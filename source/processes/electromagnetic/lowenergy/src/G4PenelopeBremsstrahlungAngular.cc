@@ -38,24 +38,37 @@
 // -----------
 // 23 Nov 2010  L. Pandola       1st implementation
 // 24 May 2011  L. Pandola       Renamed (make v2008 as default Penelope)
+// 13 Mar 2012  L. Pandola       Made a derived class of G4VEmAngularDistribution
+//                               and update the interface accordingly
 //
 //----------------------------------------------------------------
 
 #include "G4PenelopeBremsstrahlungAngular.hh"
 #include "G4PhysicsFreeVector.hh"
 #include "G4PhysicsTable.hh"
+#include "G4Material.hh"
 #include "Randomize.hh"
 #include "globals.hh"
 
 G4PenelopeBremsstrahlungAngular::G4PenelopeBremsstrahlungAngular() : 
+  G4VEmAngularDistribution("Penelope"), theEffectiveZSq(0),
   theLorentzTables1(0),theLorentzTables2(0)
+  
 {
   dataRead = false;
+  verbosityLevel = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4PenelopeBremsstrahlungAngular::~G4PenelopeBremsstrahlungAngular()
+{
+  ClearTables();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4PenelopeBremsstrahlungAngular::Initialize()
 {
   ClearTables();
 }
@@ -88,6 +101,11 @@ void G4PenelopeBremsstrahlungAngular::ClearTables()
         }
       delete theLorentzTables2;
       theLorentzTables2 = 0;
+    }  
+  if (theEffectiveZSq)
+    {
+      delete theEffectiveZSq;
+      theEffectiveZSq = 0;
     }
 }
 
@@ -284,10 +302,27 @@ void G4PenelopeBremsstrahlungAngular::PrepareInterpolationTables(G4double Zmat)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4PenelopeBremsstrahlungAngular::SampleCosTheta(G4double Zmat,
-							   G4double ePrimary,
-							   G4double eGamma)
+G4double G4PenelopeBremsstrahlungAngular::SampleCosinePolarAngle(const G4DynamicParticle* dp,
+								 G4double eGamma,
+								 G4int,
+								 const G4Material* material)
 {
+  if (!material)
+    {
+      G4Exception("G4PenelopeBremsstrahlungAngular::SampleCosinePolarAngle()",
+		  "em2040",FatalException,"The pointer to G4Material* is NULL");
+      return 0;
+    }
+  
+  G4double Zmat = GetEffectiveZ(material);
+  if (verbosityLevel > 0)
+    {
+      G4cout << "Effective <Z> for material : " << material->GetName() << 
+	" = " << Zmat << G4endl;
+    }
+
+  G4double ePrimary = dp->GetKineticEnergy();
+
   G4double beta = std::sqrt(ePrimary*(ePrimary+2*electron_mass_c2))/
     (ePrimary+electron_mass_c2);
   G4double cdt = 0;
@@ -371,4 +406,64 @@ G4double G4PenelopeBremsstrahlungAngular::SampleCosTheta(G4double Zmat,
     }
   cdt = (cdt+betap)/(1.0+betap*cdt);
   return cdt;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4PenelopeBremsstrahlungAngular::PolarAngle(const G4double ,
+						     const G4double ,
+						     const G4int )
+{
+  G4cout << "WARNING: G4PenelopeBremsstrahlungAngular() does NOT support PolarAngle()" << G4endl;
+  G4cout << "Please use the alternative interface SampleCosinePolarAngle()" << G4endl;
+  G4Exception("G4PenelopeBremsstrahlungAngular::PolarAngle()",
+	      "em0005",FatalException,"Unsupported interface");	 
+  return 0;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4PenelopeBremsstrahlungAngular::GetEffectiveZ(const G4Material* material)
+{
+  if (!theEffectiveZSq)    
+    theEffectiveZSq = new std::map<const G4Material*,G4double>;
+    
+  //found in the table: return it 
+  if (theEffectiveZSq->count(material))
+    return theEffectiveZSq->find(material)->second; 
+
+  //not found: calculate and return
+  std::vector<G4double> *StechiometricFactors = new std::vector<G4double>;
+  G4int nElements = material->GetNumberOfElements();
+  const G4ElementVector* elementVector = material->GetElementVector();
+  const G4double* fractionVector = material->GetFractionVector();
+  for (G4int i=0;i<nElements;i++)
+    {
+      G4double fraction = fractionVector[i];
+      G4double atomicWeigth = (*elementVector)[i]->GetA()/(g/mole);
+      StechiometricFactors->push_back(fraction/atomicWeigth);
+    }      
+  //Find max
+  G4double MaxStechiometricFactor = 0.;
+  for (G4int i=0;i<nElements;i++)
+    {
+      if ((*StechiometricFactors)[i] > MaxStechiometricFactor)
+        MaxStechiometricFactor = (*StechiometricFactors)[i];
+    }
+  //Normalize
+  for (G4int i=0;i<nElements;i++)
+    (*StechiometricFactors)[i] /=  MaxStechiometricFactor;
+  
+  G4double sumz2 = 0;
+  G4double sums = 0;
+  for (G4int i=0;i<nElements;i++)
+    {
+      G4double Z = (*elementVector)[i]->GetZ();
+      sumz2 += (*StechiometricFactors)[i]*Z*Z;
+      sums  += (*StechiometricFactors)[i];
+    }
+  G4double ZBR = std::sqrt(sumz2/sums);  
+  theEffectiveZSq->insert(std::make_pair(material,ZBR));
+
+  return ZBR;
 }

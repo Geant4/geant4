@@ -17,6 +17,44 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22.03.2012  L. Pandola tag emlowen-V09-05-10
+	    Penelope-based XS model for electron PIXE 
+	    registered in G4UAtomicDeexcitation.
+	    Added warning messages to Penelope models to 
+	    verify the proper activation of fluorescence.
+
+20.03.2012  L. Pandola tag emlowen-V09-05-09
+	    Updated G4PenelopeOscillatorManager to accomodate the 
+	    calculation of PIXE cross sections. First implementation 
+	    of Penelope-specific PIXE cross sections: 
+	    G4PenelopeIonisationCrossSection (derived from 
+	    G4VhShellCrossSection). **Preliminary**
+
+14.03.2012  L. Pandola tag emlowen-V09-05-08
+	    1) Make G4PenelopeBremsstrahlungAngular derived by the basic 
+	    interface G4VEmAngularDistribution. Makes angular generator 
+	    usable by any other model via the interface.
+	    2) Rename G4PenelopeIonisationCrossSection to
+	    G4PenelopeIonisationXSHandler (the name will be reserved for 
+	    a different class in a while)
+	    3) Make G4PenelopeCrossSection able to return both absolute 
+	    and normalized values of the shell cross sections. It will be 
+	    used for Penelope-PIXE.
+
+09.03.2012  L. Pandola tag emlowen-V09-05-07
+	    Minor design iteration for G4VhShellCrossSection base class, 
+            in order to carry also the information about G4Material. Also 
+            preliminar step for a future Penelope-specific fluorescence 
+            model.
+
+09.03.2012  L. Pandola tag emlowen-V09-05-06
+	    Decouple calculation of Penelope ionisation cross sections
+	    from the Ionisation model. Preliminary step for a future 
+            Penelope-specific AtomicDeexcitation model.
+
+06.03.2012  V.Ivanchenko tag emlowen-V09-05-05
+            G4IonParametrisedLossModel - fixed minor memory leak
+
 20.02.2012  L. Pandola tag emlowen-V09-05-04
 	    Make a consistent use of G4Element::GetA() and 
             G4Element::GetAtomicMassAmu() in the Penelope models

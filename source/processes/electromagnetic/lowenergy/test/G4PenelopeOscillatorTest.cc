@@ -29,7 +29,6 @@
 // 
 // ------------------------------------------------------------
 //
-//  To print cross sections per atom and mean free path for simple material
 //
 #include "G4Material.hh"
 #include "G4Element.hh"
@@ -75,6 +74,10 @@
 #include "G4MuonPlus.hh"
 
 #include "G4PenelopeOscillatorManager.hh"
+#include "G4PenelopeIonisationCrossSection.hh"
+#include "G4AtomicShellEnumerator.hh"
+#include "G4LivermoreIonisationCrossSection.hh"
+#include "G4PenelopeIonisationXSHandler.hh"
 
 int main() {
 
@@ -105,10 +108,6 @@ int main() {
   G4Material* Water2 = new G4Material("WaterFractionMass",1.0*g/cm3,2);
   Water2->AddElement(HEl,11.189*perCent); 
   Water2->AddElement(OEl,88.811*perCent);
-  //Water2->AddElement(HEl,10*perCent);
-  //Water2->AddElement(OEl,90*perCent);
-
-  //Water2->AddElement(AuEl,0.0*perCent);
   
 
   G4Material* material = Gold;
@@ -120,7 +119,39 @@ int main() {
     G4PenelopeOscillatorManager::GetOscillatorManager();
   theManager->SetVerbosityLevel(2);  
 
-  G4PenelopeOscillatorTable* theTable1 = theManager->GetOscillatorTableIonisation(material); 
+  //G4PenelopeOscillatorTable* theTable1 = 
+  //theManager->GetOscillatorTableIonisation(material); 
+  theManager->Dump(material);
+  
+  //Instantiate PIXE cross sections handlers.
+  G4PenelopeIonisationCrossSection* pixeXS = new G4PenelopeIonisationCrossSection();
+  pixeXS->SetVerboseLevel(0);
+  G4LivermoreIonisationCrossSection *livXS = new G4LivermoreIonisationCrossSection();
+
+  //Dump shell cross sections
+  G4double Emin = 500*eV, Emax = 100*MeV;
+  G4int nstep = 5000;
+  G4int iZ = 79;
+  G4double logStep = std::log10(Emax/Emin)/((G4double) nstep);
+  std::ofstream ff("test.dat");
+  for (G4int i=1;i<=nstep;i++)
+    {
+      G4double energy = Emin*std::pow(10,i*logStep);
+      G4double p1 = pixeXS->CrossSection(iZ,
+					 fKShell,
+					 energy,
+					 511.0*keV,
+					 material);
+      G4double p2 = livXS->CrossSection(iZ,
+					 fKShell,
+					 energy,
+					 511.0*keV,
+					 material);
+    
+      if (p1> 1e-3*barn || p2>1e-3*barn)
+	ff << energy/keV << " " << p1/barn << " " << p2/barn << G4endl;
+    }
+  ff.close();
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

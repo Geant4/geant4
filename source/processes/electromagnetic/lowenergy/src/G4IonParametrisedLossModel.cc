@@ -354,6 +354,8 @@ void G4IonParametrisedLossModel::Initialise(
   // The particle change object 
   if(! particleChangeLoss) {
     particleChangeLoss = GetParticleChangeForLoss();
+    braggIonModel -> SetParticleChange(particleChangeLoss, 0);
+    betheBlochModel -> SetParticleChange(particleChangeLoss, 0);
   }
  
   // The G4BraggIonModel and G4BetheBlochModel instances are initialised with

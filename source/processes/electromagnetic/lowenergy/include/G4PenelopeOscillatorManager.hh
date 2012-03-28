@@ -37,6 +37,8 @@
 //               and plasma energy (used for Ionisation). L Pandola
 //  18 Mar 2010  Added method to retrieve number of atoms per 
 //               molecule. L. Pandola
+//  15 Mar 2012  Added method to retrieve number of atom of given Z per 
+//               molecule, L. Pandola
 //
 // -------------------------------------------------------------------
 //
@@ -86,13 +88,21 @@ public:
   void SetVerbosityLevel(G4int vl){verbosityLevel = vl;};
   G4int GetVerbosityLevel(){return verbosityLevel;};
   
-  //These are cumulative for the molecule
+  //!These are cumulative for the molecule
+  //! Returns the total Z for the molecule
   G4double GetTotalZ(const G4Material*);
+  //!Returns the total A for the molecule
   G4double GetTotalA(const G4Material*);
+  //! Returns the mean excitation energy
   G4double GetMeanExcitationEnergy(const G4Material*);
+  //! Returns the squared plasma energy
   G4double GetPlasmaEnergySquared(const G4Material*);
+  //! Returns the total number of atoms per molecule
   G4double GetAtomsPerMolecule(const G4Material*);
 
+  //Components of each molecule
+  G4double GetNumberOfZAtomsPerMolecule(const G4Material*,G4int Z);
+  
 protected:
   G4PenelopeOscillatorManager();
   ~G4PenelopeOscillatorManager();
@@ -120,6 +130,8 @@ private:
   std::map<const G4Material*,G4double> *plasmaSquared;
 
   std::map<const G4Material*,G4double> *atomsPerMolecule;
+
+  std::map< std::pair<const G4Material*,G4int>, G4double> *atomTablePerMolecule;
 
   //create both tables simultaneously
   void CheckForTablesCreated();

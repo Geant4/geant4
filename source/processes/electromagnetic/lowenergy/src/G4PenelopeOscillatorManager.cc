@@ -41,6 +41,9 @@
 //  06 Sep 2011  Override the local Penelope database and use the main
 //               G4AtomicDeexcitation database to retrieve the shell 
 //               binding energies. L. Pandola
+//  15 Mar 2012  Added method to retrieve number of atom of given Z per 
+//               molecule. Restore the original Penelope database for levels
+//               below 100 eV. L. Pandola
 //
 // -------------------------------------------------------------------
 
@@ -54,7 +57,8 @@
 
 G4PenelopeOscillatorManager::G4PenelopeOscillatorManager() : 
   oscillatorStoreIonisation(0),oscillatorStoreCompton(0),atomicNumber(0),
-  atomicMass(0),excitationEnergy(0),plasmaSquared(0),atomsPerMolecule(0)
+  atomicMass(0),excitationEnergy(0),plasmaSquared(0),atomsPerMolecule(0),
+  atomTablePerMolecule(0)
 {
   fReadElementData = false;
   for (G4int i=0;i<5;i++)
@@ -131,7 +135,7 @@ void G4PenelopeOscillatorManager::Clear()
   if (excitationEnergy) delete excitationEnergy;
   if (plasmaSquared) delete plasmaSquared;
   if (atomsPerMolecule) delete atomsPerMolecule;
-
+  if (atomTablePerMolecule) delete atomTablePerMolecule;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -249,7 +253,8 @@ void G4PenelopeOscillatorManager::CheckForTablesCreated()
     plasmaSquared = new std::map<const G4Material*,G4double>;
   if (!atomsPerMolecule)
     atomsPerMolecule = new std::map<const G4Material*,G4double>;
-  
+  if (!atomTablePerMolecule)
+    atomTablePerMolecule = new std::map< std::pair<const G4Material*,G4int>, G4double>;
 }
 
 
@@ -496,6 +501,9 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 	meanAtomExcitationEnergy[iZ-1]/eV << 
 	G4endl;
       */
+      std::pair<const G4Material*,G4int> theKey = std::make_pair(material,iZ);
+      if (!atomTablePerMolecule->count(theKey))
+	atomTablePerMolecule->insert(std::make_pair(theKey,(*StechiometricFactors)[i]));
     }
   meanExcitationEnergy = std::exp(meanExcitationEnergy/totalZ);
 
@@ -503,6 +511,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
   atomicMass->insert(std::make_pair(material,totalMolecularWeight));
   excitationEnergy->insert(std::make_pair(material,meanExcitationEnergy));
   atomsPerMolecule->insert(std::make_pair(material,theatomsPerMolecule));
+
 
   if (verbosityLevel > 1)
     {
@@ -709,7 +718,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 		  G4double WI2 = (adjustmentFactor*adjustmentFactor*ionEne*ionEne) + 
 		    2./3.*(oscStre/totalZ)*Omega*Omega;
 		  G4double resEne = std::sqrt(WI2);
-		  (*helper)[i].SetResonanceEnergy(resEne);
+		  (*helper)[i].SetResonanceEnergy(resEne);	
 		  sum +=  (*helper)[i].GetOscillatorStrength()*std::log(resEne/eV);
 		}	      
 	    }
@@ -1107,9 +1116,9 @@ void G4PenelopeOscillatorManager::ReadElementData()
 	      bindingEnergy = shell->BindingEnergy();	 
 	    }
 	  //Valid level found in the G4AtomicTransition database: keep it, otherwise use 
-	  //the ionisation energy found in the Penelope database
-	  elementData[3][i] = (bindingEnergy) ? bindingEnergy : ionisationEnergy*eV;	  	  
-	  //elementData[3][i] = ionisationEnergy*eV;
+	  //the ionisation energy found in the Penelope database	 
+	  elementData[3][i] = (bindingEnergy>100*eV) ? bindingEnergy : ionisationEnergy*eV;	  	  
+	  //elementData[3][i] = ionisationEnergy*eV;	
 	  elementData[4][i] = hartreeProfile;
 	  shellCounter++;
 	}
@@ -1174,6 +1183,7 @@ G4double G4PenelopeOscillatorManager::GetPlasmaEnergySquared(const G4Material* m
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4double G4PenelopeOscillatorManager::GetAtomsPerMolecule(const G4Material* mat)
 {
   // (1) First time, create oscillatorStores and read data
@@ -1194,6 +1204,33 @@ G4double G4PenelopeOscillatorManager::GetAtomsPerMolecule(const G4Material* mat)
       G4cout << "G4PenelopeOscillatorManager::GetAtomsPerMolecule() " << G4endl;
       G4cout << "Impossible to retrieve the number of atoms per molecule for  " 
 	     << mat->GetName() << G4endl;      
+      return 0;
+    }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4PenelopeOscillatorManager::GetNumberOfZAtomsPerMolecule(const G4Material* mat,G4int Z)
+{
+  // (1) First time, create oscillatorStores and read data
+  CheckForTablesCreated();
+
+  // (2) Check if the material/Z couple has been already included
+  std::pair<const G4Material*,G4int> theKey = std::make_pair(mat,Z);
+  if (atomTablePerMolecule->count(theKey))
+    return atomTablePerMolecule->find(theKey)->second;
+    
+  // (3) If we are here, it means that we have to create the table for the material
+  BuildOscillatorTable(mat);
+
+  // (4) now, the oscillator store should be ok
+  if (atomTablePerMolecule->count(theKey))
+    return atomTablePerMolecule->find(theKey)->second;
+  else
+    {
+      G4cout << "G4PenelopeOscillatorManager::GetAtomsPerMolecule() " << G4endl;
+      G4cout << "Impossible to retrieve the number of atoms per molecule for Z = " 
+	     << Z << " in material " << mat->GetName() << G4endl;      
       return 0;
     }
 }

@@ -34,8 +34,8 @@
 //  29 Apr 2009   ALF Updated Desing for Integration
 //  15 Mar 2011   ALF introduced the usage of G4AtomicShellEnumerator
 //  20 Oct 2011   ALF updated to take into account ECPSSR Form Factor
+//  09 Mar 2012   LP  update methods
 //
-
 
 #include "globals.hh"
 #include "G4teoCrossSection.hh"
@@ -76,7 +76,7 @@ std::vector<G4double> G4teoCrossSection::GetCrossSection(G4int Z,
 							 G4double incidentEnergy,
 							 G4double mass,
 							 G4double,
-							 G4bool) const
+							 const G4Material*)
 {
   std::vector<G4double> crossSections;
 
@@ -91,7 +91,8 @@ std::vector<G4double> G4teoCrossSection::GetCrossSection(G4int Z,
 
 G4double G4teoCrossSection::CrossSection(G4int Z, G4AtomicShellEnumerator shell,
 					 G4double incidentEnergy,
-					 G4double mass) const
+					 G4double mass,
+					 const G4Material*)
 {
   G4double res = 0.0;
   if(3 < shell) {
@@ -111,7 +112,8 @@ G4double G4teoCrossSection::CrossSection(G4int Z, G4AtomicShellEnumerator shell,
 std::vector<G4double> G4teoCrossSection::Probabilities(G4int Z,
 						       G4double incidentEnergy,
 						       G4double mass,
-						       G4double deltaEnergy) const
+						       G4double deltaEnergy,
+						       const G4Material*) 
 {
   std::vector<G4double> crossSections = 
     GetCrossSection(Z, incidentEnergy, mass, deltaEnergy);

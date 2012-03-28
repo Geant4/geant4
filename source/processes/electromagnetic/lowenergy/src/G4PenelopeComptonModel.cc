@@ -95,7 +95,18 @@ void G4PenelopeComptonModel::Initialise(const G4ParticleDefinition*,
 {
   if (verboseLevel > 3)
     G4cout << "Calling G4PenelopeComptonModel::Initialise()" << G4endl;
+
   fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
+  //Issue warning if the AtomicDeexcitation has not been declared
+  if (!fAtomDeexcitation)
+    {
+      G4cout << G4endl;
+      G4cout << "WARNING from G4PenelopeComptonModel " << G4endl;
+      G4cout << "Atomic de-excitation module is not instantiated, so there will not be ";
+      G4cout << "any fluorescence/Auger emission." << G4endl;
+      G4cout << "Please make sure this is intended" << G4endl;
+    }
+
 
   if (verboseLevel > 0) 
     {

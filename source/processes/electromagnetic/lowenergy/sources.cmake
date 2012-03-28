@@ -127,7 +127,9 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
 	G4PenelopeIntegrator.hh
 	G4PenelopeIntegrator.icc
 	G4PenelopeInterpolator.hh
+	G4PenelopeIonisationCrossSection.hh
 	G4PenelopeIonisationModel.hh
+	G4PenelopeIonisationXSHandler.hh	
 	G4PenelopeOscillator.hh
 	G4PenelopeOscillatorManager.hh
 	G4PenelopePhotoElectricModel.hh
@@ -244,7 +246,9 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
 	G4PenelopeCrossSection.cc
 	G4PenelopeGammaConversionModel.cc
 	G4PenelopeInterpolator.cc
+	G4PenelopeIonisationCrossSection.cc
 	G4PenelopeIonisationModel.cc
+	G4PenelopeIonisationXSHandler.cc
 	G4PenelopeOscillator.cc
 	G4PenelopeOscillatorManager.cc
 	G4PenelopePhotoElectricModel.cc

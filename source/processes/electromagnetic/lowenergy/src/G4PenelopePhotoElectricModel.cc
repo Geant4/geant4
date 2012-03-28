@@ -110,7 +110,17 @@ void G4PenelopePhotoElectricModel::Initialise(const G4ParticleDefinition* partic
     logAtomicShellXS = new std::map<const G4int,G4PhysicsTable*>;
 
   InitialiseElementSelectors(particle,cuts);
+
   fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
+  //Issue warning if the AtomicDeexcitation has not been declared
+  if (!fAtomDeexcitation)
+    {
+      G4cout << G4endl;
+      G4cout << "WARNING from G4PenelopePhotoElectricModel " << G4endl;
+      G4cout << "Atomic de-excitation module is not instantiated, so there will not be ";
+      G4cout << "any fluorescence/Auger emission." << G4endl;
+      G4cout << "Please make sure this is intended" << G4endl;
+    }
 
   if (verboseLevel > 0) { 
     G4cout << "Penelope Photo-Electric model v2008 is initialized " << G4endl

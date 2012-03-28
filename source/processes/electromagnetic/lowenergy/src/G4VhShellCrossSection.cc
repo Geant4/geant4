@@ -58,11 +58,12 @@ void G4VhShellCrossSection :: SetTotalCS(G4double)
 G4int G4VhShellCrossSection::SelectRandomShell(G4int Z, 
                                                G4double incidentEnergy,
 					       G4double mass, 
-					       G4double deltaEnergy) const 
+					       G4double deltaEnergy,
+					       const G4Material* mat)
 //  returns the shell ionized if the shell exists. If the shell is not counted, it returns -1
 
 {
-  std::vector<G4double> p = Probabilities(Z,incidentEnergy,mass,deltaEnergy);
+  std::vector<G4double> p = Probabilities(Z,incidentEnergy,mass,deltaEnergy,mat);
   G4int shell = -1;
   size_t nShells = p.size();
   G4double q = G4UniformRand();

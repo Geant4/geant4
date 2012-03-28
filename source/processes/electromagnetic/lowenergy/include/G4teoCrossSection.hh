@@ -33,6 +33,7 @@
 //  21 Apr 2008   ALF  1st implementation
 //  29 Apr 2009   ALF Updated Desing for Integration
 //  15 Mar 2011   ALF introduced the usage of G4AtomicShellEnumerator
+//  09 Mar 2012   LP  Changed signature of methods
 //
 // -------------------------------------------------------------------
 
@@ -64,16 +65,18 @@ public:
 					G4double incidentEnergy,
 					G4double mass,
 					G4double deltaEnergy = 0,
-					G4bool testFlag = false) const;
+					const G4Material* mat=0);
 
   G4double CrossSection(G4int Z, G4AtomicShellEnumerator shell,
 			G4double incidentEnergy,
-			G4double mass) const;
+			G4double mass,
+			const G4Material* mat);
 
   std::vector<G4double> Probabilities(G4int Z,
 				      G4double incidentEnergy,
 				      G4double mass,
-				      G4double deltaEnergy = 0) const;
+				      G4double deltaEnergy = 0,
+				      const G4Material* mat=0);
   
   
   void SetTotalCS(G4double);

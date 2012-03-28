@@ -32,6 +32,7 @@
 // --------
 // 23 Nov 2010   L Pandola    First complete implementation, Penelope v2008
 // 24 May 2011   L. Pandola   Renamed (make default Penelope)
+// 13 Mar 2012   L. Pandola   Updated the interface for the angular generator
 //
 
 #include "G4PenelopeBremsstrahlungModel.hh"
@@ -104,6 +105,11 @@ void G4PenelopeBremsstrahlungModel::Initialise(const G4ParticleDefinition*,
  
   //Clear and re-build the tables 
   ClearTables();
+  
+  //forces the cleaning of tables, in this specific case
+  if (fPenelopeAngular)
+    fPenelopeAngular->Initialize();
+    
 
   //Set the number of bins for the tables. 20 points per decade
   nBins = (size_t) (20*std::log10(HighEnergyLimit()/LowEnergyLimit()));
@@ -270,18 +276,12 @@ void G4PenelopeBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParti
 
   if (verboseLevel > 3)
     G4cout << "Sampled gamma energy: " << gammaEnergy/keV << " keV" << G4endl;
-
-  G4double Zeff = std::sqrt(fPenelopeFSHelper->GetEffectiveZSquared(material));
-  if (verboseLevel > 3)
-    {
-      G4cout << "Sampling in " << material->GetName() << " with Zeff= " << 
-	Zeff << G4endl;
-    }
   
   //Now sample cosTheta for the Gamma
+  //Z is unused here, I plug 0. The information is in the material pointer
   G4double cosThetaPrimary = 
-    fPenelopeAngular->SampleCosTheta(Zeff,kineticEnergy,gammaEnergy);
-   
+    fPenelopeAngular->SampleCosinePolarAngle(aDynamicParticle,gammaEnergy,0,material);
+  
   if (verboseLevel > 3)
     G4cout << "Sampled cosTheta for e-: " << cosThetaPrimary << G4endl;
 
@@ -379,13 +379,11 @@ void G4PenelopeBremsstrahlungModel::ClearTables()
     delete energyGrid;
 
   if (fPenelopeFSHelper)
-    fPenelopeFSHelper->ClearTables();
-  
-  if (fPenelopeAngular)
-    fPenelopeAngular->ClearTables();
+    fPenelopeFSHelper->ClearTables(); 
 
   if (verboseLevel > 2)
     G4cout << "G4PenelopeBremsstrahlungModel: cleared tables" << G4endl;
+
  return;
 }
 
