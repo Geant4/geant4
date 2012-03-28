@@ -162,9 +162,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   for (G4int j=1; j<3; j++) {  
     G4double binWidth = histoManager->GetBinWidth(j);
     G4double fac = (mm/MeV)/(NbofEvents * binWidth);
-    histoManager->Scale(j, fac);
+    histoManager->Normalize(j, fac);
   }
-  histoManager->Scale(3, 1./NbofEvents);
+  histoManager->Normalize(3, 1./NbofEvents);
  
   // save and clean histo
   histoManager->save();
