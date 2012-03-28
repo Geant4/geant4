@@ -14,10 +14,15 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+       
+05-03-12 mma (testem11-V09-05-02)
+- HistoManager.hh and .cc : migrate to new g4tools histogramming system
+  Do not need aida anymore, nor G4ANALYSIS_USE
+- HistoMessenger.hh and .cc : suppress fileType command
+- Update Readme and all macros accordingly
 
 09-02-12 V.Ivant (testem11-V09-05-01)
-- PhysListEmStandard,PhysListEmStandardSS - more correct process 
-    order  
+- PhysListEmStandardSS - more correct process order  
      
 06-02-12 mma (testem11-V09-05-00)
 - modify StepMax mechanism. Add command /testem/StepMax

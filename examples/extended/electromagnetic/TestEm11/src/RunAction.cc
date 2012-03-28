@@ -239,12 +239,12 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4int ih = 1;
   G4double binWidth = histoManager->GetBinWidth(ih);
   G4double fac = (1./(NbofEvents*binWidth))*(mm/MeV);
-  histoManager->Scale(ih,fac);
+  histoManager->Normalize(ih,fac);
   
   ih = 8;
   binWidth = histoManager->GetBinWidth(ih);
   fac = (1./(NbofEvents*binWidth))*(g/(MeV*cm2));
-  histoManager->Scale(ih,fac);
+  histoManager->Normalize(ih,fac);
     
    // reset default formats
   G4cout.setf(mode,std::ios::floatfield);
