@@ -382,6 +382,9 @@ G4HadronNucleonXsc::GetHadronNucleonXscNS(const G4DynamicParticle* aParticle,
   proj_energy   /= GeV;
   proj_mass     /= GeV;
 
+  // G4double logP = std::log(proj_momentum);
+  G4double pLab = proj_momentum;
+
   // General PDG fit constants
 
   G4double s0   = 5.38*5.38; // in Gev^2
@@ -549,14 +552,17 @@ G4HadronNucleonXsc::GetHadronNucleonXscNS(const G4DynamicParticle* aParticle,
     }
     fTotalXsc = xsection;
   } 
-  else if(theParticle == thePiPlus && pORn) 
+  else if(theParticle == thePiPlus && pORn) // pi+
   {
     if(proton)
     {
       if(proj_momentum < 0.4)
       {
         G4double Ex3 = 180*std::exp(-(proj_momentum-0.29)*(proj_momentum-0.29)/0.085/0.085);
-        hpXsc      = Ex3+20.0;
+        // hpXsc      = Ex3 + 20.0; // ns original
+	// hpXsc      = Ex3 + 3.8542/((logP+1.27012)*(logP+1.27012)+0.0676011); // log-log BW
+        // hpXsc      = Ex3 + 79.057*proj_momentum*std::sqrt(proj_momentum); // my
+        hpXsc      = Ex3 + 60.056*std::pow(proj_momentum,1.2); // my
       }
       else if(proj_momentum < 1.15)
       {
@@ -608,7 +614,7 @@ G4HadronNucleonXsc::GetHadronNucleonXscNS(const G4DynamicParticle* aParticle,
     }
     // xsection = hpXsc*Zt + hnXsc*Nt;
   } 
-  else if(theParticle == thePiMinus && pORn) 
+  else if(theParticle == thePiMinus && pORn) // pi-
   {
     // pi-n = pi+p??
 
@@ -617,7 +623,8 @@ G4HadronNucleonXsc::GetHadronNucleonXscNS(const G4DynamicParticle* aParticle,
       if(proj_momentum < 0.4)
       {
         G4double Ex3 = 180*std::exp(-(proj_momentum-0.29)*(proj_momentum-0.29)/0.085/0.085);
-        hnXsc      = Ex3+20.0;
+        // hnXsc      = Ex3+20.0;
+        hnXsc      = Ex3 + 60.056*std::pow(proj_momentum,1.2); // my
       }
       else if(proj_momentum < 1.15)
       {
@@ -640,10 +647,27 @@ G4HadronNucleonXsc::GetHadronNucleonXscNS(const G4DynamicParticle* aParticle,
 
     if(proton)
     {
-      if(proj_momentum < 0.37)
+      if(proj_momentum < 0.28) 
       {
-        hpXsc = 28.0 + 40*std::exp(-(proj_momentum-0.29)*(proj_momentum-0.29)/0.07/0.07);
+      //   hpXsc = 40.*std::exp(-(proj_momentum-0.29)*(proj_momentum-0.29)/0.07/0.07);
+      //	hpXsc += 28.0;       
+        // hpXsc += 92.3243*std::pow(proj_momentum,1.2); // my
+
+        hpXsc = 0.288/((pLab - 0.28)*(pLab - 0.28) + 0.004);
+
       }
+      else if(proj_momentum < 0.395676) // first peak
+      {
+        // hpXsc = 40.*std::exp(-(proj_momentum-0.29)*(proj_momentum-0.29)/0.07/0.07);
+	// hpXsc += 28.0;       
+        // hpXsc += 92.3243*std::pow(proj_momentum,1.2); // my
+        // G4double Ex3 = 180*std::exp(-(proj_momentum-0.29)*(proj_momentum-0.29)/0.085/0.085); // ns
+        // G4double Ex3 = 3. + 12.*std::exp(-(proj_momentum-0.29)*(proj_momentum-0.29)/0.085/0.085);
+        // hpXsc      = Ex3 + 20.0; // ns original
+	// hpXsc      = Ex3 + 3.8542/((logP+1.27012)*(logP+1.27012)+0.0676011); // log-log BW
+
+        hpXsc = 0.648/((pLab - 0.28)*(pLab - 0.28) + 0.009);
+       }
       else if(proj_momentum<0.65)
       {
         hpXsc = 26+110*(std::log(proj_momentum/0.48))*(std::log(proj_momentum/0.48));

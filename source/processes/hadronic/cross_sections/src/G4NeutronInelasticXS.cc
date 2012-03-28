@@ -75,6 +75,7 @@ G4NeutronInelasticXS::G4NeutronInelasticXS()
 
 G4NeutronInelasticXS::~G4NeutronInelasticXS()
 {
+  delete fNucleon;
   for(G4int i=0; i<=maxZ; ++i) {
     delete data[i];
   }

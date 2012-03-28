@@ -658,13 +658,18 @@ G4GGNuclNuclCrossSection::GetNucleusRadiusDE(G4double A)
   a2 = 1.1;
   a3 = 1.;
 
+  // Special rms radii for light nucleii
 
   if (A < 50.)
   {
-    if( 10  < A && A <= 15. )     r0  = a11*( 1 - std::pow(A, -2./3.) )*fermi;   // 1.08*fermi;
-    else if( 15  < A && A <= 20 ) r0  = a12*( 1 - std::pow(A, -2./3.) )*fermi;
-    else if( 20  < A && A <= 30 ) r0  = a13*( 1 - std::pow(A, -2./3.) )*fermi;
-    else                          r0  = a2*fermi;
+    if(std::abs(A-1.) < 0.5)      return 0.89*fermi;
+    else if(std::abs(A-2.) < 0.5) return 2.13*fermi;
+    else if(std::abs(A-3.) < 0.5) return 1.96*fermi;
+    else if(std::abs(A-4.) < 0.5) return 1.68*fermi;
+    else if( 10.  < A && A <= 16. ) r0  = a11*( 1 - std::pow(A, -2./3.) )*fermi;   // 1.08*fermi;
+    else if( 15.  < A && A <= 20. ) r0  = a12*( 1 - std::pow(A, -2./3.) )*fermi;
+    else if( 20.  < A && A <= 30. ) r0  = a13*( 1 - std::pow(A, -2./3.) )*fermi;
+    else                            r0  = a2*fermi;
 
     R = r0*std::pow( A, 1./3. );
   }

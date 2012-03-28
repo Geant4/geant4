@@ -1217,7 +1217,9 @@ G4bool G4HadronCrossSections::correctInelasticNearZero = 0;
 G4HadronCrossSections::G4HadronCrossSections()
   : prevParticleDefinition(0), prevElement(0), prevZZ(0), prevAA(0), 
     prevKineticEnergy(DBL_MAX), lastEkx(0.), lastEkxPower(0.), verboseLevel(0)
-{}
+{
+  siginelastic = sigelastic = 0.0;
+}
 
 G4HadronCrossSections::~G4HadronCrossSections() 
 {}

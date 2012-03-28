@@ -47,6 +47,9 @@ G4UPiNuclearCrossSection::G4UPiNuclearCrossSection()
  : G4VCrossSectionDataSet("G4UPiNuclearCrossSection")
 {
   isInitialized = false;
+  piPlusElastic = piPlusInelastic = piMinusElastic = piMinusInelastic = 0;
+  piPlus  = G4PionPlus::PionPlus();
+  piMinus = G4PionMinus::PionMinus();
 }
 
 G4UPiNuclearCrossSection::~G4UPiNuclearCrossSection()
@@ -75,10 +78,11 @@ G4UPiNuclearCrossSection::GetElasticCrossSection(const G4DynamicParticle* dp,
   G4double cross = 0.0;
   G4PhysicsTable* table = 0;
   const G4ParticleDefinition* part = dp->GetDefinition();
-  if(part == piPlus) table = piPlusElastic;
-  else if(part == piMinus) table = piMinusElastic;
-  if(table) 
+  if(part == piPlus) { table = piPlusElastic; }
+  else if(part == piMinus) { table = piMinusElastic; }
+  if(table) {
     cross = Interpolate(Z, A, dp->GetKineticEnergy(),table);
+  }
   return cross;
 }
 
@@ -103,10 +107,11 @@ G4UPiNuclearCrossSection::GetInelasticCrossSection(const G4DynamicParticle* dp,
     }
   } else if(part == piMinus) {
     table = piMinusInelastic;
-    if(ekin < elow) ekin = elow;
+    if(ekin < elow) { ekin = elow; }
   }
-  if(table) 
+  if(table) {
     cross = fact*Interpolate(Z, A, ekin, table);
+  }
   return cross;
 }
 
@@ -181,8 +186,6 @@ void G4UPiNuclearCrossSection::DumpPhysicsTable(const G4ParticleDefinition& p)
 void G4UPiNuclearCrossSection::BuildPhysicsTable(const G4ParticleDefinition& p)
 {
   if(isInitialized) { return; }
-  piPlus  = G4PionPlus::PionPlus();
-  piMinus = G4PionMinus::PionMinus();
   if(&p != piPlus && &p != piMinus) { 
     throw G4HadronicException(__FILE__, __LINE__,"Is applicable only for pions");
     return;
