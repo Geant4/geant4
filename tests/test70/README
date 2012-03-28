@@ -1,0 +1,6 @@
+//////////////
+// README
+//////////////
+
+Test70 will create a file "output.txt" that should be deleted at the end 
+of the simulation.

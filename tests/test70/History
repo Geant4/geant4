@@ -1,0 +1,53 @@
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Test 70 History file
+                    --------------------
+This file should be used by the test developer to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+26 March 2012, M.K      (test70-V09-05-08)
+------------------------------------------------------
+- Remove [system("rm output.txt");] in test70.cc
+
+24 March 2012, M.K      (test70-V09-05-07)
+------------------------------------------------------
+- Remove visualization
+
+22 March 2012, M.K      (test70-V09-05-06)
+------------------------------------------------------
+- Fix compilation error on windows:
+Add #include <ctime> in test70.cc
+
+21 March 2012, M.K      (test70-V09-05-05)
+------------------------------------------------------
+- Fix compilation error on windows:
+comment struct timespec fStart, fEnd; in LaunchG4
+
+20 March 2012, M.K      (test70-V09-05-04)
+------------------------------------------------------
+- Remove "-lrt" library dependence which failed the compilation
+ on certain platform
+
+16 March 2012, Pere Mato      (test70-V09-05-03)
+------------------------------------------------------
+- CMakeLists.txt: copy commands.mac to binary tree
+
+3 March 2012, Gunter Folger      (test70-V09-05-02)
+------------------------------------------------------
+- comment timer
+- change G4Launch to LaunchG4
+
+1 February 2012, Gunter Folger      (test70-V09-05-01)
+------------------------------------------------------
+- add History and CMakeList.txt
+- fix gcc 4.6 complation warning in PrimaryGeneratorAction.cc
+
+31 January 2012, Mathieu Karamitros (test70-V09-05-00)
+------------------------------------------------------
+- new test70
