@@ -691,7 +691,7 @@ G4MultiNavigator::ResetHierarchyAndLocate(const G4ThreeVector &point,
 
 G4ThreeVector 
 G4MultiNavigator::GetGlobalExitNormal(const G4ThreeVector &argPoint,
-                                                    G4bool* argpObtained) // const
+                                      G4bool* argpObtained)  //  obtained valid
 {
   G4ThreeVector normalGlobalCrd(0.0, 0.0, 0.0); 
   G4bool isObtained= false; 
@@ -736,7 +736,9 @@ G4MultiNavigator::GetGlobalExitNormal(const G4ThreeVector &argPoint,
                 dotNewPrevious /= productMag; // Normalise
                 if( dotNewPrevious < (1 - perThousand) ) 
                 {
-                  if( dotNewPrevious <= 0.0 )
+                  *argpObtained= false; 
+
+                  if( fVerbose > 2 )  //  dotNewPrevious <= 0.0 )
                   {
                     std::ostringstream message;
                     message << "Clash of Normal from different Navigators!" << G4endl
@@ -746,7 +748,7 @@ G4MultiNavigator::GetGlobalExitNormal(const G4ThreeVector &argPoint,
                     message << "        Normal (previous) = " << normalGlobalCrd << G4endl;
                     message << "        Normal (current)  = " << newNormal       << G4endl;
                     G4Exception("G4MultiNavigator::GetGlobalExitNormal()", "GeomNav0002",
-                                FatalException, message); 
+                                JustWarning, message); 
                   }
                 }
                 else

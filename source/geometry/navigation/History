@@ -17,14 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-January 31st, 2011 - J.Apostolakis (geomnav-V09-05-01)
-----------------------------------
-- Corrected redundant condition in G4PropagatorInField.cc .
-   Revised threshold for decreaseFactor=0.5 from 100 to 30 times
-   the zero-step threshold.
+March 9th, 2012 - J.Apostolakis (geomnav-V09-05-02)
+-------------------------------
+- G4MultiNavigator: fix for dealing with cases of clashing normals and
+  return Invalid normal. Replaced FatalException with Warning, issued
+  only if fVerbose > 2.
 
-- Fixed left over debug flags for field check in locator classes.
-  Some code cleanup.
+January 31st, 2012 - J.Apostolakis (geomnav-V09-05-01)
+----------------------------------
+- Corrected redundant condition in G4PropagatorInField.
+  Revised threshold for decreaseFactor=0.5 from 100 to 30 times
+  the zero-step threshold.
 
 December 8th, 2011 - G.Cosmo (geomnav-V09-05-00)
 ----------------------------
