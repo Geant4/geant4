@@ -156,6 +156,8 @@ void HistoManager::EndOfRun()
 
   const G4Element* elm = 
     G4NistManager::Instance()->FindOrBuildElement(elementName);
+  const G4Material* mat = 
+    G4NistManager::Instance()->FindOrBuildMaterial("G4_"+elementName);
   const G4ParticleDefinition* particle = 
     G4ParticleTable::GetParticleTable()->FindParticle(particleName);
 
@@ -198,25 +200,25 @@ void HistoManager::EndOfRun()
     x += de;
     e  = std::pow(10.,x)*MeV;
     if(verbose>0) G4cout << std::setw(5) << i << std::setw(12) << e;  
-    xs = store->GetElasticCrossSectionPerAtom(particle,e,elm);
+    xs = store->GetElasticCrossSectionPerAtom(particle,e,elm,mat);
     xtot = xs;
     if(verbose>0) G4cout << std::setw(12) << xs/barn;  
     histo->fill(1, x, xs/barn);    
-    xs = store->GetInelasticCrossSectionPerAtom(particle,e,elm);
+    xs = store->GetInelasticCrossSectionPerAtom(particle,e,elm,mat);
     xtot += xs;
     if(verbose>0) G4cout << " " << std::setw(12) << xs/barn;  
     histo->fill(3, x, xs/barn);    
     if(particle == neutron) {
-      xs = store->GetCaptureCrossSectionPerAtom(particle,e,elm);
+      xs = store->GetCaptureCrossSectionPerAtom(particle,e,elm,mat);
       xtot += xs;
       if(verbose>0) G4cout << " " << std::setw(12) << xs/barn;  
       histo->fill(4, x, xs/barn);    
-      xs = store->GetFissionCrossSectionPerAtom(particle,e,elm);
+      xs = store->GetFissionCrossSectionPerAtom(particle,e,elm,mat);
       xtot += xs;
       if(verbose>0) G4cout << " " << std::setw(12) << xs/barn;  
       histo->fill(5, x, xs/barn);    
     }
-    xs = store->GetChargeExchangeCrossSectionPerAtom(particle,e,elm);
+    xs = store->GetChargeExchangeCrossSectionPerAtom(particle,e,elm,mat);
     if(verbose>0) G4cout << " " << std::setw(12) << xtot/barn << G4endl;   
     histo->fill(6, x, xs/barn);    
     histo->fill(7, x, xtot/barn);    
@@ -227,9 +229,9 @@ void HistoManager::EndOfRun()
     x += dp;
     p  = std::pow(10.,x)*GeV;
     e  = std::sqrt(p*p + mass*mass) - mass;
-    xs = store->GetElasticCrossSectionPerAtom(particle,e,elm);
+    xs = store->GetElasticCrossSectionPerAtom(particle,e,elm,mat);
     histo->fill(0, x, xs/barn);    
-    xs = store->GetInelasticCrossSectionPerAtom(particle,e,elm);
+    xs = store->GetInelasticCrossSectionPerAtom(particle,e,elm,mat);
     histo->fill(2, x, xs/barn); 
   }
   if(verbose > 0) {
