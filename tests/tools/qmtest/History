@@ -12,6 +12,9 @@ $Id$
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16-Mar-2011, G.Folger               (testtools-QMtest-V09-05-02)
+-  re-enable test70
+
 28-Feb-2011, G.Folger               (testtools-QMtest-V09-05-01)
 -  add FTFP_BERT to testing in FullCMS benchmark
 -  disable test21 (testing QGSC like PL), and test70 until fixed
