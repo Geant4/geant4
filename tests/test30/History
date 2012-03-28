@@ -14,6 +14,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+test30-V09-05-01  26 March 2011 V.Ivanchenko
+- Test30Physics - do not Set local PreCompound model to LightBinaryIon cascade
+    to avoid double deletion; add exception if not correct particles
+    are used for LHEP and RPG
+- test30.cc - comment out Tripathi cross sections - Shen is used for ions
+
 test30-V09-05-00  20 January 2011 V.Ivanchenko
 - Test30Physics - do not delete model and process to avoid double deletion
 

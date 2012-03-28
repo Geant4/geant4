@@ -155,6 +155,11 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
       sg = new Test30VSecondaryGenerator(new G4LEPionMinusInelastic(),mat);
     else if(part_name == "neutron") 
       sg = new Test30VSecondaryGenerator(new G4LENeutronInelastic(),mat);
+    else {
+      G4cout << "Test30Physics::GetProcess FATAL ERROR: LHEP in test30 "
+	     << "is not applicable for " << part_name << G4endl;
+      exit(0);
+    }
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 
@@ -167,6 +172,11 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
       sg = new Test30VSecondaryGenerator(new G4RPGPiMinusInelastic(),mat);
     else if(part_name == "neutron") 
       sg = new Test30VSecondaryGenerator(new G4RPGNeutronInelastic(),mat);
+    else {
+      G4cout << "Test30Physics::GetProcess FATAL ERROR: RPG in test30 "
+	     << "is not applicable for " << part_name << G4endl;
+      exit(0);
+    }
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 
@@ -195,8 +205,8 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
 
   } else if(gen_name == "binary_ion") {
     G4BinaryLightIonReaction* hkm = new G4BinaryLightIonReaction();
-    hkm->SetDeExcitation(theDeExcitation);
-    hkm->SetPrecompound(thePreCompound);
+    //hkm->SetDeExcitation(theDeExcitation);
+    // hkm->SetPrecompound(thePreCompound);
     sg = new Test30VSecondaryGenerator(hkm, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);

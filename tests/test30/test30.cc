@@ -836,6 +836,7 @@ int main(int argc, char** argv)
         cs = new G4IonProtonCrossSection();
         G4cout << "Using Axen-Wellisch Cross section for Ions" << G4endl;
       }
+      /*
       if(!cs) {
 	cs = new G4TripathiLightCrossSection();
 	if(cs->IsElementApplicable(&dParticle,Z)) {
@@ -848,6 +849,7 @@ int main(int argc, char** argv)
 	  G4cout << "Using Tripathi Cross section for Ions" << G4endl;
 	} else { cs = 0;}
       }
+      */
       if(!cs) {
 	cs = new G4IonsShenCrossSection();
 	if(cs->IsElementApplicable(&dParticle,Z)) {
