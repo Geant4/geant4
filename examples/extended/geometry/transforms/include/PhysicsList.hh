@@ -23,54 +23,37 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 //
-/// \file ExG4PrimaryGeneratorAction01.cc
-/// \brief Implementation of the ExG4PrimaryGeneratorAction01 class
+// $Id: PhysicsList.hh,v 1.1 2010-06-09 01:55:38 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+// 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
-#include "ExG4PrimaryGeneratorAction01.hh"
+#ifndef PhysicsList_h
+#define PhysicsList_h 1
 
-#include "G4Event.hh"
-#include "G4ParticleGun.hh"
-#include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
+#include "G4VUserPhysicsList.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExG4PrimaryGeneratorAction01::ExG4PrimaryGeneratorAction01(      
-                                const G4String& particleName, 
-                                G4double energy,
-                                G4ThreeVector position, 
-                                G4ThreeVector momentumDirection)
-  : G4VUserPrimaryGeneratorAction(),
-    fParticleGun(0)
+class PhysicsList: public G4VUserPhysicsList
 {
-  G4int nofParticles = 1;
-  fParticleGun  = new G4ParticleGun(nofParticles);
+  public:
+    PhysicsList();
+   ~PhysicsList();
 
-  // default particle kinematic
-  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  G4ParticleDefinition* particle
-    = particleTable->FindParticle(particleName);
-  fParticleGun->SetParticleDefinition(particle);
-  fParticleGun->SetParticleEnergy(energy);
-  fParticleGun->SetParticlePosition(position);
-  fParticleGun->SetParticleMomentumDirection(momentumDirection);
-}
+  protected:
+    // Construct particle and physics
+    void ConstructParticle();
+    void ConstructProcess(); 
+    void SetCuts();   
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExG4PrimaryGeneratorAction01::~ExG4PrimaryGeneratorAction01()
-{
-  delete fParticleGun;
-}
+#endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExG4PrimaryGeneratorAction01::GeneratePrimaries(G4Event* anEvent)
-{
-  // this function is called at the begining of event
-
-  fParticleGun->GeneratePrimaryVertex(anEvent);
-}
 

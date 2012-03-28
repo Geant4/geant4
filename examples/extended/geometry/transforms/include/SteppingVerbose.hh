@@ -23,66 +23,36 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 //
-/// \file ExG4EventAction01.hh
-/// \brief Definition of the ExG4EventAction01 class
+// $Id: SteppingVerbose.hh,v 1.2 2006-06-29 16:53:48 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//   This class manages the verbose outputs in G4SteppingManager. 
+//   It inherits from G4SteppingVerbose.
+//   It shows how to extract informations during the tracking of a particle.
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef ExG4EventAction01_h
-#define ExG4EventAction01_h 1
+#ifndef SteppingVerbose_h
+#define SteppingVerbose_h 1
 
-#include "G4UserEventAction.hh"
-#include "globals.hh"
+#include "G4SteppingVerbose.hh"
 
-#include "ExG4EventAction01Messenger.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-/// Event action class
-///
-/// It provides:
-/// - setting verbose level and event modulo pronting
-/// - option to save random number status at the end of event 
+class SteppingVerbose : public G4SteppingVerbose {
 
-class ExG4EventAction01 : public G4UserEventAction
-{
-  public:
-    ExG4EventAction01();
-    virtual ~ExG4EventAction01();
+public:   
 
-  public:
-    // methods from base class
-    virtual void BeginOfEventAction(const G4Event* event);
-    virtual void EndOfEventAction(const G4Event* event);
+  SteppingVerbose();
+ ~SteppingVerbose();
 
-    // set methods
-    void SetVerboseLevel(G4int level);
-    void SetPrintModulo(G4int value);
-    void SetSaveRndm(G4bool value);
-    void SetDrawFlag(G4String value);
-        
-  private:
-    // static data members (constants)
-    static const G4int  fgkDefaultVerboseLevel; 
-    static const G4int  fgkDefaultPrintModulo; 
-    
-    // data members
-    ExG4EventAction01Messenger  fMessenger;
-    G4int     fVerboseLevel;
-    G4int     fPrintModulo; 
-    G4bool    fSaveRndm;  
+  void StepInfo();
+  void TrackingStarted();
+
 };
 
-// inline functions
-
-inline void ExG4EventAction01::SetVerboseLevel(G4int level) {
-  fVerboseLevel = level;
-}  
-
-inline void ExG4EventAction01::SetPrintModulo(G4int value) {
-  fPrintModulo = value;
-}
-
-inline void ExG4EventAction01::SetSaveRndm(G4bool value) {
-  fSaveRndm = value;
-}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

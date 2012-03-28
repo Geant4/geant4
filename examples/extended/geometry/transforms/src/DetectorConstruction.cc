@@ -25,10 +25,10 @@
 //
 // $Id$
 //
-/// \file TrDetectorConstruction.cc
-/// \brief Implementation of the TrDetectorConstruction class
+/// \file DetectorConstruction.cc
+/// \brief Implementation of the DetectorConstruction class
 
-#include "TrDetectorConstruction.hh"
+#include "DetectorConstruction.hh"
 
 #include "G4Material.hh"
 #include "G4NistManager.hh"
@@ -40,9 +40,14 @@
 #include "G4RotationMatrix.hh"
 #include "G4ReflectionFactory.hh"
 
+#include "G4GeometryManager.hh"
+#include "G4PhysicalVolumeStore.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4SolidStore.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrDetectorConstruction::TrDetectorConstruction()
+DetectorConstruction::DetectorConstruction()
  : G4VUserDetectorConstruction(),
    fMessenger(this),
    fMethod(kWithDirectMatrix)
@@ -51,19 +56,26 @@ TrDetectorConstruction::TrDetectorConstruction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrDetectorConstruction::~TrDetectorConstruction()
+DetectorConstruction::~DetectorConstruction()
 { 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4VPhysicalVolume* TrDetectorConstruction::Construct()
+G4VPhysicalVolume* DetectorConstruction::Construct()
 {
   // Materials
   G4NistManager* nist = G4NistManager::Instance();
   G4bool fromIsotopes = false;
   G4Material* material = nist->FindOrBuildMaterial("G4_AIR", fromIsotopes);
-      
+  
+  // Clean old geometry, if any
+  //
+  G4GeometryManager::GetInstance()->OpenGeometry();
+  G4PhysicalVolumeStore::GetInstance()->Clean();
+  G4LogicalVolumeStore::GetInstance()->Clean();
+  G4SolidStore::GetInstance()->Clean();
+        
   // World
   //  
   G4double rmin = 0.;
@@ -126,7 +138,7 @@ G4VPhysicalVolume* TrDetectorConstruction::Construct()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void TrDetectorConstruction::PlaceWithDirectMatrix()
+void DetectorConstruction::PlaceWithDirectMatrix()
 {
   G4double og = 3*cm; 
 
@@ -168,7 +180,7 @@ void TrDetectorConstruction::PlaceWithDirectMatrix()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void TrDetectorConstruction::PlaceWithInverseMatrix()
+void DetectorConstruction::PlaceWithInverseMatrix()
 {
   G4double og = 3*cm; 
 
@@ -213,7 +225,7 @@ void TrDetectorConstruction::PlaceWithInverseMatrix()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void TrDetectorConstruction::PlaceWithAxialRotations()
+void DetectorConstruction::PlaceWithAxialRotations()
 {
   G4double og = 3*cm; 
 
@@ -258,7 +270,7 @@ void TrDetectorConstruction::PlaceWithAxialRotations()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void TrDetectorConstruction::PlaceWithEulerAngles()
+void DetectorConstruction::PlaceWithEulerAngles()
 {
   //definitions : mother frame = {x,y,z} ; daughter frame = {u,v,w}
   // n = node line = intercept of xy and uv planes
@@ -312,7 +324,7 @@ void TrDetectorConstruction::PlaceWithEulerAngles()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void TrDetectorConstruction::PlaceWithReflections()
+void DetectorConstruction::PlaceWithReflections()
 {
 /// Placement with reflcetions.
 /// In order to better show the reflection symmetry we do not apply
@@ -381,5 +393,14 @@ void TrDetectorConstruction::PlaceWithReflections()
             false,                               //no boolean operation
             4);                                  //copy number                       
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "G4RunManager.hh"
+
+void DetectorConstruction::SetMethod(EMethod method) { 
+  fMethod = method;
+  G4RunManager::GetRunManager()->DefineWorldVolume(Construct());  
+}  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

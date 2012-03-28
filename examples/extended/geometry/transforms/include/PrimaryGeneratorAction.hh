@@ -23,46 +23,41 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 //
-/// \file ExG4EventAction01Messenger.hh
-/// \brief Definition of the ExG4EventAction01Messenger class
+// $Id: PrimaryGeneratorAction.hh,v 1.2 2006-06-29 16:53:40 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
 
-#ifndef ExG4EventAction01Messenger_h
-#define ExG4EventAction01Messenger_h 1
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#ifndef PrimaryGeneratorAction_h
+#define PrimaryGeneratorAction_h 1
+
+#include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
-#include "G4UImessenger.hh"
 
-class ExG4EventAction01;
-class G4UIdirectory;
-class G4UIcmdWithAnInteger;
-class G4UIcmdWithABool;
+class G4ParticleGun;
+class G4Event;
 
-/// Messenger class that defines commands for ExG4EventAction01
-///
-/// It implements commands:
-/// - /ExG4/event/verboseLevel level
-/// - /ExG4/event/printModulo modulo
-/// - /ExG4/event/saveRndm true|false
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class ExG4EventAction01Messenger: public G4UImessenger
+class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    ExG4EventAction01Messenger(ExG4EventAction01* eventAction);
-    ~ExG4EventAction01Messenger();
-    
-    virtual void SetNewValue(G4UIcommand* command, G4String newValue);
-    
+    PrimaryGeneratorAction();    
+   ~PrimaryGeneratorAction();
+
+  public:
+    void GeneratePrimaries(G4Event*);
+
   private:
-    // data members
-    ExG4EventAction01*     fEventAction;   
-    G4UIdirectory*        fTopDirectory;
-    G4UIdirectory*        fDirectory;
-    G4UIcmdWithAnInteger* fSetVerboseLevelCmd;
-    G4UIcmdWithAnInteger* fSetPrintModuloCmd;
-    G4UIcmdWithABool*     fSetSaveRndmCmd;
-    //G4UIcmdWithAString*   DrawCmd;
+    G4ParticleGun*  fParticleGun;
 };
 
-#endif //ExG4EventAction01Messenger_h
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#endif
+
+

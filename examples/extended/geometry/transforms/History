@@ -14,8 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+12/03/2012 mma (exTransforms-V09-05-00)
+ - simplified version, limited to geometry functionalities
+ 
 15/11/2011 I. Hrivnacova (exTransforms-V09-04-00)
-
-First version of Transforms examples implemented by M.Maire;
-the reflection option added by I. Hrivnacova. 
+ First version of Transforms examples implemented by M.Maire;
+ the reflection option added by I. Hrivnacova. 

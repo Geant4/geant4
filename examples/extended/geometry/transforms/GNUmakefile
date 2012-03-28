@@ -1,6 +1,6 @@
-# $Id: GNUmakefile,v 1.2 2010-01-11 16:34:57 gcosmo Exp $
+# $Id: GNUmakefile,v 1.15 2008-06-11 22:15:20 maire Exp $
 # --------------------------------------------------------------
-# GNUmakefile for examples module
+# GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
 
 name := transforms
@@ -12,12 +12,12 @@ ifndef G4INSTALL
 endif
 
 .PHONY: all
-
 all: lib bin
 
-include $(G4INSTALL)/config/binmake.gmk
+include $(G4INSTALL)/config/architecture.gmk
 
+include $(G4INSTALL)/config/binmake.gmk
+			
 visclean:
 	rm -f g4*.prim g4*.eps g4*.wrl
 	rm -f .DAWN_*
-

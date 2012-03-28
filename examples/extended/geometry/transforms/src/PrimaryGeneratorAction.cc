@@ -23,66 +23,56 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 //
-/// \file TrDetectorConstructionMessenger.cc
-/// \brief Implementation of the TrDetectorConstructionMessenger class
+// $Id: PrimaryGeneratorAction.cc,v 1.3 2006-06-29 16:54:19 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
 
-#include "TrDetectorConstructionMessenger.hh"
-#include "TrDetectorConstruction.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
+#include "PrimaryGeneratorAction.hh"
+
+#include "G4Event.hh"
+#include "G4ParticleGun.hh"
+#include "G4ParticleTable.hh"
+#include "G4ParticleDefinition.hh"
+#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrDetectorConstructionMessenger::TrDetectorConstructionMessenger(
-                           TrDetectorConstruction* detectorConstruction)
- : G4UImessenger(),
-   fDetectorConstruction(detectorConstruction),
-   fDirectory(0),
-   fSetMethodCmd(0)
-{ 
-  fDirectory = new G4UIdirectory("/transform/");
-  fDirectory->SetGuidance("Transform example detector control");
-       
-  fSetMethodCmd 
-    = new G4UIcmdWithAString("/transform/setMethod",this);
-  fSetMethodCmd->SetGuidance("Select method for definition of transformations.");
-  fSetMethodCmd->SetParameterName("Method", false);
-  fSetMethodCmd->SetCandidates(
-    "WithDirectMatrix WithInverseMatrix WithAxialRotations WithEulerAngles WithReflections");
-  fSetMethodCmd->AvailableForStates(G4State_PreInit);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-TrDetectorConstructionMessenger::~TrDetectorConstructionMessenger()
+PrimaryGeneratorAction::PrimaryGeneratorAction()
 {
-  delete fDirectory;
-  delete fSetMethodCmd;
+  G4int n_particle = 1;
+  fParticleGun  = new G4ParticleGun(n_particle);
+  
+  // default particle kinematic
+
+  G4ParticleDefinition* particle
+           = G4ParticleTable::GetParticleTable()->FindParticle("geantino");
+  fParticleGun->SetParticleDefinition(particle);
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1.732, 1., 0.));
+  fParticleGun->SetParticleEnergy(1*eV);
+  fParticleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,0.*cm));
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void TrDetectorConstructionMessenger::SetNewValue(G4UIcommand* command, 
-                                                     G4String newValue)
-{ 
-  if( command == fSetMethodCmd ) { 
-    TrDetectorConstruction::EMethod method;
-    if ( newValue == "WithDirectMatrix" )         
-      method = TrDetectorConstruction::kWithDirectMatrix;
-    else if ( newValue == "WithInverseMatrix" )         
-      method = TrDetectorConstruction::kWithInverseMatrix;
-    else if ( newValue == "WithAxialRotations" )     
-      method = TrDetectorConstruction::kWithAxialRotations;
-    else if ( newValue == "WithEulerAngles" ) 
-      method = TrDetectorConstruction::kWithEulerAngles;
-    else if ( newValue == "WithReflections" )    
-      method = TrDetectorConstruction::kWithReflections;
-    else return;  
-    fDetectorConstruction->SetMethod(method);
-  }
+PrimaryGeneratorAction::~PrimaryGeneratorAction()
+{
+  delete fParticleGun;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
+{
+  //this function is called at the begining of event
+  //  
+  fParticleGun->GeneratePrimaryVertex(anEvent);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+

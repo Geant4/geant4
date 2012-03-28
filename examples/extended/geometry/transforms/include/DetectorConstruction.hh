@@ -25,56 +25,74 @@
 //
 // $Id$
 // 
-/// \file ExG4DetectorConstruction02.hh
-/// \brief Definition of the ExG4DetectorConstruction02 class
+/// \file DetectorConstruction.hh
+/// \brief Definition of the DetectorConstruction class
 
-#ifndef ExG4DetectorConstruction02_h
-#define ExG4DetectorConstruction02_h 1
+#ifndef DetectorConstruction_h
+#define DetectorConstruction_h 1
 
 #include "G4VUserDetectorConstruction.hh"
 
-#include "ExG4DetectorConstruction02Messenger.hh"
+#include "DetectorMessenger.hh"
 
-#include "G4ThreeVector.hh"
 #include "globals.hh"
 
-
-
 class G4LogicalVolume;
-class G4Material;
-class DetectorMessenger;
+class G4VPhysicalVolume;
 
-/// Simple detector construction with a box volume placed in a world
+/// Detector construction class to demonstrate various ways of placement
+///
+/// The geometry setup consists of two trapezoid volumes which are placed 
+/// in a world so that their axial symmetry axis is in given theta and phi 
+/// polar angles. The various ways of placement are implemented in the 
+/// DetectorConstruction class in the following private functions:
+///  - PlaceWithDirectMatrix()
+///  - PlaceWithInverseMatrix()
+///  - PlaceWithAxialRotations()
+///  - PlaceWithEulerAngles()
+///  - PlaceWithReflections()
+///
+/// which are then called from the Construct() function.
+/// All method defines exactly same geometry except for the placement 
+/// with reflection where trapezoids are placed with their symmetry axis 
+/// in parallel with z-axis in order to make easier to check reflection 
+/// visually. 
 
-class ExG4DetectorConstruction02 : public G4VUserDetectorConstruction
+class DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
-    ExG4DetectorConstruction02(
-       const G4String& boxMaterialName = "G4_AIR",
-       G4double boxHx = 40*cm, G4double boxHy = 40*cm, G4double boxHz = 40*cm,
-       const G4String& worldMaterialName = "G4_AIR",
-       G4double worldSizeFactor = 1.25);
-    ~ExG4DetectorConstruction02();
+    enum EMethod {
+      kWithDirectMatrix,
+      kWithInverseMatrix,
+      kWithAxialRotations,
+      kWithEulerAngles,
+      kWithReflections
+    };  
+
+  public:
+    DetectorConstruction();
+   ~DetectorConstruction();
 
   public:
     // methods from base class 
     virtual G4VPhysicalVolume* Construct();
-
+    
     // set methods
-    void  SetBoxMaterial(const G4String& materialName);
-    void  SetWorldMaterial(const G4String& materialName);
-    void  SetBoxDimensions(G4double hx, G4double hy, G4double hz);
-    void  SetWorldSizeFactor(G4double factor);
+    void SetMethod(EMethod method);
                        
   private:
-    ExG4DetectorConstruction02Messenger fMessenger;
+    // methods
+    void PlaceWithDirectMatrix();
+    void PlaceWithInverseMatrix();
+    void PlaceWithAxialRotations();
+    void PlaceWithEulerAngles();
+    void PlaceWithReflections();
 
-    G4String               fBoxMaterialName;
-    G4String               fWorldMaterialName;
-    G4ThreeVector          fBoxDimensions;
-    G4double               fWorldSizeFactor;
-    G4LogicalVolume*       fBoxVolume;  
-    G4LogicalVolume*       fWorldVolume;  
+    // data members
+    DetectorMessenger  fMessenger;
+    EMethod  fMethod;
+    G4LogicalVolume* fWorldVolume;
+    G4LogicalVolume* fTrdVolume;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

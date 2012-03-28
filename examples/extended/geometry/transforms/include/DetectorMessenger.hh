@@ -25,77 +25,43 @@
 //
 // $Id$
 //
-/// \file ExG4RunAction01.hh
-/// \brief Definition of the ExG4RunAction01 class
+/// \file DetectorMessenger.hh
+/// \brief Definition of the DetectorMessenger class
 
-#ifndef ExG4RunAction01_h
-#define ExG4RunAction01_h 1
+#ifndef DetectorMessenger_h
+#define DetectorMessenger_h 1
 
-#include "ExG4RunAction01Messenger.hh"
-
-#include "G4UserRunAction.hh"
+#include "G4UImessenger.hh"
 #include "globals.hh"
 
-class G4Run;
+class DetectorConstruction;
+class G4UIdirectory;
+class G4UIcmdWithAString;
+class G4UIcmdWith3VectorAndUnit;
+class G4UIcmdWithADouble;
 
-/// Run action class
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+/// Messenger class that defines commands for DetectorConstruction.
 ///
-/// It provides:
-/// - setting verbose level
-/// - option to save random number status at begin and end of run 
-/// - option to read random number from a file at begin of run 
-/// - option for automatic (time-based) random seeds for each run
+/// It implements commands:
+/// - /transform/setMethod method
 
-class ExG4RunAction01 : public G4UserRunAction
+class DetectorMessenger: public G4UImessenger
 {
   public:
-    ExG4RunAction01();
-    ~ExG4RunAction01();
-
-  public:
-    // methods
-    virtual void BeginOfRunAction(const G4Run* run);
-    virtual void EndOfRunAction(const G4Run* run);
-
-    // set methods
-    void  SetRndmFileName(const G4String& fileName);
-    void  SetVerboseLevel(G4int level);
-    void  SetSaveRndm(G4bool value);
-    void  SetReadRndm(G4bool value);
-    void  SetAutoSeed(G4bool value);
-
+    DetectorMessenger(DetectorConstruction* );
+    virtual ~DetectorMessenger();
+    
+    virtual void SetNewValue(G4UIcommand* command, G4String newValue);
+    
   private:
-    // static data members
-    static const G4String fgkDefaultRndmFileName;
-  
-    // data members
-    ExG4RunAction01Messenger fMessenger;
-    G4String fRndmFileName;    
-    G4int    fVerboseLevel;
-    G4bool   fSaveRndm;    
-    G4bool   fReadRndm;
-    G4bool   fAutoSeed;   
+    DetectorConstruction*      fDetectorConstruction;
+    G4UIdirectory*             fDirectory;
+    G4UIcmdWithAString*        fSetMethodCmd;
 };
-// inline functions
 
-inline void ExG4RunAction01::SetVerboseLevel(G4int level) {
-  fVerboseLevel = level;
-}  
-
-inline void ExG4RunAction01::SetRndmFileName(const G4String& fileName) {
-  fRndmFileName = fileName;
-}  
-
-inline void ExG4RunAction01::SetSaveRndm(G4bool value) {
-  fSaveRndm = value;
-}
-
-inline void ExG4RunAction01::SetReadRndm(G4bool value) {
-  fReadRndm = value;
-}
-
-inline void ExG4RunAction01::SetAutoSeed(G4bool value) {
-  fAutoSeed = value;
-}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+

@@ -23,52 +23,46 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExG4DetectorConstruction02Messenger.hh,v 1.2 2006-06-29 16:46:14 gunter Exp $
 //
-/// \file ExG4DetectorConstruction02Messenger.hh
-/// \brief Definition of the ExG4DetectorConstruction02Messenger class
+// $Id: PhysicsList.cc,v 1.2 2010-07-16 07:37:48 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+// 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
-#ifndef ExG4DetectorConstruction02Messenger_h
-#define ExG4DetectorConstruction02Messenger_h 1
-
-#include "G4UImessenger.hh"
-#include "globals.hh"
-
-class ExG4DetectorConstruction02;
-class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWith3VectorAndUnit;
-class G4UIcmdWithADouble;
+#include "PhysicsList.hh"
+#include "G4ParticleTypes.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-/// Messenger class that defines commands for ExG4DetectorConstruction02.
-///
-/// It implements commands:
-/// - /ExG4/det/setBoxMaterialName name
-/// - /ExG4/det/setWorldMaterialName name
-/// - /ExG4/det/setBoxDimensions hx hy hz unit
-/// - /ExG4/det/setWorldSizeFactor value
+PhysicsList::PhysicsList()
+: G4VUserPhysicsList()
+{ }
 
-class ExG4DetectorConstruction02Messenger: public G4UImessenger
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+PhysicsList::~PhysicsList()
+{ }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PhysicsList::ConstructParticle()
 {
-  public:
-    ExG4DetectorConstruction02Messenger(ExG4DetectorConstruction02* );
-    virtual ~ExG4DetectorConstruction02Messenger();
-    
-    virtual void SetNewValue(G4UIcommand* command, G4String newValue);
-    
-  private:
-    ExG4DetectorConstruction02* fDetectorConstruction;
-    G4UIdirectory*             fTopDirectory;
-    G4UIdirectory*             fDirectory;
-    G4UIcmdWithAString*        fSetBoxMaterialCmd;
-    G4UIcmdWithAString*        fSetWorldMaterialCmd;
-    G4UIcmdWith3VectorAndUnit* fSetBoxDimensionsCmd;
-    G4UIcmdWithADouble*        fSetWorldSizeFactorCmd;
-};
+  G4Geantino::GeantinoDefinition();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+void PhysicsList::ConstructProcess()
+{
+  AddTransportation();
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PhysicsList::SetCuts()
+{
+ SetCutsWithDefault(); 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
