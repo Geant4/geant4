@@ -146,7 +146,7 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
       G4cout << "G4HadronElastic WARNING (1 - cost)= " << 1 - cost
 	     << " after scattering of " 
 	     << aParticle->GetDefinition()->GetParticleName()
-	     << " p(GeV/c)= " << plab
+	     << " p(GeV/c)= " << plab/GeV
 	     << " on an ion Z= " << Z << " A= " << A
 	     << G4endl;
       //}
@@ -158,8 +158,8 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
     sint = std::sqrt((1.0-cost)*(1.0+cost));
   }    
   if (verboseLevel>1) {
-    G4cout << " t= " << t << " tmax= " << tmax 
-	   << " Pcms= " << momentumCMS << " cos(t)=" << cost 
+    G4cout << " t= " << t << " tmax(GeV^2)= " << tmax/(GeV*GeV) 
+	   << " Pcms(GeV)= " << momentumCMS/GeV << " cos(t)=" << cost 
 	   << " sin(t)=" << sint << G4endl;
   }
   G4ThreeVector v1(sint*std::cos(phi),sint*std::sin(phi),cost);
@@ -180,7 +180,7 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
       G4cout << "G4HadronElastic WARNING Efinal= " << eFinal
 	     << " after scattering of " 
 	     << aParticle->GetDefinition()->GetParticleName()
-	     << " p(GeV/c)= " << plab
+	     << " p(GeV/c)= " << plab/GeV
 	     << " on an ion Z= " << Z << " A= " << A
 	     << G4endl;
     }

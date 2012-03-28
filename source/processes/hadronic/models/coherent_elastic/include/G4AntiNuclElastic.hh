@@ -86,6 +86,11 @@ public:
  inline G4ComponentAntiNuclNuclearXS* GetComponentCrossSection();
  
 private:
+
+  // Assignment operator and copy constructor
+  G4AntiNuclElastic & operator=(const G4AntiNuclElastic &right);
+  G4AntiNuclElastic(const G4AntiNuclElastic&);
+
   G4ComponentAntiNuclNuclearXS* cs;    //cross section of antiA-A interaction
 
   G4double fTetaCMS;        //  sampled Theta in CMS 
