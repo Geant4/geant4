@@ -58,18 +58,18 @@ class RunAction : public G4UserRunAction
     void PrimaryTiming(G4double);
     
   private:
-    HistoManager*           histoManager;
-    PrimaryGeneratorAction* primary;
+    HistoManager*           fHistoManager;
+    PrimaryGeneratorAction* fPrimary;
     
-    std::map<G4String,G4int> particleCount;
-    std::map<G4String,G4double> Emean;
-    std::map<G4String,G4double> Emin;
-    std::map<G4String,G4double> Emax;
-    G4int    decayCount, timeCount;
-    G4double EkinTot[3];
-    G4double Pbalance[3];
-    G4double EventTime[3];
-    G4double PrimaryTime;                        
+    std::map<G4String,G4int> fParticleCount;
+    std::map<G4String,G4double> fEmean;
+    std::map<G4String,G4double> fEmin;
+    std::map<G4String,G4double> fEmax;
+    G4int    fDecayCount, fTimeCount;
+    G4double fEkinTot[3];
+    G4double fPbalance[3];
+    G4double fEventTime[3];
+    G4double fPrimaryTime;                        
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

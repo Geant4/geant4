@@ -39,36 +39,36 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventMessenger::EventMessenger(EventAction* EvAct)
-:eventAction(EvAct)
+:fEventAction(EvAct)
 {   
-  Dir = new G4UIdirectory("/rdecay01/");
-  Dir->SetGuidance("this example");
+  fDir = new G4UIdirectory("/rdecay01/");
+  fDir->SetGuidance("this example");
 
-  eventDir = new G4UIdirectory("/rdecay01/event/");
-  eventDir ->SetGuidance("event control");
+  fEventDir = new G4UIdirectory("/rdecay01/event/");
+  fEventDir ->SetGuidance("event control");
       
-  PrintCmd = new G4UIcmdWithAnInteger("/rdecay01/event/printModulo",this);
-  PrintCmd->SetGuidance("Print events modulo n");
-  PrintCmd->SetParameterName("EventNb",false);
-  PrintCmd->SetRange("EventNb>0");
-  PrintCmd->AvailableForStates(G4State_Idle);      
+  fPrintCmd = new G4UIcmdWithAnInteger("/rdecay01/event/printModulo",this);
+  fPrintCmd->SetGuidance("Print events modulo n");
+  fPrintCmd->SetParameterName("EventNb",false);
+  fPrintCmd->SetRange("EventNb>0");
+  fPrintCmd->AvailableForStates(G4State_Idle);      
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventMessenger::~EventMessenger()
 {
-  delete PrintCmd;
-  delete eventDir;
-  delete Dir;     
+  delete fPrintCmd;
+  delete fEventDir;
+  delete fDir;     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 { 
-  if (command == PrintCmd)
-    {eventAction->SetPrintModulo(PrintCmd->GetNewIntValue(newValue));}
+  if (command == fPrintCmd)
+    {fEventAction->SetPrintModulo(fPrintCmd->GetNewIntValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

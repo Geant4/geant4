@@ -49,13 +49,13 @@ class EventAction : public G4UserEventAction
     void BeginOfEventAction(const G4Event*);
     void   EndOfEventAction(const G4Event*);
     
-    void SetPrintModulo(G4int val)   {printModulo = val;};
-    void AddDecayChain(G4String val) {decayChain += val;};
+    void SetPrintModulo(G4int val)   {fPrintModulo = val;};
+    void AddDecayChain(G4String val) {fDecayChain += val;};
                
   private:
-    G4int           printModulo;
-    G4String        decayChain;                   
-    EventMessenger* eventMessenger;
+    G4int           fPrintModulo;
+    G4String        fDecayChain;                   
+    EventMessenger* fEventMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

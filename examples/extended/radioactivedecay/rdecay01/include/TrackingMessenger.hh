@@ -49,9 +49,8 @@ class TrackingMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    TrackingAction* trackingAction;
-    
-    G4UIcmdWithABool* TrackingCmd;
+    TrackingAction*   fTrackingAction;    
+    G4UIcmdWithABool* fTrackingCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

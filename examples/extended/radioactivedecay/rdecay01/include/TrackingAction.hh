@@ -55,13 +55,13 @@ class TrackingAction : public G4UserTrackingAction {
     void SetFullChain(G4bool flag) { fullChain = flag;};
     
   private:
-    HistoManager*       histoManager;
-    RunAction*          run;
-    EventAction*        event;
-    TrackingMessenger*  trackMessenger;
+    HistoManager*       fHistoManager;
+    RunAction*          fRun;
+    EventAction*        fEvent;
+    TrackingMessenger*  fTrackMessenger;
     
-    G4double charge, mass;        
-    G4bool fullChain;
+    G4double fCharge, fMass;        
+    G4bool   fullChain;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

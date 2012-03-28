@@ -38,23 +38,23 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::EventAction()
-:printModulo(10000),eventMessenger(0)
+:fPrintModulo(10000),fEventMessenger(0)
 {
-  eventMessenger = new EventMessenger(this);
+  fEventMessenger = new EventMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::~EventAction()
 {
-  delete eventMessenger;
+  delete fEventMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::BeginOfEventAction(const G4Event*)
 {
- decayChain = " ";
+ fDecayChain = " ";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,9 +64,9 @@ void EventAction::EndOfEventAction(const G4Event* evt)
  G4int evtNb = evt->GetEventID(); 
  //printing survey
  //
- if (evtNb%printModulo == 0) 
+ if (evtNb%fPrintModulo == 0) 
    G4cout << "\n end of event " << std::setw(6) << evtNb 
-          << " :" + decayChain << G4endl;
+          << " :" + fDecayChain << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

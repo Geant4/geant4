@@ -37,27 +37,27 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TrackingMessenger::TrackingMessenger(TrackingAction* trackA)
-:trackingAction(trackA)
+:fTrackingAction(trackA)
 {
-  TrackingCmd = new G4UIcmdWithABool("/rdecay01/fullChain",this);
-  TrackingCmd->SetGuidance("allow full decay chain");
-  TrackingCmd->SetParameterName("flag",true);
-  TrackingCmd->SetDefaultValue(true);
+  fTrackingCmd = new G4UIcmdWithABool("/rdecay01/fullChain",this);
+  fTrackingCmd->SetGuidance("allow full decay chain");
+  fTrackingCmd->SetParameterName("flag",true);
+  fTrackingCmd->SetDefaultValue(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TrackingMessenger::~TrackingMessenger()
 {
-  delete TrackingCmd;
+  delete fTrackingCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TrackingMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 { 
-  if (command == TrackingCmd)
-    { trackingAction->SetFullChain(TrackingCmd->GetNewBoolValue(newValue));}
+  if (command == fTrackingCmd)
+    { fTrackingAction->SetFullChain(fTrackingCmd->GetNewBoolValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

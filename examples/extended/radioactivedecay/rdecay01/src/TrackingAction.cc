@@ -45,17 +45,17 @@
 
 TrackingAction::TrackingAction(HistoManager* histo,
                                RunAction* RA, EventAction* EA)
-:histoManager(histo),run(RA),event(EA)
+:fHistoManager(histo),fRun(RA),fEvent(EA)
 {
   fullChain = false;
-  trackMessenger = new TrackingMessenger(this);   
+  fTrackMessenger = new TrackingMessenger(this);   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TrackingAction::~TrackingAction()
 {
-  delete trackMessenger;
+  delete fTrackMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,8 +64,8 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
 {
   G4ParticleDefinition* particle = track->GetDefinition();
   G4String name   = particle->GetParticleName();
-  charge = particle->GetPDGCharge();
-  mass   = particle->GetPDGMass();  
+  fCharge = particle->GetPDGCharge();
+  fMass   = particle->GetPDGMass();  
     
   G4double Ekin = track->GetKineticEnergy();
   G4int ID      = track->GetTrackID();
@@ -74,7 +74,7 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
 
   //count particles
   //
-  run->ParticleCount(name, Ekin);
+  fRun->ParticleCount(name, Ekin);
   
   //energy spectrum
   //
@@ -85,19 +85,19 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
            particle == G4AntiNeutrinoE::AntiNeutrinoE()) ih = 2;
   else if (particle == G4Gamma::Gamma()) ih = 3;
   else if (particle == G4Alpha::Alpha()) ih = 4;
-  else if (charge > 2.) ih = 5;
-  if (ih) histoManager->FillHisto(ih, Ekin);
+  else if (fCharge > 2.) ih = 5;
+  if (ih) fHistoManager->FillHisto(ih, Ekin);
   
   //fullChain: stop ion and print decay chain
   //
-  if (charge > 2.) {
+  if (fCharge > 2.) {
     G4Track* tr = (G4Track*) track;
     if (fullChain) tr->SetTrackStatus(fStopButAlive);
-    if (ID == 1) event->AddDecayChain(name);
-      else       event->AddDecayChain(" ---> " + name); 
+    if (ID == 1) fEvent->AddDecayChain(name);
+      else       fEvent->AddDecayChain(" ---> " + name); 
   }
   
-  //example of saving random number seed of this event, under condition
+  //example of saving random number seed of this fEvent, under condition
   //
   ////condition = (ih == 3);
   if (condition) G4RunManager::GetRunManager()->rndmSaveThisEvent();
@@ -109,13 +109,13 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
 {
   //keep only ions
   //
-  if (charge < 3. ) return;
+  if (fCharge < 3. ) return;
 
   //get time
   //   
   G4double time = track->GetGlobalTime();
   G4int ID = track->GetTrackID();
-  if (ID == 1) run->PrimaryTiming(time);	//time of life of primary ion  
+  if (ID == 1) fRun->PrimaryTiming(time);	//time of life of primary ion  
       
   //energy and momentum balance (from secondaries)
   //
@@ -138,16 +138,16 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
          Pbalance += trk->GetMomentum();	         
     }
     G4double Pbal = Pbalance.mag();  
-    run->Balance(EkinTot,Pbal);  
-    histoManager->FillHisto(6,EkinTot);
-    histoManager->FillHisto(7,Pbal);
+    fRun->Balance(EkinTot,Pbal);  
+    fHistoManager->FillHisto(6,EkinTot);
+    fHistoManager->FillHisto(7,Pbal);
   }
   
   //no secondaries --> end of chain    
   //  
   if (!nbtrk) {
-    run->EventTiming(time);		//total time of life
-    histoManager->FillHisto(8,time);
+    fRun->EventTiming(time);		//total time of life
+    fHistoManager->FillHisto(8,time);
   }
 }
 
