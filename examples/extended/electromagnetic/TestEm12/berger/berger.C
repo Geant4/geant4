@@ -42,12 +42,12 @@
    TH1D* h1 = (TH1D*) f1.Get("8");
    h1->SetLineColor(kBlack);      
    h1->Draw("SAME HIST");
-   
+/*   
    TFile f2("./10keV.liver.root");
    TH1D* h2 = (TH1D*) f2.Get("8");
    h2->SetLineColor(kBlue);   
    h2->Draw("SAME HIST");
-/*   
+   
    TFile f3("./10keV.penel.root");
    TH1D* h3 = (TH1D*) f3.Get("8");
    h3->SetLineColor(kGreen);   
@@ -56,7 +56,7 @@
    // Print the histograms legend
    TLegend *legend = new TLegend(0.7,0.6,0.86,0.78);
    legend->AddEntry(h1,"opt3 ","l");
-   legend->AddEntry(h2,"liver ","l");
+   ///legend->AddEntry(h2,"liver ","l");
    ///legend->AddEntry(h3,"penel","l");      
    legend->AddEntry(h1d,"EGSnrc","l");
    legend->Draw();

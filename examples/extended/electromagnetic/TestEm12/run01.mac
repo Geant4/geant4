@@ -17,7 +17,6 @@
 /gun/particle e-
 /gun/energy 4 MeV
 #
-/testem/histo/setFileType root
 /testem/histo/setFileName run01
 /testem/histo/setHisto 1 120  0.   2.4 cm	#edep profile
 /testem/histo/setHisto 3 100  0.    3. cm	#true track length

@@ -21,10 +21,9 @@
 /run/initialize
 #
 /gun/particle e-
-/gun/energy 1 keV
+/gun/energy 100 keV
 #
-/testem/histo/setFileType root
-/testem/histo/setFileName berger/1keV.local
+/testem/histo/setFileName berger/100keV.local
 /testem/histo/setHisto 8 120  0.  1.2 none	#normalized edep profile
 #
 /testem/event/printModulo 10000

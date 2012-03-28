@@ -18,7 +18,6 @@
 /gun/particle e-
 /gun/energy 4 MeV
 #
-/testem/histo/setFileType root
 /testem/histo/setFileName testem12
 /testem/histo/setHisto 1 120  0.   2.4 cm	#edep profile
 /testem/histo/setHisto 2 180  0.   4.5 MeV	#total Edep
