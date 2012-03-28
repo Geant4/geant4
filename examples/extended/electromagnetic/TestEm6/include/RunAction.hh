@@ -36,15 +36,12 @@
 #include "ProcessesCount.hh"
 #include "globals.hh"
 
+#include "g4root.hh"
+////#include "g4xml.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4Run;
-
-namespace AIDA {
- class IAnalysisFactory;
- class ITree;
- class IHistogram1D;
-} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -58,13 +55,8 @@ class RunAction : public G4UserRunAction
     void BeginOfRunAction(const G4Run*);
     void   EndOfRunAction(const G4Run*);
     void     CountProcesses(G4String);
-
-    AIDA::IHistogram1D* GetHisto(G4int id) {return histo[id];}
     
   private:
-    AIDA::IAnalysisFactory* af;          
-    AIDA::ITree* tree;
-    AIDA::IHistogram1D* histo[6];
     ProcessesCount*     ProcCounter;
 };
 
