@@ -52,14 +52,14 @@ class PrimaryGeneratorAction3
     void GeneratePrimaries(G4Event*);
 
   public:
-    G4ThreeVector GetNewUz() { return newUz; };
-    G4double GetAlphaMax()   { return alphaMax; };
+    G4ThreeVector GetNewUz() { return fNewUz; };
+    G4double GetAlphaMax()   { return fAlphaMax; };
     
   private:
-    G4ThreeVector          newUz;   
-    G4double               alphaMax;	//max angle
+    G4ThreeVector          fNewUz;   
+    G4double               fAlphaMax;	//max angle
     
-    G4ParticleGun*         particleGun;
+    G4ParticleGun*         fParticleGun;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

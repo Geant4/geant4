@@ -42,7 +42,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction1::PrimaryGeneratorAction1(G4ParticleGun* gun)
-: particleGun(gun)
+: fParticleGun(gun)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,17 +64,17 @@ void PrimaryGeneratorAction1::GeneratePrimaries(G4Event* anEvent)
   G4double uy = std::sin(alpha);
   G4double z = zmax*(2*G4UniformRand() - 1);	//z uniform in (-zmax, +zmax)
         
-  particleGun->SetParticlePosition(G4ThreeVector(r*ux,r*uy,z));
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(ux,uy,0));    
-  particleGun->SetParticleEnergy(1*MeV);
-  particleGun->GeneratePrimaryVertex(anEvent);
+  fParticleGun->SetParticlePosition(G4ThreeVector(r*ux,r*uy,z));
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(ux,uy,0));    
+  fParticleGun->SetParticleEnergy(1*MeV);
+  fParticleGun->GeneratePrimaryVertex(anEvent);
   
   //vertex 2 at opposite
   //
   alpha += pi;
   ux = std::cos(alpha);
   uy = std::sin(alpha);        
-  particleGun->SetParticlePosition(G4ThreeVector(r*ux,r*uy,z));
+  fParticleGun->SetParticlePosition(G4ThreeVector(r*ux,r*uy,z));
   
   //particle 2 at vertex 2
   //
@@ -82,18 +82,18 @@ void PrimaryGeneratorAction1::GeneratePrimaries(G4Event* anEvent)
   ux = std::cos(alpha + dalpha);
   uy = std::sin(alpha + dalpha);        
   
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(ux,uy,0));    
-  particleGun->SetParticleEnergy(1*keV);
-  particleGun->GeneratePrimaryVertex(anEvent);
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(ux,uy,0));    
+  fParticleGun->SetParticleEnergy(1*keV);
+  fParticleGun->GeneratePrimaryVertex(anEvent);
   
   //particle 3 at vertex 2
   //
   ux = std::cos(alpha - dalpha);
   uy = std::sin(alpha - dalpha);        
   
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(ux,uy,0));    
-  particleGun->SetParticleEnergy(1*GeV);
-  particleGun->GeneratePrimaryVertex(anEvent);    
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(ux,uy,0));    
+  fParticleGun->SetParticleEnergy(1*GeV);
+  fParticleGun->GeneratePrimaryVertex(anEvent);    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

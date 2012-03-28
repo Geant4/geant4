@@ -47,12 +47,12 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      
     G4VPhysicalVolume* Construct();
                         
-    G4double GetWorldSizeXY()     {return worldSizeXY;}; 
-    G4double GetWorldSizeZ()      {return worldSizeZ;};
+    G4double GetWorldSizeXY()     {return fWorldSizeXY;}; 
+    G4double GetWorldSizeZ()      {return fWorldSizeZ;};
 
   private:
   
-    G4double worldSizeXY, worldSizeZ;
+    G4double fWorldSizeXY, fWorldSizeZ;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -41,8 +41,8 @@
 
 DetectorConstruction::DetectorConstruction()
 {
-  worldSizeXY = 2*cm;
-  worldSizeZ  = 2*cm;    
+  fWorldSizeXY = 2*cm;
+  fWorldSizeZ  = 2*cm;    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,7 +65,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   //
   G4Box*  
   solidWorld = new G4Box("World",				//its name
-                   worldSizeXY/2,worldSizeXY/2,worldSizeZ/2);	//its size
+                   fWorldSizeXY/2,fWorldSizeXY/2,fWorldSizeZ/2);	//its size
 		   
   G4LogicalVolume*                         
   logicWorld = new G4LogicalVolume(solidWorld,		//its solid

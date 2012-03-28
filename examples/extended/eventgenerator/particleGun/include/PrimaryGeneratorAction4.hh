@@ -51,18 +51,18 @@ class PrimaryGeneratorAction4
   public:
     void GeneratePrimaries(G4Event*);
 
-    G4double GetRmin3() {return Rmin3;};
-    G4double GetRmax3() {return Rmax3;};
-    G4double GetCosAlphaMin() {return cosAlphaMin;};
-    G4double GetCosAlphaMax() {return cosAlphaMax;};
+    G4double GetRmin3() {return fRmin3;};
+    G4double GetRmax3() {return fRmax3;};
+    G4double GetCosAlphaMin() {return fCosAlphaMin;};
+    G4double GetCosAlphaMax() {return fCosAlphaMax;};
             
   private:
-    G4double Rmin3;
-    G4double Rmax3;		//vertex volume
-    G4double cosAlphaMin;
-    G4double cosAlphaMax;	//opening angle
+    G4double fRmin3;
+    G4double fRmax3;		//vertex volume
+    G4double fCosAlphaMin;
+    G4double fCosAlphaMax;	//opening angle
 
-    G4ParticleGun*  particleGun;
+    G4ParticleGun*  fParticleGun;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

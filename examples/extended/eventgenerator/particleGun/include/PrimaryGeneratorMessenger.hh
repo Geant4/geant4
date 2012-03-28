@@ -52,8 +52,8 @@ class PrimaryGeneratorMessenger: public G4UImessenger
   private:
     PrimaryGeneratorAction* Action;
     
-    G4UIdirectory*        Dir;       
-    G4UIcmdWithAnInteger* selectActionCmd;
+    G4UIdirectory*        fDir;       
+    G4UIcmdWithAnInteger* fSelectActionCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -38,7 +38,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(HistoManager* histo)
-:histoManager(histo)
+:fHistoManager(histo)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,7 +52,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
 {      
   //histograms
   //
-  histoManager->book();
+  fHistoManager->book();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,7 +61,7 @@ void RunAction::EndOfRunAction(const G4Run*)
 {     
   //save histograms
   //      
-  histoManager->save();
+  fHistoManager->save();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -40,25 +40,25 @@ PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(
                                              PrimaryGeneratorAction* Gun)
 :Action(Gun)
 {
-  Dir = new G4UIdirectory("/gunExample/");
-  Dir->SetGuidance("this example");
+  fDir = new G4UIdirectory("/gunExample/");
+  fDir->SetGuidance("this example");
     
-  selectActionCmd = new G4UIcmdWithAnInteger("/gunExample/selectGunAction",this);
-  selectActionCmd->SetGuidance("Select primary generator action");
-  selectActionCmd->SetGuidance(" id = 1 : Generate several vertices and particles per event");
-  selectActionCmd->SetGuidance(" id = 2 : Show how to sample a tabulated function");  
-  selectActionCmd->SetGuidance(" id = 3 : Divergent beam in an arbitrary direction");
-  selectActionCmd->SetGuidance(" id = 4 : In spherical coordinates with rotation matrix");
-  selectActionCmd->SetParameterName("id",false);
-  selectActionCmd->SetRange("id>0 && id<5");
+  fSelectActionCmd = new G4UIcmdWithAnInteger("/gunExample/selectGunAction",this);
+  fSelectActionCmd->SetGuidance("Select primary generator action");
+  fSelectActionCmd->SetGuidance(" id = 1 : Generate several vertices and particles per event");
+  fSelectActionCmd->SetGuidance(" id = 2 : Show how to sample a tabulated function");  
+  fSelectActionCmd->SetGuidance(" id = 3 : Divergent beam in an arbitrary direction");
+  fSelectActionCmd->SetGuidance(" id = 4 : In spherical coordinates with rotation matrix");
+  fSelectActionCmd->SetParameterName("id",false);
+  fSelectActionCmd->SetRange("id>0 && id<5");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
 {
-  delete selectActionCmd;
-  delete Dir;
+  delete fSelectActionCmd;
+  delete fDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,8 +66,8 @@ PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
 void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
                                                G4String newValue)
 { 
-  if (command == selectActionCmd)
-    Action->SelectAction(selectActionCmd->GetNewIntValue(newValue));      
+  if (command == fSelectActionCmd)
+    Action->SelectAction(fSelectActionCmd->GetNewIntValue(newValue));      
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

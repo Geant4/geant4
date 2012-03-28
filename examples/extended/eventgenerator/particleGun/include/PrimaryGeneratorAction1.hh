@@ -51,7 +51,7 @@ class PrimaryGeneratorAction1
     void GeneratePrimaries(G4Event*);
 
   private:
-    G4ParticleGun*  particleGun;
+    G4ParticleGun*  fParticleGun;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

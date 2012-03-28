@@ -51,7 +51,7 @@ class RunAction : public G4UserRunAction
     void   EndOfRunAction(const G4Run*);
     
   private:
-    HistoManager*  histoManager;    
+    HistoManager*  fHistoManager;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
