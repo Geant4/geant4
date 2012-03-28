@@ -17,16 +17,17 @@ Major development/fixes included since the last development tag are:
 ---------- Reference-tag 'Release Notes' -----------
 
 (o)  Fixes included in release 9.4.p03
+(*)  Fixes included in release 9.5.p01
 
 Summarised, the list of changes is the following:
 
-cmake                                            cmake-V09-04-41
+cmake                                            cmake-V09-05-02
 -----
-- Added setting of expansion variable needed to prepend path with G4WORKDIR
+- Added setting of expansion variable needed to prepend path with G4WORKDIR  (*)
   path. Addressing problem report #1265.
 - Updated to data set G4EMLOW-6.24
 
-config                                           config-V09-05-03
+config                                           config-V09-05-03            (*)
 ------
 - Corrected condition for determining QT_AS_FRAMEWORK flag depending on      (o)
   how QTHOME is defined in Darwin setups. Addresses problem report #1267.
@@ -36,26 +37,26 @@ config                                           config-V09-05-03
   of -lstdc++ to LDLIBS in architecture.gmk.
 - Increased stack size of executable to 12M for WIN32-VC setup.
 
-error_propagation                                error_propagation-V09-05-01
+error_propagation                                error_propagation-V09-05-01 (*)
 -----------------
 - Set navigator to stepping manager and field locators; fixing crash on Windows.
 - Fixed minor Coverity defects.
 
-g3tog4                                           g3tog4-V09-05-00
+g3tog4                                           g3tog4-V09-05-00            (*)
 ------
 - Fixed minor Coverity defects.
 
-geometry/magneticfield                           field-V09-05-00
+geometry/magneticfield                           field-V09-05-00             (*)
 ----------------------
 - Fixed Coverity defects in G4SimpleRunge (removed spurious pointer
   data member) and G4FieldTrack (missing G4ChargeState::operator=()).
 
-geometry/navigation                              geomnav-V09-05-00
+geometry/navigation                              geomnav-V09-05-00           (*)
 -------------------
 - Fixed left over debug flags for field check in locator classes.
   Some code cleanup.
 
-geometry/solids/specific                         geom-specific-V09-05-01
+geometry/solids/specific                         geom-specific-V09-05-01     (*)
 ------------------------
 - Fix in G4EllipticalCone in DistanceToIn(p,v) to exclude imaginary          (o)
   solution (virtual cone) when distance is calculated.
@@ -80,14 +81,14 @@ graphics_reps                                    greps-V09-05-02
 - Change G4Exception ID in G4NURBS and HepPolyhedron.
 - Some code cleanup.
 
-materials                                        materials-V09-05-02
+materials                                        materials-V09-05-02         (*)
 ---------
 - G4MaterialPropertiesTable: minor cosmetic changes to GetProperty(),
   GetConstProperty() and ConstPropertyExists() methods.
 - G4OpticalSurface: fixed compilation warning on Ubuntu.
 - Fixed Coverity defects.
 
-persistency/mctruth                              mctruth-V09-05-00
+persistency/mctruth                              mctruth-V09-05-00           (*)
 -------------------
 - Removed fake copy-constructor. Fixing Coverity defect.
 
@@ -97,7 +98,7 @@ physics_lists                                    phys-lists-V09-05-01
 - Reduced number of deleted objects in hadronic builders to avoid cases of
   double deletion.
 
-processes/cuts                                   procuts-V09-05-00
+processes/cuts                                   procuts-V09-05-00           (*)
 --------------
 - Fixed Coverity defect in G4ProductionCutsTable::RetrieveCutsInfo(). 
 
@@ -108,16 +109,16 @@ processes/electromagnetic/dna                    emdna-V09-05-02
 - Updated source of cross-section file for elastic scattering.
 - Removed G4Water* classes in 'utils' module.
 
-processes/electromagnetic/lowenergy              emlowen-V09-05-01
+processes/electromagnetic/lowenergy              emlowen-V09-05-01           (*)
 -----------------------------------
 - Fixed Coverity defects in Penelope classes and related.
 
-processes/electromagnetic/muons                  emmuons-V09-05-00
+processes/electromagnetic/muons                  emmuons-V09-05-00           (*)
 -------------------------------
 - Fixed initialisation of transport cross-section in
   G4EnergyLossForExtrapolator.
 
-processes/electromagnetic/standard               emstand-V09-05-02
+processes/electromagnetic/standard               emstand-V09-05-02           (*)
 ----------------------------------
 - G4UniversalFluctuation: fixed sampling at small steps (below 10 um) in
   heavy media reported at 8th Space User Workshop (Tsukuba, Japan) about
@@ -164,7 +165,7 @@ processes/hadronic
   o New tuning for stopping in CHIPS. Added rescattering to allow for wider
     energy resolution.
   o Fixed charge non-conservation problem in G4QFreeScattering.
-- models/coherent_elastic (hadr-cohe-V09-04-22)
+- models/coherent_elastic (hadr-cohe-V09-04-22)                              (*)
   o Fixed bug in G4AntiNuclElastic; introduced check of |cosTheta|<1.
 - models/de_excitation (hadr-deex-V09-05-02)
   o G4ExcitationHandler: propagate G4VPhotonEvaporation pointer to
@@ -187,7 +188,7 @@ processes/hadronic
   o Change GetIsotope() interface argument to use G4HadProjectile instead 
     of G4Track. Classes affected: G4NeutronIsotopeProduction and
     G4ProtonIsotopeProduction.
-- models/lend (hadr-lend-V09-05-00)
+- models/lend (hadr-lend-V09-05-00)                                          (*)
   o Fixed compilation warnings on Ubuntu; cleanup of header files inclusion.
 - models/low_energy (hadr-lep-V09-05-00)
   o Moved G4InelasticInteraction class to this module from 'management'. 
@@ -204,7 +205,7 @@ processes/hadronic
   o G4VHighEnergyGenerator: added virtual method PartonStringModelDescription().
   o G4VIntraNuclearTransportModel, G4VPreCompoundModel: cleanup for objec
     construction/deletion.
-- models/neutron_hp (hadr-hpn-V09-05-00)
+- models/neutron_hp (hadr-hpn-V09-05-00)                                     (*)
   o Fixed warning message in G4NeutronHPInelastic.
 - models/photolepton_hadron/muon_nuclear (hadr-munuclear-V09-05-00)
   o Modified base class for G4VDMuonNuclearModel to be G4HadronicInteraction
@@ -219,17 +220,17 @@ processes/hadronic
   o G4PiMinusAbsorptionBertini: temporarily use Bertini pre-compound instead
     of native pre-compound.
 
-processes/optical                                op-V09-05-00
+processes/optical                                op-V09-05-00                (*)
 -----------------
 - G4OpBoundaryProcess: call ProposeVelocity() for particle-change at every
   invocation of DoIt(); for Fresnel refraction calculate final velocity
   locally.  Addressing problem report #1275.
 
-run                                              run-V09-05-00
+run                                              run-V09-05-00               (*)
 ---
 - Fixed Coverity defects in assignment operator of G4VModularPhysicsList.
 
-track                                            track-V09-05-03
+track                                            track-V09-05-03             (*)
 -----
 - Reverted change in G4Track::CalculateVelocityForOpticalPhoton(), according
   to fix in G4OpBoundaryProcess, to address problem report #1275.
@@ -237,7 +238,7 @@ track                                            track-V09-05-03
   Addressing problem report #1273.
 - Fixed Coverity defects related to copy constructor and assignment operator.
 
-tracking                                         tracking-V09-05-00
+tracking                                         tracking-V09-05-00          (*)
 --------
 - Remove not defined method GetNavigator() and moved SetNavigator() to public
   in G4SteppingManager.
@@ -279,7 +280,7 @@ data sets
 examples                                         examples-V09-05-01
 --------
 - Updated reference outputs.
-- advanced/air_shower (air_shower-V09-05-01)
+- advanced/air_shower (air_shower-V09-05-01)                                 (*)
   o Fixed compilation warnings on gcc-4.6.
   o Added CMakeLists.txt file.
 - advanced/hadrontherapy (hadrontherapy-V09-05-00)
@@ -289,11 +290,11 @@ examples                                         examples-V09-05-01
 - advanced/purging_magnet (purtag-V09-05-00)
 - advanced/radioprotection (radioprotection-V09-05-00)
   o Added CMakeLists.txt file.
-- advanced/xray_fluorescence (XrayFluo-V09-05-01)
+- advanced/xray_fluorescence (XrayFluo-V09-05-01)                            (*)
   o Fixed induced memory corruption problem in XrayFluoNistMaterials, only
     intermittently visible on MacOSX.
   o Added CMakeLists.txt file.
-- basic/B4 (exampleB4-V09-05-00)
+- basic/B4 (exampleB4-V09-05-00)                                             (*)
   o Fixed compiler warning on Windows.
 - extended/analysis/AnaEx01 (AnaEx01-V09-05-01)
   o Added hbook option to HistoManager.
@@ -301,7 +302,7 @@ examples                                         examples-V09-05-01
 - extended/eventgenerator/particleGun (particleGunExample-V09-05-01)
   o Migrated to new g4tools histogramming system.
   o Simplified unit handling in HistoManager and HistoMessenger.
-- extended/hadronic/Hadr01 (exHadr01-V09-05-00)
+- extended/hadronic/Hadr01 (exHadr01-V09-05-00)                              (*)
   o DetectorMessenger: fixed deletion of objects.
 - extended/medical/electronScattering (electronScattering-V09-05-01)
 - extended/medical/fanoCavity (fano-V09-05-00)
@@ -314,8 +315,8 @@ examples                                         examples-V09-05-01
   o RunAction : added protections against division by zero.
   o fullChain.mac: added example of command /grdm/nuleusLimits.
     New macro electronicCapture.mac
-- novice/N02 (exampleN02-V09-05-00)
-- novice/N03 (exampleN03-V09-05-00)
+- novice/N02 (exampleN02-V09-05-00)                                          (*)
+- novice/N03 (exampleN03-V09-05-00)                                          (*)
   o Modified SteppingVerbose to correctly treat 'OutOfWorld' case.
 - novice/N06 (exampleN06-V09-05-00)
   o Set '/tracking/verbose 3' in input macros to also test timing of

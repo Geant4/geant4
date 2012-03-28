@@ -14,6 +14,7 @@ Major development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(*)  Fixes included in release 9.5.p01
 
 Summarised, the list of changes is the following:
 
@@ -21,7 +22,7 @@ cmake                                            cmake-V09-05-03
 -----
 - Added function REFLEX_GENERATE_DICTIONARY() for generating dictionaries.
 
-config                                           config-V09-05-05
+config                                           config-V09-05-05            (*)
 ------
 - Corrected debug compilation option in WIN32-VC, to use -MDd instead of -MD
 - Moved basic "-lm -lstdc++" link options in LOADLIBS within platform specific
@@ -38,7 +39,7 @@ analysis                                         analysis-V09-05-01
   be changed once they were used. Changed return type for the functions with
   locks to G4bool.
 
-geometry/magneticfield                           field-V09-05-03
+geometry/magneticfield                           field-V09-05-03             (*)
 ----------------------
 - G4FieldTrack: added new (inline) method to set the Rest Mass. Needed in
   order to reset this and keep reuse across tracks the same G4FieldTrack
@@ -47,19 +48,19 @@ geometry/magneticfield                           field-V09-05-03
   G4Mag_UsualEqRhs::SetChargeMomentumMass().
 - Added tests in CMakeLists.txt
 
-geometry/navigation                              geomnav-V09-05-01
+geometry/navigation                              geomnav-V09-05-01           (*)
 -------------------
 - Corrected redundant condition in G4PropagatorInField. Revised threshold
   for decreaseFactor=0.5 from 100 to 30 times the zero-step threshold.
 
-geometry/solids/specific                         geom-specific-V09-05-02
+geometry/solids/specific                         geom-specific-V09-05-02     (*)
 ------------------------
 - Fixed trivial Coverity defects in G4TwistedTubs and G4VTwisteFaceted for
   missing protection against self-assignment.
 
 global                                           global-V09-05-01
 ------
-- Corrected cases of variables never read in G4ConvergenceTester and
+- Corrected cases of variables never read in G4ConvergenceTester and         (*)
   G4DataInterpolation.
 
 graphics_reps                                    greps-V09-05-05
@@ -84,7 +85,7 @@ materials                                        materials-V09-05-10
   G4NistMaterialBuilder; cleanup logic of AddMaterial() method.
   Added GetA() in G4NistElementBuilder.
 
-persistency/ascii                                ascii-V09-04-09
+persistency/ascii                                ascii-V09-04-09             (*)
 -----------------
 - Bug correction in G4Tessellated vertex type in G4tbgVolume.
   Addressing problem report #1270.
@@ -101,7 +102,7 @@ processes/electromagnetic/lowenergy              emlowen-V09-05-04
 - Removed dependency on obsolete G4AtomicDeexcitationin in
   G4PenelopeIonisationModel.
 
-processes/electromagnetic/standard               emstand-V09-05-10
+processes/electromagnetic/standard               emstand-V09-05-10           (*)
 ----------------------------------
 - G4WentzeVIModel: fixed bug in computation of lateral displacement.
   Following report #1114 in HyperNews forum.
@@ -140,19 +141,19 @@ processes/hadronic
   o Always apply numerical solutions (used to lead to some minor violations
     of energy conservation).
   o Do nothing if the projectile is below the Coulomb barrier.
-- processes (hadr-proc-V09-05-01)
+- processes (hadr-proc-V09-05-01)                                            (*)
   o Fixes in G4WHadronElasticProcess to remove unnecessary calls responsible
     for run-time memory growth. Addressing problem report #1286.
 - stopping (hadr-stopping-V09-05-02)
   o G4PiMinusAbsorptionBertini: return back to usage of native pre-compound
     de-excitation for the Bertini cascade.
 
-processes/scoring                                procscore-V09-05-00
+processes/scoring                                procscore-V09-05-00         (*)
 -----------------
 -  Bug fix G4ParallelWorldProcess for incorrect initialization for
    secondary tracks.
 
-track                                            track-V09-05-04
+track                                            track-V09-05-04             (*)
 -----
 - Fix to reset 'RestMass' in G4FieldTrackUpdator::Update() method
   as it is used to initialise each track by ParallelWorldScoringProcess.
@@ -167,13 +168,13 @@ visualization                                    vis-V09-05-07
   o Fixed Ubuntu warnings about ignoring return value of system call.
 - OpenGL:
   o Fixes for Qt Stored text.
-- Raytracer:
+- Raytracer:                                                                 (*)
   o Fix for up-vector. Addressing problem report #1274.
 
 examples                                         examples-V09-05-02
 --------
 - Updated reference outputs.
-- advanced/air_shower (air_shower-V09-05-02)
+- advanced/air_shower (air_shower-V09-05-02)                                 (*)
   o Fixed more compilation warnings on gcc-4.6.
 - advanced/microbeam (microbeam-V09-05-00)
   o Added description of composition of cell.

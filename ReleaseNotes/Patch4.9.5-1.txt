@@ -1,0 +1,234 @@
+
+                 Geant4 9.5 - patch-01 Release Notes
+                 -----------------------------------
+
+                                                              20 March 2012
+
+List of fixes included in this public patch since the public release 9.5:
+
+  o Analysis:
+    --------
+    + Added missing header inclusion in tools/wroot/file to allow for
+      compilation on gcc-4.7 and fixed minor compilation warnings.
+
+  o Configuration:
+    -------------
+    + CMake scripts:
+      o Corrected settings for expansion variable for prepending path to
+        G4WORKDIR. Addressing problem report #1265.
+      o Added function to create dictionaries.
+      o Corrected setup and compilation options for Intel/icc compiler.
+      o Fixed symbols filtering for Windows 64-bits.
+    + Moved basic "-lm -lstdc++" link options in LOADLIBS within platform
+      specific configuration scripts. Avoid using "-lm" on Linux-icc platform.
+    + Corrected debug compilation option in WIN32-VC, to use -MDd instead
+      of -MD. Increased stack size of executable to 12Mb.
+    + Corrected condition for determining QT_AS_FRAMEWORK flag depending on
+      how QTHOME is defined in Darwin setups. Addresses problem report #1267.
+    + Removed unnecessary 'gcov' linkage for dynamic libs in Darwin-g++.gmk.
+    + Added Darwin-clang experimental configuration. Requires explicit addition
+      of -lstdc++ to LDLIBS in architecture.gmk.
+
+  o Error Propagation:
+    -----------------
+    + Set navigator to stepping manager and field locators; fixing crash
+      on Windows. Fixed minor Coverity defects.
+
+  o Event:
+    -----
+    + Corrected settings of 'sigmaX' and 'sigmaY' in G4SPSPosDistribution
+      SetBeamSigmaInR(). Addressing problem report #1278.
+    + Added dummy copy constructor and operator=() to G4Event.
+      Addressing problem report #1277.
+    + Corrected location of G4Exception in G4UserEventAction constructor.
+
+  o G3toG4:
+    ------
+    + Fixed minor Coverity defects.
+
+  o Geometry:
+    --------
+    + magnetic_field:
+      o G4Mag_UsualEqRhs: in SetChargeMomentumMass() method, fixed problem
+        with division by zero.
+      o Simplified implementation of constructors.
+    + navigation:
+      o Corrected redundant condition in G4PropagatorInField.
+        Revised threshold for decreaseFactor=0.5 from 100 to 30 times
+        the zero-step threshold.
+      o G4MultiNavigator: fix for dealing with cases of clashing normals and
+        return Invalid normal. Replaced FatalException with Warning, issued
+        only if fVerbose > 2.
+      o Fixed left over debug flags for field check in locator classes.
+        Some code cleanup.
+    + solids/specific:
+      o Fix in G4EllipticalCone in DistanceToIn(p,v) to exclude imaginary
+        solution (virtual cone) when distance is calculated.
+      o Fixed trivial Coverity defects in G4TwistedTubs and G4VTwistedFaceted
+        for missing protection against self-assignment.
+
+  o Global:
+    ------
+    + Corrected cases of variables never read in G4ConvergenceTester and
+      G4DataInterpolation.
+    + Updated date and version for 9.5.p01.
+
+  o Materials:
+    ---------
+    + G4MaterialPropertiesTable: cosmetic changes to GetProperty(),
+      GetConstProperty() and ConstPropertyExists() methods.
+    + Fixed compilation warnings on Ubuntu.
+
+  o Persistency:
+    -----------
+    + Added correction in G4tbgVolume in 'ascii' module for treatment of
+      G4TessellatedSolid vertex type. Addressing problem report #1270.
+    + Corrected initialization of material properties in G4GDMLReadMaterials.
+    + Fixed minor Coverity defects in 'mctruth' module.
+
+  o Electromagnetic Processes:
+    -------------------------
+    + Low Energy:
+      o Fixed defects reported by the Coverity analysis for Penelope-related
+        classes.
+    + Muons:
+      o Fixed initialisation of transport cross-section in
+        G4EnergyLossForExtrapolator.
+    + Standard:
+      o G4UrbanMscModel92, G4UrbanMscModel93, G4UrbanMscModel95: added
+        protection against big scattering angles for e+- (E > 20 MeV); the
+        protection cuts tail of scattering angles to avoid artificial
+        scattering of high energy e+-; in the case of E > 1 GeV and
+        cosTheta<0 a warning is now printed out.
+      o G4UniversalFluctuation: fixed sampling at small steps (below 10 um) in
+        heavy media about shift in range of 3 MeV muons.
+        Improved parameterisation for thin gas layers.
+      o G4WentzeVIModel: fixed bug in computation of lateral displacement.
+        Following report #1114 in HyperNews forum.
+        Improved algorithm of sampling of scattering angle and displacement:
+        choice between 1 or 2 sub-steps. Added G4Exception to identify misuse
+        of transport cross-section computation.
+      o G4WentzelOKandVIxSection: fixed incorrect selection of limit
+        on minimal angle (affect large angle scattering of muons).
+        Different screening functions for e+- and heavy particles.
+      o G4IonCoulombScatteringModel: fixed numerical problem for small
+        scattering angles.
+      o G4GoudsmitSaundersonTable, G4GoudsmitSaundersonMscModel: fixed
+        compilation warnings on Ubuntu.
+    + Utils:
+      o G4VEnergyLossProcess fixed crash due to apply G4hIonisation for ions;
+        fixed computation of delta-electron cross section for ions and very
+        small cuts (about 1 um).
+      o G4VEnergyLossProcess, G4VEmProcess, G4LossTableBuilder: delete old
+        G4PhysicsVectors if new vectors are built between runs.
+
+  o Hadronic Processes:
+    ------------------
+    + models/CHIPS:
+      o G4QCaptureAtRest: added check on 4-momentum balance for violations
+        of more than 2 GeV; repeat sampling again. Check baryon number of
+        final state and take into account nuclear recoil at rest which is
+        not produced as a final particle.
+    + models/coherent_elastic:
+      o Fixed Coverity defect in G4AntiNuclElastic.
+      o Fixed printout of units in G4HadronElastic.
+    + models/lend:
+      o Fixed compilation warnings on Ubuntu; cleanup of header files inclusion.
+    + models/neutron_hp:
+      o Added protection against emission of unphysical ultra-low energy
+        photons in G4NeutronHPCaptureFS.
+      o Fixed warning message in G4NeutronHPInelastic.
+    + processes:
+      o Fixes in G4WHadronElasticProcess to remove unnecessary calls
+        responsible for run-time memory growth.
+        Addressing problem report #1286.
+
+  o Generic Processes:
+    -----------------
+    + Cuts:
+      o Fixed defects reported by Coverity in G4ProductionCutsTable
+        RetrieveCutsInfo().
+    + Optical:
+      o G4OpBoundaryProcess: call ProposeVelocity() for particle-change at
+        every invocation of DoIt(); for Fresnel refraction calculate final
+        velocity locally. Addressing problem report #1275.
+    + Scoring:
+      o Bug fix G4ParallelWorldProcess for incorrect initialization for
+        secondary tracks.
+
+  o Run:
+    ---
+    + Fixed Coverity defects in assignment operator of G4VModularPhysicsList.
+
+  o Track:
+    -----
+    + Fix in G4Track::CalculateVelocityForOpticalPhoton(), according
+      to modification in G4OpBoundaryProcess, to address problem report #1275.
+    + Set 'false' to 'SecondaryWeightByProcess' as default.
+      Addressing problem report #1273.
+    + Fix to reset 'RestMass' in G4FieldTrackUpdator::Update() method
+      as it is used to initialise each track by ParallelWorldScoringProcess.
+    + Fixed Coverity defects related to copy constructor and assignment
+      operator.
+
+  o Tracking:
+    --------
+    + Remove not defined method GetNavigator() and moved SetNavigator()
+      to public in G4SteppingManager.
+
+  o Visualization:
+    -------------
+    + Management:
+      o Removed unwarranted DrawView() in G4VisManager::EndOfEvent().
+        It was causing two copies of the geometry to be drawn.
+      o Fixed size of "screen-size" markers in G4VSceneHandler::GetMarkerSize().
+      o In /vis/scene/notifyHandlers, downgraded "scene has changed"
+        from WARNING to NOTE.
+    + Modeling:
+      o Activate search also in parallel worlds in method
+        G4PhysicalVolumeModel::Validate().
+      o G4AttributeFilterT<T>::AddInterval() and AddValue(): relaxed
+        exception in case of already existing interval/value.
+    + RayTracer:
+      o Fix for up-vector, addressing problem report #1274.
+      o Other small fixes.
+
+  o Examples:
+    --------
+    + Updated reference outputs.
+    + advanced/air_shower:
+      o Fixed compilation warnings on gcc-4.6.
+    + advanced/xray_fluorescence
+      o Fixed induced memory corruption problem in XrayFluoNistMaterials,
+        only intermittently visible on MacOSX.
+    + basic/B4
+      o Fixed compiler warning on Windows.
+    + extended/hadronic/Hadr00
+      o HistoManager: use material pointer in the interface to cross-
+        sections (fixes crash for Physics Lists with HP).
+    + extended/hadronic/Hadr01
+      o DetectorMessenger: fixed deletion of objects.
+    + extended/hadronic/Hadr02
+      o Fixed missing line of code in G4DPMJET2_5CrossSection.
+    + extended/runAndEvent/RE02
+      o Fixed indexing scheme of CopyNo() method in the RunAction.
+    + novice/N02
+    + novice/N03
+      o Modified SteppingVerbose to correctly treat 'OutOfWorld' case.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 9.5.
+  o  Technical notes distributed for release 9.5 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 9.5.p01 are available
+through our "Download" Web page:
+   http://cern.ch/geant4/support/download.shtml
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/userdocuments.shtml
+for further information about using Geant4.
