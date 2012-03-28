@@ -152,14 +152,15 @@ public: // With description
   inline G4bool operator!=(const G4HadronicInteraction &right ) const
   { return ( this != (G4HadronicInteraction *) &right ); }
 
+  virtual std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
 
   virtual std::pair<G4double, G4double> GetEnergyMomentumCheckLevels() const;
-    
+
   inline void SetEnergyMomentumCheckLevels(G4double relativeLevel, G4double absoluteLevel)
   { epCheckLevels.first = relativeLevel;
     epCheckLevels.second = absoluteLevel; }
 
-  virtual void ModelDescription(std::ostream& outFile) const;
+  virtual void ModelDescription(std::ostream& outFile) const ; //=0;
 
 private:
     

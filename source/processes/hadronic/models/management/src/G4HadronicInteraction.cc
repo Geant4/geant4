@@ -229,6 +229,10 @@ G4bool G4HadronicInteraction::IsBlocked(const G4Element* anElement) const
   return false;
 }
 
+std::pair<G4double, G4double> G4HadronicInteraction::GetFatalEnergyCheckLevels() const
+{
+	return std::pair<G4double, G4double>(10.*perCent, 150.*MeV);   // default level of Check
+}
 
 std::pair<G4double, G4double>
 G4HadronicInteraction::GetEnergyMomentumCheckLevels() const
