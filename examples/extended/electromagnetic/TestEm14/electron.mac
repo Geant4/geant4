@@ -20,7 +20,6 @@
 #
 /testem/histo/setFileName eioni
 ### /testem/histo/setFileName ebrem
-/testem/histo/setFileType hbook
 /testem/histo/setHisto 1  100 0.  100 MeV	#energy  of primary  
 /testem/histo/setHisto 2  100 0.5   +1. none	#costeta of primary
 /testem/histo/setHisto 3  100 0.  100 MeV	#energy  of ch. secondary  

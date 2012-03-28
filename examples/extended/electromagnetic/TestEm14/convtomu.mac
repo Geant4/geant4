@@ -21,7 +21,6 @@
 /gun/energy 100 TeV
 #
 /testem/histo/setFileName convtomu
-/testem/histo/setFileType hbook
 /testem/histo/setHisto 3  200 0. 100. TeV	#energy  of ch. secondaries  
 /testem/histo/setHisto 4  100 0.9 1.1 none	#costeta of ch. secondaries
 #  

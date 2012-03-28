@@ -115,6 +115,8 @@ void DetectorConstruction::DefineMaterials()
 
   new G4Material("Silicon"    , z=14., a= 28.09*g/mole, density= 2.330*g/cm3);
   
+  new G4Material("Chromium"   , z=24., a= 51.99*g/mole, density= 7.140*g/cm3);
+      
   new G4Material("Copper"     , z=29., a= 63.55*g/mole, density= 8.920*g/cm3);  
 
   new G4Material("Germanium"  , z=32., a= 72.61*g/mole, density= 5.323*g/cm3);
