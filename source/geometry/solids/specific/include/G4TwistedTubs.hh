@@ -331,6 +331,7 @@ class G4TwistedTubs : public G4VSolid
         : p(r.p), vec(r.vec), value(r.value){}
       LastValueWithDoubleVector& operator=(const LastValueWithDoubleVector& r)
       {
+        if (this == &r)  { return *this; }
         p = r.p; vec = r.vec; value = r.value;
         return *this;
       }
