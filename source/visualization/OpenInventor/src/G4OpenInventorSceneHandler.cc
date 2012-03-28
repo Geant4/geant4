@@ -813,7 +813,7 @@ void G4OpenInventorSceneHandler::AddProperties(const G4VisAttributes* visAtts)
   fCurrentSeparator->addChild(fStyleCache->getResetTransform());
 
   SoMatrixTransform* matrixTransform = new SoMatrixTransform;
-  G4OpenInventorTransform3D oiTran(*fpObjectTransformation);
+  G4OpenInventorTransform3D oiTran(fObjectTransformation);
   SbMatrix* sbMatrix = oiTran.GetSbMatrix();
 
   const G4Vector3D scale = fpViewer->GetViewParameters().GetScaleFactor();

@@ -20,6 +20,9 @@ committal in the CVS repository !
 History file for visualization/OpenInventor
 -------------------------------------------
 
+28th March 2012  John Alliso  (openinventor-V09-05-01)
+- Migrated to G4VScenehandler::fObjectTransformation.
+
 3rd January 2012  John Allison  (openinventor-V09-05-00)
 - G4OpeninventorX//Xt/Win/Win32:
   o Removed #ifdef G4VIS... protection from header files so that they
