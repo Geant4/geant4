@@ -20,7 +20,6 @@
 #
 # histogram file
 /testem/histo/setFileName egs4/93ref0
-/testem/histo/setFileType root
 #
 /run/initialize
 #

@@ -44,14 +44,10 @@
 
 #include "Randomize.hh"
 
-#ifdef G4ANALYSIS_USE
-#include "AIDA/AIDA.h"
-#endif
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
-:Det(det),Kin(kin),af(0),tree(0)
+:Det(det),Kin(kin)
 {
   runMessenger = new RunActionMessenger(this);
   
@@ -74,19 +70,6 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
   limittrue = DBL_MAX;
   
   verbose = 0;
-  
-#ifdef G4ANALYSIS_USE
-  // Creating the analysis factory
-  af = AIDA_createAnalysisFactory();
-  if(!af) {
-    G4cout << " RunAction::RunAction() :" 
-           << " problem creating the AIDA analysis factory."
-           << G4endl;
-  }	     
-#endif
-    
-  histoName[0] = "testem2";
-  histoType    = "root";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -94,97 +77,80 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
 RunAction::~RunAction()
 {
   delete runMessenger;
-  
-#ifdef G4ANALYSIS_USE
-  delete af;
-#endif  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::bookHisto()
 {
-#ifdef G4ANALYSIS_USE
-  if(!af) return;
-  
-  // Creating a tree mapped to an hbook file.
-  histoName[1] = histoName[0] + "." + histoType;  
-  G4bool readOnly  = false;
-  G4bool createNew = true;
-  G4String options = "";
-  AIDA::ITreeFactory* tf  = af->createTreeFactory();  
-  tree = tf->create(histoName[1], histoType, readOnly, createNew, options);
-  delete tf;
-  if(!tree) {
-    G4cout << "RunAction::bookHisto() :" 
-           << " problem creating the AIDA tree with "
-           << " storeName = " << histoName[1]
-           << " readOnly = "  << readOnly
-           << " createNew = " << createNew
-           << G4endl;
-    return;
-  }
-  // Creating a histogram factory, whose histograms will be handled by the tree
-  AIDA::IHistogramFactory* hf = af->createHistogramFactory(*tree);
-  
+  // Create analysis manager
+  // The choice of analysis technology is done via selection of a namespace
+  //
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+    
+  // Open an output file
+  //
+  histoName[0] = "testem2";
+  analysisManager->OpenFile(histoName[0]);    
+  analysisManager->SetVerboseLevel(1);
+  G4String extension = analysisManager->GetFileType();
+  histoName[1] = histoName[0] + "." + extension;  
+
+  // Creating histograms
+  //
   G4double Ekin = Kin->GetParticleGun()->GetParticleEnergy();
   G4double dLradl = Det->GetdLradl();
   G4double dRradl = Det->GetdRradl();
+  
+  analysisManager->SetFirstHistoId(1);   
+  analysisManager->CreateH1( "1","total energy deposit(percent of Einc)",
+                                  110,0.,110.);
 
-  histo[0] = hf->createHistogram1D( "1","total energy deposit(percent of Einc)",
-                                    110,0.,110.);
+  analysisManager->CreateH1( "2","total charged tracklength (radl)",
+                                  110,0.,110.*Ekin/GeV);
 
-  histo[1] = hf->createHistogram1D( "2","total charged tracklength (radl)",
-                                    110,0.,110.*Ekin/GeV);
+  analysisManager->CreateH1( "3","total neutral tracklength (radl)",
+                                  110,0.,1100.*Ekin/GeV);
 
-  histo[2] = hf->createHistogram1D( "3","total neutral tracklength (radl)",
-                                    110,0.,1100.*Ekin/GeV);
-
-  histo[3] = hf->createHistogram1D( "4","longit energy profile (% of E inc)",
+  analysisManager->CreateH1( "4","longit energy profile (% of E inc)",
                                     nLbin,0.,nLbin*dLradl);
 				    
-  histo[4] = hf->createHistogram1D( "5","rms on longit Edep (% of E inc)",
-                                    nLbin,0.,nLbin*dLradl);
+  analysisManager->CreateH1( "5","rms on longit Edep (% of E inc)",
+                                  nLbin,0.,nLbin*dLradl);
 
   G4double Zmin=0.5*dLradl, Zmax=Zmin+nLbin*dLradl;
-  histo[5] = hf->createHistogram1D( "6","cumul longit energy dep (% of E inc)",
-                                    nLbin,Zmin,Zmax);
+  analysisManager->CreateH1( "6","cumul longit energy dep (% of E inc)",
+                                  nLbin,Zmin,Zmax);
 				    
-  histo[6] = hf->createHistogram1D( "7","rms on cumul longit Edep (% of E inc)",
-                                    nLbin,Zmin,Zmax);
+  analysisManager->CreateH1( "7","rms on cumul longit Edep (% of E inc)",
+                                  nLbin,Zmin,Zmax);
 
-  histo[7] = hf->createHistogram1D( "8","radial energy profile (% of E inc)",
-                                    nRbin,0.,nRbin*dRradl);
+  analysisManager->CreateH1( "8","radial energy profile (% of E inc)",
+                                  nRbin,0.,nRbin*dRradl);
 				    				    
-  histo[8] = hf->createHistogram1D( "9","rms on radial Edep (% of E inc)",
-                                    nRbin,0.,nRbin*dRradl);	    
+  analysisManager->CreateH1( "9","rms on radial Edep (% of E inc)",
+                                  nRbin,0.,nRbin*dRradl);	    
 
   G4double Rmin=0.5*dRradl, Rmax=Rmin+nRbin*dRradl;
-  histo[9] = hf->createHistogram1D("10","cumul radial energy dep (% of E inc)",
-                                    nRbin,Rmin,Rmax);
+  analysisManager->CreateH1("10","cumul radial energy dep (% of E inc)",
+                                  nRbin,Rmin,Rmax);
 
-  histo[10]= hf->createHistogram1D("11","rms on cumul radial Edep (% of E inc)",
-                                    nRbin,Rmin,Rmax);		    
+  analysisManager->CreateH1("11","rms on cumul radial Edep (% of E inc)",
+                                  nRbin,Rmin,Rmax);		    
 				    
- delete hf;
- G4cout << "\n----> Histogram Tree is opened in " << histoName[1] << G4endl;
-#endif
+ G4cout << "\n----> Histogram file is opened in " << histoName[1] << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::cleanHisto()
 {
-#ifdef G4ANALYSIS_USE
-  if(tree) {
-    tree->commit();       // Writing the histograms to the file
-    tree->close();        // and closing the tree (and the file)
-    G4cout << "\n----> Histogram Tree is saved in " << histoName[1] << G4endl; 
-   
-    delete tree;
-    tree = 0;
-  }
-#endif
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  
+  analysisManager->Write();
+  analysisManager->CloseFile();
+
+  delete G4AnalysisManager::Instance();    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -247,19 +213,17 @@ void RunAction::fillPerEvent()
   sumNeutrTrLength  += NeutrTrLength;
   sum2NeutrTrLength += NeutrTrLength*NeutrTrLength;
 
-#ifdef G4ANALYSIS_USE
   //fill histograms
   //
-  if(tree) {
-    G4double Ekin=Kin->GetParticleGun()->GetParticleEnergy();
-    G4double mass=Kin->GetParticleGun()->GetParticleDefinition()->GetPDGMass();
-    G4double radl=Det->GetMaterial()->GetRadlen();
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();  
 
-    histo[0]->fill(100.*dLCumul/(Ekin+mass));
-    histo[1]->fill(ChargTrLength/radl);
-    histo[2]->fill(NeutrTrLength/radl);
-  }
-#endif
+  G4double Ekin=Kin->GetParticleGun()->GetParticleEnergy();
+  G4double mass=Kin->GetParticleGun()->GetParticleDefinition()->GetPDGMass();
+  G4double radl=Det->GetMaterial()->GetRadlen();
+
+  analysisManager->FillH1(1, 100.*dLCumul/(Ekin+mass));
+  analysisManager->FillH1(2, ChargTrLength/radl);
+  analysisManager->FillH1(3, NeutrTrLength/radl);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -274,7 +238,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
   G4double mass=Kin->GetParticleGun()->GetParticleDefinition()->GetPDGMass();
   G4double norme = 100./(NbOfEvents*(kinEnergy+mass));
-
+  
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+      
   //longitudinal
   //
   G4double dLradl = Det->GetdLradl();
@@ -293,17 +259,12 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
      rmsELongitCumul[i] = norme*std::sqrt(std::fabs(NbOfEvents*sumE2LongitCumul[i]
                                     - sumELongitCumul[i]*sumELongitCumul[i]));
 
-
-#ifdef G4ANALYSIS_USE
-    if(tree) {
-      G4double bin = (i+0.5)*dLradl;
-      histo[3]->fill(bin,MeanELongit[i]/dLradl);
-      histo[4]->fill(bin, rmsELongit[i]/dLradl);      
-      bin = (i+1)*dLradl;
-      histo[5]->fill(bin,MeanELongitCumul[i]);
-      histo[6]->fill(bin, rmsELongitCumul[i]);
-    }
-#endif
+    G4double bin = (i+0.5)*dLradl;
+    analysisManager->FillH1(4, bin,MeanELongit[i]/dLradl);
+    analysisManager->FillH1(5, bin, rmsELongit[i]/dLradl);      
+    bin = (i+1)*dLradl;
+    analysisManager->FillH1(6, bin,MeanELongitCumul[i]);
+    analysisManager->FillH1(7, bin, rmsELongitCumul[i]);
    }
 
   //radial
@@ -323,16 +284,13 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
      rmsERadialCumul[i] = norme*std::sqrt(std::fabs(NbOfEvents*sumE2RadialCumul[i]
                                     - sumERadialCumul[i]*sumERadialCumul[i]));
 
-#ifdef G4ANALYSIS_USE
-    if(tree) {
-      G4double bin = (i+0.5)*dRradl;
-      histo[7]->fill(bin,MeanERadial[i]/dRradl);
-      histo[8]->fill(bin, rmsERadial[i]/dRradl);      
-      bin = (i+1)*dRradl;
-      histo[9] ->fill(bin,MeanERadialCumul[i]);
-      histo[10]->fill(bin, rmsERadialCumul[i]);
-    }
-#endif
+
+    G4double bin = (i+0.5)*dRradl;
+    analysisManager->FillH1(8, bin,MeanERadial[i]/dRradl);
+    analysisManager->FillH1(9, bin, rmsERadial[i]/dRradl);      
+    bin = (i+1)*dRradl;
+    analysisManager->FillH1(10, bin,MeanERadialCumul[i]);
+    analysisManager->FillH1(11, bin, rmsERadialCumul[i]);
    }
 
   //find Moliere confinement

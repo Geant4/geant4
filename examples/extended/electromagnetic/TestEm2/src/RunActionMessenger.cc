@@ -60,11 +60,7 @@ RunActionMessenger::RunActionMessenger(RunAction* run)
   histoDir->SetGuidance("histograms control");
   
   factoryCmd = new G4UIcmdWithAString("/testem/histo/setFileName",this);
-  factoryCmd->SetGuidance("set name for the histograms file");
-
-  typeCmd = new G4UIcmdWithAString("/testem/histo/setFileType",this);
-  typeCmd->SetGuidance("set type (hbook, root, XML) for the histograms file");
-  typeCmd->SetCandidates("hbook root XML");         
+  factoryCmd->SetGuidance("set name for the histograms file");    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,7 +71,6 @@ RunActionMessenger::~RunActionMessenger()
   delete accCmd;
   delete runDir;
   delete factoryCmd;
-  delete typeCmd;
   delete histoDir;
 }
 
@@ -91,9 +86,6 @@ void RunActionMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
       
   if (command == factoryCmd)
    { Run->SetHistoName(newValue);}
-
-  if (command == typeCmd)
-   { Run->SetHistoType(newValue);}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

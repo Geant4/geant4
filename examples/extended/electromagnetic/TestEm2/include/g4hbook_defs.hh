@@ -23,45 +23,26 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunActionMessenger.hh,v 1.4 2006-06-29 16:50:01 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// $Id$
 
-#ifndef RunActionMessenger_h
-#define RunActionMessenger_h 1
+// Author: Ivana Hrivnacova, 15/06/2011  (ivana@ipno.in2p3.fr)
 
-#include "globals.hh"
-#include "G4UImessenger.hh"
+#ifndef g4hbook_defs_h
+#define g4hbook_defs_h
 
-class RunAction;
-class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWith3Vector;
-class G4UIcmdWithAnInteger;
+#include <tools/hbook/h1>
+#include <tools/hbook/h2>
+#include <tools/hbook/wntuple>
+#include "ExG4HbookAnalysisManager.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+namespace G4Hbook {
 
-class RunActionMessenger: public G4UImessenger
-{
-  public:
-    RunActionMessenger(RunAction*);
-   ~RunActionMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
-    
-  private:
-    RunAction*          Run;
-    
-    G4UIdirectory*        runDir;
-    G4UIcmdWith3Vector*   accCmd;
-    G4UIcmdWithAnInteger* verbCmd;
-            
-    G4UIdirectory*        histoDir;        
-    G4UIcmdWithAString*   factoryCmd;
-};
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+  typedef tools::hbook::h1  G4AnaH1;
+  typedef tools::hbook::h2  G4AnaH2;    
+  typedef tools::hbook::wntuple  G4Ntuple; 
+  typedef ExG4HbookAnalysisManager G4AnalysisManager; 
+} 
 
 #endif
+
+  

@@ -38,8 +38,11 @@
 #include "G4ThreeVector.hh"
 #include "globals.hh"
 
-#include <vector>
+#include "g4root.hh"
+////#include "g4xml.hh"
+////#include "g4hbook.hh"
 
+#include <vector>
 typedef  std::vector<G4double> MyVector;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,12 +52,6 @@ class PrimaryGeneratorAction;
 class RunActionMessenger;
 
 class G4Run;
-
-namespace AIDA {
-  class IAnalysisFactory;
-  class ITree;
-  class IHistogram1D;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -84,10 +81,8 @@ class RunAction : public G4UserRunAction
 
      // Histogram name and type
      void SetHistoName(G4String& val)   {histoName[0] = val;};
-     void SetHistoType(G4String& val)   {histoType    = val;};
      
      const G4String& GetHistoName() const  {return histoName[1];};
-     const G4String& GetHistoType() const  {return histoType;};
      
   private:
 
@@ -129,11 +124,6 @@ class RunAction : public G4UserRunAction
     G4int    verbose;
     
     G4String histoName[2];
-    G4String histoType;
-    
-    AIDA::IAnalysisFactory* af;
-    AIDA::ITree*            tree;
-    AIDA::IHistogram1D*     histo[11];
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
