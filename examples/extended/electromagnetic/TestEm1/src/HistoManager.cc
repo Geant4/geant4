@@ -38,7 +38,7 @@
 
 HistoManager::HistoManager()
 {
-  fileName[0]  = "rdecay1";
+  fileName[0]  = "testem1";
   factoryOn = false;
   fNbHist   = 0;
 
