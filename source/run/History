@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Mar. 6th, 2012, M.Asai (run-V09-05-01)
+- Add dummy copy constructor and = operator to G4Run.
+
 Dec. 9th, 2011, H.Kurashige (run-V09-05-00)
 - Fix Coverity defects in assignment operator of G4VModularPhysicsList
 
