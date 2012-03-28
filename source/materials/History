@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05-03-12 V.Ivanchenko (materials-V09-05-11)
+- G4Element - add construction of Isotope vector for all elements,
+    if user does not create isotopes then vector of of isotopes
+    with natural abundances is created using NIST data
+- G4ExtDEDXTable - trying to fix Coverity report
+
 25-02-12 V.Ivanchenko (materials-V09-05-10)
 - G4Material - return back to the version of 9.5
      

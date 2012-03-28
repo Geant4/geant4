@@ -50,15 +50,18 @@
 // 30-03-05: warning in GetElement(elementName)
 // 15-11-05: GetElement(elementName, G4bool warning=true) 
 // 17-10-06: Add fNaturalAbandances (V.Ivanchenko)
-// 27-07-07, improve destructor (V.Ivanchenko) 
-// 18-10-07, move definition of material index to ComputeDerivedQuantities (V.Ivanchenko) 
+// 27-07-07: improve destructor (V.Ivanchenko) 
+// 18-10-07: move definition of material index to ComputeDerivedQuantities (VI) 
 // 25.10.11: new scheme for G4Exception  (mma)
+// 05-03-12: always create isotope vector (V.Ivanchenko) 
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4Element.hh"
 #include "G4AtomicShells.hh"
+#include "G4NistManager.hh"
 #include <iomanip>
+#include <sstream>
 
 G4ElementTable G4Element::theElementTable;
 
@@ -72,15 +75,17 @@ G4Element::G4Element(const G4String& name, const G4String& symbol,
 {
   G4int iz = (G4int)zeff;
   if (zeff<1.) {
-    G4Exception ("G4Element::G4Element()", "mat011",  FatalException,
-      "G4Element ERROR ! It is not allowed to create an Element with Z < 1" );
+    G4ExceptionDescription ed;
+    ed << "Fail to create G4Element " << name 
+       << " Z= " << zeff << " < 1 !" << G4endl;
+    G4Exception ("G4Element::G4Element()", "mat011",  FatalException, ed);
+    return;
   }
   if (std::abs(zeff - iz) > perMillion) {
-    G4cout << "G4Element Warning:  " << name << " Z= " << zeff 
-	   << " A= " << aeff/(g/mole) << G4endl; 
-    G4cerr << name << " : WARNING from G4Element::G4Element !"  
-      " Trying to define an element as a mixture directly via effective Z."
-	   << G4endl;
+    G4ExceptionDescription ed;
+    ed << "G4Element Warning:  " << name << " Z= " << zeff 
+       << " A= " << aeff/(g/mole) << G4endl; 
+    G4Exception("G4Element::G4Element()", "mat017", JustWarning, ed);
   }
 
   InitializePointers();
@@ -92,13 +97,19 @@ G4Element::G4Element(const G4String& name, const G4String& symbol,
   if(fNeff < 1.0) fNeff = 1.0;
 
   if (fNeff < zeff) {
-    G4Exception ("G4Element::G4Element()", "mat012", FatalException, 
-      "G4Element ERROR ! Attempt to create an Element with N < Z !!!" );
+    G4ExceptionDescription ed;
+    ed << "Fail to create G4Element " << name 
+       << " with Z= " << zeff << "  N= " << fNeff 
+       << "   N < Z is not allowed" << G4endl;
+    G4Exception ("G4Element::G4Element()", "mat012",  FatalException, ed);
+    return;
   }
    
   fNbOfAtomicShells      = G4AtomicShells::GetNumberOfShells(iz);
   fAtomicShells          = new G4double[fNbOfAtomicShells];
   fNbOfShellElectrons    = new G4int[fNbOfAtomicShells];
+
+  AddNaturalIsotopes();
 
   for (G4int i=0;i<fNbOfAtomicShells;i++) 
   {
@@ -121,8 +132,12 @@ G4Element::G4Element(const G4String& name,
 
   size_t n = size_t(nIsotopes);
 
-  theIsotopeVector         = new G4IsotopeVector(n,0);
-  fRelativeAbundanceVector = new G4double[nIsotopes];
+  if(0 == nIsotopes) {
+    AddNaturalIsotopes();
+  } else {
+    theIsotopeVector         = new G4IsotopeVector(n,0);
+    fRelativeAbundanceVector = new G4double[nIsotopes];
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -132,8 +147,10 @@ G4Element::G4Element(const G4String& name,
 void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
 {
   if (theIsotopeVector == 0) {
-    G4Exception ("G4Element::AddIsotope()", "mat013", FatalException,
-		 " Trying to add an Isotope before contructing the element.");
+    G4ExceptionDescription ed;
+    ed << "Fail to add Isotope to G4Element " << fName 
+       << " with Z= " << fZeff << "  N= " << fNeff << G4endl;
+    G4Exception ("G4Element::AddIsotope()", "mat013",  FatalException, ed);
     return;
   }
   G4int iz = isotope->GetZ();
@@ -143,8 +160,12 @@ void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
     // check same Z
     if (fNumberOfIsotopes==0) { fZeff = G4double(iz); }
     else if (G4double(iz) != fZeff) { 
-      G4Exception ("G4Element::AddIsotope()", "mat014", FatalException,
-		   " Try to add isotopes with different Z");
+      G4ExceptionDescription ed;
+      ed << "Fail to add Isotope Z= " << iz << " to G4Element " << fName 
+	 << " with different Z= " << fZeff << fNeff 
+	 << G4endl;
+      G4Exception ("G4Element::AddIsotope()", "mat014",  FatalException, ed);
+      return;
     }
     //Z ok   
     fRelativeAbundanceVector[fNumberOfIsotopes] = abundance;
@@ -152,8 +173,11 @@ void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
     ++fNumberOfIsotopes;
     isotope->increaseCountUse();
   } else {
-    G4Exception ("G4Element::AddIsotope()", "mat015", FatalException,  
-		 " Attempt to add more than the declared number of isotopes.");
+    G4ExceptionDescription ed;
+    ed << "Fail to add Isotope Z= " << iz << " to G4Element " << fName 
+       << " - more isotopes than declaired " << G4endl;
+    G4Exception ("G4Element::AddIsotope()", "mat015",  FatalException, ed);
+    return;
   }
 
   // filled.
@@ -250,7 +274,7 @@ void G4Element::ComputeDerivedQuantities()
   // check if elements with same Z already exist
   fIndexZ = 0; 
   for (size_t J=0 ; J<fIndexInTable ; J++) {
-    if (theElementTable[J]->GetZ() == fZeff) fIndexZ++;
+    if (theElementTable[J]->GetZ() == fZeff) { ++fIndexZ; }
   }
   //nb of materials which use this element
   fCountUse = 0;
@@ -302,11 +326,44 @@ void G4Element::ComputeLradTsaiFactor()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void G4Element::AddNaturalIsotopes()
+{
+  G4int Z = G4int(fZeff + 0.5);
+  G4NistManager* nist = G4NistManager::Instance();
+  G4int n = nist->GetNumberOfNistIsotopes(Z);
+  G4int N0 = nist->GetNistFirstIsotopeN(Z);
+  fNumberOfIsotopes = 0;
+  for(G4int i=0; i<n; ++i) {
+    if(nist->GetIsotopeAbundance(Z, N0+i) > 0.0) { ++fNumberOfIsotopes; }
+  }
+  theIsotopeVector         = new G4IsotopeVector(fNumberOfIsotopes,0);
+  fRelativeAbundanceVector = new G4double[fNumberOfIsotopes];
+  G4int idx = 0;
+  for(G4int i=0; i<n; ++i) {
+    G4int N = N0 + i;
+    G4double x = nist->GetIsotopeAbundance(Z, N); 
+    if(x > 0.0) {
+      std::ostringstream s;
+      s << fName << N;
+      (*theIsotopeVector)[idx] = new G4Isotope(s.str(),Z, N, 0.0, 0);
+      fRelativeAbundanceVector[idx] = x;
+      ++idx;
+    }
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4double G4Element::GetAtomicShell(G4int i) const
 {
   if (i<0 || i>=fNbOfAtomicShells) {
-    G4Exception("G4Element::GetAtomicShell()", "mat016", FatalException,
-                "Invalid argument in GetAtomicShell()");    
+    G4ExceptionDescription ed;
+    ed << "Invalid argument " << i << " in for G4Element " << fName 
+       << " with Z= " << fZeff 
+       << " and Nshells= " << fNbOfAtomicShells  
+       << G4endl;
+    G4Exception("G4Element::GetAtomicShell()", "mat016", FatalException, ed);
+    return 0.0;
   }
   return fAtomicShells[i];
 }
@@ -316,8 +373,13 @@ G4double G4Element::GetAtomicShell(G4int i) const
 G4int G4Element::GetNbOfShellElectrons(G4int i) const
 {
   if (i<0 || i>=fNbOfAtomicShells) {
-    G4Exception("G4Element::GetNbOfShellElectrons()", "mat017", FatalException,
-                "Invalid argument in GetNbOfShellElectrons");
+    G4ExceptionDescription ed;
+    ed << "Invalid argument " << i << " for G4Element " << fName 
+       << " with Z= " << fZeff 
+       << " and Nshells= " << fNbOfAtomicShells  
+       << G4endl;
+    G4Exception("G4Element::GetNbOfShellElectrons()", "mat016", FatalException, ed);
+    return 0;
   }
   return fNbOfShellElectrons[i];
 }
@@ -349,9 +411,9 @@ G4Element* G4Element::GetElement(G4String elementName, G4bool warning)
    
   // the element does not exist in the table
   if (warning) {
-  G4cout << "\n---> warning from G4Element::GetElement(). The element: "
-         << elementName << " does not exist in the table. Return NULL pointer."
-	 << G4endl;
+    G4cout << "\n---> warning from G4Element::GetElement(). The element: "
+	   << elementName << " does not exist in the table. Return NULL pointer."
+	   << G4endl;
   }   
   return 0;   
 }

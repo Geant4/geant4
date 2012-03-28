@@ -231,13 +231,12 @@ private:
 
   G4Element(G4Element&);
   const G4Element & operator=(const G4Element&);
-       
-private:
 
   void InitializePointers();
   void ComputeDerivedQuantities();
   void ComputeCoulombFactor();
   void ComputeLradTsaiFactor();
+  void AddNaturalIsotopes();
 
 private:
 

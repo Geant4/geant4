@@ -58,14 +58,18 @@ G4Isotope::G4Isotope(const G4String& Name,G4int Z,G4int N,G4double A,G4int m)
 : fName(Name), fZ(Z), fN(N), fA(A), fm(m), fCountUse(0)
 {
   if (Z<1) { 
-    G4Exception ("G4Isotope::G4Isotope()", "mat001", FatalException,
-      "G4Isotope: ERROR! It is not allowed to create an Isotope with Z < 1" );
+    G4ExceptionDescription ed;
+    ed << "Wrong Isotope " << Name << " Z= " << Z << G4endl;
+    G4Exception ("G4Isotope::G4Isotope()", "mat001", FatalException, ed);
+    return;
   }
   if (N<Z) {
-    G4Exception ("G4Isotope::G4Isotope()", "mat002", FatalException, 
-      "G4Isotope: ERROR! Attempt to create an Isotope with N < Z !!!" );
+    G4ExceptionDescription ed;
+    ed << "Wrong Isotope " << Name << " Z= " << Z << " > N= " << N << G4endl;
+    G4Exception ("G4Isotope::G4Isotope()", "mat002", FatalException, ed);
+    return;
   }
-  if (A<=DBL_MIN) {
+  if (A<=0.0) {
     fA = (G4NistManager::Instance()->GetAtomicMass(Z,N))*g/(mole*amu_c2);  
   }
   theIsotopeTable.push_back(this);
@@ -86,13 +90,6 @@ G4Isotope::G4Isotope(__void__&)
 
 G4Isotope::~G4Isotope()
 {
-  /*
-  if (fCountUse != 0)
-    G4cout << "--> warning from ~G4Isotope(): the isotope " << fName
-           << " is still referenced by " << fCountUse << " G4Elements \n" 
-	   << G4endl;
-  */     
-  //remove this isotope from theIsotopeTable
   theIsotopeTable[fIndexInTable] = 0;
 }  
 

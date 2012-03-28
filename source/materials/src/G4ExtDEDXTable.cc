@@ -427,6 +427,7 @@ G4bool G4ExtDEDXTable::RetrievePhysicsTable(
   ifilestream >> nmbVectors;
 
   //  if(nmbVectors == std::string::npos) {
+  /*
   if(nmbVectors <= 0) {
 #ifdef G4VERBOSE
     G4cout << "G4ExtDEDXTable::RetrievePhysicsTable() " 
@@ -434,7 +435,7 @@ G4bool G4ExtDEDXTable::RetrievePhysicsTable(
 #endif
     return false;
   }  
-
+  */
   //size_t nm = size_t(nmbVectors);
   for(G4int i = 0; i<nmbVectors; ++i) {
 
