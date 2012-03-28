@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20 March 2012 Witek Pokorski (gdml-V09-04-11)
+- Bug fix in material properties.
+
 23 November 2011 Gabriele Cosmo (gdml-V09-04-10)
 - Additional fix on G4EllipticalTube, to not consider units in import for
   semi-axes ratios.
