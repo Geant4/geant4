@@ -14,10 +14,15 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17 March 2012  Dennis Wright  radioactive_decay-V09-05-00
+---------------------------------------------------------
+- G4RIsotopeTable::GetMeanLifeTime : change length of inputChars to 100
+  to fix infinite loop when excitation energy is non-zero
+
 23 November 2011  L.Desorgher(radioactive_decay-V09-04-14)
 ---------------------------------
--- G4NuclearDecayChannel.cc: add initialisation of dynamicDaughter  in line 455 to avoid
-   segmentation fault for some decays. 
+- G4NuclearDecayChannel.cc: add initialisation of dynamicDaughter in
+  line 455 to avoid segmentation fault for some decays. 
 
 20 November 2011  V.Ivanchenko(radioactive_decay-V09-04-13)
 ---------------------------------
