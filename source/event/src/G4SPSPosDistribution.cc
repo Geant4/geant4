@@ -154,8 +154,8 @@ void G4SPSPosDistribution::SetRadius0(G4double rad)
 
 void G4SPSPosDistribution::SetBeamSigmaInR(G4double r)
 {
+  SX = SY = r;
   SR = r;
-  SX = SY = r/std::sqrt(2.);
 }
 
 void G4SPSPosDistribution::SetBeamSigmaInX(G4double r)
