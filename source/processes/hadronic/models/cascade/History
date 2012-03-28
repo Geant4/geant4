@@ -15,6 +15,58 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+21 March 2012  Michael Kelsey (hadr-casc-V09-05-06)
+---------------------------------------------------
+- G4NucleiModel.cc:  Add check in isProjectile() for single-zone nuclei, and
+  ignore "movingInward" flag in that case.
+
+20 March 2012  Michael Kelsey (hadr-casc-V09-05-05)
+---------------------------------------------------
+- G4NucleiModel.cc:  Fill zone_volumes buffer for single-zone case.
+
+14 March 2012  Michael Kelsey
+-----------------------------
+- test/: Tagged all existing, obsolete code as "OLD_Validation_Suite" for
+  future recovery if desired.  Remove all code and files from active use, to
+  be replaced with our separate "ppi4GeV" utility program, suitably renamed.
+
+9 March 2012  Michael Kelsey
+----------------------------
+- G4CascadeSigmaMinusPChannel.cc: Change zero-bin cross-sections for
+  Lambda-n and Sigma0-n, based on data from M. Goossens et al. measurements
+  of Sigma- capture (per J. Yarba).
+
+- G4NucleiModel.cc:  Add scale factor, set via envvar, for gamma absorption.
+
+8 March 2012  Michael Kelsey
+----------------------------
+- G4NucleiModel.cc:  In absorptionCrossSection() add binned spectrum derived
+  from Mikhail Kossov's gamma-D absorption data, for use with photons.
+
+- G4ElementaryParticleCollider.cc:  Modify sanity checks on dibaryon targets
+  to allow both photons and gamma to interact; gammas split the dibaryons
+  the same way pi0's do.
+
+7 March 2012  Michael Kelsey
+----------------------------
+- G4NucleiModel: In generateInteractionPartners() and
+  absorptionCrossSection(), allow photons to be absorbed via dibaryon
+  (quasideuteron) excitation.  Simplify and encapsulate path-length
+  computations in generateInteractionPartners(), with several new internal
+  functions, and a buffer to store the zone-by-zone shell volumes.
+
+5 March 2012  Michael Kelsey
+----------------------------
+- G4CascadParticle.hh:  Add public accessor for cumulative path length.
+
+- G4NucleiModel.cc:  In generateInteractionPartners(), check to see if
+  CParticle is incident projectile (inbound from outside nucleus, not
+  created in outer zone).  If so, force interaction to be attempted rather
+  than cutting on mean free path.
+
+- G4CascadeKminusPChannel.cc:  Modify two-body cross-section values in
+  zero-energy bin, to reflect stopping data from Julia Yarba.
+
 25 January 2012  Michael Kelsey (hadr-casc-V09-05-04)
 -----------------------------------------------------
 - G4CascadeInterface.cc: Check for no-interaction in retryInelasticProton,

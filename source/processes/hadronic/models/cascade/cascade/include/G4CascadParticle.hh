@@ -34,6 +34,7 @@
 //		re-organize declarations, with set/get pairs together
 // 20110806  M. Kelsey -- Add fill() function to replicate ctor/op=() action
 // 20110922  M. Kelsey -- Add stream argument to print(), add operator<<().
+// 20120306  M. Kelsey -- Add access for cumulative path through nucleus.
 
 #ifndef G4CASCAD_PARTICLE_HH
 #define G4CASCAD_PARTICLE_HH
@@ -90,6 +91,7 @@ public:
 
   void initializePath(G4double npath) { current_path = npath; }
   void incrementCurrentPath(G4double npath) { current_path += npath; }
+  G4double getCurrentPath() const { return current_path; }
 
   void updateZone(G4int izone) { current_zone = izone; }
   G4int getCurrentZone() const { return current_zone; }
@@ -100,8 +102,7 @@ public:
   G4double getPathToTheNextZone(G4double rz_in, G4double rz_out);
   void propagateAlongThePath(G4double path);
 
-  G4bool young(G4double young_path_cut, 
-	       G4double cpath) const { 
+  G4bool young(G4double young_path_cut, G4double cpath) const { 
     return ((current_path < 1000.) && (cpath < young_path_cut));
   }
 

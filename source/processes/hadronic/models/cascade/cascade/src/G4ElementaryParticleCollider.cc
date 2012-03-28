@@ -84,6 +84,8 @@
 // 20111216  M. Kelsey -- Add diagnostics to generateMomModulesFor2toMany(),
 //		defer allocation of buffer in generateSCMfinalState() so that
 //		multiplicity failures return zero output, and can be trapped.
+// 20120308  M. Kelsey -- Allow photons to interact with dibaryons (see
+//		changes in G4NucleiModel).
 
 #include "G4ElementaryParticleCollider.hh"
 #include "G4CascadeChannel.hh"
@@ -208,10 +210,11 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
       output.addOutgoingParticles(particles);
     }
   } else {	// neither particle is nucleon: pion on quasideuteron
-    if(particle1->quasi_deutron() || particle2->quasi_deutron()) {
-      if(particle1->pion() || particle2->pion()) {
+    if (particle1->quasi_deutron() || particle2->quasi_deutron()) {
+      if (particle1->pion() || particle2->pion() ||
+	  particle1->isPhoton() || particle2->isPhoton()) {
 	G4LorentzConvertor convertToSCM;
-	if(particle1->pion()) {
+	if(particle2->quasi_deutron()) {	// Quasideuteron is target
 	  convertToSCM.setBullet(particle1);
 	  convertToSCM.setTarget(particle2);
 	} else {
@@ -243,7 +246,6 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
 	  std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
 	  output.addOutgoingParticles(particles);
 	};
-	
       } else {
 	G4cerr << " ElementaryParticleCollider -> can only collide pions with dibaryons " 
 	       << G4endl;
@@ -966,13 +968,12 @@ void
 G4ElementaryParticleCollider::generateSCMpionAbsorption(G4double etot_scm,
 			             G4InuclElementaryParticle* particle1,
 			             G4InuclElementaryParticle* particle2) {
-  if (verboseLevel > 3) G4cout << " >>> G4ElementaryParticleCollider::generateSCMpionAbsorption" 
-                               << G4endl;
+  if (verboseLevel > 3)
+    G4cout << " >>> G4ElementaryParticleCollider::generateSCMpionAbsorption" 
+	   << G4endl;
 
-  // generate nucleons momenta for pion absorption
+  // generate nucleons momenta for pion or photon absorption
   // the nucleon distribution assumed to be isotropic in SCM
-
-  G4InuclElementaryParticle dummy;
 
   particles.clear();		// Initialize buffers for this event
   particles.resize(2);
@@ -984,54 +985,43 @@ G4ElementaryParticleCollider::generateSCMpionAbsorption(G4double etot_scm,
 
   // generate kinds
 
-  if (type1 == 3) {
-
-    if (type2 == 111) { // pi+ + PP -> ? 
-
-      G4cout << " pion absorption: pi+ + PP -> ? " << G4endl;
-
+  if (type1 == pionPlus) {
+    if (type2 == diproton) {		// pi+ + PP -> ? 
+      G4cerr << " pion absorption: pi+ + PP -> ? " << G4endl;
+      return;
+    } else if (type2 == unboundPN) { 	// pi+ + PN -> PP
+      particle_kinds.push_back(proton);
+      particle_kinds.push_back(proton);
+    } else if (type2 == dineutron) { 	// pi+ + NN -> PN
+      particle_kinds.push_back(proton);
+      particle_kinds.push_back(neutron);
+    }
+  } else if (type1 == pionMinus) { 
+    if (type2 == diproton) {		// pi- + PP -> PN 
+      particle_kinds.push_back(proton);
+      particle_kinds.push_back(neutron);
+    } else if (type2 == unboundPN) {	 // pi- + PN -> NN
+      particle_kinds.push_back(neutron);
+      particle_kinds.push_back(neutron);
+    } else if (type2 == dineutron) {	// pi- + NN -> ?
+      G4cerr << " pion absorption: pi- + NN -> ? " << G4endl;
       return;
     }
-    else if(type2 == 112) { // pi+ + PN -> PP
-      particle_kinds.push_back(1);
-      particle_kinds.push_back(1);
+  } else if (type1 == pionZero || type1 == photon) {
+    if (type2 == diproton) {		// pi0/gamma + PP -> PP 
+      particle_kinds.push_back(proton);
+      particle_kinds.push_back(proton);
+    } else if (type2 == unboundPN) {	// pi0/gamma + PN -> PN
+      particle_kinds.push_back(proton);
+      particle_kinds.push_back(neutron);
+    } else if (type2 == dineutron) {	// pi0/gamma + NN -> ?
+      particle_kinds.push_back(neutron);
+      particle_kinds.push_back(neutron);
     }
-    else if(type2 == 122) { // pi+ + NN -> PN
-      particle_kinds.push_back(1);
-      particle_kinds.push_back(2);
-    };     
   }
-  else if(type1 == 5) { 
-    if(type2 == 111) { // pi- + PP -> PN 
-      particle_kinds.push_back(1);
-      particle_kinds.push_back(2);
-    }
-    else if(type2 == 112) { // pi- + PN -> NN
-      particle_kinds.push_back(2);
-      particle_kinds.push_back(2);
-    }
-    else if(type2 == 122) { // pi- + NN -> ?
-
-      G4cout << " pion absorption: pi- + NN -> ? " << G4endl;
-
-      return;
-    };     
-  }
-  else if(type1 == 7) {
-    if(type2 == 111) { // pi0 + PP -> PP 
-      particle_kinds.push_back(1);
-      particle_kinds.push_back(1);
-    }
-    else if(type2 == 112) { // pi0 + PN -> PN
-      particle_kinds.push_back(1);
-      particle_kinds.push_back(2);
-    }
-    else if(type2 == 122) { // pi0 + NN -> ?
-      particle_kinds.push_back(2);
-      particle_kinds.push_back(2);
-    };     
-  };
     
+  G4InuclElementaryParticle dummy;
+
   G4double m1 = dummy.getParticleMass(particle_kinds[0]);
   G4double m1sq = m1*m1;
 

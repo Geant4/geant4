@@ -60,6 +60,9 @@
 //		returning a vector to be copied.
 // 20110823  M. Kelsey -- Remove local cross-section tables entirely
 // 20120125  M. Kelsey -- Add special case for photons to have zero potential.
+// 20120307  M. Kelsey -- Add zone volume array for use with quasideuteron
+//		density, functions to identify projectile, compute interaction
+//		distance.
 
 #ifndef G4NUCLEI_MODEL_HH
 #define G4NUCLEI_MODEL_HH
@@ -67,6 +70,7 @@
 #include "G4InuclElementaryParticle.hh"
 #include "G4CascadParticle.hh"
 #include "G4CollisionOutput.hh"
+#include "G4LorentzConvertor.hh"
 #include <algorithm>
 #include <vector>
 
@@ -115,8 +119,12 @@ public:
 
   G4double getRadius() const { return nuclei_radius; }
   G4double getRadius(G4int izone) const {
-    return ( (izone<0) ? 0 
+    return ( (izone<0) ? 0.
 	     : (izone<number_of_zones) ? zone_radii[izone] : nuclei_radius);
+  }
+  G4double getVolume(G4int izone) const {
+    return ( (izone<0) ? 0.
+	     : (izone<number_of_zones) ? zone_volumes[izone] : nuclei_volume);
   }
 
   G4int getNumberOfZones() const { return number_of_zones; }
@@ -153,6 +161,7 @@ public:
 			    G4ElementaryParticleCollider* theEPCollider,
 			    std::vector<G4CascadParticle>& cascade); 
 
+  G4bool isProjectile(const G4CascadParticle& cparticle) const;
   G4bool worthToPropagate(const G4CascadParticle& cparticle) const; 
     
   G4InuclElementaryParticle generateNucleon(G4int type, G4int zone) const;
@@ -201,9 +210,23 @@ private:
   G4double zoneIntegralGaussian(G4double ur1, G4double ur2,
 				G4double nuclearRadius) const; 
 
-  G4double getRatio(G4int ip) const;
+  G4double getRatio(G4int ip) const;	// Fraction of nucleons still available
+
+  // Scale nuclear density with interactions so far
+  G4double getCurrentDensity(G4int ip, G4int izone) const;
+
+  // Average path length for any interaction of projectile and target
+  //	= 1. / (density * cross-section)
+  G4double inverseMeanFreePath(const G4CascadParticle& cparticle,
+			       const G4InuclElementaryParticle& target);
+  // NOTE:  Function is non-const in order to use dummy_converter
+
+  // Use path-length and MFP (above) to throw random distance to collision
+  G4double generateInteractionLength(const G4CascadParticle& cparticle,
+				     G4double path, G4double invmfp) const;
 
   // Buffers for processing interactions on each cycle
+  G4LorentzConvertor dummy_convertor;	// For getting collision frame
   G4CollisionOutput EPCoutput;		// For N-body inelastic collisions
 
   std::vector<G4InuclElementaryParticle> qdeutrons;	// For h+(NN) trials
@@ -228,8 +251,10 @@ private:
   std::vector<std::vector<G4double> > zone_potentials;
   std::vector<std::vector<G4double> > fermi_momenta;
   std::vector<G4double> zone_radii;
+  std::vector<G4double> zone_volumes;
   std::vector<G4double> binding_energies;
   G4double nuclei_radius;
+  G4double nuclei_volume;
   G4int number_of_zones;
 
   G4int A;
