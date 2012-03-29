@@ -1,0 +1,287 @@
+
+                       geant4-09-05-ref-03
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o Activate construction of isotope-vector for all elements in G4Element;
+   if user does not create isotopes, then vector of isotopes with natural
+   abundances is created automatically using NIST data.
+ o Use of same Bremsstrahlung model in all EM builders 
+   and same e+e- pair production processes to mu+/mu-, pi+/pi-, K+K-,
+   proton/anti_proton. Expected reduction of memory for physics tables
+   and initialisation time for EM physics.
+ o Added protection fix in all Urban multiple-scattering classes against
+   big scattering angles for e+- (E > 20 MeV); the protection cuts
+   tail of scattering angles to avoid artificial scattering of high energy e+-.
+ o Decoupled calculation of Penelope ionisation cross-sections from the
+   Ionisation model. Preliminary step for a future Penelope-specific
+   atomic de-excitation model. Also preliminary step for a future
+   Penelope-specific fluorescence model.
+ o New classes G4PromptPhotonEvaporation, G4LevelManager, G4NucLevel, and
+   G4LevelReader implementing new photon-evaporation model.
+
+
+---------- Reference-tag 'Release Notes' -----------
+
+(*)  Fixes included in release 9.5.p01
+
+Summarised, the list of changes is the following:
+
+cmake                                            cmake-V09-05-07
+-----
+- Fixed filtering of symbols for DLL building on Windows 64-bits.            (*)
+- Corrected compilation and link options for Intel-icc compiler.             (*)
+
+event                                            event-V09-05-03             (*)
+-----
+- Corrected location of G4Exception to the constructor of G4UserEventAction. 
+- Added dummy copy constructor and operator=() to G4Event.
+  Addressing problem report #1277.
+- Corrected settings of 'sigmaX' and 'sigmaY' in G4SPSPosDistribution;
+  courtesy of G.Fada. Addressing problem report #1278.
+
+geometry/navigation                              geomnav-V09-05-02           (*)
+-------------------
+- G4MultiNavigator: fix for dealing with cases of clashing normals and
+  return invalid normal. Replaced FatalException with Warning, issued
+  only if fVerbose > 2.
+
+geometry/solids/specific                         geom-specific-V09-05-03     (*)
+------------------------
+- Fixed more trivial Coverity defects in G4TwistedTubs and G4VTwisteFaceted
+  for missing protection against self-assignment.
+
+graphics_reps                                    greps-V09-05-06
+-------------
+- G4Colour: added colour brown (colour of G4 logo).
+- G4Text: added operator<<(...,G4Text::Layout), for producing meaningful
+  text instead of the integer value of the enumerator.
+
+materials                                        materials-V09-05-11
+---------
+- G4Element: added construction of isotope-vector for all elements;
+  if user does not create isotopes, then vector of isotopes with natural
+  abundances is created automatically using NIST data.
+- Fix for Coverity report in G4ExtDEDXTable.
+
+persistency/gdml                                 gdml-V09-05-00              (*)
+----------------
+- Fix for import of material properties in reader.
+
+physics_lists                                    phys-lists-V09-05-05
+-------------
+- In all EM builders use the same Bremsstrahlung and e+e- pair production
+  processes to mu+/mu-, pi+/pi-, K+K-, proton/anti_proton.
+  Expected reduction of memory for physics tables and initialisation time
+  for EM physics.
+- Fixed Coverity warnings in G4HadronInelasticQBBC, elastic and ion builders, 
+  G4NeutronTrackingCut and G4StepLimiterBuilder classes.
+- Removed obsolete class G4HadronInelasticQLHEP.
+
+processes/electromagnetic/dna                    emdna-V09-05-05
+-----------------------------
+- Minor changes to G4VITProcess for the treatment of interaction length.
+- Improvoved management of information in G4ITStepProcessor and fixed
+  Coverity defects.
+
+processes/electromagnetic/lowenergy              emlowen-V09-05-10
+-----------------------------------
+- Decoupled calculation of Penelope ionisation cross-sections from the
+  Ionisation model. Preliminary step for a future Penelope-specific
+  atomic de-excitation model.
+- Minor design iteration for G4VhShellCrossSection base class, in order to
+  carry also the information about G4Material. Also preliminary step for a
+  future Penelope-specific fluorescence model.
+- Made G4PenelopeBremsstrahlungAngular derived from the basic interface
+  G4VEmAngularDistribution. Makes angular generator usable by any other model
+  via the interface.
+- Renamed G4PenelopeIonisationCrossSection to G4PenelopeIonisationXSHandler
+  (the name will be reserved for a different class in a while).
+- Made G4PenelopeCrossSection able to return both absolute and normalized
+  values of the shell cross sections. It will be used for Penelope-PIXE.
+- Penelope-based cross-section model for electron PIXE registered in
+  G4UAtomicDeexcitation. Added warning messages to Penelope models to 
+  verify the proper activation of fluorescence.
+- Updated G4PenelopeOscillatorManager to accomodate the calculation of PIXE
+  cross-sections. First implementation of Penelope-specific PIXE
+  cross-sections.
+
+processes/electromagnetic/standard               emstand-V09-05-14
+----------------------------------
+- G4UrbanMscModel92, G4UrbanMscModel93, G4UrbanMscModel95: added protection  (*)
+  against big scattering angles for e+- (E > 20 MeV); the protection cuts
+  tail of scattering angles to avoid artificial scattering of high energy e+-;
+  in the case of E > 1 GeV and cosTheta<0 a warning is printed out.
+- G4WentzelVIModel: fixed bug in lateral displacement sampling.              (*)
+- G4IonCoulombScatteringModel: fixed numerical problem for small             (*)
+  scattering angles.
+- G4GoudsmitSaundersonMscModel: fixed FPE bug; lateral displacemnt should
+  not be sampled for plural scattering.
+
+processes/electromagnetic/utils                  emutils-V09-05-06
+-------------------------------
+- G4VEnergyLossProcess: fixed computation of delta-electron cross-section    (*)
+  for ions and very small cuts (about 1 um).
+  Fixed crash due to apply G4hIonisation for ions.
+- G4VEnergyLossProcess, G4VEmProcess, G4LossTableBuilder: delete old         (*)
+  physics-vectors if new vectors are built between runs.
+- G4VAtomDeexcitation: use safe method to extract integer Z.
+- G4LossTableManager: added a check and protection against double
+  registration of the same process; this addition allows to use the same
+  EM energy-loss process for different particle types.
+- G4EmCalculator: modified method to access a process taking into account 
+  that the same process may used by different particle types; added new
+  methods ActiveForParticle(), FindEnLossProcess(), FindDiscreteProcess()
+  and FindMscProcess().
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V09-05-00)
+  o Fixed Coverity reports in G4NeutronElasticXS, G4NeutronInelasticXS,
+    G4KokoulinMuonNuclearXS, G4HadronCrossSections, G4UPiNuclearCrossSection.
+- models/cascade (hadr-casc-V09-05-06)
+  o G4NucleiModel: added check in isProjectile() for single-zone nuclei.
+    Added binned spectrum in absorptionCrossSection() for use with photons.
+    Added scale factor for gamma absorption.
+    Allow photons to be absorbed via dibaryon (quasideuteron) excitation in
+    generateInteractionPartners() and absorptionCrossSection(). Simplified
+    and encapsulated path-length computations in generateInteractionPartners(),
+    with several new internal functions, and a buffer to store the
+    zone-by-zone shell volumes.
+  o G4CascadeSigmaMinusPChannel: changed zero-bin cross-sections for
+    Lambda-n and Sigma0-n, based on data from M.Goossens et al. measurements
+    of Sigma- capture.
+  o G4CascadeKminusPChannel: modified two-body cross-section values in
+    zero-energy bin, to reflect stopping data from J.Yarba.
+  o G4ElementaryParticleCollider: modified sanity checks on dibaryon targets
+    to allow both photons and gamma to interact.
+  o G4CascadeParticle: added public accessor for cumulative path length.
+- models/chiral_inv_phase_space/body (hadr-chips-body-V09-05-04)
+  o Corrected mis-print in G4QFreeScattering for Omega- (3334); closed one
+    p=0 warning. Closed warning on failed correction in G4QEnvironment.
+- models/coherent_elastic (hadr-cohe-V09-05-01)                              (*)
+  o Fixed Coverity defect in G4AntiNuclElastic.
+  o Fixed printout of units in G4HadronElastic.
+- models/de_excitation (hadr-deex-V09-05-04)
+  o New classes G4PromptPhotonEvaporation, G4LevelManager, G4NucLevel, and
+    G4LevelReader implementing new photon-evaporation model.
+    Added method GetLevelManager() in G4NuclearLevelStore for the new 
+    G4PromptPhotonEvaporation model.
+  o G4PhotonEvaporation, G4CompetitiveFission, G4EvaporationChannel,
+    G4UnstableFragmentBreakUp, G4GEMChannel, G4VEvaporationChannel,
+    G4Evaporation: removed Initialise() method and use GetEmissionProbability
+    method directly. Minor performance improvement.
+- models/high_energy (hadr-hep-V09-05-01)
+  o Relaxed limits on check for "catastrophic" energy non-conservation,
+    allow for deviation by the mass of heavy nucleus.
+  o Removed obsolete comment about comparison with Geant3 in G4HEInelastic.
+- models/low_energy (hadr-lep-V09-05-04)
+  o Relaxed limits on check for "catastrophic" energy non-conservation
+    (for G4LCapture and G4LElastic), allow for deviation by the mass of
+    heavy nucleus.
+- models/management (hadr-modman-V09-05-02)
+  o Provide method and default values for checking of "catastrophic"
+    energy non-conservation. Current default is a deviation larger than
+    150 MeV and at least 10% of the kinetic energy of the primary.
+- models/neutron_hp (hadr-hpn-V09-05-01)                                     (*)
+  o Added protection against emission of unphysical ultra-low energy
+    photons in G4NeutronHPCaptureFS.
+- models/radioactive_decay (radioactive_decay-V09-05-00)
+  o Changed length of input characters to 100 in G4RIsotopeTable
+    GetMeanLifeTime() to fix infinite loop when excitation energy is non-zero.
+
+run                                              run-V09-05-01               (*)
+---
+- Added dummy copy constructor and operator=() to G4Run.
+  Addressing problem report #1277.
+
+visualization                                    vis-V09-05-12
+-------------
+- Migrated drivers to use G4VScenehandler::fObjectTransformation.
+- management:
+  o Introduced concept of "current quantities" for use in vis commands.
+  o Added command '/vis/set/textColour', allowing the user to change the
+    above current quantities for use by subsequent commands.
+  o Added command '/vis/set/textLayout'.
+  o Added command '/vis/scene/add/logo2D' and 'text2D'.
+  o Improved '/vis/scene/add/axes' command, logo and scale: size computed
+    automatically by default.
+- modeling:
+  o G4AxesModel: augmented global description.
+  o Added destructor to G4CallbackModel.
+- OpenGL:
+  o Improved rendering speed.
+  o Fixed problem with persistent text.
+  o Fixed bug in copy constructor that affected position of stored text.
+  o General tidy of code.
+- OpenInventor (openinventor-V09-05-01):
+  o Migration according to G4VScenehandler.
+
+examples                                         examples-V09-05-03
+--------
+- Updated reference outputs.
+- extended/electromagnetic/TestEm0 (testem0-V09-05-00)
+  o Updates to apply agreed coding conventions.
+- extended/electromagnetic/TestEm1 (testem1-V09-05-04)
+  o Corrected file name in HistoManager.
+- extended/electromagnetic/TestEm2 (testem2-V09-05-00)
+  o Migrated HistoManager to new g4tools histogramming system.
+    Suppressed fileType command.
+  o Updated Readme and all macros accordingly.
+    Removed unused macros.
+- extended/electromagnetic/TestEm4 (testem4-V09-05-04)
+  o Adopt rndmSeed.mac macro from N03 for handling random numbers. 
+  o Updates to apply agreed coding conventions.
+- extended/electromagnetic/TestEm5 (testem5-V09-05-03)
+- extended/electromagnetic/TestEm6 (testem6-V09-05-00)
+- extended/electromagnetic/TestEm7 (testem7-V09-05-01)
+  o Migrated HistoManager to new g4tools histogramming system.
+    Suppressed fileType command.
+  o Updated Readme and all macros accordingly.
+- extended/electromagnetic/TestEm8 (testem8-V09-05-01)
+  o Removed test cout in PhysicsListMessenger. Uncommented material printout
+    in DetectorContructor.
+- extended/electromagnetic/TestEm11 (testem11-V09-05-02)
+- extended/electromagnetic/TestEm12 (testem12-V09-05-03)
+- extended/electromagnetic/TestEm14 (testem14-V09-05-00)
+- extended/electromagnetic/TestEm15 (testem15-V09-05-00)
+- extended/electromagnetic/TestEm16 (testem16-V09-05-00)
+- extended/electromagnetic/TestEm17 (testem17-V09-05-02)
+- extended/electromagnetic/TestEm18 (testem18-V09-05-00)
+  o Migrated HistoManager to new g4tools histogramming system.
+    Suppressed fileType command.
+  o Updated Readme and all macros accordingly.
+- extended/eventgenerator/particleGun (particleGunExample-V09-05-03)
+  o Updates to apply agreed coding conventions.
+- extended/geometry/transforms (exTransforms-V09-05-00)
+  o Simplified version, limited to geometry functionalities. Renamed classes.
+- extended/medical/electronScattering2 (exampleES2-V09-05-04)
+  o PhysListEmStandardWVI, PhysListEmStandardSS: more correct process order
+    and fixed initialisation.
+- extended/hadronic/Hadr00 (exhadr00-V09-05-00)                              (*)
+  o HistoManager: use material pointer in the interface to cross-
+    sections (fixes crash for Physics Lists with HP).
+- extended/hadronic/Hadr02 (exhadr02-V09-05-00)                              (*)
+  o Fixed missing line of code in G4DPMJET2_5CrossSection.
+- extended/medical/DICOM (DICOM-V09-05-01)
+  o Corrections in materials Z/A. Addressing problem report #1287.
+- extended/radioactivedecay/rdecay01 (rdecay01-V09-05-08)
+  o Updates to apply agreed coding conventions.
+- extended/runAndEvent/RE02 (exampleRE02-V09-05-00)                          (*)
+  o Fixed indexing scheme of CopyNo() method in the RunAction.
+- extended/visualization/perspective (exam-ext-vis-perps-V09-05-01)
+- extended/visualization/standalone (exam-ext-vis-standalone-V09-05-00)
+- extended/visualization/userVisAction (exam-ext-vis-UVA-V09-05-00)
+  o Improved commands guidance and updated README.
+
+tests                                            tests-V09-05-03
+-----
+- Updated reference outputs and tools. Archived test21.
+- tests/test30 (test30-V09-05-01)
+  o Test30Physics: do not set local PreCompound model to LightBinaryIon
+    cascade to avoid double deletion; added exception if not correct
+    particles are used for LHEP and RPG.
+  o Commented out Tripathi cross-sections in main(); Shen is used for ions.
+- tests/test70 (test70-V09-05-08)
+  o New test for DNA physics.

@@ -20,7 +20,7 @@ Summarised, the list of changes is the following:
 
 cmake                                            cmake-V09-05-03
 -----
-- Added function REFLEX_GENERATE_DICTIONARY() for generating dictionaries.
+- Added function REFLEX_GENERATE_DICTIONARY() for generating dictionaries.   (*)
 
 config                                           config-V09-05-05            (*)
 ------
@@ -131,7 +131,7 @@ processes/hadronic
 - models/chiral_inv_phase_space/body (hadr-chips-body-V09-05-03)
   o Relaxed exception to warning in G4QFreeScattering in methods FetchElTot()
     and CalcElTotXS(), for wrong PDG code detection.
-- models/cim_r_matrix (hadr-im_r-V09-05-00)
+- models/im_r_matrix (hadr-im_r-V09-05-00)
   o Incorporate new data from extended nucleon-nucleon elastic scattering
     data (SAID evaluation). These double differential elastic cross-sections
     now cover energies up to 5 GeV.
