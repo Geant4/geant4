@@ -4,13 +4,13 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-02    (29-February-2012)
+ Geant4 version Name: geant4-09-05-ref-03    (31-March-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
- creating G4RunManagerKernel 0x169ff0f0
+ creating G4RunManagerKernel 0xbf1d0e0
 
 The materials defined are : 
 
@@ -18,17 +18,29 @@ The materials defined are :
 ***** Table : Nb of materials = 4 *****
 
  Material:      Air    density:  1.205 mg/cm3  RadL: 305.277 m    Nucl.Int.Length: 709.664 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
-   --->  Element: Oxigen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+   --->  Isotope: Nitrogen14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+   --->  Isotope: Nitrogen15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxigen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxigen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxigen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxigen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
  Material:       Al    density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.860 cm   Imean: 166.000 eV 
-   --->  Element: Al ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Al ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole
+   --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:       Fe    density:  7.870 g/cm3   RadL:   1.759 cm   Nucl.Int.Length:  16.969 cm   Imean: 286.000 eV 
-   --->  Element: Fe ( )   Z = 26.0   N =  55.8   A =  55.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Fe ( )   Z = 26.0   N =  55.8   A =  55.85 g/mole
+   --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
+   --->  Isotope:  Fe56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
+   --->  Isotope:  Fe57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
+   --->  Isotope:  Fe58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:       Cu    density:  8.960 g/cm3   RadL:   1.435 cm   Nucl.Int.Length:  15.513 cm   Imean: 322.000 eV 
-   --->  Element: Cu ( )   Z = 29.0   N =  63.5   A =  63.54 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Cu ( )   Z = 29.0   N =  63.5   A =  63.54 g/mole
+   --->  Isotope:  Cu63   Z = 29   N =  63   A =  62.93 g/mole   abundance:  69.17 %
+   --->  Isotope:  Cu65   Z = 29   N =  65   A =  64.93 g/mole   abundance:  30.83 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
 
  HalfWorldLength 2250
@@ -38,14 +50,14 @@ List of instantiated particles ============================================
 e+ e- gamma mu+ mu- pi+ pi- proton 
 physicsList->Construct() start.
  G4Transportation constructor> set fShortStepOptimisation to false
-0x16a6c430G4ErrorPhysicsList:: particle process manager e+ = 0x16a6d930
-0x16a6c220G4ErrorPhysicsList:: particle process manager e- = 0x16a6ef40
-0x16a6bfb0G4ErrorPhysicsList:: particle process manager gamma = 0x16a6f150
-0x16a6c640G4ErrorPhysicsList:: particle process manager mu+ = 0x16a6f3a0
-0x16a6ca70G4ErrorPhysicsList:: particle process manager mu- = 0x16a6f5f0
-0x16a6cee0G4ErrorPhysicsList:: particle process manager pi+ = 0x16a6f840
-0x16a6d300G4ErrorPhysicsList:: particle process manager pi- = 0x16a6fa90
-0x16a6d720G4ErrorPhysicsList:: particle process manager proton = 0x16a6fce0
+0xbf8ac20G4ErrorPhysicsList:: particle process manager e+ = 0xbf8c120
+0xbf8aa10G4ErrorPhysicsList:: particle process manager e- = 0xbf8d730
+0xbf8a7a0G4ErrorPhysicsList:: particle process manager gamma = 0xbf8d940
+0xbf8ae30G4ErrorPhysicsList:: particle process manager mu+ = 0xbf8db90
+0xbf8b260G4ErrorPhysicsList:: particle process manager mu- = 0xbf8dde0
+0xbf8b6d0G4ErrorPhysicsList:: particle process manager pi+ = 0xbf8e030
+0xbf8baf0G4ErrorPhysicsList:: particle process manager pi- = 0xbf8e280
+0xbf8bf10G4ErrorPhysicsList:: particle process manager proton = 0xbf8e4d0
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 

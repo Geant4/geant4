@@ -9,7 +9,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-02    (29-February-2012)
+ Geant4 version Name: geant4-09-05-ref-03    (31-March-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -60,14 +60,26 @@ Registered filter factories:
 
 Some /vis commands (optionally) take a string to specify colour.
 Available colours:
-  black, blue, cyan, gray, green, grey, magenta, red, white, yellow
+  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
 
 Defining the materials
 There are 10 crystals per row in the calorimeter, so in total 100 crystals
 The have widthof  3  cm and a lenght of  24 cm. The Material is  Material:    PbWO4    density:  8.280 g/cm3   RadL:   8.924 mm   Nucl.Int.Length:  20.740 cm   Imean: 542.741 eV 
-   --->  Element: Lead (Pb)   Z = 82.0   N = 207.2   A = 207.19 g/mole  ElmMassFraction:  45.53 %  ElmAbundance  16.67 %
-   --->  Element: Tungsten (W)   Z = 74.0   N = 183.8   A = 183.85 g/mole  ElmMassFraction:  40.40 %  ElmAbundance  16.67 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  14.06 %  ElmAbundance  66.67 %
+   --->  Element: Lead (Pb)   Z = 82.0   N = 207.2   A = 207.19 g/mole
+   --->  Isotope: Lead204   Z = 82   N = 204   A = 203.97 g/mole   abundance:   1.40 %
+   --->  Isotope: Lead206   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
+   --->  Isotope: Lead207   Z = 82   N = 207   A = 206.98 g/mole   abundance:  22.10 %
+   --->  Isotope: Lead208   Z = 82   N = 208   A = 207.98 g/mole   abundance:  52.40 %  ElmMassFraction:  45.53 %  ElmAbundance  16.67 %
+   --->  Element: Tungsten (W)   Z = 74.0   N = 183.8   A = 183.85 g/mole
+   --->  Isotope: Tungsten180   Z = 74   N = 180   A = 179.95 g/mole   abundance:   0.12 %
+   --->  Isotope: Tungsten182   Z = 74   N = 182   A = 181.95 g/mole   abundance:  26.50 %
+   --->  Isotope: Tungsten183   Z = 74   N = 183   A = 182.95 g/mole   abundance:  14.31 %
+   --->  Isotope: Tungsten184   Z = 74   N = 184   A = 183.95 g/mole   abundance:  30.64 %
+   --->  Isotope: Tungsten186   Z = 74   N = 186   A = 185.95 g/mole   abundance:  28.43 %  ElmMassFraction:  40.40 %  ElmAbundance  16.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  14.06 %  ElmAbundance  66.67 %
 Shower parameterization
 /********************************************/ 
   - GVFlashShowerParameterisation::Material -  
@@ -291,7 +303,7 @@ WARNING: Scene "refresh" not found.
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.01
+Internal Real Elapsed Time is: 0.02
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
@@ -321,7 +333,7 @@ Internal GetUserElapsed Time: 0.01
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.02
+Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
@@ -338,7 +350,7 @@ Internal GetUserElapsed Time: 0.01
 ******************************************
 Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.02
+Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 3  -----
   11951 hits are stored in ExGflashHitsCollection 
@@ -366,9 +378,9 @@ Internal GetUserElapsed Time: 0.01
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.01
+Internal Real Elapsed Time is: 0.02
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0.02
 ******************************************
  ------ ExGflashEventAction::End of event nr. 5  -----
   12133 hits are stored in ExGflashHitsCollection 
@@ -428,7 +440,7 @@ Internal GetUserElapsed Time: 0.01
 ******************************************
 Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.02
+Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 9  -----
   11898 hits are stored in ExGflashHitsCollection 
@@ -439,11 +451,11 @@ ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 number of event = 10
 Graphics systems deleted.
 Visualization Manager deleting...
-Internal Real Elapsed Time /event is: 0.0122222
+Internal Real Elapsed Time /event is: 0.0133333
 
 ******************************************
-Total Real Elapsed Time is: 0.62
-Total System Elapsed Time: 0
-Total GetUserElapsed Time: 0.61
+Total Real Elapsed Time is: 0.64
+Total System Elapsed Time: 0.01
+Total GetUserElapsed Time: 0.6
 ******************************************
 

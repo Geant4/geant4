@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-02    (29-February-2012)
+ Geant4 version Name: geant4-09-05-ref-03    (31-March-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -17,14 +17,32 @@ The materials defined are :
 ***** Table : Nb of materials = 3 *****
 
  Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+   --->  Isotope: Nitrogen14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+   --->  Isotope: Nitrogen15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
  Material:     Lead    density: 11.350 g/cm3   RadL:   5.612 mm   Nucl.Int.Length:  18.258 cm   Imean: 823.000 eV 
-   --->  Element: Lead ( )   Z = 82.0   N = 207.2   A = 207.19 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Lead ( )   Z = 82.0   N = 207.2   A = 207.19 g/mole
+   --->  Isotope: Lead204   Z = 82   N = 204   A = 203.97 g/mole   abundance:   1.40 %
+   --->  Isotope: Lead206   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
+   --->  Isotope: Lead207   Z = 82   N = 207   A = 206.98 g/mole   abundance:  22.10 %
+   --->  Isotope: Lead208   Z = 82   N = 208   A = 207.98 g/mole   abundance:  52.40 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material: XenonGas    density:  5.458 mg/cm3  RadL:  15.539 m    Nucl.Int.Length: 326.401 m    Imean: 482.000 eV   temperature: 293.15 K  pressure:   1.00 atm
-   --->  Element: XenonGas ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: XenonGas ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole
+   --->  Isotope: XenonGas124   Z = 54   N = 124   A = 123.91 g/mole   abundance:   0.09 %
+   --->  Isotope: XenonGas126   Z = 54   N = 126   A = 125.90 g/mole   abundance:   0.09 %
+   --->  Isotope: XenonGas128   Z = 54   N = 128   A = 127.90 g/mole   abundance:   1.92 %
+   --->  Isotope: XenonGas129   Z = 54   N = 129   A = 128.91 g/mole   abundance:  26.44 %
+   --->  Isotope: XenonGas130   Z = 54   N = 130   A = 129.90 g/mole   abundance:   4.08 %
+   --->  Isotope: XenonGas131   Z = 54   N = 131   A = 130.90 g/mole   abundance:  21.18 %
+   --->  Isotope: XenonGas132   Z = 54   N = 132   A = 131.90 g/mole   abundance:  26.89 %
+   --->  Isotope: XenonGas134   Z = 54   N = 134   A = 133.91 g/mole   abundance:  10.44 %
+   --->  Isotope: XenonGas136   Z = 54   N = 136   A = 135.91 g/mole   abundance:   8.87 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
 
 Computed tolerance = 5.82e-08 mm
@@ -69,7 +87,7 @@ Registered filter factories:
 
 Some /vis commands (optionally) take a string to specify colour.
 Available colours:
-  black, blue, cyan, gray, green, grey, magenta, red, white, yellow
+  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
 
 
 phot:   for  gamma    SubType= 12
