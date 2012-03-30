@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-02    (29-February-2012)
+ Geant4 version Name: geant4-09-05-ref-03    (31-March-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -27,10 +27,15 @@
 userDetector->Construct() start.
 
  Material: Galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 114561548.020 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
-   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope: Galactic1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope: Galactic2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:  Silicon    density:  2.330 g/cm3   RadL:   9.368 cm   Nucl.Int.Length:  45.761 cm   Imean: 173.000 eV 
-   --->  Element: Silicon ( )   Z = 14.0   N =  28.1   A =  28.09 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Silicon ( )   Z = 14.0   N =  28.1   A =  28.09 g/mole
+   --->  Isotope: Silicon28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
+   --->  Isotope: Silicon29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
+   --->  Isotope: Silicon30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  The  WORLD   is made of 30 um  of Galactic. The transverse size (YZ) of the world is 60 um 
  The ABSORBER is made of 20 um  of Silicon. The transverse size (YZ) is 50 um 
@@ -135,18 +140,6 @@ hIoni:   for  proton    SubType= 2
                Bragg :  Emin=        0 eV    Emax=        2 MeV
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
 
-hBrems:   for  proton    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
-
-hPairProd:   for  proton    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
-
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -171,10 +164,22 @@ nuclearStopping:   for  alpha    SubType= 8
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=        2 MeV
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+
+hBrems:   for  anti_proton    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+
+hPairProd:   for  anti_proton    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for kaon+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
@@ -209,18 +214,6 @@ hIoni:   for  kaon-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
           BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
-
-hBrems:   for  kaon-    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
-
-hPairProd:   for  kaon-    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
@@ -264,18 +257,6 @@ muIoni:   for  mu-    SubType= 2
           BetheBloch :  Emin=      200 keV   Emax=        1 GeV
         MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
 
-muBrems:   for  mu-    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :  Emin=        0 eV    Emax=       10 TeV
-
-muPairProd:   for  mu-    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :  Emin=        0 eV    Emax=       10 TeV
-
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
@@ -315,18 +296,6 @@ hIoni:   for  pi-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
-
-hBrems:   for  pi-    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
-
-hPairProd:   for  pi-    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
  This region is in the mass world.
@@ -394,15 +363,15 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=5.47s Real=7.99s Sys=2.53s
+  User=5.53s Real=8.05s Sys=2.52s
 
  ======================== run summary ======================
 
  The run was 100000 e- of 100 MeV through 20 um  of Silicon (density: 2.33 g/cm3 )
 
- Total energy deposit in absorber per event = 6.451 keV +- 16.2 eV 
+ Total energy deposit in absorber per event = 6.449 keV +- 16.19 eV 
 
- -----> Mean dE/dx = 3.226 MeV/cm	(1.384 MeV*cm2/g)
+ -----> Mean dE/dx = 3.225 MeV/cm	(1.384 MeV*cm2/g)
 
  From formulas :
    restricted dEdx = 3.016 MeV/cm	(1.295 MeV*cm2/g)
@@ -411,13 +380,13 @@ Run Summary
  Leakage :  primary = 99.97 MeV +- 2.61 keV   secondaries = 20.48 keV +- 2.61 keV
  Energy balance :  edep + eleak = 100 MeV
 
- Total track length (charged) in absorber per event = 20.25 um  +- 7.668 nm 
- Total track length (neutral) in absorber per event = 26.55 nm  +- 1.877 nm 
+ Total track length (charged) in absorber per event = 20.25 um  +- 7.661 nm 
+ Total track length (neutral) in absorber per event = 26.72 nm  +- 1.885 nm 
 
- Number of steps (charged) in absorber per event = 3.716 +- 8.757e-06
- Number of steps (neutral) in absorber per event = 0.00271 +- 8.757e-06
+ Number of steps (charged) in absorber per event = 3.716 +- 8.753e-06
+ Number of steps (neutral) in absorber per event = 0.00272 +- 8.753e-06
 
- Number of secondaries per event : Gammas = 0.00271;   electrons = 0.01666;   positrons = 0
+ Number of secondaries per event : Gammas = 0.00272;   electrons = 0.01664;   positrons = 0
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -428,11 +397,11 @@ Run Summary
  MultipleScattering:
   rms proj angle of transmit primary particle = 1.311 mrad (central part only)
   computed theta0 (Highland formula)          = 1.342 mrad
-  central part defined as +- 4.026 mrad;   Tail ratio = 2.591 %
+  central part defined as +- 4.026 mrad;   Tail ratio = 2.582 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 285353693, 2061341915
+ Current couple of seeds = 535727210, 888925659
 ----------------------------------------
 #
 /testem/det/setAbsMat Gold
@@ -441,10 +410,13 @@ Run Summary
 /testem/det/update
 
  Material: Galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 114561548.020 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
-   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope: Galactic1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope: Galactic2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:     Gold    density: 19.320 g/cm3   RadL:   3.344 mm   Nucl.Int.Length:  10.539 cm   Imean: 790.000 eV 
-   --->  Element: Gold ( )   Z = 79.0   N = 197.0   A = 196.97 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Gold ( )   Z = 79.0   N = 197.0   A = 196.97 g/mole
+   --->  Isotope: Gold197   Z = 79   N = 197   A = 196.97 g/mole   abundance: 100.00 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  The  WORLD   is made of 14.487 um  of Galactic. The transverse size (YZ) of the world is 1.2 mm 
  The ABSORBER is made of 9.658 um  of Gold. The transverse size (YZ) is 1 mm 
@@ -538,18 +510,6 @@ hIoni:   for  proton    SubType= 2
                Bragg :  Emin=        0 eV    Emax=        2 MeV
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
 
-hBrems:   for  proton    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
-
-hPairProd:   for  proton    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
-
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -574,10 +534,22 @@ nuclearStopping:   for  alpha    SubType= 8
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=        2 MeV
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+
+hBrems:   for  anti_proton    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+
+hPairProd:   for  anti_proton    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for kaon+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
@@ -612,18 +584,6 @@ hIoni:   for  kaon-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
           BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
-
-hBrems:   for  kaon-    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
-
-hPairProd:   for  kaon-    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
@@ -667,18 +627,6 @@ muIoni:   for  mu-    SubType= 2
           BetheBloch :  Emin=      200 keV   Emax=        1 GeV
         MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
 
-muBrems:   for  mu-    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :  Emin=        0 eV    Emax=       10 TeV
-
-muPairProd:   for  mu-    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :  Emin=        0 eV    Emax=       10 TeV
-
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
@@ -718,18 +666,6 @@ hIoni:   for  pi-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
-
-hBrems:   for  pi-    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
-
-hPairProd:   for  pi-    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
  This region is in the mass world.
@@ -776,7 +712,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 285353693, 2061341915
+ Current couple of seeds = 535727210, 888925659
 ----------------------------------------
 Start Run processing.
 
@@ -802,13 +738,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=6.22s Real=9.01s Sys=2.79s
+  User=6.27s Real=8.74s Sys=2.48s
 
  ======================== run summary ======================
 
  The run was 100000 e- of 15.7 MeV through 9.66 um  of Gold (density: 19.3 g/cm3 )
 
- Total energy deposit in absorber per event = 18.59 keV +- 45.29 eV 
+ Total energy deposit in absorber per event = 18.58 keV +- 45.26 eV 
 
  -----> Mean dE/dx = 19.24 MeV/cm	(0.996 MeV*cm2/g)
 
@@ -816,16 +752,16 @@ Run Summary
    restricted dEdx = 17.92 MeV/cm	(0.9276 MeV*cm2/g)
    full dEdx       = 60.88 MeV/cm	(3.151 MeV*cm2/g)
 
- Leakage :  primary = 15.64 MeV +- 1.577 keV   secondaries = 42.58 keV +- 1.573 keV
+ Leakage :  primary = 15.64 MeV +- 1.577 keV   secondaries = 42.59 keV +- 1.573 keV
  Energy balance :  edep + eleak = 15.7 MeV
 
- Total track length (charged) in absorber per event = 9.925 um  +- 7.957 nm 
- Total track length (neutral) in absorber per event = 125.8 nm  +- 3.135 nm 
+ Total track length (charged) in absorber per event = 9.925 um  +- 7.953 nm 
+ Total track length (neutral) in absorber per event = 126 nm  +- 3.136 nm 
 
- Number of steps (charged) in absorber per event = 5.105 +- 8.92e-06
- Number of steps (neutral) in absorber per event = 0.02887 +- 8.92e-06
+ Number of steps (charged) in absorber per event = 5.105 +- 8.918e-06
+ Number of steps (neutral) in absorber per event = 0.02894 +- 8.918e-06
 
- Number of secondaries per event : Gammas = 0.02871;   electrons = 0.023;   positrons = 0
+ Number of secondaries per event : Gammas = 0.02878;   electrons = 0.023;   positrons = 0
 
  Number of events with the primary particle transmitted = 99.98 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 99.98 %
@@ -840,7 +776,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 102931945, 1239486505
+ Current couple of seeds = 1699896347, 516746960
 ----------------------------------------
 #
 /testem/phys/setCuts 10 um

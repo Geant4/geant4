@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-02    (29-February-2012)
+ Geant4 version Name: geant4-09-05-ref-03    (31-March-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -20,19 +20,36 @@
 ***** Table : Nb of materials = 5 *****
 
  Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm   Nucl.Int.Length:  75.520 cm   Imean:  75.000 eV 
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope: Hydrogen1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope: Hydrogen2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
 
  Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+   --->  Isotope: Nitrogen14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+   --->  Isotope: Nitrogen15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
  Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km   Nucl.Int.Length:  85.515 km   Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+   --->  Isotope: Nitrogen14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+   --->  Isotope: Nitrogen15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
  Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 114334693.470 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
-   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope: Galactic1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope: Galactic2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.877 cm   Imean: 166.000 eV 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
@@ -55,19 +72,36 @@ PhysicsList::SetCuts:CutLength : 1 mm
 ***** Table : Nb of materials = 5 *****
 
  Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm   Nucl.Int.Length:  75.520 cm   Imean:  75.000 eV 
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope: Hydrogen1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope: Hydrogen2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
 
  Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+   --->  Isotope: Nitrogen14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+   --->  Isotope: Nitrogen15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
  Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km   Nucl.Int.Length:  85.515 km   Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+   --->  Isotope: Nitrogen14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+   --->  Isotope: Nitrogen15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
  Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 114334693.470 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
-   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope: Galactic1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope: Galactic2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.877 cm   Imean: 166.000 eV 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
@@ -167,18 +201,6 @@ hIoni:   for  proton    SubType= 2
                Bragg :  Emin=        0 eV    Emax=        2 MeV
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
 
-hBrems:   for  proton    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
-
-hPairProd:   for  proton    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
-
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -203,10 +225,22 @@ nuclearStopping:   for  alpha    SubType= 8
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=        2 MeV
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+
+hBrems:   for  anti_proton    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+
+hPairProd:   for  anti_proton    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for kaon+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
@@ -241,18 +275,6 @@ hIoni:   for  kaon-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
           BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
-
-hBrems:   for  kaon-    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
-
-hPairProd:   for  kaon-    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
@@ -296,18 +318,6 @@ muIoni:   for  mu-    SubType= 2
           BetheBloch :  Emin=      200 keV   Emax=        1 GeV
         MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
 
-muBrems:   for  mu-    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :  Emin=        0 eV    Emax=       10 TeV
-
-muPairProd:   for  mu-    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :  Emin=        0 eV    Emax=       10 TeV
-
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
       180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
@@ -348,18 +358,6 @@ hIoni:   for  pi-    SubType= 2
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
 
-hBrems:   for  pi-    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
-
-hPairProd:   for  pi-    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
-
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
@@ -390,7 +388,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.04s Real=2.09s Sys=0.03s
+  User=2.04s Real=2.08s Sys=0.04s
 
  The run consists of 1000 C12[0.0] of 144 MeV through 20 cm  of G4_Al (density: 2.699 g/cm3 )
 
@@ -408,19 +406,36 @@ Run Summary
 ***** Table : Nb of materials = 6 *****
 
  Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm   Nucl.Int.Length:  75.520 cm   Imean:  75.000 eV 
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope: Hydrogen1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope: Hydrogen2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
 
  Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+   --->  Isotope: Nitrogen14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+   --->  Isotope: Nitrogen15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
  Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km   Nucl.Int.Length:  85.515 km   Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+   --->  Isotope: Nitrogen14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+   --->  Isotope: Nitrogen15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
  Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 114334693.470 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
-   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope: Galactic1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope: Galactic2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.877 cm   Imean: 166.000 eV 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
@@ -460,19 +475,36 @@ Run Summary
 ***** Table : Nb of materials = 7 *****
 
  Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm   Nucl.Int.Length:  75.520 cm   Imean:  75.000 eV 
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope: Hydrogen1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope: Hydrogen2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
 
  Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+   --->  Isotope: Nitrogen14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+   --->  Isotope: Nitrogen15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
  Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km   Nucl.Int.Length:  85.515 km   Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+   --->  Isotope: Nitrogen14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+   --->  Isotope: Nitrogen15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
  Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 114334693.470 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
-   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope: Galactic1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope: Galactic2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.877 cm   Imean: 166.000 eV 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
@@ -517,19 +549,36 @@ Run Summary
 ***** Table : Nb of materials = 8 *****
 
  Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm   Nucl.Int.Length:  75.520 cm   Imean:  75.000 eV 
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope: Hydrogen1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope: Hydrogen2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
 
  Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+   --->  Isotope: Nitrogen14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+   --->  Isotope: Nitrogen15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
  Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km   Nucl.Int.Length:  85.515 km   Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+   --->  Isotope: Nitrogen14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+   --->  Isotope: Nitrogen15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
  Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 114334693.470 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
-   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope: Galactic1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope: Galactic2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.877 cm   Imean: 166.000 eV 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
@@ -589,19 +638,36 @@ Run Summary
 ***** Table : Nb of materials = 9 *****
 
  Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm   Nucl.Int.Length:  75.520 cm   Imean:  75.000 eV 
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope: Hydrogen1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope: Hydrogen2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
 
  Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+   --->  Isotope: Nitrogen14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+   --->  Isotope: Nitrogen15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
  Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km   Nucl.Int.Length:  85.515 km   Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+   --->  Isotope: Nitrogen14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+   --->  Isotope: Nitrogen15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
  Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 114334693.470 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
-   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope: Galactic1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope: Galactic2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.877 cm   Imean: 166.000 eV 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
@@ -673,19 +739,36 @@ Run Summary
 ***** Table : Nb of materials = 10 *****
 
  Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm   Nucl.Int.Length:  75.520 cm   Imean:  75.000 eV 
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope: Hydrogen1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope: Hydrogen2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
 
  Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+   --->  Isotope: Nitrogen14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+   --->  Isotope: Nitrogen15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
  Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km   Nucl.Int.Length:  85.515 km   Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+   --->  Isotope: Nitrogen14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+   --->  Isotope: Nitrogen15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
  Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 114334693.470 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
-   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope: Galactic1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope: Galactic2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.877 cm   Imean: 166.000 eV 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
@@ -769,19 +852,36 @@ Run Summary
 ***** Table : Nb of materials = 10 *****
 
  Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm   Nucl.Int.Length:  75.520 cm   Imean:  75.000 eV 
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope: Hydrogen1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope: Hydrogen2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
 
  Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+   --->  Isotope: Nitrogen14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+   --->  Isotope: Nitrogen15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
  Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km   Nucl.Int.Length:  85.515 km   Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+   --->  Isotope: Nitrogen14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+   --->  Isotope: Nitrogen15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
  Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 114334693.470 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
-   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope: Galactic1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope: Galactic2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.877 cm   Imean: 166.000 eV 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
@@ -865,19 +965,36 @@ Run Summary
 ***** Table : Nb of materials = 10 *****
 
  Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm   Nucl.Int.Length:  75.520 cm   Imean:  75.000 eV 
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope: Hydrogen1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope: Hydrogen2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
 
  Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+   --->  Isotope: Nitrogen14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+   --->  Isotope: Nitrogen15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
  Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km   Nucl.Int.Length:  85.515 km   Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+   --->  Isotope: Nitrogen14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+   --->  Isotope: Nitrogen15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
  Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 114334693.470 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
-   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope: Galactic1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope: Galactic2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.877 cm   Imean: 166.000 eV 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
@@ -961,19 +1078,36 @@ Run Summary
 ***** Table : Nb of materials = 10 *****
 
  Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm   Nucl.Int.Length:  75.520 cm   Imean:  75.000 eV 
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope: Hydrogen1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope: Hydrogen2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
 
  Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+   --->  Isotope: Nitrogen14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+   --->  Isotope: Nitrogen15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
  Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km   Nucl.Int.Length:  85.515 km   Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+   --->  Isotope: Nitrogen14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+   --->  Isotope: Nitrogen15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
  Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 114334693.470 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
-   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope: Galactic1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope: Galactic2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.877 cm   Imean: 166.000 eV 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
@@ -1057,19 +1191,36 @@ Run Summary
 ***** Table : Nb of materials = 10 *****
 
  Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm   Nucl.Int.Length:  75.520 cm   Imean:  75.000 eV 
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope: Hydrogen1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope: Hydrogen2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
 
  Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+   --->  Isotope: Nitrogen14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+   --->  Isotope: Nitrogen15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
  Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km   Nucl.Int.Length:  85.515 km   Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+   --->  Isotope: Nitrogen14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+   --->  Isotope: Nitrogen15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
  Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 114334693.470 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
-   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope: Galactic1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope: Galactic2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.877 cm   Imean: 166.000 eV 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
@@ -1153,19 +1304,36 @@ Run Summary
 ***** Table : Nb of materials = 10 *****
 
  Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm   Nucl.Int.Length:  75.520 cm   Imean:  75.000 eV 
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope: Hydrogen1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope: Hydrogen2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
 
  Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+   --->  Isotope: Nitrogen14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+   --->  Isotope: Nitrogen15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
  Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km   Nucl.Int.Length:  85.515 km   Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+   --->  Isotope: Nitrogen14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+   --->  Isotope: Nitrogen15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
  Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 114334693.470 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
-   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope: Galactic1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope: Galactic2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.877 cm   Imean: 166.000 eV 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
@@ -1249,19 +1417,36 @@ Run Summary
 ***** Table : Nb of materials = 10 *****
 
  Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm   Nucl.Int.Length:  75.520 cm   Imean:  75.000 eV 
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope: Hydrogen1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope: Hydrogen2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
 
  Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+   --->  Isotope: Nitrogen14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+   --->  Isotope: Nitrogen15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
  Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km   Nucl.Int.Length:  85.515 km   Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+   --->  Isotope: Nitrogen14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+   --->  Isotope: Nitrogen15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
  Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 114334693.470 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
-   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope: Galactic1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope: Galactic2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.877 cm   Imean: 166.000 eV 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole

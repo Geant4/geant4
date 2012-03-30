@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-02    (29-February-2012)
+ Geant4 version Name: geant4-09-05-ref-03    (31-March-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -525,10 +525,6 @@ Idle> /gun/energy 400 GeV
 Idle> /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 Idle> /run/beamOn 100
- Process: inelastic , Model: TheoFSGenerator
- Primary: proton (2212), E= 400806, target nucleus (13,27)
- relative limit 0.02 relative value = 0.000454617 pass
- absolute limit (MeV) 150 absolute value (MeV) = 181.786 fail
 Idle> #
 Idle> # proton at 1 TeV in Al
 Idle> #
@@ -537,10 +533,6 @@ Idle> /gun/energy 1 TeV
 Idle> /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 Idle> /run/beamOn 100
- Process: inelastic , Model: TheoFSGenerator
- Primary: proton (2212), E= 1.00078e+06, target nucleus (13,27)
- relative limit 0.02 relative value = 0.000231293 pass
- absolute limit (MeV) 150 absolute value (MeV) = 231.256 fail
 Idle> #
 Idle> # proton at 100 GeV in Air
 Idle> #

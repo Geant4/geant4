@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-02    (29-February-2012)
+ Geant4 version Name: geant4-09-05-ref-03    (31-March-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -14,54 +14,139 @@
 ***** Table : Nb of materials = 13 *****
 
  Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+   --->  Isotope: Nitrogen14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+   --->  Isotope: Nitrogen15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
  Material:    Water    density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.537 cm   Imean:  75.000 eV 
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+   --->  Isotope: Hydrogen1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope: Hydrogen2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
 
  Material: liquidArgon    density:  1.390 g/cm3   RadL:  14.065 cm   Nucl.Int.Length:  86.006 cm   Imean: 188.000 eV 
-   --->  Element: liquidArgon ( )   Z = 18.0   N =  40.0   A =  39.95 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: liquidArgon ( )   Z = 18.0   N =  40.0   A =  39.95 g/mole
+   --->  Isotope: liquidArgon36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
+   --->  Isotope: liquidArgon38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
+   --->  Isotope: liquidArgon40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material: Aluminium    density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.860 cm   Imean: 166.000 eV 
-   --->  Element: Aluminium ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Aluminium ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole
+   --->  Isotope: Aluminium27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:     Iron    density:  7.870 g/cm3   RadL:   1.759 cm   Nucl.Int.Length:  16.969 cm   Imean: 286.000 eV 
-   --->  Element: Iron ( )   Z = 26.0   N =  55.8   A =  55.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Iron ( )   Z = 26.0   N =  55.8   A =  55.85 g/mole
+   --->  Isotope: Iron54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
+   --->  Isotope: Iron56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
+   --->  Isotope: Iron57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
+   --->  Isotope: Iron58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:   Nickel    density:  8.960 g/cm3   RadL:   1.415 cm   Nucl.Int.Length:  15.127 cm   Imean: 311.000 eV 
-   --->  Element: Nickel ( )   Z = 28.0   N =  58.7   A =  58.69 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Nickel ( )   Z = 28.0   N =  58.7   A =  58.69 g/mole
+   --->  Isotope: Nickel58   Z = 28   N =  58   A =  57.94 g/mole   abundance:  68.08 %
+   --->  Isotope: Nickel60   Z = 28   N =  60   A =  59.93 g/mole   abundance:  26.22 %
+   --->  Isotope: Nickel61   Z = 28   N =  61   A =  60.93 g/mole   abundance:   1.14 %
+   --->  Isotope: Nickel62   Z = 28   N =  62   A =  61.93 g/mole   abundance:   3.63 %
+   --->  Isotope: Nickel64   Z = 28   N =  64   A =  63.93 g/mole   abundance:   0.93 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:   Copper    density:  8.960 g/cm3   RadL:   1.435 cm   Nucl.Int.Length:  15.513 cm   Imean: 322.000 eV 
-   --->  Element: Copper ( )   Z = 29.0   N =  63.5   A =  63.54 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Copper ( )   Z = 29.0   N =  63.5   A =  63.54 g/mole
+   --->  Isotope: Copper63   Z = 29   N =  63   A =  62.93 g/mole   abundance:  69.17 %
+   --->  Isotope: Copper65   Z = 29   N =  65   A =  64.93 g/mole   abundance:  30.83 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:      BGO    density:  7.100 g/cm3   RadL:   1.123 cm   Nucl.Int.Length:  22.788 cm   Imean: 473.785 eV 
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  15.41 %  ElmAbundance  63.16 %
-   --->  Element: Germanium (Ge)   Z = 32.0   N =  72.6   A =  72.59 g/mole  ElmMassFraction:  17.48 %  ElmAbundance  15.79 %
-   --->  Element: Bismuth (Bi)   Z = 83.0   N = 209.0   A = 208.98 g/mole  ElmMassFraction:  67.10 %  ElmAbundance  21.05 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  15.41 %  ElmAbundance  63.16 %
+   --->  Element: Germanium (Ge)   Z = 32.0   N =  72.6   A =  72.59 g/mole
+   --->  Isotope: Germanium70   Z = 32   N =  70   A =  69.92 g/mole   abundance:  20.84 %
+   --->  Isotope: Germanium72   Z = 32   N =  72   A =  71.92 g/mole   abundance:  27.54 %
+   --->  Isotope: Germanium73   Z = 32   N =  73   A =  72.92 g/mole   abundance:   7.73 %
+   --->  Isotope: Germanium74   Z = 32   N =  74   A =  73.92 g/mole   abundance:  36.28 %
+   --->  Isotope: Germanium76   Z = 32   N =  76   A =  75.92 g/mole   abundance:   7.61 %  ElmMassFraction:  17.48 %  ElmAbundance  15.79 %
+   --->  Element: Bismuth (Bi)   Z = 83.0   N = 209.0   A = 208.98 g/mole
+   --->  Isotope: Bismuth209   Z = 83   N = 209   A = 208.98 g/mole   abundance: 100.00 %  ElmMassFraction:  67.10 %  ElmAbundance  21.05 %
 
  Material:    PbWO4    density:  8.280 g/cm3   RadL:   8.924 mm   Nucl.Int.Length:  20.740 cm   Imean: 542.741 eV 
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  14.07 %  ElmAbundance  66.67 %
-   --->  Element: Lead (Pb)   Z = 82.0   N = 207.2   A = 207.19 g/mole  ElmMassFraction:  45.53 %  ElmAbundance  16.67 %
-   --->  Element: Tungsten (W)   Z = 74.0   N = 183.8   A = 183.84 g/mole  ElmMassFraction:  40.40 %  ElmAbundance  16.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  14.07 %  ElmAbundance  66.67 %
+   --->  Element: Lead (Pb)   Z = 82.0   N = 207.2   A = 207.19 g/mole
+   --->  Isotope: Lead204   Z = 82   N = 204   A = 203.97 g/mole   abundance:   1.40 %
+   --->  Isotope: Lead206   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
+   --->  Isotope: Lead207   Z = 82   N = 207   A = 206.98 g/mole   abundance:  22.10 %
+   --->  Isotope: Lead208   Z = 82   N = 208   A = 207.98 g/mole   abundance:  52.40 %  ElmMassFraction:  45.53 %  ElmAbundance  16.67 %
+   --->  Element: Tungsten (W)   Z = 74.0   N = 183.8   A = 183.84 g/mole
+   --->  Isotope: Tungsten180   Z = 74   N = 180   A = 179.95 g/mole   abundance:   0.12 %
+   --->  Isotope: Tungsten182   Z = 74   N = 182   A = 181.95 g/mole   abundance:  26.50 %
+   --->  Isotope: Tungsten183   Z = 74   N = 183   A = 182.95 g/mole   abundance:  14.31 %
+   --->  Isotope: Tungsten184   Z = 74   N = 184   A = 183.95 g/mole   abundance:  30.64 %
+   --->  Isotope: Tungsten186   Z = 74   N = 186   A = 185.95 g/mole   abundance:  28.43 %  ElmMassFraction:  40.40 %  ElmAbundance  16.67 %
 
  Material: Tungsten    density: 19.300 g/cm3   RadL:   3.504 mm   Nucl.Int.Length:  10.306 cm   Imean: 727.000 eV 
-   --->  Element: Tungsten (W)   Z = 74.0   N = 183.8   A = 183.84 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Tungsten (W)   Z = 74.0   N = 183.8   A = 183.84 g/mole
+   --->  Isotope: Tungsten180   Z = 74   N = 180   A = 179.95 g/mole   abundance:   0.12 %
+   --->  Isotope: Tungsten182   Z = 74   N = 182   A = 181.95 g/mole   abundance:  26.50 %
+   --->  Isotope: Tungsten183   Z = 74   N = 183   A = 182.95 g/mole   abundance:  14.31 %
+   --->  Isotope: Tungsten184   Z = 74   N = 184   A = 183.95 g/mole   abundance:  30.64 %
+   --->  Isotope: Tungsten186   Z = 74   N = 186   A = 185.95 g/mole   abundance:  28.43 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material: FCal2Slugs    density: 18.600 g/cm3   RadL:   3.689 mm   Nucl.Int.Length:  10.543 cm   Imean: 704.981 eV 
-   --->  Element: Tungsten (W)   Z = 74.0   N = 183.8   A = 183.84 g/mole  ElmMassFraction:  97.00 %  ElmAbundance  91.03 %
-   --->  Element: Iron ( )   Z = 26.0   N =  55.8   A =  55.85 g/mole  ElmMassFraction:   1.00 %  ElmAbundance   3.09 %
-   --->  Element: Nickel ( )   Z = 28.0   N =  58.7   A =  58.69 g/mole  ElmMassFraction:   2.00 %  ElmAbundance   5.88 %
+   --->  Element: Tungsten (W)   Z = 74.0   N = 183.8   A = 183.84 g/mole
+   --->  Isotope: Tungsten180   Z = 74   N = 180   A = 179.95 g/mole   abundance:   0.12 %
+   --->  Isotope: Tungsten182   Z = 74   N = 182   A = 181.95 g/mole   abundance:  26.50 %
+   --->  Isotope: Tungsten183   Z = 74   N = 183   A = 182.95 g/mole   abundance:  14.31 %
+   --->  Isotope: Tungsten184   Z = 74   N = 184   A = 183.95 g/mole   abundance:  30.64 %
+   --->  Isotope: Tungsten186   Z = 74   N = 186   A = 185.95 g/mole   abundance:  28.43 %  ElmMassFraction:  97.00 %  ElmAbundance  91.03 %
+   --->  Element: Iron ( )   Z = 26.0   N =  55.8   A =  55.85 g/mole
+   --->  Isotope: Iron54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
+   --->  Isotope: Iron56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
+   --->  Isotope: Iron57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
+   --->  Isotope: Iron58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %  ElmMassFraction:   1.00 %  ElmAbundance   3.09 %
+   --->  Element: Nickel ( )   Z = 28.0   N =  58.7   A =  58.69 g/mole
+   --->  Isotope: Nickel58   Z = 28   N =  58   A =  57.94 g/mole   abundance:  68.08 %
+   --->  Isotope: Nickel60   Z = 28   N =  60   A =  59.93 g/mole   abundance:  26.22 %
+   --->  Isotope: Nickel61   Z = 28   N =  61   A =  60.93 g/mole   abundance:   1.14 %
+   --->  Isotope: Nickel62   Z = 28   N =  62   A =  61.93 g/mole   abundance:   3.63 %
+   --->  Isotope: Nickel64   Z = 28   N =  64   A =  63.93 g/mole   abundance:   0.93 %  ElmMassFraction:   2.00 %  ElmAbundance   5.88 %
 
  Material: FCal2Abs    density: 10.000 g/cm3   RadL:   7.568 mm   Nucl.Int.Length:  18.121 cm   Imean: 593.365 eV 
-   --->  Element: Copper ( )   Z = 29.0   N =  63.5   A =  63.54 g/mole  ElmMassFraction:  20.00 %  ElmAbundance  40.43 %
-   --->  Element: Tungsten (W)   Z = 74.0   N = 183.8   A = 183.84 g/mole  ElmMassFraction:  77.60 %  ElmAbundance  54.22 %
-   --->  Element: Iron ( )   Z = 26.0   N =  55.8   A =  55.85 g/mole  ElmMassFraction:   0.80 %  ElmAbundance   1.84 %
-   --->  Element: Nickel ( )   Z = 28.0   N =  58.7   A =  58.69 g/mole  ElmMassFraction:   1.60 %  ElmAbundance   3.50 %
+   --->  Element: Copper ( )   Z = 29.0   N =  63.5   A =  63.54 g/mole
+   --->  Isotope: Copper63   Z = 29   N =  63   A =  62.93 g/mole   abundance:  69.17 %
+   --->  Isotope: Copper65   Z = 29   N =  65   A =  64.93 g/mole   abundance:  30.83 %  ElmMassFraction:  20.00 %  ElmAbundance  40.43 %
+   --->  Element: Tungsten (W)   Z = 74.0   N = 183.8   A = 183.84 g/mole
+   --->  Isotope: Tungsten180   Z = 74   N = 180   A = 179.95 g/mole   abundance:   0.12 %
+   --->  Isotope: Tungsten182   Z = 74   N = 182   A = 181.95 g/mole   abundance:  26.50 %
+   --->  Isotope: Tungsten183   Z = 74   N = 183   A = 182.95 g/mole   abundance:  14.31 %
+   --->  Isotope: Tungsten184   Z = 74   N = 184   A = 183.95 g/mole   abundance:  30.64 %
+   --->  Isotope: Tungsten186   Z = 74   N = 186   A = 185.95 g/mole   abundance:  28.43 %  ElmMassFraction:  77.60 %  ElmAbundance  54.22 %
+   --->  Element: Iron ( )   Z = 26.0   N =  55.8   A =  55.85 g/mole
+   --->  Isotope: Iron54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
+   --->  Isotope: Iron56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
+   --->  Isotope: Iron57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
+   --->  Isotope: Iron58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %  ElmMassFraction:   0.80 %  ElmAbundance   1.84 %
+   --->  Element: Nickel ( )   Z = 28.0   N =  58.7   A =  58.69 g/mole
+   --->  Isotope: Nickel58   Z = 28   N =  58   A =  57.94 g/mole   abundance:  68.08 %
+   --->  Isotope: Nickel60   Z = 28   N =  60   A =  59.93 g/mole   abundance:  26.22 %
+   --->  Isotope: Nickel61   Z = 28   N =  61   A =  60.93 g/mole   abundance:   1.14 %
+   --->  Isotope: Nickel62   Z = 28   N =  62   A =  61.93 g/mole   abundance:   3.63 %
+   --->  Isotope: Nickel64   Z = 28   N =  64   A =  63.93 g/mole   abundance:   0.93 %  ElmMassFraction:   1.60 %  ElmAbundance   3.50 %
 
  Material:     Lead    density: 11.350 g/cm3   RadL:   5.612 mm   Nucl.Int.Length:  18.258 cm   Imean: 823.000 eV 
-   --->  Element: Lead (Pb)   Z = 82.0   N = 207.2   A = 207.19 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Lead (Pb)   Z = 82.0   N = 207.2   A = 207.19 g/mole
+   --->  Isotope: Lead204   Z = 82   N = 204   A = 203.97 g/mole   abundance:   1.40 %
+   --->  Isotope: Lead206   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
+   --->  Isotope: Lead207   Z = 82   N = 207   A = 206.98 g/mole   abundance:  22.10 %
+   --->  Isotope: Lead208   Z = 82   N = 208   A = 207.98 g/mole   abundance:  52.40 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
 
 #
@@ -153,18 +238,6 @@ hIoni:   for  proton    SubType= 2
                Bragg :  Emin=        0 eV    Emax=        2 MeV
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
 
-hBrems:   for  proton    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
-
-hPairProd:   for  proton    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
-
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -186,6 +259,18 @@ hIoni:   for  anti_proton    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=        2 MeV
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+
+hBrems:   for  anti_proton    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+
+hPairProd:   for  anti_proton    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for kaon+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
@@ -220,18 +305,6 @@ hIoni:   for  kaon-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
           BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
-
-hBrems:   for  kaon-    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
-
-hPairProd:   for  kaon-    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
@@ -275,18 +348,6 @@ muIoni:   for  mu-    SubType= 2
           BetheBloch :  Emin=      200 keV   Emax=        1 GeV
         MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
 
-muBrems:   for  mu-    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :  Emin=        0 eV    Emax=       10 TeV
-
-muPairProd:   for  mu-    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :  Emin=        0 eV    Emax=       10 TeV
-
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
@@ -327,18 +388,6 @@ hIoni:   for  pi-    SubType= 2
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
 
-hBrems:   for  pi-    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
-
-hPairProd:   for  pi-    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
-
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
@@ -369,7 +418,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=18.68s Real=18.69s Sys=0s
+  User=19.84s Real=19.86s Sys=0s
                  LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
 
         bin              Mean         rms                 bin            Mean      rms 
@@ -469,31 +518,31 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=25.3s Real=25.38s Sys=0s
+  User=25.75s Real=25.87s Sys=0.01s
                  LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 1.00 radl:    1.21%       0.60%             0-> 1.00 radl:    1.21%     0.60% 
-    1.00-> 2.00 radl:    2.69%       1.08%             0-> 2.00 radl:    3.90%     1.37% 
-    2.00-> 3.00 radl:    5.80%       2.17%             0-> 3.00 radl:    9.70%     3.10% 
-    3.00-> 4.00 radl:    8.59%       2.78%             0-> 4.00 radl:   18.30%     5.35% 
-    4.00-> 5.00 radl:   10.27%       2.95%             0-> 5.00 radl:   28.56%     7.46% 
-    5.00-> 6.00 radl:   11.22%       2.56%             0-> 6.00 radl:   39.78%     9.15% 
-    6.00-> 7.00 radl:   10.61%       2.31%             0-> 7.00 radl:   50.39%    10.22% 
-    7.00-> 8.00 radl:    9.34%       2.05%             0-> 8.00 radl:   59.73%    10.30% 
-    8.00-> 9.00 radl:    7.90%       2.02%             0-> 9.00 radl:   67.63%     9.65% 
-    9.00->10.00 radl:    6.87%       1.81%             0->10.00 radl:   74.50%     8.74% 
-   10.00->11.00 radl:    5.43%       1.66%             0->11.00 radl:   79.92%     7.62% 
-   11.00->12.00 radl:    4.17%       1.67%             0->12.00 radl:   84.09%     6.30% 
-   12.00->13.00 radl:    3.23%       1.55%             0->13.00 radl:   87.33%     4.93% 
-   13.00->14.00 radl:    2.52%       1.46%             0->14.00 radl:   89.85%     3.68% 
-   14.00->15.00 radl:    1.85%       1.13%             0->15.00 radl:   91.70%     2.72% 
-   15.00->16.00 radl:    1.31%       0.84%             0->16.00 radl:   93.01%     2.01% 
-   16.00->17.00 radl:    0.93%       0.63%             0->17.00 radl:   93.94%     1.53% 
-   17.00->18.00 radl:    0.73%       0.53%             0->18.00 radl:   94.67%     1.11% 
-   18.00->19.00 radl:    0.51%       0.43%             0->19.00 radl:   95.18%     0.82% 
-   19.00->20.00 radl:    0.34%       0.29%             0->20.00 radl:   95.52%     0.68% 
+    0.00-> 1.00 radl:    1.18%       0.60%             0-> 1.00 radl:    1.18%     0.60% 
+    1.00-> 2.00 radl:    2.62%       1.12%             0-> 2.00 radl:    3.80%     1.43% 
+    2.00-> 3.00 radl:    5.74%       2.25%             0-> 3.00 radl:    9.54%     3.23% 
+    3.00-> 4.00 radl:    8.67%       2.62%             0-> 4.00 radl:   18.21%     5.30% 
+    4.00-> 5.00 radl:   10.45%       2.78%             0-> 5.00 radl:   28.67%     7.23% 
+    5.00-> 6.00 radl:   11.19%       2.40%             0-> 6.00 radl:   39.85%     8.66% 
+    6.00-> 7.00 radl:   10.51%       2.07%             0-> 7.00 radl:   50.37%     9.38% 
+    7.00-> 8.00 radl:    9.31%       1.99%             0-> 8.00 radl:   59.68%     9.45% 
+    8.00-> 9.00 radl:    7.88%       2.01%             0-> 9.00 radl:   67.56%     8.98% 
+    9.00->10.00 radl:    6.69%       1.63%             0->10.00 radl:   74.25%     8.38% 
+   10.00->11.00 radl:    5.39%       1.46%             0->11.00 radl:   79.63%     7.48% 
+   11.00->12.00 radl:    4.24%       1.58%             0->12.00 radl:   83.87%     6.28% 
+   12.00->13.00 radl:    3.33%       1.58%             0->13.00 radl:   87.20%     4.92% 
+   13.00->14.00 radl:    2.59%       1.45%             0->14.00 radl:   89.79%     3.68% 
+   14.00->15.00 radl:    1.87%       1.14%             0->15.00 radl:   91.66%     2.70% 
+   15.00->16.00 radl:    1.34%       0.81%             0->16.00 radl:   93.00%     2.02% 
+   16.00->17.00 radl:    0.95%       0.64%             0->17.00 radl:   93.95%     1.54% 
+   17.00->18.00 radl:    0.71%       0.54%             0->18.00 radl:   94.66%     1.12% 
+   18.00->19.00 radl:    0.52%       0.44%             0->19.00 radl:   95.18%     0.82% 
+   19.00->20.00 radl:    0.34%       0.28%             0->20.00 radl:   95.52%     0.69% 
 
 
 
@@ -501,39 +550,39 @@ Run Summary
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 0.25 radl:   35.39%       2.23%             0-> 0.25 radl:   35.39%     2.23% 
-    0.25-> 0.50 radl:   18.93%       1.49%             0-> 0.50 radl:   54.33%     2.33% 
-    0.50-> 0.75 radl:   10.86%       0.95%             0-> 0.75 radl:   65.19%     2.17% 
-    0.75-> 1.00 radl:    6.88%       0.81%             0-> 1.00 radl:   72.07%     1.83% 
-    1.00-> 1.25 radl:    4.64%       0.61%             0-> 1.25 radl:   76.70%     1.64% 
-    1.25-> 1.50 radl:    3.52%       0.58%             0-> 1.50 radl:   80.22%     1.44% 
-    1.50-> 1.75 radl:    2.69%       0.46%             0-> 1.75 radl:   82.91%     1.30% 
-    1.75-> 2.00 radl:    2.14%       0.39%             0-> 2.00 radl:   85.05%     1.17% 
-    2.00-> 2.25 radl:    1.84%       0.44%             0-> 2.25 radl:   86.89%     1.05% 
-    2.25-> 2.50 radl:    1.47%       0.31%             0-> 2.50 radl:   88.37%     0.99% 
-    2.50-> 2.75 radl:    1.27%       0.26%             0-> 2.75 radl:   89.63%     0.93% 
-    2.75-> 3.00 radl:    1.07%       0.25%             0-> 3.00 radl:   90.70%     0.87% 
-    3.00-> 3.25 radl:    0.93%       0.23%             0-> 3.25 radl:   91.63%     0.83% 
-    3.25-> 3.50 radl:    0.79%       0.21%             0-> 3.50 radl:   92.42%     0.82% 
-    3.50-> 3.75 radl:    0.71%       0.21%             0-> 3.75 radl:   93.13%     0.79% 
+    0.00-> 0.25 radl:   35.27%       2.11%             0-> 0.25 radl:   35.27%     2.11% 
+    0.25-> 0.50 radl:   18.98%       1.47%             0-> 0.50 radl:   54.25%     2.14% 
+    0.50-> 0.75 radl:   10.80%       0.88%             0-> 0.75 radl:   65.05%     2.03% 
+    0.75-> 1.00 radl:    6.87%       0.78%             0-> 1.00 radl:   71.92%     1.77% 
+    1.00-> 1.25 radl:    4.64%       0.61%             0-> 1.25 radl:   76.56%     1.63% 
+    1.25-> 1.50 radl:    3.54%       0.57%             0-> 1.50 radl:   80.10%     1.43% 
+    1.50-> 1.75 radl:    2.66%       0.46%             0-> 1.75 radl:   82.76%     1.30% 
+    1.75-> 2.00 radl:    2.19%       0.41%             0-> 2.00 radl:   84.95%     1.16% 
+    2.00-> 2.25 radl:    1.85%       0.44%             0-> 2.25 radl:   86.80%     1.05% 
+    2.25-> 2.50 radl:    1.49%       0.32%             0-> 2.50 radl:   88.29%     1.01% 
+    2.50-> 2.75 radl:    1.29%       0.25%             0-> 2.75 radl:   89.58%     0.95% 
+    2.75-> 3.00 radl:    1.07%       0.25%             0-> 3.00 radl:   90.65%     0.90% 
+    3.00-> 3.25 radl:    0.96%       0.24%             0-> 3.25 radl:   91.61%     0.84% 
+    3.25-> 3.50 radl:    0.80%       0.20%             0-> 3.50 radl:   92.41%     0.81% 
+    3.50-> 3.75 radl:    0.72%       0.21%             0-> 3.75 radl:   93.13%     0.78% 
     3.75-> 4.00 radl:    0.61%       0.16%             0-> 4.00 radl:   93.74%     0.76% 
-    4.00-> 4.25 radl:    0.55%       0.17%             0-> 4.25 radl:   94.28%     0.75% 
-    4.25-> 4.50 radl:    0.47%       0.14%             0-> 4.50 radl:   94.76%     0.71% 
-    4.50-> 4.75 radl:    0.42%       0.16%             0-> 4.75 radl:   95.18%     0.67% 
-    4.75-> 5.00 radl:    0.34%       0.11%             0-> 5.00 radl:   95.52%     0.68% 
+    4.00-> 4.25 radl:    0.56%       0.17%             0-> 4.25 radl:   94.29%     0.75% 
+    4.25-> 4.50 radl:    0.47%       0.15%             0-> 4.50 radl:   94.77%     0.73% 
+    4.50-> 4.75 radl:    0.42%       0.16%             0-> 4.75 radl:   95.18%     0.69% 
+    4.75-> 5.00 radl:    0.34%       0.10%             0-> 5.00 radl:   95.52%     0.69% 
 
                               SUMMARY
-                         energy deposit :   95.52 % E0 +-    0.68 % E0
-                         charged traklen:  496.28 radl +-    7.08 radl
-                         neutral traklen: 4462.51 radl +-  141.24 radl
+                         energy deposit :   95.52 % E0 +-    0.69 % E0
+                         charged traklen:  496.02 radl +-    6.33 radl
+                         neutral traklen: 4469.35 radl +-  147.08 radl
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1908463830, 745047049
+ Current couple of seeds = 1051690077, 2062642552
 ----------------------------------------
 
 <<<<<ACCEPTANCE>>>>> 100 events for Total Energy in Absorber
-Edep: 0.9551934838992  delEdep= 0.003791463899201 nrms= 4.6237364624403
+Edep: 0.95517463812996  delEdep= 0.0037726181299613 nrms= 4.600753817026
 <<<<<END>>>>>   IS NOT ACCEPTED
 
 G4 kernel has come to Quit state.
