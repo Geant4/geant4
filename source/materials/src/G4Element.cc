@@ -187,13 +187,17 @@ void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
 
     fNeff = fAeff = 0.0;
     for (size_t i=0;i<fNumberOfIsotopes;i++) {
-      //      fNeff +=  fRelativeAbundanceVector[i]*(*theIsotopeVector)[i]->GetN();
       fAeff +=  fRelativeAbundanceVector[i]*(*theIsotopeVector)[i]->GetA();
       wtSum +=  fRelativeAbundanceVector[i];
     }
-    //fNeff /=  wtSum;
     fAeff  /= wtSum;
     fNeff   = fAeff/(g/mole);
+
+    if(wtSum != 1.0) {
+      for(size_t i=0; i<fNumberOfIsotopes; ++i) { 
+	fRelativeAbundanceVector[i] /= wtSum; 
+      }
+    }
       
     fNbOfAtomicShells = G4AtomicShells::GetNumberOfShells(iz);
     fAtomicShells     = new G4double[fNbOfAtomicShells];
@@ -339,6 +343,7 @@ void G4Element::AddNaturalIsotopes()
   theIsotopeVector         = new G4IsotopeVector(fNumberOfIsotopes,0);
   fRelativeAbundanceVector = new G4double[fNumberOfIsotopes];
   G4int idx = 0;
+  G4double xsum = 0.0;
   for(G4int i=0; i<n; ++i) {
     G4int N = N0 + i;
     G4double x = nist->GetIsotopeAbundance(Z, N); 
@@ -347,8 +352,12 @@ void G4Element::AddNaturalIsotopes()
       s << fName << N;
       (*theIsotopeVector)[idx] = new G4Isotope(s.str(),Z, N, 0.0, 0);
       fRelativeAbundanceVector[idx] = x;
+      xsum += x;
       ++idx;
     }
+  }
+  if(xsum != 0.0 && xsum != 1.0) {
+    for(G4int i=0; i<idx; ++i) { fRelativeAbundanceVector[i] /= xsum; }
   }
 }
 

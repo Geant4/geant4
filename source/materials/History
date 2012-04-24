@@ -17,6 +17,28 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23-04-12 V.Ivanchenko (materials-V09-05-16)
+- G4Material : add fMassOfMolecule computation inside constructors
+    with mass fraction
+- G4Element : normalize to 1 the sum of isotope abundances
+
+21-04-12 V.Ivanchenko (materials-V09-05-15)
+- G4Material : add fMassOfMolecule definition into G4Material constructor 
+    with base material
+     
+21-04-12 mma (materials-V09-05-14)
+- G4Material : fMassOfMolecule, only computed when relevant
+- update test/testMatComponents.cc     
+     
+13-04-12 mma (materials-V09-05-13)
+- G4Material : map<G4Material*,G4double> fMatComponents, filled in AddMaterial()
+- update test/testMatComponents.cc
+     
+12-04-12 mma (materials-V09-05-12)
+- G4Material : new data member fMatComponents (a map), for composite built via
+      AddMaterial()
+- example in test/testMatComponents.cc
+
 05-03-12 V.Ivanchenko (materials-V09-05-11)
 - G4Element - add construction of Isotope vector for all elements,
     if user does not create isotopes then vector of of isotopes

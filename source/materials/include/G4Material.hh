@@ -91,6 +91,8 @@
 // 26-02-02, fIndexInTable renewed
 // 06-08-02, remove constructors with ChemicalFormula (mma)
 // 15-11-05, GetMaterial(materialName, G4bool warning=true)
+// 13-04-12, std::map<G4Material*,G4double> fMatComponents (mma)
+// 21-04-12, fMassOfMolecule (mma)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -100,6 +102,7 @@
 #include "globals.hh"
 #include "G4ios.hh"
 #include <vector>
+#include <map>
 #include "G4Element.hh"
 #include "G4MaterialPropertiesTable.hh"
 #include "G4IonisParamMat.hh"
@@ -227,6 +230,15 @@ public:  // with description
   inline 
   const G4Material* GetBaseMaterial()     const {return fBaseMaterial;}
   
+  // material components:
+  inline 
+  std::map<G4Material*,G4double> GetMatComponents() const 
+                                               {return fMatComponents;}
+					       
+  //for chemical compound
+  inline 
+  G4double GetMassOfMolecule()     const {return fMassOfMolecule;}
+      
   //meaningful only for single material:
   G4double GetZ() const;
   G4double GetA() const;
@@ -302,7 +314,7 @@ private:
   G4double         fPressure;             // Pressure    (defaults: STP)
 
   G4int            maxNbComponents;       // totalNbOfComponentsInTheMaterial 
-  G4int            fArrayLength;          // the length of FAtomVector 
+  G4int            fArrayLength;          // the length of fAtomsVector 
   size_t           fNumberOfComponents;   // Nb of components declared so far
 
   size_t           fNumberOfElements;     // Nb of Elements in the material
@@ -329,8 +341,14 @@ private:
   G4double  fNuclInterLen;                // Nuclear interaction length  
   
   G4IonisParamMat* fIonisation;           // ionisation parameters
-  G4SandiaTable*   fSandiaTable;          // Sandia table         
+  G4SandiaTable*   fSandiaTable;          // Sandia table
+  
+  // utilities
+  //         
   const G4Material* fBaseMaterial;        // Pointer to the base material
+  G4double fMassOfMolecule; 		  // for materials built by atoms count
+  std::map<G4Material*,G4double> fMatComponents; // for composites built via
+                                                 // AddMaterial()
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

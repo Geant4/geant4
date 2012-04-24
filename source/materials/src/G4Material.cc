@@ -65,9 +65,10 @@
 // 27-07-07, improve destructor (V.Ivanchenko) 
 // 18-10-07, move definition of material index to InitialisePointers (V.Ivanchenko) 
 // 13-08-08, do not use fixed size arrays (V.Ivanchenko)
-// 26-10-11, new scheme for G4Exception  (mma) 
+// 26-10-11, new scheme for G4Exception  (mma)
+// 13-04-12, map<G4Material*,G4double> fMatComponents, filled in AddMaterial()
+// 21-04-12, fMassOfMolecule, computed for AtomsCount (mma)
 // 
-
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -113,6 +114,7 @@ G4Material::G4Material(const G4String& name, G4double z,
   theElementVector->push_back( new G4Element(name, " ", z, a));  
   fMassFractionVector    = new G4double[1];
   fMassFractionVector[0] = 1. ;
+  fMassOfMolecule        = a/Avogadro;
   
   (*theElementVector)[0] -> increaseCountUse();
   
@@ -193,6 +195,7 @@ G4Material::G4Material(const G4String& name, G4double density,
 
   fBaseMaterial = bmat;
   fChemicalFormula = fBaseMaterial->GetChemicalFormula();
+  fMassOfMolecule  = fBaseMaterial->GetMassOfMolecule();
 
   fNumberOfElements = fBaseMaterial->GetNumberOfElements();     
   maxNbComponents = fNumberOfElements;
@@ -265,6 +268,7 @@ void G4Material::InitializePointers()
   TotNbOfElectPerVolume = 0; 
   fRadlen = 0.0;
   fNuclInterLen = 0.0;
+  fMassOfMolecule = 0.0;
 
   // Store in the static Table of Materials
   theMaterialTable.push_back(this);
@@ -365,6 +369,7 @@ void G4Material::AddElement(G4Element* element, G4int nAtoms)
       fMassFractionVector[i] /= Amol;
     }
 
+    fMassOfMolecule = Amol/Avogadro;
     ComputeDerivedQuantities();
   }
 }
@@ -423,11 +428,14 @@ void G4Material::AddElement(G4Element* element, G4double fraction)
 	     <<  wtSum << " is not 1 - results may be wrong" 
 	     << G4endl;
     }
+    Amol = 0.0;
     for (i=0; i<fNumberOfElements; ++i) {
       fAtomsVector[i] = 
-	G4int(fMassFractionVector[i]*Amol/(*theElementVector)[i]->GetA()+0.5);
+	G4lrint(fMassFractionVector[i]*Amol/(*theElementVector)[i]->GetA());
+      Amol +=  fAtomsVector[i]*(*theElementVector)[i]->GetA();
     }
      
+    fMassOfMolecule = Amol/Avogadro;
     ComputeDerivedQuantities();
   }
 }
@@ -486,7 +494,10 @@ void G4Material::AddMaterial(G4Material* material, G4double fraction)
 	  element->increaseCountUse();
         }
       } 
-    ++fNumberOfComponents;  
+    ++fNumberOfComponents;
+    ///store massFraction of material component
+    fMatComponents[material] = fraction;
+      
   } else {
     G4cout << "G4Material::AddMaterial ERROR for " << fName << " nElement= " 
 	   <<  fNumberOfElements << G4endl;
@@ -511,11 +522,14 @@ void G4Material::AddMaterial(G4Material* material, G4double fraction)
 	     <<  wtSum << " is not 1 - results may be wrong" 
 	     << G4endl;
     }
+    Amol = 0.0;
     for (i=0;i<fNumberOfElements;i++) {
       fAtomsVector[i] = 
-	G4int(fMassFractionVector[i]*Amol/(*theElementVector)[i]->GetA()+0.5);
+	G4lrint(fMassFractionVector[i]*Amol/(*theElementVector)[i]->GetA());
+      Amol +=  fAtomsVector[i]*(*theElementVector)[i]->GetA();
     }
      
+    fMassOfMolecule = Amol/Avogadro;
     ComputeDerivedQuantities();
   }
 }
@@ -644,6 +658,8 @@ const G4Material& G4Material::operator=(const G4Material& right)
 
       fMaterialPropertiesTable = right.fMaterialPropertiesTable;
       fBaseMaterial = right.fBaseMaterial;
+      fMassOfMolecule= right.fMassOfMolecule;
+      fMatComponents= right.fMatComponents;
 
       if(fBaseMaterial) {
         CopyPointersOfBaseMaterial();
