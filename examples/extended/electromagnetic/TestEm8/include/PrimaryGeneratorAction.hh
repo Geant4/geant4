@@ -60,7 +60,7 @@ public:
   virtual ~PrimaryGeneratorAction();
 
   virtual void GeneratePrimaries(G4Event*);
-  //G4ParticleGun* GetParticleGun() {return particleGun;};
+
   void SetPositionZ(G4double value);
     
 private:
@@ -68,7 +68,7 @@ private:
   PrimaryGeneratorAction & operator=(const PrimaryGeneratorAction &right);
   PrimaryGeneratorAction(const PrimaryGeneratorAction&);
 
-  G4ParticleGun*         particleGun;
+  G4ParticleGun*         fParticleGun;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

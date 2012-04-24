@@ -65,7 +65,7 @@ public: // Without description
 
 private:
 
-  HistoManager* theHisto;
+  HistoManager* fHisto;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

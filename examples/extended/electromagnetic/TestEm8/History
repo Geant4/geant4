@@ -15,6 +15,30 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17-04-12 V.Ivant (testem8-V09-05-07)
+- Histo - minor cleanup
+- PrimaryGeneratorAction - fixed initialisation
+
+17-04-12 V.Ivant (testem8-V09-05-06)
+- Histo - minor cleanup
+- PrimaryGeneratorAction - fixed initialisation
+
+17-04-12 V.Ivant (testem8-V09-05-05)
+- Histo - changed default names of output file; added SetVerbose
+
+12-04-12 V.Ivant (testem8-V09-05-04)
+- Histo - added method Activate(); fixed method Save()
+
+11-04-12 V.Ivant (testem8-V09-05-03)
+- Histo - use only ROOT option for analysis, 
+	  allow to have several runs with histograms per session
+- HistoManager - fixed computation of mean energy deposit,
+                 allow to have several runs with histograms per session
+
+10-04-12 V.Ivant (testem8-V09-05-02)
+- migration from AIDA to Geant4 histogram's tool; 
+  applied code convention for all classes of the example
+
 29-02-12 V.Ivant (testem8-V09-05-01)
 - PhysicsListMessenger - removed test cout
 - DetectorConstruction - uncomment material printout

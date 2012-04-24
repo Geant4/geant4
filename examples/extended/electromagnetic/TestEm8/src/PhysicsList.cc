@@ -72,24 +72,24 @@
 
 PhysicsList::PhysicsList() : G4VModularPhysicsList()
 {
-  em_config = G4LossTableManager::Instance()->EmConfigurator();
+  fConfig = G4LossTableManager::Instance()->EmConfigurator();
   G4LossTableManager::Instance()->SetVerbose(1);
   defaultCutValue = 1.*mm;
-  cutForGamma     = defaultCutValue;
-  cutForElectron  = defaultCutValue;
-  cutForPositron  = defaultCutValue;
-  cutForProton    = defaultCutValue;
+  fCutForGamma     = defaultCutValue;
+  fCutForElectron  = defaultCutValue;
+  fCutForPositron  = defaultCutValue;
+  fCutForProton    = defaultCutValue;
 
-  pMessenger = new PhysicsListMessenger(this);
+  fMessenger = new PhysicsListMessenger(this);
 
-  stepMaxProcess = new StepMax();
+  fStepMaxProcess = new StepMax();
 
   // Decay Physics is always defined
-  generalPhysicsList = new G4DecayPhysics();
+  fDecayPhysicsList = new G4DecayPhysics();
 
   // EM physics
-  emName = G4String("emstandard");
-  emPhysicsList = new G4EmStandardPhysics(1);
+  fEmName = G4String("emstandard");
+  fEmPhysicsList = new G4EmStandardPhysics(1);
 
   SetVerboseLevel(1);
 }
@@ -98,18 +98,18 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
 
 PhysicsList::~PhysicsList()
 {
-  delete pMessenger;
-  delete generalPhysicsList;
-  delete emPhysicsList;
-  for(size_t i=0; i<hadronPhys.size(); ++i) { delete hadronPhys[i]; }
-  delete stepMaxProcess;
+  delete fMessenger;
+  delete fDecayPhysicsList;
+  delete fEmPhysicsList;
+  for(size_t i=0; i<fHadronPhys.size(); ++i) { delete fHadronPhys[i]; }
+  delete fStepMaxProcess;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::ConstructParticle()
 {
-  generalPhysicsList->ConstructParticle();
+  fDecayPhysicsList->ConstructParticle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -117,9 +117,9 @@ void PhysicsList::ConstructParticle()
 void PhysicsList::ConstructProcess()
 {
   AddTransportation();
-  emPhysicsList->ConstructProcess();
-  generalPhysicsList->ConstructProcess();
-  for(size_t i=0; i<hadronPhys.size(); ++i) { hadronPhys[i]->ConstructProcess(); }
+  fEmPhysicsList->ConstructProcess();
+  fDecayPhysicsList->ConstructProcess();
+  for(size_t i=0; i<fHadronPhys.size(); ++i) { fHadronPhys[i]->ConstructProcess(); }
   AddStepMax();
 }
 
@@ -131,47 +131,47 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
 
-  if (name == emName) {
+  if (name == fEmName) {
     return;
 
   } else if (name == "emstandard_opt1") {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics_option1();
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option1();
 
   } else if (name == "emstandard_opt2") {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics_option2();
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option2();
 
   } else if (name == "emstandard_opt3") {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics_option3();
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option3();
 
   } else if (name == "emlivermore") {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmLivermorePhysics();
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmLivermorePhysics();
 
   } else if (name == "empenelope") {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmPenelopePhysics();
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmPenelopePhysics();
 
   } else if (name == "pai") {
 
-    emName = name;
+    fEmName = name;
     AddPAIModel(name);
 
   } else if (name == "pai_photon") { 
 
-    emName = name;
+    fEmName = name;
     AddPAIModel(name);
 
   } else {
@@ -194,9 +194,9 @@ void PhysicsList::AddStepMax()
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
-    if (stepMaxProcess->IsApplicable(*particle))
+    if (fStepMaxProcess->IsApplicable(*particle))
     {
-      pmanager ->AddDiscreteProcess(stepMaxProcess);
+      pmanager ->AddDiscreteProcess(fStepMaxProcess);
     }
   }
 }
@@ -215,10 +215,10 @@ void PhysicsList::SetCuts()
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma
 
-  SetCutValue(cutForGamma, "gamma");
-  SetCutValue(cutForElectron, "e-");
-  SetCutValue(cutForPositron, "e+");
-  SetCutValue(cutForProton, "proton");
+  SetCutValue(fCutForGamma, "gamma");
+  SetCutValue(fCutForElectron, "e-");
+  SetCutValue(fCutForPositron, "e+");
+  SetCutValue(fCutForProton, "proton");
 
   if ( verboseLevel > 0 ) { DumpCutValuesTable(); }
 }
@@ -227,32 +227,32 @@ void PhysicsList::SetCuts()
 
 void PhysicsList::SetCutForGamma(G4double cut)
 {
-  cutForGamma = cut;
-  SetParticleCuts(cutForGamma, G4Gamma::Gamma());
+  fCutForGamma = cut;
+  SetParticleCuts(fCutForGamma, G4Gamma::Gamma());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::SetCutForElectron(G4double cut)
 {
-  cutForElectron = cut;
-  SetParticleCuts(cutForElectron, G4Electron::Electron());
+  fCutForElectron = cut;
+  SetParticleCuts(fCutForElectron, G4Electron::Electron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::SetCutForPositron(G4double cut)
 {
-  cutForPositron = cut;
-  SetParticleCuts(cutForPositron, G4Positron::Positron());
+  fCutForPositron = cut;
+  SetParticleCuts(fCutForPositron, G4Positron::Positron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::SetCutForProton(G4double cut)
 {
-  cutForPositron = cut;
-  SetParticleCuts(cutForProton, G4Proton::Proton());
+  fCutForPositron = cut;
+  SetParticleCuts(fCutForProton, G4Proton::Proton());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -288,11 +288,11 @@ void PhysicsList::NewPAIModel(const G4ParticleDefinition* part,
   G4String partname = part->GetParticleName();
   if(modname == "pai") {
     G4PAIModel* pai = new G4PAIModel(part,"PAIModel");
-    em_config->SetExtraEmModel(partname,procname,pai,"GasDetector",
+    fConfig->SetExtraEmModel(partname,procname,pai,"GasDetector",
 			      0.0,100.*TeV,pai);
   } else if(modname == "pai_photon") {
     G4PAIPhotonModel* pai = new G4PAIPhotonModel(part,"PAIPhotModel");
-    em_config->SetExtraEmModel(partname,procname,pai,"GasDetector",
+    fConfig->SetExtraEmModel(partname,procname,pai,"GasDetector",
 			      0.0,100.*TeV,pai);
   }
 }

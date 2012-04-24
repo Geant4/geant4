@@ -76,25 +76,21 @@ private:
   void  NewPAIModel(const G4ParticleDefinition*, const G4String& modname, 
 		    const G4String& procname);
 
-  G4EmConfigurator* em_config;
+  G4EmConfigurator* fConfig;
 
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
-  G4double cutForProton;
+  G4double fCutForGamma;
+  G4double fCutForElectron;
+  G4double fCutForPositron;
+  G4double fCutForProton;
 
-  G4VPhysicsConstructor*  emPhysicsList;
-  G4VPhysicsConstructor*  generalPhysicsList;
-  G4VPhysicsConstructor*  particleList;
-  std::vector<G4VPhysicsConstructor*>  hadronPhys;
-  G4String emName;
+  G4VPhysicsConstructor*  fEmPhysicsList;
+  G4VPhysicsConstructor*  fDecayPhysicsList;
+  std::vector<G4VPhysicsConstructor*> fHadronPhys;
+  G4String fEmName;
     
-  StepMax* stepMaxProcess;
+  StepMax* fStepMaxProcess;
     
-  PhysicsListMessenger* pMessenger;
-
-  G4VEmModel* em_model;
-  G4VEmFluctuationModel* fm_model;
+  PhysicsListMessenger* fMessenger;
 
 };
 

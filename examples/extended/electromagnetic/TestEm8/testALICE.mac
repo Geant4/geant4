@@ -35,5 +35,5 @@
 /gun/energy 3. GeV
 #
 /testem/histo/fileName p_3gev_2mmNeCO2_pai
-/run/beamOn 1000000
+/run/beamOn 10000
 #

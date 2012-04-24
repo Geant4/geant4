@@ -65,20 +65,20 @@ public:
     
 private:
 
-  DetectorConstruction*      Detector;
+  DetectorConstruction*      fDetector;
     
-  G4UIdirectory*             detDir;
+  G4UIdirectory*             fDetDir;
 
-  G4UIcmdWithAString*        GasMaterCmd;
-  G4UIcmdWithADoubleAndUnit* GasThickCmd;
-  G4UIcmdWithADoubleAndUnit* GasRadCmd;
+  G4UIcmdWithAString*        fGasMaterCmd;
+  G4UIcmdWithADoubleAndUnit* fGasThickCmd;
+  G4UIcmdWithADoubleAndUnit* fGasRadCmd;
 
-  G4UIcmdWithADoubleAndUnit* WinThickCmd;
-  G4UIcmdWithAString*        WindowMaterCmd;
+  G4UIcmdWithADoubleAndUnit* fWinThickCmd;
+  G4UIcmdWithAString*        fWindowMaterCmd;
 
-  G4UIcmdWithAString*        WorldMaterCmd;
+  G4UIcmdWithAString*        fWorldMaterCmd;
 
-  G4UIcmdWithADoubleAndUnit* ionCmd;
+  G4UIcmdWithADoubleAndUnit* fIonCmd;
 };
 
 #endif

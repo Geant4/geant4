@@ -61,16 +61,16 @@ public:
   PhysicsListMessenger(PhysicsList* );
   virtual ~PhysicsListMessenger();
     
-  void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String);
     
 private:
   
-  PhysicsList* pPhysicsList;
+  PhysicsList* fPhysicsList;
     
-  G4UIcmdWithADoubleAndUnit* eCmd;
-  G4UIcmdWithAnInteger*      ebCmd;
-  G4UIcmdWithAnInteger*      cbCmd;
-  G4UIcmdWithAString*        pListCmd;
+  G4UIcmdWithADoubleAndUnit* fECmd;
+  G4UIcmdWithAnInteger*      fEBCmd;
+  G4UIcmdWithAnInteger*      fCBCmd;
+  G4UIcmdWithAString*        fListCmd;
     
 };
 

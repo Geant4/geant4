@@ -48,39 +48,39 @@
 
 PrimaryGeneratorAction::PrimaryGeneratorAction()
 {
-  particleGun  = new G4ParticleGun(1);
-  particleGun->SetParticleDefinition(G4Electron::Electron());
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  particleGun->SetParticleEnergy(1.*GeV);
+  fParticleGun  = new G4ParticleGun(1);
+  fParticleGun->SetParticleDefinition(G4Electron::Electron());
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+  fParticleGun->SetParticleEnergy(1.*GeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
-  delete particleGun;
+  delete fParticleGun;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  if(1 == anEvent->GetEventID()) {
+  if(0 == anEvent->GetEventID()) {
     G4cout << "### PrimaryGeneratorAction::GeneratePrimaries ##########" << G4endl;
-    G4cout << "### " << particleGun->GetParticleDefinition()->GetParticleName()
-	   << "  E(MeV)= " << particleGun->GetParticleEnergy()/MeV << G4endl;
+    G4cout << "### " << fParticleGun->GetParticleDefinition()->GetParticleName()
+	   << "  E(MeV)= " << fParticleGun->GetParticleEnergy()/MeV << G4endl;
     G4cout << "########################################################"
 	   << G4endl;
 
   }
-  particleGun->GeneratePrimaryVertex(anEvent);
+  fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PrimaryGeneratorAction::SetPositionZ(G4double z)
 {
-  particleGun->SetParticlePosition(G4ThreeVector(0.,0.,z));
+  fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,z));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
