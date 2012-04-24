@@ -62,8 +62,8 @@ class StepMax : public G4VDiscreteProcess
 
   private:
 
-     G4double          MaxChargedStep;
-     StepMaxMessenger* pMess;
+     G4double          fMaxChargedStep;
+     StepMaxMessenger* fMess;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

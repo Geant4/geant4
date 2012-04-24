@@ -46,7 +46,7 @@
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin,
                      HistoManager* histo)
-:detector(det), primary(kin), histoManager(histo)
+:fDetector(det), fPrimary(kin), fHistoManager(histo)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,17 +62,17 @@ void RunAction::BeginOfRunAction(const G4Run* run)
 
   //initialisation
   //
-  energyDeposit = 0.;
+  fEnergyDeposit = 0.;
   
-  nbCharged = nbNeutral = 0;
-  energyCharged = energyNeutral = 0.;  
-  emin[0] = emin[1] = DBL_MAX;
-  emax[0] = emax[1] = 0.;    
+  fNbCharged = fNbNeutral = 0;
+  fEnergyCharged = fEnergyNeutral = 0.;  
+  fEmin[0] = fEmin[1] = DBL_MAX;
+  fEmax[0] = fEmax[1] = 0.;    
     
-  nbSteps = 0;
-  trackLength = 0.; 
+  fNbSteps = 0;
+  fTrackLength = 0.; 
 
-  histoManager->book();
+  fHistoManager->book();
 
   // do not save Rndm status
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
@@ -86,26 +86,26 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4int nbEvents = aRun->GetNumberOfEvent();
   if (nbEvents == 0) return;
   
-  G4Material* material = detector->GetMaterial();
-  G4double length  = detector->GetSize();
+  G4Material* material = fDetector->GetMaterial();
+  G4double length  = fDetector->GetSize();
   G4double density = material->GetDensity();
    
-  G4ParticleDefinition* particle = primary->GetParticleGun()
+  G4ParticleDefinition* particle = fPrimary->GetParticleGun()
                                           ->GetParticleDefinition();
   G4String partName = particle->GetParticleName();
-  G4double eprimary = primary->GetParticleGun()->GetParticleEnergy();
+  G4double efPrimary = fPrimary->GetParticleGun()->GetParticleEnergy();
   
   G4int prec = G4cout.precision(3);
   G4cout << "\n ======================== run summary ======================\n";  
   G4cout << "\n The run was " << nbEvents << " " << partName << " of "
-         << G4BestUnit(eprimary,"Energy") << " through " 
+         << G4BestUnit(efPrimary,"Energy") << " through " 
 	 << G4BestUnit(length,"Length") << " of "
 	 << material->GetName() << " (density: " 
 	 << G4BestUnit(density,"Volumic Mass") << ")";
   G4cout << "\n ===========================================================\n";
   G4cout << G4endl;
   
-  histoManager->save();
+  fHistoManager->save();
     
   if (particle->GetPDGCharge() == 0.) return;
    
@@ -113,12 +113,12 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   
   //track length
   //
-  G4double trackLPerEvent = trackLength/nbEvents;
-  G4double nbStepPerEvent = double(nbSteps)/nbEvents;
-  G4double stepSize = trackLength/nbSteps;
+  G4double trackLPerEvent = fTrackLength/nbEvents;
+  G4double nbStepPerEvent = double(fNbSteps)/nbEvents;
+  G4double stepSize = fTrackLength/fNbSteps;
   
   G4cout 
-    << "\n trackLength= " 
+    << "\n fTrackLength= " 
     << G4BestUnit(trackLPerEvent, "Length")
     << "\t nb of steps= " << nbStepPerEvent
     << "  stepSize= " << G4BestUnit(stepSize, "Length")
@@ -126,34 +126,34 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
       
   //charged secondaries (ionization, direct pair production)
   //
-  G4double energyPerEvent = energyCharged/nbEvents;
-  G4double nbPerEvent = double(nbCharged)/nbEvents;
+  G4double energyPerEvent = fEnergyCharged/nbEvents;
+  G4double nbPerEvent = double(fNbCharged)/nbEvents;
   G4double meanEkin = 0.;
-  if (nbCharged) meanEkin = energyCharged/nbCharged;
+  if (fNbCharged) meanEkin = fEnergyCharged/fNbCharged;
   
   G4cout 
-    << "\n d-rays  : eLoss/primary= " 
+    << "\n d-rays  : eLoss/fPrimary= " 
     << G4BestUnit(energyPerEvent, "Energy")
     << "\t  nb of d-rays= " << nbPerEvent
     << "  <Tkin>= " << G4BestUnit(meanEkin, "Energy")
-    << "  Tmin= "   << G4BestUnit(emin[0],  "Energy")
-    << "  Tmax= "   << G4BestUnit(emax[0],  "Energy")
+    << "  Tmin= "   << G4BestUnit(fEmin[0], "Energy")
+    << "  Tmax= "   << G4BestUnit(fEmax[0], "Energy")
     << G4endl;
          
   //neutral secondaries (bremsstrahlung, pixe)
   //
-  energyPerEvent = energyNeutral/nbEvents;
-  nbPerEvent = double(nbNeutral)/nbEvents;
+  energyPerEvent = fEnergyNeutral/nbEvents;
+  nbPerEvent = double(fNbNeutral)/nbEvents;
   meanEkin = 0.;
-  if (nbNeutral) meanEkin = energyNeutral/nbNeutral;
+  if (fNbNeutral) meanEkin = fEnergyNeutral/fNbNeutral;
   
   G4cout 
-    << "\n gamma   : eLoss/primary= " 
+    << "\n gamma   : eLoss/fPrimary= " 
     << G4BestUnit(energyPerEvent, "Energy")
     << "\t  nb of gammas= " << nbPerEvent
     << "  <Tkin>= " << G4BestUnit(meanEkin, "Energy")
-    << "  Tmin= "   << G4BestUnit(emin[1],  "Energy")
-    << "  Tmax= "   << G4BestUnit(emax[1],  "Energy")
+    << "  Tmin= "   << G4BestUnit(fEmin[1],  "Energy")
+    << "  Tmax= "   << G4BestUnit(fEmax[1],  "Energy")
     << G4endl;
     
 
@@ -161,19 +161,19 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   
   //local energy deposit
   //
-  energyPerEvent = energyDeposit/nbEvents;
+  energyPerEvent = fEnergyDeposit/nbEvents;
   //
-  G4double r0  = emCal.GetRangeFromRestricteDEDX(eprimary,particle,material);  
+  G4double r0  = emCal.GetRangeFromRestricteDEDX(efPrimary,particle,material);  
   G4double r1 = r0 - trackLPerEvent;
-  G4double etry = eprimary - energyPerEvent;  
+  G4double etry = efPrimary - energyPerEvent;  
   G4double efinal = 0.;
   if (r1 > 0.) efinal = GetEnergyFromRestrictedRange(r1,particle,material,etry);
-  G4double dEtable = eprimary - efinal;
+  G4double dEtable = efPrimary - efinal;
   G4double ratio = 0.;
   if (dEtable > 0.) ratio = energyPerEvent/dEtable;
     
   G4cout 
-    << "\n deposit : eLoss/primary= " 
+    << "\n deposit : eLoss/fPrimary= " 
     << G4BestUnit(energyPerEvent, "Energy")
     << "\t <dEcut > table= " 
     << G4BestUnit(dEtable, "Energy")
@@ -182,20 +182,20 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     
   //total energy transferred
   //
-  G4double energyTotal = energyDeposit + energyCharged + energyNeutral;
+  G4double energyTotal = fEnergyDeposit + fEnergyCharged + fEnergyNeutral;
   energyPerEvent = energyTotal/nbEvents;
   //
-  r0  = emCal.GetCSDARange(eprimary,particle,material);  
+  r0  = emCal.GetCSDARange(efPrimary,particle,material);  
   r1 = r0 - trackLPerEvent;
-  etry = eprimary - energyPerEvent;
+  etry = efPrimary - energyPerEvent;
   efinal = 0.;
   if (r1 > 0.) efinal = GetEnergyFromCSDARange(r1,particle,material,etry);
-  dEtable = eprimary - efinal;
+  dEtable = efPrimary - efinal;
   ratio = 0.;
   if (dEtable > 0.) ratio = energyPerEvent/dEtable;
     
   G4cout 
-    << "\n total   : eLoss/primary= " 
+    << "\n total   : eLoss/fPrimary= " 
     << G4BestUnit(energyPerEvent, "Energy")
     << "\t <dEfull> table= " 
     << G4BestUnit(dEtable, "Energy")

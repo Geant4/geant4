@@ -51,23 +51,23 @@ class EventAction : public G4UserEventAction
     void BeginOfEventAction(const G4Event*);
     void   EndOfEventAction(const G4Event*);
     
-    void AddEnergyDeposit(G4double edep)   {EnergyDeposit  += edep;};
-    void AddSecondary(G4double ekin)     {EnergySecondary  += ekin;};
+    void AddEnergyDeposit(G4double edep)   {fEnergyDeposit  += edep;};
+    void AddSecondary(G4double ekin)     {fEnergySecondary  += ekin;};
     			           	  
-    void SetDrawFlag(G4String val)  {drawFlag = val;};
-    void SetPrintModulo(G4int val)  {printModulo = val;};
+    void SetDrawFlag(G4String val)  {fDrawFlag = val;};
+    void SetPrintModulo(G4int val)  {fPrintModulo = val;};
         
   private:
-    RunAction*    runaction;
-    HistoManager* histoManager;
+    RunAction*    fRunAction;
+    HistoManager* fHistoManager;
     
-    G4double EnergyDeposit;
-    G4double EnergySecondary;
+    G4double      fEnergyDeposit;
+    G4double      fEnergySecondary;
     
-    G4String drawFlag;
-    G4int    printModulo;
+    G4String      fDrawFlag;
+    G4int         fPrintModulo;
     
-    EventMessenger* eventMessenger;                    
+    EventMessenger* fEventMessenger;                    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

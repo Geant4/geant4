@@ -40,7 +40,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(RunAction* RA, EventAction* EA, HistoManager* HM)
-:runaction(RA), eventaction(EA), histoManager(HM)
+:fRunaction(RA), fEventaction(EA), fHistoManager(HM)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,12 +53,12 @@ SteppingAction::~SteppingAction()
 void SteppingAction::UserSteppingAction(const G4Step* step)
 {
  //continuous energy deposit per event  
- eventaction->AddEnergyDeposit (step->GetTotalEnergyDeposit());
+ fEventaction->AddEnergyDeposit (step->GetTotalEnergyDeposit());
  
  //step size
  G4double stepSize = step->GetStepLength();  
- runaction->AddTrackLength(stepSize);
- histoManager->FillHisto(6,stepSize);
+ fRunaction->AddTrackLength(stepSize);
+ fHistoManager->FillHisto(6,stepSize);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

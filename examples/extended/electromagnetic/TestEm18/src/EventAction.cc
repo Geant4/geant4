@@ -40,17 +40,17 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::EventAction(RunAction* RA, HistoManager* histo)
-:runaction(RA),histoManager(histo),
- drawFlag("none"),printModulo(10000)
+:fRunAction(RA),fHistoManager(histo),
+ fDrawFlag("none"),fPrintModulo(10000)
 {
-  eventMessenger = new EventMessenger(this);
+  fEventMessenger = new EventMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::~EventAction()
 {
-  delete eventMessenger;
+  delete fEventMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -60,21 +60,21 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
  G4int evtNb = evt->GetEventID();
 
  //printing survey
- if (evtNb%printModulo == 0) 
+ if (evtNb%fPrintModulo == 0) 
     G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
 
  // initialisation per event
- EnergyDeposit  = EnergySecondary = 0.;
+ fEnergyDeposit  = fEnergySecondary = 0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::EndOfEventAction(const G4Event*)
 {
- runaction->AddEnergyDeposit(EnergyDeposit);
- histoManager->FillHisto(1, EnergyDeposit);
- histoManager->FillHisto(2, EnergySecondary);
- histoManager->FillHisto(3, EnergyDeposit+EnergySecondary);
+ fRunAction->AddEnergyDeposit(fEnergyDeposit);
+ fHistoManager->FillHisto(1, fEnergyDeposit);
+ fHistoManager->FillHisto(2, fEnergySecondary);
+ fHistoManager->FillHisto(3, fEnergyDeposit+fEnergySecondary);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

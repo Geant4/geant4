@@ -50,9 +50,9 @@ class SteppingAction : public G4UserSteppingAction
    void UserSteppingAction(const G4Step*);
 
   private:
-    RunAction*            runaction;    
-    EventAction*          eventaction;
-    HistoManager*         histoManager;
+    RunAction*            fRunaction;    
+    EventAction*          fEventaction;
+    HistoManager*         fHistoManager;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

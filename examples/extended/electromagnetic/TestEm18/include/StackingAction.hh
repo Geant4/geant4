@@ -50,9 +50,9 @@ class StackingAction : public G4UserStackingAction
     G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
     
   private:
-    RunAction*    runaction;
-    EventAction*  eventaction;
-    HistoManager* histoManager;        
+    RunAction*    fRunaction;
+    EventAction*  fEventaction;
+    HistoManager* fHistoManager;        
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
