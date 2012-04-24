@@ -670,7 +670,7 @@ G4bool G4tgrUtils::AreWordsEquivalent( const G4String& word1,
                                        const G4String& word2 )
 {
   G4bool bEqual = true;
-  std::vector< std::pair<G4int,G4int> > stringPairs;
+  std::vector< std::pair<size_t,size_t> > stringPairs;
     // start of substring, number of characters
 
   //--- Get string limits between asterisks in word1
@@ -697,7 +697,7 @@ G4bool G4tgrUtils::AreWordsEquivalent( const G4String& word1,
       }     
       if( cAster!= cStart )
       {
-        stringPairs.push_back( std::pair<G4int,G4int>(cStart, cAster-cStart) );
+        stringPairs.push_back( std::pair<size_t,size_t>(cStart, cAster-cStart) );
       }
       cStart = cAster+1;
     }
@@ -717,7 +717,7 @@ G4bool G4tgrUtils::AreWordsEquivalent( const G4String& word1,
   {
     if( word1.length() != cStart )
     {
-      stringPairs.push_back( std::pair<G4int,G4int>(cStart,
+      stringPairs.push_back( std::pair<size_t,size_t>(cStart,
                                                     word1.length()-cStart) );
     }
   }
@@ -739,7 +739,7 @@ G4bool G4tgrUtils::AreWordsEquivalent( const G4String& word1,
   cStart = 0;
   for( size_t ii = 0; ii < stringPairs.size(); ii++ )
   {
-    std::pair<G4int,G4int> spair = stringPairs[ii];
+    std::pair<size_t,size_t> spair = stringPairs[ii];
     size_t sFound = word2.find(word1.substr(spair.first, spair.second),cStart);
     if( sFound  == std::string::npos )
     {
@@ -757,8 +757,8 @@ G4bool G4tgrUtils::AreWordsEquivalent( const G4String& word1,
         //---- If there is no asterisk after last character,
         //     the last string pair found has to end at the last character
       }
-      else if( (spair.first+spair.second-1 == G4int(word1.length()))
-            && (G4int(sFound)+spair.second-1 != G4int(word2.length())) )
+      else if( (spair.first+spair.second-1 == word1.length())
+            && (sFound+spair.second-1 != word2.length()) )
       {
         bEqual = false;
         break;
