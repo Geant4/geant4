@@ -12,6 +12,14 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+24-Apr-2012 Mikhail Kosov                      (hadr-chips-inter-V09-05-01)
+---------------------------------------------------------------------------
+- More changes for the redesigned (12.08.11) G4VCrossSectionDataSet interface
+
+23-Apr-2012 Mikhail Kosov                      (hadr-chips-inter-V09-05-00)
+---------------------------------------------------------------------------
+- Changes to follow the redesigned (12.08.11) G4VCrossSectionDataSet interface
+
 04-Oct-2011 Dennis Wright                      (hadr-chips-inter-V09-04-04)
 ---------------------------------------------------------------------------
 - integer Z and A migration:  change GetZ to GetZ_asInt and GetN to
