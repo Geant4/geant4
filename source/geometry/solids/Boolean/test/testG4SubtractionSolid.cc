@@ -239,14 +239,15 @@ int main()
   G4Orb* largeOrb = new G4Orb("largeOrb",11.*mm);
   G4Orb* smallOrb = new G4Orb("smallOrb",10.*mm);
 
+  G4ThreeVector zeroVec(0.0, 0.0, 0.0); 
   G4VSolid* orbShell = new G4SubtractionSolid( "orbShell", largeOrb, 
-                                                       smallOrb, 0,0 );
+                                                       smallOrb, 0, zeroVec );
 
   G4Ellipsoid* largeEll = new G4Ellipsoid("largeEll",11.*mm, 11*mm, 11*mm); //, -11*mm, 11*mm);
   G4Ellipsoid* smallEll = new G4Ellipsoid("smallEll",10.*mm, 10*mm, 10*mm); //, -10*mm, 10*mm);
 
   G4VSolid* ellShell = new G4SubtractionSolid( "orbShell", largeEll, 
-                                                       smallEll, 0,0 );
+                                                       smallEll, 0, zeroVec );
 
   G4Box* orbBox = new G4Box("orbBox",20*mm, 20*mm, 20*mm   );
 

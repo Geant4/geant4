@@ -102,3 +102,14 @@ G4double G4BooleanSolid::GetSurfaceArea()
   else   { fSurfaceArea = EstimateSurfaceArea(fStatistics,fAreaAccuracy); }
   return fSurfaceArea;
 }
+
+inline 
+G4double G4BooleanSolid::GetAreaRatio() const
+{
+  if (fAreaRatio <= 0.)
+  {
+    fAreaRatio = fPtrSolidA->GetSurfaceArea() /
+      (fPtrSolidA->GetSurfaceArea()+fPtrSolidB->GetSurfaceArea());
+  }
+  return fAreaRatio;
+}
