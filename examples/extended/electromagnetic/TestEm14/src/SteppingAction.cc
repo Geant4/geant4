@@ -39,7 +39,7 @@
 
 SteppingAction::SteppingAction(PrimaryGeneratorAction* prim,
                                RunAction* RuAct, HistoManager* Hist)
-:primary(prim),runAction(RuAct), histoManager(Hist)
+:fPrimary(prim),fRunAction(RuAct), fHistoManager(Hist)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,12 +54,12 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   const G4StepPoint* endPoint = aStep->GetPostStepPoint();
   G4String procName = endPoint->GetProcessDefinedStep()->GetProcessName();     
   G4bool transmit = (endPoint->GetStepStatus() <= fGeomBoundary);  
-  if (transmit) { runAction->CountProcesses(procName); }
+  if (transmit) { fRunAction->CountProcesses(procName); }
   else {                         
     //count real processes and sum track length
     G4double stepLength = aStep->GetStepLength();
-    runAction->CountProcesses(procName);  
-    runAction->SumTrack(stepLength);
+    fRunAction->CountProcesses(procName);  
+    fRunAction->SumTrack(stepLength);
   }
   
   //plot final state (only if continuous energy loss is small enough)
@@ -70,12 +70,12 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   G4int id = 1;
   if (aStep->GetTrack()->GetTrackStatus() == fAlive) {
     G4double energy = endPoint->GetKineticEnergy();      
-    histoManager->FillHisto(id,energy);
+    fHistoManager->FillHisto(id,energy);
 
     id = 2;
     G4ThreeVector direction = endPoint->GetMomentumDirection();
     G4double costeta = direction.x();
-    histoManager->FillHisto(id,costeta);     
+    fHistoManager->FillHisto(id,costeta);     
   }  
   
   //secondaries
@@ -85,15 +85,15 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     G4double charge = (*secondary)[lp]->GetDefinition()->GetPDGCharge();
     if (charge != 0.) { id = 3; } else { id = 5; }
     G4double energy = (*secondary)[lp]->GetKineticEnergy();
-    histoManager->FillHisto(id,energy);
+    fHistoManager->FillHisto(id,energy);
 
     ++id;
     G4ThreeVector direction = (*secondary)[lp]->GetMomentumDirection();      
     G4double costeta = direction.x();
-    histoManager->FillHisto(id,costeta);
+    fHistoManager->FillHisto(id,costeta);
       
     //energy tranferred to charged secondaries
-    if (charge != 0.) { runAction->SumeTransf(energy); }         
+    if (charge != 0.) { fRunAction->SumeTransf(energy); }         
   }
          
   // kill event after first interaction
