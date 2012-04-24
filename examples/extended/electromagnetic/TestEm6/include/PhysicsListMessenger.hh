@@ -52,12 +52,12 @@ class PhysicsListMessenger: public G4UImessenger
     
   private:
   
-    PhysicsList*        physList;
+    PhysicsList*        fPhysList;
     
-    G4UIdirectory*      physDir;    
-    G4UIcmdWithADouble* GammaToMuPairFacCmd;
-    G4UIcmdWithADouble* AnnihiToMuPairFacCmd;
-    G4UIcmdWithADouble* AnnihiToHadronFacCmd;    
+    G4UIdirectory*      fPhysDir;    
+    G4UIcmdWithADouble* fGammaToMuPairFacCmd;
+    G4UIcmdWithADouble* fAnnihiToMuPairFacCmd;
+    G4UIcmdWithADouble* fAnnihiToHadronFacCmd;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

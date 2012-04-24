@@ -48,8 +48,8 @@ public:
   void UserSteppingAction(const G4Step*);
     
 private:
-  RunAction* runAction;
-  G4double   muonMass;
+  RunAction* fRunAction;
+  G4double   fMuonMass;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

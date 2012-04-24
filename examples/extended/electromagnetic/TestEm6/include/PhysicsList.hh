@@ -66,7 +66,7 @@ class PhysicsList: public G4VUserPhysicsList
     void SetAnnihiToHadronFac(G4double);
 
   private:
-     PhysicsListMessenger*  pMes;
+     PhysicsListMessenger*  fMes;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

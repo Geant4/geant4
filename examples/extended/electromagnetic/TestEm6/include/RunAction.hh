@@ -57,7 +57,7 @@ class RunAction : public G4UserRunAction
     void     CountProcesses(G4String);
     
   private:
-    ProcessesCount*     ProcCounter;
+    ProcessesCount*     fProcCounter;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

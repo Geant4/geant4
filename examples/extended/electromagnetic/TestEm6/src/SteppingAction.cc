@@ -38,9 +38,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(RunAction* RuAct)
-:runAction(RuAct)
+:fRunAction(RuAct)
 { 
- muonMass = G4MuonPlus::MuonPlus()->GetPDGMass();
+ fMuonMass = G4MuonPlus::MuonPlus()->GetPDGMass();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,7 +55,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
  const G4VProcess* process = aStep->GetPostStepPoint()->GetProcessDefinedStep();
  if (process == 0) return;  
  G4String processName = process->GetProcessName();
- runAction->CountProcesses(processName); //count processes
+ fRunAction->CountProcesses(processName); //count processes
   
  if (processName != "GammaToMuPair") return;
  
@@ -78,8 +78,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     	   
  G4double xPlus = Eplus/EGamma, xMinus = Eminus/EGamma;
  G4double thetaPlus = PGamma.angle(Pplus), thetaMinus = PGamma.angle(Pminus);
- G4double GammaPlus=EGamma*xPlus/muonMass;
- G4double GammaMinus=EGamma*xMinus/muonMass;
+ G4double GammaPlus=EGamma*xPlus/fMuonMass;
+ G4double GammaMinus=EGamma*xMinus/fMuonMass;
  
  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
 

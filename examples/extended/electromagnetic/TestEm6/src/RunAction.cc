@@ -87,7 +87,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   // save Rndm status
   G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   CLHEP::HepRandom::showEngineStatus();
-  ProcCounter = new ProcessesCount;
+  fProcCounter = new ProcessesCount;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -95,12 +95,12 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 void RunAction::CountProcesses(G4String procName)
 {
   //does the process  already encounted ?
-  size_t nbProc = ProcCounter->size();
+  size_t nbProc = fProcCounter->size();
   size_t i = 0;
-  while ((i<nbProc)&&((*ProcCounter)[i]->GetName()!=procName)) i++;
-  if (i == nbProc) ProcCounter->push_back( new OneProcessCount(procName));
+  while ((i<nbProc)&&((*fProcCounter)[i]->GetName()!=procName)) i++;
+  if (i == nbProc) fProcCounter->push_back( new OneProcessCount(procName));
   
-  (*ProcCounter)[i]->Count();
+  (*fProcCounter)[i]->Count();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -112,10 +112,10 @@ void RunAction::EndOfRunAction(const G4Run*)
   //total number of process calls
   G4double countTot = 0.;
   G4cout << "\n Number of process calls --->";
-  for (size_t i=0; i< ProcCounter->size();i++) {
-	G4String procName = (*ProcCounter)[i]->GetName();
+  for (size_t i=0; i< fProcCounter->size();i++) {
+	G4String procName = (*fProcCounter)[i]->GetName();
 	if (procName != "Transportation") {
-	  G4int count    = (*ProcCounter)[i]->GetCounter(); 
+	  G4int count    = (*fProcCounter)[i]->GetCounter(); 
 	  G4cout << "\t" << procName << " : " << count;
 	  countTot += count;
 	}

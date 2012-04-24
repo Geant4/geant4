@@ -80,7 +80,7 @@ PhysicsList::PhysicsList()
 : G4VUserPhysicsList()
 {
   defaultCutValue = 1.*km;
-  pMes = new PhysicsListMessenger(this);
+  fMes = new PhysicsListMessenger(this);
   SetVerboseLevel(1);
 }
 
@@ -88,7 +88,7 @@ PhysicsList::PhysicsList()
 
 PhysicsList::~PhysicsList()
 {
-  delete pMes;
+  delete fMes;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
