@@ -9,6 +9,9 @@ else()
   set(cfg $<CONFIGURATION>/)
 endif()
 
+#---Need to see if ROOT is available to enable some of the tests
+find_package(ROOT QUIET)
+
 #-------------------------------------------------------------------------------------------------
 #---Basic-----------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------------------
@@ -298,6 +301,22 @@ if(GEANT4_USE_GDML)
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/persistency/gdml/G04
                   BUILD gdml_det)
 endif()
+if(ROOT_FOUND)
+  GEANT4_ADD_TEST(example-ext-persistency-p01-write 
+                  COMMAND ${CMAKE_BINARY_DIR}/examples/extended/persistency/P01/exampleP01
+                          ${CMAKE_SOURCE_DIR}/examples/extended/persistency/P01/run.mac
+                  SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/persistency/P01
+                  BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/persistency/P01
+                  BUILD exampleP01 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+                  
+  GEANT4_ADD_TEST(example-ext-persistency-p01-read 
+                  COMMAND ${CMAKE_BINARY_DIR}/examples/extended/persistency/P01/readHits hits.root
+                  SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/persistency/P01
+                  BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/persistency/P01
+                  BUILD readHits ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
+                  DEPENDS example-ext-persistency-p01-write)
+endif()
+
 GEANT4_ADD_TEST(example-ext-persistency-p03 
                 PRECMD  ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/examples/extended/persistency/P03/g4geom.txt g4geom.txt
                 COMMAND ${CMAKE_BINARY_DIR}/examples/extended/persistency/P03/textGeom

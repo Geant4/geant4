@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+ctests-V09-05-04 10th April 2012  Pere Mato
+- Added tests example-ext-persistency-p01-write and example-ext-persistency-p01-read
+
+ctests-V09-05-03 9th March 2012  Pere Mato
+- Created new tag to test CTest/CDash with propossed tags
 
 ctests-V09-05-02 19th January 2012  Pere Mato
 - Fixed example-ext-medical-electronScattering by creating the needed directory
