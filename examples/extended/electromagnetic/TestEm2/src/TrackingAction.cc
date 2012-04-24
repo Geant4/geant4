@@ -38,7 +38,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TrackingAction::TrackingAction(RunAction* run)
-:Run(run)
+:fRun(run)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,7 +49,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   G4double charge = aTrack->GetDefinition()->GetPDGCharge();
   G4double TrLeng = aTrack->GetTrackLength();
   
-  Run->fillPerTrack(charge,TrLeng);     
+  fRun->FillPerTrack(charge,TrLeng);     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

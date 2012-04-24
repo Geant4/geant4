@@ -51,7 +51,7 @@ class EmAcceptance
 		                 G4double rms, G4double limit);
 
   private:
-    G4bool isAccepted;
+    G4bool fIsAccepted;
 
 };
 

@@ -47,7 +47,7 @@ class TrackingAction : public G4UserTrackingAction {
    void PostUserTrackingAction(const G4Track*);
 
  private:
-   RunAction* Run;
+   RunAction* fRun;
     
 };
 

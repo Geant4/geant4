@@ -39,7 +39,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(DetectorConstruction* det, RunAction* run)
-:detector(det),Run(run)
+:fDetector(det),fRun(run)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -60,10 +60,10 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
    G4ThreeVector position  = prePoint + G4UniformRand()*(postPoint - prePoint);
    G4double x = position.x(), y = position.y(), z = position.z();
    G4double radius = std::sqrt(x*x + y*y);
-   G4double offset = 0.5*detector->GetfullLength();
-   G4int SlideNb = int((z + offset)/detector->GetdLlength());
-   G4int RingNb  = int(radius/detector->GetdRlength());        
-   Run->fillPerStep(dEStep,SlideNb,RingNb);
+   G4double offset = 0.5*fDetector->GetfullLength();
+   G4int SlideNb = int((z + offset)/fDetector->GetdLlength());
+   G4int RingNb  = int(radius/fDetector->GetdRlength());        
+   fRun->FillPerStep(dEStep,SlideNb,RingNb);
  }
 }
 

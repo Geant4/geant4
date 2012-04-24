@@ -64,14 +64,14 @@ class PhysicsList: public G4VModularPhysicsList
     void AddStepMax();       
 
   private:
-    G4double cutForGamma;
-    G4double cutForElectron;
-    G4double cutForPositron;
+    G4double fCutForGamma;
+    G4double fCutForElectron;
+    G4double fCutForPositron;
        
-    G4String                             emName;
-    G4VPhysicsConstructor*               emPhysicsList;    
+    G4String               fEmName;
+    G4VPhysicsConstructor* fEmPhysicsList;    
     
-    PhysicsListMessenger* pMessenger;
+    PhysicsListMessenger*  fMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -53,15 +53,15 @@ public:
   void SetNewValue(G4UIcommand*, G4String);
 
 private:
-  DetectorConstruction* Detector;
+  DetectorConstruction*      fDetector;
 
-  G4UIdirectory*             testemDir;
-  G4UIdirectory*             detDir;  
-  G4UIcmdWithAString*        MaterCmd;
-  G4UIcmdWith3Vector*        LBinCmd;
-  G4UIcmdWith3Vector*        RBinCmd;
-  G4UIcmdWithADoubleAndUnit* FieldCmd;
-  G4UIcmdWithoutParameter*   UpdateCmd;
+  G4UIdirectory*             fTestemDir;
+  G4UIdirectory*             fDetDir;  
+  G4UIcmdWithAString*        fMaterCmd;
+  G4UIcmdWith3Vector*        fLBinCmd;
+  G4UIcmdWith3Vector*        fRBinCmd;
+  G4UIcmdWithADoubleAndUnit* fFieldCmd;
+  G4UIcmdWithoutParameter*   fUpdateCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

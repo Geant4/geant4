@@ -52,13 +52,13 @@ class RunActionMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    RunAction*          Run;
+    RunAction*            fRun;
     
-    G4UIdirectory*        runDir;
-    G4UIcmdWith3Vector*   accCmd;
-    G4UIcmdWithAnInteger* verbCmd;
+    G4UIdirectory*        fRunDir;
+    G4UIcmdWith3Vector*   fAccCmd;
+    G4UIcmdWithAnInteger* fVerbCmd;
             
-    G4UIdirectory*        histoDir;        
+    G4UIdirectory*        fHistoDir;        
     G4UIcmdWithAString*   factoryCmd;
 };
 

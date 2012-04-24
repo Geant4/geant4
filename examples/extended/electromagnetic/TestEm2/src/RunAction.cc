@@ -11,7 +11,7 @@
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
+// * regarding  this  software system or asfSume any liability for its *
 // * use.  Please see the license in the file  LICENSE  and URL above *
 // * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
@@ -47,41 +47,41 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
-:Det(det),Kin(kin)
+:fDet(det),fKin(kin)
 {
-  runMessenger = new RunActionMessenger(this);
+  fRunMessenger = new RunActionMessenger(this);
   
-  nLbin = nRbin = MaxBin;
+  f_nLbin = f_nRbin = MaxBin;
     
-  dEdL.resize(nLbin, 0.0);
-  sumELongit.resize(nLbin, 0.0);
-  sumELongitCumul.resize(nLbin, 0.0);
-  sumE2Longit.resize(nLbin, 0.0);
-  sumE2LongitCumul.resize(nLbin, 0.0);
+  f_dEdL.resize(f_nLbin, 0.0);
+  fSumELongit.resize(f_nLbin, 0.0);
+  fSumELongitCumul.resize(f_nLbin, 0.0);
+  fSumE2Longit.resize(f_nLbin, 0.0);
+  fSumE2LongitCumul.resize(f_nLbin, 0.0);
 
-  dEdR.resize(nRbin, 0.0);
-  sumERadial.resize(nRbin, 0.0);
-  sumERadialCumul.resize(nRbin, 0.0);
-  sumE2Radial.resize(nRbin, 0.0);
-  sumE2RadialCumul.resize(nRbin, 0.0);
+  f_dEdR.resize(f_nRbin, 0.0);
+  fSumERadial.resize(f_nRbin, 0.0);
+  fSumERadialCumul.resize(f_nRbin, 0.0);
+  fSumE2Radial.resize(f_nRbin, 0.0);
+  fSumE2RadialCumul.resize(f_nRbin, 0.0);
     
-  edeptrue = 1.;
-  rmstrue  = 1.;
-  limittrue = DBL_MAX;
+  fEdeptrue = 1.;
+  fRmstrue  = 1.;
+  fLimittrue = DBL_MAX;
   
-  verbose = 0;
+  fVerbose = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::~RunAction()
 {
-  delete runMessenger;
+  delete fRunMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::bookHisto()
+void RunAction::BookHisto()
 {
   // Create analysis manager
   // The choice of analysis technology is done via selection of a namespace
@@ -90,17 +90,17 @@ void RunAction::bookHisto()
     
   // Open an output file
   //
-  histoName[0] = "testem2";
-  analysisManager->OpenFile(histoName[0]);    
+  fHistoName[0] = "testem2";
+  analysisManager->OpenFile(fHistoName[0]);    
   analysisManager->SetVerboseLevel(1);
   G4String extension = analysisManager->GetFileType();
-  histoName[1] = histoName[0] + "." + extension;  
+  fHistoName[1] = fHistoName[0] + "." + extension;  
 
   // Creating histograms
   //
-  G4double Ekin = Kin->GetParticleGun()->GetParticleEnergy();
-  G4double dLradl = Det->GetdLradl();
-  G4double dRradl = Det->GetdRradl();
+  G4double Ekin = fKin->GetParticleGun()->GetParticleEnergy();
+  G4double dLradl = fDet->GetdLradl();
+  G4double dRradl = fDet->GetdRradl();
   
   analysisManager->SetFirstHistoId(1);   
   analysisManager->CreateH1( "1","total energy deposit(percent of Einc)",
@@ -113,37 +113,37 @@ void RunAction::bookHisto()
                                   110,0.,1100.*Ekin/GeV);
 
   analysisManager->CreateH1( "4","longit energy profile (% of E inc)",
-                                    nLbin,0.,nLbin*dLradl);
+                                    f_nLbin,0.,f_nLbin*dLradl);
 				    
   analysisManager->CreateH1( "5","rms on longit Edep (% of E inc)",
-                                  nLbin,0.,nLbin*dLradl);
+                                  f_nLbin,0.,f_nLbin*dLradl);
 
-  G4double Zmin=0.5*dLradl, Zmax=Zmin+nLbin*dLradl;
+  G4double Zmin=0.5*dLradl, Zmax=Zmin+f_nLbin*dLradl;
   analysisManager->CreateH1( "6","cumul longit energy dep (% of E inc)",
-                                  nLbin,Zmin,Zmax);
+                                  f_nLbin,Zmin,Zmax);
 				    
   analysisManager->CreateH1( "7","rms on cumul longit Edep (% of E inc)",
-                                  nLbin,Zmin,Zmax);
+                                  f_nLbin,Zmin,Zmax);
 
   analysisManager->CreateH1( "8","radial energy profile (% of E inc)",
-                                  nRbin,0.,nRbin*dRradl);
+                                  f_nRbin,0.,f_nRbin*dRradl);
 				    				    
   analysisManager->CreateH1( "9","rms on radial Edep (% of E inc)",
-                                  nRbin,0.,nRbin*dRradl);	    
+                                  f_nRbin,0.,f_nRbin*dRradl);	    
 
-  G4double Rmin=0.5*dRradl, Rmax=Rmin+nRbin*dRradl;
+  G4double Rmin=0.5*dRradl, Rmax=Rmin+f_nRbin*dRradl;
   analysisManager->CreateH1("10","cumul radial energy dep (% of E inc)",
-                                  nRbin,Rmin,Rmax);
+                                  f_nRbin,Rmin,Rmax);
 
   analysisManager->CreateH1("11","rms on cumul radial Edep (% of E inc)",
-                                  nRbin,Rmin,Rmax);		    
+                                  f_nRbin,Rmin,Rmax);		    
 				    
- G4cout << "\n----> Histogram file is opened in " << histoName[1] << G4endl;
+ G4cout << "\n----> Histogram file is opened in " << fHistoName[1] << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::cleanHisto()
+void RunAction::CleanHisto()
 {
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   
@@ -163,67 +163,67 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   CLHEP::HepRandom::showEngineStatus();
 
-  nLbin = Det->GetnLtot();
-  nRbin = Det->GetnRtot();
+  f_nLbin = fDet->GetnLtot();
+  f_nRbin = fDet->GetnRtot();
 
   //initialize arrays of cumulative energy deposition
   //
-  for (G4int i=0; i<nLbin; i++) 
-     sumELongit[i]=sumE2Longit[i]=sumELongitCumul[i]=sumE2LongitCumul[i]=0.;
+  for (G4int i=0; i<f_nLbin; i++) 
+     fSumELongit[i]=fSumE2Longit[i]=fSumELongitCumul[i]=fSumE2LongitCumul[i]=0.;
   
-  for (G4int j=0; j<nRbin; j++)
-     sumERadial[j]=sumE2Radial[j]=sumERadialCumul[j]=sumE2RadialCumul[j]=0.;
+  for (G4int j=0; j<f_nRbin; j++)
+     fSumERadial[j]=fSumE2Radial[j]=fSumERadialCumul[j]=fSumE2RadialCumul[j]=0.;
 
   //initialize track length
-  sumChargTrLength=sum2ChargTrLength=sumNeutrTrLength=sum2NeutrTrLength=0.;
+  fSumChargTrLength=fSum2ChargTrLength=fSumNeutrTrLength=fSum2NeutrTrLength=0.;
 
   //histograms
   //
-  if (aRun->GetRunID() == 0) bookHisto();
+  if (aRun->GetRunID() == 0) BookHisto();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::fillPerEvent()
+void RunAction::FillPerEvent()
 {
   //accumulate statistic
   //
   G4double dLCumul = 0.;
-  for (G4int i=0; i<nLbin; i++)
+  for (G4int i=0; i<f_nLbin; i++)
      {
-      sumELongit[i]  += dEdL[i];
-      sumE2Longit[i] += dEdL[i]*dEdL[i];
-      dLCumul        += dEdL[i];
-      sumELongitCumul[i]  += dLCumul;
-      sumE2LongitCumul[i] += dLCumul*dLCumul;
+      fSumELongit[i]  += f_dEdL[i];
+      fSumE2Longit[i] += f_dEdL[i]*f_dEdL[i];
+      dLCumul        += f_dEdL[i];
+      fSumELongitCumul[i]  += dLCumul;
+      fSumE2LongitCumul[i] += dLCumul*dLCumul;
      }
 
   G4double dRCumul = 0.;
-  for (G4int j=0; j<nRbin; j++)
+  for (G4int j=0; j<f_nRbin; j++)
      {
-      sumERadial[j]  += dEdR[j];
-      sumE2Radial[j] += dEdR[j]*dEdR[j];
-      dRCumul        += dEdR[j];
-      sumERadialCumul[j]  += dRCumul;
-      sumE2RadialCumul[j] += dRCumul*dRCumul;
+      fSumERadial[j]  += f_dEdR[j];
+      fSumE2Radial[j] += f_dEdR[j]*f_dEdR[j];
+      dRCumul        += f_dEdR[j];
+      fSumERadialCumul[j]  += dRCumul;
+      fSumE2RadialCumul[j] += dRCumul*dRCumul;
      }
 
-  sumChargTrLength  += ChargTrLength;
-  sum2ChargTrLength += ChargTrLength*ChargTrLength;
-  sumNeutrTrLength  += NeutrTrLength;
-  sum2NeutrTrLength += NeutrTrLength*NeutrTrLength;
+  fSumChargTrLength  += fChargTrLength;
+  fSum2ChargTrLength += fChargTrLength*fChargTrLength;
+  fSumNeutrTrLength  += fNeutrTrLength;
+  fSum2NeutrTrLength += fNeutrTrLength*fNeutrTrLength;
 
   //fill histograms
   //
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();  
 
-  G4double Ekin=Kin->GetParticleGun()->GetParticleEnergy();
-  G4double mass=Kin->GetParticleGun()->GetParticleDefinition()->GetPDGMass();
-  G4double radl=Det->GetMaterial()->GetRadlen();
+  G4double Ekin=fKin->GetParticleGun()->GetParticleEnergy();
+  G4double mass=fKin->GetParticleGun()->GetParticleDefinition()->GetPDGMass();
+  G4double radl=fDet->GetMaterial()->GetRadlen();
 
   analysisManager->FillH1(1, 100.*dLCumul/(Ekin+mass));
-  analysisManager->FillH1(2, ChargTrLength/radl);
-  analysisManager->FillH1(3, NeutrTrLength/radl);
+  analysisManager->FillH1(2, fChargTrLength/radl);
+  analysisManager->FillH1(3, fNeutrTrLength/radl);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -233,31 +233,31 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   //compute and print statistic
   //
   G4int NbOfEvents = aRun->GetNumberOfEvent();
-  G4double kinEnergy = Kin->GetParticleGun()->GetParticleEnergy();
+  G4double kinEnergy = fKin->GetParticleGun()->GetParticleEnergy();
   assert(NbOfEvents*kinEnergy > 0);
 
-  G4double mass=Kin->GetParticleGun()->GetParticleDefinition()->GetPDGMass();
+  G4double mass=fKin->GetParticleGun()->GetParticleDefinition()->GetPDGMass();
   G4double norme = 100./(NbOfEvents*(kinEnergy+mass));
   
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
       
   //longitudinal
   //
-  G4double dLradl = Det->GetdLradl();
+  G4double dLradl = fDet->GetdLradl();
 
-  MyVector MeanELongit(nLbin),      rmsELongit(nLbin);
-  MyVector MeanELongitCumul(nLbin), rmsELongitCumul(nLbin);
+  MyVector MeanELongit(f_nLbin),      rmsELongit(f_nLbin);
+  MyVector MeanELongitCumul(f_nLbin), rmsELongitCumul(f_nLbin);
 
   G4int i;
-  for (i=0; i<nLbin; i++)
+  for (i=0; i<f_nLbin; i++)
    {
-    MeanELongit[i] = norme*sumELongit[i];
-     rmsELongit[i] = norme*std::sqrt(std::fabs(NbOfEvents*sumE2Longit[i]
-                                - sumELongit[i]*sumELongit[i]));
+    MeanELongit[i] = norme*fSumELongit[i];
+     rmsELongit[i] = norme*std::sqrt(std::fabs(NbOfEvents*fSumE2Longit[i]
+                                - fSumELongit[i]*fSumELongit[i]));
 
-    MeanELongitCumul[i] = norme*sumELongitCumul[i];
-     rmsELongitCumul[i] = norme*std::sqrt(std::fabs(NbOfEvents*sumE2LongitCumul[i]
-                                    - sumELongitCumul[i]*sumELongitCumul[i]));
+    MeanELongitCumul[i] = norme*fSumELongitCumul[i];
+     rmsELongitCumul[i] = norme*std::sqrt(std::fabs(NbOfEvents*fSumE2LongitCumul[i]
+                                    - fSumELongitCumul[i]*fSumELongitCumul[i]));
 
     G4double bin = (i+0.5)*dLradl;
     analysisManager->FillH1(4, bin,MeanELongit[i]/dLradl);
@@ -269,20 +269,20 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
   //radial
   //
-  G4double dRradl = Det->GetdRradl();
+  G4double dRradl = fDet->GetdRradl();
 
-  MyVector MeanERadial(nRbin),      rmsERadial(nRbin);
-  MyVector MeanERadialCumul(nRbin), rmsERadialCumul(nRbin);
+  MyVector MeanERadial(f_nRbin),      rmsERadial(f_nRbin);
+  MyVector MeanERadialCumul(f_nRbin), rmsERadialCumul(f_nRbin);
 
-  for (i=0; i<nRbin; i++)
+  for (i=0; i<f_nRbin; i++)
    {
-    MeanERadial[i] = norme*sumERadial[i];
-     rmsERadial[i] = norme*std::sqrt(std::fabs(NbOfEvents*sumE2Radial[i]
-                                - sumERadial[i]*sumERadial[i]));
+    MeanERadial[i] = norme*fSumERadial[i];
+     rmsERadial[i] = norme*std::sqrt(std::fabs(NbOfEvents*fSumE2Radial[i]
+                                - fSumERadial[i]*fSumERadial[i]));
 
-    MeanERadialCumul[i] = norme*sumERadialCumul[i];
-     rmsERadialCumul[i] = norme*std::sqrt(std::fabs(NbOfEvents*sumE2RadialCumul[i]
-                                    - sumERadialCumul[i]*sumERadialCumul[i]));
+    MeanERadialCumul[i] = norme*fSumERadialCumul[i];
+     rmsERadialCumul[i] = norme*std::sqrt(std::fabs(NbOfEvents*fSumE2RadialCumul[i]
+                                    - fSumERadialCumul[i]*fSumERadialCumul[i]));
 
 
     G4double bin = (i+0.5)*dRradl;
@@ -298,9 +298,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   const G4double EMoliere = 90.;
   G4double iMoliere = 0.;
   if ((MeanERadialCumul[0]       <= EMoliere) &&
-      (MeanERadialCumul[nRbin-1] >= EMoliere)) {
+      (MeanERadialCumul[f_nRbin-1] >= EMoliere)) {
     G4int imin = 0;
-    while( (imin < nRbin-1) && (MeanERadialCumul[imin] < EMoliere) ) imin++;
+    while( (imin < f_nRbin-1) && (MeanERadialCumul[imin] < EMoliere) ) imin++;
     G4double ratio = (EMoliere - MeanERadialCumul[imin]) /
                      (MeanERadialCumul[imin+1] - MeanERadialCumul[imin]);
     iMoliere = 1. + imin + ratio;
@@ -308,16 +308,16 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
       
   //track length
   //
-  norme = 1./(NbOfEvents*(Det->GetMaterial()->GetRadlen()));
-  G4double MeanChargTrLength = norme*sumChargTrLength;
+  norme = 1./(NbOfEvents*(fDet->GetMaterial()->GetRadlen()));
+  G4double MeanChargTrLength = norme*fSumChargTrLength;
   G4double  rmsChargTrLength = 
-            norme*std::sqrt(std::fabs(NbOfEvents*sum2ChargTrLength
-                                         - sumChargTrLength*sumChargTrLength));
+            norme*std::sqrt(std::fabs(NbOfEvents*fSum2ChargTrLength
+                                         - fSumChargTrLength*fSumChargTrLength));
 
-  G4double MeanNeutrTrLength = norme*sumNeutrTrLength;
+  G4double MeanNeutrTrLength = norme*fSumNeutrTrLength;
   G4double  rmsNeutrTrLength = 
-            norme*std::sqrt(std::fabs(NbOfEvents*sum2NeutrTrLength
-                                         - sumNeutrTrLength*sumNeutrTrLength));
+            norme*std::sqrt(std::fabs(NbOfEvents*fSum2NeutrTrLength
+                                         - fSumNeutrTrLength*fSumNeutrTrLength));
 
   //print
   //
@@ -326,7 +326,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout.setf(std::ios::fixed,std::ios::floatfield);
   G4int  prec = G4cout.precision(2);
   
-  if (verbose) {
+  if (fVerbose) {
 
     G4cout << "                 LOGITUDINAL PROFILE                   "
            << "      CUMULATIVE LOGITUDINAL PROFILE" << G4endl << G4endl;
@@ -334,7 +334,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     G4cout << "        bin   " << "           Mean         rms         "
            << "        bin "   << "           Mean      rms \n" << G4endl;
 
-    for (i=0; i<nLbin; i++)
+    for (i=0; i<f_nLbin; i++)
      {
        G4double inf=i*dLradl, sup=inf+dLradl;
 
@@ -356,7 +356,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     G4cout << "        bin   " << "           Mean         rms         "
            << "        bin "   << "           Mean      rms \n" << G4endl;
 
-    for (i=0; i<nRbin; i++)
+    for (i=0; i<f_nRbin; i++)
      {
        G4double inf=i*dRradl, sup=inf+dRradl;
 
@@ -373,8 +373,8 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   
   G4cout << "\n SUMMARY \n" << G4endl;
   G4cout << " energy deposit : "
-         << std::setw(7)  << MeanELongitCumul[nLbin-1] << " % E0 +- "
-         << std::setw(7)  <<  rmsELongitCumul[nLbin-1] << " % E0" << G4endl;
+         << std::setw(7)  << MeanELongitCumul[f_nLbin-1] << " % E0 +- "
+         << std::setw(7)  <<  rmsELongitCumul[f_nLbin-1] << " % E0" << G4endl;
   G4cout << " charged traklen: "
          << std::setw(7)  << MeanChargTrLength << " radl +- "
          << std::setw(7)  <<  rmsChargTrLength << " radl" << G4endl;
@@ -383,8 +383,8 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
          << std::setw(7)  <<  rmsNeutrTrLength << " radl" << G4endl;
 	 
   if (iMoliere > 0. ) {
-    G4double RMoliere1 = iMoliere*Det->GetdRradl();
-    G4double RMoliere2 = iMoliere*Det->GetdRlength(); 	 
+    G4double RMoliere1 = iMoliere*fDet->GetdRradl();
+    G4double RMoliere2 = iMoliere*fDet->GetdRlength(); 	 
     G4cout << "\n " << EMoliere << " % confinement: radius = "
            << RMoliere1 << " radl  ("
 	   << G4BestUnit( RMoliere2, "Length") << ")" << G4endl;
@@ -394,19 +394,19 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout.precision(prec);
 
   // save histos and close AnalysisFactory
-  cleanHisto();
+  CleanHisto();
   
   // show Rndm status
   CLHEP::HepRandom::showEngineStatus();
 
   // Acceptance
-  if(limittrue < DBL_MAX) {
+  if(fLimittrue < DBL_MAX) {
     EmAcceptance acc;
     acc.BeginOfAcceptance("Total Energy in Absorber",NbOfEvents);
-    G4double e = MeanELongitCumul[nLbin-1]/100.;
-    G4double r = rmsELongitCumul[nLbin-1]/100.;
-    acc.EmAcceptanceGauss("Edep",NbOfEvents,e,edeptrue,rmstrue,limittrue);
-    acc.EmAcceptanceGauss("Erms",NbOfEvents,r,rmstrue,rmstrue,2.0*limittrue);
+    G4double e = MeanELongitCumul[f_nLbin-1]/100.;
+    G4double r = rmsELongitCumul[f_nLbin-1]/100.;
+    acc.EmAcceptanceGauss("Edep",NbOfEvents,e,fEdeptrue,fRmstrue,fLimittrue);
+    acc.EmAcceptanceGauss("Erms",NbOfEvents,r,fRmstrue,fRmstrue,2.0*fLimittrue);
     acc.EndOfAcceptance();
   }
 }
@@ -415,9 +415,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
 void RunAction::SetEdepAndRMS(G4ThreeVector Value)
 {
-  edeptrue = Value(0);
-  rmstrue  = Value(1);
-  limittrue= Value(2);
+  fEdeptrue = Value(0);
+  fRmstrue  = Value(1);
+  fLimittrue= Value(2);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
