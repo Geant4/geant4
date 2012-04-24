@@ -37,14 +37,14 @@
 StepMax::StepMax(const G4String& processName, G4ProcessType type)
  : G4VDiscreteProcess(processName,type)
 {
-  MaxStep1 = MaxStep2 = DBL_MAX;
-  applyMaxStep2 = true;
-  pMess = new StepMaxMessenger(this);
+  fMaxStep1 = fMaxStep2 = DBL_MAX;
+  fApplyMaxStep2 = true;
+  fMess = new StepMaxMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StepMax::~StepMax() { delete pMess; }
+StepMax::~StepMax() { delete fMess; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -55,15 +55,15 @@ G4bool StepMax::IsApplicable(const G4ParticleDefinition& particle)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void StepMax::SetMaxStep1(G4double step) {MaxStep1 = step;}
+void StepMax::SetMaxStep1(G4double step) {fMaxStep1 = step;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void StepMax::SetMaxStep2(G4double step) {MaxStep2 = step;}
+void StepMax::SetMaxStep2(G4double step) {fMaxStep2 = step;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void StepMax::ApplyMaxStep2(G4bool value) {applyMaxStep2 = value;}
+void StepMax::ApplyMaxStep2(G4bool value) {fApplyMaxStep2 = value;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -74,8 +74,8 @@ G4double StepMax::PostStepGetPhysicalInteractionLength( const G4Track&,
   // condition is set to "Not Forced"
   *condition = NotForced;
 
-  if (applyMaxStep2 ) return MaxStep2;
-  else                return MaxStep1;
+  if (fApplyMaxStep2 ) return fMaxStep2;
+  else                return fMaxStep1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

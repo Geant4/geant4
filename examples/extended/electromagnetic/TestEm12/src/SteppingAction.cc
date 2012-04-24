@@ -42,7 +42,7 @@
 
 SteppingAction::SteppingAction(DetectorConstruction* det, RunAction* RuAct,
                                EventAction* event, HistoManager* histo)
-:detector(det), runAction(RuAct), eventAction(event), histoManager(histo)
+:fDetector(det), fRunAction(RuAct), fEventAction(event), fHistoManager(histo)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,7 +59,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
  
  //total energy deposit in absorber
  //
- eventAction->AddEdep(edep);     
+ fEventAction->AddEdep(edep);     
  
  //longitudinal profile of deposited energy
  //	
@@ -67,18 +67,18 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
  G4ThreeVector postPoint = aStep->GetPostStepPoint()->GetPosition();
  G4ThreeVector point = prePoint + G4UniformRand()*(postPoint - prePoint);
  G4double r = point.mag();
- histoManager->FillHisto(1, r, edep);
+ fHistoManager->FillHisto(1, r, edep);
  
- G4double r0 = histoManager->GetcsdaRange();
- if (r0 > 0.) histoManager->FillHisto(8, r/r0, edep);
+ G4double r0 = fHistoManager->GetcsdaRange();
+ if (r0 > 0.) fHistoManager->FillHisto(8, r/r0, edep);
  
  //step size of primary particle or charged secondaries
  //
  G4double steplen = aStep->GetStepLength();
  const G4Track* track = aStep->GetTrack();
- if      (track->GetTrackID() == 1) histoManager->FillHisto(4, steplen);
+ if      (track->GetTrackID() == 1) fHistoManager->FillHisto(4, steplen);
  else if (track->GetDefinition()->GetPDGCharge() != 0.)
-                                    histoManager->FillHisto(7, steplen); 
+                                    fHistoManager->FillHisto(7, steplen); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

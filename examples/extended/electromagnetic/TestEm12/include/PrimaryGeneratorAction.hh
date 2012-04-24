@@ -49,16 +49,16 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
    ~PrimaryGeneratorAction();
 
   public:  
-    void SetRndmBeam(G4bool val)  {rndmBeam = val;}   
+    void SetRndmBeam(G4bool val)  {fRndmBeam = val;}   
     void GeneratePrimaries(G4Event*);
          
-    G4ParticleGun* GetParticleGun() {return particleGun;}
+    G4ParticleGun* GetParticleGun() {return fParticleGun;}
     
   private:
-    G4ParticleGun*             particleGun;
-    DetectorConstruction*      detector;
-    G4bool                     rndmBeam;
-    PrimaryGeneratorMessenger* gunMessenger;     
+    G4ParticleGun*             fParticleGun;
+    DetectorConstruction*      fDetector;
+    G4bool                     fRndmBeam;
+    PrimaryGeneratorMessenger* fGunMessenger;     
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

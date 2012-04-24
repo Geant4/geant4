@@ -61,22 +61,22 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      
   public:  
                     
-     G4double     GetAbsorRadius()   {return absorRadius;};           
-     G4Material*  GetAbsorMaterial() {return absorMaterial;};
-     G4int        GetNbOfLayers()    {return nbOfLayers;};   
+     G4double     GetAbsorRadius()   {return fAbsorRadius;};           
+     G4Material*  GetAbsorMaterial() {return fAbsorMaterial;};
+     G4int        GetNbOfLayers()    {return fNbOfLayers;};   
      
      void         PrintParameters();
                        
   private:
 
-     G4double            absorRadius;     
-     G4Material*         absorMaterial;
-     G4int               nbOfLayers;
-     G4double            layerThickness;
-     G4UniformMagField*  magField;
-     G4VPhysicalVolume*  pAbsor;
+     G4double            fAbsorRadius;     
+     G4Material*         fAbsorMaterial;
+     G4int               fNbOfLayers;
+     G4double            fLayerThickness;
+     G4UniformMagField*  fMagField;
+     G4VPhysicalVolume*  fAbsor;
 
-     DetectorMessenger* detectorMessenger;
+     DetectorMessenger*  fDetectorMessenger;
 
   private:
     
