@@ -47,7 +47,7 @@
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim,
                      HistoManager* histo)
-  : detector(det), primary(prim), ProcCounter(0), histoManager(histo)
+  : fDetector(det), fPrimary(prim), fProcCounter(0), fHistoManager(histo)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,15 +65,15 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
   CLHEP::HepRandom::showEngineStatus();
 
-  ProcCounter = new ProcessesCount;
-  totalCount = 0;
+  fProcCounter = new ProcessesCount;
+  fTotalCount = 0;
   
-  truePL = truePL2 = geomPL = geomPL2 = 0.;
-  lDispl = lDispl2 = psiSpa = psiSpa2 = 0.;
-  tetPrj = tetPrj2 = 0.;
-  phiCor = phiCor2 = 0.;
+  fTruePL = fTruePL2 = fGeomPL = fGeomPL2 = 0.;
+  fLDispl = fLDispl2 = fPsiSpa = fPsiSpa2 = 0.;
+  fTetPrj = fTetPrj2 = 0.;
+  fPhiCor = fPhiCor2 = 0.;
   
-  histoManager->book();
+  fHistoManager->book();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -81,12 +81,12 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 void RunAction::CountProcesses(G4String procName)
 {
    //does the process  already encounted ?
-   size_t nbProc = ProcCounter->size();
+   size_t nbProc = fProcCounter->size();
    size_t i = 0;
-   while ((i<nbProc)&&((*ProcCounter)[i]->GetName()!=procName)) i++;
-   if (i == nbProc) ProcCounter->push_back( new OneProcessCount(procName));
+   while ((i<nbProc)&&((*fProcCounter)[i]->GetName()!=procName)) i++;
+   if (i == nbProc) fProcCounter->push_back( new OneProcessCount(procName));
 
-   (*ProcCounter)[i]->Count();
+   (*fProcCounter)[i]->Count();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -98,60 +98,60 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   
   G4int  prec = G4cout.precision(5);
     
-  G4Material* material = detector->GetMaterial();
+  G4Material* material = fDetector->GetMaterial();
   G4double density = material->GetDensity();
    
   G4ParticleDefinition* particle = 
-                            primary->GetParticleGun()->GetParticleDefinition();
+                            fPrimary->GetParticleGun()->GetParticleDefinition();
   G4String Particle = particle->GetParticleName();    
-  G4double energy = primary->GetParticleGun()->GetParticleEnergy();
+  G4double energy = fPrimary->GetParticleGun()->GetParticleEnergy();
   G4cout << "\n The run consists of " << NbOfEvents << " "<< Particle << " of "
          << G4BestUnit(energy,"Energy") << " through " 
-	 << G4BestUnit(detector->GetBoxSize(),"Length") << " of "
+	 << G4BestUnit(fDetector->GetBoxSize(),"Length") << " of "
 	 << material->GetName() << " (density: " 
 	 << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
   
   //frequency of processes
   G4cout << "\n Process calls frequency --->";
-  for (size_t i=0; i< ProcCounter->size();i++) {
-     G4String procName = (*ProcCounter)[i]->GetName();
-     G4int    count    = (*ProcCounter)[i]->GetCounter(); 
+  for (size_t i=0; i< fProcCounter->size();i++) {
+     G4String procName = (*fProcCounter)[i]->GetName();
+     G4int    count    = (*fProcCounter)[i]->GetCounter(); 
      G4cout << "\t" << procName << " = " << count;
   }
   
-  if (totalCount == 0) return;
+  if (fTotalCount == 0) return;
   
   //compute path length and related quantities
   //
-  G4double MeanTPL  = truePL /totalCount;     
-  G4double MeanTPL2 = truePL2/totalCount;     
+  G4double MeanTPL  = fTruePL /fTotalCount;     
+  G4double MeanTPL2 = fTruePL2/fTotalCount;     
   G4double rmsTPL   = std::sqrt(std::fabs(MeanTPL2 - MeanTPL*MeanTPL));
   
-  G4double MeanGPL  = geomPL /totalCount;     
-  G4double MeanGPL2 = geomPL2/totalCount;     
+  G4double MeanGPL  = fGeomPL /fTotalCount;     
+  G4double MeanGPL2 = fGeomPL2/fTotalCount;     
   G4double rmsGPL   = std::sqrt(std::fabs(MeanGPL2 - MeanGPL*MeanGPL));
   
-  G4double MeanLaD  = lDispl /totalCount;     
-  G4double MeanLaD2 = lDispl2/totalCount;     
+  G4double MeanLaD  = fLDispl /fTotalCount;     
+  G4double MeanLaD2 = fLDispl2/fTotalCount;     
   G4double rmsLaD   = std::sqrt(std::fabs(MeanLaD2 - MeanLaD*MeanLaD));
   
-  G4double MeanPsi  = psiSpa /(totalCount);     
-  G4double MeanPsi2 = psiSpa2/(totalCount);     
+  G4double MeanPsi  = fPsiSpa /(fTotalCount);     
+  G4double MeanPsi2 = fPsiSpa2/(fTotalCount);     
   G4double rmsPsi   = std::sqrt(std::fabs(MeanPsi2 - MeanPsi*MeanPsi));
   
-  G4double MeanTeta  = tetPrj /(2*totalCount);     
-  G4double MeanTeta2 = tetPrj2/(2*totalCount);     
+  G4double MeanTeta  = fTetPrj /(2*fTotalCount);     
+  G4double MeanTeta2 = fTetPrj2/(2*fTotalCount);     
   G4double rmsTeta   = std::sqrt(std::fabs(MeanTeta2 - MeanTeta*MeanTeta));
   
-  G4double MeanCorrel  = phiCor /(totalCount);     
-  G4double MeanCorrel2 = phiCor2/(totalCount);     
+  G4double MeanCorrel  = fPhiCor /(fTotalCount);     
+  G4double MeanCorrel2 = fPhiCor2/(fTotalCount);     
   G4double rmsCorrel = std::sqrt(std::fabs(MeanCorrel2-MeanCorrel*MeanCorrel));
            
   G4cout << "\n\n truePathLength :\t" << G4BestUnit(MeanTPL,"Length")
          << " +- "                    << G4BestUnit( rmsTPL,"Length")
          <<   "\n geomPathLength :\t" << G4BestUnit(MeanGPL,"Length")
          << " +- "                    << G4BestUnit( rmsGPL,"Length")
-         <<   "\n lateralDisplac :\t" << G4BestUnit(MeanLaD,"Length")
+         <<   "\n laterafLDisplac :\t" << G4BestUnit(MeanLaD,"Length")
          << " +- "                    << G4BestUnit( rmsLaD,"Length")
          <<   "\n Psi            :\t" << MeanPsi/mrad << " mrad"
 	 << " +- "                    << rmsPsi /mrad << " mrad"
@@ -196,15 +196,15 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   //restore default format	 
   G4cout.precision(prec);         
 
-  // delete and remove all contents in ProcCounter 
-  while (ProcCounter->size()>0){
-    OneProcessCount* aProcCount=ProcCounter->back();
-    ProcCounter->pop_back();
+  // delete and remove all contents in fProcCounter 
+  while (fProcCounter->size()>0){
+    OneProcessCount* aProcCount=fProcCounter->back();
+    fProcCounter->pop_back();
     delete aProcCount;
   }
-  delete ProcCounter;
+  delete fProcCounter;
   
-  histoManager->save();
+  fHistoManager->save();
 
   // show Rndm status
   CLHEP::HepRandom::showEngineStatus();
@@ -218,10 +218,10 @@ G4double RunAction::ComputeMscHighland(G4double pathLength)
  //projected angular distribution.
  //Eur. Phys. Jour. C15 (2000) page 166, formule 23.9
 
- G4double t = pathLength/(detector->GetMaterial()->GetRadlen());
+ G4double t = pathLength/(fDetector->GetMaterial()->GetRadlen());
  if (t < DBL_MIN) return 0.;
 
- G4ParticleGun* particle = primary->GetParticleGun();
+ G4ParticleGun* particle = fPrimary->GetParticleGun();
  G4double T = particle->GetParticleEnergy();
  G4double M = particle->GetParticleDefinition()->GetPDGMass();
  G4double z = std::abs(particle->GetParticleDefinition()->GetPDGCharge()/eplus);

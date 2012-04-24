@@ -57,38 +57,38 @@ class RunAction : public G4UserRunAction
 
     void CountProcesses(G4String);
     void SumPathLength (G4double truepl, G4double geompl) 
-         {totalCount++; 
-	  truePL += truepl; truePL2 += truepl*truepl;
-	  geomPL += geompl; geomPL2 += geompl*geompl;
+         {fTotalCount++; 
+	  fTruePL += truepl; fTruePL2 += truepl*truepl;
+	  fGeomPL += geompl; fGeomPL2 += geompl*geompl;
 	 };
 	 
     void SumLateralDisplacement (G4double displa)  
-         {lDispl += displa; lDispl2 += displa*displa;}
+         {fLDispl += displa; fLDispl2 += displa*displa;}
 	 
     void SumPsi (G4double psi)  
-         {psiSpa += psi; psiSpa2 += psi*psi;}
+         {fPsiSpa += psi; fPsiSpa2 += psi*psi;}
 	 
     void SumTetaPlane (G4double teta)  
-         {tetPrj += teta; tetPrj2 += teta*teta;}
+         {fTetPrj += teta; fTetPrj2 += teta*teta;}
 	 	 
     void SumPhiCorrel (G4double correl)  
-         {phiCor += correl; phiCor2 += correl*correl;}
+         {fPhiCor += correl; fPhiCor2 += correl*correl;}
 	 	 
    G4double ComputeMscHighland(G4double pathLength);
 	 	 	           
   private:
-    DetectorConstruction*   detector;
-    PrimaryGeneratorAction* primary;
-    ProcessesCount*         ProcCounter;
-    HistoManager*           histoManager;
+    DetectorConstruction*   fDetector;
+    PrimaryGeneratorAction* fPrimary;
+    ProcessesCount*         fProcCounter;
+    HistoManager*           fHistoManager;
         
-    G4int totalCount;
-    G4double truePL, truePL2;
-    G4double geomPL, geomPL2;
-    G4double lDispl, lDispl2;
-    G4double psiSpa, psiSpa2;
-    G4double tetPrj, tetPrj2;
-    G4double phiCor, phiCor2;     
+    G4int    fTotalCount;
+    G4double fTruePL, fTruePL2;
+    G4double fGeomPL, fGeomPL2;
+    G4double fLDispl, fLDispl2;
+    G4double fPsiSpa, fPsiSpa2;
+    G4double fTetPrj, fTetPrj2;
+    G4double fPhiCor, fPhiCor2;     
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
