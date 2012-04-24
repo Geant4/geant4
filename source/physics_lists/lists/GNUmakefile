@@ -25,7 +25,6 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/geometry/magneticfield/include \
             -I$(G4BASE)/geometry/navigation/include \
             -I$(G4BASE)/intercoms/include \
-            -I$(G4BASE)/interface/include \
             -I$(G4BASE)/track/include \
             -I$(G4BASE)/event/include \
             -I$(G4BASE)/particles/shortlived/include \

@@ -125,6 +125,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4EmDNAPhysicsChemistry.hh
         G4EmDNAPhysics.hh
         G4EmExtraPhysics.hh
+        G4EmLivermoreMUPhysics.hh
         G4EmLivermorePhysics.hh
         G4EmLivermorePolarizedPhysics.hh
         G4EmMessenger.hh
@@ -257,6 +258,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4EmDNAPhysics.cc
         G4EmDNAPhysicsChemistry.cc
         G4EmExtraPhysics.cc
+        G4EmLivermoreMUPhysics.cc
         G4EmLivermorePhysics.cc
         G4EmLivermorePolarizedPhysics.cc
         G4EmMessenger.cc

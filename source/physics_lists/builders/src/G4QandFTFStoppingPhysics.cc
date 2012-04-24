@@ -34,7 +34,7 @@
 //
 // Date:      18 October 2011
 //
-// Modified:
+// Modified:  05 April 2012, A.Ribon : Use FTF also for anti_Sigma+ annihilation.
 //
 //----------------------------------------------------------------------------
 //
@@ -137,8 +137,8 @@ void G4QandFTFStoppingPhysics::ConstructProcess() {
          ! particle->IsShortLived()           &&
          hProcess->IsApplicable( *particle ) ) {
 
-      // Use Fritiof/Precompound only for anti-protons
-      if ( particle == G4AntiProton::AntiProton() ) {
+      // Use Fritiof/Precompound only for anti-protons and anti-sigma+
+      if ( particle == G4AntiProton::AntiProton() || particle == G4AntiSigmaPlus::AntiSigmaPlus() ) {
         pmanager->AddRestProcess( hFTFProcess );
         if ( verbose > 1 ) {
 	  G4cout << "### G4FTFCaptureAtRest added for "
