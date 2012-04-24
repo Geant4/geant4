@@ -46,7 +46,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim)
-  : detector(det), primary(prim)
+  : fDetector(det), fPrimary(prim)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -74,14 +74,14 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   
   G4int  prec = G4cout.precision(5);
     
-  G4Material* material = detector->GetMaterial();
+  G4Material* material = fDetector->GetMaterial();
   G4double density  = material->GetDensity();
-  G4double tickness = detector->GetSize();
+  G4double tickness = fDetector->GetSize();
    
   G4ParticleDefinition* particle = 
-                            primary->GetParticleGun()->GetParticleDefinition();
+                            fPrimary->GetParticleGun()->GetParticleDefinition();
   G4String Particle = particle->GetParticleName();    
-  G4double energy = primary->GetParticleGun()->GetParticleEnergy();
+  G4double energy = fPrimary->GetParticleGun()->GetParticleEnergy();
   G4cout << "\n The run consists of " << NbOfEvents << " "<< Particle << " of "
          << G4BestUnit(energy,"Energy") << " through " 
 	 << G4BestUnit(tickness,"Length") << " of "
@@ -93,7 +93,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4int survive = 0;  
   G4cout << "\n Process calls frequency --->";
   std::map<G4String,G4int>::iterator it;  
-  for (it = procCounter.begin(); it != procCounter.end(); it++) {
+  for (it = fProcCounter.begin(); it != fProcCounter.end(); it++) {
      G4String procName = it->first;
      G4int    count    = it->second;
      totalCount += count; 
@@ -127,7 +127,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout << "\n Verification from G4EmCalculator: \n"; 
   G4EmCalculator emCalculator;
   G4double sumc = 0.0;  
-  for (it = procCounter.begin(); it != procCounter.end(); it++) {
+  for (it = fProcCounter.begin(); it != fProcCounter.end(); it++) {
     G4String procName = it->first;  
     G4double massSigma = 
     emCalculator.GetCrossSectionPerVolume(energy,particle,
@@ -152,8 +152,8 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   //restore default format	 
   G4cout.precision(prec);         
 
-  // remove all contents in procCounter 
-  procCounter.clear();
+  // remove all contents in fProcCounter 
+  fProcCounter.clear();
 
   // show Rndm status
   CLHEP::HepRandom::showEngineStatus();

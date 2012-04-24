@@ -54,12 +54,12 @@ class RunAction : public G4UserRunAction
     void BeginOfRunAction(const G4Run*);
     void   EndOfRunAction(const G4Run*);
 
-    void CountProcesses(G4String procName) { procCounter[procName]++;};
+    void CountProcesses(G4String procName) { fProcCounter[procName]++;};
                     
   private:
-    DetectorConstruction*      detector;
-    PrimaryGeneratorAction*    primary;
-    std::map<G4String,G4int>   procCounter;
+    DetectorConstruction*      fDetector;
+    PrimaryGeneratorAction*    fPrimary;
+    std::map<G4String,G4int>   fProcCounter;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

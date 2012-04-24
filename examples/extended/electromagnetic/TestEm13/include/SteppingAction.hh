@@ -48,7 +48,7 @@ class SteppingAction : public G4UserSteppingAction
     void UserSteppingAction(const G4Step*);
     
   private:
-    RunAction*  runAction;
+    RunAction*  fRunAction;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

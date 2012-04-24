@@ -37,7 +37,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(RunAction* RuAct)
-:runAction(RuAct)
+:fRunAction(RuAct)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,7 +52,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   G4StepPoint* endPoint = aStep->GetPostStepPoint();
   G4String procName = endPoint->GetProcessDefinedStep()->GetProcessName();
 
-  runAction->CountProcesses(procName);  
+  fRunAction->CountProcesses(procName);  
            
   // kill event after first interaction
   //
