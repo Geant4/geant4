@@ -40,17 +40,17 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::EventAction(RunAction* RA, HistoManager* histo)
-:runaction(RA),histoManager(histo),
- drawFlag("none"),printModulo(10000)
+:fRunAction(RA),fHistoManager(histo),
+ fDrawFlag("none"),fPrintModulo(10000)
 {
-  eventMessenger = new EventMessenger(this);
+  fEventMessenger = new EventMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::~EventAction()
 {
-  delete eventMessenger;
+  delete fEventMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -60,31 +60,31 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
  G4int evtNb = evt->GetEventID();
 
  //printing survey
- if (evtNb%printModulo == 0) 
+ if (evtNb%fPrintModulo == 0) 
     G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
 
  // initialisation per event
- EnergyDeposit  = 0.;
- TrakLenCharged = TrakLenNeutral = 0.; 
- nbStepsCharged = nbStepsNeutral = 0;
- TransmitFlag   = ReflectFlag    = 0;    
+ fEnergyDeposit  = 0.;
+ fTrakLenCharged = fTrakLenNeutral = 0.; 
+ fNbStepsCharged = fNbStepsNeutral = 0;
+ fTransmitFlag   = fReflectFlag    = 0;    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::EndOfEventAction(const G4Event*)
 {
- runaction->AddEnergy(EnergyDeposit);
- runaction->AddTrakLenCharg(TrakLenCharged);
- runaction->AddTrakLenNeutr(TrakLenNeutral);
+ fRunAction->AddEnergy(fEnergyDeposit);
+ fRunAction->AddTrakLenCharg(fTrakLenCharged);
+ fRunAction->AddTrakLenNeutr(fTrakLenNeutral);
 
- runaction->CountStepsCharg(nbStepsCharged);
- runaction->CountStepsNeutr(nbStepsNeutral);
+ fRunAction->CountStepsCharg(fNbStepsCharged);
+ fRunAction->CountStepsNeutr(fNbStepsNeutral);
 
- runaction->CountTransmit (TransmitFlag);
- runaction->CountReflect  (ReflectFlag);
+ fRunAction->CountTransmit (fTransmitFlag);
+ fRunAction->CountReflect  (fReflectFlag);
 
- histoManager->FillHisto(1,EnergyDeposit);
+ fHistoManager->FillHisto(1,fEnergyDeposit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

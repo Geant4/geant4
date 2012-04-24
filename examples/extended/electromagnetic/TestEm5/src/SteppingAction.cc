@@ -42,7 +42,7 @@
 
 SteppingAction::SteppingAction(DetectorConstruction* DET, RunAction* RA,
                                EventAction* EA, HistoManager* HM)
-:detector(DET), runaction(RA), eventaction(EA), histoManager(HM)
+:fDetector(DET), fRunAction(RA), fEventAction(EA), fHistoManager(HM)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,17 +55,17 @@ SteppingAction::~SteppingAction()
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
  if (aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume() 
-     != detector->GetAbsorber()) return;
+     != fDetector->GetAbsorber()) return;
 
- eventaction->AddEnergy (aStep->GetTotalEnergyDeposit());
+ fEventAction->AddEnergy (aStep->GetTotalEnergyDeposit());
    
  G4double charge = aStep->GetTrack()->GetDefinition()->GetPDGCharge();
  if (charge != 0.) { 
-   eventaction->AddTrakLenCharg(aStep->GetStepLength());
-   eventaction->CountStepsCharg();
+   fEventAction->AddTrakLenCharg(aStep->GetStepLength());
+   fEventAction->CountStepsCharg();
  } else {
-   eventaction->AddTrakLenNeutr(aStep->GetStepLength());
-   eventaction->CountStepsNeutr();   
+   fEventAction->AddTrakLenNeutr(aStep->GetStepLength());
+   fEventAction->CountStepsNeutr();   
  }
 }
 

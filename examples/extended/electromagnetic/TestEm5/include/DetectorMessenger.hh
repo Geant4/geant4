@@ -53,23 +53,23 @@ class DetectorMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    DetectorConstruction*   Detector;
+    DetectorConstruction*      fDetector;
     
-    G4UIdirectory*             testemDir;
-    G4UIdirectory*             detDir;
+    G4UIdirectory*             fTestemDir;
+    G4UIdirectory*             fDetDir;
 
-    G4UIcmdWithAString*        AbsMaterCmd;
-    G4UIcmdWithADoubleAndUnit* AbsThickCmd;
-    G4UIcmdWithADoubleAndUnit* AbsSizYZCmd;
+    G4UIcmdWithAString*        fAbsMaterCmd;
+    G4UIcmdWithADoubleAndUnit* fAbsThickCmd;
+    G4UIcmdWithADoubleAndUnit* fAbsSizYZCmd;
 
-    G4UIcmdWithADoubleAndUnit* AbsXposCmd;
+    G4UIcmdWithADoubleAndUnit* fAbsXposCmd;
 
-    G4UIcmdWithAString*        WorldMaterCmd;
-    G4UIcmdWithADoubleAndUnit* WorldXCmd;
-    G4UIcmdWithADoubleAndUnit* WorldYZCmd;
+    G4UIcmdWithAString*        fWorldMaterCmd;
+    G4UIcmdWithADoubleAndUnit* fWorldXCmd;
+    G4UIcmdWithADoubleAndUnit* fWorldYZCmd;
 
-    G4UIcmdWithADoubleAndUnit* MagFieldCmd;
-    G4UIcmdWithoutParameter*   UpdateCmd;
+    G4UIcmdWithADoubleAndUnit* fMagFieldCmd;
+    G4UIcmdWithoutParameter*   fUpdateCmd;
 
 };
 

@@ -51,11 +51,11 @@ class PrimaryGeneratorMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    PrimaryGeneratorAction* Action;
+    PrimaryGeneratorAction*    fAction;
     
-    G4UIdirectory*             gunDir;      
-    G4UIcmdWithoutParameter*   DefaultCmd;
-    G4UIcmdWithADouble*        RndmCmd;    
+    G4UIdirectory*             fGunDir;      
+    G4UIcmdWithoutParameter*   fDefaultCmd;
+    G4UIcmdWithADouble*        fRndmCmd;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

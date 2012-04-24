@@ -48,17 +48,17 @@ class StackingAction : public G4UserStackingAction
     StackingAction(RunAction*,EventAction*,HistoManager* );
    ~StackingAction();
    
-    void SetKillStatus(G4int value) {killSecondary = value;};
+    void SetKillStatus(G4int value) { fKillSecondary = value;};
      
     G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
     
   private:
-    RunAction*          runaction;
-    EventAction*        eventaction;    
-    HistoManager*       histoManager;
+    RunAction*          fRunAction;
+    EventAction*        fEventAction;    
+    HistoManager*       fHistoManager;
     
-    G4int               killSecondary;
-    StackingMessenger*  stackMessenger;
+    G4int               fKillSecondary;
+    StackingMessenger*  fStackMessenger;
         
 };
 

@@ -51,34 +51,34 @@ class EventAction : public G4UserEventAction
     void BeginOfEventAction(const G4Event*);
     void   EndOfEventAction(const G4Event*);
     
-    void AddEnergy      (G4double edep)   {EnergyDeposit  += edep;};
-    void AddTrakLenCharg(G4double length) {TrakLenCharged += length;};
-    void AddTrakLenNeutr(G4double length) {TrakLenNeutral += length;};
+    void AddEnergy      (G4double edep)   {fEnergyDeposit  += edep;};
+    void AddTrakLenCharg(G4double length) {fTrakLenCharged += length;};
+    void AddTrakLenNeutr(G4double length) {fTrakLenNeutral += length;};
     
-    void CountStepsCharg ()               {nbStepsCharged++ ;};
-    void CountStepsNeutr ()               {nbStepsNeutral++ ;};
+    void CountStepsCharg ()               {fNbStepsCharged++ ;};
+    void CountStepsNeutr ()               {fNbStepsNeutral++ ;};
     
     void SetTransmitFlag (G4int flag) 
-                           {if (flag > TransmitFlag) TransmitFlag = flag;};
+                           {if (flag > fTransmitFlag) fTransmitFlag = flag;};
     void SetReflectFlag  (G4int flag) 
-                           {if (flag > ReflectFlag)   ReflectFlag = flag;};
+                           {if (flag > fReflectFlag)   fReflectFlag = flag;};
 			           	  
-    void SetDrawFlag(G4String val)  {drawFlag = val;};
-    void SetPrintModulo(G4int val)  {printModulo = val;};
+    void SetDrawFlag(G4String val)  {fDrawFlag = val;};
+    void SetPrintModulo(G4int val)  {fPrintModulo = val;};
         
   private:
-    RunAction*    runaction;
-    HistoManager* histoManager;
+    RunAction*    fRunAction;
+    HistoManager* fHistoManager;
     
-    G4double EnergyDeposit;
-    G4double TrakLenCharged, TrakLenNeutral;
-    G4int    nbStepsCharged, nbStepsNeutral;
-    G4int    TransmitFlag,   ReflectFlag; 
+    G4double fEnergyDeposit;
+    G4double fTrakLenCharged, fTrakLenNeutral;
+    G4int    fNbStepsCharged, fNbStepsNeutral;
+    G4int    fTransmitFlag,   fReflectFlag; 
     
-    G4String drawFlag;
-    G4int    printModulo;
+    G4String fDrawFlag;
+    G4int    fPrintModulo;
     
-    EventMessenger* eventMessenger;                    
+    EventMessenger* fEventMessenger;                    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

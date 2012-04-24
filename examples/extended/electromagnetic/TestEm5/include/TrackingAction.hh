@@ -52,13 +52,13 @@ class TrackingAction : public G4UserTrackingAction {
     void PostUserTrackingAction(const G4Track*);
     
   private:
-    DetectorConstruction* detector;
-    RunAction*            runaction;    
-    EventAction*          eventaction;
-    HistoManager*         histoManager;
+    DetectorConstruction* fDetector;
+    RunAction*            fRunAction;    
+    EventAction*          fEventAction;
+    HistoManager*         fHistoManager;
     
-    G4double xstartAbs, xendAbs;
-    G4double primaryCharge;
+    G4double fXstartAbs, fXendAbs;
+    G4double fPrimaryCharge;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
