@@ -47,6 +47,7 @@
 //#define pdebug
 #define nout
 #define inter
+//#define rseed
 //#define pverb
 //#define pscan
 //#define csdebug
@@ -97,6 +98,7 @@
 #include "G4GenericIon.hh"
 
 #include "G4QInelastic.hh"
+#include "G4QNGamma.hh"
 #include "G4QElastic.hh"
 #include "G4QSynchRad.hh"
 #include "G4QDiffraction.hh"
@@ -505,8 +507,9 @@ int main()
 #ifdef chips
   // *************** CHIPS process definition starts here *******************************
   G4QInelastic* proc = new G4QInelastic;               // A general CHIPS process
-  ///G4QDiffraction* proc = new G4QDiffraction;           // A diffraction CHIPS process
-  ///G4QLowEnergy* proc = new G4QLowEnergy;               // fragment-nucleus universal
+  //G4QNGamma* proc = new G4QNGamma;                     // A general CHIPS process
+  ///G4QDiffraction* proc = new G4QDiffraction;          // A diffraction CHIPS process
+  ///G4QLowEnergy* proc = new G4QLowEnergy;              // fragment-nucleus universal
 #endif
   // **************** GHAD process definition starts here *******************************
 #ifdef preco
@@ -1151,7 +1154,9 @@ int main()
 #ifdef debug
       G4cout<<"Test19: ### "<<iter<< "-th event starts.### energy="<<energy<<G4endl;
 #endif
-
+#ifdef rseed
+	CLHEP::HepRandom::setTheSeed(iter);
+#endif
       if(!(iter%1000)&&iter)G4cout<<">TEST19: "<<iter<<" events are simulated"<<G4endl;
 
       gTrack->SetStep(step);            // Now step is included in the Track (see above)
