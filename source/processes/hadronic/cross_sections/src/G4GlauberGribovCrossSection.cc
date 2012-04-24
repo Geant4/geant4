@@ -316,7 +316,11 @@ G4GlauberGribovCrossSection::GetIsoCrossSection(const G4DynamicParticle* aPartic
 						const G4Material*)
 {
   G4double xsection, sigma, cofInelastic, cofTotal, nucleusSquare, ratio;
+  G4double hpInXsc(0.), hnInXsc(0.);
   G4double R             = GetNucleusRadius(A); 
+
+  G4int N = A - Z;              // number of neutrons
+  if (N < 0) N = 0;
 
   const G4ParticleDefinition* theParticle = aParticle->GetDefinition();
 
@@ -325,7 +329,16 @@ G4GlauberGribovCrossSection::GetIsoCrossSection(const G4DynamicParticle* aPartic
       theParticle == thePiPlus  || 
       theParticle == thePiMinus      )
   {
-    sigma        = GetHadronNucleonXscNS(aParticle, A, Z);
+    // sigma        = GetHadronNucleonXscNS(aParticle, A, Z);
+
+    sigma = Z*hnXsc->GetHadronNucleonXscNS(aParticle, theProton);
+
+    hpInXsc = hnXsc->GetInelasticHadronNucleonXsc();
+
+    sigma += N*hnXsc->GetHadronNucleonXscNS(aParticle, theNeutron);
+
+    hnInXsc = hnXsc->GetInelasticHadronNucleonXsc();
+
     cofInelastic = 2.4;
     cofTotal     = 2.0;
   }
@@ -367,13 +380,17 @@ G4GlauberGribovCrossSection::GetIsoCrossSection(const G4DynamicParticle* aPartic
 
     fElasticXsc   = fTotalXsc - fInelasticXsc;
 
+    if(fElasticXsc < 0.) fElasticXsc = 0.;
     
     G4double difratio = ratio/(1.+ratio);
 
     fDiffractionXsc = 0.5*nucleusSquare*( difratio - std::log( 1. + difratio ) );
 
 
-    sigma = GetHNinelasticXsc(aParticle, A, Z);
+    // sigma = GetHNinelasticXsc(aParticle, A, Z);
+
+    sigma = Z*hpInXsc + N*hnInXsc;
+
     ratio = sigma/nucleusSquare;
 
     fProductionXsc = nucleusSquare*std::log( 1. + cofInelastic*ratio )/cofInelastic;

@@ -14,6 +14,37 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+24 April 2012 Alberto Ribon  (hadr-cross-V09-05-03)
+---------------------------------------------------
+- Fixed compilation error in G4GGNuclNuclCrossSection.
+
+24 April 2012 Alberto Ribon  (hadr-cross-V09-05-02)
+---------------------------------------------------
+- Include updates of Grichine's nucleus radii of light elements 
+  (see the next comment below).
+
+23 April 2012 Vladimir Grichine 
+-----------------------------------------------
+ G4GGNuclNuclCrossSection.cc updated to get nucleus radii of light elements - p, d, 
+t, He3, He4, Li7 and Be9.
+
+19 April 2012 Alberto Ribon  (hadr-cross-V09-05-01)
+---------------------------------------------------
+- Include updates of Grichine's Glauber Gribov hadron-nucleus 
+  and hadron-nucleon cross sections (see the two next two comments below).
+
+19 March 2012 Vladimir Grichine 
+-----------------------------------------------
+ G4GlauberGribovCrossSection.hh/.cc updated to get total 
+and inelastic xsc from G4HadronNucleonXsc.
+
+18 March 2012 Vladimir Grichine 
+-----------------------------------------------
+G4HadronNucleonXsc.hh/.cc update of p,n,pi-,pi+ xsc on p,n. New method 
+GetCoulombBarrier. G4GGNuclNuclCrossSection.hh/.cc updated to get total 
+and inelastic xsc from G4HadronNucleonXsc.
+
+
 1 March 2012 Vladimir Ivanchenko  (hadr-cross-V09-05-00)
 ------------------------------------------------------------
 - Fixed Coverity reports in G4NeutronElasticXS, G4NeutronInelasticXS,

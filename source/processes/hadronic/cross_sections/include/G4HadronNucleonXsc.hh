@@ -83,6 +83,8 @@ public:
 
   G4double CalcMandelstamS( const G4double , const G4double , const G4double );
 
+  G4double GetCoulombBarrier(const G4DynamicParticle* aParticle, const G4ParticleDefinition* nucleon );
+
   G4double GetTotalHadronNucleonXsc()    { return fTotalXsc;     }; 
   G4double GetElasticHadronNucleonXsc()  { return fElasticXsc;   }; 
   G4double GetInelasticHadronNucleonXsc(){ return fInelasticXsc; }; 

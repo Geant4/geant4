@@ -32,6 +32,7 @@
 #include "G4IonTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4HadTmpUtil.hh"
+#include "G4HadronNucleonXsc.hh"
 
 
 G4GGNuclNuclCrossSection::G4GGNuclNuclCrossSection() 
@@ -43,6 +44,7 @@ G4GGNuclNuclCrossSection::G4GGNuclNuclCrossSection()
 {
   theProton   = G4Proton::Proton();
   theNeutron  = G4Neutron::Neutron();
+  hnXsc = new G4HadronNucleonXsc();
 }
 
 
@@ -118,20 +120,38 @@ GetZandACrossSection(const G4DynamicParticle* aParticle,
   G4double tN = tA - tZ;
   if( tN < 0. ) tN = 0.;
 
-  G4double tR = GetNucleusRadius(tA);  
-  G4double pR = GetNucleusRadius(pA); 
+  G4double tR = GetNucleusRadius( G4double(tZ),G4double(tA) );  
+  G4double pR = GetNucleusRadius(pZ,pA); 
 
   cB = GetCoulombBarier(aParticle, G4double(tZ), G4double(tA), pR, tR);
-  if (cB > 0.) {
 
-    sigma = (pZ*tZ+pN*tN)*GetHadronNucleonXscNS(theProton, pTkin, theProton) +
-          (pZ*tN+pN*tZ)*GetHadronNucleonXscNS(theProton, pTkin, theNeutron);
+  if ( cB > 0. ) 
+  {
+    G4DynamicParticle* dProton = new G4DynamicParticle(theProton,
+                                              G4ParticleMomentum(1.,0.,0.), 
+                                              pTkin);
+
+    G4DynamicParticle* dNeutron = new G4DynamicParticle(theNeutron,
+                                              G4ParticleMomentum(1.,0.,0.), 
+                                              pTkin);
+
+    sigma = (pZ*tZ+pN*tN)*hnXsc->GetHadronNucleonXscNS(dProton, theProton);
+
+    G4double ppInXsc = hnXsc->GetInelasticHadronNucleonXsc();
+
+    sigma += (pZ*tN+pN*tZ)*hnXsc->GetHadronNucleonXscNS(dNeutron, theProton);
+
+    G4double npInXsc = hnXsc->GetInelasticHadronNucleonXsc();
+
+    // G4cout<<"ppInXsc = "<<ppInXsc/millibarn<<"; npInXsc = "<<npInXsc/millibarn<<G4endl;
+    // G4cout<<"npTotXsc = "<<hnXsc->GetTotalHadronNucleonXsc()/millibarn<<"; npElXsc = "
+    //                      <<hnXsc->GetElasticHadronNucleonXsc()/millibarn<<G4endl;
 
     nucleusSquare = cofTotal*pi*( pR*pR + tR*tR );   // basically 2piRR
 
-    ratio = sigma/nucleusSquare;
-    xsection =  nucleusSquare*std::log( 1. + ratio );
-    fTotalXsc = xsection;
+    ratio      = sigma/nucleusSquare;
+    xsection   = nucleusSquare*std::log( 1. + ratio );
+    fTotalXsc  = xsection;
     fTotalXsc *= cB;
 
     fInelasticXsc = nucleusSquare*std::log( 1. + cofInelastic*ratio )/cofInelastic;
@@ -150,8 +170,7 @@ GetZandACrossSection(const G4DynamicParticle* aParticle,
     //sigma = (pZ*tZ+pN*tN)*GetHadronNucleonXscMK(theProton, pTkin, theProton) +
     //      (pZ*tN+pN*tZ)*GetHadronNucleonXscMK(theProton, pTkin, theNeutron);
 
-    sigma = (pZ*tZ+pN*tN)*GetHadronNucleonXscNS(theProton, pTkin, theProton) +
-          (pZ*tN+pN*tZ)*GetHadronNucleonXscNS(theProton, pTkin, theNeutron);
+    sigma = (pZ*tZ+pN*tN)*ppInXsc + (pZ*tN+pN*tZ)*npInXsc;
  
     ratio = sigma/nucleusSquare;
     fProductionXsc = nucleusSquare*std::log( 1. + cofInelastic*ratio )/cofInelastic;
@@ -229,8 +248,8 @@ GetRatioSD(const G4DynamicParticle* aParticle, G4double tA, G4double tZ)
   G4double tN = tA - tZ;
   if( tN < 0. ) tN = 0.;
 
-  G4double tR = GetNucleusRadius(tA);  
-  G4double pR = GetNucleusRadius(pA); 
+  G4double tR = GetNucleusRadius(tZ,tA);  
+  G4double pR = GetNucleusRadius(pZ,pA); 
 
   sigma = (pZ*tZ+pN*tN)*GetHadronNucleonXscNS(theProton, pTkin, theProton) +
           (pZ*tN+pN*tZ)*GetHadronNucleonXscNS(theProton, pTkin, theNeutron);
@@ -269,8 +288,8 @@ GetRatioQE(const G4DynamicParticle* aParticle, G4double tA, G4double tZ)
   G4double tN = tA - tZ;
   if( tN < 0. ) tN = 0.;
 
-  G4double tR = GetNucleusRadius(tA);  
-  G4double pR = GetNucleusRadius(pA); 
+  G4double tR = GetNucleusRadius(tZ,tA);  
+  G4double pR = GetNucleusRadius(pZ,pA); 
 
   sigma = (pZ*tZ+pN*tN)*GetHadronNucleonXscNS(theProton, pTkin, theProton) +
           (pZ*tN+pN*tZ)*GetHadronNucleonXscNS(theProton, pTkin, theNeutron);
@@ -610,10 +629,11 @@ G4GGNuclNuclCrossSection::GetNucleusRadius(const G4DynamicParticle* ,
 //
 
 G4double 
-G4GGNuclNuclCrossSection::GetNucleusRadius(G4double At)
+G4GGNuclNuclCrossSection::GetNucleusRadius(G4double Zt, G4double At)
 {
   G4double R;
-  R = GetNucleusRadiusDE(At);
+  R = GetNucleusRadiusDE(Zt,At);
+  // R = GetNucleusRadiusRMS(Zt,At);
 
   return R;
 }
@@ -644,9 +664,12 @@ G4GGNuclNuclCrossSection::GetNucleusRadiusGG(G4double At)
   return R;
 }
 
+/////////////////////////////////////////////////////////////////////////////
+//
+//
 
 G4double 
-G4GGNuclNuclCrossSection::GetNucleusRadiusDE(G4double A)
+G4GGNuclNuclCrossSection::GetNucleusRadiusDE(G4double Z, G4double A)
 {
   // algorithm from diffuse-elastic
 
@@ -662,10 +685,16 @@ G4GGNuclNuclCrossSection::GetNucleusRadiusDE(G4double A)
 
   if (A < 50.)
   {
-    if(std::abs(A-1.) < 0.5)      return 0.89*fermi;
-    else if(std::abs(A-2.) < 0.5) return 2.13*fermi;
-    else if(std::abs(A-3.) < 0.5) return 1.96*fermi;
-    else if(std::abs(A-4.) < 0.5) return 1.68*fermi;
+    if     (std::abs(A-1.) < 0.5)                         return 0.89*fermi; // p
+    else if(std::abs(A-2.) < 0.5)                         return 2.13*fermi; // d
+    else if(std::abs(Z-1.) < 0.5 && std::abs(A-3.) < 0.5) return 1.80*fermi; // t
+
+    else if(std::abs(Z-2.) < 0.5 && std::abs(A-3.) < 0.5) return 1.96*fermi; // He3
+    else if(std::abs(Z-2.) < 0.5 && std::abs(A-4.) < 0.5) return 1.68*fermi; // He4
+
+    else if(std::abs(Z-3.) < 0.5)                         return 2.40*fermi; // Li7
+    else if(std::abs(Z-4.) < 0.5)                         return 2.51*fermi; // Be9
+
     else if( 10.  < A && A <= 16. ) r0  = a11*( 1 - std::pow(A, -2./3.) )*fermi;   // 1.08*fermi;
     else if( 15.  < A && A <= 20. ) r0  = a12*( 1 - std::pow(A, -2./3.) )*fermi;
     else if( 20.  < A && A <= 30. ) r0  = a13*( 1 - std::pow(A, -2./3.) )*fermi;
@@ -680,6 +709,28 @@ G4GGNuclNuclCrossSection::GetNucleusRadiusDE(G4double A)
     R  = r0*std::pow(A, 0.27);
   }
   return R;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// RMS radii from e-A scattering data
+
+G4double 
+G4GGNuclNuclCrossSection::GetNucleusRadiusRMS(G4double Z, G4double A)
+{
+
+  if     (std::abs(A-1.) < 0.5)                         return 0.89*fermi; // p
+  else if(std::abs(A-2.) < 0.5)                         return 2.13*fermi; // d
+  else if(std::abs(Z-1.) < 0.5 && std::abs(A-3.) < 0.5) return 1.80*fermi; // t
+
+  else if(std::abs(Z-2.) < 0.5 && std::abs(A-3.) < 0.5) return 1.96*fermi; // He3
+  else if(std::abs(Z-2.) < 0.5 && std::abs(A-4.) < 0.5) return 1.68*fermi; // He4
+
+  else if(std::abs(Z-3.) < 0.5)                         return 2.40*fermi; // Li7
+  else if(std::abs(Z-4.) < 0.5)                         return 2.51*fermi; // Be9
+
+  else                               return 1.24*std::pow(A, 0.28 )*fermi; // A > 9
 }
 
 
