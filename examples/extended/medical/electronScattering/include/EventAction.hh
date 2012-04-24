@@ -49,14 +49,14 @@ class EventAction : public G4UserEventAction
     void BeginOfEventAction(const G4Event*);
     void   EndOfEventAction(const G4Event*);
 			           	  
-    void SetDrawFlag(G4String val)  {drawFlag = val;};
-    void SetPrintModulo(G4int val)  {printModulo = val;};
+    void SetDrawFlag(G4String val)  {fDrawFlag = val;};
+    void SetPrintModulo(G4int val)  {fPrintModulo = val;};
         
   private:
-    G4String drawFlag;
-    G4int    printModulo;
+    G4String        fDrawFlag;
+    G4int           fPrintModulo;
     
-    EventMessenger* eventMessenger;                    
+    EventMessenger* fEventMessenger;                    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

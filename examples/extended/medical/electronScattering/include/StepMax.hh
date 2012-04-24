@@ -50,7 +50,7 @@ class StepMax : public G4VDiscreteProcess
 
      G4bool   IsApplicable(const G4ParticleDefinition&);    
      void     SetMaxStep(G4double);
-     G4double GetMaxStep() {return MaxChargedStep;};
+     G4double GetMaxStep() {return fMaxChargedStep;};
      
      G4double PostStepGetPhysicalInteractionLength( const G4Track& track,
 			                     G4double   previousStepSize,
@@ -63,8 +63,8 @@ class StepMax : public G4VDiscreteProcess
 
   private:
 
-     G4double    MaxChargedStep;
-     StepMaxMessenger* pMess;
+     G4double          fMaxChargedStep;
+     StepMaxMessenger* fMess;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

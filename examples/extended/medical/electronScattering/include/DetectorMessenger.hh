@@ -52,14 +52,14 @@ class DetectorMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    DetectorConstruction*   Detector;
+    DetectorConstruction*      fDetector;
     
-    G4UIdirectory*             testemDir;
-    G4UIdirectory*             detDir;
+    G4UIdirectory*             fTestemDir;
+    G4UIdirectory*             fDetDir;
 
-    G4UIcmdWithAString*        MaterCmd;
-    G4UIcmdWithADoubleAndUnit* ThickCmd;
-    G4UIcmdWithoutParameter*   UpdateCmd;
+    G4UIcmdWithAString*        fMaterCmd;
+    G4UIcmdWithADoubleAndUnit* fThickCmd;
+    G4UIcmdWithoutParameter*   fUpdateCmd;
 
 };
 

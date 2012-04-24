@@ -62,18 +62,18 @@ class RunAction : public G4UserRunAction
     void PrintFluence(G4int);
     
   private:
-    DetectorConstruction*   detector;
-    PrimaryGeneratorAction* primary;
-    HistoManager*           histoManager;
+    DetectorConstruction*   fDetector;
+    PrimaryGeneratorAction* fPrimary;
+    HistoManager*           fHistoManager;
 
     //for fluence computation
     //
-    G4int                   nbBins;
-    G4double                dr;
+    G4int                   fNbBins;
+    G4double                fDr;
     std::vector<G4double>   fluence;
     std::vector<G4double>   fluence1;	//normalized fluence    
     std::vector<G4double>   fluence2;	//rms on norm. fl
-    std::vector<G4int>      nbEntries;	//entries per bin            
+    std::vector<G4int>      fNbEntries;	//entries per bin            
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
