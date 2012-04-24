@@ -31,7 +31,9 @@
 //
 //      File name:    G4BinaryCascade.hh 
 //
-//      Author: Alessandro Brunengo (Alessandro.Brunengo@ge.infn.it)       
+//      Authors: Alessandro Brunengo (Alessandro.Brunengo@ge.infn.it)
+//               Hans-Peter Wellisch
+//               Gunter Folger
 // 
 //      Creation date: 8 June 2000
 //

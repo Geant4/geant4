@@ -39,7 +39,7 @@
 #include <cmath>
  
 G4BinaryLightIonReaction::G4BinaryLightIonReaction(G4VPreCompoundModel* ptr)
-    : G4HadronicInteraction("Binary Cascade"), 
+    : G4HadronicInteraction("Binary Light Ion Cascade"),
       theProjectileFragmentation(ptr)
 {
   if(!ptr) { theProjectileFragmentation = new G4PreCompoundModel(); } 
@@ -49,7 +49,16 @@ G4BinaryLightIonReaction::G4BinaryLightIonReaction(G4VPreCompoundModel* ptr)
 
 G4BinaryLightIonReaction::~G4BinaryLightIonReaction()
 {}
-  
+
+void G4BinaryLightIonReaction::ModelDescription(std::ostream& outFile) const
+{
+	outFile << "G4Binary Light Ion Cascade is an intra-nuclear cascade model\n"
+			<< "using G4BinaryCasacde to model the interaction of a light\n"
+			<< "nucleus with a nucleus.\n"
+			<< "The lighter of the two nuclei is treated like a set of projectiles\n"
+			<< "which are transported simultanously through the heavier nucleus.\n";
+}
+
 G4HadFinalState *G4BinaryLightIonReaction::
   ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
 { 

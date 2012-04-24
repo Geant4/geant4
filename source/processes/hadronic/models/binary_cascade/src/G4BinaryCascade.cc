@@ -354,6 +354,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 		(*iter)->SetFormationTime(FormTime);                                  // Uzhi
 		if( (*iter)->GetState() == G4KineticTrack::undefined )
 		{
+			//PrintKTVector(*iter, "late particle ");
 			FindLateParticleCollision(*iter);
 			lateParticles4Momentum += (*iter)->GetTrackingMomentum();
 			//PrintKTVector(*iter, "late particle ");
@@ -385,8 +386,14 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 
     	// now check if "excitation" energy left by TheoHE model
     	G4double excitation= theProjectile4Momentum.e() + initial_nuclear_mass - lateParticles4Momentum.e() - massInNucleus;
-		//G4cout << "BIC: Proj.e / initial excitation: " << theProjectile4Momentum.e() << " / " << excitation << G4endl;
-    	if ( excitation < 0 ) {
+#ifdef debug_BIC_GetExcitationEnergy
+    	G4cout << "BIC: Proj.e, nucl initial, nucl final, lateParticles"
+    			<< theProjectile4Momentum << ",  "
+    			<< initial_nuclear_mass<< ",  " << massInNucleus << ",  "
+    			<< lateParticles4Momentum << G4endl;
+		  G4cout << "BIC: Proj.e / initial excitation: " << theProjectile4Momentum.e() << " / " << excitation << G4endl;
+#endif
+		  if ( excitation < 0 ) {
 			#ifdef debug_G4BinaryCascade
     			G4cout << "BIC: Proj.e / initial excitation: " << theProjectile4Momentum.e() << " / " << excitation << G4endl;
 			#endif
@@ -1091,14 +1098,6 @@ void  G4BinaryCascade::FindLateParticleCollision(G4KineticTrack * secondary)
 		//G4cout << "G4BC set miss ,no intersect tin, tout " << tin << " , " << tout <<G4endl;
 	}
 
-	//  for barions, correct for fermi energy
-	G4int PDGcode=std::abs(secondary->GetDefinition()->GetPDGEncoding());
-	if ( PDGcode > 1000 )
-	{
-		G4double initial_Efermi = ((G4RKPropagation *)thePropagator)->GetField(G4Neutron::Neutron()->GetPDGEncoding(),
-				secondary->GetPosition());
-		secondary->Update4Momentum(secondary->Get4Momentum().e() - initial_Efermi);
-	}
 
 #ifdef debug_BIC_FindCollision
 G4cout << "FindLateP Particle, 4-mom, times newState "

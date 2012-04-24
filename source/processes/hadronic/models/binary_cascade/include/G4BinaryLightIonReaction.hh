@@ -41,6 +41,8 @@ class G4BinaryLightIonReaction : public G4HadronicInteraction
     inline void SetPrecompound(G4VPreCompoundModel* ptr);
     inline void SetDeExcitation(G4ExcitationHandler* ptr);
 
+    virtual void ModelDescription(std::ostream&) const ;
+
   private:
     G4BinaryCascade* theModel;
     G4ExcitationHandler* theHandler;

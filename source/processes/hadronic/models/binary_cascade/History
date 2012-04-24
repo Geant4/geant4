@@ -13,6 +13,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+13 Apr 2012 Gunter Folger        had-binary-V09-05-01
+-  Add description in G4BinaryLightIonReaction
+-  G4BinaryCascade; when propagating secondaries from HE model, do not 
+     modify initial energy for fermi level. 
+
 18 Jan 2011 Vladimir Ivanchenko  had-binary-V09-05-00
 - G4BinaryCascade, G4BinaryLightIonReaction,
   G4GeneratorPrecompoundInterface - added pointer to G4VPreCompoundModel 
