@@ -28,7 +28,7 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/set - John Allison  21st March 2012
-// Set quantities for use in appropriate commands.
+// Set quantities for use in appropriate future commands.
 
 #ifndef G4VISCOMMANDSSET_HH
 #define G4VISCOMMANDSSET_HH
@@ -36,7 +36,20 @@
 #include "G4VVisCommand.hh"
 
 class G4UIcommand;
+class G4UIcmdWithADouble;
 class G4UIcmdWithAString;
+
+class G4VisCommandSetColour: public G4VVisCommand {
+public:
+  G4VisCommandSetColour ();
+  virtual ~G4VisCommandSetColour ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSetColour (const G4VisCommandSetColour&);
+  G4VisCommandSetColour& operator = (const G4VisCommandSetColour&);
+  G4UIcommand* fpCommand;
+};
 
 class G4VisCommandSetTextColour: public G4VVisCommand {
 public:
@@ -48,6 +61,18 @@ private:
   G4VisCommandSetTextColour (const G4VisCommandSetTextColour&);
   G4VisCommandSetTextColour& operator = (const G4VisCommandSetTextColour&);
   G4UIcommand* fpCommand;
+};
+
+class G4VisCommandSetLineWidth: public G4VVisCommand {
+public:
+  G4VisCommandSetLineWidth ();
+  virtual ~G4VisCommandSetLineWidth ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSetLineWidth (const G4VisCommandSetLineWidth&);
+  G4VisCommandSetLineWidth& operator = (const G4VisCommandSetLineWidth&);
+  G4UIcmdWithADouble* fpCommand;
 };
 
 class G4VisCommandSetTextLayout: public G4VVisCommand {

@@ -20,6 +20,10 @@ committal in the CVS repository !
 History file for visualization/OpenInventor
 -------------------------------------------
 
+10th April 2012  Pere Mato  (openinventor-V09-05-02)
+- G4OOpenInventorWinViewer.cc: Make it work for Win64
+  replacing [Get|Set]WindowLong() by [Get|Set]WindowLongPtr() and GWL_USERDATA by GWLP_USERDATA
+
 28th March 2012  John Alliso  (openinventor-V09-05-01)
 - Migrated to G4VScenehandler::fObjectTransformation.
 

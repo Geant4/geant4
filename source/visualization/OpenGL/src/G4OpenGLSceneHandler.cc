@@ -323,24 +323,9 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
 }
 
 void G4OpenGLSceneHandler::AddPrimitive (const G4Text& text) {
-
-  const G4Colour& c = GetTextColour (text);  // Picks up default if none.
-  MarkerSizeType sizeType;
-  G4double size = GetMarkerSize (text, sizeType);
-  G4Point3D position (text.GetPosition ());
-  G4String textString = text.GetText();
-  const char* textCString = textString.c_str();
-  
-  glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
-
-  // Set position for raster-style drawers (X, Xm)
-  glRasterPos3d( position.x(),position.y(),position.z() );
-
-  // Need access to method in G4OpenGLViewer.  static_cast doesn't work
-  // with a virtual base class, so use dynamic_cast.  No need to test
-  // the outcome since viewer is guaranteed to be a G4OpenGLViewer.
+  // Pass to specific viewer via virtual function DrawText.
   G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
-  pGLViewer->DrawText(textCString,position.x(),position.y(),position.z(),size);
+  pGLViewer->DrawText(text);
 }
 
 void G4OpenGLSceneHandler::AddPrimitive (const G4Circle& circle) {

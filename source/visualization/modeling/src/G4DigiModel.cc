@@ -42,6 +42,7 @@ G4DigiModel::~G4DigiModel () {}
 G4DigiModel::G4DigiModel ():
   fpCurrentDigi(0)
 {
+  fType = "G4DigiModel";
   fGlobalTag = "G4DigiModel for all digis.";
   fGlobalDescription = fGlobalTag;
 }

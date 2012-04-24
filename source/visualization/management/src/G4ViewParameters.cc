@@ -40,15 +40,6 @@
 #include "G4ios.hh"
 
 G4ViewParameters::G4ViewParameters ():
-  fNoValue(0x0000),
-  fXValue(0x0001),
-  fYValue(0x0002),
-  fWidthValue(0x0004),
-  fHeightValue(0x0008),
-  fAllValues(0x000F),
-  fXNegative(0x0010),
-  fYNegative(0x0020),
-  fGeometryMask(0),
   fDrawingStyle (wireframe),
   fAuxEdgeVisible (false),
   fRepStyle (polyhedron),
@@ -85,6 +76,7 @@ G4ViewParameters::G4ViewParameters ():
   fWindowLocationHintY(0),
   fWindowLocationHintXNegative(true),
   fWindowLocationHintYNegative(false),
+  fGeometryMask(0),
   fAutoRefresh (false),
   fBackgroundColour (G4Colour(0.,0.,0.)),         // Black
   fPicking (false),
@@ -292,6 +284,7 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
       (fWindowSizeHintX      != v.fWindowSizeHintX)      ||
       (fWindowSizeHintY      != v.fWindowSizeHintY)      ||
       (fXGeometryString      != v.fXGeometryString)      ||
+      (fGeometryMask         != v.fGeometryMask)         ||
       (fAutoRefresh          != v.fAutoRefresh)          ||
       (fBackgroundColour     != v.fBackgroundColour)     || 
       (fPicking              != v.fPicking)              ||
@@ -467,6 +460,9 @@ std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
      << v.fWindowSizeHintX << 'x'<< v.fWindowSizeHintX;
 
   os << "\n  X geometry string: " << v.fXGeometryString;
+  os << "\n  X geometry mask: "
+     << std::showbase << std::hex << v.fGeometryMask
+     << std::noshowbase << std::dec;
 
   os << "\n  Auto refresh: ";
   if (v.fAutoRefresh) os << "true";
@@ -526,6 +522,7 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
       (fWindowSizeHintX      != v.fWindowSizeHintX)      ||
       (fWindowSizeHintY      != v.fWindowSizeHintY)      ||
       (fXGeometryString      != v.fXGeometryString)      ||
+      (fGeometryMask         != v.fGeometryMask)         ||
       (fAutoRefresh          != v.fAutoRefresh)          ||
       (fBackgroundColour     != v.fBackgroundColour)     ||
       (fPicking              != v.fPicking)              ||
@@ -784,4 +781,3 @@ G4int G4ViewParameters::ReadInteger(char *string, char **NextString)
     else
  	return (-Result);
 }
-   

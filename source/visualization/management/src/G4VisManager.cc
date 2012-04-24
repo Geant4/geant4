@@ -45,10 +45,6 @@
 #include "G4UImanager.hh"
 #include "G4VisStateDependent.hh"
 #include "G4UIdirectory.hh"
-#include "G4VisFeaturesOfFukuiRenderer.hh"
-#include "G4VisFeaturesOfDAWNFILE.hh"
-#include "G4VisFeaturesOfOpenGL.hh"
-#include "G4VisFeaturesOfOpenInventor.hh"
 #include "G4VGraphicsSystem.hh"
 #include "G4VSceneHandler.hh"
 #include "G4VViewer.hh"
@@ -85,7 +81,6 @@ G4VisManager::Verbosity G4VisManager::fVerbosity = G4VisManager::warnings;
 G4VisManager::G4VisManager (const G4String& verbosityString):
   fVerbose         (1),
   fInitialised     (false),
-  fpUserVisAction  (0),
   fpGraphicsSystem (0),
   fpScene          (0),
   fpSceneHandler   (0),
@@ -322,6 +317,11 @@ void G4VisManager::Initialise () {
       "\nYou have successfully registered the following model factories."
 	   << G4endl;
     PrintAvailableModels (fVerbosity);
+    G4cout << G4endl;
+  }
+
+  if (fVerbosity >= startup) {
+    PrintAvailableUserVisActions (fVerbosity);
     G4cout << G4endl;
   }
 
@@ -863,22 +863,21 @@ void G4VisManager::GeometryHasChanged () {
   G4int iScene, nScenes = sceneList.size ();
   for (iScene = 0; iScene < nScenes; iScene++) {
     G4Scene* pScene = sceneList [iScene];
-    std::vector<G4VModel*>& modelList = pScene -> SetRunDurationModelList ();
-
+    std::vector<G4Scene::Model>& modelList = pScene -> SetRunDurationModelList ();
     if (modelList.size ()) {
       G4bool modelInvalid;
       do {  // Remove, if required, one at a time.
 	modelInvalid = false;
-	std::vector<G4VModel*>::iterator iterModel;
+	std::vector<G4Scene::Model>::iterator iterModel;
 	for (iterModel = modelList.begin();
 	     iterModel != modelList.end();
 	     ++iterModel) {
-	  modelInvalid = !((*iterModel) -> Validate (fVerbosity >= warnings));
+	  modelInvalid = !(iterModel->fpModel->Validate(fVerbosity>=warnings));
 	  if (modelInvalid) {
 	    // Model invalid - remove and break.
 	    if (fVerbosity >= warnings) {
 	      G4cout << "WARNING: Model \""
-		     << (*iterModel) -> GetGlobalDescription ()
+		     << iterModel->fpModel->GetGlobalDescription ()
 		     <<
 		"\" is no longer valid - being removed\n  from scene \""
 		     << pScene -> GetName () << "\""
@@ -928,7 +927,7 @@ void G4VisManager::NotifyHandlers () {
   G4int iScene, nScenes = sceneList.size ();
   for (iScene = 0; iScene < nScenes; iScene++) {
     G4Scene* pScene = sceneList [iScene];
-    std::vector<G4VModel*>& modelList = pScene -> SetRunDurationModelList ();
+    std::vector<G4Scene::Model>& modelList = pScene -> SetRunDurationModelList ();
     
     if (modelList.size ()) {
       pScene->CalculateExtent();
@@ -1025,16 +1024,48 @@ void G4VisManager::DispatchToModel(const G4VTrajectory& trajectory, G4int i_mode
   }
 }
 
-void G4VisManager::SetUserAction
-(G4VUserVisAction* pVisAction,
+void G4VisManager::RegisterRunDurationUserVisAction
+(const G4String& name,
+ G4VUserVisAction* pVisAction,
  const G4VisExtent& extent) {
-  fpUserVisAction = pVisAction;
-  fUserVisActionExtent = extent;
+  fRunDurationUserVisActions.push_back(UserVisAction(name,pVisAction));
+  if (extent.GetExtentRadius() > 0.) {
+    fUserVisActionExtents[pVisAction] = extent;
+  } else {
+    if (fVerbosity >= warnings) {
+      G4cout << 
+	"WARNING: No extent set for user vis action \"" << name << "\"."
+	     << G4endl;
+    }
+  }
+}
+
+void G4VisManager::RegisterEndOfEventUserVisAction
+(const G4String& name,
+ G4VUserVisAction* pVisAction,
+ const G4VisExtent& extent) {
+  fEndOfEventUserVisActions.push_back(UserVisAction(name,pVisAction));
+  if (extent.GetExtentRadius() > 0.) {
+    fUserVisActionExtents[pVisAction] = extent;
+  } else {
+    if (fVerbosity >= warnings) {
+      G4cout << 
+	"WARNING: No extent set for user vis action \"" << name << "\"."
+	     << G4endl;
+    }
+  }
+}
+
+void G4VisManager::RegisterEndOfRunUserVisAction
+(const G4String& name,
+ G4VUserVisAction* pVisAction,
+ const G4VisExtent& extent) {
+  fEndOfRunUserVisActions.push_back(UserVisAction(name,pVisAction));
+  fUserVisActionExtents[pVisAction] = extent;
   if (extent.GetExtentRadius() <= 0.) {
     if (fVerbosity >= warnings) {
       G4cout << 
-	"WARNING: No extent set for user vis action.  (You may"
-	"\n  set it later when adding with /vis/scene/add/userAction.)"
+	"WARNING: No extent set for user vis action \"" << name << "\"."
 	     << G4endl;
     }
   }
@@ -1215,12 +1246,15 @@ void G4VisManager::RegisterMessengers () {
   directory = new G4UIdirectory ("/vis/set/");
   directory -> SetGuidance("Set quantities for use in appropriate commands.");
   fDirectoryList.push_back (directory);
+  RegisterMessenger(new G4VisCommandSetColour);
+  RegisterMessenger(new G4VisCommandSetLineWidth);
   RegisterMessenger(new G4VisCommandSetTextColour);
   RegisterMessenger(new G4VisCommandSetTextLayout);
 
   directory = new G4UIdirectory ("/vis/scene/");
   directory -> SetGuidance ("Operations on Geant4 scenes.");
   fDirectoryList.push_back (directory);
+  RegisterMessenger(new G4VisCommandSceneActivateModel);
   RegisterMessenger(new G4VisCommandSceneCreate);
   RegisterMessenger(new G4VisCommandSceneEndOfEventAction);
   RegisterMessenger(new G4VisCommandSceneEndOfRunAction);
@@ -1266,6 +1300,7 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandViewerClearCutawayPlanes);
   RegisterMessenger(new G4VisCommandViewerClearTransients);
   RegisterMessenger(new G4VisCommandViewerClone);
+  RegisterMessenger(new G4VisCommandViewerCopyViewFrom);
   RegisterMessenger(new G4VisCommandViewerCreate);
   RegisterMessenger(new G4VisCommandViewerDolly);
   RegisterMessenger(new G4VisCommandViewerFlush);
@@ -1384,6 +1419,42 @@ void G4VisManager::PrintAvailableModels (Verbosity verbosity) const
 	G4cout << "  " << (*i)->GetName() << G4endl;
 	if (verbosity >= parameters) (*i)->PrintAll(G4cout);
       }
+    }
+  }
+}
+
+void G4VisManager::PrintAvailableUserVisActions (Verbosity) const
+{
+  G4cout <<
+    "You have successfully registered the following user vis actions."
+	 << G4endl;
+  G4cout << "Run Duration User Vis Actions:";
+  if (fRunDurationUserVisActions.empty()) G4cout << " none" << G4endl;
+  else {
+    G4cout << G4endl;
+    for (size_t i = 0; i < fRunDurationUserVisActions.size(); i++) {
+      const G4String& name = fRunDurationUserVisActions[i].fName;
+      G4cout << "  " << name << G4endl;
+    }
+  }
+
+  G4cout << "End of Event User Vis Actions:";
+  if (fEndOfEventUserVisActions.empty()) G4cout << " none" << G4endl;
+  else {
+    G4cout << G4endl;
+    for (size_t i = 0; i < fEndOfEventUserVisActions.size(); i++) {
+      const G4String& name = fEndOfEventUserVisActions[i].fName;
+      G4cout << "  " << name << G4endl;
+    }
+  }
+
+  G4cout << "End of Run User Vis Actions:";
+  if (fEndOfRunUserVisActions.empty()) G4cout << " none" << G4endl;
+  else {
+    G4cout << G4endl;
+    for (size_t i = 0; i < fEndOfRunUserVisActions.size(); i++) {
+      const G4String& name = fEndOfRunUserVisActions[i].fName;
+      G4cout << "  " << name << G4endl;
     }
   }
 }

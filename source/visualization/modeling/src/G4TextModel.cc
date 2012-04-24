@@ -42,6 +42,7 @@
 G4TextModel::~G4TextModel () {}
 
 G4TextModel::G4TextModel (const G4Text& g4Text): fG4Text(g4Text) {
+  fType = "G4TextModel";
   std::ostringstream oss;
   oss << "G4TextModel: \"" << fG4Text.GetText()
       << "\" at " << G4BestUnit(g4Text.GetPosition(),"Length")

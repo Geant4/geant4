@@ -45,12 +45,13 @@ G4AxesModel::~G4AxesModel () {}
 G4AxesModel::G4AxesModel
 (G4double x0, G4double y0, G4double z0, G4double length):
   fX0(x0), fY0(y0), fZ0(z0), fLength(length) {
+  fType = "G4AxesModel";
   std::ostringstream oss;
   oss << "G4AxesModel: "
       << G4BestUnit(G4ThreeVector(x0,y0,z0), "Length")
       << G4BestUnit(length, "Length");
   fGlobalTag = oss.str();
-  fGlobalDescription = fGlobalTag;
+  fGlobalDescription = fType + ": " + fGlobalTag;
 }
 
 void G4AxesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler) {

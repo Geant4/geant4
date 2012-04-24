@@ -43,6 +43,22 @@
 // G4PhysicalVolumeModel assumes the modeling parameters have been set
 // up with meaningful information - default vis attributes and culling
 // policy in particular.
+//
+// The volumes are unpacked and sent to the scene handler.  They are,
+// in effect, "touchables" as defined by G4TouchableHistory.  A
+// touchable is defined not only by its physical volume name and copy
+// number but also by its position in the geometry hierarchy.
+//
+// It is guaranteed that touchables are presented to the scene handler
+// in top-down hierarchy order, i.e., ancesters first, mothers before
+// daughters, so the scene handler can be assured that, if it is
+// building its own scene graph tree, a mother, if any, will have
+// already been encountered and there will already be a node in place
+// on which to hang the current volume.  But be aware that the
+// visibility and culling policy might mean that some touchables are
+// not passed to the scene handler so the drawn tree might have
+// missing layers.  GetFullPVPath allows you to know the full
+// hierarchy.
 
 #ifndef G4PHYSICALVOLUMEMODEL_HH
 #define G4PHYSICALVOLUMEMODEL_HH
@@ -154,18 +170,19 @@ public: // With description
   G4Material* GetCurrentMaterial() const {return fpCurrentMaterial;}
   // Current material.
 
+  const std::vector<G4PhysicalVolumeNodeID>& GetFullPVPath() const
+  {return fFullPVPath;}
+  // Vector of physical volume node identifiers for the current
+  // touchable.  It is its path in the geometry hierarchy, similar to
+  // the concept of "touchable history" available from the navigator
+  // during tracking.
+
   const std::vector<G4PhysicalVolumeNodeID>& GetDrawnPVPath() const
   {return fDrawnPVPath;}
-  // Path of the current drawn (non-culled) volume in terms of drawn
-  // (non-culled) ancesters.  It is a vector of physical volume node
-  // identifiers corresponding to the geometry hierarchy actually
-  // selected, i.e., not culled.  It is guaranteed that volumes are
-  // presented to the scene handlers in top-down hierarchy order,
-  // i.e., ancesters first, mothers before daughters, so the scene
-  // handler can be assured that, if it is building its own scene
-  // graph tree, a mother, if any, will have already been encountered
-  // and there will already be a node in place on which to hang the
-  // current volume.
+  // Path of the current drawn (non-culled) touchable in terms of
+  // drawn (non-culled) ancesters.  It is a vector of physical volume
+  // node identifiers corresponding to the geometry hierarchy actually
+  // selected, i.e., not culled.
 
   const std::map<G4String,G4AttDef>* GetAttDefs() const;
   // Attribute definitions for current solid.

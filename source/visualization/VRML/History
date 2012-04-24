@@ -20,6 +20,9 @@ committal in the CVS repository !
 History file for visualization/VRML sub-category
 ------------------------------------------------
 
+28th March 2012  John Allison  (VRML-V09-05-02)
+- G4VRML1FileViewer.cc: Protect debug statement.
+
 28th February 2012  John Allison  (VRML-V09-05-01)
 - Migrated to G4VScenehandler::fObjectTransformation.
 

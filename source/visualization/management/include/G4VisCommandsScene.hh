@@ -49,6 +49,19 @@ private:
   G4VVisCommandScene& operator = (const G4VVisCommandScene&);
 };
 
+class G4VisCommandSceneActivateModel: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneActivateModel ();
+  virtual ~G4VisCommandSceneActivateModel ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneActivateModel (const G4VisCommandSceneActivateModel&);
+  G4VisCommandSceneActivateModel& operator =
+  (const G4VisCommandSceneActivateModel&);
+  G4UIcommand* fpCommand;
+};
+
 class G4VisCommandSceneCreate: public G4VVisCommandScene {
 public:
   G4VisCommandSceneCreate ();

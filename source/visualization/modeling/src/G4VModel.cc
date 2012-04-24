@@ -38,6 +38,7 @@
 
 G4VModel::G4VModel (const G4Transform3D& modelTransformation,
 		    const G4ModelingParameters* pMP):
+  fType ("Other"),
   fGlobalTag ("Empty"),
   fGlobalDescription ("Empty"),
   fTransform (modelTransformation),

@@ -46,6 +46,7 @@
 #include <GL/glx.h>
 
 class G4OpenGLSceneHandler;
+class G4Text;
 
 class G4OpenGLXViewer: virtual public G4OpenGLViewer {
 
@@ -57,7 +58,7 @@ public:
   virtual ~G4OpenGLXViewer ();
   void SetView ();
   void ShowView ();
-  void DrawText(const char * ,double x,double y,double z, double size);
+  void DrawText(const G4Text&);
 
 protected:
   void GetXConnection ();

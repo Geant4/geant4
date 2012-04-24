@@ -76,10 +76,10 @@ void G4VRML1FileViewer::DrawView()
 
 void G4VRML1FileViewer::ClearView(void)
 {
-  //#if defined DEBUG_FR_VIEW
+  #if defined DEBUG_FR_VIEW
   if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
         G4cout << "***** G4VRML1File1View::ClearView()" << G4endl;
-  //#endif
+  #endif
   if(fSceneHandler.fFlagDestOpen) {
     fSceneHandler.fDest.close();
     // Re-open with same filename...

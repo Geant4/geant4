@@ -48,6 +48,7 @@ G4FlavoredParallelWorldModel::G4FlavoredParallelWorldModel
 			   mp),
     theFlavoredParallelWorld (FPW) 
 {
+  fType = "G4FlavoredParallelWorldModel";
   FPW -> GetThePhysicalVolumeWorld () ->
     GetLogicalVolume () -> SetVisAttributes (G4VisAttributes::GetInvisible());
 }

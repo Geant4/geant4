@@ -35,6 +35,10 @@ inline const G4ModelingParameters* G4VModel::GetModelingParameters () const {
   return fpMP;
 }
 
+inline const G4String& G4VModel::GetType () const {
+  return fType;
+}
+
 inline const G4String& G4VModel::GetGlobalTag () const {
   return fGlobalTag;
 }
@@ -61,6 +65,10 @@ inline void G4VModel::SetExtent (const G4VisExtent& extent) {
 
 inline void G4VModel::SetGlobalDescription (const G4String& desc) {
   fGlobalDescription = desc;
+}
+
+inline void G4VModel::SetType (const G4String& type) {
+  fType = type;
 }
 
 inline void G4VModel::SetGlobalTag (const G4String& tag) {

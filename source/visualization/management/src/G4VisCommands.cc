@@ -147,15 +147,19 @@ void G4VisCommandList::SetNewValue (G4UIcommand*, G4String newValue)
   G4cout << G4endl;
   fpVisManager->PrintAvailableModels(verbosity);
   G4cout << G4endl;
+  fpVisManager->PrintAvailableUserVisActions(verbosity);
+  G4cout << G4endl;
   fpVisManager->PrintAvailableColours(verbosity);
   G4cout << G4endl;
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
-  UImanager->ApplyCommand(G4String("/vis/viewer/list ! ") + verbosityString);
+  UImanager->ApplyCommand("/vis/scene/list ! c");
+  UImanager->ApplyCommand("/vis/viewer/list ! c");
   if (verbosity < G4VisManager::parameters)
     G4cout <<
   "\nTo get more information, \"/vis/list all all\" or use individual commands"
   "\n  such as (use \"ls\" or \"help\"):"
-  "\n    /vis/viewer/list"
+  "\n    /vis/scene/list all all"
+  "\n    /vis/viewer/list all all"
   "\n    /vis/modeling/trajectories/list"
   "\n    /vis/filtering/trajectories/list"
 	   << G4endl;

@@ -28,13 +28,125 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/set - John Allison  21st March 2012
-// Set quantities for use in appropriate commands.
+// Set quantities for use in appropriate future commands.
 
 #include "G4VisCommandsSet.hh"
 
 #include "G4UIcommand.hh"
+#include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithAString.hh"
 #include <cctype>
+
+////////////// /vis/set/colour ////////////////////////////////////
+
+G4VisCommandSetColour::G4VisCommandSetColour ()
+{
+  G4bool omitable;
+  fpCommand = new G4UIcommand("/vis/set/colour", this);
+  fpCommand->SetGuidance
+    ("Defines colour and opacity for future \"/vis/scene/add/\" commands.");
+  fpCommand->SetGuidance
+    ("(Except \"/vis/scene/add/text\" commands - see \"/vis/set/textColour\".)");
+  fpCommand->SetGuidance("Default: white and opaque.");
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter ("red", 's', omitable = true);
+  parameter->SetGuidance
+    ("Red component or a string, e.g., \"cyan\" (green and blue parameters are ignored).");
+  parameter->SetDefaultValue ("1.");
+  fpCommand->SetParameter (parameter);
+  parameter = new G4UIparameter ("green", 'd', omitable = true);
+  parameter->SetDefaultValue (1.);
+  fpCommand->SetParameter (parameter);
+  parameter = new G4UIparameter ("blue", 'd', omitable = true);
+  parameter->SetDefaultValue (1.);
+  fpCommand->SetParameter (parameter);
+  parameter = new G4UIparameter ("alpha", 'd', omitable = true);
+  parameter->SetDefaultValue (1.);
+  parameter->SetGuidance ("Opacity");
+  fpCommand->SetParameter (parameter);
+}
+
+G4VisCommandSetColour::~G4VisCommandSetColour ()
+{
+  delete fpCommand;
+}
+
+G4String G4VisCommandSetColour::GetCurrentValue (G4UIcommand*)
+{
+  return G4String();
+}
+
+void G4VisCommandSetColour::SetNewValue (G4UIcommand*, G4String newValue)
+{
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  G4String redOrString;
+  G4double green, blue, opacity;
+  std::istringstream iss(newValue);
+  iss >> redOrString >> green >> blue >> opacity;
+
+  G4Colour colour(1,1,1,1);  // Default white and opaque.
+  if (std::isalpha(redOrString(0))) {
+    if (!G4Colour::GetColour(redOrString, colour)) {
+      if (verbosity >= G4VisManager::warnings) {
+	G4cout << "WARNING: Colour \"" << redOrString
+	       << "\" not found.  Defaulting to white and opaque."
+	       << G4endl;
+      }
+    }
+  } else {
+    colour = G4Colour
+      (G4UIcommand::ConvertToDouble(redOrString), green, blue);
+  }
+  // Add opacity
+  fCurrentColour = G4Colour
+    (colour.GetRed(), colour.GetGreen(), colour.GetBlue(), opacity);
+
+  if (verbosity >= G4VisManager::confirmations) {
+    G4cout <<
+      "Colour for future \"/vis/scene/add/\" commands has been set to "
+	   << fCurrentColour <<
+      ".\n(Except \"/vis/scene/add/text\" commands - use \"/vis/set/textColour\".)"
+	   << G4endl;
+  }
+}
+
+////////////// /vis/set/lineWidth ////////////////////////////////////
+
+G4VisCommandSetLineWidth::G4VisCommandSetLineWidth ()
+{
+  G4bool omitable;
+  fpCommand = new G4UIcmdWithADouble("/vis/set/lineWidth", this);
+  fpCommand->SetGuidance
+    ("Defines lineWidth for future \"/vis/scene/add/\" commands.");
+  fpCommand->SetParameterName ("lineWidth", omitable = true);
+  fpCommand->SetDefaultValue (1.);
+  fpCommand->SetRange("lineWidth >= 1.");
+}
+
+G4VisCommandSetLineWidth::~G4VisCommandSetLineWidth ()
+{
+  delete fpCommand;
+}
+
+G4String G4VisCommandSetLineWidth::GetCurrentValue (G4UIcommand*)
+{
+  return G4String();
+}
+
+void G4VisCommandSetLineWidth::SetNewValue (G4UIcommand*, G4String newValue)
+{
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  fCurrentLineWidth = fpCommand->GetNewDoubleValue(newValue);
+
+  if (verbosity >= G4VisManager::confirmations) {
+    G4cout <<
+      "Line width for future \"/vis/scene/add/\" commands has been set to "
+	   << fCurrentLineWidth
+	   << G4endl;
+  }
+}
 
 ////////////// /vis/set/textColour ////////////////////////////////////
 
@@ -42,13 +154,13 @@ G4VisCommandSetTextColour::G4VisCommandSetTextColour ()
 {
   G4bool omitable;
   fpCommand = new G4UIcommand("/vis/set/textColour", this);
-  fpCommand -> SetGuidance
+  fpCommand->SetGuidance
     ("Defines colour and opacity for future \"/vis/scene/add/text\" commands.");
-  fpCommand -> SetGuidance("Default: blue and opaque.");
+  fpCommand->SetGuidance("Default: blue and opaque.");
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("red", 's', omitable = true);
   parameter->SetGuidance
-    ("Red component or a string, e.g., \"blue\" (green and blue parameters are ignored).");
+    ("Red component or a string, e.g., \"cyan\" (green and blue parameters are ignored).");
   parameter->SetDefaultValue ("0.");
   fpCommand->SetParameter (parameter);
   parameter = new G4UIparameter ("green", 'd', omitable = true);
@@ -100,7 +212,8 @@ void G4VisCommandSetTextColour::SetNewValue (G4UIcommand*, G4String newValue)
     (colour.GetRed(), colour.GetGreen(), colour.GetBlue(), opacity);
 
   if (verbosity >= G4VisManager::confirmations) {
-    G4cout << "Text colour (for future \"text\" commands) has been set to "
+    G4cout <<
+      "Colour for future \"/vis/scene/add/text\" commands has been set to "
 	   << fCurrentTextColour << '.'
 	   << G4endl;
   }
@@ -112,18 +225,18 @@ G4VisCommandSetTextLayout::G4VisCommandSetTextLayout ()
 {
   G4bool omitable;
   fpCommand = new G4UIcmdWithAString("/vis/set/textLayout", this);
-  fpCommand -> SetGuidance
+  fpCommand->SetGuidance
     ("Defines layout future \"/vis/scene/add/text\" commands.");
-  fpCommand -> SetGuidance
-    ("\"left\" for left justification to provided coordinate.");
-  fpCommand -> SetGuidance
+  fpCommand->SetGuidance
+    ("\"left\" (default) for left justification to provided coordinate.");
+  fpCommand->SetGuidance
     ("\"centre\" or \"center\" for text centered on provided coordinate.");
-  fpCommand -> SetGuidance
+  fpCommand->SetGuidance
     ("\"right\" for right justification to provided coordinate.");
-  fpCommand -> SetGuidance("Default: left.");
-  fpCommand -> SetParameterName("layout", omitable = false);
-  fpCommand -> SetCandidates ("left centre center right");
-  fpCommand -> SetDefaultValue ("left");
+  fpCommand->SetGuidance("Default: left.");
+  fpCommand->SetParameterName("layout", omitable = true);
+  fpCommand->SetCandidates ("left centre center right");
+  fpCommand->SetDefaultValue ("left");
 }
 
 G4VisCommandSetTextLayout::~G4VisCommandSetTextLayout ()

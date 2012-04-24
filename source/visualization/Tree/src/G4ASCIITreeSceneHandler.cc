@@ -134,11 +134,11 @@ void G4ASCIITreeSceneHandler::EndModeling () {
   // This detail to G4cout regardless of outFileName...
   if (detail >= 4) {
     G4cout << "Calculating mass(es)..." << G4endl;
-    const std::vector<G4VModel*>& models = fpScene->GetRunDurationModelList();
-    std::vector<G4VModel*>::const_iterator i;
+    const std::vector<G4Scene::Model>& models = fpScene->GetRunDurationModelList();
+    std::vector<G4Scene::Model>::const_iterator i;
     for (i = models.begin(); i != models.end(); ++i) {
       G4PhysicalVolumeModel* pvModel =
-	dynamic_cast<G4PhysicalVolumeModel*>(*i);
+	dynamic_cast<G4PhysicalVolumeModel*>(i->fpModel);
       if (pvModel) {
 	if (pvModel->GetTopPhysicalVolume() ==
 	    G4TransportationManager::GetTransportationManager()

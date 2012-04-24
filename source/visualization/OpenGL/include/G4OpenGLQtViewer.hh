@@ -39,12 +39,14 @@
 #include "globals.hh"
 
 #include "G4OpenGLViewer.hh"
+#include "G4PhysicalVolumeModel.hh"
 
 #include <qobject.h>
 #include <qpoint.h>
 
 class G4OpenGLSceneHandler;
 class G4UImanager;
+class G4Text;
 
 class QGLWidget;
 class QDialog;
@@ -98,11 +100,16 @@ public:
   void saveVideo();
   bool generateMpegEncoderParameters();
   void displayRecordingStatus();
-  void DrawText(const char * ,double x,double y,double z, double size);
+  void DrawText(const G4Text&);
   void ResetView ();
-  void addTreeElement(const G4String model,std::vector < std::pair<std::string,std::pair <unsigned int, unsigned int> > >);
-  bool isTouchableVisible(unsigned int POindex);
-
+  void addPVSceneTreeElement(const G4String model,
+                             std::vector < G4PhysicalVolumeModel::G4PhysicalVolumeNodeID >,
+                             int currentPVPOIndex);
+  void addNonPVSceneTreeElement(const G4String model,
+                                int currentPVPOIndex,
+                                std::string modelDescription);
+  bool isTouchableVisible(int POindex);
+  void clearTreeWidget();
 public:
   void G4MousePressEvent(QMouseEvent *event);
   void G4wheelEvent (QWheelEvent * event); 
@@ -150,10 +157,17 @@ private:
   void setRecordingInfos(QString);
   QString getProcessErrorMsg();
   QWidget* getParentWidget();
-  bool parseAndInsertInTree(QTreeWidgetItem *,std::vector < std::pair<std::string,std::pair <unsigned int, unsigned int> > > treeVect,QString parentRoot);
+  bool parseAndInsertInSceneTree(QTreeWidgetItem *,
+                                 std::vector < G4PhysicalVolumeModel::G4PhysicalVolumeNodeID > fullPath,
+                                 unsigned int fullPathIndex,
+                                 QString parentRoot,
+                                 unsigned int currentIndex,
+                                 int currentPVPOIndex);
   void setCheckComponent(QTreeWidgetItem* item,bool check);
   void initViewComponent();
-  bool parseAndCheckVisibility(QTreeWidgetItem * treeNode,unsigned int POindex);
+  bool parseAndCheckVisibility(QTreeWidgetItem * treeNode,int POindex);
+  QTreeWidgetItem* addTreeWidgetItem(QString name, QString copyNb, QString POIndex,Qt::CheckState state,QTreeWidgetItem * treeNode );
+  QString getModelShortName(G4String modelShortName);
 
   QMenu *fContextMenu;
 
@@ -206,6 +220,8 @@ private:
   QTreeWidget * fViewerComponentTreeWidget;
   int fNbRotation ;
   int fTimeRotation;
+  QString fTouchableVolumes;
+  QDialog* fTreeInfoDialog;
 
 public Q_SLOTS :
   void startPauseVideo();
@@ -233,11 +249,13 @@ private Q_SLOTS :
   void toggleAntialiasing(bool);
   void toggleHaloing(bool);
   void toggleAux(bool);
+  void toggleHiddenMarkers(bool);
   void toggleFullScreen(bool);
   void processEncodeFinished();
   void processLookForFinished();
   void processEncodeStdout();
   void viewComponentItemChanged(QTreeWidgetItem* item, int id);
+  void viewComponentSelected();
   // Only use for Qt>4.0
   //  void dialogClosed();
 };

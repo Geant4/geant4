@@ -73,6 +73,7 @@ G4LogicalVolumeModel::G4LogicalVolumeModel
   fVoxels (voxels),
   fReadout (readout)
 {
+  fType = "G4LogicalVolumeModel";
   fGlobalTag = fpLV -> GetName ();
   fGlobalDescription = "G4LogicalVolumeModel " + fGlobalTag;
 }

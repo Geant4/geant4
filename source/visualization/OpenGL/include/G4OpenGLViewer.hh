@@ -41,6 +41,7 @@
 
 class G4OpenGLSceneHandler;
 class G4OpenGL2PSAction;
+class G4Text;
 
 // Base class for various OpenGLView classes.
 class G4OpenGLViewer: virtual public G4VViewer {
@@ -62,7 +63,7 @@ protected:
   void SetView    ();
   void ResetView ();
 
-  virtual void DrawText(const char * ,double x,double y,double z, double size);
+  virtual void DrawText(const G4Text&);
   void ChangePointSize(G4double size);
   void ChangeLineWidth(G4double width);
   void HaloingFirstPass ();

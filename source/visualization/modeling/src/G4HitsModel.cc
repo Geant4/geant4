@@ -42,6 +42,7 @@ G4HitsModel::~G4HitsModel () {}
 G4HitsModel::G4HitsModel ():
   fpCurrentHit(0)
 {
+  fType = "G4HitsModel";
   fGlobalTag = "G4HitsModel for all hits.";
   fGlobalDescription = fGlobalTag;
 }

@@ -214,7 +214,7 @@ void G4OpenGLXmViewer::set_rot_sens_callback (Widget w,
   } else {
     G4Exception
       ("G4OpenGLXmViewer::set_rot_sens_callback",
-       "opengl0004", FatalException,
+       "opengl2004", FatalException,
        "Bad value returned for dp in set_rot_sens_callback");
   }
 
@@ -244,7 +244,7 @@ void G4OpenGLXmViewer::set_rot_subject_callback (Widget w,
     {
       G4Exception
 	("G4OpenGLXmViewer::set_rot_subject_callback",
-	 "opengl0005", FatalException,
+	 "opengl2005", FatalException,
 	 "Unrecognised choice made in set_rot_subject_callback"); 
     }
   }

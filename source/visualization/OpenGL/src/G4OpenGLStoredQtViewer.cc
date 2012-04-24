@@ -92,19 +92,10 @@ void G4OpenGLStoredQtViewer::initializeGL () {
 #endif
 }
 
-// Until tree is fixed use this
-G4bool G4OpenGLStoredQtViewer::POSelected(size_t)
-{
-  return true;
-}
-
-/***
-// When tree is fixed use this
 G4bool G4OpenGLStoredQtViewer::POSelected(size_t POListIndex)
 {
   return isTouchableVisible(POListIndex);
 }
-***/
 
 G4bool G4OpenGLStoredQtViewer::TOSelected(size_t)
 {

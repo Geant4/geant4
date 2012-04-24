@@ -298,8 +298,11 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
     ("/vis/viewer/set/picking",this);
   fpCommandPicking->SetGuidance("Sets picking, if available.");
   fpCommandPicking->SetGuidance
-    ("If true, view is set up for picking, if available."
-     "\nFor required actions, watch for instructions for viewer.");
+    ("If true, view is set up for picking, if available.");
+  fpCommandPicking->SetGuidance
+    ("You may need to issue \"/vis/viewer/update\".");
+  fpCommandPicking->SetGuidance
+    ("For required actions, watch for instructions for viewer.");
   fpCommandPicking->SetParameterName("picking",omitable = true);
   fpCommandPicking->SetDefaultValue(true);
 
@@ -929,6 +932,10 @@ void G4VisCommandsViewerSet::SetNewValue
       if (vp.IsPicking()) G4cout << "requested.";
       else G4cout << "inhibited.";
       G4cout << G4endl;
+    }
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout << "You may need to issue \"/vis/viewer/update\"."
+	     << G4endl;
     }
   }
 

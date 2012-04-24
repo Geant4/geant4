@@ -20,6 +20,9 @@ committal in the CVS repository !
 History file for visualization/gMocren sub-category
 ---------------------------------------------------
 
+10th April 2012  John Allison (gMocren-V09-05-01)
+- Migrated to G4Scene::Model.
+
 28th February 2012  John Allison (gMocren-V09-05-00)
 - Migrated to G4VScenehandler::fObjectTransformation.
 

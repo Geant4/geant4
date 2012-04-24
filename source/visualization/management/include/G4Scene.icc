@@ -42,17 +42,17 @@ inline G4bool G4Scene::IsEmpty () const {
   return fRunDurationModelList.size () == 0;
 }
 
-inline const std::vector<G4VModel*>&
+inline const std::vector<G4Scene::Model>&
 G4Scene::GetRunDurationModelList () const {
   return fRunDurationModelList;
 }
 
-inline const std::vector<G4VModel*>&
+inline const std::vector<G4Scene::Model>&
 G4Scene::GetEndOfEventModelList () const {
   return fEndOfEventModelList;
 }
 
-inline const std::vector<G4VModel*>&
+inline const std::vector<G4Scene::Model>&
 G4Scene::GetEndOfRunModelList () const {
   return fEndOfRunModelList;
 }
@@ -81,17 +81,17 @@ inline void G4Scene::SetName (const G4String& name) {
   fName = name;
 }
 
-inline std::vector<G4VModel*>& G4Scene::SetRunDurationModelList ()
+inline std::vector<G4Scene::Model>& G4Scene::SetRunDurationModelList ()
 {
   return fRunDurationModelList;
 }
 
-inline std::vector<G4VModel*>& G4Scene::SetEndOfEventModelList ()
+inline std::vector<G4Scene::Model>& G4Scene::SetEndOfEventModelList ()
 {
   return fEndOfEventModelList;
 }
 
-inline std::vector<G4VModel*>& G4Scene::SetEndOfRunModelList ()
+inline std::vector<G4Scene::Model>& G4Scene::SetEndOfRunModelList ()
 {
   return fEndOfRunModelList;
 }

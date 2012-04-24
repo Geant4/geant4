@@ -45,6 +45,7 @@ G4TrajectoriesModel::G4TrajectoriesModel ():
   fDrawingMode(0),
   fpCurrentTrajectory(0)
 {
+  fType = "G4TrajectoriesModel";
   fGlobalTag = "G4TrajectoriesModel for all trajectories.";
   fGlobalDescription = fGlobalTag;
 }

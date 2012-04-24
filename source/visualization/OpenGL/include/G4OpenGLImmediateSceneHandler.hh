@@ -65,8 +65,7 @@ public:
 
 protected:
 
-  void RequestPrimitives (const G4VSolid& solid);
-  void AddPrimitivePreamble(const G4Visible& visible);
+  G4bool AddPrimitivePreamble(const G4Visible& visible);
 
   static G4int    fSceneIdCount;  // static counter for OpenGLImmediate scenes.
 };

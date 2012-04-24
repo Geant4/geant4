@@ -59,7 +59,7 @@ template <class F> class G4CallbackModel: public G4VModel {
  public:
   G4CallbackModel(F* function):
     fFunction(function) {}
-  ~G4CallbackModel() {delete fFunction;}
+  ~G4CallbackModel() {}
   void DescribeYourselfTo(G4VGraphicsScene& sceneHandler) {
     (*fFunction)(sceneHandler, fTransform);
   }

@@ -39,6 +39,7 @@
 G4ScaleModel::~G4ScaleModel () {}
 
 G4ScaleModel::G4ScaleModel (const G4Scale& scale): fScale(scale) {
+  fType = "G4ScaleModel";
   fGlobalTag = "G4ScaleModel: " + fScale.GetAnnotation();
   switch (fScale.GetDirection()) {
   case G4Scale::x:

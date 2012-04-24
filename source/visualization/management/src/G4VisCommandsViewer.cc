@@ -64,8 +64,9 @@ void G4VVisCommandViewer::RefreshIfRequired(G4VViewer* viewer) {
       G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
     }
     else {
-      if (verbosity >= G4VisManager::confirmations) {
-	G4cout << "Issue /vis/viewer/refresh to see effect." << G4endl;
+      if (verbosity >= G4VisManager::warnings) {
+	G4cout << "Issue /vis/viewer/refresh or flush to see effect."
+	       << G4endl;
       }
     }
   }
@@ -504,6 +505,79 @@ void G4VisCommandViewerClone::SetNewValue (G4UIcommand*, G4String newValue) {
   }
 }
 
+////////////// /vis/viewer/copyViewFrom //////////////////////////
+
+G4VisCommandViewerCopyViewFrom::G4VisCommandViewerCopyViewFrom () {
+  G4bool omitable;
+  fpCommand = new G4UIcmdWithAString ("/vis/viewer/copyViewFrom", this);
+  fpCommand -> SetGuidance
+    ("Copy the camera-specific parameters from the specified viewer.");
+  fpCommand -> SetParameterName ("from-viewer-name", omitable = false);
+}
+
+G4VisCommandViewerCopyViewFrom::~G4VisCommandViewerCopyViewFrom () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandViewerCopyViewFrom::GetCurrentValue (G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandViewerCopyViewFrom::SetNewValue (G4UIcommand*, G4String newValue) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
+  if (!currentViewer) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout << 
+  "ERROR: G4VisCommandsViewerCopyViewFrom::SetNewValue: no current viewer."
+             << G4endl;
+    }
+    return;
+  }
+
+  const G4String& fromViewerName = newValue;
+  G4VViewer* fromViewer = fpVisManager -> GetViewer (fromViewerName);
+  if (!fromViewer) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout << "ERROR: Viewer \"" << fromViewerName
+	     << "\" not found - \"/vis/viewer/list\" to see possibilities."
+	     << G4endl;
+    }
+    return;
+  }
+
+  if (fromViewer == currentViewer) {
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout <<
+        "WARNING: G4VisCommandsViewerSet::SetNewValue:"
+        "\n  from-viewer and current viewer are identical."
+             << G4endl;
+    }
+    return;
+  }
+
+  // Copy camera-specific view parameters
+  G4ViewParameters vp = currentViewer->GetViewParameters();
+  const G4ViewParameters& fromVP = fromViewer->GetViewParameters();
+  vp.SetViewpointDirection(fromVP.GetViewpointDirection());
+  vp.SetUpVector          (fromVP.GetUpVector());
+  vp.SetFieldHalfAngle    (fromVP.GetFieldHalfAngle());
+  vp.SetZoomFactor        (fromVP.GetZoomFactor());
+  vp.SetScaleFactor       (fromVP.GetScaleFactor());
+  vp.SetCurrentTargetPoint(fromVP.GetCurrentTargetPoint());
+  vp.SetDolly             (fromVP.GetDolly());
+  SetViewParameters(currentViewer, vp);
+  
+  if (verbosity >= G4VisManager::confirmations) {
+    G4cout << "Camera parameters of viewer \"" << currentViewer->GetName()
+	   << "\"\n  set to those of viewer \"" << fromViewer->GetName()
+	   << "\"."
+	   << G4endl;
+  }
+}
+
 ////////////// /vis/viewer/create ///////////////////////////////////////
 
 G4VisCommandViewerCreate::G4VisCommandViewerCreate (): fId (0) {
@@ -681,8 +755,9 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
       G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
     }
     else {
-      if (verbosity >= G4VisManager::confirmations) {
-	G4cout << "Issue /vis/viewer/refresh to see effect." << G4endl;
+      if (verbosity >= G4VisManager::warnings) {
+	G4cout << "Issue /vis/viewer/refresh or flush to see effect."
+	       << G4endl;
       }
     }
   }

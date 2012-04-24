@@ -182,6 +182,23 @@ void G4OpenGLStoredSceneHandler::EndPrimitives2D ()
 
 G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
 {
+  const G4Colour& c = GetColour (visible);
+  G4double opacity = c.GetAlpha ();
+
+  if (!fSecondPass) {
+    G4bool transparency_enabled = true;
+    G4OpenGLViewer* pViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
+    if (pViewer) transparency_enabled = pViewer->transparency_enabled;
+    if (transparency_enabled && opacity < 1.) {
+      // On first pass, transparent objects are not drawn, but flag is set...
+      fSecondPassRequested = true;
+      return false;
+    }
+  }
+
+  // On second pass, opaque objects are not drwan...
+  if (fSecondPass && opacity >= 1.) return false;
+
   // Loads G4Atts for picking...
   if (fpViewer->GetViewParameters().IsPicking()) {
     glLoadName(++fPickName);
@@ -189,8 +206,6 @@ G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible
     LoadAtts(visible, holder);
     fPickMap[fPickName] = holder;
   }
-
-  const G4Colour& c = GetColour (visible);
 
   // Because of our need to control colour of transients (display by
   // time fading), display lists may only cover a single primitive.
@@ -410,7 +425,8 @@ void G4OpenGLStoredSceneHandler::EndModeling () {
       "  display List for fTopPODL - try OpenGL Immediated mode."
 	   << G4endl;
   } else {
-    glNewList (fTopPODL, GL_COMPILE_AND_EXECUTE); {
+
+    glNewList (fTopPODL, GL_COMPILE); {
       for (size_t i = 0; i < fPOList.size (); i++) {
 	glPushMatrix();
 	G4OpenGLTransform3D oglt (fPOList[i].fTransform);
@@ -422,6 +438,14 @@ void G4OpenGLStoredSceneHandler::EndModeling () {
       }
     }
     glEndList ();
+
+    // Make sure screen corresponds to graphical database...
+    if (fpViewer) {
+      fpViewer -> SetView ();
+      fpViewer -> ClearView ();
+      fpViewer -> DrawView ();
+    }
+
     if (glGetError() == GL_OUT_OF_MEMORY) {  // Could close?
       G4cout <<
         "ERROR: G4OpenGLStoredSceneHandler::EndModeling: Failure to allocate"

@@ -55,6 +55,7 @@ public:
 
   void ClearStore ();
   void ClearTransientStore ();
+  void SetScene(G4Scene*);
 };
 
 #endif

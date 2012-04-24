@@ -26,6 +26,103 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+22nd April 2012  John Allison  (visman-V09-05-17)
+- G4VisCommandsSceneAdd: Fixed compiler warnings.
+
+12th April 2012  John Allison
+- G4VSceneHandler::ProcessScene: Moved FinishView to end.
+- G4VisCommandsScene.cc:
+  o The above is a fix of the "curious problem" in visman-V09-05-16.
+  o Code reverted.
+- G4VisCommandsSceneAdd: /vis/scene/add/date:
+  o G4Timer fTimer instantiated in constructor - more efficient.
+- G4Scene.cc: Improved warning message.
+
+12th April 2012  John Allison
+- G4VisManager.hh: Removed unnecessary unnamed namespace around some typedef's.
+- G4VisManager.cc: Removed unused #include "G4VisFeaturesOf...".
+- /vis/scene/add/date: Removed trailing \n.
+
+11th April 2012  John Allison  (visman-V09-05-16)
+- G4VisManager.cc, G4VisCommandsScene.cc/hh
+  o Added /vis/scene/activateModel.
+- G4VSceneHandler.cc:
+  o Augmented drawing loops to take account of model activation state.
+- G4Scene.cc:
+  o Improved CalculateExtent to take account of model activation state.
+  o Tidied operator<<.
+- G4VisCommandsScene.cc:
+  o /vis/scene/notifyHandlers:
+    . Instead of Set+Clear+DrawView, used ApplyCommand("/vis/viewer/refresh")
+      twice!!  This was an attempt to fix a curious problem whereby
+      trajectories were not refreshed.  Probably the go only to the
+      back buffer, because a second refresh seems to do the trick.
+  o /vis/scene/list: Improved. 
+- G4VisCommandsSceneAdd.cc: /vis/scene/add/userAction:
+  o Small improvement to guidance and code readability.
+
+10th April 2012  John Allison
+- /vis/scene/list: Changed verbosity check to warnings.
+
+10th April 2012  John Allison  (visman-V09-05-15)
+- Migrated to G4Scene::Model.
+- G4VisManager.cc: Minor improvements to printing.
+- /vis/list: Added PrintAvailableUserVisActions and improved.
+- /vis/scene/list: Added printing of end-of-run models.
+
+10th April 2012  John Allison  (visman-V09-05-14)
+- G4VisManager::RegisterRunDuration/EndOfEvent/EndOfRunUserVisAction.
+  Now you can register any number of named vis actions and associate
+  them with particular types of action.  They are added to the scene
+  with /vis/scene/add/userAction [<name>] (default all).
+
+8th April 2012  John Allison  (visman-V09-05-13)
+- Added /vis/viewer/copyViewFrom.
+- G4VisManager.hh: Tidy.
+- G4VisCommandsSceneAddUserAction: Tidy model name.
+
+8th April 2012  John Allison  (visman-V09-05-12)
+- Added /vis/set/colour and /vis/set/lineWidth.  (/vis/set/ commands
+  set "current quantities" for future /vis/scene/add/ commands.)
+- /vis/scene/add/frame: Modified to use the above "current quantities".
+
+5th April 2012  John Allison
+- G4Scene::CalculateExtent: Include validation of models.  This
+  re-calculated extent.  Solves problem of change of extent if a
+  volume chnages visibility, for example, by a /vis/geometry command.
+- /vis/scene/notifyHandlers:
+  o Fix warning message if no scene exists.
+  o Call G4Scene::CalculateExtent to ensure extent is up to date.
+
+4th April 2012  John Allison  (visman-V09-05-11)
+- G4VVisCommand: Commented out as-yet-unused "current quantities".
+- /vis/set/textLayout: Allow omitable argument - default "left".
+
+30th March 2012  John Allison
+- G4ViewParameters:
+  o Moved XGeometry constants (fXValue, etc.) to static.
+  o Added fGeometryMask to list of those tested in PrintDifferences
+    and operator!=.
+  o Added fGeometryMask to those printed in operator<<.
+
+30th March 2012  John Allison
+- G4Scene.cc::operator!=:
+  o Added test on size of fEndOfEventModelList and fEndOfRunModelList.
+  o Improved comments.
+
+29th March 2012  Laurent Garnier
+- G4VSceneHandler: Made SetScene virtual
+
+28th March 2012  John Allison
+- G4VisCommandsViewer.cc: Improved some warning messages.
+
+27th March 2012  John Allison
+- G4VisCommandsSceneAdd.cc: Added SetType for classes using G4CallBackModel,
+
+27th March 2012  John Allison
+- /vis/viewer/set/picking: Improved guidance.
+- /vis/scene/add commands: Rationalised tag names.
+
 26th March 2012  John Allison  (visman-V09-05-10)
 - G4VisCommandsSet.cc: Added #include <cctype> for strict Windows compiler.
 

@@ -20,6 +20,24 @@ committal in the CVS repository !
 History file for visualization/modeling
 ---------------------------------------
 
+10th April 2012  John Allison  (modeling-V09-05-05)
+- G4CallbackModel: It ws a bad idea to delete function in destructor
+  (see 7th March).  OK to delete, but catastrophe when you try to use
+  it a second time, for example, when model is replaced by same model.
+
+4th April 2012  John Allison  (modeling-V09-05-04)
+- Tagged.
+
+30th March 2012  John Allison
+- G4PhysicalVolumeModel.cc:
+  o If top volume is a replica or a parameterised, only draw first one.
+
+26th March 2012  John Allison
+- G4VModel: Added Get/SetType. The sub-class should set its type,
+  which could be the class name, or, in the case of G4CallBackModel,
+  it could be the type of object it is coding.
+- G4PhysicalVolumeModel: Added GetFullPVPath.
+
 23rd March 2012  John Allison  (modeling-V09-05-03)
 - G4AxesModel: Augmented global description to allow more than one
   set of axes to be added to scene if significantly different.

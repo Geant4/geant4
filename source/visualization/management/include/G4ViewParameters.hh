@@ -254,16 +254,6 @@ private:
   G4int ParseGeometry ( const char *string, G4int *x, G4int *y, unsigned int *width, unsigned int *height);
   G4int ReadInteger(char *string, char **NextString);
 
-  G4int fNoValue;
-  G4int fXValue; // XValue set for XGeometry
-  G4int fYValue; // YValue set for XGeometry
-  G4int fWidthValue; // WidthValue set for XGeometry
-  G4int fHeightValue; // HeightValue set for XGeometry
-  G4int fAllValues; // AllValues are set for XGeometry
-  G4int fXNegative; // XValue is from left for XGeometry
-  G4int fYNegative; // YValue is from top for XGeometry
-  G4int fGeometryMask; // Mask for ParseGeometry
-
   DrawingStyle fDrawingStyle;    // Drawing style.
   G4bool       fAuxEdgeVisible;  // Auxiliary edge visibility.
   RepStyle     fRepStyle;        // Representation style.
@@ -308,10 +298,22 @@ private:
   G4bool       fWindowLocationHintXNegative; //  Reference of location hints for pixel-based window systems.
   G4bool       fWindowLocationHintYNegative;
   G4String     fXGeometryString; // If non-null, geometry string for X Windows.
+  G4int        fGeometryMask;    // Corresponding mask.
   G4bool       fAutoRefresh;     // ...after change of view parameters.
   G4Colour     fBackgroundColour;
   G4bool       fPicking;         // Request picking.
   RotationStyle fRotationStyle;  // Rotation style.
+
+  enum { // Constants for geometry mask in ParseGeometry and related functions.
+    fNoValue     = 0,
+    fXValue      = 0x0001,
+    fYValue      = 0x0002,
+    fWidthValue  = 0x0004,
+    fHeightValue = 0x0008,
+    fAllValues   = 0x000F,
+    fXNegative   = 0x0010,
+    fYNegative   = 0x0020
+  };
 };
 
 #include "G4ViewParameters.icc"

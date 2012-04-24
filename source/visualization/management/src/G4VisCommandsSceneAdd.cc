@@ -72,7 +72,6 @@
 #include "G4SmoothTrajectory.hh"
 #include "G4SmoothTrajectoryPoint.hh"
 #include "G4AttDef.hh"
-#include "G4Timer.hh"
 #include "G4Polyline.hh"
 #include "G4UnitsTable.hh"
 
@@ -231,8 +230,9 @@ void G4VisCommandSceneAddDate::SetNewValue (G4UIcommand*, G4String newValue)
   Date* date = new Date(fpVisManager, size, x, y, layout);
   G4VModel* model =
     new G4CallbackModel<G4VisCommandSceneAddDate::Date>(date);
+  model->SetType("Date");
+  model->SetGlobalTag("Date");
   model->SetGlobalDescription("Date");
-  model->SetGlobalTag(model->GetGlobalDescription());
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddRunDurationModel (model, warn);
   if (successful) {
@@ -249,8 +249,11 @@ void G4VisCommandSceneAddDate::SetNewValue (G4UIcommand*, G4String newValue)
 void G4VisCommandSceneAddDate::Date::operator()
   (G4VGraphicsScene& sceneHandler, const G4Transform3D&)
 {
-  G4Timer t;
-  G4Text text(t.GetClockTime(), G4Point3D(fX, fY, 0.));
+  G4String time = fTimer.GetClockTime();
+  // Check for \n, starting from back, and erase.
+  std::string::size_type i = time.rfind('\n');
+  if (i != std::string::npos) time.erase(i);
+  G4Text text(time, G4Point3D(fX, fY, 0.));
   text.SetScreenSize(fSize);
   text.SetLayout(fLayout);
   G4VisAttributes textAtts(G4Colour(0.,1.,1));
@@ -368,8 +371,9 @@ void G4VisCommandSceneAddEventID::SetNewValue (G4UIcommand*, G4String newValue)
   EventID* eventID = new EventID(fpVisManager, size, x, y, layout);
   G4VModel* model =
     new G4CallbackModel<G4VisCommandSceneAddEventID::EventID>(eventID);
+  model->SetType("EventID");
+  model->SetGlobalTag("EventID");
   model->SetGlobalDescription("EventID");
-  model->SetGlobalTag(model->GetGlobalDescription());
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddEndOfEventModel (model, warn);
   if (successful) {
@@ -451,11 +455,6 @@ G4VisCommandSceneAddFrame::G4VisCommandSceneAddFrame () {
   parameter -> SetParameterRange ("size > 0 and size <=1");
   parameter -> SetDefaultValue (0.97);
   fpCommand -> SetParameter (parameter);
-  parameter = new G4UIparameter ("width", 'i', omitable = true);
-  parameter -> SetGuidance ("Width of frame in pixels.");
-  parameter -> SetParameterRange ("width > 0");
-  parameter -> SetDefaultValue (2);
-  fpCommand -> SetParameter (parameter);
 }
 
 G4VisCommandSceneAddFrame::~G4VisCommandSceneAddFrame () {
@@ -480,15 +479,15 @@ void G4VisCommandSceneAddFrame::SetNewValue (G4UIcommand*, G4String newValue)
   }
 
   G4double size;
-  G4int width;
   std::istringstream is(newValue);
-  is >> size >> width;
+  is >> size;
 
-  Frame* frame = new Frame(size, width);
+  Frame* frame = new Frame(size, fCurrentLineWidth, fCurrentColour);
   G4VModel* model =
     new G4CallbackModel<G4VisCommandSceneAddFrame::Frame>(frame);
-  model->SetGlobalDescription("Frame" + newValue);
-  model->SetGlobalTag(model->GetGlobalDescription());
+  model->SetType("Frame");
+  model->SetGlobalTag("Frame");
+  model->SetGlobalDescription("Frame: " + newValue);
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddRunDurationModel (model, warn);
   if (successful) {
@@ -513,6 +512,7 @@ void G4VisCommandSceneAddFrame::Frame::operator()
   frame.push_back(G4Point3D( fSize,  fSize, 0.));
   G4VisAttributes va;
   va.SetLineWidth(fWidth);
+  va.SetColour(fColour);
   frame.SetVisAttributes(va);
   sceneHandler.BeginPrimitives2D();
   sceneHandler.AddPrimitive(frame);
@@ -754,15 +754,15 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
     return;
   }
 
-  const std::vector<G4VModel*>& rdModelList = pScene -> GetRunDurationModelList();
-  std::vector<G4VModel*>::const_iterator i;
+  const std::vector<G4Scene::Model>& rdModelList = pScene -> GetRunDurationModelList();
+  std::vector<G4Scene::Model>::const_iterator i;
   for (i = rdModelList.begin(); i != rdModelList.end(); ++i) {
-    if ((*i) -> GetGlobalDescription().find("Volume") != std::string::npos) break;
+    if (i->fpModel->GetGlobalDescription().find("Volume") != std::string::npos) break;
   }
   if (i != rdModelList.end()) {
     if (verbosity >= G4VisManager::errors) {
       G4cout << "There is already a volume, \""
-             << (*i) -> GetGlobalDescription()
+             << i->fpModel->GetGlobalDescription()
              << "\",\n in the run-duration model list of scene \""
              << pScene -> GetName()
              << "\".\n Your logical volume must be the only volume in the scene."
@@ -1091,8 +1091,9 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
   G4Logo* logo = new G4Logo(height,visAtts);
   G4VModel* model =
     new G4CallbackModel<G4VisCommandSceneAddLogo::G4Logo>(logo);
-  model->SetGlobalDescription("G4Logo" + newValue);
-  model->SetGlobalTag(model->GetGlobalDescription());
+  model->SetType("G4Logo");
+  model->SetGlobalTag("G4Logo");
+  model->SetGlobalDescription("G4Logo: " + newValue);
   model->SetTransformation(transform);
   // Note: it is the responsibility of the model to act upon this, but
   // the extent is in local coordinates...
@@ -1258,8 +1259,9 @@ void G4VisCommandSceneAddLogo2D::SetNewValue (G4UIcommand*, G4String newValue)
   Logo2D* logo2D = new Logo2D(fpVisManager, size, x, y, layout);
   G4VModel* model =
     new G4CallbackModel<G4VisCommandSceneAddLogo2D::Logo2D>(logo2D);
-  model->SetGlobalDescription("Logo2D" + newValue);
-  model->SetGlobalTag(model->GetGlobalDescription());
+  model->SetType("G4Logo2D");
+  model->SetGlobalTag("G4Logo2D");
+  model->SetGlobalDescription("G4Logo2D: " + newValue);
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddRunDurationModel (model, warn);
   if (successful) {
@@ -1886,11 +1888,9 @@ void G4VisCommandSceneAddText2D::SetNewValue (G4UIcommand*, G4String newValue) {
   G4Text2D* g4text2D = new G4Text2D(g4text);
   G4VModel* model =
     new G4CallbackModel<G4VisCommandSceneAddText2D::G4Text2D>(g4text2D);
-  std::ostringstream oss;
-  oss << "G4Text2D: " << newValue;
-  G4String description = oss.str();
-  model->SetGlobalDescription(oss.str());
-  model->SetGlobalTag(model->GetGlobalDescription());
+  model->SetType("Text2D");
+  model->SetGlobalTag("Text2D");
+  model->SetGlobalDescription("Text2D: " + newValue);
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddRunDurationModel (model, warn);
   if (successful) {
@@ -2072,39 +2072,17 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
 
 G4VisCommandSceneAddUserAction::G4VisCommandSceneAddUserAction () {
   G4bool omitable;
-  fpCommand = new G4UIcommand("/vis/scene/add/userAction",this);
+  fpCommand = new G4UIcmdWithAString("/vis/scene/add/userAction",this);
   fpCommand -> SetGuidance
-    ("Add Vis User Action, if any, to current scene.");
+    ("Add named Vis User Action to current scene.");
   fpCommand -> SetGuidance
-    ("Optional arguments define the extent of the callback drawing.  You may"
-     "\nnot need this if the extent has been defined in the original"
-     "\nSetUserAction or is defined by other components of the scene.  But if"
-     "\nthe user action is the only component of the scene, you will certainly"
-     "\nneed to set the extent either in SetUserAction or here.  A scene must"
-     "\nhave an extent one way or another so that the viewer can calculate"
-     "\nhow to point the camera.");
-  G4UIparameter* parameter;
-  parameter = new G4UIparameter ("xmin", 'd', omitable = true);
-  parameter->SetDefaultValue (0.);
-  fpCommand->SetParameter (parameter);
-  parameter =  new G4UIparameter ("xmax", 'd', omitable = true);
-  parameter->SetDefaultValue (0.);
-  fpCommand->SetParameter (parameter);
-  parameter =  new G4UIparameter ("ymin", 'd', omitable = true);
-  parameter->SetDefaultValue (0.);
-  fpCommand->SetParameter (parameter);
-  parameter =  new G4UIparameter ("ymax", 'd', omitable = true);
-  parameter->SetDefaultValue (0.);
-  fpCommand->SetParameter (parameter);
-  parameter =  new G4UIparameter ("zmin", 'd', omitable = true);
-  parameter->SetDefaultValue (0.);
-  fpCommand->SetParameter (parameter);
-  parameter =  new G4UIparameter ("zmax", 'd', omitable = true);
-  parameter->SetDefaultValue (0.);
-  fpCommand->SetParameter (parameter);
-  parameter =  new G4UIparameter ("unit", 's', omitable = true);
-  parameter->SetDefaultValue ("cm");
-  fpCommand->SetParameter (parameter);
+    ("Attempts to match search string to name of action - use unique sub-string.");
+  fpCommand -> SetGuidance
+    ("(Use /vis/list to see names of registered actions.)");
+  fpCommand -> SetGuidance
+    ("If name == \"all\" (default), all actions are added.");
+  fpCommand -> SetParameterName("action-name", omitable = true);
+  fpCommand -> SetDefaultValue("all");
 }
 
 G4VisCommandSceneAddUserAction::~G4VisCommandSceneAddUserAction () {
@@ -2115,19 +2093,10 @@ G4String G4VisCommandSceneAddUserAction::GetCurrentValue (G4UIcommand*) {
   return "";
 }
 
-void G4VisCommandSceneAddUserAction::SetNewValue (G4UIcommand*,
-						    G4String newValue) {
+void G4VisCommandSceneAddUserAction::SetNewValue
+(G4UIcommand*, G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
-  G4bool warn = verbosity >= G4VisManager::warnings;
-
-  G4VUserVisAction* visAction = fpVisManager->GetUserAction();
-  if (!visAction) {
-    if (warn) {
-      G4cout <<	"WARNING: No User Vis Action registered." << G4endl;
-    }
-    return;
-  }
 
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
@@ -2137,34 +2106,92 @@ void G4VisCommandSceneAddUserAction::SetNewValue (G4UIcommand*,
     return;
   }
 
-  G4String unitString;
-  G4double xmin, xmax, ymin, ymax, zmin, zmax;
-  std::istringstream is (newValue);
-  is >> xmin >> xmax >> ymin >> ymax >> zmin >> zmax >> unitString;
-  G4double unit = G4UIcommand::ValueOf(unitString);
-  xmin *= unit; xmax *= unit;
-  ymin *= unit; ymax *= unit;
-  zmin *= unit; zmax *= unit;
-  G4VisExtent commandExtent(xmin,xmax,ymin,ymax,zmin,zmax);
+  G4bool any = false;
 
+  const std::vector<G4VisManager::UserVisAction>& runDurationUserVisActions =
+    fpVisManager->GetRunDurationUserVisActions();
+  for (size_t i = 0; i < runDurationUserVisActions.size(); i++) {
+    const G4String& name = runDurationUserVisActions[i].fName;
+    G4VUserVisAction* visAction = runDurationUserVisActions[i].fpUserVisAction;
+    if (newValue == "all" || name.find(newValue) != std::string::npos) {
+      any = true;
+      AddVisAction(name,visAction,pScene,runDuration,verbosity);
+    }
+  }
+
+  const std::vector<G4VisManager::UserVisAction>& endOfEventUserVisActions =
+    fpVisManager->GetEndOfEventUserVisActions();
+  for (size_t i = 0; i < endOfEventUserVisActions.size(); i++) {
+    const G4String& name = endOfEventUserVisActions[i].fName;
+    G4VUserVisAction* visAction = endOfEventUserVisActions[i].fpUserVisAction;
+    if (newValue == "all" || name.find(newValue) != std::string::npos) {
+      any = true;
+      AddVisAction(name,visAction,pScene,endOfEvent,verbosity);
+    }
+  }
+
+  const std::vector<G4VisManager::UserVisAction>& endOfRunUserVisActions =
+    fpVisManager->GetEndOfRunUserVisActions();
+  for (size_t i = 0; i < endOfRunUserVisActions.size(); i++) {
+    const G4String& name = endOfRunUserVisActions[i].fName;
+    G4VUserVisAction* visAction = endOfRunUserVisActions[i].fpUserVisAction;
+    if (newValue == "all" || name.find(newValue) != std::string::npos) {
+      any = true;
+      AddVisAction(name,visAction,pScene,endOfRun,verbosity);
+    }
+  }
+
+  if (!any) {
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout <<	"WARNING: No User Vis Action registered." << G4endl;
+    }
+    return;
+  }
+
+  const G4String& currentSceneName = pScene -> GetName ();
+  UpdateVisManagerScene (currentSceneName);
+}
+
+void G4VisCommandSceneAddUserAction::AddVisAction
+(const G4String& name,
+ G4VUserVisAction* visAction,
+ G4Scene* pScene,
+ G4VisCommandSceneAddUserAction::ActionType type,
+ G4VisManager::Verbosity verbosity)
+{
+  G4bool warn = verbosity >= G4VisManager::warnings;
+
+  const std::map<G4VUserVisAction*,G4VisExtent>& visExtentMap =
+    fpVisManager->GetUserVisActionExtents();
   G4VisExtent extent;
-  if (commandExtent.GetExtentRadius() > 0.) {
-    extent = commandExtent;
-  } else if (fpVisManager->GetUserActionExtent().GetExtentRadius() > 0.) {
-    extent = fpVisManager->GetUserActionExtent();
-  } else {
-    if (warn) {
+  std::map<G4VUserVisAction*,G4VisExtent>::const_iterator i =
+    visExtentMap.find(visAction);
+  if (i != visExtentMap.end()) extent = i->second;
+  if (warn) {
+    if (extent.GetExtentRadius() <= 0.) {
       G4cout <<	"WARNING: User Vis Action extent is null." << G4endl;
     }
   }
 
   G4VModel* model = new G4CallbackModel<G4VUserVisAction>(visAction);
-  model->SetGlobalDescription("Vis User Action");
-  model->SetGlobalTag(model->GetGlobalDescription());
+  model->SetType("User Vis Action");
+  model->SetGlobalTag(name);
+  model->SetGlobalDescription(name);
   model->SetExtent(extent);
-  const G4String& currentSceneName = pScene -> GetName ();
-  G4bool successful = pScene -> AddRunDurationModel (model, warn);
+  G4bool successful = false;;
+  switch (type) {
+  case runDuration:
+    successful = pScene -> AddRunDurationModel (model, warn);
+    break;
+  case endOfEvent:
+    successful = pScene -> AddEndOfEventModel (model, warn);
+    break;
+  case endOfRun:
+    successful = pScene -> AddEndOfRunModel (model, warn);
+    break;
+  }
   if (successful && verbosity >= G4VisManager::confirmations) {
+    const G4String& currentSceneName = pScene -> GetName ();
     G4cout << "User Vis Action added to scene \""
 	   << currentSceneName << "\"";
     if (verbosity >= G4VisManager::parameters) {
@@ -2172,7 +2199,6 @@ void G4VisCommandSceneAddUserAction::SetNewValue (G4UIcommand*,
     }
     G4cout << G4endl;
   }
-  UpdateVisManagerScene (currentSceneName);
 }
 
 ////////////// /vis/scene/add/volume ///////////////////////////////////////
@@ -2324,18 +2350,18 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
     return;
   }
 
-  const std::vector<G4VModel*>& rdModelList = pScene -> GetRunDurationModelList();
-  std::vector<G4VModel*>::const_iterator i;
+  const std::vector<G4Scene::Model>& rdModelList = pScene -> GetRunDurationModelList();
+  std::vector<G4Scene::Model>::const_iterator i;
   for (i = rdModelList.begin(); i != rdModelList.end(); ++i) {
-    if ((*i) -> GetGlobalDescription().find("G4PhysicalVolumeModel")
+    if (i->fpModel->GetGlobalDescription().find("G4PhysicalVolumeModel")
 	!= std::string::npos) {
-      if (((G4PhysicalVolumeModel*)(*i)) -> GetTopPhysicalVolume () == world) break;
+      if (((G4PhysicalVolumeModel*)(i->fpModel))->GetTopPhysicalVolume () == world) break;
     }
   }
   if (i != rdModelList.end()) {
     if (verbosity >= G4VisManager::warnings) {
       G4cout << "WARNING: There is already a volume, \""
-             << (*i) -> GetGlobalDescription()
+             << i -> fpModel -> GetGlobalDescription()
              << "\",\n in the run-duration model list of scene \""
              << pScene -> GetName()
              << "\".\n To get a clean scene:"

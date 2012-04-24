@@ -48,6 +48,7 @@
 #include "G4Plane3D.hh"
 #include "G4AttHolder.hh"
 #include "G4AttCheck.hh"
+#include "G4Text.hh"
 
 // GL2PS
 #include "Geant4_gl2ps.h"
@@ -439,13 +440,15 @@ void G4OpenGLViewer::Pick(GLdouble x, GLdouble y)
       //GLuint zmin = *p++;
       //GLuint zmax = *p++;
       //G4cout << "Hit " << i << ": " << nnames << " names"
-      //     << "\nzmin: " << zmin << ", zmax: " << zmax << G4endl;
+      //       << "\nzmin: " << zmin << ", zmax: " << zmax << G4endl;
       // ...just increment the pointer
       p++;
       p++;
       for (GLuint j = 0; j < nnames; ++j) {
 	GLuint name = *p++;
-	G4cout << "Name " << j << ": PickName: " << name << G4endl;
+	G4cout << "Hit: " << i
+	       << ", Sub-hit: " << j
+	       << ", PickName: " << name << G4endl;
 	std::map<GLuint, G4AttHolder*>::iterator iter =
 	  fOpenGLSceneHandler.fPickMap.find(name);
 	if (iter != fOpenGLSceneHandler.fPickMap.end()) {
@@ -666,10 +669,34 @@ bool G4OpenGLViewer::isGl2psWriting() {
 
 /* Draw Gl2Ps text if needed
  */
-void G4OpenGLViewer::DrawText(const char * textString,double,double,double, double size) {
-
+void G4OpenGLViewer::DrawText(const G4Text& g4text)
+{
+  // gl2ps or GL window ?
   if (isGl2psWriting()) {
-    gl2psText(textString,"Times-Roman",GLshort(size));
+
+    const G4Colour& c = fSceneHandler.GetTextColour(g4text);
+    glColor3d(c.GetRed(),c.GetGreen(),c.GetBlue());
+    G4VSceneHandler::MarkerSizeType sizeType;
+    G4double size = fSceneHandler.GetMarkerSize(g4text,sizeType);
+    //G4Point3D position = g4text.GetPosition();
+    G4String textString = g4text.GetText();
+    const char* textCString = textString.c_str();
+    // Don't care about position
+    gl2psText(textCString,"Times-Roman",GLshort(size));
+
+  } else {
+
+    static G4int callCount = 0;
+    ++callCount;
+    //if (callCount <= 10 || callCount%100 == 0) {
+    if (callCount <= 1) {
+      G4cout <<
+	"G4OpenGLViewer::DrawText: Not implemented for \""
+	     << fName <<
+	"\"\n  Called with "
+	     << g4text
+	     << G4endl;
+    }
   }
 }
 

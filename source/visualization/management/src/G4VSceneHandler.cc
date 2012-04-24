@@ -555,7 +555,7 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
 
   // Traverse geometry tree and send drawing primitives to window(s).
 
-  const std::vector<G4VModel*>& runDurationModelList =
+  const std::vector<G4Scene::Model>& runDurationModelList =
     fpScene -> GetRunDurationModelList ();
 
   if (runDurationModelList.size ()) {
@@ -569,26 +569,30 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
     G4ModelingParameters* pMP = CreateModelingParameters ();
 
     for (size_t i = 0; i < runDurationModelList.size (); i++) {
-      G4VModel* pModel = runDurationModelList[i];
-      // Note: this is not the place to take action on
-      // pModel->GetTransformation().  The model must take care of
-      // this in pModel->DescribeYourselfTo(*this).  See, for example,
-      // G4PhysicalVolumeModel and /vis/scene/add/logo.
-      pModel -> SetModelingParameters (pMP);
-      SetModel (pModel);  // Store for use by derived class.
-      pModel -> DescribeYourselfTo (*this);
-      pModel -> SetModelingParameters (0);
+      if (runDurationModelList[i].fActive) {
+	G4VModel* pModel = runDurationModelList[i].fpModel;
+	// Note: this is not the place to take action on
+	// pModel->GetTransformation().  The model must take care of
+	// this in pModel->DescribeYourselfTo(*this).  See, for example,
+	// G4PhysicalVolumeModel and /vis/scene/add/logo.
+	pModel -> SetModelingParameters (pMP);
+	SetModel (pModel);  // Store for use by derived class.
+	pModel -> DescribeYourselfTo (*this);
+	pModel -> SetModelingParameters (0);
+      }
     }
 
     // Repeat if required...
     if (fSecondPassRequested) {
       fSecondPass = true;
       for (size_t i = 0; i < runDurationModelList.size (); i++) {
-	G4VModel* pModel = runDurationModelList[i];
-	pModel -> SetModelingParameters (pMP);
-	SetModel (pModel);  // Store for use by derived class.
-	pModel -> DescribeYourselfTo (*this);
-	pModel -> SetModelingParameters (0);
+	if (runDurationModelList[i].fActive) {
+	  G4VModel* pModel = runDurationModelList[i].fpModel;
+	  pModel -> SetModelingParameters (pMP);
+	  SetModel (pModel);  // Store for use by derived class.
+	  pModel -> DescribeYourselfTo (*this);
+	  pModel -> SetModelingParameters (0);
+	}
       }
       fSecondPass = false;
       fSecondPassRequested = false;
@@ -598,8 +602,6 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
     EndModeling ();
 
   }
-
-  fpViewer->FinishView();  // Flush streams and/or swap buffers.
 
   fReadyForTransients = true;
 
@@ -665,23 +667,27 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
     DrawEndOfRunModels();
   }
 
+  fpViewer->FinishView();  // Flush streams and/or swap buffers.
+
   fMarkForClearingTransientStore = tmpMarkForClearingTransientStore;
 }
 
 void G4VSceneHandler::DrawEvent(const G4Event* event)
 {
-  const std::vector<G4VModel*>& EOEModelList =
+  const std::vector<G4Scene::Model>& EOEModelList =
     fpScene -> GetEndOfEventModelList ();
   size_t nModels = EOEModelList.size();
   if (nModels) {
     G4ModelingParameters* pMP = CreateModelingParameters();
     pMP->SetEvent(event);
     for (size_t i = 0; i < nModels; i++) {
-      G4VModel* pModel = EOEModelList [i];
-      pModel -> SetModelingParameters(pMP);
-      SetModel (pModel);
-      pModel -> DescribeYourselfTo (*this);
-      pModel -> SetModelingParameters(0);
+      if (EOEModelList[i].fActive) {
+	G4VModel* pModel = EOEModelList[i].fpModel;
+	pModel -> SetModelingParameters(pMP);
+	SetModel (pModel);
+	pModel -> DescribeYourselfTo (*this);
+	pModel -> SetModelingParameters(0);
+      }
     }
     delete pMP;
     SetModel (0);
@@ -690,18 +696,20 @@ void G4VSceneHandler::DrawEvent(const G4Event* event)
 
 void G4VSceneHandler::DrawEndOfRunModels()
 {
-  const std::vector<G4VModel*>& EORModelList =
+  const std::vector<G4Scene::Model>& EORModelList =
     fpScene -> GetEndOfRunModelList ();
   size_t nModels = EORModelList.size();
   if (nModels) {
     G4ModelingParameters* pMP = CreateModelingParameters();
     pMP->SetEvent(0);
     for (size_t i = 0; i < nModels; i++) {
-      G4VModel* pModel = EORModelList [i];
-      pModel -> SetModelingParameters(pMP);
-      SetModel (pModel);
-      pModel -> DescribeYourselfTo (*this);
-      pModel -> SetModelingParameters(0);
+      if (EORModelList[i].fActive) {
+	G4VModel* pModel = EORModelList[i].fpModel;
+	pModel -> SetModelingParameters(pMP);
+	SetModel (pModel);
+	pModel -> DescribeYourselfTo (*this);
+	pModel -> SetModelingParameters(0);
+      }
     }
     delete pMP;
     SetModel (0);

@@ -17,6 +17,56 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10th April 2012  Pere Mato  (opengl-V09-05-12)
+- G4OpenGLWin32Viewer.cc: Make it work for Win64
+  replacing [Get|Set]WindowLong() by [Get|Set]WindowLongPtr() and GWL_USERDATA by GWLP_USERDATA
+
+10th April 2012  John Allison  (opengl-V09-05-11)
+- Tagged.
+
+4th April 2012  John Allison
+- opengl-V09-05-10: Don't use.
+- X and Xm drivers: Implemented text layout and offset.
+- Qt drivers: Text OK, but layout and offset not yet implemented.
+- Win32 drivers: Text not implemented at all.
+
+4th April 2012  Laurent Garnier
+- G4OpenGLQtViewer : Fix many time tree items on non PV
+- G4OpenGLQtViewer : Add tooltip and font on tree viewer
+
+3rd April 2012  John Allison
+- G4OpenGLXm classes: Change G4Exception id to opengl20xx.
+
+3rd April 2012  Laurent Garnier
+- G4OpenGLQtViewer & G4OpenGLQtSceneHandler : rewriting methods to add a 
+    PV or non P volume in the tree viewer
+
+2nd April 2012  Laurent Garnier  (opengl-V09-05-09)
+- Add some #ifdef around debugging printf
+ 
+30th March 2012  John Allison
+- G4OpenGLStoredSceneHandler.cc: In EndModeling, make sure screen
+  corresponds to graphical database.
+- G4OpenGLImmediateSceneHandler: Removed RequestPrimitives.  No
+  longer needed since tests for transparency and second pass have
+  been moved to AddPrimitivePreamble.
+
+29th March 2012  Laurent Garnier
+- G4OpenGLQtViewer : Add setHiddenMarker On/Off context menu
+- G4OpenGLStoredQtSceneHandler: Add SetScene to clear Qt tree in 
+  case of scene change
+- G4OpenGLStoredSceneHandler.cc: In EndModeling instead of COMPILE_AND_EXECUTE
+  just COMPILE
+
+28th March 2012  John Allison
+- G4OpenGL(Immediate/Stored)SceneHandler: Correct treatment of
+  transparent primitives.  (Previously, only transparent solids
+  were corretly treated.)  This corrects a problem that when there
+  existed a transparent solid, primitives were drawn twice!
+
+28th March 2012  Laurent Garnier
+- 1st version of Qt tree, still some bug to be solved
+
 6th March 2012  John Allison  (opengl-V09-05-08)
 - Fix problem with persistent text that does not use gl commands,
   e.g., Qt text.

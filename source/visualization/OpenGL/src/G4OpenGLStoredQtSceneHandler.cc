@@ -39,6 +39,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4OpenGLQtViewer.hh"
 #include <typeinfo>
+#include <sstream>
 
 G4OpenGLStoredQtSceneHandler::G4OpenGLStoredQtSceneHandler
 (G4VGraphicsSystem& system,
@@ -75,7 +76,7 @@ G4bool G4OpenGLStoredQtSceneHandler::ExtraPOProcessing
     // actually selected, i.e., not culled.
     typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
     typedef std::vector<PVNodeID> PVPath;
-    const PVPath& drawnPVPath = pPVModel->GetDrawnPVPath();
+    const PVPath& fullPVPath = pPVModel->GetFullPVPath();
 
     // The simplest algorithm, used by the Open Inventor Driver
     // developers, is to rely on the fact the G4PhysicalVolumeModel
@@ -91,42 +92,27 @@ G4bool G4OpenGLStoredQtSceneHandler::ExtraPOProcessing
     // LAST.)  SO WE MUST BE MORE SOPHISTICATED IN CONSTRUCTING A
     // TREE.
 
-    
-    // Name, currentPOindex, copyNo
-    std::vector < std::pair<std::string,std::pair <unsigned int, unsigned int> > > treeVect;
-    std::pair<std::string,std::pair <unsigned int, unsigned int> > treeInfos;
-
-    for (PVPath::const_iterator i = drawnPVPath.begin();
-	 i != drawnPVPath.end(); ++i) {
-      treeInfos.second.first = currentPOListIndex;
-      treeInfos.second.second = i->GetCopyNo();
-      treeInfos.first = i->GetPhysicalVolume()->GetName().data();
-      treeVect.push_back(treeInfos);
-    }
-
     // build a path for tree viewer
     G4OpenGLQtViewer* pGLViewer = dynamic_cast<G4OpenGLQtViewer*>(fpViewer);
     if ( pGLViewer ) {
-      pGLViewer->addTreeElement(fpModel->GetCurrentDescription(),treeVect);
+      pGLViewer->addPVSceneTreeElement(fpModel->GetCurrentDescription(),fullPVPath,currentPOListIndex);
+#ifdef G4DEBUG_VIS_OGL
+      printf("....call addSceneTreeElement\n");
+#endif
     }
 
   } else {  // Not from a G4PhysicalVolumeModel.
 
     if (fpModel) {
-      // Create a place for current solid in root of scene graph tree...
-      // Name, currentPOindex, copyNo
-      std::vector < std::pair<std::string,std::pair <unsigned int, unsigned int> > > treeVect;
-      std::pair<std::string,std::pair <unsigned int, unsigned int> > treeInfos;
-      
-      treeInfos.second.first = currentPOListIndex;
-      treeInfos.second.second = 0;
-      treeInfos.first = fpModel->GetCurrentTag().data();
-      treeVect.push_back(treeInfos);
+
+#ifdef G4DEBUG_VIS_OGL
+      printf("\n G4OpenGLStoredQtSceneHandler::ExtraPOProcessing not PV : %s Type:%s currentPOindex:%d\n",fpModel->GetCurrentTag().data(),fpModel->GetType().data(),currentPOListIndex);
+#endif
       
       // build a path for tree viewer
       G4OpenGLQtViewer* pGLViewer = dynamic_cast<G4OpenGLQtViewer*>(fpViewer);
       if ( pGLViewer ) {
-        pGLViewer->addTreeElement(fpModel->GetCurrentDescription(),treeVect);
+        pGLViewer->addNonPVSceneTreeElement(fpModel->GetType(),currentPOListIndex,fpModel->GetCurrentDescription().data());
       }
     }
   }
@@ -158,7 +144,6 @@ void G4OpenGLStoredQtSceneHandler::ClearStore () {
 
   G4OpenGLStoredSceneHandler::ClearStore ();  // Sets need kernel visit, etc.
 
-  // Delete Qt Tree.
 }
 
 void G4OpenGLStoredQtSceneHandler::ClearTransientStore () {
@@ -173,6 +158,17 @@ void G4OpenGLStoredQtSceneHandler::ClearTransientStore () {
     fpViewer -> ClearView ();
     fpViewer -> DrawView ();
   }
+}
+
+void G4OpenGLStoredQtSceneHandler::SetScene(G4Scene* pScene){
+
+  if (pScene != fpScene) {
+    G4OpenGLQtViewer* pGLQtViewer = dynamic_cast<G4OpenGLQtViewer*>(fpViewer);
+    if ( pGLQtViewer ) {
+      pGLQtViewer->clearTreeWidget();
+    }
+  }
+  G4VSceneHandler::SetScene(pScene);
 }
 
 #endif

@@ -40,6 +40,7 @@ class G4UIcmdWithAString;
 #include "G4Transform3D.hh"
 #include "G4VisAttributes.hh"
 #include "G4Text.hh"
+#include "G4Timer.hh"
 
 class G4VisCommandSceneAddAxes: public G4VVisCommandScene {
 public:
@@ -70,6 +71,7 @@ private:
       fX(x), fY(y), fLayout(layout) {}
     void operator()(G4VGraphicsScene&, const G4Transform3D&);
     G4VisManager* fpVisManager;
+    G4Timer fTimer;
     G4int fSize;
     G4double fX, fY;
     G4Text::Layout fLayout;
@@ -122,10 +124,12 @@ private:
   G4VisCommandSceneAddFrame (const G4VisCommandSceneAddFrame&);
   G4VisCommandSceneAddFrame& operator = (const G4VisCommandSceneAddFrame&);
   struct Frame {
-    Frame(G4double size, G4int width): fSize(size), fWidth(width) {}
+    Frame(G4double size, G4double width, const G4Colour& colour):
+      fSize(size), fWidth(width), fColour(colour) {}
     void operator()(G4VGraphicsScene&, const G4Transform3D&);
     G4double fSize;
-    G4int fWidth;
+    G4double fWidth;
+    G4Colour fColour;
   };
   G4UIcommand* fpCommand;
 };
@@ -291,7 +295,10 @@ public:
 private:
   G4VisCommandSceneAddUserAction (const G4VisCommandSceneAddUserAction&);
   G4VisCommandSceneAddUserAction& operator = (const G4VisCommandSceneAddUserAction&);
-  G4UIcommand* fpCommand;
+  enum ActionType {runDuration, endOfEvent, endOfRun};
+  void AddVisAction(const G4String& name,G4VUserVisAction*,
+		    G4Scene*,ActionType,G4VisManager::Verbosity);
+  G4UIcmdWithAString* fpCommand;
 };
 
 class G4VisCommandSceneAddVolume: public G4VVisCommandScene {

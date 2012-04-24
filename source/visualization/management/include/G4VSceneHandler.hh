@@ -209,9 +209,9 @@ public: // With description
   G4bool              GetTransientsDrawnThisEvent () const;
   G4bool              GetTransientsDrawnThisRun   () const;
   const G4Transform3D& GetObjectTransformation    () const;
-  void          SetName          (const G4String&);
+  void                SetName          (const G4String&);
   void          SetCurrentViewer (G4VViewer*);
-  void          SetScene         (G4Scene*);
+  virtual void        SetScene         (G4Scene*);
   G4ViewerList& SetViewerList    ();  // Non-const so you can change.
   void          SetModel         (G4VModel*);
   void          SetMarkForClearingTransientStore (G4bool);

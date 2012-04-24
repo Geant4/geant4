@@ -48,11 +48,11 @@ G4Scene::G4Scene (const G4String& name):
 G4Scene::~G4Scene () {}
 
 G4bool G4Scene::AddRunDurationModel (G4VModel* pModel, G4bool warn) {
-  std::vector<G4VModel*>::const_iterator i;
+  std::vector<Model>::const_iterator i;
   for (i = fRunDurationModelList.begin ();
        i != fRunDurationModelList.end (); ++i) {
     if (pModel -> GetGlobalDescription () ==
-	(*i) -> GetGlobalDescription ()) break;
+	i->fpModel->GetGlobalDescription ()) break;
   }
   if (i != fRunDurationModelList.end ()) {
     if (warn) {
@@ -65,24 +65,91 @@ G4bool G4Scene::AddRunDurationModel (G4VModel* pModel, G4bool warn) {
     }
     return false;
   }
-  fRunDurationModelList.push_back (pModel);
+  fRunDurationModelList.push_back (Model(pModel));
   CalculateExtent ();
   return true;
 }
 
-void G4Scene::CalculateExtent () {
-  G4int nModels = fRunDurationModelList.size ();
+void G4Scene::CalculateExtent ()
+{
   G4BoundingSphereScene boundingSphereScene;
-  for (G4int i = 0; i < nModels; i++) {
-    const G4VisExtent& thisExtent =
-      fRunDurationModelList[i] -> GetExtent ();
-    G4Point3D thisCentre = thisExtent.GetExtentCentre ();
-    G4double thisRadius = thisExtent.GetExtentRadius ();
-    thisCentre.transform (fRunDurationModelList[i] -> GetTransformation ());
-    boundingSphereScene.AccrueBoundingSphere (thisCentre, thisRadius);
+
+  for (size_t i = 0; i < fRunDurationModelList.size(); i++) {
+    if (fRunDurationModelList[i].fActive) {
+      G4VModel* model = fRunDurationModelList[i].fpModel;
+      if (model -> Validate()) {  // Validates and also recomputes extent.
+	const G4VisExtent& thisExtent = model -> GetExtent ();
+	G4double thisRadius = thisExtent.GetExtentRadius ();
+	if (thisRadius > 0.) {
+	  G4Point3D thisCentre = thisExtent.GetExtentCentre ();
+	  thisCentre.transform (model -> GetTransformation ());
+	  boundingSphereScene.AccrueBoundingSphere (thisCentre, thisRadius);
+	}
+      } else {
+	G4ExceptionDescription ed;
+	ed << "Invalid model \"" << model->GetGlobalDescription()
+	   << "\".\n  Not included in extent calculation.";
+	G4Exception
+	  ("G4Scene::CalculateExtent",
+	   "visman0201", JustWarning, ed);
+      }
+    }
   }
+
+  for (size_t i = 0; i < fEndOfEventModelList.size(); i++) {
+    if (fEndOfEventModelList[i].fActive) {
+      G4VModel* model = fEndOfEventModelList[i].fpModel;
+      if (model -> Validate()) {  // Validates and also recomputes extent.
+	const G4VisExtent& thisExtent = model -> GetExtent ();
+	G4double thisRadius = thisExtent.GetExtentRadius ();
+	if (thisRadius > 0.) {
+	  G4Point3D thisCentre = thisExtent.GetExtentCentre ();
+	  thisCentre.transform (model -> GetTransformation ());
+	  boundingSphereScene.AccrueBoundingSphere (thisCentre, thisRadius);
+	}
+      } else {
+	G4ExceptionDescription ed;
+	ed << "Invalid model \"" << model->GetGlobalDescription()
+	   << "\".\n  Not included in extent calculation.";
+	G4Exception
+	  ("G4Scene::CalculateExtent",
+	   "visman0201", JustWarning, ed);
+      }
+    }
+  }
+
+  for (size_t i = 0; i < fEndOfRunModelList.size(); i++) {
+    if (fEndOfRunModelList[i].fActive) {
+      G4VModel* model = fEndOfRunModelList[i].fpModel;
+      if (model -> Validate()) {  // Validates and also recomputes extent.
+	const G4VisExtent& thisExtent = model -> GetExtent ();
+	G4double thisRadius = thisExtent.GetExtentRadius ();
+	if (thisRadius > 0.) {
+	  G4Point3D thisCentre = thisExtent.GetExtentCentre ();
+	  thisCentre.transform (model -> GetTransformation ());
+	  boundingSphereScene.AccrueBoundingSphere (thisCentre, thisRadius);
+	}
+      } else {
+	G4ExceptionDescription ed;
+	ed << "Invalid model \"" << model->GetGlobalDescription()
+	   << "\".\n  Not included in extent calculation.";
+	G4Exception
+	  ("G4Scene::CalculateExtent",
+	   "visman0201", JustWarning, ed);
+      }
+    }
+  }
+
   fExtent = boundingSphereScene.GetBoundingSphereExtent ();
   fStandardTargetPoint = fExtent.GetExtentCentre ();
+  if (fExtent.GetExtentRadius() <= 0.) {
+	G4Exception
+	  ("G4Scene::CalculateExtent",
+	   "visman0202", JustWarning,
+	   "Scene has no extent.  Please activate or add something."
+	   "\nThe camera needs to have something to point at!"
+	   "\n\"/vis/scene/list\" to see list of models.");
+  }
 }
 
 G4bool G4Scene::AddWorldIfEmpty (G4bool warn) {
@@ -125,22 +192,19 @@ G4bool G4Scene::AddEndOfEventModel (G4VModel* pModel, G4bool warn) {
   G4int i, nModels = fEndOfEventModelList.size ();
   for (i = 0; i < nModels; i++) {
     if (pModel -> GetGlobalDescription () ==
-	fEndOfEventModelList [i] -> GetGlobalDescription ()) break;
+	fEndOfEventModelList[i].fpModel -> GetGlobalDescription ()) break;
   }
   if (i < nModels) {
-    delete fEndOfEventModelList[i];
-    fEndOfEventModelList[i] = pModel;
     if (warn) {
       G4cout << "G4Scene::AddEndOfEventModel: a model \""
 	     << pModel -> GetGlobalDescription ()
 	     << "\"\n  is already in the end-of-event list of scene \""
-	     << fName <<
-	"\".\n  The old model has been deleted; this new model replaces it."
+	     << fName << "\"."
 	     << G4endl;
     }
-    return true;  // Model replaced sucessfully.
+    return false;
   }
-  fEndOfEventModelList.push_back (pModel);
+  fEndOfEventModelList.push_back (Model(pModel));
   return true;
 }
 
@@ -148,20 +212,17 @@ G4bool G4Scene::AddEndOfRunModel (G4VModel* pModel, G4bool warn) {
   G4int i, nModels = fEndOfRunModelList.size ();
   for (i = 0; i < nModels; i++) {
     if (pModel -> GetGlobalDescription () ==
-	fEndOfRunModelList [i] -> GetGlobalDescription ()) break;
+	fEndOfRunModelList[i].fpModel -> GetGlobalDescription ()) break;
   }
   if (i < nModels) {
-    delete fEndOfRunModelList[i];
-    fEndOfRunModelList[i] = pModel;
     if (warn) {
       G4cout << "G4Scene::AddEndOfRunModel: a model \""
 	     << pModel -> GetGlobalDescription ()
 	     << "\"\n  is already in the end-of-run list of scene \""
-	     << fName <<
-	"\".\n  The old model has been deleted; this new model replaces it."
+	     << fName << "\"."
 	     << G4endl;
     }
-    return true;  // Model replaced sucessfully.
+    return false;
   }
   fEndOfRunModelList.push_back (pModel);
   return true;
@@ -175,17 +236,23 @@ std::ostream& operator << (std::ostream& os, const G4Scene& s) {
 
   os << "\n  Run-duration model list:";
   for (i = 0; i < s.fRunDurationModelList.size (); i++) {
-    os << "\n  " << *(s.fRunDurationModelList[i]);
+    if (s.fRunDurationModelList[i].fActive) os << "\n  Active:   ";
+    else os << "\n  Inactive: ";
+    os << *(s.fRunDurationModelList[i].fpModel);
   }
 
   os << "\n  End-of-event model list:";
   for (i = 0; i < s.fEndOfEventModelList.size (); i++) {
-    os << "\n  " << *(s.fEndOfEventModelList[i]);
+    if (s.fEndOfEventModelList[i].fActive) os << "\n  Active:   ";
+    else os << "\n  Inactive: ";
+    os << *(s.fEndOfEventModelList[i].fpModel);
   }
 
   os << "\n  End-of-run model list:";
   for (i = 0; i < s.fEndOfRunModelList.size (); i++) {
-    os << "\n  " << *(s.fEndOfRunModelList[i]);
+    if (s.fEndOfRunModelList[i].fActive) os << "\n  Active:   ";
+    else os << "\n  Inactive: ";
+    os << *(s.fEndOfRunModelList[i].fpModel);
   }
 
   os << "\n  Extent or bounding box: " << s.fExtent;
@@ -213,6 +280,10 @@ G4bool G4Scene::operator != (const G4Scene& s) const {
   if (
       (fRunDurationModelList.size () !=
        s.fRunDurationModelList.size ())                 ||
+      (fEndOfEventModelList.size () !=
+       s.fEndOfEventModelList.size ())                  ||
+      (fEndOfRunModelList.size () !=
+       s.fEndOfRunModelList.size ())                    ||
       (fExtent               != s.fExtent)              ||
       !(fStandardTargetPoint == s.fStandardTargetPoint) ||
       fRefreshAtEndOfEvent   != s.fRefreshAtEndOfEvent  ||
@@ -220,10 +291,30 @@ G4bool G4Scene::operator != (const G4Scene& s) const {
       fMaxNumberOfKeptEvents != s.fMaxNumberOfKeptEvents
       ) return true;
 
+  /* A complete comparison should, perhaps, include a comparison of
+     individual models, but it is not easy to implement operator!= for
+     all models.  Also, it would be unfeasible to ask users to
+     implement opeerator!= if we ever get round to allowing
+     user-defined models.  Moreover, there is no editing of G4Scene
+     objects, apart from changing fRefreshAtEndOfEvent, etc; as far as
+     models are concerned, all you can ever do is add them, so a test
+     on size (above) is enough.
+
   for (size_t i = 0; i < fRunDurationModelList.size (); i++) {
     if (fRunDurationModelList[i] != s.fRunDurationModelList[i])
       return true;
   }
+
+  for (size_t i = 0; i < fEndOfEventModelList.size (); i++) {
+    if (fEndOfEventModelList[i] != s.fEndOfEventModelList[i])
+      return true;
+  }
+
+  for (size_t i = 0; i < fEndOfRunModelList.size (); i++) {
+    if (fEndOfRunModelList[i] != s.fEndOfRunModelList[i])
+      return true;
+  }
+  */
 
   return false;
 }

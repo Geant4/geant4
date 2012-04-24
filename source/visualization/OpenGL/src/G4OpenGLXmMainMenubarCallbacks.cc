@@ -318,7 +318,7 @@ void G4OpenGLXmViewer::actions_callback (Widget w,
   default:
     G4Exception
       ("G4OpenGLXmViewer::actions_callback",
-       "opengl0001", FatalException,
+       "opengl2001", FatalException,
        "Unrecognised widget child of control_callback");
   }
   
@@ -519,7 +519,7 @@ void G4OpenGLXmViewer::misc_callback (Widget w,
   default:
     G4Exception
       ("G4OpenGLXmViewer::misc_callback",
-       "opengl0002", FatalException,
+       "opengl2002", FatalException,
        "Unrecognised widget child of misc_callback.");
   }
   
@@ -549,7 +549,7 @@ void G4OpenGLXmViewer::set_wob_sens_callback (Widget w,
   } else {
     G4Exception
       ("G4OpenGLXmViewer::set_wob_sens_callback",
-       "opengl0003", FatalException,
+       "opengl2003", FatalException,
        "Bad value returned for dp in set_rot_sens_callback");
   }
   

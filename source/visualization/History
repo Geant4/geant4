@@ -24,6 +24,54 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+22nd April 2012  John Allison  (vis-V09-05-17)
+- visman-V09-05-17: G4VisCommandsSceneAdd: Fixed compiler warnings.
+
+11th April 2012  John Allison
+- visman-V09-05-16: Added /vis/scene/activateModel.
+
+10th April 2012  John Allison  (vis-V09-05-16)
+- opengl-V09-05-12:
+  o G4OpenGLWin32Viewer.cc: Make it work for Win64 (Pere Mato).
+- openinventor-V09-05-02:
+  o G4OOpenInventorWinViewer.cc: Make it work for Win64 (Pere Mato).
+
+10th April 2012  John Allison  (vis-V09-05-15)
+- opengl-V09-05-11:
+  o X and Xm drivers: Implemented text layout and offset.
+  o G4OpenGLQtViewer : Many fixes.
+  o G4OpenGLXm classes: Change G4Exception id to opengl20xx.
+
+10th April 2012  John Allison  (vis-V09-05-14)
+- modeling-V09-05-05: Undid deleterious effect of modeling-V09-05-02!!
+- visman-V09-05-15: Migrated to G4Scene::Model.
+- visman-V09-05-14: Added
+  G4VisManager::RegisterRunDuration/EndOfEvent/EndOfRunUserVisAction.
+  Now you can register any number of named vis actions and associate
+  them with particular types of action.  They are added to the scene
+  with /vis/scene/add/userAction [<name>] (default all).
+- gMocren-V09-05-01: Migrated to G4Scene::Model.
+- vistree-V09-05-01: Migrated to G4Scene::Model.
+
+8th April 2012  John Allison
+- visman-V09-05-13: Added /vis/viewer/copyViewFrom.
+- visman-V09-05-12: Added /vis/set/colour and /vis/set/lineWidth
+
+4th April 2012  John Allison  (vis-V09-05-14)
+- modeling-V09-05-04:
+  o Added Get/SetType for all models (sub-classes of G4VModel).
+  o G4PhysicalVolumeModel: Draw only one replica if top volume.
+  o Other small improvements and fixes.
+- visman-V09-05-11: Many small improvements.
+- opengl-V09-05-10:
+  o X and Xm drivers: Implemented text layout and offet.
+
+2nd April 2012  John Allison, Laurent Garnier  (vis-V09-05-13)
+- opengl-V09-05-09: Introduce QT tree ("Scene" panel in G4UIQt session).
+
+28th March 2012  John Allison
+- VRML-V09-05-02: Protect debug statement.
+
 26th March 2012  John Allison  (vis-V09-05-12)
 - visman-V09-05-10:
   o G4VisCommandsSet.cc: Added #include <cctype> for strict Windows compiler.

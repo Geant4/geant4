@@ -77,6 +77,7 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
   fpClippingSolid (0),
   fClippingMode   (subtraction)
 {
+  fType = "G4PhysicalVolumeModel";
   std::ostringstream o;
   o << fpTopPV -> GetCopyNo ();
   fGlobalTag = fpTopPV -> GetName () + "." + o.str();
@@ -207,9 +208,9 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
     G4double offset;
     G4bool consuming;
     pVPV -> GetReplicationData (axis, nReplicas, width,  offset, consuming);
+    if (fCurrentDepth == 0) nReplicas = 1;  // Just draw first
     G4VPVParameterisation* pP = pVPV -> GetParameterisation ();
     if (pP) {  // Parametrised volume.
-      if (fCurrentDepth == 0) nReplicas = 1;  // Just draw first
       for (int n = 0; n < nReplicas; n++) {
 	pSol = pP -> ComputeSolid (n, pVPV);
 	pP -> ComputeTransformation (n, pVPV);

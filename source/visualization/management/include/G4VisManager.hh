@@ -95,6 +95,7 @@
 
 #include <iostream>
 #include <vector>
+#include <map>
 
 class G4Scene;
 class G4UIcommand;
@@ -102,19 +103,17 @@ class G4UImessenger;
 class G4VisStateDependent;
 class G4VTrajectoryModel;
 class G4VUserVisAction;
-template <typename T> class G4VFilter;
-template <typename T> class G4VisFilterManager;
-template <typename T> class G4VisModelManager;
-template <typename T> class G4VModelFactory;
+template <typename> class G4VFilter;
+template <typename> class G4VisFilterManager;
+template <typename> class G4VisModelManager;
+template <typename> class G4VModelFactory;
 class G4Event;
 
-namespace {
-  // Useful typedef's
-  typedef G4VModelFactory<G4VTrajectoryModel> G4TrajDrawModelFactory;
-  typedef G4VModelFactory< G4VFilter<G4VTrajectory> > G4TrajFilterFactory;
-  typedef G4VModelFactory< G4VFilter<G4VHit> > G4HitFilterFactory;
-  typedef G4VModelFactory< G4VFilter<G4VDigi> > G4DigiFilterFactory;
-}
+// Useful typedef's
+typedef G4VModelFactory<G4VTrajectoryModel> G4TrajDrawModelFactory;
+typedef G4VModelFactory<G4VFilter<G4VTrajectory> > G4TrajFilterFactory;
+typedef G4VModelFactory<G4VFilter<G4VHit> > G4HitFilterFactory;
+typedef G4VModelFactory<G4VFilter<G4VDigi> > G4DigiFilterFactory;
 
 class G4VisManager: public G4VVisManager {
 
@@ -185,6 +184,18 @@ public: // With description
 
   void Initialise ();
   void Initialize ();  // Alias Initialise ().
+
+  // Optional registration of user vis actions.  Added to scene with
+  // /vis/scene/add/userAction.
+  void RegisterRunDurationUserVisAction
+  (const G4String& name, G4VUserVisAction*,
+   const G4VisExtent& = G4VisExtent::NullExtent);
+  void RegisterEndOfEventUserVisAction
+  (const G4String& name, G4VUserVisAction*,
+   const G4VisExtent& = G4VisExtent::NullExtent);
+  void RegisterEndOfRunUserVisAction
+  (const G4String& name, G4VUserVisAction*,
+   const G4VisExtent& = G4VisExtent::NullExtent);
 
   G4bool RegisterGraphicsSystem (G4VGraphicsSystem*);
   // Register an individual graphics system.  Normally this is done in
@@ -366,8 +377,16 @@ public: // With description
 
   const G4VTrajectoryModel* CurrentTrajDrawModel() const;
 
-  G4VUserVisAction*            GetUserAction               () const;
-  G4VisExtent                  GetUserActionExtent         () const;
+  struct UserVisAction {
+    UserVisAction(const G4String& name, G4VUserVisAction* pUserVisAction)
+      :fName(name), fpUserVisAction(pUserVisAction) {}
+    G4String fName;
+    G4VUserVisAction* fpUserVisAction;
+  };
+  const std::vector<UserVisAction>& GetRunDurationUserVisActions () const;
+  const std::vector<UserVisAction>& GetEndOfEventUserVisActions  () const;
+  const std::vector<UserVisAction>& GetEndOfRunUserVisActions    () const;
+  const std::map<G4VUserVisAction*,G4VisExtent>& GetUserVisActionExtents () const;
   G4VGraphicsSystem*           GetCurrentGraphicsSystem    () const;
   G4Scene*                     GetCurrentScene             () const;
   G4VSceneHandler*             GetCurrentSceneHandler      () const;
@@ -385,9 +404,10 @@ public: // With description
   G4bool                       GetAbortReviewKeptEvents    () const;
   const G4ViewParameters&      GetDefaultViewParameters    () const;
 
-  void SetUserAction (G4VUserVisAction* pVisAction,
-		      const G4VisExtent& = G4VisExtent::NullExtent);
-  void SetUserActionExtent (const G4VisExtent&);
+  void SetUserAction
+  (G4VUserVisAction* pVisAction,
+   const G4VisExtent& = G4VisExtent::NullExtent);  // Register run-duration.
+  void SetUserActionExtent (const G4VisExtent&);  //Legacy: deprecated.
   void              SetCurrentGraphicsSystem    (G4VGraphicsSystem*);
   void              SetCurrentScene             (G4Scene*);
   void              SetCurrentSceneHandler      (G4VSceneHandler*);
@@ -458,6 +478,7 @@ private:
 
   void PrintAvailableModels            (Verbosity) const;
   void PrintAvailableColours           (Verbosity) const;
+  void PrintAvailableUserVisActions   (Verbosity) const;
   void PrintInvalidPointers            () const;
   G4bool IsValidView ();
   // True if view is valid.  Prints messages and sanitises various data.
@@ -467,8 +488,10 @@ private:
 
   static G4VisManager*  fpInstance;         // Pointer to single instance. 
   G4bool                fInitialised;
-  G4VUserVisAction*     fpUserVisAction;    // User vis action callback.
-  G4VisExtent           fUserVisActionExtent;
+  std::vector<UserVisAction> fRunDurationUserVisActions;
+  std::vector<UserVisAction> fEndOfEventUserVisActions;
+  std::vector<UserVisAction> fEndOfRunUserVisActions;
+  std::map<G4VUserVisAction*,G4VisExtent> fUserVisActionExtents;
   G4VGraphicsSystem*    fpGraphicsSystem;   // Current graphics system.
   G4Scene*              fpScene;            // Current scene.
   G4VSceneHandler*      fpSceneHandler;     // Current scene handler.

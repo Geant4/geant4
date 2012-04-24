@@ -509,10 +509,10 @@ void G4GMocrenFileSceneHandler::GFBeginModeling( void )
       //scene->AddEndOfEventModel(new G4HitsModel());
       if(GFDEBUG_HIT) {
         G4Scene * scene = GetScene();
-	std::vector<G4VModel*> vmodel = scene->GetEndOfEventModelList();
-	std::vector<G4VModel*>::iterator itr = vmodel.begin();
+	std::vector<G4Scene::Model> vmodel = scene->GetEndOfEventModelList();
+	std::vector<G4Scene::Model>::iterator itr = vmodel.begin();
 	for(; itr != vmodel.end(); itr++) {
-	  G4cout << " IIIIII model name: " << (*itr)->GetGlobalTag() << G4endl;
+	  G4cout << " IIIIII model name: " << itr->fpModel->GetGlobalTag() << G4endl;
 	}
       }
 

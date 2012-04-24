@@ -70,10 +70,10 @@ protected:
   static G4Colour                   fCurrentColour;
   static G4Colour                   fCurrentTextColour;
   static G4Text::Layout             fCurrentTextLayout;
-  static G4double                   fCurrentLineThickness;
-  static G4VisAttributes::LineStyle fCurrentLineStyle;
-  static G4VMarker::FillStyle       fCurrentFillStyle;
-  static G4VMarker::SizeType        fCurrentSizeType;
+  static G4double                   fCurrentLineWidth;
+  //static G4VisAttributes::LineStyle fCurrentLineStyle;  Not yet used.
+  //static G4VMarker::FillStyle       fCurrentFillStyle;  Not yet used.
+  //static G4VMarker::SizeType        fCurrentSizeType;  Not yet used.
 };
 
 #include "G4VVisCommand.icc"
