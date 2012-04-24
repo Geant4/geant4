@@ -50,9 +50,9 @@ class StepMaxMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    StepMax* stepMax;
-    G4UIcmdWithADoubleAndUnit* StepMax1Cmd;    
-    G4UIcmdWithABool*          StepMax2Cmd;
+    StepMax*                   fStepMax;
+    G4UIcmdWithADoubleAndUnit* fStepMax1Cmd;    
+    G4UIcmdWithABool*          fStepMax2Cmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

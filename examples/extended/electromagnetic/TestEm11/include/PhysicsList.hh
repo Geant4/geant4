@@ -63,18 +63,18 @@ class PhysicsList: public G4VModularPhysicsList
     
     void AddDecay();
     void AddStepMax();       
-    StepMax* GetStepMaxProcess() {return stepMaxProcess;};
+    StepMax* GetStepMaxProcess() {return fStepMaxProcess;};
 
   private:
-    G4double cutForGamma;
-    G4double cutForElectron;
-    G4double cutForPositron;
+    G4double fCutForGamma;
+    G4double fCutForElectron;
+    G4double fCutForPositron;
        
-    G4String                             emName;
-    G4VPhysicsConstructor*               emPhysicsList;    
-    StepMax* stepMaxProcess;
+    G4String               fEmName;
+    G4VPhysicsConstructor* fEmPhysicsList;    
+    StepMax*               fStepMaxProcess;
     
-    PhysicsListMessenger* pMessenger;
+    PhysicsListMessenger*  fMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

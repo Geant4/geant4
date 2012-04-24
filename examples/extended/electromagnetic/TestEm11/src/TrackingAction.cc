@@ -41,7 +41,7 @@
 
 TrackingAction::TrackingAction(DetectorConstruction* det, RunAction* run,
                                HistoManager* histo)
-:detector(det),runAction(run), histoManager(histo)
+:fDetector(det),fRunAction(run), fHistoManager(histo)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,17 +54,17 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
  //
  G4double tracklen = track->GetTrackLength();
  if (trackID == 1) {
-    runAction->AddTrackLength(tracklen);
-    histoManager->FillHisto(3, tracklen);
+    fRunAction->AddTrackLength(tracklen);
+    fHistoManager->FillHisto(3, tracklen);
  } else if (track->GetDefinition()->GetPDGCharge() != 0.)
-    histoManager->FillHisto(6, tracklen);
+    fHistoManager->FillHisto(6, tracklen);
            
  //extract projected range of primary particle
  //
  if (trackID == 1) {
-   G4double x = track->GetPosition().x() + 0.5*detector->GetAbsorSizeX();
-   runAction->AddProjRange(x);
-   histoManager->FillHisto(5, x);
+   G4double x = track->GetPosition().x() + 0.5*fDetector->GetAbsorSizeX();
+   fRunAction->AddProjRange(x);
+   fHistoManager->FillHisto(5, x);
  }
             
  //mean step size of primary particle
@@ -72,7 +72,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
  if (trackID == 1) {
    G4int nbOfSteps = track->GetCurrentStepNumber();
    G4double stepSize = tracklen/nbOfSteps;
-   runAction->AddStepSize(nbOfSteps,stepSize);
+   fRunAction->AddStepSize(nbOfSteps,stepSize);
  }
             
  //status of primary particle : absorbed, transmited, reflected ?
@@ -83,7 +83,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
     if (track->GetMomentumDirection().x() > 0.) status = 1;
     else                                        status = 2;
   }
-  runAction->AddTrackStatus(status);
+  fRunAction->AddTrackStatus(status);
  }   
 }
 

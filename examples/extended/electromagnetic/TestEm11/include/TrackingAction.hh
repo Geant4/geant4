@@ -50,9 +50,9 @@ class TrackingAction : public G4UserTrackingAction {
     void PostUserTrackingAction(const G4Track*);
     
   private:
-    DetectorConstruction* detector;
-    RunAction*            runAction;
-    HistoManager*         histoManager;       
+    DetectorConstruction* fDetector;
+    RunAction*            fRunAction;
+    HistoManager*         fHistoManager;       
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+13-04-12 mma (testem11-V09-05-03)
+- all classes : apply G4 coding conventions
        
 05-03-12 mma (testem11-V09-05-02)
 - HistoManager.hh and .cc : migrate to new g4tools histogramming system
