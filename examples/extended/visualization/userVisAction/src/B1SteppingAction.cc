@@ -23,80 +23,70 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
 //
-// $Id: UVA_MagneticField.cc,v 1.2 2006-06-29 17:46:47 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//  
-//   User Field class implementation.
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file B1SteppingAction.cc
+/// \brief Implementation of the B1SteppingAction class
+
+#include "B1SteppingAction.hh"
+
+#include "B1DetectorConstruction.hh"
+
+#include "G4Step.hh"
+#include "G4RunManager.hh"
+#include "G4UnitsTable.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "UVA_MagneticField.hh"
-#include "G4FieldManager.hh"
+B1SteppingAction* B1SteppingAction::fgInstance = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-UVA_MagneticField::UVA_MagneticField()
-  : G4UniformMagField(G4ThreeVector())
+B1SteppingAction* B1SteppingAction::Instance()
 {
-  GetGlobalFieldManager()->SetDetectorField(this);
-  GetGlobalFieldManager()->CreateChordFinder(this);
+// Static acces function via G4RunManager 
+
+  return fgInstance;
+}      
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+B1SteppingAction::B1SteppingAction()
+: G4UserSteppingAction(),
+  fVolume(0),
+  fEnergy(0.)
+{ 
+  fgInstance = this;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-UVA_MagneticField::UVA_MagneticField(G4ThreeVector fieldVector)
-  : G4UniformMagField(fieldVector)
-{
-  GetGlobalFieldManager()->SetDetectorField(this);    
-  GetGlobalFieldManager()->CreateChordFinder(this);
+B1SteppingAction::~B1SteppingAction()
+{ 
+  fgInstance = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// Set the value of the Global Field to fieldValue along X
-//
-void UVA_MagneticField::SetFieldValue(G4double fieldValue)
+void B1SteppingAction::UserSteppingAction(const G4Step* step)
 {
-   G4UniformMagField::SetFieldValue(G4ThreeVector(fieldValue,0,0));
+  // get volume of the current step
+  G4LogicalVolume* volume 
+    = step->GetPreStepPoint()->GetTouchableHandle()
+      ->GetVolume()->GetLogicalVolume();
+      
+  // check if we are in scoring volume
+  if (volume != fVolume ) return;
+
+  // collect energy and track length step by step
+  G4double edep = step->GetTotalEnergyDeposit();
+  fEnergy += edep;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// Set the value of the Global Field
-//
-void UVA_MagneticField::SetFieldValue(G4ThreeVector fieldVector)
+void B1SteppingAction::Reset()
 {
-  // Find the Field Manager for the global field
-  G4FieldManager* fieldMgr= GetGlobalFieldManager();
-    
-  if(fieldVector!=G4ThreeVector(0.,0.,0.))
-  { 
-    G4UniformMagField::SetFieldValue(fieldVector);
-    fieldMgr->SetDetectorField(this);
-  } else {
-    // If the new field's value is Zero, then it is best to
-    //  insure that it is not used for propagation.
-    G4MagneticField* magField = NULL;
-    fieldMgr->SetDetectorField(magField);
-  }
+  fEnergy = 0.;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-UVA_MagneticField::~UVA_MagneticField()
-{
-  // GetGlobalFieldManager()->SetDetectorField(0);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4TransportationManager.hh"
-
-G4FieldManager*  UVA_MagneticField::GetGlobalFieldManager()
-{
-  return G4TransportationManager::GetTransportationManager()->GetFieldManager();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

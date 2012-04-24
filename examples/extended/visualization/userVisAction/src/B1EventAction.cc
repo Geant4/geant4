@@ -23,73 +23,82 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
 //
-// $Id: UVA_DetectorMessenger.cc,v 1.2 2006-06-29 17:46:42 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-// 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file B1EventAction.cc
+/// \brief Implementation of the B1EventAction class
 
-#include "UVA_DetectorMessenger.hh"
+#include "B1EventAction.hh"
 
-#include "UVA_DetectorConstruction.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
-#include "globals.hh"
+#include "B1RunAction.hh"
+#include "B1SteppingAction.hh"
+  // use of stepping action to get and reset accumulated energy  
+
+#include "G4RunManager.hh"
+#include "G4Event.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-UVA_DetectorMessenger::UVA_DetectorMessenger(UVA_DetectorConstruction* myDet)
-:myDetector(myDet)
-{ 
-  N02Dir = new G4UIdirectory("/N02/");
-  N02Dir->SetGuidance("UI commands specific to this example.");
-  
-  detDir = new G4UIdirectory("/N02/det/");
-  detDir->SetGuidance("detector control.");
-  
-  TargMatCmd = new G4UIcmdWithAString("/N02/det/setTargetMate",this);
-  TargMatCmd->SetGuidance("Select Material of the Target.");
-  TargMatCmd->SetParameterName("choice",false);
-  TargMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-  
-  ChamMatCmd = new G4UIcmdWithAString("/N02/det/setChamberMate",this);
-  ChamMatCmd->SetGuidance("Select Material of the Target.");
-  ChamMatCmd->SetParameterName("choice",false);
-  ChamMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
-  
-  FieldCmd = new G4UIcmdWithADoubleAndUnit("/N02/det/setField",this);  
-  FieldCmd->SetGuidance("Define magnetic field.");
-  FieldCmd->SetGuidance("Magnetic field will be in X direction.");
-  FieldCmd->SetParameterName("Bx",false);
-  FieldCmd->SetUnitCategory("Magnetic flux density");
-  FieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
-}
+B1EventAction* B1EventAction::fgInstance = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-UVA_DetectorMessenger::~UVA_DetectorMessenger()
+B1EventAction* B1EventAction::Instance()
 {
-  delete TargMatCmd;
-  delete ChamMatCmd;
-  delete FieldCmd;
-  delete detDir;
-  delete N02Dir;
+// Static acces function via G4RunManager 
+
+  return fgInstance;
+}      
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+B1EventAction::B1EventAction()
+: G4UserEventAction(),
+  fPrintModulo(100),
+  fEnergySum(0.),
+  fEnergy2Sum(0.)
+{ 
+  fgInstance = this;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void UVA_DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+B1EventAction::~B1EventAction()
 { 
-  if( command == TargMatCmd )
-   { myDetector->setTargetMaterial(newValue);}
-   
-  if( command == ChamMatCmd )
-   { myDetector->setChamberMaterial(newValue);}  
-  
-  if( command == FieldCmd )
-   { myDetector->SetMagField(FieldCmd->GetNewDoubleValue(newValue));}
+  fgInstance = 0;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B1EventAction::BeginOfEventAction(const G4Event* event)
+{  
+  G4int eventNb = event->GetEventID();
+  if (eventNb%fPrintModulo == 0) { 
+    G4cout << "\n---> Begin of event: " << eventNb << G4endl;
+  }
+ 
+  // Reset accounted energy in stepping action
+  B1SteppingAction::Instance()->Reset();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B1EventAction::EndOfEventAction(const G4Event* /*event*/)
+{
+  // accumulate statistics
+  G4double energy = B1SteppingAction::Instance()->GetEnergy();
+  fEnergySum  += energy;
+  fEnergy2Sum += energy*energy;
+}  
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B1EventAction::Reset()
+{
+  //reset cumulative quantities
+  //
+  fEnergySum = 0.;
+  fEnergy2Sum = 0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

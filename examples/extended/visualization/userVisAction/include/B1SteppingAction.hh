@@ -23,50 +23,56 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
 //
-// $Id: UVA_PhysicsList.hh,v 1.2 2006-06-29 17:46:16 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file B1SteppingAction.hh
+/// \brief Definition of the B1SteppingAction class
 
-#ifndef UVA_PhysicsList_h
-#define UVA_PhysicsList_h 1
+#ifndef B1SteppingAction_h
+#define B1SteppingAction_h 1
 
-#include "G4VUserPhysicsList.hh"
+#include "G4UserSteppingAction.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+class G4LogicalVolume;
 
-class UVA_PhysicsList: public G4VUserPhysicsList
+/// Stepping action class
+/// 
+/// It holds data member fEnergy for accumulating the energy deposit
+/// in a selected volume step by step.
+/// The selected volume is set from  the detector construction via the  
+/// SetVolume() function. The accumulated energy deposit is reset for each 
+/// new event via the Reset() function from the event action.
+
+class B1SteppingAction : public G4UserSteppingAction
 {
   public:
-    UVA_PhysicsList();
-   ~UVA_PhysicsList();
+    B1SteppingAction();
+    virtual ~B1SteppingAction();
 
-  protected:
-    // Construct particle and physics
-    void ConstructParticle();
-    void ConstructProcess();
- 
-    void SetCuts();
+    // static access method
+    static B1SteppingAction* Instance();
 
+    // method from the base class
+    virtual void UserSteppingAction(const G4Step*);
+
+    // reset accumulated energy
+    void Reset();
+
+    // set methods
+    void SetVolume(G4LogicalVolume* volume) { fVolume = volume; }
+  
+    // get methods
+    G4LogicalVolume* GetVolume() const { return fVolume; }
+    G4double GetEnergy() const { return fEnergy; }
    
-  protected:
-    // these methods Construct particles 
-    void ConstructBosons();
-    void ConstructLeptons();
-    void ConstructMesons();
-    void ConstructBaryons();
-
-  protected:
-  // these methods Construct physics processes and register them
-    void ConstructGeneral();
-    void ConstructEM();
+  private:
+    static B1SteppingAction* fgInstance;  
+  
+    G4LogicalVolume* fVolume;
+    G4double  fEnergy;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
- 

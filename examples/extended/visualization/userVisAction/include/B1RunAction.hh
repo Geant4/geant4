@@ -23,26 +23,36 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
 //
-// $Id: UVA_SteppingAction.cc,v 1.2 2006-06-29 17:46:57 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-// 
+/// \file B1RunAction.hh
+/// \brief Definition of the B1RunAction class
+
+#ifndef B1RunAction_h
+#define B1RunAction_h 1
+
+#include "G4UserRunAction.hh"
+#include "globals.hh"
+
+class G4Run;
+
+/// Run action class
+///
+/// In EndOfRunAction(), it calculates the dose in the selected volume 
+/// from the energy deposit accumulated via stepping and event actions.
+/// The computed dose is then printed on the screen.
+
+class B1RunAction : public G4UserRunAction
+{
+  public:
+    B1RunAction();
+    virtual ~B1RunAction();
+
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void   EndOfRunAction(const G4Run*);
+};
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "UVA_SteppingAction.hh"
-#include "G4SteppingManager.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-UVA_SteppingAction::UVA_SteppingAction()
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void UVA_SteppingAction::UserSteppingAction(const G4Step*)
-{ 
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#endif
 

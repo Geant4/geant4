@@ -33,7 +33,7 @@
 #include "G4VUserVisAction.hh"
 
 class UVA_VisAction: public G4VUserVisAction {
-  void Draw();
+  virtual void Draw();
 };
 
 #endif

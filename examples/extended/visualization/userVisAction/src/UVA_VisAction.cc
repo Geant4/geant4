@@ -41,18 +41,18 @@ void UVA_VisAction::Draw() {
   if (pVisManager) {
 
     // A simple logo...
-    G4Orb orb("my_logo_orb", 1*m);
+    G4Orb orb("my_logo_orb", 5*cm);
     G4Box box("my_cut_box", 1*m, 1*m, 1*m);
     G4SubtractionSolid logo("my_logo", &orb, &box, G4Translate3D(-1*m,1*m,1*m));
     G4VisAttributes va1(G4Colour::Red());
     va1.SetForceSolid(true);
-    pVisManager->Draw(logo,va1,G4Translate3D(0,-1*m,4.5*m));
+    pVisManager->Draw(logo,va1,G4Translate3D(-15*cm,-20*cm,25*cm));
 
     G4Text text("My beautiful logo");
     G4VisAttributes va2(G4Colour::Magenta());
     text.SetVisAttributes(va2);
     text.SetScreenSize(12.);
-    pVisManager->Draw(text,G4Translate3D(0,0,3.5*m));
+    pVisManager->Draw(text,G4Translate3D(-16*cm,-18*cm,25*cm));
 
   }
 }

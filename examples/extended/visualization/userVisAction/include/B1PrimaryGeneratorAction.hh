@@ -23,45 +23,50 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
 //
-// $Id: UVA_DetectorMessenger.hh,v 1.2 2006-06-29 17:46:07 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file B1PrimaryGeneratorAction.hh
+/// \brief Definition of the B1PrimaryGeneratorAction class
 
-#ifndef UVA_DetectorMessenger_h
-#define UVA_DetectorMessenger_h 1
+#ifndef B1PrimaryGeneratorAction_h
+#define B1PrimaryGeneratorAction_h 1
 
+#include "G4VUserPrimaryGeneratorAction.hh"
+#include "G4ParticleGun.hh"
 #include "globals.hh"
-#include "G4UImessenger.hh"
 
-class UVA_DetectorConstruction;
-class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWithADoubleAndUnit;
+class G4ParticleGun;
+class G4Event;
+class B1DetectorConstruction;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// The primary generator action class with particle gum.
+///
+/// The default kinematic is a 6 MeV gamma, randomly distribued 
+/// in front of the phantom across 80% of the (X,Y) phantom size.
 
-class UVA_DetectorMessenger: public G4UImessenger
+class B1PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    UVA_DetectorMessenger(UVA_DetectorConstruction*);
-   ~UVA_DetectorMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
-    
+    B1PrimaryGeneratorAction();    
+    virtual ~B1PrimaryGeneratorAction();
+
+    // static access method
+    static const B1PrimaryGeneratorAction* Instance();
+
+    // method from the base class
+    virtual void GeneratePrimaries(G4Event*);         
+  
+    // method to access particle gun
+    const G4ParticleGun* GetParticleGun() const { return fParticleGun; }
+  
   private:
-    UVA_DetectorConstruction* myDetector;
-    
-    G4UIdirectory*             N02Dir;
-    G4UIdirectory*             detDir;
-    G4UIcmdWithAString*        TargMatCmd;
-    G4UIcmdWithAString*        ChamMatCmd;    
-    G4UIcmdWithADoubleAndUnit* FieldCmd;
+    static B1PrimaryGeneratorAction* fgInstance;
+   
+    G4ParticleGun*  fParticleGun; // pointer a to G4 gun class
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+
 

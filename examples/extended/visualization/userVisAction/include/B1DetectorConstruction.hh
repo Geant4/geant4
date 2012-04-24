@@ -23,55 +23,32 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
 //
-// $Id: UVA_EventAction.cc,v 1.2 2006-06-29 17:46:45 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
-#include "UVA_EventAction.hh"
+/// \file B1DetectorConstruction.hh
+/// \brief Definition of the B1DetectorConstruction class
 
-#include "G4Event.hh"
-#include "G4EventManager.hh"
-#include "G4TrajectoryContainer.hh"
-#include "G4Trajectory.hh"
-#include "G4ios.hh"
+#ifndef B1DetectorConstruction_h
+#define B1DetectorConstruction_h 1
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
-UVA_EventAction::UVA_EventAction()
-{}
+#include "G4VUserDetectorConstruction.hh"
+#include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
-UVA_EventAction::~UVA_EventAction()
-{}
+class G4VPhysicalVolume;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
-void UVA_EventAction::BeginOfEventAction(const G4Event*)
-{}
+/// Detector construction class to define materials and geometry.
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
-void UVA_EventAction::EndOfEventAction(const G4Event* evt)
+class B1DetectorConstruction : public G4VUserDetectorConstruction
 {
-  G4int event_id = evt->GetEventID();
-  
-  // get number of stored trajectories
-  //
-  G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
-  G4int n_trajectories = 0;
-  if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
-  
-  // periodic printing
-  //
-  if (event_id < 100 || event_id%100 == 0) {
-    G4cout << ">>> Event " << evt->GetEventID() << G4endl;
-    G4cout << "    " << n_trajectories 
-	   << " trajectories stored in this event." << G4endl;
-  }
-}
+  public:
+    B1DetectorConstruction();
+    virtual ~B1DetectorConstruction();
+
+  public:
+    virtual G4VPhysicalVolume* Construct();
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#endif
+

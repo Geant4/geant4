@@ -23,40 +23,55 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
 //
-// $Id: UVA_PrimaryGeneratorAction.hh,v 1.2 2006-06-29 17:46:19 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
-#ifndef UVA_PrimaryGeneratorAction_h
-#define UVA_PrimaryGeneratorAction_h 1
+/// \file B1EventAction.hh
+/// \brief Definition of the B1EventAction class
 
-#include "G4VUserPrimaryGeneratorAction.hh"
+#ifndef B1EventAction_h
+#define B1EventAction_h 1
 
-class UVA_DetectorConstruction;
-class G4ParticleGun;
-class G4Event;
+#include "G4UserEventAction.hh"
+#include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
-class UVA_PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+class B1SteppingAction;
+
+/// Event action class
+///
+/// It holds data member fEnergySum and fEnergy2Sum for accumulating 
+/// the event energy deposit its square event by event.
+/// These data are then used in the run action to compute the dose.
+/// The accumulated energy and enrgy square sums are reset for each 
+/// new run via the Reset() function from the run action.
+
+class B1EventAction : public G4UserEventAction
 {
   public:
-    UVA_PrimaryGeneratorAction(UVA_DetectorConstruction*);    
-   ~UVA_PrimaryGeneratorAction();
+    B1EventAction();
+    virtual ~B1EventAction();
+    
+    // static access method
+    static B1EventAction* Instance();
 
-  public:
-    void GeneratePrimaries(G4Event*);
+    virtual void BeginOfEventAction(const G4Event* event);
+    virtual void EndOfEventAction(const G4Event* event);
 
+    void Reset();
+
+    // get methods
+    G4double GetEnergySum() const { return fEnergySum; }
+    G4double GetEnergy2Sum() const { return fEnergy2Sum; }
+     
   private:
-    G4ParticleGun* particleGun;
-    UVA_DetectorConstruction* myDetector;
+    static B1EventAction* fgInstance;  
+
+    G4int     fPrintModulo;
+    G4double  fEnergySum;
+    G4double  fEnergy2Sum;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 
-
+    
