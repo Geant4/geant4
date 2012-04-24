@@ -93,25 +93,25 @@ G4KineticTrackVector *G4ExcitedStringDecay::FragmentStrings
   G4KineticTrackVector * theResult = new G4KineticTrackVector;
   G4int attempts(0);
   G4bool success=false;
+  G4bool NeedEnergyCorrector=false;
   do {
-//G4cout<<"Check of momentum at string fragmentations. New try."<<G4endl;
+       //G4cout<<"Check of momentum at string fragmentations. New try."<<G4endl;
 	std::for_each(theResult->begin() , theResult->end() , DeleteKineticTrack());
 	theResult->clear();
 
 	attempts++;
-//G4cout<<G4endl<<"attempts "<<attempts<<G4endl;
+        //G4cout<<G4endl<<"attempts "<<attempts<<G4endl;
 	G4LorentzVector KTsecondaries(0.,0.,0.,0.);
-	G4bool NeedEnergyCorrector=false;
+	NeedEnergyCorrector=false;
 
 	for ( unsigned int astring=0; astring < theStrings->size(); astring++)
 	{
-//G4cout<<"String No "<<astring+1<<" "<<theStrings->operator[](astring)->Get4Momentum().mag2()<<" "<<theStrings->operator[](astring)->GetRightParton()->GetPDGcode()<<" "<<theStrings->operator[](astring)->GetLeftParton()->GetPDGcode()<<" "<<theStrings->operator[](astring)->Get4Momentum()<<G4endl;
-//G4int Uzhi; G4cin >>Uzhi;
+          //G4cout<<"String No "<<astring+1<<" "<<theStrings->operator[](astring)->Get4Momentum().mag2()<<" "<<theStrings->operator[](astring)->GetRightParton()->GetPDGcode()<<" "<<theStrings->operator[](astring)->GetLeftParton()->GetPDGcode()<<" "<<theStrings->operator[](astring)->Get4Momentum()<<G4endl;
+          //G4int Uzhi; G4cin >>Uzhi;
           G4KineticTrackVector * generatedKineticTracks = NULL;
-  
 	  if ( theStrings->operator[](astring)->IsExcited() )
 	  {
-//G4cout<<"Fragment String"<<G4endl;
+           //G4cout<<"Fragment String"<<G4endl;
   	     generatedKineticTracks=FragmentString(*theStrings->operator[](astring));
 	  } else {
 	     generatedKineticTracks = new G4KineticTrackVector;
@@ -127,30 +127,32 @@ G4KineticTrackVector *G4ExcitedStringDecay::FragmentStrings
           G4LorentzVector KTsum1(0.,0.,0.,0.);
           for ( unsigned int aTrack=0; aTrack<generatedKineticTracks->size();aTrack++)
 	  {
-//G4cout<<"Prod part "<<(*generatedKineticTracks)[aTrack]->GetDefinition()->GetParticleName()<<" "<<(*generatedKineticTracks)[aTrack]->Get4Momentum()<<G4endl;
+        	  //--debug-- G4cout<<"Prod part "<<(*generatedKineticTracks)[aTrack]->GetDefinition()->GetParticleName()<<" "<<(*generatedKineticTracks)[aTrack]->Get4Momentum()<<G4endl;
              theResult->push_back(generatedKineticTracks->operator[](aTrack));
              KTsum1+= (*generatedKineticTracks)[aTrack]->Get4Momentum();
 	  }
 	  KTsecondaries+=KTsum1;
 	
-	  if  ( KTsum1.e() > 0 && std::abs((KTsum1.e()-theStrings->operator[](astring)->Get4Momentum().e()) / KTsum1.e()) > perMillion ) 
+	      //--debug--G4cout << "String secondaries(" <<generatedKineticTracks->size()<< ")  momentum: "
+	      //--debug--<< theStrings->operator[](astring)->Get4Momentum() << " " << KTsum1 << G4endl;
+	  if  ( KTsum1.e() > 0 && std::abs((KTsum1.e()-theStrings->operator[](astring)->Get4Momentum().e()) / KTsum1.e()) > perMillion )
 	  {
-//--debug--           G4cout << "String secondaries(" <<generatedKineticTracks->size()<< ")  momentum: " 
-//--debug--	          << theStrings->operator[](astring)->Get4Momentum() << " " << KTsum1 << G4endl;
+		  //--debug--  G4cout << "String secondaries(" <<generatedKineticTracks->size()<< ")  momentum: "
+		  //--debug--    << theStrings->operator[](astring)->Get4Momentum() << " " << KTsum1 << G4endl;
 	    NeedEnergyCorrector=true;
  	  }
 
 //        clean up
 	  delete generatedKineticTracks;
 	}
-//--DEBUG  G4cout << "Strings/secs total  4 momentum " << KTsum << " " <<KTsecondaries << G4endl;
+       //--debug  G4cout << "Initial Strings / secondaries total  4 momentum " << KTsum << " " <<KTsecondaries << G4endl;
 
-        success=true;
-//G4cout<<"success "<<success<<G4endl;
+    success=true;
+        //G4cout<<"success "<<success<<G4endl;
 	if ( NeedEnergyCorrector ) success=EnergyAndMomentumCorrector(theResult, KTsum);
-//G4cout<<"success after Ecorr "<<success<<G4endl;
+		//G4cout<<"success after Ecorr "<<success<<G4endl;
   } while(!success && (attempts < 10));   // It was 100 !!! Uzhi
-//G4cout<<"End frag string"<<G4endl;
+  	  	  //G4cout<<"End frag string"<<G4endl;
 
 #ifdef debug_ExcitedStringDecay
   G4LorentzVector  KTsum1=0;
@@ -160,6 +162,7 @@ G4KineticTrackVector *G4ExcitedStringDecay::FragmentStrings
       <<"  " << (*theResult)[aTrack]->Get4Momentum() << G4endl;
       KTsum1+= (*theResult)[aTrack]->Get4Momentum();
   }
+
   G4cout << "Needcorrector/success " << NeedEnergyCorrector << "/" << success << ", Corrected total  4 momentum " << KTsum1  << G4endl;
   if ( ! success ) G4cout << "failed to correct E/p" << G4endl;  
 #endif
