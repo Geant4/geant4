@@ -12,7 +12,7 @@
                                           4.0 -9.4
                                           5.0 -11.1"/>
 
-  <matrix name="RINDEX" coldim="2" values="1.65 1.58" />
+  <matrix name="RINDEX" coldim="2" values="1.65*eV 1.58" />
  </define>
 
  <materials>
