@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Apr 20th 2012 Mikhail Kosov   (test29-V09-05-00)
+- workaround with a seed
+
 Nov 17th 2011 G.Folger        (test29-V09-04-05)
 - send "## end of run ##.." messages to stdout, not stderr
 

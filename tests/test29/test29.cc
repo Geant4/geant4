@@ -47,6 +47,7 @@
 //#define pdebug
 #define nout
 #define inter
+//#define rseed
 //#define pverb
 //#define pscan
 //#define smear
@@ -612,6 +613,9 @@ int main()
 #endif
     for (G4int iter=0; iter<nEvt; iter++)
     {
+#ifdef rseed
+	CLHEP::HepRandom::setTheSeed(iter+3500000);
+#endif
       G4int nr = static_cast<G4int>(iRandCount*G4UniformRand())+1;// Fake cicle number
       for(G4int j=0; j<nr; j++) G4UniformRand();                  // Fake calls
 #ifdef debug
