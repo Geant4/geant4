@@ -77,6 +77,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4EmModelManager.hh"
+#include "G4PhysicsTable.hh"
+#include "G4PhysicsVector.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -674,6 +676,17 @@ void G4EmModelManager::DumpModelList(G4int verb)
 	       << std::setw(8) << G4BestUnit(r->LowEdgeEnergy(j),"Energy")
 	       << "   Emax= " 
 	       << std::setw(8) << G4BestUnit(r->LowEdgeEnergy(j+1),"Energy");
+	G4PhysicsTable* table = model->GetCrossSectionTable();
+        if(table) {
+          G4PhysicsVector* v = (*table)[0];
+          if(v) {
+	    G4int n = v->GetVectorLength() - 1;
+	    G4cout << "  Table with " << n << " bins Emin= "
+	       << std::setw(6) << G4BestUnit(v->Energy(0),"Energy")
+	       << "   Emax= " 
+	       << std::setw(6) << G4BestUnit(v->Energy(n),"Energy");
+	  }
+	}
 	G4VEmAngularDistribution* an = model->GetAngularDistribution();
         if(an) { G4cout << "   " << an->GetName(); }
         if(fluoFlag && model->DeexcitationFlag()) { G4cout << "  FluoActive"; }

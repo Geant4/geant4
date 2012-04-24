@@ -17,6 +17,39 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20 April 12: V.Ivant (emutils-V09-05-09)
+- G4LossTableManager - added methods MinKinEnergy, MaxkinEnergy
+- G4EmModelManager - extended printout if cross section table is built for
+                     the model
+- G4EmCalculator - improved model selection for msc processes
+- G4VMultipleScatetring - removed transport cross section table,
+                          simplified AlongStepGetPhysicalInteractionLength
+                          method, added protection against zero
+                          kinetic energy into PostStepDoIt,
+                          general cleanup of the code
+- G4VMscModel - added building of transport cross section table and new 
+                method GetTransportCrossSection to be used in run time
+- G4LossTableBuilder - added method BuildTableForModel
+
+19 April 12: V.Ivant (emutils-V09-05-08)
+- G4EmCorrections : A.Ribon fixed reproducibility violation due to the cashing
+    of IonHighOrderCorrections with a vector depending on the ion charge.
+    The correction depends not only on the ion charge but also on its
+    mass, therefore the cashing based on the ion charge only depends on
+    which isotope is encountered first, which depends on the history,
+    and violated the reproducibility. The fix consists of using a map
+    for cashing, with the key given by the PDG encoding of the ion,
+    which is unique for each isotope.
+- G4VEmProcess - use ProposeWeight instead of ProposeParentWeight
+    to fix weights of secondary particle for gamma processes
+- G4LossTableManager - minor correction of number of bins per decade
+
+15 April 12: V.Ivant (emutils-V09-05-07)
+- G4LossTableBuilder - added method BuildTableForModel allowing to build
+    G4PhysicsTable for a model
+- G4VEmModel - added virtual method Value, by default computes cross section
+- G4VMscModel - added method GetTransportMeanFreePath 
+
 19 March 12: V.Ivant (emutils-V09-05-06)
 - G4EmCalculator - fixed compillation warning at gcc 4.6
 

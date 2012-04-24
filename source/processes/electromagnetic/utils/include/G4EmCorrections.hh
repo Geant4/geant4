@@ -42,6 +42,7 @@
 // 13.05.2006 Add corrections for ion stopping (V.Ivanhcenko)
 // 20.05.2008 Removed Finite Size correction (V.Ivanchenko)
 // 12.09.2008 Added inlined interfaces to effective charge (V.Ivanchenko)
+// 19.04.2012 Fix reproducibility problem (A.Ribon)
 //
 // Class Description:
 //
@@ -233,7 +234,7 @@ private:
   G4LPhysicsFreeVector* ThetaL;
 
   std::vector<const G4Material*> currmat;
-  std::vector<G4double>          thcorr[100];
+  std::map< G4int, std::vector<G4double> > thcorr;
   size_t        ncouples;
 
   const G4ParticleDefinition* particle;

@@ -63,6 +63,9 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4Material.hh"
+#include "G4VEmModel.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -376,6 +379,88 @@ void G4LossTableBuilder::InitialiseCouples()
       }
     }
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4PhysicsTable* 
+G4LossTableBuilder::BuildTableForModel(G4PhysicsTable* aTable, 
+				       G4VEmModel* model, 
+				       const G4ParticleDefinition* part,
+				       G4double emin, G4double emax,
+				       G4bool spline)
+{
+  // cheack input
+  G4PhysicsTable* table = G4PhysicsTableHelper::PreparePhysicsTable(aTable);
+  if(!table) { return table; }
+  if(emin >= emax) { 
+    table->clearAndDestroy();
+    delete table;
+    table = 0;
+    return table; 
+  }
+  InitialiseBaseMaterials(table);
+
+  G4int nbins = G4int(log10(emax/emin) + 0.5)
+    *G4LossTableManager::Instance()->GetNumberOfBinsPerDecade();
+  if(nbins < 3) { nbins = 3; }
+
+  // Access to materials
+  const G4ProductionCutsTable* theCoupleTable=
+        G4ProductionCutsTable::GetProductionCutsTable();
+  size_t numOfCouples = theCoupleTable->GetTableSize();
+
+  G4PhysicsLogVector* aVector = 0;
+  G4PhysicsLogVector* bVector = 0;
+
+  for(size_t i=0; i<numOfCouples; ++i) {
+
+    if (GetFlag(i)) {
+
+      // create physics vector and fill it
+      const G4MaterialCutsCouple* couple = 
+	theCoupleTable->GetMaterialCutsCouple(i);
+      delete (*table)[i];
+
+      // if start from zero then change the scale
+
+      const G4Material* mat = couple->GetMaterial();
+
+      G4double tmin = std::max(emin,model->MinPrimaryEnergy(mat,part));
+      if(0.0 >= tmin) { tmin = eV; }
+      G4int n = nbins + 1;
+
+      if(tmin >= emax) {
+	aVector = 0;
+      } else if(tmin > emin) {
+	G4int bin = nbins*G4int(std::log10(emax/tmin) + 0.5);
+	if(bin < 3) { bin = 3; }
+	n = bin + 1;
+	aVector = new G4PhysicsLogVector(tmin, emax, bin);
+
+      } else if(!bVector) {
+	aVector = new G4PhysicsLogVector(emin, emax, nbins);
+        bVector = aVector;
+
+      } else {
+        aVector = new G4PhysicsLogVector(*bVector);
+      }
+
+      if(aVector) {
+	aVector->SetSpline(spline);
+        for(G4int j=0; j<n; ++j) {
+          aVector->PutValue(j, model->Value(couple, part, aVector->Energy(j)));
+	}
+	if(spline) { aVector->FillSecondDerivatives(); }
+      }
+      G4PhysicsTableHelper::SetPhysicsVector(table, i, aVector);
+    }
+  }
+
+  //  G4cout << "G4LossTableBuilder::BuildTableForModel done for "
+  //         << particle->GetParticleName()
+  //         << G4endl;
+  return table; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

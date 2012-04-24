@@ -50,6 +50,8 @@
 #include "G4VMscModel.hh"
 #include "G4ParticleChangeForMSC.hh"
 #include "G4TransportationManager.hh"
+#include "G4LossTableManager.hh"
+#include "G4LossTableBuilder.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -82,7 +84,8 @@ G4VMscModel::~G4VMscModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ParticleChangeForMSC* G4VMscModel::GetParticleChangeForMSC()
+G4ParticleChangeForMSC* 
+G4VMscModel::GetParticleChangeForMSC(const G4ParticleDefinition* p)
 {
   if(!safetyHelper) {
     safetyHelper = G4TransportationManager::GetTransportationManager()
@@ -94,6 +97,20 @@ G4ParticleChangeForMSC* G4VMscModel::GetParticleChangeForMSC()
     change = static_cast<G4ParticleChangeForMSC*>(pParticleChange);
   } else {
     change = new G4ParticleChangeForMSC();
+  }
+  if(p) {
+    if(p->GetPDGMass() < GeV) {
+      G4double emin = std::max(LowEnergyLimit(),  eMinActive);
+      G4double emax = std::min(HighEnergyLimit(), eMaxActive);
+      G4LossTableManager* man = G4LossTableManager::Instance();
+      emin = std::max(emin, man->MinKinEnergy());
+      emax = std::min(emax, man->MaxKinEnergy());
+      G4LossTableBuilder* builder = man->GetTableBuilder();
+      xSection = builder->BuildTableForModel(xSection, this, p, 
+					     emin, emax, true);
+      theDensityFactor = builder->GetDensityFactors();
+      theDensityIdx = builder->GetCoupleIndexes();
+    }
   }
   return change;
 }
@@ -140,9 +157,7 @@ void G4VMscModel::SampleScattering(const G4DynamicParticle*, G4double)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4VMscModel::ComputeTruePathLengthLimit(const G4Track&, 
-						 G4PhysicsTable*, 
-						 G4double)
+G4double G4VMscModel::ComputeTruePathLengthLimit(const G4Track&, G4double&)
 {
   return DBL_MAX;
 }
@@ -168,5 +183,13 @@ void G4VMscModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				    const G4DynamicParticle*,
 				    G4double, G4double)
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4VMscModel::Value(const G4MaterialCutsCouple* couple,
+			    const G4ParticleDefinition* p, G4double ekin)
+{
+  return ekin*ekin*CrossSection(couple, p, ekin, 0.0, DBL_MAX);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

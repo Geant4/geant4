@@ -828,10 +828,6 @@ void G4LossTableManager::SetMinEnergy(G4double val)
   for(G4int i=0; i<n_loss; ++i) {
     if(loss_vector[i]) { loss_vector[i]->SetMinKinEnergy(val); }
   }
-  size_t msc = msc_vector.size();
-  for (size_t j=0; j<msc; ++j) {
-    if(msc_vector[j]) { msc_vector[j]->SetMinKinEnergy(val); }
-  }
   size_t emp = emp_vector.size();
   for (size_t k=0; k<emp; ++k) {
     if(emp_vector[k]) { emp_vector[k]->SetMinKinEnergy(val); }
@@ -846,10 +842,6 @@ void G4LossTableManager::SetMaxEnergy(G4double val)
   maxKinEnergy = val;
   for(G4int i=0; i<n_loss; ++i) {
     if(loss_vector[i]) { loss_vector[i]->SetMaxKinEnergy(val); }
-  }
-  size_t msc = msc_vector.size();
-  for (size_t j=0; j<msc; ++j) {
-    if(msc_vector[j]) { msc_vector[j]->SetMaxKinEnergy(val); }
   }
   size_t emp = emp_vector.size();
   for (size_t k=0; k<emp; ++k) {
@@ -896,7 +888,7 @@ void G4LossTableManager::SetDEDXBinningForCSDARange(G4int val)
 
 void G4LossTableManager::SetLambdaBinning(G4int val)
 {
-  G4int n = val/G4int(std::log10(maxKinEnergy/minKinEnergy));
+  G4int n = val/G4int(std::log10(maxKinEnergy/minKinEnergy) + 0.5);
   if(n < 5) {
     G4cout << "G4LossTableManager::SetLambdaBinning WARNING "
 	   << "too small number of bins " << val << "  ignored" 
@@ -905,10 +897,6 @@ void G4LossTableManager::SetLambdaBinning(G4int val)
   } 
   nbinsLambda = val;
   nbinsPerDecade = n;
-  size_t msc = msc_vector.size();
-  for (size_t j=0; j<msc; ++j) {
-    if(msc_vector[j]) { msc_vector[j]->SetBinning(val); }
-  }
   size_t emp = emp_vector.size();
   for (size_t k=0; k<emp; ++k) {
     if(emp_vector[k]) { emp_vector[k]->SetLambdaBinning(val); }
@@ -1069,6 +1057,20 @@ void G4LossTableManager::SetFactorForAngleLimit(G4double val)
 G4double G4LossTableManager::FactorForAngleLimit() const
 {
   return factorForAngleLimit;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4LossTableManager::MinKinEnergy() const
+{
+  return minKinEnergy;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4LossTableManager::MaxKinEnergy() const
+{
+  return maxKinEnergy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

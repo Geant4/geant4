@@ -46,6 +46,7 @@
 // 29.02.2008 V.Ivanchenko use expantions for log and power function
 // 21.04.2008 Updated computations for ions (V.Ivanchenko)
 // 20.05.2008 Removed Finite Size correction (V.Ivanchenko)
+// 19.04.2012 Fix reproducibility problem (A.Ribon)
 //
 //
 // Class Description:
@@ -213,18 +214,27 @@ G4double G4EmCorrections::IonHighOrderCorrections(const G4ParticleDefinition* p,
     if(Z >= 100)   Z = 99;
     else if(Z < 1) Z = 1;
 
-    // fill vector
-    if(thcorr[Z].size() == 0) {
-      thcorr[Z].resize(ncouples);
-      G4double ethscaled = eth*p->GetPDGMass()/proton_mass_c2;
+    G4double ethscaled = eth*p->GetPDGMass()/proton_mass_c2;
+    G4int ionPDG = p->GetPDGEncoding();
+    if(thcorr.find(ionPDG)==thcorr.end()) {  // Not found: fill the map
+      std::vector<G4double> v;
+      for(size_t i=0; i<ncouples; ++i){
+	v.push_back(ethscaled*ComputeIonCorrections(p,currmat[i],ethscaled));
+      }
+      thcorr.insert(std::pair< G4int, std::vector<G4double> >(ionPDG,v)); 
+    }
 
-      for(size_t i=0; i<ncouples; ++i) {
-	(thcorr[Z])[i] = ethscaled*ComputeIonCorrections(p, currmat[i], ethscaled);
-	//G4cout << i << ". ethscaled= " << ethscaled 
-	//<< " corr= " << (thcorr[Z])[i]/ethscaled << G4endl;
-      } 
-    } 
-    G4double rest = (thcorr[Z])[couple->GetIndex()];
+    //G4cout << " map size=" << thcorr.size() << G4endl;
+    //for(std::map< G4int, std::vector<G4double> >::iterator 
+    //    it = thcorr.begin(); it != thcorr.end(); ++it){
+    //  G4cout << "\t map element: first (key)=" << it->first  
+    //         << "\t second (vector): vec size=" << (it->second).size() << G4endl;
+    //  for(size_t i=0; i<(it->second).size(); ++i){
+    //    G4cout << "\t \t vec element: [" << i << "]=" << (it->second)[i] << G4endl; 
+    //  } 
+    //}
+
+    G4double rest = (thcorr.find(ionPDG)->second)[couple->GetIndex()];
 
     sum = ComputeIonCorrections(p,couple->GetMaterial(),e) - rest/e;
 
@@ -884,9 +894,12 @@ void G4EmCorrections::InitialiseForNewRun()
   ncouples = tb->GetTableSize();
   if(currmat.size() != ncouples) {
     currmat.resize(ncouples);
-    size_t i;
-    for(i=0; i<100; ++i) {thcorr[i].clear();}
-    for(i=0; i<ncouples; ++i) {
+    for(std::map< G4int, std::vector<G4double> >::iterator it = 
+        thcorr.begin(); it != thcorr.end(); ++it){
+      (it->second).clear();
+    }
+    thcorr.clear();
+    for(size_t i=0; i<ncouples; ++i) {
       currmat[i] = tb->GetMaterialCutsCouple(i)->GetMaterial();
       G4String nam = currmat[i]->GetName();
       for(G4int j=0; j<nIons; ++j) {

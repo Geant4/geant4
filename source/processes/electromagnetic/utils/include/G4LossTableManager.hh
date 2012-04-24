@@ -254,6 +254,10 @@ public:
 
   G4double FactorForAngleLimit() const;
 
+  G4double MinKinEnergy() const;
+
+  G4double MaxKinEnergy() const;
+
   const std::vector<G4VEnergyLossProcess*>& GetEnergyLossProcessVector();
 
   const std::vector<G4VEmProcess*>& GetEmProcessVector();

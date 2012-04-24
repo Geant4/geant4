@@ -315,7 +315,7 @@ G4double G4EmCalculator::GetCrossSectionPerVolume(G4double kinEnergy,
 
   if(couple && UpdateParticle(p, kinEnergy)) {
     G4int idx = couple->GetIndex();
-    FindLambdaTable(p, processName);
+    FindLambdaTable(p, processName, kinEnergy);
 
     if(currentLambda) {
       G4double e = kinEnergy*massRatio;
@@ -966,7 +966,8 @@ G4bool G4EmCalculator::UpdateCouple(const G4Material* material, G4double cut)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4EmCalculator::FindLambdaTable(const G4ParticleDefinition* p,
-                                     const G4String& processName)
+                                     const G4String& processName,
+				     G4double kinEnergy)
 {
   // Search for the process
   if (!currentLambda || p != lambdaParticle || processName != lambdaName) {
@@ -985,10 +986,12 @@ void G4EmCalculator::FindLambdaTable(const G4ParticleDefinition* p,
     G4VEnergyLossProcess* elproc = FindEnLossProcess(part, processName);
     if(elproc) {
       currentLambda = elproc->LambdaTable();
-      isApplicable = true;
-      if(verbose>1) { 
-	G4cout << "G4VEnergyLossProcess is found out: " << currentName 
-	       << G4endl;
+      if(currentLambda) {
+	isApplicable = true;
+	if(verbose>1) { 
+	  G4cout << "G4VEnergyLossProcess is found out: " << currentName 
+		 << G4endl;
+	}
       }
       return;
     }
@@ -997,9 +1000,11 @@ void G4EmCalculator::FindLambdaTable(const G4ParticleDefinition* p,
     G4VEmProcess* proc = FindDiscreteProcess(part, processName);
     if(proc) {
       currentLambda = proc->LambdaTable();
-      isApplicable    = true;
-      if(verbose>1) { 
-	G4cout << "G4VEmProcess is found out: " << currentName << G4endl;
+      if(currentLambda) {
+	isApplicable    = true;
+	if(verbose>1) { 
+	  G4cout << "G4VEmProcess is found out: " << currentName << G4endl;
+	}
       }
       return;
     }
@@ -1007,11 +1012,16 @@ void G4EmCalculator::FindLambdaTable(const G4ParticleDefinition* p,
     // Search for msc process
     G4VMultipleScattering* msc = FindMscProcess(part, processName);
     if(msc) {
-      currentLambda = msc->LambdaTable();
-      isApplicable    = true;
-      if(verbose>1) { 
-	G4cout << "G4VMultipleScattering is found out: " << currentName 
-	       << G4endl;
+      currentModel = msc->SelectModel(kinEnergy,0);
+      if(currentModel) {
+	currentLambda = currentModel->GetCrossSectionTable();
+        if(currentLambda) {
+	  isApplicable    = true;
+	  if(verbose>1) { 
+	    G4cout << "G4VMultipleScattering is found out: " << currentName 
+		   << G4endl;
+	  }
+	}
       }
     }
   }
@@ -1075,12 +1085,8 @@ G4bool G4EmCalculator::FindEmModel(const G4ParticleDefinition* p,
   if(!currentModel) {
     G4VMultipleScattering* proc = FindMscProcess(part, processName);
     if(proc) {
-      currentModel = proc->SelectModelForMaterial(kinEnergy, idx);
-      G4double eth = currentModel->LowEnergyLimit();
-      if(eth > 0.0) {
-	loweModel = proc->SelectModelForMaterial(eth - CLHEP::eV, idx);
-	if(loweModel == currentModel) { loweModel = 0; }
-      }
+      currentModel = proc->SelectModel(kinEnergy, idx);
+      loweModel = 0;
     }
   }
   if(currentModel) {

@@ -75,7 +75,6 @@
 #include "G4VContinuousDiscreteProcess.hh"
 #include "globals.hh"
 #include "G4Material.hh"
-#include "G4MaterialCutsCouple.hh"
 #include "G4ParticleChangeForMSC.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
@@ -84,9 +83,6 @@
 #include "G4MscStepLimitType.hh"
 
 class G4ParticleDefinition;
-class G4DataVector;
-class G4PhysicsTable;
-class G4PhysicsVector;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -171,40 +167,13 @@ public:
 			       G4double& currentSafety);
 
   //------------------------------------------------------------------------
-  // Specific methods to build and access Physics Tables
-  //------------------------------------------------------------------------
-
-  // Build empty Physics Vector
-  G4PhysicsVector* PhysicsVector(const G4MaterialCutsCouple*);
-
-  inline void SetBinning(G4int nbins);
-  inline G4int Binning() const;
-
-  inline void SetMinKinEnergy(G4double e);
-  inline G4double MinKinEnergy() const;
-
-  inline void SetMaxKinEnergy(G4double e);
-  inline G4double MaxKinEnergy() const;
-
-  inline void SetBuildLambdaTable(G4bool val);
-
-  inline G4PhysicsTable* LambdaTable() const;
-
-  // access particle type 
-  inline const G4ParticleDefinition* Particle() const;
-
-  //------------------------------------------------------------------------
   // Specific methods to set, access, modify models
   //------------------------------------------------------------------------
 
-protected:
   // Select model in run time
-  inline G4VEmModel* SelectModel(G4double kinEnergy);
+  inline G4VEmModel* SelectModel(G4double kinEnergy, size_t idx);
 
 public:
-  // Select model in run time
-  inline G4VEmModel* SelectModelForMaterial(G4double kinEnergy, 
-					    size_t& idxRegion) const;
 
   // Add model for region, smaller value of order defines which
   // model will be selected for a given energy interval  
@@ -241,6 +210,8 @@ public:
   inline G4MscStepLimitType StepLimitType() const;
   inline void SetStepLimitType(G4MscStepLimitType val);
 
+  inline void SetBuildLambdaTable(G4bool val);
+
   //------------------------------------------------------------------------
   // Run time methods
   //------------------------------------------------------------------------
@@ -258,15 +229,6 @@ protected:
 				  G4double currentMinimalStep,
 				  G4double& currentSafety);
 
-  // This method returns inversed transport cross section
-  inline G4double GetLambda(const G4ParticleDefinition* p, 
-			    G4double& kineticEnergy);
-
-  // defines current material in run time
-  inline void DefineMaterial(const G4MaterialCutsCouple* couple);
-
-  inline const G4MaterialCutsCouple* CurrentMaterialCutsCouple() const; 
-
 private:
 
   // hide  assignment operator
@@ -276,28 +238,19 @@ private:
   // ======== Parameters of the class fixed at construction =========
 
   G4EmModelManager*           modelManager;
-  G4bool                      buildLambdaTable;
 
   // ======== Parameters of the class fixed at initialisation =======
 
   std::vector<G4VMscModel*>   mscModels;
 
-  G4PhysicsTable*             theLambdaTable;
   const G4ParticleDefinition* firstParticle;
-
-  const std::vector<G4double>* theDensityFactor;
-  const std::vector<G4int>*    theDensityIdx;
 
   G4MscStepLimitType          stepLimit;
 
-  G4double                    minKinEnergy;
-  G4double                    maxKinEnergy;
   G4double                    skin;
   G4double                    facrange;
   G4double                    facgeom;
   G4double                    polarAngleLimit;
-
-  G4int                       nBins;
 
   G4bool                      latDisplasment;
   G4bool                      isIon;
@@ -311,130 +264,19 @@ protected:
 
 private:
 
-  G4VMscModel*                currentModel;
-
   // cache
-  const G4ParticleDefinition* currentParticle;
-  const G4MaterialCutsCouple* currentCouple;
-  size_t                      currentCoupleIndex;
-  size_t                      basedCoupleIndex;
+  G4VMscModel*                currentModel;
 
 };
 
 // ======== Run time inline methods ================
 
-inline const G4MaterialCutsCouple* 
-G4VMultipleScattering::CurrentMaterialCutsCouple() const
-{
-  return currentCouple;
-} 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline 
-void G4VMultipleScattering::DefineMaterial(const G4MaterialCutsCouple* couple)
+inline G4VEmModel* 
+G4VMultipleScattering::SelectModel(G4double kinEnergy, size_t coupleIndex)
 {
-  if(couple != currentCouple) {
-    currentCouple   = couple;
-    currentCoupleIndex = couple->GetIndex();
-    basedCoupleIndex   = (*theDensityIdx)[currentCoupleIndex];
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline 
-G4double G4VMultipleScattering::GetLambda(const G4ParticleDefinition* p, 
-					  G4double& e)
-{
-  G4double x;
-  if(theLambdaTable) {
-    x = (*theDensityFactor)[currentCoupleIndex]*
-      ((*theLambdaTable)[basedCoupleIndex])->Value(e);
-  } else {
-    x = currentModel->CrossSection(currentCouple,p,e);
-  }
-  if(x > 0.0) { x = 1./x; }
-  else        { x = DBL_MAX; } 
-  return x;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4VEmModel* G4VMultipleScattering::SelectModel(G4double kinEnergy)
-{
-  return modelManager->SelectModel(kinEnergy, currentCoupleIndex);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4VEmModel* G4VMultipleScattering::SelectModelForMaterial(
-		   G4double kinEnergy, size_t& idxRegion) const
-{
-  return modelManager->SelectModel(kinEnergy, idxRegion);
-}
-
-// ======== Get/Set inline methods used at initialisation ================
-
-inline void G4VMultipleScattering::SetBinning(G4int nbins)
-{
-  nBins = nbins;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4int G4VMultipleScattering::Binning() const
-{
-  return nBins;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VMultipleScattering::SetMinKinEnergy(G4double e)
-{
-  minKinEnergy = e;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4VMultipleScattering::MinKinEnergy() const
-{
-  return minKinEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VMultipleScattering::SetMaxKinEnergy(G4double e)
-{
-  maxKinEnergy = e;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4VMultipleScattering::MaxKinEnergy() const
-{
-  return maxKinEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline  void G4VMultipleScattering::SetBuildLambdaTable(G4bool val)
-{
-  buildLambdaTable = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4PhysicsTable* G4VMultipleScattering::LambdaTable() const
-{
-  return theLambdaTable;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline  const G4ParticleDefinition* G4VMultipleScattering::Particle() const
-{
-  return currentParticle;
+  return modelManager->SelectModel(kinEnergy, coupleIndex);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -524,6 +366,11 @@ inline void G4VMultipleScattering::SetStepLimitType(G4MscStepLimitType val)
   stepLimit = val;
   if(val == fMinimal) { facrange = 0.2; }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VMultipleScattering::SetBuildLambdaTable(G4bool)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

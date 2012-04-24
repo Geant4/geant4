@@ -166,6 +166,15 @@ public:
 				    G4double& niel,
 				    G4double length);
 
+  // value which may be tabulated (by default cross section)
+  virtual G4double Value(const G4MaterialCutsCouple*,
+			 const G4ParticleDefinition*,
+			 G4double kineticEnergy);
+
+  // threshold for zero value 
+  virtual G4double MinPrimaryEnergy(const G4Material*,
+				    const G4ParticleDefinition*);
+
   // initilisation at run time for a given material
   virtual void SetupForMaterial(const G4ParticleDefinition*,
 				const G4Material*,
@@ -246,6 +255,10 @@ public:
 
   void SetParticleChange(G4VParticleChange*, G4VEmFluctuationModel* f=0);
 
+  void SetCrossSectionTable(G4PhysicsTable*);
+
+  inline G4PhysicsTable* GetCrossSectionTable();
+
   inline G4VEmFluctuationModel* GetModelOfFluctuations();
 
   inline G4VEmAngularDistribution* GetAngularDistribution();
@@ -312,18 +325,23 @@ private:
 
   G4double        lowLimit;
   G4double        highLimit;
-  G4double        eMinActive;
-  G4double        eMaxActive;
   G4double        polarAngleLimit;
   G4double        secondaryThreshold;
   G4bool          theLPMflag;
+  G4bool          flagDeexcitation;
 
   G4int           nSelectors;
   std::vector<G4EmElementSelector*> elmSelectors;
 
 protected:
 
-  G4VParticleChange*  pParticleChange;
+  G4double        eMinActive;
+  G4double        eMaxActive;
+
+  G4VParticleChange*           pParticleChange;
+  G4PhysicsTable*              xSection;
+  const std::vector<G4double>* theDensityFactor;
+  const std::vector<G4int>*    theDensityIdx;
 
   // ======== Cashed values - may be state dependent ================
 
@@ -333,7 +351,6 @@ private:
   const G4Element*            fCurrentElement;
 
   G4int                  nsec;
-  G4bool                 flagDeexcitation;
   std::vector<G4double>  xsec;
 
 };
@@ -402,7 +419,7 @@ inline G4double G4VEmModel::CrossSection(const G4MaterialCutsCouple* c,
 
 inline G4double G4VEmModel::ComputeMeanFreePath(const G4ParticleDefinition* p,
 						G4double ekin,
-						const G4Material* material,     
+						const G4Material* material,
 						G4double emin,
 						G4double emax)
 {
@@ -428,12 +445,12 @@ inline G4double G4VEmModel::ComputeCrossSectionPerAtom(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline 
-const G4Element* G4VEmModel::SelectRandomAtom(const G4MaterialCutsCouple* couple,
-					      const G4ParticleDefinition* p,
-					      G4double kinEnergy,
-					      G4double cutEnergy,
-					      G4double maxEnergy)
+inline const G4Element* 
+G4VEmModel::SelectRandomAtom(const G4MaterialCutsCouple* couple,
+			     const G4ParticleDefinition* p,
+			     G4double kinEnergy,
+			     G4double cutEnergy,
+			     G4double maxEnergy)
 {
   fCurrentCouple = couple;
   if(nSelectors > 0) {
@@ -441,7 +458,7 @@ const G4Element* G4VEmModel::SelectRandomAtom(const G4MaterialCutsCouple* couple
       elmSelectors[couple->GetIndex()]->SelectRandomAtom(kinEnergy);
   } else {
     fCurrentElement = SelectRandomAtom(couple->GetMaterial(),p,kinEnergy,
-				      cutEnergy,maxEnergy);
+				       cutEnergy,maxEnergy);
   }
   return fCurrentElement;
 }
@@ -600,6 +617,11 @@ inline void G4VEmModel::SetDeexcitationFlag(G4bool val)
 inline const G4String& G4VEmModel::GetName() const 
 {
   return name;
+}
+
+inline G4PhysicsTable* G4VEmModel::GetCrossSectionTable()
+{
+  return xSection;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

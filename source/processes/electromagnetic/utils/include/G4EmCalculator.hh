@@ -86,17 +86,20 @@ public:
 
   ~G4EmCalculator();
 
-  //==================================================================================
+  //===========================================================================
   // Methods to access precalculated dE/dx and cross sections
   // Materials should exist in the list of the G4MaterialCutsCouple
-  //==================================================================================
+  //===========================================================================
 
-  G4double GetDEDX(G4double kinEnergy, const G4ParticleDefinition*, const G4Material*,
+  G4double GetDEDX(G4double kinEnergy, const G4ParticleDefinition*, 
+		   const G4Material*,
                    const G4Region* r = 0);
-  G4double GetDEDX(G4double kinEnergy, const G4String& part, const G4String& mat,
+  G4double GetDEDX(G4double kinEnergy, const G4String& part, 
+		   const G4String& mat,
                    const G4String& s = "world");
 
-  G4double GetRangeFromRestricteDEDX(G4double kinEnergy, const G4ParticleDefinition*, 
+  G4double GetRangeFromRestricteDEDX(G4double kinEnergy, 
+				     const G4ParticleDefinition*, 
 				     const G4Material*,
 				     const G4Region* r = 0);
   G4double GetRangeFromRestricteDEDX(G4double kinEnergy, const G4String& part, 
@@ -117,10 +120,12 @@ public:
 			const G4String& mat,
 			const G4String& s = "world");
 
-  G4double GetKinEnergy(G4double range, const G4ParticleDefinition*, const G4Material*,
-                   const G4Region* r = 0);
-  G4double GetKinEnergy(G4double range, const G4String& part, const G4String& mat,
-                   const G4String& s = "world");
+  G4double GetKinEnergy(G4double range, const G4ParticleDefinition*, 
+			const G4Material*,
+			const G4Region* r = 0);
+  G4double GetKinEnergy(G4double range, const G4String& part, 
+			const G4String& mat,
+			const G4String& s = "world");
 
   G4double GetCrossSectionPerVolume(
                    G4double kinEnergy, const G4ParticleDefinition*,
@@ -138,7 +143,8 @@ public:
   G4double GetMeanFreePath(G4double kinEnergy, const G4ParticleDefinition*,
                    const G4String& processName,  const G4Material*,
 		   const G4Region* r = 0);
-  G4double GetMeanFreePath(G4double kinEnergy, const G4String& part, const G4String& proc,
+  G4double GetMeanFreePath(G4double kinEnergy, const G4String& part, 
+			   const G4String& proc,
                    const G4String& mat, const G4String& s = "world");
 
   void PrintDEDXTable(const G4ParticleDefinition*);
@@ -147,18 +153,20 @@ public:
 
   void PrintInverseRangeTable(const G4ParticleDefinition*);
 
-  //==================================================================================
+  //===========================================================================
   // Methods to calculate dE/dx and cross sections "on fly"
   // Existing tables and G4MaterialCutsCouples are not used
-  //==================================================================================
+  //===========================================================================
 
   G4double ComputeDEDX(G4double kinEnergy, const G4ParticleDefinition*,
                        const G4String& processName,  const G4Material*,
 		       G4double cut = DBL_MAX);
-  G4double ComputeDEDX(G4double kinEnergy, const G4String& part, const G4String& proc,
+  G4double ComputeDEDX(G4double kinEnergy, const G4String& part, 
+		       const G4String& proc,
                        const G4String& mat, G4double cut = DBL_MAX);
 
-  G4double ComputeElectronicDEDX(G4double kinEnergy, const G4ParticleDefinition*,
+  G4double ComputeElectronicDEDX(G4double kinEnergy, 
+				 const G4ParticleDefinition*,
 				 const G4Material* mat, G4double cut = DBL_MAX);
   G4double ComputeElectronicDEDX(G4double kinEnergy, const G4String& part,
 				 const G4String& mat, G4double cut = DBL_MAX);
@@ -178,7 +186,8 @@ public:
                        const G4String& processName,  const G4Material*,
 		       G4double cut = 0.0);
   G4double ComputeCrossSectionPerVolume(
-                       G4double kinEnergy, const G4String& part, const G4String& proc,
+                       G4double kinEnergy, const G4String& part, 
+		       const G4String& proc,
                        const G4String& mat, G4double cut = 0.0);
 
   G4double ComputeCrossSectionPerAtom(
@@ -211,9 +220,9 @@ public:
                        G4double range, const G4String&,
 		       const G4String&);
 
-  //==================================================================================
+  //===========================================================================
   // Methods to access particles, materials, regions
-  //==================================================================================
+  //===========================================================================
 
   const G4ParticleDefinition* FindParticle(const G4String&);
 
@@ -223,13 +232,14 @@ public:
 
   const G4Region* FindRegion(const G4String&);
 
-  const G4MaterialCutsCouple* FindCouple(const G4Material*, const G4Region* r = 0);
+  const G4MaterialCutsCouple* FindCouple(const G4Material*, 
+					 const G4Region* r = 0);
 
   void SetVerbose(G4int val);
 
-  //==================================================================================
+  //===========================================================================
   // Private methods 
-  //==================================================================================
+  //===========================================================================
 
 private:
 
@@ -237,7 +247,9 @@ private:
 
   G4bool UpdateCouple(const G4Material*, G4double cut);
 
-  void FindLambdaTable(const G4ParticleDefinition*, const G4String& processName);
+  void FindLambdaTable(const G4ParticleDefinition*, 
+		       const G4String& processName,
+		       G4double kinEnergy);
 
   G4bool FindEmModel(const G4ParticleDefinition*, 
                      const G4String& processName,

@@ -39,6 +39,7 @@
 //
 // Modifications:
 // 07.04.2009 V.Ivanchenko moved msc methods from G4VEmModel to G4VMscModel 
+// 26.03.2012 V.Ivanchenko added transport x-section pointer and Get?Set methods
 //
 // Class Description:
 //
@@ -57,6 +58,8 @@
 #include "G4Track.hh"
 #include "G4SafetyHelper.hh"
 #include "G4VEnergyLossProcess.hh"
+#include "G4PhysicsTable.hh"
+#include <vector>
 
 class G4ParticleChangeForMSC;
 
@@ -70,8 +73,7 @@ public:
   virtual ~G4VMscModel();
 
   virtual G4double ComputeTruePathLengthLimit(const G4Track& track,  
-					      G4PhysicsTable*, 
-					      G4double currentMinimalStep);
+					      G4double& stepLimit);
 
   virtual G4double ComputeGeomPathLength(G4double truePathLength);
 
@@ -80,12 +82,17 @@ public:
   virtual void SampleScattering(const G4DynamicParticle*,
 				G4double safety);
 
-  // empty 
+  // empty method
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
 				 G4double tmax);
+
+  // value which may be tabulated (by default cross section)
+  virtual G4double Value(const G4MaterialCutsCouple*,
+			 const G4ParticleDefinition*,
+			 G4double kineticEnergy);
 
   //================================================================
   //  Set parameters of multiple scattering models
@@ -103,15 +110,24 @@ public:
 
   inline void SetSampleZ(G4bool);
 
+  //================================================================
+  //  Get/Set access to Physics Tables
+  //================================================================
+
   inline G4VEnergyLossProcess* GetIonisation() const;
 
   inline void SetIonisation(G4VEnergyLossProcess*);
+
+  //================================================================
+  //  Run time methods
+  //================================================================
 
 protected:
 
   // initialisation of the ParticleChange for the model
   // initialisation of interface with geometry and ionisation 
-  G4ParticleChangeForMSC* GetParticleChangeForMSC();
+  G4ParticleChangeForMSC* 
+  GetParticleChangeForMSC(const G4ParticleDefinition* p = 0);
 
   // shift point of the track PostStep 
   void ComputeDisplacement(G4ParticleChangeForMSC*,  
@@ -119,11 +135,14 @@ protected:
                            G4double displacement,
 			   G4double postsafety);
 
+  // convert true length to geometry length
+  inline G4double ConvertTrueToGeom(G4double& tLength, G4double& gLength);
+
   // compute safety
   inline G4double ComputeSafety(const G4ThreeVector& position, G4double limit);
 
   // compute linear distance to a geometry boundary
-  inline G4double ComputeGeomLimit(const G4Track& position, G4double& presafety, 
+  inline G4double ComputeGeomLimit(const G4Track&, G4double& presafety, 
 				   G4double limit);
 
   inline G4double GetRange(const G4ParticleDefinition* part,
@@ -133,6 +152,11 @@ protected:
   inline G4double GetEnergy(const G4ParticleDefinition* part,
 			    G4double range,
 			    const G4MaterialCutsCouple* couple);
+
+  // G4MaterialCutsCouple should be defined before call to this method
+  inline 
+  G4double GetTransportMeanFreePath(const G4ParticleDefinition* part,
+				    G4double kinEnergy);
 
 private:
 
@@ -218,6 +242,16 @@ inline G4double G4VMscModel::ComputeSafety(const G4ThreeVector& position,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+inline G4double G4VMscModel::ConvertTrueToGeom(G4double& tlength, 
+					       G4double& glength)
+{
+  glength = ComputeGeomPathLength(tlength);
+  // should return true length 
+  return tlength;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 inline G4double G4VMscModel::ComputeGeomLimit(const G4Track& track, 
 					      G4double& presafety, 
 					      G4double limit)
@@ -240,8 +274,9 @@ G4VMscModel::GetRange(const G4ParticleDefinition* part,
 {
   localrange = DBL_MAX;
   localtkin  = kinEnergy;
-  if(ionisation) { localrange = ionisation->GetRangeForLoss(localtkin, couple); }
-  else { 
+  if(ionisation) { 
+    localrange = ionisation->GetRangeForLoss(localtkin, couple); 
+  } else { 
     G4double q = part->GetPDGCharge()/eplus;
     localrange = kinEnergy/(dedx*q*q*couple->GetMaterial()->GetDensity()); 
   }
@@ -274,6 +309,24 @@ inline G4VEnergyLossProcess* G4VMscModel::GetIonisation() const
 inline void G4VMscModel::SetIonisation(G4VEnergyLossProcess* p)
 {
   ionisation = p;
+}
+
+inline G4double 
+G4VMscModel::GetTransportMeanFreePath(const G4ParticleDefinition* part,
+				      G4double ekin)
+{
+  G4double x;
+  if(xSection) {
+    G4int idx = CurrentCouple()->GetIndex();
+    x = (*xSection)[(*theDensityIdx)[idx]]->Value(ekin)
+      *(*theDensityFactor)[idx]/(ekin*ekin);
+  } else { 
+    x = CrossSectionPerVolume(CurrentCouple()->GetMaterial(), part, ekin, 
+			      0.0, DBL_MAX); 
+  }
+  if(0.0 >= x) { x = DBL_MAX; }
+  else { x = 1.0/x; }
+  return x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
