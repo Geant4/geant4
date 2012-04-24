@@ -31,6 +31,7 @@
 // Date:      18 October 2011
 //
 // Modified:  
+//            05 April 2012, A. Ribon : added anti_sigma+ .
 //            02 November 2011, A. Ribon : migration to the new exceptions.
 //
 //----------------------------------------------------------------------------
@@ -105,16 +106,19 @@ G4FTFCaptureAtRest::~G4FTFCaptureAtRest() {
 
 
 G4bool G4FTFCaptureAtRest::IsApplicable( const G4ParticleDefinition& particle )  {
-  // For the time being, we use Fritiof annihilation at rest only for
-  // anti-protons, but it could apply as well for anti-Sigma+ .
+  // We use Fritiof annihilation at rest for anti-protons and anti-Sigma+ .
   // For the other anti-baryons that Fritiof is able to annihilate on a
   // nucleus, i.e. anti-neutron, anti-Lambda0, anti-Sigma-, anti-Sigma0,
   // anti-Csi-, anti-Csi0, and anti-Omega-, they cannot have "at rest"
   // capture in a nucleus because either they are neutrals and therefore
   // never at rest, or they are positively charged and therefore cannot
   // be captured in a nucleus.
-  if ( particle == *( G4AntiProton::AntiProton() ) ) return true;
-  return false;
+  G4bool answer = false;
+  if ( particle == *( G4AntiProton::AntiProton() ) || 
+       particle == *( G4AntiSigmaPlus::AntiSigmaPlus() ) ) { 
+    answer = true;
+  }
+  return answer;
 }
 
 void G4FTFCaptureAtRest::PreparePhysicsTable(const G4ParticleDefinition& p) 
@@ -236,7 +240,7 @@ G4VParticleChange* G4FTFCaptureAtRest::AtRestDoIt( const G4Track& track, const G
   G4LorentzVector initial4mom = projectile4mom + target4mom;
   G4LorentzVector diff = initial4mom - final4mom;
   const G4double threshold = 1.0*MeV;
-  //G4cout << "===ANTI-PROTON CAPTURE AT REST=== : Ekin = " 
+  //G4cout << "===FTF CAPTURE AT REST=== : Ekin = " 
   //       << ( projectile4mom.e() - projectile4mom.mag() ) / MeV << G4endl;  // Debug
   if ( std::abs( diff.e() )  > threshold  ||
        std::abs( diff.px() ) > threshold  ||
