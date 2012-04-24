@@ -64,10 +64,10 @@ class RunAction : public G4UserRunAction
     G4double GetEnergyCut  (G4Material*, G4int);
                         
   private:
-    DetectorConstruction*   detector;
-    PrimaryGeneratorAction* primary;
-    ProcessesCount*         ProcCounter;
-    HistoManager*           histoManager;
+    DetectorConstruction*   fDetector;
+    PrimaryGeneratorAction* fPrimary;
+    ProcessesCount*         fProcCounter;
+    HistoManager*           fHistoManager;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

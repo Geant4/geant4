@@ -46,7 +46,7 @@
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim,
                      HistoManager* HistM)
-  : detector(det), primary(prim), ProcCounter(0), histoManager(HistM)
+  : fDetector(det), fPrimary(prim), fProcCounter(0), fHistoManager(HistM)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,9 +64,9 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
   CLHEP::HepRandom::showEngineStatus();
 
-  ProcCounter = new ProcessesCount;
+  fProcCounter = new ProcessesCount;
   
-  histoManager->book();
+  fHistoManager->book();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -74,12 +74,12 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 void RunAction::CountProcesses(G4String procName)
 {
    //does the process  already encounted ?
-   size_t nbProc = ProcCounter->size();
+   size_t nbProc = fProcCounter->size();
    size_t i = 0;
-   while ((i<nbProc)&&((*ProcCounter)[i]->GetName()!=procName)) i++;
-   if (i == nbProc) ProcCounter->push_back( new OneProcessCount(procName));
+   while ((i<nbProc)&&((*fProcCounter)[i]->GetName()!=procName)) i++;
+   if (i == nbProc) fProcCounter->push_back( new OneProcessCount(procName));
 
-   (*ProcCounter)[i]->Count();
+   (*fProcCounter)[i]->Count();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -92,13 +92,13 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   std::ios::fmtflags mode = G4cout.flags();
   G4int  prec = G4cout.precision(2);
     
-  G4Material* material = detector->GetMaterial();
-  G4double length  = detector->GetSize();
+  G4Material* material = fDetector->GetMaterial();
+  G4double length  = fDetector->GetSize();
   G4double density = material->GetDensity();
    
-  G4String particle = primary->GetParticleGun()->GetParticleDefinition()
+  G4String particle = fPrimary->GetParticleGun()->GetParticleDefinition()
                       ->GetParticleName();    
-  G4double energy = primary->GetParticleGun()->GetParticleEnergy();
+  G4double energy = fPrimary->GetParticleGun()->GetParticleEnergy();
   
   G4cout << "\n The run consists of " << NbOfEvents << " "<< particle << " of "
          << G4BestUnit(energy,"Energy") << " through " 
@@ -109,10 +109,10 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   //total number of process calls
   G4double countTot = 0.;
   G4cout << "\n Number of process calls --->";
-  for (size_t i=0; i< ProcCounter->size();i++) {
-     G4String procName = (*ProcCounter)[i]->GetName();
+  for (size_t i=0; i< fProcCounter->size();i++) {
+     G4String procName = (*fProcCounter)[i]->GetName();
      if (procName != "Transportation") {
-       G4int count    = (*ProcCounter)[i]->GetCounter(); 
+       G4int count    = (*fProcCounter)[i]->GetCounter(); 
        G4cout << "\t" << procName << " : " << count;
        countTot += count;
      }
@@ -136,8 +136,8 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   //
   if(particle == "mu+" || particle == "mu-") { 
     totalCrossSection = 0.;
-    for (size_t i=0; i< ProcCounter->size();i++) {
-      G4String procName = (*ProcCounter)[i]->GetName();
+    for (size_t i=0; i< fProcCounter->size();i++) {
+      G4String procName = (*fProcCounter)[i]->GetName();
       if (procName != "Transportation")
 	totalCrossSection += ComputeTheory(procName, NbOfEvents);
     }
@@ -155,15 +155,15 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout.setf(mode,std::ios::floatfield);
   G4cout.precision(prec);         
 
-  // delete and remove all contents in ProcCounter 
-  while (ProcCounter->size()>0){
-    OneProcessCount* aProcCount=ProcCounter->back();
-    ProcCounter->pop_back();
+  // delete and remove all contents in fProcCounter 
+  while (fProcCounter->size()>0){
+    OneProcessCount* aProcCount=fProcCounter->back();
+    fProcCounter->pop_back();
     delete aProcCount;
   }
-  delete ProcCounter;
+  delete fProcCounter;
   
-  histoManager->save();
+  fHistoManager->save();
   
   // show Rndm status
   CLHEP::HepRandom::showEngineStatus();
@@ -173,8 +173,8 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
 G4double RunAction::ComputeTheory(G4String process, G4int NbOfMu)    
 {   
-  G4Material* material = detector->GetMaterial();
-  G4double ekin = primary->GetParticleGun()->GetParticleEnergy();
+  G4Material* material = fDetector->GetMaterial();
+  G4double ekin = fPrimary->GetParticleGun()->GetParticleEnergy();
   MuCrossSections crossSections;
 
   G4int id = 0; G4double cut = 0.;
@@ -201,15 +201,15 @@ G4double RunAction::ComputeTheory(G4String process, G4int NbOfMu)
 		      
   G4AnaH1* histoTh = 0;
   ////G4AnaH1* histoMC = 0;     
-  if (histoManager->HistoExist(id)) {
+  if (fHistoManager->HistoExist(id)) {
     ////histoMC  = analysisManager->GetH1(id);  
-    nbOfBins = histoManager->GetNbins(id);
-    binMin   = histoManager->GetVmin (id);
-    binMax   = histoManager->GetVmax (id);
-    binWidth = histoManager->GetBinWidth(id);
+    nbOfBins = fHistoManager->GetNbins(id);
+    binMin   = fHistoManager->GetVmin (id);
+    binMax   = fHistoManager->GetVmax (id);
+    binWidth = fHistoManager->GetBinWidth(id);
     
     G4String labelTh = label[MaxHisto + id];
-    G4String titleTh = histoManager->GetTitle(id) + " (Th)";
+    G4String titleTh = fHistoManager->GetTitle(id) + " (Th)";
     G4int histThId   = analysisManager
                        ->CreateH1(labelTh,titleTh,nbOfBins,binMin,binMax);
     histoTh = analysisManager->GetH1(histThId);
@@ -223,7 +223,7 @@ G4double RunAction::ComputeTheory(G4String process, G4int NbOfMu)
   G4double lgeps, etransf, sigmaE, dsigma;
   G4double sigmaTot = 0.;
   const G4double ln10 = std::log(10.);  
-  G4double length = detector->GetSize();
+  G4double length = fDetector->GetSize();
       
   for (G4int ibin=0; ibin<nbOfBins; ibin++) {
     lgeps = binMin + (ibin+0.5)*binWidth;
@@ -237,7 +237,7 @@ G4double RunAction::ComputeTheory(G4String process, G4int NbOfMu)
   
   //compare simulation and theory
   //
-  ////if (histoMC && histoTh) histoManager->GetHistogramFactory()
+  ////if (histoMC && histoTh) fHistoManager->GetHistogramFactory()
   ////                   ->divide(label[2*MaxHisto+id], *histoMC, *histoTh);
    
   //return integrated crossSection

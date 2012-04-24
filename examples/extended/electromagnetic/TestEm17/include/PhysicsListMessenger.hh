@@ -52,13 +52,13 @@ class PhysicsListMessenger: public G4UImessenger
     
   private:
   
-    PhysicsList* pPhysicsList;
+    PhysicsList*               fPhysicsList;
     
-    G4UIcmdWithADoubleAndUnit* gammaCutCmd;
-    G4UIcmdWithADoubleAndUnit* electCutCmd;
-    G4UIcmdWithADoubleAndUnit* protoCutCmd;    
-    G4UIcmdWithADoubleAndUnit* allCutCmd;    
-    G4UIcmdWithAString*        pListCmd;    
+    G4UIcmdWithADoubleAndUnit* fGammaCutCmd;
+    G4UIcmdWithADoubleAndUnit* fElectCutCmd;
+    G4UIcmdWithADoubleAndUnit* fProtoCutCmd;    
+    G4UIcmdWithADoubleAndUnit* fAllCutCmd;    
+    G4UIcmdWithAString*        fListCmd;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

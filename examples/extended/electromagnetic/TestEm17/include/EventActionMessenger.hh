@@ -50,10 +50,10 @@ class EventActionMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    EventAction* eventAction;
+    EventAction*          fEventAction;
     
-    G4UIdirectory*        eventDir;   
-    G4UIcmdWithAnInteger* PrintCmd;    
+    G4UIdirectory*        fEventDir;   
+    G4UIcmdWithAnInteger* fPrintCmd;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
