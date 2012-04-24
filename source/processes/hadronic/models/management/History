@@ -14,6 +14,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+12 April 2012 - Gunter Folger    (hadr-modman-V09-05-03)
+- increase default limit for catastrophic loss to 5 GeV;
+   GetFatalEnergyCheckLevels() now returns a const std::pair<> 
+   of values.
+- add G4VIntraNuclearTransportModel::Description() printing 
+   a short message, and then crash with G4Exception.
+   
 16 March 2012 - Gunter Folger    (hadr-modman-V09-05-02)
 --------------------------------------------------------
 - provide method and default values for checking of "catastrophic"

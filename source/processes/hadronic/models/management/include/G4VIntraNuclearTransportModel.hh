@@ -81,6 +81,8 @@ public:
 
   inline const G4String& GetModelName() const;
 
+  virtual void ModelDescription(std::ostream& outFile) const ;
+
 private:
 
   G4VIntraNuclearTransportModel(const G4VIntraNuclearTransportModel& right);

@@ -52,3 +52,10 @@ G4VIntraNuclearTransportModel::~G4VIntraNuclearTransportModel()
   // if(theDeExcitation!=NULL) delete theDeExcitation;
 }
 
+void G4VIntraNuclearTransportModel::ModelDescription(std::ostream& outFile) const
+{
+	outFile << "G4VIntraNuclearTransportModel is abstract class" << G4endl;
+	G4Exception("G4VIntraNuclearTransportModel::ModelDescription()","G4VINT01",FatalException,
+			"G4VIntraNuclearTransportModel is abstract class, no description available");
+}
+
