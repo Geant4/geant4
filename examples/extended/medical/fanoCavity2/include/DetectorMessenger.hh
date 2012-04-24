@@ -54,16 +54,16 @@ class DetectorMessenger: public G4UImessenger
     
   private:
   
-    DetectorConstruction*   Detector;
+    DetectorConstruction*      fDetector;
     
-    G4UIdirectory*             testemDir;
-    G4UIdirectory*             detDir;    
-    G4UIcmdWithAString*        wallMater;
-    G4UIcmdWithADoubleAndUnit* wallThick;
-    G4UIcmdWithADoubleAndUnit* cavThick;
-    G4UIcmdWithADoubleAndUnit* worldRadius;
+    G4UIdirectory*             fTestemDir;
+    G4UIdirectory*             fDetDir;    
+    G4UIcmdWithAString*        fWallMater;
+    G4UIcmdWithADoubleAndUnit* fWallThick;
+    G4UIcmdWithADoubleAndUnit* fCavThick;
+    G4UIcmdWithADoubleAndUnit* fWorldRadius;
             
-    G4UIcmdWithoutParameter*   UpdateCmd;
+    G4UIcmdWithoutParameter*   fUpdateCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

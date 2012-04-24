@@ -56,17 +56,17 @@ class SteppingAction : public G4UserSteppingAction
     void UserSteppingAction(const G4Step*);
     
   private:
-    DetectorConstruction* detector;
-    RunAction*            runAction;
-    EventAction*          eventAction;
-    TrackingAction*       trackAction;        
-    HistoManager*         histoManager;
+    DetectorConstruction* fDetector;
+    RunAction*            fRunAction;
+    EventAction*          fEventAction;
+    TrackingAction*       fTrackAction;        
+    HistoManager*         fHistoManager;
     
-    G4VPhysicalVolume*    wall;
-    G4VPhysicalVolume*    cavity;
+    G4VPhysicalVolume*    fWall;
+    G4VPhysicalVolume*    fCavity;
     G4bool                first; 
-    G4double              trackSegm;
-    G4ThreeVector         directionIn;        
+    G4double              fTrackSegm;
+    G4ThreeVector         fDirectionIn;        
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

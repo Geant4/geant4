@@ -58,11 +58,11 @@ public:
     
 private:
 
-  DetectorConstruction* detector;
-  PhysicsListMessenger* pMessenger; 
+  DetectorConstruction*  fDetector;
+  PhysicsListMessenger*  fMessenger; 
 
-  G4String emName;
-  G4VPhysicsConstructor*  emPhysicsList;
+  G4String               fEmName;
+  G4VPhysicsConstructor* fEmPhysicsList;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

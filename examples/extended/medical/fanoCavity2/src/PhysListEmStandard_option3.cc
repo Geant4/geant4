@@ -57,7 +57,7 @@
 
 PhysListEmStandard_option3::PhysListEmStandard_option3(const G4String& name,
                                DetectorConstruction* det)
-: G4VPhysicsConstructor(name), detector(det)
+: G4VPhysicsConstructor(name), fDetector(det)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

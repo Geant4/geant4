@@ -62,33 +62,33 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      
   public:
     
-     G4double     GetWallThickness()   {return wallThickness;};
-     G4Material*  GetWallMaterial()    {return wallMaterial;};
-     G4VPhysicalVolume* GetWall()      {return pWall;};
+     G4double     GetWallThickness()   {return fWallThickness;};
+     G4Material*  GetWallMaterial()    {return fWallMaterial;};
+     G4VPhysicalVolume* GetWall()      {return fWall;};
                      
-     G4double     GetCavityThickness() {return cavityThickness;};
-     G4Material*  GetCavityMaterial()  {return cavityMaterial;}; 
-     G4VPhysicalVolume* GetCavity()    {return pCavity;};
+     G4double     GetCavityThickness() {return fCavityThickness;};
+     G4Material*  GetCavityMaterial()  {return fCavityMaterial;}; 
+     G4VPhysicalVolume* GetCavity()    {return fCavity;};
           
-     G4double     GetWorldThickness()  {return worldThickness;};
-     G4double     GetWorldRadius()     {return worldRadius;};        
+     G4double     GetWorldThickness()  {return fWorldThickness;};
+     G4double     GetWorldRadius()     {return fWorldRadius;};        
      
      void         PrintParameters();
                        
   private:
    
-     G4double            wallThickness;
-     G4Material*         wallMaterial;
-     G4VPhysicalVolume*  pWall;
+     G4double            fWallThickness;
+     G4Material*         fWallMaterial;
+     G4VPhysicalVolume*  fWall;
      
-     G4double            cavityThickness;
-     G4Material*         cavityMaterial;
-     G4VPhysicalVolume*  pCavity;
+     G4double            fCavityThickness;
+     G4Material*         fCavityMaterial;
+     G4VPhysicalVolume*  fCavity;
      
-     G4double            worldThickness;
-     G4double            worldRadius;
+     G4double            fWorldThickness;
+     G4double            fWorldRadius;
 
-     DetectorMessenger* detectorMessenger;
+     DetectorMessenger* fDetectorMessenger;
 
   private:
     

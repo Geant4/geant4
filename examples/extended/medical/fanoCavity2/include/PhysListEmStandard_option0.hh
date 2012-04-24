@@ -56,7 +56,7 @@ public:
   void ConstructProcess();
   
 private:
-  DetectorConstruction* detector;  
+  DetectorConstruction* fDetector;  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

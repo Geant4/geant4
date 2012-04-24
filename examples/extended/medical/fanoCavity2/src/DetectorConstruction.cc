@@ -49,24 +49,24 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-:pWall(0), pCavity(0)
+:fWall(0), fCavity(0)
 {
   // default parameter values
-  wallThickness   = 5*cm;  
-  cavityThickness = 2*mm;
-  worldRadius     = 10*m;    
+  fWallThickness   = 5*cm;  
+  fCavityThickness = 2*mm;
+  fWorldRadius     = 10*m;    
   
   DefineMaterials();
   SetWallMaterial("Water");
   
   // create commands for interactive definition of the detector  
-  detectorMessenger = new DetectorMessenger(this);
+  fDetectorMessenger = new DetectorMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::~DetectorConstruction()
-{ delete detectorMessenger;}
+{ delete fDetectorMessenger;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -122,18 +122,18 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 		   
   // Wall
   //
-  worldThickness = cavityThickness + 2*wallThickness;
+  fWorldThickness = fCavityThickness + 2*fWallThickness;
   
   G4Tubs* 
   sWall = new G4Tubs("Wall",						//name
-    		      0.,worldRadius,0.5*worldThickness,0.,twopi);	//size
+    		      0.,fWorldRadius,0.5*fWorldThickness,0.,twopi);	//size
 
   G4LogicalVolume*
   lWall = new G4LogicalVolume(sWall,			//solid
-      			       wallMaterial,		//material
+      			       fWallMaterial,		//material
       			      "Wall");			//name
 				   
-  pWall = new G4PVPlacement(0,				//no rotation
+  fWall = new G4PVPlacement(0,				//no rotation
                              G4ThreeVector(),		//at (0,0,0)
                              lWall,			//logical volume
                             "Wall",			//name
@@ -145,14 +145,14 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   //  			   
   G4Tubs*
   sCavity = new G4Tubs("Cavity",	
-                       0.,worldRadius,0.5*cavityThickness,0.,twopi);
+                       0.,fWorldRadius,0.5*fCavityThickness,0.,twopi);
 		 
   G4LogicalVolume*		   			                      
   lCavity = new G4LogicalVolume(sCavity,		//shape
-                                cavityMaterial,		//material
+                                fCavityMaterial,		//material
                                 "Cavity");		//name
 				
-  pCavity = new G4PVPlacement(0,			//no rotation
+  fCavity = new G4PVPlacement(0,			//no rotation
                              G4ThreeVector(),		//at (0,0,0)
                              lCavity,			//logical volume
                             "Cavity",			//name
@@ -165,7 +165,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   //
   //always return the root volume
   //  
-  return pWall;
+  return fWall;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -173,12 +173,12 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 void DetectorConstruction::PrintParameters()
 {
   G4cout << "\n---------------------------------------------------------\n";
-  G4cout << "---> The Wall is " << G4BestUnit(wallThickness,"Length")
-         << " of " << wallMaterial->GetName() << " ( " 
-	 << G4BestUnit(wallMaterial->GetDensity(),"Volumic Mass") << " )\n";
-  G4cout << "     The Cavity is " << G4BestUnit(cavityThickness,"Length")
-         << " of " << cavityMaterial->GetName() << " ( " 
-	 << G4BestUnit(cavityMaterial->GetDensity(),"Volumic Mass") << " )";	 	 
+  G4cout << "---> The Wall is " << G4BestUnit(fWallThickness,"Length")
+         << " of " << fWallMaterial->GetName() << " ( " 
+	 << G4BestUnit(fWallMaterial->GetDensity(),"Volumic Mass") << " )\n";
+  G4cout << "     The Cavity is " << G4BestUnit(fCavityThickness,"Length")
+         << " of " << fCavityMaterial->GetName() << " ( " 
+	 << G4BestUnit(fCavityMaterial->GetDensity(),"Volumic Mass") << " )";	 	 
   G4cout << "\n---------------------------------------------------------\n";
   G4cout << G4endl;
 }
@@ -189,31 +189,31 @@ void DetectorConstruction::SetWallMaterial(G4String materialChoice)
 {
   // search the material by its name   
   G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
-  if (pttoMaterial) wallMaterial = pttoMaterial;
+  if (pttoMaterial) fWallMaterial = pttoMaterial;
   
   pttoMaterial = G4Material::GetMaterial(materialChoice + "_gas");
-  if (pttoMaterial) cavityMaterial = pttoMaterial;       
+  if (pttoMaterial) fCavityMaterial = pttoMaterial;       
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorConstruction::SetWallThickness(G4double value)
 {
-  wallThickness = value;
+  fWallThickness = value;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorConstruction::SetCavityThickness(G4double value)
 {
-  cavityThickness = value;
+  fCavityThickness = value;
   
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorConstruction::SetWorldRadius(G4double value)
 {
-  worldRadius = value;
+  fWorldRadius = value;
 }
   
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

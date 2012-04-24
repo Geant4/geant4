@@ -61,14 +61,14 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList(DetectorConstruction* det)
-: G4VModularPhysicsList(), detector(det)
+: G4VModularPhysicsList(), fDetector(det)
 {
   G4LossTableManager::Instance();
-  pMessenger = new PhysicsListMessenger(this); 
+  fMessenger = new PhysicsListMessenger(this); 
    
   // EM physics
-  emName = G4String("standard_opt3");
-  emPhysicsList = new PhysListEmStandard_option3(emName,detector);
+  fEmName = G4String("standard_opt3");
+  fEmPhysicsList = new PhysListEmStandard_option3(fEmName,fDetector);
       
   defaultCutValue = 10*km;
 
@@ -81,8 +81,8 @@ PhysicsList::PhysicsList(DetectorConstruction* det)
 
 PhysicsList::~PhysicsList()
 {
-  delete emPhysicsList;
-  delete pMessenger;  
+  delete fEmPhysicsList;
+  delete fMessenger;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -109,7 +109,7 @@ void PhysicsList::ConstructParticle()
 void PhysicsList::ConstructProcess()
 {
   AddTransportation();
-  emPhysicsList->ConstructProcess();
+  fEmPhysicsList->ConstructProcess();
 
   AddStepMax();
 }
@@ -141,37 +141,37 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
 
-  if (name == emName) return;
+  if (name == fEmName) return;
 
   if (name == "standard_opt0") {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandard_option0(name,detector);
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new PhysListEmStandard_option0(name,fDetector);
     
   } else if (name == "standard_opt3") {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandard_option3(name,detector);
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new PhysListEmStandard_option3(name,fDetector);
         
   } else if (name == "standard_GS") {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandard_GS(name,detector);    
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new PhysListEmStandard_GS(name,fDetector);    
         
   } else if (name == "standard_WVI") {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandard_WVI(name,detector);
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new PhysListEmStandard_WVI(name,fDetector);
             
   } else if (name == "standard_SS") {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandard_SS(name,detector);
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new PhysListEmStandard_SS(name,fDetector);
         
   } else {
 
