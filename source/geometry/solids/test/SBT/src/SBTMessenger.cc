@@ -364,7 +364,8 @@ void SBTMessenger::SetNewValue( G4UIcommand *command, G4String newValues )
 	  G4cin.get(c);
 	}
 	else {
-		G4Exception( "Unrecognized command" );
+	  G4Exception("SBTMessenger","SBT005", FatalErrorInArgument,
+		      "Unrecognized command");
 	}
 }
 
@@ -405,7 +406,8 @@ G4String SBTMessenger::GetCurrentValue( G4UIcommand *command )
 		return "";
 	}
 	
-	G4Exception( "Unrecognized command" );
+	G4Exception("SBTMessenger","SBT006", FatalErrorInArgument,
+		    "Unrecognized command");
 	return "foo!";
 }
 	

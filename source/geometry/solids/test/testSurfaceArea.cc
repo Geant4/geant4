@@ -251,7 +251,8 @@ CLHEP::HepRandom::setTheEngine(&defaultEngine);
 G4int seed = time(NULL);
 CLHEP::HepRandom::setTheSeed(seed);
 #ifdef NDEBUG
-    G4Exception("FAIL: *** Assertions must be compiled in! ***");
+ G4Exception("testSurfaceArea", "TestSA001", FatalException,
+	     "FAIL: *** Assertions must be compiled in! ***");
 #endif
     assert(testG4Surf());
     return 0;

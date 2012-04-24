@@ -25,11 +25,11 @@ INCFLAGS := -I$(G4BASE)/geometry/management/include \
             -I$(G4BASE)/global/HEPGeometry/include \
             -I$(G4BASE)/graphics_reps/include
 
-LDLIBS   := -lG4geomBoolean -lG4specsolids -lG4csg -lG4navigation \
-            -lG4volumes -lG4geometrymng \
-            -lG4graphics_reps -lG4hepnumerics\
-            -lG4magneticfield -lG4intercoms\
-            -lG4globman
+### LDLIBS   := -lG4geomBoolean -lG4specsolids -lG4csg -lG4navigation \
+###             -lG4volumes -lG4geometrymng \
+###             -lG4graphics_reps -lG4hepnumerics\
+###             -lG4magneticfield -lG4intercoms\
+###             -lG4globman
 
 include $(G4INSTALL)/config/binmake.gmk
 

@@ -123,7 +123,8 @@ G4ThreeVector SBTrun::GetRandomPoint() const {
 // enough for our purposes.
 //
 G4double SBTrun::GaussianRandom(const G4double cutoff) const {
-  if (cutoff <= 0) G4Exception( "Illegal cutoff" );
+  if (cutoff <= 0)
+    G4Exception("SBTrun", "SBT004", FatalException, "Illegal cutoff" );
 
   G4double answer;
   do {
@@ -731,9 +732,9 @@ void SBTrun::TestInsidePoint( const G4VSolid *testVolume, G4int *nError,
     G4ThreeVector norm;
 
     G4double dist = testVolume->DistanceToOut( point, v, true, &validNorm, &norm );
-    G4double NormalDist ;
 
-    NormalDist = testVolume->DistanceToOut( point );
+//    G4double NormalDist ;
+//    NormalDist = testVolume->DistanceToOut( point );
 
     if (dist <= 0) {
       ReportError( nError, point, v, safeDistance, "TI: DistanceToOut(p,v) <= 0  Normal Dist = ", logger );

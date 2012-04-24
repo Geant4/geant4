@@ -12,6 +12,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Apr 6, 2012 - M.Kelsey
+----------------------
+- Updated to new G4Exception scheme; fixed few typos...
+
+Oct 31, 2011 - T.Nikitina
+-------------------------
+- Added missing solids G4GenericTrap, G4Paraboloid and G4CutTube to test.
+
 Feb 18, 2008 - I.Hrivnacova
 ---------------------------
 - Added missing solids in specific: G4Ellipsoid, G4EllipticalCone,

@@ -232,7 +232,8 @@ void FredVoxelTestMessenger::SetNewValue( G4UIcommand *command, G4String newValu
 		voxelTest = new FredVoxelTest();
 	}
 	else {
-		G4Exception( "Unrecognized command" );
+	  G4Exception("FredVoxelTesetMessenger","Fred005",FatalErrorInArgument,
+		      "Unrecognized command");
 	}
 }
 

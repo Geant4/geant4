@@ -4,6 +4,14 @@ README for SurfaceChecker
 
 History:
 ----------------------------------
+10.Apr 12
+- Add offset between boxes for Boolean testing
+- Add boolean tests to comprehensive list in testall.pl
+- Capture command-line argument(s) for limited tests in testall.pl
+
+5.Apr 12
+- Migrate to new G4Exception interface
+- Create output directories in testall.pl
 
 19.Dec 05
 - Code is now using GetPointOnSurface()

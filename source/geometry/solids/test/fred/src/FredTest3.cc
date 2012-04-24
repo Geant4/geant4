@@ -112,7 +112,8 @@ G4ThreeVector FredTest3::GetRandomPoint() const {
 // enough for our purposes.
 //
 G4double FredTest3::GaussianRandom(const G4double cutoff) const {
-	if (cutoff <= 0) G4Exception( "Illegal cutoff" );
+	if (cutoff <= 0) 
+	  G4Exception("FredTest3","Fred001",FatalException,"Illegal cutoff" );
 
 	G4double answer;
 	do {

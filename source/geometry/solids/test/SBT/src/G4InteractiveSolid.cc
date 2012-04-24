@@ -1655,7 +1655,8 @@ void G4InteractiveSolid::SetNewValue( G4UIcommand *command, G4String newValues )
 	/* Here to add new boolean solids */
 
 	else
-		G4Exception( "Unrecognized command" );
+	  G4Exception("G4InteractiveSolid","SBT007", FatalErrorInArgument,
+		      "Unrecognized command");
 }
 
 
@@ -1725,7 +1726,8 @@ G4String G4InteractiveSolid::GetCurrentValue( G4UIcommand *command )
 	else if (command == dircTestCmd)
 		return "";
 	
-	G4Exception( "Unrecognized command" );
+	G4Exception("G4InteractiveSolid","SBT008", FatalErrorInArgument,
+		    "Unrecognized command");
 	return "foo!";
 }
 

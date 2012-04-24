@@ -123,7 +123,8 @@ G4ThreeVector SBTrun::GetRandomPoint() const {
 // enough for our purposes.
 //
 G4double SBTrun::GaussianRandom(const G4double cutoff) const {
-  if (cutoff <= 0) G4Exception( "Illegal cutoff" );
+  if (cutoff <= 0)
+    G4Exception("SBTrun", "SBT005", FatalException, "Illegal cutoff" );
 
   G4double answer;
   do {

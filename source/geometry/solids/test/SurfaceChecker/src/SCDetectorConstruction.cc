@@ -139,6 +139,8 @@ SCDetectorConstruction::SelectDetector( const G4String& val )
   G4Box* b1 = new G4Box ( "b1", 100*cm, 50*cm, 50*cm );
   G4Box* b2 = new G4Box ( "b2", 50*cm, 100*cm, 50*cm );
 
+  G4ThreeVector b1Xb2(50*cm,50*cm,50*cm);	// Offset for boolean tests
+
   fval = val ;
 
   if (val == "Sphere")
@@ -401,42 +403,27 @@ else if (val == "Q6Shell")
   }
   else if (val == "b1Ub2") 
   {         
-    aVolume = new G4UnionSolid("b1Ub2",b1,b2);
-    /*
-    G4Box * box1 = new G4Box("Box1",1092.500000,240.103374,92.000000);
-    G4Box * box2 = new G4Box("Box2",540.103374,792.500000,92.000000);
-
-    G4double L1 = 1104;
-
-    aVolume =
-    new G4UnionSolid("ECShapeBoxes",
-                     box1,
-                     box2,
-                     0,
-                     G4ThreeVector(-L1/2.,
-                                   L1/2.,
-                                   0.));
-    */
+    aVolume = new G4UnionSolid("b1Ub2",b1,b2,0,b1Xb2);
   }
   else if (val == "b1Ib2") 
   {         
-    aVolume = new G4IntersectionSolid("b1Ib2",b1,b2);
+    aVolume = new G4IntersectionSolid("b1Ib2",b1,b2,0,b1Xb2);
   }
   else if (val == "b1Sb2") 
   {         
-    aVolume = new G4SubtractionSolid("b1Sb2",b1,b2);
+    aVolume = new G4SubtractionSolid("b1Sb2",b1,b2,0,b1Xb2);
   }
   else if (val == "b1Ib1") 
   {         
-    aVolume = new G4IntersectionSolid("b1Ib1",b1,b1);
+    aVolume = new G4IntersectionSolid("b1Ib1",b1,b1,0,b1Xb2);
   }
   else if (val == "b1Ub1") 
   {         
-    aVolume = new G4UnionSolid("b1Ub1",b1,b1);
+    aVolume = new G4UnionSolid("b1Ub1",b1,b1,0,b1Xb2);
   }
   else if (val == "b1Sb1") 
   {         
-    aVolume = new G4SubtractionSolid("b1Sb1",b1,b1);
+    aVolume = new G4SubtractionSolid("b1Sb1",b1,b1,0,b1Xb2);
   }
   else if ( val == "TwistedTubs" )
   {
@@ -556,7 +543,8 @@ else if (val == "Q6Shell")
   }
   else
   {
-    G4Exception("Sc01DetectorConstruction::SelectDetector() - Invalid shape!");
+    G4Exception("Sc01DetectorConstruction::SelectDetector()", "Sc01DC001",
+		FatalException, "Invalid shape!");
   }
 
   fWorldLength= 10*m ;

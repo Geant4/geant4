@@ -122,11 +122,11 @@ void AXPETSteppingAction::UserSteppingAction(const G4Step* aStep)
        G4cout<<"                         SurfaceNormal=="<<solid->SurfaceNormal(point)<<G4endl;
        }
        if(detector->GetAbortAction()){
-       G4Exception( "  ", "Escaping Optical Photon",
+       G4Exception( "AXPETSteppingAction", "AXPET001",
                   FatalException, "Optical Photon outside Crystal" );
        }
        else{
-       G4Exception( "  ", "Escaping Optical Photon",
+       G4Exception( "AXPETSteppingAction", "AXPET002",
                   JustWarning, "Optical Photon outside Crystal" );
        }
     }

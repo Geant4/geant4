@@ -63,7 +63,8 @@ GridParticleGun::GridParticleGun( G4ThreeVector theDirection,
 	n2        = theN2;
 	
 	if (n1*n2 == 0) 
-		G4Exception( "GridParticleGun created with n1 or n2 zero" );
+	  G4Exception("GridParticleGun","Fred002",FatalErrorInArgument,
+		      "GridParticleGun created with n1 or n2 zero" );
 }
 	
 	

@@ -12,11 +12,11 @@
 use strict ;
 
 # list of solids for testing
-my @solids = qw/Tet Trap Torus Box Sphere Tube Orb Cons TwistedTubs TwistedBox
+my @solids = qw/Tet Trap Torus Box Sphere Tubs Orb Cons TwistedTubs TwistedBox
     TwistedTrd TwistedTrap  Ellipsoid EllipticalCone EllipticalTube Hype Shell
-    HalfSphere HollowSphere Shell/ ;
+    HalfSphere HollowSphere b1Ub2 b1Ib2 b1Sb2 b1Ub1 b1Ib1 b1Sb1/ ;
 
-#@solids = ("EllipticalCone" )        ; # in case if you want to process just one solid... 
+@solids = @ARGV if (($#ARGV+1)>0);	# Process solids specified by user
 
 my $nevents = 100000 ;   # sets the number of events
 
@@ -27,6 +27,9 @@ my $macro ;    # the name of the macro file.    Will be deleted at the end.
 my $data ;     # output file of SurfaceChecker. Will be deleted at the end.
 my $hbk  ;     # resulting hbook file.
 
+# Ensure that data/ and hbk/ directories exist
+unless (-d "data") { mkdir "data" or die; }
+unless (-d "hbk")  { mkdir "hbk" or die; }
 
 foreach my $solid ( @solids ) {
 

@@ -258,7 +258,8 @@ Sc01DetectorConstruction::SelectDetector( const G4String& val )
 
   else
   {
-    //   G4Exception("Sc01DetectorConstruction::SelectDetector() - Invalid shape!");
+    //   G4Exception("Sc01DetectorConstruction::SelectDetector()",
+    //               "Sc01DC001", FatalException, "Invalid shape!");
   }
   if(val == "manyCons")
   {
@@ -299,11 +300,12 @@ Sc01DetectorConstruction::SelectDetector( const G4String& val )
     new G4LogicalVolume(solidCore,Water1,"FiberCore",0,0,0);
 
   G4VPhysicalVolume * aVolume_phys1 =
-  new G4PVPlacement(0,0,logicFiber,"FiberClad",Hall_log,false,0);
+  new G4PVPlacement(0,G4ThreeVector(0*cm, 0*cm, 0*cm),
+		    "FiberClad",logicFiber,PhysicalVolume,false,0);
 
-  // G4VPhysicalVolume * aVolume_phys2 =
-  // new G4PVPlacement(0,0,logicCore,"FiberCore",logicFiber,false,0);
-  new G4PVPlacement(0,0,"FiberCore",logicCore,aVolume_phys1,false,0);
+  G4VPhysicalVolume * aVolume_phys2 =
+  new G4PVPlacement(0,G4ThreeVector(0*cm, 0*cm, 0*cm),
+		    "FiberCore",logicCore,aVolume_phys1,false,0);
 
   /*
   G4LogicalVolume* aVolume_log 

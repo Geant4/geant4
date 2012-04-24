@@ -679,8 +679,10 @@ else if (val == "Q6Shell")
 
   }
   else
-    { G4cout <<"DetectorConstruction tried to select "<<val<<G4endl;
-    G4Exception("DetectorConstruction::SelectDetector() - Invalid shape!");
+    { G4ExceptionDescription desc;
+      desc << "DetectorConstruction tried to select " << val << G4endl;
+      G4Exception("DetectorConstruction::SelectDetector()", "SVT001",
+		  FatalException, desc);
   }
 
   fWorldLength= 10*m ;

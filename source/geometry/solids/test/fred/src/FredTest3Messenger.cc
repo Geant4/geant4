@@ -346,7 +346,8 @@ void FredTest3Messenger::SetNewValue( G4UIcommand *command, G4String newValues )
 		Debug( debugToOutPVCmd->GetNewIntValue( newValues ), &debugger );
 	}
 	else {
-		G4Exception( "Unrecognized command" );
+          G4Exception("FredTest3Messenger","Fred003", FatalErrorInArgument,
+                      "Unrecognized command");
 	}
 }
 
@@ -389,7 +390,8 @@ G4String FredTest3Messenger::GetCurrentValue( G4UIcommand *command )
 		return "";
 	}
 	
-	G4Exception( "Unrecognized command" );
+	G4Exception("FredTest3Messenger","Fred004", FatalErrorInArgument,
+		    "Unrecognized command");
 	return "";
 }
 	
