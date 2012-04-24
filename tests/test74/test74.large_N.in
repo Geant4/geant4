@@ -1,0 +1,27 @@
+#
+# Macro file for test74
+#
+/control/verbose 2
+/run/verbose 1
+/run/initialize
+/tracking/verbose 0
+/process/list
+/particle/list
+/run/particle/dumpCutValues
+#
+/gun/direction 0 0 1
+#
+/gun/particle e-
+/gun/energy 10000 eV
+/run/beamOn 10
+#
+/gun/particle proton
+/gun/energy 0.1 MeV
+/run/beamOn 10
+#
+/gun/particle ion
+/gun/ion 20 48 15
+/gun/energy 4.8 MeV
+/run/beamOn 10
+#
+exit
