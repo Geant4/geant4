@@ -33,6 +33,8 @@
 //
 //      History: first implementation, based on object model of
 //      12 Dec 1997 H.Kurashige
+//
+//      Use std::vector 4  Apr. 2012  H.Kurashige
 // ------------------------------------------------------------
 
 #ifndef G4DecayProducts_h
@@ -41,7 +43,7 @@
 #include "G4ios.hh"
 #include "globals.hh"
 #include "G4DynamicParticle.hh"
-#include "G4Allocator.hh"
+#include  <vector>
 
 class G4DecayProducts
 {
@@ -59,10 +61,6 @@ class G4DecayProducts
 
     //destructor
     ~G4DecayProducts();
-
-    // new & delete operators for G4Allocator
-    inline void *operator new(size_t);
-    inline void operator delete(void *G4DecayProducts);
 
     // (un)equal operator
     G4int operator==(const G4DecayProducts &right) const;
@@ -94,37 +92,20 @@ class G4DecayProducts
   // 
     void DumpInfo() const;
 
+    typedef std::vector<G4DynamicParticle*>  G4DecayProductVector;
   protected:
     enum {MaxNumberOfProducts = 64};
 
   private: 
-    G4int                         numberOfProducts;
-    G4DynamicParticle*            theParentParticle;
-    G4DynamicParticle*            theProductVector[MaxNumberOfProducts];
+    G4int                               numberOfProducts;
+    G4DynamicParticle*                  theParentParticle;
+    G4DecayProductVector*               theProductVector;
 
 };
-
-#if defined G4PARTICLES_ALLOC_EXPORT
-  extern G4DLLEXPORT G4Allocator<G4DecayProducts> aDecayProductsAllocator;
-#else
-  extern G4DLLIMPORT G4Allocator<G4DecayProducts> aDecayProductsAllocator;
-#endif
 
 // ------------------------
 // Inlined operators
 // ------------------------
-
-inline void * G4DecayProducts::operator new(size_t)
-{
-  void * aDecayProducts;
-  aDecayProducts = (void *) aDecayProductsAllocator.MallocSingle();
-  return aDecayProducts;
-}
-
-inline void G4DecayProducts::operator delete(void * aDecayProducts)
-{
-  aDecayProductsAllocator.FreeSingle((G4DecayProducts *)  aDecayProducts);
-}
 
 inline 
  G4int G4DecayProducts::operator==(const G4DecayProducts &right) const

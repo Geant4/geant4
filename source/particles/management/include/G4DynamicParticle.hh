@@ -64,8 +64,9 @@
 //  and you are recommended to use G4ThreeVector instead
 
 #include "G4ElectronOccupancy.hh"
-#include "G4PrimaryParticle.hh"
 
+
+class G4PrimaryParticle;
 class  G4VProcess;
 class  G4DecayProducts;
 
