@@ -40,15 +40,15 @@ endif
 	-s ${LOCALDIR}/xml/selection.xml -o ${DICTIONARYPATH}/Classes_rflx.cpp \
 	--gccxmlpath ${GCCXMLPATH} -Iinclude -I${G4INCLUDE} -I${CLHEP_INCLUDE_DIR}
 #
-	gcc -o ${G4WORKDIR}/tmp/${G4SYSTEM}/${G4TARGET}/libClassesDict.so -fpic -shared \
+	$(CXX) -o ${G4WORKDIR}/tmp/${G4SYSTEM}/${G4TARGET}/libClassesDict.so -fpic -shared \
 	${DICTIONARYPATH}/Classes_rflx.cpp src/*.cc \
 	-Iinclude -I${ROOTSYS}/include -I${G4INCLUDE} -I${CLHEP_INCLUDE_DIR} \
-	${EXTRALIBS} -L${CLHEP_LIB_DIR} -l${CLHEP_LIB} -L${G4LIB}/${G4SYSTEM} ${LDLIBS2}
+	${EXTRALIBS} -L${CLHEP_LIB_DIR} -L${G4LIB}/${G4SYSTEM} ${LDLIBS2}
 #
 	mkdir -p ${G4WORKDIR}/bin/${G4SYSTEM}
-	gcc -o ${G4WORKDIR}/bin/${G4SYSTEM}/readHits readHits.cc \
+	$(CXX) -o ${G4WORKDIR}/bin/${G4SYSTEM}/readHits readHits.cc \
 	-Iinclude -I${ROOTSYS}/include -I${G4INCLUDE} -I${CLHEP_INCLUDE_DIR} \
-	${EXTRALIBS} -L${CLHEP_LIB_DIR} -l${CLHEP_LIB} -L${G4LIB}/${G4SYSTEM} ${LDLIBS2}
+	${EXTRALIBS} -L${CLHEP_LIB_DIR} -L${G4LIB}/${G4SYSTEM} ${LDLIBS2}
 
 clean_all: clean
 	@$(RM) hits.root
