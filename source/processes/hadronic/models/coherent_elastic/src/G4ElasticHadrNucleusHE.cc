@@ -39,6 +39,7 @@
 //  02.05.07 Scale sampled t as p^2 (VI)
 //  15.05.07 Redesign and cleanup (V.Ivanchenko)
 //  17.05.07 cleanup (V.Grichine)
+//  19.04.12 Fixed reproducibility violation (A.Ribon)
 //
 
 #include  "G4ElasticHadrNucleusHE.hh"
@@ -48,6 +49,8 @@
 #include  "G4IonTable.hh"
 #include  "G4Proton.hh"
 #include  "G4NistManager.hh"
+
+#include <cmath>
 
 using namespace std;
 
@@ -498,7 +501,7 @@ G4double G4ElasticHadrNucleusHE::
 
       dQ2 = pElD->TableQ2[1]-pElD->TableQ2[0];
 
-      GetHeavyFq2(NumbN, LineFq2);  //  %%%%%%%%%%%%%%%%%%%%%%%%%
+      GetHeavyFq2(Z, NumbN, LineFq2);  //  %%%%%%%%%%%%%%%%%%%%%%%%%
 
       for(G4int ii=0; ii<ONQ2; ii++)
 	{
@@ -588,7 +591,7 @@ G4double G4ElasticHadrNucleusHE::GetQ2_2(G4int kk, G4double * Q,
 ////////////////////////////////////////////////////////////////////////
 //
 //
-G4double G4ElasticHadrNucleusHE::GetHeavyFq2(G4int Nucleus, G4double* LineF)
+G4double G4ElasticHadrNucleusHE::GetHeavyFq2(G4int Z, G4int Nucleus, G4double* LineF) 
 {
   G4int ii, jj, aSimp;
   G4double curQ2, curSec;
@@ -608,7 +611,7 @@ G4double G4ElasticHadrNucleusHE::GetHeavyFq2(G4int Nucleus, G4double* LineF)
 	{
 	  curQ2 = Q2l+jj*ddQ2;
 
-	  curSec  = HadrNucDifferCrSec(Nucleus, curQ2);
+	  curSec  = HadrNucDifferCrSec(Z, Nucleus, curQ2);
 	  curSum += curSec*aSimp;
 
 	  if(aSimp > 3) aSimp = 2;
@@ -751,15 +754,17 @@ G4double G4ElasticHadrNucleusHE::GetLightFq2(G4int Z, G4int Nucleus,
 }
 //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 G4double G4ElasticHadrNucleusHE::
-   HadrNucDifferCrSec(G4int Nucleus, G4double aQ2)
+   HadrNucDifferCrSec(G4int Z, G4int , G4double aQ2)
 {
 //   ------ All external kinematical variables are in MeV -------
 //            ------ but internal in GeV !!!!  ------
 
+  G4int NWeight = int( nistManager->GetAtomicMassAmu(Z) + 0.5 ); 
+
   G4double    theQ2 = aQ2;   ///GeV/GeV;  
 
   // Scattering of proton
-  if(Nucleus == 1) 
+  if(NWeight == 1) 
   {
     G4double SqrQ2  = std::sqrt(aQ2);
     G4double ConstU = hMass2 + protonM2-2*protonM*HadrEnergy - aQ2;
@@ -829,9 +834,9 @@ G4double G4ElasticHadrNucleusHE::
     G4double    Prod1, Tot1=0, medTot, DTot1, DmedTot;
     G4int       i;
 
-    for( i=1; i<=Nucleus; i++)
+    for( i=1; i<=NWeight; i++)
     {
-      N       = -N*Unucl*(Nucleus-i+1)/i*Rho2;
+      N       = -N*Unucl*(NWeight-i+1)/i*Rho2;
       N4      = 1;
       Prod1   = std::exp(-theQ2/i*R12B/4)/i*R12B;
       medTot  = R12B/i;
@@ -876,9 +881,9 @@ G4double G4ElasticHadrNucleusHE::
 
     BinCoeff = 1;
 
-    for( i = 1; i<= Nucleus-2; i++)
+    for( i = 1; i<= NWeight-2; i++)
     {
-      N1p     = -N1p*UnuclScr*(Nucleus-i-1)/i*Rho2;
+      N1p     = -N1p*UnuclScr*(NWeight-i-1)/i*Rho2;
       N2p     = 1;
       Din2    = 0;
       DmedTot = 0;
@@ -909,10 +914,10 @@ G4double G4ElasticHadrNucleusHE::
 	if(std::fabs(Din2*N1p/Din1) < 0.000001) break;
     }           //  i
 
-    Din1 = -Din1*Nucleus*(Nucleus-1)
+    Din1 = -Din1*NWeight*(NWeight-1)
                  /2/pi/Normp/2/pi/Normp*16*pi*pi;
 
-    DTot1 = DTot1*Nucleus*(Nucleus-1)
+    DTot1 = DTot1*NWeight*(NWeight-1)
                  /2/pi/Normp/2/pi/Normp*16*pi*pi;
 
     DTot1 *= 5;   //  $$$$$$$$$$$$$$$$$$$$$$$$ 
