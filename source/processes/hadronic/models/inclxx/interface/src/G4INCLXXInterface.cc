@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.3
+// INCL++ revision: v5.0.5
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -201,16 +201,6 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
   if(theExcitationHandler != 0) {
     for(std::list<G4Fragment>::const_iterator i = remnants.begin();
 	i != remnants.end(); i++) {
-      const G4LorentzVector remnant4Momentum = (*i).GetMomentum();
-      G4LorentzRotation toRemnantZ;
-      toRemnantZ.rotateZ(-remnant4Momentum.theta());
-      toRemnantZ.rotateY(-remnant4Momentum.phi());
-      const G4LorentzRotation toRemnantLab = toRemnantZ.inverse();
-
-      G4LorentzVector remnant4MomentumCM = remnant4Momentum;
-      remnant4MomentumCM *= toRemnantZ;
-      remnant4MomentumCM.boost(-remnant4Momentum.boostVector());
-
       G4ReactionProductVector *deExcitationResult = theExcitationHandler->BreakItUp((*i));
     
       for(G4ReactionProductVector::iterator fragment = deExcitationResult->begin();
@@ -219,8 +209,6 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
 	if(def != 0) {
 	  G4DynamicParticle *theFragment = new G4DynamicParticle(def, (*fragment)->GetMomentum());
 	  G4LorentzVector labMomentum = theFragment->Get4Momentum();
-	  labMomentum.boost(remnant4Momentum.boostVector());
-	  labMomentum *= toRemnantLab;
 	  labMomentum *= toLabFrame;
 	  theFragment->Set4Momentum(labMomentum);
 	  theResult.AddSecondary(theFragment);

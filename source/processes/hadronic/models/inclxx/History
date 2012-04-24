@@ -16,6 +16,17 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+23 April 2012 - Davide Mancusi (hadr-inclxx-V09-05-07)
+-----------------------------------------------------------
+- Bugfix:
+  o Avoid collisions with A=1 targets.
+
+11 April 2012 - Davide Mancusi (hadr-inclxx-V09-05-06)
+-----------------------------------------------------------
+- Bugfix:
+  o De-excitation products should not be boosted using the pre-fragment
+    velocity.
+
 9 February 2012 - Davide Mancusi (hadr-inclxx-V09-05-04,hadr-inclxx-V09-05-05)
 -----------------------------------------------------------
 - Fix compiler warning about an unused function parameter.

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.3
+// INCL++ revision: v5.0.5
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -58,7 +58,7 @@ namespace G4INCL {
 
       ~INCL();
 
-      void setTarget(G4int A, G4int Z);
+      G4bool setTarget(G4int A, G4int Z);
       G4bool initializeTarget(G4int A, G4int Z);
       const EventInfo &processEvent(Particle *projectile);
 
@@ -96,6 +96,7 @@ namespace G4INCL {
     private:
       IPropagationModel *propagationModel;
       G4int theA, theZ;
+      G4bool targetInitSuccess;
       G4double maxImpactParameter;
       EventAction *eventAction;
       PropagationAction *propagationAction;

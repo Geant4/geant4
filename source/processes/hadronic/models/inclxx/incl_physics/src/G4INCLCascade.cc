@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.3
+// INCL++ revision: v5.0.5
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -73,7 +73,9 @@
 namespace G4INCL {
 
   INCL::INCL(G4INCL::Config const * const config)
-    :propagationModel(0), theA(208), theZ(82), maxImpactParameter(0.),
+    :propagationModel(0), theA(208), theZ(82),
+    targetInitSuccess(false),
+    maxImpactParameter(0.),
     theConfig(config)
   {
     // Set the logger object.
@@ -144,7 +146,7 @@ namespace G4INCL {
 
     // Set the target
     if(!theConfig->isNaturalTarget()) {
-      setTarget(theConfig->getTargetA(), theConfig->getTargetZ());
+      targetInitSuccess = setTarget(theConfig->getTargetA(), theConfig->getTargetZ());
       // Fill in the global information
       theGlobalInfo.At = theConfig->getTargetA();
       theGlobalInfo.Zt = theConfig->getTargetZ();
@@ -184,13 +186,14 @@ namespace G4INCL {
     delete theConfig;
   }
 
-  void INCL::setTarget(G4int A, G4int Z) {
-    if(A > 0 && A < 300 && Z > 0 && Z < 200) {
+  G4bool INCL::setTarget(G4int A, G4int Z) {
+    if(A > 1 && A < 300 && Z > 0 && Z < 200) {
       theA = A;
       theZ = Z;
     } else {
       ERROR("Unsupported target: A = " << A << " Z = " << Z << std::endl);
       ERROR("Target configuration rejected." << std::endl);
+      return false;
     }
 
     // Set the maximum impact parameter
@@ -215,6 +218,7 @@ namespace G4INCL {
     theGlobalInfo.geometricCrossSection =
       Math::tenPi*std::pow(maxImpactParameter,2);
 
+    return true;
   }
 
   G4bool INCL::initializeTarget(G4int A, G4int Z) {
@@ -230,6 +234,11 @@ namespace G4INCL {
   }
 
   const EventInfo &INCL::processEvent(Particle *projectile) {
+    if(!targetInitSuccess) {
+      theEventInfo.transparent=true;
+      return theEventInfo;
+    }
+
     initializeTarget(theA, theZ);
     // Usage of the projectile API:
 
