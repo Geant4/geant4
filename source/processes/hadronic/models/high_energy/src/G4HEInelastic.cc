@@ -5757,9 +5757,10 @@ G4HEInelastic::CalculatePhaseSpaceWeight( G4int /* npart */)
    return wfcn;
  }      
 
-std::pair<G4double, G4double> G4HEInelastic::GetFatalEnergyCheckLevels() const
+const std::pair<G4double, G4double> G4HEInelastic::GetFatalEnergyCheckLevels() const
 {
-	return std::pair<G4double, G4double>(5.*perCent,250*GeV);  // max energy non-conservation is mass of heavy nucleus
+	// max energy non-conservation is mass of heavy nucleus
+	return std::pair<G4double, G4double>(5*perCent,250*GeV);
 }
 
 

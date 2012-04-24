@@ -85,7 +85,7 @@ class G4HEInelastic : public G4HadronicInteraction
 
    G4bool EnergyConservation(void) {return conserveEnergy;} 
 
-   virtual std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
+   virtual const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
 
    G4double Amin(G4double a, G4double b);
    G4double Amax(G4double a, G4double b);
