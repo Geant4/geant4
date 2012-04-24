@@ -168,19 +168,19 @@ G4double G4QNeutronCaptureRatio::GetRatio(G4double pIU, G4int tgZ, G4int tgN)
     lastK=vK[i];
     lastT=vT[i];
     lastL=vL[i];
-    if(s>lastM)                          // At least LinTab must be updated
+    if(s>lastH)                          // At least LinTab must be updated
     {
       G4int nextN=lastJ+1;               // The next bin to be initialized
       if(lastJ<npp)
       {
         lastJ = static_cast<int>(pIU/dp)+1;// MaxBin to be initialized
+        G4double pv=lastH;
         if(lastJ>npp)
         {
           lastJ=npp;
           lastH=pma;
         }
         else lastH = lastJ*dp;           // Calculate max initialized s for LinTab
-        G4double pv=lastM;
         for(G4int j=nextN; j<=lastJ; j++)// Calculate LogTab values
         {
           pv+=dp;

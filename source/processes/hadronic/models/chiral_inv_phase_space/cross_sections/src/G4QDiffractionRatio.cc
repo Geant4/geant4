@@ -175,19 +175,19 @@ G4double G4QDiffractionRatio::GetRatio(G4double pIU, G4int pPDG, G4int tgZ, G4in
     lastT=vT[i];
     lastL=vL[i];
     // ==> Now all bins of the tables are initialized immediately for the A
-    //if(s>lastM)                          // At least LinTab must be updated
+    //if(s>lastH)                          // At least LinTab must be updated
     //{
     //  G4int nextN=lastN+1;               // The next bin to be initialized
     //  if(lastN<nps)
     //  {
     //    lastN = static_cast<int>(s/ds)+1;// MaxBin to be initialized
+    //    G4double sv=lastH;
     //    if(lastN>nps)
     //    {
     //      lastN=nps;
     //      lastH=sma;
     //    }
     //    else lastH = lastN*ds;           // Calculate max initialized s for LinTab
-    //    G4double sv=lastM;
     //    for(G4int j=nextN; j<=lastN; j++)// Calculate LogTab values
     //    {
     //      sv+=ds;
