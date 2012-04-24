@@ -68,7 +68,6 @@ class G4DataVector;
 class G4ParticleChangeForMSC;
 class G4LossTableManager;
 class G4GoudsmitSaundersonTable;
-class G4PhysicsTable;
 
 class G4GoudsmitSaundersonMscModel : public G4VMscModel
 {
@@ -88,10 +87,8 @@ public:
   virtual void SampleScattering(const G4DynamicParticle* ,
 				G4double );
 
-  virtual G4double ComputeTruePathLengthLimit(
-                             const G4Track& track,
-			           G4PhysicsTable* theLambdaTable,
-			           G4double currentMinimalStep);
+  virtual G4double ComputeTruePathLengthLimit(const G4Track& track,
+					      G4double& currentMinimalStep);
 
   virtual G4double ComputeGeomPathLength(G4double truePathLength);
 
@@ -130,9 +127,7 @@ private:
 
   G4bool   inside;
   G4bool   insideskin;
-  G4bool   isInitialized;
 
-  G4PhysicsTable*            theLambdaTable;
   G4GoudsmitSaundersonTable* GSTable;
   G4LossTableManager*        theManager;
   const G4ParticleDefinition* particle;
@@ -156,22 +151,6 @@ void G4GoudsmitSaundersonMscModel::SetParticle(const G4ParticleDefinition* p)
     mass = p->GetPDGMass();
     charge = p->GetPDGCharge()/eplus;
   }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4double G4GoudsmitSaundersonMscModel::GetLambda(G4double e)
-{
-  G4double x;  
-  if(theLambdaTable) {
-    x = ((*theLambdaTable)[currentMaterialIndex])->Value(e);
-  } else {
-    x = CrossSection(currentCouple,particle,e);
-  }
-
-  if(x > DBL_MIN) { x = 1./x; }
-  else            { x = DBL_MAX; }
-  return x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -443,8 +443,8 @@ G4double G4eBremsstrahlungRelModel::ComputeDXSectionPerAtom(G4double gammaEnergy
   else {
     // ** intermediate screening using Thomas-Fermi FF from Tsai only valid for Z>=5** 
     G4double dd=100.*electron_mass_c2*y/(totalEnergy-gammaEnergy);
-    G4double gg=dd*z13;
-    G4double eps=dd*z23;
+    G4double gg=dd/z13;
+    G4double eps=dd/z23;
     G4double phi1=Phi1(gg,currentZ),  phi1m2=Phi1M2(gg,currentZ);
     G4double psi1=Psi1(eps,currentZ),  psi1m2=Psi1M2(eps,currentZ);
     

@@ -93,9 +93,10 @@ G4double G4GoudsmitSaundersonMscModel::FTCSP[103][106] ;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4GoudsmitSaundersonMscModel::G4GoudsmitSaundersonMscModel(const G4String& nam)
-  : G4VMscModel(nam),lowKEnergy(0.1*keV),highKEnergy(100.*TeV),isInitialized(false)
+  : G4VMscModel(nam),lowKEnergy(0.1*keV),highKEnergy(100.*TeV)
 { 
-  currentKinEnergy=currentRange=skindepth=par1=par2=par3=zPathLength=truePathLength
+  currentKinEnergy=currentRange=skindepth=par1=par2=par3
+    =zPathLength=truePathLength
     =tausmall=taulim=tlimit=charge=lambdalimit=tPathLength=lambda0=lambda1
     =lambda11=mass=0.0;
   currentMaterialIndex = -1;
@@ -126,11 +127,9 @@ void G4GoudsmitSaundersonMscModel::Initialise(const G4ParticleDefinition* p,
 { 
   skindepth=skin*stepmin;
   SetParticle(p);
-  if(isInitialized) { return; }
-  fParticleChange = GetParticleChangeForMSC();
-
-  isInitialized=true;
+  fParticleChange = GetParticleChangeForMSC(p);
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double 
@@ -186,12 +185,12 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
       CalculateIntegrals(particle,(*theElementVector)[i]->GetZ(),kineticEnergy,s0,s1);
       lambda0 += (theAtomNumDensityVector[i]*s0);
     } 
-  if(lambda0>DBL_MIN) lambda0 =1./lambda0;
+  if(lambda0>0.0) lambda0 =1./lambda0;
 
   // Newton-Raphson root's finding method of scrA from: 
   // Sig1(PWA)/Sig0(PWA)=g1=2*scrA*((1+scrA)*log(1+1/scrA)-1)
   G4double g1=0.0;
-  if(lambda1>DBL_MIN) { g1 = lambda0/lambda1; }
+  if(lambda1>0.0) { g1 = lambda0/lambda1; }
 
   G4double logx0,x1,delta;
   G4double x0=g1*0.5;
@@ -200,6 +199,11 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
     {  
       logx0=std::log(1.+1./x0);
       x1 = x0-(x0*((1.+x0)*logx0-1.0)-g1*0.5)/( (1.+2.*x0)*logx0-2.0);
+
+      // V.Ivanchenko cut step size of iterative procedure
+      if(x1 < 0.0)         { x1 = 0.5*x0; }
+      else if(x1 > 2*x0)   { x1 = 2*x0; }
+      else if(x1 < 0.5*x0) { x1 = 0.5*x0; }
       delta = std::fabs( x1 - x0 );    
       x0 = x1;
       if(delta < 1.0e-3*x1) { break;}
@@ -208,9 +212,12 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
 
   G4double lambdan=0.;
 
-  if(lambda0>0.) { lambdan=tPathLength/lambda0; }
+  if(lambda0>0.0) { lambdan=tPathLength/lambda0; }
   if(lambdan<=1.0e-12)return;
  
+  //G4cout << "E(eV)= " << kineticEnergy/eV << " L0= " << lambda0
+  //	<< " L1= " << lambda1 << G4endl;
+
   G4double Qn1 = lambdan *g1;//2.* lambdan *scrA*((1.+scrA)*log(1.+1./scrA)-1.);
   G4double Qn12 = 0.5*Qn1;
   
@@ -439,8 +446,7 @@ G4GoudsmitSaundersonMscModel::CalculateIntegrals(const G4ParticleDefinition* p,G
 
 G4double 
 G4GoudsmitSaundersonMscModel::ComputeTruePathLengthLimit(const G4Track& track,
-							 G4PhysicsTable* theTable,
-							 G4double currentMinimalStep)
+							 G4double& currentMinimalStep)
 {
   tPathLength = currentMinimalStep;
   G4StepPoint* sp = track.GetStep()->GetPreStepPoint();
@@ -455,17 +461,17 @@ G4GoudsmitSaundersonMscModel::ComputeTruePathLengthLimit(const G4Track& track,
     SetParticle( dp->GetDefinition() );
   }
 
-  theLambdaTable = theTable;
   currentCouple = track.GetMaterialCutsCouple();
+  SetCurrentCouple(currentCouple); 
   currentMaterialIndex = currentCouple->GetIndex();
   currentKinEnergy = dp->GetKineticEnergy();
   currentRange = GetRange(particle,currentKinEnergy,currentCouple);
 
 
-  lambda1 = GetLambda(currentKinEnergy);
+  lambda1 = GetTransportMeanFreePath(particle,currentKinEnergy);
 
   // stop here if small range particle
-  if(inside) return tPathLength;            
+  if(inside) return ConvertTrueToGeom(tPathLength, currentMinimalStep);
   
   if(tPathLength > currentRange) tPathLength = currentRange;
 
@@ -480,7 +486,7 @@ G4GoudsmitSaundersonMscModel::ComputeTruePathLengthLimit(const G4Track& track,
   if(currentRange < presafety)
     {
       inside = true;
-      return tPathLength;  
+      return ConvertTrueToGeom(tPathLength, currentMinimalStep);  
     }
 
   // standard  version
@@ -494,7 +500,7 @@ G4GoudsmitSaundersonMscModel::ComputeTruePathLengthLimit(const G4Track& track,
       if(currentRange <= presafety)
 	{
 	  inside = true;
-	  return tPathLength;   
+	  return ConvertTrueToGeom(tPathLength, currentMinimalStep);   
 	}
 
       smallstep += 1.;
@@ -548,7 +554,7 @@ G4GoudsmitSaundersonMscModel::ComputeTruePathLengthLimit(const G4Track& track,
       // shortcut
       if((tPathLength < tlimit) && (tPathLength < presafety) &&
          (smallstep >= skin) && (tPathLength < geomlimit-0.999*skindepth))
-	return tPathLength;   
+	return ConvertTrueToGeom(tPathLength, currentMinimalStep);   
 
       // step reduction near to boundary
       if(smallstep < skin)
@@ -588,7 +594,7 @@ G4GoudsmitSaundersonMscModel::ComputeTruePathLengthLimit(const G4Track& track,
       if(currentRange < presafety)
         {
           inside = true;
-          return tPathLength;  
+          return ConvertTrueToGeom(tPathLength, currentMinimalStep);  
         }
 
       if((stepStatus == fGeomBoundary) || (stepStatus == fUndefined))
@@ -636,7 +642,7 @@ G4GoudsmitSaundersonMscModel::ComputeTruePathLengthLimit(const G4Track& track,
     }
   //G4cout << "tPathLength= " << tPathLength  
   // << " currentMinimalStep= " << currentMinimalStep << G4endl;
-  return tPathLength ;
+  return ConvertTrueToGeom(tPathLength, currentMinimalStep);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -681,7 +687,7 @@ G4double G4GoudsmitSaundersonMscModel::ComputeGeomPathLength(G4double)
     G4double T1 = GetEnergy(particle,currentRange-tPathLength,currentCouple);
 
 
-    lambda11 = GetLambda(T1);
+    lambda11 = GetTransportMeanFreePath(particle,T1);
 
     par1 = (lambda1-lambda11)/(lambda1*tPathLength) ;
     par2 = 1./(par1*lambda1) ;

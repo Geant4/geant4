@@ -59,7 +59,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4VMscModel.hh"
-#include "G4PhysicsTable.hh"
 #include "G4MscStepLimitType.hh"
 
 class G4ParticleChangeForMSC;
@@ -90,8 +89,7 @@ public:
 			G4double safety);
 
   G4double ComputeTruePathLengthLimit(const G4Track& track,
-				      G4PhysicsTable* theLambdaTable,
-				      G4double currentMinimalStep);
+				      G4double& currentMinimalStep);
 
   G4double ComputeGeomPathLength(G4double truePathLength);
 
@@ -110,8 +108,6 @@ private:
 
   G4double LatCorrelation();
 
-  inline G4double GetLambda(G4double kinEnergy);
-
   inline void SetParticle(const G4ParticleDefinition*);
 
   inline void UpdateCache();
@@ -123,7 +119,6 @@ private:
   const G4ParticleDefinition* particle;
   G4ParticleChangeForMSC*     fParticleChange;
 
-  G4PhysicsTable*             theLambdaTable;
   const G4MaterialCutsCouple* couple;
   G4LossTableManager*         theManager;
 
@@ -173,28 +168,11 @@ private:
   G4double coeffc1,coeffc2;
   G4double scr1ini,scr2ini,scr1,scr2;
 
-  G4bool   isInitialized;
   G4bool   inside;
   G4bool   insideskin;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline
-G4double G4UrbanMscModel93::GetLambda(G4double e)
-{
-  G4double x;
-  if(theLambdaTable) {
-    x = ((*theLambdaTable)[currentMaterialIndex])->Value(e);
-  } else {
-    x = CrossSection(couple,particle,e);
-  }
-  if(x > DBL_MIN) { x = 1./x; }
-  else            { x = DBL_MAX; }
-  return x;
-}
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline

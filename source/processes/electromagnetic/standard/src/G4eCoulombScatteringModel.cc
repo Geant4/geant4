@@ -68,6 +68,7 @@
 #include "G4NucleiProperties.hh"
 #include "G4Pow.hh"
 #include "G4LossTableManager.hh"
+#include "G4LossTableBuilder.hh"
 #include "G4NistManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -134,7 +135,7 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
     isInitialised = true;
     fParticleChange = GetParticleChangeForGamma();
   }
-  if(mass < GeV && particle->GetParticleType() != "nucleus") {
+  if(mass < GeV) {
     InitialiseElementSelectors(p,cuts);
   }
 }

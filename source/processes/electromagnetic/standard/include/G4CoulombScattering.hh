@@ -71,6 +71,9 @@ protected:
 
   virtual void InitialiseProcess(const G4ParticleDefinition*);
 
+  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
+                                    const G4Material*);
+
 private:
 
  // hide assignment operator

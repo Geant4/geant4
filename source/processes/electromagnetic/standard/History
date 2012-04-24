@@ -17,6 +17,28 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24 April 12: V.Ivanchenko (emstand-V09-05-16)
+- G4CoulombScattering - added method MinPrimaryEnergy allowing to 
+    define low edge of physics table when Coulomb scattering is combined with
+    multiple or single scattering
+- G4WentzelVIModel - fixed a bug introduced in previous tag
+- G4eCoulombScatteringModel - removed usage of local table for cross section
+    introduced in previous tag
+
+20 April 12: V.Ivanchenko (emstand-V09-05-15)
+- G4CoulombScatteringModel, G4eCoulombScatteringModel, G4UrbanMscModel90
+  G4UrbanMscModel92, G4UrbanMscModel93, G4UrbanMscModel95, 
+  G4WentzelVIModel, G4GoudsmitSaundersonMscModel - moved
+    cross section table from process to model, removed method GetLambda
+- G4GoudsmitSaundersonMscModel - improved method of definition of
+    screening parameter
+
+16 April 12: A.Schaelicke & F.Garay 
+- G4eBremsstrahlungRelModel fixed use of screening function
+
+13 April 12: L.Urban
+- G4UrbanMscModel95 - fixed tail using single scattering model 
+
 28 March 12: V.Ivanchenko (emstand-V09-05-14)
 - source.cmake fixed - G4UrbanMscModel92 was forgotten
 

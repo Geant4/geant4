@@ -89,13 +89,18 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
   G4double a = G4LossTableManager::Instance()->FactorForAngleLimit()
     *CLHEP::hbarc/CLHEP::fermi;
   q2Max = 0.5*a*a;
- 
+  G4double theta = PolarAngleLimit();
+
+  // cross section table should start from threshold if
+  // Coulomb scattering is combined with multiple or hadronic scattering
+  if(0.0 < theta) { SetStartFromNullFlag(true); }
+
   // second initialisation
   if(isInitialised) {
     G4VEmModel* mod = GetModelByIndex(0);
-    mod->SetPolarAngleLimit(PolarAngleLimit());
+    mod->SetPolarAngleLimit(theta);
     mod = GetModelByIndex(1);
-    if(mod) { mod->SetPolarAngleLimit(PolarAngleLimit()); }
+    if(mod) { mod->SetPolarAngleLimit(theta); }
 
     // first initialisation
   } else {
@@ -116,11 +121,29 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
     G4double emin = MinKinEnergy();
     G4double emax = MaxKinEnergy();
     G4eCoulombScatteringModel* model = new G4eCoulombScatteringModel();
-    model->SetPolarAngleLimit(PolarAngleLimit());
+    model->SetPolarAngleLimit(theta);
     model->SetLowEnergyLimit(emin);
     model->SetHighEnergyLimit(emax);
     AddEmModel(1, model);
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4CoulombScattering::MinPrimaryEnergy(const G4ParticleDefinition* part,
+					       const G4Material* mat)
+{
+  // Pure Coulomb scattering
+  G4double emin = MinKinEnergy();
+
+  // Coulomb scattering combined with multiple or hadronic scattering
+  if(0.0 < PolarAngleLimit()) {
+    G4double p2 = 2.0/(q2Max*mat->GetIonisation()->GetInvA23());
+    G4double mass = part->GetPDGMass();
+    emin = sqrt(p2 + mass*mass) - mass;
+  }
+
+  return emin;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
