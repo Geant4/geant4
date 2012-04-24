@@ -18,7 +18,6 @@
 /test31/NumberOfAbsorbers    60
 /test31/maxDeltaEnergy       1.0 MeV
 /test31/WorldMaterial        G4_AIR
-/test31/HistoNumber          5
 #
 /run/initialize
 /gun/energy                  1000.0 MeV
@@ -32,19 +31,15 @@
 #
 /test31/AbsorberMaterial     G4_Si
 #
-#/testem/histo/fileName      t_e_st.paw
 /gun/particle e-
 /run/beamOn 100
 #
-#/testem/histo/fileName      t_mu_st.paw
 /gun/particle mu-
 /run/beamOn 1000
 #
-#/testem/histo/fileName      t_pi_st.paw
 /gun/particle pi+
 /run/beamOn 1000
 #
-#/testem/histo/fileName      t_p_st.paw
 /gun/particle proton
 /run/beamOn 1000
 #

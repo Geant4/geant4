@@ -81,7 +81,7 @@ public: // Without description
   void SetHistoName(const G4String& name) {histName = name;};
   void bookHisto();
   void SaveToTuple(const G4String&, G4double);
-  void SaveToTuple(const G4String&, G4double, G4double);
+  //void SaveToTuple(const G4String&, G4double, G4double);
   void SaveEvent();
   G4double GetTrackLength() const {return trackLength;};
   void ResetTrackLength() {trackLength = 0.0, trackAbs = true;};
@@ -131,7 +131,6 @@ private:
   // MEMBERS
   static test31Histo* fManager;
 
-  EmAnalysis* ema;
   G4EnergyLossForExtrapolator* extra;
   const G4Material* absMaterial;
 
@@ -139,7 +138,6 @@ private:
   G4String theName;
   Histo* histo;
   G4int nHisto;
-  std::vector<G4int> histoID;
   G4int verbose; 
   G4double zmax;
   G4double zend;
@@ -164,6 +162,7 @@ private:
   G4int n_gam_back;
   G4bool nTuple;
   G4bool tables;
+  G4bool histoBooked;
 
   G4int n_mumu;
   G4int n_pipi;

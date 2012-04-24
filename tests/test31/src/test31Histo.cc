@@ -45,7 +45,6 @@
 #include "G4LossTableManager.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4EmCalculator.hh"
-#include "EmAnalysis.hh"
 #include "G4EmCorrections.hh"
 #include "G4NistManager.hh"
 #include "G4BraggModel.hh"
@@ -80,9 +79,9 @@ test31Histo::test31Histo()
   maxEnergy = 0.0;
   nTuple  = false;
   tables  = true;
-  histo   = Histo::GetInstance();
-  //  ema = new EmAnalysis();
-  histoID.resize(7);
+  extra   = 0;
+  histo   = new Histo();
+  histoBooked = false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -116,14 +115,12 @@ void test31Histo::BeginOfHisto(G4int num)
   n_mumu = 0;
   n_pipi = 0;
 
-  if(0 < nHisto) {
-    if(num == 0) bookHisto();
-    histo->book();
+  if(!extra) extra = new G4EnergyLossForExtrapolator(1);
+  bookHisto(); 
 
-    if(verbose > 0) {
-      G4cout << "test31Histo: Histograms are booked and run has been started"
-             << G4endl;
-    }
+  if(verbose > 0) {
+    G4cout << "test31Histo: Histograms are booked and run has been started"
+	   << G4endl;
   }
 }
 
@@ -186,15 +183,15 @@ void test31Histo::EndOfHisto()
     TableControl();
     tables = false;
   }
-  //  MuonTest();
+  MuonTest();
   //  ElectronTest();
   if(0 < nHisto) {
 
     // normalise histograms
     for(G4int i=0; i<nHisto; i++) {
-      histo->scale(i,x);
+      histo->ScaleH1(i,x);
     }
-    histo->save();
+    histo->Save();
   }
   G4cout<<"=========   End of tets31Histo  ============================"<<G4endl;  
   /*
@@ -222,21 +219,14 @@ void test31Histo::EndOfHisto()
 
 void test31Histo::SaveEvent()
 {
-  if(nTuple) histo->addRow(0);        
+  //if(nTuple) histo->addRow(0);        
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void test31Histo::SaveToTuple(const G4String& parname, G4double val)
+void test31Histo::SaveToTuple(const G4String& /*parname*/, G4double /*val*/)
 {
-  if(nTuple) histo->fillTuple(0, parname, val);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void test31Histo::SaveToTuple(const G4String& parname,G4double val, G4double)
-{
-  if(nTuple) histo->fillTuple(0, parname, val);
+  //if(nTuple) histo->fillTuple(0, parname, val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -251,41 +241,45 @@ void test31Histo::bookHisto()
          << " nHisto= " << nHisto
          << G4endl;
 
-  extra = new G4EnergyLossForExtrapolator(1);
-
   // Creating an 1-dimensional histograms in the root directory of the tree
   
-  if(nHisto >= 0) {
-    G4double em = maxEnergy/MeV;
-    histoID[0] = 
-      histo->add1D("10","Energy deposit (MeV) in absorber (mm)",
-		   NumberOfAbsorbers,0.0,zmax/mm,mm);
+  G4double em = maxEnergy/MeV;
+  
+  if(histoBooked && 0 < nHisto) {
 
-    histoID[1] =  histo->add1D("11",
+    histo->SetHisto1D(0,NumberOfAbsorbers,0.0,zmax/mm,mm);
+    histo->SetHisto1D(1,50,0.0,em,MeV);
+    histo->SetHisto1D(2,36,0.0,180.,degree);
+    histo->SetHisto1D(3,50,0.0,em,MeV);
+    histo->SetHisto1D(4,36,0.0,180.,degree);
+    histo->SetHisto1D(5,50,0.0,10.,degree);
+    histo->SetHisto1D(6,100,-em,em,MeV);
+
+  } else {
+    histo->Add1D("10","Energy deposit (MeV) in absorber (mm)",
+		 NumberOfAbsorbers,0.0,zmax/mm,mm);
+    histo->Add1D("11",
       "Energy (MeV) of secondary electrons",50,0.0,em,MeV);
-
-    histoID[2] =  histo->add1D("12",
+    histo->Add1D("12",
       "Theta (degrees) of delta-electrons",36,0.0,180.,degree);
-
-    histoID[3] =  histo->add1D("13",
+    histo->Add1D("13",
       "Energy (MeV) of secondary gamma",50,0.0,em,MeV);
-
-    histoID[4] =  histo->add1D("14",
+    histo->Add1D("14",
       "Theta (degrees) of secondary gamma",36,0.0,180.,degree);
-
-    histoID[5] =  histo->add1D("15",
+    histo->Add1D("15",
       "Theta (degrees) of primary",50,0.0,10.,degree);
-
-    histoID[6] =  histo->add1D("16",
+    histo->Add1D("16",
       "Delta Energy (MeV) of Reconstruction",100,-em,em,MeV);
-
-    for(G4int i=0; i<nHisto; i++) {histo->activate(histoID[i], true);}
   }
+  for(G4int i=0; i<nHisto; ++i) {histo->Activate(i, true);}
 
-  if(nTuple){ 
-    histo->addTuple( "100", "Range/Energy",
-     "float tkin mass beta xend, yend, zend, ltpk, tend, teta, loss, dedx, back, leak, edep" );
-  }
+  //if(nTuple){ 
+  //  histo->addTuple( "100", "Range/Energy",
+  //   "float tkin mass beta xend, yend, zend, ltpk, tend, teta, loss, dedx, back, leak, edep" );
+  //}
+
+  histoBooked = true;
+  histo->Book();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -293,7 +287,7 @@ void test31Histo::bookHisto()
 void test31Histo::AddEnergy(G4double edep, G4double z)
 {
   etot += edep;
-  if(0 < nHisto) histo->fill(histoID[0], z, edep/MeV);
+  histo->Fill(0, z, edep/MeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -310,8 +304,8 @@ void test31Histo::AddEndPoint(G4double z)
 void test31Histo::AddDeltaElectron(const G4DynamicParticle* elec)
 {
   n_elec++;
-  if(1 < nHisto) histo->fill(histoID[1],elec->GetKineticEnergy(),1.0);
-  if(2 < nHisto) histo->fill(histoID[2],elec->GetMomentumDirection().theta(),1.0);
+  histo->Fill(1, elec->GetKineticEnergy(),1.0);
+  histo->Fill(2, elec->GetMomentumDirection().theta(),1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -319,8 +313,8 @@ void test31Histo::AddDeltaElectron(const G4DynamicParticle* elec)
 void test31Histo::AddPhoton(const G4DynamicParticle* ph)
 {
   n_gam++;
-  if(3 < nHisto) histo->fill(histoID[3],ph->GetKineticEnergy(),1.0);
-  if(4 < nHisto) histo->fill(histoID[4],(ph->GetMomentumDirection()).theta(),1.0);
+  histo->Fill(3, ph->GetKineticEnergy(),1.0);
+  histo->Fill(4, (ph->GetMomentumDirection()).theta(),1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -334,7 +328,7 @@ void test31Histo::AddParticleLeak(const G4Track* track)
     n_charged_leak++;
     if(track->GetTrackID() == 1) {
       G4double tet = (dp->GetMomentumDirection()).theta();
-      if(5 < nHisto) histo->fill(histoID[5],tet,1.0);
+      histo->Fill(5, tet,1.0);
       G4double e0 = track->GetVertexKineticEnergy();
       G4double e1 = dp->GetKineticEnergy();
       G4double e2 = 
@@ -343,7 +337,7 @@ void test31Histo::AddParticleLeak(const G4Track* track)
         G4cout << "Extrapolation of primary E0(MeV)= " << e0/MeV 
 	       << " E1(MeV)= " << e1/MeV 
 	       << " Erec-E0(MeV)= " << (e2-e0)/MeV << G4endl;
-      if(6 < nHisto) histo->fill(histoID[6],e2 - e0,1.0);      
+      histo->Fill(6, e2 - e0,1.0);      
     }
   }
 }
@@ -376,9 +370,12 @@ void test31Histo::TableControl()
   G4EmCalculator cal;
   cal.SetVerbose(0);
 
-  const G4Element* elm = mman->FindOrBuildElement(79, false);
+  //mman->SetVerbose(2);
+  const G4Element* elm = mman->FindOrBuildElement(79,false);
+  //const G4Element* elm1 = mman->FindOrBuildElement(62,true);
   G4double xsb = cal.ComputeCrossSectionPerAtom(9.66*MeV,"e-","eBrem",
 						elm,150*keV);
+  //const G4Material* mat79 = mman->FindOrBuildMaterial("G4_Au");
   G4cout << "############  sig(b)= " << xsb/barn << G4endl; 
 
   // parameters
@@ -401,7 +398,37 @@ void test31Histo::TableControl()
   G4Material* mat = mman->FindOrBuildMaterial(mat_name);
   //mat->SetChemicalFormula("H_2O");
   G4double fact = 0.001*gram/(MeV*cm2*mat->GetDensity());
+  /*
+  G4cout << "========================================" << G4endl;
+  G4cout << std::setprecision(6) << mat->GetName() 
+	 << "  amu_c2= " << amu_c2 <<  " amu= " << amu << G4endl;
+  G4cout << "GetZ= " << mat->GetZ() << " GetA= " << mat->GetA()
+	 << " GetA()*mole/g= " <<  mat->GetA()*mole/g 
+	 << " GetAeffective()= " <<  mat->GetAtomicMassAmu() 
+	 << G4endl;
 
+  G4cout << elm->GetName() << G4endl;
+  G4cout << "79 GetZ= " << elm->GetZ() << " GetA= " << elm->GetA()
+	 << " GetA(mole/g)= " << elm->GetA()*mole/g
+	 << " GetA(amu)= " << elm->GetA()/(Avogadro*amu)
+	 << " GetN()= " <<  elm->GetN() << G4endl;
+  G4cout << "Mat79 GetZ= " << mat79->GetZ() << " GetA= " << mat79->GetA()
+	 << " GetA= " << mat79->GetA()*mole/g
+	 << " GetAeff()= " << mat79->GetAtomicMassAmu() << G4endl;
+  G4cout << "62 GetZ= " << elm1->GetZ() << " GetA= " << elm1->GetA()
+	 << " GetA= " << elm1->GetA()*mole/g
+	 << " GetN()= " <<  elm1->GetN() << G4endl;
+  G4cout << "NIST GetZ(Au)= " << mman->GetZ("Au") 
+	 << " GetA(Au)= " << mman->GetAtomicMassAmu("Au") 
+	 << " GetAtomicMassAmu(79)= " << mman->GetAtomicMassAmu(79)
+	 << " GetA(Sm)= " << mman->GetAtomicMassAmu("Sm") 
+	 << " GetAtomicMassAmu(Z)= " << mman->GetAtomicMassAmu(62)
+	 << G4endl; 
+  G4cout << " GetAtomicMassAmu(12)= " << mman->GetAtomicMassAmu(6)
+         << " GetAtomicMassAmu(1)= " << mman->GetAtomicMassAmu(1)
+	 << std::setprecision(4) << G4endl; 
+  G4cout << "========================================" << G4endl;
+  */
   //  G4double xmin = std::log10(tmin);
   // G4double xmax = std::log10(tmax);
   // G4double step = (xmax - xmin)/(G4double)nbin;
@@ -670,7 +697,7 @@ void test31Histo::TableControl()
 	  */
           if(ii==0 && i==0) G4cout << " " << e;
 	  else              G4cout << " " << -diff;
-          //histo->fill(i1,e,diff);
+          //histo->Fill(i1,e,diff);
               
         } while ( std::fabs(e - 1000.) > MeV);
 	  G4cout << G4endl;
@@ -693,14 +720,20 @@ void test31Histo::MuonTest()
 
   const G4ParticleDefinition* part = cal.FindParticle("mu+");
 
-  G4bool imu = false;
+  G4bool imu = true;
   if (imu) {
     G4cout << "====================================================================" << G4endl;
     G4cout << "             Stopping Powers" << G4endl;
     G4cout << "====================================================================" << G4endl;
 
-    G4String nm[3] = {"G4_WATER", "G4_Al", "G4_Fe"};
-    
+    G4String nm[4] = {"G4_WATER", "G4_Al", "G4_Fe", "G4_He"};
+
+    G4double energy1[25] = {0.0001,  0.0002,  0.0003, 0.0005, 0.0007,
+                            0.001,  0.002,  0.003, 0.005, 0.007, 
+			    0.01,  0.02,  0.03, 0.05, 0.07,    
+			    0.1,  0.2,  0.3, 0.5, 0.7,
+			    1.,  2.,  3., 5., 7.};
+
     G4double energy[43] = {10.,  14.,  20., 30., 40., 80.,
                            100., 140., 200., 300., 400., 800., 
                            1000., 1400., 2000., 3000., 4000., 8000., 
@@ -708,7 +741,7 @@ void test31Histo::MuonTest()
                            100000., 140000., 200000., 300000., 400000., 800000., 
                            1000000., 1400000., 2000000., 3000000., 4000000., 8000000., 
                            10000000., 14000000., 20000000., 30000000., 40000000., 80000000., 100000000.}; 
-    G4double dedx[3][43] = {
+    G4double dedx[4][43] = {
       { 7.965, 6.213, 4.852, 3.764, 3.214, 2.413,
         2.270, 2.116, 2.026, 1.992, 1.999, 2.075,
         2.109, 2.166, 2.229, 2.300, 2.351, 2.470,
@@ -729,9 +762,16 @@ void test31Histo::MuonTest()
         1.975, 2.039, 2.113, 2.214, 2.303, 2.623,
         2.777, 3.082, 3.543, 4.304, 5.079, 8.221,
         9.820, 13.013, 17.877,25.974,34.162,67.147,
-	83.761, 116.947, 167.024, 250.537, 334.408, 671.133, 840.063}
+	83.761, 116.947, 167.024, 250.537, 334.408, 671.133, 840.063},
+      { 7.709, 5.998, 4.673, 3.616, 3.083, 2.305,
+        2.165, 2.026, 1.954, 1.939, 1.961, 2.082, 
+        2.134, 2.219, 2.315, 2.429, 2.511, 2.712, 
+        2.776, 2.874, 2.972, 3.062, 3.117, 3.250, 
+        3.299, 3.386, 3.501, 3.679, 3.848, 4.506, 
+        4.832, 5.481, 6.461, 8.097, 9.753, 16.472, 
+	19.88, 26.734, 37.147, 54.704, 72.476, 144.871, 181.606}
     }; 
-    G4double dedxn[3][43] = {
+    G4double dedxn[4][43] = {
       { 0., 0., 0., 0., 0., 0.,
 	0., 0., 0., 0., 0., 0.,
 	0., 0.001, 0.001, 0.001, 0.002, 0.004,
@@ -752,7 +792,14 @@ void test31Histo::MuonTest()
 	0.004, 0.006, 0.008, 0.012, 0.016, 0.031,
 	0.038, 0.054, 0.076, 0.114, 0.152, 0.307, 
         0.386, 0.547, 0.791, 1.211, 1.637, 3.406,
-	4.316, 6.184, 9.05, 14.009, 19.089, 40.329, 51.31}
+	4.316, 6.184, 9.05, 14.009, 19.089, 40.329, 51.31},
+      { 0., 0., 0., 0., 0., 0.,
+	0., 0., 0., 0., 0., 0.,
+	0.001, 0.001, 0.001, 0.002,
+	0.002, 0.004, 0.005, 0.007, 0.010, 0.014,
+	0.019, 0.036, 0.045, 0.062, 0.088, 0.132, 
+        0.175, 0.354, 0.445, 0.632, 0.916, 1.404,
+	1.902, 3.979, 5.05,  7.26, 10.66, 16.578, 22.66, 48.256, 61.55}
     };
 
     G4cout << "###  Energy (MeV) ### n= 43" << G4endl;  
@@ -761,7 +808,7 @@ void test31Histo::MuonTest()
     G4cout << G4endl;  
     G4cout << G4endl;  
 
-    for(i=0; i<3; i++) {
+    for(i=0; i<4; i++) {
       const G4Material* mat = mman->FindOrBuildMaterial(nm[i]);
       G4double fact = gram/(MeV*cm2*mat->GetDensity());
       G4cout << "###  Material ### " << mat->GetName() << " Data" << G4endl;  
@@ -776,8 +823,13 @@ void test31Histo::MuonTest()
       G4cout << "### Geant4 " << G4endl;  
       for(j=0; j<43; j++) {G4cout << dedxn[i][j] << " ";}
       G4cout << G4endl;  
-      G4cout << "### 1 - Geant4/Data " << G4endl;  
-      for(j=0; j<43; j++) {G4cout << 1.0 - dedxn[i][j]/dedx[i][j] << " ";}
+      G4cout << "### 1 - Geant4/Data (%)" << G4endl;  
+      for(j=0; j<43; j++) {G4cout << (1.0 - dedxn[i][j]/dedx[i][j])*100 << " ";}
+      G4cout << G4endl;  
+      G4cout << "### Geant4 low energy" << G4endl;  
+      for(j=0; j<25; j++) {
+        G4cout << fact*(cal.ComputeDEDX(energy1[j],part,"muIoni",mat)) << " ";
+      }
       G4cout << G4endl;  
     }
     G4cout << G4endl;  

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Histo.hh,v 1.9 2007-05-24 14:35:39 vnivanch Exp $
+// $Id: Histo.hh,v 1.1 2010-09-08 11:23:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef Histo_h
@@ -43,129 +43,96 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "globals.hh"
-#include <vector>
-#include "G4DynamicParticle.hh"
-#include "G4VPhysicalVolume.hh"
 #include "G4DataVector.hh"
-#include "G4Track.hh"
-
+#include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+class G4RootAnalysisManager;
 class HistoMessenger;
-
-namespace AIDA {
-  class ITree;
-  class ITuple;
-  class IHistogram1D;
-  class ICloud1D;
-  class IAnalysisFactory;
-}
 
 class Histo
 {
 public:
-  static Histo* GetInstance();
+
+  Histo();
 
   ~Histo();
 
-private:
-  Histo();
-
-public:
-
-  void book();
   // Book predefined histogramms 
+  void Book();
 
-  void save();
   // Save histogramms to file
+  void Save();
 
-  G4int add1D(const G4String&, const G4String&, G4int nb=100, G4double x1=0., 
-                                                G4double x2=1., G4double u=1.);
-  // In this method histogramms are predefined
+  // In this method 1-D histogramms are predefined
+  void Add1D(const G4String&, const G4String&, G4int nb, G4double x1, 
+                                               G4double x2, G4double u=1.);
 
-  G4int addCloud1D(const G4String&); 
-
-  void setHisto1D(G4int id, G4int nb=100, 
-                  G4double x1=0., G4double x2=1., G4double u=1.);
   // It change bins and boundaries
+  void SetHisto1D(G4int, G4int, G4double, G4double, G4double);
 
-  void activate(G4int, G4bool val=true);
-  // Histogram is activated
+  // Histogram activation/deactivation
+  void Activate(G4int, G4bool);
 
-  void activateCloud(G4int, G4bool val=true);
-  // Cloud is activated
+  // Histogramms are filled
+  void Fill(G4int, G4double, G4double);
 
-  void fill(G4int, G4double, G4double w=1.);
-  // Histogram is filled
+  // Histogramms are scaled
+  void ScaleH1(G4int, G4double);
 
-  void fillCloud(G4int, G4double, G4double w=1.);
-  // Cloud is filled
-
-  void scale(G4int, G4double);
-
-  G4int addTuple(const G4String&, const G4String&, const G4String&);
   // In this method nTuple is booked
+  void AddTuple(const G4String&);
 
-  void fillTuple(G4int, const G4String&, G4double);
+  // In this method nTuple is booked
+  void AddTupleI(const G4String&);
+  void AddTupleF(const G4String&);
+  void AddTupleD(const G4String&);
+
   // Fill nTuple parameter
+  void FillTupleI(G4int, G4int);
+  void FillTupleF(G4int, G4float);
+  void FillTupleD(G4int, G4double);
 
-  void addRow(G4int);
   // Save tuple event 
+  void AddRow();
 
-  void setFileName(const G4String&);
+  // Set output file
+  void SetFileName(const G4String&);
+  void SetFileType(const G4String&);
 
-  void setFileType(const G4String&);
-
-  void PrintHisto(G4int id=0);
-
-  void ListHistogram(G4int val);
-
-  void setVerbose(G4int val);
-
-  G4int NumberOfBins(G4int id);
-
-  G4double MinBin(G4int id);
-
-  G4double MaxBin(G4int id);
-
-  G4bool IsActive(G4int id);
+  inline void SetVerbose(G4int val) { fVerbose = val; };
 
 private:
 
-  static Histo* m_instance;
+  G4RootAnalysisManager* fManager;
+  HistoMessenger*        fMessenger;
+ 
+  G4String fHistName;
+  G4String fHistType;
+  G4String fTupleName;
+  G4String fTupleTitle;
+  G4int    fNHisto;
+  G4int    fVerbose;
+  G4bool   fDefaultAct;
+  G4bool   fHistoActive;
+  G4bool   fNtupleActive;
 
-  void clear();
+  std::vector<G4int>    fHisto;
+  std::vector<G4int>    fTupleI;
+  std::vector<G4int>    fTupleF;
+  std::vector<G4int>    fTupleD;
+  std::vector<G4int>    fBins;
+  std::vector<G4bool>   fActive;
+  std::vector<G4double> fXmin;
+  std::vector<G4double> fXmax;
+  std::vector<G4double> fUnit;
+  std::vector<G4String> fIds;
+  std::vector<G4String> fTitles;
+  std::vector<G4String> fNtupleI;
+  std::vector<G4String> fNtupleF;
+  std::vector<G4String> fNtupleD;
 
-  G4String      m_histName;
-  G4String      m_histType;
-  std::vector<G4String> m_tuplePath;
-  std::vector<G4String> m_tupleTitle;
-  std::vector<G4String> m_tupleColumns;
-
-  G4int         m_Histo;
-  G4int         m_Clouds;
-  G4int         m_Tuple;
-  G4int         m_verbose;
-  G4bool        m_defaultAct;
-
-  std::vector<AIDA::IHistogram1D*> m_histo;
-  std::vector<AIDA::ICloud1D*>     m_cloud;
-  std::vector<AIDA::ITuple*>       m_ntup;
-
-  AIDA::IAnalysisFactory* m_af;  
-  AIDA::ITree*    m_tree;
-  HistoMessenger* m_messenger;
-
-  std::vector<G4double>  m_xmin;
-  std::vector<G4double>  m_xmax;
-  std::vector<G4double>  m_unit;
-  std::vector<G4bool>    m_active;
-  std::vector<G4bool>    m_activeCl;
-  std::vector<G4int>     m_bins;
-  std::vector<G4String>  m_ids;
-  std::vector<G4String>  m_titles;
-  std::vector<G4String>  m_titlesCl;
 };
 
 #endif
