@@ -54,24 +54,24 @@ public:
   void BeginOfRunAction(const G4Run*);
   void   EndOfRunAction(const G4Run*);
     
-  void FillTallyEdep(G4int n, G4double e)  {tallyEdep[n] += e;};
-  void FillEdep(G4double de, G4double eni) {edeptot += de; eniel += eni;};
+  void FillTallyEdep(G4int n, G4double e)  {fTallyEdep[n] += e;};
+  void FillEdep(G4double de, G4double eni) {fEdeptot += de; fEniel += eni;};
     
   void AddProjRange (G4double x) 
-  {projRange += x; projRange2 += x*x; nRange++;};
-  void AddPrimaryStep() {nPrimarySteps++;};
+  {fProjRange += x; fProjRange2 += x*x; fRange++;};
+  void AddPrimaryStep() {fNbPrimarySteps++;};
                    
 private:  
     
-  DetectorConstruction*   detector;
-  PhysicsList*            physics;
-  HistoManager*           histoManager;
-  PrimaryGeneratorAction* kinematic;
-  G4double*               tallyEdep;   
-  G4double                projRange, projRange2;
-  G4double                edeptot, eniel;
-  G4int                   nPrimarySteps;
-  G4int                   nRange;
+  DetectorConstruction*   fDetector;
+  PhysicsList*            fPhysics;
+  HistoManager*           fHistoManager;
+  PrimaryGeneratorAction* fKinematic;
+  G4double*               fTallyEdep;   
+  G4double                fProjRange, fProjRange2;
+  G4double                fEdeptot, fEniel;
+  G4int                   fNbPrimarySteps;
+  G4int                   fRange;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -14,6 +14,18 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12-04-12 V.Ivant (testem7-V09-05-04)
+- c2_functions (M.Mendenhall) fixed compillation problems at gcc 4.7
+- G4ScreenedNuclearRecoil (M.Mendenhall) fixed division by zero at 
+    initialisation (no effect at run time)
+
+05-04-12 V.Ivant (testem7-V09-05-03)
+- c2_functions (M.Mendenhall) fixed compillation problems at gcc 4.7
+- TestEm7 - added extra test case for low-energy ions
+     
+03-04-12 mma (testem7-V09-05-02)
+- all classes : apply G4 coding conventions
        
 05-03-12 mma (testem7-V09-05-01)
 - HistoManager.hh and .cc : migrate to new g4tools histogramming system

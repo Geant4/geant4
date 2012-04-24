@@ -56,19 +56,19 @@ class DetectorMessenger: public G4UImessenger
     
   private:
   
-    DetectorConstruction*   Detector;
+    DetectorConstruction*      fDetector;
     
-    G4UIdirectory*             testemDir;
-    G4UIdirectory*             detDir;    
-    G4UIcmdWithAString*        MaterCmd;
-    G4UIcmdWithADoubleAndUnit* SizeXCmd;
-    G4UIcmdWithADoubleAndUnit* SizeYZCmd;    
-    G4UIcmdWithADoubleAndUnit* MagFieldCmd;
+    G4UIdirectory*             fTestemDir;
+    G4UIdirectory*             fDetDir;    
+    G4UIcmdWithAString*        fMaterCmd;
+    G4UIcmdWithADoubleAndUnit* fSizeXCmd;
+    G4UIcmdWithADoubleAndUnit* fSizeYZCmd;    
+    G4UIcmdWithADoubleAndUnit* fMagFieldCmd;
     
-    G4UIcmdWithAnInteger*      TalNbCmd;    
-    G4UIcommand*               TalDefCmd;
-    G4UIcommand*               TalPosiCmd;                
-    G4UIcmdWithoutParameter*   UpdateCmd;
+    G4UIcmdWithAnInteger*      fTalNbCmd;    
+    G4UIcommand*               fTalDefCmd;
+    G4UIcommand*               fTalPosiCmd;                
+    G4UIcmdWithoutParameter*   fUpdateCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

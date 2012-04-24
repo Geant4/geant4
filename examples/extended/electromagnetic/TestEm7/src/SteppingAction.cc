@@ -40,7 +40,7 @@
 
 SteppingAction::SteppingAction(DetectorConstruction* det, HistoManager* histo,
                                 RunAction* RuAct)
-:detector(det), histoManager(histo), runAction(RuAct)
+:fDetector(det), fHistoManager(histo), fRunAction(RuAct)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,10 +57,10 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   
   G4double niel = step->GetNonIonizingEnergyDeposit();
 
-  runAction->FillEdep(edep, niel);
+  fRunAction->FillEdep(edep, niel);
 
   if (step->GetTrack()->GetTrackID() == 1) {
-    runAction->AddPrimaryStep();
+    fRunAction->AddPrimaryStep();
     /*
     G4cout << step->GetTrack()->GetMaterial()->GetName()
 	   << "  E1= " << step->GetPreStepPoint()->GetKineticEnergy()
@@ -76,14 +76,14 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
    
   G4double x1 = prePoint->GetPosition().x();
   G4double x2 = postPoint->GetPosition().x();  
-  G4double x  = x1 + G4UniformRand()*(x2-x1) + 0.5*(detector->GetAbsorSizeX());
-  histoManager->FillHisto(1, x, edep);
-  histoManager->FillHisto(2, x, edep);
+  G4double x  = x1 + G4UniformRand()*(x2-x1) + 0.5*(fDetector->GetAbsorSizeX());
+  fHistoManager->FillHisto(1, x, edep);
+  fHistoManager->FillHisto(2, x, edep);
 
   //fill tallies
   //
   G4int copyNb = prePoint->GetTouchableHandle()->GetCopyNumber();
-  if (copyNb > 0) runAction->FillTallyEdep(copyNb, edep);
+  if (copyNb > 0) fRunAction->FillTallyEdep(copyNb, edep);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

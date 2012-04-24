@@ -41,7 +41,7 @@
 
 TrackingAction::TrackingAction(DetectorConstruction* det, HistoManager* histo,
                                RunAction* run)
-:detector(det), histoManager(histo), runAction(run)
+:fDetector(det), fHistoManager(histo), fRunAction(run)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,9 +50,9 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
 {
   // extract Projected Range of primary particle
   if (track->GetTrackID() == 1) {
-    G4double x = track->GetPosition().x() + 0.5*detector->GetAbsorSizeX();
-    if(x > 0.0) runAction->AddProjRange(x);
-    histoManager->FillHisto(3, x);
+    G4double x = track->GetPosition().x() + 0.5*fDetector->GetAbsorSizeX();
+    if(x > 0.0) fRunAction->AddProjRange(x);
+    fHistoManager->FillHisto(3, x);
   }  
 }
 

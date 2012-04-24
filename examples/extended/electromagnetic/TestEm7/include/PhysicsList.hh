@@ -64,28 +64,27 @@ public:
   void ConstructProcess();
     
   void AddStepMax();       
-  StepMax* GetStepMaxProcess() {return stepMaxProcess;};
+  StepMax* GetStepMaxProcess() {return fStepMaxProcess;};
 
 private:
 
   void AddIonGasModels();
 
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
+  G4double fCutForGamma;
+  G4double fCutForElectron;
+  G4double fCutForPositron;
 
-  G4bool helIsRegisted;
-  G4bool bicIsRegisted;
-  G4bool biciIsRegisted;
+  G4bool   fHelIsRegisted;
+  G4bool   fBicIsRegisted;
+  G4bool   fBiciIsRegisted;
     
-  G4String                             emName;
-  G4VPhysicsConstructor*               emPhysicsList;
-  G4VPhysicsConstructor*               decPhysicsList;
-  std::vector<G4VPhysicsConstructor*>  hadronPhys;
+  G4String                             fEmName;
+  G4VPhysicsConstructor*               fEmPhysicsList;
+  G4VPhysicsConstructor*               fDecPhysicsList;
+  std::vector<G4VPhysicsConstructor*>  fHadronPhys;    
+  StepMax*                             fStepMaxProcess;
     
-  StepMax* stepMaxProcess;
-    
-  PhysicsListMessenger* pMessenger;
+  PhysicsListMessenger*  fMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

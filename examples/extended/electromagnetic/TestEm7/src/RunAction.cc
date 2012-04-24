@@ -47,16 +47,16 @@
 
 RunAction::RunAction(DetectorConstruction* det, PhysicsList* phys,
                      HistoManager* histo, PrimaryGeneratorAction* kin)
-:detector(det), physics(phys),histoManager(histo), kinematic(kin)
+:fDetector(det), fPhysics(phys),fHistoManager(histo), fKinematic(kin)
 { 
-  tallyEdep = new G4double[MaxTally];
+  fTallyEdep = new G4double[MaxTally];
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::~RunAction()
 {
-  delete [] tallyEdep;
+  delete [] fTallyEdep;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -71,24 +71,24 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
      
   //initialize projected range, tallies, Ebeam, and book histograms
   //
-  nPrimarySteps = 0;
-  nRange = 0;
-  projRange = projRange2 = 0.;
-  edeptot = eniel = 0.;
-  for (G4int j=0; j<MaxTally; j++) tallyEdep[j] = 0.;
-  kinematic->ResetEbeamCumul();
+  fNbPrimarySteps = 0;
+  fRange = 0;
+  fProjRange = fProjRange2 = 0.;
+  fEdeptot = fEniel = 0.;
+  for (G4int j=0; j<MaxTally; j++) fTallyEdep[j] = 0.;
+  fKinematic->ResetEbeamCumul();
 
   // define "1" histogram binning
   // histogram "1" is defined by the length of the target
   // zoomed histograms are defined by UI command  
-  G4double length  = detector->GetAbsorSizeX();
-  G4double stepMax = physics->GetStepMaxProcess()->GetMaxStep();
+  G4double length  = fDetector->GetAbsorSizeX();
+  G4double stepMax = fPhysics->GetStepMaxProcess()->GetMaxStep();
   G4int nbmin = 100;
   G4int nbBins = (G4int)(0.5 + length/stepMax);
   if (nbBins < nbmin) nbBins = nbmin;
-  histoManager->SetHisto(1, nbBins, 0., length, "mm");
+  fHistoManager->SetHisto(1, nbBins, 0., length, "mm");
  
-  histoManager->book();
+  fHistoManager->book();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -100,54 +100,54 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
   //run conditions
   //  
-  G4Material* material = detector->GetAbsorMaterial();
+  G4Material* material = fDetector->GetAbsorMaterial();
   G4double density = material->GetDensity();
    
-  G4String particle = kinematic->GetParticleGun()->GetParticleDefinition()
+  G4String particle = fKinematic->GetParticleGun()->GetParticleDefinition()
                       ->GetParticleName();    
-  G4double energy = kinematic->GetParticleGun()->GetParticleEnergy();
+  G4double energy = fKinematic->GetParticleGun()->GetParticleEnergy();
   G4cout << "\n The run consists of " << NbofEvents << " "<< particle << " of "
          << G4BestUnit(energy,"Energy") << " through " 
-	 << G4BestUnit(detector->GetAbsorSizeX(),"Length") << " of "
+	 << G4BestUnit(fDetector->GetAbsorSizeX(),"Length") << " of "
 	 << material->GetName() << " (density: " 
 	 << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
 	 
   //compute projected range and straggling
   //
-  if(nRange > 0) {
-    projRange /= nRange; 
-    projRange2 /= nRange;
+  if(fRange > 0) {
+    fProjRange /= fRange; 
+    fProjRange2 /= fRange;
   }
-  G4double rms = projRange2 - projRange*projRange;        
+  G4double rms = fProjRange2 - fProjRange*fProjRange;        
   if (rms>0.) rms = std::sqrt(rms); else rms = 0.;
 
-  G4double nstep = G4double(nPrimarySteps)/G4double(NbofEvents);
+  G4double nstep = G4double(fNbPrimarySteps)/G4double(NbofEvents);
 
   G4cout.precision(6);       
-  G4cout << "\n Projected Range= "<< G4BestUnit(projRange,"Length")
+  G4cout << "\n Projected Range= "<< G4BestUnit(fProjRange,"Length")
          << "   rms= "            << G4BestUnit( rms,"Length")
          << G4endl;
   G4cout << " Mean number of primary steps = "<< nstep << G4endl;
 
   //compute energy deposition and niel
   //
-  edeptot /= NbofEvents; 
-  G4cout << " Total energy deposit= "<< G4BestUnit(edeptot,"Energy")
+  fEdeptot /= NbofEvents; 
+  G4cout << " Total energy deposit= "<< G4BestUnit(fEdeptot,"Energy")
          << G4endl;
-  eniel /= NbofEvents; 
-  G4cout << " niel energy deposit = "<< G4BestUnit(eniel,"Energy")
+  fEniel /= NbofEvents; 
+  G4cout << " niel energy deposit = "<< G4BestUnit(fEniel,"Energy")
          << G4endl;
      
   //print dose in tallies
   //
-  G4int tallyNumber = detector->GetTallyNumber();
+  G4int tallyNumber = fDetector->GetTallyNumber();
   if (tallyNumber > 0) {
-    G4double Ebeam = kinematic->GetEbeamCumul();
+    G4double Ebeam = fKinematic->GetEbeamCumul();
     G4cout << "\n---------------------------------------------------------\n";
     G4cout << " Cumulated Doses : \tEdep      \tEdep/Ebeam \tDose" << G4endl;
     for (G4int j=1; j <= tallyNumber; j++) {
-      G4double Edep = tallyEdep[j], ratio = 100*Edep/Ebeam;
-      G4double tallyMass = detector->GetTallyMass(j);      
+      G4double Edep = fTallyEdep[j], ratio = 100*Edep/Ebeam;
+      G4double tallyMass = fDetector->GetTallyMass(j);      
       G4double Dose = Edep/tallyMass;
       G4cout << " tally " << j << ": \t \t"
              << G4BestUnit(Edep,"Energy") << "\t"
@@ -160,14 +160,14 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
   // normalize histograms
   for (G4int j=1; j<3; j++) {  
-    G4double binWidth = histoManager->GetBinWidth(j);
+    G4double binWidth = fHistoManager->GetBinWidth(j);
     G4double fac = (mm/MeV)/(NbofEvents * binWidth);
-    histoManager->Normalize(j, fac);
+    fHistoManager->Normalize(j, fac);
   }
-  histoManager->Normalize(3, 1./NbofEvents);
+  fHistoManager->Normalize(3, 1./NbofEvents);
  
   // save and clean histo
-  histoManager->save();
+  fHistoManager->save();
  
   // show Rndm status
   //

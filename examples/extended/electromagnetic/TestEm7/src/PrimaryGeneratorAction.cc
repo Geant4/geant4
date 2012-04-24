@@ -43,28 +43,28 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det)
-:detector(det)					       
+:fDetector(det)					       
 {
-  particleGun  = new G4ParticleGun(1);
+  fParticleGun  = new G4ParticleGun(1);
   G4ParticleDefinition* particle
            = G4ParticleTable::GetParticleTable()->FindParticle("proton");
-  particleGun->SetParticleDefinition(particle);
-  particleGun->SetParticleEnergy(160*MeV);  
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
+  fParticleGun->SetParticleDefinition(particle);
+  fParticleGun->SetParticleEnergy(160*MeV);  
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
     
-  rndmBeam   = 0.;
-  EbeamCumul = 0.;
+  fRndmBeam   = 0.;
+  fEbeamCumul = 0.;
     
   //create a messenger for this class
-  gunMessenger = new PrimaryGeneratorMessenger(this);  
+  fGunMessenger = new PrimaryGeneratorMessenger(this);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
-  delete particleGun;
-  delete gunMessenger;  
+  delete fParticleGun;
+  delete fGunMessenger;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -73,23 +73,23 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   //this function is called at the begining of event
   //
-  G4double x0 = -0.5*(detector->GetWorldSizeX());
+  G4double x0 = -0.5*(fDetector->GetWorldSizeX());
   G4double y0 = 0.*cm, z0 = 0.*cm;
     
   //randomize the beam, if requested.
   //
-  if (rndmBeam > 0.) 
+  if (fRndmBeam > 0.) 
     {
-      if (rndmBeam > detector->GetAbsorSizeYZ())
-        rndmBeam = detector->GetAbsorSizeYZ(); 
-      G4double rbeam = 0.5*rndmBeam;
+      if (fRndmBeam > fDetector->GetAbsorSizeYZ())
+        fRndmBeam = fDetector->GetAbsorSizeYZ(); 
+      G4double rbeam = 0.5*fRndmBeam;
       y0 = (2*G4UniformRand()-1.)*rbeam;
       z0 = (2*G4UniformRand()-1.)*rbeam;
     }
-  particleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));  
-  particleGun->GeneratePrimaryVertex(anEvent);
+  fParticleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));  
+  fParticleGun->GeneratePrimaryVertex(anEvent);
   
-  EbeamCumul += particleGun->GetParticleEnergy(); 
+  fEbeamCumul += fParticleGun->GetParticleEnergy(); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
