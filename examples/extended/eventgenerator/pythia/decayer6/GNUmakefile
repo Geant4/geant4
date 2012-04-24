@@ -11,11 +11,19 @@ ifndef G4INSTALL
   G4INSTALL = ../../../../..
 endif
 
-.PHONY: all
+.PHONY: setup clean_setup all
 
 all: pythia6 lib bin
 
 EXTRALIBS = $(G4TMPDIR)/libPythia6.so
+
+setup:
+	@echo "Copying files from common"
+	@$(G4INSTALL)/examples/extended/common/scripts/copy_files.sh
+
+clean_setup:
+	@echo "Removing files copied from common"
+	@$(G4INSTALL)/examples/extended/common/scripts/clean_files.sh
 
 include $(G4INSTALL)/config/binmake.gmk
 

@@ -14,6 +14,13 @@ modifications introduced in the code and keep track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11/04/2012 - I.Hrivnacova (p6decayer-V09-05-00)
+-------------------------
+- Introduced use of classes from common
+- Introduced a physics builder for adding the external decayer to
+  an existing physics list 
+- Applied coding guidelines
+
 02/12/2010 - I.Hrivnacova (p6decayer-V09-03-02)
 -------------------------
 - Migrated to use particle-based multiple-scattering.

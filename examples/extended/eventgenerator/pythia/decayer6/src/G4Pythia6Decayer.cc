@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
 //
-// $Id: G4Pythia6Decayer.cc,v 1.4 2010-10-21 09:21:41 ivana Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
+/// \file G4Pythia6Decayer.cc
+/// \brief Implementation of the G4Pythia6Decayer class
+
+// ----------------------------------------------------------------------------
 // According to TPythia6Decayer class in Root:
 // http://root.cern.ch/
 // see http://root.cern.ch/root/License.html
@@ -47,7 +49,8 @@
 
 const  EDecayType G4Pythia6Decayer::fgkDefaultDecayType = kAll;
 
-//_____________________________________________________________________________
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4Pythia6Decayer::G4Pythia6Decayer()
   : G4VExtDecayer("G4Pythia6Decayer"),
     fMessenger(this),
@@ -62,7 +65,8 @@ G4Pythia6Decayer::G4Pythia6Decayer()
   ForceDecay(fDecayType);
 }
 
-//_____________________________________________________________________________
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4Pythia6Decayer::~G4Pythia6Decayer() 
 {
 /// Destructor
@@ -75,7 +79,8 @@ G4Pythia6Decayer::~G4Pythia6Decayer()
 //
 
 
-//_____________________________________________________________________________
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4ParticleDefinition* G4Pythia6Decayer::
 GetParticleDefinition(const Pythia6Particle* particle, G4bool warn) const
 {
@@ -100,7 +105,8 @@ GetParticleDefinition(const Pythia6Particle* particle, G4bool warn) const
   return particleDefinition;
 }
 
-//_____________________________________________________________________________
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4DynamicParticle*
 G4Pythia6Decayer::CreateDynamicParticle(const Pythia6Particle* particle) const
 { 
@@ -120,8 +126,8 @@ G4Pythia6Decayer::CreateDynamicParticle(const Pythia6Particle* particle) const
   return dynamicParticle;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//_____________________________________________________________________________
 G4ThreeVector G4Pythia6Decayer::GetParticlePosition(
                                    const Pythia6Particle* particle) const 
 {
@@ -134,8 +140,8 @@ G4ThreeVector G4Pythia6Decayer::GetParticlePosition(
   return position;
 }                       
                         
-                        
-//_____________________________________________________________________________
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4ThreeVector G4Pythia6Decayer::GetParticleMomentum(
                                    const Pythia6Particle* particle) const
 {
@@ -148,18 +154,21 @@ G4ThreeVector G4Pythia6Decayer::GetParticleMomentum(
   return momentum;
 }
 
-//______________________________________________________________________________
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4int G4Pythia6Decayer::CountProducts(G4int channel, G4int particle)
 {
 /// Count number of decay products
 
    G4int np = 0;
    for ( G4int i=1; i<=5; i++ ) 
-      if ( std::abs(Pythia6::Instance()->GetKFDP(channel,i) ) == particle ) np++;
+      if ( std::abs(Pythia6::Instance()->GetKFDP(channel,i) ) == particle ) 
+        np++;
    return np;
 }
 
-//______________________________________________________________________________
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void
 G4Pythia6Decayer::ForceParticleDecay(G4int particle, G4int product, G4int mult)
 {
@@ -184,7 +193,8 @@ G4Pythia6Decayer::ForceParticleDecay(G4int particle, G4int product, G4int mult)
    }
 }
 
-//______________________________________________________________________________
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4Pythia6Decayer::ForceParticleDecay(G4int particle, G4int* products,
                                          G4int* mult, G4int npart)
 {
@@ -210,7 +220,8 @@ void G4Pythia6Decayer::ForceParticleDecay(G4int particle, G4int* products,
    }
 }
 
-//______________________________________________________________________________
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4Pythia6Decayer::ForceHadronicD()
 {
 /// Force golden D decay modes
@@ -271,7 +282,8 @@ void G4Pythia6Decayer::ForceHadronicD()
    } // hadrons
 }
 
-//______________________________________________________________________________
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4Pythia6Decayer::ForceOmega()
 {
 /// Force Omega -> Lambda K- Decay
@@ -297,7 +309,8 @@ void G4Pythia6Decayer::ForceOmega()
    } // decay channels
 }
 
-//______________________________________________________________________________
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4Pythia6Decayer::ForceDecay(EDecayType decayType)
 {
 /// Force a particle decay mode
@@ -498,7 +511,8 @@ void G4Pythia6Decayer::ForceDecay(EDecayType decayType)
    }
 }
 
-//______________________________________________________________________________
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4Pythia6Decayer::Decay(G4int pdg, const CLHEP::HepLorentzVector& p)
 {
 /// Decay a particle of type IDPART (PDG code) and momentum P.
@@ -506,7 +520,8 @@ void G4Pythia6Decayer::Decay(G4int pdg, const CLHEP::HepLorentzVector& p)
    Pythia6::Instance()->Py1ent(0, pdg, p.e(), p.theta(), p.phi());
 }
 
-//______________________________________________________________________________
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4int G4Pythia6Decayer::ImportParticles(ParticleVector* particles)
 {
 /// Get the decay products into the passed PARTICLES vector
@@ -518,7 +533,8 @@ G4int G4Pythia6Decayer::ImportParticles(ParticleVector* particles)
 // public methods
 //
 
-//_____________________________________________________________________________
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4DecayProducts* G4Pythia6Decayer::ImportDecayProducts(const G4Track& track)
 {
 /// Import decay products
@@ -596,7 +612,8 @@ G4DecayProducts* G4Pythia6Decayer::ImportDecayProducts(const G4Track& track)
   return decayProducts;
 }
     
-//_____________________________________________________________________________
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4Pythia6Decayer::ForceDecayType(EDecayType decayType)
 { 
 /// Force a given decay type

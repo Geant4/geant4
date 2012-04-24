@@ -23,54 +23,46 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: DetectorMessenger.hh,v 1.1 2008-11-03 11:48:35 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
+// $Id$
 // 
-// ----------------------------------------------------------------------------
+/// \file P6DExtDecayerPhysics.hh
+/// \brief Definition of the P6DExtDecayerPhysics class
+///
+/// \author I. Hrivnacova; IPN Orsay
 
-#ifndef DetectorMessenger_h
-#define DetectorMessenger_h 1
+#ifndef P6D_EXT_DECAYER_PHYSICS_H
+#define P6D_EXT_DECAYER_PHYSICS_H
 
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
-#include "G4UImessenger.hh"
 
-class DetectorConstruction;
-class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithoutParameter;
+class G4Decay;
 
-// ----------------------------------------------------------------------------
+/// The builder for external decayer.
+///
+/// The external decayer is added to all instantiated decay
+/// processes
+///
+/// \author I. Hrivnacova; IPN Orsay
 
-class DetectorMessenger: public G4UImessenger
+class P6DExtDecayerPhysics: public G4VPhysicsConstructor
 {
   public:
+    P6DExtDecayerPhysics(const G4String& name = "ExtDecayer");
+    virtual ~P6DExtDecayerPhysics();
 
-    DetectorMessenger(DetectorConstruction* );
-   ~DetectorMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
-    
+  protected:
+    // methods
+          // construct particle and physics
+    virtual void ConstructParticle();
+    virtual void ConstructProcess();
+
   private:
-
-    DetectorConstruction* Detector;
-    
-    G4UIdirectory*             decDir;
-    G4UIdirectory*             detDir;
-    G4UIcmdWithAString*        AbsMaterCmd;
-    G4UIcmdWithAString*        GapMaterCmd;
-    G4UIcmdWithADoubleAndUnit* AbsThickCmd;
-    G4UIcmdWithADoubleAndUnit* GapThickCmd;
-    G4UIcmdWithADoubleAndUnit* SizeYZCmd;
-    G4UIcmdWithAnInteger*      NbLayersCmd;    
-    G4UIcmdWithADoubleAndUnit* MagFieldCmd;
-    G4UIcmdWithoutParameter*   UpdateCmd;
+    /// Not implemented
+    P6DExtDecayerPhysics(const P6DExtDecayerPhysics& right);
+    /// Not implemented
+    P6DExtDecayerPhysics& operator=(const P6DExtDecayerPhysics& right);
 };
 
-// ----------------------------------------------------------------------------
-
-#endif
+#endif //P6D_EXT_DECAYER_PHYSICS_H
 

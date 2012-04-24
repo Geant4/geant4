@@ -23,14 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: PhysicsList.cc,v 1.2 2010-10-21 09:21:41 ivana Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
+// $Id$
 // 
-// ----------------------------------------------------------------------------
+/// \file P6DPhysicsList.cc
+/// \brief Implementation of the P6DPhysicsList class
 
-#include "PhysicsList.hh"
+#include "P6DPhysicsList.hh"
 
 #include "G4ProcessManager.hh"
 
@@ -41,47 +39,24 @@
 #include "G4BaryonConstructor.hh"
 #include "G4IonConstructor.hh"
 
-/// REMOVE
-/*
-#include "G4ProcessManager.hh"
-#include "G4ParticleTypes.hh"
-#include "G4Pythia6Decayer.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4ComptonScattering.hh"
-#include "G4GammaConversion.hh"
-#include "G4PhotoElectricEffect.hh"
-
-#include "G4MultipleScattering.hh"
-
-#include "G4eIonisation.hh"
-#include "G4eBremsstrahlung.hh"
-#include "G4eplusAnnihilation.hh"
-
-#include "G4MuIonisation.hh"
-#include "G4MuBremsstrahlung.hh"
-#include "G4MuPairProduction.hh"
-
-#include "G4hIonisation.hh"
-
-#include "G4Decay.hh"
-*/
-// ----------------------------------------------------------------------------
-
-PhysicsList::PhysicsList():  G4VUserPhysicsList()
+P6DPhysicsList::P6DPhysicsList()
+ : G4VUserPhysicsList()
 {
   defaultCutValue = 1.0*mm;
   SetVerboseLevel(1);
 }
 
-// ----------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::~PhysicsList()
+P6DPhysicsList::~P6DPhysicsList()
 {
 }
 
-// ----------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysicsList::ConstructParticle()
+void P6DPhysicsList::ConstructParticle()
 {
   // In this method, static member functions should be called
   // for all particles which you want to use.
@@ -104,16 +79,16 @@ void PhysicsList::ConstructParticle()
   pIonConstructor.ConstructParticle(); 
 }
 
-// ----------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysicsList::ConstructProcess()
+void P6DPhysicsList::ConstructProcess()
 {
   AddTransportation();
   ConstructEM();
   ConstructDecay();
 }
 
-// ----------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
@@ -136,7 +111,7 @@ void PhysicsList::ConstructProcess()
 
 #include "G4ionIonisation.hh"
 
-void PhysicsList::ConstructEM()
+void P6DPhysicsList::ConstructEM()
 {
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
@@ -201,12 +176,12 @@ void PhysicsList::ConstructEM()
   }
 }
 
-// ----------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4Decay.hh"
 #include "G4Pythia6Decayer.hh"
 
-void PhysicsList::ConstructDecay()
+void P6DPhysicsList::ConstructDecay()
 {
   // Add Decay Process
   G4Decay* theDecayProcess = new G4Decay();
@@ -232,13 +207,13 @@ void PhysicsList::ConstructDecay()
   }
 }
 
-// ----------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysicsList::SetCuts()
+void P6DPhysicsList::SetCuts()
 {
   if (verboseLevel >0)
   {
-    G4cout << "PhysicsList::SetCuts:";
+    G4cout << "P6DPhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
   }
 
@@ -253,5 +228,6 @@ void PhysicsList::SetCuts()
   if (verboseLevel>0) DumpCutValuesTable();
 }
 
-// ----------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 

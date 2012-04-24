@@ -23,31 +23,37 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: P6DPhysicsList.hh,v 1.2 2010-10-21 09:21:41 ivana Exp $
 //
-// $Id: SteppingVerbose.hh,v 1.1 2008-11-03 11:48:35 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//
-// ----------------------------------------------------------------------------
+/// \file P6DPhysicsList.hh
+/// \brief Definition of the P6DPhysicsList class
 
-class SteppingVerbose;
+#ifndef P6DPhysicsList_h
+#define P6DPhysicsList_h 1
 
-#ifndef SteppingVerbose_h
-#define SteppingVerbose_h 1
+#include "G4VUserPhysicsList.hh"
+#include "globals.hh"
 
-#include "G4SteppingVerbose.hh"
+/// The physics list class with Pythia6 decayer
 
-// ----------------------------------------------------------------------------
-
-class SteppingVerbose : public G4SteppingVerbose
+class P6DPhysicsList: public G4VUserPhysicsList
 {
-  public:   
+  public:
 
-    SteppingVerbose();
-   ~SteppingVerbose();
+    P6DPhysicsList();
+    ~P6DPhysicsList();
 
-    void StepInfo();
-    void TrackingStarted();
+    // Construct particle and physics
+    virtual void ConstructParticle();
+    virtual void ConstructProcess();
+ 
+    virtual void SetCuts();
+   
+  private:
+
+    // these methods Construct physics processes and register them
+    void ConstructDecay();
+    void ConstructEM();
 };
 
 // ----------------------------------------------------------------------------
