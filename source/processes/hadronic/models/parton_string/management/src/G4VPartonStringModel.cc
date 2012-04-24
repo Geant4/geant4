@@ -42,6 +42,9 @@
 #include "G4ios.hh"
 #include "G4ShortLivedConstructor.hh"
 
+#include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
+
 
 G4VPartonStringModel::G4VPartonStringModel() : G4VHighEnergyGenerator(),
 stringFragmentationModel(0), theThis(0)
@@ -122,28 +125,31 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
   G4double InvMass=SumStringMom.mag();   
 
 //#define debug_PartonStringModel
-  #ifdef debug_PartonStringModel
+#ifdef debug_PartonStringModel
+
   G4V3DNucleus * fancynucleus=theThis->GetWoundedNucleus();
   
        // loop over wounded nucleus
-     G4int hits(0);
+     G4int hits(0), charged_hits(0);
      G4Nucleon * theCurrentNucleon = fancynucleus->StartLoop() ? fancynucleus->GetNextNucleon() : NULL;
      while(theCurrentNucleon != NULL)
      {
        if(theCurrentNucleon->AreYouHit()) 
        {
          hits++;
+         if ( theCurrentNucleon->GetDefinition() == G4Proton::Proton() )  ++charged_hits;
        }
        theCurrentNucleon = fancynucleus->GetNextNucleon();
      }
      
-     G4cout << "G4VPSM: strE, nucleons,SumStringE,  inE "
-            << stringEnergy << " "    
-	    << hits << " "
-	    << Ptmp.e() << " " 
-	    << SumStringMom.e() << " "
-	    << Ptmp.e() + 939.*hits - stringEnergy  << G4endl;
-  #endif
+     G4int initialZ=fancynucleus->GetCharge();
+     G4int initialA=fancynucleus->GetMassNumber();
+     G4double initial_mass=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(initialZ,initialA);
+     G4double final_mass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(initialZ-charged_hits, initialA-hits);
+     G4cout << "G4VPSM: strE, hit nucleons, Primary, SumStringE, nucleus intial, nucleus final, excitation estimate "
+            << stringEnergy << " "    << hits << ", " << Ptmp.e() << ", "<< SumStringMom.e() << ", "
+	        << initial_mass<< ", " << final_mass<< ", "  << Ptmp.e() + initial_mass - final_mass - stringEnergy  << G4endl;
+#endif
 
 //  Fragment strings
 
