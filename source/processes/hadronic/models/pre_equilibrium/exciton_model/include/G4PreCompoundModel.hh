@@ -73,7 +73,9 @@ public:
 					  G4Nucleus & theNucleus);
 
   virtual G4ReactionProductVector* DeExcite(G4Fragment& aFragment);
-
+  
+  virtual void ModelDescription(std::ostream& outFile) const;
+  
   void UseHETCEmission();
   void UseDefaultEmission();
   void UseGNASHTransition();

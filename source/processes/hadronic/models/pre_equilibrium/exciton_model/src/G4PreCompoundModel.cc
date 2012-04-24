@@ -92,6 +92,28 @@ G4PreCompoundModel::~G4PreCompoundModel()
   delete GetExcitationHandler();
 }
 
+void G4PreCompoundModel::ModelDescription(std::ostream& outFile) const
+{
+	outFile << "The GEANT4 precompound model is considered as an extension of the\n"
+		<<	"hadron kinetic model. It gives a possibility to extend the low energy range\n"
+		<<	"of the hadron kinetic model for nucleon-nucleus inelastic collision and it \n"
+		<<	"provides a ”smooth” transition from kinetic stage of reaction described by the\n"
+		<<	"hadron kinetic model to the equilibrium stage of reaction described by the\n"
+		<<	"equilibrium deexcitation models.\n"
+		<<	"The initial information for calculation of pre-compound nuclear stage\n"
+		<<	"consists of the atomic mass number A, charge Z of residual nucleus, its\n"
+		<<	"four momentum P0 , excitation energy U and number of excitons n, which equals\n"
+		<<	"the sum of the number of particles p (from them p_Z are charged) and the number of\n"
+		<<	"holes h.\n"
+		<<	"At the preequilibrium stage of reaction, we follow the exciton model approach in ref. [1],\n"
+		<<	"taking into account the competition among all possible nuclear transitions\n"
+		<<	"with ∆n = +2, −2, 0 (which are deﬁned by their associated transition probabilities) and\n"
+		<<	"the emission of neutrons, protons, deutrons, thritium and helium nuclei (also defined by\n"
+		<<	"their associated emission  probabilities according to exciton model)\n"
+		<<	"\n"
+		<<	"[1] K.K. Gudima, S.G. Mashnik, V.D. Toneev, Nucl. Phys. A401 329 (1983)\n"
+		<< std::endl;
+}
 /////////////////////////////////////////////////////////////////////////////////////////
 
 G4HadFinalState* G4PreCompoundModel::ApplyYourself(const G4HadProjectile & thePrimary,
