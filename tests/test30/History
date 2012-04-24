@@ -14,13 +14,22 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-test30-V09-05-01  26 March 2011 V.Ivanchenko
+test30-V09-05-04  17 April 2012 V.Ivanchenko
+- Histo - minor cleanup
+
+test30-V09-05-03  17 April 2012 V.Ivanchenko
+- Histo - added SetVerbose method
+
+test30-V09-05-02  12 April 2012 V.Ivanchenko
+- Histo and HistoManager are using G4 internal histograms
+
+test30-V09-05-01  26 March 2012 V.Ivanchenko
 - Test30Physics - do not Set local PreCompound model to LightBinaryIon cascade
     to avoid double deletion; add exception if not correct particles
     are used for LHEP and RPG
 - test30.cc - comment out Tripathi cross sections - Shen is used for ions
 
-test30-V09-05-00  20 January 2011 V.Ivanchenko
+test30-V09-05-00  20 January 2012 V.Ivanchenko
 - Test30Physics - do not delete model and process to avoid double deletion
 
 test30-V09-04-10   1 November 2011 V.Ivanchenko

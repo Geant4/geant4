@@ -9,6 +9,8 @@
 //--------Proton_processes
 #particle
 proton
+#energy(MeV)
+200.
 //--------
 #material
 G4_C

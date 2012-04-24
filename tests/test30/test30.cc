@@ -660,110 +660,111 @@ int main(int argc, char** argv)
 
       isInitH = true;
     
-      histo.add1D("1","Number of Secondaries",100,-0.5,99.5);
-      histo.add1D("2","Type of secondary",10,-0.5,9.5);
-      histo.add1D("3","Phi(degrees) of Secondaries",90,-180.0,180.0);
+      histo.Add1D("1","Number of Secondaries",100,-0.5,99.5);
+      histo.Add1D("2","Type of secondary",10,-0.5,9.5);
+      histo.Add1D("3","Phi(degrees) of Secondaries",90,-180.0,180.0);
 
-      histo.add1D("4","ds/dE for protons at theta = 0",nbinsd,0.,emax);
-      histo.add1D("5","ds/dE for protons at theta = 1",nbinsd,0.,emax);
-      histo.add1D("6","ds/dE for protons at theta = 2",nbinsd,0.,emax);
-      histo.add1D("7","ds/dE for protons at theta = 3",nbinsd,0.,emax);
-      histo.add1D("8","ds/dE for protons at theta = 4",nbinsd,0.,emax);
-      histo.add1D("9","ds/dE for protons at theta = 5",nbinsd,0.,emax);
-      histo.add1D("10","ds/dE for protons at theta = 6",nbinsd,0.,emax);
-      histo.add1D("11","ds/dE for protons at theta = 7",nbinsd,0.,emax);
-      histo.add1D("12","ds/dE for protons at theta = 8",nbinsd,0.,emax);
-      histo.add1D("13","ds/dE for protons at theta = 9",nbinsd,0.,emax);
-      histo.add1D("14","ds/dE for protons at theta = 10",nbinsd,0.,emax);
+      histo.Add1D("4","ds/dE for protons at theta = 0",nbinsd,0.,emax);
+      histo.Add1D("5","ds/dE for protons at theta = 1",nbinsd,0.,emax);
+      histo.Add1D("6","ds/dE for protons at theta = 2",nbinsd,0.,emax);
+      histo.Add1D("7","ds/dE for protons at theta = 3",nbinsd,0.,emax);
+      histo.Add1D("8","ds/dE for protons at theta = 4",nbinsd,0.,emax);
+      histo.Add1D("9","ds/dE for protons at theta = 5",nbinsd,0.,emax);
+      histo.Add1D("10","ds/dE for protons at theta = 6",nbinsd,0.,emax);
+      histo.Add1D("11","ds/dE for protons at theta = 7",nbinsd,0.,emax);
+      histo.Add1D("12","ds/dE for protons at theta = 8",nbinsd,0.,emax);
+      histo.Add1D("13","ds/dE for protons at theta = 9",nbinsd,0.,emax);
+      histo.Add1D("14","ds/dE for protons at theta = 10",nbinsd,0.,emax);
 
       G4int i;
-      // proton double differencial histograms are active by request
-      for(i=nanglpr; i<11; ++i) {histo.activate(3+i, false);}
+      // proton double differential histograms are active by request
+      for(i=nanglpr; i<11; ++i) {histo.Activate(3+i, false);}
 
-      histo.add1D("15","E(MeV) for gamma",200,0.,energyg);
-      histo.add1D("16","delta E (MeV) ",100,-balance,balance);
-      histo.add1D("17","delta Pz (MeV/c)",100,-balance,balance);
-      histo.add1D("18","delta Pt (MeV/c)",100,-balance,balance);
+      histo.Add1D("15","E(MeV) for gamma",200,0.,energyg);
+      histo.Add1D("16","delta E (MeV) ",100,-balance,balance);
+      histo.Add1D("17","delta Pz (MeV/c)",100,-balance,balance);
+      histo.Add1D("18","delta Pt (MeV/c)",100,-balance,balance);
 
-      histo.add1D("19","E(MeV) for pi0",nbinse,0.,emax);
-      histo.add1D("20","E(MeV) for pi+",nbinse,0.,emax);
-      histo.add1D("21","E(MeV) for pi-",nbinse,0.,emax);
-      histo.add1D("22","E(MeV) protons",nbinse,0.,emax);
-      histo.add1D("23","E(MeV) neutrons",nbinse,0.,emax);
+      histo.Add1D("19","E(MeV) for pi0",nbinse,0.,emax);
+      histo.Add1D("20","E(MeV) for pi+",nbinse,0.,emax);
+      histo.Add1D("21","E(MeV) for pi-",nbinse,0.,emax);
+      histo.Add1D("22","E(MeV) protons",nbinse,0.,emax);
+      histo.Add1D("23","E(MeV) neutrons",nbinse,0.,emax);
 
-      histo.add1D("24","Phi(degrees) of neutrons",90,-180.0,180.0);
+      histo.Add1D("24","Phi(degrees) of neutrons",90,-180.0,180.0);
 
-      histo.add1D("25","cos(theta) protons",nbinsa,costmax,1.);
-      histo.add1D("26","cos(theta) neutrons",nbinsa,costmax,1.);
+      histo.Add1D("25","cos(theta) protons",nbinsa,costmax,1.);
+      histo.Add1D("26","cos(theta) neutrons",nbinsa,costmax,1.);
 
-      histo.add1D("27","Baryon number (mbn)",maxn,-0.5,(G4double)maxn + 0.5);
+      histo.Add1D("27","Baryon number (mbn)",maxn,-0.5,(G4double)maxn + 0.5);
 
-      histo.add1D("28","ds/dE for neutrons at theta = 0",nbinsd,0.,emax);
-      histo.add1D("29","ds/dE for neutrons at theta = 1",nbinsd,0.,emax);
-      histo.add1D("30","ds/dE for neutrons at theta = 2",nbinsd,0.,emax);
-      histo.add1D("31","ds/dE for neutrons at theta = 3",nbinsd,0.,emax);
-      histo.add1D("32","ds/dE for neutrons at theta = 4",nbinsd,0.,emax);
-      histo.add1D("33","ds/dE for neutrons at theta = 5",nbinsd,0.,emax);
-      histo.add1D("34","ds/dE for neutrons at theta = 6",nbinsd,0.,emax);
-      histo.add1D("35","ds/dE for neutrons at theta = 7",nbinsd,0.,emax);
-      histo.add1D("36","ds/dE for neutrons at theta = 8",nbinsd,0.,emax);
-      histo.add1D("37","ds/dE for neutrons at theta = 9",nbinsd,0.,emax);
-      histo.add1D("38","ds/dE for neutrons at theta = 10",nbinsd,0.,emax);
-      histo.add1D("39","ds/dE for neutrons at theta = 11",nbinsd,0.,emax);
-      histo.add1D("40","ds/dE for neutrons at theta = 12",nbinsd,0.,emax);
+      histo.Add1D("28","ds/dE for neutrons at theta = 0",nbinsd,0.,emax);
+      histo.Add1D("29","ds/dE for neutrons at theta = 1",nbinsd,0.,emax);
+      histo.Add1D("30","ds/dE for neutrons at theta = 2",nbinsd,0.,emax);
+      histo.Add1D("31","ds/dE for neutrons at theta = 3",nbinsd,0.,emax);
+      histo.Add1D("32","ds/dE for neutrons at theta = 4",nbinsd,0.,emax);
+      histo.Add1D("33","ds/dE for neutrons at theta = 5",nbinsd,0.,emax);
+      histo.Add1D("34","ds/dE for neutrons at theta = 6",nbinsd,0.,emax);
+      histo.Add1D("35","ds/dE for neutrons at theta = 7",nbinsd,0.,emax);
+      histo.Add1D("36","ds/dE for neutrons at theta = 8",nbinsd,0.,emax);
+      histo.Add1D("37","ds/dE for neutrons at theta = 9",nbinsd,0.,emax);
+      histo.Add1D("38","ds/dE for neutrons at theta = 10",nbinsd,0.,emax);
+      histo.Add1D("39","ds/dE for neutrons at theta = 11",nbinsd,0.,emax);
+      histo.Add1D("40","ds/dE for neutrons at theta = 12",nbinsd,0.,emax);
 
-      // neutron double differencial histograms are active by request
-      for(i=nangl; i<13; i++) {histo.activate(27+i, false);}
+      // neutron double differential histograms are active by request
+      for(i=nangl; i<13; i++) {histo.Activate(27+i, false);}
  
-      histo.add1D("41","ds/dE for pi- at theta = 0",nbinspi,0.,emaxpi);
-      histo.add1D("42","ds/dE for pi- at theta = 1",nbinspi,0.,emaxpi);
-      histo.add1D("43","ds/dE for pi- at theta = 2",nbinspi,0.,emaxpi);
-      histo.add1D("44","ds/dE for pi- at theta = 3",nbinspi,0.,emaxpi);
-      histo.add1D("45","ds/dE for pi- at theta = 4",nbinspi,0.,emaxpi);
-      histo.add1D("46","ds/dE for pi+ at theta = 0",nbinspi,0.,emaxpi);
-      histo.add1D("47","ds/dE for pi+ at theta = 1",nbinspi,0.,emaxpi);
-      histo.add1D("48","ds/dE for pi+ at theta = 2",nbinspi,0.,emaxpi);
-      histo.add1D("49","ds/dE for pi+ at theta = 3",nbinspi,0.,emaxpi);
-      histo.add1D("50","ds/dE for pi+ at theta = 4",nbinspi,0.,emaxpi);
+      histo.Add1D("41","ds/dE for pi- at theta = 0",nbinspi,0.,emaxpi);
+      histo.Add1D("42","ds/dE for pi- at theta = 1",nbinspi,0.,emaxpi);
+      histo.Add1D("43","ds/dE for pi- at theta = 2",nbinspi,0.,emaxpi);
+      histo.Add1D("44","ds/dE for pi- at theta = 3",nbinspi,0.,emaxpi);
+      histo.Add1D("45","ds/dE for pi- at theta = 4",nbinspi,0.,emaxpi);
+      histo.Add1D("46","ds/dE for pi+ at theta = 0",nbinspi,0.,emaxpi);
+      histo.Add1D("47","ds/dE for pi+ at theta = 1",nbinspi,0.,emaxpi);
+      histo.Add1D("48","ds/dE for pi+ at theta = 2",nbinspi,0.,emaxpi);
+      histo.Add1D("49","ds/dE for pi+ at theta = 3",nbinspi,0.,emaxpi);
+      histo.Add1D("50","ds/dE for pi+ at theta = 4",nbinspi,0.,emaxpi);
 
-      // pion double differencial histograms are active by request
+      // pion double differential histograms are active by request
       for(i=nanglpi; i<5; i++) {
-	histo.activate(40+i, false);
-	histo.activate(45+i, false);
+	histo.Activate(40+i, false);
+	histo.Activate(45+i, false);
       }
-      histo.add1D("51","E(MeV) neutrons",nbinlog,logmin,logmax);
-      histo.add1D("52","ds/dE for neutrons at theta = 0",nbinlog,logmin,logmax);
-      histo.add1D("53","ds/dE for neutrons at theta = 1",nbinlog,logmin,logmax);
-      histo.add1D("54","ds/dE for neutrons at theta = 2",nbinlog,logmin,logmax);
-      histo.add1D("55","ds/dE for neutrons at theta = 3",nbinlog,logmin,logmax);
-      histo.add1D("56","ds/dE for neutrons at theta = 4",nbinlog,logmin,logmax);
-      histo.add1D("57","ds/dE for neutrons at theta = 5",nbinlog,logmin,logmax);
+      histo.Add1D("51","E(MeV) neutrons",nbinlog,logmin,logmax);
+      histo.Add1D("52","ds/dE for neutrons at theta = 0",nbinlog,logmin,logmax);
+      histo.Add1D("53","ds/dE for neutrons at theta = 1",nbinlog,logmin,logmax);
+      histo.Add1D("54","ds/dE for neutrons at theta = 2",nbinlog,logmin,logmax);
+      histo.Add1D("55","ds/dE for neutrons at theta = 3",nbinlog,logmin,logmax);
+      histo.Add1D("56","ds/dE for neutrons at theta = 4",nbinlog,logmin,logmax);
+      histo.Add1D("57","ds/dE for neutrons at theta = 5",nbinlog,logmin,logmax);
 
-      // neutron double differencial histograms are active by request
-      for(i=nangl; i<6; i++) {histo.activate(51+i, false);}
+      // neutron double differential histograms are active by request
+      for(i=nangl; i<6; i++) {histo.Activate(51+i, false);}
 
       if(extraproc) {
-	histo.add1D("58","Ekin (MeV) for primary particle",120,0.,energy*1.2/MeV);
-	histo.add1D("59","cos(Theta) for recoil particle in Lab.Sys.",nbinsa,costmax,1.);
-	histo.add1D("60","cos(Theta) for primary particle in Lab.Sys.",nbinsa,costmax,1.);
-	histo.add1D("61","cos(Theta) for recoil particle in CM.Sys.",nbinsa,costmax,1.);
-	histo.add1D("62","cos(Theta) for primary particle in CM.Sys.",nbinsa,costmax,1.);
-	histo.add1D("63","Ekin (MeV) for recoil particle",120,0.,energy*1.2/MeV);
-	histo.add1D("64","Theta (degree) for primary particle in Lab.Sys.",nbinsa,0.0,tetmax);
+	histo.Add1D("58","Ekin (MeV) for primary particle",120,0.,energy*1.2/MeV);
+	histo.Add1D("59","cos(Theta) for recoil particle in Lab.Sys.",nbinsa,costmax,1.);
+	histo.Add1D("60","cos(Theta) for primary particle in Lab.Sys.",nbinsa,costmax,1.);
+	histo.Add1D("61","cos(Theta) for recoil particle in CM.Sys.",nbinsa,costmax,1.);
+	histo.Add1D("62","cos(Theta) for primary particle in CM.Sys.",nbinsa,costmax,1.);
+	histo.Add1D("63","Ekin (MeV) for recoil particle",120,0.,energy*1.2/MeV);
+	histo.Add1D("64","Theta (degree) for primary particle in Lab.Sys.",nbinsa,0.0,tetmax);
         G4double x2 = std::log10(tetmax);
         G4double x1 = x2 - std::log10((double)nbinsa);
         xxl = x2 - x1;
-	histo.add1D("65","log10(theta (degree)) for primary particle in Lab.Sys.",nbinsa,x1,x2);
-	histo.add1D("66","Theta (degree) for primary particle in CM.Sys.",nbinsa,0.0,tetmax);
+	histo.Add1D("65","log10(theta (degree)) for primary particle in Lab.Sys.",nbinsa,x1,x2);
+	histo.Add1D("66","Theta (degree) for primary particle in CM.Sys.",nbinsa,0.0,tetmax);
 	// desactivate not needed hist for elastic
-	histo.activate(50, false);
-	for(i=0; i<13; i++) {histo.activate(14+i, false);}
+	histo.Activate(50, false);
+
+	for(i=0; i<13; i++) {histo.Activate(14+i, false);}
       }
     }
 
     if(usepaw) {
-      histo.setFileName(hFile);
-      histo.book();
+      histo.SetFileName(hFile);
+      histo.Book();
       G4cout << "Histograms are booked output file <" << hFile << ".root> "
 	     << G4endl;
     }
@@ -1123,21 +1124,21 @@ int main(int argc, char** argv)
 	if(usepaw) {
           if(extraproc) {
 	    if(i==0)  {
-	      histo.fill(57,e/MeV,1.0);
-	      histo.fill(59,cost,factora);
-	      histo.fill(61,costcm,factora);
+	      histo.Fill(57,e/MeV,1.0);
+	      histo.Fill(59,cost,factora);
+	      histo.Fill(61,costcm,factora);
 	    } else if(i==1) {
-	      histo.fill(58,e/MeV,1.0);
-	      histo.fill(60,cost,factora);
-	      histo.fill(62,costcm,factora);
-	      histo.fill(63,thetad,factoraa/std::sin(theta));
-	      histo.fill(64,std::log10(thetad),factoral*theta/std::sin(theta));
-	      histo.fill(65,tetcmd,factoraa/std::sin(tetcm));
+	      histo.Fill(58,e/MeV,1.0);
+	      histo.Fill(60,cost,factora);
+	      histo.Fill(62,costcm,factora);
+	      histo.Fill(63,thetad,factoraa/std::sin(theta));
+	      histo.Fill(64,std::log10(thetad),factoral*theta/std::sin(theta));
+	      histo.Fill(65,tetcmd,factoraa/std::sin(tetcm));
 	    }
 	  }
 
-          histo.fill(2,mom.phi()/degree,1.0);
-          if(pd == neutron) histo.fill(23,mom.phi()/degree,1.0);
+          histo.Fill(2,mom.phi()/degree,1.0);
+          if(pd == neutron) histo.Fill(23,mom.phi()/degree,1.0);
 	}
 
 	if( (e > e0 + MeV || e == 0.0 || pt == 0.0) && warn < 100 ) {
@@ -1172,18 +1173,18 @@ int main(int argc, char** argv)
             G4double Z1= pd->GetPDGCharge()/eplus;
             G4double Z0= bestZ[(G4int)N];
             if(std::fabs(Z0 - Z1) < 0.1 || Z0 == 0.0) 
-	      histo.fill(26, N, factorb);
+	      histo.Fill(26, N, factorb);
 	  }
 
           if(pd == proton) {
 
             if(rmsProton > 0.0) e += e*rmsProton*G4RandGauss::shoot(0.0,1.0);
-            histo.fill(1,1.0, 1.0);
-	    histo.fill(21,e/MeV, factor);
-	    histo.fill(24,cost, factora);
+            histo.Fill(1,1.0, 1.0);
+	    histo.Fill(21,e/MeV, factor);
+	    histo.Fill(24,cost, factora);
             for(G4int kk=0; kk<nanglpr; kk++) {
               if(bng1pr[kk] <= thetad && thetad <= bng2pr[kk]) {
-                histo.fill(3+kk,e/MeV, cngpr[kk]);
+                histo.Fill(3+kk,e/MeV, cngpr[kk]);
                 break;
 	      }
 	    }
@@ -1191,11 +1192,11 @@ int main(int argc, char** argv)
           } else if(pd == pin) {
 
             if(rmsPion > 0.0) e += e*rmsPion*G4RandGauss::shoot(0.0,1.0);
-	    histo.fill(1,4.0, 1.0);
-            histo.fill(20,e/MeV, 1.0);
+	    histo.Fill(1,4.0, 1.0);
+            histo.Fill(20,e/MeV, 1.0);
             for(G4int kk=0; kk<nanglpi; kk++) {
               if(bngpi1[kk] <= thetad && thetad <= bngpi2[kk]) {
-                histo.fill(40+kk,e/MeV, cngpi[kk]);
+                histo.Fill(40+kk,e/MeV, cngpi[kk]);
                 break;
 	      }
 	    }
@@ -1203,25 +1204,25 @@ int main(int argc, char** argv)
           } else if(pd == pip) {
 
             if(rmsPion > 0.0) e += e*rmsPion*G4RandGauss::shoot(0.0,1.0);
-	    histo.fill(1,3.0, 1.0);
-            histo.fill(19,e/MeV, 1.0);
+	    histo.Fill(1,3.0, 1.0);
+            histo.Fill(19,e/MeV, 1.0);
             for(G4int kk=0; kk<nanglpi; kk++) {
               if(bngpi1[kk] <= thetad && thetad <= bngpi2[kk]) {
-                histo.fill(45+kk,e/MeV, cngpi[kk]);
+                histo.Fill(45+kk,e/MeV, cngpi[kk]);
                 break;
 	      }
 	    }
 
 	  } else if(pd == pi0) {
 
-	    histo.fill(1,5.0, 1.0);
-	    histo.fill(18,e/MeV, 1.0);
+	    histo.Fill(1,5.0, 1.0);
+	    histo.Fill(18,e/MeV, 1.0);
 
 	  } else if(pd == neutron) {
 
             if(rmsNeutron > 0.0) e += e*rmsNeutron*G4RandGauss::shoot(0.0,1.0);
-	    histo.fill(1,2.0, 1.0);
-	    histo.fill(22,e/MeV, factor);
+	    histo.Fill(1,2.0, 1.0);
+	    histo.Fill(22,e/MeV, factor);
             G4double ee = std::log10(e/MeV);
 	    G4double e2 = ee;
             G4bool islog= false;
@@ -1230,28 +1231,28 @@ int main(int argc, char** argv)
 	      G4int nbb = G4int(((ee - logmin)/binlog));
               G4double e1 = logmin + binlog*nbb;
 	      e2 = std::pow(10.,e1 + binlog) - std::pow(10.,e1);
-	      histo.fill(50, ee, factor*bine/e2);
+	      histo.Fill(50, ee, factor*bine/e2);
 	    } 
-	    if(e >= elim) histo.fill(25, cost, factora);
+	    if(e >= elim) histo.Fill(25, cost, factora);
             for(G4int kk=0; kk<nangl; kk++) {
               if(bng1[kk] <= thetad && thetad <= bng2[kk]) {
-                histo.fill(27+kk,e/MeV, cng[kk]);
-                if(islog && kk < 6) histo.fill(51+kk,ee,cng[kk]*bind/e2);
+                histo.Fill(27+kk,e/MeV, cng[kk]);
+                if(islog && kk < 6) histo.Fill(51+kk,ee,cng[kk]*bind/e2);
                 break;
 	      }
 	    }
 
 	  } else if(pd == gamma) {
-	    histo.fill(14,e/MeV, 1.0);
+	    histo.Fill(14,e/MeV, 1.0);
 
 	  } else if(pd == deu) {
-	    histo.fill(1,6.0, 1.0);
+	    histo.Fill(1,6.0, 1.0);
 	  } else if(pd == tri) {
-	    histo.fill(1,7.0, 1.0);
+	    histo.Fill(1,7.0, 1.0);
 	  } else if(pd == alp) {
-	    histo.fill(1,8.0, 1.0);
+	    histo.Fill(1,8.0, 1.0);
 	  } else {
-	    histo.fill(1,9.0, 1.0);
+	    histo.Fill(1,9.0, 1.0);
 	  }
 	}
 	//	delete sec;       	 
@@ -1275,12 +1276,12 @@ int main(int argc, char** argv)
         G4double tetcmd = tetcm/degree;
         G4double costcm = std::cos(tetcm);
        
-	histo.fill(58,ekin/MeV,1.0);
-	histo.fill(60,cost,factora);
-	histo.fill(62,costcm,factora);
-	histo.fill(63,thetad,factoraa/std::sin(theta));
-	histo.fill(64,std::log10(thetad),factoral*theta/std::sin(theta));
-	histo.fill(65,tetcmd,factoraa/std::sin(tetcm));
+	histo.Fill(58,ekin/MeV,1.0);
+	histo.Fill(60,cost,factora);
+	histo.Fill(62,costcm,factora);
+	histo.Fill(63,thetad,factoraa/std::sin(theta));
+	histo.Fill(64,std::log10(thetad),factoral*theta/std::sin(theta));
+	histo.Fill(65,tetcmd,factoraa/std::sin(tetcm));
         if(verbose>1) {
           G4cout /*<< "Warning! evt# " << iter*/ 
                  << "primary  "
@@ -1305,21 +1306,21 @@ int main(int argc, char** argv)
       pt = std::sqrt(px*px +py*py);
 
       if(usepaw) {
-        histo.fill(0,(G4double)n,1.0);
+        histo.Fill(0,(G4double)n,1.0);
 
         G4double ex = labv.e()/MeV;
         if(ex >= balance) { ex = balance - 0.0001; }
         else if(ex <= -balance) { ex = -balance + 0.0001; }
-	histo.fill(15,ex, 1.0);
+	histo.Fill(15,ex, 1.0);
 
         ex = pz/MeV;
         if(ex >= balance) { ex = balance - 0.0001; }
         else if(ex <= -balance) { ex = -balance + 0.0001; }
-	histo.fill(16,ex, 1.0);
+	histo.Fill(16,ex, 1.0);
 
         ex = pt/MeV;
         if(ex >= balance) { ex = balance - 0.0001; }
-	histo.fill(17,ex, 1.0);
+	histo.Fill(17,ex, 1.0);
       }
       aChange->Clear();
     }
@@ -1332,7 +1333,7 @@ int main(int argc, char** argv)
 
     if(usepaw) {
       if(verbose > 0) { G4cout << "###### Save histograms" << G4endl; }
-      histo.save();
+      histo.Save();
     }
     if(verbose > 0) {
       G4cout << "###### End of run # " << run << "     ######" << G4endl;
