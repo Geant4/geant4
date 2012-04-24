@@ -52,7 +52,7 @@ public:
   {fOptionString = optionString;}
   void SetScene(const G4String& scene)
   {fScene = scene;}
-  void Draw();
+  virtual void Draw();
 private:
   void ExtendedDraw (const G4VSolid&, const G4VisAttributes&,
     const G4Transform3D& objectTransformation = G4Transform3D());

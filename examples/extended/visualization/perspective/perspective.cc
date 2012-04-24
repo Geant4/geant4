@@ -42,9 +42,7 @@ int main(int argc,char** argv) {
 
   visManager->SetUserAction
     (new PerspectiveVisAction,
-     G4VisExtent(-5*m,5*m,-5*m,5*m,-5*m,5*m));
-  // 2nd argument optional - overridden by /vis/scene/add/userAction
-  // arguments, if any.
+     G4VisExtent(-100*m,100*m,-100*m,100*m,-100*m,100*m));
 
   G4String command = "/control/execute ";
   G4String fileName = "vis.mac";

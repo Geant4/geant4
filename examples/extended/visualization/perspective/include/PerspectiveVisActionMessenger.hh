@@ -40,7 +40,7 @@ class PerspectiveVisActionMessenger: public G4UImessenger {
 public:
   PerspectiveVisActionMessenger(PerspectiveVisAction*);
   ~PerspectiveVisActionMessenger();
-  void SetNewValue (G4UIcommand*, G4String);
+  virtual void SetNewValue (G4UIcommand*, G4String);
 
 private:
   PerspectiveVisAction* fPVA;
