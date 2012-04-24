@@ -1,0 +1,22 @@
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Test 69 History file
+                    --------------------
+This file should be used by the test developer to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+2 April 2012, Andrea Dotti (test73-V09-05-02)
+Bug fix: fixing GNUmakefile (wrong spaces in application name)
+for non-cmake builds
+
+29 March 2012, Andrea Dotti (test73-V09-05-01)
+Bug fix: copy macro files in running directory
+
+27 March 2012, Andrea Dotti (test73-V09-05-00)
+First import of new test (see README)

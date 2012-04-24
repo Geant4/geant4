@@ -1,0 +1,42 @@
+/control/verbose 0
+#Mute the next lines
+#Macro parameters: idx the index of the defined aliases mom{idx} specifying the
+#   beam momentum, part the beam particle name 
+#To run a single run, un-comment the three lines
+#/control/alias part "mu-"
+#/control/alias pt1 0.1
+#/control/alias p1 3
+#/control/alias idx 1
+#/control/alias nevents 10
+#/control/verbose 2
+
+#Run MultipleScattering Test with configuration:
+
+#Define "thin" setup
+/mydet/chamberWidth 100. um
+/mydet/numberOfChambers 20
+/mydet/chamberSpacing 1. um
+/mydet/update
+/analysis/filename/addSuffix _{part}
+/analysis/filename/addSuffix _{pt{idx}}
+/analysis/filename/addSuffix _thin
+
+/gun/momentum {pt{idx}} 0 {p{idx}} GeV 
+/gun/particle {part}
+/run/beamOn {nevents} 
+#Thin run done...
+
+#Define "thick" setup
+/mydet/chamberWidth 1.0 mm
+/mydet/numberOfChambers 2
+/mydet/chamberSpacing 19. um
+/mydet/update
+/analysis/filename/addSuffix _{part}
+/analysis/filename/addSuffix _{pt{idx}}
+/analysis/filename/addSuffix _thick
+
+/gun/particle {part}
+/gun/momentum {pt{idx}} 0 {p{idx}} GeV 
+/run/beamOn {nevents}
+#Thick run done...
+#Bye...

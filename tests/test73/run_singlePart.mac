@@ -1,0 +1,45 @@
+/control/verbose 0
+#To run a single particle un-comment the following two lines
+#/control/alias part pi-
+#/control/alias nevents 10000
+/control/verbose 2
+
+#Executing simulation for particle:
+/control/echo {part}
+
+#Define pt (x component of P)
+/control/alias pt1 0.33
+/control/alias pt2 0.36
+/control/alias pt3 0.40
+/control/alias pt4 0.44
+/control/alias pt5 0.50
+/control/alias pt6 0.57
+/control/alias pt7 0.66
+/control/alias pt8 0.80
+/control/alias pt9 1.00
+/control/alias pt10 1.33
+/control/alias pt11 2.00
+/control/alias pt12 2.5
+#Define z component
+/control/alias p1 4.989
+/control/alias p2 4.987
+/control/alias p3 4.984
+/control/alias p4 4.981
+/control/alias p5 4.97
+/control/alias p6 4.967
+/control/alias p7 4.956
+/control/alias p8 4.936
+/control/alias p9 4.899
+/control/alias p10 4.820
+/control/alias p11 4.583
+/control/alias p12 4.330
+
+#Loop on all Pt values
+/control/loop run_singlePt.mac idx 1 12 1
+
+#Perform ROOT-based analysis
+/analysis/filename/mergedFileName thin_{part}.root
+/analysis/mergeFiles *{part}*thin.root
+/analysis/filename/mergedFileName thick_{part}.root
+/analysis/mergeFiles *{part}*thick.root
+/analysis/rootmacro xmacro.C("thin_{part}.root","thick_{part}.root","{part}.pdf")

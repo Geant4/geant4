@@ -1,0 +1,8 @@
+/control/verbose 2
+#Produce MultipleScattering Test
+#Test based on Matthiew Reid from LHCb collaboration
+#Modified by A. Dotti
+/control/alias nevents 10000
+
+#Loop on all particles
+/control/foreach run_singlePart.mac part e- pi- mu- 

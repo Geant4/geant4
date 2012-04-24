@@ -1,0 +1,46 @@
+Multiple Scattering Test
+========================
+Original Author: Matthew Michael Reid (LHCb Collaboration)
+                 Adapted by Andrea Dotti
+LHCb Reference: LHCb-INT-2011-034
+
+Introduction:
+------------
+This application tests multiple scattering models used in 
+different physics lists.
+The test is performed executing two consecutives simulations
+on two setups: 
+   - The first one is composed of 20 thin (0.1mm) Al layers
+     separeted by 1um 
+   - The second one is composed of 2 thick (1mm) Al layers
+     separatd by 19um
+Thus the budget material is the same in the cases.
+The effect of multiple scattering is compared in the two setups.
+Since the material budget is the same, it is expected that the effect is the
+same in both cases.
+
+MSC Effect:
+----------
+Primaries are generated in a position I=(-6mm,0,dz) and fixed moentum.
+The momentum direction is such that the primaries have a small Px component
+(since Py=,  Pt=Px). dz is chosen such that the primary enters the setup
+at (0,0,0) where the first Al layer is located.
+The position E and direction P at the exit of the last layer is recorded and
+the impact parameter is measured (the impact parameters is the shortest distance
+between I and the reconstructed track (back propagating the track from E along
+-P). The reconstructed position x component of the impact parameter is expected
+to be distributed as a gaussian around 0 with the variance dependent on 1/Pt^2.
+
+Running the application:
+-----------------------
+The application requires ROOT to perform fit and produce plots
+(i.e. root-config should be available in your PATH).
+
+To run the application and perform a Pt scan:
+
+export G4ANALYSIS_USEROOT=1
+make
+$G4WORKDIR/bin/$G4SYSTEM/MSCTest run_all.mac
+root -b -q "macro.C(\"thin\")"
+root -l -b -q "macro.C(\"thick\")"
+root -l xmacro.C
