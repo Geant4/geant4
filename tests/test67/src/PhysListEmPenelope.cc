@@ -362,8 +362,12 @@ void PhysListEmPenelope::ConstructProcess()
   // Deexcitation
   //
   G4VAtomDeexcitation* deexcitation = new G4UAtomicDeexcitation();
+  G4cout << "Using the PENELOPE cross section model for PIXE" << G4endl;
+  deexcitation->SetPIXEElectronCrossSectionModel("Penelope");
   G4LossTableManager::Instance()->SetAtomDeexcitation(deexcitation);
   deexcitation->SetFluo(true);
+  G4cout << "Registering the PIXE cross sections, fluorescence will be produced alongstep" << G4endl;
+  deexcitation->SetPIXE(true); 
 
 }
 

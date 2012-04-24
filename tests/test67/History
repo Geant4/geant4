@@ -15,6 +15,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16-Apr-2012 L.Pandola (test67-V09-05-01)
+	Copy of the previous tag (rejected for other reasons)
+
+04-Apr-2012 L.Pandola (test67-V09-05-00)
+	Removed the local physics list using the (obsolete)
+	Penelope01 models, that are going to be removed from
+	lowenergy/
+
 14-Nov-2011 G.Folger  (test67-V09-04-11)
         Add include of time.h needed on Windows.
 

@@ -5,7 +5,7 @@
 # This macro shoots gamma-rays of energy  
 # between 45 keV and 2000 keV in the reference 
 # geometry #3. Source position is according to the 
-# same geometry (see README file). Penelope01 EM 
+# same geometry (see README file). Penelope08 EM 
 # physics, 1e5 primaries per run.
 #
 /testem/geometry/geometryType 3
@@ -13,7 +13,7 @@
 /run/verbose 0
 #
 #/testem/phys/addPhysics  empenelope
-/testem/phys/addPhysics  penelope01
+/testem/phys/addPhysics  penelopelocal
 #/testem/phys/addPhysics  emlivermore
 #/testem/phys/addPhysics  emstandard
 #/testem/phys/addPhysics  emstandard_opt3

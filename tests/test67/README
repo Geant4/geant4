@@ -65,10 +65,15 @@ $Id:
     - "penelope08" (alias of "empenelope") 
     
     Local physics builders:	 
-    - "penelope01"      low-energy EM physics with Penelope01 models
-			(obsolete, will be deleted in the future)
     - "penelopelocal"   same Penelope v2008 models as "empenelope",
-	                but implemented as a local physics list
+	                but implemented as a local physics list. At 
+	                the moment differs for the setting of the PIXE
+	                flag: it is "on" in the local physics list and 
+	                "off" in the standard builder. The local physics 
+	                list will hence produce fluorescence from 
+	                e-Ionisation AlongStep (the standard builder only 
+	                PostStep). To be used as benchmark to cross-check 
+	                results and performances.
 	
     Physics lists and options can be (re)set with UI commands. The 
     

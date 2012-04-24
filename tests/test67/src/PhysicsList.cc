@@ -31,6 +31,7 @@
 //                   processes. 
 // 25 May 2011      Remove PhysListEmPenelope08 and add PhysListEmPenelope01 since 
 //                   v2008 is now the default and v2001 the obsolete option, Luciano
+// 10 Apr 2012      Remove PhysListEmPenelope01 (obsolete, models removed), Luciano
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -38,7 +39,6 @@
 #include "PhysicsListMessenger.hh"
 
 //local physics lists
-#include "PhysListEmPenelope01.hh"
 #include "PhysListEmPenelope.hh"
 
 //Geant4 builders
@@ -160,11 +160,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   } else if (name == "emlivermore"){
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new G4EmLivermorePhysics();
-  } else if (name == "penelope01"){    
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmPenelope01(name);    
+    emPhysicsList = new G4EmLivermorePhysics();    
   } else if (name == "penelopelocal"){
     emName = name;
     delete emPhysicsList;
