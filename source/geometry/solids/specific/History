@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06-Apr-2012  M.Kelsey (geom-specific-V09-05-04)
+- Modified GetPointOnSurface() to throw sqrt(r) uniformly for disk surfaces,
+  in G4Paraboloid, G4Polycone and G4TwistedTubs.
+
 13-Dec-2011  G.Cosmo (geom-specific-V09-05-03, 02, 01)
 - Fixed trivial Coverity defects in G4TwistedTubs and G4VTwisteFaceted for
   missing protection against self-assignment.

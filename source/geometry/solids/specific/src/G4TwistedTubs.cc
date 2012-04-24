@@ -1306,27 +1306,24 @@ G4ThreeVector G4TwistedTubs::GetPointOnSurface() const
     x = G4RandFlat::shoot(xmin,xmax) ;
 
     return fFormerTwisted->SurfacePoint(x,z,true) ;
-  
-  }
+   }
   else if( (chose >= a1 + a2 + a3 + a4  )&&(chose < a1 + a2 + a3 + a4 + a5 ) )
   {
-
     rmin = GetEndInnerRadius(0) ;
     rmax = GetEndOuterRadius(0) ;
-    r = G4RandFlat::shoot(rmin,rmax) ;
+    r = std::sqrt(G4RandFlat::shoot()*(sqr(rmax)-sqr(rmin))+sqr(rmin));
 
     phimin = fLowerEndcap->GetBoundaryMin(r) ; 
     phimax = fLowerEndcap->GetBoundaryMax(r) ;
     phi    = G4RandFlat::shoot(phimin,phimax) ;
 
     return fLowerEndcap->SurfacePoint(phi,r,true) ;
-
   }
   else
   {
     rmin = GetEndInnerRadius(1) ;
     rmax = GetEndOuterRadius(1) ;
-    r = G4RandFlat::shoot(rmin,rmax) ;
+    r = rmin + (rmax-rmin)*std::sqrt(G4RandFlat::shoot());
 
     phimin = fUpperEndcap->GetBoundaryMin(r) ; 
     phimax = fUpperEndcap->GetBoundaryMax(r) ;

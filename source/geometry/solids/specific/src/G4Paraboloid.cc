@@ -1010,16 +1010,12 @@ G4ThreeVector G4Paraboloid::GetPointOnSurface() const
     G4double rho;
     if(pi * sqr(r1) / A > z)
     {
-      rho = RandFlat::shoot(0., 1.);
-      rho = std::sqrt(rho);
-      rho *= r1;
+      rho = r1 * std::sqrt(RandFlat::shoot(0., 1.));
       return G4ThreeVector(rho * std::cos(phi), rho * std::sin(phi), -dz);
     }
     else
     {
-      rho = RandFlat::shoot(0., 1);
-      rho = std::sqrt(rho);
-      rho *= r2;
+      rho = r2 * std::sqrt(RandFlat::shoot(0., 1));
       return G4ThreeVector(rho * std::cos(phi), rho * std::sin(phi), dz);
     }
   }
