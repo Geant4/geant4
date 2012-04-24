@@ -72,7 +72,7 @@ class G4LElastic : public G4HadronicInteraction
 
     virtual void ModelDescription(std::ostream& outFile) const;
 
-    virtual std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
+    virtual const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
 
   private:
 

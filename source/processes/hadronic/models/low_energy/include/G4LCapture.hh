@@ -77,7 +77,7 @@ class G4LCapture : public G4HadronicInteraction
     // void Description() const;
     virtual void ModelDescription(std::ostream& outFile) const;
 
-    virtual std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
+    virtual const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
 
   private:
 

@@ -73,7 +73,7 @@ class G4InelasticInteraction : public G4HadronicInteraction
 
     static G4IsoParticleChange* GetIsotopeProductionInfo(); 
 
-    virtual std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
+    virtual const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
 
   protected:
     
