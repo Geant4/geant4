@@ -99,6 +99,9 @@ G4VParticleChange* G4WHadronElasticProcess::PostStepDoIt(
 				  const G4Step& step)
 {
   aParticleChange.Initialize(track);
+  G4double weight = track.GetWeight();
+  aParticleChange.ProposeWeight(weight);
+
   G4double kineticEnergy = track.GetKineticEnergy();
   const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
   const G4ParticleDefinition* part = dynParticle->GetDefinition();
@@ -224,8 +227,9 @@ G4VParticleChange* G4WHadronElasticProcess::PostStepDoIt(
 
   //G4cout << "Efinal= " << efinal << "  TrackStatus= " << status << G4endl;
 
-  // recoil
   aParticleChange.SetNumberOfSecondaries(0);
+
+  // recoil
   if(result->GetNumberOfSecondaries() > 0) {
     G4DynamicParticle* p = result->GetSecondary(0)->GetParticle();
 
@@ -238,7 +242,14 @@ G4VParticleChange* G4WHadronElasticProcess::PostStepDoIt(
       pdir.rotateUz(indir);
       // G4cout << "recoil rotated " << pdir << G4endl;
       p->SetMomentumDirection(pdir);
-      aParticleChange.AddSecondary(p);
+
+      // in elastic scattering time and weight are not changed
+      G4Track* t = new G4Track(p, track.GetGlobalTime(), 
+			       track.GetPosition());
+      t->SetWeight(weight);
+      t->SetTouchableHandle(track.GetTouchableHandle());
+      aParticleChange.AddSecondary(t);
+
     } else {
       edep += p->GetKineticEnergy();
       delete p;
