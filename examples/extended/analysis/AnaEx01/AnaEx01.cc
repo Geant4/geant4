@@ -89,7 +89,7 @@ int main(int argc,char** argv)
   // Initialize G4 kernel
   //
   runManager->Initialize();
-  
+
   // Get the pointer to the User Interface manager
   //
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
@@ -105,11 +105,13 @@ int main(int argc,char** argv)
 #ifdef G4VIS_USE
       G4VisManager* visManager = new G4VisExecutive;
       visManager->Initialize();
+#ifdef G4UI_USE
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+#endif
       UImanager->ApplyCommand("/control/execute vis.mac");     
 #endif
 
 #ifdef G4UI_USE
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
       ui->SessionStart();
       delete ui;
 #endif
