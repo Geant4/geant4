@@ -186,7 +186,7 @@ G4UIQt::G4UIQt (
 
   // the splitter 
   //  fToolBox->addItem(fVisParametersTBWidget,"Vis parameters");
-  // fToolBox->addItem(fViewComponentsTBWidget,"Viewer components");
+  fToolBox->addItem(fViewComponentsTBWidget,"Scene");
   fToolBox->addItem(fHelpTBWidget,"Help");
   fToolBox->addItem(fCoutTBWidget,"Cout");
   fToolBox->addItem(fHistoryTBWidget,"History");
@@ -722,7 +722,10 @@ G4int G4UIQt::ReceiveG4cerr (
  
   QStringList result = newStr.filter(fCoutFilter->text());
 
-  QMessageBox::critical(fMainWindow, "Error",aString.data());
+  // Suppress space, \n,\t,\r...
+  if (QString(aString.data()).trimmed() != "") {
+    QMessageBox::critical(fMainWindow, "Error",aString.data());
+  }
   QColor previousColor = fCoutTBTextArea->textColor();
   fCoutTBTextArea->setTextColor(Qt::red);
   fCoutTBTextArea->append(result.join("\n"));

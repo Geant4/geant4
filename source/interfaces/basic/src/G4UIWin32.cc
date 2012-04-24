@@ -242,7 +242,7 @@ G4UIWin32::G4UIWin32 (
 			      ::GetModuleHandle(NULL),
 			      NULL);
   tmpSession = NULL;
-  ::SetWindowLong(mainWindow,GWL_USERDATA,LONG(this));
+  ::SetWindowLongPtr(mainWindow,GWLP_USERDATA,LONG(this));
 
   ::SetForegroundWindow(mainWindow);
   ::ShowWindow(mainWindow,SW_SHOWDEFAULT);
@@ -262,9 +262,9 @@ G4UIWin32::~G4UIWin32 (
     UI->SetCoutDestination(NULL);
   }
   delete textBuffer;
-  if(textWindow!=NULL) ::SetWindowLong(textWindow,GWL_USERDATA,LONG(NULL));
+  if(textWindow!=NULL) ::SetWindowLongPtr(textWindow,GWLP_USERDATA,LONG(NULL));
   if(mainWindow!=NULL) {
-    ::SetWindowLong(mainWindow,GWL_USERDATA,LONG(NULL));
+    ::SetWindowLongPtr(mainWindow,GWLP_USERDATA,LONG(NULL));
     ::DestroyWindow(mainWindow);
   }
 }
@@ -466,7 +466,7 @@ LRESULT CALLBACK G4UIWin32::MainWindowProc (
 				       a_window,NULL,
 				       GetWindowInstance(a_window),
 				       NULL);
-      ::SetWindowLong (This->textWindow,GWL_USERDATA,LONG(This));
+      ::SetWindowLongPtr (This->textWindow,GWLP_USERDATA,LONG(This));
       
       This->editWindow = CreateWindow ("edit",NULL,
 				       WS_CHILD | WS_VISIBLE | WS_BORDER,
@@ -475,8 +475,8 @@ LRESULT CALLBACK G4UIWin32::MainWindowProc (
 				       a_window,(HMENU)1,
 				       GetWindowInstance(a_window),
 				       NULL);
-      oldEditWindowProc = (WNDPROC)GetWindowLong(This->editWindow,GWL_WNDPROC);
-      SetWindowLong (This->editWindow,GWL_WNDPROC,(LONG)EditWindowProc);
+      oldEditWindowProc = (WNDPROC)GetWindowLongPtr(This->editWindow,GWLP_WNDPROC);
+      SetWindowLongPtr (This->editWindow,GWLP_WNDPROC,(LONG)EditWindowProc);
       
       MoveWindow (a_window,
 		  rect.left,rect.top,
@@ -489,7 +489,7 @@ LRESULT CALLBACK G4UIWin32::MainWindowProc (
     }
     }return 0;
   case WM_SIZE:{
-    G4UIWin32* This = (G4UIWin32*)::GetWindowLong(a_window,GWL_USERDATA);
+    G4UIWin32* This = (G4UIWin32*)::GetWindowLongPtr(a_window,GWLP_USERDATA);
     if(This!=NULL) {
       // Client size :
       int width = LOWORD(a_lParam);
@@ -507,11 +507,11 @@ LRESULT CALLBACK G4UIWin32::MainWindowProc (
     }
     }return 0;
   case WM_SETFOCUS:{
-    G4UIWin32* This = (G4UIWin32*)::GetWindowLong(a_window,GWL_USERDATA);
+    G4UIWin32* This = (G4UIWin32*)::GetWindowLongPtr(a_window,GWLP_USERDATA);
     if(This!=NULL) SetFocus (This->editWindow);
     }return 0;
   case WM_COMMAND:{
-    G4UIWin32* This = (G4UIWin32*)::GetWindowLong(a_window,GWL_USERDATA);
+    G4UIWin32* This = (G4UIWin32*)::GetWindowLongPtr(a_window,GWLP_USERDATA);
     if(This!=NULL) {
       if(This->fHelp==false) {
 	G4String command = This->GetCommand(a_wParam);
@@ -537,7 +537,7 @@ LRESULT CALLBACK G4UIWin32::TextWindowProc (
 {
   switch (a_message) { 
   case WM_PAINT:{
-    G4UIWin32* This = (G4UIWin32*)::GetWindowLong(a_window,GWL_USERDATA);
+    G4UIWin32* This = (G4UIWin32*)::GetWindowLongPtr(a_window,GWLP_USERDATA);
     if(This!=NULL) {
       TextBuffer* textBuffer = (TextBuffer*)This->textBuffer;
       RECT rect;
@@ -549,7 +549,7 @@ LRESULT CALLBACK G4UIWin32::TextWindowProc (
     }
     }return 0;
   case WM_VSCROLL:{
-    G4UIWin32* This = (G4UIWin32*)::GetWindowLong(a_window,GWL_USERDATA);
+    G4UIWin32* This = (G4UIWin32*)::GetWindowLongPtr(a_window,GWLP_USERDATA);
     if(This!=NULL) {
       TextBuffer* textBuffer = (TextBuffer*)This->textBuffer;
       int what = LOWORD(a_wParam);
@@ -597,8 +597,8 @@ LRESULT CALLBACK G4UIWin32::EditWindowProc (
   case WM_KEYDOWN:
     switch(a_wParam){
     case VK_RETURN:{
-      G4UIWin32* This = (G4UIWin32*)::GetWindowLong(
-			 GetParent(a_window),GWL_USERDATA);
+      G4UIWin32* This = (G4UIWin32*)::GetWindowLongPtr(
+			 GetParent(a_window),GWLP_USERDATA);
       char buffer[128];
       GetWindowText (a_window,buffer,128);
       G4String command (buffer);
@@ -619,8 +619,8 @@ LRESULT CALLBACK G4UIWin32::EditWindowProc (
 
     }break;
     case VK_TAB:{
-      G4UIWin32* This = (G4UIWin32*)::GetWindowLong(
-			 GetParent(a_window),GWL_USERDATA);
+      G4UIWin32* This = (G4UIWin32*)::GetWindowLongPtr(
+			 GetParent(a_window),GWLP_USERDATA);
       if( (This!=NULL) && (This->fHelp==true) ) break;
       char buffer[128];
       Edit_GetText(a_window,buffer,128);
@@ -637,8 +637,8 @@ LRESULT CALLBACK G4UIWin32::EditWindowProc (
       
     }break;
     case VK_UP:{
-      G4UIWin32* This = (G4UIWin32*)::GetWindowLong(
-			 GetParent(a_window),GWL_USERDATA);
+      G4UIWin32* This = (G4UIWin32*)::GetWindowLongPtr(
+			 GetParent(a_window),GWLP_USERDATA);
       if(This!=NULL) {
 	int pos = This->fHistoryPos== -1 ? 
 	  This->fHistory.size()-1 : This->fHistoryPos-1;
@@ -654,8 +654,8 @@ LRESULT CALLBACK G4UIWin32::EditWindowProc (
       }
     }return 0; //Do not jump into oldEditProc.
     case VK_DOWN:{
-      G4UIWin32* This = (G4UIWin32*)::GetWindowLong(
-			 GetParent(a_window),GWL_USERDATA);
+      G4UIWin32* This = (G4UIWin32*)::GetWindowLongPtr(
+			 GetParent(a_window),GWLP_USERDATA);
       if(This!=NULL) {
 	int pos = This->fHistoryPos + 1;
 	if((pos>=0)&&(pos<(int)This->fHistory.size())) {
