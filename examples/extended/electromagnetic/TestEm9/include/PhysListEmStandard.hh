@@ -44,7 +44,6 @@ public:
   PhysListEmStandard(const G4String& name = "standard");
   virtual ~PhysListEmStandard();
 
-public: 
   // This method is dummy for physics
   virtual void ConstructParticle() {};
  

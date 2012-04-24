@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StepMax.cc,v 1.3 2006-06-29 17:03:52 gunter Exp $
+// $Id: StepMax.cc,v 1.3 2006-06-29 17:00:49 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,15 +36,18 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StepMax::StepMax(const G4String& processName)
- : G4VDiscreteProcess(processName),
-   MaxChargedStep(DBL_MAX)
+  : G4VDiscreteProcess(processName),
+    fMaxChargedStep(DBL_MAX)
 {
-  pMess = new StepMaxMessenger(this);
+  fMessenger = new StepMaxMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StepMax::~StepMax() { delete pMess; }
+StepMax::~StepMax() 
+{ 
+  delete fMessenger; 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -55,20 +58,23 @@ G4bool StepMax::IsApplicable(const G4ParticleDefinition& particle)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void StepMax::SetMaxStep(G4double step) {MaxChargedStep = step;}
+void StepMax::SetMaxStep(G4double step) 
+{
+  fMaxChargedStep = step;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double StepMax::PostStepGetPhysicalInteractionLength(
-                                              const G4Track&,
-                                                    G4double,
-                                                    G4ForceCondition* condition )
+G4double 
+StepMax::PostStepGetPhysicalInteractionLength(const G4Track&,
+					      G4double,
+					      G4ForceCondition* condition)
 {
   // condition is set to "Not Forced"
   *condition = NotForced;
-  ProposedStep = MaxChargedStep;
+  fProposedStep = fMaxChargedStep;
 
-  return ProposedStep;
+  return fProposedStep;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -77,6 +83,13 @@ G4VParticleChange* StepMax::PostStepDoIt(const G4Track& aTrack, const G4Step&)
 {
   aParticleChange.Initialize(aTrack);
   return &aParticleChange;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double StepMax::GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*)
+{
+  return 0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

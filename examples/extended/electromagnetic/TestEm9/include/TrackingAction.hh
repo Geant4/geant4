@@ -56,14 +56,14 @@ public:
   ~TrackingAction();
 
   void PreUserTrackingAction(const G4Track*);
-  void PostUserTrackingAction(const G4Track*) {};
+  void PostUserTrackingAction(const G4Track*);
 
 private:
 
   TrackingAction & operator=(const TrackingAction &right);
   TrackingAction(const TrackingAction&);
 
-  HistoManager* theHisto;
+  HistoManager* fHisto;
 
 };
 

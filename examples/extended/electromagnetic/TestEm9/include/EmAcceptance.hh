@@ -56,7 +56,7 @@ private:
   EmAcceptance & operator=(const EmAcceptance &right);
   EmAcceptance(const EmAcceptance&);
 
-  G4bool isAccepted;
+  G4bool fIsAccepted;
 
 };
 

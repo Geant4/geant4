@@ -67,13 +67,12 @@ public:
   void SetCuts();
   void SetCutForGamma(G4double);
   void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
+  void SetCutForProton(G4double);
 
   void AddPhysicsList(const G4String& name);
   void ConstructProcess();
 
   void AddStepMax();
-  StepMax* GetStepMaxProcess() {return stepMaxProcess;};
 
   void SetVertexCut(G4double val);
   void SetMuonCut(G4double val);
@@ -84,28 +83,29 @@ private:
   PhysicsList & operator=(const PhysicsList &right);
   PhysicsList(const PhysicsList&);
 
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
-  G4double cutForVertexDetector;
-  G4double cutForMuonDetector;
+  G4double fCutForGamma;
+  G4double fCutForElectron;
+  G4double fCutForPositron;
+  G4double fCutForProton;
+  G4double fCutForVertexDetector;
+  G4double fCutForMuonDetector;
 
-  G4VPhysicsConstructor*  emPhysicsList;
-  G4VPhysicsConstructor*  generalPhysicsList;
+  G4VPhysicsConstructor*  fEmPhysicsList;
+  G4VPhysicsConstructor*  fDecayPhysicsList;
 
-  std::vector<G4VPhysicsConstructor*>  hadronPhys;
-  G4String emName;
+  std::vector<G4VPhysicsConstructor*> fHadronPhys;
+  G4String fEmName;
 
-  StepMax* stepMaxProcess;
+  StepMax* fStepMaxProcess;
 
-  PhysicsListMessenger* pMessenger;
-  G4ProductionCuts* vertexDetectorCuts;
-  G4ProductionCuts* muonDetectorCuts;
+  PhysicsListMessenger* fMessenger;
+  G4ProductionCuts* fVertexDetectorCuts;
+  G4ProductionCuts* fMuonDetectorCuts;
 
-  G4bool helIsRegisted;
-  G4bool bicIsRegisted;
-  G4bool gnucIsRegisted;
-  G4bool stopIsRegisted;
+  G4bool fHelIsRegisted;
+  G4bool fBicIsRegisted;
+  G4bool fGnucIsRegisted;
+  G4bool fStopIsRegisted;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

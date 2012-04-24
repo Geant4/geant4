@@ -33,7 +33,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4UserEventAction.hh"
-
 #include "G4Event.hh"
 #include "globals.hh"
 
@@ -43,25 +42,22 @@ class EventActionMessenger;
 
 class EventAction : public G4UserEventAction
 {
-public: // Without description
+public: 
 
-    EventAction();
-   ~EventAction();
+  EventAction();
+  ~EventAction();
 
-    void BeginOfEventAction(const G4Event*);
-    void   EndOfEventAction(const G4Event*);
+  void BeginOfEventAction(const G4Event*);
+  void   EndOfEventAction(const G4Event*);
 
-    void SetDrawFlag(G4String val)  {drawFlag = val;};
-    void SetPrintModulo(G4int val)  {printModulo = val;};
+  inline void SetPrintModulo(G4int val) { fPrintModulo = val;};
 
-  private:
+private:
 
-    G4int    nEvt;
-    G4int    printModulo;
-    G4int    verbose;
-    G4String drawFlag;
+  G4int    fPrintModulo;
+  G4int    fVerbose;
 
-    EventActionMessenger*  eventMessenger;
+  EventActionMessenger* fEventMessenger;
 };
 
 #endif

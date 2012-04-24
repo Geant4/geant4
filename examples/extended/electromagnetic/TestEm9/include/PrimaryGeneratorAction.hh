@@ -62,15 +62,15 @@ public:
 
 public:
   void GeneratePrimaries(G4Event*);
-  G4ParticleGun* GetParticleGun() {return particleGun;};
+  //  G4ParticleGun* GetParticleGun() {return particleGun;};
     
 private:
 
   PrimaryGeneratorAction & operator=(const PrimaryGeneratorAction &right);
   PrimaryGeneratorAction(const PrimaryGeneratorAction&);
 
-  G4ParticleGun*         particleGun;
-  DetectorConstruction*  detector; 
+  G4ParticleGun*         fParticleGun;
+  DetectorConstruction*  fDetector; 
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

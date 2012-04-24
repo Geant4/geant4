@@ -24,25 +24,22 @@
 /gun/particle e-
 /gun/energy 10 GeV
 #
-#/process/eLoss/StepFunction 0.2 1 mm
-#/process/eLoss/preciseRange true
-#
 #/testem/tracking/stepMax 1 mum
 #
 #/random/setSavingFlag true
 #/random/resetEngineFrom first.rndm
+#
+/run/initialize
+/process/em/applyCuts      true
+#
 /testem/event/printModulo 1000
 /testem/histo/fileName cms10gev1mm
-/testem/histo/fileType root
 /testem/histo/setHisto 0  250 0.60 0.85 
 /testem/histo/setHisto 1  200 0.80 1.00 
 /testem/histo/setHisto 2  100 0.90 1.00 
 /testem/histo/setHisto 10  80 0.80 0.88 
 /testem/histo/setHisto 11 100 0.75 0.85 
 /testem/histo/setHisto 12  40 0.94 0.98 
-#
-/run/initialize
-/process/em/applyCuts      true
 #
 /run/beamOn 10000
 #

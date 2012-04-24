@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StepMaxMessenger.hh,v 1.3 2006-06-29 17:02:42 gunter Exp $
+// $Id: StepMaxMessenger.hh,v 1.2 2006-06-29 16:59:55 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,14 +43,15 @@ class G4UIcmdWithADoubleAndUnit;
 class StepMaxMessenger: public G4UImessenger
 {
 public:
+
   StepMaxMessenger(StepMax*);
   ~StepMaxMessenger();
     
   void SetNewValue(G4UIcommand*, G4String);
     
 private:
-  StepMax* stepMax;
-  G4UIcmdWithADoubleAndUnit* StepMaxCmd;
+  StepMax* fStepMax;
+  G4UIcmdWithADoubleAndUnit* fStepMaxCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

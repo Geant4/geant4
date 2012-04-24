@@ -82,7 +82,7 @@ public:
 
   void UpdateGeometry();
 
-  G4double GetWorldSizeZ()  {return worldZ;}
+  inline G4double GetWorldSizeZ()  {return fWorldZ;}
 
 private:
 
@@ -92,39 +92,34 @@ private:
   DetectorConstruction & operator=(const DetectorConstruction &right);
   DetectorConstruction(const DetectorConstruction&);
 
-  G4double ecalLength;
-  G4double ecalWidth;
-  G4double vertexLength;
-  G4double padLength;
-  G4double padWidth;
-  G4double absLength;
-  G4double worldZ;
+  G4double fEcalLength;
+  G4double fEcalWidth;
+  G4double fVertexLength;
+  G4double fPadLength;
+  G4double fPadWidth;
+  G4double fAbsLength;
+  G4double fWorldZ;
 
-  G4Material* calMaterial;
-  G4Material* vertMaterial;
-  G4Material* absMaterial;
-  G4Material* worldMaterial;
-  G4Material* yorkMaterial;
+  G4Material* fCalMaterial;
+  G4Material* fVertMaterial;
+  G4Material* fAbsMaterial;
+  G4Material* fWorldMaterial;
+  G4Material* fYorkMaterial;
 
-  G4LogicalVolume* logicWorld;
-  G4LogicalVolume* logicECal;
-  G4LogicalVolume* logicCal;
-  G4LogicalVolume* logicA1;
-  G4LogicalVolume* logicA2;
-  G4LogicalVolume* logicA3;
-  G4LogicalVolume* logicA4;
-  G4LogicalVolume* logicYV;
-  G4LogicalVolume* logicY;
-  G4LogicalVolume* logicVV;
-  G4LogicalVolume* logicVD;
-  G4LogicalVolume* logicV;
+  G4LogicalVolume* fLogicWorld;
+  G4LogicalVolume* fLogicCal;
+  G4LogicalVolume* fLogicA1;
+  G4LogicalVolume* fLogicA2;
+  G4LogicalVolume* fLogicA3;
+  G4LogicalVolume* fLogicA4;
+
+  G4Region* fVertexRegion;
+  G4Region* fMuonRegion;
   
-  G4Region*   vertexRegion;
-  G4Region*   muonRegion;
-  G4ProductionCuts* vertexDetectorCuts;
-  G4ProductionCuts* muonDetectorCuts;
+  G4ProductionCuts* fVertexDetectorCuts;
+  G4ProductionCuts* fMuonDetectorCuts;
 
-  DetectorMessenger* detectorMessenger;  //pointer to the Messenger
+  DetectorMessenger* fDetectorMessenger;  //pointer to the Messenger
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

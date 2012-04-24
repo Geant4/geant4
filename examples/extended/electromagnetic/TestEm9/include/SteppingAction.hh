@@ -64,7 +64,7 @@ private:
   SteppingAction & operator=(const SteppingAction &right);
   SteppingAction(const SteppingAction&);
 
-  HistoManager* theHisto;
+  HistoManager* fHisto;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

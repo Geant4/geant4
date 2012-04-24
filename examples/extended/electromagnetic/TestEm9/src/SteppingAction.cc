@@ -50,7 +50,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction():
-  theHisto(HistoManager::GetPointer())
+  fHisto(HistoManager::GetPointer())
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,28 +62,28 @@ SteppingAction::~SteppingAction()
 
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
-  theHisto->AddStep();
-  G4double edep = aStep->GetTotalEnergyDeposit();
-  if(edep == 0.) return;
+  fHisto->AddStep();
+  G4double edep = aStep->GetTotalEnergyDeposit()*aStep->GetTrack()->GetWeight();
+  if(edep == 0.) { return; }
 
   const G4VPhysicalVolume* pv = aStep->GetPreStepPoint()->GetPhysicalVolume();
   const G4LogicalVolume* lv = pv->GetLogicalVolume();
-  //  const G4MaterialCutsCouple* couple = aStep->GetTrack()->GetMaterialCutsCouple();
-  //  G4int idx = couple->GetIndex();
-  //  const G4Material* mat = couple->GetMaterial();
-  //  G4cout << "Step in " << mat->GetName() << "   idx= " << idx << " edep= " << edep << G4endl;
+
   G4int volumeIndex = -1;
 
   G4int copyNo = pv->GetCopyNo();
+
+  // comparison of strings is not effective
+  // this method left only for simplicity of the code
   G4String name = lv->GetName();
-  if(name == "Ecal") volumeIndex = 0;
-  else if(name == "Abs1") volumeIndex = 1;
-  else if(name == "Abs2") volumeIndex = 2;
-  else if(name == "Abs3") volumeIndex = 3;
-  else if(name == "Abs4") volumeIndex = 4;
-  else if(name == "Vert") volumeIndex = 5;
-  // G4cout << "     vIndx= " << volumeIndex << " copyNo= " << copyNo << G4endl;
-  if(volumeIndex>=0) theHisto->AddEnergy(edep, volumeIndex, copyNo);
+  if(name == "Ecal")      { volumeIndex = 0; }
+  else if(name == "Abs1") { volumeIndex = 1; }
+  else if(name == "Abs2") { volumeIndex = 2; }
+  else if(name == "Abs3") { volumeIndex = 3; }
+  else if(name == "Abs4") { volumeIndex = 4; }
+  else if(name == "Vert") { volumeIndex = 5; }
+  // G4cout << "   vIndx= " << volumeIndex << " copyNo= " << copyNo << G4endl;
+  if(volumeIndex>=0) { fHisto->AddEnergy(edep, volumeIndex, copyNo); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
