@@ -49,8 +49,8 @@ class MyKleinNishinaMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand*, G4String);
     
   private:  
-    MyKleinNishinaCompton* pKleinNishina;  
-    G4UIcmdWithADouble* csFactor;
+    MyKleinNishinaCompton* fKleinNishina;  
+    G4UIcmdWithADouble*    fCsFactor;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

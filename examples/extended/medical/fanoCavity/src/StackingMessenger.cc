@@ -37,27 +37,27 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingMessenger::StackingMessenger(StackingAction* stack)
-:stacking(stack)
+:fStacking(stack)
 {   
-  killCmd = new G4UIcmdWithABool("/testem/killTracks",this);
-  killCmd->SetGuidance("kill selected secondaries");  
-  killCmd->SetParameterName("kill",true);
-  killCmd->SetDefaultValue(true);
+  fKillCmd = new G4UIcmdWithABool("/testem/killTracks",this);
+  fKillCmd->SetGuidance("kill selected secondaries");  
+  fKillCmd->SetParameterName("kill",true);
+  fKillCmd->SetDefaultValue(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingMessenger::~StackingMessenger()
 {
-  delete killCmd;
+  delete fKillCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void StackingMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {     
-  if (command == killCmd)
-    { stacking->SetKillStatus(killCmd->GetNewBoolValue(newValue));}               
+  if (command == fKillCmd)
+    { fStacking->SetKillStatus(fKillCmd->GetNewBoolValue(newValue));}               
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

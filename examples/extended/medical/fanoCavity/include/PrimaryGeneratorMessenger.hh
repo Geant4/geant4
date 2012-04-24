@@ -50,9 +50,9 @@ class PrimaryGeneratorMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    PrimaryGeneratorAction* Action;
-    G4UIdirectory*          gunDir;         
-    G4UIcmdWithADouble*     beam;
+    PrimaryGeneratorAction* fAction;
+    G4UIdirectory*          fGunDir;         
+    G4UIcmdWithADouble*     fBeam;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

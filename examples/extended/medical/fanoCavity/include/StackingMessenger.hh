@@ -49,8 +49,8 @@ class StackingMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    StackingAction*    stacking;
-    G4UIcmdWithABool*  killCmd;
+    StackingAction*    fStacking;
+    G4UIcmdWithABool*  fKillCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

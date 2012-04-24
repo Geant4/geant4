@@ -57,7 +57,7 @@
 
 PhysListEmStandard_option0::PhysListEmStandard_option0(const G4String& name,
                                DetectorConstruction* det)
-: G4VPhysicsConstructor(name), detector(det)
+: G4VPhysicsConstructor(name), fDetector(det)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -82,7 +82,7 @@ void PhysListEmStandard_option0::ConstructProcess()
       // gamma
     
       G4ComptonScattering* compton = new G4ComptonScattering();
-      MyKleinNishinaCompton* comptonModel = new MyKleinNishinaCompton(detector);
+      MyKleinNishinaCompton* comptonModel = new MyKleinNishinaCompton(fDetector);
       comptonModel->SetCSFactor(1000.);      
       compton->SetModel(comptonModel );
             

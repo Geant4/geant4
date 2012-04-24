@@ -40,16 +40,16 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::EventAction(RunAction* run, HistoManager* histo)
-:runAct(run), drawFlag("none"), printModulo(10000), histoManager(histo)
+:fRunAct(run), fDrawFlag("none"), fPrintModulo(10000), fHistoManager(histo)
 {
-  eventMessenger = new EventActionMessenger(this);
+  fEventMessenger = new EventActionMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::~EventAction()
 {
-  delete eventMessenger;
+  delete fEventMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -60,7 +60,7 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
 
  //survey convergence
  //
- if (evtNb%printModulo == 0) runAct->SurveyConvergence(evtNb);
+ if (evtNb%fPrintModulo == 0) fRunAct->SurveyConvergence(evtNb);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

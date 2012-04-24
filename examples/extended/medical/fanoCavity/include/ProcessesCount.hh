@@ -46,17 +46,17 @@
 class OneProcessCount
 {
 public:
-    OneProcessCount(G4String name) {Name=name; Counter=0;};
+    OneProcessCount(G4String name) {fName=name; fCounter=0;};
    ~OneProcessCount() {};
    
 public:
-    G4String      GetName()       {return Name;};
-    G4int         GetCounter()    {return Counter;};
-    void          Count()         {Counter++;};
+    G4String      GetName()       {return fName;};
+    G4int         GetCounter()    {return fCounter;};
+    void          Count()         {fCounter++;};
     
 private:
-    G4String Name;            // process name
-    G4int    Counter;         // process counter
+    G4String fName;            // process name
+    G4int    fCounter;         // process counter
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

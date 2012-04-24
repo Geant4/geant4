@@ -62,13 +62,13 @@ public:
 				 G4double tmin,
 				 G4double maxEnergy);
 				      
-  void SetCSFactor(G4double factor) {CrossSectionFactor = factor;};
+  void SetCSFactor(G4double factor) {fCrossSectionFactor = factor;};
 
 protected:
 
-  DetectorConstruction*    detector;
-  MyKleinNishinaMessenger* pMessenger;
-  G4double  CrossSectionFactor;
+  DetectorConstruction*    fDetector;
+  MyKleinNishinaMessenger* fMessenger;
+  G4double                 fCrossSectionFactor;
 
 };
 

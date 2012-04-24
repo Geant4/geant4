@@ -50,21 +50,21 @@ class StackingAction : public G4UserStackingAction
     StackingAction(DetectorConstruction*,RunAction*,HistoManager* );
    ~StackingAction();
    
-    void SetKillStatus(G4bool value) {killTrack = value;};
+    void SetKillStatus(G4bool value) {fKillTrack = value;};
      
     G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
     
   private:
-    DetectorConstruction* detector;  
-    RunAction*            runAction;
-    HistoManager*         histoManager;
-    StackingMessenger*    stackMessenger;
+    DetectorConstruction* fDetector;  
+    RunAction*            fRunAction;
+    HistoManager*         fHistoManager;
+    StackingMessenger*    fStackMessenger;
 
-    G4Material*           matWall;
-    G4double              Zcav;
-    G4EmCalculator*       emCal;
+    G4Material*           fMatWall;
+    G4double              fZcav;
+    G4EmCalculator*       fEmCal;
     G4bool                first;
-    G4bool                killTrack;               
+    G4bool                fKillTrack;               
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

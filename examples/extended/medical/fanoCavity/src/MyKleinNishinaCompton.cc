@@ -46,17 +46,17 @@ using namespace std;
 MyKleinNishinaCompton::MyKleinNishinaCompton(DetectorConstruction* det,
                                              const G4ParticleDefinition*,
                                              const G4String& nam)
-  :G4KleinNishinaCompton(0,nam), detector(det)
+  :G4KleinNishinaCompton(0,nam), fDetector(det)
 {
-  CrossSectionFactor = 1.;
-  pMessenger = new MyKleinNishinaMessenger(this);    
+  fCrossSectionFactor = 1.;
+  fMessenger = new MyKleinNishinaMessenger(this);    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 MyKleinNishinaCompton::~MyKleinNishinaCompton()
 {  
-  delete pMessenger;  
+  delete fMessenger;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -70,7 +70,7 @@ G4double MyKleinNishinaCompton::CrossSectionPerVolume(
   G4double CrossSection = 
   G4VEmModel::CrossSectionPerVolume(mat,part,GammaEnergy);
 
-  return CrossSection*CrossSectionFactor;
+  return CrossSection*fCrossSectionFactor;
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

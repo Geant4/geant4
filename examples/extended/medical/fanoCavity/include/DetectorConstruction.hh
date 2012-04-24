@@ -62,35 +62,35 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      
   public:
     
-     G4double     GetWallThickness()   {return wallThickness;};
-     G4double     GetWallRadius()      {return wallRadius;};           
-     G4Material*  GetWallMaterial()    {return wallMaterial;};
-     G4VPhysicalVolume* GetWall()      {return pWall;};
+     G4double     GetWallThickness()   {return fWallThickness;};
+     G4double     GetWallRadius()      {return fWallRadius;};           
+     G4Material*  GetWallMaterial()    {return fWallMaterial;};
+     G4VPhysicalVolume* GetWall()      {return fWall;};
                      
-     G4double     GetCavityThickness() {return cavityThickness;};
-     G4double     GetCavityRadius()    {return cavityRadius;};           
-     G4Material*  GetCavityMaterial()  {return cavityMaterial;}; 
-     G4VPhysicalVolume* GetCavity()    {return pCavity;};
+     G4double     GetCavityThickness() {return fCavityThickness;};
+     G4double     GetCavityRadius()    {return fCavityRadius;};           
+     G4Material*  GetCavityMaterial()  {return fCavityMaterial;}; 
+     G4VPhysicalVolume* GetCavity()    {return fCavity;};
           
-     G4double     GetTotalThickness() {return totalThickness;};     
+     G4double     GetTotalThickness()  {return fTotalThickness;};     
      
      void         PrintParameters();
                        
   private:
    
-     G4double            wallThickness;
-     G4double            wallRadius;     
-     G4Material*         wallMaterial;
-     G4VPhysicalVolume*  pWall;
+     G4double            fWallThickness;
+     G4double            fWallRadius;     
+     G4Material*         fWallMaterial;
+     G4VPhysicalVolume*  fWall;
      
-     G4double            cavityThickness;
-     G4double            cavityRadius;     
-     G4Material*         cavityMaterial;
-     G4VPhysicalVolume*  pCavity;
+     G4double            fCavityThickness;
+     G4double            fCavityRadius;     
+     G4Material*         fCavityMaterial;
+     G4VPhysicalVolume*  fCavity;
      
-     G4double            totalThickness;
+     G4double            fTotalThickness;
 
-     DetectorMessenger* detectorMessenger;
+     DetectorMessenger*  fDetectorMessenger;
 
   private:
     
