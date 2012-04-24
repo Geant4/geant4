@@ -41,18 +41,18 @@
 
 EventAction::EventAction(DetectorConstruction* det, RunAction* run,
                          HistoManager* hist)
-:detector(det), runAct(run), histoManager(hist)
+:fDetector(det), fRunAct(run), fHistoManager(hist)
 {
-  drawFlag = "none";
-  printModulo = 10000;
-  eventMessenger = new EventActionMessenger(this);
+  fDrawFlag = "none";
+  fPrintModulo = 10000;
+  fEventMessenger = new EventActionMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::~EventAction()
 {
-  delete eventMessenger;
+  delete fEventMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,13 +62,13 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
   G4int evtNb = evt->GetEventID();
 
   //survey printing
-  if (evtNb%printModulo == 0)
+  if (evtNb%fPrintModulo == 0)
     G4cout << "\n---> Begin Of Event: " << evtNb << G4endl;
     
   //initialize EnergyDeposit per event
   //
   for (G4int k=0; k<MaxAbsor; k++) {
-    energyDeposit[k] = trackLengthCh[k] = 0.0;   
+    fEnergyDeposit[k] = fTrackLengthCh[k] = 0.0;   
   }
 }
 
@@ -76,9 +76,9 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
 
 void EventAction::EndOfEventAction(const G4Event*)
 {
-  for (G4int k=1; k<=detector->GetNbOfAbsor(); k++) {
-     runAct->fillPerEvent(k,energyDeposit[k],trackLengthCh[k]);		       
-     if (energyDeposit[k] > 0.) histoManager->FillHisto(k, energyDeposit[k]);
+  for (G4int k=1; k<=fDetector->GetNbOfAbsor(); k++) {
+     fRunAct->FillPerEvent(k,fEnergyDeposit[k],fTrackLengthCh[k]);		       
+     if (fEnergyDeposit[k] > 0.) fHistoManager->FillHisto(k, fEnergyDeposit[k]);
   }
 }
 

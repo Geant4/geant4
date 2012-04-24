@@ -37,13 +37,13 @@
 StepMax::StepMax(const G4String& processName)
  : G4VDiscreteProcess(processName)
 {
-  for (G4int k=0; k<MaxAbsor; k++) stepMax[k] = DBL_MAX;
-  pMess = new StepMaxMessenger(this);
+  for (G4int k=0; k<MaxAbsor; k++) fStepMax[k] = DBL_MAX;
+  fMess = new StepMaxMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StepMax::~StepMax() { delete pMess; }
+StepMax::~StepMax() { delete fMess; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -54,7 +54,7 @@ G4bool StepMax::IsApplicable(const G4ParticleDefinition& particle)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void StepMax::SetStepMax(G4int k,G4double step) {stepMax[k] = step;}
+void StepMax::SetStepMax(G4int k,G4double step) {fStepMax[k] = step;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

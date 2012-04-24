@@ -52,7 +52,7 @@ public:
 
 private:
 
-  G4bool isAccepted;
+  G4bool fIsAccepted;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

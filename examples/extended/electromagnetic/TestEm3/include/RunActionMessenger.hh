@@ -51,11 +51,11 @@ public:
   void SetNewValue(G4UIcommand*, G4String);
     
 private:
-  RunAction*          Run;
+  RunAction*          fRunAction;
     
-  G4UIdirectory*      runDir;
-  G4UIcommand*        accCmd;
-  G4UIcmdWithABool*   limCmd;
+  G4UIdirectory*      fRunDir;
+  G4UIcommand*        fAccCmd;
+  G4UIcmdWithABool*   fLimCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

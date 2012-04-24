@@ -54,7 +54,7 @@ public:
 
   void     SetStepMax(G4int, G4double);
 
-  G4double GetStepMax(G4int k) {return stepMax[k];};
+  G4double GetStepMax(G4int k) { return fStepMax[k];};
 
   G4double PostStepGetPhysicalInteractionLength( const G4Track& track,
 			                       G4double previousStepSize,
@@ -67,9 +67,9 @@ public:
 
 private:
 
-  G4double stepMax[MaxAbsor];
+  G4double fStepMax[MaxAbsor];
      
-  StepMaxMessenger* pMess;
+  StepMaxMessenger* fMess;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -83,7 +83,7 @@ G4double StepMax::PostStepGetPhysicalInteractionLength( const G4Track& aTrack,
   
   G4double limit = DBL_MAX; 
   G4int n = aTrack.GetVolume()->GetCopyNo();
-  if (n < MaxAbsor) limit = stepMax[n];
+  if (n < MaxAbsor) limit = fStepMax[n];
   return limit;
 }
 
