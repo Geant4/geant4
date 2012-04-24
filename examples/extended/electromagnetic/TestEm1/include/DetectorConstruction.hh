@@ -1,3 +1,4 @@
+
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -65,23 +66,23 @@ class DetectorConstruction : public G4VUserDetectorConstruction
   public:
   
      const
-     G4VPhysicalVolume* GetWorld()      {return pBox;};           
+     G4VPhysicalVolume* GetWorld()      {return fPBox;};           
                     
-     G4double           GetSize()       {return BoxSize;};      
-     G4Material*        GetMaterial()   {return aMaterial;};
+     G4double           GetSize()       {return fBoxSize;};      
+     G4Material*        GetMaterial()   {return fMaterial;};
      
      void               PrintParameters();
                        
   private:
   
-     G4VPhysicalVolume*    pBox;
-     G4LogicalVolume*      lBox;
+     G4VPhysicalVolume*    fPBox;
+     G4LogicalVolume*      fLBox;
      
-     G4double              BoxSize;
-     G4Material*           aMaterial;     
-     G4UniformMagField*    magField;
+     G4double              fBoxSize;
+     G4Material*           fMaterial;     
+     G4UniformMagField*    fMagField;
      
-     DetectorMessenger* detectorMessenger;
+     DetectorMessenger* fDetectorMessenger;
 
   private:
     

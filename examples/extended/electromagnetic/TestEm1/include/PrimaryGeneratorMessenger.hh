@@ -53,9 +53,9 @@ class PrimaryGeneratorMessenger: public G4UImessenger
   private:
     PrimaryGeneratorAction* Action;
     
-    G4UIdirectory*             gunDir; 
-    G4UIcmdWithAnInteger*      DefaultCmd;
-    G4UIcmdWithADouble*        RndmCmd;
+    G4UIdirectory*             fGunDir; 
+    G4UIcmdWithAnInteger*      fDefaultCmd;
+    G4UIcmdWithADouble*        fRndmCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

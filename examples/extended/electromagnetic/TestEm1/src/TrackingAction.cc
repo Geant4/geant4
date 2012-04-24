@@ -40,7 +40,7 @@
 
 TrackingAction::TrackingAction(PrimaryGeneratorAction* prim, RunAction* run, 
                                HistoManager* histo)
-:primary(prim), runAction(run), histoManager(histo)
+:fPrimary(prim), fRunAction(run), fHistoManager(histo)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,25 +63,25 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   G4double Trleng = aTrack->GetTrackLength();
     
   if (aTrack->GetDefinition()->GetPDGCharge() == 0.) {
-    runAction->CountTraks0(1); 
-    runAction->CountSteps0(nbSteps);
+    fRunAction->CountTraks0(1); 
+    fRunAction->CountSteps0(nbSteps);
   
   } else {
-    runAction->CountTraks1(1); 
-    runAction->CountSteps1(nbSteps);
+    fRunAction->CountTraks1(1); 
+    fRunAction->CountSteps1(nbSteps);
   }
   
   //true and projected ranges for primary particle
   if (aTrack->GetTrackID() == 1) {
-    runAction->AddTrueRange(Trleng);
-    G4ThreeVector vertex = primary->GetParticleGun()->GetParticlePosition();    
+    fRunAction->AddTrueRange(Trleng);
+    G4ThreeVector vertex = fPrimary->GetParticleGun()->GetParticlePosition();    
     G4ThreeVector position = aTrack->GetPosition() - vertex;      
-    runAction->AddProjRange(position.x());
-    runAction->AddTransvDev(position.y());
-    runAction->AddTransvDev(position.z());
+    fRunAction->AddProjRange(position.x());
+    fRunAction->AddTransvDev(position.y());
+    fRunAction->AddTransvDev(position.z());
     
-    histoManager->FillHisto(1,Trleng);
-    histoManager->FillHisto(2,(float)nbSteps);    
+    fHistoManager->FillHisto(1,Trleng);
+    fHistoManager->FillHisto(2,(float)nbSteps);    
   }        
 }
 

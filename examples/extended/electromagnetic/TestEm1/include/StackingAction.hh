@@ -48,7 +48,7 @@ class StackingAction : public G4UserStackingAction
     G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
     
   private:
-    HistoManager* histoManager;        
+    HistoManager* fHistoManager;        
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

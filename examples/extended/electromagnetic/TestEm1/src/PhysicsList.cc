@@ -54,20 +54,20 @@ PhysicsList::PhysicsList(DetectorConstruction* p)
 : G4VModularPhysicsList()
 {
   G4LossTableManager::Instance();
-  pDet = p;
+  fDet = p;
   
-  currentDefaultCut   = 1.0*mm;
-  cutForGamma         = currentDefaultCut;
-  cutForElectron      = currentDefaultCut;
-  cutForPositron      = currentDefaultCut;
+  fCurrentDefaultCut   = 1.0*mm;
+  fCutForGamma         = fCurrentDefaultCut;
+  fCutForElectron      = fCurrentDefaultCut;
+  fCutForPositron      = fCurrentDefaultCut;
 
-  pMessenger = new PhysicsListMessenger(this);
+  fMessenger = new PhysicsListMessenger(this);
 
   SetVerboseLevel(1);
 
   // EM physics
-  emName = G4String("local");
-  emPhysicsList = new PhysListEmStandard(emName);
+  fEmName = G4String("local");
+  fEmPhysicsList = new PhysListEmStandard(fEmName);
 
 }
 
@@ -75,7 +75,7 @@ PhysicsList::PhysicsList(DetectorConstruction* p)
 
 PhysicsList::~PhysicsList()
 {
-  delete pMessenger;
+  delete fMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -188,7 +188,7 @@ void PhysicsList::ConstructProcess()
 
   // Electromagnetic physics list
   //
-  emPhysicsList->ConstructProcess();
+  fEmPhysicsList->ConstructProcess();
   
   // Em options
   //
@@ -213,53 +213,53 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
   
-  if (name == emName) return;
+  if (name == fEmName) return;
 
   if (name == "local") {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandard(name);
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new PhysListEmStandard(name);
     
   } else if (name == "emstandard_opt0") {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics();
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics();
 
   } else if (name == "emstandard_opt1") {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics_option1();
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option1();
 
   } else if (name == "emstandard_opt2") {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics_option2();
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option2();
 
   } else if (name == "emstandard_opt3") {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics_option3();
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option3();
     
   } else if (name == "standardSS") {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandardSS(name);
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new PhysListEmStandardSS(name);
     
   } else if (name == "emlivermore") {
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmLivermorePhysics();
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmLivermorePhysics();
     
   } else if (name == "empenelope") {
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmPenelopePhysics();
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmPenelopePhysics();
             
   } else {
 
@@ -331,9 +331,9 @@ void PhysicsList::SetCuts()
 
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma
-  SetCutValue(cutForGamma, "gamma");
-  SetCutValue(cutForElectron, "e-");
-  SetCutValue(cutForPositron, "e+");
+  SetCutValue(fCutForGamma, "gamma");
+  SetCutValue(fCutForElectron, "e-");
+  SetCutValue(fCutForPositron, "e+");
 
   if (verboseLevel>0) DumpCutValuesTable();
 }
@@ -342,24 +342,24 @@ void PhysicsList::SetCuts()
 
 void PhysicsList::SetCutForGamma(G4double cut)
 {
-  cutForGamma = cut;
-  SetParticleCuts(cutForGamma, G4Gamma::Gamma());
+  fCutForGamma = cut;
+  SetParticleCuts(fCutForGamma, G4Gamma::Gamma());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::SetCutForElectron(G4double cut)
 {
-  cutForElectron = cut;
-  SetParticleCuts(cutForElectron, G4Electron::Electron());
+  fCutForElectron = cut;
+  SetParticleCuts(fCutForElectron, G4Electron::Electron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::SetCutForPositron(G4double cut)
 {
-  cutForPositron = cut;
-  SetParticleCuts(cutForPositron, G4Positron::Positron());
+  fCutForPositron = cut;
+  SetParticleCuts(fCutForPositron, G4Positron::Positron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -368,7 +368,7 @@ void PhysicsList::SetCutForPositron(G4double cut)
 
 void PhysicsList::GetRange(G4double val)
 {
-  G4LogicalVolume* lBox = pDet->GetWorld()->GetLogicalVolume();
+  G4LogicalVolume* lBox = fDet->GetWorld()->GetLogicalVolume();
   G4ParticleTable* particleTable =  G4ParticleTable::GetParticleTable();
   const G4MaterialCutsCouple* couple = lBox->GetMaterialCutsCouple();
   const G4Material* currMat = lBox->GetMaterial();

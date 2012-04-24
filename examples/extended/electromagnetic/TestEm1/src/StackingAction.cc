@@ -37,7 +37,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingAction::StackingAction(HistoManager* histo)
-:histoManager(histo)
+:fHistoManager(histo)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,8 +59,8 @@ StackingAction::ClassifyNewTrack(const G4Track* track)
   G4double energy = track->GetKineticEnergy();
   G4double charge = track->GetDefinition()->GetPDGCharge();
 
-  if (charge != 0.) histoManager->FillHisto(5,energy);
-  else              histoManager->FillHisto(6,energy);
+  if (charge != 0.) fHistoManager->FillHisto(5,energy);
+  else              fHistoManager->FillHisto(6,energy);
    
   return fUrgent;
 }

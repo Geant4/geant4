@@ -46,7 +46,7 @@
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin,
                      HistoManager* histo)
-:detector(det), primary(kin), histoManager(histo)
+:fDetector(det), fPrimary(kin), fHistoManager(histo)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,15 +64,15 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   CLHEP::HepRandom::showEngineStatus();
 
-  NbOfTraks0 = NbOfTraks1 = NbOfSteps0 = NbOfSteps1 = 0;
-  edep = 0.;
-  trueRange = trueRange2 = 0.;
-  projRange = projRange2 = 0.;
-  transvDev = transvDev2 = 0.;    
+  fNbOfTraks0 = fNbOfTraks1 = fNbOfSteps0 = fNbOfSteps1 = 0;
+  fEdep = 0.;
+  fTrueRange = fTrueRange2 = 0.;
+  fProjRange = fProjRange2 = 0.;
+  fTransvDev = fTransvDev2 = 0.;    
      
   //histograms
   //
-  histoManager->book();
+  fHistoManager->book();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -83,13 +83,13 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   if (NbOfEvents == 0) return;
   G4double dNbOfEvents = double(NbOfEvents);
     
-  G4ParticleDefinition* particle = primary->GetParticleGun()
+  G4ParticleDefinition* particle = fPrimary->GetParticleGun()
                                           ->GetParticleDefinition();
   G4String partName = particle->GetParticleName();    
-  G4double energy   = primary->GetParticleGun()->GetParticleEnergy();
+  G4double energy   = fPrimary->GetParticleGun()->GetParticleEnergy();
   
-  G4double length      = detector->GetSize();    
-  G4Material* material = detector->GetMaterial();
+  G4double length      = fDetector->GetSize();    
+  G4Material* material = fDetector->GetMaterial();
   G4double density     = material->GetDensity();
    
   G4cout << "\n ======================== run summary ======================\n";
@@ -105,41 +105,41 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
  G4cout << "\n ============================================================\n";
  
  G4cout << "\n total energy deposit: " 
-        << G4BestUnit(edep/dNbOfEvents, "Energy") << G4endl;
+        << G4BestUnit(fEdep/dNbOfEvents, "Energy") << G4endl;
 	     
  //nb of tracks and steps per event
  //           
  G4cout << "\n nb tracks/event"
-        << "   neutral: " << std::setw(10) << NbOfTraks0/dNbOfEvents
-        << "   charged: " << std::setw(10) << NbOfTraks1/dNbOfEvents
+        << "   neutral: " << std::setw(10) << fNbOfTraks0/dNbOfEvents
+        << "   charged: " << std::setw(10) << fNbOfTraks1/dNbOfEvents
         << "\n nb  steps/event"
-        << "   neutral: " << std::setw(10) << NbOfSteps0/dNbOfEvents
-        << "   charged: " << std::setw(10) << NbOfSteps1/dNbOfEvents
+        << "   neutral: " << std::setw(10) << fNbOfSteps0/dNbOfEvents
+        << "   charged: " << std::setw(10) << fNbOfSteps1/dNbOfEvents
         << G4endl;
       
  //frequency of processes call
  std::map<G4String,G4int>::iterator it;         
  G4cout << "\n nb of process calls per event: \n   ";        
- for (it = procCounter.begin(); it != procCounter.end(); it++)  
+ for (it = fProcCounter.begin(); it != fProcCounter.end(); it++)  
     G4cout << std::setw(12) << it->first;
            
  G4cout << "\n   ";       
- for (it = procCounter.begin(); it != procCounter.end(); it++)   
+ for (it = fProcCounter.begin(); it != fProcCounter.end(); it++)   
     G4cout << std::setw(12) << (it->second)/dNbOfEvents;
  G4cout << G4endl;
       
  //compute true and projected ranges, and transverse dispersion
  //
- trueRange /= NbOfEvents; trueRange2 /= NbOfEvents;
- G4double trueRms = trueRange2 - trueRange*trueRange;        
+ fTrueRange /= NbOfEvents; fTrueRange2 /= NbOfEvents;
+ G4double trueRms = fTrueRange2 - fTrueRange*fTrueRange;        
  if (trueRms>0.) trueRms = std::sqrt(trueRms); else trueRms = 0.;
       
- projRange /= NbOfEvents; projRange2 /= NbOfEvents;
- G4double projRms = projRange2 - projRange*projRange;        
+ fProjRange /= NbOfEvents; fProjRange2 /= NbOfEvents;
+ G4double projRms = fProjRange2 - fProjRange*fProjRange;        
  if (projRms>0.) projRms = std::sqrt(projRms); else projRms = 0.;
        
- transvDev /= 2*NbOfEvents; transvDev2 /= 2*NbOfEvents;
- G4double trvsRms = transvDev2 - transvDev*transvDev;        
+ fTransvDev /= 2*NbOfEvents; fTransvDev2 /= 2*NbOfEvents;
+ G4double trvsRms = fTransvDev2 - fTransvDev*fTransvDev;        
  if (trvsRms>0.) trvsRms = std::sqrt(trvsRms); else trvsRms = 0.;
  
  //compare true range with csda range from PhysicsTables
@@ -151,19 +151,19 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
       
  G4cout << "\n---------------------------------------------------------\n";
  G4cout << " Primary particle : " ;
- G4cout << "\n true Range = " << G4BestUnit(trueRange,"Length")
+ G4cout << "\n true Range = " << G4BestUnit(fTrueRange,"Length")
         << "   rms = "        << G4BestUnit(trueRms,  "Length");
 
- G4cout << "\n proj Range = " << G4BestUnit(projRange,"Length")
+ G4cout << "\n proj Range = " << G4BestUnit(fProjRange,"Length")
         << "   rms = "        << G4BestUnit(projRms,  "Length");
 	     
- G4cout << "\n proj/true  = " << projRange/trueRange;
+ G4cout << "\n proj/true  = " << fProjRange/fTrueRange;
       	     
  G4cout << "\n transverse dispersion at end = " 
         << G4BestUnit(trvsRms,"Length");
 	
  G4cout << "\n      mass true Range from simulation = " 
-        << G4BestUnit(trueRange*density, "Mass/Surface")
+        << G4BestUnit(fTrueRange*density, "Mass/Surface")
 	<< "\n       from PhysicsTable (csda range) = " 
         << G4BestUnit(rangeTable*density, "Mass/Surface");	
  G4cout << "\n---------------------------------------------------------\n";
@@ -172,11 +172,11 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
  // reset default precision
  G4cout.precision(prec);
                                     
-  // remove all contents in procCounter 
-  procCounter.clear();
+  // remove all contents in fProcCounter 
+  fProcCounter.clear();
     
   //save histograms      
-  histoManager->save();
+  fHistoManager->save();
   
   // show Rndm status
   CLHEP::HepRandom::showEngineStatus(); 
