@@ -42,9 +42,7 @@ int main(int argc,char** argv) {
 
   visManager->SetUserAction
     (new StandaloneVisAction,
-     G4VisExtent(-5*m,5*m,-5*m,5*m,-5*m,5*m));
-  // 2nd argument optional - overridden by /vis/scene/add/userAction
-  // arguments, if any.
+     G4VisExtent(-10*m,10*m,-10*m,10*m,-10*m,10*m));
 
   G4UIExecutive* ui = new G4UIExecutive(argc, argv);
   G4UImanager* UImanager = G4UImanager::GetUIpointer();

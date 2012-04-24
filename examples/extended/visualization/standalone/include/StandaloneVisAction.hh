@@ -33,7 +33,7 @@
 #include "G4VUserVisAction.hh"
 
 class StandaloneVisAction: public G4VUserVisAction {
-  void Draw();
+  virtual void Draw();
 };
 
 #endif

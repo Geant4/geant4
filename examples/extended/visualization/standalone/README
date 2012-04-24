@@ -23,8 +23,7 @@ examples/extended/visualization/userVisAction.
 2) In the main program, StandaloneVisAction must be instantiated and
    its pointer registerd with the visualization manager. You may
    register only one vis action.  You may optionally specify an extent
-   at this point to assist the viewers to locate the objects - if not,
-   you may specify it on the command line later.
+   at this point to assist the viewers to locate the objects.
 
 3) To visualise, use the usual Geant4 vis commands to create a view
    and scene, then add the vis action to the scene, optionally with an

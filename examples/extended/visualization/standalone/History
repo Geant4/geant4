@@ -16,6 +16,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+9th April 2012  John Allison  (exam-ext-vis-standalone-V09-05-01)
+- standalone.cc: Corrected vis user action extent.
+- standalone.g4m: Removed arguments from /vis/scene/add/userAction.
+- README: Improved.
+
 21st March 2012  John Allison  (exam-ext-vis-standalone-V09-05-00)
 - Re-tagged with directory specify name.
 
