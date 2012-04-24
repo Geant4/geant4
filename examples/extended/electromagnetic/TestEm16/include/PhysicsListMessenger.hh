@@ -52,10 +52,10 @@ public:
 
 private:
 
-  PhysicsList*        physList;
+  PhysicsList*        fPhysList;
 
-  G4UIdirectory*      physDir;
-  G4UIcmdWithABool*   SRTypeCmd;
+  G4UIdirectory*      fPhysDir;
+  G4UIcmdWithABool*   fSRTypeCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

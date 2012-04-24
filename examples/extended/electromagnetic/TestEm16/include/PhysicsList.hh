@@ -51,7 +51,7 @@ public:
   void ConstructLeptons();
 
   void SetCuts();
-  void SetAnalyticSR(G4bool val) {SRType = val;};
+  void SetAnalyticSR(G4bool val) {fSRType = val;};
 
   // Construct processes and register them
   void ConstructProcess();
@@ -60,8 +60,8 @@ public:
 
 private:
 
-  G4bool                 SRType;
-  PhysicsListMessenger*  pMes;
+  G4bool                 fSRType;
+  PhysicsListMessenger*  fMess;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

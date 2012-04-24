@@ -63,15 +63,15 @@ PhysicsList::PhysicsList()
 {
   defaultCutValue = 1.*km;
   
-  SRType = true; 
-  pMes = new PhysicsListMessenger(this);
+  fSRType = true; 
+  fMess = new PhysicsListMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::~PhysicsList()
 { 
-  delete pMes;
+  delete fMess;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -145,7 +145,7 @@ void PhysicsList::ConstructEM()
       pmanager->AddProcess(new G4eMultipleScattering,       -1, 1, 1);
       pmanager->AddProcess(new G4eIonisation,               -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung,           -1, 3, 3);
-      if (SRType)
+      if (fSRType)
       pmanager->AddProcess(new G4SynchrotronRadiation,      -1,-1, 4);
       else
       pmanager->AddProcess(new G4SynchrotronRadiationInMat, -1,-1, 4); 
@@ -157,7 +157,7 @@ void PhysicsList::ConstructEM()
       pmanager->AddProcess(new G4eIonisation,               -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung,           -1, 3, 3);
       pmanager->AddProcess(new G4eplusAnnihilation,          0,-1, 4);
-      if (SRType)
+      if (fSRType)
       pmanager->AddProcess(new G4SynchrotronRadiation,      -1,-1, 5);
       else
       pmanager->AddProcess(new G4SynchrotronRadiationInMat, -1,-1, 5);       

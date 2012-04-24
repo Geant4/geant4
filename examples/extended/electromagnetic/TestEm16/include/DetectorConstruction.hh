@@ -64,23 +64,23 @@ class DetectorConstruction : public G4VUserDetectorConstruction
   public:
 
      const
-     G4VPhysicalVolume* GetWorld()      {return pBox;};
+     G4VPhysicalVolume* GetWorld()      {return fBox;};
 
-     G4double           GetSize()       {return BoxSize;};
-     G4Material*        GetMaterial()   {return aMaterial;};
+     G4double           GetSize()       {return fBoxSize;};
+     G4Material*        GetMaterial()   {return fMaterial;};
 
      void               PrintParameters();
 
   private:
 
-     G4VPhysicalVolume*    pBox;
+     G4VPhysicalVolume*  fBox;
 
-     G4double              BoxSize;
-     G4Material*           aMaterial;
-     G4UniformMagField*    magField;
-     G4UserLimits*         userLimits;
+     G4double            fBoxSize;
+     G4Material*         fMaterial;
+     G4UniformMagField*  fMagField;
+     G4UserLimits*       fUserLimits;
 
-     DetectorMessenger* detectorMessenger;
+     DetectorMessenger*  fDetectorMessenger;
 
   private:
 

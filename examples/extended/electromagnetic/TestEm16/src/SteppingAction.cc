@@ -41,7 +41,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(RunAction* RuAct, HistoManager* histo)
-:runAction(RuAct), histoManager(histo)
+:fRunAction(RuAct), fHistoManager(histo)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -71,14 +71,14 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
       if (lp)
 	{
 	  G4double  Egamma =  (*secondary)[lp-1]->GetTotalEnergy();
-	  runAction->n_gam_sync++;
-	  runAction->e_gam_sync += Egamma;
-	  runAction->e_gam_sync2 += Egamma*Egamma;
-	  if (Egamma > runAction->e_gam_sync_max) 
+	  fRunAction->n_gam_sync++;
+	  fRunAction->e_gam_sync += Egamma;
+	  fRunAction->e_gam_sync2 += Egamma*Egamma;
+	  if (Egamma > fRunAction->e_gam_sync_max) 
 	    { 
-	      runAction->e_gam_sync_max = Egamma;
+	      fRunAction->e_gam_sync_max = Egamma;
 	    }
-	  runAction->lam_gam_sync += aStep->GetStepLength();
+	  fRunAction->lam_gam_sync += aStep->GetStepLength();
 	  if (iCalled<nprint)
 	    {
 	      G4double      Eelec  = PrePoint->GetTotalEnergy();
@@ -98,12 +98,12 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 		     << " #secondaries lp=" << lp
 		     << '\n';
 	    }
-	  histoManager->FillHisto(1,Egamma);
+	  fHistoManager->FillHisto(1,Egamma);
 
 	  // power spectrum : gamma weighted with its energy
-	  histoManager->FillHisto(2,Egamma,Egamma/keV); 
+	  fHistoManager->FillHisto(2,Egamma,Egamma/keV); 
 
-	  histoManager->FillHisto(3,aStep->GetStepLength());
+	  fHistoManager->FillHisto(3,aStep->GetStepLength());
 	}
     }
 }

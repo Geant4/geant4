@@ -41,7 +41,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(HistoManager* histo)
-:histoManager(histo)
+:fHistoManager(histo)
 {
   n_gam_sync = 0;
   e_gam_sync = 0;
@@ -66,7 +66,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   CLHEP::HepRandom::showEngineStatus();
 
   //book histograms      
-  histoManager->book();
+  fHistoManager->book();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -92,7 +92,7 @@ void RunAction::EndOfRunAction(const G4Run*)
   CLHEP::HepRandom::showEngineStatus();
 
   //save histograms      
-  histoManager->save();
+  fHistoManager->save();
 
 }
 
