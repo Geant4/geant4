@@ -29,6 +29,28 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+April 20th, 2012 - Ben Morgan (cmake-V09-05-13)
+- Modules/Geant4ToolchainBackwardCompatibility.cmake : Fixed Bug #1306, using
+  BASH_VERSION instead of non-POSIX compliant check.
+
+April 12th, 2012 - Pere Mato (cmake-V09-05-12)
+- Fixed bug in Modules/Geant4CTest.cmake to locate newest data library version
+
+April 12th, 2012 - Gunter Folger (cmake-V09-05-11)
+- Switch to G4EMLOW6.26
+
+April 5th, 2012 - Gunter Folger  (cmake-V09-05-10)
+- Switch to G4EMLOW6.25
+
+April 3rd, 2012 - Ben Morgan (cmake-V09-05-09)
+- Modules/Geant4InstallData.cmake : Increased default timeout to 1500s.
+- Modules/Geant4ToolchainBackwardCompatibility.cmake : Redirect all cd commands
+  to /dev/null as some cd implementations report change to stdout.
+
+March 30th, 2012 - Ben Morgan (cmake-V09-05-08)
+- Modules/Geant4InstallData.cmake : Add GEANT4_INSTALL_DATA_TIMEOUT cache
+  variable to allow users to increase the download timeout on slow connections.
+  Only available on CMake 2.8.1 and above.
 
 March 22nd, 2012 - Pere Mato (cmake-V09-05-07)
 - genwindef/LibSymbolInfo.cpp : filter the symbols giving problems when building G4clhep for Win64 (second attempt)

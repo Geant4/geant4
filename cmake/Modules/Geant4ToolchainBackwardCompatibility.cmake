@@ -81,7 +81,7 @@ function(_g4tc_selflocate TEMPLATE_NAME SHELL_FAMILY SCRIPT_NAME LOCATION_VARIAB
   if(${SHELL_FAMILY} STREQUAL "bourne")
     set(${TEMPLATE_NAME} 
       "# Self locate script when sourced
-if [ \"x\${BASH_ARGV[0]}\" = \"x\" ]; then
+if [ -z \"\$BASH_VERSION\" ]; then
   # Not bash, so rely on sourcing from correct location
   if [ ! -f ${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION} ]; then
     echo 'ERROR: cd to location of ${SCRIPT_NAME} script and source it there'
@@ -90,7 +90,7 @@ if [ \"x\${BASH_ARGV[0]}\" = \"x\" ]; then
   ${LOCATION_VARIABLE}=\$\(pwd\)
 else
   g4sls_sourced_dir=\$\(dirname \${BASH_ARGV[0]}\)
-  ${LOCATION_VARIABLE}=$\(cd \$g4sls_sourced_dir; pwd\)
+  ${LOCATION_VARIABLE}=$\(cd \$g4sls_sourced_dir > /dev/null ; pwd\)
 fi
       "
       PARENT_SCOPE
@@ -101,7 +101,7 @@ fi
       "# Self locate script when sourced
 set ARGS=(\$_)
 set g4sls_sourced_dir=\"`dirname \${ARGS[2]}`\"
-set ${LOCATION_VARIABLE}=\"`cd \${g4sls_sourced_dir}; pwd`\"
+set ${LOCATION_VARIABLE}=\"`cd \${g4sls_sourced_dir} > /dev/null ; pwd`\"
 "
       PARENT_SCOPE
       )
@@ -514,7 +514,7 @@ file(RELATIVE_PATH
   ${CMAKE_INSTALL_FULL_DATAROOTDIR}/Geant4-${Geant4_VERSION}/geant4make
   ${CMAKE_INSTALL_FULL_INCLUDEDIR}/${PROJECT_NAME}
   )
-set(G4INCLUDE "\"`cd \$geant4make_root/${G4MAKE_TO_INCLUDEDIR}\; pwd`\"")
+set(G4INCLUDE "\"`cd \$geant4make_root/${G4MAKE_TO_INCLUDEDIR} > /dev/null \; pwd`\"")
 
 # - Lib dir
 file(RELATIVE_PATH
@@ -522,8 +522,8 @@ file(RELATIVE_PATH
   ${CMAKE_INSTALL_FULL_DATAROOTDIR}/Geant4-${Geant4_VERSION}/geant4make
   ${CMAKE_INSTALL_FULL_LIBDIR}
   )
-set(G4LIB "\"`cd \$geant4make_root/${G4MAKE_TO_LIBDIR}/Geant4-${Geant4_VERSION}\; pwd`\"")
-set(G4LIB_DIR "\"`cd \$geant4make_root/${G4MAKE_TO_LIBDIR}\; pwd`\"")
+set(G4LIB "\"`cd \$geant4make_root/${G4MAKE_TO_LIBDIR}/Geant4-${Geant4_VERSION} > /dev/null \; pwd`\"")
+set(G4LIB_DIR "\"`cd \$geant4make_root/${G4MAKE_TO_LIBDIR} > /dev/null \; pwd`\"")
 
 set(G4WORKDIR_DEFAULT "\$HOME/geant4_workdir")
 
@@ -542,7 +542,7 @@ if(GEANT4_INSTALL_DATA)
     list(GET _tuple 1 _vers)
     list(GET _tuple 4 _envvarname)
 
-    set(${_envvarname}_PATH "\"`cd \$geant4make_root/${G4MAKE_TO_DATADIR}/${_name}${_vers}\; pwd`\"")
+    set(${_envvarname}_PATH "\"`cd \$geant4make_root/${G4MAKE_TO_DATADIR}/${_name}${_vers} > /dev/null \; pwd`\"")
   endforeach()
 endif()
 
@@ -610,7 +610,7 @@ if(GEANT4_INSTALL_DATA)
     list(GET _tuple 1 _vers)
     list(GET _tuple 4 _envvarname)
 
-    set(${_envvarname}_PATH "\"`cd \$geant4_envbindir/${G4ENV_BINDIR_TO_DATADIR}/${_name}${_vers}\; pwd`\"")
+    set(${_envvarname}_PATH "\"`cd \$geant4_envbindir/${G4ENV_BINDIR_TO_DATADIR}/${_name}${_vers} > /dev/null \; pwd`\"")
   endforeach()
 endif()
 
@@ -648,7 +648,7 @@ foreach(_shell bourne;cshell)
   _g4tc_prepend_path(GEANT4_ENV_LIBPATH_SETUP
     ${_shell}
     ${_libpathname}
-    "\"`cd $geant4_envbindir/${G4ENV_BINDIR_TO_LIBDIR}; pwd`\""
+    "\"`cd $geant4_envbindir/${G4ENV_BINDIR_TO_LIBDIR} > /dev/null ; pwd`\""
     )
 
   # - Set data paths

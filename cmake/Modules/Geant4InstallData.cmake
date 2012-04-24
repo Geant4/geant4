@@ -34,12 +34,21 @@ GEANT4_ADD_FEATURE(GEANT4_INSTALL_EXAMPLES "Will install source code for Geant4 
 if(${CMAKE_VERSION} VERSION_GREATER 2.7)
   option(GEANT4_INSTALL_DATA "Download and install Geant4 Data Libraries" OFF)
 
+  # For very large datasets, and on CMake 2.8.1 and above only, provide
+  # a cached variable to allow the TIMEOUT to be adjusted if needed for slow
+  # connections. Default to 1500 seconds (25 minutes)
+  if(${CMAKE_VERSION} VERSION_GREATER 2.8.0)
+    set(GEANT4_INSTALL_DATA_TIMEOUT 1500 CACHE STRING "Time in seconds allowed for Data Library download")
+    set(_g4id_timeout_cmd TIMEOUT ${GEANT4_INSTALL_DATA_TIMEOUT})
+  endif()
+
+
   if(GEANT4_INSTALL_DATA)
     include(ExternalProject)
     set(_urlprefix "http://geant4.cern.ch/support/source")
     set(GEANT4_DATASETS
       G4NDL/4.0/G4NDL/tar.gz/G4NEUTRONHPDATA
-      G4EMLOW/6.24/G4EMLOW/tar.gz/G4LEDATA
+      G4EMLOW/6.26/G4EMLOW/tar.gz/G4LEDATA
       PhotonEvaporation/2.2/PhotonEvaporation/tar.gz/G4LEVELGAMMADATA
       RadioactiveDecay/3.4/G4RadioactiveDecay/tar.gz/G4RADIOACTIVEDATA
       G4ABLA/3.0/G4ABLA/tar.gz/G4ABLADATA
@@ -57,6 +66,7 @@ if(${CMAKE_VERSION} VERSION_GREATER 2.7)
 
       ExternalProject_Add(${_name} 
         URL ${_urlprefix}/${_fnam}.${_vers}.${_suffix}
+        ${_g4id_timeout_cmd}
         PREFIX Externals/${_fnam}-${_vers}
         SOURCE_DIR data/${_name}${_vers}
         CONFIGURE_COMMAND "" 
