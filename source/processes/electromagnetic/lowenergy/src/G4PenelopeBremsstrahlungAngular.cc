@@ -433,6 +433,7 @@ G4double G4PenelopeBremsstrahlungAngular::GetEffectiveZ(const G4Material* materi
     return theEffectiveZSq->find(material)->second; 
 
   //not found: calculate and return
+  //Helper for the calculation
   std::vector<G4double> *StechiometricFactors = new std::vector<G4double>;
   G4int nElements = material->GetNumberOfElements();
   const G4ElementVector* elementVector = material->GetElementVector();
@@ -461,7 +462,9 @@ G4double G4PenelopeBremsstrahlungAngular::GetEffectiveZ(const G4Material* materi
       G4double Z = (*elementVector)[i]->GetZ();
       sumz2 += (*StechiometricFactors)[i]*Z*Z;
       sums  += (*StechiometricFactors)[i];
-    }
+    }  
+  delete StechiometricFactors;
+
   G4double ZBR = std::sqrt(sumz2/sums);  
   theEffectiveZSq->insert(std::make_pair(material,ZBR));
 

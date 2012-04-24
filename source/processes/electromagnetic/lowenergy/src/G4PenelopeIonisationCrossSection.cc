@@ -213,6 +213,8 @@ G4int G4PenelopeIonisationCrossSection::FindShellIDIndex(const G4Material* mat,
   
   if (shellIDTable->count(theKey)) //table already built, and containing the element
     {   
+      if (verboseLevel > 2)
+	G4cout << "FindShellIDIndex: Table already built for " << mat->GetName() << G4endl;
       G4DataVector* theVec = shellIDTable->find(theKey)->second;
          
       if (ishell>=0 && ishell < (G4int) theVec->size()) //check we are not off-boundary
@@ -229,6 +231,8 @@ G4int G4PenelopeIonisationCrossSection::FindShellIDIndex(const G4Material* mat,
     }
   else
     {
+      if (verboseLevel > 2)
+	G4cout << "FindShellIDIndex: Table to be built for " << mat->GetName() << G4endl;
       //Not contained: look for it
       G4PenelopeOscillatorTable* theTable = oscManager->GetOscillatorTableIonisation(mat);
       size_t numberOfOscillators = theTable->size();
@@ -251,6 +255,7 @@ G4int G4PenelopeIonisationCrossSection::FindShellIDIndex(const G4Material* mat,
 		result = (G4int) iosc;
 	    }      
 	}
+      shellIDTable->insert(std::make_pair(theKey,dat));
     }
 
   if (verboseLevel > 1)    

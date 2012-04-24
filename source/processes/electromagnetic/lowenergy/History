@@ -17,6 +17,52 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19.04.2012  S. Incerti tag emlowen-V09-05-18
+            New draft class G4Livermore2012GammaConversionModel
+
+16.04.2012  L. Pandola tag emlowen-V09-05-17
+            Copy of the previous tag (rejected for other reasons)
+	    Database G4LEDATA updated to G4EMLOW6.26 in the meanwhile 
+            (no real effect, removed unused files only).
+
+10.04.2012  L. Pandola tag emlowen-V09-05-16
+	    Removed obsolete Penelope v2001 models and releted 
+	    helper classes. A clean-up of G4LEDATA will follow 
+	    (there are unused files now) 
+
+04.04.2012  M. Raine, S. Incerti tag emlowen-V09-05-15
+            - Delivered processes and models for microdosimetry in Si
+	    for electrons, protons and ions. These processes and models
+	    are described in the following publications:
+	    - Inelastic cross-sections of low energy electrons in silicon
+	    for the simulation of heavy ion tracks with theGeant4-DNA toolkit,
+	    NSS Conf. Record 2010, p80-85
+	    - Geant4 physics processes for microdosimetry simulation:
+	    very low energy electromagnetic models for electrons in Si,
+	    to be published in TNS
+	    - Geant4 physics processes for microdosimetry simulation:
+	    very low energy electromagnetic models for protons and
+	    heavy ions in Si, to be published in NIMB	
+	    by A. Valentin, M. Raine, J.E. Sauvestre, 
+	    M. Gaillardin, P. Paillet
+	    - to be used with G4LEDATA version 6.25    
+
+03.04.2012  S. Incerti, L. Pandola tag emlowen-V09-05-14
+	    - Updated GNUMakefile for usage of G4lrint 
+	    - Fixes of coverity defects in Penelope classes (bug fixes)
+
+02.04.2012  S. Incerti tag emlowen-V09-05-13
+	    Update to G4lrint by J. Brown (G4MUComptonModel)
+
+30.03.2012  S. Incerti tag emlowen-V09-05-12
+	    Added new rounding method developped by J. Brown for Windows 
+	    compilation of new Compton model (G4MUComptonModel)
+
+26.03.2012  S. Incerti tag emlowen-V09-05-11
+	    Added new Compton model (G4MUComptonModel) developped by
+	    J. M. C. Brown, M. R. Dimmock, J. E. Gillam and D. M. Paganin,
+	    Monash University, Australia
+	    
 22.03.2012  L. Pandola tag emlowen-V09-05-10
 	    Penelope-based XS model for electron PIXE 
 	    registered in G4UAtomicDeexcitation.

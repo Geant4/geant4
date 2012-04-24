@@ -93,6 +93,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LinInterpolation.hh
         G4LinLogInterpolation.hh
         G4LinLogLogInterpolation.hh
+        G4Livermore2012GammaConversionModel.hh
         G4LivermoreBremsstrahlungModel.hh
         G4LivermoreComptonModel.hh
         G4LivermoreGammaConversionModel.hh
@@ -107,16 +108,15 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LivermorePolarizedRayleighModel.hh
         G4LivermoreRayleighModel.hh
         G4LogLogInterpolation.hh
+        G4MUComptonModel.hh
+        G4MuElecCrossSectionDataSet.hh
+        G4MuElecElastic.hh
+        G4MuElecElasticModel.hh
+        G4MuElecInelastic.hh
+        G4MuElecInelasticModel.hh
+        G4MuElecSiStructure.hh
         G4OrlicLiXsModel.hh
         G4PaulKxsModel.hh
-        G4Penelope01BremsstrahlungAngular.hh
-	G4Penelope01BremsstrahlungContinuous.hh
-	G4Penelope01BremsstrahlungModel.hh
-	G4Penelope01ComptonModel.hh
-	G4Penelope01GammaConversionModel.hh
-	G4Penelope01IonisationModel.hh
-	G4Penelope01PhotoElectricModel.hh
-	G4Penelope01RayleighModel.hh
 	G4PenelopeAnnihilationModel.hh
 	G4PenelopeBremsstrahlungAngular.hh
 	G4PenelopeBremsstrahlungFS.hh
@@ -124,9 +124,6 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
 	G4PenelopeComptonModel.hh
 	G4PenelopeCrossSection.hh
 	G4PenelopeGammaConversionModel.hh
-	G4PenelopeIntegrator.hh
-	G4PenelopeIntegrator.icc
-	G4PenelopeInterpolator.hh
 	G4PenelopeIonisationCrossSection.hh
 	G4PenelopeIonisationModel.hh
 	G4PenelopeIonisationXSHandler.hh	
@@ -214,6 +211,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LinInterpolation.cc
         G4LinLogInterpolation.cc
         G4LinLogLogInterpolation.cc
+        G4Livermore2012GammaConversionModel.cc
         G4LivermoreBremsstrahlungModel.cc
         G4LivermoreComptonModel.cc
         G4LivermoreGammaConversionModel.cc
@@ -228,16 +226,15 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LivermorePolarizedRayleighModel.cc
         G4LivermoreRayleighModel.cc
         G4LogLogInterpolation.cc
-        G4OrlicLiXsModel.cc
-        G4PaulKxsModel.cc
-      	G4Penelope01BremsstrahlungAngular.cc
-	G4Penelope01BremsstrahlungContinuous.cc
-	G4Penelope01BremsstrahlungModel.cc
-	G4Penelope01ComptonModel.cc
-	G4Penelope01GammaConversionModel.cc
-	G4Penelope01IonisationModel.cc
-	G4Penelope01PhotoElectricModel.cc
-	G4Penelope01RayleighModel.cc
+        G4MUComptonModel.cc
+        G4MuElecCrossSectionDataSet.cc
+        G4MuElecElastic.cc
+        G4MuElecElasticModel.cc
+        G4MuElecInelastic.cc
+        G4MuElecInelasticModel.cc
+        G4MuElecSiStructure.cc
+	G4OrlicLiXsModel.cc
+        G4PaulKxsModel.cc      
 	G4PenelopeAnnihilationModel.cc
 	G4PenelopeBremsstrahlungAngular.cc
 	G4PenelopeBremsstrahlungFS.cc
@@ -245,7 +242,6 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
 	G4PenelopeComptonModel.cc
 	G4PenelopeCrossSection.cc
 	G4PenelopeGammaConversionModel.cc
-	G4PenelopeInterpolator.cc
 	G4PenelopeIonisationCrossSection.cc
 	G4PenelopeIonisationModel.cc
 	G4PenelopeIonisationXSHandler.cc

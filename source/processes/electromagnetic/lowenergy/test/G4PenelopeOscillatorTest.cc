@@ -125,7 +125,7 @@ int main() {
   
   //Instantiate PIXE cross sections handlers.
   G4PenelopeIonisationCrossSection* pixeXS = new G4PenelopeIonisationCrossSection();
-  pixeXS->SetVerboseLevel(0);
+  pixeXS->SetVerbosityLevel(0);
   G4LivermoreIonisationCrossSection *livXS = new G4LivermoreIonisationCrossSection();
 
   //Dump shell cross sections
