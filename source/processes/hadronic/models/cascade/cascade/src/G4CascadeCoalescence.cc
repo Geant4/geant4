@@ -404,7 +404,7 @@ void G4CascadeCoalescence::reportArgs(const G4String& name,
 				      const ClusterCandidate& aCluster) const {
   G4cout << " >>> G4CascadeCoalescence::" << name << " ";
   std::copy(aCluster.begin(), aCluster.end(),
-	    std::ostream_iterator<int>(G4cout, " "));
+	    std::ostream_iterator<size_t>(G4cout, " "));
   G4cout << G4endl;
 
   for (size_t i=0; i<aCluster.size(); i++)

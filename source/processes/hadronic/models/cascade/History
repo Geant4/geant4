@@ -15,6 +15,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+4 April 2012  Michael Kelsey (hadr-casc-V09-05-07)
+--------------------------------------------------
+- G4CascadeCoalescence.cc:  Use std::ostream_iterator<size_t> to report
+  cluster indices, to avoid compiler warning.
+
 21 March 2012  Michael Kelsey (hadr-casc-V09-05-06)
 ---------------------------------------------------
 - G4NucleiModel.cc:  Add check in isProjectile() for single-zone nuclei, and
