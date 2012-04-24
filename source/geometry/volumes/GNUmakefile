@@ -21,7 +21,6 @@ CPPFLAGS += -I$(G4BASE)/graphics_reps/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPGeometry/include \
             -I$(G4BASE)/geometry/magneticfield/include \
-            -I$(G4BASE)/geometry/verification/include \
             -I$(G4BASE)/geometry/management/include
 
 ifdef G4DEBUG_NAVIGATION
