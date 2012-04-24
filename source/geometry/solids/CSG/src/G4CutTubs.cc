@@ -32,6 +32,7 @@
 //
 // History:
 //
+// 05.04.12 M.Kelsey   - GetPointOnSurface() throw flat in sqrt(r)
 // 01.06.11 T.Nikitina - Derived from G4Tubs
 //
 /////////////////////////////////////////////////////////////////////////
@@ -1907,7 +1908,7 @@ G4ThreeVector G4CutTubs::GetPointOnSurface() const
   cosphi = std::cos(phi);
   sinphi = std::sin(phi);
 
-  rRand  = RandFlat::shoot(fRMin,fRMax);
+  rRand  = GetRadiusInRing(fRMin,fRMax);
   
   if( (fSPhi == 0) && (fDPhi == twopi) ) { aFou = 0; }
   

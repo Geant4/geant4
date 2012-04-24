@@ -33,6 +33,7 @@
 //
 // History:
 //
+// 05.04.12 M.Kelsey:   GetPointOnSurface() throw flat in cos(theta), sqrt(r)
 // 14.09.09 T.Nikitina: fix for phi section in DistanceToOut(p,v,..),as for G4Tubs,G4Cons 
 // 26.03.09 G.Cosmo   : optimisations and uniform use of local radial tolerance
 // 12.06.08 V.Grichine: fix for theta intersections in DistanceToOut(p,v,...)
@@ -3042,13 +3043,13 @@ std::ostream& G4Sphere::StreamInfo( std::ostream& os ) const
 G4ThreeVector G4Sphere::GetPointOnSurface() const
 {
   G4double zRand, aOne, aTwo, aThr, aFou, aFiv, chose, phi, sinphi, cosphi;
-  G4double height1, height2, slant1, slant2, costheta, sintheta,theta,rRand;
+  G4double height1, height2, slant1, slant2, costheta, sintheta, rRand;
 
   height1 = (fRmax-fRmin)*cosSTheta;
   height2 = (fRmax-fRmin)*cosETheta;
   slant1  = std::sqrt(sqr((fRmax - fRmin)*sinSTheta) + height1*height1);
   slant2  = std::sqrt(sqr((fRmax - fRmin)*sinETheta) + height2*height2);
-  rRand   = RandFlat::shoot(fRmin,fRmax);
+  rRand   = GetRadiusInRing(fRmin,fRmax);
   
   aOne = fRmax*fRmax*fDPhi*(cosSTheta-cosETheta);
   aTwo = fRmin*fRmin*fDPhi*(cosSTheta-cosETheta);
@@ -3059,8 +3060,7 @@ G4ThreeVector G4Sphere::GetPointOnSurface() const
   phi = RandFlat::shoot(fSPhi, ePhi); 
   cosphi = std::cos(phi); 
   sinphi = std::sin(phi);
-  theta = RandFlat::shoot(fSTheta,eTheta);
-  costheta = std::cos(theta);
+  costheta = RandFlat::shoot(cosETheta,cosSTheta);
   sintheta = std::sqrt(1.-sqr(costheta));
 
   if(fFullPhiSphere) { aFiv = 0; }

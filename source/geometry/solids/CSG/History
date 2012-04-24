@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+April 6, 2012  M.Kelsey                  geom-csg-V09-05-00
+- Modified GetPointOnSurface() methods for solids using polar coordinate
+  parametrizations, to generate more uniform distributions, using a
+  function to generate proper radial coordinate included in G4CSGSolid.
+
 November 15, 2011  G.Cosmo               geom-csg-V09-04-11
 - Correction in G4CutTubs for missing implementation of GetCubicVolume()
   and GetSurfaceArea() utility methods, to be temporarly replaced by

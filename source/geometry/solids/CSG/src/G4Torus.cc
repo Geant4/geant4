@@ -32,6 +32,7 @@
 //
 // Implementation
 //
+// 05.04.12 M.Kelsey:   Use sqrt(r) in GetPointOnSurface() for uniform points
 // 02.10.07 T.Nikitina: Bug fixed in SolveNumericJT(), b.969:segmentation fault.
 //                      rootsrefined is used only if the number of refined roots
 //                      is the same as for primary roots. 
@@ -1700,13 +1701,13 @@ G4ThreeVector G4Torus::GetPointOnSurface() const
   }
   else if( (chose >= aOut + aIn) && (chose < aOut + aIn + aSide) )
   {
-    rRand = RandFlat::shoot(fRmin,fRmax);
+    rRand = GetRadiusInRing(fRmin,fRmax);
     return G4ThreeVector ((fRtor+rRand*cosv)*std::cos(fSPhi),
                           (fRtor+rRand*cosv)*std::sin(fSPhi), rRand*sinv);
   }
   else
   {   
-    rRand = RandFlat::shoot(fRmin,fRmax);
+    rRand = GetRadiusInRing(fRmin,fRmax);
     return G4ThreeVector ((fRtor+rRand*cosv)*std::cos(fSPhi+fDPhi),
                           (fRtor+rRand*cosv)*std::sin(fSPhi+fDPhi), 
                           rRand*sinv);

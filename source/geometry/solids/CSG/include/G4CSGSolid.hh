@@ -71,9 +71,14 @@ class G4CSGSolid : public G4VSolid
 
   protected:
 
-  G4double fCubicVolume;
-  G4double fSurfaceArea;
-  mutable G4Polyhedron* fpPolyhedron;
+    G4double GetRadiusInRing(G4double rmin, G4double rmax) const;
+      // Utility function for subclasses to generate proper circular areas
+
+  protected:
+
+    G4double fCubicVolume;
+    G4double fSurfaceArea;
+    mutable G4Polyhedron* fpPolyhedron;
 };
 
 #endif

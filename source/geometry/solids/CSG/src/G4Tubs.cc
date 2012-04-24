@@ -32,6 +32,7 @@
 //
 // History:
 //
+// 05.04.12 M.Kelsey:   Use sqrt(r) in GetPointOnSurface() for uniform points
 // 02.08.07 T.Nikitina: bug fixed in DistanceToOut(p,v,..) for negative value under sqrt
 //                      for the case: p on the surface and v is tangent to the surface
 // 11.05.07 T.Nikitina: bug fixed in DistanceToOut(p,v,..) for phi < 2pi
@@ -1860,7 +1861,7 @@ G4ThreeVector G4Tubs::GetPointOnSurface() const
   cosphi = std::cos(phi);
   sinphi = std::sin(phi);
 
-  rRand  = RandFlat::shoot(fRMin,fRMax);
+  rRand  = GetRadiusInRing(fRMin,fRMax);
   
   if( (fSPhi == 0) && (fDPhi == twopi) ) { aFou = 0; }
   

@@ -32,6 +32,7 @@
 //
 // History:
 //
+// 05.04.12 M.Kelsey   - GetPointOnSurface() throw flat in cos(theta)
 // 30.06.04 V.Grichine - bug fixed in DistanceToIn(p,v) on Rmax surface
 // 20.08.03 V.Grichine - created
 //
@@ -700,9 +701,9 @@ G4ThreeVector G4Orb::GetPointOnSurface() const
   G4double phi      = RandFlat::shoot(0.,2.*pi);
   G4double cosphi   = std::cos(phi);
   G4double sinphi   = std::sin(phi);
-  
-  G4double theta    = RandFlat::shoot(0.,pi);
-  G4double costheta = std::cos(theta);
+
+  // generate a random point uniform in area
+  G4double costheta = RandFlat::shoot(-1.,1.);
   G4double sintheta = std::sqrt(1.-sqr(costheta));
   
   return G4ThreeVector (fRmax*sintheta*cosphi,

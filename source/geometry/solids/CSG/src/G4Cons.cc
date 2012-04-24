@@ -34,6 +34,7 @@
 //
 // History:
 //
+// 05.04.12 M.Kelsey:   GetPointOnSurface() throw flat in sqrt(r)
 // 12.10.09 T.Nikitina: Added to DistanceToIn(p,v) check on the direction in
 //                      case of point on surface
 // 03.05.05 V.Grichine: SurfaceNormal(p) according to J. Apostolakis proposal
@@ -2306,8 +2307,8 @@ G4ThreeVector G4Cons::GetPointOnSurface() const
   
   phi    = RandFlat::shoot(fSPhi,fSPhi+fDPhi);
   cosu   = std::cos(phi);  sinu = std::sin(phi);
-  rRand1 = RandFlat::shoot(fRmin1,fRmax1);
-  rRand2 = RandFlat::shoot(fRmin2,fRmax2);
+  rRand1 = GetRadiusInRing(fRmin1, fRmin2);
+  rRand2 = GetRadiusInRing(fRmax1, fRmax2);
   
   if ( (fSPhi == 0.) && fPhiFullCone )  { Afive = 0.; }
   chose  = RandFlat::shoot(0.,Aone+Atwo+Athree+Afour+2.*Afive);
