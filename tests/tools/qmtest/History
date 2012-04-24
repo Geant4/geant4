@@ -12,6 +12,12 @@ $Id$
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05-Apr-2012, G.Folger               (testtools-QMtest-V09-05-04)
+- Adding test74, disable test73 ( was rejected )
+
+28-Mar-2012, A. Dotti		    (testtools-QMtest-V09-05-03)
+- Adding test73
+
 16-Mar-2011, G.Folger               (testtools-QMtest-V09-05-02)
 -  re-enable test70
 
