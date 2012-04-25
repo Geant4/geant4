@@ -51,6 +51,7 @@
 
 #include "G4QHadronInelasticDataSet.hh"
 #include "G4BGGNucleonInelasticXS.hh"
+#include "G4NeutronHPBGGNucleonInelasticXS.hh"
 #include "G4NeutronHPJENDLHEInelasticData.hh"
 HadronPhysicsShielding::HadronPhysicsShielding( G4int )
                     :  G4VPhysicsConstructor("hInelastic Shielding")
@@ -141,7 +142,8 @@ void HadronPhysicsShielding::ConstructProcess()
 {
   CreateModels();
   theNeutrons->Build();
-  BGGxsNeutron=new  G4BGGNucleonInelasticXS(G4Neutron::Neutron()); 
+  //BGGxsNeutron=new  G4BGGNucleonInelasticXS(G4Neutron::Neutron()); 
+  BGGxsNeutron=new  G4NeutronHPBGGNucleonInelasticXS(G4Neutron::Neutron()); 
   FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(BGGxsNeutron);
 
   NeutronHPJENDLHEInelastic=new G4NeutronHPJENDLHEInelasticData;

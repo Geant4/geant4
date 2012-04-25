@@ -23,13 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// ClassName:   CHIPS
+// ClassName:   CHIPS_HP
 //
-// Author: 2009 M.Kosov (based on QGSC_BERT, but without BERT)
-//
-// Modified:
-// 04.06.2010 G.Folger: Use new ctor for builders
-// 16.08.2010 H.Kurashige: Remove inclusion of G4ParticleWithCuts 
+// Author: April 2012 M.Kosov (based on CHIPS)
 //
 //----------------------------------------------------------------------------
 //
@@ -55,22 +51,22 @@
 #include "G4NeutronTrackingCut.hh"
 
 #include "G4DataQuestionaire.hh"
-#include "HadronPhysicsCHIPS.hh"
+#include "HadronPhysicsCHIPS_HP.hh"
 
 #include "G4WarnPLStatus.hh"
 
-template<class T> TCHIPS<T>::TCHIPS(G4int ver):  T()
+template<class T> TCHIPS_HP<T>::TCHIPS_HP(G4int ver):  T()
 {
   // default cut value  (1.0mm) 
   // defaultCutValue = 1.0*mm;
   G4DataQuestionaire it(photon);
-  G4cout << "<<< Geant4 Physics List simulation engine: CHIPS 1.2"<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: CHIPS_HP 1.0"<<G4endl;
   G4cout <<G4endl<<G4endl;
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(ver);
 
   G4WarnPLStatus exp;
-  exp.Experimental("CHIPS");
+  exp.Experimental("CHIPS_HP");
 
   // EM Physics
   //this->RegisterPhysics( new G4QAtomicPhysics(ver));
@@ -85,11 +81,11 @@ template<class T> TCHIPS<T>::TCHIPS(G4int ver):  T()
   // Decays
   this->RegisterPhysics( new G4DecayPhysics(ver) );
 
-   // Hadron Elastic scattering, "CHIPS" version (to be replaced by G4QElasticPhysics)
+  // Hadron CHIPS Elastic Physics
   this->RegisterPhysics( new G4QElasticPhysics(ver));
 
-   // Hadron Physics (to be replaced by G4QInelasticPhysics)
-  this->RegisterPhysics(  new HadronPhysicsCHIPS(ver));
+  // Hadron CHIPS Inelastic Physics + HP for neutrons < 20 MeV
+  this->RegisterPhysics(  new HadronPhysicsCHIPS_HP(ver));
 
   // Stopping Physics
   this->RegisterPhysics( new G4QCaptureAtRestPhysics(ver) );
@@ -102,18 +98,18 @@ template<class T> TCHIPS<T>::TCHIPS(G4int ver):  T()
 
 }
 
-template<class T> TCHIPS<T>::~TCHIPS() {}
+template<class T> TCHIPS_HP<T>::~TCHIPS_HP() {}
 
-template<class T> void TCHIPS<T>::SetCuts()
+template<class T> void TCHIPS_HP<T>::SetCuts()
 {
-  if (this->verboseLevel >1) G4cout << "CHIPS::SetCuts:"; 
+  if (this->verboseLevel >1) G4cout << "CHIPS_HP::SetCuts:"; 
   //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
   //   the default cut value for all particle types 
 
   this->SetCutsWithDefault();   
   
-  //  if (this->verboseLevel >0)
-  //    G4VUserPhysicsList::DumpCutValuesTable();  
+//  if (this->verboseLevel >0)
+//    G4VUserPhysicsList::DumpCutValuesTable();  
   
 }
 

@@ -23,64 +23,38 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// GEANT4 tag $Name: not supported by cvs2svn $
+// ClassName:   CHIPS_HP
 //
-//---------------------------------------------------------------------------
-//
-// ClassName:   G4QInelasticCHIPSBuilder
-//
-// Author: 2009 M. Kossov
-//
-// Modified:
+// Author: April 2012 M.Kosov (based on CHIPS)
 //
 //----------------------------------------------------------------------------
 //
-// Short comment: This is a physics list of only one model G4QInelastic for all
-// hadron-nuclear interactions at all energies (+CHIPS (n,gamma) for neutrons).
-// There's no model- or process-mixing (CHIPS_HP) as in G4Hadr Physics Package.
-// In this particular builder the G4QInelastic process is attached to all
-// hadrons (+ G4QNGamma for neutrons). Previously it could be done
-// only using the LHEP parameterized package or in a temporary form by the
-// QGSC model conditionally extended (just not crashing) to low energies.
-// *** Important *** As the CHIPS treatment of all hadrons is very simple,
-// this builder with time can be not used in the CHIPS physics list. 
-//
-// -----------------------------------------------------------------------------
-#ifndef G4QInelasticCHIPSBuilder_h
-#define G4QInelasticCHIPSBuilder_h 1
 
+#ifndef TCHIPS_HP_h
+#define TCHIPS_HP_h 1
+
+#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
+#include "CompileTimeConstraints.hh"
 
-#include "G4VPhysicsConstructor.hh"
-#include "G4QInelastic.hh"
-#include "G4QNGamma.hh"
-//#include "G4QFission.hh"
-
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTable.hh"
-#include "G4ProcessManager.hh"
-
-class G4QInelasticCHIPSBuilder
+template<class T>
+class TCHIPS_HP: public T
 {
- public: 
-  G4QInelasticCHIPSBuilder(G4int verbose);
-  virtual ~G4QInelasticCHIPSBuilder();
+public:
+  TCHIPS_HP(G4int ver = 1);
+  virtual ~TCHIPS_HP();
+  
+public:
+  // SetCuts() 
+  virtual void SetCuts();
 
- public: 
-  void Build();
-
- protected:
-  // the particle table has the complete List of existing particle types
-  G4ParticleTable* theParticleTable;
-  G4ParticleTable::G4PTblDicIterator* theParticleIterator;
-
- private:
-  G4int  verbose;
-  G4bool wasActivated;
-  G4QInelastic* inelastic;
-  G4QNGamma*    nGamma;
-  //G4QFission*   fission;
+private:
+  enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };
 };
-// 2009 by M. Kossov
+#include "CHIPS_HP.icc"
+typedef TCHIPS_HP<G4VModularPhysicsList> CHIPS_HP;
 
 #endif
+
+
+

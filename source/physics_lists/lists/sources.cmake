@@ -111,6 +111,8 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
     HEADERS
         CHIPS.hh
         CHIPS.icc
+        CHIPS_HP.hh
+        CHIPS_HP.icc
         FTF_BIC.hh
         FTF_BIC.icc
         FTFP_BERT_EMV.hh
@@ -125,6 +127,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         G4PhysListFactory.hh
         G4VHadronPhysics.hh
         HadronPhysicsCHIPS.hh
+        HadronPhysicsCHIPS_HP.hh
         HadronPhysicsFTF_BIC.hh
         HadronPhysicsFTFP_BERT.hh
         HadronPhysicsFTFP_BERT_TRV.hh
@@ -142,7 +145,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         HadronPhysicsQGSP_BIC_HP.hh
         HadronPhysicsQGSP_FTFP_BERT.hh
         HadronPhysicsQGSP.hh
-	HadronPhysicsQGSP_INCLXX.hh
+	  HadronPhysicsQGSP_INCLXX.hh
         HadronPhysicsQGSP_INCL_ABLA.hh
         HadronPhysicsShielding.hh
         LBE.hh
@@ -184,8 +187,8 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         QGSP_FTFP_BERT.icc
         QGSP.hh
         QGSP.icc
-	QGSP_INCLXX.hh
-	QGSP_INCLXX.icc
+	  QGSP_INCLXX.hh
+	  QGSP_INCLXX.icc
         QGSP_INCL_ABLA.hh
         QGSP_INCL_ABLA.icc
         QGSP_QEL.hh
@@ -193,12 +196,13 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         Shielding.hh
         Shielding.icc
         SpecialCuts.hh
-	G4PhysListUtil.hh
+	  G4PhysListUtil.hh
     SOURCES
         G4HadronInelasticQBBC.cc
         G4PhysListFactory.cc
         G4VHadronPhysics.cc
         HadronPhysicsCHIPS.cc
+        HadronPhysicsCHIPS_HP.cc
         HadronPhysicsFTF_BIC.cc
         HadronPhysicsFTFP_BERT.cc
         HadronPhysicsFTFP_BERT_TRV.cc

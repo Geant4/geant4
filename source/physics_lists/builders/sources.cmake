@@ -221,10 +221,12 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4QGSPPionBuilder.hh
         G4QGSPProtonBuilder.hh
         G4QInelasticCHIPSBuilder.hh
+        G4QInelasticCHIPS_HPBuilder.hh
         G4QIonPhysics.hh
         G4QMessenger.hh
         G4QNeutrinoPhysics.hh
         G4QNeutronBuilder.hh
+        G4QNeutronHPBuilder.hh
         G4QPhotoNuclearPhysics.hh
         G4QProtonBuilder.hh
         G4QStoppingPhysics.hh
@@ -353,9 +355,11 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4QGSPPionBuilder.cc
         G4QGSPProtonBuilder.cc
         G4QInelasticCHIPSBuilder.cc
+        G4QInelasticCHIPS_HPBuilder.cc
         G4QIonPhysics.cc
         G4QMessenger.cc
         G4QNeutrinoPhysics.cc
+        G4QNeutronHPBuilder.cc
         G4QNeutronBuilder.cc
         G4QPhotoNuclearPhysics.cc
         G4QProtonBuilder.cc

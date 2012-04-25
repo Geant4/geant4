@@ -23,64 +23,38 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// GEANT4 tag $Name: not supported by cvs2svn $
+// ClassName:   HadronPhysicsCHIPS_HP
 //
-//---------------------------------------------------------------------------
-//
-// ClassName:   G4QInelasticCHIPSBuilder
-//
-// Author: 2009 M. Kossov
+// Author: 2012  M. Kosov
 //
 // Modified:
 //
 //----------------------------------------------------------------------------
-//
-// Short comment: This is a physics list of only one model G4QInelastic for all
-// hadron-nuclear interactions at all energies (+CHIPS (n,gamma) for neutrons).
-// There's no model- or process-mixing (CHIPS_HP) as in G4Hadr Physics Package.
-// In this particular builder the G4QInelastic process is attached to all
-// hadrons (+ G4QNGamma for neutrons). Previously it could be done
-// only using the LHEP parameterized package or in a temporary form by the
-// QGSC model conditionally extended (just not crashing) to low energies.
-// *** Important *** As the CHIPS treatment of all hadrons is very simple,
-// this builder with time can be not used in the CHIPS physics list. 
-//
-// -----------------------------------------------------------------------------
-#ifndef G4QInelasticCHIPSBuilder_h
-#define G4QInelasticCHIPSBuilder_h 1
+
+#ifndef HadronPhysicsCHIPS_HP_h
+#define HadronPhysicsCHIPS_HP_h 1
 
 #include "globals.hh"
+#include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4QInelastic.hh"
-#include "G4QNGamma.hh"
-//#include "G4QFission.hh"
+#include "G4QInelasticCHIPS_HPBuilder.hh"
 
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTable.hh"
-#include "G4ProcessManager.hh"
-
-class G4QInelasticCHIPSBuilder
+class HadronPhysicsCHIPS_HP : public G4VPhysicsConstructor
 {
- public: 
-  G4QInelasticCHIPSBuilder(G4int verbose);
-  virtual ~G4QInelasticCHIPSBuilder();
+  public: 
+    HadronPhysicsCHIPS_HP(G4int verbose =1);
+    HadronPhysicsCHIPS_HP(const G4String& name);
+    virtual ~HadronPhysicsCHIPS_HP();
 
- public: 
-  void Build();
+  public: 
+    virtual void ConstructParticle();
+    virtual void ConstructProcess();
 
- protected:
-  // the particle table has the complete List of existing particle types
-  G4ParticleTable* theParticleTable;
-  G4ParticleTable::G4PTblDicIterator* theParticleIterator;
-
- private:
-  G4int  verbose;
-  G4bool wasActivated;
-  G4QInelastic* inelastic;
-  G4QNGamma*    nGamma;
-  //G4QFission*   fission;
+  private:
+    G4QInelasticCHIPS_HPBuilder* theInelasticCHIPS_HP;
+//    G4int verbosity;    
 };
-// 2009 by M. Kossov
 
 #endif
+

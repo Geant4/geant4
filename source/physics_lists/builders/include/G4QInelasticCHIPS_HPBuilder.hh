@@ -27,27 +27,29 @@
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4QInelasticCHIPSBuilder
+// ClassName:   G4QInelasticCHIPS_HPBuilder
 //
-// Author: 2009 M. Kossov
+// Author: 2012 M. Kossov
 //
 // Modified:
 //
 //----------------------------------------------------------------------------
 //
-// Short comment: This is a physics list of only one model G4QInelastic for all
-// hadron-nuclear interactions at all energies (+CHIPS (n,gamma) for neutrons).
-// There's no model- or process-mixing (CHIPS_HP) as in G4Hadr Physics Package.
-// In this particular builder the G4QInelastic process is attached to all
-// hadrons (+ G4QNGamma for neutrons). Previously it could be done
-// only using the LHEP parameterized package or in a temporary form by the
+// Short comment: This is a physics list of only one model G4QInelastic for
+// all hadron-nuclear interactions at all energies. There is the only
+// process-mixing (G4QProcessMixer) with the G4_HP processes at low (< 20 MeV)
+// energies with the G4QInelastic for neutrons, as CHIS does not include yet
+// all nA inelastic processes necessary for some applications. In this particular
+// builder the G4QInelastic process (with HP mix for neutrons) is attached to
+// all hadrons other than nucleons or pi and K-mesons. Previously it could be
+// done only using the LHEP parameterized package or in a temporary form by the
 // QGSC model conditionally extended (just not crashing) to low energies.
 // *** Important *** As the CHIPS treatment of all hadrons is very simple,
 // this builder with time can be not used in the CHIPS physics list. 
 //
 // -----------------------------------------------------------------------------
-#ifndef G4QInelasticCHIPSBuilder_h
-#define G4QInelasticCHIPSBuilder_h 1
+#ifndef G4QInelasticCHIPS_HPBuilder_h
+#define G4QInelasticCHIPS_HPBuilder_h 1
 
 #include "globals.hh"
 
@@ -55,16 +57,23 @@
 #include "G4QInelastic.hh"
 #include "G4QNGamma.hh"
 //#include "G4QFission.hh"
+#include "G4QDiscProcessMixer.hh"
+//#include "G4NeutronBuilder.hh"
+#include "G4VNeutronBuilder.hh"
+#include "G4NeutronInelasticProcess.hh"
+#include "G4HadronFissionProcess.hh"
+#include "G4HadronCaptureProcess.hh"
+#include "G4NeutronHPBuilder.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 
-class G4QInelasticCHIPSBuilder
+class G4QInelasticCHIPS_HPBuilder
 {
  public: 
-  G4QInelasticCHIPSBuilder(G4int verbose);
-  virtual ~G4QInelasticCHIPSBuilder();
+  G4QInelasticCHIPS_HPBuilder(G4int verbose);
+  virtual ~G4QInelasticCHIPS_HPBuilder();
 
  public: 
   void Build();
@@ -78,9 +87,18 @@ class G4QInelasticCHIPSBuilder
   G4int  verbose;
   G4bool wasActivated;
   G4QInelastic* inelastic;
-  G4QNGamma*    nGamma;
-  //G4QFission*   fission;
+
+  G4QDiscProcessMixer*            theInProcessMixer;
+  G4QDiscProcessMixer*            theNgProcessMixer;
+  G4QDiscProcessMixer*            theFiProcessMixer;
+  G4NeutronInelasticProcess*      theNeutronInelastic;
+  G4HadronFissionProcess*         theNeutronFission;
+  G4HadronCaptureProcess*         theNeutronCapture;
+  G4QInelastic*                   theCHIPSInelastic;
+  G4QNGamma*                      theCHIPSNGamma;
+  //G4QFission*                     theCHIPSFission;
+  G4NeutronHPBuilder*             theHPNeutron;
 };
-// 2009 by M. Kossov
+// 2012 by M. Kossov
 
 #endif
