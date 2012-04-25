@@ -18,6 +18,15 @@ Summarize all code modifications & keep track of all tags in this file.
 
 <<-!- History (please, make changes only with Mikhail.Kossov@cern.ch approval)
 
+25-Apr-2012 M.Kosov (hadr-chips-V09-05-02)
+--------------------------------------------------------------------------
+Reflection of the new G4QNGamma class in processes/sources.cmake
+
+22-Apr-2012 M.Kosov (hadr-chips-V09-05-01)
+--------------------------------------------------------------------------
+Bug fixes (50000000 events w/o any E/M violation dE2+dpx2+dpx2+dpx2>.5 MeV2)
+Split G4QInelastic to G4QInelastic+G4QNGamma for the CHIPS_HP physics list.
+
 13-Jan-2012 G.Cosmo (hadr-chips-V09-05-00)
 --------------------------------------------------------------------------
 Includes "hadr-chips-body-V09-05-02" for one workaround fix to a line of

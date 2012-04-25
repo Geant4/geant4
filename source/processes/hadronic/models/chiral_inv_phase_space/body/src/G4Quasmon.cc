@@ -2429,10 +2429,10 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
           ClearQuasmon();                             // This Quasmon is done
           return theQHadrons;                        // The last decay of the quasmon...
         }
-        else if(totBN>1&&totMass>totM&&totS>=0&&envPDG>MINPDG&&envPDG!=NUCPDG)//Evaporate
-        //else if(2>3) // ********** Forced Evaporation is Closed ************
+        else if(totBN>1 &&totMass>totM &&totS>=0&&envPDG>MINPDG&&envPDG!=NUCPDG)// EvaPanic
+        //else if(2>3) // ********** EvaPanic is Closed ************
         {
-#ifdef pdebug
+#ifdef ppdebug
           //@@ May be recalculate hadronization ??
           G4double fraM=fr4Mom.m();
           G4double kinE=fr4Mom.e()-fraM;

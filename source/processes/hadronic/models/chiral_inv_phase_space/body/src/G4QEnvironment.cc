@@ -2255,6 +2255,11 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
                               G4cout<<"*>G4QE::HQE:QE,PDG="<<NPDG<<",4M=" //            ^ ^
                                     <<RS.first<<",***newEnv***: "<<newE<<G4endl;//      ^ ^
 #endif
+                              // The totQC & tot4M must be reduced by the qfN           ^ ^
+                              tot4M-=RS.first;            // current tot4M is reduced   ^ ^
+                              if     (NPDG==2212) totQC-=protQC; // sub n               ^ ^
+                              else if(NPDG==2112) totQC-=neutQC; // sub p               ^ ^
+                              else G4cout<<"*W*>G4QE::HQE:QE,Bad PDG="<<NPDG<<G4endl;// ^ ^
                             } //                                                        ^ ^
                           } //                                                          ^ ^
                           else                            // Quasi-Inelastic            ^ ^
@@ -6341,7 +6346,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
               else EvaporateResidual(theH);   // Evaporate Residual Nucleus
               corf=true;
             }
-            else
+            else if(tot4Mom.e() > 0 && cH4Mom.e() > 0 && nHadr > 1) // TeV error check
             {
               G4QHadron* prevHadr = theQHadrons[nHadr-2]; // GetPointer to Prev to theLast
               G4LorentzVector pH4Mom = prevHadr->Get4Momentum(); // 4mom of thePrevHadron
@@ -6382,12 +6387,21 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
 #ifdef pdebug
                 G4cerr<<"*!*G4QE::FSI: "<<cHM<<"+"<<pHM<<"="<<cHM+pHM<<">"<<totRM<<G4endl;
                 G4ExceptionDescription ed;
-                ed << "TEMPORARY EXCEPTION: " << cHM << "+" << pHM << "="
-                   << cHM+pHM << ">" << totRM << G4endl;
+                ed <<"TEMPORARY EXCEPTION: "<<cHM<<"+"<<pHM<<" = "<<cHM+pHM<<" > "<<totRM
+                   <<", tot4M="<<tot4Mom<<", c4M="<<cH4Mom<<", p4M="<<pH4Mom<< G4endl;
                 G4Exception("G4QEnvironment::FSInteraction()", "HAD_CHPS_0008", 
                             JustWarning, ed);
 #endif 
               }
+            }
+            else
+            {
+              G4cerr<<"*!*G4QE::FSI: tE="<<tot4Mom.e()<<", nHadr="<<nHadr<<G4endl;
+              G4ExceptionDescription ed;
+              ed << "TEMPORARY EXCEPTION: *check energy!* tot4M=" << tot4Mom << ", c4M="
+                 << cH4Mom << ", nHadr="<< nHadr << " > 1 ?" << G4endl;
+              G4Exception("G4QEnvironment::FSInteraction()", "HAD_CHPS_0009", 
+                          JustWarning, ed);
             }
             tot4Mom=tot4Mom-cor4M;
 #ifdef pdebug
@@ -6415,7 +6429,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
                   G4ExceptionDescription ed;
                   ed << "CORRECTION DecIn2Error: **Correction**,tot4M=" << tot4Mom
                      << totRM << " > sM=" << cHM+cHM << G4endl;
-                  G4Exception("G4QEnvironment::FSInteraction()", "HAD_CHPS_0009",
+                  G4Exception("G4QEnvironment::FSInteraction()", "HAD_CHPS_0010",
                               FatalException, ed);
 #endif
                 }
@@ -6434,7 +6448,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
               G4ExceptionDescription ed;
               ed << "EnMomCorrectionFailed: EnergyMomentumCorrection FAILED "
                  << G4endl;
-              G4Exception("G4QEnvironment::FSInteraction()", "HAD_CHPS_0010",
+              G4Exception("G4QEnvironment::FSInteraction()", "HAD_CHPS_0011",
                           FatalException, ed);
             }
 #endif
@@ -6634,7 +6648,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
             G4ExceptionDescription ed;
             ed << "GamSUPPRES DecIn2(n+He3)error: GamSup, tM=" << exRes4M.m()
                << "<n+He3=" << mNeut+mHe3 << G4endl;
-            G4Exception("G4QEnvironment::FSInteraction()", "HAD_CHPS_0011",
+            G4Exception("G4QEnvironment::FSInteraction()", "HAD_CHPS_0012",
                         FatalException, ed);
           }
 #ifdef ffdebug
@@ -6709,7 +6723,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
                 G4ExceptionDescription ed;
                 ed << "Gamma SUPPRESSION by D DecIn3error: GamSupByD,M="
                    << dhM << "<A+p+n=" << sum << G4endl;
-                G4Exception("G4QEnvironment::FSInteraction()", "HAD_CHPS_0012",
+                G4Exception("G4QEnvironment::FSInteraction()", "HAD_CHPS_0013",
                             FatalException, ed);
               }
 #ifdef ffdebug
@@ -6730,7 +6744,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
                 G4ExceptionDescription ed;
                 ed << "GamSUPPRESSION (3) DecIn2 error: GamSup,M=" << dh4M.m()
                    << "<A+h=" << n4M.m()+h4M.m() << G4endl;
-                G4Exception("G4QEnvironment::FSInteraction()", "HAD_CHPS_0013",
+                G4Exception("G4QEnvironment::FSInteraction()", "HAD_CHPS_0014",
                             FatalException, ed);
               }
 #ifdef ffdebug
@@ -7138,7 +7152,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
           G4ExceptionDescription ed;
           ed << "PiNucSigma Final Decay Error: No Final PiNSig recovery, Env="
              << theEnvironment << G4endl; 
-          G4Exception("G4QEnvironment::FSInteraction()", "HAD_CHPS_0014",
+          G4Exception("G4QEnvironment::FSInteraction()", "HAD_CHPS_0015",
                       FatalException, ed);
         }
 #ifdef fdebug
@@ -7232,7 +7246,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
           G4ExceptionDescription ed;
           ed << "IsoNucl+Pi FinalDecayError: No Final IsoN+Pi recovery, Env="
              << theEnvironment << G4endl;
-          G4Exception("G4QEnvironment::FSInteraction()", "HAD_CHPS_0015",
+          G4Exception("G4QEnvironment::FSInteraction()", "HAD_CHPS_0016",
                       FatalException, ed);
         }
 #ifdef fdebug
@@ -7333,7 +7347,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
           G4ExceptionDescription ed;
           ed << "IsoNucleus FinalDecayError: No FinalIsoNucRecovery, Env="
              << theEnvironment << G4endl;
-          G4Exception("G4QEnvironment::FSInteraction()", "HAD_CHPS_0016",
+          G4Exception("G4QEnvironment::FSInteraction()", "HAD_CHPS_0017",
                       FatalException, ed);
         }
 #ifdef fdebug
@@ -7382,7 +7396,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
       else if(!hCG&&hST==hBN) hPDG=91000000;
       else {
         // throw G4QException("***G4QEnvironment::FSInteract: MultyDibaryon cant be here");
-        G4Exception("G4QEnvironment::FSInteraction()", "HAD_CHPS_0017",
+        G4Exception("G4QEnvironment::FSInteraction()", "HAD_CHPS_0018",
                     FatalException, "MultyDibaryon cant be here"); 
       }
       G4LorentzVector newLV=(curHadr->Get4Momentum())/hBN;
@@ -7479,7 +7493,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
           G4ExceptionDescription ed;
           ed << "AntistrangeNucleus decayError: No Final AntiSN recovery, E="
              << theEnvironment << G4endl;
-          G4Exception("G4QEnvironment::FSInteraction()", "HAD_CHPS_0018",
+          G4Exception("G4QEnvironment::FSInteraction()", "HAD_CHPS_0019",
                       FatalException, ed);
         }
       }
@@ -7659,7 +7673,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
             G4ExceptionDescription ed;
             ed << "Hypernuclear L-decay error: Hypern, M=" << reM << "<A+n*L="
                << sum << ",d=" << sum-reM << G4endl;
-            G4Exception("G4QEnvironment::FSInteraction()", "HAD_CHPS_0019",
+            G4Exception("G4QEnvironment::FSInteraction()", "HAD_CHPS_0020",
                         FatalException, ed);
           }
 #ifdef pdebug
@@ -7712,7 +7726,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
             G4ExceptionDescription ed;
             ed << "Hypernuclear decay error: HyperN,M=" << reM << "<A+n*Pi0="
                << sum << ",d=" << sum-reM << G4endl;
-            G4Exception("G4QEnvironment::FSInteraction()", "HAD_CHPS_0020",
+            G4Exception("G4QEnvironment::FSInteraction()", "HAD_CHPS_0021",
                         FatalException, ed);
           }
           curHadr->Set4Momentum(n4M);
@@ -7758,7 +7772,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
             G4ExceptionDescription ed;
             ed << "Hypernuclear GammaDecay error: Hypern,M=" << reM << "<A+n*Pi0="
                << sum << ",d=" << sum-reM << G4endl;
-            G4Exception("G4QEnvironment::FSInteraction()", "HAD_CHPS_0021",
+            G4Exception("G4QEnvironment::FSInteraction()", "HAD_CHPS_0022",
                         FatalException, ed);
           }
           curHadr->Set4Momentum(n4M);
@@ -7987,7 +8001,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
                 G4ExceptionDescription ed;
                 ed << "HypernucOnlyStran2 error: Hyp2,M=" << reM << "< sum=" << sum
                    << ",d=" << sum-reM << G4endl;
-                G4Exception("G4QEnvironment::FSInteraction()", "HAD_CHPS_0022",
+                G4Exception("G4QEnvironment::FSInteraction()", "HAD_CHPS_0023",
                             FatalException, ed);
               }
 #ifdef pdebug
@@ -8054,7 +8068,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
                 G4ExceptionDescription ed;
                 ed << "HypernucOnlyStran3 error: Hyp3,M=" << reM << "< sum="
                    << sum << ",d=" << sum-reM << G4endl;
-                G4Exception("G4QEnvironment::FSInteraction()", "HAD_CHPS_0023",
+                G4Exception("G4QEnvironment::FSInteraction()", "HAD_CHPS_0024",
                             FatalException, ed);
               }
 #ifdef pdebug
@@ -8129,7 +8143,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
               G4ExceptionDescription ed;
               ed << "HypernucOnlyStran3 error: Hyp,M=" << reM << "<OM+SP="
                  << sum << ",d=" << sum-reM << G4endl;
-              G4Exception("G4QEnvironment::FSInteraction()", "HAD_CHPS_0024",
+              G4Exception("G4QEnvironment::FSInteraction()", "HAD_CHPS_0025",
                           FatalException, ed);
             }
 #ifdef pdebug
@@ -8212,7 +8226,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
     G4ExceptionDescription ed;
     ed << "::(F) Charge is not conserved: Ch=" << cfContSum-chContSum << ",Bn="
        << bfContSum-bnContSum << G4endl;
-    G4Exception("G4QEnvironment::FSInteraction()", "HAD_CHPS_0025",
+    G4Exception("G4QEnvironment::FSInteraction()", "HAD_CHPS_0026",
                 FatalException, ed);
   }
 #endif

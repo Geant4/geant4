@@ -598,7 +598,8 @@ G4bool G4QHadron::DecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom)
     G4cerr<<"*G4QH::DecIn2:*Boost* 4M="<<theMomentum<<",e-p="
           <<theMomentum.e()-theMomentum.rho()<<G4endl;
     //throw G4QException("G4QHadron::DecayIn2: Decay of particle with zero mass")
-    theMomentum.setE(1.0000001*theMomentum.rho());
+    //theMomentum.setE(1.0000001*theMomentum.rho()); // Lead to TeV error !
+    return false;
   }
   G4double vP  = theMomentum.rho();      // Momentum of the decaying hadron
   G4double dE  = theMomentum.e();        // Energy of the decaying hadron
@@ -672,7 +673,8 @@ G4bool G4QHadron::CorMDecayIn2(G4double corM, G4LorentzVector& fr4Mom)
   if(cm4Mom.e()<cm4Mom.rho())
   {
     G4cerr<<"*G4QH::CorMDecIn2:*Boost* c4M="<<cm4Mom<<G4endl;
-    cm4Mom.setE(1.0000001*cm4Mom.rho());
+    //cm4Mom.setE(1.0000001*cm4Mom.rho());
+    return false;
   }
   cm4Mom.boost(ltf);                           // Now it is in CMS (Forward Lor.Trans.)
   G4double pfx= cm4Mom.px();
