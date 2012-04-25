@@ -16,6 +16,7 @@ Some of the development/fixes included since the last development tag are:
 ---------- Reference-tag 'Release Notes' -----------
 
 (o)  Fixes included in release 9.4.p01
+(+)  Fixes included in release 9.4.p04
 
 Summarised, the list of changes is the following:
 
@@ -29,7 +30,7 @@ geometry
 
 global                                           global-V09-04-02           (o)
 ------
-- Extended length of internal arrays in G4Pow from 256 to 512.
+- Extended length of internal arrays in G4Pow from 256 to 512.              (+)
   Allows to fix numerical problems observed in some ion/ion collision tests.
 - Use unsigned-int for table size type in G4PhysicsTable. Fixes a problem
   for data persistency.

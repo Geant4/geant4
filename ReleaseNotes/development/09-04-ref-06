@@ -24,6 +24,7 @@ Major development/fixes included since the last development tag are:
 
 (+)  Fixes included in release 9.4.p02
 (o)  Fixes included in release 9.4.p03
+(*)  Fixes included in release 9.4.p04
 
 Summarised, the list of changes is the following:
 
@@ -103,7 +104,7 @@ geometry/solids/CSG                              geom-csg-V09-04-04          (+)
 
 global                                           global-V09-04-10
 ------
-- Added protection in G4Pow::powN() method for high exponent values.
+- Added protection in G4Pow::powN() method for high exponent values.         (*)
 - Updated CMake scripts for support of DLLs build on Windows.
 
 interfaces                                       interfaces-V09-04-04

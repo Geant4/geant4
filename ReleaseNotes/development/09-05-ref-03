@@ -24,6 +24,7 @@ Major development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(+)  Fixes included in release 9.4.p04
 (*)  Fixes included in release 9.5.p01
 
 Summarised, the list of changes is the following:
@@ -109,11 +110,11 @@ processes/electromagnetic/lowenergy              emlowen-V09-05-10
 
 processes/electromagnetic/standard               emstand-V09-05-14
 ----------------------------------
-- G4UrbanMscModel92, G4UrbanMscModel93, G4UrbanMscModel95: added protection  (*)
+- G4UrbanMscModel92, G4UrbanMscModel93, G4UrbanMscModel95: added protection (+*)
   against big scattering angles for e+- (E > 20 MeV); the protection cuts
   tail of scattering angles to avoid artificial scattering of high energy e+-;
   in the case of E > 1 GeV and cosTheta<0 a warning is printed out.
-- G4WentzelVIModel: fixed bug in lateral displacement sampling.              (*)
+- G4WentzelVIModel: fixed bug in lateral displacement sampling.             (+*)
 - G4IonCoulombScatteringModel: fixed numerical problem for small             (*)
   scattering angles.
 - G4GoudsmitSaundersonMscModel: fixed FPE bug; lateral displacemnt should

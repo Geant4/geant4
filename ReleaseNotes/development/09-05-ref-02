@@ -14,6 +14,7 @@ Major development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(+)  Fixes included in release 9.4.p04
 (*)  Fixes included in release 9.5.p01
 
 Summarised, the list of changes is the following:
@@ -41,7 +42,7 @@ analysis                                         analysis-V09-05-01
 
 geometry/magneticfield                           field-V09-05-03             (*)
 ----------------------
-- G4FieldTrack: added new (inline) method to set the Rest Mass. Needed in
+- G4FieldTrack: added new (inline) method to set the Rest Mass. Needed in    (+)
   order to reset this and keep reuse across tracks the same G4FieldTrack
   object. Simplified implementation of constructors.
 - Fixed problem with division by zero in method
@@ -104,10 +105,10 @@ processes/electromagnetic/lowenergy              emlowen-V09-05-04
 
 processes/electromagnetic/standard               emstand-V09-05-10           (*)
 ----------------------------------
-- G4WentzeVIModel: fixed bug in computation of lateral displacement.
+- G4WentzeVIModel: fixed bug in computation of lateral displacement.         (+)
   Following report #1114 in HyperNews forum.
-  Improved algorithm of sampling of scattering angle and displacement: choice
-  between 1 or 2 sub-steps.
+  Improved algorithm of sampling of scattering angle and displacement:
+  choice between 1 or 2 sub-steps.
 - G4WentzelOKandVIxSection: different screening functions for e+- and heavy
   particles.
 - G4UniversalFluctuation: improved parameterisation for thin gas layers.
@@ -155,7 +156,7 @@ processes/scoring                                procscore-V09-05-00         (*)
 
 track                                            track-V09-05-04             (*)
 -----
-- Fix to reset 'RestMass' in G4FieldTrackUpdator::Update() method
+- Fix to reset 'RestMass' in G4FieldTrackUpdator::Update() method            (+)
   as it is used to initialise each track by ParallelWorldScoringProcess.
 
 visualization                                    vis-V09-05-07
