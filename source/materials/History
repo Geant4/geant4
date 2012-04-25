@@ -16,7 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+     
+24-04-12 mma (materials-V09-05-17)
+- G4Material : go back to materials-V09-05-15
+    
 23-04-12 V.Ivanchenko (materials-V09-05-16)
 - G4Material : add fMassOfMolecule computation inside constructors
     with mass fraction

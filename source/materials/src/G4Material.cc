@@ -428,14 +428,11 @@ void G4Material::AddElement(G4Element* element, G4double fraction)
 	     <<  wtSum << " is not 1 - results may be wrong" 
 	     << G4endl;
     }
-    Amol = 0.0;
     for (i=0; i<fNumberOfElements; ++i) {
       fAtomsVector[i] = 
-	G4lrint(fMassFractionVector[i]*Amol/(*theElementVector)[i]->GetA());
-      Amol +=  fAtomsVector[i]*(*theElementVector)[i]->GetA();
+	G4int(fMassFractionVector[i]*Amol/(*theElementVector)[i]->GetA()+0.5);
     }
      
-    fMassOfMolecule = Amol/Avogadro;
     ComputeDerivedQuantities();
   }
 }
@@ -522,14 +519,11 @@ void G4Material::AddMaterial(G4Material* material, G4double fraction)
 	     <<  wtSum << " is not 1 - results may be wrong" 
 	     << G4endl;
     }
-    Amol = 0.0;
     for (i=0;i<fNumberOfElements;i++) {
       fAtomsVector[i] = 
-	G4lrint(fMassFractionVector[i]*Amol/(*theElementVector)[i]->GetA());
-      Amol +=  fAtomsVector[i]*(*theElementVector)[i]->GetA();
+	G4int(fMassFractionVector[i]*Amol/(*theElementVector)[i]->GetA()+0.5);
     }
      
-    fMassOfMolecule = Amol/Avogadro;
     ComputeDerivedQuantities();
   }
 }
