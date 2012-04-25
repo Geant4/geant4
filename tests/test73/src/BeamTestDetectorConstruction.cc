@@ -172,14 +172,14 @@ G4VPhysicalVolume* BeamTestDetectorConstruction::Construct()
 	//------------------------------------------------ 
 	// Sensitive detectors
 	//------------------------------------------------ 
-    G4String trackerChamberSDname = "BeamTest/TrackerChamberSD";
+    G4String trackerChamberSDname = "/BeamTest/TrackerChamberSD";
     G4SDManager* SDman = G4SDManager::GetSDMpointer();
-    //If already exists, delete it
-    G4VSensitiveDetector* sd=SDman->FindSensitiveDetector(trackerChamberSDname);
-    if ( sd ) delete sd;
-    monitor = new BeamTestSiliconMonitor(trackerChamberSDname);
-    SDman->AddNewDetector( monitor );
+    if ( monitor == 0 ) {
+      monitor = new BeamTestSiliconMonitor(trackerChamberSDname);
+      SDman->AddNewDetector( monitor );
+    }
     logicChamber->SetSensitiveDetector( monitor );
+    //SDman->ListTree();
 	
     //--------- Visualization attributes -------------------------------
     G4VisAttributes* BoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
