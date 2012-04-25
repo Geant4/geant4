@@ -174,6 +174,7 @@ GEANT4_DEFINE_MODULE(NAME G4had_neu_hp
         G4NeutronHPorLFissionData.hh
         G4NeutronHPorLFissionModel.hh
         G4VNeutronHPEnergyAngular.hh
+	G4NeutronHPBGGNucleonInelasticXS.hh
     SOURCES
         G4NeutronHPIsoData.cc
         G4InterpolationManager.cc
@@ -288,6 +289,7 @@ GEANT4_DEFINE_MODULE(NAME G4had_neu_hp
         G4NeutronHPorLFission.cc
         G4NeutronHPorLFissionData.cc
         G4NeutronHPorLFissionModel.cc
+	G4NeutronHPBGGNucleonInelasticXS.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons
