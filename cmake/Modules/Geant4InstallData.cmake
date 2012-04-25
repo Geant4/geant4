@@ -31,7 +31,14 @@ GEANT4_ADD_FEATURE(GEANT4_INSTALL_EXAMPLES "Will install source code for Geant4 
 # we restrict the availability of the option to CMake >= 2.8
 # We check by requiring CMAKE_VERSION to be greater than 2.7. Since a 2.7
 # version of CMake has never been released, this should be o.k.!
-if(${CMAKE_VERSION} VERSION_GREATER 2.7)
+# If we don't have the required version, warn and unset the variable.
+# This handles the case where users may pass the variable on the command line
+if(NOT ${CMAKE_VERSION} VERSION_GREATER 2.7)
+  if(GEANT4_INSTALL_DATA)
+    message(STATUS "WARNING: GEANT4_INSTALL_DATA requires CMake >= 2.8 -- deactivating")
+  endif()
+  set(GEANT4_INSTALL_DATA OFF CACHE BOOL "Install data NOT supported on CMake <2.8" FORCE)
+else()
   option(GEANT4_INSTALL_DATA "Download and install Geant4 Data Libraries" OFF)
 
   # For very large datasets, and on CMake 2.8.1 and above only, provide
@@ -84,6 +91,7 @@ if(${CMAKE_VERSION} VERSION_GREATER 2.7)
 
   GEANT4_ADD_FEATURE(GEANT4_INSTALL_DATA "Will download and install data libraries")
 endif()
+
 
 
 
