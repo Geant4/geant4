@@ -1,0 +1,67 @@
+
+                 Geant4 9.4 - patch-04 Release Notes
+                 -----------------------------------
+
+                                                            13 April 2012
+
+List of fixes included in this public patch since the public release 9.4.p03:
+
+  o Geometry:
+    --------
+    + Magnetic Field:
+      o G4FieldTrack: added inline method to set the Rest Mass. Needed in
+        order to reset this and keep reuse the same G4FieldTrack in a
+        client across tracks.
+
+  o Global:
+    ------
+    + G4Pow: reduced vector for factorial from 512 to 170 (result should be
+      below DBL_MAX). Fixed computation of log(factorial).
+      Added protection in powN() method for high exponent values.
+    + Changed date for patch-04 to release 9.4.
+
+  o Electromagnetic Processes:
+    -------------------------
+    + Standard:
+      o G4UrbanMscModel92, G4UrbanMscModel93, G4UrbanMscModel95: added
+        protection against big scattering angles for e+- (E > 20 MeV); the
+        protection cuts tail of scattering angles to avoid artificial
+        scattering of high energy e+-.
+      o G4WentzelVIModel: fixed algorithm for sampling of single scattering 
+        along step.
+      o G4WentzelOKandVIxSection: fixed incorrect angular limit for protons.
+        Fixed screening function for low Z materials.
+      o G4UniversalFluctuation: fixed sampling at small steps (below 10 um)
+        in heavy media about shift in range of 3 MeV muons.
+      o G4eCoulombScatteringModel: fixed initialisation of base class data
+        in method SetLowEnergyLimit(). Fixed cross-section in compounds.
+
+  o Hadronic Processes:
+    ------------------
+    + models/CHIPS:
+      o G4QCaptureAtRest: added check on 4-momentum balance for violations
+        of more than 2 GeV; repeat sampling again. Check baryon number of
+        final state and take into account nuclear recoil at rest which is
+        not produced as a final particle.
+
+  o Track:
+    -----
+    + Fix to reset 'RestMass' in G4FieldTrackUpdator::Update() method
+      as it is used to initialise each track by ParallelWorldScoringProcess.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 9.4 or 9.4.p03.
+  o  Technical notes distributed for release 9.4 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 9.4.p04 are available
+through our "Download" Web page:
+   http://cern.ch/geant4/support/download.shtml
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/userdocuments.shtml
+for further information about using Geant4.
