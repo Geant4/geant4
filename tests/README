@@ -80,13 +80,14 @@ test54 ## EM low-energy Livermore
 test55 ## ICRU 73-based ionization model (G4IonParametrisedLossModel)
 test56 ## Deexcitation/PIXE 
 test58 ## Single Coulomb scattering (G4IonCoulombScatteringModel)
-test60 ## Geant4-DNA LowE migrated processes.
+test60 ## Geant4-DNA processes.
 test61 ## QMD hadronic model.
 test62 ## INCL/ABLA hadronic model.
 test65 ## LEND hadronic model.
 test67 ## EM low-energy Penelope (and also others)
 test69 ## INCL++ model 
 test73 ## Multiple Scattering Test: test models in semi-realistic setup (inspired by LHCb)
+test74 ## EM low-energy G4MuElec* processes and models
 test201 # Visualization and graphical interfaces
 test202 # Visualization setup of generic geometry constructs
 ______________________________________________________________________________
