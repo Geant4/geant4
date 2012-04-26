@@ -1,0 +1,353 @@
+
+                       geant4-09-05-ref-04
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o Modified GetPointOnSurface() methods for solids using polar coordinate
+   parametrizations, to generate more uniform distributions.
+ o Modified G4eDecayProduct to use vector instead of fixed size array,
+   removing limitation of number of daughters.
+ o New EM low-energy processes and models for microdosimetry in Si for
+   electrons, protons and ions.
+ o Fixed tail in G4UrbanMscModel95 when using single scattering model.
+ o Fixed event reproducibility violations affecting G4EmCorrections,
+   hadron-elastic process and quasi-elastic cross-sections.
+ o Extended G4VisManager to allow registering any number of named vis
+   actions and associate them with particular types of action.
+   Introduced QT tree ("Scene" panel in G4UIQt session).
+ o New G4EMLOW-6.26 data set for low energy processes.
+
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+cmake                                            cmake-V09-05-14
+-----
+- Added GEANT4_INSTALL_DATA_TIMEOUT cache variable to allow users to
+  increase the download timeout on slow connections (only available on
+  CMake 2.8.1 and above). Increased default timeout to 1500s.
+- Force GEANT4_INSTALL_DATA to OFF if CMake version less than 2.8.0 is used,
+  and warn user if it has been set. Following issue reported on HyperNews.
+- Fix to use BASH_VERSION instead of non-POSIX compliant check.
+  Addressing problem report #1306.
+- Updated to reference new data set G4EMLOW-6.26.
+
+digits_hits                                      digits_hits-V09-05-01
+-----------
+- G4VScoringMesh: avoid updating size and segment in command-line scoring
+  and print warning when SetSize() or SetNumberOfSegments is called more then
+  once.
+
+event                                            event-V09-05-04
+-----
+- Correction for orthogonalization of rotation matrix in G4SPSPosDistribution
+  GenerateRotationMatrices() method. Addressing problem report #1299.
+
+geometry/management                              geommng-V09-05-00
+-------------------
+- Extended one comment to G4VSolid header.
+
+geometry/solids/Boolean                          geom-bool-V09-05-00
+-----------------------
+- G4BooleanSolid: added protected data 'fAreaRatio' and related method
+  GetAreaRatio() which store the ratio of surface areas of SolidA to
+  SolidA+SolidB. The ratio is used in GetPointOnSurface() to better
+  approximate uniform coverage. Uniformity cannot be guaranteed in all
+  cases and when constituent solids have shared surfaces.
+
+geometry/solids/CSG                              geom-csg-V09-05-04
+-------------------
+- Modified GetPointOnSurface() methods for solids using polar coordinate
+  parametrizations, to generate more uniform distributions, using a
+  function to generate proper radial coordinate included in G4CSGSolid.
+
+geometry/solids/specific                         geom-specific-V09-05-04
+------------------------
+- Modified GetPointOnSurface() to throw sqrt(r) uniformly for disk surfaces,
+  in G4Paraboloid, G4Polycone and G4TwistedTubs.
+
+geometry/volumes                                 geomvol-V09-05-00
+----------------
+- Corrected GNUMakefile for spurious inclusion path.
+
+global                                           global-V09-05-02
+------
+- G4UnitsTable: added call to BuildUnitsTable() from static accessor to
+  guarantee proper initialization of units in static calls.
+  Modified warnings in cout to be compliant with G4Exception syntax.
+
+interfaces                                       interfaces-V09-05-02
+----------
+- G4UIWin32: modified to make it work on Win64; replaced [Get|Set]WindowLong()
+  with [Get|Set]WindowLongPtr() and GWL_USERDATA by GWLP_USERDATA.
+- G4UIQt: changed name of viewer components.
+
+materials                                        materials-V09-05-17
+---------
+- G4Element: normalize to 1 the sum of isotope abundances.
+- G4Material: added new data member 'fMatComponents', a map for composite
+  materials built via AddMaterial().
+  Added 'fMassOfMolecule' definition into G4Material constructor with base
+  material and only computed when relevant.
+
+particles                                        particles-V09-05-01
+---------
+- Fixed bug in decay table for k_star-.
+- Modified G4eDecayProduct to use std::vector instead of fixed size array,
+  removing limitation of number of daughters.
+
+persistency/ascii                                ascii-V09-05-00
+-----------------
+- Fixed case of conversion from size_t to G4int in G4tgrUtils in
+  function AreWordsEquivalent(), detected on win64 system.
+
+physics_lists                                    phys-lists-V09-05-10
+-------------
+- In G4QandFTFStoppingPhysics the annihilation at rest of anti_sigma+
+  are now handled by FTF.
+- HadronPhysicsShielding: fixed problem in neutron cross-section for
+  inelastic reaction below 20MeV.
+- Added new CHIPS_HP physics list.
+- Added new Physics constructor G4EmLivermoreMUPhysics.
+- Corrected GNUMakefile in "lists" for spurious inclusion path.
+
+processes/electromagnetic/lowenergy              emlowen-V09-05-18
+-----------------------------------
+- Delivered processes and models for microdosimetry in Si for electrons,
+  protons and ions. Details can be found in: Inelastic cross-sections of
+  low energy electrons in silicon for the simulation of heavy ion tracks
+  with theGeant4-DNA toolkit, NSS Conf. Record 2010, p80-85; Geant4 physics
+  processes for microdosimetry simulation: very low energy electromagnetic
+  models for electrons in Si, to be published in TNS; Geant4 physics
+  processes for microdosimetry simulation: very low energy electromagnetic
+  models for protons and heavy ions in Si, to be published in NIMB   
+  Requires G4EMLOW data set version 6.26.
+- Added new Compton model G4MUComptonModel based on development by
+  J.M.C.Brown, M.R.Dimmock, J.E.Gillam and D.M.Paganin, Monash University,
+  Australia.
+- Removed obsolete Penelope v2001 models and releted helper classes.
+  New draft class G4Livermore2012GammaConversionModel.
+- Fixes of Coverity defects in Penelope classes.
+
+processes/electromagnetic/standard               emstand-V09-05-16
+----------------------------------
+- G4CoulombScattering: added method MinPrimaryEnergy() allowing to define
+  low edge of physics table when Coulomb scattering is combined with multiple
+  or single scattering.
+- G4UrbanMscModel95: fixed tail using single scattering model.
+- G4CoulombScatteringModel, G4UrbanMscModel90, G4UrbanMscModel92,
+  G4UrbanMscModel93, G4UrbanMscModel95, G4WentzelVIModel and
+  G4GoudsmitSaundersonMscModel: moved cross-section table from process
+  to model; removed method GetLambda().
+- G4GoudsmitSaundersonMscModel: improved method of definition of screening
+  parameter. Fixed use of screening function in G4eBremsstrahlungRelModel.
+
+processes/electromagnetic/utils                  emutils-V09-05-09
+-------------------------------
+- G4EmCalculator: improved model selection for multiple-scattering processes.
+- G4EmCorrections: fixed event reproducibility violation due to cashing
+  of 'IonHighOrderCorrections' with a vector depending on the ion charge.
+  The correction depends not only on the ion charge but also on its mass,
+  therefore the cashing based on the ion charge only depends on which
+  isotope is encountered first, which depends on the history and therefore
+  used to violate the reproducibility. Now using a map for cashing, with
+  the key given by the PDG encoding of the ion, which is unique for each
+  isotope.
+- G4VEmProcess: use ProposeWeight() instead of ProposeParentWeight()
+  to fix weights of secondary particle for gamma processes.
+- G4VEmModel: added virtual method Value(), by default computing cross-section.
+- G4VMultipleScattering: removed transport cross-section table; simplified
+  AlongStepGetPhysicalInteractionLength() method; added protection against
+  zero kinetic energy into PostStepDoIt(). General cleanup of the code
+- G4VMscModel: added building of transport cross-section table and new 
+  method GetTransportCrossSection() to be used at run-time. Added method
+  GetTransportMeanFreePath().
+- G4LossTableBuilder: added method BuildTableForModel() allowing to build
+  the physics-table for a model.
+- G4LossTableManager: added methods MinKinEnergy() and MaxkinEnergy().
+  Minor correction of number of bins per decade.
+- G4EmModelManager: extended printout if cross-section table is built for
+  the model.
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V09-05-00)
+  o G4HadronNucleonXsc: updated p,n,pi-,pi+ cross-sections on p,n.
+    Added new method GetCoulombBarrier().
+  o G4GGNuclNuclCrossSection, G4GlauberGribovCrossSection: updated to get
+    total and inelastic cross-sections from G4HadronNucleonXsc.
+  o G4GGNuclNuclCrossSection: updated to get nucleus radii of light elements
+    p, d, t, He3, He4, Li7 and Be9.
+- models/binary_cascade (had-binary-V09-05-01)
+  o G4BinaryCascade: when propagating secondaries from HE model, do not 
+    modify initial energy for fermi level.
+  o Added description in G4BinaryLightIonReaction.
+- models/cascade (hadr-casc-V09-05-07)
+  o G4CascadeCoalescence: fixed compilation warning on win64.
+- models/chiral_inv_phase_space (hadr-chips-V09-05-02)
+  o Bug fixes for E/M violation with dE2+dpx2+dpx2+dpx2>.5 MeV2.
+  o Splitted G4QInelastic into G4QInelastic and G4QNGamma classes for use
+    with the CHIPS_HP physics-list.
+  o Fix to hadron elastic and inelastic interfaces to make properly use of
+    the base class G4VCrossSectionDataSet.
+  o Fix to linear table update for quasi-elastic cross-sections responsible
+    for event non-reproducibility.
+- models/coherent_elastic (hadr-cohe-V09-05-04)
+  o G4ElasticHadrNucleusHE: fixed reproducibility violation due to cashing
+    of cross-sections based on the target element, whereas they depend also
+    on the isotope. Rather than using the first isotope encountered for an
+    element, the natural average is used. 
+- models/high_energy (hadr-hep-V09-05-02)
+  o Updated G4HEInelastic::GetFatalEnergyCheckLevels() to return
+    const std::pair<>.
+- models/inclxx (hadr-inclxx-V09-05-07)
+  o Bug fix to void collisions with A=1 targets.
+  o Bug fix: de-excitation products should not be boosted using the
+    pre-fragment velocity.
+- models/low_energy (hadr-lep-V09-05-05)
+  o Updated G4LElastic, G4LCapture and G4InelasticInteraction to return
+    const std::pair<> for GetFatalEnergyCheckLevels().
+- models/management (hadr-modman-V09-05-03)
+  o Increase default limit for energy non-conservation to 5 GeV;
+    GetFatalEnergyCheckLevels() now returns a const std::pair<> of values.
+  o Added G4VIntraNuclearTransportModel::Description() method, printing 
+    a descriptive message before throwing a G4Exception.
+- models/neutron_hp (hadr-hpn-V09-05-02)
+  o Added G4NeutronHPBGGNucleonInelasticXS class to be used in Shielding
+    physics-list.
+- models/parton_string/hadronization (had-hadronization-V09-05-00)
+  o Changes in debugging information in G4ExcitedStringDecay.
+- models/parton_string/management (had-partonstring-mgt-V09-05-00)
+  o Changes in debugging information.
+- models/pre_equilibrium (hadr-pre-V09-05-01)
+  o Added Description() method in G4PreCompoundModel printing the actual
+    description from the Physics Reference Manual.
+- models/qmd (hadr-qmd-V09-05-00)
+  o Fixed compilation warning on win64 in G4QMDMeanField.
+- models/quasi_elastic (hadr-qelastic-V09-05-01)
+  o Bug fix in G4QuasiElRatios affecting the initialisation of table.
+    Bug fix fixing wrong initialization of linear table and influencing
+    event reproducibility.
+- processes (hadr-proc-V09-05-02)
+  o G4WHadronElasticProcess: time and weight for recoil are copied from the
+    primary particle directly to avoid inconsistency of parameters definition.
+- stopping (hadr-stopping-V09-05-03)
+  o G4FTFCaptureAtRest: included annihilation of anti_sigma+.
+
+visualization                                    vis-V09-05-17
+-------------
+- management:
+  o Migrated to G4Scene::Model.
+  o Extended G4VisManager to allow registering any number of named vis actions
+    and associate them with particular types of action. They are added to the
+    scene with the command '/vis/scene/add/userAction [<name>]' (default all).
+  o Added UI commands '/vis/scene/activateModel', '/vis/viewer/copyViewFrom',
+    '/vis/set/colour' and '/vis/set/lineWidth'.
+- modeling:
+  o Added Get/SetType for all models (sub-classes of G4VModel).
+  o G4PhysicalVolumeModel: draw only one replica if top volume.
+  o Other small improvements and fixes.
+- gMocren:
+  o Migrated to G4Scene::Model.
+- OpenGL:
+  o X and Xm drivers: implemented text layout and offset.
+  o Introduced QT tree ("Scene" panel in G4UIQt session).
+  o Fix to G4OpenGLWin32Viewer to make it work on Win64.
+  o G4OpenGLXm classes: change G4Exception ID.
+- OpenInventor:
+  o Fix to G4OpenInventorWinViewer to make it work on Win64.
+- Tree:
+  o Migrated to G4Scene::Model.
+- VRML:
+  o Protected debug statement.
+
+data sets
+---------
+- G4EMLOW-6.26:
+  o Removed unused files for obsolete Penelope01 models from the
+    module 'penelope'.
+  o Added new cross-section data files for microdosimetry models in Si,
+    for electrons, protons, and ions.
+
+examples                                         examples-V09-05-04
+--------
+- Updated reference outputs.
+- examples/extended/analysis/AnaEx01 (AnEx01-V09-05-04)
+- examples/extended/analysis/AnaEx02 (AnaEx02-V09-05-00)
+  o Change order of UI and Vis in main().
+- extended/electromagnetic/TestEm1 (testem1-V09-05-06)
+  o Apply new coding conventions. Simplified TestEm1.in macro.
+  o Use NIST materials in DetectorConstruction::SetMaterial().
+- extended/electromagnetic/TestEm2 (testem2-V09-05-01)
+- extended/electromagnetic/TestEm3 (testem3-V09-05-01)
+- extended/electromagnetic/TestEm5 (testem5-V09-05-04)
+- extended/electromagnetic/TestEm6 (testem6-V09-05-01)
+  o Apply new coding conventions.
+- extended/electromagnetic/TestEm7 (testem7-V09-05-04)
+  o c2_functions: fixed compilation problems on gcc-4.7.
+  o G4ScreenedNuclearRecoil: fixed division by zero at initialisation.
+  o Added extra test case for low-energy ions.
+  o Apply new coding conventions.
+- extended/electromagnetic/TestEm8 (testem8-V09-05-07)
+  o Migrated to internal analysis tool; allow to have several runs with
+    histograms per session. Fixed computation of mean energy deposit.
+    Added method Activate() and fixed method Save(). Changed default
+    names of output file.
+  o Fixed initialization in PrimaryGeneratorAction.
+  o Apply new coding conventions.
+- extended/electromagnetic/TestEm9 (testem9-V09-05-00)
+  o Migrated to internal analysis tool.
+- extended/electromagnetic/TestEm11 (testem11-V09-05-03)
+- extended/electromagnetic/TestEm12 (testem12-V09-05-05)
+- extended/electromagnetic/TestEm13 (testem13-V09-05-00)
+- extended/electromagnetic/TestEm14 (testem14-V09-05-01)
+- extended/electromagnetic/TestEm15 (testem15-V09-05-01)
+- extended/electromagnetic/TestEm16 (testem16-V09-05-01)
+- extended/electromagnetic/TestEm17 (testem17-V09-05-03)
+- extended/electromagnetic/TestEm18 (testem18-V09-05-01)
+  o Apply new coding conventions.
+- extended/eventgenerator/pythia/decayer6 (p6decayer-V09-05-00)
+  o Introduced use of classes from 'common' module.
+  o Introduced a physics builder for adding the external decayer to
+    an existing physics list.
+  o Apply new coding conventions.
+- extended/medical/electronScattering (electronScattering-V09-05-05)
+- extended/medical/fanoCavity (fano-V09-05-05)
+- extended/medical/fanoCavity2 (fano2-V09-05-04)
+  o Apply new coding conventions.
+- extended/persistency/gdml/G01 (G01-V09-05-00)
+  o Added missing unit in opticalsurfaces.gdml.
+- extended/persistency/P01 (exampleP01-V09-05-03)
+  o Fixes in GNUMakefile and CMake scripts.
+  o Removed unnecessary G4Exception from the code.
+  o Added root macro to read the hits.
+  o Removed debug printout; small fix in the iterator type.
+- extended/visualization/perspective (exam-ext-vis-perps-V09-05-02)
+- extended/visualization/standalone (exam-ext-vis-standalone-V09-05-01)
+  o Corrected vis user action extent.
+  o Removed arguments from /vis/scene/add/userAction in visualization macros.
+- extended/visualization/userVisAction (exam-ext-vis-UVA-V09-05-03)
+  o Corrected vis user action extent.
+  o Fixed visualization macros.
+
+tests                                            tests-V09-05-04
+-----
+- Updated reference outputs and tools.
+- tests/test19 (test19-V09-05-00)
+- tests/test29 (test29-V09-05-00)
+  o Added testing of G4QNGamma.
+- tests/test30 (test30-V09-05-04)
+  o Migrated to internal histogramming tool. Minor cleanup.
+- tests/test31 (test31-V09-05-00)
+  o Migrated to internal histogramming tool.
+- tests/test53 (test53-V09-05-00)
+- tests/test67 (test67-V09-05-01)
+  o Removed obsolete Penelope-01 processes.
+- tests/test73 (test73-V09-05-03)
+  o New test for exercising multiple-scattering models with different
+    physics-lists configuration. Adapted from LHCb internal test.
+- tests/test74 (test74-V09-05-00)
+  o New test for checking all G4MuElec* processes and models.
