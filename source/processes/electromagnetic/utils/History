@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26 April 12: V.Ivant (emutils-V09-05-10)
+- G4EmCalculator - fixed GetMeanFreePath for msc processes (bug introduced
+    in previous tags)
+
 20 April 12: V.Ivant (emutils-V09-05-09)
 - G4LossTableManager - added methods MinKinEnergy, MaxkinEnergy
 - G4EmModelManager - extended printout if cross section table is built for
