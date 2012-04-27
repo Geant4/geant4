@@ -17,6 +17,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27th April 2012  Gabriele Cosmo (examples-V09-05-04)
+- Updated reference outputs according to reference tag geant4-09-05-ref-04.
+- Includes tags: AnEx01-V09-05-04, AnaEx02-V09-05-00, testem1-V09-05-06,
+                 testem2-V09-05-01, testem3-V09-05-01, testem5-V09-05-04,
+                 testem6-V09-05-01, testem7-V09-05-04, testem8-V09-05-07,
+                 testem9-V09-05-01, testem11-V09-05-03, testem12-V09-05-05,
+                 testem13-V09-05-00, testem14-V09-05-01, testem15-V09-05-01,
+                 testem16-V09-05-01, testem17-V09-05-03, testem18-V09-05-01,
+                 p6decayer-V09-05-00, electronScattering-V09-05-05,
+                 fano-V09-05-05, fano2-V09-05-04, exampleP01-V09-05-03,
+                 G01-V09-05-00, exam-ext-vis-persp-V09-05-02
+                 exam-ext-vis-standalone-V09-05-01, exam-ext-vis-UVA-V09-05-03.
+
 30th March 2012  Gabriele Cosmo (examples-V09-05-03)
 - Updated reference outputs according to reference tag geant4-09-05-ref-03.
 - Includes tags: testem0-V09-05-00, testem1-V09-05-04, testem2-V09-05-00,
