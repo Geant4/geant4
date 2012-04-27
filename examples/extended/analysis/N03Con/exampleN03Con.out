@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-03    (31-March-2012)
+ Geant4 version Name: geant4-09-05-ref-04    (30-April-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -174,6 +174,11 @@ Registered filter factories:
   originVolumeFilter
   attributeFilter
 
+You have successfully registered the following user vis actions.
+Run Duration User Vis Actions: none
+End of Event User Vis Actions: none
+End of Run User Vis Actions: none
+
 Some /vis commands (optionally) take a string to specify colour.
 Available colours:
   black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
@@ -235,10 +240,9 @@ conv:   for  gamma    SubType= 14
         BetheHeitler :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for e-    SubType= 10
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -275,10 +279,9 @@ annihil:   for  e+    SubType= 5
             eplus2gg :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for proton    SubType= 10
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -303,7 +306,7 @@ hPairProd:   for  proton    SubType= 4
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -323,10 +326,9 @@ hIoni:   for  anti_proton    SubType= 2
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
 
 msc:   for kaon+    SubType= 10
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -345,10 +347,9 @@ hIoni:   for  kaon-    SubType= 2
           BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
 
 muMsc:   for mu+    SubType= 10
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -413,10 +414,9 @@ hPairProd:   for  pi+    SubType= 4
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for pi-    SubType= 10
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -503,70 +503,70 @@ Start Run processing.
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 397.724 MeV       total track length: 94.4638 cm 
-        Gap: total energy: 85.3974 MeV       total track length: 2.37531 m  
+   Absorber: total energy: 418.848 MeV       total track length: 98.5965 cm 
+        Gap: total energy: 75.7467 MeV       total track length: 2.07702 m  
 
 ---> Begin of event: 1024
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 361369709, 461464807
+ Current couple of seeds = 948456041, 1986629630
 ----------------------------------------
 ---> End of event: 1024
-   Absorber: total energy: 313.562 MeV       total track length: 72.9565 cm 
-        Gap: total energy: 56.6886 MeV       total track length: 1.58423 m  
+   Absorber: total energy: 389.093 MeV       total track length: 92.6419 cm 
+        Gap: total energy: 105.166 MeV       total track length:   2.893 m  
 
 ---> Begin of event: 2048
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2000972672, 208365135
+ Current couple of seeds = 1628729111, 375393732
 ----------------------------------------
 ---> End of event: 2048
-   Absorber: total energy: 433.781 MeV       total track length: 1.02004 m  
-        Gap: total energy: 65.3612 MeV       total track length: 1.76032 m  
+   Absorber: total energy: 397.815 MeV       total track length: 94.8293 cm 
+        Gap: total energy: 98.0265 MeV       total track length: 2.74433 m  
 
 ---> Begin of event: 3072
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 288621611, 2070270914
+ Current couple of seeds = 1690512259, 1372078532
 ----------------------------------------
 ---> End of event: 3072
-   Absorber: total energy: 403.151 MeV       total track length:  94.084 cm 
-        Gap: total energy: 74.2325 MeV       total track length: 2.02689 m  
+   Absorber: total energy: 324.038 MeV       total track length: 76.3303 cm 
+        Gap: total energy: 68.1485 MeV       total track length: 1.87593 m  
 Run terminated.
 Run Summary
   Number of events processed : 4096
-  User=39.65s Real=39.81s Sys=0.05s
+  User=38.72s Real=38.92s Sys=0.01s
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 368.998 MeV +- 61.503 MeV
- mean Energy in Gap      : 79.2286 MeV +- 14.5931 MeV
+ mean Energy in Absorber : 367.979 MeV +- 60.698 MeV
+ mean Energy in Gap      : 79.0882 MeV +- 14.3977 MeV
 
- mean trackLength in Absorber : 87.1324 cm  +- 14.4217 cm 
- mean trackLength in Gap      : 2.18894 m   +- 40.4707 cm 
+ mean trackLength in Absorber : 86.8704 cm  +- 14.2193 cm 
+ mean trackLength in Gap      : 2.1838 m   +- 39.9407 cm 
 ------------------------------------------------------------
 
-EFFICIENCY = 0.996826
-MEAN = 368.998
-VAR = 3783.54
-SD = 61.5105
-R = 0.00260463
-SHIFT = -92.2479
-VOV = 0.00321928
-FOM = 3712.94
-THE LARGEST SCORE = 433.781 and it happend at 2048th event
-Affected Mean = 369.014 and its ratio to orignal is 1.00004
-Affected VAR = 3783.64 and its ratio to orignal is 1.00003
-Affected R = 0.00260423 and its ratio to orignal is 0.999848
-Affected SHIFT = -92.2379 and its ratio to orignal is 0.999891
-Affected FOM = 3712.01 and its ratio to orignal is 0.999748
+EFFICIENCY = 0.994385
+MEAN = 367.979
+VAR = 3685.15
+SD = 60.7054
+R = 0.00257765
+SHIFT = -93.6912
+VOV = 0.0035364
+FOM = 3886.01
+THE LARGEST SCORE = 430.926 and it happend at 2208th event
+Affected Mean = 367.995 and its ratio to orignal is 1.00004
+Affected VAR = 3685.22 and its ratio to orignal is 1.00002
+Affected R = 0.00257725 and its ratio to orignal is 0.999845
+Affected SHIFT = -93.6814 and its ratio to orignal is 0.999895
+Affected FOM = 3885.01 and its ratio to orignal is 0.999742
 MEAN distribution is not RANDOM
 r follows 1/std::sqrt(N)
 r is monotonically decrease 
-r is less than 0.1. r = 0.00260463
+r is less than 0.1. r = 0.00257765
 VOV follows 1/std::sqrt(N)
 VOV is monotonically decrease 
 FOM distribution is not RANDOM
@@ -574,40 +574,40 @@ SLOPE is large enough
 This result passes 6 / 8 Convergence Test.
 
 i/16 till_ith  mean  var  sd  r  vov  fom  shift  e  r2eff  r2int
-1 255 367.415 3951.91 62.8642 0.0106937 0.055979 3526.11 -96.8415 1 0 0.000113907 
-2 511 365.932 4454.65 66.7432 0.00806068 0.0250933 3115.52 -98.6951 0.996094 7.65931e-06 5.71883e-05 
-3 767 366.393 4296.28 65.546 0.00645534 0.016523 3238.5 -96.4282 0.996094 5.10621e-06 3.65109e-05 
-4 1023 366.91 4094.38 63.9874 0.00544985 0.0122348 3394.06 -92.9934 0.99707 2.86943e-06 2.68024e-05 
-5 1279 366.979 4170.39 64.5786 0.00491861 0.009737 3333.45 -94.3005 0.996094 3.06373e-06 2.11101e-05 
-6 1535 367.276 4156.16 64.4683 0.00447876 0.00811564 3350.28 -94.2758 0.996094 2.5531e-06 1.74932e-05 
-7 1791 367.716 3986.22 63.1365 0.00405601 0.00697416 3501.49 -91.6993 0.996652 1.8747e-06 1.45673e-05 
-8 2047 367.472 4067.75 63.7789 0.00383519 0.0061474 3430.22 -93.5176 0.996094 1.91483e-06 1.27867e-05 
-9 2303 368.2 4014.83 63.3627 0.00358517 0.00567718 3482.56 -94.9463 0.996094 1.70207e-06 1.11458e-05 
-10 2559 368.467 3969.43 63.0034 0.00337945 0.00525574 3524.98 -95.759 0.995703 1.68571e-06 9.73049e-06 
-11 2815 368.055 4009.76 63.3227 0.00324213 0.00458155 3488.63 -94.2799 0.996094 1.3926e-06 9.11506e-06 
-12 3071 368.513 3960.76 62.9346 0.00308124 0.00427334 3535.72 -94.707 0.996094 1.27655e-06 8.21441e-06 
-13 3327 368.465 3898.17 62.4354 0.00293726 0.00392316 3591.82 -93.3457 0.996394 1.08739e-06 7.53755e-06 
-14 3583 368.859 3857.82 62.1113 0.00281272 0.00369853 3635.32 -93.7324 0.996652 9.3735e-07 6.97184e-06 
-15 3839 369.124 3787.44 61.5422 0.00269051 0.00347234 3707.56 -92.9661 0.996875 8.16353e-07 6.42061e-06 
-16 4095 368.998 3783.54 61.5105 0.00260463 0.00321928 3713.88 -92.2479 0.996826 7.77327e-07 6.0051e-06 
-EFFICIENCY = 0.996826
-MEAN = 79.2286
-VAR = 213.01
-SD = 14.5949
-R = 0.00287831
-SHIFT = -14.0244
-VOV = 0.00206044
-FOM = 3040.42
-THE LARGEST SCORE = 113.037 and it happend at 841th event
-Affected Mean = 79.2368 and its ratio to orignal is 1.0001
-Affected VAR = 213.237 and its ratio to orignal is 1.00107
-Affected R = 0.0028792 and its ratio to orignal is 1.00031
-Affected SHIFT = -13.9963 and its ratio to orignal is 0.997997
-Affected FOM = 3038.88 and its ratio to orignal is 0.999496
+1 255 365.243 4176.66 64.6271 0.0110589 0.048117 3450.07 -91.4508 0.992188 3.07579e-05 9.10637e-05 
+2 511 367.262 3904.27 62.4842 0.00751898 0.0280437 3708.2 -97.124 0.994141 1.15115e-05 4.49132e-05 
+3 767 365.823 4290.01 65.4982 0.00646067 0.0165513 3341.38 -96.4869 0.99349 8.53266e-06 3.31533e-05 
+4 1023 366.805 4267.62 65.327 0.00556555 0.0127679 3359.39 -98.4119 0.994141 5.75577e-06 2.51893e-05 
+5 1279 367.081 4207.91 64.8684 0.00493931 0.0101584 3401.58 -97.4063 0.995313 3.67936e-06 2.06983e-05 
+6 1535 366.897 4177.65 64.6347 0.00449497 0.00852182 3420.41 -96.7373 0.994792 3.4086e-06 1.6783e-05 
+7 1791 367.28 4028.07 63.4671 0.00408208 0.00739157 3546.8 -95.0855 0.994978 2.81678e-06 1.38373e-05 
+8 2047 367.454 3862.15 62.1462 0.0037372 0.0066136 3698.29 -93.5992 0.995117 2.39588e-06 1.1564e-05 
+9 2303 367.692 3739.55 61.1519 0.00346485 0.00586024 3826.24 -91.3695 0.99566 1.89201e-06 1.0108e-05 
+10 2559 367.83 3724.93 61.0322 0.00327938 0.0053167 3843.97 -91.4488 0.995313 1.83968e-06 8.91047e-06 
+11 2815 367.954 3669.59 60.5771 0.00310241 0.00490702 3904.42 -90.9454 0.995028 1.7743e-06 7.84724e-06 
+12 3071 368.095 3695.36 60.7895 0.0029796 0.00467479 3877.38 -93.4017 0.994141 1.91859e-06 6.95653e-06 
+13 3327 368.084 3658.7 60.4872 0.00284855 0.00435831 3917.35 -93.213 0.994291 1.72534e-06 6.38649e-06 
+14 3583 368.216 3647.02 60.3905 0.00273957 0.00401919 3931.56 -92.9849 0.994699 1.48705e-06 6.01608e-06 
+15 3839 368.218 3627.29 60.2269 0.00263949 0.0037853 3951.98 -92.9629 0.994531 1.43198e-06 5.5331e-06 
+16 4095 367.979 3685.15 60.7054 0.00257765 0.0035364 3887.02 -93.6912 0.994385 1.37865e-06 5.26401e-06 
+EFFICIENCY = 0.994629
+MEAN = 79.0882
+VAR = 207.346
+SD = 14.3995
+R = 0.00284483
+SHIFT = -14.0946
+VOV = 0.00226272
+FOM = 3190.37
+THE LARGEST SCORE = 119.531 and it happend at 482th event
+Affected Mean = 79.098 and its ratio to orignal is 1.00012
+Affected VAR = 207.694 and its ratio to orignal is 1.00168
+Affected R = 0.00284652 and its ratio to orignal is 1.00059
+Affected SHIFT = -14.0435 and its ratio to orignal is 0.99637
+Affected FOM = 3189.54 and its ratio to orignal is 0.999742
 MEAN distribution is not RANDOM
 r follows 1/std::sqrt(N)
 r is monotonically decrease 
-r is less than 0.1. r = 0.00287831
+r is less than 0.1. r = 0.00284483
 VOV follows 1/std::sqrt(N)
 VOV is monotonically decrease 
 FOM distribution is not RANDOM
@@ -615,40 +615,40 @@ SLOPE is large enough
 This result passes 6 / 8 Convergence Test.
 
 i/16 till_ith  mean  var  sd  r  vov  fom  shift  e  r2eff  r2int
-1 255 78.0731 216.382 14.7099 0.0117758 0.0337468 2907.84 -15.0556 1 0 0.000138127 
-2 511 78.2897 240.876 15.5202 0.00876107 0.0174688 2637.29 -15.9214 0.996094 7.65931e-06 6.89471e-05 
-3 767 78.5508 230.693 15.1886 0.00697727 0.0114532 2772.11 -15.3559 0.996094 5.10621e-06 4.35128e-05 
-4 1023 78.6704 224.184 14.9728 0.00594758 0.00815815 2849.75 -14.1214 0.99707 2.86943e-06 3.24698e-05 
-5 1279 78.8152 225.914 15.0304 0.00533036 0.00664687 2838.35 -14.6018 0.996094 3.06373e-06 2.53268e-05 
-6 1535 78.8038 225.129 15.0043 0.00485818 0.00561851 2847.41 -14.7892 0.996094 2.5531e-06 2.10334e-05 
-7 1791 78.9158 218.062 14.7669 0.00442036 0.0046996 2948.06 -14.1006 0.996652 1.8747e-06 1.76539e-05 
-8 2047 78.9756 224.331 14.9777 0.0041907 0.00408192 2872.92 -14.309 0.996094 1.91483e-06 1.56386e-05 
-9 2303 79.108 222.484 14.9159 0.00392815 0.00375501 2900.96 -14.5797 0.996094 1.70207e-06 1.37216e-05 
-10 2559 79.1919 220.893 14.8625 0.00370928 0.00344356 2925.96 -14.6983 0.995703 1.68571e-06 1.20677e-05 
-11 2815 79.0604 223.028 14.9341 0.00355963 0.00300632 2894.04 -14.5231 0.996094 1.3926e-06 1.12739e-05 
-12 3071 79.1024 221.398 14.8795 0.00339381 0.00277273 2914.44 -14.5163 0.996094 1.27655e-06 1.02376e-05 
-13 3327 79.1002 217.479 14.7472 0.00323176 0.00254867 2967.03 -14.233 0.996394 1.08739e-06 9.35378e-06 
-14 3583 79.1101 214.824 14.6569 0.00309475 0.00239989 3002.92 -14.2919 0.996652 9.3735e-07 8.63748e-06 
-15 3839 79.2089 211.914 14.5573 0.00296579 0.00223415 3051.24 -14.1088 0.996875 8.16353e-07 7.97726e-06 
-16 4095 79.2286 213.01 14.5949 0.00287831 0.00206044 3041.18 -14.0244 0.996826 7.77327e-07 7.50535e-06 
-EFFICIENCY = 0.996826
-MEAN = 871.324
-VAR = 20803.5
-SD = 144.234
-R = 0.00258648
-SHIFT = -217.166
-VOV = 0.00325637
-FOM = 3765.23
-THE LARGEST SCORE = 1023.36 and it happend at 3887th event
-Affected Mean = 871.361 and its ratio to orignal is 1.00004
-Affected VAR = 20804.1 and its ratio to orignal is 1.00003
-Affected R = 0.00258609 and its ratio to orignal is 0.999849
-Affected SHIFT = -217.142 and its ratio to orignal is 0.99989
-Affected FOM = 3764.28 and its ratio to orignal is 0.999748
+1 255 78.9421 221.62 14.8869 0.0117863 0.0354958 3037.38 -15.103 0.992188 3.07579e-05 0.000107615 
+2 511 78.9966 211.865 14.5556 0.00814303 0.0188927 3161.62 -14.831 0.994141 1.15115e-05 5.46679e-05 
+3 767 78.7089 229.353 15.1444 0.00694301 0.0115481 2893.25 -15.1297 0.99349 8.53266e-06 3.96099e-05 
+4 1023 78.9394 234.379 15.3094 0.0060606 0.00854138 2833 -15.0827 0.994141 5.75577e-06 3.09392e-05 
+5 1279 78.7858 229.099 15.136 0.0053698 0.00666495 2878.04 -14.5771 0.995313 3.67936e-06 2.51329e-05 
+6 1535 78.8594 228.398 15.1128 0.00488986 0.00557662 2890.27 -14.4914 0.995443 2.98057e-06 2.09146e-05 
+7 1791 78.8817 221.479 14.8822 0.00445678 0.00477069 2975.48 -14.2248 0.995536 2.5024e-06 1.73494e-05 
+8 2047 78.9279 214.811 14.6564 0.0041033 0.00418552 3067.81 -13.8193 0.995605 2.15524e-06 1.46736e-05 
+9 2303 78.9947 209.875 14.4871 0.00382068 0.00365535 3146.74 -13.3292 0.996094 1.70207e-06 1.28892e-05 
+10 2559 78.9915 207.953 14.4206 0.00360813 0.00336997 3175.4 -13.497 0.995703 1.68571e-06 1.13278e-05 
+11 2815 78.9956 204.773 14.3099 0.00341364 0.00313061 3224.93 -13.5208 0.995384 1.64698e-06 1.00018e-05 
+12 3071 79.0299 207.758 14.4138 0.00329061 0.00295663 3179.08 -13.8552 0.994466 1.81141e-06 9.01318e-06 
+13 3327 79.0727 206.087 14.3557 0.00314707 0.00275296 3209.43 -13.8551 0.994591 1.63403e-06 8.26706e-06 
+14 3583 79.1264 205.869 14.3481 0.00302894 0.00252724 3216.24 -13.764 0.994978 1.40839e-06 7.76351e-06 
+15 3839 79.1389 205.305 14.3285 0.00292176 0.0023858 3225.27 -13.8266 0.994792 1.36344e-06 7.171e-06 
+16 4095 79.0882 207.346 14.3995 0.00284483 0.00226272 3191.19 -14.0946 0.994629 1.31838e-06 6.77268e-06 
+EFFICIENCY = 0.994385
+MEAN = 868.704
+VAR = 20223.8
+SD = 142.211
+R = 0.00255788
+SHIFT = -221.893
+VOV = 0.00361381
+FOM = 3946.32
+THE LARGEST SCORE = 1019.56 and it happend at 4014th event
+Affected Mean = 868.741 and its ratio to orignal is 1.00004
+Affected VAR = 20224.4 and its ratio to orignal is 1.00003
+Affected R = 0.0025575 and its ratio to orignal is 0.999851
+Affected SHIFT = -221.867 and its ratio to orignal is 0.999881
+Affected FOM = 3945.3 and its ratio to orignal is 0.999742
 MEAN distribution is not RANDOM
 r follows 1/std::sqrt(N)
 r is monotonically decrease 
-r is less than 0.1. r = 0.00258648
+r is less than 0.1. r = 0.00255788
 VOV follows 1/std::sqrt(N)
 VOV is monotonically decrease 
 FOM distribution is not RANDOM
@@ -656,40 +656,40 @@ SLOPE is large enough
 This result passes 6 / 8 Convergence Test.
 
 i/16 till_ith  mean  var  sd  r  vov  fom  shift  e  r2eff  r2int
-1 255 868.249 21909.2 148.018 0.0106549 0.0565918 3551.81 -229.158 1 0 0.000113083 
-2 511 864.185 24611.3 156.88 0.00802278 0.0253457 3145.02 -232.77 0.996094 7.65931e-06 5.658e-05 
-3 767 865.282 23663 153.828 0.00641499 0.0167089 3279.36 -227.197 0.996094 5.10621e-06 3.59924e-05 
-4 1023 866.423 22509.2 150.031 0.00541128 0.0123728 3442.61 -218.742 0.99707 2.86943e-06 2.6384e-05 
-5 1279 866.571 22950.3 151.494 0.00488635 0.00985042 3377.61 -222.08 0.996094 3.06373e-06 2.07941e-05 
-6 1535 867.233 22888.5 151.289 0.0044512 0.00821197 3391.9 -222.279 0.996094 2.5531e-06 1.72472e-05 
-7 1791 868.279 21906.9 148.01 0.00402682 0.00706696 3552.43 -216.121 0.996652 1.8747e-06 1.43316e-05 
-8 2047 867.649 22328 149.426 0.00380554 0.00624222 3483.89 -220.573 0.996094 1.91483e-06 1.25602e-05 
-9 2303 869.435 22037.5 148.45 0.00355715 0.00576736 3537.62 -224.009 0.996094 1.70207e-06 1.09458e-05 
-10 2559 869.942 21797.5 147.64 0.00335423 0.00533295 3578.18 -225.805 0.995703 1.68571e-06 9.56076e-06 
-11 2815 868.995 22024.2 148.406 0.00321822 0.00464788 3540.64 -222.369 0.996094 1.3926e-06 8.96069e-06 
-12 3071 870.037 21763.9 147.526 0.00305929 0.00433079 3586.65 -223.3 0.996094 1.27655e-06 8.07965e-06 
-13 3327 869.906 21432.1 146.397 0.00291721 0.00397044 3641.37 -219.907 0.996394 1.08739e-06 7.42018e-06 
-14 3583 870.897 21211.3 145.641 0.0027934 0.00374307 3685.78 -220.862 0.996652 9.3735e-07 6.86355e-06 
-15 3839 871.603 20824.9 144.308 0.00267182 0.00351118 3759.61 -218.882 0.996875 8.16353e-07 6.32041e-06 
-16 4095 871.324 20803.5 144.234 0.00258648 0.00325637 3766.18 -217.166 0.996826 7.77327e-07 5.91091e-06 
-EFFICIENCY = 0.996826
-MEAN = 2188.94
-VAR = 163828
-SD = 404.756
-R = 0.00288921
-SHIFT = -376.381
-VOV = 0.00200423
-FOM = 3017.53
-THE LARGEST SCORE = 3183.96 and it happend at 841th event
-Affected Mean = 2189.19 and its ratio to orignal is 1.00011
-Affected VAR = 164029 and its ratio to orignal is 1.00123
-Affected R = 0.00289031 and its ratio to orignal is 1.00038
-Affected SHIFT = -375.458 and its ratio to orignal is 0.997547
-Affected FOM = 3016.01 and its ratio to orignal is 0.999496
+1 255 862.544 22874.2 151.242 0.010959 0.049395 3513.24 -216.782 0.992188 3.07579e-05 8.88733e-05 
+2 511 867.202 21426.4 146.378 0.00745967 0.0285976 3767.41 -229.808 0.994141 1.15115e-05 4.40264e-05 
+3 767 863.763 23597.3 153.614 0.00641736 0.0168059 3386.64 -228.019 0.99349 8.53266e-06 3.25962e-05 
+4 1023 865.924 23428.7 153.064 0.00552388 0.0130014 3410.27 -232.718 0.994141 5.75577e-06 2.47277e-05 
+5 1279 866.263 23060.4 151.857 0.0048998 0.0103589 3456.66 -230.391 0.995313 3.67936e-06 2.03099e-05 
+6 1535 865.886 22918.6 151.389 0.00446105 0.00868491 3472.62 -228.803 0.994792 3.4086e-06 1.64794e-05 
+7 1791 866.744 22088.6 148.622 0.00405065 0.00753293 3602.06 -224.79 0.994978 2.81678e-06 1.35818e-05 
+8 2047 867.213 21172.1 145.506 0.00370759 0.00674447 3757.62 -221.357 0.995117 2.39588e-06 1.13436e-05 
+9 2303 867.743 20502.9 143.188 0.00343776 0.00597114 3886.79 -215.967 0.99566 1.89201e-06 9.92102e-06 
+10 2559 868.058 20407.1 142.853 0.00325254 0.0054263 3907.68 -216.192 0.995313 1.83968e-06 8.73519e-06 
+11 2815 868.352 20105.6 141.794 0.00307714 0.00501075 3968.82 -215.071 0.995028 1.7743e-06 7.69111e-06 
+12 3071 868.759 20264.9 142.355 0.00295639 0.00477373 3938.49 -221.06 0.994141 1.91859e-06 6.81883e-06 
+13 3327 868.823 20064.6 141.65 0.00282613 0.00445471 3979.76 -220.706 0.994291 1.72534e-06 6.25929e-06 
+14 3583 869.184 20016.6 141.48 0.00271894 0.00410302 3991.43 -220.107 0.994699 1.48705e-06 5.90354e-06 
+15 3839 869.227 19905.5 141.087 0.00261932 0.0038673 4013.09 -220.125 0.994531 1.43198e-06 5.42704e-06 
+16 4095 868.704 20223.8 142.211 0.00255788 0.00361381 3947.34 -221.893 0.994385 1.37865e-06 5.1625e-06 
+EFFICIENCY = 0.994629
+MEAN = 2183.8
+VAR = 159565
+SD = 399.456
+R = 0.00285809
+SHIFT = -379.081
+VOV = 0.00221199
+FOM = 3160.82
+THE LARGEST SCORE = 3384.21 and it happend at 482th event
+Affected Mean = 2184.09 and its ratio to orignal is 1.00013
+Affected VAR = 159877 and its ratio to orignal is 1.00196
+Affected R = 0.00286016 and its ratio to orignal is 1.00072
+Affected SHIFT = -377.366 and its ratio to orignal is 0.995476
+Affected FOM = 3160.01 and its ratio to orignal is 0.999742
 MEAN distribution is not RANDOM
 r follows 1/std::sqrt(N)
 r is monotonically decrease 
-r is less than 0.1. r = 0.00288921
+r is less than 0.1. r = 0.00285809
 VOV follows 1/std::sqrt(N)
 VOV is monotonically decrease 
 FOM distribution is not RANDOM
@@ -697,22 +697,22 @@ SLOPE is large enough
 This result passes 6 / 8 Convergence Test.
 
 i/16 till_ith  mean  var  sd  r  vov  fom  shift  e  r2eff  r2int
-1 255 2156.1 165844 407.24 0.0118049 0.0327907 2893.51 -404.847 1 0 0.000138811 
-2 511 2162.93 185088 430.218 0.00879045 0.0171337 2619.7 -432.42 0.996094 7.65931e-06 6.94618e-05 
-3 767 2170.15 177882 421.761 0.00701288 0.0111127 2744.03 -412.44 0.996094 5.10621e-06 4.40102e-05 
-4 1023 2173.15 172510 415.343 0.00597266 0.00792261 2825.87 -378.907 0.99707 2.86943e-06 3.27684e-05 
-5 1279 2177.54 173883 416.993 0.0053525 0.00645848 2814.91 -391.449 0.996094 3.06373e-06 2.55632e-05 
-6 1535 2177.56 173259 416.244 0.00487732 0.00546678 2825.1 -397.25 0.996094 2.5531e-06 2.12197e-05 
-7 1791 2180.74 167718 409.533 0.00443625 0.00457613 2926.98 -379.042 0.996652 1.8747e-06 1.77946e-05 
-8 2047 2182.47 172596 415.447 0.00420631 0.00397756 2851.63 -384.754 0.996094 1.91483e-06 1.57696e-05 
-9 2303 2185.9 171156 413.711 0.00394298 0.00365986 2879.18 -392.369 0.996094 1.70207e-06 1.38382e-05 
-10 2559 2188.06 169706 411.954 0.00372108 0.00336336 2907.44 -396.001 0.995703 1.68571e-06 1.21553e-05 
-11 2815 2184.26 171286 413.867 0.0035706 0.00293385 2876.29 -390.739 0.996094 1.3926e-06 1.1352e-05 
-12 3071 2185.4 170230 412.589 0.00340626 0.00270157 2893.18 -390.449 0.996094 1.27655e-06 1.03223e-05 
-13 3327 2185.19 167319 409.046 0.00324483 0.00247739 2943.19 -382.036 0.996394 1.08739e-06 9.43836e-06 
-14 3583 2185.5 165215 406.467 0.00310663 0.00233493 2980 -383.925 0.996652 9.3735e-07 8.71112e-06 
-15 3839 2188.3 163101 403.857 0.00297822 0.00217138 3025.83 -378.815 0.996875 8.16353e-07 8.05111e-06 
-16 4095 2188.94 163828 404.756 0.00288921 0.00200423 3018.29 -376.381 0.996826 7.77327e-07 7.56816e-06 
+1 255 2182.01 169902 412.192 0.0118065 0.034986 3026.97 -411.06 0.992188 3.07579e-05 0.000108092 
+2 511 2182.08 163227 404.014 0.00818259 0.018471 3131.12 -398.328 0.994141 1.15115e-05 5.53125e-05 
+3 767 2173.72 176314 419.898 0.00697043 0.0113745 2870.53 -408.754 0.99349 8.53266e-06 3.99909e-05 
+4 1023 2180.26 180285 424.6 0.00608586 0.00836029 2809.52 -404.364 0.994141 5.75577e-06 3.12458e-05 
+5 1279 2175.92 175996 419.518 0.00538894 0.00653525 2857.63 -391.279 0.995313 3.67936e-06 2.53387e-05 
+6 1535 2177.95 175629 419.081 0.0049097 0.00546624 2866.96 -389.325 0.995443 2.98057e-06 2.11089e-05 
+7 1791 2177.98 170236 412.597 0.0044751 0.00467498 2951.17 -381.91 0.995536 2.5024e-06 1.75129e-05 
+8 2047 2179.19 165280 406.547 0.00412239 0.00409298 3039.46 -370.46 0.995605 2.15524e-06 1.48306e-05 
+9 2303 2181.33 161627 402.029 0.00383968 0.00356286 3115.67 -356.414 0.996094 1.70207e-06 1.30347e-05 
+10 2559 2181.08 160234 400.293 0.00362732 0.00327896 3141.9 -360.751 0.995703 1.68571e-06 1.14666e-05 
+11 2815 2181.21 157744 397.17 0.00343133 0.00304798 3191.76 -361.808 0.995384 1.64698e-06 1.01229e-05 
+12 3071 2182.32 159862 399.828 0.00330555 0.00288759 3150.4 -371.634 0.994466 1.81141e-06 9.11173e-06 
+13 3327 2183.48 158540 398.171 0.00316103 0.00269197 3181.15 -371.925 0.994591 1.63403e-06 8.35506e-06 
+14 3583 2184.81 158418 398.018 0.00304302 0.00246846 3186.53 -369.295 0.994978 1.40839e-06 7.84901e-06 
+15 3839 2185.12 157994 397.484 0.00293548 0.00233115 3195.18 -371.248 0.994792 1.36344e-06 7.25136e-06 
+16 4095 2183.8 159565 399.456 0.00285809 0.00221199 3161.64 -379.081 0.994629 1.31838e-06 6.84831e-06 
 #/run/beamOn 16384
 #/run/beamOn 65536
 Graphics systems deleted.

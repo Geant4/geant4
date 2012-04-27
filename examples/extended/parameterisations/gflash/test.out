@@ -9,7 +9,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-03    (31-March-2012)
+ Geant4 version Name: geant4-09-05-ref-04    (30-April-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -57,6 +57,11 @@ Registered filter factories:
   particleFilter
   originVolumeFilter
   attributeFilter
+
+You have successfully registered the following user vis actions.
+Run Duration User Vis Actions: none
+End of Event User Vis Actions: none
+End of Run User Vis Actions: none
 
 Some /vis commands (optionally) take a string to specify colour.
 Available colours:
@@ -117,10 +122,9 @@ phot:   for  gamma    SubType= 12
        PhotoElectric :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for e-    SubType= 10
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -165,15 +169,14 @@ hIoni:   for  proton    SubType= 2
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
 
 msc:   for proton    SubType= 10
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -192,10 +195,9 @@ hIoni:   for  kaon+    SubType= 2
           BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
 
 msc:   for kaon+    SubType= 10
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -215,10 +217,9 @@ muIoni:   for  mu+    SubType= 2
         MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
 
 muMsc:   for mu+    SubType= 10
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 muBrems:   for  mu+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -270,10 +271,9 @@ hIoni:   for  pi-    SubType= 2
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
 
 msc:   for pi-    SubType= 10
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 ========= Table of registered couples ==============================
 
@@ -295,7 +295,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 ### Run 0 start.
-WARNING: Scene "refresh" not found.
+WARNING: Scene "none" not found.
   /vis/scene/list to see scenes.
 ::Initializing the sensitive detector
  ------ Start ExGflashEventAction ----- 
@@ -303,7 +303,7 @@ WARNING: Scene "refresh" not found.
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.02
+Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
@@ -324,7 +324,7 @@ Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 1  -----
   11969 hits are stored in ExGflashHitsCollection 
-   e1  12.1765   e3x3  48.4813   GeV  e5x5  48.94
+   e1  12.1851   e3x3  48.4813   GeV  e5x5  48.9578
  Total energy deposited in the calorimeter: 49.8927 (GeV)
     0 trajectories stored in this event.
 ::Initializing the sensitive detector
@@ -348,7 +348,7 @@ Internal GetUserElapsed Time: 0.01
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.01
+Internal Real Elapsed Time is: 0.02
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
@@ -378,14 +378,14 @@ Internal GetUserElapsed Time: 0.01
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.02
+Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.02
+Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 5  -----
-  12133 hits are stored in ExGflashHitsCollection 
-   e1  11.956   e3x3  47.8426   GeV  e5x5  48.4615
- Total energy deposited in the calorimeter: 49.6197 (GeV)
+  12134 hits are stored in ExGflashHitsCollection 
+   e1  11.9313   e3x3  47.8232   GeV  e5x5  48.437
+ Total energy deposited in the calorimeter: 49.6108 (GeV)
     0 trajectories stored in this event.
 ::Initializing the sensitive detector
  ------ Start ExGflashEventAction ----- 
@@ -398,9 +398,9 @@ Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 6  -----
-  11888 hits are stored in ExGflashHitsCollection 
-   e1  12.1366   e3x3  47.9869   GeV  e5x5  48.5447
- Total energy deposited in the calorimeter: 49.4438 (GeV)
+  11980 hits are stored in ExGflashHitsCollection 
+   e1  12.1698   e3x3  48.7307   GeV  e5x5  49.1417
+ Total energy deposited in the calorimeter: 49.8688 (GeV)
     0 trajectories stored in this event.
 ::Initializing the sensitive detector
  ------ Start ExGflashEventAction ----- 
@@ -413,9 +413,9 @@ Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 7  -----
-  11821 hits are stored in ExGflashHitsCollection 
-   e1  12.0027   e3x3  47.5405   GeV  e5x5  48.0162
- Total energy deposited in the calorimeter: 48.9525 (GeV)
+  11941 hits are stored in ExGflashHitsCollection 
+   e1  12.1439   e3x3  48.1361   GeV  e5x5  48.6346
+ Total energy deposited in the calorimeter: 49.7338 (GeV)
     0 trajectories stored in this event.
 ::Initializing the sensitive detector
  ------ Start ExGflashEventAction ----- 
@@ -428,9 +428,9 @@ Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 8  -----
-  11969 hits are stored in ExGflashHitsCollection 
-   e1  12.1183   e3x3  48.4285   GeV  e5x5  48.8873
- Total energy deposited in the calorimeter: 49.9048 (GeV)
+  11973 hits are stored in ExGflashHitsCollection 
+   e1  12.079   e3x3  48.5208   GeV  e5x5  49.0095
+ Total energy deposited in the calorimeter: 49.8746 (GeV)
     0 trajectories stored in this event.
 ::Initializing the sensitive detector
  ------ Start ExGflashEventAction ----- 
@@ -443,19 +443,19 @@ Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 9  -----
-  11898 hits are stored in ExGflashHitsCollection 
-   e1  12.0918   e3x3  48.0674   GeV  e5x5  48.6068
- Total energy deposited in the calorimeter: 49.5225 (GeV)
+  11963 hits are stored in ExGflashHitsCollection 
+   e1  12.1314   e3x3  48.1982   GeV  e5x5  48.8051
+ Total energy deposited in the calorimeter: 49.8731 (GeV)
     0 trajectories stored in this event.
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 number of event = 10
 Graphics systems deleted.
 Visualization Manager deleting...
-Internal Real Elapsed Time /event is: 0.0133333
+Internal Real Elapsed Time /event is: 0.0122222
 
 ******************************************
-Total Real Elapsed Time is: 0.64
-Total System Elapsed Time: 0.01
-Total GetUserElapsed Time: 0.6
+Total Real Elapsed Time is: 0.61
+Total System Elapsed Time: 0
+Total GetUserElapsed Time: 0.61
 ******************************************
 

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-03    (31-March-2012)
+ Geant4 version Name: geant4-09-05-ref-04    (30-April-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -189,7 +189,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
   range from restrict dE/dx: 	 6.07227 cm  ( 6.07227 g/cm2 )
   range from full dE/dx    : 	 4.92998 cm  ( 4.92998 g/cm2 )
  
-  transport mean free path : 	 27.9107 cm  ( 27.9107 g/cm2 )
+  transport mean free path : 	 2.79107 mm  ( 279.107 mg/cm2)
  
   critical energy (Rossi)  : 	 78.7732 MeV
   Moliere radius           : 	0.269193 X0 =  9.71583 cm 

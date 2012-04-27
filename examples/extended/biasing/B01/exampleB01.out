@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-03    (31-March-2012)
+ Geant4 version Name: geant4-09-05-ref-04    (30-April-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -105,10 +105,9 @@ phot:   for  gamma    SubType= 12
        PhotoElectric :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for e-    SubType= 10
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -145,10 +144,9 @@ annihil:   for  e+    SubType= 5
             eplus2gg :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for proton    SubType= 10
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -161,7 +159,7 @@ hIoni:   for  proton    SubType= 2
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -172,10 +170,9 @@ hIoni:   for  anti_proton    SubType= 2
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
 
 msc:   for kaon+    SubType= 10
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -194,10 +191,9 @@ hIoni:   for  kaon-    SubType= 2
           BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
 
 muMsc:   for mu+    SubType= 10
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -250,10 +246,9 @@ hIoni:   for  pi+    SubType= 2
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
 
 msc:   for pi-    SubType= 10
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -396,26 +391,26 @@ hIoni:   for  pi-    SubType= 2
  Number of event processed : 100
 =============================================================
         Volume |   Tr.Entering |    Population |    Collisions |      Coll*WGT |     NumWGTedE |    FluxWGTedE |     Av.Tr.WGT |            SL |           SLW |         SLW_v |          SLWE |        SLWE_v |
-       cell_00 |            10 |           110 |            10 |            10 |       7.26715 |       7.74855 |             1 |       2147.43 |       2147.43 |       59.1028 |       16639.5 |       429.509 |
-       cell_01 |           108 |           129 |           124 |           124 |       6.19303 |       8.82889 |             1 |       11482.6 |       11482.6 |        392.31 |        101379 |       2429.59 |
-       cell_02 |            72 |           170 |           174 |            87 |       7.18169 |       9.05796 |           0.5 |       14955.1 |       7477.56 |       225.118 |       67731.4 |       1616.73 |
-       cell_03 |            86 |           204 |           256 |            64 |       6.14601 |       8.09906 |          0.25 |       20464.8 |        5116.2 |       166.326 |       41436.4 |       1022.24 |
-       cell_04 |           108 |           239 |           260 |          32.5 |       6.13697 |       8.04259 |         0.125 |         23639 |       2954.88 |       96.3175 |       23764.8 |       591.098 |
-       cell_05 |           118 |           279 |           350 |        21.875 |       5.38004 |       7.37241 |        0.0625 |       27863.6 |       1741.47 |       61.0619 |       12838.8 |       328.516 |
-       cell_06 |           120 |           283 |           394 |       12.3125 |       5.52336 |       7.38836 |       0.03125 |       30848.1 |       964.002 |       33.1772 |        7122.4 |        183.25 |
-       cell_07 |           144 |           317 |           396 |        6.1875 |       5.92432 |       7.44713 |      0.015625 |       35063.7 |        547.87 |       17.7335 |       4080.06 |       105.059 |
-       cell_08 |           169 |           402 |           651 |       5.08594 |       4.93062 |       6.58937 |     0.0078125 |       46749.3 |       365.229 |       13.1397 |       2406.63 |        64.787 |
-       cell_09 |           163 |           384 |           664 |       2.59375 |       4.54335 |       6.17133 |    0.00390625 |       41989.8 |       164.023 |       6.15653 |       1012.24 |       27.9713 |
-       cell_10 |           184 |           388 |           764 |       1.49219 |       3.51031 |       5.62792 |    0.00195312 |       43050.9 |       84.0838 |       3.83757 |       473.217 |        13.471 |
-       cell_11 |           199 |           446 |           804 |      0.785156 |         0.222 |       5.58159 |   0.000976562 |       49648.2 |       48.4846 |       34.9704 |       270.621 |       7.76343 |
-       cell_12 |           225 |           504 |           885 |      0.432129 |     0.0421219 |       5.25189 |   0.000488281 |       54569.4 |       26.6452 |       98.3589 |       139.938 |       4.14307 |
-       cell_13 |           210 |           472 |           889 |      0.217041 |       3.19956 |       5.04092 |   0.000244141 |       51834.5 |       12.6549 |      0.597283 |       63.7924 |       1.91105 |
-       cell_14 |           227 |           476 |          1001 |      0.122192 |       2.26838 |        4.5706 |    0.00012207 |       54632.5 |       6.66901 |       0.41448 |       30.4814 |      0.940198 |
-       cell_15 |           262 |           575 |          1126 |     0.0687256 |       2.66062 |       4.70647 |   6.10352e-05 |       65224.3 |       3.98098 |      0.215024 |       18.7364 |      0.572095 |
-       cell_16 |           292 |           627 |          1326 |     0.0404663 |       2.62448 |       4.62428 |   3.05176e-05 |       70530.4 |       2.15242 |      0.116685 |       9.95338 |      0.306239 |
-       cell_17 |           310 |           700 |          1450 |     0.0221252 |       1.70572 |       4.48427 |   1.52588e-05 |       78997.9 |       1.20541 |      0.098543 |       5.40539 |      0.168086 |
-       cell_18 |           304 |           719 |          1449 |      0.011055 |       0.21408 |       4.46997 |   7.62939e-06 |       80108.1 |      0.611176 |      0.392833 |       2.73194 |     0.0840978 |
-       cell_19 |           323 |           323 |           323 |    0.00246429 |       2.05742 |       4.33469 |   7.62939e-06 |       47210.8 |       0.36019 |     0.0236586 |       1.56131 |     0.0486756 |
+       cell_00 |             9 |           109 |             9 |             9 |       7.91552 |       7.98931 |             1 |       1654.09 |       1654.09 |       42.8845 |         13215 |       339.453 |
+       cell_01 |           104 |           133 |           110 |           110 |       8.76817 |       9.26187 |             1 |       11096.2 |       11096.2 |       277.288 |        102772 |       2431.31 |
+       cell_02 |            72 |           161 |           163 |          81.5 |       8.51043 |       9.03554 |           0.5 |       14817.5 |       7408.76 |       188.642 |       66942.1 |       1605.42 |
+       cell_03 |            91 |           212 |           241 |         60.25 |       6.78157 |       8.39182 |          0.25 |       20104.8 |        5026.2 |       152.542 |         42179 |       1034.47 |
+       cell_04 |           106 |           245 |           289 |        36.125 |     0.0838554 |       8.35666 |         0.125 |       23616.6 |       2952.08 |       7208.38 |       24669.5 |       604.461 |
+       cell_05 |           122 |           284 |           385 |       24.0625 |       6.29291 |       7.91503 |        0.0625 |         29639 |       1852.44 |       58.4441 |       14662.1 |       367.783 |
+       cell_06 |           124 |           299 |           484 |        15.125 |       4.49733 |       6.87368 |       0.03125 |       31428.9 |       982.153 |       39.3457 |       6751.01 |       176.951 |
+       cell_07 |           134 |           305 |           456 |         7.125 |       4.53512 |       6.70272 |      0.015625 |       31975.8 |       499.622 |       19.5643 |       3348.82 |       88.7264 |
+       cell_08 |           158 |           353 |           555 |       4.33594 |       4.54831 |       6.50079 |     0.0078125 |       36747.7 |       287.092 |       11.0334 |       1866.32 |       50.1833 |
+       cell_09 |           170 |           363 |           601 |       2.34766 |       2.96909 |       6.17866 |    0.00390625 |       39371.3 |       153.794 |        8.7659 |       950.243 |       26.0268 |
+       cell_10 |           184 |           410 |           650 |       1.26953 |       3.07771 |       6.10332 |    0.00195312 |       42454.3 |       82.9186 |       4.54465 |       506.079 |       13.9871 |
+       cell_11 |           222 |           497 |           824 |      0.804688 |      0.257651 |       5.98984 |   0.000976562 |       55266.7 |       53.9714 |       35.1404 |        323.28 |       9.05396 |
+       cell_12 |           247 |           547 |           923 |      0.450684 |     0.0505205 |       5.80147 |   0.000488281 |       61844.8 |       30.1977 |       98.8016 |       175.191 |       4.99151 |
+       cell_13 |           273 |           604 |          1015 |      0.247803 |       2.48498 |       5.54433 |   0.000244141 |       66388.2 |       16.2081 |       1.04968 |       89.8629 |       2.60844 |
+       cell_14 |           318 |           675 |          1308 |      0.159668 |       2.11146 |       5.05266 |    0.00012207 |       75890.6 |       9.26399 |      0.660497 |       46.8078 |       1.39461 |
+       cell_15 |           358 |           785 |          1480 |      0.090332 |       2.21125 |       4.91038 |   6.10352e-05 |       93529.4 |       5.70858 |      0.383076 |       28.0313 |      0.847075 |
+       cell_16 |           394 |           869 |          1760 |     0.0537109 |       2.28857 |       4.67727 |   3.05176e-05 |       99327.6 |       3.03124 |      0.191309 |       14.1779 |      0.437823 |
+       cell_17 |           406 |           907 |          1794 |     0.0273743 |       2.21044 |       4.64559 |   1.52588e-05 |        102920 |       1.57044 |      0.102238 |       7.29562 |       0.22599 |
+       cell_18 |           390 |           931 |          1922 |     0.0146637 |     0.0749786 |       4.36041 |   7.62939e-06 |        106887 |       0.81548 |        1.5044 |       3.55582 |      0.112798 |
+       cell_19 |           396 |           396 |           396 |    0.00302124 |     0.0122632 |       4.29763 |   7.62939e-06 |       58443.4 |      0.445887 |       4.96298 |       1.91626 |      0.060862 |
 =============================================
 === G4ProcessPlacer::RemoveProcess: for: neutron
   ProcessName: ImportanceProcess, will be removed!

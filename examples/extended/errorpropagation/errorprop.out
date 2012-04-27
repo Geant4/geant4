@@ -4,13 +4,13 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-03    (31-March-2012)
+ Geant4 version Name: geant4-09-05-ref-04    (30-April-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
- creating G4RunManagerKernel 0xbf1d0e0
+ creating G4RunManagerKernel 0xaf05500
 
 The materials defined are : 
 
@@ -50,14 +50,14 @@ List of instantiated particles ============================================
 e+ e- gamma mu+ mu- pi+ pi- proton 
 physicsList->Construct() start.
  G4Transportation constructor> set fShortStepOptimisation to false
-0xbf8ac20G4ErrorPhysicsList:: particle process manager e+ = 0xbf8c120
-0xbf8aa10G4ErrorPhysicsList:: particle process manager e- = 0xbf8d730
-0xbf8a7a0G4ErrorPhysicsList:: particle process manager gamma = 0xbf8d940
-0xbf8ae30G4ErrorPhysicsList:: particle process manager mu+ = 0xbf8db90
-0xbf8b260G4ErrorPhysicsList:: particle process manager mu- = 0xbf8dde0
-0xbf8b6d0G4ErrorPhysicsList:: particle process manager pi+ = 0xbf8e030
-0xbf8baf0G4ErrorPhysicsList:: particle process manager pi- = 0xbf8e280
-0xbf8bf10G4ErrorPhysicsList:: particle process manager proton = 0xbf8e4d0
+0xaf72cf0G4ErrorPhysicsList:: particle process manager e+ = 0xaf741f0
+0xaf72ae0G4ErrorPhysicsList:: particle process manager e- = 0xaf75800
+0xaf72870G4ErrorPhysicsList:: particle process manager gamma = 0xaf75a10
+0xaf72f00G4ErrorPhysicsList:: particle process manager mu+ = 0xaf75c60
+0xaf73330G4ErrorPhysicsList:: particle process manager mu- = 0xaf75eb0
+0xaf737a0G4ErrorPhysicsList:: particle process manager pi+ = 0xaf76100
+0xaf73bc0G4ErrorPhysicsList:: particle process manager pi- = 0xaf76350
+0xaf73fe0G4ErrorPhysicsList:: particle process manager proton = 0xaf765a0
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 

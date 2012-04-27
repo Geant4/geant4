@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-03    (31-March-2012)
+ Geant4 version Name: geant4-09-05-ref-04    (30-April-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -157,6 +157,11 @@ Registered filter factories:
   originVolumeFilter
   attributeFilter
 
+You have successfully registered the following user vis actions.
+Run Duration User Vis Actions: none
+End of Event User Vis Actions: none
+End of Run User Vis Actions: none
+
 Some /vis commands (optionally) take a string to specify colour.
 Available colours:
   black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
@@ -168,8 +173,8 @@ Available colours:
 ---> Begin of event: 0
 
 --------------------End of Run------------------------------
- The run was 10000 F18[0.0]; Nb of 'good' e+ annihilations: 1289
- Total dose in patient : 291.731 picoGy 
+ The run was 10000 F18[0.0]; Nb of 'good' e+ annihilations: 1286
+ Total dose in patient : 291.525 picoGy 
 ------------------------------------------------------------
 
 Graphics systems deleted.

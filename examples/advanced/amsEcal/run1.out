@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-03    (31-March-2012)
+ Geant4 version Name: geant4-09-05-ref-04    (30-April-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -170,7 +170,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=17.23s Real=17.45s Sys=0.21s
+  User=16.73s Real=17.13s Sys=0.24s
 
 -------------------------------------------------------------
  ---> The calorimeter is 9 Modules
@@ -193,34 +193,34 @@ Run Summary
 
              visible Energy          (rms/mean)        total Energy           (rms/mean)
 
-   layer 0: 802.19 keV +-  1.79 MeV  (2.2e+02 %)     9.2429 MeV +- 5.821 MeV  ( 63 %)
-   layer 1: 774.34 keV +- 1.196 MeV  (1.5e+02 %)     8.1667 MeV +- 5.504 MeV  ( 67 %)
-   layer 2: 796.19 keV +- 1.525 MeV  (1.9e+02 %)     8.4784 MeV +- 5.386 MeV  ( 64 %)
-   layer 3: 793.11 keV +- 1.612 MeV  (2e+02 %)     8.1236 MeV +- 5.141 MeV  ( 63 %)
-   layer 4: 790.68 keV +-  1.57 MeV  (2e+02 %)     8.5387 MeV +- 5.393 MeV  ( 63 %)
-   layer 5: 784.76 keV +- 1.536 MeV  (2e+02 %)     8.1459 MeV +- 5.006 MeV  ( 61 %)
-   layer 6:  780.9 keV +- 1.552 MeV  (2e+02 %)     8.5236 MeV +-  5.13 MeV  ( 60 %)
-   layer 7: 773.62 keV +-  1.32 MeV  (1.7e+02 %)     8.0963 MeV +- 4.854 MeV  ( 60 %)
-   layer 8: 787.54 keV +- 1.445 MeV  (1.8e+02 %)     8.5681 MeV +- 5.558 MeV  ( 65 %)
-   layer 9: 813.56 keV +- 1.844 MeV  (2.3e+02 %)     8.1577 MeV +- 4.902 MeV  ( 60 %)
-   layer 10: 804.88 keV +- 1.782 MeV  (2.2e+02 %)     8.4964 MeV +- 5.054 MeV  ( 59 %)
-   layer 11: 778.67 keV +- 1.353 MeV  (1.7e+02 %)     8.2193 MeV +- 5.284 MeV  ( 64 %)
-   layer 12: 780.41 keV +-  1.26 MeV  (1.6e+02 %)      8.472 MeV +- 4.944 MeV  ( 58 %)
-   layer 13: 755.93 keV +- 991.5 keV  (1.3e+02 %)     8.0097 MeV +-  4.48 MeV  ( 56 %)
-   layer 14: 800.05 keV +- 1.222 MeV  (1.5e+02 %)     7.6107 MeV +- 4.652 MeV  ( 61 %)
-   layer 15: 779.54 keV +- 1.443 MeV  (1.9e+02 %)      9.021 MeV +- 5.421 MeV  ( 60 %)
-   layer 16: 803.43 keV +- 1.495 MeV  (1.9e+02 %)     8.5543 MeV +- 5.344 MeV  ( 62 %)
-   layer 17: 792.95 keV +- 1.423 MeV  (1.8e+02 %)     7.4248 MeV +- 4.731 MeV  ( 64 %)
+   layer 0:  792.5 keV +- 1.576 MeV  (2e+02 %)     9.2628 MeV +- 5.924 MeV  ( 64 %)
+   layer 1: 772.13 keV +- 1.193 MeV  (1.5e+02 %)     8.1761 MeV +- 5.441 MeV  ( 67 %)
+   layer 2: 802.79 keV +- 1.788 MeV  (2.2e+02 %)     8.4653 MeV +- 5.351 MeV  ( 63 %)
+   layer 3: 810.28 keV +- 1.858 MeV  (2.3e+02 %)     8.1984 MeV +- 5.429 MeV  ( 66 %)
+   layer 4: 771.66 keV +- 1.286 MeV  (1.7e+02 %)     8.5412 MeV +- 5.345 MeV  ( 63 %)
+   layer 5: 797.56 keV +- 1.629 MeV  (2e+02 %)     8.1321 MeV +- 5.028 MeV  ( 62 %)
+   layer 6: 790.39 keV +- 1.726 MeV  (2.2e+02 %)     8.5078 MeV +- 5.029 MeV  ( 59 %)
+   layer 7: 775.09 keV +-  1.32 MeV  (1.7e+02 %)      8.089 MeV +- 4.758 MeV  ( 59 %)
+   layer 8: 784.11 keV +-  1.42 MeV  (1.8e+02 %)     8.5294 MeV +- 5.424 MeV  ( 64 %)
+   layer 9: 822.27 keV +- 1.804 MeV  (2.2e+02 %)     8.1199 MeV +- 4.738 MeV  ( 58 %)
+   layer 10: 810.86 keV +- 1.876 MeV  (2.3e+02 %)     8.5226 MeV +- 5.089 MeV  ( 60 %)
+   layer 11: 777.45 keV +- 1.342 MeV  (1.7e+02 %)     8.2073 MeV +- 5.197 MeV  ( 63 %)
+   layer 12: 772.21 keV +- 1.171 MeV  (1.5e+02 %)     8.4515 MeV +- 4.851 MeV  ( 57 %)
+   layer 13: 757.03 keV +- 997.8 keV  (1.3e+02 %)     8.0005 MeV +- 4.497 MeV  ( 56 %)
+   layer 14: 794.29 keV +- 1.189 MeV  (1.5e+02 %)     7.5944 MeV +- 4.575 MeV  ( 60 %)
+   layer 15: 793.74 keV +- 1.574 MeV  (2e+02 %)     9.0414 MeV +- 5.518 MeV  ( 61 %)
+   layer 16: 807.04 keV +- 1.519 MeV  (1.9e+02 %)      8.589 MeV +- 5.351 MeV  ( 62 %)
+   layer 17: 794.64 keV +- 1.394 MeV  (1.8e+02 %)     7.4267 MeV +- 4.799 MeV  ( 65 %)
 
-   total calor : 14.193 MeV +- 6.272 MeV  ( 44 %)     149.85 MeV +- 22.56 MeV  ( 15 %)
+   total calor : 14.226 MeV +- 6.392 MeV  ( 45 %)     149.86 MeV +- 22.39 MeV  ( 15 %)
 ------------------------------------------------------------
 
-   Leakage : 850.15 MeV +- 22.56 MeV
-   Eleak/Ebeam =  85 %  ( forward =  85 %;   backward =0.0245 %;   lateral =0.0231 %)
+   Leakage : 850.14 MeV +- 22.39 MeV
+   Eleak/Ebeam =  85 %  ( forward =  85 %;   backward =0.0245 %;   lateral =0.0109 %)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1780538463, 2004058068
+ Current couple of seeds = 1827744077, 1641285383
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

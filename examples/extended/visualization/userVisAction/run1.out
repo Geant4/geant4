@@ -12,10 +12,6 @@
 
 <<< Geant4 Physics List simulation engine: QGSP_BIC_EMY 1.1
 
-Checking overlaps for volume Envelope ... OK! 
-Checking overlaps for volume Shape1 ... OK! 
-Checking overlaps for volume Shape2 ... OK! 
-### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -61,6 +57,10 @@ Some /vis commands (optionally) take a string to specify colour.
 Available colours:
   black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
 
+Checking overlaps for volume Envelope ... OK! 
+Checking overlaps for volume Shape1 ... OK! 
+Checking overlaps for volume Shape2 ... OK! 
+### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 
 phot:   for  gamma    SubType= 12
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -456,60 +456,321 @@ AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Ema
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 ============================================================================================
+
+Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
+ This region is in the mass world.
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_AIR G4_WATER G4_A-150_TISSUE G4_BONE_COMPACT_ICRU 
+ Production cuts :   gamma 700 um      e- 700 um      e+ 700 um  proton 700 um 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 700 um      e- 700 um      e+ 700 um  proton 700 um 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_AIR
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_WATER
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  2.51944 keV    e-  276.265 keV    e+  270.751 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_A-150_TISSUE
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  2.27786 keV    e-  299.466 keV    e+  293.489 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_BONE_COMPACT_ICRU
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  3.95224 keV    e-  397.122 keV    e+  384 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   0 kByte
+    Total CPU time elapsed for geometry optimisation: 0 seconds
+
+    Voxelisation: top CPU users:
+    Percent   Total CPU    System CPU       Memory  Volume
+    -------   ----------   ----------     --------  ----------
+       0.00         0.00         0.00            0k Envelope
+
+    Voxelisation: top memory users:
+    Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
+    -------   --------     ------   ------   --------   ----------    ----------
+     100.00          0k         1        3          4         0.00    Envelope
 ### Run 0 start.
+Start Run processing.
 
 ---> Begin of event: 0
 
----> Begin of event: 100
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
 
----> Begin of event: 200
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -54.1      -16     -150         6        0        0         0    Envelope initStep
+    1    -54.1      -16     22.2         0        0      172       172    Envelope conv
 
----> Begin of event: 300
+*********************************************************************************************************
+* G4Track Information:   Particle = e+,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
 
----> Begin of event: 400
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -54.1      -16     22.2     0.378        0        0         0    Envelope initStep
+    1    -54.5      -16     22.4     0.293   0.0852    0.389     0.389    Envelope eIoni
+    2    -54.6    -15.8     22.5     0.224   0.0684     0.31     0.698    Envelope eIoni
+    3    -54.7    -15.6     22.6    0.0629    0.162     0.25     0.948    Envelope eIoni
+    4    -54.8    -15.6     22.6         0   0.0629   0.0607      1.01    Envelope eIoni
+    5    -54.8    -15.6     22.6         0        0        0      1.01    Envelope annihil
 
----> Begin of event: 500
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 5,   Parent ID = 3
+*********************************************************************************************************
 
----> Begin of event: 600
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -54.8    -15.6     22.6     0.511        0        0         0    Envelope initStep
+    1    -63.3    -76.6     29.4     0.231 0.000543     61.9      61.9    Envelope compt
+    2    -57.5    -76.1     22.1     0.122 1.36e-05     9.36      71.2    Envelope compt
+    3     -100    -77.8       59     0.122        0     56.3       128       World Transportation
+    4     -120    -78.6     76.4     0.122        0     26.5       154  OutOfWorld Transportation
 
----> Begin of event: 700
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 7,   Parent ID = 5
+*********************************************************************************************************
 
----> Begin of event: 800
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -57.5    -76.1     22.1     0.109        0        0         0    Envelope initStep
+    1    -57.5      -76     21.9    0.0392   0.0697    0.145     0.145    Envelope eIoni
+    2    -57.5      -76     21.9         0   0.0392   0.0284     0.174    Envelope eIoni
 
----> Begin of event: 900
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 6,   Parent ID = 5
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -63.3    -76.6     29.4      0.28        0        0         0    Envelope initStep
+    1    -63.5    -76.7     29.6     0.209   0.0703    0.302     0.302    Envelope eIoni
+    2    -63.6    -76.8     29.5     0.143   0.0662    0.241     0.543    Envelope eIoni
+    3    -63.7    -76.8     29.7    0.0658   0.0774    0.182     0.725    Envelope eIoni
+    4    -63.7    -76.8     29.7         0   0.0658   0.0702     0.795    Envelope eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 4,   Parent ID = 3
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -54.8    -15.6     22.6     0.511        0        0         0    Envelope initStep
+    1    -41.1     82.3     11.6     0.342 2.85e-05     99.5      99.5    Envelope compt
+    2    -62.1      100     -5.6     0.342        0     32.4       132       World Transportation
+    3    -85.9      120      -25     0.342        0     36.6       169  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 8,   Parent ID = 4
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -41.1     82.3     11.6     0.169        0        0         0    Envelope initStep
+    1    -41.1     82.5     11.6    0.0569    0.112    0.205     0.205    Envelope eIoni
+    2    -41.1     82.5     11.6         0   0.0569   0.0545      0.26    Envelope eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -54.1      -16     22.2       4.6        0        0         0    Envelope initStep
+    1      -54      -16       23      4.48    0.124    0.774     0.774    Envelope msc
+    2    -53.9    -16.1     23.3      4.44   0.0349    0.313      1.09    Envelope eBrem
+    3    -53.9    -16.1     23.6      4.27   0.0409    0.273      1.36    Envelope eBrem
+    4    -53.8      -16     24.6      3.95    0.323     1.03      2.39    Envelope msc
+    5    -53.8      -16     25.6      3.76    0.186     1.03      3.41    Envelope msc
+    6    -53.8    -15.8     26.6      3.61    0.148     1.03      4.44    Envelope msc
+    7    -53.7    -15.4     27.5      3.46    0.156     1.03      5.47    Envelope msc
+    8    -53.5    -15.2     28.5       3.3    0.155     1.03       6.5    Envelope msc
+    9    -53.6    -14.5     29.3      3.15    0.153     1.03      7.52    Envelope msc
+   10    -53.5    -14.1     30.2      2.99    0.161     1.03      8.55    Envelope msc
+   11    -53.6    -13.5       31      2.85    0.142     1.03      9.58    Envelope msc
+   12    -53.7    -12.9     31.8      2.68    0.168     1.03      10.6    Envelope msc
+   13    -53.7    -12.3     32.6      2.54    0.138     1.03      11.6    Envelope msc
+   14    -53.7    -11.9     33.6      2.39    0.149     1.03      12.7    Envelope msc
+   15    -53.7    -11.7     34.6      2.23    0.158     1.03      13.7    Envelope msc
+   16      -54      -12     35.5      2.09    0.148     1.03      14.7    Envelope msc
+   17    -53.9    -12.5     36.4      1.96    0.127     1.03      15.7    Envelope msc
+   18    -53.8    -13.4     36.7      1.74    0.217     1.03      16.8    Envelope msc
+   19    -53.7    -14.4       37      1.58    0.166     1.03      17.8    Envelope msc
+   20    -53.8    -15.4       37      1.43    0.144     1.03      18.8    Envelope msc
+   21      -54    -16.2     36.4      1.27     0.16     1.03      19.8    Envelope msc
+   22    -53.6    -17.1     36.2      1.08    0.191     1.03      20.9    Envelope msc
+   23    -53.5    -18.1     36.5     0.927    0.153     1.03      21.9    Envelope msc
+   24    -53.9    -18.9     36.4     0.786    0.141    0.966      22.9    Envelope eIoni
+   25    -54.6    -19.1     36.3     0.657    0.129    0.811      23.7    Envelope eIoni
+   26    -54.9    -19.5     36.2     0.554   0.0919    0.474      24.2    Envelope eBrem
+   27    -55.4    -19.6     35.9     0.448    0.106    0.566      24.7    Envelope eIoni
+   28    -55.8    -19.5     35.8     0.331    0.118     0.46      25.2    Envelope eIoni
+   29      -56    -19.7     35.6     0.257   0.0743    0.348      25.5    Envelope eIoni
+   30    -56.2    -19.8     35.4     0.192   0.0647    0.282      25.8    Envelope eIoni
+   31    -56.4    -19.8     35.3     0.118   0.0741    0.226        26    Envelope eIoni
+   32    -56.5    -19.7     35.3    0.0362   0.0815    0.156      26.2    Envelope eIoni
+   33    -56.5    -19.8     35.3         0   0.0362   0.0246      26.2    Envelope eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 11,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -54.9    -19.5     36.2     0.011        0        0         0    Envelope initStep
+    1    -58.4    -22.3     30.5         0 0.000543     7.25      7.25    Envelope phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 12,   Parent ID = 11
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -58.4    -22.3     30.5    0.0104        0        0         0    Envelope initStep
+    1    -58.4    -22.3     30.5         0   0.0104  0.00274   0.00274    Envelope eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 10,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -53.9    -16.1     23.6     0.128        0        0         0    Envelope initStep
+    1    -54.1    -18.2     32.3     0.102 0.000543     8.99      8.99    Envelope compt
+    2    -59.3    -30.8       29     0.102 1.36e-05     14.1        23    Envelope compt
+    3    -94.8     -100     17.3     0.102        0     78.6       102       World Transportation
+    4     -105     -120     13.9     0.102        0     22.7       124  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 14,   Parent ID = 10
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -59.3    -30.8       29  0.000135        0        0         0    Envelope initStep
+    1    -59.3    -30.8       29         0 0.000135 3.95e-06  3.95e-06    Envelope eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 13,   Parent ID = 10
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -54.1    -18.2     32.3    0.0252        0        0         0    Envelope initStep
+    1    -54.1    -18.2     32.3         0   0.0252    0.013     0.013    Envelope eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 9,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -53.9    -16.1     23.3   0.00333        0        0         0    Envelope initStep
+    1    -53.9    -16.1     23.3         0 0.000543   0.0573    0.0573    Envelope phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 15,   Parent ID = 9
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -53.9    -16.1     23.3   0.00279        0        0         0    Envelope initStep
+    1    -53.9    -16.1     23.3         0  0.00279 0.000287  0.000287    Envelope eIoni
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0.01s Sys=0s
 
 --------------------End of Run------------------------------
- The run consists of 1000 gamma of 6 MeV
- Dose in scoring volume Shape2 : 44.4997 picoGy  +- 3.93043 picoGy 
+ The run consists of 1 gamma of 6 MeV
+ Dose in scoring volume Shape2 : 0 picoGy  +- 0 picoGy 
 ------------------------------------------------------------
 
+
+Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
+ This region is in the mass world.
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : G4_AIR G4_WATER G4_A-150_TISSUE G4_BONE_COMPACT_ICRU 
+ Production cuts :   gamma 699.9999999999999 um      e- 699.9999999999999 um      e+ 699.9999999999999 um  proton 699.9999999999999 um 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 699.9999999999999 um      e- 699.9999999999999 um      e+ 699.9999999999999 um  proton 699.9999999999999 um 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_AIR
+ Range cuts        :  gamma  699.9999999999999 um     e-  699.9999999999999 um     e+  699.9999999999999 um  proton 699.9999999999999 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 69.99999999999999 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_WATER
+ Range cuts        :  gamma  699.9999999999999 um     e-  699.9999999999999 um     e+  699.9999999999999 um  proton 699.9999999999999 um 
+ Energy thresholds :  gamma  2.519443689999524 keV    e-  276.2650242766719 keV    e+  270.7512371977522 keV proton 69.99999999999999 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_A-150_TISSUE
+ Range cuts        :  gamma  699.9999999999999 um     e-  699.9999999999999 um     e+  699.9999999999999 um  proton 699.9999999999999 um 
+ Energy thresholds :  gamma  2.277861824750695 keV    e-  299.4661435146969 keV    e+  293.4893009628449 keV proton 69.99999999999999 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_BONE_COMPACT_ICRU
+ Range cuts        :  gamma  699.9999999999999 um     e-  699.9999999999999 um     e+  699.9999999999999 um  proton 699.9999999999999 um 
+ Energy thresholds :  gamma  3.952238766484482 keV    e-  397.1221526194086 keV    e+  384.0004092871197 keV proton 69.99999999999999 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 ### Run 1 start.
+Start Run processing.
 
 ---> Begin of event: 0
-
----> Begin of event: 100
-
----> Begin of event: 200
-
----> Begin of event: 300
-
----> Begin of event: 400
-
----> Begin of event: 500
-
----> Begin of event: 600
-
----> Begin of event: 700
-
----> Begin of event: 800
-
----> Begin of event: 900
+Run terminated.
+Run Summary
+  Number of events processed : 3
+  User=0.01s Real=0.01s Sys=0s
 
 --------------------End of Run------------------------------
- The run consists of 1000 proton of 210 MeV
- Dose in scoring volume Shape2 : 4.87236 nanoGy  +- 145.236 picoGy 
+ The run consists of 3 mu- of 300 MeV
+ Dose in scoring volume Shape2 : 2.390861933713826 picoGy  +- 1.143658516526016 picoGy 
 ------------------------------------------------------------
 
 Graphics systems deleted.
 Visualization Manager deleting...
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserRunAction deleted.
+UserPrimaryGenerator deleted.
+G4 kernel has come to Quit state.
+EventManager deleted.
+UImanager deleted.
+Units table cleared.
+StateManager deleted.
+RunManagerKernel is deleted.
+RunManager is deleting.
 

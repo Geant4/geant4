@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-02    (29-February-2012)
+ Geant4 version Name: geant4-09-05-ref-04    (30-April-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -22,14 +26,11 @@ Current available graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  OpenGLStoredQt (OGL)
-  OpenGLImmediateQt (OGLI)
-  OpenGLStoredQt (OGLS)
+  OpenGLStoredX (OGL)
+  OpenGLImmediateX (OGLI)
+  OpenGLStoredX (OGLS)
   OpenGLImmediateX (OGLIX)
   OpenGLStoredX (OGLSX)
-  OpenGLImmediateQt (OGLIQt)
-  OpenGLStoredQt (OGLSQt)
-  RayTracerX (RayTracerX)
 
 Registering model factories...
 
@@ -46,6 +47,11 @@ Registered filter factories:
   particleFilter
   originVolumeFilter
   attributeFilter
+
+You have successfully registered the following user vis actions.
+Run Duration User Vis Actions: none
+End of Event User Vis Actions: none
+End of Run User Vis Actions: none
 
 Some /vis commands (optionally) take a string to specify colour.
 Available colours:
@@ -76,10 +82,9 @@ Rayl:   for  gamma    SubType= 11
    LivermoreRayleigh :  Emin=        0 eV    Emax=      100 GeV
 
 msc:   for e-    SubType= 10
-      Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -116,10 +121,9 @@ annihil:   for  e+    SubType= 5
             eplus2gg :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for proton    SubType= 10
-      Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -129,22 +133,10 @@ hIoni:   for  proton    SubType= 2
                Bragg :  Emin=        0 eV    Emax=        2 MeV
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
 
-hBrems:   for  proton    SubType= 3
-      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
-      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
-
-hPairProd:   for  proton    SubType= 4
-      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
-      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
-
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -165,16 +157,27 @@ nuclearStopping:   for  alpha    SubType= 8
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
       Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=        2 MeV
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
 
+hBrems:   for  anti_proton    SubType= 3
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+
+hPairProd:   for  anti_proton    SubType= 4
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
 msc:   for kaon+    SubType= 10
-      Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -204,23 +207,10 @@ hIoni:   for  kaon-    SubType= 2
             ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
           BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
 
-hBrems:   for  kaon-    SubType= 3
-      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
-      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
-
-hPairProd:   for  kaon-    SubType= 4
-      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
-      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
-
 muMsc:   for mu+    SubType= 10
-      Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -258,18 +248,6 @@ muIoni:   for  mu-    SubType= 2
           BetheBloch :  Emin=      200 keV   Emax=        1 GeV
         MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
 
-muBrems:   for  mu-    SubType= 3
-      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
-      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :  Emin=        0 eV    Emax=       10 TeV
-
-muPairProd:   for  mu-    SubType= 4
-      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
-      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :  Emin=        0 eV    Emax=       10 TeV
-
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
       180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
@@ -297,10 +275,9 @@ hPairProd:   for  pi+    SubType= 4
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for pi-    SubType= 10
-      Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -309,24 +286,12 @@ hIoni:   for  pi-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
-
-hBrems:   for  pi-    SubType= 3
-      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
-      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
-
-hPairProd:   for  pi-    SubType= 4
-      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
-      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
 ============================================================================================
              HADRONIC PROCESSES SUMMARY (verbose level 1)
 
                                   Hadronic Processes for <GenericIon>
                                   -----------------------------------
-        ionInelastic  Models:               Binary Cascade: Emin(GeV)=    0  Emax(GeV)= 20
+        ionInelastic  Models:     Binary Light Ion Cascade: Emin(GeV)=    0  Emax(GeV)= 20
 
         ionInelastic  Crs sctns:          AxenWellischIonH: Emin(GeV)=    0  Emax(GeV)= 100000
                                                   IonsShen: Emin(GeV)=    0  Emax(GeV)= 100000
@@ -941,18 +906,18 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    20    -49.3    -6.03     90.5      2.52   0.0409    0.196      28.7      Shape2 eIoni
    21    -48.9    -4.49     91.1      2.08    0.444     1.69      30.4      Shape2 eIoni
    22    -48.8    -3.25     90.5      1.74    0.344     1.39      31.8      Shape2 eIoni
-   23    -48.9    -2.12     90.3       1.3    0.434     1.16      32.9      Shape2 eIoni
+   23    -48.9    -2.13     90.3       1.3    0.434     1.16      32.9      Shape2 eIoni
    24    -48.9    -1.35     90.2      0.99    0.311    0.868      33.8      Shape2 eIoni
    25    -48.8    -1.24     90.2     0.948   0.0388    0.188        34      Shape2 eBrem
    26    -48.3     -1.1     89.8     0.781    0.166    0.636      34.6      Shape2 eIoni
    27    -47.9   -0.938     89.6     0.602     0.18     0.53      35.2      Shape2 eIoni
    28    -47.7   -0.631     89.8     0.488    0.113    0.419      35.6      Shape2 eIoni
-   29    -47.6   -0.498     90.1     0.389   0.0996    0.351      35.9      Shape2 eIoni
+   29    -47.6   -0.499     90.1     0.389   0.0996    0.351      35.9      Shape2 eIoni
    30    -47.5   -0.309     89.9     0.312   0.0771    0.293      36.2      Shape2 eIoni
    31    -47.5   -0.142     89.8      0.23   0.0816    0.248      36.5      Shape2 eIoni
-   32    -47.4  -0.0275     89.7     0.131   0.0989    0.201      36.7      Shape2 eIoni
-   33    -47.5  -0.0464     89.8   0.00487    0.126    0.125      36.8      Shape2 eIoni
-   34    -47.5  -0.0465     89.8         0  0.00487 0.000435      36.8      Shape2 eIoni
+   32    -47.4  -0.0276     89.7     0.131   0.0989    0.201      36.7      Shape2 eIoni
+   33    -47.5  -0.0465     89.8   0.00487    0.126    0.125      36.8      Shape2 eIoni
+   34    -47.5  -0.0466     89.8         0  0.00487 0.000435      36.8      Shape2 eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 59,   Parent ID = 37
@@ -1650,7 +1615,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    12    -46.9    -5.25       40      5.21    0.178    0.951        24    Envelope msc
    13    -46.9    -5.24       40      5.21  0.00102   0.0057        24    Envelope msc
    14    -46.9    -5.24       40      5.21 0.000121  0.00136        24    Envelope msc
-   15    -46.9    -5.24       40      5.21 4.98e-06 2.94e-05        24      Shape2 Transportation
+   15    -46.9    -5.24       40      5.21 4.97e-06 2.94e-05        24      Shape2 Transportation
    16    -46.7     -4.9     40.6      4.94    0.264    0.684      24.7      Shape2 msc
    17    -46.5    -4.63     41.1      4.72    0.224    0.671      25.3      Shape2 msc
    18    -45.9    -4.52     41.4      4.53    0.188    0.671        26      Shape2 msc
@@ -1706,9 +1671,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     2    -21.7     5.27     70.3    0.0981 1.13e-05       14      61.1      Shape2 compt
     3    -13.7    -10.9     81.7    0.0881 0.000288     21.3      82.4      Shape2 compt
     4     16.6    -9.21     86.4    0.0881        0     30.7       113      Shape2 Rayl
-    5       60    -8.27     95.9    0.0881        0     44.4       158    Envelope Transportation
-    6      100     -7.4      105    0.0881        0       41       199       World Transportation
-    7      120    -6.96      109    0.0881        0     20.5       219  OutOfWorld Transportation
+    5       60    -8.26     95.9    0.0881        0     44.4       158    Envelope Transportation
+    6      100    -7.39      105    0.0881        0       41       199       World Transportation
+    7      120    -6.95      109    0.0881        0     20.5       219  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 113,   Parent ID = 108
@@ -1767,7 +1732,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     8    -54.7      -23    -74.8      12.7    0.669     4.23      34.7    Envelope msc
     9    -54.9    -23.2    -73.7      11.8    0.251     1.12      35.8    Envelope eIoni
    10    -54.9    -23.4    -69.5      11.1    0.606     4.23      40.1    Envelope msc
-   11    -54.6    -23.9    -65.3      10.5    0.682     4.23      44.3    Envelope msc
+   11    -54.6      -24    -65.3      10.5    0.682     4.23      44.3    Envelope msc
    12    -54.6      -24      -65      9.97   0.0374    0.315      44.6    Envelope eIoni
    13    -54.4    -24.4      -64      9.36    0.179      1.1      45.7    Envelope eIoni
    14    -53.4    -25.5    -60.1      8.66      0.7     4.23      49.9    Envelope msc
@@ -2070,7 +2035,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 --------------------End of Run------------------------------
  The run consists of 1 e+ of 200 MeV
- Dose in scoring volume Shape2 : 3.71705651369429 picoGy  +- 0 picoGy 
+ Dose in scoring volume Shape2 : 3.717056272507159 picoGy  +- 0 picoGy 
 ------------------------------------------------------------
 
 ### Run 1 start.
@@ -2105,15 +2070,15 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0       18    -42.2      135      1.15        0        0         0    Envelope initStep
-    1     18.8    -42.5      136     0.973    0.182     1.22      1.22    Envelope eIoni
-    2     19.4    -42.1      137     0.804    0.169     1.02      2.24    Envelope eIoni
-    3     19.8    -42.1      137     0.636    0.168    0.831      3.07    Envelope eIoni
-    4     20.2    -42.2      138     0.285    0.352    0.651      3.72    Envelope eIoni
-    5     20.4      -42      138      0.23   0.0548    0.307      4.03    Envelope eIoni
-    6     20.5    -41.9      138     0.164   0.0663    0.258      4.29    Envelope eIoni
-    7     20.6      -42      138     0.109    0.055    0.201      4.49    Envelope eIoni
-    8     20.7      -42      138    0.0106   0.0981    0.145      4.64    Envelope eIoni
-    9     20.7      -42      138         0   0.0106  0.00282      4.64    Envelope eIoni
+    1     18.8    -42.2      136     0.973    0.182     1.22      1.22    Envelope eIoni
+    2     19.3    -41.7      137     0.804    0.169     1.02      2.24    Envelope eIoni
+    3     19.6    -41.6      137     0.636    0.168    0.831      3.07    Envelope eIoni
+    4     20.1    -41.6      138     0.285    0.352    0.651      3.72    Envelope eIoni
+    5     20.2    -41.4      138      0.23   0.0548    0.307      4.03    Envelope eIoni
+    6     20.3    -41.2      138     0.164   0.0663    0.258      4.29    Envelope eIoni
+    7     20.4    -41.3      138     0.109    0.055    0.201      4.49    Envelope eIoni
+    8     20.5    -41.3      138    0.0106   0.0981    0.145      4.64    Envelope eIoni
+    9     20.5    -41.3      138         0   0.0106  0.00282      4.64    Envelope eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 11,   Parent ID = 1
@@ -2121,16 +2086,16 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0       18    -42.2     51.7      1.33        0        0         0      Shape2 initStep
-    1     17.6    -41.8     52.4      1.11    0.224    0.889     0.889      Shape2 eIoni
-    2     17.2    -41.8       53     0.937    0.173    0.741      1.63      Shape2 eIoni
-    3     17.3    -42.1     53.4     0.751    0.185    0.629      2.26      Shape2 eIoni
-    4     17.1      -42     53.9     0.605    0.146    0.512      2.77      Shape2 eIoni
-    5       17    -42.2     54.2     0.486    0.119    0.422      3.19      Shape2 eIoni
-    6       17    -42.3     54.5      0.34    0.146     0.35      3.54      Shape2 eIoni
-    7     16.9    -42.5     54.7     0.255   0.0851    0.265      3.81      Shape2 eIoni
-    8     16.9    -42.5     54.9     0.148    0.107    0.215      4.02      Shape2 eIoni
-    9     16.8    -42.4     54.9     0.045    0.103    0.142      4.16      Shape2 eIoni
-   10     16.8    -42.4     54.9         0    0.045   0.0211      4.19      Shape2 eIoni
+    1     17.6    -41.9     52.4      1.11    0.224    0.889     0.889      Shape2 eIoni
+    2     17.1      -42       53     0.937    0.173    0.741      1.63      Shape2 eIoni
+    3     17.3    -42.3     53.4     0.751    0.185    0.629      2.26      Shape2 eIoni
+    4     17.1    -42.3     53.9     0.605    0.146    0.512      2.77      Shape2 eIoni
+    5       17    -42.5     54.2     0.486    0.119    0.422      3.19      Shape2 eIoni
+    6     17.1    -42.6     54.5      0.34    0.146     0.35      3.54      Shape2 eIoni
+    7       17    -42.8     54.7     0.255   0.0851    0.265      3.81      Shape2 eIoni
+    8       17    -42.8     54.9     0.148    0.107    0.215      4.02      Shape2 eIoni
+    9     16.9    -42.7     54.9     0.045    0.103    0.142      4.16      Shape2 eIoni
+   10     16.9    -42.7     54.9         0    0.045   0.0211      4.19      Shape2 eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 10,   Parent ID = 1
@@ -2138,14 +2103,14 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0       18    -42.2     45.8     0.966        0        0         0      Shape2 initStep
-    1     17.5    -42.3     46.1     0.812    0.153    0.647     0.647      Shape2 eIoni
-    2       17    -42.2     46.1     0.671    0.142     0.55       1.2      Shape2 eIoni
-    3     16.7    -42.2     46.4     0.532    0.138    0.462      1.66      Shape2 eIoni
-    4     16.8    -42.2     46.7     0.408    0.124    0.377      2.04      Shape2 eIoni
-    5     16.9    -42.1       47     0.318   0.0902    0.304      2.34      Shape2 eIoni
-    6     17.1      -42       47      0.13    0.187    0.252      2.59      Shape2 eIoni
-    7     17.2      -42       47    0.0252    0.105    0.125      2.72      Shape2 eIoni
-    8     17.2      -42       47         0   0.0252  0.00758      2.72      Shape2 eIoni
+    1     17.6    -42.4     46.1     0.812    0.153    0.647     0.647      Shape2 eIoni
+    2       17    -42.5     46.1     0.671    0.142     0.55       1.2      Shape2 eIoni
+    3     16.7    -42.6     46.4     0.532    0.138    0.462      1.66      Shape2 eIoni
+    4     16.8    -42.5     46.7     0.408    0.124    0.377      2.04      Shape2 eIoni
+    5     16.9    -42.4       47     0.318   0.0902    0.304      2.34      Shape2 eIoni
+    6     17.1    -42.3       47      0.13    0.187    0.252      2.59      Shape2 eIoni
+    7     17.2    -42.2       47    0.0252    0.105    0.125      2.72      Shape2 eIoni
+    8     17.2    -42.2       47         0   0.0252  0.00758      2.72      Shape2 eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 9,   Parent ID = 1
@@ -2153,11 +2118,11 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0       18    -42.2    -3.25     0.328        0        0         0    Envelope initStep
-    1     17.8    -42.1    -2.99     0.264   0.0635    0.345     0.345    Envelope eIoni
-    2     17.6    -42.3    -2.89     0.194   0.0699    0.288     0.633    Envelope eIoni
-    3     17.4    -42.2    -2.91     0.128   0.0656    0.228     0.861    Envelope eIoni
-    4     17.4    -42.2    -2.77     0.071   0.0574    0.167      1.03    Envelope eIoni
-    5     17.4    -42.3    -2.77         0    0.071   0.0801      1.11    Envelope eIoni
+    1     17.8    -42.2    -2.99     0.264   0.0635    0.345     0.345    Envelope eIoni
+    2     17.7    -42.4    -2.89     0.194   0.0699    0.288     0.633    Envelope eIoni
+    3     17.5    -42.4    -2.91     0.128   0.0656    0.228     0.861    Envelope eIoni
+    4     17.4    -42.4    -2.77     0.071   0.0574    0.167      1.03    Envelope eIoni
+    5     17.4    -42.4    -2.77         0    0.071   0.0801      1.11    Envelope eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 8,   Parent ID = 1
@@ -2165,12 +2130,12 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0       18    -42.2    -11.6     0.357        0        0         0    Envelope initStep
-    1     17.8    -42.4    -11.5     0.284   0.0731    0.372     0.372    Envelope eIoni
-    2     17.6    -42.6    -11.5     0.213   0.0709    0.305     0.678    Envelope eIoni
-    3     17.6    -42.8    -11.5     0.149   0.0634    0.244     0.921    Envelope eIoni
-    4     17.4    -42.8    -11.5    0.0892     0.06    0.188      1.11    Envelope eIoni
-    5     17.4    -42.9    -11.4    0.0268   0.0624    0.116      1.23    Envelope eIoni
-    6     17.4    -42.9    -11.4         0   0.0268   0.0145      1.24    Envelope eIoni
+    1     17.8    -42.5    -11.5     0.284   0.0731    0.372     0.372    Envelope eIoni
+    2     17.7    -42.7    -11.5     0.213   0.0709    0.305     0.678    Envelope eIoni
+    3     17.7    -42.9    -11.5     0.149   0.0634    0.244     0.921    Envelope eIoni
+    4     17.6      -43    -11.5    0.0892     0.06    0.188      1.11    Envelope eIoni
+    5     17.6    -43.1    -11.4    0.0268   0.0624    0.116      1.23    Envelope eIoni
+    6     17.6    -43.1    -11.4         0   0.0268   0.0145      1.24    Envelope eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 7,   Parent ID = 1
@@ -2179,17 +2144,17 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0       18    -42.2    -53.9      1.44        0        0         0    Envelope initStep
     1     18.6    -43.2      -53      1.16    0.278     1.56      1.56    Envelope eIoni
-    2     19.7    -42.9    -52.5     0.899    0.265     1.24      2.79    Envelope eIoni
-    3     20.4    -42.5    -52.8      0.76     0.14    0.936      3.73    Envelope eIoni
-    4       21    -42.4    -53.3     0.627    0.133    0.782      4.51    Envelope eIoni
-    5     21.6    -42.5    -53.4     0.509    0.117     0.64      5.15    Envelope eIoni
-    6     21.9    -42.9    -53.6     0.398    0.111    0.521      5.67    Envelope eIoni
-    7     22.3    -42.9    -53.6     0.321   0.0774    0.412      6.08    Envelope eIoni
-    8     22.6    -42.8    -53.5      0.26   0.0613    0.339      6.42    Envelope eIoni
-    9     22.8    -42.8    -53.5     0.199   0.0607    0.284      6.71    Envelope eIoni
-   10       23    -42.7    -53.4     0.118    0.081    0.232      6.94    Envelope eIoni
-   11       23    -42.6    -53.3   0.00731    0.111    0.156      7.09    Envelope eIoni
-   12       23    -42.6    -53.3         0  0.00731  0.00148       7.1    Envelope eIoni
+    2     19.7    -42.8    -52.5     0.899    0.265     1.24      2.79    Envelope eIoni
+    3     20.4    -42.4    -52.8      0.76     0.14    0.936      3.73    Envelope eIoni
+    4       21    -42.3    -53.3     0.627    0.133    0.782      4.51    Envelope eIoni
+    5     21.6    -42.4    -53.4     0.509    0.117     0.64      5.15    Envelope eIoni
+    6     21.9    -42.7    -53.6     0.398    0.111    0.521      5.67    Envelope eIoni
+    7     22.3    -42.7    -53.6     0.321   0.0774    0.412      6.08    Envelope eIoni
+    8     22.6    -42.6    -53.5      0.26   0.0613    0.339      6.42    Envelope eIoni
+    9     22.8    -42.6    -53.5     0.199   0.0607    0.284      6.71    Envelope eIoni
+   10       23    -42.4    -53.4     0.118    0.081    0.232      6.94    Envelope eIoni
+   11       23    -42.4    -53.3   0.00731    0.111    0.156      7.09    Envelope eIoni
+   12       23    -42.4    -53.3         0  0.00731  0.00148       7.1    Envelope eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 6,   Parent ID = 1
@@ -2197,17 +2162,17 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0       18    -42.2    -70.7      1.49        0        0         0    Envelope initStep
-    1     19.3    -41.7    -69.9      1.22    0.272     1.61      1.61    Envelope eIoni
+    1     19.3    -41.8    -69.9      1.22    0.272     1.61      1.61    Envelope eIoni
     2     19.8    -41.1    -69.1      1.01    0.206      1.3      2.91    Envelope eIoni
-    3     20.7    -40.5    -68.8     0.824    0.187     1.06      3.97    Envelope eIoni
-    4     20.9    -39.7    -68.6     0.689    0.135    0.853      4.82    Envelope eIoni
-    5     21.2    -39.1    -68.6     0.571    0.118    0.706      5.53    Envelope eIoni
-    6     21.7    -38.8    -68.4     0.449    0.123    0.583      6.11    Envelope eIoni
-    7     21.9    -38.5    -68.2     0.333    0.115     0.46      6.57    Envelope eIoni
-    8     22.1    -38.5    -67.9     0.265   0.0681     0.35      6.92    Envelope eIoni
-    9     22.2    -38.6    -67.6     0.161    0.104    0.289      7.21    Envelope eIoni
-   10     22.1    -38.6    -67.5      0.08   0.0807    0.198      7.41    Envelope eIoni
-   11       22    -38.6    -67.5         0     0.08   0.0984      7.51    Envelope eIoni
+    3     20.7    -40.6    -68.8     0.824    0.187     1.06      3.97    Envelope eIoni
+    4       21    -39.9    -68.6     0.689    0.135    0.853      4.82    Envelope eIoni
+    5     21.4    -39.3    -68.6     0.571    0.118    0.706      5.53    Envelope eIoni
+    6     21.8      -39    -68.4     0.449    0.123    0.583      6.11    Envelope eIoni
+    7       22    -38.7    -68.2     0.333    0.115     0.46      6.57    Envelope eIoni
+    8     22.2    -38.7    -67.9     0.265   0.0681     0.35      6.92    Envelope eIoni
+    9     22.3    -38.7    -67.6     0.161    0.104    0.289      7.21    Envelope eIoni
+   10     22.2    -38.8    -67.5      0.08   0.0807    0.198      7.41    Envelope eIoni
+   11     22.2    -38.8    -67.5         0     0.08   0.0984      7.51    Envelope eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 5,   Parent ID = 1
@@ -2218,7 +2183,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1       20    -43.1      -84      2.77    0.556     3.78      3.78    Envelope eIoni
     2     20.6    -43.8      -81      2.22     0.55     3.12       6.9    Envelope eIoni
     3     20.4    -43.4    -78.6      1.82    0.396     2.47      9.37    Envelope eIoni
-    4     20.9    -43.7    -76.7      1.34    0.479        2      11.4    Envelope eIoni
+    4       21    -43.7    -76.7      1.34    0.479        2      11.4    Envelope eIoni
     5     20.7    -44.5    -75.7       1.1    0.238     1.44      12.8    Envelope eIoni
     6     20.7    -44.4    -74.5     0.915    0.189     1.17        14    Envelope eIoni
     7     20.8    -44.9    -73.8     0.744    0.171    0.953      14.9    Envelope eIoni
@@ -2226,7 +2191,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     9     21.1      -46    -73.6     0.497   0.0924    0.602      16.3    Envelope eIoni
    10     21.1    -46.5    -73.7     0.391    0.107    0.508      16.8    Envelope eIoni
    11     20.9    -46.8    -73.7      0.32   0.0707    0.404      17.2    Envelope eIoni
-   12     20.7    -47.1    -73.9     0.205    0.115    0.338      17.5    Envelope eIoni
+   12     20.8    -47.1    -73.9     0.205    0.115    0.338      17.5    Envelope eIoni
    13     20.7    -47.2    -74.1     0.145   0.0593    0.237      17.8    Envelope eIoni
    14     20.7    -47.2    -74.3    0.0779   0.0674    0.184        18    Envelope eIoni
    15     20.7    -47.2    -74.3         0   0.0779    0.094      18.1    Envelope eIoni
@@ -2253,7 +2218,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     3     17.7    -43.1     -146     0.186   0.0982    0.306       1.2    Envelope eIoni
     4     17.7    -43.3     -146     0.126   0.0604    0.221      1.42    Envelope eIoni
     5     17.6    -43.4     -146    0.0573   0.0684    0.164      1.58    Envelope eIoni
-    6     17.6    -43.4     -146         0   0.0573   0.0552      1.64    Envelope eIoni
+    6     17.6    -43.5     -146         0   0.0573   0.0552      1.64    Envelope eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
@@ -2281,7 +2246,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 --------------------End of Run------------------------------
  The run consists of 1 mu+ of 1 TeV
- Dose in scoring volume Shape2 : 1.836485396051285 picoGy  +- 0 picoGy 
+ Dose in scoring volume Shape2 : 1.836485396054806 picoGy  +- 0 picoGy 
 ------------------------------------------------------------
 
 ### Run 2 start.
@@ -2290,7 +2255,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 --------------------End of Run------------------------------
  The run consists of 100 e+ of 200 MeV
- Dose in scoring volume Shape2 : 165.5895039734494 picoGy  +- 14.67020382399687 picoGy 
+ Dose in scoring volume Shape2 : 168.6511184405132 picoGy  +- 14.66542036678987 picoGy 
 ------------------------------------------------------------
 
 ### Run 3 start.
@@ -2299,8 +2264,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 --------------------End of Run------------------------------
  The run consists of 100 mu+ of 1 TeV
- Dose in scoring volume Shape2 : 139.9565599956189 picoGy  +- 12.49922878394471 picoGy 
+ Dose in scoring volume Shape2 : 140.8494116750958 picoGy  +- 14.53311634514309 picoGy 
 ------------------------------------------------------------
 
 Graphics systems deleted.
 Visualization Manager deleting...
+

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-03    (31-March-2012)
+ Geant4 version Name: geant4-09-05-ref-04    (30-April-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -68,10 +68,9 @@ pol-conv:   for  gamma    SubType= 14
              polConv :  Emin=        0 eV    Emax=      100 GeV
 
 msc:   for e-    SubType= 10
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 pol-eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -159,39 +158,39 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.17s Real=0.16s Sys=0s
+  User=0.16s Real=0.17s Sys=0s
 
  The run consists of 10000 gamma of 10 MeV through 1.75 mm  of G4_Fe (density: 7.874 g/cm3 )
 
 --------- Ranlux engine status ---------
  Initial seed = 9876
- float_seed_table[] = 0.518148 0.572569 0.701469 0.68884 0.506064 0.143472 0.290287 0.818386 0.232866 0.697322 0.185517 0.580805 0.0757367 0.445571 0.893262 0.599441 0.515639 0.144423 0.663978 0.109724 0.976239 0.651849 0.360894 0.486458 
- i_lag = 15, j_lag = 1
- carry = 0, count24 = 23
+ float_seed_table[] = 0.499925 0.228069 0.228329 0.256904 0.403219 0.501915 0.0404094 0.250203 0.840893 0.257915 0.0295861 0.00941056 0.862746 0.167647 0.615935 0.44205 0.649846 0.0625665 0.823988 0.378422 0.0898265 0.205206 0.74967 0.621544 
+ i_lag = 13, j_lag = 23
+ carry = 5.96046e-08, count24 = 22
  luxury = 3 nskip = 199
 ----------------------------------------
 
  Process calls frequency --->
-	Transportation = 31140
-	pol-compt = 246
-	pol-eBrem = 376
-	pol-phot = 190
-	pol-eIoni = 646
-	pol-conv = 207
-	msc = 3077
-	pol-annihil = 71
+	Transportation = 31152
+	pol-compt = 280
+	pol-eBrem = 386
+	pol-phot = 199
+	pol-eIoni = 645
+	pol-conv = 202
+	msc = 3050
+	pol-annihil = 66
  Gamma: 
-Mean Number per Event :1.0111
-Mean Energy :9.5826 MeV +- 1.8986 MeV
-Mean Polarization :-0.96397 +- 0.18331
+Mean Number per Event :1.0108
+Mean Energy :9.576 MeV +- 1.9114 MeV
+Mean Polarization :-0.96364 +- 0.18465
  Electron: 
-Mean Number per Event :0.032
-Mean Energy :5.0316 MeV +- 2.5229 MeV
-Mean Polarization :-0.70464 +- 0.29294
+Mean Number per Event :0.0328
+Mean Energy :5.1762 MeV +- 2.5515 MeV
+Mean Polarization :-0.71482 +- 0.29318
  Positron: 
-Mean Number per Event :0.0138
-Mean Energy :4.0389 MeV +- 1.8471 MeV
-Mean Polarization :-0.58958 +- 0.30929
+Mean Number per Event :0.014
+Mean Energy :4.0581 MeV +- 1.9066 MeV
+Mean Polarization :-0.59775 +- 0.29651
 #
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
