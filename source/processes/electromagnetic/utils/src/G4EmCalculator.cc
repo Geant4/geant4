@@ -320,21 +320,17 @@ G4double G4EmCalculator::GetCrossSectionPerVolume(G4double kinEnergy,
     if(currentLambda) {
       G4double e = kinEnergy*massRatio;
       res = (((*currentLambda)[idx])->Value(e))*chargeSquare;
-    } else {
-      res = ComputeCrossSectionPerVolume(kinEnergy, p, processName, mat, 
-					 kinEnergy);
+      if(verbose>0) {
+	G4cout << "G4EmCalculator::GetXSPerVolume: E(MeV)= " << kinEnergy/MeV
+	       << " cross(cm-1)= " << res*cm
+	       << "  " <<  p->GetParticleName()
+	       << " in " <<  mat->GetName();
+	if(verbose>1) 
+	  G4cout << "  idx= " << idx << "  Escaled((MeV)= " << e 
+		 << "  q2= " << chargeSquare; 
+	G4cout << G4endl;
+      }
     }
-    if(verbose>0) {
-      G4cout << "G4EmCalculator::GetXSPerVolume: E(MeV)= " << kinEnergy/MeV
-	     << " cross(cm-1)= " << res*cm
-	     << "  " <<  p->GetParticleName()
-	     << " in " <<  mat->GetName();
-      if(verbose>1) 
-	G4cout << "  idx= " << idx << "  Escaled((MeV)= " 
-	       << kinEnergy*massRatio 
-	       << "  q2= " << chargeSquare; 
-      G4cout << G4endl;
-    } 
   }
   return res;
 }
@@ -760,7 +756,7 @@ G4double G4EmCalculator::ComputeMeanFreePath(G4double kinEnergy,
 {
   G4double mfp = DBL_MAX;
   G4double x = ComputeCrossSectionPerVolume(kinEnergy, p, processName, mat, cut);
-  if(x > 0.0) { mfp = 1.0/x; }
+  if(x > 0.0) mfp = 1.0/x;
   if(verbose>1) {
     G4cout << "E(MeV)= " << kinEnergy/MeV
 	   << " MFP(mm)= " << mfp/mm
@@ -1017,7 +1013,6 @@ void G4EmCalculator::FindLambdaTable(const G4ParticleDefinition* p,
     G4VMultipleScattering* msc = FindMscProcess(part, processName);
     if(msc) {
       currentModel = msc->SelectModel(kinEnergy,0);
-      /*
       if(currentModel) {
 	currentLambda = currentModel->GetCrossSectionTable();
         if(currentLambda) {
@@ -1028,7 +1023,6 @@ void G4EmCalculator::FindLambdaTable(const G4ParticleDefinition* p,
 	  }
 	}
       }
-      */
     }
   }
 }
