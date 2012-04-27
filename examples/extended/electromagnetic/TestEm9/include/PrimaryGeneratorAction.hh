@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id: PrimaryGeneratorAction.hh,v 1.3 2006-06-29 17:02:35 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -58,11 +57,9 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
 public:
   PrimaryGeneratorAction(DetectorConstruction*);    
-  ~PrimaryGeneratorAction();
+  virtual ~PrimaryGeneratorAction();
 
-public:
-  void GeneratePrimaries(G4Event*);
-  //  G4ParticleGun* GetParticleGun() {return particleGun;};
+  virtual void GeneratePrimaries(G4Event*);
     
 private:
 

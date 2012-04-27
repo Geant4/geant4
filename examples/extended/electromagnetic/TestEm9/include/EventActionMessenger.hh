@@ -44,9 +44,10 @@ class EventActionMessenger: public G4UImessenger
 {
 public:
   EventActionMessenger(EventAction*);
-  ~EventActionMessenger();
+
+  virtual ~EventActionMessenger();
     
-  void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String);
     
 private:
 

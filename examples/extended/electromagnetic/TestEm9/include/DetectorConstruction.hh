@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id: DetectorConstruction.hh,v 1.7 2008-04-07 18:09:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -67,7 +66,7 @@ public:
   DetectorConstruction();
   virtual ~DetectorConstruction();
 
-public:
+  virtual G4VPhysicalVolume* Construct();
 
   void SetEcalMaterial(const G4String&);
   void SetAbsMaterial(const G4String&);
@@ -77,8 +76,6 @@ public:
   void SetPadLength(G4double val);
   void SetPadWidth(G4double val);
   void SetAbsLength(G4double val);
-
-  G4VPhysicalVolume* Construct();
 
   void UpdateGeometry();
 

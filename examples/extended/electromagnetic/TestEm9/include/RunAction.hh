@@ -47,14 +47,14 @@ class RunAction : public G4UserRunAction
 public: // Without description
 
   RunAction();
-  ~RunAction();
+  virtual ~RunAction();
 
 public: // With description
  
-  void BeginOfRunAction(const G4Run*);
+  virtual void BeginOfRunAction(const G4Run*);
   // In this method histogramms are booked
 
-  void EndOfRunAction(const G4Run*);
+  virtual void EndOfRunAction(const G4Run*);
   // In this method bookHisto method is called in which histogramms are filled
 
 };

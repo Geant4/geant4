@@ -45,6 +45,9 @@
 #include "G4UnitsTable.hh"
 #include "Histo.hh"
 #include "EmAcceptance.hh"
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -78,6 +81,10 @@ HistoManager::HistoManager()
 
   fHisto   = new Histo();
   bookHisto();
+
+  fGamma = G4Gamma::Gamma();
+  fElectron = G4Electron::Electron();
+  fPositron = G4Positron::Positron();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -105,6 +112,13 @@ void HistoManager::bookHisto()
   fHisto->Add1D("20","E1/E9 Ratio",fBinsED,0.0,1,1.0);
   fHisto->Add1D("21","E1/E25 Ratio",fBinsED,0.0,1.0,1.0);
   fHisto->Add1D("22","E9/E25 Ratio",fBinsED,0.0,1.0,1.0);
+
+  // initialise acceptance - by default is not applied
+  for(G4int i=0; i<fNmax; i++) {
+    fEdeptrue[i] = 1.0;
+    fRmstrue[i]  = 1.0;
+    fLimittrue[i]= 10.;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -127,13 +141,6 @@ void HistoManager::BeginOfRun()
       fEdeptr[i] = 0.0;
       fErmstr[i] = 0.0;
     }
-  }
-
-  // initialise acceptance
-  for(G4int i=0; i<fNmax; i++) {
-    fEdeptrue[i] = 1.0;
-    fRmstrue[i]  = 1.0;
-    fLimittrue[i]= DBL_MAX;
   }
 
   // initialise counters
@@ -207,10 +214,10 @@ void HistoManager::EndOfRun(G4int runID)
     G4double r = s*std::sqrt(xx);
     G4cout << std::setprecision(4) << "Edep " << nam[j] << " =                   " << e
            << " +- " << r;
-    if(e > 0.0) G4cout << "  res=  " << f*s/e << " %";
+    if(e > 0.0) G4cout << "  res=  " << f*s/e << " %   " << fStat[j];
     G4cout << G4endl;
   }
-  if(fLimittrue[0] != DBL_MAX || fLimittrue[1] != DBL_MAX || fLimittrue[2] != DBL_MAX) {
+  if(fLimittrue[0] < 10. || fLimittrue[1] < 10. || fLimittrue[2] < 10.) {
     G4cout<<"===========  Mean values without trancating ====================="<<G4endl;
     for(j=0; j<fNmax; j++) {
       G4double e = fEdep[j];
@@ -358,17 +365,17 @@ void HistoManager::EndOfEvent()
   fErms[2] += e25*e25;
 
   // trancated mean
-  if(fLimittrue[0] == DBL_MAX || std::abs(e0-fEdeptrue[0])<fRmstrue[0]*fLimittrue[0]) {
+  if(std::abs(e0-fEdeptrue[0])<fRmstrue[0]*fLimittrue[0]) {
     fStat[0] += 1;
     fEdeptr[0] += e0;
     fErmstr[0] += e0*e0;
   }
-  if(fLimittrue[1] == DBL_MAX || std::abs(e9-fEdeptrue[1])<fRmstrue[1]*fLimittrue[1]) {
+  if(std::abs(e9-fEdeptrue[1])<fRmstrue[1]*fLimittrue[1]) {
     fStat[1] += 1;
     fEdeptr[1] += e9;
     fErmstr[1] += e9*e9;
   }
-  if(fLimittrue[2] == DBL_MAX || std::abs(e25-fEdeptrue[2])<fRmstrue[2]*fLimittrue[2]) {
+  if(std::abs(e25-fEdeptrue[2])<fRmstrue[2]*fLimittrue[2]) {
     fStat[2] += 1;
     fEdeptr[2] += e25;
     fErmstr[2] += e25*e25;
@@ -438,19 +445,19 @@ void HistoManager::ScoreNewTrack(const G4Track* aTrack)
     }
 
     // delta-electron
-    if (0 < pid && particle == fElectron) {
+    if (particle == fElectron) {
       if(1 < fVerbose) {
 	G4cout << "TrackingAction: Secondary electron " << G4endl;
       }
       AddDeltaElectron(dynParticle);
 
-    } else if (0 < pid && particle == fPositron) {
+    } else if (particle == fPositron) {
       if(1 < fVerbose) {
 	G4cout << "TrackingAction: Secondary positron " << G4endl;
       }
       AddPositron(dynParticle);
 
-    } else if (0 < pid && particle == fGamma) {
+    } else if (particle == fGamma) {
       if(1 < fVerbose) {
 	G4cout << "TrackingAction: Secondary gamma; parentID= " << pid
 	       << " E= " << kinE << G4endl;

@@ -62,17 +62,18 @@ public:
   PhysicsList();
   virtual ~PhysicsList();
 
-  void ConstructParticle();
+  virtual void ConstructParticle();
 
-  void SetCuts();
+  virtual void ConstructProcess();
+
+  virtual void SetCuts();
+
+  void AddPhysicsList(const G4String& name);
+  void AddStepMax();
+
   void SetCutForGamma(G4double);
   void SetCutForElectron(G4double);
   void SetCutForProton(G4double);
-
-  void AddPhysicsList(const G4String& name);
-  void ConstructProcess();
-
-  void AddStepMax();
 
   void SetVertexCut(G4double val);
   void SetMuonCut(G4double val);

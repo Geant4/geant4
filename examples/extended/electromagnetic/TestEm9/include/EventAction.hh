@@ -45,10 +45,11 @@ class EventAction : public G4UserEventAction
 public: 
 
   EventAction();
-  ~EventAction();
 
-  void BeginOfEventAction(const G4Event*);
-  void   EndOfEventAction(const G4Event*);
+  virtual ~EventAction();
+
+  virtual void BeginOfEventAction(const G4Event*);
+  virtual void   EndOfEventAction(const G4Event*);
 
   inline void SetPrintModulo(G4int val) { fPrintModulo = val;};
 

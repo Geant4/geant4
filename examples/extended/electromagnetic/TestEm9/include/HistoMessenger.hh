@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id: HistoMessenger.hh,v 1.1 2010-09-08 11:23:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -52,7 +51,7 @@ class HistoMessenger: public G4UImessenger
 public:
 
   HistoMessenger(Histo* );
-  ~HistoMessenger();
+  virtual ~HistoMessenger();
 
   virtual void SetNewValue(G4UIcommand* ,G4String );
 

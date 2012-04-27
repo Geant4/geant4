@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id: PhysicsListMessenger.hh,v 1.4 2006-06-29 17:02:32 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -50,9 +49,9 @@ class PhysicsListMessenger: public G4UImessenger
 public:
   
   PhysicsListMessenger(PhysicsList* );
-  ~PhysicsListMessenger();
+  virtual ~PhysicsListMessenger();
     
-  void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String);
     
 private:
   

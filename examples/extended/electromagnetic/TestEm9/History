@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25-04-12 V.Ivant (testem9-V09-05-01)
+- HistoManager - fixed printout of mean gamma, e+, e- statistics
+- cleanup all header files
+
 17-04-12 V.Ivant (testem9-V09-05-00)
 - miration to internal analysis tool, cose cleanup
      

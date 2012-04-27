@@ -46,7 +46,7 @@ class StepMax : public G4VDiscreteProcess
 public:
 
   StepMax(const G4String& processName = "UserMaxStep");
-  ~StepMax();
+  virtual ~StepMax();
 
   void SetMaxStep(G4double);
 
