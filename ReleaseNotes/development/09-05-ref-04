@@ -298,8 +298,9 @@ examples                                         examples-V09-05-04
     names of output file.
   o Fixed initialization in PrimaryGeneratorAction.
   o Apply new coding conventions.
-- extended/electromagnetic/TestEm9 (testem9-V09-05-00)
+- extended/electromagnetic/TestEm9 (testem9-V09-05-01)
   o Migrated to internal analysis tool.
+  o HistoManager: fixed printout of mean gamma, e+, e- statistics.
 - extended/electromagnetic/TestEm11 (testem11-V09-05-03)
 - extended/electromagnetic/TestEm12 (testem12-V09-05-05)
 - extended/electromagnetic/TestEm13 (testem13-V09-05-00)
