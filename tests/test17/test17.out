@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-03    (31-March-2012)
+ Geant4 version Name: geant4-09-05-ref-04    (30-April-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -157,10 +157,9 @@ Rayl:   for  gamma    SubType= 11
    LivermoreRayleigh :  Emin=        0 eV    Emax=      100 GeV
 
 msc:   for e-    SubType= 10
-      Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -197,10 +196,9 @@ annihil:   for  e+    SubType= 5
             eplus2gg :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for proton    SubType= 10
-      Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -213,7 +211,7 @@ hIoni:   for  proton    SubType= 2
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -252,10 +250,9 @@ hPairProd:   for  anti_proton    SubType= 4
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for kaon+    SubType= 10
-      Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -286,10 +283,9 @@ hIoni:   for  kaon-    SubType= 2
           BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
 
 muMsc:   for mu+    SubType= 10
-      Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -354,10 +350,9 @@ hPairProd:   for  pi+    SubType= 4
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for pi-    SubType= 10
-      Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -387,25 +382,24 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ### Run 0 start.
 Start Run processing.
-EvtNo= 755  length= 0.00859784  xend= 0.00398871
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.89s Real=1.89s Sys=0.01s
+  User=1.8s Real=1.81s Sys=0s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 999 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.0251 +- 0.0153358  microns 
-    CSDA  Range  in absorber = 8.95033 +- 0.0148975  microns 
+ end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
+    Track Length in absorber = 9.01434 +- 0.0152292  microns 
+    CSDA  Range  in absorber = 8.93637 +- 0.0148118  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = -0.0338988 +- 0.0153358 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.0813346 +- 0.0148975 microns 
+    Track Length (G4 - ICRU49) = -0.044658 +- 0.0152292 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.0673655 +- 0.0148118 microns 
 
-Average Number electrons per event = 219.598
-Average Number photons per event   = 0.002002
+Average Number electrons per event = 219.497
+Average Number photons per event   = 0.002
 
 #/tracking/verbose 0
 /gun/particle anti_proton
@@ -431,21 +425,20 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ### Run 1 start.
 Start Run processing.
-EvtNo= 770  length= 0.0130421  xend= 0.000283844
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.31s Real=2.31s Sys=0s
+  User=2.22s Real=2.21s Sys=0s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 999 for anti_proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 12.6523 +- 0.0391502  microns 
-    CSDA  Range  in absorber = 11.0875 +- 0.014679  microns 
+ end of Run TotNbofEvents = 1000 for anti_proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
+    Track Length in absorber = 12.6988 +- 0.0396503  microns 
+    CSDA  Range  in absorber = 11.093 +- 0.0157514  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
-Average Number electrons per event = 254.304
-Average Number photons per event   = 0.003003
+Average Number electrons per event = 254.006
+Average Number photons per event   = 0
 
 #
 /testem/phys/setCuts 0.003 mm
@@ -474,10 +467,9 @@ Rayl:   for  gamma    SubType= 11
    LivermoreRayleigh :  Emin=        0 eV    Emax=      100 GeV
 
 msc:   for e-    SubType= 10
-      Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -514,10 +506,9 @@ annihil:   for  e+    SubType= 5
             eplus2gg :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for proton    SubType= 10
-      Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -530,7 +521,7 @@ hIoni:   for  proton    SubType= 2
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -569,10 +560,9 @@ hPairProd:   for  anti_proton    SubType= 4
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for kaon+    SubType= 10
-      Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -603,10 +593,9 @@ hIoni:   for  kaon-    SubType= 2
           BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
 
 muMsc:   for mu+    SubType= 10
-      Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -671,10 +660,9 @@ hPairProd:   for  pi+    SubType= 4
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for pi-    SubType= 10
-      Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -707,12 +695,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.09s Real=0.09s Sys=0s
+  User=0.08s Real=0.07s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for C12[0.0] with Ekin = 6 MeV p= 366.244 MeV/c
-    Track Length in absorber = 8.20185 +- 0.00990159  microns 
-    CSDA  Range  in absorber = 8.06249 +- 0.00832774  microns 
+    Track Length in absorber = 8.20695 +- 0.0100305  microns 
+    CSDA  Range  in absorber = 8.16222 +- 0.00957382  microns 
 
     Energy deposit in absorber = 6  MeV 
 
@@ -750,10 +738,9 @@ Rayl:   for  gamma    SubType= 11
    LivermoreRayleigh :  Emin=        0 eV    Emax=      100 GeV
 
 msc:   for e-    SubType= 10
-      Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 ### ===  Deexcitation model UAtomDeexcitation is activated for regions:
           DefaultRegionForTheWorld
@@ -797,10 +784,9 @@ annihil:   for  e+    SubType= 5
             eplus2gg :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for proton    SubType= 10
-      Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -813,7 +799,7 @@ hIoni:   for  proton    SubType= 2
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -852,10 +838,9 @@ hPairProd:   for  anti_proton    SubType= 4
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for kaon+    SubType= 10
-      Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -886,10 +871,9 @@ hIoni:   for  kaon-    SubType= 2
           BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
 
 muMsc:   for mu+    SubType= 10
-      Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -954,10 +938,9 @@ hPairProd:   for  pi+    SubType= 4
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for pi-    SubType= 10
-      Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -990,21 +973,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.45s Real=2.51s Sys=0s
+  User=2.3s Real=2.31s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.01521 +- 0.0158103  microns 
-    CSDA  Range  in absorber = 8.93859 +- 0.0154318  microns 
+    Track Length in absorber = 9.00617 +- 0.0142541  microns 
+    CSDA  Range  in absorber = 8.92952 +- 0.0139333  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = -0.0437907 +- 0.0158103 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.0695937 +- 0.0154318 microns 
+    Track Length (G4 - ICRU49) = -0.0528322 +- 0.0142541 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.0605246 +- 0.0139333 microns 
 
-Average Number electrons per event = 220.313
-Average Number photons per event   = 0.019
+Average Number electrons per event = 219.733
+Average Number photons per event   = 0.018
 
 #
 /process/em/auger true
@@ -1033,21 +1016,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.43s Real=2.44s Sys=0s
+  User=2.34s Real=2.34s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.02025 +- 0.0151867  microns 
-    CSDA  Range  in absorber = 8.94021 +- 0.0150498  microns 
+    Track Length in absorber = 9.01999 +- 0.0154429  microns 
+    CSDA  Range  in absorber = 8.94136 +- 0.0150751  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = -0.0387502 +- 0.0151867 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.0712147 +- 0.0150498 microns 
+    Track Length (G4 - ICRU49) = -0.0390051 +- 0.0154429 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.0723553 +- 0.0150751 microns 
 
-Average Number electrons per event = 222.168
-Average Number photons per event   = 0.012
+Average Number electrons per event = 222.712
+Average Number photons per event   = 0.02
 
 #
 G4 kernel has come to Quit state.

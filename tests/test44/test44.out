@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-03    (31-March-2012)
+ Geant4 version Name: geant4-09-05-ref-04    (30-April-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -116,22 +116,22 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    39   -0.624   -0.778       17      24.8   0.0779   0.0197        37      Target Transportation
    40   -0.624   -0.778       17      24.8        0        0        37      Target Transportation
    41   -0.715   -0.787     17.8      21.3     3.53    0.788      37.8      Target hIoni
-   42   -0.731   -0.791       18      20.3     1.01    0.218        38      Target Transportation
-   43   -0.731   -0.791       18      20.3        0        0        38      Target Transportation
+   42   -0.731    -0.79       18      20.3     1.01    0.218        38      Target Transportation
+   43   -0.731    -0.79       18      20.3        0        0        38      Target Transportation
    44   -0.758     -0.8     18.6      16.8     3.51    0.598      38.6      Target hIoni
    45   -0.791   -0.813       19      14.2     2.62    0.405        39      Target Transportation
    46   -0.791   -0.813       19      14.2        0        0        39      Target Transportation
    47   -0.833   -0.829     19.4      11.4     2.76    0.387      39.4      Target hIoni
-   48   -0.874   -0.854     19.7      8.65     2.75     0.31      39.7      Target hIoni
+   48   -0.874   -0.853     19.7      8.65     2.75     0.31      39.7      Target hIoni
    49   -0.894   -0.855     19.9      5.88     2.78    0.242        40      Target hIoni
-   50   -0.897   -0.859       20      4.86     1.02   0.0688        40      Target Transportation
-   51   -0.897   -0.859       20      4.86        0        0        40       World Transportation
+   50   -0.897   -0.858       20      4.86     1.02   0.0688        40      Target Transportation
+   51   -0.897   -0.858       20      4.86        0        0        40       World Transportation
    52   -0.961   -0.906       21      4.86 1.17e-24        1        41       World Transportation
    53    -1.54    -1.34       30      4.86 1.05e-23     9.03      50.1  OutOfWorld Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================

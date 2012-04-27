@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-03    (31-March-2012)
+ Geant4 version Name: geant4-09-05-ref-04    (30-April-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -38,10 +38,9 @@ Rayl:   for  gamma    SubType= 11
    LivermoreRayleigh :  Emin=        0 eV    Emax=      100 GeV
 
 msc:   for e-    SubType= 10
-      Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  GoudsmitSaunderson :  Emin=        0 eV    Emax=       10 TeV
+  GoudsmitSaunderson :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -78,10 +77,9 @@ annihil:   for  e+    SubType= 5
             eplus2gg :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for proton    SubType= 10
-      Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -94,7 +92,7 @@ hIoni:   for  proton    SubType= 2
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -133,10 +131,9 @@ hPairProd:   for  anti_proton    SubType= 4
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for kaon+    SubType= 10
-      Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -167,10 +164,9 @@ hIoni:   for  kaon-    SubType= 2
           BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
 
 muMsc:   for mu+    SubType= 10
-      Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -235,10 +231,9 @@ hPairProd:   for  pi+    SubType= 4
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for pi-    SubType= 10
-      Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -272,121 +267,121 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=27.52s Real=27.53s Sys=0s
+  User=25.99s Real=26.03s Sys=0s
 Thicknesses(mm)= 1.57423  1  1  
 Bins(R/R0)=      0.00738313  0  0  
  ----------------------------------------------------------
  ----------------  RUN SUMMARY ----------------------------
  ----------------------------------------------------------
-       Mean number of steps 307.592
+       Mean number of steps 307.492
              Medium 1 ==>   G4_Mo
 	 FMR (z/r0)    ||       J  
-	   0.00738313	          2.46212
-	   0.0147663	          2.9189
-	   0.0221494	          3.29198
-	   0.0295325	          3.56158
-	   0.0369157	          3.8445
-	   0.0442988	          4.22153
-	   0.0516819	          4.38363
-	   0.0590651	          4.6581
-	   0.0664482	          4.74685
-	   0.0738313	          4.80088
-	   0.0812144	          4.83299
-	   0.0885976	          4.83456
-	   0.0959807	          4.81448
-	   0.103364	          4.79686
-	   0.110747	          4.7669
-	   0.11813	          4.74667
-	   0.125513	          4.67629
-	   0.132896	          4.66232
-	   0.14028	          4.57562
-	   0.147663	          4.39212
-	   0.155046	          4.36752
-	   0.162429	          4.18899
-	   0.169812	          4.1915
-	   0.177195	          4.08534
-	   0.184578	          3.98703
-	   0.191961	          3.87556
-	   0.199345	          3.72345
-	   0.206728	          3.60493
-	   0.214111	          3.59301
-	   0.221494	          3.33909
-	   0.228877	          3.23565
-	   0.23626	          3.11235
-	   0.243643	          2.99884
-	   0.251026	          2.94063
-	   0.25841	          2.83105
-	   0.265793	          2.71766
-	   0.273176	          2.56228
-	   0.280559	          2.58007
-	   0.287942	          2.49866
-	   0.295325	          2.38482
-	   0.302708	          2.11827
-	   0.310092	          2.12087
-	   0.317475	          1.97132
-	   0.324858	          1.81808
-	   0.332241	          1.76574
-	   0.339624	          1.61608
-	   0.347007	          1.64143
-	   0.35439	          1.52487
-	   0.361773	          1.31748
-	   0.369157	          1.26756
-	   0.37654	          1.14032
-	   0.383923	          1.16664
-	   0.391306	          1.10961
-	   0.398689	          1.04863
-	   0.406072	          0.906339
-	   0.413455	          0.857219
-	   0.420839	          0.803861
-	   0.428222	          0.771427
-	   0.435605	          0.720374
-	   0.442988	          0.628011
-	   0.450371	          0.545961
-	   0.457754	          0.54495
-	   0.465137	          0.443165
-	   0.47252	          0.418125
-	   0.479904	          0.384936
-	   0.487287	          0.368432
-	   0.49467	          0.301049
-	   0.502053	          0.320158
-	   0.509436	          0.267572
-	   0.516819	          0.219413
-	   0.524202	          0.204091
-	   0.531585	          0.156473
-	   0.538969	          0.187029
-	   0.546352	          0.172711
-	   0.553735	          0.126757
-	   0.561118	          0.12928
-	   0.568501	          0.0997132
-	   0.575884	          0.0773965
-	   0.583267	          0.0810044
-	   0.590651	          0.0719531
-	   0.598034	          0.0778121
-	   0.605417	          0.0684227
-	   0.6128	          0.0526675
-	   0.620183	          0.0417355
-	   0.627566	          0.0367341
-	   0.634949	          0.0453125
-	   0.642332	          0.0365608
-	   0.649716	          0.0285965
-	   0.657099	          0.0294963
-	   0.664482	          0.0245383
-	   0.671865	          0.0152491
-	   0.679248	          0.0106226
-	   0.686631	          0.0101081
-	   0.694014	          0.0143982
-	   0.701398	          0.0147014
-	   0.708781	          0.00570488
-	   0.716164	          0.0133359
-	   0.723547	          0.00528729
-	   0.73093	          0.00306104
-	   0.738313	          0.00867859
+	   0.00738313	          2.3929
+	   0.0147663	          2.89692
+	   0.0221494	          3.22323
+	   0.0295325	          3.45557
+	   0.0369157	          3.79268
+	   0.0442988	          4.03402
+	   0.0516819	          4.228
+	   0.0590651	          4.45536
+	   0.0664482	          4.65069
+	   0.0738313	          4.74397
+	   0.0812144	          4.73786
+	   0.0885976	          4.87921
+	   0.0959807	          4.80399
+	   0.103364	          4.8467
+	   0.110747	          4.74899
+	   0.11813	          4.72174
+	   0.125513	          4.58088
+	   0.132896	          4.61037
+	   0.14028	          4.37104
+	   0.147663	          4.31694
+	   0.155046	          4.16749
+	   0.162429	          4.12784
+	   0.169812	          4.06034
+	   0.177195	          3.92143
+	   0.184578	          3.71296
+	   0.191961	          3.69076
+	   0.199345	          3.80256
+	   0.206728	          3.50661
+	   0.214111	          3.51428
+	   0.221494	          3.38451
+	   0.228877	          3.31082
+	   0.23626	          3.24766
+	   0.243643	          3.12345
+	   0.251026	          3.06597
+	   0.25841	          2.94912
+	   0.265793	          2.79413
+	   0.273176	          2.61423
+	   0.280559	          2.49703
+	   0.287942	          2.38258
+	   0.295325	          2.3124
+	   0.302708	          2.14227
+	   0.310092	          2.05984
+	   0.317475	          1.93243
+	   0.324858	          1.87002
+	   0.332241	          1.76133
+	   0.339624	          1.66694
+	   0.347007	          1.62639
+	   0.35439	          1.46541
+	   0.361773	          1.42417
+	   0.369157	          1.31814
+	   0.37654	          1.23154
+	   0.383923	          1.14775
+	   0.391306	          1.15239
+	   0.398689	          1.03295
+	   0.406072	          1.00674
+	   0.413455	          0.938755
+	   0.420839	          0.855798
+	   0.428222	          0.783212
+	   0.435605	          0.727744
+	   0.442988	          0.736023
+	   0.450371	          0.698762
+	   0.457754	          0.584801
+	   0.465137	          0.545555
+	   0.47252	          0.453612
+	   0.479904	          0.391696
+	   0.487287	          0.367435
+	   0.49467	          0.342795
+	   0.502053	          0.353765
+	   0.509436	          0.331368
+	   0.516819	          0.273816
+	   0.524202	          0.292156
+	   0.531585	          0.272521
+	   0.538969	          0.229381
+	   0.546352	          0.237064
+	   0.553735	          0.160854
+	   0.561118	          0.138338
+	   0.568501	          0.119936
+	   0.575884	          0.0834488
+	   0.583267	          0.0726982
+	   0.590651	          0.0785857
+	   0.598034	          0.0544136
+	   0.605417	          0.0692248
+	   0.6128	          0.03472
+	   0.620183	          0.0472349
+	   0.627566	          0.0441997
+	   0.634949	          0.0467447
+	   0.642332	          0.0275837
+	   0.649716	          0.0261335
+	   0.657099	          0.0197757
+	   0.664482	          0.0199731
+	   0.671865	          0.0187712
+	   0.679248	          0.0222752
+	   0.686631	          0.0106159
+	   0.694014	          0.0121972
+	   0.701398	          0.0151887
+	   0.708781	          0.00865412
+	   0.716164	          0.0079774
+	   0.723547	          0.00869549
+	   0.73093	          0.00145411
+	   0.738313	          0.00158531
 
- Deposit energy (MeV) = 0.383365
+ Deposit energy (MeV) = 0.38191
  ----------------------------------------------------------
  ----------------------------------------------------------
  ----------------------------------------------------------
- Total Deposit energy (MeV) = 0.383365
+ Total Deposit energy (MeV) = 0.38191
  ----------------------------------------------------------
  ----------------  END OF RUN SUMMARY ---------------------
  ----------------------------------------------------------
