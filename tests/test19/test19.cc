@@ -901,7 +901,8 @@ int main()
      //G4VParticleChange* aChange = 0;
      G4ParticleChange* aChange = 0;
      G4double e0 = energy+pMass;
-     G4ThreeVector pmax=std::sqrt(e0*e0-pMass*pMass)*aDirection;
+     G4double pmaxv=std::sqrt(e0*e0-pMass*pMass);
+     G4ThreeVector pmax = pmaxv * aDirection;
      //G4double et=e0+mt;
      //G4int nEvt=100;
      // Randomization loop: cycle random generator, using 2 lower digits in nEvt
@@ -1581,9 +1582,9 @@ int main()
         if(totBaryN<-dQnM) totBaryN=-dQnM;
         dBnH[totBaryN+dQnM]++;
         G4double dE=totSum.t();
-        G4int rdE=static_cast<G4int>(dQnM*20.*dE/e0-17+dQnM);
+        G4int rdE=static_cast<G4int>(dQnM*1000.*dE/e0+dQnM);
         //G4int dEn=static_cast<G4int>(dE*10.+dQnM);
-        G4int dEn=static_cast<G4int>(dE/10.+dQnE);
+        G4int dEn=static_cast<G4int>(dE*10.+dQnE);
         if(rdE>=nHst) rdE=nHst1;
         if(rdE<0) rdE=0;
         if(dEn>=nHst)
@@ -1596,7 +1597,7 @@ int main()
         dEnH[dEn]++;
         //if(nPN || nP0 || nPP) dEnH[dEn]++;
         G4double dZ=totSum.z();
-        G4int rdZ=static_cast<G4int>(dQnM*20.*dZ/pmax-17+dQnM);
+        G4int rdZ=static_cast<G4int>((dQnM*1000.*dZ)/pmaxv+dQnM);
         G4int dZn=static_cast<G4int>(dZ*10.+dQnM);
         if(rdZ>=nHst) rdZ=nHst1;
         if(rdZ<0) rdZ=0;
@@ -1605,8 +1606,8 @@ int main()
         rPzH[rdZ]++;
         dPzH[dZn]++;
         G4double dR=std::sqrt(totSum.x()*totSum.x()+totSum.y()*totSum.y());
-        G4int rdR=static_cast<G4int>(dQnM*20.*dR/pmax);
-        G4int dRn=static_cast<G4int>(dR*100.);
+        G4int rdR=static_cast<G4int>(dQnM*10000.*dR/pmaxv);
+        G4int dRn=static_cast<G4int>(dR*1000.);
         if(rdR>=nHst) rdR=nHst1;
         if(rdR<0) rdR=0;
         if(dRn>=nHst) dRn=nHst1;
@@ -1614,7 +1615,7 @@ int main()
         rPrH[rdR]++;
         dPrH[dRn]++;
         //if(!(iter%100)&&iter) G4cout<<"BN="<<totBaryN<<",dE="<<dE<<",E="<<e0<<",dZ="<<dZ
-        //                            <<",P="<<pmax<<",dR="<<dR<<G4endl;
+        //                            <<",P="<<pmaxv<<",dR="<<dR<<G4endl;
 #endif
 #ifdef pdebug
         sumKE+=totKE;
@@ -1770,10 +1771,10 @@ int main()
 #endif
 #ifdef histdbg
   G4cout<<std::setw(2)<<"#"<<" : "<<std::setw(9)<<"#gamma"<<std::setw(9)<<"SumEGam"
-        <<std::setw(9)<<"dBrN+20"<<std::setw(9)<<"dChg+20" <<std::setw(9)<<"rE(5%)"
+        <<std::setw(9)<<"dBrN+20"<<std::setw(9)<<"dChg+20" <<std::setw(9)<<"rE(.1%)"
     //<<std::setw(9)<<"rPz(5%)"<<std::setw(9)<<"rPr(5%)" <<std::setw(9)<<"dE(.1)"
-        <<std::setw(9)<<"rPz(5%)"<<std::setw(9)<<"rPr(5%)" <<std::setw(9)<<"dE(10.)"
-        <<std::setw(9)<<"dPz(.1)"<<std::setw(9)<<"dPr(.01)"<<G4endl;
+        <<std::setw(9)<<"rPz(.1%)"<<std::setw(9)<<"rPr(.01%)" <<std::setw(9)<<"dE(.1)"
+        <<std::setw(9)<<"dPz(.1)"<<std::setw(9)<<"dPr(.001)"<<G4endl;
   for(G4int jh=0; jh<nHst; jh++)
   {
     G4cout<<std::setw(2)<<jh<<" : "<<std::setw(9)<<nGaH[jh]<<std::setw(9)<<GaSE[jh]
