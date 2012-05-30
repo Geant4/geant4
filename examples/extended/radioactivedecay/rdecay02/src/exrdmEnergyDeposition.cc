@@ -37,9 +37,9 @@ exrdmEnergyDeposition::exrdmEnergyDeposition()
 exrdmEnergyDeposition::exrdmEnergyDeposition( G4double energy,
 				    G4double time,
                                     G4double weight )
-  : Energy(energy),
-    Time(time),
-    Weight(weight)
+  : fEnergy(energy),
+    fTime(time),
+    fWeight(weight)
 {;}
 
 
@@ -47,9 +47,9 @@ exrdmEnergyDeposition::exrdmEnergyDeposition( G4double energy,
 // Copy constructor
 //
 exrdmEnergyDeposition::exrdmEnergyDeposition( const exrdmEnergyDeposition &right )
-  : Energy(right.Energy),
-    Time(right.Time),
-    Weight(right.Weight)
+  : fEnergy(right.fEnergy),
+    fTime(right.fTime),
+    fWeight(right.fWeight)
 {;}
 
 //
@@ -62,7 +62,7 @@ exrdmEnergyDeposition::~exrdmEnergyDeposition() {;}
 //
 G4bool exrdmEnergyDeposition::operator==( const exrdmEnergyDeposition &right ) const
 {
-  return Time == right.Time;
+  return fTime == right.fTime;
 }
 
 //
@@ -70,11 +70,11 @@ G4bool exrdmEnergyDeposition::operator==( const exrdmEnergyDeposition &right ) c
 //
 G4bool exrdmEnergyDeposition::operator<( const exrdmEnergyDeposition &right ) const
 {
-  return Time < right.Time;
+  return fTime < right.fTime;
 }
 
 G4bool exrdmEnergyDeposition::operator<=( const exrdmEnergyDeposition &right ) const
 {
-  return Time <= right.Time;
+  return fTime <= right.fTime;
 }
 

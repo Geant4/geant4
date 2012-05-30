@@ -42,13 +42,13 @@ class exrdmEventActionMessenger: public G4UImessenger
 {
   public:
     exrdmEventActionMessenger(exrdmEventAction*);
-   ~exrdmEventActionMessenger();
+    virtual ~exrdmEventActionMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    exrdmEventAction*   eventAction;   
-    G4UIcmdWithAString* DrawCmd;
+    exrdmEventAction*   fEventAction;   
+    G4UIcmdWithAString* fDrawCmd;
 };
 
 #endif

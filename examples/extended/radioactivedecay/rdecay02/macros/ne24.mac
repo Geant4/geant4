@@ -31,23 +31,28 @@
 #
 #Next lines needed to have  atomic relaxation working 
 #
-/process/em/fluo true
-/process/em/auger true
+/process/em/fluo false
+/process/em/auger false
 
 
 /grdm/analogueMC 0
-/grdm/nucleusLimits 24 24 10 10
+#/grdm/nucleusLimits 24 24 10 10
 /gps/position 0 0 0
 /gps/energy 0 keV
 /gps/particle ion
 /gps/ion 10 24 0 0
 #
 # Branching ratio biasing on (as default)
-/histo/fileName ne24-br-on
-/run/beamOn 1000
+/grdm/verbose 1
+/tracking/verbose 3
+/histo/fileName ne24-br-on 
+/grdm/applyARM false
+/grdm/applyICM false
+/grdm/BRbias 1
+/run/beamOn 10
 #
 # Branching ratio biasing off
 /histo/fileName ne24-br-off
 /grdm/BRbias 0
-/run/beamOn 1000
+#/run/beamOn 1000
 

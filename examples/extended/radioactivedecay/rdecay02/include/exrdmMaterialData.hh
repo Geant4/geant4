@@ -26,7 +26,7 @@
 
 #include "G4Material.hh"
 
-const G4String exrdmMaterial::ELU[110] = 
+const G4String exrdmMaterial::fELU[110] =
 {
   " H","He","Li","Be"," B"," C"," N"," O"," F","Ne",
   "Na","Mg","Al","Si"," P"," S","Cl","Ar"," K","Ca",
@@ -40,7 +40,7 @@ const G4String exrdmMaterial::ELU[110] =
   "Pa"," U","Np","Pu","Am","Cm","Bk","Cf","Es","Fm",
   "Md","No","Lr","Rf","Db","Sg","Bh","Hs","Mt","UN"
 };
-const G4String exrdmMaterial::ELL[110] =
+const G4String exrdmMaterial::fELL[110] =
 {
   " h","he","li","be"," b"," c"," n"," o"," f","ne",
   "na","mg","al","si"," p"," s","cl","ar"," k","ca",
@@ -54,7 +54,7 @@ const G4String exrdmMaterial::ELL[110] =
   "pa"," u","np","pu","am","cm","bk","cf","es","fm",
   "md","no","lr","rf","db","sg","bh","hs","mt","un"
 };
-const G4String exrdmMaterial::EUU[110] =
+const G4String exrdmMaterial::fEUU[110] =
 {
   " H","HE","LI","BE"," B"," C"," N"," O"," F","NE",
   "NA","MG","AL","SI"," P"," S","CL","AR"," K","CA",
@@ -69,7 +69,7 @@ const G4String exrdmMaterial::EUU[110] =
   "MD","NO","LR","RF","DB","SG","BH","HS","MT","UN"
 };
 
-const G4double exrdmMaterial::A[110] =
+const G4double exrdmMaterial::fA[110] =
 {
   1.00794,4.002602,6.941,9.012182,10.811,12.0107,14.00674,15.9994,18.9984,20.1797,
   22.98977,24.3050,26.9815,28.0855,30.973761,32.066,35.4527,39.948,39.0983,40.078,

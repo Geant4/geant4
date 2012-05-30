@@ -35,17 +35,17 @@
 
 exrdmPrimaryGeneratorAction::exrdmPrimaryGeneratorAction()
 {
-  particleGun = new G4GeneralParticleSource ();
+  fParticleGun = new G4GeneralParticleSource ();
 }
 
 exrdmPrimaryGeneratorAction::~exrdmPrimaryGeneratorAction()
 {
-  delete particleGun;
+  delete fParticleGun;
 }
 
 void exrdmPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  particleGun->GeneratePrimaryVertex(anEvent);
+  fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 
 

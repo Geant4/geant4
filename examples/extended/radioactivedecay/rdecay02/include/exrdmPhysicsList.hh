@@ -45,15 +45,15 @@ public:
   exrdmPhysicsList();
   virtual ~exrdmPhysicsList();
 
-  void ConstructParticle();
+  virtual void ConstructParticle();
 
-  void SetCuts();
+  virtual void SetCuts();
   void SetCutForGamma(G4double);
   void SetCutForElectron(G4double);
   void SetCutForPositron(G4double);
 
   void SelectPhysicsList(const G4String& name);
-  void ConstructProcess();
+  virtual void ConstructProcess();
 
   void SetTargetCut(G4double val);
   void SetDetectorCut(G4double val);
@@ -66,21 +66,21 @@ private:
   exrdmPhysicsList & operator=(const exrdmPhysicsList &right);
   exrdmPhysicsList(const exrdmPhysicsList&);
 
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
+  G4double fCutForGamma;
+  G4double fCutForElectron;
+  G4double fCutForPositron;
 
-  G4VPhysicsConstructor*  emPhysicsList;
-  G4VPhysicsConstructor*  raddecayList;
-  G4VPhysicsConstructor*  particleList;
-  G4VPhysicsConstructor*  hadPhysicsList;
+  G4VPhysicsConstructor*  fEmPhysicsList;
+  G4VPhysicsConstructor*  fRaddecayList;
+  G4VPhysicsConstructor*  fParticleList;
+  G4VPhysicsConstructor*  fHadPhysicsList;
 
-  std::vector<G4VPhysicsConstructor*>  hadronPhys;
-  G4int nhadcomp;  
+  std::vector<G4VPhysicsConstructor*>  fHadronPhys;
+  G4int fNhadcomp;  
 
-  exrdmPhysicsListMessenger* pMessenger;
-  G4ProductionCuts* DetectorCuts;
-  G4ProductionCuts* TargetCuts;
+  exrdmPhysicsListMessenger* fPMessenger;
+  G4ProductionCuts* fDetectorCuts;
+  G4ProductionCuts* fTargetCuts;
 
 };
 

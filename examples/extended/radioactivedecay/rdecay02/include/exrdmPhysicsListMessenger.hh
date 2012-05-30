@@ -44,22 +44,22 @@ class exrdmPhysicsListMessenger: public G4UImessenger
 public:
   
   exrdmPhysicsListMessenger(exrdmPhysicsList* );
-  ~exrdmPhysicsListMessenger();
+  virtual ~exrdmPhysicsListMessenger();
     
-  void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String);
     
 private:
   
-  exrdmPhysicsList* pPhysicsList;
+  exrdmPhysicsList* fPPhysicsList;
 
-  G4UIdirectory*             physDir;  
-  G4UIcmdWithADoubleAndUnit* gammaCutCmd;
-  G4UIcmdWithADoubleAndUnit* electCutCmd;
-  G4UIcmdWithADoubleAndUnit* protoCutCmd;    
-  G4UIcmdWithADoubleAndUnit* allCutCmd;    
-  G4UIcmdWithADoubleAndUnit* mCutCmd;
-  G4UIcmdWithADoubleAndUnit* eCutCmd;
-  G4UIcmdWithAString*        pListCmd;
+  G4UIdirectory*             fPhysDir;  
+  G4UIcmdWithADoubleAndUnit* fGammaCutCmd;
+  G4UIcmdWithADoubleAndUnit* fElectCutCmd;
+  G4UIcmdWithADoubleAndUnit* fProtoCutCmd;    
+  G4UIcmdWithADoubleAndUnit* fAllCutCmd;    
+  G4UIcmdWithADoubleAndUnit* fMCutCmd;
+  G4UIcmdWithADoubleAndUnit* fECutCmd;
+  G4UIcmdWithAString*        fPListCmd;
     
 };
 

@@ -65,29 +65,29 @@ exrdmPhysicsList::exrdmPhysicsList() : G4VModularPhysicsList()
 {
   G4LossTableManager::Instance();
   defaultCutValue = 1.*mm;
-  cutForGamma     = defaultCutValue;
-  cutForElectron  = defaultCutValue;
-  cutForPositron  = defaultCutValue;
+  fCutForGamma     = defaultCutValue;
+  fCutForElectron  = defaultCutValue;
+  fCutForPositron  = defaultCutValue;
 
-  DetectorCuts = 0;
-  TargetCuts   = 0;
+  fDetectorCuts = 0;
+  fTargetCuts   = 0;
 
-  pMessenger = new exrdmPhysicsListMessenger(this);
+  fPMessenger = new exrdmPhysicsListMessenger(this);
 
   SetVerboseLevel(1);
 
   //default physics
-  particleList = new G4DecayPhysics();
+  fParticleList = new G4DecayPhysics();
 
   //default physics
-  raddecayList = new G4RadioactiveDecayPhysics();
+  fRaddecayList = new G4RadioactiveDecayPhysics();
 
   // EM physics
-  emPhysicsList = new G4EmStandardPhysics();
+  fEmPhysicsList = new G4EmStandardPhysics();
   
   // Had physics 
-  hadPhysicsList = 0;
-  nhadcomp = 0;
+  fHadPhysicsList = 0;
+  fNhadcomp = 0;
 
 }
 
@@ -95,13 +95,13 @@ exrdmPhysicsList::exrdmPhysicsList() : G4VModularPhysicsList()
 
 exrdmPhysicsList::~exrdmPhysicsList()
 {
-  delete pMessenger;
-  delete raddecayList;
-  delete emPhysicsList;
-  if (hadPhysicsList) delete hadPhysicsList;
-  if (nhadcomp > 0) {
-    for(G4int i=0; i<nhadcomp; i++) {
-      delete hadronPhys[i];
+  delete fPMessenger;
+  delete fRaddecayList;
+  delete fEmPhysicsList;
+  if (fHadPhysicsList) delete fHadPhysicsList;
+  if (fNhadcomp > 0) {
+    for(G4int i=0; i<fNhadcomp; i++) {
+      delete fHadronPhys[i];
     }
   }
 }
@@ -110,7 +110,7 @@ exrdmPhysicsList::~exrdmPhysicsList()
 
 void exrdmPhysicsList::ConstructParticle()
 {
-  particleList->ConstructParticle();
+  fParticleList->ConstructParticle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -119,17 +119,17 @@ void exrdmPhysicsList::ConstructProcess()
 {
   AddTransportation();
   // em
-  emPhysicsList->ConstructProcess();
+  fEmPhysicsList->ConstructProcess();
   // decays
-  particleList->ConstructProcess();
-  raddecayList->ConstructProcess();
+  fParticleList->ConstructProcess();
+  fRaddecayList->ConstructProcess();
   // had
-  if (nhadcomp > 0) {
-    for(G4int i=0; i<nhadcomp; i++) {
-      (hadronPhys[i])->ConstructProcess();
+  if (fNhadcomp > 0) {
+    for(G4int i=0; i<fNhadcomp; i++) {
+      (fHadronPhys[i])->ConstructProcess();
     }
   }
-  if (hadPhysicsList) hadPhysicsList->ConstructProcess();
+  if (fHadPhysicsList) fHadPhysicsList->ConstructProcess();
   G4cout << "### exrdmPhysicsList::ConstructProcess is done" << G4endl;
 
 }
@@ -142,26 +142,26 @@ void exrdmPhysicsList::SelectPhysicsList(const G4String& name)
     G4cout << "exrdmPhysicsList::SelectPhysicsList: <" << name << ">" << G4endl;
   }
   // default  Had physics
-  if (name == "Hadron" && !hadPhysicsList) {
-    hadPhysicsList = new exrdmPhysListHadron("hadron");
+  if (name == "Hadron" && !fHadPhysicsList) {
+    fHadPhysicsList = new exrdmPhysListHadron("hadron");
   } else if (name == "QGSP_BERT") {
     AddExtraBuilders(false);
-    hadPhysicsList = new HadronPhysicsQGSP_BERT("std-hadron");
-  } else if (name == "QGSP_BIC" && !hadPhysicsList) {
+    fHadPhysicsList = new HadronPhysicsQGSP_BERT("std-hadron");
+  } else if (name == "QGSP_BIC" && !fHadPhysicsList) {
     AddExtraBuilders(false);
-    hadPhysicsList = new HadronPhysicsQGSP_BIC("std-hadron");
-  } else if (name == "QGSP_BERT_HP"  && !hadPhysicsList) {
+    fHadPhysicsList = new HadronPhysicsQGSP_BIC("std-hadron");
+  } else if (name == "QGSP_BERT_HP"  && !fHadPhysicsList) {
     AddExtraBuilders(true);
-    hadPhysicsList = new HadronPhysicsQGSP_BERT_HP("std-hadron");
-  } else if (name == "QGSP_BIC_HP"  && !hadPhysicsList) {
+    fHadPhysicsList = new HadronPhysicsQGSP_BERT_HP("std-hadron");
+  } else if (name == "QGSP_BIC_HP"  && !fHadPhysicsList) {
     AddExtraBuilders(true);
-    hadPhysicsList = new HadronPhysicsQGSP_BIC_HP("std-hadron");
+    fHadPhysicsList = new HadronPhysicsQGSP_BIC_HP("std-hadron");
   } else if (name == "LowEnergy_EM") {
-      delete emPhysicsList;
-      emPhysicsList = new exrdmPhysListEmLowEnergy("lowe-em");
+      delete fEmPhysicsList;
+      fEmPhysicsList = new exrdmPhysListEmLowEnergy("lowe-em");
   } else if (name == "Standard_EM") {
-      delete emPhysicsList;
-      emPhysicsList = new G4EmStandardPhysics();
+      delete fEmPhysicsList;
+      fEmPhysicsList = new G4EmStandardPhysics();
   } else {
       G4cout << "exrdmPhysicsList WARNING wrong or unkonwn <" 
 	     << name << "> Physics " << G4endl;
@@ -172,32 +172,32 @@ void exrdmPhysicsList::SelectPhysicsList(const G4String& name)
 
 void exrdmPhysicsList::AddExtraBuilders(G4bool flagHP)
 {
-  nhadcomp = 5;
-  hadronPhys.push_back( new G4EmExtraPhysics("extra EM"));
-  hadronPhys.push_back( new G4HadronElasticPhysics("elastic",verboseLevel,
+  fNhadcomp = 5;
+  fHadronPhys.push_back( new G4EmExtraPhysics("extra EM"));
+  fHadronPhys.push_back( new G4HadronElasticPhysics("elastic",verboseLevel,
 						   flagHP));
-  hadronPhys.push_back( new G4QStoppingPhysics("stopping",verboseLevel));
-  hadronPhys.push_back( new G4IonBinaryCascadePhysics("ionBIC"));
-  hadronPhys.push_back( new G4NeutronTrackingCut("Neutron tracking cut"));
+  fHadronPhys.push_back( new G4QStoppingPhysics("stopping",verboseLevel));
+  fHadronPhys.push_back( new G4IonBinaryCascadePhysics("ionBIC"));
+  fHadronPhys.push_back( new G4NeutronTrackingCut("Neutron tracking cut"));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void exrdmPhysicsList::SetCuts()
 {
-  SetCutValue(cutForGamma, "gamma");
-  SetCutValue(cutForElectron, "e-");
-  SetCutValue(cutForPositron, "e+");
+  SetCutValue(fCutForGamma, "gamma");
+  SetCutValue(fCutForElectron, "e-");
+  SetCutValue(fCutForPositron, "e+");
   G4cout << "world cuts are set" << G4endl;
 
-  if( !TargetCuts ) SetTargetCut(cutForElectron);
+  if( !fTargetCuts ) SetTargetCut(fCutForElectron);
   G4Region* region = (G4RegionStore::GetInstance())->GetRegion("Target");
-  region->SetProductionCuts(TargetCuts);
+  region->SetProductionCuts(fTargetCuts);
   G4cout << "Target cuts are set" << G4endl;
 
-  if( !DetectorCuts ) SetDetectorCut(cutForElectron);
+  if( !fDetectorCuts ) SetDetectorCut(fCutForElectron);
   region = (G4RegionStore::GetInstance())->GetRegion("Detector");
-  region->SetProductionCuts(DetectorCuts);
+  region->SetProductionCuts(fDetectorCuts);
   G4cout << "Detector cuts are set" << G4endl;
 
   if (verboseLevel>0) DumpCutValuesTable();
@@ -207,35 +207,35 @@ void exrdmPhysicsList::SetCuts()
 
 void exrdmPhysicsList::SetCutForGamma(G4double cut)
 {
-  cutForGamma = cut;
-  SetParticleCuts(cutForGamma, G4Gamma::Gamma());
+  fCutForGamma = cut;
+  SetParticleCuts(fCutForGamma, G4Gamma::Gamma());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void exrdmPhysicsList::SetCutForElectron(G4double cut)
 {
-  cutForElectron = cut;
-  SetParticleCuts(cutForElectron, G4Electron::Electron());
+  fCutForElectron = cut;
+  SetParticleCuts(fCutForElectron, G4Electron::Electron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void exrdmPhysicsList::SetCutForPositron(G4double cut)
 {
-  cutForPositron = cut;
-  SetParticleCuts(cutForPositron, G4Positron::Positron());
+  fCutForPositron = cut;
+  SetParticleCuts(fCutForPositron, G4Positron::Positron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void exrdmPhysicsList::SetTargetCut(G4double cut)
 {
-  if( !TargetCuts ) TargetCuts = new G4ProductionCuts();
+  if( !fTargetCuts ) fTargetCuts = new G4ProductionCuts();
 
-  TargetCuts->SetProductionCut(cut, idxG4GammaCut);
-  TargetCuts->SetProductionCut(cut, idxG4ElectronCut);
-  TargetCuts->SetProductionCut(cut, idxG4PositronCut);
+  fTargetCuts->SetProductionCut(cut, idxG4GammaCut);
+  fTargetCuts->SetProductionCut(cut, idxG4ElectronCut);
+  fTargetCuts->SetProductionCut(cut, idxG4PositronCut);
 
 }
 
@@ -243,11 +243,11 @@ void exrdmPhysicsList::SetTargetCut(G4double cut)
 
 void exrdmPhysicsList::SetDetectorCut(G4double cut)
 {
-  if( !DetectorCuts ) DetectorCuts = new G4ProductionCuts();
+  if( !fDetectorCuts ) fDetectorCuts = new G4ProductionCuts();
 
-  DetectorCuts->SetProductionCut(cut, idxG4GammaCut);
-  DetectorCuts->SetProductionCut(cut, idxG4ElectronCut);
-  DetectorCuts->SetProductionCut(cut, idxG4PositronCut);
+  fDetectorCuts->SetProductionCut(cut, idxG4GammaCut);
+  fDetectorCuts->SetProductionCut(cut, idxG4ElectronCut);
+  fDetectorCuts->SetProductionCut(cut, idxG4PositronCut);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
