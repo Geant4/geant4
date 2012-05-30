@@ -35,17 +35,22 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(RunAction* run): runAction(run)
+TrackingAction::TrackingAction(RunAction* run): fRunAction(run)
 {}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+TrackingAction::~TrackingAction()
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 {
   // extract Projected Range of primary particle
   if (aTrack->GetTrackID() == 1) {
-    G4double x = aTrack->GetPosition().x() + runAction->GetOffsetX();
-    runAction->AddProjRange(x);
+    G4double x = aTrack->GetPosition().x() + fRunAction->GetOffsetX();
+    fRunAction->AddProjRange(x);
   }  
 }
 

@@ -48,12 +48,11 @@
 #include "G4SafetyHelper.hh"
 #include "G4FieldManagerStore.hh"
 #include "G4Monopole.hh"
+#include "G4TransportationProcessType.hh"
 
 class G4VSensitiveDetector;
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Constructor
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4MonopoleTransportation::G4MonopoleTransportation( const G4Monopole* mpl,
 						    G4int verb)
@@ -70,6 +69,9 @@ G4MonopoleTransportation::G4MonopoleTransportation( const G4Monopole* mpl,
     fShortStepOptimisation(false),    // Old default: true (=fast short steps)
     fVerboseLevel( verb )
 {
+  // set Process Sub Type
+  SetProcessSubType(TRANSPORTATION);  
+
   pParticleDef = mpl;
    
   magSetup = G4MonopoleFieldSetup::GetMonopoleFieldSetup();
@@ -99,18 +101,19 @@ G4MonopoleTransportation::G4MonopoleTransportation( const G4Monopole* mpl,
   fCandidateEndGlobalTime = 0;
 }
 
-//////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4MonopoleTransportation::~G4MonopoleTransportation()
 {
   if( (fVerboseLevel > 0) && (fSumEnergyKilled > 0.0 ) ){ 
-    G4cout << " G4MonopoleTransportation: Statistics for looping particles " << G4endl;
+    G4cout << " G4MonopoleTransportation: Statistics for looping particles " 
+	   << G4endl;
     G4cout << "   Sum of energy of loopers killed: " <<  fSumEnergyKilled << G4endl;
     G4cout << "   Max energy of loopers killed: " <<  fMaxEnergyKilled << G4endl;
   } 
 }
 
-//////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 // Responsibilities:
 //    Find whether the geometry limits the Step, and to what length
@@ -185,14 +188,14 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   {      
      fieldMgr= fFieldPropagator->FindAndSetFieldManager( track.GetVolume() ); 
      if (fieldMgr != 0) {
-  // Message the field Manager, to configure it for this track
-  fieldMgr->ConfigureForTrack( &track );
-  // Moved here, in order to allow a transition
-  //   from a zero-field  status (with fieldMgr->(field)0
-  //   to a finite field  status
+       // Message the field Manager, to configure it for this track
+       fieldMgr->ConfigureForTrack( &track );
+       // Moved here, in order to allow a transition
+       //   from a zero-field  status (with fieldMgr->(field)0
+       //   to a finite field  status
 
-        // If the field manager has no field, there is no field !
-        fieldExertsForce = (fieldMgr->GetDetectorField() != 0);
+       // If the field manager has no field, there is no field !
+       fieldExertsForce = (fieldMgr->GetDetectorField() != 0);
      }      
   }
 
@@ -319,78 +322,8 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 
      fTransportEndKineticEnergy  = aFieldTrack.GetKineticEnergy() ; 
 
-//       if( fFieldPropagator->GetCurrentFieldManager()->DoesFieldChangeEnergy() )
-//       {
-//         // If the field can change energy, then the time must be integrated
-//         //   - so this should have been updated
-
-        fCandidateEndGlobalTime   = aFieldTrack.GetLabTimeOfFlight();
-        fEndGlobalTimeComputed    = true;
-
-//         // was ( fCandidateEndGlobalTime != track.GetGlobalTime() );
-//         // a cleaner way is to have FieldTrack knowing whether time is updated.
-//      }
-//      else
-//      {
-//         // The energy should be unchanged by field transport,
-//         //    - so the time changed will be calculated elsewhere
-//         //
-//         fEndGlobalTimeComputed = false;
-// 
-//         // Check that the integration preserved the energy 
-//         //     -  and if not correct this!
-//         G4double  startEnergy= track.GetKineticEnergy();
-//         G4double  endEnergy= fTransportEndKineticEnergy; 
-// 
-//         static G4int no_inexact_steps=0, no_large_ediff;
-//         G4double absEdiff = std::fabs(startEnergy- endEnergy);
-//         if( absEdiff > perMillion * endEnergy )
-//         {
-//           no_inexact_steps++;
-//           // Possible statistics keeping here ...
-//         }
-//         if( fVerboseLevel > 1 )
-//         {
-//           if( std::fabs(startEnergy- endEnergy) > perThousand * endEnergy )
-//           {
-//             static G4int no_warnings= 0, warnModulo=1,  moduloFactor= 10; 
-//             no_large_ediff ++;
-//             if( (no_large_ediff% warnModulo) == 0 )
-//             {
-//                no_warnings++;
-//                G4cout << "WARNING - G4MonopoleTransportation::AlongStepGetPIL() " 
-// 	              << "   Energy change in Step is above 1^-3 relative value. " << G4endl
-// 		      << "   Relative change in 'tracking' step = " 
-// 		      << std::setw(15) << (endEnergy-startEnergy)/startEnergy << G4endl
-//                       << "     Starting E= " << std::setw(12) << startEnergy / MeV << " MeV " << G4endl
-//                       << "     Ending   E= " << std::setw(12) << endEnergy   / MeV << " MeV " << G4endl;       
-//                G4cout << " Energy has been corrected -- however, review"
-//                       << " field propagation parameters for accuracy."  << G4endl;
-// 	       if( (fVerboseLevel > 2 ) || (no_warnings<4) || (no_large_ediff == warnModulo * moduloFactor) ){
-// 		 G4cout << " These include EpsilonStepMax(/Min) in G4FieldManager "
-// 			<< " which determine fractional error per step for integrated quantities. " << G4endl
-// 			<< " Note also the influence of the permitted number of integration steps."
-// 			<< G4endl;
-// 	       }
-//                G4cerr << "ERROR - G4MonopoleTransportation::AlongStepGetPIL()" << G4endl
-// 	              << "        Bad 'endpoint'. Energy change detected"
-//                       << " and corrected. " 
-// 		      << " Has occurred already "
-//                       << no_large_ediff << " times." << G4endl;
-//                if( no_large_ediff == warnModulo * moduloFactor )
-//                {
-//                   warnModulo *= moduloFactor;
-//                }
-//             }
-//           }
-//         }  // end of if (fVerboseLevel)
-// 
-//         // Correct the energy for fields that conserve it
-//         //  This - hides the integration error
-//         //       - but gives a better physical answer
-//         fTransportEndKineticEnergy= track.GetKineticEnergy(); 
-//      }
-
+     fCandidateEndGlobalTime   = aFieldTrack.GetLabTimeOfFlight();
+     fEndGlobalTimeComputed    = true;
 
      fTransportEndSpin = aFieldTrack.GetSpin();
      fParticleIsLooping = fFieldPropagator->IsParticleLooping() ;
@@ -446,7 +379,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   return geometryStepLength ;
 }
 
-//////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 //   Initialize ParticleChange  (by setting all its members equal
 //                               to corresponding members in G4Track)
@@ -582,7 +515,7 @@ G4VParticleChange* G4MonopoleTransportation::AlongStepDoIt( const G4Track& track
   return &fParticleChange ;
 }
 
-//////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 //  This ensures that the PostStep action is always called,
 //  so that it can do the relocation if it is needed.
@@ -597,8 +530,7 @@ PostStepGetPhysicalInteractionLength( const G4Track&,
   return DBL_MAX ;  // was kInfinity ; but convention now is DBL_MAX
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VParticleChange* G4MonopoleTransportation::PostStepDoIt( const G4Track& track,
                                                    const G4Step& )
@@ -695,8 +627,11 @@ G4VParticleChange* G4MonopoleTransportation::PostStepDoIt( const G4Track& track,
   return &fParticleChange ;
 }
 
-// New method takes over the responsibility to reset the state of G4MonopoleTransportation
-//   object at the start of a new track or the resumption of a suspended track. 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+// New method takes over the responsibility to reset the state 
+// of G4MonopoleTransportation object at the start of a new track 
+// or the resumption of a suspended track. 
 
 void 
 G4MonopoleTransportation::StartTracking(G4Track* aTrack)
@@ -736,4 +671,6 @@ G4MonopoleTransportation::StartTracking(G4Track* aTrack)
   //
   fCurrentTouchableHandle = aTrack->GetTouchableHandle();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

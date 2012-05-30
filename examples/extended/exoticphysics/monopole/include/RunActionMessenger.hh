@@ -39,28 +39,25 @@ class RunAction;
 class G4UIdirectory;
 class G4UIcmdWithADouble;
 class G4UIcmdWithAnInteger;
-class G4UIcmdWithAString;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class RunActionMessenger: public G4UImessenger
 {
-  public:
+public:
   
-    RunActionMessenger(RunAction* );
-   ~RunActionMessenger();
+  RunActionMessenger(RunAction* );
+  ~RunActionMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String);
     
-  private:
+private:
   
-    RunAction*	       	   runaction;
+  RunAction*	       	 fRunAction;
     
-    G4UIdirectory*         actDir;    
-    G4UIcmdWithADouble*	   binSizeCmd;
-    G4UIcmdWithAnInteger*  verboseCmd;
-    G4UIcmdWithAString*  	 histoNameCmd;
-    G4UIcmdWithAString*  	 histoTypeCmd;
+  G4UIdirectory*         fActDir;    
+  G4UIcmdWithADouble*	 fBinSizeCmd;
+  G4UIcmdWithAnInteger*  fVerboseCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

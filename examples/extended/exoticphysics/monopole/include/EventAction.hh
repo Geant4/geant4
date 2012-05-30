@@ -41,22 +41,20 @@ class EventActionMessenger;
 
 class EventAction : public G4UserEventAction
 {
-  public:
-    EventAction();
-   ~EventAction();
+public:
 
-  public:
-    void BeginOfEventAction(const G4Event*);
-    void   EndOfEventAction(const G4Event*);
+  EventAction();
+  ~EventAction();
+
+  void BeginOfEventAction(const G4Event*);
+  void   EndOfEventAction(const G4Event*);
     
-    void SetDrawFlag(G4String val) {drawFlag = val;};
-    void SetPrintModulo(G4int val) {printModulo = val;};
+  inline void SetPrintModulo(G4int val) { fPrintModulo = val; };
             
-    
-  private:
-    G4String                  drawFlag;
-    G4int                     printModulo;                    
-    EventActionMessenger*  eventMessenger;
+private:
+
+  G4int                  fPrintModulo;                    
+  EventActionMessenger*  fEventMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -35,63 +35,43 @@
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithAnInteger.hh"
-#include "G4UIcmdWithAString.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunActionMessenger::RunActionMessenger(RunAction * ra): runaction(ra)
+RunActionMessenger::RunActionMessenger(RunAction * ra): fRunAction(ra)
 {   
-  actDir = new G4UIdirectory("/testex/run/");
-  actDir->SetGuidance("run commands");
+  fActDir = new G4UIdirectory("/testex/run/");
+  fActDir->SetGuidance("run commands");
       
-  binSizeCmd = new G4UIcmdWithADouble("/testex/run/binSize", this);
-  binSizeCmd->SetGuidance("Set bin size.");
-  binSizeCmd->SetParameterName("binSize", false);
-  binSizeCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+  fBinSizeCmd = new G4UIcmdWithADouble("/testex/run/binSize", this);
+  fBinSizeCmd->SetGuidance("Set bin size.");
+  fBinSizeCmd->SetParameterName("binSize", false);
+  fBinSizeCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-  verboseCmd = new G4UIcmdWithAnInteger("/testex/run/verbose", this);
-  verboseCmd->SetGuidance("Set verbose level.");
-  verboseCmd->SetParameterName("verbose", false);
-  verboseCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
-
-	histoNameCmd = new G4UIcmdWithAString("/testex/run/HistoName", this);
-  histoNameCmd->SetGuidance("Set histo file name.");
-  histoNameCmd->SetParameterName("histoName", false);
-  histoNameCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
-
-	histoTypeCmd = new G4UIcmdWithAString("/testex/run/HistoType", this);
-  histoTypeCmd->SetGuidance("Set histo file type.");
-  histoTypeCmd->SetParameterName("histoType", false);
-  histoTypeCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
-
+  fVerboseCmd = new G4UIcmdWithAnInteger("/testex/run/verbose", this);
+  fVerboseCmd->SetGuidance("Set verbose level.");
+  fVerboseCmd->SetParameterName("verbose", false);
+  fVerboseCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 }
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 RunActionMessenger::~RunActionMessenger()
 {
-  delete binSizeCmd;
-  delete verboseCmd;
-	delete histoNameCmd;
-	delete histoTypeCmd;
+  delete fBinSizeCmd;
+  delete fVerboseCmd;
+  delete fActDir;
 }
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void RunActionMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
+  if( command == fBinSizeCmd )
+   { fRunAction->SetBinSize(fBinSizeCmd->GetNewDoubleValue(newValue));}
 
-  if( command == binSizeCmd )
-   { runaction->SetBinSize(binSizeCmd->GetNewDoubleValue(newValue));}
-
-  if( command == verboseCmd )
-   { runaction->SetVerbose(verboseCmd->GetNewIntValue(newValue));}
-
-  if( command == histoNameCmd )
-   { runaction->SetHistoName(newValue);}
-
-  if( command == histoTypeCmd )
-   { runaction->SetHistoType(newValue);}
+  if( command == fVerboseCmd )
+   { fRunAction->SetVerbose(fVerboseCmd->GetNewIntValue(newValue));}
 
 }
 

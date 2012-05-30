@@ -43,17 +43,18 @@ class G4UIcmdWithADoubleAndUnit;
 
 class PrimaryGeneratorMessenger: public G4UImessenger
 {
-  public:
-    PrimaryGeneratorMessenger(PrimaryGeneratorAction*);
-   ~PrimaryGeneratorMessenger();
+public:
+
+  PrimaryGeneratorMessenger(PrimaryGeneratorAction*);
+  ~PrimaryGeneratorMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String);
     
-  private:
-    PrimaryGeneratorAction*    Action;
-    G4UIdirectory*             testexDir;
-    G4UIdirectory*             gunDir;         
-    G4UIcmdWithADoubleAndUnit* RndmCmd;
+private:
+  PrimaryGeneratorAction*    Action;
+  G4UIdirectory*             testexDir;
+  G4UIdirectory*             gunDir;         
+  G4UIcmdWithADoubleAndUnit* RndmCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -50,6 +50,8 @@
 G4Monopole* G4Monopole::theMonopole = 0;
 G4double    G4Monopole::magCharge = 0.0;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4Monopole::G4Monopole(
        const G4String&     aName,        G4double            mass,
        G4double            width,        G4double            charge,   
@@ -81,16 +83,17 @@ G4Monopole::~G4Monopole()
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4Monopole* G4Monopole::MonopoleDefinition(G4double mass, G4double mCharge, G4double eCharge)
+G4Monopole* G4Monopole::MonopoleDefinition(G4double mass, G4double mCharge, 
+					   G4double eCharge)
 {    
   if(!theMonopole) {
     magCharge = eplus * mCharge / fine_structure_const * 0.5;
     theMonopole = new G4Monopole(
-				 "monopole",         mass,       0.0*MeV,       eplus*eCharge, 
-				 0,               0,             0,          
-				 0,               0,             0,             
-				 "boson",               0,             0,           0,
-				 true,            -1.0,             0);
+       "monopole",         mass,       0.0*MeV,       eplus*eCharge, 
+                0,               0,             0,          
+                0,               0,             0,             
+          "boson",               0,             0,           0,
+             true,            -1.0,             0);
     
     
     G4cout << "Monopole is created: m(GeV)= " << theMonopole->GetPDGMass()/GeV 

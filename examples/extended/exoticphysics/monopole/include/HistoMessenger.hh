@@ -23,52 +23,48 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorMessenger.cc,v 1.1 2007-08-16 10:32:04 vnivanch Exp $
+// $Id: HistoMessenger.hh,v 1.1 2010-09-08 11:23:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "PrimaryGeneratorMessenger.hh"
-
-#include "PrimaryGeneratorAction.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(PrimaryGeneratorAction* Gun):Action(Gun)
-{ 
-  testexDir = new G4UIdirectory("/testex/");
-  testexDir->SetGuidance(" detector control.");
+#ifndef HistoMessenger_h
+#define HistoMessenger_h 1
 
-  gunDir = new G4UIdirectory("/testex/gun/");
-  gunDir->SetGuidance("gun control");
-
-  RndmCmd = new G4UIcmdWithADoubleAndUnit("/testex/gun/rndm", this);
-  RndmCmd->SetGuidance("random lateral extension on the beam");
-  RndmCmd->SetParameterName("rBeam", false);
-  RndmCmd->SetRange("rBeam>=0.");
-  RndmCmd->SetUnitCategory("Length");
-  RndmCmd->AvailableForStates(G4State_PreInit, G4State_Idle);  
-}
+#include "G4UImessenger.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
+class Histo;
+class G4UIdirectory;
+class G4UIcommand;
+class G4UIcmdWithAString;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class HistoMessenger: public G4UImessenger
 {
-  delete RndmCmd;
-  delete gunDir;
-  delete testexDir;
-}
+public:
+
+  HistoMessenger(Histo* );
+  ~HistoMessenger();
+
+  virtual void SetNewValue(G4UIcommand* ,G4String );
+
+private:
+
+  Histo*                  fHisto;
+   
+  G4UIdirectory*          fHistoDir;   
+  G4UIcmdWithAString*     fFactoryCmd;
+  G4UIcmdWithAString*     fFileCmd;
+  G4UIcommand*            fHistoCmd;
+
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
-{ 
-  if (command == RndmCmd)
-   {Action->SetRndmBeam(RndmCmd->GetNewDoubleValue(newValue));}   
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
+#endif

@@ -71,9 +71,9 @@ private:
 
 public: 
   
-  static G4Monopole* MonopoleDefinition(G4double mass_ = 100.*GeV, 
-                                        G4double magCharge_ = 1.0, 
-                                        G4double elCharge_  = 0.0);
+  static G4Monopole* MonopoleDefinition(G4double mass = 100.*GeV, 
+                                        G4double magCharge = 1.0, 
+                                        G4double elCharge  = 0.0);
 
   static G4Monopole* Monopole();
 

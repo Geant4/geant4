@@ -61,19 +61,19 @@ class G4MonopoleFieldMessenger;
 class G4MonopoleFieldSetup
 {
 public:  
+
   void InitialiseAll();    //  Set parameters and call method below
   void SetMagField(G4double fieldValue);
   void SetStepperAndChordFinder(G4int val);
 
   static G4MonopoleFieldSetup* GetMonopoleFieldSetup();
-  
-protected:
-  G4MonopoleFieldSetup(G4ThreeVector) ;  //  The value of the field
-  G4MonopoleFieldSetup() ;               //  A zero field
 
- ~G4MonopoleFieldSetup() ;     
- 
-protected:
+  ~G4MonopoleFieldSetup() ;     
+  
+private:
+
+  G4MonopoleFieldSetup();            
+
   G4FieldManager*         GetGlobalFieldManager() ;   // static 
 
   G4FieldManager*         fFieldManager ;
@@ -86,10 +86,8 @@ protected:
   G4MagIntegratorStepper* fMonopoleStepper ;
 
   G4double                fMinStep ;
-  
-private:  
-  static G4MonopoleFieldSetup*  fMonopoleFieldSetup;
-  
+
+  static G4MonopoleFieldSetup*  fMonopoleFieldSetup;  
   G4MonopoleFieldMessenger*     fMonopoleFieldMessenger;
  
 };
