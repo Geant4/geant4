@@ -40,7 +40,7 @@
 StepMaxMessenger::StepMaxMessenger(StepMax* stepM)
 :fStepMax(stepM)
 { 
-  fStepMax1Cmd = new G4UIcmdWithADoubleAndUnit("/testem/fStepMax",this);
+  fStepMax1Cmd = new G4UIcmdWithADoubleAndUnit("/testem/stepMax",this);
   fStepMax1Cmd->SetGuidance("Set max allowed step length");
   fStepMax1Cmd->SetParameterName("mxStep1",false);
   fStepMax1Cmd->SetRange("mxStep1>0.");

@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+30-04-12 mma (testem12-V09-05-06)
+- StepMaxMessenger : printing correction
+     
 12-04-12 mma (testem12-V09-05-04)
 - all classes : apply G4 coding conventions
        
