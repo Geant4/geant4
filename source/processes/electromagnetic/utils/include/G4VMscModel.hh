@@ -58,6 +58,7 @@
 #include "G4Track.hh"
 #include "G4SafetyHelper.hh"
 #include "G4VEnergyLossProcess.hh"
+#include "G4LossTableManager.hh"
 #include "G4PhysicsTable.hh"
 #include <vector>
 
@@ -166,6 +167,8 @@ private:
 
   G4SafetyHelper* safetyHelper;
   G4VEnergyLossProcess* ionisation;
+  const G4ParticleDefinition* currentPart;
+  G4LossTableManager* man;
 
   G4double dedx;
   G4double localtkin;
@@ -274,6 +277,10 @@ G4VMscModel::GetRange(const G4ParticleDefinition* part,
 {
   localrange = DBL_MAX;
   localtkin  = kinEnergy;
+  if(part != currentPart) {
+    currentPart = part;
+    ionisation = man->GetEnergyLossProcess(part);
+  }
   if(ionisation) { 
     localrange = ionisation->GetRangeForLoss(localtkin, couple); 
   } else { 

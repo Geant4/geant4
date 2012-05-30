@@ -61,7 +61,7 @@ G4ElectronIonPair::G4ElectronIonPair()
   curMaterial = 0;
   curMeanEnergy = 0.0;
   nMaterials = 0;
-  FanoFactor = 0.2;
+  invFanoFactor = 1.0/0.2;
   Initialise();
 }
 

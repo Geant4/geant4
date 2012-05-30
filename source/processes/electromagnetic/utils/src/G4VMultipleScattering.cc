@@ -229,9 +229,14 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
   (G4LossTableManager::Instance())->BuildPhysicsTable(firstParticle);
 
   if(verboseLevel>0 && ( num == "e-" || num == "mu+" ||  
-                         num == "proton" || num == "pi-" || 
+                         num == "proton" || num == "pi+" || 
 			 num == "kaon+" || num == "GenericIon")) {
-    PrintInfoDefinition();
+    G4cout << G4endl << GetProcessName() 
+	   << ":   for " << num
+	   << "    SubType= " << GetProcessSubType() 
+	   << G4endl;
+    PrintInfo();
+    modelManager->DumpModelList(verboseLevel);
   }
 
   if(1 < verboseLevel) {

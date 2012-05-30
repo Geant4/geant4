@@ -671,11 +671,15 @@ void G4EmModelManager::DumpModelList(G4int verb)
 	     << " ======" << G4endl;;
       for(G4int j=0; j<n; ++j) {
 	G4VEmModel* model = models[r->ModelIndex(j)];
+        G4double emin = 
+	  std::max(r->LowEdgeEnergy(j),model->LowEnergyActivationLimit());
+        G4double emax = 
+	  std::min(r->LowEdgeEnergy(j+1),model->HighEnergyActivationLimit());
 	G4cout << std::setw(20);
 	G4cout << model->GetName() << " :  Emin= " 
-	       << std::setw(8) << G4BestUnit(r->LowEdgeEnergy(j),"Energy")
+	       << std::setw(8) << G4BestUnit(emin,"Energy")
 	       << "   Emax= " 
-	       << std::setw(8) << G4BestUnit(r->LowEdgeEnergy(j+1),"Energy");
+	       << std::setw(8) << G4BestUnit(emax,"Energy");
 	G4PhysicsTable* table = model->GetCrossSectionTable();
         if(table) {
           G4PhysicsVector* v = (*table)[0];

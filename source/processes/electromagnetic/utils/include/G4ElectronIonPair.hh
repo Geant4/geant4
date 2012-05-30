@@ -125,7 +125,7 @@ private:
   const G4Material*  curMaterial;
   G4double           curMeanEnergy;
 
-  G4double FanoFactor;
+  G4double invFanoFactor;
   
   G4int    verbose;             
   G4int    nMaterials;
@@ -147,16 +147,10 @@ G4ElectronIonPair::MeanNumberOfIonsAlongStep(const G4Step* step)
 inline 
 G4int G4ElectronIonPair::SampleNumberOfIonsAlongStep(const G4Step* step)
 {
+  // use gamma distribution with mean value n=meanion and 
+  // dispersion D=meanion/invFanoFactor
   G4double meanion = MeanNumberOfIonsAlongStep(step);
-  G4double lambda  = 1./FanoFactor;
-  G4double a       = meanion*lambda;
-
-  // old Gauss implementation
-  // G4double sig = FanoFactor*std::sqrt(meanion);
-  // G4int nion = G4int(G4RandGauss::shoot(meanion,sig) + 0.5);
-
-  G4int nion = G4int(CLHEP::RandGamma::shoot(a,lambda) + 0.5);
-  return nion;
+  return G4lrint(CLHEP::RandGamma::shoot(meanion*invFanoFactor,invFanoFactor));
 } 
 
 inline 

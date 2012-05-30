@@ -17,6 +17,27 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28 May 12: V.Ivant (emutils-V09-05-14)
+- G4EmCalculator - fixed FindRegion
+
+18 May 12: V.Ivant (emutils-V09-05-13)
+- G4EmModelManager - improved printout of model energy limits
+- G4VEmModel - added inline methods HighEnergyActivationLimit(),
+    LowEnergyActivationLimit(), ForceBuildTableFlag(), ForceBuildTable()
+- G4VMscModel - updated GetRange() and GetEnergy() methods allowing to
+    use the same model class for many particles
+
+09 May 12: V.Ivant (emutils-V09-05-12)
+- G4ElectronIonPair - use inverse FanoFactor to simplify formula
+
+09 May 12: V.Ivant (emutils-V09-05-11)
+- G4VMultipleScatetring - improved printout at initialisation
+- G4ElectronIonPair - cleanup implementation of sampling of number of ions
+
+26 April 12: V.Ivant (emutils-V09-05-10)
+- G4EmCalculator - fixed GetMeanFreePath for msc processes (bug introduced
+    in previous tags)
+
 20 April 12: V.Ivant (emutils-V09-05-09)
 - G4LossTableManager - added methods MinKinEnergy, MaxkinEnergy
 - G4EmModelManager - extended printout if cross section table is built for

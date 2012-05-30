@@ -61,10 +61,9 @@
 
 G4VEmModel::G4VEmModel(const G4String& nam):
   flucModel(0),anglModel(0), name(nam), lowLimit(0.1*CLHEP::keV), 
-  highLimit(100.0*CLHEP::TeV), 
+  highLimit(100.0*CLHEP::TeV),eMinActive(0.0),eMaxActive(DBL_MAX),
   polarAngleLimit(CLHEP::pi),secondaryThreshold(DBL_MAX),
-  theLPMflag(false),flagDeexcitation(false),
-  eMinActive(0.0),eMaxActive(DBL_MAX),
+  theLPMflag(false),flagDeexcitation(false),flagForceBuildTable(false),
   pParticleChange(0),xSection(0),theDensityFactor(0),theDensityIdx(0),
   fCurrentCouple(0),fCurrentElement(0),
   nsec(5) 

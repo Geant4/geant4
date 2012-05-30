@@ -50,7 +50,6 @@
 #include "G4VMscModel.hh"
 #include "G4ParticleChangeForMSC.hh"
 #include "G4TransportationManager.hh"
-#include "G4LossTableManager.hh"
 #include "G4LossTableBuilder.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,6 +74,8 @@ G4VMscModel::G4VMscModel(const G4String& nam):
   dedx       = 2.0*CLHEP::MeV*CLHEP::cm2/CLHEP::g;
   localrange = DBL_MAX;
   localtkin  = 0.0;
+  man = G4LossTableManager::Instance();
+  currentPart = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -99,10 +100,9 @@ G4VMscModel::GetParticleChangeForMSC(const G4ParticleDefinition* p)
     change = new G4ParticleChangeForMSC();
   }
   if(p) {
-    if(p->GetPDGMass() < GeV) {
-      G4double emin = std::max(LowEnergyLimit(),  eMinActive);
-      G4double emax = std::min(HighEnergyLimit(), eMaxActive);
-      G4LossTableManager* man = G4LossTableManager::Instance();
+    if(p->GetPDGMass() < GeV || ForceBuildTableFlag()) {
+      G4double emin = std::max(LowEnergyLimit(), LowEnergyActivationLimit());
+      G4double emax = std::min(HighEnergyLimit(), HighEnergyActivationLimit());
       emin = std::max(emin, man->MinKinEnergy());
       emax = std::min(emax, man->MaxKinEnergy());
       G4LossTableBuilder* builder = man->GetTableBuilder();

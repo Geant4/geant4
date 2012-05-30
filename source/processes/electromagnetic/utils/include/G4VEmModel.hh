@@ -269,6 +269,10 @@ public:
 
   inline G4double LowEnergyLimit() const;
 
+  inline G4double HighEnergyActivationLimit() const;
+
+  inline G4double LowEnergyActivationLimit() const;
+
   inline G4double PolarAngleLimit() const;
 
   inline G4double SecondaryThreshold() const;
@@ -276,6 +280,8 @@ public:
   inline G4bool LPMFlag() const;
 
   inline G4bool DeexcitationFlag() const;
+
+  inline G4bool ForceBuildTableFlag() const;
 
   inline void SetHighEnergyLimit(G4double);
 
@@ -294,6 +300,8 @@ public:
   inline void SetLPMFlag(G4bool val);
 
   inline void SetDeexcitationFlag(G4bool val);
+
+  inline void ForceBuildTable(G4bool val);
 
   inline G4double MaxSecondaryKinEnergy(const G4DynamicParticle* dynParticle);
 
@@ -325,18 +333,18 @@ private:
 
   G4double        lowLimit;
   G4double        highLimit;
+  G4double        eMinActive;
+  G4double        eMaxActive;
   G4double        polarAngleLimit;
   G4double        secondaryThreshold;
   G4bool          theLPMflag;
   G4bool          flagDeexcitation;
+  G4bool          flagForceBuildTable;
 
   G4int           nSelectors;
   std::vector<G4EmElementSelector*> elmSelectors;
 
 protected:
-
-  G4double        eMinActive;
-  G4double        eMaxActive;
 
   G4VParticleChange*           pParticleChange;
   G4PhysicsTable*              xSection;
@@ -523,6 +531,20 @@ inline G4double G4VEmModel::LowEnergyLimit() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+inline G4double G4VEmModel::HighEnergyActivationLimit() const
+{
+  return eMaxActive;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4VEmModel::LowEnergyActivationLimit() const
+{
+  return eMinActive;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 inline G4double G4VEmModel::PolarAngleLimit() const
 {
   return polarAngleLimit;
@@ -547,6 +569,13 @@ inline G4bool G4VEmModel::LPMFlag() const
 inline G4bool G4VEmModel::DeexcitationFlag() const 
 {
   return flagDeexcitation;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4bool G4VEmModel::ForceBuildTableFlag() const 
+{
+  return flagForceBuildTable;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -610,6 +639,13 @@ inline void G4VEmModel::SetLPMFlag(G4bool val)
 inline void G4VEmModel::SetDeexcitationFlag(G4bool val) 
 {
   flagDeexcitation = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VEmModel::ForceBuildTable(G4bool val)
+{
+  flagForceBuildTable = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
