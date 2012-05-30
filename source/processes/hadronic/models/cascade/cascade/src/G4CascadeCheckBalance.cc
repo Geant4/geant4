@@ -46,6 +46,8 @@
 // 20101019  M. Kelsey -- CoVerity report: unitialized constructor
 // 20110328  M. Kelsey -- Add default ctor and explicit limit setting
 // 20110722  M. Kelsey -- For IntraNucleiCascader, take G4CollOut as argument
+// 20120525  M. Kelsey -- Follow process-level checking: allow _either_ rel.
+//		or abs. to pass (instead of requiring both)
 
 #include "G4CascadeCheckBalance.hh"
 #include "globals.hh"
@@ -81,7 +83,7 @@ G4CascadeCheckBalance::G4CascadeCheckBalance(G4double relative,
 void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
 				    G4InuclParticle* target,
 				    G4CollisionOutput& output) {
-  if (verboseLevel > 1)
+  if (verboseLevel)
     G4cout << " >>> G4CascadeCheckBalance(" << theName << ")::collide"
 	   << G4endl;
 
@@ -112,7 +114,7 @@ void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
   finalCharge = output.getTotalCharge();
 
   // Report results
-  if (verboseLevel > 2) {
+  if (verboseLevel>1) {
     G4cout << " initial px " << initial.px() << " py " << initial.py()
 	   << " pz " << initial.pz() << " E " << initial.e()
 	   << " baryon " << initialBaryon << " charge " << initialCharge
@@ -127,7 +129,7 @@ void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
 void G4CascadeCheckBalance::collide(G4InuclParticle* bullet, 
 				    G4InuclParticle* target,
     const std::vector<G4InuclElementaryParticle>& particles) {
-  if (verboseLevel > 1)
+  if (verboseLevel)
     G4cout << " >>> G4CascadeCheckBalance(" << theName << ")::collide(<vector>)"
 	   << G4endl;
 
@@ -142,7 +144,7 @@ void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
 void G4CascadeCheckBalance::collide(G4InuclParticle* bullet, 
 				    G4InuclParticle* target,
     const std::vector<G4InuclNuclei>& fragments) {
-  if (verboseLevel > 1)
+  if (verboseLevel)
     G4cout << " >>> G4CascadeCheckBalance(" << theName << ")::collide(<vector>)"
 	   << G4endl;
 
@@ -157,7 +159,7 @@ void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
 void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
 				    G4InuclParticle* target,
 		    const std::vector<G4CascadParticle>& particles) {
-  if (verboseLevel > 1)
+  if (verboseLevel)
     G4cout << " >>> G4CascadeCheckBalance(" << theName
 	   << ")::collide(<cparticles>)" << G4endl;
 
@@ -173,7 +175,7 @@ void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
 				   G4InuclParticle* target,
 				    G4CollisionOutput& output,
 	     const std::vector<G4CascadParticle>& cparticles) {
-  if (verboseLevel > 1)
+  if (verboseLevel)
     G4cout << " >>> G4CascadeCheckBalance(" << theName
 	   << ")::collide(<EP>,<CP>)" << G4endl;
 
@@ -190,12 +192,12 @@ G4bool G4CascadeCheckBalance::energyOkay() const {
   G4bool relokay = (std::abs(relativeE()) < relativeLimit);
   G4bool absokay = (std::abs(deltaE()) < absoluteLimit);
 
-  if (verboseLevel && (!relokay || !absokay)) {
+  if (verboseLevel && !(relokay || absokay)) {
     G4cerr << theName << ": Energy conservation: relative " << relativeE()
 	   << (relokay ? " conserved" : " VIOLATED")
 	   << " absolute " << deltaE()
 	   << (absokay ? " conserved" : " VIOLATED") << G4endl;
-  } else if (verboseLevel > 2) {
+  } else if (verboseLevel > 1) {
     G4cout << theName << ": Energy conservation: relative " << relativeE()
 	   << " conserved absolute " << deltaE() << " conserved" << G4endl;
   }
@@ -207,12 +209,12 @@ G4bool G4CascadeCheckBalance::ekinOkay() const {
   G4bool relokay = (std::abs(relativeKE()) < relativeLimit);
   G4bool absokay = (std::abs(deltaKE()) < absoluteLimit);
 
-  if (verboseLevel && (!relokay || !absokay)) {
+  if (verboseLevel && !(relokay || absokay)) {
     G4cerr << theName << ": Kinetic energy balance: relative "
 	   << relativeKE() << (relokay ? " conserved" : " VIOLATED")
 	   << " absolute " << deltaKE()
 	   << (absokay ? " conserved" : " VIOLATED") << G4endl;
-  } else if (verboseLevel > 2) {
+  } else if (verboseLevel > 1) {
     G4cout << theName << ": Kinetic energy balance: relative "
 	   << relativeKE() << " conserved absolute " << deltaKE()
 	   << " conserved" << G4endl;
@@ -225,12 +227,12 @@ G4bool G4CascadeCheckBalance::momentumOkay() const {
   G4bool relokay = (std::abs(relativeP()) < relativeLimit);
   G4bool absokay = (std::abs(deltaP()) < absoluteLimit);
 
-  if (verboseLevel && (!relokay || !absokay)) {
+  if (verboseLevel && !(relokay || absokay)) {
     G4cerr << theName << ": Momentum conservation: relative " << relativeP()
 	   << (relokay ? " conserved" : " VIOLATED")
 	   << " absolute " << deltaP()
 	   << (absokay ? " conserved" : " VIOLATED") << G4endl;
-  } else if (verboseLevel > 2) {
+  } else if (verboseLevel > 1) {
     G4cout << theName << ": Momentum conservation: relative " << relativeP()
 	   << " conserved absolute " << deltaP() << " conserved" << G4endl;
   }

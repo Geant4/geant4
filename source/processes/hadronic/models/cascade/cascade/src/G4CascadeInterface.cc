@@ -93,6 +93,8 @@
 // 20110922  M. Kelsey -- Follow migration of G4InuclParticle::print(), use
 //		G4ExceptionDescription for reporting before throwing exception
 // 20120125  M. Kelsey -- In retryInelasticProton() check for empty output
+// 20120525  M. Kelsey -- In NoInteraction, check for Ekin<0., set to zero;
+//		use SetEnergyChange(0.) explicitly for good final states.
 
 #include "G4CascadeInterface.hh"
 #include "globals.hh"
@@ -199,6 +201,22 @@ void G4CascadeInterface::setVerboseLevel(G4int verbose) {
 }
 
 
+// Test whether inputs are valid for this model
+
+G4bool G4CascadeInterface::IsApplicable(const G4HadProjectile& aTrack,
+					G4Nucleus& /* theNucleus */) {
+  return IsApplicable(aTrack.GetDefinition());  
+}
+
+G4bool G4CascadeInterface::IsApplicable(const G4ParticleDefinition* aPD) const {
+  if (aPD->GetAtomicMass() > 1) return true;		// Nuclei are okay
+
+  // Valid particle and have interactions available
+  G4int type = G4InuclElementaryParticle::type(aPD);
+  return (type>0 && G4CascadeChannelTables::GetTable(type));
+}
+
+
 // Main Actions
 
 G4HadFinalState* 
@@ -224,6 +242,12 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
   theParticleChange.Clear();
   clear();
 
+  // Abort processing if no interaction is possible
+  if (!IsApplicable(aTrack, theNucleus)) {
+    if (verboseLevel) G4cerr << " No interaction possible " << G4endl;
+    return NoInteraction(aTrack, theNucleus);
+  }
+
   // Make conversion between native Geant4 and Bertini cascade classes.
   if (!createBullet(aTrack)) {
     if (verboseLevel) G4cerr << " Unable to create usable bullet" << G4endl;
@@ -234,20 +258,6 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
     if (verboseLevel) G4cerr << " Unable to create usable target" << G4endl;
     return NoInteraction(aTrack, theNucleus);
   }
-
-  // Sanity check -- hadronic bullet must have interaction table
-  G4InuclElementaryParticle* hadBullet = 
-    dynamic_cast<G4InuclElementaryParticle*>(bullet);
-
-  if (hadBullet && !G4CascadeChannelTables::GetTable(hadBullet->type())) {
-    if (verboseLevel) {
-      G4cerr << " G4CascadeInterface: "
-	     << bullet->getDefinition()->GetParticleName()
-	     << " has no interaction table" << G4endl;
-    }
-    return NoInteraction(aTrack, theNucleus);
-  }
-
 
   // Different retry conditions for proton target vs. nucleus
   const G4bool isHydrogen = (theNucleus.GetA_asInt() == 1);
@@ -379,7 +389,9 @@ G4CascadeInterface::NoInteraction(const G4HadProjectile& aTrack,
 
   theParticleChange.Clear();
   theParticleChange.SetStatusChange(isAlive);
-  theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
+
+  G4double ekin = aTrack.GetKineticEnergy()>0. ? aTrack.GetKineticEnergy() : 0.;
+  theParticleChange.SetEnergyChange(ekin);	// Protect against rounding
 
   return &theParticleChange;
 }
@@ -509,6 +521,7 @@ void G4CascadeInterface::copyOutputToHadronicResult() {
   const std::vector<G4InuclElementaryParticle>& particles = output->getOutgoingParticles();
 
   theParticleChange.SetStatusChange(stopAndKill);
+  theParticleChange.SetEnergyChange(0.);
 
   // Get outcoming particles
   if (!particles.empty()) { 

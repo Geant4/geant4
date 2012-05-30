@@ -109,6 +109,7 @@
 //		for final-state clustering.
 // 20111003  M. Kelsey -- Prepare for gamma-N interactions by checking for
 //		final-state tables instead of particle "isPhoton()"
+// 20120521  A. Ribon -- Specify mass when decay trapped particle.
 
 #include "G4IntraNucleiCascader.hh"
 #include "G4CascadParticle.hh"
@@ -827,7 +828,7 @@ decayTrappedParticle(const G4CascadParticle& trapped) {
   }
 
   // Get secondaries from decay in particle's rest frame
-  G4DecayProducts* daughters = unstable->SelectADecayChannel()->DecayIt();
+  G4DecayProducts* daughters = unstable->SelectADecayChannel()->DecayIt( trappedP.getDefinition()->GetPDGMass() );
   if (!daughters) {			// No final state; cannot decay!
     if (verboseLevel > 3)
       G4cerr << " no daughters!  Releasing trapped particle" << G4endl;

@@ -34,6 +34,7 @@
 //	06 Apr 2010:  Do G4Ions initialization in ctor.
 //	13 Apr 2010:  Per Kurashige, inherit from G4VShortLivedParticle.
 //	06 May 2010:  Remove created particle from master table.
+//      25 May 2012:  Add flags to suppress particle-table error message.
 // ----------------------------------------------------------------
 
 #include "G4Diproton.hh"
@@ -67,7 +68,9 @@ G4Diproton* G4Diproton::Definition() {
     theInstance = new G4Diproton;	// There can be only one
 
     G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-    pTable->Remove(theInstance);	// Make invisible to GEANT4
+    pTable->SetReadiness(false);        // Suppress error message
+    pTable->Remove(theInstance);        // Make invisible to GEANT4
+    pTable->SetReadiness(true);         // Set back 'ready to use' flag
   }
 
   return theInstance;

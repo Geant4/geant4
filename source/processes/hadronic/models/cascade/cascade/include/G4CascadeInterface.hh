@@ -50,6 +50,8 @@
 //		discard local "theFinalState" (avail in base class).
 // 20110801  M. Kelsey -- Make bullet and target buffers local objects (with
 //		hadron and nucleus versions) to reduce memory churn
+// 20120522  M. Kelsey -- Implement base class IsApplicable, and add overloaded
+//		version which takes G4ParticleDefintion, a la G4VProcess.
 
 #ifndef G4CASCADEINTERFACE_H
 #define G4CASCADEINTERFACE_H 1
@@ -73,6 +75,7 @@ class G4DynamicParticle;
 class G4HadFinalState;
 class G4InuclCollider;
 class G4InuclParticle;
+class G4ParticleDefinition;
 class G4V3DNucleus;
 
 
@@ -90,6 +93,11 @@ public:
 				 G4Nucleus& theNucleus);
 
   void setVerboseLevel(G4int verbose);
+
+  G4bool IsApplicable(const G4HadProjectile& aTrack,
+		      G4Nucleus& theNucleus);
+
+  G4bool IsApplicable(const G4ParticleDefinition* aPD) const;
 
   // Select betweeen different post-cascade de-excitation models
   void useCascadeDeexcitation();
