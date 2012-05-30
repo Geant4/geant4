@@ -14,15 +14,27 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+10 May 2012 - Gunter Folger   (hadr-lep-V09-05-07)
+----------------------------------------------------
+-  Fix typo in previous tag 
+
+10 May 2012 - Gunter Folger   (hadr-lep-V09-05-06)
+----------------------------------------------------
+-  also relax limits on check for "catastrophic" energy non-conservation
+    for G4LFission
+
 12 April 2012 - Gunter Folger   (hadr-lep-V09-05-05)
+----------------------------------------------------
 -  GetFatalEnergyCheckLevels() returns const std::pair<>
 
 19 March 2012 - Gunter Folger   (hadr-lep-V09-05-04)
+----------------------------------------------------
 -  also relax limits on check for "catastrophic" energy non-conservation
     for G4Lelastic.
       (tag hadr-lep-V09-05-04 had .cc not committed)
     
 19 March 2012 - Gunter Folger   (hadr-lep-V09-05-02)
+----------------------------------------------------
 -  also relax limits on check for "catastrophic" energy non-conservation
     for G4LCapture.
     

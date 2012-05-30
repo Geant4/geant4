@@ -77,6 +77,8 @@ class G4LFission : public G4HadronicInteraction
 
     virtual void ModelDescription(std::ostream& outFile) const;
 
+    virtual const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
+
   private:
 
     void init();
