@@ -62,11 +62,10 @@ public:
 // Method
 public:
     virtual G4V3DNucleus* GetWoundedNucleus() const;
- 
-public:
     virtual void Init(const G4Nucleus& Nucleus, const G4DynamicParticle& Projectile);
     virtual G4ExcitedStringVector * GetStrings();
- 
+    virtual void ModelDescription(std::ostream& outFile) const;
+
 private:
    ParticipantType theParticipants;
    G4DiffractiveStringBuilder theDiffractiveStringBuilder;

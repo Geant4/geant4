@@ -123,7 +123,16 @@ G4V3DNucleus* G4QGSModel<ParticipantType>::GetWoundedNucleus() const
 {
   return theParticipants.GetWoundedNucleus();
 }
- 
 
+template<class ParticipantType>
+void G4QGSModel<ParticipantType>::ModelDescription(std::ostream& outFile) const
+{
+  outFile << "The Quark-Gluon String (QGS) model simulates the interaction\n"
+          << "of protons, neutrons, pions and kaons with nuclei in the\n"
+          << "approximate energy range 20 GeV to 50 TeV. The model handles\n"
+          << "the selection of collision partners, splitting of the nucleons\n"
+          << "into quarks and di-quarks, the formation and excitation of\n"
+          << "quark-gluon strings, string hadronization and diffractive dissociation.\n";
+}
 //********************************************************************************************************************* 
 
