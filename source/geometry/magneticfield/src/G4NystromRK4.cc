@@ -181,10 +181,10 @@ G4NystromRK4::DistChord() const
   G4double d2 = (ax*ax+ay*ay+az*az)    ; 
 
   if(d2!=0.) {
-    G4double  s = (ax*dx+ay*dy+az*dz)/d2;
-    dx         -= (s*ax)                ;
-    dy         -= (s*ay)                ;
-    dz         -= (s*az)                ;
+    G4double ds = (ax*dx+ay*dy+az*dz)/d2;
+    dx         -= (ds*ax)               ;
+    dy         -= (ds*ay)               ;
+    dz         -= (ds*az)               ;
   }
   return std::sqrt(dx*dx+dy*dy+dz*dz);
 }
