@@ -73,27 +73,27 @@ G4String G4UImessenger::BtoS(G4bool b)
   return vl;
 }
 
-G4int G4UImessenger::StoI(G4String s)
+G4int G4UImessenger::StoI(G4String str)
 {
   G4int vl;
-  const char* t = s;
+  const char* t = str;
   std::istringstream is(t);
   is >> vl;
   return vl;
 }
 
-G4double G4UImessenger::StoD(G4String s)
+G4double G4UImessenger::StoD(G4String str)
 {
   G4double vl;
-  const char* t = s;
+  const char* t = str;
   std::istringstream is(t);
   is >> vl;
   return vl;
 }
 
-G4bool G4UImessenger::StoB(G4String s)
+G4bool G4UImessenger::StoB(G4String str)
 {
-  G4String v = s;
+  G4String v = str;
   v.toUpper();
   G4bool vl = false;
   if( v=="Y" || v=="YES" || v=="1" || v=="T" || v=="TRUE" )
