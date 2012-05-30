@@ -164,6 +164,11 @@ void G4EmDNAPhysicsChemistry::ConstructDecayChannels()
     G4Molecule * H = new G4Molecule(G4Hydrogen::Definition());
     G4Molecule * H2 = new G4Molecule(G4H2::Definition());
 
+    G4Molecule* OHm = new G4Molecule(G4OH::Definition());
+    OHm->AddElectron(3);
+    OHm->SetMass(17.0079*g/Avogadro * c_squared);
+    OHm->SetDiffusionCoefficient(5.0e-9*(m2/s));
+
     //-------------------------------------
     //Define the decay channels
     G4MoleculeDefinition* water = G4H2O::Definition();
@@ -181,7 +186,7 @@ void G4EmDNAPhysicsChemistry::ConstructDecayChannels()
 
     decCh1 = new G4MolecularDecayChannel("A^1B_1_Relaxation");
     decCh2 = new G4MolecularDecayChannel("A^1B_1_DissociativeDecay");
-    //Decay 1
+    //Decay 1 : OH + H
     decCh1->SetEnergy(waterExcitation.ExcitationEnergy(0));
     decCh1->SetProbability(0.35);
     decCh1 -> SetDisplacementType(G4DNAMolecularDecayDisplacer::NoDisplacement);
@@ -208,18 +213,18 @@ void G4EmDNAPhysicsChemistry::ConstructDecayChannels()
 
     water->AddExcitedState("B^1A_1");
 
-    //Decay 1
+    //Decay 1 : energy
     decCh1->SetEnergy(waterExcitation.ExcitationEnergy(1));
     decCh1->SetProbability(0.3);
 
-    //Decay 2
+    //Decay 2 : 2OH + H_2
     decCh2->AddProduct(H2);
     decCh2->AddProduct(OH);
     decCh2->AddProduct(OH);
     decCh2->SetProbability(0.15);
     decCh2->SetDisplacementType(G4DNAMolecularDecayDisplacer::B1A1_DissociationDecay);
 
-    //Decay 3
+    //Decay 3 : OH + H_3Op + e_aq
     decCh3->AddProduct(OH);
     decCh3->AddProduct(H3O);
     decCh3->AddProduct(e_aq);
@@ -242,7 +247,7 @@ void G4EmDNAPhysicsChemistry::ConstructDecayChannels()
 
     water->AddExcitedState("Excitation3rdLayer");
 
-    //Decay channel 1
+    //Decay channel 1 : : OH + H_3Op + e_aq
     decCh1->AddProduct(OH);
     decCh1->AddProduct(H3O);
     decCh1->AddProduct(e_aq);
@@ -250,7 +255,7 @@ void G4EmDNAPhysicsChemistry::ConstructDecayChannels()
     decCh1->SetProbability(0.5);
     decCh1->SetDisplacementType(G4DNAMolecularDecayDisplacer::AutoIonisation);
 
-    //Decay channel 2
+    //Decay channel 2 : energy
     decCh2->SetEnergy(waterExcitation.ExcitationEnergy(2));
     decCh2->SetProbability(0.5);
 
@@ -271,7 +276,7 @@ void G4EmDNAPhysicsChemistry::ConstructDecayChannels()
 
     water->AddExcitedState("Excitation2ndLayer");
 
-    //Decay Channel 1
+    //Decay Channel 1 : : OH + H_3Op + e_aq
     decCh1->AddProduct(OH);
     decCh1->AddProduct(H3O);
     decCh1->AddProduct(e_aq);
@@ -279,7 +284,7 @@ void G4EmDNAPhysicsChemistry::ConstructDecayChannels()
     decCh1->SetProbability(0.5);
     decCh1->SetDisplacementType(G4DNAMolecularDecayDisplacer::AutoIonisation);
 
-    //Decay channel 2
+    //Decay channel 2 : energy
     decCh2->SetEnergy(waterExcitation.ExcitationEnergy(3));
     decCh2->SetProbability(0.5);
 
@@ -303,14 +308,14 @@ void G4EmDNAPhysicsChemistry::ConstructDecayChannels()
     water->AddExcitedState("Excitation1stLayer");
     water->AddeConfToExcitedState("Excitation1stLayer", *occ);
 
-    //Decay Channel 1
+    //Decay Channel 1 : : OH + H_3Op + e_aq
     decCh1->AddProduct(OH);
     decCh1->AddProduct(H3O);
     decCh1->AddProduct(e_aq);
     decCh1->SetProbability(0.5);
     decCh1->SetDisplacementType(G4DNAMolecularDecayDisplacer::AutoIonisation);
 
-    //Decay channel 2
+    //Decay channel 2 : energy
     decCh2->SetEnergy(waterExcitation.ExcitationEnergy(4));
     decCh2->SetProbability(0.5);
     water->AddDecayChannel("Excitation1stLayer",decCh1);
@@ -325,6 +330,7 @@ void G4EmDNAPhysicsChemistry::ConstructDecayChannels()
 
     decCh1 = new G4MolecularDecayChannel("Ionisation_Channel");
 
+    //Decay Channel 1 : : OH + H_3Op
     decCh1->AddProduct(H3O);
     decCh1->AddProduct(OH);
     decCh1->SetProbability(1);
@@ -351,6 +357,24 @@ void G4EmDNAPhysicsChemistry::ConstructDecayChannels()
     water->AddeConfToExcitedState("Ionisation", *occ);
     water->AddDecayChannel("Ionisation",decCh1);
     // to this electronic configuration should be associated a decay time of 10e-15 s should the process do it on the dynamic object? the dyn object.
+
+    //////////////////////////////////////////////////////////
+    //            Dissociative Attachment                   //
+    //////////////////////////////////////////////////////////
+    decCh1 = new G4MolecularDecayChannel("DissociativeAttachment");
+
+    //Decay 1 : 2OH + H_2
+    decCh1->AddProduct(H2);
+    decCh1->AddProduct(OHm);
+    decCh1->AddProduct(OH);
+    decCh1->SetProbability(1);
+    //decCh1->SetDisplacementType(G4DNAMolecularDecayDisplacer::DissociativeAttachment);
+
+    *occ = *(water->GetGroundStateElectronOccupancy());
+    occ->AddElectron(5,1); // H_2O^-
+    water->AddExcitedState("DissociativeAttachment");
+    water->AddeConfToExcitedState("DissociativeAttachment", *occ);
+    water->AddDecayChannel("DissociativeAttachment",decCh1);
 
     delete occ;
 }

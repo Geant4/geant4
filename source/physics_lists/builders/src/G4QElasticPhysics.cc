@@ -53,7 +53,7 @@
 #include "G4IonConstructor.hh"
 
 G4QElasticPhysics::G4QElasticPhysics(const G4String& name,  G4int ver)
-  : G4VPhysicsConstructor(name), verbose(ver), wasActivated(false)
+  : G4VPhysicsConstructor(name), process(0), verbose(ver), wasActivated(false)
 {
   if(verbose > 1) G4cout << "### QElasticPhysics is initialized" << G4endl;
   model = 0;

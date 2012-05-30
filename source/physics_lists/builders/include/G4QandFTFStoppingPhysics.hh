@@ -34,13 +34,13 @@
 //
 // Date:      18 October 2011
 //
-// Modified:
+// Modified:  10 May 2012, M. Kelsey: Use G4HadronicAbsorptionBertini.
 //
 // This class provides the nuclear capture at rest of negatively charged
-// particles, using Fritiof/Precompound for anti-protons, whereas for the
-// other particles, it does exactly the same as G4QStoppingPhysics
-// (i.e. using CHIPS for pi-, K-, Sigma-, Csi-, Omega-, and anti-Sigma+ ,
-// whereas for mu- it uses another, CHIPS-independent, implementation).
+// particles, using Fritiof/Precompound for anti-protons, Bertini for pi-,
+// K- and Sigma-, and the same as G4QStoppingPhysics (CHIPS) for the other
+// hadrons Xi-, Omega-, and anti-Sigma+; for mu- it uses another, 
+// CHIPS-independent, implementation).
 //
 //----------------------------------------------------------------------------
 //
@@ -55,7 +55,7 @@
 
 class G4QCaptureAtRest;
 class G4FTFCaptureAtRest;
-class G4PiMinusAbsorptionBertini;
+class G4HadronicAbsorptionBertini;
 
 
 class G4QandFTFStoppingPhysics : public G4VPhysicsConstructor {
@@ -86,7 +86,7 @@ private:
   G4MuonMinusCaptureAtRest* muProcess;
   G4QCaptureAtRest* hProcess;
   G4FTFCaptureAtRest* hFTFProcess;
-  G4PiMinusAbsorptionBertini* hBertProcess;
+  G4HadronicAbsorptionBertini* hBertProcess;
   
   G4int    verbose;
   G4bool   wasActivated;

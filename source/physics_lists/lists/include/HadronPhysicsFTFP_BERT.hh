@@ -99,7 +99,9 @@ class HadronPhysicsFTFP_BERT : public G4VPhysicsConstructor
     G4FTFPAntiBarionBuilder * theFTFPAntiBaryon;
 
     G4bool QuasiElastic;
-    G4VCrossSectionDataSet * theCHIPSInelastic;
+    G4VCrossSectionDataSet * ChipsKaonMinus;
+    G4VCrossSectionDataSet * ChipsKaonPlus;
+    G4VCrossSectionDataSet * ChipsKaonZero;
 };
 
 #endif

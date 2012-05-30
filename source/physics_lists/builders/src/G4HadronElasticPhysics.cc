@@ -66,7 +66,10 @@
 #include "G4BGGNucleonElasticXS.hh"
 #include "G4BGGPionElasticXS.hh"
 #include "G4NeutronElasticXS.hh"
-#include "G4CHIPSElasticXS.hh"
+//#include "G4CHIPSElasticXS.hh"
+
+#include "G4ChipsProtonElasticXS.hh"
+#include "G4ChipsNeutronElasticXS.hh"
 
 #include "G4ComponentAntiNuclNuclearXS.hh"  
 #include "G4CrossSectionElastic.hh"
@@ -178,7 +181,8 @@ void G4HadronElasticPhysics::ConstructProcess()
 
       G4WHadronElasticProcess* hel = new G4WHadronElasticProcess();
       //hel->AddDataSet(new G4BGGNucleonElasticXS(particle));
-      hel->AddDataSet(new G4CHIPSElasticXS());
+      //      hel->AddDataSet(new G4CHIPSElasticXS());
+      hel->AddDataSet(new G4ChipsProtonElasticXS());
       hel->RegisterMe(chipsp);
       pmanager->AddDiscreteProcess(hel);
       if(verbose > 1) {
@@ -190,7 +194,8 @@ void G4HadronElasticPhysics::ConstructProcess()
 
       neutronProcess = new G4WHadronElasticProcess();
       //neutronProcess->AddDataSet(new G4BGGNucleonElasticXS(particle));
-      neutronProcess->AddDataSet(new G4CHIPSElasticXS());
+      //      neutronProcess->AddDataSet(new G4CHIPSElasticXS());
+      neutronProcess->AddDataSet(new G4ChipsNeutronElasticXS());
       neutronProcess->RegisterMe(neutronModel);
       pmanager->AddDiscreteProcess(neutronProcess);
       if(verbose > 1) {

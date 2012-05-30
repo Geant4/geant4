@@ -89,7 +89,8 @@ G4HyperonFTFPBuilder::G4HyperonFTFPBuilder():
   AntiHyperonFTFP->SetHighEnergyGenerator(theStringModel);
 
 // use CHIPS cross sections
-  theCHIPSInelastic = new G4QHadronInelasticDataSet();
+//  theCHIPSInelastic = new G4QHadronInelasticDataSet();
+  theCHIPSInelastic = new G4ChipsHyperonInelasticXS();
 }
 
 
@@ -130,7 +131,6 @@ void G4HyperonFTFPBuilder::Build()
   theLambdaInelastic->RegisterMe(theBertini);
   theLambdaInelastic->RegisterMe(HyperonFTFP);
   theLambdaInelastic->AddDataSet(theCHIPSInelastic);
-
   aProcMan = G4Lambda::Lambda()->GetProcessManager();
   aProcMan->AddDiscreteProcess(theLambdaInelastic);
   

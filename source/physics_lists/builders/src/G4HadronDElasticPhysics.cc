@@ -64,14 +64,18 @@
 
 #include "G4WHadronElasticProcess.hh"
 #include "G4HadronElastic.hh"
-#include "G4CHIPSElastic.hh"
+//#include "G4CHIPSElastic.hh"
 #include "G4ElasticHadrNucleusHE.hh"
 #include "G4AntiNuclElastic.hh"
 
 #include "G4BGGNucleonElasticXS.hh"
 #include "G4BGGPionElasticXS.hh"
 #include "G4NeutronElasticXS.hh"
-#include "G4CHIPSElasticXS.hh"
+//#include "G4CHIPSElasticXS.hh"
+
+#include "G4ChipsKaonPlusElasticXS.hh"
+#include "G4ChipsKaonMinusElasticXS.hh"
+#include "G4ChipsKaonZeroElasticXS.hh"
 
 #include "G4ComponentAntiNuclNuclearXS.hh"  
 #include "G4CrossSectionElastic.hh"
@@ -196,14 +200,34 @@ void G4HadronDElasticPhysics::ConstructProcess()
 	       << " added for " << particle->GetParticleName() << G4endl;
       }
 
-    } else if(pname == "kaon-"     || 
-	      pname == "kaon+"     || 
-	      pname == "kaon0S"    || 
+    } else if(pname == "kaon-") {
+      
+      G4WHadronElasticProcess* hel = new G4WHadronElasticProcess();
+      hel->AddDataSet(new G4ChipsKaonMinusElasticXS());
+      model = new G4DiffuseElastic();
+      hel->RegisterMe(model);
+      pmanager->AddDiscreteProcess(hel);
+      if(verbose > 1) {
+	G4cout << "### HadronElasticPhysics: " << hel->GetProcessName()
+	       << " added for " << particle->GetParticleName() << G4endl;
+      }
+    } else if(pname == "kaon+") {
+      
+      G4WHadronElasticProcess* hel = new G4WHadronElasticProcess();
+      hel->AddDataSet(new G4ChipsKaonPlusElasticXS());
+      model = new G4DiffuseElastic();
+      hel->RegisterMe(model);
+      pmanager->AddDiscreteProcess(hel);
+      if(verbose > 1) {
+	G4cout << "### HadronElasticPhysics: " << hel->GetProcessName()
+	       << " added for " << particle->GetParticleName() << G4endl;
+      }
+    } else if(pname == "kaon0S"    || 
 	      pname == "kaon0L" 
 	      ) {
       
       G4WHadronElasticProcess* hel = new G4WHadronElasticProcess();
-      hel->AddDataSet(new G4CHIPSElasticXS());
+      hel->AddDataSet(new G4ChipsKaonZeroElasticXS());
       model = new G4DiffuseElastic();
       hel->RegisterMe(model);
       pmanager->AddDiscreteProcess(hel);

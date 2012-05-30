@@ -51,7 +51,7 @@
 #include "G4Gamma.hh"
 
 G4QEmExtraPhysics::G4QEmExtraPhysics(G4int ver)
-  :  G4VPhysicsConstructor("QEmExtra"), verbose(ver), wasActivated(false) 
+  :  G4VPhysicsConstructor("QEmExtra"), hProcess(0), verbose(ver), wasActivated(false) 
 {
   if(verbose > 1) G4cout << "### G4QEmExtraPhysics" << G4endl;
 }

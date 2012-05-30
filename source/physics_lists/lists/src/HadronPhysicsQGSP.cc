@@ -53,16 +53,37 @@
 #include "G4ShortLivedConstructor.hh"
 
 HadronPhysicsQGSP::HadronPhysicsQGSP(G4int)
-                 :  G4VPhysicsConstructor("hInelastic QGSP")
-		  , QuasiElastic(true)
+    :  G4VPhysicsConstructor("hInelastic QGSP")
+    , theNeutrons(0)
+    , theLEPNeutron(0)
+    , theQGSPNeutron(0)
+    , thePiK(0)
+    , theLEPPiK(0)
+    , theQGSPPiK(0)
+    , thePro(0)
+    , theLEPPro(0)
+    , theQGSPPro(0) 
+    , theMiscLHEP(0)
+    , QuasiElastic(true)
+    , ProjectileDiffraction(false)
 {
-   ProjectileDiffraction=false;
 }
 
 HadronPhysicsQGSP::HadronPhysicsQGSP(const G4String& name, G4bool quasiElastic)
-                 :  G4VPhysicsConstructor(name) , QuasiElastic(quasiElastic)
+                 :  G4VPhysicsConstructor(name)
+    , theNeutrons(0)
+    , theLEPNeutron(0)
+    , theQGSPNeutron(0)
+    , thePiK(0)
+    , theLEPPiK(0)
+    , theQGSPPiK(0)
+    , thePro(0)
+    , theLEPPro(0)
+    , theQGSPPro(0) 
+    , theMiscLHEP(0)
+    , QuasiElastic(quasiElastic)
+    , ProjectileDiffraction(false)
 {
-   ProjectileDiffraction=false;
 }
 
 void HadronPhysicsQGSP::CreateModels()

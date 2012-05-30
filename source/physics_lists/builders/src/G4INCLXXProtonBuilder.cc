@@ -33,7 +33,7 @@ G4INCLXXProtonBuilder()
 {
   theMin = 0;
   theMax=3.0*GeV;
-  theModel = new G4INCLXXInterface;
+  theModel = new G4INCLXXInterface();
 }
 
 G4INCLXXProtonBuilder::

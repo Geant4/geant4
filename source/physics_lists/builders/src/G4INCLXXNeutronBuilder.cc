@@ -33,7 +33,7 @@ G4INCLXXNeutronBuilder()
 {
   theMin = 0;
   theMax = 3.0*GeV;
-  theModel = new G4INCLXXInterface;
+  theModel = new G4INCLXXInterface();
 }
 
 void G4INCLXXNeutronBuilder::

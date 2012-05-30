@@ -50,7 +50,9 @@
 #include "G4MuonMinus.hh"
 
 G4QStoppingPhysics::G4QStoppingPhysics(G4int ver)
-  :  G4VPhysicsConstructor("stopping"), verbose(ver), wasActivated(false) ,
+  :  G4VPhysicsConstructor("stopping")
+    , muProcess(0), hProcess(0)
+, verbose(ver), wasActivated(false) ,
      useMuonMinusCaptureAtRest(true)
 {
   if(verbose > 1) G4cout << "### G4QStoppingPhysics" << G4endl;
@@ -58,7 +60,9 @@ G4QStoppingPhysics::G4QStoppingPhysics(G4int ver)
 
 G4QStoppingPhysics::G4QStoppingPhysics(const G4String& name, G4int ver,
 		G4bool UseMuonMinusCapture)
-  :  G4VPhysicsConstructor(name), verbose(ver), wasActivated(false) ,
+  :  G4VPhysicsConstructor(name)
+    , muProcess(0), hProcess(0)
+    , verbose(ver), wasActivated(false) ,
      useMuonMinusCaptureAtRest(UseMuonMinusCapture)
 {
   if(verbose > 1) G4cout << "### G4QStoppingPhysics" << G4endl;

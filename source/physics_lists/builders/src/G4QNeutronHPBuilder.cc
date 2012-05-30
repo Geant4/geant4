@@ -40,7 +40,13 @@
 //
 #include "G4QNeutronHPBuilder.hh"
 
-G4QNeutronHPBuilder::G4QNeutronHPBuilder(): wasActivated(false) 
+G4QNeutronHPBuilder::G4QNeutronHPBuilder(): 
+    theNeutrons(0)
+    , theNeutronFission(0)
+    , theNeutronCapture(0)
+    , theCHIPSNGamma(0)
+    , theHPNeutron(0)
+    , wasActivated(false) 
 {
   theNeutronInelastic = new G4NeutronInelasticProcess;
   theCHIPSInelastic  = new G4QInelastic;

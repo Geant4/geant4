@@ -50,12 +50,35 @@
 #include "G4ShortLivedConstructor.hh"
 
 HadronPhysicsQGSC_BERT::HadronPhysicsQGSC_BERT(G4int)
-                    :  G4VPhysicsConstructor("hInelastic QGSC_BERT")
-		      , QuasiElastic(true)
+    :  G4VPhysicsConstructor("hInelastic QGSC_BERT")
+    , theNeutrons(0)
+    , theQGSCNeutron(0)
+    , theBertiniNeutron(0)
+    , theLEPNeutron(0)
+    , thePiK(0)
+    , theQGSCPiK(0)
+    , theBertiniPiK(0)
+    , thePro(0)
+    , theQGSCPro(0)
+    , theBertiniPro(0)
+    , theMiscLHEP(0)
+    , QuasiElastic(true)
 {}
 
 HadronPhysicsQGSC_BERT::HadronPhysicsQGSC_BERT(const G4String& name, G4bool quasiElastic)
-                    :  G4VPhysicsConstructor(name)  , QuasiElastic(quasiElastic)
+    :  G4VPhysicsConstructor(name)
+    , theNeutrons(0)
+    , theQGSCNeutron(0)
+    , theBertiniNeutron(0)
+    , theLEPNeutron(0)
+    , thePiK(0)
+    , theQGSCPiK(0)
+    , theBertiniPiK(0)
+    , thePro(0)
+    , theQGSCPro(0)
+    , theBertiniPro(0)
+    , theMiscLHEP(0)
+    , QuasiElastic(quasiElastic)
 {}
 
 void HadronPhysicsQGSC_BERT::CreateModels()

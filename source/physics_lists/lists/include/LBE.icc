@@ -436,6 +436,8 @@ template<class T> TLBE<T>::~TLBE()
  template<class T> void TLBE<T>::ConstructOp() 
 {
   // default scintillation process
+  //Coverity report: check that the process is actually used, if not must delete
+  G4bool theScintProcessDefNeverUsed = true;
   G4Scintillation* theScintProcessDef = new G4Scintillation("Scintillation");
   // theScintProcessDef->DumpPhysicsTable();
   theScintProcessDef->SetTrackSecondariesFirst(true);
@@ -444,6 +446,7 @@ template<class T> TLBE<T>::~TLBE()
   theScintProcessDef->SetVerboseLevel(OpVerbLevel);
 
   // scintillation process for alpha:
+  G4bool theScintProcessAlphaNeverUsed = true;
   G4Scintillation* theScintProcessAlpha = new G4Scintillation("Scintillation");
   // theScintProcessNuc->DumpPhysicsTable();
   theScintProcessAlpha->SetTrackSecondariesFirst(true);
@@ -452,6 +455,7 @@ template<class T> TLBE<T>::~TLBE()
   theScintProcessAlpha->SetVerboseLevel(OpVerbLevel);
 
   // scintillation process for heavy nuclei
+  G4bool theScintProcessNucNeverUsed = true;  
   G4Scintillation* theScintProcessNuc = new G4Scintillation("Scintillation");
   // theScintProcessNuc->DumpPhysicsTable();
   theScintProcessNuc->SetTrackSecondariesFirst(true);
@@ -460,8 +464,10 @@ template<class T> TLBE<T>::~TLBE()
   theScintProcessNuc->SetVerboseLevel(OpVerbLevel);
 
   // optical processes
+  G4bool theAbsorptionProcessNeverUsed = true;
   G4OpAbsorption* theAbsorptionProcess = new G4OpAbsorption();
   //  G4OpRayleigh* theRayleighScatteringProcess = new G4OpRayleigh();
+  G4bool theBoundaryProcessNeverUsed = true;
   G4OpBoundaryProcess* theBoundaryProcess = new G4OpBoundaryProcess();
   //  theAbsorptionProcess->DumpPhysicsTable();
   //  theRayleighScatteringProcess->DumpPhysicsTable();
@@ -483,25 +489,36 @@ template<class T> TLBE<T>::~TLBE()
 	  pmanager->AddProcess(theScintProcessNuc); // AtRestDiscrete
 	  pmanager->SetProcessOrderingToLast(theScintProcessNuc,idxAtRest);
 	  pmanager->SetProcessOrderingToLast(theScintProcessNuc,idxPostStep);
+	  theScintProcessNucNeverUsed = false;
 	}	  
 	else if(particle->GetParticleName() == "alpha") {
 	  pmanager->AddProcess(theScintProcessAlpha);
 	  pmanager->SetProcessOrderingToLast(theScintProcessAlpha,idxAtRest);
 	  pmanager->SetProcessOrderingToLast(theScintProcessAlpha,idxPostStep);
+	  theScintProcessAlphaNeverUsed = false;
 	}
 	else {
 	  pmanager->AddProcess(theScintProcessDef);
 	  pmanager->SetProcessOrderingToLast(theScintProcessDef,idxAtRest);
 	  pmanager->SetProcessOrderingToLast(theScintProcessDef,idxPostStep);
+	  theScintProcessDefNeverUsed = false;
 	}	  
       }
       
       if (particleName == "opticalphoton") {
 	pmanager->AddDiscreteProcess(theAbsorptionProcess);
+	theAbsorptionProcessNeverUsed = false;
 	//	pmanager->AddDiscreteProcess(theRayleighScatteringProcess);
+	theBoundaryProcessNeverUsed = false;
 	pmanager->AddDiscreteProcess(theBoundaryProcess);
       }
     }
+    if ( theScintProcessDefNeverUsed ) delete theScintProcessDef;
+    if ( theScintProcessAlphaNeverUsed ) delete theScintProcessAlpha;
+    if ( theScintProcessNucNeverUsed ) delete theScintProcessNuc;
+    if ( theBoundaryProcessNeverUsed ) delete theBoundaryProcess;
+    if ( theAbsorptionProcessNeverUsed ) delete theAbsorptionProcess;
+    if ( theBoundaryProcessNeverUsed ) delete theBoundaryProcess;
 }
 
 
@@ -800,6 +817,7 @@ template<class T> TLBE<T>::~TLBE()
 
   // Add Decay Process
   G4Decay* theDecayProcess = new G4Decay();
+  G4bool theDecayProcessNeverUsed = true; //Check if theDecayProcess will be used
   this->theParticleIterator->reset();
   while( (*(this->theParticleIterator))() )
     {
@@ -808,6 +826,7 @@ template<class T> TLBE<T>::~TLBE()
       
       if (theDecayProcess->IsApplicable(*particle) && !particle->IsShortLived()) 
 	{ 
+	  theDecayProcessNeverUsed = false;
 	  pmanager ->AddProcess(theDecayProcess);
 	  // set ordering for PostStepDoIt and AtRestDoIt
 	  pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
@@ -835,6 +854,9 @@ template<class T> TLBE<T>::~TLBE()
 	  pmanager ->SetProcessOrdering(theRadioactiveDecay, idxAtRest);
 	} 
     }
+    //If we actually never used the process, delete it
+    //From Coverity report
+    if ( theDecayProcessNeverUsed ) delete theDecayProcess;
 }
 
 // Cuts /////////////////////////////////////////////////////////////////////

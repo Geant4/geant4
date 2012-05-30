@@ -33,6 +33,7 @@
 // Author: 2011 P. Kaitaniemi
 //
 // Modified:
+// D. Mancusi 23.03.2012 Extended INCL++ to incident heavy ions up to 16O
 //
 //----------------------------------------------------------------------------
 //
@@ -69,6 +70,7 @@
  * @see G4INCLXXProtonBuilder
  * @see G4INCLXXNeutronBuilder
  * @see G4INCLXXPiKBuilder
+ * @see G4IonINCLXXPhysics
  */
 template<class T>
 class TQGSP_INCLXX: public T

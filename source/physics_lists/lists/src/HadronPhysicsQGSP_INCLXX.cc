@@ -33,6 +33,7 @@
 // Author: 2011 P. Kaitaniemi
 //
 // Modified:
+// 23.03.2012 D. Mancusi: Extended INCL++ to incident heavy ions up to 16O
 // 27.11.2011 P.Kaitaniemi: Created physics list for INCL++ using QGSP_INCL_ABLA as a template
 //
 //----------------------------------------------------------------------------
@@ -50,16 +51,49 @@
 #include "G4ShortLivedConstructor.hh"
 
 HadronPhysicsQGSP_INCLXX::HadronPhysicsQGSP_INCLXX(G4int)
-                    :  G4VPhysicsConstructor("hInelastic QGSP_INCLXX")
-		     , QuasiElastic(true)
+    :  G4VPhysicsConstructor("hInelastic QGSP_INCLXX")
+    , theNeutrons(0)
+    , theLEPNeutron(0)
+    , theQGSPNeutron(0)
+    , theBertiniNeutron(0)
+    , theInclAblaNeutron(0)
+    , thePiK(0)
+    , theLEPPiK(0)
+    , theQGSPPiK(0)
+    , theBertiniPiK(0)
+    , theInclAblaPiK(0)
+    , thePro(0)
+    , theLEPPro(0)
+    , theQGSPPro(0)
+    , theBertiniPro(0)
+    , theInclAblaPro(0)
+    , theMiscLHEP(0)
+    , QuasiElastic(true)
+    , ProjectileDiffraction(false)
 {
-   ProjectileDiffraction=false;
 }
 
 HadronPhysicsQGSP_INCLXX::HadronPhysicsQGSP_INCLXX(const G4String& name, G4bool quasiElastic)
-                    :  G4VPhysicsConstructor(name) , QuasiElastic(quasiElastic)
+    :  G4VPhysicsConstructor(name) 
+    , theNeutrons(0)
+    , theLEPNeutron(0)
+    , theQGSPNeutron(0)
+    , theBertiniNeutron(0)
+    , theInclAblaNeutron(0)
+    , thePiK(0)
+    , theLEPPiK(0)
+    , theQGSPPiK(0)
+    , theBertiniPiK(0)
+    , theInclAblaPiK(0)
+    , thePro(0)
+    , theLEPPro(0)
+    , theQGSPPro(0)
+    , theBertiniPro(0)
+    , theInclAblaPro(0)
+    , theMiscLHEP(0)
+    , QuasiElastic(quasiElastic)
+    , ProjectileDiffraction(false)
 {
-   ProjectileDiffraction=false;
 }
 
 void HadronPhysicsQGSP_INCLXX::CreateModels()

@@ -44,12 +44,26 @@
 #include "G4ios.hh"
 #include <iomanip>   
 
-HadronPhysicsLHEP_EMV::HadronPhysicsLHEP_EMV(G4int)
-                    :  G4VPhysicsConstructor("hInelastic LHEP_EMV") 
+HadronPhysicsLHEP_EMV::HadronPhysicsLHEP_EMV(G4int) 
+    :  G4VPhysicsConstructor("hInelastic LHEP_EMV")
+    , theNeutrons(0)
+    , theLHEPNeutron(0)
+    , thePiK(0)
+    , theLHEPPiK(0)
+    , thePro(0)
+    , theLHEPPro(0)
+    , theMiscLHEP(0)
 {}
 
 HadronPhysicsLHEP_EMV::HadronPhysicsLHEP_EMV(const G4String& name)
-                    :  G4VPhysicsConstructor(name) 
+    :  G4VPhysicsConstructor(name) 
+    , theNeutrons(0)
+    , theLHEPNeutron(0)
+    , thePiK(0)
+    , theLHEPPiK(0)
+    , thePro(0)
+    , theLHEPPro(0)
+    , theMiscLHEP(0)
 {}
 
 void HadronPhysicsLHEP_EMV::CreateModels()

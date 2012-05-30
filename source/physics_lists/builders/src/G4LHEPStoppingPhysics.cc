@@ -57,11 +57,14 @@
 #include "G4AntiNeutronAnnihilationAtRest.hh"
 
 G4LHEPStoppingPhysics::G4LHEPStoppingPhysics(G4int ver)
-  : G4VPhysicsConstructor("LHEP Stopping"), verbose(ver), wasActivated(false)
+  : G4VPhysicsConstructor("LHEP Stopping")
+ , muProcess(0), piProcess(0), kProcess(0), apProcess(0), anProcess(0)
+    , verbose(ver), wasActivated(false)
 {}
 
 G4LHEPStoppingPhysics::G4LHEPStoppingPhysics(const G4String& nam, G4int ver)
-  : G4VPhysicsConstructor(nam), verbose(ver), wasActivated(false)
+: G4VPhysicsConstructor(nam), muProcess(0), piProcess(0), kProcess(0), apProcess(0), anProcess(0)
+, verbose(ver), wasActivated(false)
 {}
 
 G4LHEPStoppingPhysics::~G4LHEPStoppingPhysics()

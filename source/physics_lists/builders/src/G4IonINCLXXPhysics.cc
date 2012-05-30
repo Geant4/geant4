@@ -23,30 +23,28 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonInclAblaPhysics.cc,v 1.2 2010-06-03 15:03:53 gunter Exp $
+// $Id: G4IonINCLXXPhysics.cc,v 1.2 2010-06-03 15:03:53 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4IonInclAblaPhysics
+// ClassName:   G4IonINCLXXPhysics
 //
-// Author:      P. Kaitaniemi
+// Author:      D. Mancusi
 //
 // Modified:
-// 23.06.06 V.Ivanchenko set emaxLHEP=1 TeV
-// 24.06.06 V.Ivanchenko fix typo
 //
 //----------------------------------------------------------------------------
 //
 
-#include "G4IonInclAblaPhysics.hh"
+#include "G4IonINCLXXPhysics.hh"
 
 #include "G4DeuteronInelasticProcess.hh"
 #include "G4TritonInelasticProcess.hh"
 #include "G4AlphaInelasticProcess.hh"
 #include "G4HadronInelasticProcess.hh"
 
-#include "G4InclAblaLightIonInterface.hh"
+#include "G4INCLXXInterface.hh"
 #include "G4TripathiCrossSection.hh"
 #include "G4TripathiLightCrossSection.hh"
 #include "G4IonsShenCrossSection.hh"
@@ -59,50 +57,37 @@
 #include "G4IonConstructor.hh"
 #include "G4BuilderType.hh"
 
-G4IonInclAblaPhysics::G4IonInclAblaPhysics(G4int ver)
-  :  G4VPhysicsConstructor("IonInclAbla"), verbose(ver), wasActivated(false)
+G4IonINCLXXPhysics::G4IonINCLXXPhysics(G4int ver)
+  :  G4VPhysicsConstructor("IonINCLXX"), verbose(ver), wasActivated(false)
 {
-  // INCL/ABLA light ion maximum energy is 3.0 GeV/nucleon
+  // INCLXX light ion maximum energy is 3.0 GeV/nucleon
   emax_d     = 2 * 3.0 * GeV;
   emax_t     = 3 * 3.0 * GeV;
   emax_he3   = 3 * 3.0 * GeV;
   emax_alpha = 4 * 3.0 * GeV;
-  emax       = 12 * 3.0 * GeV;
+  emax       = 16 * 3.0 * GeV;
   emaxLHEP   = 1.*TeV;
   emin       = 0.*MeV;
   SetPhysicsType(bIons);
-  fLEDModel = 0;
-  fLETModel = 0;
-  fLEAModel = 0;
-  fTripathi = 0; 
-  fTripathiLight = 0;
-  fShen = 0;
-  if(verbose > 1) G4cout << "### G4IonInclAblaPhysics" << G4endl;
+  if(verbose > 1) G4cout << "### G4IonINCLXXPhysics" << G4endl;
 }
 
-G4IonInclAblaPhysics::G4IonInclAblaPhysics(const G4String& name, 
+G4IonINCLXXPhysics::G4IonINCLXXPhysics(const G4String& name, 
 						     G4int ver)
   :  G4VPhysicsConstructor(name), verbose(ver), wasActivated(false)
 {
-  // INCL/ABLA light ion maximum energy is 3.0 GeV/nucleon
+  // INCLXX light ion maximum energy is 3.0 GeV/nucleon
   emax_d     = 2 * 3.0 * GeV;
   emax_t     = 3 * 3.0 * GeV;
   emax_he3   = 3 * 3.0 * GeV;
   emax_alpha = 4 * 3.0 * GeV;
-  emax       = 12 * 3.0 * GeV;
   emaxLHEP   = 1.*TeV;
   emin       = 0.*MeV;
   SetPhysicsType(bIons);
-  fLEDModel = 0;
-  fLETModel = 0;
-  fLEAModel = 0;
-  fTripathi = 0; 
-  fTripathiLight = 0;
-  fShen = 0;
-  if(verbose > 1) G4cout << "### G4IonInclAblaPhysics" << G4endl;
+  if(verbose > 1) G4cout << "### G4IonINCLXXPhysics" << G4endl;
 }
 
-G4IonInclAblaPhysics::~G4IonInclAblaPhysics()
+G4IonINCLXXPhysics::~G4IonINCLXXPhysics()
 {
   if(wasActivated) {
     delete fTripathi;
@@ -114,18 +99,16 @@ G4IonInclAblaPhysics::~G4IonInclAblaPhysics()
     G4int i;
     G4int n = p_list.size();
     for(i=0; i<n; i++) {delete p_list[i];}
-    n = model_list.size();
-    for(i=0; i<n; i++) {delete model_list[i];}
+    delete fINCLXXIons;
   }
 }
 
-void G4IonInclAblaPhysics::ConstructProcess()
+void G4IonINCLXXPhysics::ConstructProcess()
 {
   if(wasActivated) return;
   wasActivated = true;
 
-  G4InclAblaLightIonInterface* fInclAblaIons= new G4InclAblaLightIonInterface();
-  model_list.push_back(fInclAblaIons);
+  fINCLXXIons= new G4INCLXXInterface();
   fShen = new G4IonsShenCrossSection;
   fTripathi = new G4TripathiCrossSection;
   fTripathiLight = new G4TripathiLightCrossSection;
@@ -134,18 +117,18 @@ void G4IonInclAblaPhysics::ConstructProcess()
   fLETModel = new G4LETritonInelastic();
   fLEAModel = new G4LEAlphaInelastic();
 
-  AddProcess("dInelastic", G4Deuteron::Deuteron(), fInclAblaIons, fLEDModel, emax_d);
-  AddProcess("tInelastic",G4Triton::Triton(),  fInclAblaIons, fLETModel, emax_t);
-  AddProcess("He3Inelastic",G4He3::He3(),  fInclAblaIons, 0, emax_he3);
-  AddProcess("alphaInelastic", G4Alpha::Alpha(),  fInclAblaIons, fLEAModel, emax_alpha);
-  AddProcess("ionInelastic",G4GenericIon::GenericIon(),  fInclAblaIons, 0, emax);
+  AddProcess("dInelastic", G4Deuteron::Deuteron(), fINCLXXIons, fLEDModel, emax_d);
+  AddProcess("tInelastic",G4Triton::Triton(),  fINCLXXIons, fLETModel, emax_t);
+  AddProcess("He3Inelastic",G4He3::He3(),  fINCLXXIons, 0, emax_he3);
+  AddProcess("alphaInelastic", G4Alpha::Alpha(),  fINCLXXIons, fLEAModel, emax_alpha);
+  AddProcess("ionInelastic",G4GenericIon::GenericIon(),  fINCLXXIons, 0, emax);
 }
 
-void G4IonInclAblaPhysics::AddProcess(const G4String& name,
+void G4IonINCLXXPhysics::AddProcess(const G4String& name,
 					   G4ParticleDefinition* p, 
 					   G4HadronicInteraction* hmodel,
 					   G4HadronicInteraction* lmodel,
-				      const G4double inclEnergyUpperLimit = 3.0 * GeV)
+				      const G4double inclxxEnergyUpperLimit = 3.0 * GeV)
 {
   G4HadronInelasticProcess* hadi = new G4HadronInelasticProcess(name, p);
   p_list.push_back(hadi);
@@ -155,25 +138,25 @@ void G4IonInclAblaPhysics::AddProcess(const G4String& name,
   hadi->AddDataSet(fTripathi);
   hadi->AddDataSet(fTripathiLight);
   hmodel->SetMinEnergy(emin);
-  hmodel->SetMaxEnergy(inclEnergyUpperLimit);
+  hmodel->SetMaxEnergy(inclxxEnergyUpperLimit);
   hadi->RegisterMe(hmodel);
   if(lmodel) {
-    lmodel->SetMinEnergy(inclEnergyUpperLimit - MeV);
+    lmodel->SetMinEnergy(inclxxEnergyUpperLimit - MeV);
     lmodel->SetMaxEnergy(emaxLHEP);
     hadi->RegisterMe(lmodel);
-  }  
+  }
   if(verbose > 1) {
     G4cout << "Register " << hadi->GetProcessName()
 	   << " for " << p->GetParticleName()
-	   << " INCL/ABLA for E(MeV)= " << emin << " - " << inclEnergyUpperLimit;
+	   << " INCLXX/G4DeexcitationHandler for E(MeV)= " << emin << " - " << inclxxEnergyUpperLimit;
     if(lmodel) {
-      G4cout  << " LHEP for E(MeV)= " << inclEnergyUpperLimit-MeV << " - " << emaxLHEP;
+      G4cout  << " LHEP for E(MeV)= " << inclxxEnergyUpperLimit-MeV << " - " << emaxLHEP;
     }
     G4cout << G4endl;
   }
 }
 
-void G4IonInclAblaPhysics::ConstructParticle()
+void G4IonINCLXXPhysics::ConstructParticle()
 {
   //  Construct light ions
   G4IonConstructor pConstructor;

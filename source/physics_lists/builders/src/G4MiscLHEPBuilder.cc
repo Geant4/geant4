@@ -44,6 +44,9 @@
 #include "G4ProcessManager.hh"
 
 G4MiscLHEPBuilder::G4MiscLHEPBuilder(): 
+  theAntiProtonInelastic(0), theLEAntiProtonModel(0), 
+  theHEAntiProtonModel(0),
+  theAntiNeutronInelastic(0), theLEAntiNeutronModel(0),
   theHEAntiNeutronModel(0),
   theLambdaInelastic(0), theLELambdaModel(0), theHELambdaModel(0),
   theAntiLambdaInelastic(0), theLEAntiLambdaModel(0), theHEAntiLambdaModel(0),

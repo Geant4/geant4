@@ -50,11 +50,27 @@
 #include "G4ShortLivedConstructor.hh"
 
 HadronPhysicsLHEP::HadronPhysicsLHEP(G4int)
-                    :  G4VPhysicsConstructor("hInelastic LHEP") 
+    :  G4VPhysicsConstructor("hInelastic LHEP") 
+    , theNeutrons(0)
+    , theLHEPNeutron(0)
+    , thePiK(0)
+    , theLHEPPiK(0)
+    , thePro(0)
+    , theLHEPPro(0)
+    , theMiscLHEP(0)
+    , theStoppingHadron(0)
 {}
 
 HadronPhysicsLHEP::HadronPhysicsLHEP(const G4String& name)
-                    :  G4VPhysicsConstructor(name) 
+    :  G4VPhysicsConstructor(name) 
+    , theNeutrons(0)
+    , theLHEPNeutron(0)
+    , thePiK(0)
+    , theLHEPPiK(0)
+    , thePro(0)
+    , theLHEPPro(0)
+    , theMiscLHEP(0)
+    , theStoppingHadron(0)
 {}
 
 void HadronPhysicsLHEP::CreateModels()

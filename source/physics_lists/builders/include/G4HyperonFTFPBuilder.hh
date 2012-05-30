@@ -61,8 +61,8 @@
 #include "G4LundStringFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
 #include "G4CascadeInterface.hh"
-#include "G4QHadronInelasticDataSet.hh"
-
+//#include "G4QHadronInelasticDataSet.hh"
+#include "G4ChipsHyperonInelasticXS.hh"
 class G4HyperonFTFPBuilder 
 {
   public: 
@@ -95,10 +95,10 @@ class G4HyperonFTFPBuilder
     G4XiMinusInelasticProcess*  theXiMinusInelastic;
     G4AntiXiMinusInelasticProcess*  theAntiXiMinusInelastic;
     G4OmegaMinusInelasticProcess*  theOmegaMinusInelastic;
-    G4AntiOmegaMinusInelasticProcess*  theAntiOmegaMinusInelastic;
-    
-    G4QHadronInelasticDataSet * theCHIPSInelastic;
-
+  G4AntiOmegaMinusInelasticProcess*  theAntiOmegaMinusInelastic;
+  
+  //  G4QHadronInelasticDataSet * theCHIPSInelastic;
+  G4VCrossSectionDataSet* theCHIPSInelastic;
     G4bool wasActivated;
 };
 #endif

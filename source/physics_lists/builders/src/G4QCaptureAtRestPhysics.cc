@@ -40,14 +40,14 @@
 #include "G4QCaptureAtRestPhysics.hh"
 
 G4QCaptureAtRestPhysics::G4QCaptureAtRestPhysics(G4int ver)
-  :  G4VPhysicsConstructor("CHIPS nuclear_capture")
+  :  G4VPhysicsConstructor("CHIPS nuclear_capture"), captureProcess(0)
    , verbose(ver), wasActivated(false)
 {
   if(verbose > 1) G4cout << "###> G4QCaptureAtRestPhysics is initialized" << G4endl;
 }
 
 G4QCaptureAtRestPhysics::G4QCaptureAtRestPhysics(const G4String& name, G4int ver)
-  :  G4VPhysicsConstructor(name), verbose(ver), wasActivated(false)
+  :  G4VPhysicsConstructor(name), captureProcess(0), verbose(ver), wasActivated(false)
 {
   if(verbose > 1) G4cout << "###> G4QCaptureAtRestPhysics is initialized" << G4endl;
 }

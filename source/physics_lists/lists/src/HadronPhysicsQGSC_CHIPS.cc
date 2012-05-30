@@ -68,12 +68,27 @@
 #include "G4ShortLivedConstructor.hh"
 
 HadronPhysicsQGSC_CHIPS::HadronPhysicsQGSC_CHIPS(G4int)
-                    :  G4VPhysicsConstructor("hInelastic QGSC_CHIPS")
-		     , QuasiElastic(true)
+    :  G4VPhysicsConstructor("hInelastic QGSC_CHIPS")
+    , theNeut(0)
+    , theQGSCNeut(0)
+    , thePiK(0)
+    , theQGSCPiK(0)
+    , theProt(0)
+    , theQGSCProt(0)
+    , theMiscQGSC(0)
+    , QuasiElastic(true)
 {}
 
 HadronPhysicsQGSC_CHIPS::HadronPhysicsQGSC_CHIPS(const G4String& name, G4bool quasiElastic)
-                    :  G4VPhysicsConstructor(name), QuasiElastic(quasiElastic)
+    :  G4VPhysicsConstructor(name)
+    , theNeut(0)
+    , theQGSCNeut(0)
+    , thePiK(0)
+    , theQGSCPiK(0)
+    , theProt(0)
+    , theQGSCProt(0)
+    , theMiscQGSC(0)
+    , QuasiElastic(quasiElastic)
 {}
 
 void HadronPhysicsQGSC_CHIPS::CreateModels()

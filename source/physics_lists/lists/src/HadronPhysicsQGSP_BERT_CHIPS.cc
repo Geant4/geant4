@@ -53,16 +53,45 @@
 #include "G4QHadronInelasticDataSet.hh"
 
 HadronPhysicsQGSP_BERT_CHIPS::HadronPhysicsQGSP_BERT_CHIPS(G4int)
-                    :  G4VPhysicsConstructor("hInelastic QGSP_BERT_CHIPS")
-		     , QuasiElastic(true)
+    :  G4VPhysicsConstructor("hInelastic QGSP_BERT_CHIPS")
+    , theNeutrons(0)
+    , theLEPNeutron(0)
+    , theQGSPNeutron(0)
+    , theBertiniNeutron(0)
+    , thePion(0)
+    , theLEPPion(0)
+    , theQGSPPion(0)
+    , theBertiniPion(0)
+    , theKaon(0)
+    , thePro(0)
+    , theLEPPro(0)
+    , theQGSPPro(0)
+    , theBertiniPro(0)
+    , theMiscCHIPS(0)
+    , QuasiElastic(true)
+    , ProjectileDiffraction(false)
 {
-   ProjectileDiffraction=false;
 }
 
 HadronPhysicsQGSP_BERT_CHIPS::HadronPhysicsQGSP_BERT_CHIPS(const G4String& name, G4bool quasiElastic)
-                    :  G4VPhysicsConstructor(name) , QuasiElastic(quasiElastic)
+    :  G4VPhysicsConstructor(name) 
+    , theNeutrons(0)
+    , theLEPNeutron(0)
+    , theQGSPNeutron(0)
+    , theBertiniNeutron(0)
+    , thePion(0)
+    , theLEPPion(0)
+    , theQGSPPion(0)
+    , theBertiniPion(0)
+    , theKaon(0)
+    , thePro(0)
+    , theLEPPro(0)
+    , theQGSPPro(0)
+    , theBertiniPro(0)
+    , theMiscCHIPS(0)
+    , QuasiElastic(quasiElastic)
+    , ProjectileDiffraction(false)
 {
-   ProjectileDiffraction=false;
 }
 
 void HadronPhysicsQGSP_BERT_CHIPS::CreateModels()

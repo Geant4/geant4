@@ -15,6 +15,58 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25-05-2012, Gunter Folger              (phys-lists-V09-05-21)
+- improve creation of cascade to avoid one instantiation of Preco in 
+   G4FTFP{Proton,Neutron,PiK,AntiBarion}Builder.cc
+
+24-05-2012, D. Mancusi                 (phys-lists-V09-05-20)
+- Updates the INCLXX builders for compatibility with the latest INCL++ tag.
+- Requires hadr-inclxx-V09-05-13.
+
+22-05-2012, D.H. Wright                (phys-lists-V09-05-19)
+- in G4EmExtraPhysics.hh, .cc, change name of class G4VDMuonNuclearModel
+  to G4MuonVDNuclearModel.  Requires tag hadr-munuclear-V09-05-03.
+ 
+21-05-2012, M.Kelsey
+- G4QandFTFStoppingPhysics: Use general G4HadronicAbsorptionBertini.
+  Requires use of hadronic/stopping MHK-20120521.
+
+18-05-2012, V.Ivanchenko               (phys-lists-V09-05-18)
+- In all EM builders modified method of instantiation of 
+  multiple scattering: the same process instance is used by mu+ and mu-,
+  for pi+,pi-,K+,K-,proton and anti_protons separate processes which
+  build internal transport x-section tables, for all others the same 
+  process instance is used and no table is built; this should reduce
+  total memory for tables and initialisation time;
+- In standard builders Opt0, Opt1, Opt2 WentzelVI multiple 
+  scattering and G4eCoulombScattering models are applied for 
+  e+ and e- above 100 MeV , below G4UrbanMscModel95 is used
+  
+14-05-2012, W. Pokorski                (phys-lists-V09-05-17)
+- moving FTFP_BERT_TRV to new Chips XS
+
+11-05-2012, W. Pokorski                (phys-lists-V09-05-16)
+- fixing compilation error in HadronPhysicsFTFP_BERT
+
+11-05-2012, W. Pokorski                (phys-lists-V09-05-15)
+- moving to the new XS extracted from CHIPS
+
+11-05-2012, D. Mancusi                 (phys-lists-V09-05-14)
+- Added builders and updated QGSP_INCLXX physics list to treat
+  light-ion-induced collisions with INCL++.
+
+04-05-2012, A. Dotti		       (phys-lists-V09-05-13)
+- Co-working tag with emdna-V09-05-09
+
+04-05-2012, A. Dotti		       (phys-lists-V09-05-12)
+- Coverity fixes
+
+02-05-2012, G.Folger                   ( ..trunk.. )
+- revert changes by Mikhail ( revs: r58248, r58249,r58250 )
+
+28-04-2012, M.Kosov                    (phys-lists-V09-05-11)
+- chips is moved from models/chiral_inv_phase_space to hadronic/chips
+
 25-04-2012, M.Kosov                    (phys-lists-V09-05-10)
 - sources.cmake files ure updated in lists & builders for CHIPS_HP
 

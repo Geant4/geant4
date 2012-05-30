@@ -48,7 +48,18 @@
 #include "G4QInelasticCHIPS_HPBuilder.hh"
 
 G4QInelasticCHIPS_HPBuilder::G4QInelasticCHIPS_HPBuilder(G4int ver):
- verbose(ver), wasActivated(false), inelastic(0)
+    verbose(ver)
+    , wasActivated(false)
+    , inelastic(0)
+    , theInProcessMixer(0)
+    , theNgProcessMixer(0)
+    , theFiProcessMixer(0) 
+    , theNeutronInelastic(0)
+    , theNeutronFission(0)
+    , theNeutronCapture(0)
+    , theCHIPSInelastic(0)
+    , theCHIPSNGamma(0)
+    , theHPNeutron(0)
 {
   // pointer to the particle table
   theParticleTable = G4ParticleTable::GetParticleTable();

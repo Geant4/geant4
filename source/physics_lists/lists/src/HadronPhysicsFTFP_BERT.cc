@@ -50,14 +50,50 @@
 #include "G4ShortLivedConstructor.hh"
 
 #include "G4QHadronInelasticDataSet.hh"
+#include "G4ChipsKaonMinusInelasticXS.hh"
+#include "G4ChipsKaonPlusInelasticXS.hh"
+#include "G4ChipsKaonZeroInelasticXS.hh"
 
 HadronPhysicsFTFP_BERT::HadronPhysicsFTFP_BERT(G4int)
-                    :  G4VPhysicsConstructor("hInelastic FTFP_BERT")
-		     , QuasiElastic(false)
+    :  G4VPhysicsConstructor("hInelastic FTFP_BERT")
+    , theNeutrons(0)
+    , theBertiniNeutron(0)
+    , theFTFPNeutron(0)
+    , theLEPNeutron(0)
+    , thePiK(0)
+    , theBertiniPiK(0)
+    , theFTFPPiK(0)
+    , thePro(0)
+    , theBertiniPro(0)
+    , theFTFPPro(0)
+    , theHyperon(0)
+    , theAntiBaryon(0)
+    , theFTFPAntiBaryon(0)
+    , QuasiElastic(false)
+    , ChipsKaonMinus(0)
+    , ChipsKaonPlus(0)
+    , ChipsKaonZero(0)
 {}
 
 HadronPhysicsFTFP_BERT::HadronPhysicsFTFP_BERT(const G4String& name, G4bool quasiElastic)
-                    :  G4VPhysicsConstructor(name) , QuasiElastic(quasiElastic)
+    :  G4VPhysicsConstructor(name) 
+    , theNeutrons(0)
+    , theBertiniNeutron(0)
+    , theFTFPNeutron(0)
+    , theLEPNeutron(0)
+    , thePiK(0)
+    , theBertiniPiK(0)
+    , theFTFPPiK(0)
+    , thePro(0)
+    , theBertiniPro(0)
+    , theFTFPPro(0)
+    , theHyperon(0)
+    , theAntiBaryon(0)
+    , theFTFPAntiBaryon(0)
+    , QuasiElastic(quasiElastic)
+    , ChipsKaonMinus(0)
+    , ChipsKaonPlus(0)
+    , ChipsKaonZero(0)
 {}
 
 void HadronPhysicsFTFP_BERT::CreateModels()
@@ -110,7 +146,7 @@ HadronPhysicsFTFP_BERT::~HadronPhysicsFTFP_BERT()
   delete theAntiBaryon;
   delete theFTFPAntiBaryon;
   
-  delete theCHIPSInelastic;
+  // delete theCHIPSInelastic;
 }
 
 void HadronPhysicsFTFP_BERT::ConstructParticle()
@@ -133,12 +169,15 @@ void HadronPhysicsFTFP_BERT::ConstructProcess()
   thePro->Build();
   thePiK->Build();
   // use CHIPS cross sections also for Kaons
-  theCHIPSInelastic = new G4QHadronInelasticDataSet();
+  //  theCHIPSInelastic = new G4QHadronInelasticDataSet();
+  ChipsKaonMinus = new G4ChipsKaonMinusInelasticXS();
+  ChipsKaonPlus = new G4ChipsKaonPlusInelasticXS();
+  ChipsKaonZero = new G4ChipsKaonZeroInelasticXS();
   
-  FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(theCHIPSInelastic);
-  FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(theCHIPSInelastic);
-  FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(theCHIPSInelastic);
-  FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(theCHIPSInelastic);
+  FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(ChipsKaonMinus);
+  FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(ChipsKaonPlus);
+  FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(ChipsKaonZero );
+  FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(ChipsKaonZero );
 
   theHyperon->Build();
   theAntiBaryon->Build();

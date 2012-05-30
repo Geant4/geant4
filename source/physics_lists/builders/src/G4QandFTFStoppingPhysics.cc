@@ -35,7 +35,7 @@
 // Date:      18 October 2011
 //
 // Modified:  05 April 2012, A.Ribon : Use FTF also for anti_Sigma+ annihilation.
-//
+//	      10 May 2012, M.Kelsey : Use Bertini for pi-,K-,Sigma-
 //----------------------------------------------------------------------------
 //
 
@@ -43,7 +43,7 @@
 
 #include "G4QCaptureAtRest.hh"
 #include "G4FTFCaptureAtRest.hh"
-#include "G4PiMinusAbsorptionBertini.hh"
+#include "G4HadronicAbsorptionBertini.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
@@ -56,7 +56,9 @@
 
 
 G4QandFTFStoppingPhysics::G4QandFTFStoppingPhysics( G4int ver )
-  :  G4VPhysicsConstructor( "stopping" ), verbose( ver ),
+  :  G4VPhysicsConstructor( "stopping" )
+    , muProcess(0), hProcess(0), hFTFProcess(0), hBertProcess(0)
+    , verbose( ver ),
      wasActivated( false ) , useMuonMinusCaptureAtRest( true ) {
   if (verbose > 1) G4cout << "### G4QandFTFStoppingPhysics" << G4endl;
 }
@@ -65,7 +67,9 @@ G4QandFTFStoppingPhysics::G4QandFTFStoppingPhysics( G4int ver )
 G4QandFTFStoppingPhysics::G4QandFTFStoppingPhysics( const G4String& name,
                                                     G4int ver, 
                                                     G4bool UseMuonMinusCapture )
-  :  G4VPhysicsConstructor( name ), verbose( ver ), wasActivated( false ) ,
+  :  G4VPhysicsConstructor( name )
+    , muProcess(0), hProcess(0), hFTFProcess(0), hBertProcess(0)
+    , verbose( ver ), wasActivated( false ) ,
      useMuonMinusCaptureAtRest( UseMuonMinusCapture ) {
   if (verbose > 1) G4cout << "### G4QandFTFStoppingPhysics" << G4endl;
 }
@@ -105,9 +109,9 @@ void G4QandFTFStoppingPhysics::ConstructProcess() {
   } else {
      muProcess = 0;
   }   
-  hProcess = new G4QCaptureAtRest();
-  hFTFProcess = new G4FTFCaptureAtRest();
-  hBertProcess = new G4PiMinusAbsorptionBertini();
+  hProcess     = new G4QCaptureAtRest();
+  hFTFProcess  = new G4FTFCaptureAtRest();
+  hBertProcess = new G4HadronicAbsorptionBertini();
 
   G4double mThreshold = 130.*MeV;
 
@@ -134,31 +138,33 @@ void G4QandFTFStoppingPhysics::ConstructProcess() {
     }
     if ( particle->GetPDGCharge() < 0.0       && 
          particle->GetPDGMass() > mThreshold  &&
-         ! particle->IsShortLived()           &&
-         hProcess->IsApplicable( *particle ) ) {
+         ! particle->IsShortLived()) {
 
       // Use Fritiof/Precompound only for anti-protons and anti-sigma+
-      if ( particle == G4AntiProton::AntiProton() || particle == G4AntiSigmaPlus::AntiSigmaPlus() ) {
+      if ( particle == G4AntiProton::AntiProton() ||
+	   particle == G4AntiSigmaPlus::AntiSigmaPlus() ) {
         pmanager->AddRestProcess( hFTFProcess );
         if ( verbose > 1 ) {
 	  G4cout << "### G4FTFCaptureAtRest added for "
                  << particle->GetParticleName() << G4endl;
         }
       }
-      // Use Bertini/Precompound for pi-
-      else if ( particle == G4PionMinus::PionMinus() ) {
+      // Use Bertini/Precompound for pi-, K-, Sigma-
+      else if ( hBertProcess->IsApplicable(*particle) ) {
         pmanager->AddRestProcess( hBertProcess );
         if ( verbose > 1 ) {
 	  G4cout << "### G4PiMinusAbsorptionBertini added for "
                  << particle->GetParticleName() << G4endl;
         }
-      } else { 
+      } 
+      // Use CHIPS for other hadrons
+      else if ( hProcess->IsApplicable(*particle) ) {
         pmanager->AddRestProcess( hProcess );
 	if ( verbose > 1 ) {
 	  G4cout << "### QStoppingPhysics added for " 
 		 << particle->GetParticleName() << G4endl;
 	}
       }
-    }
-  }
+    }	// -ve particles above mass threshold
+  }	// while ( (*theParticleIterator)() )
 }

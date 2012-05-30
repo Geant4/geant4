@@ -166,6 +166,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4INCLXXProtonBuilder.hh
         G4IonBinaryCascadePhysics.hh
         G4IonFTFPBinaryCascadePhysics.hh
+        G4IonINCLXXPhysics.hh
         G4IonInclAblaPhysics.hh
         G4IonPhysics.hh
         G4IonQMDPhysics.hh
@@ -301,6 +302,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4INCLXXProtonBuilder.cc
         G4IonBinaryCascadePhysics.cc
         G4IonFTFPBinaryCascadePhysics.cc
+        G4IonINCLXXPhysics.cc
         G4IonInclAblaPhysics.cc
         G4IonPhysics.cc
         G4IonQMDPhysics.cc

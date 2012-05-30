@@ -53,18 +53,52 @@
 #include "G4PhysListUtil.hh"
 
 HadronPhysicsQGSP_FTFP_BERT::HadronPhysicsQGSP_FTFP_BERT(G4int)
-                    :  G4VPhysicsConstructor("hInelastic QGSP_FTFP_BERT")
-		     , QuasiElastic(true)
+    :  G4VPhysicsConstructor("hInelastic QGSP_FTFP_BERT")
+    , theNeutrons(0)
+    , theFTFPNeutron(0)
+    , theQGSPNeutron(0)
+    , theBertiniNeutron(0)
+    , theLEPNeutron(0)
+    , thePiK(0)
+    , theFTFPPiK(0)
+    , theQGSPPiK(0)
+    , theBertiniPiK(0)
+    , thePro(0)
+    , theFTFPPro(0)
+    , theQGSPPro(0)
+    , theBertiniPro(0)
+    , theHyperon(0)
+    , theAntiBaryon(0)
+    , theFTFPAntiBaryon(0)
+    , QuasiElastic(true)
+    , ProjectileDiffraction(false)
+    , theCHIPSInelastic(0)
 {
-   ProjectileDiffraction=false;
 }
 
 HadronPhysicsQGSP_FTFP_BERT::HadronPhysicsQGSP_FTFP_BERT(const G4String&, 
 							 G4bool quasiElastic)
-                    :  G4VPhysicsConstructor("hInelastic QGSP_FTFP_BERT"), 
-		       QuasiElastic(quasiElastic)
+    :  G4VPhysicsConstructor("hInelastic QGSP_FTFP_BERT")
+    , theNeutrons(0)
+    , theFTFPNeutron(0)
+    , theQGSPNeutron(0)
+    , theBertiniNeutron(0)
+    , theLEPNeutron(0)
+    , thePiK(0)
+    , theFTFPPiK(0)
+    , theQGSPPiK(0)
+    , theBertiniPiK(0)
+    , thePro(0)
+    , theFTFPPro(0)
+    , theQGSPPro(0)
+    , theBertiniPro(0)
+    , theHyperon(0)
+    , theAntiBaryon(0)
+    , theFTFPAntiBaryon(0)
+    , QuasiElastic(quasiElastic)
+    , ProjectileDiffraction(false)
+    , theCHIPSInelastic(0)
 {
-   ProjectileDiffraction=false;
 }
 
 void HadronPhysicsQGSP_FTFP_BERT::CreateModels()

@@ -45,11 +45,13 @@
 
 HadronPhysicsCHIPS_HP::HadronPhysicsCHIPS_HP(G4int)
 :  G4VPhysicsConstructor( "CHIPS_HP hadronic")
+,theInelasticCHIPS_HP(0)
 //  , verbosity(verbose)
 {}
 
 HadronPhysicsCHIPS_HP::HadronPhysicsCHIPS_HP(const G4String& name)
 :  G4VPhysicsConstructor(name)
+, theInelasticCHIPS_HP(0)
 {}
 
 HadronPhysicsCHIPS_HP::~HadronPhysicsCHIPS_HP() 

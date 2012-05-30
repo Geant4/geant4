@@ -23,61 +23,85 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsCHIPS.cc,v 1.3 2010-06-03 10:42:44 gunter Exp $
+// $Id: G4IonINCLXXPhysics.hh,v 1.2 2010-06-03 15:03:53 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   HadronPhysicsCHIPS
+// ClassName:   G4IonINCLXXBuilder
 //
-// Author: 2009  M.Kosov
+// Author:      D. Mancusi 23.03.2012
 //
 // Modified:
 //
 //----------------------------------------------------------------------------
 //
-#include "HadronPhysicsCHIPS.hh"
+
+#ifndef G4IonINCLXXPhysics_h
+#define G4IonINCLXXPhysics_h 1
 
 #include "globals.hh"
-#include "G4ios.hh"
-#include <iomanip>   
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTable.hh"
+#include "G4VPhysicsConstructor.hh"
 
-#include "G4MesonConstructor.hh"
-#include "G4BaryonConstructor.hh"
-#include "G4ShortLivedConstructor.hh"
+#include "G4LEDeuteronInelastic.hh"
+#include "G4LETritonInelastic.hh"
+#include "G4LEAlphaInelastic.hh"
 
-HadronPhysicsCHIPS::HadronPhysicsCHIPS(G4int)
-:  G4VPhysicsConstructor( "CHIPS hadronic")
-    , theInelasticCHIPS(0)
-//  , verbosity(verbose)
-{}
+#include <vector>
 
-HadronPhysicsCHIPS::HadronPhysicsCHIPS(const G4String& name):  G4VPhysicsConstructor(name), theInelasticCHIPS(0)
-{}
+class G4HadronInelasticProcess;
+class G4HadronicInteraction;
+class G4TripathiLightCrossSection;
+class G4TripathiCrossSection;
+class G4IonsShenCrossSection;
+class G4INCLXXInterface;
 
-HadronPhysicsCHIPS::~HadronPhysicsCHIPS() 
+
+class G4IonINCLXXPhysics : public G4VPhysicsConstructor
 {
-   delete theInelasticCHIPS;
-}
+public:
+  G4IonINCLXXPhysics(G4int ver = 0);
+  G4IonINCLXXPhysics(const G4String& name, G4int ver = 0);
+  virtual ~G4IonINCLXXPhysics();
 
-void HadronPhysicsCHIPS::ConstructParticle()
-{
-  G4MesonConstructor pMesonConstructor;
-  pMesonConstructor.ConstructParticle();
+  // This method will be invoked in the Construct() method.
+  // each particle type will be instantiated
+  virtual void ConstructParticle();
 
-  G4BaryonConstructor pBaryonConstructor;
-  pBaryonConstructor.ConstructParticle();
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type
+  virtual void ConstructProcess();
 
-  G4ShortLivedConstructor pShortLivedConstructor;
-  pShortLivedConstructor.ConstructParticle();  
-}
+private:
 
-#include "G4ProcessManager.hh"
-void HadronPhysicsCHIPS::ConstructProcess()
-{
-  theInelasticCHIPS = new G4QInelasticCHIPSBuilder(0); // No verbose (@@ to be developed)
-  theInelasticCHIPS->Build();
-}
+  void AddProcess(const G4String&,
+		  G4ParticleDefinition*, 
+		  G4HadronicInteraction*,
+		  G4HadronicInteraction*,
+		  const G4double);
+  std::vector<G4HadronInelasticProcess*> p_list;
+  std::vector<G4HadronicInteraction*> model_list;
+
+  G4INCLXXInterface* fINCLXXIons;
+
+  G4TripathiCrossSection* fTripathi;
+  G4TripathiLightCrossSection* fTripathiLight;
+  G4IonsShenCrossSection* fShen;
+
+  G4LEDeuteronInelastic*  fLEDModel;
+  G4LETritonInelastic*    fLETModel;
+  G4LEAlphaInelastic*     fLEAModel;
+
+  G4double emin;
+  G4double emax_d, emax_t, emax_he3, emax_alpha;
+  G4double emax;
+  G4double emaxLHEP;
+
+  G4int  verbose;
+  G4bool wasActivated;
+};
+
+
+#endif
 

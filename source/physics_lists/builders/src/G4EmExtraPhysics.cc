@@ -133,7 +133,7 @@ void G4EmExtraPhysics::BuildMuonNuclear()
   G4ProcessManager * pManager = 0;
 
   muNucProcess = new G4MuonNuclearProcess();
-  muNucModel = new G4VDMuonNuclearModel();
+  muNucModel = new G4MuonVDNuclearModel();
   muNucProcess->RegisterMe(muNucModel);
 
   pManager = G4MuonPlus::MuonPlus()->GetProcessManager();
