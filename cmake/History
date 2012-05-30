@@ -29,6 +29,34 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 30th, 2012 - Pere Mato (cmake-V09-05-19)
+- Templates/UseGeant4_internal.cmake : Added new arguments WORKING_DIRECTORY and LABELS to GEANT4_ADD_TEST() 
+  This allows to assign tests to specific test slots (Nightly, Continuous, PhyscisChecks). If no label is specified it is
+  given the Nightly label.
+
+May 29th, 2012 - Ben Morgan (cmake-V09-05-18)
+- Modules/Geant4ToolchainBackwardCompatibility.cmake : [BUGFIX #1268] Enable use of C-shell scripts inside other scripts. 
+ This follows the pattern used in ROOT's cshell scripts, which works at 
+ the cost of the user having to supply extra information to the source
+ command/script.
+- Templates/geant4-env-skeleton.in : [BUGFIX #1268] Protect changes to the environment if self location fails.
+- Templates/geant4make-skeleton.in : [BUGFIX #1268] Protect changes to the environment if self location fails.
+
+
+May 9th, 2012 - Pere Mato (cmake-V09-05-17)
+- Templates/UseGeant4_internal.cmake : By default tests building anything will fail in case of warnings. 
+  This is wanted by G. Folger.
+
+May 8th, 2012 - Pere Mato (cmake-V09-05-16)
+- Templates/UseGeant4_internal.cmake : Added PASSREGEX and FAILREGEX arguments to GEANT4_ADD_TEST()
+
+April 30th, 2012 - Ben Morgan (cmake-V09-05-15)
+- Modules/Geant4InstallData.cmake : GEANT4_INSTALL_DATA set as an INTERNAL
+  variable when deactivated on CMake < 2.8. Ensures it doesn't show in GUI.
+- Modules/Geant4LibraryBuildOptions.cmake : Force deactivation of
+  GEANT4_ENABLE_TESTING on CMake < 2.8 due to compatibility issues.
+
 April 24th, 2012 - Ben Morgan (cmake-V09-05-14)
 - Modules/Geant4InstallData.cmake : Force GEANT4_INSTALL_DATA to OFF if
   CMake < 2.8.0 is used, and warn user if it has been set. This prevents the

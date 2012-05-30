@@ -37,7 +37,7 @@ if(NOT ${CMAKE_VERSION} VERSION_GREATER 2.7)
   if(GEANT4_INSTALL_DATA)
     message(STATUS "WARNING: GEANT4_INSTALL_DATA requires CMake >= 2.8 -- deactivating")
   endif()
-  set(GEANT4_INSTALL_DATA OFF CACHE BOOL "Install data NOT supported on CMake <2.8" FORCE)
+  set(GEANT4_INSTALL_DATA OFF CACHE INTERNAL "Install data NOT supported on CMake <2.8" FORCE)
 else()
   option(GEANT4_INSTALL_DATA "Download and install Geant4 Data Libraries" OFF)
 

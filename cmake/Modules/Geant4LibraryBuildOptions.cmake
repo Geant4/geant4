@@ -118,9 +118,18 @@ option(GEANT4_BUILD_EXAMPLES "Build all the examples of the project" OFF)
 GEANT4_ADD_FEATURE(GEANT4_BUILD_EXAMPLES "Build all the examples of the project")
 mark_as_advanced(GEANT4_BUILD_EXAMPLES)
 
-option(GEANT4_ENABLE_TESTING "Enable and define all the tests of the project" OFF)
-GEANT4_ADD_FEATURE(GEANT4_ENABLE_TESTING "Enable and define all the tests of the project")
-mark_as_advanced(GEANT4_ENABLE_TESTING)
+# - Testing system only functional on 2.8 and above
+if(NOT ${CMAKE_VERSION} VERSION_GREATER 2.7)
+  if(GEANT4_ENABLE_TESTING)
+    message(STATUS "WARNING: GEANT4_ENABLE_TESTING requires CMake >= 2.8 -- deactivating")
+  endif()
+  set(GEANT4_ENABLE_TESTING OFF CACHE INTERNAL "Testing NOT supported on CMake <2.8"
+    FORCE)
+else()
+  option(GEANT4_ENABLE_TESTING "Enable and define all the tests of the project" OFF)
+  GEANT4_ADD_FEATURE(GEANT4_ENABLE_TESTING "Enable and define all the tests of the project")
+  mark_as_advanced(GEANT4_ENABLE_TESTING)
+endif()
 
 
 # On WIN32, we need to build the genwindef application to create export

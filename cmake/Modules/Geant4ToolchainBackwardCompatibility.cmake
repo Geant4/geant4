@@ -84,7 +84,10 @@ function(_g4tc_selflocate TEMPLATE_NAME SHELL_FAMILY SCRIPT_NAME LOCATION_VARIAB
 if [ -z \"\$BASH_VERSION\" ]; then
   # Not bash, so rely on sourcing from correct location
   if [ ! -f ${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION} ]; then
-    echo 'ERROR: cd to location of ${SCRIPT_NAME} script and source it there'
+    echo 'ERROR: ${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION} could NOT self-locate Geant4 installation'
+    echo 'This is most likely because you are using ksh, zsh or similar'
+    echo 'To fix this issue, cd to the directory containing this script'
+    echo 'and source it in that directory.'
     return 1
   fi
   ${LOCATION_VARIABLE}=\$\(pwd\)
@@ -95,17 +98,63 @@ fi
       "
       PARENT_SCOPE
       )
+    # For bourne shell, set the values of the guard variables
+    set(GEANT4_TC_IF_SELFLOCATED "" PARENT_SCOPE)
+    set(GEANT4_TC_ENDIF_SELFLOCATED "" PARENT_SCOPE)
 
   elseif(${SHELL_FAMILY} STREQUAL "cshell")
     set(${TEMPLATE_NAME}
       "# Self locate script when sourced
-set ARGS=(\$_)
-set g4sls_sourced_dir=\"`dirname \${ARGS[2]}`\"
-set ${LOCATION_VARIABLE}=\"`cd \${g4sls_sourced_dir} > /dev/null ; pwd`\"
+# If sourced interactively, we can use $_ as this should be
+#
+#   source path_to_script_dir/${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION}
+#
+set ARGS=($_)
+if (\"$ARGS\" != \"\") then
+  set g4sls_sourced_dir=\"`dirname \${ARGS[2]}`\"
+else
+  # Oh great, we were sourced non-interactively. This means that $_
+  # won't be set, so we need an external source of information on
+  # where the script is located.
+  # We obtain this in one of two ways:
+  #   1) Current directory:
+  #     cd script_dir ; source ${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION}
+  #
+  #   2) Supply the directory as an argument to the script:
+  #     source script_dir/${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION} script_dir
+  #
+  if ( -e ${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION} ) then
+    set g4sls_sourced_dir=\"`pwd`\"
+  else if ( \"\$1\" != \"\" )  then
+    if ( -e \${1}/${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION} ) then
+      set g4sls_sourced_dir=\${1}
+    else
+      echo \"ERROR \${1} does not contain a Geant4 installation\"
+    endif
+  else
+    unset g4sls_sourced_dir
+    echo \"ERROR: ${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION} could NOT self-locate Geant4 installation\"
+    echo \"because it was sourced (i.e. embedded) in another script.\"
+    echo \"This issue is specific to (t)csh\"
+    echo \"You need to use:\"
+    echo \"  cd where_script_is ; source ${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION}\"
+    echo \"or:\"
+    echo \"  source where_script_is/${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION} where_script_is\"
+    echo \" \"
+  endif
+endif
+
+if (\$?g4sls_sourced_dir) then
+  set ${LOCATION_VARIABLE}=\"`cd \${g4sls_sourced_dir} > /dev/null ; pwd`\"
+endif
 "
       PARENT_SCOPE
       )
-    endif()
+
+    # For C-shell, set the values of the guard variables
+    set(GEANT4_TC_IF_SELFLOCATED "if (\${?g4sls_sourced_dir}) then" PARENT_SCOPE)
+   set(GEANT4_TC_ENDIF_SELFLOCATED "endif" PARENT_SCOPE)
+  endif()
 endfunction()
 
 
