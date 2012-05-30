@@ -91,17 +91,14 @@ void G4VTrajectory::ShowTrajectory(std::ostream& os) const
   for (G4int i = 0; i < GetPointEntries(); i++) {
 
     G4VTrajectoryPoint* aTrajectoryPoint = GetPoint(i);
-    std::vector<G4AttValue>* attValues
-      = aTrajectoryPoint->CreateAttValues();
-    const std::map<G4String,G4AttDef>* attDefs
-      = aTrajectoryPoint->GetAttDefs();
+    attValues = aTrajectoryPoint->CreateAttValues();
+    attDefs = aTrajectoryPoint->GetAttDefs();
 
     // Ensure validity...
     if (G4AttCheck(attValues,attDefs).Check("G4VTrajectory::ShowTrajectory")) {
       return;
     }
 
-    std::vector<G4AttValue>::iterator iAttVal;
     for (iAttVal = attValues->begin();
 	 iAttVal != attValues->end(); ++iAttVal) {
       std::map<G4String,G4AttDef>::const_iterator iAttDef =

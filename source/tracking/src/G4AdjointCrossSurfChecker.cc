@@ -283,8 +283,7 @@ G4bool G4AdjointCrossSurfChecker::AddaSphericalSurfaceWithCenterAtTheCenterOfAVo
   	G4VPhysicalVolume* daughter =thePhysicalVolume;
  	G4LogicalVolume* mother = thePhysicalVolume->GetMotherLogical();
  	G4AffineTransform theTransformationFromPhysVolToWorld = G4AffineTransform();
- 	G4PhysicalVolumeStore* thePhysVolStore =G4PhysicalVolumeStore::GetInstance();
-	 while (mother){
+	while (mother){
  		theTransformationFromPhysVolToWorld *=
 		G4AffineTransform(daughter->GetFrameRotation(),daughter->GetObjectTranslation());
  		/*G4cout<<"Mother "<<mother->GetName()<<std::endl;

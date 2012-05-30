@@ -228,10 +228,10 @@ G4RichTrajectoryPoint::GetAttDefs() const
   return store;
 }
 
-static G4String Status(G4StepStatus s)
+static G4String Status(G4StepStatus stps)
 {
   G4String status;
-  switch (s) {
+  switch (stps) {
   case fWorldBoundary:         status = "fWorldBoundary"; break;
   case fGeomBoundary:          status = "fGeomBoundary"; break;
   case fAtRestDoItProc:        status = "fAtRestDoItProc"; break;

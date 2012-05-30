@@ -18,6 +18,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24 May 2012 G.Cosmo (tracking-V09-05-01)
+- Fixed trivial cases of variable shadowing.
+
 17 January 2012 G.Cosmo (tracking-V09-05-00)
 - Remove not defined method GetNavigator() and moved SetNavigator() to public.
 
