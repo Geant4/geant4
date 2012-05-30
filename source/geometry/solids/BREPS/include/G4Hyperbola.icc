@@ -152,14 +152,14 @@ G4int G4Hyperbola::IntersectRay2D(const G4Ray& ray)
   // similar to G4Ellipse::IntersectRay2D
 
   // 2D operations would be faster
-  G4Point3D s= toUnitHyperbola*ray.GetStart();
+  G4Point3D st= toUnitHyperbola*ray.GetStart();
   G4Vector3D d= toUnitHyperbola*ray.GetDir();
   
-  // solve (s+i*t)^2 = 1 for i (the distance)
+  // solve (st+i*t)^2 = 1 for i (the distance)
 
-  G4double sd= s.x()*d.x()-s.y()*d.y();
+  G4double sd= st.x()*d.x()-st.y()*d.y();
   G4double dd= d.x()*d.x()-d.y()*d.y(); // can be 0
-  G4double ss= s.x()*s.x()-s.y()*s.y();
+  G4double ss= st.x()*st.x()-st.y()*st.y();
 
   if (std::abs(dd) < kCarTolerance*kCarTolerance) {
 

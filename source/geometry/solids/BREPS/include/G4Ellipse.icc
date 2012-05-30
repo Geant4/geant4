@@ -145,13 +145,13 @@ G4int G4Ellipse::IntersectRay2D(const G4Ray& ray)
   // with the center at the origin
 
   // 2D operations would be faster
-  G4Point3D  s= toUnitCircle*ray.GetStart();
+  G4Point3D  st= toUnitCircle*ray.GetStart();
   G4Vector3D d= toUnitCircle*ray.GetDir();
   
-  // solve (s+i*t)^2 = 1 for i (the distance)
-  G4double sd= s*d;
+  // solve (st+i*t)^2 = 1 for i (the distance)
+  G4double sd= st*d;
   G4double dd= d.mag2(); // never 0
-  G4double ss= s.mag2();
+  G4double ss= st.mag2();
 
   G4double discr= sd*sd-dd*(ss-1);
   G4int nbinter = 0;

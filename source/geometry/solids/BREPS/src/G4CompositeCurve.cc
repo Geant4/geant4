@@ -102,16 +102,16 @@ G4Curve* G4CompositeCurve::Project(const G4Transform3D& tr)
       {
         a = newSegments.back();
         newSegments.pop_back();
-        for (G4CurveVector::iterator i=newSegments.begin();
-	                             i!=newSegments.end();)
+        for (G4CurveVector::iterator it=newSegments.begin();
+	                             it!=newSegments.end();)
         {
-          if (*i==a)
+          if (*it==a)
           {
-	    i = newSegments.erase(i);
+	    it = newSegments.erase(it);
           }
           else
           {
-	    ++i;
+	    ++it;
           }
         } 
         delete a;

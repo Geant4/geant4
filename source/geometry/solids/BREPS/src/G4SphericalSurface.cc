@@ -185,29 +185,29 @@ G4SphericalSurface::~G4SphericalSurface()
 }
 
 
-G4SphericalSurface::G4SphericalSurface( const G4SphericalSurface& s )
+G4SphericalSurface::G4SphericalSurface( const G4SphericalSurface& surf )
   : G4Surface()
 {
-  x_axis = s.x_axis;
-  z_axis = s.z_axis;
-  radius = s.radius;
-  phi_1 = s.phi_1;
-  phi_2 = s.phi_2;
-  theta_1 = s.theta_1;
-  theta_2 = s.theta_2;
+  x_axis = surf.x_axis;
+  z_axis = surf.z_axis;
+  radius = surf.radius;
+  phi_1 = surf.phi_1;
+  phi_2 = surf.phi_2;
+  theta_1 = surf.theta_1;
+  theta_2 = surf.theta_2;
 }                               
 
 G4SphericalSurface&
-G4SphericalSurface::operator=( const G4SphericalSurface& s )
+G4SphericalSurface::operator=( const G4SphericalSurface& surf )
 {
-  if (&s == this)  { return *this; }
-  x_axis = s.x_axis;
-  z_axis = s.z_axis;
-  radius = s.radius;
-  phi_1 = s.phi_1;
-  phi_2 = s.phi_2;
-  theta_1 = s.theta_1;
-  theta_2 = s.theta_2;
+  if (&surf == this)  { return *this; }
+  x_axis = surf.x_axis;
+  z_axis = surf.z_axis;
+  radius = surf.radius;
+  phi_1 = surf.phi_1;
+  phi_2 = surf.phi_2;
+  theta_1 = surf.theta_1;
+  theta_2 = surf.theta_2;
 
   return *this;
 }
@@ -237,9 +237,9 @@ G4double G4SphericalSurface::HowNear( const G4Vector3D& x ) const
   //  G4SphericalSurface, negative if the point is outside.
 
   G4Vector3D d = G4Vector3D( x - origin );
-  G4double rad = d.mag();
+  G4double rds = d.mag();
 
-  return (radius - rad);
+  return (radius - rds);
 }
 
 
@@ -389,9 +389,9 @@ G4int G4SphericalSurface::Intersect( const G4Ray& ry )
 
   // Array of solutions in distance along the Ray
   //
-  G4double s[2];
-  s[0] = -1.0 ; 
-  s[1] = -1.0 ;
+  G4double ss[2];
+  ss[0] = -1.0 ; 
+  ss[1] = -1.0 ;
 
   // Calculate the two solutions (quadratic equation)
   //
@@ -413,17 +413,17 @@ G4int G4SphericalSurface::Intersect( const G4Ray& ry )
   if ( radical < 0.0 )  { return 0; }
   
   G4double root = std::sqrt( radical );
-  s[0] = -b + root;
-  s[1] = -b - root;
+  ss[0] = -b + root;
+  ss[1] = -b - root;
 
   // Order the possible solutions by increasing distance along the Ray
-  // G4Sort_double( s, isoln, maxsoln-1 );
+  // G4Sort_double( ss, isoln, maxsoln-1 );
   //        
-  if(s[0] > s[1])
+  if(ss[0] > ss[1])
   {
-    G4double tmp =s[0];
-    s[0] = s[1];
-    s[1] = tmp;
+    G4double tmp =ss[0];
+    ss[0] = ss[1];
+    ss[1] = tmp;
   }
 
   // Now loop over each positive solution, keeping the first one (smallest
@@ -433,10 +433,10 @@ G4int G4SphericalSurface::Intersect( const G4Ray& ry )
   //
   for ( isoln = 0; isoln < maxsoln; isoln++ ) 
   {
-    if ( s[isoln] >= kCarTolerance*0.5 ) 
+    if ( ss[isoln] >= kCarTolerance*0.5 ) 
     {
-      if ( s[isoln] >= kInfinity )  { return 0; }  // quit if too large
-      distance = s[isoln];
+      if ( ss[isoln] >= kInfinity )  { return 0; }  // quit if too large
+      distance = ss[isoln];
       closest_hit = ry.GetPoint( distance );
       if ( ( ( dhat * Normal( closest_hit ) * which_way ) >= 0.0 ) && 
            ( WithinBoundary( closest_hit ) == 1 )                      )

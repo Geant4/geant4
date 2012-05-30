@@ -66,9 +66,9 @@ void G4OsloMatrix::SetOffset(G4int o)
 }
 
 inline
-void G4OsloMatrix::SetSize(G4int s)
+void G4OsloMatrix::SetSize(G4int siz)
 {
-  osize = s;
+  osize = siz;
 }
 
 inline
