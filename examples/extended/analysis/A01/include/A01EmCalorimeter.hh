@@ -47,8 +47,8 @@ class A01EmCalorimeter : public G4VSensitiveDetector
       virtual void EndOfEvent(G4HCofThisEvent*HCE);
 
   private:
-      A01EmCalorimeterHitsCollection* hitsCollection;
-      G4int HCID;
+      A01EmCalorimeterHitsCollection* fHitsCollection;
+      G4int fHCID;
 };
 
 

@@ -43,14 +43,14 @@ G4Allocator<A01DriftChamberHit> A01DriftChamberHitAllocator;
 
 A01DriftChamberHit::A01DriftChamberHit()
 {
-  layerID = -1;
-  time = 0.;
+  fLayerID = -1;
+  fTime = 0.;
 }
 
 A01DriftChamberHit::A01DriftChamberHit(G4int z)
 {
-  layerID = z;
-  time = 0.;
+  fLayerID = z;
+  fTime = 0.;
 }
 
 A01DriftChamberHit::~A01DriftChamberHit()
@@ -58,18 +58,18 @@ A01DriftChamberHit::~A01DriftChamberHit()
 
 A01DriftChamberHit::A01DriftChamberHit(const A01DriftChamberHit &right)
     : G4VHit() {
-  layerID = right.layerID;
-  worldPos = right.worldPos;
-  localPos = right.localPos;
-  time = right.time;
+  fLayerID = right.fLayerID;
+  fWorldPos = right.fWorldPos;
+  fLocalPos = right.fLocalPos;
+  fTime = right.fTime;
 }
 
 const A01DriftChamberHit& A01DriftChamberHit::operator=(const A01DriftChamberHit &right)
 {
-  layerID = right.layerID;
-  worldPos = right.worldPos;
-  localPos = right.localPos;
-  time = right.time;
+  fLayerID = right.fLayerID;
+  fWorldPos = right.fWorldPos;
+  fLocalPos = right.fLocalPos;
+  fTime = right.fTime;
   return *this;
 }
 
@@ -83,7 +83,7 @@ void A01DriftChamberHit::Draw()
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   if(pVVisManager)
   {
-    G4Circle circle(worldPos);
+    G4Circle circle(fWorldPos);
     circle.SetScreenSize(2);
     circle.SetFillStyle(G4Circle::filled);
     G4Colour colour(1.,1.,0.);
@@ -122,22 +122,22 @@ std::vector<G4AttValue>* A01DriftChamberHit::CreateAttValues() const
   values->push_back(G4AttValue("HitType","DriftChamberHit",""));
 
   values->push_back
-    (G4AttValue("ID",G4UIcommand::ConvertToString(layerID),""));
+    (G4AttValue("ID",G4UIcommand::ConvertToString(fLayerID),""));
 
   values->push_back
-    (G4AttValue("Time",G4BestUnit(time,"Time"),""));
+    (G4AttValue("Time",G4BestUnit(fTime,"Time"),""));
 
   values->push_back
-    (G4AttValue("Pos",G4BestUnit(worldPos,"Length"),""));
+    (G4AttValue("Pos",G4BestUnit(fWorldPos,"Length"),""));
 
   return values;
 }
 
 void A01DriftChamberHit::Print()
 {
-  G4cout << "  Layer[" << layerID << "] : time " << time/ns
-         << " (nsec) --- local (x,y) " << localPos.x()
-         << ", " << localPos.y() << G4endl;
+  G4cout << "  Layer[" << fLayerID << "] : time " << fTime/ns
+         << " (nsec) --- local (x,y) " << fLocalPos.x()
+         << ", " << fLocalPos.y() << G4endl;
 }
 
 

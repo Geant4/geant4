@@ -42,17 +42,14 @@ class A01DetectorConstMessenger: public G4UImessenger
     A01DetectorConstMessenger(A01DetectorConstruction* mpga);
     ~A01DetectorConstMessenger();
 
-  public:
-    void SetNewValue(G4UIcommand * command,G4String newValues);
-    G4String GetCurrentValue(G4UIcommand * command);
+    virtual void SetNewValue(G4UIcommand * command,G4String newValues);
+    virtual G4String GetCurrentValue(G4UIcommand * command);
 
   private:
-    A01DetectorConstruction * target;
+    A01DetectorConstruction * fTarget;
 
-  private: //commands
-    G4UIdirectory *             mydetDirectory;
-    G4UIcmdWithADoubleAndUnit*  armCmd;
-
+    G4UIdirectory *             fMydetDirectory;
+    G4UIcmdWithADoubleAndUnit*  fArmCmd;
 };
 
 #endif

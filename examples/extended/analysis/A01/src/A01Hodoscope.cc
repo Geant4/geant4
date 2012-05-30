@@ -40,18 +40,18 @@ A01Hodoscope::A01Hodoscope(G4String name)
 {
   G4String HCname;
   collectionName.insert(HCname="hodoscopeColl");
-  HCID = -1;
+  fHCID = -1;
 }
 
 A01Hodoscope::~A01Hodoscope(){;}
 
 void A01Hodoscope::Initialize(G4HCofThisEvent*HCE)
 {
-  hitsCollection = new A01HodoscopeHitsCollection
+  fHitsCollection = new A01HodoscopeHitsCollection
                    (SensitiveDetectorName,collectionName[0]);
-  if(HCID<0)
-  { HCID = G4SDManager::GetSDMpointer()->GetCollectionID(hitsCollection); }
-  HCE->AddHitsCollection(HCID,hitsCollection);
+  if(fHCID<0)
+  { fHCID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection); }
+  HCE->AddHitsCollection(fHCID,fHitsCollection);
 }
 
 
@@ -68,9 +68,9 @@ G4bool A01Hodoscope::ProcessHits(G4Step*aStep,G4TouchableHistory* /*ROhist*/)
 
   // check if this finger already has a hit
   G4int ix = -1;
-  for(G4int i=0;i<hitsCollection->entries();i++)
+  for(G4int i=0;i<fHitsCollection->entries();i++)
   {
-    if((*hitsCollection)[i]->GetID()==copyNo)
+    if((*fHitsCollection)[i]->GetID()==copyNo)
     {
       ix = i;
       break;
@@ -79,8 +79,8 @@ G4bool A01Hodoscope::ProcessHits(G4Step*aStep,G4TouchableHistory* /*ROhist*/)
   // if it has, then take the earlier time
   if(ix>=0)
   {
-    if((*hitsCollection)[ix]->GetTime()>hitTime)
-    { (*hitsCollection)[ix]->SetTime(hitTime); }
+    if((*fHitsCollection)[ix]->GetTime()>hitTime)
+    { (*fHitsCollection)[ix]->SetTime(hitTime); }
   }
   else
   // if not, create a new hit and set it to the collection
@@ -92,7 +92,7 @@ G4bool A01Hodoscope::ProcessHits(G4Step*aStep,G4TouchableHistory* /*ROhist*/)
     aTrans.Invert();
     aHit->SetRot(aTrans.NetRotation());
     aHit->SetPos(aTrans.NetTranslation());
-    hitsCollection->insert( aHit );
+    fHitsCollection->insert( aHit );
   }
 
   return true;

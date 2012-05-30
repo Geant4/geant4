@@ -43,7 +43,6 @@ class G4AttValue;
 class A01DriftChamberHit : public G4VHit
 {
   public:
-
       A01DriftChamberHit();
       A01DriftChamberHit(G4int z);
       virtual ~A01DriftChamberHit();
@@ -63,20 +62,20 @@ class A01DriftChamberHit : public G4VHit
       virtual void Print();
 
   private:
-      G4int layerID;
-      G4double time;
-      G4ThreeVector localPos;
-      G4ThreeVector worldPos;
+      G4int fLayerID;
+      G4double fTime;
+      G4ThreeVector fLocalPos;
+      G4ThreeVector fWorldPos;
 
   public:
-      inline void SetLayerID(G4int z) { layerID = z; }
-      inline G4int GetLayerID() const { return layerID; }
-      inline void SetTime(G4double t) { time = t; }
-      inline G4double GetTime() const { return time; }
-      inline void SetLocalPos(G4ThreeVector xyz) { localPos = xyz; }
-      inline G4ThreeVector GetLocalPos() const { return localPos; }
-      inline void SetWorldPos(G4ThreeVector xyz) { worldPos = xyz; }
-      inline G4ThreeVector GetWorldPos() const { return worldPos; }
+      inline void SetLayerID(G4int z) { fLayerID = z; }
+      inline G4int GetLayerID() const { return fLayerID; }
+      inline void SetTime(G4double t) { fTime = t; }
+      inline G4double GetTime() const { return fTime; }
+      inline void SetLocalPos(G4ThreeVector xyz) { fLocalPos = xyz; }
+      inline G4ThreeVector GetLocalPos() const { return fLocalPos; }
+      inline void SetWorldPos(G4ThreeVector xyz) { fWorldPos = xyz; }
+      inline G4ThreeVector GetWorldPos() const { return fWorldPos; }
 };
 
 typedef G4THitsCollection<A01DriftChamberHit> A01DriftChamberHitsCollection;

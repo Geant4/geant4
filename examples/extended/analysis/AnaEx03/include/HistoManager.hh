@@ -23,26 +23,57 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: HistoManager.hh,v 1.1 2010-11-08 10:38:44 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// Author: Ivana Hrivnacova, 15/06/2011  (ivana@ipno.in2p3.fr)
+#ifndef HistoManager_h
+#define HistoManager_h 1
 
-#ifndef g4hbook_defs_h
-#define g4hbook_defs_h
+#include "globals.hh"
 
-#include <tools/hbook/h1>
-#include <tools/hbook/h2>
-#include <tools/hbook/wntuple>
-#include "ExG4HbookAnalysisManager.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-namespace G4Hbook {
-
-  typedef tools::hbook::h1  G4AnaH1;
-  typedef tools::hbook::h2  G4AnaH2;    
-  typedef tools::hbook::wntuple  G4Ntuple; 
-  typedef ExG4HbookAnalysisManager G4AnalysisManager; 
+namespace AIDA {
+ class IAnalysisFactory;
+ class ITree;
+ class IHistogram1D;
+ class ITuple;
 } 
+  const G4int MaxHisto = 5;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class HistoManager
+{
+  public:
+  
+    HistoManager();
+   ~HistoManager();
+   
+    void book();
+    void save();
+
+    void FillHisto(G4int id, G4double bin, G4double weight = 1.0);
+    void Normalize(G4int id, G4double fac);    
+
+    void FillNtuple(G4double EnergyAbs, G4double EnergyGap,
+                    G4double TrackLAbs, G4double TrackLGap);
+    
+    void PrintStatistic();
+        
+  private:
+  
+    AIDA::IAnalysisFactory*  af;        
+    AIDA::ITree*             tree;
+    
+    AIDA::IHistogram1D*      histo[MaxHisto];            
+    AIDA::ITuple*      	     ntupl;    
+};
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 
-  

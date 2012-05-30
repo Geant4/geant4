@@ -39,18 +39,15 @@ class A01EventActionMessenger: public G4UImessenger
 {
   public:
     A01EventActionMessenger(A01EventAction* mpga);
-    ~A01EventActionMessenger();
+    virtual ~A01EventActionMessenger();
 
-  public:
-    void SetNewValue(G4UIcommand * command,G4String newValues);
-    G4String GetCurrentValue(G4UIcommand * command);
+    virtual void SetNewValue(G4UIcommand * command,G4String newValues);
+    virtual G4String GetCurrentValue(G4UIcommand * command);
 
   private:
-    A01EventAction* target;
+    A01EventAction* fTarget;
 
-  private: //commands
-    G4UIcmdWithAnInteger*  verboseCmd;
-
+    G4UIcmdWithAnInteger* fVerboseCmd;
 };
 
 #endif

@@ -38,8 +38,8 @@ A01CellParameterisation::A01CellParameterisation()
   {
     G4int column = copyNo / 4;
     G4int row = copyNo % 4;
-    xCell[copyNo] = (column-9)*15.*cm - 7.5*cm;
-    yCell[copyNo] = (row-1)*15*cm - 7.5*cm;
+    fXCell[copyNo] = (column-9)*15.*cm - 7.5*cm;
+    fYCell[copyNo] = (row-1)*15*cm - 7.5*cm;
   }
 }
 
@@ -49,6 +49,6 @@ A01CellParameterisation::~A01CellParameterisation()
 void A01CellParameterisation::ComputeTransformation
 (const G4int copyNo,G4VPhysicalVolume *physVol) const
 {
-  physVol->SetTranslation(G4ThreeVector(xCell[copyNo],yCell[copyNo],0.));
+  physVol->SetTranslation(G4ThreeVector(fXCell[copyNo],fYCell[copyNo],0.));
 }
 

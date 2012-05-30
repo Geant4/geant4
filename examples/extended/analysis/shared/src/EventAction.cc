@@ -23,17 +23,65 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+//
+// $Id: EventAction.cc,v 1.1 2010-11-08 10:38:44 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
 
-// Author: Ivana Hrivnacova, 15/06/2011  (ivana@ipno.in2p3.fr)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef g4hbook_h
-#define g4hbook_h
+#include "EventAction.hh"
 
-#include "g4hbook_defs.hh"
+#include "RunAction.hh"
+#include "HistoManager.hh"
 
-using namespace G4Hbook;
+#include "G4Event.hh"
 
-#endif
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+EventAction::EventAction(RunAction* run, HistoManager* histo)
+:runAct(run),histoManager(histo)
+{
+ printModulo = 100; }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+EventAction::~EventAction()
+{ }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void EventAction::BeginOfEventAction(const G4Event* evt)
+{  
+  G4int evtNb = evt->GetEventID();
+  if (evtNb%printModulo == 0) 
+    G4cout << "\n---> Begin of event: " << evtNb << G4endl;
+ 
+ // initialisation per event
+ EnergyAbs = EnergyGap = 0.;
+ TrackLAbs = TrackLGap = 0.;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void EventAction::EndOfEventAction(const G4Event*)
+{
+  //accumulates statistic
+  //
+  runAct->fillPerEvent(EnergyAbs, EnergyGap, TrackLAbs, TrackLGap);
   
+  //fill histograms
+  //
+  histoManager->FillHisto(1, EnergyAbs);
+  histoManager->FillHisto(2, EnergyGap);
+  histoManager->FillHisto(3, TrackLAbs);
+  histoManager->FillHisto(4, TrackLGap);
+  
+  //fill ntuple
+  //
+  histoManager->FillNtuple(EnergyAbs, EnergyGap, TrackLAbs, TrackLGap);
+}  
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

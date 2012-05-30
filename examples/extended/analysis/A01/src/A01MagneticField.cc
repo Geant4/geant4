@@ -33,19 +33,19 @@
 
 A01MagneticField::A01MagneticField()
 {
-  messenger = new A01MagneticFieldMessenger(this);
-  By = 1.0*tesla;
+  fMessenger = new A01MagneticFieldMessenger(this);
+  fBy = 1.0*tesla;
   
 }
 
 A01MagneticField::~A01MagneticField()
-{ delete messenger; }
+{ delete fMessenger; }
 
 void A01MagneticField::GetFieldValue(const G4double [4],double *Bfield) const
 {
   Bfield[0] = 0.;
   Bfield[2] = 0.;
-  Bfield[1] = By;
+  Bfield[1] = fBy;
 
 }
 

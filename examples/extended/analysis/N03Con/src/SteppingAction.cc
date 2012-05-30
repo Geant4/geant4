@@ -45,7 +45,7 @@
 
 SteppingAction::SteppingAction(DetectorConstruction* det,
                                          EventAction* evt)
-:detector(det), eventaction(evt)					 
+:fDetector(det), fEventaction(evt)					 
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,8 +68,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   if (aStep->GetTrack()->GetDefinition()->GetPDGCharge() != 0.)
     stepl = aStep->GetStepLength();
       
-  if (volume == detector->GetAbsorber()) eventaction->AddAbs(edep,stepl);
-  if (volume == detector->GetGap())      eventaction->AddGap(edep,stepl);
+  if (volume == fDetector->GetAbsorber()) fEventaction->AddAbs(edep,stepl);
+  if (volume == fDetector->GetGap())      fEventaction->AddGap(edep,stepl);
   
   //example of saving random number seed of this event, under condition
   //// if (condition) G4RunManager::GetRunManager()->rndmSaveThisEvent(); 

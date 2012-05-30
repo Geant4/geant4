@@ -57,11 +57,7 @@ class A01MuonPhysics : public G4VPhysicsConstructor
     // each physics process will be instantiated and
     // registered to the process manager of each particle type
     virtual void ConstructProcess();
-
-  protected:
-
 };
-
 
 #endif
 

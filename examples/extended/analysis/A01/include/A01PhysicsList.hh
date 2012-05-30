@@ -38,13 +38,8 @@ public:
   A01PhysicsList();
   virtual ~A01PhysicsList();
 
-public:
-  // SetCuts()
   virtual void SetCuts();
-
-
 };
-
 
 #endif
 

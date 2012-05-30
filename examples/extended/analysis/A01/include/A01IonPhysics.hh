@@ -58,7 +58,6 @@ class A01IonPhysics : public G4VPhysicsConstructor
     A01IonPhysics(const G4String& name="ion");
     virtual ~A01IonPhysics();
 
-  public:
     // This method will be invoked in the Construct() method.
     // each particle type will be instantiated
     virtual void ConstructParticle(){;};
@@ -67,10 +66,7 @@ class A01IonPhysics : public G4VPhysicsConstructor
     // each physics process will be instantiated and
     // registered to the process manager of each particle type
     virtual void ConstructProcess();
-
-  protected:
 };
-
 
 #endif
 

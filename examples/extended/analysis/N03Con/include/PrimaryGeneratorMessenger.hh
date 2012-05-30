@@ -53,9 +53,9 @@ public:
   void SetNewValue(G4UIcommand*, G4String);
     
 private:
-  PrimaryGeneratorAction* Action;
-  G4UIdirectory*          gunDir; 
-  G4UIcmdWithAString*     RndmCmd;
+  PrimaryGeneratorAction* fAction;
+  G4UIdirectory*          fGunDir; 
+  G4UIcmdWithAString*     fRndmCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

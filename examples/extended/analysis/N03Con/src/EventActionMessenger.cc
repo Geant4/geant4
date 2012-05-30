@@ -41,24 +41,24 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventActionMessenger::EventActionMessenger(EventAction* EvAct)
-:eventAction(EvAct)
+EventActionMessenger::EventActionMessenger(EventAction* evAct)
+:fEventAction(evAct)
 {
-  eventDir = new G4UIdirectory("/N03/event/");
-  eventDir->SetGuidance("event control");
+  fEventDir = new G4UIdirectory("/N03/event/");
+  fEventDir->SetGuidance("event control");
    
-  PrintCmd = new G4UIcmdWithAnInteger("/N03/event/printModulo",this);
-  PrintCmd->SetGuidance("Print events modulo n");
-  PrintCmd->SetParameterName("EventNb",false);
-  PrintCmd->SetRange("EventNb>0");
+  fPrintCmd = new G4UIcmdWithAnInteger("/N03/event/printModulo",this);
+  fPrintCmd->SetGuidance("Print events modulo n");
+  fPrintCmd->SetParameterName("EventNb",false);
+  fPrintCmd->SetRange("EventNb>0");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventActionMessenger::~EventActionMessenger()
 {
-  delete PrintCmd;
-  delete eventDir;   
+  delete fPrintCmd;
+  delete fEventDir;   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,8 +66,8 @@ EventActionMessenger::~EventActionMessenger()
 void EventActionMessenger::SetNewValue(
                                         G4UIcommand* command,G4String newValue)
 { 
-  if(command == PrintCmd)
-    {eventAction->SetPrintModulo(PrintCmd->GetNewIntValue(newValue));}
+  if(command == fPrintCmd)
+    {fEventAction->SetPrintModulo(fPrintCmd->GetNewIntValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

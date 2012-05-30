@@ -136,7 +136,6 @@ class A01HadronPhysics : public G4VPhysicsConstructor
     A01HadronPhysics(const G4String& name="hadron");
     virtual ~A01HadronPhysics();
 
-  public: 
     // This method will be invoked in the Construct() method. 
     // each particle type will be instantiated
     virtual void ConstructParticle(){;};
@@ -145,11 +144,7 @@ class A01HadronPhysics : public G4VPhysicsConstructor
     // each physics process will be instantiated and
     // registered to the process manager of each particle type 
     virtual void ConstructProcess();
-
-  protected:
-
 };
-
 
 #endif
 

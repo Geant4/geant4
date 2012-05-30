@@ -46,34 +46,33 @@ class A01EventAction : public G4UserEventAction
     A01EventAction();
     virtual ~A01EventAction();
 
-  public:
     virtual void BeginOfEventAction(const G4Event*);
     virtual void EndOfEventAction(const G4Event*);
 
   private:
-    G4int HHC1ID;
-    G4int HHC2ID;
-    G4int DHC1ID;
-    G4int DHC2ID;
-    G4int ECHCID;
-    G4int HCHCID;
+    G4int fHHC1ID;
+    G4int fHHC2ID;
+    G4int fDHC1ID;
+    G4int fDHC2ID;
+    G4int fECHCID;
+    G4int fHCHCID;
 
-    A01EventActionMessenger* messenger;
-    G4int verboseLevel;
+    A01EventActionMessenger* fMessenger;
+    G4int fVerboseLevel;
 
 #ifdef G4ANALYSIS_USE
-    IHistogram1D* dc1Hits;
-	IHistogram1D* dc2Hits;
-	ICloud2D* dc1XY;
-	ICloud2D* dc2XY;
-	ICloud2D* evstof;
-	ITuple* tuple;
-	IPlotter* plotter;
+    IHistogram1D* fDc1Hits;
+	IHistogram1D* fDc2Hits;
+	ICloud2D* fDc1XY;
+	ICloud2D* fDc2XY;
+	ICloud2D* fEvstof;
+	ITuple* fTuple;
+	IPlotter* fPlotter;
 #endif // G4ANALYSIS_USE
 
   public:
-    inline void SetVerbose(G4int val) { verboseLevel = val; }
-    inline G4int GetVerbose() const { return verboseLevel; }
+    inline void SetVerbose(G4int val) { fVerboseLevel = val; }
+    inline G4int GetVerbose() const { return fVerboseLevel; }
 };
 
 #endif

@@ -37,7 +37,6 @@ class G4TouchableHistory;
 
 class A01Hodoscope : public G4VSensitiveDetector
 {
-
   public:
       A01Hodoscope(G4String name);
       virtual ~A01Hodoscope();
@@ -47,12 +46,9 @@ class A01Hodoscope : public G4VSensitiveDetector
       virtual void EndOfEvent(G4HCofThisEvent*HCE);
 
   private:
-      A01HodoscopeHitsCollection* hitsCollection;
-      G4int HCID;
+      A01HodoscopeHitsCollection* fHitsCollection;
+      G4int fHCID;
 };
-
-
-
 
 #endif
 

@@ -22,27 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-// **********************************************************************
-// *                                                                    *
-// *                    GEANT 4 tutorial 1                              *
-// *                                                                    *
-// * MODULE:            A01AnalysisManager.cc                           *
-// * -------                                                            *
-// *                                                                    *
-// * Version:           0.1                                             *
-// * Date:              January 28 2002                                 *
-// * Author:            T.Johnson                                       *
-// * Organisation:      SLAC                                            *
-// *                                                                    *
-// **********************************************************************
-//
-// CHANGE HISTORY
-// --------------
-//
-//
-// **********************************************************************
 
 #ifndef A01AnalysisManager_h
 #define A01AnalysisManager_h 1
@@ -65,23 +44,22 @@ class A01AnalysisManager {
 public:
 
   virtual ~A01AnalysisManager();
-  static A01AnalysisManager* getInstance();
+  static A01AnalysisManager* GetInstance();
   static void dispose();
 
-  IHistogramFactory* getHistogramFactory();
-  ITupleFactory* getTupleFactory();
-  IPlotter* getPlotter();
+  IHistogramFactory* GetHistogramFactory();
+  ITupleFactory* GetTupleFactory();
+  IPlotter* GetPlotter();
 
 private:
-
   A01AnalysisManager();
-  static A01AnalysisManager* instance;
+  static A01AnalysisManager* fInstance;
 
-  IAnalysisFactory* analysisFactory;
-  IHistogramFactory* hFactory;
+  IAnalysisFactory* fAnalysisFactory;
+  IHistogramFactory* fFactory;
   ITupleFactory* tFactory;
-  IPlotter* plotter;
-  ITree* tree;
+  IPlotter* fPlotter;
+  ITree* fTree;
 };
 
 #endif

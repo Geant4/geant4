@@ -53,9 +53,9 @@ public:
   void SetNewValue(G4UIcommand*, G4String);
     
 private:
-  EventAction*          eventAction;
-  G4UIdirectory*        eventDir;   
-  G4UIcmdWithAnInteger* PrintCmd;    
+  EventAction*          fEventAction;
+  G4UIdirectory*        fEventDir;   
+  G4UIcmdWithAnInteger* fPrintCmd;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

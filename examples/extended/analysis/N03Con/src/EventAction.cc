@@ -46,16 +46,16 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::EventAction(RunAction* run)
-:runAct(run),printModulo(1),eventMessenger(0)
+:fRunAct(run),fPrintModulo(1),fEventMessenger(NULL)
 {
-  eventMessenger = new EventActionMessenger(this);
+  fEventMessenger = new EventActionMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::~EventAction()
 {
-  delete eventMessenger;
+  delete fEventMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,14 +63,14 @@ EventAction::~EventAction()
 void EventAction::BeginOfEventAction(const G4Event* evt)
 {  
   G4int evtNb = evt->GetEventID();
-  if (evtNb%printModulo == 0) { 
+  if (evtNb%fPrintModulo == 0) { 
     G4cout << "\n---> Begin of event: " << evtNb << G4endl;
     CLHEP::HepRandom::showEngineStatus();
 }
  
  // initialisation per event
- EnergyAbs = EnergyGap = 0.;
- TrackLAbs = TrackLGap = 0.;
+ fEnergyAbs = fEnergyGap = 0.;
+ fTrackLAbs = fTrackLGap = 0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -79,24 +79,24 @@ void EventAction::EndOfEventAction(const G4Event* evt)
 {
   //accumulates statistic
   //
-  runAct->fillPerEvent(EnergyAbs, EnergyGap, TrackLAbs, TrackLGap);
+  fRunAct->FillPerEvent(fEnergyAbs, fEnergyGap, fTrackLAbs, fTrackLGap);
   
   //print per event (modulo n)
   //
   G4int evtNb = evt->GetEventID();
-  if (evtNb%printModulo == 0) {
+  if (evtNb%fPrintModulo == 0) {
     G4cout << "---> End of event: " << evtNb << G4endl;	
 
     G4cout
        << "   Absorber: total energy: " << std::setw(7)
-                                        << G4BestUnit(EnergyAbs,"Energy")
+                                        << G4BestUnit(fEnergyAbs,"Energy")
        << "       total track length: " << std::setw(7)
-                                        << G4BestUnit(TrackLAbs,"Length")
+                                        << G4BestUnit(fTrackLAbs,"Length")
        << G4endl
        << "        Gap: total energy: " << std::setw(7)
-                                        << G4BestUnit(EnergyGap,"Energy")
+                                        << G4BestUnit(fEnergyGap,"Energy")
        << "       total track length: " << std::setw(7)
-                                        << G4BestUnit(TrackLGap,"Length")
+                                        << G4BestUnit(fTrackLGap,"Length")
        << G4endl;
 	  
   }

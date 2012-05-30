@@ -157,25 +157,16 @@ void HistoManager::Normalize(G4int ih, G4double fac)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void HistoManager::FillNtuple(G4int column, G4double value)
-{
-  if (column > 3) {
-    G4cout << "---> warning from HistoManager::FillNtuple : " 
-     << "column=" << column << " value=" << value << G4endl;
-    return;
-  }
-  
+void HistoManager::FillNtuple(G4double energyAbs, G4double energyGap,
+                              G4double trackLAbs, G4double trackLGap)
+{                
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  analysisManager->FillNtupleDColumn(fNtColId[column], value);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void HistoManager::AddRowNtuple()
-{
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->FillNtupleDColumn(fNtColId[0], energyAbs);
+  analysisManager->FillNtupleDColumn(fNtColId[1], energyGap);
+  analysisManager->FillNtupleDColumn(fNtColId[2], trackLAbs);
+  analysisManager->FillNtupleDColumn(fNtColId[2], trackLGap);
   analysisManager->AddNtupleRow();  
-}
+}  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

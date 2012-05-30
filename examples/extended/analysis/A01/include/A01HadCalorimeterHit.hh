@@ -43,7 +43,6 @@ class G4AttValue;
 class A01HadCalorimeterHit : public G4VHit
 {
   public:
-
       A01HadCalorimeterHit();
       A01HadCalorimeterHit(G4int iCol,G4int iRow);
       virtual ~A01HadCalorimeterHit();
@@ -60,24 +59,24 @@ class A01HadCalorimeterHit : public G4VHit
       virtual void Print();
 
   private:
-      G4int columnID;
-      G4int rowID;
-      G4double edep;
-      G4ThreeVector pos;
-      G4RotationMatrix rot;
+      G4int fColumnID;
+      G4int fRowID;
+      G4double fEdep;
+      G4ThreeVector fPos;
+      G4RotationMatrix fRot;
 
   public:
-      inline void SetColumnID(G4int z) { columnID = z; }
-      inline G4int GetColumnID() const { return columnID; }
-      inline void SetRowID(G4int z) { rowID = z; }
-      inline G4int GetRowID() const { return rowID; }
-      inline void SetEdep(G4double de) { edep = de; }
-      inline void AddEdep(G4double de) { edep += de; }
-      inline G4double GetEdep() const { return edep; }
-      inline void SetPos(G4ThreeVector xyz) { pos = xyz; }
-      inline G4ThreeVector GetPos() const { return pos; }
-      inline void SetRot(G4RotationMatrix rmat) { rot = rmat; }
-      inline G4RotationMatrix GetRot() const { return rot; }
+      inline void SetColumnID(G4int z) { fColumnID = z; }
+      inline G4int GetColumnID() const { return fColumnID; }
+      inline void SetRowID(G4int z) { fRowID = z; }
+      inline G4int GetRowID() const { return fRowID; }
+      inline void SetEdep(G4double de) { fEdep = de; }
+      inline void AddEdep(G4double de) { fEdep += de; }
+      inline G4double GetEdep() const { return fEdep; }
+      inline void SetPos(G4ThreeVector xyz) { fPos = xyz; }
+      inline G4ThreeVector GetPos() const { return fPos; }
+      inline void SetRot(G4RotationMatrix rmat) { fRot = rmat; }
+      inline G4RotationMatrix GetRot() const { return fRot; }
 
 };
 

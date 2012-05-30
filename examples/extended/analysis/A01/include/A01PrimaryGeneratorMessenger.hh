@@ -42,21 +42,17 @@ class A01PrimaryGeneratorMessenger: public G4UImessenger
     A01PrimaryGeneratorMessenger(A01PrimaryGeneratorAction* mpga);
     ~A01PrimaryGeneratorMessenger();
 
-  public:
     void SetNewValue(G4UIcommand * command,G4String newValues);
     G4String GetCurrentValue(G4UIcommand * command);
 
   private:
-    A01PrimaryGeneratorAction * target;
+    A01PrimaryGeneratorAction * fTarget;
 
-  private: //commands
-    G4UIcmdWithADoubleAndUnit*  momentumCmd;
-    G4UIcmdWithADoubleAndUnit*  sigmaMomCmd;
-    G4UIcmdWithADoubleAndUnit*  sigmaAngCmd;
-    G4UIcmdWithABool*           randomCmd;
+    G4UIcmdWithADoubleAndUnit*  fMomentumCmd;
+    G4UIcmdWithADoubleAndUnit*  fSigmaMomCmd;
+    G4UIcmdWithADoubleAndUnit*  fSigmaAngCmd;
+    G4UIcmdWithABool*           fRandomCmd;
 
 };
 
 #endif
-
-

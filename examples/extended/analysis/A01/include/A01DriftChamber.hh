@@ -37,7 +37,6 @@ class G4TouchableHistory;
 
 class A01DriftChamber : public G4VSensitiveDetector
 {
-
   public:
       A01DriftChamber(G4String name);
       virtual ~A01DriftChamber();
@@ -47,12 +46,9 @@ class A01DriftChamber : public G4VSensitiveDetector
       virtual void EndOfEvent(G4HCofThisEvent*HCE);
 
   private:
-      A01DriftChamberHitsCollection * hitsCollection;
-      G4int HCID;
+      A01DriftChamberHitsCollection * fHitsCollection;
+      G4int fHCID;
 };
-
-
-
 
 #endif
 

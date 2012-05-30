@@ -52,14 +52,14 @@ public:
   virtual ~PrimaryGeneratorAction();
 
   void GeneratePrimaries(G4Event*);
-  void SetRndmFlag(G4String val) { rndmFlag = val;}
+  void SetRndmFlag(G4String val) { fRndmFlag = val;}
 
 private:
-  G4ParticleGun*           particleGun;	 //pointer a to G4  class
-  DetectorConstruction*    Detector;     //pointer to the geometry
+  G4ParticleGun*           fParticleGun;	 //pointer a to G4  class
+  DetectorConstruction*    fDetector;     //pointer to the geometry
     
-  PrimaryGeneratorMessenger* gunMessenger;   //messenger of this class
-  G4String                   rndmFlag;	     //flag for a rndm impact point
+  PrimaryGeneratorMessenger* fGunMessenger;   //messenger of this class
+  G4String                   fRndmFlag;	     //flag for a rndm impact point
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

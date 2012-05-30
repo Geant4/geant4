@@ -9,6 +9,16 @@ $Id: History,v 1.3 2010-11-08 11:31:23 maire Exp $
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22th May 2012 Ivana Hrivnacova (analysisExample-V09-05-02)
+- Fixed compiler warning (variable set but not used) in N03Con
+
+18th May 2012 Ivana Hrivnacova (analysisExample-V09-05-01)
+- Adding CMakeList.txt files to restructured examples.
+
+17th April 2012 Ivana Hrivnacova (analysisExample-V09-05-00)
+- Restoring the examples with use of AIDA as AnaEx03
+- Restructuring AnaEx01, AnaEx02, AnaEx03 examples for use of shared classes;
+  the shared classes are now in a new directory (shared)
 
 8rd November 2010  Michel Maire
 - add README
