@@ -534,7 +534,7 @@ G4bool  G4ProductionCutsTable::StoreMaterialInfo(const G4String& directory,
     fOut.setf(std::ios::scientific);
   
     // material name and density
-    for (size_t idx=0; G4int(idx)<numberOfMaterial; ++idx){
+    for (size_t idx=0; static_cast<G4int>(idx)<numberOfMaterial; ++idx){
       fOut << std::setw(FixedStringLengthForStore)
            << ((*matTable)[idx])->GetName();
       fOut << std::setw(FixedStringLengthForStore)
@@ -561,7 +561,7 @@ G4bool  G4ProductionCutsTable::StoreMaterialInfo(const G4String& directory,
     fOut.write( (char*)(&numberOfMaterial), sizeof (G4int));
     
     // material name and density
-    for (size_t imat=0; G4int(imat)<numberOfMaterial; ++imat){
+    for (size_t imat=0; static_cast<G4int>(imat)<numberOfMaterial; ++imat){
       G4String name =  ((*matTable)[imat])->GetName();
       G4double density = ((*matTable)[imat])->GetDensity();
       for (i=0; i<FixedStringLengthForStore; ++i) temp[i] = '\0'; 
@@ -1173,14 +1173,21 @@ G4bool   G4ProductionCutsTable::RetrieveCutsInfo(const G4String& directory,
     fIn.read( (char*)(&numberOfCouples), sizeof (G4int));
   }
 
-  for (size_t idx=0; G4int(idx) <NumberOfG4CutIndex; idx++) {
+  if (numberOfCouples > static_cast<G4int>(mccConversionTable.size()) ){
+    G4Exception( "G4ProductionCutsTable::RetrieveCutsInfo()",
+		 "ProcCuts109", JustWarning, 
+		 "Number of Couples in the file exceeds defined couples ");
+  }
+  numberOfCouples = mccConversionTable.size();
+  
+  for (size_t idx=0; static_cast<G4int>(idx) <NumberOfG4CutIndex; idx++) {
     G4CutVectorForAParticle* fRange  = rangeCutTable[idx];
     G4CutVectorForAParticle* fEnergy = energyCutTable[idx];
     fRange->clear();
     fEnergy->clear();
 
     // Loop over all couples
-    for (size_t i=0; G4int(i)< numberOfCouples; i++){      
+    for (size_t i=0; static_cast<G4int>(i)< numberOfCouples; i++){      
       G4double rcut, ecut;
       if (ascii) {
         fIn >> rcut >> ecut;

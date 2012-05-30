@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Dec. 9, 2011   - H.Kurashige (procuts-V09-05-00)
+Apr. 27, 2012   - H.Kurashige (procuts-V09-05-01)
 - Fix a bug in G4ProductionCutsTable::RetrieveCutsInfo 
   (TAINED_SCALAR by Coverity)
 
