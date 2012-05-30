@@ -28,13 +28,14 @@
 // Author:      D.H. Wright
 // Date:        2 February 2011
 //
-// Description: simple vector dominance model of muon nuclear interaction 
-//              in which a gamma from the virtual photon spectrum 
-//              interacts either as a pi+ or a pi- in the nucleus
-//              Kokoulin's parameterized gamma spectrum is used.
+// Description: model of muon nuclear interaction in which a gamma from
+//              the virtual photon spectrum interacts in the nucleus as
+//              a real gamma at low energies and as a pi0 at high energies.
+//              Kokoulin's muon cross section and equivalent gamma spectrum
+//              are used.
 //
 
-#include "G4VDMuonNuclearModel.hh"
+#include "G4MuonVDNuclearModel.hh"
 
 #include "Randomize.hh"
 #include "G4CascadeInterface.hh"
@@ -46,8 +47,8 @@
 #include "G4ExcitedStringDecay.hh"
 #include "G4FTFModel.hh"
 
-G4VDMuonNuclearModel::G4VDMuonNuclearModel()
- : G4HadronicInteraction("G4VDMuonNuclearModel")
+G4MuonVDNuclearModel::G4MuonVDNuclearModel()
+ : G4HadronicInteraction("G4MuonVDNuclearModel")
 {
   SetMinEnergy(0.0);
   SetMaxEnergy(1*PeV);
@@ -83,10 +84,9 @@ G4VDMuonNuclearModel::G4VDMuonNuclearModel()
 }
 
 
-G4VDMuonNuclearModel::~G4VDMuonNuclearModel()
+G4MuonVDNuclearModel::~G4MuonVDNuclearModel()
 {
   delete ftfp;
-  delete theHandler;
   delete preEquilib;
   delete theFragmentation;
   delete theStringDecay;
@@ -96,7 +96,7 @@ G4VDMuonNuclearModel::~G4VDMuonNuclearModel()
 
   
 G4HadFinalState*
-G4VDMuonNuclearModel::ApplyYourself(const G4HadProjectile& aTrack,
+G4MuonVDNuclearModel::ApplyYourself(const G4HadProjectile& aTrack,
                                     G4Nucleus& targetNucleus)
 {
   theParticleChange.Clear();
@@ -120,7 +120,7 @@ G4VDMuonNuclearModel::ApplyYourself(const G4HadProjectile& aTrack,
 
 
 G4DynamicParticle*
-G4VDMuonNuclearModel::CalculateEMVertex(const G4HadProjectile& aTrack,
+G4MuonVDNuclearModel::CalculateEMVertex(const G4HadProjectile& aTrack,
                                         G4Nucleus& targetNucleus)
 {
   // Select sampling table
@@ -244,58 +244,41 @@ G4VDMuonNuclearModel::CalculateEMVertex(const G4HadProjectile& aTrack,
   G4DynamicParticle* gamma = 
            new G4DynamicParticle(G4Gamma::Gamma(), momentumTransfer);
  
-  //  G4ThreeVector mom(0.0, 0.0, 50.*GeV);
-  //  G4DynamicParticle* gamma = new G4DynamicParticle();
-  //  gamma->SetDefinition(G4Gamma::Gamma() );
-  //  gamma->SetMomentum(mom); 
   return gamma;
 }
 
+
 void
-G4VDMuonNuclearModel::CalculateHadronicVertex(G4DynamicParticle* incident,
+G4MuonVDNuclearModel::CalculateHadronicVertex(G4DynamicParticle* incident,
                                               G4Nucleus& target)
 {
   G4HadFinalState* hfs = 0;
 
-  // Convert incident particle to a pion
-  G4double piMass = G4PionMinus::PionMinus()->GetPDGMass();
+  // At high energies convert incident gamma to a pion
+  G4double piMass = G4PionZero::PionZero()->GetPDGMass();
   G4double piKE = incident->GetTotalEnergy() - piMass;
+  G4double gammaE = incident->GetTotalEnergy();
   G4double piMom = std::sqrt(piKE*(piKE + 2*piMass) );
   G4ThreeVector piMomentum(incident->GetMomentumDirection() );
   piMomentum *= piMom;
+
+  if (gammaE < 10*GeV) {
+    G4HadProjectile projectile(*incident);
+    hfs = bert->ApplyYourself(projectile, target);
+  } else {
+    G4DynamicParticle theHadron(G4PionZero::PionZero(), piMomentum);
+    G4HadProjectile projectile(theHadron);
+    hfs = ftfp->ApplyYourself(projectile, target);
+  }
+
   delete incident;
 
-  // Choose pi+ or pi- randomly and interact them with GHEISHA-style models
-  if (G4UniformRand() > 0.5) {
-    G4DynamicParticle theHadron(G4PionMinus::PionMinus(), piMomentum);
-    G4HadProjectile projectile(theHadron);
-    if (piKE < 10*GeV) {
-      hfs = bert->ApplyYourself(projectile, target);
-    } else {
-      hfs = ftfp->ApplyYourself(projectile, target);
-    }
-
-  } else {
-    G4DynamicParticle theHadron(G4PionPlus::PionPlus(), piMomentum);
-    G4HadProjectile projectile(theHadron);
-    if (piKE < 10*GeV) {
-      hfs = bert->ApplyYourself(projectile, target);
-    } else {
-      hfs = ftfp->ApplyYourself(projectile, target);
-    }
-  }
-
   // Copy secondaries from sub-model to model
-  G4int nsec = hfs->GetNumberOfSecondaries();
-  G4DynamicParticle* dynSec;
-  for (G4int i = 0; i < nsec; i++) {
-    dynSec = hfs->GetSecondary(i)->GetParticle();
-    theParticleChange.AddSecondary(dynSec);
-  }
-
+  theParticleChange.AddSecondaries(hfs);
 } 
 
-void G4VDMuonNuclearModel::MakeSamplingTable()
+
+void G4MuonVDNuclearModel::MakeSamplingTable()
 {
   G4double adat[] = {1.01,9.01,26.98,63.55,238.03};
   G4double zdat[] = {1.,4.,13.,29.,92.};

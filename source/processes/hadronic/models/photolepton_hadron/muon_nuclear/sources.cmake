@@ -40,8 +40,6 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/binary_
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/cascade/evaporation/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/cascade/utils/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/cascade/cascade/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/chiral_inv_phase_space/cross_sections/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/chiral_inv_phase_space/body/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/evaporation/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/fermi_breakup/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/handler/include)
@@ -69,17 +67,15 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4had_muon_nuclear
     HEADERS
-        G4LeptonHadronInteractionModel.hh
-        G4LeptonHadronProcess.hh
+        G4ElectroVDNuclearModel.hh
         G4MuNuclearInteraction.hh
         G4ParametrizedHadronicVertex.hh
-        G4VDMuonNuclearModel.hh
+        G4MuonVDNuclearModel.hh
     SOURCES
-        G4LeptonHadronInteractionModel.cc
-        G4LeptonHadronProcess.cc
+        G4ElectroVDNuclearModel.cc
         G4MuNuclearInteraction.cc
         G4ParametrizedHadronicVertex.cc
-        G4VDMuonNuclearModel.cc
+        G4MuonVDNuclearModel.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons
@@ -95,8 +91,6 @@ GEANT4_DEFINE_MODULE(NAME G4had_muon_nuclear
         G4had_theo_max
         G4hadronic_bert_cascade
         G4hadronic_binary
-        G4hadronic_body_ci
-        G4hadronic_crosec_ci
         G4hadronic_deex_evaporation
         G4hadronic_deex_fermi_breakup
         G4hadronic_deex_handler

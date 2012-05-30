@@ -28,14 +28,15 @@
 // Author:  D.H. Wright
 // Date:    2 February 2011
 //
-// Description: simple vector dominance model of muon nuclear ineraction 
-//              in which a gamma from the virtual photon spectrum 
-//              interacts either as a pi+ or a pi- in the nucleus
-//              Kokoulin's parameterized gamma spectrum is used.
+// Description: model of muon nuclear interaction in which a gamma from
+//              the virtual photon spectrum interacts in the nucleus as
+//              a real gamma at low energies and as a pi0 at high energies.
+//              Kokoulin's muon cross section and equivalent gamma spectrum
+//              are used.
 //
  
-#ifndef G4VDMuonNuclearModel_h
-#define G4VDMuonNuclearModel_h 1 
+#ifndef G4MuonVDNuclearModel_h
+#define G4MuonVDNuclearModel_h 1 
 
 #include "G4KokoulinMuonNuclearXS.hh"
 #include "G4HadronicInteraction.hh"
@@ -50,12 +51,12 @@ class G4ExcitedStringDecay;
 class G4FTFModel;
 
 
-class G4VDMuonNuclearModel : public G4HadronicInteraction
+class G4MuonVDNuclearModel : public G4HadronicInteraction
 {
   public:
     
-    G4VDMuonNuclearModel();
-    ~G4VDMuonNuclearModel();
+    G4MuonVDNuclearModel();
+    ~G4MuonVDNuclearModel();
     
     G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
                                    G4Nucleus& targetNucleus);
@@ -89,4 +90,4 @@ class G4VDMuonNuclearModel : public G4HadronicInteraction
 };
  
 #endif
- 
+
