@@ -329,19 +329,19 @@ EInside G4Orb::Inside( const G4ThreeVector& p ) const
 
   rad2 = p.x()*p.x()+p.y()*p.y()+p.z()*p.z();
 
-  G4double rad = std::sqrt(rad2);
+  G4double radius = std::sqrt(rad2);
 
-  // G4double rad = std::sqrt(rad2);
+  // G4double radius = std::sqrt(rad2);
   // Check radial surface
   // sets `in'
   
   tolRMax = fRmax - fRmaxTolerance*0.5;
     
-  if ( rad <= tolRMax )  { in = kInside; }
+  if ( radius <= tolRMax )  { in = kInside; }
   else
   {
     tolRMax = fRmax + fRmaxTolerance*0.5;       
-    if ( rad <= tolRMax )  { in = kSurface; }
+    if ( radius <= tolRMax )  { in = kSurface; }
     else                   { in = kOutside; }
   }
   return in;
@@ -357,12 +357,12 @@ G4ThreeVector G4Orb::SurfaceNormal( const G4ThreeVector& p ) const
 {
   ENorm side = kNRMax;
   G4ThreeVector norm;
-  G4double rad = std::sqrt(p.x()*p.x()+p.y()*p.y()+p.z()*p.z());
+  G4double radius = std::sqrt(p.x()*p.x()+p.y()*p.y()+p.z()*p.z());
 
   switch (side)
   {
     case kNRMax: 
-      norm = G4ThreeVector(p.x()/rad,p.y()/rad,p.z()/rad);
+      norm = G4ThreeVector(p.x()/radius,p.y()/radius,p.z()/radius);
       break;
    default:        // Should never reach this case ...
       DumpInfo();
@@ -388,14 +388,14 @@ G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
 {
   G4double snxt = kInfinity;      // snxt = default return value
 
-  G4double rad, pDotV3d; // , tolORMax2, tolIRMax2;
-  G4double c, d2, s = kInfinity;
+  G4double radius, pDotV3d; // , tolORMax2, tolIRMax2;
+  G4double c, d2, sd = kInfinity;
 
   const G4double dRmax = 100.*fRmax;
 
   // General Precalcs
 
-  rad    = std::sqrt(p.x()*p.x() + p.y()*p.y() + p.z()*p.z());
+  radius  = std::sqrt(p.x()*p.x() + p.y()*p.y() + p.z()*p.z());
   pDotV3d = p.x()*v.x() + p.y()*v.y() + p.z()*v.z();
 
   // Radial Precalcs
@@ -412,14 +412,14 @@ G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
   //
   // => (px+svx)^2+(py+svy)^2+(pz+svz)^2=R^2
   //
-  // => (px^2+py^2+pz^2) +2s(pxvx+pyvy+pzvz)+s^2(vx^2+vy^2+vz^2)=R^2
-  // =>      rad2        +2s(pDotV3d)       +s^2                =R^2
+  // => (px^2+py^2+pz^2) +2sd(pxvx+pyvy+pzvz)+sd^2(vx^2+vy^2+vz^2)=R^2
+  // =>      rad2        +2sd(pDotV3d)      +sd^2                =R^2
   //
-  // => s=-pDotV3d+-std::sqrt(pDotV3d^2-(rad2-R^2))
+  // => sd=-pDotV3d+-std::sqrt(pDotV3d^2-(rad2-R^2))
 
-  c = (rad - fRmax)*(rad + fRmax);
+  c = (radius - fRmax)*(radius + fRmax);
 
-  if( rad > fRmax-fRmaxTolerance*0.5 ) // not inside in terms of Inside(p)
+  if( radius > fRmax-fRmaxTolerance*0.5 ) // not inside in terms of Inside(p)
   {
     if ( c > fRmaxTolerance*fRmax )
     {
@@ -430,15 +430,15 @@ G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
 
       if ( d2 >= 0 )
       {
-        s = -pDotV3d - std::sqrt(d2);
-        if ( s >= 0 )
+        sd = -pDotV3d - std::sqrt(d2);
+        if ( sd >= 0 )
         {
-          if ( s > dRmax ) // Avoid rounding errors due to precision issues seen on
-          {                // 64 bits systems. Split long distances and recompute
-            G4double fTerm = s - std::fmod(s,dRmax);
-            s = fTerm + DistanceToIn(p+fTerm*v,v);
+          if ( sd > dRmax ) // Avoid rounding errors due to precision issues seen on
+          {                 // 64 bits systems. Split long distances and recompute
+            G4double fTerm = sd - std::fmod(sd,dRmax);
+            sd = fTerm + DistanceToIn(p+fTerm*v,v);
           } 
-          return snxt = s;
+          return snxt = sd;
         }
       }
       else    // No intersection with G4Orb
@@ -482,8 +482,8 @@ G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
 G4double G4Orb::DistanceToIn( const G4ThreeVector& p ) const
 {
   G4double safe = 0.0,
-           rad  = std::sqrt(p.x()*p.x()+p.y()*p.y()+p.z()*p.z());
-  safe = rad - fRmax;
+           radius  = std::sqrt(p.x()*p.x()+p.y()*p.y()+p.z()*p.z());
+  safe = radius - fRmax;
   if( safe < 0 ) { safe = 0.; }
   return safe;
 }
@@ -526,19 +526,19 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p,
   // => s=-pDotV3d+-std::sqrt(pDotV3d^2-(rad2-R^2))
   
   const G4double  Rmax_plus = fRmax + fRmaxTolerance*0.5;
-  G4double rad = std::sqrt(rad2);
+  G4double radius = std::sqrt(rad2);
 
-  if ( rad <= Rmax_plus )
+  if ( radius <= Rmax_plus )
   {
-    c = (rad - fRmax)*(rad + fRmax);
+    c = (radius - fRmax)*(radius + fRmax);
 
     if ( c < fRmaxTolerance*fRmax ) 
     {
       // Within tolerant Outer radius 
       // 
       // The test is
-      //     rad  - fRmax < 0.5*fRmaxTolerance
-      // =>  rad  < fRmax + 0.5*kRadTol
+      //     radius  - fRmax < 0.5*fRmaxTolerance
+      // =>  radius  < fRmax + 0.5*kRadTol
       // =>  rad2 < (fRmax + 0.5*kRadTol)^2
       // =>  rad2 < fRmax^2 + 2.*0.5*fRmax*kRadTol + 0.25*kRadTol*kRadTol
       // =>  rad2 - fRmax^2    <~    fRmax*kRadTol 
@@ -629,7 +629,7 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p,
 
 G4double G4Orb::DistanceToOut( const G4ThreeVector& p ) const
 {
-  G4double safe=0.0,rad = std::sqrt(p.x()*p.x()+p.y()*p.y()+p.z()*p.z());
+  G4double safe=0.0,radius = std::sqrt(p.x()*p.x()+p.y()*p.y()+p.z()*p.z());
 
 #ifdef G4CSGDEBUG
   if( Inside(p) == kOutside )
@@ -647,7 +647,7 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p ) const
   }
 #endif
 
-  safe = fRmax - rad;
+  safe = fRmax - radius;
   if ( safe < 0. ) safe = 0.;
   return safe;
 }

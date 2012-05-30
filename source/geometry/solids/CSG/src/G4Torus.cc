@@ -256,7 +256,7 @@ void G4Torus::TorusRootsJT( const G4ThreeVector& p,
 {
 
   G4int i, num ;
-  G4double c[5], sr[4], si[4] ;
+  G4double c[5], srd[4], si[4] ;
 
   G4double Rtor2 = fRtor*fRtor, r2 = r*r  ;
 
@@ -272,11 +272,11 @@ void G4Torus::TorusRootsJT( const G4ThreeVector& p,
   
   G4JTPolynomialSolver  torusEq;
 
-  num = torusEq.FindRoots( c, 4, sr, si );
+  num = torusEq.FindRoots( c, 4, srd, si );
   
   for ( i = 0; i < num; i++ ) 
   {
-    if( si[i] == 0. )  { roots.push_back(sr[i]) ; }  // store real roots
+    if( si[i] == 0. )  { roots.push_back(srd[i]) ; }  // store real roots
   }  
 
   std::sort(roots.begin() , roots.end() ) ;  // sorting  with <
@@ -936,7 +936,7 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
 
   G4double snxt=kInfinity, sphi=kInfinity; // snxt = default return value
 
-  G4double  s[4] ;
+  G4double  sd[4] ;
 
   // Precalculated trig for phi intersections - used by r,z intersections to
   //                                            check validity
@@ -988,8 +988,8 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
   snxt = SolveNumericJT(p,v,fRmax,true);
   if (fRmin)  // Possible Rmin intersection
   {
-    s[0] = SolveNumericJT(p,v,fRmin,true);
-    if ( s[0] < snxt )  { snxt = s[0] ; }
+    sd[0] = SolveNumericJT(p,v,fRmin,true);
+    if ( sd[0] < snxt )  { snxt = sd[0] ; }
   }
 
   //
@@ -1004,7 +1004,7 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
 
   if (seg)
   {
-    sinSPhi = std::sin(fSPhi) ; // First phi surface (`S'tarting phi)
+    sinSPhi = std::sin(fSPhi) ; // First phi surface ('S'tarting phi)
     cosSPhi = std::cos(fSPhi) ;
     Comp    = v.x()*sinSPhi - v.y()*cosSPhi ;  // Component in outwards
                                                // normal direction
@@ -1035,7 +1035,7 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
         }
       }
     }
-    ePhi=fSPhi+fDPhi;    // Second phi surface (`E'nding phi)
+    ePhi=fSPhi+fDPhi;    // Second phi surface ('E'nding phi)
     sinEPhi=std::sin(ePhi);
     cosEPhi=std::cos(ePhi);
     Comp=-(v.x()*sinEPhi-v.y()*cosEPhi);
@@ -1135,7 +1135,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
                                        G4ThreeVector  *n  ) const
 {
   ESide    side = kNull, sidephi = kNull ;
-  G4double snxt = kInfinity, sphi, s[4] ;
+  G4double snxt = kInfinity, sphi, sd[4] ;
 
   static const G4double halfCarTolerance = 0.5*kCarTolerance;
   static const G4double halfAngTolerance = 0.5*kAngTolerance;
@@ -1202,10 +1202,10 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
       return  snxt = 0 ;                      // Leaving by Rmin immediately
     }
     
-    s[0] = SolveNumericJT(p,v,fRmin,false);
-    if ( s[0] < snxt )
+    sd[0] = SolveNumericJT(p,v,fRmin,false);
+    if ( sd[0] < snxt )
     {
-      snxt = s[0] ;
+      snxt = sd[0] ;
       side = kRMin ;
     }
   }
@@ -1220,10 +1220,10 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
 
   if ( fRmin )
   {
-    s[0] = SolveNumericJT(p,v,fRmin,false);
-    if ( s[0] < snxt )
+    sd[0] = SolveNumericJT(p,v,fRmin,false);
+    if ( sd[0] < snxt )
     {
-      snxt = s[0] ;
+      snxt = sd[0] ;
       side = kRMin ;
     }
   }
