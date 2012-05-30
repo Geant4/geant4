@@ -103,6 +103,8 @@ public:
 
   inline void SetVerbose(G4int val) { fVerbose = val; };
 
+  inline G4bool IsActive() const { return fHistoActive; };
+
 private:
 
   G4RootAnalysisManager* fManager;

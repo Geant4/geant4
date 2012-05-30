@@ -85,8 +85,8 @@ void Histo::Book()
   // Open file histogram file
   if(!fManager->OpenFile(nam)) {
     G4cout << "Histo::Book: ERROR open file <" << nam << ">" << G4endl;
-    fHistoActive = 0;
-    fNtupleActive = 0;
+    fHistoActive = false;
+    fNtupleActive = false;
     return; 
   }
   G4cout << "### Histo::Save: Opended file <" << nam << ">  for " 
@@ -113,11 +113,11 @@ void Histo::Book()
     }
     n = fNtupleF.size();
     for(i=0; i<n; ++i) { 
-      if(fTupleF[i] == -1) {  fTupleF[i] = fManager->CreateNtupleIColumn(fNtupleF[i]); }
+      if(fTupleF[i] == -1) {  fTupleF[i] = fManager->CreateNtupleFColumn(fNtupleF[i]); }
     }
     n = fNtupleD.size();
     for(i=0; i<n; ++i) { 
-      if(fTupleD[i] == -1) {  fTupleD[i] = fManager->CreateNtupleIColumn(fNtupleD[i]); }
+      if(fTupleD[i] == -1) {  fTupleD[i] = fManager->CreateNtupleDColumn(fNtupleD[i]); }
     }
   }
 } 
