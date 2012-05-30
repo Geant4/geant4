@@ -49,6 +49,7 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4hadronic_coherent_elastic
     HEADERS
         G4AntiNuclElastic.hh
+        G4ChipsElasticModel.hh
         G4CHIPSElastic.hh
         G4CHIPSElasticXS.hh
         G4ChargeExchange.hh
@@ -63,6 +64,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_coherent_elastic
         G4NuclNuclDiffuseElastic.hh
     SOURCES
         G4AntiNuclElastic.cc
+        G4ChipsElasticModel.cc
         G4CHIPSElastic.cc
         G4CHIPSElasticXS.cc
         G4ChargeExchange.cc

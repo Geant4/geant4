@@ -14,6 +14,17 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+26 March 2012 - W.Pokorski (hadr-cohe-V09-05-06)
+------------------------------------------------------
+- added G4ChipsElasticModel class to use the extracted Chips XS classes from 
+  hardonic/cross_sections
+
+6 May 2012, Gunter Folger  ( ..trunk.. )
+- revert changes by Mikhail ( rev. r58260, r58258 )
+
+28 April 2012 - M.Kosov (hadr-cohe-V09-05-05)
+- hadronic/models/chiral_inv_phase_space moved to hadronic/chips
+
 20 April 2012 - A.Ribon (hadr-cohe-V09-05-04)
 ------------------------------------------------------
 - G4ElasticHadrNucleusHE - fixed compilation error on Windows.
