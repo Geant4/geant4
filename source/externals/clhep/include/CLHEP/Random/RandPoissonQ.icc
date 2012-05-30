@@ -14,13 +14,13 @@
 
 namespace CLHEP {
 
-inline RandPoissonQ::RandPoissonQ(HepRandomEngine & anEngine, double m )
-: RandPoisson(anEngine, m)
+inline RandPoissonQ::RandPoissonQ(HepRandomEngine & anEngine, double a )
+: RandPoisson(anEngine, a)
 { setupForDefaultMu();
 }
 
-inline RandPoissonQ::RandPoissonQ(HepRandomEngine * anEngine, double m )
-: RandPoisson(anEngine, m)
+inline RandPoissonQ::RandPoissonQ(HepRandomEngine * anEngine, double a )
+: RandPoisson(anEngine, a)
 { setupForDefaultMu();
 }
 

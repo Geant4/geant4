@@ -17,11 +17,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10 May 2012 - G.Cosmo
+- Updated to CLHEP-2.1.2.2:
+  * Random (L.Garren <garren@fnal.gov>):
+    o Use a template to get rid of the warnings in Ranlux64Engine.
+  * Vector, Geometry, Random (L.Garren <garren@fnal.gov>):
+    o Changed names of internal variables so -Wshadow does not complain.
+  * Evaluator (M.Fischler <mf@fnal.gov>):
+    o Fixed a problem with unary +/- and exponentials in Evaluator class.
+
 7 November 2011 - G.Cosmo
 - Updated to CLHEP-2.1.1.0:
-  Utility (W.E.Brown  <wb@fnal.gov>):
-  o removing C++0X-like keywords constexpr, noexcept, and nullptr
-    to avoid collision with similar symbols in other packages.
+  * Utility (W.E.Brown  <wb@fnal.gov>):
+    o removing C++0X-like keywords constexpr, noexcept, and nullptr
+      to avoid collision with similar symbols in other packages.
 
 20 September 2011 - G.Cosmo
 - Added missing export statements for static symbols required for DLL build.

@@ -37,18 +37,18 @@ double Hep3Vector::beta() const {
 }
 
 double Hep3Vector::gamma() const {
-  double beta = std::sqrt(mag2());
-//  if (beta == 1) {
+  double bbeta = std::sqrt(mag2());
+//  if (bbeta == 1) {
 //    std::cerr << "Hep3Vector::gamma() - "
 //      << "Gamma taken for Hep3Vector of unit magnitude -- infinite result"
 //      << std::endl;
 //  }
-//  if (beta > 1) {
+//  if (bbeta > 1) {
 //    std::cerr << "Hep3Vector::gamma() - "
 //      << "Gamma taken for Hep3Vector of more than unit magnitude -- \n"
 //      << "the sqrt function would return NAN" << std::endl;
 //  }
-  return 1/std::sqrt(1-beta*beta);
+  return 1/std::sqrt(1-bbeta*bbeta);
 }
 
 double Hep3Vector::rapidity() const {
@@ -104,14 +104,14 @@ double Hep3Vector::rapidity(const Hep3Vector & v2) const {
       << "Rapidity taken with respect to zero vector" << std::endl;
     return 0;    
   }
-  double z = dot(v2)/vmag;
-//  if (std::fabs(z) >= 1) {
+  double z1 = dot(v2)/vmag;
+//  if (std::fabs(z1) >= 1) {
 //    std::cerr << "Hep3Vector::rapidity() - "
 //      << "Rapidity taken for too large a Hep3Vector "
 //      << "-- would return infinity or NAN" << std::endl;
 //  }
   // Want inverse std::tanh(z):
-  return (.5 * std::log((1+z)/(1-z)) );
+  return (.5 * std::log((1+z1)/(1-z1)) );
 }
 
 double Hep3Vector::eta(const Hep3Vector & v2) const {
@@ -120,15 +120,15 @@ double Hep3Vector::eta(const Hep3Vector & v2) const {
   // Quicker is to use cosTheta:
   // std::tan (theta/2) = std::sin(theta)/(1 + std::cos(theta))
 
-  double r   = getR();
+  double r1   = getR();
   double v2r = v2.mag();
-  if ( (r == 0) || (v2r == 0) ) {
+  if ( (r1 == 0) || (v2r == 0) ) {
     std::cerr << "Hep3Vector::eta() - "
       << "Cannot find pseudorapidity of a zero vector relative to a vector"
       << std::endl;
     return 0.;
   }
-  double c  = dot(v2)/(r*v2r);
+  double c  = dot(v2)/(r1*v2r);
   if ( c >= 1 ) {
     c = 1; 	//-| We don't want to return NAN because of roundoff
     std::cerr << "Hep3Vector::eta() - "

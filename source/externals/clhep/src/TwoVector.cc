@@ -50,9 +50,9 @@ double & Hep2Vector::operator () (int i) {
   }
 }
 
-void Hep2Vector::rotate(double angle) {
-  double s = std::sin(angle);
-  double c = std::cos(angle);
+void Hep2Vector::rotate(double aangle) {
+  double s = std::sin(aangle);
+  double c = std::cos(aangle);
   double xx = dx;
   dx = c*xx - s*dy;
   dy = s*xx + c*dy;

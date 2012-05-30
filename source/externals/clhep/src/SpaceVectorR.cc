@@ -23,19 +23,19 @@ namespace CLHEP  {
 //-************************
 
 Hep3Vector & Hep3Vector::rotate (const Hep3Vector & axis,
-				   double delta) {
-  double r = axis.mag();
-  if ( r == 0 ) {
+				   double ddelta) {
+  double r1 = axis.mag();
+  if ( r1 == 0 ) {
     std::cerr << "Hep3Vector::rotate() - "
       << "Attempt to rotate around a zero vector axis! " << std::endl;
     return *this;
   }
-  register double scale=1.0/r;
+  register double scale=1.0/r1;
   register double ux = scale*axis.getX();
   register double uy = scale*axis.getY();
   register double uz = scale*axis.getZ();
-  double cd = std::cos(delta);
-  double sd = std::sin(delta);
+  double cd = std::cos(ddelta);
+  double sd = std::sin(ddelta);
   register double ocd = 1 - cd;
   double rx;
   double ry;
@@ -71,29 +71,29 @@ Hep3Vector & Hep3Vector::rotate (const Hep3Vector & axis,
 //-****************************
 
 
-Hep3Vector & Hep3Vector::rotate (double phi, 
-				 double theta, 
-				 double psi)  {
+Hep3Vector & Hep3Vector::rotate (double phi1, 
+				 double theta1, 
+				 double psi1)  {
 
   double rx;
   double ry;
   double rz;
 
-  register double sinPhi   = std::sin( phi   ), cosPhi   = std::cos( phi   );
-  register double sinTheta = std::sin( theta ), cosTheta = std::cos( theta );
-  register double sinPsi   = std::sin( psi   ), cosPsi   = std::cos( psi   );
+  register double sinPhi   = std::sin( phi1   ), cosPhi   = std::cos( phi1   );
+  register double sinTheta = std::sin( theta1 ), cosTheta1 = std::cos( theta1 );
+  register double sinPsi   = std::sin( psi1   ), cosPsi   = std::cos( psi1   );
 
-  rx = 	(cosPsi * cosPhi   - cosTheta * sinPsi * sinPhi)   * dx  +
-	(cosPsi * sinPhi   + cosTheta * sinPsi * cosPhi)   * dy  +
+  rx = 	(cosPsi * cosPhi   - cosTheta1 * sinPsi * sinPhi)   * dx  +
+	(cosPsi * sinPhi   + cosTheta1 * sinPsi * cosPhi)   * dy  +
   	(sinPsi * sinTheta)				   * dz  ;
 
-  ry = 	(- sinPsi * cosPhi - cosTheta * cosPsi * sinPhi)   * dx  +
-	(- sinPsi * sinPhi + cosTheta * cosPsi * cosPhi)   * dy  +
+  ry = 	(- sinPsi * cosPhi - cosTheta1 * cosPsi * sinPhi)   * dx  +
+	(- sinPsi * sinPhi + cosTheta1 * cosPsi * cosPhi)   * dy  +
   	(cosPsi * sinTheta)				   * dz  ;
 
   rz = 	(sinTheta * sinPhi)				   * dx  +
   	(- sinTheta * cosPhi)				   * dy  +
-	(cosTheta)					   * dz  ;
+	(cosTheta1)					   * dz  ;
 
   dx = rx;
   dy = ry;
@@ -130,9 +130,9 @@ Hep3Vector rotationOf (const Hep3Vector & vec, const HepAxisAngle & ax) {
 }
 
 Hep3Vector rotationOf (const Hep3Vector & vec,
-                       const Hep3Vector & axis, double delta) {
+                       const Hep3Vector & axis, double ddelta) {
   Hep3Vector vv(vec);
-  return vv.rotate(axis, delta);
+  return vv.rotate(axis, ddelta);
 }
 
 Hep3Vector rotationOf (const Hep3Vector & vec, const HepEulerAngles & ex) {
@@ -146,19 +146,19 @@ Hep3Vector rotationOf (const Hep3Vector & vec,
   return vv.rotate(phi, theta, psi);
 }
 
-Hep3Vector rotationXOf (const Hep3Vector & vec, double delta) {
+Hep3Vector rotationXOf (const Hep3Vector & vec, double ddelta) {
   Hep3Vector vv(vec);
-  return vv.rotateX (delta);
+  return vv.rotateX (ddelta);
 }
 
-Hep3Vector rotationYOf (const Hep3Vector & vec, double delta) {
+Hep3Vector rotationYOf (const Hep3Vector & vec, double ddelta) {
   Hep3Vector vv(vec);
-  return vv.rotateY (delta);
+  return vv.rotateY (ddelta);
 }
 
-Hep3Vector rotationZOf (const Hep3Vector & vec, double delta) {
+Hep3Vector rotationZOf (const Hep3Vector & vec, double ddelta) {
   Hep3Vector vv(vec);
-  return vv.rotateZ (delta);
+  return vv.rotateZ (ddelta);
 }
 
 }  // namespace CLHEP

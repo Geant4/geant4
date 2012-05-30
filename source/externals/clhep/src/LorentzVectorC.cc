@@ -103,7 +103,7 @@ bool HepLorentzVector::isNearCM
   // Find the boost to the CM frame.  We know that the total vector is timelike.
 
   double tRecip = 1./tTotal;
-  Hep3Vector boost ( vTotal * (-tRecip) );
+  Hep3Vector bboost ( vTotal * (-tRecip) );
 
         //-| Note that you could do pp/t and not be terribly inefficient since
         //-| SpaceVector/t itself takes 1/t and multiplies.  The code here saves
@@ -115,16 +115,16 @@ bool HepLorentzVector::isNearCM
 
   double b2 = vTotal2*tRecip*tRecip;
 
-  register double gamma = std::sqrt(1./(1.-b2));
-  register double boostDotV1 = boost.dot(pp);
-  register double gm1_b2 = (gamma-1)/b2;
+  register double ggamma = std::sqrt(1./(1.-b2));
+  register double boostDotV1 = bboost.dot(pp);
+  register double gm1_b2 = (ggamma-1)/b2;
 
-  HepLorentzVector w1 ( pp   + ((gm1_b2)*boostDotV1+gamma*ee) * boost,
-                     gamma * (ee + boostDotV1) );
+  HepLorentzVector w1 ( pp   + ((gm1_b2)*boostDotV1+ggamma*ee) * bboost,
+                     ggamma * (ee + boostDotV1) );
 
-  register double boostDotV2 = boost.dot(w.pp);
-  HepLorentzVector w2 ( w.pp + ((gm1_b2)*boostDotV2+gamma*w.ee) * boost,
-                     gamma * (w.ee + boostDotV2) );
+  register double boostDotV2 = bboost.dot(w.pp);
+  HepLorentzVector w2 ( w.pp + ((gm1_b2)*boostDotV2+ggamma*w.ee) * bboost,
+                     ggamma * (w.ee + boostDotV2) );
 
   return (w1.isNear(w2, epsilon));
 
@@ -155,7 +155,7 @@ double HepLorentzVector::howNearCM(const HepLorentzVector & w) const {
   // Find the boost to the CM frame.  We know that the total vector is timelike.
 
   double tRecip = 1./tTotal;
-  Hep3Vector boost ( vTotal * (-tRecip) );
+  Hep3Vector bboost ( vTotal * (-tRecip) );
 
         //-| Note that you could do pp/t and not be terribly inefficient since
         //-| SpaceVector/t itself takes 1/t and multiplies.  The code here saves
@@ -170,16 +170,16 @@ double HepLorentzVector::howNearCM(const HepLorentzVector & w) const {
 //    std::cerr << "HepLorentzVector::howNearCM() - "
 //	<< "boost vector in howNearCM appears to be tachyonic" << std::endl;
 //  }
-  register double gamma = std::sqrt(1./(1.-b2));
-  register double boostDotV1 = boost.dot(pp);
-  register double gm1_b2 = (gamma-1)/b2;
+  register double ggamma = std::sqrt(1./(1.-b2));
+  register double boostDotV1 = bboost.dot(pp);
+  register double gm1_b2 = (ggamma-1)/b2;
 
-  HepLorentzVector w1 ( pp   + ((gm1_b2)*boostDotV1+gamma*ee) * boost,
-                     gamma * (ee + boostDotV1) );
+  HepLorentzVector w1 ( pp   + ((gm1_b2)*boostDotV1+ggamma*ee) * bboost,
+                     ggamma * (ee + boostDotV1) );
 
-  register double boostDotV2 = boost.dot(w.pp);
-  HepLorentzVector w2 ( w.pp + ((gm1_b2)*boostDotV2+gamma*w.ee) * boost,
-                     gamma * (w.ee + boostDotV2) );
+  register double boostDotV2 = bboost.dot(w.pp);
+  HepLorentzVector w2 ( w.pp + ((gm1_b2)*boostDotV2+ggamma*w.ee) * bboost,
+                     ggamma * (w.ee + boostDotV2) );
 
   return (w1.howNear(w2));
 
@@ -241,16 +241,16 @@ double HepLorentzVector::howParallel (const HepLorentzVector & w) const {
 
   HepLorentzVector w1 = *this / norm;
   HepLorentzVector w2 = w / wnorm;
-  double x = (w1-w2).euclideanNorm();
-  return (x < 1) ? x : 1;
+  double x1 = (w1-w2).euclideanNorm();
+  return (x1 < 1) ? x1 : 1;
 
 } /* howParallel */
 
 double HepLorentzVector::howLightlike() const {
-  double m2 = std::fabs(restMass2());
+  double m1 = std::fabs(restMass2());
   double twoT2 = 2*ee*ee;
-  if (m2 < twoT2) {
-    return m2/twoT2;
+  if (m1 < twoT2) {
+    return m1/twoT2;
   } else {
     return 1;
   }

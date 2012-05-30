@@ -18,13 +18,13 @@
 namespace CLHEP  {
 
 HepLorentzVector &
-HepLorentzVector::operator *= (const HepLorentzRotation & m) {
-  return *this = m.vectorMultiplication(*this);
+HepLorentzVector::operator *= (const HepLorentzRotation & m1) {
+  return *this = m1.vectorMultiplication(*this);
 }
 
 HepLorentzVector &
-HepLorentzVector::transform(const HepLorentzRotation & m){
-  return *this = m.vectorMultiplication(*this);
+HepLorentzVector::transform(const HepLorentzRotation & m1){
+  return *this = m1.vectorMultiplication(*this);
 }
 
 }  // namespace CLHEP

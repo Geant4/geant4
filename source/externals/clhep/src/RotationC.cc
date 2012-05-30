@@ -45,13 +45,13 @@ bool HepRotation::setCols
 
 } // HepRotation::setCols 
 
-void HepRotation::setArbitrarily (const Hep3Vector & colX, 
+void HepRotation::setArbitrarily (const Hep3Vector & ccolX, 
    Hep3Vector & v1, Hep3Vector & v2, Hep3Vector & v3) const {
 
   // We have all three col's parallel.  Warnings already been given;
   // this just supplies a result which is a valid rotation.
 
-  v1 = colX.unit();
+  v1 = ccolX.unit();
   v2 = v1.cross(Hep3Vector(0,0,1));
   if (v2.mag2() != 0) {
     v2 = v2.unit();
@@ -64,18 +64,18 @@ void HepRotation::setArbitrarily (const Hep3Vector & colX,
 
 } // HepRotation::setArbitrarily 
 
-
+
 
 // ----------  Constructors and Assignment:
 
 // 3 orthogonal columns or rows
 
-HepRotation & HepRotation::set( const Hep3Vector & colX,
-                            	const Hep3Vector & colY,
-                          	const Hep3Vector & colZ ) {
-  Hep3Vector ucolX = colX.unit();
-  Hep3Vector ucolY = colY.unit();
-  Hep3Vector ucolZ = colZ.unit();
+HepRotation & HepRotation::set( const Hep3Vector & ccolX,
+                            	const Hep3Vector & ccolY,
+                          	const Hep3Vector & ccolZ ) {
+  Hep3Vector ucolX = ccolX.unit();
+  Hep3Vector ucolY = ccolY.unit();
+  Hep3Vector ucolZ = ccolZ.unit();
 
   double u1u2 = ucolX.dot(ucolY);
   double f12  = std::fabs(u1u2);
@@ -132,17 +132,17 @@ HepRotation & HepRotation::set( const Hep3Vector & colX,
 
 }  // HepRotation::set(colX, colY, colZ)
 
-HepRotation::HepRotation ( const Hep3Vector & colX,
-              		   const Hep3Vector & colY,
-		           const Hep3Vector & colZ ) 
+HepRotation::HepRotation ( const Hep3Vector & ccolX,
+              		   const Hep3Vector & ccolY,
+		           const Hep3Vector & ccolZ ) 
 {
-  set (colX, colY, colZ);
+  set (ccolX, ccolY, ccolZ);
 }
 
-HepRotation & HepRotation::setRows( const Hep3Vector & rowX,
-                           	    const Hep3Vector & rowY,
-                              	    const Hep3Vector & rowZ ) {
-  set (rowX, rowY, rowZ);
+HepRotation & HepRotation::setRows( const Hep3Vector & rrowX,
+                           	    const Hep3Vector & rrowY,
+                              	    const Hep3Vector & rrowZ ) {
+  set (rrowX, rrowY, rrowZ);
   invert();
   return *this;
 }
@@ -174,26 +174,26 @@ void HepRotation::rectify() {
   double di = 1.0 / det;
 
   // xx, xy, ... are components of inverse matrix:
-  double xx = (ryy * rzz - ryz * rzy) * di;
-  double xy = (rzy * rxz - rzz * rxy) * di;
-  double xz = (rxy * ryz - rxz * ryy) * di;
-  double yx = (ryz * rzx - ryx * rzz) * di;
-  double yy = (rzz * rxx - rzx * rxz) * di;
-  double yz = (rxz * ryx - rxx * ryz) * di;
-  double zx = (ryx * rzy - ryy * rzx) * di;
-  double zy = (rzx * rxy - rzy * rxx) * di;
-  double zz = (rxx * ryy - rxy * ryx) * di;
+  double xx1 = (ryy * rzz - ryz * rzy) * di;
+  double xy1 = (rzy * rxz - rzz * rxy) * di;
+  double xz1 = (rxy * ryz - rxz * ryy) * di;
+  double yx1 = (ryz * rzx - ryx * rzz) * di;
+  double yy1 = (rzz * rxx - rzx * rxz) * di;
+  double yz1 = (rxz * ryx - rxx * ryz) * di;
+  double zx1 = (ryx * rzy - ryy * rzx) * di;
+  double zy1 = (rzx * rxy - rzy * rxx) * di;
+  double zz1 = (rxx * ryy - rxy * ryx) * di;
 
   // Now average with the TRANSPOSE of that:
-  rxx = .5*(rxx + xx);
-  rxy = .5*(rxy + yx);
-  rxz = .5*(rxz + zx);
-  ryx = .5*(ryx + xy);
-  ryy = .5*(ryy + yy);
-  ryz = .5*(ryz + zy);
-  rzx = .5*(rzx + xz);
-  rzy = .5*(rzy + yz);
-  rzz = .5*(rzz + zz);
+  rxx = .5*(rxx + xx1);
+  rxy = .5*(rxy + yx1);
+  rxz = .5*(rxz + zx1);
+  ryx = .5*(ryx + xy1);
+  ryy = .5*(ryy + yy1);
+  ryz = .5*(ryz + zy1);
+  rzx = .5*(rzx + xz1);
+  rzy = .5*(rzy + yz1);
+  rzz = .5*(rzz + zz1);
 
   // Now force feed this improved rotation
   double del = delta();

@@ -19,8 +19,8 @@ namespace CLHEP  {
 
 // ----------  Constructors and Assignment:
 
-HepBoostZ & HepBoostZ::set (double beta) {
-  double b2 = beta*beta;
+HepBoostZ & HepBoostZ::set (double bbeta) {
+  double b2 = bbeta*bbeta;
   if (b2 >= 1) {
     std::cerr << "HepBoostZ::set() - "
       << "Beta supplied to set HepBoostZ represents speed >= c." << std::endl;
@@ -28,7 +28,7 @@ HepBoostZ & HepBoostZ::set (double beta) {
     gamma_ = 1.0 / std::sqrt(1.0 - b2);
     return *this;
   }    
-  beta_  = beta;
+  beta_  = bbeta;
   gamma_ = 1.0 / std::sqrt(1.0 - b2);
   return *this;
 }
@@ -56,8 +56,8 @@ HepRep4x4Symmetric HepBoostZ::rep4x4Symmetric() const {
 void HepBoostZ::decompose (HepRotation & rotation, HepBoost & boost) const {
   HepAxisAngle vdelta = HepAxisAngle();
   rotation = HepRotation(vdelta);
-  Hep3Vector beta = boostVector();
-  boost = HepBoost(beta);
+  Hep3Vector bbeta = boostVector();
+  boost = HepBoost(bbeta);
 }
 
 void HepBoostZ::decompose (HepAxisAngle & rotation, Hep3Vector & boost) const {
@@ -68,8 +68,8 @@ void HepBoostZ::decompose (HepAxisAngle & rotation, Hep3Vector & boost) const {
 void HepBoostZ::decompose (HepBoost & boost, HepRotation & rotation) const {
   HepAxisAngle vdelta = HepAxisAngle();
   rotation = HepRotation(vdelta);
-  Hep3Vector beta = boostVector();
-  boost = HepBoost(beta);
+  Hep3Vector bbeta = boostVector();
+  boost = HepBoost(bbeta);
 }
 
 void HepBoostZ::decompose (Hep3Vector & boost, HepAxisAngle & rotation) const {

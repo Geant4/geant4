@@ -59,6 +59,7 @@
 #include "CLHEP/Random/DoubConv.h"
 #include <string.h>	// for strcmp
 #include <cstdlib>	// for abs(int)
+#include <limits>       // for numeric_limits
 
 using namespace std;
 
@@ -72,6 +73,30 @@ int Ranlux64Engine::numEngines = 0;
 
 // Maximum index into the seed table
 int Ranlux64Engine::maxIndex = 215;
+
+#ifndef WIN32
+namespace detail {
+
+template< std::size_t n,
+          bool = n < std::size_t(std::numeric_limits<unsigned long>::digits) >
+  struct do_right_shift;
+template< std::size_t n >
+  struct do_right_shift<n,true>
+{
+  unsigned long operator()(unsigned long value) { return value >> n; }
+};
+template< std::size_t n >
+  struct do_right_shift<n,false>
+{
+  unsigned long operator()(unsigned long) { return 0ul; }
+};
+
+template< std::size_t nbits >
+  unsigned long rshift( unsigned long value )
+{ return do_right_shift<nbits>()(value); }
+
+} // namespace detail
+#endif
 
 std::string Ranlux64Engine::name() const {return "Ranlux64Engine";}
 
@@ -395,8 +420,13 @@ void Ranlux64Engine::setSeed(long seed, int lux) {
   // are we on a 64bit machine?
   if( sizeof(long) >= 8 ) {
      long topbits1, topbits2;
+#ifdef WIN32
      topbits1 = ( seed >> 32) & 0xffff ;
      topbits2 = ( seed >> 48) & 0xffff ;
+#else
+     topbits1 = detail::rshift<32>(seed) & 0xffff ;
+     topbits2 = detail::rshift<48>(seed) & 0xffff ;
+#endif
      init_table[0] ^= topbits1;
      init_table[2] ^= topbits2;
      //std::cout << " init_table[0] " << init_table[0] << " from " << topbits1 << std::endl;

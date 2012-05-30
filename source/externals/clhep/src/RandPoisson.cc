@@ -98,34 +98,34 @@ long RandPoisson::shoot(double xm) {
 // (Adapted from Numerical Recipes in C)
 
   double em, t, y;
-  double sq, alxm, g;
+  double sq, alxm, g1;
   double om = getOldMean();
   HepRandomEngine* anEngine = HepRandom::getTheEngine();
 
   double* status = getPStatus();
   sq = status[0];
   alxm = status[1];
-  g = status[2];
+  g1 = status[2];
 
   if( xm == -1 ) return 0;
   if( xm < 12.0 ) {
     if( xm != om ) {
       setOldMean(xm);
-      g = exp(-xm);
+      g1 = exp(-xm);
     }
     em = -1;
     t = 1.0;
     do {
       em += 1.0;
       t *= anEngine->flat();
-    } while( t > g );
+    } while( t > g1 );
   }
   else if ( xm < getMaxMean() ) {
     if ( xm != om ) {
       setOldMean(xm);
       sq = sqrt(2.0*xm);
       alxm = log(xm);
-      g = xm*alxm - gammln(xm + 1.0);
+      g1 = xm*alxm - gammln(xm + 1.0);
     }
     do {
       do {
@@ -133,7 +133,7 @@ long RandPoisson::shoot(double xm) {
 	em = sq*y + xm;
       } while( em < 0.0 );
       em = floor(em);
-      t = 0.9*(1.0 + y*y)* exp(em*alxm - gammln(em + 1.0) - g);
+      t = 0.9*(1.0 + y*y)* exp(em*alxm - gammln(em + 1.0) - g1);
     } while( anEngine->flat() > t );
   }
   else {
@@ -141,14 +141,14 @@ long RandPoisson::shoot(double xm) {
     if ( static_cast<long>(em) < 0 ) 
       em = static_cast<long>(xm) >= 0 ? xm : getMaxMean();
   }    
-  setPStatus(sq,alxm,g);
+  setPStatus(sq,alxm,g1);
   return long(em);
 }
 
-void RandPoisson::shootArray(const int size, long* vect, double m)
+void RandPoisson::shootArray(const int size, long* vect, double m1)
 {
   for( long* v = vect; v != vect + size; ++v )
-    *v = shoot(m);
+    *v = shoot(m1);
 }
 
 long RandPoisson::shoot(HepRandomEngine* anEngine, double xm) {
@@ -159,33 +159,33 @@ long RandPoisson::shoot(HepRandomEngine* anEngine, double xm) {
 // (Adapted from Numerical Recipes in C)
 
   double em, t, y;
-  double sq, alxm, g;
+  double sq, alxm, g1;
   double om = getOldMean();
 
   double* status = getPStatus();
   sq = status[0];
   alxm = status[1];
-  g = status[2];
+  g1 = status[2];
 
   if( xm == -1 ) return 0;
   if( xm < 12.0 ) {
     if( xm != om ) {
       setOldMean(xm);
-      g = exp(-xm);
+      g1 = exp(-xm);
     }
     em = -1;
     t = 1.0;
     do {
       em += 1.0;
       t *= anEngine->flat();
-    } while( t > g );
+    } while( t > g1 );
   }
   else if ( xm < getMaxMean() ) {
     if ( xm != om ) {
       setOldMean(xm);
       sq = sqrt(2.0*xm);
       alxm = log(xm);
-      g = xm*alxm - gammln(xm + 1.0);
+      g1 = xm*alxm - gammln(xm + 1.0);
     }
     do {
       do {
@@ -193,7 +193,7 @@ long RandPoisson::shoot(HepRandomEngine* anEngine, double xm) {
 	em = sq*y + xm;
       } while( em < 0.0 );
       em = floor(em);
-      t = 0.9*(1.0 + y*y)* exp(em*alxm - gammln(em + 1.0) - g);
+      t = 0.9*(1.0 + y*y)* exp(em*alxm - gammln(em + 1.0) - g1);
     } while( anEngine->flat() > t );
   }
   else {
@@ -201,15 +201,15 @@ long RandPoisson::shoot(HepRandomEngine* anEngine, double xm) {
     if ( static_cast<long>(em) < 0 ) 
       em = static_cast<long>(xm) >= 0 ? xm : getMaxMean();
   }    
-  setPStatus(sq,alxm,g);
+  setPStatus(sq,alxm,g1);
   return long(em);
 }
 
 void RandPoisson::shootArray(HepRandomEngine* anEngine, const int size,
-                             long* vect, double m)
+                             long* vect, double m1)
 {
   for( long* v = vect; v != vect + size; ++v )
-    *v = shoot(anEngine,m);
+    *v = shoot(anEngine,m1);
 }
 
 long RandPoisson::fire() {
@@ -224,31 +224,31 @@ long RandPoisson::fire(double xm) {
 // (Adapted from Numerical Recipes in C)
 
   double em, t, y;
-  double sq, alxm, g;
+  double sq, alxm, g1;
 
   sq = status[0];
   alxm = status[1];
-  g = status[2];
+  g1 = status[2];
 
   if( xm == -1 ) return 0;
   if( xm < 12.0 ) {
     if( xm != oldm ) {
       oldm = xm;
-      g = exp(-xm);
+      g1 = exp(-xm);
     }
     em = -1;
     t = 1.0;
     do {
       em += 1.0;
       t *= localEngine->flat();
-    } while( t > g );
+    } while( t > g1 );
   }
   else if ( xm < meanMax ) {
     if ( xm != oldm ) {
       oldm = xm;
       sq = sqrt(2.0*xm);
       alxm = log(xm);
-      g = xm*alxm - gammln(xm + 1.0);
+      g1 = xm*alxm - gammln(xm + 1.0);
     }
     do {
       do {
@@ -256,7 +256,7 @@ long RandPoisson::fire(double xm) {
 	em = sq*y + xm;
       } while( em < 0.0 );
       em = floor(em);
-      t = 0.9*(1.0 + y*y)* exp(em*alxm - gammln(em + 1.0) - g);
+      t = 0.9*(1.0 + y*y)* exp(em*alxm - gammln(em + 1.0) - g1);
     } while( localEngine->flat() > t );
   }
   else {
@@ -264,7 +264,7 @@ long RandPoisson::fire(double xm) {
     if ( static_cast<long>(em) < 0 ) 
       em = static_cast<long>(xm) >= 0 ? xm : getMaxMean();
   }    
-  status[0] = sq; status[1] = alxm; status[2] = g;
+  status[0] = sq; status[1] = alxm; status[2] = g1;
   return long(em);
 }
 
@@ -274,10 +274,10 @@ void RandPoisson::fireArray(const int size, long* vect )
     *v = fire( defaultMean );
 }
 
-void RandPoisson::fireArray(const int size, long* vect, double m)
+void RandPoisson::fireArray(const int size, long* vect, double m1)
 {
   for( long* v = vect; v != vect + size; ++v )
-    *v = fire( m );
+    *v = fire( m1 );
 }
 
 std::ostream & RandPoisson::put ( std::ostream & os ) const {

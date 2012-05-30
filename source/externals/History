@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30-May-2012: G.Cosmo (externals-V09-05-01)
+- Additional correction for shadowed variable in CLHEP module.
+
+10-May-2012: G.Cosmo (externals-V09-05-00)
+- Updated CLHEP module to version 2.1.2.2.
+
 21-November-2011: G.Cosmo (externals-V09-04-11)
 - Use USE flags in main GNUmakefile for selection of packages,
   for backwards compatibility.

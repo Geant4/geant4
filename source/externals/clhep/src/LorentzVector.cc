@@ -58,14 +58,14 @@ double & HepLorentzVector::operator () (int i) {
 HepLorentzVector & HepLorentzVector::boost
 				(double bx, double by, double bz){
   double b2 = bx*bx + by*by + bz*bz;
-  register double gamma = 1.0 / std::sqrt(1.0 - b2);
+  register double ggamma = 1.0 / std::sqrt(1.0 - b2);
   register double bp = bx*x() + by*y() + bz*z();
-  register double gamma2 = b2 > 0 ? (gamma - 1.0)/b2 : 0.0;
+  register double gamma2 = b2 > 0 ? (ggamma - 1.0)/b2 : 0.0;
 
-  setX(x() + gamma2*bp*bx + gamma*bx*t());
-  setY(y() + gamma2*bp*by + gamma*by*t());
-  setZ(z() + gamma2*bp*bz + gamma*bz*t());
-  setT(gamma*(t() + bp));
+  setX(x() + gamma2*bp*bx + ggamma*bx*t());
+  setY(y() + gamma2*bp*by + ggamma*by*t());
+  setZ(z() + gamma2*bp*bz + ggamma*bz*t());
+  setT(ggamma*(t() + bp));
   return *this;
 }
 
@@ -82,18 +82,18 @@ HepLorentzVector & HepLorentzVector::rotateZ(double a) {
   return *this; 
 }
 
-HepLorentzVector & HepLorentzVector::rotateUz(const Hep3Vector &v) {
-  pp.rotateUz(v);
+HepLorentzVector & HepLorentzVector::rotateUz(const Hep3Vector &v1) {
+  pp.rotateUz(v1);
   return *this;
 }
 
-std::ostream & operator<< (std::ostream & os, const HepLorentzVector & v)
+std::ostream & operator<< (std::ostream & os, const HepLorentzVector & v1)
 {
-  return os << "(" << v.x() << "," << v.y() << "," << v.z()
-	    << ";" << v.t() << ")";
+  return os << "(" << v1.x() << "," << v1.y() << "," << v1.z()
+	    << ";" << v1.t() << ")";
 }
 
-std::istream & operator>> (std::istream & is, HepLorentzVector & v) {
+std::istream & operator>> (std::istream & is, HepLorentzVector & v1) {
 
 // Required format is ( a, b, c; d ) that is, four numbers, preceded by
 // (, followed by ), components of the spatial vector separated by commas,
@@ -140,10 +140,10 @@ std::istream & operator>> (std::istream & is, HepLorentzVector & v) {
     return is;
   }
 
-  v.setX(x);
-  v.setY(y);
-  v.setZ(z);
-  v.setT(t);
+  v1.setX(x);
+  v1.setY(y);
+  v1.setZ(z);
+  v1.setT(t);
   return is;
 }
 
@@ -194,47 +194,47 @@ Hep3Vector HepLorentzVector::boostVector() const {
 } /* boostVector */
 
 
-HepLorentzVector & HepLorentzVector::boostX (double beta){
-  register double b2 = beta*beta;
+HepLorentzVector & HepLorentzVector::boostX (double bbeta){
+  register double b2 = bbeta*bbeta;
   if (b2 >= 1) {
     std::cerr << "HepLorentzVector::boostX() - "
       << "boost along X with beta >= 1 (speed of light) -- \n"
       << "no boost done" << std::endl;
   } else {
-    register double gamma = std::sqrt(1./(1-b2));
+    register double ggamma = std::sqrt(1./(1-b2));
     register double tt = ee;
-    ee = gamma*(ee + beta*pp.getX());
-    pp.setX(gamma*(pp.getX() + beta*tt));
+    ee = ggamma*(ee + bbeta*pp.getX());
+    pp.setX(ggamma*(pp.getX() + bbeta*tt));
   }
   return *this;
 } /* boostX */
 
-HepLorentzVector & HepLorentzVector::boostY (double beta){
-  register double b2 = beta*beta;
+HepLorentzVector & HepLorentzVector::boostY (double bbeta){
+  register double b2 = bbeta*bbeta;
   if (b2 >= 1) {
     std::cerr << "HepLorentzVector::boostY() - "
       << "boost along Y with beta >= 1 (speed of light) -- \n"
       << "no boost done" << std::endl;
   } else {
-    register double gamma = std::sqrt(1./(1-b2));
+    register double ggamma = std::sqrt(1./(1-b2));
     register double tt = ee;
-    ee = gamma*(ee + beta*pp.getY());
-    pp.setY(gamma*(pp.getY() + beta*tt));
+    ee = ggamma*(ee + bbeta*pp.getY());
+    pp.setY(ggamma*(pp.getY() + bbeta*tt));
   }
   return *this;
 } /* boostY */
 
-HepLorentzVector & HepLorentzVector::boostZ (double beta){
-  register double b2 = beta*beta;
+HepLorentzVector & HepLorentzVector::boostZ (double bbeta){
+  register double b2 = bbeta*bbeta;
   if (b2 >= 1) {
     std::cerr << "HepLorentzVector::boostZ() - "
       << "boost along Z with beta >= 1 (speed of light) -- \n"
       << "no boost done" << std::endl;
   } else {
-    register double gamma = std::sqrt(1./(1-b2));
+    register double ggamma = std::sqrt(1./(1-b2));
     register double tt = ee;
-    ee = gamma*(ee + beta*pp.getZ());
-    pp.setZ(gamma*(pp.getZ() + beta*tt));
+    ee = ggamma*(ee + bbeta*pp.getZ());
+    pp.setZ(ggamma*(pp.getZ() + bbeta*tt));
   }
   return *this;
 } /* boostZ */

@@ -60,13 +60,13 @@ HepLorentzRotation::operator = (const HepLorentzRotation & r) {
 }
 
 inline HepLorentzRotation &
-HepLorentzRotation::operator = (const HepRotation & m) {
-  return set (m.rep4x4());
+HepLorentzRotation::operator = (const HepRotation & m1) {
+  return set (m1.rep4x4());
 }
 
 inline HepLorentzRotation &
-HepLorentzRotation::operator = (const HepBoost & m) {
-  return set (m.rep4x4());
+HepLorentzRotation::operator = (const HepBoost & m1) {
+  return set (m1.rep4x4());
 }
 
 HepLorentzRotation & HepLorentzRotation::set (const Hep3Vector & p) {
@@ -86,17 +86,17 @@ inline HepLorentzRotation & HepLorentzRotation::set (const HepRotationZ & r) {
   return set (r.rep4x4());
 }
 
-inline HepLorentzRotation & HepLorentzRotation::set (const HepBoost & boost) {
-  return set (boost.rep4x4());
+inline HepLorentzRotation & HepLorentzRotation::set (const HepBoost & bboost) {
+  return set (bboost.rep4x4());
 }
-inline HepLorentzRotation & HepLorentzRotation::set (const HepBoostX & boost) {
-  return set (boost.rep4x4());
+inline HepLorentzRotation & HepLorentzRotation::set (const HepBoostX & bboost) {
+  return set (bboost.rep4x4());
 }
-inline HepLorentzRotation & HepLorentzRotation::set (const HepBoostY & boost) {
-  return set (boost.rep4x4());
+inline HepLorentzRotation & HepLorentzRotation::set (const HepBoostY & bboost) {
+  return set (bboost.rep4x4());
 }
-inline HepLorentzRotation & HepLorentzRotation::set (const HepBoostZ & boost) {
-  return set (boost.rep4x4());
+inline HepLorentzRotation & HepLorentzRotation::set (const HepBoostZ & bboost) {
+  return set (bboost.rep4x4());
 }
 
 inline HepLorentzRotation::HepLorentzRotation(double bx,

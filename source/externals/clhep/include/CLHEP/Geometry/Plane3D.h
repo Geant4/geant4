@@ -37,7 +37,7 @@ namespace HepGeom {
 
     /**
      * Constructor from four numbers - creates plane a*x+b*y+c*z+d=0. */
-    Plane3D(T a, T b, T c, T d) : a_(a), b_(b), c_(c), d_(d) {}
+    Plane3D(T a1, T b1, T c1, T d1) : a_(a1), b_(b1), c_(c1), d_(d1) {}
 
     /**
      * Constructor from normal and point. */

@@ -245,13 +245,13 @@ double transformSmall (double r) {
   
   for ( int i = 1; i < 50; i++ ) {
     double vn2 = 1.0/(guess*guess);
-    double s = -13*11*9*7*5*3 * vn2*vn2*vn2*vn2*vn2*vn2*vn2;
-    	      s +=    11*9*7*5*3 * vn2*vn2*vn2*vn2*vn2*vn2;
-    	      s +=      -9*7*5*3 * vn2*vn2*vn2*vn2*vn2;
-	      s +=         7*5*3 * vn2*vn2*vn2*vn2;
-    	      s +=          -5*3 * vn2*vn2*vn2;
-	      s += 	       3 * vn2*vn2    - vn2  +    1.0;
-    v = sqrt ( 2.0 * log ( s / (r*guess*sqrt(CLHEP::twopi)) ) );
+    double s1 = -13*11*9*7*5*3 * vn2*vn2*vn2*vn2*vn2*vn2*vn2;
+            s1 +=    11*9*7*5*3 * vn2*vn2*vn2*vn2*vn2*vn2;
+            s1 +=      -9*7*5*3 * vn2*vn2*vn2*vn2*vn2;
+            s1 +=         7*5*3 * vn2*vn2*vn2*vn2;
+            s1 +=          -5*3 * vn2*vn2*vn2;
+            s1 +=            3 * vn2*vn2    - vn2  +    1.0;
+    v = sqrt ( 2.0 * log ( s1 / (r*guess*sqrt(CLHEP::twopi)) ) );
     if ( abs(v-guess) < eps ) break;
     guess = v;
   }

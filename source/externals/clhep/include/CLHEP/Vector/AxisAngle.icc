@@ -24,8 +24,8 @@ inline HepAxisAngle::HepAxisAngle() :
   axis_( Hep3Vector(0,0,1) ), delta_( 0.0 )
 {}  // HepAxisAngle::HepAxisAngle()
 
-inline HepAxisAngle::HepAxisAngle( const Hep3Vector axis, Scalar delta ) :
-  axis_( axis.unit() ), delta_( delta )
+inline HepAxisAngle::HepAxisAngle( const Hep3Vector aaxis, Scalar ddelta ) :
+  axis_( aaxis.unit() ), delta_( ddelta )
 {}  // HepAxisAngle::HepAxisAngle()
 
 
@@ -38,8 +38,8 @@ inline Hep3Vector HepAxisAngle::axis() const {
 }  // HepAxisAngle::axis()
 
 
-inline HepAxisAngle & HepAxisAngle::setAxis( const Hep3Vector axis ) {
-  axis_ = axis.unit();
+inline HepAxisAngle & HepAxisAngle::setAxis( const Hep3Vector aaxis ) {
+  axis_ = aaxis.unit();
   return  *this;
 }  // HepAxisAngle::setAxis()
 
@@ -53,15 +53,15 @@ inline double HepAxisAngle::delta() const {
 }  // HepAxisAngle::delta()
 
 
-inline HepAxisAngle & HepAxisAngle::setDelta( Scalar delta ) {
-  delta_ = delta;
+inline HepAxisAngle & HepAxisAngle::setDelta( Scalar ddelta ) {
+  delta_ = ddelta;
   return  *this;
 }  // HepAxisAngle::setDelta()
 
 
-inline HepAxisAngle & HepAxisAngle::set( const Hep3Vector axis, Scalar delta ) {
-  axis_ = axis.unit();
-  delta_ = delta;
+inline HepAxisAngle & HepAxisAngle::set( const Hep3Vector aaxis, Scalar ddelta ) {
+  axis_ = aaxis.unit();
+  delta_ = ddelta;
   return  *this;
 }  // HepAxisAngle::set()
 

@@ -52,10 +52,10 @@ static const double prec = 4.6566128E-10;
 
 std::string RanecuEngine::name() const {return "RanecuEngine";}
 
-void RanecuEngine::further_randomize (int seq, int col, int index, int modulus)
+void RanecuEngine::further_randomize (int seq1, int col, int index, int modulus)
 {
-  table[seq][col] -= (index&0x3FFFFFFF);
-  while (table[seq][col] <= 0) table[seq][col] += (modulus-1);
+  table[seq1][col] -= (index&0x3FFFFFFF);
+  while (table[seq1][col] <= 0) table[seq1][col] += (modulus-1);
 }  // mf 6/22/10
 
 // Number of instances with automatic seed selection

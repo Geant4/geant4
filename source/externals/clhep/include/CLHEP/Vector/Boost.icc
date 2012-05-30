@@ -15,10 +15,10 @@ namespace CLHEP  {
 
 inline HepBoost::HepBoost() : rep_() {}
 
-inline HepBoost::HepBoost(const HepBoost & m) : rep_(m.rep_) {}
+inline HepBoost::HepBoost(const HepBoost & m1) : rep_(m1.rep_) {}
 
-inline HepBoost & HepBoost::operator = (const HepBoost & m) { 
-  rep_ = m.rep_; 
+inline HepBoost & HepBoost::operator = (const HepBoost & m1) { 
+  rep_ = m1.rep_; 
   return *this;
 }
 
@@ -27,20 +27,20 @@ inline HepBoost::HepBoost(double betaX, double betaY, double betaZ)
   set(betaX, betaY, betaZ);
 }
 
-inline HepBoost::HepBoost(const HepRep4x4Symmetric & m) : rep_(m) {}
+inline HepBoost::HepBoost(const HepRep4x4Symmetric & m1) : rep_(m1) {}
 
-inline HepBoost::HepBoost(Hep3Vector direction, double beta) 
+inline HepBoost::HepBoost(Hep3Vector ddirection, double bbeta) 
 {
-  double length = direction.mag();
+  double length = ddirection.mag();
   if (length==0) {
     std::cerr << "HepBoost::HepBoost() - "
               << "HepBoost constructed using a zero vector as direction"
               << std::endl;
     set(0,0,0);
   }
-  set(beta*direction.x()/length,
-      beta*direction.y()/length,
-      beta*direction.z()/length);
+  set(bbeta*ddirection.x()/length,
+      bbeta*ddirection.y()/length,
+      bbeta*ddirection.z()/length);
 }
 
 inline HepBoost::HepBoost(const Hep3Vector & boost) 
@@ -60,11 +60,11 @@ inline HepBoost & HepBoost::set(const HepBoostZ & boost)
 
 // - Protected method:
 inline HepBoost::HepBoost ( 
-  double xx, double xy, double xz, double xt,
-  		double yy, double yz, double yt,
-  			      double zz, double zt,
-  					    double tt) :
-	  rep_ ( xx, xy, xz, xt, yy, yz, yt, zz, zt, tt ) {}	
+  double xx1, double xy1, double xz1, double xt1,
+              double yy1, double yz1, double yt1,
+                          double zz1, double zt1,
+                                      double tt1) :
+	  rep_ ( xx1, xy1, xz1, xt1, yy1, yz1, yt1, zz1, zt1, tt1 ) {}	
 
 // ----------  Accessors:
 
@@ -149,28 +149,28 @@ inline void HepBoost::setBoost(double bx, double by, double bz) {
 // ----------  Comparisons:
 
 int HepBoost::compare ( const HepBoost & b ) const {
-  const HepRep4x4Symmetric & s = b.rep4x4Symmetric();
-       if (rep_.tt_ < s.tt_) return -1; else if (rep_.tt_ > s.tt_) return 1;
-  else if (rep_.zt_ < s.zt_) return -1; else if (rep_.zt_ > s.zt_) return 1;
-  else if (rep_.zz_ < s.zz_) return -1; else if (rep_.zz_ > s.zz_) return 1;
-  else if (rep_.yt_ < s.yt_) return -1; else if (rep_.yt_ > s.yt_) return 1;
-  else if (rep_.yz_ < s.yz_) return -1; else if (rep_.yz_ > s.yz_) return 1;
-  else if (rep_.yy_ < s.yy_) return -1; else if (rep_.yy_ > s.yy_) return 1;
-  else if (rep_.xt_ < s.xt_) return -1; else if (rep_.xt_ > s.xt_) return 1;
-  else if (rep_.xz_ < s.xz_) return -1; else if (rep_.xz_ > s.xz_) return 1;
-  else if (rep_.xy_ < s.xy_) return -1; else if (rep_.xy_ > s.xy_) return 1;
-  else if (rep_.xx_ < s.xx_) return -1; else if (rep_.xx_ > s.xx_) return 1;
+  const HepRep4x4Symmetric & s1 = b.rep4x4Symmetric();
+       if (rep_.tt_ < s1.tt_) return -1; else if (rep_.tt_ > s1.tt_) return 1;
+  else if (rep_.zt_ < s1.zt_) return -1; else if (rep_.zt_ > s1.zt_) return 1;
+  else if (rep_.zz_ < s1.zz_) return -1; else if (rep_.zz_ > s1.zz_) return 1;
+  else if (rep_.yt_ < s1.yt_) return -1; else if (rep_.yt_ > s1.yt_) return 1;
+  else if (rep_.yz_ < s1.yz_) return -1; else if (rep_.yz_ > s1.yz_) return 1;
+  else if (rep_.yy_ < s1.yy_) return -1; else if (rep_.yy_ > s1.yy_) return 1;
+  else if (rep_.xt_ < s1.xt_) return -1; else if (rep_.xt_ > s1.xt_) return 1;
+  else if (rep_.xz_ < s1.xz_) return -1; else if (rep_.xz_ > s1.xz_) return 1;
+  else if (rep_.xy_ < s1.xy_) return -1; else if (rep_.xy_ > s1.xy_) return 1;
+  else if (rep_.xx_ < s1.xx_) return -1; else if (rep_.xx_ > s1.xx_) return 1;
   else return 0;
 }
 
 inline bool
 HepBoost::operator == (const HepBoost & b) const {
-  const HepRep4x4Symmetric & s = b.rep4x4Symmetric();
+  const HepRep4x4Symmetric & s1 = b.rep4x4Symmetric();
   return ( 
-     rep_.xx_==s.xx_ && rep_.xy_==s.xy_ && rep_.xz_==s.xz_ && rep_.xt_==s.xt_ 
- 		     && rep_.yy_==s.yy_ && rep_.yz_==s.yz_ && rep_.yt_==s.yt_ 
-					&& rep_.zz_==s.zz_ && rep_.zt_==s.zt_ 
-							   && rep_.tt_==s.tt_ 
+     rep_.xx_==s1.xx_ && rep_.xy_==s1.xy_ && rep_.xz_==s1.xz_ && rep_.xt_==s1.xt_
+                   && rep_.yy_==s1.yy_ && rep_.yz_==s1.yz_ && rep_.yt_==s1.yt_
+                                      && rep_.zz_==s1.zz_ && rep_.zt_==s1.zt_
+                                                         && rep_.tt_==s1.tt_
   );
 }
 

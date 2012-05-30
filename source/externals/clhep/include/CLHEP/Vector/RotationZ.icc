@@ -76,9 +76,9 @@ inline HepAxisAngle HepRotationZ::axisAngle() const {
 }
 
 inline void HepRotationZ::getAngleAxis
-			(double & delta, Hep3Vector & axis) const {
-  delta = d;
-  axis  = getAxis();
+			(double & ddelta, Hep3Vector & aaxis) const {
+  ddelta = d;
+  aaxis  = getAxis();
 }
 
 inline bool HepRotationZ::isIdentity() const {
@@ -131,20 +131,20 @@ inline HepLorentzVector HepRotationZ::operator *
   return operator()(p);
 }
 
-inline HepRotationZ & HepRotationZ::operator *= (const HepRotationZ & m) {
-  return *this = (*this) * (m);
+inline HepRotationZ & HepRotationZ::operator *= (const HepRotationZ & m1) {
+  return *this = (*this) * (m1);
 }
 
-inline HepRotationZ & HepRotationZ::transform(const HepRotationZ & m) {
-  return *this = m * (*this);
+inline HepRotationZ & HepRotationZ::transform(const HepRotationZ & m1) {
+  return *this = m1 * (*this);
 }
 
-inline double HepRotationZ::proper( double delta ) {
+inline double HepRotationZ::proper( double ddelta ) {
   // -PI < d <= PI
-  if ( std::fabs(delta) < CLHEP::pi ) {
-    return  delta;
+  if ( std::fabs(ddelta) < CLHEP::pi ) {
+    return  ddelta;
   } else {
-    register double x = delta / (CLHEP::twopi);
+    register double x = ddelta / (CLHEP::twopi);
     return  (CLHEP::twopi) * ( x + std::floor(.5-x) );
   }
 }  // proper()
