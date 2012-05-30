@@ -140,10 +140,7 @@ CML2SDWithVoxels::~CML2SDWithVoxels()
 	if(this->bSaveROG)
 	{
 		delete [] this->voxelsSum;
-		delete this->voxelsSum;
-
 		delete [] this->voxelsSingle;
-		delete this->voxelsSingle;
 	}
 }
 void CML2SDWithVoxels::resetVoxelsSingle()

@@ -98,7 +98,6 @@ bool CML2Ph_BoxInBox::Construct(G4VPhysicalVolume *PVWorld, G4int saving_in_ROG_
 
 	G4Box *boxInSide=new G4Box("BoxInSide", this->halfBoxInside_Thickness, this->halfBoxInside_Thickness, this->halfBoxInside_Thickness);
 	G4LogicalVolume *boxInSideLV=new G4LogicalVolume(boxInSide, boxInSideMaterial, "boxInSideLV");
-	G4VPhysicalVolume *boxInSidePV = 0;
 	boxInSidePV = new G4PVPlacement(0, centre+this->centreBoxInside,"BoxInsidePV", boxInSideLV,this->PVWorld,false,0,0);
 
 // layer PMMA
@@ -106,7 +105,6 @@ bool CML2Ph_BoxInBox::Construct(G4VPhysicalVolume *PVWorld, G4int saving_in_ROG_
 	G4double halfPMMA_Z_Thickness=0.5*cm;
 	G4Box *layer=new G4Box("layer", this->halfSize.getX(), this->halfSize.getY(), halfPMMA_Z_Thickness);
 	G4LogicalVolume *layerLV = new G4LogicalVolume(layer, layerMaterial, "layerLV");
-	G4VPhysicalVolume *layerPV = 0;
 	layerPV = new G4PVPlacement(0, centre+G4ThreeVector(0,0,-this->halfSize.getZ()+halfPMMA_Z_Thickness),"layerPV", layerLV,this->PVWorld,false,0,0);
 
 	std::cout <<"layerMaterial name "<<layerMaterial->GetName() <<" density " << layerMaterial->GetDensity()/(g/cm3) <<" g/cm3"<< G4endl;
@@ -121,7 +119,6 @@ bool CML2Ph_BoxInBox::Construct(G4VPhysicalVolume *PVWorld, G4int saving_in_ROG_
 
 	G4SubtractionSolid* OutMinusInBox = new G4SubtractionSolid("OutMinusInBox",	boxOutSide, boxInSide, 0, centreBoxInside-G4ThreeVector(0,0,5));
 	G4LogicalVolume *OutMinusInBoxLV = new G4LogicalVolume(OutMinusInBox, boxOutSideMaterial,"OutMinusInBoxLV",0,0,0);
-	G4VPhysicalVolume *OutMinusInBoxPV = 0;
 	OutMinusInBoxPV = new G4PVPlacement(0, centre+G4ThreeVector(0,0,-this->halfSize.getZ()+2*halfPMMA_Z_Thickness+halfBoxOutSide_Thickness),
 					"OutMinusInBoxPV",OutMinusInBoxLV,this->PVWorld,false,0);
 

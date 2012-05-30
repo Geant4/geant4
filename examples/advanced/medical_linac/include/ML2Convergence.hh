@@ -72,7 +72,7 @@ private:
 	G4String fileExperimentalData;
 
 	G4bool bCompareExp;
-	G4int maxNumberOfEvents, nGeometry;
+        G4int maxNumberOfEvents, nGeometry, nAccumulatedEvents;
 	int nMaxLoops, idCurrentLoop;
 };
 

@@ -78,10 +78,9 @@ CML2SDWithParticle::CML2SDWithParticle(G4int idType, G4int max_N_particles_in_Ph
 }
 CML2SDWithParticle::~CML2SDWithParticle()
 {
-	if (this->bSavePhaseSpace)
+        if (this->particles!=0)
 	{
 		delete [] this->particles;
-		delete this->particles;
 	}
 }
 void CML2SDWithParticle::saveHeaderParticles()

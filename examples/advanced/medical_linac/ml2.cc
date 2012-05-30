@@ -29,8 +29,8 @@
 //      with the support of Pablo Cirrone (LNS, INFN Catania Italy)
 //	with the contribute of Alessandro Occhigrossi*
 //
-// ^INAIL DIPIA - ex ISPESL  and INFN Roma, gruppo collegato SanitÃ , Italy
-// *Istituto Superiore di SanitÃ  and INFN Roma, gruppo collegato SanitÃ , Italy
+// ^INAIL DIPIA - ex ISPESL  and INFN Roma, gruppo collegato SanitÃ , Italy
+// *Istituto Superiore di SanitÃ  and INFN Roma, gruppo collegato SanitÃ , Italy
 //  Viale Regina Elena 299, 00161 Roma (Italy)
 //  tel (39) 06 49902246
 //  fax (39) 06 49387075
@@ -200,5 +200,7 @@ int main(int argc, char* argv[])
 		std::cout << "loop elapsed time [s] : "<< loopElapsedTime << '\n';
 		std::cout <<'\n';
 	}
+        delete runManager;
+        return 0;
 }
 

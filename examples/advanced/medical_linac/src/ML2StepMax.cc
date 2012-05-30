@@ -65,7 +65,8 @@ ML2StepMax::ML2StepMax(const G4String& processName)
 }
  
 /////////////////////////////////////////////////////////////////////////////
-ML2StepMax::~ML2StepMax() { delete pMess; }
+ML2StepMax::~ML2StepMax()
+{ delete pMess; }
 
 /////////////////////////////////////////////////////////////////////////////
 G4bool ML2StepMax::IsApplicable(const G4ParticleDefinition& particle) 

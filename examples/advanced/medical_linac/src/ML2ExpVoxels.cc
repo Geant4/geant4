@@ -70,9 +70,7 @@ CML2ExpVoxels::~CML2ExpVoxels(void)
 	delete [] this->startCurve;
 	delete [] this->stopCurve;
 	delete [] this->chi2Factor;
-	delete this->startCurve;
-	delete this->stopCurve;
-	delete this->chi2Factor;
+        delete [] this->nVoxelsgeometry;
 }
 G4bool CML2ExpVoxels::loadData(void)
 {
@@ -151,8 +149,17 @@ G4bool CML2ExpVoxels::loadData(void)
 	}
 	in.close();
 
+        this->nVoxelsgeometry=new G4int[(G4int) this->voxels.size()];
+        this->resetNEventsInVoxels();
+
 	return true;
 }
+void CML2ExpVoxels::resetNEventsInVoxels()
+{
+    for (int i=0; i<(int) this->voxels.size(); i++ )
+    {this->nVoxelsgeometry[i]=0;}
+}
+
 void CML2ExpVoxels::add(const G4Step* aStep)
 {
 	G4ThreeVector pos;
@@ -185,6 +192,7 @@ void CML2ExpVoxels::add(const G4Step* aStep)
 // calculate the dose 
 				dose=depEnergy/(voxelMass*this->nRecycling);
 				this->voxels[i].nEvents++;
+                                this->nVoxelsgeometry[i]++;
 				this->voxels[i].depEnergy+=dose;
 				this->voxels[i].depEnergy2+=dose*dose;
 				newEvent=true;
@@ -223,10 +231,10 @@ G4int CML2ExpVoxels::getMinNumberOfEvents()
 }
 G4int CML2ExpVoxels::getMaxNumberOfEvents()
 {
-	int n=voxels[0].nEvents;
+        int n=this->nVoxelsgeometry[0];
 	for (int i=0;i<(int)this->voxels.size();i++)
 	{ 
-		if (n<voxels[i].nEvents){n = voxels[i].nEvents;}
+                if (n<this->nVoxelsgeometry[i]){n = this->nVoxelsgeometry[i];}
 	}
 	return n;
 }
@@ -277,7 +285,7 @@ void CML2ExpVoxels::calculateNormalizedEd(std::vector <Svoxel> &voxels)
 	G4double cs, cc;
 	int n;
 	G4double d2, dd;
-	G4double v, appoo;
+        G4double v;
 	for (j=0;j<this->nCurves;j++)
 	{
 		cs=cc=0.;
@@ -296,9 +304,6 @@ void CML2ExpVoxels::calculateNormalizedEd(std::vector <Svoxel> &voxels)
 			d2=voxels[i].depEnergy2;
 			n=voxels[i].nEvents;
 			voxels[i].depEnergyNorm=chi2Factor[j]*voxels[i].depEnergy;
-			appoo=chi2Factor[j];
-			appoo=voxels[i].depEnergy;
-			appoo=voxels[i].depEnergyNorm;
 			v=n*d2-dd;
 			if (v<0.){v=0;}
 			if (n>1){voxels[i].depEnergyNormError=this->chi2Factor[j]*std::sqrt(v/(n-1));}

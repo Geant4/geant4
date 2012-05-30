@@ -67,7 +67,6 @@ bool CML2Ph_FullWater::Construct(G4VPhysicalVolume *PVWorld, G4int saving_in_ROG
 	G4Material *WATER=G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
 	G4Box *fullWaterPhantomBox = new G4Box("fullWaterPhantomBox", this->halfSize.getX(), this->halfSize.getY(), this->halfSize.getZ());
 	G4LogicalVolume *fullWaterPhantomLV = new G4LogicalVolume(fullWaterPhantomBox, WATER, "fullWaterPhantomLV", 0, 0, 0);
-	G4VPhysicalVolume *fullWaterPhantomPV=0;
 	fullWaterPhantomPV = new G4PVPlacement(0, this->centre, "fullWaterPhantomPV", fullWaterPhantomLV, this->PVWorld, false, 0);
 
 	// Region for cuts

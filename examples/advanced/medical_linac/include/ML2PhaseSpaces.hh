@@ -68,6 +68,9 @@ public:
 private:
 	CML2SDWithParticle *sensDetParticle;
 	G4int nParticles;
+
+        G4VPhysicalVolume *phVol;
+
 };
 
 

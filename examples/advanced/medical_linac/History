@@ -15,6 +15,19 @@ and keep track of all category-tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14.05.2012    L.Pandola, G.A.P.Cirrone, medical_linac-V09-05-04
+	      - Remove warning. Clean up unused files
+
+11.05.2012    G.Folger,G.A.P.Cirrone, medical_linac-V09-05-03
+              - Correction of all warnings for gcc4.6
+	      - add batch.mac to run without graphics output
+	       
+04.05.2012    G.A.P.Cirrone,    medical_linac-V09-05-02
+              - Correction to remove additional warnings
+
+04.05.2012    G.A.P.Cirrone,    medical_linac-V09-05-01
+              - Removed warnings related to the DICOM part
+
 08.12.2011    P. Mato,                 medical_linac-V09-05-00
 	      - Added CMakeLists.txt file 
 

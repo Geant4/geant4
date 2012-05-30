@@ -54,11 +54,6 @@
 #include "ML2Ph_BoxInBox.hh"
 
 
-
-// DICOM
-#include "DicomHandler.hh"
-#include "RegularDicomDetectorConstruction.hh"
-
 class CML2PhantomConstructionMessenger;
 
 
@@ -108,7 +103,6 @@ private:
 
 	CML2Ph_FullWater *Ph_fullWater;
 	CML2Ph_BoxInBox *Ph_BoxInBox;
-	DicomDetectorConstruction  *Ph_Dicom;
 	G4bool bOnlyVisio;
 };
 #endif

@@ -60,10 +60,6 @@ CML2PhantomConstruction::~CML2PhantomConstruction(void)
 	{
 		delete Ph_BoxInBox;
 	}
-	else  if (this->phantomName=="Dicom1")
-	{
-		delete Ph_Dicom;
-	}
 }
 
 CML2PhantomConstruction* CML2PhantomConstruction::instance = 0;
@@ -94,20 +90,6 @@ bool CML2PhantomConstruction::design(void)
 		this->Ph_BoxInBox=new CML2Ph_BoxInBox();bPhanExists=true;
 		this->halfPhantomInsideSize=this->Ph_BoxInBox->getHalfContainerSize();
 	}
-	else  if (this->phantomName=="Dicom1")
-	{
-		this->Ph_Dicom=new RegularDicomDetectorConstruction();bPhanExists=true;
-
-	// read the messenger data related to the phantom selected 
-		G4UImanager* UI = G4UImanager::GetUIpointer();
-		G4String command = "/control/execute ";
-		UI->ApplyCommand(command+this->PhantomFileName ); 
-
-		DicomHandler *dcmHandler=new DicomHandler();
-		dcmHandler->CheckFileFormat(this->Ph_Dicom->getDicomDirectory(), this->Ph_Dicom->getDataFileName(), this->Ph_Dicom->getCalibrationDensityFileName());
-
-		this->halfPhantomInsideSize=this->Ph_Dicom->getHalfContainerSize();
-	}
 
  	if (this->centre.size()<1)
  	{this->addNewCentre(G4ThreeVector(0.,0.,0.));}
@@ -119,8 +101,6 @@ G4int CML2PhantomConstruction::getTotalNumberOfEvents()
 	{return this->Ph_fullWater->getTotalNumberOfEvents();}
 	else if (this->phantomName="boxInBox")
 	{return this->Ph_BoxInBox->getTotalNumberOfEvents();}
-	else if (this->phantomName="Dicom1")
-	{return this->Ph_Dicom->getTotalNumberOfEvents();}
 	return 0;
 }
 
@@ -158,15 +138,6 @@ bool CML2PhantomConstruction::Construct(G4VPhysicalVolume *PVWorld, G4int saving
 			this->sensDet=this->Ph_BoxInBox->getSensDet();
 			this->createPhysicalVolumeNamesList(this->Ph_BoxInBox->getPhysicalVolume());
 			this->Ph_BoxInBox->writeInfo();
-		}
-		else  if (this->phantomName=="Dicom1")
-		{
-			std::cout << this->Ph_Dicom->getDicomDirectory()<<" "<< this->Ph_Dicom->getDataFileName()<<" "<< this->Ph_Dicom->getCalibrationDensityFileName()<<" "<< this->Ph_Dicom->getDicomColorMap() << G4endl;
-
-			this->Ph_Dicom->Construct(this->PVPhmWorld, saving_in_ROG_Voxels_every_events, seed, ROGOutFile, bSaveROG);
-			this->sensDet=this->Ph_Dicom->getSensDet();
-			this->createPhysicalVolumeNamesList(this->Ph_Dicom->getMatNames(), this->Ph_Dicom->getNmatNames());
-			this->Ph_Dicom->writeInfo();
 		}
 		// I create the data base volumeName-volumeID in the sensitive detector 
 
