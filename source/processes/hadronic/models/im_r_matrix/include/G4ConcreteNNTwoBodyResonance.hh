@@ -67,6 +67,9 @@ public:
   G4bool operator==(const G4ConcreteNNTwoBodyResonance &right) const;
   G4bool operator!=(const G4ConcreteNNTwoBodyResonance &right) const;
 
+private:
+  G4ConcreteNNTwoBodyResonance(const G4ConcreteNNTwoBodyResonance &);
+  G4ConcreteNNTwoBodyResonance & operator= (const G4ConcreteNNTwoBodyResonance &);
 
 protected:
 

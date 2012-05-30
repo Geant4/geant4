@@ -32,7 +32,14 @@
 
 G4CollisionNNToNDelta1905::G4CollisionNNToNDelta1905()
 { 
-  MakeNNToNDelta<Dm_1905PC, D0_1905PC, Dp_1905PC, Dpp_1905PC, G4ConcreteNNToNDeltaStar>::Make(this);
+	components=0;
+	MakeNNToNDelta<Dm_1905PC, D0_1905PC, Dp_1905PC, Dpp_1905PC, G4ConcreteNNToNDeltaStar>::Make(this);
+}
+
+G4CollisionNNToNDelta1905::~G4CollisionNNToNDelta1905()
+{
+	if (components) delete components;
+	components=0;
 }
 
 

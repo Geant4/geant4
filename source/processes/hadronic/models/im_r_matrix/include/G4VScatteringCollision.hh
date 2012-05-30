@@ -71,6 +71,10 @@ public:
     return theAngularDistribution;
   }
 
+private:
+  G4VScatteringCollision(const G4VScatteringCollision &);
+  G4VScatteringCollision & operator= (const G4VScatteringCollision &);
+
 protected:
 
   virtual const std::vector<const G4ParticleDefinition*> & GetOutgoingParticles() const = 0;

@@ -64,20 +64,16 @@ G4CollisionInitialState::G4CollisionInitialState(G4double time,
 // -new interface post pion:
 
 
-G4CollisionInitialState::G4CollisionInitialState(G4CollisionInitialState & right)
+G4CollisionInitialState::G4CollisionInitialState(const G4CollisionInitialState & right)
 {
-   if (this != &right)
-   {
      theCollisionTime = right.theCollisionTime;
      thePrimary       = right.thePrimary;
      theTarget        = right.theTarget;
      for (size_t i=0; i<right.theTs.size(); i++) theTs.push_back(right.theTs[i]);
      theFSGenerator   = right.theFSGenerator;
-   }
 }
 
-const G4CollisionInitialState & G4CollisionInitialState::
-      operator=(const G4CollisionInitialState& right)
+G4CollisionInitialState & G4CollisionInitialState::operator=(const G4CollisionInitialState& right)
 {
    if (this != &right)
    {

@@ -83,18 +83,11 @@ G4bool G4CollisionnpElastic::IsInCharge(const G4KineticTrack& trk1,
 
 const std::vector<G4String>& G4CollisionnpElastic::GetListOfColliders(G4int whichOne) const
 {
-  if (whichOne == 1) 
-    {
-      return colliders1;
-    }
-  else 
-    {
-      if (whichOne == 2) 
-	{ return colliders2; }
-      else 
-	{
-	  throw G4HadronicException(__FILE__, __LINE__, "G4CollisionnpElastic::GetListOfColliders - Argument outside valid range"); 
-	  return colliders1;
+	if (whichOne == 1)  {
+		return colliders1;
+	} else if (whichOne == 2) {
+		return colliders2;
 	}
-    }
+
+	throw G4HadronicException(__FILE__, __LINE__, "G4CollisionnpElastic::GetListOfColliders - Argument outside valid range");
 }

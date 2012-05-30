@@ -65,6 +65,9 @@ public:
 
   virtual G4String GetName() const { return "PN CollisionComposite"; }
 
+private:
+  G4CollisionPN(const G4CollisionPN &);
+  G4CollisionPN & operator= (const G4CollisionPN &);
 
 protected:
 

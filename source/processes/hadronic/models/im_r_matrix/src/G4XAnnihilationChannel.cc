@@ -34,7 +34,14 @@
 #include "G4PartialWidthTable.hh"
 
 G4XAnnihilationChannel::G4XAnnihilationChannel(): resonance(0)
-{ }
+{
+	// As a first approximation the model is assumed to be valid over
+	  // the entire energy range
+	  lowLimit = 0.;
+	  highLimit = DBL_MAX;
+	  widthTable = 0;
+	  partWidthTable = 0;
+}
 
 G4XAnnihilationChannel::G4XAnnihilationChannel(const G4ParticleDefinition* resDefinition,
 					       const G4ResonanceWidth& resWidths,
@@ -61,9 +68,9 @@ G4XAnnihilationChannel::G4XAnnihilationChannel(const G4ParticleDefinition* resDe
 
 G4XAnnihilationChannel::~G4XAnnihilationChannel()
 {
-  delete widthTable;
+  if (widthTable) delete widthTable;
   widthTable = 0;
-  delete partWidthTable;
+  if (partWidthTable) delete partWidthTable;
   partWidthTable = 0;
  }
 

@@ -40,7 +40,7 @@ public:
 
   G4CollisionNNToDeltaDelta1950();
 
-  virtual ~G4CollisionNNToDeltaDelta1950() {}
+  virtual ~G4CollisionNNToDeltaDelta1950();
 
 
   virtual G4String GetName() const { return "NN -> Delta Delta(1950) Collision"; }

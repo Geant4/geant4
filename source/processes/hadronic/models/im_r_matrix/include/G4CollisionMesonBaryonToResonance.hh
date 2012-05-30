@@ -49,6 +49,12 @@ public:
 
   G4CollisionMesonBaryonToResonance();
   virtual ~G4CollisionMesonBaryonToResonance(){};
+
+private:
+  G4CollisionMesonBaryonToResonance(const G4CollisionMesonBaryonToResonance &);
+  G4CollisionMesonBaryonToResonance & operator= (const G4CollisionMesonBaryonToResonance &);
+
+
   virtual G4String GetName() const { return "mN -> baryon Resonance Collision"; }  
   virtual G4double CrossSection(const G4KineticTrack& trk1, 
 				const G4KineticTrack& trk2) const

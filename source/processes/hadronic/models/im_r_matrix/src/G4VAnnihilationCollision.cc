@@ -42,11 +42,16 @@
 
 G4VAnnihilationCollision::G4VAnnihilationCollision()
 { 
+	theAngularDistribution=0;
 }
 
 
 G4VAnnihilationCollision::~G4VAnnihilationCollision()
-{ 
+{
+	if (theAngularDistribution) {
+		delete theAngularDistribution;
+		theAngularDistribution=0;
+	}
 }
 
 

@@ -50,6 +50,10 @@ public:
   virtual ~G4ConcreteNStarNToNN();  
   virtual G4String GetName() const { return "ConcreteNNToNNStar"; }
 
+private:
+  G4ConcreteNStarNToNN(const G4ConcreteNStarNToNN &);
+  G4ConcreteNStarNToNN & operator= (const G4ConcreteNStarNToNN &);
+
 private:  
 
   static G4XNNstarTable theSigmaTable;

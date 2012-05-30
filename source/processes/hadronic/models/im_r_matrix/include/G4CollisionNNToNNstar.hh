@@ -50,6 +50,9 @@ public:
 
   virtual G4String GetName() const { return "NN -> N N* Collision"; }
   
+private:
+  G4CollisionNNToNNstar(const G4CollisionNNToNNstar &);
+  G4CollisionNNToNNstar & operator= (const G4CollisionNNToNNstar &);
 
 protected:
 

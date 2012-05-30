@@ -62,6 +62,9 @@ public:
 
   virtual G4String GetName() const { return "Meson Baryon CollisionComposite"; }
 
+private:
+  G4CollisionMesonBaryon(const G4CollisionMesonBaryon &);
+  G4CollisionMesonBaryon & operator= (const G4CollisionMesonBaryon &);
 
 protected:
 

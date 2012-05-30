@@ -57,11 +57,11 @@ public:
 			  G4BCAction * aFSGenerator);
 // -new interface post pion:
 
-  G4CollisionInitialState(G4CollisionInitialState & right);
 
   ~G4CollisionInitialState() { }
 
-  const G4CollisionInitialState & operator=(const G4CollisionInitialState & right);
+  G4CollisionInitialState(const G4CollisionInitialState & right);
+  G4CollisionInitialState & operator=(const G4CollisionInitialState & right);
       
   int operator<(const G4CollisionInitialState & right) const
     {return (theCollisionTime < right.theCollisionTime);}

@@ -46,7 +46,11 @@ public:
   G4CollisionNNToDeltaDelta();
   virtual ~G4CollisionNNToDeltaDelta() {};
   virtual G4String GetName() const { return "NN -> Delta Delta Collision"; }
-  
+
+private:
+  G4CollisionNNToDeltaDelta(const G4CollisionNNToDeltaDelta &);
+  G4CollisionNNToDeltaDelta & operator= (const G4CollisionNNToDeltaDelta &);
+
 protected:
   
   std::vector<G4String> result;

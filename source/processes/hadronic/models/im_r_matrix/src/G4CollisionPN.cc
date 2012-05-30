@@ -54,7 +54,7 @@ G4CollisionPN::~G4CollisionPN()
 
 const std::vector<G4String>& G4CollisionPN::GetListOfColliders(G4int ) const
 {
-  throw G4HadronicException(__FILE__, __LINE__, "G4CollisionNN:: GetListOfColliders called");
+  throw G4HadronicException(__FILE__, __LINE__, "G4CollisionPN:: GetListOfColliders called");
   return colliders1;
 }
 

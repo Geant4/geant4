@@ -317,11 +317,8 @@ AbsorptionCrossSection(const G4KineticTrack & aT, const G4KineticTrack & bT)
   static G4double it [26] =
         {0,4,50,5.5,75,8,95,10,120,11.5,140,12,160,11.5,180,10,190,8,210,6,235,4,260,3,300,2};
 
-  if(t>it[24]) 
-  {
-    theCross = 0;
-  }
-  else 
+  G4double aCross(0);
+  if(t<=it[24])
   {
     G4int count = 0;
     while(t>it[count])count+=2;
@@ -329,9 +326,9 @@ AbsorptionCrossSection(const G4KineticTrack & aT, const G4KineticTrack & bT)
     G4double x2 = it[count];
     G4double y1 = it[count-1];
     G4double y2 = it[count+1];
-    theCross = y1+(y2-y1)/(x2-x1)*(t-x1);
+    aCross = y1+(y2-y1)/(x2-x1)*(t-x1);
     // G4cout << "Printing the absorption crosssection "
-    //        <<x1<< " "<<x2<<" "<<t<<" "<<y1<<" "<<y2<<" "<<0.5*theCross<<G4endl;
+    //        <<x1<< " "<<x2<<" "<<t<<" "<<y1<<" "<<y2<<" "<<0.5*aCross<<G4endl;
   }
-  return .5*theCross*millibarn;
+  return .5*aCross*millibarn;
 }

@@ -54,6 +54,11 @@ public:
   virtual G4double CrossSection(const G4KineticTrack& trk1, 
 				const G4KineticTrack& trk2) const;
 
+private:
+  G4CollisionNN(const G4CollisionNN &);
+  G4CollisionNN & operator= (const G4CollisionNN &);
+
+
 protected:
 
   virtual const G4VCrossSectionSource* GetCrossSectionSource() const { return crossSectionSource; }

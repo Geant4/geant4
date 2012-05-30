@@ -72,6 +72,9 @@ public:
   G4bool operator==(const G4ConcreteMesonBaryonToResonance &right) const;
   G4bool operator!=(const G4ConcreteMesonBaryonToResonance &right) const;
 
+private:
+  G4ConcreteMesonBaryonToResonance(const G4ConcreteMesonBaryonToResonance &);
+  G4ConcreteMesonBaryonToResonance & operator= (const G4ConcreteMesonBaryonToResonance &);
 
 protected:
 

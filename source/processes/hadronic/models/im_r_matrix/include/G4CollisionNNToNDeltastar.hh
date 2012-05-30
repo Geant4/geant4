@@ -48,6 +48,9 @@ public:
   virtual ~G4CollisionNNToNDeltastar(){};
   virtual G4String GetName() const { return "NN -> N Delta* Collision"; }
   
+private:
+  G4CollisionNNToNDeltastar(const G4CollisionNNToNDeltastar &);
+  G4CollisionNNToNDeltastar & operator= (const G4CollisionNNToNDeltastar &);
 
 protected:
 
