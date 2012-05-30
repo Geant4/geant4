@@ -40,7 +40,7 @@ class G4CollectionNameVector : public std::vector<G4String>
     G4CollectionNameVector() {;}
     virtual ~G4CollectionNameVector() {;}
 
-    void insert(G4String s) { push_back(s); }
+    void insert(G4String str) { push_back(str); }
 };
 
 #endif

@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 29, 2012, V.Ivanchenko (digits_hits-V09-05-03)
+May 24, 2012, G.Cosmo (digits_hits-V09-05-02)
+- Use 'const G4String&' as argument instead of plain copy of strings
+  in G4ScoringManager, G4VScoreWriter and G4VScoringMesh.
+- Fixed trivial cases of variable shadowing.
+
 Apr 17, 2012, T.Aso (digits_hits-V09-05-01)
 - G4VScoringMesh.cc : Avoid updating size and segment in command-line scoring
   and print warning when SetSize() or SetNumberOfSegments is called more then

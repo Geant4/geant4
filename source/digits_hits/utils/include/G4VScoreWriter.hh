@@ -47,9 +47,12 @@ public:
 
 public:
   // store a quantity into a file
-  virtual void DumpQuantityToFile(G4String & psName, G4String & fileName, G4String & option);
+  virtual void DumpQuantityToFile(const G4String& psName,
+                                  const G4String& fileName,
+                                  const G4String& option);
   // store all quantities into a file
-  virtual void DumpAllQuantitiesToFile(G4String & fileName, G4String & option);
+  virtual void DumpAllQuantitiesToFile(const G4String& fileName,
+                                       const G4String& option);
 
   // set a socring mesh to retrieve its quantities
   void SetScoringMesh(G4VScoringMesh * sm); 

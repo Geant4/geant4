@@ -42,7 +42,7 @@
 #include "G4VSDFilter.hh"
 #include "G4SDManager.hh"
 
-G4VScoringMesh::G4VScoringMesh(G4String wName)
+G4VScoringMesh::G4VScoringMesh(const G4String& wName)
   : fWorldName(wName),fCurrentPS(0),fConstructed(false),fActive(true),
     fRotationMatrix(0), fMFD(new G4MultiFunctionalDetector(wName)),
     verboseLevel(0),sizeIsSet(false),nMeshIsSet(false),
@@ -160,7 +160,7 @@ void G4VScoringMesh::SetFilter(G4VSDFilter * filter) {
   fCurrentPS->SetFilter(filter);
 }
 
-void G4VScoringMesh::SetCurrentPrimitiveScorer(G4String & name) {
+void G4VScoringMesh::SetCurrentPrimitiveScorer(const G4String & name) {
   fCurrentPS = GetPrimitiveScorer(name);
   if(fCurrentPS == 0) {
     G4cerr << "ERROR : G4VScoringMesh::SetCurrentPrimitiveScorer() : The primitive scorer <"
@@ -168,13 +168,13 @@ void G4VScoringMesh::SetCurrentPrimitiveScorer(G4String & name) {
   }
 }
 
-G4bool G4VScoringMesh::FindPrimitiveScorer(G4String & psname) {
+G4bool G4VScoringMesh::FindPrimitiveScorer(const G4String & psname) {
   std::map<G4String, G4THitsMap<G4double>* >::iterator itr = fMap.find(psname);;
   if(itr == fMap.end()) return false;
   return true;
 }
 
-G4String G4VScoringMesh::GetPSUnit(G4String & psname) {
+G4String G4VScoringMesh::GetPSUnit(const G4String & psname) {
   std::map<G4String, G4THitsMap<G4double>* >::iterator itr = fMap.find(psname);;
   if(itr == fMap.end()) {
     return G4String("");
@@ -205,7 +205,7 @@ void  G4VScoringMesh::SetCurrentPSUnit(const G4String& unit){
   }
 }
 
-G4double G4VScoringMesh::GetPSUnitValue(G4String & psname) {
+G4double G4VScoringMesh::GetPSUnitValue(const G4String & psname) {
   std::map<G4String, G4THitsMap<G4double>* >::iterator itr = fMap.find(psname);;
   if(itr == fMap.end()) {
     return 1.;
@@ -218,7 +218,7 @@ void G4VScoringMesh::GetDivisionAxisNames(G4String divisionAxisNames[3]) {
   for(int i = 0; i < 3; i++) divisionAxisNames[i] = fDivisionAxisNames[i];
 }
 
-G4VPrimitiveScorer * G4VScoringMesh::GetPrimitiveScorer(G4String & name) {
+G4VPrimitiveScorer * G4VScoringMesh::GetPrimitiveScorer(const G4String & name) {
   if(fMFD == 0) return 0;
 
   G4int nps = fMFD->GetNumberOfPrimitives();
@@ -284,7 +284,7 @@ void G4VScoringMesh::Dump() {
 }
 
 
-void G4VScoringMesh::DrawMesh(G4String psName,G4VScoreColorMap* colorMap,G4int axflg)
+void G4VScoringMesh::DrawMesh(const G4String& psName,G4VScoreColorMap* colorMap,G4int axflg)
 {
   fDrawPSName = psName;
   std::map<G4String, G4THitsMap<G4double>* >::const_iterator fMapItr = fMap.find(psName);
@@ -297,7 +297,7 @@ void G4VScoringMesh::DrawMesh(G4String psName,G4VScoreColorMap* colorMap,G4int a
   }
 }
 
-void G4VScoringMesh::DrawMesh(G4String psName,G4int idxPlane,G4int iColumn,G4VScoreColorMap* colorMap)
+void G4VScoringMesh::DrawMesh(const G4String& psName,G4int idxPlane,G4int iColumn,G4VScoreColorMap* colorMap)
 {
   fDrawPSName = psName;
   std::map<G4String, G4THitsMap<G4double>* >::const_iterator fMapItr = fMap.find(psName);
