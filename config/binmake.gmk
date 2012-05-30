@@ -440,7 +440,11 @@ $(G4TMPDIR)/exe/$(G4TARGET).d: $(G4TARGET).cc
 	[ -s $@ ] || rm -f $@
 ifneq ($(dependencies),)
 ifneq ($(MAKECMDGOALS),clean)
+ifneq ($(MAKECMDGOALS),setup)
+ifneq ($(MAKECMDGOALS),clean_setup)
 -include $(dependencies)
+endif
+endif
 endif
 endif
 
