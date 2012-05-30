@@ -46,41 +46,18 @@
 #include "G4IonTable.hh"
 
 
-G4VPartonStringModel::G4VPartonStringModel() : G4VHighEnergyGenerator(),
-stringFragmentationModel(0), theThis(0)
+G4VPartonStringModel::G4VPartonStringModel(const G4String& modelName)
+    : G4VHighEnergyGenerator(modelName),
+      stringFragmentationModel(0),
+      theThis(0)
 {
 //  Make shure Shotrylived partyicles are constructed.
 	G4ShortLivedConstructor ShortLived;
 	ShortLived.ConstructParticle();
 }
 
-G4VPartonStringModel::G4VPartonStringModel(const G4VPartonStringModel &) : G4VHighEnergyGenerator(), 
-stringFragmentationModel(0), theThis(0)
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4VPartonStringModel::copy ctor not accessible");
-}
-
-
 G4VPartonStringModel::~G4VPartonStringModel()
 {
-}
-
-
-const G4VPartonStringModel & G4VPartonStringModel::operator=(const G4VPartonStringModel &)
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4VPartonStringModel::operator= meant to not be accessable");
-  return *this;
-}
-
-
-int G4VPartonStringModel::operator==(const G4VPartonStringModel &) const
-{
- return 0;
-}
-
-int G4VPartonStringModel::operator!=(const G4VPartonStringModel &) const
-{
-  return 1;
 }
 
 G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus, 
@@ -189,3 +166,7 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
   return theResult;
 }
 
+void G4VPartonStringModel::ModelDescription(std::ostream& outFile) const
+{
+	outFile << GetModelName() << " has no description yet.\n";
+}
