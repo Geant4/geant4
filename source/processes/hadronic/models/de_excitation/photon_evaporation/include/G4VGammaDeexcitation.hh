@@ -103,6 +103,8 @@ public:
   inline G4ElectronOccupancy GetEO() { return _electronO; };    
   inline G4int GetVacantSN() {return _vSN;};
 
+  inline void SetTimeLimit(G4double value) { fTimeLimit = value; }
+
 protected:
 
   void Update();
@@ -112,14 +114,15 @@ protected:
 
 private:
 
-  G4Fragment* _nucleus;
-  G4ElectronOccupancy _electronO;
-  G4int _vSN;
-
   G4VGammaDeexcitation(const G4VGammaDeexcitation & right);
   const G4VGammaDeexcitation & operator = (const G4VGammaDeexcitation & right);
   G4bool operator == (const G4VGammaDeexcitation & right) const;
   G4bool operator != (const G4VGammaDeexcitation & right) const;
+
+  G4Fragment* _nucleus;
+  G4ElectronOccupancy _electronO;
+  G4int _vSN;
+  G4double fTimeLimit;
 
 };
 

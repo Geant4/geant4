@@ -105,9 +105,8 @@ void G4DiscreteGammaTransition::SelectGamma()
 	}
       
       // Small correction due to the fact that there are mismatches between 
-      // nominal level energies and emitted gamma energies
+      // nominal level energies and actular exitation energy
       
-      // 09.05.2010 VI : it is an error ?
       G4double eCorrection = _level.Energy() - _excitation;      
       _gammaEnergy = (_level.GammaEnergies())[iGamma] - eCorrection;
             
@@ -181,8 +180,8 @@ void G4DiscreteGammaTransition::SelectGamma()
 	    }
 	    //L.Desorgher 02/11/2011
 	    //Atomic shell information is available in Geant4 only up top Z=100
-	    //To extend the photo evaporation code to Z>100  the call to G4AtomicShells::GetBindingEnergy should
-	    // be forbidden for Z>100
+	    //To extend the photo evaporation code to Z>100  the call 
+	    // to G4AtomicShells::GetBindingEnergy should be forbidden for Z>100
 	    _bondE = 0.;
 	    if (_nucleusZ <=100)
 	    _bondE = G4AtomicShells::GetBindingEnergy(_nucleusZ, iShell);
@@ -210,36 +209,6 @@ void G4DiscreteGammaTransition::SelectGamma()
       _gammaCreationTime = 0.;      
       if(tau > 0.0) {  _gammaCreationTime = -tau*std::log(G4UniformRand()); }
 
-      //G4double tMin = 0;
-      //G4double tMax = 10.0 * tau;
-      //  Original code, not very efficent
-      //  G4int nBins = 200;
-      //G4double sampleArray[200];
-
-      //  for(G4int i = 0;i<nBins;i++)
-      //{
-      //  G4double t = tMin + ((tMax-tMin)/nBins)*i;
-      //  sampleArray[i] = (std::exp(-t/tau))/tau;
-      // }
-
-      //  G4RandGeneralTmp randGeneral(sampleArray, nBins);
-      //G4double random = randGeneral.shoot();
-      
-      //_gammaCreationTime = tMin + (tMax - tMin) * random;
-
-      // new code by Fan Lei
-      //
-      /*
-      if (tau != 0 ) 
-      {
-	  random = G4UniformRand() ;
-	  _gammaCreationTime = -(std::log(random*(std::exp(-tMax/tau) - std::exp(-tMin/tau)) + 
-					std::exp(-tMin/tau)));
-	  //  if(_verbose > 10)
-	  //    G4cout << "*---*---* G4DiscreteTransition: _gammaCreationTime = "
-	  //	   << _gammaCreationTime/second << G4endl;
-       } else { _gammaCreationTime=0.; }
-      */
     }
   return;
 }

@@ -74,8 +74,15 @@ G4PhotonEvaporation::G4PhotonEvaporation()
    _eOccupancy(0), _vShellNumber(-1),_gammaE(0.)
 { 
   _probAlgorithm = new G4E1Probability;
+
+  G4double timeLimit = DBL_MAX;
+  char* env = getenv("G4AddTimeLimitToPhotonEvaporation"); 
+  if(env) { timeLimit = 1.e-16*second; }
+
   G4DiscreteGammaDeexcitation* p = new G4DiscreteGammaDeexcitation();
   p->SetICM(false);
+  p->SetTimeLimit(timeLimit);
+
   _discrDeexcitation = p;
   _contDeexcitation = new G4ContinuumGammaDeexcitation;
   _nucleus = 0;
@@ -320,6 +327,11 @@ void G4PhotonEvaporation::SetICM(G4bool ic)
 void G4PhotonEvaporation::SetMaxHalfLife(G4double hl)
 {
  (static_cast <G4DiscreteGammaDeexcitation*> (_discrDeexcitation))->SetHL(hl);
+}
+
+void G4PhotonEvaporation::SetTimeLimit(G4double val)
+{
+ _discrDeexcitation->SetTimeLimit(val);
 }
 
 void G4PhotonEvaporation::RDMForced(G4bool fromRDM)

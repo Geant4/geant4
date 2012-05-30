@@ -77,6 +77,7 @@ G4VGammaDeexcitation::G4VGammaDeexcitation(): _transition(0), _verbose(0),
 					      _electronO (0), _vSN(-1)
 { 
   _nucleus = 0;
+  fTimeLimit = DBL_MAX;
 }
 
 G4VGammaDeexcitation::~G4VGammaDeexcitation()
@@ -149,9 +150,10 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
 	     << " ** left Eexc(MeV)= " << excitation
 	     << G4endl;
     }
+
+  G4double gammaTime = _transition->GetGammaCreationTime();
   
   // Do complete Lorentz computation 
-
   G4LorentzVector lv = _nucleus->GetMomentum();
   G4double Mass = _nucleus->GetGroundStateMass() + excitation;
 
@@ -170,28 +172,53 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
     lv += G4LorentzVector(0.0,0.0,0.0,CLHEP::electron_mass_c2 - dtransition->GetBondEnergy());
   }
 
-  // check consistency  
-  G4double eMass = gamma->GetPDGMass();
-
-  G4double Ecm       = lv.mag();
-  G4ThreeVector bst  = lv.boostVector();
-
-  G4double GammaEnergy = 0.5*((Ecm - Mass)*(Ecm + Mass) + eMass*eMass)/Ecm;
-  if(GammaEnergy <= eMass) { return 0; }
-
   G4double cosTheta = 1. - 2. * G4UniformRand(); 
   G4double sinTheta = std::sqrt(1. - cosTheta * cosTheta);
   G4double phi = twopi * G4UniformRand();
-  G4double mom = std::sqrt((GammaEnergy - eMass)*(GammaEnergy + eMass));
-  G4LorentzVector Gamma4P(mom * sinTheta * std::cos(phi),
-			  mom * sinTheta * std::sin(phi),
-			  mom * cosTheta,
-			  GammaEnergy);
-  Gamma4P.boost(bst);  
-  G4double gammaTime = _nucleus->GetCreationTime() + _transition->GetGammaCreationTime();
+
+  G4double eMass = gamma->GetPDGMass();
+  G4LorentzVector Gamma4P;
+
+  //G4cout << "Egamma= " << eGamma << " Mass= " << eMass << " t= " << gammaTime
+  //	 << " tlim= " << fTimeLimit << G4endl;
+
+  if(gammaTime > fTimeLimit) {
+    // shortcut for long lived levels
+    // not correct position of stopping ion gamma emission
+    // 4-momentum balance is breaked
+    G4double e = eGamma + eMass;
+    G4double mom = sqrt(eGamma*(eGamma + 2*eMass));
+    Gamma4P.set(mom * sinTheta * std::cos(phi),
+		mom * sinTheta * std::sin(phi),
+		mom * cosTheta, e); 
+    lv -= Gamma4P;
+    e = lv.e();
+    if(e < Mass) { e = Mass; }
+    mom = sqrt((e - Mass)*(e + Mass));
+    G4ThreeVector v = lv.vect().unit();
+    lv.set(mom*v.x(), mom*v.y(), mom*v.z(), e); 
+
+  } else {
+    // 2-body decay in rest frame
+    G4double Ecm       = lv.mag();
+    G4ThreeVector bst  = lv.boostVector();
+
+    G4double GammaEnergy = 0.5*((Ecm - Mass)*(Ecm + Mass) + eMass*eMass)/Ecm;
+    if(GammaEnergy <= eMass) { return 0; }
+
+    G4double mom = std::sqrt((GammaEnergy - eMass)*(GammaEnergy + eMass));
+    Gamma4P.set(mom * sinTheta * std::cos(phi),
+		mom * sinTheta * std::sin(phi),
+		mom * cosTheta,
+		GammaEnergy);
+
+    Gamma4P.boost(bst);  
+    lv -= Gamma4P;
+  }
 
   // modified primary fragment 
-  lv -= Gamma4P;
+  gammaTime += _nucleus->GetCreationTime();
+
   _nucleus->SetMomentum(lv);
   _nucleus->SetCreationTime(gammaTime);
 
@@ -202,7 +229,8 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
   G4Fragment * thePhoton = new G4Fragment(Gamma4P,gamma);
   thePhoton->SetCreationTime(gammaTime);
 
-  //G4cout << "G4VGammaDeexcitation::GenerateGamma left nucleus: " << _nucleus << G4endl;
+  //G4cout << "G4VGammaDeexcitation::GenerateGamma : " << thePhoton << G4endl;
+  //G4cout << "       Left nucleus: " << _nucleus << G4endl;
   return thePhoton;
 }
 

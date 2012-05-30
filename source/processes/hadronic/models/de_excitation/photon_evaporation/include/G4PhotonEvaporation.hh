@@ -98,7 +98,9 @@ public:
 
     void RDMForced (G4bool);
   
-    void SetMaxHalfLife(G4double) ;
+    void SetMaxHalfLife(G4double);
+
+    void SetTimeLimit(G4double value);
  
     void SetEOccupancy( G4ElectronOccupancy  eOccupancy) ;
 
