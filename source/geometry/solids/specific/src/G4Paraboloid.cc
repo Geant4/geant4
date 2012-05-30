@@ -768,7 +768,7 @@ G4double G4Paraboloid::DistanceToOut(const G4ThreeVector& p,
 
         G4double r = (p.z() > 0)? r2 : r1;
         G4double pDotV = p.dot(v);
-        G4double A = vRho2 * ( sqr(r) - sqr(p.x()) - sqr(p.y()));
+        A = vRho2 * ( sqr(r) - sqr(p.x()) - sqr(p.y()));
         intersection = (-pDotV + std::sqrt(A + sqr(pDotV))) / vRho2;
 
         if(calcNorm)

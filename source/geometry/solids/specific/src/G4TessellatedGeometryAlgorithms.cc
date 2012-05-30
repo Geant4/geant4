@@ -230,18 +230,18 @@ G4int G4TessellatedGeometryAlgorithms::IntersectLineAndLineSegment2D (
 //
 //
 // The line and line segment are not parallel.  Determine if the intersection
-// is in positive s where r = P0 + s*D0, and for 0<=t<=1 where r = p1 + t*D1.
+// is in positive q where r = P0 + q*D0, and for 0<=t<=1 where r = p1 + t*D1.
 //
-    G4double s = cross(E,D1)/kross;
-    if (s < 0)          return 0; // Intersection does not occur for positive s.
+    G4double q = cross(E,D1)/kross;
+    if (q < 0)          return 0; // Intersection does not occur for positive q.
     G4double t = cross(E,D0)/kross;
     if (t < 0 || t > 1) return 0; // Intersection does not occur on line-segment.
 //
 //
 // Intersection of lines is a single point on the forward-propagating line
-// defined by r = P0 + s*D0, and the line segment defined by  r = p1 + t*D1.
+// defined by r = P0 + q*D0, and the line segment defined by  r = p1 + t*D1.
 //
-    location[0] = P0 + s*D0;
+    location[0] = P0 + q*D0;
     return 1;
   }
 //

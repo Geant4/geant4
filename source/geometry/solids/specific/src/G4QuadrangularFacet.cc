@@ -268,14 +268,14 @@ G4double G4QuadrangularFacet::Distance (const G4ThreeVector &p,
 //
 G4double G4QuadrangularFacet::Extent (const G4ThreeVector axis)
 {
-  G4double s  = P0.dot(axis);
+  G4double q  = P0.dot(axis);
   for (G4ThreeVectorList::iterator it=P.begin(); it!=P.end(); it++)
   {
     G4double sp = it->dot(axis);
-    if (sp > s) s = sp;
+    if (sp > q) q = sp;
   }
 
-  return s;
+  return q;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

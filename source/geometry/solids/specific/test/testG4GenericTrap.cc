@@ -865,17 +865,17 @@ void testVolume(G4int testCase)
   G4VSolid* solid = createSolid(testCase, inside_points, surface_points, outside_points);
  
   if ( testCase == 0 ) {
-    assert( std::fabs(solid->GetCubicVolume() - 33138720.00020987168 ) < 1.0e+6 );
+    assert( std::fabs(solid->GetCubicVolume() - 33138720.00020987168 ) < 1.0e+7 );
   }
   if ( testCase == 1 ) {
-    assert( std::fabs(solid->GetCubicVolume() - 8408880.00005325303 ) < 1.0e+6 );
+    assert( std::fabs(solid->GetCubicVolume() - 8408880.00005325303 ) < 1.0e+7 );
   }
   if ( testCase == 2 ) {
-    assert( std::fabs(solid->GetCubicVolume() - 33191640.00021020696) < 1.0e+6 );
+    assert( std::fabs(solid->GetCubicVolume() - 33191640.00021020696) < 1.0e+7 );
   }
   
   if ( testCase == 3 ) {
-    assert( std::fabs(solid->GetCubicVolume() - 8743680.00005537 ) < 1.0e+6 );
+    assert( std::fabs(solid->GetCubicVolume() - 8743680.00005537 ) < 1.0e+7 );
   }
 
   delete solid;

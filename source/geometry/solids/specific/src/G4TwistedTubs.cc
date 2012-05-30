@@ -1096,25 +1096,25 @@ G4Polyhedron* G4TwistedTubs::CreatePolyhedron () const
   // number of meshes
   //
   G4double dA = std::max(fDPhi,fPhiTwist);
-  const G4int m =
+  const G4int k =
     G4int(G4Polyhedron::GetNumberOfRotationSteps() * dA / twopi) + 2;
   const G4int n =
     G4int(G4Polyhedron::GetNumberOfRotationSteps() * fPhiTwist / twopi) + 2;
 
-  const G4int nnodes = 4*(m-1)*(n-2) + 2*m*m ;
-  const G4int nfaces = 4*(m-1)*(n-1) + 2*(m-1)*(m-1) ;
+  const G4int nnodes = 4*(k-1)*(n-2) + 2*k*k ;
+  const G4int nfaces = 4*(k-1)*(n-1) + 2*(k-1)*(k-1) ;
 
   G4Polyhedron *ph=new G4Polyhedron;
   typedef G4double G4double3[3];
   typedef G4int G4int4[4];
   G4double3* xyz = new G4double3[nnodes];  // number of nodes 
   G4int4*  faces = new G4int4[nfaces] ;    // number of faces
-  fLowerEndcap->GetFacets(m,m,xyz,faces,0) ;
-  fUpperEndcap->GetFacets(m,m,xyz,faces,1) ;
-  fInnerHype->GetFacets(m,n,xyz,faces,2) ;
-  fFormerTwisted->GetFacets(m,n,xyz,faces,3) ;
-  fOuterHype->GetFacets(m,n,xyz,faces,4) ;
-  fLatterTwisted->GetFacets(m,n,xyz,faces,5) ;
+  fLowerEndcap->GetFacets(k,k,xyz,faces,0) ;
+  fUpperEndcap->GetFacets(k,k,xyz,faces,1) ;
+  fInnerHype->GetFacets(k,n,xyz,faces,2) ;
+  fFormerTwisted->GetFacets(k,n,xyz,faces,3) ;
+  fOuterHype->GetFacets(k,n,xyz,faces,4) ;
+  fLatterTwisted->GetFacets(k,n,xyz,faces,5) ;
 
   ph->createPolyhedron(nnodes,nfaces,xyz,faces);
 

@@ -247,14 +247,14 @@ G4ThreeVector G4TriangularFacet::Distance (const G4ThreeVector &p)
   G4double d       = E[0].dot(D);
   G4double e       = E[1].dot(D);
   G4double f       = D.mag2();
-  G4double s       = b*e - c*d;
+  G4double q       = b*e - c*d;
   G4double t       = b*d - a*e;
 
   sqrDist          = 0.0;
 
-  if (s+t <= det)
+  if (q+t <= det)
   {
-    if (s < 0.0)
+    if (q < 0.0)
     {
       if (t < 0.0)
       {
@@ -264,12 +264,12 @@ G4ThreeVector G4TriangularFacet::Distance (const G4ThreeVector &p)
         if (d < 0.0)
         {
           t = 0.0;
-          if (-d >= a) {s = 1.0; sqrDist = a + 2.0*d + f;}
-          else         {s = -d/a; sqrDist = d*s + f;}
+          if (-d >= a) {q = 1.0; sqrDist = a + 2.0*d + f;}
+          else         {q = -d/a; sqrDist = d*q + f;}
         }
         else
         {
-          s = 0.0;
+          q = 0.0;
           if       (e >= 0.0) {t = 0.0; sqrDist = f;}
           else if (-e >= c)   {t = 1.0; sqrDist = c + 2.0*e + f;}
           else                {t = -e/c; sqrDist = e*t + f;}
@@ -280,7 +280,7 @@ G4ThreeVector G4TriangularFacet::Distance (const G4ThreeVector &p)
    //
    // We are in region 3.
    //
-        s = 0.0;
+        q = 0.0;
         if      (e >= 0.0) {t = 0.0; sqrDist = f;}
         else if (-e >= c)  {t = 1.0; sqrDist = c + 2.0*e + f;}
         else               {t = -e/c; sqrDist = e*t + f;}
@@ -292,23 +292,23 @@ G4ThreeVector G4TriangularFacet::Distance (const G4ThreeVector &p)
    // We are in region 5.
    //
       t = 0.0;
-      if      (d >= 0.0) {s = 0.0; sqrDist = f;}
-      else if (-d >= a)  {s = 1.0; sqrDist = a + 2.0*d + f;}
-      else               {s = -d/a; sqrDist = d*s + f;}
+      if      (d >= 0.0) {q = 0.0; sqrDist = f;}
+      else if (-d >= a)  {q = 1.0; sqrDist = a + 2.0*d + f;}
+      else               {q = -d/a; sqrDist = d*q + f;}
     }
     else
     {
    //
    // We are in region 0.
    //
-      s       = s / det;
+      q       = q / det;
       t       = t / det;
-      sqrDist = s*(a*s + b*t + 2.0*d) + t*(b*s + c*t + 2.0*e) + f;
+      sqrDist = q*(a*q + b*t + 2.0*d) + t*(b*q + c*t + 2.0*e) + f;
     }
   }
   else
   {
-    if (s < 0.0)
+    if (q < 0.0)
     {
    //
    // We are in region 2.
@@ -319,17 +319,17 @@ G4ThreeVector G4TriangularFacet::Distance (const G4ThreeVector &p)
       {
         G4double numer = tmp1 - tmp0;
         G4double denom = a - 2.0*b + c;
-        if (numer >= denom) {s = 1.0; t = 0.0; sqrDist = a + 2.0*d + f;}
+        if (numer >= denom) {q = 1.0; t = 0.0; sqrDist = a + 2.0*d + f;}
         else
         {
-          s       = numer/denom;
-          t       = 1.0 - s;
-          sqrDist = s*(a*s + b*t +2.0*d) + t*(b*s + c*t + 2.0*e) + f;
+          q       = numer/denom;
+          t       = 1.0 - q;
+          sqrDist = q*(a*q + b*t +2.0*d) + t*(b*q + c*t + 2.0*e) + f;
         }
       }
       else
       {
-        s = 0.0;
+        q = 0.0;
         if      (tmp1 <= 0.0) {t = 1.0; sqrDist = c + 2.0*e + f;}
         else if (e >= 0.0)    {t = 0.0; sqrDist = f;}
         else                  {t = -e/c; sqrDist = e*t + f;}
@@ -346,20 +346,20 @@ G4ThreeVector G4TriangularFacet::Distance (const G4ThreeVector &p)
       {
         G4double numer = tmp1 - tmp0;
         G4double denom = a - 2.0*b + c;
-        if (numer >= denom) {t = 1.0; s = 0.0; sqrDist = c + 2.0*e + f;}
+        if (numer >= denom) {t = 1.0; q = 0.0; sqrDist = c + 2.0*e + f;}
         else
         {
           t       = numer/denom;
-          s       = 1.0 - t;
-          sqrDist = s*(a*s + b*t +2.0*d) + t*(b*s + c*t + 2.0*e) + f;
+          q       = 1.0 - t;
+          sqrDist = q*(a*q + b*t +2.0*d) + t*(b*q + c*t + 2.0*e) + f;
         }
       }
       else
       {
         t = 0.0;
-        if      (tmp1 <= 0.0) {s = 1.0; sqrDist = a + 2.0*d + f;}
-        else if (d >= 0.0)    {s = 0.0; sqrDist = f;}
-        else                  {s = -d/a; sqrDist = d*s + f;}
+        if      (tmp1 <= 0.0) {q = 1.0; sqrDist = a + 2.0*d + f;}
+        else if (d >= 0.0)    {q = 0.0; sqrDist = f;}
+        else                  {q = -d/a; sqrDist = d*q + f;}
       }
     }
     else
@@ -370,19 +370,19 @@ G4ThreeVector G4TriangularFacet::Distance (const G4ThreeVector &p)
       G4double numer = c + e - b - d;
       if (numer <= 0.0)
       {
-        s       = 0.0;
+        q       = 0.0;
         t       = 1.0;
         sqrDist = c + 2.0*e + f;
       }
       else
       {
         G4double denom = a - 2.0*b + c;
-        if (numer >= denom) {s = 1.0; t = 0.0; sqrDist = a + 2.0*d + f;}
+        if (numer >= denom) {q = 1.0; t = 0.0; sqrDist = a + 2.0*d + f;}
         else
         {
-          s       = numer/denom;
-          t       = 1.0 - s;
-          sqrDist = s*(a*s + b*t + 2.0*d) + t*(b*s + c*t + 2.0*e) + f;
+          q       = numer/denom;
+          t       = 1.0 - q;
+          sqrDist = q*(a*q + b*t + 2.0*d) + t*(b*q + c*t + 2.0*e) + f;
         }
       }
     }
@@ -395,16 +395,16 @@ G4ThreeVector G4TriangularFacet::Distance (const G4ThreeVector &p)
 // the magnitude-squared of the vector displacement.  (Note that I've also
 // tried to get around this problem by using the existing equations for
 //
-//    sqrDist = function(a,b,c,d,s,t)
+//    sqrDist = function(a,b,c,d,q,t)
 //
 // and use a more accurate addition process which minimises errors and
 // breakdown of cummutitivity [where (A+B)+C != A+(B+C)] but this still
 // doesn't work.
-// Calculation from u = D + s*E[0] + t*E[1] is less efficient, but appears
+// Calculation from u = D + q*E[0] + t*E[1] is less efficient, but appears
 // more robust.
 //
   if (sqrDist < 0.0) { sqrDist = 0.0; }
-  G4ThreeVector u = D + s*E[0] + t*E[1];
+  G4ThreeVector u = D + q*E[0] + t*E[1];
   G4double u2     = u.mag2();
 //
 //
@@ -511,13 +511,13 @@ G4double G4TriangularFacet::Distance (const G4ThreeVector &p,
 //
 G4double G4TriangularFacet::Extent (const G4ThreeVector axis)
 {
-  G4double s  = P0.dot(axis);
+  G4double q  = P0.dot(axis);
   G4double sp = P[0].dot(axis);
-  if (sp > s) s = sp;
+  if (sp > q) q = sp;
   sp = P[1].dot(axis);
-  if (sp > s) s = sp;
+  if (sp > q) q = sp;
 
-  return s;
+  return q;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -737,7 +737,7 @@ G4bool G4TriangularFacet::Intersect (const G4ThreeVector &p,
   G4ThreeVector DD = P0 - pp;
   G4double d       = E[0].dot(DD);
   G4double e       = E[1].dot(DD);
-  G4double s       = b*e - c*d;
+  G4double q       = b*e - c*d;
   G4double t       = b*d - a*e;
 
   G4double sTolerance = (std::fabs(b)+ std::fabs(c) + std::fabs(d)
@@ -747,8 +747,8 @@ G4bool G4TriangularFacet::Intersect (const G4ThreeVector &p,
   G4double detTolerance = (std::fabs(a)+ std::fabs(c)
                        + 2*std::fabs(b) ) *kCarTolerance;
 
-  //if (s < 0.0 || t < 0.0 || s+t > det)
-  if (s < -sTolerance || t < -tTolerance || ( s+t - det ) > detTolerance)
+  //if (q < 0.0 || t < 0.0 || q+t > det)
+  if (q < -sTolerance || t < -tTolerance || ( q+t - det ) > detTolerance)
   {
 //
 //

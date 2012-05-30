@@ -155,8 +155,8 @@ G4TessellatedSolid::~G4TessellatedSolid ()
 //
 // Define copy constructor.
 //
-G4TessellatedSolid::G4TessellatedSolid (const G4TessellatedSolid &s)
-  : G4VSolid(s), fpPolyhedron(0)
+G4TessellatedSolid::G4TessellatedSolid (const G4TessellatedSolid &sol)
+  : G4VSolid(sol), fpPolyhedron(0)
 {
   dirTolerance = 1.0E-14;
   
@@ -164,8 +164,8 @@ G4TessellatedSolid::G4TessellatedSolid (const G4TessellatedSolid &s)
   facets.clear();
   solidClosed  = false;
 
-  cubicVolume = s.cubicVolume;  
-  surfaceArea = s.surfaceArea;  
+  cubicVolume = sol.cubicVolume;  
+  surfaceArea = sol.surfaceArea;  
 
   xMinExtent =  kInfinity;
   xMaxExtent = -kInfinity;
@@ -176,7 +176,7 @@ G4TessellatedSolid::G4TessellatedSolid (const G4TessellatedSolid &s)
 
   SetRandomVectorSet();
 
-  CopyObjects (s);
+  CopyObjects (sol);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -184,22 +184,22 @@ G4TessellatedSolid::G4TessellatedSolid (const G4TessellatedSolid &s)
 // Define assignment operator.
 //
 const G4TessellatedSolid &
-G4TessellatedSolid::operator= (const G4TessellatedSolid &s)
+G4TessellatedSolid::operator= (const G4TessellatedSolid &sol)
 {
-  if (&s == this) { return *this; }
+  if (&sol == this) { return *this; }
   
   // Copy base class data
   //
-  G4VSolid::operator=(s);
+  G4VSolid::operator=(sol);
 
   // Copy data
   //
-  cubicVolume = s.cubicVolume;  
-  surfaceArea = s.surfaceArea;
+  cubicVolume = sol.cubicVolume;  
+  surfaceArea = sol.surfaceArea;
   fpPolyhedron = 0; 
 
   DeleteObjects ();
-  CopyObjects (s);
+  CopyObjects (sol);
   
   return *this;
 }
@@ -217,16 +217,16 @@ void G4TessellatedSolid::DeleteObjects ()
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-void G4TessellatedSolid::CopyObjects (const G4TessellatedSolid &s)
+void G4TessellatedSolid::CopyObjects (const G4TessellatedSolid &sol)
 {
-  size_t n = s.GetNumberOfFacets();
+  size_t n = sol.GetNumberOfFacets();
   for (size_t i=0; i<n; i++)
   {
-    G4VFacet *facetClone = (s.GetFacet(i))->GetClone();
+    G4VFacet *facetClone = (sol.GetFacet(i))->GetClone();
     AddFacet(facetClone);
   }
   
-  if ( s.GetSolidClosed() )  { SetSolidClosed(true); }
+  if ( sol.GetSolidClosed() )  { SetSolidClosed(true); }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -290,14 +290,14 @@ void G4TessellatedSolid::SetSolidClosed (const G4bool t)
     vertexList.clear();
     for (FacetCI it=facets.begin(); it!=facets.end(); it++)
     {
-      size_t m = vertexList.size();
+      size_t ls = vertexList.size();
       G4ThreeVector p(0.0,0.0,0.0);
       for (size_t i=0; i<(*it)->GetNumberOfVertices(); i++)
       {
         p            = (*it)->GetVertex(i);
         G4bool found = false;
         size_t j     = 0;
-        while (j < m && !found)
+        while (j < ls && !found)
         {
           G4ThreeVector q = vertexList[j];
           found = (q-p).mag() < 0.5*kCarTolerance;
@@ -493,7 +493,7 @@ EInside G4TessellatedSolid::Inside (const G4ThreeVector &p) const
   G4bool crossingI          = false;
   EInside location          = kOutside;
   EInside locationprime     = kOutside;
-  G4int m                   = 0;
+  G4int q                   = 0;
 
   for (G4int i=0; i<nTry; i++)
   {
@@ -509,8 +509,8 @@ EInside G4TessellatedSolid::Inside (const G4ThreeVector &p) const
 //
       distOut          = kInfinity;
       distIn           = kInfinity;
-      G4ThreeVector v  = randir[m];
-      m++;
+      G4ThreeVector v  = randir[q];
+      q++;
       FacetCI f = facets.begin();
       do
       {
@@ -533,10 +533,10 @@ EInside G4TessellatedSolid::Inside (const G4ThreeVector &p) const
           }
         }
       } while (!nearParallel && ++f!=facets.end());
-    } while (nearParallel && m!=maxTries);
+    } while (nearParallel && q!=maxTries);
 
 #ifdef G4VERBOSE
-    if (m == maxTries)
+    if (q == maxTries)
     {
 //
 //
