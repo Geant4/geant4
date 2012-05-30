@@ -50,6 +50,7 @@ public:
     virtual G4KineticTrackVector* FragmentString(const G4ExcitedString& theString);
 
 private:
+    // not implemented to protect/forbid use
     G4LundStringFragmentation(const G4LundStringFragmentation &right);
     const G4LundStringFragmentation & operator=(const G4LundStringFragmentation &right);
     int operator==(const G4LundStringFragmentation &right) const;

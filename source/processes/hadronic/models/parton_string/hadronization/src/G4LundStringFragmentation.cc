@@ -59,8 +59,9 @@ G4LundStringFragmentation::G4LundStringFragmentation()
 
 //    SetStringTensionParameter(0.25);                           
     SetStringTensionParameter(1.);                         
-
-    SetDiquarkBreakProbability(0.05); //(0.05);   // Vova Aug. 22
+    SetDiquarkSuppression(0.087);                 // Uzhi 18.05.2012
+    SetDiquarkBreakProbability(0.05); 
+    SetStrangenessSuppression(0.47);              // Uzhi 18.05.2012
 
 // For treating of small string decays
    for(G4int i=0; i<3; i++)
@@ -391,29 +392,6 @@ G4LundStringFragmentation::G4LundStringFragmentation()
 G4LundStringFragmentation::~G4LundStringFragmentation()
 {}
 
-// --------------------------------------------------------------
-G4LundStringFragmentation::G4LundStringFragmentation(const G4LundStringFragmentation &) : G4VLongitudinalStringDecay()
-{
-     throw G4HadronicException(__FILE__, __LINE__,"G4LundStringFragmentation::copy ctor not accessible");
-}
-
-// --------------------------------------------------------------
-
-const G4LundStringFragmentation & G4LundStringFragmentation::operator=(const G4LundStringFragmentation &)
-{
-	throw G4HadronicException(__FILE__, __LINE__, "G4LundStringFragmentation::operator= meant to not be accessable");
-	return *this;
-}
-
-int G4LundStringFragmentation::operator==(const G4LundStringFragmentation &right) const
-{
-	return !memcmp(this, &right, sizeof(G4LundStringFragmentation));
-}
-
-int G4LundStringFragmentation::operator!=(const G4LundStringFragmentation &right) const
-{
-	return memcmp(this, &right, sizeof(G4LundStringFragmentation));
-}
 
 //--------------------------------------------------------------------------------------
 void G4LundStringFragmentation::SetMinimalStringMass(const G4FragmentingString  * const string)  
