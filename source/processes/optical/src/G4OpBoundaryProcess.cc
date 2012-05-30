@@ -117,6 +117,11 @@ G4OpBoundaryProcess::G4OpBoundaryProcess(const G4String& processName,
         PropertyPointer1 = NULL;
         PropertyPointer2 = NULL;
 
+        Material1 = NULL;
+        Material2 = NULL;
+
+        OpticalSurface = NULL;
+
         kCarTolerance = G4GeometryTolerance::GetInstance()
                         ->GetSurfaceTolerance();
 
@@ -588,6 +593,8 @@ G4OpBoundaryProcess::GetFacetNormal(const G4ThreeVector& Momentum,
 
 	   G4double sigma_alpha = 0.0;
 	   if (OpticalSurface) sigma_alpha = OpticalSurface->GetSigmaAlpha();
+
+           if (sigma_alpha == 0.0) return FacetNormal = Normal;
 
 	   G4double f_max = std::min(1.0,4.*sigma_alpha);
 

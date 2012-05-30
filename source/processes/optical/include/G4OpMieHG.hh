@@ -50,26 +50,41 @@ class G4OpMieHG : public G4VDiscreteProcess
 
 public:
 
-  G4OpMieHG(const G4String& processName = "OpMieHG",
-                     G4ProcessType type = fOptical);
-  ~G4OpMieHG();
+        ////////////////////////////////
+        // Constructors and Destructor
+        ////////////////////////////////
 
-  ////////////
-  // Methods
-  ////////////
+        G4OpMieHG(const G4String& processName = "OpMieHG",
+                           G4ProcessType type = fOptical);
+        ~G4OpMieHG();
 
-  G4bool IsApplicable(const G4ParticleDefinition& aParticleType);  
-  // Returns true -> 'is applicable' only for an optical photon.
+private:
 
-  G4double GetMeanFreePath(const G4Track& aTrack,
-                           G4double,
-                           G4ForceCondition* );
-  // Return the mean free path of Mie scattering
+        G4OpMieHG(const G4OpMieHG &right);
 
-  G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
-                                  const G4Step&  aStep);
-  // This is the method implementing Mie scattering.
+        //////////////
+        // Operators
+        //////////////
 
+        G4OpMieHG& operator=(const G4OpMieHG &right);
+
+public:
+
+        ////////////
+        // Methods
+        ////////////
+
+        G4bool IsApplicable(const G4ParticleDefinition& aParticleType);  
+        // Returns true -> 'is applicable' only for an optical photon.
+
+        G4double GetMeanFreePath(const G4Track& aTrack,
+                                 G4double,
+                                 G4ForceCondition* );
+        // Return the mean free path of Mie scattering
+
+        G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
+                                        const G4Step&  aStep);
+        // This is the method implementing Mie scattering.
 };
   
 

@@ -129,17 +129,7 @@ enum G4OpBoundaryProcessStatus {  Undefined,
 class G4OpBoundaryProcess : public G4VDiscreteProcess
 {
 
-private:
-
-        //////////////
-        // Operators
-        //////////////
-
-        // G4OpBoundaryProcess& operator=(const G4OpBoundaryProcess &right);
-
-        // G4OpBoundaryProcess(const G4OpBoundaryProcess &right);
-
-public: // Without description
+public:
 
         ////////////////////////////////
         // Constructors and Destructor
@@ -147,14 +137,23 @@ public: // Without description
 
         G4OpBoundaryProcess(const G4String& processName = "OpBoundary",
                                      G4ProcessType type = fOptical);
-
 	~G4OpBoundaryProcess();
+
+private:
+
+        G4OpBoundaryProcess(const G4OpBoundaryProcess &right);
+
+        //////////////
+        // Operators
+        //////////////
+
+        G4OpBoundaryProcess& operator=(const G4OpBoundaryProcess &right);
+
+public:
 
 	////////////
 	// Methods
         ////////////
-
-public: // With description
 
         G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
         // Returns true -> 'is applicable' only for an optical photon.

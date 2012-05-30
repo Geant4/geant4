@@ -16,6 +16,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17th May 2012 P.Gumplinger (op-V09-05-02)
+              G4OpWLS.hh, G4OpRayleigh.hh, G4OpAbsorption.hh,
+              G4OpMieHG.hh and G4OpBoundaryProcess.hh -
+              more fixing Coverity warnings
+
+16th May 2012 P.Gumplinger (op-V09-05-01)
+              G4OpBoundaryProcess.cc - trying to fix Coverity warnings
+
 24th Jan 2012 P.Gumplinger (op-V09-05-00)
               G4OpBoundaryProcess.cc - solves Problem #1275
               call aParticleChange.ProposeVelocity(aTrack.GetVelocity())
