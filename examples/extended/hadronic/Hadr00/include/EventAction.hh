@@ -60,28 +60,35 @@ public: // Without description
   virtual void BeginOfEventAction(const G4Event*);
   virtual void   EndOfEventAction(const G4Event*);
 
-  void SetPrintModulo(G4int val)   {printModulo = val;};
-  void SetDrawFlag(G4String val)   {drawFlag = val;};
-  void AddEventToDebug(G4int val)  {selectedEvents.push_back(val);
-                                    nSelected++;};
+  inline void SetPrintModulo(G4int val);
+  inline void AddEventToDebug(G4int val);
 
 private:
 
   EventAction & operator=(const EventAction &right);
   EventAction(const EventAction&);
 
-  EventActionMessenger* eventMessenger;
+  EventActionMessenger* fEventMessenger;
   G4UImanager*          UI;
-  std::vector<G4int>    selectedEvents;
+  std::vector<G4int>    fSelectedEvents;
 
-  G4int        printModulo;
-  G4int        nSelected;
+  G4int        fPrintModulo;
+  G4int        fSelected;
 
-  // drawFlags = all, charged, neutral, charged+n
-  G4String     drawFlag;
-  G4bool       debugStarted;
+  G4bool       fDebugStarted;
 
 };
+
+inline void EventAction::SetPrintModulo(G4int val)   
+{ 
+  fPrintModulo = val;
+}
+ 
+inline void EventAction::AddEventToDebug(G4int val)  
+{ 
+  fSelectedEvents.push_back(val);
+  ++fSelected;
+}
 
 #endif
 

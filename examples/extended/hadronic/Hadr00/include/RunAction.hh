@@ -23,28 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: RunAction.hh,v 1.1 2008-07-07 16:37:26 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+
 #ifndef RunAction_h
 #define RunAction_h 1
 
-/////////////////////////////////////////////////////////////////////////
+// -------------------------------------------------------------
 //
-// EventAction
+//      GEANT4 Header file
+//      RunAction
 //
-// Created: 21.06.2008 V.Ivanchenko
-//
-// Modified:
-//
-////////////////////////////////////////////////////////////////////////
 // 
+// -------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4UserRunAction.hh"
+#include "G4Run.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-class Run;
 
 class RunAction : public G4UserRunAction
 {
@@ -53,16 +54,14 @@ public: // Without description
   RunAction();
   virtual ~RunAction();
 
+public: // With description
+ 
   virtual void BeginOfRunAction(const G4Run*);
   // In this method histogramms are booked
 
   virtual void EndOfRunAction(const G4Run*);
   // In this method bookHisto method is called in which histogramms are filled
 
-private:
-
-  RunAction & operator=(const RunAction &right);
-  RunAction(const RunAction&);
 };
 
 #endif

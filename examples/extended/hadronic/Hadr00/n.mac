@@ -15,7 +15,7 @@
 #
 /gun/particle  neutron
 /gun/energy 100. MeV
-/testhadr/HistoName  nC
+/testhadr/histo/fileName  nC
 /testhadr/particle   neutron
 /testhadr/verbose 1
 /process/eLoss/verbose 0

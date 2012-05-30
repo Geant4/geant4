@@ -15,6 +15,15 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23-05-12 V.Ivant (exhadr00-V09-05-03)
+- Histo - fixed n-tuples
+
+30-04-12 V.Ivant (exhadr00-V09-05-02)
+- Fixed compillation problem of previous tag
+
+26-04-12 V.Ivant (exhadr00-V09-05-01)
+- Migration to built-in Geant4 analysis and apply code convention
+
 20-03-12 V.Ivant (exhadr00-V09-05-00)
 - HistoManager - use material pointer in the interface to cross
    sections (avoid crash for Physics Lists with HP)

@@ -16,39 +16,38 @@
 #
 /gun/particle pi+
 /gun/energy 100. MeV
-/testhadr/HistoType  root
-/testhadr/HistoName  pi+al
+/testhadr/histo/fileName  pi+al
 /testhadr/particle   pi+
 /testhadr/verbose 0
 /process/eLoss/verbose 0
 /run/beamOn 0
 #
 /testhadr/targetElm  Pb
-/testhadr/HistoName  pi+pb
+/testhadr/histo/fileName  pi+pb
 /run/beamOn 0
 /testhadr/targetElm  Fe
-/testhadr/HistoName  pi+fe
+/testhadr/histo/fileName  pi+fe
 /run/beamOn 0
 /testhadr/targetElm  C
-/testhadr/HistoName  pi+c
+/testhadr/histo/fileName  pi+c
 /run/beamOn 0
 /testhadr/targetElm  H
-/testhadr/HistoName  pi+h
+/testhadr/histo/fileName  pi+h
 /run/beamOn 0
 #
 /testhadr/particle   pi-
-/testhadr/HistoName  pi-h
+/testhadr/histo/fileName  pi-h
 /run/beamOn 0
 /testhadr/targetElm  Pb
-/testhadr/HistoName  pi-pb
+/testhadr/histo/fileName  pi-pb
 /run/beamOn 0
 /testhadr/targetElm  Fe
-/testhadr/HistoName  pi-fe
+/testhadr/histo/fileName  pi-fe
 /run/beamOn 0
 /testhadr/targetElm  C
-/testhadr/HistoName  pi-c
+/testhadr/histo/fileName  pi-c
 /run/beamOn 0
 /testhadr/targetElm  Al
-/testhadr/HistoName  pi-al
+/testhadr/histo/fileName  pi-al
 /run/beamOn 0
 #

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id: PrimaryGeneratorAction.hh,v 1.1 2008-07-07 16:37:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -62,7 +61,7 @@ private:
   PrimaryGeneratorAction & operator=(const PrimaryGeneratorAction &right);
   PrimaryGeneratorAction(const PrimaryGeneratorAction&);
 
-  G4ParticleGun*   particleGun;
+  G4ParticleGun* fParticleGun;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
