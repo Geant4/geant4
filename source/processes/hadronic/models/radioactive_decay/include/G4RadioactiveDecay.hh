@@ -252,7 +252,7 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
     G4double GetMeanLifeTime(const G4Track& theTrack,
                              G4ForceCondition* condition);
 
-    G4double GetTaoTime(G4double,G4double);
+    G4double GetTaoTime(const G4double,const G4double);
 
     G4double GetDecayTime();
 

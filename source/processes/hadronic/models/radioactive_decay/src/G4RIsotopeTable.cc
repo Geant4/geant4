@@ -80,8 +80,10 @@ const G4double G4RIsotopeTable::levelTolerance = 2.0*keV;
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4RIsotopeTable::G4RIsotopeTable()
-{
-  ;
+{//
+ //Reset the list of user define data file
+ //
+ theUserRadioactiveDataFiles.clear();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -169,17 +171,24 @@ G4String G4RIsotopeTable::GetIsotopeName(G4int Z, G4int A, G4double E)
 
 G4double G4RIsotopeTable::GetMeanLifeTime(G4int Z, G4int A, G4double& aE)
 {
-  G4double lifetime = -1.0;
-  if (!getenv("G4RADIOACTIVEDATA")) {
-    G4cout << "Please setenv G4RADIOACTIVEDATA to point to the radioactive decay data files." << G4endl;
-    throw G4HadronicException(__FILE__, __LINE__, 
-			      "Please setenv G4RADIOACTIVEDATA to point to the radioactive decay data files.");
-  }
-  G4String dirName = getenv("G4RADIOACTIVEDATA");
 
-  std::ostringstream os;
-  os <<dirName <<"/z" <<Z <<".a" <<A ;
-  G4String file = os.str();
+  G4double lifetime = -1.0;
+
+
+  //Check if data have been provided by the user
+  G4String file= theUserRadioactiveDataFiles[1000*A+Z];
+  if (file ==""){
+	if (!getenv("G4RADIOACTIVEDATA")) {
+		G4cout << "Please setenv G4RADIOACTIVEDATA to point to the radioactive decay data files." << G4endl;
+		throw G4HadronicException(__FILE__, __LINE__,
+			      "Please setenv G4RADIOACTIVEDATA to point to the radioactive decay data files.");
+	}
+	G4String dirName = getenv("G4RADIOACTIVEDATA");
+
+	std::ostringstream os;
+	os <<dirName <<"/z" <<Z <<".a" <<A ;
+	file = os.str();
+  }
   std::ifstream DecaySchemeFile(file);
 
   if (!DecaySchemeFile) {
@@ -241,5 +250,22 @@ G4double G4RIsotopeTable::GetMeanLifeTime(G4int Z, G4int A, G4double& aE)
     G4cout <<lifetime << " for " << GetIsotopeName(Z, A, aE) <<G4endl;   
   }
   return lifetime;
+}
+////////////////////////////////////////////////////////////////////
+//
+void G4RIsotopeTable::AddUserDecayDataFile(G4int Z, G4int A,G4String filename)
+{ if (Z<1 || A<2) {
+	G4cout<<"Z and A not valid!"<<G4endl;
+  }
+  G4cout<<"in G4RIsotopeTable::AddUserDecayDataFile"<<std::endl;
+  G4cout<<filename<<std::endl;
+  std::ifstream DecaySchemeFile(filename);
+  if (DecaySchemeFile){
+	G4int ID_ion=A*1000+Z;
+	theUserRadioactiveDataFiles[ID_ion]=filename;
+  }
+  else {
+	G4cout<<"The file "<<filename<<" does not exist!"<<G4endl;
+  }
 }
 

@@ -67,23 +67,26 @@ G4int G4RadioactivityTable::Entries() const
 }
 ///////////////////////////////////////////////////////////////////////////////
 //
-void G4RadioactivityTable::AddIsotope(G4int Z, G4int A, G4double E, G4double rate)
+void G4RadioactivityTable::AddIsotope(G4int Z, G4int A, G4double E, G4double rate, G4double weight)
 {
-  std::map<G4ThreeVector,G4double>::iterator it;
+  G4double drate = rate*weight;
+  G4double derror = drate*rate;
+  G4TwoVector entry = G4TwoVector(drate,derror);
+  std::map<G4ThreeVector,G4TwoVector>::iterator it;
   it = fRadioactivity.find(G4ThreeVector(Z,A,E));
   if (it == fRadioactivity.end()) {
-    fRadioactivity[G4ThreeVector(Z,A,E)] = rate;
+    fRadioactivity[G4ThreeVector(Z,A,E)] = entry;
   } else {
-    fRadioactivity[G4ThreeVector(Z,A,E)] += rate;
+    fRadioactivity[G4ThreeVector(Z,A,E)] += entry;
   }
 }
 ///////////////////////////////////////////////////////////////////////////////
 //
-G4double G4RadioactivityTable::GetRate(G4int Z, G4int A, G4double E)
+G4TwoVector G4RadioactivityTable::GetRate(G4int Z, G4int A, G4double E)
 {
   if (fRadioactivity.end() == fRadioactivity.find(G4ThreeVector(Z,A,E))) {
     G4cout << G4ThreeVector(Z,A,E) << " is not in the map" << G4endl;
-    G4double rate = 0.;
+    G4TwoVector rate = G4TwoVector(0.,0.);
     return rate  ;
   }
   else
@@ -91,7 +94,7 @@ G4double G4RadioactivityTable::GetRate(G4int Z, G4int A, G4double E)
 }
 ///////////////////////////////////////////////////////////////////////////////
 //
-map<G4ThreeVector,G4double>*  G4RadioactivityTable::GetTheMap() 
+map<G4ThreeVector,G4TwoVector>*  G4RadioactivityTable::GetTheMap()
 {
   return &fRadioactivity;
 }

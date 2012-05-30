@@ -101,6 +101,12 @@ public:
   //   A: Atomic Mass
   //   E: Excitaion energy
 
+
+  void AddUserDecayDataFile(G4int Z, G4int A,G4String filename);
+  //Allow the user to replace the radio-active decay data provided in Geant4
+  // by its own data file for a given isotope
+
+
 private:
 
   G4String GetIsotopeName(G4int Z, G4int A, G4double E);
@@ -122,6 +128,10 @@ private:
   G4IsotopeList         fIsotopeList;
   G4IsotopeNameList     fIsotopeNameList;
   static const G4double levelTolerance;
+
+  //User define radioactive decay data files replacing some files in the G4RADECAY database
+  std::map<G4int, G4String> theUserRadioactiveDataFiles;
+
 };
 
 inline G4int G4RIsotopeTable::Entries() const

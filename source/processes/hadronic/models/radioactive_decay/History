@@ -13,6 +13,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+01 May 2012  Laurent Desorgher  radioactive_decay-V09-05-01
+---------------------------------------------------------
+- G4RIsotopeTable : Add the reading of user data  files  in order to take into account the life time
+  given in these files. (Bug reported by M. Maire)
+  G4RadioactiveDecay: Put the activation development of Fan Lei from trunk in the tagged release. 
 
 17 March 2012  Dennis Wright  radioactive_decay-V09-05-00
 ---------------------------------------------------------
