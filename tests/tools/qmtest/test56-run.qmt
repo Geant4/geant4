@@ -11,7 +11,9 @@
     <text/>
   </argument>
   <argument name="prerequisites">
-    <set/>
+    <set>
+      <tuple><text>test56-build</text><enumeral>PASS</enumeral></tuple>
+    </set>
   </argument>
   <argument name="stdin">
     <text/>
@@ -20,12 +22,10 @@
     <integer>0</integer>
   </argument>
   <argument name="environment">
-    <set>
-      <text>G4ANALYSIS_USEROOT=1</text>
-    </set>
+    <set/>
   </argument>
   <argument name="command">
-    <text>cd $G4INSTALL/tests/test73;make</text>
+    <text>cd $G4INSTALL/tests/test56;$G4BIN/$G4SYSTEM/test56 test56.in</text>
   </argument>
   <argument name="stderr">
     <text/>

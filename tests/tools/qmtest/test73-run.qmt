@@ -25,7 +25,7 @@
     <set/>
   </argument>
   <argument name="command">
-    <text>cd $G4INSTALL/tests/test73;$G4BIN/$G4SYSTEM/test73 run_all.mac FTFP_BERT</text>
+    <text>cd $G4INSTALL/tests/test73;$G4BIN/$G4SYSTEM/test73 run_all.mac local</text>
   </argument>
   <argument name="stderr">
     <text/>

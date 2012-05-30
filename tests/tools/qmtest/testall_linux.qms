@@ -4,6 +4,8 @@
   <argument name="suite_ids">
     <set>
       <text>tests_common</text>
+      <text>tests_using_ROOT</text>
+      
       <text>examples_nov_common</text>
       <text>examples_basic_common</text>
       <text>examples_adv_common</text>
