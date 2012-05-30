@@ -46,9 +46,6 @@ BeamTestRun::~BeamTestRun()
 void BeamTestRun::DumpData() const
 {
 	// Titles
-	G4cout << "Wow you did it :) ... Have a beer!" << G4endl;
-
-
 }
 
 

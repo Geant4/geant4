@@ -24,7 +24,7 @@ BeamTestPhysicsList::BeamTestPhysicsList()
 {
 	G4LossTableManager::Instance();
 
-	currentDefaultCut   = 5.0*mm;
+	currentDefaultCut   = 1.0*mm;
 	cutForGamma         = currentDefaultCut;
 	cutForElectron      = currentDefaultCut;
 	cutForPositron      = currentDefaultCut;
@@ -44,8 +44,7 @@ BeamTestPhysicsList::BeamTestPhysicsList()
 	//name = G4String("LHCb");
 	//name = G4String("LHCb_M");
 	//emPhysicsList = new PhysListEmStandard();
-	emPhysicsList = new MyEmPhysicsList(name);
-
+	emPhysicsList = new MyEmPhysicsList(name);/*G4EmStandardPhysics_option2();*/
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -263,8 +262,8 @@ void BeamTestPhysicsList::SetCuts()
 	SetCutValue(cutForGamma, "gamma");
 	SetCutValue(cutForElectron, "e-");
 	SetCutValue(cutForPositron, "e+");
-	SetCutValue(cutForMuon, "mu-");
-	SetCutValue(cutForPion, "pi-");
+	//SetCutValue(cutForMuon, "mu-");
+	//SetCutValue(cutForPion, "pi-");
 	DumpCutValuesTable();
 }
 

@@ -167,6 +167,7 @@ void PhysListEmStandard::ConstructProcess()
       if (newForElectrons) {
         std::cout << "new model for electrons" << std::endl;
       G4UrbanMscModel93* msc93 = new G4UrbanMscModel93();
+          msc93->SetSkin(10);//<<<<<<<<<<<<<<<<<<<<<<
       G4WentzelVIModel* wvi = new G4WentzelVIModel();
       msc93->SetHighEnergyLimit(mscEnergyLimit);
       wvi->SetLowEnergyLimit(mscEnergyLimit);

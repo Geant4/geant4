@@ -25,12 +25,14 @@
 #include "G4MuPairProduction.hh"
 #include "G4CoulombScattering.hh"
 #include "G4WentzelVIModel.hh"
+#include "G4UrbanMscModel93.hh"
 
 #include "G4hMultipleScattering.hh"
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
 #include "G4hBremsstrahlung.hh"
 #include "G4hPairProduction.hh"
+#include "G4MuMultipleScattering.hh"
 
 
 
@@ -71,8 +73,11 @@ void MyEmPhysicsList::ConstructProcess()
 		{
 			//electron
 			G4eMultipleScattering* msc = new G4eMultipleScattering();
-			//msc->AddEmModel(0, new G4UrbanMscModel93());
+            //msc->SetSkin(10);
+			msc->AddEmModel(0, new G4UrbanMscModel93());
 			msc->SetStepLimitType(fUseDistanceToBoundary);
+            msc->SetSkin(10);
+            G4cout<<"Using MSC model: G4UrbanMscModel93 with UseDistanceToBoundary steplimit type and Skin=10"<<G4endl;
 			pmanager->AddProcess(msc,                   -1, 1, 1);
 			G4eIonisation* eIoni = new G4eIonisation();
 			eIoni->SetStepFunction(0.2, 100*um);      
@@ -121,15 +126,16 @@ void MyEmPhysicsList::ConstructProcess()
 				particleName == "kaon-" ||
 				particleName == "proton" ) 
 		{
-
 			//pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
-			G4hMultipleScattering* msc = new G4hMultipleScattering();
+			G4MuMultipleScattering* msc = new G4MuMultipleScattering();
 			msc->AddEmModel(0, new G4WentzelVIModel());
 			msc->SetStepLimitType(fUseDistanceToBoundary);
+            msc->SetSkin(10);
+
 			pmanager->AddProcess(msc,                   -1, 1, 1);
 
 			G4hIonisation* hIoni = new G4hIonisation();
-			hIoni->SetStepFunction(0.2, 50*um);
+			//hIoni->SetStepFunction(0.2, 50*um);
 			pmanager->AddProcess(hIoni,                     -1, 2, 2);
 			pmanager->AddProcess(new G4hBremsstrahlung,     -1,-3, 3);
 			pmanager->AddProcess(new G4hPairProduction,     -1,-4, 4);

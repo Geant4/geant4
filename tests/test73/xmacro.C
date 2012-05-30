@@ -277,9 +277,8 @@ void xmacro(TString f1="thin.root", TString f2="thick.root", TString outf="resul
 	
 	cout<<"Student's t-test on intercept: "<<t0<<" p-value="<<pval0<<" (one-tailed)"<<endl;
 	cout<<"Student's t-test on slope: "<<t1<<" p-value="<<pval1<<" (one-tailed)"<<endl;
-	if ( pval0<0.025 ) cerr<<"Intercept failing t-test t="<<t0<<" p-val="<<pval0<<" (one tailed)"<<endl;
-	if ( pval1<0.025 ) cerr<<"Slope failing t-test t="<<t1<<" p-val="<<pval1<<" (one tailed)"<<endl;
-	
+	if ( pval0<0.025 ) cerr<<"Student's t-test failing for \"Intercept\" fitted value. Check file: "<<outf<<endl;
+	if ( pval1<0.025 ) cerr<<"Student's t-test failing for \"Slope\" fitted value. Check file: "<<outf<<endl;
 
 	char textL94[100],textS94[100],textL92[100],textS92[100];
    	sprintf(textL94," %g + %g /p_{T}", fitLx94->GetParameter(0), fitLx94->GetParameter(1));

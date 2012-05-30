@@ -11,6 +11,25 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+19 May 2012, Andrea Dotti (test73-V09-05-09)
+Fixing compilation warnings on GCC 4.6 for set but unused variables
+
+18 May 2012, Andrea Dotti (test73-V09-05-08)
+Adding test for FTFP_BERT_EMX and tuning MSC parameters
+
+11 May 2012, Andrea Dotti (test73-V09-05-07)
+Create correct dependence between tests.
+
+09 May 2012, Andrea Dotti (test73-V09-05-06)
+Create dependence between tests to allow simultaneus running
+
+02 May 2012, Andrea Dotti (test73-V09-05-05)
+Removing sporious debug message in CMakeLists.txt
+
+30 April 2012, Andrea Dotti (test73-V09-05-04)
+Adding second test test73-local and renaming first one to
+proto-test73-FTFP_BERT. 
+
 24 April 2012, Andrea Dotti (test73-V09-05-03)
 Bug fix: do not delete and create a new SD, to avoid unpredictable
 crashes, instead re-use same instance.

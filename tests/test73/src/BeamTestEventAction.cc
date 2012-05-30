@@ -57,7 +57,7 @@ void BeamTestEventAction::EndOfEventAction(const G4Event* event)
 	G4ThreeVector M;
 	G4ThreeVector P;
 	// Too many variables here but...ipT is the main one used for the inverseof the transverse momentum 
-	G4double En(0.),x(0.),y(0.),z(0.),px(0.),py(0.),pz(0.);//,ipT(0.);
+	//G4double En(0.),x(0.),y(0.),z(0.),px(0.),py(0.),pz(0.);//,ipT(0.);
 	
 	////////////////////////////////////////////////////////////////////////
 	// Output code of Silicon Monitor Hits
@@ -86,7 +86,7 @@ void BeamTestEventAction::EndOfEventAction(const G4Event* event)
                     if (aHit->GetChamberNumber() == numberOfChambers-1 &&
                         aHit->GetStepStatus() == fGeomBoundary ) 
                     {
-                        En = aHit->GetExitKineticEnergy()/MeV;
+                        /*En = aHit->GetExitKineticEnergy()/MeV;
                         P = aHit->GetExitMomentum()/mm ;
                         M = aHit->GetExitMomentumDirection();
                         x = P.x();
@@ -94,7 +94,7 @@ void BeamTestEventAction::EndOfEventAction(const G4Event* event)
                         z = P.z();
                         px = M.x();
                         py = M.y();
-                        pz = M.z();
+                        pz = M.z();*/
                 
                         E = aHit->GetExitPosition()/mm;
                         //G4cout << "Position of Particle Gun: " << I << G4endl;
