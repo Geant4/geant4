@@ -176,6 +176,7 @@ public:
   void Dump(G4int level);
   void DumpHtml();
   void PrintHtml(const G4ParticleDefinition*, std::ofstream&);
+  void PrintModelHtml(const G4HadronicInteraction * model) const;
 
   void SetVerbose(G4int val);
 

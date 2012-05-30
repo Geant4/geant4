@@ -592,6 +592,10 @@ void G4HadronicProcessStore::PrintHtml(const G4ParticleDefinition* theParticle,
               << " from " << (*jt).second->GetMinEnergy()/GeV
               << " GeV to " << (*jt).second->GetMaxEnergy()/GeV
               << " GeV </b></li>\n";
+
+      // Print ModelDescription, ignore that we overwrite files n-times.
+      PrintModelHtml((*jt).second);
+
     }
     outFile << "    </ul>\n";
     outFile << "  </li>\n";
@@ -608,7 +612,24 @@ void G4HadronicProcessStore::PrintHtml(const G4ParticleDefinition* theParticle,
   }
 }
 
+void G4HadronicProcessStore::PrintModelHtml(const G4HadronicInteraction * model) const
+{
+	G4String dirName(getenv("G4PhysListDocDir"));
+	G4String pathName = dirName + "/" + model->GetModelName() + ".html";
+	std::ofstream outModel;
+	outModel.open(pathName);
+	outModel << "<html>\n";
+	outModel << "<head>\n";
+	outModel << "<title>Description of " << model->GetModelName() << "</title>\n";
+	outModel << "</head>\n";
+	outModel << "<body>\n";
 
+	model->ModelDescription(outModel);
+
+	outModel << "</body>\n";
+	outModel << "</html>\n";
+
+}
 void G4HadronicProcessStore::Dump(G4int level)
 {
   if(level > 0) {

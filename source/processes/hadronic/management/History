@@ -14,6 +14,53 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+21 May 2012 Gunter Folger    (hadr-man-V09-05-06)
+---------------------------------------------------
+-  E/p conservation fails only if both absolute and relative fail;
+	effect: at low energies, compare to absolute limit, and at 
+	  high energies use relative limit; cross-over when limits cross,
+	  or at absolute = Ekinetic * relative
+   Charge, baryon non-conservation will make test fail as before.	  
+
+ 
+10 May 2012 Gunter Folger    (hadr-man-V09-05-05)
+---------------------------------------------------
+-  Improve format of E/p conservation check printout
+-  Ignore check for charge and baryon number conservation when limit is DBL_MAX
+
+
+09 May 2012 Gunter Folger    (hadr-man-V09-05-04)
+---------------------------------------------------
+-  Add check for momentum conservation, reusing limits for energy.
+-  Add check for charge and baryon number conservation
+
+05 May 2012 Vladimir Ivantchenko (hadr-man-V09-05-03)
+---------------------------------------------------
+- G4HadronicProcess - methods FillResult, CheckResult, 
+    CheckEnergyMomentumConservation and members theTotalResult,
+    epReportLevel, thePro moved to protected to be used 
+    in derived classes; removed unused ModelingState;
+    commented out obsolete method FillTotalResult;
+    change logic of definition of time for secondary particles
+    inside method FillResults
+
+28 April 2012 Mikhail Kosov  (hadr-man-V09-05-02)
+---------------------------------------------------
+-  Sorry, I tagged it for Gunter to compile stopping
+
+16 march 2012 Gunter Folger  - not yet tagged
+---------------------------------------------------
+-  Add printing of model desciptions to html files.
+
+16 March 2012 Gunter Folger    (hadr-man-V09-05-01)
+---------------------------------------------------
+-  add method for energy non-conservation check; in case of non-conservation, 
+    re-sample the interaction. Limits are set in G4HadronicInteraction, and
+    may be overridden for models; LEP and HEP override defaults, as these do not
+    return the nucleus in teh final state. 
+   A test mode aborting events and reporting info on stderr is available, and 
+   triggered by a negative value in G4Hadronic_epReportLevel env. variable. 
+
 22 January 2012  Dennis Wright (hadr-man-V09-05-00)
 ---------------------------------------------------
 - move isotope production infrastructure from process to model level;

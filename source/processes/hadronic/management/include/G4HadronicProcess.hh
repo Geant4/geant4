@@ -147,7 +147,6 @@ protected:
   inline G4Nucleus* GetTargetNucleusPointer() 
   { return &targetNucleus; }
   
-
 public:
 
   void BiasCrossSectionByFactor(G4double aScale);
@@ -185,18 +184,27 @@ protected:
   { theEnergyRangeManager = value; }
 
   // access to the chosen generator
-  inline G4HadronicInteraction *GetHadronicInteraction()
+  inline G4HadronicInteraction *GetHadronicInteraction() const
   { return theInteraction; }
     
   // access to the cross section data set
   inline G4double GetLastCrossSection() 
   { return theLastCrossSection; }
 
+  // fill result
+  void FillResult(G4HadFinalState * aR, const G4Track & aT);
+
+  // Check the result for catastrophic energy non-conservation
+  G4HadFinalState* CheckResult(const G4HadProjectile & thePro,
+			       const G4Nucleus &targetNucleus, 
+			       G4HadFinalState * result) const;
+
+  // Check 4-momentum balance
+  void CheckEnergyMomentumConservation(const G4Track&, const G4Nucleus&);
+
 private:
     
-  void FillTotalResult(G4HadFinalState * aR, const G4Track & aT);
-
-  void FillResult(G4HadFinalState * aR, const G4Track & aT);
+  //void FillTotalResult(G4HadFinalState * aR, const G4Track & aT);
 
   inline G4double GetTotalNumberOfInteractionLengthTraversed()
   { return theInitialNumberOfInteractionLength
@@ -206,8 +214,19 @@ private:
   G4double XBiasSurvivalProbability();
   G4double XBiasSecondaryWeight();
 
-  void CheckEnergyMomentumConservation(const G4Track&, const G4Nucleus&);
-    
+
+  // hide assignment operator as private 
+  G4HadronicProcess& operator=(const G4HadronicProcess &right);
+  G4HadronicProcess(const G4HadronicProcess& );
+
+protected:
+
+  G4HadProjectile thePro;
+
+  G4ParticleChange* theTotalResult; 
+
+  G4int epReportLevel;
+
 private:
     
   G4EnergyRangeManager theEnergyRangeManager;
@@ -215,29 +234,24 @@ private:
   G4HadronicInteraction* theInteraction;
 
   G4CrossSectionDataStore* theCrossSectionDataStore;
- 
+     
   G4Nucleus targetNucleus;
-    
-  G4HadronicProcess* dispatch;
 
   bool G4HadronicProcess_debug_flag;
 
   // Energy-momentum checking
-  G4int epReportLevel;
   std::pair<G4double, G4double> epCheckLevels;
   G4bool levelsSetByProcess;
 
   std::vector<G4VLeadingParticleBiasing *> theBias;
-
-  G4ParticleChange* theTotalResult; 
   
   G4double theInitialNumberOfInteractionLength;   
 
   G4double aScaleFactor;
-  G4bool xBiasOn;
+  G4bool   xBiasOn;
   G4double theLastCrossSection;
 
-  G4int ModelingState;
+  //G4int ModelingState;
 };
  
 #endif
