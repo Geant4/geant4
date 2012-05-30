@@ -150,7 +150,7 @@ void RunAction::EndOfRunAction(const G4Run* run)
     G4double eMin = fEmin[name], eMax = fEmax[name];    
          
     G4cout << "  " << std::setw(13) << name << ": " << std::setw(7) << count
-           << "  fEmean = " << std::setw(wid) << G4BestUnit(eMean, "Energy")
+           << "  Emean = " << std::setw(wid) << G4BestUnit(eMean, "Energy")
 	   << "\t( "  << G4BestUnit(eMin, "Energy")
 	   << " --> " << G4BestUnit(eMax, "Energy") 
            << ")" << G4endl;	   

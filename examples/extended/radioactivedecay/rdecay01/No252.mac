@@ -1,0 +1,14 @@
+# to read user's data file
+#
+/grdm/setPhotoEvaporationFile 102 252 UserData/UserEvapData_z102.a252
+#
+/gun/particle ion
+/gun/ion 102 252 0 3.2070e+02 
+#
+/rdecay01/fullChain true
+#
+###/tracking/verbose 2
+#   
+###/run/beamOn 1
+#
+/run/beamOn 100000

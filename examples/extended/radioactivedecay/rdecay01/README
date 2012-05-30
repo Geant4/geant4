@@ -45,6 +45,15 @@ $Id: README,v 1.2 2010-09-17 11:21:45 maire Exp $
  Total time of life of decay chain is plotted. Activity is computed.
  
  Few macros are given in example. Debug.mac is to be run in interactive mode. 
+ 
+ 4-a User data files
+ -------------------
+ Users can redefine RadioactiveDecay and PhotonEvaporation data, via commands:
+ /grdm/setRadioactiveDecayFile
+ /grdm/setPhotoEvaporationFile 
+ Examples of such files are given in subdirectory UserData. 
+ Formats are described in readme
+ Examples in macros Cf238.mac and No252.mac 
   	
  5- Visualisation
     -------------
