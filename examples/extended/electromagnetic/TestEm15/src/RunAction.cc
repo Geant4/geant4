@@ -151,7 +151,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
          << " +- "                    << G4BestUnit( rmsTPL,"Length")
          <<   "\n geomPathLength :\t" << G4BestUnit(MeanGPL,"Length")
          << " +- "                    << G4BestUnit( rmsGPL,"Length")
-         <<   "\n laterafLDisplac :\t" << G4BestUnit(MeanLaD,"Length")
+         <<   "\n lateralDisplac :\t" << G4BestUnit(MeanLaD,"Length")
          << " +- "                    << G4BestUnit( rmsLaD,"Length")
          <<   "\n Psi            :\t" << MeanPsi/mrad << " mrad"
 	 << " +- "                    << rmsPsi /mrad << " mrad"
