@@ -17,7 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-23rd Marche 2012  John Allison  (greps-V09-05-06)
+29th May 2012  John Allison  (greps-V09-05-08)
+- G4VisExtent: Cached radius and centre for improved efficiency.
+
+24th May 2012  Gabriele Cosmo  (greps-V09-05-07)
+- Fixed trivial cases of variable shadowing.
+
+23rd March 2012  John Allison  (greps-V09-05-06)
 - G4Colour: Added brown (colour of G4 logo).
 - G4Text: Added operator<<(...,G4Text::Layout).  This produces meaningful
   word instead of the integer value of the enumerator.

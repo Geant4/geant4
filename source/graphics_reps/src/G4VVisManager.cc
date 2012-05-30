@@ -42,7 +42,7 @@ G4VVisManager* G4VVisManager::GetConcreteInstance ()
   return fpConcreteInstance;
 }
 
-void G4VVisManager::SetConcreteInstance (G4VVisManager* m)
+void G4VVisManager::SetConcreteInstance (G4VVisManager* man)
 {
-  fpConcreteInstance = m;
+  fpConcreteInstance = man;
 }

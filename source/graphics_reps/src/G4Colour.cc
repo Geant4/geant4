@@ -32,8 +32,8 @@
 
 #include "G4Colour.hh"
 
-G4Colour::G4Colour (G4double r, G4double g, G4double b, G4double a):
-red (r), green (g), blue (b), alpha (a)
+G4Colour::G4Colour (G4double r, G4double gr, G4double b, G4double a):
+red (r), green (gr), blue (b), alpha (a)
 {
   if( red   > 1.0 ){red   = 1.0;} if( red   < 0.0 ){red   = 0.0;}
   if( green > 1.0 ){green = 1.0;} if( green < 0.0 ){green = 0.0;}

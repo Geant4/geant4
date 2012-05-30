@@ -717,7 +717,7 @@ int BooleanProcessor::testFaceVsPlane(ExtEdge & edge)
   if (s1 != ZERO_ZERO && s2 != ZERO_ZERO) {
     if (s1 == s2)                       return NON_PLANAR_FACE;
     int     iedge, i1 = 0, i2 = 0, ii[2];
-    double  d1 = 0., d2 = 0., dd ;
+    double  d1 = 0., d2 = 0., d3 = 0.;
     ii[0] = ie1; ii[1] = ie2;
     for (i=0; i<2; i++) {
       iedge = faces[iface].iedges[ii[i]];
@@ -737,7 +737,7 @@ int BooleanProcessor::testFaceVsPlane(ExtEdge & edge)
         iedge = edges[iedge].inext;
       }
       if (ii[i] == (int)nodes.size()) {
-        dd = d2-d1; d1 = d1/dd; d2 = d2/dd;
+        d3 = d2-d1; d1 = d1/d3; d2 = d2/d3;
         nodes.push_back(ExtNode(d2*nodes[i1].v-d1*nodes[i2].v, iedge));
       }  
     }

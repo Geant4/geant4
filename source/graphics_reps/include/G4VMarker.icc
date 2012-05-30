@@ -95,9 +95,9 @@ inline void G4VMarker::SetScreenDiameter (G4double sd) {
   fScreenSize = sd;
 }
 
-inline void G4VMarker::SetScreenRadius (G4double sr) {
+inline void G4VMarker::SetScreenRadius (G4double scr) {
   fWorldSize  = 0.;
-  fScreenSize = 2. * sr;
+  fScreenSize = 2. * scr;
 }
 
 inline void G4VMarker::SetFillStyle (G4VMarker::FillStyle style) {

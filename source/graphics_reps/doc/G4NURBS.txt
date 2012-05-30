@@ -1,0 +1,796 @@
+$Id: G4NURBS.txt,v 1.1 1999-01-07 16:09:09 gunter Exp $
+Olivier Crumeyrolle, 17th September 1996.
+
+		The G4NURBS C++ class library
+
+ 
+
+		Documentation (September 6  '96)
+
+	Introduction
+
+In GEANT4, there is a need for visual representations. Non Uniform Rational
+B-Spline (NURBS) are an interesting choice as they allow an exact
+representation of conics, unlike others, and have a lot of other convenient
+properties. Furthermore NURBS are an industry standard in  Computer Aided
+Design (CAD) systems.
+
+The goal of the G4NURBS C++ class library is to handle NURBS and to provide all
+the necessary methods so they can be succesfully used. 
+
+	Summary
+
+The G4NURBS class handles the data needed to define a NURBS surface,
+i.e. the orders of the NURBS used, the knot values and control points
+(explanations later).
+
+G4NURBS provides an important number of access functions to allow any graphics
+model (GM) to build its own NURBS. Although building the GM's NURBS with
+G4NURBS data (or vice versa) without any copy would be the more efficient way,
+different GMs typically use different data types, so copying and converting is
+required. For that G4NURBS provides some basic functions and also some more
+clever iterators  to simplify the user's task.
+
+Some GMs support NURBS (OpenGL, GPHIGS), but for others G4NURBS (will) provide
+some adaptative tessellation functionalities, if possible as a convertion to
+G4Polyhedron.
+
+For the GEANT4 geometry user, G4NURBSbox, G4NURBScylinder, G4NURBStube  and
+G4NURBStubesector are implemented.
+
+Some transformation functions (partial revolution in particular) will may be
+added so anyone can build almost any shape with G4NURBS, starting with some
+basic ones only, and without complication.
+
+If everything's OK, G4NURBS could become a nice kind of primitive.
+
+
+
+
+1 Building a G4NURBS instance
+
+This section is essentialy dedicated to the GEANT4 geometry user.
+
+1.1 From a G4VSolid to a G4NURBS
+
+1.1.1 Box
+
+It's straightforward with G4NURBSbox. If DX, DY and DZ are the half-lengths in
+the X, Y an Z directions respectively, then
+
+G4NURBSbox * pmybox = new
+G4NURBSbox(DX, DY, DZ); 
+
+builds the corresponding box. Thanks to polymorphism,
+this object is a G4NURBS like any other. 
+
+1.1.2 Tubs
+
+In Geant4, tubs are used to represent some sectors of tube, but also complete
+tubes and cylinders. To keep it simple, there is no G4NURBStubs, but a
+G4NURBScylinder, a G4NURBStube and a G4NURBStubesector.
+
+If RMIN, RMAX, DZ, PHI1, PHI2 are the tubs parameter (but with angles in
+radians), then something like
+
+G4NURBS * pmynurbs;
+if (RMIN != 0) 
+	{
+	if ( ((PHI2-PHI1) >= 2*M_PI) || (PHI2==PHI1) )
+		pmynurbs = new G4NURBStube(RMIN, RMAX, DZ);
+	   else pmynurbs = new G4NURBStubesector(RMIN, RMAX, DZ, PHI1, PHI2);
+	}
+   else
+	{
+	if ( ((PHI2-PHI1) >= 2*M_PI) || (PHI2==PHI1) )
+		pmynurbs = new G4NURBScylinder(RMAX, DZ);
+	   else pmynurbs = new G4NURBStubesector(0.0001, RMAX, DZ, PHI1, PHI2);
+	};
+
+builds the appropriate representation.
+NB: as you can see there is no sector of cylinder, so we use
+G4NURBStubesector(epsilon, RMAX, DZ, PHI1, PHI2).  A new release will include
+G4NURBScylindersector one day.
+
+Note that G4NURBStubesector can in principle handle all possible tubs, (it even
+works with negative radius, negative length and more than two pi angle
+difference) but the graphics system will probably have some difficulties with
+the NURBS, and even if it display it, you will not like the result.
+
+
+1.2 In general
+
+One cannot build directly a G4NURBS object. G4NURBS is just an handling class.
+To have some instance you must derive from G4NURBS and use one of its protected
+constructors in the child class constructor initialisation list. The first
+G4NURBS constructor is able to produce a regular knot vector for an unallocated
+knot vector, and the second one (the most easy to use) handles allocation of
+all arrays and is able to produce some "linear" but also some "circular" knots.
+G4NURBSbox and G4NURBStube use the second constructor and are good examples,
+G4NURBStubs is slightly more complex but shows how to build automatically  a
+G4NURBS. G4NURBScylinder is the only one written with the first constructor, to
+provide an example. See also comments in G4NURBS.hh. This file contains in the
+appendix an introduction to NURBS, with some examples. You should also follow
+the recommendations in 4.2.4.
+
+
+1.3 Future prospects
+
+A child class with an istream based constructor might be written which allows
+the user  to load a NURBS Definition file (as the << overload currently
+generates them).
+
+Some transformation functions might be written in order to help the user to
+build a NURBS from basic one. (suggestions are welcomed)
+
+A child class G4NURBStrimmingcurve might be written  with some methods to help
+the user to clip NURBS or to convert some boolean solids into clipped NURBS.
+However the GMs must support surface trimming, as it's not straightforward to
+generate an equivalent representation of a trimmed NURBS (set of smaller NURBS?)
+
+
+
+2 Access functions
+
+This section will more interest the graphics model devloper.
+
+2.1 Simple data access with and without a direction selector
+
+To retrieve NURBS simple data (order, various numbers) a first set of 
+access functions is provided :
+
+	G4int	getUorder() const;
+	G4int	getVorder() const;
+	G4int	getUnbrKnots() const;
+	G4int	getVnbrKnots() const;
+	G4int	getUnbrCtrlPts() const;	
+	G4int	getVnbrCtrlPts() const;
+
+where nbr is short for number and CtrlPts for control points. 
+
+Another set of functions using a _selector_ is provided :
+
+	G4int	getorder(t_direction in_dir) const;
+ 	G4int	getnbrKnots(t_direction in_dir) const;
+	G4int	getnbrCtrlPts(t_direction in_dir) const;	
+
+The selector in_dir is an enum in the G4NURBS scope. So the complete type name
+is G4NURBS::t_direction, and values are G4NURBS::U for retrieving data related
+to the U direction, and G4NURBS::V for V. 
+
+Hence the following calls are equivalent :
+	my_nurbs.getUorder();
+	my_nurbs.getorder(G4NURBS::U);
+The first may be slightly faster than the second (cf inline code in G4NURBS.hh).
+
+G4NURBS::NofD is also defined, where NofD means nbr of directions. One could use
+it for loops over direction. However as enum can't be incremented this is not as
+useful as it could be. See the << overload in G4NURBS.cc for a loop example  or
+the constuctors (still in G4NURBS.cc) for another example.
+
+
+2.2 Access to knots and control points
+
+2.2.1
+A set of basic functions is provided :
+
+	G4float		getfloatKnot(	t_direction in_dir, t_indKnot in_index) 
+			const;
+
+	G4double	getdoubleKnot(	t_direction in_dir, t_indKnot in_index) 
+			const;
+
+	t_floatCtrlPt*	getfloatCtrlPt(	t_indCtrlPt in_onedimindex) const;
+
+	t_floatCtrlPt*	getfloatCtrlPt(	t_inddCtrlPt in_Uindex, 
+					t_inddCtrlPt in_Vindex) const;
+
+	t_doubleCtrlPt*	getdoubleCtrlPt(t_indCtrlPts in_onedimindex) const;
+
+	t_doubleCtrlPt*	getdoubleCtrlPt(t_inddCtrlPts in_Uindex, 
+					t_inddCtrlPts in_Vindex) const;
+
+The first two return the in_index th knot (with a 0 based numbering, so the
+valid index goes from 0 to nbrKnots-1) after converting it into G4float or
+G4double. The four others functions do the same with control points. The
+returned pointer points to a brand-new allocated array with the control points
+coordinates. You can do what you want with it, it's _your_ copy, (non-const) and
+you must delete it after use. You can give the U and V index or a global index,
+as control points are stored U increasing first.
+
+The followings calls are equivalent :
+	// suppose a 5 by 9 net of ctrlpts (5 along U, 9 along V)
+	// and t_doubleCtrlPt * pmycp;
+	pmycp = my_nurbs.getdoubleCtrlPt(3, 2);
+	pmycp = my_nurbs.getdoubleCtrlPt(13);
+
+However, iterators are an easier way to retrieve the knots or the control points
+in a sequential manner.
+
+2.2.2 Iterators
+
+Iterators are defined in the G4NURBS public scope, to avoid the  global
+namespace pollution. Therefore their type name is G4NURBS::KnotsIterator,
+G4NURBS::CtrlPtsCoordsIterator, G4NURBS::CtrlPtsIterator.
+
+Iterators are independent objects : you can allocate as many iterators as you
+want and make them work concurrently. However the G4NURBS object MUST be defined
+when you use iterators over it (and must not be changed). See the Possible
+improvements 1.2 section for more about that. 
+
+2.2.2.1
+G4NURBS::KnotsIterator allows the user to retrieve knots one after the other. It
+can be used as follows to get all the knots along the U direction as 'float'
+numbers :
+
+// assuming mynurb is a G4NURBS, for instance G4NURBSbox my_nurb(1,2,3);
+G4float * my_array, * my_float_p;
+my_float_p = my_array = new float [my_nurb.getnbrKnots(G4NURBS::U)]; 
+G4NURBS::KnotsIterator  my_iterator(my_nurb, G4NURBS::U);
+while (my_iterator.pick(my_float_p++));
+
+Then my_array contain all the knots, and my_float_p point just after the array.
+The trick is that pick functions return false when they pick the last knot.
+
+The constructor has an optional third argument, in_startIndex, preseted to zero.
+It's possible to give another value to retrieve half of the knots for instance.
+(will probably be used in splitting) 
+
+
+
+
+2.2.2.2
+G4NURBS::CtrlPtsCoordsIterator is very similar to the Knots one.
+The control points are retrieved coordinate after coordinate,
+and, if we note i the index along U and j the one along V,
+control points P_i_j themselves are obtained i increasing first, j after :
+P_1_1, P_2_1, P_3_1, P_4_1, ....., P_1_2, P_2_2, P_3_2, P_4_2, ....
+
+G4float * my_array, * my_float_p;
+my_float_p = my_array = new float [my_nurb.gettotalnbrCtrlPts()
+					*G4NURBS::NofC*sizeof(float)];
+G4NURBS::CtrlPtsCoordsIterator my_iterator(my_nurb);
+while (my_iterator.pick(my_float_p++));
+
+
+2.2.2.3
+G4NURBS::CtrlPtsIterator work control point by control point, instead of control
+point coordinate by control point coordinate. Remember that control points are
+given U index increasing first, V after. The << overload in G4NURBS.cc contains
+an exemple where the retrieved control point is used immediately.
+
+
+2.2.3
+
+Some "complete-copy" functions are also provided.
+
+	G4float *	getfloatAllKnots(t_direction in_dir) const;
+	G4double *	getdoubleAllKnots(t_direction in_dir) const;
+	G4float *	getfloatAllCtrlPts() const;
+	G4double *	getdoubleAllCtrlPts() const;
+
+These functions return a pointer over a new array with all the knots or control
+points copied. You do not control the allocation nor the copy, but you own the
+result and will have to delete it.
+
+They are more easy to use than iterators, but less flexible.
+
+Be careful with these functions, as _you_ choose the type, whereas with
+iterators the compiler choose the good pick function for you. If G4double or
+G4float change, you must change your code, instead of just recompile it.
+
+
+
+
+3 Use in GEANT4
+
+3.1 NURBS manipulations
+
+The public interface of G4NURBS does not allow the user to modify a NURBS. The
+user is expected to create G4NURBS via child classes. Splitting, tesslation, or
+other non-conservative processes should occur only as a conversion to a child
+class, via its constructor, or eventually with a conversion operator.
+
+e.g.	
+
+G4NURBSashape mynurbs(foo, goo, hoo);
+
+// for splitting
+G4NURBSsplit mypieceofnurbs(mynurbs, splitdirection, splitpointvalue);
+
+// for tessellation, if
+// class G4PolyhedronedNURBS : public G4Polyhedron
+// has a constructor G4PolyhedronedNURBS(const G4NURBS &, G4Float tolerance)
+G4PolyhedronedNURBS mytessellatednurbs(mynurbs, thetolerance);
+
+// (a multiple inheritance could be used to have a "dual-face"
+// object Polyhedron/NURBS, with the advantage of keeping
+// a NURBS and its tessellation together, and the disadvantge
+// of duplicating the original NURBS into this child)
+
+The resulting instance is not necessary constant, G4NURBSsplit could provide
+some sub-splitting and refinement methods that act on itself.
+
+
+3.2 Copying policy
+
+A copy constructor is provided, but in the private part. A warning message
+( "WARNING: G4NURBS::G4NURBS(const G4NURBS &) used" )
+is printed on cerr each time the copy constructor is called.
+
+As long as there is no sophisticated memory management scheme that reduce
+useless duplications, copying should be avoided. We have already to duplicate
+data for the GM, once is enough. 
+
+
+
+4	Possible internal improvements that could have consequences
+
+4.1 Memory management :
+
+4.1.1   G4NURBS use the minimal memory management scheme possible. Control
+        points, knots, are stored in basic arrays. NURBS characteristics are
+        stored in simple structure. All those internal data could be handled in
+        protected classes with ad hoc constructors, which would be more
+        reliable. The G4NURBS copy constructor would be more elegant. However
+        performance may decrease. This point is related to typing. See 2.1.
+
+4.1.2   Some reference counting facilities should be added for internal arrays
+        so that iterators could correctly work after a G4NURBS is
+        deleted/changed. This point could be solved with 1.1 in a elegant way.
+        We should at least warn the user when a nurbs is deleted before the
+        corresponding iterators. However if we want to do the things in a good
+        way references counters must be associated to arrays. Once again 1.1 is
+        the solution for that. To put references as members, we need the future
+        "mutable" keyword planed by the ANSI C++ committee, or the counting will
+        be uncompatible with const instances.
+
+4.2 Internal data type
+
+4.2.1   Knots and control points types are just typedefs, idem for index types.
+        They could be strong types (i.e. classes), but performance costs will
+        may be significant.
+
+4.2.2   enum type are useful to enforce the user to do good things (like using
+        G4NURBS::U instead of 0), but are not really convenient for loops. Some
+        internal alias should be defined to allow some more easy loops. [this
+        concern the geom user only if he/she writes some G4NURBS children]
+
+
+
+4.2.3   As the user doesn't know the internal data type, it could be possible
+        for G4NURBS to adapt itself to the GM currently used, so this GM could
+        use directly the G4NURBS data. This adaptation concern the control
+        points storage order and knot values (some fast algorithms exists for
+        knots which differe of 0 or 1 only). It would be necessary to write some
+        inline functions for control points initialization that spare the child
+        class writer to know the storage order, see 4.2.4. But once again, what
+        about performance ? The G4NURBS constructors and the initializations
+        functions used in child constructors would have to change their target
+        type, and thus we need a very clever scheme to be compatible with the
+        use of different GMs in the same time.
+
+4.2.4   For the momment the control points storage order is publicly known, that
+        could change, with a formal class level between G4NURBS and
+        G4NURBSashape children. Calls like CP(mpCtrlPts[..], .... will have to
+        be rewritten; a tool will may be provided to automaticaly do that. Use
+        if possible explicit U & V index values like
+
+        CP(mpCtrlPts[to1d(U_index, V_index)], .......
+
+        [this concerns the geometry user only if he/she writes some
+        G4NURBSashape].
+
+
+4.3 External interfacing types
+
+4.3.1   For the moment G4int, G4double, G4float, are just alias for int, double,
+        float. These G4 types are used in the G4NURBS interface (the public part
+        of G4NURBS). If their definitions are changed, the significance of the
+        access functions will change too, user should take care about that when
+        using access functions with some others types (e.g. GLfloat )  In a more
+        general way this type interfacing problem will have to be solved at a
+        general level as different  GS are used. For the moment G4Float is used
+        internally and interfaced to G4float and G4double.
+
+4.3.2   Child constructors take all their arguments as G4double. This may have
+        to change, depending on the exact work that G4VSolid children have to
+        do. Length arguments should be unsigned (but unsigned G4double is
+        illegal), and angles in radians should have a different type from those
+        in degrees.
+
+
+4.4 Names
+
+4.4.1   G4NURBS could become G4VNurbs, and G4NURBSbox could become G4NurbsBox.
+
+
+5	Prospects
+	
+
+5.1 For NURBS in general
+
+NURBS are likely to become more and more widely supported by software, but also
+by hardware. Nvidia NV1 PCI card for PCs already accelerate quadratic curves
+(and may be more) . The new SPARCstation 20TurboZX provide dynamic tessellation
+for NURBS in firmware. 
+
+5.2  Births
+
+G4NURBS will probably have others children in the future, in particular for
+splitting. However the object oriented programming allows anyone to create some
+child classes. Don't hesitate to enlarge the family.
+
+
+
+
+
+
+
+Appendix 
+
+	Non Uniform Rational B-Spline (NURBS).
+
+1 About Representation
+
+A curve or a surface are mathematicaly a set of points. However the number of
+points is infinite, what is not convenient at all. We need a more operational
+way for describing the set of points. Here we use a parametric representation :
+the curve is described by a function of 1 real parameter t : C(t), the surface
+with two parameters called u and v : S(u,v). As the parameter(s) go(es) from a
+minimal value to a maximal one, the function describes the curve/surface. Now we
+need a representation for this function itself. To achieve this, the function is
+projected over a set of basis functions. Of course the kind of functions we can
+represent in this way is determined by the kind of basis functions used. We will
+work with real-valued polynomial function, as they are easy to represent, can
+approximate any continuous function as well as we want and are convenient in
+general. Once basis functions are chosen, the kind of 'coordinates' that a
+function will have over such a basis is determined : the function describe a set
+of point whereas basis functions chosen are real-valued, so the 'coordinates'
+are necessary some points, called control points, noted P_i (or P_{i,j}),
+represented by their position-vector, and multipied by the basis functions. 
+
+A curve will then be expressed as C(t) = sum(i = 1, n) { P_i * B_i(t) }
+where B_i is the ith basis functions.
+A surface could be expressed as S(u,v) = sum(i = 1, n) { P_i * B_i(u,v) },
+but we will use a more easy scheme, explained in 2.5
+
+An interesting point is that if T is a linear transformation, 
+T[C(t)] = sum(i = 1, n) { T[P_i] * B_i(t) }
+
+2 B-Spline curves and surfaces
+
+2.1 B-Spline basis functions
+
+They are defined as following : 
+
+B_{i,1} = 1 if t_i <= t <= t_{i+1}, 0 otherwise
+
+B_{i,k}(t) =	((t-t_i)/(t_{i+k-1}-t_i))*B_{i,k-1}(t) 
+		+
+		((t_{i+k}-t)/(t_{i+k}-t_{i+1}))*B_{i+1,k-1}
+i goes from 1 to n, the number of basis functions.
+k is the order of the B-Spline.
+(t_i)_{1<=i<=n+k} a sequence of non-decreasing values called knots that defines
+the B_{i,k}, and is globaly designed as the knot vector.
+The B-Spline is said to be uniform if t_{i+1}-t_i = d > 0 for any i, non-uniform
+(NU) otherwise, with the convention 0/0 = 0.
+
+We concentrate first on uniform B-Splines (UBS)
+
+
+2.2 Some UBS properties 
+
+The recursive relation defines B_{i,k} as a linear interpolation between
+B_{i,k-1}  and B_{i+1,k-1}. Thus B_{i,k} is a polynomial of degree k-1,
+strictly positive in [t_i, t_{i+k}], nul elsewhere. For a given t / t_i <= t <
+t_{i+1}, only B_{i-k+1,k} to B_{i,k} are non-nul. The (endknot-startknot)
+divisors in the relation imply that sum(i = 1,n){B_{i,k}(t)} = 1.
+
+[picture of UBS basis functions from k=1 to 2 or 3]
+
+
+2.3 Change of basis : the Oslo algorithm
+
+It is possible to increase the number of basis functions used.
+
+If (t_i)_{1<=i<=n+k} is the old knot vector and (t'_i)_{1<=i<=n'+k} the new
+one, then P'_i = sum (j = 1, n) { alpha_{i,j,k} * P_j }
+
+where alpha_{i,j,k} is given by a recursive relations similar to B_i,k ones :
+
+alpha_{i,j,k} =   ((t'_{j+k-1} - t_i) / (t_{i+k-1} - t_i)) * alpha_{i,j,k-1}
+          + ((t_{i+k} - t'_{j+k-1}) / (t_{i+k} - t_{i+1})) * alpha_{i+1,j,k-1}
+
+The Oslo algorithm is not used in the G4NURBS class library at the moment,
+but it will when splitting functionalities will be added.
+
+2.4 UBS curves
+
+Once we have defined the basis function, a curve is expressed as following :
+
+C(t) = sum(i = 1, n) { P_i * B_{i,k}(t) }
+
+where P_i are the control points and k the order.
+(This maps [t_min, t_max] to the curve.)
+
+If we note C^n the class of functions that are continuous up to the nth
+derivative (included), then for t_i < t < t_{i+1}, C(t) is C^infinite, and at t
+= t_i, C(t) is C^{k-2}.
+
+[pictures ?]
+
+If a control points is repeated k-1 time or more, the curve goes through it.
+
+
+2.5 UBS surfaces
+
+Surfaces are expressed as the tensor product of two curves :
+
+S(u,v) = sum(i=1,n) sum(j=1,m) { P_{i,j}*B_{i,k}(u)*B_{j,l}(v) } 
+
+where P_{i,j} is the net of control points.
+(This maps [u_min,u_max] x [v_min,v_max] to the surface.)
+
+
+This is more convenient than starting from 2D splines, or similar functions,
+but you must keep in mind that with such a scheme the curve along one direction
+must be sufficently complexe to handle the shape complexity all along this
+direction. However it's sometime possible to choose a direction for a parameter
+in such a way that the surface is more simple along this direction.
+
+
+2.6 Choice of parameter domain
+
+In the G4NURBS class library, the default is zero as the minimal parameter
+value, one for the maximal, and t_{i+1}-t_i = ( 0 or constant) ). However
+examples in section 4 will use t_i = integer for non-coincident knots, as it's
+more legible.
+
+ 
+
+3 NURBS curves and surfaces
+
+3.1 NU
+
+As previously said, the knots interval can vary. As we still impose t_{i+1} >=
+t_i, the limit case is t_{i+1} = t_i. In such a case, B_{i,1} is reduced to a
+point, B_{i,2} and B_{i+1,2} overlap on a knot segment reduced to a point, and
+at this point C(t) will be only C^{k-3}, making the curve less smooth. More
+generally if a knot appears M times, C(t) is C^{k-M-1}. If M = k-1, C(t) is
+C^0, the curve is still continuous but can have a corner at t = t_i = ... =
+t_{i+k-2} and go through the corresponding control point P_{i-1}, thanks to
+B_{i-1,k} that cover t_i to t_{i+k-2,k}. If M = k, the curve is no longer
+continous : all the basis B-Splines from B_{i-k,k} to B_{i-1,k} stop at t = t_i
+= ... = t_{i+k-1} and the curve stop a the corresponding  control point
+P_{i-1}. If there are other knots and control points after, the curve restarts
+from next control point P_i, as B_{i,k} to B_{i+k-1,k} start at t_{i+k-1} = t'.
+
+
+3.2 R
+
+The control points are no longer usual position vectors in the plane
+(isomorphic with R^2)  or in the space (isomorphic with R^3) but an element of
+the projective space P^n, which as one dimension more that the corresponding
+usual space. P^n, isomorphic with R^n, is associated with the usual space
+isomorphic with R^{n-1} : (x, y, w) in P^3 corresponds to (x/w, y/w) in R^2,
+(x, y, z, w) in P^4 corresponds to (x/w, y/w, z/w) in R^3 and so on. If w = 0,
+the point goes to infinity, defining a direction. Thus working in the
+projective space allows us to work with points and vectors, and all affine
+transformations in the usual space can be combined into a linear ones in the
+projective space, as well as projections. The coordinates in P^n are said to be
+homogeneous or rational, and items expressed with such  coordinates are
+highlighted by an ^h. 
+
+
+3.3 NU R BS 
+
+NURBS are NUBS in the projective space. Hence to transform a NURBS, one just
+has to transform the control points, even for projections.
+
+The last homogeneous coordinate w is called the "weight".
+
+3.4 NURBS curves
+
+If P_i = (x_i, y_i), then P^h_i = (w_i*x_i, w_i*y_i, w_i)
+and a curve is expressed in P^3 by 
+
+C^h(t) = sum(i = 1, n) { P^h_i * B_{i,k}(t) }
+
+and in R^2 by
+
+C(t) = sum(i = 1, n){ w_i* P_i * B_{i,k}(t) } / sum(i = 1, n){ w_i* B_{i,k}(t) }
+
+
+3.5 NURBS surfaces
+
+If P_i = (x_i, y_i, z_i), then P^h_i = (w_i*x_i, w_i*y_i, w_i*z_i, w_i)
+and a surface is expressed in P^4 by 
+
+S^h(u,v) = sum(i=1,n) sum(j=1,m) { P^h_{i,j} * B_{i,k}(u) * B_{j,l}(v) } 
+
+and in R^3 by
+
+S(u,v) = sum(i=1,n) sum(j=1,m) { w_{i,j} * P_{i,j} * B_{i,k}(u) * B_{j,l}(v) }
+        /sum(i=1,n) sum(j=1,m) { w_{i,j} * B_{i,k}(u) * B_{j,l}(v) } 
+
+
+
+3.6 NURBS advantages/disadvantages
+
+3.6.1 Advantages :
+
+	Common representation for shapes, even with discontinuities.
+
+	Exact representation of conics section (and for all shapes that have a
+	polynomial parametrisation in the projective space).
+
+	Invariant under affine and perspective tranformations.
+
+	Flexible (lot of manipulations possible, cf 4).
+
+	Generalization of others B-splines / Bezier shapes.
+
+3.6.2 Drawbacks :
+ 
+	Today need some calculations to be converted to triangles and/or
+	quadrilaterals as these are the only kind of shapes directly handled
+	by graphics systems at low-level (OpenGL is able to do that but it
+	really generate too many triangles/squares).
+
+	Extra storage for simple shapes.
+
+	We must choose a good parameterisation.
+
+
+
+
+4 Examples of NURBS
+
+4.1 Linear
+
+With 2.1 definition, linear B-Spline are order 2 : k = 2.
+All the weigths are equal to ones in what follows. 
+
+4.1.1 Segment
+
+We want a strait line from P_1 to P_2. To start the curve at P_1, we need a knot
+repeated k times at the begining and at the end of the knot vector. Thus the
+knot vector looks like { 0 0 ... 1 1 }. Do we need more than four knots ? No,
+two control points, a second order NURBS, 2 + 2 = 4, number of knots. (Remember
+(t_i)_{1<=i<=n+k})
+
+4.1.2 Polyline
+
+We could just put some lines in such a way that they connect each other in a
+head to tail fashion,
+
+{ 0 0  1 1 }
+[ P_1, P_2 ]
+                Set P_3 = P_2
+{ 0 0  1 1 }
+[ P_3, P_4 ]
+                Set P_5 = P_4 
+{ 0 0  1 1 }
+[ P_5, P_6 ]
+
+and union them in one NURBS :
+
+{  0 0     1 1       2 2    3 3 }
+[  P_1, P_2, P_3, P_4, P_5, P_6 ] still with P_3 = P_2 and P_5 = P_4. 
+
+Then we can simplify the NURBS :
+
+{ 0 0       1         2     3 3 }
+[ P_1,     P_3,      P_4,   P_6 ]
+
+
+4.1.3 Square
+
+If P_1, P_2, P_3, P_4 are the four corners, we can do a NURBS with
+a polyline that starts and stop at P_1 :
+
+{ 0 0  1   2   3  4 4 }
+[ P_1 P_2 P_3 P_4 P_1 ]
+
+
+4.1.4 Box
+
+If we take a square and move it (=extrude) along a perpendicular edge, we get a
+box which lack to faces, the two ones that are perpendicular to the edge along
+which we extruded the square. Note that if you change the order in which you are
+considering the tensor product, this surface is a segment (the edge) moved along
+a square. 
+
+{ 0 0   1    2    3   4 4 }   by
+                             
+[ P_1  P_2  P_3  P_4  P_1  ] {  0 0
+[ P'_1 P'_2 P'_3 P'_4 P'_1 ]    1 1 }
+
+To close the sides, we repeat the extremeties,
+
+{ 0 0   1    2    3   4 4 }   by
+                             
+[ P_1  P_2  P_3  P_4  P_1  ] {  0 0
+[ P_1  P_2  P_3  P_4  P_1  ]     1 
+[ P'_1 P'_2 P'_3 P'_4 P'_1 ]     2 
+[ P'_1 P'_2 P'_3 P'_4 P'_1 ]    3 3 }
+
+and then reduce the first and last square to a line or a point.
+For instance if P_0 is the center of the P_i side and P'_0 the one of the P'_i,
+
+{ 0 0   1    2    3   4 4 }   by
+                             
+[ P_0  P_0  P_0  P_0  P_0  ] {  0 0
+[ P_1  P_2  P_3  P_4  P_1  ]     1 
+[ P'_1 P'_2 P'_3 P'_4 P'_1 ]     2 
+[ P'_0 P'_0 P'_0 P'_0 P'_0 ]    3 3 }
+
+(Put differently, we take half of a rectangle and "rotate" it along a square.)
+
+The G4NURBSbox use something like
+
+{ 0 0   1    2    3   4 4 }   by
+                             
+[ P_1  P_1  P_4  P_4  P_1  ] {  0 0
+[ P_1  P_2  P_3  P_4  P_1  ]     1 
+[ P'_1 P'_2 P'_3 P'_4 P'_1 ]     2 
+[ P'_1 P'_1 P'_4 P'_4 P'_1 ]    3 3 }
+
+rectangles reduced to lines, to avoid a "star" effect on display.
+
+
+4.1.4 Trap
+
+There is no realy difference with the box. One just have to check
+that P_i and P'_i are on the same edge, or the trap will be twisted.
+
+
+
+
+4.2 Quadratic :
+
+Quadratic B-Splines are order 3 : k = 3.
+
+
+4.2.1 Arc
+
+We start at P_1 = (1,0) in R^2, and stop at P_3 = ( cos phi, sin phi ).
+With the knot vector { 0 0 0  1 1 1 }, we just need another control point, P_2.
+P_2 defines with P_1 the tangent at P_1, and with P_2 the tangent at P_2,
+thus P_2 is at ( 1, tan phi/2 ) and its weight is not 1, unlike P_1 and P_3,
+but cos phi/2.
+
+
+4.2.2 Circle
+
+To avoid infinite values, a circle is made by many arcs, for instance
+three 120 degrees arcs or four 90 degrees arcs. They are joined and simplified
+as for the polyline.
+
+ex: 
+the circle used in G4NURBScylinder is made by four 90 degree arc :
+(s = sqrt(2)/2)
+
+{ 0 0 0         1 1           2 2            3 3         4 4 4 }
+[ 1,0,1  s,s,s 0,1,1 -s,s,s -1,0,1 -s,-s,s -1,0,1 -s,s,s 1,0,1 ]
+
+
+4.2.3 Cylinder
+
+We build a cylinder from the circle as we made the box from the square :
+extrusion + closing
+
+
+4.2.3 Tube
+
+The tube is obtained by revolving a rectangle around the tube axis.
+
+
+
+
+
+For suggestion/change/English corrections : contact me or e-mail (via
+olivierc@h2.ph.man.ac.uk)
+( I'm sure it needs some English corrections )
+
