@@ -190,7 +190,11 @@ G4Material* G4NistMaterialBuilder::BuildMaterial(G4int i, G4bool isotopes)
 	             FatalException, "Fail to construct material");
 	return 0;
       }
-      mat->AddElement(el,fractions[idx+j]);
+      if(atomCount[i]) {
+	mat->AddElement(el,G4lrint(fractions[idx+j]));
+      } else {
+	mat->AddElement(el,fractions[idx+j]);
+      }
     }
   }
 
@@ -235,8 +239,8 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
   }
 
   // Material not in DB
-  G4int nm = elm.size();
-  if(nm == 0) { 
+  G4int els = elm.size();
+  if(els == 0) { 
     G4cout << "G4NistMaterialBuilder::ConstructNewMaterial:"
            << "  WARNING: empty list of elements for " << name
 	   << G4endl;
@@ -251,10 +255,10 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
   if(state == kStateGas && temp != STP_Temperature && pres != STP_Pressure)
     { stp = false; }
 
-  AddMaterial(name,dens*cm3/g,0,0.,nm,state,stp);
+  AddMaterial(name,dens*cm3/g,0,0.,els,state,stp);
   if(!stp) { AddGas(name,temp,pres); }
 
-  for (G4int i=0; i<nm; ++i) {
+  for (G4int i=0; i<els; ++i) {
     AddElementByAtomCount(elmBuilder->GetZ(elm[i]), nbAtoms[i]);
   }
 
@@ -285,8 +289,8 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
   }
 
   // Material not in DB
-  G4int nm = elm.size();
-  if(nm == 0) { 
+  G4int els = elm.size();
+  if(els == 0) { 
     G4cout << "G4NistMaterialBuilder::ConstructNewMaterial:"
            << "  WARNING: empty list of elements for " << name
 	   << G4endl;
@@ -300,10 +304,10 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
   G4bool stp = true;
   if(state == kStateGas && temp != STP_Temperature && pres != STP_Pressure)
     { stp = false; }
-  AddMaterial(name,dens*cm3/g,0,0.,nm,state,stp);
+  AddMaterial(name,dens*cm3/g,0,0.,els,state,stp);
   if(!stp) { AddGas(name,temp,pres); }
 
-  for (G4int i=0; i<nm; ++i) {
+  for (G4int i=0; i<els; ++i) {
     AddElementByWeightFraction(elmBuilder->GetZ(elm[i]), w[i]);
   }
   
@@ -380,8 +384,8 @@ G4Material* G4NistMaterialBuilder::ConstructNewIdealGasMaterial(
   }
 
   // Material not in DB
-  G4int nm = elm.size();
-  if(nm == 0) {
+  G4int els = elm.size();
+  if(els == 0) {
     G4cout << "G4NistMaterialBuilder::ConstructNewMaterial:"
            << "  WARNING: empty list of elements for " << name
            << G4endl;
@@ -399,17 +403,17 @@ G4Material* G4NistMaterialBuilder::ConstructNewIdealGasMaterial(
   G4double massPerMole = 0;
 
   G4int Z = 0;
-  for (G4int i=0; i<nm; ++i) {
+  for (G4int i=0; i<els; ++i) {
     Z = elmBuilder->GetZ(elm[i]);
     massPerMole += nbAtoms[i] * elmBuilder->GetAtomicMassAmu(Z) * amu_c2;
   }
 
   G4double dens = massPerMole / (Avogadro*k_Boltzmann*temp/pres);
 
-  if (nm == 1) { AddMaterial(name,dens,Z,0.,nm,state,stp); }
+  if (els == 1) { AddMaterial(name,dens,Z,0.,els,state,stp); }
   else {
-    AddMaterial(name,dens,0,0.,nm,state,stp);
-    for (G4int i=0; i<nm; ++i) {
+    AddMaterial(name,dens,0,0.,els,state,stp);
+    for (G4int i=0; i<els; ++i) {
       AddElementByAtomCount(elmBuilder->GetZ(elm[i]), nbAtoms[i]);
     }
   }
@@ -453,10 +457,12 @@ void G4NistMaterialBuilder::AddMaterial(const G4String& nameMat, G4double dens,
   indexes.push_back(nComponents);
   STP.push_back(stp);
   matIndex.push_back(-1);
+  atomCount.push_back(false);
 
   if (ncomp == 1 && Z > 0) {
     elements.push_back(Z);
     fractions.push_back(1.0);
+    atomCount[nMaterials] = true;
     ++nComponents;
     nCurrent = 0;
   } else {
@@ -635,8 +641,10 @@ void G4NistMaterialBuilder::AddElementByWeightFraction(G4int Z, G4double w)
     G4int imin = indexes[n];
     G4int imax = imin + components[n];
 
-    for(G4int i=imin; i<imax; ++i) {sum += fractions[i];}
-    if (sum > 0.0) for (G4int i=imin; i<imax; ++i) {fractions[i] /= sum;}
+    if(!atomCount[n]) {
+      for(G4int i=imin; i<imax; ++i) {sum += fractions[i];}
+      if (sum > 0.0) for (G4int i=imin; i<imax; ++i) {fractions[i] /= sum;}
+    }
   }
 }
 
@@ -653,7 +661,8 @@ void G4NistMaterialBuilder::AddElementByWeightFraction(const G4String& name,
 
 void G4NistMaterialBuilder::AddElementByAtomCount(G4int Z, G4int nb)
 {
-  G4double w = nb*elmBuilder->GetAtomicMassAmu(Z);
+  atomCount[nMaterials-1] = true;
+  G4double w = (G4double)nb;
   AddElementByWeightFraction(Z, w);
 }
 
@@ -662,8 +671,9 @@ void G4NistMaterialBuilder::AddElementByAtomCount(G4int Z, G4int nb)
 void G4NistMaterialBuilder::AddElementByAtomCount(const G4String& name,
 						  G4int nb)
 {
+  atomCount[nMaterials-1] = true;
   G4int Z = elmBuilder->GetZ(name);
-  G4double w = nb*elmBuilder->GetAtomicMassAmu(Z);
+  G4double w = (G4double)nb;
   AddElementByWeightFraction(Z, w);
 }
 
@@ -1758,13 +1768,13 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction( 9, 0.710028);
 
   AddMaterial("G4_WATER", 1.0,0, 78., 2);
-  AddElementByWeightFraction( 1, 0.111894);
-  AddElementByWeightFraction( 8, 0.888106);
+  AddElementByAtomCount("H", 2);
+  AddElementByAtomCount("O", 1);
   chFormulas[nMaterials-1] = "H_2O";
 
   AddMaterial("G4_WATER_VAPOR", 0.000756182, 0, 71.6, 2, kStateGas);
-  AddElementByWeightFraction( 1, 0.111894);
-  AddElementByWeightFraction( 8, 0.888106);
+  AddElementByAtomCount("H", 2);
+  AddElementByAtomCount("O", 1);
   chFormulas[nMaterials-1] = "H_2O-Gas";
 
   AddMaterial("G4_XYLENE", 0.87, 0, 61.8, 2);

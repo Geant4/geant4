@@ -16,6 +16,30 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26-05-12 V.Ivanchenko (materials-V09-05-24)
+- G4Element - M.Kesley identified a bug in Neff computation in ref01
+
+23-05-12 G.Cosmo (materials-V09-05-23)
+- Fixed trivial cases of variable shadowing.
+
+23-05-12 V.Ivanchenko (materials-V09-05-22)
+23-05-12 V.Ivanchenko (materials-V09-05-21)
+- G4NistMaterialBuilder : fixed bug introduced in the previous tag
+
+16-05-12 gum (materials-V09-05-20)
+- G4OpticalSurface : trying to fix Coverity report
+- G4NistMaterialBuilder : build H2O via atom count and not mass
+    fraction
+
+09-05-12 V.Ivanchenko (materials-V09-05-19)
+- G4Element, G4Isotope : fixed not important Coverity warning by
+    removing "return" from constructors
+- G4ExtDEDXTable - changed options to open file in order to fix
+    Coverity warning
+     
+01-05-12 mma (materials-V09-05-18)
+- G4Element, G4Material : cosmetic in printing functions
      
 24-04-12 mma (materials-V09-05-17)
 - G4Material : go back to materials-V09-05-15

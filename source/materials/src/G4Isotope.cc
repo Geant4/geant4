@@ -54,20 +54,18 @@ G4IsotopeTable G4Isotope::theIsotopeTable;
 
 // Create an isotope
 //
-G4Isotope::G4Isotope(const G4String& Name,G4int Z,G4int N,G4double A,G4int m)
-: fName(Name), fZ(Z), fN(N), fA(A), fm(m), fCountUse(0)
+G4Isotope::G4Isotope(const G4String& Name,G4int Z,G4int N,G4double A,G4int il)
+: fName(Name), fZ(Z), fN(N), fA(A), fm(il), fCountUse(0)
 {
   if (Z<1) { 
     G4ExceptionDescription ed;
     ed << "Wrong Isotope " << Name << " Z= " << Z << G4endl;
     G4Exception ("G4Isotope::G4Isotope()", "mat001", FatalException, ed);
-    return;
   }
   if (N<Z) {
     G4ExceptionDescription ed;
     ed << "Wrong Isotope " << Name << " Z= " << Z << " > N= " << N << G4endl;
     G4Exception ("G4Isotope::G4Isotope()", "mat002", FatalException, ed);
-    return;
   }
   if (A<=0.0) {
     fA = (G4NistManager::Instance()->GetAtomicMass(Z,N))*g/(mole*amu_c2);  

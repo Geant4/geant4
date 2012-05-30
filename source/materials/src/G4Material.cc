@@ -719,11 +719,12 @@ std::ostream& operator<<(std::ostream& flux, G4Material* material)
   for (size_t i=0; i<material->fNumberOfElements; i++) {
     flux 
       << "\n   ---> " << (*(material->theElementVector))[i] 
-      << "  ElmMassFraction: " << std::setw(6)<< std::setprecision(2) 
+      << "\n          ElmMassFraction: " 
+      << std::setw(6)<< std::setprecision(2) 
       << (material->fMassFractionVector[i])/perCent << " %" 
       << "  ElmAbundance "     << std::setw(6)<< std::setprecision(2) 
       << 100*(material->VecNbOfAtomsPerVolume[i])/(material->TotNbOfAtomsPerVolume)
-      << " %";
+      << " % \n";
   }
   flux.precision(prec);    
   flux.setf(mode,std::ios::floatfield);

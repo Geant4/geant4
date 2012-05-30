@@ -198,6 +198,7 @@ private:
   std::vector<G4double>  ionPotentials;
   std::vector<G4State>   states;
   std::vector<G4double>  fractions;
+  std::vector<G4bool>    atomCount;
   std::vector<G4int>     components;
   std::vector<G4int>     indexes;
   std::vector<G4int>     elements;

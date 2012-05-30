@@ -56,14 +56,15 @@ G4OpticalSurface& G4OpticalSurface::operator=(const G4OpticalSurface& right)
 {
   if (this != &right)
     {
-      theName                    = right.GetName();
+      theName                    = right.theName;
+      theType                    = right.theType;
       theModel                   = right.theModel;
       theFinish                  = right.theFinish;
-      theType                    = right.GetType();
       sigma_alpha                = right.sigma_alpha;
       polish                     = right.polish;
       theMaterialPropertiesTable = right.theMaterialPropertiesTable;
       AngularDistribution        = right.AngularDistribution;
+      readFileHandle             = right.readFileHandle;
      } 
   return *this;
 }
@@ -115,9 +116,12 @@ G4OpticalSurface::~G4OpticalSurface()
 }
 
 G4OpticalSurface::G4OpticalSurface(const G4OpticalSurface &right)
-  : G4SurfaceProperty(right.GetName())
+  : G4SurfaceProperty(right.theName,right.theType)
 {
-	*this = right;
+       *this = right;
+       this->theMaterialPropertiesTable = right.theMaterialPropertiesTable;
+       this->AngularDistribution = right.AngularDistribution;
+       this->readFileHandle = right.readFileHandle;
 }
 
 G4int G4OpticalSurface::operator==(const G4OpticalSurface &right) const
@@ -260,9 +264,6 @@ void G4OpticalSurface::ReadFile()
   G4String pathString(path);
 
   readFileName = pathString + "/" + readFileName;
-
-  // Open LUT with Material and Integer Angle
-  FILE* readFileHandle;
 
   readFileHandle = fopen(readFileName,"r");
 

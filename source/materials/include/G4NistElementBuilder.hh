@@ -168,22 +168,22 @@ inline G4double G4NistElementBuilder::GetAtomicMassAmu(G4int Z)
 
 inline G4double G4NistElementBuilder::GetIsotopeMass(G4int Z, G4int N)
 {
-  G4double m = 0.0;
+  G4double mass = 0.0;
   G4int i = N - nFirstIsotope[Z];
-  if(i >= 0 && i <nIsotopes[Z]) {m = massIsotopes[i + idxIsotopes[Z]];}
-  return m;
+  if(i >= 0 && i <nIsotopes[Z]) {mass = massIsotopes[i + idxIsotopes[Z]];}
+  return mass;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4NistElementBuilder::GetAtomicMass(G4int Z, G4int N)
 {
-  G4double m = 0.0;
+  G4double mass = 0.0;
   G4int i = N - nFirstIsotope[Z];
   if(i >= 0 && i <nIsotopes[Z]) {
-    m = massIsotopes[i + idxIsotopes[Z]] + Z*electron_mass_c2 - bindingEnergy[Z]; 
+    mass = massIsotopes[i + idxIsotopes[Z]] + Z*electron_mass_c2 - bindingEnergy[Z]; 
   }
-  return m;
+  return mass;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

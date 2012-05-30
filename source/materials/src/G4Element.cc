@@ -79,7 +79,6 @@ G4Element::G4Element(const G4String& name, const G4String& symbol,
     ed << "Fail to create G4Element " << name 
        << " Z= " << zeff << " < 1 !" << G4endl;
     G4Exception ("G4Element::G4Element()", "mat011",  FatalException, ed);
-    return;
   }
   if (std::abs(zeff - iz) > perMillion) {
     G4ExceptionDescription ed;
@@ -102,7 +101,6 @@ G4Element::G4Element(const G4String& name, const G4String& symbol,
        << " with Z= " << zeff << "  N= " << fNeff 
        << "   N < Z is not allowed" << G4endl;
     G4Exception ("G4Element::G4Element()", "mat012",  FatalException, ed);
-    return;
   }
    
   fNbOfAtomicShells      = G4AtomicShells::GetNumberOfShells(iz);
@@ -188,10 +186,11 @@ void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
     fNeff = fAeff = 0.0;
     for (size_t i=0;i<fNumberOfIsotopes;i++) {
       fAeff +=  fRelativeAbundanceVector[i]*(*theIsotopeVector)[i]->GetA();
+      fNeff +=  fRelativeAbundanceVector[i]*(*theIsotopeVector)[i]->GetN();
       wtSum +=  fRelativeAbundanceVector[i];
     }
     fAeff  /= wtSum;
-    fNeff   = fAeff/(g/mole);
+    fNeff  /= wtSum;
 
     if(wtSum != 1.0) {
       for(size_t i=0; i<fNumberOfIsotopes; ++i) { 
@@ -332,7 +331,7 @@ void G4Element::ComputeLradTsaiFactor()
 
 void G4Element::AddNaturalIsotopes()
 {
-  G4int Z = G4int(fZeff + 0.5);
+  G4int Z = G4lrint(fZeff);
   G4NistManager* nist = G4NistManager::Instance();
   G4int n = nist->GetNumberOfNistIsotopes(Z);
   G4int N0 = nist->GetNistFirstIsotopeN(Z);
@@ -348,9 +347,9 @@ void G4Element::AddNaturalIsotopes()
     G4int N = N0 + i;
     G4double x = nist->GetIsotopeAbundance(Z, N); 
     if(x > 0.0) {
-      std::ostringstream s;
-      s << fName << N;
-      (*theIsotopeVector)[idx] = new G4Isotope(s.str(),Z, N, 0.0, 0);
+      std::ostringstream strm;
+      strm << fSymbol << N;
+      (*theIsotopeVector)[idx] = new G4Isotope(strm.str(),Z, N, 0.0, 0);
       fRelativeAbundanceVector[idx] = x;
       xsum += x;
       ++idx;
@@ -514,7 +513,7 @@ std::ostream& operator<<(std::ostream& flux, G4Element* element)
    
   for (size_t i=0; i<element->fNumberOfIsotopes; i++)
   flux 
-    << "\n   ---> " << (*(element->theIsotopeVector))[i] 
+    << "\n         ---> " << (*(element->theIsotopeVector))[i] 
     << "   abundance: " << std::setw(6) << std::setprecision(2) 
     << (element->fRelativeAbundanceVector[i])/perCent << " %";
     

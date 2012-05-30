@@ -212,6 +212,9 @@ private:
 
         G4float* AngularDistribution;
 
+        // Open LUT with Material and Integer Angle
+        FILE* readFileHandle;
+
 };
 
 ////////////////////

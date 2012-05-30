@@ -407,12 +407,10 @@ G4bool G4ExtDEDXTable::StorePhysicsTable(
 
 // #########################################################################
 
-G4bool G4ExtDEDXTable::RetrievePhysicsTable(
-              const G4String& fileName  // File name
-				             ) { 
-
+G4bool G4ExtDEDXTable::RetrievePhysicsTable(const G4String& fileName) 
+{ 
   std::ifstream ifilestream;
-  ifilestream.open( fileName, std::ios::in );
+  ifilestream.open( fileName, std::ios::in|std::ios::binary );
   if( ! ifilestream ) {
 #ifdef G4VERBOSE
     G4cout << "G4ExtDEDXTable::RetrievePhysicsTable() " 
@@ -425,6 +423,13 @@ G4bool G4ExtDEDXTable::RetrievePhysicsTable(
   //std::string::size_type nmbVectors;
   G4int nmbVectors;
   ifilestream >> nmbVectors;
+  if( ifilestream.fail() ) { 
+    G4cout << "G4ExtDEDXTable::RetrievePhysicsTable() " 
+	   << " File content of " << fileName << " ill-formated." 
+	   << G4endl;     
+    ifilestream.close(); 
+    return false; 
+  }
 
   //  if(nmbVectors == std::string::npos) {
   /*
