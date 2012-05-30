@@ -363,10 +363,10 @@ G4bool G4AffineTransform::IsTranslated() const
 }
 
 inline G4RotationMatrix G4AffineTransform::NetRotation() const {
-  G4RotationMatrix m;
-  return m.rotateAxes(G4ThreeVector(rxx,ryx,rzx),
-                      G4ThreeVector(rxy,ryy,rzy),
-                      G4ThreeVector(rxz,ryz,rzz));
+  G4RotationMatrix mat;
+  return mat.rotateAxes(G4ThreeVector(rxx,ryx,rzx),
+                        G4ThreeVector(rxy,ryy,rzy),
+                        G4ThreeVector(rxz,ryz,rzz));
 }
 
 inline

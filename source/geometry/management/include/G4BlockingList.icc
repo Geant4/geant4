@@ -37,14 +37,14 @@ inline G4int G4BlockingList::Length() const
   return fBlockingList.size();
 }
 
-inline void G4BlockingList::BlockVolume(const G4int v)
+inline void G4BlockingList::BlockVolume(const G4int vol)
 {
-  fBlockingList[v] = fBlockTagNo;
+  fBlockingList[vol] = fBlockTagNo;
 }
 
-inline G4bool G4BlockingList::IsBlocked(const G4int v) const
+inline G4bool G4BlockingList::IsBlocked(const G4int vol) const
 {
-  return ( fBlockingList[v]==fBlockTagNo ) ? true : false;
+  return ( fBlockingList[vol]==fBlockTagNo ) ? true : false;
 }
 
 inline void G4BlockingList::Reset()

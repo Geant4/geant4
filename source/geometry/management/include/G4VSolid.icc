@@ -33,9 +33,9 @@
 // --------------------------------------------------------------------
 
 inline
-G4bool G4VSolid::operator==( const G4VSolid& s) const
+G4bool G4VSolid::operator==( const G4VSolid& right) const
 {
-  return (this==&s) ? true : false;
+  return (this==&right) ? true : false;
 }
 
 inline
