@@ -263,7 +263,7 @@ void G4MUComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
   // Set constants and initialize scattering parameters
 
   G4double vel_c = 299792458;
-  G4double momentum_au_to_nat = 1.992851740*std::pow(10.,-24.)*pi;
+  G4double momentum_au_to_nat = 1.992851740*std::pow(10.,-24.)*pi /2.0;
   G4double e_mass_kg = 9.10938188 * std::pow(10.,-31.);
     
   G4int maxDopplerIterations = 1000;  

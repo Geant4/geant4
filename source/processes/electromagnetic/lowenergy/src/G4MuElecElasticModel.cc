@@ -118,7 +118,10 @@ void G4MuElecElasticModel::Initialise(const G4ParticleDefinition* /*particle*/,
     char *path = getenv("G4LEDATA");
  
     if (!path)
-    G4Exception("G4MuElecElasticModel::Initialise","em0006",FatalException,"G4LEDATA environment variable not set.");
+    {
+      G4Exception("G4MuElecElasticModel::Initialise","em0006",FatalException,"G4LEDATA environment variable not set.");
+      return;
+    }
 
     std::ostringstream eFullFileName;
     eFullFileName << path << "/muelec/sigmadiff_elastic_e_Si.dat";

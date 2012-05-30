@@ -32,7 +32,7 @@ using namespace std;
 
 G4MuElecInelasticModel::G4MuElecInelasticModel(const G4ParticleDefinition*,
                                              const G4String& nam)
-:G4VEmModel(nam),isInitialised(false)
+:G4VEmModel(nam),fAtomDeexcitation(0),isInitialised(false)
 {
   nistSi = G4NistManager::Instance()->FindOrBuildMaterial("G4_Si");
 

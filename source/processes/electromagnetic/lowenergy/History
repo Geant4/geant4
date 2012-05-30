@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21.05.2012  S. Incerti, J. Brown, tag emlowen-V09-05-21
+            Update of G4MUComptonModel.cc
+
+03.05.2012  S. Incerti, J. Brown, tag emlowen-V09-05-20
+            Corrected compil. warning in G4MUComptonModel.cc
+
+29.04.2012  S. Incerti tag emlowen-V09-05-19
+            Coverity fixes
+
 19.04.2012  S. Incerti tag emlowen-V09-05-18
             New draft class G4Livermore2012GammaConversionModel
 

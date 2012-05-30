@@ -39,6 +39,7 @@ G4Livermore2012GammaConversionModel::G4Livermore2012GammaConversionModel(const G
 								 const G4String& nam)
 :G4VEmModel(nam),smallEnergy(2.*MeV),isInitialised(false),maxZ(99)
 {
+  fCurrentCouple = 0;
   fParticleChange = 0;
 
   lowEnergyLimit = 2.0*electron_mass_c2;
