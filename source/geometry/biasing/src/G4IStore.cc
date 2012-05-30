@@ -151,7 +151,7 @@ G4bool G4IStore::IsInWorld(const G4VPhysicalVolume &aVolume) const
 
 
 
-void G4IStore::Error(const G4String &m) const
+void G4IStore::Error(const G4String &msg) const
 {
-  G4Exception("G4IStore::Error()", "GeomBias0002", FatalException, m);
+  G4Exception("G4IStore::Error()", "GeomBias0002", FatalException, msg);
 }
