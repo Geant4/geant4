@@ -97,7 +97,7 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
 
   // second initialisation
   if(isInitialised) {
-    G4VEmModel* mod = GetModelByIndex(0);
+    G4VEmModel* mod = Model(1);
     mod->SetPolarAngleLimit(theta);
     mod = GetModelByIndex(1);
     if(mod) { mod->SetPolarAngleLimit(theta); }
@@ -120,7 +120,8 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
 
     G4double emin = MinKinEnergy();
     G4double emax = MaxKinEnergy();
-    G4eCoulombScatteringModel* model = new G4eCoulombScatteringModel();
+    if(!Model(1)) { SetModel(new G4eCoulombScatteringModel(), 1); }
+    G4VEmModel* model = Model(1);
     model->SetPolarAngleLimit(theta);
     model->SetLowEnergyLimit(emin);
     model->SetHighEnergyLimit(emax);

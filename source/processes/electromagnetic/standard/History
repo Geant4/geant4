@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09 May 12: V.Ivanchenko (emstand-V09-05-17)
+- G4CoulombScattering - minor modification of initialisation allowing 
+    to have add custom model with specific paraaameters but reuse
+    low andhigh energy limits defined for the process
+
 24 April 12: V.Ivanchenko (emstand-V09-05-16)
 - G4CoulombScattering - added method MinPrimaryEnergy allowing to 
     define low edge of physics table when Coulomb scattering is combined with
