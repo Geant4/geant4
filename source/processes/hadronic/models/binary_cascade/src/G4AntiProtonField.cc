@@ -54,26 +54,6 @@ G4AntiProtonField::~G4AntiProtonField()
 { }
 
 
-const G4AntiProtonField & G4AntiProtonField::operator=(const G4AntiProtonField & )
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4AntiProtonField::operator= meant not to be accessible");
-  return *this;
-}
-
-
-G4int G4AntiProtonField::operator==(const G4AntiProtonField & ) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4AntiProtonField::operator== meant not to be accessible");
-  return 0;
-}
-
-
-G4int G4AntiProtonField::operator!=(const G4AntiProtonField & ) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4AntiProtonField::operator!= meant not to be accessible");
-  return 1;
-}
-
 
 
 G4double G4AntiProtonField::GetField(const G4ThreeVector & aPosition)

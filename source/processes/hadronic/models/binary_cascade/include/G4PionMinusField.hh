@@ -50,7 +50,6 @@ public:
   virtual ~G4PionMinusField();
 
 private:
-
   G4PionMinusField(const  G4PionMinusField &right);
   const G4PionMinusField & operator=(const G4PionMinusField & right);
   int operator==(const G4PionMinusField & right) const;

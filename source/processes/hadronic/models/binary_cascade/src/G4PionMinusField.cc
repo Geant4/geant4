@@ -52,28 +52,6 @@ G4PionMinusField::G4PionMinusField(G4V3DNucleus * nucleus, G4double coeff)
 G4PionMinusField::~G4PionMinusField()
 { }
 
-
-const G4PionMinusField & G4PionMinusField::operator=(const G4PionMinusField &)
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4PionMinusField::operator= meant not to be accessible");
-  return *this;
-}
-
-
-G4int G4PionMinusField::operator==(const G4PionMinusField &) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4PionMinusField::operator== meant not to be accessible");
-  return 0;
-}
-
-
-G4int G4PionMinusField::operator!=(const G4PionMinusField &) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4PionMinusField::operator!= meant not to be accessible");
-  return 1;
-}
-
-
 G4double G4PionMinusField::GetField(const G4ThreeVector & aPosition)
 {
 // Field is 0 out of the nucleus!

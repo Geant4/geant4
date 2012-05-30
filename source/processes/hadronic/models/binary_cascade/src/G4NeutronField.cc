@@ -75,28 +75,6 @@ G4NeutronField::G4NeutronField(G4V3DNucleus * aNucleus) :
 G4NeutronField::~G4NeutronField()
 { }
 
-
-const G4NeutronField & G4NeutronField::operator=(const G4NeutronField &)
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4NeutronField::operator= meant not to be accessible");
-  return *this;
-}
-
-
-G4int G4NeutronField::operator==(const G4NeutronField &) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4NeutronField::operator== meant not to be accessible");
-  return 0;
-}
-
-
-G4int G4NeutronField::operator!=(const G4NeutronField &) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4NeutronField::operator!= meant not to be accessible");
-  return 1;
-}
-
-
 G4double G4NeutronField::GetField(const G4ThreeVector & aPosition)
 {
   G4double x = aPosition.mag();
@@ -109,8 +87,6 @@ G4double G4NeutronField::GetField(const G4ThreeVector & aPosition)
   G4double fermiMom = y1 + (x-x1)*(y2-y1)/(x2-x1);
   return -1*(fermiMom*fermiMom)/(2*neutron_mass_c2);
 }
-
-
 
 G4double G4NeutronField::GetBarrier()
 {

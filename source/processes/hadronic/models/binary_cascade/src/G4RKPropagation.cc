@@ -75,14 +75,10 @@
 
 // unsigned EncodingHashFun(const G4int& aEncoding);
 
-G4RKPropagation::G4RKPropagation() : theNucleus(0),
+G4RKPropagation::G4RKPropagation() :
+                     theOuterRadius(0), theNucleus(0),
 				     theFieldMap(0), theEquationMap(0),
 				     theField(0)
-{ }
-
-
-G4RKPropagation::G4RKPropagation(const  G4RKPropagation &) :
-G4VFieldPropagation()
 { }
 
 
@@ -96,29 +92,6 @@ G4RKPropagation::~G4RKPropagation()
 
   if (theField) delete theField;
 }
-
-
-
-const G4RKPropagation & G4RKPropagation::operator=(const G4RKPropagation &)
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4RKPropagation::operator= meant not to be accessible");
-  return *this;
-}
-
-G4int G4RKPropagation::operator==(const G4RKPropagation &) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4RKPropagation::operator== meant not to be accessible");
-  return 0;
-}
-
-G4int G4RKPropagation::operator!=(const G4RKPropagation &) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4RKPropagation::operator!= meant not to be accessible");
-  return 1;
-}
-
-//----------------------------------------------------------------------------
-
 
 //----------------------------------------------------------------------------
 void G4RKPropagation::Init(G4V3DNucleus * nucleus)

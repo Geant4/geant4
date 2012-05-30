@@ -340,6 +340,7 @@ G4HadFinalState *G4BinaryLightIonReaction::
 //	      resA <<" "<< resZ <<" ; " << spectA <<" "<< spectZ << G4endl;
 //      }
       delete result;
+      result=0;
       debug.push_back(" iState - (fState+pspectators) ");
       debug.push_back(iState-fState-pspectators);
       debug.dump();

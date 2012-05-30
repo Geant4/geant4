@@ -13,6 +13,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+29 May 2012 Gunter Folger        had-binary-V09-05-02
+-  Address coverity issues. Most were not needed implementaion of 
+    copy ctor thowing exception; i.e. suppressed implementation of 
+    private copy ctor, == and != operators
+    
 13 Apr 2012 Gunter Folger        had-binary-V09-05-01
 -  Add description in G4BinaryLightIonReaction
 -  G4BinaryCascade; when propagating secondaries from HE model, do not 

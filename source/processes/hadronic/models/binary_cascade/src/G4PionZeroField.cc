@@ -53,28 +53,6 @@ G4PionZeroField::G4PionZeroField(G4V3DNucleus * nucleus, G4double coeff)
 G4PionZeroField::~G4PionZeroField()
 { }
 
-
-const G4PionZeroField & G4PionZeroField::operator=(const G4PionZeroField &)
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4PionZeroField::operator= meant not to be accessible");
-  return *this;
-}
-
-
-G4int G4PionZeroField::operator==(const G4PionZeroField &) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4PionZeroField::operator== meant not to be accessible");
-  return 0;
-}
-
-
-G4int G4PionZeroField::operator!=(const G4PionZeroField &) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4PionZeroField::operator!= meant not to be accessible");
-  return 1;
-}
-
-
 G4double G4PionZeroField::GetField(const G4ThreeVector & aPosition)
 {
 // Field is 0 out of the nucleus!

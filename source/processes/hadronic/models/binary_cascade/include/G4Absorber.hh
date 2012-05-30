@@ -44,6 +44,13 @@ public:
   G4bool FindAbsorbers(G4KineticTrack & kt, G4KineticTrackVector & tgt);
   G4bool FindProducts(G4KineticTrack & kt);
 
+private:
+  // hide copy ctor, =, == and != operators
+  G4Absorber(const  G4Absorber &right);
+  const G4Absorber & operator=(const G4Absorber & right);
+  int operator==(const G4Absorber & right) const;
+  int operator!=(const G4Absorber & right) const;
+
 
 private:
   G4double theCutOnP;
