@@ -56,11 +56,13 @@ public :
     G4DLLEXPORT static const DisplacementType A1B1_DissociationDecay;
     G4DLLEXPORT static const DisplacementType B1A1_DissociationDecay;
     G4DLLEXPORT static const DisplacementType AutoIonisation;
+    G4DLLEXPORT static const DisplacementType DissociativeAttachment;
 #else
     G4DLLIMPORT static const DisplacementType Ionisation_DissociationDecay;
     G4DLLIMPORT static const DisplacementType A1B1_DissociationDecay;
     G4DLLIMPORT static const DisplacementType B1A1_DissociationDecay;
     G4DLLIMPORT static const DisplacementType AutoIonisation;
+    G4DLLEXPORT static const DisplacementType DissociativeAttachment;
 #endif
 
 private :

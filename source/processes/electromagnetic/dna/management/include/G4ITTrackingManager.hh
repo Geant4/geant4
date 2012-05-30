@@ -39,9 +39,6 @@
 #define G4ITTRACKINGMANAGER_HH
 
 #include "G4TrackList.hh"
-/***
-#include "G4VTrajectory.hh"
-***/
 
 class G4ITTrackingManager;
 class G4UserTrackingAction;
@@ -52,7 +49,9 @@ class G4ITTrackingManager
 {
     int fStoreTrajectory;
     int fVerboseLevel;
-/***    G4UserTrackingAction* fpUserTrackingAction; ***/
+
+    G4UserTrackingAction* fpUserTrackingAction;
+
     bool fSetNewUserTrackingAction;
 
 public:
@@ -68,18 +67,9 @@ public:
     inline void SetVerbose(int);
 
     // if not set, will use tracking action of standard G4TrackingManager
-/***
     void SetUserTrackingAction(G4UserTrackingAction*);
-    inline G4UserTrackingAction* GetUserTrackingAction();
-***/
+    G4UserTrackingAction* GetUserTrackingAction();
 };
-
-/***
-  inline G4UserTrackingAction* G4ITTrackingManager::GetUserTrackingAction()
-  {
-      return fpUserTrackingAction;
-  }
-***/
 
 inline void G4ITTrackingManager::SetVerbose(int flag)
 {

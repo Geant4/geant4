@@ -51,7 +51,9 @@ public:
     G4DNABrownianTransportation(const G4DNABrownianTransportation& other);
     G4DNABrownianTransportation& operator=(const G4DNABrownianTransportation& other);
 
-    void BuildPhysicsTable(const G4ParticleDefinition&);
+    virtual void BuildPhysicsTable(const G4ParticleDefinition&);
+
+    virtual void StartTracking(G4Track* aTrack);
 
     virtual void ComputeStep(const G4Track&,
                              const G4Step&,
@@ -65,12 +67,28 @@ public:
                                                             G4GPILSelection* /*selection*/);
     virtual G4VParticleChange* PostStepDoIt( const G4Track& track, const G4Step& ) ;
 
-    G4VParticleChange* AlongStepDoIt(const G4Track& track, const G4Step&);
+    virtual G4VParticleChange* AlongStepDoIt(const G4Track& track, const G4Step&);
 
 protected:
     void Diffusion(const G4Track& track);
-    G4SafetyHelper* fpSafetyHelper;
+
+    //________________________________________________________________
+    // Process information
+    struct G4ITBrownianState : public G4ITTransportationState
+    {
+    public :
+        G4ITBrownianState();
+        virtual ~G4ITBrownianState(){;}
+        G4bool  fPathLengthWasCorrected;
+    };
+
+    G4ITBrownianState* const & fpBrownianState;
+
+    G4bool fUseMaximumTimeBeforeReachingBoundary;
     G4Material* fNistWater ;
+
+    // Water density table
+    const std::vector<G4double>* fpWaterDensity;
 };
 
 #endif // G4ITBROWNIANTRANSPORTATION_H

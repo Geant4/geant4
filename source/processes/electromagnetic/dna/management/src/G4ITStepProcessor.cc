@@ -36,13 +36,14 @@
 #include "G4UImanager.hh"
 #include "G4ForceCondition.hh"
 #include "G4GPILSelection.hh"
-#include "G4TransportationManager.hh"
+#include "G4ITTransportationManager.hh"
 // #include "G4VSensitiveDetector.hh"    // Include from 'hits/digi'
 #include "G4GeometryTolerance.hh"
 #include "G4ParticleTable.hh"
 #include "G4ITTrackingManager.hh"
 #include "G4TrackingInformation.hh"
 #include "G4IT.hh"
+#include "G4ITNavigator.hh"             // Include from 'geometry'
 
 #include "G4VITProcess.hh"
 #include "G4VProcess.hh"
@@ -138,7 +139,18 @@ void G4ITStepProcessor::Initialize(void*)
     CleanProcessor();
     ActiveOnlyITProcess();
 
-    SetNavigator(G4TransportationManager::GetTransportationManager()
+//    G4Navigator* navigator = G4TransportationManager::GetTransportationManager()
+//            ->GetNavigatorForTracking();
+//    G4VPhysicalVolume* world = navigator->GetWorldVolume();
+//    fpNavigator = new G4ITNavigator();
+//    fpNavigator->SetWorldVolume(world);
+//    G4ThreeVector center(0,0,0);
+//    fpNavigator->LocateGlobalPointAndSetup(center,0,false);
+//    G4TransportationManager::GetTransportationManager()->DeActivateNavigator(navigator);
+//    G4TransportationManager::GetTransportationManager()->SetNavigatorForTracking(fpNavigator);
+//    G4TransportationManager::GetTransportationManager()->ActivateNavigator(fpNavigator);
+
+    SetNavigator(G4ITTransportationManager::GetTransportationManager()
                  ->GetNavigatorForTracking());
 
     fPhysIntLength = DBL_MAX;
@@ -168,6 +180,8 @@ G4ITStepProcessor::~G4ITStepProcessor()
     }
 
     fProcessGeneralInfoMap.clear();
+
+    delete G4ITTransportationManager::GetTransportationManager();
 
     //    if(fpUserSteppingAction)             delete fpUserSteppingAction;
 }
@@ -480,6 +494,102 @@ void G4ITStepProcessor::DefinePhysicalStepLength(G4Track* track)
 }
 //______________________________________________________________________________
 
+
+void G4ITStepProcessor::SetInitialStep()
+{
+    // DEBUG
+    //    G4cout << "SetInitialStep for : " << fpITrack-> GetName() << G4endl;
+    //________________________________________________________
+    // Initialize geometry
+
+
+    if ( ! fpTrack->GetTouchableHandle())
+    {
+        G4ThreeVector direction= fpTrack->GetMomentumDirection();
+        fpNavigator->LocateGlobalPointAndSetup( fpTrack->GetPosition(),
+                                                &direction, false, false );
+        fpState->fTouchableHandle = fpNavigator->CreateTouchableHistory();
+
+        fpTrack->SetTouchableHandle( fpState->fTouchableHandle );
+        fpTrack->SetNextTouchableHandle( fpState->fTouchableHandle );
+    }
+    else
+    {
+        fpState->fTouchableHandle = fpTrack->GetTouchableHandle();
+        fpTrack->SetNextTouchableHandle( fpState->fTouchableHandle );
+        G4VPhysicalVolume* oldTopVolume= fpTrack->GetTouchableHandle()->GetVolume();
+        G4VPhysicalVolume* newTopVolume=
+                fpNavigator->ResetHierarchyAndLocate( fpTrack->GetPosition(),
+                                                      fpTrack->GetMomentumDirection(),
+                                                      *((G4TouchableHistory*)fpTrack->GetTouchableHandle()()) );
+        if(newTopVolume != oldTopVolume || oldTopVolume->GetRegularStructureId() == 1 )
+        {
+            fpState->fTouchableHandle = fpNavigator->CreateTouchableHistory();
+            fpTrack->SetTouchableHandle( fpState->fTouchableHandle );
+            fpTrack->SetNextTouchableHandle( fpState->fTouchableHandle );
+        }
+    }
+
+    fpCurrentVolume = fpState->fTouchableHandle->GetVolume();
+
+    //________________________________________________________
+    // If the primary track has 'Suspend' or 'PostponeToNextEvent' state,
+    // set the track state to 'Alive'.
+    if( (fpTrack->GetTrackStatus()==fSuspend) ||
+            (fpTrack->GetTrackStatus()==fPostponeToNextEvent) )
+    {
+        fpTrack->SetTrackStatus(fAlive);
+    }
+
+    // If the primary track has 'zero' kinetic energy, set the track
+    // state to 'StopButAlive'.
+    if(fpTrack->GetKineticEnergy() <= 0.0)
+    {
+        fpTrack->SetTrackStatus( fStopButAlive );
+    }
+    //________________________________________________________
+    // Set vertex information of G4Track at here
+    if ( fpTrack->GetCurrentStepNumber() == 0 )
+    {
+        fpTrack->SetVertexPosition( fpTrack->GetPosition() );
+        fpTrack->SetVertexMomentumDirection( fpTrack->GetMomentumDirection() );
+        fpTrack->SetVertexKineticEnergy( fpTrack->GetKineticEnergy() );
+        fpTrack->SetLogicalVolumeAtVertex( fpTrack->GetVolume()->GetLogicalVolume() );
+    }
+    //________________________________________________________
+    // If track is already outside the world boundary, kill it
+    if( fpCurrentVolume==0 )
+    {
+        // If the track is a primary, stop processing
+        if(fpTrack->GetParentID()==0)
+        {
+            G4cerr << "ERROR - G4ITStepProcessor::SetInitialStep()" << G4endl
+                   << "        Primary particle starting at - "
+                   << fpTrack->GetPosition()
+                   << " - is outside of the world volume." << G4endl;
+            G4Exception("G4ITStepProcessor::SetInitialStep()", "ITStepProcessor0011",
+                        FatalException, "Primary vertex outside of the world!");
+        }
+
+        fpTrack->SetTrackStatus( fStopAndKill );
+        G4cout << "WARNING - G4ITStepProcessor::SetInitialStep()" << G4endl
+               << "          Initial track position is outside world! - "
+               << fpTrack->GetPosition() << G4endl;
+    }
+    else{
+        // Initial set up for attribues of 'Step'
+        fpStep->InitializeStep( fpTrack );
+    }
+
+
+    if( fpTrack->GetTrackStatus() == fStopAndKill ) return ;
+
+    fpTrackingManager->StartTracking(fpTrack);
+
+    fpState->fStepStatus = fUndefined;
+}
+//______________________________________________________________________________
+
 void G4ITStepProcessor::InitDefineStep()
 {
 
@@ -496,12 +606,14 @@ void G4ITStepProcessor::InitDefineStep()
         fpITrack->GetTrackingInfo()->SetStepProcessorState((G4ITStepProcessorState_Lock*)fpState);
 
         SetupMembers();
+        fpNavigator->NewNavigatorState();
 
         SetInitialStep();
     }
     else
     {
         SetupMembers();
+
         fpState->fPreviousStepSize = fpTrack->GetStepLength();
 
         // Send G4Step information to Hit/Dig if the volume is sensitive
@@ -522,14 +634,40 @@ void G4ITStepProcessor::InitDefineStep()
         fpStep->CopyPostToPreStepPoint();
         fpStep->ResetTotalEnergyDeposit();
 
-        // Switch next touchable in track to current one
-        fpTrack->SetTouchableHandle(fpTrack->GetNextTouchableHandle());
-
         //JA Set the volume before it is used (in DefineStepLength() for User Limit)
         fpCurrentVolume = fpStep->GetPreStepPoint()->GetPhysicalVolume();
-
+/*
+        G4cout << G4endl;
+        G4cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!" << G4endl;
+        G4cout << "PreStepPoint Volume : " << fpCurrentVolume->GetName() << G4endl;
+        G4cout << "Track Touchable : " << fpTrack->GetTouchableHandle()->GetVolume()->GetName() << G4endl;
+        G4cout << "Track NextTouchable : " << fpTrack->GetNextTouchableHandle()->GetVolume()->GetName() << G4endl;
+*/
         // Reset the step's auxiliary points vector pointer
         fpStep->SetPointerToVectorOfAuxiliaryPoints(0);
+
+        // Switch next touchable in track to current one
+        fpTrack->SetTouchableHandle(fpTrack->GetNextTouchableHandle());
+        fpState->fTouchableHandle = fpTrack->GetTouchableHandle();
+        fpTrack->SetNextTouchableHandle( fpState->fTouchableHandle );
+        G4VPhysicalVolume* oldTopVolume= fpTrack->GetTouchableHandle()->GetVolume();
+        fpNavigator->SetNavigatorState(fpITrack->GetTrackingInfo()->GetNavigatorState());
+
+        G4VPhysicalVolume* newTopVolume=
+            fpNavigator->ResetHierarchyAndLocate( fpTrack->GetPosition(),
+                                              fpTrack->GetMomentumDirection(),
+                                              *((G4TouchableHistory*)fpTrack->GetTouchableHandle()()) );
+
+//        G4cout << "New Top Volume : " << newTopVolume->GetName() << G4endl;
+
+        if(newTopVolume != oldTopVolume || oldTopVolume->GetRegularStructureId() == 1 )
+        {
+            fpState->fTouchableHandle = fpNavigator->CreateTouchableHistory();
+            fpTrack->SetTouchableHandle( fpState->fTouchableHandle );
+            fpTrack->SetNextTouchableHandle( fpState->fTouchableHandle );
+        }
+
+        fpNavigator->SetNavigatorState(fpITrack->GetTrackingInfo()->GetNavigatorState());
     }
 }
 
@@ -553,6 +691,8 @@ void G4ITStepProcessor::DoDefinePhysicalStepLength()
 
     if(trackStatus == fStopButAlive)
     {
+        fpITrack->GetTrackingInfo()->SetNavigatorState(fpNavigator->GetNavigatorState());
+        fpNavigator->SetNavigatorState(0);
         return GetAtRestIL() ;
     }
 
@@ -571,6 +711,10 @@ void G4ITStepProcessor::DoDefinePhysicalStepLength()
     fPostStepDoItProcTriggered = fpProcessInfo->MAXofPostStepLoops;
     fPostStepAtTimeDoItProcTriggered = fpProcessInfo->MAXofPostStepLoops;
 
+//    G4cout << "fpProcessInfo->MAXofPostStepLoops : " << fpProcessInfo->MAXofPostStepLoops
+//           << " mol : " << fpITrack -> GetName() << " id : " << fpTrack->GetTrackID()
+//           << G4endl;
+
     for(size_t np=0; np < fpProcessInfo->MAXofPostStepLoops; np++)
     {
         fpCurrentProcess = (G4VITProcess*) (*fpProcessInfo->fpPostStepGetPhysIntVector)[np];
@@ -582,7 +726,6 @@ void G4ITStepProcessor::DoDefinePhysicalStepLength()
 
         fCondition=NotForced;
         fpCurrentProcess->SetProcessState(fpTrackingInfo->GetProcessState(fpCurrentProcess->GetProcessID()));
-
 
 //        G4cout << "Is going to call : " << fpCurrentProcess -> GetProcessName() << G4endl;
         fPhysIntLength = fpCurrentProcess->
@@ -772,102 +915,9 @@ void G4ITStepProcessor::DoDefinePhysicalStepLength()
             safetyProposedToAndByProcess = fpState->proposedSafety;
 
     }
-}
 
-
-///////////////////////////////////////////////////////////
-void G4ITStepProcessor::SetInitialStep()
-///////////////////////////////////////////////////////////
-{
-    // DEBUG
-    //    G4cout << "SetInitialStep for : " << fpITrack-> GetName() << G4endl;
-    //________________________________________________________
-    // Initialize geometry
-    if ( ! fpTrack->GetTouchableHandle())
-    {
-
-        G4ThreeVector direction= fpTrack->GetMomentumDirection();
-        fpNavigator->LocateGlobalPointAndSetup( fpTrack->GetPosition(),
-                                                &direction, false, false );
-        fpState->fTouchableHandle = fpNavigator->CreateTouchableHistory();
-
-        fpTrack->SetTouchableHandle( fpState->fTouchableHandle );
-        fpTrack->SetNextTouchableHandle( fpState->fTouchableHandle );
-    }
-    else
-    {
-        fpState->fTouchableHandle = fpTrack->GetTouchableHandle();
-        fpTrack->SetNextTouchableHandle( fpState->fTouchableHandle );
-        G4VPhysicalVolume* oldTopVolume= fpTrack->GetTouchableHandle()->GetVolume();
-        G4VPhysicalVolume* newTopVolume=
-                fpNavigator->ResetHierarchyAndLocate( fpTrack->GetPosition(),
-                                                      fpTrack->GetMomentumDirection(),
-                                                      *((G4TouchableHistory*)fpTrack->GetTouchableHandle()()) );
-        if(newTopVolume != oldTopVolume || oldTopVolume->GetRegularStructureId() == 1 )
-        {
-            fpState->fTouchableHandle = fpNavigator->CreateTouchableHistory();
-            fpTrack->SetTouchableHandle( fpState->fTouchableHandle );
-            fpTrack->SetNextTouchableHandle( fpState->fTouchableHandle );
-        }
-    }
-
-    fpCurrentVolume = fpState->fTouchableHandle->GetVolume();
-
-    //________________________________________________________
-    // If the primary track has 'Suspend' or 'PostponeToNextEvent' state,
-    // set the track state to 'Alive'.
-    if( (fpTrack->GetTrackStatus()==fSuspend) ||
-            (fpTrack->GetTrackStatus()==fPostponeToNextEvent) )
-    {
-        fpTrack->SetTrackStatus(fAlive);
-    }
-
-    // If the primary track has 'zero' kinetic energy, set the track
-    // state to 'StopButAlive'.
-    if(fpTrack->GetKineticEnergy() <= 0.0)
-    {
-        fpTrack->SetTrackStatus( fStopButAlive );
-    }
-    //________________________________________________________
-    // Set vertex information of G4Track at here
-    if ( fpTrack->GetCurrentStepNumber() == 0 )
-    {
-        fpTrack->SetVertexPosition( fpTrack->GetPosition() );
-        fpTrack->SetVertexMomentumDirection( fpTrack->GetMomentumDirection() );
-        fpTrack->SetVertexKineticEnergy( fpTrack->GetKineticEnergy() );
-        fpTrack->SetLogicalVolumeAtVertex( fpTrack->GetVolume()->GetLogicalVolume() );
-    }
-    //________________________________________________________
-    // If track is already outside the world boundary, kill it
-    if( fpCurrentVolume==0 )
-    {
-        // If the track is a primary, stop processing
-        if(fpTrack->GetParentID()==0)
-        {
-            G4cerr << "ERROR - G4ITStepProcessor::SetInitialStep()" << G4endl
-                   << "        Primary particle starting at - "
-                   << fpTrack->GetPosition()
-                   << " - is outside of the world volume." << G4endl;
-            G4Exception("G4ITStepProcessor::SetInitialStep()", "ITStepProcessor0011",
-                        FatalException, "Primary vertex outside of the world!");
-        }
-
-        fpTrack->SetTrackStatus( fStopAndKill );
-        G4cout << "WARNING - G4ITStepProcessor::SetInitialStep()" << G4endl
-               << "          Initial track position is outside world! - "
-               << fpTrack->GetPosition() << G4endl;
-    }
-    else{
-        // Initial set up for attribues of 'Step'
-        fpStep->InitializeStep( fpTrack );
-    }
-
-
-    if( fpTrack->GetTrackStatus() == fStopAndKill ) return ;
-
-    fpTrackingManager->StartTracking(fpTrack);
-
-    fpState->fStepStatus = fUndefined;
+    fpITrack->GetTrackingInfo()->SetNavigatorState(fpNavigator->GetNavigatorState());
+    fpNavigator->SetNavigatorState(0);
 }
 
 //______________________________________________________________________________

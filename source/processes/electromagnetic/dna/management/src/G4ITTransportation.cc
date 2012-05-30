@@ -35,20 +35,26 @@
 
 #include "G4ITTransportation.hh"
 #include "G4TransportationManager.hh"
+#include "G4ITTransportationManager.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4ParticleTable.hh"
-#include "G4Navigator.hh"
+#include "G4ITNavigator.hh"
+//#include "G4Navigator.hh"
 #include "G4PropagatorInField.hh"
 #include "G4FieldManager.hh"
 #include "G4ChordFinder.hh"
 #include "G4SafetyHelper.hh"
 #include "G4FieldManagerStore.hh"
 
+#include "G4UnitsTable.hh"
+
 class G4VSensitiveDetector;
 
 #ifndef State
 #define State(theXInfo) (fTransportationState->theXInfo)
 #endif
+
+//#define G4DEBUG_TRANSPORT 1
 
 G4ITTransportation::G4ITTransportation(const G4String& aName, int verboseLevel) :
     G4VITProcess(aName, fTransportation),
@@ -64,9 +70,11 @@ G4ITTransportation::G4ITTransportation(const G4String& aName, int verboseLevel) 
     pParticleChange = &fParticleChange;
     G4TransportationManager* transportMgr ;
     transportMgr = G4TransportationManager::GetTransportationManager() ;
-    fLinearNavigator = transportMgr->GetNavigatorForTracking() ;
+    G4ITTransportationManager* ITtransportMgr ;
+    ITtransportMgr = G4ITTransportationManager::GetTransportationManager() ;
+    fLinearNavigator = ITtransportMgr->GetNavigatorForTracking() ;
     fFieldPropagator = transportMgr->GetPropagatorInField() ;
-    fpSafetyHelper =   transportMgr->GetSafetyHelper();  // New
+    fpSafetyHelper =   0; // transportMgr->GetSafetyHelper();  // New
 
     // Cannot determine whether a field exists here, as it would
     //  depend on the relative order of creating the detector's
@@ -100,9 +108,11 @@ G4ITTransportation::G4ITTransportation(const G4ITTransportation& right) :
     // Setup Navigators
     G4TransportationManager* transportMgr ;
     transportMgr = G4TransportationManager::GetTransportationManager() ;
-    fLinearNavigator = transportMgr->GetNavigatorForTracking() ;
+    G4ITTransportationManager* ITtransportMgr ;
+    ITtransportMgr = G4ITTransportationManager::GetTransportationManager() ;
+    fLinearNavigator = ITtransportMgr->GetNavigatorForTracking() ;
     fFieldPropagator = transportMgr->GetPropagatorInField() ;
-    fpSafetyHelper =   transportMgr->GetSafetyHelper();  // New
+    fpSafetyHelper =   0; //transportMgr->GetSafetyHelper();  // New
 
     // Cannot determine whether a field exists here, as it would
     //  depend on the relative order of creating the detector's
@@ -168,12 +178,12 @@ G4ITTransportation::~G4ITTransportation()
 
 G4bool G4ITTransportation::DoesGlobalFieldExist()
 {
-  G4TransportationManager* transportMgr;
-  transportMgr= G4TransportationManager::GetTransportationManager();
+    G4TransportationManager* transportMgr;
+    transportMgr= G4TransportationManager::GetTransportationManager();
 
-  // fFieldExists= transportMgr->GetFieldManager()->DoesFieldExist();
-  // return fFieldExists;
-  return transportMgr->GetFieldManager()->DoesFieldExist();
+    // fFieldExists= transportMgr->GetFieldManager()->DoesFieldExist();
+    // return fFieldExists;
+    return transportMgr->GetFieldManager()->DoesFieldExist();
 }
 
 
@@ -184,14 +194,17 @@ G4bool G4ITTransportation::DoesGlobalFieldExist()
 //    Calculate the new value of the safety and return it.
 //    Store the final time, position and momentum.
 G4double G4ITTransportation::AlongStepGetPhysicalInteractionLength(
-    const G4Track& track,
-    G4double ,
-    G4double currentMinimumStep,
-    G4double& currentSafety,
-    G4GPILSelection* selection)
+        const G4Track& track,
+        G4double ,
+        G4double currentMinimumStep,
+        G4double& currentSafety,
+        G4GPILSelection* selection)
 {
     G4double geometryStepLength(-1.0), newSafety(-1.0) ;
+
     State(fParticleIsLooping) = false ;
+    State(fEndGlobalTimeComputed) = false ;
+    State(fGeometryLimitedStep) = false ;
 
     // Initial actions moved to  StartTrack()
     // --------------------------------------
@@ -207,7 +220,7 @@ G4double G4ITTransportation::AlongStepGetPhysicalInteractionLength(
     // Get initial Energy/Momentum of the track
     //
     const G4DynamicParticle*    pParticle  = track.GetDynamicParticle() ;
-    const G4ParticleDefinition* pParticleDef   = pParticle->GetDefinition() ;
+//    const G4ParticleDefinition* pParticleDef   = pParticle->GetDefinition() ;
     G4ThreeVector startMomentumDir       = pParticle->GetMomentumDirection() ;
     G4ThreeVector startPosition          = track.GetPosition() ;
 
@@ -232,8 +245,6 @@ G4double G4ITTransportation::AlongStepGetPhysicalInteractionLength(
     //
     G4double              particleCharge = pParticle->GetCharge() ;
 
-    State(fGeometryLimitedStep) = false ;
-    // fEndGlobalTimeComputed = false ;
 
     // There is no need to locate the current volume. It is Done elsewhere:
     //   On track construction
@@ -317,13 +328,29 @@ G4double G4ITTransportation::AlongStepGetPhysicalInteractionLength(
         State(fTransportEndSpin)          = track.GetPolarization();
         State(fParticleIsLooping)         = false ;
         State(fMomentumChanged)           = false ;
-        State(fEndGlobalTimeComputed)     = false ;
-//        State(theInteractionTimeLeft)     = track.GetVelocity()/State(endpointDistance);
+        State(fEndGlobalTimeComputed)     = true ;
+        State(theInteractionTimeLeft)     = State(endpointDistance)/track.GetVelocity();
+        State(fCandidateEndGlobalTime)    = State(theInteractionTimeLeft)+track.GetGlobalTime();
+
+        //        G4cout << "track.GetVelocity() : " << track.GetVelocity() << G4endl;
+        //        G4cout << "State(endpointDistance) : " << G4BestUnit(State(endpointDistance),"Length") << G4endl;
+        //        G4cout << "State(theInteractionTimeLeft) : " << G4BestUnit(State(theInteractionTimeLeft),"Time") << G4endl;
+        //        G4cout << "track.GetGlobalTime() : " << G4BestUnit(track.GetGlobalTime(),"Time") << G4endl;
+
     }
     else   //  A field exerts force
     {
+
+        G4ExceptionDescription exceptionDescription;
+        exceptionDescription << "ITTransportation does not support external fields.";
+        exceptionDescription << " If you are dealing with a tradiational MC simulation, ";
+        exceptionDescription << "please use G4Transportation.";
+
+        G4Exception("G4ITTransportation::AlongStepGetPhysicalInteractionLength","NoExternalFieldSupport",
+                    FatalException,exceptionDescription);
+ /*
         G4double       momentumMagnitude = pParticle->GetTotalMomentum() ;
-//        G4ThreeVector  EndUnitMomentum ;
+        //        G4ThreeVector  EndUnitMomentum ;
         G4double       lengthAlongCurve ;
         G4double       restMass = pParticleDef->GetPDGMass() ;
 
@@ -390,7 +417,7 @@ G4double G4ITTransportation::AlongStepGetPhysicalInteractionLength(
             State(fCandidateEndGlobalTime)   = aFieldTrack.GetLabTimeOfFlight();
             State(fEndGlobalTimeComputed)    = true;
 
-//            State(theInteractionTimeLeft) = State(fCandidateEndGlobalTime) - track.GetGlobalTime() ;
+            State(theInteractionTimeLeft) = State(fCandidateEndGlobalTime) - track.GetGlobalTime() ;
 
             // was ( State(fCandidateEndGlobalTime) != track.GetGlobalTime() );
             // a cleaner way is to have FieldTrack knowing whether time is updated.
@@ -461,7 +488,8 @@ G4double G4ITTransportation::AlongStepGetPhysicalInteractionLength(
         State(fTransportEndSpin) = aFieldTrack.GetSpin();
         State(fParticleIsLooping) = fFieldPropagator->IsParticleLooping() ;
         State(endpointDistance)   = (State(fTransportEndPosition) - startPosition).mag() ;
-//        State(theInteractionTimeLeft) = track.GetVelocity()/State(endpointDistance) ;
+        //        State(theInteractionTimeLeft) = track.GetVelocity()/State(endpointDistance) ;
+*/
     }
 
     // If we are asked to go a step length of 0, and we are on a boundary
@@ -472,6 +500,8 @@ G4double G4ITTransportation::AlongStepGetPhysicalInteractionLength(
         if( currentSafety == 0.0 )
         {
             State(fGeometryLimitedStep) = true ;
+//            G4cout << "!!!! Safety is NULL, on the Boundary !!!!!" << G4endl;
+//            G4cout << " Track position : " << track.GetPosition() /nanometer << G4endl;
         }
     }
 
@@ -516,27 +546,32 @@ G4double G4ITTransportation::AlongStepGetPhysicalInteractionLength(
 
 
 void G4ITTransportation::ComputeStep(const G4Track& track,
-                                      const G4Step& step,
-                                      const double timeStep,
-                                      double& oPhysicalStep)
+                                     const G4Step& /*step*/,
+                                     const double timeStep,
+                                     double& oPhysicalStep)
 {
     const G4DynamicParticle*    pParticle  = track.GetDynamicParticle() ;
     G4ThreeVector startMomentumDir       = pParticle->GetMomentumDirection() ;
     G4ThreeVector startPosition          = track.GetPosition() ;
 
-    G4double finalVelocity   = track.GetVelocity() ;
+    track.CalculateVelocity();
+    G4double initialVelocity   = track.GetVelocity() ;
+
+    State(fGeometryLimitedStep) = false;
 
     /////////////////////////
     // !!! CASE NO FIELD !!!
     /////////////////////////
-    State(fCandidateEndGlobalTime) = step.GetPostStepPoint()->GetGlobalTime(); ;
+    State(fCandidateEndGlobalTime) = timeStep + track.GetGlobalTime();
     State(fEndGlobalTimeComputed) = true ;
 
     // Choose the calculation of the transportation: Field or not
     //
     if( !State(fMomentumChanged) )
     {
-        oPhysicalStep =  finalVelocity*timeStep ;
+        //        G4cout << "Momentum has not changed" << G4endl;
+        fParticleChange.ProposeVelocity(initialVelocity);
+        oPhysicalStep =  initialVelocity*timeStep ;
 
         // Calculate final position
         //
@@ -551,11 +586,13 @@ void G4ITTransportation::ComputeStep(const G4Track& track,
 //                               to corresponding members in G4Track)
 #include "G4ParticleTable.hh"
 G4VParticleChange* G4ITTransportation::AlongStepDoIt( const G4Track& track,
-                                                       const G4Step&  stepData )
+                                                      const G4Step&  stepData )
 {
+
+    //    G4cout << "G4ITTransportation::AlongStepDoIt" << G4endl;
     // set  pdefOpticalPhoton
     static  G4ParticleDefinition* pdefOpticalPhoton =
-      G4ParticleTable::GetParticleTable()->FindParticle("opticalphoton");
+            G4ParticleTable::GetParticleTable()->FindParticle("opticalphoton");
 
     static G4int noCalls=0;
     noCalls++;
@@ -581,7 +618,7 @@ G4VParticleChange* G4ITTransportation::AlongStepDoIt( const G4Track& track,
     ///___________________________________________________________________________
     /// !!!!!!!
     /// A REVOIR !!!!
-    if (!State(fEndGlobalTimeComputed))
+    if (State(fEndGlobalTimeComputed) == false)
     {
         // The time was not integrated .. make the best estimate possible
         //
@@ -600,23 +637,26 @@ G4VParticleChange* G4ITTransportation::AlongStepDoIt( const G4Track& track,
         {
             deltaTime = stepLength/initialVelocity ;
         }
+
         State(fCandidateEndGlobalTime)   = startTime + deltaTime ;
-        fParticleChange.ProposeLocalTime(  track.GetLocalTime() + deltaTime) ;
     }
     else
     {
         deltaTime = State(fCandidateEndGlobalTime) - startTime ;
-        fParticleChange.ProposeGlobalTime( State(fCandidateEndGlobalTime) ) ;
-
     }
 
+    fParticleChange.ProposeGlobalTime( State(fCandidateEndGlobalTime) ) ;
+    fParticleChange.ProposeLocalTime(  track.GetLocalTime() + deltaTime) ;
+    /*
     // Now Correct by Lorentz factor to get delta "proper" Time
 
     G4double  restMass       = track.GetDynamicParticle()->GetMass() ;
     G4double deltaProperTime = deltaTime*( restMass/track.GetTotalEnergy() ) ;
 
     fParticleChange.ProposeProperTime(track.GetProperTime() + deltaProperTime) ;
-    //fParticleChange. ProposeTrueStepLength( track.GetStepLength() ) ;
+*/
+
+    fParticleChange. ProposeTrueStepLength( track.GetStepLength() ) ;
 
     ///___________________________________________________________________________
     ///
@@ -697,10 +737,10 @@ G4VParticleChange* G4ITTransportation::AlongStepDoIt( const G4Track& track,
 
 G4double G4ITTransportation::
 PostStepGetPhysicalInteractionLength(
-    const G4Track&  , // track
-    G4double , // previousStepSize
-    G4ForceCondition* pForceCond
-    )
+        const G4Track&  , // track
+        G4double , // previousStepSize
+        G4ForceCondition* pForceCond
+        )
 {
     *pForceCond = Forced ;
     return DBL_MAX ;  // was kInfinity ; but convention now is DBL_MAX
@@ -710,8 +750,9 @@ PostStepGetPhysicalInteractionLength(
 //
 
 G4VParticleChange* G4ITTransportation::PostStepDoIt( const G4Track& track,
-                                                      const G4Step& )
+                                                     const G4Step& )
 {
+    //    G4cout << "G4ITTransportation::PostStepDoIt" << G4endl;
     G4TouchableHandle retCurrentTouchable ;   // The one to return
     G4bool isLastStep= false;
 
@@ -726,6 +767,9 @@ G4VParticleChange* G4ITTransportation::PostStepDoIt( const G4Track& track,
 
     if(State(fGeometryLimitedStep))
     {
+
+        //        G4cout << "Step is limited by geometry " <<  "track ID : " << track.GetTrackID() << G4endl;
+
         // fCurrentTouchable will now become the previous touchable,
         // and what was the previous will be freed.
         // (Needed because the preStepPoint can point to the previous touchable)
@@ -752,14 +796,23 @@ G4VParticleChange* G4ITTransportation::PostStepDoIt( const G4Track& track,
 #ifdef G4VERBOSE
             if(fVerboseLevel > 0)
             {
-                G4cout << "Track position : " << track.GetPosition() / nanometer<< G4endl;
-                G4cout << "G4ITTransportation will killed the track because \
-                      State(fCurrentTouchableHandle)->GetVolume() == 0"<< G4endl;
+                G4cout << "Track position : " << track.GetPosition() / nanometer << " [nm]"
+                       << " Track ID : " << track.GetTrackID()<< G4endl;
+                G4cout << "G4ITTransportation will killed the track because State(fCurrentTouchableHandle)->GetVolume() == 0"<< G4endl;
             }
 #endif
-                      fParticleChange.ProposeTrackStatus( fStopAndKill ) ;
+            fParticleChange.ProposeTrackStatus( fStopAndKill ) ;
         }
+
         retCurrentTouchable = State(fCurrentTouchableHandle) ;
+
+//        G4cout << "Current volume : " << track.GetVolume()->GetName()
+//               << " Next volume : "
+//               << (State(fCurrentTouchableHandle)->GetVolume() ? State(fCurrentTouchableHandle)->GetVolume()->GetName():"OutWorld")
+//               << " Position : " << track.GetPosition() / nanometer
+//               << " track ID : " << track.GetTrackID()
+//               << G4endl;
+
         fParticleChange.SetTouchableHandle( State(fCurrentTouchableHandle) ) ;
 
         // Update the Step flag which identifies the Last Step in a volume
@@ -770,12 +823,15 @@ G4VParticleChange* G4ITTransportation::PostStepDoIt( const G4Track& track,
         //  Checking first implementation of flagging Last Step in Volume
         G4bool exiting =  fLinearNavigator->ExitedMotherVolume();
         G4bool entering = fLinearNavigator->EnteredDaughterVolume();
+
         if( ! (exiting || entering) )
         {
             G4cout << " Transport> :  Proposed isLastStep= " << isLastStep
                    << " Exiting "  << fLinearNavigator->ExitedMotherVolume()
                    << " Entering " << fLinearNavigator->EnteredDaughterVolume()
+                   << " Track position : " << track.GetPosition() /nanometer << " [nm]"
                    << G4endl;
+            G4cout << " Track position : " << track.GetPosition() /nanometer << G4endl;
         }
 #endif
     }
@@ -797,7 +853,8 @@ G4VParticleChange* G4ITTransportation::PostStepDoIt( const G4Track& track,
 #ifdef G4DEBUG_TRANSPORT
         //  Checking first implementation of flagging Last Step in Volume
         G4cout << " Transport> Proposed isLastStep= " << isLastStep
-               << " Geometry did not limit step. " << G4endl;
+               << " Geometry did not limit step. Position : "
+               << track.GetPosition()/ nanometer << G4endl;
 #endif
     }         // endif ( fGeometryLimitedStep )
 
@@ -856,7 +913,7 @@ G4ITTransportation::StartTracking(G4Track* track)
     G4VProcess::StartTracking(track);
     if(fInstantiateProcessState)
         G4VITProcess::fpState = new G4ITTransportationState();
-        // Will set in the same time fTransportationState
+    // Will set in the same time fTransportationState
 
     // The actions here are those that were taken in AlongStepGPIL
     //   when track.GetCurrentStepNumber()==1
@@ -894,3 +951,5 @@ G4ITTransportation::StartTracking(G4Track* track)
 
     G4VITProcess::StartTracking(track);
 }
+
+#undef State

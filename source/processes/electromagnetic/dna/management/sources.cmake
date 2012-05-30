@@ -49,14 +49,19 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4ITModelHandler.hh
         G4ITModelManager.hh
         G4ITModelProcessor.hh
+        G4ITNavigator.hh
+        G4ITNavigator.icc
         G4ITReactionChange.hh
         G4ITReactionTable.hh
         G4ITStepManager.hh
+        G4ITSteppingMessenger.hh
         G4ITStepProcessor.hh
         G4ITStepStatus.hh
+        G4ITTrackHolder.hh
         G4ITTrackingManager.hh
         G4ITTransportation.hh
         G4ITTransportation.icc
+        G4ITTransportationManager.hh
         G4ITType.hh
         G4KDNode.hh
         G4KDTree.hh
@@ -82,13 +87,17 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4ITModelHandler.cc
         G4ITModelManager.cc
         G4ITModelProcessor.cc
+        G4ITNavigator.cc
         G4ITReactionChange.cc
         G4ITReactionTable.cc
         G4ITStepManager.cc
+        G4ITSteppingMessenger.cc
         G4ITStepProcessor2.cc
         G4ITStepProcessor.cc
+        G4ITTrackHolder.cc
         G4ITTrackingManager.cc
         G4ITTransportation.cc
+        G4ITTransportationManager.cc
         G4ITType.cc
         G4KDNode.cc
         G4KDTree.cc

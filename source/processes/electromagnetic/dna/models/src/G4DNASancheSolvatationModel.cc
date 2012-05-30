@@ -41,6 +41,7 @@
 #include "G4Electron.hh"
 #include "G4NistManager.hh"
 #include "G4DNAChemistryManager.hh"
+#include "G4DNAMolecularMaterial.hh"
 
 G4DNASancheSolvatationModel::G4DNASancheSolvatationModel(const G4ParticleDefinition*,
                                                          const G4String& nam):
@@ -51,7 +52,8 @@ G4DNASancheSolvatationModel::G4DNASancheSolvatationModel(const G4ParticleDefinit
     G4DNAWaterExcitationStructure exStructure ;
     SetHighEnergyLimit(exStructure.ExcitationEnergy(0));
     fParticleChangeForGamma = 0;
-    fNistWater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
+  //  fNistWater  = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
+    fpWaterDensity = 0;
 }
 
 //______________________________________________________________________
@@ -80,6 +82,9 @@ void G4DNASancheSolvatationModel::Initialise(const G4ParticleDefinition* particl
         fIsInitialised = true;
         fParticleChangeForGamma = GetParticleChangeForGamma();
     }
+
+    // Initialize waterDensity pointer
+    fpWaterDensity = G4DNAMolecularMaterial::Instance()->GetNumMolPerVolTableFor(G4Material::GetMaterial("G4_WATER"));
 }
 
 //______________________________________________________________________
@@ -99,7 +104,10 @@ G4double G4DNASancheSolvatationModel::CrossSectionPerVolume(const G4Material* ma
         return 0.0;
     }
 
-    if (material == fNistWater || material->GetBaseMaterial() == fNistWater)
+    G4double waterDensity = (*fpWaterDensity)[material->GetIndex()];
+
+    if(waterDensity!= 0.0)
+   //  if (material == nistwater || material->GetBaseMaterial() == nistwater)
     {
         if (ekin <= HighEnergyLimit())
         {
@@ -181,6 +189,7 @@ void G4DNASancheSolvatationModel::SampleSecondaries(std::vector<G4DynamicParticl
         //______________________________________________________________
         const G4Track * theIncomingTrack = fParticleChangeForGamma->GetCurrentTrack();
         G4ThreeVector finalPosition(theIncomingTrack->GetPosition()+displacement);
+
         G4DNAChemistryManager::Instance()->CreateSolvatedElectron(theIncomingTrack,&finalPosition);
 
         fParticleChangeForGamma->ProposeTrackStatus(fStopAndKill);

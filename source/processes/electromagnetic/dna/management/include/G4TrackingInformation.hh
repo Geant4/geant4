@@ -59,6 +59,8 @@ class G4Trajectory_Lock;
 class G4Track;
 struct G4ProcessState_Lock;
 class G4TrackingInformation;
+class G4SaveNavigatorState_Lock;
+class G4ITNavigatorState_Lock;
 
 class G4ITStepProcessorState_Lock{
     friend class G4TrackingInformation;
@@ -115,6 +117,9 @@ public:
     inline G4double         GetPreStepLocalTime() const;
     inline G4double         GetPreStepGlobalTime() const;
 
+    inline void SetNavigatorState(G4ITNavigatorState_Lock *);
+    inline G4ITNavigatorState_Lock* GetNavigatorState() const;
+
     //-------------
 protected:
     //-------------
@@ -128,6 +133,10 @@ protected:
     G4ThreeVector   fRecordedTrackPosition;
     G4double        fRecordedTrackLocalTime;
     G4double        fRecordedTrackGlobalTime;
+
+    //_______________________________________________________
+    G4ITNavigatorState_Lock* fNavigatorState;
+//    G4SaveNavigatorState_Lock* fNavigatorState;
 
     //_______________________________________________________
     /** Holds the information related to processes
@@ -182,6 +191,17 @@ inline G4double G4TrackingInformation::GetPreStepLocalTime() const
 inline const G4ThreeVector& G4TrackingInformation::GetPreStepPosition() const
 {
     return fRecordedTrackPosition;
+}
+
+
+inline void G4TrackingInformation::SetNavigatorState(G4ITNavigatorState_Lock* state)
+{
+    fNavigatorState = state;
+}
+
+inline G4ITNavigatorState_Lock* G4TrackingInformation::GetNavigatorState() const
+{
+    return fNavigatorState;
 }
 
 

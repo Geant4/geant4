@@ -65,6 +65,7 @@ G4VITProcess::G4VITProcess(const G4VITProcess& other)  : G4VProcess(other), fPro
         theInteractionTimeLeft              = 0;
         theNumberOfInteractionLengthLeft    = 0;
         fInstantiateProcessState            = other.fInstantiateProcessState;
+        fProposesTimeStep                   = other.fProposesTimeStep;
 }
 
 G4VITProcess& G4VITProcess::operator=(const G4VITProcess& rhs)

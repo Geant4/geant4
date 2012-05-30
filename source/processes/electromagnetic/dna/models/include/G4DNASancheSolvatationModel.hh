@@ -71,9 +71,11 @@ public :
     inline void SetVerbose(int);
 
 protected:
+    // Water density table
+    const std::vector<G4double>* fpWaterDensity;
+
     G4ThreeVector RadialDistributionOfProducts(G4double Rrms) const ;
     G4ParticleChangeForGamma* fParticleChangeForGamma;
-    G4Material* fNistWater ;
 
     G4bool fIsInitialised;
     G4int fVerboseLevel;

@@ -50,6 +50,7 @@
 #include "G4MolecularConfiguration.hh"
 #include "Randomize.hh"
 #include "G4Track.hh"
+#include "G4MoleculeCounter.hh"
 
 using namespace std;
 
@@ -125,7 +126,7 @@ void G4Molecule::Init()
  */
 //////////////////////////
 G4Molecule::G4Molecule() : G4VUserTrackInformation("G4Molecule"), G4IT()
-//////////////////////////
+  //////////////////////////
 {
     Init();
 }
@@ -136,6 +137,11 @@ G4Molecule::~G4Molecule()
 {
     if(fpTrack!=NULL)
     {
+        if(G4MoleculeCounter::GetMoleculeCounter()->InUse())
+        {
+            G4MoleculeCounter::GetMoleculeCounter()->RemoveAMoleculeAtTime(*this,
+                                                                           fpTrack->GetGlobalTime());
+        }
         fpTrack = 0;
     }
     fMolecularConfiguration = 0;
@@ -150,7 +156,7 @@ G4Molecule::~G4Molecule()
 //////////////////////////
 G4Molecule::G4Molecule(G4MoleculeDefinition * moleculeDefinition) :
     G4VUserTrackInformation("G4Molecule"), G4IT()
-//////////////////////////
+  //////////////////////////
 {
     Init();
     fMolecularConfiguration = G4MolecularConfiguration::GetMolecularConfiguration(moleculeDefinition);
@@ -163,7 +169,7 @@ G4Molecule::G4Molecule(G4MoleculeDefinition * moleculeDefinition) :
 //////////////////////////
 G4Molecule::G4Molecule(G4MoleculeDefinition * moleculeDefinition, G4int OrbitalToFree, G4int OrbitalToFill):
     G4VUserTrackInformation("G4Molecule"), G4IT()
-//////////////////////////
+  //////////////////////////
 {
     Init();
 
@@ -289,8 +295,11 @@ G4Track * G4Molecule::BuildTrack(G4double globalTime, const G4ThreeVector& Posit
     G4double KineticEnergy = GetKineticEnergy();
     // G4cout << " **** KineticEnergy : " << KineticEnergy << G4endl;
     fDynamicParticle = new G4DynamicParticle(fMolecularConfiguration->GetDefinition(),
-            MomentumDirection,
-            KineticEnergy);
+                                             MomentumDirection,
+                                             KineticEnergy);
+
+    if(G4MoleculeCounter::GetMoleculeCounter()->InUse())
+        G4MoleculeCounter::GetMoleculeCounter()->AddAMoleculeAtTime(*this,globalTime);
 
     //Set the Track
     fpTrack = new G4Track(fDynamicParticle, globalTime, Position);
@@ -375,9 +384,9 @@ G4double G4Molecule::GetMass() const
     return fMolecularConfiguration->GetMass();
 }
 
-G4ElectronOccupancy G4Molecule::GetElectronOccupancy() const
+const G4ElectronOccupancy* G4Molecule::GetElectronOccupancy() const
 {
-    return *(fMolecularConfiguration->GetElectronOccupancy());
+    return fMolecularConfiguration->GetElectronOccupancy();
 }
 
 const G4MoleculeDefinition* G4Molecule::GetDefinition() const

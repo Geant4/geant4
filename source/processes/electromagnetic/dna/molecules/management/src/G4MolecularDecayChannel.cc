@@ -86,48 +86,33 @@ G4MolecularDecayChannel::~G4MolecularDecayChannel()
 
 G4MolecularDecayChannel::G4MolecularDecayChannel(const G4MolecularDecayChannel& right)
 {
-    // String
-    fName  = right.fName;
-    //displacement type
-    fDisplacementType = right.fDisplacementType;
-    // pointers
-    if(right.fProductsVector)
-        fProductsVector = new vector<G4MoleculeHandle>(*(right.fProductsVector) );
-    else
-        fProductsVector = 0 ;
-
-    // double
-    fReleasedEnergy = right.fReleasedEnergy;
-    fDecayTime      = right.fDecayTime;
-    fProbability    = right.fProbability;
-    // vector
-    fRMSMotherMoleculeDisplacement = right.fRMSMotherMoleculeDisplacement;
-    fRMSProductsDisplacementVector = right.fRMSProductsDisplacementVector;
+    *this = right;
 }
 
 G4MolecularDecayChannel& G4MolecularDecayChannel::operator=
 (const G4MolecularDecayChannel& right)
 {
-    if(this == &right) return *this; // hendle self assignement
-
-    // string
-    fName = right.fName;
-    //displacement type
-    fDisplacementType = right.fDisplacementType;
-    // pointer
-    if(right.fProductsVector)
+    if(this != &right)
     {
-        fProductsVector = new vector<G4MoleculeHandle>(*(right.fProductsVector));
-    }
-    else fProductsVector = 0;
+        // string
+        fName = right.fName;
+        //displacement type
+        fDisplacementType = right.fDisplacementType;
+        // pointer
+        if(right.fProductsVector)
+        {
+            fProductsVector = new vector<G4MoleculeHandle>(*(right.fProductsVector));
+        }
+        else fProductsVector = 0;
 
-    // double
-    fReleasedEnergy = right.fReleasedEnergy;
-    fDecayTime      = right.fDecayTime;
-    fProbability    = right.fProbability;
-    // vector
-    fRMSMotherMoleculeDisplacement = right.fRMSMotherMoleculeDisplacement;
-    fRMSProductsDisplacementVector = right.fRMSProductsDisplacementVector;
+        // double
+        fReleasedEnergy = right.fReleasedEnergy;
+        fDecayTime      = right.fDecayTime;
+        fProbability    = right.fProbability;
+        // vector
+        fRMSMotherMoleculeDisplacement = right.fRMSMotherMoleculeDisplacement;
+        fRMSProductsDisplacementVector = right.fRMSProductsDisplacementVector;
+    }
     return *this;
 }
 

@@ -28,6 +28,7 @@
 #include "G4Electron.hh"
 #include "G4NistManager.hh"
 #include "G4DNAChemistryManager.hh"
+#include "G4DNAMolecularMaterial.hh"
 
 G4DNATransformElectronModel::G4DNATransformElectronModel(const G4ParticleDefinition*,
                                                          const G4String& nam):
@@ -37,7 +38,9 @@ G4DNATransformElectronModel::G4DNATransformElectronModel(const G4ParticleDefinit
     SetLowEnergyLimit(0.*eV);
     SetHighEnergyLimit(0.025*eV);
     fParticleChangeForGamma = 0;
-    fNistWater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
+  //  fNistWater  = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
+    fpWaterDensity = 0;
+    fpWaterDensity = 0;
 }
 
 //______________________________________________________________________
@@ -61,6 +64,9 @@ void G4DNATransformElectronModel::Initialise(const G4ParticleDefinition* particl
                     FatalErrorInArgument,exceptionDescription);
         return;
     }
+
+    // Initialize waterDensity pointer
+    fpWaterDensity = G4DNAMolecularMaterial::Instance()->GetNumMolPerVolTableFor(G4Material::GetMaterial("G4_WATER"));
 
     if(!fIsInitialised)
     {
@@ -86,7 +92,10 @@ G4double G4DNATransformElectronModel::CrossSectionPerVolume(const G4Material* ma
         return 0.0;
     }
 
-    if (material == fNistWater || material->GetBaseMaterial() == fNistWater)
+    G4double waterDensity = (*fpWaterDensity)[material->GetIndex()];
+
+    if(waterDensity!= 0.0)
+   //  if (material == nistwater || material->GetBaseMaterial() == nistwater)
     {
         if (ekin <= HighEnergyLimit())
         {

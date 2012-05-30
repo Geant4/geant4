@@ -44,7 +44,8 @@
 #include "G4Step.hh"
 #include "G4ParticleChangeForTransport.hh"
 
-class G4Navigator;
+class G4ITNavigator;
+//class G4Navigator;
 class G4SafetyHelper;
 class G4PropagatorInField;
 
@@ -192,7 +193,7 @@ protected :
     //________________________________________________________________
     // Informations relative to the process only (meaning no information
     // relative to the treated particle)
-    G4Navigator*         fLinearNavigator;
+    G4ITNavigator*         fLinearNavigator;
     G4PropagatorInField* fFieldPropagator;
     // The Propagators used to transport the particle
 

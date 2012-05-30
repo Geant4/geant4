@@ -31,6 +31,7 @@
 #include "G4UAtomicDeexcitation.hh"
 #include "G4LossTableManager.hh"
 #include "G4DNAChemistryManager.hh"
+#include "G4DNAMolecularMaterial.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -42,7 +43,7 @@ G4DNABornIonisationModel::G4DNABornIonisationModel(const G4ParticleDefinition*,
                                              const G4String& nam)
 :G4VEmModel(nam),isInitialised(false)
 {
-  nistwater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
+//  nistwater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
 
   verboseLevel= 0;
   // Verbosity scale:
@@ -60,6 +61,7 @@ G4DNABornIonisationModel::G4DNABornIonisationModel(const G4ParticleDefinition*,
   //Mark this model as "applicable" for atomic deexcitation
   SetDeexcitationFlag(true);
   fParticleChangeForGamma = 0;
+  fpWaterDensity = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -222,15 +224,16 @@ void G4DNABornIonisationModel::Initialise(const G4ParticleDefinition* particle,
            << particle->GetParticleName()
            << G4endl;
   }
+
+  // Initialize waterDensity pointer
+  fpWaterDensity = G4DNAMolecularMaterial::Instance()->GetNumMolPerVolTableFor(G4Material::GetMaterial("G4_WATER"));
   
   //
-
   fAtomDeexcitation  = G4LossTableManager::Instance()->AtomDeexcitation();
 
   if (isInitialised) { return; }
   fParticleChangeForGamma = GetParticleChangeForGamma();
   isInitialised = true;
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -258,7 +261,10 @@ G4double G4DNABornIonisationModel::CrossSectionPerVolume(const G4Material* mater
   G4double highLim = 0;
   G4double sigma=0;
 
-  if (material == nistwater || material->GetBaseMaterial() == nistwater)
+  G4double waterDensity = (*fpWaterDensity)[material->GetIndex()];
+
+  if(waterDensity!= 0.0)
+//  if (material == nistwater || material->GetBaseMaterial() == nistwater)
   {
     const G4String& particleName = particleDefinition->GetParticleName();
  
@@ -305,7 +311,8 @@ G4double G4DNABornIonisationModel::CrossSectionPerVolume(const G4Material* mater
  
   } // if (waterMaterial)
  
- return sigma*material->GetAtomicNumDensityVector()[1];		   
+// return sigma*material->GetAtomicNumDensityVector()[1];
+ return sigma*waterDensity;
 
 }
 
@@ -444,7 +451,7 @@ void G4DNABornIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
 
 
     const G4Track * theIncomingTrack = fParticleChangeForGamma->GetCurrentTrack();
-    G4DNAChemistryManager::Instance()->CreateWaterMolecule(fIonizedMolecule,
+    G4DNAChemistryManager::Instance()->CreateWaterMolecule(eIonizedMolecule,
                                                        ionizationShell,
                                                        theIncomingTrack);
   }

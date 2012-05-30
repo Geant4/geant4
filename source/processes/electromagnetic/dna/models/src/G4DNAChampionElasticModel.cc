@@ -28,6 +28,7 @@
 //
 
 #include "G4DNAChampionElasticModel.hh"
+#include "G4DNAMolecularMaterial.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -39,7 +40,7 @@ G4DNAChampionElasticModel::G4DNAChampionElasticModel(const G4ParticleDefinition*
                                              const G4String& nam)
 :G4VEmModel(nam),isInitialised(false)
 {
-  nistwater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
+//  nistwater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
 
   killBelowEnergy = 4*eV; 
   lowEnergyLimit = 0 * eV; 
@@ -64,6 +65,7 @@ G4DNAChampionElasticModel::G4DNAChampionElasticModel(const G4ParticleDefinition*
            << G4endl;
   }
   fParticleChangeForGamma = 0;
+  fpWaterDensity = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -186,6 +188,9 @@ void G4DNAChampionElasticModel::Initialise(const G4ParticleDefinition* /*particl
            << G4endl;
   }
 
+  // Initialize waterDensity pointer
+  fpWaterDensity = G4DNAMolecularMaterial::Instance()->GetNumMolPerVolTableFor(G4Material::GetMaterial("G4_WATER"));
+
   if (isInitialised) { return; }
   fParticleChangeForGamma = GetParticleChangeForGamma();
   isInitialised = true;
@@ -206,9 +211,12 @@ G4double G4DNAChampionElasticModel::CrossSectionPerVolume(const G4Material* mate
  // Calculate total cross section for model
 
  G4double sigma=0;
- 
- if (material == nistwater || material->GetBaseMaterial() == nistwater)
- {
+
+ G4double waterDensity = (*fpWaterDensity)[material->GetIndex()];
+
+ if(waterDensity!= 0.0)
+//  if (material == nistwater || material->GetBaseMaterial() == nistwater)
+  {
   const G4String& particleName = p->GetParticleName();
 
   if (ekin < highEnergyLimit)
@@ -244,7 +252,8 @@ G4double G4DNAChampionElasticModel::CrossSectionPerVolume(const G4Material* mate
 
  } 
          
- return sigma*material->GetAtomicNumDensityVector()[1];		   
+ return sigma*waterDensity;
+// return sigma*material->GetAtomicNumDensityVector()[1];
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

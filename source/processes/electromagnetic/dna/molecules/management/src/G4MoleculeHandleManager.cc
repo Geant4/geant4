@@ -32,7 +32,7 @@ G4MoleculeHandleManager* G4MoleculeHandleManager::fInstance (0);
 
 G4MoleculeHandleManager::G4MoleculeHandleManager()
 {
-//    G4cout << "G4MoleculeHandleManager::G4MoleculeHandleManager()" << G4endl;
+    //    G4cout << "G4MoleculeHandleManager::G4MoleculeHandleManager()" << G4endl;
 }
 
 G4bool G4MoleculeHandleManager::CompMoleculePointer::operator()(const G4Molecule* mol1, const G4Molecule* mol2) const
@@ -42,7 +42,7 @@ G4bool G4MoleculeHandleManager::CompMoleculePointer::operator()(const G4Molecule
 
 G4MoleculeHandleManager::~G4MoleculeHandleManager()
 {
-    if(!fMoleculeHandle.empty())
+    if(fMoleculeHandle.empty() == false)
     {
         MoleculeHandleMap::iterator it = fMoleculeHandle.begin();
         for( ; it != fMoleculeHandle.end() ; it++)

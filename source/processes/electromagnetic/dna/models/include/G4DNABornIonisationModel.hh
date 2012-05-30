@@ -78,10 +78,11 @@ protected:
 
 private:
 
+  // Water density table
+  const std::vector<G4double>* fpWaterDensity;
+
   //deexcitation manager to produce fluo photns and e-
   G4VAtomDeexcitation*      fAtomDeexcitation;
-  G4Material* nistwater;
-
 
   std::map<G4String,G4double,std::less<G4String> > lowEnergyLimit;
   std::map<G4String,G4double,std::less<G4String> > highEnergyLimit;

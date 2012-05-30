@@ -52,6 +52,7 @@ const DisplacementType G4DNAMolecularDecayDisplacer::Ionisation_DissociationDeca
 const DisplacementType G4DNAMolecularDecayDisplacer::A1B1_DissociationDecay = G4VMolecularDecayDisplacer::AddDisplacement();
 const DisplacementType G4DNAMolecularDecayDisplacer::B1A1_DissociationDecay = G4VMolecularDecayDisplacer::AddDisplacement();
 const DisplacementType G4DNAMolecularDecayDisplacer::AutoIonisation = G4VMolecularDecayDisplacer::AddDisplacement();
+const DisplacementType G4DNAMolecularDecayDisplacer::DissociativeAttachment = G4VMolecularDecayDisplacer::AddDisplacement();
 
 G4DNAMolecularDecayDisplacer::G4DNAMolecularDecayDisplacer() :
     G4VMolecularDecayDisplacer()
@@ -81,6 +82,10 @@ G4ThreeVector G4DNAMolecularDecayDisplacer::GetMotherMoleculeDisplacement(const 
     else if(decayType == AutoIonisation)
     {
         RMSMotherMoleculeDisplacement = 2.0 * nanometer ;
+    }
+    else if(decayType == DissociativeAttachment)
+    {
+        RMSMotherMoleculeDisplacement = 0. * nanometer ;
     }
 
     if(RMSMotherMoleculeDisplacement==0)
@@ -238,6 +243,43 @@ vector<G4ThreeVector> G4DNAMolecularDecayDisplacer::GetProductsDisplacement(cons
             if(product->GetDefinition() == G4Electron_aq::Definition())
             {
                 theProductDisplacementVector[i]=radialDistributionOfElectron();
+            }
+        }
+    }
+    else if(decayType == DissociativeAttachment)
+    {
+        if(fVerbose)
+            G4cout<<"DissociativeAttachment"<<G4endl;
+        G4double theRMSDisplacement = 0.8 * nanometer;
+        G4ThreeVector RandDirection = radialDistributionOfProducts(theRMSDisplacement);
+
+        G4int NbOfOH = 0;
+        for(G4int i =0 ; i < nbProducts ; i++)
+        {
+            const G4Molecule* product = theDecayChannel->GetProduct(i);
+            if(product->GetDefinition() == G4H2::Definition())
+            {
+                theProductDisplacementVector[i] = -2./18.*RandDirection;
+            }
+            else if(product->GetDefinition() == G4OH::Definition())
+            {
+                G4ThreeVector OxygenDisplacement = +16./18.*RandDirection;
+                G4double OHRMSDisplacement = 1.1 * nanometer;
+
+                G4ThreeVector OHDisplacement = radialDistributionOfProducts(OHRMSDisplacement) ;
+
+                if(NbOfOH==0)
+                {
+                    OHDisplacement = 1./2.*OHDisplacement;
+                }
+                else
+                {
+                    OHDisplacement = -1./2.*OHDisplacement;
+                }
+
+                theProductDisplacementVector[i]  = OHDisplacement + OxygenDisplacement;
+
+                NbOfOH ++;
             }
         }
     }

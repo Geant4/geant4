@@ -137,6 +137,15 @@ G4VParticleChange* G4DNAMolecularDecay::DecayIt(
         const vector<const G4MolecularDecayChannel*>* DecayVector =
                 (theMotherMolecule -> GetDecayChannel());
 
+        if(DecayVector == 0)
+        {
+            G4ExceptionDescription exceptionDescription;
+            theMotherMolecule->GetElectronOccupancy()->DumpInfo();
+            exceptionDescription << "No decay channel was found for the molecule : " << theMotherMolecule-> GetName() << G4endl;
+            G4Exception("G4DNAMolecularDecay::DecayIt", "G4DNAMolecularDecay::NoDecayChannel",FatalException,exceptionDescription);
+            return &aParticleChange;
+        }
+
         G4int DecayVectorSize = DecayVector-> size();
         //        DEBUG
         //            G4cout<< "Number of decay channels : " << DecayVectorSize<<G4endl;

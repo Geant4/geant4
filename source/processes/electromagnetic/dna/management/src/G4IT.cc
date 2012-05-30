@@ -89,22 +89,18 @@ G4IT& G4IT::operator=(const G4IT& right)
     G4Exception("G4IT::operator=(const G4IT& right)","G4IT001",FatalException,exceptionDescription);
     exit(-1);
 
-    if(this == &right) return *this;
-
-    fpTrack = 0;
-
-    fpITBox = 0;
-    fpPreviousIT = 0;
-    fpNextIT = 0;
-
-    fpKDNode = 0 ;
-
-    fParentID_A = 0;
-    fParentID_B = 0;
-
-    fpTrackingInformation = 0;
-    fpTrackNode = 0;
-
+    if(this != &right)
+    {
+        fpTrack = 0;
+        fpITBox = 0;
+        fpPreviousIT = 0;
+        fpNextIT = 0;
+        fpKDNode = 0 ;
+        fParentID_A = 0;
+        fParentID_B = 0;
+        fpTrackingInformation = 0;
+        fpTrackNode = 0;
+    }
     return *this;
 }
 

@@ -67,8 +67,8 @@ protected:
   G4ParticleChangeForGamma* fParticleChangeForGamma;
 
 private:
-
-  G4Material* nistwater;
+  // Water density table
+  const std::vector<G4double>* fpWaterDensity;
 
   std::map<G4String,G4double,std::less<G4String> > lowEnergyLimit;
   std::map<G4String,G4double,std::less<G4String> > highEnergyLimit;

@@ -42,7 +42,6 @@
 #include "globals.hh"                 // Include from 'global'
 #include "Randomize.hh"               // Include from 'global'
 
-#include "G4Navigator.hh"             // Include from 'geometry'
 #include "G4LogicalVolume.hh"         // Include from 'geometry'
 #include "G4VPhysicalVolume.hh"       // Include from 'geometry'
 #include "G4ProcessManager.hh"        // Include from 'piim'
@@ -61,6 +60,8 @@
 
 #include "G4TrackingInformation.hh"
 
+//class G4Navigator;
+class G4ITNavigator;
 class G4ParticleDefinition ;
 class G4ITTrackingManager;
 class G4IT;
@@ -128,7 +129,7 @@ protected:
 
     void GetAtRestIL();
     void DoDefinePhysicalStepLength();
-    G4StepStatus DoStepping();
+    void DoStepping();
 
     void CalculateStep();
     void DoCalculateStep();
@@ -143,7 +144,7 @@ protected:
     void InvokePostStepDoItProcs();
     void InvokePSDIP(size_t); //
     void InvokeTransportationProc();
-    void SetNavigator(G4Navigator* value);
+    void SetNavigator(G4ITNavigator *value);
     G4double CalculateSafety();
 
     // Return the estimated safety value at the PostStepPoint
@@ -165,7 +166,8 @@ private:
     G4double kCarTolerance;
     // Cached geometrical tolerance on surface
 
-    G4Navigator*            fpNavigator;
+    G4ITNavigator*            fpNavigator;
+//    G4Navigator*            fpNavigator;
     G4int                   fStoreTrajectory;
     G4int                   verboseLevel;
 
@@ -313,7 +315,7 @@ inline G4double G4ITStepProcessor::CalculateSafety()
                      kCarTolerance );
 }
 
-inline void G4ITStepProcessor::SetNavigator(G4Navigator* value)
+inline void G4ITStepProcessor::SetNavigator(G4ITNavigator *value)
 {
     fpNavigator = value;
 }
@@ -340,6 +342,7 @@ inline void G4ITStepProcessor::CleanProcessor()
     fpTransportation = 0;
 
     fpCurrentProcess= 0;
+    fpProcessInfo = 0;
 }
 
 //______________________________________________________________________________

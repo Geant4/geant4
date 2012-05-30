@@ -96,6 +96,8 @@ public:
 
     virtual void StartTracking(G4Track*);
 
+    virtual void BuildPhysicsTable(const G4ParticleDefinition&){}
+
     inline G4double GetInteractionTimeLeft();
 
     /** WARNING : Redefine the method of G4VProcess
@@ -157,6 +159,8 @@ protected:  // with description
 
     G4bool InstantiateProcessState() { return fInstantiateProcessState; }
 
+    G4bool fProposesTimeStep;
+
 private :
     const size_t fProcessID; // During all the simulation will identify a
     // process, so if two identical process are created using a copy constructor
@@ -164,7 +168,6 @@ private :
     static size_t fNbProcess ;
 
     G4bool fInstantiateProcessState;
-    G4bool fProposesTimeStep;
     //_________________________________________________
     // Redefine needed members and method of G4VProcess
     G4double*          theNumberOfInteractionLengthLeft;

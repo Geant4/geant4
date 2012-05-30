@@ -43,6 +43,8 @@
 #include "G4ITTrackingManager.hh"
 #include "G4ITTransportation.hh"
 
+#include "G4ITNavigator.hh"             // Include from 'geometry'
+//#include "G4Navigator.hh"             // Include from 'geometry'
 
 void G4ITStepProcessor::DealWithSecondaries(G4int& counter)
 {
@@ -92,6 +94,7 @@ void G4ITStepProcessor::DealWithSecondaries(G4int& counter)
 void G4ITStepProcessor::Stepping(G4Track* track, const double & timeStep)
 {
     CleanProcessor();
+    if(track == 0) return ; // maybe put an exception here
     fTimeStep = timeStep ;
     SetTrack(track);
     DoStepping();
@@ -101,9 +104,8 @@ void G4ITStepProcessor::Stepping(G4Track* track, const double & timeStep)
 // ************************************************************************
 //	Stepping
 // ************************************************************************
-G4StepStatus G4ITStepProcessor::DoStepping()
+void G4ITStepProcessor::DoStepping()
 {
-
     SetupMembers() ;
 
     if(!fpProcessInfo)
@@ -113,91 +115,117 @@ G4StepStatus G4ITStepProcessor::DoStepping()
                              << fpTrack->GetDefinition()->GetParticleName();
         G4Exception("G4ITStepProcessor::DoStepping","ITStepProcessor0012",
                     FatalErrorInArgument,exceptionDescription);
-        return fUndefined;
+        return ;
     }
     else if(fpTrack->GetTrackStatus() == fStopAndKill )
     {
-        return fUndefined;
+        fpState->fStepStatus = fUndefined;
+        return ;
     }
 
+    if(fpProcessInfo->MAXofPostStepLoops == 0
+            && fpProcessInfo->MAXofAlongStepLoops == 0
+            && fpProcessInfo->MAXofAtRestLoops == 0)
+    {
+        fpTrack -> SetTrackStatus(fStopAndKill) ;
+        fpState->fStepStatus = fUndefined;
+        return ;
+    }
     //---------------------------------
     // AtRestStep, AlongStep and PostStep Processes
     //---------------------------------
-    else  if( fpTrack->GetTrackStatus() == fStopButAlive )
+    else
     {
-        if( fpProcessInfo->MAXofAtRestLoops>0 &&
-                fpProcessInfo->fpAtRestDoItVector != 0) // second condition to make coverity happy
+        fpNavigator->SetNavigatorState(fpITrack->GetTrackingInfo()->GetNavigatorState());
+        fpNavigator->ResetHierarchyAndLocate( fpTrack->GetPosition(),
+                                              fpTrack->GetMomentumDirection(),
+                                              *((G4TouchableHistory*)fpTrack->GetTouchableHandle()()) );
+        fpNavigator->SetNavigatorState(fpITrack->GetTrackingInfo()->GetNavigatorState());
+        // We reset the navigator state before checking for AtRest
+        // in case a AtRest processe would use a navigator info
+
+        if( fpTrack->GetTrackStatus() == fStopButAlive )
         {
-            //-----------------
-            // AtRestStepDoIt
-            //-----------------
-            InvokeAtRestDoItProcs();
-            fpState->fStepStatus = fAtRestDoItProc;
+            if( fpProcessInfo->MAXofAtRestLoops>0 &&
+                    fpProcessInfo->fpAtRestDoItVector != 0) // second condition to make coverity happy
+            {
+                //-----------------
+                // AtRestStepDoIt
+                //-----------------
+                InvokeAtRestDoItProcs();
+                fpState->fStepStatus = fAtRestDoItProc;
+                fpStep->GetPostStepPoint()->SetStepStatus( fpState->fStepStatus );
+
+            }
+            // Make sure the track is killed
+            fpTrack->SetTrackStatus( fStopAndKill );
+        }
+        else // if(fTimeStep > 0.) // Bye, because PostStepIL can return 0 => time =0
+        {
+            if(fpITrack == 0)
+            {
+                G4ExceptionDescription exceptionDescription ;
+                exceptionDescription
+                        << " !!! TrackID : "<<  fpTrack->GetTrackID() << G4endl
+                        << " !!! Track status : "<<  fpTrack->GetTrackStatus() << G4endl
+                        << " !!! Particle Name : "<< fpTrack -> GetDefinition() -> GetParticleName() << G4endl
+                        << "No G4ITStepProcessor::fpITrack found" << G4endl;
+
+                G4Exception("G4ITStepProcessor::DoStepping","ITStepProcessor0013",
+                            FatalErrorInArgument,exceptionDescription);
+                return ; // to make coverity happy
+            }
+
+            if(fpITrack->GetTrackingInfo()->IsLeadingStep() == false)
+            {
+                // In case the track has NOT the minimum step length
+                // Given the final step time, the transportation
+                // will compute the final position of the particle
+
+                fpState->fStepStatus = fPostStepDoItProc;
+                fpStep->GetPostStepPoint()
+                        ->SetProcessDefinedStep(fpTransportation);
+                FindTransportationStep();
+            }
+
+
+            // Store the Step length (geometrical length) to G4Step and G4Track
+            fpTrack->SetStepLength( fpState->fPhysicalStep );
+            fpStep->SetStepLength( fpState->fPhysicalStep );
+
+            G4double GeomStepLength = fpState->fPhysicalStep;
+
+            // Store StepStatus to PostStepPoint
             fpStep->GetPostStepPoint()->SetStepStatus( fpState->fStepStatus );
 
+            // Invoke AlongStepDoIt
+            InvokeAlongStepDoItProcs();
+
+            // Update track by taking into account all changes by AlongStepDoIt
+            // fpStep->UpdateTrack(); // done in InvokeAlongStepDoItProcs
+
+            // Update safety after invocation of all AlongStepDoIts
+            fpState->endpointSafOrigin= fpPostStepPoint->GetPosition();
+
+            fpState->endpointSafety=  std::max( fpState->proposedSafety - GeomStepLength, kCarTolerance);
+
+            fpStep->GetPostStepPoint()->SetSafety( fpState->endpointSafety );
+
+            if(GetIT(fpTrack)->GetTrackingInfo()->IsLeadingStep())
+            {
+                // Invoke PostStepDoIt including G4ITTransportation::PSDI
+                InvokePostStepDoItProcs();
+            }
+            else
+            {
+                // Only invoke transportation
+                InvokeTransportationProc();
+            }
         }
-        // Make sure the track is killed
-        fpTrack->SetTrackStatus( fStopAndKill );
+
+        fpITrack->GetTrackingInfo()->SetNavigatorState(fpNavigator->GetNavigatorState());
+        fpNavigator->SetNavigatorState(0);
     }
-    else if(fTimeStep > 0.) // Bye, because PostStepIL can return 0 => time =0
-    {
-        if(fpITrack == 0)
-        {
-            G4ExceptionDescription exceptionDescription ;
-            exceptionDescription
-                    << " !!! TrackID : "<<  fpTrack->GetTrackID() << G4endl
-                    << " !!! Track status : "<<  fpTrack->GetTrackStatus() << G4endl
-                    << " !!! Particle Name : "<< fpTrack -> GetDefinition() -> GetParticleName() << G4endl
-                    << "No G4ITStepProcessor::fpITrack found" << G4endl;
-
-            G4Exception("G4ITStepProcessor::DoStepping","ITStepProcessor0013",
-                        FatalErrorInArgument,exceptionDescription);
-            return fUndefined; // to make coverity happy
-        }
-
-        if(fpITrack->GetTrackingInfo()->IsLeadingStep() == false)
-        {
-            // In case the track has NOT the minimum step length
-            // Given the final step time, the transportation
-            // will compute the final position of the particle
-            FindTransportationStep();
-        }
-
-
-        // Store the Step length (geometrical length) to G4Step and G4Track
-        fpTrack->SetStepLength( fpState->fPhysicalStep );
-        fpStep->SetStepLength( fpState->fPhysicalStep );
-
-        G4double GeomStepLength = fpState->fPhysicalStep;
-
-        // Store StepStatus to PostStepPoint
-        fpStep->GetPostStepPoint()->SetStepStatus( fpState->fStepStatus );
-
-        // Invoke AlongStepDoIt
-        InvokeAlongStepDoItProcs();
-
-        // Update track by taking into account all changes by AlongStepDoIt
-        fpStep->UpdateTrack();
-
-        // Update safety after invocation of all AlongStepDoIts
-        fpState->endpointSafOrigin= fpPostStepPoint->GetPosition();
-
-        fpState->endpointSafety=  std::max( fpState->proposedSafety - GeomStepLength, kCarTolerance);
-
-        fpStep->GetPostStepPoint()->SetSafety( fpState->endpointSafety );
-
-        if(GetIT(fpTrack)->GetTrackingInfo()->IsLeadingStep())
-        {
-            // Invoke PostStepDoIt including G4ITTransportation::PSDI
-            InvokePostStepDoItProcs();
-        }
-        else
-        {
-            // Only invoke transportation
-            InvokeTransportationProc();
-        }
-    }
-
     //-------
     // Finale
     //-------
@@ -232,7 +260,8 @@ G4StepStatus G4ITStepProcessor::DoStepping()
 ***/
     fpTrackingManager->AppendTrajectory(fpTrack,fpStep);
     // Stepping process finish. Return the value of the StepStatus.
-    return fpState->fStepStatus;
+
+    //    return fpState->fStepStatus;
 }
 
 //______________________________________________________________________________
@@ -313,6 +342,7 @@ void G4ITStepProcessor::InvokeAlongStepDoItProcs()
                 = fpCurrentProcess->AlongStepDoIt( *fpTrack, *fpStep );
         fpCurrentProcess->SetProcessState(0);
         // Update the PostStepPoint of Step according to ParticleChange
+
         fpParticleChange->UpdateStepForAlongStep(fpStep);
 
         // Now Store the secondaries from ParticleChange to SecondaryList
@@ -327,11 +357,12 @@ void G4ITStepProcessor::InvokeAlongStepDoItProcs()
     }
 
     fpStep->UpdateTrack();
+
     G4TrackStatus fNewStatus = fpTrack->GetTrackStatus();
 
     if ( fNewStatus == fAlive && fpTrack->GetKineticEnergy() <= DBL_MIN )
     {
-        G4cout << "G4ITStepProcessor::InvokeAlongStepDoItProcs : Track will be killed" << G4endl;
+        //        G4cout << "G4ITStepProcessor::InvokeAlongStepDoItProcs : Track will be killed" << G4endl;
         if(fpProcessInfo->MAXofAtRestLoops>0) fNewStatus = fStopButAlive;
         else                   fNewStatus = fStopAndKill;
         fpTrack->SetTrackStatus( fNewStatus );

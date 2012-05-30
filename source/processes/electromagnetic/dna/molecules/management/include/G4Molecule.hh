@@ -208,7 +208,7 @@ public:
     /** Returns the object ElectronOccupancy describing the electronic
      * configuration of the molecule.
      */
-    G4ElectronOccupancy GetElectronOccupancy() const;
+    const G4ElectronOccupancy* GetElectronOccupancy() const;
 
     /** Returns the charge of molecule.
      */

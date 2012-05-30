@@ -76,7 +76,9 @@ protected:
 
 private:
 
-    G4Material* fNistWater;
+    // Water density table
+    const std::vector<G4double>* fpWaterDensity;
+
     G4bool fIsInitialised;
     G4int fVerboseLevel;
 

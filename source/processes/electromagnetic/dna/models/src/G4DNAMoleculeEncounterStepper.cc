@@ -266,9 +266,9 @@ void G4DNAMoleculeEncounterStepper::RetrieveResults(const G4Track& trackA, const
             exceptionDescription << "The incomming trackID "
                                  << "(trackA entering in G4DNAMoleculeEncounterStepper and "
                                  << "for which you are looking reactant for) is : "
-                                 << trackA.GetTrackID() << G4endl;
+                                 << trackA.GetTrackID()  <<"("<< GetMolecule(trackA)->GetName()<<")" << G4endl;
             exceptionDescription << "And the trackID of the reactant (trackB) is: "
-                                 << trackB->GetTrackID() << G4endl;
+                                 << trackB->GetTrackID()  <<"("<< GetMolecule(trackB)->GetName()<<")" << G4endl;
             G4Exception("G4DNAMoleculeEncounterStepper::RetrieveResults","MoleculeEncounterStepper002",
                         FatalErrorInArgument,exceptionDescription);
             continue ;

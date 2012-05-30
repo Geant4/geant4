@@ -34,6 +34,8 @@
 
 #include "G4TrackingInformation.hh"
 #include "G4VITProcess.hh"
+#include "G4ITNavigator.hh"
+//#include "G4Navigator.hh"
 
 G4TrackingInformation::G4TrackingInformation() :
     fStepLeader                     (false),
@@ -44,6 +46,7 @@ G4TrackingInformation::G4TrackingInformation() :
     fRecordedTrackGlobalTime    = -1;
     fRecordedTrackLocalTime     = -1;
     fpStepProcessorState        = 0;
+    fNavigatorState = 0;
 }
 
 G4TrackingInformation::~G4TrackingInformation()
@@ -58,8 +61,10 @@ G4TrackingInformation::~G4TrackingInformation()
         }
     }
     fProcessState.clear();
-    delete fpStepProcessorState;
+    if(fpStepProcessorState) delete fpStepProcessorState;
     fpStepProcessorState = 0;
+    if(fNavigatorState) delete fNavigatorState;
+    fNavigatorState = 0;
 }
 
 // should not be used
@@ -71,6 +76,7 @@ G4TrackingInformation::G4TrackingInformation(const G4TrackingInformation& /*othe
     fpTrajectory_Lock = 0;
     fRecordedTrackGlobalTime = -1;
     fRecordedTrackLocalTime = -1;
+    fNavigatorState = 0;
 }
 
 // should not be used

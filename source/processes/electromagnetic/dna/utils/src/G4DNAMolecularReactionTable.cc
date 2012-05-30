@@ -483,6 +483,7 @@ G4DNAMolecularReactionTable::GetReactionData(const G4Molecule* molecule) const
         G4String errMsg = "No reaction table was implemented for this molecule Definition : "
                 + molecule -> GetName();
         G4Exception("G4MolecularInteractionTable::GetReactionData","",FatalErrorInArgument, errMsg);
+        return 0; // coverity
     }
 
     return &(it->second);

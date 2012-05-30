@@ -47,20 +47,24 @@
 #include "G4TrackList.hh"
 #include "G4ITModelHandler.hh"
 #include "G4ITStepStatus.hh"
+#include "G4ITTrackHolder.hh"
 
 class G4ITTrackingManager;
 class G4ITModelProcessor;
 class G4ITStepProcessor;
 class G4Track ;
 class G4UserReactionAction;
+class G4ITSteppingMessenger;
 
 
 /**
   * G4ITStepManager enables to synchronize in time
   * the step of tracks.
   */
-class G4ITStepManager
+class G4ITStepManager : public G4ITTrackHolder
 {
+    friend class std::auto_ptr<G4ITStepManager>;
+    virtual ~G4ITStepManager();
 
 public :
     static G4ITStepManager* Instance();
@@ -69,13 +73,19 @@ public :
       */
     static void DeleteInstance();
 
-    ~G4ITStepManager();
-
     void Initialize() ;
+    inline bool IsInitialized();
     void Reset();
     void Process() ;
-    void PushTrack(G4Track*);
+    virtual void PushTrack(G4Track*);
     void ClearList();
+
+    // To be called only in UserReactionAction::EndProcessing()
+    // after fRunning flag has been turned off.
+    // This is not done automatically before UserReactionAction::EndProcessing()
+    // is called in case one would like to access some track information
+    void EndTracking();
+
     void SetEndTime(const double);
 
     inline void SetTimeTolerance(double);
@@ -83,9 +93,14 @@ public :
     // in the same time slice
     inline double GetTimeTolerance() const;
 
+    inline void SetMaxZeroTimeAllowed(int);
+    inline int GetMaxZeroTimeAllowed() const;
+
     inline G4ITModelHandler* GetModelHandler();
     inline void     SetTimeSteps(std::map<double,double>*);
     inline G4int    GetNbSteps() const;
+    inline void     SetMaxNbSteps(G4int);
+    inline G4int    GetMaxNbSteps() const;
     inline G4double GetEndTime() const;
     inline G4double GetTimeStep() const;
     inline G4double GetPreviousTimeStep() const;
@@ -120,7 +135,6 @@ protected:
 
     void EndTracking(G4Track*);
     void KillTracks();
-    void EndTracking();
 
     void ExtractTimeStepperData(G4ITModelProcessor*);
     void ExtractILData(G4ITStepProcessor*);
@@ -130,6 +144,11 @@ protected:
 
 private:
     G4ITStepManager();
+    void Create();
+    G4ITStepManager(const G4ITStepManager&);
+    G4ITStepManager& operator=(const G4ITStepManager&);
+
+    G4ITSteppingMessenger* fSteppingMsg;
 
     static std::auto_ptr<G4ITStepManager> fgStepManager ;
     int fVerbose;
@@ -138,6 +157,7 @@ private:
 
     int fNbTracks ;
     int fNbSteps ;
+    int fMaxSteps;
 
     G4ITStepStatus fITStepStatus;
 
@@ -147,7 +167,9 @@ private:
     double fTmpGlobalTime ;
     double fEndTime ;       // fEndTime : stores the biggest global time steps here (for synchronizing tracks)
     double fTmpEndTime ;    // fTmpEndTime : Stores the biggest end time here (for synchronizing tracks)
-    double fPreviousStepTime;
+    double fPreviousTimeStep;
+    int    fZeroTimeCount;
+    int    fMaxNZeroTimeStepsAllowed;
 
     // Flags
     bool fComputeTimeStep;
@@ -189,6 +211,11 @@ private:
 
 };
 
+inline bool G4ITStepManager::IsInitialized()
+{
+    return fInitialized;
+}
+
 inline G4ITModelHandler* G4ITStepManager::GetModelHandler() {return fpModelHandler;}
 
 inline void G4ITStepManager::SetEndTime(const double __endtime) { fEndTime = __endtime ;}
@@ -202,6 +229,16 @@ inline void G4ITStepManager::SetTimeSteps(std::map<double,double>* steps)
 inline G4int G4ITStepManager::GetNbSteps() const
 {
     return fNbSteps;
+}
+
+inline void G4ITStepManager::SetMaxNbSteps(G4int maxSteps)
+{
+    fMaxSteps = maxSteps;
+}
+
+inline G4int G4ITStepManager::GetMaxNbSteps() const
+{
+    return fMaxSteps ;
 }
 
 inline G4double G4ITStepManager::GetEndTime() const
@@ -240,6 +277,16 @@ inline int G4ITStepManager::GetVerbose() const
     return fVerbose ;
 }
 
+inline void G4ITStepManager::SetMaxZeroTimeAllowed(int maxTimeStepAllowed)
+{
+    fMaxNZeroTimeStepsAllowed = maxTimeStepAllowed;
+}
+
+inline int G4ITStepManager::GetMaxZeroTimeAllowed() const
+{
+    return fMaxNZeroTimeStepsAllowed ;
+}
+
 inline void G4ITStepManager::SetTimeTolerance(double time)
 {
     fTimeTolerance = time;
@@ -252,7 +299,7 @@ inline double G4ITStepManager::GetTimeTolerance() const
 
 inline G4double G4ITStepManager::GetPreviousTimeStep() const
 {
-    return fPreviousStepTime;
+    return fPreviousTimeStep;
 }
 
 inline G4ITStepStatus G4ITStepManager::GetStatus() const
