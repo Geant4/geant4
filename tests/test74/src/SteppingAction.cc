@@ -59,5 +59,20 @@ void SteppingAction::UserSteppingAction(const G4Step* s)
 
   G4double edep = s->GetTotalEnergyDeposit();
   Run->SumeTransf(edep);
+
+  G4Track* track = s->GetTrack();
+  G4double kinEnergy = track->GetKineticEnergy();
+
+  G4ParticleDefinition* particle = track->GetDefinition();
+  G4String particleName = particle->GetParticleName(); 
+  G4double Mion_c2 = particle->GetPDGMass();
+  G4double ekin = kinEnergy*proton_mass_c2/Mion_c2 ;
+
+  if(particleName!="e-" && ekin/keV < 50)
+  {
+    track->SetTrackStatus(fStopAndKill);
+    Run->SumeTransf(kinEnergy);
+    return ;
+  }
   
 }    

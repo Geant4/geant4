@@ -15,5 +15,8 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 May 2012 - M. Raine, S. Incerti, tag test74-V09-05-01
+              Updated SteppingAction.cc
+
 04 April 2012 - M. Raine, S. Incerti, tag test74-V09-05-00
               First version.
