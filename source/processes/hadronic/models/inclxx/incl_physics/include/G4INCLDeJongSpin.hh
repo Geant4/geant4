@@ -30,47 +30,48 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
 
-#include "G4INCLStandaloneParticleDataSource.hh"
+/** \file G4INCLDeJongSpin.hh
+ * \brief Simple class implementing De Jong's spin model for nucleus-nucleus
+ *        collisions
+ *
+ * Reference: De Jong, Ignatyuk and Schmidt, Nucl. Phys. A613 (1997) 435-444.
+ *
+ * Created on: 2 April 2012
+ *     Author: Davide Mancusi
+ */
+
+#ifndef G4INCLDEJONGSPIN_HH_
+#define G4INCLDEJONGSPIN_HH_
+
+#include "G4INCLGlobals.hh"
+#include "G4INCLRandom.hh"
 
 namespace G4INCL {
-  StandaloneParticleDataSource::StandaloneParticleDataSource()
-  {}
+  class DeJongSpin {
+    public:
+      static ThreeVector shoot(const G4int Ap, const G4int Af) {
+        return Random::gaussVector(getSpinCutoffParameter(Ap, Af));
+      }
 
-  StandaloneParticleDataSource::~StandaloneParticleDataSource()
-  {}
+    private:
+      static G4double getSpinCutoffParameter(const G4int Ap, const G4int Af) {
+        const G4double jz2 = jzFactor * Math::pow23((G4double) Ap); // No deformation assumed
+        const G4double sigma = jz2 * Af*(Ap-Af)/((G4double)(Ap-1));
+        return std::sqrt(sigma);
+      }
 
-  std::string StandaloneParticleDataSource::getPDSName(ParticleType /*t*/)
-  {
-    return std::string("NAMES_NOT_IMPLEMENTED_YET");
-  }
+      const static G4double jzFactor;
 
-  std::string StandaloneParticleDataSource::getPDSName(G4int /*A*/, G4int /*Z*/)
-  {
-    return std::string("NAMES_NOT_IMPLEMENTED_YET");
-  }
+      DeJongSpin() {}
+      ~DeJongSpin() {}
 
-  G4double StandaloneParticleDataSource::getMass(ParticleType t)
-  {
-    const G4double mN = 938.2796;
-    const G4double mPi = 138.0;
-    if(t == Proton || t == Neutron) {
-      return mN;
-    } else if(t == PiPlus || t == PiMinus || t == PiZero) {
-      return mPi;
-    } else {
-      ERROR("Standalone PDS: No mass for unknown particle." << std::endl);
-      return 0.0;
-    }
-  }
-
-  G4double StandaloneParticleDataSource::getMass(G4int A, G4int Z)
-  {
-    return (A - Z) * getMass(Neutron) + Z * getMass(Proton);
-  }
+  };
 }
+
+#endif // G4INCLDEJONGSPIN_HH_

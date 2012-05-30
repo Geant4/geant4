@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -68,14 +68,19 @@ public:
   static const G4ParticleDefinition* fromINCLParticleType(G4INCL::ParticleType);
 
   /**
+   * Convert G4HadProjectile to corresponding INCL particle species
+   */
+  static G4INCL::ParticleSpecies toINCLParticleSpecies(const G4HadProjectile &);
+
+  /**
+   * Convert G4HadProjectile to corresponding INCL particle kinetic energy
+   */
+  static G4double toINCLKineticEnergy(const G4HadProjectile &);
+
+  /**
    * Create INCL projectile particle
    */
   static G4INCL::Particle* createProjectile(const G4HadProjectile &);
-
-  /**
-   * Create the INCL model initialized with the target information
-   */
-  static G4INCL::INCL* createModel(const G4Nucleus &);
 
   static G4DynamicParticle* toG4Particle(G4int A, G4int Z , G4double kinE, G4double px, G4double py, G4double pz);
 

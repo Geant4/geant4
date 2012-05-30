@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -53,6 +53,7 @@
 #include <list>
 #include <sstream>
 #include <string>
+#include <algorithm>
 
 namespace G4INCL {
 
@@ -67,6 +68,85 @@ namespace G4INCL {
     Particle(ParticleType t, G4double energy, ThreeVector momentum, ThreeVector position);
     Particle(ParticleType t, ThreeVector momentum, ThreeVector position);
     virtual ~Particle();
+
+    /** \brief Copy constructor
+     *
+     * Does not copy the particle ID.
+     */
+    Particle(const Particle &rhs) {
+      theZ = rhs.theZ;
+      theA = rhs.theA;
+      theParticipantType = rhs.theParticipantType;
+      theType = rhs.theType;
+      theEnergy = rhs.theEnergy;
+      theFrozenEnergy = rhs.theFrozenEnergy;
+      if(rhs.thePropagationEnergy == &(rhs.theFrozenEnergy))
+        thePropagationEnergy = &theFrozenEnergy;
+      else
+        thePropagationEnergy = &theEnergy;
+      theMomentum = rhs.theMomentum;
+      theFrozenMomentum = rhs.theFrozenMomentum;
+      if(rhs.thePropagationMomentum == &(rhs.theFrozenMomentum))
+        thePropagationMomentum = &theFrozenMomentum;
+      else
+        thePropagationMomentum = &theMomentum;
+      thePosition = rhs.thePosition;
+      nCollisions = rhs.nCollisions;
+      nDecays = rhs.nDecays;
+      thePotentialEnergy = rhs.thePotentialEnergy;
+      // ID intentionally not copied
+      ID = nextID++;
+
+      theHelicity = rhs.theHelicity;
+      emissionTime = rhs.emissionTime;
+      outOfWell = rhs.outOfWell;
+
+      theMass = rhs.theMass;
+    }
+
+  protected:
+    /// \brief Helper method for the assignment operator
+    void swap(Particle &rhs) {
+      std::swap(theZ, rhs.theZ);
+      std::swap(theA, rhs.theA);
+      std::swap(theParticipantType, rhs.theParticipantType);
+      std::swap(theType, rhs.theType);
+      if(rhs.thePropagationEnergy == &(rhs.theFrozenEnergy))
+        thePropagationEnergy = &theFrozenEnergy;
+      else
+        thePropagationEnergy = &theEnergy;
+      std::swap(theEnergy, rhs.theEnergy);
+      std::swap(theFrozenEnergy, rhs.theFrozenEnergy);
+      if(rhs.thePropagationMomentum == &(rhs.theFrozenMomentum))
+        thePropagationMomentum = &theFrozenMomentum;
+      else
+        thePropagationMomentum = &theMomentum;
+      std::swap(theMomentum, rhs.theMomentum);
+      std::swap(theFrozenMomentum, rhs.theFrozenMomentum);
+      std::swap(thePosition, rhs.thePosition);
+      std::swap(nCollisions, rhs.nCollisions);
+      std::swap(nDecays, rhs.nDecays);
+      std::swap(thePotentialEnergy, rhs.thePotentialEnergy);
+      // ID intentionally not swapped
+
+      std::swap(theHelicity, rhs.theHelicity);
+      std::swap(emissionTime, rhs.emissionTime);
+      std::swap(outOfWell, rhs.outOfWell);
+
+      std::swap(theMass, rhs.theMass);
+    }
+
+  public:
+
+    /** \brief Assignment operator
+     *
+     * Does not copy the particle ID.
+     */
+    Particle &operator=(const Particle &rhs) {
+      Particle temporaryParticle(rhs);
+      swap(temporaryParticle);
+      return *this;
+    }
 
     /**
      * Get the particle type.
@@ -119,7 +199,7 @@ namespace G4INCL {
       }
 
       if( !isResonance() && t!=Composite )
-        theMass = ParticleTable::getMass(theType);
+        setINCLMass();
     }
 
     /**
@@ -132,16 +212,36 @@ namespace G4INCL {
 	return false;
     };
 
+    ParticipantType getParticipantType() const {
+      return theParticipantType;
+    }
+
+    void setParticipantType(ParticipantType const p) {
+      theParticipantType = p;
+    }
+
     G4bool isParticipant() const {
-      return participant;
+      return (theParticipantType==Participant);
     }
 
-    void makeParticipant() {
-      participant = true;
+    G4bool isTargetSpectator() const {
+      return (theParticipantType==TargetSpectator);
     }
 
-    void makeSpectator() {
-      participant = false;
+    G4bool isProjectileSpectator() const {
+      return (theParticipantType==ProjectileSpectator);
+    }
+
+    virtual void makeParticipant() {
+      theParticipantType = Participant;
+    }
+
+    virtual void makeTargetSpectator() {
+      theParticipantType = TargetSpectator;
+    }
+
+    virtual void makeProjectileSpectator() {
+      theParticipantType = ProjectileSpectator;
     }
 
     /** \brief Is this a pion? */
@@ -189,12 +289,195 @@ namespace G4INCL {
       const G4double bp = theMomentum.dot(boostVector);
       const G4double alpha = (gamma*gamma)/(1.0 + gamma);
 
-      theMomentum = theMomentum + boostVector * alpha * bp - boostVector * gamma * theEnergy;
+      theMomentum = theMomentum + boostVector * (alpha * bp - gamma * theEnergy);
       theEnergy = gamma * (theEnergy - bp);
+    }
+
+    /** \brief Lorentz-contract the particle position around some center
+     *
+     * Apply Lorentz contraction to the position component along the
+     * direction of the boost vector.
+     *
+     * \param boostVector the boost vector (velocity) [c]
+     * \param refPos the reference position
+     */
+    void lorentzContract(const ThreeVector &boostVector, const ThreeVector &refPos) {
+      const G4double beta2 = boostVector.mag2();
+      const G4double gamma = 1.0 / std::sqrt(1.0 - beta2);
+      const ThreeVector theRelativePosition = thePosition - refPos;
+      const ThreeVector transversePosition = theRelativePosition - boostVector * (theRelativePosition.dot(boostVector) / boostVector.mag2());
+      const ThreeVector longitudinalPosition = theRelativePosition - transversePosition;
+
+      thePosition = refPos + transversePosition + longitudinalPosition / gamma;
     }
 
     /** \brief Get the cached particle mass. */
     inline G4double getMass() const { return theMass; }
+
+    /** \brief Get the INCL particle mass. */
+    inline G4double getINCLMass() const {
+      switch(theType) {
+        case Proton:
+        case Neutron:
+        case PiPlus:
+        case PiMinus:
+        case PiZero:
+          return ParticleTable::getINCLMass(theType);
+          break;
+
+        case DeltaPlusPlus:
+        case DeltaPlus:
+        case DeltaZero:
+        case DeltaMinus:
+          return theMass;
+          break;
+
+        case Composite:
+          return ParticleTable::getINCLMass(theA,theZ);
+          break;
+
+        default:
+          ERROR("Particle::getINCLMass: Unknown particle type." << std::endl);
+          return 0.0;
+          break;
+      }
+    }
+
+    /** \brief Get the tabulated particle mass. */
+    inline virtual G4double getTableMass() const {
+      switch(theType) {
+        case Proton:
+        case Neutron:
+        case PiPlus:
+        case PiMinus:
+        case PiZero:
+          return ParticleTable::getTableParticleMass(theType);
+          break;
+
+        case DeltaPlusPlus:
+        case DeltaPlus:
+        case DeltaZero:
+        case DeltaMinus:
+          return theMass;
+          break;
+
+        case Composite:
+          return ParticleTable::getTableMass(theA,theZ);
+          break;
+
+        default:
+          ERROR("Particle::getTableMass: Unknown particle type." << std::endl);
+          return 0.0;
+          break;
+      }
+    }
+
+    /** \brief Get the real particle mass. */
+    inline G4double getRealMass() const {
+      switch(theType) {
+        case Proton:
+        case Neutron:
+        case PiPlus:
+        case PiMinus:
+        case PiZero:
+          return ParticleTable::getRealMass(theType);
+          break;
+
+        case DeltaPlusPlus:
+        case DeltaPlus:
+        case DeltaZero:
+        case DeltaMinus:
+          return theMass;
+          break;
+
+        case Composite:
+          return ParticleTable::getRealMass(theA,theZ);
+          break;
+
+        default:
+          ERROR("Particle::getRealMass: Unknown particle type." << std::endl);
+          return 0.0;
+          break;
+      }
+    }
+
+    /// \brief Set the mass of the Particle to its real mass
+    void setRealMass() { setMass(getRealMass()); }
+
+    /// \brief Set the mass of the Particle to its table mass
+    void setTableMass() { setMass(getTableMass()); }
+
+    /// \brief Set the mass of the Particle to its table mass
+    void setINCLMass() { setMass(getINCLMass()); }
+
+    /**\brief Computes correction on the emission Q-value
+     *
+     * Computes the correction that must be applied to INCL particles in
+     * order to obtain the correct Q-value for particle emission from a given
+     * nucleus. For absorption, the correction is obviously equal to minus
+     * the value returned by this function.
+     *
+     * \param AParent the mass number of the emitting nucleus
+     * \param ZParent the charge number of the emitting nucleus
+     * \return the correction
+     */
+    G4double getEmissionQValueCorrection(const G4int AParent, const G4int ZParent) const {
+      const G4int ADaughter = AParent - theA;
+      const G4int ZDaughter = ZParent - theZ;
+
+      // Note the minus sign here
+      G4double theQValue;
+      if(isCluster())
+        theQValue = -ParticleTable::getTableQValue(theA, theZ, ADaughter, ZDaughter);
+      else {
+        const G4double massTableParent = ParticleTable::getTableMass(AParent,ZParent);
+        const G4double massTableDaughter = ParticleTable::getTableMass(ADaughter,ZDaughter);
+        const G4double massTableParticle = getTableMass();
+        theQValue = massTableParent - massTableDaughter - massTableParticle;
+      }
+
+      const G4double massINCLParent = ParticleTable::getINCLMass(AParent,ZParent);
+      const G4double massINCLDaughter = ParticleTable::getINCLMass(ADaughter,ZDaughter);
+      const G4double massINCLParticle = getINCLMass();
+
+      // The rhs corresponds to the INCL Q-value
+      return theQValue - (massINCLParent-massINCLDaughter-massINCLParticle);
+    }
+
+    /**\brief Computes correction on the transfer Q-value
+     *
+     * Computes the correction that must be applied to INCL particles in
+     * order to obtain the correct Q-value for particle transfer from a given
+     * nucleus to another.
+     *
+     * Assumes that the receving nucleus is INCL's target nucleus, with the
+     * INCL separation energy.
+     *
+     * \param AFrom the mass number of the donating nucleus
+     * \param ZFrom the charge number of the donating nucleus
+     * \param ATo the mass number of the receiving nucleus
+     * \param ZTo the charge number of the receiving nucleus
+     * \return the correction
+     */
+    G4double getTransferQValueCorrection(const G4int AFrom, const G4int ZFrom, const G4int ATo, const G4int ZTo) const {
+      const G4int AFromDaughter = AFrom - theA;
+      const G4int ZFromDaughter = ZFrom - theZ;
+      const G4int AToDaughter = ATo + theA;
+      const G4int ZToDaughter = ZTo + theZ;
+      const G4double theQValue = ParticleTable::getTableQValue(AToDaughter,ZToDaughter,AFromDaughter,ZFromDaughter,AFrom,ZFrom);
+
+      const G4double massINCLTo = ParticleTable::getINCLMass(ATo,ZTo);
+      const G4double massINCLToDaughter = ParticleTable::getINCLMass(AToDaughter,ZToDaughter);
+      /* Note that here we have to use the table mass in the INCL Q-value. We
+       * cannot use theMass, because at this stage the particle is probably
+       * still off-shell; and we cannot use getINCLMass(), because it leads to
+       * violations of global energy conservation.
+       */
+      const G4double massINCLParticle = getTableMass();
+
+      // The rhs corresponds to the INCL Q-value for particle absorption
+      return theQValue - (massINCLToDaughter-massINCLTo-massINCLParticle);
+    }
 
     /** \brief Get the the particle invariant mass.
      *
@@ -253,7 +536,7 @@ namespace G4INCL {
     };
 
     /** Get the angular momentum w.r.t. the origin */
-    G4INCL::ThreeVector getAngularMomentum() const
+    virtual G4INCL::ThreeVector getAngularMomentum() const
     {
       return thePosition.vector(theMomentum);
     };
@@ -261,7 +544,7 @@ namespace G4INCL {
     /**
      * Set the momentum vector.
      */
-    void setMomentum(const G4INCL::ThreeVector &momentum)
+    virtual void setMomentum(const G4INCL::ThreeVector &momentum)
     {
       this->theMomentum = momentum;
     };
@@ -274,7 +557,7 @@ namespace G4INCL {
       return thePosition;
     };
 
-    void setPosition(const G4INCL::ThreeVector &position)
+    virtual void setPosition(const G4INCL::ThreeVector &position)
     {
       this->thePosition = position;
     };
@@ -283,7 +566,7 @@ namespace G4INCL {
     void setHelicity(G4double h) { theHelicity = h; };
 
     void propagate(G4double step) {
-      thePosition += (theMomentum*(step/theEnergy));
+      thePosition += ((*thePropagationMomentum)*(step/(*thePropagationEnergy)));
     };
 
     /** \brief Return the number of collisions undergone by the particle. **/
@@ -321,9 +604,13 @@ namespace G4INCL {
     G4double getEmissionTime() { return emissionTime; };
 
     /** \brief Transverse component of the position w.r.t. the momentum. */
-    ThreeVector getTransversePosition() {
-      return thePosition - theMomentum *
-        (thePosition.dot(theMomentum)/theMomentum.mag2());
+    ThreeVector getTransversePosition() const {
+      return thePosition - getLongitudinalPosition();
+    }
+
+    /** \brief Longitudinal component of the position w.r.t. the momentum. */
+    ThreeVector getLongitudinalPosition() const {
+      return *thePropagationMomentum * (thePosition.dot(*thePropagationMomentum)/thePropagationMomentum->mag2());
     }
 
     /** \brief Rescale the momentum to match the total energy. */
@@ -340,8 +627,55 @@ namespace G4INCL {
     }
 
     G4bool isCluster() const {
-      if(theType == Composite) return true;
-      else return false;
+      return (theType == Composite);
+    }
+
+    /// \brief Set the frozen particle momentum
+    void setFrozenMomentum(const ThreeVector &momentum) { theFrozenMomentum = momentum; }
+
+    /// \brief Set the frozen particle momentum
+    void setFrozenEnergy(const G4double energy) { theFrozenEnergy = energy; }
+
+    /// \brief Get the frozen particle momentum
+    ThreeVector getFrozenMomentum() const { return theFrozenMomentum; }
+
+    /// \brief Get the frozen particle momentum
+    G4double getFrozenEnergy() const { return theFrozenEnergy; }
+
+    /// \brief Get the propagation velocity of the particle
+    ThreeVector getPropagationVelocity() const { return (*thePropagationMomentum)/(*thePropagationEnergy); }
+
+    /** \brief Freeze particle propagation
+     *
+     * Make the particle use theFrozenMomentum and theFrozenEnergy for
+     * propagation. The normal state can be restored by calling the
+     * thawPropagation() method.
+     */
+    void freezePropagation() {
+      thePropagationMomentum = &theFrozenMomentum;
+      thePropagationEnergy = &theFrozenEnergy;
+    }
+
+    /** \brief Unfreeze particle propagation
+     *
+     * Make the particle use theMomentum and theEnergy for propagation. Call
+     * this method to restore the normal propagation if the
+     * freezePropagation() method has been called.
+     */
+    void thawPropagation() {
+      thePropagationMomentum = &theMomentum;
+      thePropagationEnergy = &theEnergy;
+    }
+
+    /** \brief Rotate the particle position and momentum
+     *
+     * \param angle the rotation angle
+     * \param axis a unit vector representing the rotation axis
+     */
+    virtual void rotate(const G4double angle, const ThreeVector &axis) {
+      thePosition.rotate(angle, axis);
+      theMomentum.rotate(angle, axis);
+      theFrozenMomentum.rotate(angle, axis);
     }
 
     std::string print() const {
@@ -384,10 +718,14 @@ namespace G4INCL {
 
   protected:
     G4int theZ, theA;
-    G4bool participant;
+    ParticipantType theParticipantType;
     G4INCL::ParticleType theType;
     G4double theEnergy;
+    G4double *thePropagationEnergy;
+    G4double theFrozenEnergy;
     G4INCL::ThreeVector theMomentum;
+    G4INCL::ThreeVector *thePropagationMomentum;
+    G4INCL::ThreeVector theFrozenMomentum;
     G4INCL::ThreeVector thePosition;
     G4int nCollisions;
     G4int nDecays;
@@ -401,8 +739,6 @@ namespace G4INCL {
 
     G4double theMass;
     static long nextID;
-
-
 
   };
 }

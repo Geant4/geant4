@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -38,7 +38,7 @@
 
 #include "G4INCLParticleType.hh"
 #include "G4INCLConfig.hh"
-#include "G4INCLParticleType.hh"
+#include "G4INCLParticleSpecies.hh"
 #include "G4INCLParticleTable.hh"
 
 #ifdef HAS_BOOST_PROGRAM_OPTIONS
@@ -55,32 +55,40 @@
 
 namespace G4INCL {
 
-  Config::Config() {}
+  Config::Config() :
+      verbosity(1), inputFileName(""),
+      title("INCL default run title"), outputFileRoot(""),
+      logFileName(""),
+      nShots(1000),
+      targetString(""),
+      targetSpecies(ParticleSpecies()),
+      naturalTarget(false),
+      projectileString("proton"), projectileSpecies(G4INCL::Proton),
+      projectileKineticEnergy(1000.0),
+      verboseEvent(-1),
+      randomSeed1(666), randomSeed2(777),
+      pauliString("strict-statistical"), pauliType(StrictStatisticalPauli),
+      CDPP(true),
+      coulombString("non-relativistic"), coulombType(NonRelativisticCoulomb),
+      potentialString("isospin-energy"), potentialType(IsospinEnergyPotential),
+      pionPotential(true),
+      localEnergyBBString("first-collision"), localEnergyBBType(FirstCollisionLocalEnergy),
+      localEnergyPiString("first-collision"), localEnergyPiType(FirstCollisionLocalEnergy),
+      deExcitationString("none"), deExcitationType(DeExcitationNone),
+      ablav3pCxxDataFilePath(""),
+      abla07DataFilePath(""),
+      INCLXXDataFilePath(""),
+      clusterAlgorithmString("intercomparison"), clusterAlgorithmType(IntercomparisonClusterAlgorithm),
+      clusterMaxMass(8),
+      backToSpectator(true),
+      useRealMasses(true)
+  {}
 
-  Config::Config(G4int A, G4int Z, G4INCL::ParticleType proj, G4double projectileE)
-    :verbosity(1), inputFileName(""),
-     title("INCL default run title"), outputFileRoot("incl-output"),
-     logFileName("-"), // Log to the standard output (uses G4cout if in G4)
-     nShots(1000),              // Irrelevant in Geant4
-     targetA(A), targetZ(Z), // Dummy target. G4INCLXXFactory will
-     // change these.
-     naturalTarget(false),
-     projectileString("projectile"), projectileType(proj),
-     projectileKineticEnergy(projectileE),
-     verboseEvent(-1),
-     randomSeed1(666), randomSeed2(777), // In Geant4 these seeds
-					 // aren't actually used
-     pauliString("strict-statistical"), pauliType(StrictStatisticalPauli),
-     CDPP(true),
-     coulombString("non-relativistic"), coulombType(NonRelativisticCoulomb),
-     potentialString("isospin-energy"), potentialType(IsospinEnergyPotential),
-     pionPotential(true),
-     localEnergyBBString("first-collision"), localEnergyBBType(FirstCollisionLocalEnergy),
-     localEnergyPiString("never"), localEnergyPiType(NeverLocalEnergy),
-     clusterAlgorithmString("intercomparison"), clusterAlgorithmType(IntercomparisonClusterAlgorithm),
-     clusterMaxMass(8),
-     backToSpectator(true)
+  Config::Config(G4int /*A*/, G4int /*Z*/, G4INCL::ParticleSpecies proj, G4double projectileE) :
+     projectileSpecies(proj),
+     projectileKineticEnergy(projectileE)
   {
+    Config();
     //    std::cout << echo() << std::endl;
   }
 
@@ -117,22 +125,24 @@ namespace G4INCL {
       // Run-specific options
       boost::program_options::options_description runOptDesc("Run options");
       runOptDesc.add_options()
-        ("title,t", boost::program_options::value<std::string>(&title)->default_value("INCL default run title"), "run title")
-        ("output,o", boost::program_options::value<std::string>(&outputFileRoot)->default_value("incl-output"), "root for generating output file names. Suffixes (.root, .out, etc.) will be appended to this root. Defaults to the input file name")
+        ("title", boost::program_options::value<std::string>(&title)->default_value("INCL default run title"), "run title")
+        ("output,o", boost::program_options::value<std::string>(&outputFileRoot), "root for generating output file names. Suffixes (.root, .out, etc.) will be appended to this root. Defaults to the input file name, if given; otherwise, defaults to a string composed of the explicitly specified options")
         ("logfile,l", boost::program_options::value<std::string>(&logFileName), "log file name. Defaults to `<output_root>.log'. Use `-' if you want to redirect logging to stdout")
         ("number-shots,N", boost::program_options::value<G4int>(&nShots), "* number of shots")
-        ("target-mass,A", boost::program_options::value<G4int>(&targetA), "mass number of the target. If omitted, natural target composition is assumed.")
-        ("target-charge,Z", boost::program_options::value<G4int>(&targetZ), "* charge number of the target")
+        ("target,t", boost::program_options::value<std::string>(&targetString), "* target nuclide. Can be specified as Fe56, 56Fe, Fe-56, 56-Fe, Fe_56, 56_Fe or Fe. If the mass number is omitted, natural target composition is assumed.")
         ("projectile,p", boost::program_options::value<std::string>(&projectileString), "* projectile name:\n"
          "  \tproton, p\n"
          "  \tneutron, n\n"
          "  \tpi+, piplus, pion+, pionplus\n"
          "  \tpi0, pizero, pion0, pionzero\n"
-         "  \tpi-, piminus, pion-, pionminus")
-        ("energy,E", boost::program_options::value<G4float>(&projectileKineticEnergy), "* kinetic energy of the projectile, in MeV")
+         "  \tpi-, piminus, pion-, pionminus\n"
+         "  \td, t, a, deuteron, triton, alpha\n"
+         "  \tHe-4, He4, 4He (and so on)\n")
+        ("energy,E", boost::program_options::value<G4float>(&projectileKineticEnergy), "* total kinetic energy of the projectile, in MeV")
         ("verbose-event", boost::program_options::value<G4int>(&verboseEvent)->default_value(-1), "request verbose logging for the specified event only")
         ("random-seed-1", boost::program_options::value<G4int>(&randomSeed1)->default_value(666), "first seed for the random-number generator")
         ("random-seed-2", boost::program_options::value<G4int>(&randomSeed2)->default_value(777), "second seed for the random-number generator")
+        ("inclxx-datafile-path", boost::program_options::value<std::string>(&INCLXXDataFilePath)->default_value("./data/"))
         ("ablav3p-cxx-datafile-path", boost::program_options::value<std::string>(&ablav3pCxxDataFilePath)->default_value("./ablaxx/data/G4ABLA3.0/"))
         ("abla07-datafile-path", boost::program_options::value<std::string>(&abla07DataFilePath)->default_value("./smop/tables/"))
         ("verbosity,v", boost::program_options::value<G4int>(&verbosity)->default_value(4), verbosityDescription.str().c_str())
@@ -149,14 +159,15 @@ namespace G4INCL {
          "  \tnone")
         ("cdpp", boost::program_options::value<G4bool>(&CDPP)->default_value(true), "whether to apply CDPP after collisions:\n  \ttrue, 1 (default)\n  \tfalse, 0")
         ("coulomb", boost::program_options::value<std::string>(&coulombString)->default_value("non-relativistic"), "Coulomb-distortion algorithm:\n  \tnon-relativistic (default)\n  \tnone")
-        ("potential", boost::program_options::value<std::string>(&potentialString)->default_value("isospin-energy"), "nucleon potential:\n  \tisospin-energy (default)\n  \tisospin\n  \tconstant")
+        ("potential", boost::program_options::value<std::string>(&potentialString)->default_value("isospin-energy"), "nucleon potential:\n  \tisospin-energy-smooth\n  \tisospin-energy (default)\n  \tisospin\n  \tconstant")
         ("pion-potential", boost::program_options::value<G4bool>(&pionPotential)->default_value("true"), "whether to use a pion potential:\n  \ttrue, 1 (default)\n  \tfalse, 0")
         ("local-energy-BB", boost::program_options::value<std::string>(&localEnergyBBString)->default_value("first-collision"), "local energy in baryon-baryon collisions:\n  \talways\n  \tfirst-collision (default)\n  \tnever")
-        ("local-energy-pi", boost::program_options::value<std::string>(&localEnergyPiString)->default_value("never"), "local energy in pi-N collisions and in delta decays:\n  \talways\n  \tfirst-collision\n  \tnever (default)")
+        ("local-energy-pi", boost::program_options::value<std::string>(&localEnergyPiString)->default_value("first-collision"), "local energy in pi-N collisions and in delta decays:\n  \talways\n  \tfirst-collision (default)\n  \tnever")
         ("de-excitation", boost::program_options::value<std::string>(&deExcitationString)->default_value("none"), "which de-excitation model to use:\n  \tnone (default)\n  \tABLAv3p\n  \tABLA07")
         ("cluster-algorithm", boost::program_options::value<std::string>(&clusterAlgorithmString)->default_value("intercomparison"), "clustering algorithm for production of composites:\n  \tintercomparison (default)\n  \tnone")
         ("cluster-max-mass", boost::program_options::value<G4int>(&clusterMaxMass)->default_value(8), "maximum mass of produced composites:\n  \tminimum 2\n  \tmaximum 12")
         ("back-to-spectator", boost::program_options::value<G4bool>(&backToSpectator)->default_value("true"), "whether to use back-to-spectator:\n  \ttrue, 1 (default)\n  \tfalse, 0")
+        ("use-real-masses", boost::program_options::value<G4bool>(&useRealMasses)->default_value("true"), "whether to use real masses for the outgoing particle energies:\n  \ttrue, 1 (default)\n  \tfalse, 0")
         ;
 
       // Select options allowed on the command line
@@ -200,7 +211,6 @@ namespace G4INCL {
           // Merge options from the input file
           boost::program_options::store(boost::program_options::parse_config_file(inputFileStream, configFileOptions), variablesMap);
           boost::program_options::notify(variablesMap);
-          if(!variablesMap.count("output")) outputFileRoot = inputFileName;
         }
         inputFileStream.close();
       }
@@ -249,8 +259,8 @@ namespace G4INCL {
         std::string missingOption("");
         if(!variablesMap.count("number-shots"))
           missingOption = "number-shots";
-        else if(!variablesMap.count("target-charge"))
-          missingOption = "target-charge";
+        else if(!variablesMap.count("target"))
+          missingOption = "target";
         else if(!variablesMap.count("projectile"))
           missingOption = "projectile";
         else if(!variablesMap.count("energy"))
@@ -264,9 +274,27 @@ namespace G4INCL {
         std::cout <<"Not performing a full run. This had better be a test..." << std::endl;
       }
 
-      // -A/--target-mass: if not specified, assume natural target
-      if(!variablesMap.count("target-mass"))
-        naturalTarget=true;
+      // -p/--projectile: projectile species
+      projectileSpecies = ParticleSpecies(projectileString);
+      if(projectileSpecies.theType == G4INCL::UnknownParticle && isFullRun) {
+        std::cerr << "Error: unrecognized particle type " << projectileString << std::endl;
+        std::cerr << suggestHelpMsg;
+        std::exit(EXIT_FAILURE);
+      }
+
+      // -t/--target: target species
+      // TODO: natural targets
+      if(variablesMap.count("target")) {
+        targetSpecies = ParticleSpecies(targetString);
+        if(targetSpecies.theType!=Composite) {
+          std::cerr << "Unrecognized target. You specified: " << targetString << std::endl
+            << "  The target nuclide must be specified in one of the following forms:" << std::endl
+            << "    Fe56, 56Fe, Fe-56, 56-Fe, Fe_56, 56_Fe, Fe" << std::endl
+            << "  You can also use IUPAC element names (such as Uuh)." << std::endl;
+          std::cerr << suggestHelpMsg;
+          std::exit(EXIT_FAILURE);
+        }
+      }
 
       // --pauli
       if(variablesMap.count("pauli")) {
@@ -304,7 +332,8 @@ namespace G4INCL {
           coulombType = NoCoulomb;
         else {
           std::cerr << "Unrecognized Coulomb-distortion algorithm. Must be one of:" << std::endl
-            << "  non-relativistic (default)" << std::endl
+            << "  non-relativistic-heavy-ion (default)" << std::endl
+            << "  non-relativistic" << std::endl
             << "  none" << std::endl;
           std::cerr << suggestHelpMsg;
           std::exit(EXIT_FAILURE);
@@ -315,7 +344,9 @@ namespace G4INCL {
       if(variablesMap.count("potential")) {
         std::string potentialNorm = potentialString;
         std::transform(potentialNorm.begin(), potentialNorm.end(), potentialNorm.begin(), ::tolower);
-        if(potentialNorm=="isospin-energy") {
+        if(potentialNorm=="isospin-energy-smooth") {
+          potentialType = IsospinEnergySmoothPotential;
+        } else if(potentialNorm=="isospin-energy") {
           potentialType = IsospinEnergyPotential;
         } else if(potentialNorm=="isospin")
           potentialType = IsospinPotential;
@@ -323,6 +354,7 @@ namespace G4INCL {
           potentialType = ConstantPotential;
         else {
           std::cerr << "Unrecognized potential type. Must be one of:" << std::endl
+            << "  isospin-energy-smooth" << std::endl
             << "  isospin-energy (default)" << std::endl
             << "  isospin" << std::endl
             << "  constant" << std::endl;
@@ -426,6 +458,53 @@ namespace G4INCL {
           std::exit(EXIT_FAILURE);
       }
 
+      // --output: construct a reasonable output file root if not specified
+      if(!variablesMap.count("output")) {
+        // If an input file was specified, use its name as the output file root
+        if(variablesMap.count("input-file"))
+          outputFileRoot = inputFileName;
+        else {
+          std::stringstream outputFileRootStream;
+          outputFileRootStream.precision(0);
+          outputFileRootStream.setf(std::ios::fixed, std::ios::floatfield);
+          outputFileRootStream <<
+            ParticleTable::getShortName(projectileSpecies) << "_" <<
+            ParticleTable::getShortName(targetSpecies) << "_" <<
+            projectileKineticEnergy;
+
+          // Append suffixes to the output file root for each explicitly specified CLI option
+          typedef boost::program_options::variables_map::const_iterator BPOVMIter;
+          for(BPOVMIter i=variablesMap.begin(); i!=variablesMap.end(); ++i) {
+            std::string const &name = i->first;
+            // Only process CLI options
+            if(name!="projectile"
+                && name!="target"
+                && name!="energy"
+                && name!="number-shots"
+                && name!="random-seed-1"
+                && name!="random-seed-2"
+                && name!="inclxx-datafile-path"
+                && name!="abla07-datafile-path"
+                && name!="ablav3p-cxx-datafile-path") {
+              boost::program_options::variable_value v = i->second;
+              if(!v.defaulted()) {
+                const std::type_info &type = v.value().type();
+                if(type==typeid(std::string))
+                  outputFileRootStream << "_" << name << "=" << v.as<std::string>();
+                else if(type==typeid(G4float))
+                  outputFileRootStream << "_" << name << "=" << v.as<G4float>();
+                else if(type==typeid(G4int))
+                  outputFileRootStream << "_" << name << "=" << v.as<G4int>();
+                else if(type==typeid(G4bool))
+                  outputFileRootStream << "_" << name << "=" << v.as<G4bool>();
+              }
+            }
+          }
+
+          outputFileRoot = outputFileRootStream.str();
+        }
+      }
+
       // -l/--logfile
       if(!variablesMap.count("logfile"))
         logFileName = outputFileRoot + ".log";
@@ -438,38 +517,12 @@ namespace G4INCL {
       std::exit(EXIT_FAILURE);
     }
 
-    // Process the rest of the options here:
-
-    // Set projectileType:
-    projectileType = ParticleTable::getParticleType(projectileString);
-    if(projectileType == G4INCL::UnknownParticle && isFullRun) {
-      std::cerr << "Error: unrecognized particle type " << projectileString << std::endl;
-      std::cerr << suggestHelpMsg;
-      std::exit(EXIT_FAILURE);
-    }
   }
 #else
-    Config::Config(G4int /*argc*/, char ** /*argv*/, G4bool /*isFullRun*/) :
-      verbosity(1), inputFileName(""),
-      title("INCL default run title"), outputFileRoot("incl-output"),
-      logFileName("incl-output.log"),
-      nShots(1000),
-      targetA(208), targetZ(82),
-      naturalTarget(false),
-      projectileString("proton"), projectileType(G4INCL::Proton), projectileKineticEnergy(1000.0),
-      verboseEvent(-1),
-      randomSeed1(666), randomSeed2(777),
-      pauliString("strict-statistical"), pauliType(StrictStatisticalPauli),
-      CDPP(true),
-      coulombString("non-relativistic"), coulombType(NonRelativisticCoulomb),
-      potentialString("isospin-energy"), potentialType(IsospinEnergyPotential),
-      pionPotential(true),
-      localEnergyBBString("first-collision"), localEnergyBBType(FirstCollisionLocalEnergy),
-      localEnergyPiString("never"), localEnergyPiType(NeverLocalEnergy),
-      clusterAlgorithmString("intercomparison"), clusterAlgorithmType(IntercomparisonClusterAlgorithm),
-      clusterMaxMass(8),
-      backToSpectator(true)
-    {}
+    Config::Config(G4int /*argc*/, char ** /*argv*/, G4bool /*isFullRun*/)
+    {
+      Config();
+    }
 #endif
 
   Config::~Config()
@@ -478,9 +531,12 @@ namespace G4INCL {
   std::string Config::summary() {
     std::stringstream message;
     message << "INCL++ version " << getVersionID() << std::endl;
-    message << "Projectile: " << ParticleTable::getName(projectileType) << std::endl;
+    if(projectileSpecies.theType != Composite)
+      message << "Projectile: " << ParticleTable::getName(projectileSpecies) << std::endl;
+    else
+      message << "Projectile: composite, A=" << projectileSpecies.theA << ", Z=" << projectileSpecies.theZ << std::endl;
     message << "  energy = " << projectileKineticEnergy << std::endl;
-    message << "Target: A = " << targetA << " Z = " << targetZ << std::endl;
+    message << "Target: A = " << targetSpecies.theA << " Z = " << targetSpecies.theZ << std::endl;
     message << "Number of shots = " << nShots << std::endl;
     return message.str();
   }
@@ -496,28 +552,31 @@ namespace G4INCL {
       << std::endl
       << "# Run options" << std::endl
       << "title = " << title << "\t# run title" << std::endl
-      << "output = " << outputFileRoot << "\t# root for generating output file names. Suffixes (.root, .out, etc.) will be appended to this root. Defaults to the input file name" << std::endl
+      << "output = " << outputFileRoot << "\t# root for generating output file names. Suffixes (.root, .out, etc.) will be appended to this root. Defaults to the input file name, if given; otherwise, defaults to a string composed of the explicitly specified options" << std::endl
       << "logfile = " << logFileName << "\t# log file name. Defaults to `<output_root>.log'. Use `-' if you want to redirect logging to stdout" << std::endl
       << "number-shots = " << nShots << "\t# * number of shots" << std::endl
+      << "inclxx-datafile-path = " << INCLXXDataFilePath << std::endl
       << "ablav3p-cxx-datafile-path = " << ablav3pCxxDataFilePath << std::endl
       << "abla07-datafile-path = " << abla07DataFilePath << std::endl
       << std::endl << "# Projectile and target definitions" << std::endl
-      << "target-mass = " << targetA << "\t# mass number of the target. If omitted, natural target composition is assumed" << std::endl
-      << "target-charge = " << targetZ << "\t# * charge number of the target" << std::endl
-      << "projectile = " << projectileString << "\t# * projectile name (proton, neutron, pi+, pi0, pi-...)" << std::endl
-      << "energy = " << projectileKineticEnergy << "\t# * kinetic energy of the projectile, in MeV" << std::endl
+      << "target = " << targetString << "\t# * target nuclide. Can be specified as Fe56, 56Fe, Fe-56, 56-Fe, Fe_56, 56_Fe or Fe. If the mass number is omitted, natural target composition is assumed." << std::endl
+      << "         " << "# the target nuclide was parsed as Z=" << targetSpecies.theZ << ", A=" << targetSpecies.theA << std::endl
+      << "projectile = " << projectileString << "\t# * projectile name (proton, neutron, pi+, pi0, pi-, d, t, a, He-4...)" << std::endl
+      << "         " << "# the projectile nuclide was parsed as Z=" << projectileSpecies.theZ << ", A=" << projectileSpecies.theA << std::endl
+      << "energy = " << projectileKineticEnergy << "\t# * total kinetic energy of the projectile, in MeV" << std::endl
       << std::endl << "# Physics options " << std::endl
       << "pauli = " << pauliString << "\t# Pauli-blocking algorithm. Must be one of: strict-statistical (default), strict, statistical, global, none" << std::endl
       << "cdpp = " << CDPP << "\t# whether to apply CDPP after collisions" << std::endl
       << "coulomb = " << coulombString << "\t# Coulomb-distortion algorithm. Must be one of: non-relativistic (default), none" << std::endl
-      << "potential = " << potentialString << "\t# nucleon potential. Must be one of: isospin-energy (default), isospin, constant" << std::endl
+      << "potential = " << potentialString << "\t# nucleon potential. Must be one of: isospin-energy-smooth, isospin-energy (default), isospin, constant" << std::endl
       << "pion-potential = " << pionPotential << "\t# whether to use a pion potential" << std::endl
       << "local-energy-BB = " << localEnergyBBString << "\t# local energy in baryon-baryon collisions. Must be one of: always, first-collision (default), never" << std::endl
-      << "local-energy-pi = " << localEnergyPiString << "\t# local energy in pi-N collisions and in delta decays. Must be one of: always, first-collision, never (default)" << std::endl
+      << "local-energy-pi = " << localEnergyPiString << "\t# local energy in pi-N collisions and in delta decays. Must be one of: always, first-collision (default), never" << std::endl
       << "de-excitation = " << deExcitationString << "\t # which de-excitation model to use. Must be one of: none (default), ABLAv3p, ABLA07" << std::endl
       << "cluster-algorithm = " << clusterAlgorithmString << "\t# clustering algorithm for production of composites. Must be one of: intercomparison (default), none" << std::endl
       << "cluster-max-mass = " << clusterMaxMass << "\t# maximum mass of produced composites. Must be between 2 and 12 (included)" << std::endl
       << "back-to-spectator = " << backToSpectator << "\t# whether to use back-to-spectator" << std::endl
+      << "use-real-masses = " << useRealMasses << "\t# whether to use real masses for the outgoing particle energies" << std::endl
       << std::endl << "# Technical options " << std::endl
       << "verbosity = " << verbosity << "\t# from 0 (quiet) to 10 (most verbose)" << std::endl
       << "verbose-event = " << verboseEvent << "\t# request verbose logging for the specified event only" << std::endl

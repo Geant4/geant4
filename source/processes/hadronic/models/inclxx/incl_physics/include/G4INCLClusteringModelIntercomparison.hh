@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -41,6 +41,7 @@
 
 #include "G4INCLIClusteringModel.hh"
 #include "G4INCLParticle.hh"
+#include "G4INCLParticleTable.hh"
 #include "G4INCLCluster.hh"
 #include "G4INCLNucleus.hh"
 #include "G4INCLKinematicsUtils.hh"
@@ -49,7 +50,11 @@ namespace G4INCL {
 
   class ClusteringModelIntercomparison : public IClusteringModel {
   public:
-    ClusteringModelIntercomparison() {
+    ClusteringModelIntercomparison() :
+    protonMass(ParticleTable::getRealMass(Proton)),
+    neutronMass(ParticleTable::getRealMass(Neutron)),
+    runningMaxClusterAlgorithmMass(IClusteringModel::maxClusterAlgorithmMass)
+    {
       zeroOut();
 
       // Set up the maximum charge and neutron number for clusters
@@ -78,7 +83,7 @@ namespace G4INCL {
     }
 
     virtual Cluster* getCluster(Nucleus*, Particle*);
-    virtual G4bool clusterCanEscape(Cluster const * const);
+    virtual G4bool clusterCanEscape(Nucleus const * const, Cluster const * const);
 
   private:
     void findClusterStartingFrom(const G4int oldA, const G4int oldZ);
@@ -100,9 +105,14 @@ namespace G4INCL {
 
     G4int clusterZMaxAll, clusterNMaxAll;
 
-    G4double participantEnergyPool;
+    G4double cascadingEnergyPool;
 
     static const G4double limitCosEscapeAngle;
+
+    const G4double protonMass;
+    const G4double neutronMass;
+
+    G4int runningMaxClusterAlgorithmMass;
   };
 
 }

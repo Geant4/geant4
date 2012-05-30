@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -361,5 +361,58 @@ namespace G4INCL {
     }
     return 0.0; // Should never reach this point
   }
+
+  G4double CrossSections::interactionDistanceNN(const G4double projectileKineticEnergy) {
+    ThreeVector nullVector;
+    ThreeVector unitVector(0., 0., 1.);
+
+    Particle protonProjectile(Proton, unitVector, nullVector);
+    protonProjectile.setEnergy(protonProjectile.getMass()+projectileKineticEnergy);
+    protonProjectile.adjustMomentumFromEnergy();
+    Particle neutronProjectile(Neutron, unitVector, nullVector);
+    neutronProjectile.setEnergy(neutronProjectile.getMass()+projectileKineticEnergy);
+    neutronProjectile.adjustMomentumFromEnergy();
+
+    Particle protonTarget(Proton, nullVector, nullVector);
+    Particle neutronTarget(Neutron, nullVector, nullVector);
+    const G4double sigmapp = total(&protonProjectile, &protonTarget);
+    const G4double sigmapn = total(&protonProjectile, &neutronTarget);
+    const G4double sigmanp = total(&neutronProjectile, &protonTarget);
+    const G4double sigmann = total(&neutronProjectile, &neutronTarget);
+    const G4double averageSigma = 0.25 * (sigmapp + sigmapn + sigmanp + sigmann);
+    const G4double interactionDistance = std::sqrt(averageSigma/Math::tenPi);
+
+    return interactionDistance;
+  }
+
+  G4double CrossSections::interactionDistancePiN(const G4double projectileKineticEnergy) {
+    ThreeVector nullVector;
+    ThreeVector unitVector(0., 0., 1.);
+
+    Particle piPlusProjectile(PiPlus, unitVector, nullVector);
+    piPlusProjectile.setEnergy(piPlusProjectile.getMass()+projectileKineticEnergy);
+    piPlusProjectile.adjustMomentumFromEnergy();
+    Particle piZeroProjectile(PiZero, unitVector, nullVector);
+    piZeroProjectile.setEnergy(piZeroProjectile.getMass()+projectileKineticEnergy);
+    piZeroProjectile.adjustMomentumFromEnergy();
+    Particle piMinusProjectile(PiMinus, unitVector, nullVector);
+    piMinusProjectile.setEnergy(piMinusProjectile.getMass()+projectileKineticEnergy);
+    piMinusProjectile.adjustMomentumFromEnergy();
+
+    Particle protonTarget(Proton, nullVector, nullVector);
+    Particle neutronTarget(Neutron, nullVector, nullVector);
+    const G4double sigmapipp = total(&piPlusProjectile, &protonTarget);
+    const G4double sigmapipn = total(&piPlusProjectile, &neutronTarget);
+    const G4double sigmapi0p = total(&piZeroProjectile, &protonTarget);
+    const G4double sigmapi0n = total(&piZeroProjectile, &neutronTarget);
+    const G4double sigmapimp = total(&piMinusProjectile, &protonTarget);
+    const G4double sigmapimn = total(&piMinusProjectile, &neutronTarget);
+    const G4double averageSigma =
+      (sigmapipp + sigmapipn + sigmapi0p + sigmapi0n + sigmapimp + sigmapimn) / 6.;
+    const G4double interactionDistance = std::sqrt(averageSigma/Math::tenPi);
+
+    return interactionDistance;
+  }
+
 }
 

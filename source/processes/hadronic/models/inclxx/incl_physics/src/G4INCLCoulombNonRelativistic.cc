@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -48,53 +48,32 @@
 
 namespace G4INCL {
 
-  void CoulombNonRelativistic::bringToSurface(Particle * const p, Nucleus const * const n) const {
-    ThreeVector momentumUnitVector = p->getMomentum();
-    momentumUnitVector /= momentumUnitVector.mag();
-
-    ThreeVector positionTransverse = p->getTransversePosition();
-    const G4double impactParameter = positionTransverse.mag();
-
-    const G4double radius = n->getDensity()->getMaximumRadius();
-
+  ParticleEntryAvatar *CoulombNonRelativistic::bringToSurface(Particle * const p, Nucleus * const n) const {
     // No distortion for neutral particles
-    G4double newImpactParameter;
-    G4double alpha;
-    if(p->getZ()==0) {
-      newImpactParameter = impactParameter;
-      alpha = 0.;
-    } else {
-      const G4double theCoulombFactor = coulombFactor(p, n);
-      const G4double thrs2 = std::atan(theCoulombFactor/(2*impactParameter));
-      const G4double eccentricity = -1./std::sin(thrs2);
-      const G4double bMin = 0.5 * (
-          theCoulombFactor +
-          std::sqrt(theCoulombFactor*theCoulombFactor +
-            4*impactParameter*impactParameter)
-          );
-      const G4double phyp = (1.+eccentricity) * bMin;
-      const G4double thetaMax = std::acos((phyp/radius - 1.)/eccentricity);
-      newImpactParameter = radius * std::cos(thrs2 + thetaMax);
-      const G4double psi = std::atan( (1.+eccentricity*std::cos(thetaMax)) /
-          (eccentricity*std::sin(thetaMax)));
-      alpha = psi - Math::piOverTwo + thrs2 + thetaMax;
+    if(p->getZ()!=0) {
+      const G4bool success = coulombDeviation(p, n);
+      if(!success) // transparent
+        return NULL;
     }
-    const G4double distanceZ2 = radius*radius - newImpactParameter*newImpactParameter;
-    const G4double distanceZ = (distanceZ2>0. ? std::sqrt(distanceZ2) : 0.);
 
-    positionTransverse *= newImpactParameter/impactParameter;
+    // Rely on the CoulombNone slave to compute the straight-line intersection
+    // and actually bring the particle to the surface of the nucleus
+    return theCoulombNoneSlave.bringToSurface(p,n);
+  }
 
-    const ThreeVector position = positionTransverse - momentumUnitVector *
-      distanceZ;
-    p->setPosition(position);
+  IAvatarList CoulombNonRelativistic::bringToSurface(Cluster * const c, Nucleus * const n) const {
+    // Neutral clusters?!
+// assert(c->getZ()>0);
 
-    positionTransverse /= positionTransverse.mag();
-    const G4double momentum = p->getMomentum().mag();
-    const ThreeVector newMomentum = p->getMomentum() * std::cos(alpha) +
-      positionTransverse * (std::sin(alpha) * momentum);
+    // Perform the actual Coulomb deviation
+    const G4bool success = coulombDeviation(c, n);
+    if(!success) {
+      return IAvatarList();
+    }
 
-    p->setMomentum(newMomentum);
-
+    // Rely on the CoulombNone slave to compute the straight-line intersection
+    // and actually bring the particle to the surface of the nucleus
+    return theCoulombNoneSlave.bringToSurface(c,n);
   }
 
   void CoulombNonRelativistic::distortOut(ParticleList const &pL,
@@ -145,10 +124,75 @@ namespace G4INCL {
 
   G4double CoulombNonRelativistic::maxImpactParameter(Particle const * const p,
       Nucleus const * const n) const {
-    const G4double theCoulombFactor = coulombFactor(p, n);
-    const G4double rMax = n->getDensity()->getMaximumRadius();
-    const G4double theMaxImpactParameterSquared = rMax*(rMax-theCoulombFactor);
+    const G4double theMinimumDistance = minimumDistance(p, n);
+    const G4double rMax = n->getCoulombRadius(p);
+    const G4double theMaxImpactParameterSquared = rMax*(rMax-theMinimumDistance);
     return (theMaxImpactParameterSquared>0. ?
         std::sqrt(theMaxImpactParameterSquared) : 0.);
   }
+
+  G4double CoulombNonRelativistic::maxImpactParameter(Cluster const * const c, Nucleus const *
+      const n) const {
+    Particle const * const clusterAsParticle = c;
+    return maxImpactParameter(clusterAsParticle,n) + 2.*ParticleTable::getNuclearRadius(c->getA(),c->getZ());
+  }
+
+  G4bool CoulombNonRelativistic::coulombDeviation(Particle * const p, Nucleus const * const n) const {
+    // Determine the rotation angle and the new impact parameter
+    ThreeVector positionTransverse = p->getTransversePosition();
+    const G4double impactParameter = positionTransverse.mag();
+
+    // Some useful variables
+    const G4double theMinimumDistance = minimumDistance(p, n);
+    // deltaTheta2 = (pi - Rutherford scattering angle)/2
+    const G4double deltaTheta2 = std::atan(2.*impactParameter/theMinimumDistance);
+    const G4double eccentricity = 1./std::cos(deltaTheta2);
+
+    G4double newImpactParameter, alpha; // Parameters that must be determined by the deviation
+
+    // Note that in the following we call the
+    // maxImpactParameter(Particle*,Nucleus*) method (i.e. not the
+    // (Cluster*,Nucleus*) one)
+    if(impactParameter>maxImpactParameter(p,n)) {
+      // This should happen only for composite particles, whose trajectory can
+      // geometrically miss the nucleus but still trigger a cascade because of
+      // the finite extension of the projectile.
+      // In this case, the sphere radius is the minimum distance of approach
+      // and the kinematics is very simple.
+      newImpactParameter = 0.5 * theMinimumDistance * (1.+eccentricity); // the minimum distance of approach
+      alpha = Math::piOverTwo - deltaTheta2; // half the Rutherford scattering angle
+    } else {
+      // The particle trajectory intersects the Coulomb sphere
+
+      // Compute the entrance angle
+      const G4double radius = n->getCoulombRadius(p);
+      G4double argument = -(1. + 2.*impactParameter*impactParameter/(radius*theMinimumDistance))
+        / eccentricity;
+      const G4double thetaIn = Math::twoPi - std::acos(argument) - deltaTheta2;
+
+      // Velocity angle at the entrance point
+      alpha = std::atan((1+std::cos(thetaIn))
+        / (std::sqrt(eccentricity*eccentricity-1.) - std::sin(thetaIn)));
+      // New impact parameter
+      newImpactParameter = radius * std::sin(thetaIn - alpha);
+    }
+
+    // Modify the impact parameter of the particle
+    positionTransverse *= newImpactParameter/positionTransverse.mag();
+    const ThreeVector theNewPosition = p->getLongitudinalPosition() + positionTransverse;
+    p->setPosition(theNewPosition);
+
+    // Determine the rotation axis for the incoming particle
+    const ThreeVector &momentum = p->getMomentum();
+    ThreeVector rotationAxis = momentum.vector(positionTransverse);
+    const G4double axisLength = rotationAxis.mag();
+    // Apply the rotation
+    if(axisLength>1E-20) {
+      rotationAxis /= axisLength;
+      p->rotate(alpha, rotationAxis);
+    }
+
+    return true;
+  }
+
 }

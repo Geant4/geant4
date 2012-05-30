@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -184,6 +184,18 @@ namespace G4INCL {
       w *= C;
       return w;
     };
+
+    /** \brief Rotate the vector by a given angle around a given axis
+     *
+     * \param angle the rotation angle
+     * \param axis the rotation axis, which must be a unit vector
+     */
+    inline void rotate(const G4double angle, const ThreeVector &axis) {
+      // Use Rodrigues' formula
+      const G4double cos = std::cos(angle);
+      const G4double sin = std::sin(angle);
+      (*this) = (*this) * cos + axis.vector(*this) * sin + axis * (axis.dot(*this)*(1.-cos));
+    }
 
     std::string print() const {
       std::stringstream ss;

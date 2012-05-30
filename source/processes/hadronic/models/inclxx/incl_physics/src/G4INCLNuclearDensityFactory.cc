@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -42,12 +42,14 @@ namespace G4INCL {
 
   std::map<G4int,NuclearDensity*> NuclearDensityFactory::nuclearDensityCache;
 
-  NuclearDensity* NuclearDensityFactory::createDensity(G4int A, G4int Z) {
-    const G4int nuclideID = 1000*Z + A; // MCNP-style nuclide IDs
+  NuclearDensity* NuclearDensityFactory::createDensity(const G4int A, const G4int Z, const G4bool hardFermiSphere/*=true*/) {
+    const G4int nuclideID = (1000*Z + A)*(hardFermiSphere?(-1):1); // MCNP-style nuclide IDs
     const std::map<G4int,NuclearDensity*>::const_iterator mapEntry = nuclearDensityCache.find(nuclideID);
     if(mapEntry == nuclearDensityCache.end()) {
       IFunction1D *densityFunction = NuclearDensityFactory::createDensityFunction(A, Z);
-      NuclearDensity *density = new NuclearDensity(A, Z, densityFunction);
+      if(!densityFunction)
+        return NULL;
+      NuclearDensity *density = new NuclearDensity(A, Z, densityFunction, hardFermiSphere);
       nuclearDensityCache[nuclideID] = density;
       return density;
     } else {
@@ -55,7 +57,7 @@ namespace G4INCL {
     }
   }
 
-  IFunction1D* NuclearDensityFactory::createDensityFunction(G4int A, G4int Z) {
+  IFunction1D* NuclearDensityFactory::createDensityFunction(const G4int A, const G4int Z) {
     G4double radius = ParticleTable::getNuclearRadius(A, Z);
     G4double diffuseness = ParticleTable::getSurfaceDiffuseness(A, Z);
     G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(A, Z);

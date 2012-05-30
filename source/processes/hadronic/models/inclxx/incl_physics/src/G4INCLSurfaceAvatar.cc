@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -66,7 +66,7 @@ namespace G4INCL {
 
   G4INCL::IChannel* SurfaceAvatar::getChannel() const
   {
-    if(!theParticle->isParticipant()) {
+    if(theParticle->isTargetSpectator()) {
       DEBUG("Particle " << theParticle->getID() << " is a spectator, reflection" << std::endl);
       return new ReflectionChannel(theNucleus, theParticle);
     }
@@ -75,12 +75,19 @@ namespace G4INCL {
     const G4double transmissionProbability = getTransmissionProbability(theParticle);
 
     DEBUG("Transmission probability for particle " << theParticle->getID() << " = " << transmissionProbability << std::endl);
-    if(theParticle->isNucleon() && transmissionProbability>1.E-4) {
+    /* Don't attempt to construct clusters when a projectile spectator is
+     * trying to escape. The idea behind this is that projectile spectators
+     * will later be collected in the projectile remnant, and trying to
+     * clusterise them somewhat feels like G4double counting. Moreover, applying
+     * the clustering algorithm on escaping projectile spectators makes the
+     * code *really* slow if the projectile is large.
+     */
+    if(theParticle->isNucleon() && !theParticle->isProjectileSpectator() && transmissionProbability>1.E-4) {
       Cluster *candidateCluster = 0;
 
       candidateCluster = Clustering::getCluster(theNucleus, theParticle);
       if(candidateCluster != 0 &&
-          Clustering::clusterCanEscape(candidateCluster)) {
+          Clustering::clusterCanEscape(theNucleus, candidateCluster)) {
 
         DEBUG("Cluster algorithm succeded. Candidate cluster:" << std::endl << candidateCluster->print() << std::endl);
 
@@ -121,6 +128,7 @@ namespace G4INCL {
   }
 
   void SurfaceAvatar::preInteraction() {}
+
   FinalState *SurfaceAvatar::postInteraction(FinalState *fs) {
     ParticleList outgoing = fs->getOutgoingParticles();
     if(!outgoing.empty()) { // Transmission
@@ -128,14 +136,14 @@ namespace G4INCL {
       Particle *out = outgoing.front();
       if(out->isCluster()) {
 	Cluster *clusterOut = dynamic_cast<Cluster*>(out);
-        ParticleList const *components = clusterOut->getParticles();
-        for(ParticleIter i=components->begin(); i!=components->end(); ++i) {
-          if((*i)->isParticipant())
-            theNucleus->getStore()->getBook()->decrementParticipants();
+        ParticleList const components = clusterOut->getParticles();
+        for(ParticleIter i=components.begin(); i!=components.end(); ++i) {
+          if(!(*i)->isTargetSpectator())
+            theNucleus->getStore()->getBook()->decrementCascading();
         }
-      } else if(theParticle->isParticipant()) {
+      } else if(!theParticle->isTargetSpectator()) {
 // assert(out==theParticle);
-        theNucleus->getStore()->getBook()->decrementParticipants();
+        theNucleus->getStore()->getBook()->decrementCascading();
       }
     }
     return fs;
@@ -152,8 +160,13 @@ namespace G4INCL {
 
   G4double SurfaceAvatar::getTransmissionProbability(Particle const * const particle) const {
 
-    const G4double E = particle->getKineticEnergy();
+    G4double E = particle->getKineticEnergy();
     const G4double V = particle->getPotentialEnergy();
+
+    // Correction to the particle kinetic energy if using real masses
+    const G4int theA = theNucleus->getA();
+    const G4int theZ = theNucleus->getZ();
+    E += particle->getEmissionQValueCorrection(theA, theZ);
 
     if (E <= V) // No transmission if total energy < 0
       return 0.0;
@@ -171,7 +184,6 @@ namespace G4INCL {
 
     // For neutral and negative particles, no Coulomb transmission
     // Also, no Coulomb if the particle takes away all of the nuclear charge
-    const G4int theZ = theNucleus->getZ();
     const G4int theParticleZ = particle->getZ();
     if (theParticleZ <= 0 || theParticleZ >= theZ)
       return theTransmissionProbability;

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -83,10 +83,11 @@ namespace G4INCL {
      */
     void add(Particle *p);
 
-    /**
-     *
-     */
+    /// \brief Add one ParticleEntry avatar
     void addParticleEntryAvatar(IAvatar *a);
+
+    /// \brief Add one ParticleEntry avatar
+    void addParticleEntryAvatars(IAvatarList const &al);
 
     /**
      * Add one avatar to the store
@@ -107,7 +108,7 @@ namespace G4INCL {
     /**
      * Return the list of avatars
      */
-    std::list<IAvatar*> getAvatars() const {
+    IAvatarList const &getAvatars() const {
       return avatarList;
     }
 
@@ -117,6 +118,26 @@ namespace G4INCL {
      * \param p particle to add
      */
     void addIncomingParticle(Particle * const p);
+
+    /**
+     * Add a particle to the incoming list.
+     *
+     * \param p particle to add
+     */
+    void removeFromIncoming(Particle * const p) { incoming.remove(p); }
+
+    /// \brief Clear the incoming list
+    inline void clearIncoming() {
+      incoming.clear();
+    }
+
+    /// \brief Clear the incoming list and delete the particles
+    inline void deleteIncoming() {
+      for(ParticleIter iter = incoming.begin(); iter != incoming.end(); ++iter) {
+        delete (*iter);
+      }
+      clearIncoming();
+    }
 
     /**
      * Notify the Store that a particle has been updated. This
@@ -143,11 +164,20 @@ namespace G4INCL {
      */
     void particleHasBeenEjected(long);
 
-    /** \brief Add the particle to the outgoing particle list.
+    /** \brief add the particle to the outgoing particle list.
      *
      * \param p pointer to the particle to be added
      */
     void addToOutgoing(Particle *p) { outgoing.push_back(p); }
+
+    /** \brief Add a list of particles to the outgoing particle list.
+     *
+     * \param pl list of particles to be added
+     */
+    void addToOutgoing(ParticleList const &pl) {
+      for(ParticleIter p=pl.begin(); p!=pl.end(); ++p)
+        addToOutgoing(*p);
+    }
 
     /**
      * Remove the particle from the system. This also removes all
@@ -161,15 +191,6 @@ namespace G4INCL {
      **/
     void particleHasEntered(Particle * const particle);
 
-    /** \brief Return the number of incoming particles.
-     *
-     * WARNING: this is not the running size of the incoming list! The incoming
-     * list is supposed to be filled once and for all, before the cascade. The
-     * value returned by this method is the size of the list at that time, i.e.
-     * the total number of incoming particles.
-     */
-    G4int getNumberOfIncomingParticles() const { return nIncomingParticles; }
-
     /**
      * Return the list of incoming particles (i.e. particles that have yet to
      * enter the cascade).
@@ -181,6 +202,33 @@ namespace G4INCL {
      * cascade).
      */
     ParticleList const & getOutgoingParticles() const { return outgoing; }
+
+    /** \brief Returns a list of dynamical spectators
+     *
+     * Looks in the outgoing list for particles without collisions and decays,
+     * removes them from outgoing and returns them in a list.
+     *
+     * \return the (possibly empty) list of dynamical spectators
+     */
+    ParticleList extractDynamicalSpectators() {
+      ParticleList spectators;
+      std::list<std::list<Particle*>::iterator> toBeErased;
+      for(std::list<Particle*>::iterator p=outgoing.begin(); p!=outgoing.end(); ++p) {
+        if((*p)->isProjectileSpectator()) {
+// assert((*p)->isNucleon());
+          spectators.push_back(*p); // add them to the list we will return
+          toBeErased.push_back(p); // we will remove them from outgoing later
+        }
+      }
+
+      // Now erase them from outgoing
+      for(std::list<std::list<Particle*>::iterator>::iterator i=toBeErased.begin();
+          i!=toBeErased.end(); ++i) {
+        outgoing.erase(*i);
+      }
+
+      return spectators;
+    }
 
     /**
      * Return the list of "active" particles (i.e. particles that can
@@ -194,10 +242,10 @@ namespace G4INCL {
      */
     Book* getBook() {return theBook; };
 
-    G4int countParticipants() {
+    G4int countCascading() {
       G4int n=0;
       for(ParticleIter i=inside.begin(); i!=inside.end(); ++i) {
-        if((*i)->isParticipant())
+        if(!(*i)->isTargetSpectator())
           ++n;
       }
       return n;
@@ -326,14 +374,9 @@ namespace G4INCL {
 
   private:
     /**
-     * Remove all avatars connedted to a particle
+     * Remove all avatars connected to a particle
      */
     void removeAvatarsFromParticle(long ID);
-
-    /**
-     * Check if a particle is in the particleAvatarConnections map
-     */
-    G4bool particleInConnectionMap(long);
 
     /**
      * Check if a particle is in the avatarParticleConnections map
@@ -345,11 +388,6 @@ namespace G4INCL {
      * Connects a particle and an avatar
      */
     void connectParticleAndAvatar(long particleID, long avatarID);
-
-    /**
-     * Disconnects a particle and an avatar
-     */
-    void disconnectAvatarFromParticle(long ID);
 
     /**
      * Removes an avatar 
@@ -376,7 +414,7 @@ namespace G4INCL {
     /**
      * List of all avatars
      */
-    std::list<IAvatar*> avatarList;
+    IAvatarList avatarList;
 
     /**
      * List of incoming particles
@@ -394,14 +432,14 @@ namespace G4INCL {
     ParticleList outgoing;
 
     /**
+     * List of geometrical spectators
+     */
+    ParticleList geomSpectators;
+
+    /**
      * The current time in the simulation
      */
     G4double currentTime;
-
-    /**
-     * The number of incoming particles
-     */
-    G4int nIncomingParticles;
 
     /**
      * The Book object keeps track of global counters
@@ -436,6 +474,7 @@ namespace G4INCL {
      */
     std::list<IAvatarIter> avatarIterList;
 #endif
+
   };
 }
 #endif

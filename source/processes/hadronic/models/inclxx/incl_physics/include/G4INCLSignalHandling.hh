@@ -30,16 +30,16 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
 
-#ifndef G4INCLFPEDebug_hh
-#define G4INCLFPEDebug_hh 1
+#ifndef G4INCLSignalHandling_hh
+#define G4INCLSignalHandling_hh
 
-#ifdef INCL_FPE_DEBUG
+#ifdef INCL_SIGNAL_HANDLING
 
 #ifdef __linux__
 #ifdef __GNUC__
@@ -49,74 +49,102 @@
 #include <cstdlib>
 #include <iostream>
 
-struct sigaction termaction, oldaction;
+G4bool INTsignalled = false, HUPsignalled = false;
 
-void TerminationSignalHandler(G4int sig)
-{
-  std::cerr << "ERROR: " << sig;
-  std::string message;
-  switch (SIGFPE)
+struct sigaction fpeaction, hupaction, intaction, oldaction;
+
+void FPESignalHandler(G4int /*sig*/, siginfo_t *siginfo, void * /*context*/) {
+  const char *message;
+  switch(siginfo->si_code)
     {
     case FPE_INTDIV:
-      message = "Integer divide by zero.";
+      message = "ERROR - Integer divide by zero.          \n";
       break;
     case FPE_INTOVF:
-      message = "Integer overflow.";
+      message = "ERROR - Integer overflow.                \n";
       break;
     case FPE_FLTDIV:
-      message = "Floating point divide by zero.";
+      message = "ERROR - Floating point divide by zero.   \n";
       break;
     case FPE_FLTOVF:
-      message = "Floating point overflow.";
+      message = "ERROR - Floating point overflow.         \n";
       break;
     case FPE_FLTUND:
-      message = "Floating point underflow.";
+      message = "ERROR - Floating point underflow.        \n";
       break;
     case FPE_FLTRES:
-      message = "Floating point inexact result.";
+      message = "ERROR - Floating point inexact result.   \n";
       break;
     case FPE_FLTINV:
-      message = "Floating point invalid operation.";
+      message = "ERROR - Floating point invalid operation.\n";
       break;
     case FPE_FLTSUB:
-      message = "Subscript out of range.";
+      message = "ERROR - Subscript out of range.          \n";
       break;
     default:
-      message = "Unknown error.";
+      message = "ERROR - Unknown floating-point exception.\n";
       break;
     }
-  std::cerr << " - " << message << std::endl;
-
-  ::abort();
+  ::write(STDERR_FILENO, message, 42); // the answer to the ultimate question on Life, the Universe and Everything
+  ::_exit(2);
 }
 
-void enableFPEDetection ()
-{
-  std::cerr << std::endl
-	    << "        "
-	    << "############################################" << std::endl
-	    << "        "
-	    << "!!! WARNING - FPE detection is activated !!!" << std::endl
-	    << "        "
-	    << "############################################" << std::endl;
+void INTSignalHandler(G4int /*sig*/) {
+  if(INTsignalled) {
+    const char *message = "Caught SIGINT while waiting for an event to finish, exiting.\n";
+    ::write(STDERR_FILENO, message, 61); // the answer to the ultimate question on Life, the Universe and Everything
+    ::_exit(1);
+  } else {
+    INTsignalled = true;
+    const char *message = "Caught SIGINT, will try to quit cleanly at the end of the current event.\n";
+    ::write(STDERR_FILENO, message, 74);
+  }
+}
 
+void HUPSignalHandler(G4int /*sig*/) {
+  HUPsignalled = true;
+  const char *message = "Caught SIGHUP, will flush log and output files at the end of the current event.\n";
+  ::write(STDERR_FILENO, message, 81);
+}
+
+void enableSignalHandling ()
+{
   (void) feenableexcept( FE_DIVBYZERO );
   (void) feenableexcept( FE_INVALID );
   //(void) feenableexcept( FE_OVERFLOW );
   //(void) feenableexcept( FE_UNDERFLOW );
 
+  // Set the handler for SIGFPE
   sigset_t *def_set;
-  def_set=&termaction.sa_mask;
+  def_set=&fpeaction.sa_mask;
   sigfillset(def_set);
   sigdelset(def_set,SIGFPE);
-  termaction.sa_handler=TerminationSignalHandler;
-  termaction.sa_flags=0;
-  sigaction(SIGFPE, &termaction,&oldaction);
+  fpeaction.sa_sigaction=FPESignalHandler;
+  fpeaction.sa_flags=SA_SIGINFO;
+  sigaction(SIGFPE, &fpeaction, &oldaction);
+
+  // Set the handler for SIGHUP
+  sigset_t *def_set_hup;
+  def_set_hup=&hupaction.sa_mask;
+  sigfillset(def_set_hup);
+  sigdelset(def_set_hup,SIGHUP);
+  hupaction.sa_handler=HUPSignalHandler;
+  hupaction.sa_flags=0;
+  sigaction(SIGHUP, &hupaction, &oldaction);
+
+  // Set the handler for SIGINT
+  sigset_t *def_set_int;
+  def_set_int=&intaction.sa_mask;
+  sigfillset(def_set_int);
+  sigdelset(def_set_int,SIGINT);
+  intaction.sa_handler=INTSignalHandler;
+  intaction.sa_flags=0;
+  sigaction(SIGINT, &intaction, &oldaction);
 }
 #endif
 #else
-void enableFPEDetection() {
-  std::cerr <<"FPE detection is not supported by your platform." << std::endl;
+void enableSignalHandling() {
+  std::cerr <<"Signal handling is not supported by your platform." << std::endl;
 }
 #endif
 

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -51,7 +51,13 @@
 
 namespace G4INCL {
 
-  enum FinalStateValidity {ValidFS, PauliBlockedFS, NoEnergyConservationFS};
+  enum FinalStateValidity {
+    ValidFS,
+    PauliBlockedFS,
+    NoEnergyConservationFS,
+    ParticleBelowFermiFS,
+    ParticleBelowZeroFS
+  };
 
   /**
    * Final state of an interaction
@@ -68,11 +74,13 @@ namespace G4INCL {
     void addOutgoingParticle(Particle *p);
     void addDestroyedParticle(Particle *p);
     void addCreatedParticle(Particle *p);
+    void addEnteringParticle(Particle *p);
 
-    ParticleList getModifiedParticles() const;
-    ParticleList getOutgoingParticles() const;
-    ParticleList getDestroyedParticles() const;
-    ParticleList getCreatedParticles() const;
+    ParticleList const &getModifiedParticles() const;
+    ParticleList const &getOutgoingParticles() const;
+    ParticleList const &getDestroyedParticles() const;
+    ParticleList const &getCreatedParticles() const;
+    ParticleList const &getEnteringParticles() const;
 
     void setBlockedDelta(Particle * const p) { blockedDelta = p; }
     Particle *getBlockedDelta() { return blockedDelta; }
@@ -81,11 +89,13 @@ namespace G4INCL {
     void makeValid() { validity = ValidFS; }
     void makePauliBlocked() { validity = PauliBlockedFS; }
     void makeNoEnergyConservation() { validity = NoEnergyConservationFS; }
+    void makeParticleBelowFermi() { validity = ParticleBelowFermiFS; }
+    void makeParticleBelowZero() { validity = ParticleBelowZeroFS; }
 
     std::string print() const;
 
   private:
-    ParticleList outgoing, created, destroyed, modified;
+    ParticleList outgoing, created, destroyed, modified, entering;
     G4double totalEnergyBeforeInteraction;
     FinalStateValidity validity;
     Particle *blockedDelta;

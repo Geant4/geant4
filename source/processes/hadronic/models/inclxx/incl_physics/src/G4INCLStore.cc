@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -44,7 +44,7 @@
 namespace G4INCL {
 
   Store::Store(Config const * const config)
-    : nIncomingParticles(0), theConfig(config) {
+    : theConfig(config) {
     theBook = new Book;
   }
 
@@ -79,6 +79,11 @@ namespace G4INCL {
     }
   }
 
+  void Store::addParticleEntryAvatars(IAvatarList const &al) {
+    for(IAvatarIter a=al.begin(); a!=al.end(); ++a)
+      addParticleEntryAvatar(*a);
+  }
+
   void Store::add(IAvatar *a) {
     // Add the avatar to the avatar map
     avatars[a->getID()]=a;
@@ -102,35 +107,13 @@ namespace G4INCL {
 
   void Store::addIncomingParticle(Particle * const p) {
     incoming.push_back(p);
-    nIncomingParticles++;
-  }
-
-  G4bool Store::particleInConnectionMap(long particleID) {
-    return (particleAvatarConnections.count(particleID)!=0);
-  }
-
-  void Store::disconnectAvatarFromParticle(long particleID) {
-    std::vector<long>* aIDs = particleAvatarConnections.find(particleID)->second;
-    std::vector<long>* newAvatarIDs = new std::vector<long>;
-    for(std::vector<long>::iterator i = aIDs->begin();
-        i != aIDs->end(); ++i) {
-      if((*i) != particleID) {
-        newAvatarIDs->push_back((*i));
-      } else {
-        std::stringstream ss;
-        ss << "Removing particle " << particleID << " from avatar " << (*i);
-       ERROR(ss.str() << std::endl);
-      }
-    }
-    aIDs->clear();
-    delete aIDs;
-    particleAvatarConnections[particleID] = newAvatarIDs;
   }
 
   void Store::connectParticleAndAvatar(long particleID, long avatarID) {
+    std::map<long, std::vector<long>* >::const_iterator iter = particleAvatarConnections.find(particleID);
     // If the particle is already connected to other avatars
-    if(particleInConnectionMap(particleID)) { // Add to the existing map entry
-      std::vector<long> *p = particleAvatarConnections.find(particleID)->second;
+    if(iter!=particleAvatarConnections.end()) { // Add to the existing map entry
+      std::vector<long> *p = iter->second;
       p->push_back(avatarID);
     } else { // Create a new map entry
       std::vector<long> *p = new std::vector<long>;
@@ -300,12 +283,8 @@ namespace G4INCL {
   }
 
   void Store::particleHasEntered(Particle * const particle) {
-    incoming.remove(particle);
+    removeFromIncoming(particle);
     add(particle);
-    // FIXME: the number of participants should rather be incremented by
-    // avatars. Doing so on the moment a particle enters requires a new type of
-    // SurfaceAvatar.
-    if(particle->isParticipant()) theBook->incrementParticipants();
   }
 
   ParticleList Store::getParticipants() {
@@ -372,20 +351,18 @@ namespace G4INCL {
       WARN("Incoming list is not empty when Store::clear() is called" << std::endl);
     }
     incoming.clear();
-    nIncomingParticles = 0;
 
 #ifdef INCL_AVATAR_SEARCH_INCLSort
     avatarIterList.clear();
 #endif
+
   }
 
   void Store::clearOutgoing() {
     for(ParticleIter iter = outgoing.begin();	iter != outgoing.end(); ++iter) {
       if((*iter)->isCluster()) {
         Cluster *c = dynamic_cast<Cluster *>(*iter);
-        ParticleList const *comp = c->getParticles();
-        for(ParticleIter in=comp->begin(); in!=comp->end(); ++in)
-          delete (*in);
+        c->deleteParticles();
       }
       delete (*iter);
     }
@@ -431,7 +408,7 @@ namespace G4INCL {
       p->setPotentialEnergy(v);
       if(isParticipant == 1) {
         p->makeParticipant();
-        theBook->incrementParticipants();
+        theBook->incrementCascading();
       }
       add(p);
     }
@@ -498,7 +475,7 @@ namespace G4INCL {
 
   std::string Store::printAvatars() {
     std::stringstream ss;
-    std::list<IAvatar*>::const_iterator i;
+    IAvatarIter i;
     for(i = avatarList.begin(); i != avatarList.end(); ++i) {
       ss << (*i)->toString() << std::endl;
     }
@@ -506,7 +483,7 @@ namespace G4INCL {
   }
 
   G4bool Store::containsCollisions() const {
-    std::list<IAvatar*>::const_iterator i;
+    IAvatarIter i;
     for(i = avatarList.begin(); i != avatarList.end(); ++i)
       if((*i)->getType()==CollisionAvatarType) return true;
     return false;

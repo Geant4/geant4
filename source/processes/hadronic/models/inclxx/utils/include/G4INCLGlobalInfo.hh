@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -62,6 +62,7 @@ namespace G4INCL {
     struct GlobalInfo {
       GlobalInfo() :
         nShots(0), nTransparents(0), nNucleonAbsorptions(0), nPionAbsorptions(0),
+        nForcedTransparents(0), nForcedCompoundNucleus(0),
 	nucleonAbsorptionCrossSection(0.0), pionAbsorptionCrossSection(0.0),
         geometricCrossSection(0.0), reactionCrossSection(0.0),
         Ap(0), Zp(0), At(0), Zt(0), Ep(0.0)
@@ -75,6 +76,10 @@ namespace G4INCL {
       Int_t nNucleonAbsorptions;
       /** \brief Number of nucleon absorptions (no outcoming pions) */
       Int_t nPionAbsorptions;
+      /** \brief Number of forced transparents */
+      Int_t nForcedTransparents;
+      /** \brief Number of forced compound-nucleus events */
+      Int_t nForcedCompoundNucleus;
       /** \brief Nucleon absorption cross section */
       Float_t nucleonAbsorptionCrossSection;
       /** \brief Pion absorption cross section */

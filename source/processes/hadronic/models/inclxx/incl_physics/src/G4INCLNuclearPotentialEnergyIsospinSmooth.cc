@@ -30,18 +30,67 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
 
-#include "G4INCLIParticleDataSource.hh"
+/** \file G4INCLNuclearPotentialEnergyIsospinSmooth.cc
+ * \brief Isospin- and energy-dependent nuclear potential.
+ *
+ * Provides an isospin- and energy-dependent nuclear potential. The cusp at 200
+ * MeV is replaced by a smooth exponential.
+ *
+ * Created on: 16 February 2011
+ *     Author: Davide Mancusi
+ */
+
+#include "G4INCLNuclearPotentialEnergyIsospinSmooth.hh"
+#include "G4INCLParticleTable.hh"
+#include "G4INCLGlobals.hh"
 
 namespace G4INCL {
-  IParticleDataSource::IParticleDataSource()
-  {}
 
-  IParticleDataSource::~IParticleDataSource()
-  {}
+  namespace NuclearPotential {
+
+    const G4double NuclearPotentialEnergyIsospinSmooth::alpha= 0.223;
+    const G4double NuclearPotentialEnergyIsospinSmooth::deltaE= 25.;
+
+    // Constructors
+    NuclearPotentialEnergyIsospinSmooth::NuclearPotentialEnergyIsospinSmooth(NuclearDensity *density, G4bool pionPotential)
+      : NuclearPotentialIsospin(density,pionPotential)
+    {}
+
+    // Destructor
+    NuclearPotentialEnergyIsospinSmooth::~NuclearPotentialEnergyIsospinSmooth() {}
+
+    G4double NuclearPotentialEnergyIsospinSmooth::computePotentialEnergy(const Particle *particle) const {
+
+      const G4double v0 = NuclearPotentialIsospin::computePotentialEnergy(particle);
+
+      if(particle->isNucleon()) {
+        const G4double t = particle->getKineticEnergy();
+        const G4double tf = getFermiEnergy(particle);
+        // Constant potential for T<Tf
+        if(t < tf)
+          return v0;
+
+        // Linear function for Tf<T<T0, exponential function for T>T0
+        const G4double t0 = tf + v0*(1.-alpha)/alpha - deltaE; // deltaE before the linear potential vanishes
+        G4double v;
+        if(t<t0) {
+          v = v0 - alpha*(t-tf)/(1.-alpha);
+        } else {
+          const G4double v_at_t0 = v0 - alpha*(t0-tf)/(1.-alpha);
+          const G4double kappa = alpha / (v_at_t0 * (1.-alpha));
+          v = v_at_t0 * std::exp(kappa * (t0-t));
+        }
+        return (v>0.0) ? v : 0.0;
+      } else
+        return v0;
+    }
+
+  }
 }
+

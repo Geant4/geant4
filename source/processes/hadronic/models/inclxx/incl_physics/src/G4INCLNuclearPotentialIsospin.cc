@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -55,8 +55,8 @@ namespace G4INCL {
   namespace NuclearPotential {
 
     // Constructors
-    NuclearPotentialIsospin::NuclearPotentialIsospin(NuclearDensity *density, G4bool pionPotential)
-      : INuclearPotential(density, pionPotential)
+    NuclearPotentialIsospin::NuclearPotentialIsospin(NuclearDensity const * const density, const G4bool pionPotential, const G4bool hardFermiSphere/*=true*/)
+      : INuclearPotential(density, pionPotential, hardFermiSphere)
     {
       initialize();
     }
@@ -67,12 +67,12 @@ namespace G4INCL {
     void NuclearPotentialIsospin::initialize() {
       const G4double ZOverA = ((G4double) theDensity->getZ()) / ((G4double) theDensity->getA());
 
-      const G4double mp = ParticleTable::getMass(Proton);
+      const G4double mp = ParticleTable::getINCLMass(Proton);
       fermiMomentum[Proton] = PhysicalConstants::Pf * Math::pow13(2.*ZOverA);
       fermiEnergy[Proton] = std::sqrt(fermiMomentum[Proton]*fermiMomentum[Proton] + mp*mp) - mp;
       vProton = fermiEnergy[Proton] + ParticleTable::getSeparationEnergy(Proton);
 
-      const G4double mn = ParticleTable::getMass(Neutron);
+      const G4double mn = ParticleTable::getINCLMass(Neutron);
       fermiMomentum[Neutron] = PhysicalConstants::Pf * Math::pow13(2.*(1.-ZOverA));
       fermiEnergy[Neutron] = std::sqrt(fermiMomentum[Neutron]*fermiMomentum[Neutron] + mn*mn) - mn;
       vNeutron = fermiEnergy[Neutron] + ParticleTable::getSeparationEnergy(Neutron);

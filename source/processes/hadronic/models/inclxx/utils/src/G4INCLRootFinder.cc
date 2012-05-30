@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -71,9 +71,17 @@ namespace G4INCL {
     G4double x2 = bracket.second;
     // If x1>x2, it means that we could not bracket the root. Return false.
     if(x1>x2) {
-      WARN("Root-finding algorithm could not bracket the root." << std::endl);
-      f->cleanUp(false);
-      return false;
+      // Maybe zero is a good solution?
+      G4double y_at_zero = (*f)(0.);
+      if(std::abs(y_at_zero)<=toleranceY) {
+        f->cleanUp(true);
+        solution = std::make_pair(0.,y_at_zero);
+        return true;
+      } else {
+        WARN("Root-finding algorithm could not bracket the root." << std::endl);
+        f->cleanUp(false);
+        return false;
+      }
     }
 
     G4double y1 = (*f)(x1);
@@ -127,12 +135,20 @@ namespace G4INCL {
 
   std::pair<G4double,G4double> RootFinder::bracketRoot(RootFunctor const * const f, G4double x0) {
     G4double y0 = (*f)(x0);
-    G4double x1 = x0;
-    G4double y1 = (*f)(x1);
 
     const G4double scaleFactor = 1.5;
-    const G4double scaleFactorMinus1 = 1./scaleFactor;
 
+    G4double x1;
+    if(x0!=0.)
+      x1=scaleFactor*x0;
+    else
+      x1=1.;
+    G4double y1 = (*f)(x1);
+
+    if(Math::sign(y0)!=Math::sign(y1))
+      return std::make_pair(x0,x1);
+
+    const G4double scaleFactorMinus1 = 1./scaleFactor;
     G4double oldx0, oldx1, oldy1;
     G4int iterations=0;
     do {

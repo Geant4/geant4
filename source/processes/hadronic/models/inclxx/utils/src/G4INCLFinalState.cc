@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -70,24 +70,34 @@ namespace G4INCL {
     created.push_back(p);
   }
 
-  ParticleList FinalState::getModifiedParticles() const
+  void FinalState::addEnteringParticle(Particle *p)
+  {
+    entering.push_back(p);
+  }
+
+  ParticleList const &FinalState::getModifiedParticles() const
   {
     return modified;
   }
 
-  ParticleList FinalState::getOutgoingParticles() const
+  ParticleList const &FinalState::getOutgoingParticles() const
   {
     return outgoing;
   }
 
-  ParticleList FinalState::getDestroyedParticles() const
+  ParticleList const &FinalState::getDestroyedParticles() const
   {
     return destroyed;
   }
 
-  ParticleList FinalState::getCreatedParticles() const
+  ParticleList const &FinalState::getCreatedParticles() const
   {
     return created;
+  }
+
+  ParticleList const &FinalState::getEnteringParticles() const
+  {
+    return entering;
   }
 
   std::string FinalState::print() const {
@@ -103,6 +113,9 @@ namespace G4INCL {
       ss << (*iter)->print();
     ss << "Created particles:" << std::endl;
     for(ParticleIter iter = created.begin(); iter != created.end(); ++iter)
+      ss << (*iter)->print();
+    ss << "Entering particles:" << std::endl;
+    for(ParticleIter iter = entering.begin(); iter != entering.end(); ++iter)
       ss << (*iter)->print();
     return ss.str();
   }

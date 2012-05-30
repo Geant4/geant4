@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -51,6 +51,7 @@
 
 // INCL++
 #include "G4INCLCascade.hh"
+#include "G4INCLConfig.hh"
 
 // Geant4 de-excitation
 #include "G4ExcitationHandler.hh"
@@ -61,14 +62,14 @@
 using namespace std;
 
 /**
- * <h1>INCL intra-nuclear cascade with G4ExcitationHandler for de-excitation</h1>
+ * <h1>INCL++ intra-nuclear cascade with G4ExcitationHandler for de-excitation</h1>
  *
- * Interface for INCL. This interface handles basic hadron
- * bullet particles (protons, neutrons, pions).
+ * Interface for INCL++. This interface handles basic hadron bullet particles
+ * (protons, neutrons, pions), as well as light ions.
  *
  * Example usage in case of protons:
  * @code
- * G4InclCascadeInterface* inclModel = new G4InclCascadeInterface;
+ * G4INCLXXInterface* inclModel = new G4INCLXXInterface;
  * inclModel -> SetMinEnergy(0.0 * MeV); // Set the energy limits
  * inclModel -> SetMaxEnergy(3.0 * GeV);
  *
@@ -82,15 +83,23 @@ using namespace std;
  * processManager = particle -> GetProcessManager();
  * processManager -> AddDiscreteProcess(protonInelasticProcess);
  * @endcode
- * The same setup procedure is needed for neutron and pion inelastic processes
- * as well.
- *
- * @see G4InclLightIonInterface
+ * The same setup procedure is needed for neutron, pion and generic-ion
+ * inelastic processes as well.
  */
+
+class G4INCLXXInterfaceConfig;
+
 class G4INCLXXInterface : public G4VIntraNuclearTransportModel {
 public:
-  G4INCLXXInterface(const G4String& name = "INCL++ Cascade with G4ExcitationHandler");
-  
+  G4INCLXXInterface(const G4String& name = "INCL++ cascade with G4ExcitationHandler");
+//  G4INCLXXInterface(const G4String& name = "INCL++ cascade with G4ExcitationHandler/ABLA");
+  ~G4INCLXXInterface(); // Destructor
+
+/*  enum ModelEnum {
+    G4ExcitationHandlerModel,
+    ABLAModel
+  };*/
+
   G4int operator==(G4INCLXXInterface& right) {
     return (this == &right);
   }
@@ -98,8 +107,6 @@ public:
   G4int operator!=(G4INCLXXInterface& right) {
     return (this != &right);
   }
-
-  ~G4INCLXXInterface(); // Destructor
 
   G4ReactionProductVector* Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus); // Idle
 
@@ -111,14 +118,23 @@ public:
    */
   G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,  G4Nucleus& theNucleus); 
 
+  void DeleteModel() {
+    delete theINCLModel;
+    theINCLModel = NULL;
+  }
+
 private:
+  static G4INCLXXInterface *theInstance;
+
+  G4bool shouldUseInverseKinematics(const G4HadProjectile &aTrack, const G4Nucleus &theTargetNucleus);
+
   G4INCL::INCL *theINCLModel;
   G4HadFinalState theResult;
 
   G4ExcitationHandler *theExcitationHandler;
-  G4bool storeDebugOutput;
-  std::ofstream *debugOutputFile;
-  G4bool dumpInput;
+
+  G4INCL::Config *theConfig;
+  G4INCLXXInterfaceConfig * const theInterfaceConfig;
 };
 
 #endif

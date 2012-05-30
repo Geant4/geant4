@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -40,12 +40,17 @@
 #include "G4ParticleTable.hh"
 
 G4INCL::ParticleType G4INCLXXFactory::toINCLParticleType(const G4ParticleDefinition *pdef) {
-  if(     pdef == G4Proton::Proton())       return G4INCL::Proton;
-  else if(pdef == G4Neutron::Neutron())     return G4INCL::Neutron;
-  else if(pdef == G4PionPlus::PionPlus())   return G4INCL::PiPlus;
-  else if(pdef == G4PionMinus::PionMinus()) return G4INCL::PiMinus;
-  else if(pdef == G4PionZero::PionZero())   return G4INCL::PiZero;
-  else                                      return G4INCL::UnknownParticle;
+  if(     pdef == G4Proton::Proton())           return G4INCL::Proton;
+  else if(pdef == G4Neutron::Neutron())         return G4INCL::Neutron;
+  else if(pdef == G4PionPlus::PionPlus())       return G4INCL::PiPlus;
+  else if(pdef == G4PionMinus::PionMinus())     return G4INCL::PiMinus;
+  else if(pdef == G4PionZero::PionZero())       return G4INCL::PiZero;
+  else if(pdef == G4Deuteron::Deuteron())       return G4INCL::Composite;
+  else if(pdef == G4Triton::Triton())           return G4INCL::Composite;
+  else if(pdef == G4He3::He3())                 return G4INCL::Composite;
+  else if(pdef == G4Alpha::Alpha())             return G4INCL::Composite;
+  else if(pdef->GetParticleType() == G4GenericIon::GenericIon()->GetParticleType()) return G4INCL::Composite;
+  else                                            return G4INCL::UnknownParticle;
 }
 
 const G4ParticleDefinition* G4INCLXXFactory::fromINCLParticleType(G4INCL::ParticleType ptype) {
@@ -58,33 +63,22 @@ const G4ParticleDefinition* G4INCLXXFactory::fromINCLParticleType(G4INCL::Partic
   else                                      return 0;
 }
 
-G4INCL::Particle* G4INCLXXFactory::createProjectile(const G4HadProjectile &aTrack) {
+G4INCL::ParticleSpecies G4INCLXXFactory::toINCLParticleSpecies(const G4HadProjectile &aTrack) {
   const G4ParticleDefinition *pdef = aTrack.GetDefinition();
-  G4INCL::ParticleType projectileType = G4INCLXXFactory::toINCLParticleType(pdef);
-  const G4double kineticEnergy = aTrack.GetKineticEnergy();
-  const G4double mass = G4INCL::ParticleTable::getMass(projectileType);
-  const G4double energy = kineticEnergy + mass;
-  const G4double pz = std::sqrt(energy*energy - mass*mass);
-  G4INCL::ThreeVector momentum(0.0, 0.0, pz);
-  G4INCL::ThreeVector position(0.0, 0.0, 0.0); // Projectile position
-					       // doesn't actually
-					       // matter.
-
-  G4INCL::Particle *projectile = new G4INCL::Particle(projectileType, energy,
-						      momentum, position);
-  return projectile;
+  const G4INCL::ParticleType theType = G4INCLXXFactory::toINCLParticleType(pdef);
+  if(theType!=G4INCL::Composite)
+    return G4INCL::ParticleSpecies(theType);
+  else {
+    G4INCL::ParticleSpecies theSpecies;
+    theSpecies.theType=theType;
+    theSpecies.theA=(G4int) pdef->GetBaryonNumber();
+    theSpecies.theZ=(G4int) pdef->GetPDGCharge();
+    return theSpecies;
+  }
 }
 
-G4INCL::INCL* G4INCLXXFactory::createModel(const G4Nucleus &theNucleus) {
-  G4int A = theNucleus.GetA_asInt();
-  G4int Z = theNucleus.GetZ_asInt();
-  G4INCL::Config *theConfig = new G4INCL::Config(A, Z, G4INCL::Proton, 1200.0);
-  theConfig->setTargetA(A);
-  theConfig->setTargetZ(Z);
-
-  G4INCL::INCL *theINCLModel = new G4INCL::INCL(theConfig);
-
-  return theINCLModel;
+G4double G4INCLXXFactory::toINCLKineticEnergy(const G4HadProjectile &aTrack) {
+  return aTrack.GetKineticEnergy();
 }
 
 G4ParticleDefinition* G4INCLXXFactory::toG4ParticleDefinition(G4int A,

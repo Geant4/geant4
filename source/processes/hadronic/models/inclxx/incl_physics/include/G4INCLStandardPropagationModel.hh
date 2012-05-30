@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -83,8 +83,9 @@ namespace G4INCL {
        */
       G4INCL::Nucleus* getNucleus();
 
-      G4bool shootProjectile(G4INCL::Particle *p, G4double impactParameter);
-      G4bool shootProjectile(G4INCL::Nucleus *n, G4double impactParameter);
+      G4double shoot(ParticleSpecies const projectileSpecies, const G4double kineticEnergy, const G4double impactParameter);
+      G4double shootParticle(ParticleType const t, const G4double kineticEnergy, const G4double impactParameter);
+      G4double shootComposite(ParticleSpecies const s, const G4double kineticEnergy, const G4double impactParameter);
 
       /**
        * Set the stopping time of the simulation.
@@ -121,12 +122,6 @@ namespace G4INCL {
        */
       G4double getTime(G4INCL::Particle const * const particleA,
 		     G4INCL::Particle const * const particleB, G4double *minDistOfApproach) const;
-
-      /**
-       * Create avatars between participants and all other particles.
-       */
-      void checkCollisions(const ParticleList &participants,
-					       const ParticleList &particles);
 
       /** \brief Generate and register collisions between a list of updated particles and all the other particles.
        *
@@ -182,14 +177,15 @@ namespace G4INCL {
        */
       G4INCL::IAvatar* propagate();
 
-      G4double calculateParticlePositionAtSurface(ThreeVector pos, Particle *p);
-
     private:
       G4INCL::Nucleus *theNucleus;
       G4double maximumTime;
       G4double currentTime;
       G4bool firstAvatar;
       LocalEnergyType theLocalEnergyType, theLocalEnergyDeltaType;
+
+      /// \brief Put spectators on shell by extracting energy from the participants.
+      void putSpectatorsOnShell(IAvatarList const &entryAvatars, ParticleList const &spectators);
     };
 
 }

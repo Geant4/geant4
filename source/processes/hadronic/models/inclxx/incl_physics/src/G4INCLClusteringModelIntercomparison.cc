@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -43,8 +43,8 @@
 namespace G4INCL {
   const G4double ClusteringModelIntercomparison::limitCosEscapeAngle = 0.7;
 
-  static G4bool participantsFirstPredicate(Particle *lhs, Particle * /*rhs*/) {
-    return lhs->isParticipant();
+  static G4bool cascadingFirstPredicate(Particle *lhs, Particle * /*rhs*/) {
+    return !lhs->isTargetSpectator();
   }
 
   Cluster* ClusteringModelIntercomparison::getCluster(Nucleus *nucleus, Particle *particle) {
@@ -55,13 +55,16 @@ namespace G4INCL {
     selectedA = 0;
     selectedZ = 0;
 
+    // Set the maximum clustering mass dynamically, based on the current nucleus
+    runningMaxClusterAlgorithmMass = std::min(IClusteringModel::maxClusterAlgorithmMass, nucleus->getA()/2);
+
     const G4double transp = 1.0;
     const G4double rmaxws = theNucleus->getDensity()->getMaximumRadius();
 
     const G4double Rprime = theNucleus->getDensity()->getCentralRadius() + transp;
     const G4double pk = theLeadingParticle->getMomentum().mag();
 
-    const G4double cospr = theLeadingParticle->getPosition().dot(theLeadingParticle->getMomentum())/(theNucleus->getDensity()->getMaximumRadius() * pk);
+    const G4double cospr = theLeadingParticle->getPosition().dot(theLeadingParticle->getMomentum())/(theNucleus->getUniverseRadius() * pk);
     const G4double arg = rmaxws*rmaxws - Rprime*Rprime;
     G4double translat = 0.0;
 
@@ -83,7 +86,7 @@ namespace G4INCL {
 
     // Select the subset of nucleons that will be considered in the
     // cluster production:
-    participantEnergyPool = 0.;
+    cascadingEnergyPool = 0.;
     const ParticleList particles = theNucleus->getStore()->getParticles();
     for(ParticleIter i = particles.begin(); i != particles.end(); ++i) {
       if (!(*i)->isNucleon()) continue; // Only nucleons are allowed in clusters
@@ -91,18 +94,18 @@ namespace G4INCL {
 
       G4double space = ((*i)->getPosition() - leadingParticlePosition).mag2();
       G4double momentum = ((*i)->getMomentum() - leadingParticleMomentum).mag2();
-      G4double size = space*momentum*ParticleTable::clusterPosFact2[IClusteringModel::maxClusterAlgorithmMass];
-      if(size < ParticleTable::clusterPhaseSpaceCut[IClusteringModel::maxClusterAlgorithmMass]) {
+      G4double size = space*momentum*ParticleTable::clusterPosFact2[runningMaxClusterAlgorithmMass];
+      if(size < ParticleTable::clusterPhaseSpaceCut[runningMaxClusterAlgorithmMass]) {
 	consideredPartners.push_back((*i));
-        if((*i)->isParticipant())
-          participantEnergyPool += (*i)->getEnergy() - (*i)->getPotentialEnergy() - 931.3;
+        if(!(*i)->isTargetSpectator())
+          cascadingEnergyPool += (*i)->getEnergy() - (*i)->getPotentialEnergy() - 931.3;
       }
     }
     // Sort the list of considered partners so that we give priority
     // to participants. As soon as we encounter the first spectator in
     // the list we know that all the remaining nucleons will be
     // spectators too.
-    consideredPartners.sort(participantsFirstPredicate);
+    consideredPartners.sort(cascadingFirstPredicate);
 
     runningConfiguration.push_back(theLeadingParticle);
     runningPositions[1] = theLeadingParticle->getPosition();
@@ -161,15 +164,15 @@ namespace G4INCL {
       runningPotentials[newA] = runningPotentials[oldA] + (*i)->getPotentialEnergy();
 
       // Update the available participant kinetic energy
-      G4double oldParticipantEnergyPool = participantEnergyPool;
-      if((*i)->isParticipant())
-        participantEnergyPool -= (*i)->getEnergy() - (*i)->getPotentialEnergy() - 931.3;
+      G4double oldCascadingEnergyPool = cascadingEnergyPool;
+      if(!(*i)->isTargetSpectator())
+        cascadingEnergyPool -= (*i)->getEnergy() - (*i)->getPotentialEnergy() - 931.3;
 
       // Check an approximate Coulomb barrier
       const G4double halfB = 0.72 * newZ * theNucleus->getZ()/(theNucleus->getDensity()->getCentralRadius()+1.7);
       const G4double tout = runningEnergies[newA] - runningPotentials[newA] - 931.3*newA;
-      if(tout<=halfB && tout+participantEnergyPool<=halfB) {
-        participantEnergyPool = oldParticipantEnergyPool;
+      if(tout<=halfB && tout+cascadingEnergyPool<=halfB) {
+        cascadingEnergyPool = oldCascadingEnergyPool;
         continue;
       }
 
@@ -182,9 +185,8 @@ namespace G4INCL {
       if(newZ >= ParticleTable::clusterZMin[newA] && newZ <= ParticleTable::clusterZMax[newA]) {
         // Note: sqc is real kinetic energy, not the square of the kinetic energy!
         G4double sqc = KinematicsUtils::invariantMass(runningEnergies[newA], runningMomenta[newA]);
-        G4double sqct = (sqc - newZ * 938.27
-            - (newA - newZ) * 939.57
-            - ParticleTable::binding[newZ][newA])
+        G4double sqct = (sqc - 2.*newZ*protonMass - 2.*(newA-newZ)*neutronMass
+             + ParticleTable::getRealMass(newA, newZ))
           *ParticleTable::clusterPosFact[newA];
 
         if(sqct < sqtot) {
@@ -196,22 +198,27 @@ namespace G4INCL {
         }
       }
 
-      if(newA < IClusteringModel::maxClusterAlgorithmMass && newA+1 < theNucleus->getA()) {
+      if(newA < runningMaxClusterAlgorithmMass && newA+1 < theNucleus->getA()) {
 	findClusterStartingFrom(newA, newZ);
       }
 
       runningConfiguration.pop_back();
-      participantEnergyPool = oldParticipantEnergyPool;
+      cascadingEnergyPool = oldCascadingEnergyPool;
     }
   }
 
-  G4bool ClusteringModelIntercomparison::clusterCanEscape(Cluster const * const c) {
+  G4bool ClusteringModelIntercomparison::clusterCanEscape(Nucleus const * const n, Cluster const * const c) {
+    // Forbid emission of the whole nucleus
+    if(c->getA()>=n->getA())
+      return false;
+
     // Check the escape angle of the cluster
     const ThreeVector &pos = c->getPosition();
     const ThreeVector &mom = c->getMomentum();
     const G4double cosEscapeAngle = pos.dot(mom) / std::sqrt(pos.mag2()*mom.mag2());
     if(cosEscapeAngle < limitCosEscapeAngle)
       return false;
+
     return true;
   }
 

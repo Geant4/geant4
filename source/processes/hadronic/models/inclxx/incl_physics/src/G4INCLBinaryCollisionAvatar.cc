@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -76,14 +76,21 @@ namespace G4INCL {
   }
 
   G4INCL::IChannel* BinaryCollisionAvatar::getChannel() const {
-    // Commenting out the following block... we don't really need it here, do
-    // we? We already check cutNN at avatar creation time.
-    /*const G4double energyCM2 = KinematicsUtils::totalEnergyInCM(particle1, particle2);
-    // Below a certain cut value we don't do anything:
-    if(energyCM < cutNN) {
-    //return new DummyChannel(particle1, particle2, theNucleus);
-    return NULL;
-    } */
+    // We already check cutNN at avatar creation time, but we have to check it
+    // again here. For composite projectiles, we might have created independent
+    // avatars with no cutNN before any collision took place.
+    if(particle1->isNucleon()
+        && particle2->isNucleon()
+        && theNucleus->getStore()->getBook()->getAcceptedCollisions()!=0) {
+      const G4double energyCM2 = KinematicsUtils::squareTotalEnergyInCM(particle1, particle2);
+      // Below a certain cut value we don't do anything:
+      if(energyCM2 < cutNNSquared) {
+        DEBUG("CM energy = sqrt(" << energyCM2 << ") MeV < sqrt(" << cutNNSquared
+            << ") MeV = cutNN" << "; returning a NULL channel" << std::endl);
+        InteractionAvatar::restoreParticles();
+        return NULL;
+      }
+    }
 
     /** Check again the distance of approach. In order for the avatar to be
      * realised, we have to perform a check in the CM system. We define a
@@ -187,6 +194,8 @@ namespace G4INCL {
         theNucleus->getStore()->getBook()->incrementBlockedCollisions();
         break;
       case NoEnergyConservationFS:
+      case ParticleBelowFermiFS:
+      case ParticleBelowZeroFS:
         break;
       case ValidFS:
         theNucleus->getStore()->getBook()->incrementAcceptedCollisions();

@@ -36,6 +36,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/inc
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
 
 #
 # Define the Geant4 Module.
@@ -45,18 +46,16 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
     HEADERS
         G4INCLParticleTable.hh
         G4INCLRanecu.hh
-        G4INCLCluster.hh
         G4INCLIChannel.hh
         G4INCLIAvatar.hh
         G4INCLConfig.hh
-        G4INCLStandaloneParticleDataSource.hh
         G4INCLLogger.hh
         G4INCLGlobalInfo.hh
         G4INCLGlobals.hh
-        G4INCLStore.hh
         G4INCLParticleType.hh
         G4INCLBook.hh
         G4INCLIRandomGenerator.hh
+        G4INCLIntersection.hh
         G4INCLGeant4Random.hh
         G4INCLConfigEnums.hh
         G4INCLRandom.hh
@@ -64,8 +63,8 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
         G4INCLRootFinder.hh
         G4INCLDeExcitation.hh
         G4INCLVersion.hh
-        G4INCLIParticleDataSource.hh
         G4INCLGeant4Compat.hh
+        G4INCLParticleSpecies.hh
         G4INCLThreeVector.hh
         G4INCLFinalState.hh
         G4INCLParticle.hh
@@ -76,21 +75,19 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
         G4INCLParticleTable.cc
         G4INCLIAvatar.cc
         G4INCLEventInfo.cc
-        G4INCLStore.cc
         G4INCLGlobals.cc
         G4INCLConfigVersion.cc
         G4INCLParticle.cc
-        G4INCLIParticleDataSource.cc
+        G4INCLIntersection.cc
         G4INCLConfig.cc
         G4INCLRootFinder.cc
         G4INCLRanecu.cc
         G4INCLIChannel.cc
         G4INCLRandom.cc
         G4INCLFinalState.cc
-        G4INCLStandaloneParticleDataSource.cc
         G4INCLLogger.cc
         G4INCLBook.cc
-        G4INCLCluster.cc
+        G4INCLParticleSpecies.cc
 
     GRANULAR_DEPENDENCIES
         G4baryons
@@ -108,6 +105,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
         G4procman
         G4track
         G4volumes
+        G4intercoms
 
     GLOBAL_DEPENDENCIES
         G4geometry
@@ -115,5 +113,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
         G4materials
         G4particles
         G4track
+        G4intercoms
 
 LINK_LIBRARIES)# List any source specific properties here

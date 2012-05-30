@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -158,7 +158,10 @@ namespace G4INCL {
       static G4int getVerbosityLevel() { return theLoggerSlave->getVerbosityLevel(); }
 
       /// \brief Delete the slave Logger.
-      static void deleteLoggerSlave() { delete theLoggerSlave; }
+      static void deleteLoggerSlave() {
+        delete theLoggerSlave;
+        theLoggerSlave=NULL;
+      }
 
     private:
       static LoggerSlave *theLoggerSlave;
@@ -217,7 +220,10 @@ namespace G4INCL {
     ~Logger() {};
     static void setVerbosityLevel(G4int) {};
     static void setLoggerSlave(LoggerSlave * const slave) { theLoggerSlave = slave; }
-    static void deleteLoggerSlave() { delete theLoggerSlave; }
+    static void deleteLoggerSlave() {
+      delete theLoggerSlave;
+      theLoggerSlave=NULL;
+    }
   private:
     static LoggerSlave *theLoggerSlave;
   };

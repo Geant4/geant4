@@ -36,6 +36,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/inc
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
 
 #
 # Define the Geant4 Module.
@@ -44,10 +45,14 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_interface
     HEADERS
         G4INCLXXFactory.hh
+        G4INCLXXInterfaceConfig.hh
         G4INCLXXInterface.hh
+        G4INCLXXInterfaceMessenger.hh
 
     SOURCES
         G4INCLXXInterface.cc
+        G4INCLXXInterfaceMessenger.cc
+        G4INCLXXInterfaceConfig.cc
         G4INCLXXFactory.cc
 
     GRANULAR_DEPENDENCIES
@@ -66,6 +71,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_interface
         G4procman
         G4track
         G4volumes
+        G4intercoms
         utils
         physics
 
@@ -75,5 +81,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_interface
         G4materials
         G4particles
         G4track
+        G4intercoms
 
 LINK_LIBRARIES)# List any source specific properties here

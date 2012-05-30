@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -52,7 +52,7 @@ namespace G4INCL {
   }
 
   void PropagationAction::beforePropagationAction(IPropagationModel * /*pm*/) {
-    // assert(pm->getNucleus()->getStore()->getBook()->getParticipants() == pm->getNucleus()->getStore()->countParticipants());
+    // assert(pm->getNucleus()->getStore()->getBook()->getCascading() == pm->getNucleus()->getStore()->countCascading());
   }
 
   void PropagationAction::afterPropagationAction(IPropagationModel * /* pm */,

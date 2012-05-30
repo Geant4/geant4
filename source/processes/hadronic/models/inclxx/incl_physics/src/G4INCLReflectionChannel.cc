@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -59,13 +59,19 @@ namespace G4INCL {
     fs->setTotalEnergyBeforeInteraction(theParticle->getEnergy() - theParticle->getPotentialEnergy());
 
     G4double pspr = theParticle->getPosition().dot(theParticle->getMomentum());
-    G4double x2cour = theParticle->getPosition().mag2();
-    ThreeVector newMomentum = theParticle->getMomentum() - (theParticle->getPosition() * (2.0 * pspr/x2cour));
-    //ThreeVector newMomentum = -theParticle->getMomentum(); // For debugging
-    theParticle->setMomentum(newMomentum);
-    theNucleus->updatePotentialEnergy(theParticle);
-    fs->addModifiedParticle(theParticle);
+    if(pspr>=0) { // This means that the particle is trying to leave; perform a reflection
+      G4double x2cour = theParticle->getPosition().mag2();
+      ThreeVector newMomentum = theParticle->getMomentum() - (theParticle->getPosition() * (2.0 * pspr/x2cour));
+      //ThreeVector newMomentum = -theParticle->getMomentum(); // For debugging
+      theParticle->setMomentum(newMomentum);
+      theNucleus->updatePotentialEnergy(theParticle);
+    } else { // The particle momentum is already directed towards the inside of the nucleus; do nothing
+      // ...but make sure this only happened because of the frozen propagation
+// assert(theParticle->getPosition().dot(theParticle->getPropagationVelocity())>0.);
+    }
 
+    theParticle->thawPropagation();
+    fs->addModifiedParticle(theParticle);
     return fs;
   }
 }

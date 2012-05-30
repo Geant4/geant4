@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -54,42 +54,28 @@ namespace G4INCL {
   class INCL {
     public:
       INCL(Config const * const config);
-      INCL(IPropagationModel *aPropagationModel);
 
       ~INCL();
 
-      G4bool setTarget(G4int A, G4int Z);
-      G4bool initializeTarget(G4int A, G4int Z);
-      const EventInfo &processEvent(Particle *projectile);
-
-      /** \brief Rescale the energies of the outgoing particles.
-       *
-       * Allow for the remnant recoil energy by rescaling the energy (and
-       * momenta) of the outgoing particles.
-       */
-      void rescaleOutgoingForRecoil();
-
-      /** \brief Run global conservation checks
-       *
-       * Check that energy and momentum are correctly conserved. If not, issue a
-       * warning.
-       *
-       * Also feeds the balance variables in theEventInfo.
-       */
-      void globalConservationChecks();
-
-      /** \brief Stopping criterion for the cascade
-       *
-       * Returns true if the cascade should continue, and false if any of the
-       * stopping criteria is satisfied.
-       */
-      G4bool continueCascade();
+      G4bool prepareReaction(const ParticleSpecies &projectileSpecies, const G4double kineticEnergy, const G4int A, const G4int Z);
+      G4bool initializeTarget(const G4int A, const G4int Z);
+      inline const EventInfo &processEvent() {
+        return processEvent(
+            theConfig->getProjectileSpecies(),
+            theConfig->getProjectileKineticEnergy(),
+            theConfig->getTargetA(),
+            theConfig->getTargetZ()
+            );
+      }
+      const EventInfo &processEvent(
+          ParticleSpecies const &projectileSpecies,
+          const G4double kineticEnergy,
+          const G4int targetA,
+          const G4int targetZ
+          );
 
       void finaliseGlobalInfo();
       const GlobalInfo &getGlobalInfo() const { return theGlobalInfo; }
-
-      /** \brief Final calculations before returning the global information */
-      G4bool processEvent() { return false; }
 
       std::string configToString() { return theConfig->echo(); }
 
@@ -98,14 +84,97 @@ namespace G4INCL {
       G4int theA, theZ;
       G4bool targetInitSuccess;
       G4double maxImpactParameter;
+      G4double maxUniverseRadius;
+      G4double maxInteractionDistance;
       EventAction *eventAction;
       PropagationAction *propagationAction;
       AvatarAction *avatarAction;
       LoggerSlave *theLoggerSlave;
       Config const * const theConfig;
+      Nucleus *nucleus;
 
       EventInfo theEventInfo;
       GlobalInfo theGlobalInfo;
+
+      /// \brief Remnant size below which cascade stops
+      static const G4int minRemnantSize;
+
+      /** \brief Rescale the energies of the outgoing particles.
+       *
+       * Allow for the remnant recoil energy by rescaling the energy (and
+       * momenta) of the outgoing particles.
+       */
+      void rescaleOutgoingForRecoil();
+
+#ifndef INCLXX_IN_GEANT4_MODE
+      /** \brief Run global conservation checks
+       *
+       * Check that energy and momentum are correctly conserved. If not, issue
+       * a warning.
+       *
+       * Also feeds the balance variables in theEventInfo.
+       *
+       * \param afterRescaling whether to take into account nuclear recoil
+       */
+      void globalConservationChecks(G4bool afterRecoil);
+#endif
+
+      /** \brief Stopping criterion for the cascade
+       *
+       * Returns true if the cascade should continue, and false if any of the
+       * stopping criteria is satisfied.
+       */
+      G4bool continueCascade();
+
+      /** \brief Make a projectile pre-fragment out of geometrical spectators
+       *
+       * The projectile pre-fragment is assigned an excitation energy given by
+       * \f$E_\mathrm{sp}-E_\mathrm{i,A}\f$, where \f$E_\mathrm{sp}\f$ is the
+       * sum of the energies of the spectator particles, and
+       * \f$E_\mathrm{i,A}\f$ is the sum of the smallest \f$A\f$ particle
+       * energies initially present in the projectile, \f$A\f$ being the mass
+       * of the projectile pre-fragment. This is equivalent to assuming that
+       * the excitation energy is given by the sum of the transitions of all
+       * excited projectile components to the "holes" left by the participants.
+       *
+       * This method can modify the outgoing list and adds a projectile
+       * pre-fragment.
+       *
+       * \return the number of dynamical spectators that were merged back in
+       *         the projectile
+       */
+      G4int makeProjectileRemnant();
+
+      /** \brief Make a compound nucleus
+       *
+       * Selects the projectile components that can actually enter their
+       * potential and puts them into the target nucleus. If the CN excitation
+       * energy turns out to be negative, the event is considered a
+       * transparent. This method modifies theEventInfo and theGlobalInfo.
+       */
+      void makeCompoundNucleus();
+
+      /// \brief Initialise the cascade
+      G4bool preCascade(ParticleSpecies const projectileSpecies, const G4double kineticEnergy);
+
+      /// \brief The actual cascade loop
+      void cascade();
+
+      /// \brief Finalise the cascade and clean up
+      void postCascade();
+
+      /** \brief Initialise the maximum interaction distance.
+       *
+       * Used in forced CN events.
+       */
+      void initMaxInteractionDistance(Cluster const * const c);
+
+      /** \brief Initialize the universe radius.
+       *
+       * Used for determining the energy-dependent size of the volume particles
+       * live in.
+       */
+      void initUniverseRadius(ParticleSpecies const &p, const G4double kineticEnergy, const G4int A, const G4int Z);
   };
 }
 

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -290,28 +290,32 @@ namespace G4INCL {
         if((*i)->isNucleon() && theNucleus->getStore()->getConfig()->getBackToSpectator()) {
           G4double threshold = (*i)->getPotentialEnergy();
           if((*i)->getType()==Proton)
-            threshold += theNucleus->getTransmissionBarrier(*i);
+            threshold += Math::twoThirds*theNucleus->getTransmissionBarrier(*i);
           if((*i)->getKineticEnergy() < threshold)
             goesBackToSpectator = true;
         }
+
+        // Thaw the particle propagation
+        (*i)->thawPropagation();
+
         // Increment or decrement the participant counters
         if(goesBackToSpectator) {
-          if((*i)->isParticipant()) {
-            theNucleus->getStore()->getBook()->decrementParticipants();
-            (*i)->makeSpectator();
+          if(!(*i)->isTargetSpectator()) {
+            theNucleus->getStore()->getBook()->decrementCascading();
           }
+          (*i)->makeTargetSpectator();
         } else {
-          if(!(*i)->isParticipant()) {
-            theNucleus->getStore()->getBook()->incrementParticipants();
-            (*i)->makeParticipant();
+          if((*i)->isTargetSpectator()) {
+            theNucleus->getStore()->getBook()->incrementCascading();
           }
+          (*i)->makeParticipant();
         }
       }
     }
     ParticleList destroyed = fs->getDestroyedParticles();
     for( ParticleIter i = destroyed.begin(); i != destroyed.end(); ++i )
-      if((*i)->isParticipant())
-        theNucleus->getStore()->getBook()->decrementParticipants();
+      if(!(*i)->isTargetSpectator())
+        theNucleus->getStore()->getBook()->decrementCascading();
 
     return fs;
   }
@@ -409,7 +413,7 @@ namespace G4INCL {
       else
         (*i)->setPotentialEnergy(0.);
 
-      if(shouldUseLocalEnergy && !(*i)->isPion() && theNucleus) { // This translates AECSVT's loops 1, 3 and 4
+      if(shouldUseLocalEnergy && !(*i)->isPion()) { // This translates AECSVT's loops 1, 3 and 4
 // assert(theNucleus); // Local energy without a nucleus doesn't make sense
         const G4double energy = (*i)->getEnergy(); // Store the energy of the particle
         G4double locE = KinematicsUtils::getLocalEnergy(theNucleus, *i); // Initial value of local energy

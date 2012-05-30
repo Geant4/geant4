@@ -16,6 +16,42 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+25 May 2012 - Davide Mancusi (hadr-inclxx-V09-05-14)
+-----------------------------------------------------------
+- INCL++ v5.1_rc11
+  o Fixes a compiler warning on Windows.
+
+24 May 2012 - Davide Mancusi (hadr-inclxx-V09-05-13)
+-----------------------------------------------------------
+- INCL++ v5.1_rc10
+  o Refactored the configuration part of the interface in a separate
+    G4INCLXXInterfaceConfig singleton. The interface is no longer a singleton.
+  o Fixes a couple of minor bugs.
+
+22 May 2012 - Davide Mancusi (hadr-inclxx-V09-05-12)
+-----------------------------------------------------------
+- INCL++ v5.1_rc9
+  o Fixes a couple of minor bugs.
+
+12 May 2012 - Davide Mancusi (hadr-inclxx-V09-05-11)
+-----------------------------------------------------------
+- INCL++ v5.1_rc8
+  o Fixes a circular library dependency, compilation on Windows and some
+    mistakes in the build system.
+  o Minor bugfix in cluster decay.
+
+12 May 2012 - Davide Mancusi (hadr-inclxx-V09-05-09)
+-----------------------------------------------------------
+- INCL++ v5.1_rc6
+  o Fixes a bug mostly affecting reactions around 200 MeV.
+
+11 May 2012 - Davide Mancusi (hadr-inclxx-V09-05-08)
+-----------------------------------------------------------
+- New INCL++ v5.1_rc5
+  o Can handle heavy-ion collisions
+  o Conserves energy using masses from the G4 tables down
+    to the keV level.
+
 23 April 2012 - Davide Mancusi (hadr-inclxx-V09-05-07)
 -----------------------------------------------------------
 - Bugfix:

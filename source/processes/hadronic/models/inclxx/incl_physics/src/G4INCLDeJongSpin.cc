@@ -30,32 +30,26 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
 
-#ifndef G4INCLIParticleDataSource_hh
-#define G4INCLIParticleDataSource_hh 1
+/** \file G4INCLDeJongSpin.cc
+ * \brief Simple class implementing De Jong's spin model for nucleus-nucleus
+ *        collisions
+ *
+ * Reference: De Jong, Ignatyuk and Schmidt, Nucl. Phys. A613 (1997) 435-444.
+ *
+ * Created on: 2 April 2012
+ *     Author: Davide Mancusi
+ */
 
-#include <string>
-
-#include "G4INCLParticleType.hh"
+#include "G4INCLDeJongSpin.hh"
 
 namespace G4INCL {
 
-  class IParticleDataSource {
-  public:
-    IParticleDataSource();
-    virtual ~IParticleDataSource();
-
-    virtual std::string getPDSName(ParticleType t) = 0;
-    virtual std::string getPDSName(G4int A, G4int Z) = 0;
-    virtual G4double getMass(ParticleType t) = 0;
-    virtual G4double getMass(G4int A, G4int Z) = 0;
-  };
+  const G4double DeJongSpin::jzFactor = PhysicalConstants::hcSquared * 0.16;
 
 }
-
-#endif

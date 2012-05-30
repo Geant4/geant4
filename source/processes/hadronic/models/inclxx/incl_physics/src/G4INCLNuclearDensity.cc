@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -42,41 +42,83 @@
 
 namespace G4INCL {
 
-  NuclearDensity::NuclearDensity(G4int A, G4int Z, IFunction1D *densityF)
+  NuclearDensity::NuclearDensity(G4int A, G4int Z, IFunction1D *densityF, const G4bool hardFermiSphere)
     :theA(A), theZ(Z)
   {
     densityFunction = densityF;
     theRadiusParameter = densityFunction->getRadiusParameter();
     theMaximumRadius = densityFunction->getMaximumRadius();
     theDiffusenessParameter = densityFunction->getDiffusenessParameter();
-    computeCentralRadius();
+    initCentralRadius();
 
     initializeDensity();
     initializeFirstDerivative();
     initializeTransmissionRadii();
-  }
 
-  NuclearDensity::NuclearDensity(G4int A, G4int Z, IFunction1D *densityF,
-				     G4double radius,
-				     G4double maximumRadius,
-				     G4double diffuseness)
-    :theA(A), theZ(Z),
-     densityFunction(densityF),
-     theRadiusParameter(radius), theMaximumRadius(maximumRadius),
-     theDiffusenessParameter(diffuseness)
-  {
-    computeCentralRadius();
-    initializeDensity();
-    initializeFirstDerivative();
-    initializeTransmissionRadii();
+    if(hardFermiSphere)
+      shootRandomPosition = &NuclearDensity::shootRandomPositionCorrelated;
+    else
+      shootRandomPosition = &NuclearDensity::shootRandomPositionUncorrelated;
   }
 
   NuclearDensity::~NuclearDensity() {
     delete densityFunction;
   }
 
-  void NuclearDensity::initMaterial(G4int iamat, G4int izmat)
-  {
+  G4double NuclearDensity::integrate(G4double ami, G4double ama, G4double step) const {
+    G4double res = 0.0;
+    G4double x1[5];
+    for(G4int init_i = 0; init_i < 5; init_i++) {
+      x1[init_i] = 0.0;
+    }
+    G4double ri = ami;
+    G4double ra = ama;
+    G4int nb = 0;
+    G4double acont = 1.0;
+    G4double dr = step;
+
+    if(ama <= ami) {
+      acont = -1.0;
+      ri = ama;
+      ra = ami;
+    }
+
+    x1[0] = 95.0/288.0;
+    x1[1] = 317.0/240.0;
+    x1[2] = 23.0/30.0;
+    x1[3] = 793.0/720.0;
+    x1[4] = 157.0/160.0;
+    nb = G4int(std::floor(((ra - ri)/dr + 1.0000000001))); // 1.0000000001 -> 0.0
+    dr = (ra - ri)/(G4double(nb - 1));
+    res = 0.0;
+
+    if(nb < 10) {
+      ERROR("Not enough integration points" << std::endl);
+      return 0.0;
+    }
+
+    for(G4int i = 0; i < 5; i++) {
+      res = res + (densityFunction->getValue(ri)
+		   + densityFunction->getValue(ra)) * x1[i];
+      ri = ri + dr;
+      ra = ra - dr;
+    }
+
+    nb = nb - 10;
+
+    if(nb == 0) {
+      return (res*dr*acont);
+    }
+
+    for(G4int i = 0; i < nb; i++) {
+      res = res + densityFunction->getValue(ri);
+      ri = ri + dr;
+    }
+
+    return(res*dr*acont);
+  }
+
+  void NuclearDensity::initializeDensity() {
     G4double res_dws = 0.0;
     G4double fnor = 0.0;
 
@@ -88,21 +130,21 @@ namespace G4INCL {
     G4double drws = 0.0;
 
     // parametres moyens de densite de la cible (fermi 2 parametres)
-    densityFunction->setRadiusParameter(ParticleTable::getNuclearRadius(iamat,izmat));
-    densityFunction->setDiffusenessParameter(ParticleTable::getSurfaceDiffuseness(iamat,izmat));
-    densityFunction->setMaximumRadius(ParticleTable::getMaximumNuclearRadius(iamat,izmat));
+    densityFunction->setRadiusParameter(ParticleTable::getNuclearRadius(theA,theZ));
+    densityFunction->setDiffusenessParameter(ParticleTable::getSurfaceDiffuseness(theA,theZ));
+    densityFunction->setMaximumRadius(ParticleTable::getMaximumNuclearRadius(theA,theZ));
 
     drws = densityFunction->getMaximumRadius()/29.0;
 
     // preparation de la distribution w.s.:
     G4double step = 0.2;
-    if (iamat >= 19) {
+    if (theA >= 19) {
       step = 0.2;
       res_dws = integrate(0.0, 13.5, step);
     }
     else { 
       // preparation de la distribution m.h.o.:
-      if(iamat >= 6) {
+      if(theA >= 6) {
 	step=0.1;
 	res_dws = integrate(0.0, 10.0, step);
       }
@@ -157,63 +199,6 @@ namespace G4INCL {
     }
     //	      numberOfPoints = j;
     x[x.size() - 1] = 1.0; // Set the last value to 1.0 (y = rmax)
-  }
-
-  G4double NuclearDensity::integrate(G4double ami, G4double ama, G4double step) const {
-    G4double res = 0.0;
-    G4double x1[5];
-    for(G4int init_i = 0; init_i < 5; init_i++) {
-      x1[init_i] = 0.0;
-    }
-    G4double ri = ami;
-    G4double ra = ama;
-    G4int nb = 0;
-    G4double acont = 1.0;
-    G4double dr = step;
-
-    if(ama <= ami) {
-      acont = -1.0;
-      ri = ama;
-      ra = ami;
-    }
-  
-    x1[0] = 95.0/288.0;
-    x1[1] = 317.0/240.0;
-    x1[2] = 23.0/30.0;
-    x1[3] = 793.0/720.0;
-    x1[4] = 157.0/160.0;
-    nb = G4int(std::floor(((ra - ri)/dr + 1.0000000001))); // 1.0000000001 -> 0.0
-    dr = (ra - ri)/(G4double(nb - 1)); 
-    res = 0.0;
-
-    if(nb < 10) {
-      ERROR("Not enough integration points" << std::endl);
-      return 0.0;
-    }
-  
-    for(G4int i = 0; i < 5; i++) {
-      res = res + (densityFunction->getValue(ri)
-		   + densityFunction->getValue(ra)) * x1[i];
-      ri = ri + dr;
-      ra = ra - dr;
-    }
-
-    nb = nb - 10;
-
-    if(nb == 0) {
-      return (res*dr*acont);
-    }
-
-    for(G4int i = 0; i < nb; i++) {
-      res = res + densityFunction->getValue(ri);
-      ri = ri + dr;
-    }
-
-    return(res*dr*acont);
-  }
-
-  void NuclearDensity::initializeDensity() {
-    initMaterial(theA, theZ);
   }
 
   void NuclearDensity::initializeFirstDerivative() {

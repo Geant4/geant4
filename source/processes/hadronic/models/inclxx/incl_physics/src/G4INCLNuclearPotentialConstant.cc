@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -53,14 +53,8 @@ namespace G4INCL {
   namespace NuclearPotential {
 
     // Constructors
-    NuclearPotentialConstant::NuclearPotentialConstant(NuclearDensity *density, G4bool pionPotential)
-      : INuclearPotential(density, pionPotential)
-    {
-      initialize();
-    }
-
-    NuclearPotentialConstant::NuclearPotentialConstant(NuclearDensity *density, G4bool pionPotential, G4double /* nucleon */, G4double /* delta */)
-      : INuclearPotential(density, pionPotential)
+    NuclearPotentialConstant::NuclearPotentialConstant(NuclearDensity const * const density, const G4bool pionPotential, const G4bool hardFermiSphere/*=true*/)
+      : INuclearPotential(density, pionPotential, hardFermiSphere)
     {
       initialize();
     }
@@ -70,11 +64,11 @@ namespace G4INCL {
     }
 
     void NuclearPotentialConstant::initialize() {
-      const G4double mp = ParticleTable::getMass(Proton);
+      const G4double mp = ParticleTable::getINCLMass(Proton);
       fermiMomentum[Proton] = PhysicalConstants::Pf;
       fermiEnergy[Proton] = std::sqrt(PhysicalConstants::PfSquared + mp*mp) - mp;
 
-      const G4double mn = ParticleTable::getMass(Neutron);
+      const G4double mn = ParticleTable::getINCLMass(Neutron);
       fermiMomentum[Neutron] = PhysicalConstants::Pf;
       fermiEnergy[Neutron] = std::sqrt(PhysicalConstants::PfSquared + mn*mn) - mn;
 

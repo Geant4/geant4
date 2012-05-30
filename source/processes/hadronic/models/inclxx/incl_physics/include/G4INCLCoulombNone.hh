@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -49,11 +49,13 @@
 #include "G4INCLParticle.hh"
 #include "G4INCLNucleus.hh"
 #include "G4INCLICoulomb.hh"
+#include <utility>
 
 namespace G4INCL {
 
   class CoulombNone : public ICoulomb {
-  public:
+
+    public:
     CoulombNone() {}
     virtual ~CoulombNone() {}
 
@@ -64,7 +66,16 @@ namespace G4INCL {
      * \param p incoming particle
      * \param n distorting nucleus
      **/
-    void bringToSurface(Particle * const p, Nucleus const * const n) const;
+    ParticleEntryAvatar *bringToSurface(Particle * const p, Nucleus * const n) const;
+
+    /** \brief Position the cluster on the surface of the nucleus.
+     *
+     * This method does not perform any distortion.
+     *
+     * \param c incoming cluster
+     * \param n distorting nucleus
+     **/
+    IAvatarList bringToSurface(Cluster * const c, Nucleus * const n) const;
 
     /** \brief Modify the momenta of the outgoing particles.
      *
@@ -79,9 +90,16 @@ namespace G4INCL {
      *         trajectories. **/
     G4double maxImpactParameter(Particle const * const /*p*/, Nucleus const *
         const n) const {
-      return n->getDensity()->getMaximumRadius();
+      return n->getUniverseRadius();
     }
 
+    /** \brief Return the maximum impact parameter for Coulomb-distorted
+     *         trajectories. **/
+    G4double maxImpactParameter(Cluster const * const c, Nucleus const *
+        const n) const {
+      return 2.*ParticleTable::getNuclearRadius(c->getA(),c->getZ())
+        + n->getDensity()->getMaximumRadius();
+    }
   };
 }
 

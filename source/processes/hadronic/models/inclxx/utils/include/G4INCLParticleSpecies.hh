@@ -30,31 +30,70 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
 
-#ifndef G4INCLStandaloneParticleDataSource_hh
-#define G4INCLStandaloneParticleDataSource_hh 1
+/*
+ * G4INCLParticleSpecies.hh
+ *
+ *  Created on: Nov 25, 2011
+ *      Author: Davide Mancusi
+ */
 
-#include "G4INCLIParticleDataSource.hh"
-#include "G4INCLParticle.hh"
+#ifndef G4INCLPARTICLESPECIES_HH_
+#define G4INCLPARTICLESPECIES_HH_
+
+#include "G4INCLParticleType.hh"
+#include <string>
 
 namespace G4INCL {
 
-  class StandaloneParticleDataSource : public IParticleDataSource {
-  public:
-    StandaloneParticleDataSource();
-    virtual ~StandaloneParticleDataSource();
+  class ParticleSpecies {
+    public:
+      /// \brief Convert a string to a particle species
+      ParticleSpecies() :
+        theType(UnknownParticle),
+        theA(0),
+        theZ(0)
+    {}
+      ParticleSpecies(std::string const &pS);
+      ParticleSpecies(ParticleType const t);
 
-    std::string getPDSName(ParticleType t);
-    std::string getPDSName(G4int A, G4int Z);
-    G4double getMass(ParticleType t);
-    G4double getMass(G4int A, G4int Z);
+      ParticleType theType;
+      G4int theA, theZ;
+
+    private:
+      /** \brief Parse a nuclide name
+       *
+       * Note: this function is UGLY. Look at it at your own peril.
+       *
+       * \param pS a normalised string (lowercase)
+       */
+      void parseNuclide(std::string const &pS);
+
+      /** \brief Parse an element name
+       *
+       * Note: this function is UGLY. Look at it at your own peril.
+       *
+       * \param pS a normalised string (lowercase)
+       * \return true if the parsing succeeded
+       */
+      G4bool parseElement(std::string const &pS);
+
+      /** \brief Parse a IUPAC element name
+       *
+       * Note: this function is UGLY. Look at it at your own peril.
+       *
+       * \param pS a normalised string (lowercase)
+       * \return true if the parsing succeeded
+       */
+      G4bool parseIUPACElement(std::string const &s);
+
   };
 
 }
 
-#endif
+#endif /* G4INCLPARTICLESPECIES_HH_ */

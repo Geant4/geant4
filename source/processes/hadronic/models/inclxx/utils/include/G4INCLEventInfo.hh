@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -67,13 +67,16 @@ namespace G4INCL {
         impactParameter(0.0), nCollisions(0), stoppingTime(0.0),
         EBalance(0.0), pLongBalance(0.0), pTransBalance(0.0),
         nCascadeParticles(0), nRemnants(0), nParticles(0),
-        transparent(false), nucleonAbsorption(false), pionAbsorption(false), nDecays(0),
+        transparent(true),
+        forcedCompoundNucleus(false),
+        nucleonAbsorption(false), pionAbsorption(false), nDecays(0),
         nBlockedCollisions(0), nBlockedDecays(0),
         effectiveImpactParameter(0.0),
         deltasInside(false),
         forcedDeltasInside(false),
         forcedDeltasOutside(false),
-        clusterDecay(false)
+        clusterDecay(false),
+        nUnmergedSpectators(0)
       {};
 
       /** \brief Number of the event */
@@ -116,6 +119,8 @@ namespace G4INCL {
 
       /** \brief True if the event is transparent */
       Bool_t transparent;
+      /** \brief True if the event is a forced CN */
+      Bool_t forcedCompoundNucleus;
       /** \brief True if the event is absorption */
       Bool_t nucleonAbsorption;
       /** \brief True if the event is absorption */
@@ -150,6 +155,9 @@ namespace G4INCL {
       /** \brief Number of decay avatars */
       Int_t nDecayAvatars;
 
+      /// \brief Number of dynamical spectators that were merged back into the projectile remnant
+      Int_t nUnmergedSpectators;
+
       /** \brief Maximum array size for remnants */
       static const Short_t maxSizeRemnants = 10;
       /** \brief Remnant mass number */
@@ -172,6 +180,12 @@ namespace G4INCL {
       Float_t thetaRem[maxSizeRemnants];
       /** \brief Remnant momentum azimuthal angle [radians] */
       Float_t phiRem[maxSizeRemnants];
+      /** \brief Remnant angular momentum, x component [hbar] */
+      Float_t jxRem[maxSizeRemnants];
+      /** \brief Remnant angular momentum, y component [hbar] */
+      Float_t jyRem[maxSizeRemnants];
+      /** \brief Remnant angular momentum, z component [hbar] */
+      Float_t jzRem[maxSizeRemnants];
 
       /** \brief Maximum array size for emitted particles */
       static const Short_t maxSizeParticles = 1000;
@@ -231,12 +245,14 @@ namespace G4INCL {
         nRemnants = 0;
         nParticles = 0;
         transparent = true;
+        forcedCompoundNucleus = false;
 	nucleonAbsorption = false;
 	pionAbsorption = false;
         forcedDeltasInside = false;
         forcedDeltasOutside = false;
         deltasInside = false;
         clusterDecay = false;
+        nUnmergedSpectators = 0;
       }
     };
 }

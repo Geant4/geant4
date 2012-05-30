@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -48,6 +48,9 @@ namespace G4INCL {
   namespace PhysicalConstants {
     /// \brief \f$\hbar c\f$ [MeV*fm]
     const G4double hc = 197.328;
+
+    /// \brief \f$\hbar^2 c^2\f$ [MeV^2*fm^2]
+    const G4double hcSquared = hc*hc;
 
     /// \brief Fermi momentum [MeV/c]
     const G4double Pf = 1.37*hc;
@@ -68,6 +71,9 @@ namespace G4INCL {
     const G4double twoPi = 2.0 * pi;
     const G4double tenPi = 10.0 * pi;
     const G4double piOverTwo = 0.5 * pi;
+    const G4double oneOverSqrtThree = 1./std::sqrt((G4double)3.);
+    const G4double oneThird = 1./3.;
+    const G4double twoThirds = 2./3.;
 
     inline G4double toDegrees(G4double radians) {
       return radians * (180.0 / pi);
@@ -79,11 +85,15 @@ namespace G4INCL {
     }
 
     inline G4double pow13(G4double x) {
-      return std::pow(x, 1.0/3.0);
+      return std::pow(x, oneThird);
+    }
+
+    inline G4double powMinus13(G4double x) {
+      return std::pow(x, -oneThird);
     }
 
     inline G4double pow23(G4double x) {
-      return std::pow(x, 2.0/3.0);
+      return std::pow(x, twoThirds);
     }
 
     /**

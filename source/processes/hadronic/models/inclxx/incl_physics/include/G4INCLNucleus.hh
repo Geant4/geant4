@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -54,31 +54,28 @@
 #include "G4INCLCluster.hh"
 #include "G4INCLFinalState.hh"
 #include "G4INCLStore.hh"
-#include "G4INCLNuclearDensity.hh"
-#include "G4INCLINuclearPotential.hh"
 #include "G4INCLGlobals.hh"
 #include "G4INCLParticleTable.hh"
 #include "G4INCLConfig.hh"
 #include "G4INCLConfigEnums.hh"
+#include "G4INCLCluster.hh"
+#include "G4INCLProjectileRemnant.hh"
 
 namespace G4INCL {
 
-  class Nucleus {
+  class Nucleus : public Cluster {
   public:
-    Nucleus(G4int mass, G4int charge, Config const * const conf);
+    Nucleus(G4int mass, G4int charge, Config const * const conf, const G4double universeRadius=-1.);
     virtual ~Nucleus();
 
     /**
-     * Generate the initial distribution of particles. At the beginning
-     * all particles are assigned as spectators.
+     * Call the Cluster method to generate the initial distribution of
+     * particles. At the beginning all particles are assigned as spectators.
      */
     void initializeParticles();
 
-    /**
-     * Insert a new participant (e.g. a projectile) to the nucleus.
-     */
-    void insertParticipant(Particle *p) {
-      p->makeParticipant(); // The projectile particle is a participant
+    /// \brief Insert a new particle (e.g. a projectile) in the nucleus.
+    void insertParticle(Particle *p) {
       theZ += p->getZ();
       theA += p->getA();
       theStore->particleHasEntered(p);
@@ -86,15 +83,13 @@ namespace G4INCL {
         theNpInitial += Math::heaviside(ParticleTable::getIsospin(p->getType()));
         theNnInitial += Math::heaviside(-ParticleTable::getIsospin(p->getType()));
       }
+      if(!p->isTargetSpectator()) theStore->getBook()->incrementCascading();
     };
 
     /**
      * Apply reaction final state information to the nucleus.
      */
     void applyFinalState(FinalState *);
-
-    G4int getA() const { return theA; };
-    G4int getZ() const { return theZ; };
 
     G4int getInitialA() const { return theInitialA; };
     G4int getInitialZ() const { return theInitialZ; };
@@ -119,8 +114,8 @@ namespace G4INCL {
      */
     void propagateParticles(G4double step);
 
-    G4int getNumberOfProjectileProtons() const { return theNpInitial; };
-    G4int getNumberOfProjectileNeutrons() const { return theNnInitial; };
+    G4int getNumberOfEnteringProtons() const { return theNpInitial; };
+    G4int getNumberOfEnteringNeutrons() const { return theNnInitial; };
 
     /** \brief Outgoing - incoming separation energies.
      *
@@ -160,6 +155,14 @@ namespace G4INCL {
      */
     G4bool decayOutgoingClusters();
 
+    /** \brief Force the phase-space decay of the Nucleus.
+     *
+     * Only applied if Z==0 or Z==A.
+     *
+     * \return true if the nucleus was forced to decay.
+     */
+    G4bool decayMe();
+
     /// \brief Force emission of all pions inside the nucleus.
     void emitInsidePions();
 
@@ -189,6 +192,9 @@ namespace G4INCL {
       incomingAngularMomentum = j;
     }
 
+    /** \brief Get the incoming angular-momentum vector. */
+    const ThreeVector &getIncomingAngularMomentum() const { return incomingAngularMomentum; }
+
     /** \brief Set the incoming momentum vector. */
     void setIncomingMomentum(const ThreeVector &p) {
       incomingMomentum = p;
@@ -205,58 +211,11 @@ namespace G4INCL {
     /** \brief Get the initial energy. */
     G4double getInitialEnergy() const { return initialEnergy; }
 
-    /** \brief Get the recoil energy of the nucleus.
-     *
-     * Method computeRecoilKinematics() should be called first.
-     */
-    G4double getRecoilEnergy() const { return theRecoilEnergy; }
-
     /** \brief Get the excitation energy of the nucleus.
      *
      * Method computeRecoilKinematics() should be called first.
      */
     G4double getExcitationEnergy() const { return theExcitationEnergy; }
-
-    /** \brief Get the spin of the nucleus.
-     *
-     * Method computeRecoilKinematics() should be called first.
-     */
-    ThreeVector const &getSpin() const { return theSpin; }
-
-    /** \brief Get the recoil momentum of the nucleus.
-     *
-     * Method computeRecoilKinematics() should be called first.
-     */
-    ThreeVector const &getRecoilMomentum() const { return theRecoilMomentum; }
-
-    /** \brief Set the recoil momentum of the nucleus
-     *
-     * Can be used to override the recoil momentum computed by
-     * computeRecoilKinematics();
-     * */
-    void setRecoilMomentum(const ThreeVector &p) { theRecoilMomentum = p; }
-
-    /** \brief Set the recoil energy of the nucleus
-     *
-     * Can be used to override the recoil energy computed by
-     * computeRecoilKinematics();
-     * */
-    void setRecoilEnergy(G4double energy) { theRecoilEnergy = energy; }
-
-    /**
-     * Mark a particle as a participant.
-     *
-     * @param p pointer to a particle
-     */
-    void participate(G4INCL::Particle *p);
-
-    NuclearDensity* getDensity() const { return theDensity; };
-    NuclearPotential::INuclearPotential* getPotential() const { return thePotential; };
-
-    /// \brief Update the particle potential energy.
-    inline void updatePotentialEnergy(G4INCL::Particle *p) {
-      p->setPotentialEnergy(thePotential->computePotentialEnergy(p));
-    }
 
     ///\brief Returns true if the nucleus contains any deltas.
     inline G4bool containsDeltas() {
@@ -264,25 +223,6 @@ namespace G4INCL {
       for(ParticleIter i=inside.begin(); i!=inside.end(); ++i)
         if((*i)->isDelta()) return true;
       return false;
-    }
-
-    /** \brief Get the maximum allowed radius for a given particle.
-     * 
-     * Calls the NuclearDensity::getMaxRFromP() method for nucleons and deltas,
-     * and the NuclearDensity::getTrasmissionRadius() method for pions.
-     *
-     * \param particle pointer to a particle
-     * \return surface radius
-     */
-    G4double getSurfaceRadius(Particle const * const particle) const {
-      if(particle->isPion())
-        // Temporarily set RPION = RMAX
-        return theDensity->getMaximumRadius();
-        //return 0.5*(theDensity->getTransmissionRadius(particle)+theDensity->getMaximumRadius());
-      else {
-        const G4double pr = particle->getMomentum().mag()/thePotential->getFermiMomentum(particle);
-        return theDensity->getMaxRFromP(pr);
-      }
     }
 
     /**
@@ -312,14 +252,28 @@ namespace G4INCL {
      **/
     G4bool hasRemnant() const { return remnant; }
 
-    void forceTransparent() { forcedTransparent=true; }
-    G4bool isForcedTransparent() const { return forcedTransparent; }
-
     /**
      * Fill the event info which contains INCL output data
      */
     //    void fillEventInfo(Results::EventInfo *eventInfo);
     void fillEventInfo(EventInfo *eventInfo);
+
+    G4bool getTryCompoundNucleus() { return tryCN; }
+
+    /// \brief Return the charge number of the projectile
+    G4int getProjectileChargeNumber() const { return projectileZ; }
+
+    /// \brief Return the mass number of the projectile
+    G4int getProjectileMassNumber() const { return projectileA; }
+
+    /// \brief Set the charge number of the projectile
+    void setProjectileChargeNumber(G4int n) { projectileZ=n; }
+
+    /// \brief Set the mass number of the projectile
+    void setProjectileMassNumber(G4int n) { projectileA=n; }
+
+    /// \brief Returns true if a transparent event should be forced.
+    G4bool isForcedTransparent() { return forceTransparent; }
 
     /// \brief Get the transmission barrier
     G4double getTransmissionBarrier(Particle const * const p) {
@@ -336,7 +290,118 @@ namespace G4INCL {
     };
 
     /// \brief Compute charge, mass, energy and momentum balance
-    ConservationBalance getConservationBalance(EventInfo const &theEventInfo) const;
+    ConservationBalance getConservationBalance(EventInfo const &theEventInfo, const G4bool afterRecoil) const;
+
+    /// \brief Adjust the kinematics for complete-fusion events
+    void useFusionKinematics();
+
+    /** \brief Get the maximum allowed radius for a given particle.
+     *
+     * Calls the NuclearDensity::getMaxRFromP() method for nucleons and deltas,
+     * and the NuclearDensity::getTrasmissionRadius() method for pions.
+     *
+     * \param particle pointer to a particle
+     * \return surface radius
+     */
+    G4double getSurfaceRadius(Particle const * const particle) const {
+      if(particle->isPion())
+        // Temporarily set RPION = RMAX
+        return getUniverseRadius();
+        //return 0.5*(theDensity->getTransmissionRadius(particle)+getUniverseRadius());
+      else {
+        const G4double pr = particle->getMomentum().mag()/thePotential->getFermiMomentum(particle);
+        if(pr>=1.)
+          return getUniverseRadius();
+        else
+          return theDensity->getMaxRFromP(pr);
+      }
+    }
+
+    /** \brief Get the Coulomb radius for a given Particle
+     *
+     * That's the radius of the sphere that the Coulomb trajectory of the
+     * incoming particle should intersect. The intersection point is used to
+     * determine the effective impact parameter of the trajectory and the new
+     * entrance angle.
+     *
+     * If the Particle is not a Cluster, the Coulomb radius reduces to the
+     * surface radius. We use a parametrisation for d, t, He3 and alphas. For
+     * heavier clusters we fall back to the surface radius.
+     *
+     * \param particle pointer to a particle
+     * \return Coulomb radius
+     */
+    G4double getCoulombRadius(Particle const * const particle) const {
+      if(particle->isCluster()) {
+        const G4int zp = particle->getZ();
+        const G4int ap = particle->getA();
+        G4double barr, radius = 0.;
+        if(zp==1 && ap==2) { // d
+          barr = 0.2565*Math::pow23((G4double)theA)-0.78;
+          radius = ParticleTable::eSquared*zp*theZ/barr - 2.5;
+        } else if((zp==1 || zp==2) && ap==3) { // t, He3
+          barr = 0.5*(0.5009*Math::pow23((G4double)theA)-1.16);
+          radius = ParticleTable::eSquared*theZ/barr - 0.5;
+        } else if(zp==2 && ap==4) { // alpha
+          barr = 0.5939*Math::pow23((G4double)theA)-1.64;
+          radius = ParticleTable::eSquared*zp*theZ/barr - 0.5;
+        } else if(zp>2) {
+          radius = getUniverseRadius();
+        }
+        if(radius<=0.) {
+          ERROR("Negative Coulomb radius! Using the universe radius" << std::endl);
+          radius = getUniverseRadius();
+        }
+        return radius;
+      } else
+        return getUniverseRadius();
+    }
+
+    /// \brief Getter for theUniverseRadius.
+    G4double getUniverseRadius() const { return theUniverseRadius; }
+
+    /// \brief Setter for theUniverseRadius.
+    void setUniverseRadius(const G4double universeRadius) { theUniverseRadius=universeRadius; }
+
+    /// \brief Is it a nucleus-nucleus collision?
+    G4bool isNucleusNucleusCollision() const { return isNucleusNucleus; }
+
+    /// \brief Set a nucleus-nucleus collision
+    void setNucleusNucleusCollision() { isNucleusNucleus=true; }
+
+    /// \brief Set a particle-nucleus collision
+    void setParticleNucleusCollision() { isNucleusNucleus=false; }
+
+    /// \brief Set the projectile remnant
+    void setProjectileRemnant(ProjectileRemnant * const c) {
+      delete theProjectileRemnant;
+      theProjectileRemnant = c;
+    }
+
+    /// \brief Get the projectile remnant
+    ProjectileRemnant *getProjectileRemnant() const { return theProjectileRemnant; }
+
+    /// \brief Delete the projectile remnant
+    void deleteProjectileRemnant() {
+      delete theProjectileRemnant;
+      theProjectileRemnant = NULL;
+    }
+
+    /// \brief Move the components of the projectile remnant to the outgoing list
+    void moveProjectileRemnantComponentsToOutgoing() {
+      theStore->addToOutgoing(theProjectileRemnant->getParticles());
+      theProjectileRemnant->clearParticles();
+    }
+
+    /** \brief Finalise the projectile remnant
+     *
+     * Complete the treatment of the projectile remnant. If it contains
+     * nucleons, assign its excitation energy and spin. Move stuff to the
+     * outgoing list, if appropriate.
+     *
+     * \param emissionTime the emission time of the projectile remnant
+     */
+    void finalizeProjectileRemnant(const G4double emissionTime);
 
   private:
     /** \brief Compute the recoil kinematics for a 1-nucleon remnant.
@@ -347,25 +412,41 @@ namespace G4INCL {
     void computeOneNucleonRecoilKinematics();
 
   private:
-    G4int theZ, theA;
     G4int theInitialZ, theInitialA;
-    G4bool forcedTransparent;
-    G4int theNpInitial, theNnInitial;
-    G4double theExcitationEnergy;
+    /// \brief The number of entering protons
+    G4int theNpInitial;
+    /// \brief The number of entering neutrons
+    G4int theNnInitial;
     G4double initialInternalEnergy;
     ThreeVector incomingAngularMomentum, incomingMomentum;
-    ThreeVector theSpin, theRecoilMomentum, theCenterOfMass;
     ThreeVector initialCenterOfMass;
     G4bool remnant;
 
     ParticleList toBeUpdated;
     ParticleList justCreated;
     Particle *blockedDelta;
-    NuclearDensity *theDensity;
-    NuclearPotential::INuclearPotential *thePotential;
-    G4double theRecoilEnergy;
     G4double initialEnergy;
     Store *theStore;
+    G4bool tryCN;
+    G4bool forceTransparent;
+
+    /// \brief The charge number of the projectile
+    G4int projectileZ;
+    /// \brief The mass number of the projectile
+    G4int projectileA;
+
+    /// \brief The radius of the universe
+    G4double theUniverseRadius;
+
+    /** \brief true if running a nucleus-nucleus collision
+     *
+     * Tells INCL whether to make a projectile-like pre-fragment or not.
+     */
+    G4bool isNucleusNucleus;
+
+    /// \brief Pointer to the quasi-projectile
+    ProjectileRemnant *theProjectileRemnant;
+
   };
 
 }

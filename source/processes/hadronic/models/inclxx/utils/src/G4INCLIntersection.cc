@@ -30,14 +30,40 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
 
-#include "G4INCLCluster.hh"
+/** \file G4INCLIntersection.cc
+ * \brief Simple class for computing intersections between a straight line and a sphere.
+ *
+ * Created on: 12 December 2011
+ *     Author: Davide Mancusi
+ */
+
+#include "G4INCLIntersection.hh"
 
 namespace G4INCL {
 
+  Intersection IntersectionFactory::getTrajectoryIntersection(const ThreeVector &x0, const ThreeVector &v, const G4double r, const G4bool earliest) {
+    const G4double scalarVelocity = v.mag();
+    ThreeVector velocityUnitVector = v / scalarVelocity;
+
+    ThreeVector positionTransverse = x0 - velocityUnitVector * x0.dot(velocityUnitVector);
+    const G4double impactParameter = positionTransverse.mag();
+
+    const G4double r2 = r*r;
+    G4double distanceZ2 = r2 - impactParameter * impactParameter;
+    if(distanceZ2 < 0.0)
+      return Intersection(false, 0.0, ThreeVector());
+
+    const G4double distanceZ = std::sqrt(distanceZ2);
+    const ThreeVector position = positionTransverse + velocityUnitVector * (earliest ? -distanceZ : distanceZ);
+    const G4double time = (position-x0).dot(velocityUnitVector)/scalarVelocity;
+    return Intersection(true, time, position);
+  }
+
 }
+

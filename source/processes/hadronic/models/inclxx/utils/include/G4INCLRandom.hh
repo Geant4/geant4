@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -50,6 +50,7 @@
 #include <cmath>
 #include "G4INCLIRandomGenerator.hh"
 #include "G4INCLThreeVector.hh"
+#include "G4INCLGlobals.hh"
 #include "G4INCLLogger.hh"
 
 namespace G4INCL {
@@ -116,12 +117,23 @@ namespace G4INCL {
      * Generate isotropically-distributed ThreeVectors of given norm.
      */
     static ThreeVector normVector(G4double norm=1.);
+
     /**
      * Generate ThreeVectors that are uniformly distributed in a sphere of
      * radius rmax.
      */
     static ThreeVector sphereVector(G4double rmax=1.) {
-      return normVector( rmax*std::pow(shoot0(), 1./3.) );
+      return normVector( rmax*Math::pow13(shoot0()) );
+    }
+
+    /** \brief Generate Gaussianly-distributed ThreeVectors
+     *
+     * Generate ThreeVectors that are distributed as a three-dimensional
+     * Gaussian of the given sigma.
+     */
+    static ThreeVector gaussVector(G4double sigma=1.) {
+      const G4double sigmax = sigma * Math::oneOverSqrtThree;
+      return ThreeVector(gauss(sigmax), gauss(sigmax), gauss(sigmax));
     }
 
     /**

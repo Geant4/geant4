@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -46,21 +46,29 @@ namespace G4INCL {
 
   TransmissionChannel::~TransmissionChannel() {}
 
-  void TransmissionChannel::particleLeaves() {
+  G4double TransmissionChannel::particleLeaves() {
 
     // TODO: this is the place to add refraction
 
-    // Subtract the nuclear potential from the kinetic energy when leaving the
-    // nucleus
-    const G4double v = theParticle->getPotentialEnergy();
+    // The particle energy outside the nucleus. Subtract the nuclear
+    // potential from the kinetic energy when leaving the nucleus
+    G4double kineticEnergyOutside = theParticle->getEnergy()
+      - theParticle->getPotentialEnergy()
+      - theParticle->getMass();
+
+    // Correction for real masses
+    const G4int AParent = theNucleus->getA();
+    const G4int ZParent = theNucleus->getZ();
+    const G4double theQValueCorrection = theParticle->getEmissionQValueCorrection(AParent,ZParent);
+    kineticEnergyOutside += theQValueCorrection;
+    theParticle->setTableMass();
 
     // Scaling factor for the particle momentum
-    const G4double gpsg = std::sqrt((std::pow(theParticle->getEnergy() - v, 2)
-          - theParticle->getMass() * theParticle->getMass())
-        / theParticle->getMomentum().mag2());
-    theParticle->setMomentum(theParticle->getMomentum() * gpsg);
-    theParticle->setEnergy(theParticle->getEnergy() - v);
+    theParticle->setEnergy(kineticEnergyOutside + theParticle->getMass());
+    theParticle->adjustMomentumFromEnergy();
     theParticle->setPotentialEnergy(0.);
+
+    return theQValueCorrection;
   }
 
   FinalState* TransmissionChannel::getFinalState() {
@@ -68,14 +76,18 @@ namespace G4INCL {
     G4double initialEnergy = 0.0;
     if(theParticle->isCluster()) {
       Cluster *clusterOut = dynamic_cast<Cluster*>(theParticle);
-      ParticleList const *components = clusterOut->getParticles();
-      for(ParticleIter in = components->begin(); in != components->end(); ++in)
+      ParticleList const components = clusterOut->getParticles();
+      for(ParticleIter in = components.begin(); in != components.end(); ++in)
         initialEnergy += (*in)->getEnergy() - (*in)->getPotentialEnergy();
     } else {
       initialEnergy = theParticle->getEnergy() - theParticle->getPotentialEnergy();
     }
-    fs->setTotalEnergyBeforeInteraction(initialEnergy);
-    particleLeaves();
+
+    // Correction for real masses
+    initialEnergy += theParticle->getTableMass() - theParticle->getMass();
+
+    const G4double theQValueCorrection = particleLeaves();
+    fs->setTotalEnergyBeforeInteraction(initialEnergy + theQValueCorrection);
     fs->addOutgoingParticle(theParticle); // We write the particle down as outgoing
     return fs;
   }

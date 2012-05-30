@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -41,23 +41,19 @@
 
 #include <vector>
 #include <map>
+// #include <cassert>
 #include "G4INCLThreeVector.hh"
 #include "G4INCLIFunction.hh"
 #include "G4INCLParticle.hh"
 #include "G4INCLGlobals.hh"
+#include "G4INCLRandom.hh"
 
 namespace G4INCL {
 
   class NuclearDensity {
   public:
-    NuclearDensity(G4int A, G4int Z, IFunction1D *densityFunction);
-    NuclearDensity(G4int A, G4int Z, IFunction1D *densityFunction,
-		     G4double radius, G4double maxRadius, G4double diffuseness);
-    // NuclearDensity(G4int A, G4int Z, IFunction1D *densityFunction,
-    // 		     G4double radius, G4double maxRadius, G4double diffuseness);
+    NuclearDensity(G4int A, G4int Z, IFunction1D *densityFunction, const G4bool hardFermiSphere);
     ~NuclearDensity();
-
-    G4double getFirstDerivative(G4int index) const;
 
     /** \brief Get the maximum allowed radius for a given momentum.
      *  \param p Absolute value of the particle momentum, divided by the
@@ -65,15 +61,10 @@ namespace G4INCL {
      *  \return Maximum allowed radius.
      */
     G4double getMaxRFromP(G4double p) const;
-    G4double getMaxRFromPLegacy(G4double p) const;
-    G4double getMaxRFromPNew(G4double p) const;
 
     G4double getMaxTFromR(G4double r) const;
 
     G4double getMaximumRadius() const { return theMaximumRadius; };
-
-    /** \brief Initialize the transmission radius. */
-    void initializeTransmissionRadii();
 
     /** \brief The radius used for calculating the transmission coefficient.
      *
@@ -82,7 +73,7 @@ namespace G4INCL {
     G4double getTransmissionRadius(Particle const * const p) const {
       if(p->getType()==Composite) {
         return transmissionRadius.find(p->getType())->second +
-          ParticleTable::getClusterRMS(p->getA(), p->getZ());
+          ParticleTable::getNuclearRadius(p->getA(), p->getZ());
       } else
         return transmissionRadius.find(p->getType())->second;
     };
@@ -92,6 +83,7 @@ namespace G4INCL {
      * \return the radius
      */
     G4double getTransmissionRadius(ParticleType type) {
+// assert(type!=Composite);
       return transmissionRadius[type];
     };
 
@@ -103,37 +95,68 @@ namespace G4INCL {
 
     G4double getCentralRadius() { return theCentralRadius; }
 
-  private:
-    /**
-     * New implementation of the density interpolation function
-     * without gotos.
+    /** \brief Draw a random position.
+     *
+     * Returns a random position ThreeVector that is uncorrelated with the
+     * particle momentum.
+     *
+     * \return A random momentum ThreeVector.
      */
-    G4double getDensityNew(G4double) const;
+    inline ThreeVector shootRandomPositionUncorrelated(const ThreeVector &/*momentumRatio*/, const G4double /*pFermi*/) const {
+      return Random::sphereVector(getMaxRFromP(Math::pow13(Random::shoot0())));
+    }
 
-    /**
-     * Direct translation of the FORTRAN version of the density
-     * interpolation routine.
+    /** \brief Draw a random position correlated with the particle momentum.
+     *
+     * Returns a random position ThreeVector correlated with the particle
+     * momentum.
+     *
+     * \return A random momentum ThreeVector.
      */
-    G4double getDensityLegacy(G4double) const;
+    inline ThreeVector shootRandomPositionCorrelated(const ThreeVector &momentum, const G4double pFermi) const {
+      return Random::sphereVector(getMaxRFromP(momentum.mag()/pFermi));
+    }
+
+    typedef ThreeVector (NuclearDensity::*PositionSampler)(ThreeVector const &momentum, const G4double pFermi) const;
+    /** \brief Draw a random position.
+     *
+     *  Pointer to a function that returns a random ThreeVector. This can be
+     *  used to sample positions according to different algorithms. The
+     *  particle position can either be correlated to the particle momentum
+     *  (which is what we do in standard INCL for target nuclei) or it can be
+     *  drawn independently (which is what we do for composite projectiles).
+     *
+     *  All this junk should probably be refactored in a factory somehow.
+     *
+     *  \param momentumRatio ratio of the particle momentum to the Fermi momentum
+     *  \param t type of the particle
+     *  \return A random position ThreeVector.
+     */
+    PositionSampler shootRandomPosition;
+
+  private:
+    G4double getMaxRFromPLegacy(G4double p) const;
+    G4double getMaxRFromPNew(G4double p) const;
 
     void initializeDensity();
     void initializeFirstDerivative();
+    /** \brief Initialize the transmission radius. */
+    void initializeTransmissionRadii();
     G4double integrate(G4double ami, G4double ama, G4double step) const;
-    void initMaterial(G4int iamat, G4int izmat);
 
-    G4int theA, theZ;
-    IFunction1D *densityFunction;
-    G4double theRadiusParameter, theMaximumRadius, theDiffusenessParameter;
-    /// \brief Represents INCL4.5's R0 variable
-    G4double theCentralRadius;
-
-    void computeCentralRadius() {
+    void initCentralRadius() {
       if(theA>=6 && theA<19)
         theCentralRadius = 1.581*theDiffusenessParameter*
           (2.+5.*theRadiusParameter)/(2.+3.*theRadiusParameter);
       else
         theCentralRadius = theRadiusParameter;
     }
+
+    G4int theA, theZ;
+    IFunction1D *densityFunction;
+    G4double theRadiusParameter, theMaximumRadius, theDiffusenessParameter;
+    /// \brief Represents INCL4.5's R0 variable
+    G4double theCentralRadius;
 
     /* \brief map of transmission radii per particle type */
     std::map<ParticleType,G4double> transmissionRadius;

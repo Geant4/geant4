@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -80,8 +80,12 @@ namespace G4INCL {
        */
       virtual G4INCL::Nucleus* getNucleus() = 0;
 
-      virtual G4bool shootProjectile(G4INCL::Particle *p, G4double impactParameter) = 0;
-      virtual G4bool shootProjectile(G4INCL::Nucleus *n, G4double impactParameter) = 0;
+      virtual G4double shoot(ParticleSpecies const projectileSpecies, const G4double kineticEnergy, const G4double impactParameter) = 0;
+    protected:
+      virtual G4double shootParticle(ParticleType const t, const G4double kineticEnergy, const G4double impactParameter) = 0;
+      virtual G4double shootComposite(ParticleSpecies const s, const G4double kineticEnergy, const G4double impactParameter) = 0;
+
+    public:
 
       /**
        * Returns the current global time of the system.

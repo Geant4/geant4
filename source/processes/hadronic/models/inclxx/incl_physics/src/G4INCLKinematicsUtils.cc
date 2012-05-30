@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -56,10 +56,11 @@ namespace G4INCL {
     const G4double mass = p->getMass();
 
     // Local energy is constant outside the surface
-    if(r > n->getDensity()->getMaximumRadius()) {
+    if(r > n->getUniverseRadius()) {
       WARN("Tried to evaluate local energy for a particle outside the maximum radius."
             << std::endl << p->print() << std::endl
-            << "Maximum radius = " << n->getDensity()->getMaximumRadius() << std::endl);
+            << "Maximum radius = " << n->getDensity()->getMaximumRadius() << std::endl
+            << "Universe radius = " << n->getUniverseRadius() << std::endl);
       return 0.0;
     }
 

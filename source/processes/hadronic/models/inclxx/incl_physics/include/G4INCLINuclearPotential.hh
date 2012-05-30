@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.0.5
+// INCL++ revision: v5.1_rc11
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -52,6 +52,7 @@
 
 #include "G4INCLParticle.hh"
 #include "G4INCLNuclearDensity.hh"
+#include "G4INCLRandom.hh"
 #include <map>
 // #include <cassert>
 
@@ -61,7 +62,7 @@ namespace G4INCL {
 
     class INuclearPotential {
       public:
-        INuclearPotential(NuclearDensity * const nuclearDensity, G4bool pionPot)
+        INuclearPotential(NuclearDensity const * const nuclearDensity, const G4bool pionPot, const G4bool hardFermiSphere)
           : theDensity(nuclearDensity), pionPotential(pionPot)
         {
           if(pionPotential) {
@@ -80,15 +81,20 @@ namespace G4INCL {
             vPiMinus = 0.0;
           }
 
+          if(hardFermiSphere) {
+            shootRandomMomentum = &INuclearPotential::shootRandomMomentumFermi;
+          } else {
+            shootRandomMomentum = &INuclearPotential::shootRandomMomentumGaussian;
+          }
         }
 
         virtual ~INuclearPotential() {}
 
-        inline NuclearDensity *getDensity() const {
+        inline NuclearDensity const *getDensity() const {
           return theDensity;
         }
 
-        void setDensity(NuclearDensity * const nuclearDensity) {
+        void setDensity(NuclearDensity const * const nuclearDensity) {
           theDensity = nuclearDensity;
         }
 
@@ -134,6 +140,18 @@ namespace G4INCL {
           return fermiMomentum.find(t)->second;
         }
 
+        typedef ThreeVector (INuclearPotential::*MomentumSampler)(ParticleType const t) const;
+        /** \brief Draw a random momentum.
+         *
+         *  Pointer to a function that returns a random ThreeVector. This can be
+         *  used to sample momenta distributed according to the correct
+         *  distribution for the considered nuclide. We use Gaussian and Fermi
+         *  distributions for light and heavy nuclei, respectively.
+         *
+         *  \return A random momentum ThreeVector.
+         */
+        MomentumSampler shootRandomMomentum;
+
       protected:
         /// \brief Compute the potential energy for the given pion.
         G4double computePionPotentialEnergy(const Particle * const p) const {
@@ -149,16 +167,39 @@ namespace G4INCL {
               case PiMinus:
                 return vPiMinus;
                 break;
-	    default: // Pion potential is defined and non-zero only for pions
-	      return 0.0;
-	      break;
+              default: // Pion potential is defined and non-zero only for pions
+                return 0.0;
+                break;
             }
           }
           else
             return 0.0;
         }
 
-        NuclearDensity *theDensity;
+        /** \brief Draw a random Fermi momentum.
+         *
+         * Returns a random ThreeVector that follows the Fermi distribution.
+         *
+         * \return A random momentum ThreeVector.
+         */
+        inline ThreeVector shootRandomMomentumFermi(ParticleType const t) const {
+          return Random::sphereVector(getFermiMomentum(t));
+        }
+
+        /** \brief Draw a random Gaussian momentum.
+         *
+         * Returns a random ThreeVector that follows a Gaussian distribution.
+         *
+         * The distribution is isospin-independent.
+         *
+         * \return A random momentum ThreeVector.
+         */
+        inline ThreeVector shootRandomMomentumGaussian(ParticleType const /*t*/) const {
+          const G4double theMomentumRMS = ParticleTable::getMomentumRMS(theDensity->getA(),theDensity->getZ());
+          return Random::gaussVector(theMomentumRMS);
+        }
+
+        NuclearDensity const *theDensity;
 
         /* \brief map of Fermi energies per particle type */
         std::map<ParticleType,G4double> fermiEnergy;
