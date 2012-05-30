@@ -89,15 +89,7 @@
 class G4Scintillation : public G4VRestDiscreteProcess
 {
 
-private:
-
-        //////////////
-        // Operators
-        //////////////
-
-	// G4Scintillation& operator=(const G4Scintillation &right);
-
-public: // Without description
+public:
 
 	////////////////////////////////
 	// Constructors and Destructor
@@ -105,16 +97,23 @@ public: // Without description
 
 	G4Scintillation(const G4String& processName = "Scintillation",
                                  G4ProcessType type = fElectromagnetic);
-
-	// G4Scintillation(const G4Scintillation &right);
-
 	~G4Scintillation();	
+
+private:
+
+        G4Scintillation(const G4Scintillation &right);
+
+        //////////////
+        // Operators
+        //////////////
+
+        G4Scintillation& operator=(const G4Scintillation &right);
+
+public:
 
         ////////////
         // Methods
         ////////////
-
-public: // With description
 
         // G4Scintillation Process has both PostStepDoIt (for energy 
         // deposition of particles in flight) and AtRestDoIt (for energy

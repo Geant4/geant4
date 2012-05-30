@@ -80,15 +80,7 @@
 class G4Cerenkov : public G4VProcess
 {
 
-private:
-
-        //////////////
-        // Operators
-        //////////////
-
-	// G4Cerenkov& operator=(const G4Cerenkov &right);
-
-public: // Without description
+public:
 
 	////////////////////////////////
 	// Constructors and Destructor
@@ -96,16 +88,23 @@ public: // Without description
 
 	G4Cerenkov(const G4String& processName = "Cerenkov", 
                             G4ProcessType type = fElectromagnetic);
+	~G4Cerenkov();
 
-	// G4Cerenkov(const G4Cerenkov &right);
+        G4Cerenkov(const G4Cerenkov &right);
 
-	~G4Cerenkov();	
+private:
+
+        //////////////
+        // Operators
+        //////////////
+
+        G4Cerenkov& operator=(const G4Cerenkov &right);
+
+public:
 
         ////////////
         // Methods
         ////////////
-
-public: // With description
 
         G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
         // Returns true -> 'is applicable', for all charged particles

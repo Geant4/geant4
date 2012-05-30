@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17 May 12: P. Gumplinger (xrays-V09-05-02)
+- G4Cerenkov.hh, G4Scintillation.hh trying to fix Coverity warnings
+
 08 February 12: V. Grichine (xrays-V09-05-01)
 - G4SynchrotronRadiarion and G4SynchrotronRadiarionInMat was modified to 
   provide more realistic angualr distribution for secondary SR gammas 
