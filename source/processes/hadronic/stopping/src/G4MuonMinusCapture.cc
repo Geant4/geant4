@@ -23,31 +23,59 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
-#ifndef G4PiMinusAbsorptionBertini_h
-#define G4PiMinusAbsorptionBertini_h 1
-
+// $Id: G4MuonMinusCapture.cc,v 1.56 2010-11-12 06:52:01 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------
+//
+// GEANT4 Class 
+//
+// File name:     G4MuonMinusCapture
+//
+// Author V.Ivanchenko 25 April 2012 
+//
+//
 // Class Description:
 //
-// Process for pi- absorption at rest. 
-// To be used in your physics list in case you need this physics.
+// Base process class for stopping of mu-
+//
+// Modifications: 
+//
+//------------------------------------------------------------------------
 
-#include "G4HadronicAbsorptionBertini.hh"
-#include "G4PionMinus.hh"
+#include "G4MuonMinusCapture.hh"
+#include "G4MuonMinusBoundDecay.hh"
+#include "G4MuMinusCapturePrecompound.hh"
+#include "G4MuonMinus.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class G4PiMinusAbsorptionBertini : public G4HadronicAbsorptionBertini {
-private:
-  // hide assignment operator as private 
-  G4PiMinusAbsorptionBertini& operator=(const G4PiMinusAbsorptionBertini&);
-  G4PiMinusAbsorptionBertini(const G4PiMinusAbsorptionBertini&);
-  
-public:
-  G4PiMinusAbsorptionBertini()
-    : G4HadronicAbsorptionBertini(G4PionMinus::Definition()) {}
+G4MuonMinusCapture::G4MuonMinusCapture(G4VPreCompoundModel* ptr)
+  : G4HadronStoppingProcess ("muMinusCaptureAtRest")
+{
+  SetBoundDecay(new G4MuonMinusBoundDecay());
+  RegisterMe(new G4MuMinusCapturePrecompound(ptr));
+}
 
-  virtual ~G4PiMinusAbsorptionBertini() {}
-};
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#endif
+G4MuonMinusCapture::~G4MuonMinusCapture()
+{}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4bool G4MuonMinusCapture::IsApplicable(const G4ParticleDefinition& p)
+{
+  return (&p == G4MuonMinus::MuonMinus());
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4MuonMinusCapture::ProcessDescription(std::ostream& outFile) const
+{
+  outFile << "Stopping of mu- using default element selector, EM cascade"
+          << " sampling and bound decay sampling.\n"
+	  << "Native PreCompound model is used for nuclear capture\n"; 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

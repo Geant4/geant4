@@ -23,31 +23,59 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
-#ifndef G4PiMinusAbsorptionBertini_h
-#define G4PiMinusAbsorptionBertini_h 1
-
+// $Id: G4MuonMinusCapture.hh,v 1.23 2008-10-02 20:57:52 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------
+//
+// GEANT4 Class header file
+//
+// File name:     G4MuonMinusCapture
+//
+// Author V.Ivanchenko 25 April 2012 on base of G4MuonMinusCaptureAtRest
+//
+//
 // Class Description:
 //
-// Process for pi- absorption at rest. 
-// To be used in your physics list in case you need this physics.
+// Stopping of mu-
+//
+// Modifications: 
+//
+//------------------------------------------------------------------------
 
-#include "G4HadronicAbsorptionBertini.hh"
-#include "G4PionMinus.hh"
+#ifndef G4MuonMinusCapture_h
+#define G4MuonMinusCapture_h 1
+ 
+#include "globals.hh"
+#include "G4HadronStoppingProcess.hh"
+#include "G4ParticleDefinition.hh"
 
+class G4VPreCompoundModel;
 
-class G4PiMinusAbsorptionBertini : public G4HadronicAbsorptionBertini {
-private:
-  // hide assignment operator as private 
-  G4PiMinusAbsorptionBertini& operator=(const G4PiMinusAbsorptionBertini&);
-  G4PiMinusAbsorptionBertini(const G4PiMinusAbsorptionBertini&);
-  
+class G4MuonMinusCapture : public G4HadronStoppingProcess 
+{ 
 public:
-  G4PiMinusAbsorptionBertini()
-    : G4HadronicAbsorptionBertini(G4PionMinus::Definition()) {}
+ 
+  G4MuonMinusCapture(G4VPreCompoundModel* ptr=0);
 
-  virtual ~G4PiMinusAbsorptionBertini() {}
+  ~G4MuonMinusCapture();
+
+  G4bool IsApplicable(const G4ParticleDefinition&);
+
+  void ProcessDescription(std::ostream& outFile) const;
+
+private:
+
+  // hide assignment operator as private 
+  G4MuonMinusCapture& operator=(const G4MuonMinusCapture &right);
+  G4MuonMinusCapture(const G4MuonMinusCapture& );
+
 };
 
 #endif
+ 
+
+
+
+
 

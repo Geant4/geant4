@@ -23,31 +23,49 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
-#ifndef G4PiMinusAbsorptionBertini_h
-#define G4PiMinusAbsorptionBertini_h 1
-
+//---------------------------------------------------------------------
 // Class Description:
 //
-// Process for pi- absorption at rest. 
-// To be used in your physics list in case you need this physics.
+// Intermediate class for hadronic absorption at rest using Bertini
+// Physics lists should reference the concrete subclasses for pi-, K-, Sigma-
 
 #include "G4HadronicAbsorptionBertini.hh"
-#include "G4PionMinus.hh"
+#include "G4CascadeInterface.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTypes.hh"
+#include <iostream>
 
 
-class G4PiMinusAbsorptionBertini : public G4HadronicAbsorptionBertini {
-private:
-  // hide assignment operator as private 
-  G4PiMinusAbsorptionBertini& operator=(const G4PiMinusAbsorptionBertini&);
-  G4PiMinusAbsorptionBertini(const G4PiMinusAbsorptionBertini&);
-  
-public:
-  G4PiMinusAbsorptionBertini()
-    : G4HadronicAbsorptionBertini(G4PionMinus::Definition()) {}
+// Constructor
 
-  virtual ~G4PiMinusAbsorptionBertini() {}
-};
+G4HadronicAbsorptionBertini::
+G4HadronicAbsorptionBertini(G4ParticleDefinition* pdef)
+  : G4HadronStoppingProcess("hBertiniCaptureAtRest"), pdefApplicable(pdef) {
+  G4CascadeInterface* cascade = new G4CascadeInterface;
+  cascade->SetMinEnergy(0.);			// Ensure it gets used at rest
+  cascade->usePreCompoundDeexcitation();
+  RegisterMe(cascade);
+}
 
-#endif
 
+// Applies to constructor-specified particle, or to all known cases
+
+G4bool G4HadronicAbsorptionBertini::IsApplicable(const G4ParticleDefinition& particle)
+{
+  return ( (0==pdefApplicable && (&particle == G4PionMinus::Definition() ||
+				  &particle == G4KaonMinus::Definition() ||
+				  &particle == G4SigmaMinus::Definition()))
+	   || (&particle == pdefApplicable) 
+	   );
+}
+
+
+// Documentation of purpose
+
+void 
+G4HadronicAbsorptionBertini::ProcessDescription(std::ostream& os) const {
+  os << "Stopping and absorption of charged hadrons (pi-, K-, or Sigma-)\n"
+     << "using Bertini-like intranuclear cascade.\n"
+     << "Native PreCompound model is used for nuclear de-excitation"
+     << std::endl;
+}

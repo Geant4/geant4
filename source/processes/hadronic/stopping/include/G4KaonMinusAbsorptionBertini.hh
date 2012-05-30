@@ -24,30 +24,29 @@
 // ********************************************************************
 //
 
-#ifndef G4PiMinusAbsorptionBertini_h
-#define G4PiMinusAbsorptionBertini_h 1
+#ifndef G4KaonMinusAbsorptionBertini_h
+#define G4KaonMinusAbsorptionBertini_h 1
 
 // Class Description:
 //
-// Process for pi- absorption at rest. 
+// Process for K- absorption at rest. 
 // To be used in your physics list in case you need this physics.
 
 #include "G4HadronicAbsorptionBertini.hh"
-#include "G4PionMinus.hh"
+#include "G4KaonMinus.hh"
 
 
-class G4PiMinusAbsorptionBertini : public G4HadronicAbsorptionBertini {
+class G4KaonMinusAbsorptionBertini : public G4HadronicAbsorptionBertini {
 private:
   // hide assignment operator as private 
-  G4PiMinusAbsorptionBertini& operator=(const G4PiMinusAbsorptionBertini&);
-  G4PiMinusAbsorptionBertini(const G4PiMinusAbsorptionBertini&);
+  G4KaonMinusAbsorptionBertini& operator=(const G4KaonMinusAbsorptionBertini&);
+  G4KaonMinusAbsorptionBertini(const G4KaonMinusAbsorptionBertini&);
   
 public:
-  G4PiMinusAbsorptionBertini()
-    : G4HadronicAbsorptionBertini(G4PionMinus::Definition()) {}
+  G4KaonMinusAbsorptionBertini()
+    : G4HadronicAbsorptionBertini(G4KaonMinus::Definition()) {}
 
-  virtual ~G4PiMinusAbsorptionBertini() {}
+  virtual ~G4KaonMinusAbsorptionBertini() {}
 };
 
 #endif
-

@@ -23,31 +23,60 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
-#ifndef G4PiMinusAbsorptionBertini_h
-#define G4PiMinusAbsorptionBertini_h 1
-
-// Class Description:
+// $Id: G4ElementSelector.hh,v 1.10 2007-07-05 18:19:14 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Process for pi- absorption at rest. 
-// To be used in your physics list in case you need this physics.
+//-----------------------------------------------------------------------------
+//
+// GEANT4 Class header file 
+//
+// File name:  G4ElementSelector
+//
+// Author:        V.Ivanchenko (Vladimir.Ivantchenko@cern.ch)
+// 
+// Creation date: 21 April 2012 on base of G4StopElementSelector
+//
+// Class Description: 
+//
+// Selection of elements for slow negative particle capture
+// Alternative selector should inherit from this class 
+//
+// N.C.Mukhopadhyay Phys. Rep. 30 (1977) 1.
+//
+//-----------------------------------------------------------------------------
+//
+// Modifications: 
+//
+//-----------------------------------------------------------------------------
 
-#include "G4HadronicAbsorptionBertini.hh"
-#include "G4PionMinus.hh"
+#ifndef G4ElementSelector_h
+#define G4ElementSelector_h 1
+ 
+#include "globals.hh"
+#include "G4Element.hh"
+#include "G4Track.hh"
+#include <vector>
 
+class G4Nucleus;
 
-class G4PiMinusAbsorptionBertini : public G4HadronicAbsorptionBertini {
-private:
-  // hide assignment operator as private 
-  G4PiMinusAbsorptionBertini& operator=(const G4PiMinusAbsorptionBertini&);
-  G4PiMinusAbsorptionBertini(const G4PiMinusAbsorptionBertini&);
-  
+class G4ElementSelector 
+{ 
 public:
-  G4PiMinusAbsorptionBertini()
-    : G4HadronicAbsorptionBertini(G4PionMinus::Definition()) {}
+ 
+  G4ElementSelector();
+  
+  virtual ~G4ElementSelector();
 
-  virtual ~G4PiMinusAbsorptionBertini() {}
+  virtual G4Element* SelectZandA(const G4Track& track, G4Nucleus*);
+
+private:
+
+  // hide assignment operator as private 
+  G4ElementSelector& operator=(const G4ElementSelector &right);
+  G4ElementSelector(const G4ElementSelector& );
+
+  std::vector<G4double> prob;
 };
 
 #endif
-
+ 

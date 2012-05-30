@@ -24,30 +24,29 @@
 // ********************************************************************
 //
 
-#ifndef G4PiMinusAbsorptionBertini_h
-#define G4PiMinusAbsorptionBertini_h 1
+#ifndef G4SigmaMinusAbsorptionBertini_h
+#define G4SigmaMinusAbsorptionBertini_h 1
 
 // Class Description:
 //
-// Process for pi- absorption at rest. 
+// Process for Sigma- absorption at rest. 
 // To be used in your physics list in case you need this physics.
 
 #include "G4HadronicAbsorptionBertini.hh"
-#include "G4PionMinus.hh"
+#include "G4SigmaMinus.hh"
 
 
-class G4PiMinusAbsorptionBertini : public G4HadronicAbsorptionBertini {
+class G4SigmaMinusAbsorptionBertini : public G4HadronicAbsorptionBertini {
 private:
   // hide assignment operator as private 
-  G4PiMinusAbsorptionBertini& operator=(const G4PiMinusAbsorptionBertini&);
-  G4PiMinusAbsorptionBertini(const G4PiMinusAbsorptionBertini&);
+  G4SigmaMinusAbsorptionBertini& operator=(const G4SigmaMinusAbsorptionBertini&);
+  G4SigmaMinusAbsorptionBertini(const G4SigmaMinusAbsorptionBertini&);
   
 public:
-  G4PiMinusAbsorptionBertini()
-    : G4HadronicAbsorptionBertini(G4PionMinus::Definition()) {}
+  G4SigmaMinusAbsorptionBertini()
+    : G4HadronicAbsorptionBertini(G4SigmaMinus::Definition()) {}
 
-  virtual ~G4PiMinusAbsorptionBertini() {}
+  virtual ~G4SigmaMinusAbsorptionBertini() {}
 };
 
 #endif
-
