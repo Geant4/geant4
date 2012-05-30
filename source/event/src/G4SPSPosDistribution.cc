@@ -142,14 +142,14 @@ void G4SPSPosDistribution::SetHalfZ(G4double zhalf)
   halfz = zhalf;
 }
 
-void G4SPSPosDistribution::SetRadius(G4double rad)
+void G4SPSPosDistribution::SetRadius(G4double rds)
 {
-  Radius = rad;
+  Radius = rds;
 }
 
-void G4SPSPosDistribution::SetRadius0(G4double rad)
+void G4SPSPosDistribution::SetRadius0(G4double rds)
 {
-  Radius0 = rad;
+  Radius0 = rds;
 }
 
 void G4SPSPosDistribution::SetBeamSigmaInR(G4double r)
@@ -466,7 +466,7 @@ void G4SPSPosDistribution::GeneratePointsOnSurface()
     }
   else if(Shape == "Ellipsoid")
     {
-      G4double theta, phi, minphi, maxphi, middlephi;
+      G4double minphi, maxphi, middlephi;
       G4double answer, constant;
 
       constant = pi/(halfx*halfx) + pi/(halfy*halfy) + 

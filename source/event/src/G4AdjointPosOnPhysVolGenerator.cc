@@ -114,15 +114,15 @@ G4double G4AdjointPosOnPhysVolGenerator::ComputeAreaOfExtSurface()
 }
 ////////////////////////////////////////////////////
 //
-G4double G4AdjointPosOnPhysVolGenerator::ComputeAreaOfExtSurface(G4int NStat)
+G4double G4AdjointPosOnPhysVolGenerator::ComputeAreaOfExtSurface(G4int NStats)
 {
-   return ComputeAreaOfExtSurface(theSolid,NStat); 
+   return ComputeAreaOfExtSurface(theSolid,NStats); 
 }
 ////////////////////////////////////////////////////
 //
-G4double G4AdjointPosOnPhysVolGenerator::ComputeAreaOfExtSurface(G4double epsilon)
+G4double G4AdjointPosOnPhysVolGenerator::ComputeAreaOfExtSurface(G4double eps)
 {
-  return ComputeAreaOfExtSurface(theSolid,epsilon); 
+  return ComputeAreaOfExtSurface(theSolid,eps); 
 }
 ////////////////////////////////////////////////////
 //
@@ -132,15 +132,14 @@ G4double G4AdjointPosOnPhysVolGenerator::ComputeAreaOfExtSurface(G4VSolid* aSoli
 }
 ////////////////////////////////////////////////////
 //
-G4double G4AdjointPosOnPhysVolGenerator::ComputeAreaOfExtSurface(G4VSolid* aSolid,G4int NStat)
+G4double G4AdjointPosOnPhysVolGenerator::ComputeAreaOfExtSurface(G4VSolid* aSolid,G4int NStats)
 {
   if (ModelOfSurfaceSource == "OnSolid" ){
 	if (UseSphere){
-		return ComputeAreaOfExtSurfaceStartingFromSphere(aSolid,NStat);
-	
+		return ComputeAreaOfExtSurfaceStartingFromSphere(aSolid,NStats);	
 	}
 	else {
-		return ComputeAreaOfExtSurfaceStartingFromBox(aSolid,NStat);
+		return ComputeAreaOfExtSurfaceStartingFromBox(aSolid,NStats);
 	}
   }
   else {
@@ -151,10 +150,10 @@ G4double G4AdjointPosOnPhysVolGenerator::ComputeAreaOfExtSurface(G4VSolid* aSoli
 }
 ////////////////////////////////////////////////////
 //
-G4double G4AdjointPosOnPhysVolGenerator::ComputeAreaOfExtSurface(G4VSolid* aSolid,G4double epsilon)
+G4double G4AdjointPosOnPhysVolGenerator::ComputeAreaOfExtSurface(G4VSolid* aSolid,G4double eps)
 {
-  G4int Nstat = G4int(1./(epsilon*epsilon));
-  return ComputeAreaOfExtSurface(aSolid,Nstat);
+  G4int Nstats = G4int(1./(eps*eps));
+  return ComputeAreaOfExtSurface(aSolid,Nstats);
 }
 ////////////////////////////////////////////////////
 void G4AdjointPosOnPhysVolGenerator::GenerateAPositionOnTheExtSurfaceOfASolid(G4VSolid* aSolid,G4ThreeVector& p, G4ThreeVector& direction)
