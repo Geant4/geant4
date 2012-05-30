@@ -222,7 +222,7 @@ class G4ParticleTable
    G4bool  readyToUse;
  
  public:
-   void SetReadiness();
+   void SetReadiness(G4bool val=true);
    G4bool GetReadiness() const;
  private:
    void CheckReadiness();

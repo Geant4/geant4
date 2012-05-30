@@ -180,6 +180,26 @@ G4ParticleDefinition::G4ParticleDefinition()
 
 G4ParticleDefinition::~G4ParticleDefinition() 
 {
+  if (G4ParticleTable::GetParticleTable()->GetReadiness()) {
+    G4StateManager* pStateManager = G4StateManager::GetStateManager();
+    G4ApplicationState currentState = pStateManager->GetCurrentState();
+    if (currentState != G4State_PreInit) {
+      G4String msg = "Request of deletion for ";
+      msg += GetParticleName();  
+      msg += " has No effects because readyToUse is true.";
+      G4Exception("G4ParticleDefinition::~G4ParticleDefinition()",
+		  "PART117", JustWarning, msg);
+      return ;
+    } else {
+#ifdef G4VERBOSE
+      if (verboseLevel>0){
+	G4cout << GetParticleName()
+	       << " will be deleted " << G4endl;
+      }
+#endif
+    }
+  }
+
   if (theDecayTable!= 0) delete theDecayTable;
 }
 

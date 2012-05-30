@@ -70,15 +70,15 @@ G4DecayProducts::G4DecayProducts(const G4DecayProducts &right)
   //copy daughters (Deep Copy)
   for (G4int index=0; index < right.numberOfProducts; index++) {
     G4DynamicParticle* daughter = right.theProductVector->at(index);
-    const G4DecayProducts* pPreAssigned = daughter->GetPreAssignedDecayProducts();
-    G4double properTime = daughter->GetPreAssignedDecayProperTime();
     G4DynamicParticle* pDaughter =  new G4DynamicParticle(*daughter);
 
+    G4double properTime = daughter->GetPreAssignedDecayProperTime();
+    if(properTime>0.0)pDaughter->SetPreAssignedDecayProperTime(properTime); 
+
+    const G4DecayProducts* pPreAssigned = daughter->GetPreAssignedDecayProducts();
     if (pPreAssigned) {
       G4DecayProducts* pPA = new G4DecayProducts(*pPreAssigned);
       pDaughter->SetPreAssignedDecayProducts(pPA);
-      if(properTime>0.0)
-      { pDaughter->SetPreAssignedDecayProperTime(properTime); }
     }
 
     theProductVector->push_back( pDaughter );
@@ -104,7 +104,18 @@ G4DecayProducts & G4DecayProducts::operator=(const G4DecayProducts &right)
 
     //copy daughters (Deep Copy)
     for (index=0; index < right.numberOfProducts; index++) {
-      theProductVector->push_back( new G4DynamicParticle( *(right.theProductVector->at(index)) ) );
+      G4DynamicParticle* daughter = right.theProductVector->at(index);
+      G4DynamicParticle* pDaughter =  new G4DynamicParticle(*daughter);
+
+      G4double properTime = daughter->GetPreAssignedDecayProperTime();
+      if(properTime>0.0) pDaughter->SetPreAssignedDecayProperTime(properTime); 
+      
+      const G4DecayProducts* pPreAssigned = daughter->GetPreAssignedDecayProducts();
+      if (pPreAssigned) {
+	G4DecayProducts* pPA = new G4DecayProducts(*pPreAssigned);
+	pDaughter->SetPreAssignedDecayProducts(pPA);
+      }
+      theProductVector->push_back( pDaughter );
     } 
     numberOfProducts = right.numberOfProducts;
     

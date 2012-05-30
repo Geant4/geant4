@@ -124,10 +124,6 @@ inline G4int G4ShortLivedTable::size() const
   return fShortLivedList->size();
 }
 
-inline void G4ShortLivedTable::clear()
-{
-  fShortLivedList->clear();
-}
 
 inline 
  G4ParticleDefinition*  G4ShortLivedTable::GetParticle(G4int index) const

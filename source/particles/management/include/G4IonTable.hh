@@ -280,18 +280,6 @@ inline G4int G4IonTable::size() const
   return fIonList->size();
 }
 
-inline void G4IonTable::clear()
-{
-#ifdef G4VERBOSE
-    if (GetVerboseLevel()>2) {
-      G4cout << "G4IonTable::Clear() : number of Ion regsitered =  "; 
-      G4cout << fIonList->size() <<  G4endl;
-    }
-#endif
-  fIonList->clear();
-}
-
-
 
 #endif
 

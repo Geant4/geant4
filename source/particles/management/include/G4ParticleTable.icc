@@ -126,9 +126,9 @@ inline
 }
 
 inline
- void G4ParticleTable::SetReadiness()
+ void G4ParticleTable::SetReadiness(G4bool val)
 {
-  readyToUse = true;
+  readyToUse = val;
 }
 
 inline

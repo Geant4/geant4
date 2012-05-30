@@ -51,6 +51,8 @@
 #ifndef G4MuonRadiativeDecayChannelWithSpin_h
 #define G4MuonRadiativeDecayChannelWithSpin_h 1
 
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "globals.hh"
 #include "Randomize.hh"
 #include "G4ThreeVector.hh"
@@ -141,20 +143,18 @@ inline G4double G4MuonRadiativeDecayChannelWithSpin::atan4(G4double x,
 {
       G4double phi = 0.;
 
-      G4double pi = 4.*std::atan(1.);
-
       if        (x==0. && y>0.){
-         phi = 0.5*pi;
+         phi = 0.5*CLHEP::pi;
       } else if (x==0. && y<0.){
-         phi = 1.5*pi;
+         phi = 1.5*CLHEP::pi;
       } else if (y==0. && x>0.){
          phi = 0.;
       } else if (y==0. && x<0.){
-         phi = pi;
+         phi = CLHEP::pi;
       } else if (x>0.         ){
          phi = std::atan(y/x);
       } else if (x<0.         ){
-         phi = std::atan(y/x) + pi;
+         phi = std::atan(y/x) + CLHEP::pi;
       }
 
       return phi;
