@@ -62,10 +62,10 @@ public:
     
 private:
     
-  StackingAction*     stackAction;
+  StackingAction*     fStackAction;
     
-  G4UIcmdWithABool*   killCmd;
-  G4UIcmdWithAString* kCmd;
+  G4UIcmdWithABool*   fKillCmd;
+  G4UIcmdWithAString* fKCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

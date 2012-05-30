@@ -39,28 +39,27 @@
 // 
 
 #include "StackingAction.hh"
-
 #include "HistoManager.hh"
 #include "StackingMessenger.hh"
-
 #include "G4Track.hh"
-
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingAction::StackingAction()
 {
-  stackMessenger = new StackingMessenger(this);
-  histoManager   = HistoManager::GetPointer();
-  killSecondary  = false;
-  pname          = ""; 
+  fStackMessenger = new StackingMessenger(this);
+  fHistoManager   = HistoManager::GetPointer();
+  fKillSecondary  = false;
+  fParticle       = 0; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingAction::~StackingAction()
 {
-  delete stackMessenger;
+  delete fStackMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -70,28 +69,39 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
 {
   G4ClassificationOfNewTrack status = fUrgent;
 
-  if (aTrack->GetTrackStatus() == fAlive) 
-    histoManager->ScoreNewTrack(aTrack);
+  if (aTrack->GetTrackStatus() == fAlive) {
+    fHistoManager->ScoreNewTrack(aTrack);
+  }
 
-  const G4String name = aTrack->GetDefinition()->GetParticleName();
+  const G4ParticleDefinition* part = aTrack->GetDefinition();
 
-  if(histoManager->GetVerbose() > 1 ) {
+  if(fHistoManager->GetVerbose() > 1 ) {
     G4cout << "Track #"
-	   << aTrack->GetTrackID() << " of " << name
+	   << aTrack->GetTrackID() << " of " << part->GetParticleName()
 	   << " E(MeV)= " << aTrack->GetKineticEnergy()/MeV
-	   << " produced by " 
-	   << histoManager->CurrentParticle()->GetParticleName()
-	   << " ID= " << aTrack->GetParentID()
-	   << " with E(MeV)= " << histoManager->CurrentKinEnergy()/MeV
+	   << " produced by Track ID= " << aTrack->GetParentID()
 	   << G4endl;
   }
-  if(aTrack->GetTrackID() == 1) return status;
 
   //stack or delete secondaries
-  if (killSecondary)      status = fKill;
-  else if(pname == name)  status = fKill; 
-
+  if(aTrack->GetTrackID() > 1) {  
+    if (fKillSecondary || fParticle == part) { status = fKill; }
+  }
   return status;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void StackingAction::SetKillStatus(G4bool value)    
+{ 
+  fKillSecondary = value;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void StackingAction::SetKill(const G4String& name)  
+{ 
+  fParticle = G4ParticleTable::GetParticleTable()->FindParticle(name);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

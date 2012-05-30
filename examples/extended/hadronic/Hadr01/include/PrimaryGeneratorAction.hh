@@ -30,7 +30,7 @@
 //
 /////////////////////////////////////////////////////////////////////////
 //
-// EventActionMessenger
+// PrimaryGeneratorAction
 //
 // Created: 31.01.03 V.Ivanchenko
 //
@@ -58,15 +58,14 @@ public:
   virtual ~PrimaryGeneratorAction();
 
   void GeneratePrimaries(G4Event*);
-  G4ParticleGun* GetParticleGun() {return particleGun;};
 
 private:
 
   PrimaryGeneratorAction & operator=(const PrimaryGeneratorAction &right);
   PrimaryGeneratorAction(const PrimaryGeneratorAction&);
 
-  G4ParticleGun*   particleGun;
-  HistoManager*    histo; 
+  G4ParticleGun*   fParticleGun;
+  HistoManager*    fHisto; 
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

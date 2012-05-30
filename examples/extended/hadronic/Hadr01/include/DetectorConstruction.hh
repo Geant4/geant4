@@ -75,19 +75,19 @@ private:
   DetectorConstruction & operator=(const DetectorConstruction &right);
   DetectorConstruction(const DetectorConstruction&);
 
-  G4double radius;
+  G4double fRadius;
 
-  G4Material*  targetMaterial;
-  G4Material*  worldMaterial;
+  G4Material*  fTargetMaterial;
+  G4Material*  fWorldMaterial;
 
-  CheckVolumeSD*   checkSD;
-  TargetSD*        targetSD;
+  CheckVolumeSD*   fCheckSD;
+  TargetSD*        fTargetSD;
 
-  G4LogicalVolume* logicTarget;
-  G4LogicalVolume* logicCheck;
-  G4LogicalVolume* logicWorld;
+  G4LogicalVolume* fLogicTarget;
+  G4LogicalVolume* fLogicCheck;
+  G4LogicalVolume* fLogicWorld;
 
-  DetectorMessenger* detectorMessenger;
+  DetectorMessenger* fDetectorMessenger;
 
 };
 

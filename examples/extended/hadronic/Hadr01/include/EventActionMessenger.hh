@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventActionMessenger.hh,v 1.3 2006-06-29 17:23:36 gunter Exp $
+// $Id: EventActionMessenger.hh,v 1.1 2008-07-07 16:37:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -57,14 +57,13 @@ public:
   EventActionMessenger(EventAction*);
   virtual ~EventActionMessenger();
     
-  void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String);
     
 private:
 
-  EventAction*          eventAction;   
-  G4UIcmdWithAString*   drawCmd;
-  G4UIcmdWithAnInteger* printCmd;    
-  G4UIcmdWithAnInteger* dCmd;    
+  EventAction*          fEventAction;   
+  G4UIcmdWithAnInteger* fPrintCmd;    
+  G4UIcmdWithAnInteger* fCmd;    
 
 };
 

@@ -39,7 +39,6 @@
 //
 
 #include "StackingMessenger.hh"
-
 #include "StackingAction.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAString.hh"
@@ -47,37 +46,37 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingMessenger::StackingMessenger(StackingAction* stack)
-:stackAction(stack)
+:fStackAction(stack)
 {
-  killCmd = new G4UIcmdWithABool("/testhadr/KillAllSecondaries",this);
-  killCmd->SetGuidance("  Choice : true false");
-  killCmd->SetParameterName("choice",true);
-  killCmd->SetDefaultValue(false);
+  fKillCmd = new G4UIcmdWithABool("/testhadr/KillAllSecondaries",this);
+  fKillCmd->SetGuidance("  Choice : true false");
+  fKillCmd->SetParameterName("choice",true);
+  fKillCmd->SetDefaultValue(false);
 
-  kCmd = new G4UIcmdWithAString("/testhadr/Kill", this);
-  kCmd->SetGuidance("Kill secondary particles of defined type");
-  kCmd->SetParameterName("ch", true);
-  kCmd->SetDefaultValue("none");
-  kCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fKCmd = new G4UIcmdWithAString("/testhadr/Kill", this);
+  fKCmd->SetGuidance("Kill secondary particles of defined type");
+  fKCmd->SetParameterName("ch", true);
+  fKCmd->SetDefaultValue("none");
+  fKCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingMessenger::~StackingMessenger()
 {
-  delete killCmd;
-  delete kCmd;
+  delete fKillCmd;
+  delete fKCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void StackingMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {     
-  if(command == killCmd)
-    stackAction->SetKillStatus(killCmd->GetNewBoolValue(newValue));               
-
-  if(command == kCmd)
-    stackAction->SetKill(newValue);               
+  if(command == fKillCmd) {
+    fStackAction->SetKillStatus(fKillCmd->GetNewBoolValue(newValue));
+  } else if(command == fKCmd) {
+    fStackAction->SetKill(newValue);               
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

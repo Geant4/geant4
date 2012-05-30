@@ -50,7 +50,7 @@
 CheckVolumeSD::CheckVolumeSD(const G4String& name)
  :G4VSensitiveDetector(name)
 {
-  theHisto = HistoManager::GetPointer();
+  fHisto = HistoManager::GetPointer();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -68,7 +68,7 @@ void CheckVolumeSD::Initialize(G4HCofThisEvent*)
 G4bool CheckVolumeSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   const G4Track* track = aStep->GetTrack();
-  if(track->GetTrackID() > 1) theHisto->AddLeakingParticle(track);
+  if(track->GetTrackID() > 1) { fHisto->AddLeakingParticle(track); }
   return true;
 }
 

@@ -64,15 +64,15 @@ public:
     
 private:
   
-  PhysicsList* pPhysicsList;
+  PhysicsList* fPhysicsList;
     
-  G4UIcmdWithADoubleAndUnit* gammaCutCmd;
-  G4UIcmdWithADoubleAndUnit* electCutCmd;
-  G4UIcmdWithADoubleAndUnit* posCutCmd;
-  G4UIcmdWithADoubleAndUnit* pCutCmd;
-  G4UIcmdWithADoubleAndUnit* allCutCmd;
-  G4UIcmdWithAString*        pListCmd;
-  G4UIcmdWithoutParameter*   listCmd;  
+  G4UIcmdWithADoubleAndUnit* fGammaCutCmd;
+  G4UIcmdWithADoubleAndUnit* fElectCutCmd;
+  G4UIcmdWithADoubleAndUnit* fPosCutCmd;
+  G4UIcmdWithADoubleAndUnit* fCutCmd;
+  G4UIcmdWithADoubleAndUnit* fAllCutCmd;
+  G4UIcmdWithAString*        fPListCmd;
+  G4UIcmdWithoutParameter*   fListCmd;  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

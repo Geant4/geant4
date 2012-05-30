@@ -47,6 +47,7 @@
 class HistoManager;
 class StackingMessenger;
 class G4Track;
+class G4ParticleDefinition;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -57,18 +58,18 @@ public:
   StackingAction();
   virtual ~StackingAction();
    
-  void SetKillStatus(G4bool value)    {killSecondary = value;};
-  void SetKill(const G4String& name)  {pname = name;};
+  void SetKillStatus(G4bool value);
+  void SetKill(const G4String& name);
      
   G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
     
 private:
 
-  HistoManager*       histoManager;    
-  StackingMessenger*  stackMessenger;
+  HistoManager*       fHistoManager;    
+  StackingMessenger*  fStackMessenger;
+  G4bool              fKillSecondary;
 
-  G4String            pname;
-  G4bool              killSecondary;
+  const G4ParticleDefinition* fParticle;
 
 };
 

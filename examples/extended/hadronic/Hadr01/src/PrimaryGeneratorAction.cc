@@ -28,7 +28,7 @@
 //
 /////////////////////////////////////////////////////////////////////////
 //
-// EventActionMessenger
+// PrimaryGeneratorAction
 //
 // Created: 31.01.03 V.Ivanchenko
 //
@@ -47,27 +47,27 @@
 
 PrimaryGeneratorAction::PrimaryGeneratorAction()
 {
-  particleGun  = new G4ParticleGun(1);
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  histo = HistoManager::GetPointer();
+  fParticleGun  = new G4ParticleGun(1);
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+  fHisto = HistoManager::GetPointer();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
-  delete particleGun;
+  delete fParticleGun;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  if(histo->DefaultBeamPosition()) {
-    G4double zVertex = -(5.0*mm + histo->Length());
-    particleGun->SetParticlePosition(G4ThreeVector(0.,0.,zVertex));
+  if(fHisto->DefaultBeamPosition()) {
+    G4double zVertex = -(5.0*mm + fHisto->Length());
+    fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,zVertex));
   }
-  particleGun->GeneratePrimaryVertex(anEvent);
+  fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
