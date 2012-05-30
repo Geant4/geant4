@@ -60,7 +60,8 @@ class G4mplIonisationWithDeltaModel : public G4VEmModel, public G4VEmFluctuation
 
 public:
 
-  G4mplIonisationWithDeltaModel(G4double mCharge, const G4String& nam = "mplIonisationWithDelta");
+  G4mplIonisationWithDeltaModel(G4double mCharge, 
+				const G4String& nam = "mplIonisationWithDelta");
 
   virtual ~G4mplIonisationWithDeltaModel();
 
@@ -102,14 +103,14 @@ public:
                               G4double& tmax,
                               G4double& length);
 
+  void SetParticle(const G4ParticleDefinition* p);
+
 protected:
 
   virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
                                       G4double kinEnergy);
 
 private:
-
-  void SetParticle(const G4ParticleDefinition* p);
 
   G4double ComputeDEDXAhlen(const G4Material* material, G4double bg2, G4double cut);
 

@@ -79,8 +79,8 @@ G4mplIonisationModel::G4mplIonisationModel(G4double mCharge, const G4String& nam
   chargeSquare = magCharge * magCharge;
   dedxlim = 45.*nmpl*nmpl*GeV*cm2/g;
   fParticleChange = 0;
-  mass = 0.0;
   monopole = 0;
+  mass = 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -90,21 +90,35 @@ G4mplIonisationModel::~G4mplIonisationModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4mplIonisationModel::Initialise(const G4ParticleDefinition* p,
-				      const G4DataVector&)
+void G4mplIonisationModel::SetParticle(const G4ParticleDefinition* p)
 {
   monopole = p;
   mass     = monopole->GetPDGMass();
+  G4double emin = 
+    std::min(LowEnergyLimit(),0.1*mass*(1/sqrt(1 - betalow*betalow) - 1)); 
+  G4double emax = 
+    std::max(HighEnergyLimit(),10*mass*(1/sqrt(1 - beta2lim) - 1)); 
+  SetLowEnergyLimit(emin);
+  SetHighEnergyLimit(emax);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4mplIonisationModel::Initialise(const G4ParticleDefinition* p,
+				      const G4DataVector&)
+{
+  if(!monopole) { SetParticle(p); }
   if(!fParticleChange) { fParticleChange = GetParticleChangeForLoss(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4mplIonisationModel::ComputeDEDXPerVolume(const G4Material* material,
-						    const G4ParticleDefinition*,
+						    const G4ParticleDefinition* p,
 						    G4double kineticEnergy,
 						    G4double)
 {
+  if(!monopole) { SetParticle(p); }
   G4double tau   = kineticEnergy / mass;
   G4double gam   = tau + 1.0;
   G4double bg2   = tau * (tau + 2.0);
