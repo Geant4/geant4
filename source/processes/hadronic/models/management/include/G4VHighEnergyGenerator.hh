@@ -46,7 +46,7 @@ class G4KineticTrackVector;
 class G4VHighEnergyGenerator 
 {
   public:
-      G4VHighEnergyGenerator();
+      G4VHighEnergyGenerator(const G4String& modelName = "High Energy Generator");
       virtual ~G4VHighEnergyGenerator();
 
   private:
@@ -61,10 +61,14 @@ class G4VHighEnergyGenerator
                                              const G4DynamicParticle &thePrimary) = 0;
       std::pair<G4double, G4double> GetEnergyMomentumCheckLevels() const;
       void SetEnergyMomentumCheckLevels(G4double relativeLevel, G4double AbsoluteLevel);
-      virtual void PartonStringModelDescription(std::ostream&) const;
+      virtual void ModelDescription(std::ostream&) const;
+      virtual G4String GetModelName() const;
 
   private:
       std::pair<G4double, G4double> epCheckLevels;
+
+  private:
+      G4String theGeneratorModelName;
 
 };
 #endif

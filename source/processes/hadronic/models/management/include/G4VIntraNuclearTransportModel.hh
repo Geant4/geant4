@@ -82,6 +82,7 @@ public:
   inline const G4String& GetModelName() const;
 
   virtual void ModelDescription(std::ostream& outFile) const ;
+  virtual void PropagateModelDescription(std::ostream& outFile) const ;
 
 private:
 

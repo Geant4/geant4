@@ -59,3 +59,9 @@ void G4VIntraNuclearTransportModel::ModelDescription(std::ostream& outFile) cons
 			"G4VIntraNuclearTransportModel is abstract class, no description available");
 }
 
+void G4VIntraNuclearTransportModel::PropagateModelDescription(std::ostream& outFile) const
+{
+	outFile << "G4VIntraNuclearTransportModel is abstract class, missing description" << G4endl;
+//	G4Exception("G4VIntraNuclearTransportModel::ModelDescription()","G4VINT01",FatalException,
+//			"G4VIntraNuclearTransportModel is abstract class, no description available");
+}
