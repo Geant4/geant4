@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23-05-12 V.Ivant (testem9-V09-05-02)
+- Histo - fixed n-tuples
+
 25-04-12 V.Ivant (testem9-V09-05-01)
 - HistoManager - fixed printout of mean gamma, e+, e- statistics
 - cleanup all header files
