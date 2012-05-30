@@ -14,9 +14,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30-05-12  V.Ivanchenko (test36-V09-05-00)
+- Fixed compilation warnings for unused variables
+
 20-07-11  G.Cosmo (test36-V09-04-02)
 - Removed vis setup...
-- Fixed compilation warnings for unused variables.
+- Fixed compilation warnings for unused variables
 
 19-01-11  L.Pandola (test36-V09-04-00)
 - porting to Geant4 9.4

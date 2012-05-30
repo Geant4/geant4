@@ -64,8 +64,8 @@
 Em10PhysicsList::Em10PhysicsList(Em10DetectorConstruction* p)
   :  G4VUserPhysicsList(),
      MaxChargedStep(DBL_MAX),
-     thePhotoElectricEffect(0),      theComptonScattering(0),
-     theGammaConversion(0),
+     thePhotoElectricEffect(0),      theComptonScattering(0), 
+     theRayleighScattering(0),   theGammaConversion(0),
      theeminusMultipleScattering(0), theeminusIonisation(0),
      theeminusBremsstrahlung(0),
      theeplusMultipleScattering(0),  theeplusIonisation(0),
@@ -79,7 +79,7 @@ Em10PhysicsList::Em10PhysicsList(Em10DetectorConstruction* p)
 
   // world cuts
 
-  defaultCutValue = 1.*mm;
+  defaultCutValue = 0.01*mm;
   cutForGamma     = defaultCutValue;
   cutForElectron  = defaultCutValue;
   cutForPositron  = defaultCutValue;
@@ -212,6 +212,13 @@ void Em10PhysicsList::ConstructProcess()
 //
 
 #include "G4ComptonScattering.hh"
+
+// #include "G4XrayRayleighProcess.hh"
+// #include "G4PenelopRayleigh.hh"
+#include "G4RayleighScattering.hh"
+
+
+
 #include "XTRComptonScattering.hh"
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
@@ -379,18 +386,18 @@ void Em10PhysicsList::ConstructEM()
       // xtrPhotoElectricEffect->SetMinElectronEnergy(fMinElectronEnergy);
       // pmanager->AddDiscreteProcess(xtrPhotoElectricEffect);
 
-      // theComptonScattering   = new G4ComptonScattering();
-      // pmanager->AddDiscreteProcess(theComptonScattering);
+      theComptonScattering   = new G4ComptonScattering();
+      pmanager->AddDiscreteProcess(theComptonScattering);
 
       
-      XTRComptonScattering*   xtrComptonScattering   = new XTRComptonScattering();
-      xtrComptonScattering->SetMinElectronEnergy(fMinElectronEnergy);
-      xtrComptonScattering->SetMinGammaEnergy(fMinGammaEnergy);
-      pmanager->AddDiscreteProcess(xtrComptonScattering);
+      // XTRComptonScattering*   xtrComptonScattering   = new XTRComptonScattering();
+      // xtrComptonScattering->SetMinElectronEnergy(fMinElectronEnergy);
+      // xtrComptonScattering->SetMinGammaEnergy(fMinGammaEnergy);
+      // pmanager->AddDiscreteProcess(xtrComptonScattering);
       
 
-      // theComptonScattering   = new G4ComptonScattering();
-      // pmanager->AddDiscreteProcess(theComptonScattering);
+      theRayleighScattering   = new G4RayleighScattering();
+      pmanager->AddDiscreteProcess(theRayleighScattering);
       
       // XTRComptonScattering*   xtrComptonScattering   = new XTRComptonScattering();
       // xtrComptonScattering->SetMinElectronEnergy(fMinElectronEnergy);

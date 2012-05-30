@@ -37,6 +37,11 @@
 
 class G4PhotoElectricEffect;
 class G4ComptonScattering;
+
+class G4XrayRayleighProcess;
+class G4RayleighScattering;
+// class G4PenelopRayleigh;
+
 class G4GammaConversion;
 
 class G4eMultipleScattering;
@@ -115,6 +120,11 @@ class Em10PhysicsList: public G4VModularPhysicsList  // G4VUserPhysicsList
 
     G4PhotoElectricEffect* thePhotoElectricEffect;
     G4ComptonScattering*   theComptonScattering;
+
+    G4XrayRayleighProcess*  theXrayRayleighProcess;
+  // G4PenelopeRayleigh*     thePenelopRayleigh;
+    G4RayleighScattering*   theRayleighScattering;
+
     G4GammaConversion*     theGammaConversion;
 
     G4eMultipleScattering*  theeminusMultipleScattering;
