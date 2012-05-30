@@ -558,9 +558,9 @@ G4double G4ConvergenceTester::calc_Pearson_r ( G4int N , std::vector<G4double> f
       b2 += ( second_ally [ i ] - second_mean ) * ( second_ally [ i ] - second_mean );
    }
    
-   G4double r = a / std::sqrt ( b1 * b2 );  
+   G4double rds = a / std::sqrt ( b1 * b2 );  
 
-   return r; 
+   return rds; 
 }
 
 

@@ -86,7 +86,7 @@ G4double G4SimplexDownhill<T>::GetMinimum()
       }
       i++;
    }
-   std::vector< G4double > minimumPoint = currentSimplex[ imin ];
+   minimumPoint = currentSimplex[ imin ];
 
 // Second Trial
 
@@ -437,7 +437,7 @@ std::vector< G4double > G4SimplexDownhill<T>::GetMinimumPoint()
       }
       i++;
    }
-   std::vector< G4double > minimumPoint = currentSimplex[ imin ];
+   minimumPoint = currentSimplex[ imin ];
 
    return minimumPoint; 
 }

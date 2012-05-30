@@ -17,6 +17,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 30, 2012 G.Cosmo (global-V09-05-05)
+- Fixed case of shadowed variable in G4Tokenizer header.
+
+May 16, 2012 V.Ivantchenko (global-V09-05-04)
+- G4PhysicsVector: added GetMaxEnergy() inlined method; indicate inline
+  methods in header file by explicitly adding inline keyword; added inline
+  method Value() and private method ComputeValue() in order to have inline
+  access to the value for the case of multiple calls with the the same
+  energy value.
+
+May 15, 2012 G.Cosmo (global-V09-05-03)
+- Fixed spurious cases of hidden variable visibility, detected with
+  '-Wshadow' compilation option on gcc compiler.
+
 April 23, 2012 G.Cosmo (global-V09-05-02)
 - Added call to BuildUnitsTable() from static accessor to guarantee proper
   initialization of units in static calls.

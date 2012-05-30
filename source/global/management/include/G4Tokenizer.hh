@@ -49,7 +49,7 @@
 class G4Tokenizer 
 {
 public:
-  G4Tokenizer(const G4String& s):string2tokenize(s),actual(0){}
+  G4Tokenizer(const G4String& stn):string2tokenize(stn),actual(0){}
 
   G4SubString operator()(const char* str=" \t\n",size_t l=0)
     {

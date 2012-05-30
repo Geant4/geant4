@@ -60,6 +60,15 @@ inline void G4PhysicsVector::operator delete(void* aVector)
   aPVAllocator.FreeSingle((G4PhysicsVector*)aVector);
 }
 
+inline G4double G4PhysicsVector::Value(G4double theEnergy) 
+{
+  // Use cache for speed up - check if the value 'theEnergy' is same as the 
+  // last call. If it is same, then use the last value, if not - recompute
+
+  if( theEnergy != cache->lastEnergy ) { ComputeValue(theEnergy); }
+  return cache->lastValue;
+}
+
 inline
  G4double G4PhysicsVector::GetLastEnergy() const
 {
@@ -98,6 +107,14 @@ inline
  G4double G4PhysicsVector::Energy(const size_t binNumber) const
 {
   return binVector[binNumber];
+}
+
+//---------------------------------------------------------------
+
+inline
+ G4double G4PhysicsVector::GetMaxEnergy() const
+{
+  return edgeMax;
 }
 
 //---------------------------------------------------------------
