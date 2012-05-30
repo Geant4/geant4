@@ -14,16 +14,7 @@ endif
 .PHONY: all
 all: lib bin
 
-ifdef G4ANALYSIS_USE_ROOT
-  CPPFLAGS += -DG4ANALYSIS_USE_ROOT
-endif
-
 include $(G4INSTALL)/config/architecture.gmk
-
-ifdef G4ANALYSIS_USE_ROOT
-  CPPFLAGS += $(shell $(ROOTSYS)/bin/root-config --cflags)
-  LDFLAGS  += $(shell $(ROOTSYS)/bin/root-config --glibs)
-endif
 
 include $(G4INSTALL)/config/binmake.gmk
 

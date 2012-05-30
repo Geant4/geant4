@@ -14,6 +14,26 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+test30-V09-05-11  30 May 2012 V.Ivanchenko
+- Test30VSecondaryGenerator - use integer Z and A
+
+test30-V09-05-10  24 May 2012 V.Ivanchenko
+- G4INCLXXInterface is back to standard design
+
+test30-V09-05-09  23 May 2012 V.Ivanchenko
+- Histo - fixed n-tuples
+
+test30-V09-05-08  21 May 2012 V.Ivanchenko
+- test30.cc - fixed warnings of gcc 4.7
+- GNUmakefile - removed statements for analysis 
+
+test30-V09-05-07  18 May 2012 V.Ivanchenko
+- Fixed incl name and macro
+
+test30-V09-05-06  16 May 2012 - D. Mancusi
+- G4INCLXXInterface is now a singleton
+- Requires INCL++ tag hadr-inclxx-V09-05-10
+
 test30-V09-05-04  17 April 2012 V.Ivanchenko
 - Histo - minor cleanup
 

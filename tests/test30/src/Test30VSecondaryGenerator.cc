@@ -47,15 +47,14 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-Test30VSecondaryGenerator::Test30VSecondaryGenerator(G4HadronicInteraction* hadi,
-  G4Material* mat):
+Test30VSecondaryGenerator::Test30VSecondaryGenerator(
+    G4HadronicInteraction* hadi, const G4Material* mat):
   hInteraction(hadi),
   material(mat),
-  //targetNucleus(mat),
-  targetN(0)
+  targetA(0)
 {
   elm = material->GetElement(0);
-  targetZ = G4int(elm->GetZ()+0.5);
+  targetZ = G4lrint(elm->GetZ());
   G4cout << "New generator for material " << material->GetName() 
 	 << " Nelm= " <<  material->GetNumberOfElements() 
 	 << " Nmat= " <<  material->GetNumberOfMaterials() 
@@ -73,14 +72,14 @@ Test30VSecondaryGenerator::~Test30VSecondaryGenerator()
 
 void Test30VSecondaryGenerator::SetA(G4int A) 
 {
-  targetN = A;
-  G4cout << "Nucleus with N= " << targetN << "  Z= " << targetZ 
+  targetA = A;
+  G4cout << "Nucleus with A= " << targetA << "  Z= " << targetZ 
 	 << "  A(amu)= " << elm->GetN();
-  if(targetN < targetZ) {
-    targetN = 0; 
+  if(targetA < targetZ) {
+    targetA = 0; 
     G4cout << "  Natural abandances"; 
   } else {
-    G4double mass = G4NucleiProperties::GetNuclearMass(targetN, targetZ);
+    G4double mass = G4NucleiProperties::GetNuclearMass(targetA, targetZ);
     G4cout << "Mass from G4NucleiProperties(GeV)= " << mass/GeV << G4endl;
   }
   G4cout << G4endl;
@@ -90,26 +89,26 @@ void Test30VSecondaryGenerator::SetA(G4int A)
 
 G4double Test30VSecondaryGenerator::GetMass()
 {
-  G4int currentN = targetN;
-  if(targetN == 0) {
-    currentN = elm->GetN();
+  G4int A = targetA;
+  if(0 == targetA) {
+    A = G4lrint(elm->GetAtomicMassAmu());
     G4IsotopeVector* isoVector = elm->GetIsotopeVector();
     G4int nIsoPerElement = elm->GetNumberOfIsotopes();
-    currentN = G4double((*isoVector)[0]->GetN());
+    A = (*isoVector)[0]->GetN();
     if(nIsoPerElement > 1) {
       G4double* abundVector = elm->GetRelativeAbundanceVector();
       G4double y = G4UniformRand();
-      for(G4int j=0; j<nIsoPerElement; j++) {
+      for(G4int j=0; j<nIsoPerElement; ++j) {
 	y -= abundVector[j];
 	if(y <= 0.0) {
-	  currentN = G4double((*isoVector)[j]->GetN());
+	  A = (*isoVector)[j]->GetN();
 	  break;
 	}
       }
     }
   }
-  targetNucleus.SetParameters(currentN, targetZ);
-  G4double mass = G4NucleiProperties::GetNuclearMass(currentN, targetZ);
+  targetNucleus.SetParameters(A, targetZ);
+  G4double mass = G4NucleiProperties::GetNuclearMass(A, targetZ);
   return mass;
 }
 

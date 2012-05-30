@@ -61,7 +61,7 @@ class Test30VSecondaryGenerator
 {
 public:
 
-  Test30VSecondaryGenerator(G4HadronicInteraction* hadi, G4Material* mat);
+  Test30VSecondaryGenerator(G4HadronicInteraction* hadi, const G4Material* mat);
 
   virtual ~Test30VSecondaryGenerator();
 
@@ -84,12 +84,12 @@ private:
   Test30VSecondaryGenerator& operator = (const Test30VSecondaryGenerator &right);
 
   G4HadronicInteraction* hInteraction;
-  G4Material* material;
+  const G4Material* material;
   const G4Element* elm;
   G4Nucleus targetNucleus;
   G4HadFinalState* result;
   G4int targetZ;
-  G4int targetN;
+  G4int targetA;
 
 };
 

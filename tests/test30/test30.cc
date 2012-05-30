@@ -144,11 +144,11 @@ int main(int argc, char** argv)
   Histo     histo;
   G4String  namePart = "proton";
   G4bool    ionParticle = false;
-  G4bool    Shen     = false;
+  //  G4bool    Shen     = false;
   G4int     ionZ(0), ionA(0);
   G4String  nameMat  = "G4_Al";
   G4String  nameGen  = "binary";
-  G4bool    logx     = false;
+  //  G4bool    logx     = false;
   G4bool    usepaw   = false;
   G4bool    isInitH  = false;
   G4bool    inclusive= true;
@@ -189,8 +189,8 @@ int main(int argc, char** argv)
 
   G4Material* material = 0;
 
-  G4bool gtran = false;
-  G4bool gemis = false;
+  //G4bool gtran = false;
+  // G4bool gemis = false;
   G4bool xsbgg = true;
   G4bool xschips = false;
 
@@ -415,8 +415,8 @@ int main(int argc, char** argv)
         (*fin) >> nameMat;
       } else if(line == "#targetA") {
         (*fin) >> targetA;
-      } else if(line == "#Shen") {
-        Shen = true;
+	//      } else if(line == "#Shen") {
+	//        Shen = true;
       } else if(line == "#generator") {
 	nameGen = "";
         (*fin) >> nameGen;
@@ -462,8 +462,8 @@ int main(int argc, char** argv)
         if(verbose>0) G4cout << "Random Engine restored from file <"
                              << sss << ">" << G4endl;
         CLHEP::HepRandom::showEngineStatus();
-      } else if(line == "#logx") {
-        logx = true;
+	//     } else if(line == "#logx") {
+	//   logx = true;
       } else if(line == "#xs_ghad") {
 	xsbgg = false;
 	xschips = false;
@@ -482,10 +482,10 @@ int main(int argc, char** argv)
         (*fin) >> rmsNeutron;
       } else if(line == "#rmsEpi") {
         (*fin) >> rmsPion;
-      } else if(line == "#HETCEmission") {
-        gemis = true;
-      } else if(line == "#GNASHTransition") {
-        gtran = true;
+	// } else if(line == "#HETCEmission") {
+	//  gemis = true;
+	// } else if(line == "#GNASHTransition") {
+	//  gtran = true;
       } else if(line == "#GEMEvaporation") {
         G4cout<<"### GEM evaporation is set"<<G4endl;
         theEvaporation->SetGEMChannel();
@@ -585,6 +585,7 @@ int main(int argc, char** argv)
 
     // ------- Select model
     G4HadronicProcess* extraproc = 0;
+    G4QInelastic* chips = 0;
     G4VProcess* proc = 0;
     G4String namegen1 = nameGen.substr(0, 4);
     G4cout << "<" << namegen1 << ">" << G4endl; 
@@ -592,16 +593,15 @@ int main(int argc, char** argv)
       extraproc = new G4WHadronElasticProcess(); 
     } else if (nameGen == "chargeex") { 
       extraproc = new G4ChargeExchangeProcess(); 
+    } else if(nameGen == "chips") { 
+      chips = new G4QInelastic(); 
     } else { 
       proc = phys->GetProcess(nameGen, part, material); 
     }
 
-    G4QInelastic* chips = 0;
-    if(nameGen == "chips") { chips = new G4QInelastic(); }
-
     if(!proc && !chips && !extraproc) {
       G4cout << "For particle: " << part->GetParticleName()
-	     << " generator " << nameGen << " is unavailable"<< G4endl;
+	     << " generator <" << nameGen << " is unavailable"<< G4endl;
       exit(1);
     }
 
@@ -755,9 +755,9 @@ int main(int argc, char** argv)
         xxl = x2 - x1;
 	histo.Add1D("65","log10(theta (degree)) for primary particle in Lab.Sys.",nbinsa,x1,x2);
 	histo.Add1D("66","Theta (degree) for primary particle in CM.Sys.",nbinsa,0.0,tetmax);
+
 	// desactivate not needed hist for elastic
 	histo.Activate(50, false);
-
 	for(i=0; i<13; i++) {histo.Activate(14+i, false);}
       }
     }
@@ -1276,12 +1276,14 @@ int main(int argc, char** argv)
         G4double tetcmd = tetcm/degree;
         G4double costcm = std::cos(tetcm);
        
-	histo.Fill(58,ekin/MeV,1.0);
-	histo.Fill(60,cost,factora);
-	histo.Fill(62,costcm,factora);
-	histo.Fill(63,thetad,factoraa/std::sin(theta));
-	histo.Fill(64,std::log10(thetad),factoral*theta/std::sin(theta));
-	histo.Fill(65,tetcmd,factoraa/std::sin(tetcm));
+	if(extraproc) {
+	  histo.Fill(58,ekin/MeV,1.0);
+	  histo.Fill(60,cost,factora);
+	  histo.Fill(62,costcm,factora);
+	  histo.Fill(63,thetad,factoraa/std::sin(theta));
+	  histo.Fill(64,std::log10(thetad),factoral*theta/std::sin(theta));
+	  histo.Fill(65,tetcmd,factoraa/std::sin(tetcm));
+	}
         if(verbose>1) {
           G4cout /*<< "Warning! evt# " << iter*/ 
                  << "primary  "
