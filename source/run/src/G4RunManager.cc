@@ -99,6 +99,14 @@ G4RunManager::G4RunManager()
 
 G4RunManager::~G4RunManager()
 {
+  G4StateManager* pStateManager = G4StateManager::GetStateManager();
+  // set the application state to the quite state
+  if(pStateManager->GetCurrentState()!=G4State_Quit)
+  {
+    if(verboseLevel>0) G4cout << "G4 kernel has come to Quit state." << G4endl;
+    pStateManager->SetNewState(G4State_Quit);
+  }
+
   if(currentRun) delete currentRun;
   delete timer;
   delete runMessenger;
@@ -108,27 +116,31 @@ G4RunManager::~G4RunManager()
   if(userDetector)
   {
     delete userDetector;
+    userDetector = 0;
     if(verboseLevel>1) G4cout << "UserDetectorConstruction deleted." << G4endl;
   }
   if(physicsList)
   {
     delete physicsList;
+    physicsList = 0;
     if(verboseLevel>1) G4cout << "UserPhysicsList deleted." << G4endl;
   }
   if(userRunAction)
   {
     delete userRunAction;
+    userRunAction = 0;
     if(verboseLevel>1) G4cout << "UserRunAction deleted." << G4endl;
   }
   if(userPrimaryGeneratorAction)
   {
     delete userPrimaryGeneratorAction;
+    userPrimaryGeneratorAction = 0;
     if(verboseLevel>1) G4cout << "UserPrimaryGenerator deleted." << G4endl;
   }
 
   delete kernel;
 
-  if(verboseLevel>1) G4cout << "RunManager is deleting." << G4endl;
+  if(verboseLevel>1) G4cout << "RunManager is deleted." << G4endl;
   fRunManager = 0;
 }
 

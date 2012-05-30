@@ -131,10 +131,13 @@ G4RunManagerKernel::G4RunManagerKernel()
 
 G4RunManagerKernel::~G4RunManagerKernel()
 {
-  // set the application state to the quite state
-  if(verboseLevel>0) G4cout << "G4 kernel has come to Quit state." << G4endl;
   G4StateManager* pStateManager = G4StateManager::GetStateManager();
-  pStateManager->SetNewState(G4State_Quit);
+  // set the application state to the quite state
+  if(pStateManager->GetCurrentState()!=G4State_Quit)
+  {
+    if(verboseLevel>0) G4cout << "G4 kernel has come to Quit state." << G4endl;
+    pStateManager->SetNewState(G4State_Quit);
+  }
 
   // open geometry for deletion
   G4GeometryManager::GetInstance()->OpenGeometry();
