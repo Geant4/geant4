@@ -57,6 +57,12 @@ class G4NeutronHPProduct
   {
     if(theDist != 0) delete theDist;
   }
+
+
+      //TK120515 For migration of frameFlag (MF6 LCT) = 3 in
+      //G4NeutronHPEnAngCorrelation
+      G4double GetMassCode(){return theMassCode;};
+      G4double GetMass(){return theMass;};
   
   inline void Init(std::ifstream & aDataFile)
   {

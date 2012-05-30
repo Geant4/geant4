@@ -66,7 +66,9 @@ G4ReactionProductVector * G4NeutronHPEnAngCorrelation::Sample(G4double anEnergy)
   G4ReactionProductVector * it;
   G4ReactionProduct theCMS;
   G4LorentzRotation toZ;
-  if(frameFlag==2)
+  //TK120515 migrate frameFlag (MF6 LCT) = 3 
+  //if(frameFlag==2)
+  if(frameFlag==2||frameFlag==3)
   {
     // simplify and double check @
     G4ThreeVector the3Neutron = theNeutron.GetMomentum(); //theNeutron has value in LAB
@@ -130,6 +132,20 @@ G4ReactionProductVector * G4NeutronHPEnAngCorrelation::Sample(G4double anEnergy)
 #endif
           it->operator[](ii)->Lorentz(*(it->operator[](ii)), -1.*theCMS);
 	}
+        //TK120515 migrate frameFlag (MF6 LCT) = 3 
+	else if(frameFlag==3) // CMS A<=4 other LAB
+        {
+           if ( theProducts[i].GetMassCode() > 4 ) //Alpha AWP 3.96713
+           {
+              //LAB
+              it->operator[](ii)->Lorentz(*(it->operator[](ii)), -1.*theTarget); //TK 100413 Is this really need?
+           }
+           else
+           {
+              //CMS
+              it->operator[](ii)->Lorentz(*(it->operator[](ii)), -1.*theCMS);
+           }
+        }
 	else
 	{
           throw G4HadronicException(__FILE__, __LINE__, "G4NeutronHPEnAngCorrelation::Sample: The frame of the finalstate is not specified");

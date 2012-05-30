@@ -61,6 +61,8 @@ class G4NeutronHPFission : public G4HadronicInteraction
   
   G4HadFinalState * ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus);
 
+  virtual const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
+
   private:
   
   G4NeutronHPFissionFS theFS;
