@@ -76,10 +76,10 @@ void DetectorConstruction::DefineMaterials()
   //
   // define Elements
   //
+/*
   G4double z,a;
   
-  G4Element* H  = new G4Element("Hydrogen" ,"H" , z= 1., a=   1.01*g/mole);
-  G4Element* N  = new G4Element("Nitrogen" ,"N" , z= 7., a=  14.01*g/mole);
+  G4Element* H  = new G4Element("Hydrogen" ,"H" , z= 1., a=   1.01*g/mole);/  G4Element* N  = new G4Element("Nitrogen" ,"N" , z= 7., a=  14.01*g/mole);
   G4Element* O  = new G4Element("Oxygen"   ,"O" , z= 8., a=  16.00*g/mole);
   
   //
@@ -88,7 +88,7 @@ void DetectorConstruction::DefineMaterials()
   G4double density;
   G4int ncomponents, natoms;
   G4double fractionmass;  
-  /*  
+  
   G4Material* Air = 
   new G4Material("Air", density= 1.290*mg/cm3, ncomponents=2);
   Air->AddElement(N, fractionmass=70.*perCent);
