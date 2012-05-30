@@ -1409,8 +1409,8 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
   // quasi-elastic (& pickup process) for p+A(Z,N)
   //
   }
-  else if ((projPDG == 2212 || projPDG == 2112) && Z > 0 && N > 0)
-  //else if(2>3) 
+  //else if ((projPDG == 2212 || projPDG == 2112) && Z > 0 && N > 0) // Never (in Fragm!)
+  else if(2>3) // Possibility is closed as quasi-free scattering is made in fragmentation
   {
     if(momentum<500. && projPDG == 2112) // @@ It's reasonable to add proton capture too !
     {

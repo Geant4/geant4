@@ -12,6 +12,15 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+29-May-2012 V.Ivanchenko                   (hadr-chips-proc-V09-05-01)
+----------------------------------------------------------------------
+G4QCaptureAtRest.cc - added protection against catastrophic energy
+  non-conservation on top of the recent version of the code
+
+27-Apr-2012 D.H. Wright                    (hadr-chips-proc-V09-05-00)
+----------------------------------------------------------------------
+VIP fix: QE duplication in G4QInel (for p & n) is closed (it's in G4QF)
+
 21-Oct-2011 D.H. Wright                    (hadr-chips-proc-V09-04-05)
 ----------------------------------------------------------------------
 G4Exception migration: forgot G4QDiscProcessMixer.cc in previous tag
