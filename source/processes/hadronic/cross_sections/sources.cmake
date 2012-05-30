@@ -48,6 +48,26 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
         G4BGGNucleonInelasticXS.hh
         G4BGGPionElasticXS.hh
         G4BGGPionInelasticXS.hh
+	G4ChipsBaseXS.hh
+	G4ChipsKaonMinusInelasticXS.hh
+	G4ChipsKaonMinusElasticXS.hh
+ 	G4ChipsKaonPlusInelasticXS.hh
+ 	G4ChipsKaonPlusElasticXS.hh
+ 	G4ChipsKaonZeroInelasticXS.hh
+ 	G4ChipsKaonZeroElasticXS.hh
+	G4ChipsHyperonInelasticXS.hh
+	G4ChipsHyperonElasticXS.hh
+	G4ChipsProtonInelasticXS.hh
+	G4ChipsProtonElasticXS.hh
+	G4ChipsNeutronInelasticXS.hh
+	G4ChipsNeutronElasticXS.hh
+	G4ChipsPionPlusInelasticXS.hh
+	G4ChipsPionPlusElasticXS.hh
+	G4ChipsPionMinusInelasticXS.hh
+	G4ChipsPionMinusElasticXS.hh
+	G4ChipsAntiBaryonInelasticXS.hh
+	G4ChipsAntiBaryonElasticXS.hh
+	G4ChipsComponentXS.hh
         G4ComponentAntiNuclNuclearXS.hh
         G4CrossSectionDataSetRegistry.hh
         G4CrossSectionDataStore.hh
@@ -91,6 +111,26 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
         G4BGGNucleonInelasticXS.cc
         G4BGGPionElasticXS.cc
         G4BGGPionInelasticXS.cc
+	G4ChipsBaseXS.cc
+	G4ChipsKaonMinusInelasticXS.cc
+	G4ChipsKaonMinusElasticXS.cc
+	G4ChipsKaonPlusInelasticXS.cc
+	G4ChipsKaonPlusElasticXS.cc
+	G4ChipsKaonZeroInelasticXS.cc
+	G4ChipsKaonZeroElasticXS.cc
+	G4ChipsHyperonInelasticXS.cc
+	G4ChipsHyperonElasticXS.cc
+	G4ChipsProtonInelasticXS.cc
+	G4ChipsProtonElasticXS.cc
+	G4ChipsNeutronInelasticXS.cc
+	G4ChipsNeutronElasticXS.cc
+	G4ChipsPionPlusInelasticXS.cc
+	G4ChipsPionPlusElasticXS.cc
+	G4ChipsPionMinusInelasticXS.cc
+	G4ChipsPionMinusElasticXS.cc
+	G4ChipsAntiBaryonInelasticXS.cc
+	G4ChipsAntiBaryonElasticXS.cc
+	G4ChipsComponentXS.cc
         G4CrossSectionDataSetRegistry.cc
         G4CrossSectionDataStore.cc
         G4CrossSectionElastic.cc
