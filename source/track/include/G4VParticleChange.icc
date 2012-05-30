@@ -202,6 +202,13 @@ inline void G4VParticleChange::InitializeParentWeight(const G4Track& track)
   isParentWeightProposed = false;
 }
 
+inline void G4VParticleChange::InitializeParentGlobalTime(const G4Track& track)
+{
+  // set the parent track's global time
+  theParentGlobalTime = track.GetGlobalTime();
+} 
+
+
 inline void G4VParticleChange::InitializeTrueStepLength(const G4Track& track)
 {
   // Reset theTrueStepLength
@@ -276,6 +283,7 @@ inline void G4VParticleChange::Initialize(const G4Track& track)
   InitializeTrueStepLength(track);
   InitializeSecondaries(track);
   InitializeParentWeight(track);
+  InitializeParentGlobalTime(track);
   InitializeStepInVolumeFlags(track);
 }
 

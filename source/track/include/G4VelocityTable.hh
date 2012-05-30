@@ -107,7 +107,7 @@ class G4VelocityTable
 };
 
 inline
- G4double G4VelocityTable::Interpolation(G4int lastBin) const
+ G4double G4VelocityTable::Interpolation(G4int lbin) const
 {
   // Linear interpolation is used to get the value. If the give energy
   // is in the highest bin, no interpolation will be Done. Because 
@@ -115,11 +115,11 @@ inline
   // the following interpolation is valid even the current locBin=
   // numberOfBin-1. 
   
-  G4double intplFactor = (lastEnergy-binVector[lastBin]) 
-     / (binVector[lastBin + 1]-binVector[lastBin]); // Interpol. factor
+  G4double intplFactor = (lastEnergy-binVector[lbin]) 
+     / (binVector[lbin + 1]-binVector[lbin]); // Interpol. factor
   
-  return dataVector[lastBin] +
-    ( dataVector[lastBin + 1]-dataVector[lastBin] ) * intplFactor;
+  return dataVector[lbin] +
+    ( dataVector[lbin + 1]-dataVector[lbin] ) * intplFactor;
 }
 
 #endif

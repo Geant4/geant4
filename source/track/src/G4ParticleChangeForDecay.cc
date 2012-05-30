@@ -145,20 +145,8 @@ void G4ParticleChangeForDecay::Initialize(const G4Track& track)
 
 G4Step* G4ParticleChangeForDecay::UpdateStepForPostStep(G4Step* pStep)
 { 
-  if (isParentWeightProposed) {
-    // update weight
-    if (isParentWeightSetByProcess) {
-      G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint(); 
-      pPostStepPoint->SetWeight( theParentWeight );
-    }
-    if (!fSetSecondaryWeightByProcess) {    
-      // Set weight of secondary tracks
-      for (G4int index= 0; index<theNumberOfSecondaries; index++){
-        if ( (*theListOfSecondaries)[index] ) {
-          ((*theListOfSecondaries)[index])->SetWeight(theParentWeight); ;
-        }
-      }
-    }
+  if (isParentWeightProposed ){
+    pStep->GetPostStepPoint()->SetWeight( theParentWeight );
   }
 
   //  Update the G4Step specific attributes 
@@ -185,18 +173,7 @@ G4Step* G4ParticleChangeForDecay::UpdateStepForAtRest(G4Step* pStep)
   if (debugFlag) CheckIt(*aTrack);
 #endif
 
-  if (isParentWeightProposed ) {
-    // update weight
-    if (isParentWeightSetByProcess) pPostStepPoint->SetWeight( theParentWeight );
-    if (!fSetSecondaryWeightByProcess) {    
-      // Set weight of secondary tracks
-      for (G4int index= 0; index<theNumberOfSecondaries; index++){
-        if ( (*theListOfSecondaries)[index] ) {
-          ((*theListOfSecondaries)[index])->SetWeight(theParentWeight); ;
-        }
-      }
-    }
-  }
+  if (isParentWeightProposed )pPostStepPoint->SetWeight( theParentWeight );
 
   //  Update the G4Step specific attributes 
   return UpdateStepInfo(pStep);
@@ -219,25 +196,28 @@ G4bool G4ParticleChangeForDecay::CheckIt(const G4Track& aTrack)
 
   G4double  accuracy;
 
-  // global time should not go back
+  // local time should not go back
   G4bool itsOK =true;
   accuracy = -1.0*(theTimeChange - theLocalTime0)/ns;
   if (accuracy > accuracyForWarning) {
+    itsOK = false;
+    exitWithError = (accuracy > accuracyForException);
 #ifdef G4VERBOSE
     G4cout << "  G4ParticleChangeForDecay::CheckIt    : ";
-    G4cout << "the global time goes back  !!" << G4endl;
-    G4cout << "  Difference:  " << accuracy  << "[ns] " <<G4endl;
+    G4cout << "the local time goes back  !!" 
+	   << "  Difference:  " << accuracy  << "[ns] " <<G4endl;
+    G4cout << aTrack.GetDefinition()->GetParticleName()
+	   << " E=" << aTrack.GetKineticEnergy()/MeV
+	   << " pos=" << aTrack.GetPosition().x()/m
+	   << ", " << aTrack.GetPosition().y()/m
+	   << ", " << aTrack.GetPosition().z()/m
+	   <<G4endl;
 #endif
-    itsOK = false;
-    if (accuracy > accuracyForException) exitWithError = true;
   }
 
   // dump out information of this particle change
 #ifdef G4VERBOSE
-  if (!itsOK) { 
-    G4cout << " G4ParticleChangeForDecay::CheckIt " <<G4endl;
-    DumpInfo();
-  }
+  if (!itsOK) DumpInfo();
 #endif
 
   // Exit with error
@@ -249,7 +229,7 @@ G4bool G4ParticleChangeForDecay::CheckIt(const G4Track& aTrack)
 
   // correction
   if (!itsOK) {
-    theTimeChange = aTrack.GetGlobalTime();
+    theTimeChange = aTrack.GetLocalTime();
   }
 
   itsOK = (itsOK) && G4VParticleChange::CheckIt(aTrack);

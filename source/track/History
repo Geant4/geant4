@@ -17,6 +17,27 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- May 23, 2012 G.Cosmo (track-V09-05-09)
+- Fixed trivial cases of variable shadowing.
+
+- May 15, 2012 H.Kurashige (track-V09-05-08)
+- Modify way of handling parent weight in AlongStep 
+  in accumulated way (same manner for other prperties) 
+
+- May 1st, 2012 H.Kurashige (track-V09-05-07)
+- Add global time check for secondaries in G4VParticleChange
+- Modify output messages for CheckIt and CheckSecondary
+- Add G4Exception in G4ParticleChangeForRadDecay:: AddSecondary 
+
+- April 30, 2012 H.Kurashige (track-V09-05-06)
+- Fixed the bug in G4ParticleChange::AddSecondary. 
+  (Problem#1305 The local time of the parent was set before)
+
+- April 29, 2012 H.Kurashige (track-V09-05-05)
+- Fix treatment of weights in ParticleChange
+  (Problem#1283)
+ 
 - February 3rd, 2012 J.Apostolakis  (track-V09-05-04)
 - G4FieldTrackUpdator::Update method must reset the RestMass, 
    because it is used to Initialise each track by ParallelWorldScoringProcess,

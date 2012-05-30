@@ -168,7 +168,7 @@ void G4ParticleChange::AddSecondary(G4DynamicParticle* aParticle,
 				    G4bool   IsGoodForTracking    )
 {
   //  create track
-  G4Track* aTrack = new G4Track(aParticle, theTimeChange, thePositionChange);
+  G4Track* aTrack = new G4Track(aParticle, GetGlobalTime(), thePositionChange);
 
   // set IsGoodGorTrackingFlag
   if (IsGoodForTracking) aTrack->SetGoodForTrackingFlag();
@@ -185,7 +185,7 @@ void G4ParticleChange::AddSecondary(G4DynamicParticle* aParticle,
 				    G4bool   IsGoodForTracking    )
 {
   //  create track
-  G4Track*  aTrack = new G4Track(aParticle, theTimeChange, newPosition);
+  G4Track*  aTrack = new G4Track(aParticle, GetGlobalTime(), newPosition);
 
   // set IsGoodGorTrackingFlag
   if (IsGoodForTracking) aTrack->SetGoodForTrackingFlag();
@@ -321,20 +321,8 @@ G4Step* G4ParticleChange::UpdateStepForAlongStep(G4Step* pStep)
   pPostStepPoint->AddProperTime( theProperTimeChange 
 				 - pPreStepPoint->GetProperTime());
 
-  if (isParentWeightProposed) {
-    // update weight
-    G4double newWeight= theParentWeight/(pPreStepPoint->GetWeight())
-      * (pPostStepPoint->GetWeight());
-    if (isParentWeightSetByProcess) pPostStepPoint->SetWeight( newWeight );
-    
-    if (!fSetSecondaryWeightByProcess) {    
-      // Set weight of secondary tracks
-      for (G4int index= 0; index<theNumberOfSecondaries; index++){
-	if ( (*theListOfSecondaries)[index] ) {
-	  ((*theListOfSecondaries)[index])->SetWeight(newWeight); ;
-	}
-      }
-    }
+  if (isParentWeightProposed ){
+    pPostStepPoint->SetWeight( theParentWeight );
   }
 
 #ifdef G4VERBOSE
@@ -377,17 +365,8 @@ G4Step* G4ParticleChange::UpdateStepForPostStep(G4Step* pStep)
   pPostStepPoint->SetLocalTime( theTimeChange );	       
   pPostStepPoint->SetProperTime( theProperTimeChange  );
 
-  if (isParentWeightProposed) {
-    // update weight
-    if( isParentWeightSetByProcess) pPostStepPoint->SetWeight( theParentWeight );
-    if (!fSetSecondaryWeightByProcess) {    
-      // Set weight of secondary tracks
-      for (G4int index= 0; index<theNumberOfSecondaries; index++){
-	if ( (*theListOfSecondaries)[index] ) {
-	  ((*theListOfSecondaries)[index])->SetWeight(theParentWeight); ;
-	}
-      }
-    }
+  if (isParentWeightProposed ){
+    pPostStepPoint->SetWeight( theParentWeight );
   }
 
 #ifdef G4VERBOSE
@@ -426,17 +405,8 @@ G4Step* G4ParticleChange::UpdateStepForAtRest(G4Step* pStep)
   pPostStepPoint->SetLocalTime( theTimeChange );	       
   pPostStepPoint->SetProperTime( theProperTimeChange  );
 
-  if (isParentWeightProposed ) {
-    // update weight 
-    if (isParentWeightSetByProcess) pPostStepPoint->SetWeight( theParentWeight );
-    if (!fSetSecondaryWeightByProcess) {    
-      // Set weight of secondary tracks
-      for (G4int index= 0; index<theNumberOfSecondaries; index++){
-	if ( (*theListOfSecondaries)[index] ) {
-	  ((*theListOfSecondaries)[index])->SetWeight(theParentWeight); ;
-	}
-      }
-    }
+  if (isParentWeightProposed ){
+    pPostStepPoint->SetWeight( theParentWeight );
   }
 
 #ifdef G4VERBOSE
@@ -516,24 +486,33 @@ G4bool G4ParticleChange::CheckIt(const G4Track& aTrack)
 {
   G4bool    exitWithError = false;
   G4double  accuracy;
+  static G4int nError = 0;
+  const  G4int maxError = 30;
 
   // No check in case of "fStopAndKill" 
-  if (GetTrackStatus() ==   fStopAndKill )  {
-    return G4VParticleChange::CheckIt(aTrack);
-  }
+  if (GetTrackStatus() ==   fStopAndKill )  return G4VParticleChange::CheckIt(aTrack);
 
   // MomentumDirection should be unit vector
   G4bool itsOKforMomentum = true;  
   if ( theEnergyChange >0.) {
     accuracy = std::fabs(theMomentumDirectionChange.mag2()-1.0);
     if (accuracy > accuracyForWarning) {
-#ifdef G4VERBOSE
-      G4cout << "  G4ParticleChange::CheckIt  : ";
-      G4cout << "the Momentum Change is not unit vector !!" << G4endl;
-      G4cout << "  Difference:  " << accuracy << G4endl;
-#endif
       itsOKforMomentum = false;
-      if (accuracy > accuracyForException) exitWithError = true;
+      nError += 1;
+      exitWithError = exitWithError || (accuracy > accuracyForException);
+#ifdef G4VERBOSE
+      if (nError < maxError) {
+	G4cout << "  G4ParticleChange::CheckIt  : ";
+	G4cout << "the Momentum Change is not unit vector !!" 
+	       << "  Difference:  " << accuracy << G4endl;
+	G4cout << aTrack.GetDefinition()->GetParticleName()
+	       << " E=" << aTrack.GetKineticEnergy()/MeV
+	       << " pos=" << aTrack.GetPosition().x()/m
+	       << ", " << aTrack.GetPosition().y()/m
+	       << ", " << aTrack.GetPosition().z()/m
+	       <<G4endl;
+      }
+#endif
     }
   }
 
@@ -541,67 +520,118 @@ G4bool G4ParticleChange::CheckIt(const G4Track& aTrack)
   G4bool itsOKforGlobalTime = true;  
   accuracy = (aTrack.GetLocalTime()- theTimeChange)/ns;
   if (accuracy > accuracyForWarning) {
-#ifdef G4VERBOSE
-    G4cout << "  G4ParticleChange::CheckIt    : ";
-    G4cout << "the local time goes back  !!" << G4endl;
-    G4cout << "  Difference:  " << accuracy  << "[ns] " <<G4endl;
-#endif
     itsOKforGlobalTime = false;
-    if (accuracy > accuracyForException) exitWithError = true;
+    nError += 1;
+    exitWithError = exitWithError || (accuracy > accuracyForException);
+#ifdef G4VERBOSE
+    if (nError < maxError) {
+      G4cout << "  G4ParticleChange::CheckIt    : ";
+      G4cout << "the local time goes back  !!" 
+	     << "  Difference:  " << accuracy  << "[ns] " <<G4endl;
+      G4cout << aTrack.GetDefinition()->GetParticleName()
+	     << " E=" << aTrack.GetKineticEnergy()/MeV
+	     << " pos=" << aTrack.GetPosition().x()/m
+	     << ", " << aTrack.GetPosition().y()/m
+	     << ", " << aTrack.GetPosition().z()/m
+	     << " global time=" << aTrack.GetGlobalTime()/ns
+	     << " local time=" << aTrack.GetLocalTime()/ns
+	     << " proper time=" << aTrack.GetProperTime()/ns
+	     << G4endl;
+    }
+#endif
   }
 
   G4bool itsOKforProperTime = true;
   accuracy = (aTrack.GetProperTime() - theProperTimeChange )/ns;
   if (accuracy > accuracyForWarning) {
-#ifdef G4VERBOSE
-    G4cout << "  G4ParticleChange::CheckIt    : ";
-    G4cout << "the proper time goes back  !!" << G4endl;
-    G4cout << "  Difference:  " << accuracy  << "[ns] " <<G4endl;
-#endif
     itsOKforProperTime = false;
-    if (accuracy > accuracyForException) exitWithError = true;
+    nError += 1;
+    exitWithError = exitWithError ||  (accuracy > accuracyForException);
+#ifdef G4VERBOSE
+    if (nError < maxError) {
+      G4cout << "  G4ParticleChange::CheckIt    : ";
+      G4cout << "the proper time goes back  !!" 
+	     << "  Difference:  " << accuracy  << "[ns] " <<G4endl;
+      G4cout << aTrack.GetDefinition()->GetParticleName()
+	     << " E=" << aTrack.GetKineticEnergy()/MeV
+	     << " pos=" << aTrack.GetPosition().x()/m
+	     << ", " << aTrack.GetPosition().y()/m
+	     << ", " << aTrack.GetPosition().z()/m
+	     << " global time=" << aTrack.GetGlobalTime()/ns
+	     << " local time=" << aTrack.GetLocalTime()/ns
+	     << " proper time=" << aTrack.GetProperTime()/ns
+	     <<G4endl;
+    }
+#endif
   }
 
   // Kinetic Energy should not be negative
   G4bool itsOKforEnergy = true;
   accuracy = -1.0*theEnergyChange/MeV;
   if (accuracy > accuracyForWarning) {
-#ifdef G4VERBOSE
-    G4cout << "  G4ParticleChange::CheckIt    : ";
-    G4cout << "the kinetic energy is negative  !!" << G4endl;
-    G4cout << "  Difference:  " << accuracy  << "[MeV] " <<G4endl;
-#endif
     itsOKforEnergy = false;
-    if (accuracy > accuracyForException) exitWithError = true;
+    nError += 1;
+    exitWithError = exitWithError ||   (accuracy > accuracyForException);
+#ifdef G4VERBOSE
+    if (nError < maxError) {
+      G4cout << "  G4ParticleChange::CheckIt    : ";
+      G4cout << "the kinetic energy is negative  !!" 
+	     << "  Difference:  " << accuracy  << "[MeV] " <<G4endl;
+      G4cout << aTrack.GetDefinition()->GetParticleName()
+	     << " E=" << aTrack.GetKineticEnergy()/MeV
+	     << " pos=" << aTrack.GetPosition().x()/m
+	     << ", " << aTrack.GetPosition().y()/m
+	     << ", " << aTrack.GetPosition().z()/m
+	     <<G4endl;
+    }
+#endif
   }
 
   // Velocity  should not be less than c_light
   G4bool itsOKforVelocity = true;
   if (theVelocityChange < 0.) {
-#ifdef G4VERBOSE
-    G4cout << "  G4ParticleChange::CheckIt    : ";
-    G4cout << "the velocity is negative  !!" << G4endl;
-    G4cout << "  Velocity:  " << theVelocityChange/c_light  <<G4endl;
-#endif
     itsOKforVelocity = false;
+    nError += 1;
     exitWithError = true;
+#ifdef G4VERBOSE
+    if (nError < maxError) {
+      G4cout << "  G4ParticleChange::CheckIt    : ";
+      G4cout << "the velocity is negative  !!" 
+	     << "  Velocity:  " << theVelocityChange/c_light  <<G4endl;
+      G4cout << aTrack.GetDefinition()->GetParticleName()
+	     << " E=" << aTrack.GetKineticEnergy()/MeV
+	     << " pos=" << aTrack.GetPosition().x()/m
+	     << ", " << aTrack.GetPosition().y()/m
+	     << ", " << aTrack.GetPosition().z()/m
+	     <<G4endl;
+    }
+#endif
   }
+
   accuracy = theVelocityChange/c_light - 1.0;
   if (accuracy > accuracyForWarning) {
-#ifdef G4VERBOSE
-    G4cout << "  G4ParticleChange::CheckIt    : ";
-    G4cout << "the velocity is greater than c_light  !!" << G4endl;
-    G4cout << "  Velocity:  " << theVelocityChange/c_light  <<G4endl;
-#endif
     itsOKforVelocity = false;
-    if (accuracy > accuracyForException) exitWithError = true;
-   }
+    nError += 1;
+    exitWithError = exitWithError ||  (accuracy > accuracyForException);
+#ifdef G4VERBOSE
+    if (nError < maxError) {
+      G4cout << "  G4ParticleChange::CheckIt    : ";
+      G4cout << "the velocity is greater than c_light  !!" << G4endl;
+      G4cout << "  Velocity:  " << theVelocityChange/c_light  <<G4endl;
+      G4cout << aTrack.GetDefinition()->GetParticleName()
+	     << " E=" << aTrack.GetKineticEnergy()/MeV
+	     << " pos=" << aTrack.GetPosition().x()/m
+	     << ", " << aTrack.GetPosition().y()/m
+	     << ", " << aTrack.GetPosition().z()/m
+	     <<G4endl;
+    }
+#endif
+  }
 
   G4bool itsOK = itsOKforMomentum && itsOKforEnergy && itsOKforVelocity && itsOKforProperTime && itsOKforGlobalTime;
   // dump out information of this particle change
 #ifdef G4VERBOSE
   if (!itsOK) { 
-    G4cout << " G4ParticleChange::CheckIt " <<G4endl;
     DumpInfo();
   }
 #endif
@@ -618,7 +648,7 @@ G4bool G4ParticleChange::CheckIt(const G4Track& aTrack)
     theMomentumDirectionChange = (1./vmag)*theMomentumDirectionChange;
   }
   if (!itsOKforGlobalTime) {
-    theTimeChange = aTrack.GetGlobalTime();
+    theTimeChange = aTrack.GetLocalTime();
   }
   if (!itsOKforProperTime) {
     theProperTimeChange = aTrack.GetProperTime();

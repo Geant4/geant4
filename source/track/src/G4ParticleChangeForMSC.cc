@@ -169,21 +169,24 @@ G4bool G4ParticleChangeForMSC::CheckIt(const G4Track& aTrack)
   // MomentumDirection should be unit vector
   accuracy = std::fabs(theMomentumDirection.mag2()-1.0);
   if (accuracy > accuracyForWarning) {
+    itsOK = false;
+    exitWithError = (accuracy > accuracyForException);
 #ifdef G4VERBOSE
     G4cout << "  G4ParticleChangeForMSC::CheckIt  : ";
-    G4cout << "the Momentum Change is not unit vector !!" << G4endl;
-    G4cout << "  Difference:  " << accuracy << G4endl;
+    G4cout << "the Momentum Change is not unit vector !!"
+	   << "  Difference:  " << accuracy << G4endl;
+    G4cout << aTrack.GetDefinition()->GetParticleName()
+	   << " E=" << aTrack.GetKineticEnergy()/MeV
+	   << " pos=" << aTrack.GetPosition().x()/m
+	   << ", " << aTrack.GetPosition().y()/m
+	   << ", " << aTrack.GetPosition().z()/m
+	   <<G4endl;
 #endif
-    itsOK = false;
-    if (accuracy > accuracyForException) exitWithError = true;
   }
 
   // dump out information of this particle change
 #ifdef G4VERBOSE
-  if (!itsOK) {
-    G4cout << " G4ParticleChangeForMSC::CheckIt " <<G4endl;
-    DumpInfo();
-  }
+  if (!itsOK) DumpInfo();
 #endif
 
   // Exit with error

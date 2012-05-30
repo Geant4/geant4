@@ -78,11 +78,14 @@ inline void G4ParticleChangeForRadDecay::AddSecondary(G4Track *aTrack)
   } else {
 #ifdef G4VERBOSE
     if (verboseLevel>0) {
-      G4cerr << "G4VParticleChange::AddSecondary() Warning  ";
-      G4cerr << "theListOfSecondaries is full !! " << G4endl;
-      G4cerr << " The object will not be added in theListOfSecondaries" << G4endl;
+      G4cout << "G4VParticleChange::AddSecondary() Warning  ";
+      G4cout << "theListOfSecondaries is full !! " << G4endl;
+      G4cout << " The track is deleted " << G4endl;
     }
 #endif
+    G4Exception("G4ParticleChangeForRadDecay::AddSecondary",
+                "TRACK101", JustWarning,
+                "Secondary Bug is full. The track is deleted"); 
   }
 }
 

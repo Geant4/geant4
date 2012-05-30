@@ -57,9 +57,9 @@ G4VParticleChange::G4VParticleChange()
    theFirstStepInVolume(false),
    theLastStepInVolume(false),
    theParentWeight(1.0),
-   isParentWeightSetByProcess(true),
    isParentWeightProposed(false),
    fSetSecondaryWeightByProcess(false),
+   theParentGlobalTime(0.0),
    verboseLevel(1), 
    debugFlag(false)
 {
@@ -98,9 +98,9 @@ G4VParticleChange::G4VParticleChange(const G4VParticleChange &right)
    theFirstStepInVolume( right.theFirstStepInVolume),
    theLastStepInVolume(right.theLastStepInVolume),
    theParentWeight(right.theParentWeight),
-   isParentWeightSetByProcess(true),
    isParentWeightProposed(false),
    fSetSecondaryWeightByProcess(right.fSetSecondaryWeightByProcess),
+   theParentGlobalTime(0.0),
    verboseLevel(right.verboseLevel),
    debugFlag(right.debugFlag)
 {
@@ -145,9 +145,10 @@ G4VParticleChange & G4VParticleChange::operator=(const G4VParticleChange &right)
     theLastStepInVolume =  right.theLastStepInVolume;
 
     theParentWeight = right.theParentWeight;
-    isParentWeightSetByProcess = right.isParentWeightSetByProcess;
     isParentWeightProposed = right.isParentWeightProposed;
     fSetSecondaryWeightByProcess = right.fSetSecondaryWeightByProcess;
+
+    theParentGlobalTime = right.theParentGlobalTime;
 
     verboseLevel = right.verboseLevel;
     debugFlag = right.debugFlag;
@@ -166,12 +167,15 @@ G4bool G4VParticleChange::operator!=(const G4VParticleChange &right) const
 {
    return (this != (G4VParticleChange *) &right);
 }
+
 void G4VParticleChange::AddSecondary(G4Track *aTrack)
 {
   if (debugFlag) CheckSecondary(*aTrack);
 
   // add a secondary after size check
   if (theSizeOftheListOfSecondaries > theNumberOfSecondaries) {
+    // Set weight of secondary tracks
+    if (!fSetSecondaryWeightByProcess) aTrack->SetWeight(theParentWeight);
     theListOfSecondaries->SetElement(theNumberOfSecondaries, aTrack);
     theNumberOfSecondaries++;
   } else {
@@ -215,18 +219,7 @@ G4Step* G4VParticleChange::UpdateStepInfo(G4Step* pStep)
 G4Step* G4VParticleChange::UpdateStepForAtRest(G4Step* Step)
 { 
   if (isParentWeightProposed ){
-    if (isParentWeightSetByProcess) {
-      Step->GetPostStepPoint()->SetWeight( theParentWeight );
-    }
-
-    if (!fSetSecondaryWeightByProcess) {    
-      // Set weight of secondary tracks
-      for (G4int index= 0; index<theNumberOfSecondaries; index++){
-	if ( (*theListOfSecondaries)[index] ) {
-	  ((*theListOfSecondaries)[index])->SetWeight(theParentWeight); ;
-	}
-      }
-    }
+    Step->GetPostStepPoint()->SetWeight( theParentWeight );
   }
   return UpdateStepInfo(Step);
 }
@@ -235,42 +228,19 @@ G4Step* G4VParticleChange::UpdateStepForAtRest(G4Step* Step)
 G4Step* G4VParticleChange::UpdateStepForAlongStep(G4Step* Step)
 {
   if (isParentWeightProposed ){ 
-    // Weight is relaclulated 
-    G4double newWeight= theParentWeight/(Step->GetPreStepPoint()->GetWeight())*(Step->GetPostStepPoint()->GetWeight());
-    if (isParentWeightSetByProcess) {
-      Step->GetPostStepPoint()->SetWeight( newWeight );
-    }
- 
-    if (!fSetSecondaryWeightByProcess) {    
-      // Set weight of secondary tracks
-      for (G4int index= 0; index<theNumberOfSecondaries; index++){
-	if ( (*theListOfSecondaries)[index] ) {
-	  ((*theListOfSecondaries)[index])->SetWeight(newWeight); ;
-	}
-      }
-    }
-  }
-  
+    G4double initialWeight = Step->GetPreStepPoint()->GetWeight();
+    G4double currentWeight = Step->GetPostStepPoint()->GetWeight();
+    G4double finalWeight   = (theParentWeight/initialWeight)*currentWeight;
+    Step->GetPostStepPoint()->SetWeight( finalWeight );
+  }   
   return UpdateStepInfo(Step);
 }
 
 G4Step* G4VParticleChange::UpdateStepForPostStep(G4Step* Step)
 {
-  if (isParentWeightProposed) {
-    if (isParentWeightSetByProcess) {
-      Step->GetPostStepPoint()->SetWeight( theParentWeight );
-    }
-
-    if (!fSetSecondaryWeightByProcess) {    
-      // Set weight of secondary tracks
-      for (G4int index= 0; index<theNumberOfSecondaries; index++){
-	if ( (*theListOfSecondaries)[index] ) {
-	  ((*theListOfSecondaries)[index])->SetWeight(theParentWeight); ;
-	}
-      }
-    }
+  if (isParentWeightProposed ){ 
+    Step->GetPostStepPoint()->SetWeight( theParentWeight );
   }
-
   return UpdateStepInfo(Step);
 }
 
@@ -343,43 +313,61 @@ void G4VParticleChange::DumpInfo() const
   G4cout.precision(olprc);
 }
 
-G4bool G4VParticleChange::CheckIt(const G4Track& )
+G4bool G4VParticleChange::CheckIt(const G4Track& aTrack)
 {
 
   G4bool    exitWithError = false;
   G4double  accuracy;
+  static G4int nError = 0;
+  const  G4int maxError = 30;
 
   // Energy deposit should not be negative
   G4bool itsOKforEnergy = true;
   accuracy = -1.0*theLocalEnergyDeposit/MeV;
   if (accuracy > accuracyForWarning) {
-#ifdef G4VERBOSE
-    G4cout << "  G4VParticleChange::CheckIt    : ";
-    G4cout << "the energy deposit  is negative  !!" << G4endl;
-    G4cout << "  Difference:  " << accuracy  << "[MeV] " <<G4endl;
-#endif
     itsOKforEnergy = false;
-    if (accuracy > accuracyForException) exitWithError = true;
+    nError += 1;
+    exitWithError =  (accuracy > accuracyForException);
+#ifdef G4VERBOSE
+    if (nError < maxError) {
+      G4cout << "  G4VParticleChange::CheckIt    : ";
+      G4cout << "the energy deposit  is negative  !!" 
+	     << "  Difference:  " << accuracy  << "[MeV] " <<G4endl;
+      G4cout << aTrack.GetDefinition()->GetParticleName()
+	     << " E=" << aTrack.GetKineticEnergy()/MeV
+	     << " pos=" << aTrack.GetPosition().x()/m
+	     << ", " << aTrack.GetPosition().y()/m
+	     << ", " << aTrack.GetPosition().z()/m
+	     <<G4endl;
+    }
+#endif
   }
  
   // true path length should not be negative
   G4bool itsOKforStepLength = true;
   accuracy = -1.0*theTrueStepLength/mm;
   if (accuracy > accuracyForWarning) {
-#ifdef G4VERBOSE
-    G4cout << "  G4VParticleChange::CheckIt    : ";
-    G4cout << "the true step length is negative  !!" << G4endl;
-    G4cout << "  Difference:  " << accuracy  << "[MeV] " <<G4endl;
-#endif
     itsOKforStepLength = false;
-    if (accuracy > accuracyForException) exitWithError = true;
-  }
-
-  G4bool itsOK = itsOKforStepLength && itsOKforEnergy ;
-  // dump out information of this particle change
+    nError += 1;
+    exitWithError =  (accuracy > accuracyForException);
 #ifdef G4VERBOSE
-  if (! itsOK ){
-    G4cout << " G4VParticleChange::CheckIt " <<G4endl;
+    if (nError < maxError) {
+      G4cout << "  G4VParticleChange::CheckIt    : ";
+      G4cout << "the true step length is negative  !!"
+	     << "  Difference:  " << accuracy  << "[MeV] " <<G4endl;
+      G4cout << aTrack.GetDefinition()->GetParticleName()
+	     << " E=" << aTrack.GetKineticEnergy()/MeV
+	     << " pos=" << aTrack.GetPosition().x()/m
+	     << ", " << aTrack.GetPosition().y()/m
+	     << ", " << aTrack.GetPosition().z()/m
+	     <<G4endl;
+    }
+#endif
+
+  }
+#ifdef G4VERBOSE
+  if (!itsOKforStepLength || !itsOKforEnergy ){
+  // dump out information of this particle change
     DumpInfo();
   }
 #endif
@@ -398,51 +386,97 @@ G4bool G4VParticleChange::CheckIt(const G4Track& )
   if ( !itsOKforEnergy ) {
     theLocalEnergyDeposit = 0.0;
   }
-  return itsOK;
+  return (itsOKforStepLength && itsOKforEnergy );
 }
 
 G4bool G4VParticleChange::CheckSecondary(G4Track& aTrack)
 {
   G4bool    exitWithError = false;
   G4double  accuracy;
+  static G4int nError = 0;
+  const  G4int maxError = 30;
 
   // MomentumDirection should be unit vector
   G4bool itsOKforMomentum = true;  
-  accuracy = std::fabs((aTrack.GetMomentumDirection()).mag2()-1.0);
-  if (accuracy > accuracyForWarning) {
+  if (aTrack.GetKineticEnergy()>0.){
+    accuracy = std::fabs((aTrack.GetMomentumDirection()).mag2()-1.0);
+    if (accuracy > accuracyForWarning) {
+      itsOKforMomentum = false;
+      nError += 1;
+      exitWithError = exitWithError || (accuracy > accuracyForException);
 #ifdef G4VERBOSE
-    G4cout << " G4VParticleChange::CheckSecondary  :   ";
-    G4cout << "the Momentum direction is not unit vector !!" << G4endl;
-    G4cout << "  Difference:  " << accuracy << G4endl;
+      if (nError < maxError) {
+	G4cout << " G4VParticleChange::CheckSecondary  :   ";
+	G4cout << "the Momentum direction is not unit vector !! " 
+	       << "  Difference:  " << accuracy << G4endl;
+	G4cout << aTrack.GetDefinition()->GetParticleName()
+	       << " E=" << aTrack.GetKineticEnergy()/MeV
+	       << " pos=" << aTrack.GetPosition().x()/m
+	       << ", " << aTrack.GetPosition().y()/m
+	       << ", " << aTrack.GetPosition().z()/m
+	       <<G4endl;
+      }
 #endif
-    itsOKforMomentum = false;
-    if (accuracy > accuracyForException) exitWithError = true;
+    }
   }
   
   // Kinetic Energy should not be negative
-  G4bool itsOKforEnergy;
+  G4bool itsOKforEnergy = true;
   accuracy = -1.0*(aTrack.GetKineticEnergy())/MeV;
-  if (accuracy < accuracyForWarning) {
-    itsOKforEnergy = true;
-  } else {
-#ifdef G4VERBOSE
-    G4cout << " G4VParticleChange::CheckSecondary  :   ";
-    G4cout << "the kinetic energy is negative  !!" << G4endl;
-    G4cout << "  Difference:  " << accuracy  << "[MeV] " <<G4endl;
-#endif
+  if (accuracy > accuracyForWarning) {
     itsOKforEnergy = false;
-    if (accuracy < accuracyForException) { exitWithError = false;}
-    else { exitWithError = true; }
+    nError += 1;
+    exitWithError = exitWithError ||  (accuracy > accuracyForException);
+#ifdef G4VERBOSE
+    if (nError < maxError) {
+      G4cout << " G4VParticleChange::CheckSecondary  :   ";
+      G4cout << "the kinetic energy is negative  !!" 
+	     << "  Difference:  " << accuracy  << "[MeV] " <<G4endl;
+      G4cout << " G4VParticleChange::CheckSecondary  :   ";
+      G4cout << "the global time of secondary is earlier than the parent  !!" 
+	     << "  Difference:  " << accuracy  << "[ns] " <<G4endl;
+      G4cout << aTrack.GetDefinition()->GetParticleName()
+	     << " E=" << aTrack.GetKineticEnergy()/MeV
+	     << " pos=" << aTrack.GetPosition().x()/m
+	     << ", " << aTrack.GetPosition().y()/m
+	     << ", " << aTrack.GetPosition().z()/m
+	   <<G4endl;
+    }
+#endif
   }
-  
+  // Check timing of secondaries
+  G4bool itsOKforTiming = true;
+
+  accuracy = (theParentGlobalTime - aTrack.GetGlobalTime())/ns;
+  if (accuracy > accuracyForWarning){
+    itsOKforTiming = false;
+    nError += 1;
+    // exitWithError = (accuracy > accuracyForException);
+#ifdef G4VERBOSE
+    if (nError < maxError) {
+      G4cout << " G4VParticleChange::CheckSecondary  :   ";
+      G4cout << "the global time of secondary goes back comapared to the parent  !!" 
+	     << "  Difference:  " << accuracy  << "[ns] " <<G4endl;
+      G4cout << aTrack.GetDefinition()->GetParticleName()
+	     << " E=" << aTrack.GetKineticEnergy()/MeV
+	     << " pos=" << aTrack.GetPosition().x()/m
+	     << ", " << aTrack.GetPosition().y()/m
+	       << ", " << aTrack.GetPosition().z()/m
+	     << " time=" << aTrack.GetGlobalTime()/ns
+	     << " parent time=" << theParentGlobalTime/ns
+	     <<G4endl;
+    }
+#endif
+  }
+
   // Exit with error
   if (exitWithError) {
     G4Exception("G4VParticleChange::CheckSecondary",
-		"TRACK002", EventMustBeAborted,  
-		"Momentum, and/or energy was illegal");
+		"TRACK001", EventMustBeAborted,
+		"Secondary with illegal energy/momentum ");
   }
 
-  G4bool itsOK = itsOKforMomentum && itsOKforEnergy;
+  G4bool itsOK = itsOKforMomentum && itsOKforEnergy && itsOKforTiming;
 
   //correction
   if (!itsOKforMomentum) {
@@ -468,16 +502,17 @@ G4double G4VParticleChange::GetAccuracyForException() const
 }
 
 
-/////////////////////////////////////////////////////////
-void  G4VParticleChange::SetParentWeightByProcess(G4bool val)
+///////////////////////////////////////////////////////////
+//Obsolete methods for parent weight
+/////////////////////
+void  G4VParticleChange::SetParentWeightByProcess(G4bool )
 {
-  isParentWeightSetByProcess = val;
 }
 
 
 G4bool   G4VParticleChange::IsParentWeightSetByProcess() const
 {
-  return  isParentWeightSetByProcess;
+  return  true;
 }
 
 
