@@ -309,13 +309,16 @@ G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
               message << "Illegal condition caused by solids: "
                       << fPtrSolidA->GetName() << " and " << nameB << G4endl;
               message.precision(16);
-              message << "Looping detected in point " << p
+              message << "Looping detected in point " << p+dist*v
+                      << ", from original point " << p
                       << " and direction " << v << G4endl
-                      << "Returning zero distance.";
+                      << "Computed candidate distance: " << dist << "*mm.";
               message.precision(6);
+              DumpInfo();
               G4Exception("G4SubtractionSolid::DistanceToIn(p,v)",
-                          "GeomSolids1001", JustWarning, message);
-              return 0.0;
+                          "GeomSolids1001", JustWarning, message,
+                          "Returning candidate distance.");
+              return dist;
             }
           }    
         }
@@ -360,13 +363,15 @@ G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
               message << "Illegal condition caused by solids: "
                       << fPtrSolidA->GetName() << " and " << nameB << G4endl;
               message.precision(16);
-              message << "Looping detected in point " << p
+              message << "Looping detected in point " << p+dist*v
+                      << ", from original point " << p
                       << " and direction " << v << G4endl
-                      << "Returning zero distance.";
+                      << "Computed candidate distance: " << dist << "*mm.";
               message.precision(6);
+              DumpInfo();
               G4Exception("G4SubtractionSolid::DistanceToIn(p,v)",
                           "GeomSolids1001", JustWarning, message);
-              return 0.0;         
+              return dist;         
 
             }
           }
