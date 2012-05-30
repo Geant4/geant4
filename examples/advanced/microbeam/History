@@ -9,6 +9,9 @@ $Id: History,v 1.31 2010-11-17 20:42:36 allison Exp $
                        Package History file
                        --------------------
 
+20 May 2012 - S. Incerti - tag microbeam-V09-05-01
+- Updated composition of cell cytoplasm
+
 24 February 2012 - S. Incerti - tag microbeam-V09-05-00
 - Added description of composition of cell
 
