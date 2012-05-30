@@ -25,58 +25,53 @@
 //
 #include "G4HadProjectile.hh"
 #include "G4Track.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4LorentzVector.hh"
+#include "G4DynamicParticle.hh"
 
-G4HadProjectile::
-G4HadProjectile(const G4Track &aT) 
-: theMat(aT.GetMaterial()),
-  theOrgMom(aT.GetDynamicParticle()->Get4Momentum()),
-  theDef(aT.GetDefinition())
+G4HadProjectile::G4HadProjectile() 
+{
+  theMat = 0;
+  theDef = 0;
+  theTime = 0.0;
+  theBoundEnergy = 0.0;
+}
+
+G4HadProjectile::G4HadProjectile(const G4Track &aT) 
+{
+  Initialise(aT);
+}
+
+G4HadProjectile::G4HadProjectile(const G4DynamicParticle &aT) 
+  : theMat(NULL),
+    theOrgMom(aT.Get4Momentum()),
+    theDef(aT.GetDefinition())
 {
   G4LorentzRotation toZ;
   toZ.rotateZ(-theOrgMom.phi());
   toZ.rotateY(-theOrgMom.theta());
   theMom = toZ*theOrgMom;
   toLabFrame = toZ.inverse();
-  theTime = aT.GetGlobalTime();
-  G4LorentzVector it(toLabFrame*theMom);
+  theTime = 0.0;
+  theBoundEnergy = 0.0;
 }
 
-G4HadProjectile::
-G4HadProjectile(const G4DynamicParticle &aT) 
-: theMat(NULL),
-  theOrgMom(aT.Get4Momentum()),
-  theDef(aT.GetDefinition())
+G4HadProjectile::~G4HadProjectile()
+{}
+
+void G4HadProjectile::Initialise(const G4Track &aT)
 {
+  theMat = aT.GetMaterial();
+  theOrgMom = aT.GetDynamicParticle()->Get4Momentum();
+  theDef = aT.GetDefinition();
+
   G4LorentzRotation toZ;
   toZ.rotateZ(-theOrgMom.phi());
   toZ.rotateY(-theOrgMom.theta());
   theMom = toZ*theOrgMom;
   toLabFrame = toZ.inverse();
-  theTime = 0;
+
+  //VI time of interaction starts from zero
+  //   not global time of a track
+  theTime = 0.0;
+  theBoundEnergy = 0.0;
 }
-
-G4double G4HadProjectile::GetTotalEnergy() const
-{
-  return Get4Momentum().e();
-}
-
-G4double G4HadProjectile::GetTotalMomentum() const
-{
-  return Get4Momentum().vect().mag();
-}
-
-G4double G4HadProjectile::
-GetKineticEnergy() const 
-{
-  G4double m=GetDefinition()->GetPDGMass();
-  return std::sqrt(Get4Momentum().vect().mag2()+m*m)-m;
-}
-
-const G4Material * G4HadProjectile::
-GetMaterial() const {return theMat;}
-
-const G4ParticleDefinition * G4HadProjectile::
-GetDefinition() const {return theDef;}
 

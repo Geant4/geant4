@@ -14,6 +14,24 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+25 May 2012  Vladimir Ivantchenko       (hadr-util-V09-05-02)
+-------------------------------------------------------------
+- G4HadProjectile - added protection to kinetic energy computation
+
+05 May 2012  Vladimir Ivantchenko       (hadr-util-V09-05-01)
+-------------------------------------------------------------
+- G4HadProjectile - added default constructor
+
+05 May 2012  Vladimir Ivantchenko       (hadr-util-V09-05-00)
+-------------------------------------------------------------
+- G4HadProjectile - added methods SetGlobalTime, SetBoundEnergy
+    GetBoundEnergy needed for general stopping process;
+    always set time to zero when construct or initialise, so
+    hadronic interaction is starting from zero local time;
+    added Initialise method allowing to update the projectile
+    and not instantiate it for any new interaction;
+    all get methods are inlined
+
 17 Nov 2011  Gunter Folger              (hadr-util-V09-04-05)
 -------------------------------------------------------------
 - removed G4lrint(), G4lint(), and G4rint(); these are now in global

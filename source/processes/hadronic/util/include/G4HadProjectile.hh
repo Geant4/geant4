@@ -26,36 +26,108 @@
 #ifndef G4HadProjectile_hh
 #define G4HadProjectile_hh
 
+#include "globals.hh"
 #include "G4Material.hh"
-class G4Track;
-class G4DynamicParticle;
+#include "G4ParticleDefinition.hh"
+#include "G4LorentzVector.hh"
 #include "G4LorentzVector.hh"
 #include "G4LorentzRotation.hh"
-class G4ParticleDefinition;
+
+class G4Track;
+class G4DynamicParticle;
 
 class G4HadProjectile
 {
-  public:
-    G4HadProjectile(const G4Track &aT);
-    G4HadProjectile(const G4DynamicParticle &aT);
-    const G4Material * GetMaterial() const;
-    const G4ParticleDefinition * GetDefinition() const;
-    const G4LorentzVector & Get4Momentum() const {return theMom;}
-    G4LorentzRotation & GetTrafoToLab() {return toLabFrame;}
-    G4double GetKineticEnergy() const;
-    G4double GetTotalEnergy() const;
-    G4double GetTotalMomentum() const;
-    G4double GetGlobalTime() const {return theTime;}
+public:
+  G4HadProjectile();
+  G4HadProjectile(const G4Track &aT);
+  G4HadProjectile(const G4DynamicParticle &aT);
+  ~G4HadProjectile();
+
+  void Initialise(const G4Track &aT);
+
+  inline const G4Material * GetMaterial() const;
+  inline const G4ParticleDefinition * GetDefinition() const;
+  inline const G4LorentzVector & Get4Momentum() const;
+  inline G4LorentzRotation & GetTrafoToLab();
+  inline G4double GetKineticEnergy() const;
+  inline G4double GetTotalEnergy() const;
+  inline G4double GetTotalMomentum() const;
+  inline G4double GetGlobalTime() const;
+  inline G4double GetBoundEnergy() const;
+  inline void SetGlobalTime(G4double t);
+  inline void SetBoundEnergy(G4double e);
     
-    
-  private:
+private:
   
+  // hide assignment operator as private 
+  G4HadProjectile& operator=(const G4HadProjectile &right);
+  G4HadProjectile(const G4HadProjectile& );
+
   const G4Material * theMat;
   G4LorentzVector theOrgMom;
   G4LorentzVector theMom;
   const G4ParticleDefinition * theDef;
   G4LorentzRotation toLabFrame;
   G4double theTime;
+  G4double theBoundEnergy;
 };
+
+const G4Material * G4HadProjectile::GetMaterial() const 
+{
+  return theMat;
+}
+
+const G4ParticleDefinition * G4HadProjectile::GetDefinition() const 
+{
+  return theDef;
+}
+
+inline const G4LorentzVector& G4HadProjectile::Get4Momentum() const 
+{
+  return theMom;
+}
+
+inline G4LorentzRotation& G4HadProjectile::GetTrafoToLab() 
+{
+  return toLabFrame;
+}
+
+G4double G4HadProjectile::GetTotalEnergy() const
+{
+  return Get4Momentum().e();
+}
+
+G4double G4HadProjectile::GetTotalMomentum() const
+{
+  return Get4Momentum().vect().mag();
+}
+
+G4double G4HadProjectile::GetKineticEnergy() const 
+{
+  G4double ekin = GetTotalEnergy() - GetDefinition()->GetPDGMass();
+  if(ekin < 0.0) { ekin = 0.0; }
+  return ekin;
+}
+
+inline G4double G4HadProjectile::GetGlobalTime() const 
+{
+  return theTime;
+}
+
+inline G4double G4HadProjectile::GetBoundEnergy() const
+{
+  return theBoundEnergy; 
+}
+
+inline void G4HadProjectile::SetGlobalTime(G4double t) 
+{ 
+  theTime = t; 
+}
+
+inline void G4HadProjectile::SetBoundEnergy(G4double e) 
+{ 
+  theBoundEnergy = e; 
+}
 
 #endif
