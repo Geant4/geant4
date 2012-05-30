@@ -97,8 +97,6 @@ G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4S
 					  // G4VisManager.cc).
   fReadyForTransients    (true),  // Only false while processing scene.
   fProcessingSolid       (false),
-  fSecondPassRequested   (false),
-  fSecondPass            (false),
   fpModel                (0),
   fNestingDepth          (0),
   fpVisAttribs           (0)
@@ -196,16 +194,9 @@ void G4VSceneHandler::EndModeling ()
   fpModel = 0;
 }
 
-void G4VSceneHandler::ClearStore () {
-  // if (fpViewer) fpViewer -> NeedKernelVisit (true);
-  // ?? Viewer is supposed to be smart enough to know when to visit
-  // kernel, but a problem in OpenGL Stored seems to require a forced
-  // kernel visit triggered by the above code.  John Allison Aug 2001
-  // Feb 2005 - commented out.  Let's fix OpenGL if necessary.
-}
+void G4VSceneHandler::ClearStore () {}
 
-void G4VSceneHandler::ClearTransientStore () {
-}
+void G4VSceneHandler::ClearTransientStore () {}
 
 void G4VSceneHandler::AddSolid (const G4Box& box) {
   RequestPrimitives (box);
@@ -531,7 +522,10 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
   EndPrimitives ();
 }
 
-void G4VSceneHandler::ProcessScene (G4VViewer&) {
+void G4VSceneHandler::ProcessScene () {
+
+  // Assumes graphics database store has already been cleared if
+  // relevant for the particular scene handler.
 
   if (!fpScene) return;
 
@@ -543,11 +537,7 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
 
   fReadyForTransients = false;
 
-  // Clear stored scene, if any, i.e., display lists, scene graphs.
-  ClearStore ();
-
-  // Reset fMarkForClearingTransientStore.  No need to clear transient
-  // store since it has just been cleared above.  (Leaving
+  // Reset fMarkForClearingTransientStore.(Leaving
   // fMarkForClearingTransientStore true causes problems with
   // recomputing transients below.)  Restore it again at end...
   G4bool tmpMarkForClearingTransientStore = fMarkForClearingTransientStore;
@@ -582,25 +572,8 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
       }
     }
 
-    // Repeat if required...
-    if (fSecondPassRequested) {
-      fSecondPass = true;
-      for (size_t i = 0; i < runDurationModelList.size (); i++) {
-	if (runDurationModelList[i].fActive) {
-	  G4VModel* pModel = runDurationModelList[i].fpModel;
-	  pModel -> SetModelingParameters (pMP);
-	  SetModel (pModel);  // Store for use by derived class.
-	  pModel -> DescribeYourselfTo (*this);
-	  pModel -> SetModelingParameters (0);
-	}
-      }
-      fSecondPass = false;
-      fSecondPassRequested = false;
-    }
-
     delete pMP;
     EndModeling ();
-
   }
 
   fReadyForTransients = true;
@@ -666,8 +639,6 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
   if (state == G4State_Idle || state == G4State_GeomClosed) {
     DrawEndOfRunModels();
   }
-
-  fpViewer->FinishView();  // Flush streams and/or swap buffers.
 
   fMarkForClearingTransientStore = tmpMarkForClearingTransientStore;
 }

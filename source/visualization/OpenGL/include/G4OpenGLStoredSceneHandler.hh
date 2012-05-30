@@ -102,9 +102,9 @@ protected:
   static G4int  fDisplayListLimit;       // avoid memory overflow
   
   // PODL = Persistent Object Display List.
-  // This was made redundant when the PO list was unwrapped 27th
-  // October 2011, but keep it for now in case we need to wrap it
-  // again.
+  // This "top PODL" was made redundant when the PO list was
+  // "unwrapped" 27th October 2011, but keep it for now in case we
+  // need to wrap it again.
   GLint  fTopPODL;              // List which calls the other PODLs.
 
   // G4Text plus transform and 2/3D.
@@ -125,6 +125,7 @@ protected:
     G4Transform3D fTransform;
     GLuint fPickName;
     G4TextPlus* fpG4TextPlus;
+    G4bool fDisplayOnSecondPassForTransparency;
   };
   std::vector<PO> fPOList; 
   
@@ -141,6 +142,7 @@ protected:
     G4double fStartTime, fEndTime;  // Time range (e.g., for trajectory steps).
     G4Colour fColour;
     G4TextPlus* fpG4TextPlus;
+    G4bool fDisplayOnSecondPassForTransparency;
   };
   std::vector<TO> fTOList; 
   

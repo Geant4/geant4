@@ -92,7 +92,7 @@ void G4OpenGLStoredXViewer::DrawView () {
 
   G4ViewParameters::DrawingStyle style = GetViewParameters().GetDrawingStyle();
 
-  //See if things have changed from last time and remake if necessary...
+  // See if things have changed from last time and remake if necessary...
   // The fNeedKernelVisit flag might have been set by the user in
   // /vis/viewer/rebuild, but if not, make decision and set flag only
   // if necessary...
@@ -100,8 +100,7 @@ void G4OpenGLStoredXViewer::DrawView () {
   G4bool kernelVisitWasNeeded = fNeedKernelVisit; // Keep (ProcessView resets).
   ProcessView ();
 
-  if(style!=G4ViewParameters::hlr &&
-     haloing_enabled) {
+  if(style!=G4ViewParameters::hlr && haloing_enabled) {
 
     HaloingFirstPass ();
     DrawDisplayLists ();
@@ -113,19 +112,17 @@ void G4OpenGLStoredXViewer::DrawView () {
     HaloingSecondPass ();
 
     DrawDisplayLists ();
-    FinishView ();
 
   } else {
 
-    // If kernel visit was needed, drawing and FinishView will already
-    // have been done, so...
     if (!kernelVisitWasNeeded) {
 #ifdef G4DEBUG_VIS_OGL
       printf("G4OpenGLStoredXViewer::DrawView NO need kernel visit\n");
 #endif
       DrawDisplayLists ();
-      FinishView ();
+
     } else {
+
 #ifdef G4DEBUG_VIS_OGL
       printf("G4OpenGLStoredXViewer::DrawView NEED kernel visit\n");
 #endif
@@ -135,13 +132,14 @@ void G4OpenGLStoredXViewer::DrawView () {
 	  fVP.GetCutawayMode() == G4ViewParameters::cutawayUnion) {
 	ClearView();
 	DrawDisplayLists ();
-	FinishView ();
       } else { // ADD TO AVOID KernelVisit=1 and nothing to display
         DrawDisplayLists ();
-        FinishView ();
       }
     }
   }
+
+  FinishView ();
+
 }
 
 void G4OpenGLStoredXViewer::FinishView () {

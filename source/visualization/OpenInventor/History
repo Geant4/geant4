@@ -20,6 +20,11 @@ committal in the CVS repository !
 History file for visualization/OpenInventor
 -------------------------------------------
 
+23rd May 2012  John Allison  (openinventor-V09-05-03)
+- Health Check 2012: Migrated (see management/History):
+  o G4OpenInventorSceneHandler::ClearStore/ClearTransientStore:
+    . Removed call to G4VSceneHandler::ClearStore/ClearTransientStore.
+
 10th April 2012  Pere Mato  (openinventor-V09-05-02)
 - G4OOpenInventorWinViewer.cc: Make it work for Win64
   replacing [Get|Set]WindowLong() by [Get|Set]WindowLongPtr() and GWL_USERDATA by GWLP_USERDATA

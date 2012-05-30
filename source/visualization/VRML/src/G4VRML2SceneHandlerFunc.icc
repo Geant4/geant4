@@ -677,7 +677,6 @@ G4double      G4VRML2SCENEHANDLER::SetPVTransparency ()
 
 void G4VRML2SCENEHANDLER::ClearTransientStore() 
 {
-  G4VSceneHandler::ClearTransientStore ();
   // This is typically called after an update and before drawing hits
   // of the next event.  To simulate the clearing of "transients"
   // (hits, etc.) the detector is redrawn...

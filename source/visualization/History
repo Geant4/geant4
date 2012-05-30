@@ -24,6 +24,39 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+29th May 2012  John Allison  (vis-V09-05-21)
+- opengl-V09-05-16:
+  o Fixed bug in vis-V09-05-20.
+  o Implemented proper treatment of transparency in OpenGL stored mode
+    in the case that trajectories passed through or behind transparent
+    persistent objects (detector components).  Required proper ordering
+    of display list execution. 
+
+23rd May 2012  John Allison  (vis-V09-05-20)
+- Health Check 2012:
+  o Over the years we have added drivers and features and added fixes.
+    A health check revealed several instances of code duplication,
+    unnecessary screen refeshing, incorrect buffer switching
+    (necessitating extra refreshing), etc.  This tag is an attempt to
+    bring the basic vis algorithms up to full health and efficiency.
+    . visman-V09-05-18
+    and consequent changes to
+    . DAWN-V09-05-02
+    . visXXX-V09-05-01
+    . VRML-V09-05-03
+    . vis-HepRep-V09-05-01
+    . openinventor-V09-05-03
+    . opengl-V09-05-15
+
+22nd May 2012  John Allison  (vis-V09-05-19)
+- opengl-V09-05-14: Fixed Linux compiler warnings.
+
+22nd May 2012  John Allison  (vis-V09-05-18)
+- opengl-V09-05-13:
+  o Multiple fixes and improvements to Qt.
+  o Introduced depth of geometry slider.
+  o G4OpenGLStoredSceneHandler: Removed Set/Clear/Draw from EndModeling.
+
 22nd April 2012  John Allison  (vis-V09-05-17)
 - visman-V09-05-17: G4VisCommandsSceneAdd: Fixed compiler warnings.
 

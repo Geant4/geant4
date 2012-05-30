@@ -26,6 +26,51 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+23rd May 2012  John Allison  (visman-V09-05-18)
+- Health Check 2012:
+  o Over the years we have added drivers and features and added fixes.
+    A health check revealed several instances of code duplication,
+    unnecessary screen refeshing, incorrect buffer switching
+    (necessitating extra refreshing), etc.  This tag is an attempt to
+    bring the basic vis algorithms up to full health and efficiency.
+  o G4VSceneHandler:
+    . ClearStore and ClearTransientStore become "ordinary" virtual
+      functions *not* requiring to be called by sub-class
+      implementations.  The default implementation in G4VSceneHandler
+      is an empty function.
+    . ProcessScene:
+      - Changed from a private function (called only by friend
+        G4VViewer::ProcessView) to a straightforward protected virtual
+        function that can be overloaded by the subclass.  A typical
+        example of overloading is by
+        G4OpenGLScenehandler::ProcessScene, which simply invokes the
+        base class function twice, as is required for a good treatment
+        of transparency, e.g.,
+          void G4OpenGLSceneHandler::ProcessScene()
+          {
+            G4VSceneHandler::ProcessScene();
+            // Repeat if required...
+            if (fSecondPassRequested) {
+              fSecondPass = true;
+              G4VSceneHandler::ProcessScene();
+              fSecondPass = false;
+              fSecondPassRequested = false;
+            }
+          }
+      - Now assumes graphics database store has already been cleared,
+        i.e., ClearStore has been called.  ClearStore is now called
+        from G4VViewer::ProcessView just before calling ProcessScene.
+      - Existing call to ClearStore removed.
+      - Second pass of run-duration models removed (in accordance with
+        above change from private to protected virtual function).
+      - Call to FinishView removed - this is the repsonsibility of the
+        viewer.
+  o G4VViewer::ProcessView: ClearStore before ProcessScene.
+  o G4VisCommandsScene.cc:
+    . /vis/scene/notifyHandlers:
+      - Remove a superfluous call to
+        ClearTransientStore and associated tentative comments.
+
 22nd April 2012  John Allison  (visman-V09-05-17)
 - G4VisCommandsSceneAdd: Fixed compiler warnings.
 

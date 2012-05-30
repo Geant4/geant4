@@ -92,6 +92,7 @@ protected:
 			const G4String& name = "");
   virtual ~G4OpenGLSceneHandler ();
 
+  void ProcessScene();
   G4VSolid* CreateSectionSolid ();
   G4VSolid* CreateCutawaySolid ();
 
@@ -108,6 +109,9 @@ protected:
   const G4int fNbListsBeforeFlush;
   // Effective number of stored list
   G4int fNbListsToBeFlush;
+
+  G4bool fSecondPassForTransparencyRequested;
+  G4bool fSecondPassForTransparency;       // ...in process.
 
   static const GLubyte fStippleMaskHashed [128];
 };

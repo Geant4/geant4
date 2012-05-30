@@ -20,6 +20,11 @@ committal in the CVS repository !
 History file for visualization/gMocren sub-category
 ---------------------------------------------------
 
+23rd May 2012  John Allison (gMocren-V09-05-02)
+- Health Check 2012: Migrated (see management/History):
+  o G4GMocrenFileSceneHandler::ClearTransientStore:
+    . Removed call to G4VSceneHandler::ClearTransientStore.
+
 10th April 2012  John Allison (gMocren-V09-05-01)
 - Migrated to G4Scene::Model.
 

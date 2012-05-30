@@ -138,7 +138,6 @@ G4DAWNFILESceneHandler::~G4DAWNFILESceneHandler ()
 			// close g4.prim
 		FREndModeling();
 	}
-  ClearStore (); // clear current scene
 }
 
 //-----

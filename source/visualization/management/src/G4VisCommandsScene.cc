@@ -705,17 +705,6 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
 	    fpVisManager -> SetCurrentViewer(aViewer);
 	    fpVisManager -> SetCurrentSceneHandler(aSceneHandler);
 	    fpVisManager -> SetCurrentScene(aScene);
-	    // ClearTransientStore.  This clears the transient, e.g.,
-	    // trajectories part of the store/graphical database but
-	    // also re-draws the permanent part (detector) and thus
-	    // has the effect of clearing trajectories from the view.
-	    // This should not be necessary since NeedKernelVisit,
-	    // ClearView and DrawView should have the effect of
-	    // deleting the whole store and re-creating it, then
-	    // clearing and re-drawing.  But ClearView does not seem
-	    // to work for all viewers.  If it's a problem for you,
-	    // uncomment the next line.
-	    //aSceneHandler->ClearTransientStore();
 	    aViewer -> SetView ();
 	    aViewer -> ClearView ();
 	    aViewer -> DrawView ();

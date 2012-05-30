@@ -1558,7 +1558,6 @@ void G4HepRepFileSceneHandler::CheckFileOpen() {
 
 
 void G4HepRepFileSceneHandler::ClearTransientStore() {
-	G4VSceneHandler::ClearTransientStore();
 	// This is typically called after an update and before drawing hits
 	// of the next event.  To simulate the clearing of "transients"
 	// (hits, etc.) the detector is redrawn...

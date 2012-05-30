@@ -76,7 +76,6 @@ G4bool G4OpenGLStoredQtSceneHandler::ExtraPOProcessing
     // actually selected, i.e., not culled.
     typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
     typedef std::vector<PVNodeID> PVPath;
-    const PVPath& fullPVPath = pPVModel->GetFullPVPath();
 
     // The simplest algorithm, used by the Open Inventor Driver
     // developers, is to rely on the fact the G4PhysicalVolumeModel
@@ -95,24 +94,18 @@ G4bool G4OpenGLStoredQtSceneHandler::ExtraPOProcessing
     // build a path for tree viewer
     G4OpenGLQtViewer* pGLViewer = dynamic_cast<G4OpenGLQtViewer*>(fpViewer);
     if ( pGLViewer ) {
-      pGLViewer->addPVSceneTreeElement(fpModel->GetCurrentDescription(),fullPVPath,currentPOListIndex);
-#ifdef G4DEBUG_VIS_OGL
-      printf("....call addSceneTreeElement\n");
-#endif
+      pGLViewer->addPVSceneTreeElement(fpModel->GetCurrentDescription(),pPVModel,currentPOListIndex);
     }
 
   } else {  // Not from a G4PhysicalVolumeModel.
 
     if (fpModel) {
 
-#ifdef G4DEBUG_VIS_OGL
-      printf("\n G4OpenGLStoredQtSceneHandler::ExtraPOProcessing not PV : %s Type:%s currentPOindex:%d\n",fpModel->GetCurrentTag().data(),fpModel->GetType().data(),currentPOListIndex);
-#endif
       
       // build a path for tree viewer
       G4OpenGLQtViewer* pGLViewer = dynamic_cast<G4OpenGLQtViewer*>(fpViewer);
       if ( pGLViewer ) {
-        pGLViewer->addNonPVSceneTreeElement(fpModel->GetType(),currentPOListIndex,fpModel->GetCurrentDescription().data());
+        pGLViewer->addNonPVSceneTreeElement(fpModel->GetType(),fpModel,currentPOListIndex,fpModel->GetCurrentDescription().data(),visible);
       }
     }
   }
@@ -143,7 +136,14 @@ void G4OpenGLStoredQtSceneHandler::ClearStore () {
   //G4cout << "G4OpenGLStoredQtSceneHandler::ClearStore" << G4endl;
 
   G4OpenGLStoredSceneHandler::ClearStore ();  // Sets need kernel visit, etc.
-
+  // Should recreate the tree
+  G4OpenGLQtViewer* pGLQtViewer = dynamic_cast<G4OpenGLQtViewer*>(fpViewer);
+  if ( pGLQtViewer ) {
+#ifdef G4DEBUG_VIS_OGL
+    printf("G4OpenGLStoredQtSceneHandler::ClearStore_________________________________\n" );
+#endif
+    pGLQtViewer->clearTreeWidget();
+  }
 }
 
 void G4OpenGLStoredQtSceneHandler::ClearTransientStore () {
@@ -152,7 +152,16 @@ void G4OpenGLStoredQtSceneHandler::ClearTransientStore () {
 
   G4OpenGLStoredSceneHandler::ClearTransientStore ();
 
+  // Should recreate the tree
+  G4OpenGLQtViewer* pGLQtViewer = dynamic_cast<G4OpenGLQtViewer*>(fpViewer);
+  if ( pGLQtViewer ) {
+#ifdef G4DEBUG_VIS_OGL
+    printf("G4OpenGLStoredQtSceneHandler::ClearTransient_________________________________\n" );
+#endif
+    //    pGLQtViewer->clearTreeWidget();
+  }
   // Make sure screen corresponds to graphical database...
+  // FIXME : L.Garnier April 2012 : Could cause a infinite loop ?
   if (fpViewer) {
     fpViewer -> SetView ();
     fpViewer -> ClearView ();

@@ -1507,7 +1507,6 @@ void G4FRSCENEHANDLER::SendDouble( G4double	val    )
 //----- 
 void G4FRSCENEHANDLER::ClearTransientStore() 
 {
-  G4VSceneHandler::ClearTransientStore ();
   // This is typically called after an update and before drawing hits
   // of the next event.  To simulate the clearing of "transients"
   // (hits, etc.) the detector is redrawn...

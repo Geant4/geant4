@@ -61,9 +61,10 @@ class G4AttHolder;
 
 class G4VSceneHandler: public G4VGraphicsScene {
 
-public: // With description
-
+  friend class G4VViewer;
   friend std::ostream& operator << (std::ostream& os, const G4VSceneHandler& s);
+
+public: // With description
 
   enum MarkerSizeType {world, screen};
 
@@ -281,22 +282,10 @@ public: // With description
   G4int IncrementViewCount ();
 
   virtual void ClearStore ();
-  // Clears graphics database (display lists) if any.  This base class
-  // implements some common functionality so...
-  // IMPORTANT: invoke this from your polymorphic versions, e.g.:
-  // void MyXXXSceneHandler::ClearStore () {
-  //   G4VSceneHandler::ClearStore ();
-  //   ...
-  // }
+  // Clears graphics database (display lists) if any.
 
   virtual void ClearTransientStore ();
   // Clears transient part of graphics database (display lists) if any.
-  // This base class implements some common functionality so...
-  // IMPORTANT: invoke this from your polymorphic versions, e.g.:
-  // void MyXXXSceneHandler::ClearTransientStore () {
-  //   G4VSceneHandler::ClearTransientStore ();
-  //   ...
-  // }
 
   void AddViewerToList      (G4VViewer* pView);  // Add view to view List.
   void RemoveViewerFromList (G4VViewer* pView);  // Remove view from view List.
@@ -304,8 +293,13 @@ public: // With description
 protected:
 
   //////////////////////////////////////////////////////////////
-  // Default routine used by default AddSolid ().
+  // Core routine for looping over models, redrawing stored events, etc.
+  // Overload with care (see, for example,
+  // G4OpenGLScenehandler::ProcessScene).
+  virtual void ProcessScene ();
 
+  //////////////////////////////////////////////////////////////
+  // Default routine used by default AddSolid ().
   virtual void RequestPrimitives (const G4VSolid& solid);
 
   //////////////////////////////////////////////////////////////
@@ -343,31 +337,17 @@ protected:
   G4bool             fTransientsDrawnThisEvent;  // Maintained by vis
   G4bool             fTransientsDrawnThisRun;    // manager.
   G4bool             fProcessingSolid; // True if within Pre/PostAddSolid.
-  G4bool             fSecondPassRequested;
-  G4bool             fSecondPass;       // ...in process.
-  G4VModel*          fpModel;           // Current model.
-  G4Transform3D fObjectTransformation;  // Current accumulated
-					// object transformation.
-  G4int              fNestingDepth;     // For Begin/EndPrimitives.
-  const G4VisAttributes* fpVisAttribs;  // Working vis attributes.
+  G4VModel*          fpModel;          // Current model.
+  G4Transform3D fObjectTransformation; // Current accumulated
+				       // object transformation.
+  G4int              fNestingDepth;    // For Begin/EndPrimitives.
+  const G4VisAttributes* fpVisAttribs; // Working vis attributes.
   const G4Transform3D fIdentityTransformation;
 
 private:
 
   G4VSceneHandler (const G4VSceneHandler&);
   G4VSceneHandler& operator = (const G4VSceneHandler&);
-
-  //////////////////////////////////////////////////////////////
-  // Friend function accessed only by views of this scene.
-
-  friend void G4VViewer::ProcessView ();
-
-  //////////////////////////////////////////////////////////////
-  // Private functions, etc..
-
-  void   ProcessScene     (G4VViewer& view);
-  // Accessed by G4VViewer::ProcessView ().
-
 };
 
 #include "G4VSceneHandler.icc"

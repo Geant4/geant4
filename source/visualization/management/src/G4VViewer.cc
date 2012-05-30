@@ -115,16 +115,16 @@ void G4VViewer::ShowView () {}
 
 void G4VViewer::ProcessView ()
 {
-  // If ClearStore has been requested, e.g., if the scene has changed,
-  // or if the concrete viewer has decided that it necessary to visit
-  // the kernel, perhaps because the view parameters have changed
-  // significantly (this should be done in the concrete viewer's
-  // DrawView)...
+  // If the scene has changed, or if the concrete viewer has decided
+  // that it necessary to visit the kernel, perhaps because the view
+  // parameters have changed significantly (this should be done in the
+  // concrete viewer's DrawView)...
   if (fNeedKernelVisit) {
     // Reset flag.  This must be done before ProcessScene to prevent
     // recursive calls when recomputing transients...
     fNeedKernelVisit = false;
-    fSceneHandler.ProcessScene (*this);
+    fSceneHandler.ClearStore ();
+    fSceneHandler.ProcessScene ();
   }
 }
 

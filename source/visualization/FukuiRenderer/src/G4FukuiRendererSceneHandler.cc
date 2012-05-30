@@ -128,8 +128,6 @@ G4FukuiRendererSceneHandler::~G4FukuiRendererSceneHandler ()
   if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** ~G4FukuiRendererSceneHandler" << G4endl;
 #endif 
-  ClearStore (); // clear current scene
-
 }
 
 //-----

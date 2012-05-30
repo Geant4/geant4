@@ -20,6 +20,11 @@ committal in the CVS repository !
 History file for visualization/HepRep sub-category
 --------------------------------------------------
 
+23rd May 2012  John Allison  (vis-HepRep-V09-05-01)
+- Health Check 2012: Migrated (see management/History):
+  o G4HepRepFileSceneHandler::ClearTransientStore:
+    . Removed call to G4VSceneHandler::ClearTransientStore.
+
 28th February 2012  John Allison  (vis-HepRep-V09-05-00)
 - Migrated to G4VScenehandler::fObjectTransformation.
 

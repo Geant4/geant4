@@ -17,6 +17,79 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29th May 2012  John Allison  (opengl-V09-05-16)
+- G4OpenGLStoredQtSceneHandler.cc:
+  o Reverted to opengl-V09-05-14 (r58177).
+- G4OpenGLStoredViewer::DrawDisplayLists:
+  o Now does two passes for a proper treatment of transparency.
+- G4OpenGLStoredSceneHandler:
+  o Added fDisplayOnSecondPassForTransparency to PO and TO.
+- G4OpenGL(Immediate/Stored)SceneHandler:
+  o Improved name - fSecondPassForTransparency, etc., instead of fSecondPass.
+
+23rd May 2012  John Allison  (opengl-V09-05-15)
+- Health Check 2012: Migrated (see management/History):
+  o G4OpenGLSceneHandler: Added
+      void G4OpenGLSceneHandler::ProcessScene()
+      {
+        G4VSceneHandler::ProcessScene();
+        // Repeat if required...
+        if (fSecondPassRequested) {
+          fSecondPass = true;
+          G4VSceneHandler::ProcessScene();
+          fSecondPass = false;
+          fSecondPassRequested = false;
+        }
+      }
+  o G4OpenGLSceneHandler.cc:
+    . Changed glDepthFunc (GL_LESS) to glDepthFunc (GL_LEQUAL) for
+      hidden polylines and markers.
+    . Changed glDepthMask (0/1) to glDepthMask (GL_FALSE/TRUE).
+  o G4OpenGLStoredSceneHandler.cc, G4OpenGLStoredQtSceneHandler.cc:
+    . Removed calls to G4OpenGLStoredSceneHandler::ClearTransientStore and
+      G4OpenGLStoredSceneHandler::ClearStore.
+    . Removed calls to Set/Clear/DrawView.
+  o G4OpenGLImmediateSceneHandler:
+    . Removed ClearTransientStore.
+  o G4OpenGLStoredXViewer.cc:
+    . Tidied.
+
+22nd May 2012  John Allison  (opengl-V09-05-14)
+- G4OpenGLQtViewer.cc: Fixed Linux compiler warnings.
+
+22nd May 2012  John Allison  (opengl-V09-05-13)
+- Tagged.
+
+9th May 2012  Laurent Garnier
+- G4OpenGLQtViewer, in scene tree
+ o Fix problem with the PO index 0
+ o Improve rendering on slider (send commands only if necessary)
+ o Fix a color problem
+
+5th May 2012  Laurent Garnier
+- G4OpenGLQtViewer
+ o Fix a bug on MacOS French keyboard for Plus key on viewer
+ o Resolve problem on transparency in scene tree by sorting items instead
+    of by PO index (what was done before)
+ o Also check transformation in adding scene tree elements 
+ o Add a depth slider (in test)
+
+27rd April 2012  Laurent Garnier
+- G4OpenGLQtViewer : Add stuff for new transparency depth component (still some bugs)
+
+24rd April 2012  Laurent Garnier
+- G4OpenGLStoredQtSceneHandler: Remove comments and unused variable
+- G4OpenGLQtViewer : Scene Tree improvments
+
+23rd April 2012  John Allison
+- G4OpenGLStoredSceneHandler:
+  o Corrected some error messages.
+  o Removed Set/Clear/Draw from EndModeling.  Should not be necessary.
+
+23th April 2012 Garnier Laurent
+- G4OpenGLStoredQtSceneHandler: Clear the tree when ClearStore and transient store
+- G4OpenGLQtViewer: Add a color box on the scene tree items
+
 10th April 2012  Pere Mato  (opengl-V09-05-12)
 - G4OpenGLWin32Viewer.cc: Make it work for Win64
   replacing [Get|Set]WindowLong() by [Get|Set]WindowLongPtr() and GWL_USERDATA by GWLP_USERDATA

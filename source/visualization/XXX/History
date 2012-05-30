@@ -20,6 +20,12 @@ committal in the CVS repository !
 History file for visualization/XXX sub-category (a template graphics system)
 ---------------------------------------------------------------------------
 
+23rd May 2012  John Allison  (visXXX-V09-05-01)
+- Health Check 2012: Migrated (see management/History):
+  o G4XXXStoredSceneHandler.cc, G4XXXSGSceneHandler.cc
+    . Removed call to G4VSceneHandler::ClearStore.
+    . Removed call to G4VSceneHandler::ClearTransientStore.
+
 3rd January 2011  John Allison  (visXXX-V09-05-00)
 - Removed #ifdef ...XXXSG... protections.
   o No longer any reliance on imported tree code; own tree code example used. 

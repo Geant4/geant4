@@ -407,17 +407,13 @@ void G4XXXSGSceneHandler::AddPrimitive(const G4NURBS&) {
   //?? Don't bother implementing this.  NURBS are not functional.
 }
 
-void G4XXXSGSceneHandler::ClearStore () {
-
-  G4VSceneHandler::ClearStore ();  // Sets need kernel visit, etc.
-
+void G4XXXSGSceneHandler::ClearStore ()
+{
   JA::Clear(&fSceneGraph);
 }
 
-void G4XXXSGSceneHandler::ClearTransientStore () {
-
-  G4VSceneHandler::ClearTransientStore ();
-
+void G4XXXSGSceneHandler::ClearTransientStore ()
+{
   JA::Clear(&fSceneGraph);
 }
 

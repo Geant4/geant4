@@ -70,19 +70,19 @@ G4bool G4OpenGLImmediateSceneHandler::AddPrimitivePreamble(const G4Visible& visi
   const G4Colour& c = GetColour (visible);
   G4double opacity = c.GetAlpha ();
 
-  if (!fSecondPass) {
+  if (!fSecondPassForTransparency) {
     G4bool transparency_enabled = true;
     G4OpenGLViewer* pViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
     if (pViewer) transparency_enabled = pViewer->transparency_enabled;
     if (transparency_enabled && opacity < 1.) {
       // On first pass, transparent objects are not drawn, but flag is set...
-      fSecondPassRequested = true;
+      fSecondPassForTransparencyRequested = true;
       return false;
     }
   }
 
   // On second pass, opaque objects are not drwan...
-  if (fSecondPass && opacity >= 1.) return false;
+  if (fSecondPassForTransparency && opacity >= 1.) return false;
 
   // Loads G4Atts for picking...
   if (fpViewer->GetViewParameters().IsPicking()) {
@@ -237,18 +237,6 @@ void G4OpenGLImmediateSceneHandler::BeginModeling () {
 
 void G4OpenGLImmediateSceneHandler::EndModeling () {
   G4VSceneHandler::EndModeling ();
-}
-
-void G4OpenGLImmediateSceneHandler::ClearTransientStore () {
-
-  G4VSceneHandler::ClearTransientStore ();
-
-  // Make sure screen corresponds to graphical database...
-  if (fpViewer) {
-    fpViewer -> SetView ();
-    fpViewer -> ClearView ();
-    fpViewer -> DrawView ();
-  }
 }
 
 G4int G4OpenGLImmediateSceneHandler::fSceneIdCount = 0;

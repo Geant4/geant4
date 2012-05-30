@@ -74,7 +74,9 @@ G4OpenGLSceneHandler::G4OpenGLSceneHandler (G4VGraphicsSystem& system,
   // glFlush take about 90% time.  Dividing glFlush number by 100 will
   // change the first vis time from 100% to 10+90/100 = 10,9%.
   fNbListsBeforeFlush(100),
-  fNbListsToBeFlush(0)
+  fNbListsToBeFlush(0),
+  fSecondPassForTransparencyRequested(false),
+  fSecondPassForTransparency(false)
 {}
 
 G4OpenGLSceneHandler::~G4OpenGLSceneHandler ()
@@ -114,6 +116,18 @@ void G4OpenGLSceneHandler::ScaledFlush()
   if (fNbListsToBeFlush < fNbListsBeforeFlush) return;
   glFlush();
   fNbListsToBeFlush = 0;
+}
+
+void G4OpenGLSceneHandler::ProcessScene()
+{
+  G4VSceneHandler::ProcessScene();
+  // Repeat if required...
+  if (fSecondPassForTransparencyRequested) {
+    fSecondPassForTransparency = true;
+    G4VSceneHandler::ProcessScene();
+    fSecondPassForTransparency = false;
+    fSecondPassForTransparencyRequested = false;
+  }
 }
 
 void G4OpenGLSceneHandler::PreAddSolid
@@ -176,7 +190,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
 
   if (fpViewer -> GetViewParameters ().IsMarkerNotHidden ())
     glDisable (GL_DEPTH_TEST);
-  else {glEnable (GL_DEPTH_TEST); glDepthFunc (GL_LESS);}
+  else {glEnable (GL_DEPTH_TEST); glDepthFunc (GL_LEQUAL);}
 
   glDisable (GL_LIGHTING);
 
@@ -213,7 +227,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
   if (fpViewer -> GetViewParameters ().IsMarkerNotHidden ()) {
     glDisable (GL_DEPTH_TEST);
   } else {
-    glEnable (GL_DEPTH_TEST); glDepthFunc (GL_LESS);
+    glEnable (GL_DEPTH_TEST); glDepthFunc (GL_LEQUAL);
   }
   
   glDisable (GL_LIGHTING);
@@ -428,13 +442,13 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     glDepthFunc (GL_LEQUAL);    
     if (materialColour[3] < 1.) {
       // Transparent...
-      glDepthMask (0);  // Make depth buffer read-only.
+      glDepthMask (GL_FALSE);  // Make depth buffer read-only.
       glDisable (GL_CULL_FACE);
       glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
       glMaterialfv (GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, materialColour);
     } else {
       // Opaque...
-      glDepthMask (1);  // Make depth buffer writable (default).
+      glDepthMask (GL_TRUE);  // Make depth buffer writable (default).
       if (clipping) {
 	glDisable (GL_CULL_FACE);
 	glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
@@ -543,12 +557,12 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       glDepthFunc (GL_LEQUAL);    
       if (materialColour[3] < 1.) {
 	// Transparent...
-	glDepthMask (0);  // Make depth buffer read-only.
+	glDepthMask (GL_FALSE);  // Make depth buffer read-only.
 	glDisable (GL_CULL_FACE);
 	glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
       } else {
 	// Opaque...
-	glDepthMask (1);  // Make depth buffer writable (default).
+	glDepthMask (GL_TRUE);  // Make depth buffer writable (default).
 	if (clipping) {
 	  glDisable (GL_CULL_FACE);
 	  glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
@@ -639,7 +653,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   
   glEnd ();
   glDisable (GL_STENCIL_TEST);  // Revert to default for next primitive.
-  glDepthMask (1);              // Revert to default for next primitive.
+  glDepthMask (GL_TRUE);        // Revert to default for next primitive.
   glDisable (GL_LIGHTING);      // Revert to default for next primitive.
 }
 

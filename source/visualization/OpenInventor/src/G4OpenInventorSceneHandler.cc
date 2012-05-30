@@ -138,18 +138,16 @@ G4OpenInventorSceneHandler::~G4OpenInventorSceneHandler ()
   fStyleCache->unref();
 }
 
-void G4OpenInventorSceneHandler::ClearStore () {
-  G4VSceneHandler::ClearStore();
-
+void G4OpenInventorSceneHandler::ClearStore ()
+{
   fDetectorRoot->removeAllChildren();
   fSeparatorMap.clear();
 
   fTransientRoot->removeAllChildren();
 }
 
-void G4OpenInventorSceneHandler::ClearTransientStore () {
-  G4VSceneHandler::ClearTransientStore ();
-
+void G4OpenInventorSceneHandler::ClearTransientStore ()
+{
   fTransientRoot->removeAllChildren();
 }
 

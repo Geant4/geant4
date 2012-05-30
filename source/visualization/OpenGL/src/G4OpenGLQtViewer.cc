@@ -51,9 +51,12 @@
 #include "G4PhysicalVolumeModel.hh"
 #include "G4Text.hh"
 
+#include <typeinfo>
+
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qdialog.h>
+#include <qpushbutton.h>
 #include <qprocess.h>
 #include <qapplication.h>
 #include <qdesktopwidget.h>
@@ -211,11 +214,16 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
   ,fControlKeyPress(false)
   ,fShiftKeyPress(false)
   ,fBatchMode(false)
-  ,fCheckViewComponentLock(false)
+  ,fCheckViewComponentSignalLock(false)
   ,fViewerComponentTreeWidget(NULL)
+  ,fOldViewerComponentTreeWidget(NULL)
   ,fNbRotation(0)
   ,fTimeRotation(0)
   ,fTouchableVolumes("Touchables")
+  ,fTreeInfoDialog(NULL)
+  ,fShortcutsDialog(NULL)
+  ,fSceneDepthSlider(NULL)
+  ,fSceneTreeDepth(1)
 {
 
   // launch Qt if not
@@ -638,43 +646,59 @@ void G4OpenGLQtViewer::toggleMouseAction(mouseActions aAction) {
    Show shortcuts for this mouse action
  */
 void G4OpenGLQtViewer::showShortcuts() {
-  G4cout << "========= Mouse Shortcuts =========" << G4endl;
+  G4String text;
+
+  text = "========= Mouse Shortcuts =========\n";
   if (fMouseAction == STYLE1) {  // rotate
-    G4cout << "Click and move mouse to rotate volume " << G4endl;
-    G4cout << "ALT + Click and move mouse to rotate volume (Toggle View/Theta-Phi Direction)" << G4endl;
-    G4cout << "CTRL + Click and zoom mouse to zoom in/out" << G4endl;
-    G4cout << "SHIFT + Click and zoommove camera point of view" << G4endl;
+    text += "Click and move mouse to rotate volume \n";
+    text += "ALT + Click and move mouse to rotate volume (Toggle View/Theta-Phi Direction) \n";
+    text += "CTRL + Click and zoom mouse to zoom in/out \n";
+    text += "SHIFT + Click and zoommove camera point of view \n";
   } else  if (fMouseAction == STYLE2) { //move
-    G4cout << "Move camera point of view with mouse" << G4endl;
+    text += "Move camera point of view with mouse \n";
   } else  if (fMouseAction == STYLE3) { //pick
-    G4cout << "Click and pick " << G4endl;
+    text += "Click and pick \n";
   }
-  G4cout << "========= Move Shortcuts =========" << G4endl;
-  G4cout << "Press left/right arrows to move volume left/right" << G4endl;
-  G4cout << "Press up/down arrows to move volume up/down" << G4endl;
-  G4cout << "Press '+'/'-' to move volume toward/forward" << G4endl;
-  G4cout <<  G4endl;
-  G4cout << "========= Rotation (Theta/Phi) Shortcuts =========" << G4endl;
-  G4cout << "Press SHIFT + left/right arrows to rotate volume left/right" << G4endl;
-  G4cout << "Press SHIFT + up/down arrows to rotate volume up/down" << G4endl;
-  G4cout <<  G4endl;
-  G4cout << "========= Rotation (View Direction) Shortcuts =========" << G4endl;
-  G4cout << "Press ALT + left/right to rotate volume around vertical direction" << G4endl;
-  G4cout << "Press ALT + up/down to rotate volume around horizontal direction" << G4endl;
-  G4cout <<  G4endl;
-  G4cout << "========= Zoom View =========" << G4endl;
-  G4cout << "Press CTRL + '+'/'-' to zoom into volume" << G4endl;
-  G4cout <<  G4endl;
-  G4cout << "========= Misc =========" << G4endl;
-  G4cout << "Press ALT +/- to slow/speed rotation/move" << G4endl;
-  G4cout << "Press H to reset view" << G4endl;
-  G4cout << "Press Esc to exit FullScreen" << G4endl;
-  G4cout <<  G4endl;
-  G4cout << "========= Video =========" << G4endl;
-  G4cout << "In video mode : " << G4endl;
-  G4cout << " Press SPACE to Start/Pause video recording " << G4endl;
-  G4cout << " Press RETURN to Stop video recording " << G4endl;
-  G4cout <<  G4endl;
+  text += "========= Move Shortcuts ========= \n";
+  text += "Press left/right arrows to move volume left/right \n";
+  text += "Press up/down arrows to move volume up/down \n";
+  text += "Press '+'/'-' to move volume toward/forward \n";
+  text += "\n";
+  text += "========= Rotation (Theta/Phi) Shortcuts ========= \n";
+  text += "Press SHIFT + left/right arrows to rotate volume left/right \n";
+  text += "Press SHIFT + up/down arrows to rotate volume up/down \n";
+  text += "\n";
+  text += "========= Rotation (View Direction) Shortcuts ========= \n";
+  text += "Press ALT + left/right to rotate volume around vertical direction \n";
+  text += "Press ALT + up/down to rotate volume around horizontal direction \n";
+  text += "\n";
+  text += "========= Zoom View ========= \n";
+  text += "Press CTRL + '+'/'-' to zoom into volume \n";
+  text += "\n";
+  text += "========= Misc ========= \n";
+  text += "Press ALT +/- to slow/speed rotation/move \n";
+  text += "Press H to reset view \n";
+  text += "Press Esc to exit FullScreen \n";
+  text += "\n";
+  text += "========= Video ========= \n";
+  text += "In video mode : \n";
+  text += " Press SPACE to Start/Pause video recording \n";
+  text += " Press RETURN to Stop video recording \n";
+  text += "\n";
+
+  G4cout << text;
+
+  if (  fShortcutsDialog == NULL) {
+    fShortcutsDialog = new QDialog();
+    fShortcutsDialogInfos = new QTextEdit() ;
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout->addWidget(fShortcutsDialogInfos);
+    fShortcutsDialog->setLayout(mainLayout);
+    fShortcutsDialog->setWindowTitle(tr("Shortcuts"));
+  }
+  
+  fShortcutsDialogInfos->setPlainText(text.data());
+  fShortcutsDialog->show();      
 }
 
 
@@ -1436,6 +1460,10 @@ void G4OpenGLQtViewer::G4wheelEvent (QWheelEvent * event)
     }
     else if (event->key() == Qt::Key_Right) { // rotate theta
       rotateQtScene(-fRot_sens,0);
+    }
+    if (event->key() == Qt::Key_Plus) { // go forward  ("Plus" imply 
+                                        // "Shift" on Mac French keyboard
+      moveScene(0,0,-1,false);
     }
 
   // Alt Modifier
@@ -2243,14 +2271,44 @@ void G4OpenGLQtViewer::initViewComponent(){
   fViewerComponentTreeWidget->setColumnHidden (1,true);  // copy number
   fViewerComponentTreeWidget->setColumnHidden (2,true);  // PO index
   fViewerComponentTreeWidget->setColumnHidden (3,true);  // Informations
+  fViewerComponentTreeWidget->setColumnHidden (4,true);  // Alpha
+
   fLayoutViewComponentsTBWidget->addWidget(fTreeLabel);
   fLayoutViewComponentsTBWidget->addWidget(fViewerComponentTreeWidget);
   fUIViewComponentsTBWidget->setLayout(fLayoutViewComponentsTBWidget);
-  fViewerComponentTreeWidget->setColumnWidth (0,150);
 
   connect(fViewerComponentTreeWidget,SIGNAL(itemChanged(QTreeWidgetItem*, int)),SLOT(viewComponentItemChanged(QTreeWidgetItem*, int)));
   connect(fViewerComponentTreeWidget,SIGNAL(itemSelectionChanged ()),SLOT(viewComponentSelected()));
 
+
+  // Depth slider
+  QLabel *depth = new QLabel();
+  depth->setText("Depth :");
+
+  QWidget* depthWidget = new QWidget();
+  QHBoxLayout *depthLayout = new QHBoxLayout(depthWidget);
+
+  QLabel *zero = new QLabel();
+  zero->setText("Show all");          
+  QLabel *one = new QLabel();
+  one->setText("Hide all");
+  fSceneDepthSlider = new QSlider ( Qt::Horizontal, depthWidget);
+  fSceneDepthSlider->setMaximum (1000);
+  fSceneDepthSlider->setMinimum (0);
+  fSceneDepthSlider->setTickPosition(QSlider::TicksAbove);
+  depthLayout->addWidget(zero);
+  depthLayout->addWidget(fSceneDepthSlider);
+  depthLayout->addWidget(one);
+
+  depthWidget->setLayout(depthLayout);
+  fLayoutViewComponentsTBWidget->addWidget(depthWidget);
+
+  connect( fSceneDepthSlider, SIGNAL( valueChanged(int) ), this, SLOT( changeDepthInSceneTree(int) ) );
+
+  fTreeItemModels.clear();
+
+  // Create Backup version
+  fOldViewerComponentTreeWidget = new QTreeWidget();
 }
 
 
@@ -2314,7 +2372,7 @@ void G4OpenGLQtViewer::ResetView () {
 
 
 
-void G4OpenGLQtViewer::addPVSceneTreeElement(const G4String model, std::vector < G4PhysicalVolumeModel::G4PhysicalVolumeNodeID > fullPath, int currentPOListIndex) {
+void G4OpenGLQtViewer::addPVSceneTreeElement(const G4String model, G4PhysicalVolumeModel* pPVModel, int currentPOListIndex) {
 
   QString modelShortName = getModelShortName(model);
 
@@ -2326,6 +2384,11 @@ void G4OpenGLQtViewer::addPVSceneTreeElement(const G4String model, std::vector <
     initViewComponent();
   }
 
+  // if no UI
+  if (fViewerComponentTreeWidget == NULL) {
+    return;
+  }
+
   fViewerComponentTreeWidget->blockSignals(true);
 
   // Create the "volume" node if not
@@ -2334,19 +2397,24 @@ void G4OpenGLQtViewer::addPVSceneTreeElement(const G4String model, std::vector <
   resItem =  fViewerComponentTreeWidget->findItems (modelShortName, Qt::MatchExactly, 0 );
   QTreeWidgetItem * currentItem;
   if (resItem.empty()) {
-    currentItem = addTreeWidgetItem(modelShortName,
+    const G4VisAttributes* visAttr = GetApplicableVisAttributes(pPVModel->GetFullPVPath().at(0).GetPhysicalVolume()->GetLogicalVolume()->GetVisAttributes());
+    G4Colour color = visAttr->GetColour();
+
+    currentItem = addTreeWidgetItem(pPVModel->GetFullPVPath(),
+                                    pPVModel,
+                                    modelShortName,
                                     "", // currentPVCopyNb
                                     "-1", // currentPVPOIndex
+                                    "",
                                     Qt::Checked,
-                                    NULL);
-#ifdef G4DEBUG_VIS_OGL
-    printf("G4OpenGLQtViewer::addPVSceneTreeElement _______________________%s \n",modelShortName.toStdString().c_str());
-#endif
+                                    NULL,
+                                    color);
+
   } else {
     currentItem = resItem.first();
   }
 
-  bool added = parseAndInsertInSceneTree(currentItem,fullPath,0,modelShortName,0,currentPOListIndex);
+  bool added = parseAndInsertInSceneTree(currentItem,pPVModel,0,modelShortName,0,currentPOListIndex);
   if (!added) {
   }
   
@@ -2359,39 +2427,115 @@ void G4OpenGLQtViewer::addPVSceneTreeElement(const G4String model, std::vector <
  if treeNode is NULL, then add this treeNode to the TreeWidget
    @return the inserted item
 */
-QTreeWidgetItem* G4OpenGLQtViewer::addTreeWidgetItem(QString name, QString copyNb, QString POIndex,Qt::CheckState state,QTreeWidgetItem * treeNode ) {
+QTreeWidgetItem* G4OpenGLQtViewer::addTreeWidgetItem(std::vector < G4PhysicalVolumeModel::G4PhysicalVolumeNodeID > fullPath, G4VModel* fpModel, QString name, QString copyNb, QString POIndex,QString logicalName, Qt::CheckState state,QTreeWidgetItem * treeNode,G4Colour color ) {
 
+  // Set depth
+  if (fullPath.size() > fSceneTreeDepth) {
+    fSceneTreeDepth = fullPath.size();
+    // Change slider value
+    if (fSceneDepthSlider) {
+      fSceneDepthSlider->setTickInterval(1000/(fSceneTreeDepth+1));
+    }
+  }
+  QColor qc;
+  qc.setRgbF(color.GetRed(),color.GetGreen(),color.GetBlue());
   QTreeWidgetItem * newItem;
   if (treeNode == NULL) {
     newItem = new QTreeWidgetItem(fViewerComponentTreeWidget);
   } else {
     newItem = new QTreeWidgetItem(treeNode);
   }
+
   newItem->setText(0,name);
   newItem->setText(1,copyNb);
   newItem->setText(2,POIndex);
-  newItem->setText(3,"Bla bla");
+  newItem->setText(3,logicalName);
+  newItem->setText(4,QString::number(color.GetAlpha()));
   newItem->setFlags(newItem->flags()|Qt::ItemIsUserCheckable);
   newItem->setCheckState(0,state);
+
+  // If invisible
+  if ((state == Qt::Unchecked) && (POIndex == "-1")) {
+    newItem->setForeground (0, QBrush( Qt::gray) );
+    
+#ifdef G4DEBUG_VIS_OGL_CREATION
+    printf(" G4OpenGLQtViewer::addTreeWidgetItem set UNCHECKED item:%s alpha:%f\n",name.toStdString().c_str(),color.GetAlpha());
+#endif
+
+    // Set a tootip
+    newItem->setToolTip (0,QString(
+                                   "This node exists in the geometry but has not been\n")+
+                         "drawn, perhaps because it has been set invisible. It \n"+
+                         "cannot be made visible with a click on the button.\n"+
+                         "To see it, change the visibility, for example, with \n"+
+                         "/vis/geometry/set/visibility " + logicalName + " 0 true\n"+
+                         "and rebuild the view with /vis/viewer/rebuild.\n"+
+                         "Click here will only show/hide all child components");
+  } else {
+    if (POIndex != "-1") {
+      QPixmap pixmap = QPixmap(QSize(16, 16));
+      pixmap.fill (qc);
+      QPainter painter(&pixmap);
+      painter.setPen(Qt::black);
+      painter.drawRect(0,0,15,15); // Draw contour
+      newItem->setIcon(0,pixmap);
+    }
+  }
+
+  // special case: if alpha=0, it is a totally transparent objet,
+  // then, do not redraw it
+  if (color.GetAlpha() == 0) {
+    state = Qt::Unchecked;
+    newItem->setCheckState(0,state);
+#ifdef G4DEBUG_VIS_OGL_CREATION
+      printf("G4OpenGLQtViewer::setCheckComponent  UUUUUUUUUUUUUUU\n");
+#endif
+#ifdef G4DEBUG_VIS_OGL_CREATION
+    printf(" G4OpenGLQtViewer::addTreeWidgetItem ALPHA=0-> UNCHECKED item:%s alpha:%f\n",name.toStdString().c_str(),color.GetAlpha());
+#endif
+  }
+
+  fTreeItemModels.insert(std::pair <int, std::vector < G4PhysicalVolumeModel::G4PhysicalVolumeNodeID > > (POIndex.toInt(),fullPath) );
+
+  // Update state :
+  updateTreeWidgetInSceneTree(newItem,fpModel);
+
+  // sort tree 
+  if (treeNode != NULL) {
+    treeNode->sortChildren (0, Qt::AscendingOrder );
+  } else {
+    fViewerComponentTreeWidget->sortItems(0,Qt::AscendingOrder);
+  }
+
   return newItem;
 }
 
 
 /**
-   Recursive function
+   Recursive function.
+   Try to insert the given item :
+   - If not present and last item of the path: insert it and mark it CHECK
+   - If not present and NOT last item of the path: insert it and mark it UNCHECKED
+   - If already present and name/PO/Transformation identical, then it is a transparent
+     object : Change the PO number and transparency
+   - If already present and PO different, then it is an unvisible item : Have to
+     set it visible
+   - else : Create a new element
    @return true if inserted, false if already present
  */
-bool G4OpenGLQtViewer::parseAndInsertInSceneTree(QTreeWidgetItem * treeNodeQt, std::vector < G4PhysicalVolumeModel::G4PhysicalVolumeNodeID > fullPath, unsigned int fullPathIndex, QString parentRoot, unsigned int currentIndexInTreeSceneHandler,int currentPVPOIndex) {
+bool G4OpenGLQtViewer::parseAndInsertInSceneTree(QTreeWidgetItem * treeNodeQt, G4PhysicalVolumeModel* pPVModel, unsigned int fullPathIndex, QString parentRoot, unsigned int currentIndexInTreeSceneHandler,int currentPVPOIndex) {
+
+  std::vector < G4PhysicalVolumeModel::G4PhysicalVolumeNodeID > fullPath = pPVModel->GetFullPVPath();
 
   std::ostringstream oss;
   oss << fullPath.at(fullPathIndex).GetCopyNo();
   std::string currentPVName = G4String(fullPath.at(fullPathIndex).GetPhysicalVolume()->GetName()+" ["+oss.str()+"]").data();
-  int currentPVCopyNb = fullPath.at(fullPathIndex).GetCopyNo();
-  
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLQtViewer::parseAndInsertInSceneTree  child count:%d currentIndexInTreeSceneHandler:%d POindex:%d\n",treeNodeQt->childCount(),currentIndexInTreeSceneHandler,currentPVPOIndex);
-#endif
 
+  int currentPVCopyNb = fullPath.at(fullPathIndex).GetCopyNo();
+  std::string currentLVName = fullPath.at(fullPathIndex).GetPhysicalVolume()->GetLogicalVolume()->GetName().data();
+
+  const G4VisAttributes* visAttr = GetApplicableVisAttributes(fullPath.at(fullPathIndex).GetPhysicalVolume()->GetLogicalVolume()->GetVisAttributes());
+  G4Colour color = visAttr->GetColour();
 
   // look in all children in order to get if their is already a
   // child corresponding:
@@ -2404,11 +2548,7 @@ bool G4OpenGLQtViewer::parseAndInsertInSceneTree(QTreeWidgetItem * treeNodeQt, s
     std::string treeNodeQtName = treeNodeQt->child(i)->text(0).toStdString();
     int treeNodeQtCopyNb = treeNodeQt->child(i)->text(1).toInt();
     int treeNodeQtPOIndex = treeNodeQt->child(i)->text(2).toInt();
-    
-#ifdef G4DEBUG_VIS_OGL
-    printf(" G4OpenGLQtViewer::parseAndInsertInSceneTree  childCount %d/%d  treeNodeQtName:%s ? PV Name:%s  CpNumber:%d ? PV:%d POindex:%d\n",i, treeNodeQt->childCount(),treeNodeQtName.c_str(),currentPVName.c_str(),treeNodeQtCopyNb,currentPVCopyNb,currentPVPOIndex );
-#endif    
-    
+        
     // if already inside
     // -> return true
     // special case, do not have to deal with hierarchy except for PhysicalVolume
@@ -2423,36 +2563,71 @@ bool G4OpenGLQtViewer::parseAndInsertInSceneTree(QTreeWidgetItem * treeNodeQt, s
          /*AND  name equal AND  PO index equal*/
          && (currentPVName == treeNodeQtName) && (currentPVPOIndex == treeNodeQtPOIndex) )) {
       
-#ifdef G4DEBUG_VIS_OGL
-      printf("G4OpenGLQtViewer::parseAndInsertInSceneTree already exist currentPOIndex:%d treeNodeQtPOIndex:%d currentIndexInTreeSceneHandler:%d  NAME:%s\n",currentPVPOIndex, treeNodeQtPOIndex,currentIndexInTreeSceneHandler,treeNodeQt->child(i)->text(0).toStdString().c_str());
-#endif      
-      // already exist in the tree, is it a transparent object ?
-      // If so, then have to change the PO index ONLY if it is the last
-      // and then change the state ONLY if POIndex has change
-      // If not, then go deaper
-
-      // last element
-      if (currentIndexInTreeSceneHandler == (fullPath.size()-1)) {
-#ifdef G4DEBUG_VIS_OGL
-        printf("G4OpenGLQtViewer::parseAndInsertInSceneTree _______________________change PO index  to %d\n",currentPVPOIndex);
-#endif
-        treeNodeQt->child(i)->setText(2,QString::number(currentPVPOIndex));
-
-        // Then remove tooltip and special font
-        QFont f = QFont();
-        treeNodeQt->child(i)->setFont (0,f);
-
-        // Set a tootip
-        treeNodeQt->child(i)->setToolTip (0,"");
-
-        if (currentPVPOIndex != treeNodeQtPOIndex) {
-          treeNodeQt->child(i)->setCheckState(0,Qt::Checked);
+      // then check for the Transform3D
+      bool sameTransform = true;
+      if (treeNodeQtPOIndex >= 0) {
+        std::vector < G4PhysicalVolumeModel::G4PhysicalVolumeNodeID > fullPathModel = fTreeItemModels[treeNodeQtPOIndex];
+        if (fullPathModel.size() > 0) {
+          if (fullPathModel.at(fullPathModel.size()-1).GetTransform () == pPVModel->GetTransformation ()) {
+            sameTransform = true;
+          } else {
+            sameTransform = false;
+          }
         }
-        return true;
-      } else {
-#ifdef G4DEBUG_VIS_OGL
-        printf("G4OpenGLQtViewer::parseAndInsertInSceneTree do not change PO index\n");
+      }
+
+      // Same transformation, then try to change the PO index
+      if (sameTransform == true) {
+        // already exist in the tree, is it a transparent object ?
+        // If so, then have to change the PO index ONLY if it is the last
+        // and then change the state ONLY if POIndex has change
+        // If not, then go deaper
+        
+        // last element
+        if (currentIndexInTreeSceneHandler == (fullPath.size()-1)) {
+
+
+#ifdef G4DEBUG_VIS_OGL_CREATION
+          printf("G4OpenGLQtViewer::parseAndInsertInSceneTree already exist newPOIndex:%d current:%s treeNodeQtPOIndex:%d currentIndexInTreeSceneHandler:%d  NAME:%s fullePath:%d / %d copyNb:%d \n",currentPVPOIndex,treeNodeQt->child(i)->text(2).toStdString().c_str(), treeNodeQtPOIndex,currentIndexInTreeSceneHandler,treeNodeQt->child(i)->text(0).toStdString().c_str(),fullPathIndex,fullPath.size(),currentPVCopyNb);
+#endif      
+#ifdef G4DEBUG_VIS_OGL_CREATION
+          printf("G4OpenGLQtViewer::parseAndInsertInSceneTree _______________________change PO index for :%s from:%s to %d\n",treeNodeQt->child(i)->text(0).toStdString().c_str(),treeNodeQt->child(i)->text(2).toStdString().c_str(),currentPVPOIndex);
 #endif
+          treeNodeQt->child(i)->setText(2,QString::number(currentPVPOIndex));
+          
+          fTreeItemModels.insert(std::pair <int, std::vector < G4PhysicalVolumeModel::G4PhysicalVolumeNodeID > >(currentPVPOIndex,fullPath) );
+          
+          // Then remove tooltip and special font
+          QFont f = QFont();
+          treeNodeQt->child(i)->setFont (0,f);
+          
+          // set foreground
+          treeNodeQt->child(i)->setForeground (0,QBrush());
+          
+          // Set a tootip
+          treeNodeQt->child(i)->setToolTip (0,"");
+          
+          // set the pixmap 
+          QColor qc;
+          qc.setRgbF(color.GetRed(),color.GetGreen(),color.GetBlue());
+          QPixmap pixmap = QPixmap(QSize(16, 16));
+          pixmap.fill (qc);
+          QPainter painter(&pixmap);
+          painter.setPen(Qt::black);
+          painter.drawRect(0,0,15,15); // Draw contour
+          treeNodeQt->child(i)->setIcon(0,pixmap);
+          
+          // set check only if there is something to display
+          if (color.GetAlpha() > 0) {
+            treeNodeQt->child(i)->setCheckState(0,Qt::Checked);
+          }
+          return false;
+        } else {
+          subItem = treeNodeQt->child(i);        
+        }
+
+        // Exists but not the end of path, then forget get it
+      } else if (currentIndexInTreeSceneHandler < (fullPath.size()-1))  {
         subItem = treeNodeQt->child(i);        
       }
     }
@@ -2461,62 +2636,111 @@ bool G4OpenGLQtViewer::parseAndInsertInSceneTree(QTreeWidgetItem * treeNodeQt, s
   
   // if it the last, then add it and set it checked
   if (currentIndexInTreeSceneHandler == (fullPath.size()-1)) {
-    addTreeWidgetItem(QString(currentPVName.c_str()),
+#ifdef G4DEBUG_VIS_OGL_CREATION
+    printf("G4OpenGLQtViewer::parseAndInsertInSceneTree _______CREATE An CHECKED ELEMENT : %s copyNb:%d POIndex:%d size:%d\n",currentPVName.c_str(),currentPVCopyNb,currentPVPOIndex,fullPath.size());
+#endif
+    addTreeWidgetItem(fullPath,
+                      pPVModel,
+                      QString(currentPVName.c_str()),
                       QString::number(currentPVCopyNb),
                       QString::number(currentPVPOIndex),
+                      QString(currentLVName.c_str()),
                       Qt::Checked,
-                      treeNodeQt);
-#ifdef G4DEBUG_VIS_OGL
-      printf("G4OpenGLQtViewer::parseAndInsertInSceneTree _________________CREATE An CHECKED ELEMENT : %s copyNb:%d POIndex:%d\n",currentPVName.c_str(),currentPVCopyNb,currentPVPOIndex);
-#endif
+                      treeNodeQt,
+                      color);
+
   } else {
     
     // if no child found, then this child is create and marked as invisible, then go inside
     if (subItem == NULL) {
       
-#ifdef G4DEBUG_VIS_OGL
+#ifdef G4DEBUG_VIS_OGL_CREATION
       printf("G4OpenGLQtViewer::parseAndInsertInSceneTree not found\n");
 #endif
       if (currentIndexInTreeSceneHandler < (fullPath.size()-1))  {
-        subItem = addTreeWidgetItem(QString(currentPVName.c_str()),
-                                    QString::number(currentPVCopyNb),
-                                    "-1",
-                                    Qt::Unchecked,
-                                    treeNodeQt);
-        QFont f = QFont();
-        f.setItalic(true);
-        subItem->setFont (0,f);
-
-        // Set a tootip
-        subItem->setToolTip (0,QString(
-                             "This node exists in the geometry but has not been\n")+
-                             "drawn, perhaps because it has been set invisible. It \n"+
-                             "cannot be made visible with a click on the button.\n"+
-                             "To see it, change the visibility, for example, with \n"+
-                             "/vis/geometry/set/visibility " + fullPath.at(fullPathIndex).GetPhysicalVolume()->GetName().data()+" 0 true\n"+
-                             "and rebuild the view with /vis/viewer/rebuild.");
-        
-#ifdef G4DEBUG_VIS_OGL
+#ifdef G4DEBUG_VIS_OGL_CREATION
         printf("G4OpenGLQtViewer::parseAndInsertInSceneTree ________________CREATE An UNCHECKED ELEMENT : %s  copyNb:%d POIndex: -1\n",currentPVName.c_str(),currentPVCopyNb);
 #endif
+        subItem = addTreeWidgetItem(fullPath,
+                                    pPVModel,
+                                    QString(currentPVName.c_str()),
+                                    QString::number(currentPVCopyNb),
+                                    "-1",
+                                    QString(currentLVName.c_str()),
+                                    Qt::Unchecked,
+                                    treeNodeQt,
+                                    color);
+
       }
     }
     
-    //  go ahead
-#ifdef G4DEBUG_VIS_OGL
-    printf("G4OpenGLQtViewer::parseAndInsertInSceneTree more items in the tree node:%d / %d ? go ahead \n",currentIndexInTreeSceneHandler,fullPath.size());
-#endif
-    return parseAndInsertInSceneTree(subItem,fullPath,fullPathIndex+1,parentRoot,currentIndexInTreeSceneHandler+1,currentPVPOIndex);
-    
+    return parseAndInsertInSceneTree(subItem,pPVModel,fullPathIndex+1,parentRoot,currentIndexInTreeSceneHandler+1,currentPVPOIndex);
   }
   return true;
 }
 
 
-void G4OpenGLQtViewer::addNonPVSceneTreeElement(const G4String model,int currentPOListIndex,std::string modelDescription) {
+void G4OpenGLQtViewer::updateTreeWidgetInSceneTree(QTreeWidgetItem* newItem,G4VModel*) {
+
+  if (fOldViewerComponentTreeWidget != NULL) {
+#ifdef G4DEBUG_VIS_OGL_CREATION
+    printf("G4OpenGLQtViewer::isAlreadyPresentInSceneTree ? %s\n",newItem->text(0).toStdString().c_str());
+#endif
+    QList<QTreeWidgetItem *> oldItems;
+    if (newItem) {
+      oldItems = fOldViewerComponentTreeWidget->findItems(newItem->text(0),Qt::MatchRecursive | Qt::MatchFixedString| Qt::MatchCaseSensitive);
+    }
+#ifdef G4DEBUG_VIS_OGL_CREATION
+    printf("G4OpenGLQtViewer::isAlreadyPresentInSceneTree    oldItems :%d\n",oldItems.size());
+#endif
+    for (int i = 0; i < oldItems.size(); ++i) {
+      
+      bool modelIsOk = true;
+      
+      QTreeWidgetItem* parentOldItem = oldItems.at(i);
+      QTreeWidgetItem* parentNewItem = newItem;
+      while ((parentOldItem != NULL) && (parentNewItem != NULL)) {
+        // Check copy Number
+        // Logical Name
+        if ((parentOldItem->text(0) != parentNewItem->text(0)) || 
+            (parentOldItem->text(1) != parentNewItem->text(1)) ||
+            //            (parentOldItem->text(2) != parentNewItem->text(2)) ||
+            (parentOldItem->text(3) != parentNewItem->text(3))) {
+          modelIsOk = false;
+        }
+        parentOldItem = parentOldItem->parent();
+        parentNewItem = parentNewItem->parent();
+      }
+      
+      if (modelIsOk) {
+#ifdef G4DEBUG_VIS_OGL_CREATION
+        printf("G4OpenGLQtViewer::update  OKKKK oldCheckState? %d newCheckState?:%d oldExpand:%d oldSelected:%d\n",oldItems.at(i)->checkState(0),newItem->checkState(0),oldItems.at(i)->isExpanded(),oldItems.at(i)->isSelected());
+#endif
+        
+        newItem->setCheckState(0,oldItems.at(i)->checkState(0));
+        newItem->setExpanded(oldItems.at(i)->isExpanded());
+        newItem->setSelected(oldItems.at(i)->isSelected());       
+        
+      }
+      // Check modelParameters ?
+    }
+  }
+}
+
+
+void G4OpenGLQtViewer::addNonPVSceneTreeElement(const G4String model,G4VModel* fpModel, int currentPOListIndex,std::string modelDescription,const G4Visible& visible) {
 
   QString modelShortName = getModelShortName(model);
+  G4Colour color;
 
+  // Special case for text
+  try {
+    const G4Text& g4Text = dynamic_cast<const G4Text&>(visible);
+    color = fSceneHandler.GetTextColour(g4Text);
+  }
+  catch (std::bad_cast) {
+    color = fSceneHandler.GetColour(visible);
+  }
   if (modelShortName == "") {
     return ;
   }
@@ -2525,21 +2749,32 @@ void G4OpenGLQtViewer::addNonPVSceneTreeElement(const G4String model,int current
     initViewComponent();
   }
 
+  // if no UI
+  if (fViewerComponentTreeWidget == NULL) {
+    return;
+  }
+
   fViewerComponentTreeWidget->blockSignals(true);
 
-  // Create the "volume" node if not
+  // Create the "Model" node if not
 
   QList<QTreeWidgetItem *> resItem;
   resItem =  fViewerComponentTreeWidget->findItems (modelShortName, Qt::MatchExactly, 0 );
   QTreeWidgetItem * currentItem = NULL;
+  std::vector < G4PhysicalVolumeModel::G4PhysicalVolumeNodeID > tmpFullPath;
+
   if (resItem.empty()) {
-    currentItem = addTreeWidgetItem(modelShortName,
+    currentItem = addTreeWidgetItem(tmpFullPath,
+                                    fpModel,
+                                    modelShortName,
                                     "", // currentPVCopyNb
                                     "-1", // currentPVPOIndex
+                                    "",
                                     Qt::Checked,
-                                    NULL);
-#ifdef G4DEBUG_VIS_OGL
-    printf("G4OpenGLQtViewer::addNonPVSceneTreeElement _______________________%s \n",modelShortName.toStdString().c_str());
+                                    NULL,
+                                    color);
+#ifdef G4DEBUG_VIS_OGL_CREATION
+    printf("G4OpenGLQtViewer::addNonPVSceneTreeElement _______________________%s R:%f G:%f B:%f\n",modelShortName.toStdString().c_str(),color.GetRed(),color.GetGreen(),color.GetBlue());
 #endif
   } else {
     currentItem = resItem.first();
@@ -2547,24 +2782,28 @@ void G4OpenGLQtViewer::addNonPVSceneTreeElement(const G4String model,int current
 
   // Is this volume already in the tree AND PO is not the same?
   QList<QTreeWidgetItem *> resItems;
-  resItems =  fViewerComponentTreeWidget->findItems (QString(modelDescription.c_str()), Qt::MatchExactly|Qt::MatchRecursive, 0 );
+  resItems =  fViewerComponentTreeWidget->findItems (QString(modelDescription.c_str()), Qt::MatchFixedString| Qt::MatchCaseSensitive|Qt::MatchRecursive, 0 );
   
   bool alreadyPresent = false;
   for (int i = 0; i < resItems.size(); ++i) {
     if (currentPOListIndex == resItems.at(i)->text(2).toInt()) {
       alreadyPresent = true;
-#ifdef G4DEBUG_VIS_OGL
+#ifdef G4DEBUG_VIS_OGL_CREATION
       printf("G4OpenGLQtViewer::addNonPVSceneTreeElement _________________SAME NAME AND PO index as old one\n");
 #endif
     }
   }
   if (!alreadyPresent) {
-    currentItem = addTreeWidgetItem(QString(modelDescription.c_str()),
-                                    QString("0"), // currentPVCopyNb
-                                    QString::number(currentPOListIndex),
-                                    Qt::Checked,
-                                    currentItem);
-#ifdef G4DEBUG_VIS_OGL
+    addTreeWidgetItem(tmpFullPath,
+                      fpModel,
+                      QString(modelDescription.c_str()),
+                      QString("0"), // currentPVCopyNb
+                      QString::number(currentPOListIndex),
+                      "",
+                      Qt::Checked,
+                      currentItem,
+                      color);
+#ifdef G4DEBUG_VIS_OGL_CREATION
     printf("G4OpenGLQtViewer::addNonPVSceneTreeElement _________________CREATE An CHECKED ELEMENT : %s copyNb:0 POIndex:%d descr:%s\n",modelShortName.toStdString().c_str(),currentPOListIndex,modelDescription.c_str());
 #endif
   }
@@ -2589,7 +2828,7 @@ QString G4OpenGLQtViewer::getModelShortName(G4String model) {
       modelShortName = modelShortName.mid(0,modelShortName.indexOf("Model"));
     }
   }
-#ifdef G4DEBUG_VIS_OGL
+#ifdef G4DEBUG_VIS_OGL_CREATION
   printf("G4OpenGLQtViewer::getModelShortName : %s  shortName:%s *%s*\n",model.data(),modelShortName.toStdString().c_str(),modelShortName.mid(0,modelShortName.indexOf(" ")).toStdString().c_str());
 #endif
   return modelShortName;
@@ -2604,30 +2843,18 @@ bool G4OpenGLQtViewer::isTouchableVisible(int POindex){
     return true;
   }
 
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLQtViewer::isTouchableVisible PO index:%d \n",POindex);
-#endif
   for (int i = 0; i < fViewerComponentTreeWidget->topLevelItemCount () ; ++i) {
 
     if (fViewerComponentTreeWidget->topLevelItem(i)->text(2).toInt() == POindex) {
       if (fViewerComponentTreeWidget->topLevelItem(i)->checkState(0) == Qt::Checked) {
-#ifdef G4DEBUG_VIS_OGL
-        printf("G4OpenGLQtViewer::isTouchableVisible ___________TRUE \n");
-#endif
         return true;
       }
     }
     isFound = parseAndCheckVisibility(fViewerComponentTreeWidget->topLevelItem(i),POindex);
     if (isFound) {
-#ifdef G4DEBUG_VIS_OGL
-      printf("G4OpenGLQtViewer::isTouchableVisible ___________TRUE \n");
-#endif
       return true;
     }
   } // end for
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLQtViewer::isTouchableVisible ___________FALSE \n");
-#endif
   return false;
 
 }
@@ -2652,8 +2879,8 @@ bool G4OpenGLQtViewer::parseAndCheckVisibility(QTreeWidgetItem * treeNode,int PO
 
 
 void G4OpenGLQtViewer::viewComponentItemChanged(QTreeWidgetItem* item, int) {
-  if (fCheckViewComponentLock == false) {
-    fCheckViewComponentLock = true;
+  if (fCheckViewComponentSignalLock == false) {
+    fCheckViewComponentSignalLock = true;
     //std::string check = "";
     //bool checkBool = false;
 
@@ -2678,7 +2905,7 @@ void G4OpenGLQtViewer::viewComponentItemChanged(QTreeWidgetItem* item, int) {
     
     updateQWidget();
 
-    fCheckViewComponentLock = false;
+    fCheckViewComponentSignalLock = false;
   }
 }
 void G4OpenGLQtViewer::viewComponentSelected() {
@@ -2686,16 +2913,60 @@ void G4OpenGLQtViewer::viewComponentSelected() {
     if (! fViewerComponentTreeWidget->selectedItems().isEmpty ()) {
       QTreeWidgetItem* item = fViewerComponentTreeWidget->selectedItems ().first();
       if (item) {
-        fTreeInfoDialog = new QDialog();
-        QTextEdit *infos = new QTextEdit() ;
-        infos->setPlainText(item->text(3));
+        if (fTreeInfoDialog == NULL) {
+          fTreeInfoDialog = new QDialog();
+          fTreeInfoDialogInfos = new QTextEdit() ;
+          QVBoxLayout *mainLayout = new QVBoxLayout;
+          mainLayout->addWidget(fTreeInfoDialogInfos);
+          fTreeInfoDialog->setLayout(mainLayout);
+          fTreeInfoDialog->setWindowTitle(tr("Informations"));
+
+          QLabel *transparency = new QLabel();
+          transparency->setText("Change transparency :");          
+          mainLayout->addWidget(transparency);
+
+          QWidget *transparencyWidget = new QWidget(fTreeInfoDialog);
+          QHBoxLayout *transparencyLayout = new QHBoxLayout(transparencyWidget);
+
+          QLabel *zero = new QLabel();
+          zero->setText("0");          
+          QLabel *one = new QLabel();
+          one->setText("1");          
+          QSlider *treeViewerTransparencySlider = new QSlider ( Qt::Horizontal, transparencyWidget);
+          treeViewerTransparencySlider->setMaximum (1000);
+          treeViewerTransparencySlider->setMinimum (0);
+          transparencyLayout->addWidget(zero);
+          transparencyLayout->addWidget(treeViewerTransparencySlider);
+          transparencyLayout->addWidget(one);
+
+          transparencyWidget->setLayout(transparencyLayout);
+          mainLayout->addWidget(transparencyWidget);
+
+          QWidget *buttonBox = new QWidget(fTreeInfoDialog);
+          QHBoxLayout *buttonBoxLayout = new QHBoxLayout(buttonBox);
+
+          QPushButton *buttonOk = new QPushButton( tr( "&Ok" ),buttonBox );
+          buttonOk->setAutoDefault( TRUE );
+          buttonBoxLayout->addWidget(buttonOk);
+          
+          fTreeViewerButtonApply = new QPushButton( tr( "  &Apply " ),buttonBox );
+          fTreeViewerButtonApply->setEnabled(true);
+          fTreeViewerButtonApply->setAutoDefault( TRUE );
+          buttonBoxLayout->addWidget(fTreeViewerButtonApply);
+
+          QPushButton *buttonCancel = new QPushButton( tr( "&Cancel" ),buttonBox );
+          buttonCancel->setAutoDefault( TRUE );
+          buttonBoxLayout->addWidget(buttonCancel);
+
+          buttonBox->setLayout(buttonBoxLayout);
+          mainLayout->addWidget(buttonBox);
+          
+          connect( treeViewerTransparencySlider, SIGNAL( valueChanged(int) ), this, SLOT( changeTransparencyOnItem(int) ) );
+
+        }
+        fTreeInfoDialogInfos->setPlainText(item->text(0)+"\n"+item->text(1)+"\n"+item->text(2)+"\n"+item->text(3));
         //infos->setPlainText("test");
-        QVBoxLayout *mainLayout = new QVBoxLayout;
-        mainLayout->addWidget(infos);
-        fTreeInfoDialog->setLayout(mainLayout);
-        fTreeInfoDialog->setWindowTitle(tr("Informations"));
-        
-        //        fTreeInfoDialog->exec();
+        //        fTreeInfoDialog->show();
         
 #ifdef G4DEBUG_VIS_OGL
         printf("G4OpenGLQtViewer::viewComponentSelected 0:%s 1:%s 2:%s 3:%s\n",item->text(0).toStdString().c_str(),item->text(1).toStdString().c_str(),item->text(2).toStdString().c_str(),item->text(3).toStdString().c_str());
@@ -2705,17 +2976,240 @@ void G4OpenGLQtViewer::viewComponentSelected() {
   }
 }
 
+
+void G4OpenGLQtViewer::changeTransparencyOnItem (int val){
+  if (fViewerComponentTreeWidget->selectedItems().isEmpty()) {
+    return;
+  }
+  QTreeWidgetItem* item = fViewerComponentTreeWidget->selectedItems().first();
+
+  if (item) {
+    G4Colour color;
+
+    if (item->text(2).toInt() >= 0) {
+      std::vector < G4PhysicalVolumeModel::G4PhysicalVolumeNodeID > fullPath = fTreeItemModels[item->text(2).toInt()];
+      if (fullPath.size() > 0) {
+        const G4VisAttributes* visAttr2 = GetApplicableVisAttributes(fullPath.at(fullPath.size()-1).GetPhysicalVolume()->GetLogicalVolume()->GetVisAttributes());
+        color = visAttr2->GetColour();
+      }
+      // FIXME : 4 May : Why -1 ?
+      for (unsigned int i=0; i<fullPath.size()-1; i++) {
+        std::string currentPVName = G4String(fullPath.at(i).GetPhysicalVolume()->GetName()).data();
+
+        std::string currentLVName = fullPath.at(i).GetPhysicalVolume()->GetLogicalVolume()->GetName().data();
+#ifdef G4DEBUG_VIS_OGL
+        printf("  Path PVName %s LV Name:%s i:%d \n",currentPVName.c_str(),currentLVName.c_str(),i);
+#endif
+      }
+
+    }
+    QString red;
+    red.setNum(color.GetRed());
+    QString green;
+    green.setNum(color.GetGreen());
+    QString blue;
+    blue.setNum(color.GetBlue());
+
+    QString com = "/vis/geometry/set/colour "+item->text(3)+" 0 "+red+" "+green+" "+blue+" ";
+    QString num;
+    com += num.setNum((double)val/1000);
+    G4UImanager::GetUIpointer()->ApplyCommand(com.toStdString().c_str());
+#ifdef G4DEBUG_VIS_OGL
+    printf("G4OpenGLQtViewer::changeTransparencyOnItem %d -%s-\n",val,com.toStdString().c_str() );
+#endif
+
+    updateQWidget();
+  }
+}
+
+
+void G4OpenGLQtViewer::changeDepthInSceneTree (int val){
+
+  // max depth :   fSceneTreeDepth
+  // val is between 0 and 1
+  // 0  .1  .2  .3  .4  .5  .6  .7  .8  .9  1
+  // 1      1.4          2                  
+  // 1         2         3         4
+
+  // Get the depth :
+  double depth = 1 + ((double)val)/1000 * ((double)fSceneTreeDepth+1);
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLQtViewer::changeDepthInSceneTree slider val:%d depth:%f fSceneTreeDepth:%d\n",val,depth,fSceneTreeDepth );
+#endif
+  
+  // lock update on scene tree items
+  fCheckViewComponentSignalLock = true;
+  
+  // Disable redraw each time !
+  G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/set/autoRefresh false");
+  G4UImanager::GetUIpointer()->ApplyCommand("/vis/verbose errors");
+
+  // Do not apply for TopLevel items ("Touchables", "Text", "Scale"...)
+  for (int b=0;b<fViewerComponentTreeWidget->topLevelItemCount();b++) {
+    changeDepthOnSceneTreeItem(depth,1.,fViewerComponentTreeWidget->topLevelItem(b));
+  }
+
+  // Enable redraw !
+  G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/set/autoRefresh true");
+  G4UImanager::GetUIpointer()->ApplyCommand("/vis/verbose confirmations");
+
+  // unlock update on scene tree items
+  fCheckViewComponentSignalLock = false;
+
+}
+
+
+void G4OpenGLQtViewer::changeDepthOnSceneTreeItem(double lookForDepth,double currentDepth,QTreeWidgetItem* item) {
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLQtViewer::changeDepthOnSceneTreeItem look:%f current:%f name:%s\n",lookForDepth,currentDepth,item->text(0).toStdString().c_str());
+#endif
+
+  double transparencyLevel;
+  
+  // look for a 2.2 depth and we are at level 3 
+  // -> Set all theses items to Opaque
+  if ((lookForDepth-currentDepth) < 0) {
+    item->setCheckState(0,Qt::Checked);
+    transparencyLevel = 1;
+  } else if ((lookForDepth-currentDepth) > 1 ){
+    item->setCheckState(0,Qt::Unchecked);
+    transparencyLevel = 0;
+  } else {
+    item->setCheckState(0,Qt::Checked);
+    transparencyLevel = 1-(lookForDepth-currentDepth);
+  }
+  
+  G4Colour color;
+  bool colorPresent = false;
+
+  if (item->text(2).toInt() >= 0) {
+    std::vector < G4PhysicalVolumeModel::G4PhysicalVolumeNodeID > fullPath = fTreeItemModels[item->text(2).toInt()];
+    if (fullPath.size() > 0) {
+      const G4VisAttributes* visAttr2 = GetApplicableVisAttributes(fullPath.at(fullPath.size()-1).GetPhysicalVolume()->GetLogicalVolume()->GetVisAttributes());
+      color = visAttr2->GetColour();
+      colorPresent = true;
+    }
+  }
+
+  if (colorPresent) {
+    QString red;
+    red.setNum(color.GetRed());
+    QString green;
+    green.setNum(color.GetGreen());
+    QString blue;
+    blue.setNum(color.GetBlue());
+  
+    QString com = "/vis/geometry/set/colour "+item->text(3)+" 0 "+red+" "+green+" "+blue+" ";
+  
+  
+    QString num = "";
+    // We are less depper (ex:tree depth:2) than lookForDepth (ex:3.1)
+    // -> Have to hide this level ONLY if it was not hidden before
+    com += num.setNum((double)(transparencyLevel));
+  
+    // Not on a top level item case
+    // Do not set if it was already set
+
+    // Should add them all the time in case of an older command has change transparency
+    // before. Should be checked in changeDepthInSceneTree for duplicated commands
+    // Do not change transparency if not visible by humain (and avoid precision value
+    // problems..)
+    if (((color.GetAlpha()-transparencyLevel) >  0.000001) ||
+        ((color.GetAlpha()-transparencyLevel) < -0.000001))  {
+      if ((item->text(3) != "") && (com != "")) {
+        // FIXME : Should not test this here because of transparent
+        // volume that will came after and with a different alpha level
+        // Good thing to do is to check and suppress doubles in changeDepthInSceneTree
+        // and then check if last (transparents volumes) has to change alpha
+        
+#ifdef G4DEBUG_VIS_OGL
+        printf("G4OpenGLQtViewer::changeDepthOnSceneTreeItem ADD COMMAND oldAlpha:%f new:%f diff:%f-> com:%s\n",color.GetAlpha(),transparencyLevel,color.GetAlpha()-transparencyLevel,com.toStdString().c_str());
+#endif
+        G4UImanager::GetUIpointer()->ApplyCommand(com.toStdString().c_str());
+      }
+    }
+  }
+
+  for (int b=0;b< item->childCount();b++) {
+    changeDepthOnSceneTreeItem(lookForDepth,currentDepth+1,item->child(b));
+  }
+}
+
+
 void G4OpenGLQtViewer::clearTreeWidget(){
+  // be careful about calling this twice
+
   if (fViewerComponentTreeWidget) {
-    fViewerComponentTreeWidget->clear();
+    if (fViewerComponentTreeWidget->topLevelItemCount () > 0) {
+
+      // reset old
+      fOldViewerComponentTreeWidget->clear();
+
+      // Clone everything  
+      QTreeWidgetItem* cloneItem;
+      for (int b=0;b<fViewerComponentTreeWidget->topLevelItemCount();b++) {
+
+        cloneItem = new QTreeWidgetItem();
+        cloneItem->setText(0,fViewerComponentTreeWidget->topLevelItem(b)->text(0));
+        cloneItem->setText(1,fViewerComponentTreeWidget->topLevelItem(b)->text(1));
+        cloneItem->setText(2,fViewerComponentTreeWidget->topLevelItem(b)->text(2));
+        cloneItem->setText(3,fViewerComponentTreeWidget->topLevelItem(b)->text(3));
+        cloneItem->setText(4,fViewerComponentTreeWidget->topLevelItem(b)->text(4));
+        cloneItem->setFlags(fViewerComponentTreeWidget->topLevelItem(b)->flags());
+        cloneItem->setToolTip(0,fViewerComponentTreeWidget->topLevelItem(b)->toolTip(0));
+        cloneItem->setCheckState(0,fViewerComponentTreeWidget->topLevelItem(b)->checkState(0));
+        cloneItem->setSelected(fViewerComponentTreeWidget->topLevelItem(b)->isSelected());       
+    
+        fOldViewerComponentTreeWidget->addTopLevelItem(cloneItem);
+
+        cloneItem->setExpanded(fViewerComponentTreeWidget->topLevelItem(b)->isExpanded ());
+        
+        cloneSceneTree(fViewerComponentTreeWidget->topLevelItem(b),cloneItem);
+      }
+
+      fViewerComponentTreeWidget->clear();
+
+      fTreeItemModels.clear();
+      fSceneTreeDepth = 1;
+
+    }
+  }
+}
+
+/**
+   Clone the current tree in order to get a snapshot of old version 
+ */
+void G4OpenGLQtViewer::cloneSceneTree(QTreeWidgetItem* rootItem, QTreeWidgetItem* parentItem) {
+  
+  QTreeWidgetItem* cloneItem = NULL;
+  for (int b=0;b< rootItem->childCount();b++) {
+    cloneItem = new QTreeWidgetItem();
+
+    cloneItem->setText(0,rootItem->child(b)->text(0));
+    cloneItem->setText(1,rootItem->child(b)->text(1));
+    cloneItem->setText(2,rootItem->child(b)->text(2));
+    cloneItem->setText(3,rootItem->child(b)->text(3));
+    cloneItem->setText(4,rootItem->child(b)->text(4));
+    cloneItem->setFlags(rootItem->child(b)->flags());
+    cloneItem->setCheckState(0,rootItem->child(b)->checkState(0));
+    cloneItem->setSelected(rootItem->child(b)->isSelected());       
+
+    parentItem->addChild(cloneItem);
+    
+    cloneItem->setExpanded(rootItem->child(b)->isExpanded ());
+    
+    cloneSceneTree(rootItem->child(b),cloneItem);
   }
 }
 
 /**
    Should replace actual tree by the one in this class
  */
-
 void G4OpenGLQtViewer::displayViewComponentTree() {
+  // no UI
+  if (fUIViewComponentsTBWidget == NULL) {
+    return; 
+  }
   if (fUIViewComponentsTBWidget->layout() == 0) {
     return; 
   }
@@ -2727,6 +3221,7 @@ void G4OpenGLQtViewer::displayViewComponentTree() {
   }
  return;
 }
+
 
 /*
   

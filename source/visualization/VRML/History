@@ -20,6 +20,11 @@ committal in the CVS repository !
 History file for visualization/VRML sub-category
 ------------------------------------------------
 
+23rd May 2012  John Allison  (VRML-V09-05-03)
+- Health Check 2012: Migrated (see management/History):
+  o G4VRML1/2SCENEHANDLER::ClearTransientStore:
+    . Removed call to G4VSceneHandler::ClearTransientStore.
+
 28th March 2012  John Allison  (VRML-V09-05-02)
 - G4VRML1FileViewer.cc: Protect debug statement.
 

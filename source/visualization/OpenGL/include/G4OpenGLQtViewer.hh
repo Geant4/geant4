@@ -50,6 +50,7 @@ class G4Text;
 
 class QGLWidget;
 class QDialog;
+class QTextEdit;
 class QContextMenuEvent;
 class QMenu;
 class QImage;
@@ -60,8 +61,11 @@ class QWheelEvent;
 class QProcess;
 class QTime;
 class QVBoxLayout;
+class QPushButton;
+class QSlider;
 class QTreeWidgetItem;
 class QTreeWidget;
+class QColor;
 class G4OpenGLSceneHandler;
 class G4OpenGLQtMovieDialog;
 
@@ -103,11 +107,13 @@ public:
   void DrawText(const G4Text&);
   void ResetView ();
   void addPVSceneTreeElement(const G4String model,
-                             std::vector < G4PhysicalVolumeModel::G4PhysicalVolumeNodeID >,
+                             G4PhysicalVolumeModel* pPVModel,
                              int currentPVPOIndex);
   void addNonPVSceneTreeElement(const G4String model,
+                                G4VModel* fpModel,
                                 int currentPVPOIndex,
-                                std::string modelDescription);
+                                std::string modelDescription,
+                                const G4Visible& visible);
   bool isTouchableVisible(int POindex);
   void clearTreeWidget();
 public:
@@ -128,7 +134,6 @@ protected:
   void FinishView();
   void updateKeyModifierState(Qt::KeyboardModifiers);
   void displayViewComponentTree();
-
 
 protected:
   QGLWidget* fWindow;
@@ -158,7 +163,7 @@ private:
   QString getProcessErrorMsg();
   QWidget* getParentWidget();
   bool parseAndInsertInSceneTree(QTreeWidgetItem *,
-                                 std::vector < G4PhysicalVolumeModel::G4PhysicalVolumeNodeID > fullPath,
+                                  G4PhysicalVolumeModel* pPVModel,
                                  unsigned int fullPathIndex,
                                  QString parentRoot,
                                  unsigned int currentIndex,
@@ -166,8 +171,19 @@ private:
   void setCheckComponent(QTreeWidgetItem* item,bool check);
   void initViewComponent();
   bool parseAndCheckVisibility(QTreeWidgetItem * treeNode,int POindex);
-  QTreeWidgetItem* addTreeWidgetItem(QString name, QString copyNb, QString POIndex,Qt::CheckState state,QTreeWidgetItem * treeNode );
+  QTreeWidgetItem* addTreeWidgetItem(std::vector < G4PhysicalVolumeModel::G4PhysicalVolumeNodeID > fullPath,
+                                     G4VModel* fpModel,
+                                     QString name,
+                                     QString copyNb,
+                                     QString POIndex,
+                                     QString logicalName,
+                                     Qt::CheckState state,
+                                     QTreeWidgetItem * treeNode,
+                                     G4Colour color);
   QString getModelShortName(G4String modelShortName);
+  void updateTreeWidgetInSceneTree(QTreeWidgetItem* item,G4VModel* fpModel);
+  void cloneSceneTree(QTreeWidgetItem* rootItem, QTreeWidgetItem* parent);
+  void changeDepthOnSceneTreeItem(double lookForDepth,double currentDepth,QTreeWidgetItem* item);
 
   QMenu *fContextMenu;
 
@@ -216,12 +232,20 @@ private:
   bool fControlKeyPress;
   bool fShiftKeyPress;
   bool fBatchMode;
-  bool fCheckViewComponentLock;
+  bool fCheckViewComponentSignalLock;
   QTreeWidget * fViewerComponentTreeWidget;
+  QTreeWidget * fOldViewerComponentTreeWidget;
   int fNbRotation ;
   int fTimeRotation;
   QString fTouchableVolumes;
   QDialog* fTreeInfoDialog;
+  QDialog* fShortcutsDialog;
+  QTextEdit *fTreeInfoDialogInfos;
+  QPushButton * fTreeViewerButtonApply;
+  QTextEdit *fShortcutsDialogInfos;
+  QSlider* fSceneDepthSlider;
+  std::map <int, std::vector < G4PhysicalVolumeModel::G4PhysicalVolumeNodeID > > fTreeItemModels;
+  unsigned int fSceneTreeDepth;
 
 public Q_SLOTS :
   void startPauseVideo();
@@ -256,6 +280,8 @@ private Q_SLOTS :
   void processEncodeStdout();
   void viewComponentItemChanged(QTreeWidgetItem* item, int id);
   void viewComponentSelected();
+  void changeTransparencyOnItem(int);
+  void changeDepthInSceneTree(int);
   // Only use for Qt>4.0
   //  void dialogClosed();
 };

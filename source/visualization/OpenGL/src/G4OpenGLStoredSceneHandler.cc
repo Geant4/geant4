@@ -60,21 +60,24 @@
 G4OpenGLStoredSceneHandler::PO::PO():
   fDisplayListId(0),
   fPickName(0),
-  fpG4TextPlus(0)
+  fpG4TextPlus(0),
+  fDisplayOnSecondPassForTransparency(false)
 {}
 
 G4OpenGLStoredSceneHandler::PO::PO(const G4OpenGLStoredSceneHandler::PO& po):
   fDisplayListId(po.fDisplayListId),
   fTransform(po.fTransform),
   fPickName(po.fPickName),
-  fpG4TextPlus(po.fpG4TextPlus? new G4TextPlus(*po.fpG4TextPlus): 0)
+  fpG4TextPlus(po.fpG4TextPlus? new G4TextPlus(*po.fpG4TextPlus): 0),
+  fDisplayOnSecondPassForTransparency(po.fDisplayOnSecondPassForTransparency)
 {}
 
 G4OpenGLStoredSceneHandler::PO::PO(G4int id, const G4Transform3D& tr):
   fDisplayListId(id),
   fTransform(tr),
   fPickName(0),
-  fpG4TextPlus(0)
+  fpG4TextPlus(0),
+  fDisplayOnSecondPassForTransparency(false)
 {}
 
 G4OpenGLStoredSceneHandler::PO::~PO()
@@ -90,6 +93,8 @@ G4OpenGLStoredSceneHandler::PO& G4OpenGLStoredSceneHandler::PO::operator=
   fTransform = rhs.fTransform;
   fPickName = rhs.fPickName;
   fpG4TextPlus = rhs.fpG4TextPlus? new G4TextPlus(*rhs.fpG4TextPlus): 0;
+  fDisplayOnSecondPassForTransparency =
+    rhs.fDisplayOnSecondPassForTransparency;
   return *this;
 }
 
@@ -98,7 +103,8 @@ G4OpenGLStoredSceneHandler::TO::TO():
   fPickName(0),
   fStartTime(-DBL_MAX),
   fEndTime(DBL_MAX),
-  fpG4TextPlus(0)
+  fpG4TextPlus(0),
+  fDisplayOnSecondPassForTransparency(false)
 {}
 
 G4OpenGLStoredSceneHandler::TO::TO(const G4OpenGLStoredSceneHandler::TO& to):
@@ -108,7 +114,8 @@ G4OpenGLStoredSceneHandler::TO::TO(const G4OpenGLStoredSceneHandler::TO& to):
   fStartTime(to.fStartTime),
   fEndTime(to.fEndTime),
   fColour(to.fColour),
-  fpG4TextPlus(to.fpG4TextPlus? new G4TextPlus(*to.fpG4TextPlus): 0)
+  fpG4TextPlus(to.fpG4TextPlus? new G4TextPlus(*to.fpG4TextPlus): 0),
+  fDisplayOnSecondPassForTransparency(to.fDisplayOnSecondPassForTransparency)
 {}
 
 G4OpenGLStoredSceneHandler::TO::TO(G4int id, const G4Transform3D& tr):
@@ -117,7 +124,8 @@ G4OpenGLStoredSceneHandler::TO::TO(G4int id, const G4Transform3D& tr):
   fPickName(0),
   fStartTime(-DBL_MAX),
   fEndTime(DBL_MAX),
-  fpG4TextPlus(0)
+  fpG4TextPlus(0),
+  fDisplayOnSecondPassForTransparency(false)
 {}
 
 G4OpenGLStoredSceneHandler::TO::~TO()
@@ -136,6 +144,8 @@ G4OpenGLStoredSceneHandler::TO& G4OpenGLStoredSceneHandler::TO::operator=
   fEndTime = rhs.fEndTime;
   fColour = rhs.fColour;
   fpG4TextPlus = rhs.fpG4TextPlus? new G4TextPlus(*rhs.fpG4TextPlus): 0;
+  fDisplayOnSecondPassForTransparency =
+    rhs.fDisplayOnSecondPassForTransparency;
   return *this;
 }
 
@@ -185,19 +195,19 @@ G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible
   const G4Colour& c = GetColour (visible);
   G4double opacity = c.GetAlpha ();
 
-  if (!fSecondPass) {
+  if (!fSecondPassForTransparency) {
     G4bool transparency_enabled = true;
     G4OpenGLViewer* pViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
     if (pViewer) transparency_enabled = pViewer->transparency_enabled;
     if (transparency_enabled && opacity < 1.) {
       // On first pass, transparent objects are not drawn, but flag is set...
-      fSecondPassRequested = true;
+      fSecondPassForTransparencyRequested = true;
       return false;
     }
   }
 
   // On second pass, opaque objects are not drwan...
-  if (fSecondPass && opacity >= 1.) return false;
+  if (fSecondPassForTransparency && opacity >= 1.) return false;
 
   // Loads G4Atts for picking...
   if (fpViewer->GetViewParameters().IsPicking()) {
@@ -236,6 +246,7 @@ G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible
 	fpViewer->GetApplicableVisAttributes(visible.GetVisAttributes());
       to.fStartTime = pVA->GetStartTime();
       to.fEndTime = pVA->GetEndTime();
+      to.fDisplayOnSecondPassForTransparency = fSecondPassForTransparency;
       fTOList.push_back(to);
       // For transient objects, colour, transformation, are kept in
       // the TO, so should *not* be in the display list.  As mentioned
@@ -254,6 +265,7 @@ G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible
     } else {
       PO po(fDisplayListId, fObjectTransformation);
       po.fPickName = fPickName;
+      po.fDisplayOnSecondPassForTransparency = fSecondPassForTransparency;
       fPOList.push_back(po);
       G4bool usesGLCommands = ExtraPOProcessing(visible, fPOList.size() - 1);
       // Transients are displayed as they come (GL_COMPILE_AND_EXECUTE
@@ -311,16 +323,16 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePostamble()
   //  if ((glGetError() == GL_TABLE_TOO_LARGE) || (glGetError() == GL_OUT_OF_MEMORY)) {  // Could close?
   if (glGetError() == GL_OUT_OF_MEMORY) {  // Could close?
     G4cout <<
-      "ERROR: G4OpenGLStoredSceneHandler::EndModeling: Failure to allocate"
-      "  display List for fTopPODL - try OpenGL Immediated mode."
+      "ERROR: G4OpenGLStoredSceneHandler::AddPrimitivePostamble: Failure"
+      "  to allocate display List for fTopPODL - try OpenGL Immediated mode."
            << G4endl;
   }
   if (fMemoryForDisplayLists) {
     glEndList();
     if (glGetError() == GL_OUT_OF_MEMORY) {  // Could close?
       G4cout <<
-        "ERROR: G4OpenGLStoredSceneHandler::EndModeling: Failure to allocate"
-        "  display List for fTopPODL - try OpenGL Immediated mode."
+        "ERROR: G4OpenGLStoredSceneHandler::AddPrimitivePostamble: Failure"
+	"  to allocate display List for fTopPODL - try OpenGL Immediated mode."
              << G4endl;
     }
   }
@@ -409,7 +421,6 @@ void G4OpenGLStoredSceneHandler::AddPrimitive (const G4NURBS& nurbs)
 
 void G4OpenGLStoredSceneHandler::BeginModeling () {
   G4VSceneHandler::BeginModeling();
-  ClearStore();  // ...and all that goes with it.
   /* Debug...
   fDisplayListId = glGenLists (1);
   G4cout << "OGL::fDisplayListId (start): " << fDisplayListId << G4endl;
@@ -439,13 +450,6 @@ void G4OpenGLStoredSceneHandler::EndModeling () {
     }
     glEndList ();
 
-    // Make sure screen corresponds to graphical database...
-    if (fpViewer) {
-      fpViewer -> SetView ();
-      fpViewer -> ClearView ();
-      fpViewer -> DrawView ();
-    }
-
     if (glGetError() == GL_OUT_OF_MEMORY) {  // Could close?
       G4cout <<
         "ERROR: G4OpenGLStoredSceneHandler::EndModeling: Failure to allocate"
@@ -455,11 +459,6 @@ void G4OpenGLStoredSceneHandler::EndModeling () {
   }
 
   G4VSceneHandler::EndModeling ();
-
-  /* Debug...
-  fDisplayListId = glGenLists (1);
-  G4cout << "OGL::fDisplayListId (end): " << fDisplayListId << G4endl;
-  */
 }
 
 void G4OpenGLStoredSceneHandler::ClearStore () {
@@ -487,11 +486,9 @@ void G4OpenGLStoredSceneHandler::ClearStore () {
   fMemoryForDisplayLists = true;
 }
 
-void G4OpenGLStoredSceneHandler::ClearTransientStore () {
-
+void G4OpenGLStoredSceneHandler::ClearTransientStore ()
+{
   //G4cout << "G4OpenGLStoredSceneHandler::ClearTransientStore" << G4endl;
-
-  G4VSceneHandler::ClearTransientStore ();
 
   // Delete OpenGL transient display lists and Transient Objects themselves.
   for (size_t i = 0; i < fTOList.size (); i++)
@@ -499,13 +496,6 @@ void G4OpenGLStoredSceneHandler::ClearTransientStore () {
   fTOList.clear ();
 
   fMemoryForDisplayLists = true;
-
-  // Make sure screen corresponds to graphical database...
-  if (fpViewer) {
-    fpViewer -> SetView ();
-    fpViewer -> ClearView ();
-    fpViewer -> DrawView ();
-  }
 }
 
 void G4OpenGLStoredSceneHandler::RequestPrimitives (const G4VSolid& solid)
@@ -529,7 +519,7 @@ void G4OpenGLStoredSceneHandler::RequestPrimitives (const G4VSolid& solid)
   const G4Colour& c = pVA -> GetColour ();
   G4double opacity = c.GetAlpha ();
 
-  if (!fSecondPass) {
+  if (!fSecondPassForTransparency) {
     G4bool transparency_enabled = true;
     // Need access to method in G4OpenGLViewer.  static_cast doesn't work
     // with a virtual base class, so use dynamic_cast.  No need to test
@@ -538,13 +528,13 @@ void G4OpenGLStoredSceneHandler::RequestPrimitives (const G4VSolid& solid)
     transparency_enabled = pViewer->transparency_enabled;
     if (transparency_enabled && opacity < 1.) {
       // On first pass, transparent objects are not drawn, but flag is set...
-      fSecondPassRequested = true;
+      fSecondPassForTransparencyRequested = true;
       return;
     }
   }
 
   // On second pass, opaque objects are not drwan...
-  if (fSecondPass && opacity >= 1.) return;
+  if (fSecondPassForTransparency && opacity >= 1.) return;
 
   G4PhysicalVolumeModel* pPVModel =
     dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
@@ -589,6 +579,7 @@ void G4OpenGLStoredSceneHandler::RequestPrimitives (const G4VSolid& solid)
 	fPickMap[++fPickName] = holder;
 	po.fPickName = fPickName;
       }
+      po.fDisplayOnSecondPassForTransparency = fSecondPassForTransparency;
       fPOList.push_back(po);
       // No need to test if gl commands are used (result of
       // ExtraPOProcessing) because we have already decided they will

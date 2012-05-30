@@ -375,19 +375,15 @@ void G4XXXStoredSceneHandler::AddPrimitive(const G4NURBS&) {
   //?? Don't bother implementing this.  NURBS are not functional.
 }
 
-void G4XXXStoredSceneHandler::ClearStore () {
-
-  G4VSceneHandler::ClearStore ();  // Sets need kernel visit, etc.
-
+void G4XXXStoredSceneHandler::ClearStore ()
+{
   fStore.clear();
   fPermanents.clear();
   fTransients.clear();
 }
 
-void G4XXXStoredSceneHandler::ClearTransientStore () {
-
-  G4VSceneHandler::ClearTransientStore ();
-
+void G4XXXStoredSceneHandler::ClearTransientStore ()
+{
   typedef std::list<G4String> Store;
   typedef std::list<G4String>::iterator StoreIterator;
   typedef std::vector<StoreIterator>::iterator StoreIteratorIterator;

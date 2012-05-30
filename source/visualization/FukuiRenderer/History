@@ -20,6 +20,13 @@ committal in the CVS repository !
 History file for visualization/FukuiRenderer sub-category
 ---------------------------------------------------------
 
+23rd May 2012  John Allison  (DAWN-V09-05-02)
+- Health Check 2012: Migrated (see management/History):
+  o G4FukuiRendererSceneHandler.cc, G4DAWNFILESceneHandler.cc:
+    . Removed ClearStore.
+  o G4FRSCENEHANDLER::ClearTransientStore:
+    . Removed call to G4VSceneHandler::ClearTransientStore.
+
 28th February 2012  John Allison  (DAWN-V09-05-01)
 - Migrated to G4VScenehandler::fObjectTransformation.
 

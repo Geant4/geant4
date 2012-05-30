@@ -168,8 +168,6 @@ G4GMocrenFileSceneHandler::~G4GMocrenFileSceneHandler ()
     // close g4.gdd
     GFEndModeling();
   }
-  ClearStore (); // clear current scene
-
 }
 
 //----- initialize all parameters
@@ -1736,7 +1734,6 @@ G4bool G4GMocrenFileSceneHandler::IsVisible()
 //----- 
 void G4GMocrenFileSceneHandler::ClearTransientStore() 
 {
-  G4VSceneHandler::ClearTransientStore ();
   // This is typically called after an update and before drawing hits
   // of the next event.  To simulate the clearing of "transients"
   // (hits, etc.) the detector is redrawn...
