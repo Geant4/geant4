@@ -88,6 +88,15 @@ G4bool Tst50RunAction::GetFlag()
 
 void Tst50RunAction::EndOfRunAction(const G4Run* aRun)
 {
+
+  if (G4VVisManager::GetConcreteInstance())
+    {
+      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
+    }
+
+  numberEvents = aRun->GetNumberOfEvent();
+
+#ifdef G4ANALYSIS_USE
   G4RunManager* runManager = G4RunManager::GetRunManager();
   primary =
     (Tst50PrimaryGeneratorAction*)(runManager->GetUserPrimaryGeneratorAction());
@@ -98,15 +107,6 @@ void Tst50RunAction::EndOfRunAction(const G4Run* aRun)
   G4String absorberMaterialName = detector->GetMaterialName(); 
   G4double absorberMaterialDensity = detector->GetDensity();
   G4double targetThickness = detector -> GetTargetThickness();
-
-  if (G4VVisManager::GetConcreteInstance())
-    {
-      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-    }
-
-  numberEvents = aRun->GetNumberOfEvent();
-
-#ifdef G4ANALYSIS_USE
   if (primaryParticleName == "gamma")
     {
       G4double gammaTransmittedFraction = (gammaTransmitted/numberEvents);

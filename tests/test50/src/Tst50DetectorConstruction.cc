@@ -145,8 +145,8 @@ void Tst50DetectorConstruction::DefineMaterials()
   // define Elements
   //
 
-  a = 1.01*g/mole;
-  G4Element* H  = new G4Element(name="Hydrogen",symbol="H" , z= 1., a);
+//GF  a = 1.01*g/mole;
+//GF  G4Element* H  = new G4Element(name="Hydrogen",symbol="H" , z= 1., a);
 
   a = 14.01*g/mole;
   G4Element* N  = new G4Element(name="Nitrogen",symbol="N" , z= 7., a);

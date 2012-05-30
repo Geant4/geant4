@@ -68,11 +68,6 @@ void Tst50SteppingAction::UserSteppingAction(const G4Step* aStep)
   Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
 #endif
 
-  G4int runID = runAction->GetRunID();
-
-  // The user can select transmission test with this flag
-  G4bool trasmissionTestFlag = runAction->GetFlag();
-  
   G4double  primaryParticleEnergy = primaryAction->GetInitialEnergy();
   G4double  ParticleKineticEnergy = aStep->GetTrack()->GetKineticEnergy();
   G4String primaryParticleName = primaryAction->GetParticle(); 
@@ -110,6 +105,11 @@ void Tst50SteppingAction::UserSteppingAction(const G4Step* aStep)
     }
 
 #ifdef G4ANALYSIS_USE
+  G4int runID = runAction->GetRunID();
+
+  // The user can select transmission test with this flag
+  G4bool trasmissionTestFlag = runAction->GetFlag();
+  
 
   // Stopping Power and CSDA range tests ...
 
