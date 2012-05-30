@@ -15,6 +15,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25 May, 12  G.Cosmo (mctruth-V09-05-01)
+- Fixed trivial cases of variable shadowing.
+
 13 December, 11  G.Cosmo (mctruth-V09-05-00)
 - Removed fake copy-constructor. Fixing Coverity defect.
 

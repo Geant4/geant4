@@ -17,7 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-20 March 2012 Witek Pokorski (gdml-V09-04-11)
+30 May 2012 - Gabriele Cosmo (gdml-V09-05-02)
+- Fixed typo introduced in previous tag...
+
+25 May 2012 - Gabriele Cosmo (gdml-V09-05-01)
+- Fixed trivial cases of variable shadowing.
+
+20 March 2012 Witek Pokorski (gdml-V09-05-00, gdml-V09-04-11)
 - Bug fix in material properties.
 
 23 November 2011 Gabriele Cosmo (gdml-V09-04-10)

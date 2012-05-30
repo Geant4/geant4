@@ -35,8 +35,8 @@
 #include "G4PersistencyCenter.hh"
 
 // Implementation of Constructor #1
-G4PersistencyManager::G4PersistencyManager(G4PersistencyCenter* pc, std::string n)
- : f_pc(pc), nameMgr(n), f_is_initialized(false)
+G4PersistencyManager::G4PersistencyManager(G4PersistencyCenter* ptc, std::string n)
+ : f_pc(ptc), nameMgr(n), f_is_initialized(false)
 {
   m_verbose = f_pc->VerboseLevel();
 }

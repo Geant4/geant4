@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25 May 2012 - G.Cosmo (ascii-V09-05-02)
+- Fixed trivial cases of variable shadowing.
+
 4 April 2012 - G.Cosmo (ascii-V09-05-00)
 - Fixed case of conversion from size_t to G4int in G4tgrUtils in
   function AreWordsEquivalent(), detected on win64 system.

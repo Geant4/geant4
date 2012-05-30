@@ -15,6 +15,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30 May, 12  G.Cosmo (persistency-V09-05-01)
+- Fixed typo introduced in previous tag...
+
+25 May, 12  G.Cosmo (persistency-V09-05-00)
+- Fixed trivial cases of variable shadowing.
+
 23 October, 08  G.Cosmo (persistency-V09-01-00)
 - Added "ascii" module from original implementation by P.Arce (CIEMAT).
   First release.

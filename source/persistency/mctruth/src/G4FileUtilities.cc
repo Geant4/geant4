@@ -47,8 +47,8 @@ G4bool G4FileUtilities::FileExists(const std::string file)
 {
   char* c = (char *) file.c_str();
 
-  int fd = ::open( c, O_RDONLY ); 
-  // int error = errno;
+  G4int fd = ::open( c, O_RDONLY ); 
+  // G4int error = errno;
   if ( fd != -1 ) {
     ::close( fd );
     return true;
@@ -58,14 +58,14 @@ G4bool G4FileUtilities::FileExists(const std::string file)
 }
 
 // Implementation of CopyFile
-int G4FileUtilities::CopyFile(const std::string srcFile, const std::string dstFile)
+G4int G4FileUtilities::CopyFile(const std::string srcFile, const std::string dstFile)
 {
   std::string cmd = "cp " + srcFile + " " + dstFile;
   return Shell( cmd );
 }
 
 // Implementation of DeleteFile
-int G4FileUtilities::DeleteFile(const std::string file, const std::string option)
+G4int G4FileUtilities::DeleteFile(const std::string file, const std::string option)
 {
   std::string cmd = "rm " + option + " " + file;
   return Shell( cmd );

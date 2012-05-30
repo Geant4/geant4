@@ -146,8 +146,8 @@ void G4tgrSolid::FillSolidParams( const std::vector<G4String>& wl )
        = angleParams.find(solidType);
     if( ite != angleParams.end() )
     {
-      std::set<G4int> apar = (*ite).second;
-      if( apar.find(ii) != apar.end() )
+      std::set<G4int> apar2 = (*ite).second;
+      if( apar2.find(ii) != apar2.end() )
       {
         isAngle = 1;
         vd->push_back( G4tgrUtils::GetDouble( wl[3+ii], deg ));

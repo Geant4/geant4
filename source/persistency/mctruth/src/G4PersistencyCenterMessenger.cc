@@ -202,7 +202,7 @@ void G4PersistencyCenterMessenger::SetNewValue(G4UIcommand* command, G4String ne
 // Implementation of GetCurrentValue
 G4String G4PersistencyCenterMessenger::GetCurrentValue(G4UIcommand* command)
 {
-  G4String s="Undefined";
+  G4String ustr="Undefined";
 
   if (command==select)
   {
@@ -247,7 +247,7 @@ G4String G4PersistencyCenterMessenger::GetCurrentValue(G4UIcommand* command)
     }
   }
 
-  return s;
+  return ustr;
 }
 
 // Implementation of PopWord

@@ -87,8 +87,8 @@ G4LogicalVolume* G4GDMLParser::ParseST(const G4String& filename,
                                              G4Material* medium,
                                              G4Material* solid)
 {   
-  G4STRead reader;
-  return reader.Read(filename, medium, solid);
+  G4STRead STreader;
+  return STreader.Read(filename, medium, solid);
 }
 
 //

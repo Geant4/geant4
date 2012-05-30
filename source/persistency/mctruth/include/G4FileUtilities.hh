@@ -62,13 +62,13 @@ class G4FileUtilities
       std::string StrErrNo() const { return ::strerror(errno); };
       // returns the error message of the last system call as string.
 
-      int Shell(std::string s) { return ::system(s.c_str()); };
+      G4int Shell(std::string str) { return ::system(str.c_str()); };
       // execute the shell command.  returns zero if success.
 
-      int CopyFile(const std::string srcFile, const std::string dstFile);
+      G4int CopyFile(const std::string srcFile, const std::string dstFile);
       // copies the "srcFile" to "dstFile".  returns zero if success.
 
-      int DeleteFile(const std::string file, const std::string option);
+      G4int DeleteFile(const std::string file, const std::string option);
       // deletes the "file" with the "option".  returns zero if success.
 
       std::string GetEnv(const std::string env) { return ::getenv(env.c_str()); };

@@ -52,9 +52,9 @@ G4tgrEvaluator::~G4tgrEvaluator()
 
 
 // -------------------------------------------------------------------------
-void G4tgrEvaluator::print_error( G4int status ) const
+void G4tgrEvaluator::print_error( G4int estatus ) const
 {
-  switch (status)
+  switch (estatus)
   {
     case ERROR_SYNTAX_ERROR:
       G4cerr << "G4tgrEvaluator: syntax error!" << G4endl;
