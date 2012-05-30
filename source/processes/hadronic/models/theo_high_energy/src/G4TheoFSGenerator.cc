@@ -60,7 +60,7 @@ G4TheoFSGenerator::~G4TheoFSGenerator()
 
 const G4TheoFSGenerator & G4TheoFSGenerator::operator=(const G4TheoFSGenerator &)
 {
-  G4String text = "G4CrossSectionBase::operator= meant to not be accessable";
+  G4String text = "G4TheoFSGenerator::operator= meant to not be accessible";
   throw G4HadronicException(__FILE__, __LINE__, text);
   return *this;
 }
@@ -74,6 +74,20 @@ int G4TheoFSGenerator::operator==(const G4TheoFSGenerator &) const
 int G4TheoFSGenerator::operator!=(const G4TheoFSGenerator &) const
 {
   return 1;
+}
+
+void G4TheoFSGenerator::ModelDescription(std::ostream& outFile) const
+{
+  outFile << GetModelName() <<" consists of a " << theHighEnergyGenerator->GetModelName()
+		  << " string model and of "
+		  << ".\n"
+		  << "The string model simulates the interaction of\n"
+          << "an incident hadron with a nucleus, forming \n"
+          << "excited strings, decays these strings into hadrons,\n"
+          << "and leaves an excited nucleus.\n"
+          << "The string model:\n";
+  theHighEnergyGenerator->ModelDescription(outFile);
+//theTransport->IntraNuclearTransportDescription(outFile)
 }
 
 
@@ -163,6 +177,7 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
   	  std::vector<G4KineticTrack *>::iterator ir_iter;
   	  for(ir_iter=theInitialResult->begin(); ir_iter!=theInitialResult->end(); ir_iter++)
   	  {
+  		  //G4cout << "TheoFS secondary, mom " << (*ir_iter)->GetDefinition()->GetParticleName() << " " << (*ir_iter)->Get4Momentum() << G4endl;
   		  E_out += (*ir_iter)->Get4Momentum().e();
   	  }
   	  G4double init_mass= ionTable->GetIonMass(theNucleus.GetZ_asInt(),theNucleus.GetA_asInt());
@@ -191,7 +206,7 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
 	  G4cout << " Corrected delta mass " << init_mass - final_mass - delta_m << G4endl;
   	  G4cout << "initial E, mass = " << init_E << ", " << init_mass << G4endl;
   	  G4cout << "  final E, mass = " << E_out <<", " << final_mass << "  excitation_E " << E_excit << G4endl;
-    #endif
+  #endif
 
   G4ReactionProductVector * theTransportResult = NULL;
   G4int hitCount = 0;
