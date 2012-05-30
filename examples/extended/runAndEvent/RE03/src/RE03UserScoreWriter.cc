@@ -44,7 +44,7 @@ RE03UserScoreWriter::~RE03UserScoreWriter() {
   ;
 }
 
-void RE03UserScoreWriter::DumpQuantityToFile(G4String & psName, G4String & fileName, G4String & option) {
+void RE03UserScoreWriter::DumpQuantityToFile(const G4String & psName, const G4String & fileName, const G4String & option) {
 
   //
   if(verboseLevel > 0) {
