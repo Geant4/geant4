@@ -42,7 +42,7 @@ class Tst12StackingAction : public G4UserStackingAction
 	  {
 	    result = fKill;
 	  }
-	  if(aTrack->GetKineticEnergy()<1*GeV)
+	  if(aTrack->GetKineticEnergy()<3.5*GeV)
 	  {
 	    result = fKill;
 	  }

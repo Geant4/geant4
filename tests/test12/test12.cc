@@ -42,9 +42,16 @@
 #include "G4UIterminal.hh"
 #include "G4RunManager.hh"
 
+#include "G4HadronicProcessStore.hh"
+
 #include "G4ios.hh"
 
 int main(int argc,char** argv) {
+
+// arguments, all optional:
+//   1: input file name, default is - (stdin)
+//   2: physics list, default FTFP_BERT
+//   3: any value: dump HTML physics list information, 
 
   // Set the default random engine to RanecuEngine
   CLHEP::RanecuEngine defaultEngine;
@@ -95,7 +102,9 @@ int main(int argc,char** argv) {
     G4String command = "/control/execute ";
     UImanager->ApplyCommand(command+inputFileName);
   }
-
+  
+  if (argc>3 )G4HadronicProcessStore::Instance()->DumpHtml();
+  
   delete runManager;
   return 0;
 }

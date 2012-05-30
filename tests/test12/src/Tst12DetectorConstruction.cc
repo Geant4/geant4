@@ -109,8 +109,10 @@ void Tst12DetectorConstruction::SelectMaterialPointer()
                            FindOrBuildMaterial(materialChoice);
   }
   
-  if ( ! selectedMaterial )
-    { selectedMaterial = Pb; }
+  if ( ! selectedMaterial ){
+     G4cout << " Material " << materialChoice << "not found, using Pb" << G4endl;
+     selectedMaterial = Pb;
+  }
 
   if(simpleBoxLog)
   { simpleBoxLog->SetMaterial(selectedMaterial); }

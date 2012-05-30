@@ -36,17 +36,33 @@
 
 Tst12RunAction::Tst12RunAction()
 {
+   runTimer = new G4Timer;
 }
 
 Tst12RunAction::~Tst12RunAction()
 {
+   delete runTimer;
 }
 
 void Tst12RunAction::BeginOfRunAction(const G4Run* )
 {
+   runTimer->Start();
 }
 
 void Tst12RunAction::EndOfRunAction(const G4Run*)
 {
+   runTimer->Stop();
+   G4double userTime(0.0) , wallTime(0.0);
+   G4cout << "   time(s) spent "; 
+   if ( runTimer->IsValid() ) {
+      userTime = runTimer->GetUserElapsed();
+      wallTime = runTimer->GetRealElapsed();
+      G4cout << "user  time: " << userTime << "s"
+             << ", wall time: "<< wallTime << "s"
+	     << G4endl;
+  } else {
+      G4cout << "UNDEFINED" << G4endl;;
+  }
+
 }
 

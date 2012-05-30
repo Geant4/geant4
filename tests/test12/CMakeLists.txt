@@ -16,7 +16,8 @@ GEANT4_ADD_TEST(test12 COMMAND test12 test12.in
                        DEPENDS test12_hadronic_exerciser)
 GEANT4_ADD_TEST(test12-FTFBIC COMMAND test12 test12.in FTF_BIC
                               ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
-                              DEPENDS test12)
+                              DEPENDS test12
+                              TIMEOUT 2000)
 GEANT4_ADD_TEST(test12-QGSBIC COMMAND test12 test12.in QGS_BIC
                               ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
                               DEPENDS test12)

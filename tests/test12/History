@@ -15,6 +15,18 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24 May 2012, Gunter Folger             (test12-V09-05-03)
+- Add exit as last line of input file
+
+21 May 2012, Gunter Folger             (test12-V09-05-02)
+- Speed up, by raising limit to kill secondaries from 1 GeV to 3.5 GeV
+
+16 May 2012, Gunter Folger             (test12-V09-05-01)
+- Add time information per run
+
+8 May 2012, Pere Mato                  (test12-V09-05-00)
+- Increased timeout for test test12-FTFBIC  to 2000 seconds.
+
 10 Sep 2011, Pere Mato                  (test12-V09-04-03)
 - Fixed test dependencies.
 

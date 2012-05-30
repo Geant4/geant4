@@ -120,5 +120,5 @@ int main (int argc, char** argv) {
   OutputCases (5, anti_particleNameList, anti_energyList, materialNameList);
 
 
-  G4cout << G4endl;
+  G4cout << G4endl << "exit" << G4endl;
 }
