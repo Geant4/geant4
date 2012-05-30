@@ -50,9 +50,10 @@
 #include <algorithm>
 // Class G4FTFParticipants 
 
-G4FTFParticipants::G4FTFParticipants() 
+G4FTFParticipants::G4FTFParticipants() :
+  theProjectileNucleus(0),
+  currentInteraction(-1)
 {
- theProjectileNucleus=0;
 }
 
 G4FTFParticipants::G4FTFParticipants(const G4FTFParticipants &): G4VParticipants()

@@ -15,6 +15,30 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+25-May-2012, Gunter Folger   (hadr-string-diff-V09-05-04)
+-  Add ModelDescription in FTF
+-  Make copy ctor, =, ==, and != operators private without implementation
+-  add Modelname in Ctor
+
+21 May 2012, V.Uzhinsky (hadr-string-diff-V09-05-03)
+-  Improved diffraction dissociation is implemented
+
+--------------------------------------------------------
+21 May 2012, W.Pokorski (hadr-string-diff-V09-05-02)
+---------------------------------------------------------------------
+ - definitely removing G4ComponentCHIPShadronNuclearXS
+
+11 May 2012, W.Pokorski (hadr-string-diff-V09-05-01)
+---------------------------------------------------------------------
+ - G4FTFParameters uses the new G4ChipsComponentXS from 
+ hadronic/cross_sections
+
+May 5, 2012, Gunter Folger  ( ..trunk.. )
+- revert changes by Mikhail ( rev. r58261 )
+
+28 April 2012, M.Kosov                 (hadr-string-diff-V09-05-00)
+- hadronic/models/chiral_inv_phase_space moved to hadronic/chips
+
 22-November 2011, V. Uzhinsky& G.Folger (hadr-string-diff-V09-04-10)
    Fix memory leak in G4FTFParticipants.cc
 

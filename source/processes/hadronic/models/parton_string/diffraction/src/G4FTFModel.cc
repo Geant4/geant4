@@ -50,7 +50,8 @@
 
 // Class G4FTFModel 
 
-G4FTFModel::G4FTFModel():theExcitation(new G4DiffractiveExcitation()),
+G4FTFModel::G4FTFModel(const G4String& modelName):G4VPartonStringModel(modelName),
+                         theExcitation(new G4DiffractiveExcitation()),
                          theElastic(new G4ElasticHNScattering()),
                          theAnnihilation(new G4FTFAnnihilation())
 {
@@ -58,6 +59,7 @@ G4FTFModel::G4FTFModel():theExcitation(new G4DiffractiveExcitation()),
         theParameters=0;
 	NumberOfInvolvedNucleon=0;
         NumberOfInvolvedNucleonOfProjectile=0;
+    SetEnergyMomentumCheckLevels(2*perCent, 150*MeV);
 }
 
 struct DeleteVSplitableHadron { void operator()(G4VSplitableHadron * aH){ delete aH;} };
@@ -101,22 +103,6 @@ G4FTFModel::~G4FTFModel()
     }
    }
 */
-}
-
-const G4FTFModel & G4FTFModel::operator=(const G4FTFModel &)
-{
-	throw G4HadronicException(__FILE__, __LINE__, "G4FTFModel::operator= is not meant to be accessed ");
-	return *this;
-}
-
-int G4FTFModel::operator==(const G4FTFModel &right) const
-{
-	return this==&right;
-}
-
-int G4FTFModel::operator!=(const G4FTFModel &right) const
-{
-	return this!=&right;
 }
 
 // ------------------------------------------------------------
@@ -1269,7 +1255,7 @@ Successfull = false; break;                         // 1.07.11
              if(NumberOfInvolvedTargetNucleon > 1)
              {
               NumberOfInvolvedTargetNucleon--;
-              target->SetStatus(0); // 1->0 return nucleon to the target VU 18.02.11
+              target->SetStatus(4); // 1->0 return nucleon to the target  VU 10.04.2012
              }
             }
            }
@@ -1292,7 +1278,7 @@ Successfull = false; break;                         // 1.07.11
               if(NumberOfInvolvedTargetNucleon > 1)
               {
                NumberOfInvolvedTargetNucleon--;
-               target->SetStatus(0);  // 1->0 return nucleon to the target VU 18.02.11
+               target->SetStatus(0);  // 1->0 return nucleon to the target  VU 10.04.2012
               }
              }
             } else // If NumOfInel
@@ -1308,7 +1294,7 @@ Successfull = false; break;                         // 1.07.11
               if(NumberOfInvolvedTargetNucleon > 1)
               {
                NumberOfInvolvedTargetNucleon--;
-               target->SetStatus(0); // 1->0 return nucleon to the target VU 18.02.11
+               target->SetStatus(4); // 1->0 return nucleon to the target  VU 10.04.2012
               }
              }
             }   // end if NumOfInel
@@ -1577,7 +1563,7 @@ G4ExcitedStringVector * G4FTFModel::BuildStrings()
 	{
             G4bool isProjectile(0);
 
-            if(primaries[ahadron]->GetStatus() == 1) {isProjectile=true; }
+            if(primaries[ahadron]->GetStatus() <= 1) {isProjectile=true; } // VU 10.04.2012
 //            if(primaries[ahadron]->GetStatus() == 3) {isProjectile=false;}
 
             FirstString=0; SecondString=0;
@@ -1631,7 +1617,7 @@ G4ExcitedStringVector * G4FTFModel::BuildStrings()
 	 {
             G4bool isProjectile(0);
 
-            if(theAdditionalString[ahadron]->GetStatus() == 1) {isProjectile=true; }
+            if(theAdditionalString[ahadron]->GetStatus() <= 1) {isProjectile=true; } // VU 10.04.2012
 //            if(theAdditionalString[ahadron]->GetStatus() == 3) {isProjectile=false;}
 
             FirstString=0; SecondString=0;
@@ -1652,14 +1638,14 @@ G4ExcitedStringVector * G4FTFModel::BuildStrings()
 	for (G4int ahadron=0; ahadron < NumberOfInvolvedNucleon ; ahadron++)
 	{
 //G4cout<<"Nucleon status & int# "<<ahadron<<" "<<TheInvolvedNucleon[ahadron]->GetSplitableHadron()->GetStatus()<<" "<<TheInvolvedNucleon[ahadron]->GetSplitableHadron()->GetSoftCollisionCount()<<G4endl;
-            if(TheInvolvedNucleon[ahadron]->GetSplitableHadron()->GetStatus() ==0)
+            if(TheInvolvedNucleon[ahadron]->GetSplitableHadron()->GetStatus() ==4)
             { // A nucleon is returned back to the nucleus after annihilation act for example
 //G4cout<<" Delete 0"<<G4endl;
              delete TheInvolvedNucleon[ahadron]->GetSplitableHadron();
              G4VSplitableHadron *aHit=0; 
              TheInvolvedNucleon[ahadron]->Hit(aHit);
             }
-            else if((TheInvolvedNucleon[ahadron]->GetSplitableHadron()->GetStatus() ==1)  &&
+            else if((TheInvolvedNucleon[ahadron]->GetSplitableHadron()->GetStatus() <=1)  && // VU 10.04.2012
             (TheInvolvedNucleon[ahadron]->GetSplitableHadron()->GetSoftCollisionCount() ==0))
             { // A nucleon is returned back to the nucleus after rejected interactions
               // due to an annihilation before
@@ -1668,7 +1654,7 @@ G4ExcitedStringVector * G4FTFModel::BuildStrings()
              G4VSplitableHadron *aHit=0; 
              TheInvolvedNucleon[ahadron]->Hit(aHit);
             }
-            else if((TheInvolvedNucleon[ahadron]->GetSplitableHadron()->GetStatus() ==1)  &&
+            else if((TheInvolvedNucleon[ahadron]->GetSplitableHadron()->GetStatus() <=1)  && // VU 10.04.2012
             (TheInvolvedNucleon[ahadron]->GetSplitableHadron()->GetSoftCollisionCount() !=0))
             { // Nucleon which participate in the interactions, 
 //G4cout<<"Taken 1 !=0"<<G4endl;
@@ -1769,4 +1755,9 @@ G4ThreeVector G4FTFModel::GaussianPt(G4double AveragePt2, G4double maxPtSquare) 
 	G4double phi=G4UniformRand() * twopi;
 	
 	return G4ThreeVector (Pt*std::cos(phi), Pt*std::sin(phi), 0.);    
+}
+
+void G4FTFModel::ModelDescription(std::ostream& desc) const
+{
+	desc << "please add description here" << G4endl;
 }

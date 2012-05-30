@@ -130,6 +130,7 @@ G4bool G4DiffractiveExcitation::
      G4double ProbTargetDiffraction=theParameters->GetProbabilityOfTarDiff();
 
      G4double AveragePt2=theParameters->GetAveragePt2();
+     G4double ProbLogDistr=theParameters->GetProbLogDistr();         // Uzhi 21.05.2012
 
 //     G4double ProbOfDiffraction=ProbProjectileDiffraction +
 //                                ProbTargetDiffraction;
@@ -141,6 +142,8 @@ G4bool G4DiffractiveExcitation::
      G4LorentzVector Psum;      // 4-momentum in CMS
      Psum=Pprojectile+Ptarget;
      G4double S=Psum.mag2(); 
+
+//Uzhi_SqrtS=std::sqrt(S);
 
 // Transform momenta to cms and then rotate parallel to z axis;
      G4LorentzRotation toCms(-1*Psum.boostVector());
@@ -236,6 +239,13 @@ G4cout<<"M0pr M0tr "<<M0projectile<<" "<<M0target<<" "<<SumMasses<<G4endl;
 //G4cout<<"Targ "<<Ptarget<<G4endl;
      G4double maxPtSquare; // = PZcms2;
 /*
+Uzhi_targetdiffraction=0;
+Uzhi_projectilediffraction=0;
+Uzhi_Mx2=1.0;
+Uzhi_modT=0.;
+G4int Uzhi_QE=0;
+*/
+/*
 G4cout<<"Start --------------------"<<G4endl;
 G4cout<<"Proj "<<M0projectile<<" "<<ProjectileDiffStateMinMass<<"  "<<ProjectileNonDiffStateMinMass<<G4endl;
 G4cout<<"Targ "<<M0target    <<" "<<TargetDiffStateMinMass    <<" "<<TargetNonDiffStateMinMass<<G4endl;
@@ -268,6 +278,7 @@ G4cout<<"Rapid "<<ProjectileRapidity<<G4endl; //" "<<TargetRapidity<<G4endl;
      {    
 //        std::exp(-SlopeQuarkExchange*(ProjectileRapidity - 1.36)))  //TargetRapidity))) 1.45
 //G4cout<<"Q exchange"<<G4endl;
+//Uzhi_QE=1;
       G4int NewProjCode(0), NewTargCode(0);
 
       G4int ProjQ1(0), ProjQ2(0), ProjQ3(0);
@@ -726,7 +737,8 @@ G4int Uzhi; G4cin>>Uzhi;
      G4int whilecount=0;
 
 //   Choose a process ---------------------------
-
+//ProbOfDiffraction=1.;                 // Uzhi Difr
+//ProbProjectileDiffraction=1.;         // Uzhi 
      if(G4UniformRand() < ProbOfDiffraction)
        {
         if(G4UniformRand() < ProbProjectileDiffraction)
@@ -734,6 +746,11 @@ G4int Uzhi; G4cin>>Uzhi;
 //G4cout<<"projectile diffraction"<<G4endl;
 
          do {
+/*
+Uzhi_projectilediffraction=1;
+Uzhi_targetdiffraction=0;
+Uzhi_Mx2=1.;
+*/
 //             Generate pt
 //             if (whilecount++ >= 500 && (whilecount%100)==0)
 //	   	 G4cout << "G4DiffractiveExcitation::ExciteParticipants possibly looping"
@@ -802,12 +819,18 @@ G4int Uzhi; G4cin>>Uzhi;
           } while ((Pprojectile+Qmomentum).mag2() <  ProjectileDiffStateMinMass2); //||  
                   //Repeat the sampling because there was not any excitation
 //((Ptarget    -Qmomentum).mag2() <  M0target2                  )) );
+          projectile->SetStatus(1*projectile->GetStatus());          // VU 10.04.2012
         }
         else
         { // -------------- Target diffraction ----------------
 
 //G4cout<<"Target diffraction"<<G4endl;
          do {
+/*
+Uzhi_projectilediffraction=0;
+Uzhi_targetdiffraction=1;
+Uzhi_Mx2=1.;
+*/
 //             Generate pt
 //             if (whilecount++ >= 500 && (whilecount%100)==0)
 //	   	 G4cout << "G4DiffractiveExcitation::ExciteParticipants possibly looping"
@@ -890,6 +913,7 @@ G4cout<<Seco<<G4endl;
 // (((Pprojectile+Qmomentum).mag2() <  M0projectile2          ) ||  //No without excitation
 //  ((Ptarget    -Qmomentum).mag2() <  TargetDiffStateMinMass2)) );
 //G4cout<<"Go out"<<G4endl;
+          target->SetStatus(1*target->GetStatus());     // VU 10.04.2012
          } // End of if(G4UniformRand() < ProbProjectileDiffraction)
         }
         else  //----------- Non-diffraction process ------------
@@ -897,6 +921,11 @@ G4cout<<Seco<<G4endl;
 
 //G4cout<<"Non-diffraction process"<<G4endl;
          do {
+/*
+Uzhi_projectilediffraction=0;
+Uzhi_targetdiffraction=0;
+Uzhi_Mx2=1.;
+*/
 //             Generate pt
 //             if (whilecount++ >= 500 && (whilecount%100)==0)
 //	   	 G4cout << "G4DiffractiveExcitation::ExciteParticipants possibly looping"
@@ -946,16 +975,18 @@ G4cout<<Seco<<G4endl;
              PMinusMin=std::sqrt(ProjMassT2+PZcms2)-PZcms;
              PMinusMax=SqrtS-TargMassT;
 
-//           PMinusNew=ChooseP(PMinusMin, PMinusMax);  // 12.06.11
-             PMinusNew=(PMinusMax-PMinusMin)*G4UniformRand() + PMinusMin;
+             if(G4UniformRand() < ProbLogDistr)                       // Uzhi 25.04.2012
+             {     PMinusNew=ChooseP(PMinusMin, PMinusMax);}               // 12.06.11
+             else {PMinusNew=(PMinusMax-PMinusMin)*G4UniformRand() + PMinusMin;}
              Qminus=PMinusNew-Pprojectile.minus();
 
              TPlusMin=std::sqrt(TargMassT2+PZcms2)-PZcms;
 //           TPlusMax=SqrtS-PMinusNew;                      
              TPlusMax=SqrtS-ProjMassT;      
 
-//           TPlusNew=ChooseP(TPlusMin, TPlusMax); // 12.06.11
-             TPlusNew=(TPlusMax-TPlusMin)*G4UniformRand() +TPlusMin;
+             if(G4UniformRand() < 0.5)
+             {     TPlusNew=ChooseP(TPlusMin, TPlusMax);}                   // 12.06.11
+             else {TPlusNew=(TPlusMax-TPlusMin)*G4UniformRand() +TPlusMin;} 
 
              Qplus=-(TPlusNew-Ptarget.plus());
 
@@ -969,6 +1000,9 @@ G4int Uzhi; G4cin>>Uzhi;
        } while ( 
  ((Pprojectile+Qmomentum).mag2() <  ProjectileNonDiffStateMinMass2) || //No double Diffraction
  ((Ptarget    -Qmomentum).mag2() <  TargetNonDiffStateMinMass2    ));
+
+      projectile->SetStatus(0*projectile->GetStatus());     // VU 10.04.2012
+      target->SetStatus(0*target->GetStatus());             // VU 10.04.2012
      }
 
      Pprojectile += Qmomentum;
@@ -986,7 +1020,20 @@ G4int Uzhi; G4cin>>Uzhi;
 // Creation time and position of target nucleon were determined at
 // ReggeonCascade() of G4FTFModel
 // ------------------------------------------------------
+/*
+if(Uzhi_projectilediffraction != 0) 
+{Uzhi_Mx2=Pprojectile.mag2(); Uzhi_modT=(target->Get4Momentum()-Ptarget).mag2();}
 
+if(Uzhi_targetdiffraction     != 0) 
+{Uzhi_Mx2=Ptarget.mag2(); Uzhi_modT=(projectile->Get4Momentum()-Pprojectile).mag2();}
+
+if(Uzhi_QE!= 0) 
+{
+ Uzhi_projectilediffraction=0;
+ Uzhi_targetdiffraction    =0;
+ Uzhi_Mx2                  =1.;
+}
+*/
 //G4cout<<"Mproj "<<Pprojectile.mag()<<G4endl;
 //G4cout<<"Mtarg "<<Ptarget.mag()<<G4endl;
      projectile->Set4Momentum(Pprojectile);
@@ -1065,8 +1112,13 @@ G4cout<<"Defin "<<hadron->GetDefinition()->GetPDGEncoding()<<G4endl;
 //G4cout<<G4endl<<"Check for Kink!##############"<<G4endl<<G4endl;
         if(W > Wmin)
         {                                        // Kink is possible
-          G4double Pt2kink=theParameters->GetPt2Kink();
-          Pt = std::sqrt(Pt2kink*(std::pow(W2/16./Pt2kink+1.,G4UniformRand()) - 1.));
+          if(hadron->GetStatus() == 0)           // VU 10.04.2012
+          {
+           G4double Pt2kink=theParameters->GetPt2Kink(); // For non-diffractive
+           Pt = std::sqrt(Pt2kink*(std::pow(W2/16./Pt2kink+1.,G4UniformRand()) - 1.));
+          }
+          else
+          {Pt=0.;}                                       // For diffractive
 
           if(Pt > 500.*MeV)
           {

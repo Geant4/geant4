@@ -60,7 +60,6 @@ GEANT4_DEFINE_MODULE(NAME G4had_string_diff
         G4FTFModel.hh
         G4FTFParameters.hh
         G4FTFParticipants.hh
-        G4ComponentCHIPShadronNuclearXS.hh
     SOURCES
         G4DiffractiveExcitation.cc
         G4DiffractiveHHScatterer.cc
@@ -70,7 +69,6 @@ GEANT4_DEFINE_MODULE(NAME G4had_string_diff
         G4FTFModel.cc
         G4FTFParameters.cc
         G4FTFParticipants.cc
-        G4ComponentCHIPShadronNuclearXS.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

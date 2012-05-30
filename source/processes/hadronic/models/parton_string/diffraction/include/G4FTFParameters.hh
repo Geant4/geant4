@@ -80,6 +80,7 @@ class G4FTFParameters
         void SetProbabilityOfTarDiff(const G4double aValue);
 
         void SetAveragePt2(const G4double aValue);
+        void SetProbLogDistr(const G4double aValue);
 
 // --------- Set parameters of a string kink --------------------------------
         void SetPt2Kink(const G4double aValue);
@@ -130,6 +131,7 @@ class G4FTFParameters
         G4double GetProbabilityOfTarDiff();
 
         G4double GetAveragePt2();
+        G4double GetProbLogDistr();
 
 // --------- Get parameters of a string kink --------------------------------
         G4double GetPt2Kink();
@@ -184,6 +186,7 @@ class G4FTFParameters
         G4double ProbabilityOfTarDiff;
 
         G4double AveragePt2;
+        G4double ProbLogDistr;
 
 // ---------- Parameters of kink -------------------------------------
         G4double Pt2kink;
@@ -271,6 +274,9 @@ inline  void G4FTFParameters::SetProbabilityOfTarDiff(const G4double aValue)
 
 inline  void G4FTFParameters::SetAveragePt2(const G4double aValue)
              {AveragePt2 = aValue*GeV*GeV;}
+
+inline  void G4FTFParameters::SetProbLogDistr(const G4double aValue)
+             {ProbLogDistr = aValue;}
 
 // --------- Set parameters of a string kink --------------------------------
 inline  void G4FTFParameters::SetPt2Kink(const G4double aValue) 
@@ -366,6 +372,7 @@ inline  G4double G4FTFParameters::GetTarMinNonDiffMass()      {return TarMinNonD
 inline  G4double G4FTFParameters::GetProbabilityOfTarDiff()   {return ProbabilityOfTarDiff;}
 
 inline  G4double G4FTFParameters::GetAveragePt2()             {return AveragePt2;}
+inline  G4double G4FTFParameters::GetProbLogDistr()           {return ProbLogDistr;}
 
 // --------- Get parameters of a string kink --------------------------
 inline  G4double G4FTFParameters::GetPt2Kink()                {return Pt2kink;}
