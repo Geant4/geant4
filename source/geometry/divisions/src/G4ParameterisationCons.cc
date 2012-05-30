@@ -105,9 +105,9 @@ G4ParameterisationConsRho( EAxis axis, G4int nDiv,
   }
   else if( divType == DivNDIV )
   {
-    G4Cons* msol = (G4Cons*)(msolid);
-    fwidth = CalculateWidth( msol->GetOuterRadiusMinusZ()
-                           - msol->GetInnerRadiusMinusZ(), nDiv, offset );
+    G4Cons* mconsol = (G4Cons*)(msolid);
+    fwidth = CalculateWidth( mconsol->GetOuterRadiusMinusZ()
+                           - mconsol->GetInnerRadiusMinusZ(), nDiv, offset );
   }
 
 #ifdef G4DIVDEBUG
