@@ -23,66 +23,58 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: IonDPMJETPhysics.hh,v 1.0 2010/08/26 10:51:25 antoni Exp $
-// GRAS tag $Name: gras-02-05-02 $
+// $Id: $ 
+// GEANT4 tag $Name: $
 //
 //---------------------------------------------------------------------------
 //
-// Header:    IonDPMJETPhysics
+// ClassName:   UrQMDAntiBarionBuilder
 //
-// Author:    copy from P.Truscott manuel DPMJET2.5 
+// Author: 2012  Andrea Dotti
 //
-// 
-// Customer:          
-// Contract:          
+// Modified:
 //
-// Modifications are provided according to
+//----------------------------------------------------------------------------
 //
-// Organisation:        
-// Customer:            
-// Contract:            
-//
-// Modified:     26.08.2010
-//
-// ------------------------------------------------------------
-//
+#ifndef UrQMDAntiBarionBuilder_h
+#define UrQMDAntiBarionBuilder_h 1
 
-#ifndef IonDPMJETPhysics_h
-#define IonDPMJETPhysics_h 1
-
-#include "G4VHadronPhysics.hh"
 #include "globals.hh"
 
-class G4BinaryLightIonReaction;
-class G4DPMJET2_5Model;
-class G4DPMJET2_5CrossSection;
-class G4VCrossSectionDataSet;
+#include "G4HadronElasticProcess.hh"
+#include "G4VAntiBarionBuilder.hh"
 
-class IonDPMJETPhysics : public G4VHadronPhysics
+#include "G4UrQMD1_3Model.hh"
+
+#include "G4VCrossSectionDataSet.hh"
+#include "G4VComponentCrossSection.hh"
+
+class UrQMDAntiBarionBuilder : public G4VAntiBarionBuilder
 {
-public:
+public: 
 
-  IonDPMJETPhysics(G4bool val);
-  virtual ~IonDPMJETPhysics();
+  UrQMDAntiBarionBuilder();
+  virtual ~UrQMDAntiBarionBuilder();
 
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type
-  void ConstructProcess();
+  virtual void Build(G4HadronElasticProcess * aP);
+  virtual void Build(G4AntiProtonInelasticProcess * aP);
+  virtual void Build(G4AntiNeutronInelasticProcess * aP);
+  virtual void Build(G4AntiDeuteronInelasticProcess * aP);
+  virtual void Build(G4AntiTritonInelasticProcess * aP);
+  virtual void Build(G4AntiHe3InelasticProcess * aP);
+  virtual void Build(G4AntiAlphaInelasticProcess * aP);
+    
+  void SetMinEnergy(G4double val) {fMin = val;}
+  void SetMaxEnergy(G4double val) {fMax = val;}
 
 private:
 
-  void AddProcess(const G4String& name, G4ParticleDefinition* part,
-		  G4bool isIon);
+  G4UrQMD1_3Model * fModel; 
+  G4VCrossSectionDataSet* fAntiNucleonData;
+  G4VComponentCrossSection * fAntiNucleonXS;
+  G4double fMin;
+  G4double fMax;
 
-  G4VCrossSectionDataSet* fTripathi;
-  G4VCrossSectionDataSet* fTripathiLight;
-  G4VCrossSectionDataSet* fShen;
-  G4VCrossSectionDataSet* fIonH;
-  G4BinaryLightIonReaction*  fIonBC;
-  G4DPMJET2_5Model*          fDPM;
-  G4DPMJET2_5CrossSection*   fDpmXS;
-  G4bool                  fUseDPMJETXS;
 };
-
 #endif
+

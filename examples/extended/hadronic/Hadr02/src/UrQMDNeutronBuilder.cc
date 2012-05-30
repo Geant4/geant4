@@ -23,66 +23,57 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: IonDPMJETPhysics.hh,v 1.0 2010/08/26 10:51:25 antoni Exp $
-// GRAS tag $Name: gras-02-05-02 $
+// $Id: UrQMDNeutronBuilder.cc,v 1.4 2009-04-02 08:11:32 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// Header:    IonDPMJETPhysics
+// ClassName:   UrQMDNeutronBuilder
 //
-// Author:    copy from P.Truscott manuel DPMJET2.5 
+// Author: 2012 Andrea Dotti
 //
-// 
-// Customer:          
-// Contract:          
+// Modified:
 //
-// Modifications are provided according to
+//----------------------------------------------------------------------------
 //
-// Organisation:        
-// Customer:            
-// Contract:            
-//
-// Modified:     26.08.2010
-//
-// ------------------------------------------------------------
-//
+#ifdef G4_USE_URQMD
+#include "UrQMDNeutronBuilder.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTable.hh"
+#include "G4ProcessManager.hh"
 
-#ifndef IonDPMJETPhysics_h
-#define IonDPMJETPhysics_h 1
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4VHadronPhysics.hh"
-#include "globals.hh"
-
-class G4BinaryLightIonReaction;
-class G4DPMJET2_5Model;
-class G4DPMJET2_5CrossSection;
-class G4VCrossSectionDataSet;
-
-class IonDPMJETPhysics : public G4VHadronPhysics
+UrQMDNeutronBuilder::UrQMDNeutronBuilder() 
 {
-public:
+  fMin = 0*MeV;
+  fMax = 100*TeV;
+  fModel = new G4UrQMD1_3Model();
+}
 
-  IonDPMJETPhysics(G4bool val);
-  virtual ~IonDPMJETPhysics();
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type
-  void ConstructProcess();
+void UrQMDNeutronBuilder::Build(G4NeutronInelasticProcess * aP)
+{
+  fModel->SetMinEnergy(fMin);
+  fModel->SetMaxEnergy(fMax);
+  aP->RegisterMe(fModel);
+}
 
-private:
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-  void AddProcess(const G4String& name, G4ParticleDefinition* part,
-		  G4bool isIon);
+UrQMDNeutronBuilder::~UrQMDNeutronBuilder() 
+{}
 
-  G4VCrossSectionDataSet* fTripathi;
-  G4VCrossSectionDataSet* fTripathiLight;
-  G4VCrossSectionDataSet* fShen;
-  G4VCrossSectionDataSet* fIonH;
-  G4BinaryLightIonReaction*  fIonBC;
-  G4DPMJET2_5Model*          fDPM;
-  G4DPMJET2_5CrossSection*   fDpmXS;
-  G4bool                  fUseDPMJETXS;
-};
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+void UrQMDNeutronBuilder::Build(G4HadronElasticProcess * )
+{}
+
+void UrQMDNeutronBuilder::Build(G4HadronFissionProcess * )
+{}
+
+void UrQMDNeutronBuilder::Build(G4HadronCaptureProcess * )
+{}
+
+#endif //G4_USE_URQMD

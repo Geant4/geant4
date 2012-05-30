@@ -23,47 +23,38 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: IonDPMJETPhysics.hh,v 1.0 2010/08/26 10:51:25 antoni Exp $
-// GRAS tag $Name: gras-02-05-02 $
+// $Id: G4IonUrQMDPhysics.hh,v 1.0 2010/08/26 10:51:25 antoni Exp $
+// GRAS tag $Name: $
 //
 //---------------------------------------------------------------------------
 //
-// Header:    IonDPMJETPhysics
+// Header:    G4IonUrQMDPhysics
 //
-// Author:    copy from P.Truscott manuel DPMJET2.5 
+// Author:    2012 Andrea Dotti
 //
 // 
-// Customer:          
-// Contract:          
 //
-// Modifications are provided according to
-//
-// Organisation:        
-// Customer:            
-// Contract:            
-//
-// Modified:     26.08.2010
+// Modified:     
 //
 // ------------------------------------------------------------
 //
 
-#ifndef IonDPMJETPhysics_h
-#define IonDPMJETPhysics_h 1
+#ifndef G4IonUrQMDPhysics_h
+#define G4IonUrQMDPhysics_h 1
 
 #include "G4VHadronPhysics.hh"
 #include "globals.hh"
 
-class G4BinaryLightIonReaction;
-class G4DPMJET2_5Model;
-class G4DPMJET2_5CrossSection;
+class G4HadronicInteraction;
 class G4VCrossSectionDataSet;
+class G4UrQMD1_3Model;
 
-class IonDPMJETPhysics : public G4VHadronPhysics
+class IonUrQMDPhysics : public G4VHadronPhysics
 {
 public:
 
-  IonDPMJETPhysics(G4bool val);
-  virtual ~IonDPMJETPhysics();
+  IonUrQMDPhysics(G4int ver = 0);
+  virtual ~IonUrQMDPhysics();
 
   // This method will be invoked in the Construct() method.
   // each physics process will be instantiated and
@@ -72,17 +63,26 @@ public:
 
 private:
 
-  void AddProcess(const G4String& name, G4ParticleDefinition* part,
-		  G4bool isIon);
+  void AddProcess(const G4String&, G4ParticleDefinition*, G4bool isIon);
 
-  G4VCrossSectionDataSet* fTripathi;
-  G4VCrossSectionDataSet* fTripathiLight;
-  G4VCrossSectionDataSet* fShen;
-  G4VCrossSectionDataSet* fIonH;
-  G4BinaryLightIonReaction*  fIonBC;
-  G4DPMJET2_5Model*          fDPM;
-  G4DPMJET2_5CrossSection*   fDpmXS;
-  G4bool                  fUseDPMJETXS;
+  G4VCrossSectionDataSet*   fTripathi;
+  G4VCrossSectionDataSet*   fTripathiLight;
+  G4VCrossSectionDataSet*   fShen;
+  G4VCrossSectionDataSet*   fIonH;
+  
+  G4UrQMD1_3Model * fModel;
+
+  G4int  fVerbose;
+  G4bool fWasActivated;
 };
 
+
 #endif
+
+
+
+
+
+
+
+

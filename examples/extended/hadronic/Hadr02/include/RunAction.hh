@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: RunAction.hh,v 1.3 2006-06-29 17:23:52 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 #ifndef RunAction_h
 #define RunAction_h 1
 
@@ -48,8 +51,6 @@ public: // Without description
 
   RunAction();
   ~RunAction();
-
-public: // With description
  
   void BeginOfRunAction(const G4Run*);
   // In this method histogramms are booked

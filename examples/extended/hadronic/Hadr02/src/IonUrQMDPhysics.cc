@@ -23,27 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: IonABPhysics.cc,v 1.1 2006/10/28 16:00:25 vnivanch Exp $
-// GEANT4 tag $Name: gras-02-05-02 $
+// $Id: IonUrQMDPhysics.cc,v 1.1 2006/10/28 16:00:25 vnivanch Exp $
+// GEANT4 tag $Name: $
 //
 //---------------------------------------------------------------------------
 //
-// Class:    IonDPMJETPhysics
+// Class:    IonUrQMDPhysics
 //
-// Author:      A.Ivanchenko 26.08.2010
-//
-// This class was designed under ESA contracts
-// 
-// Customer:     
-// Contract:            
+// Author:   2012 Andrea Dotti
 //
 //
 // Modified:
 //
 // ------------------------------------------------------------
 // 
-
-#include "IonDPMJETPhysics.hh"
+#ifdef G4_USE_URQMD
+#include "IonUrQMDPhysics.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 #include "G4Deuteron.hh"
@@ -53,63 +48,55 @@
 #include "G4GenericIon.hh"
 
 #include "G4HadronInelasticProcess.hh"
-#include "G4BinaryLightIonReaction.hh"
 #include "G4TripathiCrossSection.hh"
 #include "G4TripathiLightCrossSection.hh"
 #include "G4IonsShenCrossSection.hh"
 #include "G4IonProtonCrossSection.hh"
 
+#include "G4UrQMD1_3Model.hh"
+
 #include "G4BuilderType.hh"
-
-#ifdef G4_USE_DPMJET
-#include "G4DPMJET2_5Model.hh"
-#include "G4DPMJET2_5Interface.hh"
-#include "G4DPMJET2_5CrossSection.hh"
-#endif
-
 using namespace std;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-IonDPMJETPhysics::IonDPMJETPhysics(G4bool val)
-  : G4VHadronPhysics("ionInelasticDPMJET"),fIonBC(0),fDPM(0),
-    fUseDPMJETXS(val)
+IonUrQMDPhysics::IonUrQMDPhysics(G4int ver)
+  : G4VHadronPhysics("ionInelasticUrQMD"),verbose(ver),
+    fWasActivated(false)
 {
   fTripathi = fTripathiLight = fShen = fIonH = 0;
+  fModel = 0;
   SetPhysicsType(bIons);
+  if(fVerbose > 1) { G4cout << "### IonUrQMDPhysics" << G4endl; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-IonDPMJETPhysics::~IonDPMJETPhysics()
+IonUrQMDPhysics::~IonUrQMDPhysics()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void IonDPMJETPhysics::ConstructProcess()
+void IonUrQMDPhysics::ConstructProcess()
 {
-  G4double emax = 1000.*TeV;
+  if(fWasActivated) { return; }
+  fWasActivated = true;
 
-  fIonBC = new G4BinaryLightIonReaction();
-  fIonBC->SetMinEnergy(0.0);
-  fIonBC->SetMaxEnergy(6*GeV);
+  G4double emin = 0.*MeV;
+  G4double emax = 100.*TeV;
+
+  fModel = new G4UrQMD1_3Model();
+  fModel->SetMinEnergy( emin );
+  fModel->SetMaxEnergy( emax );
 
   fShen = new G4IonsShenCrossSection();
   fTripathi = new G4TripathiCrossSection();
   fTripathiLight = new G4TripathiLightCrossSection();
   fIonH = new G4IonProtonCrossSection();
+  fShen->SetMaxKinEnergy( emax );
+  fTripathi->SetMaxKinEnergy( emax );
+  fTripathiLight->SetMaxKinEnergy( emax );
+  fIonH->SetMaxKinEnergy( emax );
 
-  fShen->SetMaxKinEnergy(emax);
-  fTripathi->SetMaxKinEnergy(emax);
-  fTripathiLight->SetMaxKinEnergy(emax);
-  fIonH->SetMaxKinEnergy(emax);    
-
-#ifdef G4_USE_DPMJET
-  fDPM = new G4DPMJET2_5Model();
-  fDPM->SetMinEnergy(5*GeV);
-  fDPM->SetMaxEnergy(emax);
-  if(fUseDPMJETXS) { fDpmXS = new G4DPMJET2_5CrossSection; }
-#endif
 
   AddProcess("dInelastic", G4Deuteron::Deuteron(),false);
   AddProcess("tInelastic",G4Triton::Triton(),false);
@@ -117,28 +104,27 @@ void IonDPMJETPhysics::ConstructProcess()
   AddProcess("alphaInelastic", G4Alpha::Alpha(),true);
   AddProcess("ionInelastic",G4GenericIon::GenericIon(),true);
 
-  G4cout << "IonDPMJETPhysics::ConstructProcess done! " << G4endl;
+  if(fVerbose > 1) {
+    G4cout << "IonUrQMDPhysics::ConstructProcess done! " 
+	   << G4endl;
+  }
 }
 
-void IonDPMJETPhysics::AddProcess(const G4String& name,
-				  G4ParticleDefinition* part,
-				  G4bool isIon)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void IonUrQMDPhysics::AddProcess(const G4String& name, 
+				 G4ParticleDefinition* part, 
+				 G4bool isIon)
 {
   G4HadronInelasticProcess* hadi = new G4HadronInelasticProcess(name, part);
   G4ProcessManager* pManager = part->GetProcessManager();
   pManager->AddDiscreteProcess(hadi);
   hadi->AddDataSet(fShen);
-  //hadi->AddDataSet(fTripathi);
-  //hadi->AddDataSet(fTripathiLight);
+  //  hadi->AddDataSet(fTripathi);
+  // hadi->AddDataSet(fTripathiLight);
   if(isIon) { hadi->AddDataSet(fIonH); }
-  hadi->RegisterMe(fIonBC);
-#ifdef G4_USE_DPMJET
-  hadi->RegisterMe(fDPM); 
-  if(fUseDPMJETXS) { hadi->AddDataSet(fDpmXS); }
-#endif
+  hadi->RegisterMe( fModel );
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-
-
+#endif //URQMD

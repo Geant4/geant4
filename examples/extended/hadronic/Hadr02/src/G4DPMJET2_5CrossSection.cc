@@ -65,6 +65,8 @@
 #include <fstream>
 #include <sstream>
 
+#include "G4DynamicParticle.hh"
+
 using namespace std;
 
 ///////////////////////////////////////////////////////////////////////////////

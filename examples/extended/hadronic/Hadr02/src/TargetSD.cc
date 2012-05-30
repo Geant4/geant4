@@ -49,7 +49,7 @@
 TargetSD::TargetSD(const G4String& name)
  :G4VSensitiveDetector(name)
 {
-  theHisto = HistoManager::GetPointer();
+  fHisto = HistoManager::GetPointer();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -66,7 +66,7 @@ void TargetSD::Initialize(G4HCofThisEvent*)
 
 G4bool TargetSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
-  theHisto->AddTargetStep(aStep);
+  fHisto->AddTargetStep(aStep);
   return true;
 }
 

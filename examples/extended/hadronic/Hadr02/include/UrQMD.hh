@@ -23,66 +23,60 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: IonDPMJETPhysics.hh,v 1.0 2010/08/26 10:51:25 antoni Exp $
-// GRAS tag $Name: gras-02-05-02 $
+// $Id: UrQMD.hh,v 1.1 2007-10-19 15:35:08 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// Header:    IonDPMJETPhysics
+// ClassName:   
 //
-// Author:    copy from P.Truscott manuel DPMJET2.5 
+// Author: 2012  Andrea Dotti
+//   created from FTFP_BERT
 //
-// 
-// Customer:          
-// Contract:          
+// Modified:
 //
-// Modifications are provided according to
+//----------------------------------------------------------------------------
 //
-// Organisation:        
-// Customer:            
-// Contract:            
-//
-// Modified:     26.08.2010
-//
-// ------------------------------------------------------------
-//
+#ifndef TUrQMD_h
+#define TUrQMD_h 1
 
-#ifndef IonDPMJETPhysics_h
-#define IonDPMJETPhysics_h 1
-
-#include "G4VHadronPhysics.hh"
+#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
+#include "CompileTimeConstraints.hh"
 
-class G4BinaryLightIonReaction;
-class G4DPMJET2_5Model;
-class G4DPMJET2_5CrossSection;
-class G4VCrossSectionDataSet;
-
-class IonDPMJETPhysics : public G4VHadronPhysics
+template<class T>
+class TUrQMD: public T
 {
 public:
-
-  IonDPMJETPhysics(G4bool val);
-  virtual ~IonDPMJETPhysics();
-
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type
-  void ConstructProcess();
+  TUrQMD(G4int ver = 1);
+  virtual ~TUrQMD();
+  
+public:
+  // SetCuts() 
+  virtual void SetCuts();
 
 private:
-
-  void AddProcess(const G4String& name, G4ParticleDefinition* part,
-		  G4bool isIon);
-
-  G4VCrossSectionDataSet* fTripathi;
-  G4VCrossSectionDataSet* fTripathiLight;
-  G4VCrossSectionDataSet* fShen;
-  G4VCrossSectionDataSet* fIonH;
-  G4BinaryLightIonReaction*  fIonBC;
-  G4DPMJET2_5Model*          fDPM;
-  G4DPMJET2_5CrossSection*   fDpmXS;
-  G4bool                  fUseDPMJETXS;
+  enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };
 };
+#ifdef G4_USE_URQMD
+#include "UrQMD.icc"
+#else
+template<class T>
+TUrQMD<T>::TUrQMD(G4int) : T()
+{
+  G4ExceptionDescription de;
+  de<<"Support for UrQMD not enabled"<<G4endl;
+  G4Exception(__FILE__,"UrQMD-01",FatalException,de,"Code should be compiled with G4_USE_URQMD environment variable set.");
+}
 
+template<class T>
+TUrQMD<T>::~TUrQMD() { }
+template<class T>
+void TUrQMD<T>::SetCuts() { }
 #endif
+
+typedef TUrQMD<G4VModularPhysicsList> UrQMD;
+
+#endif //TUrQMD_h
+
+

@@ -23,54 +23,96 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.4 2006-11-15 14:58:10 vnivanch Exp $
+// $Id: UrQMDPiKBuilder.cc,v 1.7 2010-11-18 14:52:22 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-/////////////////////////////////////////////////////////////////////////
+//---------------------------------------------------------------------------
 //
-// EventActionMessenger
+// ClassName:   UrQMDPiKBuilder
 //
-// Created: 31.01.03 V.Ivanchenko
+// Author: 2012 Andrea Dotti
 //
 // Modified:
-// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
-// 16.11.2006 Add option allowing to have user defined beam position (VI)
 //
-////////////////////////////////////////////////////////////////////////
+//----------------------------------------------------------------------------
 //
-
-#include "PrimaryGeneratorAction.hh"
-#include "G4ParticleGun.hh"
-#include "HistoManager.hh"
-#include "G4Event.hh"
+#ifdef G4_USE_URQMD
+#include "UrQMDPiKBuilder.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTable.hh"
+#include "G4ProcessManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::PrimaryGeneratorAction()
+UrQMDPiKBuilder::UrQMDPiKBuilder()
 {
-  fParticleGun  = new G4ParticleGun(1);
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  fHisto = HistoManager::GetPointer();
+  fMin = 0*MeV;
+  fMax = 100*TeV;
+  fModel = new G4UrQMD1_3Model(); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::~PrimaryGeneratorAction()
+UrQMDPiKBuilder::~UrQMDPiKBuilder() 
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void UrQMDPiKBuilder::Build(G4HadronElasticProcess * ) 
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void UrQMDPiKBuilder::Build(G4PionPlusInelasticProcess * aP)
 {
-  delete fParticleGun;
+  fModel->SetMinEnergy(fMin);
+  fModel->SetMaxEnergy(fMax);
+  aP->RegisterMe(fModel);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
+void UrQMDPiKBuilder::Build(G4PionMinusInelasticProcess * aP)
 {
-  if(0 == anEvent->GetEventID()) {
-    if(fHisto->DefaultBeamPosition()) {
-      G4double zVertex = -(5.0*mm + fHisto->Length());
-      fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,zVertex));
-    }
-  }
-  fParticleGun->GeneratePrimaryVertex(anEvent);
+  fModel->SetMinEnergy(fMin);
+  fModel->SetMaxEnergy(fMax);
+  aP->RegisterMe(fModel);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void UrQMDPiKBuilder::Build(G4KaonPlusInelasticProcess * aP)
+{
+  fModel->SetMinEnergy(fMin);
+  fModel->SetMaxEnergy(fMax);
+  aP->RegisterMe(fModel);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void UrQMDPiKBuilder::Build(G4KaonMinusInelasticProcess * aP)
+{
+  fModel->SetMinEnergy(fMin);
+  fModel->SetMaxEnergy(fMax);
+  aP->RegisterMe(fModel);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void UrQMDPiKBuilder::Build(G4KaonZeroLInelasticProcess * aP)
+{
+  fModel->SetMinEnergy(fMin);
+  fModel->SetMaxEnergy(fMax);
+  aP->RegisterMe(fModel);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void UrQMDPiKBuilder::Build(G4KaonZeroSInelasticProcess * aP)
+{
+  fModel->SetMinEnergy(fMin);
+  fModel->SetMaxEnergy(fMax);
+  aP->RegisterMe(fModel);
+}
+
+#endif //G4_USE_URQMD
