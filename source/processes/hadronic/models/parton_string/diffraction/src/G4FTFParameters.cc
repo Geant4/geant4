@@ -34,7 +34,7 @@
 #include <utility>                                        
 //#include "G4VComponentCrossSection.hh"         // 31 May 2011
 //#include "G4ComponentCHIPShadronNuclearXS.hh"  // 31 May 2011
-#include "G4ChipsComponentXS.hh" // change by Witek Pokorski
+//#include "G4ChipsComponentXS.hh" // change by Witek Pokorski
 
 #include "G4ParticleDefinition.hh"             // 31 May 2011
 
@@ -46,12 +46,15 @@
 #include "G4KaonPlus.hh"                       // 31 May 2011
 #include "G4KaonMinus.hh"                      // 31 May 2011
 
+G4ChipsComponentXS* G4FTFParameters::FTFxsManager = new G4ChipsComponentXS();  // change by Witek Pokorski
+
+
 G4FTFParameters::G4FTFParameters()
-{FTFxsManager=0;}
+{}
 
 
 G4FTFParameters::~G4FTFParameters()
-{delete FTFxsManager;}
+{}
 //**********************************************************************************************
 G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle, 
                                                    G4int      theA,
@@ -109,7 +112,6 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
 
 // ------------------- Cross section calculation from CHIPS -------------
 //    FTFxsManager = new G4ComponentCHIPShadronNuclearXS();  // 31 May 2011 
-    FTFxsManager = new G4ChipsComponentXS();  // change by Witek Pokorski
 
     Plab/=GeV;
 //  G4double LogPlab    = std::log( Plab );

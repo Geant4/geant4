@@ -15,6 +15,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+30 May 2012, W.Pokorski (hadr-string-diff-V09-05-05)
+---------------------------------------------------------------------
+ - making G4ChipsComponentXS static to avoid multiple instanciations
+
 25-May-2012, Gunter Folger   (hadr-string-diff-V09-05-04)
 -  Add ModelDescription in FTF
 -  Make copy ctor, =, ==, and != operators private without implementation
