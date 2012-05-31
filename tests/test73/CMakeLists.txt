@@ -26,14 +26,29 @@ file(COPY ${MACROS} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/local)
 file(COPY ${MACROS} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/FTFP_BERT_EMX)
 file(COPY ${MACROS} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/FTFP_BERT)
 
-GEANT4_ADD_TEST( test73-build BUILD test73) 
+GEANT4_ADD_TEST( test73-build BUILD test73 LABELS Nightly Continuous PhysicsChecks) 
 
-GEANT4_ADD_TEST(test73-FTFP_BERT_EMX COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_BINARY_DIR}/FTFP_BERT_EMX ${CMAKE_CURRENT_BINARY_DIR}/test73 run_all.mac FTFP_BERT_EMX
+GEANT4_ADD_TEST(test73-local COMMAND ${CMAKE_CURRENT_BINARY_DIR}/test73 run_all.mac local
+	       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/local
 	       DEPENDS test73-build
+  	       LABELS PhysicsChecks Nightly Continous
 	       ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
-GEANT4_ADD_TEST(test73-FTFP_BERT COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_BINARY_DIR}/FTFP_BERT ${CMAKE_CURRENT_BINARY_DIR}/test73 run_all.mac FTFP_BERT
+
+#The following tests are enabled only in PhysicsChecks since they 
+#Will fail for physics reasons: the MSC model is not adeguate for pi-
+#When new G4 developments are such that they will not fail anymore
+#they can be promoted to nightlies adding the Nichtly and Continous
+#LABELS
+
+GEANT4_ADD_TEST(test73-FTFP_BERT_EMX COMMAND ${CMAKE_CURRENT_BINARY_DIR}/test73 run_all.mac FTFP_BERT_EMX
+	       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/FTFP_BERT_EMX
 	       DEPENDS test73-build
+	       LABELS PhysicsChecks
 	       ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
-GEANT4_ADD_TEST(test73-local COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_BINARY_DIR}/local ${CMAKE_CURRENT_BINARY_DIR}/test73 run_all.mac local
-		DEPENDS test73-build
-		ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+
+GEANT4_ADD_TEST(test73-FTFP_BERT COMMAND ${CMAKE_CURRENT_BINARY_DIR}/test73 run_all.mac FTFP_BERT
+	       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/FTFP_BERT
+	       DEPENDS test73-build
+	       LABELS PhysicsChecks
+	       ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+

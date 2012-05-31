@@ -11,6 +11,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+31 May 2012, Andrea Dotti (test73-V09-05-10, test73-V09-05-11)
+Adding LABELS property to test definition. Use of WORKING_DIRECTORY
+to correctly partse stderr. Needs cmake-V09-05-19
+
 19 May 2012, Andrea Dotti (test73-V09-05-09)
 Fixing compilation warnings on GCC 4.6 for set but unused variables
 
