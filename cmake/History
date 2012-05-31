@@ -30,6 +30,10 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 30th, 2012 - Pere Mato (cmake-V09-05-20)
+- Modules/Geant4MakeRules_cxx.cmake : Added -limf library in CMAKE_EXE_LINKER_FLAGS for icc compiler.
+  This is to avoid warnings of the type "warning: feupdateenv is not implemented and will always fail"
+
 May 30th, 2012 - Pere Mato (cmake-V09-05-19)
 - Templates/UseGeant4_internal.cmake : Added new arguments WORKING_DIRECTORY and LABELS to GEANT4_ADD_TEST() 
   This allows to assign tests to specific test slots (Nightly, Continuous, PhyscisChecks). If no label is specified it is
