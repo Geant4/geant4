@@ -87,6 +87,7 @@ set(CMAKE_CXX_FLAGS_DEBUG          "${Geant4_CXX_FLAGS_DEBUG}")
 set(CMAKE_CXX_FLAGS_MINSIZEREL     "${Geant4_CXX_FLAGS_MINSIZEREL}")
 set(CMAKE_CXX_FLAGS_RELEASE        "${Geant4_CXX_FLAGS_RELEASE}")
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${Geant4_CXX_FLAGS_RELWITHDEBINFO}")
+set(CMAKE_EXE_LINKER_FLAGS         "${Geant4_EXE_LINKER_FLAGS}")
 
 
 #----------------------------------------------------------------------------
