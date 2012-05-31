@@ -16,15 +16,6 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-22th May 2012 Garnier Laurent (config-V09-05-08)
-- fix moc.gmk generation in order to generate moc in G4TMP dir
-
-2nd May 2012, G.Folger
-- revert changes by Mikhail (rev r58246)
-
-27th April 2012 Mikhail Kosov  (config-V09-05-07)
-- hadronic/model/chiral_inv_phase_space moved to hadronic/chips
-
 5th April 2012 Gabriele Cosmo  (config-V09-05-06)
 - Exclude "setup" and "clean_setup" targets from dependencies step.
 

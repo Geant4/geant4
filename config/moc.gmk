@@ -13,9 +13,9 @@ G4TMPDIR := $(G4TMP)/$(G4SYSTEM)/$(name)
 
 ifneq ($(G4INTY_BUILD_QT),)
   moc_inc := $(shell ($(GREP) -l "Q_OBJECT" include/*.hh))
-  moc_sources := $(patsubst include/%.hh, $(G4TMPDIR)/moc/%_moc.cc, $(moc_inc))
-  moc_objects := $(patsubst $(G4TMPDIR)/moc/%_moc.cc,$(G4TMPDIR)/%_moc.o,$(moc_sources))
-  moc_dependencies := $(patsubst $(G4TMPDIR)/moc/%_moc.cc,$(G4TMPDIR)/%_moc.d,$(moc_sources))
+  moc_sources := $(patsubst include/%.hh, moc/%_moc.cc, $(moc_inc))
+  moc_objects := $(patsubst moc/%_moc.cc,$(G4TMPDIR)/%_moc.o,$(moc_sources))
+  moc_dependencies := $(patsubst moc/%_moc.cc,$(G4TMPDIR)/%_moc.d,$(moc_sources))
 endif
 
 
@@ -34,7 +34,7 @@ endif
 
 
 ifneq ($(G4INTY_BUILD_QT),)
-$(G4TMPDIR)/%_moc.d: $(G4TMPDIR)/moc/%_moc.cc
+$(G4TMPDIR)/%_moc.d: moc/%_moc.cc
 	@echo Making dependency for moc file $< ...
 	@if [ ! -d $(G4TMPDIR) ] ; then mkdir -p $(G4TMPDIR)  ;fi
 	@set -e;\
@@ -42,21 +42,21 @@ $(G4TMPDIR)/%_moc.d: $(G4TMPDIR)/moc/%_moc.cc
 	sed 's!$*\.o!$(G4TMPDIR)/& $@!' >$@;\
 	[ -s $@ ] || rm -f $@
 
-$(G4TMPDIR)/moc/%_moc.cc: include/%.hh
+moc/%_moc.cc: include/%.hh
 	@echo Making moc file for $< ...
-	@if [ ! -d $(G4TMPDIR)/moc ] ; then mkdir -p $(G4TMPDIR)/moc  ;fi
+	@if [ ! -d moc ] ; then mkdir -p moc  ;fi
 	@if [ `$(QTMOC) -v 2>&1 | $(GREP) "Qt 3" | wc -l ` -gt 0 ]; then \
 	$(QTMOC) -o $@ $<;\
 	else $(QTMOC) $(MOC_MACRO) -o $@ $<; \
 	fi;
 
 # could be better if we not duplicate this rule from common.gmk...
-$(G4TMPDIR)/%_moc.o: $(G4TMPDIR)/moc/%_moc.cc
+$(G4TMPDIR)/%_moc.o: moc/%_moc.cc
 	@echo Compiling $*.cc ...
 ifdef CPPVERBOSE
 	@echo Compiling moc file $*.cc ...
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $(OUT_OBJ)$(G4TMPDIR)/$(*F)_moc.o $(G4TMPDIR)/moc/$*_moc.cc
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $(OUT_OBJ)$(G4TMPDIR)/$(*F)_moc.o moc/$*_moc.cc
 else
-	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $(OUT_OBJ)$(G4TMPDIR)/$(*F)_moc.o $(G4TMPDIR)/moc/$*_moc.cc
+	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $(OUT_OBJ)$(G4TMPDIR)/$(*F)_moc.o moc/$*_moc.cc
 endif
 endif
