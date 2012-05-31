@@ -4,22 +4,24 @@ cd $VFEM/test46
 mkdir -p $REFERENCE
 
 cd $REFERENCE
+
 setenv PRIMARYBEAM e-
 mkdir -p $PRIMARYBEAM
-cd $PRIMARYBEAM
-
 setenv PHYSLIST FTFP_BERT_EMV
+
+cd $PRIMARYBEAM
 source $G4INSTALL/tests/test46/run_em.csh e30gev
 source $G4INSTALL/tests/test46/run_em.csh e50gev
+cd ../
 
-cd $REFERENCE
 setenv PRIMARYBEAM gamma
 mkdir -p $PRIMARYBEAM
-cd $PRIMARYBEAM
-
 setenv PHYSLIST FTFP_BERT_EMV
-source $G4INSTALL/tests/test46/run_em.csh e30gev
-source $G4INSTALL/tests/test46/run_em.csh e50gev
+
+cd $PRIMARYBEAM
+#source $G4INSTALL/tests/test46/run_em.csh e30gev
+#source $G4INSTALL/tests/test46/run_em.csh e50gev
+cd ../
 
 #setenv PHYSLIST QGSP_BERT_EML
 #source $G4INSTALL/tests/test46/run_em.csh e50gev

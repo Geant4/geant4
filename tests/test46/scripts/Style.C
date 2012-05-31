@@ -2,11 +2,17 @@
 gROOT->Reset();
 gROOT->SetStyle("Plain"); 
 gStyle->SetOptStat(0);
+gStyle->SetTitleSize(.06, "x");
+gStyle->SetTitleSize(.06, "y");
+gStyle->SetTitleOffset(.5, "y");
+gStyle->SetPadLeftMargin(.1);
+gStyle->SetPadRightMargin(.05);
+gStyle->SetPadBottomMargin(.12);
 
 Int_t nplot = 4;
 //Int_t nener = 17;
 Int_t nener = 8;
-Int_t ndir  = 14;
+Int_t ndir  = 17;
 
 Int_t iplot = 0;
 Int_t iplot0= 0;
@@ -17,8 +23,8 @@ TString axtit[3] = {"E (GeV)", "","log10(p/GeV)"};
 TString tit[nplot] = {"ECAL energy deposit", "HCAL visible energy","HCAL energy deposit","Total energy deposit"};
 
 TString hed[3] = {"QBBC","QBBC+ch.ex","QBBC+ch.ex+xsec"};
- TString dir[ndir] = {"QGSP_BERT_EMV","QGSP_BERT","FTFP_BERT","FTFP_BERT_EML","QBBC","QGSP_BERT_EMLSN","QBBC_XGGSN","QGSP_BERT_EML","e-/FTFP_BERT_EMV","../geant4-09-04-patch-01/e-/FTFP_BERT_EMV","../geant4-09-03-patch-01x/e-/FTFP_BERT_EMV","../geant4-09-04-patch-03z/e-/FTFP_BERT_EMV","../geant4-09-04-patch-03x/e-/FTFP_BERT_EMV","../geant4-09-05-cand-03x/e-/FTFP_BERT_EMV"};
- TString dir1[ndir] = {"QGSP_BERT_EMV","QGSP_BERT","FTFP_BERT","FTFP_BERT_EML","QBBC","QGSP_BERT_EMLSN","QBBC_XGGSN","QGSP_BERT_EML","9.4ref09","9.4p01","9.3p01","9.4p03+br","9.4p03","9.5"};
+ TString dir[ndir] = {"QGSP_BERT_EMV","QGSP_BERT","FTFP_BERT","FTFP_BERT_EML","QBBC","QGSP_BERT_EMLSN","QBBC_XGGSN","QGSP_BERT_EML","e-/FTFP_BERT_EMV","../geant4-09-04-patch-01/e-/FTFP_BERT_EMV","../geant4-09-03-patch-01x/e-/FTFP_BERT_EMV","../geant4-09-04-patch-03z/e-/FTFP_BERT_EMV","../geant4-09-04-patch-03x/e-/FTFP_BERT_EMV","../geant4-09-04-patch-03x/e-/FTFP_BERT_EMV","../20120224/e-/FTFP_BERT_EMV","../20120224c/e-/FTFP_BERT_EMV","../20120224d/e-/FTFP_BERT_EMV"};
+ TString dir1[ndir] = {"QGSP_BERT_EMV","QGSP_BERT","FTFP_BERT","FTFP_BERT_EML","QBBC","QGSP_BERT_EMLSN","QBBC_XGGSN","QGSP_BERT_EML","9.4ref09","9.4p01","9.3p01","9.4p03+br","9.4p03","9.4p03","9.4p03+br95-0.1GeV","9.4p03+br95+1GeV","9.4p03+br95+2BS"};
 TString fil[nener]= {"pi-9gev","pi-30gev","pi-300gev","pi-20gev","pi-5gev","pi-50gev","e30gev","e50gev"};
 //TString part[nener]= {"#pi^{-} 9 GeV","#pi^{-} 30 GeV","#pi^{-} 300 GeV","#pi^{-} 12 GeV","#pi^{-} 5 GeV","#pi^{-} 50 GeV"};
 TString part[nener]= {"proton 9 GeV","proton 30 GeV","proton 300 GeV","proton 20 GeV","proton 5 GeV","proton 50 GeV"};
@@ -33,7 +39,7 @@ TH1F*    hh[nplot];
 TString  gtit, fin;
 
 TFile   ff[ndir];
- Int_t   col[ndir]  = {2, 3, 4, 5, 6, 7, 2, 9, 3, 2, 4,  3, 13, 6};
- Int_t   iac[ndir]  = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0};
+ Int_t   col[ndir]  = {2, 3, 4, 5, 6, 7, 2, 9, 3, 2, 4,  3, 13, 6, 2, 3, 4};
+ Int_t   iac[ndir]  = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0};
 
 }

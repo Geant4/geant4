@@ -236,15 +236,14 @@ void DetectorConstruction::ConstructECAL()
   G4double y  = x0;
   G4double x;
   G4int k = 0;
-  G4VPhysicalVolume* pv;
   G4int i,j;
 
   for (i=0; i<5; i++) {
     x  = x0;
     for (j=0; j<5; j++) {
 
-      pv = new G4PVPlacement(0,G4ThreeVector(x,y,0.),"Ecal",logicCrystal,
-			     physGap,false,k);
+      new G4PVPlacement(0,G4ThreeVector(x,y,0.),"Ecal",logicCrystal,
+			physGap,false,k);
       k++;
       x += crystalWidth + gap;
     }

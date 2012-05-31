@@ -2,7 +2,7 @@
 gROOT->ProcessLine(".x $G4INSTALL/tests/test46/scripts/Style.C");
 gStyle->SetMarkerSize(2);
 //gStyle->SetTextSize(2);
-TCanvas c1("c1"," ",0.5, 5, 800, 600);
+TCanvas c1("c1"," ",0.5, 5, 1000, 600);
 
 iac[7] = 1;
 iac[0] = 1;
@@ -27,18 +27,18 @@ hh[1] = gPad->DrawFrame(0.88,0.,0.98,0.2,"ECAL e- 30 GeV");
 hh[1]->GetYaxis()->SetTitle("");
 hh[1]->GetXaxis()->SetTitle("E_{3x3}/E_{5x5}");
 
-leg[1] = new TLegend(0.2, 0.50, 0.5, 0.8);
+leg[1] = new TLegend(0.15, 0.45, 0.5, 0.85);
 leg[1]->SetHeader("FTFP_BERT_EMV");
  
 for(iplot=0; iplot<2; iplot++) {
 
   c1.cd(iplot + 1);
-  for(idir = 10; idir<14; idir++) {
+  for(idir = 13; idir<17; idir++) {
     gROOT->ProcessLine(".x $G4INSTALL/tests/test46/scripts/AddMC.C");
   }
   cout << "PlotSingle " << iplot << " done " << endl;
 }
 leg[1]->Draw("SAME");
-c1.Print("A_e-30a.gif");
+c1.Print("A_e-30d.gif");
 
 }

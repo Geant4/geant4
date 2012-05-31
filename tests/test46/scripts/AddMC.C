@@ -17,7 +17,7 @@ hhh->SetLineColor(col[idir]);
 leg[iplot]->AddEntry(hhh, dir1[idir], "l");
 //leg[iplot]->AddEntry(hhh, dir[idir], "l");
 //hhh->Draw("C HIST SAME");
-hhh->Draw("HIST SAME C");
+hhh->Draw("HIST SAME");
 //c1->Update();
 //delete fff;
  cout << "AddMC done iplot= " << iplot << " iplot0= " << iplot0 << endl;

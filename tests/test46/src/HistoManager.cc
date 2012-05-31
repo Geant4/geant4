@@ -98,20 +98,20 @@ HistoManager::~HistoManager()
 void HistoManager::bookHisto()
 { 
   nHisto = 14;
-  histo->add1D("0","e0, Evis in central crystal (GeV)",nBins,0.,maxEnergy,GeV);
-  histo->add1D("1","e9, Evis in 3x3 (GeV)",nBins,0.,maxEnergy,GeV);
-  histo->add1D("2","e25, Evis in 5x5 (GeV)",nBins,0.,maxEnergy,GeV);
-  histo->add1D("3","E0/E3x3;",nBins,0.55,1.05,1);
-  histo->add1D("4","E0/E5x5",nBins,0.55,1.05,1);
-  histo->add1D("5","E3x3/E5x5",nBins,0.55,1.05,1);
-  histo->add1D("6","Energy (GeV) Eecal",nBins,0.,maxEnergy,GeV);
-  histo->add1D("7","Energy (GeV) Ehcal",nBins,0.,maxEnergy*0.01,GeV);
-  histo->add1D("8","Energy (GeV) Eehcal",nBins,0.,maxEnergy*0.01,GeV);
-  histo->add1D("9","Energy (GeV) Eabshcal",nBins,0.,maxEnergy*0.5,GeV);
-  histo->add1D("10","Energy computed (GeV)",nBins,0.,maxEnergy,GeV);
-  histo->add1D("11","Energy computed (GeV)",nBins,0.,maxEnergy,GeV);
-  histo->add1D("12","Energy deposition total (GeV)",nBins,0.,maxEnergy,GeV);
-  histo->add1D("13","ECAL hits log10(edep/MeV)",100,-6.,4.,1.0);
+  histo->Add1D("0","e0, Evis in central crystal (GeV)",nBins,0.,maxEnergy,GeV);
+  histo->Add1D("1","e9, Evis in 3x3 (GeV)",nBins,0.,maxEnergy,GeV);
+  histo->Add1D("2","e25, Evis in 5x5 (GeV)",nBins,0.,maxEnergy,GeV);
+  histo->Add1D("3","E0/E3x3;",nBins,0.55,1.05,1);
+  histo->Add1D("4","E0/E5x5",nBins,0.55,1.05,1);
+  histo->Add1D("5","E3x3/E5x5",nBins,0.55,1.05,1);
+  histo->Add1D("6","Energy (GeV) Eecal",nBins,0.,maxEnergy,GeV);
+  histo->Add1D("7","Energy (GeV) Ehcal",nBins,0.,maxEnergy*0.01,GeV);
+  histo->Add1D("8","Energy (GeV) Eehcal",nBins,0.,maxEnergy*0.01,GeV);
+  histo->Add1D("9","Energy (GeV) Eabshcal",nBins,0.,maxEnergy*0.5,GeV);
+  histo->Add1D("10","Energy computed (GeV)",nBins,0.,maxEnergy,GeV);
+  histo->Add1D("11","Energy computed (GeV)",nBins,0.,maxEnergy,GeV);
+  histo->Add1D("12","Energy deposition total (GeV)",nBins,0.,maxEnergy,GeV);
+  histo->Add1D("13","ECAL hits log10(edep/MeV)",100,-6.,4.,1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -142,9 +142,9 @@ void HistoManager::BeginOfRun()
   etotSum = 0;
   etotSum2 = 0;
 
-  histo->setVerbose(verbose);
+  histo->SetVerbose(verbose);
   bookHisto();
-  histo->book();
+  histo->Book();
 
   if(verbose > 0) 
     G4cout << "HistoManager: Histograms are booked and run has been started"
@@ -241,10 +241,10 @@ void HistoManager::EndOfRun()
 
   // normalise histograms
   for(G4int i=0; i<nHisto; i++) {
-    histo->scale(i,x);
+    histo->ScaleH1(i,x);
   }
 
-  histo->save();
+  histo->Save();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -331,20 +331,20 @@ void HistoManager::EndOfEvent()
   etotSum += etot;
   etotSum2 += etot*etot;
 
-  // fill histo
-  histo->fill(0,e0,1.0);
-  histo->fill(1,e9,1.0);
-  histo->fill(2,e25,1.0);
-  histo->fill(3,e19,1.0);
-  histo->fill(4,e125,1.0);
-  histo->fill(5,e925,1.0);
-  histo->fill(6,Eecal,1.0);
-  histo->fill(7,Ehcal,1.0);
-  histo->fill(8,Eehcal,1.0);
-  histo->fill(9,Eabshcal+Ehcal,1.0);
-  histo->fill(10,edep,1.0);
-  histo->fill(11,edep1,1.0);
-  histo->fill(12,etot,1.0);
+  // Fill histo
+  histo->Fill(0,e0,1.0);
+  histo->Fill(1,e9,1.0);
+  histo->Fill(2,e25,1.0);
+  histo->Fill(3,e19,1.0);
+  histo->Fill(4,e125,1.0);
+  histo->Fill(5,e925,1.0);
+  histo->Fill(6,Eecal,1.0);
+  histo->Fill(7,Ehcal,1.0);
+  histo->Fill(8,Eehcal,1.0);
+  histo->Fill(9,Eabshcal+Ehcal,1.0);
+  histo->Fill(10,edep,1.0);
+  histo->Fill(11,edep1,1.0);
+  histo->Fill(12,etot,1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -371,7 +371,7 @@ void HistoManager::AddEcalHit(const G4ParticleDefinition* part,
   //  G4cout << "### edep= " << edep << "   #copyNo =" << copyNo << G4endl;
   if(part->GetPDGMass() < MeV) { Eecal += edep; }
   //  G4cout << "### Eecal= " << Eecal << G4endl;
-  if(edep > eV) { histo->fill(13,std::log10(edep/MeV),1.0); }
+  if(edep > eV) { histo->Fill(13,std::log10(edep/MeV),1.0); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -409,7 +409,7 @@ void HistoManager::AddStep(const G4ParticleDefinition* part)
 void HistoManager::SetVerbose(G4int val)        
 {
   verbose = val; 
-  histo->setVerbose(val);
+  histo->SetVerbose(val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -451,7 +451,7 @@ G4double HistoManager::GetBeamSizeXY() const
 
 void HistoManager::Fill(G4int id, G4double x, G4double w)
 {
-  histo->fill(id, x, w);
+  histo->Fill(id, x, w);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
