@@ -122,13 +122,16 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4DataQuestionaire.hh
         G4DecayPhysics.hh
         G4ElectroNuclearBuilder.hh
+        G4BertiniElectroNuclearBuilder.hh
         G4EmDNAPhysicsChemistry.hh
         G4EmDNAPhysics.hh
         G4EmExtraPhysics.hh
+        G4EmExtraBertiniPhysics.hh
         G4EmLivermoreMUPhysics.hh
         G4EmLivermorePhysics.hh
         G4EmLivermorePolarizedPhysics.hh
         G4EmMessenger.hh
+        G4EmBertiniMessenger.hh
         G4EmPenelopePhysics.hh
         G4EmStandardPhysics.hh
         G4EmStandardPhysics_option1.hh
@@ -258,13 +261,16 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4ChipsKaonBuilder.cc
         G4DecayPhysics.cc
         G4ElectroNuclearBuilder.cc
+        G4BertiniElectroNuclearBuilder.cc
         G4EmDNAPhysics.cc
         G4EmDNAPhysicsChemistry.cc
         G4EmExtraPhysics.cc
+        G4EmExtraBertiniPhysics.cc
         G4EmLivermoreMUPhysics.cc
         G4EmLivermorePhysics.cc
         G4EmLivermorePolarizedPhysics.cc
         G4EmMessenger.cc
+        G4EmBertiniMessenger.cc
         G4EmPenelopePhysics.cc
         G4EmStandardPhysics.cc
         G4EmStandardPhysics_option1.cc

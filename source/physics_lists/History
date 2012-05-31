@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30-05-2012, Witek Pokorski            (phys-lists-V09-05-22)
+- created new builders using Bertini gamma nuclear
+- migrated FTFP_BERT to use the new builders
+
 25-05-2012, Gunter Folger              (phys-lists-V09-05-21)
 - improve creation of cascade to avoid one instantiation of Preco in 
    G4FTFP{Proton,Neutron,PiK,AntiBarion}Builder.cc

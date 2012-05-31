@@ -56,7 +56,7 @@
 
 #include "G4DecayPhysics.hh"
 #include "G4EmStandardPhysics.hh"
-#include "G4EmExtraPhysics.hh"
+#include "G4EmExtraBertiniPhysics.hh"
 #include "G4IonFTFPBinaryCascadePhysics.hh"
 #include "G4QStoppingPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
@@ -79,7 +79,7 @@ template<class T> TFTFP_BERT<T>::TFTFP_BERT(G4int ver):  T()
   this->RegisterPhysics( new G4EmStandardPhysics(ver));
 
   // Synchroton Radiation & GN Physics
-  this->RegisterPhysics( new G4EmExtraPhysics(ver) );
+  this->RegisterPhysics( new G4EmExtraBertiniPhysics(ver) );
 
   // Decays 
   this->RegisterPhysics( new G4DecayPhysics(ver) );
