@@ -1,0 +1,476 @@
+
+                       geant4-09-05-ref-05
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o Updated internal CLHEP module to version 2.1.2.2.
+ o Fixed problem in G4PhaseSpaceDecayChannel, where dynamic mass was cached
+   in the object and used in following decays.
+ o Fixed treatment of weights and local time in G4ParticleChange.
+ o New builders using Bertini gamma nuclear. Migrated FTFP_BERT to use the
+   new builders. Moved FTFP_BERT_TRV to use the new cross-sections extracted
+   from CHIPS.
+ o Added mechanism for energy non-conservation check in hadronic models.
+ o Fixed remaining cases of violation of event reproducibility in FTF and
+   Bertini based physics-lists. Now reaching 100% reproducibility.
+ o Code cleanup in visualization classes.
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+cmake                                            cmake-V09-05-21
+-----
+- Set GEANT4_INSTALL_DATA as an INTERNAL variable when deactivated on
+  CMake version before 2.8. Ensures it doesn't show in GUI.
+  Forced deactivation of GEANT4_ENABLE_TESTING on CMake < 2.8 due to
+  compatibility issues.
+- Changed setup for internal tests to have flagged failure on build also in
+  case of warnings.
+- Enable use of C-shell scripts inside other scripts.
+  Protect changes to the environment if self location fails.
+  Addressing problem report #1268.
+- Updated scripts to allow for assigning tests to specific test slots
+  (Nightly, Continuous, PhysicsChecks). If no label is specified defaults
+  to 'Nightly' label.
+- Added -limf library in CMAKE_EXE_LINKER_FLAGS for icc compiler.
+  This is to avoid icc-12 warnings of the type "warning: feupdateenv is not
+  implemented and will always fail"
+
+config                                           config-V09-05-06
+------
+- Exclude "setup" and "clean_setup" targets from dependencies step.
+
+digits_hits                                      digits_hits-V09-05-03
+-----------
+- Use 'const G4String&' as argument instead of plain copy of strings
+  in G4ScoringManager, G4VScoreWriter and G4VScoringMesh.
+- Fixed trivial cases of variable shadowing.
+
+event                                            event-V09-05-05
+-----
+- Fixed trivial cases of variable shadowing.
+
+externals                                        externals-V09-05-01
+---------
+- Updated CLHEP module to version 2.1.2.2.
+  * Random: use a template to get rid of the warnings in Ranlux64Engine.
+  * Vector, Geometry, Random: changed names of internal variables so
+    -Wshadow does not complain.
+  * Evaluator: fixed a problem with unary +/- and exponentials in
+    Evaluator class.
+
+geometry/biasing                                 geombias-V09-05-00
+----------------
+- Fixed trivial cases of variable shadowing.
+
+geometry/divisions                               geomdiv-V09-05-00
+------------------
+- Fixed trivial cases of variable shadowing.
+
+geometry/magneticfield                           field-V09-05-04
+----------------------
+- Fixed trivial cases of variable shadowing.
+
+geometry/management                              geommng-V09-05-01
+-------------------
+- Fixed trivial cases of variable shadowing.
+
+geometry/navigation                              geomnav-V09-05-03
+-------------------
+- Fixed trivial cases of variable shadowing.
+
+geometry/solids/Boolean                          geom-bool-V09-05-01
+-----------------------
+- G4SubtractionSolid: refined protection for potential cases of
+  infinite loop in DistanceToIn(p,v); return computed distance instead
+  of zero and provide more descriptive information when issuing warning.
+
+geometry/solids/BREPS                            breps-V09-05-00
+---------------------
+- Fixed trivial cases of variable shadowing.
+
+geometry/solids/CSG                              geom-csg-V09-05-03
+-------------------
+- G4CSGSolid: corrected implementation of GetRadiusInRing().
+- Fixed trivial cases of variable shadowing.
+
+geometry/solids/specific                         geom-specific-V09-05-05
+------------------------
+- Fixed trivial cases of variable shadowing.
+
+geometry/volumes                                 geomvol-V09-05-01
+----------------
+- Fixed trivial cases of variable shadowing.
+
+global                                           global-V09-05-05
+------
+- G4PhysicsVector: added GetMaxEnergy() inlined method; indicate inline
+  methods in header file by explicitly adding inline keyword; added inline
+  method Value() and private method ComputeValue() in order to have inline
+  access to the value for the case of multiple calls with the the same
+  energy value.
+- Fixed trivial cases of variable shadowing.
+
+graphics_reps                                    greps-V09-05-08
+-------------
+- G4VisExtent: cached radius and centre for improved efficiency.
+- Fixed trivial cases of variable shadowing.
+
+intercoms                                        intercoms-V09-05-00
+---------
+- Fixed trivial cases of variable shadowing.
+
+materials                                        materials-V09-05-24
+---------
+- G4Element: fixed bug in Neff computation introduced in ref-01.
+- G4NistMaterialBuilder: build H2O via atom count and not mass fraction.
+- Coverity fixes in G4OpticalSurface, G4Element, G4Isotope, G4ExtDEDXTable.
+- Fixed trivial cases of variable shadowing.
+- G4Element, G4Material: cosmetics in printing functions.
+
+particles                                        particles-V09-05-05
+---------
+- Fixed problem in G4PhaseSpaceDecayChannel, where dynamic mass was cached
+  in the object and used in following decays.
+  Fixed assignment operator of G4DecayProducts. 
+- Added protection to call G4ParticleRemoveAllParticles in 'readyToUse' state.
+- Added protection to call 'Clear' for G4IonTable and G4ShortlivedTable
+  in 'readyToUse' state.
+- Added protection to call 'Remove' for G4ParticleTable and related tables
+  in 'readyToUse' state.
+- Added protection to call destructor of G4ParticleDefinition in 'readyToUse'
+  state.
+- Fixed trivial cases of variable shadowing.
+
+persistency                                      persistency-V09-05-01
+-----------
+- Fixed trivial cases of variable shadowing.
+
+physics_lists                                    phys-lists-V09-05-22
+-------------
+- In all EM builders modified method of instantiation of multiple scattering:
+  the same process instance is used by mu+ and mu-; for pi+,pi-,K+,K-,proton
+  and anti_protons use separate processes which build internal transport
+  cross-section tables, for all others the same process instance is used and
+  no table is built. Helping in reducing total memory for tables and
+  initialisation time.
+- In standard builders Opt0, Opt1, Opt2 WentzelVI multiple-scattering and
+  G4eCoulombScattering models are applied for e+ and e- above 100 MeV,
+  below G4UrbanMscModel95 is used.
+- New builders using Bertini gamma nuclear. Migrated FTFP_BERT to use the
+  new builders. Moved FTFP_BERT_TRV to use the new cross-sections extracted
+  from CHIPS.
+- Improve creation of cascade to avoid one instantiation of Precompound in
+  FTFP{Proton,Neutron,PiK,AntiBarion} builders.
+- Updates the INCLXX builders for compatibility with the latest INCL++
+  developments. Updated QGSP_INCLXX physics list to treat light-ion-induced
+  collisions with INCL++.
+- G4EmExtraPhysics: changed name of class G4VDMuonNuclearModel
+  to G4MuonVDNuclearModel.
+- G4QandFTFStoppingPhysics: use general G4HadronicAbsorptionBertini.
+- Updated builders for G4DNA.
+- Some Coverity fixes.
+
+processes/cuts                                   procuts-V09-05-01
+--------------
+- Coverity fix in G4ProductionCutsTable::RetrieveCutsInfo().
+
+processes/electromagnetic/dna                    emdna-V09-05-17
+-----------------------------
+- Added products of dissociative attachments (as a molecular decay).
+  Added new methods in G4ChemistryManager.
+- Add an exception in molecular decay, in case no decay channel was
+  proposed in input.
+- Added possibility of calling G4ITStepManager::EndTracking()
+  from UserReactionAction::EndProcessing().
+- Added new classes G4DNAMolecularMaterial and G4DNADamages.
+  Modified all models to use G4DNAMolecularMaterial.
+  Added G4DNASecondOrderReaction prototype class.
+
+processes/electromagnetic/highenergy             emhighenergy-V09-05-00
+------------------------------------
+- G4mplIonisation, G4mplIonisationModel, G4mplIonisationWithDeltaModel:
+  extended energy range of dEdx and other tables for monopoles with large
+  mass, required for interpolation of dEdx for super-heavy monopoles.
+
+processes/electromagnetic/lowenergy              emlowen-V09-05-21
+-----------------------------------
+- New draft class G4Livermore2012GammaConversionModel.
+- Updates to G4MUComptonModel and Coverity fixes.
+
+processes/electromagnetic/standard               emstand-V09-05-17
+----------------------------------
+- G4CoulombScattering: minor modification of initialisation allowing to have
+  addition of custom model with specific parameters but reuse low and high
+  energy limits defined for the process.
+
+processes/electromagnetic/utils                  emutils-V09-05-14
+-------------------------------
+- G4EmCalculator: fixed GetMeanFreePath() for multiple-scattering processes
+  (bug introduced in previous tags). Fix in FindRegion().
+- G4VMscModel: updated GetRange() and GetEnergy() methods allowing to
+  use the same model class for many particles.
+- G4VEmModel: added inline methods HighEnergyActivationLimit(), and
+  LowEnergyActivationLimit(), ForceBuildTableFlag(), ForceBuildTable().
+- G4ElectronIonPair: use inverse FanoFactor to simplify formula.
+- G4EmModelManager: improved printout of model energy limits.
+- G4VMultipleScattering: improved printout at initialisation.
+- G4ElectronIonPair: cleanup implementation of sampling of number of ions.
+
+processes/electromagnetic/xrays                  xrays-V09-05-02
+-------------------------------
+- Fixed coverity defects in G4Cerenkov and G4Scintillation.
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V09-05-08)
+  o G4HadronNucleonXsc: updated p,n,pi-,pi+ xsc on p,n.
+    Added new method GetCoulombBarrier().
+    G4GGNuclNuclCrossSection, G4GlauberGribovCrossSection: updated to get
+    total and inelastic cross-sections from G4HadronNucleonXsc.
+    G4GGNuclNuclCrossSection: updated to get nucleus radii of light elements
+    p, d, t, He3, He4, Li7 and Be9.
+  o New classes G4ComponentGGNuclNuclXsc based on G4GGNuclNuclCrossSection
+    (Glauber-Gribov for ion-ion xsc) and G4ComponentBarNucleonNucleusXsc
+    based on G4NucleonNuclearCrossSection (Barashenkov xsc); implemented
+    component interface.
+  o Added elastic and inelastic cross-sections extracted from CHIPS.
+    Make GetExchangeT() method public to be used in coherent_elastic.
+- management (hadr-man-V09-05-06)
+  o Added method for energy non-conservation check; in case of non-conservation,
+    re-sample the interaction. Limits are set in G4HadronicInteraction, and
+    may be overridden for models; LEP and HEP override defaults, as these do
+    not return the nucleus in the final state.
+    A test mode aborting events and reporting info on stderr is available, and
+    triggered by a negative value in G4Hadronic_epReportLevel environment
+    variable.
+    E/p conservation fails only if both absolute and relative fail.
+    Added check for momentum conservation, reusing limits for energy.
+    Added check for charge and baryon number conservation if limit is
+    less than DBL_MAX.
+  o G4HadronicProcess: move some to protected to be used in derived classes;
+    removed unused code. Changed logic of definition of time for secondary
+    particles inside method FillResults().
+  o Added printing of model desciptions to html files.
+- models/binary_cascade (had-binary-V09-05-02)
+  o Fixed coverity defects for copy constructors, == and != operators. 
+- models/cascade (hadr-casc-V09-05-11)
+  o G4Fissioner: removed static in local vectors in method collide(), to
+    ensure event reproducibility.
+  o G4IntraNucleiCascader: specify mass when decaying trapped particle.
+    This fixes reproducibility violations when hyperons are forced to
+    decay inside the nucleus.
+  o G4CascadeInterface: added local implementation of IsApplicable().
+    Returns true only if interaction tables are defined for projectile.
+    Check for small negative projectile energy and force to zero, to protect
+    against occasional G4HadFinalState exceptions.
+  o G4CascadeCheckBalance: lower verbosity level for energy-conservation
+    reports, change violation rules to allow relative OR absolute passing,
+    consistent with new process-level checks.
+  o G4Dineutron, G4Diproton, G4UnboundPN: added protection against warning
+    messages issued from G4ParticleTable::Remove().
+- models/chiral_inv_phase_space/cross_sections (hadr-chips-cs-V09-05-02)
+  o Reinstated corrections in G4QProtonNuclearCrossSection and
+    G4QNeutronNuclearCrossSection for h+N/P interactions.
+- models/chiral_inv_phase_space/fragmentation (hadr-chips-frag-V09-05-02)
+  o Fixes to Coulomb barrier for positive hadrons, except for string K+.
+  o Moved 'maxBN' in G4QFragment under debug flag.
+- models/chiral_inv_phase_space/processes (hadr-chips-proc-V09-05-01)
+  o Fix for quasi-elastic duplication in G4QInelastic (for p & n).
+  o Added protection against catastrophic energy non-conservation in
+    G4QCaptureAtRest, on top of the recent version of the code.
+- models/coherent_elastic (hadr-cohe-V09-05-06)
+  o Added G4ChipsElasticModel class to use the extracted CHIPS cross-section
+    classes from main 'cross_sections' module.
+- models/de_excitation (hadr-deex-V09-05-05)
+  o G4PhotonEvaporation: added check for variable
+    'G4AddTimeLimitToPhotonEvaporation', if defined a time limit (1.e10-16),
+    a comparison of this limit with nuclear level life time allows to identify
+    to sample narrow gamma lines or use relativistic kinematics which will
+    result in Doppler broadening of nuclear lines; this option has a side
+    effect for energy momentum non-conservation. Use this threshold in
+    G4VGammaDeexcitation.
+- models/im_r_matrix (hadr-im_r-V09-05-03)
+  o Fixed Coverity defects for non-initialised data and dead code.
+- models/inclxx (hadr-inclxx-V09-05-14)
+  o Updated to INCL++ v5.1_rc11: can now handle heavy-ion collisions.
+    Conserves energy using masses from the Geant4 tables down to the keV level.
+    Fixed a bug mostly affecting reactions around 200 MeV.
+    Refactored the configuration part of the interface in a separate
+    G4INCLXXInterfaceConfig singleton.
+- models/low_energy (hadr-lep-V09-05-07)
+  o Relaxed limits on check for "catastrophic" energy non-conservation
+    for G4LFission.
+- models/management (hadr-modman-V09-05-04)
+  o Modified G4VHighEnergyGenerator: added ModelDescripion() to interface;
+    made copy-costructor, =,  ==, and  != operators private, not implemented.
+  o G4VIntraNuclearTransportModel: added PropagateModelDescription() method.
+- models/neutron_hp (hadr-hpn-V09-05-04)
+  o G4NeutronHPFission: added method to loosen check for bad energy violation
+    to allow for a violation of order of nuclear mass (250GeV).
+  o Migrated 'frameFlag' (MF6 LCT) = 3, used for several ENDF/B-VII.1 files
+    previously in use only for energies beyond 20MeV.
+- models/parton_string/diffraction (hadr-string-diff-V09-05-05)
+  o Modified G4FTFParameters to use new G4ChipsComponentXS from main
+    'cross_sections' module; made G4ChipsComponentXS static to avoid multiple
+    instanciations. Removed old interface G4ComponentCHIPShadronNuclearXS.
+  o Implemented improved diffraction dissociation.
+  o Added ModelDescription() to FTF. Few Coverity fixes.
+- models/parton_string/hadronization (had-hadronization-V09-05-02)
+  o Probabilities of s-sbar quark pairs and qq-qqbar diquark pairs are changed
+    in G4LundStringFragmentation for a description of the NA49 data.
+  o Fixed Coverity defects.
+- models/parton_string/management (had-partonstring-mgt-V09-05-01)
+  o Added ModelDescription() interface. Few Coverity fixes.
+- models/parton_string/qgsm (hadr-qgsm-V09-05-00)
+  o Added ModelDescription() to QGS.
+- models/photolepton_hadron/muon_nuclear (hadr-munuclear-V09-05-04)
+  o Added new model G4ElectroVDNuclearModel
+  o Removed classes G4LeptonHadronProcess and G4LeptonHadronInteractionModel
+  o Changed name of G4VDMuonNuclearModel to G4MuonVDNuclearModel to
+    avoid any confusion with virtual class names.
+    For gammas below 10 GeV use Bertini cascade to interact gammas directly
+    with nucleus. Above 10 GeV, treat gamma as pi0 and use FTFP model.
+- models/radioactive_decay (radioactive_decay-V09-05-01)
+  o G4RIsotopeTable: added reading of user data  files in order to take into
+    account the life time.
+  o G4RadioactiveDecay: added computation of activation.
+- models/theo_high_energy (had-theo-HE-V09-05-01)
+  o Added ModelDescription() interface.
+- stopping (hadr-stopping-V09-05-11)
+  o Added new classes G4MuonMinusBoundDecay, G4ElementSelector,
+    G4EmCaptureCascade, G4MuMinusCapturePrecompound, G4HadronStoppingProcess,
+    G4MuonMinusCapture, providing general stopping process.
+  o New class G4HadronicAbsorptionBertini inheriting from
+    G4HadronStoppingProcess, registering Bertini as the model.
+    G4PiMinusAbsorptionBertini as subclass of G4HadronicAbsorptionBertini,
+    G4KaonMinusAbsorptionBertini and G4SigmaMinusAbsorptionBertini new
+    subclasses of G4HadronicAbsorptionBertini.
+- util (hadr-util-V09-05-02)
+  o G4HadProjectile: added methods SetGlobalTime(), SetBoundEnergy() and
+    GetBoundEnergy() needed for general stopping process; always set time
+    to zero at construction or initialisation, so hadronic interaction is
+    starting from zero local time.
+    Added Initialise() method allowing to update the projectile and not
+    instantiate it for any new interaction. Inlined all get methods.
+    Added protection to kinetic energy computation.
+
+processes/optical                                op-V09-05-02
+-----------------
+- Fixed Coverity defects.
+
+run                                              run-V09-05-03
+---
+o Destructor of G4RunManager now sets G4State_Quit in addition to
+  G4RunManagerKernel.
+o Fixed trivial case of variable shadowing in G4RunMessenger.
+
+track                                            track-V09-05-09
+-----
+- Modified way of handling parent weight in AlongStep in accumulated way
+  (same as for other properties).
+  Fixed treatment of weights in G4ParticleChange.
+  Addressing problem report #1283.
+- Fixed bug in G4ParticleChange::AddSecondary(), where the local time
+  of the parent was set before. Addressing problem report #1305.
+  Added global time check for secondaries in G4VParticleChange
+- Modified output messages for CheckIt() and CheckSecondary().
+  Added G4Exception in G4ParticleChangeForRadDecay::AddSecondary().
+- Fixed trivial cases of variable shadowing.
+
+tracking                                         tracking-V09-05-01
+--------
+o Fixed trivial cases of variable shadowing.
+
+visualization                                    vis-V09-05-21
+-------------
+- management and drivers:
+  o Health code check to removed several instances of code duplication,
+    unnecessary screen refeshing, incorrect buffer switching (necessitating
+    extra refreshing), etc.
+- OpenGL:
+  o Implemented proper treatment of transparency in OpenGL stored mode
+    in the case trajectories pass through or behind transparent persistent
+    objects (detector components). Required proper ordering of display list
+    execution.
+  o Multiple fixes and improvements to Qt.
+  o Introduced depth of geometry slider.
+  o G4OpenGLStoredSceneHandler: removed Set/Clear/Draw from EndModeling.
+
+examples                                         examples-V09-05-05
+--------
+- Updated reference outputs.
+- advanced/medical_linac (medical_linac-V09-05-04)
+  o Fixed compilation warnings and cleanup of unused files.
+  o Added batch.mac to run without graphics.
+- advanced/microbeam (microbeam-V09-05-01)
+  o Updated composition of cell cytoplasm.
+- extended/analysis (analysisExample-V09-05-02)
+  o Restructuring of AnaEx01, AnaEx02, AnaEx03 examples for use of
+    shared classes; shared classes are now in a new directory, 'shared'.
+- extended/electromagnetic/TestEm5 (testem5-V09-05-05)
+  o Added fluo.mac input macro.
+- extended/electromagnetic/TestEm8 (testem8-V09-05-08)
+- extended/electromagnetic/TestEm9 (testem9-V09-05-02)
+  o Histo: fixed n-tuples.
+- extended/electromagnetic/TestEm11 (testem11-V09-05-04)
+  o New results in sandia/EGSnr: e- 50 MeV, 150 MeV in Water.
+- extended/electromagnetic/TestEm12 (testem12-V09-05-06)
+  o Printing correction in StepMaxMessenger.
+- extended/electromagnetic/TestEm15 (testem15-V09-05-02)
+- extended/electromagnetic/TestEm18 (testem18-V09-05-02)
+  o Printing corrections in RunAction::EndOfRunAction().
+- extended/exoticphysics/monopole (monopole-V09-05-00)
+  o Apply new coding conventions.
+- extended/hadronic/Hadr00 (exhadr00-V09-05-03)
+  o Migration to built-in Geant4 analysis and apply new coding conventions.
+- extended/hadronic/Hadr01 (exhadr01-V09-05-01)
+  o Apply new coding conventions.
+- extended/hadronic/Hadr02 (exhadr02-V09-05-02)
+  o Added first implementation of UrQMD interface.
+  o Apply new coding conventions.
+- extended/radioactivedecay/rdecay01 (rdecay01-V09-05-10)
+  o Added macros Cf238.mac and No252.mac to demonstrate UserRadData
+    and UserEvapData files respectively.
+- extended/radioactivedecay/rdecay02 (rdecay02-V09-05-01)
+  o Added ntuple RDecayProducts registering Z,A,time,energy, PID,weight
+    of each radioactive decay product
+  o Changed macro UserRadDataCf238Test.mac and UserRadData_z82.a210 to check
+    that the mean life time given is properly taken into account in the code.
+  o Merged modifications for the activation computation.
+  o Apply new coding conventions.
+- extended/runAndEvent/RE03 (exampleRE03-V09-05-00)
+  o Corrected signature of RE03UserScoreWriter::DumpQuantityToFile() to adopt
+    'const G4String&' according to changes done in 'digits_hits' module.
+
+tests                                            tests-V09-05-05
+-----
+- Updated reference outputs and tools.
+- tests/test12 (test12-V09-05-03)
+  o Increased timeout for test test12-FTFBIC to 2000 seconds.
+    Speed up by raising limit to kill secondaries from 1 GeV to 3.5 GeV.
+    Added time information per run.
+  o Added exit as last line of input file.
+- tests/test19 (test19-V09-05-01)
+  o Work-around for e/m conservation.
+- tests/test30 (test30-V09-05-11)
+  o Test30VSecondaryGenerator: use integer Z and A.
+  o Fixed compilation warnings.
+- tests/test31 (test31-V09-05-01)
+  o Histo: fixed n-tuples.
+- tests/test36 (test36-V09-05-00)
+  o Fixed compilation warnings for unused variables.
+- tests/test46 (test46-V09-05-01)
+  o Migration to built-in Geant4 analysis.
+- tests/test50 (test50-V09-05-00)
+  o Fixed compilation warnings for unused variables when analysis is off.
+- tests/test56 (test56-V09-05-00)
+  o Fixed compilation warnings for unused variables.
+- tests/test73 (test73-V09-05-11)
+  o Added test for FTFP_BERT_EMX and tuning MSC parameters.
+  o Adapted build system to CMake 'PhysicsChecks' test slot.
+- tests/test74 (test74-V09-05-01)
+  o Updated SteppingAction.
