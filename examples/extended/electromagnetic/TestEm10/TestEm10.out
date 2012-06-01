@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-04    (30-April-2012)
+ Geant4 version Name: geant4-09-05-ref-05    (31-May-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -308,6 +308,11 @@ muPairProd:   for  mu-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
+msc:   for pi+    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -317,11 +322,6 @@ hIoni:   for  pi+    SubType= 2
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
       ===== EM models for the G4Region  XTRdEdxDetector ======
             PAIModel :  Emin=        0 eV    Emax=       10 TeV
-
-msc:   for pi-    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -370,7 +370,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.64s Real=0.65s Sys=0s
+  User=0.77s Real=0.8s Sys=0.01s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
     mean charged track length   in absorber=45.1493 +- 0.60496  mm  

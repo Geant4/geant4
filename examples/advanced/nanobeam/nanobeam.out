@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-04    (30-April-2012)
+ Geant4 version Name: geant4-09-05-ref-05    (31-May-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -16,8 +16,10 @@
 
  Material:   Vacuum    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 114561548.020 pc   Imean:  19.200 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Vacuum ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
-   --->  Isotope: Vacuum1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-   --->  Isotope: Vacuum2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+         --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
 
 ### NIST DataBase for Materials is used

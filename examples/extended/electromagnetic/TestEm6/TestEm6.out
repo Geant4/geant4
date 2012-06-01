@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-04    (30-April-2012)
+ Geant4 version Name: geant4-09-05-ref-05    (31-May-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -15,19 +15,25 @@
 
  Material: Beryllium    density:  1.848 g/cm3   RadL:  35.276 cm   Nucl.Int.Length:  39.449 cm   Imean:  63.700 eV 
    --->  Element: Beryllium ( )   Z =  4.0   N =   9.0   A =   9.01 g/mole
-   --->  Isotope: Beryllium9   Z =  4   N =   9   A =   9.01 g/mole   abundance: 100.00 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+         --->  Isotope:     9   Z =  4   N =   9   A =   9.01 g/mole   abundance: 100.00 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material:   Carbon    density:  2.265 g/cm3   RadL:  18.851 cm   Nucl.Int.Length:  35.410 cm   Imean:  81.000 eV 
    --->  Element: Carbon ( )   Z =  6.0   N =  12.0   A =  12.01 g/mole
-   --->  Isotope: Carbon12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-   --->  Isotope: Carbon13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+         --->  Isotope:    12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:    13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material:     Iron    density:  7.870 g/cm3   RadL:   1.759 cm   Nucl.Int.Length:  16.969 cm   Imean: 286.000 eV 
    --->  Element: Iron ( )   Z = 26.0   N =  55.8   A =  55.85 g/mole
-   --->  Isotope: Iron54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
-   --->  Isotope: Iron56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
-   --->  Isotope: Iron57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
-   --->  Isotope: Iron58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+         --->  Isotope:    54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
+         --->  Isotope:    56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
+         --->  Isotope:    57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
+         --->  Isotope:    58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
 
 ... create Root H1 : 1 - done
@@ -196,6 +202,11 @@ muPairProd:   for  mu-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=        1 PeV
 
+msc:   for pi+    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
+
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 1 PeV in 91 bins
       Lambda tables from threshold to 1 PeV in 91 bins, spline: 1
@@ -203,11 +214,6 @@ hIoni:   for  pi+    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=        1 PeV
-
-msc:   for pi-    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 1 PeV in 91 bins
@@ -298,7 +304,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -393,7 +399,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -568,7 +574,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 2
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0s Sys=0s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -577,19 +583,19 @@ Run Summary
 
  Number of process calls --->	hhIoni : 112
 #
+G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 ... write Root file :  - done
 ... close Root file :  - done
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
-G4 kernel has come to Quit state.
 EventManager deleted.
 UImanager deleted.
 Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
-RunManager is deleting.
+RunManager is deleted.
 ### G4eeTo3PiModel::~G4eeTo3PiModel: gmax= 1 gcash= 0
 ### G4eeTo3PiModel::~G4eeTo3PiModel: gmax= 1 gcash= 0
 

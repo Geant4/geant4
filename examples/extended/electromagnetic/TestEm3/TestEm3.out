@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-04    (30-April-2012)
+ Geant4 version Name: geant4-09-05-ref-05    (31-May-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -25,21 +25,27 @@ userDetector->Construct() start.
 
  Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 114334693.470 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
-   --->  Isotope: Galactic1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-   --->  Isotope: Galactic2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+         --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material:     Lead    density: 11.350 g/cm3   RadL:   5.613 mm   Nucl.Int.Length:  18.261 cm   Imean: 823.000 eV 
    --->  Element: Pb (Pb)   Z = 82.0   N = 207.2   A = 207.22 g/mole
-   --->  Isotope: Pb204   Z = 82   N = 204   A = 203.97 g/mole   abundance:   1.40 %
-   --->  Isotope: Pb206   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
-   --->  Isotope: Pb207   Z = 82   N = 207   A = 206.98 g/mole   abundance:  22.10 %
-   --->  Isotope: Pb208   Z = 82   N = 208   A = 207.98 g/mole   abundance:  52.40 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+         --->  Isotope: Pb204   Z = 82   N = 204   A = 203.97 g/mole   abundance:   1.40 %
+         --->  Isotope: Pb206   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
+         --->  Isotope: Pb207   Z = 82   N = 207   A = 206.98 g/mole   abundance:  22.10 %
+         --->  Isotope: Pb208   Z = 82   N = 208   A = 207.98 g/mole   abundance:  52.40 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material: liquidArgon    density:  1.390 g/cm3   RadL:  14.064 cm   Nucl.Int.Length:  86.001 cm   Imean: 188.000 eV 
-   --->  Element: Ar (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole
-   --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
-   --->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
-   --->  Isotope:  Ar40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Element: Ar (Ar)   Z = 18.0   N =  40.0   A =  39.95 g/mole
+         --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
+         --->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
+         --->  Isotope:  Ar40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
 -------------------------------------------------------------
 World is registered to the default region.
@@ -84,7 +90,8 @@ conv:   for  gamma    SubType= 14
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=       10 TeV  Table with 35 bins Emin=    100 MeV   Emax=     10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -100,6 +107,12 @@ eBrem:   for  e-    SubType= 3
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
+
+CoulombScat:   for  e-    SubType= 1
+      Lambda tables from 100 MeV to 10 TeV in 77 bins, spline: 1
+      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=      100 MeV   Emax=       10 TeV
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -119,6 +132,12 @@ eBrem:   for  e+    SubType= 3
 annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  e+    SubType= 1
+      Lambda tables from 100 MeV to 10 TeV in 77 bins, spline: 1
+      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=      100 MeV   Emax=       10 TeV
 
 msc:   for proton    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
@@ -247,6 +266,11 @@ CoulombScat:   for  mu-    SubType= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
+msc:   for pi+    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -266,11 +290,6 @@ hPairProd:   for  pi+    SubType= 4
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
-
-msc:   for pi-    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -349,33 +368,33 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=3.49s Real=3.52s Sys=0s
+  User=8.53s Real=4.49s Sys=0.01s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 781.36 MeV :   15.7 MeV     2.009 +- 0.2009 %      54.7 cm  +- 1.21 cm 
-   liquidArgon: 208.69 MeV :  15.12 MeV     7.243 +- 0.7243 %      1.03 m   +- 7.73 cm 
+          Lead: 783.26 MeV :  16.18 MeV     2.066 +- 0.2066 %      54.8 cm  +- 1.26 cm 
+   liquidArgon: 206.24 MeV :  15.07 MeV     7.305 +- 0.7305 %      1.02 m   +- 7.82 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
- Mean number of gamma  510
- Mean number of e-     874
- Mean number of e+     54
+ Mean number of gamma  511
+ Mean number of e-     878
+ Mean number of e+     55
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 781.275 MeV
-liquidArgon:	 208.586 MeV
+      Lead:	 783.155 MeV
+liquidArgon:	 206.201 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1257538766, 1401032069
+ Current couple of seeds = 1579220486, 1553248547
 ----------------------------------------
 #
 /process/em/setSecBiasing eIoni World 0.3 2 MeV
@@ -408,7 +427,8 @@ conv:   for  gamma    SubType= 14
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=       10 TeV  Table with 35 bins Emin=    100 MeV   Emax=     10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -424,6 +444,12 @@ eBrem:   for  e-    SubType= 3
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
+
+CoulombScat:   for  e-    SubType= 1
+      Lambda tables from 100 MeV to 10 TeV in 77 bins, spline: 1
+      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=      100 MeV   Emax=       10 TeV
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -443,6 +469,12 @@ eBrem:   for  e+    SubType= 3
 annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  e+    SubType= 1
+      Lambda tables from 100 MeV to 10 TeV in 77 bins, spline: 1
+      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=      100 MeV   Emax=       10 TeV
 
 msc:   for proton    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
@@ -571,6 +603,11 @@ CoulombScat:   for  mu-    SubType= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
+msc:   for pi+    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -590,11 +627,6 @@ hPairProd:   for  pi+    SubType= 4
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
-
-msc:   for pi-    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -646,7 +678,7 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1257538766, 1401032069
+ Current couple of seeds = 1579220486, 1553248547
 ----------------------------------------
 Start Run processing.
 
@@ -656,44 +688,44 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.99s Real=3.04s Sys=0.01s
+  User=5.8s Real=4.23s Sys=0.03s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 778.58 MeV :  22.83 MeV     2.932 +- 0.2932 %      52.1 cm  +-  1.4 cm 
-   liquidArgon: 208.86 MeV :  18.38 MeV       8.8 +-  0.88 %      98.9 cm  +- 8.03 cm 
+          Lead: 783.75 MeV :  19.94 MeV     2.544 +- 0.2544 %      52.3 cm  +- 1.19 cm 
+   liquidArgon: 207.39 MeV :  14.59 MeV     7.033 +- 0.7033 %        98 cm  +- 7.29 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
- Mean number of gamma  294
- Mean number of e-     557
- Mean number of e+     54.8
+ Mean number of gamma  295
+ Mean number of e-     561
+ Mean number of e+     53.8
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 779.971 MeV
-liquidArgon:	 210.464 MeV
+      Lead:	 781.921 MeV
+liquidArgon:	 208.392 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 509776854, 89296478
+ Current couple of seeds = 1720440033, 1075822684
 ----------------------------------------
 #
+G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
-G4 kernel has come to Quit state.
 EventManager deleted.
 UImanager deleted.
 Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
-RunManager is deleting.
+RunManager is deleted.
 

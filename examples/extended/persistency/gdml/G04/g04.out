@@ -15,7 +15,7 @@ Stripping off GDML names of materials, solids and volumes ...
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-04    (30-April-2012)
+ Geant4 version Name: geant4-09-05-ref-05    (31-May-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -333,7 +333,7 @@ Processing hits ....
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 /gun/direction 0 0 -1
 /run/beamOn 20
 
@@ -585,7 +585,7 @@ Processing hits ....
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /gun/direction 0.3 0.2 1
 /run/beamOn 20
@@ -745,15 +745,15 @@ Run Summary
   User=0s Real=0s Sys=0s
 Graphics systems deleted.
 Visualization Manager deleting...
+G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserPrimaryGenerator deleted.
-G4 kernel has come to Quit state.
 G4SDManager deleted.
 EventManager deleted.
 UImanager deleted.
 Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
-RunManager is deleting.
+RunManager is deleted.
 

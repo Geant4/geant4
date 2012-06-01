@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-04    (30-April-2012)
+ Geant4 version Name: geant4-09-05-ref-05    (31-May-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -15,32 +15,44 @@
 
  Material:     Lead    density: 10.976 g/cm3   RadL:   5.803 mm   Nucl.Int.Length:  18.881 cm   Imean: 823.000 eV 
    --->  Element: Lead ( )   Z = 82.0   N = 207.2   A = 207.20 g/mole
-   --->  Isotope: Lead204   Z = 82   N = 204   A = 203.97 g/mole   abundance:   1.40 %
-   --->  Isotope: Lead206   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
-   --->  Isotope: Lead207   Z = 82   N = 207   A = 206.98 g/mole   abundance:  22.10 %
-   --->  Isotope: Lead208   Z = 82   N = 208   A = 207.98 g/mole   abundance:  52.40 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+         --->  Isotope:   204   Z = 82   N = 204   A = 203.97 g/mole   abundance:   1.40 %
+         --->  Isotope:   206   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
+         --->  Isotope:   207   Z = 82   N = 207   A = 206.98 g/mole   abundance:  22.10 %
+         --->  Isotope:   208   Z = 82   N = 208   A = 207.98 g/mole   abundance:  52.40 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material: Scintillator    density:  1.032 g/cm3   RadL:  42.438 cm   Nucl.Int.Length:  70.748 cm   Imean:  65.944 eV 
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
-   --->  Isotope: Carbon12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-   --->  Isotope: Carbon13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %  ElmMassFraction:  92.24 %  ElmAbundance  50.00 %
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction:  92.24 %  ElmAbundance  50.00 % 
+
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
-   --->  Isotope: Hydrogen1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-   --->  Isotope: Hydrogen2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:   7.76 %  ElmAbundance  50.00 %
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction:   7.76 %  ElmAbundance  50.00 % 
+
 
  Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
-   --->  Isotope: Nitrogen14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
-   --->  Isotope: Nitrogen15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+         --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+         --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
+          ElmMassFraction:  70.00 %  ElmAbundance  72.71 % 
+
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
-   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
-   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
-   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
+
 
  Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 114334693.470 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
-   --->  Isotope: Galactic1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-   --->  Isotope: Galactic2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+         --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
 
 /run/verbose 2
@@ -125,19 +137,19 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   32 kByte
-    Total CPU time elapsed for geometry optimisation: 0 seconds
+    Total CPU time elapsed for geometry optimisation: 0.01 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-       0.00         0.00         0.00           31k layer
+     100.00         0.01         0.00           31k layer
        0.00         0.00         0.00            1k module
        0.00         0.00         0.00            1k calorimeter
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      94.74         30k         1      490        980         0.00    layer
+      94.74         30k         1      490        980         0.01    layer
        3.16          1k         1       17         20         0.00    module
        2.10          0k         1       10         18         0.00    calorimeter
 ### Run 0 start.
@@ -170,7 +182,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=16.73s Real=17.13s Sys=0.24s
+  User=43.63s Real=27.65s Sys=0.6s
 
 -------------------------------------------------------------
  ---> The calorimeter is 9 Modules
@@ -222,15 +234,15 @@ Run Summary
  Initial seed (index) = 0
  Current couple of seeds = 1827744077, 1641285383
 ----------------------------------------
+G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
-G4 kernel has come to Quit state.
 EventManager deleted.
 UImanager deleted.
 Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
-RunManager is deleting.
+RunManager is deleted.
 

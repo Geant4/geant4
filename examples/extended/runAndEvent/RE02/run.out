@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-04    (30-April-2012)
+ Geant4 version Name: geant4-09-05-ref-05    (31-May-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -78,35 +78,49 @@ The materials defined are :
 
  Material:   G4_AIR    density:  1.205 mg/cm3  RadL: 303.921 m    Nucl.Int.Length: 710.261 m    Imean:  85.700 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
-   --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-   --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %  ElmMassFraction:   0.01 %  ElmAbundance   0.02 %
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction:   0.01 %  ElmAbundance   0.02 % 
+
    --->  Element: N (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
-   --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
-   --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  75.53 %  ElmAbundance  78.44 %
+         --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+         --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
+          ElmMassFraction:  75.53 %  ElmAbundance  78.44 % 
+
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
-   --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
-   --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
-   --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  23.18 %  ElmAbundance  21.07 %
-   --->  Element: Ar (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole
-   --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
-   --->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
-   --->  Isotope:  Ar40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %  ElmMassFraction:   1.28 %  ElmAbundance   0.47 %
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  23.18 %  ElmAbundance  21.07 % 
+
+   --->  Element: Ar (Ar)   Z = 18.0   N =  40.0   A =  39.95 g/mole
+         --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
+         --->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
+         --->  Isotope:  Ar40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %
+          ElmMassFraction:   1.28 %  ElmAbundance   0.47 % 
+
 
  Material: G4_WATER H_2O   density:  1.000 g/cm3   RadL:  36.083 cm   Nucl.Int.Length:  75.517 cm   Imean:  78.000 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
-   --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-   --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction:  11.19 %  ElmAbundance  66.67 % 
+
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
-   --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
-   --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
-   --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
+
 
  Material:    G4_Pb    density: 11.350 g/cm3   RadL:   5.613 mm   Nucl.Int.Length:  18.261 cm   Imean: 823.000 eV 
    --->  Element: Pb (Pb)   Z = 82.0   N = 207.2   A = 207.22 g/mole
-   --->  Isotope: Pb204   Z = 82   N = 204   A = 203.97 g/mole   abundance:   1.40 %
-   --->  Isotope: Pb206   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
-   --->  Isotope: Pb207   Z = 82   N = 207   A = 206.98 g/mole   abundance:  22.10 %
-   --->  Isotope: Pb208   Z = 82   N = 208   A = 207.98 g/mole   abundance:  52.40 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+         --->  Isotope: Pb204   Z = 82   N = 204   A = 203.97 g/mole   abundance:   1.40 %
+         --->  Isotope: Pb206   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
+         --->  Isotope: Pb207   Z = 82   N = 207   A = 206.98 g/mole   abundance:  22.10 %
+         --->  Isotope: Pb208   Z = 82   N = 208   A = 207.98 g/mole   abundance:  52.40 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
 
 <-- RE02DetectorConstruction::Construct-------
@@ -331,6 +345,11 @@ hIoni:   for  pi+    SubType= 2
                Bragg :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
 
+msc:   for pi+    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -338,11 +357,6 @@ hIoni:   for  pi-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
-
-msc:   for pi-    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 ============================================================================================
              HADRONIC PROCESSES SUMMARY (verbose level 1)
 
@@ -747,68 +761,68 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=24.62s Real=24.8s Sys=0.02s
+  User=44.86s Real=43.81s Sys=0.05s
 =============================================================
  Number of event processed : 10000
 =============================================================
 #Z Cell#       totalEDep      protonEDep protonNStep  chargedPassCellFlux     chargedCellFlux     chargedSurfFlux    gammaSurfCurr000    gammaSurfCurr001    gammaSurfCurr002    gammaSurfCurr003
-     0       44.9227 MeV           0 eV            0         3043.39 /cm2        3109.49 /cm2         2614.7 /cm2              0 /cm2              0 /cm2            500 /cm2            300 /cm2
-     1       596.725 MeV           0 eV            0         4226.14 /cm2        5587.57 /cm2        3677.93 /cm2             25 /cm2             25 /cm2           1350 /cm2            550 /cm2
-     2       73.0982 MeV           0 eV            0         4863.54 /cm2        5113.86 /cm2        7509.18 /cm2              0 /cm2              0 /cm2           4475 /cm2           4375 /cm2
-     3       358.638 MeV           0 eV            0         1739.65 /cm2        3341.86 /cm2        5248.81 /cm2             25 /cm2              0 /cm2           4475 /cm2           3850 /cm2
-     4       15.6177 MeV           0 eV            0         954.832 /cm2        1059.74 /cm2        2197.32 /cm2              0 /cm2              0 /cm2           3550 /cm2           4175 /cm2
-     5       146.437 MeV           0 eV            0           387.5 /cm2        1296.85 /cm2        1477.96 /cm2              0 /cm2             50 /cm2           2975 /cm2           3525 /cm2
-     6       8.11652 MeV           0 eV            0         347.793 /cm2        450.168 /cm2        567.425 /cm2              0 /cm2             25 /cm2           1875 /cm2           3525 /cm2
-     7       59.1844 MeV           0 eV            0         75.3678 /cm2        499.132 /cm2         2185.3 /cm2              0 /cm2              0 /cm2           1725 /cm2           2825 /cm2
-     8       3.19817 MeV           0 eV            0         210.447 /cm2        215.855 /cm2        304.244 /cm2              0 /cm2              0 /cm2           1375 /cm2           2375 /cm2
-     9       38.9486 MeV           0 eV            0         21.6524 /cm2        341.917 /cm2        157.977 /cm2              0 /cm2              0 /cm2           1400 /cm2           1750 /cm2
-    10       4.39935 MeV           0 eV            0         201.535 /cm2        269.232 /cm2        154.006 /cm2              0 /cm2              0 /cm2           1100 /cm2           1975 /cm2
-    11       23.9527 MeV           0 eV            0         38.6287 /cm2        203.125 /cm2        148.117 /cm2              0 /cm2              0 /cm2           1050 /cm2           1950 /cm2
-    12       2.71781 MeV           0 eV            0         151.094 /cm2        165.633 /cm2        63.0408 /cm2              0 /cm2              0 /cm2            900 /cm2           1450 /cm2
-    13       7.61231 MeV           0 eV            0         36.5355 /cm2        65.8098 /cm2        206.926 /cm2              0 /cm2              0 /cm2            500 /cm2           1100 /cm2
-    14       2.00226 MeV           0 eV            0         102.748 /cm2        115.239 /cm2        113.563 /cm2              0 /cm2              0 /cm2            525 /cm2            900 /cm2
-    15       16.1931 MeV           0 eV            0         34.0693 /cm2        147.804 /cm2              0 /cm2              0 /cm2              0 /cm2            500 /cm2            825 /cm2
-    16       2.19309 MeV           0 eV            0         125.979 /cm2        127.744 /cm2        178.816 /cm2              0 /cm2              0 /cm2            450 /cm2            850 /cm2
-    17       13.7656 MeV           0 eV            0          19.395 /cm2        116.523 /cm2          327.5 /cm2              0 /cm2              0 /cm2            375 /cm2            775 /cm2
-    18         1.508 MeV           0 eV            0         83.9387 /cm2         90.788 /cm2        152.425 /cm2              0 /cm2              0 /cm2            225 /cm2            575 /cm2
-    19       5.65752 MeV           0 eV            0        0.121895 /cm2        54.7439 /cm2        70.0926 /cm2              0 /cm2              0 /cm2            175 /cm2            550 /cm2
-    20             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2            175 /cm2            425 /cm2
-    21       1.23548 MeV           0 eV            0        0.161226 /cm2        7.89998 /cm2              0 /cm2              0 /cm2              0 /cm2            150 /cm2            500 /cm2
-    22             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2            175 /cm2            500 /cm2
-    23       2.27468 MeV           0 eV            0               0 /cm2         14.065 /cm2              0 /cm2              0 /cm2              0 /cm2            175 /cm2            525 /cm2
-    24       153.896 keV           0 eV            0          11.937 /cm2         11.937 /cm2        25.5953 /cm2              0 /cm2              0 /cm2            100 /cm2            475 /cm2
-    25       4.67517 MeV           0 eV            0               0 /cm2        42.0412 /cm2              0 /cm2              0 /cm2              0 /cm2            125 /cm2            450 /cm2
-    26       561.206 keV           0 eV            0         40.2833 /cm2        40.2833 /cm2        26.0684 /cm2              0 /cm2              0 /cm2            100 /cm2            300 /cm2
-    27       2.84003 MeV           0 eV            0         11.6448 /cm2        29.4224 /cm2        215.463 /cm2              0 /cm2              0 /cm2            100 /cm2            200 /cm2
-    28             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2            150 /cm2            175 /cm2
-    29       834.699 keV           0 eV            0         7.96154 /cm2        8.59023 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2            175 /cm2
-    30             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2            175 /cm2
-    31       777.934 keV           0 eV            0               0 /cm2        3.83534 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2            200 /cm2
-    32        1.4809 MeV           0 eV            0         80.8046 /cm2        100.393 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2            150 /cm2
-    33       2.57601 MeV           0 eV            0         1.66533 /cm2        24.9595 /cm2            254 /cm2              0 /cm2              0 /cm2             50 /cm2            175 /cm2
-    34       301.526 keV           0 eV            0               0 /cm2        7.59142 /cm2              0 /cm2              0 /cm2              0 /cm2             75 /cm2            175 /cm2
-    35       1.48334 MeV           0 eV            0               0 /cm2        11.1121 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2            175 /cm2
-    36             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2             75 /cm2
-    37       510.999 keV           0 eV            0               0 /cm2        3.02877 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
-    38             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
-    39             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2             50 /cm2
-    40             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2
-    41             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    42             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2
-    43             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    44             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2
+     0       40.1077 MeV           0 eV            0         2682.65 /cm2        2785.01 /cm2        2491.65 /cm2              0 /cm2              0 /cm2            650 /cm2            325 /cm2
+     1       516.932 MeV           0 eV            0         3598.65 /cm2        4769.41 /cm2        3421.18 /cm2              0 /cm2             25 /cm2           1425 /cm2            750 /cm2
+     2       60.3879 MeV           0 eV            0         4082.03 /cm2        4271.47 /cm2        7082.88 /cm2              0 /cm2              0 /cm2           3650 /cm2           3450 /cm2
+     3        280.97 MeV           0 eV            0         1458.05 /cm2        2621.03 /cm2        4228.44 /cm2              0 /cm2             25 /cm2           3900 /cm2           4100 /cm2
+     4       19.5045 MeV           0 eV            0         1214.08 /cm2           1317 /cm2        1171.25 /cm2              0 /cm2              0 /cm2           3125 /cm2           4200 /cm2
+     5       88.0911 MeV           0 eV            0         202.868 /cm2        775.855 /cm2        1789.19 /cm2              0 /cm2              0 /cm2           3075 /cm2           3800 /cm2
+     6       7.96309 MeV           0 eV            0         471.054 /cm2        531.691 /cm2        935.986 /cm2              0 /cm2              0 /cm2           1700 /cm2           3300 /cm2
+     7       54.2408 MeV           0 eV            0         122.978 /cm2        461.475 /cm2        1365.02 /cm2              0 /cm2              0 /cm2           1500 /cm2           2825 /cm2
+     8       3.24837 MeV           0 eV            0         186.094 /cm2        186.094 /cm2        111.124 /cm2              0 /cm2              0 /cm2           1300 /cm2           2050 /cm2
+     9       31.1659 MeV           0 eV            0         77.6695 /cm2        264.134 /cm2        316.818 /cm2              0 /cm2              0 /cm2           1025 /cm2           1675 /cm2
+    10       3.26115 MeV           0 eV            0         140.694 /cm2        204.676 /cm2        273.747 /cm2              0 /cm2              0 /cm2           1000 /cm2           1375 /cm2
+    11       32.4723 MeV           0 eV            0         49.9569 /cm2        286.823 /cm2        276.242 /cm2              0 /cm2              0 /cm2            975 /cm2           1325 /cm2
+    12       3.74901 MeV           0 eV            0         224.682 /cm2        252.242 /cm2        3563.85 /cm2              0 /cm2              0 /cm2            775 /cm2           1275 /cm2
+    13       47.5132 MeV           0 eV            0         89.3654 /cm2        453.353 /cm2        1055.45 /cm2              0 /cm2              0 /cm2            550 /cm2           1225 /cm2
+    14       441.021 keV           0 eV            0         35.8594 /cm2        35.8594 /cm2        68.4962 /cm2              0 /cm2              0 /cm2            775 /cm2           1075 /cm2
+    15       15.4442 MeV           0 eV            0         64.5683 /cm2        140.822 /cm2              0 /cm2              0 /cm2              0 /cm2            500 /cm2            950 /cm2
+    16       761.355 keV           0 eV            0         42.4722 /cm2        42.4722 /cm2        100.635 /cm2              0 /cm2              0 /cm2            400 /cm2            750 /cm2
+    17       8.00456 MeV           0 eV            0         24.4584 /cm2        68.4328 /cm2        34.7203 /cm2              0 /cm2              0 /cm2            325 /cm2            850 /cm2
+    18       879.758 keV           0 eV            0         71.4113 /cm2        71.4113 /cm2        37.2558 /cm2              0 /cm2              0 /cm2            250 /cm2            675 /cm2
+    19       9.93017 MeV           0 eV            0         1.02441 /cm2        89.6669 /cm2              0 /cm2              0 /cm2              0 /cm2            175 /cm2            575 /cm2
+    20       308.116 keV           0 eV            0               0 /cm2        13.0843 /cm2              0 /cm2              0 /cm2              0 /cm2            225 /cm2            475 /cm2
+    21       1.45345 MeV           0 eV            0         5.86104 /cm2        10.9234 /cm2              0 /cm2              0 /cm2              0 /cm2            125 /cm2            375 /cm2
+    22       899.976 keV           0 eV            0         51.0514 /cm2        54.0909 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2            375 /cm2
+    23       5.38091 MeV           0 eV            0           17.07 /cm2        44.0913 /cm2        71.5167 /cm2              0 /cm2              0 /cm2            100 /cm2            350 /cm2
+    24             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2            100 /cm2            325 /cm2
+    25       1.35508 MeV           0 eV            0         4.04914 /cm2        9.63272 /cm2              0 /cm2              0 /cm2              0 /cm2            100 /cm2            250 /cm2
+    26       1.05613 MeV           0 eV            0         77.0429 /cm2        77.0429 /cm2        174.695 /cm2              0 /cm2              0 /cm2            100 /cm2            250 /cm2
+    27       3.46234 MeV           0 eV            0          5.2277 /cm2        31.9697 /cm2        27.7106 /cm2              0 /cm2              0 /cm2            100 /cm2            325 /cm2
+    28             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2            350 /cm2
+    29       3.26558 MeV           0 eV            0        0.841176 /cm2        29.6618 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2            250 /cm2
+    30       1.63039 MeV           0 eV            0         99.0789 /cm2        102.707 /cm2        29.7147 /cm2              0 /cm2              0 /cm2             25 /cm2            100 /cm2
+    31       439.007 keV           0 eV            0         4.97833 /cm2        5.20779 /cm2        126.695 /cm2              0 /cm2              0 /cm2             25 /cm2            150 /cm2
+    32       150.049 keV           0 eV            0         12.4399 /cm2        12.4399 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             75 /cm2
+    33       2.70281 MeV           0 eV            0         22.2778 /cm2        24.4869 /cm2        37.0933 /cm2              0 /cm2              0 /cm2             25 /cm2             75 /cm2
+    34       361.024 keV           0 eV            0               0 /cm2        15.5876 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             75 /cm2
+    35        5.6125 MeV           0 eV            0               0 /cm2        51.5961 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2            100 /cm2
+    36             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2            150 /cm2
+    37             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2            125 /cm2
+    38             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2            100 /cm2
+    39       3.67021 MeV           0 eV            0               0 /cm2        41.0968 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2             75 /cm2
+    40       18.4362 keV           0 eV            0         1.10358 /cm2        1.10358 /cm2        33.1424 /cm2              0 /cm2              0 /cm2             25 /cm2             50 /cm2
+    41       533.157 keV           0 eV            0               0 /cm2        3.68272 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2
+    42             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             75 /cm2
+    43       428.758 keV           0 eV            0               0 /cm2       0.949834 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+    44             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     45             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     46             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     47             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    48             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    49             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    50             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+    48             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
+    49             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
+    50             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
     51             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     52             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    53             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    54             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    55             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    56             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2             25 /cm2
+    53             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2
+    54             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2
+    55             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2              0 /cm2
+    56             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     57             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     58             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     59             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
@@ -816,19 +830,19 @@ Run Summary
     61             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     62             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     63             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    64             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2              0 /cm2
+    64             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     65             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     66             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    67             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    68             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+    67             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
+    68             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
     69             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     70             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     71             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     72             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     73             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     74             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
-    75             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
-    76             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             25 /cm2
+    75             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
+    76             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     77             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     78             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
     79             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
@@ -956,18 +970,18 @@ Run Summary
 #
 Graphics systems deleted.
 Visualization Manager deleting...
+G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
-G4 kernel has come to Quit state.
 G4SDManager deleted.
 EventManager deleted.
 UImanager deleted.
 Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
-RunManager is deleting.
+RunManager is deleted.
 
 
 
@@ -976,7 +990,7 @@ RunManager is deleting.
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-04    (30-April-2012)
+ Geant4 version Name: geant4-09-05-ref-05    (31-May-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -1050,35 +1064,49 @@ The materials defined are :
 
  Material:   G4_AIR    density:  1.205 mg/cm3  RadL: 303.921 m    Nucl.Int.Length: 710.261 m    Imean:  85.700 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
-   --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-   --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %  ElmMassFraction:   0.01 %  ElmAbundance   0.02 %
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction:   0.01 %  ElmAbundance   0.02 % 
+
    --->  Element: N (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
-   --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
-   --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  75.53 %  ElmAbundance  78.44 %
+         --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+         --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
+          ElmMassFraction:  75.53 %  ElmAbundance  78.44 % 
+
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
-   --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
-   --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
-   --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  23.18 %  ElmAbundance  21.07 %
-   --->  Element: Ar (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole
-   --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
-   --->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
-   --->  Isotope:  Ar40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %  ElmMassFraction:   1.28 %  ElmAbundance   0.47 %
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  23.18 %  ElmAbundance  21.07 % 
+
+   --->  Element: Ar (Ar)   Z = 18.0   N =  40.0   A =  39.95 g/mole
+         --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
+         --->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
+         --->  Isotope:  Ar40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %
+          ElmMassFraction:   1.28 %  ElmAbundance   0.47 % 
+
 
  Material: G4_WATER H_2O   density:  1.000 g/cm3   RadL:  36.083 cm   Nucl.Int.Length:  75.517 cm   Imean:  78.000 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
-   --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-   --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction:  11.19 %  ElmAbundance  66.67 % 
+
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
-   --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
-   --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
-   --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
+
 
  Material:    G4_Pb    density: 11.350 g/cm3   RadL:   5.613 mm   Nucl.Int.Length:  18.261 cm   Imean: 823.000 eV 
    --->  Element: Pb (Pb)   Z = 82.0   N = 207.2   A = 207.22 g/mole
-   --->  Isotope: Pb204   Z = 82   N = 204   A = 203.97 g/mole   abundance:   1.40 %
-   --->  Isotope: Pb206   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
-   --->  Isotope: Pb207   Z = 82   N = 207   A = 206.98 g/mole   abundance:  22.10 %
-   --->  Isotope: Pb208   Z = 82   N = 208   A = 207.98 g/mole   abundance:  52.40 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+         --->  Isotope: Pb204   Z = 82   N = 204   A = 203.97 g/mole   abundance:   1.40 %
+         --->  Isotope: Pb206   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
+         --->  Isotope: Pb207   Z = 82   N = 207   A = 206.98 g/mole   abundance:  22.10 %
+         --->  Isotope: Pb208   Z = 82   N = 208   A = 207.98 g/mole   abundance:  52.40 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
 
 <-- RE02DetectorConstruction::Construct-------
@@ -1305,6 +1333,11 @@ hIoni:   for  pi+    SubType= 2
                Bragg :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
 
+msc:   for pi+    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -1312,11 +1345,6 @@ hIoni:   for  pi-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
-
-msc:   for pi-    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 ============================================================================================
              HADRONIC PROCESSES SUMMARY (verbose level 1)
 
@@ -1721,13 +1749,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.29s Real=0.29s Sys=0s
+  User=0.72s Real=0.72s Sys=0s
 =============================================================
  Number of event processed : 10000
 =============================================================
 #Z Cell#       totalEDep      protonEDep protonNStep  chargedPassCellFlux     chargedCellFlux     chargedSurfFlux    gammaSurfCurr000    gammaSurfCurr001    gammaSurfCurr002    gammaSurfCurr003
-     0        240.42 keV           0 eV            0               0 /cm2        2.37375 /cm2              0 /cm2              0 /cm2          10425 /cm2              0 /cm2              0 /cm2
-     1       24.1208 MeV           0 eV            0               0 /cm2        36.5329 /cm2              0 /cm2              0 /cm2          10125 /cm2              0 /cm2              0 /cm2
+     0       234.729 keV           0 eV            0               0 /cm2        2.36174 /cm2              0 /cm2              0 /cm2          10350 /cm2              0 /cm2              0 /cm2
+     1       24.0008 MeV           0 eV            0               0 /cm2        36.3509 /cm2              0 /cm2              0 /cm2          10075 /cm2              0 /cm2              0 /cm2
      2             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
      3             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
      4             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
@@ -1930,18 +1958,18 @@ Run Summary
 #
 Graphics systems deleted.
 Visualization Manager deleting...
+G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
-G4 kernel has come to Quit state.
 G4SDManager deleted.
 EventManager deleted.
 UImanager deleted.
 Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
-RunManager is deleting.
+RunManager is deleted.
 
 
 
@@ -1950,7 +1978,7 @@ RunManager is deleting.
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-04    (30-April-2012)
+ Geant4 version Name: geant4-09-05-ref-05    (31-May-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -2024,35 +2052,49 @@ The materials defined are :
 
  Material:   G4_AIR    density:  1.205 mg/cm3  RadL: 303.921 m    Nucl.Int.Length: 710.261 m    Imean:  85.700 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
-   --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-   --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %  ElmMassFraction:   0.01 %  ElmAbundance   0.02 %
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction:   0.01 %  ElmAbundance   0.02 % 
+
    --->  Element: N (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
-   --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
-   --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  75.53 %  ElmAbundance  78.44 %
+         --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+         --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
+          ElmMassFraction:  75.53 %  ElmAbundance  78.44 % 
+
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
-   --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
-   --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
-   --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  23.18 %  ElmAbundance  21.07 %
-   --->  Element: Ar (Ar)   Z = 18.0   N =  39.9   A =  39.95 g/mole
-   --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
-   --->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
-   --->  Isotope:  Ar40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %  ElmMassFraction:   1.28 %  ElmAbundance   0.47 %
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  23.18 %  ElmAbundance  21.07 % 
+
+   --->  Element: Ar (Ar)   Z = 18.0   N =  40.0   A =  39.95 g/mole
+         --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
+         --->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
+         --->  Isotope:  Ar40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %
+          ElmMassFraction:   1.28 %  ElmAbundance   0.47 % 
+
 
  Material: G4_WATER H_2O   density:  1.000 g/cm3   RadL:  36.083 cm   Nucl.Int.Length:  75.517 cm   Imean:  78.000 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
-   --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-   --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction:  11.19 %  ElmAbundance  66.67 % 
+
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
-   --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
-   --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
-   --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
+
 
  Material:    G4_Pb    density: 11.350 g/cm3   RadL:   5.613 mm   Nucl.Int.Length:  18.261 cm   Imean: 823.000 eV 
    --->  Element: Pb (Pb)   Z = 82.0   N = 207.2   A = 207.22 g/mole
-   --->  Isotope: Pb204   Z = 82   N = 204   A = 203.97 g/mole   abundance:   1.40 %
-   --->  Isotope: Pb206   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
-   --->  Isotope: Pb207   Z = 82   N = 207   A = 206.98 g/mole   abundance:  22.10 %
-   --->  Isotope: Pb208   Z = 82   N = 208   A = 207.98 g/mole   abundance:  52.40 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+         --->  Isotope: Pb204   Z = 82   N = 204   A = 203.97 g/mole   abundance:   1.40 %
+         --->  Isotope: Pb206   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
+         --->  Isotope: Pb207   Z = 82   N = 207   A = 206.98 g/mole   abundance:  22.10 %
+         --->  Isotope: Pb208   Z = 82   N = 208   A = 207.98 g/mole   abundance:  52.40 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
 
 <-- RE02DetectorConstruction::Construct-------
@@ -2279,6 +2321,11 @@ hIoni:   for  pi+    SubType= 2
                Bragg :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
 
+msc:   for pi+    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -2286,11 +2333,6 @@ hIoni:   for  pi-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
-
-msc:   for pi-    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 ============================================================================================
              HADRONIC PROCESSES SUMMARY (verbose level 1)
 
@@ -2785,7 +2827,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0s Real=0.01s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 =============================================================
  Number of event processed : 10
 =============================================================
@@ -2994,16 +3036,16 @@ Run Summary
 #
 Graphics systems deleted.
 Visualization Manager deleting...
+G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
-G4 kernel has come to Quit state.
 G4SDManager deleted.
 EventManager deleted.
 UImanager deleted.
 Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
-RunManager is deleting.
+RunManager is deleted.
 

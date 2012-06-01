@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-04    (30-April-2012)
+ Geant4 version Name: geant4-09-05-ref-05    (31-May-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -336,6 +336,11 @@ hIoni:   for  pi+    SubType= 2
                Bragg :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
 
+msc:   for pi+    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -343,11 +348,6 @@ hIoni:   for  pi-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
-
-msc:   for pi-    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 ========= Table of registered couples ==============================
 
@@ -406,7 +406,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=2.63s Real=3.3s Sys=0.67s
+  User=5.16s Real=6.46s Sys=1.39s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -533,7 +533,7 @@ layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
       18          0          0          0          0          0          0
       19          0          0          0          0          0          0
 ############################################################
-CPU Time spent by each region0x2afb0efcc2c8
+CPU Time spent by each region0x2b656af042c8
 Region <DefaultRegionForTheWorld>
  All particles : User=0  Real=0  Sys=0
  e+ / e-       : User=0  Real=0  Sys=0
@@ -543,16 +543,16 @@ Region <DefaultRegionForParallelWorld>
  e+ / e-       : User=0  Real=0  Sys=0
 
 Region <Calor-A>
- All particles : User=0.98  Real=1.14  Sys=0.14
- e+ / e-       : User=0.71  Real=0.76  Sys=0.1
+ All particles : User=2.1  Real=2.28  Sys=0.52
+ e+ / e-       : User=1.56  Real=1.8  Sys=0.44
 
 Region <Calor-B>
- All particles : User=0.34  Real=0.42  Sys=0.03
- e+ / e-       : User=0.24  Real=0.27  Sys=0.03
+ All particles : User=0.74  Real=1.34  Sys=0.17
+ e+ / e-       : User=0.55  Real=1.16  Sys=0.14
 
 Region <Calor-C>
- All particles : User=0.81  Real=0.93  Sys=0.11
- e+ / e-       : User=0.63  Real=0.71  Sys=0.13
+ All particles : User=1.03  Real=1.26  Sys=0.11
+ e+ / e-       : User=0.8  Real=0.9  Sys=0.11
 
 /run/dumpCouples
 
@@ -803,6 +803,11 @@ hIoni:   for  pi+    SubType= 2
                Bragg :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
 
+msc:   for pi+    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -810,11 +815,6 @@ hIoni:   for  pi-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
-
-msc:   for pi-    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 ========= Table of registered couples ==============================
 
@@ -873,7 +873,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.83s Real=2.39s Sys=0.55s
+  User=4.44s Real=2.93s Sys=1.42s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1000,7 +1000,7 @@ layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
       18          0          0          0          0          0          0
       19          0          0          0          0          0          0
 ############################################################
-CPU Time spent by each region0x2afb0efcc2c8
+CPU Time spent by each region0x2b656af042c8
 Region <DefaultRegionForTheWorld>
  All particles : User=0  Real=0  Sys=0
  e+ / e-       : User=0  Real=0  Sys=0
@@ -1010,16 +1010,16 @@ Region <DefaultRegionForParallelWorld>
  e+ / e-       : User=0  Real=0  Sys=0
 
 Region <Calor-A>
- All particles : User=0.59  Real=0.75  Sys=0.13
- e+ / e-       : User=0.41  Real=0.51  Sys=0.1
+ All particles : User=1.41  Real=0.73  Sys=0.25
+ e+ / e-       : User=1.06  Real=0.63  Sys=0.2
 
 Region <Calor-B>
- All particles : User=0.41  Real=0.46  Sys=0.06
- e+ / e-       : User=0.26  Real=0.32  Sys=0.04
+ All particles : User=0.95  Real=0.64  Sys=0.2
+ e+ / e-       : User=0.66  Real=0.46  Sys=0.16
 
 Region <Calor-C>
- All particles : User=0.5  Real=0.62  Sys=0.07
- e+ / e-       : User=0.37  Real=0.39  Sys=0.09
+ All particles : User=1.18  Real=0.72  Sys=0.32
+ e+ / e-       : User=0.84  Real=0.51  Sys=0.24
 
 /run/dumpCouples
 
@@ -1269,6 +1269,11 @@ hIoni:   for  pi+    SubType= 2
                Bragg :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
 
+msc:   for pi+    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -1276,11 +1281,6 @@ hIoni:   for  pi-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
-
-msc:   for pi-    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 ========= Table of registered couples ==============================
 
@@ -1369,7 +1369,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.32s Real=0.39s Sys=0.07s
+  User=0.78s Real=0.51s Sys=0.22s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1496,7 +1496,7 @@ layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
       18  0.0709139          0        0.2          0    0.10503        0.9
       19 0.00654043          0        0.5          0 0.00130447        0.5
 ############################################################
-CPU Time spent by each region0x2afb0efcc2c8
+CPU Time spent by each region0x2b656af042c8
 Region <DefaultRegionForTheWorld>
  All particles : User=0  Real=0  Sys=0
  e+ / e-       : User=0  Real=0  Sys=0
@@ -1506,16 +1506,16 @@ Region <DefaultRegionForParallelWorld>
  e+ / e-       : User=0  Real=0  Sys=0
 
 Region <Calor-A>
- All particles : User=0.07  Real=0.17  Sys=0.01
- e+ / e-       : User=0.07  Real=0.1  Sys=0.03
+ All particles : User=0.31  Real=0.23  Sys=0.07
+ e+ / e-       : User=0.18  Real=0.16  Sys=0.02
 
 Region <Calor-B>
- All particles : User=0.12  Real=0.12  Sys=0.01
- e+ / e-       : User=0.04  Real=0.08  Sys=0
+ All particles : User=0.21  Real=0.12  Sys=0.03
+ e+ / e-       : User=0.1  Real=0.04  Sys=0.01
 
 Region <Calor-C>
- All particles : User=0.07  Real=0.04  Sys=0
- e+ / e-       : User=0.02  Real=0  Sys=0
+ All particles : User=0.11  Real=0.06  Sys=0.05
+ e+ / e-       : User=0.06  Real=0.02  Sys=0.01
 
 /run/dumpCouples
 
@@ -1796,6 +1796,11 @@ hIoni:   for  pi+    SubType= 2
                Bragg :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
 
+msc:   for pi+    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -1803,11 +1808,6 @@ hIoni:   for  pi-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
-
-msc:   for pi-    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 ========= Table of registered couples ==============================
 
@@ -1896,7 +1896,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.82s Real=1.06s Sys=0.24s
+  User=2.06s Real=1.37s Sys=0.65s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -2023,7 +2023,7 @@ layer   eDep/evt  nGamma/evt nElec/evt  nPosi/evt  stpLen/evt nStep/evt
       18  0.0363951          0        0.3          0  0.0330875        0.3
       19  0.0099319          0        0.3          0 0.00352348        0.4
 ############################################################
-CPU Time spent by each region0x2afb0efcc2c8
+CPU Time spent by each region0x2b656af042c8
 Region <DefaultRegionForTheWorld>
  All particles : User=0  Real=0  Sys=0
  e+ / e-       : User=0  Real=0  Sys=0
@@ -2033,16 +2033,16 @@ Region <DefaultRegionForParallelWorld>
  e+ / e-       : User=0  Real=0  Sys=0
 
 Region <Calor-A>
- All particles : User=0.33  Real=0.47  Sys=0.05
- e+ / e-       : User=0.21  Real=0.29  Sys=0.09
+ All particles : User=0.89  Real=0.53  Sys=0.16
+ e+ / e-       : User=0.6  Real=0.36  Sys=0.18
 
 Region <Calor-B>
- All particles : User=0.21  Real=0.18  Sys=0.03
- e+ / e-       : User=0.14  Real=0.08  Sys=0.03
+ All particles : User=0.52  Real=0.3  Sys=0.1
+ e+ / e-       : User=0.31  Real=0.24  Sys=0.04
 
 Region <Calor-C>
- All particles : User=0.1  Real=0.12  Sys=0.02
- e+ / e-       : User=0.05  Real=0.11  Sys=0.02
+ All particles : User=0.2  Real=0.15  Sys=0.06
+ e+ / e-       : User=0.1  Real=0.07  Sys=0.05
 
 /run/dumpCouples
 

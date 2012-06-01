@@ -4,13 +4,13 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-04    (30-April-2012)
+ Geant4 version Name: geant4-09-05-ref-05    (31-May-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
- creating G4RunManagerKernel 0xaf05500
+ creating G4RunManagerKernel 0x43374e0
 
 The materials defined are : 
 
@@ -19,28 +19,38 @@ The materials defined are :
 
  Material:      Air    density:  1.205 mg/cm3  RadL: 305.277 m    Nucl.Int.Length: 709.664 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
-   --->  Isotope: Nitrogen14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
-   --->  Isotope: Nitrogen15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+         --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+         --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
+          ElmMassFraction:  70.00 %  ElmAbundance  72.71 % 
+
    --->  Element: Oxigen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
-   --->  Isotope: Oxigen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
-   --->  Isotope: Oxigen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
-   --->  Isotope: Oxigen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
+
 
  Material:       Al    density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.860 cm   Imean: 166.000 eV 
    --->  Element: Al ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole
-   --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+         --->  Isotope:    27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material:       Fe    density:  7.870 g/cm3   RadL:   1.759 cm   Nucl.Int.Length:  16.969 cm   Imean: 286.000 eV 
    --->  Element: Fe ( )   Z = 26.0   N =  55.8   A =  55.85 g/mole
-   --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
-   --->  Isotope:  Fe56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
-   --->  Isotope:  Fe57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
-   --->  Isotope:  Fe58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+         --->  Isotope:    54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
+         --->  Isotope:    56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
+         --->  Isotope:    57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
+         --->  Isotope:    58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material:       Cu    density:  8.960 g/cm3   RadL:   1.435 cm   Nucl.Int.Length:  15.513 cm   Imean: 322.000 eV 
    --->  Element: Cu ( )   Z = 29.0   N =  63.5   A =  63.54 g/mole
-   --->  Isotope:  Cu63   Z = 29   N =  63   A =  62.93 g/mole   abundance:  69.17 %
-   --->  Isotope:  Cu65   Z = 29   N =  65   A =  64.93 g/mole   abundance:  30.83 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+         --->  Isotope:    63   Z = 29   N =  63   A =  62.93 g/mole   abundance:  69.17 %
+         --->  Isotope:    65   Z = 29   N =  65   A =  64.93 g/mole   abundance:  30.83 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
 
  HalfWorldLength 2250
@@ -50,14 +60,14 @@ List of instantiated particles ============================================
 e+ e- gamma mu+ mu- pi+ pi- proton 
 physicsList->Construct() start.
  G4Transportation constructor> set fShortStepOptimisation to false
-0xaf72cf0G4ErrorPhysicsList:: particle process manager e+ = 0xaf741f0
-0xaf72ae0G4ErrorPhysicsList:: particle process manager e- = 0xaf75800
-0xaf72870G4ErrorPhysicsList:: particle process manager gamma = 0xaf75a10
-0xaf72f00G4ErrorPhysicsList:: particle process manager mu+ = 0xaf75c60
-0xaf73330G4ErrorPhysicsList:: particle process manager mu- = 0xaf75eb0
-0xaf737a0G4ErrorPhysicsList:: particle process manager pi+ = 0xaf76100
-0xaf73bc0G4ErrorPhysicsList:: particle process manager pi- = 0xaf76350
-0xaf73fe0G4ErrorPhysicsList:: particle process manager proton = 0xaf765a0
+0x43a4d60G4ErrorPhysicsList:: particle process manager e+ = 0x43a6260
+0x43a4b50G4ErrorPhysicsList:: particle process manager e- = 0x43a7870
+0x43a48e0G4ErrorPhysicsList:: particle process manager gamma = 0x43a7a80
+0x43a4f70G4ErrorPhysicsList:: particle process manager mu+ = 0x43a7cd0
+0x43a53a0G4ErrorPhysicsList:: particle process manager mu- = 0x43a7f20
+0x43a5810G4ErrorPhysicsList:: particle process manager pi+ = 0x43a8170
+0x43a5c30G4ErrorPhysicsList:: particle process manager pi- = 0x43a83c0
+0x43a6050G4ErrorPhysicsList:: particle process manager proton = 0x43a8610
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 

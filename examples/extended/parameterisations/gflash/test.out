@@ -9,7 +9,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-04    (30-April-2012)
+ Geant4 version Name: geant4-09-05-ref-05    (31-May-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -71,20 +71,26 @@ Defining the materials
 There are 10 crystals per row in the calorimeter, so in total 100 crystals
 The have widthof  3  cm and a lenght of  24 cm. The Material is  Material:    PbWO4    density:  8.280 g/cm3   RadL:   8.924 mm   Nucl.Int.Length:  20.740 cm   Imean: 542.741 eV 
    --->  Element: Lead (Pb)   Z = 82.0   N = 207.2   A = 207.19 g/mole
-   --->  Isotope: Lead204   Z = 82   N = 204   A = 203.97 g/mole   abundance:   1.40 %
-   --->  Isotope: Lead206   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
-   --->  Isotope: Lead207   Z = 82   N = 207   A = 206.98 g/mole   abundance:  22.10 %
-   --->  Isotope: Lead208   Z = 82   N = 208   A = 207.98 g/mole   abundance:  52.40 %  ElmMassFraction:  45.53 %  ElmAbundance  16.67 %
+         --->  Isotope: Pb204   Z = 82   N = 204   A = 203.97 g/mole   abundance:   1.40 %
+         --->  Isotope: Pb206   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
+         --->  Isotope: Pb207   Z = 82   N = 207   A = 206.98 g/mole   abundance:  22.10 %
+         --->  Isotope: Pb208   Z = 82   N = 208   A = 207.98 g/mole   abundance:  52.40 %
+          ElmMassFraction:  45.53 %  ElmAbundance  16.67 % 
+
    --->  Element: Tungsten (W)   Z = 74.0   N = 183.8   A = 183.85 g/mole
-   --->  Isotope: Tungsten180   Z = 74   N = 180   A = 179.95 g/mole   abundance:   0.12 %
-   --->  Isotope: Tungsten182   Z = 74   N = 182   A = 181.95 g/mole   abundance:  26.50 %
-   --->  Isotope: Tungsten183   Z = 74   N = 183   A = 182.95 g/mole   abundance:  14.31 %
-   --->  Isotope: Tungsten184   Z = 74   N = 184   A = 183.95 g/mole   abundance:  30.64 %
-   --->  Isotope: Tungsten186   Z = 74   N = 186   A = 185.95 g/mole   abundance:  28.43 %  ElmMassFraction:  40.40 %  ElmAbundance  16.67 %
+         --->  Isotope:  W180   Z = 74   N = 180   A = 179.95 g/mole   abundance:   0.12 %
+         --->  Isotope:  W182   Z = 74   N = 182   A = 181.95 g/mole   abundance:  26.50 %
+         --->  Isotope:  W183   Z = 74   N = 183   A = 182.95 g/mole   abundance:  14.31 %
+         --->  Isotope:  W184   Z = 74   N = 184   A = 183.95 g/mole   abundance:  30.64 %
+         --->  Isotope:  W186   Z = 74   N = 186   A = 185.95 g/mole   abundance:  28.43 %
+          ElmMassFraction:  40.40 %  ElmAbundance  16.67 % 
+
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
-   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
-   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
-   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  14.06 %  ElmAbundance  66.67 %
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  14.06 %  ElmAbundance  66.67 % 
+
 Shower parameterization
 /********************************************/ 
   - GVFlashShowerParameterisation::Material -  
@@ -262,6 +268,11 @@ hIoni:   for  pi+    SubType= 2
                Bragg :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
 
+msc:   for pi+    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -269,11 +280,6 @@ hIoni:   for  pi-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
-
-msc:   for pi-    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 ========= Table of registered couples ==============================
 
@@ -305,7 +311,7 @@ WARNING: Scene "none" not found.
 ******************************************
 Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0.03
 ******************************************
  ------ ExGflashEventAction::End of event nr. 0  -----
   11969 hits are stored in ExGflashHitsCollection 
@@ -320,7 +326,7 @@ Internal GetUserElapsed Time: 0.01
 ******************************************
 Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0.02
 ******************************************
  ------ ExGflashEventAction::End of event nr. 1  -----
   11969 hits are stored in ExGflashHitsCollection 
@@ -335,7 +341,7 @@ Internal GetUserElapsed Time: 0.01
 ******************************************
 Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0.02
 ******************************************
  ------ ExGflashEventAction::End of event nr. 2  -----
   11921 hits are stored in ExGflashHitsCollection 
@@ -348,9 +354,9 @@ Internal GetUserElapsed Time: 0.01
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.02
+Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0.02
 ******************************************
  ------ ExGflashEventAction::End of event nr. 3  -----
   11951 hits are stored in ExGflashHitsCollection 
@@ -365,7 +371,7 @@ Internal GetUserElapsed Time: 0.01
 ******************************************
 Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0.02
 ******************************************
  ------ ExGflashEventAction::End of event nr. 4  -----
   11977 hits are stored in ExGflashHitsCollection 
@@ -380,7 +386,7 @@ Internal GetUserElapsed Time: 0.01
 ******************************************
 Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0.02
 ******************************************
  ------ ExGflashEventAction::End of event nr. 5  -----
   12134 hits are stored in ExGflashHitsCollection 
@@ -393,9 +399,9 @@ Internal GetUserElapsed Time: 0.01
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.01
+Internal Real Elapsed Time is: 0.02
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0.02
 ******************************************
  ------ ExGflashEventAction::End of event nr. 6  -----
   11980 hits are stored in ExGflashHitsCollection 
@@ -410,7 +416,7 @@ Internal GetUserElapsed Time: 0.01
 ******************************************
 Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0.02
 ******************************************
  ------ ExGflashEventAction::End of event nr. 7  -----
   11941 hits are stored in ExGflashHitsCollection 
@@ -425,7 +431,7 @@ Internal GetUserElapsed Time: 0.01
 ******************************************
 Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0.02
 ******************************************
  ------ ExGflashEventAction::End of event nr. 8  -----
   11973 hits are stored in ExGflashHitsCollection 
@@ -440,7 +446,7 @@ Internal GetUserElapsed Time: 0.01
 ******************************************
 Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0.03
 ******************************************
  ------ ExGflashEventAction::End of event nr. 9  -----
   11963 hits are stored in ExGflashHitsCollection 
@@ -454,8 +460,8 @@ Visualization Manager deleting...
 Internal Real Elapsed Time /event is: 0.0122222
 
 ******************************************
-Total Real Elapsed Time is: 0.61
-Total System Elapsed Time: 0
-Total GetUserElapsed Time: 0.61
+Total Real Elapsed Time is: 0.64
+Total System Elapsed Time: 0.02
+Total GetUserElapsed Time: 1.27
 ******************************************
 

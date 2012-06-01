@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-04    (30-April-2012)
+ Geant4 version Name: geant4-09-05-ref-05    (31-May-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -63,7 +63,7 @@ msc:   for e-    SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
       ===== EM models for the G4Region  Target ======
-          UrbanMsc93 :  Emin=        0 eV    Emax=       10 TeV  Table with 49 bins Emin=      1 MeV   Emax=     10 TeV
+          UrbanMsc93 :  Emin=        1 MeV   Emax=       10 TeV  Table with 49 bins Emin=      1 MeV   Emax=     10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -72,7 +72,7 @@ eIoni:   for  e-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
       ===== EM models for the G4Region  Target ======
-        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
+        MollerBhabha :  Emin=      990 keV   Emax=       10 TeV
 
 e-_G4DNAElastic:   for  e-    SubType= 51
  Total cross sections computed from DummyModel model
@@ -122,8 +122,8 @@ hIoni:   for  proton    SubType= 2
          BraggIonGas :  Emin=        0 eV    Emax=        2 MeV
     BetheBlochGasIon :  Emin=        2 MeV   Emax=       10 TeV
       ===== EM models for the G4Region  Target ======
-         BraggIonGas :  Emin=        0 eV    Emax=        2 MeV
-    BetheBlochGasIon :  Emin=        2 MeV   Emax=       10 TeV
+         BraggIonGas :  Emin=      9.9 MeV   Emax=        2 MeV
+    BetheBlochGasIon :  Emin=      9.9 MeV   Emax=       10 TeV
 
 proton_G4DNAExcitation:   for  proton    SubType= 52
  Total cross sections computed from DummyModel and DummyModel models
