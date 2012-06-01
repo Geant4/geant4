@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-04    (30-April-2012)
+ Geant4 version Name: geant4-09-05-ref-05    (31-May-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -15,64 +15,88 @@
 
  Material: Beryllium    density:  1.848 g/cm3   RadL:  35.267 cm   Nucl.Int.Length:  39.439 cm   Imean:  63.700 eV 
    --->  Element: Beryllium ( )   Z =  4.0   N =   9.0   A =   9.01 g/mole
-   --->  Isotope: Beryllium9   Z =  4   N =   9   A =   9.01 g/mole   abundance: 100.00 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+         --->  Isotope:     9   Z =  4   N =   9   A =   9.01 g/mole   abundance: 100.00 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material: Aluminium    density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.860 cm   Imean: 166.000 eV 
    --->  Element: Aluminium ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole
-   --->  Isotope: Aluminium27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+         --->  Isotope:    27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material:  Silicon    density:  2.330 g/cm3   RadL:   9.368 cm   Nucl.Int.Length:  45.761 cm   Imean: 173.000 eV 
    --->  Element: Silicon ( )   Z = 14.0   N =  28.1   A =  28.09 g/mole
-   --->  Isotope: Silicon28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
-   --->  Isotope: Silicon29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
-   --->  Isotope: Silicon30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+         --->  Isotope:    28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
+         --->  Isotope:    29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
+         --->  Isotope:    30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material: liquidArgon    density:  1.390 g/cm3   RadL:  14.065 cm   Nucl.Int.Length:  86.006 cm   Imean: 188.000 eV 
    --->  Element: liquidArgon ( )   Z = 18.0   N =  40.0   A =  39.95 g/mole
-   --->  Isotope: liquidArgon36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
-   --->  Isotope: liquidArgon38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
-   --->  Isotope: liquidArgon40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+         --->  Isotope:    36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
+         --->  Isotope:    38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
+         --->  Isotope:    40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material:     Iron    density:  7.870 g/cm3   RadL:   1.759 cm   Nucl.Int.Length:  16.969 cm   Imean: 286.000 eV 
    --->  Element: Iron ( )   Z = 26.0   N =  55.8   A =  55.85 g/mole
-   --->  Isotope: Iron54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
-   --->  Isotope: Iron56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
-   --->  Isotope: Iron57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
-   --->  Isotope: Iron58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+         --->  Isotope:    54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
+         --->  Isotope:    56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
+         --->  Isotope:    57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
+         --->  Isotope:    58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material:   Copper    density:  8.960 g/cm3   RadL:   1.436 cm   Nucl.Int.Length:  15.515 cm   Imean: 322.000 eV 
    --->  Element: Copper ( )   Z = 29.0   N =  63.5   A =  63.55 g/mole
-   --->  Isotope: Copper63   Z = 29   N =  63   A =  62.93 g/mole   abundance:  69.17 %
-   --->  Isotope: Copper65   Z = 29   N =  65   A =  64.93 g/mole   abundance:  30.83 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+         --->  Isotope:    63   Z = 29   N =  63   A =  62.93 g/mole   abundance:  69.17 %
+         --->  Isotope:    65   Z = 29   N =  65   A =  64.93 g/mole   abundance:  30.83 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material:     Gold    density: 19.320 g/cm3   RadL:   3.344 mm   Nucl.Int.Length:  10.539 cm   Imean: 790.000 eV 
    --->  Element: Gold ( )   Z = 79.0   N = 197.0   A = 196.97 g/mole
-   --->  Isotope: Gold197   Z = 79   N = 197   A = 196.97 g/mole   abundance: 100.00 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+         --->  Isotope:   197   Z = 79   N = 197   A = 196.97 g/mole   abundance: 100.00 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material:     Lead    density: 11.350 g/cm3   RadL:   5.612 mm   Nucl.Int.Length:  18.258 cm   Imean: 823.000 eV 
    --->  Element: Lead ( )   Z = 82.0   N = 207.2   A = 207.19 g/mole
-   --->  Isotope: Lead204   Z = 82   N = 204   A = 203.97 g/mole   abundance:   1.40 %
-   --->  Isotope: Lead206   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
-   --->  Isotope: Lead207   Z = 82   N = 207   A = 206.98 g/mole   abundance:  22.10 %
-   --->  Isotope: Lead208   Z = 82   N = 208   A = 207.98 g/mole   abundance:  52.40 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+         --->  Isotope:   204   Z = 82   N = 204   A = 203.97 g/mole   abundance:   1.40 %
+         --->  Isotope:   206   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
+         --->  Isotope:   207   Z = 82   N = 207   A = 206.98 g/mole   abundance:  22.10 %
+         --->  Isotope:   208   Z = 82   N = 208   A = 207.98 g/mole   abundance:  52.40 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material:    Water    density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.537 cm   Imean:  68.998 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
-   --->  Isotope: Hydrogen1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-   --->  Isotope: Hydrogen2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction:  11.21 %  ElmAbundance  66.67 % 
+
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
-   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
-   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
-   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  88.79 %  ElmAbundance  33.33 % 
+
 
  Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
-   --->  Isotope: Nitrogen14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
-   --->  Isotope: Nitrogen15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+         --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+         --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
+          ElmMassFraction:  70.00 %  ElmAbundance  72.71 % 
+
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
-   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
-   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
-   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
+
 
 
 /run/verbose 2
@@ -315,7 +339,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.15s Real=0.15s Sys=0s
+  User=0.4s Real=0.2s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -420,7 +444,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.03s Real=0.02s Sys=0s
+  User=0.06s Real=0.03s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 1
@@ -516,7 +540,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.02s Sys=0s
+  User=0.05s Real=0.03s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 1
@@ -612,7 +636,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.02s Sys=0s
+  User=0.06s Real=0.03s Sys=0s
 #
 /gun/particle e-
 #---------------
@@ -749,7 +773,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.3s Real=0.3s Sys=0s
+  User=0.86s Real=0.43s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -840,7 +864,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.08s Real=0.08s Sys=0s
+  User=0.23s Real=0.12s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 1
@@ -928,7 +952,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.02s Sys=0s
+  User=0.07000000000000001s Real=0.03s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 1
@@ -1016,7 +1040,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.01s Sys=0s
+  User=0.04s Real=0.02s Sys=0s
 #
 /calor/setAbsMat Lead
 
@@ -1232,7 +1256,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.22s Real=0.22s Sys=0s
+  User=0.5600000000000001s Real=0.28s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -1338,7 +1362,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.06s Real=0.06s Sys=0s
+  User=0.14s Real=0.07000000000000001s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 1
@@ -1444,7 +1468,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.03s Sys=0s
+  User=0.08s Real=0.04s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 1
@@ -1550,7 +1574,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.03s Real=0.03s Sys=0s
+  User=0.06s Real=0.03s Sys=0s
 #
 /gun/particle e-
 #---------------
@@ -1714,7 +1738,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -1758,7 +1782,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.45s Real=0.45s Sys=0s
+  User=1.24s Real=0.62s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -1842,7 +1866,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -1886,7 +1910,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.19s Real=0.18s Sys=0s
+  User=0.52s Real=0.26s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 1
@@ -1988,7 +2012,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.03s Real=0.04s Sys=0s
+  User=0.11s Real=0.05s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 1
@@ -2042,7 +2066,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -2086,7 +2110,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.01s Sys=0s
+  User=0.03s Real=0.01s Sys=0s
 #
 #
 /calor/setAbsMat Water
@@ -2273,7 +2297,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -2322,7 +2346,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.15s Real=0.15s Sys=0s
+  User=0.38s Real=0.19s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -2438,7 +2462,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.03s Real=0.04s Sys=0s
+  User=0.09s Real=0.04s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 1
@@ -2554,7 +2578,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.02s Sys=0s
+  User=0.05s Real=0.03s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 1
@@ -2670,7 +2694,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.01s Sys=0s
+  User=0.06s Real=0.03s Sys=0s
 #
 /gun/particle e-
 #-----------------
@@ -2796,7 +2820,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.22s Real=0.22s Sys=0s
+  User=0.6s Real=0.3s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -2906,7 +2930,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.05s Real=0.05s Sys=0s
+  User=0.14s Real=0.07000000000000001s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 1
@@ -3014,7 +3038,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.01s Sys=0s
+  User=0.03s Real=0.02s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 1
@@ -3122,7 +3146,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.01s Sys=0s
+  User=0.03s Real=0.02s Sys=0s
 #
 /gun/particle gamma
 #------------------
@@ -3257,7 +3281,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.01s Sys=0s
+  User=0.02s Real=0.01s Sys=0s
 /gun/energy 100 MeV
 /run/beamOn 1000
 
@@ -3306,7 +3330,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.02s Sys=0s
+  User=0.04s Real=0.02s Sys=0s
 /calor/setAbsMat Lead
 
  The  WORLD   is made of 2000mm of Air, the transverse size (R) of the world is 2000 mm. 
@@ -3363,7 +3387,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.02s Sys=0s
+  User=0.06s Real=0.03s Sys=0s
 /gun/energy 100 MeV
 /run/beamOn 1000
 
@@ -3412,7 +3436,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.03s Real=0.03s Sys=0s
+  User=0.1s Real=0.05s Sys=0s
 /calor/setAbsMat Water
 
  The  WORLD   is made of 2000mm of Air, the transverse size (R) of the world is 2000 mm. 
@@ -3469,7 +3493,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.01s Sys=0s
+  User=0.03s Real=0.02s Sys=0s
 /gun/energy 100 MeV
 /run/beamOn 1000
 
@@ -3518,12 +3542,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.01s Sys=0s
+  User=0.03s Real=0.02s Sys=0s
+G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
-G4 kernel has come to Quit state.
 G4SDManager deleted.
 Rayl for gamma in Aluminium : 19 calls
 Rayl for gamma in Lead : 33 calls
@@ -3566,5 +3590,5 @@ UImanager deleted.
 Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
-RunManager is deleting.
+RunManager is deleted.
 

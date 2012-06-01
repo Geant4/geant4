@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-04    (30-April-2012)
+ Geant4 version Name: geant4-09-05-ref-05    (31-May-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -176,6 +176,11 @@ muPairProd:   for  mu-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
+msc:   for pi+    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -183,11 +188,6 @@ hIoni:   for  pi+    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
-
-msc:   for pi-    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -315,6 +315,11 @@ hIoni:   for  pi-    SubType= 2
            inelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 ============================================================================================
+ Process: inelastic , Model: TheoFSGenerator
+ Primary: proton (2212), E= 100788, target nucleus (82,208)
+   fail relative, limit 0.02, values E / p (MeV) = 0 / 0.0203241
+   fail absolute, limit (MeV) 150, values E / p (MeV) = 0 / 2048.33
+   pass charge/baryon number balance 0 / 0 
 Idle> #
 Idle> # proton at 400 GeV in Pb
 Idle> #
@@ -323,6 +328,21 @@ Idle> /gun/energy 400 GeV
 Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 100
+ Process: inelastic , Model: TheoFSGenerator
+ Primary: proton (2212), E= 28066.7, target nucleus (82,208)
+   fail relative, limit 0.02, values E / p (MeV) = 0 / 0.0321538
+   fail absolute, limit (MeV) 150, values E / p (MeV) = 0 / 901.945
+   pass charge/baryon number balance 0 / 0 
+ Process: inelastic , Model: TheoFSGenerator
+ Primary: proton (2212), E= 24261.3, target nucleus (82,208)
+   fail relative, limit 0.02, values E / p (MeV) = -1.24786e-15 / 0.0443538
+   fail absolute, limit (MeV) 150, values E / p (MeV) = -2.91038e-11 / 1075.28
+   pass charge/baryon number balance 0 / 0 
+ Process: inelastic , Model: TheoFSGenerator
+ Primary: proton (2212), E= 44950.3, target nucleus (82,208)
+   fail relative, limit 0.02, values E / p (MeV) = -1.32254e-15 / 0.0304401
+   fail absolute, limit (MeV) 150, values E / p (MeV) = -5.82077e-11 / 1367.99
+   pass charge/baryon number balance 0 / 0 
 Idle> #
 Idle> # proton at 1 TeV in Pb
 Idle> #
@@ -331,6 +351,26 @@ Idle> /gun/energy 1 TeV
 Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 100
+ Process: inelastic , Model: TheoFSGenerator
+ Primary: proton (2212), E= 28578.5, target nucleus (82,207)
+   fail relative, limit 0.02, values E / p (MeV) = 0 / 0.0231826
+   fail absolute, limit (MeV) 150, values E / p (MeV) = 0 / 662.167
+   pass charge/baryon number balance 0 / 0 
+ Process: inelastic , Model: TheoFSGenerator
+ Primary: proton (2212), E= 24076.2, target nucleus (82,208)
+   fail relative, limit 0.02, values E / p (MeV) = 0 / 0.0330768
+   fail absolute, limit (MeV) 150, values E / p (MeV) = 0 / 795.76
+   pass charge/baryon number balance 0 / 0 
+ Process: inelastic , Model: TheoFSGenerator
+ Primary: proton (2212), E= 30582.1, target nucleus (82,208)
+   fail relative, limit 0.02, values E / p (MeV) = -1.96357e-15 / 0.0479504
+   fail absolute, limit (MeV) 150, values E / p (MeV) = -5.82077e-11 / 1465.73
+   pass charge/baryon number balance 0 / 0 
+ Process: inelastic , Model: TheoFSGenerator
+ Primary: proton (2212), E= 53364.8, target nucleus (82,208)
+   fail relative, limit 0.02, values E / p (MeV) = -5.55136e-16 / 0.0317433
+   fail absolute, limit (MeV) 150, values E / p (MeV) = -2.91038e-11 / 1693.71
+   pass charge/baryon number balance 0 / 0 
 Idle> #
 Idle> # proton at 100 GeV in Al
 Idle> #
@@ -487,6 +527,11 @@ muPairProd:   for  mu-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
+msc:   for pi+    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -495,11 +540,6 @@ hIoni:   for  pi+    SubType= 2
                Bragg :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
 
-msc:   for pi-    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
-
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -507,6 +547,11 @@ hIoni:   for  pi-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
+ Process: inelastic , Model: TheoFSGenerator
+ Primary: proton (2212), E= 41485.8, target nucleus (13,27)
+   fail relative, limit 0.02, values E / p (MeV) = 0.000683012 / 0.0243044
+   fail absolute, limit (MeV) 150, values E / p (MeV) = 27.6945 / 1008.03
+   pass charge/baryon number balance 0 / 0 
 Idle> #
 Idle> # proton at 400 GeV in Al
 Idle> #
@@ -516,9 +561,25 @@ Idle> /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 Idle> /run/beamOn 100
  Process: inelastic , Model: TheoFSGenerator
- Primary: proton (2212), E= 400766, target nucleus (13,27)
- relative limit 0.02 relative value = 0.000406637 pass
- absolute limit (MeV) 150 absolute value (MeV) = 162.585 fail
+ Primary: proton (2212), E= 400881, target nucleus (13,27)
+   pass relative, limit 0.02, values E / p (MeV) = -0.000344595 / 0.00448617
+   fail absolute, limit (MeV) 150, values E / p (MeV) = -137.818 / 1798.41
+   fail charge/baryon number balance 2 / 0 
+ Process: inelastic , Model: TheoFSGenerator
+ Primary: proton (2212), E= 31190.6, target nucleus (13,27)
+   fail relative, limit 0.02, values E / p (MeV) = 4.81018e-16 / 0.0375719
+   fail absolute, limit (MeV) 150, values E / p (MeV) = 1.45519e-11 / 1171.36
+   pass charge/baryon number balance 0 / 0 
+ Process: inelastic , Model: TheoFSGenerator
+ Primary: proton (2212), E= 25706.8, target nucleus (13,27)
+   fail relative, limit 0.02, values E / p (MeV) = -2.93758e-16 / 0.0346507
+   fail absolute, limit (MeV) 150, values E / p (MeV) = -7.27596e-12 / 890.166
+   pass charge/baryon number balance 0 / 0 
+ Process: inelastic , Model: TheoFSGenerator
+ Primary: proton (2212), E= 27717.6, target nucleus (13,27)
+   fail relative, limit 0.02, values E / p (MeV) = 2.71701e-16 / 0.0344442
+   fail absolute, limit (MeV) 150, values E / p (MeV) = 7.27596e-12 / 954.161
+   pass charge/baryon number balance 0 / 0 
 Idle> #
 Idle> # proton at 1 TeV in Al
 Idle> #
@@ -527,6 +588,21 @@ Idle> /gun/energy 1 TeV
 Idle> /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 Idle> /run/beamOn 100
+ Process: inelastic , Model: TheoFSGenerator
+ Primary: proton (2212), E= 39054.1, target nucleus (13,27)
+   fail relative, limit 0.02, values E / p (MeV) = 1.90891e-16 / 0.0280132
+   fail absolute, limit (MeV) 150, values E / p (MeV) = 7.27596e-12 / 1093.72
+   pass charge/baryon number balance 0 / 0 
+ Process: inelastic , Model: TheoFSGenerator
+ Primary: proton (2212), E= 41421.4, target nucleus (13,27)
+   fail relative, limit 0.02, values E / p (MeV) = 0 / 0.0287049
+   fail absolute, limit (MeV) 150, values E / p (MeV) = 0 / 1188.69
+   pass charge/baryon number balance 0 / 0 
+ Process: inelastic , Model: TheoFSGenerator
+ Primary: proton (2212), E= 42144.5, target nucleus (13,27)
+   fail relative, limit 0.02, values E / p (MeV) = 0 / 0.0299844
+   fail absolute, limit (MeV) 150, values E / p (MeV) = 0 / 1263.36
+   pass charge/baryon number balance 0 / 0 
 Idle> #
 Idle> # proton at 100 GeV in Air
 Idle> #
@@ -683,6 +759,11 @@ muPairProd:   for  mu-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
+msc:   for pi+    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -690,11 +771,6 @@ hIoni:   for  pi+    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
-
-msc:   for pi-    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins

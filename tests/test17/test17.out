@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-04    (30-April-2012)
+ Geant4 version Name: geant4-09-05-ref-05    (31-May-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -28,94 +28,128 @@ Material available: Graphite
 
  Material: Beryllium    density:  1.848 g/cm3   RadL:  35.267 cm   Nucl.Int.Length:  39.439 cm   Imean:  63.700 eV 
    --->  Element: Beryllium ( )   Z =  4.0   N =   9.0   A =   9.01 g/mole
-   --->  Isotope: Beryllium9   Z =  4   N =   9   A =   9.01 g/mole   abundance: 100.00 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+         --->  Isotope:     9   Z =  4   N =   9   A =   9.01 g/mole   abundance: 100.00 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material: Aluminum    density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.860 cm   Imean: 166.000 eV 
    --->  Element: Aluminum ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole
-   --->  Isotope: Aluminum27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+         --->  Isotope:    27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material:   Carbon    density:  2.000 g/cm3   RadL:  21.348 cm   Nucl.Int.Length:  40.101 cm   Imean:  81.000 eV 
    --->  Element: Carbon ( )   Z =  6.0   N =  12.0   A =  12.01 g/mole
-   --->  Isotope: Carbon12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-   --->  Isotope: Carbon13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+         --->  Isotope:    12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:    13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material:  Silicon    density:  2.330 g/cm3   RadL:   9.368 cm   Nucl.Int.Length:  45.761 cm   Imean: 173.000 eV 
    --->  Element: Silicon ( )   Z = 14.0   N =  28.1   A =  28.09 g/mole
-   --->  Isotope: Silicon28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
-   --->  Isotope: Silicon29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
-   --->  Isotope: Silicon30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+         --->  Isotope:    28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
+         --->  Isotope:    29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
+         --->  Isotope:    30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material: liquidArgon    density:  1.390 g/cm3   RadL:  14.065 cm   Nucl.Int.Length:  86.006 cm   Imean: 188.000 eV 
    --->  Element: liquidArgon ( )   Z = 18.0   N =  40.0   A =  39.95 g/mole
-   --->  Isotope: liquidArgon36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
-   --->  Isotope: liquidArgon38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
-   --->  Isotope: liquidArgon40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+         --->  Isotope:    36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
+         --->  Isotope:    38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
+         --->  Isotope:    40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material: liquidXenon    density:  3.020 g/cm3   RadL:   2.808 cm   Nucl.Int.Length:  58.990 cm   Imean: 482.000 eV 
    --->  Element: liquidXenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole
-   --->  Isotope: liquidXenon124   Z = 54   N = 124   A = 123.91 g/mole   abundance:   0.09 %
-   --->  Isotope: liquidXenon126   Z = 54   N = 126   A = 125.90 g/mole   abundance:   0.09 %
-   --->  Isotope: liquidXenon128   Z = 54   N = 128   A = 127.90 g/mole   abundance:   1.92 %
-   --->  Isotope: liquidXenon129   Z = 54   N = 129   A = 128.91 g/mole   abundance:  26.44 %
-   --->  Isotope: liquidXenon130   Z = 54   N = 130   A = 129.90 g/mole   abundance:   4.08 %
-   --->  Isotope: liquidXenon131   Z = 54   N = 131   A = 130.90 g/mole   abundance:  21.18 %
-   --->  Isotope: liquidXenon132   Z = 54   N = 132   A = 131.90 g/mole   abundance:  26.89 %
-   --->  Isotope: liquidXenon134   Z = 54   N = 134   A = 133.91 g/mole   abundance:  10.44 %
-   --->  Isotope: liquidXenon136   Z = 54   N = 136   A = 135.91 g/mole   abundance:   8.87 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+         --->  Isotope:   124   Z = 54   N = 124   A = 123.91 g/mole   abundance:   0.09 %
+         --->  Isotope:   126   Z = 54   N = 126   A = 125.90 g/mole   abundance:   0.09 %
+         --->  Isotope:   128   Z = 54   N = 128   A = 127.90 g/mole   abundance:   1.92 %
+         --->  Isotope:   129   Z = 54   N = 129   A = 128.91 g/mole   abundance:  26.44 %
+         --->  Isotope:   130   Z = 54   N = 130   A = 129.90 g/mole   abundance:   4.08 %
+         --->  Isotope:   131   Z = 54   N = 131   A = 130.90 g/mole   abundance:  21.18 %
+         --->  Isotope:   132   Z = 54   N = 132   A = 131.90 g/mole   abundance:  26.89 %
+         --->  Isotope:   134   Z = 54   N = 134   A = 133.91 g/mole   abundance:  10.44 %
+         --->  Isotope:   136   Z = 54   N = 136   A = 135.91 g/mole   abundance:   8.87 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material:     Iron    density:  7.870 g/cm3   RadL:   1.759 cm   Nucl.Int.Length:  16.969 cm   Imean: 286.000 eV 
    --->  Element: Iron ( )   Z = 26.0   N =  55.8   A =  55.85 g/mole
-   --->  Isotope: Iron54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
-   --->  Isotope: Iron56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
-   --->  Isotope: Iron57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
-   --->  Isotope: Iron58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+         --->  Isotope:    54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
+         --->  Isotope:    56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
+         --->  Isotope:    57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
+         --->  Isotope:    58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material:   Copper    density:  8.960 g/cm3   RadL:   1.436 cm   Nucl.Int.Length:  15.515 cm   Imean: 322.000 eV 
    --->  Element: Copper ( )   Z = 29.0   N =  63.5   A =  63.55 g/mole
-   --->  Isotope: Copper63   Z = 29   N =  63   A =  62.93 g/mole   abundance:  69.17 %
-   --->  Isotope: Copper65   Z = 29   N =  65   A =  64.93 g/mole   abundance:  30.83 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+         --->  Isotope:    63   Z = 29   N =  63   A =  62.93 g/mole   abundance:  69.17 %
+         --->  Isotope:    65   Z = 29   N =  65   A =  64.93 g/mole   abundance:  30.83 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material:     Gold    density: 19.320 g/cm3   RadL:   3.344 mm   Nucl.Int.Length:  10.539 cm   Imean: 790.000 eV 
    --->  Element: Gold ( )   Z = 79.0   N = 197.0   A = 196.97 g/mole
-   --->  Isotope: Gold197   Z = 79   N = 197   A = 196.97 g/mole   abundance: 100.00 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+         --->  Isotope:   197   Z = 79   N = 197   A = 196.97 g/mole   abundance: 100.00 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material:     Lead    density: 11.350 g/cm3   RadL:   5.612 mm   Nucl.Int.Length:  18.258 cm   Imean: 823.000 eV 
    --->  Element: Lead ( )   Z = 82.0   N = 207.2   A = 207.19 g/mole
-   --->  Isotope: Lead204   Z = 82   N = 204   A = 203.97 g/mole   abundance:   1.40 %
-   --->  Isotope: Lead206   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
-   --->  Isotope: Lead207   Z = 82   N = 207   A = 206.98 g/mole   abundance:  22.10 %
-   --->  Isotope: Lead208   Z = 82   N = 208   A = 207.98 g/mole   abundance:  52.40 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+         --->  Isotope:   204   Z = 82   N = 204   A = 203.97 g/mole   abundance:   1.40 %
+         --->  Isotope:   206   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
+         --->  Isotope:   207   Z = 82   N = 207   A = 206.98 g/mole   abundance:  22.10 %
+         --->  Isotope:   208   Z = 82   N = 208   A = 207.98 g/mole   abundance:  52.40 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material:    Water H_2O   density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.537 cm   Imean:  75.000 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
-   --->  Isotope: Hydrogen1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-   --->  Isotope: Hydrogen2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction:  11.21 %  ElmAbundance  66.67 % 
+
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
-   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
-   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
-   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  88.79 %  ElmAbundance  33.33 % 
+
 
  Material:  Methane CH_4   density:  0.667 kg/m3   RadL: 696.374 m    Nucl.Int.Length: 910.557 m    Imean:  41.700 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
-   --->  Isotope: Hydrogen1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-   --->  Isotope: Hydrogen2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction:  25.19 %  ElmAbundance  80.00 %
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction:  25.19 %  ElmAbundance  80.00 % 
+
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.00 g/mole
-   --->  Isotope: Carbon12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-   --->  Isotope: Carbon13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %  ElmMassFraction:  74.81 %  ElmAbundance  20.00 %
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction:  74.81 %  ElmAbundance  20.00 % 
+
 
  Material: Graphite Graphite   density:  2.265 g/cm3   RadL:  18.834 cm   Nucl.Int.Length:  35.377 cm   Imean:  81.000 eV 
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.00 g/mole
-   --->  Isotope: Carbon12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-   --->  Isotope: Carbon13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
 
  Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
-   --->  Isotope: Nitrogen14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
-   --->  Isotope: Nitrogen15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+         --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+         --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
+          ElmMassFraction:  70.00 %  ElmAbundance  72.71 % 
+
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
-   --->  Isotope: Oxygen16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
-   --->  Isotope: Oxygen17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
-   --->  Isotope: Oxygen18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
+
 
 
 /run/verbose 1
@@ -211,7 +245,7 @@ hIoni:   for  proton    SubType= 2
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
 
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -329,6 +363,11 @@ CoulombScat:   for  mu-    SubType= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
+msc:   for pi+    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
       Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
@@ -348,11 +387,6 @@ hPairProd:   for  pi+    SubType= 4
       Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
-
-msc:   for pi-    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -385,7 +419,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.8s Real=1.81s Sys=0s
+  User=4.82s Real=3.61s Sys=0.01s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -428,7 +462,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.22s Real=2.21s Sys=0s
+  User=5.93s Real=4.6s Sys=0.01s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for anti_proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -521,7 +555,7 @@ hIoni:   for  proton    SubType= 2
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
 
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -639,6 +673,11 @@ CoulombScat:   for  mu-    SubType= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
+msc:   for pi+    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
       Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
@@ -658,11 +697,6 @@ hPairProd:   for  pi+    SubType= 4
       Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
-
-msc:   for pi-    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -695,12 +729,12 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.08s Real=0.07s Sys=0s
+  User=0.23s Real=0.12s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for C12[0.0] with Ekin = 6 MeV p= 366.244 MeV/c
-    Track Length in absorber = 8.20695 +- 0.0100305  microns 
-    CSDA  Range  in absorber = 8.16222 +- 0.00957382  microns 
+    Track Length in absorber = 8.20682 +- 0.0100599  microns 
+    CSDA  Range  in absorber = 8.06647 +- 0.00849467  microns 
 
     Energy deposit in absorber = 6  MeV 
 
@@ -799,7 +833,7 @@ hIoni:   for  proton    SubType= 2
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
 
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -917,6 +951,11 @@ CoulombScat:   for  mu-    SubType= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
+msc:   for pi+    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
       Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
@@ -936,11 +975,6 @@ hPairProd:   for  pi+    SubType= 4
       Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
-
-msc:   for pi-    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -973,7 +1007,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.3s Real=2.31s Sys=0s
+  User=6.5s Real=3.96s Sys=0.01s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -1016,7 +1050,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.34s Real=2.34s Sys=0s
+  User=6.47s Real=3.86s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c

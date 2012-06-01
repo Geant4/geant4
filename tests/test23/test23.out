@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-04    (30-April-2012)
+ Geant4 version Name: geant4-09-05-ref-05    (31-May-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -183,6 +183,11 @@ hIoni:   for  pi+    SubType= 2
                Bragg :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
 
+msc:   for pi+    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -190,11 +195,6 @@ hIoni:   for  pi-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
-
-msc:   for pi-    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 ============================================================================================
              HADRONIC PROCESSES SUMMARY (verbose level 1)
 
@@ -316,6 +316,6 @@ Test23 event # 700
 Test23 event # 800
 Test23 event # 900
 Test23 event # 1000
-Test23_Result: gam=98(3.70977), e-=1521(17.5373), e+=11(4.73992), p=323(4.95078), n=1986(3.67585), d=95(4.73089), t=30(6.23875), He3=2(14.5578), alph=174(3.37207), nu=1355(54.5963), anu=730(32.7278), others=18739*0.104186
+Test23_Result: gam=102(4.27654), e-=1595(16.8565), e+=16(4.6665), p=324(5.41881), n=1931(3.84911), d=99(4.48754), t=41(5.20646), He3=6(8.60498), alph=147(3.08623), nu=1345(53.6671), anu=735(33.2795), others=18356*0.105942
 Test23 is done
 

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-04    (30-April-2012)
+ Geant4 version Name: geant4-09-05-ref-05    (31-May-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -174,6 +174,11 @@ muPairProd:   for  mu-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
+msc:   for pi+    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -181,11 +186,6 @@ hIoni:   for  pi+    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
-
-msc:   for pi-    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -332,13 +332,49 @@ hIoni:   for  pi-    SubType= 2
 ============================================================================================
 Event number 0
 Event number 1
-Event number 2
-Event number 3
-Event number 4
-G4Fragment::CalculateExcitationEnergy(): WARNING 
-Fragment: A =  26, Z =  12, U = -8.445e-02 MeV
-          P = (-5.738e+00,-8.211e+01,1.716e+01) MeV   E = 2.420e+04 MeV
 
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : had012
+      issued by : G4HadronicProcess:CheckResult()
+Warning: Bad energy non-conservation detected, will re-sample the interaction
+ Process / Model: ElectroNuclear / CHIPSElectroNuclear
+ Primary: e- (11), E= 8928.67, target nucleus (13,27)
+ E(initial - final) = 5864.98 MeV.
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+Event number 2
+G4Fragment::CalculateExcitationEnergy(): WARNING 
+Fragment: A =  26, Z =  12, U = -7.213e-01 MeV
+          P = (1.738e+02,-6.671e+01,-2.203e+01) MeV   E = 2.420e+04 MeV
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : had012
+      issued by : G4HadronicProcess:CheckResult()
+Warning: Bad energy non-conservation detected, will re-sample the interaction
+ Process / Model: PositronNuclear / CHIPSElectroNuclear
+ Primary: e+ (-11), E= 87779.2, target nucleus (13,27)
+ E(initial - final) = 11943 MeV.
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+Event number 3
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : had012
+      issued by : G4HadronicProcess:CheckResult()
+Warning: Bad energy non-conservation detected, will re-sample the interaction
+ Process / Model: ElectroNuclear / CHIPSElectroNuclear
+ Primary: e- (11), E= 89222, target nucleus (13,27)
+ E(initial - final) = 9854.62 MeV.
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+Event number 4
 #
 # electron 100 GeV in Air
 #
@@ -499,6 +535,11 @@ muPairProd:   for  mu-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
+msc:   for pi+    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -506,11 +547,6 @@ hIoni:   for  pi+    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
-
-msc:   for pi-    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
