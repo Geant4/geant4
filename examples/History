@@ -17,6 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+31st May 2012  Gabriele Cosmo (examples-V09-05-05)
+- Updated reference outputs according to reference tag geant4-09-05-ref-05.
+- Includes tags: medical_linac-V09-05-04, microbeam-V09-05-01,
+                 analysisExample-V09-05-02, testem5-V09-05-05,
+                 testem8-V09-05-08, testem9-V09-05-02, testem11-V09-05-04,
+                 testem12-V09-05-06, testem15-V09-05-02, testem18-V09-05-02,
+                 monopole-V09-05-00, exhadr00-V09-05-03, exhadr01-V09-05-01,
+                 exhadr02-V09-05-02, rdecay01-V09-05-10, rdecay02-V09-05-01,
+                 exampleRE03-V09-05-00.
+
 27th April 2012  Gabriele Cosmo (examples-V09-05-04)
 - Updated reference outputs according to reference tag geant4-09-05-ref-04.
 - Includes tags: AnEx01-V09-05-04, AnaEx02-V09-05-00, testem1-V09-05-06,
