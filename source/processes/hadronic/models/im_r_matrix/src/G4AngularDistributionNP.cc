@@ -32,11 +32,11 @@
 #include "Randomize.hh"
 
 
-G4double G4AngularDistributionNP::CosTheta(G4double s, G4double m1, G4double m2) const
+G4double G4AngularDistributionNP::CosTheta(G4double S, G4double m_1, G4double m_2) const
 {
     G4int verboseLevel=1;
 
-    G4double ek= ((s - sqr(m1) -sqr(m2) )/(2*m1) - m1 )/GeV   ;    // kinetic energy in GeV
+    G4double ek= ((S - sqr(m_1) -sqr(m_2) )/(2*m_1) - m_1 )/GeV   ;    // kinetic energy in GeV
 
     // Find energy bin
 

@@ -68,16 +68,16 @@ G4KineticTrackVector* G4VElasticCollision::FinalState(const G4KineticTrack& trk1
   toZ.rotateY(-Ptmp.theta());
   toLabFrame *= toZ.inverse();
 
-  G4double s = pCM.mag2();
+  G4double S = pCM.mag2();
   G4double m10 = trk1.GetDefinition()->GetPDGMass();
   G4double m20 = trk2.GetDefinition()->GetPDGMass();
-  if(s-(m10+m20)*(m10+m20) < 0) return new G4KineticTrackVector;
+  if(S-(m10+m20)*(m10+m20) < 0) return new G4KineticTrackVector;
 
-  G4double m1 = trk1.GetActualMass();
-  G4double m2 = trk2.GetActualMass();
+  G4double m_1 = trk1.GetActualMass();
+  G4double m_2 = trk2.GetActualMass();
   
   // Angles of outgoing particles
-  G4double cosTheta = angDistribution->CosTheta(s,m1,m2);
+  G4double cosTheta = angDistribution->CosTheta(S,m_1,m_2);
 
    if ( (trk1.GetDefinition() == G4Proton::Proton() || trk1.GetDefinition() == G4Neutron::Neutron() )
       &&(trk2.GetDefinition() == G4Proton::Proton() || trk2.GetDefinition() == G4Neutron::Neutron() ) )
@@ -107,7 +107,7 @@ G4KineticTrackVector* G4VElasticCollision::FinalState(const G4KineticTrack& trk1
   // Unit vector of three-momentum
   G4ThreeVector pFinal1(std::sin(Theta)*std::cos(phi), std::sin(Theta)*std::sin(phi), cosTheta);
   // Three momentum in cm system
-  G4double pInCM = std::sqrt((s-(m10+m20)*(m10+m20))*(s-(m10-m20)*(m10-m20))/(4.*s));
+  G4double pInCM = std::sqrt((S-(m10+m20)*(m10+m20))*(S-(m10-m20)*(m10-m20))/(4.*S));
   pFinal1 = pFinal1 * pInCM;
   G4ThreeVector pFinal2 = -pFinal1;
 

@@ -155,25 +155,25 @@ G4double G4VXResonance::DetailedBalance(const G4KineticTrack& trk1,
     G4double factor = degeneracy * weight;
 
     // now the phase-space
-    G4double s = (trk1.Get4Momentum() + trk2.Get4Momentum()).mag2();
-    G4double m1 = in1->GetPDGMass();
-    G4double m2 = in2->GetPDGMass();
+    G4double S = (trk1.Get4Momentum() + trk2.Get4Momentum()).mag2();
+    G4double m_1 = in1->GetPDGMass();
+    G4double m_2 = in2->GetPDGMass();
     
     // on-shell
-    G4double pinitial2 = (s - (m1+m2) * (m1+m2)) * (s - (m1-m2) * (m1-m2)) / (4.0*s);
-    G4double pfinal2 = (s - (mOut1+mOut2) * (mOut1+mOut2)) * (s - ( mOut1-mOut2) * (mOut1-mOut2)) / (4.0*s);
+    G4double pinitial2 = (S - (m_1+m_2) * (m_1+m_2)) * (S - (m_1-m_2) * (m_1-m_2)) / (4.0*S);
+    G4double pfinal2 = (S - (mOut1+mOut2) * (mOut1+mOut2)) * (S - ( mOut1-mOut2) * (mOut1-mOut2)) / (4.0*S);
     G4double relativeMomsquared = pfinal2/pinitial2;
 
     // resonance-nucleon scattering - inverse channel
     if(in1->IsShortLived())
     {
       G4DetailedBalancePhaseSpaceIntegral theI(in1);
-      relativeMomsquared = 1./theI.GetPhaseSpaceIntegral(std::sqrt(s));
+      relativeMomsquared = 1./theI.GetPhaseSpaceIntegral(std::sqrt(S));
     }
     else if(in2->IsShortLived())
     {
       G4DetailedBalancePhaseSpaceIntegral theI(in2);
-      relativeMomsquared = 1./theI.GetPhaseSpaceIntegral(std::sqrt(s));
+      relativeMomsquared = 1./theI.GetPhaseSpaceIntegral(std::sqrt(S));
     }
 
     result = factor * relativeMomsquared;

@@ -76,12 +76,12 @@ G4double G4Clebsch::Weight(G4int isoIn1,  G4int iso3In1,
 {
   G4double value = 0.;
   
-  G4int m = iso3In1 + iso3In2;
+  G4int an_m = iso3In1 + iso3In2;
 
-  G4int jMinIn = std::max(std::abs(isoIn1 - isoIn2), std::abs(m));
+  G4int jMinIn = std::max(std::abs(isoIn1 - isoIn2), std::abs(an_m));
   G4int jMaxIn = isoIn1 + isoIn2;
 
-  G4int jMinOut = std::max(std::abs(isoOut1 - isoOut2), std::abs(m));
+  G4int jMinOut = std::max(std::abs(isoOut1 - isoOut2), std::abs(an_m));
   G4int jMaxOut = isoOut1 + isoOut2;
 
   G4int jMin = std::max(jMinIn,jMinOut);
@@ -107,16 +107,16 @@ G4double G4Clebsch::ClebschGordan(G4int isoIn1, G4int iso3In1,
   G4double j2 = isoIn2 / 2.0;
   G4double j3 = jOut / 2.0;
 
-  G4double m1 = iso3In1 / 2.0;
-  G4double m2 = iso3In2 / 2.0;
-  G4double m3 = - (m1 + m2);
+  G4double m_1 = iso3In1 / 2.0;
+  G4double m_2 = iso3In2 / 2.0;
+  G4double m_3 = - (m_1 + m_2);
 
-  G4int n = G4lrint(m3+j1+j2+.1);
+  G4int n = G4lrint(m_3+j1+j2+.1);
   G4double argument = 2. * j3 + 1.;
   if (argument < 0.) 
     throw G4HadronicException(__FILE__, __LINE__, "G4Clebsch::ClebschGordan - sqrt of negative argument");
   G4double coeff = std::sqrt(argument) / (std::pow(-1.,n));
-  G4double clebsch = coeff * Wigner3J(j1,j2,j3, m1,m2,m3);
+  G4double clebsch = coeff * Wigner3J(j1,j2,j3, m_1,m_2,m_3);
   G4double value = clebsch * clebsch;
 
 //   G4cout << "ClebschGordan(" 
@@ -129,7 +129,7 @@ G4double G4Clebsch::ClebschGordan(G4int isoIn1, G4int iso3In1,
 
 
 G4double G4Clebsch::Wigner3J(G4double j1, G4double j2, G4double j3, 
-			     G4double m1, G4double m2, G4double m3) const
+			     G4double m_1, G4double m_2, G4double m_3) const
 {
   // Calculates Wigner 3-j symbols
 
@@ -138,14 +138,14 @@ G4double G4Clebsch::Wigner3J(G4double j1, G4double j2, G4double j3,
   G4double sigma = j1 + j2 + j3;
   std::vector<G4double> n;
   n.push_back(-j1 + j2 + j3);      // n0
-  n.push_back(j1 - m1);            // n1
-  n.push_back(j1 + m1);            // n2
+  n.push_back(j1 - m_1);            // n1
+  n.push_back(j1 + m_1);            // n2
   n.push_back(j1 - j2 + j3);       // n3
-  n.push_back(j2 - m2);            // n4
-  n.push_back(j2 + m2);            // n5
+  n.push_back(j2 - m_2);            // n4
+  n.push_back(j2 + m_2);            // n5
   n.push_back(j1 + j2 - j3);       // n6
-  n.push_back(j3 - m3);            // n7
-  n.push_back(j3 + m3);            // n8
+  n.push_back(j3 - m_3);            // n7
+  n.push_back(j3 + m_3);            // n8
 
   // Some preliminary checks
 
@@ -258,17 +258,17 @@ G4double G4Clebsch::Wigner3J(G4double j1, G4double j2, G4double j3,
 
     G4double hlp2 = l6 - logVector[n61] + l8 - logVector[n81];
     G4double sum = std::exp(hlp2);
-    std::vector<G4double> s;
-    s.push_back(sum);
+    std::vector<G4double> S;
+    S.push_back(sum);
     n1 = (size_t)r1;
     for (i=1; i<=n1; i++)
     {
-      G4double last = s.back();
+      G4double last = S.back();
       G4double den = i * (r6 - r1 + i) * (r8 - r1 + i);
       if (den == 0) 
 	throw G4HadronicException(__FILE__, __LINE__, "G4Clebsch::Wigner3J - divide by zero");
       G4double data = -last * (r1 + 1.0 - i) * (r5 + 1.0 - i) * (r9 + 1. - i) / den;
-      s.push_back(data);
+      S.push_back(data);
       sum += data;
     }
     value = coeff * sum * sign;
@@ -510,9 +510,9 @@ std::vector<G4double> G4Clebsch::GenerateIso3(G4int isoIn1, G4int iso3In1,
 }
 
 
-G4double G4Clebsch::NormalizedClebschGordan(G4int J, G4int m, 
+G4double G4Clebsch::NormalizedClebschGordan(G4int J, G4int M, 
 					    G4int J1, G4int J2,
-					    G4int m1, G4int m2) const
+					    G4int m_1, G4int m_2) const
 {
   // Calculate the normalized Clebsch-Gordan coefficient, that is the prob 
   // of isospin decomposition of (J,m) into J1, J2, m1, m2
@@ -527,11 +527,11 @@ G4double G4Clebsch::NormalizedClebschGordan(G4int J, G4int m,
 
   for(G4int m1Current=-J1; m1Current<=J1;  m1Current+=2) 
     {
-      G4int m2Current = m - m1Current;
+      G4int m2Current = M - m1Current;
       
       G4double prob = ClebschGordan(J1, m1Current, J2, m2Current, J);
       sum += prob;
-      if (m2Current == m2 && m1Current == m1) cleb += prob;
+      if (m2Current == m_2 && m1Current == m_1) cleb += prob;
     }
 
   // Normalize probs to 1 

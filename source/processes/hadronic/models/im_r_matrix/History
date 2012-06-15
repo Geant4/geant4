@@ -14,6 +14,9 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+12-Jun-2012 Gunter Folger		 hadr-im_r-V09-05-04
+-  fixes to avoid shadowing of variables
+
 29-May-2012 Gunter Folger		 hadr-im_r-V09-05-03
 -  Fix coverity warnings, part 2; fixed ~20 more warnings, mostly not
      initialized data members, or dead code. 

@@ -98,8 +98,8 @@ G4double G4XAnnihilationChannel::CrossSection(const G4KineticTrack& trk1,
 
   G4int J1 = def1->GetPDGiSpin();
   G4int J2 = def2->GetPDGiSpin();
-  G4double m1 = def1->GetPDGMass();
-  G4double m2 = def2->GetPDGMass();
+  G4double m_1 = def1->GetPDGMass();
+  G4double m_2 = def2->GetPDGMass();
 
   G4int JRes = resonance->GetPDGiSpin();
   G4double mRes = resonance->GetPDGMass();
@@ -108,10 +108,10 @@ G4double G4XAnnihilationChannel::CrossSection(const G4KineticTrack& trk1,
   G4double width = VariableWidth(trk1,trk2);
   G4double cleb = NormalizedClebsch(trk1,trk2);
 
-  G4double s = eCM * eCM;
-  if (s == 0.) throw G4HadronicException(__FILE__, __LINE__, "G4XAnnihilationChannel::CrossSection - eCM = 0");
+  G4double S = eCM * eCM;
+  if (S == 0.) throw G4HadronicException(__FILE__, __LINE__, "G4XAnnihilationChannel::CrossSection - eCM = 0");
 
-  G4double pCM = std::sqrt((s-(m1+m2)*(m1+m2))*(s-(m1-m2)*(m1-m2))/(4.*s));
+  G4double pCM = std::sqrt((S-(m_1+m_2)*(m_1+m_2))*(S-(m_1-m_2)*(m_1-m_2))/(4.*S));
 
   sigma = ( (JRes + 1.) / ( (J1 + 1) * (J2 + 1) ) 
 	    * pi / (pCM * pCM) * branch * width * width / 

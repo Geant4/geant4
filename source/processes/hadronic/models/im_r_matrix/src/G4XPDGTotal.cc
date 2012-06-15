@@ -208,11 +208,11 @@ G4double G4XPDGTotal::CrossSection(const G4KineticTrack& trk1,
 		       << eMinFit / GeV << " - " << eMaxFit / GeV << " GeV " << G4endl;
 	      }
 	      
-	      G4double s = (sqrtS * sqrtS) / (GeV*GeV);
+	      G4double S = (sqrtS * sqrtS) / (GeV*GeV);
 	      
-	      sigma = ( (xFit * std::pow(s,epsilon)) + 
-			(y1Fit * std::pow(s,eta1)) + 
-			(coeff * y2Fit * std::pow(s,eta2)) ) * millibarn;
+	      sigma = ( (xFit * std::pow(S,epsilon)) + 
+			(y1Fit * std::pow(S,eta1)) + 
+			(coeff * y2Fit * std::pow(S,eta2)) ) * millibarn;
 	      
 	      if (sigma < 0.)
 		{

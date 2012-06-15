@@ -52,10 +52,10 @@ class G4CrossSectionBuffer
       return result;
     }
     
-    void push_back(G4double s, G4double x)
+    void push_back(G4double S, G4double x)
     {
       std::pair<G4double, G4double> aNew;
-      aNew.first = s;
+      aNew.first = S;
       aNew.second = x;
       theData.push_back(aNew);
     }

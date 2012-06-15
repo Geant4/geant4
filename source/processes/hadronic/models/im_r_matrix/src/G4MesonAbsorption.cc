@@ -182,20 +182,20 @@ GetFinalState(G4KineticTrack * projectile,
   }
   
   // calculate the momenta.
-  G4double M = (thePro+theT1+theT2).mag();
-  G4double m1 = d1->GetPDGMass();
-  G4double m2 = d2->GetPDGMass();
-  G4double m = std::sqrt(M*M-m1*m1-m2*m2);
-  G4double p = std::sqrt((m*m*m*m - 4.*m1*m1 * m2*m2)/(4.*(M*M)));
+  G4double M_sq  = (thePro+theT1+theT2).mag2();
+  G4double m1_sq = sqr(d1->GetPDGMass());
+  G4double m2_sq = sqr(d2->GetPDGMass());
+  G4double m_sq  = M_sq-m1_sq-m2_sq;
+  G4double p = std::sqrt((m_sq*m_sq - 4.*m1_sq * m2_sq)/(4.*M_sq));
   G4double costh = 2.*G4UniformRand()-1.;
   G4double phi = 2.*pi*G4UniformRand();
   G4ThreeVector pFinal(p*std::sin(std::acos(costh))*std::cos(phi), p*std::sin(std::acos(costh))*std::sin(phi), p*costh);
   
   // G4cout << "testing p "<<p-pFinal.mag()<<G4endl;
   // construct the final state particles lorentz momentum.
-  G4double eFinal1 = std::sqrt(m1*m1+pFinal.mag2());
+  G4double eFinal1 = std::sqrt(m1_sq+pFinal.mag2());
   G4LorentzVector final1(pFinal, eFinal1);
-  G4double eFinal2 = std::sqrt(m2*m2+pFinal.mag2());
+  G4double eFinal2 = std::sqrt(m2_sq+pFinal.mag2());
   G4LorentzVector final2(-1.*pFinal, eFinal2);
   
   // rotate back.
