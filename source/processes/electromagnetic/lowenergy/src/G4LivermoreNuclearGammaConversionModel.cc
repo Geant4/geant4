@@ -158,12 +158,12 @@ void G4LivermoreNuclearGammaConversionModel::SampleSecondaries(std::vector<G4Dyn
   G4ParticleMomentum photonDirection = aDynamicGamma->GetMomentumDirection();
 
   G4double epsilon ;
-  G4double epsilon0 = electron_mass_c2 / photonEnergy ;
+  G4double epsilon0Local = electron_mass_c2 / photonEnergy ;
 
   // Do it fast if photon energy < 2. MeV
   if (photonEnergy < smallEnergy )
     {
-      epsilon = epsilon0 + (0.5 - epsilon0) * G4UniformRand();
+      epsilon = epsilon0Local + (0.5 - epsilon0Local) * G4UniformRand();
     }
   else
     {
@@ -191,13 +191,13 @@ void G4LivermoreNuclearGammaConversionModel::SampleSecondaries(std::vector<G4Dyn
       if (photonEnergy > 50. * MeV) fZ += 8. * (element->GetfCoulomb());
 
       // Limits of the screening variable
-      G4double screenFactor = 136. * epsilon0 / (element->GetIonisation()->GetZ3()) ;
+      G4double screenFactor = 136. * epsilon0Local / (element->GetIonisation()->GetZ3()) ;
       G4double screenMax = std::exp ((42.24 - fZ)/8.368) - 0.952 ;
       G4double screenMin = std::min(4.*screenFactor,screenMax) ;
 
       // Limits of the energy sampling
       G4double epsilon1 = 0.5 - 0.5 * std::sqrt(1. - screenMin / screenMax) ;
-      G4double epsilonMin = std::max(epsilon0,epsilon1);
+      G4double epsilonMin = std::max(epsilon0Local,epsilon1);
       G4double epsilonRange = 0.5 - epsilonMin ;
 
       // Sample the energy rate of the created electron (or positron)

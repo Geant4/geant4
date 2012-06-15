@@ -55,8 +55,8 @@ using namespace std;
 
 G4MUComptonModel::G4MUComptonModel(const G4ParticleDefinition*,
 						 const G4String& nam)
-  :G4VEmModel(nam),isInitialised(false),scatterFunctionData(0),
-   crossSectionHandler(0),fAtomDeexcitation(0)
+  :G4VEmModel(nam),fParticleChange(0),isInitialised(false),
+  scatterFunctionData(0),crossSectionHandler(0),fAtomDeexcitation(0)
 {
   lowEnergyLimit = 250 * eV; 
   highEnergyLimit = 100 * GeV;
@@ -212,16 +212,16 @@ void G4MUComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
   const G4Element* elm = SelectRandomAtom(couple,particle,photonEnergy0);
   G4int Z = (G4int)elm->GetZ();
 
-  G4double epsilon0 = 1. / (1. + 2. * e0m);
-  G4double epsilon0Sq = epsilon0 * epsilon0;
-  G4double alpha1 = -std::log(epsilon0);
-  G4double alpha2 = 0.5 * (1. - epsilon0Sq);
+  G4double MUCepsilon0 = 1. / (1. + 2. * e0m);
+  G4double MUCepsilon0Sq = MUCepsilon0 * MUCepsilon0;
+  G4double alpha1 = -std::log(MUCepsilon0);
+  G4double alpha2 = 0.5 * (1. - MUCepsilon0Sq);
 
   G4double wlPhoton = h_Planck*c_light/photonEnergy0;
 
   // Sample the energy of the scattered photon
-  G4double epsilon;
-  G4double epsilonSq;
+  G4double MUCepsilon;
+  G4double MUCepsilonSq;
   G4double oneCosT;
   G4double sinT2;
   G4double gReject;
@@ -230,20 +230,20 @@ void G4MUComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
     {
       if ( alpha1/(alpha1+alpha2) > G4UniformRand())
 	{
-	  epsilon = std::exp(-alpha1 * G4UniformRand());  
-	  epsilonSq = epsilon * epsilon;
+	  MUCepsilon = std::exp(-alpha1 * G4UniformRand());  
+	  MUCepsilonSq = MUCepsilon * MUCepsilon;
 	}
       else
 	{
-	  epsilonSq = epsilon0Sq + (1. - epsilon0Sq) * G4UniformRand();
-	  epsilon = std::sqrt(epsilonSq);
+	  MUCepsilonSq = MUCepsilon0Sq + (1. - MUCepsilon0Sq) * G4UniformRand();
+	  MUCepsilon = std::sqrt(MUCepsilonSq);
 	}
 
-      oneCosT = (1. - epsilon) / ( epsilon * e0m);
+      oneCosT = (1. - MUCepsilon) / ( MUCepsilon * e0m);
       sinT2 = oneCosT * (2. - oneCosT);
       G4double x = std::sqrt(oneCosT/2.) / (wlPhoton/cm);
       G4double scatteringFunction = scatterFunctionData->FindValue(x,Z-1);
-      gReject = (1. - epsilon * sinT2 / (1. + epsilonSq)) * scatteringFunction;
+      gReject = (1. - MUCepsilon * sinT2 / (1. + MUCepsilonSq)) * scatteringFunction;
 
     } while(gReject < G4UniformRand()*Z); 
 

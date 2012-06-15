@@ -219,9 +219,9 @@ void G4LivermorePolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicPa
 
   G4double epsilon, epsilonSq, onecost, sinThetaSqr, greject ;
 
-  G4double epsilon0 = 1./(1. + 2*E0_m);
-  G4double epsilon0Sq = epsilon0*epsilon0;
-  G4double alpha1   = - std::log(epsilon0);
+  G4double epsilon0Local = 1./(1. + 2*E0_m);
+  G4double epsilon0Sq = epsilon0Local*epsilon0Local;
+  G4double alpha1   = - std::log(epsilon0Local);
   G4double alpha2 = 0.5*(1.- epsilon0Sq);
 
   G4double wlGamma = h_Planck*c_light/gammaEnergy0;

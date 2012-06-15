@@ -123,8 +123,8 @@ G4double G4eIonisationSpectrum::Probability(G4int Z,
 
   if(p[3] > 0.5) p[3] = 0.5;
   
-  G4double g = energy/electron_mass_c2 + 1.;
-  p.push_back((2.0*g - 1.0)/(g*g));
+  G4double gLocal = energy/electron_mass_c2 + 1.;
+  p.push_back((2.0*gLocal - 1.0)/(gLocal*gLocal));
   
   //Add protection against division by zero: actually in Function() 
   //parameter p[3] appears in the denominator. Bug report 1042
@@ -217,8 +217,8 @@ G4double G4eIonisationSpectrum::AverageEnergy(G4int Z,
 
   if(p[3] > 0.5) p[3] = 0.5;
 
-  G4double g = energy/electron_mass_c2 + 1.;
-  p.push_back((2.0*g - 1.0)/(g*g));
+  G4double gLocal2 = energy/electron_mass_c2 + 1.;
+  p.push_back((2.0*gLocal2 - 1.0)/(gLocal2*gLocal2));
 
   
   //Add protection against division by zero: actually in Function() 
@@ -305,8 +305,8 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
 
   if(p[3] > 0.5) p[3] = 0.5;
 
-  G4double g = energy/electron_mass_c2 + 1.;
-  p.push_back((2.0*g - 1.0)/(g*g));
+  G4double gLocal3 = energy/electron_mass_c2 + 1.;
+  p.push_back((2.0*gLocal3 - 1.0)/(gLocal3*gLocal3));
 
   
   //Add protection against division by zero: actually in Function() 

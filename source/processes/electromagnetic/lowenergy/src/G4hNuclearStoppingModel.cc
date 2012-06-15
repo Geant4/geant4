@@ -171,9 +171,9 @@ G4double G4hNuclearStoppingModel::StoppingPower(
   for (G4int iel=0; iel<NumberOfElements; iel++) {
     const G4Element* element = (*theElementVector)[iel] ;
     G4double z2 = element->GetZ();
-    G4double m2 = element->GetA()*mole/g ;
+    G4double m2Local = element->GetA()*mole/g ;
     nloss += (nStopingPowerTable->
-              NuclearStoppingPower(kineticEnergy, z1, z2, m1, m2))
+              NuclearStoppingPower(kineticEnergy, z1, z2, m1, m2Local))
            * theAtomicNumDensityVector[iel] ;    
   }
 

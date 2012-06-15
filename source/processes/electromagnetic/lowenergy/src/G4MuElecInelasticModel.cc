@@ -254,7 +254,7 @@ G4double G4MuElecInelasticModel::CrossSectionPerVolume(const G4Material* materia
   G4double sigma=0;
 
   const G4String& particleName = particleDefinition->GetParticleName();
-  G4String name = particleName ;
+  G4String nameLocal = particleName ;
 
   G4double Zeff2 = 1.0;
   G4double Mion_c2 = particleDefinition->GetPDGMass();
@@ -267,29 +267,29 @@ G4double G4MuElecInelasticModel::CrossSectionPerVolume(const G4Material* materia
 
     if (verboseLevel > 3) 
     G4cout << "Before scaling : " << G4endl
-    << "Particle : " << name << ", mass : " << Mion_c2/proton_mass_c2 << "*mp, charge " << Zeff 
+    << "Particle : " << nameLocal << ", mass : " << Mion_c2/proton_mass_c2 << "*mp, charge " << Zeff 
     << ", Ekin (eV) = " << ekin/eV << G4endl ;
 
     ekin *= proton_mass_c2/Mion_c2 ;
-    name = "proton" ;
+    nameLocal = "proton" ;
 
     if (verboseLevel > 3) 
     G4cout << "After scaling : " << G4endl
-     << "Particle : " << name  << ", Ekin (eV) = " << ekin/eV << G4endl ;
+     << "Particle : " << nameLocal  << ", Ekin (eV) = " << ekin/eV << G4endl ;
   }
 
   if (material == nistSi || material->GetBaseMaterial() == nistSi)
   {
 
     std::map< G4String,G4double,std::less<G4String> >::iterator pos1;
-    pos1 = lowEnergyLimit.find(name);
+    pos1 = lowEnergyLimit.find(nameLocal);
     if (pos1 != lowEnergyLimit.end())
     {
       lowLim = pos1->second;
     }
   
     std::map< G4String,G4double,std::less<G4String> >::iterator pos2;
-    pos2 = highEnergyLimit.find(name);
+    pos2 = highEnergyLimit.find(nameLocal);
     if (pos2 != highEnergyLimit.end())
     {
       highLim = pos2->second;
@@ -298,7 +298,7 @@ G4double G4MuElecInelasticModel::CrossSectionPerVolume(const G4Material* materia
     if (ekin >= lowLim && ekin < highLim)
     {
       std::map< G4String,G4MuElecCrossSectionDataSet*,std::less<G4String> >::iterator pos;
-      pos = tableData.find(name);
+      pos = tableData.find(nameLocal);
 	
       if (pos != tableData.end())
       {
@@ -315,9 +315,9 @@ G4double G4MuElecInelasticModel::CrossSectionPerVolume(const G4Material* materia
     }
     else 
     {
-	if (name!="e-")
+	if (nameLocal!="e-")
 	{
-		// G4cout << "Particle : " << name << ", Ekin (eV) = " << ekin/eV << G4endl;
+		// G4cout << "Particle : " << nameLocal << ", Ekin (eV) = " << ekin/eV << G4endl;
 		// G4cout << "### Warning: particle energy out of bounds! ###" << G4endl;
 	}
     }
@@ -355,18 +355,18 @@ void G4MuElecInelasticModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
 
   G4ParticleDefinition* PartDef = particle->GetDefinition();
   const G4String& particleName = PartDef->GetParticleName();
-  G4String name = particleName ;
+  G4String nameLocal2 = particleName ;
   G4double particleMass = particle->GetDefinition()->GetPDGMass();
 
   if (particleMass > proton_mass_c2)
   {
     k *= proton_mass_c2/particleMass ;
     PartDef = G4Proton::ProtonDefinition();
-    name = "proton" ;
+    nameLocal2 = "proton" ;
   }
 
   std::map< G4String,G4double,std::less<G4String> >::iterator pos1;
-  pos1 = lowEnergyLimit.find(name);
+  pos1 = lowEnergyLimit.find(nameLocal2);
 
   if (pos1 != lowEnergyLimit.end())
   {
@@ -374,7 +374,7 @@ void G4MuElecInelasticModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
   }
 
   std::map< G4String,G4double,std::less<G4String> >::iterator pos2;
-  pos2 = highEnergyLimit.find(name);
+  pos2 = highEnergyLimit.find(nameLocal2);
 
   if (pos2 != highEnergyLimit.end())
   {
@@ -388,7 +388,7 @@ void G4MuElecInelasticModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
     G4double pSquare = ekin * (totalEnergy + particleMass);
     G4double totalMomentum = std::sqrt(pSquare);
 
-    G4int Shell = RandomSelect(k,name);
+    G4int Shell = RandomSelect(k,nameLocal2);
     G4double bindingEnergy = SiStructure.Energy(Shell);
     if (verboseLevel > 3)
     {

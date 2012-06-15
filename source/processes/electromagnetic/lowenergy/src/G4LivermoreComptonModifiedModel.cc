@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreComptonModel.cc,v 1.8 2010-12-27 17:45:12 vnivanch Exp $
+// $Id: G4LivermoreComptonModifiedModel.cc,v 1.8 2010-12-27 17:45:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -42,7 +42,7 @@
 // 26 Dec 2010   V Ivanchenko Load data tables only once to avoid memory leak
 // 30 May 2011   V Ivanchenko Migration to model design for deexcitation
 
-#include "G4LivermoreComptonModel.hh"
+#include "G4LivermoreComptonModifiedModel.hh"
 #include "G4Electron.hh"
 #include "G4ParticleChangeForGamma.hh"
 #include "G4LossTableManager.hh"
@@ -59,7 +59,7 @@ using namespace std;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4LivermoreComptonModel::G4LivermoreComptonModel(const G4ParticleDefinition*,
+G4LivermoreComptonModifiedModel::G4LivermoreComptonModifiedModel(const G4ParticleDefinition*,
 						 const G4String& nam)
   :G4VEmModel(nam),fParticleChange(0),isInitialised(false),
    scatterFunctionData(0),
@@ -77,7 +77,7 @@ G4LivermoreComptonModel::G4LivermoreComptonModel(const G4ParticleDefinition*,
   // 4 = entering in methods
 
   if(  verboseLevel>0 ) { 
-    G4cout << "Livermore Compton model is constructed " << G4endl
+    G4cout << "Livermore Modified Compton model is constructed " << G4endl
 	   << "Energy range: "
 	   << lowEnergyLimit / eV << " eV - "
 	   << highEnergyLimit / GeV << " GeV"
@@ -91,7 +91,7 @@ G4LivermoreComptonModel::G4LivermoreComptonModel(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4LivermoreComptonModel::~G4LivermoreComptonModel()
+G4LivermoreComptonModifiedModel::~G4LivermoreComptonModifiedModel()
 {  
   delete crossSectionHandler;
   delete scatterFunctionData;
@@ -99,11 +99,11 @@ G4LivermoreComptonModel::~G4LivermoreComptonModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4LivermoreComptonModel::Initialise(const G4ParticleDefinition* particle,
+void G4LivermoreComptonModifiedModel::Initialise(const G4ParticleDefinition* particle,
 					 const G4DataVector& cuts)
 {
   if (verboseLevel > 2) {
-    G4cout << "Calling G4LivermoreComptonModel::Initialise()" << G4endl;
+    G4cout << "Calling G4LivermoreComptonModifiedModel::Initialise()" << G4endl;
   }
 
   if (crossSectionHandler)
@@ -131,7 +131,7 @@ void G4LivermoreComptonModel::Initialise(const G4ParticleDefinition* particle,
   InitialiseElementSelectors(particle,cuts);
 
   if (verboseLevel > 2) {
-    G4cout << "Loaded cross section files for Livermore Compton model" << G4endl;
+    G4cout << "Loaded cross section files for Livermore Modified Compton model" << G4endl;
   }
 
   if(isInitialised) { return; }
@@ -152,14 +152,14 @@ void G4LivermoreComptonModel::Initialise(const G4ParticleDefinition* particle,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4LivermoreComptonModel::ComputeCrossSectionPerAtom(
+G4double G4LivermoreComptonModifiedModel::ComputeCrossSectionPerAtom(
                                        const G4ParticleDefinition*,
                                              G4double GammaEnergy,
                                              G4double Z, G4double,
                                              G4double, G4double)
 {
   if (verboseLevel > 3) {
-    G4cout << "Calling ComputeCrossSectionPerAtom() of G4LivermoreComptonModel" << G4endl;
+    G4cout << "Calling ComputeCrossSectionPerAtom() of G4LivermoreComptonModifiedModel" << G4endl;
   }
   if (GammaEnergy < lowEnergyLimit || GammaEnergy > highEnergyLimit) { return 0.0; }
     
@@ -169,7 +169,7 @@ G4double G4LivermoreComptonModel::ComputeCrossSectionPerAtom(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4LivermoreComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
+void G4LivermoreComptonModifiedModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
 						const G4MaterialCutsCouple* couple,
 						const G4DynamicParticle* aDynamicGamma,
 						G4double, G4double)
@@ -192,7 +192,7 @@ void G4LivermoreComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
   G4double photonEnergy0 = aDynamicGamma->GetKineticEnergy();
 
   if (verboseLevel > 3) {
-    G4cout << "G4LivermoreComptonModel::SampleSecondaries() E(MeV)= " 
+    G4cout << "G4LivermoreComptonModifiedModel::SampleSecondaries() E(MeV)= " 
 	   << photonEnergy0/MeV << " in " << couple->GetMaterial()->GetName() 
 	   << G4endl;
   }
@@ -268,10 +268,14 @@ void G4LivermoreComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
   G4double photonEoriginal = epsilon * photonEnergy0;
   G4double photonE = -1.;
   G4int iteration = 0;
-  G4double eMax = photonEnergy0;
-
+  G4double systemE = 0;
+  G4double ePAU = -1;
   G4int shellIdx = 0;
-
+  G4double vel_c = 299792458;
+  G4double momentum_au_to_nat = 1.992851740*std::pow(10.,-24.);
+  G4double e_mass_kg = 9.10938188 * std::pow(10.,-31.);  
+  G4double eMax = -1;
+  G4double Alpha=0;
   do
     {
       ++iteration;
@@ -279,12 +283,35 @@ void G4LivermoreComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
       shellIdx = shellData.SelectRandomShell(Z);
       bindingE = shellData.BindingEnergy(Z,shellIdx);
       
-      eMax = photonEnergy0 - bindingE;
+      
      
       // Randomly sample bound electron momentum 
       // (memento: the data set is in Atomic Units)
       G4double pSample = profileData.RandomSelectMomentum(Z,shellIdx);
       // Rescale from atomic units
+      
+
+      //Kinetic energy of target electron
+
+
+      // Reverse vector projection onto scattering vector
+
+      do {
+         Alpha = G4UniformRand()*pi/2.0;
+         } while(Alpha >= (pi/2.0));
+ 
+      ePAU = pSample / std::cos(Alpha);
+      
+      // Convert to SI and the calculate electron energy in natural units
+      
+      G4double ePSI = ePAU * momentum_au_to_nat;
+      G4double u_temp = sqrt( ((ePSI*ePSI)*(vel_c*vel_c)) / ((e_mass_kg*e_mass_kg)*(vel_c*vel_c)+(ePSI*ePSI)))/vel_c;
+      G4double eEIncident = electron_mass_c2 / sqrt( 1 - (u_temp*u_temp));
+      
+      //Total energy of the system
+      systemE = eEIncident+photonEnergy0;
+
+      eMax = systemE - bindingE - electron_mass_c2;
       G4double pDoppler = pSample * fine_structure_const;
       G4double pDoppler2 = pDoppler * pDoppler;
       G4double var2 = 1. + oneCosT * e0m;
@@ -304,9 +331,42 @@ void G4LivermoreComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
 	  photonE = -1.;
 	}
     } while ( iteration <= maxDopplerIterations && 
-	     (photonE < 0. || photonE > eMax || photonE < eMax*G4UniformRand()) );
+	     (photonE < 0. || photonE > eMax ) );
   
   // End of recalculation of photon energy with Doppler broadening
+  // Kinematics of the scattered electron
+  G4double eKineticEnergy = systemE - photonE - bindingE - electron_mass_c2;
+
+  // protection against negative final energy: no e- is created
+   G4double eDirX = 0.0;
+   G4double eDirY = 0.0;
+   G4double eDirZ = 1.0;
+
+  if(eKineticEnergy < 0.0) {
+    G4cout << "Error, kinetic energy of electron less than zero" << G4endl;
+    }
+
+ else{
+    // Estimation of Compton electron polar angle taken from:
+    // The EGSnrc Code System: Monte Carlo Simulation of Electron and Photon Transport
+    // Eqn 2.2.25 Pg 42, NRCC Report PIRS-701
+    G4double E_num = photonEnergy0 - photonE*cosTheta;
+    G4double E_dom = sqrt(photonEnergy0*photonEnergy0 + photonE*photonE -2*photonEnergy0*photonE*cosTheta);
+    G4double cosThetaE = E_num / E_dom;
+    G4double sinThetaE = -sqrt((1. - cosThetaE) * (1. + cosThetaE));
+
+    eDirX = sinThetaE * std::cos(phi);
+    eDirY = sinThetaE * std::sin(phi);
+    eDirZ = cosThetaE;
+
+    G4ThreeVector eDirection(eDirX,eDirY,eDirZ);
+    eDirection.rotateUz(photonDirection0);
+    G4DynamicParticle* dp = new G4DynamicParticle (G4Electron::Electron(),
+                                                   eDirection,eKineticEnergy) ;
+    fvect->push_back(dp);
+   }
+
+
   // Revert to original if maximum number of iterations threshold has been reached
 
   if (iteration >= maxDopplerIterations)
@@ -326,44 +386,22 @@ void G4LivermoreComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
   if (photonEnergy1 > 0.)
     {
       fParticleChange->SetProposedKineticEnergy(photonEnergy1) ;
+      
+        if (iteration < maxDopplerIterations)
+        {
+         G4ThreeVector eDirection(eDirX,eDirY,eDirZ);
+         eDirection.rotateUz(photonDirection0);
+         G4DynamicParticle* dp = new G4DynamicParticle (G4Electron::Electron(),
+                                                       eDirection,eKineticEnergy) ;
+         fvect->push_back(dp);
+        }
     }
   else
     {
       photonEnergy1 = 0.;
       fParticleChange->SetProposedKineticEnergy(0.) ;
       fParticleChange->ProposeTrackStatus(fStopAndKill);   
-    }
-
-  // Kinematics of the scattered electron
-  G4double eKineticEnergy = photonEnergy0 - photonEnergy1 - bindingE;
-
-  // protection against negative final energy: no e- is created
-  if(eKineticEnergy < 0.0) {
-    bindingE = photonEnergy0 - photonEnergy1;
-
-  } else {
-    G4double eTotalEnergy = eKineticEnergy + electron_mass_c2;
-
-    G4double electronE = photonEnergy0 * (1. - epsilon) + electron_mass_c2; 
-    G4double electronP2 = electronE*electronE - electron_mass_c2*electron_mass_c2;
-    G4double sinThetaE = -1.;
-    G4double cosThetaE = 0.;
-    if (electronP2 > 0.)
-      {
-	cosThetaE = (eTotalEnergy + photonEnergy1 )* (1. - epsilon) / std::sqrt(electronP2);
-	sinThetaE = -sqrt((1. - cosThetaE) * (1. + cosThetaE)); 
-      }
-  
-    G4double eDirX = sinThetaE * std::cos(phi);
-    G4double eDirY = sinThetaE * std::sin(phi);
-    G4double eDirZ = cosThetaE;
-
-    G4ThreeVector eDirection(eDirX,eDirY,eDirZ);
-    eDirection.rotateUz(photonDirection0);
-    G4DynamicParticle* dp = new G4DynamicParticle (G4Electron::Electron(),
-						   eDirection,eKineticEnergy) ;
-    fvect->push_back(dp);
-  }
+     }
 
   // sample deexcitation
   //

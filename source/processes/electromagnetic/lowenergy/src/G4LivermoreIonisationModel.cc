@@ -333,10 +333,10 @@ void G4LivermoreIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle
     } 
   else 
     {
-      G4double norm = 1.0/std::sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz);
-      finalPx *= norm;
-      finalPy *= norm;
-      finalPz *= norm;
+      G4double normLocal = 1.0/std::sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz);
+      finalPx *= normLocal;
+      finalPy *= normLocal;
+      finalPz *= normLocal;
       fParticleChange->ProposeMomentumDirection(finalPx, finalPy, finalPz);
     }
   fParticleChange->SetProposedKineticEnergy(finalKinEnergy);

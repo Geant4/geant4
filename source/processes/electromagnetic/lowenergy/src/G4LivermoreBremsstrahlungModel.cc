@@ -359,31 +359,31 @@ G4LivermoreBremsstrahlungModel::SetAngularGenerator(G4VBremAngularDistribution* 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4LivermoreBremsstrahlungModel::SetAngularGenerator(const G4String& name)
+void G4LivermoreBremsstrahlungModel::SetAngularGenerator(const G4String& theGenName)
 {
-  if(name == generatorName) return;
-  if (name == "tsai") 
+  if(theGenName == generatorName) return;
+  if (theGenName == "tsai") 
     {
       delete angularDistribution;
       angularDistribution = new G4ModifiedTsai("TsaiGenerator");
-      generatorName = name;
+      generatorName = theGenName;
     }
-  else if (name == "2bn")
+  else if (theGenName == "2bn")
     {
       delete angularDistribution;
       angularDistribution = new G4Generator2BN("2BNGenerator");
-      generatorName = name;
+      generatorName = theGenName;
     }
-  else if (name == "2bs")
+  else if (theGenName == "2bs")
     {
       delete angularDistribution;
       angularDistribution = new G4Generator2BS("2BSGenerator");
-      generatorName = name;
+      generatorName = theGenName;
     }
   else
     {
       G4cout << "### G4LivermoreBremsstrahlungModel::SetAngularGenerator WARNING:"
-	     << " generator <" << name << "> is not known" << G4endl;
+	     << " generator <" << theGenName << "> is not known" << G4endl;
       return; 
 
     }

@@ -96,6 +96,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4Livermore2012GammaConversionModel.hh
         G4LivermoreBremsstrahlungModel.hh
         G4LivermoreComptonModel.hh
+        G4LivermoreComptonModifiedModel.hh
         G4LivermoreGammaConversionModel.hh
         G4LivermoreGammaConversionModelRC.hh
         G4LivermoreIonisationCrossSection.hh
@@ -214,6 +215,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4Livermore2012GammaConversionModel.cc
         G4LivermoreBremsstrahlungModel.cc
         G4LivermoreComptonModel.cc
+        G4LivermoreComptonModifiedModel.cc
         G4LivermoreGammaConversionModel.cc
         G4LivermoreGammaConversionModelRC.cc
         G4LivermoreIonisationCrossSection.cc

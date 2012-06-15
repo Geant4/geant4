@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13.06.2012  S. Incerti, tag emlowen-V09-05-23
+            Shadowing issues fixes
+
+01.06.2012  S. Incerti, tag emlowen-V09-05-22
+            Coverity fix of G4MUComptonModel.cc
+
 21.05.2012  S. Incerti, J. Brown, tag emlowen-V09-05-21
             Update of G4MUComptonModel.cc
 

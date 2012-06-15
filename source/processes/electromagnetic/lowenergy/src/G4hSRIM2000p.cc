@@ -211,13 +211,13 @@ G4double G4hSRIM2000p::ElectronicStoppingPower(G4double z,
   // low energy region
   if ( T < 25.0 ) {
     
-    G4double  s = 0.45 ;
+    G4double  sLocal = 0.45 ;
     // light elements
-    if(6.5 > z) s = 0.25 ;
+    if(6.5 > z) sLocal = 0.25 ;
     // semiconductors
-    if(5 == i || 13 == i || 31 == i) s = 0.375 ;
+    if(5 == i || 13 == i || 31 == i) sLocal = 0.375 ;
     
-    ionloss *= std::pow(T/25.0, s) ;
+    ionloss *= std::pow(T/25.0, sLocal) ;
   }
   
   if ( ionloss < 0.0) ionloss = 0.0 ;

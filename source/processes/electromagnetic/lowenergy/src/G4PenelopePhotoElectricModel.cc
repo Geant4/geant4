@@ -579,8 +579,8 @@ size_t G4PenelopePhotoElectricModel::SelectRandomShell(G4int Z,G4double energy)
   for (size_t k=1;k<theTable->entries();k++)
     {
       G4PhysicsFreeVector* partialXSLog = (G4PhysicsFreeVector*) (*theTable)[k];
-      G4double logXS = partialXSLog->Value(logEnergy);
-      G4double partialXS = std::exp(logXS);
+      G4double logXSLocal = partialXSLog->Value(logEnergy);
+      G4double partialXS = std::exp(logXSLocal);
       sum += partialXS;
       tempVector->push_back(sum);     
     }

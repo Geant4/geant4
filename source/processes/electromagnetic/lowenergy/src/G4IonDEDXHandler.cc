@@ -388,18 +388,18 @@ G4CacheValue G4IonDEDXHandler::GetCacheValue(
       entry.key = key;
       cacheEntries.push_front(entry);
 
-      CacheEntryList::iterator* pointerIter = 
+      CacheEntryList::iterator* pointerIter1 = 
                                    new CacheEntryList::iterator();
-      *pointerIter = cacheEntries.begin();
-      cacheKeyPointers[key] = pointerIter;
+      *pointerIter1 = cacheEntries.begin();
+      cacheKeyPointers[key] = pointerIter1;
 
       if(G4int(cacheEntries.size()) > maxCacheEntries) {
 
   	 G4CacheEntry lastEntry = cacheEntries.back();
 	          
-         void* pointerIter = cacheKeyPointers[lastEntry.key];
+         void* pointerIter2 = cacheKeyPointers[lastEntry.key];
          CacheEntryList::iterator* listPointerIter = 
-                      	  (CacheEntryList::iterator*) pointerIter;
+                      	  (CacheEntryList::iterator*) pointerIter2;
 
          cacheEntries.erase(*listPointerIter);
 

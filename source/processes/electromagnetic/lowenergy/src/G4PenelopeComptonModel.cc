@@ -326,11 +326,11 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
 	  ionEnergy = (*theTable)[i]->GetIonisationEnergy();
 	  if (photonEnergy0 > ionEnergy)
 	    {
-	      G4double aux = photonEnergy0*(photonEnergy0-ionEnergy)*2.0;
+	      G4double aux2 = photonEnergy0*(photonEnergy0-ionEnergy)*2.0;
 	      hartreeFunc = (*theTable)[i]->GetHartreeFactor(); 
 	      oscStren = (*theTable)[i]->GetOscillatorStrength();
-	      pzomc = hartreeFunc*(aux-electron_mass_c2*ionEnergy)/
-		(electron_mass_c2*std::sqrt(2.0*aux+ionEnergy*ionEnergy));
+	      pzomc = hartreeFunc*(aux2-electron_mass_c2*ionEnergy)/
+		(electron_mass_c2*std::sqrt(2.0*aux2+ionEnergy*ionEnergy));
 	      if (pzomc > 0) 	
 		rni = 1.0-0.5*std::exp(0.5-(std::sqrt(0.5)+std::sqrt(2.0)*pzomc)*
 				       (std::sqrt(0.5)+std::sqrt(2.0)*pzomc));		
@@ -785,29 +785,29 @@ G4double G4PenelopeComptonModel::OscillatorTotalCrossSection(G4double energy,G4P
       a=0.5*(xb-xa);
       b=0.5*(xb+xa);
       c=a*Abscissas[0];
-      G4double d = Weights[0]*
+      G4double dLocal = Weights[0]*
 	(DifferentialCrossSection(b+c,energy,osc)+DifferentialCrossSection(b-c,energy,osc));
       
       for (G4int j=1;j<npoints;j++)
 	{
 	  c=a*Abscissas[j];
-	  d += Weights[j]*
+	  dLocal += Weights[j]*
 	    (DifferentialCrossSection(b+c,energy,osc)+DifferentialCrossSection(b-c,energy,osc));
 	}    
-      G4double s1=d*a;
+      G4double s1=dLocal*a;
       a=0.5*(xc-xb);
       b=0.5*(xc+xb);
       c=a*Abscissas[0];
-      d=Weights[0]*
+      dLocal=Weights[0]*
 	(DifferentialCrossSection(b+c,energy,osc)+DifferentialCrossSection(b-c,energy,osc));
       
       for (G4int j=1;j<npoints;j++)
 	{
 	  c=a*Abscissas[j];
-	  d += Weights[j]*
+	  dLocal += Weights[j]*
 	    (DifferentialCrossSection(b+c,energy,osc)+DifferentialCrossSection(b-c,energy,osc));
 	}    
-      G4double s2=d*a;
+      G4double s2=dLocal*a;
       icall=icall+4*npoints;
       G4double s12=s1+s2;
       if (std::abs(s12-si)<std::max(Ptol*std::abs(s12),1e-35))

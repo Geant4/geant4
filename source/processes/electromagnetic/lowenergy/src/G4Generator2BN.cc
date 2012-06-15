@@ -326,8 +326,8 @@ void G4Generator2BN::ConstructMajorantSurface()
   vmax = G4int(100.*std::log10(Ek/kmin));
 
   for(G4int v = 0; v < vmax; v++){
-    G4double fraction = (v/100.);
-    k = std::pow(10.,fraction)*kmin;
+    G4double fractionLocal = (v/100.);
+    k = std::pow(10.,fractionLocal)*kmin;
 
     for(theta = 0.; theta < pi; theta = theta + dtheta){
       dk = k - k0;

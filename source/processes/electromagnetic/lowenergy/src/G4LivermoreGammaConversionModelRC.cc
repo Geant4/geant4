@@ -163,7 +163,7 @@ void G4LivermoreGammaConversionModelRC::SampleSecondaries(std::vector<G4DynamicP
   G4ParticleMomentum photonDirection = aDynamicGamma->GetMomentumDirection();
 
   G4double epsilon ;
-  G4double epsilon0 = electron_mass_c2 / photonEnergy ;
+  G4double epsilon0Local = electron_mass_c2 / photonEnergy ;
   G4double electronTotEnergy;
   G4double positronTotEnergy;
 
@@ -171,7 +171,7 @@ void G4LivermoreGammaConversionModelRC::SampleSecondaries(std::vector<G4DynamicP
   // Do it fast if photon energy < 2. MeV
   if (photonEnergy < smallEnergy )
     {
-      epsilon = epsilon0 + (0.5 - epsilon0) * G4UniformRand();
+      epsilon = epsilon0Local + (0.5 - epsilon0Local) * G4UniformRand();
  
      if (G4int(2*G4UniformRand()))
       {
@@ -211,13 +211,13 @@ void G4LivermoreGammaConversionModelRC::SampleSecondaries(std::vector<G4DynamicP
       if (photonEnergy > 50. * MeV) fZ += 8. * (element->GetfCoulomb());
 
       // Limits of the screening variable
-      G4double screenFactor = 136. * epsilon0 / (element->GetIonisation()->GetZ3()) ;
+      G4double screenFactor = 136. * epsilon0Local / (element->GetIonisation()->GetZ3()) ;
       G4double screenMax = std::exp ((42.24 - fZ)/8.368) - 0.952 ;
       G4double screenMin = std::min(4.*screenFactor,screenMax) ;
 
       // Limits of the energy sampling
       G4double epsilon1 = 0.5 - 0.5 * std::sqrt(1. - screenMin / screenMax) ;
-      G4double epsilonMin = std::max(epsilon0,epsilon1);
+      G4double epsilonMin = std::max(epsilon0Local,epsilon1);
       G4double epsilonRange = 0.5 - epsilonMin ;
 
       // Sample the energy rate of the created electron (or positron)
@@ -229,13 +229,13 @@ void G4LivermoreGammaConversionModelRC::SampleSecondaries(std::vector<G4DynamicP
       G4double normF1 = std::max(f10 * epsilonRange * epsilonRange,0.);
       G4double normF2 = std::max(1.5 * f20,0.);
       G4double a=393.3750918, b=115.3070201, c=810.6428451, d=19.96497475, e=1016.874592, f=1.936685510,
-               g=751.2140962, h=0.099751048, i=299.9466339, j=0.002057250, k=49.81034926;
+               gLocal=751.2140962, h=0.099751048, i=299.9466339, j=0.002057250, k=49.81034926;
       G4double aa=-18.6371131, bb=-1729.95248, cc=9450.971186, dd=106336.0145, ee=55143.09287, ff=-117602.840,
                gg=-721455.467, hh=693957.8635, ii=156266.1085, jj=533209.9347;                            
       G4double Rechazo = 0.;
       G4double logepsMin = log(epsilonMin);
       G4double NormaRC = a + b*logepsMin + c/logepsMin + d*pow(logepsMin,2.) + e/pow(logepsMin,2.) + f*pow(logepsMin,3.) +
-                            g/pow(logepsMin,3.) + h*pow(logepsMin,4.) + i/pow(logepsMin,4.) + j*pow(logepsMin,5.) +
+                            gLocal/pow(logepsMin,3.) + h*pow(logepsMin,4.) + i/pow(logepsMin,4.) + j*pow(logepsMin,5.) +
                             k/pow(logepsMin,5.);
  
       do {
@@ -258,7 +258,7 @@ void G4LivermoreGammaConversionModelRC::SampleSecondaries(std::vector<G4DynamicP
        
          G4double logepsilon = log(epsilon);
          G4double deltaP_R1 = 1. + (a + b*logepsilon + c/logepsilon + d*pow(logepsilon,2.) + e/pow(logepsilon,2.) + 
-                              f*pow(logepsilon,3.) + g/pow(logepsilon,3.) + h*pow(logepsilon,4.) + i/pow(logepsilon,4.) + 
+                              f*pow(logepsilon,3.) + gLocal/pow(logepsilon,3.) + h*pow(logepsilon,4.) + i/pow(logepsilon,4.) + 
                               j*pow(logepsilon,5.) + k/pow(logepsilon,5.))/100.;
          G4double deltaP_R2 = 1.+((aa + cc*logepsilon +  ee*pow(logepsilon,2.) + gg*pow(logepsilon,3.) + ii*pow(logepsilon,4.))
                              / (1. + bb*logepsilon + dd*pow(logepsilon,2.) + ff*pow(logepsilon,3.) + hh*pow(logepsilon,4.) 

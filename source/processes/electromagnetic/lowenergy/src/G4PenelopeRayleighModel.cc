@@ -823,7 +823,7 @@ void G4PenelopeRayleighModel::InitializeSamplingAlgorithm(const G4Material* mat)
 	  G4DataVector* pdfih = new G4DataVector();
 	  G4DataVector* sumi = new G4DataVector();
 	  
-	  G4double dx = (*x)[i+1]-(*x)[i];
+	  G4double dxLocal = (*x)[i+1]-(*x)[i];
 	  G4double dxi = ((*x)[i+1]-(*x)[i])/(G4double (nip-1));
 	  G4double pdfmax = 0;
 	  for (G4int k=0;k<nip;k++)
@@ -866,8 +866,8 @@ void G4PenelopeRayleighModel::InitializeSamplingAlgorithm(const G4Material* mat)
 	  
 	  G4double pli = (*pdfi)[0]*factor;
 	  G4double pui = (*pdfi)[pdfi->size()-1]*factor;
-	  G4double B_temp = 1.0-1.0/(pli*pui*dx*dx);
-	  G4double A_temp = (1.0/(pli*dx))-1.0-B_temp;
+	  G4double B_temp = 1.0-1.0/(pli*pui*dxLocal*dxLocal);
+	  G4double A_temp = (1.0/(pli*dxLocal))-1.0-B_temp;
 	  G4double C_temp = 1.0+A_temp+B_temp;
 	  if (C_temp < 1e-35)
 	    {

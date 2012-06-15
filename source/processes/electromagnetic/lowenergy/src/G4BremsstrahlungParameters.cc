@@ -118,13 +118,13 @@ void G4BremsstrahlungParameters::LoadData(const G4String& name)
   G4int nMaterials = G4Material::GetNumberOfMaterials();
 
   G4double x = 1.e-9;
-  for (G4int mm=0; mm<100; mm++) {
+  for (G4int mmLocal=0; mmLocal<100; mmLocal++) {
     paramC.push_back(x);
   }
 
-  for (G4int m=0; m<nMaterials; m++) {
+  for (G4int mLocal=0; mLocal<nMaterials; mLocal++) {
 
-    const G4Material* material= (*materialTable)[m];
+    const G4Material* material= (*materialTable)[mLocal];
     const G4ElementVector* elementVector = material->GetElementVector();
     const G4int nElements = material->GetNumberOfElements();
 
@@ -205,8 +205,8 @@ void G4BremsstrahlungParameters::LoadData(const G4String& name)
 	  G4VDataSetAlgorithm* inter  = new G4LogLogInterpolation();
 	  G4DataVector* eVector = new G4DataVector;
 	  size_t eSize = e.size();
-	  for (size_t s=0; s<eSize; s++) {
-	    eVector->push_back(e[s]);
+	  for (size_t sLocal=0; sLocal<eSize; sLocal++) {
+	    eVector->push_back(e[sLocal]);
 	  }
 	  G4VEMDataSet* set = new G4EMDataSet(id,eVector,a[k],inter,1.,1.);
 	  param[id] = set;

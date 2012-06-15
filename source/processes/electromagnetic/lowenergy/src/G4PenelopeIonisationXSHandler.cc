@@ -377,9 +377,9 @@ void G4PenelopeIonisationXSHandler::BuildDeltaTable(const G4Material* mat)
 	      fdel = 0.;
 	      for (size_t i=0;i<numberOfOscillators;i++)
 		{
-		  G4PenelopeOscillator* theOsc = (*theTable)[i];
-		  G4double wri = theOsc->GetResonanceEnergy();
-		  fdel += theOsc->GetOscillatorStrength()/(wri*wri+wl2);
+		  G4PenelopeOscillator* theOscLocal1 = (*theTable)[i];
+		  G4double wri = theOscLocal1->GetResonanceEnergy();
+		  fdel += theOscLocal1->GetOscillatorStrength()/(wri*wri+wl2);
 		}
 	      if (fdel > TST)
 		loopAgain = true;
@@ -395,9 +395,9 @@ void G4PenelopeIonisationXSHandler::BuildDeltaTable(const G4Material* mat)
 	      fdel = 0;
 	      for (size_t i=0;i<numberOfOscillators;i++)
 		{
-		  G4PenelopeOscillator* theOsc = (*theTable)[i];
-		  G4double wri = theOsc->GetResonanceEnergy();
-		  fdel += theOsc->GetOscillatorStrength()/(wri*wri+wl2);
+		  G4PenelopeOscillator* theOscLocal2 = (*theTable)[i];
+		  G4double wri = theOscLocal2->GetResonanceEnergy();
+		  fdel += theOscLocal2->GetOscillatorStrength()/(wri*wri+wl2);
 		}
 	      if (fdel > TST)
 		wl2l = wl2;
@@ -411,9 +411,9 @@ void G4PenelopeIonisationXSHandler::BuildDeltaTable(const G4Material* mat)
 	  delta = 0.;
 	  for (size_t i=0;i<numberOfOscillators;i++)
 	    {
-	      G4PenelopeOscillator* theOsc = (*theTable)[i];
-	      G4double wri = theOsc->GetResonanceEnergy();
-	      delta += theOsc->GetOscillatorStrength()*
+	      G4PenelopeOscillator* theOscLocal3 = (*theTable)[i];
+	      G4double wri = theOscLocal3->GetResonanceEnergy();
+	      delta += theOscLocal3->GetOscillatorStrength()*
 		std::log(1.0+(wl2/(wri*wri)));	  	     
 	    }
 	  delta = (delta/totalZ)-wl2/(gamSq*plasmaSq);

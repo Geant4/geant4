@@ -554,20 +554,20 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 		{
 		  if (std::fabs(occup) > 0)
 		    {
-		      G4PenelopeOscillator newOsc; 
-		      newOsc.SetOscillatorStrength(std::fabs(occup)*(*StechiometricFactors)[k]);
-		      newOsc.SetIonisationEnergy(elementData[3][i]);
-		      newOsc.SetHartreeFactor(elementData[4][i]/fine_structure_const);
-		      newOsc.SetParentZ(elementData[0][i]);
+		      G4PenelopeOscillator newOscLocal; 
+		      newOscLocal.SetOscillatorStrength(std::fabs(occup)*(*StechiometricFactors)[k]);
+		      newOscLocal.SetIonisationEnergy(elementData[3][i]);
+		      newOscLocal.SetHartreeFactor(elementData[4][i]/fine_structure_const);
+		      newOscLocal.SetParentZ(elementData[0][i]);
 		      //keep track of the origianl shell level
-		      newOsc.SetParentShellID((G4int)elementData[1][i]);
+		      newOscLocal.SetParentShellID((G4int)elementData[1][i]);
 		      //register only K, L and M shells. Outer shells all grouped with 
 		      //shellIndex = 30
 		      if (elementData[0][i] > 6 && elementData[1][i] < 10)
-			newOsc.SetShellFlag(((G4int)elementData[1][i]));
+			newOscLocal.SetShellFlag(((G4int)elementData[1][i]));
 		      else
-			newOsc.SetShellFlag(30);
-		      helper->push_back(newOsc);
+			newOscLocal.SetShellFlag(30);
+		      helper->push_back(newOscLocal);
 		      if (occup < 0)		  
 			{
 			  G4double ff = (*helper)[0].GetOscillatorStrength();
@@ -703,13 +703,13 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
       do
 	{
 	  adjustmentFactor = (AALow+AAHigh)*0.5;
-	  G4double sum = 0;
+	  G4double sumLocal = 0;
 	  for (size_t i=0;i<helper->size();i++)
 	    {
 	      if (i == 0 && isAConductor)	       
 		{
 		  G4double resEne = (*helper)[i].GetResonanceEnergy();
-		  sum += (*helper)[i].GetOscillatorStrength()*std::log(resEne/eV);
+		  sumLocal += (*helper)[i].GetOscillatorStrength()*std::log(resEne/eV);
 		}
 	      else
 		{
@@ -719,10 +719,10 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 		    2./3.*(oscStre/totalZ)*Omega*Omega;
 		  G4double resEne = std::sqrt(WI2);
 		  (*helper)[i].SetResonanceEnergy(resEne);	
-		  sum +=  (*helper)[i].GetOscillatorStrength()*std::log(resEne/eV);
+		  sumLocal +=  (*helper)[i].GetOscillatorStrength()*std::log(resEne/eV);
 		}	      
 	    }
-	  if (sum < TST)
+	  if (sumLocal < TST)
 	    AALow = adjustmentFactor;
 	  else
 	    AAHigh = adjustmentFactor;

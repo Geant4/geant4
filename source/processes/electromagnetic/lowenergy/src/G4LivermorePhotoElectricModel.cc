@@ -294,28 +294,28 @@ G4LivermorePhotoElectricModel::SetAngularGenerator(G4VPhotoElectricAngularDistri
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4LivermorePhotoElectricModel::SetAngularGenerator(const G4String& name)
+void G4LivermorePhotoElectricModel::SetAngularGenerator(const G4String& nameLocal)
 {
-  if (name == "default") 
+  if (nameLocal == "default") 
     {
       delete fElectronAngularGenerator;
       fElectronAngularGenerator = 
 	new G4PhotoElectricAngularGeneratorSimple("GEANT4LowEnergySimpleGenerator");
-      generatorName = name;
+      generatorName = nameLocal;
     }
-  else if (name == "standard")
+  else if (nameLocal == "standard")
     {
       delete fElectronAngularGenerator;
       fElectronAngularGenerator = 
 	new G4PhotoElectricAngularGeneratorSauterGavrila("GEANT4SauterGavrilaGenerator");
-      generatorName = name;
+      generatorName = nameLocal;
     }
-  else if (name == "polarized")
+  else if (nameLocal == "polarized")
     {
       delete fElectronAngularGenerator;
       fElectronAngularGenerator = 
 	new G4PhotoElectricAngularGeneratorPolarized("GEANT4LowEnergyPolarizedGenerator");
-      generatorName = name;
+      generatorName = nameLocal;
     }
   else
     {

@@ -87,9 +87,9 @@ G4CrossSectionHandler::BuildCrossSectionsForMaterials(const G4DataVector& energy
   size_t nOfBins = energyVector.size();
   const G4VDataSetAlgorithm* interpolationAlgo = CreateInterpolation();
 
-  for (size_t m=0; m<numOfCouples; m++)
+  for (size_t mLocal=0; mLocal<numOfCouples; mLocal++)
     {
-      const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(m);
+      const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(mLocal);
       const G4Material* material= couple->GetMaterial();
       G4int nElements = material->GetNumberOfElements();
       const G4ElementVector* elementVector = material->GetElementVector();
