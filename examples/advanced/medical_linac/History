@@ -15,6 +15,15 @@ and keep track of all category-tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13.06.2012    G.Cosmo, medical_linac-V09-05-06
+              - Dummy initialisation for voxel.volumeId to zero in
+                CML2ExpVoxels::loadData(). Fixes compilation warning
+                on gcc-4.7.
+
+13.06.2012    G.Cosmo, medical_linac-V09-05-05
+	      - Fixed incorrect string comparison in ML2PhantomConstruction.
+                Fixes compilation warning MacOSX/clang.
+
 14.05.2012    L.Pandola, G.A.P.Cirrone, medical_linac-V09-05-04
 	      - Remove warning. Clean up unused files
 

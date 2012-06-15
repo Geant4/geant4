@@ -97,9 +97,9 @@ bool CML2PhantomConstruction::design(void)
 }
 G4int CML2PhantomConstruction::getTotalNumberOfEvents()
 {
-	if (this->phantomName="fullWater")
+	if (this->phantomName=="fullWater")
 	{return this->Ph_fullWater->getTotalNumberOfEvents();}
-	else if (this->phantomName="boxInBox")
+	else if (this->phantomName=="boxInBox")
 	{return this->Ph_BoxInBox->getTotalNumberOfEvents();}
 	return 0;
 }

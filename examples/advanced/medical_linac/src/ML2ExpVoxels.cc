@@ -77,7 +77,7 @@ G4bool CML2ExpVoxels::loadData(void)
 	this->bHasExperimentalData=true;
 	std::ifstream in;
 
-	Svoxel voxel;
+	Svoxel voxel; voxel.volumeId=0;
 	G4ThreeVector pos, halfSize;
 	G4double expDose;
 
