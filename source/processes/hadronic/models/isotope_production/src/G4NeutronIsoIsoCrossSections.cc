@@ -154,7 +154,6 @@ Init(G4int A, G4int Z, G4double frac)
     }
     theCrossSection.Times(frac);
   }
-//  theCrossSection.Dump();
   
   // now isotope-production cross-sections
   theNames.SetMaxOffSet(1);
@@ -170,10 +169,10 @@ Init(G4int A, G4int Z, G4double frac)
     theProductionData = new G4IsoProdCrossSections * [theNumberOfProducts];
     for(G4int i=0; i<theNumberOfProducts; i++)
     {
-      G4String aName;
-      aDataSet >> aName;
+      G4String dName;
+      aDataSet >> dName;
       aDataSet >> dummy >> dummy;
-      theProductionData[i] = new G4IsoProdCrossSections(aName);
+      theProductionData[i] = new G4IsoProdCrossSections(dName);
       theProductionData[i]->Init(aDataSet);
     }
   }
