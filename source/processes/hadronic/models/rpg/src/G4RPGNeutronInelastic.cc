@@ -33,14 +33,12 @@
 
 G4HadFinalState* 
 G4RPGNeutronInelastic::ApplyYourself(const G4HadProjectile& aTrack,
-                                      G4Nucleus& targetNucleus)
+                                     G4Nucleus& targetNucleus)
 {
   theParticleChange.Clear();
   const G4HadProjectile* originalIncident = &aTrack;
 
-  //
   // create the target particle
-  //
   G4DynamicParticle* originalTarget = targetNucleus.ReturnTargetParticle();
   
   G4ReactionProduct modifiedOriginal;
@@ -54,10 +52,8 @@ G4RPGNeutronInelastic::ApplyYourself(const G4HadProjectile& aTrack,
     return &theParticleChange;
   }
 
-  //
   // Fermi motion and evaporation
   // As of Geant3, the Fermi energy calculation had not been Done
-  //
   G4double ek = originalIncident->GetKineticEnergy()/MeV;
   G4double amas = originalIncident->GetDefinition()->GetPDGMass()/MeV;
     

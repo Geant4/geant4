@@ -159,8 +159,8 @@ void G4RPGAntiSigmaPlusInelastic::Cascade(
     static G4double neutmul[numMul], neutnorm[numSec]; // neutron constants
     static G4double protmulA[numMulA], protnormA[numSec]; // proton constants
     static G4double neutmulA[numMulA], neutnormA[numSec]; // neutron constants
-    // np = number of pi+, nm = number of pi-, nz = number of pi0
-    G4int counter, nt=0, np=0, nm=0, nz=0;
+    // np = number of pi+, nneg = number of pi-, nz = number of pi0
+    G4int counter, nt=0, np=0, nneg=0, nz=0;
     G4double test;
     const G4double c = 1.25;    
     const G4double b[] = { 0.7, 0.7 };
@@ -173,16 +173,16 @@ void G4RPGAntiSigmaPlusInelastic::Cascade(
       counter = -1;
       for( np=0; np<(numSec/3); ++np )
       {
-        for( nm=std::max(0,np-1); nm<=(np+1); ++nm )
+        for( nneg=std::max(0,np-1); nneg<=(np+1); ++nneg )
         {
           for( nz=0; nz<numSec/3; ++nz )
           {
             if( ++counter < numMul )
             {
-              nt = np+nm+nz;
+              nt = np+nneg+nz;
               if( nt>0 && nt<=numSec )
               {
-                protmul[counter] = Pmltpc(np,nm,nz,nt,b[0],c);
+                protmul[counter] = Pmltpc(np,nneg,nz,nt,b[0],c);
                 protnorm[nt-1] += protmul[counter];
               }
             }
@@ -194,16 +194,16 @@ void G4RPGAntiSigmaPlusInelastic::Cascade(
       counter = -1;
       for( np=0; np<numSec/3; ++np )
       {
-        for( nm=np; nm<=(np+2); ++nm )
+        for( nneg=np; nneg<=(np+2); ++nneg )
         {
           for( nz=0; nz<numSec/3; ++nz )
           {
             if( ++counter < numMul )
             {
-              nt = np+nm+nz;
+              nt = np+nneg+nz;
               if( nt>0 && nt<=numSec )
               {
-                neutmul[counter] = Pmltpc(np,nm,nz,nt,b[1],c);
+                neutmul[counter] = Pmltpc(np,nneg,nz,nt,b[1],c);
                 neutnorm[nt-1] += neutmul[counter];
               }
             }
@@ -223,15 +223,15 @@ void G4RPGAntiSigmaPlusInelastic::Cascade(
       counter = -1;
       for( np=1; np<(numSec/3); ++np )
       {
-        nm = np;
+        nneg = np;
         for( nz=0; nz<numSec/3; ++nz )
         {
           if( ++counter < numMulA )
           {
-            nt = np+nm+nz;
+            nt = np+nneg+nz;
             if( nt>1 && nt<=numSec )
             {
-              protmulA[counter] = Pmltpc(np,nm,nz,nt,b[0],c);
+              protmulA[counter] = Pmltpc(np,nneg,nz,nt,b[0],c);
               protnormA[nt-1] += protmulA[counter];
             }
           }
@@ -242,15 +242,15 @@ void G4RPGAntiSigmaPlusInelastic::Cascade(
       counter = -1;
        for( np=0; np<numSec/3; ++np )
        {
-        nm = np+1;
+        nneg = np+1;
         for( nz=0; nz<numSec/3; ++nz )
         {
           if( ++counter < numMulA )
           {
-            nt = np+nm+nz;
+            nt = np+nneg+nz;
             if( nt>1 && nt<=numSec )
             {
-              neutmulA[counter] = Pmltpc(np,nm,nz,nt,b[1],c);
+              neutmulA[counter] = Pmltpc(np,nneg,nz,nt,b[1],c);
               neutnormA[nt-1] += neutmulA[counter];
             }
           }
@@ -297,13 +297,13 @@ void G4RPGAntiSigmaPlusInelastic::Cascade(
         counter = -1;
         for( np=0; np<numSec/3 && ran>=excs; ++np )
         {
-          for( nm=std::max(0,np-1); nm<=(np+1) && ran>=excs; ++nm )
+          for( nneg=std::max(0,np-1); nneg<=(np+1) && ran>=excs; ++nneg )
           {
             for( nz=0; nz<numSec/3 && ran>=excs; ++nz )
             {
               if( ++counter < numMul )
               {
-                nt = np+nm+nz;
+                nt = np+nneg+nz;
                 if( (nt>0) && (nt<=numSec) )
                 {
                   test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
@@ -324,8 +324,8 @@ void G4RPGAntiSigmaPlusInelastic::Cascade(
           quasiElastic = true;
           return;
         }
-        np--; nm--; nz--;
-        G4int ncht = std::min( 3, std::max( 1, np-nm+2 ) );
+        np--; nneg--; nz--;
+        G4int ncht = std::min( 3, std::max( 1, np-nneg+2 ) );
         switch( ncht )
         {
          case 1:
@@ -358,13 +358,13 @@ void G4RPGAntiSigmaPlusInelastic::Cascade(
         counter = -1;
         for( np=0; np<numSec/3 && ran>=excs; ++np )
         {
-          for( nm=np; nm<=(np+2) && ran>=excs; ++nm )
+          for( nneg=np; nneg<=(np+2) && ran>=excs; ++nneg )
           {
             for( nz=0; nz<numSec/3 && ran>=excs; ++nz )
             {
               if( ++counter < numMul )
               {
-                nt = np+nm+nz;
+                nt = np+nneg+nz;
                 if( (nt>0) && (nt<=numSec) )
                 {
                   test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
@@ -385,8 +385,8 @@ void G4RPGAntiSigmaPlusInelastic::Cascade(
           quasiElastic = true;
           return;
         }
-        np--; nm--; nz--;
-        G4int ncht = std::min( 3, std::max( 1, np-nm+3 ) );
+        np--; nneg--; nz--;
+        G4int ncht = std::min( 3, std::max( 1, np-nneg+3 ) );
         switch( ncht )
         {
          case 1:
@@ -447,12 +447,12 @@ void G4RPGAntiSigmaPlusInelastic::Cascade(
         counter = -1;
         for( np=1; np<numSec/3 && ran>=excs; ++np )
         {
-          nm = np;
+          nneg = np;
           for( nz=0; nz<numSec/3 && ran>=excs; ++nz )
           {
             if( ++counter < numMulA )
             {
-              nt = np+nm+nz;
+              nt = np+nneg+nz;
               if( nt>1 && nt<=numSec )
               {
                 test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
@@ -479,12 +479,12 @@ void G4RPGAntiSigmaPlusInelastic::Cascade(
         counter = -1;
         for( np=0; np<numSec/3 && ran>=excs; ++np )
         {
-          nm = np+1;
+          nneg = np+1;
           for( nz=0; nz<numSec/3 && ran>=excs; ++nz )
           {
             if( ++counter < numMulA )
             {
-              nt = np+nm+nz;
+              nt = np+nneg+nz;
               if( nt>1 && nt<=numSec )
               {
                 test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
@@ -508,7 +508,7 @@ void G4RPGAntiSigmaPlusInelastic::Cascade(
       }
       if( nz > 0 )
       {
-        if( nm > 0 )
+        if( nneg > 0 )
         {
           if( G4UniformRand() < 0.5 )
           {
@@ -517,7 +517,7 @@ void G4RPGAntiSigmaPlusInelastic::Cascade(
             p->SetDefinition( aKaonMinus );
             (G4UniformRand() < 0.5) ? p->SetSide( -1 ) : p->SetSide( 1 );
             vec.SetElement( vecLen++, p );
-            --nm;
+            --nneg;
           }
           else
           {
@@ -529,7 +529,7 @@ void G4RPGAntiSigmaPlusInelastic::Cascade(
             --nz;
           }
         }
-        else   // nm == 0
+        else   // nneg == 0
         {
           vec.Initialize( 1 );
           G4ReactionProduct *p = new G4ReactionProduct;
@@ -541,21 +541,21 @@ void G4RPGAntiSigmaPlusInelastic::Cascade(
       }
       else    //  nz == 0
       {
-        if( nm > 0 )
+        if( nneg > 0 )
         {
           vec.Initialize( 1 );
           G4ReactionProduct *p = new G4ReactionProduct;
           p->SetDefinition( aKaonMinus );
           (G4UniformRand() < 0.5) ? p->SetSide( -1 ) : p->SetSide( 1 );
           vec.SetElement( vecLen++, p );
-          --nm;
+          --nneg;
         }
       }
       currentParticle.SetMass( 0.0 );
       targetParticle.SetMass( 0.0 );
     }
 
-  SetUpPions( np, nm, nz, vec, vecLen );
+  SetUpPions( np, nneg, nz, vec, vecLen );
   return;
 }
 

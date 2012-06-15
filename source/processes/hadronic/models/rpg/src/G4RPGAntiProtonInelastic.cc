@@ -164,8 +164,8 @@ void G4RPGAntiProtonInelastic::Cascade(
     static G4double neutmul[numMul], neutnorm[numSec]; // neutron constants
     static G4double protmulA[numMulA], protnormA[numSec]; // proton constants
     static G4double neutmulA[numMulA], neutnormA[numSec]; // neutron constants
-    // np = number of pi+, nm = number of pi-, nz = number of pi0
-    G4int counter, nt=0, np=0, nm=0, nz=0;
+    // np = number of pi+, nneg = number of pi-, nz = number of pi0
+    G4int counter, nt=0, np=0, nneg=0, nz=0;
     G4double test;
     const G4double c = 1.25;    
     const G4double b[] = { 0.7, 0.7 };
@@ -178,16 +178,16 @@ void G4RPGAntiProtonInelastic::Cascade(
       counter = -1;
       for( np=0; np<(numSec/3); ++np )
       {
-        for( nm=std::max(0,np-1); nm<=(np+1); ++nm )
+        for( nneg=std::max(0,np-1); nneg<=(np+1); ++nneg )
         {
           for( nz=0; nz<numSec/3; ++nz )
           {
             if( ++counter < numMul )
             {
-              nt = np+nm+nz;
+              nt = np+nneg+nz;
               if( nt>0 && nt<=numSec )
               {
-                protmul[counter] = Pmltpc(np,nm,nz,nt,b[0],c);
+                protmul[counter] = Pmltpc(np,nneg,nz,nt,b[0],c);
                 protnorm[nt-1] += protmul[counter];
               }
             }
@@ -199,16 +199,16 @@ void G4RPGAntiProtonInelastic::Cascade(
       counter = -1;
       for( np=0; np<numSec/3; ++np )
       {
-        for( nm=np; nm<=(np+2); ++nm )
+        for( nneg=np; nneg<=(np+2); ++nneg )
         {
           for( nz=0; nz<numSec/3; ++nz )
           {
             if( ++counter < numMul )
             {
-              nt = np+nm+nz;
+              nt = np+nneg+nz;
               if( (nt>0) && (nt<=numSec) )
               {
-                neutmul[counter] = Pmltpc(np,nm,nz,nt,b[1],c);
+                neutmul[counter] = Pmltpc(np,nneg,nz,nt,b[1],c);
                 neutnorm[nt-1] += neutmul[counter];
               }
             }
@@ -228,15 +228,15 @@ void G4RPGAntiProtonInelastic::Cascade(
       counter = -1;
       for( np=0; np<(numSec/3); ++np )
       {
-        nm = np;
+        nneg = np;
         for( nz=0; nz<numSec/3; ++nz )
         {
           if( ++counter < numMulA )
           {
-            nt = np+nm+nz;
+            nt = np+nneg+nz;
             if( nt>1 && nt<=numSec )
             {
-              protmulA[counter] = Pmltpc(np,nm,nz,nt,b[0],c);
+              protmulA[counter] = Pmltpc(np,nneg,nz,nt,b[0],c);
               protnormA[nt-1] += protmulA[counter];
             }
           }
@@ -247,15 +247,15 @@ void G4RPGAntiProtonInelastic::Cascade(
       counter = -1;
       for( np=0; np<numSec/3; ++np )
       {
-        nm = np+1;
+        nneg = np+1;
         for( nz=0; nz<numSec/3; ++nz )
         {
           if( ++counter < numMulA )
           {
-            nt = np+nm+nz;
+            nt = np+nneg+nz;
             if( (nt>1) && (nt<=numSec) )
             {
-              neutmulA[counter] = Pmltpc(np,nm,nz,nt,b[1],c);
+              neutmulA[counter] = Pmltpc(np,nneg,nz,nt,b[1],c);
               neutnormA[nt-1] += neutmulA[counter];
             }
           }
@@ -302,7 +302,7 @@ void G4RPGAntiProtonInelastic::Cascade(
         // suppress high multiplicity events at low momentum
         // only one pion will be produced
         //
-        np = nm = nz = 0;
+        np = nneg = nz = 0;
         if( targetParticle.GetDefinition() == aProton )
         {
           test = std::exp( std::min( expxu, std::max( expxl, -(1.0+b[1])*(1.0+b[1])/(2.0*c*c) ) ) );
@@ -318,7 +318,7 @@ void G4RPGAntiProtonInelastic::Cascade(
           else if( ran < wp/wt )
             np = 1;
           else
-            nm = 1;
+            nneg = 1;
         }
         else  // target is a neutron
         {
@@ -330,7 +330,7 @@ void G4RPGAntiProtonInelastic::Cascade(
           if( ran < w0/(w0+wm) )
             nz = 1;
           else
-            nm = 1;
+            nneg = 1;
         }
       }
       else   // (availableEnergy >= 2.0*GeV) || (random number < supp[ieab])
@@ -344,13 +344,13 @@ void G4RPGAntiProtonInelastic::Cascade(
           counter = -1;
           for( np=0; np<numSec/3 && ran>=excs; ++np )
           {
-            for( nm=std::max(0,np-1); nm<=(np+1) && ran>=excs; ++nm )
+            for( nneg=std::max(0,np-1); nneg<=(np+1) && ran>=excs; ++nneg )
             {
               for( nz=0; nz<numSec/3 && ran>=excs; ++nz )
               {
                 if( ++counter < numMul )
                 {
-                  nt = np+nm+nz;
+                  nt = np+nneg+nz;
                   if( (nt>0) && (nt<=numSec) )
                   {
                     test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
@@ -377,13 +377,13 @@ void G4RPGAntiProtonInelastic::Cascade(
           counter = -1;
           for( np=0; np<numSec/3 && ran>=excs; ++np )
           {
-            for( nm=np; nm<=(np+2) && ran>=excs; ++nm )
+            for( nneg=np; nneg<=(np+2) && ran>=excs; ++nneg )
             {
               for( nz=0; nz<numSec/3 && ran>=excs; ++nz )
               {
                 if( ++counter < numMul )
                 {
-                  nt = np+nm+nz;
+                  nt = np+nneg+nz;
                   if( (nt>0) && (nt<=numSec) )
                   {
                     test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
@@ -405,11 +405,11 @@ void G4RPGAntiProtonInelastic::Cascade(
             return;
           }
         }
-        np--; nm--; nz--;
+        np--; nneg--; nz--;
       }
       if( targetParticle.GetDefinition() == aProton )
       {
-        switch( np-nm )
+        switch( np-nneg )
         {
          case 0:
            if( G4UniformRand() < 0.33 )
@@ -432,7 +432,7 @@ void G4RPGAntiProtonInelastic::Cascade(
       }
       else  // target must be a neutron
       {
-        switch( np-nm )
+        switch( np-nneg )
         {
          case -1:
            if( G4UniformRand() < 0.5 )
@@ -476,12 +476,12 @@ void G4RPGAntiProtonInelastic::Cascade(
         counter = -1;
         for( np=0; (np<numSec/3) && (ran>=excs); ++np )
         {
-          nm = np;
+          nneg = np;
           for( nz=0; (nz<numSec/3) && (ran>=excs); ++nz )
           {
             if( ++counter < numMulA )
             {
-              nt = np+nm+nz;
+              nt = np+nneg+nz;
               if( (nt>1) && (nt<=numSec) )
               {
                 test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
@@ -502,12 +502,12 @@ void G4RPGAntiProtonInelastic::Cascade(
         counter = -1;
         for( np=0; (np<numSec/3) && (ran>=excs); ++np )
         {
-          nm = np+1;
+          nneg = np+1;
           for( nz=0; (nz<numSec/3) && (ran>=excs); ++nz )
           {
             if( ++counter < numMulA )
             {
-              nt = np+nm+nz;
+              nt = np+nneg+nz;
               if( (nt>1) && (nt<=numSec) )
               {
                 test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
@@ -531,10 +531,10 @@ void G4RPGAntiProtonInelastic::Cascade(
       np--; nz--;
       currentParticle.SetMass( 0.0 );
       targetParticle.SetMass( 0.0 );
-    }
-    while(np+nm+nz<3) nz++;
+  }
 
-  SetUpPions( np, nm, nz, vec, vecLen );
+  while(np + nneg + nz < 3) nz++;
+  SetUpPions( np, nneg, nz, vec, vecLen );
   return;
 }
 

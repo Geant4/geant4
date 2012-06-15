@@ -128,7 +128,7 @@ ReactionStage(const G4HadProjectile* originalIncident,
     // two secondaries in the list.  Current particle KE is maintained.
  
     G4double ek = currentParticle.GetKineticEnergy();
-    G4ThreeVector m = currentParticle.GetMomentum();
+    G4ThreeVector mom = currentParticle.GetMomentum();
     currentParticle = *vec[0];
     currentParticle.SetSide(1);
     targetParticle = *vec[1];
@@ -144,7 +144,7 @@ ReactionStage(const G4HadProjectile* originalIncident,
     incidentHasChanged = true;
     targetHasChanged = true;
     currentParticle.SetKineticEnergy( ek );
-    currentParticle.SetMomentum( m );
+    currentParticle.SetMomentum(mom);
     veryForward = true;
   }
   const G4double atomicWeight = targetNucleus.GetA_asInt();
@@ -371,7 +371,7 @@ ReactionStage(const G4HadProjectile* originalIncident,
       if (vec[i]->GetSide() == -2) {       // its a nucleon
         if (backwardNucleonCount < 18) {
           if (vec[i]->GetDefinition()->GetParticleSubType() == "pi") {
-            for(G4int i=0; i<vecLen; i++) delete vec[i];
+            for (G4int j = 0; j < vecLen; j++) delete vec[j];
             vecLen = 0;
             throw G4HadReentrentException(__FILE__, __LINE__,
             "G4RPGFragmentation::ReactionStage : a pion has been counted as a backward nucleon");
