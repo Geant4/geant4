@@ -7,10 +7,13 @@ carlo.casarino@polooncologicocefalu.it
              History file of the IORT application
          ====================================================
 
-15.12.2011 - P. Mato;      Tag: iort_therapy-V09-05-01
-            Tagged changes made by Gunter (windows line endings, 
-            invalid header files, etc.)
-24.11.2011 - P. Mato;      Tag: iort_therapy-V09-05-00
+13.06.2012 - G.Cosmo;     Tag: iort_therapy-V09-05-02
+                Use std::string::size_type for string length instead of int
+                in IORTMatrix::ion. Fixes compilation warning on gcc-4.7.
+15.12.2011 - P.Mato;      Tag: iort_therapy-V09-05-01
+                Tagged changes made by Gunter (windows line endings, 
+                invalid header files, etc.)
+24.11.2011 - P.Mato;      Tag: iort_therapy-V09-05-00
 	        Added CMakeLists.txt file
 24.11.2011 - G.Folger;      Tag: iort_therapy-V09-04-08
 	        Use G4lrint() in place of lrint()
@@ -20,11 +23,11 @@ carlo.casarino@polooncologicocefalu.it
 	        Macro file corrected
 07.11.2011 - G.A.P.Cirrone; Tag: iort_therapy-V09-04-05
 	        Code revision and visualisation improved
-03.11.2011 - F. Romano; Tag: iort_therapy-V09-04-04
+03.11.2011 - F.Romano; Tag: iort_therapy-V09-04-04
 	        Migration to new G4Exception scheme
-02.11.2011 - C. Casarino; Tag: iort_therapy-V09-04-03
+02.11.2011 - C.Casarino; Tag: iort_therapy-V09-04-03
 	        Main file improved
-02.11.2011 - C. Casarino; Tag: iort_therapy-V09-04-02
+02.11.2011 - C.Casarino; Tag: iort_therapy-V09-04-02
 	        Warings removed.
 30.10.2011 - G.A.P. Cirrone; Tag: iort_therapy-V09-04-01
 	        Main name changed.
