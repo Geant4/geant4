@@ -233,9 +233,9 @@ G4HENeutronInelastic::FirstIntInCasNeutron(G4bool& inElastic,
   static G4double neutmul[numMul], neutnorm[numSec];  // neutron constants
 
   //  misc. local variables
-  //  np = number of pi+,  nm = number of pi-,  nz = number of pi0
+  //  npos = number of pi+,  nneg = number of pi-,  nzero = number of pi0
 
-  G4int i, counter, nt, np, nm, nz;
+  G4int i, counter, nt, npos, nneg, nzero;
 
    if( first ) 
      {     // compute normalization constants, this will only be done once
@@ -243,19 +243,19 @@ G4HENeutronInelastic::FirstIntInCasNeutron(G4bool& inElastic,
        for( i=0; i<numMul; i++ )protmul[i]  = 0.0;
        for( i=0; i<numSec; i++ )protnorm[i] = 0.0;
        counter = -1;
-       for( np=0; np<(numSec/3); np++ ) 
+       for( npos=0; npos<(numSec/3); npos++ ) 
           {
-            for( nm=std::max(0,np-1); nm<=(np+1); nm++ ) 
+            for( nneg=std::max(0,npos-1); nneg<=(npos+1); nneg++ ) 
                {
-                 for( nz=0; nz<numSec/3; nz++ ) 
+                 for( nzero=0; nzero<numSec/3; nzero++ ) 
                     {
                       if( ++counter < numMul ) 
                         {
-                          nt = np+nm+nz;
+                          nt = npos+nneg+nzero;
                           if( (nt>0) && (nt<=numSec) ) 
                             {
-                              protmul[counter] = pmltpc(np,nm,nz,nt,protb,c)
-                                                 /(Factorial(1-np+nm)*Factorial(1+np-nm)) ;
+                              protmul[counter] = pmltpc(npos,nneg,nzero,nt,protb,c)
+                                                 /(Factorial(1-npos+nneg)*Factorial(1+npos-nneg)) ;
                               protnorm[nt-1] += protmul[counter];
                             }
                         }
@@ -265,19 +265,19 @@ G4HENeutronInelastic::FirstIntInCasNeutron(G4bool& inElastic,
        for( i=0; i<numMul; i++ )neutmul[i]  = 0.0;
        for( i=0; i<numSec; i++ )neutnorm[i] = 0.0;
        counter = -1;
-       for( np=0; np<numSec/3; np++ ) 
+       for( npos=0; npos<numSec/3; npos++ ) 
           {
-            for( nm=np; nm<=(np+2); nm++ ) 
+            for( nneg=npos; nneg<=(npos+2); nneg++ ) 
                {
-                 for( nz=0; nz<numSec/3; nz++ ) 
+                 for( nzero=0; nzero<numSec/3; nzero++ ) 
                     {
                       if( ++counter < numMul ) 
                         {
-                          nt = np+nm+nz;
+                          nt = npos+nneg+nzero;
                           if( (nt>0) && (nt<=numSec) ) 
                             {
-                               neutmul[counter] = pmltpc(np,nm,nz,nt,neutb,c)
-                                                  /(Factorial(-np+nm)*Factorial(2+np-nm));
+                               neutmul[counter] = pmltpc(npos,nneg,nzero,nt,neutb,c)
+                                                  /(Factorial(-npos+nneg)*Factorial(2+npos-nneg));
                                neutnorm[nt-1] += neutmul[counter];
                             }
                         }
@@ -317,7 +317,7 @@ G4HENeutronInelastic::FirstIntInCasNeutron(G4bool& inElastic,
 
                                                   //   inelastic scattering
 
-   np = 0, nm = 0, nz = 0;
+   npos = 0, nneg = 0, nzero = 0;
    G4double eab = availableEnergy;
    G4int ieab = G4int( eab*5.0 );
    
@@ -333,9 +333,9 @@ G4HENeutronInelastic::FirstIntInCasNeutron(G4bool& inElastic,
            wm = w0 = std::exp(w0);
            w0 = w0/2.;
            if( G4UniformRand() < w0/(w0+wm) )  
-             { np = 0; nm = 0; nz = 1; }
+             { npos = 0; nneg = 0; nzero = 1; }
            else 
-             { np = 0; nm = 1; nz = 0; }       
+             { npos = 0; nneg = 1; nzero = 0; }       
          } 
        else 
          {                                               // target is a proton
@@ -348,11 +348,11 @@ G4HENeutronInelastic::FirstIntInCasNeutron(G4bool& inElastic,
            wp = w0+wp;
            ran = G4UniformRand();
            if( ran < w0/wt)
-             { np = 0; nm = 0; nz = 1; }       
+             { npos = 0; nneg = 0; nzero = 1; }       
            else if( ran < wp/wt)
-             { np = 1; nm = 0; nz = 0; }       
+             { npos = 1; nneg = 0; nzero = 0; }       
            else
-             { np = 0; nm = 1; nz = 0; }       
+             { npos = 0; nneg = 1; nzero = 0; }       
          }
      }
    else
@@ -382,11 +382,11 @@ G4HENeutronInelastic::FirstIntInCasNeutron(G4bool& inElastic,
        if( targetCode == protonCode ) 
          {
            counter = -1;
-           for (np=0; np<numSec/3; np++) {
-             for (nm=std::max(0,np-1); nm<=(np+1); nm++) {
-               for (nz=0; nz<numSec/3; nz++) {
+           for (npos=0; npos<numSec/3; npos++) {
+             for (nneg=std::max(0,npos-1); nneg<=(npos+1); nneg++) {
+               for (nzero=0; nzero<numSec/3; nzero++) {
                  if (++counter < numMul) {
-                   nt = np+nm+nz;
+                   nt = npos+nneg+nzero;
                    if ( (nt>0) && (nt<=numSec) ) {
                      test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                      dum = (pi/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
@@ -409,11 +409,11 @@ G4HENeutronInelastic::FirstIntInCasNeutron(G4bool& inElastic,
        else   
          {                                         // target must be a neutron
            counter = -1;
-           for (np=0; np<numSec/3; np++) {
-             for (nm=np; nm<=(np+2); nm++) {
-               for (nz=0; nz<numSec/3; nz++) {
+           for (npos=0; npos<numSec/3; npos++) {
+             for (nneg=npos; nneg<=(npos+2); nneg++) {
+               for (nzero=0; nzero<numSec/3; nzero++) {
                  if (++counter < numMul) {
-                   nt = np+nm+nz;
+                   nt = npos+nneg+nzero;
                    if ( (nt>=1) && (nt<=numSec) ) {
                      test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                      dum = (pi/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
@@ -437,10 +437,10 @@ G4HENeutronInelastic::FirstIntInCasNeutron(G4bool& inElastic,
     
    if( targetCode == neutronCode)
      {
-       if( np == nm)
+       if( npos == nneg)
          {
          }
-       else if (np == (nm-1))
+       else if (npos == (nneg-1))
          {
            if( G4UniformRand() < 0.5)
              {
@@ -459,7 +459,7 @@ G4HENeutronInelastic::FirstIntInCasNeutron(G4bool& inElastic,
      }  
    else
      {
-       if( np == nm)
+       if( npos == nneg)
          {
            if( G4UniformRand() < 0.25)
              {
@@ -470,7 +470,7 @@ G4HENeutronInelastic::FirstIntInCasNeutron(G4bool& inElastic,
              {
              }
          } 
-       else if ( np == (1+nm))
+       else if ( npos == (1+nneg))
          {
            pv[1] = Neutron;
          }
@@ -481,34 +481,34 @@ G4HENeutronInelastic::FirstIntInCasNeutron(G4bool& inElastic,
      }      
 
 
-   nt = np + nm + nz;
+   nt = npos + nneg + nzero;
    while ( nt > 0)
        {
          G4double ran = G4UniformRand();
-         if ( ran < (G4double)np/nt)
+         if ( ran < (G4double)npos/nt)
             { 
-              if( np > 0 ) 
+              if( npos > 0 ) 
                 { pv[vecLen++] = PionPlus;
-                  np--;
+                  npos--;
                 }
             }
-         else if ( ran < (G4double)(np+nm)/nt)
+         else if ( ran < (G4double)(npos+nneg)/nt)
             {   
-              if( nm > 0 )
+              if( nneg > 0 )
                 { 
                   pv[vecLen++] = PionMinus;
-                  nm--;
+                  nneg--;
                 }
             }
          else
             {
-              if( nz > 0 )
+              if( nzero > 0 )
                 { 
                   pv[vecLen++] = PionZero;
-                  nz--;
+                  nzero--;
                 }
             }
-         nt = np + nm + nz;
+         nt = npos + nneg + nzero;
        } 
    if (verboseLevel > 1)
       {

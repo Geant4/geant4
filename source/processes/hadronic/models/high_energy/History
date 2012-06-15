@@ -14,14 +14,17 @@ code and to keep track of all tags.
   * Please list in reverse chronological order (last date on top)
   ---------------------------------------------------------------
 
+12 June 2012 - Dennis Wright (hadr-hep-V09-05-03)
+-------------------------------------------------
+- replace shadowed variables nm, m, s, etc. in .cc files 
 
 12 April 2012 - Gunter Folger   (hadr-hep-V09-05-02)
--  GetFatalEnergyCheckLevels() returns const std::pair<>
+----------------------------------------------------
+- GetFatalEnergyCheckLevels() returns const std::pair<>
 
 22 March 2012 - Dennis Wright  (hadr-hep-V09-05-01)
 ---------------------------------------------------
 - remove obsolete comment about comparison with Geant3 from G4HEInelastic.hh
-
 
 16 March 2012 - Gunter Folger   (hadr-hep-V09-05-00)
 ----------------------------------------------------
