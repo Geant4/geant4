@@ -61,8 +61,8 @@
 
 using namespace std;
 
-G4eeToHadronsMultiModel::G4eeToHadronsMultiModel(G4int ver, const G4String& name)
-  : G4VEmModel(name),
+G4eeToHadronsMultiModel::G4eeToHadronsMultiModel(G4int ver, const G4String& mname)
+  : G4VEmModel(mname),
     csFactor(1.0),
     nModels(0),
     verbose(ver),

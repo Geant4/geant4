@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07 June 2012: V.Ivant (emhighenergy-V09-05-01)
+- Fixed variable shagowing
+
 27 May 2012: V.Ivant (emhighenergy-V09-05-00)
 - G4mplIonisation, G4mplIonisationModel, G4mplIonisationWithDeltaModel
     extended energy range of dedx and other tables for monopoles with large mass,

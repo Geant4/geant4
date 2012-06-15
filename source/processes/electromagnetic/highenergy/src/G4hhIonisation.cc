@@ -53,8 +53,10 @@
 #include "G4ICRU73NoDeltaModel.hh"
 #include "G4UniversalFluctuation.hh"
 #include "G4BohrFluctuations.hh"
+#include "G4IonFluctuations.hh"
 #include "G4UnitsTable.hh"
 #include "G4Electron.hh"
+#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -93,8 +95,8 @@ G4double G4hhIonisation::MinPrimaryEnergy(const G4ParticleDefinition*,
 {
   G4double x = 0.5*cut/electron_mass_c2;
   G4double y = electron_mass_c2/mass;
-  G4double g = x*y + std::sqrt((1. + x)*(1. + x*y*y));
-  return mass*(g - 1.0);
+  G4double gam = x*y + std::sqrt((1. + x)*(1. + x*y*y));
+  return mass*(gam - 1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -112,36 +114,34 @@ void G4hhIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* par
   }
   SetBaseParticle(0);
   SetSecondaryParticle(G4Electron::Electron());
-  //G4double q = theParticle->GetPDGCharge();
   mass  = theParticle->GetPDGMass();
   ratio = electron_mass_c2/mass;
   G4double eth = 2*MeV*mass/proton_mass_c2;
-  flucModel = new G4BohrFluctuations();
+  flucModel = new G4IonFluctuations();
 
-  G4int nm = 1;
+  G4double emin = std::min(MinKinEnergy(), 0.1*eth);
+  G4double emax = std::max(MaxKinEnergy(), 100*eth);
 
-  G4double minKinEnergy = MinKinEnergy();
+  SetMinKinEnergy(emin);
+  SetMaxKinEnergy(emax);
+  G4int bin = G4lrint(G4LossTableManager::Instance()->GetNumberOfBinsPerDecade()
+		      *std::log10(emax/emin));
+  SetDEDXBinning(bin);
 
-  if(eth > minKinEnergy) {
-    G4VEmModel* em;
-    em = new G4BraggNoDeltaModel(); 
-    //if(q > 0.0) { em = new G4BraggNoDeltaModel(); }
-    //else { em = new G4ICRU73NoDeltaModel(); }
-    em->SetLowEnergyLimit(minKinEnergy);
-    em->SetHighEnergyLimit(eth);
-    AddEmModel(nm, em, flucModel);
-    ++nm;
-  }
+  G4VEmModel* em = 0; 
+  if(part->GetPDGCharge() > 0.0) { em = new G4BraggNoDeltaModel(); }
+  else { em = new G4ICRU73NoDeltaModel(); }
+  em->SetLowEnergyLimit(emin);
+  em->SetHighEnergyLimit(eth);
+  AddEmModel(1, em, flucModel);
 
-  if(eth < MaxKinEnergy()) {
-    G4VEmModel* em1 = new G4BetheBlochNoDeltaModel();
-    em1->SetLowEnergyLimit(std::max(eth,minKinEnergy));
-    em1->SetHighEnergyLimit(MaxKinEnergy());
-    AddEmModel(nm, em1, flucModel);
-  }
+  em = new G4BetheBlochNoDeltaModel();
+  em->SetLowEnergyLimit(eth);
+  em->SetHighEnergyLimit(emax);
+  AddEmModel(1, em, flucModel);
 
   if(verboseLevel>1) {
-    G4cout << "G4hhIonisation is initialised: Nmodels= " << nm << G4endl;
+    G4cout << "G4hhIonisation is initialised" << G4endl;
   }
   isInitialised = true;
 }

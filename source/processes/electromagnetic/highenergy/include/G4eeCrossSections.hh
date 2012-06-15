@@ -83,15 +83,15 @@ private:
 
   void Initialise();
 
-  G4double Width2p(G4double s,  G4double mres, G4double g, 
+  G4double Width2p(G4double s_inv,  G4double mres, G4double gconst, 
                    G4double br, G4double mp);
 
-  G4double Width3p(G4double s,  G4double mres, G4double g, 
+  G4double Width3p(G4double s_inv,  G4double mres, G4double gconst,
                    G4double br);
 
   G4double PhaseSpace3p(G4double e); 
 
-  G4double WidthPg(G4double s,  G4double mres, G4double g, 
+  G4double WidthPg(G4double s_inv,  G4double mres, G4double gconst,
                    G4double br, G4double mp);
 
   G4double WidthRho(G4double e);
