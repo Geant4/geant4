@@ -616,13 +616,13 @@ G4bool G4QMDMeanField::IsPauliBlocked( G4int i )
 void G4QMDMeanField::DoPropagation( G4double dt )
 {
  
-   G4double c2 = 1.0; 
-   G4double c1 = 1.0 - c2; 
-   G4double c3 = 1.0 / 2.0 / c2; 
+   G4double cc2 = 1.0; 
+   G4double cc1 = 1.0 - cc2; 
+   G4double cc3 = 1.0 / 2.0 / cc2; 
 
-   G4double dt3 = dt * c3;
-   G4double dt1 = dt * ( c1 - c3 );
-   G4double dt2 = dt * c2;
+   G4double dt3 = dt * cc3;
+   G4double dt1 = dt * ( cc1 - cc3 );
+   G4double dt2 = dt * cc2;
 
    CalGraduate(); 
 
@@ -670,7 +670,6 @@ void G4QMDMeanField::DoPropagation( G4double dt )
    }
 
    Cal2BodyQuantities(); 
-
 
 }
 
