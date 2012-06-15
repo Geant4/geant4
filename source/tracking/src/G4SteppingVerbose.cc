@@ -42,7 +42,7 @@
 
 #include "G4SteppingVerbose.hh"
 #include "G4SteppingManager.hh"
-
+#include "G4SystemOfUnits.hh"
 #include "G4VSensitiveDetector.hh"    // Include from 'hits/digi'
 #include "G4StepStatus.hh"    // Include from 'tracking'
 
