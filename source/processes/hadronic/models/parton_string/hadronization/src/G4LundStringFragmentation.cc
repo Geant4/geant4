@@ -856,9 +856,9 @@ G4double G4LundStringFragmentation::GetLightConeZ(G4double zmin, G4double zmax,
 }
 
 //------------------------------------------------------------------------
-G4double G4LundStringFragmentation::lambda(G4double s, G4double m1_Sqr, G4double m2_Sqr)
+G4double G4LundStringFragmentation::lambda(G4double S, G4double m1_Sqr, G4double m2_Sqr)
 { 
-	G4double lam = sqr(s - m1_Sqr - m2_Sqr) - 4.*m1_Sqr*m2_Sqr;
+	G4double lam = sqr(S - m1_Sqr - m2_Sqr) - 4.*m1_Sqr*m2_Sqr;
 	return lam;
 }
 
