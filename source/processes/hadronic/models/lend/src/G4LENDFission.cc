@@ -33,8 +33,6 @@ G4HadFinalState * G4LENDFission::ApplyYourself(const G4HadProjectile& aTrack, G4
 
    G4double temp = aTrack.GetMaterial()->GetTemperature();
 
-   //G4int iZ = int ( aTarg.GetZ() );
-   //G4int iA = int ( aTarg.GetN() );
    //migrate to integer A and Z (GetN_asInt returns number of neutrons in the nucleus since this) 
    G4int iZ = aTarg.GetZ_asInt();
    G4int iA = aTarg.GetA_asInt();
@@ -50,8 +48,8 @@ G4HadFinalState * G4LENDFission::ApplyYourself(const G4HadProjectile& aTrack, G4
    {
       for ( G4int j = 0; j < int( products->size() ); j++ ) 
       {
-         G4int iZ = (*products)[j].Z; 
-         G4int iA = (*products)[j].A; 
+         G4int jZ = (*products)[j].Z; 
+         G4int jA = (*products)[j].A; 
 
          //G4cout << "Z = "    << (*products)[j].Z 
          //       << ", A = "  << (*products)[j].A 
@@ -63,12 +61,12 @@ G4HadFinalState * G4LENDFission::ApplyYourself(const G4HadProjectile& aTrack, G4
 
          G4DynamicParticle* theSec = new G4DynamicParticle;
 
-         if ( iZ > 0 )
+         if ( jZ > 0 )
          {
                                                                                         //Ex  j?
-            theSec->SetDefinition( G4ParticleTable::GetParticleTable()->FindIon( iZ, iA , 0, 0 ) );
+            theSec->SetDefinition( G4ParticleTable::GetParticleTable()->FindIon( jZ, jA , 0, 0 ) );
          } 
-         else if ( iA == 1 && iZ == 0 )
+         else if ( jA == 1 && jZ == 0 )
          {
             theSec->SetDefinition( G4Neutron::Neutron() );
          } 

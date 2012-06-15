@@ -91,7 +91,7 @@ class G4LENDCrossSection : public G4VCrossSectionDataSet
       //G4double GetCrossSection(const G4DynamicParticle*, G4int , const G4Material* );
 
 
-      void ChangeDefaultEvaluation( G4String name ){ default_evaluation = name; };
+      void ChangeDefaultEvaluation( G4String name_tmp ){ default_evaluation = name_tmp; };
       void AllowNaturalAbundanceTarget(){ allow_nat = true; };
       void AllowAnyCandidateTarget(){ allow_any = true; };
 
