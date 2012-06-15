@@ -126,7 +126,12 @@ G4SynchrotronRadiationInMat::G4SynchrotronRadiationInMat(const G4String& process
   TotBin(200),
   theGamma (G4Gamma::Gamma() ),
   theElectron ( G4Electron::Electron() ),
-  thePositron ( G4Positron::Positron() ), fAlpha(0.0), fRootNumber(80),
+  thePositron ( G4Positron::Positron() ), 
+  GammaCutInKineticEnergy(0),
+  ElectronCutInKineticEnergy(0),
+  PositronCutInKineticEnergy(0),
+  ParticleCutInKineticEnergy(0),
+  fAlpha(0.0), fRootNumber(80),
   fVerboseLevel( verboseLevel )
 {
   G4TransportationManager* transportMgr = G4TransportationManager::GetTransportationManager();

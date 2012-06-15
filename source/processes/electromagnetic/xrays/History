@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08 June 12: V.Ivanchenko (xrays-V09-05-04)
+- fixed shadowing
+
+05 June 12: V. Grichine (xrays-V09-05-03)
+- G4VTransitionRadiation, G4SynchrotronRadiationInMat,
+  G4ForwardXrayTR - trying to fix Coverity warnings
+
 17 May 12: P. Gumplinger (xrays-V09-05-02)
 - G4Cerenkov.hh, G4Scintillation.hh trying to fix Coverity warnings
 

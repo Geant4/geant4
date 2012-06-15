@@ -596,12 +596,12 @@ void G4Scintillation::BuildThePhysicsTable()
                          // loop over all (photon energy, intensity)
                          // pairs stored for this material  
 
-                         for (size_t i = 1;
-                              i < theFastLightVector->GetVectorLength();
-                              i++)
+                         for (size_t ii = 1;
+                              ii < theFastLightVector->GetVectorLength();
+                              ++ii)
                          {
-                                currentPM = theFastLightVector->Energy(i);
-                                currentIN = (*theFastLightVector)[i];
+                                currentPM = theFastLightVector->Energy(ii);
+                                currentIN = (*theFastLightVector)[ii];
 
                                 currentCII = 0.5 * (prevIN + currentIN);
 
@@ -650,12 +650,12 @@ void G4Scintillation::BuildThePhysicsTable()
                          // loop over all (photon energy, intensity)
                          // pairs stored for this material
 
-                         for (size_t i = 1;
-                              i < theSlowLightVector->GetVectorLength();
-                              i++)
+                         for (size_t ii = 1;
+                              ii < theSlowLightVector->GetVectorLength();
+                              ++ii)
                          {
-                                currentPM = theSlowLightVector->Energy(i);
-                                currentIN = (*theSlowLightVector)[i];
+                                currentPM = theSlowLightVector->Energy(ii);
+                                currentIN = (*theSlowLightVector)[ii];
 
                                 currentCII = 0.5 * (prevIN + currentIN);
 
@@ -739,8 +739,8 @@ G4double G4Scintillation::sample_time(G4double tau1, G4double tau2)
           // make sure the envelope function is 
           // always larger than the bi-exponential
           G4double t = -1.0*tau2*std::log(1-ran1);
-          G4double g = d*single_exp(t,tau2);
-          if (ran2 <= bi_exp(t,tau1,tau2)/g) return t;
+          G4double gg = d*single_exp(t,tau2);
+          if (ran2 <= bi_exp(t,tau1,tau2)/gg) return t;
         }
         return -1.0;
 }
