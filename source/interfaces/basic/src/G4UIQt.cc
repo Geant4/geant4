@@ -191,6 +191,9 @@ G4UIQt::G4UIQt (
   fToolBox->addItem(fCoutTBWidget,"Cout");
   fToolBox->addItem(fHistoryTBWidget,"History");
 
+  // set default
+  fToolBox->setCurrentWidget(fCoutTBWidget);
+
   fToolBox->resize (300,200);
 
   fToolBox->setSizePolicy (QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));

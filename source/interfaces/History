@@ -17,11 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-3rd April March 2012  Pere Mato (interfaces-V09-05-02)
+1st June 2012  John Allison (interfaces-V09-05-03)
+- Tagged.
+
+6th April 2012 Laurent Garnier
+- G4UIQt : Set Cout as default ToolBox widget at launch
+
+3rd April 2012  Pere Mato (interfaces-V09-05-02)
 - basic/src/G4UIWin32.cc : Attempt to make it work for Win64
   replacing [Get|Set]WindowLong() by [Get|Set]WindowLongPtr() and GWL_USERDATA by GWLP_USERDATA
 
-2nd April March 2012  John Allison (interfaces-V09-05-01)
+2nd April 2012  John Allison (interfaces-V09-05-01)
 - Tagged.
 
 28th March 2012 Laurent Garnier
