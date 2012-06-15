@@ -13,6 +13,14 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+14-Jun-2012 A.Ribon                         (hadr-chips-frag-V09-05-04)
+-----------------------------------------------------------------------
+Re-tagged for testing. No changes w.r.t. previous tag.
+
+13-Jun-2012 A.Ribon                         (hadr-chips-frag-V09-05-03)
+-----------------------------------------------------------------------
+Fixed warnings of shadowed variables.
+
 11-May-2012 M.Kosov                         (hadr-chips-frag-V09-05-02)
 -----------------------------------------------------------------------
 maxBN in G4QFragment is moved under a debug flag as it's used for debug

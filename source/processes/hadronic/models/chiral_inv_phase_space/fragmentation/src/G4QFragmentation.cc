@@ -242,23 +242,23 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
   // Check the reaction threshold 
   G4int theNA=theNucleus.GetA();
   G4LorentzVector pNuc4M=theNucleus.Get4Momentum()/theNA;
-  G4double s = (cmProjMom + pNuc4M).mag2();          // Squared CM Energy of compound
+  G4double s_value = (cmProjMom + pNuc4M).mag2();          // Squared CM Energy of compound
   G4double ThresholdMass = projM + theNucleus.GetGSMass()/theNA;
 #ifdef debug
-  G4cout<<"G4QFrag::Construc: p4M="<<cmProjMom<<", tgN4M="<<pNuc4M<<", s="<<s<<", ThreshM="
+  G4cout<<"G4QFrag::Construc: p4M="<<cmProjMom<<", tgN4M="<<pNuc4M<<", s="<<s_value<<", ThreshM="
         <<ThresholdMass<<G4endl;
 #endif
   ModelMode = SOFT;                                  // NOT-Diffractive hadronization
-  if (s < 0.)                                        // At ThP=0 is impossible(virtNucl)
+  if (s_value < 0.)                                  // At ThP=0 is impossible(virtNucl)
   {
-    G4cerr<<"***G4QFragmentation::Construct: s="<<s<<", pN4M="<<pNuc4M<<G4endl;
+    G4cerr<<"***G4QFragmentation::Construct: s="<<s_value<<", pN4M="<<pNuc4M<<G4endl;
     G4Exception("G4QFragmentation::Construct:","72",FatalException,"LowEnergy(NegativeS)");
   }
-  else if(s < mProt2)
+  else if(s_value < mProt2)
   {
     theNucleus.StartLoop();                          // To get the same nucleon
     G4QHadron* aTarget=0;                            // Prototype of the target
-    G4QHadron* aProjectile=0;                        // Prototype of the projectile
+    G4QHadron* pProjectile=0;                        // Prototype of the projectile
     G4QHadron* bNucleon=0;                           // Prototype of the best nucleon
     G4double   maxS=0.;                              // Maximum s found
     while((bNucleon=theNucleus.GetNextNucleon()))    // Loop over all nuclei to get theBest
@@ -272,14 +272,14 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
       }
     }
     aTarget = new G4QHadron(*pNucleon);              // Copy selected nucleon for String
-    aProjectile =cmProjectile;
+    pProjectile =cmProjectile;
     theNucleus.DoLorentzBoost(theCurrentVelocity);   // Boost theResNucleus toRotatedLS
     theNucleus.SubtractNucleon(pNucleon);            // Pointer to theUsedNucleon to delete
     theNucleus.DoLorentzBoost(-theCurrentVelocity);  // Boost theResNucleus back to CM
-    G4QContent QQC=aTarget->GetQC()+aProjectile->GetQC(); // QContent of the compound
-    G4LorentzVector Q4M=aTarget->Get4Momentum()+aProjectile->Get4Momentum(); // 4-mom of Q
+    G4QContent QQC=aTarget->GetQC()+pProjectile->GetQC(); // QContent of the compound
+    G4LorentzVector Q4M=aTarget->Get4Momentum()+pProjectile->Get4Momentum(); // 4-mom of Q
     delete aTarget;
-    delete aProjectile;
+    delete pProjectile;
     //if(maxNuc>1)                                     // Absorb moreNucleons to theQuasmon
     //{
     //  for(G4int i=1; i<maxNuc; ++i)
@@ -301,11 +301,11 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
     theNucleus.DoLorentzRotation(toLab);// Recove Z-direction in LS ("LS"->LS) for rNucleus
     return;
   }
-  if (s < sqr(ThresholdMass))                        // --> Only diffractive interaction
+  if (s_value < sqr(ThresholdMass))                    // --> Only diffractive interaction
   {
 #ifdef debug
     G4cout<<"G4QFragmentation::Construct:*OnlyDiffraction*ThM="<<ThresholdMass<<">sqrt(s)="
-          <<std::sqrt(s)<<" -> only Diffraction is possible"<<G4endl; // @@ Dif toQuasmon
+          <<std::sqrt(s_value)<<" -> only Diffraction is possible"<<G4endl; // @@ Dif toQuasmon
 #endif
     ModelMode = DIFFRACTIVE;
   }
@@ -375,12 +375,12 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
     {
       ++nucleonCount;
       // Needs to be moved to Probability class @@@
-      G4double s = (cmProjMom + pNucleon->Get4Momentum()).mag2();
+      s_value = (cmProjMom + pNucleon->Get4Momentum()).mag2();
 #ifdef debug
-      G4cout<<"G4QFrag::Constr:N# "<<nucleonCount<<", s="<<s<<", tgN4M="
+      G4cout<<"G4QFrag::Constr:N# "<<nucleonCount<<", s="<<s_value<<", tgN4M="
             <<pNucleon->Get4Momentum()<<G4endl;
 #endif
-      if(s<=10000.)
+      if(s_value<=10000.)
       {
 #ifdef debug
         G4cout<<"G4QFragmentation::Construct: SKIP, s<.01 GeV^2, p4M="<<cmProjMom
@@ -389,15 +389,15 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
         continue;
       }
 #ifdef sdebug
-      G4cout<<"G4QFragmentation::Construct:LOOPovNuc,nC="<<nucleonCount<<", s="<<s<<G4endl;
+      G4cout<<"G4QFragmentation::Construct:LOOPovNuc,nC="<<nucleonCount<<", s="<<s_value<<G4endl;
       G4cout<<"G4QFragmentation::Construct:LOOPovNuc, R="<<pNucleon->GetPosition()<<G4endl;
 #endif
       G4double Distance2 = sqr(impactX - pNucleon->GetPosition().x()) +
                            sqr(impactY - pNucleon->GetPosition().y());
 #ifdef sdebug
-      G4cout<<"G4QFragmentation::Construct: s="<<s<<", D2="<<Distance2<<G4endl;
+      G4cout<<"G4QFragmentation::Construct: s="<<s_value<<", D2="<<Distance2<<G4endl;
 #endif
-      G4double Probability = theProbability.GetPomInelProbability(s, Distance2); // PomINEL
+      G4double Probability = theProbability.GetPomInelProbability(s_value, Distance2); // PomINEL
       // test for inelastic collision
 #ifdef sdebug
       G4cout<<"G4QFragmentation::Construct: Probubility="<<Probability<<G4endl;
@@ -419,7 +419,7 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
         theNucleus.DoLorentzBoost(theCurrentVelocity);// Boost theResNucleus toRotatedLS
         theNucleus.SubtractNucleon(pNucleon);         // Pointer to the used nucleon
         theNucleus.DoLorentzBoost(-theCurrentVelocity);// Boost theResNucleus back to CM
-        if((theProbability.GetPomDiffProbability(s,Distance2)/Probability >
+        if((theProbability.GetPomDiffProbability(s_value,Distance2)/Probability >
             G4UniformRand() && ModelMode==SOFT ) || ModelMode==DIFFRACTIVE)
         { 
           // --------------->> diffractive interaction @@ IsSingleDiffractive called once
@@ -443,7 +443,7 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
           G4double* running = new G4double[nCutMax]; // @@ This limits the max cuts
           for(nCut = 0; nCut < nCutMax; nCut++)      // Calculates multiCut probabilities
           {
-            running[nCut]= theProbability.GetCutPomProbability(s, Distance2, nCut+1);
+            running[nCut]= theProbability.GetCutPomProbability(s_value, Distance2, nCut+1);
             if(nCut) running[nCut] += running[nCut-1];// Sum up with the previous one
           }
           G4double random = running[nCutMax-1]*G4UniformRand();
@@ -482,11 +482,11 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
   if(!nInt || (nInt==1 && theInteractions[0]->GetNumberOfDINRCollisions()==1)) // @@ ?? @@
   {
     G4QHadron* aTarget=0;
-    G4QHadron* aProjectile=0;
+    G4QHadron* pProjectile=0;
     if(nInt)                                         // Take Targ/Proj from the Interaction
     {
 	aTarget=theInteractions[0]->GetTarget();
-	aProjectile=theInteractions[0]->GetProjectile();
+	pProjectile=theInteractions[0]->GetProjectile();
       delete theInteractions[0];
       theInteractions.clear();
     }
@@ -495,15 +495,15 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
       theNucleus.StartLoop();                        // To get the same nucleon
       pNucleon=theNucleus.GetNextNucleon();          // Get the nucleon to create
       aTarget = new G4QHadron(*pNucleon);            // Copy selected nucleon for String
-      aProjectile =cmProjectile;
+      pProjectile =cmProjectile;
       theNucleus.DoLorentzBoost(theCurrentVelocity); // Boost theResNucleus toRotatedLS
       theNucleus.SubtractNucleon(pNucleon);          // Pointer to theUsedNucleon to delete
       theNucleus.DoLorentzBoost(-theCurrentVelocity);// Boost theResNucleus back to CM
     }
-    G4QContent QQC=aTarget->GetQC()+aProjectile->GetQC(); // QContent of the compound
-    G4LorentzVector Q4M=aTarget->Get4Momentum()+aProjectile->Get4Momentum(); // 4-mom of Q
+    G4QContent QQC=aTarget->GetQC()+pProjectile->GetQC(); // QContent of the compound
+    G4LorentzVector Q4M=aTarget->Get4Momentum()+pProjectile->Get4Momentum(); // 4-mom of Q
     delete aTarget;
-    delete aProjectile;
+    delete pProjectile;
     //if(maxNuc>1)                                     // Absorb moreNucleons to theQuasmon
     //{
     //  for(G4int i=1; i<maxNuc; ++i)
@@ -641,11 +641,11 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
     G4cout<<"G4QFragmentation::Construct: CreationOfDiffractivePartonPairs, i="<<i<<G4endl;
 #endif
     // the projectile diffraction parton pair is created first
-    G4QHadron* aProjectile = anIniteraction->GetProjectile();
-    G4QParton* aParton = aProjectile->GetNextParton();
+    G4QHadron* pProjectile = anIniteraction->GetProjectile();
+    G4QParton* aParton = pProjectile->GetNextParton();
     if (aParton)
     {
-      aPartonPair = new G4QPartonPair(aParton, aProjectile->GetNextAntiParton(), 
+      aPartonPair = new G4QPartonPair(aParton, pProjectile->GetNextAntiParton(), 
                                       G4QPartonPair::DIFFRACTIVE,
                                       G4QPartonPair::PROJECTILE);
       thePartonPairs.push_back(aPartonPair);
@@ -1529,8 +1529,8 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
             G4bool sing=true;
             if(cLT==2 && cRT==2)
             {
-              G4int aLPDG=0;
-              G4int aRPDG=0;
+              aLPDG=0;
+              aRPDG=0;
               if(cLPDG>0)
               {
                 aLPDG=nLPDG/100;
@@ -2934,11 +2934,11 @@ void G4QFragmentation::Breeder()
             G4QHadron* selHP=0;                   // Pointer to the used hadron for erasing
             G4QString* cString=strings[astring];  // Must be the last string by definition
             G4LorentzVector cString4M = cString->Get4Momentum();
-            G4QParton* cLeft=cString->GetLeftParton();
-            G4QParton* cRight=cString->GetRightParton();
+            cLeft=cString->GetLeftParton();
+            cRight=cString->GetRightParton();
             G4int sumT=cLeft->GetType()+cRight->GetType();
-            G4int sPDG=cLeft->GetPDGCode();
-            G4int nPDG=cRight->GetPDGCode();
+            sPDG=cLeft->GetPDGCode();
+            nPDG=cRight->GetPDGCode();
             G4int cMax=0;                         // Both or only one cuark can merge
             for (G4int reh=0; reh < nHadr; reh++)
             {
@@ -3965,7 +3965,6 @@ void G4QFragmentation::Breeder()
   {
     std::list<std::pair<G4double, G4QHadron*> > theSorted;         // Output
     std::list<std::pair<G4double, G4QHadron*> >::iterator current; // Input
-    G4int nRes=theResult->size();
     for(G4int secondary = 0; secondary<nRes-1; ++secondary)
     {
       G4QHadron*      ih    =theResult->operator[](secondary);
