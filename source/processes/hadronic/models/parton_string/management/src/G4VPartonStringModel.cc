@@ -104,16 +104,18 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
 //#define debug_PartonStringModel
 #ifdef debug_PartonStringModel
 
-  G4V3DNucleus * fancynucleus=theThis->GetWoundedNucleus();
+     G4V3DNucleus * fancynucleus=theThis->GetWoundedNucleus();
   
        // loop over wounded nucleus
      G4int hits(0), charged_hits(0);
+     G4ThreeVector hitNucleonMomentum(0.,0.,0.);
      G4Nucleon * theCurrentNucleon = fancynucleus->StartLoop() ? fancynucleus->GetNextNucleon() : NULL;
-     while(theCurrentNucleon != NULL)
+     while( theCurrentNucleon )
      {
        if(theCurrentNucleon->AreYouHit()) 
        {
          hits++;
+         hitNucleonMomentum += theCurrentNucleon->Get4Momentum().vect();
          if ( theCurrentNucleon->GetDefinition() == G4Proton::Proton() )  ++charged_hits;
        }
        theCurrentNucleon = fancynucleus->GetNextNucleon();
@@ -126,6 +128,7 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
      G4cout << "G4VPSM: strE, hit nucleons, Primary, SumStringE, nucleus intial, nucleus final, excitation estimate "
             << stringEnergy << " "    << hits << ", " << Ptmp.e() << ", "<< SumStringMom.e() << ", "
 	        << initial_mass<< ", " << final_mass<< ", "  << Ptmp.e() + initial_mass - final_mass - stringEnergy  << G4endl;
+     G4cout << "momentum balance " <<  thePrimary.GetMomentum() + hitNucleonMomentum - SumStringMom.vect()<< G4endl;
 #endif
 
 //  Fragment strings
