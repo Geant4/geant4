@@ -33,14 +33,14 @@
 #include <tools/hbook/h1>
 #include <tools/hbook/h2>
 #include <tools/hbook/wntuple>
-#include "G4HbookAnalysisManager.hh"
+#include "ExG4HbookAnalysisManager.hh"
 
 namespace G4Hbook {
 
   typedef tools::hbook::h1  G4AnaH1;
   typedef tools::hbook::h2  G4AnaH2;    
   typedef tools::hbook::wntuple  G4Ntuple; 
-  typedef G4HbookAnalysisManager G4AnalysisManager; 
+  typedef ExG4HbookAnalysisManager G4AnalysisManager; 
 } 
 
 #endif
