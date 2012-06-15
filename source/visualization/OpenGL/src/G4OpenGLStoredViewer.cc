@@ -150,24 +150,25 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
   G4int iPassForTransparency = 1;
   G4bool secondPassForTransparencyRequested = false;
   do {
-    for (size_t i = 0; i < nPassesForCutaways; ++i) {
+    for (size_t iPass = 0; iPass < nPassesForCutaways; ++iPass) {
 
       if (cutawayUnion) {
 	double a[4];
-	a[0] = cutaways[i].a();
-	a[1] = cutaways[i].b();
-	a[2] = cutaways[i].c();
-	a[3] = cutaways[i].d();
+	a[0] = cutaways[iPass].a();
+	a[1] = cutaways[iPass].b();
+	a[2] = cutaways[iPass].c();
+	a[3] = cutaways[iPass].d();
 	glClipPlane (GL_CLIP_PLANE2, a);
 	glEnable (GL_CLIP_PLANE2);
       }
 
       G4bool isPicking = fVP.IsPicking();
 
-      for (size_t i = 0; i < fG4OpenGLStoredSceneHandler.fPOList.size(); ++i) {
-	if (POSelected(i)) {
+      for (size_t iPO = 0;
+	   iPO < fG4OpenGLStoredSceneHandler.fPOList.size(); ++iPO) {
+	if (POSelected(iPO)) {
 	  G4OpenGLStoredSceneHandler::PO& po =
-	    fG4OpenGLStoredSceneHandler.fPOList[i];
+	    fG4OpenGLStoredSceneHandler.fPOList[iPO];
 	  if (iPassForTransparency == 1) {  // First pass for transparency.
 	    if (po.fDisplayOnSecondPassForTransparency) {
 	      secondPassForTransparencyRequested = true;
@@ -199,10 +200,11 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
       G4Transform3D lastMatrixTransform;
       G4bool first = true;
 
-      for (size_t i = 0; i < fG4OpenGLStoredSceneHandler.fTOList.size(); ++i) {
-	if (TOSelected(i)) {
+      for (size_t iTO = 0;
+	   iTO < fG4OpenGLStoredSceneHandler.fTOList.size(); ++iTO) {
+	if (TOSelected(iTO)) {
 	  G4OpenGLStoredSceneHandler::TO& to =
-	    fG4OpenGLStoredSceneHandler.fTOList[i];
+	    fG4OpenGLStoredSceneHandler.fTOList[iTO];
 	  if (iPassForTransparency == 1) {  // First pass for transparency.
 	    if (to.fDisplayOnSecondPassForTransparency) {
 	      secondPassForTransparencyRequested = true;

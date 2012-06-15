@@ -181,7 +181,7 @@ G4bool G4RTXScanner::GetXWindow(const G4String& name, G4ViewParameters& vp)
      &scmap, &nMaps, XA_RGB_BEST_MAP);
   if (!status) {
     system("xstdcmap -best");  // ...and try again...
-    Status status = XGetRGBColormaps
+    status = XGetRGBColormaps
       (display, RootWindow(display, screen_num),
        &scmap, &nMaps, XA_RGB_BEST_MAP);
     if (!status) {

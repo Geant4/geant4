@@ -240,8 +240,6 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Cons& cons) {
 		haveVisible = false;
 		AddHepRepInstance("Cylinder", NULL);
 		
-		G4HepRepMessenger* messenger = G4HepRepMessenger::GetInstance();
-		
 		if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && messenger->getCullInvisibles())
 			return;
 		
@@ -709,7 +707,6 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 				
 				// Write out point attribute values.
 				if (pointAttValues) {
-					std::vector<G4AttValue>::iterator iAttVal;
 					for (iAttVal = pointAttValues->begin();
 						 iAttVal != pointAttValues->end(); ++iAttVal)
 						// Do not write out the Aux or Pos attribute.  Aux does not conform to the HepRep rule
@@ -809,7 +806,6 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 				
 				// Write out point attribute values.
 				if (pointAttValues) {
-					std::vector<G4AttValue>::iterator iAttVal;
 					for (iAttVal = pointAttValues->begin();
 						 iAttVal != pointAttValues->end(); ++iAttVal)
 						// Do not write out the Aux or Pos attribute.  Aux does not conform to the HepRep rule

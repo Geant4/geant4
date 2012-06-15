@@ -61,22 +61,22 @@ G4bool G4VModel::Validate (G4bool) {
   return true;
 }
 
-std::ostream& operator << (std::ostream& os, const G4VModel& m) {
-  os << m.fGlobalDescription;
+std::ostream& operator << (std::ostream& os, const G4VModel& model) {
+  os << model.fGlobalDescription;
   os << "\n  Modeling parameters:";
-  const G4ModelingParameters* mp = m.fpMP;
+  const G4ModelingParameters* mp = model.fpMP;
   if (mp) os << "\n  " << *mp;
   else os << " none.";
-  os << "\n  Extent: " << m.fExtent;
+  os << "\n  Extent: " << model.fExtent;
   os << "\n  Transformation: ";
   os << "\n    Rotation: ";
-  G4RotationMatrix rotation = m.fTransform.getRotation ();
+  G4RotationMatrix rotation = model.fTransform.getRotation ();
   os << rotation.thetaX() << ", "
      << rotation.phiX() << ", "
      << rotation.thetaY() << ", "
      << rotation.phiY() << ", "
      << rotation.thetaZ() << ", "
      << rotation.phiZ();
-  os << "\n    Translation: " << m.fTransform.getTranslation ();
+  os << "\n    Translation: " << model.fTransform.getTranslation ();
   return os;
 }

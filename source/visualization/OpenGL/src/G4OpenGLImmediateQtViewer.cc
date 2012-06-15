@@ -101,9 +101,9 @@ void G4OpenGLImmediateQtViewer::ComputeView () {
   // back buffer for this OpenGLImmediate view.
   //  glDrawBuffer (GL_FRONT);
 
-  G4ViewParameters::DrawingStyle style = GetViewParameters().GetDrawingStyle();
+  G4ViewParameters::DrawingStyle dstyle = GetViewParameters().GetDrawingStyle();
 
-  if(style!=G4ViewParameters::hlr &&
+  if(dstyle!=G4ViewParameters::hlr &&
      haloing_enabled) {
 
     HaloingFirstPass ();

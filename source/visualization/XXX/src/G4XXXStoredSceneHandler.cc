@@ -384,8 +384,6 @@ void G4XXXStoredSceneHandler::ClearStore ()
 
 void G4XXXStoredSceneHandler::ClearTransientStore ()
 {
-  typedef std::list<G4String> Store;
-  typedef std::list<G4String>::iterator StoreIterator;
   typedef std::vector<StoreIterator>::iterator StoreIteratorIterator;
   for (StoreIteratorIterator i = fTransients.begin();
        i != fTransients.end(); ++i) {

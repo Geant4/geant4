@@ -105,7 +105,7 @@ void G4XXXSGViewer::KernelVisitDecision () {
 
   SceneGraph& sceneGraph =
     static_cast<G4XXXSGSceneHandler&>(fSceneHandler).fSceneGraph;
-  if (sceneGraph.daughters.size() == 3  // I.e., only the root nodes.
+  if (sceneGraph.fDaughters.size() == 3  // I.e., only the root nodes.
       // (The above needs re-thinking.)
       || CompareForKernelVisit(fLastVP)) {
     NeedKernelVisit ();  // Sets fNeedKernelVisit.

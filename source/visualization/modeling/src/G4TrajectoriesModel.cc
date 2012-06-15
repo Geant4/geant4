@@ -133,20 +133,24 @@ void G4TrajectoriesModel::SetDrawingMode(G4int drawingMode)
 
 void G4TrajectoriesModelDebugG4AttValues(const G4VTrajectory* pTraj)
 {
-  std::vector<G4AttValue>* attValues = pTraj->CreateAttValues();
-  if (attValues) {
-    G4AttCheck attCheck(attValues, pTraj->GetAttDefs());
-    G4cout << "\nProvided G4Atts:\n" << attCheck;
-    if (attCheck.Check()) G4cout << "Error" << G4endl;
-    else {
-      std::vector<G4AttValue> standardValues;
-      std::map<G4String,G4AttDef> standardDefinitions;
-      attCheck.Standard(&standardValues, &standardDefinitions);
-      G4cout << "\nStandard G4Atts:\n"
-	     << G4AttCheck(&standardValues, &standardDefinitions);
+  // Trajectory attributes
+  {  // Scope bracket - allows re-use of names without compiler warnings.
+    std::vector<G4AttValue>* attValues = pTraj->CreateAttValues();
+    if (attValues) {
+      G4AttCheck attCheck(attValues, pTraj->GetAttDefs());
+      G4cout << "\nProvided G4Atts:\n" << attCheck;
+      if (attCheck.Check()) G4cout << "Error" << G4endl;
+      else {
+	std::vector<G4AttValue> standardValues;
+	std::map<G4String,G4AttDef> standardDefinitions;
+	attCheck.Standard(&standardValues, &standardDefinitions);
+	G4cout << "\nStandard G4Atts:\n"
+	       << G4AttCheck(&standardValues, &standardDefinitions);
+      }
+      delete attValues;
     }
-    delete attValues;
   }
+  // Trajectory point attributes
   for (G4int i = 0; i < pTraj->GetPointEntries(); i++) {
     G4VTrajectoryPoint* aPoint = pTraj->GetPoint(i);
     std::vector<G4AttValue>* attValues = aPoint->CreateAttValues();
@@ -163,5 +167,5 @@ void G4TrajectoriesModelDebugG4AttValues(const G4VTrajectory* pTraj)
       }
       delete attValues;
     }
-  }	  
+  }
 }

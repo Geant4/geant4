@@ -60,17 +60,17 @@ public:
   void PreAddSolid (const G4Transform3D& objectTransformation,
 		    const G4VisAttributes&);
   void PostAddSolid ();
-  void AddSolid (const G4Box& s) {FindVolume (s);}
-  void AddSolid (const G4Cons & s) {FindVolume (s);}
-  void AddSolid (const G4Tubs& s) {FindVolume (s);}
-  void AddSolid (const G4Trd& s) {FindVolume (s);}
-  void AddSolid (const G4Trap& s) {FindVolume (s);}
-  void AddSolid (const G4Sphere& s) {FindVolume (s);}
-  void AddSolid (const G4Para& s) {FindVolume (s);}
-  void AddSolid (const G4Torus& s) {FindVolume (s);}
-  void AddSolid (const G4Polycone& s) {FindVolume (s);}
-  void AddSolid (const G4Polyhedra& s) {FindVolume (s);}
-  void AddSolid (const G4VSolid& s) {FindVolume (s);}
+  void AddSolid (const G4Box& solid) {FindVolume (solid);}
+  void AddSolid (const G4Cons & solid) {FindVolume (solid);}
+  void AddSolid (const G4Tubs& solid) {FindVolume (solid);}
+  void AddSolid (const G4Trd& solid) {FindVolume (solid);}
+  void AddSolid (const G4Trap& solid) {FindVolume (solid);}
+  void AddSolid (const G4Sphere& solid) {FindVolume (solid);}
+  void AddSolid (const G4Para& solid) {FindVolume (solid);}
+  void AddSolid (const G4Torus& solid) {FindVolume (solid);}
+  void AddSolid (const G4Polycone& solid) {FindVolume (solid);}
+  void AddSolid (const G4Polyhedra& solid) {FindVolume (solid);}
+  void AddSolid (const G4VSolid& solid) {FindVolume (solid);}
   void AddCompound (const G4VTrajectory&) {}
   void AddCompound (const G4VHit&) {}
   void AddCompound (const G4VDigi&) {}

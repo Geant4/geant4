@@ -24,38 +24,38 @@ namespace cheprep {
 
 std::string DefaultHepRepAttValue::labelStrings[LABELSTRINGS_LEN];
 
-DefaultHepRepAttValue::DefaultHepRepAttValue(string name, string value, int showLabel)
-    : name(name), type(HepRepConstants::TYPE_STRING), stringValue(value), showLabelValue(showLabel) {
+DefaultHepRepAttValue::DefaultHepRepAttValue(string aName, string aValue, int aShowLabel)
+    : name(aName), type(HepRepConstants::TYPE_STRING), stringValue(aValue), showLabelValue(aShowLabel) {
 
     init();
 }
 
-DefaultHepRepAttValue::DefaultHepRepAttValue(string name, int64 value, int showLabel)
-    : name(name), type(HepRepConstants::TYPE_LONG), longValue(value), showLabelValue(showLabel) {
+DefaultHepRepAttValue::DefaultHepRepAttValue(string aName, int64 aValue, int aShowLabel)
+    : name(aName), type(HepRepConstants::TYPE_LONG), longValue(aValue), showLabelValue(aShowLabel) {
 
     init();
 }
 
-DefaultHepRepAttValue::DefaultHepRepAttValue(string name, int value, int showLabel)
-    : name(name), type(HepRepConstants::TYPE_INT), longValue(value), showLabelValue(showLabel) {
+DefaultHepRepAttValue::DefaultHepRepAttValue(string aName, int aValue, int aShowLabel)
+    : name(aName), type(HepRepConstants::TYPE_INT), longValue(aValue), showLabelValue(aShowLabel) {
 
     init();
 }
 
-DefaultHepRepAttValue::DefaultHepRepAttValue(string name, double value, int showLabel)
-    : name(name), type(HepRepConstants::TYPE_DOUBLE), doubleValue(value), showLabelValue(showLabel) {
+DefaultHepRepAttValue::DefaultHepRepAttValue(string aName, double aValue, int aShowLabel)
+    : name(aName), type(HepRepConstants::TYPE_DOUBLE), doubleValue(aValue), showLabelValue(aShowLabel) {
 
     init();
 }
 
-DefaultHepRepAttValue::DefaultHepRepAttValue(string name, bool value, int showLabel)
-    : name(name), type(HepRepConstants::TYPE_BOOLEAN), booleanValue(value), showLabelValue(showLabel) {
+DefaultHepRepAttValue::DefaultHepRepAttValue(string aName, bool aValue, int aShowLabel)
+    : name(aName), type(HepRepConstants::TYPE_BOOLEAN), booleanValue(aValue), showLabelValue(aShowLabel) {
 
     init();
 }
 
-DefaultHepRepAttValue::DefaultHepRepAttValue(string name, vector<double> value, int showLabel)
-    : name(name), type(HepRepConstants::TYPE_COLOR), colorValue(value), showLabelValue(showLabel) {
+DefaultHepRepAttValue::DefaultHepRepAttValue(string aName, vector<double> aValue, int aShowLabel)
+    : name(aName), type(HepRepConstants::TYPE_COLOR), colorValue(aValue), showLabelValue(aShowLabel) {
 
     init();
 }

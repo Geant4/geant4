@@ -1103,17 +1103,17 @@ void G4OpenGLQtViewer::FinishView()
    Save the current mouse press point
    @param p mouse click point
 */
-void G4OpenGLQtViewer::G4MousePressEvent(QMouseEvent *event)
+void G4OpenGLQtViewer::G4MousePressEvent(QMouseEvent *evnt)
 {
-  if (event->buttons() & Qt::LeftButton) {
+  if (evnt->buttons() & Qt::LeftButton) {
     fWindow->setMouseTracking(true);
     fAutoMove = false; // stop automove
-    fLastPos1 = event->pos();
+    fLastPos1 = evnt->pos();
     fLastPos2 = fLastPos1;
     fLastPos3 = fLastPos2;
     fLastEventTime->start();
     if (fMouseAction == STYLE3){  // pick
-      Pick(event->pos().x(),event->pos().y());
+      Pick(evnt->pos().x(),evnt->pos().y());
     }
   }
 }
@@ -1196,12 +1196,12 @@ void G4OpenGLQtViewer::G4MouseDoubleClickEvent()
    @param mAutoMove true: apply this move till another evnt came, false :one time move
 */
 
-void G4OpenGLQtViewer::G4MouseMoveEvent(QMouseEvent *event)
+void G4OpenGLQtViewer::G4MouseMoveEvent(QMouseEvent *evnt)
 {
 
-  Qt::MouseButtons mButtons = event->buttons();
+  Qt::MouseButtons mButtons = evnt->buttons();
 
-  updateKeyModifierState(event->modifiers());
+  updateKeyModifierState(evnt->modifiers());
 
   if (fAutoMove) {
     return;
@@ -1209,7 +1209,7 @@ void G4OpenGLQtViewer::G4MouseMoveEvent(QMouseEvent *event)
 
   fLastPos3 = fLastPos2;
   fLastPos2 = fLastPos1;
-  fLastPos1 = QPoint(event->x(), event->y());
+  fLastPos1 = QPoint(evnt->x(), evnt->y());
 
   int deltaX = fLastPos2.x()-fLastPos1.x();
   int deltaY = fLastPos2.y()-fLastPos1.y();
@@ -1385,14 +1385,14 @@ bool G4OpenGLQtViewer::printPDF (
 }
 
 
-void G4OpenGLQtViewer::G4wheelEvent (QWheelEvent * event) 
+void G4OpenGLQtViewer::G4wheelEvent (QWheelEvent * evnt) 
 {
-  fVP.SetZoomFactor(fVP.GetZoomFactor()+(fVP.GetZoomFactor()*(event->delta())/1200)); 
+  fVP.SetZoomFactor(fVP.GetZoomFactor()+(fVP.GetZoomFactor()*(evnt->delta())/1200)); 
   updateQWidget();
 }
 
 
- void G4OpenGLQtViewer::G4keyPressEvent (QKeyEvent * event) 
+ void G4OpenGLQtViewer::G4keyPressEvent (QKeyEvent * evnt) 
 {
   if (fHoldKeyEvent)
     return;
@@ -1401,29 +1401,29 @@ void G4OpenGLQtViewer::G4wheelEvent (QWheelEvent * event)
 
   
   // with no modifiers
-  updateKeyModifierState(event->modifiers());
-  if ((fNoKeyPress) || (event->modifiers() == Qt::KeypadModifier )) {
-    if (event->key() == Qt::Key_Down) { // go down
+  updateKeyModifierState(evnt->modifiers());
+  if ((fNoKeyPress) || (evnt->modifiers() == Qt::KeypadModifier )) {
+    if (evnt->key() == Qt::Key_Down) { // go down
       moveScene(0,1,0,false);
     }
-    else if (event->key() == Qt::Key_Up) {  // go up
+    else if (evnt->key() == Qt::Key_Up) {  // go up
       moveScene(0,-1,0,false);
     }
-    if (event->key() == Qt::Key_Left) { // go left
+    if (evnt->key() == Qt::Key_Left) { // go left
       moveScene(-1,0,0,false);
     }
-    else if (event->key() == Qt::Key_Right) { // go right
+    else if (evnt->key() == Qt::Key_Right) { // go right
       moveScene(1,0,0,false);
     }
-    if (event->key() == Qt::Key_Minus) { // go backward
+    if (evnt->key() == Qt::Key_Minus) { // go backward
       moveScene(0,0,1,false);
     }
-    else if (event->key() == Qt::Key_Plus) { // go forward
+    else if (evnt->key() == Qt::Key_Plus) { // go forward
       moveScene(0,0,-1,false);
     }
 
     // escaped from full screen
-    if (event->key() == Qt::Key_Escape) {
+    if (evnt->key() == Qt::Key_Escape) {
       toggleFullScreen(false);
     }
   }    
@@ -1433,15 +1433,15 @@ void G4OpenGLQtViewer::G4wheelEvent (QWheelEvent * event)
   // If all ok-> generate parameter file
   // If ok -> put encoder button enabled
   
-  if ((event->key() == Qt::Key_Return) || (event->key() == Qt::Key_Enter)){ // end of video
+  if ((evnt->key() == Qt::Key_Return) || (evnt->key() == Qt::Key_Enter)){ // end of video
     stopVideo();
   }
-  if (event->key() == Qt::Key_Space){ // start/pause of video
+  if (evnt->key() == Qt::Key_Space){ // start/pause of video
     startPauseVideo();
   }
   
   // H : Return Home view
-  if (event->key() == Qt::Key_H){ // go Home
+  if (evnt->key() == Qt::Key_H){ // go Home
     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/reset");
 
     updateQWidget();
@@ -1449,19 +1449,19 @@ void G4OpenGLQtViewer::G4wheelEvent (QWheelEvent * event)
 
   // Shift Modifier
   if (fShiftKeyPress) {
-    if (event->key() == Qt::Key_Down) { // rotate phi
+    if (evnt->key() == Qt::Key_Down) { // rotate phi
       rotateQtScene(0,-fRot_sens);
     }
-    else if (event->key() == Qt::Key_Up) { // rotate phi
+    else if (evnt->key() == Qt::Key_Up) { // rotate phi
       rotateQtScene(0,fRot_sens);
     }
-    if (event->key() == Qt::Key_Left) { // rotate theta
+    if (evnt->key() == Qt::Key_Left) { // rotate theta
       rotateQtScene(fRot_sens,0);
     }
-    else if (event->key() == Qt::Key_Right) { // rotate theta
+    else if (evnt->key() == Qt::Key_Right) { // rotate theta
       rotateQtScene(-fRot_sens,0);
     }
-    if (event->key() == Qt::Key_Plus) { // go forward  ("Plus" imply 
+    if (evnt->key() == Qt::Key_Plus) { // go forward  ("Plus" imply 
                                         // "Shift" on Mac French keyboard
       moveScene(0,0,-1,false);
     }
@@ -1469,25 +1469,25 @@ void G4OpenGLQtViewer::G4wheelEvent (QWheelEvent * event)
   // Alt Modifier
   }
   if ((fAltKeyPress)) {
-    if (event->key() == Qt::Key_Down) { // rotate phi
+    if (evnt->key() == Qt::Key_Down) { // rotate phi
       rotateQtSceneToggle(0,-fRot_sens);
     }
-    else if (event->key() == Qt::Key_Up) { // rotate phi
+    else if (evnt->key() == Qt::Key_Up) { // rotate phi
       rotateQtSceneToggle(0,fRot_sens);
     }
-    if (event->key() == Qt::Key_Left) { // rotate theta
+    if (evnt->key() == Qt::Key_Left) { // rotate theta
       rotateQtSceneToggle(fRot_sens,0);
     }
-    else if (event->key() == Qt::Key_Right) { // rotate theta
+    else if (evnt->key() == Qt::Key_Right) { // rotate theta
       rotateQtSceneToggle(-fRot_sens,0);
     }
 
     // Rotatio +/-
-    if (event->key() == Qt::Key_Plus) {
+    if (evnt->key() == Qt::Key_Plus) {
       fRot_sens = fRot_sens/0.7;
       G4cout << "Auto-rotation set to : " << fRot_sens << G4endl;
     }
-    else if (event->key() == Qt::Key_Minus) {
+    else if (evnt->key() == Qt::Key_Minus) {
       fRot_sens = fRot_sens*0.7;
       G4cout << "Auto-rotation set to : " << fRot_sens << G4endl;
     }
@@ -1495,11 +1495,11 @@ void G4OpenGLQtViewer::G4wheelEvent (QWheelEvent * event)
   // Control Modifier OR Command on MAC
   }
   if ((fControlKeyPress)) {
-    if (event->key() == Qt::Key_Plus) {
+    if (evnt->key() == Qt::Key_Plus) {
       fVP.SetZoomFactor(fVP.GetZoomFactor()*(1+fDeltaZoom)); 
       updateQWidget();
     }
-    else if (event->key() == Qt::Key_Minus) {
+    else if (evnt->key() == Qt::Key_Minus) {
       fVP.SetZoomFactor(fVP.GetZoomFactor()*(1-fDeltaZoom)); 
       updateQWidget();
     }

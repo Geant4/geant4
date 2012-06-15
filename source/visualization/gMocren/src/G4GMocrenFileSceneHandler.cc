@@ -861,9 +861,9 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
     G4RotationMatrix rot(raxis, pi*rad);
     G4Transform3D trot(rot, dummy);
     if(GFDEBUG_DET) {
-      G4ThreeVector trans = kVolumeTrans3D.getTranslation();
-      G4RotationMatrix rot = kVolumeTrans3D.getRotation().inverse();
-      G4cout << "kVolumeTrans3D: " << trans << G4endl << rot << G4endl;
+      G4ThreeVector trans1 = kVolumeTrans3D.getTranslation();
+      G4RotationMatrix rot1 = kVolumeTrans3D.getRotation().inverse();
+      G4cout << "kVolumeTrans3D: " << trans1 << G4endl << rot1 << G4endl;
     }
     kVolumeTrans3D = kVolumeTrans3D*trot;
     if(GFDEBUG_DET) G4cout << " Parameterised volume : " << box.GetName() << G4endl;
@@ -1078,7 +1078,6 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
 	  G4cout << G4endl;
 
 
-	  EAxis axis; G4int nReplicas; G4double width; G4double offset; G4bool consuming;  
 	  pPVModel->GetCurrentPV()->GetReplicationData(axis, nReplicas, width, offset, consuming);
 	  G4cout << "     # replicas : " << nReplicas << G4endl;
 	  G4double pareDims[3] = {0.,0.,0.};
@@ -1660,7 +1659,7 @@ void G4GMocrenFileSceneHandler::AddCompound(const G4THitsMap<G4double> & hits) {
   }
   */
   
-
+  {  // Scope bracket to avoid compiler messages about shadowing (JA).
   //for(G4int i = 0; i < nhitname; i++) {       // this selection trusts
     //if(scorername == hitScorerNames[i]) {   // thea command /vis/scene/add/psHits hit_name.
 
@@ -1685,6 +1684,7 @@ void G4GMocrenFileSceneHandler::AddCompound(const G4THitsMap<G4double> & hits) {
       //break;
     //}
   //}
+  }
 
   if(GFDEBUG_HIT) {
     G4String meshname = static_cast<G4VHitsCollection>(hits).GetSDname();

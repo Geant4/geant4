@@ -56,12 +56,12 @@ class G4OpenGLQtExportDialog : public QDialog
 
  public:
   /** Construct a G4OpenGLQtExportDialog
-      @param parent : parent widget
-      @param format : format of save file in lower case
-      @param height : height of the original file
-      @param width : width of the original file
+      @param parentw : parent widget
+      @param format  : format of save file in lower case
+      @param height  : height of the original file
+      @param width   : width of the original file
   */
-  G4OpenGLQtExportDialog(QWidget* parent, QString format, int height =0, int width=0);
+  G4OpenGLQtExportDialog(QWidget* parentw, QString format, int height =0, int width=0);
 
   /** Destroys G4OpenGLQtExportDialog */
   ~G4OpenGLQtExportDialog();

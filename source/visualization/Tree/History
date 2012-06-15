@@ -24,6 +24,9 @@ committal in the CVS repository !
 History file for visualization/Tree sub-category
 ------------------------------------------------
 
+8th June 2012  John Allison (vistree-V09-05-02)
+- Shadow clean.
+
 10th April 2012  John Allison (vistree-V09-05-01)
 - Migrated to G4Scene::Model.
 

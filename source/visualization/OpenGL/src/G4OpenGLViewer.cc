@@ -305,18 +305,18 @@ void G4OpenGLViewer::SetView () {
   // G4OpenGLStoredViewer::CompareForKernelVisit.
   //if (fVP.IsSection () ) {  // pair of back to back clip planes.
   if (false) {  // pair of back to back clip planes.
-    const G4Plane3D& s = fVP.GetSectionPlane ();
+    const G4Plane3D& sp = fVP.GetSectionPlane ();
     double sArray[4];
-    sArray[0] = s.a();
-    sArray[1] = s.b();
-    sArray[2] = s.c();
-    sArray[3] = s.d() + radius * 1.e-05;
+    sArray[0] = sp.a();
+    sArray[1] = sp.b();
+    sArray[2] = sp.c();
+    sArray[3] = sp.d() + radius * 1.e-05;
     glClipPlane (GL_CLIP_PLANE0, sArray);
     glEnable (GL_CLIP_PLANE0);
-    sArray[0] = -s.a();
-    sArray[1] = -s.b();
-    sArray[2] = -s.c();
-    sArray[3] = -s.d() + radius * 1.e-05;
+    sArray[0] = -sp.a();
+    sArray[1] = -sp.b();
+    sArray[2] = -sp.c();
+    sArray[3] = -sp.d() + radius * 1.e-05;
     glClipPlane (GL_CLIP_PLANE1, sArray);
     glEnable (GL_CLIP_PLANE1);
   } else {
@@ -454,9 +454,10 @@ void G4OpenGLViewer::Pick(GLdouble x, GLdouble y)
 	if (iter != fOpenGLSceneHandler.fPickMap.end()) {
 	  G4AttHolder* attHolder = iter->second;
 	  if(attHolder && attHolder->GetAttDefs().size()) {
-	    for (size_t i = 0; i < attHolder->GetAttDefs().size(); ++i) {
-	      G4cout << G4AttCheck(attHolder->GetAttValues()[i],
-				   attHolder->GetAttDefs()[i]);
+	    for (size_t iAtt = 0;
+		 iAtt < attHolder->GetAttDefs().size(); ++iAtt) {
+	      G4cout << G4AttCheck(attHolder->GetAttValues()[iAtt],
+				   attHolder->GetAttDefs()[iAtt]);
 	    }
 	  }
 	}

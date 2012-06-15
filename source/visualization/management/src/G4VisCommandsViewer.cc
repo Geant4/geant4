@@ -714,9 +714,9 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
   if (newName == nextName) fId++;
   G4String newShortName = fpVisManager -> ViewerShortName (newName);
 
-  for (iHandler = 0; iHandler < nHandlers; iHandler++) {
-    G4VSceneHandler* sceneHandler = sceneHandlerList [iHandler];
-    const G4ViewerList& viewerList = sceneHandler -> GetViewerList ();
+  for (G4int ih = 0; ih < nHandlers; ih++) {
+    G4VSceneHandler* sh = sceneHandlerList [ih];
+    const G4ViewerList& viewerList = sh -> GetViewerList ();
     for (size_t iViewer = 0; iViewer < viewerList.size (); iViewer++) {
       if (viewerList [iViewer] -> GetShortName () == newShortName ) {
 	if (verbosity >= G4VisManager::errors) {

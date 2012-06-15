@@ -20,6 +20,9 @@ committal in the CVS repository !
 History file for visualization/XXX sub-category (a template graphics system)
 ---------------------------------------------------------------------------
 
+8th June 2012  John Allison  (visXXX-V09-05-02)
+- Shadow clean.
+
 23rd May 2012  John Allison  (visXXX-V09-05-01)
 - Health Check 2012: Migrated (see management/History):
   o G4XXXStoredSceneHandler.cc, G4XXXSGSceneHandler.cc

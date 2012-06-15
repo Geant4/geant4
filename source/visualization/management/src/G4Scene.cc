@@ -228,67 +228,67 @@ G4bool G4Scene::AddEndOfRunModel (G4VModel* pModel, G4bool warn) {
   return true;
 }
 
-std::ostream& operator << (std::ostream& os, const G4Scene& s) {
+std::ostream& operator << (std::ostream& os, const G4Scene& scene) {
 
   size_t i;
 
   os << "Scene data:";
 
   os << "\n  Run-duration model list:";
-  for (i = 0; i < s.fRunDurationModelList.size (); i++) {
-    if (s.fRunDurationModelList[i].fActive) os << "\n  Active:   ";
+  for (i = 0; i < scene.fRunDurationModelList.size (); i++) {
+    if (scene.fRunDurationModelList[i].fActive) os << "\n  Active:   ";
     else os << "\n  Inactive: ";
-    os << *(s.fRunDurationModelList[i].fpModel);
+    os << *(scene.fRunDurationModelList[i].fpModel);
   }
 
   os << "\n  End-of-event model list:";
-  for (i = 0; i < s.fEndOfEventModelList.size (); i++) {
-    if (s.fEndOfEventModelList[i].fActive) os << "\n  Active:   ";
+  for (i = 0; i < scene.fEndOfEventModelList.size (); i++) {
+    if (scene.fEndOfEventModelList[i].fActive) os << "\n  Active:   ";
     else os << "\n  Inactive: ";
-    os << *(s.fEndOfEventModelList[i].fpModel);
+    os << *(scene.fEndOfEventModelList[i].fpModel);
   }
 
   os << "\n  End-of-run model list:";
-  for (i = 0; i < s.fEndOfRunModelList.size (); i++) {
-    if (s.fEndOfRunModelList[i].fActive) os << "\n  Active:   ";
+  for (i = 0; i < scene.fEndOfRunModelList.size (); i++) {
+    if (scene.fEndOfRunModelList[i].fActive) os << "\n  Active:   ";
     else os << "\n  Inactive: ";
-    os << *(s.fEndOfRunModelList[i].fpModel);
+    os << *(scene.fEndOfRunModelList[i].fpModel);
   }
 
-  os << "\n  Extent or bounding box: " << s.fExtent;
+  os << "\n  Extent or bounding box: " << scene.fExtent;
 
-  os << "\n  Standard target point:  " << s.fStandardTargetPoint;
+  os << "\n  Standard target point:  " << scene.fStandardTargetPoint;
 
   os << "\n  End of event action set to \"";
-  if (s.fRefreshAtEndOfEvent) os << "refresh\"";
+  if (scene.fRefreshAtEndOfEvent) os << "refresh\"";
   else {
     os << "accumulate (maximum number of kept events: ";
-    if (s.fMaxNumberOfKeptEvents >= 0) os << s.fMaxNumberOfKeptEvents;
+    if (scene.fMaxNumberOfKeptEvents >= 0) os << scene.fMaxNumberOfKeptEvents;
     else os << "unlimited";
     os << ")";
   }
 
   os << "\n  End of run action set to \"";
-  if (s.fRefreshAtEndOfRun) os << "refresh";
+  if (scene.fRefreshAtEndOfRun) os << "refresh";
   else os << "accumulate";
   os << "\"";
 
   return os;
 }
 
-G4bool G4Scene::operator != (const G4Scene& s) const {
+G4bool G4Scene::operator != (const G4Scene& scene) const {
   if (
       (fRunDurationModelList.size () !=
-       s.fRunDurationModelList.size ())                 ||
+       scene.fRunDurationModelList.size ())                 ||
       (fEndOfEventModelList.size () !=
-       s.fEndOfEventModelList.size ())                  ||
+       scene.fEndOfEventModelList.size ())                  ||
       (fEndOfRunModelList.size () !=
-       s.fEndOfRunModelList.size ())                    ||
-      (fExtent               != s.fExtent)              ||
-      !(fStandardTargetPoint == s.fStandardTargetPoint) ||
-      fRefreshAtEndOfEvent   != s.fRefreshAtEndOfEvent  ||
-      fRefreshAtEndOfRun     != s.fRefreshAtEndOfRun    ||
-      fMaxNumberOfKeptEvents != s.fMaxNumberOfKeptEvents
+       scene.fEndOfRunModelList.size ())                    ||
+      (fExtent               != scene.fExtent)              ||
+      !(fStandardTargetPoint == scene.fStandardTargetPoint) ||
+      fRefreshAtEndOfEvent   != scene.fRefreshAtEndOfEvent  ||
+      fRefreshAtEndOfRun     != scene.fRefreshAtEndOfRun    ||
+      fMaxNumberOfKeptEvents != scene.fMaxNumberOfKeptEvents
       ) return true;
 
   /* A complete comparison should, perhaps, include a comparison of
@@ -301,17 +301,17 @@ G4bool G4Scene::operator != (const G4Scene& s) const {
      on size (above) is enough.
 
   for (size_t i = 0; i < fRunDurationModelList.size (); i++) {
-    if (fRunDurationModelList[i] != s.fRunDurationModelList[i])
+    if (fRunDurationModelList[i] != scene.fRunDurationModelList[i])
       return true;
   }
 
   for (size_t i = 0; i < fEndOfEventModelList.size (); i++) {
-    if (fEndOfEventModelList[i] != s.fEndOfEventModelList[i])
+    if (fEndOfEventModelList[i] != scene.fEndOfEventModelList[i])
       return true;
   }
 
   for (size_t i = 0; i < fEndOfRunModelList.size (); i++) {
-    if (fEndOfRunModelList[i] != s.fEndOfRunModelList[i])
+    if (fEndOfRunModelList[i] != scene.fEndOfRunModelList[i])
       return true;
   }
   */

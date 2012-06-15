@@ -20,6 +20,26 @@ committal in the CVS repository !
 History file for visualization/HepRep sub-category
 --------------------------------------------------
 
+10th June 2012  John Allison  (vis-HepRep-V09-05-03)
+- Fixed shadowing in the following files:
+  o include/cheprep/AbstractXMLWriter.h
+  o src/IndentPrintWriter.cc
+  o src/XMLWriter.cc
+  o src/DefaultHepRepAttDef.cc
+  o src/DefaultHepRepTreeID.cc
+  o src/ZipOutputStreamBuffer.cc
+  o src/DeflateOutputStreamBuffer.cc
+  o src/DefaultHepRepInstanceTree.cc
+  o src/DefaultHepRepAttValue.cc
+  o src/GZIPOutputStreamBuffer.cc
+  o src/DefaultHepRepPoint.cc
+  o src/BHepRepWriter.cc
+  o src/DefaultHepRepAction.cc
+  o src/G4HepRepSceneHandler.cc
+
+8th June 2012  John Allison  (vis-HepRep-V09-05-02)
+- G4HepRepFileSceneHandler.cc: Shadow clean.
+
 23rd May 2012  John Allison  (vis-HepRep-V09-05-01)
 - Health Check 2012: Migrated (see management/History):
   o G4HepRepFileSceneHandler::ClearTransientStore:

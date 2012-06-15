@@ -17,9 +17,27 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12th June 2012  Laurent Garnier  (opengl-V09-05-18)
+- G4OpenGLQtMovieDialog.cc
+  o Shadow clean.
+
+8th June 2012  John Allison  (opengl-V09-05-17)
+- G4OpenGLSceneHandler.cc, G4OpenGLXmSliderBar.cc,
+  G4OpenGLStoredViewer.cc, G4OpenGLViewer.cc::
+  o Shadow clean.
+- G4OpenGLQtExportDialog.hh/cc, G4OpenGLStoredQtViewer.cc,
+  G4OpenGLQtMovieDialog.cc, G4OpenGLQtViewer.cc,
+  G4OpenGLImmediateQtViewer.cc:
+  o Clean all possible shadows, but many remain because Q_OBJECT,
+    qobject.h, qdialog.h, qgl.h and others use "s" and/or "sr".
+
 29th May 2012  John Allison  (opengl-V09-05-16)
 - G4OpenGLStoredQtSceneHandler.cc:
   o Reverted to opengl-V09-05-14 (r58177).
+- Implemented proper treatment of transparency in OpenGL stored mode
+  in the case that trajectories passed through or behind transparent
+  persistent objects (detector components).  Required proper ordering
+  of display list execution. 
 - G4OpenGLStoredViewer::DrawDisplayLists:
   o Now does two passes for a proper treatment of transparency.
 - G4OpenGLStoredSceneHandler:

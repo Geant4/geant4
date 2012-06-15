@@ -20,6 +20,9 @@ committal in the CVS repository !
 History file for visualization/OpenInventor
 -------------------------------------------
 
+8th June 2012  John Allison  (openinventor-V09-05-04)
+- Shadow clean.
+
 23rd May 2012  John Allison  (openinventor-V09-05-03)
 - Health Check 2012: Migrated (see management/History):
   o G4OpenInventorSceneHandler::ClearStore/ClearTransientStore:

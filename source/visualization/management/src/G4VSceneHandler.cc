@@ -284,8 +284,8 @@ void G4VSceneHandler::AddCompound (const G4THitsMap<G4double>& hits) {
   G4ScoringManager* scoringManager = G4ScoringManager::GetScoringManagerIfExist();
   if (scoringManager) {
     size_t nMeshes = scoringManager->GetNumberOfMesh();
-    for (size_t i = 0; i < nMeshes; ++i) {
-      G4VScoringMesh* mesh = scoringManager->GetMesh(i);
+    for (size_t iMesh = 0; iMesh < nMeshes; ++iMesh) {
+      G4VScoringMesh* mesh = scoringManager->GetMesh(iMesh);
       if (mesh && mesh->IsActive()) {
 	MeshScoreMap scoreMap = mesh->GetScoreMap();
 	for(MeshScoreMap::const_iterator i = scoreMap.begin();
@@ -751,11 +751,11 @@ G4VSolid* G4VSceneHandler::CreateSectionSolid()
     G4double safe = radius + fpScene->GetExtent().GetExtentCentre().mag();
     G4VSolid* sectionBox =
       new G4Box("_sectioner", safe, safe, 1.e-5 * radius);  // Thin in z-plane.
-    const G4Plane3D& s = vp.GetSectionPlane ();
-    G4double a = s.a();
-    G4double b = s.b();
-    G4double c = s.c();
-    G4double d = s.d();
+    const G4Plane3D& sp = vp.GetSectionPlane ();
+    G4double a = sp.a();
+    G4double b = sp.b();
+    G4double c = sp.c();
+    G4double d = sp.d();
     G4Transform3D transform = G4TranslateZ3D(-d);
     const G4Normal3D normal(a,b,c);
     if (normal != G4Normal3D(0,0,1)) {
@@ -790,9 +790,9 @@ void G4VSceneHandler::LoadAtts(const G4Visible& visible, G4AttHolder* holder)
     dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
   if (pPVModel) {
     // Load G4Atts from G4PhysicalVolumeModel...
-    const std::map<G4String,G4AttDef>* defs = pPVModel->GetAttDefs();
-    if (defs) {
-      holder->AddAtts(pPVModel->CreateCurrentAttValues(), defs);
+    const std::map<G4String,G4AttDef>* pvDefs = pPVModel->GetAttDefs();
+    if (pvDefs) {
+      holder->AddAtts(pPVModel->CreateCurrentAttValues(), pvDefs);
     }
   }
 
@@ -800,16 +800,16 @@ void G4VSceneHandler::LoadAtts(const G4Visible& visible, G4AttHolder* holder)
   if (trajModel) {
     // Load G4Atts from trajectory...
     const G4VTrajectory* traj = trajModel->GetCurrentTrajectory();
-    const std::map<G4String,G4AttDef>* defs = traj->GetAttDefs();
-    if (defs) {
-      holder->AddAtts(traj->CreateAttValues(), defs);
+    const std::map<G4String,G4AttDef>* trajDefs = traj->GetAttDefs();
+    if (trajDefs) {
+      holder->AddAtts(traj->CreateAttValues(), trajDefs);
     }
     G4int nPoints = traj->GetPointEntries();
     for (G4int i = 0; i < nPoints; ++i) {
       G4VTrajectoryPoint* trajPoint = traj->GetPoint(i);
-      const std::map<G4String,G4AttDef>* defs = trajPoint->GetAttDefs();
-      if (defs) {
-	holder->AddAtts(trajPoint->CreateAttValues(), defs);
+      const std::map<G4String,G4AttDef>* pointDefs = trajPoint->GetAttDefs();
+      if (pointDefs) {
+	holder->AddAtts(trajPoint->CreateAttValues(), pointDefs);
       }
     }
   }
@@ -818,9 +818,9 @@ void G4VSceneHandler::LoadAtts(const G4Visible& visible, G4AttHolder* holder)
   if (hitsModel) {
     // Load G4Atts from hit...
     const G4VHit* hit = hitsModel->GetCurrentHit();
-    const std::map<G4String,G4AttDef>* defs = hit->GetAttDefs();
-    if (defs) {
-      holder->AddAtts(hit->CreateAttValues(), defs);
+    const std::map<G4String,G4AttDef>* hitsDefs = hit->GetAttDefs();
+    if (hitsDefs) {
+      holder->AddAtts(hit->CreateAttValues(), hitsDefs);
     }
   }
 }
@@ -941,16 +941,16 @@ G4int G4VSceneHandler::GetNoOfSides(const G4VisAttributes* pVisAttribs)
   return lineSegmentsPerCircle;
 }
 
-std::ostream& operator << (std::ostream& os, const G4VSceneHandler& s) {
+std::ostream& operator << (std::ostream& os, const G4VSceneHandler& sh) {
 
-  os << "Scene handler " << s.fName << " has "
-     << s.fViewerList.size () << " viewer(s):";
-  for (size_t i = 0; i < s.fViewerList.size (); i++) {
-    os << "\n  " << *(s.fViewerList [i]);
+  os << "Scene handler " << sh.fName << " has "
+     << sh.fViewerList.size () << " viewer(s):";
+  for (size_t i = 0; i < sh.fViewerList.size (); i++) {
+    os << "\n  " << *(sh.fViewerList [i]);
   }
 
-  if (s.fpScene) {
-    os << "\n  " << *s.fpScene;
+  if (sh.fpScene) {
+    os << "\n  " << *sh.fpScene;
   }
   else {
     os << "\n  This scene handler currently has no scene.";

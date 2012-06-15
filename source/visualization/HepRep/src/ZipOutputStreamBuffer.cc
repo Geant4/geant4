@@ -14,8 +14,8 @@
  */
 namespace cheprep {
 
-    ZipOutputStreamBuffer::ZipOutputStreamBuffer(std::streambuf* buffer)
-        : DeflateOutputStreamBuffer(buffer), 
+    ZipOutputStreamBuffer::ZipOutputStreamBuffer(std::streambuf* aBuffer)
+        : DeflateOutputStreamBuffer(aBuffer), 
           comment("") {
         
         closed = false;

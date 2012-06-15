@@ -20,6 +20,9 @@ committal in the CVS repository !
 History file for visualization/FukuiRenderer sub-category
 ---------------------------------------------------------
 
+8th June 2012  John Allison  (DAWN-V09-05-03)
+- Shadow clean.
+
 23rd May 2012  John Allison  (DAWN-V09-05-02)
 - Health Check 2012: Migrated (see management/History):
   o G4FukuiRendererSceneHandler.cc, G4DAWNFILESceneHandler.cc:

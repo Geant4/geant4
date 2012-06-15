@@ -10,8 +10,8 @@ namespace cheprep {
 
     using namespace std;
 
-    GZIPOutputStreamBuffer::GZIPOutputStreamBuffer( streambuf *buffer)
-        : DeflateOutputStreamBuffer(buffer),
+    GZIPOutputStreamBuffer::GZIPOutputStreamBuffer( streambuf *aBuffer)
+        : DeflateOutputStreamBuffer(aBuffer),
           open(false) {
             
         init(true);

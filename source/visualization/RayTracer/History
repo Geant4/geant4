@@ -24,6 +24,9 @@ committal in the CVS repository !
 History file for Ray Tracer category
 ---------------------------------------
 
+8th June 2012  John Allison  (raytracer-V09-05-02)
+- Shadow clean.
+
 8th February 2012  John Allison  (raytracer-V09-05-01)
 - G4RayTracerViewer.cc, G4TheRayTracer.hh/cc:
   Adopt fix proposed by jasondet@gmail.com to fix Bug #1274.

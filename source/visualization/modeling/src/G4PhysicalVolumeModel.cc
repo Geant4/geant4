@@ -392,7 +392,6 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   if (thisToBeDrawn) {
 
     // Update path of drawn physical volumes...
-    G4int copyNo = fpCurrentPV->GetCopyNo();
     fDrawnPVPath.push_back
       (G4PhysicalVolumeNodeID
        (fpCurrentPV,copyNo,fCurrentDepth,*fpCurrentTransform,thisToBeDrawn));
@@ -401,16 +400,16 @@ void G4PhysicalVolumeModel::DescribeAndDescend
       // For top-level drawn volumes, explode along radius...
       G4Transform3D centering = G4Translate3D(fpMP->GetExplodeCentre());
       G4Transform3D centred = centering.inverse() * theNewAT;
-      G4Scale3D scale;
-      G4Rotate3D rotation;
-      G4Translate3D translation;
-      centred.getDecomposition(scale, rotation, translation);
+      G4Scale3D oldScale;
+      G4Rotate3D oldRotation;
+      G4Translate3D oldTranslation;
+      centred.getDecomposition(oldScale, oldRotation, oldTranslation);
       G4double explodeFactor = fpMP->GetExplodeFactor();
       G4Translate3D newTranslation =
-	G4Translate3D(explodeFactor * translation.dx(),
-		      explodeFactor * translation.dy(),
-		      explodeFactor * translation.dz());
-      theNewAT = centering * newTranslation * rotation * scale;
+	G4Translate3D(explodeFactor * oldTranslation.dx(),
+		      explodeFactor * oldTranslation.dy(),
+		      explodeFactor * oldTranslation.dz());
+      theNewAT = centering * newTranslation * oldRotation * oldScale;
     }
 
     DescribeSolid (theNewAT, pSol, pVisAttribs, sceneHandler);
@@ -432,8 +431,6 @@ void G4PhysicalVolumeModel::DescribeAndDescend
 
   // Now, reasons that depend on culling policy...
   else {
-    G4bool culling = fpMP->IsCulling();
-    G4bool cullingInvisible = fpMP->IsCullingInvisible();
     G4bool daughtersInvisible = pVisAttribs->IsDaughtersInvisible();
     // Culling of covered daughters request.  This is computed in
     // G4VSceneHandler::CreateModelingParameters() depending on view
@@ -682,10 +679,10 @@ static std::ostream& operator<< (std::ostream& o, const G4Transform3D t)
 {
   using namespace std;
 
-  G4Scale3D s;
+  G4Scale3D sc;
   G4Rotate3D r;
   G4Translate3D tl;
-  t.getDecomposition(s, r, tl);
+  t.getDecomposition(sc, r, tl);
 
   const int w = 10;
 
@@ -706,7 +703,7 @@ static std::ostream& operator<< (std::ostream& o, const G4Transform3D t)
 
   // Scale
   o << "* scale:" << endl;
-  o << setw(w) << s.xx() << setw(w) << s.yy() << setw(w) << s.zz() << endl;
+  o << setw(w) << sc.xx() << setw(w) << sc.yy() << setw(w) << sc.zz() << endl;
 
   // Transformed axes
   o << "Transformed axes:" << endl;

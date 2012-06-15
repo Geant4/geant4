@@ -436,8 +436,8 @@ void Insert(const PVNodeID* pvPath, size_t pathLength,
 
   // See if node has been encountered before
   G4bool found = false; size_t foundPosition = 0;
-  for (size_t i = 0; i < node->daughters.size(); ++i) {
-    PVNodeID& daughterPVNodeID = node->daughters[i]->pvNodeID;
+  for (size_t i = 0; i < node->fDaughters.size(); ++i) {
+    PVNodeID& daughterPVNodeID = node->fDaughters[i]->fPVNodeID;
     // It is enough to compare volume and copy number at a given position in the tree
     if (daughterPVNodeID.GetPhysicalVolume() == pvPath[0].GetPhysicalVolume() &&
 	daughterPVNodeID.GetCopyNo() == pvPath[0].GetCopyNo()) {
@@ -449,9 +449,9 @@ void Insert(const PVNodeID* pvPath, size_t pathLength,
 
   if (pathLength == 1) {  // This is a leaf
     if (found) {  // Update index
-      node->daughters[foundPosition]->index = index;
+      node->fDaughters[foundPosition]->fIndex = index;
     } else {      // Make a new full entry
-      node->daughters.push_back(new Node(pvPath[0],index));
+      node->fDaughters.push_back(new Node(pvPath[0],index));
     }
     /* Debug
     std::cout << std::endl;
@@ -459,11 +459,11 @@ void Insert(const PVNodeID* pvPath, size_t pathLength,
   } else {  // Not a leaf - carry on with rest of path
     if (found) {  // Just carry on
       Insert(pvPath+1,--pathLength,index,
-	     node->daughters[foundPosition]);
+	     node->fDaughters[foundPosition]);
     } else {      // Insert place holder, then carry on
-      node->daughters.push_back(new Node(pvPath[0]));
+      node->fDaughters.push_back(new Node(pvPath[0]));
       Insert(pvPath+1,--pathLength,index,
-	     node->daughters[node->daughters.size()-1]);
+	     node->fDaughters[node->fDaughters.size()-1]);
     }
   }
 }
@@ -472,9 +472,9 @@ void PrintTree(std::ostream& os, Node* node)
 {
   static G4int depth = -1;
   depth++;
-  PVNodeID& thisPVNodeID = node->pvNodeID;
-  G4int& thisIndex = node->index;
-  const size_t& nDaughters = node->daughters.size();
+  PVNodeID& thisPVNodeID = node->fPVNodeID;
+  G4int& thisIndex = node->fIndex;
+  const size_t& nDaughters = node->fDaughters.size();
   G4VPhysicalVolume* thisPhysicalVolume= thisPVNodeID.GetPhysicalVolume();
   if (!thisPhysicalVolume) os << "Root" << std::endl;
   else {
@@ -484,17 +484,17 @@ void PrintTree(std::ostream& os, Node* node)
        << thisIndex << ")" << std::endl;;
   }
   for (size_t i = 0; i < nDaughters; ++i) {
-    PrintTree(os, node->daughters[i]);
+    PrintTree(os, node->fDaughters[i]);
   }
   depth--;
 }
 
 void Clear(Node* node)
 {
-  const size_t& nDaughters = node->daughters.size();
+  const size_t& nDaughters = node->fDaughters.size();
   for (size_t i = 0; i < nDaughters; ++i) {
-    Clear(node->daughters[i]);
-    delete node->daughters[i];
+    Clear(node->fDaughters[i]);
+    delete node->fDaughters[i];
   }
 }
 

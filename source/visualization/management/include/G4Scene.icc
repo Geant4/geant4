@@ -30,8 +30,8 @@
 // 
 // Scene data  John Allison  19th July 1996.
 
-inline G4bool G4Scene::operator == (const G4Scene& s) const {
-  return !(G4Scene::operator != (s));
+inline G4bool G4Scene::operator == (const G4Scene& scene) const {
+  return !(G4Scene::operator != (scene));
 }
 
 inline const G4String& G4Scene::GetName () const {

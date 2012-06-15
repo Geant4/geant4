@@ -1265,6 +1265,8 @@ void G4VisManager::RegisterMessengers () {
   directory = new G4UIdirectory ("/vis/scene/add/");
   directory -> SetGuidance ("Add model to current scene.");
   fDirectoryList.push_back (directory);
+  RegisterMessenger(new G4VisCommandSceneAddArrow);
+  RegisterMessenger(new G4VisCommandSceneAddArrow2D);
   RegisterMessenger(new G4VisCommandSceneAddAxes);
   RegisterMessenger(new G4VisCommandSceneAddDate);
   RegisterMessenger(new G4VisCommandSceneAddDigis);
@@ -1272,6 +1274,8 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandSceneAddFrame);
   RegisterMessenger(new G4VisCommandSceneAddGhosts);
   RegisterMessenger(new G4VisCommandSceneAddHits);
+  RegisterMessenger(new G4VisCommandSceneAddLine);
+  RegisterMessenger(new G4VisCommandSceneAddLine2D);
   RegisterMessenger(new G4VisCommandSceneAddLogicalVolume);
   RegisterMessenger(new G4VisCommandSceneAddLogo);
   RegisterMessenger(new G4VisCommandSceneAddLogo2D);
@@ -1719,33 +1723,33 @@ G4VViewer* G4VisManager::GetViewer (const G4String& viewerName) const {
 std::vector<G4String> G4VisManager::VerbosityGuidanceStrings;
 
 G4String G4VisManager::VerbosityString(Verbosity verbosity) {
-  G4String s;
+  G4String rs;
   switch (verbosity) {
-  case         quiet: s = "quiet (0)"; break;
-  case       startup: s = "startup (1)"; break;
-  case        errors: s = "errors (2)"; break;
-  case      warnings: s = "warnings (3)"; break;
-  case confirmations: s = "confirmations (4)"; break;
-  case    parameters: s = "parameters (5)"; break;
-  case           all: s = "all (6)"; break;
+  case         quiet: rs = "quiet (0)"; break;
+  case       startup: rs = "startup (1)"; break;
+  case        errors: rs = "errors (2)"; break;
+  case      warnings: rs = "warnings (3)"; break;
+  case confirmations: rs = "confirmations (4)"; break;
+  case    parameters: rs = "parameters (5)"; break;
+  case           all: rs = "all (6)"; break;
   }
-  return s;
+  return rs;
 }
 
 G4VisManager::Verbosity
 G4VisManager::GetVerbosityValue(const G4String& verbosityString) {
-  G4String s(verbosityString); s.toLower();
+  G4String ss(verbosityString); ss.toLower();
   Verbosity verbosity;
-  if      (s(0) == 'q') verbosity = quiet;
-  else if (s(0) == 's') verbosity = startup;
-  else if (s(0) == 'e') verbosity = errors;
-  else if (s(0) == 'w') verbosity = warnings;
-  else if (s(0) == 'c') verbosity = confirmations;
-  else if (s(0) == 'p') verbosity = parameters;
-  else if (s(0) == 'a') verbosity = all;
+  if      (ss(0) == 'q') verbosity = quiet;
+  else if (ss(0) == 's') verbosity = startup;
+  else if (ss(0) == 'e') verbosity = errors;
+  else if (ss(0) == 'w') verbosity = warnings;
+  else if (ss(0) == 'c') verbosity = confirmations;
+  else if (ss(0) == 'p') verbosity = parameters;
+  else if (ss(0) == 'a') verbosity = all;
   else {
     G4int intVerbosity;
-    std::istringstream is(s);
+    std::istringstream is(ss);
     is >> intVerbosity;
     if (!is) {
       G4cout << "ERROR: G4VisManager::GetVerbosityValue: invalid verbosity \""

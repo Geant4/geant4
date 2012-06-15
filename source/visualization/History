@@ -24,6 +24,42 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+12th June 2012    John Allison  (vis-V09-05-26)
+- opengl-V09-05-18 (Laurent Garnier):
+  o Fixed shadow warnings where possible.
+  o Many warnings remain due to the use "s" and/or "sr" in Qt macros
+    and headers.  These will have to wait until CLHEP global variables
+    are fixed.
+
+10th June 2012  John Allison  (vis-V09-05-25)
+- vis-HepRep-V09-05-03: Fixed remaining shadow warnings.
+- Now all shadow warnings fixed except in Qt.
+
+8th June 2012  John Allison  (vis-V09-05-24)
+- DAWN-V09-05-03, raytracer-V09-05-02, vistree-V09-05-02, visXXX-V09-05-02,
+  gMocren-V09-05-03, openinventor-V09-05-04:
+  o Shadow clean.
+- vis-HepRep-V09-05-02, opengl-V09-05-17:
+  o Partial shadow clean.
+
+7th June 2012  John Allison
+- modeling-V09-05-07, visman-V09-05-22:
+  o Shadow clean.
+
+6th June 2012  John Allison  (vis-V09-05-23)
+- visman-V09-05-21: Fix compiler warning.
+
+5th June 2012  John Allison  (vis-V09-05-22)
+- visman-V09-05-20: Added /vis/scene/add/line(2D) and arrow(2D).
+
+3rd June 2012  John Allison
+- visman-V09-05-19: Coverity fixes.
+
+31st May 2012  John Allison
+- modeling-V09-05-06:
+  o Brought stray print statement under control of verbosity.
+  o Fixes bug report 1310.
+
 29th May 2012  John Allison  (vis-V09-05-21)
 - opengl-V09-05-16:
   o Fixed bug in vis-V09-05-20.

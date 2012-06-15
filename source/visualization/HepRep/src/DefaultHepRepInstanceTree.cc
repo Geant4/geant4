@@ -11,8 +11,8 @@ using namespace HEPREP;
  */
 namespace cheprep {
 
-DefaultHepRepInstanceTree::DefaultHepRepInstanceTree(string name, string version, HepRepTreeID* typeTree)
-    : DefaultHepRepTreeID(name, version), typeTree(typeTree) {
+DefaultHepRepInstanceTree::DefaultHepRepInstanceTree(string aName, string aVersion, HepRepTreeID* aTypeTree)
+    : DefaultHepRepTreeID(aName, aVersion), typeTree(aTypeTree) {
 }
 
 DefaultHepRepInstanceTree::~DefaultHepRepInstanceTree() {

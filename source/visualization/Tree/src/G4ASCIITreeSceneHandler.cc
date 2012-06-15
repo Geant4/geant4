@@ -198,8 +198,9 @@ void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
   // PVNodeID object, which is a physical volume and copy number.  It
   // is a vector of PVNodeIDs corresponding to the geometry hierarchy
   // actually selected, i.e., not culled.
-  typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
-  typedef std::vector<PVNodeID> PVPath;
+  // The following typedef's already set in header file...
+  //typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
+  //typedef std::vector<PVNodeID> PVPath;
   const PVPath& drawnPVPath = pPVModel->GetDrawnPVPath();
   //G4int currentDepth = pPVModel->GetCurrentDepth();
   G4VPhysicalVolume* pCurrentPV = pPVModel->GetCurrentPV();

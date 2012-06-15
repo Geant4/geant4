@@ -55,8 +55,8 @@ void G4PSHitsModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
     G4ScoringManager::GetScoringManagerIfExist();
   if (scoringManager) {
     size_t nMeshes = scoringManager->GetNumberOfMesh();
-    for (size_t i = 0; i < nMeshes; ++i) {
-      G4VScoringMesh* mesh = scoringManager->GetMesh(i);
+    for (size_t iMesh = 0; iMesh < nMeshes; ++iMesh) {
+      G4VScoringMesh* mesh = scoringManager->GetMesh(iMesh);
       if (mesh && mesh->IsActive()) {
 	MeshScoreMap scoreMap = mesh->GetScoreMap();
 	for(MeshScoreMap::const_iterator i = scoreMap.begin();

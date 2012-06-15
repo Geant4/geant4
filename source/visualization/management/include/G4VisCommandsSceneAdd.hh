@@ -39,8 +39,54 @@ class G4UIcmdWithAString;
 
 #include "G4Transform3D.hh"
 #include "G4VisAttributes.hh"
+#include "G4Polyline.hh"
 #include "G4Text.hh"
 #include "G4Timer.hh"
+
+class G4VisCommandSceneAddArrow: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneAddArrow ();
+  virtual ~G4VisCommandSceneAddArrow ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneAddArrow (const G4VisCommandSceneAddArrow&);
+  G4VisCommandSceneAddArrow& operator = (const G4VisCommandSceneAddArrow&);
+  struct Arrow {
+    Arrow(G4double x1, G4double y1, G4double z1,
+	  G4double x2, G4double y2, G4double z2,
+	  G4double width, const G4Colour& colour);
+    ~Arrow();
+    void operator()(G4VGraphicsScene&, const G4Transform3D&);
+    G4Polyhedron* fpShaftPolyhedron;
+    G4Polyhedron* fpHeadPolyhedron;
+    G4double fWidth;
+    G4Colour fColour;
+  };
+  G4UIcommand* fpCommand;
+};
+
+class G4VisCommandSceneAddArrow2D: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneAddArrow2D ();
+  virtual ~G4VisCommandSceneAddArrow2D ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneAddArrow2D (const G4VisCommandSceneAddArrow2D&);
+  G4VisCommandSceneAddArrow2D& operator = (const G4VisCommandSceneAddArrow2D&);
+  struct Arrow2D {
+    Arrow2D(G4double x1, G4double y1,
+	    G4double x2, G4double y2,
+	    G4double width, const G4Colour& colour);
+    void operator()(G4VGraphicsScene&, const G4Transform3D&);
+    G4Polyline fShaftPolyline;
+    G4Polyline fHeadPolyline;
+    G4double fWidth;
+    G4Colour fColour;
+  };
+  G4UIcommand* fpCommand;
+};
 
 class G4VisCommandSceneAddAxes: public G4VVisCommandScene {
 public:
@@ -159,6 +205,48 @@ private:
   G4UIcmdWithoutParameter* fpCommand;
 };
 
+class G4VisCommandSceneAddLine: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneAddLine ();
+  virtual ~G4VisCommandSceneAddLine ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneAddLine (const G4VisCommandSceneAddLine&);
+  G4VisCommandSceneAddLine& operator = (const G4VisCommandSceneAddLine&);
+  struct Line {
+    Line(G4double x1, G4double y1, G4double z1,
+	 G4double x2, G4double y2, G4double z2,
+	 G4double width, const G4Colour& colour);
+    void operator()(G4VGraphicsScene&, const G4Transform3D&);
+    G4Polyline fPolyline;
+    G4double fWidth;
+    G4Colour fColour;
+  };
+  G4UIcommand* fpCommand;
+};
+
+class G4VisCommandSceneAddLine2D: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneAddLine2D ();
+  virtual ~G4VisCommandSceneAddLine2D ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneAddLine2D (const G4VisCommandSceneAddLine2D&);
+  G4VisCommandSceneAddLine2D& operator = (const G4VisCommandSceneAddLine2D&);
+  struct Line2D {
+    Line2D(G4double x1, G4double y1,
+	 G4double x2, G4double y2,
+	 G4double width, const G4Colour& colour);
+    void operator()(G4VGraphicsScene&, const G4Transform3D&);
+    G4Polyline fPolyline;
+    G4double fWidth;
+    G4Colour fColour;
+  };
+  G4UIcommand* fpCommand;
+};
+
 class G4VisCommandSceneAddLogicalVolume: public G4VVisCommandScene {
 public:
   G4VisCommandSceneAddLogicalVolume ();
@@ -182,7 +270,7 @@ private:
   G4VisCommandSceneAddLogo (const G4VisCommandSceneAddLogo&);
   G4VisCommandSceneAddLogo& operator = (const G4VisCommandSceneAddLogo&);
   // Direction of outward-facing normal to front face of logo.
-  enum Direction {autoDirection, X, minusX, Y, minusY, Z, minusZ};
+  enum Direction {X, minusX, Y, minusY, Z, minusZ};
   struct G4Logo {
     G4Logo(G4double height, const G4VisAttributes&);
     ~G4Logo();

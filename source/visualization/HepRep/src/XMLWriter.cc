@@ -15,8 +15,8 @@ using namespace std;
  */
 namespace cheprep {
 
-XMLWriter::XMLWriter(ostream* out, string indentString, string defaultNameSpace)
-    : AbstractXMLWriter(defaultNameSpace) {
+XMLWriter::XMLWriter(ostream* out, string indentString, string aDefaultNameSpace)
+    : AbstractXMLWriter(aDefaultNameSpace) {
     writer = new IndentPrintWriter(out);
     writer->setIndentString(indentString);
     closed = false;

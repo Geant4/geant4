@@ -95,17 +95,17 @@ public:
   // Force execution of AccrueMass for all solids...
   void PreAddSolid (const G4Transform3D&, const G4VisAttributes&) {}
   void PostAddSolid () {}
-  void AddSolid (const G4Box& s) {AccrueMass (s);}
-  void AddSolid (const G4Cons & s) {AccrueMass (s);}
-  void AddSolid (const G4Tubs& s) {AccrueMass (s);}
-  void AddSolid (const G4Trd& s) {AccrueMass (s);}
-  void AddSolid (const G4Trap& s) {AccrueMass (s);}
-  void AddSolid (const G4Sphere& s) {AccrueMass (s);}
-  void AddSolid (const G4Para& s) {AccrueMass (s);}
-  void AddSolid (const G4Torus& s) {AccrueMass (s);}
-  void AddSolid (const G4Polycone& s) {AccrueMass (s);}
-  void AddSolid (const G4Polyhedra& s) {AccrueMass (s);}
-  void AddSolid (const G4VSolid& s) {AccrueMass (s);}
+  void AddSolid (const G4Box& solid) {AccrueMass (solid);}
+  void AddSolid (const G4Cons & solid) {AccrueMass (solid);}
+  void AddSolid (const G4Tubs& solid) {AccrueMass (solid);}
+  void AddSolid (const G4Trd& solid) {AccrueMass (solid);}
+  void AddSolid (const G4Trap& solid) {AccrueMass (solid);}
+  void AddSolid (const G4Sphere& solid) {AccrueMass (solid);}
+  void AddSolid (const G4Para& solid) {AccrueMass (solid);}
+  void AddSolid (const G4Torus& solid) {AccrueMass (solid);}
+  void AddSolid (const G4Polycone& solid) {AccrueMass (solid);}
+  void AddSolid (const G4Polyhedra& solid) {AccrueMass (solid);}
+  void AddSolid (const G4VSolid& solid) {AccrueMass (solid);}
   void AddCompound (const G4VTrajectory&) {}
   void AddCompound (const G4VHit&) {}
   void AddCompound (const G4VDigi&) {}

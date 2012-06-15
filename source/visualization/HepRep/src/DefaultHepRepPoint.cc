@@ -15,8 +15,8 @@ using namespace HEPREP;
  */
 namespace cheprep {
 
-DefaultHepRepPoint::DefaultHepRepPoint(HepRepInstance* inst, double x, double y, double z)
-    : DefaultHepRepAttribute(), instance(inst), x(x), y(y), z(z) {
+DefaultHepRepPoint::DefaultHepRepPoint(HepRepInstance* inst, double xx, double yy, double zz)
+    : DefaultHepRepAttribute(), instance(inst), x(xx), y(yy), z(zz) {
 
     if (instance == NULL) {
         cerr << "HepRepPoints cannot be created without a HepRepInstance." << endl;

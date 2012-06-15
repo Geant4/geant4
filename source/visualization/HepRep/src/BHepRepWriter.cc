@@ -18,9 +18,9 @@ namespace cheprep {
     std::map<std::string, unsigned char> BHepRepWriter::attributes;           
     std::map<std::string, unsigned char> BHepRepWriter::values;
 
-    BHepRepWriter::BHepRepWriter( std::ostream& os) 
+    BHepRepWriter::BHepRepWriter( std::ostream& ostrm) 
             : AbstractXMLWriter("heprep"), 
-            os(os), 
+            os(ostrm), 
             singlePrecision(true) {        
 
         // resolve endiannes        
@@ -242,8 +242,8 @@ namespace cheprep {
         writeTag(name);
     }
     
-    void BHepRepWriter::writeTag(std::string name, bool hasContent) {
-        std::string s = name;
+    void BHepRepWriter::writeTag(std::string tagName, bool hasContent) {
+        std::string s = tagName;
         std::transform(s.begin(), s.end(), s.begin(), (int(*)(int)) tolower);
         
         // find tag

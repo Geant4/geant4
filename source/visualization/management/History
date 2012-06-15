@@ -26,6 +26,19 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+7th June 2012  John Allison  (visman-V09-05-22)
+- Shadow clean.
+
+6th June 2012  John Allison  (visman-V09-05-21)
+- G4VisCommandsSceneAdd.cc: Fix compiler warning.
+
+5th June 2012  John Allison  (visman-V09-05-20)
+- Added /vis/scene/add/line(2D) and arrow(2D).
+
+3rd June 2012  John Allison  (visman-V09-05-19)
+- G4VisCommandsSceneAdd.cc/hh, G4VisCommandsGeometrySet.cc:
+  o Coverity fixes.
+
 23rd May 2012  John Allison  (visman-V09-05-18)
 - Health Check 2012:
   o Over the years we have added drivers and features and added fixes.

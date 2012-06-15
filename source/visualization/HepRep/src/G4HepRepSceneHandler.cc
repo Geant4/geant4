@@ -1263,39 +1263,39 @@ void G4HepRepSceneHandler::addAttVals(HepRepAttribute* attribute, const map<G4St
         if ((name == "Pos") && (point != NULL)) {
             G4String pos = attValIterator->GetValue();
 //            cout << "Pos* " << pos << endl;
-            int s = 0;
-            int n = 0;
-            int m = 0;
+            int is = 0;
+            int in = 0;
+            int im = 0;
             G4String unit;
             for (unsigned int i=0; i<pos.length(); i++) {
                 if (pos[i] == ' ') {
-                    if (n == 0) {
+                    if (in == 0) {
                         // first coordinate
-                        double factor = atof(pos.substr(s, i-s).c_str())/point->getX();
-                        m = (int)(std::log10(factor)+((factor < 1) ? -0.5 : 0.5));
-//                        cout << factor << ", " << m << endl;
-                    } else if (n == 3) {
+                        double factor = atof(pos.substr(is, i-is).c_str())/point->getX();
+                        im = (int)(std::log10(factor)+((factor < 1) ? -0.5 : 0.5));
+//                        cout << factor << ", " << im << endl;
+                    } else if (in == 3) {
                         // unit
-                        unit = pos.substr(s, i-s);
+                        unit = pos.substr(is, i-is);
                         if (unit == G4String("mum")) {
-                            m += -6;
+                            im += -6;
                         } else if (unit == G4String("mm")) {
-                            m += -3;
+                            im += -3;
                         } else if (unit == G4String("cm")) {
-                            m += -2;
+                            im += -2;
                         } else if (unit == G4String("m")) {
-                            m += 0;
+                            im += 0;
                         } else if (unit == G4String("km")) {
-                            m += 3;
+                            im += 3;
                         } else {
                             cerr << "HepRepSceneHandler: Unrecognized Unit: '" << unit << "'" << endl;
                         }
                     }
-                    s = i+1;
-                    n++;
+                    is = i+1;
+                    in++;
                 }
             }
-            switch(m) {
+            switch(im) {
                 case -6:
                     unit = G4String("mum");
                     break;
@@ -1312,8 +1312,8 @@ void G4HepRepSceneHandler::addAttVals(HepRepAttribute* attribute, const map<G4St
                     unit = G4String("km");
                     break;
                 default:
-                    cerr << "HepRepSceneHandler: No valid unit found for m: " << m << endl;
-                    unit = G4String("*m");                        
+                    cerr << "HepRepSceneHandler: No valid unit found for im: " << im << endl;
+                    unit = G4String("*im");                        
                     break;
             }
 //            cout << "U: " << unit << endl;

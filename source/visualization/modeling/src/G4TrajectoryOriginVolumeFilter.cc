@@ -59,9 +59,10 @@ G4TrajectoryOriginVolumeFilter::Evaluate(const G4VTrajectory& traj) const
   G4String logicalName = logicalVolume->GetName();
   G4String physicalName = volume->GetName();
 
-  if (GetVerbose()) G4cout<<"G4TrajectoryOriginVolumeFilter processing trajectory with originating volume "<<G4endl;
-  G4cout<<"logical and physical names:  "<<logicalName<<" "<<physicalName<<G4endl;
-
+  if (GetVerbose()) {
+    G4cout<<"G4TrajectoryOriginVolumeFilter processing trajectory with originating volume "<<G4endl;
+    G4cout<<"logical and physical names:  "<<logicalName<<" "<<physicalName<<G4endl;
+  }
   // Search for logical volume name
   std::vector<G4String>::const_iterator iterLogical = std::find(fVolumes.begin(), fVolumes.end(), logicalName);
 

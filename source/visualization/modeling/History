@@ -20,6 +20,14 @@ committal in the CVS repository !
 History file for visualization/modeling
 ---------------------------------------
 
+7th June 2012  John Allison  (modeling-V09-05-07)
+- Shadow clean.
+
+31st May 2012  John Allison  (modeling-V09-05-06)
+- G4TrajectoryOriginVolumeFilter.cc:
+  o Brought stray print statement under control of verbosity.
+  o Fixes bug report 1310.
+
 10th April 2012  John Allison  (modeling-V09-05-05)
 - G4CallbackModel: It ws a bad idea to delete function in destructor
   (see 7th March).  OK to delete, but catastrophe when you try to use

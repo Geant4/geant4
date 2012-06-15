@@ -480,12 +480,11 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     G4Point3D vertex[4];
     G4int edgeFlag[4];
     G4Normal3D normals[4];
-    G4int n;
-    notLastFace = polyhedron.GetNextFacet(n, vertex, edgeFlag, normals);
+    G4int nEdges;
+    notLastFace = polyhedron.GetNextFacet(nEdges, vertex, edgeFlag, normals);
 
     //Loop through the four edges of each G4Facet...
-    G4int edgeCount = 0;
-    for(edgeCount = 0; edgeCount < n; ++edgeCount) {
+    for(G4int edgeCount = 0; edgeCount < nEdges; ++edgeCount) {
       // Check to see if edge is visible or not...
       if (isAuxEdgeVisible) {
 	edgeFlag[edgeCount] = 1;
@@ -504,8 +503,8 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     }
     // HepPolyhedron produces triangles too; in that case add an extra
     // vertex identical to first...
-    if (n == 3) {
-      edgeCount = 3;
+    if (nEdges == 3) {
+      G4int edgeCount = 3;
       normals[edgeCount] = normals[0];
       vertex[edgeCount] = vertex[0];
       edgeFlag[edgeCount] = -1;
@@ -518,7 +517,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 		  vertex[edgeCount].z());
     }
     // Trap situation where number of edges is > 4...
-    if (n > 4) {
+    if (nEdges > 4) {
       G4cerr <<
 	"G4OpenGLSceneHandler::AddPrimitive(G4Polyhedron): WARNING";
       G4PhysicalVolumeModel* pPVModel =
@@ -532,7 +531,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 	  " (" << pCurrentLV->GetSolid()->GetEntityType();
       }
       G4cerr<<
-	"\n   G4Polyhedron facet with " << n << " edges" << G4endl;
+	"\n   G4Polyhedron facet with " << nEdges << " edges" << G4endl;
     }
 
     // Do it all over again (twice) for hlr...

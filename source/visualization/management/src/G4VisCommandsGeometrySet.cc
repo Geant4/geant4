@@ -153,7 +153,13 @@ void G4VisCommandGeometrySetColour::SetNewValue
   G4Colour colour(1,1,1,1);  // Default white and opaque.
   const size_t iPos0 = 0;
   if (std::isalpha(redOrString[iPos0])) {
-    G4Colour::GetColour(redOrString, colour); // Remains if not found.
+    if (!G4Colour::GetColour(redOrString, colour)) {
+      if (fpVisManager->GetVerbosity() >= G4VisManager::warnings) {
+        G4cout << "WARNING: Colour \"" << redOrString
+               << "\" not found.  Defaulting to white and opaque."
+               << G4endl;
+      }
+    }
   } else {
     colour = G4Colour(G4UIcommand::ConvertToDouble(redOrString), green, blue);
   }

@@ -48,10 +48,10 @@ namespace JA {
 
   struct Node {
     Node(PVNodeID pvNodeID = PVNodeID(), G4int index = -1):
-      pvNodeID(pvNodeID), index(index) {}
-    PVNodeID pvNodeID;
-    G4int index;
-    std::vector<Node*> daughters;
+      fPVNodeID(pvNodeID), fIndex(index) {}
+    PVNodeID fPVNodeID;
+    G4int fIndex;
+    std::vector<Node*> fDaughters;
   };
 
   void Insert(const PVNodeID* pvPath, size_t pathLength,

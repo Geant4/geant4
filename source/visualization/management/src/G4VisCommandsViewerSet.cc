@@ -874,9 +874,10 @@ void G4VisCommandsViewerSet::SetNewValue
   }
 
   else if (command == fpCommandLightsMove) {
-    G4String s (newValue);
-    if (s.find("cam") != G4String::npos) vp.SetLightsMoveWithCamera(true);
-    else if(s.find("obj") != G4String::npos) vp.SetLightsMoveWithCamera(false);
+    if (newValue.find("cam") != G4String::npos)
+      vp.SetLightsMoveWithCamera(true);
+    else if(newValue.find("obj") != G4String::npos)
+      vp.SetLightsMoveWithCamera(false);
     else {
       if (verbosity >= G4VisManager::errors) {
 	G4cout << "ERROR: \"" << newValue << "\" not recognised."

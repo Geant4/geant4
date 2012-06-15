@@ -66,9 +66,9 @@ namespace G4TrajectoryDrawerUtils {
     // Keep positions.  Don't store unless first or different.
     std::vector<G4ThreeVector> positions;
 
-    for (G4int i=0; i<traj.GetPointEntries(); i++) {
+    for (G4int iPoint=0; iPoint<traj.GetPointEntries(); iPoint++) {
 
-      G4VTrajectoryPoint* aTrajectoryPoint = traj.GetPoint(i);
+      G4VTrajectoryPoint* aTrajectoryPoint = traj.GetPoint(iPoint);
       const G4ThreeVector& trajectoryPointPosition =
 	aTrajectoryPoint->GetPosition();
 
@@ -139,7 +139,6 @@ namespace G4TrajectoryDrawerUtils {
 	      auxiliaryPoints.push_back(auxPointPosition);
 	      if (validity == ValidTimes) {
 		// Interpolate time for auxiliary points...
-		const G4ThreeVector& auxPointPosition = (*auxiliaries)[iAux];
 		G4double s1 =
 		  (auxPointPosition - lastTrajectoryPointPosition).mag();
 		G4double s2 =

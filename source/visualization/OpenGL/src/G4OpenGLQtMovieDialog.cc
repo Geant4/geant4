@@ -64,9 +64,9 @@
 
 G4OpenGLQtMovieDialog::G4OpenGLQtMovieDialog(
  G4OpenGLQtViewer* parentViewer,
- QWidget* parentWidget
+ QWidget* parentw
 )
-  : QDialog( parentWidget ),
+  : QDialog( parentw ),
     fParentViewer(parentViewer)
 {
   setModal(false);
@@ -180,9 +180,9 @@ G4OpenGLQtMovieDialog::G4OpenGLQtMovieDialog(
   fRecordingStatus = new QLabel(statusGroupBox);
   statusVGroupBoxLayout->setMargin(15);
   fRecordingStatus->setWordWrap(true);
-  QPalette palette( fRecordingStatus->palette() );
-  palette.setColor( QPalette::Text, Qt::green);
-  fRecordingStatus->setPalette(palette);
+  QPalette mypalette( fRecordingStatus->palette() );
+  mypalette.setColor( QPalette::Text, Qt::green);
+  fRecordingStatus->setPalette(mypalette);
 
   fRecordingInfos = new QLabel(statusGroupBox);
   fRecordingInfos->setWordWrap(true);
@@ -319,22 +319,22 @@ void G4OpenGLQtMovieDialog::save() {
 bool G4OpenGLQtMovieDialog::checkEncoderSwParameters() {
 
   bool status = true;
-  QPalette palette( fEncoderPath->palette() );
+  QPalette mypalette( fEncoderPath->palette() );
 
   QString temp = fParentViewer->setEncoderPath(fEncoderPath->text());
   setRecordingInfos("");
   fEncoderStatus->setText(temp);
   if (temp != "") {
-    palette.setColor( QPalette::Base, Qt::red);
+    mypalette.setColor( QPalette::Base, Qt::red);
     if (fParentViewer->isReadyToEncode()) {
       setRecordingInfos("No valid encode defined, screen capture had been saved in the temp folder in ppm format.\nPlease define a encoder and clic on Apply button");
 	}
     status = false;
   } else {
-    palette.setColor( QPalette::Base, Qt::white);
+    mypalette.setColor( QPalette::Base, Qt::white);
     fEncoderPath->setText(fParentViewer->getEncoderPath());
   }
-  fEncoderPath->setPalette(palette);
+  fEncoderPath->setPalette(mypalette);
   return status;
 }
 
@@ -346,18 +346,18 @@ bool G4OpenGLQtMovieDialog::checkEncoderSwParameters() {
 bool G4OpenGLQtMovieDialog::checkTempFolderParameters() {
 
   bool status = true;
-  QPalette palette( fTempFolderPath->palette() );
+  QPalette mypalette( fTempFolderPath->palette() );
 
   QString temp = fParentViewer->setTempFolderPath(fTempFolderPath->text());
   fTempFolderStatus->setText(temp);
   if (temp != "") {
-    palette.setColor( QPalette::Base, Qt::red);
+    mypalette.setColor( QPalette::Base, Qt::red);
     status = false;
   } else {
-    palette.setColor( QPalette::Base, Qt::white);
+    mypalette.setColor( QPalette::Base, Qt::white);
     fTempFolderPath->setText(fParentViewer->getTempFolderPath());
   }
-  fTempFolderPath->setPalette(palette);
+  fTempFolderPath->setPalette(mypalette);
   return status;
 }
 
@@ -369,18 +369,18 @@ bool G4OpenGLQtMovieDialog::checkTempFolderParameters() {
 bool G4OpenGLQtMovieDialog::checkSaveFileNameParameters() {
 
   bool status = true;
-  QPalette palette( fSaveFileName->palette() );
+  QPalette mypalette( fSaveFileName->palette() );
 
   QString temp = fParentViewer->setSaveFileName(fSaveFileName->text());
   fSaveFileStatus->setText(temp);
   if (temp != "") { 
-    palette.setColor( QPalette::Base, Qt::red);
+    mypalette.setColor( QPalette::Base, Qt::red);
     status = false;
   } else {
-    palette.setColor( QPalette::Base, Qt::white);
+    mypalette.setColor( QPalette::Base, Qt::white);
     fSaveFileName->setText(fParentViewer->getSaveFileName());
   }
-  fSaveFileName->setPalette(palette);
+  fSaveFileName->setPalette(mypalette);
   return status;
 }
 

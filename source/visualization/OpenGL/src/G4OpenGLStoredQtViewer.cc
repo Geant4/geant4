@@ -112,7 +112,7 @@ void G4OpenGLStoredQtViewer::ComputeView () {
   printf("G4OpenGLStoredQtViewer::ComputeView %d %d   VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV\n",getWinWidth(), getWinHeight());
 #endif
   makeCurrent();
-  G4ViewParameters::DrawingStyle style = GetViewParameters().GetDrawingStyle();
+  G4ViewParameters::DrawingStyle dstyle = GetViewParameters().GetDrawingStyle();
 
   //Make sure current viewer is attached and clean...
 
@@ -127,7 +127,7 @@ void G4OpenGLStoredQtViewer::ComputeView () {
   ProcessView ();
    
 
-  if(style!=G4ViewParameters::hlr &&
+  if(dstyle!=G4ViewParameters::hlr &&
      haloing_enabled) {
 #ifdef G4DEBUG_VIS_OGL
     printf("G4OpenGLStoredQtViewer::ComputeView DANS LE IF\n");

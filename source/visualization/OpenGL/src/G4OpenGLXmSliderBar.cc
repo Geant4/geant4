@@ -40,7 +40,7 @@
 
 G4OpenGLXmSliderBar::G4OpenGLXmSliderBar (const char* n,
 					  XtCallbackRec* c,
-					  G4bool s,
+					  G4bool sh,
 					  short dp,
 					  G4double v,
 					  G4double max,
@@ -50,7 +50,7 @@ G4OpenGLXmSliderBar::G4OpenGLXmSliderBar (const char* n,
 {
   name = n;
   callback = c;
-  show = s;
+  show = sh;
   decimal_places = dp;
   initial_value = int(v * std::pow(10.0, (G4double)dp));
   max_value = int(max * std::pow(10.0, (G4double)dp));
@@ -112,9 +112,9 @@ void G4OpenGLXmSliderBar::SetName (const char* n)
  XmStringFree (sliderbar_string);
 }
 
-void G4OpenGLXmSliderBar::SetShow (G4bool s) 
+void G4OpenGLXmSliderBar::SetShow (G4bool sh) 
 {
-  show = s;
+  show = sh;
   XtVaSetValues (sliderbar,
 		 XmNshowValue, show,
 		 NULL);

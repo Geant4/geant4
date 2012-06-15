@@ -47,12 +47,12 @@
 #include <qbuttongroup.h>
 
 G4OpenGLQtExportDialog::G4OpenGLQtExportDialog(
- QWidget* parent
+ QWidget* parentw
 ,QString format
  ,int aHeight
  ,int aWidth
 )
-  : QDialog( parent ),
+  : QDialog( parentw ),
     isChangingSize(false)
 {
   setWindowTitle( tr( " Export options" ));

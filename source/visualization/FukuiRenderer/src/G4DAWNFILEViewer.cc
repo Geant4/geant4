@@ -214,23 +214,24 @@ void  G4DAWNFILEViewer::SendDrawingStyleToDAWNGUI( std::ostream& out )
 
 	G4int  style = fVP.GetDrawingStyle();
 
-	enum {	FR_WIREFRAME = 1, FR_WF_STORED = 2, FR_HID =3  , \
-		FR_HID2      = 4, FR_HID3      = 5, FR_DRAWING_MODE_END = 6 };
+	enum {	FR_WIREFRAME_STYLE = 1, FR_WF_STORED_STYLE = 2,
+		FR_HID_STYLE       = 3,	FR_HID2_STYLE      = 4,
+		FR_HID3_STYLE      = 5, FR_DRAWING_MODE_END_STYLE = 6 };
 
 	switch( style )
 	{
 	  case G4ViewParameters::wireframe: 
-		out <<  FR_WIREFRAME << G4endl;
+		out <<  FR_WIREFRAME_STYLE << G4endl;
 		break;
 	  case G4ViewParameters::hlr:
-		out <<  FR_HID2      << G4endl; // LINE
+		out <<  FR_HID2_STYLE      << G4endl; // LINE
 		break;
 	  case G4ViewParameters::hsr:
 	  case G4ViewParameters::hlhsr:
-		out <<  FR_HID       << G4endl; // SURFACE
+		out <<  FR_HID_STYLE       << G4endl; // SURFACE
 		break;
 	  default:
-		out <<  FR_WIREFRAME << G4endl;
+		out <<  FR_WIREFRAME_STYLE << G4endl;
 		break;
 	}
 

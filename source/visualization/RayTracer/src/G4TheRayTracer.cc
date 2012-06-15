@@ -318,11 +318,11 @@ G4bool G4TheRayTracer::GenerateColour(G4Event* anEvent)
 
 G4Colour G4TheRayTracer::GetMixedColour(G4Colour surfCol,G4Colour transCol,G4double weight)
 {
-  G4double r = weight*surfCol.GetRed() + (1.-weight)*transCol.GetRed();
-  G4double g = weight*surfCol.GetGreen() + (1.-weight)*transCol.GetGreen();
-  G4double b = weight*surfCol.GetBlue() + (1.-weight)*transCol.GetBlue();
-  G4double a = weight*surfCol.GetAlpha() + (1.-weight)*transCol.GetAlpha();
-  return G4Colour(r,g,b,a);
+  G4double red   = weight*surfCol.GetRed() + (1.-weight)*transCol.GetRed();
+  G4double green = weight*surfCol.GetGreen() + (1.-weight)*transCol.GetGreen();
+  G4double blue  = weight*surfCol.GetBlue() + (1.-weight)*transCol.GetBlue();
+  G4double alpha = weight*surfCol.GetAlpha() + (1.-weight)*transCol.GetAlpha();
+  return G4Colour(red,green,blue,alpha);
 }
 
 G4Colour G4TheRayTracer::GetSurfaceColour(G4RayTrajectoryPoint* point)
@@ -345,10 +345,11 @@ G4Colour G4TheRayTracer::GetSurfaceColour(G4RayTrajectoryPoint* point)
   if(preVis)
   {
     G4double brill = (1.0-(-lightDirection).dot(normal))/2.0;
-    G4double r = preAtt->GetColour().GetRed();
-    G4double g = preAtt->GetColour().GetGreen();
-    G4double b = preAtt->GetColour().GetBlue();
-    preCol = G4Colour(r*brill,g*brill,b*brill,preAtt->GetColour().GetAlpha());
+    G4double red   = preAtt->GetColour().GetRed();
+    G4double green = preAtt->GetColour().GetGreen();
+    G4double blue  = preAtt->GetColour().GetBlue();
+    preCol = G4Colour
+      (red*brill,green*brill,blue*brill,preAtt->GetColour().GetAlpha());
   }
   else
   { preCol = transparent; }
@@ -356,10 +357,11 @@ G4Colour G4TheRayTracer::GetSurfaceColour(G4RayTrajectoryPoint* point)
   if(postVis)
   {
     G4double brill = (1.0-(-lightDirection).dot(-normal))/2.0;
-    G4double r = postAtt->GetColour().GetRed();
-    G4double g = postAtt->GetColour().GetGreen();
-    G4double b = postAtt->GetColour().GetBlue();
-    postCol = G4Colour(r*brill,g*brill,b*brill,postAtt->GetColour().GetAlpha());
+    G4double red   = postAtt->GetColour().GetRed();
+    G4double green = postAtt->GetColour().GetGreen();
+    G4double blue  = postAtt->GetColour().GetBlue();
+    postCol = G4Colour
+      (red*brill,green*brill,blue*brill,postAtt->GetColour().GetAlpha());
   }
   else
   { postCol = transparent; }

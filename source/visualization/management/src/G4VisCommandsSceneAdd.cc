@@ -88,6 +88,238 @@ static void G4VisCommandsSceneAddUnsuccessful
   }
 }
 
+////////////// /vis/scene/add/arrow ///////////////////////////////////////
+
+G4VisCommandSceneAddArrow::G4VisCommandSceneAddArrow () {
+  fpCommand = new G4UIcommand("/vis/scene/add/arrow", this);
+  fpCommand -> SetGuidance ("Adds arrow to current scene.");
+  G4bool omitable;
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter ("x1", 'd', omitable = false);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("y1", 'd', omitable = false);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("z1", 'd', omitable = false);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("x2", 'd', omitable = false);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("y2", 'd', omitable = false);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("z2", 'd', omitable = false);
+  fpCommand -> SetParameter (parameter);
+  parameter =  new G4UIparameter ("unit", 's', omitable = true);
+  parameter->SetDefaultValue ("m");
+  fpCommand->SetParameter    (parameter);
+}
+
+G4VisCommandSceneAddArrow::~G4VisCommandSceneAddArrow () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandSceneAddArrow::GetCurrentValue (G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandSceneAddArrow::SetNewValue (G4UIcommand*, G4String newValue)
+{
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+  G4bool warn(verbosity >= G4VisManager::warnings);
+
+  G4Scene* pScene = fpVisManager->GetCurrentScene();
+  if (!pScene) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<	"ERROR: No current scene.  Please create one." << G4endl;
+    }
+    return;
+  }
+
+  G4String unitString;
+  G4double x1, y1, z1, x2, y2, z2;
+  std::istringstream is(newValue);
+  is >> x1 >> y1 >> z1 >> x2 >> y2 >> z2 >> unitString;
+  G4double unit = G4UIcommand::ValueOf(unitString);
+  x1 *= unit; y1 *= unit; z1 *= unit;
+  x2 *= unit; y2 *= unit; z2 *= unit;
+
+  // Consult scene for arrow width.
+  const G4VisExtent& sceneExtent = pScene->GetExtent();
+  G4double arrowWidth =
+    0.005 * fCurrentLineWidth * sceneExtent.GetExtentRadius();
+
+  Arrow* arrow = new Arrow(x1, y1, z1, x2, y2, z2,
+			   arrowWidth, fCurrentColour);
+  G4VModel* model =
+    new G4CallbackModel<G4VisCommandSceneAddArrow::Arrow>(arrow);
+  model->SetType("Arrow");
+  model->SetGlobalTag("Arrow");
+  model->SetGlobalDescription("Arrow: " + newValue);
+  const G4String& currentSceneName = pScene -> GetName ();
+  G4bool successful = pScene -> AddRunDurationModel (model, warn);
+  if (successful) {
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Arrow has been added to scene \""
+	     << currentSceneName << "\"."
+	     << G4endl;
+    }
+  }
+  else G4VisCommandsSceneAddUnsuccessful(verbosity);
+  UpdateVisManagerScene (currentSceneName);
+}
+
+G4VisCommandSceneAddArrow::Arrow::Arrow
+(G4double x1, G4double y1, G4double z1,
+ G4double x2, G4double y2, G4double z2,
+ G4double width, const G4Colour& colour):
+  fWidth(width), fColour(colour)
+{
+  // Make a cylinder slightly shorter than the arrow length so that it
+  // doesn't stick out of the head.
+  const G4double shaftRadius = fWidth/2.;
+  const G4double shaftLength = std::sqrt
+    (std::pow(x2-x1,2)+std::pow(y2-y1,2)+std::pow(z2-z1,2));
+  const G4double halfShaftLength = shaftLength/2.;
+  const G4double halfReduction = 2.*fWidth;
+  G4Tubs shaft("shaft",0.,shaftRadius,halfShaftLength-halfReduction,0.,twopi);
+  fpShaftPolyhedron = shaft.CreatePolyhedron();
+  // Move it a little so that the tail is at z = -halfShaftLength.
+  fpShaftPolyhedron->Transform(G4Translate3D(0,0,-halfReduction));
+
+  // Locate the head at +halfShaftLength.
+  const G4int numRZ = 3;
+  G4double r[] = {0,4,0};
+  G4double z[] = {0,-6,-4};
+  for (G4int i = 0; i < numRZ; i++) {
+    r[i] *= fWidth;
+    z[i] = halfShaftLength + z[i] * fWidth;
+  }
+  G4Polycone head("head",0,twopi,numRZ,r,z);
+  fpHeadPolyhedron = head.CreatePolyhedron();
+
+  // Transform to position
+  const G4Vector3D arrowDirection = G4Vector3D(x2-x1,y2-y1,z2-z1).unit();
+  const G4double theta = arrowDirection.theta();
+  const G4double phi = arrowDirection.phi();
+  const G4Point3D arrowCentre(0.5*(x1+x2),0.5*(y1+y2),0.5*(z1+z2));
+  const G4Transform3D tr =
+    G4Translate3D(arrowCentre) * G4RotateZ3D(phi) * G4RotateY3D(theta);
+  fpShaftPolyhedron->Transform(tr);
+  fpHeadPolyhedron->Transform(tr);
+
+  G4VisAttributes va;
+  va.SetColour(fColour);
+  va.SetForceSolid(true);
+  fpShaftPolyhedron->SetVisAttributes(va);
+  fpHeadPolyhedron->SetVisAttributes(va);
+}
+
+G4VisCommandSceneAddArrow::Arrow::~Arrow() {
+  delete fpShaftPolyhedron;
+  delete fpHeadPolyhedron;
+}
+
+void G4VisCommandSceneAddArrow::Arrow::operator()
+  (G4VGraphicsScene& sceneHandler, const G4Transform3D&)
+{
+  sceneHandler.BeginPrimitives();
+  sceneHandler.AddPrimitive(*fpShaftPolyhedron);
+  sceneHandler.AddPrimitive(*fpHeadPolyhedron);
+  sceneHandler.EndPrimitives();
+}
+
+////////////// /vis/scene/add/arrow2D ///////////////////////////////////////
+
+G4VisCommandSceneAddArrow2D::G4VisCommandSceneAddArrow2D () {
+  fpCommand = new G4UIcommand("/vis/scene/add/arrow2D", this);
+  fpCommand -> SetGuidance ("Adds 2D arrow to current scene.");
+  G4bool omitable;
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter ("x1", 'd', omitable = false);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("y1", 'd', omitable = false);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("x2", 'd', omitable = false);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("y2", 'd', omitable = false);
+  fpCommand -> SetParameter (parameter);
+}
+
+G4VisCommandSceneAddArrow2D::~G4VisCommandSceneAddArrow2D () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandSceneAddArrow2D::GetCurrentValue (G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandSceneAddArrow2D::SetNewValue (G4UIcommand*, G4String newValue)
+{
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+  G4bool warn(verbosity >= G4VisManager::warnings);
+
+  G4Scene* pScene = fpVisManager->GetCurrentScene();
+  if (!pScene) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<	"ERROR: No current scene.  Please create one." << G4endl;
+    }
+    return;
+  }
+
+  G4double x1, y1, x2, y2;
+  std::istringstream is(newValue);
+  is >> x1 >> y1 >> x2 >> y2;
+
+  Arrow2D* arrow2D = new Arrow2D
+    (x1, y1, x2, y2, fCurrentLineWidth, fCurrentColour);
+  G4VModel* model =
+    new G4CallbackModel<G4VisCommandSceneAddArrow2D::Arrow2D>(arrow2D);
+  model->SetType("Arrow2D");
+  model->SetGlobalTag("Arrow2D");
+  model->SetGlobalDescription("Arrow2D: " + newValue);
+  const G4String& currentSceneName = pScene -> GetName ();
+  G4bool successful = pScene -> AddRunDurationModel (model, warn);
+  if (successful) {
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "A 2D arrow has been added to scene \""
+	     << currentSceneName << "\"."
+	     << G4endl;
+    }
+  }
+  else G4VisCommandsSceneAddUnsuccessful(verbosity);
+  UpdateVisManagerScene (currentSceneName);
+}
+
+G4VisCommandSceneAddArrow2D::Arrow2D::Arrow2D
+(G4double x1, G4double y1,
+ G4double x2, G4double y2,
+ G4double width, const G4Colour& colour):
+  fWidth(width), fColour(colour)
+{
+  fShaftPolyline.push_back(G4Point3D(x1,y1,0));
+  fShaftPolyline.push_back(G4Point3D(x2,y2,0));
+  G4Vector3D arrowDirection = G4Vector3D(x2-x1,y2-y1,0).unit();
+  G4Vector3D arrowPointLeftDirection(arrowDirection);
+  arrowPointLeftDirection.rotateZ(150.*deg);
+  G4Vector3D arrowPointRightDirection(arrowDirection);
+  arrowPointRightDirection.rotateZ(-150.*deg);
+  fHeadPolyline.push_back(G4Point3D(x2,y2,0)+0.04*arrowPointLeftDirection);
+  fHeadPolyline.push_back(G4Point3D(x2,y2,0));
+  fHeadPolyline.push_back(G4Point3D(x2,y2,0)+0.04*arrowPointRightDirection);
+  G4VisAttributes va;
+  va.SetLineWidth(fWidth);
+  va.SetColour(fColour);
+  fShaftPolyline.SetVisAttributes(va);
+  fHeadPolyline.SetVisAttributes(va);
+}
+
+void G4VisCommandSceneAddArrow2D::Arrow2D::operator()
+  (G4VGraphicsScene& sceneHandler, const G4Transform3D&)
+{
+  sceneHandler.BeginPrimitives2D();
+  sceneHandler.AddPrimitive(fShaftPolyline);
+  sceneHandler.AddPrimitive(fHeadPolyline);
+  sceneHandler.EndPrimitives2D();
+}
+
 ////////////// /vis/scene/add/axes //////////////////////////////////
 
 G4VisCommandSceneAddAxes::G4VisCommandSceneAddAxes () {
@@ -678,6 +910,185 @@ void G4VisCommandSceneAddHits::SetNewValue (G4UIcommand*, G4String) {
   UpdateVisManagerScene (currentSceneName);
 }
 
+////////////// /vis/scene/add/line ///////////////////////////////////////
+
+G4VisCommandSceneAddLine::G4VisCommandSceneAddLine () {
+  fpCommand = new G4UIcommand("/vis/scene/add/line", this);
+  fpCommand -> SetGuidance ("Adds line to current scene.");
+  G4bool omitable;
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter ("x1", 'd', omitable = false);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("y1", 'd', omitable = false);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("z1", 'd', omitable = false);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("x2", 'd', omitable = false);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("y2", 'd', omitable = false);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("z2", 'd', omitable = false);
+  fpCommand -> SetParameter (parameter);
+  parameter =  new G4UIparameter ("unit", 's', omitable = true);
+  parameter->SetDefaultValue ("m");
+  fpCommand->SetParameter    (parameter);
+}
+
+G4VisCommandSceneAddLine::~G4VisCommandSceneAddLine () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandSceneAddLine::GetCurrentValue (G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandSceneAddLine::SetNewValue (G4UIcommand*, G4String newValue)
+{
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+  G4bool warn(verbosity >= G4VisManager::warnings);
+
+  G4Scene* pScene = fpVisManager->GetCurrentScene();
+  if (!pScene) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<	"ERROR: No current scene.  Please create one." << G4endl;
+    }
+    return;
+  }
+
+  G4String unitString;
+  G4double x1, y1, z1, x2, y2, z2;
+  std::istringstream is(newValue);
+  is >> x1 >> y1 >> z1 >> x2 >> y2 >> z2 >> unitString;
+  G4double unit = G4UIcommand::ValueOf(unitString);
+  x1 *= unit; y1 *= unit; z1 *= unit;
+  x2 *= unit; y2 *= unit; z2 *= unit;
+
+  Line* line = new Line(x1, y1, z1, x2, y2, z2,
+			fCurrentLineWidth, fCurrentColour);
+  G4VModel* model =
+    new G4CallbackModel<G4VisCommandSceneAddLine::Line>(line);
+  model->SetType("Line");
+  model->SetGlobalTag("Line");
+  model->SetGlobalDescription("Line: " + newValue);
+  const G4String& currentSceneName = pScene -> GetName ();
+  G4bool successful = pScene -> AddRunDurationModel (model, warn);
+  if (successful) {
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Line has been added to scene \""
+	     << currentSceneName << "\"."
+	     << G4endl;
+    }
+  }
+  else G4VisCommandsSceneAddUnsuccessful(verbosity);
+  UpdateVisManagerScene (currentSceneName);
+}
+
+G4VisCommandSceneAddLine::Line::Line
+(G4double x1, G4double y1, G4double z1,
+ G4double x2, G4double y2, G4double z2,
+ G4double width, const G4Colour& colour):
+  fWidth(width), fColour(colour)
+{
+  fPolyline.push_back(G4Point3D(x1,y1,z1));
+  fPolyline.push_back(G4Point3D(x2,y2,z2));
+  G4VisAttributes va;
+  va.SetLineWidth(fWidth);
+  va.SetColour(fColour);
+  fPolyline.SetVisAttributes(va);
+}
+
+void G4VisCommandSceneAddLine::Line::operator()
+  (G4VGraphicsScene& sceneHandler, const G4Transform3D&)
+{
+  sceneHandler.BeginPrimitives();
+  sceneHandler.AddPrimitive(fPolyline);
+  sceneHandler.EndPrimitives();
+}
+
+////////////// /vis/scene/add/line2D ///////////////////////////////////////
+
+G4VisCommandSceneAddLine2D::G4VisCommandSceneAddLine2D () {
+  fpCommand = new G4UIcommand("/vis/scene/add/line2D", this);
+  fpCommand -> SetGuidance ("Adds 2D line to current scene.");
+  G4bool omitable;
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter ("x1", 'd', omitable = false);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("y1", 'd', omitable = false);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("x2", 'd', omitable = false);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("y2", 'd', omitable = false);
+  fpCommand -> SetParameter (parameter);
+}
+
+G4VisCommandSceneAddLine2D::~G4VisCommandSceneAddLine2D () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandSceneAddLine2D::GetCurrentValue (G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandSceneAddLine2D::SetNewValue (G4UIcommand*, G4String newValue)
+{
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+  G4bool warn(verbosity >= G4VisManager::warnings);
+
+  G4Scene* pScene = fpVisManager->GetCurrentScene();
+  if (!pScene) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<	"ERROR: No current scene.  Please create one." << G4endl;
+    }
+    return;
+  }
+
+  G4double x1, y1, x2, y2;
+  std::istringstream is(newValue);
+  is >> x1 >> y1 >> x2 >> y2;
+
+  Line2D* line2D = new Line2D
+    (x1, y1, x2, y2, fCurrentLineWidth, fCurrentColour);
+  G4VModel* model =
+    new G4CallbackModel<G4VisCommandSceneAddLine2D::Line2D>(line2D);
+  model->SetType("Line2D");
+  model->SetGlobalTag("Line2D");
+  model->SetGlobalDescription("Line2D: " + newValue);
+  const G4String& currentSceneName = pScene -> GetName ();
+  G4bool successful = pScene -> AddRunDurationModel (model, warn);
+  if (successful) {
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "A 2D line has been added to scene \""
+	     << currentSceneName << "\"."
+	     << G4endl;
+    }
+  }
+  else G4VisCommandsSceneAddUnsuccessful(verbosity);
+  UpdateVisManagerScene (currentSceneName);
+}
+
+G4VisCommandSceneAddLine2D::Line2D::Line2D
+(G4double x1, G4double y1,
+ G4double x2, G4double y2,
+ G4double width, const G4Colour& colour):
+  fWidth(width), fColour(colour)
+{
+  fPolyline.push_back(G4Point3D(x1,y1,0));
+  fPolyline.push_back(G4Point3D(x2,y2,0));
+  G4VisAttributes va;
+  va.SetLineWidth(fWidth);
+  va.SetColour(fColour);
+  fPolyline.SetVisAttributes(va);
+}
+
+void G4VisCommandSceneAddLine2D::Line2D::operator()
+  (G4VGraphicsScene& sceneHandler, const G4Transform3D&)
+{
+  sceneHandler.BeginPrimitives2D();
+  sceneHandler.AddPrimitive(fPolyline);
+  sceneHandler.EndPrimitives2D();
+}
+
 ////////////// /vis/scene/add/logicalVolume //////////////////////////////////
 
 G4VisCommandSceneAddLogicalVolume::G4VisCommandSceneAddLogicalVolume () {
@@ -884,6 +1295,17 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
     return;
   }
 
+  G4VViewer* pViewer = fpVisManager->GetCurrentViewer();
+  if (!pViewer) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout << 
+	"ERROR: G4VisCommandSceneAddLogo::SetNewValue: no viewer."
+	"\n  Auto direction needs a viewer."
+	     << G4endl;
+    }
+    return;
+  }
+
   G4double userHeight, red, green, blue, xmid, ymid, zmid;
   G4String userHeightUnit, direction, auto_manual, positionUnit;
   std::istringstream is (newValue);
@@ -903,8 +1325,18 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
   G4double unit = G4UIcommand::ValueOf(positionUnit);
   xmid *= unit; ymid *= unit; zmid *= unit;
 
-  Direction logoDirection (autoDirection);
-  if (direction == "auto") logoDirection = autoDirection;
+  Direction logoDirection = X;  // Initialise to keep some compilers happy.
+  if (direction == "auto") {
+    // Take cue from viewer
+    const G4Vector3D& vp =
+      pViewer->GetViewParameters().GetViewpointDirection();
+    if (vp.x() > vp.y() && vp.x() > vp.z()) logoDirection = X;
+    else if (vp.x() < vp.y() && vp.x() < vp.z()) logoDirection = minusX;
+    else if (vp.y() > vp.x() && vp.y() > vp.z()) logoDirection = Y;
+    else if (vp.y() < vp.x() && vp.y() < vp.z()) logoDirection = minusY;
+    else if (vp.z() > vp.x() && vp.z() > vp.y()) logoDirection = Z;
+    else if (vp.z() < vp.x() && vp.z() < vp.y()) logoDirection = minusZ;
+  }
   else if (direction(0) == 'x') logoDirection = X;
   else if (direction(0) == 'y') logoDirection = Y;
   else if (direction(0) == 'z') logoDirection = Z;
@@ -920,19 +1352,6 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
     }
   }
 
-  G4VViewer* pViewer = fpVisManager->GetCurrentViewer();
-  if (logoDirection == autoDirection) {  // Takes cue from viewer.
-    if (!pViewer) {
-      if (verbosity >= G4VisManager::errors) {
-	G4cout << 
-	  "ERROR: G4VisCommandSceneAddLogo::SetNewValue: no viewer."
-          "\n  Auto direction needs a viewer."
-	       << G4endl;
-      }
-      return;
-    }
-  }
-
   G4bool autoPlacing = false; if (auto_manual == "auto") autoPlacing = true;
   // Parameters read and interpreted.
 
@@ -943,7 +1362,6 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
   const G4double ymax = sceneExtent.GetYmax();
   const G4double zmin = sceneExtent.GetZmin();
   const G4double zmax = sceneExtent.GetZmax();
-  const G4double diameter = 2. * sceneExtent.GetExtentRadius();
 
   // Test existing extent and issue warnings...
   G4bool worried = false;
@@ -965,8 +1383,6 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
   // Test existing scene for room...
   G4bool room = true;
   switch (logoDirection) {
-  case autoDirection:
-    if (freeHeightFraction * diameter < height) room = false; break;
   case X:
   case minusX:
     if (freeHeightFraction * (xmax - xmin) < height) room = false; break;
@@ -997,26 +1413,6 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
     }
   }
 
-  if (logoDirection == autoDirection) {
-    // Take cue from viewer
-    const G4Vector3D& vp =
-      pViewer->GetViewParameters().GetViewpointDirection();
-    if (vp.x() > vp.y() && vp.x() > vp.z()) logoDirection = X;
-    else if (vp.x() < vp.y() && vp.x() < vp.z()) logoDirection = minusX;
-    else if (vp.y() > vp.x() && vp.y() > vp.z()) logoDirection = Y;
-    else if (vp.y() < vp.x() && vp.y() < vp.z()) logoDirection = minusY;
-    else if (vp.z() > vp.x() && vp.z() > vp.y()) logoDirection = Z;
-    else if (vp.z() < vp.x() && vp.z() < vp.y()) logoDirection = minusZ;
-  }
-  if (logoDirection == autoDirection) {
-    if (verbosity >= G4VisManager::errors) {
-      G4cout << 
-	"ERROR: Something wrong with logic for auto direction."
-	     << G4endl;
-    }
-    return;
-  }
-
   G4double sxmid(xmid), symid(ymid), szmid(zmid);
   if (autoPlacing) {
     // Aim to place at bottom right of screen when viewed from logoDirection.
@@ -1025,8 +1421,6 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
     const G4double yComfort = comfort * (ymax - ymin);
     const G4double zComfort = comfort * (zmax - zmin);
     switch (logoDirection) {
-    case autoDirection:  // Shouldn't happen - see code above.
-      break;
     case X:  // y-axis up, z-axis to left?
       sxmid = xmax + halfHeight + xComfort;
       symid = ymin - yComfort;
@@ -1062,8 +1456,6 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4Transform3D transform;
   switch (logoDirection) {
-  case autoDirection:  // Shouldn't happen - see code above.
-    break;
   case X:  // y-axis up, z-axis to left?
     transform = G4RotateY3D(halfpi);
     break;
@@ -1145,13 +1537,13 @@ G4VisCommandSceneAddLogo::G4Logo::G4Logo
   G4RotationMatrix rm;
   rm.rotateZ(angle*rad);
   const G4double d = std::sqrt(dx * dx + dy * dy);
-  const G4double s = h;  // Half height of square subtractor
-  const G4double y8 = s; // Choose y of subtractor for outer slope.
-  const G4double x8 = ((-s * d - dx * (yt - y8)) / dy) + xt;
-  G4double y9 = s; // Choose y of subtractor for inner slope.
-  G4double x9 = ((-(s - w) * d - dx * (yt - y8)) / dy) + xt;
+  const G4double ss = h;  // Half height of square subtractor
+  const G4double y8 = ss; // Choose y of subtractor for outer slope.
+  const G4double x8 = ((-ss * d - dx * (yt - y8)) / dy) + xt;
+  G4double y9 = ss; // Choose y of subtractor for inner slope.
+  G4double x9 = ((-(ss - w) * d - dx * (yt - y8)) / dy) + xt;
   // But to get inner, we make a triangle translated by...
-  const G4double xtr = s - f1, ytr = -s - f2 -w;
+  const G4double xtr = ss - f1, ytr = -ss - f2 -w;
   x9 += xtr; y9 += ytr;
 
   // G...
@@ -1164,11 +1556,11 @@ G4VisCommandSceneAddLogo::G4Logo::G4Logo
 
   // 4...
   G4Box b1("b1",h2,h2,d2);
-  G4Box bS("bS",s,s,d2+e);  // Subtractor.
-  G4Box bS2("bS2",s,s,d2+2.*e);  // 2nd Subtractor.
-  G4SubtractionSolid s1("s1",&b1,&bS,G4Translate3D(f1-s,f2-s,0.));
-  G4SubtractionSolid s2("s2",&s1,&bS,G4Translate3D(f1+s+w,f2-s,0.));
-  G4SubtractionSolid s3("s3",&s2,&bS,G4Translate3D(f1+s+w,f2+s+w,0.));
+  G4Box bS("bS",ss,ss,d2+e);  // Subtractor.
+  G4Box bS2("bS2",ss,ss,d2+2.*e);  // 2nd Subtractor.
+  G4SubtractionSolid s1("s1",&b1,&bS,G4Translate3D(f1-ss,f2-ss,0.));
+  G4SubtractionSolid s2("s2",&s1,&bS,G4Translate3D(f1+ss+w,f2-ss,0.));
+  G4SubtractionSolid s3("s3",&s2,&bS,G4Translate3D(f1+ss+w,f2+ss+w,0.));
   G4SubtractionSolid s4
     ("s4",&s3,&bS,G4Transform3D(rm,G4ThreeVector(x8,y8,0.)));
   G4SubtractionSolid s5    // Triangular hole.
@@ -2351,17 +2743,17 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
   }
 
   const std::vector<G4Scene::Model>& rdModelList = pScene -> GetRunDurationModelList();
-  std::vector<G4Scene::Model>::const_iterator i;
-  for (i = rdModelList.begin(); i != rdModelList.end(); ++i) {
-    if (i->fpModel->GetGlobalDescription().find("G4PhysicalVolumeModel")
+  std::vector<G4Scene::Model>::const_iterator it;
+  for (it = rdModelList.begin(); it != rdModelList.end(); ++it) {
+    if (it->fpModel->GetGlobalDescription().find("G4PhysicalVolumeModel")
 	!= std::string::npos) {
-      if (((G4PhysicalVolumeModel*)(i->fpModel))->GetTopPhysicalVolume () == world) break;
+      if (((G4PhysicalVolumeModel*)(it->fpModel))->GetTopPhysicalVolume () == world) break;
     }
   }
-  if (i != rdModelList.end()) {
+  if (it != rdModelList.end()) {
     if (verbosity >= G4VisManager::warnings) {
       G4cout << "WARNING: There is already a volume, \""
-             << i -> fpModel -> GetGlobalDescription()
+             << it -> fpModel -> GetGlobalDescription()
              << "\",\n in the run-duration model list of scene \""
              << pScene -> GetName()
              << "\".\n To get a clean scene:"
@@ -2392,7 +2784,6 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
 
   } else if (name == "worlds") {
 
-    size_t nWorlds = transportationManager->GetNoWorlds();
     if (nWorlds == 0) {
       if (verbosity >= G4VisManager::warnings) {
 	G4cout <<
@@ -2414,7 +2805,6 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
 
   } else {  // Search all worlds...
     
-    size_t nWorlds = transportationManager->GetNoWorlds();
     std::vector<G4VPhysicalVolume*>::iterator iterWorld =
       transportationManager->GetWorldsIterator();
     for (size_t i = 0; i < nWorlds; ++i, ++iterWorld) {
