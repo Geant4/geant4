@@ -16,6 +16,15 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+12 June 2012 Vladimir Ivantchenko (hadr-proc-V09-05-04)
+--------------------------------------------------------
+- G4WHadronElasticProcess - fixed compillation problem introduced
+    in the previous tag
+
+11 June 2012 Vladimir Ivantchenko (hadr-proc-V09-05-03)
+--------------------------------------------------------
+- G4WHadronElasticProcess - fixed shadowing
+
 23 April 2012 Vladimir Ivantchenko (hadr-proc-V09-05-02)
 --------------------------------------------------------
 - G4WHadronElasticProcess - time and weight for recoil are
