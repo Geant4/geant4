@@ -44,6 +44,7 @@
 //		a number of G4double terms with G4int, with consequent casts.
 // 20110214  M. Kelsey -- Follow G4InuclParticle::Model enumerator migration
 // 20110922  M. Kelsey -- Follow G4InuclParticle::print(ostream&) migration
+// 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
 
 #include "G4NonEquilibriumEvaporator.hh"
 #include "G4CollisionOutput.hh"
@@ -334,17 +335,17 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		      
 		      if (ptype == 2) QNP_new--;
 		      
-		if (verboseLevel > 3) {
-		  G4cout << " nucleus   px " << PEX.px() << " py " << PEX.py()
-			 << " pz " << PEX.pz() << " E " << PEX.e() << G4endl
-			 << " evaporate px " << mom.px() << " py " << mom.py()
-			 << " pz " << mom.pz() << " E " << mom.e() << G4endl;
-		}
+		      if (verboseLevel > 3) {
+			G4cout << " nucleus   px " << PEX.px() << " py " << PEX.py()
+			       << " pz " << PEX.pz() << " E " << PEX.e() << G4endl
+			       << " evaporate px " << mom.px() << " py " << mom.py()
+			       << " pz " << mom.pz() << " E " << mom.e() << G4endl;
+		      }
 		
 		      // New excitation energy depends on residual nuclear state
 		      G4double mass_new = G4InuclNuclei::getNucleiMass(A_new, Z_new);
 		      
-		      G4double EEXS_new = ((PEX-mom).m() - mass_new)*GeV;
+		      EEXS_new = ((PEX-mom).m() - mass_new)*GeV;
 		      if (EEXS_new < 0.) continue;	// Sanity check for new nucleus
 		      
 		      if (verboseLevel > 3)

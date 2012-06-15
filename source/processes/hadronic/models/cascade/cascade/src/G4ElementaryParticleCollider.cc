@@ -86,6 +86,7 @@
 //		multiplicity failures return zero output, and can be trapped.
 // 20120308  M. Kelsey -- Allow photons to interact with dibaryons (see
 //		changes in G4NucleiModel).
+// 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
 
 #include "G4ElementaryParticleCollider.hh"
 #include "G4CascadeChannel.hh"
@@ -334,21 +335,22 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
       G4double pmod = pscm;	// Elastic scattering preserves CM momentum
 
       if (kw == 2) {		// Non-elastic needs new CM momentum value
-	G4double m1 = dummy.getParticleMass(particle_kinds[0]);
-	G4double m2 = dummy.getParticleMass(particle_kinds[1]);
+	G4double mone = dummy.getParticleMass(particle_kinds[0]);
+	G4double mtwo = dummy.getParticleMass(particle_kinds[1]);
 
-	if (etot_scm < m1+m2) {		// Can't produce final state
+	if (etot_scm < mone+mtwo) {		// Can't produce final state
 	  if (verboseLevel > 2) {
 	    G4cerr << " bad final state " << particle_kinds[0]
 		   << " , " << particle_kinds[1] << " etot_scm " << etot_scm
-		   << " < m1+m2 " << m1+m2 << " , but ekin " << ekin << G4endl;
+		   << " < mone+mtwo " << mone+mtwo << " , but ekin " << ekin
+		   << G4endl;
 	  }
 	  continue;
 	}
 
 	G4double ecm_sq = etot_scm*etot_scm;
-	G4double msumsq = m1+m2; msumsq *= msumsq;
-	G4double mdifsq = m1-m2; mdifsq *= mdifsq;
+	G4double msumsq = mone+mtwo; msumsq *= msumsq;
+	G4double mdifsq = mone-mtwo; mdifsq *= mdifsq;
 
 	G4double a = (ecm_sq - msumsq) * (ecm_sq - mdifsq);
 
@@ -642,20 +644,20 @@ G4ElementaryParticleCollider::generateMomModules(G4int mult,
 
 G4bool 
 G4ElementaryParticleCollider::satisfyTriangle(
-			const std::vector<G4double>& modules) const 
+			const std::vector<G4double>& pmod) const 
 {
   if (verboseLevel > 3) {
     G4cout << " >>> G4ElementaryParticleCollider::satisfyTriangle" 
            << G4endl;
   }
 
-  G4bool good = ( (modules.size() != 3) ||
-		  !(std::fabs(modules[1] - modules[2]) > modules[0] || 
-		    modules[0] > modules[1] + modules[2] ||
-		    std::fabs(modules[0] - modules[2]) > modules[1] ||
-		    modules[1] > modules[0] + modules[2] ||
-		    std::fabs(modules[0] - modules[1]) > modules[2] ||
-		    modules[2] > modules[1] + modules[0]));
+  G4bool good = ( (pmod.size() != 3) ||
+		  !(std::fabs(pmod[1] - pmod[2]) > pmod[0] || 
+		    pmod[0] > pmod[1] + pmod[2] ||
+		    std::fabs(pmod[0] - pmod[2]) > pmod[1] ||
+		    pmod[1] > pmod[0] + pmod[2] ||
+		    std::fabs(pmod[0] - pmod[1]) > pmod[2] ||
+		    pmod[2] > pmod[1] + pmod[0]));
 
   return good;
 }
@@ -734,13 +736,13 @@ G4ElementaryParticleCollider::getMomModuleFor2toMany(G4int is, G4int /*mult*/,
   if (knd == 1 || knd == 2) JM = 1;
   if (verboseLevel > 3) G4cout << " JM " << JM << G4endl;
 
-  for(G4int m = 0; m < 3; m++) {
+  for(G4int im = 0; im < 3; im++) {
     if (verboseLevel >3) {
-      G4cout << " m " << m << " : rmn[8+IM+m][7+JM][KM-1] "
-	     << rmn[8+IM+m][7+JM][KM-1] << " ekin^m " << std::pow(ekin, m)
+      G4cout << " im " << im << " : rmn[8+IM+im][7+JM][KM-1] "
+	     << rmn[8+IM+im][7+JM][KM-1] << " ekin^im " << std::pow(ekin, im)
 	     << G4endl;
     }
-    PS += rmn[8 + IM + m][7 + JM][KM - 1] * std::pow(ekin, m);
+    PS += rmn[8 + IM + im][7 + JM][KM - 1] * std::pow(ekin, im);
   }
   
   G4double PRA = PS * std::sqrt(S) * (PR + (1 - PQ) * (S*S*S*S));
@@ -785,8 +787,8 @@ G4ElementaryParticleCollider::particleSCMmomentumFor2to3(
     for(G4int l = 0; l < 4; l++) {
       G4double V = 0.0;
 
-      for(G4int m = 0; m < 4; m++) {
-	V += abn[m][l][K + J - 1] * std::pow(ekin, m);
+      for(G4int im = 0; im < 4; im++) {
+	V += abn[im][l][K+J-1] * std::pow(ekin, im);
       };
 
       U += V;
@@ -1022,18 +1024,18 @@ G4ElementaryParticleCollider::generateSCMpionAbsorption(G4double etot_scm,
     
   G4InuclElementaryParticle dummy;
 
-  G4double m1 = dummy.getParticleMass(particle_kinds[0]);
-  G4double m1sq = m1*m1;
+  G4double mone = dummy.getParticleMass(particle_kinds[0]);
+  G4double m1sq = mone*mone;
 
-  G4double m2 = dummy.getParticleMass(particle_kinds[1]);
-  G4double m2sq = m2*m2;
+  G4double mtwo = dummy.getParticleMass(particle_kinds[1]);
+  G4double m2sq = mtwo*mtwo;
 
   G4double a = 0.5 * (etot_scm * etot_scm - m1sq - m2sq);
 
   G4double pmod = std::sqrt((a * a - m1sq * m2sq) / (m1sq + m2sq + 2.0 * a));
-  G4LorentzVector mom1 = generateWithRandomAngles(pmod, m1);
+  G4LorentzVector mom1 = generateWithRandomAngles(pmod, mone);
   G4LorentzVector mom2;
-  mom2.setVectM(-mom1.vect(), m2);
+  mom2.setVectM(-mom1.vect(), mtwo);
 
   particles[0].fill(mom1, particle_kinds[0], G4InuclParticle::EPCollider);
   particles[1].fill(mom2, particle_kinds[1], G4InuclParticle::EPCollider);

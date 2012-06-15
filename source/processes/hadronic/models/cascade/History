@@ -15,6 +15,28 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+8 June 2012 Michael Kelsey (hadr-casc-V09-05-12)
+------------------------------------------------
+Address compiler warnings about variable-shadowing (local variable has same
+name as data member or global variable) which appear when "-Wshadow" is used.
+
+	G4InuclSpecialFunctions.hh
+	G4CascadeSampler.icc
+	G4CascadeData.icc
+	G4InuclElementaryParticle.hh
+	G4InuclEvaporation.cc
+	G4EquilibriumEvaporator.cc
+	G4InuclElementaryParticle.cc
+	G4NonEquilibriumEvaporator.cc
+	G4NucleiModel.cc
+	G4CascadeInterface.cc
+	G4InuclSpecialFunctions.cc
+	G4ElementaryParticleCollider.cc
+	G4BigBanger.cc
+	(evaporation) G4BENeutronChannel.cc
+	(evaporation) G4BEChargedChannel.cc
+	(evaporation) G4BertiniEvaporationChannel.cc
+
 25 May 2012 Michael Kelsey (hadr-casc-V09-05-11)
 ------------------------------------------------
 - G4Dineutron.cc, G4Diproton.cc, G4UnboundPN.cc:  Add code to protect

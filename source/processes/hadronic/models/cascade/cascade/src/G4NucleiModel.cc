@@ -110,6 +110,7 @@
 // 20120308  M. Kelsey -- Add binned photon absorption cross-section.
 // 20120320  M. Kelsey -- Bug fix: fill zone_volumes for single-zone case
 // 20120321  M. Kelsey -- Add check in isProjectile() for single-zone case.
+// 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
 
 #include "G4NucleiModel.hh"
 #include "G4CascadeChannel.hh"
@@ -573,10 +574,10 @@ G4double G4NucleiModel::getFermiKinetic(G4int ip, G4int izone) const {
   G4double ekin = 0.0;
   
   if (ip < 3 && izone < number_of_zones) {	// ip for proton/neutron only
-    G4double pf = fermi_momenta[ip - 1][izone]; 
+    G4double pfermi = fermi_momenta[ip - 1][izone]; 
     G4double mass = G4InuclElementaryParticle::getParticleMass(ip);
     
-    ekin = std::sqrt(pf * pf + mass * mass) - mass;
+    ekin = std::sqrt(pfermi*pfermi + mass*mass) - mass;
   }  
   return ekin;
 }
@@ -981,12 +982,12 @@ G4bool G4NucleiModel::passFermi(const std::vector<G4InuclElementaryParticle>& pa
 
     G4int type   = particles[i].type();
     G4double mom = particles[i].getMomModule();
-    G4double pf  = fermi_momenta[type-1][zone];
+    G4double pfermi  = fermi_momenta[type-1][zone];
 
     if (verboseLevel > 2)
-      G4cout << " type " << type << " p " << mom << " pf " << pf << G4endl;
+      G4cout << " type " << type << " p " << mom << " pf " << pfermi << G4endl;
     
-    if (mom < pf) {
+    if (mom < pfermi) {
 	if (verboseLevel > 2) G4cout << " rejected by Fermi" << G4endl;
 	return false;
     }
@@ -1292,18 +1293,18 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 
 	      for (i = 0; i < 2; i++) {
 		G4int itry1 = 0;
-		G4double s, u, rho; 
+		G4double ss, u, rho; 
 		G4double fmax = std::exp(-0.5) / std::sqrt(0.5);
 
 		while (itry1 < itry_max) {
 		  itry1++;
-		  s = -std::log(inuclRndm());
+		  ss = -std::log(inuclRndm());
 		  u = fmax * inuclRndm();
-		  rho = std::sqrt(s) * std::exp(-s);
+		  rho = std::sqrt(ss) * std::exp(-ss);
 
-		  if (rho > u && s < s3max) {
-		    s = r0forAeq3 * std::sqrt(s);
-		    coord1 = generateWithRandomAngles(s).vect();
+		  if (rho > u && ss < s3max) {
+		    ss = r0forAeq3 * std::sqrt(ss);
+		    coord1 = generateWithRandomAngles(ss).vect();
 		    coordinates.push_back(coord1);
 
 		    if (verboseLevel > 2){
@@ -1355,8 +1356,7 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	    G4double b = 3./(ab - 2.0);
 	    G4double b1 = 1.0 - b / 2.0;
 	    G4double u = b1 + std::sqrt(b1 * b1 + b);
-	    b = 1.0 / b;
-	    G4double fmax = (1.0 + u * b) * u * std::exp(-u);
+	    G4double fmax = (1.0 + u/b) * u * std::exp(-u);
 	  
 	    while (badco && itry < itry_max) {
 
@@ -1366,16 +1366,17 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	    
 	      for (i = 0; i < ab-1; i++) {
 		G4int itry1 = 0;
-		G4double s, u; 
+		G4double ss; 
 
 		while (itry1 < itry_max) {
 		  itry1++;
-		  s = -std::log(inuclRndm());
+		  ss = -std::log(inuclRndm());
 		  u = fmax * inuclRndm();
 
-		  if (std::sqrt(s) * std::exp(-s) * (1.0 + b * s) > u && s < s4max) {
-		    s = r0forAeq4 * std::sqrt(s);
-		    coord1 = generateWithRandomAngles(s).vect();
+		  if (std::sqrt(ss) * std::exp(-ss) * (1.0 + ss/b) > u
+		      && ss < s4max) {
+		    ss = r0forAeq4 * std::sqrt(ss);
+		    coord1 = generateWithRandomAngles(ss).vect();
 		    coordinates.push_back(coord1);
 
 		    if (verboseLevel > 2) {
@@ -1441,10 +1442,10 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	    //G4bool badp = True;
 
 	    for (G4int i = 0; i < ab - 1; i++) {
-	      G4int itry = 0;
+	      G4int itry2 = 0;
 
-	      while(itry < itry_max) {
-		itry++;
+	      while(itry2 < itry_max) {
+		itry2++;
 		u = -std::log(0.879853 - 0.8798502 * inuclRndm());
 		x = u * std::exp(-u);
 
@@ -1455,9 +1456,9 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 
 		  break;
 		}
-	      }
+	      }	// while (itry2 < itry_max)
 
-	      if(itry == itry_max) {
+	      if(itry2 == itry_max) {
 		G4cout << " can not generate proper momentum for a "
 		       << ab << G4endl;
 
@@ -1465,8 +1466,7 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 		particles.clear();
 		return;
 	      } 
-
-	    }
+	    }	// for (i=0 ...
 	    // last momentum
 
 	    mom *= 0.;		// Cheap way to reset

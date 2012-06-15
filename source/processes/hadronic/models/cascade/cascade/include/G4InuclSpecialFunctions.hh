@@ -33,6 +33,7 @@
 // 20100412  M. Kelsey -- Modify paraMaker[Truncated] to take buffer as argument
 // 20100914  M. Kelsey -- Migrate to integer A and Z.  Discard unused binding
 //		energy functions
+// 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
 
 #ifndef G4INUCL_SPECIAL_FUNC_HH
 #define G4INUCL_SPECIAL_FUNC_HH
@@ -75,9 +76,9 @@ namespace G4InuclSpecialFunctions {
 
   // Optional mass argument will be used to fill G4LorentzVector correctly
   G4LorentzVector generateWithFixedTheta(G4double ct, G4double p,
-					 G4double m=0.);
+					 G4double mass=0.);
 
-  G4LorentzVector generateWithRandomAngles(G4double p, G4double m=0.);
+  G4LorentzVector generateWithRandomAngles(G4double p, G4double mass=0.);
 }
 
 

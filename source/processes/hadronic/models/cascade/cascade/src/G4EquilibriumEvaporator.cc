@@ -62,6 +62,7 @@
 //		creation of temporaries.
 // 20110922  M. Kelsey -- Follow G4InuclParticle::print(ostream&) migration
 // 20111007  M. Kelsey -- Add G4InuclParticleNames, replace hardcoded numbers
+// 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
 
 #include "G4EquilibriumEvaporator.hh"
 #include "G4BigBanger.hh"
@@ -357,7 +358,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
       G4double SL = prob_sum * inuclRndm();
       G4double S1 = 0.0;
 
-      for (G4int i = 0; i < 7; i++) {	// Select evaporation scenario
+      for (i = 0; i < 7; i++) {	// Select evaporation scenario
 	S1 += W[i];
 	if (SL <= S1) {
 	  icase = i;

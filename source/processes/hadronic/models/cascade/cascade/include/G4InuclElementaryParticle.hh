@@ -43,6 +43,7 @@
 // 20110801  M. Kelsey -- Add fill() functions to replicate ctors, allowing
 //		reuse of objects as buffers; c.f. G4InuclNuclei.
 // 20110922  M. Kelsey -- Add stream argument to printParticle() => print()
+// 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
 
 #ifndef G4INUCL_ELEMENTARY_PARTICLE_HH
 #define G4INUCL_ELEMENTARY_PARTICLE_HH
@@ -59,20 +60,20 @@ public:
   G4InuclElementaryParticle() 
     : G4InuclParticle() {}
 
-  G4InuclElementaryParticle(G4int type, Model model=DefaultModel) 
-    : G4InuclParticle(makeDefinition(type), model) {}
+  G4InuclElementaryParticle(G4int ityp, Model model=DefaultModel) 
+    : G4InuclParticle(makeDefinition(ityp), model) {}
 
   G4InuclElementaryParticle(const G4DynamicParticle& dynPart,
 			    Model model=DefaultModel)
     : G4InuclParticle(dynPart, model) {}
 
   G4InuclElementaryParticle(const G4LorentzVector& mom,
-			    G4int type, Model model=DefaultModel)
-    : G4InuclParticle(makeDefinition(type), mom, model) {}
+			    G4int ityp, Model model=DefaultModel)
+    : G4InuclParticle(makeDefinition(ityp), mom, model) {}
 
-  G4InuclElementaryParticle(G4double ekin, G4int type,
+  G4InuclElementaryParticle(G4double ekin, G4int ityp,
 			    Model model=DefaultModel) 
-    : G4InuclParticle(makeDefinition(type), ekin, model) {}
+    : G4InuclParticle(makeDefinition(ityp), ekin, model) {}
 
   // WARNING:  This may create a particle without a valid type code!
   G4InuclElementaryParticle(const G4LorentzVector& mom,
@@ -86,11 +87,11 @@ public:
   G4InuclElementaryParticle& operator=(const G4InuclElementaryParticle& right);
 
   // Overwrite data structure (avoids creating/copying temporaries)
-  void fill(G4int type, Model model=DefaultModel) { fill(0., type, model); }
+  void fill(G4int ityp, Model model=DefaultModel) { fill(0., ityp, model); }
 
-  void fill(const G4LorentzVector& mom, G4int type, Model model=DefaultModel);
+  void fill(const G4LorentzVector& mom, G4int ityp, Model model=DefaultModel);
 
-  void fill(G4double ekin, G4int type, Model model=DefaultModel);
+  void fill(G4double ekin, G4int ityp, Model model=DefaultModel);
 
   // WARNING:  This may create a particle without a valid type code!
   void fill(const G4LorentzVector& mom, G4ParticleDefinition* pd,

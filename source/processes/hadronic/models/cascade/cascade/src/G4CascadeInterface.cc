@@ -225,6 +225,12 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
   if (verboseLevel)
     G4cout << " >>> G4CascadeInterface::ApplyYourself" << G4endl;
 
+  if (aTrack.GetKineticEnergy() < 0.) {
+    G4cerr << " >>> G4CascadeInterface got negative-energy track: "
+	   << aTrack.GetDefinition()->GetParticleName() << " Ekin = "
+	   << aTrack.GetKineticEnergy() << G4endl;
+  }
+
 #ifdef G4CASCADE_DEBUG_INTERFACE
   static G4int counter(0);
   counter++;
