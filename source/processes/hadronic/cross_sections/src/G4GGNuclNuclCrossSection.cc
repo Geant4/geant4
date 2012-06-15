@@ -439,8 +439,8 @@ G4GGNuclNuclCrossSection::GetHadronNucleonXscNS(G4ParticleDefinition* pParticle,
   G4double xsection(0);
   // G4double Delta;   DHW 19 May 2011: variable set but not used
   G4double A0, B0;
-  G4double hpXsc(0);
-  G4double hnXsc(0);
+  G4double hpXscv(0);
+  G4double hnXscv(0);
 
   G4double targ_mass = tParticle->GetPDGMass();
   G4double proj_mass = pParticle->GetPDGMass(); 
@@ -487,37 +487,37 @@ G4GGNuclNuclCrossSection::GetHadronNucleonXscNS(G4ParticleDefinition* pParticle,
       {
         if( proj_momentum < 0.73 )
         {
-          hnXsc = 23 + 50*( std::pow( std::log(0.73/proj_momentum), 3.5 ) );
+          hnXscv = 23 + 50*( std::pow( std::log(0.73/proj_momentum), 3.5 ) );
         }
         else if( proj_momentum < 1.05  )
         {
-          hnXsc = 23 + 40*(std::log(proj_momentum/0.73))*
+          hnXscv = 23 + 40*(std::log(proj_momentum/0.73))*
                          (std::log(proj_momentum/0.73));
         }
         else  // if( proj_momentum < 10.  )
         {
-          hnXsc = 39.0 + 
+          hnXscv = 39.0 + 
               75*(proj_momentum - 1.2)/(std::pow(proj_momentum,3.0) + 0.15);
         }
-        xsection = hnXsc;
+        xsection = hnXscv;
       }
       else  // pn to be np
       {
         if( proj_momentum < 0.8 )
         {
-          hpXsc = 33+30*std::pow(std::log(proj_momentum/1.3),4.0);
+          hpXscv = 33+30*std::pow(std::log(proj_momentum/1.3),4.0);
         }      
         else if( proj_momentum < 1.4 )
         {
-          hpXsc = 33+30*std::pow(std::log(proj_momentum/0.95),2.0);
+          hpXscv = 33+30*std::pow(std::log(proj_momentum/0.95),2.0);
         }
         else    // if( proj_momentum < 10.  )
         {
-          hpXsc = 33.3+
+          hpXscv = 33.3+
               20.8*(std::pow(proj_momentum,2.0)-1.35)/
                  (std::pow(proj_momentum,2.50)+0.95);
         }
-        xsection = hpXsc;
+        xsection = hpXscv;
       }
   }
   xsection *= millibarn; // parametrised in mb

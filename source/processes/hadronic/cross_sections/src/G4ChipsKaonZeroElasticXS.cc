@@ -46,6 +46,11 @@
 #include "G4KaonZeroShort.hh"
 #include "G4AntiKaonZero.hh"
 
+// factory
+#include "G4CrossSectionFactory.hh"
+//
+G4_DECLARE_XS_FACTORY(G4ChipsKaonZeroElasticXS);
+
 // Initialization of the
 G4double* G4ChipsKaonZeroElasticXS::lastLEN=0;// Pointer to the lastArray of LowEn CS
 G4double* G4ChipsKaonZeroElasticXS::lastHEN=0;// Pointer to the lastArray of HighEnCS
@@ -57,17 +62,15 @@ G4double  G4ChipsKaonZeroElasticXS::lastCS=0.;// Last value of the Cross Section
 G4int     G4ChipsKaonZeroElasticXS::lastI=0;  // The last position in the DAMDB
 
 
-G4ChipsKaonZeroElasticXS::G4ChipsKaonZeroElasticXS():G4VCrossSectionDataSet("ChipsKaonZeroElasticXS")
+G4ChipsKaonZeroElasticXS::G4ChipsKaonZeroElasticXS():G4VCrossSectionDataSet(Default_Name())
 {
-  theKMinusCS = new G4ChipsKaonMinusElasticXS;
-  theKPlusCS = new G4ChipsKaonPlusElasticXS;
+  theKMinusCS = (G4ChipsKaonMinusElasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonMinusElasticXS::Default_Name());;
+  theKPlusCS = (G4ChipsKaonPlusElasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonPlusElasticXS::Default_Name());
 }
 
 
 G4ChipsKaonZeroElasticXS::~G4ChipsKaonZeroElasticXS()
 {
-  delete theKMinusCS;
-  delete theKPlusCS;
 }
 
 G4bool G4ChipsKaonZeroElasticXS::IsIsoApplicable(const G4DynamicParticle* Pt, G4int, G4int,    

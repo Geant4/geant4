@@ -69,6 +69,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
 	G4ChipsAntiBaryonElasticXS.hh
 	G4ChipsComponentXS.hh
         G4ComponentAntiNuclNuclearXS.hh
+        G4ComponentSAIDTotalXS.hh
         G4CrossSectionDataSetRegistry.hh
         G4CrossSectionDataStore.hh
         G4CrossSectionElastic.hh
@@ -106,6 +107,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
         G4UPiNuclearCrossSection.hh
         G4VComponentCrossSection.hh
         G4VCrossSectionDataSet.hh
+	G4CrossSectionFactory.hh
     SOURCES
         G4BGGNucleonElasticXS.cc
         G4BGGNucleonInelasticXS.cc
@@ -137,6 +139,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
         G4CrossSectionInelastic.cc
         G4CrossSectionPairGG.cc
         G4ComponentAntiNuclNuclearXS.cc
+	G4ComponentSAIDTotalXS.cc
         G4EMDissociationCrossSection.cc
         G4EMDissociationSpectrum.cc
         G4ElectroNuclearCrossSection.cc

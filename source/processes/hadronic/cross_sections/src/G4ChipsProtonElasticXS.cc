@@ -46,6 +46,11 @@
 #include "G4ParticleTable.hh"
 #include "G4NucleiProperties.hh"
 
+// factory
+#include "G4CrossSectionFactory.hh"
+//
+G4_DECLARE_XS_FACTORY(G4ChipsProtonElasticXS);
+
 // Initialization of the static parameters
 const G4int G4ChipsProtonElasticXS::nPoints=128;//#ofPt in the AMDB table(>anyPar)(D)
 const G4int G4ChipsProtonElasticXS::nLast=nPoints-1;// theLastElement in the table(D)
@@ -98,7 +103,7 @@ std::vector<G4double*> G4ChipsProtonElasticXS::B3T; // Vector of the 3d slope
 std::vector<G4double*> G4ChipsProtonElasticXS::S4T; // Vector of the 4th mantissa (g)
 std::vector<G4double*> G4ChipsProtonElasticXS::B4T; // Vector of the 4th slope (glor)
 
-G4ChipsProtonElasticXS::G4ChipsProtonElasticXS():G4VCrossSectionDataSet("ChipsProtonElasticXS")
+G4ChipsProtonElasticXS::G4ChipsProtonElasticXS():G4VCrossSectionDataSet(Default_Name())
 {
 }
 
@@ -865,8 +870,8 @@ G4double G4ChipsProtonElasticXS::GetQ2max(G4int PDG, G4int tgZ, G4int tgN,
   {
     G4double mt=G4ParticleTable::GetParticleTable()->FindIon(tgZ,tgZ+tgN,0,tgZ)->GetPDGMass()*.001; // Target mass in GeV
     G4double dmt=mt+mt;
-    G4double s=dmt*std::sqrt(pP2+mProt2)+mProt2+mt*mt;// Mondelstam s
-    return dmt*dmt*pP2/s;
+    G4double mds=dmt*std::sqrt(pP2+mProt2)+mProt2+mt*mt;// Mondelstam mds
+    return dmt*dmt*pP2/mds;
   }
   else
   {

@@ -58,6 +58,8 @@ public:
 
   ~G4ChipsKaonZeroElasticXS();
 
+  static const char* Default_Name() {return "ChipsKaonZeroElasticXS";}
+
   virtual G4bool IsIsoApplicable(const G4DynamicParticle* Pt, G4int Z, G4int A,    
 				 const G4Element* elm,
 				 const G4Material* mat );
@@ -72,8 +74,8 @@ public:
 
 // Body
 private:
-  G4ChipsBaseXS* theKMinusCS; // K- cross-section
-  G4ChipsBaseXS* theKPlusCS;  // K+ cross-section
+  G4ChipsKaonMinusElasticXS* theKMinusCS; // K- cross-section
+  G4ChipsKaonPlusElasticXS* theKPlusCS;  // K+ cross-section
 
   static G4double  lastSig; // Last value of the Cross Section
   static G4double* lastLEN; // Pointer to the last array of LowEnergy cross sections

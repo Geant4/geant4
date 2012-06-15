@@ -1476,7 +1476,7 @@ G4HadronCrossSections::CalcScatteringCrossSections(
          if (correctInelasticNearZero && je1 == 0 && i <= 3) {
             G4double m0 = aParticle->GetMass()/GeV;
             G4double T = std::sqrt(m0*m0 + p*p) - m0;
-            G4double dx = std::sqrt(m0*m0 + plab[1]*plab[1]) - m0;
+            dx = std::sqrt(m0*m0 + plab[1]*plab[1]) - m0;
             rc = dy/dx;
             xsecin = rc*T + b;
          }

@@ -51,6 +51,10 @@
 #include "G4AntiXiZero.hh"
 #include "G4AntiOmegaMinus.hh"
 
+// factory
+#include "G4CrossSectionFactory.hh"
+//
+G4_DECLARE_XS_FACTORY(G4ChipsAntiBaryonInelasticXS);
 
 // Initialization of the
 G4double* G4ChipsAntiBaryonInelasticXS::lastLEN=0; // Pointer to lastArray of LowEn CS
@@ -64,7 +68,7 @@ G4int     G4ChipsAntiBaryonInelasticXS::lastI=0;   // The last position in the D
 std::vector<G4double*>* G4ChipsAntiBaryonInelasticXS::LEN = new std::vector<G4double*>;
 std::vector<G4double*>* G4ChipsAntiBaryonInelasticXS::HEN = new std::vector<G4double*>;
 
-G4ChipsAntiBaryonInelasticXS::G4ChipsAntiBaryonInelasticXS():G4VCrossSectionDataSet("ChipsAntiBaryonInelasticXS"){}
+G4ChipsAntiBaryonInelasticXS::G4ChipsAntiBaryonInelasticXS():G4VCrossSectionDataSet(Default_Name()){}
 
 G4ChipsAntiBaryonInelasticXS::~G4ChipsAntiBaryonInelasticXS()
 {
@@ -137,7 +141,7 @@ G4double G4ChipsAntiBaryonInelasticXS::GetIsoCrossSection(const G4DynamicParticl
   return GetChipsCrossSection(pMom, tgZ, tgN, pdg);
 }
 
-G4double G4ChipsAntiBaryonInelasticXS::GetChipsCrossSection(G4double pMom, G4int tgZ, G4int tgN, G4int pPDG)
+G4double G4ChipsAntiBaryonInelasticXS::GetChipsCrossSection(G4double pMom, G4int tgZ, G4int tgN, G4int cPDG)
 {
   static G4int j;                      // A#0f Z/N-records already tested in AMDB
   static std::vector <G4int>    colN;  // Vector of N for calculated nuclei (isotops)
@@ -174,7 +178,7 @@ G4double G4ChipsAntiBaryonInelasticXS::GetChipsCrossSection(G4double pMom, G4int
         }
         in = true;                     // This is the case when the isotop is found in DB
         // Momentum pMom is in IU ! @@ Units
-        lastCS=CalculateCrossSection(-1,j,pPDG,lastZ,lastN,pMom); // read & update
+        lastCS=CalculateCrossSection(-1,j,cPDG,lastZ,lastN,pMom); // read & update
         if(lastCS<=0. && pMom>lastTH)  // Correct the threshold (@@ No intermediate Zeros)
         {
           lastCS=0.;
@@ -187,7 +191,7 @@ G4double G4ChipsAntiBaryonInelasticXS::GetChipsCrossSection(G4double pMom, G4int
     if(!in)                            // This isotope has not been calculated previously
     {
       //!!The slave functions must provide cross-sections in millibarns (mb) !! (not in IU)
-      lastCS=CalculateCrossSection(0,j,pPDG,lastZ,lastN,pMom); //calculate & create
+      lastCS=CalculateCrossSection(0,j,cPDG,lastZ,lastN,pMom); //calculate & create
       //if(lastCS>0.)                   // It means that the AMBD was initialized
       //{
 
@@ -216,7 +220,7 @@ G4double G4ChipsAntiBaryonInelasticXS::GetChipsCrossSection(G4double pMom, G4int
   }
   else                                 // It is the last used -> use the current tables
   {
-    lastCS=CalculateCrossSection(1,j,pPDG,lastZ,lastN,pMom); // Only read and UpdateDB
+    lastCS=CalculateCrossSection(1,j,cPDG,lastZ,lastN,pMom); // Only read and UpdateDB
     lastP=pMom;
   }
   return lastCS*millibarn;
@@ -256,9 +260,9 @@ G4double G4ChipsAntiBaryonInelasticXS::CalculateCrossSection(G4int F, G4int I,
       lastHEN = new G4double[nH];      // Allocate memory for the new HEN cross sections
       // --- Instead of making a separate function ---
       G4double P=THmiG;                // Table threshold in GeV/c
-      for(G4int m=0; m<nL; m++)
+      for(G4int k=0; k<nL; k++)
       {
-        lastLEN[m] = CrossSectionLin(targZ, targN, P);
+        lastLEN[k] = CrossSectionLin(targZ, targN, P);
         P+=dPG;
       }
       G4double lP=milPG;

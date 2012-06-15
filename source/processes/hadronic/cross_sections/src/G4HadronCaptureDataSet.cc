@@ -37,8 +37,8 @@
 #include "G4HadronCaptureDataSet.hh"
 #include <iostream>
 
-G4HadronCaptureDataSet::G4HadronCaptureDataSet(const G4String& name)
- : G4VCrossSectionDataSet(name)
+G4HadronCaptureDataSet::G4HadronCaptureDataSet(const G4String& nam)
+ : G4VCrossSectionDataSet(nam)
 {
   theHadronCrossSections = G4HadronCrossSections::Instance();
 }

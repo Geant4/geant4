@@ -57,6 +57,8 @@ public:
 
   ~G4ChipsNeutronInelasticXS();
 
+  static const char* Default_Name() {return "ChipsNeutronInelasticXS";}
+
   // At present momentum (pMom) in MeV/c, CS in mb (@@ Units)
 
   virtual G4bool IsIsoApplicable(const G4DynamicParticle* Pt, G4int Z, G4int A,    

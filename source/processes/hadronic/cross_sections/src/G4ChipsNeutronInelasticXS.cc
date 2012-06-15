@@ -43,6 +43,11 @@
 #include "G4ParticleDefinition.hh"
 #include "G4Neutron.hh"
 
+// factory
+#include "G4CrossSectionFactory.hh"
+//
+G4_DECLARE_XS_FACTORY(G4ChipsNeutronInelasticXS);
+
 // Initialization of the
 G4double* G4ChipsNeutronInelasticXS::lastLEN=0; // Pointer to the lastArray of LowEn CS
 G4double* G4ChipsNeutronInelasticXS::lastHEN=0; // Pointer to the lastArray of HighEnCS
@@ -56,7 +61,7 @@ G4double  G4ChipsNeutronInelasticXS::HEthresh=0.;// HE threshold for the CS calc
 std::vector<G4double*>* G4ChipsNeutronInelasticXS::LEN = new std::vector<G4double*>;
 std::vector<G4double*>* G4ChipsNeutronInelasticXS::HEN = new std::vector<G4double*>;
 
-G4ChipsNeutronInelasticXS::G4ChipsNeutronInelasticXS():G4VCrossSectionDataSet("ChipsNeutronInelasticXS"){}
+G4ChipsNeutronInelasticXS::G4ChipsNeutronInelasticXS():G4VCrossSectionDataSet(Default_Name()){}
 
 G4ChipsNeutronInelasticXS::~G4ChipsNeutronInelasticXS()
 {
@@ -216,9 +221,9 @@ G4double G4ChipsNeutronInelasticXS::CalculateCrossSection(G4int F, G4int I,
       lastHEN = new G4double[nH];      // Allocate memory for the new HEN cross sections
       // --- Instead of making a separate function ---
       G4double P=THmiG;                // Table threshold in GeV/c
-      for(G4int m=0; m<nL; m++)
+      for(G4int k=0; k<nL; k++)
       {
-        lastLEN[m] = CrossSectionLin(targZ, targN, P);
+        lastLEN[k] = CrossSectionLin(targZ, targN, P);
         P+=dPG;
       }
       G4double lP=milPG;
@@ -1292,14 +1297,14 @@ G4double G4ChipsNeutronInelasticXS::CrossSectionFormula(G4int tZ, G4int tN,
     G4double dl=al-3.;
     G4double dl2=dl*dl;
     G4double r=.21+.62*dl2/(1.+.5*dl2);
-    G4double g=42.*(std::exp(al*0.8)+4.E-8*a4)/(1.+28./a)/(1.+5.E-5*a2);
+    G4double gg=42.*(std::exp(al*0.8)+4.E-8*a4)/(1.+28./a)/(1.+5.E-5*a2);
     G4double e=5.*((a6+.021*a8)/(1.+.0013*a7)+.001*a3)/(1.+.0007*a2);
-    G4double s=5./(1.+144./a8);
+    G4double ss=5./(1.+144./a8);
 				G4double h=HEthresh; // Individual
 
     //G4double h=(.01/a4+2.5e-6/a)*(1.+7.e-8*a4)/(1.+6.e7/a12/a2);
-    //sigma=(c+d*d)/(1.+r/p4)+(g+e*std::exp(-s*P))/(1.+h/p4/p4);
-    sigma=(c+d*d)/(1+r/p4)+(g+e*std::exp(-s*P))/(1+h/p4/p4);
+    //sigma=(c+d*d)/(1.+r/p4)+(gg+e*std::exp(-ss*P))/(1.+h/p4/p4);
+    sigma=(c+d*d)/(1+r/p4)+(gg+e*std::exp(-ss*P))/(1+h/p4/p4);
   }
   else
   {

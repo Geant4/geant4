@@ -36,32 +36,7 @@
 #include "G4IonTable.hh"
 #include "G4ParticleDefinition.hh"
 
-#include "G4ChipsProtonElasticXS.hh"
-#include "G4ChipsProtonInelasticXS.hh"
-
-#include "G4ChipsNeutronElasticXS.hh"
-#include "G4ChipsNeutronInelasticXS.hh"
-
-#include "G4ChipsAntiBaryonElasticXS.hh" 
-#include "G4ChipsAntiBaryonInelasticXS.hh"
-
-#include "G4ChipsPionMinusElasticXS.hh" 
-#include "G4ChipsPionMinusInelasticXS.hh"
-
-#include "G4ChipsPionPlusElasticXS.hh" 
-#include "G4ChipsPionPlusInelasticXS.hh"
-
-#include "G4ChipsKaonMinusElasticXS.hh"
-#include "G4ChipsKaonMinusInelasticXS.hh"
-
-#include "G4ChipsKaonPlusElasticXS.hh" 
-#include "G4ChipsKaonPlusInelasticXS.hh"
-
-#include "G4ChipsKaonZeroElasticXS.hh" 
-#include "G4ChipsKaonZeroInelasticXS.hh"
-
-#include "G4ChipsHyperonElasticXS.hh" 
-#include "G4ChipsHyperonInelasticXS.hh"
+#include "G4CrossSectionDataSetRegistry.hh"
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -69,32 +44,32 @@
 G4ChipsComponentXS::G4ChipsComponentXS():G4VComponentCrossSection("G4ChipsComponentXS"), fUpperLimit( 10000 * GeV ),
 					 fLowerLimit( 10 * MeV )
 {
-  PxsManagerEl      = new G4ChipsProtonElasticXS();
-  PxsManagerInEl    = new G4ChipsProtonInelasticXS();
+  PxsManagerEl      = (G4ChipsProtonElasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsProtonElasticXS::Default_Name());
+  PxsManagerInEl    = (G4ChipsProtonInelasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsProtonInelasticXS::Default_Name());
 
-  NxsManagerEl      = new G4ChipsNeutronElasticXS();
-  NxsManagerInEl    = new G4ChipsNeutronInelasticXS();
+  NxsManagerEl      = (G4ChipsNeutronElasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsNeutronElasticXS::Default_Name());
+  NxsManagerInEl    = (G4ChipsNeutronInelasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsNeutronInelasticXS::Default_Name());
 
-  PBARxsManagerEl   = new G4ChipsAntiBaryonElasticXS();
-  PBARxsManagerInEl = new G4ChipsAntiBaryonInelasticXS();
+  PBARxsManagerEl   = (G4ChipsAntiBaryonElasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsAntiBaryonElasticXS::Default_Name());
+  PBARxsManagerInEl = (G4ChipsAntiBaryonInelasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsAntiBaryonInelasticXS::Default_Name());
 
-  PIPxsManagerEl    = new G4ChipsPionPlusElasticXS();
-  PIPxsManagerInEl  = new G4ChipsPionPlusInelasticXS(); 
+  PIPxsManagerEl    = (G4ChipsPionPlusElasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsPionPlusElasticXS::Default_Name());
+  PIPxsManagerInEl  = (G4ChipsPionPlusInelasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsPionPlusInelasticXS::Default_Name()); 
 
-  PIMxsManagerEl    = new G4ChipsPionMinusElasticXS();
-  PIMxsManagerInEl  = new G4ChipsPionMinusInelasticXS();
+  PIMxsManagerEl    = (G4ChipsPionMinusElasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsPionMinusElasticXS::Default_Name());
+  PIMxsManagerInEl  = (G4ChipsPionMinusInelasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsPionMinusInelasticXS::Default_Name());
 
-  KPxsManagerEl     = new G4ChipsKaonPlusElasticXS();
-  KPxsManagerInEl   = new G4ChipsKaonPlusInelasticXS();
+  KPxsManagerEl     = (G4ChipsKaonPlusElasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonPlusElasticXS::Default_Name());
+  KPxsManagerInEl   = (G4ChipsKaonPlusInelasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonPlusInelasticXS::Default_Name());
 
-  KMxsManagerEl     = new G4ChipsKaonMinusElasticXS();
-  KMxsManagerInEl   = new G4ChipsKaonMinusInelasticXS();
+  KMxsManagerEl     = (G4ChipsKaonMinusElasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonMinusElasticXS::Default_Name());
+  KMxsManagerInEl   = (G4ChipsKaonMinusInelasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonMinusInelasticXS::Default_Name());
 
-  KZxsManagerEl     = new G4ChipsKaonZeroElasticXS();
-  KZxsManagerInEl   = new G4ChipsKaonZeroInelasticXS();
+  KZxsManagerEl     = (G4ChipsKaonZeroElasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonZeroElasticXS::Default_Name());
+  KZxsManagerInEl   = (G4ChipsKaonZeroInelasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name());
 
-  HxsManagerEl     = new G4ChipsHyperonElasticXS();
-  HxsManagerInEl   = new G4ChipsHyperonInelasticXS();
+  HxsManagerEl     = (G4ChipsHyperonElasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsHyperonElasticXS::Default_Name());
+  HxsManagerInEl   = (G4ChipsHyperonInelasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsHyperonInelasticXS::Default_Name());
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////

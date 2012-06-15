@@ -42,11 +42,36 @@
 #include "G4AntiProton.hh"
 #include "G4Nucleus.hh"
 
-#include "G4ChipsBaseXS.hh"
+#include "G4ChipsProtonElasticXS.hh"
+#include "G4ChipsProtonInelasticXS.hh"
+
+#include "G4ChipsNeutronElasticXS.hh"
+#include "G4ChipsNeutronInelasticXS.hh"
+
+#include "G4ChipsAntiBaryonElasticXS.hh" 
+#include "G4ChipsAntiBaryonInelasticXS.hh"
+
+#include "G4ChipsPionMinusElasticXS.hh" 
+#include "G4ChipsPionMinusInelasticXS.hh"
+
+#include "G4ChipsPionPlusElasticXS.hh" 
+#include "G4ChipsPionPlusInelasticXS.hh"
+
+#include "G4ChipsKaonMinusElasticXS.hh"
+#include "G4ChipsKaonMinusInelasticXS.hh"
+
+#include "G4ChipsKaonPlusElasticXS.hh" 
+#include "G4ChipsKaonPlusInelasticXS.hh"
+
+#include "G4ChipsKaonZeroElasticXS.hh" 
+#include "G4ChipsKaonZeroInelasticXS.hh"
+
+#include "G4ChipsHyperonElasticXS.hh" 
+#include "G4ChipsHyperonInelasticXS.hh"
+
 #include "G4VComponentCrossSection.hh"
 
 class G4ParticleDefinition;
-
 
 class G4ChipsComponentXS : public G4VComponentCrossSection
 {
@@ -98,32 +123,32 @@ public:
   const G4double fUpperLimit;
   const G4double fLowerLimit; 
 
-  G4ChipsBaseXS* PxsManagerEl;
-  G4ChipsBaseXS* PxsManagerInEl;
+  G4ChipsProtonElasticXS* PxsManagerEl;
+  G4ChipsProtonInelasticXS* PxsManagerInEl;
 
-  G4ChipsBaseXS* NxsManagerEl;
-  G4ChipsBaseXS* NxsManagerInEl;
+  G4ChipsNeutronElasticXS* NxsManagerEl;
+  G4ChipsNeutronInelasticXS* NxsManagerInEl;
 
-  G4ChipsBaseXS* PBARxsManagerEl;
-  G4ChipsBaseXS* PBARxsManagerInEl;
+  G4ChipsAntiBaryonElasticXS* PBARxsManagerEl;
+  G4ChipsAntiBaryonInelasticXS* PBARxsManagerInEl;
 
-  G4ChipsBaseXS* PIPxsManagerEl; 
-  G4ChipsBaseXS* PIPxsManagerInEl; 
+  G4ChipsPionPlusElasticXS* PIPxsManagerEl; 
+  G4ChipsPionPlusInelasticXS* PIPxsManagerInEl; 
 
-  G4ChipsBaseXS* PIMxsManagerEl; 
-  G4ChipsBaseXS* PIMxsManagerInEl; 
+  G4ChipsPionMinusElasticXS* PIMxsManagerEl; 
+  G4ChipsPionMinusInelasticXS* PIMxsManagerInEl; 
 
-  G4ChipsBaseXS* KPxsManagerEl;
-  G4ChipsBaseXS* KPxsManagerInEl;
+  G4ChipsKaonPlusElasticXS* KPxsManagerEl;
+  G4ChipsKaonPlusInelasticXS* KPxsManagerInEl;
 
-  G4ChipsBaseXS* KMxsManagerEl;
-  G4ChipsBaseXS* KMxsManagerInEl;
+  G4ChipsKaonMinusElasticXS* KMxsManagerEl;
+  G4ChipsKaonMinusInelasticXS* KMxsManagerInEl;
 
-  G4ChipsBaseXS* KZxsManagerEl;
-  G4ChipsBaseXS* KZxsManagerInEl;
+  G4ChipsKaonZeroElasticXS* KZxsManagerEl;
+  G4ChipsKaonZeroInelasticXS* KZxsManagerInEl;
 
-  G4ChipsBaseXS* HxsManagerEl;
-  G4ChipsBaseXS* HxsManagerInEl;
+  G4ChipsHyperonElasticXS* HxsManagerEl;
+  G4ChipsHyperonInelasticXS* HxsManagerInEl;
 };
 
 #endif

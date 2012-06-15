@@ -45,6 +45,11 @@
 #include "G4Proton.hh"
 #include "G4PionPlus.hh"
 
+// factory
+#include "G4CrossSectionFactory.hh"
+//
+G4_DECLARE_XS_FACTORY(G4ChipsKaonPlusInelasticXS);
+
 // Initialization of the
 G4double* G4ChipsKaonPlusInelasticXS::lastLEN=0; // Pointer to the lastArray of LowEn CS
 G4double* G4ChipsKaonPlusInelasticXS::lastHEN=0; // Pointer to the lastArray of HighEn CS
@@ -57,7 +62,7 @@ G4int     G4ChipsKaonPlusInelasticXS::lastI=0;   // The last position in the DAM
 std::vector<G4double*>* G4ChipsKaonPlusInelasticXS::LEN = new std::vector<G4double*>;
 std::vector<G4double*>* G4ChipsKaonPlusInelasticXS::HEN = new std::vector<G4double*>;
 
-G4ChipsKaonPlusInelasticXS::G4ChipsKaonPlusInelasticXS():G4VCrossSectionDataSet("ChipsKaonPlusInelasticXS"){}
+G4ChipsKaonPlusInelasticXS::G4ChipsKaonPlusInelasticXS():G4VCrossSectionDataSet(Default_Name()){}
 
 G4ChipsKaonPlusInelasticXS::~G4ChipsKaonPlusInelasticXS()
 {
@@ -220,9 +225,9 @@ G4double G4ChipsKaonPlusInelasticXS::CalculateCrossSection(G4int F, G4int I,
       lastHEN = new G4double[nH];      // Allocate memory for the new HEN cross sections
       // --- Instead of making a separate function ---
       G4double P=THmiG;                // Table threshold in GeV/c
-      for(G4int m=0; m<nL; m++)
+      for(G4int k=0; k<nL; k++)
       {
-        lastLEN[m] = CrossSectionLin(targZ, targN, P);
+        lastLEN[k] = CrossSectionLin(targZ, targN, P);
         P+=dPG;
       }
       G4double lP=milPG;
@@ -331,9 +336,9 @@ G4double G4ChipsKaonPlusInelasticXS::CrossSectionFormula(G4int tZ, G4int tN,
     G4double a12=a8*a4;
     G4double f=.6;                       // Default values for deutrons
     G4double r=.5;
-    G4double g=3.7;
+    G4double gg=3.7;
     G4double c=36.;
-    G4double s=3.5;
+    G4double ss=3.5;
     G4double t=3.;
     G4double u=.44;
     G4double v=5.E-9;
@@ -341,17 +346,17 @@ G4double G4ChipsKaonPlusInelasticXS::CrossSectionFormula(G4int tZ, G4int tN,
     {
       f=1.;
       r=1./(1.+.007*a2);
-      g=4.2;
+      gg=4.2;
       c=52.*std::exp(al*.6)*(1.+95./a2)/(1.+9./a)/(1.+46./a2);
-      s=(40.+.14*a)/(1.+12./a);
+      ss=(40.+.14*a)/(1.+12./a);
       G4double y=std::exp(al*1.7);
       t=.185*y/(1.+.00012*y);
       u=(1.+80./asa)/(1.+200./asa);
       v=(1.+3.E-6*a4*(1.+6.E-7*a3+4.E10/a12))/a3/20000.;
     }
-    G4double d=lP-g;
+    G4double d=lP-gg;
     G4double w=P-1.;
-    G4double rD=s/(w*w+.36);
+    G4double rD=ss/(w*w+.36);
     G4double h=P-.44;
     G4double rR=t/(h*h+u*u);
     sigma=(f*d*d+c)/(1.+r/std::sqrt(P)+1./p4)+(rD+rR)/(1+v/p4/p4);

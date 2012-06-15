@@ -44,6 +44,11 @@
 #include "G4XiZero.hh"
 #include "G4OmegaMinus.hh"
 
+// factory
+#include "G4CrossSectionFactory.hh"
+//
+G4_DECLARE_XS_FACTORY(G4ChipsHyperonInelasticXS);
+
 // Initialization of the
 G4double* G4ChipsHyperonInelasticXS::lastLEN=0; // Pointer to the lastArray of LowEn CS
 G4double* G4ChipsHyperonInelasticXS::lastHEN=0; // Pointer to the lastArray of HighEn CS
@@ -56,7 +61,7 @@ G4int     G4ChipsHyperonInelasticXS::lastI=0;   // The last position in the DAMD
 std::vector<G4double*>* G4ChipsHyperonInelasticXS::LEN = new std::vector<G4double*>;
 std::vector<G4double*>* G4ChipsHyperonInelasticXS::HEN = new std::vector<G4double*>;
 
-G4ChipsHyperonInelasticXS::G4ChipsHyperonInelasticXS():G4VCrossSectionDataSet("ChipsHyperonInelasticXS"){}
+G4ChipsHyperonInelasticXS::G4ChipsHyperonInelasticXS():G4VCrossSectionDataSet(Default_Name()){}
 
 G4ChipsHyperonInelasticXS::~G4ChipsHyperonInelasticXS()
 {
@@ -243,9 +248,9 @@ G4double G4ChipsHyperonInelasticXS::CalculateCrossSection(G4int F, G4int I,
       lastHEN = new G4double[nH];      // Allocate memory for the new HEN cross sections
       // --- Instead of making a separate function ---
       G4double P=THmiG;                // Table threshold in GeV/c
-      for(G4int m=0; m<nL; m++)
+      for(G4int k=0; k<nL; k++)
       {
-        lastLEN[m] = CrossSectionLin(targZ, targN, P);
+        lastLEN[k] = CrossSectionLin(targZ, targN, P);
         P+=dPG;
       }
       G4double lP=milPG;
@@ -331,7 +336,7 @@ G4double G4ChipsHyperonInelasticXS::CrossSectionFormula(G4int tZ, G4int tN,
     G4double a4=a2*a2;
     G4double a8=a4*a4;
     G4double c=(170.+3600./a2s)/(1.+65./a2s);
-    G4double g=42.*(std::exp(al*0.8)+4.E-8*a4)/(1.+28./a)/(1.+5.E-5*a2);
+    G4double gg=42.*(std::exp(al*0.8)+4.E-8*a4)/(1.+28./a)/(1.+5.E-5*a2);
     G4double e=390.;                       // Defolt values for deutrons
     G4double r=0.27;
     G4double h=2.E-7;
@@ -343,9 +348,9 @@ G4double G4ChipsHyperonInelasticXS::CrossSectionFormula(G4int tZ, G4int tN,
       h=1.E-8*a2/(1.+a2/17.)/(1.+3.E-20*a8);
       t=(.2+.00056*a2)/(1.+a2*.0006);
     }
-    sigma=(c+d*d)/(1.+t/ssp+r/p4)+(g+e*std::exp(-6.*P))/(1.+h/p4/p4);
+    sigma=(c+d*d)/(1.+t/ssp+r/p4)+(gg+e*std::exp(-6.*P))/(1.+h/p4/p4);
 #ifdef pdebug
-    G4cout<<"G4QHyperonNucCS::CSForm: A="<<a<<",P="<<P<<",CS="<<sigma<<",c="<<c<<",g="<<g
+    G4cout<<"G4QHyperonNucCS::CSForm: A="<<a<<",P="<<P<<",CS="<<sigma<<",c="<<c<<",g="<<gg
           <<",d="<<d<<",r="<<r<<",e="<<e<<",h="<<h<<G4endl;
 #endif
   }

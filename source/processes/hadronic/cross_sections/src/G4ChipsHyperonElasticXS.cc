@@ -52,6 +52,11 @@
 #include "G4ParticleTable.hh"
 #include "G4NucleiProperties.hh"
 
+// factory
+#include "G4CrossSectionFactory.hh"
+//
+G4_DECLARE_XS_FACTORY(G4ChipsHyperonElasticXS);
+
 // Initialization of the static parameters
 const G4int G4ChipsHyperonElasticXS::nPoints=128;//#ofPt in AMDB table(>anyPar)(D)
 const G4int G4ChipsHyperonElasticXS::nLast=nPoints-1;// theLastElement inTable (D)
@@ -104,7 +109,7 @@ std::vector<G4double*> G4ChipsHyperonElasticXS::B3T;// Vector of the3d slope
 std::vector<G4double*> G4ChipsHyperonElasticXS::S4T;// Vector ofThe4th mantissa(g)
 std::vector<G4double*> G4ChipsHyperonElasticXS::B4T;// Vector ofThe4th slope(glor)
 
-G4ChipsHyperonElasticXS::G4ChipsHyperonElasticXS():G4VCrossSectionDataSet("ChipsHyperonElasticXS")
+G4ChipsHyperonElasticXS::G4ChipsHyperonElasticXS():G4VCrossSectionDataSet(Default_Name())
 {
 }
 
@@ -881,8 +886,8 @@ G4double G4ChipsHyperonElasticXS::GetQ2max(G4int PDG, G4int tgZ, G4int tgN,
     G4double mt=G4ParticleTable::GetParticleTable()->FindIon(tgZ,tgZ+tgN,0,tgZ)->GetPDGMass()*.001; // Target mass in GeV
 
     G4double dmt=mt+mt;
-    G4double s=dmt*std::sqrt(pP2+mLa2)+mLa2+mt*mt;    // Mondelstam s (@@ other hyperons?)
-    return dmt*dmt*pP2/s;
+    G4double mds=dmt*std::sqrt(pP2+mLa2)+mLa2+mt*mt;    // Mondelstam mds (@@ other hyperons?)
+    return dmt*dmt*pP2/mds;
   }
   else
   {

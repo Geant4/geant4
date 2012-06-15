@@ -47,9 +47,12 @@
 #define G4CrossSectionDataSetRegistry_h 1
 
 #include <vector>
+#include <map>
 #include "globals.hh"
 
+
 class G4VCrossSectionDataSet;
+class G4VBaseXSFactory;
 
 class G4CrossSectionDataSetRegistry
 {
@@ -68,6 +71,10 @@ public:
 
   void Clean();
   //clean the store
+  
+  void AddFactory(G4String, G4VBaseXSFactory*);
+
+  G4VCrossSectionDataSet* GetCrossSectionDataSet(const G4String& name);
     
 private:
 
@@ -76,6 +83,8 @@ private:
   static G4CrossSectionDataSetRegistry* theInstance;
   
   std::vector <G4VCrossSectionDataSet*> xSections;
+
+  std::map <G4String, G4VBaseXSFactory*> factories;
 
 };
 

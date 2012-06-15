@@ -46,6 +46,7 @@
 #include "G4VCrossSectionDataSet.hh"
 #include "G4ChipsBaseXS.hh"
 
+
 class G4ChipsKaonPlusInelasticXS : public G4VCrossSectionDataSet, public G4ChipsBaseXS
 {
 
@@ -54,6 +55,8 @@ public:
   G4ChipsKaonPlusInelasticXS();
 
   ~G4ChipsKaonPlusInelasticXS();
+
+  static const char* Default_Name() {return "ChipsKaonPlusInelasticXS";}
 
   virtual G4bool IsIsoApplicable(const G4DynamicParticle* Pt, G4int Z, G4int A,    
 				 const G4Element* elm,

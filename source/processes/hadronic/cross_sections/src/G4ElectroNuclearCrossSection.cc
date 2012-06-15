@@ -72,8 +72,8 @@ std::vector<G4double*> G4ElectroNuclearCrossSection::J2;
 std::vector<G4double*> G4ElectroNuclearCrossSection::J3;
 
 
-G4ElectroNuclearCrossSection::G4ElectroNuclearCrossSection(const G4String& name)
- : G4VCrossSectionDataSet(name)
+G4ElectroNuclearCrossSection::G4ElectroNuclearCrossSection(const G4String& nam)
+ : G4VCrossSectionDataSet(nam)
 {}
 
 G4ElectroNuclearCrossSection::~G4ElectroNuclearCrossSection()
@@ -2375,18 +2375,18 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
       G4int     k1=k-1;
       G4double  xi=A[k1];
       G4double   b=(a-xi)/(A[k]-xi);
-      for(G4int m=0; m<nE; m++)
+      for(G4int q=0; q<nE; q++)
       {
-        G4double xi=P0[k1][m];
-        x[m]=xi+(P0[k][m]-xi)*b;
-        G4double yi=P1[k1][m];
-        y[m]=yi+(P1[k][m]-yi)*b;
-        G4double zi=P2[k1][m];
-        z[m]=zi+(P2[k][m]-zi)*b;
+        xi=P0[k1][q];
+        x[q]=xi+(P0[k][q]-xi)*b;
+        G4double yi=P1[k1][q];
+        y[q]=yi+(P1[k][q]-yi)*b;
+        G4double zi=P2[k1][q];
+        z[q]=zi+(P2[k][q]-zi)*b;
       }
       r=L[k];
       if(L[k1]<r) r=L[k1];
-	}
+    }
   }
   return r;
 }

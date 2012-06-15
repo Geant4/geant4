@@ -39,8 +39,11 @@
 // Modifications:
 //
 
+#include "G4ios.hh"
+
 #include "G4CrossSectionDataSetRegistry.hh"
 #include "G4VCrossSectionDataSet.hh"
+#include "G4CrossSectionFactory.hh"
 
 G4CrossSectionDataSetRegistry* G4CrossSectionDataSetRegistry::theInstance = 0;
 
@@ -102,4 +105,34 @@ void G4CrossSectionDataSetRegistry::DeRegister(G4VCrossSectionDataSet* p)
   }
 }
 
+void G4CrossSectionDataSetRegistry::AddFactory(G4String name, G4VBaseXSFactory* factory)
+{
+  factories[name] = factory;
+}
 
+G4VCrossSectionDataSet* G4CrossSectionDataSetRegistry::GetCrossSectionDataSet(const G4String& name)
+{
+  size_t n = xSections.size(); 
+ 
+  for (size_t i=0; i<n; ++i) 
+    {
+      if(xSections[i]) 
+	{
+	  G4VCrossSectionDataSet* p = xSections[i];
+	  if (p->GetName() == name) return p;
+	}
+    }
+  // check if factory exists...
+  //
+  if (factories.find(name)!=factories.end())
+    {
+      return factories[name]->Instantiate();
+    }
+  else
+    {
+      G4ExceptionDescription ED;
+      ED << "invalid cross section data set name"<< G4endl;
+      G4Exception("G4CrossSectionDataSetRegistry::GetCrossSectionDataSet", "CrossSection001", FatalException, ED);
+      return 0;
+    }
+}

@@ -44,6 +44,11 @@
 #include "G4ParticleDefinition.hh"
 #include "G4PionMinus.hh"
 
+// factory
+#include "G4CrossSectionFactory.hh"
+//
+G4_DECLARE_XS_FACTORY(G4ChipsPionMinusInelasticXS);
+
 // Initialization of the
 G4double* G4ChipsPionMinusInelasticXS::lastLEN=0; // Pointer to lastArray of LowEn CS
 G4double* G4ChipsPionMinusInelasticXS::lastHEN=0; // Pointer to lastArray of HighEn CS
@@ -212,9 +217,9 @@ G4double G4ChipsPionMinusInelasticXS::CalculateCrossSection(G4int F, G4int I,
       lastHEN = new G4double[nH];      // Allocate memory for the new HEN cross sections
       // --- Instead of making a separate function ---
       G4double P=THmiG;                // Table threshold in GeV/c
-     for(G4int m=0; m<nL; m++)
+     for(G4int k=0; k<nL; k++)
       {
-        lastLEN[m] = CrossSectionLin(targZ, targN, P);
+        lastLEN[k] = CrossSectionLin(targZ, targN, P);
         P+=dPG;
       }
       G4double lP=milPG;
@@ -297,8 +302,8 @@ G4double G4ChipsPionMinusInelasticXS::CrossSectionFormula(G4int tZ, G4int tN,
     G4double p2=P*P;
     G4double d=lP-2.7;
     G4double f=lP+1.25;
-    G4double g=lP-.017;
-    sigma=(.55*d*d+38.+23./std::sqrt(P))/(1.+.3/p2/p2)+18./(f*f+.1089)+.02/(g*g+.0025);
+    G4double gg=lP-.017;
+    sigma=(.55*d*d+38.+23./std::sqrt(P))/(1.+.3/p2/p2)+18./(f*f+.1089)+.02/(gg*gg+.0025);
   }
   else if(tZ<97 && tN<152)                // General solution
   {
@@ -312,8 +317,8 @@ G4double G4ChipsPionMinusInelasticXS::CrossSectionFormula(G4int tZ, G4int tN,
     G4double a2=a*a;
     G4double c=41.*std::exp(al*.68)*(1.+44./a2)/(1.+8./a)/(1.+200./a2/a2);
     G4double f=120*sa/(1.+24./a/ssa);
-    G4double g=-1.32-al*.043;
-    G4double u=lP-g;
+    G4double gg=-1.32-al*.043;
+    G4double u=lP-gg;
     G4double h=al*(.388-.046*al);
     sigma=(c+d*d)/(1.+.17/p4)+f/(u*u+h*h);
   }

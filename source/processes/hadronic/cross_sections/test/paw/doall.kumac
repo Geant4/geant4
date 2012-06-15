@@ -1,0 +1,12 @@
+exec doit input_ar_ag.liste
+exec doit input_ar_bi.liste
+exec doit input_ar_u.liste
+exec doit input_c_al.liste
+exec doit input_c_ca.liste
+exec doit input_c_fe.liste
+exec doit input_c_zn.liste
+exec doit input_o_ca.liste
+exec doit input_o_co.liste
+exec doit input_o_ni.liste
+exec doit input_o_pb.liste
+exec doit input_o_si.liste

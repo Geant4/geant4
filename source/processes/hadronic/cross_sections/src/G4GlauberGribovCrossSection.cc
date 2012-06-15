@@ -757,8 +757,8 @@ G4GlauberGribovCrossSection::GetHadronNucleonXscNS(const G4DynamicParticle* aPar
   G4double xsection(0);
   // G4double Delta;   DHW 19 May 2011: variable set but not used
   G4double A0, B0;
-  G4double hpXsc(0);
-  G4double hnXsc(0);
+  G4double hpXscv(0);
+  G4double hnXscv(0);
 
   G4int Nt = At-Zt;              // number of neutrons
   if (Nt < 0) Nt = 0;  
@@ -823,35 +823,35 @@ G4GlauberGribovCrossSection::GetHadronNucleonXscNS(const G4DynamicParticle* aPar
 
       if( proj_momentum < 0.73 )
       {
-        hnXsc = 23 + 50*( std::pow( std::log(0.73/proj_momentum), 3.5 ) );
+        hnXscv = 23 + 50*( std::pow( std::log(0.73/proj_momentum), 3.5 ) );
       }
       else if( proj_momentum < 1.05  )
       {
-       hnXsc = 23 + 40*(std::log(proj_momentum/0.73))*
+       hnXscv = 23 + 40*(std::log(proj_momentum/0.73))*
                          (std::log(proj_momentum/0.73));
       }
       else  // if( proj_momentum < 10.  )
       {
-         hnXsc = 39.0+
+         hnXscv = 39.0+
               75*(proj_momentum - 1.2)/(std::pow(proj_momentum,3.0) + 0.15);
       }
       // pn to be np
 
       if( proj_momentum < 0.8 )
       {
-        hpXsc = 33+30*std::pow(std::log(proj_momentum/1.3),4.0);
+        hpXscv = 33+30*std::pow(std::log(proj_momentum/1.3),4.0);
       }      
       else if( proj_momentum < 1.4 )
       {
-        hpXsc = 33+30*std::pow(std::log(proj_momentum/0.95),2.0);
+        hpXscv = 33+30*std::pow(std::log(proj_momentum/0.95),2.0);
       }
       else    // if( proj_momentum < 10.  )
       {
-        hpXsc = 33.3+
+        hpXscv = 33.3+
               20.8*(std::pow(proj_momentum,2.0)-1.35)/
                  (std::pow(proj_momentum,2.50)+0.95);
       }
-      xsection = hpXsc*zz + hnXsc*nn;
+      xsection = hpXscv*zz + hnXscv*nn;
     }
   } 
   else if(theParticle == theProton) 
@@ -883,37 +883,37 @@ G4GlauberGribovCrossSection::GetHadronNucleonXscNS(const G4DynamicParticle* aPar
 
       if( proj_momentum < 0.73 )
       {
-        hpXsc = 23 + 50*( std::pow( std::log(0.73/proj_momentum), 3.5 ) );
+        hpXscv = 23 + 50*( std::pow( std::log(0.73/proj_momentum), 3.5 ) );
       }
       else if( proj_momentum < 1.05  )
       {
-       hpXsc = 23 + 40*(std::log(proj_momentum/0.73))*
+       hpXscv = 23 + 40*(std::log(proj_momentum/0.73))*
                          (std::log(proj_momentum/0.73));
       }
       else    // if( proj_momentum < 10.  )
       {
-         hpXsc = 39.0+
+         hpXscv = 39.0+
               75*(proj_momentum - 1.2)/(std::pow(proj_momentum,3.0) + 0.15);
       }
       // pn to be np
 
       if( proj_momentum < 0.8 )
       {
-        hnXsc = 33+30*std::pow(std::log(proj_momentum/1.3),4.0);
+        hnXscv = 33+30*std::pow(std::log(proj_momentum/1.3),4.0);
       }      
       else if( proj_momentum < 1.4 )
       {
-        hnXsc = 33+30*std::pow(std::log(proj_momentum/0.95),2.0);
+        hnXscv = 33+30*std::pow(std::log(proj_momentum/0.95),2.0);
       }
       else   // if( proj_momentum < 10.  )
       {
-        hnXsc = 33.3+
+        hnXscv = 33.3+
               20.8*(std::pow(proj_momentum,2.0)-1.35)/
                  (std::pow(proj_momentum,2.50)+0.95);
       }
-      xsection = hpXsc*zz + hnXsc*nn;
-      // xsection = hpXsc*(Zt + Nt);
-      // xsection = hnXsc*(Zt + Nt);
+      xsection = hpXscv*zz + hnXscv*nn;
+      // xsection = hpXscv*(Zt + Nt);
+      // xsection = hnXscv*(Zt + Nt);
     }    
     // xsection *= 0.95;
   } 
@@ -952,50 +952,50 @@ G4GlauberGribovCrossSection::GetHadronNucleonXscNS(const G4DynamicParticle* aPar
     if(proj_momentum < 0.4)
     {
       G4double Ex3 = 180*std::exp(-(proj_momentum-0.29)*(proj_momentum-0.29)/0.085/0.085);
-      hpXsc      = Ex3+20.0;
+      hpXscv      = Ex3+20.0;
     }
     else if( proj_momentum < 1.15 )
     {
       G4double Ex4 = 88*(std::log(proj_momentum/0.75))*(std::log(proj_momentum/0.75));
-      hpXsc = Ex4+14.0;
+      hpXscv = Ex4+14.0;
     }
     else if(proj_momentum < 3.5)
     {
       G4double Ex1 = 3.2*std::exp(-(proj_momentum-2.55)*(proj_momentum-2.55)/0.55/0.55);
       G4double Ex2 = 12*std::exp(-(proj_momentum-1.47)*(proj_momentum-1.47)/0.225/0.225);
-      hpXsc = Ex1+Ex2+27.5;
+      hpXscv = Ex1+Ex2+27.5;
     }
     else //  if(proj_momentum > 3.5) // mb
     {
-      hpXsc = 10.6+2.*std::log(proj_energy)+25*std::pow(proj_energy,-0.43);
+      hpXscv = 10.6+2.*std::log(proj_energy)+25*std::pow(proj_energy,-0.43);
     }
     // pi+n = pi-p??
 
     if(proj_momentum < 0.37)
     {
-      hnXsc = 28.0 + 40*std::exp(-(proj_momentum-0.29)*(proj_momentum-0.29)/0.07/0.07);
+      hnXscv = 28.0 + 40*std::exp(-(proj_momentum-0.29)*(proj_momentum-0.29)/0.07/0.07);
     }
     else if(proj_momentum<0.65)
     {
-       hnXsc = 26+110*(std::log(proj_momentum/0.48))*(std::log(proj_momentum/0.48));
+       hnXscv = 26+110*(std::log(proj_momentum/0.48))*(std::log(proj_momentum/0.48));
     }
     else if(proj_momentum<1.3)
     {
-      hnXsc = 36.1+
+      hnXscv = 36.1+
                 10*std::exp(-(proj_momentum-0.72)*(proj_momentum-0.72)/0.06/0.06)+
                 24*std::exp(-(proj_momentum-1.015)*(proj_momentum-1.015)/0.075/0.075);
     }
     else if(proj_momentum<3.0)
     {
-      hnXsc = 36.1+0.079-4.313*std::log(proj_momentum)+
+      hnXscv = 36.1+0.079-4.313*std::log(proj_momentum)+
                 3*std::exp(-(proj_momentum-2.1)*(proj_momentum-2.1)/0.4/0.4)+
                 1.5*std::exp(-(proj_momentum-1.4)*(proj_momentum-1.4)/0.12/0.12);
     }
     else   // mb
     {
-      hnXsc = 10.6+2*std::log(proj_energy)+30*std::pow(proj_energy,-0.43); 
+      hnXscv = 10.6+2*std::log(proj_energy)+30*std::pow(proj_energy,-0.43); 
     }
-    xsection = hpXsc*zz + hnXsc*nn;
+    xsection = hpXscv*zz + hnXscv*nn;
   } 
   else if(theParticle == thePiMinus) 
   {
@@ -1004,50 +1004,50 @@ G4GlauberGribovCrossSection::GetHadronNucleonXscNS(const G4DynamicParticle* aPar
     if(proj_momentum < 0.4)
     {
       G4double Ex3 = 180*std::exp(-(proj_momentum-0.29)*(proj_momentum-0.29)/0.085/0.085);
-      hnXsc      = Ex3+20.0;
+      hnXscv      = Ex3+20.0;
     }
     else if(proj_momentum < 1.15)
     {
       G4double Ex4 = 88*(std::log(proj_momentum/0.75))*(std::log(proj_momentum/0.75));
-      hnXsc = Ex4+14.0;
+      hnXscv = Ex4+14.0;
     }
     else if(proj_momentum < 3.5)
     {
       G4double Ex1 = 3.2*std::exp(-(proj_momentum-2.55)*(proj_momentum-2.55)/0.55/0.55);
       G4double Ex2 = 12*std::exp(-(proj_momentum-1.47)*(proj_momentum-1.47)/0.225/0.225);
-      hnXsc = Ex1+Ex2+27.5;
+      hnXscv = Ex1+Ex2+27.5;
     }
     else //  if(proj_momentum > 3.5) // mb
     {
-      hnXsc = 10.6+2.*std::log(proj_energy)+25*std::pow(proj_energy,-0.43);
+      hnXscv = 10.6+2.*std::log(proj_energy)+25*std::pow(proj_energy,-0.43);
     }
     // pi-p
 
     if(proj_momentum < 0.37)
     {
-      hpXsc = 28.0 + 40*std::exp(-(proj_momentum-0.29)*(proj_momentum-0.29)/0.07/0.07);
+      hpXscv = 28.0 + 40*std::exp(-(proj_momentum-0.29)*(proj_momentum-0.29)/0.07/0.07);
     }
     else if(proj_momentum<0.65)
     {
-       hpXsc = 26+110*(std::log(proj_momentum/0.48))*(std::log(proj_momentum/0.48));
+       hpXscv = 26+110*(std::log(proj_momentum/0.48))*(std::log(proj_momentum/0.48));
     }
     else if(proj_momentum<1.3)
     {
-      hpXsc = 36.1+
+      hpXscv = 36.1+
                 10*std::exp(-(proj_momentum-0.72)*(proj_momentum-0.72)/0.06/0.06)+
                 24*std::exp(-(proj_momentum-1.015)*(proj_momentum-1.015)/0.075/0.075);
     }
     else if(proj_momentum<3.0)
     {
-      hpXsc = 36.1+0.079-4.313*std::log(proj_momentum)+
+      hpXscv = 36.1+0.079-4.313*std::log(proj_momentum)+
                 3*std::exp(-(proj_momentum-2.1)*(proj_momentum-2.1)/0.4/0.4)+
                 1.5*std::exp(-(proj_momentum-1.4)*(proj_momentum-1.4)/0.12/0.12);
     }
     else   // mb
     {
-      hpXsc = 10.6+2*std::log(proj_energy)+30*std::pow(proj_energy,-0.43); 
+      hpXscv = 10.6+2*std::log(proj_energy)+30*std::pow(proj_energy,-0.43); 
     }
-    xsection = hpXsc*zz + hnXsc*nn;
+    xsection = hpXscv*zz + hnXscv*nn;
   } 
   else if(theParticle == theKPlus) 
   {

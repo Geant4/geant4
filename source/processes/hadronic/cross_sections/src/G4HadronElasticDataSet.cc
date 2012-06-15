@@ -38,8 +38,8 @@
 #include <iostream>
 
 
-G4HadronElasticDataSet::G4HadronElasticDataSet(const G4String& name)
- : G4VCrossSectionDataSet(name)
+G4HadronElasticDataSet::G4HadronElasticDataSet(const G4String& nam)
+ : G4VCrossSectionDataSet(nam)
 {
   theHadronCrossSections = G4HadronCrossSections::Instance(); 
 }

@@ -208,9 +208,9 @@ inline const G4String& G4VCrossSectionDataSet::GetName() const
   return name;
 }
 
-inline void G4VCrossSectionDataSet::SetName(const G4String& s)
+inline void G4VCrossSectionDataSet::SetName(const G4String& nam)
 {
-  name = s;
+  name = nam;
 }
 
 #endif

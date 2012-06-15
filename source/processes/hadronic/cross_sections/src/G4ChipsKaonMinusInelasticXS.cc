@@ -42,6 +42,11 @@
 #include "G4ParticleDefinition.hh"
 #include "G4KaonMinus.hh"
 
+// factory
+#include "G4CrossSectionFactory.hh"
+//
+G4_DECLARE_XS_FACTORY(G4ChipsKaonMinusInelasticXS);
+
 // Initialization of the
 G4double* G4ChipsKaonMinusInelasticXS::lastLEN=0; // Pointer to lastArray of LowEn CS
 G4double* G4ChipsKaonMinusInelasticXS::lastHEN=0; // Pointer to lastArray of HighEn CS
@@ -55,7 +60,7 @@ std::vector<G4double*>* G4ChipsKaonMinusInelasticXS::LEN = new std::vector<G4dou
 std::vector<G4double*>* G4ChipsKaonMinusInelasticXS::HEN = new std::vector<G4double*>;
 
 
-G4ChipsKaonMinusInelasticXS::G4ChipsKaonMinusInelasticXS():G4VCrossSectionDataSet("ChipsKaonMinusInelasticXS"){}
+G4ChipsKaonMinusInelasticXS::G4ChipsKaonMinusInelasticXS():G4VCrossSectionDataSet(Default_Name()){}
 
 G4ChipsKaonMinusInelasticXS::~G4ChipsKaonMinusInelasticXS()
 {
@@ -214,9 +219,9 @@ G4double G4ChipsKaonMinusInelasticXS::CalculateCrossSection(G4int F, G4int I,
       lastHEN = new G4double[nH];      // Allocate memory for the new HEN cross sections
       // --- Instead of making a separate function ---
       G4double P=THmiG;                // Table threshold in GeV/c
-      for(G4int m=0; m<nL; m++)
+      for(G4int k=0; k<nL; k++)
       {
-        lastLEN[m] = CrossSectionLin(targZ, targN, P);
+        lastLEN[k] = CrossSectionLin(targZ, targN, P);
         P+=dPG;
       }
       G4double lP=milPG;
@@ -310,12 +315,12 @@ G4double G4ChipsKaonMinusInelasticXS::CrossSectionFormula(G4int tZ, G4int tN,
     G4double al=std::log(a);
     G4double a2=a*a;
     G4double c=52.*std::exp(al*0.6)*(1.+97./a2)/(1.+9.8/a)/(1.+47./a2);
-    G4double g=-.2-.003*a;
+    G4double gg=-.2-.003*a;
     G4double h=.5+.07*a;
     G4double v=P-1.;
     G4double f=.6*a*sa/(1.+.00002*a2);
     G4double u=.125+.127*al;
-    sigma=(c+d*d)/(1.+g/sp+h/p2/p2)+f/(v*v+u*u)+20.*sa/P/sp;
+    sigma=(c+d*d)/(1.+gg/sp+h/p2/p2)+f/(v*v+u*u)+20.*sa/P/sp;
   }
   else
   {

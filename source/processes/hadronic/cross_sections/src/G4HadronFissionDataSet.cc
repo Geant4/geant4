@@ -37,8 +37,8 @@
 #include <iostream>
 
 
-G4HadronFissionDataSet::G4HadronFissionDataSet(const G4String& name)
-  : G4VCrossSectionDataSet(name)
+G4HadronFissionDataSet::G4HadronFissionDataSet(const G4String& nam)
+  : G4VCrossSectionDataSet(nam)
 {
   theHadronCrossSections = G4HadronCrossSections::Instance();
 }
