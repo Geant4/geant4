@@ -91,33 +91,34 @@ G4FissLib::~G4FissLib()
   delete [] theFission;
 }
   
-G4HadFinalState * G4FissLib::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& )
+G4HadFinalState*
+G4FissLib::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus&)
 {
-  const G4Material * theMaterial = aTrack.GetMaterial();
+  const G4Material* theMaterial = aTrack.GetMaterial();
   G4int n = theMaterial->GetNumberOfElements();
   G4int index = theMaterial->GetElement(0)->GetIndex();
-  if(n!=1)
-  {
+
+  if (n != 1) {
     xSec = new G4double[n];
-    G4double sum=0;
-    G4int i, index;
+    G4double sum = 0;
+    G4int i;
+    G4int imat;
     const G4double * NumAtomsPerVolume = theMaterial->GetVecNbOfAtomsPerVolume();
     G4double rWeight;    
     G4NeutronHPThermalBoost aThermalE;
-    for (i=0; i<n; i++)
-    {
-      index = theMaterial->GetElement(i)->GetIndex();
+    for (i = 0; i < n; i++) {
+      imat = theMaterial->GetElement(i)->GetIndex();
       rWeight = NumAtomsPerVolume[i];
-      xSec[i] = theFission[index].GetXsec(aThermalE.GetThermalEnergy(aTrack,
-		                                                      theMaterial->GetElement(i),
+      xSec[i] = theFission[imat].GetXsec(aThermalE.GetThermalEnergy(aTrack,
+		                                                    theMaterial->GetElement(i),
   						      theMaterial->GetTemperature()));
       xSec[i] *= rWeight;
       sum+=xSec[i];
     }
+
     G4double random = G4UniformRand();
     G4double running = 0;
-    for (i=0; i<n; i++)
-    {
+    for (i = 0; i < n; i++) {
       running += xSec[i];
       index = theMaterial->GetElement(i)->GetIndex();
       if(random<=running/sum) break;
