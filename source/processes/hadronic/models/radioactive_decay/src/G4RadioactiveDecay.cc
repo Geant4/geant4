@@ -705,25 +705,24 @@ G4RadioactiveDecay::LoadDecayTable(G4ParticleDefinition& theParentNucleus)
   G4int Z    = ((const G4Ions*)(&theParentNucleus))->GetAtomicNumber();
   G4double E = ((const G4Ions*)(&theParentNucleus))->GetExcitationEnergy();
 
-
-
   //Check if data have been provided by the user
   G4String file= theUserRadioactiveDataFiles[1000*A+Z];
 
-  if (file ==""){
-	  if ( !getenv("G4RADIOACTIVEDATA") ) {
-		  G4cout << "Please setenv G4RADIOACTIVEDATA to point to the radioactive decay data files." << G4endl;
-		  throw G4HadronicException(__FILE__, __LINE__,
+  if (file =="") {
+    if (!getenv("G4RADIOACTIVEDATA") ) {
+      G4cout << "Please setenv G4RADIOACTIVEDATA to point to the radioactive decay data files."
+             << G4endl;
+      throw G4HadronicException(__FILE__, __LINE__,
 			      "Please setenv G4RADIOACTIVEDATA to point to the radioactive decay data files.");
-	  }
-	  G4String dirName = getenv("G4RADIOACTIVEDATA");
-	  LoadedNuclei.push_back(theParentNucleus.GetParticleName());
-	  std::sort( LoadedNuclei.begin(), LoadedNuclei.end() );
-	  // sort needed to allow binary_search
+    }
+    G4String dirName = getenv("G4RADIOACTIVEDATA");
+    LoadedNuclei.push_back(theParentNucleus.GetParticleName());
+    std::sort( LoadedNuclei.begin(), LoadedNuclei.end() );
+    // sort needed to allow binary_search
 
-	  std::ostringstream os;
-	  os <<dirName <<"/z" <<Z <<".a" <<A <<'\0';
-	  file = os.str();
+    std::ostringstream os;
+    os <<dirName <<"/z" <<Z <<".a" <<A <<'\0';
+    file = os.str();
   }
 
   std::ifstream DecaySchemeFile(file);
@@ -1738,9 +1737,9 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
 
           // Decide whether to apply branching ratio bias or not	     
           if (BRBias) {
-            G4DecayTable* theDecayTable = parentNucleus->GetDecayTable();
-            ndecaych = G4int(theDecayTable->entries()*G4UniformRand());
-            G4VDecayChannel* theDecayChannel = theDecayTable->GetDecayChannel(ndecaych);
+            G4DecayTable* decayTable = parentNucleus->GetDecayTable();
+            ndecaych = G4int(decayTable->entries()*G4UniformRand());
+            G4VDecayChannel* theDecayChannel = decayTable->GetDecayChannel(ndecaych);
             if (theDecayChannel == 0) {
               // Decay channel not found.
 #ifdef G4VERBOSE
@@ -1748,7 +1747,7 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
                 G4cerr << " G4RadioactiveDecay::DoIt : cannot determine decay channel ";
                 G4cerr << " for this nucleus; decay as if no biasing active ";
                 G4cerr << G4endl;
-                theDecayTable ->DumpInfo();
+                decayTable ->DumpInfo();
               }
 #endif
               tempprods = DoDecay(*parentNucleus);  // DHW 6 Dec 2010 - do decay as if no biasing
@@ -1757,7 +1756,7 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
               // A decay channel has been identified, so execute the DecayIt.
               G4double tempmass = parentNucleus->GetPDGMass();
               tempprods = theDecayChannel->DecayIt(tempmass);
-              weight *= (theDecayChannel->GetBR())*(theDecayTable->entries());
+              weight *= (theDecayChannel->GetBR())*(decayTable->entries());
             }
           } else {
             tempprods = DoDecay(*parentNucleus);

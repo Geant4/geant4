@@ -13,7 +13,14 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+
+11 June 2012  Dennis Wright  radioactive_decay-V09-05-02
+--------------------------------------------------------
+- replace shadowed variable "s" in G4NucleusLimits.cc, G4BetaDecayType.cc
+  and G4RadioactiveDecayMode.cc.  Replace shadowed variable "theDecayTable"
+  in G4RadioactiveDecay.cc
+       
 01 May 2012  Laurent Desorgher  radioactive_decay-V09-05-01
 ---------------------------------------------------------
 - G4RIsotopeTable : Add the reading of user data  files  in order to take into account the life time
