@@ -227,7 +227,7 @@ void G3fillParams(G4String *tokens, const char *ptypes)
     // loop over ptypes
     //
     G4int i =0, ipt = 0, k = 0;
-    G4int ni =0, nr = 0, ns = 0;
+    G4int ni =0, nr = 0, nq = 0;
     while (ptypes[i] != '\0')
     {
         switch (ptypes[i])
@@ -242,8 +242,8 @@ void G3fillParams(G4String *tokens, const char *ptypes)
                 nr++; ipt++;
                 break;
             case 's':
-                Spar[ns] = tokens[ipt];
-                ns++; ipt++;
+                Spar[nq] = tokens[ipt];
+                nq++; ipt++;
                 break;
             case 'I':
                 for (k=0; k < narray; k++)
@@ -273,8 +273,8 @@ void G3fillParams(G4String *tokens, const char *ptypes)
             case 'S':
                 for (k=0; k < narray; k++)
                 {
-                    Spar[ns] = tokens[ipt];
-                    ns++; ipt++;
+                    Spar[nq] = tokens[ipt];
+                    nq++; ipt++;
                 }
                 break;
             default:

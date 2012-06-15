@@ -51,11 +51,11 @@ G3EleTable::GetEle(G4double Z){
   char name[20], sym[3];
   G4int index = (G4int) Z-1;
   if (!parse(Z, name, sym, A)) {
-    G4String nm(name);
+    G4String na(name);
     G4String sy(sym);
     if (_Ele[index] == 0) {
       // add an element to the element table here
-      _Ele[index] = new G4Element(nm, sy, Z, A*g/mole);
+      _Ele[index] = new G4Element(na, sy, Z, A*g/mole);
     }
   }
   return _Ele[index];
