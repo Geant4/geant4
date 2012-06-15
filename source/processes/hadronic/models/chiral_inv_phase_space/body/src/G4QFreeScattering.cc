@@ -618,8 +618,8 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QFreeScattering::Scatter(G4int NPDG
   if(pPDG>3400 || pPDG<-3400) G4cout<<"-Warning-G4QFreeScat::Scatter: pPDG="<<pPDG<<G4endl;
   // @@ check a possibility to separate p, n, or alpha (!)
   G4double dmT=mT+mT;
-  G4double s=dmT*E2+mP2+mT2;                           // Mondelstam s (?)
-  G4double maxt=dmT*dmT*pP2/s;                         // max possible |t|
+  G4double s_value=dmT*E2+mP2+mT2;         // Mondelstam s (?)
+  G4double maxt=dmT*dmT*pP2/s_value;       // max possible |t|
   G4double mint=0.;                        // Prototype of functional rand -t (MeV^2)
   if(P < 14.) mint=maxt*G4UniformRand();   // S-wave
   else                                     // Calculate slopes (no cash !)

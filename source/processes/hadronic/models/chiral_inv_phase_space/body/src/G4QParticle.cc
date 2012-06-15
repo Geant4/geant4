@@ -139,8 +139,8 @@ std::ostream& operator<<(std::ostream& lhs, G4QParticle& rhs)
   {
     lhs << DCV[i]->GetDecayChanLimit() << "PDG codes";
     G4QPDGCodeVector PCV=DCV[i]->GetVecOfSecHadrons();
-    G4int m = PCV.size();
-    for (int j=0; j<m; j++)
+    G4int m_value = PCV.size();
+    for (int j=0; j<m_value; j++)
     {
       if(!j) lhs << ":";
       else   lhs << ",";

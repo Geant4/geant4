@@ -418,8 +418,8 @@ G4QHadronVector* G4QString::FragmentString(G4bool QL)
   while (!success && attempt++ < StringLoopInterrupt) // Try fragment String till success
   {
     // Recover the CMS String
-    G4QParton* LeftParton = new G4QParton(theStringInCMS->GetLeftParton());
-    G4QParton* RightParton= new G4QParton(theStringInCMS->GetRightParton());
+    LeftParton = new G4QParton(theStringInCMS->GetLeftParton());
+    RightParton= new G4QParton(theStringInCMS->GetRightParton());
     ExciteString(LeftParton, RightParton, theStringInCMS->GetDirection());
 #ifdef edebug
     G4LorentzVector cm4M=cmS4M;    // Copy the full momentum for the reduction and check

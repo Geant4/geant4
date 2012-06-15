@@ -279,7 +279,7 @@ inline G4QPDGCode G4QPDGCode::operator/=(const G4int& rhs)
   return *this;
 }
  
-inline G4double G4QPDGCode::GetMass2() {G4double m=GetMass(); return m*m;}
+inline G4double G4QPDGCode::GetMass2() {G4double mass=GetMass(); return mass*mass;}
 inline G4double G4QPDGCode::GetNuclMass(G4int PDG)
 {
   if(PDG>80000000)
@@ -290,9 +290,9 @@ inline G4double G4QPDGCode::GetNuclMass(G4int PDG)
     G4int dn=0;
     if(szn<-100000)
     {
-      G4int ns=(-szn)/1000000+1;
-      szn+=ns*1000000;
-      ds+=ns;
+      G4int ns_value=(-szn)/1000000+1;
+      szn+=ns_value*1000000;
+      ds+=ns_value;
     }
     else if(szn<-100)
     {
@@ -319,8 +319,8 @@ inline G4double G4QPDGCode::GetNuclMass(G4int PDG)
       z-=1000;
       ds--;
     }
-    G4int s  =sz/1000-ds;
-    return GetNuclMass(z,n,s);
+    G4int s_value  =sz/1000-ds;
+    return GetNuclMass(z,n,s_value);
   }
   return 0.;
 }

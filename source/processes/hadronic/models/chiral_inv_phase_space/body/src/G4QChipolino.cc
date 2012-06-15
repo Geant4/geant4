@@ -102,14 +102,14 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
       G4QPDGCode oQPDG(oQC);
       G4double                    M2=oQPDG.GetMass();
       if(oQPDG.GetPDGCode()==221) M2=mPi0;
-      G4double m=M1+M2;
+      G4double m_value=M1+M2;
 #ifdef debug
    cout<<"G4QChipolino: c="<<cQPDG<<",cM="<<M1<<",o="<<oQPDG<<",oM="<<M2
-          <<",cM+0M="<<m<<", curMinM="<<minM<<G4endl;
+          <<",cM+0M="<<m_value<<", curMinM="<<minM<<G4endl;
 #endif
-      if(m<minM)
+      if(m_value<minM)
       {
-        minM=m;
+        minM=m_value;
         theQPDG1  = cQPDG;
         theQCont1 = cQC;
         theQPDG2  = oQPDG;
@@ -140,10 +140,10 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
       G4QPDGCode oQPDG(oQC);      // Make QPDG of residual baryon
       G4double                    M2=oQPDG.GetMass(); // Get baryon mass
       if(oQPDG.GetPDGCode()==221) M2=mPi0; // @@ Never !!
-      G4double m=M1+M2;
-      if(m<minM)
+      G4double m_value=M1+M2;
+      if(m_value<minM)
       {
-        minM=m;
+        minM=m_value;
         theQPDG1  = cQPDG;
         theQCont1 = cQC;
         theQPDG2  = oQPDG;
@@ -186,10 +186,10 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
             G4QPDGCode oQPDG=(oQC);
             G4double                    M2=oQPDG.GetMass();
             if(oQPDG.GetPDGCode()==221) M2=mPi0;
-            G4double m=M1+M2;
-            if(m<minM)
+            G4double m_value=M1+M2;
+            if(m_value<minM)
             {
-              minM=m;
+              minM=m_value;
               theQPDG1  = cQPDG;
               theQCont1 = cQC;
               theQPDG2  = oQPDG;
@@ -272,7 +272,7 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
         }
         else if(kS<2)                                              // NucFrag+K is possible
         {
-          G4int    nN =(mU+mD-4-nI*3)/6;
+          nN =(mU+mD-4-nI*3)/6;
           if(nI>0)                                                 // Excess of au-quarks
           {
             nN+=1;
@@ -395,7 +395,7 @@ G4QChipolino::G4QChipolino(G4QContent& QCont)
         }
         else if(mS<2)                                              // NucFrag+K is possible
         {
-          G4int    nN =(kU+kD-4-nI*3)/6;
+          nN =(kU+kD-4-nI*3)/6;
           if(nI>0)                                                 // Excess of u-quarks
           {
             nN+=1;

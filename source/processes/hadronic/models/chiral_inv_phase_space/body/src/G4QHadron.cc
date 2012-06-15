@@ -225,9 +225,9 @@ void G4QHadron::DefineQC(G4int PDGCode)
   G4int dn=0;
   if(szn<-100000)
   {
-    G4int ns=(-szn)/1000000+1;
-    szn+=ns*1000000;
-    ds+=ns;
+    G4int ns_value=(-szn)/1000000+1;
+    szn+=ns_value*1000000;
+    ds+=ns_value;
   }
   else if(szn<-100)
   {
@@ -704,8 +704,8 @@ G4bool G4QHadron::CorMDecayIn2(G4double corM, G4LorentzVector& fr4Mom)
   }
   else
   {
-    G4double pc=sqrt(pc2);
-    ct=pfz/pc;
+    G4double pc_value=sqrt(pc2);
+    ct=pfz/pc_value;
   }
 #ifdef debug
   G4cout<<"G4QHadron::CorMDecayIn2: ct="<<ct<<", p="<<p<<G4endl;
@@ -1340,10 +1340,10 @@ G4double* G4QHadron::RandomX(G4int nPart)
 // Non-iterative recursive phase-space CHIPS algorthm
 G4double G4QHadron::SampleCHIPSX(G4double anXtot, G4int nSea)
 {
-  G4double ns=nSea;
+  G4double ns_value=nSea;
   if(nSea<1 || anXtot<=0.) G4cout<<"-Warning-G4QHad::SCX:N="<<nSea<<",tX="<<anXtot<<G4endl;
   if(nSea<2) return anXtot;
-  return anXtot*(1.-std::pow(G4UniformRand(),1./ns));
+  return anXtot*(1.-std::pow(G4UniformRand(),1./ns_value));
 }
 
 // Get flavors for the valence quarks of this hadron

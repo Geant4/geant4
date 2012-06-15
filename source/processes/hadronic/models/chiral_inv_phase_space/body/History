@@ -11,6 +11,14 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+14-Jun-2012 A.Ribon (hadr-chips-body-V09-05-06)
+--------------------------------------------------------------------------
+- Fix mistake in G4QPDGCode.cc and G4QNucleus.cc introduced in previous tag
+
+14-Jun-2012 A.Ribon (hadr-chips-body-V09-05-05)
+--------------------------------------------------------------------------
+- Fix compilation warnings of shadowed variables.
+
 6-Mar-2012 V.Ivanchenko (hadr-chips-body-V09-05-04)
 --------------------------------------------------------------------------
 - In G4QFreeScattering.cc misprint for Omega- (3334) is corrected + one
