@@ -287,8 +287,8 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
   nOfNeutrons=N;                                       // Remember it for energy-mom. check
   G4double dd=0.025;
   G4double am=Z+N;
-  G4double sr=std::sqrt(am);
-  G4double dsr=0.01*(sr+sr);
+  G4double value_sr=std::sqrt(am);
+  G4double dsr=0.01*(value_sr+value_sr);
   if(dsr<dd)dsr=dd;
   if(manualFlag) G4QNucleus::SetParameters(freeNuc,freeDib,clustProb,mediRatio); // ManualP
   else if(projPDG==-2212) G4QNucleus::SetParameters(1.-dsr-dsr,dd+dd,5.,10.);//aP ClustPars

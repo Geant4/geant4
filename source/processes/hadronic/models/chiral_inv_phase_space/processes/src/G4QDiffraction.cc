@@ -474,7 +474,7 @@ G4VParticleChange* G4QDiffraction::PostStepDoIt(const G4Track& track, const G4St
 #ifdef pdebug
   G4cout<<"G4QDiffraction::PostStepDoIt: =---=found=---= nSecondaries="<<nSec<<G4endl;
 #endif
-  for(G4int i=0; i<nSec; i++)
+  for(i=0; i<nSec; i++)
   {
     difQH = (*out)[i];
     difPDG= difQH->GetPDGCode();
@@ -513,7 +513,7 @@ G4VParticleChange* G4QDiffraction::PostStepDoIt(const G4Track& track, const G4St
     else if(difPDG==   13) theDefinition=G4MuonPlus::MuonPlus();
     else
     {
-      G4int Z = difQH->GetCharge();
+      Z = difQH->GetCharge();
       G4int B = difQH->GetBaryonNumber();
       G4int S = difQH->GetStrangeness();
       if(S||Z>B||Z<0)G4cout<<"-Warning-G4QDif::PoStDoIt:Z="<<Z<<",A="<<B<<",S="<<S<<G4endl;

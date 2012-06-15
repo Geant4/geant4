@@ -1046,12 +1046,12 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
   }
   else if (aProjPDG == 12 || aProjPDG == 14)
   {
-    G4double kinEnergy= projHadron->GetKineticEnergy()/MeV; // Total energy of the neutrino
+    kinEnergy= projHadron->GetKineticEnergy()/MeV; // Total energy of the neutrino
     G4double dKinE=kinEnergy+kinEnergy;  // doubled energy for s calculation
 #ifdef debug
     G4cout<<"G4QInelastic::PostStDoIt: 2*nuEnergy="<<dKinE<<"(MeV), PDG="<<projPDG<<G4endl;
 #endif
-    G4ParticleMomentum dir = projHadron->GetMomentumDirection(); // unit vector
+    dir = projHadron->GetMomentumDirection(); // unit vector
     G4double ml  = mu;
     G4double ml2 = mu2;
     //G4double mlN = muN;
@@ -1177,7 +1177,8 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
       ml2=0.;
       mldM=0.;
       mlD2=mPPi2;
-      G4QPDGCode targQPDG(targPDG);
+      G4QPDGCode temporary_targQPDG(targPDG); 
+      targQPDG = temporary_targQPDG;
       G4double rM=targQPDG.GetMass();
       mIN=tM-rM;                                 // bounded in-mass of the neutron
       tM=rM;
@@ -1185,7 +1186,8 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
     else if(nuanu)
     {
       targPDG-=1;                                // Neutrino -> subtract neutron
-      G4QPDGCode targQPDG(targPDG);
+      G4QPDGCode temporary_targQPDG(targPDG); 
+      targQPDG = temporary_targQPDG;
       G4double rM=targQPDG.GetMass();
       mIN=tM-rM;                                 // bounded in-mass of the neutron
       tM=rM;
@@ -1201,7 +1203,8 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
       if(Z>1||N>0)                               // Calculate the splitted mass
       {
         targPDG-=1000;                           // Anti-Neutrino -> subtract proton
-        G4QPDGCode targQPDG(targPDG);
+        G4QPDGCode temporary_targQPDG(targPDG); 
+        targQPDG = temporary_targQPDG;
         G4double rM=targQPDG.GetMass();
         mIN=tM-rM;                               // bounded in-mass of the proton
         tM=rM;
@@ -1214,11 +1217,11 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
       }
       projPDG=2112;                              // neutron is going out
     }
-    G4double s=mIN*(mIN+dKinE);                  // s=(M_cm)^2=m2+2mE (m=targetMass,E=E_nu)
+    G4double s_value=mIN*(mIN+dKinE);            // s_value=(M_cm)^2=m2+2mE (m=targetMass,E=E_nu)
 #ifdef debug
-    G4cout<<"G4QInelastic::PostStDoIt: s="<<s<<" >? OT="<<OT<<", mlD2="<<mlD2<<G4endl;
+    G4cout<<"G4QInelastic::PostStDoIt: s="<<s_value<<" >? OT="<<OT<<", mlD2="<<mlD2<<G4endl;
 #endif
-    if(s<=OT)                                    // *** Do nothing solution ***
+    if(s_value<=OT)                                    // *** Do nothing solution ***
     {
       //Do NothingToDo Action insead of the reaction (@@ Can we make it common?)
       G4cout<<"G4QInelastic::PostStepDoIt: tooSmallFinalMassOfCompound: DoNothing"<<G4endl;
@@ -1235,20 +1238,20 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
     aParticleChange.ProposeEnergy(0.);
     aParticleChange.ProposeTrackStatus(fStopAndKill); // the initial neutrino is killed
     // There is no way back from here !
-    if ( ((secnu || !nuanu || N) && totCS*G4UniformRand() < qelCS) || s < mlD2 ) 
+    if ( ((secnu || !nuanu || N) && totCS*G4UniformRand() < qelCS) || s_value < mlD2 ) 
     {   // Quasi-Elastic interaction
       G4double Q2=0.;                           // Simulate transferred momentum, in MeV^2
       if(secnu) Q2=CSmanager2->GetQEL_ExchangeQ2();
       else      Q2=CSmanager->GetQEL_ExchangeQ2();
 #ifdef debug
-      G4cout<<"G4QInelastic::PostStDoIt:QuasiEl(nu="<<secnu<<"),s="<<s<<",Q2="<<Q2<<G4endl;
+      G4cout<<"G4QInelastic::PostStDoIt:QuasiEl(nu="<<secnu<<"),s="<<s_value<<",Q2="<<Q2<<G4endl;
 #endif
-      //G4double ds=s+s;                          // doubled s
-      G4double sqs=std::sqrt(s);                // M_cm
+      //G4double ds=s_value+s_value;              // doubled s_value
+      G4double sqs=std::sqrt(s_value);          // M_cm
       G4double dsqs=sqs+sqs;                    // 2*M_cm
-      G4double pi=(s-mIN*mIN)/dsqs;             // initial momentum in CMS (checked MK)
-      G4double dpi=pi+pi;                       // doubled initial momentum in CMS
-      G4double sd=s-mlsOT;                      // s-ml2-mOT2 (mlsOT=m^2_neut+m^2_lept)
+      G4double p_init=(s_value-mIN*mIN)/dsqs;   // initial momentum in CMS (checked MK)
+      G4double dpi=p_init+p_init;               // doubled initial momentum in CMS
+      G4double sd=s_value-mlsOT;                // s_value-ml2-mOT2 (mlsOT=m^2_neut+m^2_lept)
       G4double qo2=(sd*sd-mlOT)/dsqs;           // squared momentum of secondaries in CMS
       G4double qo=std::sqrt(qo2);               // momentum of secondaries in CMS
       G4double cost=(dpi*std::sqrt(qo2+ml2)-Q2-ml2)/dpi/qo; // cos(theta) in CMS (chck MK)
@@ -1274,7 +1277,7 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
       if(secnu) Q2=CSmanager->GetNQE_ExchangeQ2();
       else      Q2=CSmanager2->GetNQE_ExchangeQ2();
 #ifdef debug
-      G4cout<<"G4QInel::PStDoIt: MultiPeriferal s="<<s<<",Q2="<<Q2<<",T="<<targPDG<<G4endl;
+      G4cout<<"G4QInel::PStDoIt: MultiPeriferal s="<<s_value<<",Q2="<<Q2<<",T="<<targPDG<<G4endl;
 #endif
       if(secnu) projPDG=CSmanager2->GetExchangePDGCode();// PDG Code of the effective gamma
       else      projPDG=CSmanager->GetExchangePDGCode(); // PDG Code of the effective pion
@@ -1338,11 +1341,11 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
       if(fM2>=c4M.m2())                         // Elastic scattering should be done
       {
         G4LorentzVector tot4M=tg4M+proj4M+scat4M; // recover the total 4-momentum
-        s=tot4M.m2();
-        G4double fs=s-fM2-ml2;
+        s_value=tot4M.m2();
+        G4double fs=s_value-fM2-ml2;
         G4double fMl=fM2*ml2;
-        G4double hQ2max=(fs*fs/2-fMl-fMl)/s;    // Maximum possible Q2/2
-        G4double cost=1.-Q2/hQ2max;             // cos(theta) in CMS (use MultProd Q2)
+        G4double hQ2max=(fs*fs/2-fMl-fMl)/s_value; // Maximum possible Q2/2
+        cost=1.-Q2/hQ2max;                // cos(theta) in CMS (use MultProd Q2)
 #ifdef debug
         G4cout<<"G4QI::PSDI:ct="<<cost<<",Q2="<<Q2<<",hQ2="<<hQ2max<<",4M="<<tot4M<<G4endl;
 #endif
@@ -2292,7 +2295,7 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
   delete output; // instances of the G4QHadrons from the output are already deleted above +
   if(leadhs)     // To satisfy Valgrind ( How can that be?)
   {
-    G4int qNH=leadhs->size();
+    qNH=leadhs->size();
     if(qNH) for(G4int iq=0; iq<qNH; iq++) delete (*leadhs)[iq];
     delete leadhs;
     leadhs=0;
@@ -2320,10 +2323,10 @@ std::pair<G4double,G4double> G4QInelastic::Random2DDirection()
   G4double r2=2.;             // to enter the loop
   while(r2>1. || r2<.0001)    // pi/4 efficiency
   {
-    G4double s=G4UniformRand();
-    G4double c=G4UniformRand();
-    sp=1.-s-s;
-    cp=1.-c-c;
+    G4double sine=G4UniformRand();
+    G4double cosine=G4UniformRand();
+    sp=1.-sine-sine;
+    cp=1.-cosine-cosine;
     r2=sp*sp+cp*cp;
   }
   G4double norm=std::sqrt(r2);

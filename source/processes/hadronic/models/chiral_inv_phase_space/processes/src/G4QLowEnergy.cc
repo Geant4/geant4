@@ -134,7 +134,7 @@ G4double G4QLowEnergy::GetMeanFreePath(const G4Track&Track, G4double, G4ForceCon
   for(G4int i=0; i<nE; ++i)
   {
     G4Element* pElement=(*theElementVector)[i]; // Pointer to the current element
-    G4int Z = static_cast<G4int>(pElement->GetZ()); // Z of the Element
+    Z = static_cast<G4int>(pElement->GetZ()); // Z of the Element
     ElementZ.push_back(Z);                  // Remember Z of the Element
     G4int isoSize=0;                        // The default for the isoVectorLength is 0
     G4int indEl=0;                          // Index of non-natural element or 0(default)
@@ -521,10 +521,10 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
     G4cout<<">G4QLEn::PSDI:#"<<nAt<<",tC="<<totChg<<",tA="<<totBaN<<",t4M="<<tch4M<<G4endl;
 #endif
     G4LorentzVector tt4M=tot4M;
-    G4int resN=result.size();
-    if(resN)
+    G4int resultSize=result.size();
+    if(resultSize)
     {
-      for(G4int i=0; i<resN; ++i) delete result[i];
+      for(i=0; i<resultSize; ++i) delete result[i];
       result.clear();
     }
     G4double D=std::sqrt(R2*G4UniformRand());
@@ -614,7 +614,7 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
               if(rNE >= prM) Mom = std::sqrt(pNE*pNE-prM2); // Mom(s) fake value
               else break;             // Break the while loop
             }
-            G4double xSec=0.;
+            xSec=0.;
             if(pPDG==2212) xSec=PCSmanager->GetCrossSection(false, Mom, tZ, tN, pPDG);
             else           xSec=NCSmanager->GetCrossSection(false, Mom, tZ, tN, pPDG);
             if( xSec <= 0. ) break;   // Break the while loop
@@ -747,7 +747,7 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
             }
             G4double Mom=0.;
             G4LorentzVector com4M=proj4M; // Proto of 4mom of compound
-            G4double prM=proj4M.m();
+            prM=proj4M.m();
             G4double rNM=0.;
             G4LorentzVector rNuc4M(0.,0.,0.,0.);
             if(tD==tB)
@@ -770,7 +770,7 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
               if(rNE >= prM) Mom = std::sqrt(tNE*tNE-prM2); // Mom(s) fake value
               else break;                     // Break the while loop
             }
-            G4double xSec=0.;
+            xSec=0.;
             if(pPDG==2212) xSec=PCSmanager->GetCrossSection(false, Mom, tZ, tN, pPDG);
             else           xSec=NCSmanager->GetCrossSection(false, Mom, tZ, tN, pPDG);
             if( xSec <= 0. ) break;           // Break the while loop
@@ -928,7 +928,7 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
             G4int nc=pD;
             if(pD+pD>pB) nc=pB-pD;
             pFM = mFm*std::pow(G4UniformRand(),third)*G4RandomDirection();
-            for(G4int i=1; i < nc; ++i)
+            for(i=1; i < nc; ++i)
                              pFM+= mFm*std::pow(G4UniformRand(),third)*G4RandomDirection();
           }
           G4ThreeVector tFM(0.,0.,0.);
@@ -937,7 +937,7 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
             G4int nc=pD;
             if(tD+tD>tB) nc=tB-tD;
             tFM = mFm*std::pow(G4UniformRand(),third)*G4RandomDirection();
-            for(G4int i=1; i < nc; ++i)
+            for(i=1; i < nc; ++i)
                              tFM+= mFm*std::pow(G4UniformRand(),third)*G4RandomDirection();
           }
 #ifdef pdebug
@@ -945,8 +945,8 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
 #endif
           // Split the projectile spectator
           G4int rpZ=pZ-pC;            // number of protons in the projectile spectator
-          G4int pF=pD-pC;             // number of neutrons in the projectile part of comp
-          G4int rpN=pN-pF;            // number of neutrons in the projectile spectator
+          G4int pF_value=pD-pC;       // number of neutrons in the projectile part of comp
+          G4int rpN=pN-pF_value;      // number of neutrons in the projectile spectator
           G4double rpNM=G4QPDGCode(2112).GetNuclMass(rpZ, rpN, 0); // Mass of the spectator
           G4ThreeVector boostV=proj4M.vect()/proj4M.e(); // Antilab Boost Vector
           G4double rpE=std::sqrt(rpNM*rpNM+pFM.mag2());
@@ -1123,8 +1123,8 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
           //
           // Split the target spectator
           G4int rtZ=tZ-tC;            // number of protons in the target spectator
-          G4int tF=tD-tC;             // number of neutrons in the target part of comp
-          G4int rtN=tN-tF;            // number of neutrons in the target spectator
+          G4int tF_value=tD-tC;       // number of neutrons in the target part of comp
+          G4int rtN=tN-tF_value;      // number of neutrons in the target spectator
           G4double rtNM=G4QPDGCode(2112).GetNuclMass(rtZ, rtN, 0); // Mass of the spectator
           G4double rtE=std::sqrt(rtNM*rtNM+tFM.mag2());
           G4LorentzVector rt4M(tFM,rtE);
@@ -1292,7 +1292,7 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
           if(aFraTTrack) result.push_back(aFraTTrack);
           if(aNewTTrack) result.push_back(aNewTTrack);
           tcM = tt4M.m();            // total CMS mass of the compound (after reduction!)
-          G4int sN=tF+pF;
+          G4int sN=tF_value+pF_value;
           G4int sZ=tC+pC;
           tnM = targQPDG.GetNuclMass(sZ,sN,0); // GSM
 #ifdef pdebug
@@ -1302,9 +1302,9 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
           if(tcM > tnM)              // !! The totalresidual  reaction is modified !
           {
             pZ=pC;
-            pN=pF;
+            pN=pF_value;
             tZ=tC;
-            tN=tF;
+            tN=tF_value;
             tot4M=tt4M;
           }
           //else
@@ -1430,7 +1430,7 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
 #endif
   
   G4double qv = 0.0;                        // Total sum of probabilities (q-values)
-  for(G4int i=0; i<nCh; ++i )
+  for(i=0; i<nCh; ++i )
   {
 #ifdef sdebug
     G4cout<<"G4QLowEn::PSDI: i="<<i<<", q="<<qval[i]<<",m="<<mass[i]<<G4endl;
@@ -2221,7 +2221,7 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
     G4QHadronVector* evaHV = new G4QHadronVector; // Output vector of hadrons (delete!)
     Nuc.EvaporateNucleus(rHadron, evaHV); // here a pion can appear !
     G4int nOut=evaHV->size();
-    for(G4int i=0; i<nOut; i++)
+    for(i=0; i<nOut; i++)
     {
       G4QHadron* curH = (*evaHV)[i];
       G4int hPDG=curH->GetPDGCode();
@@ -2258,7 +2258,7 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
   // algorithm implementation --- STOPS HERE
   G4int nres=result.size();
   aParticleChange.SetNumberOfSecondaries(nres);
-  for(G4int i=0; i<nres; ++i) aParticleChange.AddSecondary(result[i]);
+  for(i=0; i<nres; ++i) aParticleChange.AddSecondary(result[i]);
 #ifdef debug
   G4cout<<"G4QLowEnergy::PostStepDoIt:*** PostStepDoIt is done ***"<<G4endl;
 #endif
