@@ -359,9 +359,10 @@ G4HadFinalState *G4EMDissociation::ApplyYourself
 // projectile.
 //
   G4double e  = mass + Eg;
-  G4double m1 = typeNucleon->GetPDGMass();
-  G4double m2 = typeDaughter->GetPDGMass();
-  G4double pp = (e+m1+m2)*(e+m1-m2)*(e-m1+m2)*(e-m1-m2)/(4.0*e*e);
+  G4double mass1 = typeNucleon->GetPDGMass();
+  G4double mass2 = typeDaughter->GetPDGMass();
+  G4double pp = (e+mass1+mass2)*(e+mass1-mass2)*
+                (e-mass1+mass2)*(e-mass1-mass2)/(4.0*e*e);
   if (pp < 0.0)
   {
     pp = 1.0*eV;
@@ -371,8 +372,8 @@ G4HadFinalState *G4EMDissociation::ApplyYourself
 //      G4cout <<"Error in mass of secondaries compared with primary:" <<G4endl;
 //      G4cout <<"Rest mass of primary      = " <<mass <<" MeV" <<G4endl;
 //      G4cout <<"Virtual gamma energy      = " <<Eg   <<" MeV" <<G4endl;
-//      G4cout <<"Rest mass of secondary #1 = " <<m1   <<" MeV" <<G4endl;
-//      G4cout <<"Rest mass of secondary #2 = " <<m2   <<" MeV" <<G4endl;
+//      G4cout <<"Rest mass of secondary #1 = " <<mass1   <<" MeV" <<G4endl;
+//      G4cout <<"Rest mass of secondary #2 = " <<mass2   <<" MeV" <<G4endl;
 //    }
   }
   else
