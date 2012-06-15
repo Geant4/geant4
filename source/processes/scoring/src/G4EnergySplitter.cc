@@ -103,7 +103,7 @@ G4int G4EnergySplitter::SplitEnergyInVolumes(const G4Step* aStep )
 #endif
   //----- No iterations to correct elost and msc => distribute energy deposited according to geometrical step length in each voxel
   if( theNIterations == 0 ) { 
-    for( unsigned int ii = 0; ii < rnsl.size(); ii++ ){
+    for( ii = 0; ii < rnsl.size(); ii++ ){
       G4double sl = G4RegularNavigationHelper::theStepLengths[ii].second;
       G4double edepStep = edep * sl/slSum; //divide edep along steps, proportional to step length
 #ifdef VERBOSE_ENERSPLIT
@@ -204,7 +204,7 @@ G4int G4EnergySplitter::SplitEnergyInVolumes(const G4Step* aStep )
 	}
 	
 	//---- Recalculate energy lost with this new step lengths
-	G4double kinEnergyPre = aStep->GetPreStepPoint()->GetKineticEnergy();
+        kinEnergyPre = aStep->GetPreStepPoint()->GetKineticEnergy();
 	totalELost = 0.;
 	for( ii = 0; ii < rnsl.size(); ii++ ){
 	  const G4Material* mate = thePhantomParam->GetMaterial( rnsl[ii].first );
