@@ -29,6 +29,8 @@
 //
 // G4PSFlatSurfaceFlux
 #include "G4PSFlatSurfaceFlux.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4StepStatus.hh"
 #include "G4Track.hh"
 #include "G4VSolid.hh"

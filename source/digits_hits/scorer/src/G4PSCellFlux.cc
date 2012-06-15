@@ -29,6 +29,8 @@
 //
 // G4PSCellFlux
 #include "G4PSCellFlux.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4Track.hh"
 #include "G4VSolid.hh"
 #include "G4VPhysicalVolume.hh"

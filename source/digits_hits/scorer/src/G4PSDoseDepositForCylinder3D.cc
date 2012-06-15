@@ -29,6 +29,7 @@
 //
 // G4PSDoseDepositForCylinder3D
 #include "G4PSDoseDepositForCylinder3D.hh"
+#include "G4PhysicalConstants.hh"
 
 ////////////////////////////////////////////////////////////////////////////////
 // (Description)

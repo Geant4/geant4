@@ -29,6 +29,7 @@
 //
 // G4PSPassageCellFluxForCylinder3D
 #include "G4PSPassageCellFluxForCylinder3D.hh"
+#include "G4PhysicalConstants.hh"
 
 ///////////////////////////////////////////////////////////////////////////////
 // (Description)

@@ -29,6 +29,7 @@
 //
 // G4PSTrackLength
 #include "G4PSTrackLength.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 ////////////////////////////////////////////////////////////////////////////////
 // (Description)

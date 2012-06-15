@@ -29,6 +29,8 @@
 //
 // G4PSCellFluxForCylinder3D
 #include "G4PSCellFluxForCylinder3D.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 ///////////////////////////////////////////////////////////////////////////////
 // (Description)

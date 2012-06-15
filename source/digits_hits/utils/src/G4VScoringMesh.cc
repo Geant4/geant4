@@ -36,6 +36,8 @@
 // ---------------------------------------------------------------------
 
 #include "G4VScoringMesh.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4MultiFunctionalDetector.hh"
 #include "G4VPrimitiveScorer.hh"
