@@ -12,6 +12,10 @@ $Id$
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+8-June-2012,G.Folger               (testtools-QMtest-V09-05-09)
+- remove examples/extended/g3tog4/cltog4 from testing and delete 
+   corresponding qmt files.
+
 25-May-2012, G.Folger               (testtools-QMtest-V09-05-08)
 - change timelimits fro tets12 and test12-FTF_BIC
 
