@@ -15,7 +15,31 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07 June 2012  John Apostolakis (test22-V09-05-02)
+------------------------------------------------
+- test22.cc: Do not include Tst22PhysicsList (deleted). 
+
+07 June 2012  John Apostolakis (test22-V09-05-01)
+------------------------------------------------
+- Moved to use new modular physics list Tst22ModularPhysicsList
+   which was derived from Tst22PhysicsList 
+- Tst22EMPhysics: Added biasing factor of 100 for Photo-nuclear,
+   and changed to 1,000,000 for electro-nuclear." 
+- Deleted Tst22PhysicsList - to avoid confusion.
+- New script  'process-GammaN.awk' to process output of short 
+   runs - to check whether the interactions under test do occur.
+- Revised input file to test all particles with all materials.
+
+07 June 2012  John Apostolakis (test22-V09-05-00)
+---------------------------------------------
+- Tst22PhysicsList: 
+   Took out parts referring to modular physics 
+     lists.  Now it is only a single-class physics list.
+   Improved moved the include of all physics processes from header to 
+     source file of Tst22PhysicsList.cc
+
 01 Jun 2010  Gunter Folger (test22-V09-03-02)
+---------------------------------------------
 -  retag to pick up changed header file from previous rejected tag.
    No change other the test22.out to test22-V09-03-01
 

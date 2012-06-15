@@ -76,14 +76,19 @@ void Tst22EMPhysics::ConstructParticle()
 
 void Tst22EMPhysics::ConstructProcess()
 {
+
   G4ProcessManager * pManager = 0;
+  G4cout << " Tst22EMPhysicsList::ConstructProcess() " << " called." << G4endl;
   
   // Gamma Physics
   pManager = G4Gamma::Gamma()->GetProcessManager();
-  pManager->AddDiscreteProcess(&thePhotoEffect);
-  pManager->AddDiscreteProcess(&theComptonEffect);
-  pManager->AddDiscreteProcess(&thePairProduction);
-  
+  G4bool allPhysics = true;
+  if( allPhysics ) {
+     pManager->AddDiscreteProcess(&thePhotoEffect);
+     pManager->AddDiscreteProcess(&theComptonEffect);
+     pManager->AddDiscreteProcess(&thePairProduction);
+  }
+
   theGammaReaction = new G4GammaNuclearReaction;
   theModel = new G4TheoFSGenerator;
   theCascade = new G4StringChipsParticleLevelInterface;
@@ -96,6 +101,10 @@ void Tst22EMPhysics::ConstructProcess()
   theModel->SetMinEnergy(3.*GeV);
   theModel->SetMaxEnergy(100*TeV);
   thePhotoNuclearProcess.RegisterMe(theModel);
+
+  G4double  biasFactorPhotoNuclear= 100;
+  thePhotoNuclearProcess.BiasCrossSectionByFactor(biasFactorPhotoNuclear);
+  G4cout << " Bias factor for Phot Nuclear is set to " << biasFactorPhotoNuclear << G4endl;
   pManager->AddDiscreteProcess(&thePhotoNuclearProcess);
 
   // Electron Physics
@@ -105,7 +114,11 @@ void Tst22EMPhysics::ConstructProcess()
   pManager->AddProcess(&theElectronIonisation, ordInActive,2, 2);
   pManager->AddProcess(&theElectronMultipleScattering);
   theElectronNuclearProcess.RegisterMe(theElectroReaction);
-  theElectronNuclearProcess.BiasCrossSectionByFactor(1000);
+
+  G4double biasFactorElectroNuclear= 1000000;
+  theElectronNuclearProcess.BiasCrossSectionByFactor(biasFactorElectroNuclear);
+
+  G4cout << " Bias factor for ElectronNuclear is set to " << biasFactorElectroNuclear << G4endl;
   pManager->AddDiscreteProcess(&theElectronNuclearProcess);
   
   pManager->SetProcessOrdering(&theElectronMultipleScattering, idxAlongStep,  1);
@@ -118,6 +131,7 @@ void Tst22EMPhysics::ConstructProcess()
   pManager->AddDiscreteProcess(&theAnnihilation);
   pManager->AddRestProcess(&theAnnihilation);
   pManager->AddProcess(&thePositronIonisation, ordInActive,2, 2);
+  G4cout << " Bias factor for PositronNuclear is set to " << biasFactorElectroNuclear << " - same process instance is used as for electron " << G4endl;
   thePositronNuclearProcess.RegisterMe(theElectroReaction);
   pManager->AddDiscreteProcess(&thePositronNuclearProcess);
   pManager->AddProcess(&thePositronMultipleScattering);

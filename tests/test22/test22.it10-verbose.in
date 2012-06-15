@@ -6,6 +6,7 @@
 /run/initialize
 /gun/direction 1 0 0
 
+/tracking/verbose 1
 #
 # gamma in Pb
 #

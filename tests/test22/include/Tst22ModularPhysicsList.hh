@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifndef Tst22PhysicsList_h
-#define Tst22PhysicsList_h 1
+#ifndef Tst22ModularPhysicsList_h
+#define Tst22ModularPhysicsList_h 1
 
-//#include "G4VModularPhysicsList.hh"
-#include "G4VUserPhysicsList.hh"
+#include "G4VModularPhysicsList.hh"
+// #include "G4VUserPhysicsList.hh"
 #include "globals.hh"
 #include "G4ios.hh"
 #include <iomanip>   
@@ -185,35 +185,35 @@
 #include "G4ExcitedStringDecay.hh"
 #include "G4StringChipsParticleLevelInterface.hh"
 
-//class Tst22PhysicsList: public G4VModularPhysicsList
-class Tst22PhysicsList: public G4VUserPhysicsList
+class Tst22ModularPhysicsList: public G4VModularPhysicsList 
+// class Tst22ModularPhysicsList: public G4VUserPhysicsList
 {
 public:
-  Tst22PhysicsList();
-  virtual ~Tst22PhysicsList();
+  Tst22ModularPhysicsList();
+  virtual ~Tst22ModularPhysicsList();
   
 //public:
-  // SetCuts()
+  // SetCuts();
 protected: 
   // Construct particle and physics
-  virtual void ConstructParticle();
-  virtual void ConstructProcess();
+  // virtual void ConstructParticle();
+  // virtual void ConstructProcess();
 
-  virtual void SetCuts();
+  // virtual void SetCuts();
 
 protected:
   // these methods Construct physics processes and register them
-  virtual void ConstructGeneral();
-  virtual void ConstructEM();
-  virtual void ConstructHad();
-  virtual void ConstructLeptHad();
+  // virtual void ConstructGeneral();
+  // virtual void ConstructEM();
+  // virtual void ConstructHad();
+  // virtual void ConstructLeptHad();
   //
-  void  ConstructAllBosons();
-  void  ConstructAllLeptons();
-  void  ConstructAllMesons();
-  void  ConstructAllBaryons();
-  void  ConstructAllIons();
-  void  ConstructAllShortLiveds();
+  // void  ConstructAllBosons();
+  // void  ConstructAllLeptons();
+  // void  ConstructAllMesons();
+  // void  ConstructAllBaryons();
+  // void  ConstructAllIons();
+  // void  ConstructAllShortLiveds();
 
 };
 

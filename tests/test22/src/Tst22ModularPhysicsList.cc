@@ -24,58 +24,37 @@
 // ********************************************************************
 //
 //
-// $Id: test22.cc,v 1.4 2006-06-29 21:48:37 gunter Exp $
+// $Id: Tst22ModularPhysicsList.cc,v 1.6 2010-06-25 09:46:21 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// 
 
-#include "Tst22DetectorConstruction.hh"
-#include "Tst22RunAction.hh"
-#include "Tst22PrimaryGeneratorAction.hh"
 #include "Tst22ModularPhysicsList.hh"
-#include "Tst22SteppingAction.hh"
-#include "Tst22EventAction.hh"
 
-#include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4RunManager.hh"
+Tst22ModularPhysicsList::Tst22ModularPhysicsList():  G4VModularPhysicsList()
+{
+  // default cut value  (1.0mm) 
+  defaultCutValue = 1.0*mm;
+  SetVerboseLevel(1);
 
-#include "G4ios.hh"
+  // General Physics
+  RegisterPhysics( new Tst22GeneralPhysics("general") );
 
-int main(int argc,char** argv) {
+  // EM Physics
+  this->RegisterPhysics( new Tst22EMPhysics("standard EM with bias for e/g Nuclear."));
 
-  // Set the default random engine to RanecuEngine
-  CLHEP::RanecuEngine defaultEngine;
-  CLHEP::HepRandom::setTheEngine(&defaultEngine);
+  // Muon Physics
+  RegisterPhysics(  new Tst22MuonPhysics("muon"));
 
-  // Run manager
-  G4RunManager * runManager = new G4RunManager;
+  // Hadron Physics
+  RegisterPhysics(  new Tst22HadronPhysics("hadron"));
 
-  // UserInitialization classes
-  runManager->SetUserInitialization(new Tst22DetectorConstruction);
-  runManager->SetUserInitialization(new Tst22ModularPhysicsList);
+  // Ion Physics
+  RegisterPhysics( new Tst22IonPhysics("ion"));
 
-  // UserAction classes
-  runManager->SetUserAction(new Tst22RunAction);
-  runManager->SetUserAction(new Tst22PrimaryGeneratorAction);
-  runManager->SetUserAction(new Tst22EventAction);
-  //runManager->SetUserAction(new Tst22SteppingAction);
-
-  if(argc==1)
-  {
-    // G4UIterminal is a (dumb) terminal.
-    G4UIsession* session = new G4UIterminal;
-    session->SessionStart();
-    delete session;
-  }
-  else
-  {
-    G4UImanager* UImanager = G4UImanager::GetUIpointer();
-    G4String command = "/control/execute ";
-    G4String fileName = argv[1];
-    UImanager->ApplyCommand(command+fileName);
-  }
-
-  delete runManager;
-  return 0;
 }
+
+Tst22ModularPhysicsList::~Tst22ModularPhysicsList() {}
+
+// void Tst22ModularPhysicsList::SetCuts() {SetCutsWithDefault();}
 
