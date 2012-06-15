@@ -29,6 +29,34 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+14th June 2012 - Ben Morgan (cmake-V09-05-27)
+- Modules/Geant4OptionalComponents.cmake : Search for system expat by
+  default on non-Win32. We prefer the system library on these platforms
+  due to compilation warnings in the current internal version of expat.
+
+13th June 2012 - Ben Morgan (cmake-V09-05-26)
+- Modules/Geant4OptionalComponents.cmake : Allow choice between internal
+  and system expat library on non-Win32 platforms, default to use
+  internal. Choosing system expat requires it to be found.
+
+12th June 2012 - Ben Morgan (cmake-V09-05-25)
+- Modules/Geant4ToolchainBackwardCompatibility.cmake: Quote paths used
+  in execute_process calls run at install time. This fixes a problem
+  reported by Joseph Perl on Windows, when a space appears in the install
+  prefix.
+
+8th June, 2012 - Gunter Folger (cmake-V09-05-24)
+- Modules/Geant4OptionalComponents.cmake: require CLHEP 2.1.2.3
+
+4th June, 2012 - Gunter Folger (cmake-V09-05-23)
+- Modules/Geant4InstallData.cmake: use G4EMLOW.6.27
+
+1st June, 2012 - Ben Morgan (cmake-V09-05-22)
+- Modules/Geant4InstallData.cmake : Complete rewrite of data installation 
+  with support for CMake >= 2.6.4 and custom physics data install location.
+  Downloaded data bundles are also verified using MD5 hashes.
+- Modules/Geant4ToolchainBackwardCompatibility.cmake : Location of data
+  updated to use new paths from Geant4InstallData.cmake.
 
 May 31st, 2012 - Pere Mato (cmake-V09-05-21)
 - Modules/Geant4BuildProjectConfig.cmake : Transmit CMAKE_EXE_LINKER_FLAGS as Geant4_EXE_LINKER_FLAGS

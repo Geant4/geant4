@@ -518,15 +518,13 @@ set(G4WORKDIR_DEFAULT "\$HOME/geant4_workdir")
 # - Data
 # Messy for now...
 if(GEANT4_INSTALL_DATA)
-  set(_g4datarootdir ${PROJECT_BINARY_DIR}/data)
-
   foreach(_ds ${GEANT4_DATASETS})
     string(REPLACE "/" ";" _tuple ${_ds})
     list(GET _tuple 0 _name)
     list(GET _tuple 1 _vers)
     list(GET _tuple 4 _envvarname)
 
-    set(${_envvarname}_PATH ${_g4datarootdir}/${_name}${_vers})
+    set(${_envvarname}_PATH ${GEANT4_BUILD_FULL_DATADIR}/${_name}${_vers})
   endforeach()
 endif()
 
@@ -582,7 +580,7 @@ if(GEANT4_INSTALL_DATA)
   file(RELATIVE_PATH
     G4MAKE_TO_DATADIR
     ${CMAKE_INSTALL_FULL_DATAROOTDIR}/Geant4-${Geant4_VERSION}/geant4make
-    ${CMAKE_INSTALL_FULL_DATAROOTDIR}/Geant4-${Geant4_VERSION}/data
+    ${GEANT4_INSTALL_FULL_DATADIR}
     )
 
   foreach(_ds ${GEANT4_DATASETS})
@@ -619,11 +617,13 @@ install(DIRECTORY config
     PATTERN "scripts/" EXCLUDE
 )
 
-# compatibility softlink to library directory
-# NB This won't work on Windows, but shouldn't fail either.
-install(CODE "execute_process(COMMAND \${CMAKE_COMMAND} -E make_directory \$ENV{DESTDIR}${CMAKE_INSTALL_FULL_LIBDIR}/Geant4-${Geant4_VERSION})")
+# Compatibility softlink to library directory, we do this on all
+# platforms, but it does nothing on Windows (well, at least the
+# attempted symlink creation does not)
+# Take care to quote the path names to avoid issues with spaces
+install(CODE "execute_process(COMMAND \${CMAKE_COMMAND} -E make_directory \"\$ENV{DESTDIR}${CMAKE_INSTALL_FULL_LIBDIR}/Geant4-${Geant4_VERSION}\")")
 
-install(CODE "execute_process(COMMAND \${CMAKE_COMMAND} -E create_symlink .. ${GEANT4_SYSTEM}-${GEANT4_COMPILER} WORKING_DIRECTORY \$ENV{DESTDIR}${CMAKE_INSTALL_FULL_LIBDIR}/Geant4-${Geant4_VERSION})")
+install(CODE "execute_process(COMMAND \${CMAKE_COMMAND} -E create_symlink .. ${GEANT4_SYSTEM}-${GEANT4_COMPILER} WORKING_DIRECTORY \"\$ENV{DESTDIR}${CMAKE_INSTALL_FULL_LIBDIR}/Geant4-${Geant4_VERSION}\")")
 
 
 
@@ -650,7 +650,7 @@ if(GEANT4_INSTALL_DATA)
   file(RELATIVE_PATH
     G4ENV_BINDIR_TO_DATADIR
     ${CMAKE_INSTALL_FULL_BINDIR}
-    ${CMAKE_INSTALL_FULL_DATAROOTDIR}/Geant4-${Geant4_VERSION}/data
+    ${GEANT4_INSTALL_FULL_DATADIR}
     )
 
   foreach(_ds ${GEANT4_DATASETS})
