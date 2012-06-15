@@ -126,8 +126,8 @@ G4double G4MuIonisation::MinPrimaryEnergy(const G4ParticleDefinition*,
 					  G4double cut)
 {
   G4double x = 0.5*cut/electron_mass_c2;
-  G4double g = x*ratio + std::sqrt((1. + x)*(1. + x*ratio*ratio));
-  return mass*(g - 1.0);
+  G4double gam = x*ratio + std::sqrt((1. + x)*(1. + x*ratio*ratio));
+  return mass*(gam - 1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -148,10 +148,7 @@ void G4MuIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* par
     // Bragg peak model
     if (!EmModel(1)) {
       if(q > 0.0) { SetEmModel(new G4BraggModel(),1); }
-      else { 
-	SetEmModel(new G4ICRU73QOModel(),1); 
-	//elow = 1.0*MeV;
-      }
+      else { SetEmModel(new G4ICRU73QOModel(),1); }
     }
     EmModel(1)->SetLowEnergyLimit(MinKinEnergy());
     EmModel(1)->SetHighEnergyLimit(elow); 

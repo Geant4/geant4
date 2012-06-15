@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08 June 2012: V.Ivant (emmuons-V09-05-01)
+- G4MuIonisation - fixed variable shadowing
+
 27 January 2012: V.Ivant (emmuons-V09-05-00)
 - G4EnergyLossForExtrapolator fixed initialisation of transport 
     cross section

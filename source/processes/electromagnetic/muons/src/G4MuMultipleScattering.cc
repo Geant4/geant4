@@ -80,9 +80,9 @@ G4bool G4MuMultipleScattering::IsApplicable (const G4ParticleDefinition& p)
 void G4MuMultipleScattering::InitialiseProcess(const G4ParticleDefinition*)
 {
   // Modification of parameters between runs
-  if(isInitialized) return;
-  AddEmModel(1, new G4UrbanMscModel90());
-  //  AddEmModel(1, new G4WentzelVIModel());
+  if(isInitialized) { return; }
+  if(!Model(1)) { SetModel(new G4UrbanMscModel90(), 1); }
+  AddEmModel(1, Model(1));
   isInitialized = true;
 }
 
