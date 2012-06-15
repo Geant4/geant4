@@ -33,8 +33,10 @@
 // Tubesector builder implementation
 // OC 290896
 
-#include "G4NURBStubesector.hh"
 #include <sstream>
+
+#include "G4NURBStubesector.hh"
+#include "G4PhysicalConstants.hh"
 
 G4NURBStubesector::G4NURBStubesector(G4double r, G4double R,
                                      G4double DZ, G4double PHI1, G4double PHI2)
