@@ -181,8 +181,8 @@ void G4LEKaonPlusInelastic::Cascade(
     const G4int numSec = 60;
     static G4double protmul[numMul], protnorm[numSec]; // proton constants
     static G4double neutmul[numMul], neutnorm[numSec]; // neutron constants
-    // np = number of pi+, nm = number of pi-, nz = number of pi0
-    G4int nt=0, np=0, nm=0, nz=0;
+    // npos = number of pi+, nneg = number of pi-, nzero = number of pi0
+    G4int nt=0, npos=0, nneg=0, nzero=0;
     const G4double c = 1.25;    
     const G4double b[] = { 0.70, 0.70 };
     if( first )       // compute normalization constants, this will only be Done once
@@ -192,18 +192,18 @@ void G4LEKaonPlusInelastic::Cascade(
       for( i=0; i<numMul; ++i )protmul[i] = 0.0;
       for( i=0; i<numSec; ++i )protnorm[i] = 0.0;
       G4int counter = -1;
-      for( np=0; np<(numSec/3); ++np )
+      for( npos=0; npos<(numSec/3); ++npos )
       {
-        for( nm=std::max(0,np-2); nm<=np; ++nm )
+        for( nneg=std::max(0,npos-2); nneg<=npos; ++nneg )
         {
-          for( nz=0; nz<numSec/3; ++nz )
+          for( nzero=0; nzero<numSec/3; ++nzero )
           {
             if( ++counter < numMul )
             {
-              nt = np+nm+nz;
+              nt = npos+nneg+nzero;
               if( nt > 0 )
               {
-                protmul[counter] = Pmltpc(np,nm,nz,nt,b[0],c);
+                protmul[counter] = Pmltpc(npos,nneg,nzero,nt,b[0],c);
                 protnorm[nt-1] += protmul[counter];
               }
             }
@@ -213,18 +213,18 @@ void G4LEKaonPlusInelastic::Cascade(
       for( i=0; i<numMul; ++i )neutmul[i] = 0.0;
       for( i=0; i<numSec; ++i )neutnorm[i] = 0.0;
       counter = -1;
-      for( np=0; np<numSec/3; ++np )
+      for( npos=0; npos<numSec/3; ++npos )
       {
-        for( nm=std::max(0,np-1); nm<=(np+1); ++nm )
+        for( nneg=std::max(0,npos-1); nneg<=(npos+1); ++nneg )
         {
-          for( nz=0; nz<numSec/3; ++nz )
+          for( nzero=0; nzero<numSec/3; ++nzero )
           {
             if( ++counter < numMul )
             {
-              nt = np+nm+nz;
+              nt = npos+nneg+nzero;
               if( (nt>0) && (nt<=numSec) )
               {
-                neutmul[counter] = Pmltpc(np,nm,nz,nt,b[1],c);
+                neutmul[counter] = Pmltpc(npos,nneg,nzero,nt,b[1],c);
                 neutnorm[nt-1] += neutmul[counter];
               }
             }
@@ -252,16 +252,16 @@ void G4LEKaonPlusInelastic::Cascade(
       // suppress high multiplicity events at low momentum
       // only one pion will be produced
       
-      nm = np = nz = 0;
+      nneg = npos = nzero = 0;
       if( targetParticle.GetDefinition() == aProton )
       {
         test = std::exp( std::min( expxu, std::max( expxl, -sqr(1.0+b[0])/(2.0*c*c) ) ) );
         w0 = test;
         wp = test*2.0;        
         if( G4UniformRand() < w0/(w0+wp) )
-          nz = 1;
+          nzero = 1;
         else
-          np = 1;
+          npos = 1;
       }
       else  // target is a neutron
       {
@@ -274,11 +274,11 @@ void G4LEKaonPlusInelastic::Cascade(
         wp += w0;
         G4double ran = G4UniformRand();
         if( ran < w0/wt )
-          nz = 1;
+          nzero = 1;
         else if( ran < wp/wt )
-          np = 1;
+          npos = 1;
         else
-          nm = 1;
+          nneg = 1;
       }
     }
     else
@@ -290,15 +290,15 @@ void G4LEKaonPlusInelastic::Cascade(
       if( targetParticle.GetDefinition() == aProton )
       {
         G4int counter = -1;
-        for( np=0; (np<numSec/3) && (ran>=excs); ++np )
+        for( npos=0; (npos<numSec/3) && (ran>=excs); ++npos )
         {
-          for( nm=std::max(0,np-2); (nm<=np) && (ran>=excs); ++nm )
+          for( nneg=std::max(0,npos-2); (nneg<=npos) && (ran>=excs); ++nneg )
           {
-            for( nz=0; (nz<numSec/3) && (ran>=excs); ++nz )
+            for( nzero=0; (nzero<numSec/3) && (ran>=excs); ++nzero )
             {
               if( ++counter < numMul )
               {
-                nt = np+nm+nz;
+                nt = npos+nneg+nzero;
                 if( nt > 0 )
                 {
                   test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
@@ -315,20 +315,20 @@ void G4LEKaonPlusInelastic::Cascade(
           }
         }
         if( ran >= excs )return;  // 3 previous loops continued to the end
-        np--; nm--; nz--;
+        npos--; nneg--; nzero--;
       }
       else  // target must be a neutron
       {
         G4int counter = -1;
-        for( np=0; (np<numSec/3) && (ran>=excs); ++np )
+        for( npos=0; (npos<numSec/3) && (ran>=excs); ++npos )
         {
-          for( nm=std::max(0,np-1); (nm<=(np+1)) && (ran>=excs); ++nm )
+          for( nneg=std::max(0,npos-1); (nneg<=(npos+1)) && (ran>=excs); ++nneg )
           {
-            for( nz=0; (nz<numSec/3) && (ran>=excs); ++nz )
+            for( nzero=0; (nzero<numSec/3) && (ran>=excs); ++nzero )
             {
               if( ++counter < numMul )
               {
-                nt = np+nm+nz;
+                nt = npos+nneg+nzero;
                 if( (nt>=1) && (nt<=numSec) )
                 {
                   test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
@@ -345,12 +345,12 @@ void G4LEKaonPlusInelastic::Cascade(
           }
         }
         if( ran >= excs )return;  // 3 previous loops continued to the end
-        np--; nm--; nz--;
+        npos--; nneg--; nzero--;
       }
     }
     if( targetParticle.GetDefinition() == aProton )
     {
-      switch( np-nm )
+      switch( npos-nneg )
       {
        case 1:
          if( G4UniformRand() < 0.5 )
@@ -383,7 +383,7 @@ void G4LEKaonPlusInelastic::Cascade(
     }
     else   // target is a neutron
     {
-      switch( np-nm )
+      switch( npos-nneg )
       {
        case 0:
          if( G4UniformRand() < 0.25 )
@@ -404,13 +404,13 @@ void G4LEKaonPlusInelastic::Cascade(
            currentParticle.SetDefinitionAndUpdateE( aKaonZL );
          incidentHasChanged = true;
          break;
-       default: // assumes nm = np+1 so charge is conserved
+       default: // assumes nneg = npos+1 so charge is conserved
          targetParticle.SetDefinitionAndUpdateE( aProton );
          targetHasChanged = true;
          break;
       }
     }
-    SetUpPions( np, nm, nz, vec, vecLen );
+    SetUpPions( npos, nneg, nzero, vec, vecLen );
     return;
   }
 

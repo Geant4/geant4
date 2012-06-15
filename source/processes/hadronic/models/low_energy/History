@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+10 June 2012 - Dennis Wright  (hadr-lep-V09-05-08)
+--------------------------------------------------
+- fix compiler shadowing warning by replacing variable nm with nneg,
+  m with pvec and m2 with mass2.  Also replace np with npos, nz with
+  nzero
+
 10 May 2012 - Gunter Folger   (hadr-lep-V09-05-07)
 ----------------------------------------------------
 -  Fix typo in previous tag 

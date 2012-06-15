@@ -167,8 +167,8 @@ void G4LESigmaMinusInelastic::Cascade(
     const G4int numSec = 60;
     static G4double protmul[numMul], protnorm[numSec]; // proton constants
     static G4double neutmul[numMul], neutnorm[numSec]; // neutron constants
-    // np = number of pi+, nm = number of pi-, nz = number of pi0
-    G4int counter, nt=0, np=0, nm=0, nz=0;
+    // npos = number of pi+, nneg = number of pi-, nzero = number of pi0
+    G4int counter, nt=0, npos=0, nneg=0, nzero=0;
     G4double test;
     const G4double c = 1.25;    
     const G4double b[] = { 0.70, 0.70 };
@@ -179,18 +179,18 @@ void G4LESigmaMinusInelastic::Cascade(
       for( i=0; i<numMul; ++i )protmul[i] = 0.0;
       for( i=0; i<numSec; ++i )protnorm[i] = 0.0;
       counter = -1;
-      for( np=0; np<(numSec/3); ++np )
+      for( npos=0; npos<(numSec/3); ++npos )
       {
-        for( nm=std::max(0,np-1); nm<=(np+1); ++nm )
+        for( nneg=std::max(0,npos-1); nneg<=(npos+1); ++nneg )
         {
-          for( nz=0; nz<numSec/3; ++nz )
+          for( nzero=0; nzero<numSec/3; ++nzero )
           {
             if( ++counter < numMul )
             {
-              nt = np+nm+nz;
+              nt = npos+nneg+nzero;
               if( nt>0 && nt<=numSec )
               {
-                protmul[counter] = Pmltpc(np,nm,nz,nt,b[0],c);
+                protmul[counter] = Pmltpc(npos,nneg,nzero,nt,b[0],c);
                 protnorm[nt-1] += protmul[counter];
               }
             }
@@ -200,18 +200,18 @@ void G4LESigmaMinusInelastic::Cascade(
       for( i=0; i<numMul; ++i )neutmul[i] = 0.0;
       for( i=0; i<numSec; ++i )neutnorm[i] = 0.0;
       counter = -1;
-      for( np=0; np<numSec/3; ++np )
+      for( npos=0; npos<numSec/3; ++npos )
       {
-        for( nm=np; nm<=(np+2); ++nm )
+        for( nneg=npos; nneg<=(npos+2); ++nneg )
         {
-          for( nz=0; nz<numSec/3; ++nz )
+          for( nzero=0; nzero<numSec/3; ++nzero )
           {
             if( ++counter < numMul )
             {
-              nt = np+nm+nz;
+              nt = npos+nneg+nzero;
               if( nt>0 && nt<=numSec )
               {
-                neutmul[counter] = Pmltpc(np,nm,nz,nt,b[1],c);
+                neutmul[counter] = Pmltpc(npos,nneg,nzero,nt,b[1],c);
                 neutnorm[nt-1] += neutmul[counter];
               }
             }
@@ -241,15 +241,15 @@ void G4LESigmaMinusInelastic::Cascade(
     if( targetParticle.GetDefinition() == aProton )
     {
       counter = -1;
-      for( np=0; np<numSec/3 && ran>=excs; ++np )
+      for( npos=0; npos<numSec/3 && ran>=excs; ++npos )
       {
-        for( nm=std::max(0,np-1); nm<=(np+1) && ran>=excs; ++nm )
+        for( nneg=std::max(0,npos-1); nneg<=(npos+1) && ran>=excs; ++nneg )
         {
-          for( nz=0; nz<numSec/3 && ran>=excs; ++nz )
+          for( nzero=0; nzero<numSec/3 && ran>=excs; ++nzero )
           {
             if( ++counter < numMul )
             {
-              nt = np+nm+nz;
+              nt = npos+nneg+nzero;
               if( nt>0 && nt<=numSec )
               {
                 test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
@@ -270,8 +270,8 @@ void G4LESigmaMinusInelastic::Cascade(
         quasiElastic = true;
         return;
       }
-      np--; nm--; nz--;
-      G4int ncht = std::max( 1, np-nm+2 );
+      npos--; nneg--; nzero--;
+      G4int ncht = std::max( 1, npos-nneg+2 );
       switch( ncht )
       {
        case 1:
@@ -302,15 +302,15 @@ void G4LESigmaMinusInelastic::Cascade(
     else  // target must be a neutron
     {
       counter = -1;
-      for( np=0; np<numSec/3 && ran>=excs; ++np )
+      for( npos=0; npos<numSec/3 && ran>=excs; ++npos )
       {
-        for( nm=np; nm<=(np+2) && ran>=excs; ++nm )
+        for( nneg=npos; nneg<=(npos+2) && ran>=excs; ++nneg )
         {
-          for( nz=0; nz<numSec/3 && ran>=excs; ++nz )
+          for( nzero=0; nzero<numSec/3 && ran>=excs; ++nzero )
           {
             if( ++counter < numMul )
             {
-              nt = np+nm+nz;
+              nt = npos+nneg+nzero;
               if( nt>0 && nt<=numSec )
               {
                 test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
@@ -331,8 +331,8 @@ void G4LESigmaMinusInelastic::Cascade(
         quasiElastic = true;
         return;
       }
-      np--; nm--; nz--;
-      G4int ncht = std::max( 1, np-nm+3 );
+      npos--; nneg--; nzero--;
+      G4int ncht = std::max( 1, npos-nneg+3 );
       switch( ncht )
       {
        case 1:
@@ -363,7 +363,7 @@ void G4LESigmaMinusInelastic::Cascade(
          break;
       }
     }
-    SetUpPions( np, nm, nz, vec, vecLen );
+    SetUpPions( npos, nneg, nzero, vec, vecLen );
     return;
 }
 

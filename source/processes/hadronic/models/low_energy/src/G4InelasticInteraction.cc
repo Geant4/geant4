@@ -56,28 +56,25 @@ G4InelasticInteraction::G4InelasticInteraction(const G4String& name)
 {}
   
 G4InelasticInteraction::~G4InelasticInteraction()
-{
-  // std::for_each(theProductionModels.begin(), theProductionModels.end(),
-  //               G4Delete());
-//  if (theOldIsoResult) delete theOldIsoResult; // causes a crash at ed of program
-//  if (theIsoResult) delete theIsoResult;       //   ""
-}
+{}
 
 // Pmltpc used in Cascade functions
-G4double G4InelasticInteraction::Pmltpc(G4int np, G4int nm, G4int nz, G4int n,
-                                        G4double b, G4double c)
+G4double
+G4InelasticInteraction::Pmltpc(G4int npos, G4int nneg, G4int nzero, G4int n,
+                               G4double b, G4double c)
 {
-  const G4double expxu =  82.;       // upper bound for arg. of exp
-  const G4double expxl = -expxu;     // lower bound for arg. of exp
+  const G4double expxu = 82.;       // upper bound for arg. of exp
+  const G4double expxl = -expxu;    // lower bound for arg. of exp
   G4double npf = 0.0;
   G4double nmf = 0.0;
   G4double nzf = 0.0;
   G4int i;
-  for (i = 2; i <= np; i++) npf += std::log((G4double)i);
-  for (i = 2; i <= nm; i++) nmf += std::log((G4double)i);
-  for (i = 2; i <= nz; i++) nzf += std::log((G4double)i);
-  G4double r;
-  r = std::min(expxu, std::max(expxl, -(np-nm+nz+b)*(np-nm+nz+b)/(2*c*c*n*n)-npf-nmf-nzf ) );
+  for (i = 2; i <= npos; i++) npf += std::log((G4double)i);
+  for (i = 2; i <= nneg; i++) nmf += std::log((G4double)i);
+  for (i = 2; i <= nzero; i++) nzf += std::log((G4double)i);
+  G4double r = std::min(expxu, std::max(expxl,
+                        -(npos-nneg+nzero+b)*(npos-nneg+nzero+b)/(2*c*c*n*n)
+                        - npf - nmf - nzf ) );
   return std::exp(r);
 }
 
@@ -110,35 +107,34 @@ G4bool G4InelasticInteraction::MarkLeadingStrangeParticle(
 }
 
 
-void G4InelasticInteraction::SetUpPions(const G4int np, const G4int nm,
-                                        const G4int nz,
-                                        G4FastVector<G4ReactionProduct,GHADLISTSIZE>& vec,
-                                        G4int& vecLen)
+void
+G4InelasticInteraction::SetUpPions(const G4int npos, const G4int nneg,
+                                   const G4int nzero,
+                                   G4FastVector<G4ReactionProduct,GHADLISTSIZE>& vec,
+                                   G4int& vecLen)
 {
-  if (np+nm+nz == 0) return;
+  if (npos + nneg + nzero == 0) return;
   G4int i;
   G4ReactionProduct* p;
-  for (i = 0; i < np; ++i) {
+
+  for (i = 0; i < npos; ++i) {
     p = new G4ReactionProduct;
     p->SetDefinition( G4PionPlus::PionPlus() );
     (G4UniformRand() < 0.5) ? p->SetSide( -1 ) : p->SetSide( 1 );
     vec.SetElement( vecLen++, p );
   }
-
-    for( i=np; i<np+nm; ++i )
-    {
-      p = new G4ReactionProduct;
-      p->SetDefinition( G4PionMinus::PionMinus() );
-      (G4UniformRand() < 0.5) ? p->SetSide( -1 ) : p->SetSide( 1 );
-      vec.SetElement( vecLen++, p );
-    }
-    for( i=np+nm; i<np+nm+nz; ++i )
-    {
-      p = new G4ReactionProduct;
-      p->SetDefinition( G4PionZero::PionZero() );
-      (G4UniformRand() < 0.5) ? p->SetSide( -1 ) : p->SetSide( 1 );
-      vec.SetElement( vecLen++, p );
-    }
+  for (i = npos; i < npos+nneg; ++i) {
+    p = new G4ReactionProduct;
+    p->SetDefinition( G4PionMinus::PionMinus() );
+    (G4UniformRand() < 0.5) ? p->SetSide(-1) : p->SetSide(1);
+    vec.SetElement( vecLen++, p );
+  }
+  for (i = npos+nneg; i < npos+nneg+nzero; ++i) {
+    p = new G4ReactionProduct;
+    p->SetDefinition( G4PionZero::PionZero() );
+    (G4UniformRand() < 0.5) ? p->SetSide(-1) : p->SetSide(1);
+    vec.SetElement( vecLen++, p );
+  }
 }
 
  
@@ -414,9 +410,9 @@ void G4InelasticInteraction::SetUpChange(
     theParticleChange.SetEnergyChange( 0.0 );
   } else {
     G4double p = currentParticle.GetMomentum().mag()/MeV;
-    G4ThreeVector m = currentParticle.GetMomentum();
+    G4ThreeVector pvec = currentParticle.GetMomentum();
     if (p > DBL_MIN)
-      theParticleChange.SetMomentumChange(m.x()/p, m.y()/p, m.z()/p);
+      theParticleChange.SetMomentumChange(pvec.x()/p, pvec.y()/p, pvec.z()/p);
     else
       theParticleChange.SetMomentumChange(1.0, 0.0, 0.0);
 
