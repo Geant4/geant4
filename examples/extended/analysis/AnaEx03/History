@@ -15,8 +15,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
-07-06-11 mma (AnaEx01-V09-04-01)     
-PhysicsList migrated to new scheme G4PhysListHelper
+15 June 2012 Gabriele Cosmo (AnaEx03-V09-05-00)     
+- Fixed compilation warnings in case analysis is not used...
+
+16 April 2012 Ivana Hrivnacova
+- Restored AnaEx01 example with AIDA under new name AnaEx03.
+
+07 June 2011 mma (AnaEx01-V09-04-01)     
+- PhysicsList migrated to new scheme G4PhysListHelper
      
 03 February 2011 mma (AnaEx01-V09-04-00)
 - delete subdirectory analysis

@@ -188,10 +188,10 @@ void HistoManager::Normalize(G4int ih, G4double fac)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#ifdef G4ANALYSIS_USE
 void HistoManager::FillNtuple(G4double energyAbs, G4double energyGap,
                               G4double trackLAbs, G4double trackLGap)
 {                              
-#ifdef G4ANALYSIS_USE
   if (ntupl) {
     ntupl->fill(0, energyAbs);
     ntupl->fill(1, energyGap);
@@ -199,8 +199,13 @@ void HistoManager::FillNtuple(G4double energyAbs, G4double energyGap,
     ntupl->fill(3, trackLGap);
     ntupl->addRow();
   }  
-#endif
 }
+#else
+void HistoManager::FillNtuple(G4double, G4double, G4double, G4double)
+{
+  return;
+}
+#endif
 
 void HistoManager::PrintStatistic()
 {
