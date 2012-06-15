@@ -135,7 +135,7 @@ G4double G4AlphaEvaporationProbability::GetOpt12(G4double K)
   G4double     p2 = 1146.;
   G4double     landa0 = 0.0643;
   G4double     landa1 = -13.96;
-  G4double     mu0 = 781.2;
+  G4double     mum0 = 781.2;
   G4double     mu1 = 0.29;
   G4double     nu0 = -304.7;
   G4double     nu1 = -470.0;
@@ -146,7 +146,7 @@ G4double G4AlphaEvaporationProbability::GetOpt12(G4double K)
   p = p0 + p1/Ec + p2/(Ec*Ec);
   landa = landa0*ResidualA + landa1;
   G4double resmu1 = fG4pow->powZ(ResidualA,mu1); 
-  mu = mu0*resmu1;
+  mu = mum0*resmu1;
   nu = resmu1*(nu0 + nu1*Ec + nu2*(Ec*Ec));
   q = landa - nu/(Ec*Ec) - 2*p*Ec;
   r = mu + 2*nu/Ec + p*(Ec*Ec);
@@ -176,7 +176,7 @@ G4double G4AlphaEvaporationProbability::GetOpt34(G4double K)
   G4double     p2 = 1146.;
   G4double     landa0 = 0.0643;
   G4double     landa1 = -13.96;
-  G4double     mu0 = 781.2;
+  G4double     mum0 = 781.2;
   G4double     mu1 = 0.29;
   G4double     nu0 = -304.7;
   G4double     nu1 = -470.0;
@@ -191,7 +191,7 @@ G4double G4AlphaEvaporationProbability::GetOpt34(G4double K)
   p = p0 + p1/ec + p2/ecsq;
   landa = landa0*ResidualA + landa1;
   a = fG4pow->powZ(ResidualA,mu1);
-  mu = mu0 * a;
+  mu = mum0 * a;
   nu = a* (nu0+nu1*ec+nu2*ecsq);  
   xnulam = nu / landa;
   if (xnulam > spill) { xnulam=0.; }

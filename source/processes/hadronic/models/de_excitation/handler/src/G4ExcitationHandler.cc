@@ -179,10 +179,10 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
 
 		// Analyse fragment A > 1
 		else {
-		  G4double exEnergy = (*j)->GetExcitationEnergy();
+		  G4double exEnergy1 = (*j)->GetExcitationEnergy();
 
 		  // cold fragments
-		  if(exEnergy < minExcitation) {
+		  if(exEnergy1 < minExcitation) {
 		    Z = (*j)->GetZ_asInt(); 
 		    if(nist->GetIsotopeAbundance(Z, A) > 0.0) { 
 		      theResults.push_back(*j); // stable fragment 
@@ -252,7 +252,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
 
 	  //G4cout << *j << G4endl;  
 	  A = (*j)->GetA_asInt();
-	  G4double exEnergy = (*j)->GetExcitationEnergy();
+	  exEnergy = (*j)->GetExcitationEnergy();
 
 	  if(A <= 1) { theResults.push_back(*j); }    // gamma, p, n
 
@@ -311,7 +311,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
     {
       //G4cout << "Next photon evaporate: " << thePhotonEvaporation << G4endl;  
       //G4cout << *iList << G4endl;
-      G4double exEnergy = (*iList)->GetExcitationEnergy();
+      exEnergy = (*iList)->GetExcitationEnergy();
 
       // only hot fragments
       if(exEnergy >= minExcitation) {  

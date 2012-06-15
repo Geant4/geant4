@@ -89,8 +89,8 @@ private:
 
   inline G4double I0(G4double t);
   inline G4double I1(G4double t, G4double tx);
-  inline G4double I2(G4double s, G4double sx);
-  G4double I3(G4double s, G4double sx);
+  inline G4double I2(G4double s0, G4double sx);
+  G4double I3(G4double s0, G4double sx);
 
   // Copy constructor
   G4GEMProbability();
@@ -237,13 +237,13 @@ inline G4double G4GEMProbability::I1(G4double t, G4double tx)
 }
 
 
-inline G4double G4GEMProbability::I2(G4double s, G4double sx)
+inline G4double G4GEMProbability::I2(G4double s0, G4double sx)
 {
-  G4double S = 1.0/std::sqrt(s);
+  G4double S = 1.0/std::sqrt(s0);
   G4double Sx = 1.0/std::sqrt(sx);
   
   G4double p1 = S*S*S*( 1.0 + S*S*( 1.5 + 3.75*S*S) );
-  G4double p2 = Sx*Sx*Sx*( 1.0 + Sx*Sx*( 1.5 + 3.75*Sx*Sx) )*std::exp(sx-s);
+  G4double p2 = Sx*Sx*Sx*( 1.0 + Sx*Sx*( 1.5 + 3.75*Sx*Sx) )*std::exp(sx-s0);
   
   return p1-p2;
 }

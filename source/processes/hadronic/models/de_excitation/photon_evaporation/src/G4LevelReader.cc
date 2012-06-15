@@ -51,7 +51,7 @@ G4LevelReader::G4LevelReader()
   eGamma.resize(nLevelMax,0.0);
   wGamma.resize(nLevelMax,0.0);
   kICC.resize(nLevelMax,0.0);
-  //for(G4int i=0; i<30; ++i) { buffer[i] = ""; }
+  for(G4int i=0; i<30; ++i) { buffer[i] = 0; }
 }
 
 G4LevelReader::~G4LevelReader() 
@@ -72,7 +72,7 @@ void G4LevelReader::FillLevels(G4int Z, G4int A,
   }
 
   // Read file with gamma data and fill levels
-  G4double fLevelEnergy = 0.0;
+  fLevelEnergy = 0.0;
   nLevels = 0;
      
   // read next line

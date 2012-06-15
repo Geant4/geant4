@@ -158,9 +158,10 @@ G4FermiConfigurationList::DecayProbability(G4int A, G4double TotalE,
   
   // Permutation Factor G_n
   G4double G_n = 1.0;
-  for (std::set<G4int>::iterator s = combSet.begin(); s != combSet.end(); ++s)
+  for (std::set<G4int>::iterator itr = combSet.begin(); 
+       itr != combSet.end(); ++itr)
     {
-      for (G4int ni = combmSet.count(*s); ni > 1; ni--) { G_n *= ni; }
+      for (G4int ni = combmSet.count(*itr); ni > 1; ni--) { G_n *= ni; }
     }
 
   G4double Weight = Coeff * MassFactor * (S_n / G_n) / Gamma;

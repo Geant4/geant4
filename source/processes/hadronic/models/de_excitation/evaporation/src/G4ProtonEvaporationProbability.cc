@@ -123,7 +123,7 @@ G4double G4ProtonEvaporationProbability::GetOpt1(G4double K)
   // JMQ  xsec is set constat above limit of validity
   if (K > 50*MeV) { Kc = 50*MeV; }
 
-  G4double landa, landa0, landa1, mu, mu0, mu1,nu, nu0, nu1, nu2,xs;
+  G4double landa, landa0, landa1, mu, mum0, mu1,nu, nu0, nu1, nu2,xs;
   G4double p, p0, p1, p2,Ec,delta,q,r,ji;
   
   p0 = 15.72;
@@ -131,7 +131,7 @@ G4double G4ProtonEvaporationProbability::GetOpt1(G4double K)
   p2 = -449.0;
   landa0 = 0.00437;
   landa1 = -16.58;
-  mu0 = 244.7;
+  mum0 = 244.7;
   mu1 = 0.503;
   nu0 = 273.1;
   nu1 = -182.4;
@@ -143,7 +143,7 @@ G4double G4ProtonEvaporationProbability::GetOpt1(G4double K)
   landa = landa0*ResidualA + landa1;
 
   G4double resmu1 = fG4pow->powZ(ResidualA,mu1); 
-  mu = mu0*resmu1;
+  mu = mum0*resmu1;
   nu = resmu1*(nu0 + nu1*Ec + nu2*(Ec*Ec));
   q = landa - nu/(Ec*Ec) - 2*p*Ec;
   r = mu + 2*nu/Ec + p*(Ec*Ec);
@@ -207,14 +207,14 @@ G4double G4ProtonEvaporationProbability::GetOpt3(const  G4double K)
   //     ** p from  becchetti and greenlees (but modified with sub-barrier
   //     ** correction function and xp2 changed from -449)
 
-  G4double landa, landa0, landa1, mu, mu0, mu1,nu, nu0, nu1, nu2;
+  G4double landa, landa0, landa1, mu, mum0, mu1,nu, nu0, nu1, nu2;
   G4double p, p0, p1, p2;
   p0 = 15.72;
   p1 = 9.65;
   p2 = -300.;
   landa0 = 0.00437;
   landa1 = -16.58;
-  mu0 = 244.7;
+  mum0 = 244.7;
   mu1 = 0.503;
   nu0 = 273.1;
   nu1 = -182.4;
@@ -242,7 +242,7 @@ G4double G4ProtonEvaporationProbability::GetOpt3(const  G4double K)
   p = p0 + p1/ec + p2/ecsq;
   landa = landa0*ResidualA + landa1;
   a = fG4pow->powZ(ResidualA,mu1);
-  mu = mu0 * a;
+  mu = mum0 * a;
   nu = a* (nu0+nu1*ec+nu2*ecsq);
   
   c =std::min(3.15,ec*0.5);

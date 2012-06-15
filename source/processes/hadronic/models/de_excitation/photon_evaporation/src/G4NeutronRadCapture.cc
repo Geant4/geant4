@@ -86,18 +86,18 @@ G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
     G4double M  = lv1.mag();
 
     ++A;
-    G4double m2 = G4NucleiProperties::GetNuclearMass(A, Z);
-    if(M - m2 <= lowestEnergyLimit) {
+    G4double mm2 = G4NucleiProperties::GetNuclearMass(A, Z);
+    if(M - mm2 <= lowestEnergyLimit) {
       return &theParticleChange;
     }
  
     if (verboseLevel > 1) {
       G4cout << "G4NeutronRadCapture::DoIt: Eini(MeV)=" 
 	     << aTrack.GetKineticEnergy()/MeV << "  Eexc(MeV)= " 
-	     << (M - m2)/MeV 
+	     << (M - mm2)/MeV 
 	     << "  Z= " << Z << "  A= " << A << G4endl;
     }
-    G4double e1 = (M - m2)*(M + m2)/(2*M);
+    G4double e1 = (M - mm2)*(M + mm2)/(2*M);
     G4double cost = 2.0*G4UniformRand() - 1.0;
     if(cost > 1.0) {cost = 1.0;}
     else if(cost < -1.0) {cost = -1.0;}

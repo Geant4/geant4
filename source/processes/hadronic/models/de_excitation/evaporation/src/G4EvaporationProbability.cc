@@ -63,16 +63,16 @@ G4EvaporationProbability::~G4EvaporationProbability()
 {}
   
 G4double 
-G4EvaporationProbability::EmissionProbability(const G4Fragment & fragment, G4double anEnergy)
+G4EvaporationProbability::EmissionProbability(const G4Fragment & fragment, 
+					      G4double anEnergy)
 {
-  G4double EmissionProbability = 0.0;
-  G4double MaximalKineticEnergy = anEnergy;
+  G4double probability = 0.0;
 
-  if (MaximalKineticEnergy > 0.0 && fragment.GetExcitationEnergy() > 0.0) {
-    EmissionProbability = CalculateProbability(fragment, MaximalKineticEnergy);
+  if (anEnergy > 0.0 && fragment.GetExcitationEnergy() > 0.0) {
+    probability = CalculateProbability(fragment, anEnergy);
 
   }
-  return EmissionProbability;
+  return probability;
 }
 
 ////////////////////////////////////

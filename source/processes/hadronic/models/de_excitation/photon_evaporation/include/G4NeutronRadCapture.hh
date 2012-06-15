@@ -61,6 +61,9 @@ public:
 
 private:
 
+  G4NeutronRadCapture & operator=(const G4NeutronRadCapture &right);
+  G4NeutronRadCapture(const G4NeutronRadCapture&);
+
   G4double lowestEnergyLimit;
   G4PhotonEvaporation* photonEvaporation;
 };

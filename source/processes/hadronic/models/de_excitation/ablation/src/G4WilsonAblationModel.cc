@@ -378,6 +378,8 @@ G4FragmentVector *G4WilsonAblationModel::BreakItUp
       SelectSecondariesByDefault(G4ThreeVector(0.0,0.0,0.0));
   }
 
+  delete resultNucleus;
+
   if (AF > 0)
   {
     G4double mass = G4ParticleTable::GetParticleTable()->GetIonTable()->
@@ -437,8 +439,8 @@ void G4WilsonAblationModel::SelectSecondariesByEvaporation
 // more accurately sample to kinematics, but the species of the nuclear
 // fragments will be the ones of our choosing as above.
 //
-    std::vector <G4VEvaporationChannel*>  theChannels;
-    theChannels.clear();
+    std::vector <G4VEvaporationChannel*>  theChannels1;
+    theChannels1.clear();
     std::vector <G4VEvaporationChannel*>::iterator i;
     VectorOfFragmentTypes::iterator iter;
     std::vector <VectorOfFragmentTypes::iterator> iters;
@@ -446,8 +448,8 @@ void G4WilsonAblationModel::SelectSecondariesByEvaporation
     iter = std::find(evapType.begin(), evapType.end(), G4Alpha::Alpha());
     if (iter != evapType.end())
     {
-      theChannels.push_back(new G4AlphaEvaporationChannel);
-      i = theChannels.end() - 1;
+      theChannels1.push_back(new G4AlphaEvaporationChannel);
+      i = theChannels1.end() - 1;
       (*i)->SetOPTxs(OPTxs);
       (*i)->UseSICB(useSICB);
 //      (*i)->Initialize(theResidualNucleus);
@@ -456,8 +458,8 @@ void G4WilsonAblationModel::SelectSecondariesByEvaporation
     iter = std::find(evapType.begin(), evapType.end(), G4He3::He3());
     if (iter != evapType.end())
     {
-      theChannels.push_back(new G4He3EvaporationChannel);
-      i = theChannels.end() - 1;
+      theChannels1.push_back(new G4He3EvaporationChannel);
+      i = theChannels1.end() - 1;
       (*i)->SetOPTxs(OPTxs);
       (*i)->UseSICB(useSICB);
 //      (*i)->Initialize(theResidualNucleus);
@@ -466,8 +468,8 @@ void G4WilsonAblationModel::SelectSecondariesByEvaporation
     iter = std::find(evapType.begin(), evapType.end(), G4Triton::Triton());
     if (iter != evapType.end())
     {
-      theChannels.push_back(new G4TritonEvaporationChannel);
-      i = theChannels.end() - 1;
+      theChannels1.push_back(new G4TritonEvaporationChannel);
+      i = theChannels1.end() - 1;
       (*i)->SetOPTxs(OPTxs);
       (*i)->UseSICB(useSICB);
 //      (*i)->Initialize(theResidualNucleus);
@@ -476,8 +478,8 @@ void G4WilsonAblationModel::SelectSecondariesByEvaporation
     iter = std::find(evapType.begin(), evapType.end(), G4Deuteron::Deuteron());
     if (iter != evapType.end())
     {
-      theChannels.push_back(new G4DeuteronEvaporationChannel);
-      i = theChannels.end() - 1;
+      theChannels1.push_back(new G4DeuteronEvaporationChannel);
+      i = theChannels1.end() - 1;
       (*i)->SetOPTxs(OPTxs);
       (*i)->UseSICB(useSICB);
 //      (*i)->Initialize(theResidualNucleus);
@@ -486,8 +488,8 @@ void G4WilsonAblationModel::SelectSecondariesByEvaporation
     iter = std::find(evapType.begin(), evapType.end(), G4Proton::Proton());
     if (iter != evapType.end())
     {
-      theChannels.push_back(new G4ProtonEvaporationChannel);
-      i = theChannels.end() - 1;
+      theChannels1.push_back(new G4ProtonEvaporationChannel);
+      i = theChannels1.end() - 1;
       (*i)->SetOPTxs(OPTxs);
       (*i)->UseSICB(useSICB);
 //      (*i)->Initialize(theResidualNucleus);
@@ -496,20 +498,20 @@ void G4WilsonAblationModel::SelectSecondariesByEvaporation
     iter = std::find(evapType.begin(), evapType.end(), G4Neutron::Neutron());
     if (iter != evapType.end())
     {
-      theChannels.push_back(new G4NeutronEvaporationChannel);
-      i = theChannels.end() - 1;
+      theChannels1.push_back(new G4NeutronEvaporationChannel);
+      i = theChannels1.end() - 1;
       (*i)->SetOPTxs(OPTxs);
       (*i)->UseSICB(useSICB);
 //      (*i)->Initialize(theResidualNucleus);
       iters.push_back(iter);
     }
-    G4int nChannels = theChannels.size();
+    G4int nChannels = theChannels1.size();
 
     G4double totalProb = 0.0;
     G4int ich = 0;
     G4double probEvapType[6] = {0.0};
     std::vector<G4VEvaporationChannel*>::iterator iterEv;
-    for (iterEv=theChannels.begin(); iterEv!=theChannels.end(); iterEv++) {
+    for (iterEv=theChannels1.begin(); iterEv!=theChannels1.end(); iterEv++) {
       totalProb += (*iterEv)->GetEmissionProbability(intermediateNucleus);
       probEvapType[ich] = totalProb;
       ++ich;
@@ -522,18 +524,18 @@ void G4WilsonAblationModel::SelectSecondariesByEvaporation
 // the nucleus.
 //
       G4double xi = totalProb*G4UniformRand();
-      G4int i     = 0;
-      for (i=0; i<nChannels; i++) {
-        if (xi < probEvapType[i]) { break; }
+      G4int ii     = 0;
+      for (ii=0; ii<nChannels; ii++) {
+        if (xi < probEvapType[ii]) { break; }
       }
-      if (i >= nChannels) { i = nChannels - 1; }
-      G4FragmentVector *evaporationResult = theChannels[i]->
+      if (ii >= nChannels) { ii = nChannels - 1; }
+      G4FragmentVector *evaporationResult = theChannels1[ii]->
         BreakUp(*intermediateNucleus);
       fragmentVector->push_back((*evaporationResult)[0]);
       *intermediateNucleus = *(*evaporationResult)[1];
-      delete evaporationResult->back();
+      //delete evaporationResult->back();
       delete evaporationResult;
-      evapType.erase(iters[i]);
+      //evapType.erase(iters[ii]);
     }
     else
     {

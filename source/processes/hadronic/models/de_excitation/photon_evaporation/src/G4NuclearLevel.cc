@@ -292,7 +292,7 @@ void G4NuclearLevel::MakeCumProb()
   }
 }
 
-const G4NuclearLevel& G4NuclearLevel::operator=(const G4NuclearLevel &right)
+G4NuclearLevel& G4NuclearLevel::operator=(const G4NuclearLevel &right)
 {
   if(this != &right)
     {

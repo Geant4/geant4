@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+12 June 2012 Vladimir Ivanchenko (hadr-deex-V09-05-07)
+----------------------------------------------------------
+11 June 2012 Vladimir Ivanchenko (hadr-deex-V09-05-06)
+----------------------------------------------------------
+- Fixed shadowing and Coverity warnings
+
 25 May 2012 Vladimir Ivanchenko (hadr-deex-V09-05-05)
 ----------------------------------------------------------
 - G4PhotonEvaporation - added check of environment variable

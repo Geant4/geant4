@@ -124,7 +124,7 @@ public:
   G4bool operator==(const G4NuclearLevel &right) const;
   G4bool operator!=(const G4NuclearLevel &right) const;
   G4bool operator<(const G4NuclearLevel &right) const;
-  const G4NuclearLevel& operator=(const G4NuclearLevel &right);
+  G4NuclearLevel& operator=(const G4NuclearLevel &right);
 
   G4NuclearLevel(const G4NuclearLevel &right);
 

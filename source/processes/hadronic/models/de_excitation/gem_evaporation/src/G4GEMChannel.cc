@@ -223,7 +223,7 @@ G4double G4GEMChannel::CalcKineticEnergy(const G4Fragment & fragment)
   //JMQ  BIG BUG fixed: hbarc instead of hbar_Planck !!!!
   //     it was fixed in total probability (for this channel) but remained still here!!
   //    G4double g = (2.0*Spin+1.0)*NuclearMass/(pi2* hbar_Planck*hbar_Planck);
-  G4double g = (2.0*Spin+1.0)*EvaporatedMass/(pi2* hbarc*hbarc);
+  G4double gg = (2.0*Spin+1.0)*EvaporatedMass/(pi2* hbarc*hbarc);
   //
   //JMQ  fix on Rb and  geometrical cross sections according to Furihata's paper 
   //                      (JAERI-Data/Code 2001-105, p6)
@@ -250,7 +250,7 @@ G4double G4GEMChannel::CalcKineticEnergy(const G4Fragment & fragment)
   //   G4double GeometricalXS = pi*RN*RN*std::pow(G4double(fragment.GetA()-A),2./3.); 
   G4double GeometricalXS = pi*Rb*Rb; 
     
-  G4double ConstantFactor = g*GeometricalXS*Alpha/InitialLevelDensity;
+  G4double ConstantFactor = gg*GeometricalXS*Alpha/InitialLevelDensity;
   ConstantFactor *= pi/12.0;
   //JMQ : this is the assimptotic maximal kinetic energy of the ejectile 
   //      (obtained by energy-momentum conservation). 

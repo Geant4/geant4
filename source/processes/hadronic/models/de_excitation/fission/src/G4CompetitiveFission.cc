@@ -297,14 +297,15 @@ G4CompetitiveFission::FissionAtomicNumber(G4int A,
   if (Mass5 > MassMax) MassMax = Mass5;
 
   // Sample a fragment mass number, which lies between C1 and C2
-  G4double m;
+  G4double xm;
   G4double Pm;
   do {
-    m = C1+G4UniformRand()*(C2-C1);
-    Pm = MassDistribution(m,A,theParam); 
+    xm = C1+G4UniformRand()*(C2-C1);
+    Pm = MassDistribution(xm,A,theParam); 
   } while (MassMax*G4UniformRand() > Pm);
+  G4int ires = G4lrint(xm);
 
-  return static_cast<G4int>(m+0.5);
+  return ires;
 }
 
 G4double 

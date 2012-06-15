@@ -65,6 +65,8 @@ G4PromptPhotonEvaporation::G4PromptPhotonEvaporation()
    fEmissionProbability(0.0),levelManager(0),nucleus(0)
 {
   fNuclearLevelStore = G4NuclearLevelStore::GetInstance(); 
+  theA = theZ = 0;
+  fEnergyFermi = fExcEnergyMax = gammaE = 0.0;
 }
 
 G4PromptPhotonEvaporation::~G4PromptPhotonEvaporation()
