@@ -41,7 +41,8 @@
 // 090331 Migrate to AME03 by Koi, Tatsumi 
 
 #include "G4NucleiProperties.hh"
-
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 G4double G4NucleiProperties::mass_proton = -1.;
 G4double G4NucleiProperties::mass_neutron = -1.;

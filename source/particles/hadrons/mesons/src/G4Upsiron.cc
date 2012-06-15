@@ -36,6 +36,7 @@
 // 
 
 #include "G4Upsiron.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 
 // ######################################################################

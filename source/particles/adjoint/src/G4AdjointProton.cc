@@ -29,6 +29,8 @@
 
 
 #include "G4AdjointProton.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 
 // ######################################################################

@@ -45,6 +45,8 @@
 //
 
 #include "G4ios.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4NucleiPropertiesTableAME03.hh"
 
 // Class G4NucleiPropertiesTableAME03 

@@ -33,6 +33,8 @@
 // Hyper Nuclei properties based on CHIPS model (Mikhail KOSOV)
 // Migrate into particles category by H.Kurashige (Sep. 2007)
 // 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4HyperNucleiProperties.hh"
 #include "G4NucleiProperties.hh"
 #include "G4ParticleTable.hh"

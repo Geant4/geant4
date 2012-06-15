@@ -38,6 +38,7 @@
 // ----------------------------------------------------------------
 
 #include "G4Geantino.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 
 

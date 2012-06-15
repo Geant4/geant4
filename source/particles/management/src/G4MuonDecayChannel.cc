@@ -42,6 +42,8 @@
 // ------------------------------------------------------------
 
 #include "G4ParticleDefinition.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4DecayProducts.hh"
 #include "G4VDecayChannel.hh"
 #include "G4MuonDecayChannel.hh"

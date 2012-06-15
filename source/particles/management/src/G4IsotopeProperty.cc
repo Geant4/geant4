@@ -37,6 +37,8 @@
 #include "G4ios.hh"
 #include <iomanip>
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4IsotopeProperty.hh"
 #include "G4DecayTable.hh"
 

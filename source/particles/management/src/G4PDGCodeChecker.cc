@@ -39,6 +39,8 @@
 #include <iomanip>
 
 #include "G4PDGCodeChecker.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 /////////////
 G4PDGCodeChecker::G4PDGCodeChecker()

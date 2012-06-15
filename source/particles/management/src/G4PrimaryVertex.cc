@@ -29,6 +29,7 @@
 //
 
 #include "G4PrimaryVertex.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4VUserPrimaryVertexInformation.hh"
 #include "G4ios.hh"
 

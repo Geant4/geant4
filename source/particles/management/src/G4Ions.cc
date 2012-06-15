@@ -39,6 +39,8 @@
 #include <iomanip>
 
 #include "G4Ions.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
  // ######################################################################
 // ###                           Ions                                ###

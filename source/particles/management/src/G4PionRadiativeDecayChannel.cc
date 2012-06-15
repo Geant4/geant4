@@ -39,6 +39,8 @@
 
 #include "G4PionRadiativeDecayChannel.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4DecayProducts.hh"
 #include "G4LorentzVector.hh"

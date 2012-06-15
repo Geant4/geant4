@@ -35,6 +35,8 @@
 // Remove "theInstance"  by H.Kurashige (12 Dec. 03)
 
 #include "G4NucleiPropertiesTheoreticalTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 // Determine the table index for a Nuclide with Z protons and A nucleons
 G4int G4NucleiPropertiesTheoreticalTable::GetIndex(G4int Z, G4int A) 

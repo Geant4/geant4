@@ -28,6 +28,7 @@
 //
 
 #include "G4AdjointAlpha.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 
 // ######################################################################

@@ -37,6 +37,7 @@
 // 
 
 #include "G4BMesonPlus.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 
 // ######################################################################

@@ -49,9 +49,10 @@
 #ifndef G4DynamicParticle_h
 #define G4DynamicParticle_h 1
 
+#include <cmath>
+#include <CLHEP/Units/SystemOfUnits.h>
 
 #include "globals.hh"
-#include <cmath>
 #include "G4ios.hh"
 
 #include "G4ParticleDefinition.hh"

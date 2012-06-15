@@ -41,6 +41,7 @@
 //
 
 #include "G4Eta.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 
 #include "G4PhaseSpaceDecayChannel.hh"

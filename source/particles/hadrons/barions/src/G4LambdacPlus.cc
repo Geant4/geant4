@@ -38,6 +38,7 @@
 // ----------------------------------------------------------------------
 
 #include "G4LambdacPlus.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 
 #include "G4PhaseSpaceDecayChannel.hh"

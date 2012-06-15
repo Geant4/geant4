@@ -40,6 +40,8 @@
 
 #include "G4AdjointPositron.hh"
 #include "G4ParticleTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 // ######################################################################
 // ###                         ADJOINT ELECTRON                       ###

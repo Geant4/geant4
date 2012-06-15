@@ -46,6 +46,8 @@
 //      Remove test of cuts in SetCuts   16 Jan  03 V.Ivanchenko
 
 #include "G4IonTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 #include "G4StateManager.hh"
 #include "G4Ions.hh"

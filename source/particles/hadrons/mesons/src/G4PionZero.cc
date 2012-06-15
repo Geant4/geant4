@@ -38,6 +38,7 @@
 // ----------------------------------------------------------------------
 
 #include "G4PionZero.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 
 

@@ -38,6 +38,8 @@
 // ----------------------------------------------------------------------
 
 #include "G4XiZero.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 
 #include "G4PhaseSpaceDecayChannel.hh"

@@ -36,6 +36,7 @@
 // 
 
 #include "G4AdjointGamma.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 
 // ######################################################################

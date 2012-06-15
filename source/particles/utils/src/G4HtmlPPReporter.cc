@@ -37,6 +37,7 @@
 #include "G4HtmlPPReporter.hh"
 #include "G4ios.hh"
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"  
 #include "G4ParticleTable.hh"  
 #include "G4DecayTable.hh"  

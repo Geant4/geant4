@@ -54,9 +54,11 @@
 #ifndef G4ParticleDefinition_h
 #define G4ParticleDefinition_h 1
 
+#include <vector>
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "globals.hh"
 #include "G4ios.hh"
-#include <vector>
 
 class G4ProcessManager;
 class G4DecayTable;

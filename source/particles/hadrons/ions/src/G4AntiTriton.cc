@@ -38,6 +38,8 @@
 // ----------------------------------------------------------------------
 
 #include "G4AntiTriton.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 
 // ######################################################################

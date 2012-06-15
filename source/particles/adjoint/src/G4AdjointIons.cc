@@ -30,6 +30,7 @@
 #include <iomanip>
 
 #include "G4AdjointIons.hh"
+#include "G4SystemOfUnits.hh"
 
  // ######################################################################
 // ###                           ADJOINT Ions                          ###
