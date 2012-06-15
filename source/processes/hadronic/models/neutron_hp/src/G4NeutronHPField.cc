@@ -67,7 +67,7 @@
         high = i;
       }
     }else{
-      for (G4int j=0; j<10; j++)
+      for (G4int jj=0; jj<10; jj++)
       {
         if(theData[i].GetX()<e) break;
         i--;

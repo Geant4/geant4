@@ -243,14 +243,14 @@ if(it==0) G4cout << "080808 Something unexpected is happen in G4NeutronHPLabAngu
      }
      {
        // calculate theta
-       G4double x, x1, x2, y1, y2;
-       x =  random;
-       x1 = theThVec.GetY(ith-1)-theThVec.GetY(0); // integrals
-       x2 = theThVec.GetY(ith)-theThVec.GetY(0);
-       y1 = theThVec.GetX(ith-1); // std::cos(theta)
-       y2 = theThVec.GetX(ith);
+       G4double xx, xx1, xx2, yy1, yy2;
+       xx =  random;
+       xx1 = theThVec.GetY(ith-1)-theThVec.GetY(0); // integrals
+       xx2 = theThVec.GetY(ith)-theThVec.GetY(0);
+       yy1 = theThVec.GetX(ith-1); // std::cos(theta)
+       yy2 = theThVec.GetX(ith);
        cosTh = theInt.Interpolate(theSecondManager[it].GetScheme(ith), 
-                                  x, x1,x2,y1,y2);
+                                  xx, xx1,xx2,yy1,yy2);
      }
      G4int i1(0), i2(0);
      // get the indixes of the vectors close to theta for low energy

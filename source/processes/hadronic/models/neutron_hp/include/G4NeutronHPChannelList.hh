@@ -103,6 +103,7 @@ class G4NeutronHPChannelList
 
   G4StableIsotopes theStableOnes;
   
+  G4HadFinalState unChanged;
 };
 
 #endif

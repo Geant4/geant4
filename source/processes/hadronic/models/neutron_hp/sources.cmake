@@ -100,6 +100,7 @@ GEANT4_DEFINE_MODULE(NAME G4had_neu_hp
         G4NeutronHPEnergyDistribution.hh
         G4NeutronHPEvapSpectrum.hh
         G4NeutronHPFCFissionFS.hh
+        G4NeutronHPFFFissionFS.hh
         G4NeutronHPFSFissionFS.hh
         G4NeutronHPFastLegendre.hh
         G4NeutronHPField.hh
@@ -218,6 +219,7 @@ GEANT4_DEFINE_MODULE(NAME G4had_neu_hp
         G4NeutronHPElementData.cc
         G4NeutronHPEnAngCorrelation.cc
         G4NeutronHPFCFissionFS.cc
+        G4NeutronHPFFFissionFS.cc
         G4NeutronHPFSFissionFS.cc
         G4NeutronHPFastLegendre.cc
         G4NeutronHPFastLegendre_14.cc

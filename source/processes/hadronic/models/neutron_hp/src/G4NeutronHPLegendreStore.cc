@@ -61,22 +61,22 @@ G4double G4NeutronHPLegendreStore::SampleDiscreteTwoBody (G4double anEnergy)
   G4double try01=0, try02=0;
   G4double max1, max2, costh;
   max1 = 0; max2 = 0;
-  G4int l,m;
+  G4int l,m_tmp;
   for(i0=0; i0<601; i0++)
   {
       costh = G4double(i0-300)/300.;
       try01 = 0.5;
-      for(m=0; m<theCoeff[low].GetNumberOfPoly() ; m++)
+      for(m_tmp=0; m_tmp<theCoeff[low].GetNumberOfPoly() ; m_tmp++)
       {  
-	  l=m+1;
-	  try01 += (2.*l+1)/2.*theCoeff[low].GetCoeff(m)*theLeg.Evaluate(l, costh);
+	  l=m_tmp+1;
+	  try01 += (2.*l+1)/2.*theCoeff[low].GetCoeff(m_tmp)*theLeg.Evaluate(l, costh);
       } 
       if(try01>max1) max1=try01;
       try02 = 0.5;
-      for(m=0; m<theCoeff[high].GetNumberOfPoly() ; m++)
+      for(m_tmp=0; m_tmp<theCoeff[high].GetNumberOfPoly() ; m_tmp++)
       {
-	  l=m+1;
-	  try02 += (2.*l+1)/2.*theCoeff[high].GetCoeff(m)*theLeg.Evaluate(l, costh);
+	  l=m_tmp+1;
+	  try02 += (2.*l+1)/2.*theCoeff[high].GetCoeff(m_tmp)*theLeg.Evaluate(l, costh);
       }
       if(try02>max2) max2=try02;
   } 
@@ -89,17 +89,17 @@ G4double G4NeutronHPLegendreStore::SampleDiscreteTwoBody (G4double anEnergy)
     v1 = 0.5;
     v2 = 0.5;
     result = 2.*G4UniformRand()-1.;
-    for(m=0; m<theCoeff[low].GetNumberOfPoly() ; m++)
+    for(m_tmp=0; m_tmp<theCoeff[low].GetNumberOfPoly() ; m_tmp++)
     {
-	l=m+1;	
+	l=m_tmp+1;	
 	G4double legend = theLeg.Evaluate(l, result); // @@@ done to avoid optimization error on SUN
-	v1 += (2.*l+1)/2.*theCoeff[low].GetCoeff(m)*legend;
+	v1 += (2.*l+1)/2.*theCoeff[low].GetCoeff(m_tmp)*legend;
     } 
-    for(m=0; m<theCoeff[high].GetNumberOfPoly() ; m++)
+    for(m_tmp=0; m_tmp<theCoeff[high].GetNumberOfPoly() ; m_tmp++)
     {	
-	l=m+1;
+	l=m_tmp+1;
 	G4double legend = theLeg.Evaluate(l, result); // @@@ done to avoid optimization error on SUN
-	v2 += (2.*l+1)/2.*theCoeff[high].GetCoeff(m)*legend;
+	v2 += (2.*l+1)/2.*theCoeff[high].GetCoeff(m_tmp)*legend;
     } 
     // v1 = std::max(0.,v1); // Workaround in case one of the distributions is fully non-physical.
     // v2 = std::max(0.,v2); 

@@ -44,15 +44,18 @@
     G4bool dbool;
     G4NeutronHPDataUsed aFile = theNames.GetName(static_cast<G4int>(A), static_cast<G4int>(Z), M, tString, bit, dbool);
     G4String filename = aFile.GetName();
-    theBaseA = aFile.GetA();
-    theBaseZ = aFile.GetZ();
-    if(!dbool  || ( Z<2.5 && ( std::abs(theBaseZ - Z)>0.0001 || std::abs(theBaseA - A)>0.0001) ) )
+    SetAZMs( A, Z, M, aFile ); 
+    //theBaseA = aFile.GetA();
+    //theBaseZ = aFile.GetZ();
+    //if(!dbool  || ( Z<2.5 && ( std::abs(theBaseZ - Z)>0.0001 || std::abs(theBaseA - A)>0.0001) ) )
+    if ( !dbool || ( Z<2.5 && ( std::abs(theNDLDataZ - Z)>0.0001 || std::abs(theNDLDataA - A)>0.0001)) )
     {
       hasAnyData = false;
       hasFSData = false; 
       hasXsec = false;
       return; // no data for exactly this isotope.
     }
+
     std::ifstream theData(filename, std::ios::in);
     G4int dummy;
     if(!(theData))

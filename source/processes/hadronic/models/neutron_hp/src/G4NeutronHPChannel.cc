@@ -109,8 +109,9 @@
         G4int A = theElement->GetIsotope(i1)->GetN();
         G4int M = theElement->GetIsotope(i1)->Getm();
         G4double frac = theElement->GetRelativeAbundanceVector()[i1]/perCent;
-        theFinalStates[i1]->SetA_Z(A, Z);
+        //theFinalStates[i1]->SetA_Z(A, Z);
 	//UpdateData(A, Z, count++, frac);
+        theFinalStates[i1]->SetA_Z(A, Z, M);
 	UpdateData(A, Z, M, count++, frac);
       }
     } else {
@@ -160,19 +161,19 @@
   
   void G4NeutronHPChannel::Harmonise(G4NeutronHPVector *& theStore, G4NeutronHPVector * theNew)
   {
-    G4int s = 0, n=0, m=0;
+    G4int s_tmp = 0, n=0, m_tmp=0;
     G4NeutronHPVector * theMerge = new G4NeutronHPVector;
     G4NeutronHPVector * anActive = theStore;
     G4NeutronHPVector * aPassive = theNew;
     G4NeutronHPVector * tmp;
-    G4int a = s, p = n, t;
+    G4int a = s_tmp, p = n, t;
     while (a<anActive->GetVectorLength()&&p<aPassive->GetVectorLength())
     {
       if(anActive->GetEnergy(a) <= aPassive->GetEnergy(p))
       {
         G4double xa  = anActive->GetEnergy(a);
-        theMerge->SetData(m, xa, anActive->GetXsec(a)+std::max(0., aPassive->GetXsec(xa)) );
-        m++;
+        theMerge->SetData(m_tmp, xa, anActive->GetXsec(a)+std::max(0., aPassive->GetXsec(xa)) );
+        m_tmp++;
         a++;
         G4double xp = aPassive->GetEnergy(p);
         if( std::abs(std::abs(xp-xa)/xa)<0.001 )
@@ -187,13 +188,13 @@
     }
     while (a!=anActive->GetVectorLength())
     {
-      theMerge->SetData(m++, anActive->GetEnergy(a), anActive->GetXsec(a));
+      theMerge->SetData(m_tmp++, anActive->GetEnergy(a), anActive->GetXsec(a));
       a++;
     }
     while (p!=aPassive->GetVectorLength())
     {
-      if(std::abs(theMerge->GetEnergy(std::max(0,m-1))-aPassive->GetEnergy(p))/aPassive->GetEnergy(p)>0.001)
-        theMerge->SetData(m++, aPassive->GetEnergy(p), aPassive->GetXsec(p));
+      if(std::abs(theMerge->GetEnergy(std::max(0,m_tmp-1))-aPassive->GetEnergy(p))/aPassive->GetEnergy(p)>0.001)
+        theMerge->SetData(m_tmp++, aPassive->GetEnergy(p), aPassive->GetXsec(p));
       p++;
     }
     delete theStore;

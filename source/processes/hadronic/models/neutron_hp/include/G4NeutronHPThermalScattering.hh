@@ -69,8 +69,9 @@ class G4NeutronHPThermalScattering : public G4HadronicInteraction
   
       ~G4NeutronHPThermalScattering();
   
-       G4HadFinalState * ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus);
+      G4HadFinalState * ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus);
 
+      virtual const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
       //G4int GetNiso() {return theElastic[0].GetNiso();}
 
    private:
@@ -97,7 +98,7 @@ class G4NeutronHPThermalScattering : public G4HadronicInteraction
 
       G4NeutronHPThermalScatteringData* theXSection;
       G4double * xSec;
-      G4String dirName;
+      //G4String dirName;
       G4int numEle;
 
 

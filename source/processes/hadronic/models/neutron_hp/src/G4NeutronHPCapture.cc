@@ -108,3 +108,9 @@
     }
     return theCapture[index].ApplyYourself(aTrack);
   }
+
+const std::pair<G4double, G4double> G4NeutronHPCapture::GetFatalEnergyCheckLevels() const
+{
+   //return std::pair<G4double, G4double>(10*perCent,10*GeV);
+   return std::pair<G4double, G4double>(10*perCent,DBL_MAX);
+}

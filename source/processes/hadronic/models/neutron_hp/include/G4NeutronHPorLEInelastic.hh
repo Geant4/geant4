@@ -102,7 +102,7 @@ class G4NeutronHPorLEInelastic : public G4HadronicInteraction
   
   G4HadFinalState * ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus);
 
-  
+      virtual const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
 
   //G4int GetNiso() {return theInelastic[0].GetNiso();}
 

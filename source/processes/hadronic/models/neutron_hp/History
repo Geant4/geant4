@@ -14,6 +14,101 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+14 June 2012  Tatsumi Koi (hadr-hpn-V09-05-14)
+- Bug fix which introduced in the fix compilation warnings for shadowed variables
+	src/G4NeutronHPThermalScattering.cc
+
+
+13 June 2012  Tatsumi Koi (hadr-hpn-V09-05-13)
+- Delete unnecessary outputs
+	src/G4NeutronHPCapture.cc
+- Fix compilation warnings for shadowed variables
+
+
+13 June 2012  Tatsumi Koi (hadr-hpn-V09-05-12)
+- Set DBL_MAX for the upper limit of Energy Check Levels
+
+
+12 June 2012  Tatsumi Koi (hadr-hpn-V09-05-11)
+- Bug fix related compilation error on WIN32-VC
+	include/G4NeutronHPVector.hh
+
+
+11 June 2012  Tatsumi Koi (hadr-hpn-V09-05-10)
+- Increase upper limit of Energy Check Levels
+Allow the difference caused by miss much in target isotope selections
+	include/G4NeutronHPElastic.hh
+	include/G4NeutronHPCapture.hh
+	src/G4NeutronHPCapture.cc
+	src/G4NeutronHPInelastic.cc
+	src/G4NeutronHPElastic.cc
+
+
+8 June 2012  Tatsumi Koi (hadr-hpn-V09-05-09)
+- Fix compilation error on WIN32-VC
+	include/G4NeutronHPVector.hh
+
+
+7 June 2012  Tatsumi Koi (hadr-hpn-V09-05-08)
+- Protection of huge Ep breakdown caused by a miss match between cross section data set and model
+	include/G4NeutronHPChannelList.hh
+        src/G4NeutronHPChannelList.cc
+- Add final momentum check which expected to be
+	src/G4NeutronHPInelasticBaseFS.cc
+- Add method to loosen check for bad energy violation 
+and allow huge differences when "G4NEUTRONHP_DO_NOT_ADJUST_FINAL_STATE" was set
+	include/G4NeutronHPInelastic.hh
+	src/G4NeutronHPInelastic.cc
+
+
+6 June 2012  Tatsumi Koi for E.Mendoza (hadr-hpn-V09-05-07)
+- Use QI values for limiting the products energies
+	src/G4NeutronHPInelasticCompFS.cc
+- Add Isotropic emission in CM system
+	src/G4NeutronHPAngular.cc
+- Add non LIN-LIN interpolation 
+	include/G4NeutronHPVector.hh
+	src/G4NeutronHPVector.cc
+- Bug fix
+	include/G4InterpolationManager.hh
+- Add 2D interpolation
+	include/G4NeutronHPArbitaryTab.hh
+	src/G4NeutronHPArbitaryTab.cc
+- Protection for Zero devided
+	src/G4NeutronHPInterpolator.cc
+- Bug fix 
+	src/G4NeutronHPCaptureFS.cc
+- Modified sources.cmake for 09-05-06
+	sources.cmake
+
+
+1 June 2012  Tatsumi Koi (hadr-hpn-V09-05-06)
+- Add Capability to produce fission fragments those currently neglected, based on ENDF nfy data 
+  Enable by setting enviroment varibale for "G4NEUTRONHP_PRODUCE_FISSION_FRAGMENTS"
+	include/G4NeutronHPFFFissionFS.hh
+	include/G4NeutronHPFissionFS.hh
+	src/G4NeutronHPFissionFS.cc
+	src/G4NeutronHPFFFissionFS.cc
+- Set proper excited isomer index and methods
+	src/G4NeutronHPChannel.cc
+- Bug fix (introduced in 09-05-05)
+	include/G4NeutronHPDataUsed.hh
+
+
+31 May 2012  Tatsumi Koi (hadr-hpn-V09-05-05)
+- Add excited isomer index and methods
+	include/G4NeutronHPFinalState.hh
+	include/G4NeutronHPDataUsed.hh
+- Set proper excited isomer index and methods
+	src/G4NeutronHPElasticFS.cc
+	src/G4NeutronHPNames.cc
+	src/G4NeutronHPInelasticCompFS.cc
+	src/G4NeutronHPCaptureFS.cc
+	src/G4NeutronHPFSFissionFS.cc
+	src/G4NeutronHPFissionBaseFS.cc
+	src/G4NeutronHPInelasticBaseFS.cc
+
+
 25 May 2012  Tatsumi Koi (hadr-hpn-V09-05-04)
 - Migrate frameFlag (MF6 LCT) = 3, which is used several ENDF/B-VII.1 files
 (This had been used in previous but the energies were beyond 20MeV.)

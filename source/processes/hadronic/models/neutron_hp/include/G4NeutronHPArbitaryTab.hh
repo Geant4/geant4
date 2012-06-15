@@ -65,8 +65,33 @@ class G4NeutronHPArbitaryTab : public G4VNeutronHPEDis
       theData >> currentEnergy;
       theDistFunc[i].SetLabel(currentEnergy*eV);
       theDistFunc[i].Init(theData, eV);
-      theDistFunc[i].ThinOut(0.02); // @@@ optimization to be finished.
+      //************************************************************************
+      //EMendoza:
+      //ThinOut() assumes that the data is linear-linear, what is false:
+      //theDistFunc[i].ThinOut(0.02); // @@@ optimization to be finished.
+      //************************************************************************
     }
+
+    //************************************************************************
+    //EMendoza:
+    //Here we calculate the thresholds for the 2D sampling:
+    for(i=0; i<nDistFunc; i++){
+      G4int np=theDistFunc[i].GetVectorLength();
+      theLowThreshold[i]=theDistFunc[i].GetEnergy(0);
+      theHighThreshold[i]=theDistFunc[i].GetEnergy(np-1);
+      for(G4int j=0;j<np-1;j++){
+	if(theDistFunc[i].GetXsec(j+1)>1.e-20){
+	  theLowThreshold[i]=theDistFunc[i].GetEnergy(j);
+	  break;
+	}
+      }
+      for(G4int j=1;j<np;j++){
+	if(theDistFunc[i].GetXsec(j-1)>1.e-20){
+	  theHighThreshold[i]=theDistFunc[i].GetEnergy(j);
+	}
+      }
+    }
+     //************************************************************************
   }
   
   inline G4double GetFractionalProbability(G4double anEnergy)
@@ -83,7 +108,12 @@ class G4NeutronHPArbitaryTab : public G4VNeutronHPEDis
   G4InterpolationManager theManager; // knows the interpolation between stores
   G4NeutronHPVector * theDistFunc; // one per incoming energy
   G4NeutronHPVector theBuffer;
-  
+  //************************************************************************
+  //EMendoza:
+  G4double theLowThreshold[1000];
+  G4double theHighThreshold[1000];
+  //************************************************************************
+
 };
 
 #endif

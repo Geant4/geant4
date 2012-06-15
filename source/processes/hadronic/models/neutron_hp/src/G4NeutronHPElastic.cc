@@ -102,3 +102,9 @@
     if (overrideSuspension) finalState->SetStatusChange(isAlive);
     return finalState; 
   }
+
+const std::pair<G4double, G4double> G4NeutronHPElastic::GetFatalEnergyCheckLevels() const
+{
+   //return std::pair<G4double, G4double>(10*perCent,10*GeV);
+   return std::pair<G4double, G4double>(10*perCent,DBL_MAX);
+}

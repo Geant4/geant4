@@ -84,11 +84,13 @@ void G4NeutronHPInelasticCompFS::Init (G4double A, G4double Z, G4int M, G4String
   G4bool dbool;
   G4NeutronHPDataUsed aFile = theNames.GetName(static_cast<G4int>(A), static_cast<G4int>(Z), M, tString, aFSType, dbool);
   G4String filename = aFile.GetName();
-  theBaseA = aFile.GetA();
-  theBaseZ = aFile.GetZ();
-   theNDLDataA = (int)aFile.GetA();
-   theNDLDataZ = aFile.GetZ();
-  if(!dbool || ( Z<2.5 && ( std::abs(theBaseZ - Z)>0.0001 || std::abs(theBaseA - A)>0.0001)))
+  SetAZMs( A, Z, M, aFile ); 
+  //theBaseA = aFile.GetA();
+  //theBaseZ = aFile.GetZ();
+  //theNDLDataA = (int)aFile.GetA();
+  //theNDLDataZ = aFile.GetZ();
+  //if(!dbool || ( Z<2.5 && ( std::abs(theBaseZ - Z)>0.0001 || std::abs(theBaseA - A)>0.0001)))
+  if ( !dbool || ( Z<2.5 && ( std::abs(theNDLDataZ - Z)>0.0001 || std::abs(theNDLDataA - A)>0.0001)) )
   {
     if(getenv("NeutronHPNamesLogging")) G4cout << "Skipped = "<< filename <<" "<<A<<" "<<Z<<G4endl;
     hasAnyData = false;
@@ -96,8 +98,8 @@ void G4NeutronHPInelasticCompFS::Init (G4double A, G4double Z, G4int M, G4String
     hasXsec = false;
     return;
   }
-  theBaseA = A;
-  theBaseZ = G4int(Z+.5);
+  //theBaseA = A;
+  //theBaseZ = G4int(Z+.5);
   std::ifstream theData(filename, std::ios::in);
   if(!theData)
   {
@@ -307,8 +309,22 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
     {
       if(theEnergyDistribution[it]!=0) // MF5
       {
+	//************************************************************
+	/*
         aHadron.SetKineticEnergy(theEnergyDistribution[it]->Sample(eKinetic, dummy));
         G4double eSecN = aHadron.GetKineticEnergy();
+	*/
+	//************************************************************
+	//EMendoza --> maximum allowable energy should be taken into account.
+        G4double dqi = 0.0;
+        if ( QI[it] < 0 || 849 < QI[it] ) dqi = QI[it]; //For backword compatibility QI introduced since G4NDL3.15
+	G4double MaxEne=eKinetic+dqi;
+	G4double eSecN;
+	do{
+	  eSecN=theEnergyDistribution[it]->Sample(eKinetic, dummy);
+	}while(eSecN>MaxEne);
+	aHadron.SetKineticEnergy(eSecN);
+	//************************************************************
         eGamm = eKinetic-eSecN;
         for(iLevel=theGammas.GetNumberOfLevels()-1; iLevel>=0; iLevel--)
         {
@@ -415,9 +431,9 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
     {
        // the photon distributions are in the Nucleus rest frame.
        // TK residual rest frame
-      G4ReactionProduct boosted;
-      boosted.Lorentz(theNeutron, theTarget);
-      G4double anEnergy = boosted.GetKineticEnergy();
+      G4ReactionProduct boosted_tmp;
+      boosted_tmp.Lorentz(theNeutron, theTarget);
+      G4double anEnergy = boosted_tmp.GetKineticEnergy();
       thePhotons = theFinalStatePhotons[it]->GetPhotons(anEnergy);
       G4double aBaseEnergy = theFinalStatePhotons[it]->GetLevelEnergy();
       G4double testEnergy = 0;
@@ -431,11 +447,11 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
 	  G4bool foundMatchingLevel = false;
           G4int closest = 2;
 	  G4double deltaEold = -1;
-	  for(G4int i=1; i<it; i++)
+	  for(G4int j=1; j<it; j++)
           {
-            if(theFinalStatePhotons[i]!=0) 
+            if(theFinalStatePhotons[j]!=0) 
             {
-              testEnergy = theFinalStatePhotons[i]->GetLevelEnergy();
+              testEnergy = theFinalStatePhotons[j]->GetLevelEnergy();
             }
             else
             {
@@ -445,16 +461,16 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
             if(deltaE<0.1*keV)
             {
               G4ReactionProductVector * theNext = 
-        	theFinalStatePhotons[i]->GetPhotons(anEnergy);
+        	theFinalStatePhotons[j]->GetPhotons(anEnergy);
               thePhotons->push_back(theNext->operator[](0));
               aBaseEnergy = testEnergy-theNext->operator[](0)->GetTotalEnergy();
               delete theNext;
 	      foundMatchingLevel = true;
               break; // ===>
             }
-	    if(theFinalStatePhotons[i]!=0 && ( deltaE<deltaEold||deltaEold<0.) )
+	    if(theFinalStatePhotons[j]!=0 && ( deltaE<deltaEold||deltaEold<0.) )
 	    {
-	      closest = i;
+	      closest = j;
 	      deltaEold = deltaE;     
 	    }
           } // <=== the break goes here.
@@ -489,11 +505,11 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
       if ( thePhotons != 0 )
       {
          unsigned int nPhotons = thePhotons->size();
-         unsigned int i0;
-         for ( i0=0; i0<nPhotons; i0++)
+         unsigned int ii0;
+         for ( ii0=0; ii0<nPhotons; ii0++)
          {
             //thePhotons has energies at LAB system 
-            totalPhotonEnergy += thePhotons->operator[](i0)->GetTotalEnergy();
+            totalPhotonEnergy += thePhotons->operator[](ii0)->GetTotalEnergy();
          }
       }
 
@@ -570,13 +586,13 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
     {
       nSecondaries = theParticles->size();
       G4ParticleDefinition * aDef;
-      unsigned int i0;
-      for(i0=0; i0<theParticles->size(); i0++)
+      unsigned int ii0;
+      for(ii0=0; ii0<theParticles->size(); ii0++)
       {
-        aDef = theParticles->operator[](i0)->GetDefinition();
+        aDef = theParticles->operator[](ii0)->GetDefinition();
 	totalBaryonNumber+=aDef->GetBaryonNumber();
 	totalCharge+=G4int(aDef->GetPDGCharge()+eps);
-        totalMomentum += theParticles->operator[](i0)->GetMomentum();
+        totalMomentum += theParticles->operator[](ii0)->GetMomentum();
       } 
       if(totalBaryonNumber!=G4int(theBaseA+eps+incidentParticle->GetDefinition()->GetBaryonNumber())) 
       {

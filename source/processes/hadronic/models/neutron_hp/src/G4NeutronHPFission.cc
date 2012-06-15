@@ -102,5 +102,6 @@
 const std::pair<G4double, G4double> G4NeutronHPFission::GetFatalEnergyCheckLevels() const
 {
         // max energy non-conservation is mass of heavy nucleus
-        return std::pair<G4double, G4double>(5*perCent,250*GeV);
+        //return std::pair<G4double, G4double>(5*perCent,250*GeV);
+        return std::pair<G4double, G4double>(5*perCent,DBL_MAX);
 }

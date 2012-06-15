@@ -114,7 +114,14 @@ class G4InterpolationManager
      for(G4int i=0; i<nRanges; i++)
      {
        aDataFile>>range[i];
+       //***************************************************************
+       //EMendoza -> there is a bug here.
+       /*
        if(i!=0) start[i] = start[i-1]+range[i-1];
+       */
+       //***************************************************************
+       if(i!=0) start[i] = range[i-1];
+       //***************************************************************
        aDataFile>>it;
        scheme[i] = MakeScheme(it);
      }

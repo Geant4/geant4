@@ -24,51 +24,43 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPElastic.hh,v 1.10 2006-06-29 20:47:21 gunter Exp $
+// $Id: G4NeutronHPFFFissionFS.hh,v 1.11 2007-06-06 12:45:13 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
- // Hadronic Process: High Precision low E neutron tracking
- // original by H.P. Wellisch, TRIUMF, 14-Feb-97
- // Builds and has the Cross-section data for one material.
- 
-#ifndef G4NeutronHPElastic_h
-#define G4NeutronHPElastic_h 1
-
-// Class Description
-// Final state production model for a high precision (based on evaluated data
-// libraries) description of neutron elastic scattering below 20 MeV; 
-// To be used in your physics list in case you need this physics.
-// In this case you want to register an object of this class with 
-// the corresponding process.
-// Class Description - End
+#ifndef G4NeutronHPFFFissionFS_h
+#define G4NeutronHPFFFissionFS_h 1
 
 #include "globals.hh"
-#include "G4NeutronHPChannel.hh"
-#include "G4HadronicInteraction.hh"
+#include "G4HadProjectile.hh"
+#include "G4DynamicParticleVector.hh"
+#include "G4NeutronHPFissionBaseFS.hh"
 
-class G4NeutronHPElastic : public G4HadronicInteraction
+class G4NeutronHPFFFissionFS : public G4NeutronHPFissionBaseFS
 {
-  public: 
+ 
+   public:
+      G4NeutronHPFFFissionFS(){ hasXsec = false; }
+      ~G4NeutronHPFFFissionFS(){}
+
+      void Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType);
+
+      G4DynamicParticleVector * ApplyYourself( G4int nNeutrons );
+
+      G4NeutronHPFinalState * New() 
+      {
+         G4NeutronHPFFFissionFS * theNew = new G4NeutronHPFFFissionFS;
+         return theNew;
+      }
+
+                              //energy   fragZ fragA   fragM
+      void GetAFissionFragment( G4double , G4int& , G4int& , G4int& );
   
-  G4NeutronHPElastic();
-  
-  ~G4NeutronHPElastic();
+   private:
+      G4HadFinalState * ApplyYourself( const G4HadProjectile & ) { return NULL; }
 
-  G4HadFinalState * ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus);
+      //        MT              Energy            FPS    Yield
+      std::map< G4int , std::map< G4double , std::map< G4int , G4double >* >* > FissionProductYieldData; 
+      std::map< G4int , std::map< G4double , G4int >* > mMTInterpolation; 
 
-  virtual const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
-
-  G4int GetNiso() {return theElastic[0].GetNiso();}
-
-  void DoNotSuspend() {overrideSuspension = true;}
-
-  private:
-  
-  G4double * xSec;
-  G4NeutronHPChannel * theElastic;
-  G4String dirName;
-  G4int numEle;
-  G4bool overrideSuspension;
 };
-
 #endif

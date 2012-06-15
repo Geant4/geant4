@@ -852,10 +852,10 @@ std::pair< G4double , E_isoAng > G4NeutronHPThermalScattering::create_sE_and_EPM
          if ( E_isoAng_L.n == E_isoAng_H.n ) 
          {
             anE_isoAng.n =  E_isoAng_L.n; 
-            for ( G4int i=0 ; i < anE_isoAng.n ; i++ )
+            for ( G4int j=0 ; j < anE_isoAng.n ; j++ )
             { 
                G4double angle;
-               angle = get_linear_interpolated ( sE  , std::pair< G4double , G4double > ( sE_L , E_isoAng_L.isoAngle[ i ] ) , std::pair< G4double , G4double > ( sE_H , E_isoAng_H.isoAngle[ i ] ) );  
+               angle = get_linear_interpolated ( sE  , std::pair< G4double , G4double > ( sE_L , E_isoAng_L.isoAngle[ j ] ) , std::pair< G4double , G4double > ( sE_H , E_isoAng_H.isoAngle[ j ] ) );  
                anE_isoAng.isoAngle.push_back( angle ); 
             }
          }
@@ -995,4 +995,10 @@ G4int G4NeutronHPThermalScattering::getTS_ID ( const G4Material* material , cons
    if ( dic.find( std::pair < const G4Material* , const G4Element* > ( material , element ) ) != dic.end() ) 
       result = dic.find( std::pair < const G4Material* , const G4Element* > ( material , element ) )->second; 
    return result; 
+}
+
+const std::pair<G4double, G4double> G4NeutronHPThermalScattering::GetFatalEnergyCheckLevels() const
+{
+   //return std::pair<G4double, G4double>(10*perCent,10*GeV);
+   return std::pair<G4double, G4double>(10*perCent,DBL_MAX);
 }

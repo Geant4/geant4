@@ -117,6 +117,7 @@ if(getenv("NeutronHPNames"))  G4cout << "entered GetName!!!"<<G4endl;
        result.SetName(*theName);
        result.SetA(myA);
        result.SetZ(myZ);
+       result.SetM(M);
 if(getenv("NeutronHPNames")) G4cout <<"HPWD 1 "<<*theName<<G4endl;
 
      // T.K. debug for memory leak
@@ -145,6 +146,7 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 2 "<<*theName<<G4endl;
              G4double natA = myZ/G4SandiaTable::GetZtoA(myZ);
              result.SetA(natA);
              result.SetZ(myZ);
+             result.SetM(M);
              check = new std::ifstream(*theName);
              if ( !(*check) ) 
              {
@@ -162,9 +164,10 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 2 "<<*theName<<G4endl;
                 theName = biff;
 if(getenv("NeutronHPNames"))    G4cout <<"HPWD 3 "<<*theName<<G4endl;
                 result.SetName(*theName);
-                G4double natA = myZ/G4SandiaTable::GetZtoA(myZ);
+                natA = myZ/G4SandiaTable::GetZtoA(myZ);
                 result.SetA(natA);
                 result.SetZ(myZ);
+                result.SetM(M);
                 result.SetNaturalAbundanceFlag();
              }
           }
@@ -238,6 +241,7 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4b2c "<<*theName<<G4endl;
           result.SetName(fileName);
           result.SetA(tmpA);
           result.SetZ(myZ);
+          result.SetM(M);
 
        }
 

@@ -39,15 +39,18 @@ class G4NeutronHPDataUsed
     theName = "";
     theA = 0;
     theZ = 0;
+    theM = 0;
      nat = false;
   }
   
   void SetA(G4double anA){theA = anA;}
   void SetZ(G4int aZ){theZ = aZ;}
+  void SetM(G4int aM){theM = aM;}
   void SetName(G4String aName){theName = aName;}
 
   G4int GetZ() {return theZ;}
   G4double GetA() {return theA;}
+  G4int GetM() {return theM;}
   G4String GetName() {return theName;}
   
   private:
@@ -55,6 +58,7 @@ class G4NeutronHPDataUsed
   G4String theName;
   G4double theA;
   G4int theZ;
+  G4int theM;
    public:
       G4bool IsThisNaturalAbundance() { return nat; };
       void SetNaturalAbundanceFlag() { nat = TRUE; };

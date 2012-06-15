@@ -107,6 +107,8 @@
     // decide on the channel
     running = new G4double[nChannels];
     running[0]=0;
+    G4int targA=-1; // For production of unChanged
+    G4int targZ=-1;
     for(i=0; i<nChannels; i++)
     {
       if(i!=0) running[i] = running[i-1];
@@ -117,8 +119,32 @@
 								  theChannels[i]->GetZ(isotope),
 						  		  aTrack.GetMaterial()->GetTemperature()),
 					                isotope);
+        targA=(G4int)theChannels[i]->GetN(isotope); //Will be simply used the last valid value
+        targZ=(G4int)theChannels[i]->GetZ(isotope);
       }
     }
+
+    //TK120607
+    if ( running[nChannels-1] == 0 )
+    {
+       //This happened usually by the miss match between the cross section data and model
+       if ( targA == -1 && targZ == -1 ) {
+          throw G4HadronicException(__FILE__, __LINE__, "NeutronHP model encounter lethal discrepancy with cross section data");
+       }
+
+       //For Ep Check create unchanged final state including rest target 
+       G4ParticleDefinition* targ_pd = G4ParticleTable::GetParticleTable()->GetIon ( targZ , targA , 0.0 );
+       G4DynamicParticle* targ_dp = new G4DynamicParticle( targ_pd , G4ThreeVector(1,0,0), 0.0 );
+
+       unChanged.Clear();
+       unChanged.SetEnergyChange(aTrack.GetKineticEnergy());
+       unChanged.SetMomentumChange(aTrack.Get4Momentum().vect() );
+       unChanged.AddSecondary(targ_dp);
+       return &unChanged;
+    }
+    //TK120607
+
+
     G4int lChan=0;
     random=G4UniformRand();
     for(i=0; i<nChannels; i++)

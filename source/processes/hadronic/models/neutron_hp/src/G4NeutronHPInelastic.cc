@@ -167,3 +167,12 @@
     }
     return theInelastic[index].ApplyYourself(theMaterial->GetElement(it), aTrack);
   }
+
+const std::pair<G4double, G4double> G4NeutronHPInelastic::GetFatalEnergyCheckLevels() const
+{
+      // max energy non-conservation is mass of heavy nucleus
+//      if ( getenv("G4NEUTRONHP_DO_NOT_ADJUST_FINAL_STATE") ) return std::pair<G4double, G4double>(5*perCent,250*GeV);
+      // This should be same to the hadron default value
+//      return std::pair<G4double, G4double>(10*perCent,10*GeV);
+      return std::pair<G4double, G4double>(10*perCent,DBL_MAX);
+}

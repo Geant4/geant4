@@ -144,3 +144,9 @@ void G4NeutronHPorLElastic::createXSectionDataSet()
 {
    theDataSet = new G4NeutronHPorLElasticData ( theElastic , &unavailable_elements );
 }
+
+const std::pair<G4double, G4double> G4NeutronHPorLElastic::GetFatalEnergyCheckLevels() const
+{
+   //return std::pair<G4double, G4double>(10*perCent,10*GeV);
+   return std::pair<G4double, G4double>(10*perCent,DBL_MAX);
+}

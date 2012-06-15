@@ -93,37 +93,37 @@
       // T. K. add
       photonEvaporation.SetICM( TRUE );
       G4FragmentVector* products = photonEvaporation.BreakItUp(nucleus);
-      G4FragmentVector::iterator i;
+      G4FragmentVector::iterator it;
       thePhotons = new G4ReactionProductVector;
-      for(i=products->begin(); i!=products->end(); i++)
+      for(it=products->begin(); it!=products->end(); it++)
       {
         G4ReactionProduct * theOne = new G4ReactionProduct;
         // T. K. add 
-        if ( (*i)->GetParticleDefinition() != 0 ) 
-           theOne->SetDefinition( (*i)->GetParticleDefinition() );
+        if ( (*it)->GetParticleDefinition() != 0 ) 
+           theOne->SetDefinition( (*it)->GetParticleDefinition() );
         else
            theOne->SetDefinition( G4Gamma::Gamma() ); // this definiion will be over writen
         
         // T. K. comment out below line
         //theOne->SetDefinition( G4Gamma::Gamma() );
         G4ParticleTable* theTable = G4ParticleTable::GetParticleTable();
-        if( (*i)->GetMomentum().mag() > 10*MeV ) theOne->SetDefinition( theTable->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ)) );
+        if( (*it)->GetMomentum().mag() > 10*MeV ) theOne->SetDefinition( theTable->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ)) );
 
         //if ( (*i)->GetExcitationEnergy() > 0 )
-        if ( (*i)->GetExcitationEnergy() > 1.0e-2*eV )
+        if ( (*it)->GetExcitationEnergy() > 1.0e-2*eV )
         {
-           G4double ex = (*i)->GetExcitationEnergy();
+           G4double ex = (*it)->GetExcitationEnergy();
            G4ReactionProduct* aPhoton = new G4ReactionProduct;
            aPhoton->SetDefinition( G4Gamma::Gamma() ); 
-           aPhoton->SetMomentum( (*i)->GetMomentum().vect().unit() * ex );
+           aPhoton->SetMomentum( (*it)->GetMomentum().vect().unit() * ex );
            //aPhoton->SetTotalEnergy( ex ); //will be calculated from momentum 
            thePhotons->push_back(aPhoton);
         }
 
-        theOne->SetMomentum( (*i)->GetMomentum().vect() * ( (*i)->GetMomentum().t() - (*i)->GetExcitationEnergy() ) / (*i)->GetMomentum().t() ) ;
+        theOne->SetMomentum( (*it)->GetMomentum().vect() * ( (*it)->GetMomentum().t() - (*it)->GetExcitationEnergy() ) / (*it)->GetMomentum().t() ) ;
         //theOne->SetTotalEnergy( (*i)->GetMomentum().t() - (*i)->GetExcitationEnergy() ); //will be calculated from momentum 
         thePhotons->push_back(theOne);
-        delete *i;
+        delete *it;
       } 
       delete products;
     }
@@ -213,22 +213,22 @@
     G4bool residual = false;
     G4ParticleDefinition * aRecoil = G4ParticleTable::GetParticleTable()
                                    ->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ));
-    for ( G4int i = 0 ; i != theResult.GetNumberOfSecondaries() ; i++ )
+    for ( G4int j = 0 ; j != theResult.GetNumberOfSecondaries() ; j++ )
     {
-       if ( theResult.GetSecondary(i)->GetParticle()->GetDefinition() == aRecoil ) residual = true;
+       if ( theResult.GetSecondary(j)->GetParticle()->GetDefinition() == aRecoil ) residual = true;
     }
 
     if ( residual == false )
     {
-       G4ParticleDefinition * aRecoil = G4ParticleTable::GetParticleTable()
-                                        ->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ));
+       //G4ParticleDefinition * aRecoil = G4ParticleTable::GetParticleTable()
+       //                                 ->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ));
        G4int nNonZero = 0;
        G4LorentzVector p_photons(0,0,0,0);
-       for ( G4int i = 0 ; i != theResult.GetNumberOfSecondaries() ; i++ )
+       for ( G4int j = 0 ; j != theResult.GetNumberOfSecondaries() ; j++ )
        {
-          p_photons += theResult.GetSecondary(i)->GetParticle()->Get4Momentum();
+          p_photons += theResult.GetSecondary(j)->GetParticle()->Get4Momentum();
           // To many 0 momentum photons -> Check PhotonDist 
-          if ( theResult.GetSecondary(i)->GetParticle()->Get4Momentum() > 0 ) nNonZero++;
+          if ( theResult.GetSecondary(j)->GetParticle()->Get4Momentum() > 0 ) nNonZero++;
        }
 
        // Can we include kinetic energy here?
@@ -241,7 +241,7 @@
               //G4cout << "TKDB G4NeutronHPCaptureFS::ApplyYourself we will create additional " << nPhotons - nNonZero << " photons" << G4endl;
           std::vector<G4double> vRand;
           vRand.push_back( 0.0 );
-          for ( G4int i = 0 ; i != nPhotons - nNonZero - 1 ; i++ )
+          for ( G4int j = 0 ; j != nPhotons - nNonZero - 1 ; j++ )
           { 
              vRand.push_back( G4UniformRand() );
           }
@@ -249,19 +249,19 @@
           std::sort( vRand.begin(), vRand.end() );
 
           std::vector<G4double> vEPhoton;
-          for ( G4int i = 0 ; i < (G4int)vRand.size() - 1 ; i++ )
+          for ( G4int j = 0 ; j < (G4int)vRand.size() - 1 ; j++ )
           {
-             vEPhoton.push_back( deltaE * ( vRand[i+1] - vRand[i] ) );
+             vEPhoton.push_back( deltaE * ( vRand[j+1] - vRand[j] ) );
           }
           std::sort( vEPhoton.begin(), vEPhoton.end() );
 
-          for ( G4int i = 0 ; i < nPhotons - nNonZero - 1 ; i++ )
+          for ( G4int j = 0 ; j < nPhotons - nNonZero - 1 ; j++ )
           {
              //Isotopic in LAB OK?
              G4double theta = pi*G4UniformRand();
              G4double phi = twopi*G4UniformRand();
              G4double sinth = std::sin(theta);
-             G4double en = vEPhoton[i];
+             G4double en = vEPhoton[j];
              G4ThreeVector tempVector(en*sinth*std::cos(phi), en*sinth*std::sin(phi), en*std::cos(theta) );
               
              p_photons += G4LorentzVector ( tempVector, tempVector.mag() );
@@ -315,7 +315,7 @@
      G4String sM;
      if ( M > 0 ) 
      {
-        ss << m;
+        ss << "m";
         ss << M;
         ss >> sM;
         ss.clear();
@@ -357,8 +357,9 @@
     G4NeutronHPDataUsed aFile = theNames.GetName(static_cast<G4int>(A), static_cast<G4int>(Z), M, dirName, tString, dbool);
 
     G4String filename = aFile.GetName();
-    theBaseA = A;
-    theBaseZ = G4int(Z+.5);
+    SetAZMs( A, Z, M, aFile ); 
+    //theBaseA = A;
+    //theBaseZ = G4int(Z+.5);
     if(!dbool || ( Z<2.5 && ( std::abs(theBaseZ - Z)>0.0001 || std::abs(theBaseA - A)>0.0001)))
     {
       hasAnyData = false;
