@@ -15,6 +15,15 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+8 June 2012  D.H. Wright     (hadr-munuclear-V09-05-06)
+-------------------------------------------------------
+- G4ElectroVDNuclearModel.cc : replace variable "m2" which shadows
+  a CLHEP variable
+
+1 June 2012  D.H. Wright     (hadr-munuclear-V09-05-05)
+-------------------------------------------------------
+- G4MuonVDNuclearModel.cc : fix negative KE bug in CalculateHadronicVertex 
+
 22 May 2012  D.H. Wright     (hadr-munuclear-V09-05-04)
 -------------------------------------------------------
 - fix bug in sources.cmake

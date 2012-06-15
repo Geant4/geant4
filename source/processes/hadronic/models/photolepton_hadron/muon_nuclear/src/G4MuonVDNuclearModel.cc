@@ -221,7 +221,7 @@ G4MuonVDNuclearModel::CalculateEMVertex(const G4HadProjectile& aTrack,
   G4double sinth = std::sin(theta);
   G4double dirx = sinth*std::cos(phi);
   G4double diry = sinth*std::sin(phi);
-  G4double dirz=std::cos(theta);
+  G4double dirz = std::cos(theta);
   G4ThreeVector finalDirection(dirx,diry,dirz);
   G4ThreeVector ParticleDirection(aTrack.Get4Momentum().vect().unit() );
   finalDirection.rotateUz(ParticleDirection);
@@ -253,19 +253,18 @@ G4MuonVDNuclearModel::CalculateHadronicVertex(G4DynamicParticle* incident,
                                               G4Nucleus& target)
 {
   G4HadFinalState* hfs = 0;
-
-  // At high energies convert incident gamma to a pion
-  G4double piMass = G4PionZero::PionZero()->GetPDGMass();
-  G4double piKE = incident->GetTotalEnergy() - piMass;
   G4double gammaE = incident->GetTotalEnergy();
-  G4double piMom = std::sqrt(piKE*(piKE + 2*piMass) );
-  G4ThreeVector piMomentum(incident->GetMomentumDirection() );
-  piMomentum *= piMom;
 
   if (gammaE < 10*GeV) {
     G4HadProjectile projectile(*incident);
     hfs = bert->ApplyYourself(projectile, target);
   } else {
+    // convert incident gamma to a pi0
+    G4double piMass = G4PionZero::PionZero()->GetPDGMass();
+    G4double piKE = incident->GetTotalEnergy() - piMass;
+    G4double piMom = std::sqrt(piKE*(piKE + 2*piMass) );
+    G4ThreeVector piMomentum(incident->GetMomentumDirection() );
+    piMomentum *= piMom;
     G4DynamicParticle theHadron(G4PionZero::PionZero(), piMomentum);
     G4HadProjectile projectile(theHadron);
     hfs = ftfp->ApplyYourself(projectile, target);

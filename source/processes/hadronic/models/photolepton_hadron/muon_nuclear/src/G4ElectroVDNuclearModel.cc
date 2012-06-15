@@ -178,13 +178,13 @@ G4ElectroVDNuclearModel::CalculateEMVertex(const G4HadProjectile& aTrack,
 
   // Scatter the lepton
   G4double mProj = aTrack.GetDefinition()->GetPDGMass();
-  G4double m2 = mProj*mProj;
+  G4double mProj2 = mProj*mProj;
   G4double iniE = leptonKE + mProj;               // Total energy of incident lepton
   G4double finE = iniE - photonEnergy;            // Total energy of scattered lepton
   theParticleChange.SetEnergyChange(finE-mProj);
-  G4double iniP = std::sqrt(iniE*iniE-m2);        // Incident lepton momentum
-  G4double finP = std::sqrt(finE*finE-m2);        // Scattered lepton momentum
-  G4double cost = (iniE*finE - m2 - photonQ2/2.)/iniP/finP;  // cos(theta) from Q**2
+  G4double iniP = std::sqrt(iniE*iniE-mProj2);    // Incident lepton momentum
+  G4double finP = std::sqrt(finE*finE-mProj2);    // Scattered lepton momentum
+  G4double cost = (iniE*finE - mProj2 - photonQ2/2.)/iniP/finP;  // cos(theta) from Q**2
   if (cost > 1.) cost= 1.;
   if (cost < -1.) cost=-1.;
   G4double sint = std::sqrt(1.-cost*cost);
