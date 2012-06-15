@@ -80,7 +80,7 @@ class G4QHadronElasticDataSet : public G4VCrossSectionDataSet
 {
   public:
 
-    G4QHadronElasticDataSet(const G4String& name = "CHIPSElasticXS");
+    G4QHadronElasticDataSet(const G4String& dataSetName = "CHIPSElasticXS");
     ~G4QHadronElasticDataSet() {};
     G4bool IsIsoApplicable(const G4DynamicParticle*, G4int Z, G4int A,    
                            const G4Element* elm = 0, const G4Material* mat = 0);

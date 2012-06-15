@@ -47,8 +47,8 @@
 //SumProbIsoInEl
 
 
-G4QHadronElasticDataSet::G4QHadronElasticDataSet(const G4String& name)
- : G4VCrossSectionDataSet(name)
+G4QHadronElasticDataSet::G4QHadronElasticDataSet(const G4String& dataSetName)
+ : G4VCrossSectionDataSet(dataSetName)
 {
   //Isotopes = G4QIsotope::Get(); // Pointer to the G4QIsotopes singleton
   Description();

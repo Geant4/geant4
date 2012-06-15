@@ -12,6 +12,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+13-Jun-2012 Alberto Ribon                      (hadr-chips-inter-V09-05-02)
+---------------------------------------------------------------------------
+- Fixed warnings of shadowed variables.
+
 24-Apr-2012 Mikhail Kosov                      (hadr-chips-inter-V09-05-01)
 ---------------------------------------------------------------------------
 - More changes for the redesigned (12.08.11) G4VCrossSectionDataSet interface
