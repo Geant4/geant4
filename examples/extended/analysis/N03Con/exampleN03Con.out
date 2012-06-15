@@ -1,198 +1,67 @@
 
-        ############################################
-        !!! WARNING - FPE detection is activated !!!
-        ############################################
-
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-05    (31-May-2012)
+ Geant4 version Name: geant4-08-03    (5-May-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
 
-***** Table : Nb of materials = 14 *****
+***** Table : Nb of materials = 13 *****
 
- Material: Aluminium    density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.860 cm   Imean: 166.000 eV 
-   --->  Element: Aluminium ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole
-         --->  Isotope:    27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
-          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+ Material: Aluminium     density:  2.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm 
+   --->  Element: Aluminium ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
+ Material: liquidArgon     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065 cm 
+   --->  Element: liquidArgon ( )   Z = 18.0   N =  40.0   A =  39.95 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material: liquidArgon    density:  1.390 g/cm3   RadL:  14.065 cm   Nucl.Int.Length:  86.006 cm   Imean: 188.000 eV 
-   --->  Element: liquidArgon ( )   Z = 18.0   N =  40.0   A =  39.95 g/mole
-         --->  Isotope:    36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
-         --->  Isotope:    38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
-         --->  Isotope:    40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %
-          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+ Material:     Lead     density: 11.350 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612 mm 
+   --->  Element: Lead ( )   Z = 82.0   N = 207.2   A = 207.19 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
+ Material:    Water     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
 
- Material:     Lead    density: 11.350 g/cm3   RadL:   5.612 mm   Nucl.Int.Length:  18.258 cm   Imean: 823.000 eV 
-   --->  Element: Lead ( )   Z = 82.0   N = 207.2   A = 207.19 g/mole
-         --->  Isotope:   204   Z = 82   N = 204   A = 203.97 g/mole   abundance:   1.40 %
-         --->  Isotope:   206   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
-         --->  Isotope:   207   Z = 82   N = 207   A = 206.98 g/mole   abundance:  22.10 %
-         --->  Isotope:   208   Z = 82   N = 208   A = 207.98 g/mole   abundance:  52.40 %
-          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+ Material: Scintillator     density:  1.032 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  42.549 cm 
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  91.45 %  ElmAbundance  47.37 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:   8.55 %  ElmAbundance  52.63 %
 
+ Material:    Mylar     density:  1.397 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  28.599 cm 
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  62.49 %  ElmAbundance  45.45 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:   4.20 %  ElmAbundance  36.36 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  33.30 %  ElmAbundance  18.18 %
 
- Material:    Water    density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.537 cm   Imean:  75.000 eV 
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
-          ElmMassFraction:  11.21 %  ElmAbundance  66.67 % 
+ Material:   quartz     density:  2.200 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  12.295 cm 
+   --->  Element: Silicon (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole  ElmMassFraction:  46.75 %  ElmAbundance  33.33 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  53.25 %  ElmAbundance  66.67 %
 
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
-         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
-         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
-         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
-          ElmMassFraction:  88.79 %  ElmAbundance  33.33 % 
+ Material:      Air     density:  1.290 kg/m3   temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
+ Material:  Aerogel     density: 200.000 kg/m3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.493 m  
+   --->  Element: Silicon (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole  ElmMassFraction:  29.22 %  ElmAbundance  11.12 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  66.49 %  ElmAbundance  44.42 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:   4.19 %  ElmAbundance  44.37 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:   0.10 %  ElmAbundance   0.09 %
 
- Material: Scintillator    density:  1.032 g/cm3   RadL:  42.549 cm   Nucl.Int.Length:  70.109 cm   Imean:  64.684 eV 
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
-         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
-          ElmMassFraction:  91.45 %  ElmAbundance  47.37 % 
+ Material: CarbonicGas     density: 27.000 kg/m3   temperature: 325.00 K  pressure:  50.00 atm  RadLength:  13.406 m  
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  27.29 %  ElmAbundance  33.33 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  72.71 %  ElmAbundance  66.67 %
 
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
-          ElmMassFraction:   8.55 %  ElmAbundance  52.63 % 
+ Material: WaterSteam     density:  0.300 mg/cm3  temperature: 500.00 K  pressure:   2.00 atm  RadLength:   1.203 km 
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
 
+ Material: Galactic     density:  0.000 kg/m3   temperature:   2.73 K  pressure:   0.00 atm  RadLength: 204727576.737 pc 
+   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:    Mylar    density:  1.397 g/cm3   RadL:  28.599 cm   Nucl.Int.Length:  56.108 cm   Imean:  75.967 eV 
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
-         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
-          ElmMassFraction:  62.49 %  ElmAbundance  45.45 % 
-
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
-          ElmMassFraction:   4.20 %  ElmAbundance  36.36 % 
-
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
-         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
-         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
-         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
-          ElmMassFraction:  33.30 %  ElmAbundance  18.18 % 
+ Material:     Beam     density:  0.010 mg/cm3  temperature: 273.15 K  pressure:   0.02 atm  RadLength:  36.786 km 
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
 
- Material:   quartz    density:  2.200 g/cm3   RadL:  12.295 cm   Nucl.Int.Length:  43.612 cm   Imean: 125.663 eV 
-   --->  Element: Silicon (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole
-         --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
-         --->  Isotope:  Si29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
-         --->  Isotope:  Si30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %
-          ElmMassFraction:  46.75 %  ElmAbundance  33.33 % 
-
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
-         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
-         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
-         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
-          ElmMassFraction:  53.25 %  ElmAbundance  66.67 % 
-
-
- Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
-         --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
-         --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
-          ElmMassFraction:  70.00 %  ElmAbundance  72.71 % 
-
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
-         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
-         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
-         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
-          ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
-
-
- Material:  Aerogel    density: 200.000 mg/cm3  RadL:   1.493 m    Nucl.Int.Length:   4.356 m    Imean:  98.882 eV 
-   --->  Element: Silicon (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole
-         --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
-         --->  Isotope:  Si29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
-         --->  Isotope:  Si30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %
-          ElmMassFraction:  29.22 %  ElmAbundance  11.12 % 
-
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
-         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
-         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
-         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
-          ElmMassFraction:  66.49 %  ElmAbundance  44.42 % 
-
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
-          ElmMassFraction:   4.19 %  ElmAbundance  44.37 % 
-
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
-         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
-          ElmMassFraction:   0.10 %  ElmAbundance   0.09 % 
-
-
- Material: CarbonicGas    density:  1.842 mg/cm3  RadL: 196.501 m    Nucl.Int.Length: 466.112 m    Imean:  90.958 eV   temperature: 325.00 K  pressure:  50.00 atm
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
-         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
-          ElmMassFraction:  27.29 %  ElmAbundance  33.33 % 
-
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
-         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
-         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
-         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
-          ElmMassFraction:  72.71 %  ElmAbundance  66.67 % 
-
-
- Material: WaterSteam    density:  0.300 kg/m3   RadL:   1.203 km   Nucl.Int.Length:   2.518 km   Imean:  68.998 eV   temperature: 500.00 K  pressure:   2.00 atm
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
-          ElmMassFraction:  11.21 %  ElmAbundance  66.67 % 
-
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
-         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
-         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
-         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
-          ElmMassFraction:  88.79 %  ElmAbundance  33.33 % 
-
-
- Material: Galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 114561548.020 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
-   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
-          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
-
-
- Material:     Beam    density:  0.010 kg/m3   RadL:  36.786 km   Nucl.Int.Length:  85.515 km   Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
-         --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
-         --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
-          ElmMassFraction:  70.00 %  ElmAbundance  72.71 % 
-
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
-         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
-         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
-         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
-          ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
-
-
- Material: G4_SODIUM_IODIDE    density:  3.667 g/cm3   RadL:   2.588 cm   Nucl.Int.Length:  42.894 cm   Imean: 452.000 eV 
-   --->  Element: Na (Na)   Z = 11.0   N =  23.0   A =  22.99 g/mole
-         --->  Isotope:  Na23   Z = 11   N =  23   A =  22.99 g/mole   abundance: 100.00 %
-          ElmMassFraction:  15.34 %  ElmAbundance  50.00 % 
-
-   --->  Element: I (I)   Z = 53.0   N = 127.0   A = 126.90 g/mole
-         --->  Isotope:  I127   Z = 53   N = 127   A = 126.90 g/mole   abundance: 100.00 %
-          ElmMassFraction:  84.66 %  ElmAbundance  50.00 % 
-
-
-
-
-------------------------------------------------------------
----> The calorimeter is 10 layers of: [ 10mm of Lead + 5mm of liquidArgon ] 
-------------------------------------------------------------
-PhysicsList::SetCuts:CutLength : 1 mm 
-Visualization Manager instantiating with verbosity "warnings (3)"...
+Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
 
@@ -200,17 +69,17 @@ You have successfully registered the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
-  gMocrenFile (gMocrenFile)
-  OpenGLStoredX (OGL)
-  OpenGLImmediateX (OGLI)
-  OpenGLStoredX (OGLS)
+  FukuiRenderer (DAWN)
   OpenGLImmediateX (OGLIX)
   OpenGLStoredX (OGLSX)
+  VRML1 (VRML1)
+  VRML2 (VRML2)
 
 Registering model factories...
 
@@ -228,27 +97,22 @@ Registered filter factories:
   originVolumeFilter
   attributeFilter
 
-You have successfully registered the following user vis actions.
-Run Duration User Vis Actions: none
-End of Event User Vis Actions: none
-End of Run User Vis Actions: none
 
-Some /vis commands (optionally) take a string to specify colour.
-Available colours:
-  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
-
+------------------------------------------------------------
+---> The calorimeter is 10 layers of: [ 10mm of Lead + 5mm of liquidArgon ] 
+------------------------------------------------------------
+ExN03PhysicsList::SetCuts:CutLength : 1 mm 
 /run/verbose 2
-# e+ 300MeV
+# e+ 300MeV 
 #/gun/particle e+
 #/gun/energy 300 MeV
 #/run/beamOn 1
 #
 # list the existing physics processes
 /process/list
-     Transportation,                msc,              hIoni,            ionIoni
-              eIoni,              eBrem,            annihil,               phot
-              compt,               conv,              muMsc,             muIoni
-            muBrems,         muPairProd,             hBrems,          hPairProd
+     Transportation,                msc,              hIoni,              eIoni
+              eBrem,            annihil,               phot,              compt
+               conv,             muIoni,            muBrems,         muPairProd
               Decay
 #
 # switch off MultipleScattering
@@ -256,7 +120,7 @@ Available colours:
 #/run/beamOn 1
 #
 # switch on MultipleScattering
-#/process/activate msc
+#/process/activate msc 
 #
 # change detector parameter
 /N03/det/setAbsMat Aluminium
@@ -264,13 +128,13 @@ Available colours:
 /N03/det/setAbsThick 2. cm
 /N03/det/setGapThick 5. cm
 /N03/det/setNbOfLayers 30
-/N03/det/setSizeYZ 1.5 m
+/N03/det/setSizeYZ   1.5 m
 /N03/det/update
 
 ------------------------------------------------------------
 ---> The calorimeter is 30 layers of: [ 20mm of Aluminium + 50mm of Aerogel ] 
 ------------------------------------------------------------
-Obsolete world logical volume is removed from the default region.
+World is removed from the default region.
 World is registered to the default region.
 #
 /gun/particle gamma
@@ -279,252 +143,159 @@ World is registered to the default region.
 #/run/beamOn 1024
 /run/beamOn 4096
 
-phot:   for  gamma    SubType= 12
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV
+phot:  Total cross sections from Sandia parametrisation. 
+      Sampling according PhotoElectric model
 
-compt:   for  gamma    SubType= 13
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
+compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
+      tables are built for  gamma
+      Lambda tables from 100 eV  to 100 GeV in 90 bins.
 
-conv:   for  gamma    SubType= 14
-      Lambda tables from 1.022 MeV to 10 TeV in 77 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=       10 TeV
+conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according Bethe-Heitler model
+      tables are built for  gamma
+      Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
 
-msc:   for e-    SubType= 10
-      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
-eIoni:   for  e-    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
-eBrem:   for  e-    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
-            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-eIoni:   for  e+    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections and sampling from MollerBhabha model
+      Good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
-eBrem:   for  e+    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
-            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-annihil:   for  e+    SubType= 5
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            eplus2gg :  Emin=        0 eV    Emax=       10 TeV
+annihil:       Sampling according eplus2gg model
+      tables are built for  e+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
-msc:   for proton    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
-hIoni:   for  proton    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=        2 MeV
-          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from Bragg for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
-hBrems:   for  proton    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
+hIoni:   tables are built for  anti_proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
+      Parametrisation from Bragg for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
-hPairProd:   for  proton    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
-msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
-ionIoni:   for  GenericIon    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
-      Stopping Power data for 17 ion/material pairs 
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            BraggIon :  Emin=        0 eV    Emax=        2 MeV
-          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
 
-hIoni:   for  anti_proton    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=        2 MeV
-          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
 
-msc:   for kaon+    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
-hIoni:   for  kaon+    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=  1.05231 MeV
-          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
+muBrems:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
 
-hIoni:   for  kaon-    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
-          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
+muPairProd:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
 
-muMsc:   for mu+    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+hIoni:   tables are built for  pi+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
+      Parametrisation from Bragg for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
-muIoni:   for  mu+    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=      200 keV
-          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
-        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      LateralDisplacementFlag=  1   Skin= 0
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
-muBrems:   for  mu+    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :  Emin=        0 eV    Emax=       10 TeV
+hIoni:   tables are built for  pi-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used from proton dE/dx and range.
+      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
+      Parametrisation from Bragg for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
-muPairProd:   for  mu+    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :  Emin=        0 eV    Emax=       10 TeV
-
-muIoni:   for  mu-    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=      200 keV
-          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
-        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
-
-muBrems:   for  mu-    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :  Emin=        0 eV    Emax=       10 TeV
-
-muPairProd:   for  mu-    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :  Emin=        0 eV    Emax=       10 TeV
-
-msc:   for pi+    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
-
-hIoni:   for  pi+    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=  297.505 keV
-          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
-
-hBrems:   for  pi+    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
-
-hPairProd:   for  pi+    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
-
-hIoni:   for  pi-    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
-          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
-
-hBrems:   for  pi-    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
-
-hPairProd:   for  pi-    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
-
-Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
- This region is in the mass world.
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Materials : Galactic Aluminium Aerogel 
- Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
-
-Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
- Root logical volume(s) : 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : 
- Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+ Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Galactic
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 6.88731 keV    e- 596.68 keV    e+ 568.011 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Aerogel
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  1.71771 keV    e-  119.266 keV    e+  116.885 keV proton 100 keV
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 1.70631 keV    e- 118.951 keV    e+ 116.058 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -539,14 +310,14 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-       0.00         0.00         0.00            2k Calorimeter
+       0.00         0.00         0.00            1k Calorimeter
        0.00         0.00         0.00            0k Layer
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      87.60          1k         1       30         30         0.00    Calorimeter
-      12.40          0k         1        3          4         0.00    Layer
+      86.94          0k         1       30         30         0.00    Calorimeter
+      13.06          0k         1        3          4         0.00    Layer
 ### Run 0 start.
 Start Run processing.
 
@@ -557,229 +328,227 @@ Start Run processing.
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 418.848 MeV       total track length: 98.5965 cm 
-        Gap: total energy: 75.7467 MeV       total track length: 2.07702 m  
+   Absorber: total energy: 283.25731 MeV       total track length: 67.769363 cm 
+        Gap: total energy: 68.38224 MeV       total track length: 1.8803601 m  
 
 ---> Begin of event: 1024
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 948456041, 1986629630
+ Current couple of seeds = 1416617493, 1758921592
 ----------------------------------------
 ---> End of event: 1024
-   Absorber: total energy: 389.093 MeV       total track length: 92.6419 cm 
-        Gap: total energy: 105.166 MeV       total track length:   2.893 m  
+   Absorber: total energy: 409.9527 MeV       total track length: 96.615784 cm 
+        Gap: total energy: 83.253761 MeV       total track length: 2.3460079 m  
 
 ---> Begin of event: 2048
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1628729111, 375393732
+ Current couple of seeds = 2100749244, 1483535160
 ----------------------------------------
 ---> End of event: 2048
-   Absorber: total energy: 397.815 MeV       total track length: 94.8293 cm 
-        Gap: total energy: 98.0265 MeV       total track length: 2.74433 m  
+   Absorber: total energy: 358.55591 MeV       total track length: 84.409873 cm 
+        Gap: total energy: 73.33255 MeV       total track length: 2.0270683 m  
 
 ---> Begin of event: 3072
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1690512259, 1372078532
+ Current couple of seeds = 91156885, 1490904840
 ----------------------------------------
 ---> End of event: 3072
-   Absorber: total energy: 324.038 MeV       total track length: 76.3303 cm 
-        Gap: total energy: 68.1485 MeV       total track length: 1.87593 m  
+   Absorber: total energy: 327.39408 MeV       total track length: 78.469165 cm 
+        Gap: total energy: 82.857064 MeV       total track length: 2.3756107 m  
 Run terminated.
 Run Summary
   Number of events processed : 4096
-  User=92.04s Real=79.85s Sys=0.06s
+  User=122.98s Real=125.18s Sys=0.06s
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 367.979 MeV +- 60.698 MeV
- mean Energy in Gap      : 79.0882 MeV +- 14.3977 MeV
+ mean Energy in Absorber : 367.36474 MeV +- 63.119832 MeV
+ mean Energy in Gap      : 78.477718 MeV +- 15.014884 MeV
 
- mean trackLength in Absorber : 86.8704 cm  +- 14.2193 cm 
- mean trackLength in Gap      : 2.1838 m   +- 39.9407 cm 
+ mean trackLength in Absorber : 86.905156 cm  +- 14.807223 cm 
+ mean trackLength in Gap      : 2.1938518 m   +- 42.051723 cm 
 ------------------------------------------------------------
 
-EFFICIENCY = 0.994385
-MEAN = 367.979
-VAR = 3685.15
-SD = 60.7054
-R = 0.00257765
-SHIFT = -93.6912
-VOV = 0.0035364
-FOM = 1634.33
-THE LARGEST SCORE = 430.926 and it happend at 2208th event
-Affected Mean = 367.995 and its ratio to orignal is 1.00004
-Affected VAR = 3685.22 and its ratio to orignal is 1.00002
-Affected R = 0.00257725 and its ratio to orignal is 0.999845
-Affected SHIFT = -93.6814 and its ratio to orignal is 0.999895
-Affected FOM = 1633.97 and its ratio to orignal is 0.999783
+EFFICIENCY = 0.99414062
+MEAN = 367.36474
+VAR = 3985.0861
+SD = 63.127539
+R = 0.0026849822
+SHIFT = -93.076864
+VOV = 0.003182594
+FOM = 1127.3814
+THE LARGEST SCORE = 432.17571 and it happend at 2089th event
+Affected Mean = 367.38056 and its ratio to orignal is 1.0000431
+Affected VAR = 3985.1385 and its ratio to orignal is 1.0000131
+Affected R = 0.0026845566 and its ratio to orignal is 0.99984146
+Affected SHIFT = -93.06831 and its ratio to orignal is 0.99990809
+Affected FOM = 1127.1981 and its ratio to orignal is 0.99983748
 MEAN distribution is not RANDOM
-r follows 1/std::sqrt(N)
-r is monotonically decrease 
-r is less than 0.1. r = 0.00257765
-VOV follows 1/std::sqrt(N)
-VOV is monotonically decrease 
-FOM distribution is not RANDOM
+r follows 1/sqrt(N)
+r is monotonically decrease 1
+r is less than 0.1. r = 0.0026849822
+VOV follows 1/sqrt(N)
+VOV is monotonically decrease 1
+FOM distribution is RANDOM
 SLOPE is large enough
-This result passes 6 / 8 Convergence Test.
+This result passes 7 / 8 Convergence Test.
 
 i/16 till_ith  mean  var  sd  r  vov  fom  shift  e  r2eff  r2int
-1 255 365.243 4176.66 64.6271 0.0110589 0.048117 1409.77 -91.4508 0.992188 3.07579e-05 9.10637e-05 
-2 511 367.262 3904.27 62.4842 0.00751898 0.0280437 1531.44 -97.124 0.994141 1.15115e-05 4.49132e-05 
-3 767 365.823 4290.01 65.4982 0.00646067 0.0165513 1384.84 -96.4869 0.99349 8.53266e-06 3.31533e-05 
-4 1023 366.805 4267.62 65.327 0.00556555 0.0127679 1393.94 -98.4119 0.994141 5.75577e-06 2.51893e-05 
-5 1279 367.081 4207.91 64.8684 0.00493931 0.0101584 1417.82 -97.4063 0.995313 3.67936e-06 2.06983e-05 
-6 1535 366.897 4177.65 64.6347 0.00449497 0.00852182 1430.03 -96.7373 0.994792 3.4086e-06 1.6783e-05 
-7 1791 367.28 4028.07 63.4671 0.00408208 0.00739157 1485.81 -95.0855 0.994978 2.81678e-06 1.38373e-05 
-8 2047 367.454 3862.15 62.1462 0.0037372 0.0066136 1551.44 -93.5992 0.995117 2.39588e-06 1.1564e-05 
-9 2303 367.692 3739.55 61.1519 0.00346485 0.00586024 1604.65 -91.3695 0.99566 1.89201e-06 1.0108e-05 
-10 2559 367.83 3724.93 61.0322 0.00327938 0.0053167 1611.82 -91.4488 0.995313 1.83968e-06 8.91047e-06 
-11 2815 367.954 3669.59 60.5771 0.00310241 0.00490702 1637.46 -90.9454 0.995028 1.7743e-06 7.84724e-06 
-12 3071 368.095 3695.36 60.7895 0.0029796 0.00467479 1627.95 -93.4017 0.994141 1.91859e-06 6.95653e-06 
-13 3327 368.084 3658.7 60.4872 0.00284855 0.00435831 1645.61 -93.213 0.994291 1.72534e-06 6.38649e-06 
-14 3583 368.216 3647.02 60.3905 0.00273957 0.00401919 1652.08 -92.9849 0.994699 1.48705e-06 6.01608e-06 
-15 3839 368.218 3627.29 60.2269 0.00263949 0.0037853 1661.68 -92.9629 0.994531 1.43198e-06 5.5331e-06 
-16 4095 367.979 3685.15 60.7054 0.00257765 0.0035364 1634.68 -93.6912 0.994385 1.37865e-06 5.26401e-06 
-EFFICIENCY = 0.994629
-MEAN = 79.0882
-VAR = 207.346
-SD = 14.3995
-R = 0.00284483
-SHIFT = -14.0946
-VOV = 0.00226272
-FOM = 1341.62
-THE LARGEST SCORE = 119.531 and it happend at 482th event
-Affected Mean = 79.098 and its ratio to orignal is 1.00012
-Affected VAR = 207.694 and its ratio to orignal is 1.00168
-Affected R = 0.00284652 and its ratio to orignal is 1.00059
-Affected SHIFT = -14.0435 and its ratio to orignal is 0.99637
-Affected FOM = 1341.18 and its ratio to orignal is 0.999674
+1 255 363.69563 4842.0051 69.584518 0.01195789 0.056002987 917.77436 -110.35431 0.984375 6.2003968e-05 8.0428606e-05 
+2 511 363.58843 4749.7359 68.918328 0.0083770227 0.025419456 925.93819 -102.91971 0.98632812 2.707302e-05 4.2964429e-05 
+3 767 364.42855 4544.2168 67.410807 0.0066747733 0.018336314 995.80213 -104.31098 0.98828125 1.5439723e-05 2.9054864e-05 
+4 1023 365.10707 4393.1003 66.280467 0.0056730334 0.013420174 1031.9498 -101.03049 0.99023438 9.6307939e-06 2.2521085e-05 
+5 1279 366.02106 4083.8816 63.905255 0.0048800639 0.01065566 1105.881 -95.586858 0.9921875 6.1515748e-06 1.7644843e-05 
+6 1535 365.9273 4180.3188 64.655385 0.0045083153 0.0086705565 1077.0735 -96.06075 0.99283854 4.6960383e-06 1.5615636e-05 
+7 1791 366.45161 4031.9307 63.497486 0.0040932747 0.0074700364 1116.0068 -94.449401 0.99386161 3.446599e-06 1.3298949e-05 
+8 2047 366.85003 4019.5466 63.399895 0.0038188711 0.0066935636 1119.3168 -95.675698 0.99365234 3.1192414e-06 1.1457414e-05 
+9 2303 367.29667 3935.3014 62.73198 0.0035582034 0.0059453164 1143.2028 -94.30888 0.99392361 2.6534449e-06 1.0001871e-05 
+10 2559 367.20252 3939.3158 62.763969 0.0033781954 0.0053236784 1138.4369 -93.986262 0.99375 2.456761e-06 8.9509854e-06 
+11 2815 367.18776 3923.8609 62.640729 0.0032147876 0.004764987 1142.7885 -92.933911 0.99396307 2.1568174e-06 8.1743718e-06 
+12 3071 367.45252 3874.3851 62.244559 0.0030562548 0.0042984072 1163.0465 -91.357182 0.99446615 1.8114089e-06 7.526244e-06 
+13 3327 367.46316 3919.3176 62.604453 0.0029532469 0.0039628182 1147.6026 -92.378714 0.99459135 1.6340344e-06 7.0850122e-06 
+14 3583 367.67356 3884.2471 62.323728 0.0028314377 0.0036583059 1158.1645 -91.590867 0.99469866 1.4870517e-06 6.5277511e-06 
+15 3839 367.36349 3979.2159 63.081026 0.002771004 0.0033338321 1130.2126 -91.977413 0.99453125 1.4319848e-06 6.2444786e-06 
+16 4095 367.36474 3985.0861 63.127539 0.0026849822 0.003182594 1127.748 -93.076864 0.99414062 1.4389428e-06 5.7684267e-06 
+EFFICIENCY = 0.99438477
+MEAN = 78.477718
+VAR = 225.50178
+SD = 15.016717
+R = 0.0029898448
+SHIFT = -13.902917
+VOV = 0.0019924127
+FOM = 909.19362
+THE LARGEST SCORE = 117.3797 and it happend at 510th event
+Affected Mean = 78.487213 and its ratio to orignal is 1.000121
+Affected VAR = 225.81611 and its ratio to orignal is 1.0013939
+Affected R = 0.0029912008 and its ratio to orignal is 1.0004535
+Affected SHIFT = -13.862598 and its ratio to orignal is 0.99709995
+Affected FOM = 908.89814 and its ratio to orignal is 0.99967501
 MEAN distribution is not RANDOM
-r follows 1/std::sqrt(N)
-r is monotonically decrease 
-r is less than 0.1. r = 0.00284483
-VOV follows 1/std::sqrt(N)
-VOV is monotonically decrease 
-FOM distribution is not RANDOM
+r follows 1/sqrt(N)
+r is monotonically decrease 1
+r is less than 0.1. r = 0.0029898448
+VOV follows 1/sqrt(N)
+VOV is monotonically decrease 1
+FOM distribution is RANDOM
 SLOPE is large enough
-This result passes 6 / 8 Convergence Test.
+This result passes 7 / 8 Convergence Test.
 
 i/16 till_ith  mean  var  sd  r  vov  fom  shift  e  r2eff  r2int
-1 255 78.9421 221.62 14.8869 0.0117863 0.0354958 1241.14 -15.103 0.992188 3.07579e-05 0.000107615 
-2 511 78.9966 211.865 14.5556 0.00814303 0.0188927 1305.71 -14.831 0.994141 1.15115e-05 5.46679e-05 
-3 767 78.7089 229.353 15.1444 0.00694301 0.0115481 1199.11 -15.1297 0.99349 8.53266e-06 3.96099e-05 
-4 1023 78.9394 234.379 15.3094 0.0060606 0.00854138 1175.52 -15.0827 0.994141 5.75577e-06 3.09392e-05 
-5 1279 78.7858 229.099 15.136 0.0053698 0.00666495 1199.6 -14.5771 0.995313 3.67936e-06 2.51329e-05 
-6 1535 78.8594 228.398 15.1128 0.00488986 0.00557662 1208.39 -14.4914 0.995443 2.98057e-06 2.09146e-05 
-7 1791 78.8817 221.479 14.8822 0.00445678 0.00477069 1246.48 -14.2248 0.995536 2.5024e-06 1.73494e-05 
-8 2047 78.9279 214.811 14.6564 0.0041033 0.00418552 1286.95 -13.8193 0.995605 2.15524e-06 1.46736e-05 
-9 2303 78.9947 209.875 14.4871 0.00382068 0.00365535 1319.68 -13.3292 0.996094 1.70207e-06 1.28892e-05 
-10 2559 78.9915 207.953 14.4206 0.00360813 0.00336997 1331.48 -13.497 0.995703 1.68571e-06 1.13278e-05 
-11 2815 78.9956 204.773 14.3099 0.00341364 0.00313061 1352.49 -13.5208 0.995384 1.64698e-06 1.00018e-05 
-12 3071 79.0299 207.758 14.4138 0.00329061 0.00295663 1334.76 -13.8552 0.994466 1.81141e-06 9.01318e-06 
-13 3327 79.0727 206.087 14.3557 0.00314707 0.00275296 1348.23 -13.8551 0.994591 1.63403e-06 8.26706e-06 
-14 3583 79.1264 205.869 14.3481 0.00302894 0.00252724 1351.5 -13.764 0.994978 1.40839e-06 7.76351e-06 
-15 3839 79.1389 205.305 14.3285 0.00292176 0.0023858 1356.12 -13.8266 0.994792 1.36344e-06 7.171e-06 
-16 4095 79.0882 207.346 14.3995 0.00284483 0.00226272 1342.05 -14.0946 0.994629 1.31838e-06 6.77268e-06 
-EFFICIENCY = 0.994385
-MEAN = 868.704
-VAR = 20223.8
-SD = 142.211
-R = 0.00255788
-SHIFT = -221.893
-VOV = 0.00361381
-FOM = 1659.51
-THE LARGEST SCORE = 1019.56 and it happend at 4014th event
-Affected Mean = 868.741 and its ratio to orignal is 1.00004
-Affected VAR = 20224.4 and its ratio to orignal is 1.00003
-Affected R = 0.0025575 and its ratio to orignal is 0.999851
-Affected SHIFT = -221.867 and its ratio to orignal is 0.999881
-Affected FOM = 1658.97 and its ratio to orignal is 0.999674
+1 255 76.935633 252.45045 15.888689 0.012907453 0.038596366 787.70557 -17.661167 0.984375 6.2003968e-05 0.00010394759 
+2 511 77.389232 257.4632 16.04566 0.0091630923 0.017298474 773.88648 -16.441348 0.98632812 2.707302e-05 5.6725251e-05 
+3 767 77.665817 248.62651 15.767895 0.0073259372 0.012144321 826.64625 -16.585523 0.98828125 1.5439723e-05 3.8159751e-05 
+4 1023 77.969112 245.54395 15.669842 0.0062804686 0.0086792682 841.98653 -16.027547 0.99023438 9.6307939e-06 2.9774973e-05 
+5 1279 78.061919 228.9236 15.130221 0.0054175269 0.0067481801 897.34046 -14.687306 0.9921875 6.1515748e-06 2.3175093e-05 
+6 1535 77.870133 231.84589 15.226486 0.004989226 0.0054405699 879.44272 -14.43874 0.99283854 4.6960383e-06 2.0180132e-05 
+7 1791 78.045703 224.72573 14.990855 0.004537414 0.0046643478 908.22153 -14.045519 0.99386161 3.446599e-06 1.7130038e-05 
+8 2047 78.107287 226.09338 15.036402 0.0042539011 0.0041397452 902.08658 -14.202387 0.99365234 3.1192414e-06 1.4967598e-05 
+9 2303 78.129941 222.08125 14.902391 0.0039737195 0.0036662056 916.62223 -13.945849 0.99392361 2.6534449e-06 1.3130148e-05 
+10 2559 78.225505 223.59764 14.953181 0.0037780287 0.0032772248 910.22344 -13.934949 0.99414062 2.3023084e-06 1.1965617e-05 
+11 2815 78.250797 222.51845 14.917052 0.003592344 0.0029353727 915.19704 -13.768958 0.99431818 2.0292208e-06 1.0871132e-05 
+12 3071 78.377339 220.83103 14.860385 0.0034208098 0.002628038 928.36413 -13.3624 0.99479167 1.7042976e-06 9.9938329e-06 
+13 3327 78.364284 221.49591 14.882739 0.0032921001 0.0024634602 923.51719 -13.660307 0.99489183 1.5427886e-06 9.2918778e-06 
+14 3583 78.464175 220.63749 14.853871 0.0031621629 0.0022668889 928.57248 -13.539324 0.99497768 1.4083908e-06 8.5880937e-06 
+15 3839 78.420541 224.71581 14.990524 0.0030847599 0.002080651 911.9934 -13.68267 0.99479167 1.363438e-06 8.1498278e-06 
+16 4095 78.477718 225.50178 15.016717 0.0029898448 0.0019924127 909.4893 -13.902917 0.99438477 1.3786483e-06 7.5583414e-06 
+EFFICIENCY = 0.99414062
+MEAN = 869.05156
+VAR = 21930.74
+SD = 148.09031
+R = 0.0026625706
+SHIFT = -219.82454
+VOV = 0.0032422354
+FOM = 1146.4402
+THE LARGEST SCORE = 1027.1443 and it happend at 3814th event
+Affected Mean = 869.09015 and its ratio to orignal is 1.0000444
+Affected VAR = 21931.486 and its ratio to orignal is 1.000034
+Affected R = 0.0026621727 and its ratio to orignal is 0.99985057
+Affected SHIFT = -219.79928 and its ratio to orignal is 0.99988512
+Affected FOM = 1146.1608 and its ratio to orignal is 0.99975624
 MEAN distribution is not RANDOM
-r follows 1/std::sqrt(N)
-r is monotonically decrease 
-r is less than 0.1. r = 0.00255788
-VOV follows 1/std::sqrt(N)
-VOV is monotonically decrease 
-FOM distribution is not RANDOM
+r follows 1/sqrt(N)
+r is monotonically decrease 1
+r is less than 0.1. r = 0.0026625706
+VOV follows 1/sqrt(N)
+VOV is monotonically decrease 1
+FOM distribution is RANDOM
 SLOPE is large enough
-This result passes 6 / 8 Convergence Test.
+This result passes 7 / 8 Convergence Test.
 
 i/16 till_ith  mean  var  sd  r  vov  fom  shift  e  r2eff  r2int
-1 255 862.544 22874.2 151.242 0.010959 0.049395 1435.58 -216.782 0.992188 3.07579e-05 8.88733e-05 
-2 511 867.202 21426.4 146.378 0.00745967 0.0285976 1555.89 -229.808 0.994141 1.15115e-05 4.40264e-05 
-3 767 863.763 23597.3 153.614 0.00641736 0.0168059 1403.59 -228.019 0.99349 8.53266e-06 3.25962e-05 
-4 1023 865.924 23428.7 153.064 0.00552388 0.0130014 1415.05 -232.718 0.994141 5.75577e-06 2.47277e-05 
-5 1279 866.263 23060.4 151.857 0.0048998 0.0103589 1440.77 -230.391 0.995313 3.67936e-06 2.03099e-05 
-6 1535 865.886 22918.6 151.389 0.00446105 0.00868491 1451.86 -228.803 0.994792 3.4086e-06 1.64794e-05 
-7 1791 866.744 22088.6 148.622 0.00405065 0.00753293 1508.96 -224.79 0.994978 2.81678e-06 1.35818e-05 
-8 2047 867.213 21172.1 145.506 0.00370759 0.00674447 1576.33 -221.357 0.995117 2.39588e-06 1.13436e-05 
-9 2303 867.743 20502.9 143.188 0.00343776 0.00597114 1630.04 -215.967 0.99566 1.89201e-06 9.92102e-06 
-10 2559 868.058 20407.1 142.853 0.00325254 0.0054263 1638.53 -216.192 0.995313 1.83968e-06 8.73519e-06 
-11 2815 868.352 20105.6 141.794 0.00307714 0.00501075 1664.47 -215.071 0.995028 1.7743e-06 7.69111e-06 
-12 3071 868.759 20264.9 142.355 0.00295639 0.00477373 1653.61 -221.06 0.994141 1.91859e-06 6.81883e-06 
-13 3327 868.823 20064.6 141.65 0.00282613 0.00445471 1671.83 -220.706 0.994291 1.72534e-06 6.25929e-06 
-14 3583 869.184 20016.6 141.48 0.00271894 0.00410302 1677.24 -220.107 0.994699 1.48705e-06 5.90354e-06 
-15 3839 869.227 19905.5 141.087 0.00261932 0.0038673 1687.37 -220.125 0.994531 1.43198e-06 5.42704e-06 
-16 4095 868.704 20223.8 142.211 0.00255788 0.00361381 1660.05 -221.893 0.994385 1.37865e-06 5.1625e-06 
-EFFICIENCY = 0.994629
-MEAN = 2183.8
-VAR = 159565
-SD = 399.456
-R = 0.00285809
-SHIFT = -379.081
-VOV = 0.00221199
-FOM = 1329.19
-THE LARGEST SCORE = 3384.21 and it happend at 482th event
-Affected Mean = 2184.09 and its ratio to orignal is 1.00013
-Affected VAR = 159877 and its ratio to orignal is 1.00196
-Affected R = 0.00286016 and its ratio to orignal is 1.00072
-Affected SHIFT = -377.366 and its ratio to orignal is 0.995476
-Affected FOM = 1328.76 and its ratio to orignal is 0.999674
+1 255 861.69435 26843.051 163.83849 0.011883455 0.056992789 929.30787 -261.77551 0.984375 6.2003968e-05 7.8660896e-05 
+2 511 860.79291 26203.188 161.87399 0.008310811 0.025999392 940.75075 -244.30029 0.98632812 2.707302e-05 4.1861658e-05 
+3 767 862.6567 25165.992 158.63793 0.0066357256 0.018648001 1007.5561 -247.39142 0.98828125 1.5439723e-05 2.8535796e-05 
+4 1023 864.30516 24375.56 156.12674 0.0056449516 0.013579709 1042.2426 -239.09024 0.99023438 9.6307939e-06 2.2203565e-05 
+5 1279 866.26907 22638.47 150.46086 0.0048547374 0.010784744 1117.4495 -226.02039 0.9921875 6.1515748e-06 1.7398488e-05 
+6 1535 865.84122 23148.783 152.14724 0.0044836347 0.0087734476 1088.9638 -226.82282 0.99283854 4.6960383e-06 1.5393854e-05 
+7 1791 867.159 22318.346 149.39326 0.0040697081 0.0075531817 1128.9691 -222.78426 0.99386161 3.446599e-06 1.3106683e-05 
+8 2047 867.96874 22251.061 149.1679 0.0037975745 0.0067720602 1131.9061 -225.8556 0.99365234 3.1192414e-06 1.1295289e-05 
+9 2303 869.08068 21767.979 147.53976 0.0035367774 0.0060219798 1157.0959 -222.63442 0.99392361 2.6534449e-06 9.8499201e-06 
+10 2559 868.69511 21767.631 147.53857 0.003356744 0.0054034157 1153.0339 -222.0616 0.99375 2.456761e-06 8.8065678e-06 
+11 2815 868.66303 21656.962 147.16305 0.0031925015 0.004844182 1158.7993 -219.6029 0.99396307 2.1568174e-06 8.0316288e-06 
+12 3071 869.31174 21362.273 146.15838 0.0030334552 0.0043726635 1180.5953 -215.78394 0.99446615 1.8114089e-06 7.3874459e-06 
+13 3327 869.27849 21608.366 146.99784 0.0029313007 0.0040300166 1164.8508 -218.22222 0.99459135 1.6340344e-06 6.9559075e-06 
+14 3583 869.75188 21383.902 146.23235 0.0028084332 0.0037266284 1177.2159 -216.34151 0.99469866 1.4870517e-06 6.3980446e-06 
+15 3839 869.07806 21900.952 147.9897 0.002747939 0.0033957938 1149.2652 -217.22849 0.99453125 1.4319848e-06 6.1172176e-06 
+16 4095 869.05156 21930.74 148.09031 0.0026625706 0.0032422354 1146.8131 -219.82454 0.99414062 1.4389428e-06 5.6486085e-06 
+EFFICIENCY = 0.99438477
+MEAN = 2193.8518
+VAR = 176877.92
+SD = 420.56857
+R = 0.0029953636
+SHIFT = -381.00068
+VOV = 0.0019642012
+FOM = 905.84641
+THE LARGEST SCORE = 3342.1446 and it happend at 510th event
+Affected Mean = 2194.1321 and its ratio to orignal is 1.0001278
+Affected VAR = 177156.58 and its ratio to orignal is 1.0015754
+Affected R = 0.0029969734 and its ratio to orignal is 1.0005374
+Affected SHIFT = -379.68581 and its ratio to orignal is 0.99654889
+Affected FOM = 905.55202 and its ratio to orignal is 0.99967501
 MEAN distribution is not RANDOM
-r follows 1/std::sqrt(N)
-r is monotonically decrease 
-r is less than 0.1. r = 0.00285809
-VOV follows 1/std::sqrt(N)
-VOV is monotonically decrease 
-FOM distribution is not RANDOM
+r follows 1/sqrt(N)
+r is monotonically decrease 1
+r is less than 0.1. r = 0.0029953636
+VOV follows 1/sqrt(N)
+VOV is monotonically decrease 1
+FOM distribution is RANDOM
 SLOPE is large enough
-This result passes 6 / 8 Convergence Test.
+This result passes 7 / 8 Convergence Test.
 
 i/16 till_ith  mean  var  sd  r  vov  fom  shift  e  r2eff  r2int
-1 255 2182.01 169902 412.192 0.0118065 0.034986 1236.88 -411.06 0.992188 3.07579e-05 0.000108092 
-2 511 2182.08 163227 404.014 0.00818259 0.018471 1293.11 -398.328 0.994141 1.15115e-05 5.53125e-05 
-3 767 2173.72 176314 419.898 0.00697043 0.0113745 1189.69 -408.754 0.99349 8.53266e-06 3.99909e-05 
-4 1023 2180.26 180285 424.6 0.00608586 0.00836029 1165.78 -404.364 0.994141 5.75577e-06 3.12458e-05 
-5 1279 2175.92 175996 419.518 0.00538894 0.00653525 1191.09 -391.279 0.995313 3.67936e-06 2.53387e-05 
-6 1535 2177.95 175629 419.081 0.0049097 0.00546624 1198.64 -389.325 0.995443 2.98057e-06 2.11089e-05 
-7 1791 2177.98 170236 412.597 0.0044751 0.00467498 1236.29 -381.91 0.995536 2.5024e-06 1.75129e-05 
-8 2047 2179.19 165280 406.547 0.00412239 0.00409298 1275.06 -370.46 0.995605 2.15524e-06 1.48306e-05 
-9 2303 2181.33 161627 402.029 0.00383968 0.00356286 1306.65 -356.414 0.996094 1.70207e-06 1.30347e-05 
-10 2559 2181.08 160234 400.293 0.00362732 0.00327896 1317.43 -360.751 0.995703 1.68571e-06 1.14666e-05 
-11 2815 2181.21 157744 397.17 0.00343133 0.00304798 1338.58 -361.808 0.995384 1.64698e-06 1.01229e-05 
-12 3071 2182.32 159862 399.828 0.00330555 0.00288759 1322.72 -371.634 0.994466 1.81141e-06 9.11173e-06 
-13 3327 2183.48 158540 398.171 0.00316103 0.00269197 1336.35 -371.925 0.994591 1.63403e-06 8.35506e-06 
-14 3583 2184.81 158418 398.018 0.00304302 0.00246846 1339.02 -369.295 0.994978 1.40839e-06 7.84901e-06 
-15 3839 2185.12 157994 397.484 0.00293548 0.00233115 1343.47 -371.248 0.994792 1.36344e-06 7.25136e-06 
-16 4095 2183.8 159565 399.456 0.00285809 0.00221199 1329.63 -379.081 0.994629 1.31838e-06 6.84831e-06 
+1 255 2151.5475 198324.33 445.3362 0.012936509 0.037983865 784.17115 -485.5417 0.984375 6.2003968e-05 0.00010469556 
+2 511 2163.8396 202042.18 449.49103 0.0091803868 0.017034269 770.97345 -450.67455 0.98632812 2.707302e-05 5.7041873e-05 
+3 767 2171.0637 195014.7 441.60469 0.0073397371 0.011969743 823.54072 -455.57391 0.98828125 1.5439723e-05 3.8361872e-05 
+4 1023 2179.4431 192970.03 439.28354 0.0062986782 0.0085220689 837.12516 -439.35363 0.99023438 9.6307939e-06 3.000381e-05 
+5 1279 2182.0842 179945.56 424.19991 0.0054336802 0.0066285985 892.01315 -402.04808 0.9921875 6.1515748e-06 2.3350239e-05 
+6 1535 2177.0042 182127.31 426.76377 0.0050018729 0.0053600627 875.00109 -396.25674 0.99283854 4.6960383e-06 2.0306406e-05 
+7 1791 2181.7945 176401.6 420.00191 0.0045474551 0.0045955059 904.21513 -385.65985 0.99386161 3.446599e-06 1.7221209e-05 
+8 2047 2183.614 177518.81 421.32981 0.004263648 0.0040792702 897.96688 -389.87024 0.99365234 3.1192414e-06 1.5050577e-05 
+9 2303 2184.0604 174066.09 417.21229 0.003979708 0.0036267829 913.86573 -383.82636 0.99392361 2.6534449e-06 1.3177757e-05 
+10 2559 2186.6213 175388.85 418.79452 0.0037853622 0.0032378986 906.70004 -383.10592 0.99414062 2.3023084e-06 1.2021061e-05 
+11 2815 2187.5558 174760.73 418.04393 0.0036011935 0.0028953572 910.70461 -378.32363 0.99431818 2.0292208e-06 1.0934768e-05 
+12 3071 2191.0798 173383.37 416.39329 0.003428743 0.0025916378 924.07314 -367.0535 0.99479167 1.7042976e-06 1.0048154e-05 
+13 3327 2190.6932 173982.37 417.11194 0.0033004974 0.0024267277 918.82384 -374.97139 0.99489183 1.5427886e-06 9.3472211e-06 
+14 3583 2193.4584 173261.32 416.24671 0.0031698405 0.0022327559 924.07983 -371.21284 0.99497768 1.4083908e-06 8.6366942e-06 
+15 3839 2192.2379 176250.34 419.8218 0.0030903786 0.0020511909 908.68019 -374.98467 0.99479167 1.363438e-06 8.1845148e-06 
+16 4095 2193.8518 176877.92 420.56857 0.0029953636 0.0019642012 906.14099 -381.00068 0.99438477 1.3786483e-06 7.5913646e-06 
 #/run/beamOn 16384
 #/run/beamOn 65536
-Graphics systems deleted.
-Visualization Manager deleting...
-G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
+G4 kernel has come to Quit state.
 EventManager deleted.
+Default detector region deleted.
 UImanager deleted.
 Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
-RunManager is deleted.
-
+RunManager is deleting.

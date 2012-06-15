@@ -52,17 +52,17 @@ public:
   void  BeginOfEventAction(const G4Event*);
   void    EndOfEventAction(const G4Event*);
     
-  void AddAbs(G4double de, G4double dl) {EnergyAbs += de; TrackLAbs += dl;};
-  void AddGap(G4double de, G4double dl) {EnergyGap += de; TrackLGap += dl;};
+  void AddAbs(G4double de, G4double dl) {fEnergyAbs += de; fTrackLAbs += dl;};
+  void AddGap(G4double de, G4double dl) {fEnergyGap += de; fTrackLGap += dl;};
     
 private:
-   RunAction*    runAct;
-   HistoManager* histoManager;
+   RunAction*    fRunAct;
+   HistoManager* fHistoManager;
       
-   G4double  EnergyAbs, EnergyGap;
-   G4double  TrackLAbs, TrackLGap;
+   G4double  fEnergyAbs, fEnergyGap;
+   G4double  fTrackLAbs, fTrackLGap;
                      
-   G4int     printModulo;                             
+   G4int     fPrintModulo;                             
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

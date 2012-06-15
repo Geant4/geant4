@@ -53,8 +53,8 @@ public:
   void GeneratePrimaries(G4Event*);
 
 private:
-  G4ParticleGun*           particleGun;	 //pointer a to G4  class
-  DetectorConstruction*    Detector;     //pointer to the geometry
+  G4ParticleGun*           fParticleGun;  //pointer a to G4 class
+  DetectorConstruction*    fDetector;     //pointer to the geometry
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -51,8 +51,8 @@ public:
   void UserSteppingAction(const G4Step*);
     
 private:
-  DetectorConstruction* detector;
-  EventAction*          eventaction;  
+  DetectorConstruction* fDetector;
+  EventAction*          fEventAction;  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -11,7 +11,7 @@
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
+// * regarding  this  software system or asfSume any liability for its *
 // * use.  Please see the license in the file  LICENSE  and URL above *
 // * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
@@ -40,7 +40,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(HistoManager* histo)
-:histoManager(histo)
+:fHistoManager(histo)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,12 +56,12 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
     
   //initialize cumulative quantities
   //
-  sumEAbs = sum2EAbs =sumEGap = sum2EGap = 0.;
-  sumLAbs = sum2LAbs =sumLGap = sum2LGap = 0.;
+  fSumEAbs = fSum2EAbs =fSumEGap = fSum2EGap = 0.;
+  fSumLAbs = fSum2LAbs =fSumLGap = fSum2LGap = 0.;
   
   //histograms
   //
-  histoManager->book(); 
+  fHistoManager->book(); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -71,11 +71,11 @@ void RunAction::fillPerEvent(G4double EAbs, G4double EGap,
 {
   //accumulate statistic
   //
-  sumEAbs += EAbs;  sum2EAbs += EAbs*EAbs;
-  sumEGap += EGap;  sum2EGap += EGap*EGap;
+  fSumEAbs += EAbs;  fSum2EAbs += EAbs*EAbs;
+  fSumEGap += EGap;  fSum2EGap += EGap*EGap;
   
-  sumLAbs += LAbs;  sum2LAbs += LAbs*LAbs;
-  sumLGap += LGap;  sum2LGap += LGap*LGap;  
+  fSumLAbs += LAbs;  fSum2LAbs += LAbs*LAbs;
+  fSumLGap += LGap;  fSum2LGap += LGap*LGap;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -87,44 +87,44 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   
   //compute statistics: mean and rms
   //
-  sumEAbs /= NbOfEvents; sum2EAbs /= NbOfEvents;
-  G4double rmsEAbs = sum2EAbs - sumEAbs*sumEAbs;
+  fSumEAbs /= NbOfEvents; fSum2EAbs /= NbOfEvents;
+  G4double rmsEAbs = fSum2EAbs - fSumEAbs*fSumEAbs;
   if (rmsEAbs >0.) rmsEAbs = std::sqrt(rmsEAbs); else rmsEAbs = 0.;
   
-  sumEGap /= NbOfEvents; sum2EGap /= NbOfEvents;
-  G4double rmsEGap = sum2EGap - sumEGap*sumEGap;
+  fSumEGap /= NbOfEvents; fSum2EGap /= NbOfEvents;
+  G4double rmsEGap = fSum2EGap - fSumEGap*fSumEGap;
   if (rmsEGap >0.) rmsEGap = std::sqrt(rmsEGap); else rmsEGap = 0.;
   
-  sumLAbs /= NbOfEvents; sum2LAbs /= NbOfEvents;
-  G4double rmsLAbs = sum2LAbs - sumLAbs*sumLAbs;
+  fSumLAbs /= NbOfEvents; fSum2LAbs /= NbOfEvents;
+  G4double rmsLAbs = fSum2LAbs - fSumLAbs*fSumLAbs;
   if (rmsLAbs >0.) rmsLAbs = std::sqrt(rmsLAbs); else rmsLAbs = 0.;
   
-  sumLGap /= NbOfEvents; sum2LGap /= NbOfEvents;
-  G4double rmsLGap = sum2LGap - sumLGap*sumLGap;
+  fSumLGap /= NbOfEvents; fSum2LGap /= NbOfEvents;
+  G4double rmsLGap = fSum2LGap - fSumLGap*fSumLGap;
   if (rmsLGap >0.) rmsLGap = std::sqrt(rmsLGap); else rmsLGap = 0.;
   
   //print
   //
   G4cout
      << "\n--------------------End of Run------------------------------\n"
-     << "\n mean Energy in Absorber : " << G4BestUnit(sumEAbs,"Energy")
+     << "\n mean Energy in Absorber : " << G4BestUnit(fSumEAbs,"Energy")
      << " +- "                          << G4BestUnit(rmsEAbs,"Energy")  
-     << "\n mean Energy in Gap      : " << G4BestUnit(sumEGap,"Energy")
+     << "\n mean Energy in Gap      : " << G4BestUnit(fSumEGap,"Energy")
      << " +- "                          << G4BestUnit(rmsEGap,"Energy")
      << G4endl;
      
   G4cout
-     << "\n mean trackLength in Absorber : " << G4BestUnit(sumLAbs,"Length")
+     << "\n mean trackLength in Absorber : " << G4BestUnit(fSumLAbs,"Length")
      << " +- "                               << G4BestUnit(rmsLAbs,"Length")  
-     << "\n mean trackLength in Gap      : " << G4BestUnit(sumLGap,"Length")
+     << "\n mean trackLength in Gap      : " << G4BestUnit(fSumLGap,"Length")
      << " +- "                               << G4BestUnit(rmsLGap,"Length")
      << "\n------------------------------------------------------------\n"
      << G4endl;
      
   //save histograms
   //
-  histoManager->PrintStatistic();
-  histoManager->save();   
+  fHistoManager->PrintStatistic();
+  fHistoManager->save();   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
