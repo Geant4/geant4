@@ -848,8 +848,8 @@ G4double G4ProtonElasticCrossSection::GetQ2max(G4int PDG, G4int tgZ, G4int tgN,
 //    G4double mt=G4QPDGCode(90000000+tgZ*1000+tgN).GetMass()*.001; // Target mass in GeV
     G4double mt=G4ParticleTable::GetParticleTable()->FindIon(tgZ,tgZ+tgN,0,tgZ)->GetPDGMass()*.001; // Target mass in GeV
     G4double dmt=mt+mt;
-    G4double s=dmt*std::sqrt(pP2+mProt2)+mProt2+mt*mt;// Mondelstam s
-    return dmt*dmt*pP2/s;
+    G4double mandelstam_s=dmt*std::sqrt(pP2+mProt2)+mProt2+mt*mt;// Mondelstam s
+    return dmt*dmt*pP2/mandelstam_s;
   }
   else
   {
