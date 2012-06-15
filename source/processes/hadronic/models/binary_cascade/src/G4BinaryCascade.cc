@@ -522,7 +522,6 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 			PrintKTVector(&theSecondaryList, "active particles @ end  added to theFinalState");
 		#endif
 		//  add left secondaries to FinalSate
-		std::vector<G4KineticTrack *>::iterator iter;
 		for ( iter =theSecondaryList.begin(); iter != theSecondaryList.end(); ++iter)
 		{
 			theFinalState.push_back(*iter);
@@ -1782,7 +1781,6 @@ void G4BinaryCascade::CorrectFinalPandE()
 
 	G4LorentzRotation toCMS(-pCM.boostVector());
 	pFinals *=toCMS;
-
 #ifdef debug_BIC_CorrectFinalPandE
 	G4cout << "CorrectFinalPandE pCM, CMS pCM " << pCM << " " <<toCMS*pCM<< G4endl;
 	G4cout << "CorrectFinal CMS pN pF " <<toCMS*pNucleus << " "
@@ -1794,16 +1792,16 @@ void G4BinaryCascade::CorrectFinalPandE()
 
 	G4LorentzRotation toLab = toCMS.inverse();
 
-	G4double s = pCM.mag2();
+	G4double s0 = pCM.mag2();
 	G4double m10 = GetIonMass(currentZ,currentA);
 	G4double m20 = pFinals.mag();
-	if( s-(m10+m20)*(m10+m20) < 0 )
+	if( s0-(m10+m20)*(m10+m20) < 0 )
 	{
 #ifdef debug_BIC_CorrectFinalPandE
 		G4cout << "G4BinaryCascade::CorrectFinalPandE() : error! " << G4endl;
 
 		G4cout << "not enough mass to correct: mass, A,Z, mass(nucl), mass(finals) "
-				<< std::sqrt(-s+(m10+m20)*(m10+m20)) << " "
+				<< std::sqrt(s0-(m10+m20)*(m10+m20)) << " "
 				<< currentA << " " << currentZ << " "
 				<< m10 << " " << m20
 				<< G4endl;
@@ -1815,7 +1813,7 @@ void G4BinaryCascade::CorrectFinalPandE()
 	}
 
 	// Three momentum in cm system
-	G4double pInCM = std::sqrt((s-(m10+m20)*(m10+m20))*(s-(m10-m20)*(m10-m20))/(4.*s));
+	G4double pInCM = std::sqrt((s0-(m10+m20)*(m10+m20))*(s0-(m10-m20)*(m10-m20))/(4.*s0));
 #ifdef debug_BIC_CorrectFinalPandE
 	G4cout <<" CorrectFinalPandE pInCM  new, CURRENT, ratio : " << pInCM
 			<< " " << (pFinals).vect().mag()<< " " <<  pInCM/(pFinals).vect().mag() << G4endl;
@@ -2868,10 +2866,10 @@ G4ReactionProductVector * G4BinaryCascade::FillVoidNucleusProducts(G4ReactionPro
 	for(iter = theTargetList.begin(); iter != theTargetList.end(); ++iter)
 	{
 		G4ReactionProduct * aNew = new G4ReactionProduct((*iter)->GetDefinition());
-		G4double m=(*iter)->GetDefinition()->GetPDGMass();
-		G4double p=std::sqrt(sqr(Ekinetic) + 2.*Ekinetic*m);
+		G4double mass=(*iter)->GetDefinition()->GetPDGMass();
+		G4double p=std::sqrt(sqr(Ekinetic) + 2.*Ekinetic*mass);
 		aNew->SetMomentum(p*(*iter)->Get4Momentum().vect().unit());
-		aNew->SetTotalEnergy(m+Ekinetic);
+		aNew->SetTotalEnergy(mass+Ekinetic);
 		aNew->SetNewlyAdded(true);
 		//G4cout << " Particle Ekin " << aNew->GetKineticEnergy() << G4endl;
 		products->push_back(aNew);

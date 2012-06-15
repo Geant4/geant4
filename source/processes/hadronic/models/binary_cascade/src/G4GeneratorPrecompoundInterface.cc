@@ -89,11 +89,10 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 	G4ThreeVector exciton3Momentum(0.,0.,0.);
 
 	// loop over secondaries
-	unsigned int amax = theSecondaries->size();
 #ifdef exactExcitationEnergy
 	G4LorentzVector secondary4Momemtum(0,0,0,0);
 #endif  
-	for(unsigned int list=0; list<amax; ++list)
+	for(unsigned int list=0; list<theSecondaries->size(); ++list)
 	{
 		G4KineticTrack *aTrack = (*theSecondaries)[list];
 		G4ParticleDefinition* part = aTrack->GetDefinition();
@@ -176,8 +175,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 			G4ReactionProductVector * aPreResult = theDeExcitation->DeExcite(anInitialState);
 
 			// fill pre-compound part into the result, and return
-			unsigned int amax = aPreResult->size();
-			for(unsigned int ll=0; ll<amax; ++ll) {
+			for(unsigned int ll=0; ll<aPreResult->size(); ++ll) {
 				theTotalResult->push_back(aPreResult->operator[](ll));
 			}
 			delete aPreResult;
