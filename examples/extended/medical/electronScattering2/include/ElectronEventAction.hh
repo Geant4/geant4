@@ -34,10 +34,10 @@ class ElectronEventAction : public G4UserEventAction
 {
   public:
     ElectronEventAction();
-    ~ElectronEventAction();
+    virtual ~ElectronEventAction();
 
   public:
-    void BeginOfEventAction(const G4Event*);
+    virtual void BeginOfEventAction(const G4Event*);
 };
 
 #endif

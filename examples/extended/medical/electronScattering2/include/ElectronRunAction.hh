@@ -35,18 +35,16 @@ class G4Run;
 class ElectronRunAction : public G4UserRunAction {
 
 public:
-
   ElectronRunAction(G4String&);
   virtual ~ElectronRunAction();
 
   virtual G4Run* GenerateRun();
   
-  void BeginOfRunAction(const G4Run*);
-  void EndOfRunAction(const G4Run*);
+  virtual void BeginOfRunAction(const G4Run*);
+  virtual void EndOfRunAction(const G4Run*);
 
 private:
-  G4String outputFileSpec;
-    
+  G4String fOutputFileSpec;
 };
 
 #endif

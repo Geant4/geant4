@@ -37,23 +37,18 @@ class G4Event;
 class ElectronRun : public G4Run {
 
 public:
-
   ElectronRun(const G4String& detectorName);
   virtual ~ElectronRun();
-
-public:
 
   virtual void RecordEvent(const G4Event*);
   void DumpData(G4String&) const;
 
 private:
-
   void Print(const std::vector<G4String>& title,
 			 const std::map< G4int, std::vector<G4double> >&out,
 			 G4String&) const;  
 
   std::map<G4int, G4THitsMap<G4double>* > fMap;
-
 };
 
 #endif

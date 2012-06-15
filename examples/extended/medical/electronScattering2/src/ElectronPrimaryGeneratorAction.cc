@@ -30,15 +30,15 @@
 
 ElectronPrimaryGeneratorAction::ElectronPrimaryGeneratorAction()
 {
-  particleGun  = new G4GeneralParticleSource();
+  fParticleGun  = new G4GeneralParticleSource();
 }
 
 ElectronPrimaryGeneratorAction::~ElectronPrimaryGeneratorAction()
 {
-  delete particleGun;
+  delete fParticleGun;
 }
 
 void ElectronPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  particleGun->GeneratePrimaryVertex(anEvent);
+  fParticleGun->GeneratePrimaryVertex(anEvent);
 }
