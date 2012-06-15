@@ -110,7 +110,7 @@ G4bool XrayFluoHPGeSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
     
     //    else {G4cout << " il deposito proviene da: Rayleugh" << G4endl;}
     
-    if ((edep==0.)) return false;      
+    if (edep==0.) return false;      
     
     //  G4cout << " edep =  " << edep << G4endl;
     

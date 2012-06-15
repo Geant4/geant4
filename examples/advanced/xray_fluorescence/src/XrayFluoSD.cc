@@ -147,7 +147,7 @@ G4bool XrayFluoSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
     G4cout << " la particella creata ha energia cinetica: " << secondEnergy << G4endl;  
   */
 
-  if ((edep==0.)) return false;      
+  if (edep==0.) return false;      
 
   //G4cout << " edep =  " << edep << G4endl;
 
