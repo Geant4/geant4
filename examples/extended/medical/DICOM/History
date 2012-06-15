@@ -9,13 +9,19 @@ $Id: History,v 1.31 2010-12-23 11:34:22 chauvie Exp $
 
                       ---------------------
 
+13.06.2012 - Gabriele Cosmo   (DICOM-V09-05-02)
+             Assign return value for fread() and fscanf() calls in
+             DicomHandler. Fixes compilation warnings on Ubuntu.
+
 28.03.2012 - Pedro Arce   (DICOM-V09-05-01)
+             Corrections in materials Z/A. Addressing problem report #1287.
 
 13.11.2011 - Pedro Arce   (DICOM-V09-04-03)
+             Migration to new G4Exception scheme.
 
 03.10.2011 - G.Folger   (DICOM-V09-04-02)
              Fix gcc46 compilation warning in DicomHandler.cc 
-              and DicomPhantomParameterisationColour.cc
+             and DicomPhantomParameterisationColour.cc
 
 05.06.2011 - Pedro Arce (DICOM-V09-04-01)
              Corrected name for sensitive detector to be consistently
