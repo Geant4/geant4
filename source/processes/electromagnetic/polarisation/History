@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08 June 12: V.Ivanchenko (empolar-V09-05-00)
+- Fixed shadowing
+
 11 November 11: V.Ivanchenko (empolar-V09-04-04)
 - G4ePolarizedBremsstrahlung - fixed problem provoked by the tag 
     of standard

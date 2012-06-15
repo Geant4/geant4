@@ -125,10 +125,10 @@ void G4PolarizedCompton::PrintInfo()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4PolarizedCompton::SetModel(const G4String& s)
+void G4PolarizedCompton::SetModel(const G4String& ss)
 {
-  if(s == "Klein-Nishina") mType = 0;
-  if(s == "Polarized-Compton") mType = 10;
+  if(ss == "Klein-Nishina") mType = 0;
+  if(ss == "Polarized-Compton") mType = 10;
 }
 
 

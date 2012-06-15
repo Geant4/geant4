@@ -173,9 +173,9 @@ void G4PolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
 
   G4double epsilon, epsilonsq, onecost, sint2, greject ;
 
-  G4double epsilon0   = 1./(1. + 2.*E0_m);
-  G4double epsilon0sq = epsilon0*epsilon0;
-  G4double alpha1     = - std::log(epsilon0);
+  G4double eps0       = 1./(1. + 2.*E0_m);
+  G4double epsilon0sq = eps0*eps0;
+  G4double alpha1     = - std::log(eps0);
   G4double alpha2     = 0.5*(1.- epsilon0sq);
 
   G4double polarization = theBeamPolarization.p3()*theTargetPolarization.p3();
