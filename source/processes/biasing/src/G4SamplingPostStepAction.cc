@@ -79,10 +79,10 @@ void G4SamplingPostStepAction::DoIt(const G4Track& aTrack,
     os << "Sampler returned nw = "
        << nw
        << "\n";
-    G4String m = os.str();
+    G4String msg = os.str();
     
     G4Exception("G4SamplingPostStepAction::DoIt()",
-                "InvalidCondition", FatalException, m);
+                "InvalidCondition", FatalException, msg);
   }
 }
 
