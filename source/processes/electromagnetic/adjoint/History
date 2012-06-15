@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08 Jun 2012: V.Ivanchenko (emadjoint-V09-05-01)
+- Fixed shadowing
+
+06 Jun 2012: V.Ivanchenko (emadjoint-V09-05-00)
+- G4AdjointhMultipleScattering - comment out obsolete call
+
 24 Jun 2011: V.Ivanchenko (emadjoint-V09-04-03)
 - G4AdjointAlongStepWeightCorrection,G4ContinuousGainOfEnergy,
    G4VEmAdjointModel - fixed initialisation of currentCouple 

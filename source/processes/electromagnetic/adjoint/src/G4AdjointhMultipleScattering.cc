@@ -93,7 +93,7 @@ void G4AdjointhMultipleScattering::InitialiseProcess(const G4ParticleDefinition*
   if (p->GetParticleType() == "adjoint_nucleus" || p->GetPDGMass() > GeV) {
     SetStepLimitType(fMinimal);
     SetLateralDisplasmentFlag(false);
-    SetBuildLambdaTable(false);
+    //SetBuildLambdaTable(false);
     if(p->GetParticleType() == "adjoint_nucleus") isIon = true;
   }
 
