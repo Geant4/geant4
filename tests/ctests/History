@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ctests-V09-05-07 14th June 2012 Pere Mato
+- Added test  example-ext-analysis-anaex03 
+
+ctests-V09-05-06 8st June 2012 Pere Mato
+- Removed test example-ext-g3tog4-cltog4 
+
+ctests-V09-05-05 1st June 2012 Andrea Dotti
+- Added reference to SimplifiedCalorimeter testing suite: note test definition is done
+  in SimplifiedCalorimeter
+
 ctests-V09-05-04 10th April 2012  Pere Mato
 - Added tests example-ext-persistency-p01-write and example-ext-persistency-p01-read
 

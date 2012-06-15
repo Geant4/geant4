@@ -131,6 +131,12 @@ GEANT4_ADD_TEST(example-ext-analysis-anaex02
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/analysis/AnaEx02
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/analysis/AnaEx02
                 BUILD AnaEx02 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+GEANT4_ADD_TEST(example-ext-analysis-anaex03 
+                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/analysis/AnaEx03/AnaEx03 
+                        ${CMAKE_SOURCE_DIR}/examples/extended/analysis/AnaEx03/AnaEx03.in
+                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/analysis/AnaEx03
+                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/analysis/AnaEx03
+                BUILD AnaEx03 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-ext-analysis-n03con 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/extended/analysis/N03Con/exampleN03Con 
                         ${CMAKE_SOURCE_DIR}/examples/extended/analysis/N03Con/exampleN03Con.in
@@ -210,13 +216,6 @@ if(GEANT4_USE_G3TOG4)
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/g3tog4/clGeometry
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/g3tog4/clGeometry
                   BUILD clGeometry ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
-  GEANT4_ADD_TEST(example-ext-g3tog4-cltog4 
-                  COMMAND ${CMAKE_BINARY_DIR}/examples/extended/g3tog4/cltog4/cltog4
-                          ${CMAKE_SOURCE_DIR}/examples/extended/g3tog4/data/testmodel.dat
-                          ${CMAKE_SOURCE_DIR}/examples/extended/g3tog4/cltog4/cltog4.in
-                  SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/g3tog4/cltog4
-                  BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/g3tog4/cltog4
-                  BUILD cltog4 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 endif()
 GEANT4_ADD_TEST(example-ext-geometry-olap 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/extended/geometry/olap/olapex
@@ -482,6 +481,9 @@ GEANT4_ADD_TEST(example-adv-medical_linac-build
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/medical_linac
                 BUILD ml2)
 
-
+#-------------------------------------------------------------------------------------------------
+#---Simplified Calorimeter-----------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------
+include( ${CMAKE_SOURCE_DIR}/SimplifiedCalorimeter/SimplifiedCalorimeter/CTestDefinitions.txt OPTIONAL)
 
 
