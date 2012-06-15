@@ -323,7 +323,9 @@ G4GoudsmitSaundersonMscModel::SampleCosineTheta(G4double lambdan, G4double scrA,
 						G4double &cost, G4double &sint)
 {
   G4double r1,tet,xi=0.;
-  G4double Qn1 = 2.* lambdan *scrA*((1.+scrA)*log(1.+1./scrA)-1.);
+  G4double Qn1 = 2.* lambdan;
+  if(scrA < 10.) { Qn1 *= scrA*((1.+scrA)*log(1.+1./scrA)-1.); }
+  else { Qn1*= (1.0 - 0.5/scrA - 0.5/(scrA*scrA)) ; }
   if (Qn1<0.001)
     {
       do{

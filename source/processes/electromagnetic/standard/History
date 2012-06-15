@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15 June 12: V.Ivanchenko (emstand-V09-05-28)
+- G4GoudsmitSaundersonMscModel - fixed precision lost providing FPE 
+
 14 June 12: V.Ivanchenko (emstand-V09-05-27)
 - G4ScreeningMottCrossSection - added extra protections against FPE
 
