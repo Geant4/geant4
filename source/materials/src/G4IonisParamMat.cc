@@ -47,6 +47,8 @@
 #include "G4DensityEffectData.hh"
 #include "G4NistManager.hh"
 #include "G4Pow.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 G4DensityEffectData* G4IonisParamMat::fDensityData = 0;
 

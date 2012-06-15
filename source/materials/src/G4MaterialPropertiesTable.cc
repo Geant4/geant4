@@ -49,6 +49,7 @@
 
 #include "globals.hh"
 #include "G4MaterialPropertiesTable.hh"
+#include "G4PhysicalConstants.hh"
 
 /////////////////
 // Constructors

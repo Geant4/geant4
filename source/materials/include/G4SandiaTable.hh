@@ -50,10 +50,13 @@
 #ifndef G4SANDIATABLE_HH
 #define G4SANDIATABLE_HH
 
+#include <assert.h>
+
 #include "G4OrderedTable.hh"      
 #include "G4ios.hh"
 #include "globals.hh"
-#include <assert.h>
+
+#include <CLHEP/Units/PhysicalConstants.h>
 
 class G4Material;
 
@@ -208,10 +211,10 @@ G4SandiaTable::GetSandiaCofPerAtom(G4int Z, G4int interval, G4int j)
 	      && j>=0 && j<5);
 
   G4int row = fCumulInterval[Z-1] + interval;
-  G4double x = fSandiaTable[row][0]*keV;
+  G4double x = fSandiaTable[row][0]*CLHEP::keV;
   if (j > 0) {
-    x = Z*amu/fZtoAratio[Z]*
-      (fSandiaTable[row][j]*cm2*std::pow(keV,G4double(j))/g);     
+    x = Z*CLHEP::amu/fZtoAratio[Z]*
+      (fSandiaTable[row][j]*CLHEP::cm2*std::pow(CLHEP::keV,G4double(j))/CLHEP::g);     
   }
   return x;
 }
@@ -248,8 +251,8 @@ G4SandiaTable::GetSandiaMatTable(G4int interval, G4int j)
 {
   assert (interval >= 0 && interval < fMaxInterval && j >= 0 && j < 5 );
   G4double     unitCof ;
-  if(j == 0)   unitCof = keV ;
-  else         unitCof = (cm2/g)*std::pow(keV,(G4double)j);                      
+  if(j == 0)   unitCof = CLHEP::keV ;
+  else         unitCof = (CLHEP::cm2/CLHEP::g)*std::pow(CLHEP::keV,(G4double)j);                      
   return ( (*(*fMatSandiaMatrix)[interval])[j] )*unitCof; 
 }
 
@@ -288,8 +291,8 @@ G4SandiaTable::GetSandiaMatTablePAI(G4int interval, G4int j)
   assert (interval >= 0 && interval < fMaxInterval && j >= 0 && j < 5 );
   if(!fMatSandiaMatrixPAI) ComputeMatSandiaMatrixPAI();
   G4double     unitCof ;
-  if(j == 0)   unitCof = keV ;
-  else         unitCof = (cm2/g)*std::pow(keV,(G4double)j);                      
+  if(j == 0)   unitCof = CLHEP::keV ;
+  else         unitCof = (CLHEP::cm2/CLHEP::g)*std::pow(CLHEP::keV,(G4double)j);                      
   return ( (*(*fMatSandiaMatrixPAI)[interval])[j] )*unitCof; 
 }
 
@@ -298,7 +301,7 @@ G4SandiaTable::GetSandiaMatTablePAI(G4int interval, G4int j)
 inline G4double
 G4SandiaTable::GetIonizationPot(G4int Z)
 {
-  return fIonizationPotentials[Z]*eV;
+  return fIonizationPotentials[Z]*CLHEP::eV;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -342,8 +345,8 @@ inline
 G4double G4SandiaTable::GetPhotoAbsorpCof(G4int i, G4int j) const
 {
   G4double     unitCof ;
-  if(j == 0)   unitCof = keV ;
-  else         unitCof = (cm2/g)*std::pow(keV,(G4double)j) ;
+  if(j == 0)   unitCof = CLHEP::keV ;
+  else         unitCof = (CLHEP::cm2/CLHEP::g)*std::pow(CLHEP::keV,(G4double)j) ;
    
   return  fPhotoAbsorptionCof[i][j]*unitCof ;
 }
@@ -354,4 +357,3 @@ G4double G4SandiaTable::GetPhotoAbsorpCof(G4int i, G4int j) const
 
 
 #endif 
-

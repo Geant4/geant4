@@ -48,6 +48,8 @@
 #include "G4StaticSandiaData.hh"
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 G4int    G4SandiaTable::fCumulInterval[101]  = {0};
 G4double G4SandiaTable::fSandiaCofPerAtom[4] = {0.0};

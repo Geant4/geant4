@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11-06-12 G.Cosmo (materials-V09-05-25)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
 26-05-12 V.Ivanchenko (materials-V09-05-24)
 - G4Element - M.Kesley identified a bug in Neff computation in ref01
 

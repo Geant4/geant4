@@ -69,6 +69,8 @@
 #include "G4NistMaterialBuilder.hh"
 #include "G4NistElementBuilder.hh"
 #include "G4Element.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

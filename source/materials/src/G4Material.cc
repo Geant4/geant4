@@ -72,10 +72,13 @@
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include <iomanip>
+
 #include "G4Material.hh"
 #include "G4UnitsTable.hh"
 #include "G4Pow.hh"
-#include <iomanip>
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 G4MaterialTable G4Material::theMaterialTable;
 

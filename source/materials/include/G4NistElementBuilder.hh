@@ -55,8 +55,10 @@
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "globals.hh"
 #include <vector>
+#include <CLHEP/Units/PhysicalConstants.h>
+
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -181,7 +183,7 @@ inline G4double G4NistElementBuilder::GetAtomicMass(G4int Z, G4int N)
   G4double mass = 0.0;
   G4int i = N - nFirstIsotope[Z];
   if(i >= 0 && i <nIsotopes[Z]) {
-    mass = massIsotopes[i + idxIsotopes[Z]] + Z*electron_mass_c2 - bindingEnergy[Z]; 
+    mass = massIsotopes[i + idxIsotopes[Z]] + Z*CLHEP::electron_mass_c2 - bindingEnergy[Z]; 
   }
   return mass;
 }

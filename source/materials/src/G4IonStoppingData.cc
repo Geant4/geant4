@@ -50,13 +50,15 @@
 // =========================================================================== 
 //
 
-#include "G4IonStoppingData.hh" 
-#include "G4PhysicsVector.hh"
-#include "G4LPhysicsFreeVector.hh"
 #include <fstream>
 #include <sstream>
 #include <iomanip>
 
+#include "G4IonStoppingData.hh" 
+#include "G4PhysicsVector.hh"
+#include "G4LPhysicsFreeVector.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 // #########################################################################
 

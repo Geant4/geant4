@@ -38,8 +38,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 
-#include "G4AtomicShells.hh"
 #include <assert.h>
+
+#include "G4AtomicShells.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -756,7 +758,7 @@ G4double
 G4AtomicShells::GetBindingEnergy(G4int Z, G4int ShellNb)
 {
   assert (Z>0 && Z<101 && ShellNb<fNumberOfShells[Z]);
-  return fBindingEnergies[fIndexOfShells[Z] + ShellNb]*CLHEP::eV;
+  return fBindingEnergies[fIndexOfShells[Z] + ShellNb]*eV;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -778,7 +780,7 @@ G4double G4AtomicShells::GetTotalBindingEnergy (G4int Z)
   G4int idxmax = idx +  fNumberOfShells[Z];
   G4double energy = 0.0;
   for (G4int i=idx; i<idxmax; ++i) {energy += fBindingEnergies[i];}
-  return energy*CLHEP::eV;
+  return energy*eV;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....

@@ -99,10 +99,12 @@
 #ifndef G4MATERIAL_HH
 #define G4MATERIAL_HH 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include <vector>
 #include <map>
+#include <CLHEP/Units/PhysicalConstants.h>
+
+#include "globals.hh"
+#include "G4ios.hh"
 #include "G4Element.hh"
 #include "G4MaterialPropertiesTable.hh"
 #include "G4IonisParamMat.hh"
@@ -126,8 +128,8 @@ public:  // with description
                    G4double  a,					//mass of mole
                    G4double  density, 				//density
                    G4State   state    = kStateUndefined,	//solid,gas
-                   G4double  temp     = STP_Temperature,	//temperature
-                   G4double  pressure = STP_Pressure);		//pressure
+                   G4double  temp     = CLHEP::STP_Temperature,	//temperature
+                   G4double  pressure = CLHEP::STP_Pressure);	//pressure
 
   //
   // Constructor to create a material from a combination of elements
@@ -137,8 +139,8 @@ public:  // with description
                    G4double  density, 				//density
                    G4int     nComponents,			//nbOfComponents
                    G4State   state    = kStateUndefined,	//solid,gas
-                   G4double  temp     = STP_Temperature,	//temperature
-                   G4double  pressure = STP_Pressure);		//pressure
+                   G4double  temp     = CLHEP::STP_Temperature,	//temperature
+                   G4double  pressure = CLHEP::STP_Pressure);	//pressure
 
   //
   // Constructor to create a material from the base material
@@ -147,8 +149,8 @@ public:  // with description
                    G4double  density, 				//density
              const G4Material* baseMaterial,			//base material
                    G4State   state    = kStateUndefined,	//solid,gas
-                   G4double  temp     = STP_Temperature,	//temperature
-                   G4double  pressure = STP_Pressure);		//pressure
+                   G4double  temp     = CLHEP::STP_Temperature,	//temperature
+                   G4double  pressure = CLHEP::STP_Pressure);	//pressure
 
   //
   // Add an element, giving number of atoms

@@ -67,6 +67,8 @@
 #define G4NistManager_h 1
 
 #include <vector>
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "globals.hh"
 #include "G4Material.hh"
 #include "G4NistElementBuilder.hh"
@@ -178,8 +180,8 @@ public:
   G4Material* BuildMaterialWithNewDensity(const G4String& name,
                                           const G4String& basename, 
 					  G4double density = 0.0,
-					  G4double temp = STP_Temperature,  
-					  G4double pres = STP_Pressure);  
+					  G4double temp = CLHEP::STP_Temperature,  
+					  G4double pres = CLHEP::STP_Pressure);  
 
   // Construct a G4Material from scratch by atome count
   // 
@@ -190,8 +192,8 @@ public:
 				  G4double dens, 
 				  G4bool isotopes=true,
 				  G4State   state    = kStateSolid,     
-				  G4double  temp     = STP_Temperature,  
-				  G4double  pressure = STP_Pressure); 
+				  G4double  temp     = CLHEP::STP_Temperature,  
+				  G4double  pressure = CLHEP::STP_Pressure); 
 
   // Construct a G4Material from scratch by fraction mass
   // 
@@ -202,8 +204,8 @@ public:
 				  G4double dens, 
 				  G4bool isotopes=true,
 				  G4State   state    = kStateSolid,     
-				  G4double  temp     = STP_Temperature,  
-				  G4double  pressure = STP_Pressure); 
+				  G4double  temp     = CLHEP::STP_Temperature,  
+				  G4double  pressure = CLHEP::STP_Pressure); 
 
   // Construct a gas G4Material from scratch by atome count
   // 
@@ -220,8 +222,8 @@ public:
                                   const std::vector<G4String>& elm,
                                   const std::vector<G4int>& nbAtoms,
                                   G4bool isotopes    = true,
-                                  G4double  temp     = STP_Temperature,
-                                  G4double  pressure = STP_Pressure);
+                                  G4double  temp     = CLHEP::STP_Temperature,
+                                  G4double  pressure = CLHEP::STP_Pressure);
 				      
   // Get number of G4Materials
   //
