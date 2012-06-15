@@ -41,6 +41,7 @@
 //   Use G4VelocityTable                     17 AUg. 2011 H.Kurashige
 
 #include "G4Track.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4ParticleTable.hh"
 #include "G4VelocityTable.hh"
 

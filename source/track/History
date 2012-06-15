@@ -18,6 +18,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- June 13, 2012 G.Cosmo (track-V09-05-11)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+- June 09, 2012 H.Kurashige (track-V09-05-10)
+- Fixed G4VelocityTable::Interpolation()
+
 - May 23, 2012 G.Cosmo (track-V09-05-09)
 - Fixed trivial cases of variable shadowing.
 

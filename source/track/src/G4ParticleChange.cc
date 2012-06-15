@@ -44,6 +44,8 @@
 // --------------------------------------------------------------
 
 #include "G4ParticleChange.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
 #include "G4TrackFastVector.hh"

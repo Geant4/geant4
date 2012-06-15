@@ -79,7 +79,7 @@ class G4VelocityTable
   size_t FindBinLocation(G4double theEnergy) const;
    // Find the bin# in which theEnergy belongs - pure virtual function
 
-  G4double Interpolation(G4int lastBin) const;
+  G4double Interpolation() const;
 
   G4double edgeMin;           // Energy of first point
   G4double edgeMax;           // Energy of the last point
@@ -107,7 +107,7 @@ class G4VelocityTable
 };
 
 inline
- G4double G4VelocityTable::Interpolation(G4int lbin) const
+ G4double G4VelocityTable::Interpolation() const
 {
   // Linear interpolation is used to get the value. If the give energy
   // is in the highest bin, no interpolation will be Done. Because 
@@ -115,11 +115,11 @@ inline
   // the following interpolation is valid even the current locBin=
   // numberOfBin-1. 
   
-  G4double intplFactor = (lastEnergy-binVector[lbin]) 
-     / (binVector[lbin + 1]-binVector[lbin]); // Interpol. factor
+  G4double intplFactor = (lastEnergy-binVector[lastBin]) 
+     / (binVector[lastBin + 1]-binVector[lastBin]); // Interpol. factor
   
-  return dataVector[lbin] +
-    ( dataVector[lbin + 1]-dataVector[lbin] ) * intplFactor;
+  return dataVector[lastBin] +
+    ( dataVector[lastBin + 1]-dataVector[lastBin] ) * intplFactor;
 }
 
 #endif

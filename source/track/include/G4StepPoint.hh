@@ -49,8 +49,10 @@
 #ifndef G4StepPoint_h
 #define G4StepPoint_h 1
 
+#include <cmath>                     // Include from 'system'
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "globals.hh"                // Include from 'global'
-#include <cmath>                    // Include from 'system'
 #include "G4Allocator.hh"            // Include from 'global'
 #include "G4ThreeVector.hh"          // Include from 'geometry'
 #include "G4VPhysicalVolume.hh"      // Include from 'geometry'

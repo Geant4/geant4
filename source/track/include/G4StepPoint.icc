@@ -126,7 +126,7 @@ inline
   
 inline
  G4double G4StepPoint::GetBeta() const
- {  return fVelocity/c_light; }
+ {  return fVelocity/CLHEP::c_light; }
     // Velocity of the track in unit of c(light velocity)
 
 inline
