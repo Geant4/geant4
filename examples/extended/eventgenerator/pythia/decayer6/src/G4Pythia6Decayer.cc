@@ -560,7 +560,7 @@ G4DecayProducts* G4Pythia6Decayer::ImportDecayProducts(const G4Track& track)
   Decay(pdgEncoding, p);
   G4int nofParticles = ImportParticles(fDecayProductsArray);
   
-  if ( fVerboseLevel > 1 ) {
+  if ( fVerboseLevel > 0 ) {
     G4cout << "nofParticles: " <<  nofParticles << G4endl;
   }  
 
@@ -582,7 +582,7 @@ G4DecayProducts* G4Pythia6Decayer::ImportDecayProducts(const G4Track& track)
       // pass to tracking final particles only;
       // skip neutrinos
 
-      if ( fVerboseLevel > 1 ) {
+      if ( fVerboseLevel > 0 ) {
         G4cout << "  " << i << "th particle PDG: " << pdg << "   ";
       }  
             
@@ -592,7 +592,7 @@ G4DecayProducts* G4Pythia6Decayer::ImportDecayProducts(const G4Track& track)
 
       if (dynamicParticle) {
 
-        if ( fVerboseLevel > 1 ) {
+        if ( fVerboseLevel > 0 ) {
           G4cout << "  G4 particle name: " 
                  << dynamicParticle->GetDefinition()->GetParticleName()
                  << G4endl;
@@ -605,7 +605,7 @@ G4DecayProducts* G4Pythia6Decayer::ImportDecayProducts(const G4Track& track)
       }
     }       
   }                             
-  if ( fVerboseLevel > 1 ) {
+  if ( fVerboseLevel > 0 ) {
     G4cout << "nofParticles for tracking: " <<  counter << G4endl;
   }  
      

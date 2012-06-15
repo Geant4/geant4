@@ -72,7 +72,7 @@ void P6DExtDecayerPhysics::ConstructProcess()
 
   // Create Geant4 external decayer
   G4Pythia6Decayer* extDecayer = new G4Pythia6Decayer();
-  extDecayer->SetVerboseLevel(2); 
+  extDecayer->SetVerboseLevel(1); 
      // The extDecayer will be deleted in G4Decay destructor
 
   theParticleIterator->reset();

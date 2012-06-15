@@ -1,3 +1,4 @@
+EXAMPLE extended/eventgenerator/pythia/decayer6
 COMMON_CLASSES_PATH ../../../common
 COMMON_CLASSES_LIST
 ExG4DetectorConstruction01

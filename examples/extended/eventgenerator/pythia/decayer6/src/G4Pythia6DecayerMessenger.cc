@@ -64,7 +64,7 @@ G4Pythia6DecayerMessenger::G4Pythia6DecayerMessenger(
     = new G4UIcmdWithAnInteger("/pythia6Decayer/verbose", this);
   fVerboseCmd->SetGuidance("Set Pythia6Decayer verbose level");
   fVerboseCmd->SetParameterName("VerboseLevel", false);
-  fVerboseCmd->SetRange("VerboseLevel >= 0 && VerboseLevel <= 5");
+  fVerboseCmd->SetRange("VerboseLevel >= 0 && VerboseLevel <= 1");
   fVerboseCmd->AvailableForStates(G4State_Idle);
 
   fDecayTypeCmd 
