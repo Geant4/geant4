@@ -58,6 +58,9 @@
 // 4 June 2004, J.P. Wellisch, CERN, Switzerland
 // resolving technical portability issues.
 //
+// 12 June 2012, A. Ribon, CERN, Switzerland
+// Fixing trivial warning errors of shadowed variables. 
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -116,26 +119,26 @@ G4double G4NuclearAbrasionGeometry::P ()
 // whether the projectile is larger or smaller than the target and these radii
 // in relation to the impact parameter.
 //
-  G4double P = 0.0;
+  G4double valueP = 0.0;
 
   if (rT > rP)
   {
-    if (rT-rP<=r && r<=rT+rP) P = 0.125*R*U*S - 0.125*(0.5*R*U+1.0)*T;
-    else                      P = -1.0;
+    if (rT-rP<=r && r<=rT+rP) valueP = 0.125*R*U*S - 0.125*(0.5*R*U+1.0)*T;
+    else                      valueP = -1.0;
   }
   else
   {
-    if (rP-rT<=r && r<=rP+rT) P = 0.125*R*U*S - 0.125*(0.5*std::sqrt(n/m)*U-
+    if (rP-rT<=r && r<=rP+rT) valueP = 0.125*R*U*S - 0.125*(0.5*std::sqrt(n/m)*U-
       (std::sqrt(1.0-m*m)/n - 1.0)*std::sqrt((2.0-m)/std::pow(m,5.0)))*T;
-    else                      P = (std::sqrt(1.0-m*m)/n-1.0)*std::sqrt(1.0-b*b/n/n);
+    else                      valueP = (std::sqrt(1.0-m*m)/n-1.0)*std::sqrt(1.0-b*b/n/n);
   }
 
-  if (!(P <= 1.0 && P>= -1.0))
+  if (!(valueP <= 1.0 && valueP>= -1.0))
   {
-    if (P > 1.0) P =  1.0;
-    else         P = -1.0;
+    if (valueP > 1.0) valueP =  1.0;
+    else         valueP = -1.0;
   }
-  return P;
+  return valueP;
 }
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -147,26 +150,26 @@ G4double G4NuclearAbrasionGeometry::F ()
 // whether the projectile is larger or smaller than the target and these radii
 // in relation to the impact parameter.
 //
-  G4double F = 0.0;
+  G4double valueF = 0.0;
 
   if (rT > rP)
   {
-    if (rT-rP<=r && r<=rT+rP) F = 0.75*R*S - 0.125*(3.0*R-1.0)*T;
-    else                      F = 1.0;
+    if (rT-rP<=r && r<=rT+rP) valueF = 0.75*R*S - 0.125*(3.0*R-1.0)*T;
+    else                      valueF = 1.0;
   }
   else
   {
-    if (rP-rT<=r && r<=rP+rT) F = 0.75*R*S - 0.125*(3.0*std::sqrt(n/m)-
+    if (rP-rT<=r && r<=rP+rT) valueF = 0.75*R*S - 0.125*(3.0*std::sqrt(n/m)-
       (1.0-std::pow(1.0-m*m,3.0/2.0))*std::sqrt(1.0-std::pow(1.0-m,2.0))/std::pow(m,3.0))*T;
-    else                      F = (1.0-std::pow(1.0-m*m,3.0/2.0))*std::sqrt(1.0-b*b/n/n);
+    else                      valueF = (1.0-std::pow(1.0-m*m,3.0/2.0))*std::sqrt(1.0-b*b/n/n);
   }
 
-  if (!(F <= 1.0 && F>= 0.0))
+  if (!(valueF <= 1.0 && valueF>= 0.0))
   {
-    if (F > 1.0) F = 1.0;
-    else         F = 0.0;
+    if (valueF > 1.0) valueF = 1.0;
+    else         valueF = 0.0;
   }
-  return F;
+  return valueF;
 }
 ////////////////////////////////////////////////////////////////////////////////
 //

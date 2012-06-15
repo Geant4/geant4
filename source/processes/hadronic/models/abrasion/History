@@ -13,10 +13,18 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-27-Sep-2011  Dennis Wright  (had-abrasion-V09-04-00)
+12-Jun-2012  Alberto Ribon  (had-abrasion-V09-05-00)
 -----------------------------------------------------
-- Migrate to integer Z and A.  File affected: 
-    G4WilsonAbrasionModel.cc
+- Fixed warnings of shadowed variables.  File affected: 
+    G4NuclearAbrasionGeometry.cc , G4WilsonAbrasionModel.cc
+
+08-Nov-2011  Dennis Wright  (had-abrasion-V09-04-01)
+----------------------------------------------------
+- add method ModelDescription()
+
+27-Sep-2011  Dennis Wright  (had-abrasion-V09-04-00)
+----------------------------------------------------
+- Migrate to integer Z and A in G4WilsonAbrasionModel.cc
 
 12-Nov-2010  Dennis Wright  (had-abrasion-V09-03-01)
 ----------------------------------------------------

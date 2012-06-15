@@ -75,6 +75,9 @@
 // algorithm not properly defined if either:
 //    rT > rP && rsq < rTsq - rPsq) or (rP > rT && rsq < rPsq - rTsq)
 //
+// 12 June 2012, A. Ribon, CERN, Switzerland
+// Fixing trivial warning errors of shadowed variables. 
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -100,8 +103,8 @@
 #include "globals.hh"
 
 
-G4WilsonAbrasionModel::G4WilsonAbrasionModel (G4bool useAblation1)
-  :G4HadronicInteraction("G4WilsonAbrasion")
+G4WilsonAbrasionModel::G4WilsonAbrasionModel(G4bool useAblation1)
+ :G4HadronicInteraction("G4WilsonAbrasion")
 {
   // Send message to stdout to advise that the G4Abrasion model is being used.
   PrintWelcomeMessage();
@@ -159,18 +162,26 @@ G4WilsonAbrasionModel::G4WilsonAbrasionModel (G4bool useAblation1)
   conserveMomentum = true;
 }
 
-
-G4WilsonAbrasionModel::G4WilsonAbrasionModel (G4ExcitationHandler *aExcitationHandler)
+void G4WilsonAbrasionModel::ModelDescription(std::ostream& outFile) const
 {
-//
-//
+  outFile << "G4WilsonAbrasionModel is a macroscopic treatment of\n"
+          << "nucleus-nucleus collisions using simple geometric arguments.\n"
+          << "The smaller projectile nucleus gouges out a part of the larger\n"
+          << "target nucleus, leaving a residual nucleus and a fireball\n"
+          << "region where the projectile and target intersect.  The fireball"
+          << "is then treated as a highly excited nuclear fragment.  This\n"
+          << "model is based on the NUCFRG2 model and is valid for all\n"
+          << "projectile energies between 70 MeV/n and 10.1 GeV/n. \n";
+}
+
+G4WilsonAbrasionModel::G4WilsonAbrasionModel(G4ExcitationHandler* aExcitationHandler)
+{
 // Send message to stdout to advise that the G4Abrasion model is being used.
-//
+
   PrintWelcomeMessage();
-//
-//
+
 // Set the default verbose level to 0 - no output.
-//
+
   verboseLevel = 0;
 //                      
 //
@@ -553,14 +564,14 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
   if (fragmentP != NULL)
   {
     G4LorentzVector lorentzVector = fragmentP->GetMomentum();
-    G4double m                    = lorentzVector.m();
+    G4double fragmentM            = lorentzVector.m();
     if (conserveMomentum)
       fragmentP->SetMomentum
-        (G4LorentzVector(pBalance,std::sqrt(pBalance.mag2()+m*m+1.0*eV*eV)));
+        (G4LorentzVector(pBalance,std::sqrt(pBalance.mag2()+fragmentM*fragmentM+1.0*eV*eV)));
     else
     {
-      G4double mg = fragmentP->GetGroundStateMass();
-      fragmentP->SetMomentum(lorentzVector.boost(-boost * mg/m));
+      G4double fragmentGroundStateM = fragmentP->GetGroundStateMass();
+      fragmentP->SetMomentum(lorentzVector.boost(-boost * fragmentGroundStateM/fragmentM));
     }
   }
 //
@@ -703,7 +714,7 @@ G4Fragment *G4WilsonAbrasionModel::GetAbradedNucleons (G4int Dabr, G4double A,
 //
 //
 // Initialise variables.  tau is the Fermi radius of the nucleus.  The variables
-// p..., C... and g(amma) are used to help sample the secondary nucleon
+// p..., C... and gamma are used to help sample the secondary nucleon
 // spectrum.
 //
   
@@ -716,7 +727,7 @@ G4Fragment *G4WilsonAbrasionModel::GetAbradedNucleons (G4int Dabr, G4double A,
   G4double C1   = 1.0;
   G4double C2   = 0.03;
   G4double C3   = 0.0002;
-  G4double g    = 90.0 * MeV;
+  G4double gamma = 90.0 * MeV;
   G4double maxn = C1 + C2 + C3;
 //
 //
@@ -746,7 +757,7 @@ G4Fragment *G4WilsonAbrasionModel::GetAbradedNucleons (G4int Dabr, G4double A,
       while (p <= 0.0) p = npK * pK * G4UniformRand();
       G4double psq = p * p;
       found = maxn * G4UniformRand() < C1*std::exp(-psq/p1sq/2.0) +
-        C2*std::exp(-psq/p2sq/2.0) + C3*std::exp(-psq/p3sq/2.0) + p/g/std::sinh(p/g);
+        C2*std::exp(-psq/p2sq/2.0) + C3*std::exp(-psq/p3sq/2.0) + p/gamma/std::sinh(p/gamma);
     }
 //
 //
