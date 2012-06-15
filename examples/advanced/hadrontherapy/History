@@ -8,6 +8,10 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
              History file of the Hadrontherapy application
          ====================================================
 
+13.06.2012 G.Cosmo;       Tag: hadrontherapy-V09-05-01
+	   - Use std::string::size_type for string length instead of int
+             in HadrontherapyMatrix::ion. Fixes compilation warning on gcc-4.7.
+
 08.12.2011 G.Folger;      Tag: hadrontherapy-V09-05-00
 	   - Added CMakeLists.txt file 
 
