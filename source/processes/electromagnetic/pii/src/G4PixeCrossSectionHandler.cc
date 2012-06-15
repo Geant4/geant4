@@ -584,9 +584,9 @@ void G4PixeCrossSectionHandler::ActiveElements()
 
   G4int nMaterials = G4Material::GetNumberOfMaterials();
 
-  for (G4int m=0; m<nMaterials; m++)
+  for (G4int mat=0; mat<nMaterials; mat++)
     {
-      const G4Material* material= (*materialTable)[m];
+      const G4Material* material= (*materialTable)[mat];
       const G4ElementVector* elementVector = material->GetElementVector();
       const G4int nElements = material->GetNumberOfElements();
 
@@ -652,9 +652,9 @@ G4PixeCrossSectionHandler::BuildCrossSectionsForMaterials(const G4DataVector& en
 
   G4int nMaterials = G4Material::GetNumberOfMaterials();
 
-  for (G4int m=0; m<nMaterials; m++)
+  for (G4int mat=0; mat<nMaterials; mat++)
     {
-      const G4Material* material = (*materialTable)[m];
+      const G4Material* material = (*materialTable)[mat];
       G4int nElements = material->GetNumberOfElements();
       const G4ElementVector* elementVector = material->GetElementVector();
       const G4double* nAtomsPerVolume = material->GetAtomicNumDensityVector();
