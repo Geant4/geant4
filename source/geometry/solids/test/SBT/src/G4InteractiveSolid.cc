@@ -30,6 +30,8 @@
 //
 
 #include "SBTrun.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4InteractiveSolid.hh"
 #include "G4UIdirectory.hh"

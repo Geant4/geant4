@@ -56,6 +56,8 @@
 #include <iomanip>
 
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4TwoVector.hh"
 #include "G4ThreeVector.hh"
@@ -1044,7 +1046,7 @@ void testDistanceToOutPV(G4int testCase)
     G4ThreeVector surfPt3= surface_points[3];
     // pointOnEdge = cornerAtop + ADdir3v * 0.2345678901;  // Surface points
     // G4ThreeVector vecAtoSu3 = ( surfPt3 - G4ThreeVector( 2749.0, 0.0, 0.0 ) ) ;
-    double s3x = ( surfPt3.x() - 2749.0 );
+    // double s3x = ( surfPt3.x() - 2749.0 );
 
     //****   Continue here ...   JA 2011.09.29
 #if 0

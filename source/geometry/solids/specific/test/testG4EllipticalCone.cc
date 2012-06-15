@@ -39,6 +39,8 @@
 #include "globals.hh"
 #include "geomdefs.hh"
 #include "G4GeometryTolerance.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4ThreeVector.hh"
 #include "G4EllipticalCone.hh"
@@ -211,9 +213,8 @@ int main()
 #endif 
   assert(testG4EllipticalCone()); 
     
-  G4bool what;
-  what = testDistanceToIn();
-  what = testDistanceToOut();
+  testDistanceToIn();
+  testDistanceToOut();
   G4cout << G4endl;
   G4cout << "*********************************************************************" <<G4endl;
   G4cout << "******************* END OF TEST - THANK YOU!!! **********************" <<G4endl;

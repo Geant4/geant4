@@ -35,6 +35,7 @@
 // -------------------------------------------------------------------
 
 #include "G4UniformMagField.hh"
+#include "G4PhysicalConstants.hh"
 
 G4UniformMagField::G4UniformMagField(const G4ThreeVector& FieldVector )
 {

@@ -46,6 +46,8 @@
 #include "globals.hh"
 #include "geomdefs.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "ApproxEqual.hh"
 

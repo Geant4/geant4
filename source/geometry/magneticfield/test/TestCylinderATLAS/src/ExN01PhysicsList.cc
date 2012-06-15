@@ -34,6 +34,8 @@
 
 #include "ExN01PhysicsList.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ProcessManager.hh"
 #include "G4ParticleTypes.hh"
 

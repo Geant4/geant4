@@ -39,6 +39,8 @@
 
 #include "G4MonopoleEq.hh"
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 void  
 G4MonopoleEq::SetChargeMomentumMass(G4double particleCharge, // e+ units

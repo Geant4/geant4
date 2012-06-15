@@ -35,6 +35,8 @@
 #include <fstream>
 #include <stdlib.h>
 #include "G4ios.hh" 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Polyhedra.hh"
 
 #include "globals.hh"

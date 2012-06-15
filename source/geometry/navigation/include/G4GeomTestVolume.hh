@@ -58,7 +58,7 @@ class G4GeomTestVolume
 
     G4GeomTestVolume( const G4VPhysicalVolume *theTarget,
                             G4GeomTestLogger *theLogger,
-                            G4double theTolerance=1E-4*mm );
+                            G4double theTolerance=1E-4 );  // mm
     ~G4GeomTestVolume();
       // Constructor and destructor
 

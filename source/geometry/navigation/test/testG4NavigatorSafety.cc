@@ -163,15 +163,14 @@ void computeApproxSafeties(G4VPhysicalVolume *pTopNode)
   {
     myNav.LocateGlobalPointAndSetup(*pos); 
     G4double safety = myNav.ComputeSafety(*pos);
-    std::pair<G4double,G4double> s(safety,0.);
-    kSafeties.push_back(s);
+    std::pair<G4double,G4double> sft(safety,0.);
+    kSafeties.push_back(sft);
   }
 }
 
 void computeExactSafeties(G4VPhysicalVolume *pTopNode)
 {
   G4int i=0;
-  G4VPhysicalVolume *pPhysVol=0;
 
   MyNavigator myNav;
   myNav.SetWorldVolume(pTopNode);
@@ -184,7 +183,7 @@ void computeExactSafeties(G4VPhysicalVolume *pTopNode)
 
   G4ThreeVector  center( 0., 0., 0. ); 
   G4cout << " Trial point= " << center << G4endl;
-  pPhysVol= myNav.LocateGlobalPointAndSetup( center ); 
+  myNav.LocateGlobalPointAndSetup( center ); 
   // G4double saf= myNav.ComputeSafety( center );  
 
   std::vector<G4ThreeVector>::const_iterator pos;
@@ -192,7 +191,7 @@ void computeExactSafeties(G4VPhysicalVolume *pTopNode)
   {
     G4cout << " Trial point= " << *pos << G4endl;
     // Relocate point
-    pPhysVol= myNav.LocateGlobalPointAndSetup(*pos); 
+    myNav.LocateGlobalPointAndSetup(*pos); 
 
     G4cout << G4endl;
     G4cout << " ============================================== " << G4endl;

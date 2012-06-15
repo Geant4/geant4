@@ -62,10 +62,12 @@
 //   constructor of the input arguments (i.e. circumscribed radius).
 // ----------------------------------------------------------------------
 
-#include "G4BREPSolidPolyhedra.hh"
-#include "G4FPlane.hh"
-
 #include <sstream>
+
+#include "G4BREPSolidPolyhedra.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4FPlane.hh"
 
 G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
                                                  G4double  start_angle,

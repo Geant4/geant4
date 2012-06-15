@@ -54,7 +54,7 @@ void
 {
    //   G4double fFieldConstant = 100 ;
    G4double a = 1.00 ;   // mm -> m 
-   G4double x = a*yTrack[0], y = a*yTrack[1], z = a*yTrack[2] ;
+   G4double x = a*yTrack[0], y = a*yTrack[1]; // z = a*yTrack[2] ;
    G4double x2 = x*x, y2 = y*y, r2 = x2 + y2 ;
    G4double r = std::sqrt(r2+a*a) ;
    G4double Br = fFieldConstant/r;

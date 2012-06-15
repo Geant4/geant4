@@ -30,6 +30,8 @@
 #ifndef BUILDCALORIMETER_HH
 #define BUILDCALORIMETER_HH
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4PVPlacement.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Box.hh"

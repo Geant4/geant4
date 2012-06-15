@@ -38,6 +38,8 @@
 
 #include "G4ios.hh"
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4Navigator.hh"
 
@@ -459,7 +461,6 @@ G4bool testG4Navigator1(G4VPhysicalVolume *pTopNode)
 G4bool testG4Navigator2(G4VPhysicalVolume *pTopNode)
 {
   G4Navigator myNav;
-  G4VPhysicalVolume *located;
   G4double Step,physStep,safety;
   G4ThreeVector* Hat = new G4ThreeVector[3];
   Hat[0] = G4ThreeVector(1,0,0);
@@ -475,7 +476,7 @@ G4bool testG4Navigator2(G4VPhysicalVolume *pTopNode)
   for( G4int ii = 0; ii < numberOfPoints; ii++ ) {
     if( fin.eof() ) break;
     fin >> posX >> posY >> posZ;
-    located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(posX,posY,posZ));
+    myNav.LocateGlobalPointAndSetup(G4ThreeVector(posX,posY,posZ));
     physStep=kInfinity;
     for( G4int jj = 0; jj < 3; jj++ ) {
       Step=myNav.ComputeStep(G4ThreeVector(posX,posY,posZ),Hat[jj],physStep,safety);
@@ -667,7 +668,8 @@ SolidType getSolidType( const G4String& st )
   }else if( st == "polyhedra" ){
     stype = g4polyhedra;
   } else {
-    G4Exception(" Input solid type can only be 'box', 'trd', 'tube', 'tubs', 'cons', 'polycone', 'polyhedra' " );
+    G4Exception("getSolidType()", "InvalidInput", FatalException,
+                "Input solid type can only be 'box', 'trd', 'tube', 'tubs', 'cons', 'polycone', 'polyhedra' ");
   }
   return stype;
 }
@@ -700,7 +702,9 @@ G4int checkNumberOfArguments( const G4String& st, G4int narg )
 
   if( !nok ){
     G4cerr << " Number Of arguments " << narg << " for solid type " << st << G4endl;
-    G4Exception(" Number of arguments incorrect for input solid type, please check method checkNumberOfArguments " );
+    G4Exception("checkNumberOfArguments()", "InvalidArguments", FatalException,
+                "Number of arguments incorrect for input solid type"
+                "Please check method checkNumberOfArguments()" );
   }
 
   return divTypeSet;
@@ -719,7 +723,8 @@ PVType getPVType( const G4String& pvt )
   }else if( pvt == "place") {
     vtype = pvPlacement; 
   } else {
-    G4Exception(" Input PV type can only be 'divis', 'repli' or 'place' " );
+    G4Exception("getPVType()", "InvalidType", FatalException,
+                "Input PV type can only be 'divis', 'repli' or 'place'" );
   }
   return vtype;
 }

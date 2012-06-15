@@ -39,6 +39,7 @@
 // --------------------------------------------------------------------
 
 #include "G4EnclosingCylinder.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4ReduciblePolygon.hh"
 #include "G4GeometryTolerance.hh"
 

@@ -48,6 +48,8 @@
 #ifndef __G4VTWISTSURFACE__
 #define __G4VTWISTSURFACE__
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4VSolid.hh"
 #include "geomdefs.hh"
 
@@ -377,7 +379,7 @@ G4bool DistanceSort( const Intersection &a, const Intersection &b)
 inline
 G4bool EqualIntersection( const Intersection &a, const Intersection &b)
 {
-  return ( ( a.xx - b.xx ).mag() < 1E-9*mm ) ;
+  return ( ( a.xx - b.xx ).mag() < 1E-9*CLHEP::mm ) ;
 }
 
 #include "G4VTwistSurface.icc"

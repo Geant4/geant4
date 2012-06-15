@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 13th, 2012  Gabriele Cosmo
+- Explicit inclusion of units and constants headers.
+- Fixed shadowing compilation warnings...
+
 February 2nd, 2012  John Apostolakis
 - Improved Exceptions in NTSTPhysicsList.cc
 

@@ -39,6 +39,7 @@
 // --------------------------------------------------------------------
 
 #include "G4PolyhedraSide.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4IntersectingCone.hh"
 #include "G4ClippablePolygon.hh"
 #include "G4AffineTransform.hh"

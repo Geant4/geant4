@@ -40,6 +40,8 @@
 
 #include "G4EqMagElectricField.hh"
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 void  
 G4EqMagElectricField::SetChargeMomentumMass(G4double particleCharge, // e+ units

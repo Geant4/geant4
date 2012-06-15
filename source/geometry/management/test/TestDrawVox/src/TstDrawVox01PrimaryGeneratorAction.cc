@@ -25,15 +25,17 @@
 //
 
 #include "TstDrawVox01PrimaryGeneratorAction.hh"
-
 #include "TstDrawVox01PrimaryGeneratorMessenger.hh"
+
+#include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4TransportationManager.hh"
-#include "globals.hh"
-#include "CLHEP/Random/RandFlat.h"
+#include <CLHEP/Random/RandFlat.h>
 
 TstDrawVox01PrimaryGeneratorAction::TstDrawVox01PrimaryGeneratorAction():
   generatorAction (standardGun),

@@ -43,6 +43,8 @@
 #ifndef G4UNIFORMGRAVITYFIELD_HH
 #define G4UNIFORMGRAVITYFIELD_HH
 
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "G4Types.hh"
 #include "G4ThreeVector.hh"
 #include "G4Field.hh"
@@ -54,7 +56,7 @@ class G4UniformGravityField : public G4Field
     G4UniformGravityField(const G4ThreeVector FieldVector );
       // A field with value equal to FieldVector.
 
-    G4UniformGravityField(const G4double gy = -9.81*m/s/s/c_light );
+    G4UniformGravityField(const G4double gy = -9.81*CLHEP::m/CLHEP::s/CLHEP::s/CLHEP::c_light );
       // Standard Gravitational field on earth's surface
 
     virtual ~G4UniformGravityField();

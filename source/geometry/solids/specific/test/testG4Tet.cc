@@ -39,6 +39,8 @@
 
 #include "globals.hh"
 #include "geomdefs.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "ApproxEqual.hh"
 
@@ -53,11 +55,7 @@ G4bool testG4Tet()
     G4ThreeVector pzero(0,0,0);
     G4ThreeVector pnt1(10.,0.,0.),pnt2(5.0,10.,0), pnt3(5.,5.,10.);
 
-    G4ThreeVector *pNorm,norm;
-    G4bool *pgoodNorm,goodNorm;
-
-    pNorm=&norm;
-    pgoodNorm=&goodNorm;
+    G4ThreeVector norm;
 
     G4bool  goodTet;
     G4Tet   t1( "Solid Tet #1", pzero, pnt1, pnt2, pnt3, &goodTet); 

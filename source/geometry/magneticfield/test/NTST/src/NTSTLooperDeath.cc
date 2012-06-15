@@ -44,6 +44,8 @@
 
 #include "NTSTLooperDeath.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4TransportationManager.hh"
 #include "G4FieldManager.hh"
 #include "G4MagneticField.hh"

@@ -42,6 +42,8 @@
 #include <iomanip>
 
 #include "G4ExtrudedSolid.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4TriangularFacet.hh"
 #include "G4QuadrangularFacet.hh"
 

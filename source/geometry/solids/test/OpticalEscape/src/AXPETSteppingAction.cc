@@ -32,6 +32,8 @@
 
 #include "G4SteppingManager.hh"
 #include "G4TrackVector.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "AXPETSteppingAction.hh"
 

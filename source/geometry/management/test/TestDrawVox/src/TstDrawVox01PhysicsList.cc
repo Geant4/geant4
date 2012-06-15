@@ -33,7 +33,11 @@
 //        add decay at rest          26  Feb. 1998 by H.Kurashige
 // ------------------------------------------------------------
 
+#include <iomanip>                
+
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "TstDrawVox01PhysicsList.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleWithCuts.hh"
@@ -49,8 +53,6 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4ios.hh"
-#include <iomanip>                
-
 
 TstDrawVox01PhysicsList::TstDrawVox01PhysicsList():  G4VUserPhysicsList()
 {
@@ -129,17 +131,19 @@ void TstDrawVox01PhysicsList::ConstructProcess()
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 
-#include "G4MultipleScattering.hh"
-
+#include "G4eMultipleScattering.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
 
+#include "G4MuMultipleScattering.hh"
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
 
+#include "G4hMultipleScattering.hh"
 #include "G4hIonisation.hh"
+
 void TstDrawVox01PhysicsList::ConstructEM()
 {
   theParticleIterator->reset();
@@ -158,15 +162,14 @@ void TstDrawVox01PhysicsList::ConstructEM()
     } else if (particleName == "e-") {
     //electron
       // Construct processes for electron
-      pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
+      pmanager->AddProcess(new G4eMultipleScattering(),-1,1,1);
       pmanager->AddProcess(new G4eIonisation(),-1,2,2);
       pmanager->AddProcess(new G4eBremsstrahlung(),-1,-1,3);
   
     } else if (particleName == "e+") {
     //positron
       // Construct processes for positron
-     pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
-     
+     pmanager->AddProcess(new G4eMultipleScattering(),-1,1,1);
      pmanager->AddProcess(new G4eIonisation(),-1,2,2);
      pmanager->AddProcess(new G4eBremsstrahlung(),-1,-1,3);      
      pmanager->AddProcess(new G4eplusAnnihilation(),0,-1,4);
@@ -175,7 +178,7 @@ void TstDrawVox01PhysicsList::ConstructEM()
                particleName == "mu-"    ) {
     //muon  
      // Construct processes for muon+
-     pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
+     pmanager->AddProcess(new G4MuMultipleScattering(),-1,1,1);
      pmanager->AddProcess(new G4MuIonisation(),-1,2,2);
      pmanager->AddProcess(new G4MuBremsstrahlung(),-1,-1,3);
      pmanager->AddProcess(new G4MuPairProduction(),-1,-1,4);       
@@ -184,7 +187,7 @@ void TstDrawVox01PhysicsList::ConstructEM()
       if ((particle->GetPDGCharge() != 0.0) && 
           (particle->GetParticleName() != "chargedgeantino")) {
      // all others charged particles except geantino
-       pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
+       pmanager->AddProcess(new G4hMultipleScattering(),-1,1,1);
        pmanager->AddProcess(new G4hIonisation(),-1,2,2);       
      }
     }

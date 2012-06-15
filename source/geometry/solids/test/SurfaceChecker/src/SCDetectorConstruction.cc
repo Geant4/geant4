@@ -31,6 +31,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 #include "SCDetectorConstruction.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "SCDetectorMessenger.hh"
 #include "SCMagneticField.hh"
 #include "SCTrackerSD.hh"

@@ -35,7 +35,7 @@
 // ----------------------------------------------------------------------
 
 #include "G4ToroidalSurface.hh"
-
+#include "G4PhysicalConstants.hh"
 
 G4ToroidalSurface::G4ToroidalSurface()
  : MinRadius(0.), MaxRadius(0.), TransMatrix(0), EQN_EPS(1e-9)

@@ -71,7 +71,7 @@ G4double G4Ellipse::GetSemiAxis2() const
 inline
 G4double G4Ellipse::GetPMax() const
 {
-  return twopi;
+  return CLHEP::twopi;
 }
 
 inline
@@ -88,7 +88,7 @@ G4double G4Ellipse::GetPPoint(const G4Point3D& pt) const
 {
   G4Point3D ptLocal= position.GetToPlacementCoordinates()*pt;
   G4double angle= std::atan2(ptLocal.y(), ptLocal.x()*ratioAxis2Axis1);
-  G4double r= (angle<0)? angle+twopi: angle;
+  G4double r= (angle<0)? angle+CLHEP::twopi: angle;
   return r+GetPShift();
 }
 

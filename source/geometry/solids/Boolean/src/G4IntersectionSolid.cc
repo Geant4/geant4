@@ -40,10 +40,12 @@
 //
 // --------------------------------------------------------------------
 
-#include "G4IntersectionSolid.hh"
 
 #include <sstream>
 
+#include "G4IntersectionSolid.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4VoxelLimits.hh"
 #include "G4VPVParameterisation.hh"
 

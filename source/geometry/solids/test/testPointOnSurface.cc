@@ -41,6 +41,8 @@
 
 #include "globals.hh"
 #include "geomdefs.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4TwoVector.hh"
 #include "G4ThreeVector.hh"
@@ -674,7 +676,6 @@ G4bool checkExtrudedSolid(G4int N)
 
 int main() 
 { 
-  G4bool what;    
   G4int N = 1000000;
   
   G4cout <<G4endl;
@@ -685,23 +686,23 @@ int main()
    
   G4cout <<G4endl<<G4endl;
 
-  what = checkBox(1000000);  
-  what = checkEllipsoid(1000000);    
-  what = checkHype(1000000);        
-  what = checkEllipticalTube(1000000);           
-  what = checkOrb(1000000);    
-  what = checkTorus(1000000);    
-  what = checkTubs(1000000);     
-  what = checkCons(1000000);                
-  what = checkTrap(1000000);          
-  what = checkPara(1000000);        
-  what = checkTrd(1000000);   
-  what = checkSphere(1000000);  
-  what = checkPolycone(1000000);           
-  what = checkTet(1000000);           
-  what = checkPolyhedra(1000000);      
-  what = checkEllipticalCone(1000000);
-  what = checkExtrudedSolid(1000000);
+  checkBox(1000000);  
+  checkEllipsoid(1000000);    
+  checkHype(1000000);        
+  checkEllipticalTube(1000000);           
+  checkOrb(1000000);    
+  checkTorus(1000000);    
+  checkTubs(1000000);     
+  checkCons(1000000);                
+  checkTrap(1000000);          
+  checkPara(1000000);        
+  checkTrd(1000000);   
+  checkSphere(1000000);  
+  checkPolycone(1000000);           
+  checkTet(1000000);           
+  checkPolyhedra(1000000);      
+  checkEllipticalCone(1000000);
+  checkExtrudedSolid(1000000);
   
   G4cout <<G4endl;
     

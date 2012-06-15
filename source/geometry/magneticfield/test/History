@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 13th, 2012 G.Cosmo
+-----------------------
+Fixed compilation errors and warnings (except in field* directories...).
+
 February  3rd,  2011 J.Apostolakis
 ----------------------------------
 testPropagateMagField.cc

@@ -55,12 +55,12 @@ public:
 public:
   virtual void SetParticleDefinition (G4ParticleDefinition* pDef)
     {particle_definition = pDef;}
-  virtual void SetPlow        (const G4double m)      { Plow  = m; }
-  virtual void SetPhigh       (const G4double m)      { Phigh = m; }
-  virtual void SetCoslow      (const G4double m)      { Coslow  = m; }
-  virtual void SetCoshigh     (const G4double m)      { Coshigh = m; }
-  virtual void SetPhilow      (const G4double m)      { Philow  = m; }
-  virtual void SetPhihigh     (const G4double m)      { Phihigh = m; }
+  virtual void SetPlow        (const G4double p)      { Plow  = p; }
+  virtual void SetPhigh       (const G4double p)      { Phigh = p; }
+  virtual void SetCoslow      (const G4double p)      { Coslow  = p; }
+  virtual void SetCoshigh     (const G4double p)      { Coshigh = p; }
+  virtual void SetPhilow      (const G4double p)      { Philow  = p; }
+  virtual void SetPhihigh     (const G4double p)      { Phihigh = p; }
   virtual void SetMeanVertex  (const G4ThreeVector v) { MeanVertex = v;}
   virtual void SetRmsVertex   (const G4ThreeVector v) { RmsVertex  = v;}
   virtual void SetPolarization(const G4ThreeVector v) { Polarization= v;}

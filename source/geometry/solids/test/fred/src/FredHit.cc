@@ -32,6 +32,8 @@
 //
 
 #include "FredHit.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Track.hh"
 #include "G4VVisManager.hh"
 #include "G4Circle.hh"

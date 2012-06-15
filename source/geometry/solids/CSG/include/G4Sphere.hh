@@ -70,6 +70,7 @@
 #ifndef G4Sphere_HH
 #define G4Sphere_HH
 
+#include <CLHEP/Units/PhysicalConstants.h>
 #include "G4CSGSolid.hh"
 
 class G4VisExtent;

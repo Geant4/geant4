@@ -43,6 +43,7 @@
 // ----------------------------------------------------------------------
 
 #include "G4FPlane.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4CompositeCurve.hh"
 
 

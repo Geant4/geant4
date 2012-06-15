@@ -70,6 +70,8 @@
 #ifndef G4TUBS_HH
 #define G4TUBS_HH
 
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "G4CSGSolid.hh"
 
 class G4Tubs : public G4CSGSolid

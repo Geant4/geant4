@@ -204,9 +204,9 @@ G4bool testG4PathFinder1(G4VPhysicalVolume *) // pTopNode)
      //==========  ------
     located= pathFinder->GetLocatedVolume( navId ); 
 
-    G4double t0=0.0, Ekin=100.00*MeV, restMass= 0.511*MeV, charge= -1, magDipole=0.0, s=0.0; 
+    G4double t0=0.0, Ekin=100.00*MeV, restMass= 0.511*MeV, charge= -1, magDipole=0.0, s0=0.0; 
     G4ThreeVector Spin(0.,0.,0.); 
-    G4FieldTrack  startFT( position, t0, dirUx, Ekin, restMass, charge, Spin, magDipole, s), 
+    G4FieldTrack  startFT( position, t0, dirUx, Ekin, restMass, charge, Spin, magDipole, s0), 
                   endFT('a');     //  Default values for return
 
     G4int stepNo=0; 
@@ -470,9 +470,8 @@ int main()
     G4VPhysicalVolume *myTopNode;
     myTopNode=BuildGeometry();	// Build the geometry
     G4GeometryManager::GetInstance()->CloseGeometry(false);
-    G4PathFinder* pPathFinder;
-
-    pPathFinder= setupPathFinder(myTopNode);
+    // G4PathFinder* pPathFinder =
+    setupPathFinder(myTopNode);
 
     testG4PathFinder1(myTopNode);
     // testG4Navigator2(myTopNode);

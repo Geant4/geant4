@@ -35,6 +35,7 @@
 // ----------------------------------------------------------------------
 
 #include "G4BREPSolidSphere.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4SphericalSurface.hh"
 
 G4BREPSolidSphere::G4BREPSolidSphere(const G4String& name,

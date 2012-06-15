@@ -54,7 +54,7 @@ inline
 G4double G4Orb::GetCubicVolume()
 {
   if(fCubicVolume != 0.) {;}
-  else   { fCubicVolume = 4*pi*fRmax*fRmax*fRmax/3.; }
+  else   { fCubicVolume = 4*CLHEP::pi*fRmax*fRmax*fRmax/3.; }
   return fCubicVolume;
 }
 
@@ -62,6 +62,6 @@ inline
 G4double G4Orb::GetSurfaceArea()
 {
   if(fSurfaceArea != 0.) {;}
-  else   { fSurfaceArea = 4*pi*fRmax*fRmax; }
+  else   { fSurfaceArea = 4*CLHEP::pi*fRmax*fRmax; }
   return fSurfaceArea;
 }

@@ -30,6 +30,7 @@
 
 #include "G4DELPHIMagField.hh"
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 
 G4DELPHIMagField::G4DELPHIMagField()
 {

@@ -36,6 +36,7 @@
 #include "G4ParameterisationPolyhedra.hh"
 
 #include <iomanip>
+#include "G4PhysicalConstants.hh"
 #include "G4ThreeVector.hh"
 #include "G4GeometryTolerance.hh"
 #include "G4RotationMatrix.hh"

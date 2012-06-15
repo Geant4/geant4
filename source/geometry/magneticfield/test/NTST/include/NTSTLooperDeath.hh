@@ -44,6 +44,8 @@
 #ifndef NTSTlooperDeath_hh
 #define NTSTLooperDeath_hh 1
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
 #include "G4VProcess.hh"
 
@@ -51,7 +53,7 @@ class NTSTLooperDeath : public G4VProcess
 {
 public:
   
-  NTSTLooperDeath( G4double theMinMomentum=5*MeV,
+  NTSTLooperDeath( G4double theMinMomentum=5*CLHEP::MeV,
 		   const char* name="NTSTLoopDeath",
 		   G4ProcessType type=fUserDefined );
 

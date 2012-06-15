@@ -35,6 +35,7 @@
 // ----------------------------------------------------------------------
 
 #include "G4Hyperbola.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4CurvePoint.hh"
 #include "G4GeometryTolerance.hh"
 

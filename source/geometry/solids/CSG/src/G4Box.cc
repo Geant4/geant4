@@ -42,6 +42,7 @@
 
 #include "G4Box.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
 #include "Randomize.hh"

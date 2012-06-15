@@ -71,7 +71,7 @@ G4ReplicaNavigation::VoxelLocate( const G4SmartVoxelHeader* pHead,
       break;
     case kPhi:
       coord = localPoint.phi();
-      if ( (coord<0) && (coord<targetHeaderMin) ) coord += 2.0*pi;
+      if ( (coord<0) && (coord<targetHeaderMin) ) coord += CLHEP::twopi;
       break;
     case kRadial3D:
     default:
@@ -111,7 +111,7 @@ G4ReplicaNavigation::VoxelLocate( const G4SmartVoxelHeader* pHead,
       // the last voxel to the zeroth and vice versa
       //                                        H.Boie, April 30, 2001  
       if ( (targetHeaderAxis==kPhi)
-           && (targetHeaderMin==0) && (targetHeaderMax==2*pi) )
+           && (targetHeaderMin==0) && (targetHeaderMax==CLHEP::twopi) )
       {
         if ( targetNodeNo<0 ) 
           targetNodeNo = targetHeaderNoSlices-1;

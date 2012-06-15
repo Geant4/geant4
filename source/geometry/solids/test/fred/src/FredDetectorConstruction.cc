@@ -29,6 +29,8 @@
 // Implementation of fred's detector
 //
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "FredDetectorConstruction.hh"
 #include "FredSensitive.hh"
 #include "FredSensMother.hh"

@@ -46,7 +46,7 @@
 
 
 #include "CurveTestFunction.hh"
-
+#include "G4PhysicalConstants.hh"
 
 int main()
 {

@@ -26,6 +26,8 @@
 //
 //geotest.cc
 //Geant4 includes
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"

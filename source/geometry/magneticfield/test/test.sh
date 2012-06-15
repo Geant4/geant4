@@ -21,7 +21,7 @@ $MAKE G4TARGET=$target   || exit
 echo  "Executing $target ..."
 for n in 1 2 3 4 5 6 7 8 9 10 11 12 13
 do
-  echo "Executing with stepper choice $n .. \c"
+  echo "Executing with stepper choice $n ..."
   $BINDIR/$target $n  > $target.newout$n \
 		     2> $target.newerr$n
   echo  ".. difference from expected output: "
@@ -39,7 +39,7 @@ $MAKE G4TARGET=$target  || exit
 echo  "Executing $target ..."
 for n in 1 2 3 4 8
 do
-  echo "Executing with stepper choice $n .. \c"
+  echo "Executing with stepper choice $n ..."
   $BINDIR/$target $n  > $target.newout$n \
 		     2> $target.newerr$n
   echo  ".. difference from expected output: "
@@ -59,7 +59,7 @@ do
   echo  "Executing $target ..."
   for n in  4 3 2 1 0
   do
-    echo "Executing with stepper choice $n .. \c"
+    echo "Executing with stepper choice $n ..."
     $BINDIR/$target $n  > $target.newout$n \
 		       2> $target.newerr$n
     echo  ".. difference from expected output: "

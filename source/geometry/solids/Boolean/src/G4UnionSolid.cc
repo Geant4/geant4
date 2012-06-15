@@ -38,10 +38,11 @@
 //
 // --------------------------------------------------------------------
 
-#include "G4UnionSolid.hh"
-
 #include <sstream>
 
+#include "G4UnionSolid.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4VoxelLimits.hh"
 #include "G4VPVParameterisation.hh"
 #include "G4GeometryTolerance.hh"

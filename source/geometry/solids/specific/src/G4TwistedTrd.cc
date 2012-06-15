@@ -41,6 +41,7 @@
 // --------------------------------------------------------------------
 
 #include "G4TwistedTrd.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Polyhedron.hh"
 
 G4TwistedTrd::G4TwistedTrd( const G4String& pName,

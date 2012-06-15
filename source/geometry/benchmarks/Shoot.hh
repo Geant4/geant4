@@ -31,6 +31,8 @@
 #define SHOOT_HH
 
 #include "G4Timer.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4Navigator.hh"
 #include "G4ThreeVector.hh"
@@ -176,7 +178,6 @@ void MagneticShoot(const G4int numShoot,
 	{
 	  G4double physStep= kInfinity; // 2.5*mm ;
 	  G4double safety = 1.0*m;
-	  G4double Step = 0.0*m;
 	  /*
 	  G4cout << "Loc = " << partLoc << " Vec = " << Vec << G4endl ;
 	  G4cout << "Safety = " << safety << G4endl ;
@@ -184,7 +185,8 @@ void MagneticShoot(const G4int numShoot,
 	  
 	  G4FieldTrack initTrack(partLoc,pVec,0.,kineticEnergy,
 	                         proton_mass_c2,velocity,labTof,properTof,0);
-	  Step=pMagFieldPropagator->ComputeStep(initTrack,physStep,safety);
+	  // G4double Step=
+          pMagFieldPropagator->ComputeStep(initTrack,physStep,safety);
 
 	  myNav->SetGeometricallyLimitedStep();
 	  

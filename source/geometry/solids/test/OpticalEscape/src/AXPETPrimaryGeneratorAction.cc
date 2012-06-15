@@ -33,6 +33,8 @@
 #include "AXPETPrimaryGeneratorAction.hh"
 #include "AXPETPrimaryGeneratorMessenger.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 #include "G4Event.hh"

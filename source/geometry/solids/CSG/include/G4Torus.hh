@@ -96,6 +96,8 @@
 #ifndef G4Torus_HH
 #define G4Torus_HH
 
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "G4CSGSolid.hh"
 
 class G4Torus : public G4CSGSolid

@@ -345,9 +345,9 @@ G4bool testExitNormal(G4VPhysicalVolume *pTopNode,
        assert(safety>=0);
 
        newPoint= initPoint + Step * direction; 
-       G4ThreeVector localNormal = myNav.GetLocalExitNormal(&valid); 
+       localNormal = myNav.GetLocalExitNormal(&valid); 
        assert(valid);
-       G4ThreeVector globalNormal = myNav.GetLocalToGlobalTransform().TransformAxis(localNormal);
+       globalNormal = myNav.GetLocalToGlobalTransform().TransformAxis(localNormal);
       
        if( 0 ) { // globalNormal != G4ThreeVector(1.0,0.0,0.0) ){
          G4cout << " **Problem** with pre-relocation normals: " << G4endl;

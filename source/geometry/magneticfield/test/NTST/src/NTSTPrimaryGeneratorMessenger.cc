@@ -44,7 +44,7 @@ NTSTPrimaryGeneratorMessenger::NTSTPrimaryGeneratorMessenger()
   ChooseCmd = new G4UIcmdWithAString("/gen/choose",this);
   ChooseCmd->SetGuidance("Choose the generator to use.");
   ChooseCmd->SetDefaultValue("gun");
-  G4String Names("gun evt");
+  Names = "gun evt";
   //  ChooseCmd->SetCandidates(Names);
   //  ChooseCmd->AvailableForStates(PreInit,Idle);
   SetNewValue(ChooseCmd, "gun");

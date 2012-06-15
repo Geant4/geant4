@@ -39,6 +39,7 @@
 // -------------------------------------------------------------------
 
 #include "G4ExactHelixStepper.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4ThreeVector.hh"
 #include "G4LineSection.hh"
 

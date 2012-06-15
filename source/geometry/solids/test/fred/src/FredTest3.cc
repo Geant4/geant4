@@ -29,6 +29,8 @@
 // Implementation of fred's third geometry tester
 //
 #include "FredTest3.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "Randomize.hh"
 #include "G4VSolid.hh"

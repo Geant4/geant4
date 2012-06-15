@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13-Jun-2012 - Gabriele Cosmo
+- Fixed compilation errors and warnings after recent migrations...
+
 08-Jan-2002, Gabriele Cosmo
 - Fixed warnings and updated to release 4.0.
 

@@ -869,14 +869,10 @@ double DistanceToTorus (Intersect * Inter)
 
   G4double NewL[NBPOINT];
   int valid[] = {1,1,1,1,1,1} ;
-  int j;
 
   		double x,y,z,dx,dy,dz;
 		double Rmax,Rmin;
-		double phi,deltaphi;
-
-		j = 0;
-
+/*		double phi,deltaphi; */
 
   		dx = Inter->dx;
 		dy = Inter->dy;
@@ -886,8 +882,8 @@ double DistanceToTorus (Intersect * Inter)
 		z = Inter->z;
 		Rmax = Inter->R0 ;
 		Rmin = Inter->R1 ;
-		phi = Inter->phi;
-		deltaphi = Inter->deltaphi;
+/*		phi = Inter->phi;
+		deltaphi = Inter->deltaphi; */
 
 
   /*** Compute Intervals  from Bounding Volume ***/
@@ -1113,7 +1109,7 @@ double DistanceToTorus (Intersect * Inter)
 	  */
 	  
 	  return 100000.0;//guess;
-	  exit(1);
+//	  exit(1);
 										
 	}
 	return NOINTERSECTION;

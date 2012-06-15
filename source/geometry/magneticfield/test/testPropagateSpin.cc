@@ -38,6 +38,8 @@
 
 // Global defs
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4Navigator.hh"
 
@@ -451,7 +453,7 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume*,     // *pTopNode,
 	  //       --------
 	  G4FieldTrack  EndFieldTrack= pMagFieldPropagator->GetEndState();
 	  G4ThreeVector EndSpin=         EndFieldTrack.GetSpin();
-          G4ThreeVector EndUnitMomentum  = EndFieldTrack.GetMomentumDir();
+          EndUnitMomentum  = EndFieldTrack.GetMomentumDir();
 
 //          G4cout << " EndPosition " << EndPosition << G4endl;
 //          G4cout << " EndUnitMomentum " << EndUnitMomentum << G4endl;

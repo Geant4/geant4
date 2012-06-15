@@ -43,6 +43,7 @@
 #include <cmath>
 
 #include "G4TwistTrapParallelSide.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4JTPolynomialSolver.hh"
 
 //=====================================================================

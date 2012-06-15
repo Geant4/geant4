@@ -29,11 +29,13 @@
 //
 // --------------------------------------------------------------
 
+#include <sstream>
+
 #include "TstVADetectorConstruction.hh"
 #include "TstVADetectorMessenger.hh"
 
-#include <sstream>
-
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"

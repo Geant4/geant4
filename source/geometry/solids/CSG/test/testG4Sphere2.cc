@@ -44,6 +44,8 @@
 #include "globals.hh"
 #include "geomdefs.hh"
 #include "G4GeometryTolerance.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "ApproxEqual.hh"
 
@@ -124,12 +126,7 @@ int main(void)
                 vmxy(-1/std::sqrt(2.),1/std::sqrt(2.),0);
   G4ThreeVector v345exit1(-0.8,0.6,0),v345exit2(0.8,0.6,0),
 	        v345exit3(0.6,0.8,0);
-  G4ThreeVector norm,*pNorm;
-  G4bool *pgoodNorm,goodNorm;
-
-  pNorm=&norm;
-  pgoodNorm=&goodNorm;
-
+  G4ThreeVector norm;
 
   G4bool checkPoint( const G4Sphere& pSph, G4ThreeVector origin,
                            G4double  d,    G4ThreeVector dir,    EInside  exp); 

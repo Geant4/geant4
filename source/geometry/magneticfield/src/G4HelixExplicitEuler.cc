@@ -37,6 +37,7 @@
 // -------------------------------------------------------------------
 
 #include "G4HelixExplicitEuler.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4ThreeVector.hh"
 
 

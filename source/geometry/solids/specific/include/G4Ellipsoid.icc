@@ -91,11 +91,11 @@ G4double G4Ellipsoid::GetCubicVolume()
     if ((zTopCut > +zSemiAxis && zBottomCut < -zSemiAxis)
      || (zTopCut == 0 && zBottomCut == 0) )
     {
-      fCubicVolume = (4./3.)*pi*xSemiAxis*ySemiAxis*zSemiAxis;
+      fCubicVolume = (4./3.)*CLHEP::pi*xSemiAxis*ySemiAxis*zSemiAxis;
     }
     else 
     {   
-      fCubicVolume = pi*xSemiAxis*ySemiAxis
+      fCubicVolume = CLHEP::pi*xSemiAxis*ySemiAxis
                    * ((zTopCut-std::pow(zTopCut,3.)/(3.*sqr(zSemiAxis)))
                    - (zBottomCut-std::pow(zBottomCut,3.)/(3.*sqr(zSemiAxis))));
     }

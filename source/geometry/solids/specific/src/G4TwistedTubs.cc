@@ -44,6 +44,7 @@
 
 #include "G4TwistedTubs.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4GeometryTolerance.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"

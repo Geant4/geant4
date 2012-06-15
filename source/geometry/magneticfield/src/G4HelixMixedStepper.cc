@@ -39,6 +39,7 @@
 // -------------------------------------------------------------------------
 
 #include "G4HelixMixedStepper.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4ClassicalRK4.hh"
 #include "G4CashKarpRKF45.hh"
 #include "G4SimpleRunge.hh"

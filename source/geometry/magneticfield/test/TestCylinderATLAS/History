@@ -17,10 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 13th, 2012  G.Cosmo 
+------------------------
+- Fixed compilation errors and warnings...
+
 January 5th, 2012  J.Apostolakis 
 ---------------------------------
 - Committed as I found it in my directory.
   Originally this was a copy of code developed by Tatiana Nikitina.
-
   I believe that this is not changed from the copy she gave me (tbc.)
 

@@ -35,6 +35,7 @@
 // ----------------------------------------------------------------------
 
 #include "G4SphericalSurface.hh"
+#include "G4PhysicalConstants.hh"
 
 G4SphericalSurface::G4SphericalSurface()
   : G4Surface(), radius(1.0), phi_1(0.0), phi_2(2*pi),

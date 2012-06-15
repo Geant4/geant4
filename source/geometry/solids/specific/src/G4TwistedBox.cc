@@ -41,6 +41,7 @@
 // --------------------------------------------------------------------
 
 #include "G4TwistedBox.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Polyhedron.hh"
 
 G4TwistedBox::G4TwistedBox( const G4String& pName,

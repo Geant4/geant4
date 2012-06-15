@@ -40,6 +40,8 @@
 #include "G4ElectroMagneticField.hh"
 #include "G4ThreeVector.hh"
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 G4EqEMFieldWithEDM::G4EqEMFieldWithEDM(G4ElectroMagneticField *emField )
       : G4EquationOfMotion( emField ), fElectroMagCof(0.), fMassCof(0.),

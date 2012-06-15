@@ -46,6 +46,7 @@
 
 
 #include "G4Axis2Placement3D.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4Curve.hh"
 #include "G4Line.hh"
 #include "G4CircularCurve.hh"

@@ -33,6 +33,9 @@
 #include "AXPETDetectorConstruction.hh"
 #include "AXPETDetectorMessenger.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 //Solids
 #include "G4Box.hh"
 #include "G4Tubs.hh"

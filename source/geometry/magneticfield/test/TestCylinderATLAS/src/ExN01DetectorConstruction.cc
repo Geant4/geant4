@@ -30,6 +30,9 @@
 
 #include "ExN01DetectorConstruction.hh"
 
+#include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Material.hh"
 #include "G4Box.hh"
 #include "G4Tubs.hh"
@@ -37,7 +40,6 @@
 #include "G4ThreeVector.hh"
 #include "G4PVPlacement.hh"
 #include "G4UnitsTable.hh"
-#include "globals.hh"
 
 ExN01DetectorConstruction::ExN01DetectorConstruction()
  :  experimentalHall_log(0), tracker_log(0),
@@ -60,16 +62,8 @@ G4VPhysicalVolume* ExN01DetectorConstruction::Construct()
   G4double density;
   G4double pressure;
   G4double temperature;
-  G4int ncomponents, natoms;
-  G4double abundance, fractionmass;
-  G4Material* Ar = 
-  new G4Material("ArgonGas", z= 18., a= 39.95*g/mole, density= 1.782*mg/cm3);
-
-  G4Material* Al = 
-  new G4Material("Aluminum", z= 13., a= 26.98*g/mole, density= 2.7*g/cm3);
-
-  G4Material* Pb = 
-  new G4Material("Lead", z= 82., a= 207.19*g/mole, density= 11.35*g/cm3);
+  G4int ncomponents;
+  G4double fractionmass;
 //
 // What about vacuum ?  Vacuum is an ordinary gas with very low density
 //

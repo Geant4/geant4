@@ -33,6 +33,8 @@
 //        
 // 
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Sc01DetectorConstruction.hh"
 #include "Sc01DetectorMessenger.hh"
 
@@ -303,7 +305,7 @@ Sc01DetectorConstruction::SelectDetector( const G4String& val )
   new G4PVPlacement(0,G4ThreeVector(0*cm, 0*cm, 0*cm),
 		    "FiberClad",logicFiber,PhysicalVolume,false,0);
 
-  G4VPhysicalVolume * aVolume_phys2 =
+  // G4VPhysicalVolume * aVolume_phys2 =
   new G4PVPlacement(0,G4ThreeVector(0*cm, 0*cm, 0*cm),
 		    "FiberCore",logicCore,aVolume_phys1,false,0);
 
@@ -360,14 +362,16 @@ Sc01DetectorConstruction::SelectDetector( const G4String& val )
   // ------------ Surfaces definition ------------------
 
 //  G4LogicalBorderSurface* BorderSurfaces[12];   
-  G4LogicalBorderSurface* BorderSurfaces[2];   
+//  G4LogicalBorderSurface* BorderSurfaces[2];   
   
-BorderSurfaces[0] = new G4LogicalBorderSurface("VolumeSurface",
+// BorderSurfaces[0] =
+   new G4LogicalBorderSurface("VolumeSurface",
                                PhysicalVolume,
                                aVolume_phys1,
                                aSurface);
 
-  BorderSurfaces[6] = new G4LogicalBorderSurface("VolumeSurface",
+// BorderSurfaces[6] =
+   new G4LogicalBorderSurface("VolumeSurface",
                                aVolume_phys1,
                                PhysicalVolume,
                                aSurface);

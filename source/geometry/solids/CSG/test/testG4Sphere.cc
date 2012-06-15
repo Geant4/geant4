@@ -43,6 +43,8 @@
 #include <cmath>
 #include "globals.hh"
 #include "geomdefs.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "ApproxEqual.hh"
 #include "G4GeometryTolerance.hh"

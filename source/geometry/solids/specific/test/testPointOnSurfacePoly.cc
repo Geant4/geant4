@@ -41,6 +41,8 @@
 
 #include "globals.hh"
 #include "geomdefs.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4TwoVector.hh"
 #include "G4ThreeVector.hh"
@@ -210,7 +212,6 @@ G4bool checkPolyhedra(G4int N)
 
 int main() 
 { 
-  G4bool what;    
   //G4int N = 10000000;
     G4int N = 50000;
   
@@ -222,8 +223,8 @@ int main()
    
   G4cout <<G4endl<<G4endl;
 
-   what = checkPolycone(N);           
-  // what = checkPolyhedra(N);      
+  checkPolycone(N);           
+  // checkPolyhedra(N);      
   
   G4cout <<G4endl;
     

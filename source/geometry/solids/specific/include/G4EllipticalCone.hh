@@ -78,6 +78,8 @@
 #ifndef G4EllipticalCone_HH
 #define G4EllipticalCone_HH
 
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "G4VSolid.hh"
 
 class G4EllipticalCone : public G4VSolid

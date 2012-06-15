@@ -33,6 +33,8 @@
 #include "globals.hh"
 #include "TEx01PhysicsList.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Transportation.hh"
 #include "G4Geantino.hh"
 #include "G4Proton.hh"

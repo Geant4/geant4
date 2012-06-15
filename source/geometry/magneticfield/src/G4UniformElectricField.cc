@@ -36,6 +36,7 @@
 // -------------------------------------------------------------------
 
 #include "G4UniformElectricField.hh"
+#include "G4PhysicalConstants.hh"
 
 G4UniformElectricField::G4UniformElectricField(const G4ThreeVector FieldVector )
 {

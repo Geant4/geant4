@@ -35,6 +35,7 @@
 // ----------------------------------------------------------------------
 
 #include "G4FConicalSurface.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4Sort.hh"
 #include "G4CircularCurve.hh"
 

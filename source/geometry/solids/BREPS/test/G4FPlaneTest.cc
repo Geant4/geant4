@@ -33,6 +33,7 @@
 // Created by L. Broglia, 22 October 1998
 
 #include "G4FPlane.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4Surface.hh"
 #include "G4Axis2Placement3D.hh"
 #include "G4GeometryTolerance.hh"

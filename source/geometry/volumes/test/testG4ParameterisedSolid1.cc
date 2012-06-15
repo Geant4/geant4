@@ -87,13 +87,15 @@ class BoxesAndSpheres : public G4VPVParameterisation
        if( n >= 0 ) {
           mySolid = fBox;
        }else{
-	  G4Exception(" Your Boxes+Spheres replica number was out of range");
+	  G4Exception("ComputeSolid()", "InvalidSetup", FatalException,
+                      " Your Boxes+Spheres replica number was out of range");
        }
     }else{
        if( n < fNumBoxes + fNumSpheres ) {
           mySolid = fSphere;
        }else{
-	  G4Exception(" Your Boxes+Spheres replica number was out of range");
+	  G4Exception("ComputeSolid()", "InvalidSetup", FatalException,
+                      " Your Boxes+Spheres replica number was out of range");
        }
     }
     return mySolid;

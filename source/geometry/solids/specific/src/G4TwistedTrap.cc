@@ -41,6 +41,7 @@
 // --------------------------------------------------------------------
 
 #include "G4TwistedTrap.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Polyhedron.hh"
 
 G4TwistedTrap::G4TwistedTrap( const G4String &pName,

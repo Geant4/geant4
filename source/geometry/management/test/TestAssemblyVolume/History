@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13-Jun-2012 - Gabriele Cosmo
+  Fixed compilation errors and warnings after recent migrations...
+
 09-Nov-2005 - Gabriele Cosmo
   Migrated to <sstream> from deprecated <strstream>.
 

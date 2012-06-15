@@ -45,6 +45,8 @@
 #ifndef G4Orb_HH
 #define G4Orb_HH
 
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "G4CSGSolid.hh"
 
 class G4Orb : public G4CSGSolid

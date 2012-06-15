@@ -29,6 +29,8 @@
 // Implementation of voxel solid tests
 //
 #include "FredVoxelTest.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4VSolid.hh"
 
 #include "G4VVisManager.hh"

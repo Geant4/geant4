@@ -44,41 +44,39 @@ NTSTRotationMatrix::~NTSTRotationMatrix()
 }
 
 void 
-NTSTRotationMatrix::SetRotationMatrixByCol(const G4ThreeVector& col1,
-					   const G4ThreeVector& col2,
-					   const G4ThreeVector& col3)
+NTSTRotationMatrix::SetRotationMatrixByCol(const G4ThreeVector& c1,
+					   const G4ThreeVector& c2,
+					   const G4ThreeVector& c3)
 {
-  rxx = col1.x();
-  ryx = col1.y();
-  rzx = col1.z();
+  rxx = c1.x();
+  ryx = c1.y();
+  rzx = c1.z();
   
-  rxy = col2.x();
-  ryy = col2.y();
-  rzy = col2.z();
+  rxy = c2.x();
+  ryy = c2.y();
+  rzy = c2.z();
   
-  rxz = col3.x();
-  ryz = col3.y();
-  rzz = col3.z();
-  
+  rxz = c3.x();
+  ryz = c3.y();
+  rzz = c3.z();
 }
 
 void 
-NTSTRotationMatrix::SetRotationMatrixByRow(const G4ThreeVector& row1,
-					   const G4ThreeVector& row2,
-					   const G4ThreeVector& row3)
+NTSTRotationMatrix::SetRotationMatrixByRow(const G4ThreeVector& r1,
+					   const G4ThreeVector& r2,
+					   const G4ThreeVector& r3)
 {
-  rxx = row1.x();
-  rxy = row1.y();
-  rxz = row1.z();
+  rxx = r1.x();
+  rxy = r1.y();
+  rxz = r1.z();
   
-  ryx = row2.x();
-  ryy = row2.y();
-  ryz = row2.z();
+  ryx = r2.x();
+  ryy = r2.y();
+  ryz = r2.z();
   
-  rzx = row3.x();
-  rzy = row3.y();
-  rzz = row3.z();
-  
+  rzx = r3.x();
+  rzy = r3.y();
+  rzz = r3.z();
 }
 
 

@@ -68,6 +68,8 @@
 #ifndef G4Cons_HH
 #define G4Cons_HH
 
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "G4CSGSolid.hh"
 
 class G4Cons : public G4CSGSolid

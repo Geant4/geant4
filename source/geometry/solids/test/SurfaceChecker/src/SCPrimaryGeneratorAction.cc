@@ -31,6 +31,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "SCPrimaryGeneratorAction.hh"
 #include "SCDetectorConstruction.hh"

@@ -73,9 +73,9 @@ void Sc01EventAction::EndOfEventAction(const G4Event* evt)
 {
   // G4cout << ">>> End Event " << evt->GetEventID() << G4endl;
 
-  G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
-  G4int n_trajectories = 0;
-  if(trajectoryContainer) n_trajectories = trajectoryContainer->entries(); 
+  // G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
+  // G4int n_trajectories = 0;
+  // if(trajectoryContainer) n_trajectories = trajectoryContainer->entries(); 
 
   G4VVisManager* pVisManager = G4VVisManager::GetConcreteInstance();
 

@@ -33,8 +33,11 @@
 // modification of old G4Gerep test
 //
 
-#include "G4Timer.hh"
 #include <cmath>
+
+#include "G4Timer.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh" 
 #include "G4BREPSolid.hh"
 #include "G4BREPSolidPCone.hh"

@@ -24,6 +24,11 @@
 // ********************************************************************
 //
 
+#include <iomanip>
+
+#include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "NTSTDetectorConstruction.hh"
 #include "NTSTDetectorMessenger.hh"
 #include "NTSTRotationMatrix.hh"
@@ -41,10 +46,7 @@
 #include "G4Color.hh"
 #include "G4Transform3D.hh"
 #include "G4Point3D.hh"
-#include "globals.hh"
 #include "NTSTFileRead.hh"
-
-#include <iomanip>
 
 #include "G4Mag_UsualEqRhs.hh"
 #include "G4ClassicalRK4.hh"
@@ -234,22 +236,22 @@ NTSTDetectorConstruction::Construct()
   //------------------------------------------------------ materials
 
   G4double a;  // atomic mass
-  G4double z;  // atomic number
+  G4double zn; // atomic number
   G4double density;
   G4String name;
 
   a = 39.95*g/mole;
   density = 1.782e-03*g/cm3;
-  G4Material* Ar = new G4Material(name="ArgonGas", z=18., a, density);
+  G4Material* Ar = new G4Material(name="ArgonGas", zn=18., a, density);
 
   a = 26.98*g/mole;
   density = 2.7*g/cm3;
   // G4Material* Al = 
-  new G4Material(name="Aluminum", z=13., a, density);
+  new G4Material(name="Aluminum", zn=13., a, density);
 
   a = 28.0855*g/mole;
   density = 2.33*g/cm3;
-  G4Material* Si = new G4Material(name="Silicon", z=14., a, density);
+  G4Material* Si = new G4Material(name="Silicon", zn=14., a, density);
 
   //------------------------------------------------------ volumes
 

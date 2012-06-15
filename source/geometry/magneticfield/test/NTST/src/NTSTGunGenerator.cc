@@ -30,6 +30,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "NTSTGunGenerator.hh"
 #include "NTSTGunMessenger.hh"
 #include "G4Event.hh"

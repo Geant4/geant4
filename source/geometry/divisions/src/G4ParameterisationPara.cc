@@ -38,6 +38,7 @@
 
 #include <iomanip>
 
+#include "G4PhysicalConstants.hh"
 #include "G4ThreeVector.hh"
 #include "G4Transform3D.hh"
 #include "G4RotationMatrix.hh"

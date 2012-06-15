@@ -38,6 +38,7 @@
 #include <iomanip>
 #include "G4Timer.hh"
 #include "G4GeometryManager.hh"
+#include "G4SystemOfUnits.hh"
 
 #ifdef  G4GEOMETRY_VOXELDEBUG
 #include "G4ios.hh"

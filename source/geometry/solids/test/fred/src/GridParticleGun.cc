@@ -30,6 +30,8 @@
 //
 
 #include "GridParticleGun.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "GridParticleGunMessenger.hh"
 
 #include "G4PrimaryParticle.hh"

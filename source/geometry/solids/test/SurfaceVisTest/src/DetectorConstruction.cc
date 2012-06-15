@@ -28,6 +28,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "DetectorConstruction.hh"
 #include "DetectorMessenger.hh"
 

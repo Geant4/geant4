@@ -32,15 +32,16 @@
 // Author:  John Apostolakis, November 2006
 // --------------------------------------------------------------------
 
+#include <iomanip>
+
 #include "G4MultiNavigator.hh"
 
 class G4FieldManager;
 
+#include "G4SystemOfUnits.hh"
 #include "G4Navigator.hh"
 #include "G4PropagatorInField.hh"
 #include "G4TransportationManager.hh"
-
-#include <iomanip>
 
 // ********************************************************************
 // Constructor

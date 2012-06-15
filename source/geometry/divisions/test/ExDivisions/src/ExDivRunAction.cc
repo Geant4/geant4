@@ -31,6 +31,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 #include "G4Timer.hh"
 #include "ExDivRunAction.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4Run.hh"
 #include "G4UImanager.hh"
@@ -133,7 +135,6 @@ void ExDivRunAction::TestNavigator2()
   G4cout << G4endl
          << " @@@@@@@@@@@@@@@@@@@@@  START testNavigator2  @@@@@@@@@@@@ "
          << G4endl;
-  G4VPhysicalVolume *located=0;
   G4double Step,physStep,safety;
   G4ThreeVector* Hat = new G4ThreeVector[3];
   Hat[0] = G4ThreeVector(1,0,0);
@@ -149,7 +150,7 @@ void ExDivRunAction::TestNavigator2()
     if( fin.eof() ) break;
     fin >> posX >> posY >> posZ;
     G4ThreeVector pos(posX,posY,posZ);
-    located=theNavigator->LocateGlobalPointAndSetup(pos);
+    theNavigator->LocateGlobalPointAndSetup(pos);
     physStep=kInfinity;
     if( !ExVDivTester::bDivCylindrical ){
       fout << ii+1 << ". " << pos;

@@ -97,11 +97,12 @@ G4double G4EllipticalCone::GetCubicVolume()
   {
     if (zTopCut > +zheight )
     {
-      fCubicVolume = (8./3.)*pi*xSemiAxis*ySemiAxis*zheight*zheight*zheight;
+      fCubicVolume = (8./3.)*CLHEP::pi*xSemiAxis*
+                     ySemiAxis*zheight*zheight*zheight;
     }
     else 
     {   
-      fCubicVolume = pi*xSemiAxis*ySemiAxis*
+      fCubicVolume = CLHEP::pi*xSemiAxis*ySemiAxis*
                     (2./3.*std::pow(zTopCut,3.)+2.*sqr(zheight)*zTopCut);
     }
   }

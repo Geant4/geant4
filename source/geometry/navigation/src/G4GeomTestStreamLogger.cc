@@ -35,11 +35,12 @@
 // Author: D.C.Williams, UCSC (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 
+#include <iomanip>
+
+#include "G4SystemOfUnits.hh"
 #include "G4GeomTestStreamLogger.hh"
 #include "G4VSolid.hh"
 #include "G4VPhysicalVolume.hh"
-#include <iomanip>
-
 #include "G4GeomTestOverlapList.hh"
 #include "G4GeomTestOvershootList.hh"
 

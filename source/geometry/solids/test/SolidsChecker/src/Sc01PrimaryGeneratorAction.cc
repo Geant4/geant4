@@ -32,6 +32,8 @@
 //        first version              09  Sept. 1998 by S.Magni
 // ------------------------------------------------------------
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Sc01PrimaryGeneratorAction.hh"
 #include "Sc01DetectorConstruction.hh"
 

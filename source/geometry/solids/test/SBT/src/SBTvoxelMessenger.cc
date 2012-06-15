@@ -29,6 +29,8 @@
 // Implementation of the messenger for the voxel test
 //
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "SBTvoxelMessenger.hh"
 #include "SBTvoxel.hh"
 #include "SBTVisManager.hh"

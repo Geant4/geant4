@@ -44,6 +44,8 @@
 #ifndef G4MagHelicalStepper_hh
 #define G4MagHelicalStepper_hh
 
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "G4Types.hh"
 #include "G4MagIntegratorStepper.hh"
 #include "G4Mag_EqRhs.hh"

@@ -29,6 +29,11 @@
 // ----------------------------------------------------------------------
 // GEANT 4 source file
 // ----------------------------------------------------------------------
+
+#include <iostream>
+
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4BREPSolid.hh"
 #include "G4BREPSolidBox.hh"
 #include "G4BREPSolidCone.hh"
@@ -38,9 +43,6 @@
 #include "G4BREPSolidPolyhedra.hh"
 #include "G4BREPSolidSphere.hh"
 #include "G4BREPSolidTorus.hh"
-
-#include <iostream>
-
 
 int main()
 {

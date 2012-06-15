@@ -33,6 +33,8 @@
 
 #include "globals.hh"
 #include "geomdefs.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "ApproxEqual.hh"
 
@@ -100,11 +102,13 @@ int main()
 //          Min = 0.8
 //          Max = something just larger than 1*m
 	
-  G4bool answer3, answer4;
+  // G4bool answer3, answer4;
   G4double min3, max3, min4, max4;
 	
-  answer3 = test3.CalculateExtent( kYAxis, voxel1, transform, min3, max3 );
-  answer4 = test4.CalculateExtent( kYAxis, voxel1, transform, min4, max4 );
+  // answer3 =
+  test3.CalculateExtent( kYAxis, voxel1, transform, min3, max3 );
+  // answer4 =
+  test4.CalculateExtent( kYAxis, voxel1, transform, min4, max4 );
 	
   G4cout << "-----------------" << std::endl;
   G4cout << "Voxel test 1 " << std::endl;
@@ -138,11 +142,10 @@ int main()
 //          Min = -0.8
 //          Max = +0.8
 	
-//  answer3 = test3.CalculateExtent( kXAxis, voxel2, transform, min3, max3 );
-//  answer4 = test4.CalculateExtent( kXAxis, voxel2, transform, min4, max4 );
-
-  answer3 = test3.CalculateExtent( kYAxis, voxel2, transform, min3, max3 );
-  answer4 = test4.CalculateExtent( kYAxis, voxel2, transform, min4, max4 );
+//  answer3 =
+    test3.CalculateExtent( kYAxis, voxel2, transform, min3, max3 );
+//  answer4 =
+    test4.CalculateExtent( kYAxis, voxel2, transform, min4, max4 );
 	
 	G4cout << "-----------------" << std::endl;
 	G4cout << "Voxel test 2 " << std::endl;
@@ -178,10 +181,10 @@ int main()
 //           Max = Something larger than 1.0
 //
 
-// answer3 = test3.CalculateExtent( kXAxis, voxel3, transform, min3, max3 );
-// answer4 = test4.CalculateExtent( kXAxis, voxel3, transform, min4, max4 );
-  answer3 = test3.CalculateExtent( kYAxis, voxel3, transform, min3, max3 );
-  answer4 = test4.CalculateExtent( kYAxis, voxel3, transform, min4, max4 );
+//  answer3 =
+    test3.CalculateExtent( kYAxis, voxel3, transform, min3, max3 );
+//  answer4 =
+    test4.CalculateExtent( kYAxis, voxel3, transform, min4, max4 );
 	
         G4cout << "-----------------" << std::endl;
 	G4cout << "Voxel test 3 " << std::endl;

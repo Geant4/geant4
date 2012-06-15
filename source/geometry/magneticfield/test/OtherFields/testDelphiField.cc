@@ -34,10 +34,12 @@
 //   with and without voxels. Parameterised volumes are included.
 
 #include <assert.h>
-// #include "ApproxEqual.hh"
+#include <iomanip>
 
 // Global defs
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4Navigator.hh"
 
@@ -60,7 +62,6 @@
 // #include "G4LineCurrentMagField.hh"
 
 #include "G4ios.hh"
-#include <iomanip>
 
 // Sample Parameterisation
 class G4LinScale : public G4VPVParameterisation
@@ -73,7 +74,7 @@ class G4LinScale : public G4VPVParameterisation
   
   virtual void ComputeDimensions(G4Box &pBox,
 				 const G4int n,
-				 const G4VPhysicalVolume* pRep) const
+				 const G4VPhysicalVolume*) const
   {
     pBox.SetXHalfLength(10);
     pBox.SetYHalfLength(5+n);
@@ -469,7 +470,7 @@ int main(int argc, char **argv)
 
 
 void report_endPV(G4ThreeVector    Position, 
-                  G4ThreeVector UnitVelocity,
+                  G4ThreeVector, // UnitVelocity,
 		  G4double step_len, 
                   G4double physStep, 
                   G4double safety,
@@ -558,8 +559,6 @@ int readin_particle( )
                     0.493677      ,         //  kaon
                     0.93827231              //  proton
                    } ;
- const double cSpeed = 299792458.0 ; // light speed in m/s
- const double pi = 3.141592653589793238 ;
  int pCharge, i ;
  double pMomentum, pTeta, pPhi, h ;
  G4cout<<"Enter particle type: 0 - electron, 1 - muon, 2 - pion, \n"
@@ -579,8 +578,8 @@ int readin_particle( )
  h *=  10.; // G4 units are in millimeters.
 
  double betaGamma = pMomentum/pMass ;
- double pSpeed = betaGamma*cSpeed/std::sqrt(1 + betaGamma*betaGamma) ;
- double pEnergy = pMomentum*cSpeed/pSpeed ;
+ double pSpeed = betaGamma*c_light/std::sqrt(1 + betaGamma*betaGamma) ;
+ double pEnergy = pMomentum*c_light/pSpeed ;
         pEnergy *= 1.60217733e-10  ; // energy in J (SI units)
  pTeta *= pi/180 ;
  pPhi  *= pi/180 ;

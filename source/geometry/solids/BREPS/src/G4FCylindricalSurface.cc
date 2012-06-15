@@ -35,6 +35,7 @@
 // ----------------------------------------------------------------------
 
 #include "G4FCylindricalSurface.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4Sort.hh"
 
 

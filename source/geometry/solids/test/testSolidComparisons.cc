@@ -43,6 +43,8 @@
 #include "globals.hh"
 #include "geomdefs.hh"
 #include "G4GeometryTolerance.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4ThreeVector.hh"
 #include "G4TwoVector.hh"
@@ -528,14 +530,12 @@ G4bool compareBoxtoExtruded(G4int N)
 int main()
 {
 
-  G4bool what;
-
-  what = compareEllipsoidtoOrb(1000);
-  what = compareEllipticalTubetoTubs(1000);
-  what = compareEllipsoidtoSphere(1000);
-  what = compareBoxtoTrap(1000);
-  what = compareSpheretoOrb(1000);
-  what = compareBoxtoExtruded(1000);
+  compareEllipsoidtoOrb(1000);
+  compareEllipticalTubetoTubs(1000);
+  compareEllipsoidtoSphere(1000);
+  compareBoxtoTrap(1000);
+  compareSpheretoOrb(1000);
+  compareBoxtoExtruded(1000);
 
 
   return 0;

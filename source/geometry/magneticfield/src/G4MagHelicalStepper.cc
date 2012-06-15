@@ -30,6 +30,8 @@
 // --------------------------------------------------------------------
 
 #include "G4MagHelicalStepper.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4LineSection.hh"
 #include "G4Mag_EqRhs.hh"
 

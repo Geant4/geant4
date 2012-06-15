@@ -61,7 +61,7 @@ ExN01EventAction::~ExN01EventAction()
                                                                                            
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
                                                                                            
-void ExN01EventAction::BeginOfEventAction(const G4Event* evt)
+void ExN01EventAction::BeginOfEventAction(const G4Event*)
 {
   //G4int evtNb = evt->GetEventID();
                                            
@@ -69,7 +69,7 @@ void ExN01EventAction::BeginOfEventAction(const G4Event* evt)
                                                                                            
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
                                                                                            
-void ExN01EventAction::EndOfEventAction(const G4Event* evt)
+void ExN01EventAction::EndOfEventAction(const G4Event*)
 {
   //accumulates statistic
   //

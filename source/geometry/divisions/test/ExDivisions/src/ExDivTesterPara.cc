@@ -33,6 +33,8 @@
 // ********************************************************************
 
 #include "ExDivTesterPara.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Para.hh"
 
 #include "G4ThreeVector.hh"

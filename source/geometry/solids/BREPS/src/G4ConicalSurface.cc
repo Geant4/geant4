@@ -35,6 +35,7 @@
 // ----------------------------------------------------------------------
 
 #include "G4ConicalSurface.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4Sort.hh"
 #include "G4Globals.hh"
 

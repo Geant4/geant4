@@ -53,6 +53,8 @@
 #ifndef G4Ellipsoid_HH
 #define G4Ellipsoid_HH
 
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "G4VSolid.hh"
 
 class G4Ellipsoid : public G4VSolid

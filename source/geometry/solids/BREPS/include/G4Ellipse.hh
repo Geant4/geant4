@@ -40,6 +40,8 @@
 #ifndef __ELLIPTICCURVE_H
 #define __ELLIPTICCURVE_H 
 
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "G4CircularCurve.hh"
 
 class G4Ellipse : public G4Conic

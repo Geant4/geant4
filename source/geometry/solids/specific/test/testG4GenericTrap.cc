@@ -56,6 +56,8 @@
 #include <iomanip>
 
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4TwoVector.hh"
 #include "G4ThreeVector.hh"

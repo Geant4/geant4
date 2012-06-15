@@ -64,7 +64,7 @@ G4MagHelicalStepper::GetInverseCurve(const G4double Momentum,
 {
   
   G4double  inv_momentum = 1.0 / Momentum ;
-  G4double particleCharge = fPtrMagEqOfMot->FCof() / (eplus*c_light); 
+  G4double particleCharge = fPtrMagEqOfMot->FCof() / (CLHEP::eplus*CLHEP::c_light); 
   G4double fCoefficient = -fUnitConstant  * particleCharge*inv_momentum;
  
   return  fCoefficient*Bmag;

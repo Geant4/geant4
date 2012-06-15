@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12-Jun-2012  G.Cosmo (geom-specific-V09-05-06)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
 14-May-2012  G.Cosmo (geom-specific-V09-05-05)
 - Fixed spurious cases of hidden variable visibility, detected with
   '-Wshadow' compilation option on gcc compiler.

@@ -30,11 +30,13 @@
 
 #include "ExN01PrimaryGeneratorAction.hh"
 
+#include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
-#include "globals.hh"
 
 ExN01PrimaryGeneratorAction::ExN01PrimaryGeneratorAction()
 {

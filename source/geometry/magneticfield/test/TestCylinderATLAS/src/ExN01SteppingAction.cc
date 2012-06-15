@@ -54,27 +54,24 @@ ExN01SteppingAction::~ExN01SteppingAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......                                                                                
 void ExN01SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
- // get volume of the current step
-  G4VPhysicalVolume* volume
-   = aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume();
-  //
-  //tanja
-  //get name of particle
-  G4double EndStepX=0.;
-  G4double EndStepY=0.;
-  G4double EndStepZ=0.;
+  // get volume of the current step
+  // G4VPhysicalVolume* volume =
+  // aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume();
+
+  // G4double EndStepX=0.;
+  // G4double EndStepY=0.;
+  // G4double EndStepZ=0.;
     G4String particleName = (aStep -> GetTrack() -> GetDynamicParticle()
                            -> GetDefinition() -> GetParticleName());
     if( particleName =="e-")
     {
       //      G4cout<<particleName<<G4endl;
-     EndStepX =
-       aStep->GetPreStepPoint()->GetPosition().x();
-    
-       EndStepY =
-         aStep->GetPreStepPoint()->GetPosition().y();
-       EndStepZ =
-         aStep->GetPreStepPoint()->GetPosition().z();
+      // EndStepX =
+      // aStep->GetPreStepPoint()->GetPosition().x();
+      // EndStepY =
+      // aStep->GetPreStepPoint()->GetPosition().y();
+      // EndStepZ =
+      // aStep->GetPreStepPoint()->GetPosition().z();
         G4cout.precision(15);
 	// G4cout<<particleName<<"  "<<"PreStep"<<" "
         //    << std::setw(6) << G4BestUnit(aStep->GetPreStepPoint()->GetPosition().x(),"Length")<<"  "
@@ -131,13 +128,12 @@ void ExN01SteppingAction::UserSteppingAction(const G4Step* aStep)
       if( particleName =="chargedgeantino")
     {
       //      G4cout<<particleName<<G4endl;
-     EndStepX =
-       aStep->GetPreStepPoint()->GetPosition().x();
-    
-       EndStepY =
-         aStep->GetPreStepPoint()->GetPosition().y();
-       EndStepZ =
-         aStep->GetPreStepPoint()->GetPosition().z();
+      // EndStepX =
+      // aStep->GetPreStepPoint()->GetPosition().x();
+      // EndStepY =
+      //   aStep->GetPreStepPoint()->GetPosition().y();
+      // EndStepZ =
+      //   aStep->GetPreStepPoint()->GetPosition().z();
        G4cout<<particleName<<"  "
             << std::setw(6) << G4BestUnit(aStep->GetPreStepPoint()->GetPosition().x(),"Length")<<"  "
             << std::setw(6) << G4BestUnit(aStep->GetPreStepPoint()->GetPosition().y(),"Length")<<"  "
@@ -148,13 +144,12 @@ void ExN01SteppingAction::UserSteppingAction(const G4Step* aStep)
       if( particleName =="mu+")
     {
       //      G4cout<<particleName<<G4endl;
-     EndStepX =
-       aStep->GetPreStepPoint()->GetPosition().x();
-    
-       EndStepY =
-         aStep->GetPreStepPoint()->GetPosition().y();
-       EndStepZ =
-         aStep->GetPreStepPoint()->GetPosition().z();
+      // EndStepX =
+      // aStep->GetPreStepPoint()->GetPosition().x();
+      // EndStepY =
+      //   aStep->GetPreStepPoint()->GetPosition().y();
+      // EndStepZ =
+      //   aStep->GetPreStepPoint()->GetPosition().z();
        G4cout<<particleName<<"  "
             << std::setw(6) << G4BestUnit(aStep->GetPreStepPoint()->GetPosition().x(),"Length")<<"  "
             << std::setw(6) << G4BestUnit(aStep->GetPreStepPoint()->GetPosition().y(),"Length")<<"  "

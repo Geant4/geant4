@@ -43,6 +43,7 @@
 // --------------------------------------------------------------------
 
 #include "G4TwistTubsHypeSide.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4GeometryTolerance.hh"
 
 //=====================================================================

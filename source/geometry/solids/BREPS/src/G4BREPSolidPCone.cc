@@ -43,6 +43,8 @@
 #include <sstream>
 
 #include "G4BREPSolidPCone.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4FCylindricalSurface.hh"
 #include "G4FConicalSurface.hh"
 #include "G4CircularCurve.hh"

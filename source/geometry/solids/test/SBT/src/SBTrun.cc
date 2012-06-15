@@ -29,6 +29,8 @@
 // Implementation of the batch solid test
 //
 #include "SBTrun.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "Randomize.hh"
 #include "G4VSolid.hh"

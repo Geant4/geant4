@@ -35,6 +35,7 @@
 // ----------------------------------------------------------------------
 
 #include "G4CircularCurve.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4Ellipse.hh"
 
 // G4CircularCurve

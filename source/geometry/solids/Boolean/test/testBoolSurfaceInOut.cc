@@ -40,6 +40,8 @@
 #include <assert.h>
 #include <cmath>
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "geomdefs.hh"
 #include "Randomize.hh"
 

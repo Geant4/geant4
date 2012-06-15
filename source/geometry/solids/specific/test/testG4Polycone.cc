@@ -36,6 +36,8 @@
 #include <fstream>
 #include <stdlib.h>
 #include "G4ios.hh" 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Polycone.hh"
 
 #include "G4Vector3D.hh"

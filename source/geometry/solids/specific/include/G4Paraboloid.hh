@@ -58,6 +58,8 @@
 #ifndef G4Paraboloid_HH
 #define G4Paraboloid_HH
 
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "G4VSolid.hh"
 
 class G4Paraboloid : public G4VSolid

@@ -48,6 +48,10 @@
 #include <iostream>
 #include <iomanip>
 
+// ====== Units and constants ======
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 // ====== This class header ======
 #include "NTSTBabarEvtReadGenerator.hh"
 
