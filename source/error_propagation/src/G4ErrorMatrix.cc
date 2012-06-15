@@ -47,15 +47,15 @@
 
 #define SIMPLE_BOP(OPER)                            \
     G4ErrorMatrixIter a=m.begin();                  \
-    G4ErrorMatrixConstIter b=m2.m.begin();          \
+    G4ErrorMatrixConstIter b=mat2.m.begin();          \
     G4ErrorMatrixIter e=m.end();                    \
    for(;a!=e; a++, b++) (*a) OPER (*b);
 
 #define SIMPLE_TOP(OPER)                            \
-    G4ErrorMatrixConstIter a=m1.m.begin();          \
-    G4ErrorMatrixConstIter b=m2.m.begin();          \
+    G4ErrorMatrixConstIter a=mat1.m.begin();          \
+    G4ErrorMatrixConstIter b=mat2.m.begin();          \
     G4ErrorMatrixIter t=mret.m.begin();             \
-    G4ErrorMatrixConstIter e=m1.m.end();            \
+    G4ErrorMatrixConstIter e=mat1.m.end();            \
    for(;a!=e; a++, b++, t++) (*t) = (*a) OPER (*b);
 
 // Static functions.
@@ -115,19 +115,19 @@ G4ErrorMatrix::~G4ErrorMatrix()
 {
 }
 
-G4ErrorMatrix::G4ErrorMatrix(const G4ErrorMatrix &m1)
-   : m(m1.size), nrow(m1.nrow), ncol(m1.ncol), size(m1.size)
+G4ErrorMatrix::G4ErrorMatrix(const G4ErrorMatrix &mat1)
+   : m(mat1.size), nrow(mat1.nrow), ncol(mat1.ncol), size(mat1.size)
 {
-   m = m1.m;
+   m = mat1.m;
 }
 
-G4ErrorMatrix::G4ErrorMatrix(const G4ErrorSymMatrix &m1)
-   : m(m1.nrow*m1.nrow), nrow(m1.nrow), ncol(m1.nrow)
+G4ErrorMatrix::G4ErrorMatrix(const G4ErrorSymMatrix &mat1)
+   : m(mat1.nrow*mat1.nrow), nrow(mat1.nrow), ncol(mat1.nrow)
 {
    size = nrow * ncol;
 
    G4int n = ncol;
-   G4ErrorMatrixConstIter sjk = m1.m.begin();
+   G4ErrorMatrixConstIter sjk = mat1.m.begin();
    G4ErrorMatrixIter m1j = m.begin();
    G4ErrorMatrixIter mj  = m.begin();
    // j >= k
@@ -175,19 +175,19 @@ G4ErrorMatrix G4ErrorMatrix::sub(G4int min_row, G4int max_row,
   return mret;
 }
 
-void G4ErrorMatrix::sub(G4int row,G4int col,const G4ErrorMatrix &m1)
+void G4ErrorMatrix::sub(G4int row,G4int col,const G4ErrorMatrix &mat1)
 {
-  if(row <1 || row+m1.num_row()-1 > num_row() || 
-     col <1 || col+m1.num_col()-1 > num_col()   )
+  if(row <1 || row+mat1.num_row()-1 > num_row() || 
+     col <1 || col+mat1.num_col()-1 > num_col()   )
     { error("G4ErrorMatrix::sub: Index out of range"); }
-  G4ErrorMatrixConstIter a = m1.m.begin();
+  G4ErrorMatrixConstIter a = mat1.m.begin();
   G4int nc = num_col();
   G4ErrorMatrixIter b1 = m.begin() + (row - 1) * nc + col - 1;
   
-  for(G4int irow=1; irow<=m1.num_row(); irow++)
+  for(G4int irow=1; irow<=mat1.num_row(); irow++)
   {
     G4ErrorMatrixIter brc = b1;
-    for(G4int icol=1; icol<=m1.num_col(); icol++)
+    for(G4int icol=1; icol<=mat1.num_col(); icol++)
     {
       *(brc++) = *(a++);
     }
@@ -199,12 +199,12 @@ void G4ErrorMatrix::sub(G4int row,G4int col,const G4ErrorMatrix &m1)
 // Direct sum of two matricies
 //
 
-G4ErrorMatrix dsum(const G4ErrorMatrix &m1, const G4ErrorMatrix &m2)
+G4ErrorMatrix dsum(const G4ErrorMatrix &mat1, const G4ErrorMatrix &mat2)
 {
-  G4ErrorMatrix mret(m1.num_row() + m2.num_row(), m1.num_col() + m2.num_col(),
-                 0);
-  mret.sub(1,1,m1);
-  mret.sub(m1.num_row()+1,m1.num_col()+1,m2);
+  G4ErrorMatrix mret(mat1.num_row() + mat2.num_row(),
+                     mat1.num_col() + mat2.num_col(), 0);
+  mret.sub(1,1,mat1);
+  mret.sub(mat1.num_row()+1,mat1.num_col()+1,mat2);
   return mret;
 }
 
@@ -215,18 +215,18 @@ G4ErrorMatrix dsum(const G4ErrorMatrix &m1, const G4ErrorMatrix &m2)
 
 G4ErrorMatrix G4ErrorMatrix::operator- () const 
 {
-   G4ErrorMatrix m2(nrow, ncol);
+   G4ErrorMatrix mat2(nrow, ncol);
    G4ErrorMatrixConstIter a=m.begin();
-   G4ErrorMatrixIter b=m2.m.begin();
+   G4ErrorMatrixIter b=mat2.m.begin();
    G4ErrorMatrixConstIter e=m.end();
    for(;a<e; a++, b++) (*b) = -(*a);
-   return m2;
+   return mat2;
 }
 
-G4ErrorMatrix operator+(const G4ErrorMatrix &m1,const G4ErrorMatrix &m2)
+G4ErrorMatrix operator+(const G4ErrorMatrix &mat1,const G4ErrorMatrix &mat2)
 {
-  G4ErrorMatrix mret(m1.nrow, m1.ncol);
-  CHK_DIM_2(m1.num_row(),m2.num_row(), m1.num_col(),m2.num_col(),+);
+  G4ErrorMatrix mret(mat1.nrow, mat1.ncol);
+  CHK_DIM_2(mat1.num_row(),mat2.num_row(), mat1.num_col(),mat2.num_col(),+);
   SIMPLE_TOP(+)
   return mret;
 }
@@ -235,11 +235,11 @@ G4ErrorMatrix operator+(const G4ErrorMatrix &m1,const G4ErrorMatrix &m2)
 // operator -
 //
 
-G4ErrorMatrix operator-(const G4ErrorMatrix &m1,const G4ErrorMatrix &m2)
+G4ErrorMatrix operator-(const G4ErrorMatrix &mat1,const G4ErrorMatrix &mat2)
 {
-  G4ErrorMatrix mret(m1.num_row(), m1.num_col());
-  CHK_DIM_2(m1.num_row(),m2.num_row(),
-                         m1.num_col(),m2.num_col(),-);
+  G4ErrorMatrix mret(mat1.num_row(), mat1.num_col());
+  CHK_DIM_2(mat1.num_row(),mat2.num_row(),
+                         mat1.num_col(),mat2.num_col(),-);
   SIMPLE_TOP(-)
   return mret;
 }
@@ -249,45 +249,45 @@ G4ErrorMatrix operator-(const G4ErrorMatrix &m1,const G4ErrorMatrix &m2)
    The two argument functions *,/. They call copy constructor and then /=,*=.
    ----------------------------------------------------------------------- */
 
-G4ErrorMatrix operator/(const G4ErrorMatrix &m1,G4double t)
+G4ErrorMatrix operator/(const G4ErrorMatrix &mat1,G4double t)
 {
-  G4ErrorMatrix mret(m1);
+  G4ErrorMatrix mret(mat1);
   mret /= t;
   return mret;
 }
 
-G4ErrorMatrix operator*(const G4ErrorMatrix &m1,G4double t)
+G4ErrorMatrix operator*(const G4ErrorMatrix &mat1,G4double t)
 {
-  G4ErrorMatrix mret(m1);
+  G4ErrorMatrix mret(mat1);
   mret *= t;
   return mret;
 }
 
-G4ErrorMatrix operator*(G4double t,const G4ErrorMatrix &m1)
+G4ErrorMatrix operator*(G4double t,const G4ErrorMatrix &mat1)
 {
-  G4ErrorMatrix mret(m1);
+  G4ErrorMatrix mret(mat1);
   mret *= t;
   return mret;
 }
 
-G4ErrorMatrix operator*(const G4ErrorMatrix &m1,const G4ErrorMatrix &m2)
+G4ErrorMatrix operator*(const G4ErrorMatrix &mat1,const G4ErrorMatrix &mat2)
 {
   // initialize matrix to 0.0
-  G4ErrorMatrix mret(m1.nrow,m2.ncol,0);
-  CHK_DIM_1(m1.ncol,m2.nrow,*);
+  G4ErrorMatrix mret(mat1.nrow,mat2.ncol,0);
+  CHK_DIM_1(mat1.ncol,mat2.nrow,*);
 
-  G4int m1cols = m1.ncol;
-  G4int m2cols = m2.ncol;
+  G4int m1cols = mat1.ncol;
+  G4int m2cols = mat2.ncol;
 
-  for (G4int i=0; i<m1.nrow; i++)
+  for (G4int i=0; i<mat1.nrow; i++)
   {
      for (G4int j=0; j<m1cols; j++) 
      {
-         G4double temp = m1.m[i*m1cols+j];
+         G4double temp = mat1.m[i*m1cols+j];
          G4ErrorMatrixIter pt = mret.m.begin() + i*m2cols;
 
-        // Loop over k (the column index in matrix m2)
-        G4ErrorMatrixConstIter pb = m2.m.begin() + m2cols*j;
+        // Loop over k (the column index in matrix mat2)
+        G4ErrorMatrixConstIter pb = mat2.m.begin() + m2cols*j;
         const G4ErrorMatrixConstIter pblast = pb + m2cols;
         while (pb < pblast)
         {
@@ -304,16 +304,16 @@ G4ErrorMatrix operator*(const G4ErrorMatrix &m1,const G4ErrorMatrix &m2)
    This section contains the assignment and inplace operators =,+=,-=,*=,/=.
    ----------------------------------------------------------------------- */
 
-G4ErrorMatrix & G4ErrorMatrix::operator+=(const G4ErrorMatrix &m2)
+G4ErrorMatrix & G4ErrorMatrix::operator+=(const G4ErrorMatrix &mat2)
 {
-  CHK_DIM_2(num_row(),m2.num_row(),num_col(),m2.num_col(),+=);
+  CHK_DIM_2(num_row(),mat2.num_row(),num_col(),mat2.num_col(),+=);
   SIMPLE_BOP(+=)
   return (*this);
 }
 
-G4ErrorMatrix & G4ErrorMatrix::operator-=(const G4ErrorMatrix &m2)
+G4ErrorMatrix & G4ErrorMatrix::operator-=(const G4ErrorMatrix &mat2)
 {
-  CHK_DIM_2(num_row(),m2.num_row(),num_col(),m2.num_col(),-=);
+  CHK_DIM_2(num_row(),mat2.num_row(),num_col(),mat2.num_col(),-=);
   SIMPLE_BOP(-=)
   return (*this);
 }
@@ -330,46 +330,46 @@ G4ErrorMatrix & G4ErrorMatrix::operator*=(G4double t)
   return (*this);
 }
 
-G4ErrorMatrix & G4ErrorMatrix::operator=(const G4ErrorMatrix &m1)
+G4ErrorMatrix & G4ErrorMatrix::operator=(const G4ErrorMatrix &mat1)
 {
-   if (&m1 == this) { return *this; }
+   if (&mat1 == this) { return *this; }
 
-   if(m1.nrow*m1.ncol != size) //??fixme?? m1.size != size
+   if(mat1.nrow*mat1.ncol != size) //??fixme?? mat1.size != size
    {
-      size = m1.nrow * m1.ncol;
-      m.resize(size); //??fixme?? if (size < m1.size) m.resize(m1.size);
+      size = mat1.nrow * mat1.ncol;
+      m.resize(size); //??fixme?? if (size < mat1.size) m.resize(mat1.size);
    }
-   nrow = m1.nrow;
-   ncol = m1.ncol;
-   m = m1.m;
+   nrow = mat1.nrow;
+   ncol = mat1.ncol;
+   m = mat1.m;
    return (*this);
 }
 
 
 // Print the G4ErrorMatrix.
 
-std::ostream& operator<<(std::ostream &s, const G4ErrorMatrix &q)
+std::ostream& operator<<(std::ostream &os, const G4ErrorMatrix &q)
 {
-  s << "\n";
+  os << "\n";
 
   // Fixed format needs 3 extra characters for field,
   // while scientific needs 7
 
   G4int width;
-  if(s.flags() & std::ios::fixed)
-    { width = s.precision()+3; }
+  if(os.flags() & std::ios::fixed)
+    { width = os.precision()+3; }
   else
-    { width = s.precision()+7; }
+    { width = os.precision()+7; }
   for(G4int irow = 1; irow<= q.num_row(); irow++)
     {
       for(G4int icol = 1; icol <= q.num_col(); icol++)
         {
-          s.width(width);
-          s << q(irow,icol) << " ";
+          os.width(width);
+          os << q(irow,icol) << " ";
         }
-      s << G4endl;
+      os << G4endl;
     }
-  return s;
+  return os;
 }
 
 G4ErrorMatrix G4ErrorMatrix::T() const
@@ -494,9 +494,9 @@ G4int G4ErrorMatrix::dfinv_matrix(G4int *ir) {
   }
   G4int nxch = ir[n];
   if (nxch==0) return 0;
-  for (G4int mm=1;mm<=nxch;mm++)
+  for (G4int mq=1;mq<=nxch;mq++)
   {
-    G4int k = nxch - mm + 1;
+    G4int k = nxch - mq + 1;
     G4int ij = ir[k];
     G4int i = ij >> 12;
     G4int j = ij%4096;
@@ -658,7 +658,7 @@ void G4ErrorMatrix::invert(G4int &ierr)
     ir = new G4int [max_array+1];
   }
   G4double t1, t2, t3;
-  G4double det, temp, s;
+  G4double det, temp, ss;
   G4int ifail;
   switch(nrow)
   {
@@ -715,17 +715,17 @@ void G4ErrorMatrix::invert(G4int &ierr)
       return;
     }
     {
-      G4double s = temp/det;
-      G4ErrorMatrixIter mm = m.begin();
-      *(mm++) = s*c11;
-      *(mm++) = s*c21;
-      *(mm++) = s*c31;
-      *(mm++) = s*c12;
-      *(mm++) = s*c22;
-      *(mm++) = s*c32;
-      *(mm++) = s*c13;
-      *(mm++) = s*c23;
-      *(mm) = s*c33;
+      ss = temp/det;
+      G4ErrorMatrixIter mq = m.begin();
+      *(mq++) = ss*c11;
+      *(mq++) = ss*c21;
+      *(mq++) = ss*c31;
+      *(mq++) = ss*c12;
+      *(mq++) = ss*c22;
+      *(mq++) = ss*c32;
+      *(mq++) = ss*c13;
+      *(mq++) = ss*c23;
+      *(mq) = ss*c33;
     }
     break;
   case 2:
@@ -736,11 +736,11 @@ void G4ErrorMatrix::invert(G4int &ierr)
       ierr = 1;
       return;
     }
-    s = 1.0/det;
-    temp = s*(*(m.begin()+3));
-    *(m.begin()+1) *= -s;
-    *(m.begin()+2) *= -s;
-    *(m.begin()+3) = s*(*m.begin());
+    ss = 1.0/det;
+    temp = ss*(*(m.begin()+3));
+    *(m.begin()+1) *= -ss;
+    *(m.begin()+2) *= -ss;
+    *(m.begin()+3) = ss*(*m.begin());
     *(m.begin()) = temp;
     break;
   case 1:
@@ -803,9 +803,9 @@ G4double G4ErrorMatrix::trace() const
   return t;
 }
 
-void G4ErrorMatrix::error(const char *s)
+void G4ErrorMatrix::error(const char *msg)
 {
-  G4cerr << s << G4endl;
+  G4cerr << msg << G4endl;
   G4cerr << "---Exiting to System." << G4endl;
   abort();
 }
