@@ -58,7 +58,7 @@ public:
   inline Hep2Vector(const Hep2Vector & p);
   // The copy constructor.
 
-  explicit Hep2Vector( const Hep3Vector & s);
+  explicit Hep2Vector( const Hep3Vector & );
   // "demotion" constructor"
   // WARNING -- THIS IGNORES THE Z COMPONENT OF THE Hep3Vector.
   //		SO IN GENERAL, Hep2Vector(v)==v WILL NOT HOLD!

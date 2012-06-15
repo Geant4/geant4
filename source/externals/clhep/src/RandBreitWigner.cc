@@ -25,8 +25,6 @@
 #include <algorithm>	// for min() and max()
 #include <cmath>
 
-using namespace std;
-
 namespace CLHEP {
 
 std::string RandBreitWigner::name() const {return "RandBreitWigner";}

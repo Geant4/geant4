@@ -247,7 +247,7 @@ namespace HepGeom {
     // ---------------
 
     /**
-     * Gets pseudo-rapidity: -std::ln(std::tan(theta/2)) */
+     * Gets pseudo-rapidity: -ln(tan(theta/2)) */
     T pseudoRapidity() const;
     /**
      * Gets pseudo-rapidity. */

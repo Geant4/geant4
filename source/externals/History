@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05-June-2012: G.Cosmo (externals-V09-05-02)
+- Updated CLHEP module to version 2.1.2.3.
+
 30-May-2012: G.Cosmo (externals-V09-05-01)
 - Additional correction for shadowed variable in CLHEP module.
 

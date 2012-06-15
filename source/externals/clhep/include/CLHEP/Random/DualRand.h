@@ -28,7 +28,7 @@
 //  Put into ranlib by GMH 6/23/89				           
 //  Re-written as C++ routine for 32-bit ints MF 1/26/98	           
 //  Re-written for CLHEP package	     KLS 6/04/98	           
-//  Removed std::pow() from flat method for speed KLS 7/21/98	           
+//  Removed pow() from flat method for speed KLS 7/21/98	           
 //  Ken Smith	   - Added conversion operators:  6th Aug 1998             
 //  Mark Fischler    methods for distrib. instance save/restore 12/8/04    
 //  Mark Fischler    methods for anonymous save/restore 12/27/04    

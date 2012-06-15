@@ -51,11 +51,11 @@ double & Hep2Vector::operator () (int i) {
 }
 
 void Hep2Vector::rotate(double aangle) {
-  double s = std::sin(aangle);
-  double c = std::cos(aangle);
+  double ss = std::sin(aangle);
+  double cc = std::cos(aangle);
   double xx = dx;
-  dx = c*xx - s*dy;
-  dy = s*xx + c*dy;
+  dx = cc*xx - ss*dy;
+  dy = ss*xx + cc*dy;
 }
 
 Hep2Vector operator/ (const Hep2Vector & p, double a) {

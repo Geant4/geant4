@@ -12,7 +12,7 @@
 // Gabriele Cosmo - Created: 19th August 1998
 // =======================================================================
 
-#include <cmath>	// for std::log()
+#include <cmath>	// for log()
 
 namespace CLHEP {
 

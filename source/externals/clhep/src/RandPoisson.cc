@@ -28,9 +28,7 @@
 #include "CLHEP/Random/RandPoisson.h"
 #include "CLHEP/Units/PhysicalConstants.h"
 #include "CLHEP/Random/DoubConv.h"
-#include <cmath>	// for floor()
-
-using namespace std;
+#include <cmath>	// for std::floor()
 
 namespace CLHEP {
 
@@ -65,14 +63,14 @@ double gammln(double xx) {
   int j;
   double x = xx - 1.0;
   double tmp = x + 5.5;
-  tmp -= (x + 0.5) * log(tmp);
+  tmp -= (x + 0.5) * std::log(tmp);
   double ser = 1.000000000190015;
 
   for ( j = 0; j <= 5; j++ ) {
     x += 1.0;
     ser += cof[j]/x;
   }
-  return -tmp + log(2.5066282746310005*ser);
+  return -tmp + std::log(2.5066282746310005*ser);
 }
 
 static
@@ -86,7 +84,7 @@ double normal (HepRandomEngine* eptr) 		// mf 1/13/06
     r = v1*v1 + v2*v2;
   } while ( r > 1.0 );
 
-  fac = sqrt(-2.0*log(r)/r);
+  fac = std::sqrt(-2.0*std::log(r)/r);
   return v2*fac;
 }
 
@@ -111,7 +109,7 @@ long RandPoisson::shoot(double xm) {
   if( xm < 12.0 ) {
     if( xm != om ) {
       setOldMean(xm);
-      g1 = exp(-xm);
+      g1 = std::exp(-xm);
     }
     em = -1;
     t = 1.0;
@@ -123,21 +121,21 @@ long RandPoisson::shoot(double xm) {
   else if ( xm < getMaxMean() ) {
     if ( xm != om ) {
       setOldMean(xm);
-      sq = sqrt(2.0*xm);
-      alxm = log(xm);
+      sq = std::sqrt(2.0*xm);
+      alxm = std::log(xm);
       g1 = xm*alxm - gammln(xm + 1.0);
     }
     do {
       do {
-	y = tan(CLHEP::pi*anEngine->flat());
+	y = std::tan(CLHEP::pi*anEngine->flat());
 	em = sq*y + xm;
       } while( em < 0.0 );
-      em = floor(em);
-      t = 0.9*(1.0 + y*y)* exp(em*alxm - gammln(em + 1.0) - g1);
+      em = std::floor(em);
+      t = 0.9*(1.0 + y*y)* std::exp(em*alxm - gammln(em + 1.0) - g1);
     } while( anEngine->flat() > t );
   }
   else {
-    em = xm + sqrt(xm) * normal (anEngine);	// mf 1/13/06
+    em = xm + std::sqrt(xm) * normal (anEngine);	// mf 1/13/06
     if ( static_cast<long>(em) < 0 ) 
       em = static_cast<long>(xm) >= 0 ? xm : getMaxMean();
   }    
@@ -171,7 +169,7 @@ long RandPoisson::shoot(HepRandomEngine* anEngine, double xm) {
   if( xm < 12.0 ) {
     if( xm != om ) {
       setOldMean(xm);
-      g1 = exp(-xm);
+      g1 = std::exp(-xm);
     }
     em = -1;
     t = 1.0;
@@ -183,21 +181,21 @@ long RandPoisson::shoot(HepRandomEngine* anEngine, double xm) {
   else if ( xm < getMaxMean() ) {
     if ( xm != om ) {
       setOldMean(xm);
-      sq = sqrt(2.0*xm);
-      alxm = log(xm);
+      sq = std::sqrt(2.0*xm);
+      alxm = std::log(xm);
       g1 = xm*alxm - gammln(xm + 1.0);
     }
     do {
       do {
-	y = tan(CLHEP::pi*anEngine->flat());
+	y = std::tan(CLHEP::pi*anEngine->flat());
 	em = sq*y + xm;
       } while( em < 0.0 );
-      em = floor(em);
-      t = 0.9*(1.0 + y*y)* exp(em*alxm - gammln(em + 1.0) - g1);
+      em = std::floor(em);
+      t = 0.9*(1.0 + y*y)* std::exp(em*alxm - gammln(em + 1.0) - g1);
     } while( anEngine->flat() > t );
   }
   else {
-    em = xm + sqrt(xm) * normal (anEngine);	// mf 1/13/06
+    em = xm + std::sqrt(xm) * normal (anEngine);	// mf 1/13/06
     if ( static_cast<long>(em) < 0 ) 
       em = static_cast<long>(xm) >= 0 ? xm : getMaxMean();
   }    
@@ -234,7 +232,7 @@ long RandPoisson::fire(double xm) {
   if( xm < 12.0 ) {
     if( xm != oldm ) {
       oldm = xm;
-      g1 = exp(-xm);
+      g1 = std::exp(-xm);
     }
     em = -1;
     t = 1.0;
@@ -246,21 +244,21 @@ long RandPoisson::fire(double xm) {
   else if ( xm < meanMax ) {
     if ( xm != oldm ) {
       oldm = xm;
-      sq = sqrt(2.0*xm);
-      alxm = log(xm);
+      sq = std::sqrt(2.0*xm);
+      alxm = std::log(xm);
       g1 = xm*alxm - gammln(xm + 1.0);
     }
     do {
       do {
-	y = tan(CLHEP::pi*localEngine->flat());
+	y = std::tan(CLHEP::pi*localEngine->flat());
 	em = sq*y + xm;
       } while( em < 0.0 );
-      em = floor(em);
-      t = 0.9*(1.0 + y*y)* exp(em*alxm - gammln(em + 1.0) - g1);
+      em = std::floor(em);
+      t = 0.9*(1.0 + y*y)* std::exp(em*alxm - gammln(em + 1.0) - g1);
     } while( localEngine->flat() > t );
   }
   else {
-    em = xm + sqrt(xm) * normal (localEngine.get());	// mf 1/13/06
+    em = xm + std::sqrt(xm) * normal (localEngine.get());	// mf 1/13/06
     if ( static_cast<long>(em) < 0 ) 
       em = static_cast<long>(xm) >= 0 ? xm : getMaxMean();
   }    

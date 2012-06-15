@@ -12,8 +12,7 @@
 // 24.09.96 E.Chernyaev - initial version
 
 #include <iostream>
-#include <cmath>	// double abs()
-#include <stdlib.h>	// int abs()
+#include <cmath>	// double std::abs()
 #include "CLHEP/Geometry/Transform3D.h"
 
 namespace HepGeom {

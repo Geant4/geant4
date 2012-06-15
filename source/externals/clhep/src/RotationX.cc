@@ -78,12 +78,12 @@ double HepRotationX::phiX() const {
 
 double HepRotationX::phiY() const {
   return (yy() == 0.0 && xy() == 0.0) ? 0.0 : std::atan2(yy(),xy());
-		// or ----  return (yy() == 0.0) ? 0.0 : atan2(yy(),xy());
+		// or ----  return (yy() == 0.0) ? 0.0 : std::atan2(yy(),xy());
 }
 
 double HepRotationX::phiZ() const {
   return (yz() == 0.0 && xz() == 0.0) ? 0.0 : std::atan2(yz(),xz());
-		// or ----  return (yz() == 0.0) ? 0.0 : atan2(yz(),xz());
+		// or ----  return (yz() == 0.0) ? 0.0 : std::atan2(yz(),xz());
 }
 
 double HepRotationX::thetaX() const {

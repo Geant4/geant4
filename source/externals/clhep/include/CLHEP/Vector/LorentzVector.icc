@@ -146,8 +146,8 @@ inline double HepLorentzVector::mag2() const {
 }
 
 inline double HepLorentzVector::mag() const {
-  double m1 = m2();
-  return m1 < 0.0 ? -std::sqrt(-m1) : std::sqrt(m1);
+  double mmm = m2();
+  return mmm < 0.0 ? -std::sqrt(-mmm) : std::sqrt(mmm);
 }
 
 inline double HepLorentzVector::m2() const { 
@@ -161,8 +161,8 @@ inline double HepLorentzVector::mt2() const {
 }
 
 inline double HepLorentzVector::mt() const {
-  double m1 = mt2();
-  return m1 < 0.0 ? -std::sqrt(-m1) : std::sqrt(m1);
+  double mmm = mt2();
+  return mmm < 0.0 ? -std::sqrt(-mmm) : std::sqrt(mmm);
 }
 
 inline double HepLorentzVector::et2() const {

@@ -148,8 +148,8 @@ HepLorentzRotation::matrixMultiplication(const HepRep4x4 & m1) const {
 }
 
 HepLorentzRotation & HepLorentzRotation::rotateX(double delta) {
-  double c1 = cos (delta);
-  double s1 = sin (delta);
+  double c1 = std::cos (delta);
+  double s1 = std::sin (delta);
   HepLorentzVector rowy = row2();
   HepLorentzVector rowz = row3();
   HepLorentzVector r2 = c1 * rowy - s1 * rowz;
@@ -238,8 +238,6 @@ HepLorentzRotation & HepLorentzRotation::boostZ(double beta) {
 }
 
 std::ostream & HepLorentzRotation::print( std::ostream & os ) const {
-//  using std::setw;
-//  using std::setprecision;
   os << "\n   [ ( " <<
         std::setw(11) << std::setprecision(6) << xx() << "   " <<
         std::setw(11) << std::setprecision(6) << xy() << "   " <<

@@ -21,8 +21,6 @@
 #include <algorithm>	// for min() and max()
 #include <cmath>	// for exp()
 
-using namespace std;
-
 namespace CLHEP {
 
 std::string RandBinomial::name() const {return "RandBinomial";}

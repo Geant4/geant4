@@ -51,7 +51,7 @@ void Hep3Vector::setSpherical (
   dy = rho1 * std::sin (phi1);
   dx = rho1 * std::cos (phi1);
   return;
-} /* setSpherical (r, theta, phi) */
+} /* setSpherical (r, theta1, phi1) */
 
 void Hep3Vector::setCylindrical (
  		double rho1,

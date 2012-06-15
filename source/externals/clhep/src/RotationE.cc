@@ -20,7 +20,6 @@
 #include "CLHEP/Units/PhysicalConstants.h"
 
 #include <cmath>
-#include <stdlib.h>
 
 namespace CLHEP  {
 
@@ -146,16 +145,16 @@ double HepRotation::psi  () const {
 // Helpers for eulerAngles():
 
 static		     
-void correctByPi ( double& psi, double& phi ) {
-  if (psi > 0) {
-    psi -= CLHEP::pi;
+void correctByPi ( double& psi1, double& phi1 ) {
+  if (psi1 > 0) {
+    psi1 -= CLHEP::pi;
   } else {
-    psi += CLHEP::pi;
+    psi1 += CLHEP::pi;
   }
-  if (phi > 0) {
-    phi -= CLHEP::pi;
+  if (phi1 > 0) {
+    phi1 -= CLHEP::pi;
   } else {
-    phi += CLHEP::pi;
+    phi1 += CLHEP::pi;
   }  
 }
 
@@ -164,7 +163,7 @@ void correctPsiPhi ( double rxz, double rzx, double ryz, double rzy,
 		     double& psi1, double& phi1 ) {
 
   // set up quatities which would be positive if sin and cosine of
-  // psi and phi were positive:
+  // psi1 and phi1 were positive:
   double w[4];
   w[0] = rxz; w[1] = rzx; w[2] = ryz; w[3] = -rzy;
 

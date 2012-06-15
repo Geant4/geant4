@@ -15,7 +15,7 @@
 #include "CLHEP/Random/RandGaussQ.h"
 #include "CLHEP/Units/PhysicalConstants.h"
 #include <iostream>
-#include <cmath>	// for log()
+#include <cmath>	// for std::log()
 
 namespace CLHEP {
 

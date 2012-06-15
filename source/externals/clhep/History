@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+5 June 2012 - G.Cosmo
+- Updated to CLHEP-2.1.2.3:
+  * Random, Vector (L.Garren <garren@fnal.gov>):
+    o More fixes for shadowing when global units used.
+  * Vector, Evaluator, Random, Geometry (L.Garren <garren@fnal.gov>):
+    o Use explicit std:: with math functions.
+
 10 May 2012 - G.Cosmo
 - Updated to CLHEP-2.1.2.2:
   * Random (L.Garren <garren@fnal.gov>):

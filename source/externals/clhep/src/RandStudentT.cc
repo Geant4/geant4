@@ -18,7 +18,7 @@
 // =======================================================================
 
 #include <float.h>
-#include <cmath>	// for log() exp()
+#include <cmath>	// for std::log() std::exp()
 #include "CLHEP/Random/RandStudentT.h"
 #include "CLHEP/Random/DoubConv.h"
 

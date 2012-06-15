@@ -32,7 +32,7 @@
 
 // =======================================================================
 // Ken Smith      - Created: 9th June 1998
-//                - Removed std::pow() from flat method: 21st Jul 1998
+//                - Removed pow() from flat method: 21st Jul 1998
 //                - Added conversion operators:  6th Aug 1998
 // Mark Fischler    Methods put, get for instance save/restore 12/8/04    
 // Mark Fischler    methods for anonymous save/restore 12/27/04    
