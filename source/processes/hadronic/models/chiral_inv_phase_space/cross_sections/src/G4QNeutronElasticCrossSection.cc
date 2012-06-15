@@ -2356,8 +2356,8 @@ G4double G4QNeutronElasticCrossSection::GetQ2max(G4int PDG, G4int tgZ, G4int tgN
     G4double mt=mProt;                                 // Target mass in GeV
     if(tgN||tgZ>1) mt=G4QPDGCode(90000000+tgZ*1000+tgN).GetMass()*.001; // Target mass GeV
     G4double dmt=mt+mt;
-    G4double s=dmt*std::sqrt(pP2+mNeut2)+mNeut2+mt*mt; // Mondelstam s (in GeV^2)
-    return dmt*dmt*pP2/s;
+    G4double s_value=dmt*std::sqrt(pP2+mNeut2)+mNeut2+mt*mt; // Mondelstam s (in GeV^2)
+    return dmt*dmt*pP2/s_value;
   }
   else
   {

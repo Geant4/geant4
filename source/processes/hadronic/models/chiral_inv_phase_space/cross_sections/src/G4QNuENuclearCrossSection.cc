@@ -769,9 +769,9 @@ G4double G4QNuENuclearCrossSection::GetDirectPart(G4double Q2)
   G4double f=Q2/4.62;
   G4double ff=f*f;
   G4double r=ff*ff;
-  G4double s=std::pow((1.+.6/Q2),(-1.-(1.+r)/(12.5+r/.3)));
+  G4double s_value=std::pow((1.+.6/Q2),(-1.-(1.+r)/(12.5+r/.3)));
   //@@ It is the same for nu/anu, but for nu it is a bit less, and for anu a bit more (par)
-  return 1.-s*(1.-s/2);
+  return 1.-s_value*(1.-s_value/2);
 }
 
 // #of quark-partons in the nonperturbative phase space is the same for neut and anti-neut

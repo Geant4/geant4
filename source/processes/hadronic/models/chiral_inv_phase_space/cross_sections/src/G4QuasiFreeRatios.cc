@@ -98,7 +98,7 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::GetRatios(G4double pIU, G4int pP
 }
 
 // Calculatio QasiFree/Inelastic Ratio as a function of total hN cross-section (mb) and A
-G4double G4QuasiFreeRatios::GetQF2IN_Ratio(G4double s, G4int A)
+G4double G4QuasiFreeRatios::GetQF2IN_Ratio(G4double s_value, G4int A)
 {
   static const G4int    nps=150;        // Number of steps in the R(s) LinTable
   static const G4int    mps=nps+1;      // Number of elements in the R(s) LinTable
@@ -109,7 +109,7 @@ G4double G4QuasiFreeRatios::GetQF2IN_Ratio(G4double s, G4int A)
   static const G4double lsi=5.;         // The min ln(s) LogTabEl(s=148.4 < sma=150.)
   static const G4double lsa=9.;         // The max ln(s) LogTabEl(s=148.4 - 8103. mb)
   static const G4double mi=std::exp(lsi);// The min s of LogTabEl(~ 148.4 mb)
-  static const G4double ms=std::exp(lsa);// The max s of LogTabEl(~ 8103. mb)
+  static const G4double max_s=std::exp(lsa);// The max s of LogTabEl(~ 8103. mb)
   static const G4double dl=(lsa-lsi)/nls;// A step Log-Length of the Logarithmic Table
   static const G4double edl=std::exp(dl);// Multiplication step of the Logarithmic Table
   static const G4double toler=.01;      // The tolarence mb defining the same cross-section
@@ -131,18 +131,18 @@ G4double G4QuasiFreeRatios::GetQF2IN_Ratio(G4double s, G4int A)
   static G4double* lastL=0;             // theLast of pointer to LogTable in the C++ heap
   // LogTable is created only if necessary. The ratio R(s>8100 mb) = 0 for any nuclei
 #ifdef pdebug
-  G4cout<<"+++G4QuasiFreeRatio::GetQF2IN_Ratio:A="<<A<<", s="<<s<<G4endl;
+  G4cout<<"+++G4QuasiFreeRatio::GetQF2IN_Ratio:A="<<A<<", s="<<s_value<<G4endl;
 #endif
-  if(s<toler || A<2) return 1.;
-  if(s>ms) return 0.;
+  if(s_value<toler || A<2) return 1.;
+  if(s_value>max_s) return 0.;
   if(A>238)
   {
     G4cout<<"-Warning-G4QuasiFreeRatio::GetQF2IN_Ratio:A="<<A<<">238, return zero"<<G4endl;
     return 0.;
   }
   G4int nDB=vA.size();                  // A number of nuclei already initialized in AMDB
-  //  if(nDB && lastA==A && std::fabs(s-lastS)<toler) return lastR;
-  if(nDB && lastA==A && s==lastS) return lastR;  // VI do not use tolerance
+  //  if(nDB && lastA==A && std::fabs(s_value-lastS)<toler) return lastR;
+  if(nDB && lastA==A && s_value==lastS) return lastR;  // VI do not use tolerance
   G4bool found=false;
   G4int i=-1;
   if(nDB) for (i=0; i<nDB; i++) if(A==vA[i]) // Sirch for this A in AMDB
@@ -160,7 +160,7 @@ G4double G4QuasiFreeRatios::GetQF2IN_Ratio(G4double s, G4int A)
     G4cout<<"G4QuasiFreeRatios::GetQF2IN_Ratio: NewT, A="<<A<<", nDB="<<nDB<<G4endl;
 #endif
     lastT = new G4double[mps];          // Create the Linear Table
-    lastN = static_cast<int>(s/ds)+1;   // MaxBin to be initialized in Lin Table
+    lastN = static_cast<int>(s_value/ds)+1;   // MaxBin to be initialized in Lin Table
     if(lastN>nps)                       // The Lin Table should be completely initialized
     {
       lastN=nps;
@@ -175,12 +175,12 @@ G4double G4QuasiFreeRatios::GetQF2IN_Ratio(G4double s, G4int A)
       lastT[j]=CalcQF2IN_Ratio(sv,A);
     }
     lastL=new G4double[mls];            // Create the Logarithmic Table
-    if(s>sma)                           // Initialize the Log Table (at least a part of it)
+    if(s_value>sma)                     // Initialize the Log Table (at least a part of it)
     {
 #ifdef pdebug
       G4cout<<"G4QuasiFreeRatios::GetQF2IN_Ratio: NewL, A="<<A<<", nDB="<<nDB<<G4endl;
 #endif
-      G4double ls=std::log(s);
+      G4double ls=std::log(s_value);
       lastK = static_cast<int>((ls-lsi)/dl)+1; // MaxBin to be initialized in Log Table
       if(lastK>nls)                     // The Log Table should be completely initialized
       {
@@ -219,9 +219,9 @@ G4double G4QuasiFreeRatios::GetQF2IN_Ratio(G4double s, G4int A)
     lastT=vT[i];
     lastL=vL[i];
 #ifdef pdebug
-    G4cout<<"G4QuasiFreeRatios::GetQF2IN_Ratio: Found, s="<<s<<", lastM="<<lastM<<G4endl;
+    G4cout<<"G4QuasiFreeRatios::GetQF2IN_Ratio: Found, s="<<s_value<<", lastM="<<lastM<<G4endl;
 #endif
-    if(s>lastH)                          // At least Lin Table must be updated
+    if(s_value>lastH)                          // At least Lin Table must be updated
     {
       G4int nextN=lastN+1;               // The next bin to be initialized in Lin Table (p)
 #ifdef pdebug
@@ -229,7 +229,7 @@ G4double G4QuasiFreeRatios::GetQF2IN_Ratio(G4double s, G4int A)
 #endif
       if(lastN < nps)                    // The Lin Table is not completely initialized
       {
-        lastN = static_cast<int>(s/ds)+1;// MaxBin to be initialized in Lin Table
+        lastN = static_cast<int>(s_value/ds)+1;// MaxBin to be initialized in Lin Table
         G4double sv=lastH;
         if(lastN>nps)
         {
@@ -259,10 +259,10 @@ G4double G4QuasiFreeRatios::GetQF2IN_Ratio(G4double s, G4int A)
 #ifdef pdebug
       G4cout<<"G4QFRat::GetQF2IN_Ratio: sma="<<sma<<", lastK="<<lastK<<" < "<<nls<<G4endl;
 #endif
-      if(s>sma && lastK<nls)             // LogTab must be updated (not filled completely)
+      if(s_value>sma && lastK<nls)             // LogTab must be updated (not filled completely)
       {
         G4double sv=std::exp(lastM+lsi); // Define starting s-poit (lastM will be changed)
-        G4double ls=std::log(s);
+        G4double ls=std::log(s_value);
         lastK = static_cast<int>((ls-lsi)/dl)+1; // MaxBin to be initialized in Log Table
         if(lastK>nls)
         {
@@ -296,19 +296,19 @@ G4double G4QuasiFreeRatios::GetQF2IN_Ratio(G4double s, G4int A)
     }
   }
 #ifdef pdebug
-  G4cout<<"G4QuasiFreeRatios::GetQF2IN_Ratio: BeforeTab s="<<s<<", sma="<<sma<<G4endl;
+  G4cout<<"G4QuasiFreeRatios::GetQF2IN_Ratio: BeforeTab s="<<s_value<<", sma="<<sma<<G4endl;
 #endif
   // Now one can use tabeles to calculate the value
-  if(s<sma)                             // Use linear table
+  if(s_value<sma)                             // Use linear table
   {
-    G4int n=static_cast<int>(s/ds);     // Low edge number of the bin
-    G4double d=s-n*ds;                  // Linear shift
+    G4int n=static_cast<int>(s_value/ds);     // Low edge number of the bin
+    G4double d=s_value-n*ds;                  // Linear shift
     G4double v=lastT[n];                // Base
     lastR=v+d*(lastT[n+1]-v)/ds;        // Result
   }
   else                                  // Use log table
   {
-    G4double ls=std::log(s)-lsi;        // ln(s)-l_min
+    G4double ls=std::log(s_value)-lsi;        // ln(s)-l_min
     G4int n=static_cast<int>(ls/dl);    // Low edge number of the bin
     G4double d=ls-n*dl;                 // Log shift
     G4double v=lastL[n];                // Base
@@ -323,14 +323,14 @@ G4double G4QuasiFreeRatios::GetQF2IN_Ratio(G4double s, G4int A)
 } // End of CalcQF2IN_Ratio
 
 // Calculatio QasiFree/Inelastic Ratio as a function of total hN cross-section and A
-G4double G4QuasiFreeRatios::CalcQF2IN_Ratio(G4double s, G4int A)
+G4double G4QuasiFreeRatios::CalcQF2IN_Ratio(G4double s_value, G4int A)
 {
   static const G4double C=1.246;
-  G4double s2=s*s;
+  G4double s2=s_value*s_value;
   G4double s4=s2*s2;
-  G4double ss=std::sqrt(std::sqrt(s));
+  G4double ss=std::sqrt(std::sqrt(s_value));
   G4double P=7.48e-5*s2/(1.+8.77e12/s4/s4/s2);
-  G4double E=.2644+.016/(1.+std::exp((29.54-s)/2.49));
+  G4double E=.2644+.016/(1.+std::exp((29.54-s_value)/2.49));
   G4double F=ss*.1526*std::exp(-s2*ss*.0000859);
   return C*std::exp(-E*std::pow(G4double(A-1.),F))/std::pow(G4double(A),P);
 } // End of CalcQF2IN_Ratio

@@ -266,9 +266,9 @@ G4double G4QKaonMinusNuclearCrossSection::CalculateCrossSection(G4bool, G4int F,
       lastHEN = new G4double[nH];      // Allocate memory for the new HEN cross sections
       // --- Instead of making a separate function ---
       G4double P=THmiG;                // Table threshold in GeV/c
-      for(G4int m=0; m<nL; m++)
+      for(G4int n=0; n<nL; n++)
       {
-        lastLEN[m] = CrossSectionLin(targZ, targN, P);
+        lastLEN[n] = CrossSectionLin(targZ, targN, P);
         P+=dPG;
       }
       G4double lP=milPG;
@@ -381,14 +381,14 @@ G4double G4QKaonMinusNuclearCrossSection::CrossSectionFormula(G4int tZ, G4int tN
     G4double al=std::log(a);
     G4double a2=a*a;
     G4double c=52.*std::exp(al*0.6)*(1.+97./a2)/(1.+9.8/a)/(1.+47./a2);
-    G4double g=-.2-.003*a;
+    G4double g_value=-.2-.003*a;
     G4double h=.5+.07*a;
     G4double v=P-1.;
     G4double f=.6*a*sa/(1.+.00002*a2);
     G4double u=.125+.127*al;
-    sigma=(c+d*d)/(1.+g/sp+h/p2/p2)+f/(v*v+u*u)+20.*sa/P/sp;
+    sigma=(c+d*d)/(1.+g_value/sp+h/p2/p2)+f/(v*v+u*u)+20.*sa/P/sp;
 #ifdef pdebug
-    G4cout<<"G4QKMinNucCS::CSForm: A="<<a<<",P="<<P<<",CS="<<sigma<<",c="<<c<<",g="<<g
+    G4cout<<"G4QKMinNucCS::CSForm: A="<<a<<",P="<<P<<",CS="<<sigma<<",c="<<c<<",g="<<g_value
           <<",d="<<d<<",r="<<r<<",e="<<e<<",h="<<h<<G4endl;
 #endif
   }

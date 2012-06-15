@@ -1098,8 +1098,8 @@ G4double G4QPionMinusElasticCrossSection::GetQ2max(G4int PDG, G4int tgZ, G4int t
   {
     G4double mt=G4QPDGCode(90000000+tgZ*1000+tgN).GetMass()*.001; // Target mass in GeV
     G4double dmt=mt+mt;
-    G4double s=dmt*std::sqrt(pP2+mPi2)+mPi2+mt*mt;    // Mondelstam s
-    return dmt*dmt*pP2/s;
+    G4double s_value=dmt*std::sqrt(pP2+mPi2)+mPi2+mt*mt;    // Mondelstam s
+    return dmt*dmt*pP2/s_value;
   }
   else
   {

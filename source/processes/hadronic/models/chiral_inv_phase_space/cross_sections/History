@@ -11,6 +11,15 @@ Summarize all code modifications & keep track of all tags in this file.
      -----------------------------------------------------------------
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
+
+14-Jun-2012 A.Ribon                            (hadr-chips-cs-V09-05-04)
+------------------------------------------------------------------------
+Fixed mistake in G4QuasiFreeRatios.cc introduced in previous tag.
+
+13-Jun-2012 A.Ribon                            (hadr-chips-cs-V09-05-03)
+------------------------------------------------------------------------
+Fixed warnings of shadowed variables.
+
 27-Apr-2012 V. Uzhinsky                        (hadr-chips-cs-V09-05-02)
 G4QProtonNuclearCrossSection.cc and G4QNeutronNuclearCrossSection.cc 
 have been corrected for h+N/P interactions.

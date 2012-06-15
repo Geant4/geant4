@@ -270,11 +270,11 @@ G4double G4QNeutronNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, G
       lastHEN = new G4double[nH];      // Allocate memory for the new HEN cross sections
       // --- Instead of making a separate function ---
       G4double P=THmiG;                // Table threshold in GeV/c
-      for(G4int m=0; m<nL; m++)
+      for(G4int n=0; n<nL; n++)
       {
-        lastLEN[m] = CrossSectionLin(targZ, targN, P);
+        lastLEN[n] = CrossSectionLin(targZ, targN, P);
 #ifdef debug
-        G4cout<<"-Li->G4QNeutNucCS::CalcCS: P="<<P<<", S="<<lastLEN[m]<<G4endl;
+        G4cout<<"-Li->G4QNeutNucCS::CalcCS: P="<<P<<", S="<<lastLEN[n]<<G4endl;
 #endif
         P+=dPG;
       }
@@ -1398,17 +1398,17 @@ G4double G4QNeutronNuclearCrossSection::CrossSectionFormula(G4int tZ, G4int tN,
     G4double dl=al-3.;
     G4double dl2=dl*dl;
     G4double r=.21+.62*dl2/(1.+.5*dl2);
-    G4double g=42.*(std::exp(al*0.8)+4.E-8*a4)/(1.+28./a)/(1.+5.E-5*a2);
+    G4double g_value=42.*(std::exp(al*0.8)+4.E-8*a4)/(1.+28./a)/(1.+5.E-5*a2);
     G4double e=5.*((a6+.021*a8)/(1.+.0013*a7)+.001*a3)/(1.+.0007*a2);
-    G4double s=5./(1.+144./a8);
+    G4double s_value=5./(1.+144./a8);
 				G4double h=HEthresh; // Individual
 
     //G4double h=(.01/a4+2.5e-6/a)*(1.+7.e-8*a4)/(1.+6.e7/a12/a2);
-    //sigma=(c+d*d)/(1.+r/p4)+(g+e*std::exp(-s*P))/(1.+h/p4/p4);
-    sigma=(c+d*d)/(1+r/p4)+(g+e*std::exp(-s*P))/(1+h/p4/p4);
+    //sigma=(c+d*d)/(1.+r/p4)+(g_value+e*std::exp(-s_value*P))/(1.+h/p4/p4);
+    sigma=(c+d*d)/(1+r/p4)+(g_value+e*std::exp(-s_value*P))/(1+h/p4/p4);
 #ifdef pdebug
     G4cout<<"G4QNeutNuclearCrossS::CSForm: A="<<a<<",P="<<P<<",CS="<<sigma<<",c="<<c<<",g="
-          <<g<<",d="<<d<<",r="<<r<<",e="<<e<<",h="<<h<<G4endl;
+          <<g_value<<",d="<<d<<",r="<<r<<",e="<<e<<",h="<<h<<G4endl;
 #endif
   }
   else
