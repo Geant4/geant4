@@ -122,8 +122,8 @@ G4ICRU49NuclearStoppingModel::ComputeDEDXPerVolume(const G4Material* mat,
   for (G4int iel=0; iel<numberOfElements; iel++) {
     const G4Element* element = (*theElementVector)[iel] ;
     G4double z2 = element->GetZ();
-    G4double m2 = element->GetA()*mole/g ;
-    nloss += (NuclearStoppingPower(kinEnergy, z1, z2, m1, m2))
+    G4double mm2 = element->GetA()*mole/g ;
+    nloss += (NuclearStoppingPower(kinEnergy, z1, z2, m1, mm2))
            * atomDensity[iel] ;
   }
   nloss *= theZieglerFactor;
@@ -135,7 +135,7 @@ G4ICRU49NuclearStoppingModel::ComputeDEDXPerVolume(const G4Material* mat,
 G4double 
 G4ICRU49NuclearStoppingModel::NuclearStoppingPower(G4double kineticEnergy,
 						   G4double z1, G4double z2,
-						   G4double m1, G4double m2)
+						   G4double m1, G4double mm2)
 {
   G4double energy = kineticEnergy/keV ;  // energy in keV
   G4double nloss = 0.0;
@@ -144,10 +144,10 @@ G4ICRU49NuclearStoppingModel::NuclearStoppingPower(G4double kineticEnergy,
   G4int iz2 = G4int(z2);
   
   G4double rm;
-  if(iz1 > 1) rm = (m1 + m2) * ( g4pow->Z23(iz1) + g4pow->Z23(iz2) );
-  else        rm = (m1 + m2) * g4pow->Z13(iz2);
+  if(iz1 > 1) rm = (m1 + mm2) * ( g4pow->Z23(iz1) + g4pow->Z23(iz2) );
+  else        rm = (m1 + mm2) * g4pow->Z13(iz2);
 
-  G4double er = 32.536 * m2 * energy / ( z12 * rm ) ;  // reduced energy
+  G4double er = 32.536 * mm2 * energy / ( z12 * rm ) ;  // reduced energy
 
   if (er >= ed[0]) nloss = ad[0];
   else {
@@ -163,9 +163,9 @@ G4ICRU49NuclearStoppingModel::NuclearStoppingPower(G4double kineticEnergy,
 
   // Stragling
   if(lossFlucFlag) {
-    //    G4double sig = 4.0 * m1 * m2 / ((m1 + m2)*(m1 + m2)*
+    //    G4double sig = 4.0 * m1 * mm2 / ((m1 + mm2)*(m1 + mm2)*
     //              (4.0 + 0.197*std::pow(er,-1.6991)+6.584*std::pow(er,-1.0494))) ;
-    G4double sig = 4.0 * m1 * m2 / ((m1 + m2)*(m1 + m2)*
+    G4double sig = 4.0 * m1 * mm2 / ((m1 + mm2)*(m1 + mm2)*
 				    (4.0 + 0.197/(er*er) + 6.584/er));
 
     nloss *= G4RandGauss::shoot(1.0,sig) ;

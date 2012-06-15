@@ -43,7 +43,8 @@
 //      "Non Ionizing Energy Loss induced by Electrons in the Space Environment"
 //       Proc. of the 13th International Conference on Particle Physics and Advanced Technology 
 //       (13th ICPPAT, Como 3-7/10/2011), World Scientific (Singapore).
-//       
+//      Available at: http://arxiv.org/abs/1111.4042v4
+//
 //
 // -------------------------------------------------------------------
 //
@@ -118,7 +119,7 @@ protected:
   	G4ParticleTable*          theParticleTable;
   	G4ParticleChangeForGamma* fParticleChange; 
   	G4NistManager*            fNistManager;
-  	G4ScreeningMottCrossSection* McFcross;	  
+  	G4ScreeningMottCrossSection* Mottcross;	  
 
         const std::vector<G4double>* pCuts;
   	const G4MaterialCutsCouple* currentCouple; 
@@ -162,7 +163,7 @@ void G4eSingleCoulombScatteringModel::SetupParticle(const G4ParticleDefinition* 
   	if(p != particle) {
     		particle = p;
     		mass = particle->GetPDGMass();
-		McFcross->SetupParticle(p);
+		Mottcross->SetupParticle(p);
   		}
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -134,8 +134,8 @@ G4double G4IonCoulombScatteringModel::ComputeCrossSectionPerAtom(
 
   	SetupParticle(p);
  
-  	G4double xsec =0.0;
-	if(kinEnergy < lowEnergyLimit) return xsec;
+  	G4double cross =0.0;
+	if(kinEnergy < lowEnergyLimit) return cross;
 
   	DefineMaterial(CurrentCouple());
 
@@ -147,10 +147,10 @@ G4double G4IonCoulombScatteringModel::ComputeCrossSectionPerAtom(
 
         ioncross->SetupTarget(Z, kinEnergy, heavycorr);
 
-  	xsec = ioncross->NuclearCrossSection();
+  	cross = ioncross->NuclearCrossSection();
 
-//cout<< "..........xsec "<<G4BestUnit(xsec,"Surface") <<endl;
-  return xsec;
+//cout<< "..........cross "<<G4BestUnit(cross,"Surface") <<endl;
+  return cross;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -177,13 +177,13 @@ void G4IonCoulombScatteringModel::SampleSecondaries(
 	G4double Z  = currentElement->GetZ();
   	G4int iz          = G4int(Z);
   	G4int ia = SelectIsotopeNumber(currentElement);
-  	G4double m2 = G4NucleiProperties::GetNuclearMass(ia, iz);
+  	G4double mm2 = G4NucleiProperties::GetNuclearMass(ia, iz);
 
 
 
-	G4double xsec= ComputeCrossSectionPerAtom(particle,kinEnergy, Z,
+	G4double cross= ComputeCrossSectionPerAtom(particle,kinEnergy, Z,
                                 kinEnergy, cutEnergy, kinEnergy) ;
-	if(xsec == 0.0) { return; }
+	if(cross == 0.0) { return; }
     
 	//scattering angle, z1 == (1-cost)
   	G4double z1 = ioncross->SampleCosineTheta(); 
@@ -201,7 +201,7 @@ void G4IonCoulombScatteringModel::SampleSecondaries(
   	G4double ptot = sqrt(mom2);
 
 	//CM particle 1
-  	G4double bet  = ptot/(etot + m2);
+  	G4double bet  = ptot/(etot + mm2);
   	G4double gam  = 1.0/sqrt((1.0 - bet)*(1.0 + bet));
 
 	//CM 	
@@ -224,8 +224,8 @@ void G4IonCoulombScatteringModel::SampleSecondaries(
   
 	// V.Ivanchenko fix of final energies after scattering
 	// recoil.......................................
-	//G4double trec =(1.0 - cost)* m2*(etot*etot - mass*mass )/
-	//			(mass*mass + m2*m2+ 2.*m2*etot);
+	//G4double trec =(1.0 - cost)* mm2*(etot*etot - mass*mass )/
+	//			(mass*mass + mm2*mm2+ 2.*mm2*etot);
         //G4double finalT = kinEnergy - trec;
 
 	// new computation

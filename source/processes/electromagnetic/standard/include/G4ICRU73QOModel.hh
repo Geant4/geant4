@@ -140,7 +140,7 @@ private:
   G4DensityEffectData*        denEffData;
 
   G4double mass;
-  G4double q;
+  G4double charge;
   G4double chargeSquare;
   G4double massRate;
   G4double ratio;
@@ -197,8 +197,8 @@ inline void G4ICRU73QOModel::SetParticle(const G4ParticleDefinition* p)
 {
   particle = p;
   mass = particle->GetPDGMass();
-  q = particle->GetPDGCharge()/eplus;
-  chargeSquare = q*q;
+  charge = particle->GetPDGCharge()/eplus;
+  chargeSquare = charge*charge;
   massRate     = mass/proton_mass_c2;
   ratio = electron_mass_c2/mass;
 }

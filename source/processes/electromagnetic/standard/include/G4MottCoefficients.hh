@@ -23,76 +23,71 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SeltzerBergerModel.hh,v 1.14 2010-10-26 10:35:22 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// -------------------------------------------------------------------
+//	G4MottCoefficients.hh
+//-------------------------------------------------------------------
 //
 // GEANT4 Class header file
 //
+// File name:    G4MottCoefficients
 //
-// File name:     G4SeltzerBergerModel
+// Author:      Cristina Consolandi
 //
-// Author:        Andreas Schaelicke & Vladimir Ivantchenko
-//
-// Creation date: 25.09.2011
-//
-// Modifications:
-//
-//
-// Class Description:
-//
-// Implementation of the bremssrahlung model using
-// S.M. Seltzer and M.J. Berger Atomic data and Nuclear Data 
-// Tables 35 (1986) 345
+// Creation date: 27.05.2012  
+//                                  
+//  Class Description:
+// 
+//       Mott Coulomb Cross section coefficients:
+// 
+//       Reference:
+//       M.J. Boschini et al.
+//       "Non Ionizing Energy Loss induced by Electrons in the Space Environment"
+//       Proc. of the 13th International Conference on Particle Physics and Advanced Technology 
+//       (13th ICPPAT, Como 3-7/10/2011), World Scientific (Singapore).
+//       
+//       Available at: http://arxiv.org/abs/1111.4042v4
+//       coeffb of par. 2.1 , eq. (17) were recalculated by M. Tacconi
+//       following the same procedur as: 
+//       
+//       T. Lijian et al. "Analytic Fitting to the Mott Cross Section of Electrons" 
+//       Radiat. Phys. Chem. 45 (1995), 235–245.
+// 
+//       
+// ----------------------------------------------------------------------------------------
 
-// -------------------------------------------------------------------
 //
+#ifndef G4MottCoefficients_h
+#define G4MottCoefficients_h 1
 
-#ifndef G4SeltzerBergerModel_h
-#define G4SeltzerBergerModel_h 1
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4eBremsstrahlungRelModel.hh"
 #include "globals.hh"
 
-class G4Physics2DVector;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4SeltzerBergerModel : public G4eBremsstrahlungRelModel
+class G4MottCoefficients
 {
 
 public:
 
-  G4SeltzerBergerModel(const G4ParticleDefinition* p = 0, 
-		       const G4String& nam = "eBremSB");
+  	G4MottCoefficients();
 
-  virtual ~G4SeltzerBergerModel();
+  	virtual ~G4MottCoefficients();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+	void  SetMottCoeff( G4double targetZ, G4double coeff[5][6] );
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double cutEnergy,
-				 G4double maxEnergy);
 
-protected:
-
-  virtual G4double ComputeDXSectionPerAtom(G4double gammaEnergy);
 
 private:
 
-  void ReadData(size_t Z, const char* path = 0);
+ 	G4MottCoefficients & operator=(const  G4MottCoefficients &right);
+  	G4MottCoefficients(const  G4MottCoefficients&);
 
-  // hide assignment operator
-  G4SeltzerBergerModel & operator=(const  G4SeltzerBergerModel &right);
-  G4SeltzerBergerModel(const  G4SeltzerBergerModel&);
-
-  static G4Physics2DVector* dataSB[101];
-  static G4double ylimit[101];
 
 };
 
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-
 #endif
+
+

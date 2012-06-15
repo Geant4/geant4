@@ -184,7 +184,7 @@ void G4InitXscPAI::Normalisation()
   //  G4cout<<"G4InitXscPAI::fNormalizationCof/cof = "<<fNormalizationCof
   //    <<";  at delta ="<<delta<<G4endl ;
 
-  for (G4int i = 0; i < fIntervalNumber; i++) // renormalisation on QM sum rule
+  for (i = 0; i < fIntervalNumber; i++) // renormalisation on QM sum rule
   {
     for(j = 1; j < 5 ; j++)
     {
@@ -222,10 +222,6 @@ void G4InitXscPAI::Normalisation()
         <<";  at delta ="<<delta<<"  and i = "<<i<<G4endl ;
  */ 
 }
-
-
-
-
 
 ////////////////////////////////////////////////////////////////////
 //

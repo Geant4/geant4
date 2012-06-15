@@ -45,6 +45,7 @@
 // 25-01-06 remove cut dependance in AtRestDoIt (mma)
 // 09-08-06 add SetModel(G4VEmModel*) (mma)
 // 12-09-06, move SetModel(G4VEmModel*) in G4VEmProcess (mma)
+// 30-05-12 propagate parent weight to secondaries (D. Sawkey)
 //
 
 //
@@ -136,13 +137,15 @@ G4VParticleChange* G4eplusAnnihilation::AtRestDoIt(const G4Track& aTrack,
   phi = twopi * G4UniformRand();
   G4ThreeVector pol(cos(phi), sin(phi), 0.0);
   pol.rotateUz(dir);
-
+  
+  fParticleChange.ProposeWeight(aTrack.GetWeight());
   // add gammas
   fParticleChange.SetNumberOfSecondaries(2);
   G4DynamicParticle* dp = 
     new G4DynamicParticle(theGamma, dir, electron_mass_c2);
   dp->SetPolarization(pol.x(),pol.y(),pol.z()); 
   fParticleChange.AddSecondary(dp);
+
   dp = new G4DynamicParticle(theGamma,-dir, electron_mass_c2);
   dp->SetPolarization(-pol.x(),-pol.y(),-pol.z()); 
   fParticleChange.AddSecondary(dp);

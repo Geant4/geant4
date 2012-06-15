@@ -64,7 +64,7 @@ class G4eBremParametrizedModel : public G4VEmModel
 public:
 
   G4eBremParametrizedModel(const G4ParticleDefinition* p = 0, 
-			    const G4String& nam = "eBremLPM");
+			   const G4String& nam = "eBremParam");
 
   virtual ~G4eBremParametrizedModel();
 

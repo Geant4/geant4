@@ -77,8 +77,8 @@ G4bool G4hMultipleScattering::IsApplicable (const G4ParticleDefinition& p)
 void G4hMultipleScattering::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(isInitialized) { return; }
-  G4VMscModel* mscUrban = new G4UrbanMscModel90();
-  AddEmModel(1,mscUrban);
+  if(!Model(1)) { SetModel(new G4UrbanMscModel90(), 1); }
+  AddEmModel(1, Model(1));
   isInitialized = true;
 }
 

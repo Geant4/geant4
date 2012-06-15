@@ -421,7 +421,7 @@ G4double G4UrbanMscModel90::ComputeTruePathLengthLimit(
   if (steppingAlgorithm == fUseDistanceToBoundary)
     {
       //compute geomlimit and presafety 
-      G4double geomlimit = ComputeGeomLimit(track, presafety, currentRange);
+      geomlimit = ComputeGeomLimit(track, presafety, currentRange);
    
       // is far from boundary
       if(currentRange <= presafety)

@@ -337,7 +337,7 @@ G4double G4UrbanMscModel93::ComputeCrossSectionPerAtom(
   G4double sigma;
   SetParticle(part);
 
-  G4double Z23 = 2.*log(AtomicNumber)/3.; Z23 = exp(Z23);
+  G4double Z23 = pow(AtomicNumber,2./3.); 
 
   // correction if particle .ne. e-/e+
   // compute equivalent kinetic energy
@@ -377,10 +377,10 @@ G4double G4UrbanMscModel93::ComputeCrossSectionPerAtom(
   if (iZ==14)                               iZ = 13;
   if (iZ==-1)                               iZ = 0 ;
 
-  G4double Z1 = Zdat[iZ];
-  G4double Z2 = Zdat[iZ+1];
-  G4double ratZ = (AtomicNumber-Z1)*(AtomicNumber+Z1)/
-                  ((Z2-Z1)*(Z2+Z1));
+  G4double ZZ1 = Zdat[iZ];
+  G4double ZZ2 = Zdat[iZ+1];
+  G4double ratZ = (AtomicNumber-ZZ1)*(AtomicNumber+ZZ1)/
+                  ((ZZ2-ZZ1)*(ZZ2+ZZ1));
 
   if(eKineticEnergy <= Tlim) 
   {
@@ -431,12 +431,12 @@ G4double G4UrbanMscModel93::ComputeCrossSectionPerAtom(
   {
     c1 = bg2lim*sig0[iZ]*(1.+hecorr[iZ]*(beta2-beta2lim))/bg2;
     c2 = bg2lim*sig0[iZ+1]*(1.+hecorr[iZ+1]*(beta2-beta2lim))/bg2;
-    if((AtomicNumber >= Z1) && (AtomicNumber <= Z2))
+    if((AtomicNumber >= ZZ1) && (AtomicNumber <= ZZ2))
       sigma = c1+ratZ*(c2-c1) ;
-    else if(AtomicNumber < Z1)
-      sigma = AtomicNumber*AtomicNumber*c1/(Z1*Z1);
-    else if(AtomicNumber > Z2)
-      sigma = AtomicNumber*AtomicNumber*c2/(Z2*Z2);
+    else if(AtomicNumber < ZZ1)
+      sigma = AtomicNumber*AtomicNumber*c1/(ZZ1*ZZ1);
+    else if(AtomicNumber > ZZ2)
+      sigma = AtomicNumber*AtomicNumber*c2/(ZZ2*ZZ2);
   }
   return sigma;
 
@@ -492,7 +492,7 @@ G4double G4UrbanMscModel93::ComputeTruePathLengthLimit(
   if (steppingAlgorithm == fUseDistanceToBoundary)
     {
       //compute geomlimit and presafety 
-      G4double geomlimit = ComputeGeomLimit(track, presafety, currentRange);
+      geomlimit = ComputeGeomLimit(track, presafety, currentRange);
 
       // is it far from boundary ?
       if(currentRange < presafety)

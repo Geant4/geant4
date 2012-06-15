@@ -192,8 +192,8 @@ G4PEEffectFluoModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
       fAtomDeexcitation->GenerateParticles(fvect, shell, Z, index);
       size_t nafter = fvect->size();
       if(nafter > nbefore) {
-	for (size_t i=nbefore; i<nafter; ++i) {
-	  edep -= ((*fvect)[i])->GetKineticEnergy();
+	for (size_t j=nbefore; j<nafter; ++j) {
+	  edep -= ((*fvect)[j])->GetKineticEnergy();
 	} 
       }
     }

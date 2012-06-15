@@ -127,15 +127,15 @@ void G4IonCoulombCrossSection::SetupKinematic(G4double ekin,
                 G4double m12  = mass*mass;
 
                 targetMass=fNistManager->GetAtomicMassAmu(iz)*amu_c2;
-                G4double m2   = targetMass;
+                G4double mm2   = targetMass;
 
         // relativistic reduced mass from publucation
         // A.P. Martynenko, R.N. Faustov, Teoret. mat. Fiz. 64 (1985) 179
         
 		//incident particle & target nucleus
-	        G4double Ecm=sqrt(m12 + m2*m2 + 2.0*etot*m2);
-                G4double mu_rel=mass*m2/Ecm;
-                G4double momCM= ptot*m2/Ecm;
+	        G4double Ecm=sqrt(m12 + mm2*mm2 + 2.0*etot*mm2);
+                G4double mu_rel=mass*mm2/Ecm;
+                G4double momCM= ptot*mm2/Ecm;
                 // relative system
                 mom2 = momCM*momCM;
                 invbeta2 = 1.0 +  mu_rel*mu_rel/mom2;

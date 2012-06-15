@@ -65,6 +65,7 @@ G4ICRU73QOModel::G4ICRU73QOModel(const G4ParticleDefinition* p, const G4String& 
     particle(0),
     isInitialised(false)
 {
+  mass = charge = chargeSquare = massRate = ratio = 0.0;
   if(p) { SetParticle(p); }
   SetHighEnergyLimit(10.0*MeV);
 
@@ -260,7 +261,7 @@ G4double G4ICRU73QOModel::DEDXPerElement(G4int AtomicNumber,
 
   }
   G4double dedx  = 2*CLHEP::twopi_mc2_rcl2*chargeSquare*factorBethe[Z]*
-    (l0Term + q*fBetheVelocity*l1Term 
+    (l0Term + charge*fBetheVelocity*l1Term 
      + chargeSquare*fBetheVelocity*fBetheVelocity*l2Term)/beta2;
   return dedx;
 }
@@ -379,8 +380,8 @@ void G4ICRU73QOModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
 
   // sampling follows ...
   do {
-    G4double q = G4UniformRand();
-    deltaKinEnergy = xmin*xmax/(xmin*(1.0 - q) + xmax*q);
+    G4double x = G4UniformRand();
+    deltaKinEnergy = xmin*xmax/(xmin*(1.0 - x) + xmax*x);
 
     f = 1.0 - beta2*deltaKinEnergy/tmax;
 

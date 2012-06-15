@@ -101,9 +101,7 @@ G4double G4DipBustGenerator::PolarAngle(const G4double eTkin,
 void G4DipBustGenerator::PrintGeneratorInformation() const
 {
   G4cout << "\n" << G4endl;
-  G4cout << "Bremsstrahlung Angular Generator is Modified Tsai" << G4endl;
-  G4cout << "Distribution suggested by L.Urban (Geant3 manual (1993) Phys211)" 
-	 << G4endl;
-  G4cout << "Derived from Tsai distribution (Rev Mod Phys 49,421(1977)) \n" 
+  G4cout << "Angular Generator based on classical formula from" << G4endl;
+  G4cout << "J.D. Jackson, Classical Electrodynamics, Wiley, New York 1975" 
 	 << G4endl;
 } 

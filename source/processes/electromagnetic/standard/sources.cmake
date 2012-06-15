@@ -71,6 +71,7 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4KleinNishinaModel.hh
         G4ModifiedTsai.hh
         G4MollerBhabhaModel.hh
+        G4MottCoefficients.hh
         G4NuclearStopping.hh
         G4PAIModel.hh
         G4PAIPhotonModel.hh
@@ -91,6 +92,8 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4WaterStopping.hh
         G4WentzelOKandVIxSection.hh
         G4WentzelVIModel.hh
+        G4WentzelVIRelModel.hh
+        G4WentzelVIRelXSection.hh
         G4XrayRayleighModel.hh
         G4alphaIonisation.hh
         G4eBremsstrahlung.hh
@@ -103,6 +106,7 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4eSingleCoulombScatteringModel.hh
         G4eeToTwoGammaModel.hh
         G4eplusAnnihilation.hh
+        G4hCoulombScatteringModel.hh
         G4hIonisation.hh
         G4hMultipleScattering.hh
         G4ionIonisation.hh
@@ -132,6 +136,7 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4KleinNishinaModel.cc
         G4ModifiedTsai.cc
         G4MollerBhabhaModel.cc
+        G4MottCoefficients.cc
         G4NuclearStopping.cc
         G4PAIModel.cc
         G4PAIPhotonModel.cc
@@ -152,6 +157,8 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4WaterStopping.cc
         G4WentzelOKandVIxSection.cc
         G4WentzelVIModel.cc
+        G4WentzelVIRelModel.cc
+        G4WentzelVIRelXSection.cc
         G4XrayRayleighModel.cc
         G4alphaIonisation.cc
         G4eBremsstrahlung.cc
@@ -164,6 +171,7 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4eSingleCoulombScatteringModel.cc
         G4eeToTwoGammaModel.cc
         G4eplusAnnihilation.cc
+        G4hCoulombScatteringModel.cc
         G4hIonisation.cc
         G4hMultipleScattering.cc
         G4ionIonisation.cc

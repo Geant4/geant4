@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.63 2010-11-05 19:15:09 vnivanch Exp $
+// $Id: G4WentzelVIRelModel.cc,v 1.63 2010-11-05 19:15:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -31,16 +31,13 @@
 // GEANT4 Class file
 //
 //
-// File name:   G4WentzelVIModel
+// File name:   G4WentzelVIRelModel
 //
 // Author:      V.Ivanchenko 
 //
-// Creation date: 09.04.2008 from G4MuMscModel
+// Creation date: 08.06.2012 from G4WentzelVIRelModel
 //
 // Modifications:
-// 27-05-2010 V.Ivanchenko added G4WentzelOKandVIxSection class to
-//              compute cross sections and sample scattering angle
-//
 //
 // Class Description:
 //
@@ -56,7 +53,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4WentzelVIModel.hh"
+#include "G4WentzelVIRelModel.hh"
 #include "Randomize.hh"
 #include "G4ParticleChangeForMSC.hh"
 #include "G4PhysicsTableHelper.hh"
@@ -70,7 +67,7 @@
 
 using namespace std;
 
-G4WentzelVIModel::G4WentzelVIModel(const G4String& nam) :
+G4WentzelVIRelModel::G4WentzelVIRelModel(const G4String& nam) :
   G4VMscModel(nam),
   numlimit(0.1),
   currentCouple(0),
@@ -88,7 +85,7 @@ G4WentzelVIModel::G4WentzelVIModel(const G4String& nam) :
   theManager = G4LossTableManager::Instance();
   fNistManager = G4NistManager::Instance();
   fG4pow = G4Pow::GetInstance();
-  wokvi = new G4WentzelOKandVIxSection();
+  wokvi = new G4WentzelVIRelXSection();
 
   preKinEnergy = tPathLength = zPathLength = lambdaeff = currentRange = xtsec = 0;
   currentMaterialIndex = 0;
@@ -101,14 +98,14 @@ G4WentzelVIModel::G4WentzelVIModel(const G4String& nam) :
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4WentzelVIModel::~G4WentzelVIModel()
+G4WentzelVIRelModel::~G4WentzelVIRelModel()
 {
   delete wokvi;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4WentzelVIModel::Initialise(const G4ParticleDefinition* p,
+void G4WentzelVIRelModel::Initialise(const G4ParticleDefinition* p,
 				  const G4DataVector& cuts)
 {
   // reset parameters
@@ -117,7 +114,7 @@ void G4WentzelVIModel::Initialise(const G4ParticleDefinition* p,
   cosThetaMax = cos(PolarAngleLimit());
   wokvi->Initialise(p, cosThetaMax);
   /*  
-  G4cout << "G4WentzelVIModel: " << particle->GetParticleName()
+  G4cout << "G4WentzelVIRelModel: " << particle->GetParticleName()
          << "  1-cos(ThetaLimit)= " << 1 - cosThetaMax 
 	 << G4endl;
   */
@@ -129,7 +126,7 @@ void G4WentzelVIModel::Initialise(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4WentzelVIModel::ComputeCrossSectionPerAtom( 
+G4double G4WentzelVIRelModel::ComputeCrossSectionPerAtom( 
                              const G4ParticleDefinition* p,
 			     G4double kinEnergy,
 			     G4double Z, G4double,
@@ -139,7 +136,7 @@ G4double G4WentzelVIModel::ComputeCrossSectionPerAtom(
   if(p != particle) { SetupParticle(p); }
   if(kinEnergy < lowEnergyLimit) { return cross; }
   if(!CurrentCouple()) {
-    G4Exception("G4WentzelVIModel::ComputeCrossSectionPerAtom", "em0011",
+    G4Exception("G4WentzelVIRelModel::ComputeCrossSectionPerAtom", "em0011",
 		FatalException, " G4MaterialCutsCouple is not defined");
     return 0.0;
   }
@@ -150,7 +147,7 @@ G4double G4WentzelVIModel::ComputeCrossSectionPerAtom(
     cross = wokvi->ComputeTransportCrossSectionPerAtom(cosTetMaxNuc);
     /*
     if(p->GetParticleName() == "e-")      
-    G4cout << "G4WentzelVIModel::CS: Z= " << G4int(Z) << " e(MeV)= " << kinEnergy 
+    G4cout << "G4WentzelVIRelModel::CS: Z= " << G4int(Z) << " e(MeV)= " << kinEnergy 
 	   << " 1-cosN= " << 1 - cosTetMaxNuc << " cross(bn)= " << cross/barn
 	   << " " << particle->GetParticleName() << G4endl;
     */
@@ -160,7 +157,7 @@ G4double G4WentzelVIModel::ComputeCrossSectionPerAtom(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
+G4double G4WentzelVIRelModel::ComputeTruePathLengthLimit(
                              const G4Track& track,
 			     G4double& currentMinimalStep)
 {
@@ -169,7 +166,7 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
   G4StepPoint* sp = track.GetStep()->GetPreStepPoint();
   G4StepStatus stepStatus = sp->GetStepStatus();
   singleScatteringMode = false;
-  //G4cout << "G4WentzelVIModel::ComputeTruePathLengthLimit stepStatus= " 
+  //G4cout << "G4WentzelVIRelModel::ComputeTruePathLengthLimit stepStatus= " 
   //	 << stepStatus << G4endl;
 
   // initialisation for 1st step  
@@ -259,7 +256,7 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4WentzelVIModel::ComputeGeomPathLength(G4double truelength)
+G4double G4WentzelVIRelModel::ComputeGeomPathLength(G4double truelength)
 {
   tPathLength  = truelength;
   zPathLength  = tPathLength;
@@ -290,7 +287,7 @@ G4double G4WentzelVIModel::ComputeGeomPathLength(G4double truelength)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
+G4double G4WentzelVIRelModel::ComputeTrueStepLength(G4double geomStepLength)
 {
   // initialisation of single scattering x-section
   xtsec = 0.0;
@@ -380,10 +377,10 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
+void G4WentzelVIRelModel::SampleScattering(const G4DynamicParticle* dynParticle,
 					G4double safety)
 {
-  //G4cout << "!##! G4WentzelVIModel::SampleScattering for " 
+  //G4cout << "!##! G4WentzelVIRelModel::SampleScattering for " 
   //	 << particle->GetParticleName() << G4endl;
 
   // ignore scattering for zero step length and energy below the limit
@@ -525,7 +522,7 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
     
   dir.rotateUz(oldDirection);
 
-  //G4cout << "G4WentzelVIModel sampling of scattering is done" << G4endl;
+  //G4cout << "G4WentzelVIRelModel sampling of scattering is done" << G4endl;
   // end of sampling -------------------------------
 
   fParticleChange->ProposeMomentumDirection(dir);
@@ -548,12 +545,12 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
       ComputeDisplacement(fParticleChange, pos, r, safety);
     }
   }
-  //G4cout << "G4WentzelVIModel::SampleScattering end NewDir= " << dir << G4endl;
+  //G4cout << "G4WentzelVIRelModel::SampleScattering end NewDir= " << dir << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4WentzelVIModel::ComputeXSectionPerVolume()
+G4double G4WentzelVIRelModel::ComputeXSectionPerVolume()
 {
   // prepare recomputation of x-sections
   const G4ElementVector* theElementVector = currentMaterial->GetElementVector();

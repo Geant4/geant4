@@ -836,9 +836,9 @@ void G4eBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
   gammaDirection.rotateUz(direction);
 
   // create G4DynamicParticle object for the Gamma
-  G4DynamicParticle* g = new G4DynamicParticle(theGamma,gammaDirection,
-                                                        gammaEnergy);
-  vdp->push_back(g);
+  G4DynamicParticle* gamma = new G4DynamicParticle(theGamma,gammaDirection,
+						   gammaEnergy);
+  vdp->push_back(gamma);
   
   G4double totMomentum = sqrt(kineticEnergy*(totalEnergy + electron_mass_c2));
   G4ThreeVector dir = totMomentum*direction - gammaEnergy*gammaDirection;

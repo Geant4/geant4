@@ -484,10 +484,10 @@ void G4PSTARStopping::Initialise()
   AddData(T0, e73, 73);
 } 
 
-void G4PSTARStopping::AddData(G4double* ekin, G4double* s, G4int idx)
+void G4PSTARStopping::AddData(G4double* ekin, G4double* stop, G4int idx)
 {
   sdata[idx] = new G4LPhysicsFreeVector(60, ekin[0]*MeV, ekin[59]*MeV);
   const G4double fac = MeV*cm2/g;
-  for(size_t i=0; i<60; ++i) { sdata[idx]->PutValues(i, ekin[i]*MeV, s[i]*fac); }
+  for(size_t i=0; i<60; ++i) { sdata[idx]->PutValues(i, ekin[i]*MeV, stop[i]*fac); }
   sdata[idx]->SetSpline(true);
 }

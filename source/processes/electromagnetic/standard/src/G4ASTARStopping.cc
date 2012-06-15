@@ -418,10 +418,10 @@ G4double e73[78] = { 18.11, 23.3, 27.86, 31.99, 35.83, 42.84, 49.2, 55.1, 60.63,
 AddData(T0,e73, 73);
 } 
 
-void G4ASTARStopping::AddData(G4double* ekin, G4double* s, G4int idx)
+void G4ASTARStopping::AddData(G4double* ekin, G4double* stop, G4int idx)
 {
 sdata[idx] = new G4LPhysicsFreeVector(78, ekin[0]*MeV, ekin[77]*MeV);
 const G4double fac = MeV*cm2/g;
-for(size_t i=0; i<78; ++i) { sdata[idx]->PutValues(i, ekin[i]*MeV, s[i]*fac); }
+for(size_t i=0; i<78; ++i) { sdata[idx]->PutValues(i, ekin[i]*MeV, stop[i]*fac); }
 sdata[idx]->SetSpline(true);
 }

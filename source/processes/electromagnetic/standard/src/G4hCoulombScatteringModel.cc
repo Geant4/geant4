@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.91 2010-11-13 18:45:55 vnivanch Exp $
+// $Id: G4hCoulombScatteringModel.cc,v 1.91 2010-11-13 18:45:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -31,23 +31,13 @@
 // GEANT4 Class file
 //
 //
-// File name:     G4eCoulombScatteringModel
+// File name:     G4hCoulombScatteringModel
 //
 // Author:        Vladimir Ivanchenko 
 //
-// Creation date: 22.08.2005
+// Creation date: 08.06.2012 from G4eCoulombScatteringModel
 //
 // Modifications:
-//
-// 01.08.06 V.Ivanchenko extend upper limit of table to TeV and review the
-//          logic of building - only elements from G4ElementTable
-// 08.08.06 V.Ivanchenko build internal table in ekin scale, introduce faclim
-// 19.08.06 V.Ivanchenko add inline function ScreeningParameter 
-// 09.10.07 V.Ivanchenko reorganized methods, add cut dependence in scattering off e- 
-// 09.06.08 V.Ivanchenko add SelectIsotope and sampling of the recoil ion 
-// 16.06.09 C.Consolandi fixed computation of effective mass
-// 27.05.10 V.Ivanchenko added G4WentzelOKandVIxSection class to
-//              compute cross sections and sample scattering angle
 //
 //
 // Class Description:
@@ -57,7 +47,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4eCoulombScatteringModel.hh"
+#include "G4hCoulombScatteringModel.hh"
 #include "Randomize.hh"
 #include "G4DataVector.hh"
 #include "G4ElementTable.hh"
@@ -75,7 +65,7 @@
 
 using namespace std;
 
-G4eCoulombScatteringModel::G4eCoulombScatteringModel(const G4String& nam)
+G4hCoulombScatteringModel::G4hCoulombScatteringModel(const G4String& nam)
   : G4VEmModel(nam),
     cosThetaMin(1.0),
     cosThetaMax(-1.0),
@@ -94,7 +84,7 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(const G4String& nam)
 
   particle = 0;
   currentCouple = 0;
-  wokvi = new G4WentzelOKandVIxSection();
+  wokvi = new G4WentzelVIRelXSection();
 
   currentMaterialIndex = 0;
 
@@ -106,14 +96,14 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(const G4String& nam)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4eCoulombScatteringModel::~G4eCoulombScatteringModel()
+G4hCoulombScatteringModel::~G4hCoulombScatteringModel()
 {
   delete wokvi;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
+void G4hCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
 					   const G4DataVector& cuts)
 {
   SetupParticle(p);
@@ -121,13 +111,13 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
   cosThetaMin = cos(PolarAngleLimit());
   wokvi->Initialise(p, cosThetaMin);
   /*  
-  G4cout << "G4eCoulombScatteringModel: " << particle->GetParticleName()
+  G4cout << "G4hCoulombScatteringModel: " << particle->GetParticleName()
          << "  1-cos(ThetaLimit)= " << 1 - cosThetaMin
 	 << "  cos(thetaMax)= " <<  cosThetaMax
 	 << G4endl;
   */
   pCuts = G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(3);
-  //G4cout << "!!! G4eCoulombScatteringModel::Initialise for " 
+  //G4cout << "!!! G4hCoulombScatteringModel::Initialise for " 
   //	 << p->GetParticleName() << "  cos(TetMin)= " << cosThetaMin 
   //	 << "  cos(TetMax)= " << cosThetaMax <<G4endl;
   // G4cout << "cut0= " << cuts[0] << "  cut1= " << cuts[1] << G4endl;
@@ -142,13 +132,13 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
+G4double G4hCoulombScatteringModel::ComputeCrossSectionPerAtom(
                 const G4ParticleDefinition* p,
 		G4double kinEnergy,
 		G4double Z, G4double,
 		G4double cutEnergy, G4double)
 {
-  //G4cout << "### G4eCoulombScatteringModel::ComputeCrossSectionPerAtom  for " 
+  //G4cout << "### G4hCoulombScatteringModel::ComputeCrossSectionPerAtom  for " 
   //  << p->GetParticleName()<<" Z= "<<Z<<" e(MeV)= "<< kinEnergy/MeV << G4endl; 
   G4double cross = 0.0;
   if(p != particle) { SetupParticle(p); }
@@ -181,7 +171,7 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eCoulombScatteringModel::SampleSecondaries(
+void G4hCoulombScatteringModel::SampleSecondaries(
                 std::vector<G4DynamicParticle*>* fvect,
 		const G4MaterialCutsCouple* couple,
 		const G4DynamicParticle* dp,
@@ -201,7 +191,7 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   SetupParticle(dp->GetDefinition());
   DefineMaterial(couple);
 
-  //G4cout << "G4eCoulombScatteringModel::SampleSecondaries e(MeV)= " 
+  //G4cout << "G4hCoulombScatteringModel::SampleSecondaries e(MeV)= " 
   //	 << kinEnergy << "  " << particle->GetParticleName() 
   //	 << " cut= " << cutEnergy<< G4endl;
  
@@ -234,7 +224,7 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   G4double mom2 = wokvi->GetMomentumSquare();
   G4double trec = mom2*(1.0 - cost)/(targetMass + (mass + kinEnergy)*(1.0 - cost));
   G4double finalT = kinEnergy - trec; 
-  //G4cout<<"G4eCoulombScatteringModel: finalT= "<<finalT<<" Trec= "<<trec<<G4endl;
+  //G4cout<<"G4hCoulombScatteringModel: finalT= "<<finalT<<" Trec= "<<trec<<G4endl;
   if(finalT <= lowEnergyThreshold) { 
     trec = kinEnergy;  
     finalT = 0.0;

@@ -205,7 +205,7 @@ G4double G4GoudsmitSaundersonTable::SampleTheta(G4double lambda, G4double Chia2,
 { 
   //Benedito's procedure
   G4double A[11],ThisPDF[320],ThisCPDF[320];
-  G4double coeff,Ckj,CkjPlus1,CkPlus1j,CkPlus1jPlus1,a,b,m,F;
+  G4double coeff,Ckj,CkjPlus1,CkPlus1j,CkPlus1jPlus1,a,b,mmm,F;
   G4int Ind0,KIndex=0,JIndex=0,IIndex=0;
 
 
@@ -239,15 +239,16 @@ G4double G4GoudsmitSaundersonTable::SampleTheta(G4double lambda, G4double Chia2,
   b=uvalues[IIndex+1];
   
   do{
-    m=0.5*(a+b);
-    F=(ThisCPDF[IIndex]+(m-uvalues[IIndex])*ThisPDF[IIndex]
-       +((m-uvalues[IIndex])*(m-uvalues[IIndex])*(ThisPDF[IIndex+1]-ThisPDF[IIndex]))
+    mmm=0.5*(a+b);
+    F=(ThisCPDF[IIndex]+(mmm-uvalues[IIndex])*ThisPDF[IIndex]
+       +((mmm-uvalues[IIndex])*(mmm-uvalues[IIndex])
+	 *(ThisPDF[IIndex+1]-ThisPDF[IIndex]))
        /(2.*(uvalues[IIndex+1]-uvalues[IIndex])))-rndm;
-    if(F>0.)b=m;
-    else a=m;
+    if(F>0.)b=mmm;
+    else a=mmm;
   } while(std::fabs(b-a)>1.0e-9);
 
-  return m;
+  return mmm;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

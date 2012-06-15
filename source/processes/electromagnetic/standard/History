@@ -17,6 +17,54 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14 June 12: V.Ivanchenko (emstand-V09-05-27)
+- G4ScreeningMottCrossSection - added extra protections against FPE
+
+11 June 12: V.Ivanchenko (emstand-V09-05-26)
+- G4SeltzerBergerModel - more accurate majoranta definition for 
+    low-energy e-
+- G4ScreeningMottCrossSection - added protection against FPE
+    due to low-energy value of internal table
+
+10 June 12: V.Ivanchenko (emstand-V09-05-25)
+- G4SeltzerBergerModel - more effective sampling of energy
+
+09 June 12: V.Ivanchenko (emstand-V09-05-24)
+- G4SeltzerBergerModel - more accurate simulation of tail for e+
+
+08 June 12: V.Ivanchenko (emstand-V09-05-23)
+- Fixed shadowing
+
+07 June 12: V.Ivanchenko (emstand-V09-05-22)
+- G4ScreeningMottCrossSection, G4eSingleCoulombScatteringModel -
+    C. Consolandi and P.G. Rancoita provided updated version of 
+    electron scattering code based on analytical approximation of
+    the Mott cross section by means Hose coefficients  
+- G4MottCoefficients - new class by above scattring model
+
+07 June 12: V.Ivanchenko (emstand-V09-05-21)
+- G4WentzelVIModel - fixed sampling of single scattering
+- G4eMultipleScattering, G4hMultipleScattering - minor optimisation 
+    of initialisation
+
+01 June 12: V.Ivanchenko (emstand-V09-05-20)
+- G4SeltzerBergerModel - fixed warning at Windows
+
+01 June 12: V.Ivanchenko (emstand-V09-05-19)
+- G4SeltzerBergerModel - fixed problem introduced in previous tag
+
+31 May 12: V.Ivanchenko (emstand-V09-05-18)
+- G4SeltzerBergerModel - fixed minor problem of sampling for positrons;
+                       - make internal data structure static to be used 
+                         by both e+ and e- models - some memory reduction
+                       - used simplified computation of majoranta valid
+                         for data with more detailed grid;
+                       - make internal data vectors static to reduce 
+                         size of data in run time
+- G4DipBustGenerator - fixed model description
+- G4eBremsstrahlungRelModel (A.Schaelicke switch full screening off) 
+- G4eplusAnnihilation (D. Sawkey) fixed propagate weight to secondaries
+
 09 May 12: V.Ivanchenko (emstand-V09-05-17)
 - G4CoulombScattering - minor modification of initialisation allowing 
     to have add custom model with specific paraaameters but reuse

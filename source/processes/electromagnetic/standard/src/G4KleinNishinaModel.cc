@@ -100,8 +100,8 @@ G4KleinNishinaModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
 						G4double Z, G4double,
 						G4double, G4double)
 {
-  G4double CrossSection = 0.0 ;
-  if ( Z < 0.9999 || GammaEnergy < 0.1*keV) { return CrossSection; }
+  G4double xSection = 0.0 ;
+  if ( Z < 0.9999 || GammaEnergy < 0.1*keV) { return xSection; }
 
   static const G4double a = 20.0 , b = 230.0 , c = 440.0;
   
@@ -117,7 +117,7 @@ G4KleinNishinaModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
   if (Z < 1.5) { T0 = 40.0*keV; } 
 
   G4double X   = max(GammaEnergy, T0) / electron_mass_c2;
-  CrossSection = p1Z*std::log(1.+2.*X)/X
+  xSection = p1Z*std::log(1.+2.*X)/X
                + (p2Z + p3Z*X + p4Z*X*X)/(1. + a*X + b*X*X + c*X*X*X);
 		
   //  modification for low energy. (special case for Hydrogen)
@@ -126,11 +126,11 @@ G4KleinNishinaModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
     X = (T0+dT0) / electron_mass_c2 ;
     G4double sigma = p1Z*log(1.+2*X)/X
                     + (p2Z + p3Z*X + p4Z*X*X)/(1. + a*X + b*X*X + c*X*X*X);
-    G4double   c1 = -T0*(sigma-CrossSection)/(CrossSection*dT0);             
+    G4double   c1 = -T0*(sigma-xSection)/(xSection*dT0);             
     G4double   c2 = 0.150; 
     if (Z > 1.5) { c2 = 0.375-0.0556*log(Z); }
     G4double    y = log(GammaEnergy/T0);
-    CrossSection *= exp(-y*(c1+c2*y));          
+    xSection *= exp(-y*(c1+c2*y));          
   }
   G4int iz = G4int(Z);
   G4int nShells = G4AtomicShells::GetNumberOfShells(iz);
@@ -138,11 +138,11 @@ G4KleinNishinaModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
   G4double bindingEnergy = G4AtomicShells::GetBindingEnergy(iz,nShells-1);
   G4double eth = sqrt(bindingEnergy*(bindingEnergy + electron_mass_c2)) -
     0.5*(sqrt(bindingEnergy*(bindingEnergy + 2*electron_mass_c2)) - bindingEnergy);
-  CrossSection *= (1.0 - eth/GammaEnergy);
-  if(CrossSection < 0.0) { CrossSection = 0.0; }
+  xSection *= (1.0 - eth/GammaEnergy);
+  if(xSection < 0.0) { xSection = 0.0; }
   //  G4cout << "e= " << GammaEnergy << " Z= " << Z 
-  //  << " cross= " << CrossSection << G4endl;
-  return CrossSection;
+  //  << " cross= " << xSection << G4endl;
+  return xSection;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -238,9 +238,9 @@ void G4KleinNishinaModel::SampleSecondaries(
 
     G4double epsilon, epsilonsq, onecost, sint2, greject ;
 
-    G4double epsilon0   = 1./(1 + 2*E0_m);
-    G4double epsilon0sq = epsilon0*epsilon0;
-    G4double alpha1     = - log(epsilon0);
+    G4double eps0       = 1./(1 + 2*E0_m);
+    G4double epsilon0sq = eps0*eps0;
+    G4double alpha1     = - log(eps0);
     G4double alpha2     = 0.5*(1 - epsilon0sq);
 
     do {
