@@ -128,17 +128,10 @@ public:
  
 protected:    
 
-  // reset number of interaction length and save  
-  virtual void ResetNumberOfInteractionLengthLeft()
-  { G4VProcess::ResetNumberOfInteractionLengthLeft(); 
-    theInitialNumberOfInteractionLength = 
-      G4VProcess::theNumberOfInteractionLengthLeft;
-  }
-
   // generic method to choose secondary generator 
   // recommended for all derived classes
-  inline G4HadronicInteraction *ChooseHadronicInteraction(
-      G4double kineticEnergy, G4Material *aMaterial, G4Element *anElement )
+  inline G4HadronicInteraction* ChooseHadronicInteraction(
+      G4double kineticEnergy, G4Material* aMaterial, G4Element* anElement)
   { return theEnergyRangeManager.GetHadronicInteraction(kineticEnergy,
 							aMaterial,anElement);
   }
@@ -184,7 +177,7 @@ protected:
   { theEnergyRangeManager = value; }
 
   // access to the chosen generator
-  inline G4HadronicInteraction *GetHadronicInteraction() const
+  inline G4HadronicInteraction* GetHadronicInteraction() const
   { return theInteraction; }
     
   // access to the cross section data set
@@ -192,32 +185,24 @@ protected:
   { return theLastCrossSection; }
 
   // fill result
-  void FillResult(G4HadFinalState * aR, const G4Track & aT);
+  void FillResult(G4HadFinalState* aR, const G4Track& aT);
 
   // Check the result for catastrophic energy non-conservation
-  G4HadFinalState* CheckResult(const G4HadProjectile & thePro,
-			       const G4Nucleus &targetNucleus, 
-			       G4HadFinalState * result) const;
+  G4HadFinalState* CheckResult(const G4HadProjectile& thePro,
+			       const G4Nucleus& targetNucleus, 
+			       G4HadFinalState* result) const;
 
   // Check 4-momentum balance
   void CheckEnergyMomentumConservation(const G4Track&, const G4Nucleus&);
 
 private:
     
-  //void FillTotalResult(G4HadFinalState * aR, const G4Track & aT);
-
-  inline G4double GetTotalNumberOfInteractionLengthTraversed()
-  { return theInitialNumberOfInteractionLength
-      -G4VProcess::theNumberOfInteractionLengthLeft;
-  }
-            
   G4double XBiasSurvivalProbability();
   G4double XBiasSecondaryWeight();
 
-
   // hide assignment operator as private 
-  G4HadronicProcess& operator=(const G4HadronicProcess &right);
-  G4HadronicProcess(const G4HadronicProcess& );
+  G4HadronicProcess& operator=(const G4HadronicProcess& right);
+  G4HadronicProcess(const G4HadronicProcess&);
 
 protected:
 
@@ -250,8 +235,6 @@ private:
   G4double aScaleFactor;
   G4bool   xBiasOn;
   G4double theLastCrossSection;
-
-  //G4int ModelingState;
 };
  
 #endif

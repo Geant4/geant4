@@ -392,8 +392,8 @@ void G4HadronicProcessStore::RegisterParticle(G4HadronicProcess* proc,
     std::multimap<PD,HP,std::less<PD> >::iterator it;
     for(it=p_map.lower_bound(part); it!=p_map.upper_bound(part); ++it) {
       if(it->first == part) {
-	HP process = (it->second);
-	if(proc == process) { return; }
+	HP process2 = (it->second);
+	if(proc == process2) { return; }
       }
     }
   }
@@ -471,8 +471,8 @@ void G4HadronicProcessStore::RegisterParticleForExtraProcess(
     std::multimap<PD,G4VProcess*,std::less<PD> >::iterator it;
     for(it=ep_map.lower_bound(part); it!=ep_map.upper_bound(part); ++it) {
       if(it->first == part) {
-	G4VProcess* process = (it->second);
-	if(proc == process) { return; }
+	G4VProcess* process2 = (it->second);
+	if(proc == process2) { return; }
       }
     }
   }
@@ -612,19 +612,19 @@ void G4HadronicProcessStore::PrintHtml(const G4ParticleDefinition* theParticle,
   }
 }
 
-void G4HadronicProcessStore::PrintModelHtml(const G4HadronicInteraction * model) const
+void G4HadronicProcessStore::PrintModelHtml(const G4HadronicInteraction * mod) const
 {
 	G4String dirName(getenv("G4PhysListDocDir"));
-	G4String pathName = dirName + "/" + model->GetModelName() + ".html";
+	G4String pathName = dirName + "/" + mod->GetModelName() + ".html";
 	std::ofstream outModel;
 	outModel.open(pathName);
 	outModel << "<html>\n";
 	outModel << "<head>\n";
-	outModel << "<title>Description of " << model->GetModelName() << "</title>\n";
+	outModel << "<title>Description of " << mod->GetModelName() << "</title>\n";
 	outModel << "</head>\n";
 	outModel << "<body>\n";
 
-	model->ModelDescription(outModel);
+	mod->ModelDescription(outModel);
 
 	outModel << "</body>\n";
 	outModel << "</html>\n";

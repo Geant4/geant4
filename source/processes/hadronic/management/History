@@ -14,6 +14,17 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+8 June 2012 Gabriele Cosmo   (hadr-man-V09-05-08)
+-------------------------------------------------
+- Fixed trivial cases of hidden variable visibility, detected with
+  '-Wshadow' compilation option on gcc compiler.
+
+4 June 2012 Dennis Wright    (hadr-man-V09-05-07)
+-------------------------------------------------
+- G4HadronicProcess.hh: remove methods ResetNumberOfInteractionLengthLeft()
+    and GetTotalNumberOfInteractionLengthTraversed() as these have been 
+    moved to G4VProcess.   Must use with tag procman-V09-05-00 or later.
+
 21 May 2012 Gunter Folger    (hadr-man-V09-05-06)
 ---------------------------------------------------
 -  E/p conservation fails only if both absolute and relative fail;
