@@ -42,7 +42,7 @@ class G4BasePhantomBuilder
 public:
 
   G4BasePhantomBuilder();
-  ~G4BasePhantomBuilder();
+  virtual ~G4BasePhantomBuilder();
  
   virtual void BuildHead(const G4String&,G4bool,G4bool) {return ;};
   virtual void BuildTrunk(const G4String&,G4bool,G4bool) {return ;};
