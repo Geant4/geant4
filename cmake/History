@@ -29,6 +29,10 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15th June 2012 - Gabriele Cosmo (cmake-V09-05-28)
+- Updated tags to 9.6.0 for 9.6-beta.
+
 14th June 2012 - Ben Morgan (cmake-V09-05-27)
 - Modules/Geant4OptionalComponents.cmake : Search for system expat by
   default on non-Win32. We prefer the system library on these platforms
