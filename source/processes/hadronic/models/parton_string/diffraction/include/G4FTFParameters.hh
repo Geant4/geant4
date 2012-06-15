@@ -31,7 +31,6 @@
 //
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
-//#include "G4VComponentCrossSection.hh"   // 31 May 2011
 #include "G4ChipsComponentXS.hh"
 
 class G4FTFParameters
@@ -159,7 +158,7 @@ class G4FTFParameters
         G4double FTFhNcmsEnergy;                // Initial hN CMS energy
 
 // ------------ hN cross section manager -----------------------------
-        static G4ChipsComponentXS* FTFxsManager;
+        G4ChipsComponentXS* FTFxsManager;
 // ------------ Geometrical parameteres ------------------------------
         G4double FTFXtotal;                     // Total X in mb
         G4double FTFXelastic;                   // Elastic X in mb
@@ -209,8 +208,8 @@ class G4FTFParameters
 };
 
 // --------------------------------------------------------------------
-inline  void G4FTFParameters::SethNcmsEnergy(const G4double s)
-             {FTFhNcmsEnergy = s;}
+inline  void G4FTFParameters::SethNcmsEnergy(const G4double S)
+             {FTFhNcmsEnergy = S;}
 
 // --------- Set geometrical parameteres ------------------------------
 inline  void G4FTFParameters::SetTotalCrossSection(const G4double Xtotal)

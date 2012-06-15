@@ -137,6 +137,7 @@ G4bool G4ElasticHNScattering::
              PZcms2=(S*S+Mprojectile2*Mprojectile2+Mtarget2*Mtarget2-
                     2*S*Mprojectile2 - 2*S*Mtarget2 - 2*Mprojectile2*Mtarget2)
                     /4./S;
+
              if(PZcms2 < 0.){ return false;} // Non succesful attempt after the de-excitation
             }
             else // if(M0projectile > projectile->GetDefinition()->GetPDGMass())
@@ -181,7 +182,6 @@ G4bool G4ElasticHNScattering::
            G4double TargMassT2; //, TargMassT;
 
 	   G4LorentzVector Qmomentum;
-
 	   Qmomentum=G4LorentzVector(GaussianPt(AveragePt2,maxPtSquare),0);
 
 	   Pt2=G4ThreeVector(Qmomentum.vect()).mag2();                  

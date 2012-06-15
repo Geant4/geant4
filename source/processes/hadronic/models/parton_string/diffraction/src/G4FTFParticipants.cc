@@ -111,7 +111,7 @@ void G4FTFParticipants::GetList(const G4ReactionProduct  &thePrimary,
 //G4cout<<"Prim in Part "<<primarySplitable->Get4Momentum()<<G4endl;
      G4double xyradius;                          
      xyradius =theNucleus->GetOuterRadius() + deltaxy; // Impact parameter sampling
-                                                      
+                                                    
 //    G4bool nucleusNeedsShift = true;                // Uzhi 20 July 2009
     
      while ( theInteractions.size() == 0 )
@@ -156,7 +156,7 @@ G4int TrN(0);
 		theInteractions.push_back(aInteraction);
 	   }
 TrN++;
-	 }    
+	 } 
      }      // end of while ( theInteractions.size() == 0 )
 
 //	G4cout << "Number of Hit nucleons " << theInteractions.size()
