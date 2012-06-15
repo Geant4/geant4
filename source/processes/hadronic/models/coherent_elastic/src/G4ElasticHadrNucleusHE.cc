@@ -40,6 +40,7 @@
 //  15.05.07 Redesign and cleanup (V.Ivanchenko)
 //  17.05.07 cleanup (V.Grichine)
 //  19.04.12 Fixed reproducibility violation (A.Ribon)
+//  12.06.12 Fixed warnings of shadowed variables (A.Ribon)
 //
 
 #include  "G4ElasticHadrNucleusHE.hh"
@@ -648,11 +649,11 @@ G4double G4ElasticHadrNucleusHE::GetLightFq2(G4int Z, G4int Nucleus,
   if(Z == 1) 
   {
     G4double SqrQ2  = std::sqrt(Q2);
-    G4double ConstU = 2.*(hMass2 + protonM2) - Q2;
+    G4double valueConstU = 2.*(hMass2 + protonM2) - Q2;
 
     G4double y = (1.-Coeff1-Coeff0)/HadrSlope*(1.-std::exp(-HadrSlope*Q2))
       + Coeff0*(1.-std::exp(-Slope0*Q2))
-      + Coeff2/Slope2*std::exp(Slope2*ConstU)*(std::exp(Slope2*Q2)-1.)
+      + Coeff2/Slope2*std::exp(Slope2*valueConstU)*(std::exp(Slope2*Q2)-1.)
       + 2.*Coeff1/Slope1*(1./Slope1-(1./Slope1+SqrQ2)*std::exp(-Slope1*SqrQ2));
 
     return y;
@@ -706,7 +707,7 @@ G4double G4ElasticHadrNucleusHE::GetLightFq2(G4int Z, G4int Nucleus,
   G4double    Prod3 ;
   G4double    exp2  ;
   G4double    N4, N5, N2, Prod1, Prod2;
-  G4int    i1, i2, m1, m2;
+  G4int    i1, i2, j1, j2;
 
   for(i1 = 1; i1<= Nucleus; i1++) ////++++++++++  i1
     {
@@ -720,22 +721,22 @@ G4double G4ElasticHadrNucleusHE::GetLightFq2(G4int Z, G4int Nucleus,
           N2    = -N2*Unucl*(Nucleus-i2+1)/i2*Rho2;
           Prod2 = 0; 
           N5    = -1/NN2;
-	  for(m2=0; m2<= i2; m2++) ////+++++++++ m2
+	  for(j2=0; j2<= i2; j2++) ////+++++++++ j2
             {
               Prod3 = 0;
-              exp2  = 1/(m2/R22B+(i2-m2)/R12B);
+              exp2  = 1/(j2/R22B+(i2-j2)/R12B);
               N5    = -N5*NN2;
               N4    = -1/NN2;
-	      for(m1=0; m1<=i1; m1++) ////++++++++ m1
+	      for(j1=0; j1<=i1; j1++) ////++++++++ j1
 		{
-		  exp1  = 1/(m1/R22B+(i1-m1)/R12B);
+		  exp1  = 1/(j1/R22B+(i1-j1)/R12B);
 		  dddd  = exp1+exp2;
 		  N4    = -N4*NN2;
 		  Prod3 = Prod3+N4*exp1*exp2*
-		    (1-std::exp(-Q2*dddd/4))/dddd*4*SetBinom[i1][m1];
-               }                                   // m1
-	      Prod2 = Prod2 +Prod3*N5*SetBinom[i2][m2];
-	    }                                      // m2
+		    (1-std::exp(-Q2*dddd/4))/dddd*4*SetBinom[i1][j1];
+               }                                   // j1
+	      Prod2 = Prod2 +Prod3*N5*SetBinom[i2][j2];
+	    }                                      // j2
 	  Prod1 = Prod1 + Prod2*N2*std::cos(FiH*(i1-i2));
 
 	  if (std::fabs(Prod2*N2/Prod1)<prec) break;
@@ -767,7 +768,7 @@ G4double G4ElasticHadrNucleusHE::
   if(NWeight == 1) 
   {
     G4double SqrQ2  = std::sqrt(aQ2);
-    G4double ConstU = hMass2 + protonM2-2*protonM*HadrEnergy - aQ2;
+    G4double valueConstU = hMass2 + protonM2-2*protonM*HadrEnergy - aQ2;
 
     G4double MaxT = 4*MomentumCM*MomentumCM;
 
@@ -782,7 +783,7 @@ G4double G4ElasticHadrNucleusHE::
     dSigPodT = HadrTot*HadrTot*(1+HadrReIm*HadrReIm)*
                  (
                   Coeff1*std::exp(-Slope1*SqrQ2)+
-                  Coeff2*std::exp( Slope2*(ConstU)+aQ2)+
+                  Coeff2*std::exp( Slope2*(valueConstU)+aQ2)+
                   (1-Coeff1-Coeff0)*std::exp(-HadrSlope*aQ2)+
                  +Coeff0*std::exp(-Slope0*aQ2)
 //                +0.1*(1-std::fabs(CosTh))

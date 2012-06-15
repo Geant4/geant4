@@ -40,6 +40,7 @@
 //  15.05.07 Redesign and cleanup (V.Ivanchenko)
 //  18.05.07 Cleanup (V.Grichine)
 //  19.04.12 Fixed reproducibility violation (A.Ribon)
+//  12.06.12 Fixed warnings of shadowed variables (A.Ribon)
 //
 
 #ifndef G4ElasticHadrNucleusHE_h
@@ -266,9 +267,9 @@ void G4ElasticHadrNucleusHE::InterpolateHN(G4int n, const G4double EnP[],
 ////////////////////////////////////////////////////////////////
 
 inline
-G4double G4ElasticHadrNucleusHE::GetBinomCof( G4int n, G4int m )
+G4double G4ElasticHadrNucleusHE::GetBinomCof( G4int numN, G4int numM )
 {
-  if ( n >= m && n <= 240) return SetBinom[n][m];
+  if ( numN >= numM && numN <= 240) return SetBinom[numN][numM];
   else                     return 0.;
 }
 

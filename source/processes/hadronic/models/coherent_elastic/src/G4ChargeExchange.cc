@@ -34,6 +34,7 @@
 // Modified:
 // 07-Jun-06 V.Ivanchenko fix problem of rotation of final state
 // 25-Jul-06 V.Ivanchenko add 19 MeV low energy, below which S-wave is sampled
+// 12-Jun-12 A.Ribon fix warnings of shadowed variables
 //
 
 #include "G4ChargeExchange.hh"
@@ -122,9 +123,9 @@ G4HadFinalState* G4ChargeExchange::ApplyYourself(
 
   G4ParticleDefinition * theDef = 0;
 
-  G4double m2 = G4NucleiProperties::GetNuclearMass((G4double)A, (G4double)Z);
+  G4double mass2 = G4NucleiProperties::GetNuclearMass((G4double)A, (G4double)Z);
   G4LorentzVector lv1 = aParticle->Get4Momentum();
-  G4LorentzVector lv0(0.0,0.0,0.0,m2);
+  G4LorentzVector lv0(0.0,0.0,0.0,mass2);
 
   G4LorentzVector lv  = lv0 + lv1;
   G4ThreeVector bst = lv.boostVector();

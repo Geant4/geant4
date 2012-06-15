@@ -122,9 +122,9 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
 	   << G4endl;
   }
 
-  G4double m2 = G4NucleiProperties::GetNuclearMass(A, Z);
+  G4double mass2 = G4NucleiProperties::GetNuclearMass(A, Z);
   G4LorentzVector lv1 = aParticle->Get4Momentum();
-  G4LorentzVector lv(0.0,0.0,0.0,m2);   
+  G4LorentzVector lv(0.0,0.0,0.0,mass2);   
   lv += lv1;
 
   G4ThreeVector bst = lv.boostVector();
@@ -193,9 +193,9 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   }  
 
   lv -= nlv1;
-  G4double erec =  lv.e() - m2;
+  G4double erec =  lv.e() - mass2;
   if (verboseLevel > 1) {
-    G4cout << "Recoil: " <<" m= " << m2 << " Erec(MeV)= " << erec
+    G4cout << "Recoil: " <<" m= " << mass2 << " Erec(MeV)= " << erec
 	   << " 4-mom: " << lv 
 	   << G4endl;
   }

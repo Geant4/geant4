@@ -402,10 +402,10 @@ G4DiffuseElastic::GetDiffElasticProb( // G4ParticleDefinition* particle,
   }
   G4double lambda = 15.; // 15 ok
 
-  //  G4double kg    = fWaveVector*gamma;   // wavek*delta;
+  //  G4double kgamma    = fWaveVector*gamma;   // wavek*delta;
 
-  G4double kg    = lambda*(1.-std::exp(-fWaveVector*gamma/lambda));   // wavek*delta;
-  G4double kg2   = kg*kg;
+  G4double kgamma    = lambda*(1.-std::exp(-fWaveVector*gamma/lambda));   // wavek*delta;
+  G4double kgamma2   = kgamma*kgamma;
 
   // G4double dk2t  = delta*fWaveVector*fWaveVector*theta; // delta*wavek*wavek*theta;
   // G4double dk2t2 = dk2t*dk2t;
@@ -420,7 +420,7 @@ G4DiffuseElastic::GetDiffElasticProb( // G4ParticleDefinition* particle,
   G4double e2dk3t  = -2.*e2*delta*fWaveVector*fWaveVector*fWaveVector*theta;
 
 
-  sigma  = kg2;
+  sigma  = kgamma2;
   // sigma  += dk2t2;
   sigma *= bzero2;
   sigma += mode2k2*bone2 + e2dk3t*bzero*bone;
@@ -479,21 +479,21 @@ G4DiffuseElastic::GetDiffElasticSumProb( // G4ParticleDefinition* particle,
     e2      = 0.35*fermi;
   }
   G4double lambda = 15.; // 15 ok
-  // G4double kg    = fWaveVector*gamma;   // wavek*delta;
-  G4double kg    = lambda*(1.-std::exp(-fWaveVector*gamma/lambda));   // wavek*delta;
+  // G4double kgamma    = fWaveVector*gamma;   // wavek*delta;
+  G4double kgamma    = lambda*(1.-std::exp(-fWaveVector*gamma/lambda));   // wavek*delta;
 
-  // G4cout<<"kg = "<<kg<<G4endl;
+  // G4cout<<"kgamma = "<<kgamma<<G4endl;
 
   if(fAddCoulomb)  // add Coulomb correction
   {
     G4double sinHalfTheta  = std::sin(0.5*theta);
     G4double sinHalfTheta2 = sinHalfTheta*sinHalfTheta;
 
-    kg += 0.5*fZommerfeld/kr/(sinHalfTheta2+fAm); // correction at J0()
-  // kg += 0.65*fZommerfeld/kr/(sinHalfTheta2+fAm); // correction at J0()
+    kgamma += 0.5*fZommerfeld/kr/(sinHalfTheta2+fAm); // correction at J0()
+  // kgamma += 0.65*fZommerfeld/kr/(sinHalfTheta2+fAm); // correction at J0()
   }
 
-  G4double kg2   = kg*kg;
+  G4double kgamma2   = kgamma*kgamma;
 
   // G4double dk2t  = delta*fWaveVector*fWaveVector*theta; // delta*wavek*wavek*theta;
   //   G4cout<<"dk2t = "<<dk2t<<G4endl;
@@ -510,7 +510,7 @@ G4DiffuseElastic::GetDiffElasticSumProb( // G4ParticleDefinition* particle,
   G4double mode2k2 = (e1*e1+e2*e2)*fWaveVector*fWaveVector;  
   G4double e2dk3t  = -2.*e2*delta*fWaveVector*fWaveVector*fWaveVector*theta;
 
-  sigma  = kg2;
+  sigma  = kgamma2;
   // sigma += dk2t2;
   sigma *= bzero2;
   sigma += mode2k2*bone2; 
@@ -576,21 +576,21 @@ G4DiffuseElastic::GetDiffElasticSumProbA( G4double alpha )
     e2      = 0.35*fermi;
   }
   G4double lambda = 15.; // 15 ok
-  // G4double kg    = fWaveVector*gamma;   // wavek*delta;
-  G4double kg    = lambda*(1.-std::exp(-fWaveVector*gamma/lambda));   // wavek*delta;
+  // G4double kgamma    = fWaveVector*gamma;   // wavek*delta;
+  G4double kgamma    = lambda*(1.-std::exp(-fWaveVector*gamma/lambda));   // wavek*delta;
 
-  // G4cout<<"kg = "<<kg<<G4endl;
+  // G4cout<<"kgamma = "<<kgamma<<G4endl;
 
   if(fAddCoulomb)  // add Coulomb correction
   {
     G4double sinHalfTheta  = theta*0.5; // std::sin(0.5*theta);
     G4double sinHalfTheta2 = sinHalfTheta*sinHalfTheta;
 
-    kg += 0.5*fZommerfeld/kr/(sinHalfTheta2+fAm); // correction at J0()
-  // kg += 0.65*fZommerfeld/kr/(sinHalfTheta2+fAm); // correction at J0()
+    kgamma += 0.5*fZommerfeld/kr/(sinHalfTheta2+fAm); // correction at J0()
+  // kgamma += 0.65*fZommerfeld/kr/(sinHalfTheta2+fAm); // correction at J0()
   }
 
-  G4double kg2   = kg*kg;
+  G4double kgamma2   = kgamma*kgamma;
 
   // G4double dk2t  = delta*fWaveVector*fWaveVector*theta; // delta*wavek*wavek*theta;
   //   G4cout<<"dk2t = "<<dk2t<<G4endl;
@@ -607,7 +607,7 @@ G4DiffuseElastic::GetDiffElasticSumProbA( G4double alpha )
   G4double mode2k2 = (e1*e1+e2*e2)*fWaveVector*fWaveVector;  
   G4double e2dk3t  = -2.*e2*delta*fWaveVector*fWaveVector*fWaveVector*theta;
 
-  sigma  = kg2;
+  sigma  = kgamma2;
   // sigma += dk2t2;
   sigma *= bzero2;
   sigma += mode2k2*bone2; 
@@ -740,9 +740,9 @@ G4double G4DiffuseElastic::SampleInvariantT( const G4ParticleDefinition* aPartic
   fParticle = aParticle;
   G4double m1 = fParticle->GetPDGMass();
   G4double totElab = std::sqrt(m1*m1+p*p);
-  G4double m2 = G4NucleiProperties::GetNuclearMass(A, Z);
+  G4double mass2 = G4NucleiProperties::GetNuclearMass(A, Z);
   G4LorentzVector lv1(p,0.0,0.0,totElab);
-  G4LorentzVector  lv(0.0,0.0,0.0,m2);   
+  G4LorentzVector  lv(0.0,0.0,0.0,mass2);   
   lv += lv1;
 
   G4ThreeVector bst = lv.boostVector();
