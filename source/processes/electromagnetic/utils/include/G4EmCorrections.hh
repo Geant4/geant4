@@ -310,11 +310,11 @@ inline G4double G4EmCorrections::Value2(G4double xv, G4double yv,
          / ((x2-x1)*(y2-y1));
 }
 
-inline 
-void G4EmCorrections::SetIonisationModels(G4VEmModel* m1, G4VEmModel* m2)
+inline void 
+G4EmCorrections::SetIonisationModels(G4VEmModel* mod1, G4VEmModel* mod2)
 {
-  if(m1) ionLEModel = m1;
-  if(m2) ionHEModel = m2;
+  if(mod1) { ionLEModel = mod1; }
+  if(mod2) { ionHEModel = mod2; }
 }
 
 inline G4int G4EmCorrections::GetNumberOfStoppingVectors()

@@ -281,11 +281,13 @@ G4double G4VMultipleScattering::AlongStepGetPhysicalInteractionLength(
 	                    track.GetMaterialCutsCouple()->GetIndex()));
 
   // define ionisation process
+  /*
   if(!currentModel->GetIonisation()) {
     currentModel->SetIonisation(G4LossTableManager::Instance()->
-      GetEnergyLossProcess(track.GetParticleDefinition()));
+				GetEnergyLossProcess(track.GetParticleDefinition())
+				,track.GetParticleDefinition());
   }  
-
+  */
   if(x > 0.0 && currentModel->IsActive(ekin)) {
     G4double tPathLength = currentModel->ComputeTruePathLengthLimit(track, x);
     if (tPathLength < currentMinimalStep) { 
@@ -390,7 +392,7 @@ G4VMultipleScattering::StorePhysicsTable(const G4ParticleDefinition* part,
       G4int j = std::min(i,3); 
       G4String name = 
 	GetPhysicsTableFileName(part,directory,"LambdaMod"+ss[j],ascii);
-      G4bool yes = table->StorePhysicsTable(name,ascii);
+      yes = table->StorePhysicsTable(name,ascii);
 
       if ( yes ) {
 	if ( verboseLevel>0 ) {
@@ -417,6 +419,17 @@ G4VMultipleScattering::RetrievePhysicsTable(const G4ParticleDefinition*,
 					    G4bool)
 {
   return true;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VMultipleScattering::SetIonisation(G4VEnergyLossProcess* p)
+{
+  G4int nmod = modelManager->NumberOfModels();
+  for(G4int i=0; i<nmod; ++i) {
+    G4VMscModel* msc = static_cast<G4VMscModel*>(modelManager->GetModel(i));
+    msc->SetIonisation(p, firstParticle);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

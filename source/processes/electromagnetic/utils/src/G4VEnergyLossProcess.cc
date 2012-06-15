@@ -108,6 +108,8 @@
 // 27-10-07 Virtual functions moved to source (V.Ivanchenko)
 // 24-06-09 Removed hidden bin in G4PhysicsVector (V.Ivanchenko)
 // 15-10-10 Fixed 4-momentum balance if deexcitation is active (L.Pandola)
+// 30-05-12 Call new ApplySecondaryBiasing so 2ries may be unique (D. Sawkey)
+// 30-05-12 Fix bug in forced biasing: now called on first step (D. Sawkey)
 //
 // Class Description:
 //
@@ -583,6 +585,9 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
     if(atomDeexcitation) { 
       if(atomDeexcitation->IsPIXEActive()) { useDeexcitation = true; } 
     }
+    if(&part == particle) {
+      G4LossTableManager::Instance()->InitialiseMSC(particle, this);
+    }
   }
 
   if(1 < verboseLevel) {
@@ -939,7 +944,8 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
   // forced biasing only for primary particles
   if(biasManager) {
     if(0 == track.GetParentID()) {
-      if(0 == track.GetCurrentStepNumber()) {
+      // first step is #1
+      if(1 == track.GetCurrentStepNumber()) {
         biasFlag = true; 
 	biasManager->ResetForcedInteraction(); 
       }
@@ -1039,7 +1045,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   G4double weight = fParticleChange.GetParentWeight();
   if(weightFlag) {
     weight /= biasFactor;
-    fParticleChange.ProposeParentWeight(weight);
+    fParticleChange.ProposeWeight(weight);
   }
 
   // stopping
@@ -1243,6 +1249,8 @@ G4VEnergyLossProcess::FillSecondariesAlongStep(G4double& eloss, G4double& weight
     if(t) {
       if(weightNotChanged) { t->SetWeight(weight); }
       pParticleChange->AddSecondary(t);
+      //G4cout << "Secondary(along step) has weight " << t->GetWeight() 
+      //<< ", kenergy " << t->GetKineticEnergy()/MeV << " MeV" <<G4endl;
     }
   }
   scTracks.clear();
@@ -1398,7 +1406,7 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
   G4double weight = fParticleChange.GetParentWeight();
   if(weightFlag) {
     weight /= biasFactor;
-    fParticleChange.ProposeParentWeight(weight);
+    fParticleChange.ProposeWeight(weight);
   }
 
   const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
@@ -1406,12 +1414,16 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
 
   // sample secondaries
   secParticles.clear();
+  //G4cout << "Energy of primary: " << dynParticle->GetKineticEnergy()/MeV<<G4endl;
   currentModel->SampleSecondaries(&secParticles, currentCouple, dynParticle, tcut);
 
   // bremsstrahlung splitting or Russian roulette  
   if(biasManager) {
     if(biasManager->SecondaryBiasingRegion(currentCoupleIndex)) {
-      weight *= biasManager->ApplySecondaryBiasing(secParticles,currentCoupleIndex);
+      weight *= biasManager->ApplySecondaryBiasing(secParticles,currentCoupleIndex,
+						   currentModel,
+						   currentCouple, &track, 
+						   tcut, &fParticleChange);
     }
   }
 
@@ -1426,6 +1438,8 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
 				 track.GetPosition());
 	t->SetTouchableHandle(track.GetTouchableHandle());
 	t->SetWeight(weight); 
+	//G4cout << "Secondary(post step) has weight " << t->GetWeight() 
+	//<< ", kenergy " << t->GetKineticEnergy()/MeV << " MeV" <<G4endl;
 	pParticleChange->AddSecondary(t);
       }
     }
@@ -1892,7 +1906,7 @@ void G4VEnergyLossProcess::SetLambdaTable(G4PhysicsTable* p)
   if(theLambdaTable) {
     size_t n = theLambdaTable->length();
     G4PhysicsVector* pv = (*theLambdaTable)[0];
-    G4double e, s, smax, emax;
+    G4double e, ss, smax, emax;
 
     size_t i;
 
@@ -1906,9 +1920,9 @@ void G4VEnergyLossProcess::SetLambdaTable(G4PhysicsTable* p)
 	if(nb > 0) {
 	  for (size_t j=0; j<nb; ++j) {
 	    e = pv->Energy(j);
-	    s = (*pv)(j);
-	    if(s > smax) {
-	      smax = s;
+	    ss = (*pv)(j);
+	    if(ss > smax) {
+	      smax = ss;
 	      emax = e;
 	    }
 	  }
@@ -1923,7 +1937,7 @@ void G4VEnergyLossProcess::SetLambdaTable(G4PhysicsTable* p)
       }
     }
     // second loop using base materials
-    for (size_t i=0; i<n; ++i) {
+    for (i=0; i<n; ++i) {
       pv = (*theLambdaTable)[i];
       if(!pv){
 	G4int j = (*theDensityIdx)[i];

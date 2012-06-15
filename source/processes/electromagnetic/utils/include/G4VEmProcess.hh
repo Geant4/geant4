@@ -239,6 +239,11 @@ public:
 				 const G4String& r = "",
 				 G4bool flag = true);
 
+  void ActivateSecondaryBiasing(const G4String& region, G4double factor,
+          G4double energyLimit);
+          
+
+
   // Single scattering parameters
   inline void SetPolarAngleLimit(G4double a);
   inline G4double PolarAngleLimit() const;

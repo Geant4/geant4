@@ -117,7 +117,8 @@ public:
 
   inline G4VEnergyLossProcess* GetIonisation() const;
 
-  inline void SetIonisation(G4VEnergyLossProcess*);
+  inline void SetIonisation(G4VEnergyLossProcess*, 
+			    const G4ParticleDefinition* part);
 
   //================================================================
   //  Run time methods
@@ -275,7 +276,6 @@ inline G4double
 G4VMscModel::GetRange(const G4ParticleDefinition* part,
 		      G4double kinEnergy, const G4MaterialCutsCouple* couple)
 {
-  localrange = DBL_MAX;
   localtkin  = kinEnergy;
   if(part != currentPart) {
     currentPart = part;
@@ -313,9 +313,11 @@ inline G4VEnergyLossProcess* G4VMscModel::GetIonisation() const
   return ionisation;
 }
 
-inline void G4VMscModel::SetIonisation(G4VEnergyLossProcess* p)
+inline void G4VMscModel::SetIonisation(G4VEnergyLossProcess* p,
+				       const G4ParticleDefinition* part)
 {
   ionisation = p;
+  currentPart = part;
 }
 
 inline G4double 

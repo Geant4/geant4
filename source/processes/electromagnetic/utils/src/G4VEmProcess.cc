@@ -53,6 +53,7 @@
 // 27-10-07 Virtual functions moved to source (V.Ivanchenko)
 // 24-06-09 Removed hidden bin in G4PhysicsVector (V.Ivanchenko)
 // 17-02-10 Added pointer currentParticle (VI)
+// 30-05-12 allow Russian roulette, brem splitting (D. Sawkey)
 //
 // Class Description:
 //
@@ -504,7 +505,7 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
   if (integral) {
     G4double lx = GetLambda(finalT, currentCouple);
     if(preStepLambda<lx && 1 < verboseLevel) {
-      G4cout << "WARING: for " << currentParticle->GetParticleName() 
+      G4cout << "WARNING: for " << currentParticle->GetParticleName() 
              << " and " << GetProcessName()
              << " E(MeV)= " << finalT/MeV
              << " preLambda= " << preStepLambda << " < " 
@@ -523,8 +524,10 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
 
   // define new weight for primary and secondaries
   G4double weight = fParticleChange.GetParentWeight();
-  if(weightFlag) { weight /= biasFactor; }
-  fParticleChange.ProposeWeight(weight);
+  if(weightFlag) { 
+    weight /= biasFactor; 
+    fParticleChange.ProposeWeight(weight);
+  }
   
   /*  
   if(0 < verboseLevel) {
@@ -543,6 +546,17 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
 				  track.GetDynamicParticle(),
 				  (*theCuts)[currentCoupleIndex]);
 
+  // bremsstrahlung splitting or Russian roulette
+  if(biasManager) {
+    if(biasManager->SecondaryBiasingRegion(currentCoupleIndex)) {
+      weight *= biasManager->ApplySecondaryBiasing(secParticles,
+						   currentCoupleIndex,currentModel,
+						   currentCouple, &track, 
+						   (*theCuts)[currentCoupleIndex], 
+						   &fParticleChange);
+    }
+  }
+
   // save secondaries
   G4int num = secParticles.size();
   if(num > 0) {
@@ -551,31 +565,40 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
     G4double edep = fParticleChange.GetLocalEnergyDeposit();
      
     for (G4int i=0; i<num; ++i) {
-      G4DynamicParticle* dp = secParticles[i];
-      const G4ParticleDefinition* p = dp->GetParticleDefinition();
-      G4double e = dp->GetKineticEnergy();
-      G4bool good = true;
-      if(applyCuts) {
-	if (p == theGamma) {
-	  if (e < (*theCutsGamma)[currentCoupleIndex]) good = false;
+      if (secParticles[i]) {
+        G4DynamicParticle* dp = secParticles[i];
+        const G4ParticleDefinition* p = dp->GetParticleDefinition();
+        G4double e = dp->GetKineticEnergy();
+        G4bool good = true;
+        if(applyCuts) {
+	  if (p == theGamma) {
+	    if (e < (*theCutsGamma)[currentCoupleIndex]) { good = false; }
 
-	} else if (p == theElectron) {
-	  if (e < (*theCutsElectron)[currentCoupleIndex]) good = false;
+	  } else if (p == theElectron) {
+	    if (e < (*theCutsElectron)[currentCoupleIndex]) { good = false; }
 
-	} else if (p == thePositron) {
-	  if (electron_mass_c2 < (*theCutsGamma)[currentCoupleIndex] &&
-	      e < (*theCutsPositron)[currentCoupleIndex]) {
-	    good = false;
-	    e += 2.0*electron_mass_c2;
+	  } else if (p == thePositron) {
+	    if (electron_mass_c2 < (*theCutsGamma)[currentCoupleIndex] &&
+		e < (*theCutsPositron)[currentCoupleIndex]) {
+	      good = false;
+	      e += 2.0*electron_mass_c2;
+	    }
 	  }
-	}
-        if(!good) {
+	  // added secondary if it is good
+        }
+        if (good) { 
+          G4Track* t = new G4Track(dp, track.GetGlobalTime(), track.GetPosition());
+          t->SetTouchableHandle(track.GetTouchableHandle());
+          t->SetWeight(weight);
+          pParticleChange->AddSecondary(t); 
+          //G4cout << "Secondary(post step) has weight " << t->GetWeight() 
+	  //      << ", Ekin= " << t->GetKineticEnergy()/MeV << " MeV" <<G4endl;
+        } else {
 	  delete dp;
 	  edep += e;
 	}
-      }
-      if (good) { fParticleChange.AddSecondary(dp); }
-    } 
+      } 
+    }
     fParticleChange.ProposeLocalEnergyDeposit(edep);
   }
 
@@ -735,7 +758,7 @@ void G4VEmProcess::FindLambdaMax()
   }
   size_t n = theLambdaTable->length();
   G4PhysicsVector* pv;
-  G4double e, s, emax, smax;
+  G4double e, ss, emax, smax;
 
   size_t i;
 
@@ -749,9 +772,9 @@ void G4VEmProcess::FindLambdaMax()
       if(nb > 0) {
 	for (size_t j=0; j<nb; ++j) {
 	  e = pv->Energy(j);
-	  s = (*pv)(j);
-	  if(s > smax) {
-	    smax = s;
+	  ss = (*pv)(j);
+	  if(ss > smax) {
+	    smax = ss;
 	    emax = e;
 	  }
 	}
@@ -766,7 +789,7 @@ void G4VEmProcess::FindLambdaMax()
     }
   }
   // second loop using base materials
-  for (size_t i=0; i<n; ++i) {
+  for (i=0; i<n; ++i) {
     pv = (*theLambdaTable)[i];
     if(!pv){
       G4int j = (*theDensityIdx)[i];
@@ -831,6 +854,27 @@ G4VEmProcess::ActivateForcedInteraction(G4double length, const G4String& r,
   }
   weightFlag = flag;
   biasManager->ActivateForcedInteraction(length, r);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void
+G4VEmProcess::ActivateSecondaryBiasing(const G4String& region,
+                 G4double factor,
+                 G4double energyLimit)
+{
+  if (0.0 < factor) {
+    if(!biasManager) { biasManager = new G4EmBiasingManager(); }
+    biasManager->ActivateSecondaryBiasing(region, factor, energyLimit);
+    if(1 < verboseLevel) {
+      G4cout << "### ActivateSecondaryBiasing: for "
+       << " process " << GetProcessName()
+       << " factor= " << factor
+       << " in G4Region <" << region
+       << "> energyLimit(MeV)= " << energyLimit/MeV
+       << G4endl;
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

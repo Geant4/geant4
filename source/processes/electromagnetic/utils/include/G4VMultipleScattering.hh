@@ -83,6 +83,7 @@
 #include "G4MscStepLimitType.hh"
 
 class G4ParticleDefinition;
+class G4VEnergyLossProcess;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -192,6 +193,8 @@ public:
   // Get/Set parameters for simulation of multiple scattering
   //------------------------------------------------------------------------
 
+  void SetIonisation(G4VEnergyLossProcess*);
+
   inline G4bool LateralDisplasmentFlag() const;
   inline void SetLateralDisplasmentFlag(G4bool val);
 
@@ -210,7 +213,7 @@ public:
   inline G4MscStepLimitType StepLimitType() const;
   inline void SetStepLimitType(G4MscStepLimitType val);
 
-  inline void SetBuildLambdaTable(G4bool val);
+  inline const G4ParticleDefinition* FirstParticle() const;
 
   //------------------------------------------------------------------------
   // Run time methods
@@ -369,8 +372,10 @@ inline void G4VMultipleScattering::SetStepLimitType(G4MscStepLimitType val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4VMultipleScattering::SetBuildLambdaTable(G4bool)
-{}
+inline const G4ParticleDefinition* G4VMultipleScattering::FirstParticle() const
+{
+  return firstParticle;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

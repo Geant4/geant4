@@ -684,11 +684,11 @@ void G4EmModelManager::DumpModelList(G4int verb)
         if(table) {
           G4PhysicsVector* v = (*table)[0];
           if(v) {
-	    G4int n = v->GetVectorLength() - 1;
-	    G4cout << "  Table with " << n << " bins Emin= "
+	    G4int nn = v->GetVectorLength() - 1;
+	    G4cout << "  Table with " << nn << " bins Emin= "
 	       << std::setw(6) << G4BestUnit(v->Energy(0),"Energy")
 	       << "   Emax= " 
-	       << std::setw(6) << G4BestUnit(v->Energy(n),"Energy");
+	       << std::setw(6) << G4BestUnit(v->Energy(nn),"Energy");
 	  }
 	}
 	G4VEmAngularDistribution* an = model->GetAngularDistribution();

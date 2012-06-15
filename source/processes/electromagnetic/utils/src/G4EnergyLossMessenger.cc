@@ -359,7 +359,7 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
 
   G4UIparameter* bUnit = new G4UIparameter("bUnit",'s',true);
   brCmd->SetParameter(bUnit);
-  brCmd->SetGuidance("unit of tlength");
+  brCmd->SetGuidance("unit of energy");
 
   brCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
@@ -526,12 +526,12 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
   } else if (command == bfCmd) {
     G4double v1(1.0);
-    G4String s(""),s1("");
+    G4String s0(""),s1("");
     std::istringstream is(newValue);
-    is >> s >> v1 >> s1;
+    is >> s0 >> v1 >> s1;
     G4bool yes = false;
     if(s1 == "true") { yes = true; }
-    opt->SetProcessBiasingFactor(s,v1,yes);
+    opt->SetProcessBiasingFactor(s0,v1,yes);
   } else if (command == fiCmd) {
     G4double v1(0.0);
     G4String s1(""),s2(""),s3(""),unt("mm");
@@ -547,7 +547,10 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     std::istringstream is(newValue);
     is >> s1 >> s2 >> fb >> en >> unt;
     en *= G4UIcommand::ValueOf(unt);    
-    opt->ActivateSecondaryBiasing(s1,s2,fb,en);
+
+    if (s1=="phot"||s1=="compt"||s1=="conv") 
+                opt->ActivateSecondaryBiasingForGamma(s1,s2,fb,en);
+    else opt->ActivateSecondaryBiasing(s1,s2,fb,en);
   }  
 }
 

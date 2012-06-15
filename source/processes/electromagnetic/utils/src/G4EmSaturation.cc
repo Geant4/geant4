@@ -119,8 +119,8 @@ G4double G4EmSaturation::VisibleEnergyDeposition(
       if(nloss > 0.0) {
         if(!proton) { proton = G4Proton::Proton(); }
         G4double escaled = nloss*curRatio;
-        G4double s = manager->GetRange(proton,escaled,couple)/curChargeSq; 
-	nloss /= (1.0 + bfactor*nloss/s);
+        G4double range = manager->GetRange(proton,escaled,couple)/curChargeSq; 
+	nloss /= (1.0 + bfactor*nloss/range);
       }
 
       evis = eloss + nloss;

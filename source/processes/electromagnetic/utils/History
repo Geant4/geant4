@@ -17,6 +17,47 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08 June 12: V.Ivant (emutils-V09-05-19)
+ - Fixed shadowing
+
+06 June 12: V.Ivant (emutils-V09-05-18)
+ - G4VMscModel - trying optimise inline methods
+ - G4VMultipleScattering - trying optimise initialisation and reduce
+     number of checks in run time
+ - G4LossTableManager - moved inline methods to the source
+ - G4EmBiasingmanager - add check on number of secondaries PostStep,
+   if it is not 1 then disable both spliting and Russian roulette,
+   this does not affect ordinary delta-electron and bremssrahlung
+   secondary biasing (splitting and Russian roulette);
+   Dynamic weight approach (weight is function of secondary energy)
+   is applied for Russian roulette if biasing limit energy is set 
+   below 1 GeV, alternatively costant factor is used 
+
+05 June 12: V.Ivant (emutils-V09-05-17)
+ - G4VMscModel - allow build transport x-section table for d,t,He3,He4
+
+01 June 12: D. Sawkey (emutils-V09-05-16)
+ - G4EnergyLossMessenger: Put back in guidance for high energy limit for 
+   bremsplitting, russian roulette
+31 May 12: D. Sawkey
+    G4EmBiasingManager:Put back in high energy limit for Russian roulette, 
+    bremsplitting
+
+31 May 12: V.Ivant (emutils-V09-05-15)
+30 May 12: D. Sawkey
+ - G4VEnergyLossProcess bug 1314 fix: for forced biasing, now force if step==1
+
+30 May 12: D. Sawkey 
+ - G4VEmProcess, G4VEnergyLossProcess. for forced interaction, cross-
+   section biasing, set weight consistently
+
+29 May 12: D. Sawkey
+- G4EmBiasingManager, G4VEmProcess, G4VEnergyLossProcess, 
+  G4EmProcessOptions, G4EnergyLossMessenger: Change brem splitting to 
+  EGS-style with unique secondaries. Only brem split particles with 
+  weight > 1/N (N=brem splitting factor), and only Russian Roulette 
+  with weight < 1. Energy limit no longer used.
+
 28 May 12: V.Ivant (emutils-V09-05-14)
 - G4EmCalculator - fixed FindRegion
 

@@ -100,7 +100,10 @@ G4VMscModel::GetParticleChangeForMSC(const G4ParticleDefinition* p)
     change = new G4ParticleChangeForMSC();
   }
   if(p) {
-    if(p->GetPDGMass() < GeV || ForceBuildTableFlag()) {
+    G4String partname = p->GetParticleName();
+    if(p->GetPDGMass() < GeV || ForceBuildTableFlag() ||
+       partname == "deuteron" || partname == "triton" 
+       || partname == "He3" || partname == "alpha") {
       G4double emin = std::max(LowEnergyLimit(), LowEnergyActivationLimit());
       G4double emax = std::min(HighEnergyLimit(), HighEnergyActivationLimit());
       emin = std::max(emin, man->MinKinEnergy());

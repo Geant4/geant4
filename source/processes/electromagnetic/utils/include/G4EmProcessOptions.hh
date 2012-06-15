@@ -151,6 +151,9 @@ public:
   void ActivateSecondaryBiasing(const G4String& name, const G4String& region, 
 				G4double factor, G4double energyLimit);
 
+  void ActivateSecondaryBiasingForGamma(const G4String& name, const G4String& region, 
+				G4double factor, G4double energyLimit);
+
 private:
 
   G4EmProcessOptions & operator=(const  G4EmProcessOptions &right);

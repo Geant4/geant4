@@ -59,6 +59,10 @@ class G4Region;
 class G4DynamicParticle;
 class G4Track;
 
+class G4VEmModel;
+class G4MaterialCutsCouple;
+class G4ParticleChangeForLoss;
+class G4ParticleChangeForGamma;
 class G4EmBiasingManager 
 {
 public:
@@ -83,8 +87,29 @@ public:
 
   // return weight of splitting or Russian roulette
   // G4DynamicParticle may be deleted
+  //G4double ApplySecondaryBiasing(std::vector<G4DynamicParticle*>&, 
+  // 				 G4int coupleIdx);
+
+  // two functions are required because of the different ParticleChange
+  // ApplySecondaryBiasing() are wrappers, ApplySecondaryBiasingWrapper
+  // does the work
+  //for G4VEnergyLossProcess
   G4double ApplySecondaryBiasing(std::vector<G4DynamicParticle*>&, 
-				 G4int coupleIdx);
+   				 G4int coupleIdx, G4VEmModel* currentModel, 
+           const G4MaterialCutsCouple* currentCouple,
+           const G4Track* track, G4double tcut, 
+           G4ParticleChangeForLoss* pParticleChange);
+  //for G4VEmProcess 
+  G4double ApplySecondaryBiasing(std::vector<G4DynamicParticle*>&, 
+   				 G4int coupleIdx, G4VEmModel* currentModel, 
+           const G4MaterialCutsCouple* currentCouple,
+           const G4Track* track, G4double tcut, 
+           G4ParticleChangeForGamma* pParticleChange);
+
+  G4double ApplySecondaryBiasingWrapped(std::vector<G4DynamicParticle*>& vd,
+              G4int coupleIdx, G4VEmModel* currentModel,
+              const G4MaterialCutsCouple* currentCouple, const G4Track* track,
+              G4double tcut);
 
   // Splitting or Russian roulette, G4Track may be deleted
   void ApplySecondaryBiasing(std::vector<G4Track*>&, G4double primaryWeight, 
@@ -113,6 +138,8 @@ private:
 
   std::vector<G4int>           idxForcedCouple;
   std::vector<G4int>           idxSecBiasedCouple;
+
+  std::vector<G4DynamicParticle*> tmpSecondaries;
 
   G4double currentStepLimit;
   G4bool   startTracking;

@@ -1029,11 +1029,12 @@ void G4EnergyLossTables::CPRWarning()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4EnergyLossTables::ParticleHaveNoLoss(const G4ParticleDefinition* aParticle, 
-					    const G4String& q)
+void 
+G4EnergyLossTables::ParticleHaveNoLoss(const G4ParticleDefinition*, 
+				       const G4String& /*q*/)
 {
-  G4String s = " " + q + " table not found for "
-             + aParticle->GetParticleName() + " !";
+  //G4String s = " " + q + " table not found for "
+  //           + aParticle->GetParticleName() + " !";
   //G4Exception("G4EnergyLossTables::ParticleHaveNoLoss", "EM01",
   //	      FatalException, s);
 }

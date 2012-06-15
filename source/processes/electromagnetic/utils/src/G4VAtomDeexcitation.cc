@@ -170,18 +170,18 @@ G4VAtomDeexcitation::SetDeexcitationActiveRegion(const G4String& rname,
 						 G4bool valAuger,
 						 G4bool valPIXE)
 {
-  G4String s = rname;
+  G4String ss = rname;
   //G4cout << "### G4VAtomDeexcitation::SetDeexcitationActiveRegion " << s 
   //	 << G4endl;
-  if(s == "world" || s == "World" || s == "WORLD") {
-    s = "DefaultRegionForTheWorld";
+  if(ss == "world" || ss == "World" || ss == "WORLD") {
+    ss = "DefaultRegionForTheWorld";
   }
   size_t n = activeRegions.size();
   if(n > 0) {
     for(size_t i=0; i<n; ++i) {
  
       // Region already exist
-      if(s == activeRegions[i]) {
+      if(ss == activeRegions[i]) {
 	deRegions[i] = valDeexcitation;
 	AugerRegions[i] = valAuger;
 	PIXERegions[i] = valPIXE;
@@ -190,7 +190,7 @@ G4VAtomDeexcitation::SetDeexcitationActiveRegion(const G4String& rname,
     }
   }
   // New region
-  activeRegions.push_back(s);
+  activeRegions.push_back(ss);
   deRegions.push_back(valDeexcitation);
   AugerRegions.push_back(valAuger);
   PIXERegions.push_back(valPIXE);
