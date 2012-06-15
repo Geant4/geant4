@@ -251,6 +251,7 @@ void G4EmStandardPhysics::ConstructProcess()
                particleName == "He3") {
 
       ph->RegisterProcess(hmsc, particle);
+      //ph->RegisterProcess(new G4hMultipleScattering(), particle);
       ph->RegisterProcess(new G4ionIonisation(), particle);
 
     } else if (particleName == "GenericIon") {
@@ -303,7 +304,7 @@ void G4EmStandardPhysics::ConstructProcess()
                particleName == "anti_triton" ||
                particleName == "anti_xi_c+" ||
                particleName == "anti_xi-" ||
-               particleName == "deuteron" ||
+	       particleName == "deuteron" ||
 	       particleName == "lambda_c+" ||
                particleName == "omega-" ||
                particleName == "sigma_c+" ||
@@ -312,7 +313,7 @@ void G4EmStandardPhysics::ConstructProcess()
                particleName == "sigma-" ||
                particleName == "tau+" ||
                particleName == "tau-" ||
-               particleName == "triton" ||
+	       particleName == "triton" ||
                particleName == "xi_c+" ||
                particleName == "xi-" ) {
 

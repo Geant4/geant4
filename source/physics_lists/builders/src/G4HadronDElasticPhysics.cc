@@ -64,14 +64,14 @@
 
 #include "G4WHadronElasticProcess.hh"
 #include "G4HadronElastic.hh"
-//#include "G4CHIPSElastic.hh"
 #include "G4ElasticHadrNucleusHE.hh"
 #include "G4AntiNuclElastic.hh"
 
 #include "G4BGGNucleonElasticXS.hh"
 #include "G4BGGPionElasticXS.hh"
 #include "G4NeutronElasticXS.hh"
-//#include "G4CHIPSElasticXS.hh"
+
+#include "G4CrossSectionDataSetRegistry.hh"
 
 #include "G4ChipsKaonPlusElasticXS.hh"
 #include "G4ChipsKaonMinusElasticXS.hh"
@@ -203,7 +203,7 @@ void G4HadronDElasticPhysics::ConstructProcess()
     } else if(pname == "kaon-") {
       
       G4WHadronElasticProcess* hel = new G4WHadronElasticProcess();
-      hel->AddDataSet(new G4ChipsKaonMinusElasticXS());
+      hel->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonMinusElasticXS::Default_Name()));
       model = new G4DiffuseElastic();
       hel->RegisterMe(model);
       pmanager->AddDiscreteProcess(hel);
@@ -214,7 +214,7 @@ void G4HadronDElasticPhysics::ConstructProcess()
     } else if(pname == "kaon+") {
       
       G4WHadronElasticProcess* hel = new G4WHadronElasticProcess();
-      hel->AddDataSet(new G4ChipsKaonPlusElasticXS());
+      hel->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonPlusElasticXS::Default_Name()));
       model = new G4DiffuseElastic();
       hel->RegisterMe(model);
       pmanager->AddDiscreteProcess(hel);
@@ -227,7 +227,7 @@ void G4HadronDElasticPhysics::ConstructProcess()
 	      ) {
       
       G4WHadronElasticProcess* hel = new G4WHadronElasticProcess();
-      hel->AddDataSet(new G4ChipsKaonZeroElasticXS());
+      hel->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonZeroElasticXS::Default_Name()));
       model = new G4DiffuseElastic();
       hel->RegisterMe(model);
       pmanager->AddDiscreteProcess(hel);

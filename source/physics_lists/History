@@ -15,6 +15,28 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12-06-2012, W.Pokorski                 (phys-lists-V09-05-28)
+- Migrating Elastic and DElastic builders to use factory
+mechanism for Chips cross sections
+
+11-06-2012, W.Pokorski                 (phys-lists-V09-05-27)
+- Migrating FTFP_BERT and FTFP_BERT_TRV to use factory
+mechanism for Chips cross sections
+
+06-05-2012, V.Ivanchenko               (phys-lists-V09-05-26)
+- Return back EM builders to  phys-lists-V09-05-23, because no
+  visible effect on CPU was observed
+
+05-05-2012, V.Ivanchenko               (phys-lists-V09-05-25)
+- Build transport cross section tables for d and t in standard opt0 
+
+05-05-2012, V.Ivanchenko               (phys-lists-V09-05-24)
+- Build transport cross section tables for He3 and He4 in standard opt0 
+
+03-06-2012, Witek Pokorski            (phys-lists-V09-05-23)
+- using the new functionality of cross sections registry allowing
+to share the cross sections data sets
+
 30-05-2012, Witek Pokorski            (phys-lists-V09-05-22)
 - created new builders using Bertini gamma nuclear
 - migrated FTFP_BERT to use the new builders

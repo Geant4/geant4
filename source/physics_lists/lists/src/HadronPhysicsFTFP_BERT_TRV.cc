@@ -48,10 +48,11 @@
 #include "G4MesonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
-//#include "G4QHadronInelasticDataSet.hh"
 #include "G4ChipsKaonMinusInelasticXS.hh"
 #include "G4ChipsKaonPlusInelasticXS.hh"
 #include "G4ChipsKaonZeroInelasticXS.hh"
+#include "G4CrossSectionDataSetRegistry.hh"
+
 
 #include "G4PhysListUtil.hh"
 
@@ -160,7 +161,6 @@ HadronPhysicsFTFP_BERT_TRV::~HadronPhysicsFTFP_BERT_TRV()
   delete theAntiBaryon;
   delete theFTFPAntiBaryon;
   
-  // delete theCHIPSInelastic;
 }
 
 void HadronPhysicsFTFP_BERT_TRV::ConstructParticle()
@@ -182,11 +182,12 @@ void HadronPhysicsFTFP_BERT_TRV::ConstructProcess()
   theNeutrons->Build();
   thePro->Build();
   thePiK->Build();
+
   // use CHIPS cross sections also for Kaons
-  //theCHIPSInelastic = new G4QHadronInelasticDataSet();
-  ChipsKaonMinus = new G4ChipsKaonMinusInelasticXS();
-  ChipsKaonPlus = new G4ChipsKaonPlusInelasticXS();
-  ChipsKaonZero = new G4ChipsKaonZeroInelasticXS();
+  ChipsKaonMinus = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonMinusInelasticXS::Default_Name());
+  ChipsKaonPlus = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonPlusInelasticXS::Default_Name());
+  ChipsKaonZero = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name());
+
   
   G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(ChipsKaonMinus);
   G4PhysListUtil::FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(ChipsKaonPlus);
