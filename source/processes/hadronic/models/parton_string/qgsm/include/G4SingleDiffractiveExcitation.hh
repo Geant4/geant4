@@ -47,31 +47,31 @@ class G4ExcitedString;
 class G4SingleDiffractiveExcitation : public G4QGSDiffractiveExcitation
 {
 
-  public:
+public:
 
-      G4SingleDiffractiveExcitation(G4double sigmaPt=0.6*GeV, G4double minExtraMass=250*MeV,G4double x0mass=250*MeV);
-      ~G4SingleDiffractiveExcitation();
+	G4SingleDiffractiveExcitation(G4double sigmaPt=0.6*GeV, G4double minExtraMass=250*MeV,G4double x0mass=250*MeV);
+	~G4SingleDiffractiveExcitation();
 
-      G4bool ExciteParticipants (G4VSplitableHadron *aPartner, G4VSplitableHadron * bPartner) const;
-      
-//      void SetPtWidth(G4double aValue) { widthOfPtSquare = aValue*aValue; }
-//      void SetExtraMass(G4double aValue) { minExtraMass = aValue; }
-//      void SetMinimumMass(G4double aValue) { minmass = aValue; }
+	G4bool ExciteParticipants (G4VSplitableHadron *aPartner, G4VSplitableHadron * bPartner) const;
+
+	//      void SetPtWidth(G4double aValue) { widthOfPtSquare = aValue*aValue; }
+	//      void SetExtraMass(G4double aValue) { minExtraMass = aValue; }
+	//      void SetMinimumMass(G4double aValue) { minmass = aValue; }
 
 
-  private:
+private:
 
-      G4SingleDiffractiveExcitation(const G4SingleDiffractiveExcitation &right);
-      
-      G4double ChooseX(G4double Xmin, G4double Xmax) const;
-      G4ThreeVector GaussianPt(G4double widthSquare, G4double maxPtSquare) const;
-      
-      const G4SingleDiffractiveExcitation & operator=(const G4SingleDiffractiveExcitation &right);
-      int operator==(const G4SingleDiffractiveExcitation &right) const;
-      int operator!=(const G4SingleDiffractiveExcitation &right) const;
+	G4SingleDiffractiveExcitation(const G4SingleDiffractiveExcitation &right);
 
-  private:
-// Model Parameters:
+	G4double ChooseX(G4double Xmin, G4double Xmax) const;
+	G4ThreeVector GaussianPt(G4double widthSquare, G4double maxPtSquare) const;
+
+	const G4SingleDiffractiveExcitation & operator=(const G4SingleDiffractiveExcitation &right);
+	int operator==(const G4SingleDiffractiveExcitation &right) const;
+	int operator!=(const G4SingleDiffractiveExcitation &right) const;
+
+private:
+	// Model Parameters:
 	const G4double widthOfPtSquare;	// width^2 of pt for string excitation
 	const G4double minExtraMass;	// minimum excitation mass 
 	const G4double minmass;	// mean pion transverse mass; used for Xmin 

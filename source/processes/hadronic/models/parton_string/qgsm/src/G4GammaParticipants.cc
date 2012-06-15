@@ -39,71 +39,71 @@
 
 G4VSplitableHadron* G4GammaParticipants::SelectInteractions(const G4ReactionProduct  &thePrimary) 
 {
-  // Check reaction threshold  - goes to CheckThreshold
-  G4VSplitableHadron* aProjectile = new G4QGSMSplitableHadron(thePrimary, TRUE); // @@@ check the TRUE
+	// Check reaction threshold  - goes to CheckThreshold
+	G4VSplitableHadron* aProjectile = new G4QGSMSplitableHadron(thePrimary, TRUE); // @@@ check the TRUE
 
-  const std::vector<G4Nucleon>& theTargetNuc = theNucleus->GetNucleons();
-  G4LorentzVector aPrimaryMomentum(thePrimary.GetMomentum(), thePrimary.GetTotalEnergy());
-  if((!(aPrimaryMomentum.e()>-1)) && (!(aPrimaryMomentum.e()<1)) )
-  {
-    throw G4HadronicException(__FILE__, __LINE__, 
-                 "G4GammaParticipants::SelectInteractions: primary nan energy.");
-  }
-  G4double s = (aPrimaryMomentum + theTargetNuc[0].Get4Momentum()).mag2();
-  G4double ThresholdMass = thePrimary.GetMass() + theTargetNuc[0].GetDefinition()->GetPDGMass(); 
-  ModelMode = SOFT;
-  if (sqr(ThresholdMass + ThresholdParameter) > s)
-  {
-    ModelMode = DIFFRACTIVE;
-    //throw G4HadronicException(__FILE__, __LINE__, "Initial energy is too low. The 4-vectors of the input are inconsistant with the particle masses.");
-  }
-  if (sqr(ThresholdMass + QGSMThreshold) > s) // thus only diffractive in cascade!
-  {
-    ModelMode = DIFFRACTIVE;
-  }
- 
-  // first find the collisions HPW
-  std::for_each(theInteractions.begin(), theInteractions.end(), DeleteInteractionContent());
-  theInteractions.clear();
-  G4int totalCuts = 0;
+	const std::vector<G4Nucleon>& theTargetNuc = theNucleus->GetNucleons();
+	G4LorentzVector aPrimaryMomentum(thePrimary.GetMomentum(), thePrimary.GetTotalEnergy());
+	if((!(aPrimaryMomentum.e()>-1)) && (!(aPrimaryMomentum.e()<1)) )
+	{
+		throw G4HadronicException(__FILE__, __LINE__,
+				"G4GammaParticipants::SelectInteractions: primary nan energy.");
+	}
+	G4double S = (aPrimaryMomentum + theTargetNuc[0].Get4Momentum()).mag2();
+	G4double ThresholdMass = thePrimary.GetMass() + theTargetNuc[0].GetDefinition()->GetPDGMass();
+	ModelMode = SOFT;
+	if (sqr(ThresholdMass + ThresholdParameter) > S)
+	{
+		ModelMode = DIFFRACTIVE;
+		//throw G4HadronicException(__FILE__, __LINE__, "Initial energy is too low. The 4-vectors of the input are inconsistant with the particle masses.");
+	}
+	if (sqr(ThresholdMass + QGSMThreshold) > S) // thus only diffractive in cascade!
+	{
+		ModelMode = DIFFRACTIVE;
+	}
 
-   #ifdef debug_G4GammaParticipants
-   G4double eK = thePrimary.GetKineticEnergy()/GeV;
-   G4int nucleonCount = theTargetNuc.size(); // debug
-   #endif
+	// first find the collisions HPW
+	std::for_each(theInteractions.begin(), theInteractions.end(), DeleteInteractionContent());
+	theInteractions.clear();
+	G4int totalCuts = 0;
 
-  G4int theCurrent = static_cast<G4int> (theTargetNuc.size()*G4UniformRand());
-  const G4Nucleon& pNucleon = theTargetNuc[theCurrent];
-  G4QGSMSplitableHadron* aTarget = new G4QGSMSplitableHadron(pNucleon);
-  theTargets.push_back(aTarget);
-  const_cast<G4Nucleon&>(pNucleon).Hit(aTarget);
-   if ( (0.06 > G4UniformRand() &&(ModelMode==SOFT)) || (ModelMode==DIFFRACTIVE ) )
-   { 
-     // diffractive interaction occurs
-     if(IsSingleDiffractive())
-     {
-       theSingleDiffExcitation.ExciteParticipants(aProjectile, aTarget);
-     }
-     else
-     {
-       theDiffExcitaton.ExciteParticipants(aProjectile, aTarget);
-     }
-     G4InteractionContent * aInteraction = new G4InteractionContent(aProjectile);
-     aInteraction->SetTarget(aTarget); 
-     theInteractions.push_back(aInteraction);
-     aInteraction->SetNumberOfDiffractiveCollisions(1);
-     totalCuts += 1;
-   }
-   else
-   {
-     // nondiffractive soft interaction occurs
-     aTarget->IncrementCollisionCount(1);
-     aProjectile->IncrementCollisionCount(1);
-     G4InteractionContent * aInteraction = new G4InteractionContent(aProjectile);
-     aInteraction->SetTarget(aTarget);
-     aInteraction->SetNumberOfSoftCollisions(1);
-     theInteractions.push_back(aInteraction);
-     totalCuts += 1;
-    }
-  return aProjectile;
+	#ifdef debug_G4GammaParticipants
+		G4double eK = thePrimary.GetKineticEnergy()/GeV;
+		G4int nucleonCount = theTargetNuc.size(); // debug
+	#endif
+
+	G4int theCurrent = static_cast<G4int> (theTargetNuc.size()*G4UniformRand());
+	const G4Nucleon& pNucleon = theTargetNuc[theCurrent];
+	G4QGSMSplitableHadron* aTarget = new G4QGSMSplitableHadron(pNucleon);
+	theTargets.push_back(aTarget);
+	const_cast<G4Nucleon&>(pNucleon).Hit(aTarget);
+	if ( (0.06 > G4UniformRand() &&(ModelMode==SOFT)) || (ModelMode==DIFFRACTIVE ) )
+	{
+		// diffractive interaction occurs
+		if(IsSingleDiffractive())
+		{
+			theSingleDiffExcitation.ExciteParticipants(aProjectile, aTarget);
+		}
+		else
+		{
+			theDiffExcitaton.ExciteParticipants(aProjectile, aTarget);
+		}
+		G4InteractionContent * aInteraction = new G4InteractionContent(aProjectile);
+		aInteraction->SetTarget(aTarget);
+		theInteractions.push_back(aInteraction);
+		aInteraction->SetNumberOfDiffractiveCollisions(1);
+		totalCuts += 1;
+	}
+	else
+	{
+		// nondiffractive soft interaction occurs
+		aTarget->IncrementCollisionCount(1);
+		aProjectile->IncrementCollisionCount(1);
+		G4InteractionContent * aInteraction = new G4InteractionContent(aProjectile);
+		aInteraction->SetTarget(aTarget);
+		aInteraction->SetNumberOfSoftCollisions(1);
+		theInteractions.push_back(aInteraction);
+		totalCuts += 1;
+	}
+	return aProjectile;
 }

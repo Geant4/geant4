@@ -32,22 +32,12 @@ class G4QGSMParameters
     {
 public:
       G4QGSMParameters();
-      G4QGSMParameters(const G4QGSMParameters &right);
       ~G4QGSMParameters();
       
+private:
+      G4QGSMParameters(const G4QGSMParameters &right);
       int operator==(const G4QGSMParameters &right) const;
       int operator!=(const G4QGSMParameters &right) const;
-private:     
      };
-     
-inline int G4QGSMParameters::operator==(const G4QGSMParameters &) const
-    {
-    return 1;
-    }
-
-inline int G4QGSMParameters::operator!=(const G4QGSMParameters &) const
-    {
-    return  0;
-    }
 
 #endif     

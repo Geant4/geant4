@@ -32,28 +32,18 @@
 #include "G4PartonPair.hh"
 
 class G4DiffractiveStringBuilder 
-    {
+{
 public:
-      G4DiffractiveStringBuilder();
-      G4DiffractiveStringBuilder(const G4DiffractiveStringBuilder &right);
-      ~G4DiffractiveStringBuilder();
-      
-      G4int operator==(const G4DiffractiveStringBuilder &right) const;
-      G4int operator!=(const G4DiffractiveStringBuilder &right) const;
-      
-      G4ExcitedString* BuildString(G4PartonPair* aParton);
-      
-private:     
-     };
-     
-inline G4int G4DiffractiveStringBuilder::operator==(const G4DiffractiveStringBuilder &) const
-    {
-    return 1;
-    }
+	G4DiffractiveStringBuilder();
+	~G4DiffractiveStringBuilder();
 
-inline G4int G4DiffractiveStringBuilder::operator!=(const G4DiffractiveStringBuilder &) const
-    {
-    return  0;
-    }
+	G4ExcitedString* BuildString(G4PartonPair* aParton);
+
+private:
+	G4DiffractiveStringBuilder(const G4DiffractiveStringBuilder &right);
+	G4int operator==(const G4DiffractiveStringBuilder &right) const;
+	G4int operator!=(const G4DiffractiveStringBuilder &right) const;
+
+};
 
 #endif     

@@ -57,11 +57,6 @@ G4PartonPair::G4PartonPair(G4Parton* P1, G4Parton* P2, G4int Type, G4int aDirect
 #endif      
     }
 
-G4PartonPair::G4PartonPair(const G4PartonPair &)
-    {
-    throw G4HadronicException(__FILE__, __LINE__, "You can not make a copy of this object");
-    }
-
 G4PartonPair::~G4PartonPair()
     {
     }

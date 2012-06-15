@@ -28,30 +28,26 @@
 //***************************************************************************************************
 
 G4SoftStringBuilder::G4SoftStringBuilder()
-   {
-   }
-
-G4SoftStringBuilder::G4SoftStringBuilder(const G4SoftStringBuilder &)
-   {
-   }
+{
+}
 
 G4SoftStringBuilder::~G4SoftStringBuilder()
-   {
-   }
+{
+}
 
 //***************************************************************************************************
-       
+
 G4ExcitedString* G4SoftStringBuilder::BuildString(G4PartonPair * aPair)       
-    {
+{
 #ifdef debug_G4SoftStringBuilder
-   	G4cout << "BuildSoft " << aPair->GetParton1()->GetPDGcode() << " " 
-			      << aPair->GetParton1()->Get4Momentum() << " "
-			      << aPair->GetParton1()->GetX() << " " << G4endl;
+	G4cout << "BuildSoft " << aPair->GetParton1()->GetPDGcode() << " "
+			<< aPair->GetParton1()->Get4Momentum() << " "
+			<< aPair->GetParton1()->GetX() << " " << G4endl;
 	G4cout << "         " << aPair->GetParton2()->GetPDGcode() << " " 
-			      << aPair->GetParton2()->Get4Momentum() << " "
-			      << aPair->GetParton2()->GetX() << " " << G4endl;
+			<< aPair->GetParton2()->Get4Momentum() << " "
+			<< aPair->GetParton2()->GetX() << " " << G4endl;
 #endif
-    return  new G4ExcitedString(aPair->GetParton1(), aPair->GetParton2(), aPair->GetDirection());
-    }
-       
+	return  new G4ExcitedString(aPair->GetParton1(), aPair->GetParton2(), aPair->GetDirection());
+}
+
 //***********************************************************************************************
