@@ -1,0 +1,9 @@
+# Macro file for the initialization phase of g3tog4/clGeometry example
+# when running in interactive mode without visualization
+#
+# Set some default verbose
+#
+/control/verbose 1
+/run/verbose 1
+/tracking/verbose 1
+/tracking/storeTrajectory 1

@@ -15,6 +15,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 5th, 2012 I.Hrivnacova (g3tog4Tests-V09-05-00)
+---------------------------
+- Removed cltog4 example as it was just a duplication of clGeometry.
+- Restructured clGeometry for use of classes from common.
+- Applied coding guidelines, code clean-up.
+- Changed gun particle position & direction in test macros 
+  to get particles to go through volumes inside HALL
+
 November 23rd, 2011 G.Cosmo (g3tog4Tests-V09-04-01)
 ---------------------------
 - Merged changes from previous tag never considered for testing...

@@ -47,16 +47,13 @@ class G3toG4DetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
   G3toG4DetectorConstruction(G4String inFile="svt.dat");
+  virtual ~G3toG4DetectorConstruction();
 
-  ~G3toG4DetectorConstruction();
-
-  G4VPhysicalVolume* Construct();
-  G4LogicalVolume* SimpleConstruct();
-
+  virtual G4VPhysicalVolume* Construct();
+ 
 private:
-  G4String _inFile;
-  G4VPhysicalVolume* _pv;
-  G4LogicalVolume* _lv;
+  G4LogicalVolume* SimpleConstruct();
+  G4String fInFile;
 };
 
 #endif

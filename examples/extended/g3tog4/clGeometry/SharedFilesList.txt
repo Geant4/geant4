@@ -1,0 +1,8 @@
+EXAMPLE extended/g3tog4/clGeometry
+COMMON_CLASSES_PATH ../../common
+COMMON_CLASSES_LIST
+ExG4PrimaryGeneratorAction01 
+ExG4EventAction01 
+ExG4EventAction01Messenger
+ExG4RunAction01
+ExG4RunAction01Messenger
