@@ -260,13 +260,13 @@ class G4GHEKinematicsVector
   G4double GetKineticEnergy() {return kineticEnergy;}
 
   inline
-  void SetMass( G4double m ) { mass = m; return; }
+  void SetMass( G4double mas ) { mass = mas; return; }
 
   inline
-  void SetMassAndUpdate( G4double m )
+  void SetMassAndUpdate( G4double mas )
   {
-    kineticEnergy = std::max(0., energy - m);
-    mass = m;
+    kineticEnergy = std::max(0., energy - mas);
+    mass = mas;
     energy = kineticEnergy + mass;
     G4double momnew = std::sqrt(std::max(0., energy*energy - mass*mass));
     if ( momnew == 0.0) 
@@ -314,7 +314,7 @@ class G4GHEKinematicsVector
   G4double GetTOF() { return timeOfFlight; }
 
   inline
-  void SetSide( G4int s ) { side = s; return; }
+  void SetSide( G4int sid ) { side = sid; return; }
 
   inline
   G4int GetSide() { return side; }
