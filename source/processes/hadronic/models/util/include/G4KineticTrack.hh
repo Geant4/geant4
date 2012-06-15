@@ -297,9 +297,9 @@ inline void G4KineticTrack::SetTrackingMomentum(const G4LorentzVector& aMomentum
   the4Momentum = aMomentum;
   theTotal4Momentum=the4Momentum+theFermi3Momentum;
 //     keep mass of aMomentum for the total momentum
-  G4double m2 = aMomentum.mag2();
+  G4double mass2 = aMomentum.mag2();
   G4double p2=theTotal4Momentum.vect().mag2();
-  theTotal4Momentum.setE(std::sqrt(m2+p2));
+  theTotal4Momentum.setE(std::sqrt(mass2+p2));
 }
 
 inline void G4KineticTrack::UpdateTrackingMomentum(G4double aEnergy)
@@ -383,14 +383,14 @@ inline G4double G4KineticTrack::SampleResidualLifetime()
 
 
 
-inline G4double G4KineticTrack::EvaluateCMMomentum(const G4double m, 
+inline G4double G4KineticTrack::EvaluateCMMomentum(const G4double mass, 
                                                  const G4double* m_ij) const
 {
   G4double theCMMomentum;
-  if((m_ij[0]+m_ij[1])<m)
-   theCMMomentum = 1 / (2 * m) * 
-          std::sqrt (((m * m) - (m_ij[0] + m_ij[1]) * (m_ij[0] + m_ij[1])) *
-                ((m * m) - (m_ij[0] - m_ij[1]) * (m_ij[0] - m_ij[1])));
+  if((m_ij[0]+m_ij[1])<mass)
+   theCMMomentum = 1 / (2 * mass) * 
+          std::sqrt (((mass * mass) - (m_ij[0] + m_ij[1]) * (m_ij[0] + m_ij[1])) *
+                ((mass * mass) - (m_ij[0] - m_ij[1]) * (m_ij[0] - m_ij[1])));
   else
    theCMMomentum=0.;
 

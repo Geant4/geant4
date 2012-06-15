@@ -395,6 +395,9 @@ void G4Fancy3DNucleus::ChooseFermiMomenta()
 	        - BindingEnergy()/myA;
        G4LorentzVector tempV(momentum[i],energy);
        theNucleons[i].SetMomentum(tempV);
+       // GF 11-05-2011: set BindingEnergy to be T of Nucleon with p , ~ p**2/2m
+       //theNucleons[i].SetBindingEnergy(
+       //     0.5*sqr(fermiM[i])/theNucleons[i].GetParticleType()->GetPDGMass());
     }
 }
 

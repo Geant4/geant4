@@ -15,6 +15,9 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+12 Jun 2012 Gunter Folger                  hadr-mod-util-V09-05-00
+- fix variable shadowing warnings
+
 22 Nov 2011 Gunter Folger                  hadr-mod-util-V09-04-04
 - fix leak in G4DecayKineticTracks.cc
 

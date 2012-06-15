@@ -377,7 +377,7 @@ G4DecayProducts *G4GeneralPhaseSpaceDecay::ManyBodyDecayIt()
   G4double tmas;
   G4double weight = 1.0;
   G4int    numberOfTry = 0; 
-  G4int index1, index2;
+  G4int index1;
 
   do {
     //Generate rundom number in descending order 
@@ -388,7 +388,7 @@ G4DecayProducts *G4GeneralPhaseSpaceDecay::ManyBodyDecayIt()
       rd[index1] = G4UniformRand(); 
     rd[ numberOfDaughters -1] = 0.0;
     for(index1 =1; index1 < numberOfDaughters -1; index1++) {
-      for(index2 = index1+1; index2 < numberOfDaughters; index2++) {
+      for(G4int index2 = index1+1; index2 < numberOfDaughters; index2++) {
         if (rd[index1] < rd[index2]){
           temp         = rd[index1];
           rd[index1]   = rd[index2];
