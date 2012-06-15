@@ -72,20 +72,20 @@ class G4VSensitiveDetector;
 //
 // Constructor
 
-G4Transportation::G4Transportation( G4int verboseLevel )
+G4Transportation::G4Transportation( G4int verbosity )
   : G4VProcess( G4String("Transportation"), fTransportation ),
     fParticleIsLooping( false ),
-    fPreviousSftOrigin (0.,0.,0.),
-    fPreviousSafety    ( 0.0 ),
+    fPreviousSftOrigin( 0.,0.,0. ),
+    fPreviousSafety( 0.0 ),
     fThreshold_Warning_Energy( 100 * MeV ),  
     fThreshold_Important_Energy( 250 * MeV ), 
     fThresholdTrials( 10 ), 
     fUnimportant_Energy( 1 * MeV ),  // Not used
-    fNoLooperTrials(0),
+    fNoLooperTrials( 0 ),
     fSumEnergyKilled( 0.0 ), fMaxEnergyKilled( 0.0 ), 
-    fShortStepOptimisation(false),    // Old default: true (=fast short steps)
-    fUseMagneticMoment(false),  
-    fVerboseLevel( verboseLevel )
+    fShortStepOptimisation( false ), // Old default: true (=fast short steps)
+    fUseMagneticMoment( false ),
+    fVerboseLevel( verbosity )
 {
   // set Process Sub Type
   SetProcessSubType(static_cast<int>(TRANSPORTATION));

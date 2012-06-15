@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Jun. 7th, 2012 Gabriele Cosmo transport-V09-05-00
+-----------------------------
+- Fixed spurious cases of hidden variable visibility, detected with
+  '-Wshadow' compilation option on gcc compiler.
+
 Nov. 4th, 2011, J.Apostolakis transport-V09-04-13
 -----------------------------
 - Turned off tracking for magnetic moment - by default.
