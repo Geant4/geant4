@@ -27,7 +27,9 @@
 // $Id: G4GaussLegendreQ.cc,v 1.8 2007-11-13 17:35:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+
 #include "G4GaussLegendreQ.hh"
+#include "G4PhysicalConstants.hh"
 
 G4GaussLegendreQ::G4GaussLegendreQ( function pFunction )
    : G4VGaussianQuadrature(pFunction)

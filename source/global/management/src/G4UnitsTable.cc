@@ -47,11 +47,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
- 
-#include "G4UnitsTable.hh"
-
 #include <iomanip>
 #include <sstream>
+
+#include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 
 G4UnitsTable G4UnitDefinition::theUnitsTable;
 

@@ -340,7 +340,7 @@ G4double G4Integrator<T,F>::Legendre( T& typeT, F f, G4double a, G4double b,
       
    for(i=1;i<=fNumber;i++)      // Loop over the desired roots
    {
-      nwt = std::cos(pi*(i - 0.25)/(k + 0.5)) ;  // Initial root approximation
+      nwt = std::cos(CLHEP::pi*(i - 0.25)/(k + 0.5)) ;  // Initial root approximation
 
       do     // loop of Newton's method  
       {                           
@@ -417,7 +417,7 @@ G4double G4Integrator<T,F>::Legendre( G4double (*f)(G4double),
       
    for(i=1;i<=fNumber;i++)      // Loop over the desired roots
    {
-      nwt = std::cos(pi*(i - 0.25)/(k + 0.5)) ;  // Initial root approximation
+      nwt = std::cos(CLHEP::pi*(i - 0.25)/(k + 0.5)) ;  // Initial root approximation
 
       do     // loop of Newton's method  
       {                           
@@ -751,7 +751,7 @@ G4double G4Integrator<T,F>::Chebyshev( T& typeT, F f, G4double a,
    G4double xDiff, xMean, dx, integral = 0.0 ;
    
    G4int fNumber = nChebyshev  ;   // Try to reduce fNumber twice ??
-   G4double cof = pi/fNumber ;
+   G4double cof = CLHEP::pi/fNumber ;
    G4double* fAbscissa = new G4double[fNumber] ;
    G4double* fWeight   = new G4double[fNumber] ;
    for(i=0;i<fNumber;i++)
@@ -799,7 +799,7 @@ G4double G4Integrator<T,F>::Chebyshev( G4double (*f)(G4double),
    G4double xDiff, xMean, dx, integral = 0.0 ;
    
    G4int fNumber = nChebyshev  ;   // Try to reduce fNumber twice ??
-   G4double cof = pi/fNumber ;
+   G4double cof = CLHEP::pi/fNumber ;
    G4double* fAbscissa = new G4double[fNumber] ;
    G4double* fWeight   = new G4double[fNumber] ;
    for(i=0;i<fNumber;i++)
@@ -1054,7 +1054,7 @@ G4double G4Integrator<T,F>::Hermite( T& typeT, F f, G4int nHermite )
    G4double integral = 0.0 ;
    G4double nwt=0., nwt1, temp1, temp2, temp3, temp ;
 
-   G4double piInMinusQ = std::pow(pi,-0.25) ;    // 1.0/std::sqrt(std::sqrt(pi)) ??
+   G4double piInMinusQ = std::pow(CLHEP::pi,-0.25) ; // 1.0/std::sqrt(std::sqrt(pi)) ??
 
    G4int fNumber = (nHermite +1)/2 ;
    G4double* fAbscissa = new G4double[fNumber] ;
@@ -1152,7 +1152,7 @@ G4double G4Integrator<T,F>::Hermite( G4double (*f)(G4double), G4int nHermite)
    G4double integral = 0.0 ;
    G4double nwt=0., nwt1, temp1, temp2, temp3, temp ;
 
-   G4double piInMinusQ = std::pow(pi,-0.25) ;    // 1.0/std::sqrt(std::sqrt(pi)) ??
+   G4double piInMinusQ = std::pow(CLHEP::pi,-0.25) ;    // 1.0/std::sqrt(std::sqrt(pi)) ??
 
    G4int fNumber = (nHermite +1)/2 ;
    G4double* fAbscissa = new G4double[fNumber] ;

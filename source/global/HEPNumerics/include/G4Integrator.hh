@@ -44,6 +44,7 @@
 
 #include "G4Types.hh"
 #include <cmath>
+#include <CLHEP/Units/PhysicalConstants.h>
 
 template <class T, class F>
 class G4Integrator

@@ -240,6 +240,10 @@ G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
       dataVector.push_back(vData);
     }
 
+    // to remove any inconsistency 
+    numberOfNodes = siz;
+    edgeMin = binVector[0];
+    edgeMax = binVector[numberOfNodes-1];
     return true ;
   }
 
@@ -269,6 +273,11 @@ G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
     dataVector.push_back(value[2*i+1]);
   }
   delete [] value;
+
+  // to remove any inconsistency 
+  numberOfNodes = size;
+  edgeMin = binVector[0];
+  edgeMax = binVector[numberOfNodes-1];
 
   return true;
 }
