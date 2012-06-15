@@ -16,6 +16,16 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+12 June 2012 - Davide Mancusi (hadr-inclxx-V09-05-16)
+-----------------------------------------------------------
+- Should compile cleanly with -Wshadow.
+
+1 June 2012 - Davide Mancusi (hadr-inclxx-V09-05-15)
+-----------------------------------------------------------
+- INCL++ v5.1
+  o Interface returns an empty G4HadFinalState if no inelastic event could be
+    produced.
+
 25 May 2012 - Davide Mancusi (hadr-inclxx-V09-05-14)
 -----------------------------------------------------------
 - INCL++ v5.1_rc11

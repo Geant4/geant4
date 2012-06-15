@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1_rc11
+// INCL++ revision: v5.1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -45,8 +45,10 @@
 #include "G4ReactionProductVector.hh"
 #include "G4ReactionProduct.hh"
 #include "G4INCLXXInterfaceConfig.hh"
+#include "G4String.hh"
 
-G4INCLXXInterfaceMessenger *theINCLXXInterfaceMessenger = NULL;
+G4int G4INCLXXInterface::nWarnings = 0;
+const G4int G4INCLXXInterface::maxWarnings = 50;
 
 G4INCLXXInterface::G4INCLXXInterface(const G4String& nam)
   :G4VIntraNuclearTransportModel(nam),
@@ -57,7 +59,8 @@ G4INCLXXInterface::G4INCLXXInterface(const G4String& nam)
 
   // Use the environment variable G4INCLXX_NO_DE_EXCITATION to disable de-excitation
   if(getenv("G4INCLXX_NO_DE_EXCITATION")) {
-    G4cout <<"INCL++ Interface: WARNING: De-excitation is completely disabled!" << G4endl;
+    G4String message = "de-excitation is completely disabled!";
+    EmitWarning(message);
     theExcitationHandler = 0;
   } else {
     theExcitationHandler = new G4ExcitationHandler;
@@ -82,7 +85,7 @@ G4INCLXXInterface::~G4INCLXXInterface()
   delete theExcitationHandler;
 }
 
-G4bool G4INCLXXInterface::shouldUseInverseKinematics(const G4HadProjectile &aTrack, const G4Nucleus &theNucleus) {
+G4bool G4INCLXXInterface::ShouldUseInverseKinematics(const G4HadProjectile &aTrack, const G4Nucleus &theNucleus) {
   // Use direct kinematics if the projectile is a nucleon or a pion
   const G4ParticleDefinition *projectileDef = aTrack.GetDefinition();
   if(projectileDef == G4Proton::Proton()
@@ -95,11 +98,11 @@ G4bool G4INCLXXInterface::shouldUseInverseKinematics(const G4HadProjectile &aTra
   // Here all projectiles should be light nuclei
   const G4int pA = projectileDef->GetAtomicMass();
   if(pA<=0) {
-    G4cout << "INCL++ WARNING: the model does not know how to handle a collision between a "
-      << projectileDef->GetParticleName()
-      << " projectile and a Z=" << theNucleus.GetZ_asInt()
-      << ", A=" << theNucleus.GetA_asInt()
-      << G4endl;
+    std::stringstream ss;
+    ss << "the model does not know how to handle a collision between a "
+      << projectileDef->GetParticleName() << " projectile and a Z="
+      << theNucleus.GetZ_asInt() << ", A=" << theNucleus.GetA_asInt();
+    EmitWarning(ss.str());
     return true;
   }
 
@@ -125,7 +128,7 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
   const G4int maxTries = 200;
 
   // Check if inverse kinematics should be used
-  const G4bool inverseKinematics = shouldUseInverseKinematics(aTrack, theNucleus);
+  const G4bool inverseKinematics = ShouldUseInverseKinematics(aTrack, theNucleus);
 
   // If we are running in inverse kinematics, redefine aTrack and theNucleus
   G4LorentzRotation *toInverseKinematics = NULL;
@@ -152,10 +155,12 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
         G4DynamicParticle swappedProjectileParticle(oldTargetDef, (*toInverseKinematics) * theProjectile4Momentum);
         aProjectileTrack = new G4HadProjectile(swappedProjectileParticle);
       } else {
-        G4cout <<"Badly defined target after swapping. Falling back to normal (non-swapped) mode." << G4endl;
+        G4String message = "badly defined target after swapping. Falling back to normal (non-swapped) mode.";
+        EmitWarning(message);
       }
     } else {
-      G4cout <<"oldProjectileDef or oldTargetDef was null" << G4endl;
+      G4String message = "oldProjectileDef or oldTargetDef was null";
+      EmitWarning(message);
     }
   }
 
@@ -244,7 +249,8 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
 	  theResult.AddSecondary(p);
 
 	} else {
-	  G4cout <<"Warning: INCL++ produced a particle that couldn't be converted to Geant4 particle." << G4endl;
+	  G4String message = "the model produced a particle that couldn't be converted to Geant4 particle.";
+          EmitWarning(message);
 	}
       }
 
@@ -269,16 +275,17 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
 	G4LorentzVector fourMomentum(scaling * px, scaling * py, scaling * pz,
 				     nuclearMass + kinE);
 	if(std::abs(scaling - 1.0) > 0.01) {
-	  G4cout <<"INCL++ warning: momentum scaling = " << scaling << G4endl
-	  <<"                Lorentz vector = " << fourMomentum << G4endl
-	  <<"                A = " << A << ", Z = " << Z << G4endl
-	  <<"                E* = " << excitationE << ", nuclearMass = " << nuclearMass << G4endl
-          <<"                remnant i=" << i << ", nRemnants=" << eventInfo.nRemnants << G4endl
-	  <<"                Reaction was: " << aTrack.GetKineticEnergy()/MeV << "-MeV "
-          << aTrack.GetDefinition()->GetParticleName() << " + "
-          << G4ParticleTable::GetParticleTable()->GetIon(theNucleus.GetZ_asInt(), theNucleus.GetA_asInt(), 0.0)->GetParticleName()
-          << ", in " << (inverseKinematics ? "inverse" : "direct") << " kinematics."
-          << G4endl;
+          std::stringstream ss;
+          ss << "momentum scaling = " << scaling
+            << "\n                Lorentz vector = " << fourMomentum
+            << ")\n                A = " << A << ", Z = " << Z
+            << "\n                E* = " << excitationE << ", nuclearMass = " << nuclearMass
+            << "\n                remnant i=" << i << ", nRemnants=" << eventInfo.nRemnants
+            << "\n                Reaction was: " << aTrack.GetKineticEnergy()/MeV
+            << "-MeV " << aTrack.GetDefinition()->GetParticleName() << " + "
+            << G4ParticleTable::GetParticleTable()->GetIon(theNucleus.GetZ_asInt(), theNucleus.GetA_asInt(), 0.0)->GetParticleName()
+            << ", in " << (inverseKinematics ? "inverse" : "direct") << " kinematics.";
+          EmitWarning(ss.str());
 	}
 
         // Apply the toLabFrame rotation
@@ -297,6 +304,19 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
     }
     nTries++;
   } while(!eventIsOK && nTries < maxTries);
+
+  if(!eventIsOK) {
+    std::stringstream ss;
+    ss << "maximum number of tries exceeded for the proposed "
+    << aTrack.GetKineticEnergy()/MeV << "-MeV " << aTrack.GetDefinition()->GetParticleName()
+    << " + " << G4ParticleTable::GetParticleTable()->GetIon(theNucleus.GetZ_asInt(), theNucleus.GetA_asInt(), 0.0)->GetParticleName()
+    << " inelastic reaction, in " << (inverseKinematics ? "inverse" : "direct") << " kinematics.";
+    EmitWarning(ss.str());
+    theResult.SetStatusChange(isAlive);
+    theResult.SetEnergyChange(aTrack.GetKineticEnergy());
+    theResult.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
+    return &theResult;
+  }
   
   // Clean up the objects that we created for the inverse kinematics
   if(inverseKinematics) {
@@ -340,4 +360,11 @@ G4ReactionProductVector* G4INCLXXInterface::Propagate(G4KineticTrackVector* , G4
   return 0;
 }
 
-
+void G4INCLXXInterface::EmitWarning(const G4String &message) {
+  if(++nWarnings<=maxWarnings) {
+    G4cout << "[INCL++] Warning: " << message << G4endl;
+    if(nWarnings==maxWarnings) {
+      G4cout << "[INCL++] INCL++ has already emitted " << maxWarnings << " warnings and will emit no more." << G4endl;
+    }
+  }
+}

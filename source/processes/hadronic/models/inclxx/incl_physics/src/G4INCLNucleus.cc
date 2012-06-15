@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1_rc11
+// INCL++ revision: v5.1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -525,9 +525,9 @@ namespace G4INCL {
       // Can apply exact 2-body kinematics here. Keep the CM emission angle of
       // the first particle.
       Particle *p1 = outgoing.front(), *p2 = outgoing.back();
-      const ThreeVector boostVector = incomingMomentum / initialEnergy;
+      const ThreeVector aBoostVector = incomingMomentum / initialEnergy;
       // Boost to the initial CM
-      p1->boost(boostVector);
+      p1->boost(aBoostVector);
       const G4double sqrts = std::sqrt(initialEnergy*initialEnergy - incomingMomentum.mag2());
       const G4double pcm = KinematicsUtils::momentumInCM(sqrts, p1->getMass(), p2->getMass());
       const G4double scale = pcm/(p1->getMomentum().mag());
@@ -537,8 +537,8 @@ namespace G4INCL {
       p1->adjustEnergyFromMomentum();
       p2->adjustEnergyFromMomentum();
       // Unboost
-      p1->boost(-boostVector);
-      p2->boost(-boostVector);
+      p1->boost(-aBoostVector);
+      p2->boost(-aBoostVector);
 
     } else {
 
@@ -813,25 +813,25 @@ namespace G4INCL {
     setMass(getTableMass() + theExcitationEnergy);
   }
 
-  void Nucleus::finalizeProjectileRemnant(const G4double emissionTime) {
+  void Nucleus::finalizeProjectileRemnant(const G4double anEmissionTime) {
     // Deal with the projectile remnant
     if(theProjectileRemnant->getA()>1) {
       // Set the mass
-      const G4double theMass = theProjectileRemnant->getInvariantMass();
-      theProjectileRemnant->setMass(theMass);
+      const G4double aMass = theProjectileRemnant->getInvariantMass();
+      theProjectileRemnant->setMass(aMass);
 
       // Compute the excitation energy from the invariant mass
-      const G4double theExcitationEnergy = theMass
+      const G4double anExcitationEnergy = aMass
         - ParticleTable::getTableMass(theProjectileRemnant->getA(), theProjectileRemnant->getZ());
 
       // Set the excitation energy
-      theProjectileRemnant->setExcitationEnergy(theExcitationEnergy);
+      theProjectileRemnant->setExcitationEnergy(anExcitationEnergy);
 
       // Set the spin
       theProjectileRemnant->setSpin(DeJongSpin::shoot(theProjectileRemnant->getNumberStoredComponents(), theProjectileRemnant->getA()));
 
       // Set the emission time
-      theProjectileRemnant->setEmissionTime(emissionTime);
+      theProjectileRemnant->setEmissionTime(anEmissionTime);
 
       // Put it in the outgoing list
       theStore->addToOutgoing(theProjectileRemnant);

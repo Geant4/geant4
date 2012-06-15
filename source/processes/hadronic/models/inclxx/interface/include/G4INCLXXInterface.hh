@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1_rc11
+// INCL++ revision: v5.1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -124,9 +124,19 @@ public:
   }
 
 private:
-  static G4INCLXXInterface *theInstance;
+  G4bool ShouldUseInverseKinematics(const G4HadProjectile &aTrack, const G4Nucleus &theTargetNucleus);
 
-  G4bool shouldUseInverseKinematics(const G4HadProjectile &aTrack, const G4Nucleus &theTargetNucleus);
+  /** \brief Emit a warning to G4cout
+   *
+   * The interface will not emit more than <maxWarnings> warnings.
+   */
+  void EmitWarning(const G4String &message);
+
+  /// \brief Static warning counter
+  static G4int nWarnings;
+
+  /// \brief Maximum number of warnings
+  static const G4int maxWarnings;
 
   G4INCL::INCL *theINCLModel;
   G4HadFinalState theResult;
@@ -135,6 +145,7 @@ private:
 
   G4INCL::Config *theConfig;
   G4INCLXXInterfaceConfig * const theInterfaceConfig;
+
 };
 
 #endif

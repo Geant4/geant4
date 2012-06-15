@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1_rc11
+// INCL++ revision: v5.1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -53,8 +53,8 @@ namespace G4INCL {
   namespace NuclearPotential {
 
     // Constructors
-    NuclearPotentialConstant::NuclearPotentialConstant(NuclearDensity const * const density, const G4bool pionPotential, const G4bool hardFermiSphere/*=true*/)
-      : INuclearPotential(density, pionPotential, hardFermiSphere)
+    NuclearPotentialConstant::NuclearPotentialConstant(NuclearDensity const * const density, const G4bool aPionPotential, const G4bool hardFermiSphere/*=true*/)
+      : INuclearPotential(density, aPionPotential, hardFermiSphere)
     {
       initialize();
     }
