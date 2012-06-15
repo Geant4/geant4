@@ -473,7 +473,7 @@ inline void CHDIRS(bool a_PAWC,std::vector<std::string>& a_dirs){
     int ls = iq[lcdir+KLS];
     int ndir = iq[lcdir+KNSD];
     for (int k=0;k<ndir;k++) {
-      int lcdir = get_rzcl()[2];
+      lcdir = get_rzcl()[2];
       int ncw = 4;
       int ihdir[4];
       CZITOH(iq+(lcdir+ls+7*k),ihdir,&ncw);

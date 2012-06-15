@@ -387,7 +387,7 @@ public:
     for(unsigned iaxis=0;iaxis<m_dimension;iaxis++) {
       if(aIs[iaxis]==0) {
         aIs[iaxis] = axis<TC>::UNDERFLOW_BIN;
-      } else if(aIs[iaxis]==m_axes[iaxis].m_number_of_bins+1) {
+      } else if(aIs[iaxis]==int(m_axes[iaxis].m_number_of_bins+1)) {
         aIs[iaxis] = axis<TC>::OVERFLOW_BIN;
       } else {
         aIs[iaxis]--;

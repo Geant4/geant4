@@ -18,12 +18,12 @@ if [ "${use_sys_cernlib}" = "yes" ] ; then
     if [ "`sysctl hw.optional.x86_64 | grep 1`" != "" ] ; then
       # May 2011 : we don't have cernlib on 64 bits intel machines.
       echo " We don't have cernlib on Mac 64 bits machines."
-      echo " We try to use exlib/hbook/hdummy.c."
+      echo " We try to use ourex/hbook/hdummy.c."
 
       # gfortran is 32 bits !
       cernlib_cflags="-m32"
       obj="hdummy.o"
-      eval ${cc_compiler} -c ${ccflags} ${cernlib_cflags} -o ${obj} ${tools_mgr}/../../tools/hbook/hdummy.c
+      eval ${cc_compiler} -c ${ccflags0} ${cernlib_cflags} -o ${obj} ${tools_mgr}/../../tools/hbook/hdummy.c
 
       objs="${objs} ${obj}"
       f77_objs="${f77_objs} ${obj}"

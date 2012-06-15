@@ -24,7 +24,6 @@
 #ifdef WIN32
 #ifndef __GNUC__
 #include <direct.h>
-#define ssize_t int
 #include <io.h>
 // disable the warning about the usage of "this" in the constructor.
 #pragma warning(disable:4355)
@@ -84,6 +83,9 @@ public: //ifile
 
   virtual bool write_buffer(const char* a_buffer,uint32 a_length) {
     // Write a buffer to the file. This is the basic low level write operation.
+#ifdef WIN32
+    typedef int ssize_t;
+#endif
     ssize_t siz;
     while ((siz = ::write(m_file,a_buffer,a_length)) < 0 && 
             error_number() == EINTR) reset_error_number();
@@ -152,7 +154,7 @@ public: //ifile
     uint32 nbytes = a_buffer.length();
     uint32 cxlevel = m_compress;
     if(cxlevel && (nbytes>256)) {
-      ifile::zip_func func;
+      tools::zip_func func;
       if(!ziper('Z',func)) {
         //m_out << "tools::wroot::directory::write_object :" 
         //      << " zlib ziper not found."
@@ -394,7 +396,7 @@ public:
   }
 
   bool add_ziper(char a_key,zip_func a_func){
-    std::map<char,zip_func>::iterator it = m_zipers.find(a_key);
+    std::map<char,zip_func>::const_iterator it = m_zipers.find(a_key);
     if(it!=m_zipers.end()) {
       //(*it).second = a_func; //override ?
       return false;
@@ -454,17 +456,17 @@ protected:
     const char* eob = psave + kBegin();
     char* pos = psave;
     ::memcpy(pos,root,4); pos += 4;
-    uint32 version = m_version;
+    uint32 vers = m_version;
     if((m_END>START_BIG_FILE())        ||
        (m_seek_free>START_BIG_FILE())  ||
        (m_seek_info>START_BIG_FILE())  ){
-      version += 1000000;
+      vers += 1000000;
       m_units = 8;
     }
     wbuf wb(m_out,byte_swap(),eob,pos);
-    if(!wb.write(version)) return false;
+    if(!wb.write(vers)) return false;
     if(!wb.write((seek32)m_BEGIN)) return false;
-    if(version>1000000) {
+    if(vers>1000000) {
       if(!wb.write(m_END)) return false;
       if(!wb.write(m_seek_free)) return false;
     } else {
@@ -478,7 +480,7 @@ protected:
     if(!wb.write(m_nbytes_name)) return false;
     if(!wb.write(m_units)) return false;
     if(!wb.write(m_compress)) return false;
-    if(version>1000000) {
+    if(vers>1000000) {
       if(!wb.write(m_seek_info)) return false;
     } else {
       if(!wb.write((seek32)m_seek_info)) return false;
@@ -540,7 +542,7 @@ protected:
   }
 
   static bool zip(std::ostream& a_out,
-                         ifile::zip_func a_func,
+                         tools::zip_func a_func,
                          int a_level,
                          uint32 a_srcsize,char* a_src,
                          uint32 a_tgtsize,char* a_tgt,

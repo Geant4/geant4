@@ -57,13 +57,13 @@ public:
   void fill_end() const {cd_end();}
 
   std::string title() const {
-    std::string title;
+    std::string _title;
     int ncx,ncy;
     rarg xmin,xmax,ymin,ymax;
     cd_beg();
-    CHGIVE(m_id,title,ncx,xmin,xmax,ncy,ymin,ymax);
+    CHGIVE(m_id,_title,ncx,xmin,xmax,ncy,ymin,ymax);
     cd_end();
-    return title;
+    return _title;
   }
   int dimension() const {return 2;}
   bool reset() {
@@ -203,13 +203,6 @@ public:
     }
     cd_end();
     return w;
-  }
-  bool scale(rarg aScale) {
-    //FIXME : Do we want the E option ?
-    cd_beg();
-    CHOPERA(m_id,"+E",m_id,m_id,aScale,0);
-    cd_end();
-    return true;
   }
 protected:
   hbook::axis m_axis_x;

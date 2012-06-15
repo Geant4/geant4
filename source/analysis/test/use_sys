@@ -1,0 +1,13 @@
+
+if [ `uname` = Darwin ] ; then
+  lib=lib
+  shext=dylib
+else
+  if [ `uname -p` = x86_64 ] ; then
+    lib=lib64
+  else
+    lib=lib
+  fi
+  shext=so
+fi
+

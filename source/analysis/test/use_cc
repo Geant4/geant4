@@ -1,0 +1,33 @@
+
+cc_compiler=cc_not_defined
+
+if [ ${build_icc} = "yes" ] ; then
+  cc_compiler=icc
+else
+  if [ ${build_clang} = "yes" ] ; then
+    cc_compiler=clang
+  else
+    if [ ${build_cl_exe} = "yes" ] ; then
+      cc_compiler=cl.exe
+    else
+      cc_compiler=cc
+    fi
+  fi
+fi
+
+ccflags=
+if [ ${build_cl_exe} = "yes" ] ; then
+
+  ccflags="${ccflags} /nologo /DWIN32 /MD /O2 /W3" 
+
+else
+
+  if [ ${build_debug} = "yes" ] ; then
+    ccflags="${ccflags} -g"
+  else
+    ccflags="${ccflags} -O2"
+  fi
+
+fi
+
+ccflags0="${ccflags}"

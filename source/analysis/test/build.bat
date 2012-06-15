@@ -7,7 +7,7 @@ IF ERRORLEVEL 1 (
   GOTO build_return
 )
 
-SET flags=/nologo /DWIN32 /MD /O2 /W3  /GX /GR 
+SET flags=/nologo /DWIN32 /MD /O2 /W3 /EHsc /GR 
 
 SET cppflags=%flags%
 REM // WARNING : the below is modified by g4tools/mgr/build.

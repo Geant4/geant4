@@ -5,6 +5,13 @@ what=""
 build_debug=no
 build_verbose=no
 build_icc=no
+build_clang=no
+build_mem=no
+
+build_cl_exe=no
+if [ "`uname | grep CYGWIN`" != "" ] ; then
+  build_cl_exe=yes
+fi
 
 args=""
 while test $# -ge 1 ; do
@@ -16,6 +23,12 @@ while test $# -ge 1 ; do
         args="${args} $1"
         ;;
     -icc) build_icc=yes
+        args="${args} $1"
+        ;;
+    -clang) build_clang=yes
+        args="${args} $1"
+        ;;
+    -mem) build_mem=yes
         args="${args} $1"
         ;;
     -*) echo "unknwon option : $1" ; exit ;;
@@ -34,13 +47,9 @@ if [ "${what}" = "" ] ; then
   exit
 fi
 
-if [ ${build_verbose} = "yes" ] ; then
-  set -x
-fi
+if [ ${build_verbose} = "yes" ] ; then set -x;fi
 
-what=`basename ${what}` # in case executed from exlib/mgr/check
-
-exa=${what}
+exa=`basename ${what}`
 
 exa=`echo ${exa} | sed -e 's:.cpp::g'`
 exa=`echo ${exa} | sed -e 's:./::g'`
@@ -50,29 +59,26 @@ if [ ${exa} = "whbook" ] ; then exit;fi
 
 echo "build ${exa}..."
 
-cppflags="-I../include"
-if [ ${build_debug} = "yes" ] ; then
-  cppflags="${cppflags} -g -DTOOLS_MEM"
+. ./use_cpp
+
+if [ ${build_cl_exe} = "yes" ] ; then
+  # rm painfull warnings about API strcpy, etc... deprecated.
+  cppflags="${cppflags} /wd4996"
+  ccflags0="${ccflags0} /wd4996"
+fi
+
+if [ ${build_cl_exe} = "yes" ] ; then
+  cppflags="${cppflags} /I../.. -I../include"
 else
-  cppflags="${cppflags} -O2"
+  cppflags="${cppflags} -I../.. -I../include"
 fi
 
-cppflags="${cppflags} -I../.."
+# let the freedom to some application to not use G4_cppflags.
+cppflags="${G4_cppflags} ${cppflags}"
 
-files=${exa}.cpp
-
-if [ ${exa} = "rpawdemo" ] ; then
-  use_inflate=yes
-fi
-
-if [ "${use_inflate}" = "yes" ] ; then
-  files="${files} ../../inlib/csz/inflate.c"
-fi
-
-if [ ${build_icc} = "yes" ] ; then
-  eval icpc -o tools_test_${exa} ${cppflags} ${files}
+if [ ${build_cl_exe} = "yes" ] ; then
+  eval ${cpp_compiler} /c ${cppflags} /Fomain.o ${exa}.cpp
+  eval ${link_cmd} /nologo /OPT:NOREF /out:tools_test_${exa}.exe main.o ${objs} ${libs}
 else
-  # G4 flags :
-  cppflags="${cppflags} -W -Wall -ansi -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual"
-  eval c++ -o tools_test_${exa} ${cppflags} ${files}
+  eval ${link_cmd} -o tools_test_${exa} ${cppflags} ${exa}.cpp
 fi

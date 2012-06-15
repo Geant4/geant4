@@ -21,6 +21,54 @@ protected:
     m_id = aFrom.m_id;
     return *this;
   }
+public:
+  int hbook_id() const {return m_id;}
+
+  bool scale(rarg aScale) {
+    //FIXME : Do we want the E option ?
+    cd_beg();
+    CHOPERA(m_id,"+E",m_id,m_id,aScale,0);
+    cd_end();
+    return true;
+  }
+
+  bool add(const base_histo& a_histo,rarg a_1 = 1,rarg a_2 = 1){
+    // this = a_1*this + a_2*a_histo
+    //NOTE : it is assumed that m_id and a_histo.m_id are in the
+    //       same HBOOK directory.
+    cd_beg();
+    CHOPERA(m_id,"+E",a_histo.m_id,m_id,a_1,a_2);
+    cd_end();
+    return true;
+  }
+  bool subtract(const base_histo& a_histo,rarg a_1 = 1,rarg a_2 = 1){
+    // this = a_1*this - a_2*a_histo
+    //NOTE : it is assumed that m_id and a_histo.m_id are in the
+    //       same HBOOK directory.
+    cd_beg();
+    CHOPERA(m_id,"-E",a_histo.m_id,m_id,a_1,a_2);
+    cd_end();
+    return true;
+  }
+  bool multiply(const base_histo& a_histo,rarg a_1 = 1,rarg a_2 = 1){
+    // this = a_1*this * a_2*a_histo
+    //NOTE : it is assumed that m_id and a_histo.m_id are in the
+    //       same HBOOK directory.
+    cd_beg();
+    CHOPERA(m_id,"*E",a_histo.m_id,m_id,a_1,a_2);
+    cd_end();
+    return true;
+  }
+  bool divide(const base_histo& a_histo,rarg a_1 = 1,rarg a_2 = 1){
+    // this = a_1*this / a_2*a_histo
+    //NOTE : it is assumed that m_id and a_histo.m_id are in the
+    //       same HBOOK directory.
+    cd_beg();
+    CHOPERA(m_id,"/E",a_histo.m_id,m_id,a_1,a_2);
+    cd_end();
+    return true;
+  }
+
 protected:
   void cd_beg() const{
     base_histo& self = const_cast<base_histo&>(*this);

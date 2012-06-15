@@ -17,6 +17,9 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 5, 2012 I.Hrivnacova (analysis-V09-05-02)
+- Updated to g4tools-1.2.0 (G. Barrand) - see History_tools
+
 February 23, 2012 I.Hrivnacova (analysis-V09-05-01)
 - Adding locks for functions which define directory names,
   setting Ids etc. so that these parameters cannot be changed once

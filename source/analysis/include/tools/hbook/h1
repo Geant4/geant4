@@ -12,7 +12,7 @@ namespace hbook {
 class h1 : public base_histo {
 public:
   h1(int aID,const std::string& a_title,
-             int aXnumber,rarg aXmin,rarg aXmax)
+     int aXnumber,rarg aXmin,rarg aXmax)
   :base_histo(aID)
   ,m_axis(m_path,aID,1,true,true)
   {
@@ -22,7 +22,7 @@ public:
     cd_end();
   }
   h1(int aID,const std::string& a_title,
-             const std::vector<rarg>& a_edges)
+     const std::vector<rarg>& a_edges)
   :base_histo(aID)
   ,m_axis(m_path,aID,1,true,false)
   {
@@ -47,13 +47,13 @@ private:
   }
 public:
   std::string title() const {
-    std::string title;
+    std::string _title;
     int ncx,ncy;
     rarg xmin,xmax,ymin,ymax;
     cd_beg();
-    CHGIVE(m_id,title,ncx,xmin,xmax,ncy,ymin,ymax);
+    CHGIVE(m_id,_title,ncx,xmin,xmax,ncy,ymin,ymax);
     cd_end();
-    return title;
+    return _title;
   }
   //bool set_title(const std::string& a_title) {
   //  return false;
@@ -101,13 +101,6 @@ public:
     w += CHI(m_id,NX1);
     cd_end();
     return w;
-  }
-  bool scale(rarg aScale) {
-    //FIXME : Do we want the E option ?
-    cd_beg();
-    CHOPERA(m_id,"+E",m_id,m_id,aScale,0);
-    cd_end();
-    return true;
   }
 
   rret min_bin_height() const {

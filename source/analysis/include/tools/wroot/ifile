@@ -4,8 +4,8 @@
 #ifndef tools_wroot_ifile
 #define tools_wroot_ifile
 
-#include <ostream>
 #include "seek"
+#include "../zfunc"
 
 namespace tools {
 namespace wroot {
@@ -37,12 +37,6 @@ public:
   virtual uint32 version() const = 0;
 
   virtual bool synchronize() = 0;
-
-  typedef bool (*zip_func)(std::ostream&,
-                           int,
-                           uint32,char*,
-                           uint32,char*,
-                           uint32&);
 
   virtual bool ziper(char,zip_func&) const = 0;
 

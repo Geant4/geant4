@@ -14,8 +14,8 @@ namespace histo {
 template <class TC,class TN,class TW,class TH>
 class b3 : public base_histo<TC,TN,TW,TH> {
   typedef base_histo<TC,TN,TW,TH> parent;
-  typedef axis<TC> axis_t;
 public:
+  typedef axis<TC> axis_t;
   typedef typename base_histo<TC,TN,TW,TH>::bn_t bn_t;
 protected:
   enum {AxisX=0,AxisY=1,AxisZ=2};
@@ -230,18 +230,18 @@ public:
     bn_t yoffset = parent::m_axes[1].m_offset;
     bn_t zoffset = parent::m_axes[2].m_offset;
     bn_t joffset = ibin;
-    TN entries = 0;
+    TN _entries = 0;
     for(jbin=0;jbin<ybins;jbin++) {
       //joffset = ibin + jbin * parent::m_axes[1].m_offset;
       offset = joffset;
       for(kbin=0;kbin<zbins;kbin++) {
         //offset = joffset + kbin * parent::m_axes[2].m_offset;
-        entries += parent::m_bin_entries[offset];
+        _entries += parent::m_bin_entries[offset];
         offset += zoffset;
       }
       joffset += yoffset;
     }
-    return entries;
+    return _entries;
   }
 
   TN bin_entries_y(int aJ) const {
@@ -254,18 +254,18 @@ public:
     bn_t yoffset = parent::m_axes[1].m_offset;
     bn_t zoffset = parent::m_axes[2].m_offset;
     bn_t joffset = jbin * yoffset;
-    TN entries = 0;
+    TN _entries = 0;
     for(ibin=0;ibin<xbins;ibin++) {
       //joffset = ibin + jbin * parent::m_axes[1].m_offset;
       offset = joffset;
       for(kbin=0;kbin<zbins;kbin++) {
         //offset = joffset + kbin * parent::m_axes[2].m_offset;
-        entries += parent::m_bin_entries[offset];
+        _entries += parent::m_bin_entries[offset];
         offset += zoffset;
       }
       joffset++;
     }
-    return entries;
+    return _entries;
   }
 
   TN bin_entries_z(int aK) const {
@@ -278,18 +278,18 @@ public:
     bn_t yoffset = parent::m_axes[1].m_offset;
     bn_t zoffset = parent::m_axes[2].m_offset;
     bn_t koffset = kbin * zoffset;
-    TN entries = 0;
+    TN _entries = 0;
     for(ibin=0;ibin<xbins;ibin++) {
       //koffset = ibin + kbin * parent::m_axes[2].m_offset;
       offset = koffset;
       for(jbin=0;jbin<ybins;jbin++) {
         //offset = koffset + jbin * parent::m_axes[1].m_offset;
-        entries += parent::m_bin_entries[offset];
+        _entries += parent::m_bin_entries[offset];
         offset += yoffset;
       }
       koffset++;
     }
-    return entries;
+    return _entries;
   }
 
   TW bin_height_x(int aI) const {

@@ -99,17 +99,17 @@ public:
     return (m_histo ? m_histo->mean() : (m_Sw?m_Sxw/m_Sw:0));
   }
   double rms() const {
-    double rms = 0; //FIXME nan.
+    double _rms = 0; //FIXME nan.
     if(m_histo) {
-      rms = m_histo->rms();
+      _rms = m_histo->rms();
     } else {
       if(m_Sw==0) {
       } else {
-        double mean = m_Sxw / m_Sw;
-        rms = ::sqrt(::fabs( (m_Sx2w / m_Sw) - mean * mean));
+        double _mean = m_Sxw / m_Sw;
+        _rms = ::sqrt(::fabs( (m_Sx2w / m_Sw) - _mean * _mean));
       }
     }
-    return rms;
+    return _rms;
   }
 
   bool convert(unsigned int aBins,double aLowerEdge,double aUpperEdge){

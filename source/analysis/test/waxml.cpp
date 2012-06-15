@@ -29,9 +29,9 @@ int main(int,char**) {
   //////////////////////////////////////////////////////////
   /// create and write some histos : ///////////////////////
   //////////////////////////////////////////////////////////
-  unsigned int entries = 1000000;
   tools::random::gauss rg(1,2);
   tools::random::bw rbw(0,1);
+  unsigned int entries = 1000000;
 
  {tools::histo::h1d h("Gauss",100,-5,5);
   for(unsigned int count=0;count<entries;count++) {

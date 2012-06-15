@@ -5,9 +5,9 @@
 #define tools_version
 
 #define TOOLS_MAJOR_VERSION 1
-#define TOOLS_MINOR_VERSION 1
+#define TOOLS_MINOR_VERSION 2
 #define TOOLS_PATCH_VERSION 0
-#define TOOLS_VERSION "1.1.0"
-#define TOOLS_VERSION_VRP "v1r1p0"
+#define TOOLS_VERSION "1.2.0"
+#define TOOLS_VERSION_VRP "v1r2p0"
 
 #endif

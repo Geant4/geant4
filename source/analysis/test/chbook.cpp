@@ -27,7 +27,7 @@ extern "C" void oclose_(int*);
 
 #include <iostream>
 
-int main(int a_argc,char** a_argv) {
+int main(int,char**) {
 
  {
 

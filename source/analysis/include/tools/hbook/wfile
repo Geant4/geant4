@@ -5,6 +5,7 @@
 #define tools_hbook_wfile
 
 #include <sstream>
+#include <ostream>
 
 #include "CHBOOK"
 #include <tools/srep>

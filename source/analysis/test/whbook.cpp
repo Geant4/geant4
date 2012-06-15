@@ -37,7 +37,7 @@ extern "C" int setntuc_();
 
 #include <iostream>
 
-int main(int a_argc,char** a_argv) {
+int main(int,char**) {
 
  {// Initialize HBOOK :
 #ifdef WIN32

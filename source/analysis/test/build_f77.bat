@@ -10,7 +10,7 @@ IF ERRORLEVEL 1 (
   GOTO build_return
 )
 
-SET flags=/nologo /DWIN32 /MD /O2 /W3  /GX /GR 
+SET flags=/nologo /DWIN32 /MD /O2 /W3 /EHsc /GR 
 
 SET cppflags=%flags%
 REM // WARNING : the below is modified by g4tools/mgr/build.
@@ -19,7 +19,7 @@ SET cppflags=%cppflags% /I..\.. /I..\..
 REM //////////////////////////////////////////////////////////////
 REM /// F77 //////////////////////////////////////////////////////
 REM //////////////////////////////////////////////////////////////
-F77.exe 1> NUL 2> NUL
+F77.EXE 1> NUL 2> NUL
 IF ERRORLEVEL 1 (
   ECHO F77.exe program not found. You have to setup your fortran.
   GOTO build_return

@@ -18,11 +18,6 @@
 #include <tools/random>
 #include <tools/randf>
 
-//#define HAS_EXLIB
-#ifdef HAS_EXLIB
-#include <tools/wroot/zip>
-#endif
-
 #include <tools/args>
 #include <iostream>
 
@@ -35,10 +30,6 @@ int main(int argc,char** argv) {
   //////////////////////////////////////////////////////////
   std::string file = "out.root";
   tools::wroot::file rfile(std::cout,file);
-#ifdef HAS_EXLIB
-  rfile.add_ziper('Z',exlib::wroot::zip);
-  rfile.set_compression(9);
-#endif
 
   tools::wroot::directory* dir = rfile.dir().mkdir("histo");
   if(!dir) {
@@ -98,7 +89,7 @@ int main(int argc,char** argv) {
     ntu->set_basket_size(1000000);
   }
 
-  tools::randf::bw rbw(0,1);
+  tools::randf::bw rbwf(0,1);
   for(unsigned int count=0;count<entries;count++) {    
     if(!col_index->fill(count)) {
       std::cout << "col_index fill failed." << std::endl;
@@ -108,7 +99,7 @@ int main(int argc,char** argv) {
       std::cout << "col_rgauss fill failed." << std::endl;
       break;
     }
-    if(!col_rbw->fill(rbw.shoot())) {
+    if(!col_rbw->fill(rbwf.shoot())) {
       std::cout << "col_rbw fill failed." << std::endl;
       break;
     }

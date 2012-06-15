@@ -7,10 +7,14 @@
 build_debug=no
 build_verbose=no
 build_icc=no
+build_clang=no
+build_cl_exe=no
+build_mem=no
 
 use_from=sys
 
-tools_mgr=. # for use_CERN_ROOT/check_app
+tools_mgr=../../../tools/mgr
+tools_mgr=.
 
 args=""
 while test $# -ge 1 ; do
@@ -31,12 +35,11 @@ done
 #////////////////////////////////////
 #/// C/C++ //////////////////////////
 #////////////////////////////////////
-cppflags="-I../include"
-if [ ${build_debug} = "yes" ] ; then
-  cppflags="${cppflags} -g"
-else
-  cppflags="${cppflags} -O2"
-fi
+. ${tools_mgr}/use_sys
+. ${tools_mgr}/use_cc
+. ${tools_mgr}/use_cpp
+. ${tools_mgr}/use_f77
+
 if [ `uname` = Darwin ] ; then
   if [ "`sysctl hw.optional.x86_64 | grep 1`" != "" ] ; then
     # gfortran is 32 bits !
@@ -44,64 +47,12 @@ if [ `uname` = Darwin ] ; then
   fi
 fi
 
-# G4 flags. Do not put in cppflags here because some application
-# may want to not include them (as LHCb_artist_X11).
-G4_cppflags="-Wall -ansi -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual"
-
-ccflags=
-if [ ${build_debug} = "yes" ] ; then
-  ccflags="${ccflags} -g"
-else
-  ccflags="${ccflags} -O2"
-fi
-
-if [ ${build_icc} = "yes" ] ; then
-  cc_compiler=icc
-  cpp_compiler=icpc
-else
-  cc_compiler=cc
-  cpp_compiler=c++
-fi
-
-#////////////////////////////////////
-#/// f77 mess ///////////////////////
-#////////////////////////////////////
-
-f77flags=
-
-f77_compiler=gfortran
-if [ "`uname -n | grep lal.in2p3.fr | grep lx`" != "" ] ; then
-  f77_compiler=g77
-  # hbook.f does not pass with gfortran
-fi
-
-if [ "${f77_compiler}" = "g77" ] ; then
-  ${tools_mgr}/check_app g77 'g77 not found.'
-  use_status=$?;if [ ${use_status} != 0 ] ; then exit ${use_status};fi
-fi
-if [ "${f77_compiler}" = "gfortran" ] ; then
-  ${tools_mgr}/check_app gfortran 'gfortran not found.'
-  use_status=$?;if [ ${use_status} != 0 ] ; then exit ${use_status};fi
-fi
 #////////////////////////////////////
 #////////////////////////////////////
 #////////////////////////////////////
-
 
 if [ ${build_verbose} = "yes" ] ; then
   set -x
-fi
-
-if [ `uname` = Darwin ] ; then
-  lib=lib
-  shext=dylib
-else
-  if [ `uname -p` = x86_64 ] ; then
-    lib=lib64
-  else
-    lib=lib
-  fi
-  shext=so
 fi
 
 objs=""
@@ -152,12 +103,16 @@ ${f77_compiler} ${f77flags} -o ./tools_test_hbooknt hbooknt.o ${f77_objs} ${f77_
 # ////////////////////////////////////
 echo "build chbook.cpp ..."
 
-${f77_compiler} ${f77flags} -c -o close.o ../include/tools/hbook/close.f
-${f77_compiler} ${f77flags} -c -o setpawc.o ../include/tools/hbook/setpawc.f
+#hbook_dir=../../tools/hbook
+hbook_dir=../include/tools/hbook
+
+${f77_compiler} ${f77flags} -c -o close.o ${hbook_dir}/close.f
+${f77_compiler} ${f77flags} -c -o setpawc.o ${hbook_dir}/setpawc.f
 
 cppflags="${cppflags} ${G4_cppflags}"
 cppflags="${cppflags} -I../.."
-cppflags="${cppflags} -I../include/tools"
+cppflags="${cppflags} -I../../../tools"
+cppflags="${cppflags} -I../include"
 
 ${cpp_compiler} -c ${cppflags} -o chbook.o chbook.cpp
 ${cpp_compiler} ${cppflags} -o ./tools_test_chbook chbook.o close.o setpawc.o ${objs} ${libs}
@@ -167,7 +122,7 @@ ${cpp_compiler} ${cppflags} -o ./tools_test_chbook chbook.o close.o setpawc.o ${
 # ////////////////////////////////////
 echo "build whbook.cpp ..."
 
-${f77_compiler} ${f77flags} -c -o setntuc.o ../include/tools/hbook/setntuc.f
+${f77_compiler} ${f77flags} -c -o setntuc.o ${hbook_dir}/setntuc.f
 
 ${cpp_compiler} -c ${cppflags} -o whbook.o whbook.cpp
 ${cpp_compiler} ${cppflags} -o ./tools_test_whbook whbook.o setntuc.o setpawc.o close.o ${objs} ${libs}
