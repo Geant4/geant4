@@ -148,7 +148,7 @@ G4MuMinusCapturePrecompound::ApplyYourself(const G4HadProjectile& projectile,
       ++reentryCount;
       G4int index = 0;
       do {
-	G4int index=G4int(A*G4UniformRand());
+	index=G4int(A*G4UniformRand());
 	pDef = nucleons[index].GetDefinition();
       } while(pDef != fProton);
       G4LorentzVector momP = nucleons[index].Get4Momentum();
@@ -214,8 +214,8 @@ G4MuMinusCapturePrecompound::ApplyYourself(const G4HadProjectile& projectile,
 
       // reaction time
       fTime = time0 + rp->GetTOF();
-      G4ThreeVector dir = rp->GetMomentum().unit();
-      AddNewParticle(rp->GetDefinition(), dir, rp->GetKineticEnergy());
+      G4ThreeVector direction = rp->GetMomentum().unit();
+      AddNewParticle(rp->GetDefinition(), direction, rp->GetKineticEnergy());
     }
   } 
   if(verboseLevel > 1)

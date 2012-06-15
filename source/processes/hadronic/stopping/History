@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+12 June 2012  Dennis Wright  (hadr-stopping-V09-05-12)
+------------------------------------------------------
+- G4HadronStoppingProcess.hh: remove member "G4HadFinalState result: because
+  it shadows "result" in .cc file
+- replace shadowed variables m, mm, dir and index in .cc files 
+
 24 May 2012 Vladimir Ivanchenko (hadr-stopping-V09-05-11)
 ------------------------------------------------------------
 - G4HadronStoppingProcess.cc - register it as an extra process

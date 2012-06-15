@@ -101,7 +101,9 @@ private:
   G4HadronicInteraction* fEmCascade;
   G4HadronicInteraction* fBoundDecay;
 
-  G4HadFinalState result;   
+  // This is shadowing "result" in the cc file and
+  // looks to be unnecessary.  Removed by DHW, 12 June 2012   
+  // G4HadFinalState result;   
 };
 
 inline void 
