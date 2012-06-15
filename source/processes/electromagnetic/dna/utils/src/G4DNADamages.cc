@@ -1,7 +1,7 @@
 #include "G4DNADamages.hh"
 #include "G4UnitsTable.hh"
 
-G4DNADamages* G4DNADamages::fInstance(0);
+G4DNADamages* G4DNADamages::fpInstance(0);
 
 G4DNAIndirectHit::G4DNAIndirectHit(const G4String& baseName,
                                    const G4Molecule* molecule,
@@ -17,7 +17,8 @@ G4DNAIndirectHit::G4DNAIndirectHit(const G4String& baseName,
 
 G4DNAIndirectHit::~G4DNAIndirectHit()
 {
-    ;
+    if(fpMolecule) delete fpMolecule;
+    fpMolecule = 0;
 }
 
 void G4DNAIndirectHit::Print()
@@ -30,16 +31,15 @@ void G4DNAIndirectHit::Print()
 
 G4DNADamages* G4DNADamages::Instance()
 {
-    if(!fInstance) new G4DNADamages();
+    if(!fpInstance) new G4DNADamages();
 
-    return fInstance;
+    return fpInstance;
 }
 
-G4DNADamages::G4DNADamages() : G4VStateDependent()
+G4DNADamages::G4DNADamages()
 {
-    fInstance = this;
+    fpInstance = this;
 }
-
 
 G4DNADamages::~G4DNADamages()
 {
@@ -51,9 +51,10 @@ G4DNADamages::~G4DNADamages()
     fIndirectHits.clear();
 }
 
-G4bool G4DNADamages::Notify(G4ApplicationState /*requestedState*/)
+void G4DNADamages::DeleteInstance()
 {
-    return true;
+    if(fpInstance) delete fpInstance;
+    fpInstance = 0;
 }
 
 void G4DNADamages::Reset()

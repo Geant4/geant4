@@ -71,9 +71,9 @@ private:
 };
 
 // comparison
-bool CompareResNode(const ResNode& first, const ResNode& second)
+bool CompareResNode(const ResNode& left, const ResNode& right)
 {
-    return first < second;
+    return left < right;
 }
 
 G4KDTreeResult::G4KDTreeResult(G4KDTree* tree) : std::list<ResNode>()

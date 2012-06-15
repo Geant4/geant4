@@ -235,9 +235,10 @@ void G4ITStepProcessor::DoStepping()
     fpTrack->IncrementCurrentStepNumber();
 
     // Send G4Step information to Hit/Dig if the volume is sensitive
+/***
     fpCurrentVolume = fpStep->GetPreStepPoint()->GetPhysicalVolume();
     StepControlFlag =  fpStep->GetControlFlag();
-    /***
+
     if( fpCurrentVolume != 0 && StepControlFlag != AvoidHitInvocation)
     {
         fpSensitive = fpStep->GetPreStepPoint()->
@@ -258,7 +259,7 @@ void G4ITStepProcessor::DoStepping()
             ->GetRegionalSteppingAction();
     if( regionalAction ) regionalAction->UserSteppingAction(fpStep);
 ***/
-    fpTrackingManager->AppendTrajectory(fpTrack,fpStep);
+    fpTrackingManager->AppendStep(fpTrack,fpStep);
     // Stepping process finish. Return the value of the StepStatus.
 
     //    return fpState->fStepStatus;

@@ -42,33 +42,30 @@
 
 class G4ITTrackingManager;
 class G4UserTrackingAction;
+class G4UserSteppingAction;
 class G4Step;
 class G4Track;
+class G4ITTrackingInteractivity;
 
 class G4ITTrackingManager
 {
-    int fStoreTrajectory;
+protected:
     int fVerboseLevel;
 
-    G4UserTrackingAction* fpUserTrackingAction;
-
-    bool fSetNewUserTrackingAction;
+    G4ITTrackingInteractivity* fpTrackingInteractivity;
 
 public:
     G4ITTrackingManager();
-    ~G4ITTrackingManager();
+    virtual ~G4ITTrackingManager();
 
     void Initialize();
 
-    void StartTracking(G4Track*);
-    void TrackBanner(G4Track* track, const G4String& message = "");
-    void AppendTrajectory(G4Track* track, G4Step* step);
-    void EndTracking(G4Track*);
+    virtual void StartTracking(G4Track*);
+    virtual void AppendStep(G4Track* track, G4Step* step);
+    virtual void EndTracking(G4Track*);
     inline void SetVerbose(int);
 
-    // if not set, will use tracking action of standard G4TrackingManager
-    void SetUserTrackingAction(G4UserTrackingAction*);
-    G4UserTrackingAction* GetUserTrackingAction();
+    void SetInteractivity(G4ITTrackingInteractivity*);
 };
 
 inline void G4ITTrackingManager::SetVerbose(int flag)

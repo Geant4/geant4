@@ -320,17 +320,17 @@ G4double G4Molecule::GetKineticEnergy() const
 
 G4double G4Molecule::GetDiffusionVelocity() const
 {
-    double m = fMolecularConfiguration->GetMass()/(c_squared);
+    double moleculeMass = fMolecularConfiguration->GetMass()/(c_squared);
 
     ////
     // Different possibilities
     ////
     // Ideal Gaz case : Maxwell Boltzmann Distribution
-    //    double sigma = k_Boltzmann * fgTemperature / m;
+    //    double sigma = k_Boltzmann * fgTemperature / mass;
     //    return G4RandGauss::shoot( 0, sigma );
     ////
     // Ideal Gaz case : mean velocity from equipartition theorem
-    return sqrt(3*k_Boltzmann*fgTemperature/m);
+    return sqrt(3*k_Boltzmann*fgTemperature/moleculeMass);
     ////
     // Using this approximation for liquid is wrong
     // However the brownian process avoid taking

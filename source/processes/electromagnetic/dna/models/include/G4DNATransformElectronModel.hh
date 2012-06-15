@@ -70,6 +70,8 @@ public :
 
     inline void SetVerbose(int);
 
+    inline void SetEpsilonEnergy(G4double);
+
 protected:
 
     G4ParticleChangeForGamma* fParticleChangeForGamma;
@@ -81,6 +83,7 @@ private:
 
     G4bool fIsInitialised;
     G4int fVerboseLevel;
+    G4double fEpsilon;
 
     G4DNATransformElectronModel & operator=(const  G4DNATransformElectronModel &right);
     G4DNATransformElectronModel(const  G4DNATransformElectronModel&);
@@ -90,6 +93,11 @@ private:
 inline void G4DNATransformElectronModel::SetVerbose(int flag)
 {
     fVerboseLevel = flag ;
+}
+
+inline void G4DNATransformElectronModel::SetEpsilonEnergy(G4double eps)
+{
+    fEpsilon = eps ;
 }
 
 #endif

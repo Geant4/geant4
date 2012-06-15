@@ -13,61 +13,67 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
+09.06.2012  M.K			tag emdna-V09-05-19
+            Fixed shadowing
+
+04.06.2012  M.K			tag emdna-V09-05-18
+            Add G4ITTrackingInteractivity + correct coverity warnings
+
 24.05.2012  M.K			tag emdna-V09-05-17
-        Remove unnecessary call of pow in G4DNASecondOrderReaction
+            Remove unnecessary call of pow in G4DNASecondOrderReaction
 
 23.05.2012  M.K			tag emdna-V09-05-16
-        Add initialisation of G4ITTrackHolder in copy constructor of
-        G4ITStepManager
-        Prevent call of destructor of G4ITStepManager and
-        G4DNAChemistryManager
+            Add initialisation of G4ITTrackHolder in copy constructor of
+            G4ITStepManager
+            Prevent call of destructor of G4ITStepManager and
+            G4DNAChemistryManager
 
 23.05.2012  M.K			tag emdna-V09-05-15
-        Display warning (only once) from G4DNAMolecularMaterial
-        when one of its methods is called using a material that is
-        not defined as a molecule
+            Display warning (only once) from G4DNAMolecularMaterial
+            when one of its methods is called using a material that is
+            not defined as a molecule
 
 21.05.2012  M.K			tag emdna-V09-05-14
-        Modify G4DNAMolecularMaterial
-        Modify G4DNADamages
-        Add G4DNASecondOrderReaction prototype
-        Modify all models to use G4DNAMolecularMaterial
+            Modify G4DNAMolecularMaterial
+            Modify G4DNADamages
+            Add G4DNASecondOrderReaction prototype
+            Modify all models to use G4DNAMolecularMaterial
 
 14.05.2012  M.K			tag emdna-V09-05-13
-        Add G4DNAMolecularMaterial
-        Add G4DNADamages
+            Add G4DNAMolecularMaterial
+            Add G4DNADamages
 
 10.05.2012  M.K			tag emdna-V09-05-12
-        Add the possibility of calling G4ITStepManager::EndTracking()
-        from UserReactionAction::EndProcessing()
+            Add the possibility of calling G4ITStepManager::EndTracking()
+            from UserReactionAction::EndProcessing()
 
 08.05.2012  M.K			tag emdna-V09-05-11
-        Use inverseErf from CLHEP
+            Use inverseErf from CLHEP
 
 03.05.2012  M.K			tag emdna-V09-05-10
-        Add erfc function for windows compilator (VC++)
+            Add erfc function for windows compilator (VC++)
 
 03.05.2012  M.K			tag emdna-V09-05-09
-         Add an exception in molecular decay, in case no decay channel was proposed in input
+            Add an exception in molecular decay, in case no decay channel was proposed in input
 
 03.05.2012  M.K			tag emdna-V09-05-08
-         Add products of dissociative attachments (as a molecular decay)
-         Add new methods in G4ChemistryManager :
-         - PushMolecule
-         - PushMoleculeAtParentTimeAndPlace
-         Reset() at the end of G4ITStepManager::Process()
+            Add products of dissociative attachments (as a molecular decay)
+            Add new methods in G4ChemistryManager :
+            - PushMolecule
+            - PushMoleculeAtParentTimeAndPlace
+            Reset() at the end of G4ITStepManager::Process()
 
 30.03.2012  M.K			tag emdna-V09-05-07
-         Same as emdna-V09-05-06
+            Same as emdna-V09-05-06
 
 30.03.2012  M.K			tag emdna-V09-05-06
-         1) Add separate navigator for synchronous tracking
-         New classes :
-         * G4ITTransportationManager
-         * G4ITNavigator (just a small change from G4Navigator)
-         2) A messenger for G4ITStepManager :
-         * G4ITSteppingMessenger
-         3) Solve bugs with normal and brownian ITTransportation
+            1) Add separate navigator for synchronous tracking
+            New classes :
+            * G4ITTransportationManager
+            * G4ITNavigator (just a small change from G4Navigator)
+            2) A messenger for G4ITStepManager :
+            * G4ITSteppingMessenger
+            3) Solve bugs with normal and brownian ITTransportation
 
 14.03.2012  M.K			tag emdna-V09-05-05
             *   int G4VITProcess::fProcessID

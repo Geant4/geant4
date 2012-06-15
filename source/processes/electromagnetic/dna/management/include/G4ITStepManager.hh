@@ -48,6 +48,7 @@
 #include "G4ITModelHandler.hh"
 #include "G4ITStepStatus.hh"
 #include "G4ITTrackHolder.hh"
+#include "G4VStateDependent.hh"
 
 class G4ITTrackingManager;
 class G4ITModelProcessor;
@@ -55,13 +56,14 @@ class G4ITStepProcessor;
 class G4Track ;
 class G4UserReactionAction;
 class G4ITSteppingMessenger;
+class G4ITTrackingInteractivity;
 
 
 /**
   * G4ITStepManager enables to synchronize in time
   * the step of tracks.
   */
-class G4ITStepManager : public G4ITTrackHolder
+class G4ITStepManager : public G4ITTrackHolder, public G4VStateDependent
 {
     friend class std::auto_ptr<G4ITStepManager>;
     virtual ~G4ITStepManager();
@@ -72,8 +74,10 @@ public :
       * of the destructor
       */
     static void DeleteInstance();
+    virtual G4bool Notify(G4ApplicationState requestedState) ;
 
     void Initialize() ;
+    void ForceReinitialization() ;
     inline bool IsInitialized();
     void Reset();
     void Process() ;
@@ -116,6 +120,9 @@ public :
     // 3 : (2) + trackList processing info + push track info
     inline int GetVerbose() const;
 
+    void SetInteractivity(G4ITTrackingInteractivity*);
+    inline G4ITTrackingInteractivity* GetInteractivity();
+
 protected:
 
     void DoProcess();
@@ -141,6 +148,8 @@ protected:
     void ExtractDoItData(G4ITStepProcessor*);
 
     void AddTrackID(G4Track*);
+
+    void ResetLeadingTracks();
 
 private:
     G4ITStepManager();
@@ -208,7 +217,7 @@ private:
 
     G4ITTrackingManager* fpTrackingManager;
     G4UserReactionAction* fpUserReactionAction;
-
+    G4ITTrackingInteractivity* fpTrackingInteractivity;
 };
 
 inline bool G4ITStepManager::IsInitialized()
@@ -305,6 +314,11 @@ inline G4double G4ITStepManager::GetPreviousTimeStep() const
 inline G4ITStepStatus G4ITStepManager::GetStatus() const
 {
     return fITStepStatus;
+}
+
+inline G4ITTrackingInteractivity* G4ITStepManager::GetInteractivity()
+{
+    return fpTrackingInteractivity ;
 }
 
 #endif

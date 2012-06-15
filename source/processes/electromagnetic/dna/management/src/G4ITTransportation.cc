@@ -56,7 +56,7 @@ class G4VSensitiveDetector;
 
 //#define G4DEBUG_TRANSPORT 1
 
-G4ITTransportation::G4ITTransportation(const G4String& aName, int verboseLevel) :
+G4ITTransportation::G4ITTransportation(const G4String& aName, int verbose) :
     G4VITProcess(aName, fTransportation),
     InitProcessState(fTransportationState, fpState),
     fThreshold_Warning_Energy( 100 * MeV ),
@@ -65,7 +65,7 @@ G4ITTransportation::G4ITTransportation(const G4String& aName, int verboseLevel) 
     fUnimportant_Energy( 1 * MeV ),  // Not used
     fSumEnergyKilled( 0.0 ), fMaxEnergyKilled( 0.0 ),
     fShortStepOptimisation(false),    // Old default: true (=fast short steps)
-    fVerboseLevel( verboseLevel )
+    fVerboseLevel( verbose )
 {
     pParticleChange = &fParticleChange;
     G4TransportationManager* transportMgr ;

@@ -560,13 +560,13 @@ G4double G4DNAMillerGreenExcitationModel::Sum(G4double k, const G4ParticleDefini
 
 G4double G4DNAMillerGreenExcitationModel::S_1s(G4double t,
                                                G4double energyTransferred,
-                                               G4double slaterEffectiveCharge,
+                                               G4double _slaterEffectiveCharge,
                                                G4double shellNumber)
 {
     // 1 - e^(-2r) * ( 1 + 2 r + 2 r^2)
     // Dingfelder, in Chattanooga 2005 proceedings, formula (7)
 
-    G4double r = R(t, energyTransferred, slaterEffectiveCharge, shellNumber);
+    G4double r = R(t, energyTransferred, _slaterEffectiveCharge, shellNumber);
     G4double value = 1. - std::exp(-2 * r) * ( ( 2. * r + 2. ) * r + 1. );
 
     return value;
@@ -577,13 +577,13 @@ G4double G4DNAMillerGreenExcitationModel::S_1s(G4double t,
 
 G4double G4DNAMillerGreenExcitationModel::S_2s(G4double t,
                                                G4double energyTransferred,
-                                               G4double slaterEffectiveCharge,
+                                               G4double _slaterEffectiveCharge,
                                                G4double shellNumber)
 {
     // 1 - e^(-2 r) * ( 1 + 2 r + 2 r^2 + 2 r^4)
     // Dingfelder, in Chattanooga 2005 proceedings, formula (8)
 
-    G4double r = R(t, energyTransferred, slaterEffectiveCharge, shellNumber);
+    G4double r = R(t, energyTransferred, _slaterEffectiveCharge, shellNumber);
     G4double value =  1. - std::exp(-2 * r) * (((2. * r * r + 2.) * r + 2.) * r + 1.);
 
     return value;
@@ -594,13 +594,13 @@ G4double G4DNAMillerGreenExcitationModel::S_2s(G4double t,
 
 G4double G4DNAMillerGreenExcitationModel::S_2p(G4double t,
                                                G4double energyTransferred,
-                                               G4double slaterEffectiveCharge,
+                                               G4double _slaterEffectiveCharge,
                                                G4double shellNumber)
 {
     // 1 - e^(-2 r) * ( 1 + 2 r + 2 r^2 + 4/3 r^3 + 2/3 r^4)
     // Dingfelder, in Chattanooga 2005 proceedings, formula (9)
 
-    G4double r = R(t, energyTransferred, slaterEffectiveCharge, shellNumber);
+    G4double r = R(t, energyTransferred, _slaterEffectiveCharge, shellNumber);
     G4double value =  1. - std::exp(-2 * r) * (((( 2./3. * r + 4./3.) * r + 2.) * r + 2.) * r  + 1.);
 
     return value;
@@ -610,7 +610,7 @@ G4double G4DNAMillerGreenExcitationModel::S_2p(G4double t,
 
 G4double G4DNAMillerGreenExcitationModel::R(G4double t,
                                             G4double energyTransferred,
-                                            G4double slaterEffectiveCharge,
+                                            G4double _slaterEffectiveCharge,
                                             G4double shellNumber)
 {
     // tElectron = m_electron / m_alpha * t
@@ -620,7 +620,7 @@ G4double G4DNAMillerGreenExcitationModel::R(G4double t,
 
     // The following is provided by M. Dingfelder
     G4double H = 2.*13.60569172 * eV;
-    G4double value = std::sqrt ( 2. * tElectron / H ) / ( energyTransferred / H ) *  (slaterEffectiveCharge/shellNumber);
+    G4double value = std::sqrt ( 2. * tElectron / H ) / ( energyTransferred / H ) *  (_slaterEffectiveCharge/shellNumber);
 
     return value;
 }

@@ -67,6 +67,8 @@ G4ITStepProcessor::G4ITStepProcessor()
     fpTrackingManager = 0;
     fpNavigator = 0;
     kCarTolerance = -1.;
+    fInitialized = false;
+    fPreviousTimeStep = DBL_MAX;
     CleanProcessor();
     ResetSecondaries();
 }
@@ -128,33 +130,52 @@ G4ITStepProcessor::G4ITStepProcessorState&  G4ITStepProcessor::G4ITStepProcessor
     fTouchableHandle = 0;
     return *this;
 }
+//____________________________________________________________________________________
 
 G4ITStepProcessor::G4ITStepProcessorState::~G4ITStepProcessorState()
 {;}
+//____________________________________________________________________________________
+
+void G4ITStepProcessor::ClearProcessInfo()
+{
+    std::map<const G4ParticleDefinition*, ProcessGeneralInfo*> ::iterator it;
+
+    for(it = fProcessGeneralInfoMap.begin();it != fProcessGeneralInfoMap.end();it++)
+    {
+        if(it->second)
+        {
+            delete it->second;
+            it->second = 0;
+        }
+    }
+
+    fProcessGeneralInfoMap.clear();
+}
 
 //____________________________________________________________________________________
 
-void G4ITStepProcessor::Initialize(void*)
+void G4ITStepProcessor::ForceReInitialization()
+{
+    fInitialized = false;
+    ClearProcessInfo();
+    Initialize();
+}
+
+//____________________________________________________________________________________
+
+void G4ITStepProcessor::Initialize()
 {
     CleanProcessor();
-    ActiveOnlyITProcess();
-
-//    G4Navigator* navigator = G4TransportationManager::GetTransportationManager()
-//            ->GetNavigatorForTracking();
-//    G4VPhysicalVolume* world = navigator->GetWorldVolume();
-//    fpNavigator = new G4ITNavigator();
-//    fpNavigator->SetWorldVolume(world);
-//    G4ThreeVector center(0,0,0);
-//    fpNavigator->LocateGlobalPointAndSetup(center,0,false);
-//    G4TransportationManager::GetTransportationManager()->DeActivateNavigator(navigator);
-//    G4TransportationManager::GetTransportationManager()->SetNavigatorForTracking(fpNavigator);
-//    G4TransportationManager::GetTransportationManager()->ActivateNavigator(fpNavigator);
+    if(fInitialized) return;
+    //    ActiveOnlyITProcess();
 
     SetNavigator(G4ITTransportationManager::GetTransportationManager()
                  ->GetNavigatorForTracking());
 
     fPhysIntLength = DBL_MAX;
     kCarTolerance = 0.5*G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+
+    fInitialized = true;
 }
 //______________________________________________________________________________
 
@@ -167,21 +188,8 @@ G4ITStepProcessor::~G4ITStepProcessor()
     }
 
     if(fpSecondary)                      delete fpSecondary;
-
-    std::map<const G4ParticleDefinition*, ProcessGeneralInfo*>::iterator it;
-
-    for(it = fProcessGeneralInfoMap.begin() ; it != fProcessGeneralInfoMap.begin(); it++)
-    {
-        if(it->second)
-        {
-            delete it->second;
-            it->second = 0;
-        }
-    }
-
-    fProcessGeneralInfoMap.clear();
-
-    delete G4ITTransportationManager::GetTransportationManager();
+    ClearProcessInfo();
+    G4ITTransportationManager::DeleteInstance();
 
     //    if(fpUserSteppingAction)             delete fpUserSteppingAction;
 }
@@ -193,6 +201,7 @@ G4ITStepProcessor::G4ITStepProcessor(const G4ITStepProcessor& rhs)
     //    fpUserSteppingAction = 0 ;
     fpTrackingManager = 0;
     fpNavigator = 0;
+    fInitialized = false;
     CleanProcessor();
 }
 //______________________________________________________________________________
@@ -207,6 +216,7 @@ G4ITStepProcessor& G4ITStepProcessor::operator=(const G4ITStepProcessor& rhs)
 
 void G4ITStepProcessor::ActiveOnlyITProcess()
 {
+    // Method not used for the time being
 #ifdef debug
     G4cout<<"G4ITStepProcessor::CloneProcesses: is called"<<G4endl;
 #endif
@@ -239,6 +249,7 @@ void G4ITStepProcessor::ActiveOnlyITProcess()
 
 void G4ITStepProcessor::ActiveOnlyITProcess(G4ProcessManager* processManager)
 {
+    // Method not used for the time being
     G4ProcessVector* processVector = processManager->GetProcessList();
 
     G4VITProcess* itProcess = 0 ;
@@ -249,9 +260,7 @@ void G4ITStepProcessor::ActiveOnlyITProcess(G4ProcessManager* processManager)
 
         if(!itProcess)
         {
-            int index = processManager->GetProcessIndex(itProcess) ;
-            if(index != -1)
-                processManager->SetProcessActivation(index, false);
+            processManager->SetProcessActivation(base_process, false);
         }
     }
 }
@@ -615,7 +624,7 @@ void G4ITStepProcessor::InitDefineStep()
         SetupMembers();
 
         fpState->fPreviousStepSize = fpTrack->GetStepLength();
-
+/***
         // Send G4Step information to Hit/Dig if the volume is sensitive
         fpCurrentVolume = fpStep->GetPreStepPoint()->GetPhysicalVolume();
         StepControlFlag =  fpStep->GetControlFlag();
@@ -628,7 +637,7 @@ void G4ITStepProcessor::InitDefineStep()
             //              fSensitive->Hit(fStep);
             //            }
         }
-
+***/
         // Store last PostStepPoint to PreStepPoint, and swap current and next
         // volume information of G4Track. Reset total energy deposit in one Step.
         fpStep->CopyPostToPreStepPoint();
@@ -654,11 +663,11 @@ void G4ITStepProcessor::InitDefineStep()
         fpNavigator->SetNavigatorState(fpITrack->GetTrackingInfo()->GetNavigatorState());
 
         G4VPhysicalVolume* newTopVolume=
-            fpNavigator->ResetHierarchyAndLocate( fpTrack->GetPosition(),
-                                              fpTrack->GetMomentumDirection(),
-                                              *((G4TouchableHistory*)fpTrack->GetTouchableHandle()()) );
+                fpNavigator->ResetHierarchyAndLocate( fpTrack->GetPosition(),
+                                                      fpTrack->GetMomentumDirection(),
+                                                      *((G4TouchableHistory*)fpTrack->GetTouchableHandle()()) );
 
-//        G4cout << "New Top Volume : " << newTopVolume->GetName() << G4endl;
+        //        G4cout << "New Top Volume : " << newTopVolume->GetName() << G4endl;
 
         if(newTopVolume != oldTopVolume || oldTopVolume->GetRegularStructureId() == 1 )
         {
@@ -711,9 +720,9 @@ void G4ITStepProcessor::DoDefinePhysicalStepLength()
     fPostStepDoItProcTriggered = fpProcessInfo->MAXofPostStepLoops;
     fPostStepAtTimeDoItProcTriggered = fpProcessInfo->MAXofPostStepLoops;
 
-//    G4cout << "fpProcessInfo->MAXofPostStepLoops : " << fpProcessInfo->MAXofPostStepLoops
-//           << " mol : " << fpITrack -> GetName() << " id : " << fpTrack->GetTrackID()
-//           << G4endl;
+    //    G4cout << "fpProcessInfo->MAXofPostStepLoops : " << fpProcessInfo->MAXofPostStepLoops
+    //           << " mol : " << fpITrack -> GetName() << " id : " << fpTrack->GetTrackID()
+    //           << G4endl;
 
     for(size_t np=0; np < fpProcessInfo->MAXofPostStepLoops; np++)
     {
@@ -727,7 +736,7 @@ void G4ITStepProcessor::DoDefinePhysicalStepLength()
         fCondition=NotForced;
         fpCurrentProcess->SetProcessState(fpTrackingInfo->GetProcessState(fpCurrentProcess->GetProcessID()));
 
-//        G4cout << "Is going to call : " << fpCurrentProcess -> GetProcessName() << G4endl;
+        //        G4cout << "Is going to call : " << fpCurrentProcess -> GetProcessName() << G4endl;
         fPhysIntLength = fpCurrentProcess->
                 PostStepGPIL( *fpTrack,
                               fpState->fPreviousStepSize,
@@ -736,30 +745,30 @@ void G4ITStepProcessor::DoDefinePhysicalStepLength()
 
         switch (fCondition)
         {
-            case ExclusivelyForced: // Will need special treatment
-                (fpState->fSelectedPostStepDoItVector)[np] = ExclusivelyForced;
-                fpState->fStepStatus = fExclusivelyForcedProc;
-                fpStep->GetPostStepPoint()
-                        ->SetProcessDefinedStep(fpCurrentProcess);
-                break;
+        case ExclusivelyForced: // Will need special treatment
+            (fpState->fSelectedPostStepDoItVector)[np] = ExclusivelyForced;
+            fpState->fStepStatus = fExclusivelyForcedProc;
+            fpStep->GetPostStepPoint()
+                    ->SetProcessDefinedStep(fpCurrentProcess);
+            break;
 
-            case Conditionally:
-                //	     (fpState->fSelectedPostStepDoItVector)[np] = Conditionally;
-                G4Exception("G4ITStepProcessor::DefinePhysicalStepLength()", "ITStepProcessor0008",
-                            FatalException, "This feature is no more supported");
-                break;
+        case Conditionally:
+            //	     (fpState->fSelectedPostStepDoItVector)[np] = Conditionally;
+            G4Exception("G4ITStepProcessor::DefinePhysicalStepLength()", "ITStepProcessor0008",
+                        FatalException, "This feature is no more supported");
+            break;
 
-            case Forced:
-                (fpState->fSelectedPostStepDoItVector)[np] = Forced;
-                break;
+        case Forced:
+            (fpState->fSelectedPostStepDoItVector)[np] = Forced;
+            break;
 
-            case StronglyForced:
-                (fpState->fSelectedPostStepDoItVector)[np] = StronglyForced;
-                break;
+        case StronglyForced:
+            (fpState->fSelectedPostStepDoItVector)[np] = StronglyForced;
+            break;
 
-            default:
-                (fpState->fSelectedPostStepDoItVector)[np] = InActivated;
-                break;
+        default:
+            (fpState->fSelectedPostStepDoItVector)[np] = InActivated;
+            break;
         }
 
         if (fCondition==ExclusivelyForced)
@@ -878,7 +887,7 @@ void G4ITStepProcessor::DoDefinePhysicalStepLength()
                         InActivated)
                 {
                     (fpState->fSelectedPostStepDoItVector)[fPostStepAtTimeDoItProcTriggered] = NotForced;
-//                    (fpState->fSelectedPostStepDoItVector)[fPostStepDoItProcTriggered] = InActivated;
+                    //                    (fpState->fSelectedPostStepDoItVector)[fPostStepDoItProcTriggered] = InActivated;
 
                     fpState->fStepStatus = fPostStepDoItProc;
                     fpStep->GetPostStepPoint()->SetProcessDefinedStep(processWithPostStepGivenByTimeStep);

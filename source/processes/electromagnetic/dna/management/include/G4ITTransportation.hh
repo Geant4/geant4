@@ -197,7 +197,7 @@ protected :
     G4PropagatorInField* fFieldPropagator;
     // The Propagators used to transport the particle
 
-    static const G4TouchableHandle nullTouchableHandle;  // Points to (G4VTouchable*) 0
+//    static const G4TouchableHandle nullTouchableHandle;  // Points to (G4VTouchable*) 0
 
     G4ParticleChangeForTransport fParticleChange;
     // New ParticleChange

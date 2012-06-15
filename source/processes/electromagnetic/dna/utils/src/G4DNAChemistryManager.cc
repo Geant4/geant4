@@ -45,6 +45,7 @@
 #include "G4Electron_aq.hh"
 #include "G4ITManager.hh"
 #include "G4MolecularConfiguration.hh"
+#include "G4MoleculeCounter.hh"
 
 using namespace std;
 
@@ -76,6 +77,7 @@ G4DNAChemistryManager::~G4DNAChemistryManager()
     G4MoleculeHandleManager::DeleteInstance();
     G4MolecularConfiguration::DeleteManager();
     fInstance.release();
+    G4MoleculeCounter::DeleteInstance();
 }
 
 void G4DNAChemistryManager::DeleteInstance()

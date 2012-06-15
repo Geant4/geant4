@@ -7,12 +7,30 @@
 
 using namespace std;
 
-typedef map<G4double, G4int> NbMoleculeAgainstTime;
+struct compDoubleWithPrecision
+{
+    bool operator() (const double& a, const double& b) const
+    {
+        if(fabs(a - b) < fPrecision)
+        {
+            return false;
+        }
+        else
+        {
+            return a < b;
+        }
+    }
+
+    static double fPrecision ;
+};
+
+typedef map<G4double, G4int, compDoubleWithPrecision> NbMoleculeAgainstTime;
 
 class G4MoleculeCounter
 {
 private:
     G4MoleculeCounter();
+    ~G4MoleculeCounter(){;}
     static G4MoleculeCounter* fpInstance;
     typedef std::map<const G4Molecule, NbMoleculeAgainstTime> CounterMapType;
 
@@ -24,13 +42,10 @@ private:
     G4int fVerbose ;
 
 public:
-    ~G4MoleculeCounter()
-    {
-        G4cout << "~G4MoleculeCounter" << G4endl;
-    }
+    static void DeleteInstance();
 
     static  G4MoleculeCounter* GetMoleculeCounter();
-    inline NbMoleculeAgainstTime GetNbMoleculeAgainstTime(const G4Molecule &molecule);
+    inline const NbMoleculeAgainstTime& GetNbMoleculeAgainstTime(const G4Molecule &molecule);
     vector<G4Molecule> RecordMolecules();
     void AddAMoleculeAtTime(const G4Molecule&, G4double);
     void RemoveAMoleculeAtTime(const G4Molecule&, G4double);
@@ -59,7 +74,7 @@ inline void G4MoleculeCounter::ResetCounter()
     fCounterMap.clear();
 }
 
-inline NbMoleculeAgainstTime G4MoleculeCounter::GetNbMoleculeAgainstTime(const G4Molecule& molecule)
+inline const NbMoleculeAgainstTime& G4MoleculeCounter::GetNbMoleculeAgainstTime(const G4Molecule& molecule)
 {
     return fCounterMap[molecule];
 }

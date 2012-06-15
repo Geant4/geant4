@@ -46,12 +46,18 @@ void G4DNAMolecularMaterial::DeleteInstance()
     fInstance = 0;
 }
 
-G4DNAMolecularMaterial::G4DNAMolecularMaterial() :G4VStateDependent()
+void G4DNAMolecularMaterial::Create()
 {
     fpCompFractionTable = 0;
     fpCompDensityTable = 0;
     fpCompNumMolPerVolTable = 0;
     fIsInitialized = false;
+    fInstance = this;
+}
+
+G4DNAMolecularMaterial::G4DNAMolecularMaterial() :G4VStateDependent()
+{
+    Create();
     fInstance = this;
 }
 
@@ -61,19 +67,15 @@ G4bool G4DNAMolecularMaterial::Notify(G4ApplicationState requestedState)
     return true;
 }
 
-G4DNAMolecularMaterial::G4DNAMolecularMaterial(const G4DNAMolecularMaterial& rhs) : G4VStateDependent()
+G4DNAMolecularMaterial::G4DNAMolecularMaterial(const G4DNAMolecularMaterial& /*rhs*/) : G4VStateDependent()
 {
-    *fpCompFractionTable = *rhs.fpCompFractionTable;
-    *fpCompDensityTable = *rhs.fpCompDensityTable;
-    fIsInitialized = rhs.fIsInitialized;
+    Create();
 }
 
 G4DNAMolecularMaterial& G4DNAMolecularMaterial::operator=(const G4DNAMolecularMaterial& rhs)
 {
     if(this == &rhs) return *this;
-    *fpCompFractionTable = *rhs.fpCompFractionTable;
-    *fpCompDensityTable = *rhs.fpCompDensityTable;
-    fIsInitialized = rhs.fIsInitialized;
+    Create();
     return *this;
 }
 
@@ -96,6 +98,26 @@ G4DNAMolecularMaterial::~G4DNAMolecularMaterial()
         fpCompNumMolPerVolTable->clear();
         delete fpCompNumMolPerVolTable;
         fpCompNumMolPerVolTable = 0;
+    }
+
+    std::map<const G4Material*,std::vector<double>*,CompareMaterial>::iterator it;
+
+    for(it= fAskedDensityTable.begin() ; it != fAskedDensityTable.end() ;it++)
+    {
+        if(it->second)
+        {
+            delete it->second;
+            it->second = 0;
+        }
+    }
+
+    for(it= fAskedNumPerVolTable.begin() ; it != fAskedNumPerVolTable.end() ;it++)
+    {
+        if(it->second)
+        {
+            delete it->second;
+            it->second = 0;
+        }
     }
 }
 
@@ -275,10 +297,10 @@ const std::vector<double>* G4DNAMolecularMaterial::GetDensityTableFor(const G4Ma
         }
     }
 
-    std::map<const G4Material*,std::vector<double>,CompareMaterial>::const_iterator it_askedDensityTable = fAskedDensityTable.find(lookForMaterial);
+    std::map<const G4Material*,std::vector<double>*,CompareMaterial>::const_iterator it_askedDensityTable = fAskedDensityTable.find(lookForMaterial);
     if(it_askedDensityTable != fAskedDensityTable.end())
     {
-        return &it_askedDensityTable->second;
+        return it_askedDensityTable->second;
     }
 
     const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
@@ -311,7 +333,7 @@ const std::vector<double>* G4DNAMolecularMaterial::GetDensityTableFor(const G4Ma
         PrintNotAMolecularMaterial("G4DNAMolecularMaterial::GetDensityTableFor",lookForMaterial);
     }
 
-    fAskedDensityTable.insert(make_pair(lookForMaterial, *output));
+    fAskedDensityTable.insert(make_pair(lookForMaterial, output));
 
     return output;
 }
@@ -343,10 +365,10 @@ const std::vector<double>* G4DNAMolecularMaterial::GetNumMolPerVolTableFor(const
         }
     }
 
-    std::map<const G4Material*,std::vector<double>,CompareMaterial>::const_iterator it_askedNumMolPerVolTable = fAskedNumPerVolTable.find(lookForMaterial);
+    std::map<const G4Material*,std::vector<double>*,CompareMaterial>::const_iterator it_askedNumMolPerVolTable = fAskedNumPerVolTable.find(lookForMaterial);
     if(it_askedNumMolPerVolTable != fAskedNumPerVolTable.end())
     {
-        return &it_askedNumMolPerVolTable->second;
+        return it_askedNumMolPerVolTable->second;
     }
 
     const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
@@ -379,7 +401,7 @@ const std::vector<double>* G4DNAMolecularMaterial::GetNumMolPerVolTableFor(const
         PrintNotAMolecularMaterial("G4DNAMolecularMaterial::GetNumMolPerVolTableFor",lookForMaterial);
     }
 
-    fAskedNumPerVolTable.insert(make_pair(lookForMaterial, *output));
+    fAskedNumPerVolTable.insert(make_pair(lookForMaterial, output));
 
     return output;
 }

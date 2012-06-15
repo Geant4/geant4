@@ -26,6 +26,7 @@ void G4DNASecondOrderReaction::Create()
     fMolarMassOfMaterial = -1.;
     fProposesTimeStep = true;
     fReturnedValue = -1.;
+    fpMoleculeDensity = 0;
 }
 
 G4DNASecondOrderReaction::G4DNASecondOrderReaction(const G4String &aName, G4ProcessType type) :
@@ -62,14 +63,10 @@ G4DNASecondOrderReaction::SecondOrderReactionState::SecondOrderReactionState() :
 
 void G4DNASecondOrderReaction::BuildPhysicsTable(const G4ParticleDefinition&)
 {
-//    fMolarMassOfMaterial = fpMaterial->GetMaterialPropertiesTable()->GetConstProperty("Molar Mass");
-
-    fpMoleculeDensity = G4DNAMolecularMaterial::Instance()->GetDensityTableFor(fpMaterial);
-    fpMoleculeDensity2 = G4DNAMolecularMaterial::Instance()->GetNumMolPerVolTableFor(fpMaterial);
+//    fpMoleculeDensity = G4DNAMolecularMaterial::Instance()->GetDensityTableFor(fpMaterial);
+    fpMoleculeDensity = G4DNAMolecularMaterial::Instance()->GetNumMolPerVolTableFor(fpMaterial);
     fMolarMassOfMaterial = fpMaterial->GetMassOfMolecule()*CLHEP::Avogadro*1e3;
     fIsInitialized = true;
-
-//    fpMoleculeConcentration = new std::vector<double>(fpMoleculeDensity->size());
 }
 
 void
@@ -111,7 +108,6 @@ G4double G4DNASecondOrderReaction::PostStepGetPhysicalInteractionLength(const G4
     }
 
     G4double molDensity = (*fpMoleculeDensity)[material->GetIndex()];
-    G4double molDensity2 = (*fpMoleculeDensity2)[material->GetIndex()];
 
     if(molDensity == 0.0) // ie : not found
     {
@@ -132,15 +128,8 @@ G4double G4DNASecondOrderReaction::PostStepGetPhysicalInteractionLength(const G4
 
     fpSecondOrderReactionState->fIsInGoodMaterial = true;
 
-    fConcentration = molDensity/fMolarMassOfMaterial;
-    fConcentration2 = molDensity2/CLHEP::Avogadro;
-
-//    if(fConcentration != fConcentration2)
-//    {
-//        G4cout << "fConcentration != fConcentration2" << G4endl;
-//        G4cout << "fConcentration = " << fConcentration << G4endl;
-//        G4cout << "fConcentration2 = " << fConcentration2 << G4endl;
-//    }
+//    fConcentration = molDensity/fMolarMassOfMaterial;
+    fConcentration = molDensity/CLHEP::Avogadro;
 
 //    G4cout << "Concentration : " << fConcentration / (g/mole)<< G4endl;
 
@@ -172,7 +161,7 @@ G4double G4DNASecondOrderReaction::PostStepGetPhysicalInteractionLength(const G4
     *pForceCond = NotForced;
 
     // get mean free path
-    fpState->currentInteractionLength = 1/(fReactionRate*fConcentration2);
+    fpState->currentInteractionLength = 1/(fReactionRate*fConcentration);
 
     G4double value;
     if (fpState->currentInteractionLength <DBL_MAX) {

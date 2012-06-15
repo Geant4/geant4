@@ -14,6 +14,15 @@ G4ITTransportationManager::~G4ITTransportationManager()
     if(fpNavigator) delete fpNavigator;
 }
 
+void G4ITTransportationManager::DeleteInstance()
+{
+    if(fpInstance)
+    {
+        delete fpInstance;
+        fpInstance = 0;
+    }
+}
+
 void G4ITTransportationManager::Initialize()
 {
     fpNavigator = new G4ITNavigator();

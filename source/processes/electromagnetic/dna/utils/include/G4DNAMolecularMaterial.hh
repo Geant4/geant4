@@ -41,6 +41,7 @@ protected :
     G4DNAMolecularMaterial(const G4DNAMolecularMaterial& right);
     G4DNAMolecularMaterial& operator=(const G4DNAMolecularMaterial&);
     virtual ~G4DNAMolecularMaterial();
+    void Create();
     void InitializeNumMolPerVol();
     void InitializeDensity();
     void RecordMolecularMaterial(G4Material* parentMaterial, G4Material* molecularMaterial, G4double fraction);
@@ -54,8 +55,8 @@ protected :
     std::vector<ComponentMap>* fpCompDensityTable;
     std::vector<ComponentMap>* fpCompNumMolPerVolTable;
 
-    mutable std::map<const G4Material*,std::vector<double>,CompareMaterial> fAskedDensityTable;
-    mutable std::map<const G4Material*,std::vector<double>,CompareMaterial> fAskedNumPerVolTable;
+    mutable std::map<const G4Material*,std::vector<double>*,CompareMaterial> fAskedDensityTable;
+    mutable std::map<const G4Material*,std::vector<double>*,CompareMaterial> fAskedNumPerVolTable;
     mutable std::map<const G4Material*,bool,CompareMaterial> fWarningPrinted;
 
     G4bool fIsInitialized;

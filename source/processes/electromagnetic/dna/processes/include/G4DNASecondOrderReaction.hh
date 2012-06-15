@@ -113,10 +113,8 @@ protected:
     G4double fReturnedValue;
 
     const std::vector<double>* fpMoleculeDensity;
-    const std::vector<double>* fpMoleculeDensity2;
     G4double fReactionRate;
     G4double fConcentration;
-    G4double fConcentration2;
     G4double fMolarMassOfMaterial;
     SecondOrderReactionState*& fpSecondOrderReactionState;
     G4ParticleChange fParticleChange;
@@ -125,14 +123,5 @@ protected:
     const G4Material* fpMaterial;
     G4bool fpMaterialIsComposite;
 };
-
-//inline void G4DNASecondOrderReaction::SetReaction(const G4MolecularConfiguration* molConf,
-//                                                  const G4Material* material,
-//                                                  double reactionRate)
-//{
-//    fpMolecularConfiguration = molConf;
-//    fpMaterial = material;
-//    fReactionRate = reactionRate;
-//}
 
 #endif // G4DNASECONDORDERREACTION_HH

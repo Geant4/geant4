@@ -68,13 +68,23 @@ G4ITStepManager* G4ITStepManager::Instance()
 } 
 //_________________________________________________________________________
 
+G4bool G4ITStepManager::Notify(G4ApplicationState requestedState)
+{
+    if(requestedState == G4State_Quit)
+    {
+        DeleteInstance();
+    }
+    return true;
+}
+//_________________________________________________________________________
+
 void G4ITStepManager::DeleteInstance()
 {
     if(fgStepManager.get()) fgStepManager.reset();
 }
 //_________________________________________________________________________
 
-G4ITStepManager::G4ITStepManager() : G4ITTrackHolder()
+G4ITStepManager::G4ITStepManager() : G4ITTrackHolder(), G4VStateDependent()
 {
     Create();
 }
@@ -83,6 +93,7 @@ void G4ITStepManager::Create()
 {
     fpMainList = 0 ;
     fpWaitingList = 0 ;
+    fpTrackingInteractivity = 0;
 
     fITStepStatus = eUndefined;
 
@@ -210,6 +221,8 @@ void G4ITStepManager::Initialize()
     fpStepProcessor = new G4ITStepProcessor();
     fpStepProcessor->SetTrackingManager(fpTrackingManager);
 
+    fpTrackingManager->SetInteractivity(fpTrackingInteractivity);
+
     //    fpMasterStepProcessor = new G4ITStepProcessor();
     //    fpMasterStepProcessor->SetTrackingManager(fpTrackingManager);
     //    fpStepProcessor = fpMasterStepProcessor ;
@@ -224,6 +237,7 @@ void G4ITStepManager::Initialize()
 
 void G4ITStepManager::Reset()
 {
+    ClearList();
     fTimeStep = DBL_MAX ;
     fTSTimeStep = DBL_MAX;
     fILTimeStep = DBL_MAX;
@@ -248,7 +262,9 @@ void G4ITStepManager::Process()
     }
 #endif
 
-    fpTrackingManager->Initialize();
+    if(fInitialized == false) Initialize();
+
+//    fpTrackingManager->Initialize();
     fpModelProcessor->Initialize();
     fpStepProcessor->Initialize();
 
@@ -296,7 +312,6 @@ void G4ITStepManager::Process()
 
     // ___________________
     EndTracking();
-    ClearList();
     Reset();
 }
 //_________________________________________________________________________
@@ -430,7 +445,7 @@ void G4ITStepManager::SynchronizeTracks()
 void G4ITStepManager::DoProcess()
 // We split it from the Process() method to avoid repeating code in SynchronizeTracks
 {
-    while(fGlobalTime <= fEndTime &&  ! (fpMainList -> empty()) && (fMaxSteps == -1 ? true :  fNbSteps < fMaxSteps))
+    while(fGlobalTime < fEndTime &&  ! (fpMainList -> empty()) && (fMaxSteps == -1 ? true :  fNbSteps < fMaxSteps))
     {
         Stepping() ;
     }
@@ -535,43 +550,29 @@ void G4ITStepManager::Stepping()
     }
 #endif
 
-
     if(fILTimeStep <= fTSTimeStep) // Give the priority to the IL
     {
         fInteractionStep = true ;
         fReactingTracks.clear(); // Give the priority to the IL
-
         fTimeStep = fILTimeStep;
         fITStepStatus = eInteractionWithMedium;
     }
     else
     {
         fInteractionStep = false ;
-        if(fLeadingTracks.empty() == false)
-        {
-            std::vector<G4Track*>::iterator fLeadingTracks_i = fLeadingTracks.begin();
-
-            while(fLeadingTracks_i != fLeadingTracks.end())
-            {
-                G4Track* track = *fLeadingTracks_i;
-                if(track)
-                {
-                    G4IT* ITrack = GetIT(*fLeadingTracks_i) ;
-                    if(ITrack)
-                    {
-                        GetIT(*fLeadingTracks_i)->GetTrackingInfo()->SetLeadingStep(false);
-                    }
-                }
-
-                fLeadingTracks_i++;
-                continue ;
-            }
-
-            fLeadingTracks.clear();
-        }
-
+        ResetLeadingTracks();
         fTimeStep = fTSTimeStep;
         fITStepStatus = eCollisionBetweenTracks;
+    }
+
+    if(fGlobalTime + fTimeStep > fEndTime)
+    // This check is done at very time step
+    {
+        fTimeStep = fEndTime - fGlobalTime;
+        fITStepStatus = eInteractionWithMedium; // ie: transportation
+        fInteractionStep = true ;
+        fReactingTracks.clear();
+        ResetLeadingTracks();
     }
 
     if(fTimeStep == 0)// < fTimeTolerance)
@@ -892,13 +893,13 @@ void G4ITStepManager::ExtractILData(G4ITStepProcessor* SP)
 
             while(fLeadingTracks_i != fLeadingTracks.end())
             {
-                G4Track* track = *fLeadingTracks_i;
-                if(track)
+                G4Track* leading_track = *fLeadingTracks_i;
+                if(leading_track)
                 {
-                    G4IT* ITrack = GetIT(*fLeadingTracks_i) ;
+                    G4IT* ITrack = GetIT(leading_track) ;
                     if(ITrack)
                     {
-                        GetIT(*fLeadingTracks_i)->GetTrackingInfo()->SetLeadingStep(false);
+                        ITrack->GetTrackingInfo()->SetLeadingStep(false);
                     }
                 }
 
@@ -1047,7 +1048,8 @@ void G4ITStepManager::ComputeTrackReaction()
         return ;
     }
 
-    if(fInteractionStep == false)
+     if(fITStepStatus == eCollisionBetweenTracks)
+//        if(fInteractionStep == false)
     {
         fpModelProcessor->FindReaction(&fReactingTracks,
                                        fTimeStep,
@@ -1366,6 +1368,34 @@ void G4ITStepManager::KillTracks()
 }
 //_________________________________________________________________________
 
+void G4ITStepManager::ResetLeadingTracks()
+{
+    if(fLeadingTracks.empty() == false)
+    {
+        std::vector<G4Track*>::iterator fLeadingTracks_i = fLeadingTracks.begin();
+
+        while(fLeadingTracks_i != fLeadingTracks.end())
+        {
+            G4Track* track = *fLeadingTracks_i;
+            if(track)
+            {
+                G4IT* ITrack = GetIT(*fLeadingTracks_i) ;
+                if(ITrack)
+                {
+                    GetIT(*fLeadingTracks_i)->GetTrackingInfo()->SetLeadingStep(false);
+                }
+            }
+
+            fLeadingTracks_i++;
+            continue ;
+        }
+
+        fLeadingTracks.clear();
+    }
+}
+
+//_________________________________________________________________________
+
 void G4ITStepManager::EndTracking(G4Track* trackToBeKilled)
 {
     fpTrackingManager->EndTracking(trackToBeKilled);
@@ -1411,8 +1441,23 @@ void G4ITStepManager::EndTracking()
         }
     }
 }
+
 //_________________________________________________________________________
-G4ITStepManager::G4ITStepManager(const G4ITStepManager&) : G4ITTrackHolder()
+void G4ITStepManager::SetInteractivity(G4ITTrackingInteractivity* interactivity)
+{
+    fpTrackingInteractivity = interactivity;
+    if(fpTrackingManager) fpTrackingManager->SetInteractivity(fpTrackingInteractivity);
+}
+
+//_________________________________________________________________________
+void G4ITStepManager::ForceReinitialization()
+{
+    fInitialized = false;
+    Initialize();
+}
+
+//_________________________________________________________________________
+G4ITStepManager::G4ITStepManager(const G4ITStepManager&) : G4ITTrackHolder(), G4VStateDependent()
 {
     Create();
 }

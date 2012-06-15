@@ -97,9 +97,8 @@ public:
     inline void SetTrackingManager(G4ITTrackingManager* trackMan)  {fpTrackingManager = trackMan;}
     inline G4ITTrackingManager* GetTrackingManager()               {return fpTrackingManager;}
 
-
-    virtual void Initialize(void* o = 0);
-    void Initialize(G4Track*);
+    virtual void Initialize();
+    void ForceReInitialization();
 
     void DefinePhysicalStepLength(G4Track*);
     void Stepping(G4Track*, const double&);
@@ -117,6 +116,7 @@ public:
 
 protected:
     void SetupGeneralProcessInfo(G4ParticleDefinition*,G4ProcessManager*);
+    void ClearProcessInfo();
     void SetTrack(G4Track*);
 
     void GetProcessInfo();
@@ -159,6 +159,8 @@ private:
     //
     //              General members
     //________________________________________________
+
+    G4bool fInitialized;
 
     G4ITTrackingManager* fpTrackingManager;
     //  G4UserSteppingAction*   fpUserSteppingAction;
@@ -209,8 +211,8 @@ private:
     // The minimum physical interaction length over all possible processes
 
     // * Sensitive detector
-    G4SteppingControl StepControlFlag;
-    G4VSensitiveDetector*   fpSensitive;
+//    G4SteppingControl StepControlFlag;
+//    G4VSensitiveDetector*   fpSensitive;
 
     G4VPhysicalVolume*      fpCurrentVolume; // Get from fpStep or touchable, keep as member for user interface
 
@@ -323,6 +325,7 @@ inline void G4ITStepProcessor::SetNavigator(G4ITNavigator *value)
 inline void G4ITStepProcessor::CleanProcessor()
 {
     fTimeStep = DBL_MAX ;
+    fPhysIntLength = DBL_MAX;
 
     fpState = 0;
     fpTrack = 0;
@@ -335,7 +338,7 @@ inline void G4ITStepProcessor::CleanProcessor()
     fpParticleChange = 0;
 
     fpCurrentVolume = 0;
-    fpSensitive = 0;
+//    fpSensitive = 0;
 
     fpSecondary = 0 ;
 
@@ -343,6 +346,12 @@ inline void G4ITStepProcessor::CleanProcessor()
 
     fpCurrentProcess= 0;
     fpProcessInfo = 0;
+
+    fAtRestDoItProcTriggered = INT_MAX;
+    fPostStepDoItProcTriggered = INT_MAX;
+    fPostStepAtTimeDoItProcTriggered = INT_MAX;
+    fGPILSelection = NotCandidateForSelection ;
+    fCondition = NotForced;
 }
 
 //______________________________________________________________________________

@@ -1,7 +1,6 @@
 #ifndef G4DNADAMAGES_HH
 #define G4DNADAMAGES_HH 1
 
-#include "G4VStateDependent.hh"
 #include "G4Molecule.hh"
 
 class G4VDNAHit
@@ -32,15 +31,15 @@ protected :
     G4String fBaseName;
 };
 
-class G4DNADamages : public G4VStateDependent
+class G4DNADamages
 {
-    static G4DNADamages* fInstance;
+    static G4DNADamages* fpInstance;
+    virtual ~G4DNADamages();
+
 public:
     G4DNADamages();
     static G4DNADamages* Instance();
-    virtual ~G4DNADamages();
-
-    virtual G4bool Notify(G4ApplicationState requestedState) ;
+    static void DeleteInstance();
 
     void Reset();
 
