@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- Jun. 7th, 2012     G.Cosmo (procman-V09-05-01)
+- Fixed trivial case of variable shadowing in G4ProcessVector.
+
+- May 16th, 2012     H.Kurashige (procman-V09-05-00)
+- Add GetTotalNumberOfInteractionLengthTraversed to G4VProcess
+- Move 'virtual inlined' methods to cc files
+
 - Nov. 9th, 2011     H.Kurashige (procman-V09-04-07)
 - Fix Coverity defects
 - Fix bugs in copy constructor and assignment operator of G4ProcessVector

@@ -44,9 +44,9 @@ G4ProcessVector::G4ProcessVector()
   pProcVector = new G4ProcVector();
 }
 
-G4ProcessVector::G4ProcessVector(size_t s)
+G4ProcessVector::G4ProcessVector(size_t siz)
 {
-  pProcVector = new G4ProcVector(s);
+  pProcVector = new G4ProcVector(siz);
 }
 
 G4ProcessVector::G4ProcessVector(const G4ProcessVector& right)
