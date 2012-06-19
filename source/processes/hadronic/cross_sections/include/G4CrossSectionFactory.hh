@@ -31,6 +31,14 @@ public:
   }
 };
 
+
 #define G4_DECLARE_XS_FACTORY(cross_section) \
-  static const G4CrossSectionFactory<cross_section> my_factory(cross_section::Default_Name())
+  const G4CrossSectionFactory<cross_section>& cross_section##Factory = G4CrossSectionFactory<cross_section>(cross_section::Default_Name())
+
+#define G4_REFERENCE_XS_FACTORY(cross_section) \
+  class cross_section; \
+  extern const G4CrossSectionFactory<cross_section>& cross_section##Factory; \
+  const G4CrossSectionFactory<cross_section>& cross_section##FactoryRef = cross_section##Factory
+
+
 #endif

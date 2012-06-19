@@ -45,6 +45,27 @@
 #include "G4VCrossSectionDataSet.hh"
 #include "G4CrossSectionFactory.hh"
 
+// Neeed for running with 'static' libraries to pull the references of the 
+// declared factories
+G4_REFERENCE_XS_FACTORY(G4ChipsKaonMinusInelasticXS);
+G4_REFERENCE_XS_FACTORY(G4ChipsKaonMinusElasticXS);
+G4_REFERENCE_XS_FACTORY(G4ChipsKaonPlusInelasticXS);
+G4_REFERENCE_XS_FACTORY(G4ChipsKaonPlusElasticXS);
+G4_REFERENCE_XS_FACTORY(G4ChipsKaonZeroInelasticXS);
+G4_REFERENCE_XS_FACTORY(G4ChipsKaonZeroElasticXS);
+G4_REFERENCE_XS_FACTORY(G4ChipsHyperonInelasticXS);
+G4_REFERENCE_XS_FACTORY(G4ChipsHyperonElasticXS);
+G4_REFERENCE_XS_FACTORY(G4ChipsProtonInelasticXS);
+G4_REFERENCE_XS_FACTORY(G4ChipsProtonElasticXS);
+G4_REFERENCE_XS_FACTORY(G4ChipsNeutronInelasticXS);
+G4_REFERENCE_XS_FACTORY(G4ChipsNeutronElasticXS);
+G4_REFERENCE_XS_FACTORY(G4ChipsPionPlusInelasticXS);
+G4_REFERENCE_XS_FACTORY(G4ChipsPionPlusElasticXS);
+G4_REFERENCE_XS_FACTORY(G4ChipsPionMinusInelasticXS);
+G4_REFERENCE_XS_FACTORY(G4ChipsPionMinusElasticXS);
+G4_REFERENCE_XS_FACTORY(G4ChipsAntiBaryonInelasticXS);
+G4_REFERENCE_XS_FACTORY(G4ChipsAntiBaryonElasticXS);
+
 G4CrossSectionDataSetRegistry* G4CrossSectionDataSetRegistry::theInstance = 0;
 
 G4CrossSectionDataSetRegistry* G4CrossSectionDataSetRegistry::Instance()
@@ -131,7 +152,7 @@ G4VCrossSectionDataSet* G4CrossSectionDataSetRegistry::GetCrossSectionDataSet(co
   else
     {
       G4ExceptionDescription ED;
-      ED << "invalid cross section data set name"<< G4endl;
+      ED << "invalid cross section data set name ["<< name << "]" << G4endl;
       G4Exception("G4CrossSectionDataSetRegistry::GetCrossSectionDataSet", "CrossSection001", FatalException, ED);
       return 0;
     }
