@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file analysis/AnaEx02/include/HistoManager.hh
+/// \brief Definition of the HistoManager class
+//
 // $Id$
 // GEANT4 tag $Name: geant4-09-04 $
 //

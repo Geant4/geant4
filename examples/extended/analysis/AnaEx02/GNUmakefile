@@ -22,10 +22,10 @@ clean_setup:
 	@echo "Removing files copied from common"
 	@$(G4INSTALL)/examples/extended/common/scripts/clean_files.sh
 
-#### G4ANALYSIS_USE := true
-
-CPPFLAGS += -I$(shell root-config --incdir) 
-EXTRALIBS = $(shell root-config --glibs) -lGeomPainter -lGeom
+ifdef G4ANALYSIS_USE
+  CPPFLAGS += -I$(shell root-config --incdir) 
+  EXTRALIBS = $(shell root-config --glibs) -lGeomPainter -lGeom
+endif
 
 include $(G4INSTALL)/config/binmake.gmk
 
