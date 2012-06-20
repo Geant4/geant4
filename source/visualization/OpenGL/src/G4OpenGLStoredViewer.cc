@@ -132,14 +132,6 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
   printf("G4OpenGLStoredViewer::DrawDisplayLists \n");
 #endif
 
-  // Temporarily disable display list creation because we wish to
-  // re-use G4OpenGLStoredSceneHandler::AddPrimitive without creating
-  // new display lists.  But if we do re-use
-  // G4OpenGLStoredSceneHandler::AddPrimitive, we must supply an
-  // object transform and 2D if applicable.
-  G4bool tempMFDL = fG4OpenGLStoredSceneHandler.fMemoryForDisplayLists;
-  fG4OpenGLStoredSceneHandler.fMemoryForDisplayLists = false;
-
   const G4Planes& cutaways = fVP.GetCutawayPlanes();
   G4bool cutawayUnion = fVP.IsCutaway() &&
     fVP.GetCutawayMode() == G4ViewParameters::cutawayUnion;
@@ -181,12 +173,26 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 	  }
 	  if (isPicking) glLoadName(po.fPickName);
 	  if (po.fpG4TextPlus) {
-	    // Re-use G4OpenGLStoredSceneHandler::AddPrimitive...
-	    fG4OpenGLStoredSceneHandler.fObjectTransformation = po.fTransform;
-	    fG4OpenGLStoredSceneHandler.fProcessing2D =
-	      po.fpG4TextPlus->fProcessing2D;
-	    fG4OpenGLStoredSceneHandler.AddPrimitive(po.fpG4TextPlus->fG4Text);
-	    fG4OpenGLStoredSceneHandler.fProcessing2D = false;
+	    glPushMatrix();
+	    if (po.fpG4TextPlus->fProcessing2D) {
+	      glMatrixMode (GL_PROJECTION);
+	      glPushMatrix();
+	      glLoadIdentity();
+	      glOrtho (-1., 1., -1., 1., -G4OPENGL_FLT_BIG, G4OPENGL_FLT_BIG);
+	      glMatrixMode (GL_MODELVIEW);
+	      glPushMatrix();
+	      glLoadIdentity();
+	    }
+	    G4OpenGLTransform3D oglt (po.fTransform);
+	    glMultMatrixd (oglt.GetGLMatrix ());
+	    static_cast<G4OpenGLSceneHandler&>(fSceneHandler).
+	      G4OpenGLSceneHandler::AddPrimitive(po.fpG4TextPlus->fG4Text);
+	    if (po.fpG4TextPlus->fProcessing2D) {
+	      glMatrixMode (GL_PROJECTION);
+	      glPopMatrix();
+	      glMatrixMode (GL_MODELVIEW);
+	      glPopMatrix();
+	    }
 	  } else {
 	    glPushMatrix();
 	    G4OpenGLTransform3D oglt (po.fTransform);
@@ -218,14 +224,27 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 	  if (to.fEndTime >= fStartTime && to.fStartTime <= fEndTime) {
 	    if (fVP.IsPicking()) glLoadName(to.fPickName);
 	    if (to.fpG4TextPlus) {
-	      // Re-use G4OpenGLStoredSceneHandler::AddPrimitive...
-	      fG4OpenGLStoredSceneHandler.fObjectTransformation =
-		to.fTransform;
-	      fG4OpenGLStoredSceneHandler.fProcessing2D =
-		to.fpG4TextPlus->fProcessing2D;
-	      fG4OpenGLStoredSceneHandler.AddPrimitive
-		(to.fpG4TextPlus->fG4Text);
-	      fG4OpenGLStoredSceneHandler.fProcessing2D = false;
+	      if (to.fpG4TextPlus->fProcessing2D) {
+		glMatrixMode (GL_PROJECTION);
+		glPushMatrix();
+		glLoadIdentity();
+		glOrtho (-1., 1., -1., 1., -G4OPENGL_FLT_BIG, G4OPENGL_FLT_BIG);
+		glMatrixMode (GL_MODELVIEW);
+		glPushMatrix();
+		glLoadIdentity();
+	      }
+	      G4OpenGLTransform3D oglt (to.fTransform);
+	      glMultMatrixd (oglt.GetGLMatrix ());
+	      const G4Colour& c = to.fColour;
+	      glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
+	      static_cast<G4OpenGLSceneHandler&>(fSceneHandler).
+		G4OpenGLSceneHandler::AddPrimitive(to.fpG4TextPlus->fG4Text);
+	      if (to.fpG4TextPlus->fProcessing2D) {
+		glMatrixMode (GL_PROJECTION);
+		glPopMatrix();
+		glMatrixMode (GL_MODELVIEW);
+		glPopMatrix();
+	      }
 	    } else {
 	      if (to.fTransform != lastMatrixTransform) {
 		if (! first) {
@@ -343,8 +362,10 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
     }
   }
 
+  /***
   // Restore current flag...
   fG4OpenGLStoredSceneHandler.fMemoryForDisplayLists = tempMFDL;
+  ***/
 }
 
 #endif

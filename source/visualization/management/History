@@ -26,6 +26,9 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+15th June 2012  John Allison
+- G4VSceneHandler.cc: Spelling correction in comment.
+
 7th June 2012  John Allison  (visman-V09-05-22)
 - Shadow clean.
 

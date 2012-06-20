@@ -24,6 +24,17 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+18th June 2012  John Allison  (vis-V09-05-28)
+- opengl-V09-05-21:
+  o Fix drawing of non-display-list text.
+
+16th June 2012  John Allison  (vis-V09-05-27)
+- opengl-V09-05-20:
+  o Fixes drawing of trajectories when no memory fro display lists.
+  o Fixes cases of extra drawing, causing loss of trajectories.
+- opengl-V09-05-19:
+  o Added /vis/ogl/set/eventsDrawInterval.
+
 12th June 2012    John Allison  (vis-V09-05-26)
 - opengl-V09-05-18 (Laurent Garnier):
   o Fixed shadow warnings where possible.

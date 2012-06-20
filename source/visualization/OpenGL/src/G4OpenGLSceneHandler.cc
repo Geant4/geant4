@@ -73,8 +73,8 @@ G4OpenGLSceneHandler::G4OpenGLSceneHandler (G4VGraphicsSystem& system,
   fProcessing2D (false),
   // glFlush take about 90% time.  Dividing glFlush number by 100 will
   // change the first vis time from 100% to 10+90/100 = 10,9%.
-  fNbListsBeforeFlush(100),
-  fNbListsToBeFlush(0),
+  fEventsDrawInterval(1),
+  fEventsWaitingToBeFlushed(0),
   fSecondPassForTransparencyRequested(false),
   fSecondPassForTransparency(false)
 {}
@@ -112,10 +112,10 @@ void G4OpenGLSceneHandler::ClearAndDestroyAtts()
 
 void G4OpenGLSceneHandler::ScaledFlush()
 {
-  fNbListsToBeFlush++;
-  if (fNbListsToBeFlush < fNbListsBeforeFlush) return;
+  fEventsWaitingToBeFlushed++;
+  if (fEventsWaitingToBeFlushed < fEventsDrawInterval) return;
   glFlush();
-  fNbListsToBeFlush = 0;
+  fEventsWaitingToBeFlushed = 0;
 }
 
 void G4OpenGLSceneHandler::ProcessScene()

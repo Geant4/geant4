@@ -282,11 +282,7 @@ G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible
       glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
     }
   } else {  // Out of memory (or being used when display lists not required).
-    glDrawBuffer (GL_BACK);
-    // Laurent Garnier 01/2012 : Not sure it was working with a front buffer. 
-    // Moreover, because this is the "outside of list" drawing, it will not be redraw
-    // when moving scene, so...
-    //    glDrawBuffer (GL_FRONT);
+    glDrawBuffer (GL_FRONT);
     glPushMatrix();
     G4OpenGLTransform3D oglt (fObjectTransformation);
     glMultMatrixd (oglt.GetGLMatrix ());
@@ -496,6 +492,13 @@ void G4OpenGLStoredSceneHandler::ClearTransientStore ()
   fTOList.clear ();
 
   fMemoryForDisplayLists = true;
+
+  // Redraw the scene ready for the next event.
+  if (fpViewer) {
+    fpViewer -> SetView ();
+    fpViewer -> ClearView ();
+    fpViewer -> DrawView ();
+  }
 }
 
 void G4OpenGLStoredSceneHandler::RequestPrimitives (const G4VSolid& solid)

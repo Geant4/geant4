@@ -239,6 +239,16 @@ void G4OpenGLImmediateSceneHandler::EndModeling () {
   G4VSceneHandler::EndModeling ();
 }
 
+void G4OpenGLImmediateSceneHandler::ClearTransientStore ()
+{
+  // Nothing to do except redraw the scene ready for the next event.
+  if (fpViewer) {
+    fpViewer -> SetView ();
+    fpViewer -> ClearView ();
+    fpViewer -> DrawView ();
+  }
+}
+
 G4int G4OpenGLImmediateSceneHandler::fSceneIdCount = 0;
 
 #endif

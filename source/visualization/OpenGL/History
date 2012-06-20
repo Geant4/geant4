@@ -17,6 +17,41 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18th June 2012  John Allison  (opengl-V09-05-21)
+- G4OpenGLStoredViewer::DrawDisplayLists:
+  o For special case of text that must be treated without a display
+    list, call G4OpenGLSceneHandler::AddPrimitive(const G4Text&)
+    directly and call glPushMatrix, glColor, etc., as would be in the
+    display list.
+  o Remove code that changed fMemoryForDisplayLists (was a bad idea!!).
+
+16th June 2012  John Allison  (opengl-V09-05-20)
+- G4OpenGLStoredSceneHandler::AddPrimitivePreamble:
+  o Re-instated glDrawBuffer(GL_FRONT) when memory for display lists is
+    unavailable.  It now draws further trajectories properly.
+- G4OpenGLStoredX(m)Viewer::ShowView:
+  o Removed functions altogether, so parent class functions are now used.
+  o They were issuing an extra Clear/DrawView.
+  o ShowView is invoked at end of run and was thus causing an
+    unneccessary draw.
+  o It also had the effect of losing the above-mentioned "further
+    trajectories" at the end of run.
+
+16th June 2012  John Allison  (opengl-V09-05-19)
+- Added /vis/ogl/set/eventsDrawInterval.
+  o By default, the screen is updated at the end of every event.
+    Allowing OpenGL to buffer several events can make a big
+    improvement in drawing speed.  E.g., with exampleB1, 1000 events
+    took 5 seconds but with "/vis/ogl/set/eventsDrawInterval 100",
+    only 1 second.
+
+15th June 2012  John Allison
+- G4OpenGLImmediateSceneHandler:
+  o Added ClearTransientStore, which issues Set/Clear/DrawView.
+- G4OpenGLStoredSceneHandler.cc:
+  o G4OpenGLStoredSceneHandler::ClearTransientStore:
+    Re-introduced Set/Clear/DrawView.
+
 12th June 2012  Laurent Garnier  (opengl-V09-05-18)
 - G4OpenGLQtMovieDialog.cc
   o Shadow clean.

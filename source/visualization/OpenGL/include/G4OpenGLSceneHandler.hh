@@ -85,6 +85,9 @@ public:
   void AddCompound (const G4VDigi&);
   void AddCompound (const G4THitsMap<G4double>&);
 
+  G4int GetEventsDrawInterval() {return fEventsDrawInterval;}
+  void SetEventsDrawInterval(G4int interval) {fEventsDrawInterval = interval;}
+
 protected:
 
   G4OpenGLSceneHandler (G4VGraphicsSystem& system,
@@ -105,10 +108,10 @@ protected:
 
   // Shared code to wait until we make a single glFlush
   void ScaledFlush () ;
-  // Number of stored list to wait until we make a single glFlush
-  const G4int fNbListsBeforeFlush;
-  // Effective number of stored list
-  G4int fNbListsToBeFlush;
+  // Number of events to wait until we make a single glFlush
+  G4int fEventsDrawInterval;
+  // Number of events waiting to be flushed
+  G4int fEventsWaitingToBeFlushed;
 
   G4bool fSecondPassForTransparencyRequested;
   G4bool fSecondPassForTransparency;       // ...in process.

@@ -66,6 +66,8 @@ protected:
 
   G4bool AddPrimitivePreamble(const G4Visible& visible);
 
+  void ClearTransientStore ();
+
   static G4int    fSceneIdCount;  // static counter for OpenGLImmediate scenes.
 };
 

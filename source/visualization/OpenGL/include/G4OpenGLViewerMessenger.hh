@@ -60,6 +60,7 @@ private:
   G4UIcmdWithAnInteger* fpCommandDisplayListLimit;
   G4UIcommand* fpCommandDisplayLightFront;
   G4UIcommand* fpCommandEndTime;
+  G4UIcmdWithAnInteger* fpCommandEventsDrawInterval;
   G4UIcmdWithADouble* fpCommandFade;
   G4UIcmdWithAString* fpCommandPrintMode;
   G4UIcommand* fpCommandStartTime;

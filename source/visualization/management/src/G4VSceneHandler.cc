@@ -537,7 +537,7 @@ void G4VSceneHandler::ProcessScene () {
 
   fReadyForTransients = false;
 
-  // Reset fMarkForClearingTransientStore.(Leaving
+  // Reset fMarkForClearingTransientStore. (Leaving
   // fMarkForClearingTransientStore true causes problems with
   // recomputing transients below.)  Restore it again at end...
   G4bool tmpMarkForClearingTransientStore = fMarkForClearingTransientStore;
