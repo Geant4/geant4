@@ -15,6 +15,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20 June, 12  G.Cosmo (mctruth-V09-05-02)
+- Corrected GNUMakefile to use G4BASE instead of $G4INSTALL/source.
+
 25 May, 12  G.Cosmo (mctruth-V09-05-01)
 - Fixed trivial cases of variable shadowing.
 
