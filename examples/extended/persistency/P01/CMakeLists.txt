@@ -11,6 +11,10 @@ if(NOT ROOT_FOUND)
   return()
 endif()
 
+if(BUILD_STATIC_LIBS AND NOT BUILD_SHARED_LIBS )
+  message(STATUS "G4 Examples: Building only Static Libraires. --> Example P01 disabled")
+  return()
+endif()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include 
                     ${Geant4_INCLUDE_DIR}

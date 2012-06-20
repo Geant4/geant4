@@ -34,7 +34,7 @@
 
 #include "ExP01TrackerHit.hh"
 
-/** @class rootio rootio.hh include/rootio.hh
+/** @class RootIO
  *   
  *
  *  @author Witold POKORSKI
