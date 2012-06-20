@@ -14,8 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+12 June 2012  Tatsumi Koi		(test11-V09-05-00)
+- Comment out "Cross Section Dump" for reducing output
+	src/Tst11PhysicsList.cc
+
 20 November 2011  Tatsumi Koi		(test11-V09-04-07)
-- Remove ZrH and UO2 from checking to reduce memory consumption 
+- Remove ZrH and UO2 from test to reduce memory consumption 
 	test11_hadronic_exerciser.cc
 	src/Tst11DetectorConstruction.cc
 

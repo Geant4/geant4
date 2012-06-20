@@ -8,14 +8,11 @@ $Id: README,v 1.4 2010-11-24 15:18:24 tkoi Exp $
                             Test11
                             ------
 
-Description:  neutron transport test using the LEND (Low Energy Nuclar Data) 
-              and LEP models.
+Description:  neutron transport test using LEP and 
+              the HP (High Precision including Thermal Scattering) models.
               The detector is a simple box made up of air, aluminum, lead 
               or uranium.
 
 Type of test: run to completion
 
 Output:       run log
-
-
-
