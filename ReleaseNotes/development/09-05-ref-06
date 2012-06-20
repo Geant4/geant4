@@ -385,6 +385,8 @@ examples                                         examples-V09-05-06
     Fixes compilation warnings on Ubuntu.
 - extended/persistency/P01 (exampleP01-V09-05-04)
   o Disable building example if static libraries are build.
+- novice/N07 (exampleN07-V09-05-00)
+  o ExN07SteppingVerbose: added protection with G4VERBOSE for verbosity.
 
 tests                                            tests-V09-05-06
 -----
