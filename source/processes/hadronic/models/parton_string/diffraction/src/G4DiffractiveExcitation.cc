@@ -77,7 +77,7 @@ G4bool G4DiffractiveExcitation::
 //G4cout<<G4endl<<"ExciteParticipants --------------"<<G4endl;
 // -------------------- Projectile parameters -----------------------
      G4LorentzVector Pprojectile=projectile->Get4Momentum();
-//G4cout<<"Pproj "<<Pprojectile<<G4endl;
+
      if(Pprojectile.z() < 0.)
      {
        target->SetStatus(2);
@@ -109,9 +109,10 @@ G4bool G4DiffractiveExcitation::
 // -------------------- Target parameters -------------------------
      G4int    TargetPDGcode=target->GetDefinition()->GetPDGEncoding();
      G4int    absTargetPDGcode=std::abs(TargetPDGcode);
-//G4cout<<"Excit "<<ProjectilePDGcode<<" "<<TargetPDGcode<<G4endl;
+//G4cout<<"Entry to QE or Excit "<<ProjectilePDGcode<<" "<<TargetPDGcode<<G4endl;
 
      G4LorentzVector Ptarget=target->Get4Momentum();
+//G4cout<<"Pproj "<<Pprojectile<<G4endl;
 //G4cout<<"Ptarget "<<Ptarget<<G4endl;
      G4double M0target = Ptarget.mag();
 
@@ -402,12 +403,22 @@ if(TestParticle)
 {
  G4double MtestPart=                             // 31.05.2012
  (G4ParticleTable::GetParticleTable()->FindParticle(NewProjCode))->GetPDGMass();
+/*
+G4cout<<"TestParticle Name "<<NewProjCode<<" "<<TestParticle->GetParticleName()<<G4endl;
+G4cout<<"MtestPart M0projectile projectile->GetDefinition()->GetPDGMass() "<<MtestPart<<" "<<M0projectile<<" "<<projectile->GetDefinition()->GetPDGMass()<<G4endl;
+G4bool Test =M0projectile <= projectile->GetDefinition()->GetPDGMass(); 
+G4cout<<"M0projectile <= projectile->GetDefinition()->GetPDGMass() "<<Test<<G4endl;
+*/
 
- if(MtestPart >= M0projectile)                   // 31.05.2012
- {                                               // 31.05.2012
-  M0projectile = MtestPart;                      // 31.05.2012
-  M0projectile2 = M0projectile * M0projectile;   // 31.05.2012
- }                                               // 31.05.2012
+  if(MtestPart > M0projectile) 
+  {M0projectile = MtestPart;}
+  else 
+  {
+   if(std::abs(M0projectile - projectile->GetDefinition()->GetPDGMass()) < 140.*MeV)
+   {M0projectile = MtestPart;}
+  }
+//G4cout<<"M0projectile After check "<<M0projectile<<G4endl;
+  M0projectile2 = M0projectile * M0projectile;
 
  ProjectileDiffStateMinMass   =M0projectile+210.*MeV; //210 MeV=m_pi+70 MeV 
  ProjectileNonDiffStateMinMass=M0projectile+210.*MeV; //210 MeV=m_pi+70 MeV
@@ -441,19 +452,20 @@ if(TestParticle)
 //       target->SetDefinition(                                          // Fix 15.12.09
 //       G4ParticleTable::GetParticleTable()->FindParticle(NewTargCode));// Fix 15.12.09 
 
-//G4cout<<"NewTargCode "<<NewTargCode<<G4endl;
-//G4int Uzhi; G4cin>>Uzhi;
 TestParticle=G4ParticleTable::GetParticleTable()->FindParticle(NewTargCode);
+//G4cout<<"New targ "<<NewTargCode<<" "<<TestParticle->GetParticleName()<<G4endl;
 if(TestParticle) 
 {
  G4double MtestPart=                             // 31.05.2012
  (G4ParticleTable::GetParticleTable()->FindParticle(NewTargCode))->GetPDGMass();
 
- if(MtestPart >=M0target)                        // 31.05.2012
- {                                               // 31.05.2012
-  M0target=MtestPart;                            // 31.05.2012
-  M0target2 = M0target * M0target;               // 31.05.2012
- }                                               // 31.05.2012
+ if(MtestPart > M0target)
+ {M0target=MtestPart;}
+ else
+ {
+  if(std::abs(M0target - target->GetDefinition()->GetPDGMass()) < 140.*MeV)
+  {M0target=MtestPart;}
+ }
 
  TargetDiffStateMinMass   =M0target+220.*MeV;         //220 MeV=m_pi+80 MeV;    
  TargetNonDiffStateMinMass=M0target+220.*MeV;         //220 MeV=m_pi+80 MeV; 
@@ -529,15 +541,6 @@ if(TestParticle)
        } // End of sampling baryon
 
        NewProjCode = NewNucleonId(ProjQ1, ProjQ2, ProjQ3); // *****************************
-
-//G4cout<<"ProjQ1, ProjQ2, ProjQ3 "<<ProjQ1<<" "<<ProjQ2<<" "<<ProjQ3<<" "<<NewProjCode<<G4endl;
-
-//G4int                 TestParticleID=NewProjCode;
-//G4ParticleDefinition* TestParticle=0;
-//G4double              TestParticleMass=DBL_MAX;
-
-//TestParticle=G4ParticleTable::GetParticleTable()->FindParticle(NewProjCode);
-//if(TestParticle) TestParticleMass=TestParticle->GetPDGMass(); 
 
        if((ProjQ1==ProjQ2) && (ProjQ1==ProjQ3)) {NewProjCode +=2; ProjDeltaHasCreated=true;}
        else if(projectile->GetDefinition()->GetPDGiIsospin() == 3)// Projectile was Delta
@@ -674,6 +677,7 @@ if(TargDeltaHasCreated) {ProbProjectileDiffraction=0.; ProbTargetDiffraction=1.;
         target->Set4Momentum(Ptarget);
 
         G4bool Result= theElastic->ElasticScattering (projectile,target,theParameters);
+//G4cout<<"Result of el. scatt "<<Result<<G4endl;
         return Result;
        } // end of if(Make elastic scattering for projectile meson?)
       } else

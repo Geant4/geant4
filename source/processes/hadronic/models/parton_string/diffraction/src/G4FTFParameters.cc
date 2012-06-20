@@ -550,7 +550,7 @@ if(Xtotal-Xelastic != 0.)
               SetProjMinDiffMass(0.5);                               // GeV
               SetProjMinNonDiffMass(0.5);                            // GeV 0.3
 //              SetProbabilityOfProjDiff(0.);                        // Uzhi 3.06.2012 
-              SetProbabilityOfProjDiff((6.2-3.7*std::exp(-sqr(SqrtS-7.)/16.))/Xinel);
+              SetProbabilityOfProjDiff((6.2-3.7*std::exp(-sqr(SqrtS-7.)/16.))/Xinel*0.);
 
               SetTarMinDiffMass(1.16);                               // GeV
               SetTarMinNonDiffMass(1.16);                            // GeV
@@ -571,10 +571,10 @@ if(Xtotal-Xelastic != 0.)
               SetSlopeQuarkExchange(2.25);
               SetDeltaProbAtQuarkExchange(0.6);
 
-              SetProjMinDiffMass(0.7);                               // GeV 0.7 0.6
-              SetProjMinNonDiffMass(0.7);                            // GeV 0.7 0.6
+              SetProjMinDiffMass(0.6);                               // GeV 0.7 0.6
+              SetProjMinNonDiffMass(0.6);                            // GeV 0.7 0.6
 //            SetProbabilityOfProjDiff(0.85*std::pow(s/GeV/GeV,-0.5)); // 40/32 X-dif/X-inel
-              SetProbabilityOfProjDiff(4.7/Xinel);                   // Uzhi 5.06.2012
+              SetProbabilityOfProjDiff(0.*4.7/Xinel);                   // Uzhi 5.06.2012
 
               SetTarMinDiffMass(1.1);                                // GeV
               SetTarMinNonDiffMass(1.1);                             // GeV
@@ -616,6 +616,9 @@ if(Xtotal-Xelastic != 0.)
               SetAveragePt2(0.3);                         // 0.15 GeV^2 Uzhi 21.05.2012
               SetProbLogDistr(0.5);                                  // Uzhi 21.05.2012
              }
+
+             if(theA > 4) SetProbabilityOfProjDiff(0.);     // Uzhi 19.06.2012
+
 //G4cout<<"Param Get Min Dif "<<GetProjMinNonDiffMass()<<G4endl;
 
 // ---------- Set parameters of a string kink -------------------------------
