@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20 June 2012 Pere Mato (exampleN07-V09-05-00)
+- ExN07SteppingVerbose.cc added propection with G4VERBOSE
+
 29 November 2011 Ben Morgan (exampleN07-V09-04-00)
 - CMakeLists.txt edited to add standard UI/Vis activation and copying of scripts
   to build directory, plus comments and neatification.

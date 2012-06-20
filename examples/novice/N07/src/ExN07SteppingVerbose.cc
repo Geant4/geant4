@@ -68,7 +68,9 @@ void ExN07SteppingVerbose::InitializeTimers()
 
   // Set verbosity for timing
   G4RunManagerKernel::GetRunManagerKernel()->GetTrackingManager()->SetVerboseLevel(0);
+#ifdef G4VERBOSE
   fManager->SetVerboseLevel(1);
+#endif
 }
 
 void ExN07SteppingVerbose::Report()
