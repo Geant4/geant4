@@ -373,9 +373,9 @@ void G4DynamicParticle::Set4Momentum(const G4LorentzVector &momentum )
 ////////////////////
 //  --- Dump Information --
 ////////////////////
+#ifdef G4VERBOSE
 void G4DynamicParticle::DumpInfo(G4int mode) const
 {
-#ifdef G4VERBOSE
   if (theParticleDefinition == 0) {
     G4cout << " G4DynamicParticle::DumpInfo():: !!!Particle type not defined !!!! " << G4endl;
   } else {
@@ -400,8 +400,13 @@ void G4DynamicParticle::DumpInfo(G4int mode) const
       }
     }
   }
-#endif
 }
+#else
+void G4DynamicParticle::DumpInfo(G4int) const
+{
+  return;
+}
+#endif
 
 ////////////////////////
 G4double  G4DynamicParticle::GetElectronMass() const
