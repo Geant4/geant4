@@ -345,7 +345,6 @@ G4Step* G4ParticleChange::UpdateStepForPostStep(G4Step* pStep)
   // momentum vector.
 
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint(); 
-  G4Track*     aTrack  = pStep->GetTrack();
 
   // Set Mass/Charge
   pPostStepPoint->SetMass(theMassChange);
@@ -372,6 +371,7 @@ G4Step* G4ParticleChange::UpdateStepForPostStep(G4Step* pStep)
   }
 
 #ifdef G4VERBOSE
+  G4Track*     aTrack  = pStep->GetTrack();
   if (debugFlag) CheckIt(*aTrack);
 #endif
 
@@ -385,7 +385,6 @@ G4Step* G4ParticleChange::UpdateStepForAtRest(G4Step* pStep)
   // A physics process always calculates the final state of the particle
 
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint(); 
-  G4Track*     aTrack  = pStep->GetTrack();
 
   // Set Mass/Charge
   pPostStepPoint->SetMass(theMassChange);
@@ -412,6 +411,7 @@ G4Step* G4ParticleChange::UpdateStepForAtRest(G4Step* pStep)
   }
 
 #ifdef G4VERBOSE
+  G4Track*     aTrack  = pStep->GetTrack();
   if (debugFlag) CheckIt(*aTrack);
 #endif
 
@@ -489,7 +489,9 @@ G4bool G4ParticleChange::CheckIt(const G4Track& aTrack)
   G4bool    exitWithError = false;
   G4double  accuracy;
   static G4int nError = 0;
+#ifdef G4VERBOSE
   const  G4int maxError = 30;
+#endif
 
   // No check in case of "fStopAndKill" 
   if (GetTrackStatus() ==   fStopAndKill )  return G4VParticleChange::CheckIt(aTrack);
@@ -665,6 +667,3 @@ G4bool G4ParticleChange::CheckIt(const G4Track& aTrack)
   itsOK = (itsOK) && G4VParticleChange::CheckIt(aTrack);
   return itsOK;
 }
-
-
-

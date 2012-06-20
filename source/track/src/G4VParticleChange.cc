@@ -320,7 +320,9 @@ G4bool G4VParticleChange::CheckIt(const G4Track& aTrack)
   G4bool    exitWithError = false;
   G4double  accuracy;
   static G4int nError = 0;
+#ifdef G4VERBOSE
   const  G4int maxError = 30;
+#endif
 
   // Energy deposit should not be negative
   G4bool itsOKforEnergy = true;
@@ -395,7 +397,9 @@ G4bool G4VParticleChange::CheckSecondary(G4Track& aTrack)
   G4bool    exitWithError = false;
   G4double  accuracy;
   static G4int nError = 0;
+#ifdef G4VERBOSE
   const  G4int maxError = 30;
+#endif
 
   // MomentumDirection should be unit vector
   G4bool itsOKforMomentum = true;  
@@ -515,17 +519,3 @@ G4bool   G4VParticleChange::IsParentWeightSetByProcess() const
 {
   return  true;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
