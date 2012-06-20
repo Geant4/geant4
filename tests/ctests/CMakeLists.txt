@@ -300,7 +300,7 @@ if(GEANT4_USE_GDML)
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/persistency/gdml/G04
                   BUILD gdml_det)
 endif()
-if(ROOT_FOUND)
+if(ROOT_FOUND AND BUILD_SHARED_LIBS)
   GEANT4_ADD_TEST(example-ext-persistency-p01-write 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/persistency/P01/exampleP01
                           ${CMAKE_SOURCE_DIR}/examples/extended/persistency/P01/run.mac
