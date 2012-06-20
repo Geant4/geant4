@@ -362,7 +362,11 @@ void G4VRangeToEnergyConverter::BuildRangeVector(const G4Material* aMaterial,
 G4double G4VRangeToEnergyConverter::ConvertCutToKineticEnergy(
 				    G4RangeVector* rangeVector,
 				    G4double       theCutInLength, 
+#ifdef G4VERBOSE
 				    size_t         materialIndex
+#else
+                                    size_t
+#endif
 				                              ) const
 {
   const G4double epsilon=0.01;
