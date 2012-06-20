@@ -2296,6 +2296,7 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
                               G4cout<<"*>G4QE::HQE:QIE,***NewEnv***: "<<newE<<G4endl;// ^ ^
 #endif
                               scat=true;                      // Don't fill the Primary ^ ^
+                              delete Q;
                             } //                                                        ^ ^
                           } //                                                          ^ ^
                         } //                                                            ^ ^
