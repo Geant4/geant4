@@ -87,6 +87,10 @@ particles                                        particles-V09-05-05
 - Explicitly use inclusion of headers for system of units and physical
   constants.
 
+particles/management                             partman-V09-05-00
+--------------------
+- Fixed compilation warning in G4DynamicParticle if G4_NO_VERBOSE set.
+
 persistency/mctruth                              mctruth-V09-05-02
 -------------------
 - Corrected GNUMakefile to use $G4BASE instead of $G4INSTALL/source.
@@ -102,8 +106,9 @@ processes/biasing                                procbiasing-V09-05-00
 -----------------
 - Fixed trivial cases of variable shadowing.
 
-processes/cuts                                   procuts-V09-05-02
+processes/cuts                                   procuts-V09-05-03
 --------------
+- Fixed compilation warning in G4VRangeToEnergyConverter if G4_NO_VERBOSE set.
 - Fixed trivial cases of variable shadowing.
 
 processes/electromagnetic/adjoint                emadjoint-V09-05-01
