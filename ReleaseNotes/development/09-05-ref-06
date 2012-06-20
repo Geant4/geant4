@@ -1,0 +1,398 @@
+
+                       geant4-09-05-ref-06
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o Updated internal CLHEP module to version 2.1.2.3.
+ o New data sets G4EMLOW-6.27 and G4NDL-4.1.
+ o Fixes for shadowing of variables all over the code.
+ o Updated version of electron scattering code based on analytical
+   approximation of the Mott cross-section by means of Hose coefficients.
+ o Optimisations to EM processes initialisation.
+ o Added capability to produce fission fragments for those currently
+   neglected, based on ENDF nfy data.
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+cmake                                            cmake-V09-05-29
+-----
+- Complete rewrite of data installation with support for CMake >= 2.6.4
+  and custom physics data install location. Downloaded data bundles are
+  also verified using MD5 hashes.
+- Allow choice between internal and system expat library on non-Win32
+  platforms. Choosing system expat requires it to be found.
+- Fixed problem on Windows, when a space appears in the install prefix.
+- Updated version of data sets: G4EMLOW.6.27 and G4NDL.4.1.
+  Updated CLHEP required version to 2.1.2.3. Updated tags for 9.6-beta.
+
+analysis                                         analysis-V09-05-02
+--------
+- Updated anaylsis tools to g4tools-1.2.0.
+
+digits_hits                                      digits_hits-V09-05-05
+-----------
+- Support 'weighted'/'dividedByArea' options in flatCurrent and flatFlux
+  command-line scorers.
+- Explicitly use inclusion of headers for system of units and physical
+  constants.
+
+error_propagation                                error_propagation-V09-05-02
+-----------------
+- Fixed trivial cases of variable shadowing.
+
+externals                                        externals-V09-05-02
+---------
+- Updated CLHEP module to version 2.1.2.3.
+  * Random, Vector:
+    o More fixes for shadowing when global units used.
+  * Vector, Evaluator, Random, Geometry:
+    o Use explicit std:: with math functions.
+
+g3tog4                                           g3tog4-V09-05-01
+------
+- Fixed trivial cases of variable shadowing.
+
+geometry                                         geometry-V09-05-00
+----------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants.
+
+global                                           global-V09-05-06
+------
+- Correction to G4PhysicsOrderedFreeVector to fix ordering of elements.
+- Explicitly use inclusion of headers for system of units and physical
+  constants and fixed remaining cases of variable shadowing.
+- Changed tag version for 9.6-beta.
+
+graphics_reps                                    greps-V09-05-09
+-------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants.
+
+interfaces                                       interfaces-V09-05-03
+----------
+- G4UIQt: set Cout as default ToolBox widget at startup
+
+materials                                        materials-V09-05-25
+---------
+- Explicitly use inclusion of headers for system of units and physical
+  constants.
+
+particles                                        particles-V09-05-05
+---------
+- Explicitly use inclusion of headers for system of units and physical
+  constants.
+
+persistency/mctruth                              mctruth-V09-05-02
+-------------------
+- Corrected GNUMakefile to use $G4BASE instead of $G4INSTALL/source.
+
+physics_lists                                    phys-lists-V09-05-28
+-------------
+- Using new functionality of cross-sections registry allowing
+  to share the cross sections data sets.
+  Migrated Elastic and DElastic builders and FTFP_BERT and FTFP_BERT_TRV
+  to use factory mechanism for CHIPS cross-sections.
+
+processes/biasing                                procbiasing-V09-05-00
+-----------------
+- Fixed trivial cases of variable shadowing.
+
+processes/cuts                                   procuts-V09-05-02
+--------------
+- Fixed trivial cases of variable shadowing.
+
+processes/electromagnetic/adjoint                emadjoint-V09-05-01
+---------------------------------
+- G4AdjointhMultipleScattering: commented out obsolete call.
+- Fixed cases of variable shadowing.
+
+processes/electromagnetic/dna                    emdna-V09-05-19
+-----------------------------
+- Added G4ITTrackingInteractivity class. 
+- Fixed cases of variable shadowing and corrected Coverity defects.
+
+processes/electromagnetic/highenergy             emhighenergy-V09-05-01
+------------------------------------
+- Fixed cases of variable shadowing.
+
+processes/electromagnetic/lowenergy              emlowen-V09-05-23
+-----------------------------------
+- Fixed cases of variable shadowing. Coverity fix of G4MUComptonModel.
+- New data set G4EMLOW.6.27.
+
+processes/electromagnetic/muons                  emmuons-V09-05-01
+-------------------------------
+- Fixed cases of variable shadowing in G4MuIonisation.
+
+processes/electromagnetic/pii                    empii-V09-05-01
+-----------------------------
+- Fixed trivial cases of variable shadowing.
+
+processes/electromagnetic/polarisation           empolar-V09-05-00
+--------------------------------------
+- Fixed cases of variable shadowing.
+
+processes/electromagnetic/standard               emstand-V09-05-28
+----------------------------------
+- G4ScreeningMottCrossSection, G4eSingleCoulombScatteringModel: updated
+  version of electron scattering code based on analytical approximation of
+  the Mott cross-section by means of Hose coefficients. Added new class
+  G4MottCoefficients.
+- G4WentzelVIModel: fixed sampling of single scattering.
+- G4eMultipleScattering, G4hMultipleScattering: minor optimisation
+  at initialisation.
+- G4SeltzerBergerModel: fixed minor problem of sampling for positrons;
+  more accurate simulation of tail for e+ and more effective sampling of
+  energy; made internal data structure static to be used by both e+ and e-
+  models and providing some memory reduction; use simplified computation of
+  majoranta valid for data with more detailed grid.
+- G4DipBustGenerator: fixed model description.
+- G4eBremsstrahlungRelModel: switched full screening off.
+- G4eplusAnnihilation: fixed propagate weight to secondaries.
+- G4GoudsmitSaundersonMscModel: fixed precision lost providing FPE.
+- Fixes for variable shadowing.
+
+processes/electromagnetic/utils                  emutils-V09-05-19
+-------------------------------
+- G4VMscModel: optimisation of inline methods. Allow build of transport
+  cross-section table for d, t, He3, He4.
+- G4VMultipleScattering: optimisation of initialisation and reduced
+  number of checks at run time.
+- G4LossTableManager: moved inline methods to source.
+- G4VEnergyLossProcess: fix for forced biasing, now forcing if step==1.
+  Addressing problem report #1314.
+- G4EmBiasingmanager: added check on number of secondaries PostStep,
+  if not 1 then disable both splitting and Russian roulette, this does not
+  affect ordinary delta-electron and Bremssrahlung secondary biasing.
+  Dynamic weight approach (weight is function of secondary energy) is applied
+  for Russian roulette if biasing limit energy is set below 1 GeV,
+  alternatively costant factor is used.
+- G4EmBiasingManager, G4VEmProcess, G4VEnergyLossProcess,
+  G4EmProcessOptions, G4EnergyLossMessenger: change Bremssrahlung splitting
+  to EGS-style with unique secondaries. Only Bremssrahlung split particles
+  with weight > 1/N (N=brem splitting factor), and only Russian Roulette
+  with weight < 1. Energy limit no longer used.
+  Set weight consistently for forced interaction and cross-section biasing
+  in G4VEmProcess and G4VEnergyLossProcess.
+- Fixes for variable shadowing.
+
+processes/electromagnetic/xrays                  xrays-V09-05-04
+-------------------------------
+- Fixed Coverity warnings and variable shadowing.
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V09-05-15)
+  o Extended functionality of G4CrossSectionDataSetRegistry to allow
+    sharing of cross-sections sets.
+  o New class G4ComponentSAIDTotalXS for SAID cross-sections.
+  o Use new cross-sections factory for CHIPS elastic and inelastic
+    cross-sections.
+  o Fixed trivial cases of variable shadowing.
+- management (hadr-man-V09-05-08)
+  o G4HadronicProcess: removed methods ResetNumberOfInteractionLengthLeft()
+    and GetTotalNumberOfInteractionLengthTraversed() as these have been
+    moved to G4VProcess.
+  o Fixed trivial cases of variable shadowing.
+- models/abrasion (had-abrasion-V09-05-00)
+- models/binary_cascade (had-binary-V09-05-03)
+- models/cascade (hadr-casc-V09-05-12)
+  o Fixed cases of variable shadowing.
+- models/chiral_inv_phase_space/body (hadr-chips-body-V09-05-07)
+  o Fix memory leak in G4QEnvironment.
+  o Fixed cases of variable shadowing.
+- models/chiral_inv_phase_space/cross_sections (hadr-chips-cs-V09-05-04)
+- models/chiral_inv_phase_space/fragmentation (hadr-chips-frag-V09-05-04)
+- models/chiral_inv_phase_space/interface (hadr-chips-inter-V09-05-02)
+- models/chiral_inv_phase_space/processes (hadr-chips-proc-V09-05-03)
+- models/coherent_elastic (hadr-cohe-V09-05-07)
+- models/de_excitation (hadr-deex-V09-05-07)
+- models/em_dissociation (hadr-emd-V09-05-00)
+- models/high_energy (hadr-hep-V09-05-03)
+- models/im_r_matrix (hadr-im_r-V09-05-04)
+  o Fixed cases of variable shadowing.
+- models/inclxx (hadr-inclxx-V09-05-16)
+  o Updated to INCL++ v5.1: interface returns an empty G4HadFinalState if
+    no inelastic event could be produced.
+  o Fixed cases of variable shadowing.
+- models/isotope_production (hadr-isopro-V09-05-01)
+- models/lend (hadr-lend-V09-05-01)
+- models/lll_fission (hadr-lllfis-V09-05-00)
+- models/low_energy (hadr-lep-V09-05-08)
+  o Fixed cases of variable shadowing.
+- models/neutron_hp (hadr-hpn-V09-05-14)
+  o Added protection of huge Ep breakdown caused by a miss match between
+    cross-section data set and model
+    Added final momentum check win G4NeutronHPInelasticBaseFS.
+    Added method to loosen check for bad energy violation and allow for big
+    differences when G4NEUTRONHP_DO_NOT_ADJUST_FINAL_STATE is set.
+  o Removed unnecessary debug output produced by G4NeutronHPCapture.
+  o Use QI values for limiting the products energies in
+    G4NeutronHPInelasticCompFS.
+  o Added isotropic emission in CM system.
+  o Added non LIN-LIN interpolation and 2D interpolation.
+  o Added capability to produce fission fragments for those currently
+    neglected, based on ENDF nfy data; enable by setting environment variable
+    G4NEUTRONHP_PRODUCE_FISSION_FRAGMENTS.
+    New data set G4NDL.4.1.
+  o Added excited isomer index and methods in G4NeutronHPFinalState and
+    G4NeutronHPDataUsed. Updated relevant sources accordingly.
+  o Fixed cases of variable shadowing.
+- models/parton_string/diffraction (hadr-string-diff-V09-05-11)
+  o Improved diffraction dissociation of p/pi/k-mesons.
+    Fit of exp. data on p/pi/k + H.
+    Good results are obtained for h+A interactions.
+  o Introduced new energy dependences for diffraction cross-sections.
+  o Improved quark exchange algorithm. Strings with large masses
+    are now allowed to save their masses.
+  o Increased Pt transfer in excitation up to 0.3 GeV/c.
+  o Changed string mass sampling for baryon like strings.
+  o Safer implementation of the static pointer for cross-sections.
+  o Bug-fixes in PutOnMassShell() and high energy anti-baryons in FTF model.
+    Fixed bug for K-minus interactions.
+  o Fixed cases of variable shadowing.
+- models/parton_string/hadronization (had-hadronization-V09-05-03)
+- models/parton_string/management (had-partonstring-mgt-V09-05-02)
+- models/parton_string/qgsm (hadr-qgsm-V09-05-02)
+  o Fixed cases of variable shadowing.
+- models/photolepton_hadron/muon_nuclear (hadr-munuclear-V09-05-06)
+  o G4MuonVDNuclearModel: fixed negative KE bug in CalculateHadronicVertex().
+  o Fixed cases of variable shadowing.
+- models/qmd (hadr-qmd-V09-05-01)
+- models/quasi_elastic (hadr-qelastic-V09-05-03)
+- models/radioactive_decay (radioactive_decay-V09-05-02)
+- models/rpg (hadr-rpg-V09-05-00)
+- models/theo_high_energy (had-theo-HE-V09-05-02)
+- models/util (hadr-mod-util-V09-05-00)
+- processes (hadr-proc-V09-05-04)
+- stopping (hadr-stopping-V09-05-12)
+- util (hadr-util-V09-05-04)
+
+processes/management                             procman-V09-05-01
+--------------------
+- Added GetTotalNumberOfInteractionLengthTraversed() method to G4VProcess.
+- Move virtual inlined methods to source.
+- Fixed trivial case of variable shadowing in G4ProcessVector.
+
+processes/optical                                op-V09-05-03
+-----------------
+- Fixed trivial cases of variable shadowing.
+
+processes/scoring                                procscore-V09-05-01
+-----------------
+- Fixed trivial case of variable shadowing in G4EnergySplitter.
+
+processes/transportation                         transport-V09-05-00
+------------------------
+- Fixed trivial cases of variable shadowing.
+
+track                                            track-V09-05-12
+-----
+- Fix in G4VelocityTable::Interpolation().
+- Explicitly use inclusion of headers for system of units and physical
+  constants.
+- Fixed compilation warnings when G4_NO_VERBOSE is set.
+
+tracking                                         tracking-V09-05-02
+--------
+- Explicitly use inclusion of headers for system of units and physical
+  constants.
+
+visualization                                    vis-V09-05-28
+-------------
+- Fixed cases of variable shadowing.
+- management:
+  o Added UI commands /vis/scene/add/line(2D) and arrow(2D).
+  o Some fixes for Coverity defects.
+- modeling:
+  o Brought stray print statement under control of verbosity.
+    Addressing problem report #1310.
+- OpenGL:
+  o Fixed drawing of non-display-list text.
+  o Fixed drawing of trajectories when no memory from display lists.
+  o Fixed cases of extra drawing, causing loss of trajectories.
+  o Added UI command /vis/ogl/set/eventsDrawInterval.
+
+data sets
+---------
+- G4EMLOW-6.27:
+  o added updated Bremsstrahlung data files with extended grid from NIST
+    (as in Penelope2008); added probabilities of scattering off electrons
+    from S.M.Seltzer and M.J.Berger Atom. Data and Nucl. Data Tables
+    35 (1986) 345-418.
+- G4NDL-4.1:
+  o Most data is converted from ENDF/B-VII.r1 with processing by
+    NJOY-99.u364 with reconstruction tolerance of 0.001.
+    Following isotopes are exception: Cl35 (same as v.4.0), MT600,
+    4Be7, 25Mn55, 33As74, 39Y90, 40Zr90, 40Zr91, 40Zr92, 40Zr93, 40Zr94,
+    40Zr95, 40Zr96, 69Tm168, 69Tm169, 69Tm170, 74W180, 74W182, 74W183,
+    74W184, 74W186, 90Th232, 91Pa231 and 91Pa232.
+  o New independent and cumulative fission product yield data within
+    Fission/FF module, originating from ENDF/B-VII.1 neutron fis.yields
+    sub-library.
+
+examples                                         examples-V09-05-06
+--------
+- Updated reference outputs.
+- advanced/hadrontherapy (hadrontherapy-V09-05-01)
+  o Use std::string::size_type for string length instead of int
+    in HadrontherapyMatrix::ion. Fixes compilation warning on gcc-4.7.
+- advanced/human_phantom (human_phantom-V09-05-01)
+  o Make destructor virtual in G4BasePhantomBuilder.
+- advanced/iort_therapy (iort_therapy-V09-05-02)
+  o Use std::string::size_type for string length instead of int
+    in IORTMatrix::ion. Fixes compilation warning on gcc-4.7.
+- advanced/medical_linac (medical_linac-V09-05-06)
+  o Fixed incorrect string comparison in ML2PhantomConstruction.
+    Fixes compilation warning MacOSX/clang.
+  o Dummy initialisation for voxel.volumeId to zero in
+    CML2ExpVoxels::loadData(). Fixes compilation warning on gcc-4.7.
+- advanced/xray_fluorescence (XrayFluo-V09-05-02)
+  o Fixed compilation warnings for extra parenthesis from MacOSX/clang.
+- extended/analysis (analysisExample-V09-05-03)
+  o Apply new coding conventions in shared classes.
+- extended/analysis/AnaEx03 (AnaEx03-V09-05-00)
+  o Fixed compilation warnings in case analysis is not used.
+- extended/common (excommon-V09-05-00)
+  o Updated scripts for copying shared files.
+    Shared files are now defined in the SharedFilesList.txt file.
+- extended/electromagnetic/TestEm0 (testem0-V09-05-01)
+  o Updated PhyListEmStandard for GenericIon.
+- extended/eventgenerator/pythia/decayer6 (p6decayer-V09-05-01)
+  o Updated pythia6_decayer.in macro: added initialization (now required);
+    added call to /pythia6Decayer/verbose.
+  o Limited G4Pythia6Decayer verbose levels to 0, 1
+  o Updated Pythia6 version in README file
+- extended/g3tog4 (g3tog4Tests-V09-05-00)
+  o Removed cltog4 example, duplication of clGeometry.
+  o Restructured clGeometry for use of classes from common.
+    Applied coding guidelines and code clean-up.
+    Changed gun particle position & direction in test macros to get particles
+    to go through volumes inside HALL.
+- extended/medical/electronScattering2 (exampleES2-V09-05-00)
+  o Corrected area calculation in ElectronRun.
+  o Apply new coding guidelines.
+- extended/medical/DICOM (DICOM-V09-05-02)
+  o Assign return value for fread() and fscanf() calls in DicomHandler.
+    Fixes compilation warnings on Ubuntu.
+- extended/persistency/P01 (exampleP01-V09-05-04)
+  o Disable building example if static libraries are build.
+
+tests                                            tests-V09-05-06
+-----
+- Updated reference outputs and tools.
+- tests/test11 (test11-V09-05-00)
+  o Commented out cross-section dump, to reduce output produced.
+- tests/test22 (test22-V09-05-02)
+  o Moved to use new modular physics list Tst22ModularPhysicsList
+    which was derived from Tst22PhysicsList; deleted Tst22PhysicsList. 
+  o Tst22EMPhysics: added biasing factor of 100 for Photo-nuclear,
+    and changed to 1,000,000 for electro-nuclear.
+  o New script  'process-GammaN.awk' to process output of short
+    runs. to check whether the interactions under test do occur.
+  o Revised input file to test all particles with all materials.
