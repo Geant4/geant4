@@ -18,7 +18,7 @@ Major development/fixes included since the last development tag are:
 
 Summarised, the list of changes is the following:
 
-cmake                                            cmake-V09-05-29
+cmake                                            cmake-V09-05-30
 -----
 - Complete rewrite of data installation with support for CMake >= 2.6.4
   and custom physics data install location. Downloaded data bundles are
@@ -277,6 +277,7 @@ processes/hadronic
 - processes (hadr-proc-V09-05-04)
 - stopping (hadr-stopping-V09-05-12)
 - util (hadr-util-V09-05-04)
+  o Fixed cases of variable shadowing.
 
 processes/management                             procman-V09-05-01
 --------------------
@@ -326,7 +327,7 @@ visualization                                    vis-V09-05-28
 data sets
 ---------
 - G4EMLOW-6.27:
-  o added updated Bremsstrahlung data files with extended grid from NIST
+  o Added updated Bremsstrahlung data files with extended grid from NIST
     (as in Penelope2008); added probabilities of scattering off electrons
     from S.M.Seltzer and M.J.Berger Atom. Data and Nucl. Data Tables
     35 (1986) 345-418.
