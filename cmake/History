@@ -30,6 +30,12 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21th June 2012 - Gunter Folger  (cmake-V09-05-30)
+- After recreating G4NDL4.1, update md5sum.
+
+20th June 2012 - Gunter Folger  (cmake-V09-05-29) 
+- Modules/Geant4InstallData.cmake: Use G4NDL 4.1
+
 15th June 2012 - Gabriele Cosmo (cmake-V09-05-28)
 - Updated tags to 9.6.0 for 9.6-beta.
 
