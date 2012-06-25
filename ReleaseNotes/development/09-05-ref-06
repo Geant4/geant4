@@ -129,9 +129,10 @@ processes/electromagnetic/highenergy             emhighenergy-V09-05-01
 ------------------------------------
 - Fixed cases of variable shadowing.
 
-processes/electromagnetic/lowenergy              emlowen-V09-05-23
+processes/electromagnetic/lowenergy              emlowen-V09-05-25
 -----------------------------------
-- Fixed cases of variable shadowing. Coverity fix of G4MUComptonModel.
+- Fixes to G4MUComptonModel.
+- Fixed cases of variable shadowing.
 - New data set G4EMLOW.6.27.
 
 processes/electromagnetic/muons                  emmuons-V09-05-01
