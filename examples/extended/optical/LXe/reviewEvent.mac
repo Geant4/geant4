@@ -1,0 +1,6 @@
+#quickly review a particular event
+#replace file name with that of the correct event
+
+/random/resetEngineFrom random/run0.rndm
+/tracking/verbose 1
+/run/beamOn

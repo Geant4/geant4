@@ -1,0 +1,9 @@
+/control/execute defaults.mac
+/LXe/detector/volumes/wls 1
+/LXe/detector/volumes/lxe 0
+/LXe/detector/nfibers 15
+/LXe/detector/WLSScintYield 10000
+/LXe/detector/update
+/gun/particle e-
+/gun/energy 511 keV
+
