@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/src/F04FocusSolenoid.cc
+/// \brief Implementation of the F04FocusSolenoid class
 //
 //
-
 #include "globals.hh"
 
 #include "G4GeometryManager.hh"
@@ -35,34 +36,38 @@
 #include "F04FocusSolenoid.hh"
 #include "F04SimpleSolenoid.hh"
 
-F04FocusSolenoid::F04FocusSolenoid(G4double Ba, G4double Bb, G4double fz,
-                                G4LogicalVolume* lv, 
-                                G4ThreeVector c) : F04SimpleSolenoid(B1, fz, lv, c) 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-{  
-   B1 = Ba;
-   B2 = Bb;
-   Half = false;
+F04FocusSolenoid::F04FocusSolenoid(G4double Ba, G4double Bb, G4double fz,
+                           G4LogicalVolume* lv,
+                           G4ThreeVector c) : F04SimpleSolenoid(Ba, fz, lv, c)
+
+{
+   fHalf = false;
+   fB1 = Ba;
+   fB2 = Bb;
 }
 
-void F04FocusSolenoid::addFieldValue(const G4double point[4],
-                                         G4double field[6]) const
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void F04FocusSolenoid::AddFieldValue(const G4double point[4],
+                                           G4double field[6]) const
 {
    G4ThreeVector global(point[0],point[1],point[2]);
 
-   G4ThreeVector local = global2local.TransformPoint(global);
+   G4ThreeVector local = fGlobal2local.TransformPoint(global);
 
-   if (isOutside(local)) return;
+   if (IsOutside(local)) return;
 
-   G4double length = ((F04SimpleSolenoid*)this)->getLength();
+   G4double length = ((F04SimpleSolenoid*)this)->GetLength();
 
-   G4double Bz = (B2-B1) * std::abs(local.z())/(length/2.) + B1;
+   G4double Bz = (fB2-fB1) * std::abs(local.z())/(length/2.) + fB1;
 
-   if (Half) { if (local.z() >= 0.) Bz = B1; }
+   if (fHalf) { if (local.z() >= 0.) Bz = fB1; }
 
    G4ThreeVector B(0.0,0.0,Bz);
 
-   B = global2local.Inverse().TransformAxis(B);
+   B = fGlobal2local.Inverse().TransformAxis(B);
 
    field[0] += B[0];
    field[1] += B[1];

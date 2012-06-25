@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/src/F04OpticalPhysics.cc
+/// \brief Implementation of the F04OpticalPhysics class
 //
 //
-
 #include "globals.hh"
 
 #include "G4Scintillation.hh"
@@ -39,10 +40,16 @@
 
 #include "F04OpticalPhysics.hh"
 
-F04OpticalPhysics::F04OpticalPhysics()
-    : G4VPhysicsConstructor("Optical") { }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F04OpticalPhysics::~F04OpticalPhysics() { }
+F04OpticalPhysics::F04OpticalPhysics()
+    : G4VPhysicsConstructor("Optical") {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+F04OpticalPhysics::~F04OpticalPhysics() {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
@@ -53,6 +60,8 @@ void F04OpticalPhysics::ConstructParticle()
 {
   G4OpticalPhoton::OpticalPhotonDefinition();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ProcessManager.hh"
 
@@ -70,7 +79,7 @@ void F04OpticalPhysics::ConstructProcess()
   G4OpBoundaryProcess* theBoundaryProcess = new G4OpBoundaryProcess();
   G4OpWLS* theWLSProcess=new G4OpWLS();
 
-  G4ProcessManager* pManager = 
+  G4ProcessManager* pManager =
                 G4OpticalPhoton::OpticalPhoton()->GetProcessManager();
 
   if (!pManager) {
@@ -80,13 +89,9 @@ void F04OpticalPhysics::ConstructProcess()
                   FatalException,o.str().c_str());
   }
 
-
   pManager->AddDiscreteProcess(theAbsorptionProcess);
   pManager->AddDiscreteProcess(theRayleighScattering);
   pManager->AddDiscreteProcess(theMieHGScatteringProcess);
-
-  theBoundaryProcess->SetModel(unified);
-//  theBoundaryProcess->SetModel(glisur);
 
   pManager->AddDiscreteProcess(theBoundaryProcess);
 

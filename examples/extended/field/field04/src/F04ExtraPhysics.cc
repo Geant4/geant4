@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/src/F04ExtraPhysics.cc
+/// \brief Implementation of the F04ExtraPhysics class
 //
 //
-
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
@@ -36,16 +37,24 @@
 
 #include "F04ExtraPhysics.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 F04ExtraPhysics::F04ExtraPhysics() 
-    : G4VPhysicsConstructor("Extra") { }
+    : G4VPhysicsConstructor("Extra") {}
 
-F04ExtraPhysics::~F04ExtraPhysics() { }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void F04ExtraPhysics::ConstructParticle() { }
+F04ExtraPhysics::~F04ExtraPhysics() {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void F04ExtraPhysics::ConstructParticle() {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F04ExtraPhysics::ConstructProcess()
 {
-    G4cout << "F04ExtraPhysics:: Add Extra Physics Processes" 
+    G4cout << "F04ExtraPhysics:: Add Extra Physics Processes"
               << G4endl;
 
     theParticleIterator->reset();

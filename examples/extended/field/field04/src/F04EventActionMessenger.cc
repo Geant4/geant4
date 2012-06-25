@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/src/F04EventActionMessenger.cc
+/// \brief Implementation of the F04EventActionMessenger class
 //
 //
-
 #include "globals.hh"
 
 #include "G4UIcmdWithAString.hh"
@@ -35,44 +36,50 @@
 #include "F04EventAction.hh"
 #include "F04EventActionMessenger.hh"
 
-F04EventActionMessenger::F04EventActionMessenger(F04EventAction* EvAct)
-     :eventAction(EvAct)
-{ 
-  setVerboseCmd = new G4UIcmdWithAnInteger("/event/setverbose",this);
-  setVerboseCmd->SetGuidance("Set verbose level ." );
-  setVerboseCmd->SetParameterName("level",true);
-  setVerboseCmd->SetDefaultValue(0);
-  
-  DrawCmd = new G4UIcmdWithAString("/event/drawTracks",this);
-  DrawCmd->SetGuidance("Draw the tracks in the event");
-  DrawCmd->SetGuidance("  Choice : none,charged, all");
-  DrawCmd->SetParameterName("choice",true);
-  DrawCmd->SetDefaultValue("all");
-  DrawCmd->SetCandidates("none charged all");
-  DrawCmd->AvailableForStates(G4State_Idle);
-  
-  PrintCmd = new G4UIcmdWithAnInteger("/event/printModulo",this);
-  PrintCmd->SetGuidance("Print events modulo n");
-  PrintCmd->SetParameterName("EventNb",false);
-  PrintCmd->SetRange("EventNb>0");
-  PrintCmd->AvailableForStates(G4State_Idle);     
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+F04EventActionMessenger::F04EventActionMessenger(F04EventAction* eventAction)
+     :fEventAction(eventAction)
+{
+  fSetVerboseCmd = new G4UIcmdWithAnInteger("/event/setverbose",this);
+  fSetVerboseCmd->SetGuidance("Set verbose level ." );
+  fSetVerboseCmd->SetParameterName("level",true);
+  fSetVerboseCmd->SetDefaultValue(0);
+
+  fDrawCmd = new G4UIcmdWithAString("/event/drawTracks",this);
+  fDrawCmd->SetGuidance("Draw the tracks in the event");
+  fDrawCmd->SetGuidance("  Choice : none,charged, all");
+  fDrawCmd->SetParameterName("choice",true);
+  fDrawCmd->SetDefaultValue("all");
+  fDrawCmd->SetCandidates("none charged all");
+  fDrawCmd->AvailableForStates(G4State_Idle);
+
+  fPrintCmd = new G4UIcmdWithAnInteger("/event/printModulo",this);
+  fPrintCmd->SetGuidance("Print events modulo n");
+  fPrintCmd->SetParameterName("EventNb",false);
+  fPrintCmd->SetRange("EventNb>0");
+  fPrintCmd->AvailableForStates(G4State_Idle);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F04EventActionMessenger::~F04EventActionMessenger()
 {
-  delete setVerboseCmd;
-  delete DrawCmd;
-  delete PrintCmd;    
+  delete fSetVerboseCmd;
+  delete fDrawCmd;
+  delete fPrintCmd;
 }
 
-void F04EventActionMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
-{ 
-  if(command == setVerboseCmd)
-    {eventAction->SetEventVerbose(setVerboseCmd->GetNewIntValue(newValue));}
-    
-  if(command == DrawCmd)
-    {eventAction->SetDrawFlag(newValue);}
-    
-  if(command == PrintCmd)
-    {eventAction->SetPrintModulo(PrintCmd->GetNewIntValue(newValue));}               
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void F04EventActionMessenger::
+                          SetNewValue(G4UIcommand * command,G4String newValue)
+{
+  if(command == fSetVerboseCmd)
+    fEventAction->SetEventVerbose(fSetVerboseCmd->GetNewIntValue(newValue));
+ 
+  if(command == fDrawCmd)fEventAction->SetDrawFlag(newValue);
+
+  if(command == fPrintCmd)
+    fEventAction->SetPrintModulo(fPrintCmd->GetNewIntValue(newValue));
 }

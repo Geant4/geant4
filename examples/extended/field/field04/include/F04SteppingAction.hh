@@ -23,13 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/include/F04SteppingAction.hh
+/// \brief Definition of the F04SteppingAction class
 //
 //
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #ifndef F04SteppingAction_h
 #define F04SteppingAction_h 1
 
@@ -44,13 +41,13 @@ class F04SteppingAction : public G4UserSteppingAction
   public:
 
     F04SteppingAction();
-    ~F04SteppingAction();
+    virtual ~F04SteppingAction();
 
-    void UserSteppingAction(const G4Step*);
+    virtual void UserSteppingAction(const G4Step*);
 
   private:
 
-    F04SteppingActionMessenger*    steppingMessenger;
+    F04SteppingActionMessenger*    fSteppingMessenger;
 
 };
 

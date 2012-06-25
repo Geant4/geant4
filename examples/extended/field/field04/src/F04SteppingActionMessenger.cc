@@ -23,24 +23,32 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/src/F04SteppingActionMessenger.cc
+/// \brief Implementation of the F04SteppingActionMessenger class
 //
 //
-
 #include "G4UIdirectory.hh"
 #include "F04SteppingAction.hh"
 
 #include "F04SteppingActionMessenger.hh"
 
-F04SteppingActionMessenger::F04SteppingActionMessenger(F04SteppingAction* SA)
-  : steppingAction (SA)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+F04SteppingActionMessenger::
+                 F04SteppingActionMessenger(F04SteppingAction* steppingAction)
+  : fSteppingAction (steppingAction)
 {
-  steppingDir = new G4UIdirectory("/stepping/");
-  steppingDir->SetGuidance("stepping control");
+  fSteppingDir = new G4UIdirectory("/stepping/");
+  fSteppingDir->SetGuidance("stepping control");
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F04SteppingActionMessenger::~F04SteppingActionMessenger()
 {
-  delete steppingDir;
+  delete fSteppingDir;
 }
 
-void F04SteppingActionMessenger::SetNewValue(G4UIcommand*, G4String) { }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void F04SteppingActionMessenger::SetNewValue(G4UIcommand*, G4String) {}

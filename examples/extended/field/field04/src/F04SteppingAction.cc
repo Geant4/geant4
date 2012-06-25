@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/src/F04SteppingAction.cc
+/// \brief Implementation of the F04SteppingAction class
 //
 //
-
 #include "G4Track.hh"
 
 #include "F04SteppingAction.hh"
@@ -36,15 +37,21 @@
 
 #include "F04UserTrackInformation.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 F04SteppingAction::F04SteppingAction()
 {
-  steppingMessenger = new F04SteppingActionMessenger(this);
+  fSteppingMessenger = new F04SteppingActionMessenger(this);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F04SteppingAction::~F04SteppingAction()
 {
-  delete steppingMessenger ;
+  delete fSteppingMessenger ;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F04SteppingAction::UserSteppingAction(const G4Step* theStep)
 {
@@ -95,7 +102,7 @@ void F04SteppingAction::UserSteppingAction(const G4Step* theStep)
 //  G4double z = theTrack->GetPosition().z();
 
   F04UserTrackInformation* trackInformation =
-                        (F04UserTrackInformation*)theTrack->GetUserInformation();
+                      (F04UserTrackInformation*)theTrack->GetUserInformation();
 
   if (trackInformation->GetTrackStatusFlag() != reverse) {
      if (thePrePVname  != "Target" ) {
@@ -111,7 +118,8 @@ void F04SteppingAction::UserSteppingAction(const G4Step* theStep)
   if (theTrack->GetTrackStatus() == fAlive) { return; }
 
   if (thePostPoint->GetProcessDefinedStep() != 0) {
-     if (thePostPoint->GetProcessDefinedStep()->GetProcessName() != "Decay") return;
+     if (thePostPoint->GetProcessDefinedStep()->GetProcessName() != "Decay")
+                                                                       return;
   }
 
 }

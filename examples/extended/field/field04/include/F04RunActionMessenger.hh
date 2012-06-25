@@ -23,13 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/include/F04RunActionMessenger.hh
+/// \brief Definition of the F04RunActionMessenger class
 //
 //
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #ifndef F04RunActionMessenger_h
 #define F04RunActionMessenger_h 1
 
@@ -49,18 +46,18 @@ class F04RunActionMessenger : public G4UImessenger
   public:
 
     F04RunActionMessenger(F04RunAction* );
-    ~F04RunActionMessenger();
+    virtual ~F04RunActionMessenger();
 
-    void SetNewValue(G4UIcommand* ,G4String );
+    virtual void SetNewValue(G4UIcommand* ,G4String );
 
   private:
 
-    F04RunAction*                 runAction;
-   
-    G4UIdirectory*             RndmDir;
-    G4UIcmdWithAnInteger*      RndmSaveCmd;    
-    G4UIcmdWithAString*        RndmReadCmd;
-    G4UIcmdWithABool*          SetAutoSeedCmd;
+    F04RunAction*              fRunAction;
+
+    G4UIdirectory*             fRndmDir;
+    G4UIcmdWithAnInteger*      fRndmSaveCmd;
+    G4UIcmdWithAString*        fRndmReadCmd;
+    G4UIcmdWithABool*          fSetAutoSeedCmd;
  
 };
 

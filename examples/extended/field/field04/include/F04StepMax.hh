@@ -23,13 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/include/F04StepMax.hh
+/// \brief Definition of the F04StepMax class
 //
 //
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #ifndef F04StepMax_h
 #define F04StepMax_h 1
 
@@ -46,23 +43,25 @@ class F04StepMax : public G4VDiscreteProcess
     F04StepMax(const G4String& processName = "UserStepMax");
     F04StepMax(F04StepMax &);
 
-    ~F04StepMax();
+    virtual ~F04StepMax();
 
-    G4bool IsApplicable(const G4ParticleDefinition&);
+    virtual G4bool IsApplicable(const G4ParticleDefinition&);
 
     void SetStepMax(G4double);
 
-    G4double GetStepMax() {return MaxChargedStep;};
+    G4double GetStepMax() {return fMaxChargedStep;};
 
-    G4double PostStepGetPhysicalInteractionLength(const G4Track& track,
-                                                  G4double previousStepSize,
-                                                  G4ForceCondition* condition);
+    virtual G4double PostStepGetPhysicalInteractionLength(const G4Track&,
+                                                          G4double,
+                                                          G4ForceCondition*);
 
-    G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+    virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 
   protected:
 
-    G4double GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*);
+    virtual G4double GetMeanFreePath(const G4Track&,
+                                     G4double,
+                                     G4ForceCondition*);
 
   private:
 
@@ -70,8 +69,9 @@ class F04StepMax : public G4VDiscreteProcess
     F04StepMax & operator=(const F04StepMax &right);
     F04StepMax(const F04StepMax&);
 
-  private: 
-    G4double MaxChargedStep;
+  private:
+
+    G4double fMaxChargedStep;
 
 };
 

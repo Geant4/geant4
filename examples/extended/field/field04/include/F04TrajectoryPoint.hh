@@ -23,13 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/include/F04TrajectoryPoint.hh
+/// \brief Definition of the F04TrajectoryPoint class
 //
 //
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #ifndef F04TrajectoryPoint_h
 #define F04TrajectoryPoint_h 1
 
@@ -84,10 +81,10 @@ class F04TrajectoryPoint : public G4TrajectoryPoint {
 
 // Member data
 
-    G4double fTime;
+    G4double      fTime;
     G4ThreeVector fMomentum;
-    G4StepStatus fStepStatus;
-    G4String fVolumeName;
+    G4StepStatus  fStepStatus;
+    G4String      fVolumeName;
 
 };
 

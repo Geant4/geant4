@@ -23,13 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/include/F04RunAction.hh
+/// \brief Definition of the F04RunAction class
 //
 //
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #ifndef F04RunAction_h
 #define F04RunAction_h 1
 
@@ -45,24 +42,24 @@ class F04RunAction : public G4UserRunAction
   public:
 
     F04RunAction();
-   ~F04RunAction();
+    virtual ~F04RunAction();
 
   public:
 
-    void BeginOfRunAction(const G4Run*);
-    void EndOfRunAction(const G4Run*);
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void EndOfRunAction(const G4Run*);
 
-    void  SetRndmFreq(G4int val) {saveRndm = val;}
-    G4int GetRndmFreq()          {return saveRndm;}
+    void  SetRndmFreq(G4int val) {fSaveRndm = val;}
+    G4int GetRndmFreq()          {return fSaveRndm;}
 
-    inline void SetAutoSeed (const G4bool val) {autoSeed = val;}
+    inline void SetAutoSeed (const G4bool val) {fAutoSeed = val;}
 
   private:
  
-    F04RunActionMessenger* runMessenger;
+    F04RunActionMessenger* fRunMessenger;
 
-    G4int saveRndm;
-    G4bool autoSeed;
+    G4int fSaveRndm;
+    G4bool fAutoSeed;
 
 };
 

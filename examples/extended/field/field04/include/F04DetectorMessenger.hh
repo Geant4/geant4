@@ -23,15 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/include/F04DetectorMessenger.hh
+/// \brief Definition of the F04DetectorMessenger class
 //
-// $Id: F04DetectorMessenger.hh,v 1.1 2007-10-30 02:01:47 gum Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #ifndef F04DetectorMessenger_h
 #define F04DetectorMessenger_h 1
 
@@ -51,42 +46,42 @@ class F04DetectorMessenger : public G4UImessenger
   public:
 
     F04DetectorMessenger(F04DetectorConstruction* );
-    ~F04DetectorMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
-    
+    virtual ~F04DetectorMessenger();
+
+    virtual void SetNewValue(G4UIcommand*, G4String);
+ 
   private:
 
-    F04DetectorConstruction*   Detector;
-    
-    G4UIdirectory*          detDir;
+    F04DetectorConstruction*   fDetector;
 
-    G4UIcmdWithAString*        WorldMaterCmd;
-    G4UIcmdWithADoubleAndUnit* WorldRCmd;
-    G4UIcmdWithADoubleAndUnit* WorldZCmd;
+    G4UIdirectory*          fDetDir;
 
-    G4UIcmdWithADoubleAndUnit* CaptureRCmd;
-    G4UIcmdWithADoubleAndUnit* CaptureZCmd;
-    G4UIcmdWithADoubleAndUnit* CaptureB1Cmd;
-    G4UIcmdWithADoubleAndUnit* CaptureB2Cmd;
+    G4UIcmdWithAString*        fWorldMaterCmd;
+    G4UIcmdWithADoubleAndUnit* fWorldRCmd;
+    G4UIcmdWithADoubleAndUnit* fWorldZCmd;
 
-    G4UIcmdWithADoubleAndUnit* TransferRCmd;
-    G4UIcmdWithADoubleAndUnit* TransferZCmd;
-    G4UIcmdWithADoubleAndUnit* TransferBCmd;
-    G4UIcmdWithADoubleAndUnit* TransferPCmd;
+    G4UIcmdWithADoubleAndUnit* fCaptureRCmd;
+    G4UIcmdWithADoubleAndUnit* fCaptureZCmd;
+    G4UIcmdWithADoubleAndUnit* fCaptureB1Cmd;
+    G4UIcmdWithADoubleAndUnit* fCaptureB2Cmd;
 
-    G4UIcmdWithAString*        TgtMaterCmd;
-    G4UIcmdWithADoubleAndUnit* TgtRadCmd;
-    G4UIcmdWithADoubleAndUnit* TgtThickCmd;
-    G4UIcmdWithADoubleAndUnit* TgtPosCmd;
-    G4UIcmdWithAnInteger* TgtAngCmd;
+    G4UIcmdWithADoubleAndUnit* fTransferRCmd;
+    G4UIcmdWithADoubleAndUnit* fTransferZCmd;
+    G4UIcmdWithADoubleAndUnit* fTransferBCmd;
+    G4UIcmdWithADoubleAndUnit* fTransferPCmd;
 
-    G4UIcmdWithAString*        DgrMaterCmd;
-    G4UIcmdWithADoubleAndUnit* DgrRadCmd;
-    G4UIcmdWithADoubleAndUnit* DgrThickCmd;
-    G4UIcmdWithADoubleAndUnit* DgrPosCmd;
+    G4UIcmdWithAString*        fTgtMaterCmd;
+    G4UIcmdWithADoubleAndUnit* fTgtRadCmd;
+    G4UIcmdWithADoubleAndUnit* fTgtThickCmd;
+    G4UIcmdWithADoubleAndUnit* fTgtPosCmd;
+    G4UIcmdWithAnInteger*      fTgtAngCmd;
 
-    G4UIcmdWithoutParameter*   UpdateCmd;
+    G4UIcmdWithAString*        fDgrMaterCmd;
+    G4UIcmdWithADoubleAndUnit* fDgrRadCmd;
+    G4UIcmdWithADoubleAndUnit* fDgrThickCmd;
+    G4UIcmdWithADoubleAndUnit* fDgrPosCmd;
+
+    G4UIcmdWithoutParameter*   fUpdateCmd;
 
 };
 

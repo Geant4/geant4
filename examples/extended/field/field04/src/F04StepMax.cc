@@ -23,32 +23,45 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/src/F04StepMax.cc
+/// \brief Implementation of the F04StepMax class
 //
 //
-
 #include "G4Track.hh"
 #include "G4VParticleChange.hh"
 
 #include "F04StepMax.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 F04StepMax::F04StepMax(const G4String& aName)
-  : G4VDiscreteProcess(aName), MaxChargedStep(DBL_MAX)
+  : G4VDiscreteProcess(aName), fMaxChargedStep(DBL_MAX)
 {
    if (verboseLevel>0) {
      G4cout << GetProcessName() << " is created "<< G4endl;
    }
 }
 
-F04StepMax::~F04StepMax() { }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F04StepMax::F04StepMax(F04StepMax& right) : G4VDiscreteProcess(right) { }
+F04StepMax::~F04StepMax() {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+F04StepMax::F04StepMax(F04StepMax& right) : G4VDiscreteProcess(right) {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool F04StepMax::IsApplicable(const G4ParticleDefinition& particle)
 {
   return (particle.GetPDGCharge() != 0.);
 }
 
-void F04StepMax::SetStepMax(G4double step) { MaxChargedStep = step ; }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void F04StepMax::SetStepMax(G4double step) { fMaxChargedStep = step ; }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double F04StepMax::PostStepGetPhysicalInteractionLength(
                                               const G4Track&,
@@ -58,12 +71,14 @@ G4double F04StepMax::PostStepGetPhysicalInteractionLength(
   // condition is set to "Not Forced"
   *condition = NotForced;
 
-  G4double ProposedStep = DBL_MAX;
+  G4double proposedStep = DBL_MAX;
 
-  if ( MaxChargedStep > 0.) ProposedStep = MaxChargedStep ;
+  if ( fMaxChargedStep > 0.) proposedStep = fMaxChargedStep ;
 
-   return ProposedStep;
+   return proposedStep;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VParticleChange* F04StepMax::PostStepDoIt(const G4Track& aTrack,
                                          const G4Step&         )
@@ -72,6 +87,8 @@ G4VParticleChange* F04StepMax::PostStepDoIt(const G4Track& aTrack,
    aParticleChange.Initialize(aTrack);
    return &aParticleChange;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double F04StepMax::GetMeanFreePath(const G4Track&,G4double,G4ForceCondition*)
 {

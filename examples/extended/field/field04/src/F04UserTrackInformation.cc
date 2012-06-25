@@ -23,12 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/src/F04UserTrackInformation.cc
+/// \brief Implementation of the F04UserTrackInformation class
 //
 //
-
 #include "F04UserTrackInformation.hh"
 
-F04UserTrackInformation::F04UserTrackInformation()
-  : status(undefined) { }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F04UserTrackInformation::~F04UserTrackInformation() { }
+F04UserTrackInformation::F04UserTrackInformation()
+  : fStatus(undefined) {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+F04UserTrackInformation::~F04UserTrackInformation() {}

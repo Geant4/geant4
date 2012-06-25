@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/src/F04DetectorMessenger.cc
+/// \brief Implementation of the F04DetectorMessenger class
 //
 //
-
 #include "F04DetectorMessenger.hh"
 
 #include "G4UIdirectory.hh"
@@ -34,252 +35,258 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
-F04DetectorMessenger::F04DetectorMessenger(F04DetectorConstruction * Det)
- : Detector(Det)
-{ 
-  detDir = new G4UIdirectory("/field04/");
-  detDir->SetGuidance(" field04 Simulation ");
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-  WorldMaterCmd = new G4UIcmdWithAString("/field04/SetWorldMat",this);
-  WorldMaterCmd->SetGuidance("Select Material of the World");
-  WorldMaterCmd->SetParameterName("wchoice",true);
-  WorldMaterCmd->SetDefaultValue("Air");
-  WorldMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+F04DetectorMessenger::F04DetectorMessenger(F04DetectorConstruction* detector)
+ : fDetector(detector)
+{
+  fDetDir = new G4UIdirectory("/field04/");
+  fDetDir->SetGuidance(" field04 Simulation ");
 
-  WorldRCmd = new G4UIcmdWithADoubleAndUnit("/field04/SetWorldR",this);
-  WorldRCmd->SetGuidance("Set Radius of the World");
-  WorldRCmd->SetParameterName("WSizeR",false,false);
-  WorldRCmd->SetDefaultUnit("cm");
-  WorldRCmd->SetRange("WSizeR>0.");
-  WorldRCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fWorldMaterCmd = new G4UIcmdWithAString("/field04/SetWorldMat",this);
+  fWorldMaterCmd->SetGuidance("Select Material of the World");
+  fWorldMaterCmd->SetParameterName("wchoice",true);
+  fWorldMaterCmd->SetDefaultValue("Air");
+  fWorldMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  WorldZCmd = new G4UIcmdWithADoubleAndUnit("/field04/SetWorldZ",this);
-  WorldZCmd->SetGuidance("Set Length of the World");
-  WorldZCmd->SetParameterName("WSizeZ",false,false);
-  WorldZCmd->SetDefaultUnit("cm");
-  WorldZCmd->SetRange("WSizeZ>0.");
-  WorldZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fWorldRCmd = new G4UIcmdWithADoubleAndUnit("/field04/SetWorldR",this);
+  fWorldRCmd->SetGuidance("Set Radius of the World");
+  fWorldRCmd->SetParameterName("WSizeR",false,false);
+  fWorldRCmd->SetDefaultUnit("cm");
+  fWorldRCmd->SetRange("WSizeR>0.");
+  fWorldRCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  CaptureRCmd = new G4UIcmdWithADoubleAndUnit("/field04/SetCaptureR",this);
-  CaptureRCmd->SetGuidance("Set Radius of the Capture Magnet");
-  CaptureRCmd->SetParameterName("CSizeR",false,false);
-  CaptureRCmd->SetDefaultUnit("cm");
-  CaptureRCmd->SetRange("CSizeR>0.");
-  CaptureRCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fWorldZCmd = new G4UIcmdWithADoubleAndUnit("/field04/SetWorldZ",this);
+  fWorldZCmd->SetGuidance("Set Length of the World");
+  fWorldZCmd->SetParameterName("WSizeZ",false,false);
+  fWorldZCmd->SetDefaultUnit("cm");
+  fWorldZCmd->SetRange("WSizeZ>0.");
+  fWorldZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  CaptureZCmd = new G4UIcmdWithADoubleAndUnit("/field04/SetCaptureZ",this);
-  CaptureZCmd->SetGuidance("Set Length of the Capture Magnet");
-  CaptureZCmd->SetParameterName("CSizeZ",false,false);
-  CaptureZCmd->SetDefaultUnit("cm");
-  CaptureZCmd->SetRange("CSizeZ>0.");
-  CaptureZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fCaptureRCmd = new G4UIcmdWithADoubleAndUnit("/field04/SetCaptureR",this);
+  fCaptureRCmd->SetGuidance("Set Radius of the Capture Magnet");
+  fCaptureRCmd->SetParameterName("CSizeR",false,false);
+  fCaptureRCmd->SetDefaultUnit("cm");
+  fCaptureRCmd->SetRange("CSizeR>0.");
+  fCaptureRCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  CaptureB1Cmd = new G4UIcmdWithADoubleAndUnit("/field04/SetCaptureB1",this);
-  CaptureB1Cmd->SetGuidance("Set B1 of the Capture Magnet");
-  CaptureB1Cmd->SetParameterName("CSizeB1",false,false);
-  CaptureB1Cmd->SetDefaultUnit("tesla");
-  CaptureB1Cmd->SetRange("CSizeB1>0.");
-  CaptureB1Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fCaptureZCmd = new G4UIcmdWithADoubleAndUnit("/field04/SetCaptureZ",this);
+  fCaptureZCmd->SetGuidance("Set Length of the Capture Magnet");
+  fCaptureZCmd->SetParameterName("CSizeZ",false,false);
+  fCaptureZCmd->SetDefaultUnit("cm");
+  fCaptureZCmd->SetRange("CSizeZ>0.");
+  fCaptureZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  CaptureB2Cmd = new G4UIcmdWithADoubleAndUnit("/field04/SetCaptureB2",this);
-  CaptureB2Cmd->SetGuidance("Set B2 of the Capture Magnet");
-  CaptureB2Cmd->SetParameterName("CSizeB2",false,false);
-  CaptureB2Cmd->SetDefaultUnit("tesla");
-  CaptureB2Cmd->SetRange("CSizeB2>0.");
-  CaptureB2Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fCaptureB1Cmd = new G4UIcmdWithADoubleAndUnit("/field04/SetCaptureB1",this);
+  fCaptureB1Cmd->SetGuidance("Set B1 of the Capture Magnet");
+  fCaptureB1Cmd->SetParameterName("CSizeB1",false,false);
+  fCaptureB1Cmd->SetDefaultUnit("tesla");
+  fCaptureB1Cmd->SetRange("CSizeB1>0.");
+  fCaptureB1Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  TransferRCmd = new G4UIcmdWithADoubleAndUnit("/field04/SetTransferR",this);
-  TransferRCmd->SetGuidance("Set Radius of the Transfer Magnet");
-  TransferRCmd->SetParameterName("TSizeR",false,false);
-  TransferRCmd->SetDefaultUnit("cm");
-  TransferRCmd->SetRange("TSizeR>0.");
-  TransferRCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fCaptureB2Cmd = new G4UIcmdWithADoubleAndUnit("/field04/SetCaptureB2",this);
+  fCaptureB2Cmd->SetGuidance("Set B2 of the Capture Magnet");
+  fCaptureB2Cmd->SetParameterName("CSizeB2",false,false);
+  fCaptureB2Cmd->SetDefaultUnit("tesla");
+  fCaptureB2Cmd->SetRange("CSizeB2>0.");
+  fCaptureB2Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  TransferZCmd = new G4UIcmdWithADoubleAndUnit("/field04/SetTransferZ",this);
-  TransferZCmd->SetGuidance("Set Length of the Transfer Magnet");
-  TransferZCmd->SetParameterName("TSizeZ",false,false);
-  TransferZCmd->SetDefaultUnit("cm");
-  TransferZCmd->SetRange("TSizeZ>0.");
-  TransferZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fTransferRCmd = new G4UIcmdWithADoubleAndUnit("/field04/SetTransferR",this);
+  fTransferRCmd->SetGuidance("Set Radius of the Transfer Magnet");
+  fTransferRCmd->SetParameterName("TSizeR",false,false);
+  fTransferRCmd->SetDefaultUnit("cm");
+  fTransferRCmd->SetRange("TSizeR>0.");
+  fTransferRCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  TransferBCmd = new G4UIcmdWithADoubleAndUnit("/field04/SetTransferB",this);
-  TransferBCmd->SetGuidance("Set B of the Transfer Magnet");
-  TransferBCmd->SetParameterName("TSizeB",false,false);
-  TransferBCmd->SetDefaultUnit("tesla");
-  TransferBCmd->SetRange("TSizeB>0.");
-  TransferBCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fTransferZCmd = new G4UIcmdWithADoubleAndUnit("/field04/SetTransferZ",this);
+  fTransferZCmd->SetGuidance("Set Length of the Transfer Magnet");
+  fTransferZCmd->SetParameterName("TSizeZ",false,false);
+  fTransferZCmd->SetDefaultUnit("cm");
+  fTransferZCmd->SetRange("TSizeZ>0.");
+  fTransferZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  TransferPCmd = new G4UIcmdWithADoubleAndUnit("/field04/SetTransferP",this);
-  TransferPCmd->SetGuidance("Set Z pos of the T-Mgnt from end of C-Mgnt");
-  TransferPCmd->SetParameterName("TSizeP",false,false);
-  TransferPCmd->SetDefaultUnit("cm");
-  TransferPCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fTransferBCmd = new G4UIcmdWithADoubleAndUnit("/field04/SetTransferB",this);
+  fTransferBCmd->SetGuidance("Set B of the Transfer Magnet");
+  fTransferBCmd->SetParameterName("TSizeB",false,false);
+  fTransferBCmd->SetDefaultUnit("tesla");
+  fTransferBCmd->SetRange("TSizeB>0.");
+  fTransferBCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  TgtMaterCmd = new G4UIcmdWithAString("/field04/SetTgtMat",this);
-  TgtMaterCmd->SetGuidance("Select Material of the Target");
-  TgtMaterCmd->SetParameterName("tchoice",true);
-  TgtMaterCmd->SetDefaultValue("Tungsten");
-  TgtMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fTransferPCmd = new G4UIcmdWithADoubleAndUnit("/field04/SetTransferP",this);
+  fTransferPCmd->SetGuidance("Set Z pos of the T-Mgnt from end of C-Mgnt");
+  fTransferPCmd->SetParameterName("TSizeP",false,false);
+  fTransferPCmd->SetDefaultUnit("cm");
+  fTransferPCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  TgtRadCmd = new G4UIcmdWithADoubleAndUnit("/field04/SetTgtRad",this);
-  TgtRadCmd->SetGuidance("Set Radius of the Target");
-  TgtRadCmd->SetParameterName("TgtSizeR",false,false);
-  TgtRadCmd->SetDefaultUnit("cm");
-  TgtRadCmd->SetRange("TgtSizeR>0.");
-  TgtRadCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fTgtMaterCmd = new G4UIcmdWithAString("/field04/SetTgtMat",this);
+  fTgtMaterCmd->SetGuidance("Select Material of the Target");
+  fTgtMaterCmd->SetParameterName("tchoice",true);
+  fTgtMaterCmd->SetDefaultValue("Tungsten");
+  fTgtMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  TgtThickCmd = new G4UIcmdWithADoubleAndUnit("/field04/SetTgtThick",this);
-  TgtThickCmd->SetGuidance("Set Thickness of the Target");
-  TgtThickCmd->SetParameterName("TgtSizeZ",false,false);
-  TgtThickCmd->SetDefaultUnit("cm");
-  TgtThickCmd->SetRange("TgtSizeZ>0.");
-  TgtThickCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fTgtRadCmd = new G4UIcmdWithADoubleAndUnit("/field04/SetTgtRad",this);
+  fTgtRadCmd->SetGuidance("Set Radius of the Target");
+  fTgtRadCmd->SetParameterName("TgtSizeR",false,false);
+  fTgtRadCmd->SetDefaultUnit("cm");
+  fTgtRadCmd->SetRange("TgtSizeR>0.");
+  fTgtRadCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  TgtPosCmd = new G4UIcmdWithADoubleAndUnit("/field04/SetTgtPos",this);
-  TgtPosCmd->SetGuidance("Set Z pos of the tgt relative to C-Mgnt centre");
-  TgtPosCmd->SetParameterName("TgtSizeP",false,false);
-  TgtPosCmd->SetDefaultUnit("cm");
-  TgtPosCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fTgtThickCmd = new G4UIcmdWithADoubleAndUnit("/field04/SetTgtThick",this);
+  fTgtThickCmd->SetGuidance("Set Thickness of the Target");
+  fTgtThickCmd->SetParameterName("TgtSizeZ",false,false);
+  fTgtThickCmd->SetDefaultUnit("cm");
+  fTgtThickCmd->SetRange("TgtSizeZ>0.");
+  fTgtThickCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  TgtAngCmd = new G4UIcmdWithAnInteger("/field04/SetTgtAng",this);
-  TgtAngCmd->SetGuidance("Set the angle [in deg] of the Tgt relative to C-Mgnt centre");
-  TgtAngCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fTgtPosCmd = new G4UIcmdWithADoubleAndUnit("/field04/SetTgtPos",this);
+  fTgtPosCmd->SetGuidance("Set Z pos of the tgt relative to C-Mgnt centre");
+  fTgtPosCmd->SetParameterName("TgtSizeP",false,false);
+  fTgtPosCmd->SetDefaultUnit("cm");
+  fTgtPosCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  DgrMaterCmd = new G4UIcmdWithAString("/field04/SetDgrMat",this);
-  DgrMaterCmd->SetGuidance("Select Material of the Degrader");
-  DgrMaterCmd->SetParameterName("dchoice",true);
-  DgrMaterCmd->SetDefaultValue("Lead");
-  DgrMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fTgtAngCmd = new G4UIcmdWithAnInteger("/field04/SetTgtAng",this);
+  fTgtAngCmd->
+    SetGuidance("Set the angle [in deg] of the Tgt relative to C-Mgnt centre");
+  fTgtAngCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  DgrRadCmd = new G4UIcmdWithADoubleAndUnit("/field04/SetDgrRad",this);
-  DgrRadCmd->SetGuidance("Set Radius of the Degrader");
-  DgrRadCmd->SetParameterName("DrgSizeR",false,false);
-  DgrRadCmd->SetDefaultUnit("cm");
-  DgrRadCmd->SetRange("DrgSizeR>0.");
-  DgrRadCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fDgrMaterCmd = new G4UIcmdWithAString("/field04/SetDgrMat",this);
+  fDgrMaterCmd->SetGuidance("Select Material of the Degrader");
+  fDgrMaterCmd->SetParameterName("dchoice",true);
+  fDgrMaterCmd->SetDefaultValue("Lead");
+  fDgrMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  DgrThickCmd = new G4UIcmdWithADoubleAndUnit("/field04/SetDgrThick",this);
-  DgrThickCmd->SetGuidance("Set Thickness of the Degrader");
-  DgrThickCmd->SetParameterName("DgrSizeZ",false,false);
-  DgrThickCmd->SetDefaultUnit("cm");
-  DgrThickCmd->SetRange("DgrSizeZ>0.");
-  DgrThickCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-  
-  DgrPosCmd = new G4UIcmdWithADoubleAndUnit("/field04/SetDgrPos",this);
-  DgrPosCmd->SetGuidance("Set Z pos of the Dgr relative to T-Mgnt centre");
-  DgrPosCmd->SetParameterName("DgrSizeP",false,false);
-  DgrPosCmd->SetDefaultUnit("cm");
-  DgrPosCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-  
-  UpdateCmd = new G4UIcmdWithoutParameter("/field04/Update",this);
-  UpdateCmd->SetGuidance("Update field04 geometry");
-  UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  UpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  UpdateCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fDgrRadCmd = new G4UIcmdWithADoubleAndUnit("/field04/SetDgrRad",this);
+  fDgrRadCmd->SetGuidance("Set Radius of the Degrader");
+  fDgrRadCmd->SetParameterName("DrgSizeR",false,false);
+  fDgrRadCmd->SetDefaultUnit("cm");
+  fDgrRadCmd->SetRange("DrgSizeR>0.");
+  fDgrRadCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  fDgrThickCmd = new G4UIcmdWithADoubleAndUnit("/field04/SetDgrThick",this);
+  fDgrThickCmd->SetGuidance("Set Thickness of the Degrader");
+  fDgrThickCmd->SetParameterName("DgrSizeZ",false,false);
+  fDgrThickCmd->SetDefaultUnit("cm");
+  fDgrThickCmd->SetRange("DgrSizeZ>0.");
+  fDgrThickCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  fDgrPosCmd = new G4UIcmdWithADoubleAndUnit("/field04/SetDgrPos",this);
+  fDgrPosCmd->SetGuidance("Set Z pos of the Dgr relative to T-Mgnt centre");
+  fDgrPosCmd->SetParameterName("DgrSizeP",false,false);
+  fDgrPosCmd->SetDefaultUnit("cm");
+  fDgrPosCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+ 
+  fUpdateCmd = new G4UIcmdWithoutParameter("/field04/Update",this);
+  fUpdateCmd->SetGuidance("Update field04 geometry");
+  fUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
+  fUpdateCmd->SetGuidance("if you changed geometrical value(s).");
+  fUpdateCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F04DetectorMessenger::~F04DetectorMessenger()
 {
-  delete detDir;
+  delete fDetDir;
 
-  delete WorldMaterCmd;
-  delete WorldRCmd;
-  delete WorldZCmd;
+  delete fWorldMaterCmd;
+  delete fWorldRCmd;
+  delete fWorldZCmd;
 
-  delete CaptureRCmd;
-  delete CaptureZCmd;
-  delete CaptureB1Cmd;
-  delete CaptureB2Cmd;
+  delete fCaptureRCmd;
+  delete fCaptureZCmd;
+  delete fCaptureB1Cmd;
+  delete fCaptureB2Cmd;
 
-  delete TransferRCmd;
-  delete TransferZCmd;
-  delete TransferBCmd;
-  delete TransferPCmd;
+  delete fTransferRCmd;
+  delete fTransferZCmd;
+  delete fTransferBCmd;
+  delete fTransferPCmd;
 
-  delete TgtMaterCmd;
-  delete TgtRadCmd;
-  delete TgtThickCmd;
-  delete TgtPosCmd;
-  delete TgtAngCmd;
+  delete fTgtMaterCmd;
+  delete fTgtRadCmd;
+  delete fTgtThickCmd;
+  delete fTgtPosCmd;
+  delete fTgtAngCmd;
 
-  delete DgrMaterCmd;
-  delete DgrRadCmd; 
-  delete DgrThickCmd;
-  delete DgrPosCmd;
+  delete fDgrMaterCmd;
+  delete fDgrRadCmd;
+  delete fDgrThickCmd;
+  delete fDgrPosCmd;
 
-  delete UpdateCmd;
+  delete fUpdateCmd;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F04DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {
-  if( command == WorldMaterCmd )
-   { Detector->SetWorldMaterial(newValue);}
+  if( command == fWorldMaterCmd )
+   { fDetector->SetWorldMaterial(newValue);}
 
-  if( command == TgtMaterCmd )
-   { Detector->SetTargetMaterial(newValue);}
+  if( command == fTgtMaterCmd )
+   { fDetector->SetTargetMaterial(newValue);}
  
-  if( command == DgrMaterCmd )
-   { Detector->SetDegraderMaterial(newValue);}
+  if( command == fDgrMaterCmd )
+   { fDetector->SetDegraderMaterial(newValue);}
 
-  if( command == WorldRCmd )
-   { Detector->SetWorldSizeR(WorldRCmd->GetNewDoubleValue(newValue));}
+  if( command == fWorldRCmd )
+   { fDetector->SetWorldSizeR(fWorldRCmd->GetNewDoubleValue(newValue));}
 
-  if( command == WorldZCmd )
-   { Detector->SetWorldSizeZ(WorldZCmd->GetNewDoubleValue(newValue));}
+  if( command == fWorldZCmd )
+   { fDetector->SetWorldSizeZ(fWorldZCmd->GetNewDoubleValue(newValue));}
 
-  if( command == CaptureRCmd )
-   { Detector->SetCaptureMgntRadius(CaptureRCmd->GetNewDoubleValue(newValue));}
+  if( command == fCaptureRCmd )
+    fDetector->SetCaptureMgntRadius(fCaptureRCmd->GetNewDoubleValue(newValue));
 
-  if( command == CaptureZCmd )
-   { Detector->SetCaptureMgntLength(CaptureZCmd->GetNewDoubleValue(newValue));}
+  if( command == fCaptureZCmd )
+    fDetector->SetCaptureMgntLength(fCaptureZCmd->GetNewDoubleValue(newValue));
 
-  if( command == CaptureB1Cmd )
-   { Detector->SetCaptureMgntB1(CaptureB1Cmd->GetNewDoubleValue(newValue));}
+  if( command == fCaptureB1Cmd )
+    fDetector->SetCaptureMgntB1(fCaptureB1Cmd->GetNewDoubleValue(newValue));
 
-  if( command == CaptureB2Cmd )
-   { Detector->SetCaptureMgntB2(CaptureB2Cmd->GetNewDoubleValue(newValue));}
+  if( command == fCaptureB2Cmd )
+    fDetector->SetCaptureMgntB2(fCaptureB2Cmd->GetNewDoubleValue(newValue));
 
-  if( command == TransferRCmd )
-  { Detector->SetTransferMgntRadius(TransferRCmd->GetNewDoubleValue(newValue));}
+  if( command == fTransferRCmd )
+   fDetector->SetTransferMgntRadius(fTransferRCmd->GetNewDoubleValue(newValue));
 
-  if( command == TransferZCmd )
-  { Detector->SetTransferMgntLength(TransferZCmd->GetNewDoubleValue(newValue));}
+  if( command == fTransferZCmd )
+   fDetector->SetTransferMgntLength(fTransferZCmd->GetNewDoubleValue(newValue));
 
-  if( command == TransferBCmd )
-   { Detector->SetTransferMgntB(TransferBCmd->GetNewDoubleValue(newValue));}
+  if( command == fTransferBCmd )
+    fDetector->SetTransferMgntB(fTransferBCmd->GetNewDoubleValue(newValue));
 
-  if( command == TransferPCmd )
-  { Detector->SetTransferMgntPos(TransferPCmd->GetNewDoubleValue(newValue));}
+  if( command == fTransferPCmd )
+    fDetector->SetTransferMgntPos(fTransferPCmd->GetNewDoubleValue(newValue));
 
-  if( command == TgtRadCmd )
-   { Detector->SetTargetRadius(TgtRadCmd->GetNewDoubleValue(newValue));}
+  if( command == fTgtRadCmd )
+    fDetector->SetTargetRadius(fTgtRadCmd->GetNewDoubleValue(newValue));
 
-  if( command == TgtThickCmd )
-   { Detector->SetTargetThickness(TgtThickCmd->GetNewDoubleValue(newValue));}
+  if( command == fTgtThickCmd )
+    fDetector->SetTargetThickness(fTgtThickCmd->GetNewDoubleValue(newValue));
 
-  if( command == TgtPosCmd )
-   { Detector->SetTargetPos(TgtPosCmd->GetNewDoubleValue(newValue));}
+  if( command == fTgtPosCmd )
+    fDetector->SetTargetPos(fTgtPosCmd->GetNewDoubleValue(newValue));
 
-  if( command == TgtAngCmd )
-   { Detector->SetTargetAngle(TgtAngCmd->GetNewIntValue(newValue));}
+  if( command == fTgtAngCmd )
+    fDetector->SetTargetAngle(fTgtAngCmd->GetNewIntValue(newValue));
 
-  if( command == DgrRadCmd )
-   { Detector->SetDegraderRadius(DgrRadCmd->GetNewDoubleValue(newValue));}
+  if( command == fDgrRadCmd )
+    fDetector->SetDegraderRadius(fDgrRadCmd->GetNewDoubleValue(newValue));
  
-  if( command == DgrThickCmd )
-   { Detector->SetDegraderThickness(DgrThickCmd->GetNewDoubleValue(newValue));}
-   
-  if( command == DgrPosCmd )
-   { Detector->SetDegraderPos(DgrPosCmd->GetNewDoubleValue(newValue));}
-   
-  if( command == WorldZCmd )
-   { Detector->SetWorldSizeZ(WorldZCmd->GetNewDoubleValue(newValue));}
-   
-  if( command == WorldRCmd )
-   { Detector->SetWorldSizeR(WorldRCmd->GetNewDoubleValue(newValue));}
-   
-  if( command == UpdateCmd )
-   { Detector->UpdateGeometry(); }
+  if( command == fDgrThickCmd )
+    fDetector->SetDegraderThickness(fDgrThickCmd->GetNewDoubleValue(newValue));
+ 
+  if( command == fDgrPosCmd )
+    fDetector->SetDegraderPos(fDgrPosCmd->GetNewDoubleValue(newValue));
+ 
+  if( command == fWorldZCmd )
+    fDetector->SetWorldSizeZ(fWorldZCmd->GetNewDoubleValue(newValue));
+
+  if( command == fWorldRCmd )
+    fDetector->SetWorldSizeR(fWorldRCmd->GetNewDoubleValue(newValue));
+
+  if( command == fUpdateCmd ) fDetector->UpdateGeometry();
 
 }

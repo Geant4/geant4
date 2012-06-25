@@ -23,13 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/src/F04TrackingAction.cc
+/// \brief Implementation of the F04TrackingAction class
 //
 //
-
 #include "globals.hh"
 #include "G4RunManager.hh"
-
-//#include "F04Trajectory.hh"
 
 #include "F04UserTrackInformation.hh"
 
@@ -38,6 +37,8 @@
 #include "G4TrackingManager.hh"
 
 #include "F04TrackingAction.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F04TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 {
@@ -53,7 +54,9 @@ void F04TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 
 }
 
-void F04TrackingAction::PostUserTrackingAction(const G4Track* aTrack){ 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void F04TrackingAction::PostUserTrackingAction(const G4Track* aTrack){
 
   F04UserTrackInformation*
     trackInformation = (F04UserTrackInformation*)aTrack->GetUserInformation();

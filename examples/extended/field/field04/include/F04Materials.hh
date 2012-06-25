@@ -23,13 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/include/F04Materials.hh
+/// \brief Definition of the F04Materials class
 //
 //
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #ifndef F04Materials_h
 #define F04Materials_h 1
 
@@ -41,28 +38,28 @@ class F04Materials
 {
   public:
 
-    ~F04Materials();
-  
+    virtual ~F04Materials();
+
     static F04Materials* GetInstance();
-  
+
     G4Material* GetMaterial(G4String);
-  
+ 
   private:
-  
+ 
     F04Materials();
-  
+ 
     void CreateMaterials();
 
   private:
 
-  static F04Materials* instance;
+  static F04Materials* fInstance;
 
-  G4NistManager*     nistMan;
+  G4NistManager*     fNistMan;
 
-  G4Material*        Vacuum;
-  G4Material*        Air;
-  G4Material*        Sci;
-  G4Material*        BeO;
+  G4Material*        fVacuum;
+  G4Material*        fAir;
+  G4Material*        fSci;
+  G4Material*        fBeO;
 
 };
 

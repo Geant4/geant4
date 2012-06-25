@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/src/F04StackingAction.cc
+/// \brief Implementation of the F04StackingAction class
 //
 //
-
 #include "F04StackingAction.hh"
 
 #include "G4RunManager.hh"
@@ -34,9 +35,15 @@
 #include "G4ParticleTypes.hh"
 #include "G4ParticleDefinition.hh"
 
-F04StackingAction::F04StackingAction() { }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F04StackingAction::~F04StackingAction() { }
+F04StackingAction::F04StackingAction() {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+F04StackingAction::~F04StackingAction() {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4ClassificationOfNewTrack
       F04StackingAction::ClassifyNewTrack(const G4Track * aTrack)
@@ -61,6 +68,10 @@ G4ClassificationOfNewTrack
   return fUrgent;
 }
 
-void F04StackingAction::NewStage() { }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void F04StackingAction::PrepareNewEvent() { }
+void F04StackingAction::NewStage() {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void F04StackingAction::PrepareNewEvent() {}

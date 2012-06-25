@@ -23,13 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/include/F04DetectorConstruction.hh
+/// \brief Definition of the F04DetectorConstruction class
 //
 //
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #ifndef F04DetectorConstruction_h
 #define F04DetectorConstruction_h 1
 
@@ -56,16 +53,16 @@ class F04DetectorMessenger;
 class F04DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
-  
-    F04DetectorConstruction();
-    ~F04DetectorConstruction();
 
-    G4VPhysicalVolume* Construct();
+    F04DetectorConstruction();
+    virtual ~F04DetectorConstruction();
+
+    virtual G4VPhysicalVolume* Construct();
     G4VPhysicalVolume* ConstructDetector();
 
     void UpdateGeometry();
 
-    // stringToRotationMatrix() converts a string "X90,Y45" into a
+    // StringToRotationMatrix() converts a string "X90,Y45" into a
     // G4RotationMatrix.
     // This is an active rotation, in that the object is first rotated
     // around the parent's X axis by 90 degrees, then the object is
@@ -74,7 +71,7 @@ class F04DetectorConstruction : public G4VUserDetectorConstruction
     // it is persistent. Angles are in degrees, can have decimals,
     // and can be negative. Axes are X, Y, Z.
 
-    static G4RotationMatrix stringToRotationMatrix(G4String rotation);
+    static G4RotationMatrix StringToRotationMatrix(G4String rotation);
 
   public:
 
@@ -97,98 +94,98 @@ class F04DetectorConstruction : public G4VUserDetectorConstruction
      void SetTargetRadius(G4double);
      void SetTargetPos(G4double);
      void SetTargetAngle(G4int);
-     
-     void SetDegraderMaterial (G4String);     
-     void SetDegraderThickness(G4double);     
+ 
+     void SetDegraderMaterial (G4String);
+     void SetDegraderThickness(G4double);
      void SetDegraderRadius(G4double);
-     void SetDegraderPos(G4double);          
-      
+     void SetDegraderPos(G4double);
+ 
   public:
-  
-     G4Material* GetWorldMaterial()    {return WorldMaterial;};
-     G4double GetWorldSizeZ()          {return WorldSizeZ;}; 
-     G4double GetWorldSizeR()          {return WorldSizeR;};
+ 
+     G4Material* GetWorldMaterial()    {return fWorldMaterial;};
+     G4double GetWorldSizeZ()          {return fWorldSizeZ;};
+     G4double GetWorldSizeR()          {return fWorldSizeR;};
 
-     G4double GetCaptureMgntRadius()   {return CaptureMgntRadius;};
-     G4double GetCaptureMgntLength()   {return CaptureMgntLength;};
-     G4double GetCaptureMgntB1()       {return CaptureMgntB1;};
-     G4double GetCaptureMgntB2()       {return CaptureMgntB2;};
+     G4double GetCaptureMgntRadius()   {return fCaptureMgntRadius;};
+     G4double GetCaptureMgntLength()   {return fCaptureMgntLength;};
+     G4double GetCaptureMgntB1()       {return fCaptureMgntB1;};
+     G4double GetCaptureMgntB2()       {return fCaptureMgntB2;};
 
-     G4double GetTransferMgntRadius()  {return TransferMgntRadius;};
-     G4double GetTransferMgntLength()  {return TransferMgntLength;};
-     G4double GetTransferMgntB()       {return TransferMgntB;};
-     G4double GetTransferMgntPos()     {return TransferMgntPos;};
+     G4double GetTransferMgntRadius()  {return fTransferMgntRadius;};
+     G4double GetTransferMgntLength()  {return fTransferMgntLength;};
+     G4double GetTransferMgntB()       {return fTransferMgntB;};
+     G4double GetTransferMgntPos()     {return fTransferMgntPos;};
 
-     G4Material* GetTargetMaterial()  {return TargetMaterial;};
-     G4double    GetTargetRadius()    {return TargetRadius;};
-     G4double    GetTargetThickness() {return TargetThickness;};
-     G4double    GetTargetPos()       {return TargetPos;};
-     G4int       GetTargetAngle()     {return TargetAngle;};
+     G4Material* GetTargetMaterial()  {return fTargetMaterial;};
+     G4double    GetTargetRadius()    {return fTargetRadius;};
+     G4double    GetTargetThickness() {return fTargetThickness;};
+     G4double    GetTargetPos()       {return fTargetPos;};
+     G4int       GetTargetAngle()     {return fTargetAngle;};
 
-     G4Material* GetDegraderMaterial()  {return DegraderMaterial;};
-     G4double    GetDegraderRadius()    {return DegraderRadius;};
-     G4double    GetDegraderThickness() {return DegraderThickness;};
-     G4double    GetDegraderPos()       {return DegraderPos;}; 
+     G4Material* GetDegraderMaterial()  {return fDegraderMaterial;};
+     G4double    GetDegraderRadius()    {return fDegraderRadius;};
+     G4double    GetDegraderThickness() {return fDegraderThickness;};
+     G4double    GetDegraderPos()       {return fDegraderPos;};
+
+  private:
+
+     F04Materials* fMaterials;
+
+     G4Material* fVacuum;
+ 
+     G4Tubs*            fSolidWorld;
+     G4LogicalVolume*   fLogicWorld;
+     G4VPhysicalVolume* fPhysiWorld;
+
+     G4Tubs*            fSolidTarget;
+     G4LogicalVolume*   fLogicTarget;
+     G4VPhysicalVolume* fPhysiTarget;
+
+     G4Tubs*            fSolidDegrader;
+     G4LogicalVolume*   fLogicDegrader;
+     G4VPhysicalVolume* fPhysiDegrader;
+
+     G4Tubs*            fSolidCaptureMgnt;
+     G4LogicalVolume*   fLogicCaptureMgnt;
+     G4VPhysicalVolume* fPhysiCaptureMgnt;
+
+     G4Tubs*            fSolidTransferMgnt;
+     G4LogicalVolume*   fLogicTransferMgnt;
+     G4VPhysicalVolume* fPhysiTransferMgnt;
+
+     G4Material*        fWorldMaterial;
+     G4double           fWorldSizeR;
+     G4double           fWorldSizeZ;
+
+     G4double           fCaptureMgntLength;
+     G4double           fCaptureMgntRadius;
+     G4double           fCaptureMgntB1;
+     G4double           fCaptureMgntB2;
+
+     G4double           fTransferMgntLength;
+     G4double           fTransferMgntRadius;
+     G4double           fTransferMgntB;
+     G4double           fTransferMgntPos;
+
+     G4Material*        fTargetMaterial;
+     G4double           fTargetThickness;
+     G4double           fTargetRadius;
+     G4double           fTargetPos;
+     G4int              fTargetAngle;
+
+     G4Material*        fDegraderMaterial;
+     G4double           fDegraderThickness;
+     G4double           fDegraderRadius;
+     G4double           fDegraderPos;
+
+     F04FocusSolenoid*  fFocusSolenoid;
+     F04SimpleSolenoid* fSimpleSolenoid;
 
   private:
 
-     F04Materials* materials;
-
-     G4Material* Vacuum;
-     
-     G4Tubs*            solidWorld;
-     G4LogicalVolume*   logicWorld;
-     G4VPhysicalVolume* physiWorld;
-
-     G4Tubs*            solidTarget;
-     G4LogicalVolume*   logicTarget;
-     G4VPhysicalVolume* physiTarget;
-
-     G4Tubs*            solidDegrader;
-     G4LogicalVolume*   logicDegrader;
-     G4VPhysicalVolume* physiDegrader;
-
-     G4Tubs*            solidCaptureMgnt;
-     G4LogicalVolume*   logicCaptureMgnt;
-     G4VPhysicalVolume* physiCaptureMgnt;
-
-     G4Tubs*            solidTransferMgnt;
-     G4LogicalVolume*   logicTransferMgnt;
-     G4VPhysicalVolume* physiTransferMgnt;
-
-     G4Material*        WorldMaterial;
-     G4double           WorldSizeR;
-     G4double           WorldSizeZ;
-
-     G4double           CaptureMgntLength;
-     G4double           CaptureMgntRadius;
-     G4double           CaptureMgntB1;
-     G4double           CaptureMgntB2;
-
-     G4double           TransferMgntLength;
-     G4double           TransferMgntRadius;
-     G4double           TransferMgntB;
-     G4double           TransferMgntPos;
-
-     G4Material*        TargetMaterial;
-     G4double           TargetThickness;
-     G4double           TargetRadius;
-     G4double           TargetPos;
-     G4int              TargetAngle;
-
-     G4Material*        DegraderMaterial;
-     G4double           DegraderThickness;
-     G4double           DegraderRadius;
-     G4double           DegraderPos;
-
-     F04FocusSolenoid*  focusSolenoid;
-     F04SimpleSolenoid* simpleSolenoid;
-
-  private:
-    
      void DefineMaterials();
 
-     F04DetectorMessenger* detectorMessenger;  // pointer to the Messenger
+     F04DetectorMessenger* fDetectorMessenger;  // pointer to the Messenger
 
 };
 

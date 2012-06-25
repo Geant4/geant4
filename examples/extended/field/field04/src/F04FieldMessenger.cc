@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/src/F04FieldMessenger.cc
+/// \brief Implementation of the F04FieldMessenger class
 //
 //
-
 #include "F04FieldMessenger.hh"
 
 #include "F04GlobalField.hh"
@@ -35,13 +36,13 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
-//////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F04FieldMessenger::F04FieldMessenger(F04GlobalField* pEMfield)
   : fGlobalField(pEMfield)
-{ 
-  detDir = new G4UIdirectory("/field/");
-  detDir->SetGuidance(" Field tracking control ");
+{
+  fDetDir = new G4UIdirectory("/field/");
+  fDetDir->SetGuidance(" Field tracking control ");
 
   fStepperCMD = new G4UIcmdWithAnInteger("/field/setStepperType",this);
   fStepperCMD->SetGuidance("Select stepper type for field");
@@ -55,7 +56,7 @@ F04FieldMessenger::F04FieldMessenger(F04GlobalField* pEMfield)
   fUpdateCMD->SetGuidance("if you changed field settings.");
   fUpdateCMD->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  fMinStepCMD = new G4UIcmdWithADoubleAndUnit("/field/setMinStep",this);  
+  fMinStepCMD = new G4UIcmdWithADoubleAndUnit("/field/setMinStep",this);
   fMinStepCMD->SetGuidance("Define minimal step");
   fMinStepCMD->SetParameterName("min step",false,false);
   fMinStepCMD->SetDefaultUnit("mm");
@@ -67,14 +68,14 @@ F04FieldMessenger::F04FieldMessenger(F04GlobalField* pEMfield)
   fDeltaChordCMD->SetDefaultUnit("mm");
   fDeltaChordCMD->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  fDeltaOneStepCMD = 
+  fDeltaOneStepCMD =
                  new G4UIcmdWithADoubleAndUnit("/field/setDeltaOneStep",this);
   fDeltaOneStepCMD->SetGuidance("Define delta one step");
   fDeltaOneStepCMD->SetParameterName("delta one step",false,false);
   fDeltaOneStepCMD->SetDefaultUnit("mm");
   fDeltaOneStepCMD->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  fDeltaIntersectionCMD = 
+  fDeltaIntersectionCMD =
             new G4UIcmdWithADoubleAndUnit("/field/setDeltaIntersection",this);
   fDeltaIntersectionCMD->SetGuidance("Define delta intersection");
   fDeltaIntersectionCMD->SetParameterName("delta intersection",false,false);
@@ -94,9 +95,11 @@ F04FieldMessenger::F04FieldMessenger(F04GlobalField* pEMfield)
   fEpsMaxCMD->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 F04FieldMessenger::~F04FieldMessenger()
 {
-  delete detDir;
+  delete fDetDir;
 
   delete fStepperCMD;
   delete fMinStepCMD;
@@ -108,18 +111,20 @@ F04FieldMessenger::~F04FieldMessenger()
   delete fUpdateCMD;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void F04FieldMessenger::SetNewValue( G4UIcommand* command, G4String newValue)
-{ 
+{
   if( command == fStepperCMD )
-  { 
+  {
     fGlobalField->SetStepperType(fStepperCMD->GetNewIntValue(newValue));
-  }  
+  }
   if( command == fUpdateCMD )
-  { 
-    fGlobalField->updateField(); 
+  {
+    fGlobalField->UpdateField();
   }
   if( command == fMinStepCMD )
-  { 
+  {
     fGlobalField->SetMinStep(fMinStepCMD->GetNewDoubleValue(newValue));
   }
   if( command == fDeltaChordCMD )
@@ -133,7 +138,7 @@ void F04FieldMessenger::SetNewValue( G4UIcommand* command, G4String newValue)
   }
   if( command == fDeltaIntersectionCMD )
   {
-    fGlobalField-> 
+    fGlobalField->
       SetDeltaIntersection(fDeltaIntersectionCMD->GetNewDoubleValue(newValue));
   }
   if( command == fEpsMinCMD )

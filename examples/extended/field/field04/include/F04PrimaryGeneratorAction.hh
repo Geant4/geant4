@@ -23,13 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/include/F04PrimaryGeneratorAction.hh
+/// \brief Definition of the F04PrimaryGeneratorAction class
 //
 //
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #ifndef F04PrimaryGeneratorAction_h
 #define F04PrimaryGeneratorAction_h 1
 
@@ -49,36 +46,36 @@ class F04PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
 
-    F04PrimaryGeneratorAction(F04DetectorConstruction*);    
-   ~F04PrimaryGeneratorAction();
+    F04PrimaryGeneratorAction(F04DetectorConstruction*);
+    virtual ~F04PrimaryGeneratorAction();
 
   public:
 
-    void GeneratePrimaries(G4Event*);
+    virtual void GeneratePrimaries(G4Event*);
 
-    void SetRndmFlag(G4String val) { rndmFlag = val;}
+    void SetRndmFlag(G4String val) { fRndmFlag = val;}
 
-    void Setxvertex(G4double x) ;
-    void Setyvertex(G4double y) ;
-    void Setzvertex(G4double z) ;
+    void SetXvertex(G4double x);
+    void SetYvertex(G4double y);
+    void SetZvertex(G4double z);
 
   private:
 
-    F04DetectorConstruction*      Detector;    // pointer to the geometry
+    F04DetectorConstruction*   fDetector;    // pointer to the geometry
 
-    G4ParticleGun*             particleGun; // pointer a to G4 service class
-    
-    F04PrimaryGeneratorMessenger* gunMessenger; // messenger of this class
+    G4ParticleGun*             fParticleGun; // pointer a to G4 service class
+ 
+    F04PrimaryGeneratorMessenger* fGunMessenger; // messenger of this class
 
-    G4String rndmFlag;                      // flag for random impact point
+    G4String fRndmFlag;                      // flag for random impact point
 
-    static G4bool first;
+    static G4bool fFirst;
 
-    G4AffineTransform global2local;
+    G4AffineTransform fGlobal2local;
 
-    G4double xvertex, yvertex, zvertex;
+    G4double fXvertex, fYvertex, fZvertex;
 
-    G4bool vertexdefined;
+    G4bool fVertexdefined;
 
 };
 

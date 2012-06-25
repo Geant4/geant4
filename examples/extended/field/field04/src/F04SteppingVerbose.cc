@@ -23,20 +23,26 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/src/F04SteppingVerbose.cc
+/// \brief Implementation of the F04SteppingVerbose class
 //
 //
-
 #include "G4UnitsTable.hh"
 
 #include "F04SteppingVerbose.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F04SteppingVerbose::F04SteppingVerbose()
 {
   G4VSteppingVerbose::SetSilent(1);
 }
 
-F04SteppingVerbose::~F04SteppingVerbose()
-{} 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+F04SteppingVerbose::~F04SteppingVerbose() {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F04SteppingVerbose::StepInfo()
 {
@@ -55,18 +61,18 @@ void F04SteppingVerbose::StepInfo()
       G4cout << G4endl;    
       G4cout << std::setw( 5) << "#Step#"     << " "
 	     << std::setw(10) << "X"          << "    "
-	     << std::setw(10) << "Y"          << "    "  
+	     << std::setw(10) << "Y"          << "    "
 	     << std::setw(10) << "Z"          << "    "
 	     << std::setw(10) << "KineE"      << " "
-	     << std::setw(10) << "dEStep"     << " "  
-	     << std::setw(10) << "StepLeng"     
-	     << std::setw(10) << "TrakLeng" 
-	     << std::setw(10) << "NextVolu" 
-	     << std::setw(10) << "Process"   
+	     << std::setw(10) << "dEStep"     << " "
+	     << std::setw(10) << "StepLeng"
+	     << std::setw(10) << "TrakLeng"
+	     << std::setw(10) << "NextVolu"
+	     << std::setw(10) << "Process"
 	     << std::setw(10) << "Dir_x"        << "    "
 	     << std::setw(10) << "Dir_y"        << "    "  
 	     << std::setw(10) << "Dir_z"        << "    "
-             << G4endl;	          
+             << G4endl;
     }
 
     G4cout << std::setw( 5) << fTrack->GetCurrentStepNumber() << " "
@@ -74,27 +80,31 @@ void F04SteppingVerbose::StepInfo()
 	   << std::setw(10) << G4BestUnit(fTrack->GetPosition().y(),"Length")
 	   << std::setw(10) << G4BestUnit(fTrack->GetPosition().z(),"Length")
 	   << std::setw(10) << G4BestUnit(fTrack->GetKineticEnergy(),"Energy")
-	   << std::setw(10) << G4BestUnit(fStep->GetTotalEnergyDeposit(),"Energy")
+	   << std::setw(10) << G4BestUnit(fStep->
+                                             GetTotalEnergyDeposit(),"Energy")
 	   << std::setw(10) << G4BestUnit(fStep->GetStepLength(),"Length")
 	   << std::setw(10) << G4BestUnit(fTrack->GetTrackLength(),"Length");
 
-    if( fTrack->GetNextVolume() != 0 ) { 
+    if( fTrack->GetNextVolume() != 0 ) {
       G4cout << std::setw(10) << fTrack->GetVolume()->GetName();
     } else {
       G4cout << std::setw(10) << "OutOfWorld";
     }
 
     if(fStep->GetPostStepPoint()->GetProcessDefinedStep() != 0){
-      G4cout << "  " 
-             << std::setw(10) << fStep->GetPostStepPoint()->GetProcessDefinedStep()
-	                                ->GetProcessName();
+      G4cout << "  "
+             << std::setw(10) << fStep->GetPostStepPoint()->
+                                   GetProcessDefinedStep()->GetProcessName();
     } else {
       G4cout << "   UserLimit";
     }
 
-//    G4cout << std::setw(12) << G4BestUnit(fTrack->GetMomentumDirection().x(),"Length")
-//           << std::setw(12) << G4BestUnit(fTrack->GetMomentumDirection().y(),"Length")
-//           << std::setw(12) << G4BestUnit(fTrack->GetMomentumDirection().z(),"Length");
+//    G4cout << std::setw(12) << 
+//                    G4BestUnit(fTrack->GetMomentumDirection().x(),"Length")
+//           << std::setw(12) <<
+//                    G4BestUnit(fTrack->GetMomentumDirection().y(),"Length")
+//           << std::setw(12) <<
+//                    G4BestUnit(fTrack->GetMomentumDirection().z(),"Length");
 
     G4cout << G4endl;
 
@@ -104,7 +114,7 @@ void F04SteppingVerbose::StepInfo()
 	                    fN2ndariesPostStepDoIt;
       if(tN2ndariesTot>0){
 	G4cout << "    :----- List of 2ndaries - "
-	       << "#SpawnInStep=" << std::setw(3) << tN2ndariesTot 
+	       << "#SpawnInStep=" << std::setw(3) << tN2ndariesTot
 	       << "(Rest="  << std::setw(2) << fN2ndariesAtRestDoIt
 	       << ",Along=" << std::setw(2) << fN2ndariesAlongStepDoIt
 	       << ",Post="  << std::setw(2) << fN2ndariesPostStepDoIt
@@ -113,7 +123,7 @@ void F04SteppingVerbose::StepInfo()
 	       << " ---------------"
 	       << G4endl;
 
-	for(size_t lp1=(*fSecondary).size()-tN2ndariesTot; 
+	for(size_t lp1=(*fSecondary).size()-tN2ndariesTot;
                    lp1<(*fSecondary).size(); lp1++){
 	  G4cout << "    : "
 		 << std::setw(6)
@@ -128,17 +138,19 @@ void F04SteppingVerbose::StepInfo()
 		 << (*fSecondary)[lp1]->GetDefinition()->GetParticleName();
 	  G4cout << G4endl;
 	}
-              
+ 
 	G4cout << "    :-----------------------------"
 	       << "----------------------------------"
 	       << "-- EndOf2ndaries Info ---------------"
 	       << G4endl;
       }
     }
-    
+ 
   }
   G4cout.precision(prec);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F04SteppingVerbose::TrackingStarted()
 {
@@ -171,21 +183,22 @@ void F04SteppingVerbose::TrackingStarted()
 
     G4cout << std::setw( 5) << "Step#"      << " "
            << std::setw( 6) << "X"          << "    "
-	   << std::setw( 6) << "Y"          << "    "  
+	   << std::setw( 6) << "Y"          << "    "
 	   << std::setw( 6) << "Z"          << "    "
 	   << std::setw( 9) << "KineE"      << " "
-	   << std::setw( 9) << "dEStep"     << " "  
-	   << std::setw(10) << "StepLeng"  
+	   << std::setw( 9) << "dEStep"     << " "
+	   << std::setw(10) << "StepLeng"
 	   << std::setw(10) << "TrakLeng"
 	   << std::setw(10) << "Volume"     << "  "
-	   << std::setw(10) << "Process"    << G4endl;	     
+	   << std::setw(10) << "Process"    << G4endl;
 
     G4cout << std::setw( 5) << fTrack->GetCurrentStepNumber() << " "
 	   << std::setw( 6) << G4BestUnit(fTrack->GetPosition().x(),"Length")
 	   << std::setw( 6) << G4BestUnit(fTrack->GetPosition().y(),"Length")
 	   << std::setw( 6) << G4BestUnit(fTrack->GetPosition().z(),"Length")
 	   << std::setw( 6) << G4BestUnit(fTrack->GetKineticEnergy(),"Energy")
-	   << std::setw( 6) << G4BestUnit(fStep->GetTotalEnergyDeposit(),"Energy")
+	   << std::setw( 6) <<
+                           G4BestUnit(fStep->GetTotalEnergyDeposit(),"Energy")
 	   << std::setw( 6) << G4BestUnit(fStep->GetStepLength(),"Length")
 	   << std::setw( 6) << G4BestUnit(fTrack->GetTrackLength(),"Length");
 

@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/src/F04TrajectoryPoint.cc
+/// \brief Implementation of the F04TrajectoryPoint class
 //
 //
-
 #include "F04TrajectoryPoint.hh"
 
 #include "G4Step.hh"
@@ -46,15 +47,19 @@
 
 G4Allocator<F04TrajectoryPoint> aTrajPointAllocator;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 F04TrajectoryPoint::F04TrajectoryPoint()
-      : fTime(0.), fMomentum(0.,0.,0.), 
-        fStepStatus(fUndefined), fVolumeName("") { }
+      : fTime(0.), fMomentum(0.,0.,0.),
+        fStepStatus(fUndefined), fVolumeName("") {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F04TrajectoryPoint::F04TrajectoryPoint(const G4Step* aStep)
     : G4TrajectoryPoint(aStep->GetPostStepPoint()->GetPosition())
 {
       fTime = aStep->GetPostStepPoint()->GetGlobalTime();
-      fMomentum = aStep->GetPostStepPoint()->GetMomentum(); 
+      fMomentum = aStep->GetPostStepPoint()->GetMomentum();
       fStepStatus = aStep->GetPostStepPoint()->GetStepStatus();
       if (aStep->GetPostStepPoint()->GetPhysicalVolume())
       {
@@ -65,6 +70,8 @@ F04TrajectoryPoint::F04TrajectoryPoint(const G4Step* aStep)
       }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 F04TrajectoryPoint::F04TrajectoryPoint(const G4Track* aTrack)
     : G4TrajectoryPoint(aTrack->GetPosition())
 {
@@ -73,6 +80,8 @@ F04TrajectoryPoint::F04TrajectoryPoint(const G4Track* aTrack)
       fStepStatus = fUndefined;
       fVolumeName = aTrack->GetVolume()->GetName();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F04TrajectoryPoint::F04TrajectoryPoint(const F04TrajectoryPoint &right)
     : G4TrajectoryPoint(right)
@@ -83,7 +92,11 @@ F04TrajectoryPoint::F04TrajectoryPoint(const F04TrajectoryPoint &right)
       fVolumeName = right.fVolumeName;
 }
 
-F04TrajectoryPoint::~F04TrajectoryPoint() { }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+F04TrajectoryPoint::~F04TrajectoryPoint() {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 const std::map<G4String,G4AttDef>* F04TrajectoryPoint::GetAttDefs() const
 {
@@ -96,11 +109,11 @@ const std::map<G4String,G4AttDef>* F04TrajectoryPoint::GetAttDefs() const
       G4AttDef(Pos, "Position", "Physics","G4BestUnit","G4ThreeVector");
 
     G4String Time("Time");
-    (*store)[Time] = 
+    (*store)[Time] =
       G4AttDef(Time, "Time", "Physics","G4BestUnit","G4double");
 
     G4String Momentum("Momentum");
-    (*store)[Momentum] = 
+    (*store)[Momentum] =
       G4AttDef(Momentum, "Momentum", "Physics","G4BestUnit","G4ThreeVector");
 
     G4String StepStatus("StepStatus");
@@ -114,6 +127,8 @@ const std::map<G4String,G4AttDef>* F04TrajectoryPoint::GetAttDefs() const
   }
   return store;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 std::vector<G4AttValue>* F04TrajectoryPoint::CreateAttValues() const
 {

@@ -23,13 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field04/include/F04EventAction.hh
+/// \brief Definition of the F04EventAction class
 //
 //
-//
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #ifndef F04EventAction_h
 #define F04EventAction_h 1
 
@@ -43,29 +40,29 @@ class F04EventAction : public G4UserEventAction
 {
   public:
 
-    F04EventAction(F04RunAction* RA);
-    ~F04EventAction();
+    F04EventAction(F04RunAction* );
+    virtual ~F04EventAction();
 
   public:
 
-    void BeginOfEventAction(const G4Event*);
-    void   EndOfEventAction(const G4Event*);
+    virtual void BeginOfEventAction(const G4Event*);
+    virtual void   EndOfEventAction(const G4Event*);
 
     G4int GetEventNo();
     void SetEventVerbose(G4int);
-    
-    void SetDrawFlag(G4String val)  { drawFlag = val; };
-    void SetPrintModulo(G4int val)  { printModulo = val; };
-        
+ 
+    void SetDrawFlag(G4String val)  { fDrawFlag = val; };
+    void SetPrintModulo(G4int val)  { fPrintModulo = val; };
+ 
   private:
 
-    F04RunAction* runaction;
-    F04EventActionMessenger* eventMessenger;
+    F04RunAction* fRunaction;
+    F04EventActionMessenger* fEventMessenger;
 
-    G4int verboselevel;
-    G4int printModulo;   
+    G4int fVerboselevel;
+    G4int fPrintModulo;
 
-    G4String drawFlag;
+    G4String fDrawFlag;
 
 };
 
