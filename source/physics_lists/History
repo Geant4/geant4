@@ -15,6 +15,16 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25-06-2012, A.Ribon                    (phys-lists-V09-05-31)
+- Fixed incorrect class used for Bertini gamma-nuclear.
+
+22-06-2012, W.Pokorski                 (phys-lists-V09-05-30)
+- fixing incorrect classes used for gamma- and electro-nuclear
+
+20-06-2012, P.Gumplinger               (phys-lists-V09-05-29)
+- remove everything to do with SetModel in G4OpBoundaryProcess
+  to cowork with op-V09-05-04
+
 12-06-2012, W.Pokorski                 (phys-lists-V09-05-28)
 - Migrating Elastic and DElastic builders to use factory
 mechanism for Chips cross sections

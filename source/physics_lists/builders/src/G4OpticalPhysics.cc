@@ -59,7 +59,6 @@ G4OpticalPhysics::G4OpticalPhysics(G4int verbose, const G4String& name)
     fMaxBetaChange(10.0),
     fYieldFactor(1.),
     fExcitationRatio(0.0),
-    fSurfaceModel(unified),
     fProfile("delta"),
     fFiniteRiseTime(false),
     fScintillationByParticleType(false)
@@ -120,11 +119,6 @@ void G4OpticalPhysics::PrintStatistics() const
         G4cout << "    ExcitationRatio: " << fExcitationRatio << G4endl;
         if ( fProcessTrackSecondariesFirst[kScintillation] ) G4cout << "  Track secondaries first:  activated" << G4endl;
       }
-      if ( i == kBoundary ) {
-        G4cout << "    OpticalSurfaceModel:  ";
-        if ( fSurfaceModel == glisur )  G4cout << "glisur" << G4endl;
-        if ( fSurfaceModel == unified ) G4cout << "unified" << G4endl;
-      }
       if ( i == kWLS ) {
         G4cout << "     WLS process time profile: " << fProfile << G4endl;
       }
@@ -165,7 +159,6 @@ void G4OpticalPhysics::ConstructProcess()
   fProcesses[kMieHG] = fOpMieHGScatteringProcess = new G4OpMieHG();
 
   fProcesses[kBoundary] = fOpBoundaryProcess = new G4OpBoundaryProcess();
-  fOpBoundaryProcess->SetModel(fSurfaceModel);
 
   fProcesses[kWLS] = fOpWLSProcess = new G4OpWLS();
   fOpWLSProcess->UseTimeProfile(fProfile);
@@ -287,16 +280,6 @@ void G4OpticalPhysics::SetMaxBetaChangePerStep(G4double maxBetaChange)
 
   if(fCerenkovProcess)
     fCerenkovProcess->SetMaxBetaChangePerStep(maxBetaChange);
-}
-
-void G4OpticalPhysics::SetOpticalSurfaceModel(G4OpticalSurfaceModel model)
-{
-/// Set optical surface model (glisur or unified)
-
-  fSurfaceModel = model;
-
-  if(fOpBoundaryProcess)
-    fOpBoundaryProcess->SetModel(model); 
 }
 
 void G4OpticalPhysics::SetWLSTimeProfile(G4String profile)

@@ -50,6 +50,7 @@
 #include "G4Positron.hh"
 #include "G4ProcessManager.hh"
 
+
 G4BertiniElectroNuclearBuilder::G4BertiniElectroNuclearBuilder() : 
     thePhotoNuclearProcess(0), theElectronNuclearProcess(0), 
     thePositronNuclearProcess(0), theElectroReaction(0), 
@@ -83,8 +84,9 @@ void G4BertiniElectroNuclearBuilder::Build()
   thePhotoNuclearProcess = new G4PhotoNuclearProcess;
   theElectronNuclearProcess = new G4ElectronNuclearProcess;
   thePositronNuclearProcess = new G4PositronNuclearProcess;
-  theElectroReaction = new G4ElectroNuclearReaction;
-  theGammaReaction = new G4MuonVDNuclearModel;
+  //  theElectroReaction = new G4ElectroNuclearReaction;
+  theElectroReaction = new G4ElectroVDNuclearModel;
+  theGammaReaction = new G4CascadeInterface;
 
   theModel = new G4TheoFSGenerator;
 

@@ -36,8 +36,9 @@
 #include "G4QGSMFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
 
-#include "G4MuonVDNuclearModel.hh"
-#include "G4ElectroNuclearReaction.hh"
+#include "G4CascadeInterface.hh"
+#include "G4ElectroVDNuclearModel.hh"
+//#include "G4ElectroNuclearReaction.hh"
 #include "G4PhotoNuclearProcess.hh"
 #include "G4ElectronNuclearProcess.hh"
 #include "G4PositronNuclearProcess.hh"
@@ -55,8 +56,8 @@ class G4BertiniElectroNuclearBuilder
     G4PhotoNuclearProcess * thePhotoNuclearProcess;
     G4ElectronNuclearProcess * theElectronNuclearProcess;
     G4PositronNuclearProcess * thePositronNuclearProcess;
-    G4ElectroNuclearReaction * theElectroReaction;
-    G4MuonVDNuclearModel * theGammaReaction;  
+    G4ElectroVDNuclearModel * theElectroReaction;
+    G4CascadeInterface * theGammaReaction;  
     
     G4TheoFSGenerator * theModel;
     G4GeneratorPrecompoundInterface * theCascade;

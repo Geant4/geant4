@@ -474,8 +474,6 @@ template<class T> TLBE<T>::~TLBE()
   theAbsorptionProcess->SetVerboseLevel(OpVerbLevel);
   // theRayleighScatteringProcess->SetVerboseLevel(OpVerbLevel);
   theBoundaryProcess->SetVerboseLevel(OpVerbLevel);
-  G4OpticalSurfaceModel themodel = unified;
-  theBoundaryProcess->SetModel(themodel);
 
   this->theParticleIterator->reset();
   while( (*(this->theParticleIterator))() )
