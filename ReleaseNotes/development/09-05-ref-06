@@ -18,7 +18,7 @@ Major development/fixes included since the last development tag are:
 
 Summarised, the list of changes is the following:
 
-cmake                                            cmake-V09-05-30
+cmake                                            cmake-V09-05-31
 -----
 - Complete rewrite of data installation with support for CMake >= 2.6.4
   and custom physics data install location. Downloaded data bundles are
@@ -116,10 +116,11 @@ processes/electromagnetic/adjoint                emadjoint-V09-05-01
 - G4AdjointhMultipleScattering: commented out obsolete call.
 - Fixed cases of variable shadowing.
 
-processes/electromagnetic/dna                    emdna-V09-05-19
+processes/electromagnetic/dna                    emdna-V09-05-20
 -----------------------------
 - Added G4ITTrackingInteractivity class. 
 - Fixed cases of variable shadowing and corrected Coverity defects.
+- Updated electron elastic scattering low limit.
 
 processes/electromagnetic/highenergy             emhighenergy-V09-05-01
 ------------------------------------
@@ -362,11 +363,12 @@ examples                                         examples-V09-05-06
   o Fixed compilation warnings for extra parenthesis from MacOSX/clang.
 - extended/analysis (analysisExample-V09-05-03)
   o Apply new coding conventions in shared classes.
-- extended/analysis/AnaEx02 (AnaEx02-V09-05-01)
-  o GNUmakefile: protect analysis setup by G4ANALYSIS_USE flag.
+- extended/analysis/AnaEx02 (AnaEx02-V09-05-02)
+  o Require explicit use of Root analysis tool.
   o Added Doxygen comments.
-- extended/analysis/AnaEx03 (AnaEx03-V09-05-00)
+- extended/analysis/AnaEx03 (AnaEx03-V09-05-02)
   o Fixed compilation warnings in case analysis is not used.
+  o Updated CMake script to get FindAIDA.cmake module found automatically.
 - extended/common (excommon-V09-05-00)
   o Updated scripts for copying shared files.
     Shared files are now defined in the SharedFilesList.txt file.

@@ -266,6 +266,7 @@ List of main features and fixes included in this Beta release since 9.5.p01:
       o Bug fix in G4DNAChemistryManager::CreateSolvatedElectron() concerning
         the final position of the solvated electron using Sanche thermalization.
       o Updated source of cross-section file for elastic scattering.
+        Updated electron elastic scattering low limit.
       o Removed G4Water* classes in 'utils' module.
       o Improved management of information in G4ITStepProcessor and fixed
         Coverity defects.
