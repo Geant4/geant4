@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file polarisation/Pol01/include/EventActionMessenger.hh
+/// \brief Definition of the EventActionMessenger class
+//
 // $Id: EventActionMessenger.hh,v 1.1 2006-10-02 13:48:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 

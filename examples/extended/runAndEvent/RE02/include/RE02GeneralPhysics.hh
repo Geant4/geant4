@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE02/include/RE02GeneralPhysics.hh
+/// \brief Definition of the RE02GeneralPhysics class
+//
 // $Id: RE02GeneralPhysics.hh,v 1.2 2006-06-29 17:44:47 gunter Exp $
 // --------------------------------------------------------------
 //

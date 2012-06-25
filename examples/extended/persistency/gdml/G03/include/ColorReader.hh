@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/gdml/G03/include/ColorReader.hh
+/// \brief Definition of the ColorReader class
+//
 //
 // $Id: ColorReader.hh,v 1.3 2009-04-24 15:54:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

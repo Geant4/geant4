@@ -25,7 +25,7 @@
 //
 // $Id$
 //
-/// \file Pythia6.hh
+/// \file eventgenerator/pythia/decayer6/include/Pythia6.hh
 /// \brief Definition of the Pythia6 class
 
 // 

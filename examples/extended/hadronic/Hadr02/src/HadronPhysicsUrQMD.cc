@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file hadronic/Hadr02/src/HadronPhysicsUrQMD.cc
+/// \brief Implementation of the HadronPhysicsUrQMD class
+//
 // $Id: HadronPhysicsUrQMD.cc,v 1.4 2010-06-15 11:03:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

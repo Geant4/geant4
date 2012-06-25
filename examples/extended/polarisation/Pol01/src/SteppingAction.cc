@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file polarisation/Pol01/src/SteppingAction.cc
+/// \brief Implementation of the SteppingAction class
+//
 // $Id: SteppingAction.cc,v 1.1 2006-10-02 13:48:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 

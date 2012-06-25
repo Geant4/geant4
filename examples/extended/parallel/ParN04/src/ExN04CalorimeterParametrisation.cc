@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parallel/ParN04/src/ExN04CalorimeterParametrisation.cc
+/// \brief Implementation of the ExN04CalorimeterParametrisation class
+//
 
 #include "ExN04CalorimeterParametrisation.hh"
 

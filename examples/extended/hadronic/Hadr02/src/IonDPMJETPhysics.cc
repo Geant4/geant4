@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file hadronic/Hadr02/src/IonDPMJETPhysics.cc
+/// \brief Implementation of the IonDPMJETPhysics class
+//
 // $Id: IonABPhysics.cc,v 1.1 2006/10/28 16:00:25 vnivanch Exp $
 // GEANT4 tag $Name: gras-02-05-02 $
 //

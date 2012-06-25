@@ -33,6 +33,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file hadronic/Hadr02/include/G4Type1GlauberParameterisation.hh
+/// \brief Definition of the G4Type1GlauberParameterisation class
+//
 #ifndef G4Type1GlauberParameterisation_h
 #define G4Type1GlauberParameterisation_h
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

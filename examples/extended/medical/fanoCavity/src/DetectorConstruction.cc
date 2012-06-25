@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/fanoCavity/src/DetectorConstruction.cc
+/// \brief Implementation of the DetectorConstruction class
+//
 // $Id: DetectorConstruction.cc,v 1.3 2007-10-08 12:05:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 

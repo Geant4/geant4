@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parallel/ParN04/src/ExN04TrackerHit.cc
+/// \brief Implementation of the ExN04TrackerHit class
+//
 
 #include "ExN04TrackerHit.hh"
 #include "G4VVisManager.hh"

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/fanoCavity/include/EventActionMessenger.hh
+/// \brief Definition of the EventActionMessenger class
+//
 // $Id: EventActionMessenger.hh,v 1.1 2007-01-19 17:20:26 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

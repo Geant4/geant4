@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE04/src/RE04PhysicsList.cc
+/// \brief Implementation of the RE04PhysicsList class
+//
 
 #include "RE04PhysicsList.hh"
 

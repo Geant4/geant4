@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/exgps/include/exGPSEventActionMessenger.hh
+/// \brief Definition of the exGPSEventActionMessenger class
+//
 // This code implementation is the intellectual property of
 // the GEANT4 collaboration.
 //

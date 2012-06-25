@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parallel/ParN04/include/ExN04PrimaryGeneratorMessenger.hh
+/// \brief Definition of the ExN04PrimaryGeneratorMessenger class
+//
 
 #ifndef ExN04PrimaryGeneratorMessenger_h
 #define ExN04PrimaryGeneratorMessenger_h 1

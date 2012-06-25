@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/P01/src/ExP01TrackerSD.cc
+/// \brief Implementation of the ExP01TrackerSD class
+//
 //
 // $Id: ExP01TrackerSD.cc,v 1.3 2010-12-01 14:18:27 witoldp Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

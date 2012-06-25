@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE01/src/RE01LeptonPhysics.cc
+/// \brief Implementation of the RE01LeptonPhysics class
+//
 //
 // $Id: RE01LeptonPhysics.cc,v 1.3 2010-04-07 01:27:53 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

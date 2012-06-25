@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parallel/MPI/exMPI02/exMPI02.cc
+/// \brief Main program of the parallel/MPI/exMPI02 example
+//
 // $Id: exMPI02.cc,v 1.2 2010-05-18 06:08:30 kmura Exp $
 // $Name: not supported by cvs2svn $
 //

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE02/src/RE02NestedPhantomParameterisation.cc
+/// \brief Implementation of the RE02NestedPhantomParameterisation class
+//
 ///////////////////////////////////////////////////////////////////////////////
 #include "RE02NestedPhantomParameterisation.hh"
 

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/MCTruth/mctruthex.cc
+/// \brief Main program of the eventgenerator/HepMC/MCTruth example
+//
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 

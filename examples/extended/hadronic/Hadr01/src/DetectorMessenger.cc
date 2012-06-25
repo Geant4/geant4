@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file hadronic/Hadr01/src/DetectorMessenger.cc
+/// \brief Implementation of the DetectorMessenger class
+//
 // $Id: DetectorMessenger.cc,v 1.7 2007-05-16 11:43:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

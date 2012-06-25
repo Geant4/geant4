@@ -25,7 +25,7 @@
 //
 // $Id$
 //
-/// \file P6DExtDecayerPhysics.cc
+/// \file eventgenerator/pythia/decayer6/src/P6DExtDecayerPhysics.cc
 /// \brief Implementation of the P6DExtDecayerPhysics class
 ///
 /// \author I. Hrivnacova; IPN, Orsay

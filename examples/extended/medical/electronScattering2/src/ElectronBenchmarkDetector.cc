@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/electronScattering2/src/ElectronBenchmarkDetector.cc
+/// \brief Implementation of the ElectronBenchmarkDetector class
+//
 
 #include "ElectronBenchmarkDetector.hh"
 

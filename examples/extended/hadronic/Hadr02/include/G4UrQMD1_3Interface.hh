@@ -29,6 +29,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file hadronic/Hadr02/include/G4UrQMD1_3Interface.hh
+/// \brief Definition of the G4UrQMD1_3Interface class
+//
 #ifndef G4UrQMD1_3Interface_hh
 #define G4UrQMD1_3Interface_hh
 

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/GammaTherapy/include/StepLimiterPerRegion.hh
+/// \brief Definition of the StepLimiterPerRegion class
+//
 // $Id: StepLimiterPerRegion.hh,v 1.3 2008-08-05 10:38:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

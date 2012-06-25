@@ -33,6 +33,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file hadronic/Hadr02/include/G4FullGlaubAADataSet.hh
+/// \brief Definition of the G4FullGlaubAADataSet class
+//
 #ifndef G4FullGlaubAADataSet_h
 #define G4FullGlaubAADataSet_h
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/HepMCEx01/src/HepMCG4Interface.cc
+/// \brief Implementation of the HepMCG4Interface class
+//
 // ====================================================================
 //
 //   HepMCG4Interface.cc

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file visualization/userVisAction/userVisAction.cc
+/// \brief Main program of the visualization/userVisAction example
+//
 //
 // $Id: userVisAction.cc,v 1.3 2009-12-22 15:07:19 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

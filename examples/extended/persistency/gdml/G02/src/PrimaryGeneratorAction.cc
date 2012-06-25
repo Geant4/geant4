@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/gdml/G02/src/PrimaryGeneratorAction.cc
+/// \brief Implementation of the PrimaryGeneratorAction class
+//
 //
 // $Id: PrimaryGeneratorAction.cc,v 1.2 2008-12-18 12:57:08 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

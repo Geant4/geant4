@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/fanoCavity/include/MyKleinNishinaMessenger.hh
+/// \brief Definition of the MyKleinNishinaMessenger class
+//
 // $Id: MyKleinNishinaMessenger.hh,v 1.1 2009-10-25 19:06:26 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

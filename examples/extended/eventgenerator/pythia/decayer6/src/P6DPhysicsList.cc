@@ -25,7 +25,7 @@
 //
 // $Id$
 // 
-/// \file P6DPhysicsList.cc
+/// \file eventgenerator/pythia/decayer6/src/P6DPhysicsList.cc
 /// \brief Implementation of the P6DPhysicsList class
 
 #include "P6DPhysicsList.hh"

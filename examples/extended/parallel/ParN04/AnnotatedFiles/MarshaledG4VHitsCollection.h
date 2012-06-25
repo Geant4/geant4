@@ -1,3 +1,6 @@
+/// \file parallel/ParN04/AnnotatedFiles/MarshaledG4VHitsCollection.h
+/// \brief Definition of the MaraledG4VHitsCollection class
+//
 // This file was generated automatically by marshalgen.
 
 #ifndef MarshaledG4VHitsCollection_H

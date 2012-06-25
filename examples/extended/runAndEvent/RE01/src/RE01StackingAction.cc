@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE01/src/RE01StackingAction.cc
+/// \brief Implementation of the RE01StackingAction class
+//
 // $Id: RE01StackingAction.cc,v 1.3 2010-11-24 22:47:23 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

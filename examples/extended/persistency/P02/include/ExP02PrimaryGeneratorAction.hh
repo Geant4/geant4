@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/P02/include/ExP02PrimaryGeneratorAction.hh
+/// \brief Definition of the ExP02PrimaryGeneratorAction class
+//
 //
 // $Id: ExP02PrimaryGeneratorAction.hh,v 1.1 2007-11-29 17:05:22 witoldp Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

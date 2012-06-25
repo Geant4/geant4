@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parameterisations/gflash/src/ExGflashEventAction.cc
+/// \brief Implementation of the ExGflashEventAction class
+//
 // Created by Joanna Weng 26.11.2004
 
 

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/DICOM/include/DicomNestedPhantomParameterisation.hh
+/// \brief Definition of the DicomNestedPhantomParameterisation class
+//
 // $Id: DicomNestedPhantomParameterisation.hh,v 1.6 2010-11-09 09:02:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

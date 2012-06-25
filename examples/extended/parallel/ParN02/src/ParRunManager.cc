@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parallel/ParN02/src/ParRunManager.cc
+/// \brief Implementation of the ParRunManager class
+//
 #ifdef G4USE_TOPC
 
 #include "G4Timer.hh"

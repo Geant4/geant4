@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/electronScattering/include/EventAction.hh
+/// \brief Definition of the EventAction class
+//
 // $Id: EventAction.hh,v 1.1 2009-09-19 16:09:44 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

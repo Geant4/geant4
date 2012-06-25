@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/GammaTherapy/src/EventAction.cc
+/// \brief Implementation of the EventAction class
+//
 // -------------------------------------------------------------
 //
 //

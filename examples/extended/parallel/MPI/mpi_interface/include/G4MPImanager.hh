@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parallel/MPI/mpi_interface/include/G4MPImanager.hh
+/// \brief Definition of the G4MPImanager class
+//
 // $Id: G4MPImanager.hh,v 1.2 2010-05-18 06:03:27 kmura Exp $
 // $Name: not supported by cvs2svn $
 //

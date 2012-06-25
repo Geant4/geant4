@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/fanoCavity2/include/TrackingAction.hh
+/// \brief Definition of the TrackingAction class
+//
 // $Id: TrackingAction.hh,v 1.2 2007-10-31 16:16:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

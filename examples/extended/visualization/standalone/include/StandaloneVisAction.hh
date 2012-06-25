@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file visualization/standalone/include/StandaloneVisAction.hh
+/// \brief Definition of the StandaloneVisAction class
+//
 //
 // $Id: StandaloneVisAction.hh,v 1.2 2006-06-29 17:45:55 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

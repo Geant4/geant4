@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/GammaTherapy/src/RunAction.cc
+/// \brief Implementation of the RunAction class
+//
 // -------------------------------------------------------------
 //
 //

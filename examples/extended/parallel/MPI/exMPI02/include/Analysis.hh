@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parallel/MPI/exMPI02/include/Analysis.hh
+/// \brief Definition of the Analysis class
+//
 // $Id: Analysis.hh,v 1.1 2007-11-16 14:29:32 kmura Exp $
 // $Name: not supported by cvs2svn $
 //

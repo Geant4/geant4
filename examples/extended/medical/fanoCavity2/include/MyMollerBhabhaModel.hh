@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/fanoCavity2/include/MyMollerBhabhaModel.hh
+/// \brief Definition of the MyMollerBhabhaModel class
+//
 // $Id: MyMollerBhabhaModel.hh,v 1.1 2007-10-15 16:20:23 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

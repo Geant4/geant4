@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE01/src/RE01CalorimeterSD.cc
+/// \brief Implementation of the RE01CalorimeterSD class
+//
 // $Id: RE01CalorimeterSD.cc,v 1.3 2006-11-18 02:42:27 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

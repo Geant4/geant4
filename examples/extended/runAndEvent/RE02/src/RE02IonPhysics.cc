@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE02/src/RE02IonPhysics.cc
+/// \brief Implementation of the RE02IonPhysics class
+//
 // $Id: RE02IonPhysics.cc,v 1.3 2010-04-07 01:29:00 asaim Exp $
 // --------------------------------------------------------------
 //

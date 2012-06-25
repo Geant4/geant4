@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE01/src/RE01DetectorConstruction.cc
+/// \brief Implementation of the RE01DetectorConstruction class
+//
 // $Id: RE01DetectorConstruction.cc,v 1.3 2006-06-29 17:43:46 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

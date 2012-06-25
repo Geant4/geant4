@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/gdml/G03/src/ColorWriter.cc
+/// \brief Implementation of the ColorWriter class
+//
 // $Id: ColorWriter.cc,v 1.2 2009-04-24 15:54:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

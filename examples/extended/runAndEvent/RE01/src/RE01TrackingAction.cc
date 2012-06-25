@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE01/src/RE01TrackingAction.cc
+/// \brief Implementation of the RE01TrackingAction class
+//
 // $Id: RE01TrackingAction.cc,v 1.2 2006-06-29 17:44:34 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file hadronic/Hadr00/hadr00.cc
+/// \brief Main program of the hadronic/Hadr00 example
+//
 //
 // $Id: hadr00.cc,v 1.4 2010-05-27 18:09:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

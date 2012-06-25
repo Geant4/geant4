@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file g3tog4/clGeometry/src/G3toG4DetectorConstruction.cc
+/// \brief Implementation of the G3toG4DetectorConstruction class
+//
 //
 // $Id: G3toG4DetectorConstruction.cc,v 1.5 2006-06-29 17:20:15 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

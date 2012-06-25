@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/exgps/include/exGPSAnalysisMessenger.hh
+/// \brief Definition of the exGPSAnalysisMessenger class
+//
 #ifndef exGPSAnalysisMessenger_h
 #define exGPSAnalysisMessenger_h 1
 

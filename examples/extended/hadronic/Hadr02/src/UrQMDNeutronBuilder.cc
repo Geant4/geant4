@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file hadronic/Hadr02/src/UrQMDNeutronBuilder.cc
+/// \brief Implementation of the UrQMDNeutronBuilder class
+//
 // $Id: UrQMDNeutronBuilder.cc,v 1.4 2009-04-02 08:11:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

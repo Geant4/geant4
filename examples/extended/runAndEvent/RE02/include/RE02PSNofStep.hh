@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE02/include/RE02PSNofStep.hh
+/// \brief Definition of the RE02PSNofStep class
+//
 //
 // $Id: RE02PSNofStep.hh,v 1.2 2006-12-13 15:42:57 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

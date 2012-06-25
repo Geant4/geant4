@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE02/src/RE02PhysicsList.cc
+/// \brief Implementation of the RE02PhysicsList class
+//
 // $Id: RE02PhysicsList.cc,v 1.2 2006-06-29 17:45:29 gunter Exp $
 // --------------------------------------------------------------
 //

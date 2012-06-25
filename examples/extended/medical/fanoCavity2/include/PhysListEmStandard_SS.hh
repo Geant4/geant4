@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/fanoCavity2/include/PhysListEmStandard_SS.hh
+/// \brief Definition of the PhysListEmStandard_SS class
+//
 // $Id: PhysListEmStandard_SS.hh,v 1.1 2009-10-31 18:05:56 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

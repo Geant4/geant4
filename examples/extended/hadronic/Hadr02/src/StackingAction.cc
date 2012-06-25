@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file hadronic/Hadr02/src/StackingAction.cc
+/// \brief Implementation of the StackingAction class
+//
 // $Id: StackingAction.cc,v 1.5 2006-10-04 09:56:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

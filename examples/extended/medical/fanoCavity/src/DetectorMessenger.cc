@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/fanoCavity/src/DetectorMessenger.cc
+/// \brief Implementation of the DetectorMessenger class
+//
 // $Id: DetectorMessenger.cc,v 1.3 2007-11-05 13:44:18 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/HepMCEx01/src/ExN04PrimaryGeneratorMessenger.cc
+/// \brief Implementation of the ExN04PrimaryGeneratorMessenger class
+//
 // ====================================================================
 //
 //   ExN04PrimaryGeneratorMessenger.cc

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/DICOM/src/DicomEventAction.cc
+/// \brief Implementation of the DicomEventAction class
+//
 //
 // The code was written by :
 //	*Louis Archambault louis.archambault@phy.ulaval.ca,

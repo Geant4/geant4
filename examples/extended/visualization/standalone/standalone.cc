@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file visualization/standalone/standalone.cc
+/// \brief Main program of the visualization/standalone example
+//
 //
 // $Id: standalone.cc,v 1.3 2010-11-09 10:02:45 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

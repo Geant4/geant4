@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file errorpropagation/include/ExErrorDetectorConstruction.hh
+/// \brief Definition of the ExErrorDetectorConstruction class
+//
 // ------------------------------------------------------------
 //      GEANT 4 class header file 
 // ------------------------------------------------------------

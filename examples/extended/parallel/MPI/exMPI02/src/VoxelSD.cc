@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parallel/MPI/exMPI02/src/VoxelSD.cc
+/// \brief Implementation of the VoxelSD class
+//
 // $Id: VoxelSD.cc,v 1.1 2007-11-16 14:29:33 kmura Exp $
 // $Name: not supported by cvs2svn $
 //

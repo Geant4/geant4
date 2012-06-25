@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/DICOM/include/DicomPartialDetectorConstruction.hh
+/// \brief Definition of the DicomPartialDetectorConstruction class
+//
 #ifndef DicomPartialDetectorConstruction_h
 #define DicomPartialDetectorConstruction_h 1
 

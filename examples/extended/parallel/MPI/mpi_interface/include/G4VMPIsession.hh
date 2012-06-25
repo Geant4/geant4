@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parallel/MPI/mpi_interface/include/G4VMPIsession.hh
+/// \brief Definition of the G4VMPIsession class
+//
 // $Id: G4VMPIsession.hh,v 1.2 2010-05-18 06:05:05 kmura Exp $
 // $Name: not supported by cvs2svn $
 //

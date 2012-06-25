@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parallel/MPI/mpi_interface/src/G4MPImessenger.cc
+/// \brief Implementation of the G4MPImessenger class
+//
 // $Id: G4MPImessenger.cc,v 1.3 2010-12-03 08:21:29 kmura Exp $
 // $Name: not supported by cvs2svn $
 //

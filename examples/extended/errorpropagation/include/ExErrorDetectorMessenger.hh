@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file errorpropagation/include/ExErrorDetectorMessenger.hh
+/// \brief Definition of the ExErrorDetectorMessenger class
+//
 // ------------------------------------------------------------
 //      GEANT 4 class header file 
 // ------------------------------------------------------------

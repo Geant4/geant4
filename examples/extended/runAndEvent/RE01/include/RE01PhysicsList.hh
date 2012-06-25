@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE01/include/RE01PhysicsList.hh
+/// \brief Definition of the RE01PhysicsList class
+//
 //
 // $Id: RE01PhysicsList.hh,v 1.2 2006-06-29 17:43:01 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

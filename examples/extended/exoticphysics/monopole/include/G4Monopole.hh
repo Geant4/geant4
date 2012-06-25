@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file exoticphysics/monopole/include/G4Monopole.hh
+/// \brief Definition of the G4Monopole class
+//
 #ifndef G4Monopole_h
 #define G4Monopole_h 1
 

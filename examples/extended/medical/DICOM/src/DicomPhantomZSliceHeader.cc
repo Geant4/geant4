@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/DICOM/src/DicomPhantomZSliceHeader.cc
+/// \brief Implementation of the DicomPhantomZSliceHeader class
+//
 
 #include "globals.hh"
 #include "G4LogicalVolume.hh"

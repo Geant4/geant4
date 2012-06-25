@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/gdml/G04/gdml_det.cc
+/// \brief Main program of the persistency/gdml/G04 example
+//
 //
 // $Id: gdml_det.cc,v 1.3 2010-11-09 10:34:35 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

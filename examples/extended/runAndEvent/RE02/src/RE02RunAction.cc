@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE02/src/RE02RunAction.cc
+/// \brief Implementation of the RE02RunAction class
+//
 //
 // $Id: RE02RunAction.cc,v 1.3 2006-11-18 01:37:24 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

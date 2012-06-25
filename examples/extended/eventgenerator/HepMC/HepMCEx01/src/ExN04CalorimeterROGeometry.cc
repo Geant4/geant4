@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/HepMCEx01/src/ExN04CalorimeterROGeometry.cc
+/// \brief Implementation of the ExN04CalorimeterROGeometry class
+//
 #include "ExN04CalorimeterROGeometry.hh"
 #include "ExN04DummySD.hh"
 

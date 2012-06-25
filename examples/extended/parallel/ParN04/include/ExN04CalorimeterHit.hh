@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parallel/ParN04/include/ExN04CalorimeterHit.hh
+/// \brief Definition of the ExN04CalorimeterHit class
+//
 
 #ifndef ExN04CalorimeterHit_h
 #define ExN04CalorimeterHit_h 1

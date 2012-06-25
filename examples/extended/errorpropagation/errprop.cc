@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file errorpropagation/errprop.cc
+/// \brief Main program of the errorpropagation example
+//
 // ------------------------------------------------------------
 //      GEANT 4 example main
 // ------------------------------------------------------------

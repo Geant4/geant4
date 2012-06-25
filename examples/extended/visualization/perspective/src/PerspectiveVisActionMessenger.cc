@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file visualization/perspective/src/PerspectiveVisActionMessenger.cc
+/// \brief Implementation of the PerspectiveVisActionMessenger class
+//
 //
 // $Id: PerspectiveVisActionMessenger.cc,v 1.3 2006-11-06 20:07:36 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

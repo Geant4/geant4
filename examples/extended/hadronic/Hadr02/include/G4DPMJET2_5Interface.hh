@@ -33,6 +33,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file hadronic/Hadr02/include/G4DPMJET2_5Interface.hh
+/// \brief Definition of the G4DPMJET2_5Interface class
+//
 #ifndef G4DPMJET2_5Interface_hh
 #define G4DPMJET2_5Interface_hh 1
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

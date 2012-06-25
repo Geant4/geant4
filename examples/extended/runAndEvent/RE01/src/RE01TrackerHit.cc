@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE01/src/RE01TrackerHit.cc
+/// \brief Implementation of the RE01TrackerHit class
+//
 // $Id: RE01TrackerHit.cc,v 1.5 2006-11-14 07:07:38 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

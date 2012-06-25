@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file hadronic/Hadr01/src/PhysicsListMessenger.cc
+/// \brief Implementation of the PhysicsListMessenger class
+//
 //
 // $Id: PhysicsListMessenger.cc,v 1.7 2010-01-13 15:53:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

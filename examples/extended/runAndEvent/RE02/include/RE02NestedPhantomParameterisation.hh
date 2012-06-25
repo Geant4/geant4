@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE02/include/RE02NestedPhantomParameterisation.hh
+/// \brief Definition of the RE02NestedPhantomParameterisation class
+//
 //
 // $Id: RE02NestedPhantomParameterisation.hh,v 1.4 2010-11-09 19:46:30 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

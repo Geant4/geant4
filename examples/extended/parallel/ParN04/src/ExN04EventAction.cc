@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parallel/ParN04/src/ExN04EventAction.cc
+/// \brief Implementation of the ExN04EventAction class
+//
 
 #include "ExN04EventAction.hh"
 

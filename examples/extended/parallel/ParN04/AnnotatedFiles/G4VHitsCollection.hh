@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parallel/ParN04/AnnotatedFiles/G4VHitsCollection.hh
+/// \brief Definition of the G4VHitsCollection class
+//
 //
 // $Id: G4VHitsCollection.hh,v 1.3 2006-06-29 17:35:37 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

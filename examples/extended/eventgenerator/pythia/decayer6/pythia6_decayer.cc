@@ -25,7 +25,7 @@
 //
 // $Id$
 //
-/// \file pythia6_decayer.cc
+/// \file eventgenerator/pythia/decayer6/pythia6_decayer.cc
 /// \brief Main program of the pythia6Decayer example
 
 #include "P6DExtDecayerPhysics.hh"

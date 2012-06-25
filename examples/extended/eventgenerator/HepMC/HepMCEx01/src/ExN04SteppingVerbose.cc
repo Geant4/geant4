@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/HepMCEx01/src/ExN04SteppingVerbose.cc
+/// \brief Implementation of the ExN04SteppingVerbose class
+//
 //
 // $Id: ExN04SteppingVerbose.cc,v 1.4 2006-06-29 17:06:23 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

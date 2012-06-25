@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/P01/src/ExP01DetectorConstruction.cc
+/// \brief Implementation of the ExP01DetectorConstruction class
+//
 //
 // $Id: ExP01DetectorConstruction.cc,v 1.2 2006-06-29 17:39:17 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

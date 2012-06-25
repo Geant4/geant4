@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/P01/include/ExP01DetectorMessenger.hh
+/// \brief Definition of the ExP01DetectorMessenger class
+//
 //
 // $Id: ExP01DetectorMessenger.hh,v 1.2 2006-06-29 17:38:49 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

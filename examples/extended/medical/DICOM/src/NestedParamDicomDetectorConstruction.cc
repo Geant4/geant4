@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/DICOM/src/NestedParamDicomDetectorConstruction.cc
+/// \brief Implementation of the NestedParamDicomDetectorConstruction class
+//
 // History:
 //	Pedro Arce  
 //

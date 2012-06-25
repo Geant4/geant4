@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file exoticphysics/monopole/include/G4MonopolePhysics.hh
+/// \brief Definition of the G4MonopolePhysics class
+//
 //
 // $Id: G4MonopolePhysics.hh,v 1.4 2010-11-29 15:14:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

@@ -25,8 +25,8 @@
 //
 // $Id$
 //
-/// \file EDecayType.hh
-/// \brief Definition of the EDecayType class
+/// \file eventgenerator/pythia/decayer6/include/EDecayType.hh
+/// \brief Definition of the EDecayType enumeration
 
 #ifndef E_DECAY_TYPE_H
 #define E_DECAY_TYPE_H 

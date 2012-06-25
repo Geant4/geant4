@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file hadronic/Hadr02/include/UrQMD.icc
+/// \brief Implementation of the UrQMD class inline functions
+//
 // $Id: UrQMD.icc,v 1.7 2010-08-16 07:14:44 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/HepMCEx01/hepmcEx01.cc
+/// \brief Main program of the eventgenerator/HepMC/HepMCEx01 example
+//
 //
 // $Id: hepmcEx01.cc,v 1.7 2010-12-10 06:21:34 kmura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

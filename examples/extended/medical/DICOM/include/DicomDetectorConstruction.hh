@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/DICOM/include/DicomDetectorConstruction.hh
+/// \brief Definition of the DicomDetectorConstruction class
+//
 // Author: P. Arce
 // History: 30.11.07  First version
 //*******************************************************

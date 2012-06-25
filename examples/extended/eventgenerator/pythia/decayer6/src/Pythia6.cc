@@ -25,7 +25,7 @@
 //
 // $Id$
 //
-/// \file Pythia6.cc
+/// \file eventgenerator/pythia/decayer6/src/Pythia6.cc
 /// \brief Implementation of the Pythia6 class
 
 // ----------------------------------------------------------------------------

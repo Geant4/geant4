@@ -25,7 +25,7 @@
 //
 // $Id: P6DPhysicsList.hh,v 1.2 2010-10-21 09:21:41 ivana Exp $
 //
-/// \file P6DPhysicsList.hh
+/// \file eventgenerator/pythia/decayer6/include/P6DPhysicsList.hh
 /// \brief Definition of the P6DPhysicsList class
 
 #ifndef P6DPhysicsList_h

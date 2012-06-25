@@ -33,6 +33,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file hadronic/Hadr02/include/G4DPMJET2_5CrossSection.hh
+/// \brief Definition of the G4DPMJET2_5CrossSection class
+//
 #ifndef G4DPMJET2_5CrossSection_h
 #define G4DPMJET2_5CrossSection_h
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

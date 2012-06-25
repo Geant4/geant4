@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/DICOM/include/DicomPhysicsList.hh
+/// \brief Definition of the DicomPhysicsList class
+//
 // -------------------------------------------------------------------
 // $Id: DicomPhysicsList.hh,v 1.7 2009-10-26 11:21:01 chauvie Exp $
 // -------------------------------------------------------------------

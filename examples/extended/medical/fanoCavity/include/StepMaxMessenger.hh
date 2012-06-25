@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/fanoCavity/include/StepMaxMessenger.hh
+/// \brief Definition of the StepMaxMessenger class
+//
 // $Id: StepMaxMessenger.hh,v 1.1 2007-01-19 17:20:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

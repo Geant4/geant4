@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file polarisation/Pol01/src/RunAction.cc
+/// \brief Implementation of the RunAction class
+//
 // $Id: RunAction.cc,v 1.3 2006-11-17 11:44:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 

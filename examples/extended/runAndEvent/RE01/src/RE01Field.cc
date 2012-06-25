@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE01/src/RE01Field.cc
+/// \brief Implementation of the RE01Field class
+//
 // $Id: RE01Field.cc,v 1.3 2006-06-29 17:43:58 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

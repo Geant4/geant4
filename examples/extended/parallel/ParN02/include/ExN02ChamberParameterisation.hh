@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parallel/ParN02/include/ExN02ChamberParameterisation.hh
+/// \brief Definition of the ExN02ChamberParameterisation class
+//
 //
 // $Id: ExN02ChamberParameterisation.hh,v 1.4 2006-06-29 17:34:02 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

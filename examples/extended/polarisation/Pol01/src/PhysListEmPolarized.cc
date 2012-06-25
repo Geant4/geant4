@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file polarisation/Pol01/src/PhysListEmPolarized.cc
+/// \brief Implementation of the PhysListEmPolarized class
+//
 //
 // $Id: PhysListEmPolarized.cc,v 1.3 2009-11-21 16:27:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

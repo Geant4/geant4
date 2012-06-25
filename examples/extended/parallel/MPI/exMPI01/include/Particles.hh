@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parallel/MPI/exMPI01/include/Particles.hh
+/// \brief Definition of the Particles class
+//
 // $Id: Particles.hh,v 1.1 2007-11-16 14:16:46 kmura Exp $
 // $Name: not supported by cvs2svn $
 //

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/electronScattering/src/PhysicsList.cc
+/// \brief Implementation of the PhysicsList class
+//
 // $Id: PhysicsList.cc,v 1.2 2011-01-05 18:48:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

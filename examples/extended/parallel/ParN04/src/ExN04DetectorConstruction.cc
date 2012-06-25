@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parallel/ParN04/src/ExN04DetectorConstruction.cc
+/// \brief Implementation of the ExN04DetectorConstruction class
+//
 
 #include "ExN04DetectorConstruction.hh"
 #include "ExN04TrackerSD.hh"

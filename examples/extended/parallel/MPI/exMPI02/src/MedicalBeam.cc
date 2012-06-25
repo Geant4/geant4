@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parallel/MPI/exMPI02/src/MedicalBeam.cc
+/// \brief Implementation of the MedicalBeam class
+//
 // $Id: MedicalBeam.cc,v 1.1 2007-11-16 14:29:33 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================

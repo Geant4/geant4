@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE03/include/RE03UserScoreWriter.hh
+/// \brief Definition of the RE03UserScoreWriter class
+//
 //
 
 #ifndef RE03UserScoreWriter_h

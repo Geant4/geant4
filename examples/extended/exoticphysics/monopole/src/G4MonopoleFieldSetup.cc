@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file exoticphysics/monopole/src/G4MonopoleFieldSetup.cc
+/// \brief Implementation of the G4MonopoleFieldSetup class
+//
 // $Id: G4MonopoleFieldSetup.cc,v 1.2 2010-11-29 15:14:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file hadronic/Hadr00/src/HistoManager.cc
+/// \brief Implementation of the HistoManager class
+//
 // $Id: HistoManager.cc,v 1.7 2010-10-11 11:02:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/HepMCEx01/include/ExN04PrimaryGeneratorAction.hh
+/// \brief Definition of the ExN04PrimaryGeneratorAction class
+//
 // ====================================================================
 //
 //   ExN04PrimaryGeneratorAction.hh

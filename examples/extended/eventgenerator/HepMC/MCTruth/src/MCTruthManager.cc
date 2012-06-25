@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/MCTruth/src/MCTruthManager.cc
+/// \brief Implementation of the MCTruthManager class
+//
 //
 // $Id: MCTruthManager.cc,v 1.4 2010-12-15 07:38:50 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

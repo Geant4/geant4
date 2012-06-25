@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/HepMC/HepMCEx01/include/ExN04Field.hh
+/// \brief Definition of the ExN04Field class
+//
 
 #ifndef ExN04Field_H
 #define ExN04Field_H 1

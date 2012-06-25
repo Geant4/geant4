@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parameterisations/gflash/src/ExGflashPrimaryGeneratorAction.cc
+/// \brief Implementation of the ExGflashPrimaryGeneratorAction class
+//
 #include "ExGflashPrimaryGeneratorAction.hh"
 
 #include "G4Event.hh"

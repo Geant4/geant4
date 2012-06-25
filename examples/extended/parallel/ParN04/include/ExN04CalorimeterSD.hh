@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parallel/ParN04/include/ExN04CalorimeterSD.hh
+/// \brief Definition of the ExN04CalorimeterSD class
+//
 
 #ifndef ExN04CalorimeterSD_h
 #define ExN04CalorimeterSD_h 1

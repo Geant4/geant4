@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/DICOM/include/DicomPrimaryGeneratorAction.hh
+/// \brief Definition of the DicomPrimaryGeneratorAction class
+//
 // The code was written by :
 //	*Louis Archambault louis.archambault@phy.ulaval.ca,
 //      *Luc Beaulieu beaulieu@phy.ulaval.ca

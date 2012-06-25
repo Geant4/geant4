@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file exoticphysics/monopole/monopole.cc
+/// \brief Main program of the exoticphysics/monopole example
+//
 // $Id: monopole.cc,v 1.6 2010-06-06 04:53:49 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

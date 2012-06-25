@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE04/RE04.cc
+/// \brief Main program of the runAndEvent/RE04 example
+//
 
 #include "G4RunManager.hh"
 #include "G4ScoringManager.hh"

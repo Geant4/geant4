@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/fanoCavity/include/StackingMessenger.hh
+/// \brief Definition of the StackingMessenger class
+//
 // $Id: StackingMessenger.hh,v 1.1 2007-01-23 13:34:19 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file hadronic/Hadr02/src/IonUrQMDPhysics.cc
+/// \brief Implementation of the IonUrQMDPhysics class
+//
 // $Id: IonUrQMDPhysics.cc,v 1.1 2006/10/28 16:00:25 vnivanch Exp $
 // GEANT4 tag $Name: $
 //

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file exoticphysics/monopole/src/RunActionMessenger.cc
+/// \brief Implementation of the RunActionMessenger class
+//
 // $Id: RunActionMessenger.cc,v 1.1 2007-08-16 10:32:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

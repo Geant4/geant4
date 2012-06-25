@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file polarisation/Pol01/src/HistoManager.cc
+/// \brief Implementation of the HistoManager class
+//
 // $Id: HistoManager.cc,v 1.4 2010-11-09 20:19:49 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

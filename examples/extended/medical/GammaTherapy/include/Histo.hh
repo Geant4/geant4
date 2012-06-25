@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/GammaTherapy/include/Histo.hh
+/// \brief Definition of the Histo class
+//
 #ifndef Histo_h
 #define Histo_h 1
 

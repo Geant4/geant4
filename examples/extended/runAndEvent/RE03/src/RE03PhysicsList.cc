@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE03/src/RE03PhysicsList.cc
+/// \brief Implementation of the RE03PhysicsList class
+//
 //
 // $Id: RE03PhysicsList.cc,v 1.2 2010-04-07 01:30:07 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

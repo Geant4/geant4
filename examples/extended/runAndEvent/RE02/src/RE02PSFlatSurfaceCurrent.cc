@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE02/src/RE02PSFlatSurfaceCurrent.cc
+/// \brief Implementation of the RE02PSFlatSurfaceCurrent class
+//
 //
 // $Id: RE02PSFlatSurfaceCurrent.cc,v 1.3 2007-05-18 18:16:28 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

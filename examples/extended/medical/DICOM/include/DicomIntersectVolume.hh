@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/DICOM/include/DicomIntersectVolume.hh
+/// \brief Definition of the DicomIntersectVolume class
+//
 #ifndef DicomIntersectVolume__HH
 #define DicomIntersectVolume__HH
 

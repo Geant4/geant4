@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/DICOM/include/DicomRun.hh
+/// \brief Definition of the DicomRun class
+//
 //
 // $Id: DicomRun.hh,v 1.1 2008-11-27 21:55:27 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

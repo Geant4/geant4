@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/exgps/src/exGPSEventAction.cc
+/// \brief Implementation of the exGPSEventAction class
+//
 
 #include "exGPSEventAction.hh"
 

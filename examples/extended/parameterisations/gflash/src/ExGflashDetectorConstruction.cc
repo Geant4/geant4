@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parameterisations/gflash/src/ExGflashDetectorConstruction.cc
+/// \brief Implementation of the ExGflashDetectorConstruction class
+//
 // Created by Joanna Weng 26.11.2004
 #include <iostream>
 // G4 Classes

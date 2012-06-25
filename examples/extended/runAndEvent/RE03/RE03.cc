@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE03/RE03.cc
+/// \brief Main program of the runAndEvent/RE03 example
+//
 //
 // $Id: RE03.cc,v 1.5 2010-11-08 20:14:41 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

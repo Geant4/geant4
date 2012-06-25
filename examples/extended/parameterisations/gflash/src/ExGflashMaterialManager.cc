@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parameterisations/gflash/src/ExGflashMaterialManager.cc
+/// \brief Implementation of the ExGflashMaterialManager class
+//
 #include "ExGflashMaterialManager.hh"
 using namespace std;
 ExGflashMaterialManager* ExGflashMaterialManager::mpointer=0;

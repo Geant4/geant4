@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file hadronic/Hadr00/include/PrimaryGeneratorAction.hh
+/// \brief Definition of the PrimaryGeneratorAction class
+//
 // $Id: PrimaryGeneratorAction.hh,v 1.1 2008-07-07 16:37:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

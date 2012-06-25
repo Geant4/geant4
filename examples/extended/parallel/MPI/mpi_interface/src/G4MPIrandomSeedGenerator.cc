@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parallel/MPI/mpi_interface/src/G4MPIrandomSeedGenerator.cc
+/// \brief Implementation of the G4MPIrandomSeedGenerator class
+//
 // $Id: G4MPIrandomSeedGenerator.cc,v 1.1 2007-11-16 14:05:41 kmura Exp $
 // $Name: not supported by cvs2svn $
 //

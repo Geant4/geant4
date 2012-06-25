@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/fanoCavity/fanoCavity.cc
+/// \brief Main program of the medical/fanoCavity example
+//
 // $Id: fanoCavity.cc,v 1.7 2010-05-22 21:02:48 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parallel/MPI/exMPI01/src/PhysicsListEMstd.cc
+/// \brief Implementation of the PhysicsListEMstd class
+//
 // $Id: PhysicsListEMstd.cc,v 1.2 2010-05-13 03:12:00 kmura Exp $
 // $Name: not supported by cvs2svn $
 //

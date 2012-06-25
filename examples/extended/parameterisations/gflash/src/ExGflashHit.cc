@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parameterisations/gflash/src/ExGflashHit.cc
+/// \brief Implementation of the ExGflashHit class
+//
 
 #include "ExGflashHit.hh"
 

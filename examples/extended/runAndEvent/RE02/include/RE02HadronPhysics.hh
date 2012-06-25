@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file runAndEvent/RE02/include/RE02HadronPhysics.hh
+/// \brief Definition of the RE02HadronPhysics class
+//
 // $Id: RE02HadronPhysics.hh,v 1.3 2010-04-07 01:29:00 asaim Exp $
 // --------------------------------------------------------------
 //

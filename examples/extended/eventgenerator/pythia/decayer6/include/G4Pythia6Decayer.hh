@@ -26,7 +26,7 @@
 //
 // $Id$
 //
-/// \file G4Pythia6Decayer.hh
+/// \file eventgenerator/pythia/decayer6/include/G4Pythia6Decayer.hh
 /// \brief Definition of the G4Pythia6Decayer class
 //
 #ifndef G4_PYTHIA6_DECAYER_H

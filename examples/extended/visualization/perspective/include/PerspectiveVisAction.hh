@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file visualization/perspective/include/PerspectiveVisAction.hh
+/// \brief Definition of the PerspectiveVisAction class
+//
 //
 // $Id: PerspectiveVisAction.hh,v 1.2 2006-06-29 17:45:43 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

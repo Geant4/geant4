@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/fanoCavity/src/PhysListEmStandard_option3.cc
+/// \brief Implementation of the PhysListEmStandard_option3 class
+//
 // $Id: PhysListEmStandard_option3.cc,v 1.2 2009-11-16 17:51:44 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

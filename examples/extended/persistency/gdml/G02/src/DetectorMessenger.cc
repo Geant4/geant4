@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/gdml/G02/src/DetectorMessenger.cc
+/// \brief Implementation of the DetectorMessenger class
+//
 //
 // $Id: DetectorMessenger.cc,v 1.3 2008-12-18 12:57:06 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

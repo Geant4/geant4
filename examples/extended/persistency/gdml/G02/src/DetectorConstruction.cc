@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/gdml/G02/src/DetectorConstruction.cc
+/// \brief Implementation of the DetectorConstruction class
+//
 //
 // $Id: DetectorConstruction.cc,v 1.8 2009-04-24 15:47:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

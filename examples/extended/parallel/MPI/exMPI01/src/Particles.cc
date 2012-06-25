@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file parallel/MPI/exMPI01/src/Particles.cc
+/// \brief Implementation of the Particles class
+//
 // $Id: Particles.cc,v 1.1 2007-11-16 14:16:46 kmura Exp $
 // $Name: not supported by cvs2svn $
 //

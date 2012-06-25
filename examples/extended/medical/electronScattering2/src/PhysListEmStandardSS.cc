@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/electronScattering2/src/PhysListEmStandardSS.cc
+/// \brief Implementation of the PhysListEmStandardSS class
+//
 // $Id: PhysListEmStandardSS.cc,v 1.4 2011-01-05 18:51:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

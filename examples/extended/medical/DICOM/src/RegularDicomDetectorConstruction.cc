@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file medical/DICOM/src/RegularDicomDetectorConstruction.cc
+/// \brief Implementation of the RegularDicomDetectorConstruction class
+//
 // History:
 //	Pedro Arce  
 //

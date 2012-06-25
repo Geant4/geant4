@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/P03/include/ExTGTrackerHit.hh
+/// \brief Definition of the ExTGTrackerHit class
+//
 //
 // $Id: ExTGTrackerHit.hh,v 1.2 2010-11-05 08:52:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

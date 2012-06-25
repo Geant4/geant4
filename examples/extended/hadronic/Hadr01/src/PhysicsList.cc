@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file hadronic/Hadr01/src/PhysicsList.cc
+/// \brief Implementation of the PhysicsList class
+//
 //
 // $Id: PhysicsList.cc,v 1.37 2010-11-19 20:12:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

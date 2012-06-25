@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file persistency/P01/src/RootIO.cc
+/// \brief Implementation of the RootIO class
+//
 #include <sstream>
 
 #include "RootIO.hh"
