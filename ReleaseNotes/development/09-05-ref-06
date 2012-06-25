@@ -18,7 +18,7 @@ Major development/fixes included since the last development tag are:
 
 Summarised, the list of changes is the following:
 
-cmake                                            cmake-V09-05-31
+cmake                                            cmake-V09-05-32
 -----
 - Complete rewrite of data installation with support for CMake >= 2.6.4
   and custom physics data install location. Downloaded data bundles are
@@ -95,12 +95,15 @@ persistency/mctruth                              mctruth-V09-05-02
 -------------------
 - Corrected GNUMakefile to use $G4BASE instead of $G4INSTALL/source.
 
-physics_lists                                    phys-lists-V09-05-28
+physics_lists                                    phys-lists-V09-05-31
 -------------
 - Using new functionality of cross-sections registry allowing
   to share the cross sections data sets.
   Migrated Elastic and DElastic builders and FTFP_BERT and FTFP_BERT_TRV
   to use factory mechanism for CHIPS cross-sections.
+- Fix to use correct classes for Bertini gamma/electro-nuclear.
+- Remove use of SetModel() for optical physics, according to changes to
+  optical process.
 
 processes/biasing                                procbiasing-V09-05-00
 -----------------
@@ -143,7 +146,7 @@ processes/electromagnetic/polarisation           empolar-V09-05-00
 --------------------------------------
 - Fixed cases of variable shadowing.
 
-processes/electromagnetic/standard               emstand-V09-05-28
+processes/electromagnetic/standard               emstand-V09-05-29
 ----------------------------------
 - G4ScreeningMottCrossSection, G4eSingleCoulombScatteringModel: updated
   version of electron scattering code based on analytical approximation of
@@ -161,6 +164,8 @@ processes/electromagnetic/standard               emstand-V09-05-28
 - G4eBremsstrahlungRelModel: switched full screening off.
 - G4eplusAnnihilation: fixed propagate weight to secondaries.
 - G4GoudsmitSaundersonMscModel: fixed precision lost providing FPE.
+- Fixed event non-reproducibility in multiple-scattering models for the case
+  where more than one model is defined for different energy intervals.
 - Fixes for variable shadowing.
 
 processes/electromagnetic/utils                  emutils-V09-05-19
@@ -249,7 +254,7 @@ processes/hadronic
   o Added excited isomer index and methods in G4NeutronHPFinalState and
     G4NeutronHPDataUsed. Updated relevant sources accordingly.
   o Fixed cases of variable shadowing.
-- models/parton_string/diffraction (hadr-string-diff-V09-05-11)
+- models/parton_string/diffraction (hadr-string-diff-V09-05-12)
   o Improved diffraction dissociation of p/pi/k-mesons.
     Fit of exp. data on p/pi/k + H.
     Good results are obtained for h+A interactions.
@@ -273,7 +278,7 @@ processes/hadronic
 - models/quasi_elastic (hadr-qelastic-V09-05-03)
 - models/radioactive_decay (radioactive_decay-V09-05-02)
 - models/rpg (hadr-rpg-V09-05-00)
-- models/theo_high_energy (had-theo-HE-V09-05-02)
+- models/theo_high_energy (had-theo-HE-V09-05-03)
 - models/util (hadr-mod-util-V09-05-00)
 - processes (hadr-proc-V09-05-04)
 - stopping (hadr-stopping-V09-05-12)
@@ -286,8 +291,9 @@ processes/management                             procman-V09-05-01
 - Move virtual inlined methods to source.
 - Fixed trivial case of variable shadowing in G4ProcessVector.
 
-processes/optical                                op-V09-05-03
+processes/optical                                op-V09-05-04
 -----------------
+- Removed unnecessary methods Get/SetModel() from G4OpBoundaryProcess.
 - Fixed trivial cases of variable shadowing.
 
 processes/scoring                                procscore-V09-05-01
@@ -379,6 +385,12 @@ examples                                         examples-V09-05-06
     added call to /pythia6Decayer/verbose.
   o Limited G4Pythia6Decayer verbose levels to 0, 1
   o Updated Pythia6 version in README file
+- extended/field/field04 (fieldex04-V09-05-01)
+  o Removed use of SetModel() from WLSOpticalPhysics, according to recent
+    changes to optical process.
+  o Renamed global allocator for F04Trajectory to not clash with one defined
+    in the kernel.
+  o Applied coding guidelines and code clean-up.
 - extended/g3tog4 (g3tog4Tests-V09-05-00)
   o Removed cltog4 example, duplication of clGeometry.
   o Restructured clGeometry for use of classes from common.
@@ -391,8 +403,16 @@ examples                                         examples-V09-05-06
 - extended/medical/DICOM (DICOM-V09-05-02)
   o Assign return value for fread() and fscanf() calls in DicomHandler.
     Fixes compilation warnings on Ubuntu.
+- extended/optical/LXe (LXe-V09-05-00)
+- extended/optical/WLS (WLS-V09-05-00)
+  o Removed use of SetModel() from WLSOpticalPhysics, according to recent
+    changes to optical process.
+  o Applied coding guidelines and code clean-up.
 - extended/persistency/P01 (exampleP01-V09-05-04)
   o Disable building example if static libraries are build.
+- novice/N06 (exampleN06-V09-05-01)
+  o Removed use of SetModel() from WLSOpticalPhysics, according to recent
+    changes to optical process.
 - novice/N07 (exampleN07-V09-05-00)
   o ExN07SteppingVerbose: added protection with G4VERBOSE for verbosity.
 

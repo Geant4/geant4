@@ -235,8 +235,11 @@ List of main features and fixes included in this Beta release since 9.5.p01:
       to share the cross sections data sets.
       Migrated Elastic and DElastic builders and FTFP_BERT and FTFP_BERT_TRV
       to use factory mechanism for CHIPS cross-sections.
+    + Fix to use correct classes for Bertini gamma/electro-nuclear.
     + Improve creation of cascade to avoid one instantiation of Precompound in
       FTFP{Proton,Neutron,PiK,AntiBarion} builders.
+    + Remove use of SetModel() for optical physics, according to changes to
+      optical process.
     + Updates the INCLXX builders for compatibility with the latest INCL++
       developments. Updated QGSP_INCLXX physics list to treat light-ion-induced
       collisions with INCL++.
@@ -331,6 +334,9 @@ List of main features and fixes included in this Beta release since 9.5.p01:
         Modified initialisation, allowing to have addition of custom model
         with specific parameters but reuse low and high energy limits defined
         for the process.
+      o Fixed event non-reproducibility in multiple-scattering models for
+        the case where more than one model is defined for different energy
+        intervals.
       o G4UrbanMscModel95: fixed tail using single scattering model.
       o G4CoulombScatteringModel, G4UrbanMscModel90, G4UrbanMscModel92,
         G4UrbanMscModel93, G4UrbanMscModel95, G4WentzelVIModel and
@@ -422,6 +428,8 @@ List of main features and fixes included in this Beta release since 9.5.p01:
     + Management:
       o Added GetTotalNumberOfInteractionLengthTraversed() method to G4VProcess.
       o Move virtual inlined methods to source.
+    + Optical:
+      o Removed unnecessary methods Get/SetModel() from G4OpBoundaryProcess.
 
   o Hadronic Processes:
     ------------------
@@ -892,6 +900,9 @@ List of main features and fixes included in this Beta release since 9.5.p01:
         added call to /pythia6Decayer/verbose.
       o Limited G4Pythia6Decayer verbose levels to 0, 1
       o Updated Pythia6 version in README file
+    + extended/field/field04
+      o Removed use of SetModel() from WLSOpticalPhysics, according to
+        recent changes to optical process.
     + extended/g3tog4
       o Removed cltog4 example, duplication of clGeometry.
       o Restructured clGeometry for use of classes from common.
@@ -916,6 +927,10 @@ List of main features and fixes included in this Beta release since 9.5.p01:
     + extended/medical/fanoCavity
     + extended/medical/fanoCavity2
       o PhysListEmStandard_WVI: more safe initialisation method.
+    + extended/optical/LXe
+    + extended/optical/WLS
+      o Removed use of SetModel() from WLSOpticalPhysics, according to
+        recent changes to optical process.
     + extended/persistency/gdml/G01
       o Added missing unit in opticalsurfaces.gdml.
     + extended/persistency/P01
@@ -944,11 +959,11 @@ List of main features and fixes included in this Beta release since 9.5.p01:
     + extended/visualization/standalone
     + extended/visualization/userVisAction
       o Corrected vis user action extent.
-    + examples/novice/N03
-      o 
     + examples/novice/N06
       o Set '/tracking/verbose 3' in input macros to also test timing of
         optical photons.
+      o Removed use of SetModel() from WLSOpticalPhysics, according to
+        recent changes to optical process.
 
  ----------------------------------------------------------------------------
  
