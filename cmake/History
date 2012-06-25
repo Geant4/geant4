@@ -30,6 +30,9 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21th June 2012 - Gunter Folger  (cmake-V09-05-31)
+- After update of G4EMLOW6.27, new tar needs updated md5sum.
+
 21th June 2012 - Gunter Folger  (cmake-V09-05-30)
 - After recreating G4NDL4.1, update md5sum.
 
