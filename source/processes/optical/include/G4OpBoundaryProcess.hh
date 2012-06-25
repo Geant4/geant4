@@ -170,15 +170,8 @@ public:
 				       const G4Step&  aStep);
         // This is the method implementing boundary processes.
 
-	G4OpticalSurfaceModel GetModel() const;
-        // Returns the optical surface mode.
-
         G4OpBoundaryProcessStatus GetStatus() const;
         // Returns the current status.
-
-        void SetModel(G4OpticalSurfaceModel model);
-	// Set the optical surface model to be followed
-        // (glisur || unified || LUT).
 
 private:
 
@@ -273,21 +266,9 @@ G4bool G4OpBoundaryProcess::IsApplicable(const G4ParticleDefinition&
 }
 
 inline
-G4OpticalSurfaceModel G4OpBoundaryProcess::GetModel() const
-{
-   return theModel;
-}
-
-inline
 G4OpBoundaryProcessStatus G4OpBoundaryProcess::GetStatus() const
 {
    return theStatus;
-}
-
-inline
-void G4OpBoundaryProcess::SetModel(G4OpticalSurfaceModel model)
-{
-   theModel = model;
 }
 
 inline
