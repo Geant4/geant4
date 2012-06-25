@@ -163,6 +163,7 @@ private:
   G4double coeffc1,coeffc2,coeffc3,coeffc4;
   G4double scr1ini,scr2ini,scr1,scr2;
 
+  G4int    trackID;
   G4bool   inside;
   G4bool   insideskin;
 

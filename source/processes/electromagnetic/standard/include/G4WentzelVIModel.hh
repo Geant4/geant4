@@ -148,6 +148,8 @@ private:
   const G4ParticleDefinition* particle;
   G4double lowEnergyLimit;
 
+  G4int    trackID;
+
   // flags
   G4bool   inside;
   G4bool   singleScatteringMode;

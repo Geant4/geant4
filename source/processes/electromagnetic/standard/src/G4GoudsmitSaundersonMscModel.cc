@@ -108,6 +108,7 @@ G4GoudsmitSaundersonMscModel::G4GoudsmitSaundersonMscModel(const G4String& nam)
   theManager=G4LossTableManager::Instance();
   inside=false;insideskin=false;
   samplez=false;
+  trackID = -1;
 
   GSTable = new G4GoudsmitSaundersonTable();
 
@@ -126,6 +127,7 @@ void G4GoudsmitSaundersonMscModel::Initialise(const G4ParticleDefinition* p,
 					      const G4DataVector&)
 { 
   skindepth=skin*stepmin;
+  trackID = -1;
   SetParticle(p);
   fParticleChange = GetParticleChangeForMSC(p);
 }
@@ -451,12 +453,13 @@ G4GoudsmitSaundersonMscModel::ComputeTruePathLengthLimit(const G4Track& track,
 							 G4double& currentMinimalStep)
 {
   tPathLength = currentMinimalStep;
+  const G4DynamicParticle* dp = track.GetDynamicParticle();
   G4StepPoint* sp = track.GetStep()->GetPreStepPoint();
   G4StepStatus stepStatus = sp->GetStepStatus();
-
-  const G4DynamicParticle* dp = track.GetDynamicParticle();
-
-  if(stepStatus == fUndefined) {
+  G4bool firstStep = false;
+  if(stepStatus == fUndefined || track.GetTrackID() != trackID) { 
+    firstStep = true; 
+    trackID =  track.GetTrackID();
     inside = false;
     insideskin = false;
     tlimit = geombig;
@@ -508,10 +511,10 @@ G4GoudsmitSaundersonMscModel::ComputeTruePathLengthLimit(const G4Track& track,
       smallstep += 1.;
       insideskin = false;
 
-      if((stepStatus == fGeomBoundary) || (stepStatus == fUndefined))
+      if(firstStep || stepStatus == fGeomBoundary)
 	{
           rangeinit = currentRange;
-          if(stepStatus == fUndefined) smallstep = 1.e10;
+          if(firstStep) smallstep = 1.e10;
           else  smallstep = 1.;
 
           //define stepmin here (it depends on lambda!)
@@ -599,7 +602,7 @@ G4GoudsmitSaundersonMscModel::ComputeTruePathLengthLimit(const G4Track& track,
           return ConvertTrueToGeom(tPathLength, currentMinimalStep);  
         }
 
-      if((stepStatus == fGeomBoundary) || (stepStatus == fUndefined))
+      if(firstStep || stepStatus == fGeomBoundary)
 	{
 	  rangeinit = currentRange;
 	  fr = facrange;

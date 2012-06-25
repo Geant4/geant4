@@ -383,8 +383,10 @@ G4double G4UrbanMscModel90::ComputeTruePathLengthLimit(
   const G4DynamicParticle* dp = track.GetDynamicParticle();
   G4StepPoint* sp = track.GetStep()->GetPreStepPoint();
   G4StepStatus stepStatus = sp->GetStepStatus();
-
-  if(stepStatus == fUndefined) {
+  G4bool firstStep = false;
+  if(stepStatus == fUndefined || track.GetTrackID() != trackID) { 
+    firstStep = true; 
+    trackID =  track.GetTrackID();
     inside = false;
     insideskin = false;
     tlimit = geombig;
@@ -433,10 +435,10 @@ G4double G4UrbanMscModel90::ComputeTruePathLengthLimit(
       smallstep += 1.;
       insideskin = false;
 
-      if((stepStatus == fGeomBoundary) || (stepStatus == fUndefined))
+      if(firstStep || stepStatus == fGeomBoundary)
 	{
 
-	  if(stepStatus == fUndefined) smallstep = 1.e10;
+	  if(firstStep) smallstep = 1.e10;
 	  else  smallstep = 1.;
 
 	  // facrange scaling in lambda 
@@ -533,7 +535,7 @@ G4double G4UrbanMscModel90::ComputeTruePathLengthLimit(
           return ConvertTrueToGeom(tPathLength, currentMinimalStep);  
         }
 
-      if((stepStatus == fGeomBoundary) || (stepStatus == fUndefined))
+      if(firstStep || stepStatus == fGeomBoundary)
 	{ 
 	  // facrange scaling in lambda 
 	  // not so strong step restriction above lambdalimit

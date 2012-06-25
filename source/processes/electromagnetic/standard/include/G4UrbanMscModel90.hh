@@ -158,6 +158,7 @@ private:
 
   G4int    currentMaterialIndex;
 
+  G4int    trackID;
   G4bool   inside;
   G4bool   insideskin;
 

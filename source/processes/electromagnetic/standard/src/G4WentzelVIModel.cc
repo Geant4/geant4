@@ -97,6 +97,7 @@ G4WentzelVIModel::G4WentzelVIModel(const G4String& nam) :
   fParticleChange = 0;
   currentCuts = 0;
   currentMaterial = 0;
+  trackID = -1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -114,6 +115,8 @@ void G4WentzelVIModel::Initialise(const G4ParticleDefinition* p,
   // reset parameters
   SetupParticle(p);
   currentRange = 0.0;
+  trackID = -1;
+
   cosThetaMax = cos(PolarAngleLimit());
   wokvi->Initialise(p, cosThetaMax);
   /*  
@@ -169,14 +172,15 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
   G4StepPoint* sp = track.GetStep()->GetPreStepPoint();
   G4StepStatus stepStatus = sp->GetStepStatus();
   singleScatteringMode = false;
-  //G4cout << "G4WentzelVIModel::ComputeTruePathLengthLimit stepStatus= " 
-  //	 << stepStatus << G4endl;
 
   // initialisation for 1st step  
-  if(stepStatus == fUndefined) {
+  if(stepStatus == fUndefined || track.GetTrackID() != trackID) { 
+    trackID =  track.GetTrackID();
     inside = false;
     SetupParticle(dp->GetDefinition());
   }
+  //G4cout << "G4WentzelVIModel::ComputeTruePathLengthLimit stepStatus= " 
+  //	 << stepStatus << G4endl;
 
   // initialisation for each step, lambda may be computed from scratch
   preKinEnergy  = dp->GetKineticEnergy();

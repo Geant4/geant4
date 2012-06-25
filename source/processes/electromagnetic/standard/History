@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22 June 12: V.Ivanchenko (emstand-V09-05-29)
+- Fixed non-reproducibility in msc models for the case if more than 
+    several models defined for different energy interval
+
 15 June 12: V.Ivanchenko (emstand-V09-05-28)
 - G4GoudsmitSaundersonMscModel - fixed precision lost providing FPE 
 

@@ -173,6 +173,7 @@ G4UrbanMscModel93::G4UrbanMscModel93(const G4String& nam)
   currentMaterialIndex = -1;
   fParticleChange = 0;
   couple = 0;
+  trackID = -1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -186,6 +187,7 @@ void G4UrbanMscModel93::Initialise(const G4ParticleDefinition* p,
 				   const G4DataVector&)
 {
   skindepth = skin*stepmin;
+  trackID = -1;
 
   // set values of some data members
   SetParticle(p);
@@ -449,12 +451,13 @@ G4double G4UrbanMscModel93::ComputeTruePathLengthLimit(
 			     G4double& currentMinimalStep)
 {
   tPathLength = currentMinimalStep;
+  const G4DynamicParticle* dp = track.GetDynamicParticle();
   G4StepPoint* sp = track.GetStep()->GetPreStepPoint();
   G4StepStatus stepStatus = sp->GetStepStatus();
-
-  const G4DynamicParticle* dp = track.GetDynamicParticle();
-
-  if(stepStatus == fUndefined) {
+  G4bool firstStep = false;
+  if(stepStatus == fUndefined || track.GetTrackID() != trackID) { 
+    firstStep = true; 
+    trackID =  track.GetTrackID();
     inside = false;
     insideskin = false;
     tlimit = geombig;
@@ -504,10 +507,10 @@ G4double G4UrbanMscModel93::ComputeTruePathLengthLimit(
       smallstep += 1.;
       insideskin = false;
 
-      if((stepStatus == fGeomBoundary) || (stepStatus == fUndefined))
+      if(firstStep || stepStatus == fGeomBoundary)
         {
           rangeinit = currentRange;
-          if(stepStatus == fUndefined) smallstep = 1.e10;
+          if(firstStep) smallstep = 1.e10;
           else  smallstep = 1.;
 
           //define stepmin here (it depends on lambda!)
@@ -581,8 +584,7 @@ G4double G4UrbanMscModel93::ComputeTruePathLengthLimit(
       if(tlimit < stepmin) tlimit = stepmin;
 
       // randomize 1st step or 1st 'normal' step in volume
-      if((stepStatus == fUndefined) ||
-         ((smallstep == skin) && !insideskin)) 
+      if(firstStep || ((smallstep == skin) && !insideskin)) 
         { 
           G4double temptlimit = tlimit;
           if(temptlimit > tlimitmin)
@@ -618,7 +620,7 @@ G4double G4UrbanMscModel93::ComputeTruePathLengthLimit(
           return ConvertTrueToGeom(tPathLength, currentMinimalStep);  
         }
 
-      if((stepStatus == fGeomBoundary) || (stepStatus == fUndefined))
+      if(firstStep || stepStatus == fGeomBoundary)
       {
         rangeinit = currentRange;
         fr = facrange;
