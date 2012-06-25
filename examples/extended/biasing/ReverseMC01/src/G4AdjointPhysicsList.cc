@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file biasing/ReverseMC01/src/G4AdjointPhysicsList.cc
+/// \brief Implementation of the G4AdjointPhysicsList class
+//
 // $Id: G4AdjointPhysicsList.cc,v 1.3 2010-11-11 14:39:42 ldesorgh Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

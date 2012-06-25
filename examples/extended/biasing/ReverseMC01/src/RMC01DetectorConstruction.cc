@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file biasing/ReverseMC01/src/RMC01DetectorConstruction.cc
+/// \brief Implementation of the RMC01DetectorConstruction class
+//
 // $Id: RMC01DetectorConstruction.cc,v 1.2 2010-11-11 14:39:42 ldesorgh Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

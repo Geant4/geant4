@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file biasing/ReverseMC01/exampleRMC01.cc
+/// \brief Main program of the biasing/ReverseMC01 example
+//
 //
 // $Id: exampleRMC01.cc,v 1.2 2010-05-12 12:42:51 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

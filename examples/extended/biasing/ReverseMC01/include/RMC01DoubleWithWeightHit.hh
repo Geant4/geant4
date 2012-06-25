@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file biasing/ReverseMC01/include/RMC01DoubleWithWeightHit.hh
+/// \brief Definition of the RMC01DoubleWithWeightHit class
+//
 // $Id: RMC01DoubleWithWeightHit.hh,v 1.1 2009-11-19 22:41:18 ldesorgh Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

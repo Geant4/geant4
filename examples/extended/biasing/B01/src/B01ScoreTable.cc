@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file biasing/B01/src/B01ScoreTable.cc
+/// \brief Implementation of the B01ScoreTable class
+//
 //
 // $Id: B01ScoreTable.cc,v 1.2 2007-06-22 13:15:29 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file biasing/B02/src/B02PVolumeStore.cc
+/// \brief Implementation of the B02PVolumeStore class
+//
 //
 // $Id: B02PVolumeStore.cc,v 1.5 2006-06-29 16:34:50 gunter Exp $
 // GEANT4 tag 

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file biasing/B01/include/B01Run.hh
+/// \brief Definition of the B01Run class
+//
 //
 // $Id: B01Run.hh,v 1.4 2007-06-21 15:03:33 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

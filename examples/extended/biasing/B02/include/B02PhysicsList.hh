@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file biasing/B02/include/B02PhysicsList.hh
+/// \brief Definition of the B02PhysicsList class
+//
 //
 #ifndef B02PhysicsList_h
 #define B02PhysicsList_h 1

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file biasing/ReverseMC01/src/RMC01DetectorMessenger.cc
+/// \brief Implementation of the RMC01DetectorMessenger class
+//
 // $Id: RMC01DetectorMessenger.cc,v 1.2 2009-11-27 14:43:25 ldesorgh Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

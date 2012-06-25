@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file biasing/B01/src/B01RunAction.cc
+/// \brief Implementation of the B01RunAction class
+//
 //
 // $Id: B01RunAction.cc,v 1.4 2007-06-22 13:29:45 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

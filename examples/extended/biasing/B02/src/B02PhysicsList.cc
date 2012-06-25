@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file biasing/B02/src/B02PhysicsList.cc
+/// \brief Implementation of the B02PhysicsList class
+//
 //
 // $Id: B02PhysicsList.cc,v 1.8 2010-11-30 11:41:14 ivana Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

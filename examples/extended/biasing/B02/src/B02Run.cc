@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file biasing/B02/src/B02Run.cc
+/// \brief Implementation of the B02Run class
+//
 //
 // $Id: B02Run.cc,v 1.2 2007-06-21 15:03:45 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file biasing/B02/exampleB02.cc
+/// \brief Main program of the biasing/B02 example
+//
 //
 // $Id: exampleB02.cc,v 1.22 2007-06-22 13:38:55 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

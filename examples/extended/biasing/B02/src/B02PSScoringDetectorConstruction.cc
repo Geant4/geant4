@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file biasing/B02/src/B02PSScoringDetectorConstruction.cc
+/// \brief Implementation of the B02PSScoringDetectorConstruction class
+//
 //
 // $Id: B02PSScoringDetectorConstruction.cc,v 1.2 2007-06-22 13:38:55 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

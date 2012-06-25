@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file biasing/ReverseMC01/src/G4AdjointPhysicsMessenger.cc
+/// \brief Implementation of the G4AdjointPhysicsMessenger class
+//
 // $Id: G4AdjointPhysicsMessenger.cc,v 1.1 2009-11-19 22:41:18 ldesorgh Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

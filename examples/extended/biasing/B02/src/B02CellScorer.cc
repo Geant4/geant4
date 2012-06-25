@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file biasing/B02/src/B02CellScorer.cc
+/// \brief Implementation of the B02CellScorer class
+//
 //
 // $Id: B02CellScorer.cc,v 1.2 2006-06-29 16:34:42 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file biasing/B01/include/B01PrimaryGeneratorAction.hh
+/// \brief Definition of the B01PrimaryGeneratorAction class
+//
 //
 
 #ifndef B01PrimaryGeneratorAction_hh
