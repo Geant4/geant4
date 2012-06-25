@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay02/include/exrdmHistoMessenger.hh
+/// \brief Definition of the exrdmHistoMessenger class
+//
 
 #ifndef exrdmHistoMessenger_h
 #define exrdmHistoMessenger_h 1

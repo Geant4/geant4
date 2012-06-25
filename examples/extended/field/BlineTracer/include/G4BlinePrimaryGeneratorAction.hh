@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/BlineTracer/include/G4BlinePrimaryGeneratorAction.hh
+/// \brief Definition of the G4BlinePrimaryGeneratorAction class
+//
 //
 // $Id: G4BlinePrimaryGeneratorAction.hh,v 1.2 2006-06-29 17:14:59 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

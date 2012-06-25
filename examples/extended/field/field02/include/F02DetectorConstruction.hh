@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field02/include/F02DetectorConstruction.hh
+/// \brief Definition of the F02DetectorConstruction class
+//
 //
 // $Id: F02DetectorConstruction.hh,v 1.6 2006-06-29 17:17:08 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

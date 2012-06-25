@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay02/src/exrdmEnergyDeposition.cc
+/// \brief Implementation of the exrdmEnergyDeposition class
+//
 #include "exrdmEnergyDeposition.hh"
 
 

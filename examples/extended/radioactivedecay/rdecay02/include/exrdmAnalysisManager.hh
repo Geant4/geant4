@@ -23,6 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay02/include/exrdmAnalysisManager.hh
+/// \brief Definition of the exrdmAnalysisManager class
+//
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #ifndef exrdmAnalysisManager_h
 #define exrdmAnalysisManager_h 1
 

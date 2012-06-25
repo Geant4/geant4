@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay02/src/exrdmHisto.cc
+/// \brief Implementation of the exrdmHisto class
+//
 #ifdef G4ANALYSIS_USE
 #include <AIDA/AIDA.h>
 #endif

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field06/src/F06EventActionMessenger.cc
+/// \brief Implementation of the F06EventActionMessenger class
+//
 //
 //
 

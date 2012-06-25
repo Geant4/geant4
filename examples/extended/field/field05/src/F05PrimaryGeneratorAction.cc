@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field05/src/F05PrimaryGeneratorAction.cc
+/// \brief Implementation of the F05PrimaryGeneratorAction class
+//
 //
 //
 // 

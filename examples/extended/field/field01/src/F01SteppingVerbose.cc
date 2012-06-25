@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field01/src/F01SteppingVerbose.cc
+/// \brief Implementation of the F01SteppingVerbose class
+//
 //
 // $Id: F01SteppingVerbose.cc,v 1.7 2006-06-29 17:17:00 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

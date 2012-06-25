@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field03/field03.cc
+/// \brief Main program of the field/field03 example
+//
 //
 // $Id: field03.cc,v 1.9 2010-05-12 16:41:42 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

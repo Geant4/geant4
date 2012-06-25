@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field02/src/F02ElectricFieldSetup.cc
+/// \brief Implementation of the F02ElectricFieldSetup class
+//
 //
 // $Id: F02ElectricFieldSetup.cc,v 1.4 2008-05-14 15:27:29 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

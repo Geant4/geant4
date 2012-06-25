@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field01/include/F01StepCut.hh
+/// \brief Definition of the F01StepCut class
+//
 //
 // $Id: F01StepCut.hh,v 1.5 2006-06-29 17:16:12 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

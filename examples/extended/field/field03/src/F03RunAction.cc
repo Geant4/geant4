@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field03/src/F03RunAction.cc
+/// \brief Implementation of the F03RunAction class
+//
 //
 // $Id: F03RunAction.cc,v 1.9 2006-06-29 17:19:46 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

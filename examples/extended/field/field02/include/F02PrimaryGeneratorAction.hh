@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field02/include/F02PrimaryGeneratorAction.hh
+/// \brief Definition of the F02PrimaryGeneratorAction class
+//
 //
 // $Id: F02PrimaryGeneratorAction.hh,v 1.4 2006-06-29 17:17:28 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

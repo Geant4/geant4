@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field01/include/F01FieldMessenger.hh
+/// \brief Definition of the F01FieldMessenger class
+//
 //
 // $Id: F01FieldMessenger.hh,v 1.7 2006-06-29 17:15:43 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

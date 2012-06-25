@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field03/include/F03RunMessenger.hh
+/// \brief Definition of the F03RunMessenger class
+//
 
 //
 // $Id: F03RunMessenger.hh,v 1.4 2006-06-29 17:19:05 gunter Exp $

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field01/src/F01EventActionMessenger.cc
+/// \brief Implementation of the F01EventActionMessenger class
+//
 //
 // $Id: F01EventActionMessenger.cc,v 1.4 2006-06-29 17:16:31 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

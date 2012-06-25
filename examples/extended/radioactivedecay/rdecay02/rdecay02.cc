@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay02/rdecay02.cc
+/// \brief Main program of the radioactivedecay/rdecay02 example
+//
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 

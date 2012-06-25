@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/BlineTracer/src/G4BlineEventAction.cc
+/// \brief Implementation of the G4BlineEventAction class
+//
 //
 // $Id: G4BlineEventAction.cc,v 1.2 2006-06-29 17:15:09 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

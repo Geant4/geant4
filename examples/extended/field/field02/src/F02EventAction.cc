@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field02/src/F02EventAction.cc
+/// \brief Implementation of the F02EventAction class
+//
 //
 // $Id: F02EventAction.cc,v 1.7 2010-06-06 04:55:59 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

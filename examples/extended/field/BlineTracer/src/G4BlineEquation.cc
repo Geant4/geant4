@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/BlineTracer/src/G4BlineEquation.cc
+/// \brief Implementation of the G4BlineEquation class
+//
 //
 // $Id: G4BlineEquation.cc,v 1.2 2006-06-29 17:15:07 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

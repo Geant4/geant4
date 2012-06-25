@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field03/src/F03DetectorConstruction.cc
+/// \brief Implementation of the F03DetectorConstruction class
+//
 //
 // $Id: F03DetectorConstruction.cc,v 1.13 2009-11-05 01:10:06 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

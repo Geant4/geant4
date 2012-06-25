@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field05/src/F05ExtraPhysics.cc
+/// \brief Implementation of the F05ExtraPhysics class
+//
 //
 //
 

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field03/src/F03PrimaryGeneratorMessenger.cc
+/// \brief Implementation of the F03PrimaryGeneratorMessenger class
+//
 //
 // $Id: F03PrimaryGeneratorMessenger.cc,v 1.5 2006-06-29 17:19:44 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

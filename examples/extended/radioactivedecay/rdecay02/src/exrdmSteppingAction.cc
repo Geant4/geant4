@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay02/src/exrdmSteppingAction.cc
+/// \brief Implementation of the exrdmSteppingAction class
+//
 #include "G4ios.hh"
 
 #include "exrdmSteppingAction.hh"

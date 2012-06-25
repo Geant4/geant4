@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay02/src/exrdmPhysListEmLowEnergy.cc
+/// \brief Implementation of the exrdmPhysListEmLowEnergy class
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
 #include "exrdmPhysListEmLowEnergy.hh"

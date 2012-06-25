@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field05/src/F05SteppingAction.cc
+/// \brief Implementation of the F05SteppingAction class
+//
 //
 //
 // 

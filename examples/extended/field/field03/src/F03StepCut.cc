@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field03/src/F03StepCut.cc
+/// \brief Implementation of the F03StepCut class
+//
 //
 // $Id: F03StepCut.cc,v 1.3 2006-06-29 17:19:51 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

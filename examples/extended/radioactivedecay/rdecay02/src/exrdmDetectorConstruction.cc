@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay02/src/exrdmDetectorConstruction.cc
+/// \brief Implementation of the exrdmDetectorConstruction class
+//
 #include "exrdmDetectorConstruction.hh"
 #include "exrdmDetectorMessenger.hh"
 //#include "exrdmDetectorSD.hh"

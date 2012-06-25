@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field03/include/F03DetectorMessenger.hh
+/// \brief Definition of the F03DetectorMessenger class
+//
 //
 // $Id: F03DetectorMessenger.hh,v 1.4 2006-06-29 17:18:42 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

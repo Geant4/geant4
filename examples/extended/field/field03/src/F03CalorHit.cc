@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field03/src/F03CalorHit.cc
+/// \brief Implementation of the F03CalorHit class
+//
 //
 // $Id: F03CalorHit.cc,v 1.4 2006-06-29 17:19:17 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

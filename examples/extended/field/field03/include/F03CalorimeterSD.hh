@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field03/include/F03CalorimeterSD.hh
+/// \brief Definition of the F03CalorimeterSD class
+//
 //
 // $Id: F03CalorimeterSD.hh,v 1.4 2006-06-29 17:18:38 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

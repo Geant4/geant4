@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay01/rdecay01.cc
+/// \brief Main program of the radioactivedecay/rdecay01 example
+//
 //
 // $Id: rdecay01.cc,v 1.1 2010-09-16 16:26:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

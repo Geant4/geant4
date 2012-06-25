@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/BlineTracer/src/G4BlineTracer.cc
+/// \brief Implementation of the G4BlineTracer class
+//
 //
 // $Id: G4BlineTracer.cc,v 1.3 2006-06-29 17:15:16 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay02/include/exrdmMaterialMessenger.hh
+/// \brief Definition of the exrdmMaterialMessenger class
+//
 #ifndef exrdmMaterialMessenger_h
 #define exrdmMaterialMessenger_h 1
 ////////////////////////////////////////////////////////////////////////////////

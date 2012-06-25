@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field02/src/F02SteppingMessenger.cc
+/// \brief Implementation of the F02SteppingMessenger class
+//
 //
 // $Id: F02SteppingMessenger.cc,v 1.4 2006-06-29 17:18:29 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay02/include/exrdmMaterialData.hh
+/// \brief Definition of the exrdmMaterialData class
+//
 
 #include "G4Material.hh"
 

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file radioactivedecay/rdecay01/src/RunAction.cc
+/// \brief Implementation of the RunAction class
+//
 //
 // $Id: RunAction.cc,v 1.2 2010-10-11 14:31:39 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
