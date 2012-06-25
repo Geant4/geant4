@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/wls/src/WLSExtraPhysics.cc
+/// \brief Implementation of the WLSExtraPhysics class
+//
 //
 //
 

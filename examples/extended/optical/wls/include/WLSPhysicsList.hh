@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file optical/wls/include/WLSPhysicsList.hh
+/// \brief Definition of the WLSPhysicsList class
+//
 //
 //
 //

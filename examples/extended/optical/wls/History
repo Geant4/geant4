@@ -16,6 +16,9 @@ track of all tags.
  
      ----------------------------------------------------------
 
+Jun 20th, 2012 Peter Gumplinger (WLS-V09-05-00)
+    remove SetModel from  WLSOpticalPhysics.cc to work with op-V09-05-04
+
 Nov 18th, 2011 Gunter Folger    (WLS-V09-04-03)
 -----------------------------------------------
     migrate to new G4Exception
