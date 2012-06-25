@@ -171,18 +171,18 @@ List of main features and fixes included in this Beta release since 9.5.p01:
   o Materials:
     ---------
     + G4Element, G4Isotope, G4NistManager, G4NistMaterialBuilder,
-      G4NistElement: added/reviewed methods GetA(), GetAtomicMassAmu().
+      G4NistElement, G4NistElementBuilder: added/reviewed methods GetA(), 
+      GetAtomicMassAmu().
     + G4Element: added construction of isotope-vector for all elements;
       if user does not create isotopes, then vector of isotopes with natural
       abundances is created automatically using NIST data.
-      Normalize to 1 the sum of isotope abundances.
+      In all cases the sum of isotope abundances is normalized to unity.
     + G4Material: added map for composite materials built via AddMaterial().
     + G4NistMaterialBuilder: build H2O via atom count and not mass fraction.
     + G4IonisParamMat: more safe computation of element index and
       indentification of Hydrogen and Helium.
     + Added method ConstructNewIdealGasMaterial() in G4NistManager and
-      G4NistMaterialBuilder; cleanup logic of AddMaterial() method.
-      Added GetA() in G4NistElementBuilder.
+      G4NistMaterialBuilder.
     + Explicitly use inclusion of headers for system of units and physical
       constants.
     + Fixed cases of variable shadowing and Coverity defects.
@@ -288,10 +288,10 @@ List of main features and fixes included in this Beta release since 9.5.p01:
         low energy electrons in silicon for the simulation of heavy ion tracks
         with the Geant4-DNA toolkit", NSS Conf. Record 2010, p80-85;
         "Geant4 physics processes for microdosimetry simulation: very low
-        energy electromagnetic models for electrons in Si", to be published
-        in TNS; "Geant4 physics processes for microdosimetry simulation:
+        energy electromagnetic models for electrons in Si", submitted
+        to TNS; "Geant4 physics processes for microdosimetry simulation:
         very low energy electromagnetic models for protons and heavy ions
-        in Si", to be published in NIMB.
+        in Si", accepted in NIMB.
       o Requiring G4EMLOW data set version 6.27.
       o Added new Compton model G4MUComptonModel..
       o Removed obsolete Penelope v2001 models and releted helper classes.
@@ -322,8 +322,8 @@ List of main features and fixes included in this Beta release since 9.5.p01:
         PIXE cross-sections. First implementation of Penelope-specific PIXE
         cross-sections.
     + Standard:
-      o G4GoudsmitSaundersonMscModel: fixed FPE bug; lateral displacemnt
-        should not be sampled for plural scattering.
+      o G4GoudsmitSaundersonMscModel: fixed FPE bug; fixed inconsistency -
+        lateral displacement is not anymore sampled for plural scattering.
       o G4CoulombScattering: added method MinPrimaryEnergy() allowing to define
         low edge of physics table when Coulomb scattering is combined with
         multiple or single scattering.
@@ -335,13 +335,12 @@ List of main features and fixes included in this Beta release since 9.5.p01:
         G4UrbanMscModel93, G4UrbanMscModel95, G4WentzelVIModel and
         G4GoudsmitSaundersonMscModel: moved cross-section table from process
         to model; removed method GetLambda().
-      o G4WentzelVIModel: fixed sampling of single scattering.
+      o G4WentzelVIModel: fixed sampling for single scattering mode.
       o G4eMultipleScattering, G4hMultipleScattering: minor optimisation
         at initialisation.
       o G4SeltzerBergerModel: fixed minor problem of sampling for positrons;
-        more accurate simulation of tail for e+ and more effective sampling of
-        energy; made internal data structure static to be used by both e+ and e-
-        models and providing some memory reduction; use simplified computation
+        made internal data structure static to be used by both e+ and e-
+        models providing some memory reduction; use simplified computation
         of majoranta valid for data with more detailed grid.
       o G4DipBustGenerator: fixed model description.
       o G4eBremsstrahlungRelModel: switched full screening off.
@@ -350,9 +349,9 @@ List of main features and fixes included in this Beta release since 9.5.p01:
         screening parameter. Fixed use of screening function in
         G4eBremsstrahlungRelModel.
       o G4ScreeningMottCrossSection, G4eSingleCoulombScatteringModel: updated
-        version of electron scattering code based on analytical approximation of
-        the Mott cross-section by means of Hose coefficients. Added new class
-        G4MottCoefficients.
+        version of electron scattering code based on analytical approximation 
+        of the Mott cross-section by means of Hose coefficients. Added new 
+        class G4MottCoefficients.
     + Utils:
       o G4VAtomDeexcitation: corrected activation of de-excitation for the
         case when specific de-excitation regions are not defined.
@@ -362,12 +361,11 @@ List of main features and fixes included in this Beta release since 9.5.p01:
       o G4LossTableManager: added a check and protection against double
         registration of the same process; this addition allows to use the same
         EM energy-loss process for different particle types.
-      o G4EmCalculator: modified method to access a process taking into account 
-        that the same process may used by different particle types; added new
-        methods ActiveForParticle(), FindEnLossProcess(), FindDiscreteProcess()
-        and FindMscProcess().
+      o G4EmCalculator: modified method to access a process taking into 
+        account that the same process may be used by different particle types; 
+        added new methods ActiveForParticle(), FindEnLossProcess(), 
+        FindDiscreteProcess() and FindMscProcess(). Fix in FindRegion().
         Improved model selection for multiple-scattering processes.
-        Fix in FindRegion().
       o G4EmCorrections: fixed event reproducibility violation due to cashing
         of 'IonHighOrderCorrections' with a vector depending on the ion charge.
       o G4VEmProcess: use ProposeWeight() instead of ProposeParentWeight()
@@ -375,11 +373,12 @@ List of main features and fixes included in this Beta release since 9.5.p01:
       o G4VEmModel: added virtual method Value(), by default computing
         cross-section. Added inline methods HighEnergyActivationLimit(),
         LowEnergyActivationLimit(), ForceBuildTableFlag(), ForceBuildTable().
-      o G4VMultipleScattering: removed transport cross-section table;
-        simplified AlongStepGetPhysicalInteractionLength() method; added
+      o G4VMultipleScattering: removed transport cross-section table (it
+        will be assigned to msc models; simplified 
+        AlongStepGetPhysicalInteractionLength() method; added
         protection against zero kinetic energy into PostStepDoIt().
-        Optimisation of initialisation and reduced number of checks at run time.
-        Improved printout at initialisation; general cleanup of the code.
+        Optimisation of initialisation and reduced number of checks at 
+        run time. Improved printout at initialisation.
       o G4VMscModel: added building of transport cross-section table and new 
         method GetTransportCrossSection() to be used at run-time. Added method
         GetTransportMeanFreePath().
@@ -389,17 +388,17 @@ List of main features and fixes included in this Beta release since 9.5.p01:
         table for d, t, He3, He4.
       o G4LossTableBuilder: added method BuildTableForModel() allowing to build
         the physics-table for a model.
-      o G4LossTableManager: added methods MinKinEnergy() and MaxkinEnergy().
+      o G4LossTableManager: added methods MinKinEnergy() and MaxKinEnergy().
       o G4EmModelManager: extended printout if cross-section table is built
         for the model. Improved printout of model energy limits.
-      o G4VEnergyLossProcess: fix for forced biasing, now forcing if step==1.
-        Addressing problem report #1314.
+      o G4VEnergyLossProcess: fix for forced biasing, now forcing if step==1
+        (addressing problem report #1314).
       o G4EmBiasingmanager: added check on number of secondaries PostStep,
-        if not 1 then disable both splitting and Russian roulette, this does not
-        affect ordinary delta-electron and Bremssrahlung secondary biasing.
+        if not 1 then disable both splitting and Russian roulette, this does 
+        not affect ordinary delta-electron and Bremssrahlung secondary biasing.
         Dynamic weight approach (weight is function of secondary energy) is
-        applied for Russian roulette if biasing limit energy is set below 1 GeV,
-        alternatively costant factor is used.
+        applied for Russian roulette if biasing limit energy is set below 
+        1 GeV, alternatively costant factor is used.
       o G4EmBiasingManager, G4VEmProcess, G4VEnergyLossProcess,
         G4EmProcessOptions, G4EnergyLossMessenger: change Bremssrahlung
         splitting to EGS-style with unique secondaries. Only Bremssrahlung
@@ -528,22 +527,21 @@ List of main features and fixes included in this Beta release since 9.5.p01:
         cross-section classes from main 'cross_sections' module.
     + models/de_excitation
       o G4ExcitationHandler: propagate G4VPhotonEvaporation pointer to
-        G4Evaporation and do not delete it; this allows usin the same gamma 
-        evaporation object inside G4Evaporation class and G4ExcitationHandler;
-        added access methods to de-excitation components.
+        G4Evaporation and do not delete it; this allows usage of the same 
+        gamma evaporation object inside G4Evaporation class and 
+        G4ExcitationHandler; added access methods to de-excitation components.
       o G4VEvaporationFactory, G4Evaporation, G4EvaporationGEMFactory,
         G4EvaporationFactory, G4EvaporationDefaultGEMFactory: proper deletion
         of decay channels after run. Simplified constructors.
       o G4Evaporation: cleanup logic of initialisation and setup options;
         always define photon evaporation channel as first; removed obsolete
         constructor.
-      o G4PhotonEvaporation: added check for variable
-       'G4AddTimeLimitToPhotonEvaporation', if defined a time limit (1.e10-16),
-        a comparison of this limit with nuclear level life time allows to
-        identify to sample narrow gamma lines or use relativistic kinematics
-        which will result in Doppler broadening of nuclear lines; this option
-        has a side effect for energy momentum non-conservation.
-        Use this threshold in G4VGammaDeexcitation.
+      o G4PhotonEvaporation: added check for environment variable
+       'G4AddTimeLimitToPhotonEvaporation', if it is defined a time limit 
+        1.e10-16 is compared with the nuclear level life time allows to
+        identify and sample narrow gamma lines or use relativistic kinematics
+        which will result in Doppler broadening for other nuclear lines; this 
+        option has a side effect for energy-momentum non-conservation.
       o New classes G4PromptPhotonEvaporation, G4LevelManager, G4NucLevel, and
         G4LevelReader implementing new photon-evaporation model.
     + models/high_energy
