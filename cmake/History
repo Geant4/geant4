@@ -30,6 +30,10 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22nd June 2012 - Pere Mato  (cmake-V09-05-32)
+- Modules/Geant4TestDriver.cmake : adapted to create <test>.out and <test>.err files 
+  with stdout and stderr each time a test is run in the current directory.
+
 21th June 2012 - Gunter Folger  (cmake-V09-05-31)
 - After update of G4EMLOW6.27, new tar needs updated md5sum.
 
