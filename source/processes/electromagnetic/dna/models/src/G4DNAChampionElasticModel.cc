@@ -42,7 +42,7 @@ G4DNAChampionElasticModel::G4DNAChampionElasticModel(const G4ParticleDefinition*
 {
 //  nistwater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
 
-  killBelowEnergy = 4*eV; 
+  killBelowEnergy = 7.4*eV; 
   lowEnergyLimit = 0 * eV; 
   highEnergyLimit = 1. * MeV;
   SetLowEnergyLimit(lowEnergyLimit);

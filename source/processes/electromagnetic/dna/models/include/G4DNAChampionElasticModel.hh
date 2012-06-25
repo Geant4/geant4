@@ -131,15 +131,22 @@ private:
 };
 
 
-inline void G4DNAChampionElasticModel::SetKillBelowThreshold (G4double threshold) 
+inline void G4DNAChampionElasticModel::SetKillBelowThreshold (G4double /*threshold*/) 
 { 
-    killBelowEnergy = threshold; 
+
+// SI - commented on 19/06/2013
+
+/*
+  killBelowEnergy = threshold; 
     
-    if (threshold < 1*eV)
+  if (threshold < 1*eV)
      G4Exception ("*** WARNING : the G4DNAChampionElasticModel class is not validated below 1 eV !","",JustWarning,"") ;
-    
-    if (threshold < 0.025*eV) threshold = 0.025*eV;
-             
+
+  if (threshold < 0.025*eV) threshold = 0.025*eV;
+*/
+
+  G4Exception ("*** WARNING : G4DNAChampionElasticModel::SetKillBelowThreshold INACTIVE for now","",JustWarning,"") ;
+            
 }		 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
