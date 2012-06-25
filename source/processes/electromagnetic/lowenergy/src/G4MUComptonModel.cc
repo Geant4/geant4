@@ -56,7 +56,7 @@ using namespace std;
 G4MUComptonModel::G4MUComptonModel(const G4ParticleDefinition*,
 						 const G4String& nam)
   :G4VEmModel(nam),fParticleChange(0),isInitialised(false),
-  scatterFunctionData(0),crossSectionHandler(0),fAtomDeexcitation(0)
+   scatterFunctionData(0),crossSectionHandler(0),fAtomDeexcitation(0)
 {
   lowEnergyLimit = 250 * eV; 
   highEnergyLimit = 100 * GeV;
@@ -263,7 +263,7 @@ void G4MUComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
   // Set constants and initialize scattering parameters
 
   G4double vel_c = 299792458;
-  G4double momentum_au_to_nat = 1.992851740*std::pow(10.,-24.)*pi /2.0;
+  G4double momentum_au_to_nat = (pi/2.0)*1.992851740*std::pow(10.,-24.);
   G4double e_mass_kg = 9.10938188 * std::pow(10.,-31.);
     
   G4int maxDopplerIterations = 1000;  
@@ -276,6 +276,7 @@ void G4MUComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
  
   G4double CE_emission_flag = 0.;
   G4double ePAU = -1;
+  //G4double Alpha=0;
   G4int shellIdx = 0;
   G4double u_temp = 0;
   G4double cosPhiE =0;
@@ -307,7 +308,7 @@ void G4MUComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
       
       // Randomly sample bound electron momentum (memento: the data set is in Atomic Units)
       ePAU = profileData.RandomSelectMomentum(Z,shellIdx);  
-      
+
       // Convert to SI units
       
       G4double ePSI = ePAU * momentum_au_to_nat;
@@ -334,9 +335,10 @@ void G4MUComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
       G4double denominator = (1.0 - cosTheta) +  (gamma_temp*electron_mass_c2*(1 - subdenom1 - subdenom2) / pEIncident);
       pERecoil = (numerator/denominator);
       eERecoil = systemE - pERecoil; 
-      CE_emission_flag = eERecoil - bindingE - electron_mass_c2;
-    } while ( (iteration <= maxDopplerIterations) && (CE_emission_flag < 0.0));      
- 
+      CE_emission_flag = pEIncident - pERecoil;
+    } while ( (iteration <= maxDopplerIterations) && (CE_emission_flag < bindingE));      
+    
+    
    
   // End of recalculation of photon energy with Doppler broadening
 
@@ -490,9 +492,7 @@ void G4MUComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
      G4double eDirY = sinThetaE * std::sin(phi+PhiE);
      G4double eDirZ = cosThetaE;
   
-     G4double eKineticEnergy = eERecoil - electron_mass_c2;
-     eKineticEnergy = eKineticEnergy;
-  
+     G4double eKineticEnergy = pEIncident - pERecoil - bindingE;  
   
      G4ThreeVector eDirection(eDirX,eDirY,eDirZ);
      eDirection.rotateUz(photonDirection0);

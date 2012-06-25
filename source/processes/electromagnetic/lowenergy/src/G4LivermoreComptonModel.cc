@@ -304,8 +304,12 @@ void G4LivermoreComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
 	  photonE = -1.;
 	}
     } while ( iteration <= maxDopplerIterations && 
-	     (photonE < 0. || photonE > eMax || photonE < eMax*G4UniformRand()) );
-  
+
+// JB : corrected the following condition
+//	     (photonE < 0. || photonE > eMax || photonE < eMax*G4UniformRand()) );
+
+	     (photonE > eMax ) );
+    
   // End of recalculation of photon energy with Doppler broadening
   // Revert to original if maximum number of iterations threshold has been reached
 

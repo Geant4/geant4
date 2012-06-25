@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21.06.2012  JB, tag emlowen-V09-05-25 (committed by SI)
+            Fix in G4MUComptonModel 
+
+20.06.2012  JB, tag emlowen-V09-05-24 (committed by SI)
+            Update of G4MUComptonModel & G4LivermoreComptonModel classes
+
 13.06.2012  S. Incerti, tag emlowen-V09-05-23
             Shadowing issues fixes
 
