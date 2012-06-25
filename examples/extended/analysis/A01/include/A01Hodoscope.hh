@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file analysis/A01/include/A01Hodoscope.hh
+/// \brief Definition of the A01Hodoscope class
+//
 // $Id: A01Hodoscope.hh,v 1.4 2006-06-29 16:31:17 gunter Exp $
 // --------------------------------------------------------------
 //

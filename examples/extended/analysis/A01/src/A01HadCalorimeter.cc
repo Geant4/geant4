@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file analysis/A01/src/A01HadCalorimeter.cc
+/// \brief Implementation of the A01HadCalorimeter class
+//
 // $Id: A01HadCalorimeter.cc,v 1.6 2006-06-29 16:32:43 gunter Exp $
 // --------------------------------------------------------------
 //

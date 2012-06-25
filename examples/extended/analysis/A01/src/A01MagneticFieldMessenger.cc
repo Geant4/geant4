@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file analysis/A01/src/A01MagneticFieldMessenger.cc
+/// \brief Implementation of the A01MagneticFieldMessenger class
+//
 // $Id: A01MagneticFieldMessenger.cc,v 1.4 2006-06-29 16:32:59 gunter Exp $
 // --------------------------------------------------------------
 //

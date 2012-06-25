@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file analysis/A01/src/A01HodoscopeHit.cc
+/// \brief Implementation of the A01HodoscopeHit class
+//
 // $Id: A01HodoscopeHit.cc,v 1.11 2006-11-14 07:11:19 perl Exp $
 // --------------------------------------------------------------
 //

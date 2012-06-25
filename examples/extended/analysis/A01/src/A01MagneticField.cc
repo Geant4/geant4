@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file analysis/A01/src/A01MagneticField.cc
+/// \brief Implementation of the A01MagneticField class
+//
 // $Id: A01MagneticField.cc,v 1.7 2009-11-21 00:22:55 perl Exp $
 // --------------------------------------------------------------
 //

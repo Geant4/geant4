@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file analysis/A01/src/A01IonPhysics.cc
+/// \brief Implementation of the A01IonPhysics class
+//
 // $Id: A01IonPhysics.cc,v 1.10 2009-11-21 01:00:19 perl Exp $
 // --------------------------------------------------------------
 //

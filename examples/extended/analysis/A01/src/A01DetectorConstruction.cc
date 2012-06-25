@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file analysis/A01/src/A01DetectorConstruction.cc
+/// \brief Implementation of the A01DetectorConstruction class
+//
 // $Id: A01DetectorConstruction.cc,v 1.10 2009-11-21 00:22:55 perl Exp $
 // --------------------------------------------------------------
 //

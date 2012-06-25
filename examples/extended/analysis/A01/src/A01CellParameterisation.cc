@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file analysis/A01/src/A01CellParameterisation.cc
+/// \brief Implementation of the A01CellParameterisation class
+//
 // $Id: A01CellParameterisation.cc,v 1.4 2006-06-29 16:31:45 gunter Exp $
 // --------------------------------------------------------------
 //

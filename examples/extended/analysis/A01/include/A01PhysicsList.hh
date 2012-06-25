@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file analysis/A01/include/A01PhysicsList.hh
+/// \brief Definition of the A01PhysicsList class
+//
 // $Id: A01PhysicsList.hh,v 1.4 2006-06-29 16:31:33 gunter Exp $
 // --------------------------------------------------------------
 //

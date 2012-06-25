@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file analysis/A01/include/A01EventActionMessenger.hh
+/// \brief Definition of the A01EventActionMessenger class
+//
 // $Id: A01EventActionMessenger.hh,v 1.6 2006-06-29 16:31:06 gunter Exp $
 // --------------------------------------------------------------
 //

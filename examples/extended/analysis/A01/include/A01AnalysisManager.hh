@@ -22,6 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
+/// \file analysis/A01/include/A01AnalysisManager.hh
+/// \brief Definition of the A01AnalysisManager class
 
 #ifndef A01AnalysisManager_h
 #define A01AnalysisManager_h 1

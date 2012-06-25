@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file analysis/A01/src/A01DriftChamber.cc
+/// \brief Implementation of the A01DriftChamber class
+//
 // $Id: A01DriftChamber.cc,v 1.6 2006-06-29 16:32:26 gunter Exp $
 // --------------------------------------------------------------
 //

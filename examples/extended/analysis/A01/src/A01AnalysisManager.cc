@@ -22,6 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
+/// \file analysis/A01/src/A01AnalysisManager.cc
+/// \brief Implementation of the A01AnalysisManager class
 
 #ifdef G4ANALYSIS_USE
 
