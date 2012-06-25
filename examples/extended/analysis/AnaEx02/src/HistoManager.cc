@@ -35,11 +35,9 @@
 #include "HistoManager.hh"
 #include "G4UnitsTable.hh"
 
-#ifdef G4ANALYSIS_USE
 #include "TH1D.h"
 #include "TFile.h"
 #include "TTree.h"
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -58,17 +56,13 @@ HistoManager::HistoManager()
 
 HistoManager::~HistoManager()
 {
-#ifdef G4ANALYSIS_USE  
-    if ( rootFile ) delete rootFile;
-#endif    
+  if ( rootFile ) delete rootFile;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HistoManager::book()
 { 
-#ifdef G4ANALYSIS_USE
- 
  // Creating a tree container to handle histograms and ntuples.
  // This tree is associated to an output file.
  //
@@ -100,20 +94,17 @@ void HistoManager::book()
 
  
  G4cout << "\n----> Histogram file is opened in " << fileName << G4endl;
-#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HistoManager::save()
 { 
-#ifdef G4ANALYSIS_USE
   if (rootFile) {
     rootFile->Write();       // Writing the histograms to the file
     rootFile->Close();        // and closing the tree (and the file)
     G4cout << "\n----> Histogram Tree is saved \n" << G4endl;
   }
-#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -126,9 +117,7 @@ void HistoManager::FillHisto(G4int ih, G4double xbin, G4double weight)
 	   << G4endl;
     return;
   }
-#ifdef G4ANALYSIS_USE
  if  (histo[ih]) { histo[ih]->Fill(xbin, weight); }
-#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -140,9 +129,7 @@ void HistoManager::Normalize(G4int ih, G4double fac)
            << " does not exist. (fac=" << fac << ")" << G4endl;
     return;
   }
-#ifdef G4ANALYSIS_USE
-   if (histo[ih]) histo[ih]->Scale(fac);
-#endif
+  if (histo[ih]) histo[ih]->Scale(fac);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -155,16 +142,13 @@ void HistoManager::FillNtuple(G4double energyAbs, G4double energyGap,
  Labs = trackLAbs;
  Lgap = trackLGap;
 
-#ifdef G4ANALYSIS_USE
   if (ntupl) ntupl->Fill();
-#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HistoManager::PrintStatistic()
 {
-#ifdef G4ANALYSIS_USE
   if(histo[1]) {
     G4cout << "\n ----> print histograms statistic \n" << G4endl;
     
@@ -182,7 +166,6 @@ void HistoManager::PrintStatistic()
             << " rms = " << G4BestUnit(histo[4]->GetRMS(),  "Length") << G4endl;
 
   }
-#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,13 +21,28 @@ endif()
 include(${Geant4_USE_FILE})
 
 #----------------------------------------------------------------------------
+# Find ROOT
+#
+find_package(ROOT QUIET)
+if(NOT ROOT_FOUND)
+  message(STATUS "ROOT package not found. --> Building failed.")
+  return()
+else()
+  message(STATUS "ROOT package found.")
+endif()
+
+# ROOT libraries properties
+set(libsuffix .so)
+set(ROOT_LIBRARY_PROPERTIES ${ROOT_LIBRARY_PROPERTIES}
+      SUFFIX ${libsuffix})
+
+#----------------------------------------------------------------------------
 # Locate sources and headers for this project
 #
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include 
-                    # uncomment the line below to include HBOOK analysis
-                    #${CMAKE_CURRENT_SOURCE_DIR}/../../common/analysis/include
                     ${CMAKE_CURRENT_SOURCE_DIR}/../shared/include 
-                    ${Geant4_INCLUDE_DIR})
+                    ${Geant4_INCLUDE_DIR}
+                    ${ROOT_INCLUDE_DIR})
 file(GLOB sources ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cc)
 
 #----------------------------------------------------------------------------
@@ -49,7 +64,7 @@ list(APPEND sources
 #
 add_executable(AnaEx02 EXCLUDE_FROM_ALL AnaEx02.cc ${sources})
 #target_link_libraries(AnaEx02 ${Geant4_LIBRARIES} -lXt)
-target_link_libraries(AnaEx02 ${Geant4_LIBRARIES})
+target_link_libraries(AnaEx02 ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
