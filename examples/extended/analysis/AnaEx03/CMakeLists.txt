@@ -21,11 +21,23 @@ endif()
 include(${Geant4_USE_FILE})
 
 #----------------------------------------------------------------------------
+# Find AIDA
+#
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
+find_package(AIDA)
+if(NOT AIDA_FOUND)
+  message(STATUS "AIDA package not found. --> AIDA based code disabled")
+else()
+  add_definitions(-DG4ANALYSIS_USE) 
+endif()
+
+#----------------------------------------------------------------------------
 # Locate sources and headers for this project
 #
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include 
                     ${CMAKE_CURRENT_SOURCE_DIR}/../shared/include 
-                    ${Geant4_INCLUDE_DIR})
+                    ${Geant4_INCLUDE_DIR}
+                    ${AIDA_INCLUDE_DIR})
 file(GLOB sources ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cc)
 
 #----------------------------------------------------------------------------
@@ -45,7 +57,7 @@ list(APPEND sources
 #
 add_executable(AnaEx03 EXCLUDE_FROM_ALL AnaEx03.cc ${sources})
 #target_link_libraries(AnaEx03 ${Geant4_LIBRARIES} -lXt)
-target_link_libraries(AnaEx03 ${Geant4_LIBRARIES})
+target_link_libraries(AnaEx03 ${Geant4_LIBRARIES} ${AIDA_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we

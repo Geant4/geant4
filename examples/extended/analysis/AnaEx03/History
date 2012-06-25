@@ -14,7 +14,14 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21 June 2012 Ivana Hrivnacova (AnaEx03-V09-05-02)   
+- Updated CMakeLists.txt to get FindAIDA.cmake module found 
+  by CMake automatically
      
+21 June 2012 Ivana Hrivnacova (AnaEx03-V09-05-01)   
+- Added AIDA support in CMake build
+
 15 June 2012 Gabriele Cosmo (AnaEx03-V09-05-00)     
 - Fixed compilation warnings in case analysis is not used...
 

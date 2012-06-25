@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file analysis/AnaEx03/include/HistoManager.hh
+/// \brief Definition of the HistoManager class
+//
 // $Id: HistoManager.hh,v 1.1 2010-11-08 10:38:44 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
