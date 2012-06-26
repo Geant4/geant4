@@ -314,7 +314,11 @@ void G4VParticleChange::DumpInfo() const
   G4cout.precision(olprc);
 }
 
-G4bool G4VParticleChange::CheckIt(const G4Track& aTrack)
+G4bool G4VParticleChange::CheckIt(const G4Track&
+#ifdef G4VERBOSE
+                                         aTrack
+#endif
+)
 {
 
   G4bool    exitWithError = false;
@@ -379,7 +383,7 @@ G4bool G4VParticleChange::CheckIt(const G4Track& aTrack)
   if (exitWithError) {
     G4Exception("G4VParticleChange::CheckIt",
 		"TRACK001", EventMustBeAborted,
-		"Step length and/or energy deposit was  illegal");
+		"Step length and/or energy deposit was illegal");
   }
 
   // correction 

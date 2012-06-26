@@ -18,6 +18,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- June 26, 2012 G.Cosmo (track-V09-05-13)
+- Additional protection for parameter not used in G4VParticleChange when
+  G4_NO_VERBOSE is set.
+
 - June 20, 2012 G.Cosmo (track-V09-05-12)
 - Protect variable used for verbosity within G4VERBOSE in G4ParticleChange
   and G4VParticleChange. Fixes compilation warnings when G4_NO_VERBOSE is
