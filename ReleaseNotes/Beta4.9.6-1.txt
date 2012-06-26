@@ -166,7 +166,8 @@ List of main features and fixes included in this Beta release since 9.5.p01:
       replaced [Get|Set]WindowLong() with [Get|Set]WindowLongPtr()
       and GWL_USERDATA by GWLP_USERDATA.
     + G4UIQt: changed name of viewer components. Set Cout as default
-      ToolBox widget at startup
+      ToolBox widget at startup. Removed scene tree to avoid slow-down
+      on DICOM scenes.
 
   o Materials:
     ---------
@@ -563,6 +564,9 @@ List of main features and fixes included in this Beta release since 9.5.p01:
       o Incorporate new data from extended nucleon-nucleon elastic scattering
         data (SAID evaluation). These double differential elastic
         cross-sections now cover energies up to 5 GeV.
+    + models/incl
+      o Added missing projectile parameters for He6 projectiles to avoid error
+        condition due to inability to use He6 projectiles.
     + models/inclxx
       o Updated to INCL++ v5.1: can now handle heavy-ion collisions.
         Conserves energy using masses from the Geant4 tables down to the keV

@@ -73,9 +73,10 @@ graphics_reps                                    greps-V09-05-09
 - Explicitly use inclusion of headers for system of units and physical
   constants.
 
-interfaces                                       interfaces-V09-05-03
+interfaces                                       interfaces-V09-05-04
 ----------
-- G4UIQt: set Cout as default ToolBox widget at startup
+- G4UIQt: set Cout as default ToolBox widget at startup.
+  Removed scene tree to avoid slow-down on DICOM scenes.
 
 materials                                        materials-V09-05-25
 ---------
@@ -231,6 +232,9 @@ processes/hadronic
 - models/high_energy (hadr-hep-V09-05-03)
 - models/im_r_matrix (hadr-im_r-V09-05-04)
   o Fixed cases of variable shadowing.
+- models/incl (hadr-incl-V09-05-00)
+  o Added missing projectile parameters for He6 projectiles to avoid error
+    condition due to inability to use He6 projectiles.
 - models/inclxx (hadr-inclxx-V09-05-16)
   o Updated to INCL++ v5.1: interface returns an empty G4HadFinalState if
     no inelastic event could be produced.
@@ -308,7 +312,7 @@ processes/transportation                         transport-V09-05-00
 ------------------------
 - Fixed trivial cases of variable shadowing.
 
-track                                            track-V09-05-12
+track                                            track-V09-05-13
 -----
 - Fix in G4VelocityTable::Interpolation().
 - Explicitly use inclusion of headers for system of units and physical
