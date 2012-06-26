@@ -33,7 +33,7 @@
 //#define DEBUGINCL 1
 
 #include "G4InclCascadeInterface.hh"
-#include "math.h"
+#include <cmath>
 #include "G4GenericIon.hh"
 #include "CLHEP/Random/Random.h"
 

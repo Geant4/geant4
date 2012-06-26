@@ -33,7 +33,7 @@
 #include <vector>
 
 #include "G4InclAblaLightIonInterface.hh"
-#include "math.h"
+#include <cmath>
 #include "G4GenericIon.hh"
 #include "CLHEP/Random/Random.h"
 #include "G4ExcitationHandler.hh"

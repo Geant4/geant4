@@ -16,6 +16,11 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+26 June 2012 - Pekka Kaitaniemi (hadr-incl-V09-05-00)
+-----------------------------------------------------
+- Added missing projectile parameters for He6 projectiles (the values should be
+  checked) to avoid error condition due to inability to use He6 projectiles.
+
 31 October 2011 - Pekka Kaitaniemi (hadr-incl-V09-04-06)
 --------------------------------------------------------
 - Fixed a GCC 4.6 compiler warning

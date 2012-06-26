@@ -433,6 +433,10 @@ void G4Incl::processEventIncl(G4InclInput *input)
       be->rms_be=2.56;
       be->bind_be=32.0;
       i_tabled=1;
+    } else if(be->iz_be == 2 && be->ia_be == 6) { // TODO: Dummy values to work around error with He6 projectiles (PK, 2012-06-26)
+      be->rms_be=2.56;
+      be->bind_be=32.0;
+      i_tabled=1;
     } else if(be->iz_be == 3 && be->ia_be == 7) { // TODO: Check the values!
       be->rms_be=2.56;
       be->bind_be=32.0;
@@ -959,6 +963,10 @@ void G4Incl::processEventInclAbla(G4InclInput *input, G4int eventnumber)
     be->pms_be=100.;
     G4int i_tabled=0;
     if(be->iz_be == 3 && be->ia_be == 6) {
+      be->rms_be=2.56;
+      be->bind_be=32.0;
+      i_tabled=1;
+    } else if(be->iz_be == 2 && be->ia_be == 6) { // TODO: Dummy values to work around error with He6 projectiles (PK, 2012-06-26)
       be->rms_be=2.56;
       be->bind_be=32.0;
       i_tabled=1;

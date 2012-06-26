@@ -34,7 +34,7 @@
 
 #include "G4InclAblaCascadeInterface.hh"
 #include "G4ExcitationHandler.hh"
-#include "math.h"
+#include <cmath>
 #include "G4GenericIon.hh"
 #include "CLHEP/Random/Random.h"
 

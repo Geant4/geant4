@@ -34,7 +34,7 @@
 
 #include "G4InclLightIonInterface.hh"
 #include "G4FermiBreakUp.hh"
-#include "math.h"
+#include <cmath>
 #include "G4GenericIon.hh"
 #include "CLHEP/Random/Random.h"
 
