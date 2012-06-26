@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 June 2012 Laurent Garnier (interfaces-V09-05-04)
+- Remove scene tree from next tag. Slow some examples (DICOM) too much.
+
 1st June 2012  John Allison (interfaces-V09-05-03)
 - Tagged.
 

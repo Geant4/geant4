@@ -172,11 +172,11 @@ G4UIQt::G4UIQt (
   fHistoryTBWidget = new QWidget(fToolBox);
   fCoutTBWidget = new QWidget(fToolBox);
   fVisParametersTBWidget = new QWidget(fToolBox);
-  fViewComponentsTBWidget = new QWidget(fToolBox);
+  //  fViewComponentsTBWidget = new QWidget(fToolBox);
 #if QT_VERSION < 0x040200
-  fViewComponentsTBWidget->hide();
+  //  fViewComponentsTBWidget->hide();
 #else
-  fViewComponentsTBWidget->setVisible(false);
+  //  fViewComponentsTBWidget->setVisible(false);
 #endif
   
   CreateVisParametersTBWidget();
@@ -186,7 +186,7 @@ G4UIQt::G4UIQt (
 
   // the splitter 
   //  fToolBox->addItem(fVisParametersTBWidget,"Vis parameters");
-  fToolBox->addItem(fViewComponentsTBWidget,"Scene");
+  //  fToolBox->addItem(fViewComponentsTBWidget,"Scene");
   fToolBox->addItem(fHelpTBWidget,"Help");
   fToolBox->addItem(fCoutTBWidget,"Cout");
   fToolBox->addItem(fHistoryTBWidget,"History");
