@@ -148,7 +148,7 @@ void G4NeutronHPFFFissionFS::GetAFissionFragment( G4double energy , G4int& fragZ
       it != mEnergyFSPData->end() ; it++ )
       {
          G4double e = (it->first);
-         G4double d = fabs ( energy - e ); 
+         G4double d = std::fabs ( energy - e ); 
          if ( d < Dmin ) 
          {
             Dmin = d;

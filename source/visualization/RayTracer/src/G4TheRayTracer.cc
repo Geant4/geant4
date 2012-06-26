@@ -231,9 +231,9 @@ G4bool G4TheRayTracer::CreateBitMap()
 	rayDirection = G4ThreeVector(-std::tan(angleX),std::tan(angleY),1.0);
       }
       G4double cp = std::cos(eyeDirection.phi());
-      G4double sp = sqrt(1.-cp*cp);
+      G4double sp = std::sqrt(1.-cp*cp);
       G4double ct = std::cos(eyeDirection.theta());
-      G4double st = sqrt(1.-ct*ct);
+      G4double st = std::sqrt(1.-ct*ct);
       G4double gamma = std::atan2(ct*cp*up.x()+ct*sp*up.y()-st*up.z(), -sp*up.x()+cp*up.y());
       rayDirection.rotateZ(-gamma);
       rayDirection.rotateZ(headAngle);

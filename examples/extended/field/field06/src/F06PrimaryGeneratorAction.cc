@@ -77,12 +77,12 @@ void F06PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   particleGun->SetParticleEnergy(particleEnergy);
 
   G4double theta = 2*pi*G4UniformRand();
-  G4double phi = acos(1-2*G4UniformRand());
+  G4double phi = std::acos(1-2*G4UniformRand());
   if (phi > pi/2 && phi < pi) phi = pi-phi;
 
-  G4double z = sin(phi)*cos(theta);
-  G4double x = sin(phi)*sin(theta);
-  G4double y = cos(phi);
+  G4double z = std::sin(phi)*std::cos(theta);
+  G4double x = std::sin(phi)*std::sin(theta);
+  G4double y = std::cos(phi);
 
   particleGun->SetParticleMomentumDirection(G4ThreeVector(x,y,z));
 

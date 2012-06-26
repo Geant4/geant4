@@ -35,7 +35,7 @@
 #include <fstream>
 #include "G4DataVector.hh"
 #include "RemSimPrimaryGeneratorMessenger.hh"
-#include <math.h>
+#include <cmath>
 
 RemSimPrimaryGeneratorAction::RemSimPrimaryGeneratorAction()
 {

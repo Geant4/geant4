@@ -290,7 +290,7 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack,
   if (electronP2 > 0.)
     {
       cosThetaE = (eTotalEnergy + photonEnergy1 )* (1. - epsilon) / std::sqrt(electronP2);
-      sinThetaE = -1. * sqrt(1. - cosThetaE * cosThetaE); 
+      sinThetaE = -1. * std::sqrt(1. - cosThetaE * cosThetaE); 
     }
   
   G4double eDirX = sinThetaE * std::cos(phi);

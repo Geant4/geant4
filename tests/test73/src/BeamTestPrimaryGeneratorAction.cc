@@ -72,7 +72,7 @@ void BeamTestPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     
 	//this->Position(parameter);
 	//particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-	particleGun->SetParticleMomentumDirection(G4ThreeVector(tan(theta),0.,1.0));
+	particleGun->SetParticleMomentumDirection(G4ThreeVector(std::tan(theta),0.,1.0));
 	//particleGun->SetParticleEnergy(10.*GeV);
 	particleGun->SetParticleEnergy(p*GeV);
 	// This forces the particle gun to be exactly 10cm from the first detector plane
@@ -87,7 +87,7 @@ void BeamTestPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
         G4ThreeVector momdir = particleGun->GetParticleMomentumDirection();
         //Position of primary depends on P
         G4double dx = 6.*mm;
-        G4double dz = dx/tan(momdir.theta());
+        G4double dz = dx/std::tan(momdir.theta());
         //G4cout << "pT " << pT << "  and tan(theta_xz) = " << tan(xzAngle(A)) << G4endl;
         G4ThreeVector Position(-dx,0.,-dz);
         particleGun->SetParticlePosition(Position);
@@ -97,7 +97,7 @@ void BeamTestPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
         //Get mometum magnitude
         G4double myp = particleGun->GetParticleMomentum();
         //Pt.. Remember only along x... 
-        G4double mypt = myp * sin(momdir.theta());
+        G4double mypt = myp * std::sin(momdir.theta());
         static_cast<BeamTestRunAction*>(theRunAction)->SetpT(mypt);
         static_cast<BeamTestRunAction*>(theRunAction)->Initialize();
         G4UserEventAction* theEventAction = const_cast<G4UserEventAction*>(G4RunManager::GetRunManager()->GetUserEventAction());

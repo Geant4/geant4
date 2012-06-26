@@ -103,9 +103,9 @@ G4VEmAngularDistribution::SampleDirection(const G4DynamicParticle* dp,
   G4double cost = SampleCosinePolarAngle(dp, out_energy, Z, mat);
   if(cost > 1.0) { cost = 1.0; }
   else if(cost < -1.0) { cost = -1.0; }
-  G4double sint = sqrt((1. - cost)*(1 + cost));
+  G4double sint = std::sqrt((1. - cost)*(1 + cost));
   G4double phi  = twopi*G4UniformRand(); 
-  return G4ThreeVector(sint*cos(phi),sint*sin(phi),cost);
+  return G4ThreeVector(sint*std::cos(phi),sint*std::sin(phi),cost);
 }
 
 inline const G4String& G4VEmAngularDistribution::GetName() const

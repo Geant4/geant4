@@ -401,7 +401,7 @@ G4LossTableBuilder::BuildTableForModel(G4PhysicsTable* aTable,
   }
   InitialiseBaseMaterials(table);
 
-  G4int nbins = G4int(log10(emax/emin) + 0.5)
+  G4int nbins = G4int(std::log10(emax/emin) + 0.5)
     *G4LossTableManager::Instance()->GetNumberOfBinsPerDecade();
   if(nbins < 3) { nbins = 3; }
 

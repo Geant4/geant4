@@ -129,7 +129,7 @@ G4MuMinusCapturePrecompound::ApplyYourself(const G4HadProjectile& projectile,
     G4double emu = (availableEnergy*availableEnergy - massA*massA
 		    + fMuMass*fMuMass)/(2*availableEnergy);
     G4ThreeVector mudir = G4RandomDirection();
-    G4LorentzVector momMuon(sqrt(emu*emu - fMuMass*fMuMass)*mudir, emu);
+    G4LorentzVector momMuon(std::sqrt(emu*emu - fMuMass*fMuMass)*mudir, emu);
 
     // nucleus
     G4LorentzVector momInitial(0.0,0.0,0.0,availableEnergy);

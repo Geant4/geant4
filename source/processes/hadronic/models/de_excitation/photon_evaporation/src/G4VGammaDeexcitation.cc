@@ -187,14 +187,14 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
     // not correct position of stopping ion gamma emission
     // 4-momentum balance is breaked
     G4double e = eGamma + eMass;
-    G4double mom = sqrt(eGamma*(eGamma + 2*eMass));
+    G4double mom = std::sqrt(eGamma*(eGamma + 2*eMass));
     Gamma4P.set(mom * sinTheta * std::cos(phi),
 		mom * sinTheta * std::sin(phi),
 		mom * cosTheta, e); 
     lv -= Gamma4P;
     e = lv.e();
     if(e < Mass) { e = Mass; }
-    mom = sqrt((e - Mass)*(e + Mass));
+    mom = std::sqrt((e - Mass)*(e + Mass));
     G4ThreeVector v = lv.vect().unit();
     lv.set(mom*v.x(), mom*v.y(), mom*v.z(), e); 
 

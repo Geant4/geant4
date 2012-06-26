@@ -809,7 +809,7 @@ namespace G4INCL {
     setEnergy(initialEnergy);
     setMomentum(incomingMomentum);
     setSpin(incomingAngularMomentum);
-    theExcitationEnergy = sqrt(theEnergy*theEnergy-theMomentum.mag2()) - getTableMass();
+    theExcitationEnergy = std::sqrt(theEnergy*theEnergy-theMomentum.mag2()) - getTableMass();
     setMass(getTableMass() + theExcitationEnergy);
   }
 

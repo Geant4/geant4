@@ -180,7 +180,7 @@ void BeamTestEventAction::EndOfEventAction(const G4Event* event)
 
 G4double BeamTestEventAction::ScatteredAngle(G4double x_i, G4double z_FinalExitPos)
 {
-	return atan(x_i/z_FinalExitPos);
+	return std::atan(x_i/z_FinalExitPos);
 }
 
 std::string makeFilename( const std::string& basename, double index )
