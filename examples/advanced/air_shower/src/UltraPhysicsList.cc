@@ -260,10 +260,6 @@ void UltraPhysicsList::ConstructOp()
 //   theCerenkovProcess->SetMaxNumPhotonsPerStep(MaxNumPhotons);
   theCerenkovProcess->SetTrackSecondariesFirst(true);
 
-  // Boundary model (UNIFIED OR GLISUR (OLD GEANT3)) For now only GEANT3
-  G4OpticalSurfaceModel themodel = unified;
-  theBoundaryProcess->SetModel(themodel);
-
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
