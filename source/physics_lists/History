@@ -15,6 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26-06-2012, A.Ribon                    (phys-lists-V09-05-32)
+- For nuclear capture at rest in both FTFP_BERT and FTFP_BERT_TRV,
+  use Bertini for pi-, K-, and Sigma-; FTF/Preco for anti-proton
+  and anti-Sigma+; removed CHIPS for Xi- and Omega-.
+
 25-06-2012, A.Ribon                    (phys-lists-V09-05-31)
 - Fixed incorrect class used for Bertini gamma-nuclear.
 

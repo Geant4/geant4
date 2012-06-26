@@ -36,12 +36,13 @@
 //
 // Modified:  05 April 2012, A.Ribon : Use FTF also for anti_Sigma+ annihilation.
 //	      10 May 2012, M.Kelsey : Use Bertini for pi-,K-,Sigma-
+//            26 June 2012, A.Ribon : Remove CHIPS for Xi- and Omega-
 //----------------------------------------------------------------------------
 //
 
 #include "G4QandFTFStoppingPhysics.hh"
 
-#include "G4QCaptureAtRest.hh"
+// #include "G4QCaptureAtRest.hh"
 #include "G4FTFCaptureAtRest.hh"
 #include "G4HadronicAbsorptionBertini.hh"
 
@@ -57,7 +58,7 @@
 
 G4QandFTFStoppingPhysics::G4QandFTFStoppingPhysics( G4int ver )
   :  G4VPhysicsConstructor( "stopping" )
-    , muProcess(0), hProcess(0), hFTFProcess(0), hBertProcess(0)
+    , muProcess(0), /* hProcess(0), */ hFTFProcess(0), hBertProcess(0)
     , verbose( ver ),
      wasActivated( false ) , useMuonMinusCaptureAtRest( true ) {
   if (verbose > 1) G4cout << "### G4QandFTFStoppingPhysics" << G4endl;
@@ -68,7 +69,7 @@ G4QandFTFStoppingPhysics::G4QandFTFStoppingPhysics( const G4String& name,
                                                     G4int ver, 
                                                     G4bool UseMuonMinusCapture )
   :  G4VPhysicsConstructor( name )
-    , muProcess(0), hProcess(0), hFTFProcess(0), hBertProcess(0)
+    , muProcess(0), /* hProcess(0), */ hFTFProcess(0), hBertProcess(0)
     , verbose( ver ), wasActivated( false ) ,
      useMuonMinusCaptureAtRest( UseMuonMinusCapture ) {
   if (verbose > 1) G4cout << "### G4QandFTFStoppingPhysics" << G4endl;
@@ -109,7 +110,7 @@ void G4QandFTFStoppingPhysics::ConstructProcess() {
   } else {
      muProcess = 0;
   }   
-  hProcess     = new G4QCaptureAtRest();
+  //hProcess     = new G4QCaptureAtRest();
   hFTFProcess  = new G4FTFCaptureAtRest();
   hBertProcess = new G4HadronicAbsorptionBertini();
 
@@ -130,10 +131,10 @@ void G4QandFTFStoppingPhysics::ConstructProcess() {
            G4cout << "### QStoppingPhysics added G4MuonMinusCaptureAtRest for " 
 	          << particle->GetParticleName() << G4endl;
       } else {
-         pmanager->AddRestProcess( hProcess );
-         if ( verbose > 1 )
-           G4cout << "### QStoppingPhysics added G4QCaptureAtRest for " 
-	          << particle->GetParticleName() << G4endl;
+         //pmanager->AddRestProcess( hProcess );
+         //if ( verbose > 1 )
+         //  G4cout << "### QStoppingPhysics added G4QCaptureAtRest for " 
+	 //         << particle->GetParticleName() << G4endl;
       }  
     }
     if ( particle->GetPDGCharge() < 0.0       && 
@@ -153,18 +154,18 @@ void G4QandFTFStoppingPhysics::ConstructProcess() {
       else if ( hBertProcess->IsApplicable(*particle) ) {
         pmanager->AddRestProcess( hBertProcess );
         if ( verbose > 1 ) {
-	  G4cout << "### G4PiMinusAbsorptionBertini added for "
+	  G4cout << "### G4HadronicAbsorptionBertini added for "
                  << particle->GetParticleName() << G4endl;
         }
       } 
-      // Use CHIPS for other hadrons
-      else if ( hProcess->IsApplicable(*particle) ) {
-        pmanager->AddRestProcess( hProcess );
-	if ( verbose > 1 ) {
-	  G4cout << "### QStoppingPhysics added for " 
-		 << particle->GetParticleName() << G4endl;
-	}
-      }
+      // Not use CHIPS for other hadrons (Xi- and Omega-)
+      //else if ( hProcess->IsApplicable(*particle) ) {
+      //  pmanager->AddRestProcess( hProcess );
+      //  if ( verbose > 1 ) {
+      //    G4cout << "### QStoppingPhysics added for " 
+      //	   << particle->GetParticleName() << G4endl;
+      //  }
+      //}
     }	// -ve particles above mass threshold
   }	// while ( (*theParticleIterator)() )
 }
