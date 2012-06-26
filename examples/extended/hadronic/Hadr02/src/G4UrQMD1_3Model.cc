@@ -20,7 +20,7 @@
 // *                                                                  *
 // * Parts of this code which have been  developed by Abdel-Waged     *
 // * et al under contract (31-465) to the King Abdul-Aziz City for    *
-// * Science and Technology (KACST), the National Centre of          *
+// * Science and Technology (KACST), the National Centre of           *
 // * Mathematics and Physics (NCMP), Saudi Arabia.                    *
 // *                                                                  *
 // * By using,  copying,  modifying or  distributing the software (or *

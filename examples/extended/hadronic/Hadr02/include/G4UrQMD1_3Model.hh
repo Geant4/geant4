@@ -20,12 +20,9 @@
 // *                                                                  *
 // * Parts of this code which have been  developed by Abdel-Waged     *
 // * et al under contract (31-465) to the King Abdul-Aziz City for    *
-// * Science and Technology (KAUST), the National Centre of           *
+// * Science and Technology (KACST), the National Centre of           *
 // * Mathematics and Physics (NCMP), Saudi Arabia.                    *
 // *                                                                  *
-// * Rights to use, copy, modify and  redistribute this software for  *
-// * general public use are granted in compliance with any licensing, *
-// * distribution and development policy adopted by the Geant4        *                                             
 // * By using,  copying,  modifying or  distributing the software (or *
 // * any work based  on the software)  you  agree  to acknowledge its *
 // * use  in  resulting  scientific  publications,  and indicate your *
