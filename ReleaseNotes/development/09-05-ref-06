@@ -95,12 +95,15 @@ persistency/mctruth                              mctruth-V09-05-02
 -------------------
 - Corrected GNUMakefile to use $G4BASE instead of $G4INSTALL/source.
 
-physics_lists                                    phys-lists-V09-05-31
+physics_lists                                    phys-lists-V09-05-32
 -------------
 - Using new functionality of cross-sections registry allowing
   to share the cross sections data sets.
   Migrated Elastic and DElastic builders and FTFP_BERT and FTFP_BERT_TRV
   to use factory mechanism for CHIPS cross-sections.
+- For nuclear capture at rest in both FTFP_BERT and FTFP_BERT_TRV,
+  use Bertini for pi-, K-, and Sigma-; FTF/Preco for anti-proton
+  and anti-Sigma+; removed CHIPS for Xi- and Omega-.
 - Fix to use correct classes for Bertini gamma/electro-nuclear.
 - Remove use of SetModel() for optical physics, according to changes to
   optical process.
@@ -353,6 +356,9 @@ data sets
 examples                                         examples-V09-05-06
 --------
 - Updated reference outputs.
+- advanced/air_shower (air_shower-V09-05-03)
+  o Removed use of SetModel() for optical physics, according to recent
+    changes to optical process.
 - advanced/hadrontherapy (hadrontherapy-V09-05-01)
   o Use std::string::size_type for string length instead of int
     in HadrontherapyMatrix::ion. Fixes compilation warning on gcc-4.7.
@@ -387,7 +393,7 @@ examples                                         examples-V09-05-06
   o Limited G4Pythia6Decayer verbose levels to 0, 1
   o Updated Pythia6 version in README file
 - extended/field/field04 (fieldex04-V09-05-01)
-  o Removed use of SetModel() from WLSOpticalPhysics, according to recent
+  o Removed use of SetModel() for optical physics, according to recent
     changes to optical process.
   o Renamed global allocator for F04Trajectory to not clash with one defined
     in the kernel.
@@ -406,13 +412,13 @@ examples                                         examples-V09-05-06
     Fixes compilation warnings on Ubuntu.
 - extended/optical/LXe (LXe-V09-05-00)
 - extended/optical/WLS (WLS-V09-05-00)
-  o Removed use of SetModel() from WLSOpticalPhysics, according to recent
+  o Removed use of SetModel() from optical physics, according to recent
     changes to optical process.
   o Applied coding guidelines and code clean-up.
 - extended/persistency/P01 (exampleP01-V09-05-04)
   o Disable building example if static libraries are build.
 - novice/N06 (exampleN06-V09-05-01)
-  o Removed use of SetModel() from WLSOpticalPhysics, according to recent
+  o Removed use of SetModel() from optical physics, according to recent
     changes to optical process.
 - novice/N07 (exampleN07-V09-05-00)
   o ExN07SteppingVerbose: added protection with G4VERBOSE for verbosity.

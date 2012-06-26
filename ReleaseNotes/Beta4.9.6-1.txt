@@ -235,6 +235,9 @@ List of main features and fixes included in this Beta release since 9.5.p01:
       to share the cross sections data sets.
       Migrated Elastic and DElastic builders and FTFP_BERT and FTFP_BERT_TRV
       to use factory mechanism for CHIPS cross-sections.
+    + For nuclear capture at rest in both FTFP_BERT and FTFP_BERT_TRV,
+      use Bertini for pi-, K-, and Sigma-; FTF/Preco for anti-proton
+      and anti-Sigma+; removed CHIPS for Xi- and Omega-.
     + Fix to use correct classes for Bertini gamma/electro-nuclear.
     + Improve creation of cascade to avoid one instantiation of Precompound in
       FTFP{Proton,Neutron,PiK,AntiBarion} builders.
@@ -832,6 +835,9 @@ List of main features and fixes included in this Beta release since 9.5.p01:
     + Updated reference outputs; added CMake scripts where missing.
     + Migrated to new g4tools histogramming system, where needed.
     + Updates to apply new coding conventions.
+    + advanced/air_shower
+      o Removed use of SetModel() for optical physics, according to recent
+        changes to optical process.
     + advanced/hadrontherapy
       o Fixed compilation warning on gcc-4.7.
     + advanced/human_phantom
@@ -901,7 +907,7 @@ List of main features and fixes included in this Beta release since 9.5.p01:
       o Limited G4Pythia6Decayer verbose levels to 0, 1
       o Updated Pythia6 version in README file
     + extended/field/field04
-      o Removed use of SetModel() from WLSOpticalPhysics, according to
+      o Removed use of SetModel() for optical physics, according to
         recent changes to optical process.
     + extended/g3tog4
       o Removed cltog4 example, duplication of clGeometry.
@@ -929,7 +935,7 @@ List of main features and fixes included in this Beta release since 9.5.p01:
       o PhysListEmStandard_WVI: more safe initialisation method.
     + extended/optical/LXe
     + extended/optical/WLS
-      o Removed use of SetModel() from WLSOpticalPhysics, according to
+      o Removed use of SetModel() for optical physics, according to
         recent changes to optical process.
     + extended/persistency/gdml/G01
       o Added missing unit in opticalsurfaces.gdml.
@@ -962,7 +968,7 @@ List of main features and fixes included in this Beta release since 9.5.p01:
     + examples/novice/N06
       o Set '/tracking/verbose 3' in input macros to also test timing of
         optical photons.
-      o Removed use of SetModel() from WLSOpticalPhysics, according to
+      o Removed use of SetModel() for optical physics, according to
         recent changes to optical process.
 
  ----------------------------------------------------------------------------
