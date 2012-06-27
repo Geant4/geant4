@@ -451,25 +451,25 @@ GEANT4_ADD_TEST(example-adv-hadrontherapy
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/hadrontherapy
                 BUILD Hadrontherapy ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-adv-human_phantom 
-                COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/human_phantom/${cfg}phantom batch.mac
+                COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/human_phantom/phantom batch.mac
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/human_phantom
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/human_phantom
                 WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/examples/advanced/human_phantom
                 BUILD phantom ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-adv-purging_magnet
-                COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/purging_magnet/${cfg}PurgMag MacroTesting.mac
+                COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/purging_magnet/PurgMag MacroTesting.mac
                 WORKING_DIRECTORY  ${CMAKE_SOURCE_DIR}/examples/advanced/purging_magnet
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/purging_magnet
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/purging_magnet
                 BUILD PurgMag ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-adv-radioprotection
-                COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/radioprotection/${cfg}remsim vehicle1.mac
+                COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/radioprotection/remsim vehicle1.mac
                 WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/examples/advanced/radioprotection
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/radioprotection
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/radioprotection
                 BUILD remsim ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-adv-xray_fluorescence
-                COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/xray_fluorescence/${cfg}XrayFluo livermore.mac 1
+                COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/xray_fluorescence/XrayFluo livermore.mac 1
                 WORKING_DIRECTORY  ${CMAKE_SOURCE_DIR}/examples/advanced/xray_fluorescence
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/xray_fluorescence
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/xray_fluorescence
