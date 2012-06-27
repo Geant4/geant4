@@ -4,6 +4,18 @@
 
                                                             29 June 2012
 
+                             Migration Notes
+                             ---------------
+
+  o Obsolete methods Get/SetModel() have been removed from optical processes,
+    therefore eventually requiring update (i.e. removal of such calls) for
+    those custom physics lists and physics configurations where optical
+    boundary process is defined.
+  o New data sets G4EMLOW-6.27 and G4NDL-4.1 are required.
+  o New version of the CLHEP library, CLHEP-2.1.2.3, is now in use.
+
+ ----------------------------------------------------------------------------
+
                              Technical Notes
                              --------------- 
 
@@ -839,6 +851,7 @@ List of main features and fixes included in this Beta release since 9.5.p01:
     + Updated reference outputs; added CMake scripts where missing.
     + Migrated to new g4tools histogramming system, where needed.
     + Updates to apply new coding conventions.
+    + Added Doxygen documentation and comments.
     + advanced/air_shower
       o Removed use of SetModel() for optical physics, according to recent
         changes to optical process.
@@ -920,7 +933,7 @@ List of main features and fixes included in this Beta release since 9.5.p01:
         get particles to go through volumes inside HALL.
     + extended/geometry/transforms
       o Simplified version, limited to geometry functionalities.
-        Renamed classes.
+        Renamed classes, updated input macros.
     + extended/hadronic/Hadr02
       o Added first implementation of UrQMD interface.
     + extended/medical/DICOM

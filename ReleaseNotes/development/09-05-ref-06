@@ -360,6 +360,7 @@ data sets
 examples                                         examples-V09-05-06
 --------
 - Updated reference outputs.
+- Added Doxygen documentation and comments.
 - advanced/air_shower (air_shower-V09-05-03)
   o Removed use of SetModel() for optical physics, according to recent
     changes to optical process.
@@ -408,6 +409,8 @@ examples                                         examples-V09-05-06
     Applied coding guidelines and code clean-up.
     Changed gun particle position & direction in test macros to get particles
     to go through volumes inside HALL.
+- extended/geometry/transforms (exTransforms-V09-05-01)
+  o Updated README and debug.mac input macro.
 - extended/medical/electronScattering2 (exampleES2-V09-05-00)
   o Corrected area calculation in ElectronRun.
   o Apply new coding guidelines.
