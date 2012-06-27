@@ -30,6 +30,11 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27th June 2012 - Pere Mato  (cmake-V09-05-34)
+- Modules/Geant4TestDriver.cmake : Added TST paramenter to obtain the test name to produce
+                                   <test>.out and <test>.err
+- Templates/UseGeant4_internal.cmake: mofdified to pass the test name
+
 22nd June 2012 - Pere Mato  (cmake-V09-05-33)
 - Modules/Geant4TestDriver.cmake : Fixed the problem that <test> should be only the
   file name and not the full path of the executable.

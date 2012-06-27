@@ -119,6 +119,7 @@ function(GEANT4_ADD_TEST test)
   if(NOT CMAKE_GENERATOR MATCHES Makefiles)
     set(_cfg $<CONFIGURATION>/)
   endif()
+  
   #- Handle COMMAND argument
   list(LENGTH ARG_COMMAND _len)
   if(_len LESS 1)
@@ -132,15 +133,15 @@ function(GEANT4_ADD_TEST test)
       set(_prg ${CMAKE_CURRENT_BINARY_DIR}/${_cfg}${_prg})
     elseif(EXISTS ${_prg})
     else()
-	  get_filename_component(_path ${_prg} PATH)
-	  get_filename_component(_file ${_prg} NAME)
+      get_filename_component(_path ${_prg} PATH)
+      get_filename_component(_file ${_prg} NAME)
       set(_prg ${_path}/${_cfg}${_file})
     endif()
     set(_cmd ${_prg} ${ARG_COMMAND})
     string(REPLACE ";" "#" _cmd "${_cmd}")
   endif()
 
-  set(_command ${CMAKE_COMMAND} -DCMD=${_cmd})
+  set(_command ${CMAKE_COMMAND} -DTST=${test} -DCMD=${_cmd})
 
   #- Handle PRE and POST commands
   if(ARG_PRECMD)

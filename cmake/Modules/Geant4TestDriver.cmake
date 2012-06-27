@@ -8,19 +8,16 @@
 #     ERR file to collect stderr
 #     ENV evironment VAR1=Value1;VAR2=Value2
 #     CWD current working directory
+#     TST test name (used to name output/error files)
 #     DBG debug flag
 
 if(DBG)
   message(STATUS "ENV=${ENV}")
 endif()
 
-#---Massage arguments---------------------------------------------------------------------------------
+#---Message arguments---------------------------------------------------------------------------------
 if(CMD)
   string(REPLACE "#" ";" _cmd ${CMD})
-  list(GET _cmd 0 _fullname)
-  get_filename_component(_name ${_fullname} NAME)
-else()
-  set(_name test)
 endif()
 
 if(PRE)
@@ -76,11 +73,15 @@ if(CMD)
   message("G4Test rc: ${_rc}")
   if(_errvar)
     message("G4Test stderr:\n ${_errvar}")
-    file(WRITE ${_name}.err ${_errvar})
+    if(TST)
+      file(WRITE ${TST}.err ${_errvar})
+    endif()
   endif()
   if(_outvar)
     message("G4Test stdout:\n ${_outvar}")
-    file(WRITE ${_name}.out ${_outvar})
+    if(TST)
+      file(WRITE ${TST}.out ${_outvar})
+    endif()
   endif()
   #---Return error is test returned an error code of write somthing to the stderr---------------------
   if(_errvar OR _rc)
