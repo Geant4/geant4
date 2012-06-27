@@ -14,7 +14,20 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27 June 2012  Dennis Wright  radioactive_decay-V09-05-03
+--------------------------------------------------------
+- G4BetaDecayCorrections::ctor : to fix bug for beta+ decay, replace
+  alphaZ = fine_structure_const*std::abs(Z);
+     with
+  alphaZ = fine_structure_const*Z;
+- G4BetaDecayCorrections::FermiFunction : replace
+  if (Wprime < 1.) Wprime = W;
+    with
+  if (Wprime <= 1.00001) Wprime = 1.00001;
+  to fix discontinuity in electron screening energy
 
+  Above changes suggested by Ryan Fitzgerald (NIST)
+ 
 11 June 2012  Dennis Wright  radioactive_decay-V09-05-02
 --------------------------------------------------------
 - replace shadowed variable "s" in G4NucleusLimits.cc, G4BetaDecayType.cc

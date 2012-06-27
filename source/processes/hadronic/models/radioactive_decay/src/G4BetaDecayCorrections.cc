@@ -31,7 +31,8 @@
 G4BetaDecayCorrections::G4BetaDecayCorrections(G4int theZ, G4int theA)
  : Z(theZ), A(theA)
 {
-  alphaZ = fine_structure_const*std::abs(Z);
+  // alphaZ = fine_structure_const*std::abs(Z);
+  alphaZ = fine_structure_const*Z;
 
   // Nuclear radius in units of hbar/m_e/c
   Rnuc = 0.5*fine_structure_const*std::pow(A, 0.33333);
@@ -62,7 +63,8 @@ G4double G4BetaDecayCorrections::FermiFunction(const G4double& W)
     Wprime = W + V0;
   } else {
     Wprime = W - V0;
-    if (Wprime < 1.) Wprime = W;
+//    if (Wprime < 1.) Wprime = W;
+    if (Wprime <= 1.00001) Wprime = 1.00001;
   }
 
   G4double p_e = std::sqrt(Wprime*Wprime - 1.);
