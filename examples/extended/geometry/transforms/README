@@ -33,7 +33,7 @@ $Id: README,v 1.2 2010-09-17 11:21:45 maire Exp $
 
  The method of placement can be selected interactively via the command
  (see DetectorMessenger):
- /placement/setMethod method
+ /placement/setMethod method (see debug.mac)
 
       
  2- Physics list
@@ -68,6 +68,7 @@ $Id: README,v 1.2 2010-09-17 11:21:45 maire Exp $
  	Idle>   ---> type your commands. For instance:
 	Idle> /control/execute debug.mac 
 	....
+	Idle> /placement/setMethod WithInverseMatrix 		
 	Idle> /run/beamOn 1
 	....				
  	Idle> exit
