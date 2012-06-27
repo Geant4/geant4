@@ -1,0 +1,15 @@
+$Id:$
+
+To generate Doxygen documentation for all examples:
+
+1) Check in Doxyfile, Doxyfile_standalone the value of
+   STRIP_FROM_PATH variable and adjust it if needed
+
+2) Generate documentation for all examples with unique class names
+   (alltogether):
+   doxygen >& doxygen.out
+   
+3) Generate documentation for examples with non-unique class names 
+   (a standalone documentation will be generated for each example)
+   ./generate_standalone.sh
+      

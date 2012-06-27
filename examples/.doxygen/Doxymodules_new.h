@@ -2,7 +2,7 @@
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_new.h
-/// \brief The page that defines the class groups for examples documentation 
+/// \brief The page that defines the extended/new examples modules 
 
 
 /** @defgroup extended_new new

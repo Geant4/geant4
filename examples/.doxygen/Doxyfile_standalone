@@ -25,7 +25,7 @@ DOXYFILE_ENCODING      = UTF-8
 # The PROJECT_NAME tag is a single word (or a sequence of words surrounded
 # by quotes) that should identify the project.
 
-PROJECT_NAME           = "Geant4 examples"
+PROJECT_NAME           = "Geant4 example EXAMPLE_NAME"
 
 # The PROJECT_NUMBER tag can be used to enter a project or revision number.
 # This could be handy for archiving the generated documentation or
@@ -49,7 +49,7 @@ PROJECT_LOGO           =
 # If a relative path is entered, it will be relative to the location
 # where doxygen was started. If left blank the current directory will be used.
 
-OUTPUT_DIRECTORY       = doc
+OUTPUT_DIRECTORY       = BACK_PATH/html_EXAMPLE_NAME
 
 # If the CREATE_SUBDIRS tag is set to YES, then doxygen will create
 # 4096 sub-directories (in 2 levels) under the output directory of each output
@@ -606,96 +606,7 @@ WARN_LOGFILE           =
 #                         ../extended/common ../extended/new
 
 # release
-INPUT                  = Doxymain.h Doxymodules_basic.h \
-                         Doxymodules_common.h Doxymodules_analysis.h \
-                         Doxymodules_biasing.h Doxymodules_electromagnetic.h \
-                         Doxymodules_errorpropagation.h \
-                         Doxymodules_eventgenerator.h Doxymodules_exoticphysics.h \
-                         Doxymodules_field.h Doxymodules_g3tog4.h \
-                         Doxymodules_geometry.h Doxymodules_medical.h \
-                         Doxymodules_optical.h Doxymodules_parallel.h \
-                         Doxymodules_parameterisations.h Doxymodules_persistency.h \
-                         Doxymodules_polarisation.h Doxymodules_radioactivedecay.h \
-                         Doxymodules_runAndEvent.h Doxymodules_visualization.h \
-                         ../basic/.README \ 
-                         ../extended/.README \
-                         ../basic/B1 ../basic/B2 ../basic/B3 ../basic/B4 \
-                         ../extended/common \
-                         ../extended/analysis/.README \
-                         ../extended/analysis/A01 \
-                         ../extended/analysis/AnaEx01/.README \
-                         ../extended/analysis/AnaEx02/.README \
-                         ../extended/analysis/AnaEx03/.README \
-                         ../extended/analysis/N03Con/.README \
-                         ../extended/biasing \
-                         ../extended/electromagnetic/.README \
-                         ../extended/electromagnetic/TestEm0/.README \
-                         ../extended/electromagnetic/TestEm1/.README \
-                         ../extended/electromagnetic/TestEm2/.README \
-                         ../extended/electromagnetic/TestEm3/.README \
-                         ../extended/electromagnetic/TestEm4/.README \
-                         ../extended/electromagnetic/TestEm5/.README \
-                         ../extended/electromagnetic/TestEm6/.README \
-                         ../extended/electromagnetic/TestEm7/.README \
-                         ../extended/electromagnetic/TestEm8/.README \
-                         ../extended/electromagnetic/TestEm9/.README \
-                         ../extended/electromagnetic/TestEm10/.README \
-                         ../extended/electromagnetic/TestEm11/.README \
-                         ../extended/electromagnetic/TestEm12/.README \
-                         ../extended/electromagnetic/TestEm13/.README \
-                         ../extended/electromagnetic/TestEm14/.README \
-                         ../extended/electromagnetic/TestEm15/.README \
-                         ../extended/electromagnetic/TestEm16/.README \
-                         ../extended/electromagnetic/TestEm17/.README \
-                         ../extended/electromagnetic/TestEm18/.README \
-                         ../extended/errorpropagation \
-                         ../extended/eventgenerator/.README \
-                         ../extended/eventgenerator/exgps \
-                         ../extended/eventgenerator/HepMC/.README \
-                         ../extended/eventgenerator/HepMC/HepMCEx01 \
-                         ../extended/eventgenerator/HepMC/HepMCEx02 \
-                         ../extended/eventgenerator/HepMC/MCTruth \
-                         ../extended/eventgenerator/particleGun/.README \
-                         ../extended/eventgenerator/pythia/.README \
-                         ../extended/eventgenerator/pythia/decayer6 \
-                         ../extended/exoticphysics/monopole/.README \
-                         ../extended/field \
-                         ../extended/g3tog4 \
-                         ../extended/geometry/.README \
-                         ../extended/geometry/transforms/.README \
-                         ../extended/geometry/olap \
-                         ../extended/hadronic/.README \
-                         ../extended/hadronic/Hadr00/.README \
-                         ../extended/hadronic/Hadr01/.README \
-                         ../extended/hadronic/Hadr02/.README \
-                         ../extended/hadronic/Hadr03/.README \
-                         ../extended/medical/.README \
-                         ../extended/medical/DICOM \
-                         ../extended/medical/electronScattering/.README \
-                         ../extended/medical/electronScattering2/.README \
-                         ../extended/medical/fanoCavity/.README \
-                         ../extended/medical/fanoCavity2/.README \
-                         ../extended/medical/gammaTherapy/.README \
-                         ../extended/optical \
-                         ../extended/parallel/.README \
-                         ../extendedparallel/MPI/exMPI01/.README \
-                         ../extendedparallel/MPI/exMPI02/.README \
-                         ../extended/parallel/ParN02/.README \
-                         ../extended/parallel/ParN04/.README \
-                         ../extended/parameterisations \
-                         ../extended/persistency/.README \
-                         ../extended/persistency/gdml/.README \
-                         ../extended/persistency/P01 \
-                         ../extended/persistency/P02 \
-                         ../extended/persistency/P03 \
-                         ../extended/persistency/gdml/G01/.README \
-                         ../extended/persistency/gdml/G02/.README \
-                         ../extended/persistency/gdml/G03/.README \
-                         ../extended/radioactivedecay/.README \
-                         ../extended/radioactivedecay/rdecay01/.README \
-                         ../extended/radioactivedecay/rdecay02/.README \
-                         ../extended/runAndEvent \
-                         ../extended/visualization
+INPUT                  = . ../shared ../../common ../../../common
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding, which is
@@ -755,33 +666,7 @@ EXCLUDE                = ../basic/B2/B2b/include/B2EventAction.hh \
                          ../basic/B4/B4d/include/B4RunAction.hh \
                          ../basic/B4/B4b/src/B4RunAction.cc \
                          ../basic/B4/B4c/src/B4RunAction.cc \
-                         ../basic/B4/B4d/src/B4RunAction.cc \
-                         ../extended/eventgenerator/HepMC/HepMCEx02/include/HepMCG4AsciiReader.hh \
-                         ../extended/eventgenerator/HepMC/HepMCEx02/include/HepMCG4AsciiReaderMessenger.hh \
-                         ../extended/eventgenerator/HepMC/HepMCEx02/include/HepMCG4Interface.hh \
-                         ../extended/eventgenerator/HepMC/HepMCEx02/include/HepMCG4PythiaInterface.hh \
-                         ../extended/eventgenerator/HepMC/HepMCEx02/include/HepMCG4PythiaMessenger.hh \
-                         ../extended/eventgenerator/HepMC/HepMCEx02/src/HepMCG4AsciiReader.cc \
-                         ../extended/eventgenerator/HepMC/HepMCEx02/src/HepMCG4AsciiReaderMessenger.cc \
-                         ../extended/eventgenerator/HepMC/HepMCEx02/src/HepMCG4Interface.cc \
-                         ../extended/eventgenerator/HepMC/HepMCEx02/src/HepMCG4PythiaInterface.cc \
-                         ../extended/eventgenerator/HepMC/HepMCEx02/src/HepMCG4PythiaMessenger.cc \
-                         ../extended/eventgenerator/HepMC/MCTruth/include/DetectorConstruction.hh \
-                         ../extended/eventgenerator/HepMC/MCTruth/include/PhysicsList.hh \
-                         ../extended/eventgenerator/HepMC/MCTruth/include/PrimaryGeneratorAction.hh \
-                         ../extended/eventgenerator/HepMC/MCTruth/src/DetectorConstruction.cc \
-                         ../extended/eventgenerator/HepMC/MCTruth/src/PhysicsList.cc \
-                         ../extended/eventgenerator/HepMC/MCTruth/src/PrimaryGeneratorAction.cc \
-                         ../extended/visualization/userVisAction/include/B1DetectorConstruction.hh \
-                         ../extended/visualization/userVisAction/include/B1EventAction.hh \
-                         ../extended/visualization/userVisAction/include/B1PrimaryGeneratorAction.hh \
-                         ../extended/visualization/userVisAction/include/B1RunAction.hh \
-                         ../extended/visualization/userVisAction/include/B1SteppingAction.hh \
-                         ../extended/visualization/userVisAction/src/B1DetectorConstruction.cc \
-                         ../extended/visualization/userVisAction/src/B1EventAction.cc \
-                         ../extended/visualization/userVisAction/src/B1PrimaryGeneratorAction.cc \
-                         ../extended/visualization/userVisAction/src/B1RunAction.cc \
-                         ../extended/visualization/userVisAction/src/B1SteppingAction.cc
+                         ../basic/B4/B4d/src/B4RunAction.cc
 
 # The EXCLUDE_SYMLINKS tag can be used select whether or not files or
 # directories that are symbolic links (a Unix file system feature) are excluded

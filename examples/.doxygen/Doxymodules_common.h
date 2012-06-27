@@ -2,7 +2,7 @@
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_common.h
-/// \brief The page that defines the class groups for examples documentation 
+/// \brief The page that defines the extended/common classes modules 
 
 
 /** @defgroup extended_common common
