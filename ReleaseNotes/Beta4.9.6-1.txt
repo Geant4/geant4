@@ -699,6 +699,8 @@ List of main features and fixes included in this Beta release since 9.5.p01:
       o G4RIsotopeTable: added reading of user data  files in order to take
         into account the life time.
       o G4RadioactiveDecay: added computation of activation.
+      o G4BetaDecayCorrections: fix in costructor for a bug on beta+ decay.
+        In FermiFunction(), fix for discontinuity in electron screening energy.
     + models/theo_high_energy
       o Added ModelDescription() interface.
     + processes
