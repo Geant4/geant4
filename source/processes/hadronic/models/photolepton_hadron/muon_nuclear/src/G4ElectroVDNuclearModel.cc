@@ -211,19 +211,17 @@ G4ElectroVDNuclearModel::CalculateHadronicVertex(G4DynamicParticle* incident,
                                                  G4Nucleus& target)
 {
   G4HadFinalState* hfs = 0;
-
-  // At high energies convert incident gamma to a pion
-  G4double piMass = G4PionZero::PionZero()->GetPDGMass();
-  G4double piKE = incident->GetTotalEnergy() - piMass;
   G4double gammaE = incident->GetTotalEnergy();
-  G4double piMom = std::sqrt(piKE*(piKE + 2.*piMass) );
-  G4ThreeVector piMomentum(incident->GetMomentumDirection() );
-  piMomentum *= piMom;
 
   if (gammaE < 10*GeV) {
     G4HadProjectile projectile(*incident);
     hfs = bert->ApplyYourself(projectile, target);
   } else {
+    // At high energies convert incident gamma to a pion
+    G4double piMass = G4PionZero::PionZero()->GetPDGMass();
+    G4double piMom = std::sqrt(gammaE*gammaE - piMass*piMass);
+    G4ThreeVector piMomentum(incident->GetMomentumDirection() );
+    piMomentum *= piMom;
     G4DynamicParticle theHadron(G4PionZero::PionZero(), piMomentum);
     G4HadProjectile projectile(theHadron);
     hfs = ftfp->ApplyYourself(projectile, target);
