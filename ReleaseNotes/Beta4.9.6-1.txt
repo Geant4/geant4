@@ -674,17 +674,17 @@ List of main features and fixes included in this Beta release since 9.5.p01:
       o Probabilities of s-sbar quark pairs and qq-qqbar diquark pairs are
         changed in G4LundStringFragmentation for a description of the NA49 data.
     + models/photolepton_hadron/muon_nuclear
-      o Modified base class for G4VDMuonNuclearModel to be
-        G4HadronicInteraction instead of G4InelasticInteraction.
       o Added new model G4ElectroVDNuclearModel. Removed classes
         G4LeptonHadronProcess and G4LeptonHadronInteractionModel
       o Changed name of G4VDMuonNuclearModel to G4MuonVDNuclearModel to
         avoid any confusion with virtual class names.
         For gammas below 10 GeV use Bertini cascade to interact gammas directly
         with nucleus. Above 10 GeV, treat gamma as pi0 and use FTFP model.
-      o G4MuonVDNuclearModel: fixed negative KE bug in
-        CalculateHadronicVertex().
+        Fixed negative KE bug in CalculateHadronicVertex().
+        Fixed case of NaN value for pion momentum at low gamma energies.
     + models/pre_equilibrium
+      o G4VPreCompoundFragment: fixed rare bug for abnormal fragments by
+        moving computation of Z13 after consistency check.
       o G4PreCompoundModel: properly deal with instantiation and deletion of
         G4ExcitationHandler in constructor and destructor.
       o Added Description() method in G4PreCompoundModel printing the actual

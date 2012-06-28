@@ -279,9 +279,13 @@ processes/hadronic
 - models/parton_string/management (had-partonstring-mgt-V09-05-02)
 - models/parton_string/qgsm (hadr-qgsm-V09-05-02)
   o Fixed cases of variable shadowing.
-- models/photolepton_hadron/muon_nuclear (hadr-munuclear-V09-05-06)
+- models/photolepton_hadron/muon_nuclear (hadr-munuclear-V09-05-07)
   o G4MuonVDNuclearModel: fixed negative KE bug in CalculateHadronicVertex().
+    Fixed case of NaN value for pion momentum at low gamma energies.
   o Fixed cases of variable shadowing.
+- models/pre_equilibrium (hadr-pre-V09-05-02)
+  o G4VPreCompoundFragment: fixed rare bug for abnormal fragments by
+    moving computation of Z13 after consistency check.
 - models/qmd (hadr-qmd-V09-05-01)
 - models/quasi_elastic (hadr-qelastic-V09-05-03)
   o Fixed cases of variable shadowing.
