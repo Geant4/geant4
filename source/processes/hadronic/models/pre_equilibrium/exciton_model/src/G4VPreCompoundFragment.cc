@@ -78,7 +78,6 @@ G4VPreCompoundFragment::Initialize(const G4Fragment & aFragment)
 {
   theRestNucleusA = aFragment.GetA_asInt() - theA;
   theRestNucleusZ = aFragment.GetZ_asInt() - theZ;
-  theRestNucleusA13 = g4pow->Z13(theRestNucleusA);
 
   if ((theRestNucleusA < theRestNucleusZ) ||
       (theRestNucleusA < theA) ||
@@ -88,6 +87,8 @@ G4VPreCompoundFragment::Initialize(const G4Fragment & aFragment)
       theMaximalKineticEnergy = 0.0;
       return;
     }
+
+  theRestNucleusA13 = g4pow->Z13(theRestNucleusA);
     
   // Calculate Coulomb barrier
   theCoulombBarrier = theCoulombBarrierPtr->
