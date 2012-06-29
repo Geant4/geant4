@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-05    (31-May-2012)
+ Geant4 version Name: geant4-09-06-beta-01    (29-June-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -325,8 +325,8 @@ Index : 3     used in the geometry : Yes     recalculation needed : No
 Choosing random seed according to time(0) 
 
 --------- Ranecu engine status ---------
- Initial seed (index) = 14
- Current couple of seeds = 1572428583, 1522927631
+ Initial seed (index) = 108
+ Current couple of seeds = 777605184, 2144304938
 ----------------------------------------
 Primary energy: 45 keV 
 
@@ -1541,5 +1541,5 @@ Primary energy: 2000 keV
 ---> Begin Of Event: 99000
 Going to close the ROOT file....done
 Execution terminated
-User=52.7s Real=30.53s Sys=0.2s
+User=24.66s Real=26.92s Sys=0.04s
 

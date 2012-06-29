@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-05    (31-May-2012)
+ Geant4 version Name: geant4-09-06-beta-01    (29-June-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -26,31 +26,31 @@ Test29: The Box frame is set
 Test29: The TouchableHandle is defined 
 Test29: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test29:NewRun: Targ=90001000,Proj=-2212, 1 of 88
-Test29:CalculationTimePerEvent= 3.100000e-03 s
+Test29:CalculationTimePerEvent= 1.700000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test29:NewRun: Targ=90002002,Proj=-2212, 2 of 88
-Test29:CalculationTimePerEvent= 4.700000e-03 s
+Test29:CalculationTimePerEvent= 2.600000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
 Test29:NewRun: Targ=90003004,Proj=-2212, 3 of 88
-Test29:CalculationTimePerEvent= 6.100000e-03 s
+Test29:CalculationTimePerEvent= 3.300000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test29:NewRun: Targ=90007007,Proj=-2212, 4 of 88
-Test29:CalculationTimePerEvent= 1.370000e-02 s
+Test29:CalculationTimePerEvent= 7.400000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test29:NewRun: Targ=90013014,Proj=-2212, 5 of 88
-Test29:CalculationTimePerEvent= 1.150000e-02 s
+Test29:CalculationTimePerEvent= 6.200000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test29:NewRun: Targ=90027032,Proj=-2212, 6 of 88
-Test29:CalculationTimePerEvent= 1.040000e-02 s
+Test29:CalculationTimePerEvent= 5.500000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Silver, Element[0]=Silver,A[0]=107 is selected.
 Test29:NewRun: Targ=90047060,Proj=-2212, 7 of 88
-Test29:CalculationTimePerEvent= 9.700000e-03 s
+Test29:CalculationTimePerEvent= 5.100000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test29:NewRun: Targ=90092146,Proj=-2212, 8 of 88
@@ -103,35 +103,35 @@ G4QCaptureAtRest: wrong product5 imax= 6 Pa237[0.0]  4-mom= (0.000000e+00,0.0000
 G4QCaptureAtRest: wrong product4 imax= 5 Pa237[0.0]  4-mom= (0.000000e+00,0.000000e+00,0.000000e+00;2.207660e+05)
 G4QCaptureAtRest: wrong product8 imax= 9 Pa235[0.0]  4-mom= (9.243422e+02,2.318544e+02,6.372684e+02;2.189007e+05)
 G4QCaptureAtRest: wrong product6 imax= 7 Th235[0.0]  4-mom= (1.079717e+02,-3.562925e+02,5.191212e+02;2.189010e+05)
-Test29:CalculationTimePerEvent= 1.170000e-02 s
+Test29:CalculationTimePerEvent= 6.100000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test29:NewRun: Targ=90001000,Proj=-211, 9 of 88
-Test29:CalculationTimePerEvent= 1.000000e-04 s
+Test29:CalculationTimePerEvent= 0.000000e+00 s
 Test29: ########## End of run ##########
 Test29: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test29:NewRun: Targ=90002002,Proj=-211, 10 of 88
-Test29:CalculationTimePerEvent= 1.200000e-03 s
+Test29:CalculationTimePerEvent= 6.000000e-04 s
 Test29: ########## End of run ##########
 Test29: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
 Test29:NewRun: Targ=90003004,Proj=-211, 11 of 88
-Test29:CalculationTimePerEvent= 1.300000e-03 s
+Test29:CalculationTimePerEvent= 7.000000e-04 s
 Test29: ########## End of run ##########
 Test29: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test29:NewRun: Targ=90007007,Proj=-211, 12 of 88
-Test29:CalculationTimePerEvent= 1.500000e-03 s
+Test29:CalculationTimePerEvent= 8.000000e-04 s
 Test29: ########## End of run ##########
 Test29: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test29:NewRun: Targ=90013014,Proj=-211, 13 of 88
-Test29:CalculationTimePerEvent= 1.500000e-03 s
+Test29:CalculationTimePerEvent= 9.000000e-04 s
 Test29: ########## End of run ##########
 Test29: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test29:NewRun: Targ=90027032,Proj=-211, 14 of 88
-Test29:CalculationTimePerEvent= 1.800000e-03 s
+Test29:CalculationTimePerEvent= 8.000000e-04 s
 Test29: ########## End of run ##########
 Test29: Material=Silver, Element[0]=Silver,A[0]=107 is selected.
 Test29:NewRun: Targ=90047060,Proj=-211, 15 of 88
-Test29:CalculationTimePerEvent= 1.600000e-03 s
+Test29:CalculationTimePerEvent= 9.000000e-04 s
 Test29: ########## End of run ##########
 Test29: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test29:NewRun: Targ=90092146,Proj=-211, 16 of 88
@@ -235,35 +235,35 @@ G4QCaptureAtRest: wrong product18 imax= 19 Pa220[0.0]  4-mom= (6.550115e+01,1.28
 G4QCaptureAtRest: wrong product15 imax= 16 Pa223[0.0]  4-mom= (-7.809740e+01,9.255538e+01,-6.185720e+01;2.076998e+05)
 G4QCaptureAtRest: wrong product2 imax= 3 Th236[0.0]  4-mom= (2.134279e+02,-1.645484e+02,-1.934332e+02;2.198340e+05)
 G4QCaptureAtRest: wrong product3 imax= 4 Th235[0.0]  4-mom= (3.053677e+02,-8.724620e+01,-1.099182e+02;2.189003e+05)
-Test29:CalculationTimePerEvent= 1.700000e-03 s
+Test29:CalculationTimePerEvent= 9.000000e-04 s
 Test29: ########## End of run ##########
 Test29: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test29:NewRun: Targ=90001000,Proj=-321, 17 of 88
-Test29:CalculationTimePerEvent= 1.000000e-03 s
+Test29:CalculationTimePerEvent= 5.000000e-04 s
 Test29: ########## End of run ##########
 Test29: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test29:NewRun: Targ=90002002,Proj=-321, 18 of 88
-Test29:CalculationTimePerEvent= 1.600000e-03 s
+Test29:CalculationTimePerEvent= 8.000000e-04 s
 Test29: ########## End of run ##########
 Test29: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
 Test29:NewRun: Targ=90003004,Proj=-321, 19 of 88
-Test29:CalculationTimePerEvent= 2.500000e-03 s
+Test29:CalculationTimePerEvent= 1.200000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test29:NewRun: Targ=90007007,Proj=-321, 20 of 88
-Test29:CalculationTimePerEvent= 2.800000e-03 s
+Test29:CalculationTimePerEvent= 1.500000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test29:NewRun: Targ=90013014,Proj=-321, 21 of 88
-Test29:CalculationTimePerEvent= 3.100000e-03 s
+Test29:CalculationTimePerEvent= 1.600000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test29:NewRun: Targ=90027032,Proj=-321, 22 of 88
-Test29:CalculationTimePerEvent= 3.200000e-03 s
+Test29:CalculationTimePerEvent= 1.600000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Silver, Element[0]=Silver,A[0]=107 is selected.
 Test29:NewRun: Targ=90047060,Proj=-321, 23 of 88
-Test29:CalculationTimePerEvent= 4.000000e-03 s
+Test29:CalculationTimePerEvent= 2.000000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test29:NewRun: Targ=90092146,Proj=-321, 24 of 88
@@ -319,7 +319,7 @@ G4QCaptureAtRest: wrong product4 imax= 5 Pa235[0.0]  4-mom= (-3.624461e+02,3.613
 G4QCaptureAtRest: wrong product20 imax= 21 Pa217[0.0]  4-mom= (7.163392e+01,-6.074686e+01,1.720389e+02;2.021056e+05)
 G4QCaptureAtRest: wrong product4 imax= 5 Th235[0.0]  4-mom= (3.711250e+02,3.945479e+02,2.713989e+02;2.189009e+05)
 G4QCaptureAtRest: wrong product2 imax= 3 Pa236[0.0]  4-mom= (-2.652155e+02,2.204136e+02,-1.825217e+02;2.198325e+05)
-Test29:CalculationTimePerEvent= 4.400000e-03 s
+Test29:CalculationTimePerEvent= 2.200000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test29:NewRun: Targ=90001000,Proj=13, 25 of 88
@@ -331,23 +331,23 @@ Test29:CalculationTimePerEvent= 0.000000e+00 s
 Test29: ########## End of run ##########
 Test29: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
 Test29:NewRun: Targ=90003004,Proj=13, 27 of 88
-Test29:CalculationTimePerEvent= 1.000000e-04 s
+Test29:CalculationTimePerEvent= 0.000000e+00 s
 Test29: ########## End of run ##########
 Test29: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test29:NewRun: Targ=90007007,Proj=13, 28 of 88
-Test29:CalculationTimePerEvent= 3.000000e-04 s
+Test29:CalculationTimePerEvent= 2.000000e-04 s
 Test29: ########## End of run ##########
 Test29: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test29:NewRun: Targ=90013014,Proj=13, 29 of 88
-Test29:CalculationTimePerEvent= 1.100000e-03 s
+Test29:CalculationTimePerEvent= 5.000000e-04 s
 Test29: ########## End of run ##########
 Test29: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test29:NewRun: Targ=90027032,Proj=13, 30 of 88
-Test29:CalculationTimePerEvent= 1.500000e-03 s
+Test29:CalculationTimePerEvent= 9.000000e-04 s
 Test29: ########## End of run ##########
 Test29: Material=Silver, Element[0]=Silver,A[0]=107 is selected.
 Test29:NewRun: Targ=90047060,Proj=13, 31 of 88
-Test29:CalculationTimePerEvent= 1.400000e-03 s
+Test29:CalculationTimePerEvent= 7.000000e-04 s
 Test29: ########## End of run ##########
 Test29: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test29:NewRun: Targ=90092146,Proj=13, 32 of 88
@@ -451,35 +451,35 @@ G4QCaptureAtRest: wrong product3 imax= 4 Pa236[0.0]  4-mom= (-6.890212e+01,2.832
 G4QCaptureAtRest: wrong product3 imax= 4 Th236[0.0]  4-mom= (-7.821597e+01,-5.688086e+01,3.268559e+02;2.198340e+05)
 G4QCaptureAtRest: wrong product4 imax= 5 Pa235[0.0]  4-mom= (2.908511e-01,-1.553473e+02,-4.656242e+01;2.188977e+05)
 G4QCaptureAtRest: wrong product2 imax= 3 Pa237[0.0]  4-mom= (-7.961963e+01,1.168574e+02,-5.336013e+01;2.207660e+05)
-Test29:CalculationTimePerEvent= 1.600000e-03 s
+Test29:CalculationTimePerEvent= 8.000000e-04 s
 Test29: ########## End of run ##########
 Test29: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test29:NewRun: Targ=90001000,Proj=15, 33 of 88
-Test29:CalculationTimePerEvent= 0.000000e+00 s
+Test29:CalculationTimePerEvent= 1.000000e-04 s
 Test29: ########## End of run ##########
 Test29: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test29:NewRun: Targ=90002002,Proj=15, 34 of 88
-Test29:CalculationTimePerEvent= 1.000000e-04 s
+Test29:CalculationTimePerEvent= 0.000000e+00 s
 Test29: ########## End of run ##########
 Test29: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
 Test29:NewRun: Targ=90003004,Proj=15, 35 of 88
-Test29:CalculationTimePerEvent= 2.000000e-04 s
+Test29:CalculationTimePerEvent= 1.000000e-04 s
 Test29: ########## End of run ##########
 Test29: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test29:NewRun: Targ=90007007,Proj=15, 36 of 88
-Test29:CalculationTimePerEvent= 2.200000e-03 s
+Test29:CalculationTimePerEvent= 1.100000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test29:NewRun: Targ=90013014,Proj=15, 37 of 88
-Test29:CalculationTimePerEvent= 2.700000e-03 s
+Test29:CalculationTimePerEvent= 1.500000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test29:NewRun: Targ=90027032,Proj=15, 38 of 88
-Test29:CalculationTimePerEvent= 3.300000e-03 s
+Test29:CalculationTimePerEvent= 1.700000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Silver, Element[0]=Silver,A[0]=107 is selected.
 Test29:NewRun: Targ=90047060,Proj=15, 39 of 88
-Test29:CalculationTimePerEvent= 3.900000e-03 s
+Test29:CalculationTimePerEvent= 2.000000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test29:NewRun: Targ=90092146,Proj=15, 40 of 88
@@ -555,35 +555,35 @@ G4QCaptureAtRest: wrong product4 imax= 5 Th235[0.0]  4-mom= (2.816605e+02,-7.486
 G4QCaptureAtRest: wrong product5 imax= 6 Th235[0.0]  4-mom= (-7.237691e+02,-1.494275e+02,-1.908454e+03;2.189096e+05)
 G4QCaptureAtRest: wrong product12 imax= 13 U228[0.0]  4-mom= (-6.773552e+02,6.261339e+02,-3.146261e+02;2.123659e+05)
 G4QCaptureAtRest: wrong product3 imax= 4 Pa236[0.0]  4-mom= (1.295230e+03,7.741350e+02,2.399327e+02;2.198375e+05)
-Test29:CalculationTimePerEvent= 2.900000e-03 s
+Test29:CalculationTimePerEvent= 1.500000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test29:NewRun: Targ=90001000,Proj=3112, 41 of 88
-Test29:CalculationTimePerEvent= 9.000000e-04 s
+Test29:CalculationTimePerEvent= 5.000000e-04 s
 Test29: ########## End of run ##########
 Test29: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test29:NewRun: Targ=90002002,Proj=3112, 42 of 88
-Test29:CalculationTimePerEvent= 1.500000e-03 s
+Test29:CalculationTimePerEvent= 8.000000e-04 s
 Test29: ########## End of run ##########
 Test29: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
 Test29:NewRun: Targ=90003004,Proj=3112, 43 of 88
-Test29:CalculationTimePerEvent= 2.000000e-03 s
+Test29:CalculationTimePerEvent= 9.000000e-04 s
 Test29: ########## End of run ##########
 Test29: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test29:NewRun: Targ=90007007,Proj=3112, 44 of 88
-Test29:CalculationTimePerEvent= 2.200000e-03 s
+Test29:CalculationTimePerEvent= 1.100000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test29:NewRun: Targ=90013014,Proj=3112, 45 of 88
-Test29:CalculationTimePerEvent= 2.200000e-03 s
+Test29:CalculationTimePerEvent= 1.200000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test29:NewRun: Targ=90027032,Proj=3112, 46 of 88
-Test29:CalculationTimePerEvent= 3.200000e-03 s
+Test29:CalculationTimePerEvent= 1.500000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Silver, Element[0]=Silver,A[0]=107 is selected.
 Test29:NewRun: Targ=90047060,Proj=3112, 47 of 88
-Test29:CalculationTimePerEvent= 3.200000e-03 s
+Test29:CalculationTimePerEvent= 1.600000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test29:NewRun: Targ=90092146,Proj=3112, 48 of 88
@@ -608,35 +608,35 @@ G4QCaptureAtRest: wrong product3 imax= 5 Pa235[0.0]  4-mom= (-5.681381e+02,-2.06
 G4QCaptureAtRest: wrong product5 imax= 6 Pa234[0.0]  4-mom= (-1.326840e+01,-3.285920e+01,-9.829158e+01;2.179642e+05)
 G4QCaptureAtRest: wrong product3 imax= 4 Th236[0.0]  4-mom= (-1.171562e+02,5.711008e+02,-1.170876e+02;2.198346e+05)
 G4QCaptureAtRest: wrong product24 imax= 25 Pa215[0.0]  4-mom= (-1.564324e+02,-6.926145e+01,-9.438656e+01;2.002434e+05)
-Test29:CalculationTimePerEvent= 4.500000e-03 s
+Test29:CalculationTimePerEvent= 2.200000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test29:NewRun: Targ=90001000,Proj=3312, 49 of 88
-Test29:CalculationTimePerEvent= 1.000000e-03 s
+Test29:CalculationTimePerEvent= 5.000000e-04 s
 Test29: ########## End of run ##########
 Test29: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test29:NewRun: Targ=90002002,Proj=3312, 50 of 88
-Test29:CalculationTimePerEvent= 1.500000e-03 s
+Test29:CalculationTimePerEvent= 8.000000e-04 s
 Test29: ########## End of run ##########
 Test29: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
 Test29:NewRun: Targ=90003004,Proj=3312, 51 of 88
-Test29:CalculationTimePerEvent= 2.000000e-03 s
+Test29:CalculationTimePerEvent= 9.000000e-04 s
 Test29: ########## End of run ##########
 Test29: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test29:NewRun: Targ=90007007,Proj=3312, 52 of 88
-Test29:CalculationTimePerEvent= 2.200000e-03 s
+Test29:CalculationTimePerEvent= 1.200000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test29:NewRun: Targ=90013014,Proj=3312, 53 of 88
-Test29:CalculationTimePerEvent= 2.500000e-03 s
+Test29:CalculationTimePerEvent= 1.200000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test29:NewRun: Targ=90027032,Proj=3312, 54 of 88
-Test29:CalculationTimePerEvent= 3.300000e-03 s
+Test29:CalculationTimePerEvent= 1.600000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Silver, Element[0]=Silver,A[0]=107 is selected.
 Test29:NewRun: Targ=90047060,Proj=3312, 55 of 88
-Test29:CalculationTimePerEvent= 5.300000e-03 s
+Test29:CalculationTimePerEvent= 2.400000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test29:NewRun: Targ=90092146,Proj=3312, 56 of 88
@@ -648,35 +648,35 @@ G4QCaptureAtRest: wrong product22 imax= 23 Pa217[0.0]  4-mom= (-2.457717e+01,-2.
 G4QCaptureAtRest: wrong product4 imax= 5 Pa235[0.0]  4-mom= (-1.050549e+02,-9.240279e+01,-4.219843e+01;2.188977e+05)
 G4QCaptureAtRest: wrong product4 imax= 5 Pa235[0.0]  4-mom= (4.745489e+01,-3.539420e+01,-2.583599e+02;2.188978e+05)
 G4QCaptureAtRest: wrong product22 imax= 23 Pa217[0.0]  4-mom= (-1.905750e+02,-4.670216e+01,-3.331985e+02;2.021059e+05)
-Test29:CalculationTimePerEvent= 7.000000e-03 s
+Test29:CalculationTimePerEvent= 3.100000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test29:NewRun: Targ=90001000,Proj=3334, 57 of 88
-Test29:CalculationTimePerEvent= 1.000000e-03 s
+Test29:CalculationTimePerEvent= 6.000000e-04 s
 Test29: ########## End of run ##########
 Test29: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test29:NewRun: Targ=90002002,Proj=3334, 58 of 88
-Test29:CalculationTimePerEvent= 1.200000e-03 s
+Test29:CalculationTimePerEvent= 6.000000e-04 s
 Test29: ########## End of run ##########
 Test29: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
 Test29:NewRun: Targ=90003004,Proj=3334, 59 of 88
-Test29:CalculationTimePerEvent= 1.200000e-03 s
+Test29:CalculationTimePerEvent= 6.000000e-04 s
 Test29: ########## End of run ##########
 Test29: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test29:NewRun: Targ=90007007,Proj=3334, 60 of 88
-Test29:CalculationTimePerEvent= 1.300000e-03 s
+Test29:CalculationTimePerEvent= 6.000000e-04 s
 Test29: ########## End of run ##########
 Test29: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test29:NewRun: Targ=90013014,Proj=3334, 61 of 88
-Test29:CalculationTimePerEvent= 1.300000e-03 s
+Test29:CalculationTimePerEvent= 7.000000e-04 s
 Test29: ########## End of run ##########
 Test29: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test29:NewRun: Targ=90027032,Proj=3334, 62 of 88
-Test29:CalculationTimePerEvent= 1.300000e-03 s
+Test29:CalculationTimePerEvent= 7.000000e-04 s
 Test29: ########## End of run ##########
 Test29: Material=Silver, Element[0]=Silver,A[0]=107 is selected.
 Test29:NewRun: Targ=90047060,Proj=3334, 63 of 88
-Test29:CalculationTimePerEvent= 1.200000e-03 s
+Test29:CalculationTimePerEvent= 6.000000e-04 s
 Test29: ########## End of run ##########
 Test29: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test29:NewRun: Targ=90092146,Proj=3334, 64 of 88
@@ -780,7 +780,7 @@ G4QCaptureAtRest: wrong product1 imax= 5 Pa238[0.0]  4-mom= (-5.531020e+01,-1.52
 G4QCaptureAtRest: wrong product1 imax= 5 Pa238[0.0]  4-mom= (8.079055e+02,2.810297e+02,8.572144e+01;2.217023e+05)
 G4QCaptureAtRest: wrong product1 imax= 5 Pa238[0.0]  4-mom= (-2.048520e+02,2.253177e+02,-4.024245e+02;2.217012e+05)
 G4QCaptureAtRest: wrong product1 imax= 5 Pa238[0.0]  4-mom= (-3.522680e+02,6.956767e+02,-4.119385e+02;2.217023e+05)
-Test29:CalculationTimePerEvent= 1.400000e-03 s
+Test29:CalculationTimePerEvent= 7.000000e-04 s
 Test29: ########## End of run ##########
 Test29: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test29:NewRun: Targ=90001000,Proj=2112, 65 of 88
@@ -796,7 +796,7 @@ Test29:CalculationTimePerEvent= 0.000000e+00 s
 Test29: ########## End of run ##########
 Test29: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test29:NewRun: Targ=90007007,Proj=2112, 68 of 88
-Test29:CalculationTimePerEvent= 3.700000e-03 s
+Test29:CalculationTimePerEvent= 1.900000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test29:NewRun: Targ=90013014,Proj=2112, 69 of 88
@@ -804,11 +804,11 @@ Test29:CalculationTimePerEvent= 0.000000e+00 s
 Test29: ########## End of run ##########
 Test29: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test29:NewRun: Targ=90027032,Proj=2112, 70 of 88
-Test29:CalculationTimePerEvent= 3.500000e-03 s
+Test29:CalculationTimePerEvent= 1.900000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Silver, Element[0]=Silver,A[0]=107 is selected.
 Test29:NewRun: Targ=90047060,Proj=2112, 71 of 88
-Test29:CalculationTimePerEvent= 3.700000e-03 s
+Test29:CalculationTimePerEvent= 1.900000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test29:NewRun: Targ=90092146,Proj=2112, 72 of 88
@@ -912,15 +912,15 @@ G4QCaptureAtRest: wrong product1 imax= 2 Th235[0.0]  4-mom= (1.082776e+02,6.0823
 G4QCaptureAtRest: wrong product1 imax= 2 Th235[0.0]  4-mom= (-9.411143e+01,-2.127930e+02,1.000680e+02;2.189002e+05)
 G4QCaptureAtRest: wrong product1 imax= 2 Th235[0.0]  4-mom= (-8.751592e+01,-2.349673e+02,3.581545e+01;2.189002e+05)
 G4QCaptureAtRest: wrong product1 imax= 2 Th235[0.0]  4-mom= (-1.749558e+02,-1.114624e+02,1.453204e+02;2.189002e+05)
-Test29:CalculationTimePerEvent= 3.700000e-03 s
+Test29:CalculationTimePerEvent= 1.900000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test29:NewRun: Targ=90001000,Proj=-2112, 73 of 88
-Test29:CalculationTimePerEvent= 1.800000e-03 s
+Test29:CalculationTimePerEvent= 1.600000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test29:NewRun: Targ=90002002,Proj=-2112, 74 of 88
-Test29:CalculationTimePerEvent= 2.300000e-03 s
+Test29:CalculationTimePerEvent= 2.400000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
 Test29:NewRun: Targ=90003004,Proj=-2112, 75 of 88
@@ -928,19 +928,19 @@ Test29:CalculationTimePerEvent= 3.100000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test29:NewRun: Targ=90007007,Proj=-2112, 76 of 88
-Test29:CalculationTimePerEvent= 7.200000e-03 s
+Test29:CalculationTimePerEvent= 5.400000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test29:NewRun: Targ=90013014,Proj=-2112, 77 of 88
-Test29:CalculationTimePerEvent= 7.500000e-03 s
+Test29:CalculationTimePerEvent= 5.000000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test29:NewRun: Targ=90027032,Proj=-2112, 78 of 88
-Test29:CalculationTimePerEvent= 3.900000e-03 s
+Test29:CalculationTimePerEvent= 4.100000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Silver, Element[0]=Silver,A[0]=107 is selected.
 Test29:NewRun: Targ=90047060,Proj=-2112, 79 of 88
-Test29:CalculationTimePerEvent= 3.700000e-03 s
+Test29:CalculationTimePerEvent= 4.000000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test29:NewRun: Targ=90092146,Proj=-2112, 80 of 88
@@ -998,7 +998,7 @@ G4QCaptureAtRest: wrong product9 imax= 10 Pa231[0.0]  4-mom= (-3.791168e+02,-4.0
 G4QCaptureAtRest: wrong product22 imax= 23 Pa222[0.0]  4-mom= (-2.888222e+02,1.545355e+02,-1.837952e+02;2.067684e+05)
 G4QCaptureAtRest: wrong product8 imax= 9 Th235[0.0]  4-mom= (-2.133514e+02,2.082074e+02,5.539331e+02;2.189010e+05)
 G4QCaptureAtRest: wrong product10 imax= 11 Ac234[0.0]  4-mom= (5.991163e+02,2.227916e+02,-9.320156e+01;2.179709e+05)
-Test29:CalculationTimePerEvent= 5.000000e-03 s
+Test29:CalculationTimePerEvent= 5.300000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test29:NewRun: Targ=90001000,Proj=-3222, 81 of 88
@@ -1006,27 +1006,27 @@ Test29:CalculationTimePerEvent= 1.400000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Helium, Element[0]=Helium,A[0]=4 is selected.
 Test29:NewRun: Targ=90002002,Proj=-3222, 82 of 88
-Test29:CalculationTimePerEvent= 2.200000e-03 s
+Test29:CalculationTimePerEvent= 2.400000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Lithium, Element[0]=Lithium,A[0]=7 is selected.
 Test29:NewRun: Targ=90003004,Proj=-3222, 83 of 88
-Test29:CalculationTimePerEvent= 2.600000e-03 s
+Test29:CalculationTimePerEvent= 3.100000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Nitrogen, Element[0]=Nitrogen,A[0]=14 is selected.
 Test29:NewRun: Targ=90007007,Proj=-3222, 84 of 88
-Test29:CalculationTimePerEvent= 5.300000e-03 s
+Test29:CalculationTimePerEvent= 5.700000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test29:NewRun: Targ=90013014,Proj=-3222, 85 of 88
-Test29:CalculationTimePerEvent= 4.400000e-03 s
+Test29:CalculationTimePerEvent= 4.700000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Cobalt, Element[0]=Cobalt,A[0]=59 is selected.
 Test29:NewRun: Targ=90027032,Proj=-3222, 86 of 88
-Test29:CalculationTimePerEvent= 4.300000e-03 s
+Test29:CalculationTimePerEvent= 4.600000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Silver, Element[0]=Silver,A[0]=107 is selected.
 Test29:NewRun: Targ=90047060,Proj=-3222, 87 of 88
-Test29:CalculationTimePerEvent= 4.100000e-03 s
+Test29:CalculationTimePerEvent= 4.900000e-03 s
 Test29: ########## End of run ##########
 Test29: Material=Uranium, Element[0]=Uranium,A[0]=238 is selected.
 Test29:NewRun: Targ=90092146,Proj=-3222, 88 of 88

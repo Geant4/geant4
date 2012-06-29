@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-05    (31-May-2012)
+ Geant4 version Name: geant4-09-06-beta-01    (29-June-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -300,7 +300,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=3s Real=1.58s Sys=0.01s
+  User=1.2s Real=1.2s Sys=0.01s
 
  ======================== run summary ======================
 
@@ -401,7 +401,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=9.35s Real=7.07s Sys=0.11s
+  User=3.67s Real=3.69s Sys=0.01s
 
  ======================== run summary ======================
 
@@ -503,7 +503,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=205.1s Real=141.5s Sys=1.79s
+  User=89.14s Real=89.19s Sys=0.02s
 
  ======================== run summary ======================
 
@@ -605,7 +605,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=135.8s Real=103.5s Sys=0.07s
+  User=79.99s Real=81.06s Sys=0.05s
 
  ======================== run summary ======================
 
@@ -706,7 +706,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.95s Real=1.56s Sys=0.01s
+  User=3.49s Real=3.5s Sys=0.01s
 
  ======================== run summary ======================
 
@@ -719,43 +719,43 @@ Run Summary
  ============= Primary particle statistics ==============
 
  Total track length in absorber:
- 99.21 um  +- 78.3 nm 
+ 99.54 um  +- 47.45 nm 
 
  Mean Number of Steps :
- 108 +/- 0.9442
+ 209.4 +/- 1.47
 
  Mean Free Path :
- 918.2 nm  +/- 8.056 nm 
+ 475.2 nm  +/- 3.343 nm 
 
  Mean Cross Section :
- 2.18e+05 barn   +/- 1913 barn  
+ 4.212e+05 barn   +/- 2963 barn  
 
  Mean scattering angle :
- 0.001703 mrad +/- 0.0005985 mrad
+ 0.001159 mrad +/- 9.059e-05 mrad
 
  Total energy deposit in absorber:
- 370.9 keV +/- 263.7 keV
------> dE/dx total= 37.38 MeV/cm	(16.04 MeV*cm2/g)
+ 36.05 keV +/- 2.971 keV
+-----> dE/dx total= 3.622 MeV/cm	(1.555 MeV*cm2/g)
 
  Nuclear energy deposit in absorber:
- 336.9 keV +/- 263.7 keV
------> dE/dx  nucl = 33.96 MeV/cm	(14.58 MeV*cm2/g)
+ 5.092 eV  +/- 0.8671 eV 
+-----> dE/dx  nucl = 0.0005116 MeV/cm	(0.0002196 MeV*cm2/g)
 
  NIEL in absorber (Th>21 eV):
- 7.222e-10 eV  +/- 0 eV 
------> NIEL = 7.279e-14 MeV/cm	(3.124e-14 MeV*cm2/g)
+ 8.842e-10 eV  +/- 0 eV 
+-----> NIEL = 8.883e-14 MeV/cm	(3.813e-14 MeV*cm2/g)
 
 ----------------------------------------------------------------
 
- Total Number of primary knock-on atoms: PKA = 10501
- Mean Kinetic Energy of PKA = 0.03566 eV  +/- 0 eV 
- Total Frenkel-pairs Concentration: FP = 1.386e-07 #/cm3
+ Total Number of primary knock-on atoms: PKA = 18702
+ Mean Kinetic Energy of PKA = 0.02723 eV  +/- 0 eV 
+ Total Frenkel-pairs Concentration: FP = 1.692e-07 #/cm3
 
 ----------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1742212779, 656355520
+ Current couple of seeds = 272888769, 1727608926
 ----------------------------------------
 
  ===========================================================

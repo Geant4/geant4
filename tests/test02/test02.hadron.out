@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-05    (31-May-2012)
+ Geant4 version Name: geant4-09-06-beta-01    (29-June-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -727,18 +727,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 Idle> /run/beamOn 1
- G4VParticleChange::CheckSecondary  :   the global time of secondary goes back comapared to the parent  !!  Difference:  2.85892e-08[ns] 
-gamma E=713.734 pos=0.876999, -0.0209652, -0.0123162 time=3.27369 parent time=3.27369
- G4VParticleChange::CheckSecondary  :   the global time of secondary goes back comapared to the parent  !!  Difference:  2.85892e-08[ns] 
-gamma E=713.734 pos=0.876999, -0.0209652, -0.0123162 time=3.27369 parent time=3.27369
- G4VParticleChange::CheckSecondary  :   the global time of secondary goes back comapared to the parent  !!  Difference:  2.85892e-08[ns] 
-proton E=239.789 pos=0.876999, -0.0209652, -0.0123162 time=3.27369 parent time=3.27369
- G4VParticleChange::CheckSecondary  :   the global time of secondary goes back comapared to the parent  !!  Difference:  2.85892e-08[ns] 
-deuteron E=96.5989 pos=0.876999, -0.0209652, -0.0123162 time=3.27369 parent time=3.27369
- G4VParticleChange::CheckSecondary  :   the global time of secondary goes back comapared to the parent  !!  Difference:  2.85892e-08[ns] 
-deuteron E=27.8233 pos=0.876999, -0.0209652, -0.0123162 time=3.27369 parent time=3.27369
- G4VParticleChange::CheckSecondary  :   the global time of secondary goes back comapared to the parent  !!  Difference:  2.85892e-08[ns] 
-deuteron E=1.1628 pos=0.876999, -0.0209652, -0.0123162 time=3.27369 parent time=3.27369
 Idle> #
 Idle> # proton at 100 GeV in Air
 Idle> #
