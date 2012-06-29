@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-05    (31-May-2012)
+ Geant4 version Name: geant4-09-06-beta-01    (29-June-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -51,7 +51,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=15.59s Real=11.39s Sys=0.02s
+  User=5.75s Real=5.75s Sys=0.01s
 ... write Root file :  - done
 ... close Root file :  - done
 

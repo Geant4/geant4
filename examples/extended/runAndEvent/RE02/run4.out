@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-05    (31-May-2012)
+ Geant4 version Name: geant4-09-06-beta-01    (29-June-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -763,13 +763,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.72s Real=0.72s Sys=0s
+  User=0.29s Real=0.3s Sys=0s
 =============================================================
  Number of event processed : 10000
 =============================================================
 #Z Cell#       totalEDep      protonEDep protonNStep  chargedPassCellFlux     chargedCellFlux     chargedSurfFlux    gammaSurfCurr000    gammaSurfCurr001    gammaSurfCurr002    gammaSurfCurr003
-     0       234.729 keV           0 eV            0               0 /cm2        2.36174 /cm2              0 /cm2              0 /cm2          10350 /cm2              0 /cm2              0 /cm2
-     1       24.0008 MeV           0 eV            0               0 /cm2        36.3509 /cm2              0 /cm2              0 /cm2          10075 /cm2              0 /cm2              0 /cm2
+     0       234.552 keV           0 eV            0               0 /cm2        2.36068 /cm2              0 /cm2              0 /cm2          10225 /cm2              0 /cm2              0 /cm2
+     1       23.7008 MeV           0 eV            0               0 /cm2        35.8944 /cm2              0 /cm2              0 /cm2           9950 /cm2              0 /cm2              0 /cm2
      2             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
      3             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
      4             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2

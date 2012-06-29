@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-05    (31-May-2012)
+ Geant4 version Name: geant4-09-06-beta-01    (29-June-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -312,10 +312,11 @@ AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Ema
  AntiProtonInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
+          FTFNuclearCaptureAtRest
 
                                   Hadronic Processes for <e->
                                   -----------------------------------
-      ElectroNuclear  Models:          CHIPSElectroNuclear: Emin(GeV)=    0  Emax(GeV)= 30000
+      ElectroNuclear  Models:      G4ElectroVDNuclearModel: Emin(GeV)=    0  Emax(GeV)= 1e+06
 
       ElectroNuclear  Crs sctns:          ElectroNuclearXS: Emin(GeV)=    0  Emax(GeV)= 100000
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
@@ -323,7 +324,7 @@ AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Ema
 
                                   Hadronic Processes for <gamma>
                                   -----------------------------------
-     PhotonInelastic  Models:         G4MuonVDNuclearModel: Emin(GeV)=    0  Emax(GeV)= 3.5
+     PhotonInelastic  Models:               BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 3.5
                                            TheoFSGenerator: Emin(GeV)=    3  Emax(GeV)= 100000
 
      PhotonInelastic  Crs sctns:            PhotoNuclearXS: Emin(GeV)=    0  Emax(GeV)= 100000
@@ -355,6 +356,7 @@ AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Ema
   KaonMinusInelastic  Crs sctns: ChipsKaonMinusInelasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
+          hBertiniCaptureAtRest
 
                                   Hadronic Processes for <lambda>
                                   -----------------------------------
@@ -429,6 +431,7 @@ AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Ema
                            below 91 GeV, Glauber-Gribov above 
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
+          hBertiniCaptureAtRest
 
                                   Hadronic Processes for <proton>
                                   -----------------------------------
@@ -477,19 +480,19 @@ Histo::Add1D: New histogram will be booked: #h8  <Total cross section (barn) as 
 Start Run processing.
 EventAction: Event # 0 started
  Process: ProtonInelastic , Model: FTFP
- Primary: proton (2212), E= 20933.1, target nucleus (13,27)
-   fail relative, limit 0.02, values E / p (MeV) = 3.63891e-16 / 0.0220985
-   fail absolute, limit (MeV) 150, values E / p (MeV) = 7.27596e-12 / 462.126
+ Primary: proton (2212), E= 20933.8, target nucleus (13,27)
+   fail relative, limit 0.02, values E / p (MeV) = -3.63879e-16 / 0.032063
+   fail absolute, limit (MeV) 150, values E / p (MeV) = -7.27596e-12 / 670.526
    pass charge/baryon number balance 0 / 0 
  Process: ProtonInelastic , Model: FTFP
- Primary: proton (2212), E= 20868.3, target nucleus (13,27)
-   fail relative, limit 0.02, values E / p (MeV) = 0 / 0.0203576
-   fail absolute, limit (MeV) 150, values E / p (MeV) = 0 / 424.399
+ Primary: proton (2212), E= 20889.9, target nucleus (13,27)
+   fail relative, limit 0.02, values E / p (MeV) = 0 / 0.0272764
+   fail absolute, limit (MeV) 150, values E / p (MeV) = 0 / 569.226
    pass charge/baryon number balance 0 / 0 
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.04s Real=0.26s Sys=0s
+  User=0.1s Real=0.1s Sys=0.01s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ### Fill Cross Sections for proton off Al

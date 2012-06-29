@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-05    (31-May-2012)
+ Geant4 version Name: geant4-09-06-beta-01    (29-June-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -344,7 +344,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20000
-  User=5.83s Real=8.54s Sys=1.36s
+  User=3.05s Real=3.49s Sys=0.43s
 
  ======================== run summary ======================
 
@@ -353,20 +353,20 @@ Run Summary
 
  ============================================================
 
- Total Energy deposited        = 452.732 keV +- 102.121 keV
+ Total Energy deposited        = 452.696 keV +- 101.641 keV
 
- Track length of primary track = 885.337 um  +- 190.785 um 
- Range from EmCalculator = 942.706 um  (from full dE/dx)
+ Track length of primary track = 886.703 um  +- 190.646 um 
+ Range from EmCalculator = 942.835 um  (from full dE/dx)
 
- Projected range               = 317.402 um  +- 205.242 um 
+ Projected range               = 317.054 um  +- 205.724 um 
 
- Nb of steps of primary track  = 21.32 +- 4.81	 Step size= 42.002 um  +- 7.234 um 
+ Nb of steps of primary track  = 21.33 +- 4.79	 Step size= 42.049 um  +- 7.258 um 
 
- absorbed = 80.30 %   transmit = 4.11 %   reflected = 15.60 %
+ absorbed = 80.23 %   transmit = 4.12 %   reflected = 15.64 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1191396704, 43982632
+ Current couple of seeds = 527778524, 830031279
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

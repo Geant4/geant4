@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-05    (31-May-2012)
+ Geant4 version Name: geant4-09-06-beta-01    (29-June-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -599,81 +599,91 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    -54.1      -16     22.2       4.6        0        0         0    Envelope initStep
     1      -54      -16       23      4.48    0.124    0.774     0.774    Envelope msc
-    2    -53.9    -16.1     23.3      4.44   0.0349    0.313      1.09    Envelope eBrem
-    3    -53.9    -16.1     23.6      4.27   0.0409    0.273      1.36    Envelope eBrem
-    4    -53.8      -16     24.6      3.95    0.323     1.03      2.39    Envelope msc
-    5    -53.8      -16     25.6      3.76    0.186     1.03      3.41    Envelope msc
-    6    -53.8    -15.8     26.6      3.61    0.148     1.03      4.44    Envelope msc
-    7    -53.7    -15.4     27.5      3.46    0.156     1.03      5.47    Envelope msc
-    8    -53.5    -15.2     28.5       3.3    0.155     1.03       6.5    Envelope msc
-    9    -53.6    -14.5     29.3      3.15    0.153     1.03      7.52    Envelope msc
-   10    -53.5    -14.1     30.2      2.99    0.161     1.03      8.55    Envelope msc
-   11    -53.6    -13.5       31      2.85    0.142     1.03      9.58    Envelope msc
-   12    -53.7    -12.9     31.8      2.68    0.168     1.03      10.6    Envelope msc
-   13    -53.7    -12.3     32.6      2.54    0.138     1.03      11.6    Envelope msc
-   14    -53.7    -11.9     33.6      2.39    0.149     1.03      12.7    Envelope msc
-   15    -53.7    -11.7     34.6      2.23    0.158     1.03      13.7    Envelope msc
-   16      -54      -12     35.5      2.09    0.148     1.03      14.7    Envelope msc
-   17    -53.9    -12.5     36.4      1.96    0.127     1.03      15.7    Envelope msc
-   18    -53.8    -13.4     36.7      1.74    0.217     1.03      16.8    Envelope msc
-   19    -53.7    -14.4       37      1.58    0.166     1.03      17.8    Envelope msc
-   20    -53.8    -15.4       37      1.43    0.144     1.03      18.8    Envelope msc
-   21      -54    -16.2     36.4      1.27     0.16     1.03      19.8    Envelope msc
-   22    -53.6    -17.1     36.2      1.08    0.191     1.03      20.9    Envelope msc
-   23    -53.5    -18.1     36.5     0.927    0.153     1.03      21.9    Envelope msc
-   24    -53.9    -18.9     36.4     0.786    0.141    0.966      22.9    Envelope eIoni
-   25    -54.6    -19.1     36.3     0.657    0.129    0.811      23.7    Envelope eIoni
-   26    -54.9    -19.5     36.2     0.554    0.092    0.474      24.2    Envelope eBrem
-   27    -55.4    -19.6     35.9     0.448    0.106    0.566      24.7    Envelope eIoni
-   28    -55.8    -19.5     35.8     0.331    0.118     0.46      25.2    Envelope eIoni
-   29      -56    -19.7     35.6     0.257   0.0743    0.348      25.5    Envelope eIoni
-   30    -56.2    -19.8     35.4     0.192   0.0647    0.281      25.8    Envelope eIoni
-   31    -56.4    -19.8     35.3     0.118   0.0741    0.226        26    Envelope eIoni
-   32    -56.5    -19.7     35.3    0.0362   0.0815    0.156      26.2    Envelope eIoni
-   33    -56.5    -19.8     35.3         0   0.0362   0.0246      26.2    Envelope eIoni
+    2    -53.9    -16.1     23.3      4.43    0.041    0.365      1.14    Envelope eBrem
+    3    -53.9    -16.1     23.6      4.26   0.0428    0.287      1.43    Envelope eBrem
+    4    -53.8      -16     24.6      3.94    0.323     1.03      2.45    Envelope msc
+    5    -53.8      -16     25.6      3.75    0.186     1.03      3.48    Envelope msc
+    6    -53.8    -15.8     26.7      3.61    0.148     1.03      4.51    Envelope msc
+    7    -53.7    -15.4     27.6      3.45    0.156     1.03      5.53    Envelope msc
+    8    -53.5    -15.2     28.6      3.29    0.155     1.03      6.56    Envelope msc
+    9    -53.7    -14.5     29.4      3.14    0.153     1.03      7.59    Envelope msc
+   10    -53.6    -14.1     30.3      2.98    0.161     1.03      8.62    Envelope msc
+   11    -53.7    -13.5     31.1      2.84    0.142     1.03      9.64    Envelope msc
+   12    -53.8    -12.9     31.9      2.67    0.168     1.03      10.7    Envelope msc
+   13    -53.8    -12.3     32.7      2.53    0.138     1.03      11.7    Envelope msc
+   14    -53.8    -11.9     33.6      2.38    0.149     1.03      12.7    Envelope msc
+   15    -53.9    -11.7     34.6      2.23    0.158     1.03      13.8    Envelope msc
+   16    -54.2      -12     35.6      2.08    0.148     1.03      14.8    Envelope msc
+   17      -54    -12.5     36.4      1.95    0.127     1.03      15.8    Envelope msc
+   18    -53.9    -13.5     36.8      1.73    0.217     1.03      16.8    Envelope msc
+   19    -53.7    -14.4       37      1.57    0.166     1.03      17.9    Envelope msc
+   20    -53.8    -15.4       37      1.42    0.144     1.03      18.9    Envelope msc
+   21      -54    -16.2     36.4      1.26     0.16     1.03      19.9    Envelope msc
+   22    -53.5    -17.1     36.2      1.07    0.191     1.03      20.9    Envelope msc
+   23    -53.4    -18.1     36.5     0.918    0.153     1.03        22    Envelope msc
+   24    -53.7    -18.9     36.4     0.779     0.14    0.957      22.9    Envelope eIoni
+   25    -54.4    -19.1     36.3     0.651    0.128    0.803      23.7    Envelope eIoni
+   26    -54.9    -19.6     36.3      0.52    0.131    0.666      24.4    Envelope eIoni
+   27    -55.3    -19.8     36.2     0.303    0.217    0.531      24.9    Envelope eIoni
+   28    -55.5    -19.9     36.4     0.212    0.091    0.323      25.2    Envelope eIoni
+   29    -55.6    -19.9     36.4     0.178   0.0293   0.0934      25.3    Envelope eBrem
+   30    -55.7    -19.9     36.6    0.0917   0.0863    0.214      25.6    Envelope eIoni
+   31    -55.7    -19.8     36.7    0.0226    0.069     0.12      25.7    Envelope eIoni
+   32    -55.7    -19.8     36.7         0   0.0226   0.0108      25.7    Envelope eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 11,   Parent ID = 2
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -54.9    -19.5     36.2     0.011        0        0         0    Envelope initStep
-    1    -58.4    -22.3     30.5         0 0.000543     7.25      7.25    Envelope phot
+    0    -55.6    -19.9     36.4    0.0047        0        0         0    Envelope initStep
+    1    -55.6    -19.9     36.5         0 0.000543   0.0664    0.0664    Envelope phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 12,   Parent ID = 11
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -58.4    -22.3     30.5    0.0104        0        0         0    Envelope initStep
-    1    -58.4    -22.3     30.5         0   0.0104  0.00274   0.00274    Envelope eIoni
+    0    -55.6    -19.9     36.5   0.00415        0        0         0    Envelope initStep
+    1    -55.6    -19.9     36.5         0  0.00415 0.000559  0.000559    Envelope eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 10,   Parent ID = 2
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -53.9    -16.1     23.6     0.128        0        0         0    Envelope initStep
-    1    -54.1    -18.2     32.3     0.102 0.000543     8.99      8.99    Envelope compt
-    2    -59.3    -30.8       29     0.102 1.36e-05     14.1        23    Envelope compt
-    3    -94.8     -100     17.3     0.102        0     78.6       102       World Transportation
-    4     -105     -120     13.9     0.102        0     22.7       124  OutOfWorld Transportation
+    0    -53.9    -16.1     23.6     0.127        0        0         0    Envelope initStep
+    1      -54    -17.7     30.4     0.107 4.16e-05     6.94      6.94    Envelope compt
+    2      -47    -0.83       40     0.107        0     20.7      27.6      Shape2 Transportation
+    3    -24.5     53.1     70.8    0.0895 0.000349     66.1      93.7      Shape2 compt
+    4    -25.4     54.6     69.1    0.0895        0     2.39      96.1    Envelope Transportation
+    5    -41.9     80.9     39.3    0.0876 4.16e-05     43.1       139    Envelope compt
+    6    -76.2      100     19.7    0.0876        0     43.9       183       World Transportation
+    7     -112      120    -0.83    0.0876        0     45.9       229  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 15,   Parent ID = 10
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -41.9     80.9     39.3   0.00187        0        0         0    Envelope initStep
+    1    -41.9     80.9     39.3         0  0.00187 0.000149  0.000149    Envelope eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 14,   Parent ID = 10
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -59.3    -30.8       29  0.000135        0        0         0    Envelope initStep
-    1    -59.3    -30.8       29         0 0.000135 3.94e-06  3.94e-06    Envelope eIoni
+    0    -24.5     53.1     70.8    0.0176        0        0         0      Shape2 initStep
+    1    -24.5     53.1     70.8         0   0.0176  0.00405   0.00405      Shape2 eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 13,   Parent ID = 10
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -54.1    -18.2     32.3    0.0252        0        0         0    Envelope initStep
-    1    -54.1    -18.2     32.3         0   0.0252    0.013     0.013    Envelope eIoni
+    0      -54    -17.7     30.4    0.0199        0        0         0    Envelope initStep
+    1      -54    -17.7     30.4         0   0.0199   0.0086    0.0086    Envelope eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 9,   Parent ID = 2
@@ -681,15 +691,15 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    -53.9    -16.1     23.3   0.00333        0        0         0    Envelope initStep
-    1    -53.9    -16.1     23.3         0 0.000543   0.0573    0.0573    Envelope phot
+    1    -53.9    -16.1     23.4         0 0.000543    0.127     0.127    Envelope phot
 
 *********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 15,   Parent ID = 9
+* G4Track Information:   Particle = e-,   Track ID = 16,   Parent ID = 9
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -53.9    -16.1     23.3   0.00279        0        0         0    Envelope initStep
-    1    -53.9    -16.1     23.3         0  0.00279 0.000287  0.000287    Envelope eIoni
+    0    -53.9    -16.1     23.4   0.00279        0        0         0    Envelope initStep
+    1    -53.9    -16.1     23.4         0  0.00279 0.000287  0.000287    Envelope eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -697,7 +707,7 @@ Run Summary
 
 --------------------End of Run------------------------------
  The run consists of 1 gamma of 6 MeV
- Dose in scoring volume Shape2 : 0 picoGy  +- 0 picoGy 
+ Dose in scoring volume Shape2 : 0.001662960021238911 picoGy  +- 0 picoGy 
 ------------------------------------------------------------
 
 
@@ -951,11 +961,11 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=4.29s Real=4.84s Sys=0.01s
+  User=1.89s Real=1.89s Sys=0s
 
 --------------------End of Run------------------------------
  The run consists of 10000 gamma of 6 MeV
- Dose in scoring volume Shape2 : 423.4093565435511 picoGy  +- 12.16822155786747 picoGy 
+ Dose in scoring volume Shape2 : 428.2151187277458 picoGy  +- 12.29088268170665 picoGy 
 ------------------------------------------------------------
 
 Graphics systems deleted.

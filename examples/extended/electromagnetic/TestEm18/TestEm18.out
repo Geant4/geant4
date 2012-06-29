@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-05    (31-May-2012)
+ Geant4 version Name: geant4-09-06-beta-01    (29-June-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -417,7 +417,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=1.83s Real=2.93s Sys=0s
+  User=1.46s Real=1.46s Sys=0s
 
  ======================== run summary ======================
 
@@ -425,19 +425,19 @@ Run Summary
  ===========================================================
 
 
- TrackLength= 1.0005 cm 	 nb of steps= 2.5122  stepSize= 3.9824 mm 
+ TrackLength= 1.0005 cm 	 nb of steps= 2.5031  stepSize= 3.997 mm 
 
- d-rays  : eLoss/primary= 246.59 keV	  nb of d-rays= 0.23359  <Tkin>= 1.0556 MeV  Tmin= 351.89 keV  Tmax= 4.9902 MeV
+ d-rays  : eLoss/primary= 245.64 keV	  nb of d-rays= 0.23243  <Tkin>= 1.0568 MeV  Tmin= 351.89 keV  Tmax= 4.9755 MeV
 
- gamma   : eLoss/primary= 160.63 keV	  nb of gammas= 0.28374  <Tkin>= 566.13 keV  Tmin= 2.942 keV  Tmax= 9.7331 MeV
+ gamma   : eLoss/primary= 155.31 keV	  nb of gammas= 0.27277  <Tkin>= 569.37 keV  Tmin= 2.9421 keV  Tmax= 9.722 MeV
 
- deposit : eLoss/primary= 1.7331 MeV	 <dEcut > table= 1.7337 MeV   ---> simul/reference= 0.99968
+ deposit : eLoss/primary= 1.7327 MeV	 <dEcut > table= 1.7337 MeV   ---> simul/reference= 0.9994
 
- total   : eLoss/primary= 2.1404 MeV	 <dEfull> table= 2.1404 MeV   ---> simul/reference= 1
+ total   : eLoss/primary= 2.1337 MeV	 <dEfull> table= 2.1369 MeV   ---> simul/reference= 0.9985
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 160931890, 1868498466
+ Current couple of seeds = 449827188, 2086854158
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

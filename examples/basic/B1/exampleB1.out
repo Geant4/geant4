@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-05    (31-May-2012)
+ Geant4 version Name: geant4-09-06-beta-01    (29-June-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -480,7 +480,7 @@ AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Ema
 
 --------------------End of Run------------------------------
  The run consists of 1000 gamma of 6 MeV
- Dose in scoring volume Shape2 : 43.6718 picoGy  +- 3.89008 picoGy 
+ Dose in scoring volume Shape2 : 47.032 picoGy  +- 4.01706 picoGy 
 ------------------------------------------------------------
 
 ### Run 1 start.
@@ -507,7 +507,7 @@ AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Ema
 
 --------------------End of Run------------------------------
  The run consists of 1000 proton of 210 MeV
- Dose in scoring volume Shape2 : 4.96607 nanoGy  +- 146.467 picoGy 
+ Dose in scoring volume Shape2 : 4.72332 nanoGy  +- 146.669 picoGy 
 ------------------------------------------------------------
 
 Graphics systems deleted.

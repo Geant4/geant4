@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-05    (31-May-2012)
+ Geant4 version Name: geant4-09-06-beta-01    (29-June-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -357,10 +357,11 @@ AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Ema
  AntiProtonInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
+          FTFNuclearCaptureAtRest
 
                                   Hadronic Processes for <e->
                                   -----------------------------------
-      ElectroNuclear  Models:          CHIPSElectroNuclear: Emin(GeV)=    0  Emax(GeV)= 30000
+      ElectroNuclear  Models:      G4ElectroVDNuclearModel: Emin(GeV)=    0  Emax(GeV)= 1e+06
 
       ElectroNuclear  Crs sctns:          ElectroNuclearXS: Emin(GeV)=    0  Emax(GeV)= 100000
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
@@ -368,7 +369,7 @@ AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Ema
 
                                   Hadronic Processes for <gamma>
                                   -----------------------------------
-     PhotonInelastic  Models:         G4MuonVDNuclearModel: Emin(GeV)=    0  Emax(GeV)= 3.5
+     PhotonInelastic  Models:               BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 3.5
                                            TheoFSGenerator: Emin(GeV)=    3  Emax(GeV)= 100000
 
      PhotonInelastic  Crs sctns:            PhotoNuclearXS: Emin(GeV)=    0  Emax(GeV)= 100000
@@ -400,6 +401,7 @@ AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Ema
   KaonMinusInelastic  Crs sctns: ChipsKaonMinusInelasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
+          hBertiniCaptureAtRest
 
                                   Hadronic Processes for <lambda>
                                   -----------------------------------
@@ -474,6 +476,7 @@ AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Ema
                            below 91 GeV, Glauber-Gribov above 
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
+          hBertiniCaptureAtRest
 
                                   Hadronic Processes for <proton>
                                   -----------------------------------
@@ -495,15 +498,15 @@ AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Ema
 
 ---> Begin of event: 0
 ---> End of event: 0
-   Absorber: total energy: 271.112 MeV       total track length: 19.6788 cm 
-        Gap: total energy: 23.0495 MeV       total track length: 12.2115 cm 
+   Absorber: total energy: 277.994 MeV       total track length: 20.0614 cm 
+        Gap: total energy: 16.7987 MeV       total track length: 8.67454 cm 
 
  ----> print histograms statistic 
 
- EAbs : mean = 271.112 MeV rms = 0 eV 
- EGap : mean = 23.0495 MeV rms = 0 eV 
- LAbs : mean = 19.6788 cm  rms = 0 fm 
- LGap : mean = 12.2115 cm  rms = 0 fm 
+ EAbs : mean = 277.994 MeV rms = 0 eV 
+ EGap : mean = 16.7987 MeV rms = 0 eV 
+ LAbs : mean = 20.0614 cm  rms = 0 fm 
+ LGap : mean = 8.67454 cm  rms = 0 fm 
      Transportation,                msc,              hIoni,            ionIoni
              hBrems,          hPairProd,              eIoni,              eBrem
             annihil,        CoulombScat,               phot,              compt
@@ -516,9 +519,9 @@ AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Ema
  SigmaPlusInelastic,AntiSigmaPlusInelastic,   XiMinusInelastic,AntiXiMinusInelastic
     XiZeroInelastic,AntiXiZeroInelastic,OmegaMinusInelastic,AntiOmegaMinusInelastic
 AntiProtonInelastic,AntiNeutronInelastic,AntiDeuteronInelastic,AntiHe3InelasticProcess
-AntiAlphaInelasticProcess,CHIPSNuclearCaptureAtRest,muMinusCaptureAtRest,         dInelastic
-         tInelastic,       He3Inelastic,     alphaInelastic,       ionInelastic
-            nKiller
+AntiAlphaInelasticProcess,FTFNuclearCaptureAtRest,hBertiniCaptureAtRest,muMinusCaptureAtRest
+         dInelastic,         tInelastic,       He3Inelastic,     alphaInelastic
+       ionInelastic,            nKiller
 
 phot:   for  gamma    SubType= 12
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -749,15 +752,15 @@ hIoni:   for  pi-    SubType= 2
 
 ---> Begin of event: 0
 ---> End of event: 0
-   Absorber: total energy: 279.828 MeV       total track length: 20.1136 cm 
-        Gap: total energy: 17.6796 MeV       total track length: 9.16532 cm 
+   Absorber: total energy: 277.136 MeV       total track length: 20.3061 cm 
+        Gap: total energy: 19.1935 MeV       total track length: 9.82045 cm 
 
  ----> print histograms statistic 
 
- EAbs : mean = 279.828 MeV rms = 0 eV 
- EGap : mean = 17.6796 MeV rms = 0 eV 
- LAbs : mean = 20.1136 cm  rms = 0 fm 
- LGap : mean = 9.16532 cm  rms = 0 fm 
+ EAbs : mean = 277.136 MeV rms = 0 eV 
+ EGap : mean = 19.1935 MeV rms = 0 eV 
+ LAbs : mean = 20.3061 cm  rms = 0 fm 
+ LGap : mean = 9.82045 cm  rms = 0 fm 
 
 phot:   for  gamma    SubType= 12
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -988,15 +991,15 @@ hIoni:   for  pi-    SubType= 2
 
 ---> Begin of event: 0
 ---> End of event: 0
-   Absorber: total energy: 456.813 MeV       total track length: 32.9529 cm 
-        Gap: total energy: 33.2295 MeV       total track length: 16.8963 cm 
+   Absorber: total energy: 461.199 MeV       total track length: 33.1055 cm 
+        Gap: total energy:  15.961 MeV       total track length: 8.18397 cm 
 
  ----> print histograms statistic 
 
- EAbs : mean = 456.813 MeV rms = 0 eV 
- EGap : mean = 33.2295 MeV rms = 0 eV 
- LAbs : mean = 32.9529 cm  rms = 0 fm 
- LGap : mean = 16.8963 cm  rms = 0 fm 
+ EAbs : mean = 461.199 MeV rms = 0 eV 
+ EGap : mean = 15.961 MeV rms = 0 eV 
+ LAbs : mean = 33.1055 cm  rms = 0 fm 
+ LGap : mean = 8.18397 cm  rms = 0 fm 
 Graphics systems deleted.
 Visualization Manager deleting...
 
