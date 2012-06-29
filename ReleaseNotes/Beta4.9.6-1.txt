@@ -406,7 +406,7 @@ List of features and fixes included in this Beta release since 9.5.p01:
       o G4SeltzerBergerModel: fixed minor problem of sampling for positrons;
         made internal data structure static to be used by both e+ and e-
         models providing some memory reduction; use simplified computation
-        of majoranta valid for data with more detailed grid.
+        of majorant valid for data with more detailed grid.
       o G4DipBustGenerator: fixed model description.
       o G4eBremsstrahlungRelModel: switched full screening off.
       o G4eplusAnnihilation: fixed propagate weight to secondaries.
@@ -424,9 +424,9 @@ List of features and fixes included in this Beta release since 9.5.p01:
       o G4VEmAngularDistribution added  methods SampleCosinePolarAngle(),
         SampleDirection() and Initialise().
       o G4LossTableManager: added a check and protection against double
-        registration of the same process; this addition allows to use the same
+        registration of the same process; this allows the use of the same
         EM energy-loss process for different particle types.
-      o G4EmCalculator: modified method to access a process taking into 
+      o G4EmCalculator: modified method to access a process to take into 
         account that the same process may be used by different particle types; 
         added new methods ActiveForParticle(), FindEnLossProcess(), 
         FindDiscreteProcess() and FindMscProcess(). Fix in FindRegion().
@@ -439,34 +439,34 @@ List of features and fixes included in this Beta release since 9.5.p01:
         cross-section. Added inline methods HighEnergyActivationLimit(),
         LowEnergyActivationLimit(), ForceBuildTableFlag(), ForceBuildTable().
       o G4VMultipleScattering: removed transport cross-section table (it
-        will be assigned to msc models; simplified 
+        is assigned to msc models); simplified 
         AlongStepGetPhysicalInteractionLength() method; added
         protection against zero kinetic energy into PostStepDoIt().
-        Optimisation of initialisation and reduced number of checks at 
-        run time. Improved printout at initialisation.
+        Optimised initialisation and reduced number of checks at run time.
+        Improved printout at initialisation.
       o G4VMscModel: added building of transport cross-section table and new 
         method GetTransportCrossSection() to be used at run-time. Added method
         GetTransportMeanFreePath().
-        Updated GetRange() and GetEnergy() methods allowing to use the same
+        Updated GetRange() and GetEnergy() methods to allow using the same
         model class for many particles.
         Optimisation of inline methods. Allow build of transport cross-section
         table for d, t, He3, He4.
-      o G4LossTableBuilder: added method BuildTableForModel() allowing to build
-        the physics-table for a model.
+      o G4LossTableBuilder: added method BuildTableForModel() to enable the
+        building of the physics-table for a model.
       o G4LossTableManager: added methods MinKinEnergy() and MaxKinEnergy().
       o G4EmModelManager: extended printout if cross-section table is built
         for the model. Improved printout of model energy limits.
       o G4VEnergyLossProcess: fix for forced biasing, now forcing if step==1
         (addressing problem report #1314).
       o G4EmBiasingmanager: added check on number of secondaries PostStep,
-        if not 1 then disable both splitting and Russian roulette, this does 
+        if not 1 then disable both splitting and Russian roulette. This does 
         not affect ordinary delta-electron and Bremssrahlung secondary biasing.
         Dynamic weight approach (weight is function of secondary energy) is
         applied for Russian roulette if biasing limit energy is set below 
         1 GeV, alternatively costant factor is used.
       o G4EmBiasingManager, G4VEmProcess, G4VEnergyLossProcess,
-        G4EmProcessOptions, G4EnergyLossMessenger: change Bremssrahlung
-        splitting to EGS-style with unique secondaries. Only Bremssrahlung
+        G4EmProcessOptions, G4EnergyLossMessenger: change Bremsstrahlung
+        splitting to EGS-style with unique secondaries. Only Bremsstrahlung
         split particles with weight > 1/N (N=brem splitting factor), and only
         Russian Roulette with weight < 1. Energy limit no longer used.
         Set weight consistently for forced interaction and cross-section
@@ -513,18 +513,17 @@ List of features and fixes included in this Beta release since 9.5.p01:
     + management
       o Added method for energy non-conservation check; in case of
         non-conservation, re-sample the interaction. Limits are set in
-        G4HadronicInteraction, and may be overridden for models; LEP and HEP
-        override defaults, as these do not return the nucleus in the final
-        state. E/p conservation fails only if both absolute and relative fail.
-        Added check for momentum conservation, reusing limits for energy.
+        G4HadronicInteraction, and may be overridden per model; LEP and HEP
+        override defaults, as these do not include the recoil nucleus in the 
+        final state. E/p conservation fails only if both absolute and relative 
+        fail. Added check for momentum conservation, reusing limits for energy.
         Added check for charge and baryon number conservation if limit is
         less than DBL_MAX.
-      o G4HadronicProcess: move some to protected to be used in derived classes;
-        removed unused code. Changed logic of definition of time for secondary
-        particles inside method FillResults().
-        Removed methods ResetNumberOfInteractionLengthLeft() and
-        GetTotalNumberOfInteractionLengthTraversed() as these have been
-        moved to G4VProcess.
+      o G4HadronicProcess: move some data members to protected to be used in 
+        derived classes; removed unused code. Changed logic of definition of 
+        time for secondary particles inside method FillResults().
+        Moved to use method ResetNumberOfInteractionLengthLeft() and
+        GetTotalNumberOfInteractionLengthTraversed() from G4VProcess.
       o Added printing of model desciptions to html files.
       o Moved isotope production infrastructure from process to model level;
         now done only for LEP models. Updated G4HadronicProcess accordingly.
@@ -535,6 +534,9 @@ List of features and fixes included in this Beta release since 9.5.p01:
       o Added description in G4BinaryLightIonReaction.
       o Fixed minor leak in G4GeneratorPrecompoundInterface.
     + models/cascade
+      o Developed and improved ability of Bertini cascade to handle
+        photo-nuclear and elector-nuclear interactions and the interactions
+	of stopping particles.
       o G4CascadeInterface: check for no-interaction in retryInelasticProton(),
         both in return value and in debugging report.
       o G4NucleiModel: in getPotential() added test for ip==9 (photon) to
@@ -577,16 +579,16 @@ List of features and fixes included in this Beta release since 9.5.p01:
       o New tuning for stopping in CHIPS. Added rescattering to allow for
         wider energy resolution.
       o Fixed charge non-conservation problem in G4QFreeScattering.
-      o Bug fixes for E/M violation with dE2+dpx2+dpx2+dpx2>.5 MeV2.
-      o Splitted G4QInelastic into G4QInelastic and G4QNGamma classes for use
+      o Bug fixes for E/M violation with (dE)^2+(dp)^2>.5 MeV^2.
+      o Split G4QInelastic into G4QInelastic and G4QNGamma classes for use
         with the CHIPS_HP physics-list.
-      o Fix to hadron elastic and inelastic interfaces to make properly use of
+      o Fix to hadron elastic and inelastic interfaces to correct the use of
         the base class G4VCrossSectionDataSet.
       o Fix to linear table update for quasi-elastic cross-sections responsible
         for event non-reproducibility.
       o Fix for quasi-elastic duplication in G4QInelastic (for p & n).
    + models/coherent_elastic
-      o G4ElasticHadrNucleusHE: fixed reproducibility violation due to cashing
+      o G4ElasticHadrNucleusHE: fixed reproducibility violation due to caching
         of cross-sections based on the target element, whereas they depend also
         on the isotope. Rather than using the first isotope encountered for an
         element, the natural average is used. 
@@ -598,7 +600,7 @@ List of features and fixes included in this Beta release since 9.5.p01:
         gamma evaporation object inside G4Evaporation class and 
         G4ExcitationHandler; added access methods to de-excitation components.
       o G4VEvaporationFactory, G4Evaporation, G4EvaporationGEMFactory,
-        G4EvaporationFactory, G4EvaporationDefaultGEMFactory: proper deletion
+        G4EvaporationFactory, G4EvaporationDefaultGEMFactory: correct deletion
         of decay channels after run. Simplified constructors.
       o G4Evaporation: cleanup logic of initialisation and setup options;
         always define photon evaporation channel as first; removed obsolete
@@ -616,7 +618,7 @@ List of features and fixes included in this Beta release since 9.5.p01:
         allow for deviation by the mass of heavy nucleus.
     + models/im_r_matrix
       o Incorporate new data from extended nucleon-nucleon elastic scattering
-        data (SAID evaluation). These double differential elastic
+        data (SAID evaluation). These double-differential elastic
         cross-sections now cover energies up to 5 GeV.
     + models/incl
       o Added missing projectile parameters for He6 projectiles to avoid error
@@ -629,7 +631,7 @@ List of features and fixes included in this Beta release since 9.5.p01:
         G4INCLXXInterfaceConfig singleton.
         Interface returns an empty G4HadFinalState if no inelastic event
         can be produced.
-      o Better (iterative) determination of the remnant recoil at the the end
+      o Better (iterative) determination of the remnant recoil at the end
         of the cascade. Isospin-dependent back-to-spectator.
       o Minor bug for negative incident pions: integration over impact-parameter
         distribution was incomplete.
@@ -651,8 +653,8 @@ List of features and fixes included in this Beta release since 9.5.p01:
         to DoIsotopeCounting(), conditional upon isotope production mode being
         turned on.
       o Relaxed limits on check for "catastrophic" energy non-conservation
-        (for G4LCapture, G4LFission and G4LElastic), allow for deviation by
-        the mass of heavy nucleus.
+        (for G4LCapture, G4LFission and G4LElastic). This allows for deviation
+        by the mass of heavy nucleus. Accounts for lack of recoil nucleus.
     + models/management
       o Moved G4InelasticInteraction class to 'low_energy' model.
       o G4IsoParticleChange: moved from main 'management' module.
@@ -673,9 +675,10 @@ List of features and fixes included in this Beta release since 9.5.p01:
         implemented.
       o G4VIntraNuclearTransportModel: added PropagateModelDescription() method.
     + models/neutron_hp
-      o Added protection of huge Ep breakdown caused by a miss match between
-        cross-section data set and model
-        Added final momentum check win G4NeutronHPInelasticBaseFS.
+      o Requires new data set G4NDL-4.1.
+      o Added protection of huge E/p breakdown caused by a miss match between
+        cross-section data set and model.
+        Added final momentum check in G4NeutronHPInelasticBaseFS.
         Added method to loosen check for bad energy violation and allow for
         big differences when G4NEUTRONHP_DO_NOT_ADJUST_FINAL_STATE is set.
       o Removed unnecessary debug output produced by G4NeutronHPCapture.
@@ -684,22 +687,21 @@ List of features and fixes included in this Beta release since 9.5.p01:
       o Added isotropic emission in CM system.
       o Added non LIN-LIN interpolation and 2D interpolation.
       o Added capability to produce fission fragments for those currently
-        neglected, based on ENDF nfy data; enable by setting environment
+        neglected, based on ENDF nfy data; enabled by setting environment
         variable G4NEUTRONHP_PRODUCE_FISSION_FRAGMENTS.
-      o Added excited isomer index and methods in G4NeutronHPFinalState and
-        G4NeutronHPDataUsed. Updated relevant sources accordingly.
       o G4NeutronHPFission: added method to loosen check for bad energy
         violation to allow for a violation of order of nuclear mass (250GeV).
+      o Added excited isomer index and methods in G4NeutronHPFinalState and
+        G4NeutronHPDataUsed. Updated relevant sources accordingly.
       o Migrated 'frameFlag' (MF6 LCT) = 3, used for several ENDF/B-VII.1
         files previously in use only for energies beyond 20 MeV.
       o Added G4NeutronHPBGGNucleonInelasticXS class to be used in Shielding
         physics-list.
-      o Requires new data set G4NDL-4.1.
     + models/parton_string
       o Improved diffraction dissociation of p/pi/k-mesons.
         Fit of exp. data on p/pi/k + H.
         Good results are obtained for h+A interactions.
-      o Introduced new energy dependences for diffraction cross-sections.
+      o Introduced new energy dependence for diffraction cross-sections.
       o Improved quark exchange algorithm. Strings with large masses
         are now allowed to save their masses.
       o Increased Pt transfer in excitation up to 0.3 GeV/c.
@@ -714,7 +716,7 @@ List of features and fixes included in this Beta release since 9.5.p01:
       o Implemented improved diffraction dissociation.
       o Added ModelDescription() to FTF and QGS. 
       o Probabilities of s-sbar quark pairs and qq-qqbar diquark pairs are
-        changed in G4LundStringFragmentation for a description of the NA49 data.
+        changed in G4LundStringFragmentation to describe the NA49 data.
     + models/photolepton_hadron/muon_nuclear
       o Added new model G4ElectroVDNuclearModel. Removed classes
         G4LeptonHadronProcess and G4LeptonHadronInteractionModel
@@ -726,22 +728,22 @@ List of features and fixes included in this Beta release since 9.5.p01:
         Fixed case of NaN value for pion momentum at low gamma energies.
     + models/pre_equilibrium
       o G4VPreCompoundFragment: fixed rare bug for abnormal fragments by
-        moving computation of Z13 after consistency check.
-      o G4PreCompoundModel: properly deal with instantiation and deletion of
+        moving computation of Z^(1/3) after consistency check.
+      o G4PreCompoundModel: deal correctly with instantiation and deletion of
         G4ExcitationHandler in constructor and destructor.
-      o Added Description() method in G4PreCompoundModel printing the actual
+      o Added Description() method in G4PreCompoundModel printing the 
         description from the Physics Reference Manual.
     + models/quasi_elastic
       o Bug fix in G4QuasiElRatios affecting the initialisation of table.
-        Bug fix fixing wrong initialization of linear table and influencing
+        Fixed wrong initialization of linear table, which influenced
         event reproducibility.
     + models/radioactive_decay
       o Changed length of input characters to 100 in G4RIsotopeTable
         to fix infinite loop when excitation energy is non-zero.
-      o G4RIsotopeTable: added reading of user data  files in order to take
+      o G4RIsotopeTable: added reading of user data files in order to take
         into account the life time.
       o G4RadioactiveDecay: added computation of activation.
-      o G4BetaDecayCorrections: fix in costructor for a bug on beta+ decay.
+      o G4BetaDecayCorrections: fix in constructor for a bug on beta+ decay.
         In FermiFunction(), fix for discontinuity in electron screening energy.
     + models/theo_high_energy
       o Added ModelDescription() interface.
@@ -785,7 +787,7 @@ List of features and fixes included in this Beta release since 9.5.p01:
       Fixed treatment of weights in G4ParticleChange.
       Addressing problem report #1283.
     + Fixed bug in G4ParticleChange::AddSecondary(), where the local time
-      of the parent was set before. Addressing problem report #1305.
+      of the parent was incorrectly used. Addressing problem report #1305.
       Added global time check for secondaries in G4VParticleChange
     + Modified output messages for CheckIt() and CheckSecondary().
       Added G4Exception in G4ParticleChangeForRadDecay::AddSecondary().
@@ -805,7 +807,7 @@ List of features and fixes included in this Beta release since 9.5.p01:
     + Migrated drivers to use G4VScenehandler::fObjectTransformation.
     + Migrated to G4Scene::Model.
     + Fixed Ubuntu warnings about ignoring return value of system call.
-    + Health code check to removed several instances of code duplication,
+    + Code health check removed several instances of code duplication,
       unnecessary screen refeshing, incorrect buffer switching (necessitating
       extra refreshing), variable shadowing, etc.
     + management:
