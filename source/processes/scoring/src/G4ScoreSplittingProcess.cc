@@ -28,8 +28,10 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#include "G4ios.hh"
 #include "G4ScoreSplittingProcess.hh"
+
+#include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Step.hh"
 #include "G4VTouchable.hh"
 #include "G4VPhysicalVolume.hh"

@@ -29,8 +29,10 @@
 //
 //
 
-#include "G4ios.hh"
 #include "G4ParallelWorldScoringProcess.hh"
+
+#include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Step.hh"
 #include "G4Navigator.hh"
 #include "G4VTouchable.hh"
