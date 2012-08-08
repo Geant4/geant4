@@ -55,12 +55,12 @@ CalculateProbability(const G4Fragment & aFragment)
   else if ( x < 15.0*MeV ) ;
   else x *= std::sqrt(15.0*MeV/x);
 
-  // g = (6.0/pi2)*a*A
-  G4double g =  (6.0/pi2)*G4PreCompoundParameters::GetAddress()->GetLevelDensity()*A;
+  // gg = (6.0/pi2)*a*A
+  G4double gg =  (6.0/pi2)*G4PreCompoundParameters::GetAddress()->GetLevelDensity()*A;
 
   G4double Epauli = ((P+1.0)*(P+1.0) + (H+1.0)*(H+1.0) + (P+1.0) - 3.0*(H-1.0))/4.0;
 
-  G4double Probability = g*g*g *(E-Epauli)*(E-Epauli);
+  G4double Probability = gg*gg*gg *(E-Epauli)*(E-Epauli);
   Probability /= 2.0*(N+1.0)*h_Planck;
   Probability *= theMatrixElement;
 

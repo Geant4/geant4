@@ -100,7 +100,6 @@ private:
 
   G4VAtomDeexcitation*      fAtomDeexcitation;
   G4double                  limitFactor;
-  G4bool                    isInitialized;
   std::vector<G4double>     fProbabilities;
 };
 

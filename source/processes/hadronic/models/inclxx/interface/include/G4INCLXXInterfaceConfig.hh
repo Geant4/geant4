@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1
+// INCL++ revision: v5.1.1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -91,10 +91,10 @@ class G4INCLXXInterfaceConfig {
       void SetDeexcitationModel(const ModelEnum m) { theDeexcitationModel=m; }*/
 
   /// \brief Setter for theMaxClusterMass
-  void SetMaxClusterMass(const G4int aMass) { theMaxClusterMass=aMass; }
+  void SetMaxClusterMass(const G4int m) { theMaxClusterMass=m; }
 
   /// \brief Setter for theMaxProjMass
-  void SetMaxProjMass(const G4int aMass) { theMaxProjMass=aMass; }
+  void SetMaxProjMass(const G4int m) { theMaxProjMass=m; }
 
 
 

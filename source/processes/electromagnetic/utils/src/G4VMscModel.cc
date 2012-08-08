@@ -101,16 +101,16 @@ G4VMscModel::GetParticleChangeForMSC(const G4ParticleDefinition* p)
   }
   if(p) {
     G4String partname = p->GetParticleName();
-    if(p->GetPDGMass() < GeV || ForceBuildTableFlag() ||
-       partname == "deuteron" || partname == "triton" 
+    if(p->GetPDGMass() < GeV || ForceBuildTableFlag()
+       || partname == "deuteron" || partname == "triton" 
        || partname == "He3" || partname == "alpha") {
       G4double emin = std::max(LowEnergyLimit(), LowEnergyActivationLimit());
       G4double emax = std::min(HighEnergyLimit(), HighEnergyActivationLimit());
       emin = std::max(emin, man->MinKinEnergy());
       emax = std::min(emax, man->MaxKinEnergy());
       G4LossTableBuilder* builder = man->GetTableBuilder();
-      xSection = builder->BuildTableForModel(xSection, this, p, 
-					     emin, emax, true);
+      xSectionTable = builder->BuildTableForModel(xSectionTable, this, p, 
+						  emin, emax, true);
       theDensityFactor = builder->GetDensityFactors();
       theDensityIdx = builder->GetCoupleIndexes();
     }
@@ -186,13 +186,5 @@ void G4VMscModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				    const G4DynamicParticle*,
 				    G4double, G4double)
 {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4VMscModel::Value(const G4MaterialCutsCouple* couple,
-			    const G4ParticleDefinition* p, G4double ekin)
-{
-  return ekin*ekin*CrossSection(couple, p, ekin, 0.0, DBL_MAX);
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1
+// INCL++ revision: v5.1.1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -45,13 +45,13 @@ namespace G4INCL {
   {
     const ThreeVector oldPosition = thePosition;
     G4INCL::ParticleType type = G4INCL::Proton;
-    const G4int theMassNumber = theA;
-    const G4int theChargeNumber = theZ;
+    const G4int theMass = theA;
+    const G4int theCharge = theZ;
     theA = 0;
     theZ = 0;
-    for(G4int i = 1; i <= theMassNumber; ++i) {
+    for(G4int i = 1; i <= theMass; ++i) {
       // DEBUG("Creating particle " << i << std::endl);
-      if(i == (theChargeNumber + 1)) { // Nucleons [Z+1..A] are neutrons
+      if(i == (theCharge + 1)) { // Nucleons [Z+1..A] are neutrons
         type = G4INCL::Neutron;
       }
 
@@ -62,7 +62,7 @@ namespace G4INCL {
       addParticle(p); // add the particle to the `particles' list
     }
 
-// assert(theA==theMassNumber && theZ==theChargeNumber);
+// assert(theA==theMass && theZ==theCharge);
     thePosition = oldPosition;
   }
 

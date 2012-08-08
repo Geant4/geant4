@@ -97,7 +97,6 @@ private:
   G4VAtomDeexcitation*      fAtomDeexcitation;
 
   G4double                  fminimalEnergy;
-  G4bool                    isInitialized;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

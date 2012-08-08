@@ -189,19 +189,19 @@ G4PreCompoundEmission::AngularDistribution(G4VPreCompoundFragment* thePreFragmen
 	
   //
   //  G4EvaporationLevelDensityParameter theLDP;
-  //  G4double g = (6.0/pi2)*aFragment.GetA()*
+  //  G4double gg = (6.0/pi2)*aFragment.GetA()*
 
-  G4double g = (6.0/pi2)*aFragment.GetA_asInt()*theParameters->GetLevelDensity();
+  G4double gg = (6.0/pi2)*aFragment.GetA_asInt()*theParameters->GetLevelDensity();
 	
   // Average exciton energy relative to bottom of nuclear well
-  G4double Eav = 2*p*(p+1)/((p+h)*g);
+  G4double Eav = 2*p*(p+1)/((p+h)*gg);
 	
   // Excitation energy relative to the Fermi Level
   G4double Uf = std::max(U - (p - h)*Ef , 0.0);
   //  G4double Uf = U - KineticEnergyOfEmittedFragment - Bemission;
 
-  G4double w_num = rho(p+1, h, g, Uf, Ef);
-  G4double w_den = rho(p,   h, g, Uf, Ef);
+  G4double w_num = rho(p+1, h, gg, Uf, Ef);
+  G4double w_den = rho(p,   h, gg, Uf, Ef);
   if (w_num > 0.0 && w_den > 0.0)
     {
       Eav *= (w_num/w_den);
@@ -261,16 +261,16 @@ G4PreCompoundEmission::AngularDistribution(G4VPreCompoundFragment* thePreFragmen
   theFinalMomentum.rotateUz(theIncidentDirection);
 }
 
-G4double G4PreCompoundEmission::rho(G4int p, G4int h, G4double g, 
+G4double G4PreCompoundEmission::rho(G4int p, G4int h, G4double gg, 
 				    G4double E, G4double Ef) const
 {	
   // 25.02.2010 V.Ivanchenko added more protections
-  G4double Aph   = (p*p + h*h + p - 3.0*h)/(4.0*g);
-  //  G4double alpha = (p*p + h*h)/(2.0*g);
+  G4double Aph   = (p*p + h*h + p - 3.0*h)/(4.0*gg);
+  //  G4double alpha = (p*p + h*h)/(2.0*gg);
   
   if ( E - Aph < 0.0) { return 0.0; }
   
-  G4double logConst =  (p+h)*std::log(g) 
+  G4double logConst =  (p+h)*std::log(gg) 
     - g4pow->logfactorial(p+h-1) - g4pow->logfactorial(p) - g4pow->logfactorial(h);
 
   // initialise values using j=0

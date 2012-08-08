@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1
+// INCL++ revision: v5.1.1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -373,6 +373,12 @@ namespace G4INCL {
 #endif
 
   private:
+    /// \brief Dummy copy constructor to shut up Coverity warnings
+    Store(const Store &rhs);
+
+    /// \brief Dummy assignment operator to shut up Coverity warnings
+    Store &operator=(Store const &rhs);
+
     /**
      * Remove all avatars connected to a particle
      */

@@ -617,7 +617,7 @@ if(Xtotal-Xelastic != 0.)
               SetProbLogDistr(0.5);                                  // Uzhi 21.05.2012
              }
 
-             if(theA > 4) SetProbabilityOfProjDiff(0.);     // Uzhi 19.06.2012
+//           if(theA > 4) SetProbabilityOfProjDiff(0.);     // Uzhi 6.07.2012 Closed
 
 //G4cout<<"Param Get Min Dif "<<GetProjMinNonDiffMass()<<G4endl;
 
@@ -637,13 +637,13 @@ if(Xtotal-Xelastic != 0.)
 
       SetR2ofNuclearDestruction(1.5*fermi*fermi);
 
-      SetDofNuclearDestruction(0.4);
+      SetDofNuclearDestruction(0.3);
       SetPt2ofNuclearDestruction((0.035+0.04*std::exp(4.*(Ylab-2.5))/
                                          (1.+std::exp(4.*(Ylab-2.5))))*GeV*GeV); //0.09
 //G4cout<<"Parm Pt2 Y "<<(0.035+0.04*std::exp(4.*(Ylab-2.5))/(1.+std::exp(4.*(Ylab-2.5))))<<" "<<Ylab<<G4endl;
       SetMaxPt2ofNuclearDestruction(1.0*GeV*GeV);
 
-      SetExcitationEnergyPerWoundedNucleon(75.*MeV);
+      SetExcitationEnergyPerWoundedNucleon(100.*MeV);
     } else if( ProjectilePDGcode < -1000 )             // for anti-baryon projectile
     {
 //G4cout<<"Nucl destruct Anti Bar"<<G4endl;
@@ -654,12 +654,12 @@ if(Xtotal-Xelastic != 0.)
 
       SetR2ofNuclearDestruction(1.5*fermi*fermi);
 
-      SetDofNuclearDestruction(0.4);
+      SetDofNuclearDestruction(0.3);
       SetPt2ofNuclearDestruction((0.035+0.04*std::exp(4.*(Ylab-2.5))/
                                          (1.+std::exp(4.*(Ylab-2.5))))*GeV*GeV); //0.09
       SetMaxPt2ofNuclearDestruction(1.0*GeV*GeV);
 
-      SetExcitationEnergyPerWoundedNucleon(75.*MeV);
+      SetExcitationEnergyPerWoundedNucleon(100.*MeV);
 
       if(Plab < 2.)   // 2 GeV/c
       { // For slow anti-baryon we have to garanty putting on mass-shell
@@ -678,12 +678,12 @@ if(Xtotal-Xelastic != 0.)
 
       SetR2ofNuclearDestruction(1.5*fermi*fermi);
 
-      SetDofNuclearDestruction(0.4);
+      SetDofNuclearDestruction(0.3);
       SetPt2ofNuclearDestruction((0.035+0.04*std::exp(4.*(Ylab-2.5))/
                                          (1.+std::exp(4.*(Ylab-2.5))))*GeV*GeV); //0.09
       SetMaxPt2ofNuclearDestruction(1.0*GeV*GeV);
 
-      SetExcitationEnergyPerWoundedNucleon(75.*MeV);
+      SetExcitationEnergyPerWoundedNucleon(100.*MeV);
     }
 
 //SetCofNuclearDestruction(0.47*std::exp(2.*(Ylab-2.5))/(1.+std::exp(2.*(Ylab-2.5)))); 

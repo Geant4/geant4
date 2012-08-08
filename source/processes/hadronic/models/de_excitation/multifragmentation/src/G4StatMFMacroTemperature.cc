@@ -172,9 +172,7 @@ G4double G4StatMFMacroTemperature::FragsExcitEnergy(const G4double T)
       }
 
     // Excitation energy per nucleon
-    G4double FragsExcitEnergy = AverageEnergy - _FreeInternalE0;
-
-    return FragsExcitEnergy;
+    return AverageEnergy - _FreeInternalE0;
 
 }
 

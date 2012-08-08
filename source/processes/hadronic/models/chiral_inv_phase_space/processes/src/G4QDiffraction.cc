@@ -562,10 +562,10 @@ G4double G4QDiffraction::CalculateXS(G4double p, G4int Z, G4int N, G4int PDG)
   //G4double x=CSmanager->GetCrossSection(true, p, Z, N, PDG); // inelastic XS
   //G4double pIU=p*GeV;                                        // IndependentUnistMomentum
   //G4double r=diffRatio->GetRatio(pIU, PDG, Z, N);            // Proj. Diffraction Part
-  //G4double s=x*r;                                            // XS for proj. diffraction
-  G4double s=diffRatio->GetTargSingDiffXS(p, PDG, Z, N);     // XS for target diffraction
+  //G4double xs_value=x*r;                                            // XS for proj. diffraction
+  G4double xs_value=diffRatio->GetTargSingDiffXS(p, PDG, Z, N);     // XS for target diffraction
 #ifdef debug
-  G4cout<<"G4QDiff::CXS:p="<<p<<",Z="<<Z<<",N="<<N<<",C="<<PDG<<",XS="<<s<<G4endl;
+  G4cout<<"G4QDiff::CXS:p="<<p<<",Z="<<Z<<",N="<<N<<",C="<<PDG<<",XS="<<xs_value<<G4endl;
 #endif
-  return s;
+  return xs_value;
 }

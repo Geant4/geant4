@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1
+// INCL++ revision: v5.1.1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -78,14 +78,14 @@ namespace G4INCL {
       return theNucleus;
     }
 
-    G4double StandardPropagationModel::shoot(ParticleSpecies const projectileSpecies, const G4double kineticEnergy, const G4double impactParameter) {
+    G4double StandardPropagationModel::shoot(ParticleSpecies const projectileSpecies, const G4double kineticEnergy, const G4double impactParameter, const G4double phi) {
       if(projectileSpecies.theType==Composite)
-        return shootComposite(projectileSpecies, kineticEnergy, impactParameter);
+        return shootComposite(projectileSpecies, kineticEnergy, impactParameter, phi);
       else
-        return shootParticle(projectileSpecies.theType, kineticEnergy, impactParameter);
+        return shootParticle(projectileSpecies.theType, kineticEnergy, impactParameter, phi);
     }
 
-    G4double StandardPropagationModel::shootParticle(ParticleType const type, const G4double kineticEnergy, const G4double impactParameter) {
+    G4double StandardPropagationModel::shootParticle(ParticleType const type, const G4double kineticEnergy, const G4double impactParameter, const G4double phi) {
       theNucleus->setParticleNucleusCollision();
       currentTime = 0.0;
 
@@ -122,9 +122,8 @@ namespace G4INCL {
         return -1.;
       }
 
-      const G4double tbid = Random::shoot() * Math::twoPi;
-      ThreeVector position(impactParameter * std::cos(tbid),
-          impactParameter * std::sin(tbid),
+      ThreeVector position(impactParameter * std::cos(phi),
+          impactParameter * std::sin(phi),
           0.);
       p->setPosition(position);
 
@@ -158,7 +157,7 @@ namespace G4INCL {
       }
     }
 
-    G4double StandardPropagationModel::shootComposite(ParticleSpecies const species, const G4double kineticEnergy, const G4double impactParameter) {
+    G4double StandardPropagationModel::shootComposite(ParticleSpecies const species, const G4double kineticEnergy, const G4double impactParameter, const G4double phi) {
       theNucleus->setNucleusNucleusCollision();
       currentTime = 0.0;
 
@@ -187,9 +186,8 @@ namespace G4INCL {
       }
 
       // Position the cluster at the right impact parameter
-      const G4double tbid = Random::shoot() * Math::twoPi;
-      ThreeVector position(impactParameter * std::cos(tbid),
-          impactParameter * std::sin(tbid),
+      ThreeVector position(impactParameter * std::cos(phi),
+          impactParameter * std::sin(phi),
           0.);
       pr->setPosition(position);
 

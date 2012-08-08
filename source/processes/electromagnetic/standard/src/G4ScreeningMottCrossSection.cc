@@ -179,11 +179,11 @@ void G4ScreeningMottCrossSection::SetupKinematic(G4double ekin, G4double Z )
         	G4int iz = G4int(Z);
                 G4double A = fNistManager->GetAtomicMassAmu(iz);
         	G4int ia = G4int(A);
-       	 	G4double mm2 = G4NucleiProperties::GetNuclearMass(ia, iz);
+       	 	G4double mass2 = G4NucleiProperties::GetNuclearMass(ia, iz);
 
                 targetZ = Z;
 		targetA = fNistManager->GetAtomicMassAmu(iz);
-		targetMass= mm2;
+		targetMass= mass2;
 
  		mottcoeff->SetMottCoeff(targetZ, coeffb);
 
@@ -204,9 +204,9 @@ void G4ScreeningMottCrossSection::SetupKinematic(G4double ekin, G4double Z )
         // A.P. Martynenko, R.N. Faustov, Teoret. mat. Fiz. 64 (1985) 179
         
 		//incident particle & target nucleus
-	        G4double Ecm=sqrt(m12 + mm2*mm2 + 2.0*etot*mm2);
-                 mu_rel=mass*mm2/Ecm;
-                G4double momCM= ptot*mm2/Ecm;
+	        G4double Ecm=sqrt(m12 + mass2*mass2 + 2.0*etot*mass2);
+                 mu_rel=mass*mass2/Ecm;
+                G4double momCM= ptot*mass2/Ecm;
                 // relative system
                 mom2 = momCM*momCM;
                 invbeta2 = 1.0 +  mu_rel*mu_rel/mom2;
@@ -508,9 +508,9 @@ G4ThreeVector dir(0.0,0.0,1.0);
 
 	//.......set Trc
 	G4double etot=tkinLab+mass;
-	G4double mm2=targetMass;
-	Trec=(1.0 - cost)* mm2*(etot*etot - mass*mass )/
-                              (mass*mass + mm2*mm2+ 2.*mm2*etot);
+	G4double mass2=targetMass;
+	Trec=(1.0 - cost)* mass2*(etot*etot - mass*mass )/
+                              (mass*mass + mass2*mass2+ 2.*mass2*etot);
         
 
 

@@ -642,6 +642,7 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
     }
     G4double cross = mod->CrossSection(couple,particle,e,cut,tmax);
     cross *= (1.0 + del/e); 
+    if(fIsCrossSectionPrim == tType) { cross *= e/MeV; }
     
     if(j==0 && startFromNull) { cross = 0.0; }
 

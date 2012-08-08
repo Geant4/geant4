@@ -78,6 +78,8 @@ G4ComptonScattering::G4ComptonScattering(const G4String& processName,
   SetBuildTableFlag(true);
   SetSecondaryParticle(G4Electron::Electron());
   SetProcessSubType(fComptonScattering);
+  SetMinKinEnergyPrim(1*MeV);
+  SetSplineFlag(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

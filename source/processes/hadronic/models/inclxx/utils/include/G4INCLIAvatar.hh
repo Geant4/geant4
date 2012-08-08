@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1
+// INCL++ revision: v5.1.1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -56,7 +56,8 @@ namespace G4INCL {
   enum AvatarType {SurfaceAvatarType,
 		   CollisionAvatarType,
 		   DecayAvatarType,
-		   ParticleEntryAvatarType};
+		   ParticleEntryAvatarType,
+                   UnknownAvatarType};
 
   class IAvatar {
   public:

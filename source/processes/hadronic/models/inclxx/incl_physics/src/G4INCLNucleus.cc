@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1
+// INCL++ revision: v5.1.1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -71,6 +71,8 @@ namespace G4INCL {
      incomingAngularMomentum(0.,0.,0.), incomingMomentum(0.,0.,0.),
      initialCenterOfMass(0.,0.,0.),
      remnant(true),
+     blockedDelta(NULL),
+     initialEnergy(0.),
      tryCN(false),
      forceTransparent(false),
      projectileZ(0),
@@ -83,7 +85,6 @@ namespace G4INCL {
       theUniverseRadius = theDensity->getMaximumRadius();
     theStore = new Store(conf);
     toBeUpdated.clear();
-    blockedDelta = NULL;
   }
 
   Nucleus::~Nucleus() {
@@ -525,9 +526,9 @@ namespace G4INCL {
       // Can apply exact 2-body kinematics here. Keep the CM emission angle of
       // the first particle.
       Particle *p1 = outgoing.front(), *p2 = outgoing.back();
-      const ThreeVector aBoostVector = incomingMomentum / initialEnergy;
+      const ThreeVector boostVector = incomingMomentum / initialEnergy;
       // Boost to the initial CM
-      p1->boost(aBoostVector);
+      p1->boost(boostVector);
       const G4double sqrts = std::sqrt(initialEnergy*initialEnergy - incomingMomentum.mag2());
       const G4double pcm = KinematicsUtils::momentumInCM(sqrts, p1->getMass(), p2->getMass());
       const G4double scale = pcm/(p1->getMomentum().mag());
@@ -537,8 +538,8 @@ namespace G4INCL {
       p1->adjustEnergyFromMomentum();
       p2->adjustEnergyFromMomentum();
       // Unboost
-      p1->boost(-aBoostVector);
-      p2->boost(-aBoostVector);
+      p1->boost(-boostVector);
+      p2->boost(-boostVector);
 
     } else {
 
@@ -674,11 +675,17 @@ namespace G4INCL {
 
     // Reset the remnant counter
     eventInfo->nRemnants = 0;
+    eventInfo->history.clear();
 
     for( ParticleIter i = outgoingParticles.begin(); i != outgoingParticles.end(); ++i ) {
       // If the particle is a cluster and has excitation energy, treat it as a cluster
       if((*i)->isCluster()) {
         Cluster const * const c = dynamic_cast<Cluster *>(*i);
+// assert(c);
+#ifdef INCLXX_IN_GEANT4_MODE
+        if(!c)
+          continue;
+#endif
         const G4double eStar = c->getExcitationEnergy();
         if(std::abs(eStar)>1E-10) {
           if(eStar<0.) {
@@ -729,7 +736,7 @@ namespace G4INCL {
       eventInfo->theta[eventInfo->nParticles] = Math::toDegrees(mom.theta());
       eventInfo->phi[eventInfo->nParticles] = Math::toDegrees(mom.phi());
       eventInfo->origin[eventInfo->nParticles] = -1;
-      //      std::strcpy(eventInfo->history[eventInfo->nParticles],"");
+      eventInfo->history.push_back("");
       eventInfo->nParticles++;
     }
     eventInfo->nucleonAbsorption = isNucleonAbsorption;
@@ -813,25 +820,25 @@ namespace G4INCL {
     setMass(getTableMass() + theExcitationEnergy);
   }
 
-  void Nucleus::finalizeProjectileRemnant(const G4double anEmissionTime) {
+  void Nucleus::finalizeProjectileRemnant(const G4double emissionTime) {
     // Deal with the projectile remnant
     if(theProjectileRemnant->getA()>1) {
       // Set the mass
-      const G4double aMass = theProjectileRemnant->getInvariantMass();
-      theProjectileRemnant->setMass(aMass);
+      const G4double theMass = theProjectileRemnant->getInvariantMass();
+      theProjectileRemnant->setMass(theMass);
 
       // Compute the excitation energy from the invariant mass
-      const G4double anExcitationEnergy = aMass
+      const G4double theExcitationEnergy = theMass
         - ParticleTable::getTableMass(theProjectileRemnant->getA(), theProjectileRemnant->getZ());
 
       // Set the excitation energy
-      theProjectileRemnant->setExcitationEnergy(anExcitationEnergy);
+      theProjectileRemnant->setExcitationEnergy(theExcitationEnergy);
 
       // Set the spin
       theProjectileRemnant->setSpin(DeJongSpin::shoot(theProjectileRemnant->getNumberStoredComponents(), theProjectileRemnant->getA()));
 
       // Set the emission time
-      theProjectileRemnant->setEmissionTime(anEmissionTime);
+      theProjectileRemnant->setEmissionTime(emissionTime);
 
       // Put it in the outgoing list
       theStore->addToOutgoing(theProjectileRemnant);

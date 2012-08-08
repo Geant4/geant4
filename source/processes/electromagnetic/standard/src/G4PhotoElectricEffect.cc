@@ -83,6 +83,7 @@ G4PhotoElectricEffect::G4PhotoElectricEffect(const G4String& processName,
   SetBuildTableFlag(false);
   SetSecondaryParticle(G4Electron::Electron());
   SetProcessSubType(fPhotoElectricEffect);
+  SetMinKinEnergyPrim(200*keV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

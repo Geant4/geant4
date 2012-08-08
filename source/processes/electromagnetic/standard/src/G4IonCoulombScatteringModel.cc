@@ -177,7 +177,7 @@ void G4IonCoulombScatteringModel::SampleSecondaries(
 	G4double Z  = currentElement->GetZ();
   	G4int iz          = G4int(Z);
   	G4int ia = SelectIsotopeNumber(currentElement);
-  	G4double mm2 = G4NucleiProperties::GetNuclearMass(ia, iz);
+  	G4double mass2 = G4NucleiProperties::GetNuclearMass(ia, iz);
 
 
 
@@ -201,7 +201,7 @@ void G4IonCoulombScatteringModel::SampleSecondaries(
   	G4double ptot = sqrt(mom2);
 
 	//CM particle 1
-  	G4double bet  = ptot/(etot + mm2);
+  	G4double bet  = ptot/(etot + mass2);
   	G4double gam  = 1.0/sqrt((1.0 - bet)*(1.0 + bet));
 
 	//CM 	
@@ -224,8 +224,8 @@ void G4IonCoulombScatteringModel::SampleSecondaries(
   
 	// V.Ivanchenko fix of final energies after scattering
 	// recoil.......................................
-	//G4double trec =(1.0 - cost)* mm2*(etot*etot - mass*mass )/
-	//			(mass*mass + mm2*mm2+ 2.*mm2*etot);
+	//G4double trec =(1.0 - cost)* mass2*(etot*etot - mass*mass )/
+	//			(mass*mass + mass2*mass2+ 2.*mass2*etot);
         //G4double finalT = kinEnergy - trec;
 
 	// new computation

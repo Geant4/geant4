@@ -849,7 +849,7 @@ G4bool G4FTFModel::PutOnMassShell()
         if(theNucleus->GetMassNumber() != 1)
         {
 //G4cout<<"NumberOfInvolvedNucleon "<<NumberOfInvolvedNucleon<<G4endl;
-          G4double ProbDeltaIsobar(0.25);                                  // Uzhi 12.06.2012
+          G4double ProbDeltaIsobar(0.05);                                  // Uzhi 6.07.2012
 	  for(G4int i=0; i < NumberOfInvolvedNucleon; i++ )
           {
             if((G4UniformRand() < ProbDeltaIsobar)&&(NumberOfDeltas < MaxNumberOfDeltas))

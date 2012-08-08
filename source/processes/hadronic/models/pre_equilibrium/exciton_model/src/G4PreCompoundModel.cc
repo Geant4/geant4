@@ -208,10 +208,10 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
 
     theEmission->Initialize(aFragment);
     
-    G4double g = (6.0/pi2)*aFragment.GetA_asInt()*theParameters->GetLevelDensity();
+    G4double gg = (6.0/pi2)*aFragment.GetA_asInt()*theParameters->GetLevelDensity();
     
     G4int EquilibriumExcitonNumber = 
-      static_cast<G4int>(std::sqrt(2.0*g*aFragment.GetExcitationEnergy())+ 0.5);
+      G4lrint(std::sqrt(2*gg*aFragment.GetExcitationEnergy()));
     //   
     //    G4cout<<"Neq="<<EquilibriumExcitonNumber<<G4endl;
     //

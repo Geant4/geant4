@@ -105,7 +105,7 @@ class G4QHadronInelasticDataSet : public G4VCrossSectionDataSet
 {
   public:
 
-    G4QHadronInelasticDataSet(const G4String& name = "CHIPSInelasticXS");
+    G4QHadronInelasticDataSet(const G4String& input_name = "CHIPSInelasticXS");
     ~G4QHadronInelasticDataSet() {};
     G4bool IsIsoApplicable(const G4DynamicParticle*, G4int Z, G4int A,    
                            const G4Element* elm = 0, const G4Material* mat = 0);

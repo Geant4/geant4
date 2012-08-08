@@ -62,10 +62,11 @@ G4CoulombScattering::G4CoulombScattering(const G4String& name)
 {
   //  G4cout << "G4CoulombScattering constructor "<< G4endl;
   SetBuildTableFlag(true);
-  SetStartFromNullFlag(false);
+  SetStartFromNullFlag(true);
   SetIntegral(true);
   SetSecondaryParticle(G4Proton::Proton());
   SetProcessSubType(fCoulombScattering);
+  SetSplineFlag(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -84,16 +85,19 @@ G4bool G4CoulombScattering::IsApplicable(const G4ParticleDefinition& p)
 
 void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
 {
-  //G4cout << "### G4CoulombScattering::InitialiseProcess : "
-  //	 << p->GetParticleName() << G4endl;
   G4double a = G4LossTableManager::Instance()->FactorForAngleLimit()
     *CLHEP::hbarc/CLHEP::fermi;
   q2Max = 0.5*a*a;
   G4double theta = PolarAngleLimit();
-
-  // cross section table should start from threshold if
-  // Coulomb scattering is combined with multiple or hadronic scattering
-  if(0.0 < theta) { SetStartFromNullFlag(true); }
+  /*
+  G4cout << "### G4CoulombScattering::InitialiseProcess: "
+  	 << p->GetParticleName()
+	 << " Emin(MeV)= " << MinKinEnergy()/MeV
+	 << " Emax(TeV)= " << MaxKinEnergy()/TeV
+	 << " nbins= " << LambdaBinning()
+	 << " theta= " << theta
+	 << G4endl;
+  */
 
   // second initialisation
   if(isInitialised) {
@@ -135,11 +139,11 @@ G4double G4CoulombScattering::MinPrimaryEnergy(const G4ParticleDefinition* part,
 					       const G4Material* mat)
 {
   // Pure Coulomb scattering
-  G4double emin = MinKinEnergy();
+  G4double emin = 0.0;
 
   // Coulomb scattering combined with multiple or hadronic scattering
   if(0.0 < PolarAngleLimit()) {
-    G4double p2 = 2.0/(q2Max*mat->GetIonisation()->GetInvA23());
+    G4double p2 = 0.5*q2Max*mat->GetIonisation()->GetInvA23();
     G4double mass = part->GetPDGMass();
     emin = sqrt(p2 + mass*mass) - mass;
   }

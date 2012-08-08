@@ -12,6 +12,10 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+06-Jul-2012 A.Ribon                        (hadr-chips-proc-V09-05-04)
+----------------------------------------------------------------------
+Fixed warning of shadowed variable in G4QDiffraction.cc .
+
 14-Jun-2012 A.Ribon                        (hadr-chips-proc-V09-05-03)
 ----------------------------------------------------------------------
 Fix mistake in G4QLowEnergy.cc introduced in previous tag.

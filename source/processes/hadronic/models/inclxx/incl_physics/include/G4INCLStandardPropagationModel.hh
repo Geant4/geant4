@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1
+// INCL++ revision: v5.1.1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -83,9 +83,9 @@ namespace G4INCL {
        */
       G4INCL::Nucleus* getNucleus();
 
-      G4double shoot(ParticleSpecies const projectileSpecies, const G4double kineticEnergy, const G4double impactParameter);
-      G4double shootParticle(ParticleType const t, const G4double kineticEnergy, const G4double impactParameter);
-      G4double shootComposite(ParticleSpecies const s, const G4double kineticEnergy, const G4double impactParameter);
+      G4double shoot(ParticleSpecies const projectileSpecies, const G4double kineticEnergy, const G4double impactParameter, const G4double phi);
+      G4double shootParticle(ParticleType const t, const G4double kineticEnergy, const G4double impactParameter, const G4double phi);
+      G4double shootComposite(ParticleSpecies const s, const G4double kineticEnergy, const G4double impactParameter, const G4double phi);
 
       /**
        * Set the stopping time of the simulation.

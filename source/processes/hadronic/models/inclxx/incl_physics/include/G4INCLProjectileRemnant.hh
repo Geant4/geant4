@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1
+// INCL++ revision: v5.1.1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -79,8 +79,8 @@ namespace G4INCL {
       storeEnergyLevels();
 
       // Boost the whole thing
-      const ThreeVector aBoostVector = ThreeVector(0.0, 0.0, momentumZ / energy);
-      boost(-aBoostVector);
+      const ThreeVector boostVector = ThreeVector(0.0, 0.0, momentumZ / energy);
+      boost(-boostVector);
 
       // Freeze the internal motion of the particles
       freezeInternalMotion();

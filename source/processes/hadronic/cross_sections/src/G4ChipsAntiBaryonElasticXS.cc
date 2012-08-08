@@ -110,6 +110,7 @@ G4ChipsAntiBaryonElasticXS::G4ChipsAntiBaryonElasticXS():G4VCrossSectionDataSet(
 
 G4ChipsAntiBaryonElasticXS::~G4ChipsAntiBaryonElasticXS()
 {
+  /*
   std::vector<G4double*>::iterator pos;
   for (pos=CST.begin(); pos<CST.end(); pos++)
   { delete [] *pos; }
@@ -144,6 +145,7 @@ G4ChipsAntiBaryonElasticXS::~G4ChipsAntiBaryonElasticXS()
   for (pos=B4T.begin(); pos<B4T.end(); pos++)
   { delete [] *pos; }
   B4T.clear();
+  */
 }
 
 

@@ -80,6 +80,7 @@ G4GammaConversion::G4GammaConversion(const G4String& processName,
 {
   SetMinKinEnergy(2.0*electron_mass_c2);
   SetProcessSubType(fGammaConversion);
+  SetStartFromNullFlag(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -102,13 +103,21 @@ void G4GammaConversion::InitialiseProcess(const G4ParticleDefinition*)
     isInitialised = true;
     SetBuildTableFlag(true);
     SetSecondaryParticle(G4Electron::Electron());
-    G4double emin = std::max(MinKinEnergy(), 2.0*electron_mass_c2);
+    G4double emin = std::max(MinKinEnergy(), 2*electron_mass_c2);
     SetMinKinEnergy(emin);
     if(!Model()) { SetModel(new G4BetheHeitlerModel()); }
     Model()->SetLowEnergyLimit(emin);
     Model()->SetHighEnergyLimit(MaxKinEnergy());
     AddEmModel(1, Model());
   } 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4GammaConversion::MinPrimaryEnergy(const G4ParticleDefinition*,
+					     const G4Material*)
+{
+  return 2*electron_mass_c2;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

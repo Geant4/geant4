@@ -109,6 +109,7 @@ G4ChipsNeutronElasticXS::G4ChipsNeutronElasticXS():G4VCrossSectionDataSet(Defaul
 
 G4ChipsNeutronElasticXS::~G4ChipsNeutronElasticXS()
 {
+    /*
   std::vector<G4double*>::iterator pos;
   for (pos=CST.begin(); pos<CST.end(); pos++)
   { delete [] *pos; }
@@ -142,7 +143,7 @@ G4ChipsNeutronElasticXS::~G4ChipsNeutronElasticXS()
   S4T.clear();
   for (pos=B4T.begin(); pos<B4T.end(); pos++)
   { delete [] *pos; }
-  B4T.clear();
+  B4T.clear(); */
 }
 
 G4bool G4ChipsNeutronElasticXS::IsIsoApplicable(const G4DynamicParticle* Pt, G4int, G4int,    

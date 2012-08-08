@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1
+// INCL++ revision: v5.1.1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -76,6 +76,9 @@ namespace G4INCL {
 
     /// \brief Default destructor
     ~Config();
+
+    /// \brief Initialise the members
+    void init();
 
     /// \brief Return a summary of the run configuration.
     std::string summary();
@@ -204,13 +207,24 @@ namespace G4INCL {
       return INCLXXDataFilePath;
     }
 
+#ifdef INCL_DEEXCITATION_ABLAXX
     std::string const &getABLAv3pCxxDataFilePath() const {
       return ablav3pCxxDataFilePath;
     }
+#endif
 
+#ifdef INCL_DEEXCITATION_ABLA07
     std::string const &getABLA07DataFilePath() const {
       return abla07DataFilePath;
     }
+#endif
+#ifdef INCL_DEEXCITATION_GEMINIXX
+    std::string const &getGEMINIXXDataFilePath() const {
+      return geminixxDataFilePath;
+    }
+#endif
+
+    G4double getImpactParameter() const { return impactParameter; }
 
   private:
     G4int verbosity;
@@ -252,8 +266,15 @@ namespace G4INCL {
 
     std::string deExcitationString;
     DeExcitationType deExcitationType;
+#ifdef INCL_DEEXCITATION_ABLAXX
     std::string ablav3pCxxDataFilePath;
+#endif
+#ifdef INCL_DEEXCITATION_ABLA07
     std::string abla07DataFilePath;
+#endif
+#ifdef INCL_DEEXCITATION_GEMINIXX
+    std::string geminixxDataFilePath;
+#endif
     std::string INCLXXDataFilePath;
 
     std::string clusterAlgorithmString;
@@ -264,6 +285,8 @@ namespace G4INCL {
     G4bool backToSpectator;
 
     G4bool useRealMasses;
+
+    G4double impactParameter;
   };
 
 }

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1
+// INCL++ revision: v5.1.1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -157,10 +157,12 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
       } else {
         G4String message = "badly defined target after swapping. Falling back to normal (non-swapped) mode.";
         EmitWarning(message);
+        toInverseKinematics = new G4LorentzRotation;
       }
     } else {
       G4String message = "oldProjectileDef or oldTargetDef was null";
       EmitWarning(message);
+      toInverseKinematics = new G4LorentzRotation;
     }
   }
 
@@ -305,6 +307,14 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
     nTries++;
   } while(!eventIsOK && nTries < maxTries);
 
+  // Clean up the objects that we created for the inverse kinematics
+  if(inverseKinematics) {
+    delete aProjectileTrack;
+    delete theTargetNucleus;
+    delete toInverseKinematics;
+    delete toDirectKinematics;
+  }
+
   if(!eventIsOK) {
     std::stringstream ss;
     ss << "maximum number of tries exceeded for the proposed "
@@ -318,14 +328,6 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
     return &theResult;
   }
   
-  // Clean up the objects that we created for the inverse kinematics
-  if(inverseKinematics) {
-    delete aProjectileTrack;
-    delete theTargetNucleus;
-    delete toInverseKinematics;
-    delete toDirectKinematics;
-  }
-
   // De-excitation:
 
   if(theExcitationHandler != 0) {

@@ -16,6 +16,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+3 July 2012  Dennis Wright  (hadr-proc-V09-05-05)
+-------------------------------------------------
+- G4AlphaInelasticProcess.cc : from Bug Report 1309, replace
+  G4Proton::Proton() with G4Alpha::Alpha() in constructor
+
 12 June 2012 Vladimir Ivantchenko (hadr-proc-V09-05-04)
 --------------------------------------------------------
 - G4WHadronElasticProcess - fixed compillation problem introduced

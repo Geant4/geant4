@@ -79,7 +79,7 @@ G4KleinNishinaCompton::~G4KleinNishinaCompton()
 void G4KleinNishinaCompton::Initialise(const G4ParticleDefinition*,
                                        const G4DataVector&)
 {
-  fParticleChange = GetParticleChangeForGamma();
+  if(!fParticleChange) { fParticleChange = GetParticleChangeForGamma(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1
+// INCL++ revision: v5.1.1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -42,6 +42,7 @@
 #include "G4INCLThreeVector.hh"
 #include "G4INCLParticle.hh"
 #include "G4INCLNucleus.hh"
+#include "G4INCLParticleSpecies.hh"
 
 namespace G4INCL {
 
@@ -88,6 +89,7 @@ namespace G4INCL {
     static ThreeVector sumMomenta(const ParticleList &);
     static G4double energy(const ThreeVector &p, const G4double m);
     static G4double invariantMass(const G4double E, const ThreeVector & p);
+    static G4double gammaFromKineticEnergy(const ParticleSpecies &p, const G4double EKin);
   };
 }
 

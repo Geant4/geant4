@@ -678,14 +678,14 @@ G4double G4EmCorrections::NuclearDEDX(const G4ParticleDefinition* p,
 
   // Projectile nucleus
   G4double z1 = std::fabs(particle->GetPDGCharge()/eplus);
-  G4double mm1 = mass/amu_c2;
+  G4double mass1 = mass/amu_c2;
 
   //  loop for the elements in the material
   for (G4int iel=0; iel<numberOfElements; iel++) {
     const G4Element* element = (*theElementVector)[iel] ;
     G4double z2 = element->GetZ();
-    G4double mm2 = element->GetA()*mole/g ;
-    nloss += (NuclearStoppingPower(kinEnergy, z1, z2, mm1, mm2))
+    G4double mass2 = element->GetA()*mole/g ;
+    nloss += (NuclearStoppingPower(kinEnergy, z1, z2, mass1, mass2))
            * atomDensity[iel] ;
   }
   nloss *= theZieglerFactor;
@@ -696,16 +696,16 @@ G4double G4EmCorrections::NuclearDEDX(const G4ParticleDefinition* p,
 
 G4double G4EmCorrections::NuclearStoppingPower(G4double kineticEnergy,
                                                G4double z1, G4double z2,
-                                               G4double mm1, G4double mm2)
+                                               G4double mass1, G4double mass2)
 {
   G4double energy = kineticEnergy/keV ;  // energy in keV
   G4double nloss = 0.0;
   
   G4double rm;
-  if(z1 > 1.5) rm = (mm1 + mm2) * ( Z23[G4int(z1)] + Z23[G4int(z2)] ) ;
-  else         rm = (mm1 + mm2) * nist->GetZ13(G4int(z2));
+  if(z1 > 1.5) rm = (mass1 + mass2) * ( Z23[G4int(z1)] + Z23[G4int(z2)] ) ;
+  else         rm = (mass1 + mass2) * nist->GetZ13(G4int(z2));
 
-  G4double er = 32.536 * mm2 * energy / ( z1 * z2 * rm ) ;  // reduced energy
+  G4double er = 32.536 * mass2 * energy / ( z1 * z2 * rm ) ;  // reduced energy
 
   if (er >= ed[0]) { nloss = a[0]; }
   else {
@@ -722,14 +722,14 @@ G4double G4EmCorrections::NuclearStoppingPower(G4double kineticEnergy,
   // Stragling
   if(lossFlucFlag) {
     //    G4double sig = 4.0 * m1 * m2 / ((m1 + m2)*(m1 + m2)*
-    //              (4.0 + 0.197*std::pow(er,-1.6991)+6.584*std::pow(er,-1.0494))) ;
-    G4double sig = 4.0 * mm1 * mm2 / ((mm1 + mm2)*(mm1 + mm2)*
+    //   (4.0 + 0.197*std::pow(er,-1.6991)+6.584*std::pow(er,-1.0494))) ;
+    G4double sig = 4.0 * mass1 * mass2 / ((mass1 + mass2)*(mass1 + mass2)*
 				    (4.0 + 0.197/(er*er) + 6.584/er));
 
     nloss *= G4RandGauss::shoot(1.0,sig) ;
   }
    
-  nloss *= 8.462 * z1 * z2 * mm1 / rm ; // Return to [ev/(10^15 atoms/cm^2]
+  nloss *= 8.462 * z1 * z2 * mass1 / rm ; // Return to [ev/(10^15 atoms/cm^2]
 
   if ( nloss < 0.0) nloss = 0.0 ;
 

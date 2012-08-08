@@ -62,7 +62,7 @@
 using namespace std;
 
 G4KleinNishinaModel::G4KleinNishinaModel(const G4String& nam)
-  : G4VEmModel(nam),isInitialized(false)
+  : G4VEmModel(nam)
 {
   theGamma = G4Gamma::Gamma();
   theElectron = G4Electron::Electron();
@@ -86,10 +86,7 @@ void G4KleinNishinaModel::Initialise(const G4ParticleDefinition* p,
 {
   fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
   InitialiseElementSelectors(p, cuts);
-
-  if (isInitialized) { return; }
-  fParticleChange = GetParticleChangeForGamma();
-  isInitialized = true;
+  if(!fParticleChange) { fParticleChange = GetParticleChangeForGamma(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

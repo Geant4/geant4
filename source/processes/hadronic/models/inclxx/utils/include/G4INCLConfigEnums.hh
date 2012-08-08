@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1
+// INCL++ revision: v5.1.1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -73,9 +73,19 @@ namespace G4INCL {
 
   // Enumerator for de-excitation types
   enum DeExcitationType {
-    DeExcitationNone,
-    DeExcitationABLAv3p,
-    DeExcitationABLA07
+    DeExcitationNone
+#ifdef INCL_DEEXCITATION_ABLAXX
+    , DeExcitationABLAv3p
+#endif
+#ifdef INCL_DEEXCITATION_ABLA07
+    , DeExcitationABLA07
+#endif
+#ifdef INCL_DEEXCITATION_SMM
+    , DeExcitationSMM
+#endif
+#ifdef INCL_DEEXCITATION_GEMINIXX
+    , DeExcitationGEMINIXX
+#endif
   };
 
   // Enumerator for cluster-algorithm types

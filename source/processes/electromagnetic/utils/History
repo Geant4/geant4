@@ -17,6 +17,23 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05 July 12: V.Ivant (emutils-V09-05-21)
+ - G4EmCorrections, G4VEmModel, G4VMscModel - fixed shadowing
+
+04 July 12: V.Ivant (emutils-V09-05-20)
+ - G4VMscModel - method Value() is moved to G4VEmModel
+ - G4VEmProcess - added extra option allowing to build two different tables
+     for low-energy and high-energy using different interpolation method,
+     for that added optinal extra energy limit and SetMinKinEnergyPrim(G4double)
+     method, improved initialisation of tables and initialisation printout
+ - G4EmTableType - added type fIsCrossSectionPrim
+ - G4EmModelManager - added possibility to build high energy table of
+     cross sections
+ - G4VEmAngularDistribution - cleanup user interface 
+
+08 June 12: D. Sawkey
+ - G4VEmProcess fix for first part of bug 1314. Force if step==1 (see 30May12) 
+
 08 June 12: V.Ivant (emutils-V09-05-19)
  - Fixed shadowing
 

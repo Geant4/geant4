@@ -109,6 +109,7 @@ G4ChipsPionPlusElasticXS::G4ChipsPionPlusElasticXS():G4VCrossSectionDataSet(Defa
 
 G4ChipsPionPlusElasticXS::~G4ChipsPionPlusElasticXS()
 {
+  /*
   std::vector<G4double*>::iterator pos;
   for (pos=CST.begin(); pos<CST.end(); pos++)
   { delete [] *pos; }
@@ -143,6 +144,7 @@ G4ChipsPionPlusElasticXS::~G4ChipsPionPlusElasticXS()
   for (pos=B4T.begin(); pos<B4T.end(); pos++)
   { delete [] *pos; }
   B4T.clear();
+  */
 }
 
 G4bool G4ChipsPionPlusElasticXS::IsIsoApplicable(const G4DynamicParticle* Pt, G4int, G4int,    

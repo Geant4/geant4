@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Jul. 5th, 2012 Gabriele Cosmo transport-V09-05-01
+-----------------------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
 Jun. 7th, 2012 Gabriele Cosmo transport-V09-05-00
 -----------------------------
 - Fixed spurious cases of hidden variable visibility, detected with

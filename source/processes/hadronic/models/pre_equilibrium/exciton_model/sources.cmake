@@ -70,7 +70,6 @@ GEANT4_DEFINE_MODULE(NAME G4had_preequ_exciton
         G4PreCompoundAlpha.hh
         G4PreCompoundDeuteron.hh
         G4PreCompoundEmission.hh
-        G4PreCompoundEmission.icc
         G4PreCompoundEmissionFactory.hh
         G4PreCompoundFragment.hh
         G4PreCompoundFragmentVector.hh

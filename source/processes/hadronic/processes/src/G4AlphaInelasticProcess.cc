@@ -34,7 +34,7 @@
 
 
 G4AlphaInelasticProcess::G4AlphaInelasticProcess(const G4String& name)
- :G4HadronInelasticProcess(name, G4Proton::Proton() )
+ :G4HadronInelasticProcess(name, G4Alpha::Alpha() )
 {}
 
 

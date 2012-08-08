@@ -40,6 +40,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4NeutronKiller.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4NeutronKillerMessenger.hh"
 #include "G4TransportationProcessType.hh"
 

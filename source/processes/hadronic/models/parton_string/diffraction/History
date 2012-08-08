@@ -15,6 +15,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+6 July 2012, V. Uzhinsky (hadr-string-diff-V09-05-13)
+- FTF parameters tunned: Wdelta 0.25 -> 0.05, Dcor 0.4 -> 0.3
+                         E* 75 -> 100 MeV
+-------------------------------------------------------
 21 June 2012, W.Pokorski  (hadr-string-diff-V09-05-12)
 - removed dependency on CHIPS in sources.cmake file
 -------------------------------------------------------

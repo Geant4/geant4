@@ -53,7 +53,9 @@
 
 G4VEmAngularDistribution::G4VEmAngularDistribution(const G4String& name) 
   : fName(name)
-{}
+{
+  fLocalDirection.set(0.0,0.0,1.0);
+}
 
 G4VEmAngularDistribution::~G4VEmAngularDistribution() 
 {}
@@ -61,13 +63,12 @@ G4VEmAngularDistribution::~G4VEmAngularDistribution()
 void G4VEmAngularDistribution::Initialise()
 {}
 
-G4double 
-G4VEmAngularDistribution::SampleCosinePolarAngle(const G4DynamicParticle*,
-						 G4double,
-						 G4int,
-						 const G4Material*)
+G4ThreeVector& 
+G4VEmAngularDistribution::SampleDirection(const G4DynamicParticle*,
+					  G4double, G4int,
+					  const G4Material*)
 {
-  return 1.0;
+  return fLocalDirection;
 }
 
 //    

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1
+// INCL++ revision: v5.1.1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -52,6 +52,9 @@
 #ifdef INCL_ROOT_USE
 #include <Rtypes.h>
 #endif
+#include <string>
+#include <vector>
+#include <algorithm>
 
 namespace G4INCL {
 #ifndef INCL_ROOT_USE
@@ -63,7 +66,9 @@ namespace G4INCL {
 
     struct EventInfo {
       EventInfo() :
+        projectileType(UnknownParticle),
         At(0), Zt(0), Ap(0), Zp(0),
+        Ep(0.),
         impactParameter(0.0), nCollisions(0), stoppingTime(0.0),
         EBalance(0.0), pLongBalance(0.0), pTransBalance(0.0),
         nCascadeParticles(0), nRemnants(0), nParticles(0),
@@ -76,8 +81,38 @@ namespace G4INCL {
         forcedDeltasInside(false),
         forcedDeltasOutside(false),
         clusterDecay(false),
+        firstCollisionTime(0.),
+        firstCollisionXSec(0.),
+        nReflectionAvatars(0),
+        nCollisionAvatars(0),
+        nDecayAvatars(0),
         nUnmergedSpectators(0)
-      {};
+      {
+        std::fill_n(ARem, maxSizeRemnants, 0);
+        std::fill_n(ZRem, maxSizeRemnants, 0);
+        std::fill_n(EStarRem, maxSizeRemnants, 0.);
+        std::fill_n(JRem, maxSizeRemnants, 0.);
+        std::fill_n(EKinRem, maxSizeRemnants, 0.);
+        std::fill_n(pxRem, maxSizeRemnants, 0.);
+        std::fill_n(pyRem, maxSizeRemnants, 0.);
+        std::fill_n(pzRem, maxSizeRemnants, 0.);
+        std::fill_n(thetaRem, maxSizeRemnants, 0.);
+        std::fill_n(phiRem, maxSizeRemnants, 0.);
+        std::fill_n(jxRem, maxSizeRemnants, 0.);
+        std::fill_n(jyRem, maxSizeRemnants, 0.);
+        std::fill_n(jzRem, maxSizeRemnants, 0.);
+
+        std::fill_n(A, maxSizeParticles, 0);
+        std::fill_n(Z, maxSizeParticles, 0);
+        std::fill_n(emissionTime, maxSizeParticles, 0.);
+        std::fill_n(EKin, maxSizeParticles, 0.);
+        std::fill_n(px, maxSizeParticles, 0.);
+        std::fill_n(py, maxSizeParticles, 0.);
+        std::fill_n(pz, maxSizeParticles, 0.);
+        std::fill_n(theta, maxSizeParticles, 0.);
+        std::fill_n(phi, maxSizeParticles, 0.);
+        std::fill_n(origin, maxSizeParticles, 0);
+      };
 
       /** \brief Number of the event */
       static Int_t eventNumber;
@@ -214,15 +249,35 @@ namespace G4INCL {
        *
        */
       Short_t origin[maxSizeParticles];
-      /** \brief Maximum history size */
-      static const Short_t maxHistorySize = 50;
       /** \brief History of the particle
        *
-       * Mainly useful for de-excitation.
-       * TODO: document the meaning of each history character.
+       * Condensed information about the de-excitation chain of a particle. For
+       * cascade particles, it is just an empty string. For particles arising
+       * from the de-excitation of a cascade remnant, it is a string of
+       * characters. Each character represents one or more identical steps in
+       * the de-excitation process. The currently defined possible character
+       * values and their meanings are the following:
        *
+       * e: evaporation product
+       * E: evaporation residue
+       * m: multifragmentation
+       * a: light partner in asymmetric fission or IMF emission
+       * A: heavy partner in asymmetric fission or IMF emission
+       * f: light partner in fission
+       * F: heavy partner in fission
+       * s: saddle-to-scission emission
+       * n: non-statistical emission (decay)
        */
-      char history[maxSizeParticles][maxHistorySize];
+      std::vector<std::string> history;
+
+#ifdef INCL_INVERSE_KINEMATICS
+      /** \brief Particle kinetic energy, in inverse kinematics [MeV] */
+      Float_t EKinPrime[maxSizeParticles];
+      /** \brief Particle momentum, z component, in inverse kinematics [MeV/c] */
+      Float_t pzPrime[maxSizeParticles];
+      /** \brief Particle momentum polar angle, in inverse kinematics [radians] */
+      Float_t thetaPrime[maxSizeParticles];
+#endif // INCL_INVERSE_KINEMATICS
 
       /** \brief Reset the EventInfo members */
       void reset() {
@@ -254,6 +309,10 @@ namespace G4INCL {
         clusterDecay = false;
         nUnmergedSpectators = 0;
       }
+
+#ifdef INCL_INVERSE_KINEMATICS
+      void fillInverseKinematics(const Double_t gamma);
+#endif // INCL_INVERSE_KINEMATICS
     };
 }
 

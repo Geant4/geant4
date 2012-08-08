@@ -89,11 +89,13 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   secondaryParticle(0),
   buildLambdaTable(true),
   theLambdaTable(0),
+  theLambdaTablePrim(0),
   theDensityFactor(0),
   theDensityIdx(0),
   integral(false),
   applyCuts(false),
   startFromNull(false),
+  splineFlag(true),
   currentModel(0),
   particle(0),
   currentParticle(0),
@@ -105,6 +107,7 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   minKinEnergy = 0.1*keV;
   maxKinEnergy = 10.0*TeV;
   nLambdaBins  = 77;
+  minKinEnergyPrim = DBL_MAX;
 
   // default lambda factor
   lambdaFactor  = 0.8;
@@ -260,6 +263,12 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
       theLambdaTable = G4PhysicsTableHelper::PreparePhysicsTable(theLambdaTable);
       bld->InitialiseBaseMaterials(theLambdaTable);
     }
+    // high energy table
+    if(minKinEnergyPrim < maxKinEnergy){
+      theLambdaTablePrim = 
+	G4PhysicsTableHelper::PreparePhysicsTable(theLambdaTablePrim);
+      bld->InitialiseBaseMaterials(theLambdaTablePrim);
+    }
     // forced biasing
     if(biasManager) { 
       biasManager->Initialise(part,GetProcessName(),verboseLevel); 
@@ -285,9 +294,8 @@ void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 
   (G4LossTableManager::Instance())->BuildPhysicsTable(particle);
 
-  if(buildLambdaTable) {
+  if(buildLambdaTable || minKinEnergyPrim < maxKinEnergy) {
     BuildLambdaTable();
-    FindLambdaMax();
   }
 
   // reduce printout for nuclear stopping
@@ -324,13 +332,18 @@ void G4VEmProcess::BuildLambdaTable()
   size_t numOfCouples = theCoupleTable->GetTableSize();
 
   G4LossTableBuilder* bld = (G4LossTableManager::Instance())->GetTableBuilder();
-  G4bool splineFlag = (G4LossTableManager::Instance())->SplineFlag();
 
   G4PhysicsLogVector* aVector = 0;
   G4PhysicsLogVector* bVector = 0;
+  G4PhysicsLogVector* aVectorPrim = 0;
+  G4PhysicsLogVector* bVectorPrim = 0;
 
-  G4double scale = 0.0;
-  if(startFromNull) { scale = std::log(maxKinEnergy/minKinEnergy); }
+  G4double scale = 1.0;
+  G4double emax1 = maxKinEnergy;
+  if(startFromNull || minKinEnergyPrim < maxKinEnergy ) { 
+    scale = std::log(maxKinEnergy/minKinEnergy); 
+    if(minKinEnergyPrim < maxKinEnergy) { emax1 = minKinEnergyPrim; }
+  }
     
   for(size_t i=0; i<numOfCouples; ++i) {
 
@@ -339,32 +352,65 @@ void G4VEmProcess::BuildLambdaTable()
       // create physics vector and fill it
       const G4MaterialCutsCouple* couple = 
 	theCoupleTable->GetMaterialCutsCouple(i);
-      delete (*theLambdaTable)[i];
 
-      // if start from zero then change the scale
-      if(startFromNull) {
-	G4double emin = MinPrimaryEnergy(particle,couple->GetMaterial());
-	if(0.0 >= emin) { emin = eV; }
-	else if(maxKinEnergy <= emin) { emin = 0.5*maxKinEnergy; }
-	G4int bin = 
-	  G4int(nLambdaBins*std::log(maxKinEnergy/emin)/scale + 0.5);
-	if(bin < 3) { bin = 3; }
-	aVector = new G4PhysicsLogVector(emin, maxKinEnergy, bin);
+      // build main table
+      if(buildLambdaTable) {
+	delete (*theLambdaTable)[i];
+
+        G4bool startNull = startFromNull;
+	// if start from zero then change the scale
+	if(startFromNull || minKinEnergyPrim < maxKinEnergy) {
+	  G4double emin = MinPrimaryEnergy(particle,couple->GetMaterial());
+          if(emin < minKinEnergy) {
+	    emin = minKinEnergy;
+	    startNull = false;
+	  }
+	  G4double emax = emax1;
+	  if(emax <= emin) { emax = 2*emin; }
+	  G4int bin = 
+	    G4lrint(nLambdaBins*std::log(emax/emin)/scale);
+	  if(bin < 3) { bin = 3; }
+	  aVector = new G4PhysicsLogVector(emin, emax, bin);
+
+	  // start not from zero
+	} else if(!bVector) {
+	  aVector = 
+	    new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nLambdaBins);
+	  bVector = aVector;
+	} else {
+	  aVector = new G4PhysicsLogVector(*bVector);
+	}
+	aVector->SetSpline(splineFlag);
+	modelManager->FillLambdaVector(aVector, couple, startNull);
+	if(splineFlag) { aVector->FillSecondDerivatives(); }
+	G4PhysicsTableHelper::SetPhysicsVector(theLambdaTable, i, aVector);
+      }
+      // build high energy table 
+      if(minKinEnergyPrim < maxKinEnergy) { 
+	delete (*theLambdaTablePrim)[i];
 
 	// start not from zero
-      } else if(!bVector) {
-	aVector = 
-	  new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nLambdaBins);
-        bVector = aVector;
-      } else {
-        aVector = new G4PhysicsLogVector(*bVector);
+	if(!bVectorPrim) {
+	  G4int bin = 
+	    G4lrint(nLambdaBins*std::log(maxKinEnergy/minKinEnergyPrim)/scale);
+	  if(bin < 3) { bin = 3; }
+	  aVectorPrim = 
+	    new G4PhysicsLogVector(minKinEnergyPrim, maxKinEnergy, bin);
+	  bVectorPrim = aVectorPrim;
+	} else {
+	  aVectorPrim = new G4PhysicsLogVector(*bVectorPrim);
+	}
+	// always use spline
+	aVectorPrim->SetSpline(true);
+	modelManager->FillLambdaVector(aVectorPrim, couple, false, 
+				       fIsCrossSectionPrim);
+	aVectorPrim->FillSecondDerivatives();
+	G4PhysicsTableHelper::SetPhysicsVector(theLambdaTablePrim, i, aVectorPrim);
       }
-      aVector->SetSpline(splineFlag);
-      modelManager->FillLambdaVector(aVector, couple, startFromNull);
-      if(splineFlag) { aVector->FillSecondDerivatives(); }
-      G4PhysicsTableHelper::SetPhysicsVector(theLambdaTable, i, aVector);
     }
   }
+
+  if(buildLambdaTable) { FindLambdaMax(); }
 
   if(1 < verboseLevel) {
     G4cout << "Lambda table is built for "
@@ -386,13 +432,37 @@ void G4VEmProcess::PrintInfoDefinition()
     if(biasFactor != 1.0) { G4cout << "   BiasingFactor= " << biasFactor; }
     G4cout << G4endl;
     if(buildLambdaTable) {
-      G4cout << "      Lambda tables from "
-	     << G4BestUnit(minKinEnergy,"Energy") 
-	     << " to "
-	     << G4BestUnit(maxKinEnergy,"Energy")
-	     << " in " << nLambdaBins << " bins, spline: " 
-	     << (G4LossTableManager::Instance())->SplineFlag()
-	     << G4endl;
+      size_t length = theLambdaTable->length();
+      for(size_t i=0; i<length; ++i) {
+        G4PhysicsVector* v = (*theLambdaTable)[i];
+        if(v) { 
+	  G4cout << "      Lambda table from "
+		 << G4BestUnit(minKinEnergy,"Energy") 
+		 << " to "
+		 << G4BestUnit(v->GetMaxEnergy(),"Energy")
+		 << " in " << v->GetVectorLength()-1
+		 << " bins, spline: " 
+		 << splineFlag
+		 << G4endl;
+	  break;
+	}
+      }
+    }
+    if(minKinEnergyPrim < maxKinEnergy) {
+      size_t length = theLambdaTablePrim->length();
+      for(size_t i=0; i<length; ++i) {
+        G4PhysicsVector* v = (*theLambdaTablePrim)[i];
+        if(v) { 
+	  G4cout << "      LambdaPrime table from "
+		 << G4BestUnit(minKinEnergyPrim,"Energy") 
+		 << " to "
+		 << G4BestUnit(maxKinEnergy,"Energy")
+		 << " in " << v->GetVectorLength()-1
+		 << " bins " 
+		 << G4endl;
+	  break;
+	}
+      }
     }
     PrintInfo();
     modelManager->DumpModelList(verboseLevel);
@@ -421,7 +491,8 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
   // forced biasing only for primary particles
   if(biasManager) {
     if(0 == track.GetParentID()) {
-      if(0 == track.GetCurrentStepNumber()) {
+      // first step is step 1
+      if(1 == track.GetCurrentStepNumber()) {
         biasFlag = true; 
 	biasManager->ResetForcedInteraction(); 
       }
@@ -627,12 +698,30 @@ G4bool G4VEmProcess::StorePhysicsTable(const G4ParticleDefinition* part,
     yes = theLambdaTable->StorePhysicsTable(name,ascii);
 
     if ( yes ) {
-      G4cout << "Physics tables are stored for " << particle->GetParticleName()
+      G4cout << "Physics table is stored for " << particle->GetParticleName()
              << " and process " << GetProcessName()
 	     << " in the directory <" << directory
 	     << "> " << G4endl;
     } else {
-      G4cout << "Fail to store Physics Tables for " 
+      G4cout << "Fail to store Physics Table for " 
+	     << particle->GetParticleName()
+             << " and process " << GetProcessName()
+	     << " in the directory <" << directory
+	     << "> " << G4endl;
+    }
+  }
+  if ( theLambdaTablePrim && part == particle) {
+    const G4String name = 
+      GetPhysicsTableFileName(part,directory,"LambdaPrim",ascii);
+    yes = theLambdaTablePrim->StorePhysicsTable(name,ascii);
+
+    if ( yes ) {
+      G4cout << "Physics table prim is stored for " << particle->GetParticleName()
+             << " and process " << GetProcessName()
+	     << " in the directory <" << directory
+	     << "> " << G4endl;
+    } else {
+      G4cout << "Fail to store Physics Table Prim for " 
 	     << particle->GetParticleName()
              << " and process " << GetProcessName()
 	     << " in the directory <" << directory
@@ -655,34 +744,64 @@ G4bool G4VEmProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
   }
   G4bool yes = true;
 
-  if(!buildLambdaTable || particle != part) return yes;
+  if((!buildLambdaTable && minKinEnergyPrim > maxKinEnergy) 
+     || particle != part) { return yes; }
 
   const G4String particleName = part->GetParticleName();
   G4String filename;
 
-  filename = GetPhysicsTableFileName(part,directory,"Lambda",ascii);
-  yes = G4PhysicsTableHelper::RetrievePhysicsTable(theLambdaTable,
-						   filename,ascii);
-  if ( yes ) {
-    if (0 < verboseLevel) {
-      G4cout << "Lambda table for " << particleName 
-	     << " is Retrieved from <"
-             << filename << ">"
-             << G4endl;
-    }
-    if((G4LossTableManager::Instance())->SplineFlag()) {
-      size_t n = theLambdaTable->length();
-      for(size_t i=0; i<n; ++i) {
-        if((* theLambdaTable)[i]) {
-	  (* theLambdaTable)[i]->SetSpline(true);
+  if(buildLambdaTable) {
+    filename = GetPhysicsTableFileName(part,directory,"Lambda",ascii);
+    yes = G4PhysicsTableHelper::RetrievePhysicsTable(theLambdaTable,
+						     filename,ascii);
+    if ( yes ) {
+      if (0 < verboseLevel) {
+	G4cout << "Lambda table for " << particleName 
+	       << " is Retrieved from <"
+	       << filename << ">"
+	       << G4endl;
+      }
+      if((G4LossTableManager::Instance())->SplineFlag()) {
+	size_t n = theLambdaTable->length();
+	for(size_t i=0; i<n; ++i) {
+	  if((* theLambdaTable)[i]) {
+	    (* theLambdaTable)[i]->SetSpline(true);
+	  }
 	}
       }
+    } else {
+      if (1 < verboseLevel) {
+	G4cout << "Lambda table for " << particleName << " in file <"
+	       << filename << "> is not exist"
+	       << G4endl;
+      }
     }
-  } else {
-    if (1 < verboseLevel) {
-      G4cout << "Lambda table for " << particleName << " in file <"
-             << filename << "> is not exist"
-             << G4endl;
+  }
+  if(minKinEnergyPrim < maxKinEnergy) {
+    filename = GetPhysicsTableFileName(part,directory,"LambdaPrim",ascii);
+    yes = G4PhysicsTableHelper::RetrievePhysicsTable(theLambdaTablePrim,
+						     filename,ascii);
+    if ( yes ) {
+      if (0 < verboseLevel) {
+	G4cout << "Lambda table prim for " << particleName 
+	       << " is Retrieved from <"
+	       << filename << ">"
+	       << G4endl;
+      }
+      if((G4LossTableManager::Instance())->SplineFlag()) {
+	size_t n = theLambdaTablePrim->length();
+	for(size_t i=0; i<n; ++i) {
+	  if((* theLambdaTablePrim)[i]) {
+	    (* theLambdaTablePrim)[i]->SetSpline(true);
+	  }
+	}
+      }
+    } else {
+      if (1 < verboseLevel) {
+	G4cout << "Lambda table prim for " << particleName << " in file <"
+	       << filename << "> is not exist"
+	       << G4endl;
+      }
     }
   }
 
@@ -875,6 +994,24 @@ G4VEmProcess::ActivateSecondaryBiasing(const G4String& region,
        << G4endl;
     }
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEmProcess::SetMinKinEnergy(G4double e)
+{
+  nLambdaBins = G4lrint(nLambdaBins*std::log(maxKinEnergy/e)
+			/std::log(maxKinEnergy/minKinEnergy));
+  minKinEnergy = e;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEmProcess::SetMaxKinEnergy(G4double e)
+{
+  nLambdaBins = G4lrint(nLambdaBins*std::log(e/minKinEnergy)
+			/std::log(maxKinEnergy/minKinEnergy));
+  maxKinEnergy = e;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

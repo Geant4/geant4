@@ -14,12 +14,19 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-8 June 2012 Gabriele Cosmo   (hadr-man-V09-05-08)
+2  July 2012 John Apostolakis (hadr-man-V09-05-09)
+-------------------------------------------------
+- G4HadronicProcess.cc: Improved quick check and full check for case of 
+  electro-nuclear. 
+  Copes with case that both primary survives and secondaries are created.
+
+
+8  June 2012 Gabriele Cosmo   (hadr-man-V09-05-08)
 -------------------------------------------------
 - Fixed trivial cases of hidden variable visibility, detected with
   '-Wshadow' compilation option on gcc compiler.
 
-4 June 2012 Dennis Wright    (hadr-man-V09-05-07)
+4  June 2012 Dennis Wright    (hadr-man-V09-05-07)
 -------------------------------------------------
 - G4HadronicProcess.hh: remove methods ResetNumberOfInteractionLengthLeft()
     and GetTotalNumberOfInteractionLengthTraversed() as these have been 

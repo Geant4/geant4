@@ -47,8 +47,8 @@
 //std::vector<std::vector<G4double>*> G4QHadronInelasticDataSet::IsoProbInEl;
 ////SumProbIsoInEl
 
-G4QHadronInelasticDataSet::G4QHadronInelasticDataSet(const G4String& name)
- : G4VCrossSectionDataSet(name)
+G4QHadronInelasticDataSet::G4QHadronInelasticDataSet(const G4String& input_name)
+ : G4VCrossSectionDataSet(input_name)
 {
   //CHIPSpAin    = G4QProtonNuclearCrossSection::GetPointer();
   //CHIPSnAin    = G4QNeutronNuclearCrossSection::GetPointer();

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1
+// INCL++ revision: v5.1.1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -55,41 +55,16 @@
 
 namespace G4INCL {
 
-  Config::Config() :
-      verbosity(1), inputFileName(""),
-      title("INCL default run title"), outputFileRoot(""),
-      logFileName(""),
-      nShots(1000),
-      targetString(""),
-      targetSpecies(ParticleSpecies()),
-      naturalTarget(false),
-      projectileString("proton"), projectileSpecies(G4INCL::Proton),
-      projectileKineticEnergy(1000.0),
-      verboseEvent(-1),
-      randomSeed1(666), randomSeed2(777),
-      pauliString("strict-statistical"), pauliType(StrictStatisticalPauli),
-      CDPP(true),
-      coulombString("non-relativistic"), coulombType(NonRelativisticCoulomb),
-      potentialString("isospin-energy"), potentialType(IsospinEnergyPotential),
-      pionPotential(true),
-      localEnergyBBString("first-collision"), localEnergyBBType(FirstCollisionLocalEnergy),
-      localEnergyPiString("first-collision"), localEnergyPiType(FirstCollisionLocalEnergy),
-      deExcitationString("none"), deExcitationType(DeExcitationNone),
-      ablav3pCxxDataFilePath(""),
-      abla07DataFilePath(""),
-      INCLXXDataFilePath(""),
-      clusterAlgorithmString("intercomparison"), clusterAlgorithmType(IntercomparisonClusterAlgorithm),
-      clusterMaxMass(8),
-      backToSpectator(true),
-      useRealMasses(true)
-  {}
-
-  Config::Config(G4int /*A*/, G4int /*Z*/, G4INCL::ParticleSpecies proj, G4double projectileE) :
-     projectileSpecies(proj),
-     projectileKineticEnergy(projectileE)
+  Config::Config()
   {
-    Config();
-    //    std::cout << echo() << std::endl;
+    init();
+  }
+
+  Config::Config(G4int /*A*/, G4int /*Z*/, G4INCL::ParticleSpecies proj, G4double projectileE)
+  {
+    init();
+    projectileSpecies = proj;
+    projectileKineticEnergy = projectileE;
   }
 
   // NOT used in Geant4 mode
@@ -103,6 +78,7 @@ namespace G4INCL {
       boost::program_options::options_description hiddenOptDesc("Hidden options");
       hiddenOptDesc.add_options()
         ("input-file", boost::program_options::value<std::string>(&inputFileName), "input file")
+        ("impact-parameter", boost::program_options::value<G4double>(&impactParameter)->default_value(-1.), "impact parameter")
         ;
 
       // Generic options
@@ -143,8 +119,15 @@ namespace G4INCL {
         ("random-seed-1", boost::program_options::value<G4int>(&randomSeed1)->default_value(666), "first seed for the random-number generator")
         ("random-seed-2", boost::program_options::value<G4int>(&randomSeed2)->default_value(777), "second seed for the random-number generator")
         ("inclxx-datafile-path", boost::program_options::value<std::string>(&INCLXXDataFilePath)->default_value("./data/"))
-        ("ablav3p-cxx-datafile-path", boost::program_options::value<std::string>(&ablav3pCxxDataFilePath)->default_value("./ablaxx/data/G4ABLA3.0/"))
-        ("abla07-datafile-path", boost::program_options::value<std::string>(&abla07DataFilePath)->default_value("./smop/tables/"))
+#ifdef INCL_DEEXCITATION_ABLAXX
+        ("ablav3p-cxx-datafile-path", boost::program_options::value<std::string>(&ablav3pCxxDataFilePath)->default_value("./de-excitation/ablaxx/data/G4ABLA3.0/"))
+#endif
+#ifdef INCL_DEEXCITATION_ABLA07
+        ("abla07-datafile-path", boost::program_options::value<std::string>(&abla07DataFilePath)->default_value("./de-excitation/abla07/upstream/tables/"))
+#endif
+#ifdef INCL_DEEXCITATION_GEMINIXX
+        ("geminixx-datafile-path", boost::program_options::value<std::string>(&geminixxDataFilePath)->default_value("./de-excitation/geminixx/upstream/"))
+#endif
         ("verbosity,v", boost::program_options::value<G4int>(&verbosity)->default_value(4), verbosityDescription.str().c_str())
         ;
 
@@ -163,7 +146,21 @@ namespace G4INCL {
         ("pion-potential", boost::program_options::value<G4bool>(&pionPotential)->default_value("true"), "whether to use a pion potential:\n  \ttrue, 1 (default)\n  \tfalse, 0")
         ("local-energy-BB", boost::program_options::value<std::string>(&localEnergyBBString)->default_value("first-collision"), "local energy in baryon-baryon collisions:\n  \talways\n  \tfirst-collision (default)\n  \tnever")
         ("local-energy-pi", boost::program_options::value<std::string>(&localEnergyPiString)->default_value("first-collision"), "local energy in pi-N collisions and in delta decays:\n  \talways\n  \tfirst-collision (default)\n  \tnever")
-        ("de-excitation", boost::program_options::value<std::string>(&deExcitationString)->default_value("none"), "which de-excitation model to use:\n  \tnone (default)\n  \tABLAv3p\n  \tABLA07")
+        ("de-excitation", boost::program_options::value<std::string>(&deExcitationString)->default_value("none"), "which de-excitation model to use:"
+         "\n  \tnone (default)"
+#ifdef INCL_DEEXCITATION_ABLAXX
+         "\n  \tABLAv3p"
+#endif
+#ifdef INCL_DEEXCITATION_ABLA07
+         "\n  \tABLA07"
+#endif
+#ifdef INCL_DEEXCITATION_SMM
+         "\n  \tSMM"
+#endif
+#ifdef INCL_DEEXCITATION_GEMINIXX
+         "\n  \tGEMINIXX"
+#endif
+         )
         ("cluster-algorithm", boost::program_options::value<std::string>(&clusterAlgorithmString)->default_value("intercomparison"), "clustering algorithm for production of composites:\n  \tintercomparison (default)\n  \tnone")
         ("cluster-max-mass", boost::program_options::value<G4int>(&clusterMaxMass)->default_value(8), "maximum mass of produced composites:\n  \tminimum 2\n  \tmaximum 12")
         ("back-to-spectator", boost::program_options::value<G4bool>(&backToSpectator)->default_value("true"), "whether to use back-to-spectator:\n  \ttrue, 1 (default)\n  \tfalse, 0")
@@ -411,16 +408,39 @@ namespace G4INCL {
             deExcitationNorm.begin(), ::tolower);
         if(deExcitationNorm=="none")
           deExcitationType = DeExcitationNone;
+#ifdef INCL_DEEXCITATION_ABLAXX
         else if(deExcitationNorm=="ablav3p")
           deExcitationType = DeExcitationABLAv3p;
+#endif
+#ifdef INCL_DEEXCITATION_ABLA07
         else if(deExcitationNorm=="abla07")
           deExcitationType = DeExcitationABLA07;
+#endif
+#ifdef INCL_DEEXCITATION_SMM
+        else if(deExcitationNorm=="smm")
+          deExcitationType = DeExcitationSMM;
+#endif
+#ifdef INCL_DEEXCITATION_GEMINIXX
+        else if(deExcitationNorm=="geminixx")
+          deExcitationType = DeExcitationGEMINIXX;
+#endif
         else {
           std::cerr << "Unrecognized de-excitation model. "
             << "Must be one of:" << std::endl
             << "  none (default)" << std::endl
+#ifdef INCL_DEEXCITATION_ABLAXX
             << "  ABLAv3p" << std::endl
-            << "  ABLA07" << std::endl;
+#endif
+#ifdef INCL_DEEXCITATION_ABLA07
+            << "  ABLA07" << std::endl
+#endif
+#ifdef INCL_DEEXCITATION_SMM
+            << "  SMM" << std::endl
+#endif
+#ifdef INCL_DEEXCITATION_GEMINIXX
+            << "  GEMINIXX" << std::endl
+#endif
+            ;
           std::cerr << suggestHelpMsg;
           std::exit(EXIT_FAILURE);
         }
@@ -484,8 +504,16 @@ namespace G4INCL {
                 && name!="random-seed-1"
                 && name!="random-seed-2"
                 && name!="inclxx-datafile-path"
+#ifdef INCL_DEEXCITATION_ABLA07
                 && name!="abla07-datafile-path"
-                && name!="ablav3p-cxx-datafile-path") {
+#endif
+#ifdef INCL_DEEXCITATION_ABLAXX
+                && name!="ablav3p-cxx-datafile-path"
+#endif
+#ifdef INCL_DEEXCITATION_GEMINIXX
+                && name!="geminixx-datafile-path"
+#endif
+                ) {
               boost::program_options::variable_value v = i->second;
               if(!v.defaulted()) {
                 const std::type_info &type = v.value().type();
@@ -521,12 +549,46 @@ namespace G4INCL {
 #else
     Config::Config(G4int /*argc*/, char ** /*argv*/, G4bool /*isFullRun*/)
     {
-      Config();
+      init();
     }
 #endif
 
   Config::~Config()
   {}
+
+  void Config::init() {
+      verbosity = 1;
+      inputFileName = "";
+      title = "INCL default run title";
+      nShots = 1000;
+      naturalTarget = false;
+      projectileString = "proton";
+      projectileSpecies = G4INCL::Proton;
+      projectileKineticEnergy = 1000.0;
+      verboseEvent = -1;
+      randomSeed1 = 666;
+      randomSeed2 = 777;
+      pauliString = "strict-statistical";
+      pauliType = StrictStatisticalPauli;
+      CDPP = true;
+      coulombString = "non-relativistic";
+      coulombType = NonRelativisticCoulomb;
+      potentialString = "isospin-energy";
+      potentialType = IsospinEnergyPotential;
+      pionPotential = true;
+      localEnergyBBString = "first-collision";
+      localEnergyBBType = FirstCollisionLocalEnergy;
+      localEnergyPiString = "first-collision";
+      localEnergyPiType = FirstCollisionLocalEnergy;
+      deExcitationString = "none";
+      deExcitationType = DeExcitationNone;
+      clusterAlgorithmString = "intercomparison";
+      clusterAlgorithmType = IntercomparisonClusterAlgorithm;
+      clusterMaxMass = 8;
+      backToSpectator = true;
+      useRealMasses = true;
+      impactParameter = -1.;
+  }
 
   std::string Config::summary() {
     std::stringstream message;
@@ -556,8 +618,15 @@ namespace G4INCL {
       << "logfile = " << logFileName << "\t# log file name. Defaults to `<output_root>.log'. Use `-' if you want to redirect logging to stdout" << std::endl
       << "number-shots = " << nShots << "\t# * number of shots" << std::endl
       << "inclxx-datafile-path = " << INCLXXDataFilePath << std::endl
+#ifdef INCL_DEEXCITATION_ABLAXX
       << "ablav3p-cxx-datafile-path = " << ablav3pCxxDataFilePath << std::endl
+#endif
+#ifdef INCL_DEEXCITATION_ABLA07
       << "abla07-datafile-path = " << abla07DataFilePath << std::endl
+#endif
+#ifdef INCL_DEEXCITATION_GEMINIXX
+      << "geminixx-datafile-path = " << geminixxDataFilePath << std::endl
+#endif
       << std::endl << "# Projectile and target definitions" << std::endl
       << "target = " << targetString << "\t# * target nuclide. Can be specified as Fe56, 56Fe, Fe-56, 56-Fe, Fe_56, 56_Fe or Fe. If the mass number is omitted, natural target composition is assumed." << std::endl
       << "         " << "# the target nuclide was parsed as Z=" << targetSpecies.theZ << ", A=" << targetSpecies.theA << std::endl
@@ -572,7 +641,21 @@ namespace G4INCL {
       << "pion-potential = " << pionPotential << "\t# whether to use a pion potential" << std::endl
       << "local-energy-BB = " << localEnergyBBString << "\t# local energy in baryon-baryon collisions. Must be one of: always, first-collision (default), never" << std::endl
       << "local-energy-pi = " << localEnergyPiString << "\t# local energy in pi-N collisions and in delta decays. Must be one of: always, first-collision (default), never" << std::endl
-      << "de-excitation = " << deExcitationString << "\t # which de-excitation model to use. Must be one of: none (default), ABLAv3p, ABLA07" << std::endl
+      << "de-excitation = " << deExcitationString << "\t # which de-excitation model to use. Must be one of:"
+      " none (default)"
+#ifdef INCL_DEEXCITATION_ABLAXX
+      ", ABLAv3p"
+#endif
+#ifdef INCL_DEEXCITATION_ABLA07
+      ", ABLA07"
+#endif
+#ifdef INCL_DEEXCITATION_SMM
+      ", SMM"
+#endif
+#ifdef INCL_DEEXCITATION_GEMINIXX
+      ", GEMINIXX"
+#endif
+      << std::endl
       << "cluster-algorithm = " << clusterAlgorithmString << "\t# clustering algorithm for production of composites. Must be one of: intercomparison (default), none" << std::endl
       << "cluster-max-mass = " << clusterMaxMass << "\t# maximum mass of produced composites. Must be between 2 and 12 (included)" << std::endl
       << "back-to-spectator = " << backToSpectator << "\t# whether to use back-to-spectator" << std::endl

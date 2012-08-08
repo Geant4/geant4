@@ -16,6 +16,12 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+9 July 2012 - Davide Mancusi (hadr-inclxx-V09-05-17)
+-----------------------------------------------------------
+- INCL++ v5.1.1
+  o Should fix all Coverity warnings.
+  o Minor bugfixes.
+
 12 June 2012 - Davide Mancusi (hadr-inclxx-V09-05-16)
 -----------------------------------------------------------
 - Should compile cleanly with -Wshadow.

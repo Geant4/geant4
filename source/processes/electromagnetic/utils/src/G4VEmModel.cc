@@ -64,7 +64,7 @@ G4VEmModel::G4VEmModel(const G4String& nam):
   highLimit(100.0*CLHEP::TeV),eMinActive(0.0),eMaxActive(DBL_MAX),
   polarAngleLimit(CLHEP::pi),secondaryThreshold(DBL_MAX),
   theLPMflag(false),flagDeexcitation(false),flagForceBuildTable(false),
-  pParticleChange(0),xSection(0),theDensityFactor(0),theDensityIdx(0),
+  pParticleChange(0),xSectionTable(0),theDensityFactor(0),theDensityIdx(0),
   fCurrentCouple(0),fCurrentElement(0),
   nsec(5) 
 {
@@ -85,9 +85,9 @@ G4VEmModel::~G4VEmModel()
     }
   }
   delete anglModel;
-  if(xSection) { 
-    xSection->clearAndDestroy(); 
-    delete xSection;
+  if(xSectionTable) { 
+    xSectionTable->clearAndDestroy(); 
+    delete xSectionTable;
   }
 }
 
@@ -283,7 +283,7 @@ G4double G4VEmModel::Value(const G4MaterialCutsCouple* couple,
 			   const G4ParticleDefinition* p, G4double e)
 {
   fCurrentCouple = couple;
-  return CrossSectionPerVolume(couple->GetMaterial(), p, e, 0.0, DBL_MAX);
+  return e*e*CrossSectionPerVolume(couple->GetMaterial(),p,e,0.0,DBL_MAX);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -318,14 +318,15 @@ G4VEmModel::SetParticleChange(G4VParticleChange* p, G4VEmFluctuationModel* f)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4VEmModel::SetCrossSectionTable(G4PhysicsTable* p)
 {
-  if(p != xSection) {
-    if(xSection) { 
-      xSection->clearAndDestroy(); 
-      delete xSection;
+  if(p != xSectionTable) {
+    if(xSectionTable) { 
+      xSectionTable->clearAndDestroy(); 
+      delete xSectionTable;
     }
-    xSection = p;
+    xSectionTable = p;
   }
 }
 

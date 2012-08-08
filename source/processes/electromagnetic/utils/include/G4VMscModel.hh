@@ -90,11 +90,6 @@ public:
 				 G4double tmin,
 				 G4double tmax);
 
-  // value which may be tabulated (by default cross section)
-  virtual G4double Value(const G4MaterialCutsCouple*,
-			 const G4ParticleDefinition*,
-			 G4double kineticEnergy);
-
   //================================================================
   //  Set parameters of multiple scattering models
   //================================================================
@@ -325,9 +320,9 @@ G4VMscModel::GetTransportMeanFreePath(const G4ParticleDefinition* part,
 				      G4double ekin)
 {
   G4double x;
-  if(xSection) {
+  if(xSectionTable) {
     G4int idx = CurrentCouple()->GetIndex();
-    x = (*xSection)[(*theDensityIdx)[idx]]->Value(ekin)
+    x = (*xSectionTable)[(*theDensityIdx)[idx]]->Value(ekin)
       *(*theDensityFactor)[idx]/(ekin*ekin);
   } else { 
     x = CrossSectionPerVolume(CurrentCouple()->GetMaterial(), part, ekin, 

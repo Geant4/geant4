@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1
+// INCL++ revision: v5.1.1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -154,6 +154,15 @@ namespace G4INCL {
 
   G4double KinematicsUtils::invariantMass(const G4double E, const ThreeVector & p) {
     return std::sqrt(E*E - p.mag2());
+  }
+
+  G4double KinematicsUtils::gammaFromKineticEnergy(const ParticleSpecies &p, const G4double EKin) {
+    G4double mass;
+    if(p.theType==Composite)
+      mass = ParticleTable::getTableMass(p.theA, p.theZ);
+    else
+      mass = ParticleTable::getTableParticleMass(p.theType);
+    return (1.+EKin/mass);
   }
 
 }

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1
+// INCL++ revision: v5.1.1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -48,6 +48,9 @@
 #include <csignal>
 #include <cstdlib>
 #include <iostream>
+#ifdef INCL_ROOT_USE
+#include "TSystem.h"
+#endif
 
 G4bool INTsignalled = false, HUPsignalled = false;
 
@@ -86,7 +89,7 @@ void FPESignalHandler(G4int /*sig*/, siginfo_t *siginfo, void * /*context*/) {
       break;
     }
   ::write(STDERR_FILENO, message, 42); // the answer to the ultimate question on Life, the Universe and Everything
-  ::_exit(2);
+  ::raise(SIGFPE);
 }
 
 void INTSignalHandler(G4int /*sig*/) {
@@ -109,6 +112,13 @@ void HUPSignalHandler(G4int /*sig*/) {
 
 void enableSignalHandling ()
 {
+#ifdef INCL_ROOT_USE
+  // We don't want ROOT's signal handlers
+  for(G4int sig=0; sig<kMAXSIGNALS; ++sig) {
+    gSystem->ResetSignal((ESignals)sig);
+  }
+#endif
+
   (void) feenableexcept( FE_DIVBYZERO );
   (void) feenableexcept( FE_INVALID );
   //(void) feenableexcept( FE_OVERFLOW );
@@ -120,7 +130,7 @@ void enableSignalHandling ()
   sigfillset(def_set);
   sigdelset(def_set,SIGFPE);
   fpeaction.sa_sigaction=FPESignalHandler;
-  fpeaction.sa_flags=SA_SIGINFO;
+  fpeaction.sa_flags=SA_SIGINFO | SA_RESETHAND;
   sigaction(SIGFPE, &fpeaction, &oldaction);
 
   // Set the handler for SIGHUP

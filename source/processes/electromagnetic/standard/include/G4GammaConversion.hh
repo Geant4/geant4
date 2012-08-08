@@ -86,6 +86,9 @@ public:  // with description
   // true for Gamma only.
   virtual G4bool IsApplicable(const G4ParticleDefinition&);
 
+  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
+				    const G4Material*);
+
   // Print few lines of informations about the process: validity range,
   virtual void PrintInfo();
 

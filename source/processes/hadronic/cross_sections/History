@@ -14,6 +14,32 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+4 July 2012 W.Pokorski (hadr-cross-V09-05-19)
+-----------------------------------------------
+- fixing double deletion in Chips cross sections
+
+2 July 2012 V.Ivanchenko (hadr-cross-V09-05-18)
+-----------------------------------------------
+- G4HadronCrossSections - fixed problem of compillation at Windows
+
+2 July 2012 V.Ivanchenko (hadr-cross-V09-05-17)
+-----------------------------------------------
+
+22 June 2012 W.Pokorski 
+-----------------------------------------------
+- removing fix from hadr-cross-V09-05-16, which was wrong and not
+needed. Sorry for the noise.
+
+22 June 2012 V.Ivanchenko  
+-----------------------------------------------
+- G4HadronCrossSections - use cache of previous x-section and G4Pow
+- G4CrossSectionDataStore - take into account that all elements 
+    should have isotopes 
+
+22 June 2012 W.Pokorski  (hadr-cross-V09-05-16)
+-----------------------------------------------
+- fix to avoid double deletion on exit
+
 15 June 2012 P. Mato  (hadr-cross-V09-05-15)
 -----------------------------------------------
 - minor changes in the references to also please Windows

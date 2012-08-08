@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1
+// INCL++ revision: v5.1.1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -163,6 +163,8 @@ namespace G4INCL {
     // Echo the input parameters to the log file
     INFO(theConfig->echo() << std::endl);
 #endif
+
+    fixedImpactParameter = theConfig->getImpactParameter();
   }
 
   INCL::~INCL() {
@@ -254,7 +256,7 @@ namespace G4INCL {
       FATAL("Fatal: natural targets are not supported yet." << std::endl);
       std::exit(EXIT_FAILURE);
     }
-    targetInitSuccess = prepareReaction(projectileSpecies, kineticEnergy, targetA, targetZ);
+    const G4bool targetInitSuccess = prepareReaction(projectileSpecies, kineticEnergy, targetA, targetZ);
 
     if(!targetInitSuccess) {
       WARN("Target initialisation failed for A=" << targetA << ", Z=" << targetZ << std::endl);
@@ -300,12 +302,21 @@ namespace G4INCL {
       return false;
     }
 
-    // Randomly draw an impact parameter
-    G4double impactParameter = maxImpactParameter * std::sqrt(Random::shoot0());
+    // Randomly draw an impact parameter or use a fixed value, depending on the
+    // Config option
+    G4double impactParameter, phi;
+    if(fixedImpactParameter<0.) {
+      impactParameter = maxImpactParameter * std::sqrt(Random::shoot0());
+      phi = Random::shoot() * Math::twoPi;
+    } else {
+      impactParameter = fixedImpactParameter;
+      phi = 0.;
+    }
+
     // Fill in the event information
     theEventInfo.impactParameter = impactParameter;
 
-    const G4double effectiveImpactParameter = propagationModel->shoot(projectileSpecies, kineticEnergy, impactParameter);
+    const G4double effectiveImpactParameter = propagationModel->shoot(projectileSpecies, kineticEnergy, impactParameter, phi);
     if(effectiveImpactParameter < 0.) {
       // Increment the global counter for the number of transparents
       theGlobalInfo.nTransparents++;

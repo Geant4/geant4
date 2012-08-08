@@ -51,7 +51,8 @@ enum G4EmTableType
   fRestricted,
   fSubRestricted,
   fIsIonisation,
-  fIsSubIonisation
+  fIsSubIonisation,
+  fIsCrossSectionPrim
 };
 #endif
 

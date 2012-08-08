@@ -77,7 +77,6 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
             hadronic/models/em_dissociation/sources.cmake
             hadronic/models/high_energy/sources.cmake
             hadronic/models/im_r_matrix/sources.cmake
-            hadronic/models/incl/sources.cmake
             hadronic/models/inclxx/utils/sources.cmake
             hadronic/models/inclxx/incl_physics/sources.cmake
             hadronic/models/inclxx/interface/sources.cmake

@@ -585,43 +585,52 @@ void G4HadronicProcess::BiasCrossSectionByFactor(G4double aScale)
 
 G4HadFinalState* G4HadronicProcess::CheckResult(const G4HadProjectile & aPro,const G4Nucleus &aNucleus, G4HadFinalState * result) const
 {
-	// check for catastrophic energy non-conservation, to re-sample the interaction
+   // check for catastrophic energy non-conservation, to re-sample the interaction
 
-	G4HadronicInteraction * theModel = GetHadronicInteraction();
-	G4double nuclearMass(0);
-	if (theModel){
+   G4HadronicInteraction * theModel = GetHadronicInteraction();
+   G4double nuclearMass(0);
+   if (theModel){
 
-		// Compute final-state total energy
-		G4double finalE(0.);
-		if (result->GetStatusChange() == stopAndKill) {
-			nuclearMass = G4NucleiProperties::GetNuclearMass(aNucleus.GetA_asInt(),aNucleus.GetZ_asInt());
-			G4int nSec = result->GetNumberOfSecondaries();
-			for (G4int i = 0; i < nSec; i++) {
-				finalE += result->GetSecondary(i)->GetParticle()->GetTotalEnergy();
-			}
-		} else {	// Interaction didn't complete, returned "do nothing" state
-			finalE=result->GetLocalEnergyDeposit() +
-					aPro.GetDefinition()->GetPDGMass() + result->GetEnergyChange();
-		}
-		G4double deltaE= nuclearMass +  aPro.GetTotalEnergy() -  finalE;
+      // Compute final-state total energy
+      G4double finalE(0.);
+      G4int nSec = result->GetNumberOfSecondaries();
 
-		std::pair<G4double, G4double> checkLevels = theModel->GetFatalEnergyCheckLevels();	// (relative, absolute)
-		if (std::abs(deltaE) > checkLevels.second && std::abs(deltaE) > checkLevels.first*aPro.GetKineticEnergy()){
-			// do not delete result, this is a pointer to a data member;
-			result=0;
-		    G4ExceptionDescription desc;
-		    desc << "Warning: Bad energy non-conservation detected, will "
-		    	 << (epReportLevel<0 ? "abort the event" :	"re-sample the interaction") << G4endl
-		    	 << " Process / Model: " <<  GetProcessName()<< " / " << theModel->GetModelName() << G4endl
-		    	 << " Primary: " << aPro.GetDefinition()->GetParticleName()
-		         << " (" << aPro.GetDefinition()->GetPDGEncoding() << "),"
-		         << " E= " <<  aPro.Get4Momentum().e()
-			     << ", target nucleus (" << aNucleus.GetZ_asInt() << ","<< aNucleus.GetA_asInt() << ")" << G4endl
-			     << " E(initial - final) = " << deltaE << " MeV." << G4endl;
-		    G4Exception("G4HadronicProcess:CheckResult()", "had012", epReportLevel<0 ? EventMustBeAborted : JustWarning,desc);
-		}
-	}
-	return result;
+      finalE= 0.0; 
+      nuclearMass = G4NucleiProperties::GetNuclearMass(aNucleus.GetA_asInt(),
+                                                       aNucleus.GetZ_asInt());
+      if (result->GetStatusChange() != stopAndKill) {
+       	// Interaction didn't complete, returned "do nothing" state          => reset nucleus
+        //  or  the primary survived the interaction (e.g. electro-nucleus ) => keep  nucleus
+         finalE=result->GetLocalEnergyDeposit() +
+		aPro.GetDefinition()->GetPDGMass() + result->GetEnergyChange();
+         if( nSec == 0 ){ 
+            // Since there are no secondaries, there is no recoil nucleus.
+            // To check energy balance we must neglect the initial nucleus too.
+            nuclearMass=0.0; 
+         } 
+      }
+      for (G4int i = 0; i < nSec; i++) {
+         finalE += result->GetSecondary(i)->GetParticle()->GetTotalEnergy();
+      }
+      G4double deltaE= nuclearMass +  aPro.GetTotalEnergy() -  finalE;
+
+      std::pair<G4double, G4double> checkLevels = theModel->GetFatalEnergyCheckLevels();	// (relative, absolute)
+      if (std::abs(deltaE) > checkLevels.second && std::abs(deltaE) > checkLevels.first*aPro.GetKineticEnergy()){
+         // do not delete result, this is a pointer to a data member;
+         result=0;
+         G4ExceptionDescription desc;
+         desc << "Warning: Bad energy non-conservation detected, will "
+              << (epReportLevel<0 ? "abort the event" :	"re-sample the interaction") << G4endl
+              << " Process / Model: " <<  GetProcessName()<< " / " << theModel->GetModelName() << G4endl
+              << " Primary: " << aPro.GetDefinition()->GetParticleName()
+              << " (" << aPro.GetDefinition()->GetPDGEncoding() << "),"
+              << " E= " <<  aPro.Get4Momentum().e()
+              << ", target nucleus (" << aNucleus.GetZ_asInt() << ","<< aNucleus.GetA_asInt() << ")" << G4endl
+              << " E(initial - final) = " << deltaE << " MeV." << G4endl;
+         G4Exception("G4HadronicProcess:CheckResult()", "had012", epReportLevel<0 ? EventMustBeAborted : JustWarning,desc);
+      }
+   }
+   return result;
 }
 
 void 
@@ -634,30 +643,52 @@ G4HadronicProcess::CheckEnergyMomentumConservation(const G4Track& aTrack,
   G4LorentzVector target4mom(0, 0, 0, targetMass);
 
   G4LorentzVector projectile4mom = aTrack.GetDynamicParticle()->Get4Momentum();
-  G4int initial_A = target_A + aTrack.GetDefinition()->GetBaryonNumber();
-  G4int initial_Z = target_Z + G4lrint(aTrack.GetDefinition()->GetPDGCharge());
+  G4int track_A = aTrack.GetDefinition()->GetBaryonNumber();
+  G4int track_Z = G4lrint(aTrack.GetDefinition()->GetPDGCharge());
+
+  G4int initial_A = target_A + track_A;
+  G4int initial_Z = target_Z + track_Z;
 
   G4LorentzVector initial4mom = projectile4mom + target4mom;
 
   // Compute final-state momentum for scattering and "do nothing" results
   G4LorentzVector final4mom;
   G4int final_A(0), final_Z(0);
-  if (theTotalResult->GetTrackStatus() == fStopAndKill) {
+
+  G4int nSec = theTotalResult->GetNumberOfSecondaries();
+  if (theTotalResult->GetTrackStatus() != fStopAndKill) {  // If it is Alive
+     // Either interaction didn't complete, returned "do nothing" state
+     //  or    the primary survived the interaction (e.g. electro-nucleus )
+     G4Track temp(aTrack);
+
+     // Use the final energy / momentum 
+     temp.SetMomentumDirection(*theTotalResult->GetMomentumDirection());
+     temp.SetKineticEnergy(theTotalResult->GetEnergy());
+
+     if( nSec == 0 ){ 
+        // Interaction didn't complete, returned "do nothing" state 
+        //   - or suppressed recoil  (e.g. Neutron elastic ) 
+        final4mom = temp.GetDynamicParticle()->Get4Momentum() + target4mom;
+        final_A = initial_A;
+        final_Z = initial_Z;
+     }else{
+        // The primary remains in final state (e.g. electro-nucleus ) 
+        final4mom = temp.GetDynamicParticle()->Get4Momentum();
+        final_A = track_A; 
+        final_Z = track_Z; 
+        // Expect that the target nucleus will have interacted, 
+        //  and its products, including recoil, will be included in secondaries.
+     }
+  }
+  if( nSec > 0 ) {
     G4Track* sec;
-    G4int nSec = theTotalResult->GetNumberOfSecondaries();
+
     for (G4int i = 0; i < nSec; i++) {
       sec = theTotalResult->GetSecondary(i);
       final4mom += sec->GetDynamicParticle()->Get4Momentum();
       final_A += sec->GetDefinition()->GetBaryonNumber();
       final_Z += G4lrint(sec->GetDefinition()->GetPDGCharge());
     }
-  } else {	// Interaction didn't complete, returned "do nothing" state
-    G4Track temp(aTrack);
-    temp.SetMomentumDirection(*theTotalResult->GetMomentumDirection());
-    temp.SetKineticEnergy(theTotalResult->GetEnergy());
-    final4mom = temp.GetDynamicParticle()->Get4Momentum() + target4mom;
-    final_A = initial_A;
-    final_Z = initial_Z;
   }
 
   // Get level-checking information (used to cut-off relative checks)
@@ -731,8 +762,8 @@ G4HadronicProcess::CheckEnergyMomentumConservation(const G4Track& aTrack,
 	 || std::abs(epReportLevel) == 2
 	 || ! conservationPass ){
 
-      Myout << "   "<< relResult  <<" relative, limit " << checkLevels.first << ", values E / p (MeV) = "
-             << relative/MeV << " / " << relative_mom/MeV  << G4endl;
+      Myout << "   "<< relResult  <<" relative, limit " << checkLevels.first << ", values E/T(0) = "
+             << relative << " p/p(0)= " << relative_mom  << G4endl;
       Myout << "   "<< absResult << " absolute, limit (MeV) " << checkLevels.second/MeV << ", values E / p (MeV) = "
              << absolute/MeV << " / " << absolute_mom/MeV << G4endl;
       Myout << "   "<< chargeResult << " charge/baryon number balance " << (initial_Z-final_Z) << " / " << (initial_A-final_A) << " "<<  G4endl;

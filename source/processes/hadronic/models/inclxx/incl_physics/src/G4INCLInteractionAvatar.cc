@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1
+// INCL++ revision: v5.1.1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -214,8 +214,8 @@ namespace G4INCL {
         restoreParticles();
 
         // Delete newly created particles
-        for( ParticleIter j = created.begin(); j != created.end(); ++j )
-          delete *j;
+        for( ParticleIter i = created.begin(); i != created.end(); ++i )
+          delete *i;
 
         FinalState *fsBlocked = new FinalState;
         delete fs;
@@ -275,8 +275,8 @@ namespace G4INCL {
       // ...except for pions beyond their surface radius.
       if((*i)->isOutOfWell()) continue;
 
-      const G4bool successBringParticlesInside = bringParticleInside(*i);
-      if( !successBringParticlesInside ) {
+      const G4bool success = bringParticleInside(*i);
+      if( !success ) {
         ERROR("Failed to bring particle inside the nucleus!" << std::endl);
       }
     }

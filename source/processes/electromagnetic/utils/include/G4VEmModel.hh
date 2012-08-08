@@ -347,7 +347,7 @@ private:
 protected:
 
   G4VParticleChange*           pParticleChange;
-  G4PhysicsTable*              xSection;
+  G4PhysicsTable*              xSectionTable;
   const std::vector<G4double>* theDensityFactor;
   const std::vector<G4int>*    theDensityIdx;
 
@@ -657,7 +657,7 @@ inline const G4String& G4VEmModel::GetName() const
 
 inline G4PhysicsTable* G4VEmModel::GetCrossSectionTable()
 {
-  return xSection;
+  return xSectionTable;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

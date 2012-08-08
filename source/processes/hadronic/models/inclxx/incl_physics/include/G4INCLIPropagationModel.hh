@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1
+// INCL++ revision: v5.1.1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -80,10 +80,10 @@ namespace G4INCL {
        */
       virtual G4INCL::Nucleus* getNucleus() = 0;
 
-      virtual G4double shoot(ParticleSpecies const projectileSpecies, const G4double kineticEnergy, const G4double impactParameter) = 0;
+      virtual G4double shoot(ParticleSpecies const projectileSpecies, const G4double kineticEnergy, const G4double impactParameter, const G4double phi) = 0;
     protected:
-      virtual G4double shootParticle(ParticleType const t, const G4double kineticEnergy, const G4double impactParameter) = 0;
-      virtual G4double shootComposite(ParticleSpecies const s, const G4double kineticEnergy, const G4double impactParameter) = 0;
+      virtual G4double shootParticle(ParticleType const t, const G4double kineticEnergy, const G4double impactParameter, const G4double phi) = 0;
+      virtual G4double shootComposite(ParticleSpecies const s, const G4double kineticEnergy, const G4double impactParameter, const G4double phi) = 0;
 
     public:
 

@@ -61,7 +61,7 @@
 using namespace std;
 
 G4PEEffectFluoModel::G4PEEffectFluoModel(const G4String& nam)
-  : G4VEmModel(nam),isInitialized(false)
+  : G4VEmModel(nam)
 {
   theGamma    = G4Gamma::Gamma();
   theElectron = G4Electron::Electron();
@@ -82,10 +82,7 @@ void G4PEEffectFluoModel::Initialise(const G4ParticleDefinition*,
 				     const G4DataVector&)
 {
   fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
-
-  if (isInitialized) { return; }
-  fParticleChange = GetParticleChangeForGamma();
-  isInitialized = true;
+  if(!fParticleChange) { fParticleChange = GetParticleChangeForGamma(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

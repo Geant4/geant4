@@ -86,7 +86,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
         G4INCLRandom.cc
         G4INCLFinalState.cc
         G4INCLLogger.cc
-        G4INCLBook.cc
         G4INCLParticleSpecies.cc
 
     GRANULAR_DEPENDENCIES

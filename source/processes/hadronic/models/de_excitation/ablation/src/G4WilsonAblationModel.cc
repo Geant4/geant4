@@ -378,8 +378,6 @@ G4FragmentVector *G4WilsonAblationModel::BreakItUp
       SelectSecondariesByDefault(G4ThreeVector(0.0,0.0,0.0));
   }
 
-  delete resultNucleus;
-
   if (AF > 0)
   {
     G4double mass = G4ParticleTable::GetParticleTable()->GetIonTable()->
@@ -389,9 +387,10 @@ G4FragmentVector *G4WilsonAblationModel::BreakItUp
     G4ThreeVector direction(0.0,0.0,1.0);
     G4LorentzVector lorentzVector = G4LorentzVector(direction*p, e);
     lorentzVector.boost(-boost);
-    *resultNucleus = G4Fragment(AF, ZF, lorentzVector);
-    fragmentVector->push_back(resultNucleus);
+    G4Fragment* frag = new G4Fragment(AF, ZF, lorentzVector);
+    fragmentVector->push_back(frag);
   }
+  delete resultNucleus;
 //
 //
 // Provide verbose output on the ablation products if requested.

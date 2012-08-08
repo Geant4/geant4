@@ -181,12 +181,15 @@ public:
   inline G4int LambdaBinning() const;
 
   // Min kinetic energy for tables
-  inline void SetMinKinEnergy(G4double e);
+  void SetMinKinEnergy(G4double e);
   inline G4double MinKinEnergy() const;
 
   // Max kinetic energy for tables
-  inline void SetMaxKinEnergy(G4double e);
+  void SetMaxKinEnergy(G4double e);
   inline G4double MaxKinEnergy() const;
+
+  // Min kinetic energy for high energy table
+  inline void SetMinKinEnergyPrim(G4double e);
 
   // Cross section table pointer
   inline const G4PhysicsTable* LambdaTable() const;
@@ -286,6 +289,8 @@ protected:
 
   inline void SetStartFromNullFlag(G4bool val);
 
+  inline void SetSplineFlag(G4bool val);
+
 private:
 
   void Clear();
@@ -301,6 +306,8 @@ private:
   inline void ComputeIntegralLambda(G4double kinEnergy);
 
   inline G4double GetLambdaFromTable(G4double kinEnergy);
+
+  inline G4double GetLambdaFromTablePrim(G4double kinEnergy);
 
   inline G4double GetCurrentLambda(G4double kinEnergy);
 
@@ -327,6 +334,7 @@ private:
 
   // tables and vectors
   G4PhysicsTable*              theLambdaTable;
+  G4PhysicsTable*              theLambdaTablePrim;
   std::vector<G4double>        theEnergyOfCrossSectionMax;
   std::vector<G4double>        theCrossSectionMax;
 
@@ -340,6 +348,7 @@ private:
   G4int                        nLambdaBins;
 
   G4double                     minKinEnergy;
+  G4double                     minKinEnergyPrim;
   G4double                     maxKinEnergy;
   G4double                     lambdaFactor;
   G4double                     polarAngleLimit;
@@ -348,6 +357,7 @@ private:
   G4bool                       integral;
   G4bool                       applyCuts;
   G4bool                       startFromNull;
+  G4bool                       splineFlag;
 
   // ======== Cashed values - may be state dependent ================
 
@@ -455,6 +465,13 @@ inline G4double G4VEmProcess::GetLambdaFromTable(G4double e)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+inline G4double G4VEmProcess::GetLambdaFromTablePrim(G4double e)
+{
+  return fFactor*((*theLambdaTablePrim)[basedCoupleIndex])->Value(e)*MeV/e;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 inline G4double G4VEmProcess::ComputeCurrentLambda(G4double e)
 {
   return fFactor *
@@ -467,8 +484,9 @@ inline G4double G4VEmProcess::ComputeCurrentLambda(G4double e)
 inline G4double G4VEmProcess::GetCurrentLambda(G4double e)
 {
   G4double x = 0.0;
-  if(theLambdaTable) { x = GetLambdaFromTable(e); }
-  else               { x = ComputeCurrentLambda(e); }
+  if(e >= minKinEnergyPrim) { x = GetLambdaFromTablePrim(e); }
+  else if(theLambdaTable)   { x = GetLambdaFromTable(e); }
+  else                      { x = ComputeCurrentLambda(e); }
   return x;
 }
 
@@ -532,13 +550,6 @@ inline G4int G4VEmProcess::LambdaBinning() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4VEmProcess::SetMinKinEnergy(G4double e)
-{
-  minKinEnergy = e;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 inline G4double G4VEmProcess::MinKinEnergy() const
 {
   return minKinEnergy;
@@ -546,16 +557,16 @@ inline G4double G4VEmProcess::MinKinEnergy() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4VEmProcess::SetMaxKinEnergy(G4double e)
+inline G4double G4VEmProcess::MaxKinEnergy() const
 {
-  maxKinEnergy = e;
+  return maxKinEnergy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4VEmProcess::MaxKinEnergy() const
+inline void G4VEmProcess::SetMinKinEnergyPrim(G4double e)
 {
-  return maxKinEnergy;
+  minKinEnergyPrim = e;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -664,6 +675,13 @@ inline void G4VEmProcess::SetSecondaryParticle(const G4ParticleDefinition* p)
 inline void G4VEmProcess::SetStartFromNullFlag(G4bool val)
 {
   startFromNull = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VEmProcess::SetSplineFlag(G4bool val)
+{
+  splineFlag = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

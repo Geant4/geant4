@@ -339,7 +339,7 @@ G4double G4UrbanMscModel93::ComputeCrossSectionPerAtom(
   G4double sigma;
   SetParticle(part);
 
-  G4double Z23 = pow(AtomicNumber,2./3.); 
+  Z23 = pow(AtomicNumber,2./3.); 
 
   // correction if particle .ne. e-/e+
   // compute equivalent kinetic energy

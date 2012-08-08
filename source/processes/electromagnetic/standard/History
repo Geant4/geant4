@@ -17,6 +17,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05 July 12: V.Ivanchenko (emstand-V09-05-31)
+- G4ICRU49NuclearStoppingModel, G4IonCoulombCrossSection,
+  G4IonCoulombScatteringModel, G4ScreeningMottCrossSection,
+  G4UrbanMscModel93, G4UrbanMscModel95 - fixed shadowing
+
+04 July 12: V.Ivanchenko (emstand-V09-05-30)
+- G4GammaConversion, G4KleinNishinaModel, G4KleinNishinaCompton,
+  G4PEEffectFluoModel - minor cleanup of initialisation
+- G4PhotoElectricEffect - build cross section table above 200 keV
+- G4ComptonScattering - build 2 cross section tables - below and above 
+    1 MeV using different technique for interpolation
+- G4CoulombScattering - improved list of options/flags in the 
+    constructor to reduce size of cross section tables 
+
 22 June 12: V.Ivanchenko (emstand-V09-05-29)
 - Fixed non-reproducibility in msc models for the case if more than 
     several models defined for different energy interval

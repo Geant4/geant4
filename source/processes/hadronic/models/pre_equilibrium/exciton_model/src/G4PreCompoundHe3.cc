@@ -146,7 +146,7 @@ G4double G4PreCompoundHe3::GetOpt12(const  G4double K)
   G4double     p2 = -1389.;
   G4double     landa0 = -0.00535;
   G4double     landa1 = -11.16;
-  G4double     mu0 = 555.5;
+  G4double     mm0 = 555.5;
   G4double     mu1 = 0.40;
   G4double     nu0 = 687.4;
   G4double     nu1 = -476.3;
@@ -158,7 +158,7 @@ G4double G4PreCompoundHe3::GetOpt12(const  G4double K)
   landa = landa0*ResidualA + landa1;
 
   G4double resmu1 = g4pow->powZ(ResidualA,mu1); 
-  mu = mu0*resmu1;
+  mu = mm0*resmu1;
   nu = resmu1*(nu0 + nu1*Ec + nu2*(Ec*Ec));
   q = landa - nu/(Ec*Ec) - 2*p*Ec;
   r = mu + 2*nu/Ec + p*(Ec*Ec);
@@ -189,7 +189,7 @@ G4double G4PreCompoundHe3::GetOpt34(const  G4double K)
   G4double     p2 = -1487.;
   G4double     landa0 = 0.00459;
   G4double     landa1 = -8.93;
-  G4double     mu0 = 611.2;
+  G4double     mm0 = 611.2;
   G4double     mu1 = 0.35;
   G4double     nu0 = 473.8;
   G4double     nu1 = -468.2;
@@ -204,7 +204,7 @@ G4double G4PreCompoundHe3::GetOpt34(const  G4double K)
   p = p0 + p1/ec + p2/ecsq;
   landa = landa0*ResidualA + landa1;
   a = g4pow->powZ(ResidualA,mu1);
-  mu = mu0 * a;
+  mu = mm0 * a;
   nu = a* (nu0+nu1*ec+nu2*ecsq);  
   xnulam = nu / landa;
   if (xnulam > spill) { xnulam=0.; }

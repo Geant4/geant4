@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1
+// INCL++ revision: v5.1.1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -137,6 +137,12 @@ private:
 
   /// \brief Maximum number of warnings
   static const G4int maxWarnings;
+
+  /// \brief Dummy copy constructor to shut up Coverity warnings
+  G4INCLXXInterface(const G4INCLXXInterface &rhs);
+
+  /// \brief Dummy assignment operator to shut up Coverity warnings
+  G4INCLXXInterface &operator=(G4INCLXXInterface const &rhs);
 
   G4INCL::INCL *theINCLModel;
   G4HadFinalState theResult;

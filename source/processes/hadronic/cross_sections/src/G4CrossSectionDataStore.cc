@@ -99,28 +99,22 @@ G4CrossSectionDataStore::GetCrossSection(const G4DynamicParticle* part,
     G4int nIso = elm->GetNumberOfIsotopes();    
     G4Isotope* iso = 0;
 
-    if (0 < nIso) { 
+    if (0 >= nIso) { 
+      G4cout << " Element " << elm->GetName() << " Z= " << Z 
+	     << " has no isotopes " << G4endl; 
+      throw G4HadronicException(__FILE__, __LINE__, 
+                      " Isotope vector is not defined");
+      return xsec;
+    }
+    // user-defined isotope abundances        
+    G4IsotopeVector* isoVector = elm->GetIsotopeVector();
+    G4double* abundVector = elm->GetRelativeAbundanceVector();
 
-      // user-defined isotope abundances        
-      G4IsotopeVector* isoVector = elm->GetIsotopeVector();
-      G4double* abundVector = elm->GetRelativeAbundanceVector();
-
-      for (G4int j = 0; j<nIso; ++j) {
-	if(abundVector[j] > 0.0) {
-	  iso = (*isoVector)[j];
-	  xsec += abundVector[j]*
-	    GetIsoCrossSection(part, Z, iso->GetN(), iso, elm, mat, i);
-	}
-      }
-    } else {
-      // natural isotope abundances
-      G4int n0 = nist->GetNistFirstIsotopeN(Z);
-      G4int nn = nist->GetNumberOfNistIsotopes(Z);
-      for (G4int A = n0; A < n0+nn; ++A) {
-	G4double abund = nist->GetIsotopeAbundance(Z, A);
-	if(abund > 0.0) {
-	  xsec += abund*GetIsoCrossSection(part, Z, A, iso, elm, mat, i);
-	}
+    for (G4int j = 0; j<nIso; ++j) {
+      if(abundVector[j] > 0.0) {
+	iso = (*isoVector)[j];
+	xsec += abundVector[j]*
+	  GetIsoCrossSection(part, Z, iso->GetN(), iso, elm, mat, i);
       }
     }
   }
@@ -224,40 +218,27 @@ G4CrossSectionDataStore::SampleZandA(const G4DynamicParticle* part,
     // isotope cross section is not computed
     //----------------------------------------------------------------
     G4int nIso = anElement->GetNumberOfIsotopes();
-    if (0 < nIso) { 
+    if (0 >= nIso) { 
+      G4cout << " Element " << anElement->GetName() << " Z= " << Z 
+	     << " has no isotopes " << G4endl; 
+      throw G4HadronicException(__FILE__, __LINE__, 
+                      " Isotope vector is not defined");
+      return anElement;
+    }
+    // user-defined isotope abundances        
+    G4IsotopeVector* isoVector = anElement->GetIsotopeVector();
+    A = (*isoVector)[0]->GetN();
 
-      // user-defined isotope abundances        
-      G4IsotopeVector* isoVector = anElement->GetIsotopeVector();
-      A = (*isoVector)[0]->GetN();
-
-      // more than 1 isotope
-      if(1 < nIso) {
-	G4double* abundVector = anElement->GetRelativeAbundanceVector();
-	G4double sum = 0.0;
-	G4double q = G4UniformRand();
-	for (G4int j = 0; j<nIso; ++j) {
-	  sum += abundVector[j];
-	  if(q <= sum) {
-	    A = (*isoVector)[j]->GetN();
-	    break;
-	  }
-	}
-      }
-    } else {
-
-      // natural isotope abundances
-      G4int n0 = nist->GetNistFirstIsotopeN(Z);
-      G4int nn = nist->GetNumberOfNistIsotopes(Z);
-      A = n0; 
-
-      // more than 1 isotope
-      if(1 < nn) {
-	G4double sum = 0.0;
-	G4double q = G4UniformRand();
-	for (G4int j = 0; j<nn; ++j) {
-	  A = n0 + j;
-	  sum += nist->GetIsotopeAbundance(Z, A);
-	  if(q <= sum) { break; }
+    // more than 1 isotope
+    if(1 < nIso) {
+      G4double* abundVector = anElement->GetRelativeAbundanceVector();
+      G4double sum = 0.0;
+      G4double q = G4UniformRand();
+      for (G4int j = 0; j<nIso; ++j) {
+	sum += abundVector[j];
+	if(q <= sum) {
+	  A = (*isoVector)[j]->GetN();
+	  break;
 	}
       }
     }
@@ -271,62 +252,38 @@ G4CrossSectionDataStore::SampleZandA(const G4DynamicParticle* part,
     G4double cross = 0.0;
     G4double xsec;
 
-    if (0 < nIso) { 
+    if (0 >= nIso) { 
+      G4cout << " Element " << anElement->GetName() << " Z= " << Z 
+	     << " has no isotopes " << G4endl; 
+      throw G4HadronicException(__FILE__, __LINE__, 
+                      " Isotope vector is not defined");
+      return anElement;
+    }
 
-      // user-defined isotope abundances        
-      G4IsotopeVector* isoVector = anElement->GetIsotopeVector();
-      A = (*isoVector)[0]->GetN();
+    // user-defined isotope abundances        
+    G4IsotopeVector* isoVector = anElement->GetIsotopeVector();
+    A = (*isoVector)[0]->GetN();
 
-      // more than 1 isotope
-      if(1 < nIso) {
-	G4double* abundVector = anElement->GetRelativeAbundanceVector();
-	if(G4int(xseciso.size()) < nIso) { xseciso.resize(nIso); }
+    // more than 1 isotope
+    if(1 < nIso) {
+      G4double* abundVector = anElement->GetRelativeAbundanceVector();
+      if(G4int(xseciso.size()) < nIso) { xseciso.resize(nIso); }
 
-	for (G4int j = 0; j<nIso; ++j) {
-	  xsec = 0.0;
-	  if(abundVector[j] > 0.0) {
-	    iso = (*isoVector)[j];
-	    xsec = abundVector[j]*
-	      GetIsoCrossSection(part, Z, iso->GetN(), iso, anElement, mat, i);
-	  }
-	  cross += xsec;
-	  xseciso[j] = cross;
+      for (G4int j = 0; j<nIso; ++j) {
+	xsec = 0.0;
+	if(abundVector[j] > 0.0) {
+	  iso = (*isoVector)[j];
+	  xsec = abundVector[j]*
+	    GetIsoCrossSection(part, Z, iso->GetN(), iso, anElement, mat, i);
 	}
-	cross *= G4UniformRand();
-	for (G4int j = 0; j<nIso; ++j) {
-	  if(cross <= xseciso[j]) {
-	    A = (*isoVector)[j]->GetN();
-	    break;
-	  }
-	}
+	cross += xsec;
+	xseciso[j] = cross;
       }
-    } else {
-
-      // natural isotope abundances
-      G4int n0 = nist->GetNistFirstIsotopeN(Z);
-      G4int nn = nist->GetNumberOfNistIsotopes(Z);
-      A = n0;
-
-      // more than 1 isotope
-      if(1 < nn) {
-	if(G4int(xseciso.size()) < nn) { xseciso.resize(nn); }
-	for (G4int j = 0; j < nn; ++j) {
-	  xsec = 0.0;
-	  A = n0 + j;
-	  G4double abund = nist->GetIsotopeAbundance(Z, A);
-	  if(abund > 0.0) {
-	    xsec = abund*GetIsoCrossSection(part, Z, A, iso, anElement, mat, i);
-	  }
-	  cross += xsec;
-	  xseciso[j] = cross;
-	}
-	cross *= G4UniformRand();
-	A = n0;
-	for (G4int j = 0; j<nn; ++j) {
-	  if(cross <= xseciso[j]) {
-	    A = n0 + j;
-	    break;
-	  }
+      cross *= G4UniformRand();
+      for (G4int j = 0; j<nIso; ++j) {
+	if(cross <= xseciso[j]) {
+	  A = (*isoVector)[j]->GetN();
+	  break;
 	}
       }
     }

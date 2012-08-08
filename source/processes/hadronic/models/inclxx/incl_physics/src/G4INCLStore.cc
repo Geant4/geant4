@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1
+// INCL++ revision: v5.1.1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -43,9 +43,13 @@
 
 namespace G4INCL {
 
-  Store::Store(Config const * const config)
-    : theConfig(config) {
-    theBook = new Book;
+  Store::Store(Config const * const config) :
+    theBook(new Book),
+    loadedA(0),
+    loadedZ(0),
+    loadedStoppingTime(0.),
+    theConfig(config)
+  {
   }
 
   Store::~Store() {
@@ -362,6 +366,11 @@ namespace G4INCL {
     for(ParticleIter iter = outgoing.begin();	iter != outgoing.end(); ++iter) {
       if((*iter)->isCluster()) {
         Cluster *c = dynamic_cast<Cluster *>(*iter);
+// assert(c);
+#ifdef INCLXX_IN_GEANT4_MODE
+        if(!c)
+          continue;
+#endif
         c->deleteParticles();
       }
       delete (*iter);

@@ -110,6 +110,7 @@ G4ChipsPionMinusElasticXS::G4ChipsPionMinusElasticXS():G4VCrossSectionDataSet(De
 
 G4ChipsPionMinusElasticXS::~G4ChipsPionMinusElasticXS()
 {
+  /*
   std::vector<G4double*>::iterator pos;
   for (pos=CST.begin(); pos<CST.end(); pos++)
   { delete [] *pos; }
@@ -144,6 +145,7 @@ G4ChipsPionMinusElasticXS::~G4ChipsPionMinusElasticXS()
   for (pos=B4T.begin(); pos<B4T.end(); pos++)
   { delete [] *pos; }
   B4T.clear();
+  */
 }
 
 

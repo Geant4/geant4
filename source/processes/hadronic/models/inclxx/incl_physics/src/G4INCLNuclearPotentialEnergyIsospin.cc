@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1
+// INCL++ revision: v5.1.1
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -56,8 +56,8 @@ namespace G4INCL {
     const G4double NuclearPotentialEnergyIsospin::alpha= 0.223;
 
     // Constructors
-    NuclearPotentialEnergyIsospin::NuclearPotentialEnergyIsospin(NuclearDensity const * const density, const G4bool aPionPotential, const G4bool hardFermiSphere/*=true*/)
-      : NuclearPotentialIsospin(density,aPionPotential,hardFermiSphere)
+    NuclearPotentialEnergyIsospin::NuclearPotentialEnergyIsospin(NuclearDensity const * const density, const G4bool pionPotential, const G4bool hardFermiSphere/*=true*/)
+      : NuclearPotentialIsospin(density,pionPotential,hardFermiSphere)
     {}
 
     // Destructor

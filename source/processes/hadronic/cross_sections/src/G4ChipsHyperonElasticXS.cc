@@ -115,6 +115,7 @@ G4ChipsHyperonElasticXS::G4ChipsHyperonElasticXS():G4VCrossSectionDataSet(Defaul
 
 G4ChipsHyperonElasticXS::~G4ChipsHyperonElasticXS()
 {
+  /*
   std::vector<G4double*>::iterator pos;
   for (pos=CST.begin(); pos<CST.end(); pos++)
   { delete [] *pos; }
@@ -149,6 +150,7 @@ G4ChipsHyperonElasticXS::~G4ChipsHyperonElasticXS()
   for (pos=B4T.begin(); pos<B4T.end(); pos++)
   { delete [] *pos; }
   B4T.clear();
+  */
 }
 
 G4bool G4ChipsHyperonElasticXS::IsIsoApplicable(const G4DynamicParticle* Pt, G4int, G4int,    
@@ -292,6 +294,7 @@ G4double G4ChipsHyperonElasticXS::CalculateCrossSection(G4bool CS,G4int F,G4int 
     {
       lastPIN = PIN[I];                 // Max log(P) initialised for this table set
       lastPAR = PAR[I];                 // Pointer to the parameter set
+
       lastCST = CST[I];                 // Pointer to the total sross-section table
       lastSST = SST[I];                 // Pointer to the first squared slope
       lastS1T = S1T[I];                 // Pointer to the first mantissa
