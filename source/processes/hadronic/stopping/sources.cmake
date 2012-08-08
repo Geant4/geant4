@@ -66,11 +66,13 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4hadronic_stop
     HEADERS
         G4AntiNeutronAnnihilationAtRest.hh
+        G4AntiProtonAbsorptionFritiof.hh
         G4AntiProtonAnnihilationAtRest.hh
+        G4AntiSigmaPlusAbsorptionFritiof.hh
         G4DistributionGenerator.hh
         G4ElementSelector.hh
         G4EmCaptureCascade.hh
-        G4FTFCaptureAtRest.hh
+        G4HadronicAbsorptionFritiof.hh
         G4HadronStoppingProcess.hh
         G4KaonMinusAbsorption.hh
         G4KaonMinusAbsorptionAtRest.hh
@@ -108,7 +110,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_stop
         G4DistributionGenerator.cc
         G4ElementSelector.cc
         G4EmCaptureCascade.cc
-        G4FTFCaptureAtRest.cc
+        G4HadronicAbsorptionFritiof.cc
         G4HadronStoppingProcess.cc
         G4KaonMinusAbsorption.cc
         G4KaonMinusAbsorptionAtRest.cc

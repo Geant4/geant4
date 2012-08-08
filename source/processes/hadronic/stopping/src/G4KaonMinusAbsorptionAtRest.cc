@@ -132,6 +132,12 @@ G4VParticleChange* G4KaonMinusAbsorptionAtRest::AtRestDoIt
 
   // Do the interaction with the nucleon
   G4DynamicParticleVector* absorptionProducts = KaonNucleonReaction();
+
+  //A.R. 26-Jul-2012 Coverity fix
+  if ( ! absorptionProducts ) {
+    G4Exception("G4KaonMinusAbsorptionAtRest::AtRestDoIt()", "HAD_STOP_0001",
+                FatalException, "NULL absorptionProducts");
+  }
   
   // Secondary interactions
   
@@ -224,7 +230,7 @@ G4VParticleChange* G4KaonMinusAbsorptionAtRest::AtRestDoIt
     }
 
   if (energyDeposit < 0.)
-    G4Exception("G4KaonMinusAbsorptionAtRest::AtRestDoIt()", "HAD_STOP_0001",
+    G4Exception("G4KaonMinusAbsorptionAtRest::AtRestDoIt()", "HAD_STOP_0002",
                 FatalException, "Excitation energy < 0");
   delete nucleus;    
 
@@ -396,6 +402,10 @@ G4DynamicParticleVector* G4KaonMinusAbsorptionAtRest::KaonNucleonReaction()
 	    << " is not a good nucleon - check G4Nucleus::ReturnTargetParticle()!"
 	    << G4endl;
 	}
+
+      //A.R. 26-Jul-2012 Coverity fix
+      if ( products ) delete products;
+
       return 0;
     }  
 
