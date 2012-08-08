@@ -89,19 +89,22 @@ class G4GHEKinematicsVector
   inline
    G4GHEKinematicsVector & operator = ( const G4GHEKinematicsVector & p )
    {
-     momentum.setX( p.momentum.x() );
-     momentum.setY( p.momentum.y() );
-     momentum.setZ( p.momentum.z() );
-     energy        = p.energy;
-     kineticEnergy = p.kineticEnergy;
-     mass          = p.mass;
-     charge        = p.charge;
-     timeOfFlight  = p.timeOfFlight;
-     side          = p.side;
-     flag          = p.flag;
-     code          = p.code;
-     particleDef   = p.particleDef;
-     return *this;
+     if (this != &p)
+     {
+        momentum.setX( p.momentum.x() );
+        momentum.setY( p.momentum.y() );
+        momentum.setZ( p.momentum.z() );
+        energy        = p.energy;
+        kineticEnergy = p.kineticEnergy;
+        mass          = p.mass;
+        charge        = p.charge;
+        timeOfFlight  = p.timeOfFlight;
+        side          = p.side;
+        flag          = p.flag;
+        code          = p.code;
+        particleDef   = p.particleDef;
+     }
+    return *this;
    }
 
   inline

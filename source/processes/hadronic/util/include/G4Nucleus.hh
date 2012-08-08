@@ -118,6 +118,20 @@
     { return theZ; }   
 //... \GF
 
+    inline const G4Isotope* GetIsotope()
+    { return fIsotope; }
+
+    inline void SetIsotope(const G4Isotope* iso)
+    { 
+      fIsotope = iso;
+      if(iso) { 
+	theZ = iso->GetZ();
+        theA = iso->GetN();
+        aEff = theA;
+        zEff = theZ;
+      }
+    }
+
     G4DynamicParticle *ReturnTargetParticle() const;
     
     G4double AtomicMass( const G4double A, const G4double Z ) const;
@@ -182,6 +196,8 @@
     G4int    theZ;
     G4double aEff;  // effective atomic weight
     G4double zEff;  // effective atomic number
+
+    const G4Isotope* fIsotope;
     
     G4double pnBlackTrackEnergy;  // the kinetic energy available for
                                   // proton/neutron black track particles
