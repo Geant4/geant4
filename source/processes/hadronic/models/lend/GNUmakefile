@@ -17,6 +17,9 @@ CPPFLAGS += -DG4HADRONIC_ALLOC_EXPORT
 ifeq ($(G4SYSTEM), WIN32-VC)
 CPPFLAGS += -I$(G4BASE)/externals/expat/include
 endif
+ifdef G4LIB_BUILD_EXPAT
+CPPFLAGS += -I$(G4BASE)/externals/expat/include
+endif
 
 CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
