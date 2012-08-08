@@ -130,6 +130,51 @@ G4HadronicProcessStore::G4HadronicProcessStore()
   buildTableStart = true;
   theEPTestMessenger = new G4HadronicEPTestMessenger(this);
 }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+G4double G4HadronicProcessStore::GetCrossSectionPerAtom(
+                                 const G4ParticleDefinition* particle,
+                                 G4double energy,
+                                 const G4VProcess* process,
+                                 const G4Element*  element)
+{
+  G4double cross = 0.;    
+  G4int subType = process->GetProcessSubType();      
+  if (subType == fHadronElastic)   
+    cross = GetElasticCrossSectionPerAtom(particle,energy,element);
+  else if (subType == fHadronInelastic)   
+    cross = GetInelasticCrossSectionPerAtom(particle,energy,element);
+  else if (subType == fCapture)   
+    cross = GetCaptureCrossSectionPerAtom(particle,energy,element);      
+  else if (subType == fFission)   
+    cross = GetFissionCrossSectionPerAtom(particle,energy,element); 
+  else if (subType == fChargeExchange)   
+    cross = GetChargeExchangeCrossSectionPerAtom(particle,energy,element);
+  return cross;
+}  	   
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+G4double G4HadronicProcessStore::GetCrossSectionPerVolume(
+                                 const G4ParticleDefinition* particle,
+                                 G4double energy,
+                                 const G4VProcess* process,
+                                 const G4Material* material)
+{
+  G4double cross = 0.;    
+  G4int subType = process->GetProcessSubType();      
+  if (subType == fHadronElastic)   
+    cross = GetElasticCrossSectionPerVolume(particle,energy,material);
+  else if (subType == fHadronInelastic)   
+    cross = GetInelasticCrossSectionPerVolume(particle,energy,material);
+  else if (subType == fCapture)   
+    cross = GetCaptureCrossSectionPerVolume(particle,energy,material);      
+  else if (subType == fFission)   
+    cross = GetFissionCrossSectionPerVolume(particle,energy,material); 
+  else if (subType == fChargeExchange)   
+    cross = GetChargeExchangeCrossSectionPerVolume(particle,energy,material);
+  return cross;
+}  	   
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 

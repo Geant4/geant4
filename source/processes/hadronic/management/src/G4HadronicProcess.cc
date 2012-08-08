@@ -42,6 +42,7 @@
 //		engine state before each model call
 // 18-Oct-2011 M.Kelsey -- Handle final-state cases in conservation checks.
 // 14-Mar-2012 G.Folger -- enhance checks for conservation of energy, etc.
+// 28-Jul-2012 M.Maire  -- add function GetTargetDefinition() 
 
 #include "G4Types.hh"
 #include "G4HadronicProcess.hh"
@@ -198,10 +199,13 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
 		ed);
   }
 
-  if (GetElementCrossSection(aParticle, anElement, aMaterial) <= 0.0) {
-    // No interaction
-    return theTotalResult;
-  }    
+  // check only for charged particles
+  if(aParticle->GetDefinition()->GetPDGCharge() != 0.0) {
+    if (GetElementCrossSection(aParticle, anElement, aMaterial) <= 0.0) {
+      // No interaction
+      return theTotalResult;
+    }    
+  }
 
   // Next check for illegal track status
   //
@@ -595,12 +599,11 @@ G4HadFinalState* G4HadronicProcess::CheckResult(const G4HadProjectile & aPro,con
       G4double finalE(0.);
       G4int nSec = result->GetNumberOfSecondaries();
 
-      finalE= 0.0; 
       nuclearMass = G4NucleiProperties::GetNuclearMass(aNucleus.GetA_asInt(),
                                                        aNucleus.GetZ_asInt());
       if (result->GetStatusChange() != stopAndKill) {
        	// Interaction didn't complete, returned "do nothing" state          => reset nucleus
-        //  or  the primary survived the interaction (e.g. electro-nucleus ) => keep  nucleus
+        //  or  the primary survived the interaction (e.g. electro-nuclear ) => keep  nucleus
          finalE=result->GetLocalEnergyDeposit() +
 		aPro.GetDefinition()->GetPDGMass() + result->GetEnergyChange();
          if( nSec == 0 ){ 
@@ -770,8 +773,8 @@ G4HadronicProcess::CheckEnergyMomentumConservation(const G4Track& aTrack,
 
   }
   Myout.flush();
-  if (epReportLevel > 0)      G4cout << Myout.str();
-  else if (epReportLevel < 0) G4cerr << Myout.str();
+  if (epReportLevel > 0)      G4cout << Myout.str()<< G4endl;
+  else if (epReportLevel < 0) G4cerr << Myout.str()<< G4endl;
 }
 
 
@@ -798,6 +801,14 @@ void G4HadronicProcess::DumpState(const G4Track& aTrack,
     ed << "PhysicalVolume  <" << aTrack.GetVolume()->GetName() 
        << ">" << G4endl;
   }
-} 
-
+}
+/* 
+G4ParticleDefinition* G4HadronicProcess::GetTargetDefinition()
+{
+  const G4Nucleus* nuc = GetTargetNucleus();
+  G4int Z = nuc->GetZ_asInt();
+  G4int A = nuc->GetA_asInt();
+  return G4ParticleTable::GetParticleTable()->GetIon(Z,A,0*eV);
+}
+*/
 /* end of file */

@@ -76,7 +76,18 @@ public:
   ~G4HadronicProcessStore();
 
   void Clean();
-
+  G4double GetCrossSectionPerAtom(
+    const G4ParticleDefinition* particle,
+    G4double kineticEnergy,
+    const G4VProcess* process,
+    const G4Element*  element);
+      
+  G4double GetCrossSectionPerVolume(
+    const G4ParticleDefinition* particle,
+    G4double kineticEnergy,
+    const G4VProcess* process,
+    const G4Material* material);
+    
   G4double GetInelasticCrossSectionPerVolume(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,

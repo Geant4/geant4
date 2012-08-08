@@ -40,7 +40,8 @@
 // J.L. Chuma, TRIUMF, 10-Mar-1997
 // Last modified: 04-Apr-1997
 // 19-May-2008 V.Ivanchenko cleanup and added comments
-// 05-Jul-2010 V.Ivanchenko cleanup commented lines 
+// 05-Jul-2010 V.Ivanchenko cleanup commented lines
+// 28-Jul-2012 M.Maire add function GetTargetDefinition() 
 //
 
 #ifndef G4HadronicProcess_h
@@ -123,6 +124,10 @@ public:
   // access to the target nucleus
   inline const G4Nucleus* GetTargetNucleus() const
   { return &targetNucleus; }
+  
+  //  G4ParticleDefinition* GetTargetDefinition();
+  inline const G4Isotope* GetTargetIsotope()
+  { return targetNucleus.GetIsotope(); }
   
   virtual void ProcessDescription(std::ostream& outFile) const;
  
