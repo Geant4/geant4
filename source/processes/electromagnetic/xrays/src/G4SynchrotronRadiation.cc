@@ -43,6 +43,8 @@
 ///////////////////////////////////////////////////////////////////////////
 
 #include "G4SynchrotronRadiation.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 #include "G4EmProcessSubType.hh"
 

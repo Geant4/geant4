@@ -63,6 +63,8 @@
 ////////////////////////////////////////////////////////////////////////
 
 #include "G4ios.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Poisson.hh"
 #include "G4EmProcessSubType.hh"
 

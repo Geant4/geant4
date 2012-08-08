@@ -31,6 +31,7 @@
 #include <complex>
 
 #include "G4TransparentRegXTRadiator.hh"
+#include "G4PhysicalConstants.hh"
 #include "Randomize.hh"
 #include "G4Integrator.hh"
 #include "G4Gamma.hh"

@@ -71,6 +71,8 @@
 
 #include "G4ios.hh"
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTypes.hh"
 #include "G4EmProcessSubType.hh"
 

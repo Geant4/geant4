@@ -36,9 +36,12 @@
 // 28.09.07, V.Ivanchenko general cleanup without change of algorithms
 //
 
-#include "G4Timer.hh"
-
 #include "G4VXTRenergyLoss.hh"
+
+#include "G4Timer.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 #include "G4Poisson.hh"
 #include "G4MaterialTable.hh"
 #include "G4VDiscreteProcess.hh"

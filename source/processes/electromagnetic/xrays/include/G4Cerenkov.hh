@@ -53,6 +53,8 @@
 // Includes
 /////////////
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
 #include "templates.hh"
 #include "Randomize.hh"
@@ -227,7 +229,7 @@ void G4Cerenkov::SetTrackSecondariesFirst(const G4bool state)
 inline
 void G4Cerenkov::SetMaxBetaChangePerStep(const G4double value)
 {
-        fMaxBetaChange = value*perCent;
+        fMaxBetaChange = value*CLHEP::perCent;
 }
 
 inline
