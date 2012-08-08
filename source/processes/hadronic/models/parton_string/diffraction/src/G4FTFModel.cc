@@ -1316,7 +1316,10 @@ Successfull = false; break;                         // 1.07.11
 
             } else
             {
-             Successfull = Successfull || false;
+              //A.R. 25-Jul-2012 : commenting the next line to fix a Coverity
+              //                   "logically dead code".
+              //Successfull = Successfull || false;
+
 //             target->SetStatus(2);
             }
            } 
@@ -1469,8 +1472,13 @@ void G4FTFModel::AjustTargetNucleonForAnnihilation(G4VSplitableHadron *SelectedA
         SelectedTargetNucleon->Set4Momentum(Ptmp);
 //-----------
 
-        G4double DeltaExcitationEnergy=ResidualExcitationEnergy/((G4double) NumberOfHoles);
-
+        //A.R. 25-Jul-2012 : Fix to Covery "Division by zero"
+        //G4double DeltaExcitationEnergy=ResidualExcitationEnergy/((G4double) NumberOfHoles);
+        G4double DeltaExcitationEnergy = 0.0;
+        if ( NumberOfHoles != 0 ) {
+          DeltaExcitationEnergy = ResidualExcitationEnergy / ((G4double) NumberOfHoles);
+        }
+ 
 // Re-definition of the wounded nucleon momenta
         theNucleus->StartLoop();
 	while ((aNucleon = theNucleus->GetNextNucleon()))

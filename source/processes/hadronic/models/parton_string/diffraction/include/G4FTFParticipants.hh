@@ -53,7 +53,6 @@ class G4FTFParticipants : public G4VParticipants
 
   public:
       G4FTFParticipants();
-      G4FTFParticipants(const G4FTFParticipants &right);
       const G4FTFParticipants & operator=(const G4FTFParticipants &right);
       ~G4FTFParticipants();
 
@@ -75,6 +74,9 @@ class G4FTFParticipants : public G4VParticipants
       std::vector<G4InteractionContent *> theInteractions;
       G4V3DNucleus *theProjectileNucleus;
   private:
+
+      //A.R. 25-Jul-2012 Coverity fix : copy constructor becomes private.
+      G4FTFParticipants(const G4FTFParticipants &right);
 
 //      std::vector<G4InteractionContent *> theInteractions;
   

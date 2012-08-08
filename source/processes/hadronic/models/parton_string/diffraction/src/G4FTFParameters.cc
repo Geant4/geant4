@@ -44,7 +44,10 @@
 #include "G4KaonMinus.hh"                      // 31 May 2011
 
 G4FTFParameters::G4FTFParameters()
-{}
+{ 
+  //A.R. 25-Jul-2012 : Coverity fix.
+  FTFxsManager = 0; 
+}
 
 
 G4FTFParameters::~G4FTFParameters()
@@ -55,6 +58,12 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
                                                    G4int      theZ,
                                                    G4double   PlabPerParticle) 
 {
+
+    //A.R. 25-Jul-2012 Coverity fix.
+    FTFXannihilation = 0.0;
+    FTFhNcmsEnergy = 0.0;
+    ProbOfSameQuarkExchange = 0.0;
+
     G4int    ProjectilePDGcode    = particle->GetPDGEncoding();
     G4int    ProjectileabsPDGcode = std::abs(ProjectilePDGcode);
     G4double ProjectileMass       = particle->GetPDGMass();

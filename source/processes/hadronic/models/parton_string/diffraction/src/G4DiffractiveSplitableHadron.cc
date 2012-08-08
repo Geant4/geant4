@@ -76,11 +76,6 @@ G4DiffractiveSplitableHadron::~G4DiffractiveSplitableHadron()
 //        if(Parton[0] != NULL){delete Parton[0]; delete Parton[1];}
 }
 
-const G4DiffractiveSplitableHadron & G4DiffractiveSplitableHadron::operator=(const G4DiffractiveSplitableHadron &)
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4DiffractiveSplitableHadron::operator= meant to not be accessable");
-  return *this;
-}
 
 void G4DiffractiveSplitableHadron::SplitUp()
 {

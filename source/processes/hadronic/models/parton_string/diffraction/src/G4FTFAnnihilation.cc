@@ -1111,19 +1111,19 @@ G4FTFAnnihilation::~G4FTFAnnihilation()
 
 const G4FTFAnnihilation & G4FTFAnnihilation::operator=(const G4FTFAnnihilation &)
 {
-	throw G4HadronicException(__FILE__, __LINE__, "G4FTFAnnihilation = operator meant to be called");
-	return *this;
+	throw G4HadronicException(__FILE__, __LINE__, "G4FTFAnnihilation = operator not meant to be called"); 
+        //return *this;  //A.R. 25-Jul-2012 : fix Coverity
 }
 
 
 int G4FTFAnnihilation::operator==(const G4FTFAnnihilation &) const
 {
-	throw G4HadronicException(__FILE__, __LINE__, "G4FTFAnnihilation == operator meant to be called");
-	return false;
+	throw G4HadronicException(__FILE__, __LINE__, "G4FTFAnnihilation == operator not meant to be called");
+	//return false;  //A.R. 25-Jul-2012 : fix Coverity
 }
 
 int G4FTFAnnihilation::operator!=(const G4FTFAnnihilation &) const
 {
-	throw G4HadronicException(__FILE__, __LINE__, "G4DiffractiveExcitation != operator meant to be called");
-	return true;
+	throw G4HadronicException(__FILE__, __LINE__, "G4DiffractiveExcitation != operator not meant to be called");
+	//return true;  //A.R. 25-Jul-2012 : fix Coverity
 }
