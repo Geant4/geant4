@@ -45,8 +45,11 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
-#include "Randomize.hh"
+
 #include "G4SPSAngDistribution.hh"
+
+#include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
 
 G4SPSAngDistribution::G4SPSAngDistribution()
   : Theta(0.), Phi(0.)

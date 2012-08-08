@@ -29,6 +29,7 @@
 //
 
 #include "G4RayShooter.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4PrimaryParticle.hh"
 #include "G4Event.hh"
 #include "G4ParticleTable.hh"

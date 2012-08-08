@@ -44,10 +44,11 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
-#include "Randomize.hh"
-//#include <cmath>
 
 #include "G4SPSEneDistribution.hh"
+
+#include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
 
 G4SPSEneDistribution::G4SPSEneDistribution()
   : particle_definition(0), eneRndm(0), Splinetemp(0)

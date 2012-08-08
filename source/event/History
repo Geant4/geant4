@@ -17,13 +17,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-May 24th, 2012 G.Cosmo (event-V09-05-05)
+July 5th, 2012, G.Cosmo (event-V09-05-07)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+July 4th, 2012, J.Allison (event-V09-05-06)
+- G4TrajectoryContainer: added private copy constructor and assignment
+  operator in attempt to keep Coverity quiet.
+
+May 24th, 2012, G.Cosmo (event-V09-05-05)
 - Fixed trivial cases of variable shadowing.
 
 April 2nd, 2012, L.Desorgher (event-V09-05-04)
 - Correction for orthogonalization of rotation matrix in  
-    G4SPSPosDistribution::GenerateRotationMatrices() as suggested by
-    Joaquin Phoenix (bug report 1299)
+  G4SPSPosDistribution::GenerateRotationMatrices() as suggested by
+  Joaquin Phoenix (bug report #1299)
 
 March 8th, 2012, M.Asai (event-V09-05-03)
 - Correct the location of G4Exception to the constructor of
@@ -32,9 +40,10 @@ March 8th, 2012, M.Asai (event-V09-05-03)
 March 6th, 2012, M.Asai (event-V09-05-02)
 - Add dummy copy constructor and = operator to G4Event. (bug report 1277)
 
-January 12th, 2012, LDesorgher (event-V09-05-01)
-- Correction for settings of sigmaX and sigmaY in G4SPSPosDistribution::SetBeamSigmaInR 
-  as suggested by  Guan, Fada (bug report 1278).
+January 12th, 2012, L.Desorgher (event-V09-05-01)
+- Correction for settings of sigmaX and sigmaY in
+  G4SPSPosDistribution::SetBeamSigmaInR () as suggested by
+  Guan, Fada (bug report #1278).
   
 November 10th, 2011, M.Asai (event-V09-04-09)
 - Fixing Coverity warnings.

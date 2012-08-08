@@ -44,12 +44,14 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
+
+#include "G4SPSPosDistribution.hh"
+
+#include "G4PhysicalConstants.hh"
 #include "Randomize.hh"
 #include "G4TransportationManager.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PhysicalVolumeStore.hh"
-
-#include "G4SPSPosDistribution.hh"
 
 G4SPSPosDistribution::G4SPSPosDistribution()
   : posRndm(0)

@@ -30,6 +30,7 @@
 
 // G4ParticleGun
 #include "G4ParticleGun.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4PrimaryParticle.hh"
 #include "G4ParticleGunMessenger.hh"
 #include "G4Event.hh"

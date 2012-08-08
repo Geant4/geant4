@@ -29,6 +29,7 @@
 //
 
 #include "G4PrimaryTransformer.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Event.hh"
 #include "G4PrimaryVertex.hh"
 #include "G4ParticleDefinition.hh"

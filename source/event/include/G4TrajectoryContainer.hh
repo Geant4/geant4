@@ -53,6 +53,11 @@ class G4TrajectoryContainer
     G4TrajectoryContainer();
     ~G4TrajectoryContainer();
 
+  private:
+    G4TrajectoryContainer(const G4TrajectoryContainer&);
+    G4TrajectoryContainer& operator=(const G4TrajectoryContainer&);
+
+  public:
     inline void *operator new(size_t);
     inline void operator delete(void* anEvent);
 
