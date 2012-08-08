@@ -43,19 +43,19 @@
 #include "G4ParticleDefinition.hh"
 #include <iostream>
 
+#include "G4CrossSectionDataSetRegistry.hh"
 
 G4ChipsElasticModel::G4ChipsElasticModel() : G4HadronElastic("hElasticCHIPS")
 {
   if(!pxsManager)
   {
-    pxsManager    = new G4ChipsProtonElasticXS();
-    nxsManager    = new G4ChipsNeutronElasticXS();
-
-    PBARxsManager = new G4ChipsAntiBaryonElasticXS(); // Uzhi
-    PIPxsManager  = new G4ChipsPionPlusElasticXS();   // Uzhi
-    PIMxsManager  = new G4ChipsPionMinusElasticXS();  // Uzhi
-    KPxsManager   = new G4ChipsKaonPlusElasticXS();   // Uzhi
-    KMxsManager   = new G4ChipsKaonMinusElasticXS();  // Uzhi
+    pxsManager    = (G4ChipsProtonElasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsProtonElasticXS::Default_Name());
+    nxsManager    = (G4ChipsNeutronElasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsNeutronElasticXS::Default_Name());
+    PBARxsManager = (G4ChipsAntiBaryonElasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsAntiBaryonElasticXS::Default_Name());
+    PIPxsManager  = (G4ChipsPionPlusElasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsPionPlusElasticXS::Default_Name());
+    PIMxsManager  = (G4ChipsPionMinusElasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsPionMinusElasticXS::Default_Name());
+    KPxsManager   = (G4ChipsKaonPlusElasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonPlusElasticXS::Default_Name());
+    KMxsManager   = (G4ChipsKaonMinusElasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonMinusElasticXS::Default_Name());
   }
   //Description();
 }
