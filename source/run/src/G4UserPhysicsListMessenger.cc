@@ -39,8 +39,11 @@
 //        add dumpOrderingParam command    3 May. 2011 by H.Kurashige
 // ------------------------------------------------------------
 
+#include <sstream>
 
 #include "G4UserPhysicsListMessenger.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4VUserPhysicsList.hh"
 #include "G4PhysicsListHelper.hh"
 #include "G4UIdirectory.hh"
@@ -51,8 +54,6 @@
 #include "G4ParticleTable.hh"
 #include "G4ios.hh"
 #include "G4Tokenizer.hh"           
-
-#include <sstream>
 
 G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pParticleList):thePhysicsList(pParticleList)
 {

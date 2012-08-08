@@ -35,6 +35,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "G4AdjointPrimaryGeneratorAction.hh"
+
+#include "G4PhysicalConstants.hh"
 #include "G4Event.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"

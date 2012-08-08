@@ -48,8 +48,10 @@
 //           SetCuts is not 'pure virtual' any more 
 // ------------------------------------------------------------
 
-#include "globals.hh"
 #include "G4VUserPhysicsList.hh"
+
+#include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4PhysicsListHelper.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
