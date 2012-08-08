@@ -69,6 +69,10 @@ public:
 
 private:
 
+  // hide assignment operator as private 
+  G4WHadronElasticProcess& operator=(const G4WHadronElasticProcess &right);
+  G4WHadronElasticProcess(const G4WHadronElasticProcess& );
+
   const G4ParticleDefinition* theNeutron;
 
   G4double        lowestEnergy;
