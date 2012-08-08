@@ -71,6 +71,7 @@
 ////////////////////////////////////////////////////////////////////////
 
 #include "G4ios.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4OpProcessSubType.hh"
 
 #include "G4OpBoundaryProcess.hh"

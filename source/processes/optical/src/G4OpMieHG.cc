@@ -40,9 +40,9 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
-#include "G4OpProcessSubType.hh"
-
 #include "G4OpMieHG.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4OpProcessSubType.hh"
 
 G4OpMieHG::G4OpMieHG(const G4String& processName, G4ProcessType type)
            : G4VDiscreteProcess(processName, type)

@@ -44,10 +44,13 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
+#include "G4OpWLS.hh"
+
 #include "G4ios.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4OpProcessSubType.hh"
 
-#include "G4OpWLS.hh"
 #include "G4WLSTimeGeneratorProfileDelta.hh"
 #include "G4WLSTimeGeneratorProfileExponential.hh"
 

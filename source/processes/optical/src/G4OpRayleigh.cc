@@ -57,10 +57,12 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
-#include "G4ios.hh"
-#include "G4OpProcessSubType.hh"
-
 #include "G4OpRayleigh.hh"
+
+#include "G4ios.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4OpProcessSubType.hh"
 
 /////////////////////////
 // Class Implementation
