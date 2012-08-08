@@ -30,6 +30,8 @@
 // G4VRML1SceneHandlerFunc.icc
 // Satoshi Tanaka & Yasuhide Sawada
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4VisManager.hh"
 
 //#define DEBUG_SCENE_FUNC
@@ -111,7 +113,7 @@ void G4VRML1SCENEHANDLER::AddSolid(const G4Tubs& tubs)
 	const G4double dp = tubs.GetDPhi(); // angle interval
 
 	// Send data
-	if ( r == 0.0 && dp >= 360. * deg ) {
+	if ( r == 0.0 && dp >= 360. * CLHEP::deg ) {
 		// Send a built-in VRML node (Cylinder)
 		fDest << "Separator {" << "\n";
 		SendMatrixTransformNode( fObjectTransformation );
@@ -152,7 +154,7 @@ void G4VRML1SCENEHANDLER::AddSolid(const G4Cons& cons)
 	const G4double dp = cons.GetDPhi();  // angle width
 
 	// Send data
-	if ( r1 == 0.0 && r2 == 0.0 && R1 == R2 && dp >= 360. * deg) {
+	if ( r1 == 0.0 && r2 == 0.0 && R1 == R2 && dp >= 360. * CLHEP::deg) {
 		// Send a built-in VRML node (Cylinder)
 		fDest << "Separator {" << "\n";
 		SendMatrixTransformNode( fObjectTransformation );
@@ -218,7 +220,7 @@ void G4VRML1SCENEHANDLER::AddSolid(const G4Sphere& sphere)
 	G4double  rmin   = sphere.GetRmin  () ;
 
 	// Send data
-	if ( (dphi >= 360. * deg) && (dtheta >= 180. * deg) && (rmin == 0.0)  ) {
+	if ( (dphi >= 360. * CLHEP::deg) && (dtheta >= 180. * CLHEP::deg) && (rmin == 0.0)  ) {
 		// Send a built-in VRML node (Sphere)
 		fDest << "Separator {" << "\n";
 		SendMatrixTransformNode( fObjectTransformation );
@@ -556,7 +558,7 @@ void G4VRML1SCENEHANDLER::SendCubeNode(G4double w, G4double h, G4double d)
 void G4VRML1SCENEHANDLER::SendCylinderNode(G4double R, G4double h)
 {
 	fDest << "\t\t" << "Transform {" << "\n";
-	fDest << "\t\t\t" << "rotation 1 0 0 " << (90. * deg) << "\n";
+	fDest << "\t\t\t" << "rotation 1 0 0 " << (90. * CLHEP::deg) << "\n";
 	fDest << "\t\t" << "}" << "\n";
 
 	fDest << "\t\t" << "Cylinder {" << "\n";

@@ -26,6 +26,30 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+17th July 2012  John Allison  (visman-V09-05-25)
+- Tagged.
+
+16th July 2012  John Allison
+- G4VisCommandsViewer.cc: /vis/viewer/copyViewFrom:
+  o Added LightpointDirection and LightsMoveWithCamera to list of copied
+    view parameters.
+- G4VSceneHandler::Begin/EndPrimitives2D:
+  o Moved fProcessing2D from G4OpenGLSceneHandler.
+  o Now may be used by all and any driver.
+
+15th July 2012  John Allison  (visman-V09-05-24, needs modeling-V09-05-09)
+- G4VisCommandsSceneAdd: Re-implemented:
+  o /vis/scene/add/arrow
+  o /vis/scene/add/axes
+
+13th July 2012  John Allison
+- G4VisCommandsSceneAdd.cc/hh:
+  o Re-implemented /vis/scene/add/axes with annotated arrows.
+
+5th July 2012  Gabriele Cosmo  (visman-V09-05-23)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
 15th June 2012  John Allison
 - G4VSceneHandler.cc: Spelling correction in comment.
 

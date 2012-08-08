@@ -31,6 +31,7 @@
 
 #include "G4OpenGLXmViewerMessenger.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4OpenGLXmViewer.hh"
 #include "G4OpenGLXmSliderBar.hh"
 

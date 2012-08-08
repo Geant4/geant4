@@ -17,6 +17,65 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17th July 2012  John Allison  (opengl-V09-05-27)
+- Fix Linux compiler warnings.
+
+17th July 2012 Laurent Garnier
+- G4OpenGLQtViewer.cc :
+ o Fix a problem with Scene tree on mix with some transparent and non physical
+   volumes.
+ o Moving transparency slider does now do not change non physical volume hidden/visible.
+ o Sort item in scene tree
+
+17th July 2012  John Allison  (opengl-V09-05-26, co-works interfaces-V09-05-08)
+- Tagged.
+- Included Laurent's fix for text layout.
+
+17th July 2012 Laurent Garnier
+- G4OpenGLQtViewer.cc :
+ o Fix text alignement problem
+
+16th July 2012 Laurent Garnier
+- G4OpenGLQtViewer : 
+ o Bug fix for transparent objects in scene tree
+ o Bug fix when closing a viewer on scene tree
+ o bug fix when playing with scene tree and active tab was an immediate viewer
+
+16th July 2012  John Allison
+- G4OpenGLXViewer::DrawText:
+  o Removed glDisable (GL_DEPTH_TEST); glDisable (GL_LIGHTING).
+  o Now 3D text is hidden, when appropiate, by volumes drawn in surface mode.
+  o (The depth testing of 2D objects, including 2D text, is dealt with in
+     the scene handler.)
+- G4OpenGLSceneHandler::Begin/EndPrimitives2D:
+  o Moved fProcessing2D to G4VSceneHandler.
+  o Now may be used by all and any driver.
+
+13th July 2012 Laurent Garnier
+- G4OpenGLQtViewer : Updates in Scene tree viewer algorithm 
+  (speedup and fix transparency bug of 11th July).
+
+11th July 2012 Laurent Garnier  (opengl-V09-05-25 co-works interfaces-V09-05-08)
+- G4OpenGLStoredQtSceneHandler.cc, G4OpenGLStoredQtViewer.cc : change/rename fonction
+- G4OpenGLQtViewer : 
+ o Change Scene tree viewer algorithm (still some bug in tree on transparent objects)
+ o Move scene tree layout to "interfaces", this fix a "bad layout problem"
+   some tags ago
+
+5th July 2012  Gabriele Cosmo  (opengl-V09-05-24)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+3rd July 2012  John Allison  (opengl-V09-05-23)
+- Fixed some Coverity warnings.
+
+2nd July 2012  John Allison  (opengl-V09-05-22)
+- G4OpenGLStoredViewer.cc:
+  o Important bug-fix for non-display-list text (i.e., Qt).
+
+27th June 2012  John Allison
+- G4OpenGLStoredViewer.cc: Tidy.
+
 18th June 2012  John Allison  (opengl-V09-05-21)
 - G4OpenGLStoredViewer::DrawDisplayLists:
   o For special case of text that must be treated without a display

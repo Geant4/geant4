@@ -251,7 +251,7 @@ void G4OpenGLStoredQtViewer::paintGL()
   fHasToRepaint = false;
 
   // update the view component tree
-  displayViewComponentTree();
+  displaySceneTreeComponent();
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredQtViewer::paintGL ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ready %d\n",fReadyToPaint);
 #endif

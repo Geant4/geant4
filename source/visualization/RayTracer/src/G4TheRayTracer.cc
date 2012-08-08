@@ -32,6 +32,7 @@
 
 
 #include "G4TheRayTracer.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4EventManager.hh"
 #include "G4RTMessenger.hh"
 #include "G4RayShooter.hh"

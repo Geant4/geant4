@@ -73,9 +73,16 @@ class G4OpenGLQtViewer: public QObject, virtual public G4OpenGLViewer {
 
   Q_OBJECT
 
+    typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
+    typedef std::vector<PVNodeID> PVPath;
+
 public:
   G4OpenGLQtViewer (G4OpenGLSceneHandler& scene);
   virtual ~G4OpenGLQtViewer ();
+private:
+  G4OpenGLQtViewer (const G4OpenGLQtViewer&);
+  G4OpenGLQtViewer& operator= (const G4OpenGLQtViewer&);
+public:
   virtual void updateQWidget()=0;
   QString setEncoderPath(QString path);
   QString getEncoderPath();
@@ -110,7 +117,6 @@ public:
                              G4PhysicalVolumeModel* pPVModel,
                              int currentPVPOIndex);
   void addNonPVSceneTreeElement(const G4String model,
-                                G4VModel* fpModel,
                                 int currentPVPOIndex,
                                 std::string modelDescription,
                                 const G4Visible& visible);
@@ -133,7 +139,7 @@ protected:
   void moveScene(float, float, float,bool);
   void FinishView();
   void updateKeyModifierState(Qt::KeyboardModifiers);
-  void displayViewComponentTree();
+  void displaySceneTreeComponent();
 
 protected:
   QGLWidget* fWindow;
@@ -169,38 +175,39 @@ private:
                                  unsigned int currentIndex,
                                  int currentPVPOIndex);
   void setCheckComponent(QTreeWidgetItem* item,bool check);
-  void initViewComponent();
+  void initSceneTreeComponent();
   bool parseAndCheckVisibility(QTreeWidgetItem * treeNode,int POindex);
-  QTreeWidgetItem* addTreeWidgetItem(std::vector < G4PhysicalVolumeModel::G4PhysicalVolumeNodeID > fullPath,
-                                     G4VModel* fpModel,
+  QTreeWidgetItem* createTreeWidgetItem(PVPath fullPath,
                                      QString name,
-                                     QString copyNb,
-                                     QString POIndex,
+                                     int copyNb,
+                                     int POIndex,
                                      QString logicalName,
                                      Qt::CheckState state,
                                      QTreeWidgetItem * treeNode,
                                      G4Colour color);
   QString getModelShortName(G4String modelShortName);
-  void updateTreeWidgetInSceneTree(QTreeWidgetItem* item,G4VModel* fpModel);
   void cloneSceneTree(QTreeWidgetItem* rootItem, QTreeWidgetItem* parent);
   void changeDepthOnSceneTreeItem(double lookForDepth,double currentDepth,QTreeWidgetItem* item);
+  void updateQuickVisibilityMap(int POindex,Qt::CheckState checkState);
+  bool isSameSceneTreeElement(QTreeWidgetItem* parentOldItem,QTreeWidgetItem* parentNewItem);
+  void changeOpenCloseVisibleHiddenSelectedSceneTreeElement(QTreeWidgetItem* subItem);
+  bool isPVVolume(QTreeWidgetItem* item);
 
   QMenu *fContextMenu;
-
   mouseActions fMouseAction; // 1: rotate 2:move 3:pick 4:shortcuts 
   QPoint fLastPos1;
   QPoint fLastPos2;
   QPoint fLastPos3;
 
-  /** delta of depth move. This delta is put in % of the scene view */
+  // delta of depth move. This delta is put in % of the scene view
   G4double fDeltaDepth;
-  /** delta of zoom move. This delta is put in % of the scene view */
+  // delta of zoom move. This delta is put in % of the scene view
   G4double fDeltaZoom;
-  /** To ensure key event are keep one by one */
+  // To ensure key event are keep one by one
   bool fHoldKeyEvent;
-  /** To ensure move event are keep one by one */
+  // To ensure move event are keep one by one
   bool fHoldMoveEvent;
-  /** To ensure rotate event are keep one by one */
+  // To ensure rotate event are keep one by one
   bool fHoldRotateEvent;
   bool fAutoMove;
   QString fEncoderPath;
@@ -225,27 +232,50 @@ private:
   int fNbMaxFramesPerSec;
   float fNbMaxAnglePerSec;
   int fLaunchSpinDelay;
-  QWidget* fUIViewComponentsTBWidget;
-  QVBoxLayout* fLayoutViewComponentsTBWidget;
+  QWidget* fUISceneTreeComponentsTBWidget;
   bool fNoKeyPress;
   bool fAltKeyPress;
   bool fControlKeyPress;
   bool fShiftKeyPress;
   bool fBatchMode;
-  bool fCheckViewComponentSignalLock;
-  QTreeWidget * fViewerComponentTreeWidget;
-  QTreeWidget * fOldViewerComponentTreeWidget;
+  bool fCheckSceneTreeComponentSignalLock;
+  QTreeWidget* fSceneTreeComponentTreeWidget;
+  QWidget* fSceneTreeWidget;
+  bool fPVRootNodeCreate;
+
+
+  QTreeWidget* fOldSceneTreeOpenComponentTreeWidget;
+  QTreeWidget* fOldSceneTreeCloseComponentTreeWidget;
+
+  QTreeWidget* fOldSceneTreeVisibleComponentTreeWidget;
+  QTreeWidget* fOldSceneTreeHiddenComponentTreeWidget;
+
+  QTreeWidget* fOldSceneTreeSelectedComponentTreeWidget;
+
+  unsigned int fNumberOldSceneTreeOpenComponent;
+  unsigned int fNumberOldSceneTreeCloseComponent;
+  unsigned int fNumberOldSceneTreeVisibleComponent;
+  unsigned int fNumberOldSceneTreeHiddenComponent;
+  unsigned int fNumberOldSceneTreeSelectedComponent;
+
+
+
   int fNbRotation ;
   int fTimeRotation;
   QString fTouchableVolumes;
   QDialog* fTreeInfoDialog;
   QDialog* fShortcutsDialog;
   QTextEdit *fTreeInfoDialogInfos;
-  QPushButton * fTreeViewerButtonApply;
+  QPushButton * fSceneTreeButtonApply;
   QTextEdit *fShortcutsDialogInfos;
-  QSlider* fSceneDepthSlider;
-  std::map <int, std::vector < G4PhysicalVolumeModel::G4PhysicalVolumeNodeID > > fTreeItemModels;
+  QSlider* fSceneTreeDepthSlider;
+  std::map <int, PVPath > fTreeItemModels;
+  std::map <int, PVPath > fOldTreeItemModels;
+  std::map <int, Qt::CheckState> fSceneTreeQuickVisibilityMap;
   unsigned int fSceneTreeDepth;
+  QTreeWidgetItem* fModelShortNameItem;
+  int fNumber;
+  int fMaxPOindexInserted;
 
 public Q_SLOTS :
   void startPauseVideo();
@@ -278,8 +308,8 @@ private Q_SLOTS :
   void processEncodeFinished();
   void processLookForFinished();
   void processEncodeStdout();
-  void viewComponentItemChanged(QTreeWidgetItem* item, int id);
-  void viewComponentSelected();
+  void sceneTreeComponentItemChanged(QTreeWidgetItem* item, int id);
+  void sceneTreeComponentSelected();
   void changeTransparencyOnItem(int);
   void changeDepthInSceneTree(int);
   // Only use for Qt>4.0

@@ -38,6 +38,7 @@
 
 #include "G4OpenGLXmViewer.hh"
 
+#include "G4PhysicalConstants.hh"
 #include "G4Scene.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"

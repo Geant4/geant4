@@ -20,6 +20,10 @@ committal in the CVS repository !
 History file for visualization/HepRep sub-category
 --------------------------------------------------
 
+5th July 2012  Gabriele Cosmo  (vis-HepRep-V09-05-04)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
 10th June 2012  John Allison  (vis-HepRep-V09-05-03)
 - Fixed shadowing in the following files:
   o include/cheprep/AbstractXMLWriter.h

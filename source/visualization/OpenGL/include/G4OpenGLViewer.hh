@@ -60,6 +60,12 @@ public:
 protected:
   G4OpenGLViewer (G4OpenGLSceneHandler& scene);
   virtual ~G4OpenGLViewer ();
+
+private:
+  G4OpenGLViewer(const G4OpenGLViewer&);
+  G4OpenGLViewer& operator= (const G4OpenGLViewer&);
+
+protected:
   void SetView    ();
   void ResetView ();
 

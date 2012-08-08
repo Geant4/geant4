@@ -37,6 +37,7 @@
 
 #include "G4OpenGLStoredViewer.hh"
 
+#include "G4PhysicalConstants.hh"
 #include "G4OpenGLStoredSceneHandler.hh"
 #include "G4Text.hh"
 #include "G4Circle.hh"
@@ -173,7 +174,6 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 	  }
 	  if (isPicking) glLoadName(po.fPickName);
 	  if (po.fpG4TextPlus) {
-	    glPushMatrix();
 	    if (po.fpG4TextPlus->fProcessing2D) {
 	      glMatrixMode (GL_PROJECTION);
 	      glPushMatrix();
@@ -185,8 +185,8 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 	    }
 	    G4OpenGLTransform3D oglt (po.fTransform);
 	    glMultMatrixd (oglt.GetGLMatrix ());
-	    static_cast<G4OpenGLSceneHandler&>(fSceneHandler).
-	      G4OpenGLSceneHandler::AddPrimitive(po.fpG4TextPlus->fG4Text);
+	    fOpenGLSceneHandler.G4OpenGLSceneHandler::AddPrimitive
+	      (po.fpG4TextPlus->fG4Text);
 	    if (po.fpG4TextPlus->fProcessing2D) {
 	      glMatrixMode (GL_PROJECTION);
 	      glPopMatrix();
@@ -237,8 +237,8 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 	      glMultMatrixd (oglt.GetGLMatrix ());
 	      const G4Colour& c = to.fColour;
 	      glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
-	      static_cast<G4OpenGLSceneHandler&>(fSceneHandler).
-		G4OpenGLSceneHandler::AddPrimitive(to.fpG4TextPlus->fG4Text);
+	      fOpenGLSceneHandler.G4OpenGLSceneHandler::AddPrimitive
+		(to.fpG4TextPlus->fG4Text);
 	      if (to.fpG4TextPlus->fProcessing2D) {
 		glMatrixMode (GL_PROJECTION);
 		glPopMatrix();
@@ -302,8 +302,7 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 			      fDisplayHeadTimeGreen,
 			      fDisplayHeadTimeBlue));
     headTimeText.SetVisAttributes(&visAtts);
-    static_cast<G4OpenGLSceneHandler&>(fSceneHandler).
-      G4OpenGLSceneHandler::AddPrimitive(headTimeText);
+    fOpenGLSceneHandler.G4OpenGLSceneHandler::AddPrimitive(headTimeText);
     glMatrixMode (GL_PROJECTION);
     glPopMatrix();
     glMatrixMode (GL_MODELVIEW);
@@ -356,16 +355,10 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 	glColor3d(fDisplayLightFrontRed,
 		  fDisplayLightFrontGreen,
 		  fDisplayLightFrontBlue);
-	static_cast<G4OpenGLSceneHandler&>(fSceneHandler).
-	  G4OpenGLSceneHandler::AddPrimitive(lightFront);
+	fOpenGLSceneHandler.G4OpenGLSceneHandler::AddPrimitive(lightFront);
       }
     }
   }
-
-  /***
-  // Restore current flag...
-  fG4OpenGLStoredSceneHandler.fMemoryForDisplayLists = tempMFDL;
-  ***/
 }
 
 #endif

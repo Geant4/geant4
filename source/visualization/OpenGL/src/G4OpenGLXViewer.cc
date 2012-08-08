@@ -384,8 +384,6 @@ void G4OpenGLXViewer::DrawText(const G4Text& g4text)
     // Set position for raster-style drawers (X, Xm)
     glRasterPos3d(position.x(),position.y(),position.z());
 
-    glDisable (GL_DEPTH_TEST);
-    glDisable (GL_LIGHTING);
     glPushAttrib(GL_LIST_BIT);
 
     // Calculate move for centre and right adjustment

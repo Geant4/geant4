@@ -20,6 +20,14 @@ committal in the CVS repository !
 History file for visualization/modeling
 ---------------------------------------
 
+15th July 2012  John Allison  (modeling-V09-05-09)
+- Introduced G4ArrowModel.
+- G4AxesModel: Re-implemented (uses G4ArrowModel).
+
+5th July 2012  Gabriele Cosmo  (modeling-V09-05-08)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
 7th June 2012  John Allison  (modeling-V09-05-07)
 - Shadow clean.
 

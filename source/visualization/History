@@ -24,13 +24,69 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+17th July 2012  John Allison  (vis-V09-05-33, co-works interfaces-V09-05-08
+- opengl-V09-05-27:
+  o Fix Linux compiler warnings.
+  o More Qt improvements.
+
+17th July 2012  John Allison  (vis-V09-05-32, co-works interfaces-V09-05-08)
+- visman-V09-05-25:
+  o Improved /vis/viewer/copyViewFrom: added lights direction and move.
+  o Moved fProcessing2D from G4OpenGLSceneHandler.
+- opengl-V09-05-26, co-works interfaces-V09-05-08:
+  o Fixed text layout in Qt.
+  o Improvements in Qt viewer.
+  o Improvements in X viewers:
+    . Now 3D text is hidden, when appropiate, by volumes drawn in surface mode.
+  o Moved fProcessing2D to G4VSceneHandler.
+  o Now may be used by all and any driver.
+
+13th July 2012 Laurent Garnier
+- G4OpenGLQtViewer : Updates in Scene tree viewer algorithm 
+  (speedup and fix transparency bug of 11th July).
+
+15th July 2012  John Allison
+- modeling-V09-05-09:
+  o Introduced G4ArrowModel.
+  o G4AxesModel: Re-implemented (uses G4ArrowModel).
+- visman-V09-05-24: Re-implemented:
+  o /vis/scene/add/arrow
+  o /vis/scene/add/axes
+
+11th July 2012 Laurent Garnier  (vis-V09-05-31, co-works interfaces-V09-05-08)
+- G4OpenGLQtViewer : Change Scene tree viewer algorithm
+
+9th July 2012  John Allison  (vis-V09-05-30)
+- Tagged.
+
+5th July 2012  Gabriele Cosmo
+- modeling-V09-05-08, visman-V09-05-23, opengl-V09-05-24,
+  raytracer-V09-05-05, DAWN-V09-05-04,  VRML-V09-05-04,
+  vis-HepRep-V09-05-04, gMocren-V09-05-04, :
+  o Explicitly use inclusion of headers for system of units and physical
+    constants, in plan to remove implicit inclusion from globals.hh.
+
+3rd July 2012  John Allison
+- raytracer-V09-05-04:
+  o Fixed some Coverity warnings.
+
+3rd July 2012  John Allison  (vis-V09-05-29)
+- opengl-V09-05-23, openinventor-V09-05-05:
+  o Fixed some Coverity warnings.
+- raytracer-V09-05-03:
+  o Tagged a fix: uses std::sqrt.
+
+2nd July 2012  John Allison
+- opengl-V09-05-22:
+  o Important bug-fix for non-display-list text (i.e., Qt).
+
 18th June 2012  John Allison  (vis-V09-05-28)
 - opengl-V09-05-21:
   o Fix drawing of non-display-list text.
 
 16th June 2012  John Allison  (vis-V09-05-27)
 - opengl-V09-05-20:
-  o Fixes drawing of trajectories when no memory fro display lists.
+  o Fixes drawing of trajectories when no memory for display lists.
   o Fixes cases of extra drawing, causing loss of trajectories.
 - opengl-V09-05-19:
   o Added /vis/ogl/set/eventsDrawInterval.

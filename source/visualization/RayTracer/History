@@ -24,6 +24,16 @@ committal in the CVS repository !
 History file for Ray Tracer category
 ---------------------------------------
 
+5th July 2012  Gabriele Cosmo  (raytracer-V09-05-05)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+3rd July 2012  John Allison  (raytracer-V09-05-04)
+- Fixed some Coverity warnings.
+
+3rd July 2012  John Allison  (raytracer-V09-05-03)
+- Tagged a fix: uses std::sqrt.
+
 8th June 2012  John Allison  (raytracer-V09-05-02)
 - Shadow clean.
 

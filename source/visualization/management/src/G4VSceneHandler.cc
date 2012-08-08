@@ -84,6 +84,7 @@
 #include "G4Transform3D.hh"
 #include "G4AttHolder.hh"
 #include "G4AttDef.hh"
+#include "G4PhysicalConstants.hh"
 
 G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4String& name):
   fSystem                (system),
@@ -97,6 +98,7 @@ G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4S
 					  // G4VisManager.cc).
   fReadyForTransients    (true),  // Only false while processing scene.
   fProcessingSolid       (false),
+  fProcessing2D          (false),
   fpModel                (0),
   fNestingDepth          (0),
   fpVisAttribs           (0)
@@ -173,6 +175,7 @@ void G4VSceneHandler::BeginPrimitives2D
        "visman0005", FatalException,
        "Nesting detected. It is illegal to nest Begin/EndPrimitives.");
   fObjectTransformation = objectTransformation;
+  fProcessing2D = true;
 }
 
 void G4VSceneHandler::EndPrimitives2D () {
@@ -184,6 +187,7 @@ void G4VSceneHandler::EndPrimitives2D () {
     fTransientsDrawnThisEvent = true;
     fTransientsDrawnThisRun = true;
   }
+  fProcessing2D = false;
 }
 
 void G4VSceneHandler::BeginModeling () {

@@ -64,13 +64,13 @@
 #include "G4Scene.hh"
 #include "G4VisExtent.hh"
 #include "G4AttHolder.hh"
+#include "G4PhysicalConstants.hh"
 
 G4OpenGLSceneHandler::G4OpenGLSceneHandler (G4VGraphicsSystem& system,
 			      G4int id,
 			      const G4String& name):
   G4VSceneHandler (system, id, name),
   fPickName(0),
-  fProcessing2D (false),
   // glFlush take about 90% time.  Dividing glFlush number by 100 will
   // change the first vis time from 100% to 10+90/100 = 10,9%.
   fEventsDrawInterval(1),
@@ -152,12 +152,10 @@ void G4OpenGLSceneHandler::BeginPrimitives2D
 (const G4Transform3D& objectTransformation)
 {
   G4VSceneHandler::BeginPrimitives2D (objectTransformation);
-  fProcessing2D = true;
 }
 
 void G4OpenGLSceneHandler::EndPrimitives2D ()
 {
-  fProcessing2D = false;
   G4VSceneHandler::EndPrimitives2D ();
 }
 
@@ -199,11 +197,12 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
     fpViewer -> GetApplicableVisAttributes (line.GetVisAttributes ());
 
   G4double lineWidth = GetLineWidth(pVA);
-  // Need access to method in G4OpenGLViewer.  static_cast doesn't work
-  // with a virtual base class, so use dynamic_cast.  No need to test
-  // the outcome since viewer is guaranteed to be a G4OpenGLViewer.
+  // Need access to method in G4OpenGLViewer.  static_cast doesn't
+  // work with a virtual base class, so use dynamic_cast.  No need to
+  // test the outcome since viewer is guaranteed to be a
+  // G4OpenGLViewer, but test it anyway to keep Coverity happy.
   G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
-  pGLViewer->ChangeLineWidth(lineWidth);
+  if (pGLViewer) pGLViewer->ChangeLineWidth(lineWidth);
 
   glBegin (GL_LINE_STRIP);
   for (G4int iPoint = 0; iPoint < nPoints; iPoint++) {
@@ -237,11 +236,12 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
     fpViewer -> GetApplicableVisAttributes (polymarker.GetVisAttributes ());
 
   G4double lineWidth = GetLineWidth(pVA);
-  // Need access to method in G4OpenGLViewer.  static_cast doesn't work
-  // with a virtual base class, so use dynamic_cast.  No need to test
-  // the outcome since viewer is guaranteed to be a G4OpenGLViewer.
+  // Need access to method in G4OpenGLViewer.  static_cast doesn't
+  // work with a virtual base class, so use dynamic_cast.  No need to
+  // test the outcome since viewer is guaranteed to be a
+  // G4OpenGLViewer, but test it anyway to keep Coverity happy.
   G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
-  pGLViewer->ChangeLineWidth(lineWidth);
+  if (pGLViewer) pGLViewer->ChangeLineWidth(lineWidth);
 
   G4VMarker::FillStyle style = polymarker.GetFillStyle();
 
@@ -339,7 +339,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
 void G4OpenGLSceneHandler::AddPrimitive (const G4Text& text) {
   // Pass to specific viewer via virtual function DrawText.
   G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
-  pGLViewer->DrawText(text);
+  if (pGLViewer) pGLViewer->DrawText(text);
 }
 
 void G4OpenGLSceneHandler::AddPrimitive (const G4Circle& circle) {

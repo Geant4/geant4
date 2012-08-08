@@ -47,6 +47,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/tracking/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4modeling
     HEADERS
+        G4ArrowModel.hh
         G4AttFilterUtils.hh
         G4AttValueFilterT.hh
         G4AttributeFilterT.hh
@@ -95,6 +96,7 @@ GEANT4_DEFINE_MODULE(NAME G4modeling
         G4VisTrajContext.hh
         G4VisTrajContext.icc
     SOURCES
+        G4ArrowModel.cc
         G4AttFilterUtils.cc
         G4AxesModel.cc
         G4BoundingSphereScene.cc

@@ -20,6 +20,9 @@ committal in the CVS repository !
 History file for visualization/OpenInventor
 -------------------------------------------
 
+3rd July 2012  John Allison  (openinventor-V09-05-05)
+- Fixed some Coverity warnings.
+
 8th June 2012  John Allison  (openinventor-V09-05-04)
 - Shadow clean.
 

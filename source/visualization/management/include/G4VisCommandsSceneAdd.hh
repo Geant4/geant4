@@ -52,17 +52,6 @@ public:
 private:
   G4VisCommandSceneAddArrow (const G4VisCommandSceneAddArrow&);
   G4VisCommandSceneAddArrow& operator = (const G4VisCommandSceneAddArrow&);
-  struct Arrow {
-    Arrow(G4double x1, G4double y1, G4double z1,
-	  G4double x2, G4double y2, G4double z2,
-	  G4double width, const G4Colour& colour);
-    ~Arrow();
-    void operator()(G4VGraphicsScene&, const G4Transform3D&);
-    G4Polyhedron* fpShaftPolyhedron;
-    G4Polyhedron* fpHeadPolyhedron;
-    G4double fWidth;
-    G4Colour fColour;
-  };
   G4UIcommand* fpCommand;
 };
 

@@ -41,6 +41,7 @@
 #include "G4TrajectoriesModel.hh"
 #include "G4ScaleModel.hh"
 #include "G4TextModel.hh"
+#include "G4ArrowModel.hh"
 #include "G4AxesModel.hh"
 #include "G4PhysicalVolumeSearchScene.hh"
 #include "G4VGlobalFastSimulationManager.hh"
@@ -74,6 +75,8 @@
 #include "G4AttDef.hh"
 #include "G4Polyline.hh"
 #include "G4UnitsTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include <sstream>
 
@@ -146,13 +149,10 @@ void G4VisCommandSceneAddArrow::SetNewValue (G4UIcommand*, G4String newValue)
   G4double arrowWidth =
     0.005 * fCurrentLineWidth * sceneExtent.GetExtentRadius();
 
-  Arrow* arrow = new Arrow(x1, y1, z1, x2, y2, z2,
-			   arrowWidth, fCurrentColour);
-  G4VModel* model =
-    new G4CallbackModel<G4VisCommandSceneAddArrow::Arrow>(arrow);
-  model->SetType("Arrow");
-  model->SetGlobalTag("Arrow");
-  model->SetGlobalDescription("Arrow: " + newValue);
+  G4VModel* model = new G4ArrowModel
+    (x1, y1, z1, x2, y2, z2,
+     arrowWidth, fCurrentColour, newValue);
+
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddRunDurationModel (model, warn);
   if (successful) {
@@ -164,66 +164,6 @@ void G4VisCommandSceneAddArrow::SetNewValue (G4UIcommand*, G4String newValue)
   }
   else G4VisCommandsSceneAddUnsuccessful(verbosity);
   UpdateVisManagerScene (currentSceneName);
-}
-
-G4VisCommandSceneAddArrow::Arrow::Arrow
-(G4double x1, G4double y1, G4double z1,
- G4double x2, G4double y2, G4double z2,
- G4double width, const G4Colour& colour):
-  fWidth(width), fColour(colour)
-{
-  // Make a cylinder slightly shorter than the arrow length so that it
-  // doesn't stick out of the head.
-  const G4double shaftRadius = fWidth/2.;
-  const G4double shaftLength = std::sqrt
-    (std::pow(x2-x1,2)+std::pow(y2-y1,2)+std::pow(z2-z1,2));
-  const G4double halfShaftLength = shaftLength/2.;
-  const G4double halfReduction = 2.*fWidth;
-  G4Tubs shaft("shaft",0.,shaftRadius,halfShaftLength-halfReduction,0.,twopi);
-  fpShaftPolyhedron = shaft.CreatePolyhedron();
-  // Move it a little so that the tail is at z = -halfShaftLength.
-  fpShaftPolyhedron->Transform(G4Translate3D(0,0,-halfReduction));
-
-  // Locate the head at +halfShaftLength.
-  const G4int numRZ = 3;
-  G4double r[] = {0,4,0};
-  G4double z[] = {0,-6,-4};
-  for (G4int i = 0; i < numRZ; i++) {
-    r[i] *= fWidth;
-    z[i] = halfShaftLength + z[i] * fWidth;
-  }
-  G4Polycone head("head",0,twopi,numRZ,r,z);
-  fpHeadPolyhedron = head.CreatePolyhedron();
-
-  // Transform to position
-  const G4Vector3D arrowDirection = G4Vector3D(x2-x1,y2-y1,z2-z1).unit();
-  const G4double theta = arrowDirection.theta();
-  const G4double phi = arrowDirection.phi();
-  const G4Point3D arrowCentre(0.5*(x1+x2),0.5*(y1+y2),0.5*(z1+z2));
-  const G4Transform3D tr =
-    G4Translate3D(arrowCentre) * G4RotateZ3D(phi) * G4RotateY3D(theta);
-  fpShaftPolyhedron->Transform(tr);
-  fpHeadPolyhedron->Transform(tr);
-
-  G4VisAttributes va;
-  va.SetColour(fColour);
-  va.SetForceSolid(true);
-  fpShaftPolyhedron->SetVisAttributes(va);
-  fpHeadPolyhedron->SetVisAttributes(va);
-}
-
-G4VisCommandSceneAddArrow::Arrow::~Arrow() {
-  delete fpShaftPolyhedron;
-  delete fpHeadPolyhedron;
-}
-
-void G4VisCommandSceneAddArrow::Arrow::operator()
-  (G4VGraphicsScene& sceneHandler, const G4Transform3D&)
-{
-  sceneHandler.BeginPrimitives();
-  sceneHandler.AddPrimitive(*fpShaftPolyhedron);
-  sceneHandler.AddPrimitive(*fpHeadPolyhedron);
-  sceneHandler.EndPrimitives();
 }
 
 ////////////// /vis/scene/add/arrow2D ///////////////////////////////////////
@@ -327,7 +267,7 @@ G4VisCommandSceneAddAxes::G4VisCommandSceneAddAxes () {
   fpCommand = new G4UIcommand ("/vis/scene/add/axes", this);
   fpCommand -> SetGuidance ("Add axes.");
   fpCommand -> SetGuidance
-    ("Draws axes at (x0, y0, z0) of given length.");
+    ("Draws axes at (x0, y0, z0) of given length and colour.");
   G4UIparameter* parameter;
   parameter =  new G4UIparameter ("x0", 'd', omitable = true);
   parameter->SetDefaultValue (0.);
@@ -344,8 +284,17 @@ G4VisCommandSceneAddAxes::G4VisCommandSceneAddAxes () {
     ("If negative, length automatic, about 25% of scene extent.");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("unit", 's', omitable = true);
-  parameter->SetDefaultValue  ("m");
-  fpCommand->SetParameter     (parameter);
+  parameter->SetDefaultValue ("m");
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("unitcolour", 's', omitable = true);
+  parameter->SetDefaultValue  ("auto");
+  parameter->SetGuidance
+    ("If \"auto\", x, y and z will be red, green and blue respectively.");
+  parameter->SetGuidance
+    ("Otherwise choose from the pre-defined text-specified colours - "
+     "\n  see information printed by the vis manager at start-up or"
+     "\n  use \"/vis/list\".");
+  fpCommand->SetParameter (parameter);
 }
 
 G4VisCommandSceneAddAxes::~G4VisCommandSceneAddAxes () {
@@ -369,30 +318,32 @@ void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand*, G4String newValue) {
     return;
   }
 
-  G4String unitString;
+  G4String unitString, colourString;
   G4double x0, y0, z0, length;
   std::istringstream is (newValue);
-  is >> x0 >> y0 >> z0 >> length >> unitString;
+  is >> x0 >> y0 >> z0 >> length >> unitString  >> colourString;
 
   G4double unit = G4UIcommand::ValueOf(unitString);
   x0 *= unit; y0 *= unit; z0 *= unit;
   const G4VisExtent& sceneExtent = pScene->GetExtent();  // Existing extent.
   if (length < 0.) {
     length = 0.5 * sceneExtent.GetExtentRadius();
+    G4double intLog10Length = std::floor(std::log10(length));
+    length = std::pow(10,intLog10Length);
   } else {
     length *= unit;
   }
+  G4String annotation = G4BestUnit(length,"Length");
 
-  G4VModel* model = new G4AxesModel(x0, y0, z0, length);
+  // Consult scene for arrow width.
+  G4double arrowWidth =
+    0.005 * fCurrentLineWidth * sceneExtent.GetExtentRadius();
 
-  model->SetExtent(G4VisExtent(x0 - length, x0 + length,
-			       y0 - length, y0 + length,
-			       z0 - length, z0 + length));
-  // This extent gets "added" to existing scene extent in
-  // AddRunDurationModel below.
+  G4VModel* model = new G4AxesModel
+    (x0, y0, z0, length, arrowWidth, colourString, newValue);
 
-  const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddRunDurationModel (model, warn);
+  const G4String& currentSceneName = pScene -> GetName ();
   if (successful) {
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Axes have been added to scene \"" << currentSceneName << "\"."

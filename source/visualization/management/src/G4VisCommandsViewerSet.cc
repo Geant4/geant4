@@ -40,6 +40,7 @@
 #include "G4UnitsTable.hh"
 #include "G4VisManager.hh"
 #include "G4Polyhedron.hh"
+#include "G4SystemOfUnits.hh"
 
 #include <sstream>
 #include <cctype>

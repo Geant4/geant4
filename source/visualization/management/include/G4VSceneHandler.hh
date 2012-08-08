@@ -337,6 +337,7 @@ protected:
   G4bool             fTransientsDrawnThisEvent;  // Maintained by vis
   G4bool             fTransientsDrawnThisRun;    // manager.
   G4bool             fProcessingSolid; // True if within Pre/PostAddSolid.
+  G4bool             fProcessing2D;    // True for 2D.
   G4VModel*          fpModel;          // Current model.
   G4Transform3D fObjectTransformation; // Current accumulated
 				       // object transformation.

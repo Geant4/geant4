@@ -561,13 +561,15 @@ void G4VisCommandViewerCopyViewFrom::SetNewValue (G4UIcommand*, G4String newValu
   // Copy camera-specific view parameters
   G4ViewParameters vp = currentViewer->GetViewParameters();
   const G4ViewParameters& fromVP = fromViewer->GetViewParameters();
-  vp.SetViewpointDirection(fromVP.GetViewpointDirection());
-  vp.SetUpVector          (fromVP.GetUpVector());
-  vp.SetFieldHalfAngle    (fromVP.GetFieldHalfAngle());
-  vp.SetZoomFactor        (fromVP.GetZoomFactor());
-  vp.SetScaleFactor       (fromVP.GetScaleFactor());
-  vp.SetCurrentTargetPoint(fromVP.GetCurrentTargetPoint());
-  vp.SetDolly             (fromVP.GetDolly());
+  vp.SetViewpointDirection  (fromVP.GetViewpointDirection());
+  vp.SetLightpointDirection (fromVP.GetLightpointDirection());
+  vp.SetLightsMoveWithCamera(fromVP.GetLightsMoveWithCamera());
+  vp.SetUpVector            (fromVP.GetUpVector());
+  vp.SetFieldHalfAngle      (fromVP.GetFieldHalfAngle());
+  vp.SetZoomFactor          (fromVP.GetZoomFactor());
+  vp.SetScaleFactor         (fromVP.GetScaleFactor());
+  vp.SetCurrentTargetPoint  (fromVP.GetCurrentTargetPoint());
+  vp.SetDolly               (fromVP.GetDolly());
   SetViewParameters(currentViewer, vp);
   
   if (verbosity >= G4VisManager::confirmations) {

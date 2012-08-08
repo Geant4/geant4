@@ -36,6 +36,7 @@
 #include "G4ios.hh"
 #include "G4VisAttributes.hh"
 #include "G4ExceptionSeverity.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4VSolid.hh"
 
 G4ModelingParameters::G4ModelingParameters ():

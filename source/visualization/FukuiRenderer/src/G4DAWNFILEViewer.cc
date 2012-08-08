@@ -47,6 +47,7 @@
 #include "G4VisExtent.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VSolid.hh"
+#include "G4PhysicalConstants.hh"
 
 #include "G4FRConst.hh"
 #include "G4DAWNFILE.hh"

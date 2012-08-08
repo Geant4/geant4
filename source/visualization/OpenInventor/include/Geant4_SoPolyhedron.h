@@ -53,6 +53,9 @@ class G4Polyhedron;
 
 class Geant4_SoPolyhedron : public SoShape {
   SO_NODE_HEADER(Geant4_SoPolyhedron);
+private:
+  Geant4_SoPolyhedron(const Geant4_SoPolyhedron&);
+  Geant4_SoPolyhedron& operator=(const Geant4_SoPolyhedron&);
 public:
   SoSFBool solid;
   SoSFBool reducedWireFrame;

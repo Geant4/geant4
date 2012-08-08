@@ -34,6 +34,7 @@
 #ifdef G4VIS_BUILD_OPENGL_DRIVER
 
 #include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4OpenGLViewer.hh"
 #include "G4OpenGLSceneHandler.hh"
 #include "G4OpenGLTransform3D.hh"

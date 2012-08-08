@@ -37,6 +37,7 @@
 
 #include "G4VisManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
 G4ViewParameters::G4ViewParameters ():

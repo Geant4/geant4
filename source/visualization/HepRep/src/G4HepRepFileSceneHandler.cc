@@ -36,6 +36,8 @@
 #include "G4HepRepMessenger.hh"
 #include "G4UIcommand.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Version.hh"
 #include "G4VSolid.hh"
 #include "G4PhysicalVolumeModel.hh"

@@ -104,8 +104,6 @@ protected:
   GLuint fPickName;
   std::map<GLuint, G4AttHolder*> fPickMap;  // For picking.
 
-  G4bool fProcessing2D;
-
   // Shared code to wait until we make a single glFlush
   void ScaledFlush () ;
   // Number of events to wait until we make a single glFlush

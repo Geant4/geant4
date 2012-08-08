@@ -63,6 +63,12 @@ class G4RayTrajectory : public G4VTrajectory
    G4RayTrajectory(G4RayTrajectory & right);
    virtual ~G4RayTrajectory();
 
+   private:
+
+   G4RayTrajectory& operator= (const G4RayTrajectory&);
+
+   public:
+ 
    inline void* operator new(size_t);
    inline void  operator delete(void*);
   //   inline int operator == (const G4RayTrajectory& right){return (this==&right);}

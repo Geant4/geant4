@@ -28,6 +28,8 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "G4VisManager.hh"
 #include "G4PhysicalVolumeModel.hh"
 #include "G4LogicalVolume.hh"
@@ -651,8 +653,8 @@ void G4FRSCENEHANDLER::AddSolid ( const G4Sphere& sphere )
 	SendTransformedCoordinates();
 
 		//----- send sphere to Fukui Renderer
-	const G4double PI_minus  = 0.9999 * pi ;
-	const G4double PI2_minus = 1.9999 * pi ;
+	const G4double PI_minus  = 0.9999 * CLHEP::pi ;
+	const G4double PI2_minus = 1.9999 * CLHEP::pi ;
 	if( dphi > PI2_minus    &&   dtheta > PI_minus ) {
 			//----- full sphere
 		SendStrDouble ( FR_SPHERE, rmax );
@@ -784,12 +786,12 @@ void G4FRSCENEHANDLER::AddSolid (const G4Trap& trap)
         if ( ny==0. && nx ==0.) { 
           phi     = 0.;   // std::atan2(0.,0.) gives undefined value of phi 
         } else {
-          phi = std::atan2( ny, nx ) ;  if( phi < 0. ) { phi += twopi ; } 
+          phi = std::atan2( ny, nx ) ;  if( phi < 0. ) { phi += CLHEP::twopi ; } 
 					// -PI < std::atan() < PI 
         }
 /////////////////////////////////////////////////
 //  	G4double  phi     = std::atan2( ny, nx ) ;  
-//	if( phi < 0.0 ) { phi += twopi ; } 
+//	if( phi < 0.0 ) { phi += CLHEP::twopi ; } 
 //				// -PI < std::atan() < PI 
 /////////////////////////////////////////////////
 

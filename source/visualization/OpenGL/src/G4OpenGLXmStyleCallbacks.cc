@@ -37,6 +37,7 @@
 #ifdef G4VIS_BUILD_OPENGLXM_DRIVER
 
 #include "G4OpenGLXmViewer.hh"
+#include "G4SystemOfUnits.hh"
 
 void G4OpenGLXmViewer::drawing_style_callback (Widget w, 
 					     XtPointer clientData, 

@@ -24,38 +24,37 @@
 // ********************************************************************
 //
 //
-// $Id: G4AxesModel.hh,v 1.6 2006-11-01 10:28:42 allison Exp $
+// $Id: G4ArrowModel.hh,v 1.6 2006-11-01 10:28:42 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// John Allison  3rd April 2001
+// John Allison  15th July 2012
 //
 // Class Description:
 //
-// Model which knows how to draw axes.
+// Model that knows how to draw an arrow.
 //
 // For access to base class information, e.g., modeling parameters,
 // use GetModelingParameters() inherited from G4VModel.  See Class
 // Description of the base class G4VModel.
 
-#ifndef G4AXESMODEL_HH
-#define G4AXESMODEL_HH
+#ifndef G4ARROWMODEL_HH
+#define G4ARROWMODEL_HH
 
 #include "G4VModel.hh"
 
-class G4AxesModel: public G4VModel {
+class G4Colour;
+class G4Polyhedron;
+
+class G4ArrowModel: public G4VModel {
 
 public: // With description
 
-  G4AxesModel
-  (G4double x0, G4double y0, G4double z0, G4double length,
-   G4double arrowWidth = 1.,
-   const G4String& colourString = "auto",
-   const G4String& description = "",
-   G4bool withAnnotation = true
-   );
-   
-  virtual ~G4AxesModel ();
+  G4ArrowModel(G4double x1, G4double y1, G4double z1,
+	       G4double x2, G4double y2, G4double z2,
+	       G4double width, const G4Colour& colour,
+	       const G4String& description = "");
+  virtual ~G4ArrowModel ();
 
   virtual void DescribeYourselfTo (G4VGraphicsScene&);
   // The main task of a model is to describe itself to the graphics scene.
@@ -63,13 +62,11 @@ public: // With description
 private:
 
   // Private copy contructor and assignment to forbid use...
-  G4AxesModel (const G4AxesModel&);
-  G4AxesModel& operator = (const G4AxesModel&);
+  G4ArrowModel (const G4ArrowModel&);
+  G4ArrowModel& operator = (const G4ArrowModel&);
 
-  G4VModel
-    *fXAxisModel, *fXLabelModel, *fXAnnotationModel,
-    *fYAxisModel, *fYLabelModel, *fYAnnotationModel,
-    *fZAxisModel, *fZLabelModel, *fZAnnotationModel;
+  G4Polyhedron* fpShaftPolyhedron;
+  G4Polyhedron* fpHeadPolyhedron;
 };
 
 #endif

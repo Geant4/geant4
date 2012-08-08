@@ -20,6 +20,10 @@ committal in the CVS repository !
 History file for visualization/FukuiRenderer sub-category
 ---------------------------------------------------------
 
+5th July 2012  Gabriele Cosmo  (DAWN-V09-05-04)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
 8th June 2012  John Allison  (DAWN-V09-05-03)
 - Shadow clean.
 

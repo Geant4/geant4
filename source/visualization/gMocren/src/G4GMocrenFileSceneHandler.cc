@@ -42,6 +42,8 @@
 #include <sstream>
 
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4VisManager.hh"
 
 #include "G4GMocrenFile.hh"

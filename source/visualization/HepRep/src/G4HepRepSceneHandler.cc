@@ -47,6 +47,7 @@
 #include "G4HepRepMessenger.hh"
 
 //G4
+#include "G4PhysicalConstants.hh"
 #include "G4Vector3D.hh"
 #include "G4Version.hh"
 #include "G4Types.hh"

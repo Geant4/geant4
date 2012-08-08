@@ -109,7 +109,7 @@ protected:
 
   // G4Text plus transform and 2/3D.
   struct G4TextPlus {
-    G4TextPlus(const G4Text& text): fG4Text(text) {}
+    G4TextPlus(const G4Text& text): fG4Text(text), fProcessing2D(false) {}
     G4Text fG4Text;
     G4bool fProcessing2D;
   };

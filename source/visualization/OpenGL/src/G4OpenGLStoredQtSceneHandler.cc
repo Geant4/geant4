@@ -105,7 +105,7 @@ G4bool G4OpenGLStoredQtSceneHandler::ExtraPOProcessing
       // build a path for tree viewer
       G4OpenGLQtViewer* pGLViewer = dynamic_cast<G4OpenGLQtViewer*>(fpViewer);
       if ( pGLViewer ) {
-        pGLViewer->addNonPVSceneTreeElement(fpModel->GetType(),fpModel,currentPOListIndex,fpModel->GetCurrentDescription().data(),visible);
+        pGLViewer->addNonPVSceneTreeElement(fpModel->GetType(),currentPOListIndex,fpModel->GetCurrentDescription().data(),visible);
       }
     }
   }

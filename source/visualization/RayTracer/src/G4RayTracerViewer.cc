@@ -31,6 +31,7 @@
 
 #include "G4ios.hh"
 #include <sstream>
+#include "G4SystemOfUnits.hh"
 
 #include "G4VSceneHandler.hh"
 #include "G4Scene.hh"
