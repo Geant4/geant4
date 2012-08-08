@@ -44,6 +44,8 @@
 //---------------------------------------------------------------
 
 #include "G4FastStep.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
 #include "G4TrackFastVector.hh"

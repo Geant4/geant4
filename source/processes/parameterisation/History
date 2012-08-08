@@ -17,29 +17,33 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Sep. 30, 2011, M. Verderi (param-V09-04-03)
+July 10, 2012, G. Cosmo (param-V09-05-00)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+September 30, 2011, M. Verderi (param-V09-04-03)
 - Added missing new header file (G4FastSimulationProcessType.hh) in
   sources.cmake.
 
-Sep. 30, 2011, M. Verderi (param-V09-04-02)
+September 30, 2011, M. Verderi (param-V09-04-02)
 - Migration to new G4Exception scheme.
 - what is V09-04-01 tag ?
 
-Feb. 11, 2011, M. Verderi (param-V09-04-00)
+February 11, 2011, M. Verderi (param-V09-04-00)
 - Implementation of method
   void ProposePrimaryTrackFinalKineticEnergy (G4double);
   was missing : modified file  G4FastStep.icc
 
-March 13 2008, G. Cosmo (param-V09-01-00)
+March 13, 2008, G. Cosmo (param-V09-01-00)
 - Cleared compilation warnings in G4FastSimulationManagerProcess and
   G4FastSimulationMessenger on gcc-4.3.0 for ambiguous use of
   parentheses in nested if-else statements.
 
-November 30 2007, M. Verderi
+November 30, 2007, M. Verderi
 - Add Along methods to G4FSMP process
   - tag as param-V09-00-01
 
-November 30 2007, M. Verderi
+November 30, 2007, M. Verderi
 - minor corrections to G4FastSimulationManagerProcess.hh/.cc : 
    * add call fPathFinder->prepareNewrack(...)
    * deactivate ghost navigator in EndOfTracking(..) method
