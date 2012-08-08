@@ -31,6 +31,8 @@
 
 #include <cmath>
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G3toG4.hh"
 #include "G3MatTable.hh"
 #include "G3EleTable.hh"

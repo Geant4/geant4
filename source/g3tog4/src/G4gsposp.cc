@@ -34,6 +34,7 @@
 #include "G3VolTable.hh"
 #include "G3toG4MakeSolid.hh"
 #include "G3Division.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4VSolid.hh"
 
 G4bool G3NegVolPars(G4double pars[], G4int *nparpt, 

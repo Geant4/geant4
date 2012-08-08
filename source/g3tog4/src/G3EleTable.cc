@@ -28,10 +28,14 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#include "G4Types.hh"
 #include <sstream>
-#include "G4ios.hh"
+
 #include "G3EleTable.hh"
+
+#include "G4Types.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4ios.hh"
 
 G3EleTable::G3EleTable() :_MaxEle(109){
   _EleNames = new char*[_MaxEle];

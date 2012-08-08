@@ -29,8 +29,9 @@
 //
 #include "G3toG4.hh"
 #include "G3RotTable.hh"
-#include "G4ThreeVector.hh"
 #include "G3toG4RotationMatrix.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4ThreeVector.hh"
 
 void PG4gsrotm(G4String *tokens)
 {

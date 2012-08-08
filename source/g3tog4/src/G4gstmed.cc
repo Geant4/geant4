@@ -33,6 +33,7 @@
 //
 // by I.Hrivnacova, 27 Sep 99
 
+#include "G4SystemOfUnits.hh"
 #include "G4LogicalVolume.hh"
 #include "G3toG4.hh"
 #include "G3MatTable.hh"

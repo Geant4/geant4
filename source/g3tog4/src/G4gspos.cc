@@ -34,6 +34,7 @@
 #include "G3toG4.hh"
 #include "G3Pos.hh"
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 
 void G4CreateCloneVTE(G3VolTableEntry* vte, G3VolTableEntry* mvte,
               G4double pars[], G4int npar, G4int num,

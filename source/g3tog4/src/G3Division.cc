@@ -34,6 +34,7 @@
 #include "G3toG4MakeSolid.hh"
 #include "G4Para.hh"
 #include "G3Pos.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"

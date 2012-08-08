@@ -30,6 +30,7 @@
 // modified by I.Hrivnacova, V.Berejnoi 27 Sep 99 
 
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Box.hh"
 #include "G4Tubs.hh"
 #include "G4Trd.hh"
