@@ -139,6 +139,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4QAOLowEnergyLoss.hh
         G4RangeNoTest.hh
         G4RangeTest.hh
+        G4RayleighAngularGenerator.hh
         G4RayleighScattering.hh
         G4SemiLogInterpolation.hh
         G4ShellData.hh
@@ -257,6 +258,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4PhotoElectricAngularGeneratorSimple.cc
         G4QAOLowEnergyLoss.cc
         G4RangeTest.cc
+        G4RayleighAngularGenerator.cc
         G4RayleighScattering.cc
         G4SemiLogInterpolation.cc
         G4ShellData.cc

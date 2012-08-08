@@ -46,8 +46,10 @@
 
 // -------------------------------------------------------------------
 
-#ifndef   G4EMDATASET_HH
-#define  G4EMDATASET_HH 1
+#ifndef G4EMDATASET_HH
+#define G4EMDATASET_HH 1
+
+#include <CLHEP/Units/SystemOfUnits.h>
 
 #include "globals.hh"
 #include "G4VEMDataSet.hh"
@@ -59,16 +61,16 @@ class G4EMDataSet : public G4VEMDataSet
 public:
   G4EMDataSet(G4int argZ, 
 	      G4VDataSetAlgorithm* algo, 
-	      G4double xUnit=MeV, 
-	      G4double yUnit=barn,
+	      G4double xUnit=CLHEP::MeV, 
+	      G4double yUnit=CLHEP::barn,
               G4bool random=false);
 
   G4EMDataSet(G4int argZ, 
 	      G4DataVector* xData, 
 	      G4DataVector* data, 
 	      G4VDataSetAlgorithm* algo, 
-	      G4double xUnit=MeV, 
-	      G4double yUnit=barn,
+	      G4double xUnit=CLHEP::MeV, 
+	      G4double yUnit=CLHEP::barn,
 	      G4bool random=false);
 
   G4EMDataSet(G4int argZ, 
@@ -77,8 +79,8 @@ public:
 	      G4DataVector* xLogData, 
 	      G4DataVector* Logdata, 
 	      G4VDataSetAlgorithm* algo, 
-	      G4double xUnit=MeV, 
-	      G4double yUnit=barn,
+	      G4double xUnit=CLHEP::MeV, 
+	      G4double yUnit=CLHEP::barn,
 	      G4bool random=false);
 
   virtual ~G4EMDataSet();

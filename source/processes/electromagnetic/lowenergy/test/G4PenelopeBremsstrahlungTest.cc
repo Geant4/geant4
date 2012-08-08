@@ -55,16 +55,17 @@
 #include "G4UnitsTable.hh"
 
 #include "G4PenelopeComptonModel.hh"
-#include "G4Penelope08RayleighModel.hh"
-#include "G4Penelope08PhotoElectricModel.hh"
-#include "G4Penelope08GammaConversionModel.hh"
-#include "G4Penelope08ComptonModel.hh"
-#include "G4Penelope08BremsstrahlungModel.hh"
+#include "G4PenelopeRayleighModel.hh"
+#include "G4PenelopePhotoElectricModel.hh"
+#include "G4PenelopeGammaConversionModel.hh"
+#include "G4PenelopeComptonModel.hh"
+#include "G4PenelopeBremsstrahlungModel.hh"
 #include "G4PenelopePhotoElectricModel.hh"
 #include "G4PenelopeGammaConversionModel.hh"
 #include "G4PenelopeAnnihilationModel.hh"
 #include "G4PenelopeOscillatorManager.hh"
 #include "G4PenelopeBremsstrahlungModel.hh"
+#include "G4PenelopeBremsstrahlungFS.hh"
 
 #include "G4Gamma.hh"
 #include "G4Positron.hh"
@@ -120,20 +121,9 @@ int main() {
   G4ParticleDefinition* electron = G4Electron::Electron();
   G4ParticleDefinition* positron = G4Positron::Positron();
 
-  // G4VEmModel* phot = new G4PenelopePhotoElectricModel();
-  //G4VEmModel* comp = new G4PenelopeComptonModel();
-  //G4VEmModel* conv = new G4PenelopeGammaConversionModel(); 
-  //G4Penelope08RayleighModel* ray = new G4Penelope08RayleighModel();
-  //G4Penelope08PhotoElectricModel* phot = new
-  //G4Penelope08PhotoElectricModel();
-  //G4Penelope08ComptonModel* comp = new 
-  //G4Penelope08ComptonModel();
-
   G4cout << "Going to instantiate the model..";
 
-  G4Penelope08BremsstrahlungModel* brem= 
-    new G4Penelope08BremsstrahlungModel();
-  G4PenelopeBremsstrahlungModel* oldBrem = 
+  G4PenelopeBremsstrahlungModel* brem= 
     new G4PenelopeBremsstrahlungModel();
   G4cout << "...done" << G4endl;
 
@@ -150,11 +140,9 @@ int main() {
   //comp->SetVerbosityLevel(0);
   //phot->Initialise(gamma,dummy);
   //phot->SetVerbosityLevel(0);
-  brem->SetVerbosityLevel(1);
-  oldBrem->SetVerbosityLevel(1);
+  brem->SetVerbosityLevel(1); 
   G4cout << "Going to initialize...";
   brem->Initialise(electron,dummy);
-  oldBrem->Initialise(electron,dummy);
   G4cout << "...done " << G4endl;
  
 
@@ -163,12 +151,9 @@ int main() {
 
   G4Timer* theTimer = new G4Timer();
   theTimer->Start();
-  G4double tCut = 1.0*keV;
 
-  //G4cout << ioni->GetDensityCorrection(material,1.0*MeV);
-  //G4Exception();
-  //exit(1);
-   
+  G4double tCut = 10*keV;
+
   G4cout << "Going to start loop" << G4endl;
 
   std::ofstream file("testBrem.dat");
@@ -179,31 +164,41 @@ int main() {
       G4double sPower = brem->ComputeDEDXPerVolume(material,positron,energy,tCut);
       file << energy/eV << " " << xsvolume/(1./cm) << " " << 
 	sPower/(eV/cm) << G4endl;
-
-      //file << energy/eV << " " << XSVOLUME/(1./cm) << " " << 
-      //meanSigma/barn << G4endl;
-
     }	
   file.close();
 
   G4cout << "tCut = " << tCut/keV << " keV " << G4endl;
   G4cout << "Material = " << material->GetName() << G4endl;
-  
-  std::ofstream file2("brem_v2001_divided_v2008.dat");
+ 
+  /* 
+  std::ofstream file2("test.dat");
   for (G4int i=1;i<=nstep;i++)
     {
       G4double energy = Emin*std::pow(10,i*logStep);
       G4double sPower = brem->CrossSectionPerVolume(material,electron,energy,tCut);
-      G4double sPower2 = oldBrem->CrossSectionPerVolume(material,electron,energy,tCut);
-      file2 << energy/eV << " " << sPower/(1/cm) << " " << sPower2/(1/cm) << G4endl;
+      file2 << energy/eV << " " << sPower/(1/cm) << G4endl;
 
       //file << energy/eV << " " << XSVOLUME/(1./cm) << " " <<
       //meanSigma/barn << G4endl;
 
     }
+  */
   
+  /*
+  G4PenelopeBremsstrahlungFS* fPenelopeFSHelper = new G4PenelopeBremsstrahlungFS();
+  G4PhysicsTable* table = fPenelopeFSHelper->GetScaledXSTable(material,tCut);
 
-  file.close();
+  std::ofstream file3("ene.dat");
+  for (size_t i=0;i<10000;i++)
+    {
+      G4double kineticEnergy = 0.30*keV;
+      G4double gammaEnergy = 
+	fPenelopeFSHelper->SampleGammaEnergy(kineticEnergy,material,tCut);
+      file3 << gammaEnergy/keV << G4endl;
+    }
+  file3.close();
+  */
+
   theTimer->Stop();
 
   G4cout << "Time: " << theTimer->GetSystemElapsed() << " " << 

@@ -41,6 +41,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
 #include "G4MuElecSiStructure.hh"
+#include "G4SystemOfUnits.hh"
 
 G4MuElecSiStructure::G4MuElecSiStructure(): nLevels(6)
 {

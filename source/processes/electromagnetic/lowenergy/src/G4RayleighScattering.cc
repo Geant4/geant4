@@ -42,7 +42,11 @@ G4RayleighScattering::G4RayleighScattering(const G4String& processName,
   G4ProcessType type):G4VEmProcess (processName, type),
     isInitialised(false)
 {
+  SetStartFromNullFlag(false);
+  SetBuildTableFlag(true);
   SetProcessSubType(fRayleigh);
+  SetMinKinEnergyPrim(100*keV);
+  SetSplineFlag(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,9 +67,7 @@ void G4RayleighScattering::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
-    SetLambdaBinning(200); //use 200 bins instead of 90
-    SetBuildTableFlag(true);
-    if(!Model()) SetModel(new G4LivermoreRayleighModel);
+    if(!Model()) { SetModel(new G4LivermoreRayleighModel); }
     AddEmModel(1, Model());
   } 
 }

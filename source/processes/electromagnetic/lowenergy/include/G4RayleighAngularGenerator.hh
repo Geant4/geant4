@@ -23,88 +23,74 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Generator2BS.hh,v 1.5 2010-10-14 14:00:29 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id:  G4RayleighAngularGenerator.hh,v 1.1 2012-12-31 18:34:15 antoni Exp $
+// GEANT4 tag $Name: not supported by svn $
 //
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
 //
 //
-// File name:  G4Generator2BS
+// File name:  G4RayleighAngularGenerator
 //
-// Author:     Andreia Trindade (andreia@lip.pt)
-//             Pedro Rodrigues  (psilva@lip.pt)
-//             Luis Peralta     (luis@lip.pt)
+// Author:     Ivantchenko  (antoni@cern.ch, vnivanch@cern.ch)
+//             modified fit formulas from Dermott E. Cullen, 
+//             Nucl. Instrum. Meth. Phys. Res. B v.101, (4),499-510. 
+//            
 // 
-// Creation date: 2 June 2003
+// Creation date: 31 May 2012
 //
 // Modifications: 
-// 02 Jun 2003  First implementation acording with new design
-// 12 Oct 2010  V.Ivanchenko moved RejectionFunction inline
-//               
+//
 //
 // Class Description: 
 //
-// Concrete class for Bremsstrahlung Angular Distribution Generation 
-// 2BS Distribution
+// Class for Rayleigh Scattering angle sampling
 //
-
 // -------------------------------------------------------------------
 //
 
-#ifndef G4Generator2BS_h
-#define G4Generator2BS_h 1
+#ifndef G4RayleighAngularGenerator_h
+#define G4RayleighAngularGenerator_h 1
 
-#include "G4ios.hh"
-#include "globals.hh"
 #include "G4VEmAngularDistribution.hh"
+#include "globals.hh"
+#include "G4DynamicParticle.hh"
+#include "G4ThreeVector.hh"
 
-class G4Pow;
-
-class G4Generator2BS : public G4VEmAngularDistribution
+class G4RayleighAngularGenerator : public G4VEmAngularDistribution
 {
-
 public:
 
-  G4Generator2BS(const G4String& name="");
+  G4RayleighAngularGenerator();
 
-  virtual ~G4Generator2BS();
+  virtual ~G4RayleighAngularGenerator();
 
   virtual G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
-                                         G4double out_energy,
-                                         G4int Z,
-                                         const G4Material* mat = 0);
-
-  void PrintGeneratorInformation() const;
-
-protected:
-
-  inline G4double RejectionFunction(G4double value) const;
-
+					 G4double out_energy,
+					 G4int Z,
+					 const G4Material* mat = 0);
 private:
 
   // hide assignment operator 
-  G4Generator2BS & operator=(const  G4Generator2BS &right);
-  G4Generator2BS(const  G4Generator2BS&);
+  G4RayleighAngularGenerator & operator=(const  G4RayleighAngularGenerator &right);
+  G4RayleighAngularGenerator(const  G4RayleighAngularGenerator&);
 
-  G4double fz;
-  G4double ratio;
-  G4double ratio1;
-  G4double ratio2;
-  G4double delta;
+  // static data
+  static const G4double PP0[101];
+  static const G4double PP1[101];
+  static const G4double PP2[101];
+  static const G4double PP3[101];
+  static const G4double PP4[101];
+  static const G4double PP5[101];
+  static const G4double PP6[101];
+  static const G4double PP7[101];
+  static const G4double PP8[101];
 
-  G4Pow* g4pow;
-  G4int  nwarn;
-
+  G4double fFactor;
+  
 };
 
-inline G4double G4Generator2BS::RejectionFunction(G4double y) const
-{
-  G4double y2 = (1 + y)*(1 + y);
-  G4double x  = 4*y*ratio/y2;
-  return 4*x - ratio1 - (ratio2 - x)*std::log(delta + fz/y2); 
-}
 
 #endif
 

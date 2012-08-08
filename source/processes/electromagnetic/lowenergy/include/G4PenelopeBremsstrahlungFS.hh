@@ -113,6 +113,10 @@ private:
   std::map< std::pair<const G4Material*,G4double> , 
 	    G4PhysicsFreeVector* > *thePBcut;
  
+  //temporary vector. Used as member variable to avoid to book/release the 
+  //memory on the fly. This vector is over-written at every call of 
+  //SampleGammaEnergy()
+  G4PhysicsFreeVector* theTempVec; 
 
 };
 

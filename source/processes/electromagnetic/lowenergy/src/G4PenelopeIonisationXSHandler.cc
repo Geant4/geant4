@@ -34,6 +34,8 @@
 //
 
 #include "G4PenelopeIonisationXSHandler.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"

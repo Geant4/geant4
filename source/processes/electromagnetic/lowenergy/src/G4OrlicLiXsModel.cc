@@ -41,9 +41,11 @@
 // Further documentation available from http://www.ge.infn.it/geant4/lowE
 // -------------------------------------------------------------------
 
+#include "G4OrlicLiXsModel.hh"
 
 #include "globals.hh"
-#include "G4OrlicLiXsModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Proton.hh"
 
 

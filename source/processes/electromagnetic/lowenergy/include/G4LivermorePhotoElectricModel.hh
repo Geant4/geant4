@@ -52,8 +52,7 @@ class G4LivermorePhotoElectricModel : public G4VEmModel
 
 public:
 
-  G4LivermorePhotoElectricModel(const G4ParticleDefinition* p = 0, 
-				const G4String& nam = "LivermorePhElectric");
+  G4LivermorePhotoElectricModel(const G4String& nam = "LivermorePhElectric");
 
   virtual ~G4LivermorePhotoElectricModel();
 
@@ -73,17 +72,14 @@ public:
 				 G4double tmin,
 				 G4double maxEnergy);
 
-  //  void ActivateAuger(G4bool);
-
-  void SetAngularGenerator(G4VPhotoElectricAngularDistribution* distribution);
-
-  void SetAngularGenerator(const G4String& name);
-
 protected:
 
   G4ParticleChangeForGamma* fParticleChange;
 
 private:
+
+  G4LivermorePhotoElectricModel & operator=(const  G4LivermorePhotoElectricModel &right);
+  G4LivermorePhotoElectricModel(const  G4LivermorePhotoElectricModel&);
 
   G4ParticleDefinition*     theGamma;
   G4ParticleDefinition*     theElectron;
@@ -92,19 +88,12 @@ private:
   G4double highEnergyLimit; 
 
   G4int verboseLevel;
-  G4bool isInitialised;
+  G4bool                  fDeexcitationActive;
 
   G4VCrossSectionHandler* crossSectionHandler;
   G4VCrossSectionHandler* shellCrossSectionHandler;
 
-  G4VAtomDeexcitation*             fAtomDeexcitation;
-  const G4AtomicTransitionManager* fTransitionManager;
-
-  G4VPhotoElectricAngularDistribution* fElectronAngularGenerator;
-  G4String generatorName;
-
-  G4LivermorePhotoElectricModel & operator=(const  G4LivermorePhotoElectricModel &right);
-  G4LivermorePhotoElectricModel(const  G4LivermorePhotoElectricModel&);
+  G4VAtomDeexcitation*    fAtomDeexcitation;
 
 };
 

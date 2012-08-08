@@ -36,6 +36,7 @@
 //
 
 #include "G4LivermoreIonisationCrossSection.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4AtomicTransitionManager.hh"
 #include "G4VCrossSectionHandler.hh"
 #include "G4eCrossSectionHandler.hh"

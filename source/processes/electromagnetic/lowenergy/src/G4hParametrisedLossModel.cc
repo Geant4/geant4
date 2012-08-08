@@ -55,13 +55,15 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4hParametrisedLossModel.hh"
-#include "G4UnitsTable.hh"
+
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 #include "G4hZiegler1977p.hh"
 #include "G4hZiegler1977He.hh"
 #include "G4hZiegler1985p.hh"
 #include "G4hSRIM2000p.hh"
-//#include "G4hQAOModel.hh"
 #include "G4hICRU49p.hh"
 #include "G4hICRU49He.hh"
 #include "G4DynamicParticle.hh"

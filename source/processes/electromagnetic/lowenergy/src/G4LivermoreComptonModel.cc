@@ -43,6 +43,8 @@
 // 30 May 2011   V Ivanchenko Migration to model design for deexcitation
 
 #include "G4LivermoreComptonModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Electron.hh"
 #include "G4ParticleChangeForGamma.hh"
 #include "G4LossTableManager.hh"

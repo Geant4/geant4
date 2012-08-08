@@ -53,8 +53,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4hZiegler1985p.hh"
-#include "G4UnitsTable.hh"
+
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 #include "G4Material.hh"
 
 G4double G4hZiegler1985p::a[92][8] = {

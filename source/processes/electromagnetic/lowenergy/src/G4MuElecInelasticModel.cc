@@ -41,13 +41,15 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
 #include "G4MuElecInelasticModel.hh"
+
+#include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4ios.hh"
+#include "G4UnitsTable.hh"
 #include "G4UAtomicDeexcitation.hh"
 #include "G4LossTableManager.hh"
-#include "globals.hh"
 #include "G4ionEffectiveCharge.hh"
-#include "G4ios.hh"
-
-#include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

@@ -31,6 +31,8 @@
 //
 
 #include "G4LivermorePolarizedGammaConversionModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

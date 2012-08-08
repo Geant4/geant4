@@ -42,6 +42,8 @@
 //                  - use G4ElementSelector
 
 #include "G4LivermorePolarizedRayleighModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

@@ -80,6 +80,8 @@
 
 
 #include "G4IonParametrisedLossModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4LPhysicsFreeVector.hh"
 #include "G4IonStoppingData.hh"
 #include "G4VIonDEDXTable.hh"

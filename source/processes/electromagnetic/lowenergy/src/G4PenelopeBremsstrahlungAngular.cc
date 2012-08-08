@@ -40,15 +40,20 @@
 // 24 May 2011  L. Pandola       Renamed (make v2008 as default Penelope)
 // 13 Mar 2012  L. Pandola       Made a derived class of G4VEmAngularDistribution
 //                               and update the interface accordingly
+// 18 Jul 2012  L. Pandola       Migrated to the new basic interface of G4VEmAngularDistribution
+//                               Now returns a G4ThreeVector and takes care of the rotation
 //
 //----------------------------------------------------------------
 
 #include "G4PenelopeBremsstrahlungAngular.hh"
+
+#include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4PhysicsFreeVector.hh"
 #include "G4PhysicsTable.hh"
 #include "G4Material.hh"
 #include "Randomize.hh"
-#include "globals.hh"
 
 G4PenelopeBremsstrahlungAngular::G4PenelopeBremsstrahlungAngular() : 
   G4VEmAngularDistribution("Penelope"), theEffectiveZSq(0),
@@ -302,16 +307,16 @@ void G4PenelopeBremsstrahlungAngular::PrepareInterpolationTables(G4double Zmat)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4PenelopeBremsstrahlungAngular::SampleCosinePolarAngle(const G4DynamicParticle* dp,
-								 G4double eGamma,
-								 G4int,
-								 const G4Material* material)
+G4ThreeVector& G4PenelopeBremsstrahlungAngular::SampleDirection(const G4DynamicParticle* dp,
+								G4double eGamma,
+								G4int,
+								const G4Material* material)
 {
   if (!material)
     {
-      G4Exception("G4PenelopeBremsstrahlungAngular::SampleCosinePolarAngle()",
+      G4Exception("G4PenelopeBremsstrahlungAngular::SampleDirection()",
 		  "em2040",FatalException,"The pointer to G4Material* is NULL");
-      return 0;
+      return fLocalDirection;
     }
   
   G4double Zmat = GetEffectiveZ(material);
@@ -326,6 +331,8 @@ G4double G4PenelopeBremsstrahlungAngular::SampleCosinePolarAngle(const G4Dynamic
   G4double beta = std::sqrt(ePrimary*(ePrimary+2*electron_mass_c2))/
     (ePrimary+electron_mass_c2);
   G4double cdt = 0;
+  G4double sinTheta = 0;
+  G4double phi = 0;
 
   //Use a pure dipole distribution for energy above 500 keV
   if (ePrimary > 500*keV)
@@ -339,7 +346,16 @@ G4double G4PenelopeBremsstrahlungAngular::SampleCosinePolarAngle(const G4Dynamic
 	    cdt = std::pow(cdt,1./3.);
 	}
       cdt = (cdt+beta)/(1.0+beta*cdt);
-      return cdt;
+      //Get primary kinematics
+      sinTheta = std::sqrt(1. - cdt*cdt);
+      phi  = twopi * G4UniformRand(); 
+      fLocalDirection.set(sinTheta* std::cos(phi),
+		      sinTheta* std::sin(phi),
+		      cdt);
+      //rotate
+      fLocalDirection.rotateUz(dp->GetMomentumDirection());
+      //return
+      return fLocalDirection;
     }
   
   //Else, retrieve tables and go through the full thing
@@ -356,7 +372,7 @@ G4double G4PenelopeBremsstrahlungAngular::SampleCosinePolarAngle(const G4Dynamic
     {
       G4ExceptionDescription ed;
       ed << "Unable to retrieve Lorentz tables for Z= " << Zmat << G4endl;
-      G4Exception("G4PenelopeBremsstrahlungAngular::SampleCosTheta()",
+      G4Exception("G4PenelopeBremsstrahlungAngular::SampleDirection()",
 		  "em2006",FatalException,ed);
     }
     
@@ -405,7 +421,18 @@ G4double G4PenelopeBremsstrahlungAngular::SampleCosinePolarAngle(const G4Dynamic
       }while(testf>0);
     }
   cdt = (cdt+betap)/(1.0+betap*cdt);
-  return cdt;
+
+  //Get primary kinematics
+  sinTheta = std::sqrt(1. - cdt*cdt);
+  phi  = twopi * G4UniformRand(); 
+  fLocalDirection.set(sinTheta* std::cos(phi),
+		      sinTheta* std::sin(phi),
+		      cdt);
+  //rotate
+  fLocalDirection.rotateUz(dp->GetMomentumDirection());
+  //return
+  return fLocalDirection;
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -415,7 +442,7 @@ G4double G4PenelopeBremsstrahlungAngular::PolarAngle(const G4double ,
 						     const G4int )
 {
   G4cout << "WARNING: G4PenelopeBremsstrahlungAngular() does NOT support PolarAngle()" << G4endl;
-  G4cout << "Please use the alternative interface SampleCosinePolarAngle()" << G4endl;
+  G4cout << "Please use the alternative interface SampleDirection()" << G4endl;
   G4Exception("G4PenelopeBremsstrahlungAngular::PolarAngle()",
 	      "em0005",FatalException,"Unsupported interface");	 
   return 0;

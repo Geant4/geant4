@@ -17,6 +17,62 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+01.08.2012  V.Ivanchenko, tag emlowen-V09-05-35
+            G4LivermorePolarizedPhotoElectricModel - removed debug cout 
+
+31.07.2012  V.Ivanchenko, tag emlowen-V09-05-34
+            G4LivermorePolarizedPhotoElectricModel - fixed initialisation 
+
+28.07.2012  V.Ivanchenko, tag emlowen-V09-05-33
+            G4LivermorePolarizedPhotoElectricModel - use 
+              G4SauterGavrilaAngularDistribution as it was in 9.5 
+              instead of G4PhotoElectricAngularGeneratorPolarized
+              to avoid infinite loop in angular sampling
+
+26.07.2012  V.Ivanchenko, tag emlowen-V09-05-32
+            G4PhotoElectricAngularGeneratorPolarized - added protection 
+              against infinite loop
+
+26.07.2012  V.Ivanchenko, tag emlowen-V09-05-31
+            G4Generator2BN - use G4Generator2BS for Ekin > 1.5 MeV
+            G4LivermorePhotoElectricModel, 
+            G4LivermorePolarizedPhotoElectricModel - use angular
+              generator via G4VAngularDistribution interface
+              removed headers and initialisation of old 
+              deexcitation
+            G4PhotoElectricAngularGeneratorSimple,
+            G4PhotoElectricAngularGeneratorSauterGavrila,
+            G4PhotoElectricAngularGeneratorPolarized - migrated
+              to G4VAngularDistribution interface
+
+20.07.2012  V.Ivanchenko, tag emlowen-V09-05-30
+            G4Generator2BS - fixed sampling according to original paper
+            G4Generator2BN - cleanup
+
+20.07.2012  V.Ivanchenko, L.Pandola tag emlowen-V09-05-29
+            G4LivermoreBremsstrahlungModel, G4LivermoreRayleighModel,
+            G4RayleighAngularGenerator, G4Generator2BN, G4Generator2BS,
+            G4PenelopeBremsstrahlungAngular, G4PenelopeBremsstrahlungModel
+            migrated to the common SampleDirection interface of the pure
+            virtual G4VEmAngularDistribution interface 
+
+17.07.2012  V.Ivanchenko, tag emlowen-V09-05-28
+            G4RayleighScattering - use high energy table above 100 keV
+            G4LivermoreRayleighModel - updated by S.Incerti
+            G4RayleighAngularGenerator - new class (A.Ivantchenko)
+            G4LivermoreGammaConversionModel - is a new version (S.Incerti)
+            G4Livermore2012GammaConversionModel - temporary keep old version
+
+11.07.2012  G.Cosmo, tag emlowen-V09-05-27
+            Explicitly use inclusion of headers for system of units and
+            physical constants, in plan to remove implicit inclusion from
+            globals.hh.
+
+29.06.2012  L.Pandola, tag emlowen-V09-05-26
+	    Corrected G4PenelopeBremsstrahlungFS to avoid the anomaly 
+	    in the gamma-ray spectrum close to the cut which was 
+	    reported by Vladimir
+
 21.06.2012  JB, tag emlowen-V09-05-25 (committed by SI)
             Fix in G4MUComptonModel 
 

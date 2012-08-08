@@ -36,6 +36,7 @@
 // 24 May 2011  L. Pandola       Renamed (make default Penelope)
 // 13 Mar 2012  L. Pandola       Made a derived class of G4VEmAngularDistribution
 //                               and update the interface accordingly
+// 18 Jul 2012  L. Pandola       Migrate to the new interface of G4VEmAngularDistribution
 //
 // Class description:
 // Calculation of angular distribution for Penelope Bremsstrahlung
@@ -68,12 +69,12 @@ public:
 		      const G4double final_energy,
 		      const G4int Z);
 
-  //! Samples Cos(theta). The G4Material* pointer is unused. Forces the 
-  //! calculation of tables, if they are not available
-  G4double SampleCosinePolarAngle(const G4DynamicParticle* dp,
-				  G4double out_energy,
-				  G4int Z,
-				  const G4Material* mat = 0);
+  //! Samples the direction of the outgoing photon (in global coordinates). 
+  //! Forces the calculation of tables, if they are not available
+  G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
+				 G4double out_energy,
+				 G4int Z,
+				 const G4Material* mat = 0);
   
   //! Set/Get Verbosity level
   void SetVerbosityLevel(G4int vl){verbosityLevel = vl;};

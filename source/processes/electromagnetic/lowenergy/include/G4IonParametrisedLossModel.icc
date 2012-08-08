@@ -107,7 +107,7 @@ inline G4double G4IonParametrisedLossModel::DeltaRayMeanEnergyTransferRate(
 
     meanRate = 
         (- std::log(cutMaxEnergyRatio) - (1.0 - cutMaxEnergyRatio) * betaSquared) * 
-        twopi_mc2_rcl2 * 
+        CLHEP::twopi_mc2_rcl2 * 
         (material->GetTotNbOfElectPerVolume()) / betaSquared;
 
     meanRate *= GetChargeSquareRatio(particle, material, kineticEnergy);
@@ -122,8 +122,8 @@ void G4IonParametrisedLossModel::UpdateCache(
 
   cacheParticle = particle;
   cacheMass = particle -> GetPDGMass();
-  cacheElecMassRatio = electron_mass_c2 / cacheMass;
-  G4double q = particle -> GetPDGCharge() / eplus;
+  cacheElecMassRatio = CLHEP::electron_mass_c2 / cacheMass;
+  G4double q = particle -> GetPDGCharge() / CLHEP::eplus;
   cacheChargeSquare = q * q;
 }
 

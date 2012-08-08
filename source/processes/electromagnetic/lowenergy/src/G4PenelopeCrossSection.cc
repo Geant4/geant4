@@ -36,6 +36,7 @@
 //                            sections independently.
 //
 #include "G4PenelopeCrossSection.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsFreeVector.hh"
 #include "G4DataVector.hh"

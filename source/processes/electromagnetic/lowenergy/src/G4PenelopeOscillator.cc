@@ -31,6 +31,7 @@
 // 18 Dec 2008   L Pandola    First implementation 
 
 #include "G4PenelopeOscillator.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

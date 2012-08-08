@@ -33,9 +33,13 @@
 // 23 Nov 2010   L Pandola    First complete implementation, Penelope v2008
 // 24 May 2011   L. Pandola   Renamed (make default Penelope)
 // 13 Mar 2012   L. Pandola   Updated the interface for the angular generator
+// 18 Jul 2012   L. Pandola   Migrate to the new interface of the angular generator, which 
+//                            now provides the G4ThreeVector and takes care of rotation
 //
 
 #include "G4PenelopeBremsstrahlungModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4PenelopeBremsstrahlungFS.hh"
 #include "G4PenelopeBremsstrahlungAngular.hh"
 #include "G4ParticleDefinition.hh"
@@ -277,13 +281,13 @@ void G4PenelopeBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParti
   if (verboseLevel > 3)
     G4cout << "Sampled gamma energy: " << gammaEnergy/keV << " keV" << G4endl;
   
-  //Now sample cosTheta for the Gamma
+  //Now sample the direction for the Gamma. Notice that the rotation is already done
   //Z is unused here, I plug 0. The information is in the material pointer
-  G4double cosThetaPrimary = 
-    fPenelopeAngular->SampleCosinePolarAngle(aDynamicParticle,gammaEnergy,0,material);
+   G4ThreeVector gammaDirection1 = 
+     fPenelopeAngular->SampleDirection(aDynamicParticle,gammaEnergy,0,material);
   
   if (verboseLevel > 3)
-    G4cout << "Sampled cosTheta for e-: " << cosThetaPrimary << G4endl;
+    G4cout << "Sampled cosTheta for e-: " << gammaDirection1.cosTheta() << G4endl;
 
   G4double residualPrimaryEnergy = kineticEnergy-gammaEnergy;
   if (residualPrimaryEnergy < 0)
@@ -292,15 +296,6 @@ void G4PenelopeBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParti
       gammaEnergy += residualPrimaryEnergy;
       residualPrimaryEnergy = 0.0;
     }
-  
-  //Get primary kinematics
-  G4double sinTheta = std::sqrt(1. - cosThetaPrimary*cosThetaPrimary);
-  G4double phi  = twopi * G4UniformRand(); 
-  G4ThreeVector gammaDirection1(sinTheta* std::cos(phi),
-				sinTheta* std::sin(phi),
-				cosThetaPrimary);
-  
-  gammaDirection1.rotateUz(particleDirection0);
   
   //Produce final state according to momentum conservation
   G4ThreeVector particleDirection1 = initialMomentum - gammaEnergy*gammaDirection1;

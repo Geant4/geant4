@@ -44,6 +44,8 @@
 
 #include "G4VLowEnergyDiscretePhotonProcess.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4String.hh"
 #include "G4CrossSectionHandler.hh"
 #include "G4CompositeEMDataSet.hh"

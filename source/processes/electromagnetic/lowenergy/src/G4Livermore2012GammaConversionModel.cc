@@ -23,11 +23,27 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4Livermore2012GammaConversionModel.cc,v 1.9 2010-12-27 17:45:12 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
 // Author: Sebastien Incerti
-//         22 January 2012
-//         on base of G4LivermoreGammaConversionModel
+//         30 October 2008
+//         on base of G4LowEnergyGammaConversion developed by A.Forti and M.G.Pia
+//
+// History:
+// --------
+// 12 Apr 2009   V Ivanchenko Cleanup initialisation and generation of secondaries:
+//                  - apply internal high-energy limit only in constructor 
+//                  - do not apply low-energy limit (default is 0)
+//                  - use CLHEP electron mass for low-enegry limit
+//                  - remove MeanFreePath method and table
+// 26 Dec 2010   V Ivanchenko Load data tables only once to avoid memory leak
+
 
 #include "G4Livermore2012GammaConversionModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -37,23 +53,27 @@ using namespace std;
 
 G4Livermore2012GammaConversionModel::G4Livermore2012GammaConversionModel(const G4ParticleDefinition*,
 								 const G4String& nam)
-:G4VEmModel(nam),smallEnergy(2.*MeV),isInitialised(false),maxZ(99)
+  :G4VEmModel(nam),fParticleChange(0),smallEnergy(2.*MeV),isInitialised(false),
+   crossSectionHandler(0),meanFreePathTable(0)
 {
-  fCurrentCouple = 0;
-  fParticleChange = 0;
-
   lowEnergyLimit = 2.0*electron_mass_c2;
-  data.resize(maxZ+1,0); 
+  highEnergyLimit = 100 * GeV;
+  SetHighEnergyLimit(highEnergyLimit);
   	 
   verboseLevel= 0;
-  // Verbosity scale for debugging purposes:
+  // Verbosity scale:
   // 0 = nothing 
-  // 1 = calculation of cross sections, file openings...
-  // 2 = entering in methods
+  // 1 = warning for energy non-conservation 
+  // 2 = details of energy budget
+  // 3 = calculation of cross sections, file openings, sampling of atoms
+  // 4 = entering in methods
 
-  if(verboseLevel > 0) 
-  {
-    G4cout << "G4Livermore2012GammaConversionModel is constructed " << G4endl;
+  if(verboseLevel > 0) {
+    G4cout << "Livermore2012 Gamma conversion is constructed " << G4endl
+	   << "Energy range: "
+	   << lowEnergyLimit / MeV << " MeV - "
+	   << highEnergyLimit / GeV << " GeV"
+	   << G4endl;
   }
 }
 
@@ -61,131 +81,47 @@ G4Livermore2012GammaConversionModel::G4Livermore2012GammaConversionModel(const G
 
 G4Livermore2012GammaConversionModel::~G4Livermore2012GammaConversionModel()
 {  
-  for(G4int i=0; i<=maxZ; ++i) { delete data[i];}
+  if (crossSectionHandler) { delete crossSectionHandler; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void 
-G4Livermore2012GammaConversionModel::Initialise(const G4ParticleDefinition* particle,
-					    const G4DataVector& cuts)
+G4Livermore2012GammaConversionModel::Initialise(const G4ParticleDefinition*,
+					    const G4DataVector&)
 {
-  if (verboseLevel > 1) 
+  if (verboseLevel > 3) {
+    G4cout << "Calling G4Livermore2012GammaConversionModel::Initialise()" << G4endl;
+  }
+
+  if (crossSectionHandler)
   {
-    G4cout << "Calling Initialise() of G4Livermore2012GammaConversionModel." << G4endl
+    crossSectionHandler->Clear();
+    delete crossSectionHandler;
+  }
+
+  // Read data tables for all materials
+  
+  crossSectionHandler = new G4CrossSectionHandler();
+  crossSectionHandler->Initialise(0,lowEnergyLimit,100.*GeV,400);
+  G4String crossSectionFile = "pair/pp-cs-";
+  crossSectionHandler->LoadData(crossSectionFile);
+  //
+  
+  if (verboseLevel > 2) { 
+    G4cout << "Loaded cross section files for Livermore2012 Gamma Conversion model" << G4endl;
+  }
+  if (verboseLevel > 0) { 
+    G4cout << "Livermore2012 Gamma Conversion model is initialized " << G4endl
 	   << "Energy range: "
 	   << LowEnergyLimit() / MeV << " MeV - "
 	   << HighEnergyLimit() / GeV << " GeV"
 	   << G4endl;
   }
 
-  // Initialise element selector
-  
-  InitialiseElementSelectors(particle, cuts);
-
-  // Access to elements
-  
-  char* path = getenv("G4LEDATA");
-
-  /*
-  const G4ElementTable* theElmTable = G4Element::GetElementTable();  
-  size_t numOfElm = G4Element::GetNumberOfElements();
-  if(numOfElm > 0) 
-  {
-    for(size_t i=0; i<numOfElm; ++i) 
-    {  
-      G4int Z = G4int(((*theElmTable)[i])->GetZ());      
-      if(Z < 1)          { Z = 1; }
-      else if(Z > maxZ)  { Z = maxZ; }
-      if(!data[Z]) { ReadData(Z, path); }
-    }
-  }
-  */
-
-  G4ProductionCutsTable* theCoupleTable=G4ProductionCutsTable::GetProductionCutsTable();
-  G4int numOfCouples = theCoupleTable->GetTableSize();
-  
-  for(G4int i=0; i<numOfCouples; ++i) 
-  {
-    
-    fCurrentCouple = theCoupleTable->GetMaterialCutsCouple(i);
-    const G4Material* material = fCurrentCouple->GetMaterial();
-    const G4ElementVector* theElementVector = material->GetElementVector();
-    G4int nelm = material->GetNumberOfElements();
-    
-    for (G4int j=0; j<nelm; ++j) 
-    {
-        
-      G4int Z = (G4int)(*theElementVector)[j]->GetZ();
-      if(Z < 1)          { Z = 1; }
-      else if(Z > maxZ)  { Z = maxZ; }
-      if(!data[Z]) { ReadData(Z, path); }
-    }
-  }
-  //
-  
   if(isInitialised) { return; }
   fParticleChange = GetParticleChangeForGamma();
   isInitialised = true;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4Livermore2012GammaConversionModel::ReadData(size_t Z, const char* path)
-{
-  if (verboseLevel > 1) 
-  {
-    G4cout << "Calling ReadData() of G4Livermore2012GammaConversionModel" 
-	   << G4endl;
-  }
-
-  if(data[Z]) { return; }
-  
-  const char* datadir = path;
-
-  if(!datadir) 
-  {
-    datadir = getenv("G4LEDATA");
-    if(!datadir) 
-    {
-      G4Exception("G4Livermore2012GammaConversionModel::ReadData()","em0006",FatalException,
-		  "Environment variable G4LEDATA not defined");
-      return;
-    }
-  }
-
-  //
-  
-  data[Z] = new G4LPhysicsFreeVector();
-  
-  // Activation of spline interpolation
-  data[Z] ->SetSpline(true);
-  //
-  
-  std::ostringstream ost;
-  ost << datadir << "/livermore/pair/pp-cs-" << Z <<".dat";
-  std::ifstream fin(ost.str().c_str());
-  
-  if( !fin.is_open()) 
-  {
-    G4ExceptionDescription ed;
-    ed << "G4Livermore2012GammaConversionModel data file <" << ost.str().c_str()
-       << "> is not opened!" << G4endl;
-    G4Exception("G4Livermore2012GammaConversionModel::ReadData()","em0003",FatalException,
-		ed,"G4LEDATA version should be G4EMLOW6.24 or later.");
-    return;
-  } 
-  
-  else 
-  {
-    
-    if(verboseLevel > 3) { G4cout << "File " << ost.str() 
-	     << " is opened by G4Livermore2012GammaConversionModel" << G4endl;}
-    
-    data[Z]->Retrieve(fin, true);
-  } 
-  
-  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -196,51 +132,14 @@ G4Livermore2012GammaConversionModel::ComputeCrossSectionPerAtom(const G4Particle
 							    G4double Z, G4double,
 							    G4double, G4double)
 {
-  if (verboseLevel > 1) 
-  {
+  if (verboseLevel > 3) {
     G4cout << "Calling ComputeCrossSectionPerAtom() of G4Livermore2012GammaConversionModel" 
 	   << G4endl;
   }
+  if (GammaEnergy < lowEnergyLimit || GammaEnergy > highEnergyLimit) { return 0.0; } 
 
-  if (GammaEnergy < lowEnergyLimit) { return 0.0; } 
-
-  G4double xs = 0.0;
-  
-  G4int intZ=G4int(Z);
-
-  if(intZ < 1 || intZ > maxZ) { return xs; }
-
-  G4LPhysicsFreeVector* pv = data[intZ];
-
-  // element was not initialised
-  if(!pv) 
-  {
-    char* path = getenv("G4LEDATA");
-    ReadData(intZ, path);
-    pv = data[intZ];
-    if(!pv) { return xs; }
-  }
-
-  G4int n = pv->GetVectorLength() - 1;
-
-  G4double e1 = pv->Energy(0);
-  G4double e2 = pv->Energy(n);
-
-  if(GammaEnergy < e1)       { xs = 0; }
-
-  else if(GammaEnergy <= e2) { xs = pv->Value(GammaEnergy); }
-
-  if(verboseLevel > 0)
-  {
-    G4cout  <<  "****** DEBUG: tcs value for Z=" << Z << " at energy (MeV)=" << GammaEnergy/MeV << G4endl;
-    G4cout  <<  "  cs (Geant4 internal unit)=" << xs << G4endl;
-    G4cout  <<  "    -> first cs value in EADL data file (iu) =" << (*pv)[0] << G4endl;
-    G4cout  <<  "    -> last  cs value in EADL data file (iu) =" << (*pv)[n] << G4endl;
-    G4cout  <<  "*********************************************************" << G4endl;
-  }
-
-  return xs;
-
+  G4double cs = crossSectionHandler->FindValue(G4int(Z), GammaEnergy);
+  return cs;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -262,7 +161,7 @@ void G4Livermore2012GammaConversionModel::SampleSecondaries(std::vector<G4Dynami
 // pair creation in both nuclear and atomic electron fields. However triplet
 // prodution is not generated.
 
-  if (verboseLevel > 1)
+  if (verboseLevel > 3)
     G4cout << "Calling SampleSecondaries() of G4Livermore2012GammaConversionModel" << G4endl;
 
   G4double photonEnergy = aDynamicGamma->GetKineticEnergy();
@@ -273,29 +172,29 @@ void G4Livermore2012GammaConversionModel::SampleSecondaries(std::vector<G4Dynami
 
   // Do it fast if photon energy < 2. MeV
   if (photonEnergy < smallEnergy )
-  {
+    {
       epsilon = epsilon0Local + (0.5 - epsilon0Local) * G4UniformRand();
-  }
+    }
   else
-  {
+    {
       // Select randomly one element in the current material
-
+      //const G4Element* element = crossSectionHandler->SelectRandomElement(couple,photonEnergy);
       const G4ParticleDefinition* particle =  aDynamicGamma->GetDefinition();
       const G4Element* element = SelectRandomAtom(couple,particle,photonEnergy);
 
       if (element == 0)
-      {
+	{
 	  G4cout << "G4Livermore2012GammaConversionModel::SampleSecondaries - element = 0" 
 		 << G4endl;
 	  return;
-      }
+	}
       G4IonisParamElm* ionisation = element->GetIonisation();
       if (ionisation == 0)
-      {
+	{
 	  G4cout << "G4Livermore2012GammaConversionModel::SampleSecondaries - ionisation = 0" 
 		 << G4endl;
 	  return;
-      }
+	}
 
       // Extract Coulomb factor for this Element
       G4double fZ = 8. * (ionisation->GetlogZ3());
@@ -320,20 +219,19 @@ void G4Livermore2012GammaConversionModel::SampleSecondaries(std::vector<G4Dynami
       G4double normF1 = std::max(f10 * epsilonRange * epsilonRange,0.);
       G4double normF2 = std::max(1.5 * f20,0.);
 
-      do 
-      {
+      do {
 	if (normF1 / (normF1 + normF2) > G4UniformRand() )
-	{
-	    epsilon = 0.5 - epsilonRange * std::pow(G4UniformRand(), 0.333333) ;
+	  {
+	    epsilon = 0.5 - epsilonRange * std::pow(G4UniformRand(), 0.3333) ;
 	    screen = screenFactor / (epsilon * (1. - epsilon));
 	    gReject = (ScreenFunction1(screen) - fZ) / f10 ;
-	}
+	  }
 	else
-	{
+	  {
 	    epsilon = epsilonMin + epsilonRange * G4UniformRand();
 	    screen = screenFactor / (epsilon * (1 - epsilon));
 	    gReject = (ScreenFunction2(screen) - fZ) / f20 ;
-	}
+	  }
       } while ( gReject < G4UniformRand() );
 
     }   //  End of epsilon sampling
@@ -344,15 +242,15 @@ void G4Livermore2012GammaConversionModel::SampleSecondaries(std::vector<G4Dynami
   G4double positronTotEnergy;
 
   if (G4int(2*G4UniformRand()))
-  {
+    {
       electronTotEnergy = (1. - epsilon) * photonEnergy;
       positronTotEnergy = epsilon * photonEnergy;
-  }
+    }
   else
-  {
+    {
       positronTotEnergy = (1. - epsilon) * photonEnergy;
       electronTotEnergy = epsilon * photonEnergy;
-  }
+    }
 
   // Scattered electron (positron) angles. ( Z - axis along the parent photon)
   // Universal distribution suggested by L. Urban (Geant3 manual (1993) Phys211),
@@ -365,13 +263,13 @@ void G4Livermore2012GammaConversionModel::SampleSecondaries(std::vector<G4Dynami
 
   //  if (9. / (9. + d) > G4UniformRand())
   if (0.25 > G4UniformRand())
-  {
+    {
       u = - std::log(G4UniformRand() * G4UniformRand()) / a1 ;
-  }
+    }
   else
-  {
+    {
       u = - std::log(G4UniformRand() * G4UniformRand()) / a2 ;
-  }
+    }
 
   G4double thetaEle = u*electron_mass_c2/electronTotEnergy;
   G4double thetaPos = u*electron_mass_c2/positronTotEnergy;
@@ -387,6 +285,8 @@ void G4Livermore2012GammaConversionModel::SampleSecondaries(std::vector<G4Dynami
   
   G4double electronKineEnergy = std::max(0.,electronTotEnergy - electron_mass_c2) ;
   
+  // SI - The range test has been removed wrt original G4LowEnergyGammaconversion class
+
   G4ThreeVector electronDirection (dxEle, dyEle, dzEle);
   electronDirection.rotateUz(photonDirection);
       
@@ -396,6 +296,8 @@ void G4Livermore2012GammaConversionModel::SampleSecondaries(std::vector<G4Dynami
 
   // The e+ is always created (even with kinetic energy = 0) for further annihilation
   G4double positronKineEnergy = std::max(0.,positronTotEnergy - electron_mass_c2) ;
+
+  // SI - The range test has been removed wrt original G4LowEnergyGammaconversion class
 
   G4ThreeVector positronDirection (dxPos, dyPos, dzPos);
   positronDirection.rotateUz(photonDirection);   

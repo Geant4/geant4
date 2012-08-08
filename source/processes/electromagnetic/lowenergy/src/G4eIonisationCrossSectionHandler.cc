@@ -58,6 +58,7 @@
 // -------------------------------------------------------------------
 
 #include "G4eIonisationCrossSectionHandler.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4VEnergySpectrum.hh"
 #include "G4DataVector.hh"
 #include "G4CompositeEMDataSet.hh"

@@ -45,6 +45,8 @@
 //
 
 #include "G4LivermoreBremsstrahlungModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4MaterialCutsCouple.hh"
 
@@ -54,10 +56,10 @@
 #include "G4Electron.hh"
 #include "G4SemiLogInterpolation.hh"
 //
-#include "G4VBremAngularDistribution.hh"
+#include "G4VEmAngularDistribution.hh"
 #include "G4ModifiedTsai.hh"
 #include "G4Generator2BS.hh"
-#include "G4Generator2BN.hh"
+//#include "G4Generator2BN.hh"
 //
 #include "G4BremsstrahlungCrossSectionHandler.hh"
 //
@@ -80,11 +82,12 @@ G4LivermoreBremsstrahlungModel::G4LivermoreBremsstrahlungModel(const G4ParticleD
   SetHighEnergyLimit(fIntrinsicHighEnergyLimit);
   //
   verboseLevel = 0;
+  SetAngularDistribution(new G4Generator2BS());
   //
-  generatorName = "tsai";
-  angularDistribution = new G4ModifiedTsai("TsaiGenerator"); //default generator
+  //generatorName = "tsai";
+  //angularDistribution = new G4ModifiedTsai("TsaiGenerator"); //default generator
   //
-  TsaiAngularDistribution = new G4ModifiedTsai("TsaiGenerator");
+  //TsaiAngularDistribution = new G4ModifiedTsai("TsaiGenerator");
   //
 }
 
@@ -95,8 +98,8 @@ G4LivermoreBremsstrahlungModel::~G4LivermoreBremsstrahlungModel()
   if (crossSectionHandler) delete crossSectionHandler;
   if (energySpectrum) delete energySpectrum;
   energyBins.clear();
-  delete angularDistribution;
-  delete TsaiAngularDistribution;
+  //delete angularDistribution;
+  //delete TsaiAngularDistribution;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -270,37 +273,22 @@ void G4LivermoreBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicPart
 
   //Sample gamma energy
   G4double tGamma = energySpectrum->SampleEnergy(Z, energyCut, kineticEnergy, kineticEnergy);
+  //nothing happens
+  if (tGamma == 0.) { return; }
+
   G4double totalEnergy = kineticEnergy + electron_mass_c2;
   G4double finalEnergy = kineticEnergy - tGamma; // electron final energy  
-  G4double theta = 0;
-
-  if (tGamma == 0.) //nothing happens
-    return;
 
   //Sample gamma direction
-  //Use alternative algorithms, if it is the case.
-  if((kineticEnergy < MeV && kineticEnergy > keV))
-    { 
-      theta = angularDistribution->PolarAngle(kineticEnergy,finalEnergy,Z);
-    }
-  else
-    //Otherwise, use tsai
-    {
-      theta = TsaiAngularDistribution->PolarAngle(kineticEnergy,finalEnergy,Z);
-    }  
+  G4ThreeVector gammaDirection = 
+    GetAngularDistribution()->SampleDirection(aDynamicParticle, 
+					      totalEnergy-tGamma,
+					      Z, 
+					      couple->GetMaterial());
 
-  G4double phi   = twopi * G4UniformRand();
-  G4double dirZ  = std::cos(theta);
-  G4double sinTheta  = std::sqrt(1. - dirZ*dirZ);
-  G4double dirX  = sinTheta*std::cos(phi);
-  G4double dirY  = sinTheta*std::sin(phi);
-
-  G4ThreeVector gammaDirection (dirX, dirY, dirZ);
   G4ThreeVector electronDirection = aDynamicParticle->GetMomentumDirection();
 
-  //Update the incident particle
-  gammaDirection.rotateUz(electronDirection);   
-    
+  //Update the incident particle    
   if (finalEnergy < 0.) 
     {
       // Kinematic problem
@@ -347,7 +335,7 @@ void G4LivermoreBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicPart
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+/*
 void 
 G4LivermoreBremsstrahlungModel::SetAngularGenerator(G4VBremAngularDistribution* distribution)
 {
@@ -356,9 +344,9 @@ G4LivermoreBremsstrahlungModel::SetAngularGenerator(G4VBremAngularDistribution* 
   angularDistribution = distribution;
   angularDistribution->PrintGeneratorInformation();
 }
-
+*/
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+ /*
 void G4LivermoreBremsstrahlungModel::SetAngularGenerator(const G4String& theGenName)
 {
   if(theGenName == generatorName) return;
@@ -390,3 +378,4 @@ void G4LivermoreBremsstrahlungModel::SetAngularGenerator(const G4String& theGenN
 
   angularDistribution->PrintGeneratorInformation();
 }
+ */

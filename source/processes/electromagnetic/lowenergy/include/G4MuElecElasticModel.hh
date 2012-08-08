@@ -38,6 +38,8 @@
 #define G4MuElecElasticModel_h 1
 
 #include <map>
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4MuElecCrossSectionDataSet.hh"
 #include "G4VEmModel.hh"
 #include "G4Electron.hh"
@@ -137,10 +139,10 @@ inline void G4MuElecElasticModel::SetKillBelowThreshold (G4double threshold)
 { 
     killBelowEnergy = threshold; 
     
-    if (threshold < 5*eV)
+    if (threshold < 5*CLHEP::eV)
     {
        G4Exception ("*** WARNING : the G4MuElecElasticModel class is not validated below 5 eV !","",JustWarning,"") ;
-       threshold = 0.025*eV;
+       threshold = 0.025*CLHEP::eV;
     }
              
 }		 

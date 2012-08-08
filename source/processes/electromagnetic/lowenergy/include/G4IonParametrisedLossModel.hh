@@ -68,13 +68,15 @@
 #ifndef G4IONPARAMETRISEDLOSSMODEL_HH
 #define G4IONPARAMETRISEDLOSSMODEL_HH
 
-#include "G4VEmModel.hh"
-#include "G4EmCorrections.hh"
-#include "G4IonDEDXHandler.hh"
 #include <iomanip>
 #include <list>
 #include <map>
 #include <utility>
+#include <CLHEP/Units/PhysicalConstants.h>
+
+#include "G4VEmModel.hh"
+#include "G4EmCorrections.hh"
+#include "G4IonDEDXHandler.hh"
 
 class G4BraggIonModel;
 class G4BetheBlochModel;

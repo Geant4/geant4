@@ -51,6 +51,8 @@
 // -------------------------------------------------------------------
 
 #include "G4UAtomicDeexcitation.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4Gamma.hh"
 #include "G4AtomicTransitionManager.hh"

@@ -43,13 +43,14 @@
 //
 // -------------------------------------------------------------------
 
+#include <fstream>
+
 #include "G4BremsstrahlungParameters.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4VEMDataSet.hh"
 #include "G4EMDataSet.hh"
 #include "G4LogLogInterpolation.hh"
 #include "G4Material.hh"
-#include <fstream>
-
 
 G4BremsstrahlungParameters:: G4BremsstrahlungParameters(const G4String& name,
     size_t num, G4int minZ, G4int maxZ)

@@ -56,6 +56,8 @@
 #include "G4AtomicShell.hh"
 #include "G4DataVector.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 
 G4eIonisationSpectrum::G4eIonisationSpectrum():G4VEnergySpectrum(),

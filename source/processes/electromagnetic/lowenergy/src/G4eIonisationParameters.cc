@@ -46,6 +46,7 @@
 // -------------------------------------------------------------------
 
 #include "G4eIonisationParameters.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4VEMDataSet.hh"
 #include "G4ShellEMDataSet.hh"
 #include "G4EMDataSet.hh"

@@ -49,6 +49,8 @@
 #ifndef  G4CrossSectionDataSet_HH
 #define  G4CrossSectionDataSet_HH 1
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4ShellEMDataSet.hh"
 
 class G4CrossSectionDataSet : public G4VEMDataSet
@@ -56,8 +58,8 @@ class G4CrossSectionDataSet : public G4VEMDataSet
 
 public:
   G4CrossSectionDataSet(G4VDataSetAlgorithm* algo, 
-			   G4double xUnit=MeV, 
-			   G4double dataUnit=barn);
+			   G4double xUnit=CLHEP::MeV, 
+			   G4double dataUnit=CLHEP::barn);
 
   virtual ~G4CrossSectionDataSet();
 

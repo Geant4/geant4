@@ -52,9 +52,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4hZiegler1985Nuclear.hh"
-#include "G4UnitsTable.hh"
+
 #include "globals.hh"
 #include "Randomize.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

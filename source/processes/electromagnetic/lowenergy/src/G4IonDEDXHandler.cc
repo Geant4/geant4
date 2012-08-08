@@ -49,14 +49,15 @@
 //
 // =========================================================================== 
 
+#include <iomanip>
 
 #include "G4IonDEDXHandler.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4VIonDEDXTable.hh"
 #include "G4VIonDEDXScalingAlgorithm.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Material.hh"
 #include "G4LPhysicsFreeVector.hh"
-#include <iomanip>
 
 //#define PRINT_DEBUG
 

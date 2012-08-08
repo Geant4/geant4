@@ -37,6 +37,7 @@
 //!         e+)
 //
 #include "G4PenelopeOscillatorManager.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4PenelopeIonisationCrossSection.hh"
 #include "G4PenelopeIonisationXSHandler.hh"
 #include "G4PenelopeCrossSection.hh"
