@@ -50,23 +50,24 @@
 //
 G4_DECLARE_XS_FACTORY(G4ChipsKaonPlusInelasticXS);
 
-// Initialization of the
-G4double* G4ChipsKaonPlusInelasticXS::lastLEN=0; // Pointer to the lastArray of LowEn CS
-G4double* G4ChipsKaonPlusInelasticXS::lastHEN=0; // Pointer to the lastArray of HighEn CS
-G4int     G4ChipsKaonPlusInelasticXS::lastN=0;   // The last N of calculated nucleus
-G4int     G4ChipsKaonPlusInelasticXS::lastZ=0;   // The last Z of calculated nucleus
-G4double  G4ChipsKaonPlusInelasticXS::lastP=0.;  // Last used in cross section Momentum
-G4double  G4ChipsKaonPlusInelasticXS::lastTH=0.; // Last threshold momentum
-G4double  G4ChipsKaonPlusInelasticXS::lastCS=0.; // Last value of the Cross Section
-G4int     G4ChipsKaonPlusInelasticXS::lastI=0;   // The last position in the DAMDB
-std::vector<G4double*>* G4ChipsKaonPlusInelasticXS::LEN = new std::vector<G4double*>;
-std::vector<G4double*>* G4ChipsKaonPlusInelasticXS::HEN = new std::vector<G4double*>;
 
-G4ChipsKaonPlusInelasticXS::G4ChipsKaonPlusInelasticXS():G4VCrossSectionDataSet(Default_Name()){}
+G4ChipsKaonPlusInelasticXS::G4ChipsKaonPlusInelasticXS():G4VCrossSectionDataSet(Default_Name())
+{
+  // Initialization of the
+  lastLEN=0; // Pointer to the lastArray of LowEn CS
+  lastHEN=0; // Pointer to the lastArray of HighEn CS
+  lastN=0;   // The last N of calculated nucleus
+  lastZ=0;   // The last Z of calculated nucleus
+  lastP=0.;  // Last used in cross section Momentum
+  lastTH=0.; // Last threshold momentum
+  lastCS=0.; // Last value of the Cross Section
+  lastI=0;   // The last position in the DAMDB
+  LEN = new std::vector<G4double*>;
+  HEN = new std::vector<G4double*>;
+}
 
 G4ChipsKaonPlusInelasticXS::~G4ChipsKaonPlusInelasticXS()
 {
-  /* 
   G4int lens=LEN->size();
   for(G4int i=0; i<lens; ++i) delete[] (*LEN)[i];
   delete LEN;
@@ -74,7 +75,6 @@ G4ChipsKaonPlusInelasticXS::~G4ChipsKaonPlusInelasticXS()
   G4int hens=HEN->size();
   for(G4int i=0; i<hens; ++i) delete[] (*HEN)[i];
   delete HEN;
-  */
 }
 
 
@@ -134,10 +134,6 @@ G4double G4ChipsKaonPlusInelasticXS::GetChipsCrossSection(G4double pMom, G4int t
         }
         lastP  =colP [i];              // Last Momentum  (A-dependent)
         lastCS =colCS[i];              // Last CrossSect (A-dependent)
-        if(lastP==pMom)              // VI do not use tolerance
-        {
-          return lastCS*millibarn;     // Use theLastCS
-        }
         in = true;                     // This is the case when the isotop is found in DB
         // Momentum pMom is in IU ! @@ Units
         lastCS=CalculateCrossSection(-1,j,321,lastZ,lastN,pMom); // read & update
@@ -155,6 +151,7 @@ G4double G4ChipsKaonPlusInelasticXS::GetChipsCrossSection(G4double pMom, G4int t
     {
       //!!The slave functions must provide cross-sections in millibarns (mb) !! (not in IU)
       lastCS=CalculateCrossSection(0,j,321,lastZ,lastN,pMom); //calculate & create
+
       //if(lastCS>0.)                   // It means that the AMBD was initialized
       //{
 
@@ -176,10 +173,6 @@ G4double G4ChipsKaonPlusInelasticXS::GetChipsCrossSection(G4double pMom, G4int t
   else if(pMom<=lastTH)
   {
     return 0.;                         // Momentum is below the Threshold Value -> CS=0
-  }
-  else if(lastP==pMom)               // VI do not use tolerance
-  {
-    return lastCS*millibarn;           // Use theLastCS
   }
   else                                 // It is the last used -> use the current tables
   {

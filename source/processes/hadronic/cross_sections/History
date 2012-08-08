@@ -14,6 +14,40 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+31 July 2012 V.Ivanchenko (hadr-cross-V09-05-26)
+-----------------------------------------------
+- G4CrossSectionDataStore - introduced cash for material and element
+    cross sections in order to save CPU; cross section for material
+    is not recomputed if material, primary particle and kinetic
+    energy are the same; cross section for element is not recomputed
+    if material, element, primary particle and kinetic energy are the 
+    same; G4Nucleus is updated using new method SetIsotope
+
+20 July 2012 W.Pokorski (hadr-cross-V09-05-25)
+-----------------------------------------------
+- removing unnecesary statics in all the Chips cross sections
+
+20 July 2012 W.Pokorski (hadr-cross-V09-05-24)
+-----------------------------------------------
+- removing check for equal momenta in following interactions for kaons
+
+17 July 2012 W.Pokorski (hadr-cross-V09-05-23)
+-----------------------------------------------
+- removing first bunch of statics from Chips XS
+
+17 July 2012 G.Folger  (hadr-cross-V09-05-22)
+-----------------------------------------------
+-  correct order for initialising data members in ctor.
+
+17 July 2012 G.Folger  (hadr-cross-V09-05-21)
+-----------------------------------------------
+- add missing headers and sources to sources.cmake
+
+13 July 2012 G.Folger  (hadr-cross-V09-05-20)
+-----------------------------------------------
+- fix coverity warning in G4CrossSectionPairGG.cc, where an invalid iterator 
+   could be used, beyond container.
+
 4 July 2012 W.Pokorski (hadr-cross-V09-05-19)
 -----------------------------------------------
 - fixing double deletion in Chips cross sections

@@ -85,57 +85,57 @@ private:
 // Body
 private:
   // --- Data formating AMDB (define the precalculated table structure) ---
-  static const G4int nPoints;// #of points in the AMDB tables     
-  static const G4int nLast;  // the Last element in the table
-  static G4double    lPMin;  // Min tabulated logarithmic Momentum  
-  static G4double    lPMax;  // Max tabulated logarithmic Momentum  
-  static G4double    dlnP;   // Log step in the table     
+  const G4int nPoints;// #of points in the AMDB tables     
+  const G4int nLast;  // the Last element in the table
+  G4double    lPMin;  // Min tabulated logarithmic Momentum  
+  G4double    lPMax;  // Max tabulated logarithmic Momentum  
+  G4double    dlnP;   // Log step in the table     
   // ---- Local (for particular pP, pPDG, tZ, tN) -----
-  static G4bool    onlyCS;   // flag to calculate only CS (not S1/B1,S2/B2,S3/B3)
-  static G4double  lastSIG;  // Last calculated cross section
-  static G4double  lastLP;   // Last log(mom_of_the_incident_hadron in GeV)
-  static G4double  lastTM;   // Last t_maximum                       
-  static G4int     lastN;    // The last N of calculated nucleus
-  static G4int     lastZ;    // The last Z of calculated nucleus
-  static G4double  lastP;    // Last used in the cross section Momentum
-  static G4double  lastTH;   // Last value of the Momentum Threshold
-  static G4double  lastCS;   // Last value of the Cross Section
-  static G4int     lastI;    // The last position in the DAMDB
-  static G4double  theSS;    // The Last squared slope of first diffruction 
-  static G4double  theS1;    // The Last mantissa of first diffruction 
-  static G4double  theB1;    // The Last slope of first diffruction    
-  static G4double  theS2;    // The Last mantissa of second diffruction
-  static G4double  theB2;    // The Last slope of second diffruction   
-  static G4double  theS3;    // The Last mantissa of third diffruction 
-  static G4double  theB3;    // The Last slope of third diffruction    
-  static G4double  theS4;    // The Last mantissa of 4-th diffruction 
-  static G4double  theB4;    // The Last slope of 4-th diffruction    
+  G4bool    onlyCS;   // flag to calculate only CS (not S1/B1,S2/B2,S3/B3)
+  G4double  lastSIG;  // Last calculated cross section
+  G4double  lastLP;   // Last log(mom_of_the_incident_hadron in GeV)
+  G4double  lastTM;   // Last t_maximum                       
+  G4int     lastN;    // The last N of calculated nucleus
+  G4int     lastZ;    // The last Z of calculated nucleus
+  G4double  lastP;    // Last used in the cross section Momentum
+  G4double  lastTH;   // Last value of the Momentum Threshold
+  G4double  lastCS;   // Last value of the Cross Section
+  G4int     lastI;    // The last position in the DAMDB
+  G4double  theSS;    // The Last squared slope of first diffruction 
+  G4double  theS1;    // The Last mantissa of first diffruction 
+  G4double  theB1;    // The Last slope of first diffruction    
+  G4double  theS2;    // The Last mantissa of second diffruction
+  G4double  theB2;    // The Last slope of second diffruction   
+  G4double  theS3;    // The Last mantissa of third diffruction 
+  G4double  theB3;    // The Last slope of third diffruction    
+  G4double  theS4;    // The Last mantissa of 4-th diffruction 
+  G4double  theB4;    // The Last slope of 4-th diffruction    
   // ---- Global (AMBD of P-dependent tables for pPDG,tZ,tN) -----
-  static G4int     lastTZ;   // Last atomic number of the target
-  static G4int     lastTN;   // Last number of neutrons of the target
-  static G4double  lastPIN;  // Last initialized max momentum
-  static G4double* lastCST;  // Last cross-section table
-  static G4double* lastPAR;  // Last parameters for functional calculation
-  static G4double* lastSST;  // E-dep of squared slope of the first difruction 
-  static G4double* lastS1T;  // E-dep of mantissa of the first difruction 
-  static G4double* lastB1T;  // E-dep of the slope of the first difruction
-  static G4double* lastS2T;  // E-dep of mantissa of the second difruction
-  static G4double* lastB2T;  // E-dep of the slope of theSecond difruction
-  static G4double* lastS3T;  // E-dep of mantissa of the third difruction 
-  static G4double* lastB3T;  // E-dep of the slope of the third difruction
-  static G4double* lastS4T;  // E-dep of mantissa of the 4-th difruction 
-  static G4double* lastB4T;  // E-dep of the slope of the 4-th difruction
+  G4int     lastTZ;   // Last atomic number of the target
+  G4int     lastTN;   // Last number of neutrons of the target
+  G4double  lastPIN;  // Last initialized max momentum
+  G4double* lastCST;  // Last cross-section table
+  G4double* lastPAR;  // Last parameters for functional calculation
+  G4double* lastSST;  // E-dep of squared slope of the first difruction 
+  G4double* lastS1T;  // E-dep of mantissa of the first difruction 
+  G4double* lastB1T;  // E-dep of the slope of the first difruction
+  G4double* lastS2T;  // E-dep of mantissa of the second difruction
+  G4double* lastB2T;  // E-dep of the slope of theSecond difruction
+  G4double* lastS3T;  // E-dep of mantissa of the third difruction 
+  G4double* lastB3T;  // E-dep of the slope of the third difruction
+  G4double* lastS4T;  // E-dep of mantissa of the 4-th difruction 
+  G4double* lastB4T;  // E-dep of the slope of the 4-th difruction
 
-  static std::vector <G4double*> PAR;   // Vector of parameters for functional calculations
-  static std::vector <G4double*> CST;   // Vector of cross-section table
-  static std::vector <G4double*> SST;   // Vector of the first squared slope
-  static std::vector <G4double*> S1T;   // Vector of the first mantissa
-  static std::vector <G4double*> B1T;   // Vector of the first slope
-  static std::vector <G4double*> S2T;   // Vector of the secon mantissa
-  static std::vector <G4double*> B2T;   // Vector of the second slope
-  static std::vector <G4double*> S3T;   // Vector of the third mantissa
-  static std::vector <G4double*> B3T;   // Vector of the third slope
-  static std::vector <G4double*> S4T;   // Vector of the 4-th mantissa (gloria)
-  static std::vector <G4double*> B4T;   // Vector of the 4-th slope    (gloria)
+  std::vector <G4double*> PAR;   // Vector of parameters for functional calculations
+  std::vector <G4double*> CST;   // Vector of cross-section table
+  std::vector <G4double*> SST;   // Vector of the first squared slope
+  std::vector <G4double*> S1T;   // Vector of the first mantissa
+  std::vector <G4double*> B1T;   // Vector of the first slope
+  std::vector <G4double*> S2T;   // Vector of the secon mantissa
+  std::vector <G4double*> B2T;   // Vector of the second slope
+  std::vector <G4double*> S3T;   // Vector of the third mantissa
+  std::vector <G4double*> B3T;   // Vector of the third slope
+  std::vector <G4double*> S4T;   // Vector of the 4-th mantissa (gloria)
+  std::vector <G4double*> B4T;   // Vector of the 4-th slope    (gloria)
  };
 #endif

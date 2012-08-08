@@ -1467,10 +1467,9 @@ G4HadronCrossSections::CalcScatteringCrossSections(
       crel = 1.;
       crin = 1.;
 
-      G4int i = 3;
-      if (AA < 50) i = 2;
-      else if (AA > 100.) i = 4;
-      i = i - 1;      // For array indexing
+      G4int i = 2;
+      if (AA < 50) i = 1;
+      else if (AA > 100) i = 3;
 
 // Protons and neutrons
       if (ipart == 14 || ipart == 16) {

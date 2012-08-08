@@ -51,66 +51,48 @@
 //
 G4_DECLARE_XS_FACTORY(G4ChipsPionMinusElasticXS);
 
-
-// Initialization of the static parameters
-const G4int G4ChipsPionMinusElasticXS::nPoints=128;//#ofPt in AMDB table(>anyPar)(D)
-const G4int G4ChipsPionMinusElasticXS::nLast=nPoints-1;//theLastElement inTheTable(D)
-G4double  G4ChipsPionMinusElasticXS::lPMin=-8.;  //Min tabulated logarithmMomentum(D)
-G4double  G4ChipsPionMinusElasticXS::lPMax= 8.;  //Max tabulated logarithmMomentum(D)
-G4double  G4ChipsPionMinusElasticXS::dlnP=(lPMax-lPMin)/nLast;//LogStep inTheTable(D)
-G4bool    G4ChipsPionMinusElasticXS::onlyCS=true;//Flag toCalcul OnlyCS(not Si/Bi)(L)
-G4double  G4ChipsPionMinusElasticXS::lastSIG=0.; //Last calculated cross section  (L)
-G4double  G4ChipsPionMinusElasticXS::lastLP=-10.;//Last log(mom_of IncidentHadron)(L)
-G4double  G4ChipsPionMinusElasticXS::lastTM=0.;  //Last t_maximum                 (L)
-G4double  G4ChipsPionMinusElasticXS::theSS=0.;   //TheLastSqSlope of 1st difr.Max(L)
-G4double  G4ChipsPionMinusElasticXS::theS1=0.;   //TheLastMantissa of 1st difr.Max(L)
-G4double  G4ChipsPionMinusElasticXS::theB1=0.;   //TheLastSlope of 1st difruct.Max(L)
-G4double  G4ChipsPionMinusElasticXS::theS2=0.;   //TheLastMantissa of 2nd difr.Max(L)
-G4double  G4ChipsPionMinusElasticXS::theB2=0.;   //TheLastSlope of 2nd difruct.Max(L)
-G4double  G4ChipsPionMinusElasticXS::theS3=0.;   //TheLastMantissa of 3d difr. Max(L)
-G4double  G4ChipsPionMinusElasticXS::theB3=0.;   //TheLastSlope of 3d difruct. Max(L)
-G4double  G4ChipsPionMinusElasticXS::theS4=0.;   //TheLastMantissa of 4th difr.Max(L)
-G4double  G4ChipsPionMinusElasticXS::theB4=0.;   //TheLastSlope of 4th difruct.Max(L)
-G4int     G4ChipsPionMinusElasticXS::lastTZ=0;   // Last atomic number of the target
-G4int     G4ChipsPionMinusElasticXS::lastTN=0;   // Last # of neutrons in the target
-G4double  G4ChipsPionMinusElasticXS::lastPIN=0.; // Last initialized max momentum
-G4double* G4ChipsPionMinusElasticXS::lastCST=0;  // Elastic cross-section table
-G4double* G4ChipsPionMinusElasticXS::lastPAR=0;  // Parameters ForFunctionCalculation
-G4double* G4ChipsPionMinusElasticXS::lastSST=0;  // E-dep of SqardSlope of 1st difMax
-G4double* G4ChipsPionMinusElasticXS::lastS1T=0;  // E-dep of mantissa of 1st dif.Max
-G4double* G4ChipsPionMinusElasticXS::lastB1T=0;  // E-dep of the slope of 1st difMax
-G4double* G4ChipsPionMinusElasticXS::lastS2T=0;  // E-dep of mantissa of 2nd difrMax
-G4double* G4ChipsPionMinusElasticXS::lastB2T=0;  // E-dep of the slope of 2nd difMax
-G4double* G4ChipsPionMinusElasticXS::lastS3T=0;  // E-dep of mantissa of 3d difr.Max
-G4double* G4ChipsPionMinusElasticXS::lastB3T=0;  // E-dep of the slope of 3d difrMax
-G4double* G4ChipsPionMinusElasticXS::lastS4T=0;  // E-dep of mantissa of 4th difrMax
-G4double* G4ChipsPionMinusElasticXS::lastB4T=0;  // E-dep of the slope of 4th difMax
-G4int     G4ChipsPionMinusElasticXS::lastN=0;    // The last N of calculated nucleus
-G4int     G4ChipsPionMinusElasticXS::lastZ=0;    // The last Z of calculated nucleus
-G4double  G4ChipsPionMinusElasticXS::lastP=0.;   // LastUsed in CrossSection Momentum
-G4double  G4ChipsPionMinusElasticXS::lastTH=0.;  // Last threshold momentum
-G4double  G4ChipsPionMinusElasticXS::lastCS=0.;  // Last value of the Cross Section
-G4int     G4ChipsPionMinusElasticXS::lastI=0;    // The last position in the DAMDB
-
-std::vector<G4double*> G4ChipsPionMinusElasticXS::PAR;// Vector of ParsForFunctCalcul
-std::vector<G4double*> G4ChipsPionMinusElasticXS::CST;// Vector of CrossSection table
-std::vector<G4double*> G4ChipsPionMinusElasticXS::SST;// Vector of the1st SquardSlope
-std::vector<G4double*> G4ChipsPionMinusElasticXS::S1T;// Vector of the1st mantissa
-std::vector<G4double*> G4ChipsPionMinusElasticXS::B1T;// Vector of the1st slope
-std::vector<G4double*> G4ChipsPionMinusElasticXS::S2T;// Vector of the2nd mantissa
-std::vector<G4double*> G4ChipsPionMinusElasticXS::B2T;// Vector of the2nd slope
-std::vector<G4double*> G4ChipsPionMinusElasticXS::S3T;// Vector of the3d mantissa
-std::vector<G4double*> G4ChipsPionMinusElasticXS::B3T;// Vector of the3d slope
-std::vector<G4double*> G4ChipsPionMinusElasticXS::S4T;// Vector of the4th mantissa(g)
-std::vector<G4double*> G4ChipsPionMinusElasticXS::B4T;// Vector of the4th slope(glor)
-
-G4ChipsPionMinusElasticXS::G4ChipsPionMinusElasticXS():G4VCrossSectionDataSet(Default_Name())
+G4ChipsPionMinusElasticXS::G4ChipsPionMinusElasticXS():G4VCrossSectionDataSet(Default_Name()), nPoints(128), nLast(nPoints-1)
 {
+  lPMin=-8.;  //Min tabulated logarithmMomentum(D)
+  lPMax= 8.;  //Max tabulated logarithmMomentum(D)
+  dlnP=(lPMax-lPMin)/nLast;//LogStep inTheTable(D)
+  onlyCS=true;//Flag toCalcul OnlyCS(not Si/Bi)(L)
+  lastSIG=0.; //Last calculated cross section  (L)
+  lastLP=-10.;//Last log(mom_of IncidentHadron)(L)
+  lastTM=0.;  //Last t_maximum                 (L)
+  theSS=0.;   //TheLastSqSlope of 1st difr.Max(L)
+  theS1=0.;   //TheLastMantissa of 1st difr.Max(L)
+  theB1=0.;   //TheLastSlope of 1st difruct.Max(L)
+  theS2=0.;   //TheLastMantissa of 2nd difr.Max(L)
+  theB2=0.;   //TheLastSlope of 2nd difruct.Max(L)
+  theS3=0.;   //TheLastMantissa of 3d difr. Max(L)
+  theB3=0.;   //TheLastSlope of 3d difruct. Max(L)
+  theS4=0.;   //TheLastMantissa of 4th difr.Max(L)
+  theB4=0.;   //TheLastSlope of 4th difruct.Max(L)
+  lastTZ=0;   // Last atomic number of the target
+  lastTN=0;   // Last # of neutrons in the target
+  lastPIN=0.; // Last initialized max momentum
+  lastCST=0;  // Elastic cross-section table
+  lastPAR=0;  // Parameters ForFunctionCalculation
+  lastSST=0;  // E-dep of SqardSlope of 1st difMax
+  lastS1T=0;  // E-dep of mantissa of 1st dif.Max
+  lastB1T=0;  // E-dep of the slope of 1st difMax
+  lastS2T=0;  // E-dep of mantissa of 2nd difrMax
+  lastB2T=0;  // E-dep of the slope of 2nd difMax
+  lastS3T=0;  // E-dep of mantissa of 3d difr.Max
+  lastB3T=0;  // E-dep of the slope of 3d difrMax
+  lastS4T=0;  // E-dep of mantissa of 4th difrMax
+  lastB4T=0;  // E-dep of the slope of 4th difMax
+  lastN=0;    // The last N of calculated nucleus
+  lastZ=0;    // The last Z of calculated nucleus
+  lastP=0.;   // LastUsed in CrossSection Momentum
+  lastTH=0.;  // Last threshold momentum
+  lastCS=0.;  // Last value of the Cross Section
+  lastI=0;    // The last position in the DAMDB
 }
 
 G4ChipsPionMinusElasticXS::~G4ChipsPionMinusElasticXS()
-{
-  /*
+{  
   std::vector<G4double*>::iterator pos;
   for (pos=CST.begin(); pos<CST.end(); pos++)
   { delete [] *pos; }
@@ -145,7 +127,6 @@ G4ChipsPionMinusElasticXS::~G4ChipsPionMinusElasticXS()
   for (pos=B4T.begin(); pos<B4T.end(); pos++)
   { delete [] *pos; }
   B4T.clear();
-  */
 }
 
 

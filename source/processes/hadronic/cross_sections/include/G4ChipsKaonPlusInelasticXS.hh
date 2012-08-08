@@ -81,19 +81,19 @@ private:
   G4double ThresholdMomentum(G4int targZ, G4int targN); // Threshold of pA reaction (MeV/c)
 // Body
 private:
-  static G4double  lastSig; // Last value of the Cross Section
-  static G4double* lastLEN; // Pointer to the last array of LowEnergy cross sections
-  static G4double* lastHEN; // Pointer to the last array of HighEnergy cross sections
-  static G4double  lastE;   // Last used in the cross section Energy
-  static G4int     lastPDG; // The last projectile PDG
-  static G4int     lastN;   // The last N of calculated nucleus
-  static G4int     lastZ;   // The last Z of calculated nucleus
-  static G4double  lastP;   // Last used in the cross section Momentum
-  static G4double  lastTH;  // Last value of the Momentum Threshold
-  static G4double  lastCS;  // Last value of the Cross Section
-  static G4int     lastI;   // The last position in the DAMDB
-  static std::vector<G4double*>* LEN;  // Vector of pointers to LowEnProtonCrossSection
-  static std::vector<G4double*>* HEN;  // Vector of pointers to HighEnProtonCrossSection
+  G4double  lastSig; // Last value of the Cross Section
+  G4double* lastLEN; // Pointer to the last array of LowEnergy cross sections
+  G4double* lastHEN; // Pointer to the last array of HighEnergy cross sections
+  G4double  lastE;   // Last used in the cross section Energy
+  G4int     lastPDG; // The last projectile PDG
+  G4int     lastN;   // The last N of calculated nucleus
+  G4int     lastZ;   // The last Z of calculated nucleus
+  G4double  lastP;   // Last used in the cross section Momentum
+  G4double  lastTH;  // Last value of the Momentum Threshold
+  G4double  lastCS;  // Last value of the Cross Section
+  G4int     lastI;   // The last position in the DAMDB
+  std::vector<G4double*>* LEN;  // Vector of pointers to LowEnProtonCrossSection
+  std::vector<G4double*>* HEN;  // Vector of pointers to HighEnProtonCrossSection
 };
 
 #endif
