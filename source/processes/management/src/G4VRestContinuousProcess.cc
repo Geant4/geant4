@@ -38,6 +38,13 @@
 // ------------------------------------------------------------
 
 #include "G4VRestContinuousProcess.hh"
+#include "G4SystemOfUnits.hh"
+
+#include "G4Step.hh"
+#include "G4Track.hh"
+#include "G4MaterialTable.hh"
+#include "G4VParticleChange.hh"
+
 G4VRestContinuousProcess::G4VRestContinuousProcess()
   :G4VProcess("No Name Discrete Process") ,
    valueGPILSelection(CandidateForSelection)
@@ -62,13 +69,6 @@ G4VRestContinuousProcess::G4VRestContinuousProcess(G4VRestContinuousProcess& rig
 		    valueGPILSelection(right.valueGPILSelection)
 {
 }
-
-
-// -----------------------------------------
-#include "G4Step.hh"
-#include "G4Track.hh"
-#include "G4MaterialTable.hh"
-#include "G4VParticleChange.hh"
 
 G4double G4VRestContinuousProcess::AlongStepGetPhysicalInteractionLength(
                              const G4Track& track,
@@ -144,13 +144,3 @@ G4VParticleChange* G4VRestContinuousProcess::AlongStepDoIt(
 { 
     return pParticleChange;
 }
-
-
-
-
-
-
-
-
-
-

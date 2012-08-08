@@ -38,6 +38,13 @@
 // ------------------------------------------------------------
 
 #include "G4VRestProcess.hh"
+#include "G4SystemOfUnits.hh"
+
+#include "G4Step.hh"
+#include "G4Track.hh"
+#include "G4MaterialTable.hh"
+#include "G4VParticleChange.hh"
+
 G4VRestProcess::G4VRestProcess()
                    :G4VProcess("No Name Rest Process") 
 {
@@ -60,12 +67,6 @@ G4VRestProcess::G4VRestProcess(G4VRestProcess& right)
                   : G4VProcess(right)
 {
 }
-
-// -----------------------------------------
-#include "G4Step.hh"
-#include "G4Track.hh"
-#include "G4MaterialTable.hh"
-#include "G4VParticleChange.hh"
 
 G4double G4VRestProcess::AtRestGetPhysicalInteractionLength(
                              const G4Track& track,
@@ -105,14 +106,3 @@ G4VParticleChange* G4VRestProcess::AtRestDoIt(
 
     return pParticleChange;
 }
-
-
-
-
-
-
-
-
-
-
-

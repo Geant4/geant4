@@ -38,6 +38,13 @@
 // ------------------------------------------------------------
 
 #include "G4VDiscreteProcess.hh"
+#include "G4SystemOfUnits.hh"
+
+#include "G4Step.hh"
+#include "G4Track.hh"
+#include "G4MaterialTable.hh"
+#include "G4VParticleChange.hh"
+
 G4VDiscreteProcess::G4VDiscreteProcess()
                    :G4VProcess("No Name Discrete Process") 
 {
@@ -61,15 +68,6 @@ G4VDiscreteProcess::G4VDiscreteProcess(G4VDiscreteProcess& right)
                   : G4VProcess(right)
 {
 }
-
-
-// -----------------------------------------
-//  inlined function members implementation
-// -----------------------------------------
-#include "G4Step.hh"
-#include "G4Track.hh"
-#include "G4MaterialTable.hh"
-#include "G4VParticleChange.hh"
 
 G4double G4VDiscreteProcess::PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
@@ -122,14 +120,3 @@ G4VParticleChange* G4VDiscreteProcess::PostStepDoIt(
 
     return pParticleChange;
 }
-
-
-
-
-
-
-
-
-
-
-

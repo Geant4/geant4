@@ -38,6 +38,13 @@
 // ------------------------------------------------------------
 
 #include "G4VContinuousProcess.hh"
+#include "G4SystemOfUnits.hh"
+
+#include "G4Step.hh"
+#include "G4Track.hh"
+#include "G4MaterialTable.hh"
+#include "G4VParticleChange.hh"
+
 G4VContinuousProcess::G4VContinuousProcess()
   :G4VProcess("No Name Continuous Process"),
    valueGPILSelection(CandidateForSelection) 
@@ -63,12 +70,6 @@ G4VContinuousProcess::G4VContinuousProcess(G4VContinuousProcess& right)
 		    valueGPILSelection(right.valueGPILSelection)
 {
 }
-
-// -----------------------------------------
-#include "G4Step.hh"
-#include "G4Track.hh"
-#include "G4MaterialTable.hh"
-#include "G4VParticleChange.hh"
 
 G4double G4VContinuousProcess::AlongStepGetPhysicalInteractionLength(
                              const G4Track& track,
@@ -107,13 +108,3 @@ G4VParticleChange* G4VContinuousProcess::AlongStepDoIt(
 { 
     return pParticleChange;
 }
-
-
-
-
-
-
-
-
-
-

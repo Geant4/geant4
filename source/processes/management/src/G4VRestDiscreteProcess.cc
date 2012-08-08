@@ -38,6 +38,14 @@
 // ------------------------------------------------------------
 
 #include "G4VRestDiscreteProcess.hh"
+#include "G4SystemOfUnits.hh"
+
+#include "Randomize.hh"              
+#include "G4Step.hh"
+#include "G4Track.hh"
+#include "G4MaterialTable.hh"
+#include "G4VParticleChange.hh"
+
 G4VRestDiscreteProcess::G4VRestDiscreteProcess()
                    :G4VProcess("No Name Discrete Process") 
 {
@@ -59,13 +67,6 @@ G4VRestDiscreteProcess::G4VRestDiscreteProcess(G4VRestDiscreteProcess& right)
                   : G4VProcess(right)
 {
 }
-
-// -----------------------------------------
-#include "Randomize.hh"              
-#include "G4Step.hh"
-#include "G4Track.hh"
-#include "G4MaterialTable.hh"
-#include "G4VParticleChange.hh"
 
 G4double G4VRestDiscreteProcess::PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
@@ -157,14 +158,3 @@ G4VParticleChange* G4VRestDiscreteProcess::AtRestDoIt(
 
     return pParticleChange;
 }
-
-
-
-
-
-
-
-
-
-
-

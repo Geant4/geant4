@@ -38,6 +38,13 @@
 // ------------------------------------------------------------
 
 #include "G4VContinuousDiscreteProcess.hh"
+#include "G4SystemOfUnits.hh"
+
+#include "G4Step.hh"
+#include "G4Track.hh"
+#include "G4MaterialTable.hh"
+#include "G4VParticleChange.hh"
+
 G4VContinuousDiscreteProcess::G4VContinuousDiscreteProcess()
   :G4VProcess("No Name Discrete Process"),
    valueGPILSelection(CandidateForSelection)
@@ -62,12 +69,6 @@ G4VContinuousDiscreteProcess::G4VContinuousDiscreteProcess(G4VContinuousDiscrete
 		    valueGPILSelection(right.valueGPILSelection)
 {
 }
-
-// -----------------------------------------
-#include "G4Step.hh"
-#include "G4Track.hh"
-#include "G4MaterialTable.hh"
-#include "G4VParticleChange.hh"
 
 G4double G4VContinuousDiscreteProcess::PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
@@ -159,12 +160,3 @@ G4double G4VContinuousDiscreteProcess::AlongStepGetPhysicalInteractionLength(
 #endif
   return  steplength ;
 }
-
-
-
-
-
-
-
-
-

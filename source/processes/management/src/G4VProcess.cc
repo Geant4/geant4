@@ -39,11 +39,15 @@
 //   removed thePhysicsTable           02 Aug. 1998 H.Kurashige
 //   Modified DumpInfo                 15 Aug. 1998 H.Kurashige
 
+#include "G4VProcess.hh"
+
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 #include "G4PhysicsTable.hh"
 #include "G4MaterialTable.hh"
 #include "G4ElementTable.hh"
 #include "G4ElementVector.hh"
-#include "G4VProcess.hh"
 
 G4VProcess::G4VProcess(const G4String& aName, G4ProcessType   aType )
                   : aProcessManager(0),
@@ -223,12 +227,3 @@ const G4String&  G4VProcess::GetPhysicsTableFileName(const G4ParticleDefinition*
   
   return thePhysicsTableFileName;
 }
-
-
-
-
-
-
-
-
-
