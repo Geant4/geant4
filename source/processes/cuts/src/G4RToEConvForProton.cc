@@ -39,6 +39,8 @@
 #include "G4PhysicsLogVector.hh"
 
 #include "G4ios.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 G4RToEConvForProton::G4RToEConvForProton() : G4VRangeToEnergyConverter()
 {    

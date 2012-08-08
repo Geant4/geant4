@@ -40,6 +40,7 @@
 #include "G4PhysicsLogVector.hh"
 
 #include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 
 G4RToEConvForGamma::G4RToEConvForGamma() : G4VRangeToEnergyConverter()
 {    

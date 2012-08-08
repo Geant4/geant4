@@ -40,6 +40,7 @@
 #include "G4PhysicsLogVector.hh"
 
 #include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 
 // energy range
 G4double  G4VRangeToEnergyConverter::LowestEnergy = 0.99e-3*MeV;
