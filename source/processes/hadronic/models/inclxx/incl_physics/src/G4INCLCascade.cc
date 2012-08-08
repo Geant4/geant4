@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.1
+// INCL++ revision: v5.1.2
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -256,7 +256,7 @@ namespace G4INCL {
       FATAL("Fatal: natural targets are not supported yet." << std::endl);
       std::exit(EXIT_FAILURE);
     }
-    const G4bool targetInitSuccess = prepareReaction(projectileSpecies, kineticEnergy, targetA, targetZ);
+    targetInitSuccess = prepareReaction(projectileSpecies, kineticEnergy, targetA, targetZ);
 
     if(!targetInitSuccess) {
       WARN("Target initialisation failed for A=" << targetA << ", Z=" << targetZ << std::endl);

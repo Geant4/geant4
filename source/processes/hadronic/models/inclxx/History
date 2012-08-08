@@ -16,6 +16,15 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+17 July 2012 - Davide Mancusi (hadr-inclxx-V09-05-19)
+-----------------------------------------------------------
+- Remove relic file utils/src/G4INCLBook.cc.
+- Fix a minor bug concerning transmission of delta resonances.
+
+9 July 2012 - Davide Mancusi (hadr-inclxx-V09-05-18)
+-----------------------------------------------------------
+- Fix compilation warning on Windows.
+
 9 July 2012 - Davide Mancusi (hadr-inclxx-V09-05-17)
 -----------------------------------------------------------
 - INCL++ v5.1.1

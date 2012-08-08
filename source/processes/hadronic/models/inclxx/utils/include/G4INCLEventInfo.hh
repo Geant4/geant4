@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.1
+// INCL++ revision: v5.1.2
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -90,27 +90,27 @@ namespace G4INCL {
       {
         std::fill_n(ARem, maxSizeRemnants, 0);
         std::fill_n(ZRem, maxSizeRemnants, 0);
-        std::fill_n(EStarRem, maxSizeRemnants, 0.);
-        std::fill_n(JRem, maxSizeRemnants, 0.);
-        std::fill_n(EKinRem, maxSizeRemnants, 0.);
-        std::fill_n(pxRem, maxSizeRemnants, 0.);
-        std::fill_n(pyRem, maxSizeRemnants, 0.);
-        std::fill_n(pzRem, maxSizeRemnants, 0.);
-        std::fill_n(thetaRem, maxSizeRemnants, 0.);
-        std::fill_n(phiRem, maxSizeRemnants, 0.);
-        std::fill_n(jxRem, maxSizeRemnants, 0.);
-        std::fill_n(jyRem, maxSizeRemnants, 0.);
-        std::fill_n(jzRem, maxSizeRemnants, 0.);
+        std::fill_n(EStarRem, maxSizeRemnants, ((Float_t)0.));
+        std::fill_n(JRem, maxSizeRemnants, ((Float_t)0.));
+        std::fill_n(EKinRem, maxSizeRemnants, ((Float_t)0.));
+        std::fill_n(pxRem, maxSizeRemnants, ((Float_t)0.));
+        std::fill_n(pyRem, maxSizeRemnants, ((Float_t)0.));
+        std::fill_n(pzRem, maxSizeRemnants, ((Float_t)0.));
+        std::fill_n(thetaRem, maxSizeRemnants, ((Float_t)0.));
+        std::fill_n(phiRem, maxSizeRemnants, ((Float_t)0.));
+        std::fill_n(jxRem, maxSizeRemnants, ((Float_t)0.));
+        std::fill_n(jyRem, maxSizeRemnants, ((Float_t)0.));
+        std::fill_n(jzRem, maxSizeRemnants, ((Float_t)0.));
 
         std::fill_n(A, maxSizeParticles, 0);
         std::fill_n(Z, maxSizeParticles, 0);
-        std::fill_n(emissionTime, maxSizeParticles, 0.);
-        std::fill_n(EKin, maxSizeParticles, 0.);
-        std::fill_n(px, maxSizeParticles, 0.);
-        std::fill_n(py, maxSizeParticles, 0.);
-        std::fill_n(pz, maxSizeParticles, 0.);
-        std::fill_n(theta, maxSizeParticles, 0.);
-        std::fill_n(phi, maxSizeParticles, 0.);
+        std::fill_n(emissionTime, maxSizeParticles, ((Float_t)0.));
+        std::fill_n(EKin, maxSizeParticles, ((Float_t)0.));
+        std::fill_n(px, maxSizeParticles, ((Float_t)0.));
+        std::fill_n(py, maxSizeParticles, ((Float_t)0.));
+        std::fill_n(pz, maxSizeParticles, ((Float_t)0.));
+        std::fill_n(theta, maxSizeParticles, ((Float_t)0.));
+        std::fill_n(phi, maxSizeParticles, ((Float_t)0.));
         std::fill_n(origin, maxSizeParticles, 0);
       };
 

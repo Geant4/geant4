@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.1
+// INCL++ revision: v5.1.2
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -371,12 +371,12 @@ namespace G4INCL {
      *
      * \param boostVector the velocity to boost to [c]
      */
-    void boost(const ThreeVector &boostVector) {
-      Particle::boost(boostVector);
+    void boost(const ThreeVector &aBoostVector) {
+      Particle::boost(aBoostVector);
       for(ParticleIter p=particles.begin(); p!=particles.end(); ++p) {
-        (*p)->boost(boostVector);
+        (*p)->boost(aBoostVector);
         // Apply Lorentz contraction to the particle position
-        (*p)->lorentzContract(boostVector,thePosition);
+        (*p)->lorentzContract(aBoostVector,thePosition);
       }
     }
 

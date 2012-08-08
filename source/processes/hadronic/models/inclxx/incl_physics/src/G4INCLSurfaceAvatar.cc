@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.1
+// INCL++ revision: v5.1.2
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -68,6 +68,16 @@ namespace G4INCL {
   {
     if(theParticle->isTargetSpectator()) {
       DEBUG("Particle " << theParticle->getID() << " is a spectator, reflection" << std::endl);
+      return new ReflectionChannel(theNucleus, theParticle);
+    }
+
+    // We forbid transmission of resonances below the Fermi energy. Emitting a
+    // delta particle below Tf can lead to negative excitation energies, since
+    // CDPP assumes that particles stay in the Fermi sea.
+    const G4double theFermiEnergy = theNucleus->getPotential()->getFermiEnergy(theParticle);
+    if(theParticle->isResonance() && theParticle->getKineticEnergy()<theFermiEnergy) {
+      DEBUG("Particle " << theParticle->getID() << " is a resonance below Tf, reflection" << std::endl
+          << "  Tf=" << theFermiEnergy << ", EKin=" << theParticle->getKineticEnergy() << std::endl);
       return new ReflectionChannel(theNucleus, theParticle);
     }
 
