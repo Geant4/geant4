@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+
+Jul. 12th, 2011, J.Apostolakis transport-V09-05-02
+------------------------------
+- G4Transportation.cc: 
+    Corrected issues with initilisation of data members reported by Coverity.
+    Renamed data member endpointdistance to fEndPointDistance (to conform).
+
 Jul. 5th, 2012 Gabriele Cosmo transport-V09-05-01
 -----------------------------
 - Explicitly use inclusion of headers for system of units and physical
