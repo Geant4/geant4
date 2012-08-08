@@ -48,6 +48,7 @@
 #define G4RANDOMDIR_HH
 
 #include <CLHEP/Units/PhysicalConstants.h>
+
 #include "globals.hh"
 #include "Randomize.hh"
 #include "G4ThreeVector.hh"

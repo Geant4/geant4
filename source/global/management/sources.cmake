@@ -107,6 +107,7 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4Physics2DVector.cc
         G4Physics2DVectorCache.cc
         G4Pow.cc
+        G4ReferenceCountedHandle.cc
         G4SliceTimer.cc
         G4StateManager.cc
         G4Timer.cc
