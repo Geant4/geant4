@@ -39,6 +39,17 @@ G4QGSModel<ParticipantType>::G4QGSModel(const G4QGSModel &right)
 	std::pair<G4double, G4double> levels=right.GetEnergyMomentumCheckLevels();
 	SetEnergyMomentumCheckLevels(levels.first, levels.second);
     }
+
+template<class ParticipantType>
+G4QGSModel<ParticipantType>& G4QGSModel<ParticipantType>::operator=(const G4QGSModel &right)
+    {
+       if (this != &right )
+       {
+         G4VPartonStringModel::SetThisPointer(this);
+         std::pair<G4double, G4double> levels=right.GetEnergyMomentumCheckLevels();
+         SetEnergyMomentumCheckLevels(levels.first, levels.second);
+      }
+    }
 template<class ParticipantType>
 G4QGSModel<ParticipantType>::~G4QGSModel()
     {

@@ -56,8 +56,9 @@ class G4QGSModel : public G4VPartonStringModel
 // Constructors   
 public:
     G4QGSModel();
-    G4QGSModel(const G4QGSModel &right);
     virtual ~G4QGSModel();
+    G4QGSModel(const G4QGSModel &right);
+    G4QGSModel& operator=(const G4QGSModel &right);
 
 // Method
 public:
