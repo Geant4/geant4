@@ -49,6 +49,8 @@
 
 #include "G4eeToTwoPiModel.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4PionPlus.hh"
 #include "G4PionMinus.hh"
 #include "G4DynamicParticle.hh"

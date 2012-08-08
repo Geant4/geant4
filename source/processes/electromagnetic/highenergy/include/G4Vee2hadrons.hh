@@ -46,13 +46,14 @@
 
 // -------------------------------------------------------------------
 //
-
 #ifndef G4Vee2hadrons_h
 #define G4Vee2hadrons_h 1
 
+#include <vector>
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
 #include "G4ThreeVector.hh"
-#include <vector>
 
 class G4DynamicParticle;
 class G4PhysicsVector;
@@ -62,7 +63,7 @@ class G4Vee2hadrons
 
 public:
 
-  G4Vee2hadrons() : lowEnergy(0.0), highEnergy(1.1*GeV) {};
+  G4Vee2hadrons() : lowEnergy(0.0), highEnergy(1.1*CLHEP::GeV) {};
 
   virtual ~G4Vee2hadrons() {};
 

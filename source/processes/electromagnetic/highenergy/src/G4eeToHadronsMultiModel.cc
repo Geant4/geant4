@@ -49,6 +49,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4eeToHadronsMultiModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4eeToTwoPiModel.hh"
 #include "G4eeTo3PiModel.hh"
 #include "G4eeToPGammaModel.hh"

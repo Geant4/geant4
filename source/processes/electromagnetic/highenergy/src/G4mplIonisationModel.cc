@@ -56,6 +56,8 @@
 
 #include "G4mplIonisationModel.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4LossTableManager.hh"
 #include "G4ParticleChangeForLoss.hh"
 

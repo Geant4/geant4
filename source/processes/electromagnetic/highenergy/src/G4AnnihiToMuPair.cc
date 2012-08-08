@@ -43,6 +43,8 @@
 
 #include "G4ios.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4Positron.hh"
 #include "G4MuonPlus.hh"

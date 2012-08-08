@@ -49,6 +49,7 @@
 
 #include "G4eeTo3PiModel.hh"
 #include "Randomize.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4PionPlus.hh"
 #include "G4PionMinus.hh"
 #include "G4PionZero.hh"

@@ -49,6 +49,8 @@
 
 #include "G4ee2KChargedModel.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4KaonPlus.hh"
 #include "G4KaonMinus.hh"
 #include "G4DynamicParticle.hh"

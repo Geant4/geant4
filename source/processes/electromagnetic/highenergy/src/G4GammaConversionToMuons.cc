@@ -36,6 +36,8 @@
 // ---------------------------------------------------------------------------
 
 #include "G4GammaConversionToMuons.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 #include "G4MuonPlus.hh"
 #include "G4MuonMinus.hh"

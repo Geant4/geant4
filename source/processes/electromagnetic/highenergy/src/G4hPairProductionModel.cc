@@ -50,6 +50,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4hPairProductionModel.hh"
+#include "G4PhysicalConstants.hh"
 
 using namespace std;
 

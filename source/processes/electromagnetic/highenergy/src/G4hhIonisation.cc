@@ -48,6 +48,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4hhIonisation.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4BraggNoDeltaModel.hh"
 #include "G4BetheBlochNoDeltaModel.hh"
 #include "G4ICRU73NoDeltaModel.hh"

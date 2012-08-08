@@ -49,6 +49,8 @@
 
 #include "G4ee2KNeutralModel.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4KaonZeroLong.hh"
 #include "G4KaonZeroShort.hh"
 #include "G4DynamicParticle.hh"

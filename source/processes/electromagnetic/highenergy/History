@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11 July 2012: G.Cosmo (emhighenergy-V09-05-02)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
 07 June 2012: V.Ivant (emhighenergy-V09-05-01)
 - Fixed variable shagowing
 
