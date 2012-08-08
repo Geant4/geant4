@@ -35,6 +35,7 @@
 
 #include "G4GDMLWriteSolids.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4BooleanSolid.hh"
 #include "G4Box.hh"
 #include "G4Cons.hh"

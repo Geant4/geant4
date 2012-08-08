@@ -35,6 +35,8 @@
 // -------------------------------------------------------------------------
 
 #include "G4tgbRotationMatrixMgr.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4tgrRotationMatrixFactory.hh"
 #include "G4tgrMessenger.hh"
 

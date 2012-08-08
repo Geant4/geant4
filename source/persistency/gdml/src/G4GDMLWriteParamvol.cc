@@ -35,6 +35,7 @@
 
 #include "G4GDMLWriteParamvol.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4Box.hh"
 #include "G4Trd.hh"
 #include "G4Trap.hh"

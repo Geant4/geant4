@@ -31,12 +31,13 @@
 // - Created.                                 P.Arce, CIEMAT (November 2007)
 // -------------------------------------------------------------------------
 
-#include "geomdefs.hh"
-
 #include <iomanip>
 #include <set>
 
 #include "G4tgrUtils.hh"
+
+#include "geomdefs.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4tgrParameterMgr.hh"
 #include "G4tgrMessenger.hh"
 #include "G4UnitsTable.hh"

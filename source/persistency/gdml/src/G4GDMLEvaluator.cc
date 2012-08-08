@@ -36,6 +36,7 @@
 #include <sstream>
 
 #include "G4GDMLEvaluator.hh"
+#include "G4SystemOfUnits.hh"
 
 G4GDMLEvaluator::G4GDMLEvaluator()
 {

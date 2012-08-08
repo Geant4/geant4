@@ -35,6 +35,8 @@
 // -------------------------------------------------------------------------
 
 #include "G4tgbMaterialMixtureByVolume.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4tgbMaterial.hh"
 #include "G4tgbMaterialMgr.hh"
 #include "G4tgrMessenger.hh"

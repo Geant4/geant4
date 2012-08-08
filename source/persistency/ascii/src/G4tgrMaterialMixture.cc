@@ -35,9 +35,10 @@
 // -------------------------------------------------------------------------
 
 #include "G4tgrMaterialMixture.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4tgrUtils.hh"
 #include "G4tgrMessenger.hh"
-
 
 //-----------------------------------------------------------
 G4tgrMaterialMixture::G4tgrMaterialMixture()

@@ -35,6 +35,9 @@
 // -------------------------------------------------------------------------
 
 #include "G4tgbVolume.hh"
+
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4tgbVolumeMgr.hh"
 #include "G4tgbMaterialMgr.hh"
 #include "G4tgbRotationMatrixMgr.hh"

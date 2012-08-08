@@ -34,6 +34,7 @@
 // --------------------------------------------------------------------
 
 #include "G4GDMLWriteDefine.hh"
+#include "G4SystemOfUnits.hh"
 
 const G4double G4GDMLWriteDefine::kRelativePrecision = DBL_EPSILON;
 const G4double G4GDMLWriteDefine::kAngularPrecision = DBL_EPSILON;

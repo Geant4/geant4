@@ -35,6 +35,8 @@
 // -------------------------------------------------------------------------
 
 #include "G4tgrVolumeDivision.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4tgrUtils.hh"
 #include "G4tgrVolumeMgr.hh"
 #include "G4tgrPlace.hh"

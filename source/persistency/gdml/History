@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+5 July 2012 - Gabriele Cosmo (gdml-V09-05-03)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
 30 May 2012 - Gabriele Cosmo (gdml-V09-05-02)
 - Fixed typo introduced in previous tag...
 

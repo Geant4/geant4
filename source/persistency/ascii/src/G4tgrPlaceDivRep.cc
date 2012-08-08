@@ -35,6 +35,8 @@
 // -------------------------------------------------------------------------
 
 #include "G4tgrPlaceDivRep.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4tgrUtils.hh"
 #include "G4tgrMessenger.hh"
 #include "G4tgrVolume.hh"

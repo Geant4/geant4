@@ -34,13 +34,15 @@
 // - Created.                                 P.Arce, CIEMAT (November 2007)
 // -------------------------------------------------------------------------
 
+#include <map>
+#include <set>
+
 #include "G4tgrSolid.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4tgrUtils.hh"
 #include "G4tgrMessenger.hh"
 #include "G4tgrVolumeMgr.hh"
-
-#include <map>
-#include <set>
 
 // -------------------------------------------------------------------------
 G4tgrSolid::G4tgrSolid()

@@ -32,6 +32,8 @@
 // -------------------------------------------------------------------------
 
 #include "G4tgrLineProcessor.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4tgrParameterMgr.hh"
 #include "G4tgrFileIn.hh"
 #include "G4tgrElementSimple.hh"

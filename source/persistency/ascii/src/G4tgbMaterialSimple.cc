@@ -35,6 +35,8 @@
 // -------------------------------------------------------------------------
 
 #include "G4tgbMaterialSimple.hh"
+
+#include "G4PhysicalConstants.hh"
 #include "G4tgrMaterialSimple.hh"
 #include "G4tgrMessenger.hh"
 
