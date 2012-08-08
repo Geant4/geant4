@@ -13,6 +13,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+26-Jul-2012  Alberto Ribon  (had-abrasion-V09-05-01)
+-----------------------------------------------------
+- Fixed Coverity complain in G4WilsonAbrasionModel.cc
+
 12-Jun-2012  Alberto Ribon  (had-abrasion-V09-05-00)
 -----------------------------------------------------
 - Fixed warnings of shadowed variables.  File affected: 

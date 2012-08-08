@@ -183,6 +183,9 @@ G4WilsonAbrasionModel::G4WilsonAbrasionModel(G4ExcitationHandler* aExcitationHan
 // Set the default verbose level to 0 - no output.
 
   verboseLevel = 0;
+
+//A.R. 26-Jul-2012 Coverity fix.
+  theAblation = NULL;
 //                      
 //
 // The user is able to provide the excitation handler as well as an argument
