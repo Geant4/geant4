@@ -35,6 +35,11 @@ else()
     OUTPUT_VARIABLE ROOT_LIBRARIES
     OUTPUT_STRIP_TRAILING_WHITESPACE)
 
+  execute_process(
+    COMMAND ${ROOT_CONFIG_EXECUTABLE} --python-version
+    OUTPUT_VARIABLE ROOT_PYTHONVER
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+
   #set(ROOT_LIBRARIES ${ROOT_LIBRARIES} -lThread -lMinuit -lHtml -lVMC -lEG -lGeom -lTreePlayer -lXMLIO -lProof)
   #set(ROOT_LIBRARIES ${ROOT_LIBRARIES} -lProofPlayer -lMLP -lSpectrum -lEve -lRGL -lGed -lXMLParser -lPhysics)
   set(ROOT_LIBRARY_DIR ${ROOTSYS}/lib)

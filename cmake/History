@@ -29,6 +29,26 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+16th July 2012 - Ben Morgan (cmake-V09-05-38)
+- Use correct tag name. Update tag number to ensure numerical sequence.
+
+16th July 2012 - Ben Morgan (cmake-V09-05-37)
+- Templates/geant4_validate_sources.cmake.in : Remove use of STATUS in
+  error messages so all errors go to stderr.
+
+10th July 2012 - Ben Morgan (cmake-V09-05-36)
+- Modules/Geant4MakeRules_cxx.cmake : Add preliminary support for Clang 
+  detection (CMake > 2.8.1)
+- Modules/Geant4/LibraryBuildOptions.cmake : Add preliminary support for
+  Clang detection (CMake > 2.8.1)
+
+10th July 2012 - Ben Morgan
+- Modules/FindStatTest.cmake : Minor formatting/layout updates.
+
+10th July 2012 - Andrea Dotti (cmake-V09-05-35)
+- Modules/FindStatTest.cmake : First commit of module to find and setup
+  utility program StatTest for automatic regression testing of Geant4 
+  ctest outputs
 
 27th June 2012 - Pere Mato  (cmake-V09-05-34)
 - Modules/Geant4TestDriver.cmake : Added TST paramenter to obtain the test name to produce

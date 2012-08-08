@@ -1,16 +1,18 @@
 # - Geant4MakeRules_cxx
-# Sets the default make rules for a CXX build, specifically the initialization
-# of the compiler flags on a platform dependent basis
+# Sets the default make rules for a CXX build, specifically the 
+# initialization of the compiler flags on a platform and compiler
+# dependent basis
 #
+#-----------------------------------------------------------------------
+# GNU C++ or LLVM/Clang Compiler on all(?) platforms
+# NB: At present, only identifies clang correctly on CMake > 2.8.1
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  set(CMAKE_CXX_FLAGS_INIT "-W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -pipe")
 
-message(STATUS "setting default compiler flags for CXX")
+  if(CMAKE_COMPILER_IS_GNUCXX)
+    set(CMAKE_CXX_FLAGS_INIT "${CMAKE_CXX_FLAGS_INIT} -ansi")
+  endif()
 
-
-#------------------------------------------------------------------------------
-# GNU C++ Compiler on all(?) platforms
-#
-if(CMAKE_COMPILER_IS_GNUCXX)
-  set(CMAKE_CXX_FLAGS_INIT "-W -Wall -ansi -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -pipe")
   set(CMAKE_CXX_FLAGS_DEBUG_INIT "-g") 
   set(CMAKE_CXX_FLAGS_RELEASE_INIT "-O2 -DNDEBUG")
   set(CMAKE_CXX_FLAGS_MINSIZEREL_INIT "-Os -DNDEBUG")
@@ -33,7 +35,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # MSVC - all (?) versions
 # I don't understand VS flags at all.... Guess try the CMake defaults first
 # and see what happens!
@@ -54,7 +56,7 @@ if(MSVC)
 endif()
 
 
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Intel C++ Compilers - all (?) platforms
 #
 # Sufficient id on all platforms?
@@ -74,7 +76,7 @@ if(CMAKE_CXX_COMPILER MATCHES "icpc.*|icc.*")
 endif()
 
 
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Ye Olde *NIX/Compiler Systems
 # NB: *NOT* Supported... Only provided as legacy.
 # None are tested...
@@ -82,7 +84,7 @@ endif()
 # CMake defaults on these platforms are good enough...
 #
 if(UNIX AND NOT CMAKE_COMPILER_IS_GNUCXX)
-  #--------------------------------------------------------------------------
+  #---------------------------------------------------------------------
   # IBM xlC compiler
   #
   if(CMAKE_CXX_COMPILER MATCHES "xlC")
@@ -93,7 +95,7 @@ if(UNIX AND NOT CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "-O3 -g -qdbextra -qcheck=all -qfullpath -qtwolink -+")
   endif()
 
-  #--------------------------------------------------------------------------
+  #---------------------------------------------------------------------
   # HP aC++ Compiler
   #
   if(CMAKE_CXX_COMPILER MATCHES "aCC")
@@ -104,7 +106,7 @@ if(UNIX AND NOT CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "-O2 +Onolimit -g")
   endif()
 
-  #--------------------------------------------------------------------------
+  #---------------------------------------------------------------------
   # IRIX MIPSpro CC Compiler
   #
   if(CMAKE_CXX_COMPILER MATCHES "CC" AND CMAKE_SYSTEM_NAME MATCHES "IRIX")
@@ -115,7 +117,7 @@ if(UNIX AND NOT CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "-O -OPT:Olimit=5000 -g")
   endif()
 
-  #--------------------------------------------------------------------------
+  #---------------------------------------------------------------------
   # SunOS CC Compiler
   # - CMake may do a reasonable job on its own here...
 endif()
