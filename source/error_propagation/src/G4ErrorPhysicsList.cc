@@ -32,6 +32,9 @@
 
 #include "globals.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 #include "G4ErrorPhysicsList.hh"
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"

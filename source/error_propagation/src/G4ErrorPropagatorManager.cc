@@ -31,6 +31,9 @@
 // ------------------------------------------------------------
 //
 
+#include "G4ErrorPropagatorManager.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4MagIntegratorStepper.hh"
 #include "G4Mag_UsualEqRhs.hh"
 #include "G4Mag_EqRhs.hh"
@@ -39,8 +42,6 @@
 #include "G4ClassicalRK4.hh"
 #include "G4ExactHelixStepper.hh"
 #include "G4HelixExplicitEuler.hh"
-
-#include "G4ErrorPropagatorManager.hh"
 
 #include "G4EventManager.hh"
 #include "G4ErrorRunManagerHelper.hh"

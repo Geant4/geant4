@@ -38,6 +38,7 @@
 #include "G4ErrorGeomVolumeTarget.hh"
 #include "G4ErrorSurfaceTarget.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4DynamicParticle.hh"
 #include "G4Track.hh"
 #include "G4SteppingManager.hh"

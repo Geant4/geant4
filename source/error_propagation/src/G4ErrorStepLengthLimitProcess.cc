@@ -33,6 +33,7 @@
 
 #include "G4ErrorStepLengthLimitProcess.hh"
 #include "G4ErrorMessenger.hh"
+#include "G4SystemOfUnits.hh"
 
 #ifdef G4VERBOSE
 #include "G4ErrorPropagatorData.hh"
