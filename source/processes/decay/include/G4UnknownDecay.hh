@@ -35,6 +35,8 @@
 #ifndef G4UnknownDecay_h
 #define G4UnknownDecay_h 1
 
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "G4ios.hh"
 #include "globals.hh"
 #include "G4VDiscreteProcess.hh"
@@ -142,7 +144,7 @@ inline
   
   // use pre-assigned Decay time to determine PIL
   //return GetMeanFreePath(track, previousStepSize, condition);
-  return remainder*c_light;
+  return remainder*CLHEP::c_light;
 
 }
 

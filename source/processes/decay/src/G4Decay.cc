@@ -49,6 +49,9 @@
 //
 
 #include "G4Decay.hh"
+
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4DynamicParticle.hh"
 #include "G4DecayProducts.hh"
 #include "G4DecayTable.hh"

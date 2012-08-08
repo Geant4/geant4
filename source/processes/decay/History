@@ -16,57 +16,61 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
--Oct. 17th 2011   H.Kurashige  (decay-V09-04-02)
+
+- Jul. 5, 12 G.Cosmo (decay-V09-05-00)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+- Oct. 17, 11 H.Kurashige (decay-V09-04-02)
 - Fix obsolete G4Exception
 
--July 6  2011   H.Kurashige (decay-V09-04-01)
+- Jul. 6, 11 H.Kurashige (decay-V09-04-01)
 - Modify G4Decay  to propose the final local time rather than the global time
   so that local time can be updated properly
   (see problem #1224)  
 
--June 4  2011   H.Kurashige (decay-V09-04-00)
+- Jun. 4, 11 H.Kurashige (decay-V09-04-00)
 - Add SubType of DECAY_Radioactive (=210) 
 
--Oct. 30 2010   H.Kurashige (decay-V09-03-01)
+- Oct. 30, 10 H.Kurashige (decay-V09-03-01)
 - Fix minor bugs reported by Coverity
 
--Aug. 10 2010   H.Kurashige (decay-V09-03-00)
+- Aug. 10, 10 H.Kurashige (decay-V09-03-00)
 - Use const pointer to G4ParticleDefinition because it should not be modified.  
 
--Sep. 19 2008   H.Kurashige (decay-V09-01-04)
+- Sep. 19, 08 H.Kurashige (decay-V09-01-04)
 - modify process sub type enumeration
 
-- Aug. 22,  08 P.Gumplinger (decay-V09-01-03)
+- Aug. 22, 08 P.Gumplinger (decay-V09-01-03)
 - fix a bug in G4DecayWithSpin.cc: there is a memory overwrite when the
   GetFieldValue being called initializes a fieldValue array of size 6
   when the array is only defined of size 3 in the calling program.
-  Thanks to Kamil Sedlak (PSI) for pointing this out and suggesting this
-  fix.
+  Thanks to Kamil Sedlak (PSI) for pointing this out and suggesting this fix.
  
-- Apr. 16,  08 H.Kurashige  (decay-V09-01-02)
+- Apr. 16, 08 H.Kurashige  (decay-V09-01-02)
 - fix a bug when shortlived particles has finite  pre-assigned proper time
  
-- Apr. 11,  08 P.Gumplinger (decay-V09-01-01)
+- Apr. 11, 08 P.Gumplinger (decay-V09-01-01)
 - modify G4DecayWithSpin::DecayIt to allow spin precession also for EM Fields;
   e.g. fields that do "DoesFieldChangeEnergy()" but only if the B-field
   component is > 0. (thanks to Kamil Sedlak, Toni Shiroka from PSI)
 
-- Dec. 15,  07 H.Kurashige (decay-V09-01-00)
+- Dec. 15, 07 H.Kurashige (decay-V09-01-00)
 - add G4DecayProcessType
 - define process sub type
 
-- Oct. 29,  07 P.Gumplinger (decay-V09-00-02)
+- Oct. 29, 07 P.Gumplinger (decay-V09-00-02)
 - add G4PionDecayMakeSpin class
   set the daughter muon spin for 2 body decays of
   pi, K and K0_long
 
-- Oct. 12,  07 H.Kurashige (decay-V09-00-01)
+- Oct. 12, 07 H.Kurashige (decay-V09-00-01)
 - add forward declaration for G4VExtDecayer in G4DecayWithSpin
 
-- Oct. 06,  07 H.Kurashige (decay-V09-00-00)
+- Oct. 06, 07 H.Kurashige (decay-V09-00-00)
 - Add a method of DaughterPolarization in G4Decay 
 
-- May 07, 07 H.Kurashige (decay-V08-02-00)
+- May. 07, 07 H.Kurashige (decay-V08-02-00)
 - Add protection for "TotalEnergy < Mass" 
 
 - Apr. 29, 05 H.Kurashige (decay-V07-00-00)
@@ -78,10 +82,10 @@ committal in the CVS repository !
 - Dec. 2, 04 H.Kurashige (decay-V06-02-04)
 - migration to cmath
 
-- Oct 19, 04 H.Kurashige (decay-V06-02-03)
+- Oct. 19, 04 H.Kurashige (decay-V06-02-03)
 - Modify G4UnknownDecay for migration of ParticleChange
 
-- Sep 17, 04 P. Gumplinger (decay-V06-02-02)
+- Sep. 17, 04 P. Gumplinger (decay-V06-02-02)
 - Add G4DecayWithSpin class and allow for dependency to
   /geometry/navigation in GNUmakefile
 - Fixed the problem of determination of particle's decay time
@@ -93,41 +97,41 @@ committal in the CVS repository !
 - Jul. 07, 04 M.Asai (decay-V06-02-00)
 - Introducing G4UnknownDecay
 
--  May. 08, 04 H.Kurashige(decay-V06-01-00)
--   Change method name for ParticleChange
+- May. 08, 04 H.Kurashige(decay-V06-01-00)
+- Change method name for ParticleChange
 
--  Mar. 12, 04 H.Kurashige(decay-V06-00-00)
--   Fixed bug in PostStepGPIL in case of stopping during AlongStep actions 
+- Mar. 12, 04 H.Kurashige(decay-V06-00-00)
+- Fixed bug in PostStepGPIL in case of stopping during AlongStep actions 
 
--  Apr 26, 03 V.Ivanchenko(decay-V05-00-00)
--  add initialisation of TouchableHandle for decay products
+- Apr. 26, 03 V.Ivanchenko(decay-V05-00-00)
+- add initialisation of TouchableHandle for decay products
 
--  Feb 12, 02 H.Kurashige(decay-V04-00-01)
--  Remove physics table
+- Feb. 12, 02 H.Kurashige(decay-V04-00-01)
+- Remove physics table
 
--  Feb 9, 02 H.Kurashige(decay-V04-00-00)
--   Modify Lowest/HighestBinEnergy for physics table
-     to calculate beta for slow particle 
+- Feb. 9, 02 H.Kurashige(decay-V04-00-00)
+- Modify Lowest/HighestBinEnergy for physics table
+  to calculate beta for slow particle 
 
--  Aug 22, 01 H.Kurashige(decay-V03-02-01)
+- Aug. 22, 01 H.Kurashige(decay-V03-02-01)
 - Clean up codes
 
-- Feb 29, 01 H.Kurashige(decay-V03-00-03)
+- Feb. 29, 01 H.Kurashige(decay-V03-00-03)
 - Fix minor bug in G4VExtDecayer 
 
-- Feb 22, 01 H.Kurashige(decay-V03-00-02)
+- Feb. 22, 01 H.Kurashige(decay-V03-00-02)
 - Add G4VExtDecayer and modify G4Decay 
 
-- Jan 18, 01 H.Kurashige(decay-V03-00-01)
--  Use PreAssignedDecayTime in G4DynamicParticle if necessary
+- Jan. 18, 01 H.Kurashige(decay-V03-00-01)
+- Use PreAssignedDecayTime in G4DynamicParticle if necessary
 
-- Oct 24, 00 H.Kurashige(decay-V02-00-01)
--  Bug fix in G4Decay::DecayIt (no decay if the particle is stable)
+- Oct. 24, 00 H.Kurashige(decay-V02-00-01)
+- Bug fix in G4Decay::DecayIt (no decay if the particle is stable)
 
-- Oct 19, 00 H.Kurashige(decay-V02-00-00)
--  Bug fix in G4Decay to avoid direct modification of G4Track
-   by the Decay Process
+- Oct. 19, 00 H.Kurashige(decay-V02-00-00)
+- Bug fix in G4Decay to avoid direct modification of G4Track
+  by the Decay Process
 
 - Mar. 1, 00 H.Kurashige (decay-V01-00-00)
--  Bug fix in G4Decay::IsApplicable()
-      G4Decay should be applicable to "shortlived" particles  
+- Bug fix in G4Decay::IsApplicable()
+  G4Decay should be applicable to "shortlived" particles  

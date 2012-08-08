@@ -35,12 +35,14 @@
 //
 
 #include "G4UnknownDecay.hh"
+
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4DynamicParticle.hh"
 #include "G4DecayProducts.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4ParticleChangeForDecay.hh"
 #include "G4DecayProcessType.hh"
-
 
 // constructor
 G4UnknownDecay::G4UnknownDecay(const G4String& processName)
