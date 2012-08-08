@@ -130,9 +130,6 @@ public:
   void BuildPhysicsTable(const G4ParticleDefinition* aParticle, 
 			 G4VEnergyLossProcess* p);
 
-  void InitialiseMSC(const G4ParticleDefinition* aParticle, 
-		     G4VEnergyLossProcess* p);
-
   //-------------------------------------------------
   // Run time access to DEDX, range, energy for a given particle, 
   // energy, and G4MaterialCutsCouple

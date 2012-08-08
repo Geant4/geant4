@@ -48,6 +48,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4EmBiasingManager.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4ProductionCuts.hh"
@@ -337,7 +338,7 @@ G4EmBiasingManager::ApplySecondaryBiasingWrapped(std::vector<G4DynamicParticle*>
   if(ekin < elim) {
 
     // double splitting is supressed 
-    if(1 < nsplit && trackWeight>weight) {
+    if(1 < nsplit && trackWeight>w) {
 
       weight = w;
       // start from 1, because already one secondary created
@@ -356,9 +357,9 @@ G4EmBiasingManager::ApplySecondaryBiasingWrapped(std::vector<G4DynamicParticle*>
 
       weight = w;
       // dynamic weight
-      if(ekin > tcut && tcut < elim && GeV > elim) {
-        weight = ekin*(elim - tcut)/((elim - ekin)*tcut/w + (ekin - tcut)*elim);
-      }
+      //if(ekin > tcut && tcut < elim && GeV > elim) {
+      //  weight = ekin*(elim - tcut)/((elim - ekin)*tcut/w + (ekin - tcut)*elim);
+      //}
 
       for(size_t k=0; k<n; ++k) {
 	const G4DynamicParticle* dp = vd[k];

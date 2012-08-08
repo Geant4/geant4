@@ -159,6 +159,9 @@ public:
 				     const G4Material*,
 				     G4double kineticEnergy);
 
+  // Initialisation for a new track
+  virtual void StartTracking(G4Track*);
+
   // add correction to energy loss and compute non-ionizing energy loss
   virtual void CorrectionsAlongStep(const G4MaterialCutsCouple*,
 				    const G4DynamicParticle*,

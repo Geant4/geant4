@@ -47,9 +47,10 @@
 
 // -------------------------------------------------------------------
 //
-
 #ifndef G4VMscModel_h
 #define G4VMscModel_h 1
+
+#include <CLHEP/Units/SystemOfUnits.h>
 
 #include "G4VEmModel.hh"
 #include "G4MscStepLimitType.hh"
@@ -272,14 +273,10 @@ G4VMscModel::GetRange(const G4ParticleDefinition* part,
 		      G4double kinEnergy, const G4MaterialCutsCouple* couple)
 {
   localtkin  = kinEnergy;
-  if(part != currentPart) {
-    currentPart = part;
-    ionisation = man->GetEnergyLossProcess(part);
-  }
   if(ionisation) { 
     localrange = ionisation->GetRangeForLoss(localtkin, couple); 
   } else { 
-    G4double q = part->GetPDGCharge()/eplus;
+    G4double q = part->GetPDGCharge()/CLHEP::eplus;
     localrange = kinEnergy/(dedx*q*q*couple->GetMaterial()->GetDensity()); 
   }
   return localrange;
@@ -294,7 +291,7 @@ G4VMscModel::GetEnergy(const G4ParticleDefinition* part,
   G4double e = localtkin;
   if(ionisation) { e = ionisation->GetKineticEnergy(range, couple); }
   else { 
-    G4double q = part->GetPDGCharge()/eplus;
+    G4double q = part->GetPDGCharge()/CLHEP::eplus;
     if(localrange > range) {
       e -= (localrange - range)*dedx*q*q*couple->GetMaterial()->GetDensity(); 
     }

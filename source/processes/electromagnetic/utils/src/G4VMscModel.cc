@@ -48,6 +48,7 @@
 //
 
 #include "G4VMscModel.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleChangeForMSC.hh"
 #include "G4TransportationManager.hh"
 #include "G4LossTableBuilder.hh"

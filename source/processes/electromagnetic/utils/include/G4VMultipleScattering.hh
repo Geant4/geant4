@@ -84,6 +84,7 @@
 
 class G4ParticleDefinition;
 class G4VEnergyLossProcess;
+class G4LossTableManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -138,6 +139,9 @@ public:
                               const G4String& directory,
 			      G4bool ascii);
 
+  // This is called in the beginning of tracking for a new track
+  void StartTracking(G4Track*);
+
   // The function overloads the corresponding function of the base
   // class.It limits the step near to boundaries only
   // and invokes the method GetMscContinuousStepLimit at every step.
@@ -180,11 +184,17 @@ public:
   // model will be selected for a given energy interval  
   void AddEmModel(G4int order, G4VEmModel*, const G4Region* region = 0);
 
-  // Assign a model to a process
+  // Assign a model to a process - obsolete method will be removed
   void SetModel(G4VMscModel*, G4int index = 1);
   
-  // return the assigned model
+  // return the assigned model - obsolete method will be removed
   G4VMscModel* Model(G4int index = 1);
+
+  // Assign a model to a process
+  void SetEmModel(G4VMscModel*, G4int index = 1);
+  
+  // return the assigned model
+  G4VMscModel* EmModel(G4int index = 1);
 
   // Access to models by index
   G4VEmModel* GetModelByIndex(G4int idx = 0, G4bool ver = false) const;
@@ -241,12 +251,15 @@ private:
   // ======== Parameters of the class fixed at construction =========
 
   G4EmModelManager*           modelManager;
+  G4LossTableManager*         emManager;
 
   // ======== Parameters of the class fixed at initialisation =======
 
   std::vector<G4VMscModel*>   mscModels;
+  G4int                       numberOfModels;
 
   const G4ParticleDefinition* firstParticle;
+  const G4ParticleDefinition* currParticle;
 
   G4MscStepLimitType          stepLimit;
 

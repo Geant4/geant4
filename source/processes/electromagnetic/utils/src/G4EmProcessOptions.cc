@@ -54,6 +54,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4EmProcessOptions.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4LossTableManager.hh"
 #include "G4VEmProcess.hh"
 #include "G4VEnergyLossProcess.hh"

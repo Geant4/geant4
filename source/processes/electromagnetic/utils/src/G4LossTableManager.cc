@@ -80,6 +80,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4LossTableManager.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4EnergyLossMessenger.hh"
 #include "G4PhysicsTable.hh"
 #include "G4ParticleDefinition.hh"
@@ -735,21 +736,6 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
            << G4endl;
   }
   return em;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-
-void G4LossTableManager::InitialiseMSC(const G4ParticleDefinition* aParticle, 
-				       G4VEnergyLossProcess* p)
-{
-  size_t msc = msc_vector.size();
-  for (size_t j=0; j<msc; ++j) {
-    if(msc_vector[j]) { 
-      if(msc_vector[j]->FirstParticle() == aParticle) {
-        msc_vector[j]->SetIonisation(p);
-      }
-    }
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

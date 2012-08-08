@@ -64,6 +64,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4VEmProcess.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ProcessManager.hh"
 #include "G4LossTableManager.hh"
 #include "G4LossTableBuilder.hh"
@@ -88,6 +90,7 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   G4VDiscreteProcess(name, type),
   secondaryParticle(0),
   buildLambdaTable(true),
+  numberOfModels(0),
   theLambdaTable(0),
   theLambdaTablePrim(0),
   theDensityFactor(0),
@@ -199,6 +202,24 @@ G4VEmModel* G4VEmProcess::Model(G4int index)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void G4VEmProcess::SetEmModel(G4VEmModel* p, G4int index)
+{
+  G4int n = emModels.size();
+  if(index >= n) { for(G4int i=n; i<=index; ++i) {emModels.push_back(0);} }
+  emModels[index] = p;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4VEmModel* G4VEmProcess::EmModel(G4int index)
+{
+  G4VEmModel* p = 0;
+  if(index >= 0 && index <  G4int(emModels.size())) { p = emModels[index]; }
+  return p;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4VEmProcess::UpdateEmModel(const G4String& nam, 
 				 G4double emin, G4double emax)
 {
@@ -242,9 +263,10 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
     theCrossSectionMax.resize(n, DBL_MAX);
 
     // initialisation of models
-    G4int nmod = modelManager->NumberOfModels();
-    for(G4int i=0; i<nmod; ++i) {
+    numberOfModels = modelManager->NumberOfModels();
+    for(G4int i=0; i<numberOfModels; ++i) {
       G4VEmModel* mod = modelManager->GetModel(i);
+      if(0 == i) { currentModel = mod; }
       mod->SetPolarAngleLimit(polarAngleLimit);
       if(mod->HighEnergyLimit() > maxKinEnergy) {
 	mod->SetHighEnergyLimit(maxKinEnergy);
@@ -283,11 +305,11 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 
 void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
-  G4String partname = part.GetParticleName();
+  G4String num = part.GetParticleName();
   if(1 < verboseLevel) {
     G4cout << "G4VEmProcess::BuildPhysicsTable() for "
            << GetProcessName()
-           << " and particle " << partname
+           << " and particle " << num
 	   << " buildLambdaTable= " << buildLambdaTable
            << G4endl;
   }
@@ -298,19 +320,21 @@ void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
     BuildLambdaTable();
   }
 
-  // reduce printout for nuclear stopping
-  G4bool gproc = true;
-  G4int st = GetProcessSubType();
-  if((st == fCoulombScattering || st == fNuclearStopping) && 
-     part.GetParticleType() == "nucleus" && 
-     partname != "GenericIon" && partname != "alpha") { gproc = false; } 
-
-  if(gproc && 0 < verboseLevel) { PrintInfoDefinition(); }
+  // explicitly defined printout by particle name
+  if(1 < verboseLevel || 
+     (0 < verboseLevel && (num == "gamma" || num == "e-" || 
+			   num == "e+"    || num == "mu+" || 
+			   num == "mu-"   || num == "proton"|| 
+			   num == "pi+"   || num == "pi-" || 
+			   num == "kaon+" || num == "kaon-" || 
+			   num == "alpha" || num == "anti_proton" || 
+			   num == "GenericIon")))
+    { PrintInfoDefinition(); }
 
   if(1 < verboseLevel) {
     G4cout << "G4VEmProcess::BuildPhysicsTable() done for "
            << GetProcessName()
-           << " and particle " << partname
+           << " and particle " << num
            << G4endl;
   }
 }
@@ -476,26 +500,45 @@ void G4VEmProcess::PrintInfoDefinition()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void G4VEmProcess::StartTracking(G4Track* track)
+{
+  // reset parameters for the new track
+  currentParticle = track->GetParticleDefinition();
+  theNumberOfInteractionLengthLeft = -1.0;
+  currentInteractionLength = -1.0;
+  theNumberOfInteractionLengthLeft = -1.0;
+  theInitialNumberOfInteractionLength=-1.0;
+  mfpKinEnergy = DBL_MAX; 
+
+  // forced biasing only for primary particles
+  if(biasManager) {
+    if(0 == track->GetParentID()) {
+      // primary particle
+      biasFlag = true; 
+      biasManager->ResetForcedInteraction(); 
+    }
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
                              G4double   previousStepSize,
                              G4ForceCondition* condition)
 {
-  // condition is set to "Not Forced"
   *condition = NotForced;
   G4double x = DBL_MAX;
-  if(previousStepSize <= 0.0) { theNumberOfInteractionLengthLeft = -1.0; }
-  InitialiseStep(track);
+
+  preStepKinEnergy = track.GetKineticEnergy();
+  DefineMaterial(track.GetMaterialCutsCouple());
+  SelectModel(preStepKinEnergy, currentCoupleIndex);
+
   if(!currentModel->IsActive(preStepKinEnergy)) { return x; }
  
   // forced biasing only for primary particles
   if(biasManager) {
     if(0 == track.GetParentID()) {
-      // first step is step 1
-      if(1 == track.GetCurrentStepNumber()) {
-        biasFlag = true; 
-	biasManager->ResetForcedInteraction(); 
-      }
       if(biasFlag && biasManager->ForcedInteractionRegion(currentCoupleIndex)) {
         return biasManager->GetStepLimit(currentCoupleIndex, previousStepSize);
       }
@@ -506,22 +549,34 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
   if(preStepKinEnergy < mfpKinEnergy) {
     if (integral) { ComputeIntegralLambda(preStepKinEnergy); }
     else { preStepLambda = GetCurrentLambda(preStepKinEnergy); }
-    if(preStepLambda <= 0.0) { mfpKinEnergy = 0.0; }
+
+    // zero cross section
+    if(preStepLambda <= 0.0) { 
+      theNumberOfInteractionLengthLeft = -1.0;
+      currentInteractionLength = DBL_MAX;
+    }
   }
 
-  // non-zero cross sect}ion
+  // non-zero cross section
   if(preStepLambda > 0.0) { 
+
     if (theNumberOfInteractionLengthLeft < 0.0) {
+
       // beggining of tracking (or just after DoIt of this process)
       ResetNumberOfInteractionLengthLeft();
+
     } else if(currentInteractionLength < DBL_MAX) {
-      // subtract NumberOfInteractionLengthLeft
-      SubtractNumberOfInteractionLengthLeft(previousStepSize);
-      if(theNumberOfInteractionLengthLeft < 0.)
-	theNumberOfInteractionLengthLeft = perMillion;
+
+      // subtract NumberOfInteractionLengthLeft using previous step
+      theNumberOfInteractionLengthLeft -= previousStepSize/currentInteractionLength;
+      //SubtractNumberOfInteractionLengthLeft(previousStepSize);
+      if(theNumberOfInteractionLengthLeft < 0.) {
+	theNumberOfInteractionLengthLeft = 0.0;
+	//theNumberOfInteractionLengthLeft = perMillion;
+      }
     }
 
-    // get mean free path and step limit
+    // new mean free path and step limit for the next step
     currentInteractionLength = 1.0/preStepLambda;
     x = theNumberOfInteractionLengthLeft * currentInteractionLength;
 #ifdef G4VERBOSE
@@ -532,22 +587,10 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
 	     << " in Material  " <<  currentMaterial->GetName()
 	     << " Ekin(MeV)= " << preStepKinEnergy/MeV 
 	     <<G4endl;
-      G4cout << "MeanFreePath = " << currentInteractionLength/cm << "[cm]" 
-	     << "InteractionLength= " << x/cm <<"[cm] " <<G4endl;
+      G4cout << " MeanFreePath = " << currentInteractionLength/cm << "[cm]" 
+	     << " InteractionLength= " << x/cm <<"[cm] " <<G4endl;
     }
 #endif
-
-    // zero cross section case
-  } else {
-    if(theNumberOfInteractionLengthLeft > DBL_MIN && 
-       currentInteractionLength < DBL_MAX) {
-
-      // subtract NumberOfInteractionLengthLeft
-      SubtractNumberOfInteractionLengthLeft(previousStepSize);
-      if(theNumberOfInteractionLengthLeft < 0.)
-	theNumberOfInteractionLengthLeft = perMillion;
-    }
-    currentInteractionLength = DBL_MAX;
   }
   return x;
 }
@@ -557,6 +600,10 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
 G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
                                               const G4Step&)
 {
+  // In all cases clear number of interaction lengths
+  theNumberOfInteractionLengthLeft = -1.0;
+  mfpKinEnergy = DBL_MAX; 
+
   fParticleChange.InitializeForPostStep(track);
 
   // Do not make anything if particle is stopped, the annihilation then
@@ -680,7 +727,7 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
     else { fParticleChange.ProposeTrackStatus(fStopAndKill); }
   }
 
-  ClearNumberOfInteractionLengthLeft();
+  //  ClearNumberOfInteractionLengthLeft();
   return &fParticleChange;
 }
 

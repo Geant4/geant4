@@ -56,6 +56,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4LossTableBuilder.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsTableHelper.hh"

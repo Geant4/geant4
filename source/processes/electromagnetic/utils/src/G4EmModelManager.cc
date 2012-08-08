@@ -77,6 +77,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4EmModelManager.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsVector.hh"
 

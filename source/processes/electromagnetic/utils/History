@@ -17,6 +17,49 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+01 August 12: V.Ivant (emutils-V09-05-30)
+- G4EnergyLossMessenger - Allow to apply bising UI commands only
+    in G4_Idle state
+
+30 July 12: V.Ivant (emutils-V09-05-29)
+- G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering -
+    use the same list of particles for printout at initialisation
+    in the case of verboseLevel=1 
+
+20 July 12: V.Ivant (emutils-V09-05-28)
+- G4VEnergyLossProcess - similar fix as for G4VEmProcess
+- G4VEmAngularGenerator - cleanup comments, removed obsolete methods  
+
+19 July 12: V.Ivant (emutils-V09-05-27)
+- G4VEmProcess - fixed problem introduced in previous tag making
+    possible infinite loop in DNA tracking of 6 eV electron 
+
+17 July 12: V.Ivant (emutils-V09-05-26)
+- G4VEnergyLossProcess, G4VEmProcess - updated tracking parameters 
+    and flags in PostStepGetPhysicalInteractionLength
+- G4EmBiasingManager - fixed bug in bremsstrahlung splitting, which
+    practically forbid splitting
+
+13 July 12: V.Ivant (emutils-V09-05-25)
+- G4VEnergyLossProcess, G4LossTableManager - removed unused method 
+    InitialiseMSC
+
+13 July 12: V.Ivant (emutils-V09-05-24)
+- G4EmBiasingManager - do not using dynamic weight for Russian roulette
+
+12 July 12: V.Ivant (emutils-V09-05-23)
+- G4VEnergyLossProcess, G4VMultipleScattering, G4VEmModel - added 
+  implementation of new method StartTracking 
+- G4VMscModel - changed initialisation of the new track using
+    StartTracking method 
+- G4VEmAngularDistribution - add temporary dummy implementation of virtual
+    sampling methods - will be removed when all generators will migrated
+    to the new signature
+
+10 July 12: G.Cosmo (emutils-V09-05-22)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
 05 July 12: V.Ivant (emutils-V09-05-21)
  - G4EmCorrections, G4VEmModel, G4VMscModel - fixed shadowing
 

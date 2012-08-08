@@ -209,6 +209,11 @@ G4double G4VEmModel::CrossSectionPerVolume(const G4Material* material,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void G4VEmModel::StartTracking(G4Track*)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 const G4Element* G4VEmModel::SelectRandomAtom(const G4Material* material,
 					      const G4ParticleDefinition* pd,
 					      G4double kinEnergy,

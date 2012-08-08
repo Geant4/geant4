@@ -60,15 +60,4 @@ G4VEmAngularDistribution::G4VEmAngularDistribution(const G4String& name)
 G4VEmAngularDistribution::~G4VEmAngularDistribution() 
 {}
 
-void G4VEmAngularDistribution::Initialise()
-{}
-
-G4ThreeVector& 
-G4VEmAngularDistribution::SampleDirection(const G4DynamicParticle*,
-					  G4double, G4int,
-					  const G4Material*)
-{
-  return fLocalDirection;
-}
-
 //    

@@ -43,6 +43,7 @@
 // -------------------------------------------------------------------
 
 #include "G4EnergyLossTables.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4RegionStore.hh"
 #include "G4LossTableManager.hh"

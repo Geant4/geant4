@@ -174,6 +174,9 @@ public:
   // summary printout after initialisation
   void PrintInfoDefinition();
 
+  // Called before tracking of each new G4Track
+  void StartTracking(G4Track*);
+
   // Step limit from AlongStep 
   G4double AlongStepGetPhysicalInteractionLength(const G4Track&,
 						 G4double  previousStepSize,

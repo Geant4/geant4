@@ -66,18 +66,13 @@ public:
 
   virtual ~G4VEmAngularDistribution();
 
-  virtual void Initialise();
-
-  // old interface method for bremsstrahlung
-  virtual G4double PolarAngle(const G4double initial_energy,
-			      const G4double final_energy,
-                              const G4int Z) = 0;
-
-  // new interface - will be pure virtual
+  // Sample direction in global coordinate system,
+  // this means for zero scattering angle this direction is the same
+  // as the direction of primary 
   virtual G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
-					 G4double out_energy,
+					 G4double finalTotalEnergy,
 					 G4int Z,
-					 const G4Material* mat = 0);
+					 const G4Material*) = 0;
 
   inline const G4String& GetName() const;
 

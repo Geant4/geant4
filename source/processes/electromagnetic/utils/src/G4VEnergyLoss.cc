@@ -52,6 +52,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4VEnergyLoss.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4EnergyLossMessenger.hh"
 #include "G4ProductionCutsTable.hh"
 

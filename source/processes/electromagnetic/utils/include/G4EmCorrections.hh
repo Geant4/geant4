@@ -55,6 +55,8 @@
 #ifndef G4EmCorrections_h
 #define G4EmCorrections_h 1
 
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "globals.hh"
 #include "G4ionEffectiveCharge.hh"
 #include "G4Material.hh"
@@ -352,9 +354,9 @@ inline void G4EmCorrections::SetupKinematics(const G4ParticleDefinition* p,
     beta2 = bg2/(gamma*gamma);
     beta  = std::sqrt(beta2);
     ba2   = beta2/alpha2;
-    G4double ratio = electron_mass_c2/mass;
-    tmax  = 2.0*electron_mass_c2*bg2 /(1. + 2.0*gamma*ratio + ratio*ratio);
-    charge  = p->GetPDGCharge()/eplus;
+    G4double ratio = CLHEP::electron_mass_c2/mass;
+    tmax  = 2.0*CLHEP::electron_mass_c2*bg2 /(1. + 2.0*gamma*ratio + ratio*ratio);
+    charge  = p->GetPDGCharge()/CLHEP::eplus;
     //if(charge < 1.5)  {q2 = charge*charge;}
     //else {
     //  q2 = effCharge.EffectiveChargeSquareRatio(p,mat,kinEnergy);

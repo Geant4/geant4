@@ -45,6 +45,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4ElectronIonPair.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4StepPoint.hh"

@@ -67,6 +67,8 @@
 #ifndef G4VEmProcess_h
 #define G4VEmProcess_h 1
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4VDiscreteProcess.hh"
 #include "globals.hh"
 #include "G4Material.hh"
@@ -128,6 +130,9 @@ public:
   void BuildPhysicsTable(const G4ParticleDefinition&);
 
   void PrintInfoDefinition();
+
+  // Called before tracking of each new G4Track
+  void StartTracking(G4Track*);
 
   // implementation of virtual method, specific for G4VEmProcess
   G4double PostStepGetPhysicalInteractionLength(
@@ -218,12 +223,18 @@ public:
   // model will be selected for a given energy interval  
   void AddEmModel(G4int, G4VEmModel*, const G4Region* region = 0);
 
-  // Assign a model to a process
+  // Assign a model to a process - obsolete will be removed
   void SetModel(G4VEmModel*, G4int index = 1);
   
-  // return the assigned model
+  // return the assigned model - obsolete will be removed
   G4VEmModel* Model(G4int index = 1);
-    
+
+  // return the assigned model
+  G4VEmModel* EmModel(G4int index = 1);
+
+  // Assign a model to a process
+  void SetEmModel(G4VEmModel*, G4int index = 1);
+      
   // Define new energy range for the model identified by the name
   void UpdateEmModel(const G4String&, G4double, G4double);
 
@@ -299,8 +310,6 @@ private:
 
   void FindLambdaMax();
 
-  inline void InitialiseStep(const G4Track&);
-
   inline void DefineMaterial(const G4MaterialCutsCouple* couple);
 
   inline void ComputeIntegralLambda(G4double kinEnergy);
@@ -331,6 +340,7 @@ private:
   // ======== Parameters of the class fixed at initialisation =======
 
   std::vector<G4VEmModel*>     emModels;
+  G4int                        numberOfModels;
 
   // tables and vectors
   G4PhysicsTable*              theLambdaTable;
@@ -431,7 +441,9 @@ inline void G4VEmProcess::DefineMaterial(const G4MaterialCutsCouple* couple)
 inline 
 G4VEmModel* G4VEmProcess::SelectModel(G4double& kinEnergy, size_t index)
 {
-  currentModel = modelManager->SelectModel(kinEnergy, index);
+  if(1 < numberOfModels) {
+    currentModel = modelManager->SelectModel(kinEnergy, index);
+  }
   currentModel->SetCurrentCouple(currentCouple);
   return currentModel;
 }
@@ -447,17 +459,6 @@ G4VEmModel* G4VEmProcess::SelectModelForMaterial(G4double kinEnergy,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4VEmProcess::InitialiseStep(const G4Track& track)
-{
-  currentParticle = track.GetParticleDefinition();
-  preStepKinEnergy = track.GetKineticEnergy();
-  DefineMaterial(track.GetMaterialCutsCouple());
-  SelectModel(preStepKinEnergy, currentCoupleIndex);
-  if (theNumberOfInteractionLengthLeft < 0.0) { mfpKinEnergy = DBL_MAX; }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 inline G4double G4VEmProcess::GetLambdaFromTable(G4double e)
 {
   return fFactor*((*theLambdaTable)[basedCoupleIndex])->Value(e);
@@ -467,7 +468,7 @@ inline G4double G4VEmProcess::GetLambdaFromTable(G4double e)
 
 inline G4double G4VEmProcess::GetLambdaFromTablePrim(G4double e)
 {
-  return fFactor*((*theLambdaTablePrim)[basedCoupleIndex])->Value(e)*MeV/e;
+  return fFactor*((*theLambdaTablePrim)[basedCoupleIndex])->Value(e)*CLHEP::MeV/e;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
