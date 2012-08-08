@@ -40,40 +40,15 @@
 
 G4TheoFSGenerator::G4TheoFSGenerator(const G4String& name)
     : G4HadronicInteraction(name)
+    , theTransport(0), theHighEnergyGenerator(0)
     , theQuasielastic(0), theProjectileDiffraction(0)
  {
  theParticleChange = new G4HadFinalState;
 }
 
-G4TheoFSGenerator::G4TheoFSGenerator(const G4TheoFSGenerator &) 
-    : G4HadronicInteraction("TheoFSGenerator")
-    , theQuasielastic(0), theProjectileDiffraction(0)
-{
-}
-
-
 G4TheoFSGenerator::~G4TheoFSGenerator()
 {
   delete theParticleChange;
-}
-
-
-const G4TheoFSGenerator & G4TheoFSGenerator::operator=(const G4TheoFSGenerator &)
-{
-  G4String text = "G4TheoFSGenerator::operator= meant to not be accessible";
-  throw G4HadronicException(__FILE__, __LINE__, text);
-  return *this;
-}
-
-
-int G4TheoFSGenerator::operator==(const G4TheoFSGenerator &) const
-{
-  return 0;
-}
-
-int G4TheoFSGenerator::operator!=(const G4TheoFSGenerator &) const
-{
-  return 1;
 }
 
 void G4TheoFSGenerator::ModelDescription(std::ostream& outFile) const
