@@ -40,6 +40,7 @@
 // 04.06.2010 G.Folger: Use new ctor for builders
 // 16.08.2010 H.Kurashige: Remove inclusion of G4ParticleWithCuts 
 // 26.06.2012 A.Ribon:  Use FTF/Preco and BERT for nuclear capture at rest.
+// 27.07.2012 A.Ribon:  Use the new class G4BertiniAndFritiofStoppingPhysics
 //
 //----------------------------------------------------------------------------
 //
@@ -59,7 +60,7 @@
 #include "G4EmStandardPhysics.hh"
 #include "G4EmExtraBertiniPhysics.hh"
 #include "G4IonFTFPBinaryCascadePhysics.hh"
-#include "G4QandFTFStoppingPhysics.hh"
+#include "G4BertiniAndFritiofStoppingPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 
@@ -92,7 +93,7 @@ template<class T> TFTFP_BERT<T>::TFTFP_BERT(G4int ver):  T()
   this->RegisterPhysics(  new HadronPhysicsFTFP_BERT(ver));
 
   // Stopping Physics
-  this->RegisterPhysics( new G4QandFTFStoppingPhysics(ver) );
+  this->RegisterPhysics( new G4BertiniAndFritiofStoppingPhysics(ver) );
 
   // Ion Physics
   this->RegisterPhysics( new G4IonFTFPBinaryCascadePhysics(ver));

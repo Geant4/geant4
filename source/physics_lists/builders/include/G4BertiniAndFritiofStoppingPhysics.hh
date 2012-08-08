@@ -23,54 +23,53 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QandFTFStoppingPhysics.hh,v 1.6 2010-06-04 09:59:47 vnivanch Exp $
+// $Id: G4BertiniAndFritiofStoppingPhysics.hh,v 1.6 2010-06-04 09:59:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4QandFTFStoppingPhysics
+// ClassName:  G4BertiniAndFritiofStoppingPhysics
 //
-// Author:    Alberto Ribon
+// Author:     Alberto Ribon
 //
-// Date:      18 October 2011
+// Date:       27 July 2012
 //
-// Modified:  10 May 2012, M. Kelsey: Use G4HadronicAbsorptionBertini.
-//            26 June 2012, A. Ribon: Remove CHIPS
+// Modified:  
+//
+// Class Description:
 //
 // This class provides the nuclear capture at rest of negatively charged
-// particles, using Fritiof/Precompound for anti-protons and anti-Sigma+;
-// Bertini for pi-, K- and Sigma-. 
+// particles, using: Bertini for pi-, K-, and Sigma-; 
+//                   Fritiof/Precompound for anti-proton and anti-Sigma+;
+//                   another (CHIPS-independent) model for mu-.
 // No capture at rest is used for the other hadrons: Xi-, Omega-
 // (this means that these hadrons can only decay).
-// For mu- it uses another, CHIPS-independent, implementation.
 //
 //----------------------------------------------------------------------------
-//
 
-#ifndef G4QandFTFStoppingPhysics_h
-#define G4QandFTFStoppingPhysics_h 1
+#ifndef G4BertiniAndFritiofStoppingPhysics_h
+#define G4BertiniAndFritiofStoppingPhysics_h 1
 
 #include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
 #include "G4MuonMinusCaptureAtRest.hh"
 
 
-//class G4QCaptureAtRest;
-class G4FTFCaptureAtRest;
 class G4HadronicAbsorptionBertini;
+class G4HadronicAbsorptionFritiof;
 
 
-class G4QandFTFStoppingPhysics : public G4VPhysicsConstructor {
+class G4BertiniAndFritiofStoppingPhysics : public G4VPhysicsConstructor {
 
 public: 
 
-  G4QandFTFStoppingPhysics( G4int ver = 1 );
+  G4BertiniAndFritiofStoppingPhysics( G4int ver = 1 );
 
-  G4QandFTFStoppingPhysics( const G4String& name,
-		            G4int ver = 1,
-		            G4bool UseMuonMinusCapture=true );
+  G4BertiniAndFritiofStoppingPhysics( const G4String& name,
+		                      G4int ver = 1,
+		                      G4bool UseMuonMinusCapture=true );
 
-  virtual ~G4QandFTFStoppingPhysics();
+  virtual ~G4BertiniAndFritiofStoppingPhysics();
 
 public: 
 
@@ -86,13 +85,12 @@ public:
 private:
 
   G4MuonMinusCaptureAtRest* muProcess;
-  //G4QCaptureAtRest* hProcess;
-  G4FTFCaptureAtRest* hFTFProcess;
-  G4HadronicAbsorptionBertini* hBertProcess;
+  G4HadronicAbsorptionBertini* hBertiniProcess;
+  G4HadronicAbsorptionFritiof* hFritiofProcess;
   
-  G4int    verbose;
-  G4bool   wasActivated;
-  G4bool   useMuonMinusCaptureAtRest;
+  G4int  verbose;
+  G4bool wasActivated;
+  G4bool useMuonMinusCaptureAtRest;
 };
 
 

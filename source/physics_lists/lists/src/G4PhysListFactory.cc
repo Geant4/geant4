@@ -55,7 +55,7 @@
 #include "QGSP_FTFP_BERT.hh"
 #include "QGS_BIC.hh"
 #include "QGSP_INCLXX.hh"
-#include "QGSP_INCL_ABLA.hh"
+//#include "QGSP_INCL_ABLA.hh"
 #include "Shielding.hh"
 
 #include "G4EmStandardPhysics.hh"
@@ -69,16 +69,16 @@ G4PhysListFactory::G4PhysListFactory()
   : defName("FTFP_BERT"),verbose(1)
 {
   nlists_hadr = 19;
-  G4String s[19] = {
+  G4String ss[19] = {
     "CHIPS",
     "FTFP_BERT","FTFP_BERT_TRV","FTF_BIC",
     "LBE","LHEP","QBBC",
     "QGSC_BERT","QGSP","QGSP_BERT","QGSP_BERT_CHIPS","QGSP_BERT_HP",
     "QGSP_BIC","QGSP_BIC_HP",
-    "QGSP_FTFP_BERT","QGS_BIC","QGSP_INCLXX","QGSP_INCL_ABLA",
+    "QGSP_FTFP_BERT","QGS_BIC","QGSP_INCLXX",
     "Shielding"};
   for(size_t i=0; i<nlists_hadr; ++i) {
-    listnames_hadr.push_back(s[i]);
+    listnames_hadr.push_back(ss[i]);
   }
 
   nlists_em = 6;
@@ -159,7 +159,7 @@ G4PhysListFactory::GetReferencePhysList(const G4String& name)
   else if(had_name == "QGSP_FTFP_BERT") {p = new QGSP_FTFP_BERT(verbose);}
   else if(had_name == "QGS_BIC")        {p = new QGS_BIC(verbose);}
   else if(had_name == "QGSP_INCLXX")    {p = new QGSP_INCLXX(verbose);}
-  else if(had_name == "QGSP_INCL_ABLA") {p = new QGSP_INCL_ABLA(verbose);}
+  //  else if(had_name == "QGSP_INCL_ABLA") {p = new QGSP_INCL_ABLA(verbose);}
   else if(had_name == "Shielding")      {p = new Shielding(verbose);}
   else if(had_name == "ShieldingLEND")  {p = new Shielding(verbose,"LEND");}
   else {

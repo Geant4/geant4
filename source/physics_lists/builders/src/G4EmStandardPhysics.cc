@@ -173,6 +173,12 @@ void G4EmStandardPhysics::ConstructProcess()
   // muon & hadron multiple scattering
   G4MuMultipleScattering* mumsc = new G4MuMultipleScattering();
   mumsc->AddEmModel(0, new G4WentzelVIModel());
+  G4MuMultipleScattering* pimsc = new G4MuMultipleScattering();
+  pimsc->AddEmModel(0, new G4WentzelVIModel());
+  G4MuMultipleScattering* kmsc = new G4MuMultipleScattering();
+  kmsc->AddEmModel(0, new G4WentzelVIModel());
+  G4MuMultipleScattering* pmsc = new G4MuMultipleScattering();
+  pmsc->AddEmModel(0, new G4WentzelVIModel());
   G4hMultipleScattering* hmsc = new G4hMultipleScattering();
 
   // high energy limit for e+- scattering models and bremsstrahlung
@@ -262,7 +268,7 @@ void G4EmStandardPhysics::ConstructProcess()
     } else if (particleName == "pi+" ||
                particleName == "pi-" ) {
 
-      G4hMultipleScattering* pimsc = new G4hMultipleScattering();
+      //G4hMultipleScattering* pimsc = new G4hMultipleScattering();
       ph->RegisterProcess(pimsc, particle);
       ph->RegisterProcess(new G4hIonisation(), particle);
       ph->RegisterProcess(pib, particle);
@@ -271,7 +277,7 @@ void G4EmStandardPhysics::ConstructProcess()
     } else if (particleName == "kaon+" ||
                particleName == "kaon-" ) {
 
-      G4hMultipleScattering* kmsc = new G4hMultipleScattering();
+      //G4hMultipleScattering* kmsc = new G4hMultipleScattering();
       ph->RegisterProcess(kmsc, particle);
       ph->RegisterProcess(new G4hIonisation(), particle);
       ph->RegisterProcess(kb, particle);
@@ -280,7 +286,7 @@ void G4EmStandardPhysics::ConstructProcess()
     } else if (particleName == "proton" ||
 	       particleName == "anti_proton") {
 
-      G4hMultipleScattering* pmsc = new G4hMultipleScattering();
+      //G4hMultipleScattering* pmsc = new G4hMultipleScattering();
       ph->RegisterProcess(pmsc, particle);
       ph->RegisterProcess(new G4hIonisation(), particle);
       ph->RegisterProcess(pb, particle);

@@ -67,7 +67,8 @@
 //#include "QGSP_EMX.hh"
 //#include "QGSP_QEL.hh"
 //#include "QGSP_CASC.hh"
-#include "QGSP_INCL_ABLA.hh"
+//#include "QGSP_INCL_ABLA.hh"
+#include "QGSP_INCLXX.hh"
 
 #include "QGSP_FTFP_BERT.hh"
 
@@ -130,7 +131,8 @@ int main(int argc,char** argv) {
 //9.4beta   G4VModularPhysicsList *thePL27a = new QGSP_DIF;
   G4VModularPhysicsList *thePL28 = new QGSP;
 //  G4VModularPhysicsList *thePL29 = new QGSP_CASC;
-  G4VModularPhysicsList *thePL29 = new QGSP_INCL_ABLA;
+//  G4VModularPhysicsList *thePL29 = new QGSP_INCL_ABLA;
+  G4VModularPhysicsList *thePL29 = new QGSP_INCLXX;
   
   G4VModularPhysicsList *thePL30 = new QGS_BIC;
   G4VModularPhysicsList *thePL31 = new FTF_BIC;

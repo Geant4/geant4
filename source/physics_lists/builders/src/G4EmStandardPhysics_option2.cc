@@ -57,6 +57,7 @@
 #include "G4PhotoElectricEffect.hh"
 #include "G4PEEffectFluoModel.hh"
 #include "G4KleinNishinaModel.hh"
+#include "G4RayleighScattering.hh"
 
 #include "G4eMultipleScattering.hh"
 #include "G4hMultipleScattering.hh"
@@ -215,6 +216,7 @@ void G4EmStandardPhysics_option2::ConstructProcess()
       ph->RegisterProcess(new G4PhotoElectricEffect(), particle);
       ph->RegisterProcess(new G4ComptonScattering(), particle);
       ph->RegisterProcess(new G4GammaConversion(), particle);
+      ph->RegisterProcess(new G4RayleighScattering(), particle);
 
     } else if (particleName == "e-") {
 

@@ -80,7 +80,6 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/util/include \
             -I$(G4BASE)/processes/hadronic/models/high_energy/include \
             -I$(G4BASE)/processes/hadronic/models/im_r_matrix/include \
-            -I$(G4BASE)/processes/hadronic/models/incl/include \
             -I$(G4BASE)/processes/hadronic/models/inclxx/utils/include \
             -I$(G4BASE)/processes/hadronic/models/inclxx/incl_physics/include \
             -I$(G4BASE)/processes/hadronic/models/inclxx/interface/include \

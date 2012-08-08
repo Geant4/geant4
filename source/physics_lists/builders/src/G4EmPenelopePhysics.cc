@@ -198,10 +198,17 @@ void G4EmPenelopePhysics::ConstructProcess()
   // muon & hadron multiple scattering
   G4MuMultipleScattering* mumsc = new G4MuMultipleScattering();
   mumsc->AddEmModel(0, new G4WentzelVIModel());
+  G4MuMultipleScattering* pimsc = new G4MuMultipleScattering();
+  pimsc->AddEmModel(0, new G4WentzelVIModel());
+  G4MuMultipleScattering* kmsc = new G4MuMultipleScattering();
+  kmsc->AddEmModel(0, new G4WentzelVIModel());
+  G4MuMultipleScattering* pmsc = new G4MuMultipleScattering();
+  pmsc->AddEmModel(0, new G4WentzelVIModel());
   G4hMultipleScattering* hmsc = new G4hMultipleScattering();
-  G4hMultipleScattering* pmsc = new G4hMultipleScattering();
-  G4hMultipleScattering* pimsc = new G4hMultipleScattering();
-  G4hMultipleScattering* kmsc = new G4hMultipleScattering();
+
+  // nuclear stopping
+  G4NuclearStopping* ionnuc = new G4NuclearStopping();
+  G4NuclearStopping* pnuc = new G4NuclearStopping();
 
   // Add Penelope EM Processes
   theParticleIterator->reset();
@@ -248,7 +255,7 @@ void G4EmPenelopePhysics::ConstructProcess()
       G4RayleighScattering* theRayleigh = new G4RayleighScattering();
       G4PenelopeRayleighModel* theRayleighPenelopeModel = 
 	new G4PenelopeRayleighModel();
-      theRayleighPenelopeModel->SetHighEnergyLimit(PenelopeHighEnergyLimit);
+      //theRayleighPenelopeModel->SetHighEnergyLimit(PenelopeHighEnergyLimit);
       theRayleigh->AddEmModel(0,theRayleighPenelopeModel);
       ph->RegisterProcess(theRayleigh, particle);
 
@@ -332,7 +339,7 @@ void G4EmPenelopePhysics::ConstructProcess()
 
       ph->RegisterProcess(hmsc, particle);
       ph->RegisterProcess(ionIoni, particle);
-      ph->RegisterProcess(new G4NuclearStopping(), particle);
+      ph->RegisterProcess(ionnuc, particle);
 
     } else if (particleName == "GenericIon") {
 
@@ -344,7 +351,7 @@ void G4EmPenelopePhysics::ConstructProcess()
 
       ph->RegisterProcess(hmsc, particle);
       ph->RegisterProcess(ionIoni, particle);
-      ph->RegisterProcess(new G4NuclearStopping(), particle);
+      ph->RegisterProcess(ionnuc, particle);
 
     } else if (particleName == "pi+" ||
                particleName == "pi-" ) {
@@ -378,6 +385,7 @@ void G4EmPenelopePhysics::ConstructProcess()
       ph->RegisterProcess(hIoni, particle);
       ph->RegisterProcess(pb, particle);
       ph->RegisterProcess(pp, particle);
+      ph->RegisterProcess(pnuc, particle);
 
     } else if (particleName == "B+" ||
 	       particleName == "B-" ||
@@ -435,6 +443,9 @@ void G4EmPenelopePhysics::ConstructProcess()
   opt.SetMaxEnergy(10*TeV);
   opt.SetDEDXBinning(220);
   opt.SetLambdaBinning(220);
+
+  // Nuclear stopping
+  pnuc->SetMaxKinEnergy(MeV);
 
   //opt.SetSplineFlag(true);
   opt.SetPolarAngleLimit(CLHEP::pi);

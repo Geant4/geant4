@@ -189,7 +189,17 @@ void G4EmLivermorePhysics::ConstructProcess()
   // muon & hadron multiple scattering
   G4MuMultipleScattering* mumsc = new G4MuMultipleScattering();
   mumsc->AddEmModel(0, new G4WentzelVIModel());
+  G4MuMultipleScattering* pimsc = new G4MuMultipleScattering();
+  pimsc->AddEmModel(0, new G4WentzelVIModel());
+  G4MuMultipleScattering* kmsc = new G4MuMultipleScattering();
+  kmsc->AddEmModel(0, new G4WentzelVIModel());
+  G4MuMultipleScattering* pmsc = new G4MuMultipleScattering();
+  pmsc->AddEmModel(0, new G4WentzelVIModel());
   G4hMultipleScattering* hmsc = new G4hMultipleScattering();
+
+  // nuclear stopping
+  G4NuclearStopping* ionnuc = new G4NuclearStopping();
+  G4NuclearStopping* pnuc = new G4NuclearStopping();
 
   // Add Livermore EM Processes
   theParticleIterator->reset();
@@ -226,20 +236,20 @@ void G4EmLivermorePhysics::ConstructProcess()
       G4GammaConversion* theGammaConversion = new G4GammaConversion();
       G4LivermoreGammaConversionModel* theLivermoreGammaConversionModel = 
 	new G4LivermoreGammaConversionModel();
-      theLivermoreGammaConversionModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
+      theLivermoreGammaConversionModel->SetHighEnergyLimit(100*GeV);
       theGammaConversion->AddEmModel(0, theLivermoreGammaConversionModel);
       ph->RegisterProcess(theGammaConversion, particle);
 
       G4RayleighScattering* theRayleigh = new G4RayleighScattering();
-      G4LivermoreRayleighModel* theRayleighModel = new G4LivermoreRayleighModel();
-      theRayleighModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
-      theRayleigh->AddEmModel(0, theRayleighModel);
+      //G4LivermoreRayleighModel* theRayleighModel = new G4LivermoreRayleighModel();
+      //theRayleighModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
+      //theRayleigh->AddEmModel(0, theRayleighModel);
       ph->RegisterProcess(theRayleigh, particle);
 
     } else if (particleName == "e-") {
 
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc->AddEmModel(0, new G4UrbanMscModel95());
+      //msc->AddEmModel(0, new G4UrbanMscModel95());
       //msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
       msc->SetStepLimitType(fUseDistanceToBoundary);
       ph->RegisterProcess(msc, particle);
@@ -255,11 +265,13 @@ void G4EmLivermorePhysics::ConstructProcess()
       
       // Bremsstrahlung
       G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
+      /*
       G4LivermoreBremsstrahlungModel* theBremLivermore = new
         G4LivermoreBremsstrahlungModel();
       theBremLivermore->SetHighEnergyLimit(25*MeV);
       theBremLivermore->SetAngularDistribution(new G4Generator2BS());
       eBrem->AddEmModel(0, theBremLivermore);
+      */
       ph->RegisterProcess(eBrem, particle);
 
     } else if (particleName == "e+") {
@@ -267,7 +279,7 @@ void G4EmLivermorePhysics::ConstructProcess()
       // Identical to G4EmStandardPhysics_option3
       
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc->AddEmModel(0, new G4UrbanMscModel95());
+      //msc->AddEmModel(0, new G4UrbanMscModel95());
       //msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
       msc->SetStepLimitType(fUseDistanceToBoundary);
       G4eIonisation* eIoni = new G4eIonisation();
@@ -301,7 +313,7 @@ void G4EmLivermorePhysics::ConstructProcess()
 
       ph->RegisterProcess(msc, particle);
       ph->RegisterProcess(ionIoni, particle);
-      ph->RegisterProcess(new G4NuclearStopping(), particle);
+      ph->RegisterProcess(ionnuc, particle);
 
     } else if (particleName == "GenericIon") {
 
@@ -313,7 +325,7 @@ void G4EmLivermorePhysics::ConstructProcess()
 
       ph->RegisterProcess(hmsc, particle);
       ph->RegisterProcess(ionIoni, particle);
-      ph->RegisterProcess(new G4NuclearStopping(), particle);
+      ph->RegisterProcess(ionnuc, particle);
 
     } else if (particleName == "pi+" ||
                particleName == "pi-" ) {
@@ -350,6 +362,7 @@ void G4EmLivermorePhysics::ConstructProcess()
       ph->RegisterProcess(hIoni, particle);
       ph->RegisterProcess(pb, particle);
       ph->RegisterProcess(pp, particle);
+      ph->RegisterProcess(pnuc, particle);
 
     } else if (particleName == "B+" ||
 	       particleName == "B-" ||
@@ -406,6 +419,9 @@ void G4EmLivermorePhysics::ConstructProcess()
   opt.SetMaxEnergy(10*TeV);
   opt.SetDEDXBinning(220);
   opt.SetLambdaBinning(220);
+
+  // Nuclear stopping
+  pnuc->SetMaxKinEnergy(MeV);
 
   // Ionization
   //

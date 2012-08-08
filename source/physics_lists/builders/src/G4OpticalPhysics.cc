@@ -343,16 +343,16 @@ void G4OpticalPhysics::Configure(G4OpticalProcessIndex index, G4bool isUse)
 }
 
 void G4OpticalPhysics::SetProcessVerbose(G4int index,
-                                         G4int verboseLevel)
+                                         G4int inputVerboseLevel)
 {
   // Set new verbose level to a selected process
 
   if ( index >= kNoProcess ) return;
-  if ( fProcessVerbose[index] == verboseLevel ) return;
+  if ( fProcessVerbose[index] == inputVerboseLevel ) return;
 
-  fProcessVerbose[index] = verboseLevel;
+  fProcessVerbose[index] = inputVerboseLevel;
 
-  if ( fProcesses[index] ) fProcesses[index]->SetVerboseLevel(verboseLevel);
+  if ( fProcesses[index] ) fProcesses[index]->SetVerboseLevel(inputVerboseLevel);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

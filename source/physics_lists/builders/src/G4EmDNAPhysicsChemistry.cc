@@ -593,7 +593,7 @@ void G4EmDNAPhysicsChemistry::ConstructProcess()
             ph->RegisterProcess(theRayleigh, particle);
 
         }
-        else if(particleType == "Molecule" && particleName != "H2O")
+        else if(particleType == "Molecule" && particleName != "H_{2}O")
         {
             if  (pmanager==0)
             {
@@ -603,7 +603,7 @@ void G4EmDNAPhysicsChemistry::ConstructProcess()
             G4DNABrownianTransportation* brown = new G4DNABrownianTransportation();
             ph->RegisterProcess(brown, particle);
         }
-        else if (particleName == "H2O")
+        else if (particleName == "H_{2}O")
         {
             if  (pmanager==0)
             {

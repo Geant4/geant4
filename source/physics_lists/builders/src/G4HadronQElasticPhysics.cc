@@ -42,7 +42,7 @@
 
 #include "G4HadronQElasticPhysics.hh"
 
-#include "G4WHadronElasticProcess.hh"
+#include "G4HadronElasticProcess.hh"
 #include "G4HadronicInteraction.hh"
 #include "G4HadronElastic.hh"
 #include "G4QElastic.hh"
@@ -136,7 +136,7 @@ void G4HadronQElasticPhysics::ConstructProcess()
        pname == "anti_He3"       ) {
       
       G4ProcessManager* pmanager = particle->GetProcessManager();
-      G4WHadronElasticProcess* hel = new G4WHadronElasticProcess();
+      G4HadronElasticProcess* hel = new G4HadronElasticProcess();
       hel->RegisterMe(lhep);
       pmanager->AddDiscreteProcess(hel);
 

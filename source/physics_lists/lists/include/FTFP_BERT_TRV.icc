@@ -38,6 +38,7 @@
 // 16.08.2010 H.Kurashige: Remove inclusion of G4ParticleWithCuts 
 // 18.10.2011 A.Ribon: Replace CHIPS with FTF/Preco for nuclear capture
 //                     at rest of anti-protons.
+// 27.07.2012 A.Ribon:  Use the new class G4BertiniAndFritiofStoppingPhysics
 //
 //----------------------------------------------------------------------------
 //
@@ -57,7 +58,7 @@
 #include "G4EmStandardPhysics.hh"
 #include "G4EmExtraBertiniPhysics.hh"
 #include "G4IonPhysics.hh"
-#include "G4QandFTFStoppingPhysics.hh"
+#include "G4BertiniAndFritiofStoppingPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 
@@ -95,7 +96,7 @@ template<class T> TFTFP_BERT_TRV<T>::TFTFP_BERT_TRV(G4int ver):  T()
   this->RegisterPhysics(  new HadronPhysicsFTFP_BERT_TRV(ver));
 
   // Stopping Physics
-  this->RegisterPhysics( new G4QandFTFStoppingPhysics(ver) );
+  this->RegisterPhysics( new G4BertiniAndFritiofStoppingPhysics(ver) );
 
   // Ion Physics
   this->RegisterPhysics( new G4IonPhysics(ver));

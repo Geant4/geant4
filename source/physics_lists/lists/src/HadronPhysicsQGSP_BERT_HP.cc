@@ -60,9 +60,11 @@ HadronPhysicsQGSP_BERT_HP::HadronPhysicsQGSP_BERT_HP(G4int)
     , theBertiniNeutron(0)
     , theHPNeutron(0)
     , thePiK(0)
+    , theLEPPiK(0)      //A.R. 26-Jul-2012 Coverity fix
     , theQGSPPiK(0)
     , theBertiniPiK(0)
     , thePro(0)
+    , theLEPPro(0)      //A.R. 26-Jul-2012 Coverity fix
     , theQGSPPro(0)
     , theBertiniPro(0)
     , theMiscLHEP(0)
@@ -77,9 +79,11 @@ HadronPhysicsQGSP_BERT_HP::HadronPhysicsQGSP_BERT_HP(const G4String& name, G4boo
     , theBertiniNeutron(0)
     , theHPNeutron(0)
     , thePiK(0)
+    , theLEPPiK(0)      //A.R. 26-Jul-2012 Coverity fix
     , theQGSPPiK(0)
     , theBertiniPiK(0)
     , thePro(0)
+    , theLEPPro(0)      //A.R. 26-Jul-2012 Coverity fix
     , theQGSPPro(0)
     , theBertiniPro(0)
     , theMiscLHEP(0)

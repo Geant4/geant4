@@ -15,6 +15,52 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27-07-2012, Vladimir Ivanchenko        (phys-lists-V09-05-43)
+- G4EmPenelopePhysics, G4EmStandardPhysics_option3,
+  G4EmLivermorePhysics,  G4EmPenelopePolarizedPhysics -
+    added upper limit 1 MeV for nuclear stopping for CPU performance
+
+27-07-2012, Vladimir Ivanchenko        (phys-lists-V09-05-42)
+- Substitute G4WHadronElasticPhysics by G4HadronElasticPhysics in 
+    all elastic builders
+- G4EmStandardPhysics, G4EmStandardPhysics_option1 - use WentzelVI 
+    for pions and kaons
+- G4EmStandardPhysics_option2 - add Rayleigh scattering
+- G4EmStandardPhysics_option3, G4EmLivermorePhysics, 
+  G4EmPenelopePhysics - added nuclear stopping for protons and
+    anti_protons, romove upper energy limit for Rayleigh
+
+27-07-2012, Alberto Ribon              (phys-lists-V09-05-41)
+- Replaced (removed) G4QandFTFStoppingPhysics with the new class
+  G4BertiniAndFritiofStoppingPhysics in FTFP_BERT and FTFP_BERT_TRV.
+
+26-07-2012, Alberto Ribon              (phys-lists-V09-05-40)
+- Coverity fixes in HadronPhysicsQGSP_BERT_HP, adding some
+  missing initialization.
+
+16-07-2012, Gunter Folger              (phys-lists-V09-05-39)
+- coverity fixes in G4ChipsKaonBuilder.hh, adding private copy
+   and assignment operator.
+
+13-07-2012, M.Karamitros               (phys-lists-V09-05-38)
+- Update G4EmDNAPhysicsChemistry : molecule's names changed
+
+09-07-2012, A.Ribon                    (phys-lists-V09-05-37)
+- Fixed a few forgotten changes to remove INCL builders.
+
+09-07-2012, A.Ribon                    (phys-lists-V09-05-36)
+- Removed INCL builders.
+
+09-07-2012, D.Mancusi                  (phys-lists-V09-05-35)
+- Fixes Coverity warnings in INCL++ ion builder.
+
+06-07-2012, A.Ribon                    (phys-lists-V09-05-34)
+- Fixed warnings of shadowed variables.
+
+06-07-2012, A.Ribon                    (phys-lists-V09-05-33)
+- Removed obsolete physics list QGSP_INCL_ABLA 
+  (leaving only QGSP_INCLXX).
+
 26-06-2012, A.Ribon                    (phys-lists-V09-05-32)
 - For nuclear capture at rest in both FTFP_BERT and FTFP_BERT_TRV,
   use Bertini for pi-, K-, and Sigma-; FTF/Preco for anti-proton

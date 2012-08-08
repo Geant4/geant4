@@ -57,8 +57,16 @@
 #include "G4IonConstructor.hh"
 #include "G4BuilderType.hh"
 
-G4IonINCLXXPhysics::G4IonINCLXXPhysics(G4int ver)
-  :  G4VPhysicsConstructor("IonINCLXX"), verbose(ver), wasActivated(false)
+G4IonINCLXXPhysics::G4IonINCLXXPhysics(G4int ver) :
+  G4VPhysicsConstructor("IonINCLXX"),
+  fINCLXXIons(NULL),
+  fTripathi(NULL),
+  fTripathiLight(NULL),
+  fShen(NULL),
+  fLEDModel(NULL),
+  fLETModel(NULL),
+  fLEAModel(NULL),
+  verbose(ver), wasActivated(false)
 {
   // INCLXX light ion maximum energy is 3.0 GeV/nucleon
   emax_d     = 2 * 3.0 * GeV;
@@ -74,7 +82,15 @@ G4IonINCLXXPhysics::G4IonINCLXXPhysics(G4int ver)
 
 G4IonINCLXXPhysics::G4IonINCLXXPhysics(const G4String& name, 
 						     G4int ver)
-  :  G4VPhysicsConstructor(name), verbose(ver), wasActivated(false)
+  :  G4VPhysicsConstructor(name),
+  fINCLXXIons(NULL),
+  fTripathi(NULL),
+  fTripathiLight(NULL),
+  fShen(NULL),
+  fLEDModel(NULL),
+  fLETModel(NULL),
+  fLEAModel(NULL),
+  verbose(ver), wasActivated(false)
 {
   // INCLXX light ion maximum energy is 3.0 GeV/nucleon
   emax_d     = 2 * 3.0 * GeV;

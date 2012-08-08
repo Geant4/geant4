@@ -73,7 +73,6 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_exci
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/high_energy/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/im_r_matrix/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/incl/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/inclxx/utils/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/inclxx/incl_physics/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/inclxx/interface/include)
@@ -145,8 +144,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         HadronPhysicsQGSP_BIC_HP.hh
         HadronPhysicsQGSP_FTFP_BERT.hh
         HadronPhysicsQGSP.hh
-	  HadronPhysicsQGSP_INCLXX.hh
-        HadronPhysicsQGSP_INCL_ABLA.hh
+	HadronPhysicsQGSP_INCLXX.hh
         HadronPhysicsShielding.hh
         LBE.hh
         LBE.icc
@@ -187,10 +185,8 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         QGSP_FTFP_BERT.icc
         QGSP.hh
         QGSP.icc
-	  QGSP_INCLXX.hh
-	  QGSP_INCLXX.icc
-        QGSP_INCL_ABLA.hh
-        QGSP_INCL_ABLA.icc
+	QGSP_INCLXX.hh
+	QGSP_INCLXX.icc
         QGSP_QEL.hh
         QGSP_QEL.icc
         Shielding.hh
@@ -220,7 +216,6 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         HadronPhysicsQGSP_BIC_HP.cc
         HadronPhysicsQGSP.cc
         HadronPhysicsQGSP_FTFP_BERT.cc
-        HadronPhysicsQGSP_INCL_ABLA.cc
         HadronPhysicsQGSP_INCLXX.cc
         HadronPhysicsShielding.cc
         MaxTimeCuts.cc
@@ -272,7 +267,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         G4hadronic_fragm_ci
         G4hadronic_hetcpp_evaporation
         G4hadronic_hetcpp_utils
-        G4hadronic_incl_cascade
+        G4had_inclxx
         G4hadronic_interface_ci
         G4hadronic_iso
         G4hadronic_mgt

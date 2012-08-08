@@ -71,7 +71,6 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_exci
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/high_energy/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/im_r_matrix/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/incl/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/inclxx/utils/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/inclxx/incl_physics/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/inclxx/interface/include)
@@ -107,6 +106,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
     HEADERS
         CompileTimeConstraints.hh
         G4AntiBarionBuilder.hh
+        G4BertiniAndFritiofStoppingPhysics.hh
         G4BertiniKaonBuilder.hh
         G4BertiniNeutronBuilder.hh
         G4BertiniPiKBuilder.hh
@@ -161,16 +161,12 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4HyperonCHIPSBuilder.hh
         G4HyperonFTFPBuilder.hh
         G4HyperonLHEPBuilder.hh
-        G4InclAblaNeutronBuilder.hh
-        G4InclAblaPiKBuilder.hh
-        G4InclAblaProtonBuilder.hh
         G4INCLXXNeutronBuilder.hh
         G4INCLXXPiKBuilder.hh
         G4INCLXXProtonBuilder.hh
         G4IonBinaryCascadePhysics.hh
         G4IonFTFPBinaryCascadePhysics.hh
         G4IonINCLXXPhysics.hh
-        G4IonInclAblaPhysics.hh
         G4IonPhysics.hh
         G4IonQMDPhysics.hh
         G4KaonBuilder.hh
@@ -199,7 +195,6 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4PrecoNeutronBuilder.hh
         G4PrecoProtonBuilder.hh
         G4ProtonBuilder.hh
-        G4QandFTFStoppingPhysics.hh
         G4QAtomicPhysics.hh
         G4QCaptureAtRestPhysics.hh
         G4QElasticPhysics.hh
@@ -248,6 +243,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         TheoModelFactory.hh
     SOURCES
         G4AntiBarionBuilder.cc
+        G4BertiniAndFritiofStoppingPhysics.cc
         G4BertiniKaonBuilder.cc
         G4BertiniNeutronBuilder.cc
         G4BertiniPiKBuilder.cc
@@ -300,16 +296,12 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4HyperonCHIPSBuilder.cc
         G4HyperonFTFPBuilder.cc
         G4HyperonLHEPBuilder.cc
-        G4InclAblaNeutronBuilder.cc
-        G4InclAblaPiKBuilder.cc
-        G4InclAblaProtonBuilder.cc
         G4INCLXXNeutronBuilder.cc
         G4INCLXXPiKBuilder.cc
         G4INCLXXProtonBuilder.cc
         G4IonBinaryCascadePhysics.cc
         G4IonFTFPBinaryCascadePhysics.cc
         G4IonINCLXXPhysics.cc
-        G4IonInclAblaPhysics.cc
         G4IonPhysics.cc
         G4IonQMDPhysics.cc
         G4KaonBuilder.cc
@@ -337,7 +329,6 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4PrecoNeutronBuilder.cc
         G4PrecoProtonBuilder.cc
         G4ProtonBuilder.cc
-        G4QandFTFStoppingPhysics.cc
         G4QAtomicPhysics.cc
         G4QCaptureAtRestPhysics.cc
         G4QElasticPhysics.cc
@@ -424,7 +415,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4hadronic_deex_photon_evaporation
         G4hadronic_deex_util
         G4hadronic_fragm_ci
-        G4hadronic_incl_cascade
+        G4had_inclxx
         G4hadronic_interface_ci
         G4hadronic_mgt
         G4hadronic_proc

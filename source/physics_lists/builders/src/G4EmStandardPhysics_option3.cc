@@ -179,7 +179,17 @@ void G4EmStandardPhysics_option3::ConstructProcess()
   // muon & hadron multiple scattering
   G4MuMultipleScattering* mumsc = new G4MuMultipleScattering();
   mumsc->AddEmModel(0, new G4WentzelVIModel());
+  G4MuMultipleScattering* pimsc = new G4MuMultipleScattering();
+  pimsc->AddEmModel(0, new G4WentzelVIModel());
+  G4MuMultipleScattering* kmsc = new G4MuMultipleScattering();
+  kmsc->AddEmModel(0, new G4WentzelVIModel());
+  G4MuMultipleScattering* pmsc = new G4MuMultipleScattering();
+  pmsc->AddEmModel(0, new G4WentzelVIModel());
   G4hMultipleScattering* hmsc = new G4hMultipleScattering();
+
+  // nuclear stopping
+  G4NuclearStopping* ionnuc = new G4NuclearStopping();
+  G4NuclearStopping* pnuc = new G4NuclearStopping();
 
   // Add standard EM Processes
   theParticleIterator->reset();
@@ -192,12 +202,10 @@ void G4EmStandardPhysics_option3::ConstructProcess()
 
     if (particleName == "gamma") {
 
-      G4PhotoElectricEffect* pe = new G4PhotoElectricEffect;
-      pe->SetModel(new G4PEEffectFluoModel());
       G4ComptonScattering* cs   = new G4ComptonScattering;
       cs->SetModel(new G4KleinNishinaModel());
 
-      ph->RegisterProcess(pe, particle);
+      ph->RegisterProcess(new G4PhotoElectricEffect(), particle);
       ph->RegisterProcess(cs, particle);
       ph->RegisterProcess(new G4GammaConversion(), particle);
       ph->RegisterProcess(new G4RayleighScattering(), particle);
@@ -211,6 +219,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
       eIoni->SetStepFunction(0.2, 100*um);      
 
       G4eBremsstrahlung* brem = new G4eBremsstrahlung();
+      /*
       G4SeltzerBergerModel* br1 = new G4SeltzerBergerModel();
       G4eBremsstrahlungRelModel* br2 = new G4eBremsstrahlungRelModel();
       br1->SetAngularDistribution(new G4Generator2BS());
@@ -218,7 +227,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
       brem->SetEmModel(br1,1);
       brem->SetEmModel(br2,2);
       br2->SetLowEnergyLimit(GeV);
-
+      */
       ph->RegisterProcess(msc, particle);
       ph->RegisterProcess(eIoni, particle);
       ph->RegisterProcess(brem, particle);
@@ -257,7 +266,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
 
       ph->RegisterProcess(msc, particle);
       ph->RegisterProcess(ionIoni, particle);
-      ph->RegisterProcess(new G4NuclearStopping(), particle);
+      ph->RegisterProcess(ionnuc, particle);
 
     } else if (particleName == "GenericIon") {
 
@@ -267,7 +276,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
 
       ph->RegisterProcess(hmsc, particle);
       ph->RegisterProcess(ionIoni, particle);
-      ph->RegisterProcess(new G4NuclearStopping(), particle);
+      ph->RegisterProcess(ionnuc, particle);
 
     } else if (particleName == "pi+" ||
                particleName == "pi-" ) {
@@ -304,6 +313,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
       ph->RegisterProcess(hIoni, particle);
       ph->RegisterProcess(pb, particle);
       ph->RegisterProcess(pp, particle);
+      ph->RegisterProcess(pnuc, particle);
 
     } else if (particleName == "B+" ||
 	       particleName == "B-" ||
@@ -356,6 +366,9 @@ void G4EmStandardPhysics_option3::ConstructProcess()
   opt.SetMaxEnergy(10*TeV);
   opt.SetDEDXBinning(240);
   opt.SetLambdaBinning(240);
+
+  // Nuclear stopping
+  pnuc->SetMaxKinEnergy(MeV);
     
   // Ionization
   //
