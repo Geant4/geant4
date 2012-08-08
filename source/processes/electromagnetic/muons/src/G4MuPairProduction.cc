@@ -71,6 +71,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4MuPairProduction.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4MuonPlus.hh"

@@ -60,6 +60,8 @@
 #ifndef G4MuBetheBlochModel_h
 #define G4MuBetheBlochModel_h 1
 
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "G4VEmModel.hh"
 
 class G4ParticleChangeForLoss;
@@ -148,7 +150,7 @@ inline void G4MuBetheBlochModel::SetParticle(const G4ParticleDefinition* p)
     particle = p;
     mass = particle->GetPDGMass();
     massSquare = mass*mass;
-    ratio = electron_mass_c2/mass;
+    ratio = CLHEP::electron_mass_c2/mass;
   }
 }
 

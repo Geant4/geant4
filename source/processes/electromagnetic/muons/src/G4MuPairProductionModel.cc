@@ -71,6 +71,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4MuPairProductionModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4MuonMinus.hh"
@@ -420,7 +422,7 @@ void G4MuPairProductionModel::MakeSamplingTables()
       G4double maxPairEnergy = MaxSecondaryEnergy(particle,kineticEnergy);
       // G4cout << "Z= " << currentZ << " z13= " << z13 
       //<< " mE= " << maxPairEnergy << G4endl;
-      G4double CrossSection = 0.0 ;
+      G4double xSec = 0.0 ;
 
       if(maxPairEnergy > minPairEnergy) {
 
@@ -438,21 +440,21 @@ void G4MuPairProductionModel::MakeSamplingTables()
 	    x *= fac;
 	    dx*= fac;
 	    G4double ep = minPairEnergy*exp(c*x) ;
-	    CrossSection += 
+	    xSec += 
 	      ep*dx*ComputeDMicroscopicCrossSection(kineticEnergy, Z, ep);
 	  }
 	  ya[i] = y;
-	  proba[iz][it][i] = CrossSection;
+	  proba[iz][it][i] = xSec;
 	}
        
       } else {
 	for (G4int i=0 ; i<nbiny; ++i) {
-	  proba[iz][it][i] = CrossSection;
+	  proba[iz][it][i] = xSec;
 	}
       }
 
       ya[nbiny]=ymax;
-      proba[iz][it][nbiny] = CrossSection;
+      proba[iz][it][nbiny] = xSec;
 
     }
   }

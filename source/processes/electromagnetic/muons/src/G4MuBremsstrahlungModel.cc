@@ -63,6 +63,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4MuBremsstrahlungModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Gamma.hh"
 #include "G4MuonMinus.hh"
 #include "G4MuonPlus.hh"

@@ -78,6 +78,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4MuIonisation.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Electron.hh"
 #include "G4MuonPlus.hh"
 #include "G4MuonMinus.hh"

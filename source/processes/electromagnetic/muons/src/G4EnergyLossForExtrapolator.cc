@@ -49,6 +49,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4EnergyLossForExtrapolator.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Material.hh"

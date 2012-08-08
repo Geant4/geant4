@@ -61,6 +61,8 @@
 #ifndef G4MuBremsstrahlungModel_h
 #define G4MuBremsstrahlungModel_h 1
 
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "G4VEmModel.hh"
 #include "G4NistManager.hh"
 
@@ -167,9 +169,9 @@ void G4MuBremsstrahlungModel::SetParticle(const G4ParticleDefinition* p)
   if(!particle) {
     particle = p;
     mass = particle->GetPDGMass();
-    rmass=mass/electron_mass_c2 ;
-    cc=classic_electr_radius/rmass ;
-    coeff= 16.*fine_structure_const*cc*cc/3. ;
+    rmass=mass/CLHEP::electron_mass_c2 ;
+    cc=CLHEP::classic_electr_radius/rmass ;
+    coeff= 16.*CLHEP::fine_structure_const*cc*cc/3. ;
   }
 }
 
