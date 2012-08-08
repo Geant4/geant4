@@ -132,7 +132,7 @@ G4Fragment::G4Fragment(const G4LorentzVector& aMomentum,
   theGroundStateMass = aParticleDefinition->GetPDGMass();
 }
 
-const G4Fragment & G4Fragment::operator=(const G4Fragment &right)
+G4Fragment & G4Fragment::operator=(const G4Fragment &right)
 {
   if (this != &right) {
     theA = right.theA;

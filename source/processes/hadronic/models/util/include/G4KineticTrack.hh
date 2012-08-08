@@ -73,7 +73,7 @@ class G4KineticTrack : public G4VKineticNucleon
 
       ~G4KineticTrack();
 
-      const G4KineticTrack& operator=(const G4KineticTrack& right);
+      G4KineticTrack& operator=(const G4KineticTrack& right);
 
       G4int operator==(const G4KineticTrack& right) const;
 
@@ -160,10 +160,6 @@ public:
 
   //   friend G4double IntegrandFunction4 (G4double xmass);
       
-  // LB new variable created LB
-      G4int chosench;
-
-
   private:
  
       G4ParticleDefinition* theDefinition;

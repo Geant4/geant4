@@ -60,7 +60,7 @@ class G4Nucleon : public G4VKineticNucleon
 
       inline int operator==(const G4Nucleon &right) const;
       inline int operator!=(const G4Nucleon &right) const;
-      const G4Nucleon& operator=(const G4Nucleon& right);
+      G4Nucleon& operator=(const G4Nucleon& right);
 
   public:
 
@@ -118,14 +118,16 @@ inline int G4Nucleon::operator!=(const G4Nucleon &right) const
 	return this!=&right;
 }
 
-inline const G4Nucleon& G4Nucleon::operator=(const G4Nucleon& right)
+inline G4Nucleon& G4Nucleon::operator=(const G4Nucleon& right)
 {
-	thePosition=right.GetPosition();
-	theMomentum=right.Get4Momentum();
-	theBindingE=right.GetBindingEnergy();
-	theParticleType=right.GetDefinition();
-	theSplitableHadron=right.GetSplitableHadron();
-
+   if (this != &right)
+   {
+      thePosition=right.GetPosition();
+      theMomentum=right.Get4Momentum();
+      theBindingE=right.GetBindingEnergy();
+      theParticleType=right.GetDefinition();
+      theSplitableHadron=right.GetSplitableHadron();
+   }
 	return *this;
 }
 

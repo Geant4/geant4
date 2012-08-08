@@ -116,17 +116,20 @@ G4Parton::G4Parton(const G4Parton &right)
 	theSpinZ = right.theSpinZ;
 }
 
-const G4Parton & G4Parton::operator=(const G4Parton &right)
+G4Parton & G4Parton::operator=(const G4Parton &right)
 {
-	PDGencoding=right.GetPDGcode();
-	theMomentum=right.Get4Momentum();
-	thePosition=right.GetPosition();
-	theX = right.theX;
-	theDefinition = right.theDefinition;
-	theColour = right.theColour;
-	theIsoSpinZ = right.theIsoSpinZ;
-	theSpinZ = right.theSpinZ;
-		
+   if (this != &right)
+   {
+      PDGencoding=right.GetPDGcode();
+      theMomentum=right.Get4Momentum();
+      thePosition=right.GetPosition();
+      theX = right.theX;
+      theDefinition = right.theDefinition;
+      theColour = right.theColour;
+      theIsoSpinZ = right.theIsoSpinZ;
+      theSpinZ = right.theSpinZ;
+   }
+
 	return *this;
 }
 

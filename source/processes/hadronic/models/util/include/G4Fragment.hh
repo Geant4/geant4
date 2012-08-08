@@ -91,7 +91,7 @@ public:
 
   // ============= OPERATORS ==================
     
-  const G4Fragment & operator=(const G4Fragment &right);
+  G4Fragment & operator=(const G4Fragment &right);
   G4bool operator==(const G4Fragment &right) const;
   G4bool operator!=(const G4Fragment &right) const;
 
