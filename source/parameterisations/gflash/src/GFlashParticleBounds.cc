@@ -35,10 +35,12 @@
 // Author: Joanna Weng - 9.11.2004
 // ------------------------------------------------------------
 
+#include "GFlashParticleBounds.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 
-#include "GFlashParticleBounds.hh"
 
 GFlashParticleBounds::GFlashParticleBounds()
 {    

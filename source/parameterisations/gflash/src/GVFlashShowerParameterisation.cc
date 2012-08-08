@@ -35,8 +35,12 @@
 // Authors: Joanna Weng - 11.2005
 // ------------------------------------------------------------
 
-#include "GVFlashShowerParameterisation.hh"
 #include <cmath>
+
+#include "GVFlashShowerParameterisation.hh"
+
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4ios.hh"
 #include "G4Material.hh"

@@ -36,8 +36,10 @@
 // ------------------------------------------------------------
 
 #include <cmath>
-#include "GVFlashShowerParameterisation.hh"
+
 #include "GFlashSamplingShowerParameterisation.hh"
+#include "GVFlashShowerParameterisation.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4ios.hh"
 #include "G4Material.hh"

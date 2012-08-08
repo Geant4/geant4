@@ -35,9 +35,14 @@
 // Author: Joanna Weng - 9.11.2004
 // ------------------------------------------------------------
 
+#include <iomanip>                
+#include <sstream>
+
 #include "GFlashShowerModelMessenger.hh"
 #include "GFlashShowerModel.hh"
 #include "GFlashParticleBounds.hh"
+#include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh" 
@@ -45,10 +50,6 @@
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
-#include "globals.hh"
-
-#include <iomanip>                
-#include <sstream>
 
 GFlashShowerModelMessenger::
 GFlashShowerModelMessenger(GFlashShowerModel * aModel)
