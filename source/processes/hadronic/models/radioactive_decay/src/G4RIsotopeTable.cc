@@ -59,6 +59,7 @@
 #include "G4RIsotopeTable.hh"
 
 #include "G4HadronicException.hh"
+#include "G4NuclearLevelStore.hh"
 
 /*
 #include "G4RadioactiveDecayMode.hh"
@@ -191,22 +192,21 @@ G4double G4RIsotopeTable::GetMeanLifeTime(G4int Z, G4int A, G4double& aE)
   }
   std::ifstream DecaySchemeFile(file);
 
+  G4bool found_in_raddecay_data(false);
   if (!DecaySchemeFile) {
-    if (GetVerboseLevel()>1) {
+    //if (GetVerboseLevel()>1) {
       G4cout <<"G4RIsotopeTable::GetMeanLife() : "
 	     <<"cannot find ion radioactive decay file: " 
 	     <<file <<G4endl;
-      G4cout <<"The nucleus is assumed to be stable " <<G4endl;
-    }
+    //}
   } else {
-    G4bool found(false);
     char inputChars[100]={' '};
     G4String inputLine;
     G4String recordType("");
     G4double a(0.0);
     G4double b(0.0);
 
-    while (!found && !DecaySchemeFile.getline(inputChars, 100).eof()) {
+    while (!found_in_raddecay_data && !DecaySchemeFile.getline(inputChars, 100).eof()) {
       inputLine = inputChars;
       inputLine = inputLine.strip(1);
 
@@ -215,40 +215,53 @@ G4double G4RIsotopeTable::GetMeanLifeTime(G4int Z, G4int A, G4double& aE)
         tmpstream >> recordType >> a >> b;
         if (recordType == "P") {
           if (std::abs(a*keV-aE) < levelTolerance) {
-            found    = true;
+            found_in_raddecay_data    = true;
             lifetime = b/0.693147*s ;
           }
         }
       }
     }
+    DecaySchemeFile.close();
+  }
 
-    if (!found && aE) {
-      if (GetVerboseLevel()>1) {
+    if (!found_in_raddecay_data && aE) {
+      G4double half_life=-1.;
+      lifetime = 1.0E-20*s;
+
+
+      //added by L.Desorgher If the life time is not found in  raddecay database
+      // then it is deduced from photo-evaporation level
+      const G4NuclearLevel* aLevel =
+    		G4NuclearLevelStore::GetInstance()->GetManager(Z, A)
+    									->NearestLevel(aE,levelTolerance);
+      if (aLevel) {
+    	  half_life = aLevel->HalfLife();
+    	  lifetime = half_life/0.693147;
+      }
+
+      if (GetVerboseLevel()>1 && half_life<0) {
         G4cout << "G4RIsotopeTable::GetMeanLife() : ";
         G4cout << "cannot find ion of required excitation E = " << aE << G4endl;
-        G4cout << "state in radioactive data file " << G4endl;
+        G4cout << "state in radioactive or photoevaporation data file " << G4endl;
         G4cout <<"The nucleus is assumed to be IT decayed with life = 1E-20 s" << G4endl;
-        G4cout <<" -----------* THIS MAY CAUSE PROBLEM IN ITS DECAY-----------" << G4endl; 
-        lifetime = 1.0E-20*s;
+        G4cout <<" -----------* THIS MAY CAUSE PROBLEM IN ITS DECAY-----------" << G4endl;
       }
     }
 
-    if (!found && !aE) {
+    if (!found_in_raddecay_data && !aE) {
       if (GetVerboseLevel()>1) {
         G4cout <<"G4RIsotopeTable::GetMeanLife() : ";
         G4cout <<"cannot find ion of required excitation E = " << aE << G4endl;
-        G4cout <<"state in radioactive data file " <<G4endl;
+        G4cout <<"state in radioactive or photoevaporation data file" <<G4endl;
         G4cout <<"The nucleus is assumed to be stable" <<G4endl;
         lifetime = -1.0;
       }
     }
-    DecaySchemeFile.close();
-  } // end if (DecaySchemeFile)
 
-  if (GetVerboseLevel()>1) {
-    G4cout <<"G4RIsotopeTable::GetMeanLifeTime: ";
-    G4cout <<lifetime << " for " << GetIsotopeName(Z, A, aE) <<G4endl;   
-  }
+    if (GetVerboseLevel()>1) {
+       G4cout <<"G4RIsotopeTable::GetMeanLifeTime: ";
+       G4cout <<lifetime << " for " << GetIsotopeName(Z, A, aE) <<G4endl;
+    }
   return lifetime;
 }
 ////////////////////////////////////////////////////////////////////
@@ -257,8 +270,7 @@ void G4RIsotopeTable::AddUserDecayDataFile(G4int Z, G4int A,G4String filename)
 { if (Z<1 || A<2) {
 	G4cout<<"Z and A not valid!"<<G4endl;
   }
-  G4cout<<"in G4RIsotopeTable::AddUserDecayDataFile"<<std::endl;
-  G4cout<<filename<<std::endl;
+
   std::ifstream DecaySchemeFile(filename);
   if (DecaySchemeFile){
 	G4int ID_ion=A*1000+Z;

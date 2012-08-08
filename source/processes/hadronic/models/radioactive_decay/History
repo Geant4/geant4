@@ -12,7 +12,25 @@ track of all tags.
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+     ---------------------------------------------------------
+
+27 July 2012  Laurent  Desorgher radioactive_decay-V09-05-05
+--------------------------------------------------------
+ -Set a flag isAllVolumesMode in G4RadioactiveDecay to ensure  that  when 
+  the geometry is changed, the AllVolume Mode is still considered.
+  Problem reported by Tatsumi Koi.  
+    
+ -Use of evaporation nuclear level data in G4RIsotope::GetMeanLifeTime
+ 	for getting the mean life of an exited nuclei, when it is not provided in 
+ 	radioactive decay database. Solving of a problem reported by Tatsumi Koi.
+
+
+10 July 2012  L. Desorgher radioactive_decay-V09-05-04
+--------------------------------------------------------
+ -G4RadiocativeDecay::LoadDecayTable
+ 	Add LoadedNuclei.push_back(theParentNucleus.GetParticleName())
+ 	also for the case where user data files are used. Correction for bug
+    1324. Changes proposed by Joa L.
 
 27 June 2012  Dennis Wright  radioactive_decay-V09-05-03
 --------------------------------------------------------

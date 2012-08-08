@@ -297,6 +297,7 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
 
     std::vector<G4String> LoadedNuclei;
     std::vector<G4String> ValidVolumes;
+    bool isAllVolumesMode;
 
     G4RadioactiveDecayRate theDecayRate;
     G4RadioactiveDecayRates theDecayRateVector;

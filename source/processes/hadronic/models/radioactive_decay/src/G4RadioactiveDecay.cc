@@ -43,6 +43,12 @@
 // 
 // CHANGE HISTORY
 // --------------
+// 10 July 2012, L. Desorgher
+//			-In LoadDecayTable:  Add LoadedNuclei.push_back(theParentNucleus.GetParticleName());
+//			also for the case where user data files are used. Correction for bug
+//			1324. Changes proposed by Joa L.
+//
+//
 // 01 May 2012, L. Desorgher
 //			-Force the reading of user file to theIsotopeTable
 // 			-Merge the development by Fan Lei for activation computation
@@ -189,6 +195,7 @@ G4RadioactiveDecay::G4RadioactiveDecay(const G4String& processName)
   halflifethreshold = -1.*second;
   //
   // RDM applies to xall logical volumes as default
+  isAllVolumesMode=true;
   SelectAllVolumes();
 }
 
@@ -274,6 +281,7 @@ void G4RadioactiveDecay::DeselectAVolume(const G4String aVolume)
       if (location != ValidVolumes.end()) {
 	ValidVolumes.erase(location);
 	std::sort(ValidVolumes.begin(), ValidVolumes.end());
+	isAllVolumesMode =false;
       } else {
 	G4cerr << " DeselectVolume:" << aVolume << " is not in the list"<< G4endl; 
       }	  
@@ -309,12 +317,14 @@ void G4RadioactiveDecay::SelectAllVolumes()
   }
   std::sort(ValidVolumes.begin(), ValidVolumes.end());
   // sort needed in order to allow binary_search
+  isAllVolumesMode=true;
 }
 
 
 void G4RadioactiveDecay::DeselectAllVolumes() 
 {
   ValidVolumes.clear();
+  isAllVolumesMode=false;
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>0)
     G4cout << " RDM removed from all volumes" << G4endl; 
@@ -716,14 +726,15 @@ G4RadioactiveDecay::LoadDecayTable(G4ParticleDefinition& theParentNucleus)
 			      "Please setenv G4RADIOACTIVEDATA to point to the radioactive decay data files.");
     }
     G4String dirName = getenv("G4RADIOACTIVEDATA");
-    LoadedNuclei.push_back(theParentNucleus.GetParticleName());
-    std::sort( LoadedNuclei.begin(), LoadedNuclei.end() );
-    // sort needed to allow binary_search
 
     std::ostringstream os;
     os <<dirName <<"/z" <<Z <<".a" <<A <<'\0';
     file = os.str();
   }
+
+  LoadedNuclei.push_back(theParentNucleus.GetParticleName());
+  std::sort( LoadedNuclei.begin(), LoadedNuclei.end() );
+  // sort needed to allow binary_search
 
   std::ifstream DecaySchemeFile(file);
 
@@ -1482,8 +1493,8 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
   G4ParticleDefinition *theParticleDef = theParticle->GetDefinition();
 
   // First check whether RDM applies to the current logical volume
-
-  if (!std::binary_search(ValidVolumes.begin(), ValidVolumes.end(), 
+  if (!isAllVolumesMode){
+   if (!std::binary_search(ValidVolumes.begin(), ValidVolumes.end(),
 			  theTrack.GetVolume()->GetLogicalVolume()->GetName())) {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
@@ -1503,6 +1514,7 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
     fParticleChangeForRadDecay.ProposeLocalEnergyDeposit(0.0);
     ClearNumberOfInteractionLengthLeft();
     return &fParticleChangeForRadDecay;
+   }
   }
 
   // now check is the particle is valid for RDM
