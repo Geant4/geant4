@@ -112,7 +112,6 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/hadronic/models/em_dissociation/include \
               -I$(G4BASE)/processes/hadronic/models/high_energy/include \
               -I$(G4BASE)/processes/hadronic/models/im_r_matrix/include \
-              -I$(G4BASE)/processes/hadronic/models/incl/include \
               -I$(G4BASE)/processes/hadronic/models/inclxx/interface/include \
               -I$(G4BASE)/processes/hadronic/models/inclxx/utils/include \
               -I$(G4BASE)/processes/hadronic/models/inclxx/incl_physics/include \
