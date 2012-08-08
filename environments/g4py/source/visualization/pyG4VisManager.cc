@@ -44,13 +44,16 @@ public:
   PyG4VisManager() { SetVerboseLevel(quiet); }
   ~PyG4VisManager() { }
 
+  static PyG4VisManager* _get_concrete_instance() { 
+    return dynamic_cast<PyG4VisManager*>(fpConcreteInstance);
+  }
+
   virtual void RegisterGraphicsSystems() { }
 
   virtual void RegisterModelFactories() {
     RegisterModelFactory(new G4TrajectoryDrawByChargeFactory());
     RegisterModelFactory(new G4TrajectoryDrawByParticleIDFactory());
   }
-
 };
 
 // ====================================================================
@@ -62,7 +65,7 @@ void (PyG4VisManager::*f1_SetVerboseLevel)(G4int)
   = &PyG4VisManager::SetVerboseLevel;
 void (PyG4VisManager::*f2_SetVerboseLevel)(const G4String&)
   = &PyG4VisManager::SetVerboseLevel;
-  void (PyG4VisManager::*f3_SetVerboseLevel)(G4VisManager::Verbosity)
+void (PyG4VisManager::*f3_SetVerboseLevel)(G4VisManager::Verbosity)
   = &PyG4VisManager::SetVerboseLevel;
 
 }
@@ -76,9 +79,9 @@ void export_G4VisManager()
 {
   scope in_PyG4VisManager =
     class_<PyG4VisManager, boost::noncopyable>
-    ("G4VisManager", "visualization manager")
+    ("G4VisManager", "visualization manager")    
     // ---
-    .def("GetConcreteInstance", &PyG4VisManager::GetConcreteInstance,
+    .def("GetConcreteInstance", &PyG4VisManager::_get_concrete_instance,
          "Get an instance of G4VisManager",
          return_value_policy<reference_existing_object>())
     .staticmethod("GetConcreteInstance")
@@ -87,6 +90,7 @@ void export_G4VisManager()
     .def("SetVerboseLevel", f2_SetVerboseLevel)
     .def("SetVerboseLevel", f3_SetVerboseLevel)
     .def("GetVerbosity", &PyG4VisManager::GetVerbosity)
+    .staticmethod("GetVerbosity")
     .def("Initialize", &PyG4VisManager::Initialize)
     .def("RegisterGraphicsSystem", &PyG4VisManager::RegisterGraphicsSystem)
     ;
@@ -94,7 +98,7 @@ void export_G4VisManager()
   // enum LineStyle
   enum_<G4VisManager::Verbosity>("Verbosity")
     .value("quiet",           G4VisManager::quiet)
-    .value("startuo",         G4VisManager::startup)
+    .value("startup",         G4VisManager::startup)
     .value("errors",          G4VisManager::errors)
     .value("warnings",        G4VisManager::warnings)
     .value("confirmations",   G4VisManager::confirmations)

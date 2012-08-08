@@ -5,8 +5,6 @@
 # ======================================================================
 export LANG=C
 
-IFS='
- 	'
 PATH=/bin:/usr/bin
 export PATH
 
@@ -47,7 +45,7 @@ Fine tuning of the library path:
   --with-g4-libdir=DIR      Geant4 library dir [\$G4INSTALL/lib/\$G4SYSTEM]
   --with-clhep-incdir=DIR   CLHEP header dir [\$CLHEP_BASE_DIR/include]
   --with-clhep-libdir=DIR   CLHEP library dir [\$CLHEP_BASE_DIR/lib]
-  --with-clhep-lib=LIB      library name of libCLHEP.so [CLHEP|\$CLHEP_LIB]
+  --with-clhep-lib=LIB      library name of CLHEP [CLHEP|\$CLHEP_LIB|G4clhep]
 
   --with-python-incdir=DIR  Python header dir [/usr/include/python(2.#)],
                             (location of pyconfig.h)
@@ -279,10 +277,11 @@ echo "ok"
 # ---
 clhep_incdir1=${CLHEP_INCLUDE_DIR:-/zzz}
 clhep_incdir2=${CLHEP_BASE_DIR:+$CLHEP_BASE_DIR/include}
-set $clhep_incdir $clhep_incdir1 $clhep_incdir2
+clhep_incdir3=$g4_incdir
+set $clhep_incdir $clhep_incdir1 $clhep_incdir2 $clhep_incdir3
 for adir in $*
 do
-  if [ -d "$adir" ]; then
+  if [ -d "$adir"/CLHEP ]; then
     clhep_incdir=$adir
     break
   fi
@@ -319,6 +318,16 @@ fi
 echo "$clhep_libdir"
 
 echo $ac_n "Checking for CLHEP lib name ... $ac_c"
+clhep_lib2=G4clhep
+set $clhep_lib $clhep_lib2
+for aclhep in $*
+do
+  if [ -f "$clhep_libdir"/lib${aclhep}.${shlib} ]; then
+    clhep_lib=$aclhep
+    break
+  fi
+done
+
 if [ ! -f "$clhep_libdir"/lib${clhep_lib}.${shlib} ]; then
   echo "no"
   echo $ac_n "### lib${clhep_lib}.${shlib} (clhep-lib) does not exist. $ac_c"
@@ -329,19 +338,21 @@ echo "lib${clhep_lib}.${shlib}"
 
 # ---
 echo $ac_n "Checking for Python include dir (pyconfig.h) ... $ac_c"
-# check version
-if [ $with_python3 = 0 ]; then
-  set python python2.7 python2.6 python2.5 python2.4 python2.3 python2.2
-else
-  set python3.1 python3.0
-fi
-for aincdir in $*
-do
-  if [ -d /usr/include/"$aincdir" ]; then
-    python_incdir=/usr/include/$aincdir
-    break
+if [ $python_incdir = /zzz ]; then
+  # check version
+  if [ $with_python3 = 0 ]; then
+    set python python2.7 python2.6 python2.5 python2.4 python2.3 python2.2
+  else
+    set python3.3 python3.2 python3.1 python3.0
   fi
-done
+  for aincdir in $*
+  do
+    if [ -d /usr/include/"$aincdir" ]; then
+      python_incdir=/usr/include/$aincdir
+      break
+    fi
+  done
+fi
 
 if [ ! -f "$python_incdir"/pyconfig.h ]; then
   echo "no"

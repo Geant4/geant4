@@ -51,7 +51,7 @@ using namespace pyG4Event;
 // ====================================================================
 void export_G4Event()
 {
-  class_<G4Event, G4Event*>("G4Event", "event class")
+  class_<G4Event, G4Event*, boost::noncopyable>("G4Event", "event class")
     .def(init<G4int>())
     // ---
     .def("Print",              &G4Event::Print)
