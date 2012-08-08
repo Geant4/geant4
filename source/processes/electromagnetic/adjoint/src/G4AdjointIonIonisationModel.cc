@@ -29,7 +29,8 @@
 #include "G4AdjointIonIonisationModel.hh"
 #include "G4AdjointCSManager.hh"
 
-
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Integrator.hh"
 #include "G4TrackStatus.hh"
 #include "G4ParticleChange.hh"

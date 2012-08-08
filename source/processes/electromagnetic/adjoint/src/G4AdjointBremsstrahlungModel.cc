@@ -35,9 +35,9 @@
 #include "G4AdjointGamma.hh"
 #include "G4Electron.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Timer.hh"
-//#include "G4PenelopeBremsstrahlungModel.hh"
-
 
 ////////////////////////////////////////////////////////////////////////////////
 //

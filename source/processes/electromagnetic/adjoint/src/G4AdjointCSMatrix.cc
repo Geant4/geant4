@@ -27,10 +27,13 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#include "G4AdjointCSMatrix.hh"
 #include <iomanip>
 #include <fstream>
+
+#include "G4AdjointCSMatrix.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4AdjointInterpolator.hh"
+
 ///////////////////////////////////////////////////////
 //
 G4AdjointCSMatrix::G4AdjointCSMatrix(G4bool aBool){

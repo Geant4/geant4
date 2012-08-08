@@ -27,6 +27,9 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4AdjointhIonisationModel.hh"
+
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4AdjointCSManager.hh"
 #include "G4Integrator.hh"
 #include "G4TrackStatus.hh"

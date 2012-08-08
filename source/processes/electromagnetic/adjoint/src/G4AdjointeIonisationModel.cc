@@ -29,12 +29,12 @@
 #include "G4AdjointeIonisationModel.hh"
 #include "G4AdjointCSManager.hh"
 
-
+#include "G4PhysicalConstants.hh"
 #include "G4Integrator.hh"
 #include "G4TrackStatus.hh"
 #include "G4ParticleChange.hh"
 #include "G4AdjointElectron.hh"
-#include  "G4Gamma.hh"
+#include "G4Gamma.hh"
 #include "G4AdjointGamma.hh"
 
 

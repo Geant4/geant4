@@ -29,7 +29,7 @@
 #include "G4AdjointPhotoElectricModel.hh"
 #include "G4AdjointCSManager.hh"
 
-
+#include "G4PhysicalConstants.hh"
 #include "G4Integrator.hh"
 #include "G4TrackStatus.hh"
 #include "G4ParticleChange.hh"

@@ -42,6 +42,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4AdjointhMultipleScattering.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4UrbanMscModel90.hh"
 #include "G4MscStepLimitType.hh"
 

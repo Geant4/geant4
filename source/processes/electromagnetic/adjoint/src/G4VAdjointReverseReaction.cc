@@ -27,6 +27,7 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4VAdjointReverseReaction.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4AdjointCSManager.hh"
 #include "G4AdjointCSMatrix.hh"
 #include "G4AdjointInterpolator.hh"

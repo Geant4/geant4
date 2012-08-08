@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10 Jul 2012: G.Cosmo (emadjoint-V09-05-02)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
 08 Jun 2012: V.Ivanchenko (emadjoint-V09-05-01)
 - Fixed shadowing
 

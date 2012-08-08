@@ -26,7 +26,11 @@
 // $Id: G4ContinuousGainOfEnergy.cc,v 1.5 2010-11-11 11:51:56 ldesorgh Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+
 #include "G4ContinuousGainOfEnergy.hh"
+
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Step.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4VEmModel.hh"
