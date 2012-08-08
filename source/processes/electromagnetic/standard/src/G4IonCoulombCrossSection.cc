@@ -54,6 +54,7 @@
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 #include "G4IonCoulombCrossSection.hh"
+#include "G4PhysicalConstants.hh"
 #include "Randomize.hh"
 #include "G4Proton.hh"
 #include "G4LossTableManager.hh"

@@ -61,6 +61,8 @@
 #ifndef G4ICRU73QOModel_h
 #define G4ICRU73QOModel_h 1
 
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "G4VEmModel.hh"
 #include "G4AtomicShells.hh"
 #include "G4DensityEffectData.hh"
@@ -197,10 +199,10 @@ inline void G4ICRU73QOModel::SetParticle(const G4ParticleDefinition* p)
 {
   particle = p;
   mass = particle->GetPDGMass();
-  charge = particle->GetPDGCharge()/eplus;
+  charge = particle->GetPDGCharge()/CLHEP::eplus;
   chargeSquare = charge*charge;
-  massRate     = mass/proton_mass_c2;
-  ratio = electron_mass_c2/mass;
+  massRate     = mass/CLHEP::proton_mass_c2;
+  ratio = CLHEP::electron_mass_c2/mass;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -224,7 +226,7 @@ G4ICRU73QOModel::GetShellEnergy(G4int Z, G4int nbOfTheShell) const
 
   G4int idx = indexZ[Z];
 
-  if(idx >= 0) { shellEnergy = ShellEnergy[startElemIndex[idx] + nbOfTheShell]*eV; 
+  if(idx >= 0) { shellEnergy = ShellEnergy[startElemIndex[idx] + nbOfTheShell]*CLHEP::eV; 
   } else { shellEnergy = GetOscillatorEnergy(Z, nbOfTheShell); }
 
   return  shellEnergy;

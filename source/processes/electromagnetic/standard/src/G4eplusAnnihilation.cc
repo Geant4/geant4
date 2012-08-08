@@ -55,6 +55,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4eplusAnnihilation.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4Gamma.hh"
 #include "G4PhysicsVector.hh"
@@ -104,10 +105,10 @@ void G4eplusAnnihilation::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
-    if(!Model()) SetModel(new G4eeToTwoGammaModel());
-    Model()->SetLowEnergyLimit(MinKinEnergy());
-    Model()->SetHighEnergyLimit(MaxKinEnergy());
-    AddEmModel(1, Model());
+    if(!EmModel(1)) { SetEmModel(new G4eeToTwoGammaModel(),1); }
+    EmModel(1)->SetLowEnergyLimit(MinKinEnergy());
+    EmModel(1)->SetHighEnergyLimit(MaxKinEnergy());
+    AddEmModel(1, EmModel(1));
   }
 }
 

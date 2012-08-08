@@ -54,6 +54,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4VMscModel.hh"
 #include "G4MscStepLimitType.hh"
 
@@ -72,6 +74,8 @@ public:
   virtual ~G4UrbanMscModel90();
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+
+  void StartTracking(G4Track*);
 
   G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition* particle,
 				      G4double KineticEnergy,
@@ -158,7 +162,7 @@ private:
 
   G4int    currentMaterialIndex;
 
-  G4int    trackID;
+  G4bool   firstStep;
   G4bool   inside;
   G4bool   insideskin;
 
@@ -172,7 +176,7 @@ void G4UrbanMscModel90::SetParticle(const G4ParticleDefinition* p)
   if (p != particle) {
     particle = p;
     mass = p->GetPDGMass();
-    charge = p->GetPDGCharge()/eplus;
+    charge = p->GetPDGCharge()/CLHEP::eplus;
   }
 }
 

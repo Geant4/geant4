@@ -51,6 +51,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ICRU49NuclearStoppingModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4LossTableManager.hh"
 #include "G4ParticleChangeForLoss.hh"
@@ -105,13 +107,13 @@ G4ICRU49NuclearStoppingModel::ComputeDEDXPerVolume(
 			 G4double)
 {
   G4double nloss = 0.0;
-  if(kinEnergy <= 0.0) return nloss; 
+  if(kinEnergy <= 0.0) { return nloss; }
 
   // projectile
   G4double mass1 = p->GetPDGMass();
   G4double z1 = std::fabs(p->GetPDGCharge()/eplus);
 
-  if(kinEnergy*proton_mass_c2/mass1 > z1*z1*100.*MeV) { return nloss; }
+  if(kinEnergy*proton_mass_c2/mass1 > z1*z1*MeV) { return nloss; }
 
   // Projectile nucleus
   mass1 /= amu_c2;
@@ -146,12 +148,12 @@ G4ICRU49NuclearStoppingModel::NuclearStoppingPower(G4double kineticEnergy,
   G4int iz2 = G4int(z2);
   
   G4double rm;
-  if(iz1 > 1) rm = (mass1 + mass2) * ( g4pow->Z23(iz1) + g4pow->Z23(iz2) );
-  else        rm = (mass1 + mass2) * g4pow->Z13(iz2);
+  if(iz1 > 1) { rm = (mass1 + mass2)*(g4pow->Z23(iz1) + g4pow->Z23(iz2)); }
+  else        { rm = (mass1 + mass2)*g4pow->Z13(iz2); }
 
   G4double er = 32.536 * mass2 * energy / ( z12 * rm ) ;  // reduced energy
 
-  if (er >= ed[0]) nloss = ad[0];
+  if (er >= ed[0]) { nloss = ad[0]; }
   else {
     // the table is inverse in energy
     for (G4int i=102; i>=0; --i)
@@ -170,13 +172,13 @@ G4ICRU49NuclearStoppingModel::NuclearStoppingPower(G4double kineticEnergy,
     G4double sig = 4.0 * mass1 * mass2 / ((mass1 + mass2)*(mass1 + mass2)*
 				    (4.0 + 0.197/(er*er) + 6.584/er));
 
-    nloss *= G4RandGauss::shoot(1.0,sig) ;
+    nloss *= G4RandGauss::shoot(1.0,sig);
     lossFlucFlag = false;
   }
    
-  nloss *= 8.462 * z12 * mass1 / rm ; // Return to [ev/(10^15 atoms/cm^2]
+  nloss *= 8.462 * z12 * mass1 / rm; // Return to [ev/(10^15 atoms/cm^2]
 
-  if ( nloss < 0.0) nloss = 0.0 ;
+  if ( nloss < 0.0) { nloss = 0.0; }
 
   return nloss;
 }

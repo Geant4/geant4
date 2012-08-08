@@ -88,18 +88,17 @@ public:
 				 const G4DynamicParticle*,
 				 G4double tmin,
 				 G4double maxEnergy);
-protected:
-
-  virtual G4double ElecCosThetaDistribution(G4double ElecKineEnergy);
 
 private:
+
+  G4PEEffectModel & operator=(const G4PEEffectModel &right);
+  G4PEEffectModel(const G4PEEffectModel&);
 
   G4ParticleDefinition*     theGamma;
   G4ParticleDefinition*     theElectron;
   G4ParticleChangeForGamma* fParticleChange;
 
   G4double                  fminimalEnergy;
-  G4bool                    isInitialized;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -65,6 +65,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4ScreeningMottCrossSection.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4MottCoefficients.hh"
 #include "Randomize.hh"
 #include "G4Proton.hh"

@@ -58,6 +58,8 @@
 #ifndef G4BraggIonModel_h
 #define G4BraggIonModel_h 1
 
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "G4VEmModel.hh"
 #include "G4ASTARStopping.hh"
 
@@ -182,10 +184,10 @@ inline void G4BraggIonModel::SetParticle(const G4ParticleDefinition* p)
   particle = p;
   mass = particle->GetPDGMass();
   spin = particle->GetPDGSpin();
-  G4double q   = particle->GetPDGCharge()/eplus;
+  G4double q   = particle->GetPDGCharge()/CLHEP::eplus;
   chargeSquare = q*q;
-  massRate     = mass/proton_mass_c2;
-  ratio        = electron_mass_c2/mass;
+  massRate     = mass/CLHEP::proton_mass_c2;
+  ratio        = CLHEP::electron_mass_c2/mass;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PEEffectFluoModel.hh,v 1.1 2010-09-03 14:11:16 vnivanch Exp $
+// $Id: G4SauterGavrilaAngularDistribution.hh,v 1.1 2010-10-14 15:17:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -31,73 +31,51 @@
 // GEANT4 Class header file
 //
 //
-// File name:     G4PEEffectFluoModel
+// File name:  G4SauterGavrilaAngularDistribution
 //
-// Author:        Vladimir Ivanchenko on base of G4PEEffectModel
+// Author:     Vladimir Ivanchenko using Michel Maire algorithm
+//             developed for Geant3
+// 
+// Creation date: 23 July 2012
 //
-// Creation date: 13.06.2010
+// Class Description: 
 //
-// Modifications:
+// Photoelectric Angular Distribution Generation 
+// The Sauter-Gavrila distribution for the K-shell is used.
 //
-// Class Description:
-//
-// Implementation of the photo-electric effect with deexcitation
-//
-
 // -------------------------------------------------------------------
 //
 
-#ifndef G4PEEffectFluoModel_h
-#define G4PEEffectFluoModel_h 1
+#ifndef G4SauterGavrilaAngularDistribution_h
+#define G4SauterGavrilaAngularDistribution_h 1
 
-#include "G4VEmModel.hh"
+#include "G4ios.hh"
+#include "globals.hh"
+#include "G4VEmAngularDistribution.hh"
 
-class G4ParticleChangeForGamma;
-class G4VAtomDeexcitation;
-
-class G4PEEffectFluoModel : public G4VEmModel
+class G4SauterGavrilaAngularDistribution : public G4VEmAngularDistribution
 {
 
 public:
 
-  G4PEEffectFluoModel(const G4String& nam = "PhotoElectric");
+  G4SauterGavrilaAngularDistribution();
 
-  virtual ~G4PEEffectFluoModel();
+  virtual ~G4SauterGavrilaAngularDistribution();
 
-  virtual 
-  void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
+                                         G4double e = 0.0,
+                                         G4int shellId = 0,
+                                         const G4Material* mat = 0);
 
-  virtual 
-  G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
-				      G4double kinEnergy,
-				      G4double Z,
-				      G4double A,
-				      G4double, G4double);
-				      
-  virtual G4double CrossSectionPerVolume(const G4Material*,
-					 const G4ParticleDefinition*,
-					 G4double kineticEnergy,
-					 G4double cutEnergy,
-					 G4double maxEnergy);
+  void PrintGeneratorInformation() const;
 
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double tmin,
-				 G4double maxEnergy);
 private:
 
-  G4PEEffectFluoModel & operator=(const G4PEEffectFluoModel &right);
-  G4PEEffectFluoModel(const G4PEEffectFluoModel&);
+  // hide assignment operator 
+  G4SauterGavrilaAngularDistribution & operator=(const  G4SauterGavrilaAngularDistribution &right);
+  G4SauterGavrilaAngularDistribution(const  G4SauterGavrilaAngularDistribution&);
 
-  G4ParticleDefinition*     theGamma;
-  G4ParticleDefinition*     theElectron;
-  G4ParticleChangeForGamma* fParticleChange;
-  G4VAtomDeexcitation*      fAtomDeexcitation;
-
-  G4double                  fminimalEnergy;
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #endif
+

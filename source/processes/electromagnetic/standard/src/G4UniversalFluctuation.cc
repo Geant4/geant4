@@ -68,6 +68,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4UniversalFluctuation.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4Poisson.hh"
 #include "G4Step.hh"
@@ -118,20 +120,23 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
 						    const G4DynamicParticle* dp,
 						    G4double& tmax,
 						    G4double& length,
-						    G4double& meanLoss)
+						    G4double& averageLoss)
 {
   // Calculate actual loss from the mean loss.
   // The model used to get the fluctuations is essentially the same
   // as in Glandz in Geant3 (Cern program library W5013, phys332).
   // L. Urban et al. NIM A362, p.416 (1995) and Geant4 Physics Reference Manual
 
-  // shortcut for very very small loss (out of validity of the model)
+  // shortcut for very small loss or from a step nearly equal to the range
+  // (out of validity of the model)
   //
+  G4double meanLoss = averageLoss;
+  G4double tkin  = dp->GetKineticEnergy();
   if (meanLoss < minLoss) { return meanLoss; }
 
   if(!particle) { InitialiseMe(dp->GetDefinition()); }
   
-  G4double tau   = dp->GetKineticEnergy()/particleMass;
+  G4double tau   = tkin/particleMass;
   G4double gam   = tau + 1.0;
   G4double gam2  = gam*gam;
   G4double beta2 = tau*(tau + 2.0)/gam2;
@@ -151,23 +156,26 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
     if (tmaxkine <= 2.*tmax)   
     {
       electronDensity = material->GetElectronDensity();
-      siga  = (1.0/beta2 - 0.5) * twopi_mc2_rcl2 * tmax * length
-                                * electronDensity * chargeSquare;
+      siga = sqrt((1.0/beta2 - 0.5) * twopi_mc2_rcl2 * tmax * length
+		  * electronDensity * chargeSquare);
 
-      G4double sigb = siga/(meanLoss*meanLoss);
-      G4double lambda = 1.0/sigb;
+     
+      G4double sn = meanLoss/siga;
   
-      if (lambda >= 5.0) {
+      // thick target case 
+      if (sn >= 2.0) {
 
-	sigb = sqrt(sigb);
+	G4double twomeanLoss = meanLoss + meanLoss;
 	do {
-	  loss = G4RandGauss::shoot(1.0,sigb);
-	} while (0.0 > loss || loss > 2.0);
+	  loss = G4RandGauss::shoot(meanLoss,siga);
+	} while (0.0 > loss || twomeanLoss < loss);
+
+	// Gamma distribution
       } else {
 
-	loss = CLHEP::RandGamma::shoot(lambda,lambda);
+	G4double neff = sn*sn;
+	loss = meanLoss*CLHEP::RandGamma::shoot(neff,1.0)/neff;
       }
-      loss *= meanLoss;  
 
       return loss;
     }

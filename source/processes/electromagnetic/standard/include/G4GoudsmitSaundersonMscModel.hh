@@ -60,6 +60,8 @@
 #ifndef G4GoudsmitSaundersonMscModel_h
 #define G4GoudsmitSaundersonMscModel_h 1
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4VMscModel.hh"
 #include "G4PhysicsTable.hh"
 #include "globals.hh"
@@ -78,6 +80,8 @@ public:
   virtual ~G4GoudsmitSaundersonMscModel();
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+
+  void StartTracking(G4Track*);
 
   virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition* particle,
 					      G4double KineticEnergy,
@@ -125,7 +129,7 @@ private:
   G4double mass;
   G4int    currentMaterialIndex;
 
-  G4int    trackID;
+  G4bool   firstStep;
   G4bool   inside;
   G4bool   insideskin;
 
@@ -150,7 +154,7 @@ void G4GoudsmitSaundersonMscModel::SetParticle(const G4ParticleDefinition* p)
   if (p != particle) {
     particle = p;
     mass = p->GetPDGMass();
-    charge = p->GetPDGCharge()/eplus;
+    charge = p->GetPDGCharge()/CLHEP::eplus;
   }
 }
 

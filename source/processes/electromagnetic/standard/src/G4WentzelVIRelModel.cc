@@ -54,6 +54,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4WentzelVIRelModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4ParticleChangeForMSC.hh"
 #include "G4PhysicsTableHelper.hh"
@@ -94,7 +96,6 @@ G4WentzelVIRelModel::G4WentzelVIRelModel(const G4String& nam) :
   fParticleChange = 0;
   currentCuts = 0;
   currentMaterial = 0;
-  trackID = -1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -112,7 +113,6 @@ void G4WentzelVIRelModel::Initialise(const G4ParticleDefinition* p,
   // reset parameters
   SetupParticle(p);
   currentRange = 0.0;
-  trackID = -1;
 
   cosThetaMax = cos(PolarAngleLimit());
   wokvi->Initialise(p, cosThetaMax);
@@ -160,6 +160,14 @@ G4double G4WentzelVIRelModel::ComputeCrossSectionPerAtom(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void G4WentzelVIRelModel::StartTracking(G4Track* track)
+{
+  SetupParticle(track->GetDynamicParticle()->GetDefinition());
+  inside = false;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4double G4WentzelVIRelModel::ComputeTruePathLengthLimit(
                              const G4Track& track,
 			     G4double& currentMinimalStep)
@@ -168,13 +176,6 @@ G4double G4WentzelVIRelModel::ComputeTruePathLengthLimit(
   const G4DynamicParticle* dp = track.GetDynamicParticle();
   G4StepPoint* sp = track.GetStep()->GetPreStepPoint();
   G4StepStatus stepStatus = sp->GetStepStatus();
-
-  // initialisation for 1st step  
-  if(stepStatus == fUndefined || track.GetTrackID() != trackID) { 
-    trackID = track.GetTrackID();
-    inside = false;
-    SetupParticle(dp->GetDefinition());
-  }
   singleScatteringMode = false;
   //G4cout << "G4WentzelVIRelModel::ComputeTruePathLengthLimit stepStatus= " 
   //	 << stepStatus << G4endl;

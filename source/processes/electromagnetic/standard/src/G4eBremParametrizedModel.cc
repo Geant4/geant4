@@ -47,6 +47,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4eBremParametrizedModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4Gamma.hh"
@@ -483,7 +485,6 @@ void G4eBremParametrizedModel::SampleSecondaries(
   kinEnergy   = kineticEnergy;
   totalEnergy = kineticEnergy + particleMass;
   densityCorr = densityFactor*totalEnergy*totalEnergy;
-  G4ThreeVector direction = dp->GetMomentumDirection();
  
   G4double xmin = log(cut*cut + densityCorr);
   G4double xmax = log(emax*emax  + densityCorr);
@@ -509,14 +510,10 @@ void G4eBremParametrizedModel::SampleSecondaries(
   // angles of the emitted gamma. ( Z - axis along the parent particle)
   // use general interface
   //
-  G4double theta = GetAngularDistribution()->PolarAngle(totalEnergy,
-							totalEnergy-gammaEnergy,
-							(G4int)currentZ);
-
-  G4double sint = sin(theta);
-  G4double phi = twopi * G4UniformRand();
-  G4ThreeVector gammaDirection(sint*cos(phi),sint*sin(phi), cos(theta));
-  gammaDirection.rotateUz(direction);
+  G4ThreeVector gammaDirection = 
+    GetAngularDistribution()->SampleDirection(dp, totalEnergy-gammaEnergy,
+					      G4lrint(currentZ), 
+					      couple->GetMaterial());
 
   // create G4DynamicParticle object for the Gamma
   G4DynamicParticle* gamma = new G4DynamicParticle(theGamma,gammaDirection,
@@ -524,8 +521,8 @@ void G4eBremParametrizedModel::SampleSecondaries(
   vdp->push_back(gamma);
   
   G4double totMomentum = sqrt(kineticEnergy*(totalEnergy + electron_mass_c2));
-  G4ThreeVector dir = totMomentum*direction - gammaEnergy*gammaDirection;
-  direction = dir.unit();
+  G4ThreeVector direction = (totMomentum*dp->GetMomentumDirection()
+			     - gammaEnergy*gammaDirection).unit();
 
   // energy of primary
   G4double finalE = kineticEnergy - gammaEnergy;

@@ -55,6 +55,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4SeltzerBergerModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4Gamma.hh"
@@ -80,6 +82,7 @@ using namespace std;
 
 G4Physics2DVector* G4SeltzerBergerModel::dataSB[101] = {0};
 G4double G4SeltzerBergerModel::ylimit[101] = {0.0};
+G4double G4SeltzerBergerModel::expnumlim = -12.;
 
 G4SeltzerBergerModel::G4SeltzerBergerModel(const G4ParticleDefinition* p,
 					   const G4String& nam)
@@ -87,6 +90,7 @@ G4SeltzerBergerModel::G4SeltzerBergerModel(const G4ParticleDefinition* p,
 {
   SetLowEnergyLimit(0.0);
   SetLPMFlag(false);
+  nwarn = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -192,11 +196,13 @@ G4double G4SeltzerBergerModel::ComputeDXSectionPerAtom(G4double gammaEnergy)
   if(!isElectron) {
     G4double invbeta1 = sqrt(invb2);
     G4double e2 = kinEnergy - gammaEnergy;
-    G4double bet2 = sqrt(e2*(e2 + 2*particleMass))/(e2 + particleMass);
-    const G4double expnumlim = 1.e-10;
-    if(bet2 < expnumlim) { cross = 0.0; }
-    else { 
-      cross *= exp(twopi*fine_structure_const*currentZ*(invbeta1 - 1./bet2));
+    if(e2 > 0.0) {
+      G4double invbeta2 = (e2 + particleMass)/sqrt(e2*(e2 + 2*particleMass));
+      G4double xxx = twopi*fine_structure_const*currentZ*(invbeta1 - invbeta2);
+      if(xxx < expnumlim) { cross = 0.0; }
+      else { cross *= exp(xxx); }
+    } else {
+      cross = 0.0;
     }
   }
   
@@ -227,7 +233,6 @@ G4SeltzerBergerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
   totalEnergy = kineticEnergy + particleMass;
   densityCorr = densityFactor*totalEnergy*totalEnergy;
   G4double totMomentum = sqrt(kineticEnergy*(totalEnergy + electron_mass_c2));
-  G4ThreeVector direction = dp->GetMomentumDirection();
   /*
   G4cout << "G4SeltzerBergerModel::SampleSecondaries E(MeV)= " 
 	 << kineticEnergy/MeV
@@ -243,90 +248,81 @@ G4SeltzerBergerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
   // majoranta
   G4double x0 = cut/kineticEnergy;
   G4double vmax = dataSB[Z]->Value(x0, y)*1.02;
-  G4double invbeta1 = 0;
+  //  G4double invbeta1 = 0;
 
   const G4double epeaklimit= 300*MeV; 
   const G4double elowlimit = 10*keV; 
-  const G4double expnumlim = 1.e-10;
 
   // majoranta corrected for e-
   if(isElectron && x0 < 0.97 && 
      ((kineticEnergy > epeaklimit) || (kineticEnergy < elowlimit))) {
     G4double ylim = std::min(ylimit[Z],1.1*dataSB[Z]->Value(0.97, y)); 
     if(ylim > vmax) { vmax = ylim; }
-
-  // majoranta corrected for e+
-  } else if(!isElectron) {
-    invbeta1 = (kineticEnergy + particleMass)
-      /sqrt(kineticEnergy*(kineticEnergy + 2*particleMass));
-    G4double e2 = kineticEnergy - cut;
-    G4double bet2 = sqrt(e2*(e2 + 2*particleMass))/(e2 + particleMass);
-    if(bet2 < expnumlim) { return; }
-    else { 
-      vmax *= exp(twopi*fine_structure_const*currentZ*(invbeta1 - 1./bet2));
-    } 
   }
 
   //G4cout<<"y= "<<y<<" xmin= "<<xmin<<" xmax= "<<xmax<<" vmax= "<<vmax<<G4endl;
-  G4int ncount = 0;
+  //  G4int ncount = 0;
   do {
-    ++ncount;
+    //++ncount;
     G4double x = exp(xmin + G4UniformRand()*(xmax - xmin)) - densityCorr;
     if(x < 0.0) { x = 0.0; }
     gammaEnergy = sqrt(x);
     G4double x1 = gammaEnergy/kineticEnergy;
     v = dataSB[Z]->Value(x1, y);
-        
+
+    // correction for positrons        
     if(!isElectron) {
+      G4double e1 = kineticEnergy - cut;
+      G4double invbeta1 = (e1 + particleMass)/sqrt(e1*(e1 + 2*particleMass));
       G4double e2 = kineticEnergy - gammaEnergy;
-      G4double bet2 = sqrt(e2*(e2 + 2*particleMass))/(e2 + particleMass);
-      if(bet2 < expnumlim) { v = 0.0; }
-      else { 
-	v *= exp(twopi*fine_structure_const*currentZ*(invbeta1 - 1./bet2));
-      } 
+      G4double invbeta2 = (e2 + particleMass)/sqrt(e2*(e2 + 2*particleMass));
+      G4double xxx = twopi*fine_structure_const*currentZ*(invbeta1 - invbeta2); 
+
+      if(xxx < expnumlim) { v = 0.0; }
+      else { v *= exp(xxx); }
     }
    
-    if ( v > 1.05*vmax ) {
+    if (v > 1.05*vmax && nwarn < 20) {
+      ++nwarn;
       G4cout << "### G4SeltzerBergerModel Warning: Majoranta exceeded! "
 	     << v << " > " << vmax
 	     << " Egamma(MeV)= " << gammaEnergy
 	     << " Ee(MeV)= " << kineticEnergy
 	     << " Z= " << Z << "  " << particle->GetParticleName()
+	//<< " ncount= " << ncount
 	     << G4endl;
-      /*
-    } else if ( 20 == ncount ) {
-      G4cout << "### G4SBModel Warn: long loop! v= "
-	     << v << " vmax= " << vmax << " x0= " << x0 << " x1= " << x1
-	     << " Eg(MeV)= " << gammaEnergy
-	     << " Ee(MeV)= " << kineticEnergy
-	     << " Z= " << Z << "  " << particle->GetParticleName()
-	     << G4endl;
-      */
+     
+      if ( 20 == nwarn ) {
+	G4cout << "### G4SeltzerBergerModel Warnings will not be printed anymore"
+	       << G4endl;
+      }
     }
-      
-
   } while (v < vmax*G4UniformRand());
 
   //
   // angles of the emitted gamma. ( Z - axis along the parent particle)
   // use general interface
   //
-  G4double theta = 
-    GetAngularDistribution()->PolarAngle(totalEnergy,totalEnergy-gammaEnergy,Z);
 
-  G4double sint = sin(theta);
-  G4double phi = twopi * G4UniformRand();
-  G4ThreeVector gammaDirection(sint*cos(phi),sint*sin(phi), cos(theta));
-  gammaDirection.rotateUz(direction);
+  G4ThreeVector gammaDirection = 
+    GetAngularDistribution()->SampleDirection(dp, totalEnergy-gammaEnergy,
+					      Z, couple->GetMaterial());
 
   // create G4DynamicParticle object for the Gamma
   G4DynamicParticle* gamma = 
     new G4DynamicParticle(theGamma,gammaDirection,gammaEnergy);
   vdp->push_back(gamma);
   
-  G4ThreeVector dir = totMomentum*direction - gammaEnergy*gammaDirection;
-  direction = dir.unit();
+  G4ThreeVector direction = (totMomentum*dp->GetMomentumDirection()
+			     - gammaEnergy*gammaDirection).unit();
 
+  /*
+  G4cout << "### G4SBModel: v= "
+	 << " Eg(MeV)= " << gammaEnergy
+	 << " Ee(MeV)= " << kineticEnergy
+	 << " DirE " << direction << " DirG " << gammaDirection
+	 << G4endl;
+  */
   // energy of primary
   G4double finalE = kineticEnergy - gammaEnergy;
 

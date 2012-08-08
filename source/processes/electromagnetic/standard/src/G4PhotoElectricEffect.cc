@@ -69,6 +69,7 @@
 // -----------------------------------------------------------------------------
 
 #include "G4PhotoElectricEffect.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4PEEffectFluoModel.hh"
 #include "G4Electron.hh"
 
@@ -104,10 +105,10 @@ void G4PhotoElectricEffect::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
-    if(!Model()) { SetModel(new G4PEEffectFluoModel()); }
-    Model()->SetLowEnergyLimit(MinKinEnergy());
-    Model()->SetHighEnergyLimit(MaxKinEnergy());
-    AddEmModel(1, Model());
+    if(!EmModel(1)) { SetEmModel(new G4PEEffectFluoModel(),1); }
+    EmModel(1)->SetLowEnergyLimit(MinKinEnergy());
+    EmModel(1)->SetHighEnergyLimit(MaxKinEnergy());
+    AddEmModel(1, EmModel(1));
   }
 }
 

@@ -62,6 +62,8 @@
 #ifndef G4BetheBlochModel_h
 #define G4BetheBlochModel_h 1
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4VEmModel.hh"
 #include "G4NistManager.hh"
 
@@ -172,7 +174,7 @@ inline void G4BetheBlochModel::SetParticle(const G4ParticleDefinition* p)
 {
   if(particle != p) {
     particle = p;
-    if (p->GetPDGCharge()/eplus > 1.5 && p->GetBaryonNumber() > 2) 
+    if (p->GetPDGCharge()/CLHEP::eplus > 1.5 && p->GetBaryonNumber() > 2) 
       { isIon = true; }
     SetupParameters();
   }

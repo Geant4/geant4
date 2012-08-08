@@ -56,8 +56,9 @@
 
 
 #include "G4IonCoulombScatteringModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
-//#include "G4DataVector.hh"
 #include "G4ParticleChangeForGamma.hh"
 #include "G4Proton.hh"
 #include "G4ProductionCutsTable.hh"

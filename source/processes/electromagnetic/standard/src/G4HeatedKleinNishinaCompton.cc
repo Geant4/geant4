@@ -49,6 +49,8 @@
 
 #include <CLHEP/Random/RandGamma.h>
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4RandomDirection.hh"
 #include "Randomize.hh"
 

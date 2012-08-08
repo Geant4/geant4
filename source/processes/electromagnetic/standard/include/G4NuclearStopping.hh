@@ -96,6 +96,10 @@ protected:
 
 private:       
 
+  // copy constructor and hide assignment operator
+  G4NuclearStopping(G4NuclearStopping &);
+  G4NuclearStopping & operator=(const G4NuclearStopping &right);
+
   G4ParticleChangeForLoss nParticleChange;
 
   G4ICRU49NuclearStoppingModel* modelICRU49;

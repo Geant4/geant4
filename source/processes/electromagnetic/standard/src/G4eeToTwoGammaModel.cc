@@ -70,6 +70,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4eeToTwoGammaModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4TrackStatus.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"

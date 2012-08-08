@@ -103,6 +103,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4UrbanMscModel93.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4Electron.hh"
 #include "G4LossTableManager.hh"
@@ -160,6 +162,7 @@ G4UrbanMscModel93::G4UrbanMscModel93(const G4String& nam)
   third         = 1./3.;
   particle      = 0;
   theManager    = G4LossTableManager::Instance(); 
+  firstStep     = true; 
   inside        = false;  
   insideskin    = false;
 
@@ -173,7 +176,6 @@ G4UrbanMscModel93::G4UrbanMscModel93(const G4String& nam)
   currentMaterialIndex = -1;
   fParticleChange = 0;
   couple = 0;
-  trackID = -1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -187,7 +189,6 @@ void G4UrbanMscModel93::Initialise(const G4ParticleDefinition* p,
 				   const G4DataVector&)
 {
   skindepth = skin*stepmin;
-  trackID = -1;
 
   // set values of some data members
   SetParticle(p);
@@ -446,6 +447,17 @@ G4double G4UrbanMscModel93::ComputeCrossSectionPerAtom(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void G4UrbanMscModel93::StartTracking(G4Track* track)
+{
+  SetParticle(track->GetDynamicParticle()->GetDefinition());
+  firstStep = true; 
+  inside = false;
+  insideskin = false;
+  tlimit = geombig;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4double G4UrbanMscModel93::ComputeTruePathLengthLimit(
                              const G4Track& track,
 			     G4double& currentMinimalStep)
@@ -454,16 +466,6 @@ G4double G4UrbanMscModel93::ComputeTruePathLengthLimit(
   const G4DynamicParticle* dp = track.GetDynamicParticle();
   G4StepPoint* sp = track.GetStep()->GetPreStepPoint();
   G4StepStatus stepStatus = sp->GetStepStatus();
-  G4bool firstStep = false;
-  if(stepStatus == fUndefined || track.GetTrackID() != trackID) { 
-    firstStep = true; 
-    trackID =  track.GetTrackID();
-    inside = false;
-    insideskin = false;
-    tlimit = geombig;
-    SetParticle( dp->GetDefinition() );
-  }
-
   couple = track.GetMaterialCutsCouple();
   SetCurrentCouple(couple); 
   currentMaterialIndex = couple->GetIndex();
@@ -673,6 +675,7 @@ G4double G4UrbanMscModel93::ComputeTruePathLengthLimit(
 
 G4double G4UrbanMscModel93::ComputeGeomPathLength(G4double)
 {
+  firstStep = false; 
   lambdaeff = lambda0;
   par1 = -1. ;  
   par2 = par3 = 0. ;  

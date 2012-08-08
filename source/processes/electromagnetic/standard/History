@@ -17,6 +17,61 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27 July 12: V.Ivanchenko (emstand-V09-05-42)
+- G4NuclearStopping - added check of upper energy limit (for CPU 
+    performance reasons)
+- G4ICRU49NuclearStoppingModel - reduced upper limit for protons from 
+    100 MeV to 1 MeV (for CPU performance reasons)
+
+26 July 12: V.Ivanchenko (emstand-V09-05-41)
+- fixed source.cmake
+
+26 July 12: V.Ivanchenko (emstand-V09-05-40)
+- updated source.cmake
+
+26 July 12: V.Ivanchenko (emstand-V09-05-39)
+- G4PEEffectFluoModel, G4PEEffectModel - use G4VEmAngularDistribution
+    interface
+- G4SauterGavrilaAngularDistribution extracted from G4PEEffectModel,
+    limit gamma fator is changed from 5 to 30 (no angular sampling
+    above ~15 MeV instead of 2.5 MeV) 
+
+20 July 12: V.Ivanchenko (emstand-V09-05-38)
+- G4ModifiedTsai - improved sampling of bremsstarhlung in backward 
+    hemisphere 
+
+20 July 12: V.Ivanchenko (emstand-V09-05-37)
+- WentzelVIModel - return back old step limitation
+- G4DipBustGenerator, G4ModifiedTsai, G4SeltzerBergerModel,
+  G4eBremParametrizedModel, G4eBremsstrahlungModel, 
+  G4eBremsstrahlungRelModel - use SampleDirection interface of the
+  G4VEmAngularDistribution interface
+
+17 July 12: V.Ivanchenko (emstand-V09-05-36)
+- G4UniversalFluctuation, G4IonFluctuations - fixed bug in sampling 
+    in the case of Gamma-distribution (thick target at low energy)
+
+17 July 12: V.Ivanchenko (emstand-V09-05-35)
+- G4SeltzerBergerModel - optimisation of sampling for e+
+- WentzelVIModel - optimisation of sampling of scattering for
+    large value of mean scattering angle
+- G4UniversalFluctuation, G4IonFluctuations - improved sampling for 
+    "thick" absorber
+
+13 July 12: V.Ivanchenko (emstand-V09-05-34)
+- G4GammaConversion - use relativistic model above 100 GeV - more
+    accurate cross sections + LPM effect at very high energy
+- G4ComptonScattering, G4CoulombScattering, G4PhotoElectricEffect,
+    G4eplusAnnihilation use EmModel and SetEmModel methods of the base 
+    class at initialisation
+
+13 July 12: V.Ivanchenko (emstand-V09-05-33)
+- StartTracking method is implemented in all msc models
+
+10 July 12: G.Cosmo (emstand-V09-05-32)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
 05 July 12: V.Ivanchenko (emstand-V09-05-31)
 - G4ICRU49NuclearStoppingModel, G4IonCoulombCrossSection,
   G4IonCoulombScatteringModel, G4ScreeningMottCrossSection,

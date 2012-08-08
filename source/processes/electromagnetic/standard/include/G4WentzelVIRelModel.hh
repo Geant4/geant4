@@ -78,6 +78,8 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
+  void StartTracking(G4Track*);
+
   virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
 					      G4double KineticEnergy,
 					      G4double AtomicNumber,
@@ -145,8 +147,6 @@ private:
   // projectile
   const G4ParticleDefinition* particle;
   G4double lowEnergyLimit;
-
-  G4int    trackID;
 
   // flags
   G4bool   inside;

@@ -51,6 +51,8 @@
 #ifndef G4PairProductionRelModel_h
 #define G4PairProductionRelModel_h 1
 
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "G4VEmModel.hh"
 #include "G4PhysicsTable.hh"
 #include "G4NistManager.hh"
@@ -279,7 +281,7 @@ inline G4double G4PairProductionRelModel::DeltaMax() const
 
 inline G4double G4PairProductionRelModel::DeltaMin(G4double k) const
 {
-  return 4.*136./z13*(electron_mass_c2/k);
+  return 4.*136./z13*(CLHEP::electron_mass_c2/k);
 }
 
 

@@ -67,7 +67,9 @@
 // -----------------------------------------------------------------------------
 
 #include "G4GammaConversion.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4BetheHeitlerModel.hh"
+#include "G4PairProductionRelModel.hh"
 #include "G4Electron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -81,6 +83,8 @@ G4GammaConversion::G4GammaConversion(const G4String& processName,
   SetMinKinEnergy(2.0*electron_mass_c2);
   SetProcessSubType(fGammaConversion);
   SetStartFromNullFlag(true);
+  SetBuildTableFlag(true);
+  SetSecondaryParticle(G4Electron::Electron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -101,14 +105,20 @@ void G4GammaConversion::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
-    SetBuildTableFlag(true);
-    SetSecondaryParticle(G4Electron::Electron());
+    const G4double limit = 100*GeV;
     G4double emin = std::max(MinKinEnergy(), 2*electron_mass_c2);
+    G4double emax = MaxKinEnergy();
     SetMinKinEnergy(emin);
-    if(!Model()) { SetModel(new G4BetheHeitlerModel()); }
-    Model()->SetLowEnergyLimit(emin);
-    Model()->SetHighEnergyLimit(MaxKinEnergy());
-    AddEmModel(1, Model());
+    if(!EmModel(1)) { SetEmModel(new G4BetheHeitlerModel(), 1); }
+    EmModel(1)->SetLowEnergyLimit(emin);
+    EmModel(1)->SetHighEnergyLimit(std::min(emax,limit));
+    AddEmModel(1, EmModel(1));
+    if(emax > limit) {
+      if(!EmModel(2)) { SetEmModel(new G4PairProductionRelModel(), 2); }
+      EmModel(2)->SetLowEnergyLimit(limit);
+      EmModel(2)->SetHighEnergyLimit(emax);
+      AddEmModel(2, EmModel(2));
+    }
   } 
 }
 

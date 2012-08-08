@@ -57,6 +57,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4WentzelVIModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4ParticleChangeForMSC.hh"
 #include "G4PhysicsTableHelper.hh"
@@ -97,7 +99,6 @@ G4WentzelVIModel::G4WentzelVIModel(const G4String& nam) :
   fParticleChange = 0;
   currentCuts = 0;
   currentMaterial = 0;
-  trackID = -1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -115,7 +116,6 @@ void G4WentzelVIModel::Initialise(const G4ParticleDefinition* p,
   // reset parameters
   SetupParticle(p);
   currentRange = 0.0;
-  trackID = -1;
 
   cosThetaMax = cos(PolarAngleLimit());
   wokvi->Initialise(p, cosThetaMax);
@@ -163,6 +163,14 @@ G4double G4WentzelVIModel::ComputeCrossSectionPerAtom(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void G4WentzelVIModel::StartTracking(G4Track* track)
+{
+  SetupParticle(track->GetDynamicParticle()->GetDefinition());
+  inside = false;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
                              const G4Track& track,
 			     G4double& currentMinimalStep)
@@ -172,13 +180,6 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
   G4StepPoint* sp = track.GetStep()->GetPreStepPoint();
   G4StepStatus stepStatus = sp->GetStepStatus();
   singleScatteringMode = false;
-
-  // initialisation for 1st step  
-  if(stepStatus == fUndefined || track.GetTrackID() != trackID) { 
-    trackID =  track.GetTrackID();
-    inside = false;
-    SetupParticle(dp->GetDefinition());
-  }
   //G4cout << "G4WentzelVIModel::ComputeTruePathLengthLimit stepStatus= " 
   //	 << stepStatus << G4endl;
 
@@ -233,11 +234,11 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
    
   // cut correction
   G4double rcut = currentCouple->GetProductionCuts()->GetProductionCut(1);
-  //G4cout << "rcut= " << rcut << " rlimit= " << rlimit << " presafety= " << presafety 
-  // << " 1-cosThetaMax= " <<1-cosThetaMax << " 1-cosTetMaxNuc= " << 1-cosTetMaxNuc
-  // << G4endl;
+  //G4cout << "rcut= " << rcut << " rlimit= " << rlimit << " presafety= " 
+  // << presafety << " 1-cosThetaMax= " <<1-cosThetaMax 
+  //<< " 1-cosTetMaxNuc= " << 1-cosTetMaxNuc << G4endl;
   if(rcut > rlimit) { rlimit = std::min(rlimit, rcut*sqrt(rlimit/rcut)); }
-
+ 
   if(rlimit < tlimit) { tlimit = rlimit; }
 
   tlimit = std::max(tlimit, tlimitminfix);
@@ -246,11 +247,12 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
   tlimit = std::min(tlimit, 50*currentMaterial->GetRadlen()/facgeom);
 
   //compute geomlimit and force few steps within a volume
-  if (steppingAlgorithm == fUseDistanceToBoundary && stepStatus == fGeomBoundary)
-    {
-      G4double geomlimit = ComputeGeomLimit(track, presafety, currentRange);
-      tlimit = std::min(tlimit, geomlimit/facgeom);
-    } 
+  if (steppingAlgorithm == fUseDistanceToBoundary 
+      && stepStatus == fGeomBoundary) {
+
+    G4double geomlimit = ComputeGeomLimit(track, presafety, currentRange);
+    tlimit = std::min(tlimit, geomlimit/facgeom);
+  } 
 
   /*  
   G4cout << particle->GetParticleName() << " e= " << preKinEnergy
@@ -492,10 +494,14 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
       if(!singleScatteringMode) {
         G4double z0 = x0*invlambda;
 
-	// correction to keep first moment
-        if(z0 > 0.1) { z0 /= (1.0 - 1.0/(z0*(exp(1.0/z0) - 1.0))); }
-	do { z = -z0*log(G4UniformRand()); } while (z >= 1.0); 
-
+	// sample z in interval 0 - 1
+        if(z0 > 5.0) { z = G4UniformRand(); }
+	else {
+	  G4double zzz = 0.0;
+	  if(z0 > 0.1) { zzz = exp(-1.0/z0); }
+	  z = -z0*log(1.0 - (1.0 - zzz)*G4UniformRand())
+	    /(1.0 - (1.0/z0 + 1.0)*zzz); 
+	}
 	cost = 1.0 - 2.0*z/*factCM*/;
 	if(cost > 1.0)       { cost = 1.0; }
 	else if(cost < -1.0) { cost =-1.0; }

@@ -45,6 +45,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4WaterStopping.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4EmCorrections.hh"
 #include "G4LPhysicsFreeVector.hh"
 

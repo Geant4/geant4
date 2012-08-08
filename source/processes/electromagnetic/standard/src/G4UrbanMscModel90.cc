@@ -54,6 +54,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4UrbanMscModel90.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4Electron.hh"
 
@@ -89,6 +91,7 @@ G4UrbanMscModel90::G4UrbanMscModel90(const G4String& nam)
   Zeff          = 1.;
   particle      = 0;
   theManager    = G4LossTableManager::Instance(); 
+  firstStep     = true; 
   inside        = false;  
   insideskin    = false;
 
@@ -375,6 +378,17 @@ G4double G4UrbanMscModel90::ComputeCrossSectionPerAtom(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void G4UrbanMscModel90::StartTracking(G4Track* track)
+{
+  SetParticle(track->GetDynamicParticle()->GetDefinition());
+  firstStep = true; 
+  inside = false;
+  insideskin = false;
+  tlimit = geombig;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4double G4UrbanMscModel90::ComputeTruePathLengthLimit(
                              const G4Track& track,
 			     G4double& currentMinimalStep)
@@ -383,16 +397,6 @@ G4double G4UrbanMscModel90::ComputeTruePathLengthLimit(
   const G4DynamicParticle* dp = track.GetDynamicParticle();
   G4StepPoint* sp = track.GetStep()->GetPreStepPoint();
   G4StepStatus stepStatus = sp->GetStepStatus();
-  G4bool firstStep = false;
-  if(stepStatus == fUndefined || track.GetTrackID() != trackID) { 
-    firstStep = true; 
-    trackID =  track.GetTrackID();
-    inside = false;
-    insideskin = false;
-    tlimit = geombig;
-    SetParticle( dp->GetDefinition() );
-  }
-
   couple = track.GetMaterialCutsCouple();
   SetCurrentCouple(couple); 
   currentMaterialIndex = couple->GetIndex();
@@ -579,6 +583,7 @@ G4double G4UrbanMscModel90::ComputeTruePathLengthLimit(
 
 G4double G4UrbanMscModel90::ComputeGeomPathLength(G4double)
 {
+  firstStep = false; 
   lambdaeff = lambda0;
   par1 = -1. ;  
   par2 = par3 = 0. ;  

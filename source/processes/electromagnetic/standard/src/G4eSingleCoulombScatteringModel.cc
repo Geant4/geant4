@@ -53,6 +53,7 @@
 
 
 #include "G4eSingleCoulombScatteringModel.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4ParticleChangeForGamma.hh"
 #include "G4Proton.hh"

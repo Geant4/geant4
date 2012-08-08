@@ -42,6 +42,11 @@
 // 11.04.05 Major optimisation of internal interfaces (V.Ivantchenko)
 //
 
+#include "G4PAIPhotonModel.hh"
+
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 #include "G4Region.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsFreeVector.hh"
@@ -52,7 +57,6 @@
 #include "G4SandiaTable.hh"
 #include "G4PAIxSection.hh"
 
-#include "G4PAIPhotonModel.hh"
 #include "Randomize.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"

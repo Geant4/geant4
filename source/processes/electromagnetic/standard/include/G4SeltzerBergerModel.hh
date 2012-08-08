@@ -89,6 +89,8 @@ private:
 
   static G4Physics2DVector* dataSB[101];
   static G4double ylimit[101];
+  static G4double expnumlim;
+  G4int nwarn;
 
 };
 

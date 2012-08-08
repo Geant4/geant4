@@ -72,6 +72,9 @@
 #include "G4GoudsmitSaundersonMscModel.hh"
 #include "G4GoudsmitSaundersonTable.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 #include "G4ParticleChangeForMSC.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4DynamicParticle.hh"
@@ -108,7 +111,7 @@ G4GoudsmitSaundersonMscModel::G4GoudsmitSaundersonMscModel(const G4String& nam)
   theManager=G4LossTableManager::Instance();
   inside=false;insideskin=false;
   samplez=false;
-  trackID = -1;
+  firstStep = true; 
 
   GSTable = new G4GoudsmitSaundersonTable();
 
@@ -127,7 +130,6 @@ void G4GoudsmitSaundersonMscModel::Initialise(const G4ParticleDefinition* p,
 					      const G4DataVector&)
 { 
   skindepth=skin*stepmin;
-  trackID = -1;
   SetParticle(p);
   fParticleChange = GetParticleChangeForMSC(p);
 }
@@ -446,6 +448,17 @@ G4GoudsmitSaundersonMscModel::CalculateIntegrals(const G4ParticleDefinition* p,G
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4GoudsmitSaundersonMscModel::StartTracking(G4Track* track)
+{
+  SetParticle(track->GetDynamicParticle()->GetDefinition());
+  firstStep = true; 
+  inside = false;
+  insideskin = false;
+  tlimit = geombig;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //t->g->t step transformations taken from Ref.6 
 
 G4double 
@@ -456,22 +469,11 @@ G4GoudsmitSaundersonMscModel::ComputeTruePathLengthLimit(const G4Track& track,
   const G4DynamicParticle* dp = track.GetDynamicParticle();
   G4StepPoint* sp = track.GetStep()->GetPreStepPoint();
   G4StepStatus stepStatus = sp->GetStepStatus();
-  G4bool firstStep = false;
-  if(stepStatus == fUndefined || track.GetTrackID() != trackID) { 
-    firstStep = true; 
-    trackID =  track.GetTrackID();
-    inside = false;
-    insideskin = false;
-    tlimit = geombig;
-    SetParticle( dp->GetDefinition() );
-  }
-
   currentCouple = track.GetMaterialCutsCouple();
   SetCurrentCouple(currentCouple); 
   currentMaterialIndex = currentCouple->GetIndex();
   currentKinEnergy = dp->GetKineticEnergy();
   currentRange = GetRange(particle,currentKinEnergy,currentCouple);
-
 
   lambda1 = GetTransportMeanFreePath(particle,currentKinEnergy);
 
@@ -654,6 +656,7 @@ G4GoudsmitSaundersonMscModel::ComputeTruePathLengthLimit(const G4Track& track,
 // taken from Ref.6
 G4double G4GoudsmitSaundersonMscModel::ComputeGeomPathLength(G4double)
 {
+  firstStep = false; 
   par1 = -1. ;  
   par2 = par3 = 0. ;  
 

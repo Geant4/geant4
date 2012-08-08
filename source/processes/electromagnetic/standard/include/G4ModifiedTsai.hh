@@ -60,8 +60,9 @@
 #include "G4ios.hh"
 #include "globals.hh"
 #include "G4VBremAngularDistribution.hh"
+#include "G4VEmAngularDistribution.hh"
 
-class G4ModifiedTsai : public G4VBremAngularDistribution
+class G4ModifiedTsai : public G4VEmAngularDistribution
 {
 
 public:
@@ -69,6 +70,11 @@ public:
   G4ModifiedTsai(const G4String& name = "");
 
   virtual ~G4ModifiedTsai();
+
+  virtual G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
+                                         G4double out_energy,
+                                         G4int Z,
+                                         const G4Material* mat = 0);
 
   G4double PolarAngle(const G4double initial_energy,
 		      const G4double final_energy,

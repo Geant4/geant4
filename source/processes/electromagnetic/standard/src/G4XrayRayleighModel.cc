@@ -32,6 +32,8 @@
 // 25.052011   first implementation
 
 #include "G4XrayRayleighModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 ////////////////////////////////////////////////////////////////////////////////////
 
