@@ -17,6 +17,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05-11-12 V.Ivanchenko (materials-V09-05-29)
+05-11-12 V.Ivanchenko (materials-V09-05-28)
+- Fixed bug of previous tag
+
+05-11-12 V.Ivanchenko (materials-V09-05-27)
+- G4SandiaTable - move inline methods with static variables to the source
+
+05-07-12 V.Ivanchenko (materials-V09-05-26)
+- G4SandiaTable - remove execution of std::pow from all functions
+    instead use precomuted values in static array, removed
+    unnecessary asserts from inline methods, some CPU performance
+    improvement expected
+
 11-06-12 G.Cosmo (materials-V09-05-25)
 - Explicitly use inclusion of headers for system of units and physical
   constants, in plan to remove implicit inclusion from globals.hh.
@@ -73,7 +86,9 @@ committal in the CVS repository !
 05-03-12 V.Ivanchenko (materials-V09-05-11)
 - G4Element - add construction of Isotope vector for all elements,
     if user does not create isotopes then vector of of isotopes
-    with natural abundances is created using NIST data
+    with natural abundances is created using NIST data;
+    extend printout of G4Exceptions
+- G4Isotope - extend printout of G4Exceptions 
 - G4ExtDEDXTable - trying to fix Coverity report
 
 25-02-12 V.Ivanchenko (materials-V09-05-10)

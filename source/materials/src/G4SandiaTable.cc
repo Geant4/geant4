@@ -53,7 +53,8 @@
 
 G4int    G4SandiaTable::fCumulInterval[101]  = {0};
 G4double G4SandiaTable::fSandiaCofPerAtom[4] = {0.0};
-G4double const G4SandiaTable::funitc[4] = {cm2*keV/g,     
+G4double const G4SandiaTable::funitc[5] = {keV,
+                                           cm2*keV/g,     
 					   cm2*keV*keV/g,     
 					   cm2*keV*keV*keV/g,     
 					   cm2*keV*keV*keV*keV/g};
@@ -126,18 +127,9 @@ G4SandiaTable::~G4SandiaTable()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-G4double G4SandiaTable::GetZtoA(G4int Z)
-{
-  return fZtoAratio[Z];
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
-
 G4double*
 G4SandiaTable::GetSandiaCofPerAtom(G4int Z, G4double energy)
 {
-  assert (Z > 0 && Z < 101);
-   
   G4double Emin  = fSandiaTable[fCumulInterval[Z-1]][0]*keV;
   G4double Iopot = fIonizationPotentials[Z]*eV;
   if (Iopot > Emin) Emin = Iopot;
@@ -152,10 +144,10 @@ G4SandiaTable::GetSandiaCofPerAtom(G4int Z, G4double energy)
     {        
       G4double AoverAvo = Z*amu/fZtoAratio[Z];
          
-      fSandiaCofPerAtom[0]=AoverAvo*funitc[0]*fSandiaTable[row][1];     
-      fSandiaCofPerAtom[1]=AoverAvo*funitc[1]*fSandiaTable[row][2];     
-      fSandiaCofPerAtom[2]=AoverAvo*funitc[2]*fSandiaTable[row][3];     
-      fSandiaCofPerAtom[3]=AoverAvo*funitc[3]*fSandiaTable[row][4];
+      fSandiaCofPerAtom[0]=AoverAvo*funitc[1]*fSandiaTable[row][1];     
+      fSandiaCofPerAtom[1]=AoverAvo*funitc[2]*fSandiaTable[row][2];     
+      fSandiaCofPerAtom[2]=AoverAvo*funitc[3]*fSandiaTable[row][3];     
+      fSandiaCofPerAtom[3]=AoverAvo*funitc[4]*fSandiaTable[row][4];
     }
   else 
     {
@@ -164,7 +156,15 @@ G4SandiaTable::GetSandiaCofPerAtom(G4int Z, G4double energy)
     }                
   return fSandiaCofPerAtom;     
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 						 	
+G4double G4SandiaTable::GetZtoA(G4int Z)
+{
+  assert (Z>0 && Z<101);
+  return fZtoAratio[Z];
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 void G4SandiaTable::ComputeMatSandiaMatrix()
@@ -197,7 +197,7 @@ void G4SandiaTable::ComputeMatSandiaMatrix()
   {
     IonizationPot = GetIonizationPot(Z[elm]);
 
-    for (G4int row = fCumulInterval[ Z[elm]-1 ]; row < fCumulInterval[Z[elm]]; row++ ) 
+    for (G4int row = fCumulInterval[ Z[elm]-1 ]; row < fCumulInterval[Z[elm]]; row++ )
     {
       tmp1[interval1++] = std::max(fSandiaTable[row][0]*keV,IonizationPot);
     }
@@ -248,8 +248,9 @@ void G4SandiaTable::ComputeMatSandiaMatrix()
   {
     Emin = (*(*fMatSandiaMatrix)[fMatNbOfIntervals])[0] = tmp2[interval];
 
-    for ( G4int k = 1; k < 5; k++ )   (*(*fMatSandiaMatrix)[fMatNbOfIntervals])[k] = 0.;      
-    
+    for ( G4int k = 1; k < 5; k++ ) {
+      (*(*fMatSandiaMatrix)[fMatNbOfIntervals])[k] = 0.;      
+    }
     newsum = 0.;
       
     for ( elm = 0; elm < NbElm; elm++ ) 
@@ -260,7 +261,7 @@ void G4SandiaTable::ComputeMatSandiaMatrix()
       {
 	coef = NbOfAtomsPerVolume[elm]*fSandiaCofPerAtom[j-1];
 	(*(*fMatSandiaMatrix)[fMatNbOfIntervals])[j] += coef;
-	newsum += std::abs(coef);
+	newsum += std::fabs(coef);
       }						       
     }	      			      			      	 
     //check for null or redondant intervals
@@ -273,13 +274,16 @@ void G4SandiaTable::ComputeMatSandiaMatrix()
 
   if ( fVerbose > 0 && fMaterial->GetName() == "G4_Ar" )
   {
-    G4cout<<"mma, G4SandiaTable::ComputeMatSandiaMatrix(), mat = "<<fMaterial->GetName()<<G4endl;
+    G4cout<<"mma, G4SandiaTable::ComputeMatSandiaMatrix(), mat = "
+	  <<fMaterial->GetName()<<G4endl;
 
     for( G4int i = 0; i < fMatNbOfIntervals; i++)
     {
-      G4cout<<i<<"\t"<<GetSandiaCofForMaterial(i,0)/keV<<" keV \t"<<this->GetSandiaCofForMaterial(i,1)
-       <<"\t"<<this->GetSandiaCofForMaterial(i,2)<<"\t"<<this->GetSandiaCofForMaterial(i,3)
-       <<"\t"<<this->GetSandiaCofForMaterial(i,4)<<G4endl;
+      G4cout<<i<<"\t"<<GetSandiaCofForMaterial(i,0)/keV<<" keV \t"
+	    <<this->GetSandiaCofForMaterial(i,1)
+	    <<"\t"<<this->GetSandiaCofForMaterial(i,2)
+	    <<"\t"<<this->GetSandiaCofForMaterial(i,3)
+	    <<"\t"<<this->GetSandiaCofForMaterial(i,4)<<G4endl;
     }   
   }
 }
@@ -498,7 +502,6 @@ void G4SandiaTable::ComputeMatSandiaMatrixPAI()
        <<"\t"<<this->GetSandiaMatTablePAI(i,4)<<G4endl;
     }   
   }
-
 	         	    
   delete [] Z;
   delete [] fPhotoAbsorptionCof0;
@@ -737,6 +740,126 @@ G4SandiaTable::SandiaMixing(         G4int Z[],
     
   return mi;
 }  
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+G4int G4SandiaTable::GetMatNbOfIntervals()  
+{
+  return fMatNbOfIntervals;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+G4int G4SandiaTable::GetNbOfIntervals(G4int Z)
+{
+  assert (Z>0 && Z<101);  
+  return fNbOfIntervals[Z];
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+G4double
+G4SandiaTable::GetSandiaCofPerAtom(G4int Z, G4int interval, G4int j)
+{
+  assert (Z>0 && Z<101 && interval>=0 && interval<fNbOfIntervals[Z]
+	  && j>=0 && j<5);
+
+  G4int row = fCumulInterval[Z-1] + interval;
+  G4double x = fSandiaTable[row][0]*CLHEP::keV;
+  if (j > 0) {
+    x = Z*CLHEP::amu/fZtoAratio[Z]*fSandiaTable[row][j]*funitc[j];     
+  }
+  return x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+G4double  
+G4SandiaTable::GetSandiaCofForMaterial(G4int interval, G4int j)    
+{
+  assert (interval>=0 && interval<fMatNbOfIntervals && j>=0 && j<5);
+  return ((*(*fMatSandiaMatrix)[interval])[j]); 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+G4double* 
+G4SandiaTable::GetSandiaCofForMaterial(G4double energy)
+{
+  G4double* x = fnulcof;
+  if (energy >= (*(*fMatSandiaMatrix)[0])[0]) {
+   
+    G4int interval = fMatNbOfIntervals - 1;
+    while ((interval>0)&&(energy<(*(*fMatSandiaMatrix)[interval])[0])) 
+      {interval--;} 
+    x = &((*(*fMatSandiaMatrix)[interval])[1]);
+  }
+  return x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+G4double  
+G4SandiaTable::GetSandiaMatTable(G4int interval, G4int j) 
+{
+  assert (interval >= 0 && interval < fMaxInterval && j >= 0 && j < 5 );
+  return ((*(*fMatSandiaMatrix)[interval])[j])*funitc[j]; 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+G4double  
+G4SandiaTable::GetSandiaCofForMaterialPAI(G4int interval, G4int j)    
+{
+  assert (interval>=0 && interval<fMatNbOfIntervals && j>=0 && j<5);
+  if(!fMatSandiaMatrixPAI) ComputeMatSandiaMatrixPAI();
+  return ((*(*fMatSandiaMatrixPAI)[interval])[j]); 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+G4double* 
+G4SandiaTable::GetSandiaCofForMaterialPAI(G4double energy)
+{
+  if(!fMatSandiaMatrixPAI) ComputeMatSandiaMatrixPAI();
+  G4double* x = fnulcof;
+  if (energy >= (*(*fMatSandiaMatrixPAI)[0])[0]) {
+   
+    G4int interval = fMatNbOfIntervals - 1;
+    while ((interval>0)&&(energy<(*(*fMatSandiaMatrixPAI)[interval])[0])) 
+      {interval--;} 
+    x = &((*(*fMatSandiaMatrixPAI)[interval])[1]);
+  }
+  return x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+G4double  
+G4SandiaTable::GetSandiaMatTablePAI(G4int interval, G4int j) 
+{
+  assert (interval >= 0 && interval < fMaxInterval && j >= 0 && j < 5 );
+  if(!fMatSandiaMatrixPAI) { ComputeMatSandiaMatrixPAI(); }
+  return ((*(*fMatSandiaMatrixPAI)[interval])[j])*funitc[j]; 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+G4double
+G4SandiaTable::GetIonizationPot(G4int Z)
+{
+  assert (Z>0 && Z<101);
+  return fIonizationPotentials[Z]*CLHEP::eV;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+G4OrderedTable*  
+G4SandiaTable::GetSandiaMatrixPAI()
+{
+  if(!fMatSandiaMatrixPAI) { ComputeMatSandiaMatrixPAI(); }
+  return fMatSandiaMatrixPAI;
+}
 
 ////////////////////////////////////////////////////////////////////////////
 //
