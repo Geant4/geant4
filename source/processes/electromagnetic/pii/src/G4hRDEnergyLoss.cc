@@ -65,6 +65,8 @@
 // --------------------------------------------------------------
 
 #include "G4hRDEnergyLoss.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4EnergyLossTables.hh"
 #include "G4Poisson.hh"
 #include "G4ProductionCutsTable.hh"

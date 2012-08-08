@@ -55,14 +55,15 @@
 
 #ifndef G4HIMPACTIONISATION
 #define G4HIMPACTIONISATION 1
- 
+
+#include <map>
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "globals.hh"
 #include "G4hRDEnergyLoss.hh"
 #include "G4DataVector.hh"
 #include "G4AtomicDeexcitation.hh"
 #include "G4PixeCrossSectionHandler.hh"
-
-#include <map>
 
 class G4VLowEnergyModel;
 class G4VParticleChange;
@@ -313,7 +314,7 @@ inline G4bool G4hImpactIonisation::IsApplicable(const G4ParticleDefinition& part
   // ---- MGP ---- Better criterion for applicability to be defined;
   // now hard-coded particle mass > 0.1 * proton_mass
 
-  return (particle.GetPDGCharge() != 0.0 && particle.GetPDGMass() > proton_mass_c2*0.1);
+  return (particle.GetPDGCharge() != 0.0 && particle.GetPDGMass() > CLHEP::proton_mass_c2*0.1);
 }
 
 #endif

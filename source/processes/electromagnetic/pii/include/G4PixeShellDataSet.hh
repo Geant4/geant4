@@ -47,9 +47,11 @@
 #ifndef  G4PIXESHELLDATASET_HH
 #define  G4PIXESHELLDATASET_HH 1
 
+#include <vector>
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
 #include "G4IDataSet.hh"
-#include <vector>
 
 class G4IInterpolator;
 
@@ -62,8 +64,8 @@ public:
                      const G4String& modelK="ecpssr",
 		     const G4String& modelL="ecpssr",
 		     const G4String& modelM="ecpssr",
-		     G4double eUnit=MeV, 
-		     G4double dataUnit=barn);
+		     G4double eUnit=CLHEP::MeV, 
+		     G4double dataUnit=CLHEP::barn);
 
   virtual ~G4PixeShellDataSet();
  

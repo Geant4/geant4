@@ -39,6 +39,7 @@
 // -------------------------------------------------------------------
 
 #include "G4PixeCrossSectionHandler.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4IInterpolator.hh"
 #include "G4LogLogInterpolator.hh"
 #include "G4IDataSet.hh"
