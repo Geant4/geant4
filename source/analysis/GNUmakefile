@@ -13,6 +13,7 @@ GLOBLIBS = libG4global.lib
 include $(G4INSTALL)/config/architecture.gmk
 
 CPPFLAGS += -I$(G4BASE)/global/management/include \
+            -I$(G4BASE)/intercoms/include \
             -I$(G4BASE)/analysis/include
             
 include $(G4INSTALL)/config/common.gmk

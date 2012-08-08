@@ -1,3 +1,25 @@
+ 1.3.1 : 24 Jul 2012 : G.Barrand :
+ - hbook/h1,h2,p1 : have a configure() method to rebook.
+ - hbook/h1,h2,p1,base_histo : have title(),reset(),all_entries()
+   on base_histo.
+
+ 1.3.0 : 20 Jul 2012 : G.Barrand :
+ - add file/class ntuple_booking to capture a ntuple booking parameters.
+ - hbook/wntuple, waxml/ntuple, wcsv_ntuple : add a constructor receiving
+   a ntuple_booking object.
+ - tests/cpp/[waxml,whbook,wroot,wcsv_booking].cpp : have an example of usage
+   of the creation of an ntuple by using a ntuple_booking object.
+
+ 1.2.1 : 19 Jul 2012 : G.Barrand :
+ - histo/b1,b2,b3 : have public configure methods to rebook an existing
+   histogram.
+ - histo/b3 constructor : variable ns changed to nbins to remove a
+   "-shadow pinaillage" warning.
+ - change "private" to "protected" in various classes to let things
+   opened via inheritance.
+ - test/cpp/build : g++ : -shadow.
+ - test/cpp/build : CYGWIN : changes to build also with VisualStudio 2009.
+
  1.2.0 : 28 May 2012 : G.Barrand :
  - waxml/ntuple : do not write the default option in the column element.
    It permits to have XML files with ntuple readable by jas3.

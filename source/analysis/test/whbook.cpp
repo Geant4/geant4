@@ -17,6 +17,7 @@
 //   PAW > ntuple/print 40
 //   PAW > ntuple/plot 40.rg
 //   PAW > ntuple/plot 40.rbw
+//   PAW > ntuple/print 50
 
 #include <tools/hbook/wfile>
 #include <tools/hbook/h1>
@@ -74,11 +75,13 @@ int main(int,char**) {
   tools::randf::gauss rg(0,1);
   tools::randf::bw rbw(0,1);
 
+  /////////////////////////////////////////////////////////////////////////
   // create some histos under //PAWC/LUN1/histo.
   // At creation, an tools::hbook histo keeps track of the HBOOK
   // directory path in which it had been created (its "booking directory").
   // This permits to have multiple HBOOK histos with same integer
   // id but be in different HBOOK directories.
+  /////////////////////////////////////////////////////////////////////////
   tools::hbook::h1 h1(10,"Gauss",100,-5,5);
   tools::hbook::h2 h2(20,"Gauss_BW",100,-5,5,100,-2,2);
   tools::hbook::p1 p(30,"Profile",100,-5,5,-2,2);
@@ -130,17 +133,21 @@ int main(int,char**) {
   tools::cmp<double>(std::cout,h1.mean(),0,0.01);
   tools::cmp<double>(std::cout,h1.rms(),1,0.01);
 
+  /////////////////////////////////////////////////////////////////
   // create an "ntuple" directory both in memory and in the file :
+  /////////////////////////////////////////////////////////////////
   hfile.cd_home();      //go under //PAWC/LUN1
   //hfile.cd_up();      //could have been ok too.
   hfile.mkcd("ntuple"); //create  //LUN1/ntuple and //PAWC/LUN1/ntuple
   // We should be under //PAWC/LUN1/ntuple
 
+  ////////////////////////////////////////////////////////////////////////
   // create a ntuple under //LUN1/ntuple. Contrary to an tools::hbook
   // histo, an tools::hbook ntuple is attached to a file from creation.
   // At creation, the tools::hbook::wntuple keeps track of two booking
   // directories : the one in memory and the one on file
   // (here //PAWC/LUN1/ntuple and //LUN1/ntuple).
+  ////////////////////////////////////////////////////////////////////////
   tools::hbook::wntuple* ntu = new tools::hbook::wntuple(40,"An ntuple");
 
  {tools::hbook::wntuple::column<double>* col_rg = 
@@ -202,6 +209,49 @@ int main(int,char**) {
 
   // We should be under //PAWC/LUN1
 
+  /////////////////////////////////////////////////////////////////
+  // create an ntuple by using an tools::ntuple_booking object :
+  /////////////////////////////////////////////////////////////////
+  hfile.cd_home();      //go under //PAWC/LUN1
+  hfile.cd("ntuple");
+
+  tools::ntuple_booking nbk;
+  nbk.m_title = "An ntuple";
+  nbk.add_column<double>("rg");
+  nbk.add_column<float>("rbw");
+  nbk.add_column<int>("count");
+
+  tools::hbook::wntuple* ntub = new tools::hbook::wntuple(50,std::cout,nbk);
+
+  // We should be under //PAWC/LUN1/ntuple.
+
+  if(ntub->columns().size()){
+    tools::hbook::wntuple::column<double>* col_rg = 
+      ntub->find_column<double>("rg");
+    tools::hbook::wntuple::column<float>* col_rbw = 
+      ntub->find_column<float>("rbw");
+    tools::hbook::wntuple::column<int>* col_count = 
+      ntub->find_column<int>("count");
+
+    // Return to //PAWC/LUN1 :
+    tools::hbook::CHCDIR("//PAWC/LUN1"," ");
+
+    ntub->add_row_beg(); //go under //PAWC/LUN1/ntuple and //LUN1/ntuple
+    for(unsigned int count=0;count<1000;count++) {
+      col_rg->fill(rg.shoot());    
+      col_rbw->fill(rbw.shoot());    
+      col_count->fill(count);    
+      ntub->add_row_fast();  //no CHCDIR is done here.
+    }
+    ntub->add_row_end(); //returns to //PAWC/LUN1
+  }
+
+  // We should be under //PAWC/LUN1
+
+  /////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////
+
   // The below changes directory under //PAWC/LUN1 and //LUN1
   // and writes memory data (histos) into the file :
   if(!hfile.write()) {
@@ -209,7 +259,9 @@ int main(int,char**) {
     return EXIT_FAILURE;
   }
 
-  delete ntu; //WARNING : have to delete the ntuple before closing the file.
+  //WARNING : have to delete the ntuple before closing the file.
+  delete ntu;
+  delete ntub;
 
   // close the file and delete the //LUN1 directory.
   if(!hfile.close()) {

@@ -81,6 +81,33 @@ int main(int,char**) {
   }
   ntu.write_trailer();}
 
+  ////////////////////////////////////////////////////////////////
+  /// create and write a flat ntuple by using ntuple_booking : ///
+  ////////////////////////////////////////////////////////////////
+ {tools::ntuple_booking nbk;
+  nbk.add_column<double>("rgauss");
+  nbk.add_column<double>("rbw");
+
+  tools::waxml::ntuple ntu(writer,std::cout,nbk);
+  if(ntu.columns().size()) {
+
+    tools::waxml::ntuple::column<double>* col_rgauss =
+      ntu.find_column<double>("rgauss");
+    tools::waxml::ntuple::column<double>* col_rbw =
+      ntu.find_column<double>("rbw");
+
+    ntu.write_header("/tuple","rg_rbw_2","Randoms");
+
+    // fill :
+    for(unsigned int count=0;count<100;count++) {    
+      col_rgauss->fill(rg.shoot());
+      col_rbw->fill(rbw.shoot());
+      ntu.add_row(); // it will write columns data as a <row> in the file.
+    }
+
+    ntu.write_trailer();
+  }}
+
   //////////////////////////////////////////////////////////
   /// close file : /////////////////////////////////////////
   //////////////////////////////////////////////////////////

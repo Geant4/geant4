@@ -210,7 +210,10 @@ public:
 protected:
   enum {AxisX=0,AxisY=1,AxisZ=2};
 
-  bool configure(dim_t a_dim,const std::vector<bn_t>& aNumbers,const std::vector<TC>& aMins,const std::vector<TC>& aMaxs) {
+  bool configure(dim_t a_dim,
+                 const std::vector<bn_t>& aNumbers,
+                 const std::vector<TC>& aMins,
+                 const std::vector<TC>& aMaxs) {
     // Clear :
     m_bin_entries.clear();
     m_bin_Sw.clear();

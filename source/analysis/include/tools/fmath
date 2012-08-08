@@ -31,6 +31,7 @@ inline float ffabs(float x) {return (float)::fabs(double(x));}
 inline float fceil(float x) {return (float)::ceil(double(x));}
   
 inline float fdeg2rad() {return fpi()/180.0f;}
+inline float frad2deg() {return 180.0f/fpi();}
 
 inline int fround(float a_x) {
   // From CoinGL/src/base/SbViewportRegion.cpp.

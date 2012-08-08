@@ -69,6 +69,27 @@ public:
     return true;
   }
 
+  std::string title() const {
+    std::string _title;
+    int ncx,ncy;
+    rarg xmin,xmax,ymin,ymax;
+    cd_beg();
+    CHGIVE(m_id,_title,ncx,xmin,xmax,ncy,ymin,ymax);
+    cd_end();
+    return _title;
+  }
+  bool reset() {
+    cd_beg();
+    CHRESET(m_id," ");
+    cd_end();
+    return true;
+  }
+  int all_entries() const { 
+    cd_beg();
+    int v = CHNOENT(m_id);
+    cd_end();
+    return v;
+  }
 protected:
   void cd_beg() const{
     base_histo& self = const_cast<base_histo&>(*this);

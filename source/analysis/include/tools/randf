@@ -45,7 +45,7 @@ public:
     fac = fsqrt(-2*flog(r)/r);
     return (v2 * fac) * m_std_dev + m_mean;
   }
-private:
+protected:
   flat m_flat;
   float m_mean;
   float m_std_dev;
@@ -69,7 +69,7 @@ public:
     float displ = 0.5f * m_gamma * ftan(rval * fhalf_pi());
     return m_mean + displ;
   }
-private:
+protected:
   flat m_flat;
   float m_mean;
   float m_gamma;
@@ -89,7 +89,7 @@ public:
     } while(v<=0);
     return -flog(v)/m_rate;
   }
-private:
+protected:
   flat m_flat;
   float m_rate;
 };

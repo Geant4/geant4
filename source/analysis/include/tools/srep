@@ -47,6 +47,21 @@ inline bool replace(std::vector<std::string>& a_strings,const std::string& a_old
   return true;
 }
 
+inline std::string to_xml(const std::string& a_string){
+  // > : &lt;
+  // < : &gt;
+  // & : &amp;
+  // " : &quot;
+  // ' : &apos;
+  std::string s = a_string;
+  replace(s,"<","&lt;");
+  replace(s,">","&gt;");
+  replace(s,"&","&amp;");
+  replace(s,"\"","&quot;");
+  replace(s,"'","&apos;");
+  return s;
+}
+
 }
 
 #endif

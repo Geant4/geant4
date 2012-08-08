@@ -50,16 +50,27 @@ class G4CsvAnalysisManager : public G4VAnalysisManager
     static G4CsvAnalysisManager* Instance();
 
     // Methods to manipulate files
+    using G4VAnalysisManager::OpenFile;
     virtual G4bool OpenFile(const G4String& fileName);
     virtual G4bool Write();
     virtual G4bool CloseFile(); 
 
     // Methods for handling histogrammes, ntuples
     virtual G4int CreateH1(const G4String& name, const G4String& title,
-                           G4int nbins, G4double xmin, G4double xmax);
+                           G4int nbins, G4double xmin, G4double xmax,
+                           G4double unit = 1.0);
     virtual G4int CreateH2(const G4String& name, const G4String& title,
                            G4int nxbins, G4double xmin, G4double xmax, 
-                           G4int nybins, G4double ymin, G4double ymax);
+                           G4int nybins, G4double ymin, G4double ymax,
+                           G4double xunit = 1.0, G4double yunit = 1.0);
+                           
+    virtual G4bool SetH1(G4int id,
+                           G4int nbins, G4double xmin, G4double xmax,
+                           G4double unit = 1.0);
+    virtual G4bool SetH2(G4int id,
+                           G4int nxbins, G4double xmin, G4double xmax, 
+                           G4int nybins, G4double ymin, G4double ymax,
+                           G4double xunit = 1.0, G4double yunit = 1.0);
                            
     virtual void  CreateNtuple(const G4String& name, const G4String& title);
     virtual G4int CreateNtupleIColumn(const G4String& name);
@@ -75,10 +86,13 @@ class G4CsvAnalysisManager : public G4VAnalysisManager
     virtual G4bool FillNtupleFColumn(G4int id, G4float value);
     virtual G4bool FillNtupleDColumn(G4int id, G4double value);
     virtual G4bool AddNtupleRow();
-
+    
     // Access methods
     virtual tools::wcsv::ntuple* GetNtuple() const;
         
+  protected:
+    virtual G4bool WriteOnAscii(std::ofstream& output);
+
   private:
     // static data members
     //
@@ -89,6 +103,7 @@ class G4CsvAnalysisManager : public G4VAnalysisManager
     tools::wcsv::ntuple::column<int>*    GetNtupleIColumn(G4int id) const;
     tools::wcsv::ntuple::column<float>*  GetNtupleFColumn(G4int id) const;
     tools::wcsv::ntuple::column<double>* GetNtupleDColumn(G4int id) const;
+    virtual G4bool Reset();
  
     // data members
     //
@@ -97,9 +112,8 @@ class G4CsvAnalysisManager : public G4VAnalysisManager
     //std::vector<histo::h1d*>         fH1Vector;            
     //std::map<G4String, histo::h1d*>  fH1MapByName;
     
-    G4String  fNtupleName;
-    G4String  fNtupleTitle;
     tools::wcsv::ntuple*  fNtuple; 
+    tools::ntuple_booking*  fNtupleBooking; 
     std::map<G4int, tools::wcsv::ntuple::column<int>* >    fNtupleIColumnMap;           
     std::map<G4int, tools::wcsv::ntuple::column<float>* >  fNtupleFColumnMap;           
     std::map<G4int, tools::wcsv::ntuple::column<double>* > fNtupleDColumnMap;           

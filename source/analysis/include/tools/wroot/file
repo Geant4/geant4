@@ -196,9 +196,7 @@ public: //ifile
     }
   }
 public:
-  file(std::ostream& a_out,
-              const std::string& a_path,
-              bool a_verbose = false)
+  file(std::ostream& a_out,const std::string& a_path,bool a_verbose = false)
   :m_out(a_out)
   ,m_path(a_path)
   ,m_verbose(a_verbose)

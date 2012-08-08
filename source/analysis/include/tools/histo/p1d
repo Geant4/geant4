@@ -50,11 +50,8 @@ public:
 #ifdef __CINT__
   bool fill(double aX,double aY,double aW = 1) {return parent::fill(aX,aY,aW);}
 #endif
-private:
-  static void check_instantiation() {
-    p1d dummy("",10,0,1);
-    dummy.gather_bins(5);
-  }
+
+private:static void check_instantiation() {p1d p("",10,0,1);p.gather_bins(5);}
 };
 
 }}

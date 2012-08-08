@@ -103,8 +103,10 @@ ${f77_compiler} ${f77flags} -o ./tools_test_hbooknt hbooknt.o ${f77_objs} ${f77_
 # ////////////////////////////////////
 echo "build chbook.cpp ..."
 
-#hbook_dir=../../tools/hbook
-hbook_dir=../include/tools/hbook
+hbook_dir=../../tools/hbook
+if [ -d ../include/tools/hbook ] ; then   # if within G4.
+  hbook_dir=../include/tools/hbook
+fi
 
 ${f77_compiler} ${f77flags} -c -o close.o ${hbook_dir}/close.f
 ${f77_compiler} ${f77flags} -c -o setpawc.o ${hbook_dir}/setpawc.f
@@ -112,7 +114,8 @@ ${f77_compiler} ${f77flags} -c -o setpawc.o ${hbook_dir}/setpawc.f
 cppflags="${cppflags} ${G4_cppflags}"
 cppflags="${cppflags} -I../.."
 cppflags="${cppflags} -I../../../tools"
-cppflags="${cppflags} -I../include"
+
+cppflags="${cppflags} -I../include" # if within G4.
 
 ${cpp_compiler} -c ${cppflags} -o chbook.o chbook.cpp
 ${cpp_compiler} ${cppflags} -o ./tools_test_chbook chbook.o close.o setpawc.o ${objs} ${libs}

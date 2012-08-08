@@ -30,6 +30,19 @@ inline bool is_little_endian() {
 
 namespace tools {
 namespace device {
+#if TARGET_OS_IPHONE
+inline bool is_iOS() {return true;}
+#else
+inline bool is_iOS() {return false;}
+#endif
+
+#if ANDROID_NDK
+inline bool is_Android() {return true;}
+#else
+inline bool is_Android() {return false;}
+#endif
+
+
 #if ANDROID_NDK || TARGET_OS_IPHONE
 inline bool small_screen()           {return true;}
 inline bool no_cursor()              {return true;}

@@ -41,8 +41,8 @@ public:
   }
   void hprint(std::ostream& a_out) {parent::hprint(a_out);}
 #endif
-private:
-  static void check_instantiation() {h2d dummy("",10,0,1,10,0,1);}
+
+private:static void check_instantiation() {h2d dummy("",10,0,1,10,0,1);}
 };
 
 }}

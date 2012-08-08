@@ -296,7 +296,7 @@ public:
     }
   }
 
-private:
+protected:
   std::vector<arg> m_args;
 };
 

@@ -67,6 +67,13 @@ inline void remove(std::vector<T*>& a_vec,T* a_elem) {
 }
 
 template <class T>
+inline void push_back_unique(std::vector<T>& a_vec,const T& a_v) {
+  typedef typename std::vector<T>::const_iterator it_t;
+  for(it_t it=a_vec.begin();it!=a_vec.end();++it) {if(*it==a_v) return;}
+  a_vec.push_back(a_v);
+}
+
+template <class T>
 inline void unique(std::vector<T>& a_vec) {
   typedef typename std::vector<T>::iterator it_t;
   it_t it,it2;

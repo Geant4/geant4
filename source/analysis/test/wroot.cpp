@@ -110,6 +110,41 @@ int main(int argc,char** argv) {
   }}
 
   //////////////////////////////////////////////////////////
+  /// create a ntuple from a ntuple_booking object. ////////
+  //////////////////////////////////////////////////////////
+ {tools::ntuple_booking nbk;
+  nbk.m_name = "rg_rbw_2";
+  nbk.m_title = "Randoms";
+  nbk.add_column<double>("rgauss");
+  nbk.add_column<float>("rbw");
+  //nbk.add_column<bool>("not_handled");
+
+  tools::wroot::ntuple* ntu = new tools::wroot::ntuple(rfile.dir(),nbk);
+  if(ntu->columns().size()) {
+
+    tools::wroot::ntuple::column<double>* col_rgauss =
+      ntu->find_column<double>("rgauss");
+    tools::wroot::ntuple::column<float>* col_rbw =
+      ntu->find_column<float>("rbw");
+
+    tools::randf::bw rbwf(0,1);
+    for(unsigned int count=0;count<1000;count++) {    
+      if(!col_rgauss->fill(rg.shoot())) {
+        std::cout << "col_rgauss fill failed." << std::endl;
+        break;
+      }
+      if(!col_rbw->fill(rbwf.shoot())) {
+        std::cout << "col_rbw fill failed." << std::endl;
+        break;
+      }
+      if(!ntu->add_row()) {
+        std::cout << "ntuple fill failed." << std::endl;
+        break;
+      }
+    }
+  }}
+
+  //////////////////////////////////////////////////////////
   /// write and close file : ///////////////////////////////
   //////////////////////////////////////////////////////////
  {unsigned int n;

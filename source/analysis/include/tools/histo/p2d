@@ -51,8 +51,8 @@ public:
     parent::operator=(a_from);
     return *this;
   }
-private:
-  static void check_instantiation() {p2d dummy("",10,0,1,10,0,1);}
+
+private: static void check_instantiation() {p2d dummy("",10,0,1,10,0,1);}
 };
 
 }}

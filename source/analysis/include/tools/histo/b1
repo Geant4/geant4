@@ -151,7 +151,7 @@ public:
   }
 protected:
   b1(const std::string& a_title,
-             bn_t aXnumber,TC aXmin,TC aXmax){
+     bn_t aXnumber,TC aXmin,TC aXmax){
     parent::m_title = a_title;
     std::vector<bn_t> nbins;
     nbins.push_back(aXnumber);
@@ -178,6 +178,23 @@ protected:
     update_fast_getters();
     return *this;
   }
+
+public:
+  bool configure(bn_t aXnumber,TC aXmin,TC aXmax){
+    std::vector<bn_t> nbins;
+    nbins.push_back(aXnumber);
+    std::vector<TC> mins;
+    mins.push_back(aXmin);
+    std::vector<TC> maxs;
+    maxs.push_back(aXmax);
+    return parent::configure(1,nbins,mins,maxs);
+  }
+  bool configure(const std::vector<TC>& aEdges) {
+    std::vector< std::vector<TC> > edges(1);
+    edges[0] = aEdges;
+    return parent::configure(1,edges);
+  }
+
 };
 
 }}

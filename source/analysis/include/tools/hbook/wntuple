@@ -12,6 +12,7 @@
 #include <tools/sto>
 #include <tools/scast>
 #include <tools/stype>
+#include <tools/ntuple_booking>
 
 #include "CHBOOK"
 
@@ -86,6 +87,41 @@ public:
     CHBNT(m_id,a_title," ");
     cd_end();
   }
+
+  wntuple(int a_id,std::ostream& a_out,const tools::ntuple_booking& a_bkg)
+  :m_path(CHPWD()),m_id(a_id),m_path_file(CHPWD())
+  {
+    // WARNING : the below assumes that we are under //PAWC/<something>
+    //           and that a //<something> exists and is attached to a file.
+    tools::replace(m_path_file,"//PAWC","/");
+    cd_beg();
+    CHBNT(m_id,a_bkg.m_title," ");
+    cd_end();
+
+    const std::vector<tools::ntuple_booking::col_t>& cols = a_bkg.m_columns;
+    std::vector<tools::ntuple_booking::col_t>::const_iterator it;
+    for(it=cols.begin();it!=cols.end();++it){
+
+      if((*it).second==tools::_cid(int(0))) {
+        create_column<int>((*it).first);
+      } else if((*it).second==tools::_cid(float(0))) {
+        create_column<float>((*it).first);
+      } else if((*it).second==tools::_cid(double(0))) {
+        create_column<double>((*it).first);
+
+      } else {
+        a_out << "tools::hbook::wntuple :"
+              << " for column " << tools::sout((*it).first)
+              << ", type with cid " << (*it).second << " not yet handled."
+              << std::endl;
+        //throw
+        tools::clear<icol>(m_cols);
+        //FIXME : should undo the calls to CHBNAME.
+        return;
+      }      
+    }
+  }
+
   virtual ~wntuple(){
     cd_beg();
     CHDELET(m_id);

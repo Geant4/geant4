@@ -28,6 +28,7 @@
 // Author: Ivana Hrivnacova, 15/06/2011  (ivana@ipno.in2p3.fr)
 
 #include "G4VAnalysisManager.hh"
+#include "G4AnalysisMessenger.hh"
 #include "G4UnitsTable.hh"
 
 #include <iostream>
@@ -35,8 +36,10 @@
 //_____________________________________________________________________________
 G4VAnalysisManager::G4VAnalysisManager(const G4String& type)
   : fVerboseLevel(0),
+    fActivation(false),
     fFirstHistoId(0),
     fFirstNtupleColumnId(0),
+    fFileName(""), 
     fHistoDirectoryName(""), 
     fNtupleDirectoryName(""),
     fLockFirstHistoId(false),
@@ -48,12 +51,82 @@ G4VAnalysisManager::G4VAnalysisManager(const G4String& type)
     fVerboseL3(type,3),
     fpVerboseL1(0),
     fpVerboseL2(0),
-    fpVerboseL3(0)
-{}
+    fpVerboseL3(0),
+    fMessenger(0),
+    fNofActiveObjects(0),
+    fNofAsciiObjects(0),
+    fH1Informations(),
+    fH2Informations()
+{
+  fMessenger = new G4AnalysisMessenger(this);
+}
 
 //_____________________________________________________________________________
 G4VAnalysisManager::~G4VAnalysisManager()
-{}
+{
+  delete fMessenger;
+  // add delete G4HnInformation objects
+}
+
+// 
+// protected methods
+//
+
+//_____________________________________________________________________________
+void G4VAnalysisManager::AddH1Information(const G4String& name,
+                                          G4double unit)
+{
+  fH1Informations.push_back(new G4HnInformation(name, unit, unit));
+  ++fNofActiveObjects;
+}  
+
+//_____________________________________________________________________________
+void  G4VAnalysisManager::AddH2Information(const G4String& name,
+                                           G4double xunit, G4double yunit)
+{
+  fH2Informations.push_back(new G4HnInformation(name, xunit, yunit));
+  ++fNofActiveObjects;
+}  
+
+//_____________________________________________________________________________
+G4bool G4VAnalysisManager::WriteAscii()
+{
+  // Replace or add file extension .ascii
+  G4String name(fFileName);
+  if ( name.find(".") != std::string::npos ) { 
+    name.erase(name.find("."), name.length()); 
+  }
+  name.append(".ascii");
+
+#ifdef G4VERBOSE
+  if ( fpVerboseL3 ) 
+    fpVerboseL3->Message("write ASCII", "file", name);
+#endif
+     
+  std::ofstream output(name, std::ios::out);
+  if ( ! output ) {
+    G4ExceptionDescription description;
+    description 
+      << "Cannot open file. File name is not defined.";
+    G4Exception("G4VAnalysisManager::OpenFile()",
+                "Analysis_W009", JustWarning, description);
+    return false;
+  }
+  output.setf( std::ios::scientific, std::ios::floatfield );
+
+  G4bool result = WriteOnAscii(output);
+
+#ifdef G4VERBOSE
+    if ( fpVerboseL1 ) 
+      fpVerboseL1->Message("write ASCII", "file",  name, result);
+#endif
+  
+  return result;
+}     
+
+// 
+// public methods
+//
 
 //_____________________________________________________________________________
 void G4VAnalysisManager::SetVerboseLevel(G4int verboseLevel) 
@@ -82,6 +155,37 @@ void G4VAnalysisManager::SetVerboseLevel(G4int verboseLevel)
     fpVerboseL2 = &fVerboseL2;
     fpVerboseL3 = &fVerboseL3;
   }
+}  
+
+//_____________________________________________________________________________
+G4bool G4VAnalysisManager::OpenFile()
+{
+  if ( fFileName == "" ) {
+    G4ExceptionDescription description;
+    description 
+      << "Cannot open file. File name is not defined.";
+    G4Exception("G4VAnalysisManager::OpenFile()",
+                "Analysis_W009", JustWarning, description);
+    return false;
+  }           
+  
+  return OpenFile(fFileName);
+}     
+
+//_____________________________________________________________________________
+G4bool G4VAnalysisManager::SetFileName(const G4String& fileName) 
+{
+  if ( fLockFileName ) {
+    G4ExceptionDescription description;
+    description 
+      << "Cannot set File name as its value was already used.";
+    G4Exception("G4VAnalysisManager::SetFileName()",
+                "Analysis_W009", JustWarning, description);
+    return false;
+  }              
+
+  fFileName = fileName;
+  return true;
 }  
 
 //_____________________________________________________________________________
@@ -117,6 +221,18 @@ G4bool G4VAnalysisManager::SetNtupleDirectoryName(const G4String& dirName)
 }  
 
 //_____________________________________________________________________________
+G4String G4VAnalysisManager::GetFullFileName() const 
+{  
+  G4String name(fFileName);
+  if ( name.find(".") == std::string::npos ) { 
+    name.append(".");
+    name.append(GetFileType());
+  }  
+
+  return name;
+}  
+
+//_____________________________________________________________________________
 G4bool G4VAnalysisManager::SetFirstHistoId(G4int firstId) 
 {
   if ( fLockFirstHistoId ) {
@@ -149,7 +265,164 @@ G4bool G4VAnalysisManager::SetFirstNtupleColumnId(G4int firstId)
 }
 
 //_____________________________________________________________________________
-G4String G4VAnalysisManager::GetFileType() const {
+G4bool G4VAnalysisManager::IsActive() const
+{
+  if ( ! fActivation ) return true;
+  
+  return ( fNofActiveObjects > 0 );
+}  
+
+//_____________________________________________________________________________
+G4bool G4VAnalysisManager::IsAscii() const
+{
+  return ( fNofAsciiObjects > 0 );
+}  
+
+//_____________________________________________________________________________
+G4HnInformation* G4VAnalysisManager::GetH1Information(G4int id) const
+{
+  G4int index = id - fFirstHistoId;
+  if ( index < 0 || index >= GetNofH1s() ) {
+    G4ExceptionDescription description;
+    description << "      " << "histo " << id << " does not exist.";
+    G4Exception("G4VAnalysisManager::GetH1Information()",
+                "Analysis_W007", JustWarning, description);
+    return 0;         
+  }
+  return fH1Informations[index];
+}    
+
+//_____________________________________________________________________________
+G4HnInformation* G4VAnalysisManager::GetH2Information(G4int id) const
+{
+  G4int index = id - fFirstHistoId;
+  if ( index < 0 || index >= GetNofH2s() ) {
+    G4ExceptionDescription description;
+    description << "      " << "histo " << id << " does not exist.";
+    G4Exception("G4VAnalysisManager::GetH2Information()",
+                "Analysis_W007", JustWarning, description);
+    return 0;         
+  }
+  return fH2Informations[index];
+}    
+    
+//_____________________________________________________________________________
+G4HnInformation* G4VAnalysisManager::GetInformation(ObjectType objType, G4int id) const
+{
+  switch ( objType ) {
+    case kH1: 
+      return GetH1Information(id);
+      break;
+      
+    case kH2: 
+      return GetH2Information(id);
+      break;
+      
+    case kNtuple:
+    default:
+      return 0;
+      break;
+  }    
+
+  // Cannot reach this line
+  G4ExceptionDescription description;
+  description << "Wrong object type.";
+  G4Exception("G4VAnalysisManager::SetFirstHistoId()",
+              "Analysis_W010", FatalException, description);
+  return 0;
+}    
+
+//_____________________________________________________________________________
+void  G4VAnalysisManager::SetActivation(ObjectType type, G4int id, 
+                                        G4bool activation)
+{
+  G4HnInformation* info = GetInformation(type, id);
+
+  if ( ! info ) return;
+
+  // Do nothing if activation does not change
+  if ( info->fActivation == activation ) return;
+  
+  // Change activation and account it in fNofActiveObjects
+  info->fActivation = activation;
+  if ( activation ) 
+    fNofActiveObjects++;
+  else
+    fNofActiveObjects--;   
+}    
+
+//_____________________________________________________________________________
+void  G4VAnalysisManager::SetAscii(ObjectType type, G4int id, G4bool ascii)
+{
+  G4HnInformation* info = GetInformation(type, id);
+
+  if ( ! info ) return;
+
+  // Do nothing if ascii does not change
+  if ( info->fAscii == ascii ) return;
+  
+  // Change ascii and account it in fNofAsciiObjects
+  info->fAscii = ascii;
+  if ( ascii ) 
+    fNofAsciiObjects++;
+  else
+    fNofAsciiObjects--;   
+}    
+
+//_____________________________________________________________________________
+G4String G4VAnalysisManager::GetName(ObjectType type, G4int id) const
+{
+  G4HnInformation* info = GetInformation(type, id);
+
+  if ( ! info ) return "";
+    
+  return info->fName;
+}    
+
+//_____________________________________________________________________________
+G4double G4VAnalysisManager::GetXUnit(ObjectType type, G4int id) const
+{
+  G4HnInformation* info = GetInformation(type, id);
+
+  if ( ! info ) return 1.0;
+  
+  return info->fXUnit;
+}    
+
+//_____________________________________________________________________________
+G4double G4VAnalysisManager::GetYUnit(ObjectType type, G4int id) const
+{
+  G4HnInformation* info = GetInformation(type, id);
+
+  if ( ! info ) return 1.0;
+  
+  return info->fYUnit;
+}    
+
+//_____________________________________________________________________________
+G4bool G4VAnalysisManager::GetActivation(ObjectType type, G4int id) const
+{
+  G4HnInformation* info = GetInformation(type, id);
+
+  if ( ! info ) return true;
+  
+  return info->fActivation;
+}    
+
+//_____________________________________________________________________________
+G4bool G4VAnalysisManager::GetAscii(ObjectType type, G4int id) const
+{
+  G4HnInformation* info = GetInformation(type, id);
+
+  if ( ! info ) return false;
+  
+  return info->fAscii;
+}    
+
+
+//_____________________________________________________________________________
+G4String G4VAnalysisManager::GetFileType() const 
+{
   G4String fileType = fVerboseL1.GetType();
   fileType.toLower();
   return fileType;

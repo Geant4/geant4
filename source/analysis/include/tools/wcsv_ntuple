@@ -12,6 +12,10 @@
 #include "vmanip"
 #include <ostream>
 
+#include "scast"
+#include "ntuple_booking"
+#include "sout"
+
 namespace tools {
 namespace wcsv {
 
@@ -21,6 +25,9 @@ protected:
   public:
     virtual ~icol(){}
   public:
+    virtual void* cast(cid) const = 0;
+    virtual cid id_cls() const = 0;
+  public:
     virtual void add() = 0;
     virtual const std::string& name() const = 0;
   };
@@ -28,6 +35,16 @@ protected:
 public:
   template <class T>
   class column : public virtual icol {
+  public:
+    static cid id_class() {
+      static const T s_v = T(); //do that for T = std::string.
+      return _cid(s_v);
+    }
+    virtual void* cast(cid a_class) const {
+      if(void* p = cmp_cast<column>(this,a_class)) {return p;}
+      else return 0;
+    }
+    virtual cid id_cls() const {return id_class();}
   public: //icol
     virtual void add() {
       m_writer << m_tmp;
@@ -35,9 +52,7 @@ public:
     }
     virtual const std::string& name() const {return m_name;}
   public:
-    column(std::ostream& a_writer,
-                  const std::string& a_name,
-                  const T& a_def)
+    column(std::ostream& a_writer,const std::string& a_name,const T& a_def)
     :m_writer(a_writer)
     ,m_name(a_name),m_def(a_def),m_tmp(a_def)
     {}
@@ -71,6 +86,51 @@ public:
   :m_writer(a_writer)
   ,m_sep(a_sep)
   {}
+
+  ntuple(std::ostream& a_writer,
+         std::ostream& a_out, //for errors.
+         const ntuple_booking& a_bkg,
+         char a_sep = ',')
+  :m_writer(a_writer)
+  ,m_sep(a_sep){  
+    const std::vector<ntuple_booking::col_t>& cols = a_bkg.m_columns;
+    std::vector<ntuple_booking::col_t>::const_iterator it;
+    for(it=cols.begin();it!=cols.end();++it){
+
+      if((*it).second==_cid(char(0))) {
+        create_column<char>((*it).first);
+      } else if((*it).second==_cid(short(0))) {
+        create_column<short>((*it).first);
+      } else if((*it).second==_cid(int(0))) {
+        create_column<int>((*it).first);
+      } else if((*it).second==_cid(float(0))) {
+        create_column<float>((*it).first);
+      } else if((*it).second==_cid(double(0))) {
+        create_column<double>((*it).first);
+
+      } else if((*it).second==_cid(byte(0))) {
+        create_column<byte>((*it).first);
+      } else if((*it).second==_cid((unsigned short)0)) {
+        create_column<unsigned short>((*it).first);
+      } else if((*it).second==_cid((unsigned int)0)) {
+        create_column<unsigned int>((*it).first);
+      } else if((*it).second==_cid(bool(true))) {
+        create_column<bool>((*it).first);
+      } else if((*it).second==_cid(uint64(0))) {
+        create_column<uint64>((*it).first);
+
+      } else {
+        a_out << "tools::wcsv::ntuple :"
+              << " for column " << sout((*it).first)
+              << ", type with cid " << (*it).second << " not yet handled."
+              << std::endl;
+        //throw
+        tools::clear<icol>(m_cols);
+        return;
+      }      
+    }
+  }
+
   virtual ~ntuple() {
     tools::clear<icol>(m_cols);
   }
@@ -85,13 +145,19 @@ protected:
   }
 public:
   template <class T>
-  column<T>* create_column(const std::string& a_name,
-                                  const T& a_def = T()) {
+  column<T>* create_column(const std::string& a_name,const T& a_def = T()) {
     if(find_named<icol>(m_cols,a_name)) return 0;
     column<T>* col = new column<T>(m_writer,a_name,a_def);
     if(!col) return 0;
     m_cols.push_back(col);
     return col;
+  }
+
+  template <class T>
+  column<T>* find_column(const std::string& a_name) {
+    icol* col = find_named<icol>(m_cols,a_name);
+    if(!col) return 0;
+    return id_cast<icol, column<T> >(*col);
   }
 
   bool add_row() {

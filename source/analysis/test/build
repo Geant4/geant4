@@ -68,9 +68,11 @@ if [ ${build_cl_exe} = "yes" ] ; then
 fi
 
 if [ ${build_cl_exe} = "yes" ] ; then
-  cppflags="${cppflags} /I../.. -I../include"
+  cppflags="${cppflags} /I../.."
+  cppflags="${cppflags} /I../include" # if within G4.
 else
-  cppflags="${cppflags} -I../.. -I../include"
+  cppflags="${cppflags} -I../.."
+  cppflags="${cppflags} -I../include" # if within G4.
 fi
 
 # let the freedom to some application to not use G4_cppflags.

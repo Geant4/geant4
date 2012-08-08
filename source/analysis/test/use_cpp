@@ -13,10 +13,16 @@ else
       cpp_compiler=cl.exe
 
       if [ "${MSVCDir}" != "" ] ;  then
+        # Visual Studio 2003
         link_cmd="`cygpath \"${MSVCDir}\"/bin/link.exe`"
       else
-        echo "env variable MSVCDir not defined. You have to setup Visual."
-        exit
+        if [ "${VCINSTALLDIR}" != "" ] ;  then
+          # Visual Studio 9.0
+          link_cmd="`cygpath \"${VCINSTALLDIR}\"/bin/link.exe`"
+        else
+          echo "env variables MSVCDir and VCINSTALLDIR not defined. You have to setup Visual."
+          exit
+        fi  
       fi  
       #echo ${link_cmd}
       link_cmd=`echo ${link_cmd} | sed -e 's: :\\\ :g'`
@@ -58,7 +64,8 @@ else
     if [ ${build_clang} = "yes" ] ; then
       G4_cppflags="-Wno-non-virtual-dtor -Wwrite-strings -Wpointer-arith -Woverloaded-virtual"
     else
-      G4_cppflags="-W -Wall -ansi -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wshadow"
+      G4_cppflags="-W -Wall -ansi -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual"
+#      G4_cppflags="${G4_cppflags} -Wshadow"
     fi
   fi
 
