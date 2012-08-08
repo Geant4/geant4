@@ -110,7 +110,7 @@ public: // With description
   bool AddTabWidget(QWidget*,QString,int,int);
   // To add a tab for vis openGL Qt driver
   
-  QWidget* GetViewComponentsTBWidget();
+  QWidget* GetSceneTreeComponentsTBWidget();
   // Get the viewComponent
 
   bool IsSplitterReleased();
@@ -170,7 +170,7 @@ private:
   QWidget* fHistoryTBWidget;
   QWidget* fCoutTBWidget;
   QWidget* fVisParametersTBWidget;
-  QWidget* fViewComponentsTBWidget;
+  QWidget* fSceneTreeComponentsTBWidget;
   QLineEdit* fHelpLine;
   G4QTabWidget* fTabWidget;
   QString fCoutText;

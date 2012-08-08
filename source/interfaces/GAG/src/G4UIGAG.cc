@@ -448,23 +448,23 @@ void G4UIGAG::TerminalHelp(G4String newCommand)
   floor[iFloor]->ListCurrentWithNum();
   // 1998 Oct 2 non-number input
   while(1){
-    int i;
+    int j;
     G4cout << G4endl << "Type the number ( 0:end, -n:n level back ) : "<<std::flush;
-    G4cin >> i;
+    G4cin >> j;
     if(!G4cin.good()){
       G4cin.clear();
       G4cin.ignore(30,'\n');
       G4cout << G4endl << "Not a number, once more" << G4endl; continue;}
-    else if( i < 0 ){
-      iFloor += i;
+    else if( j < 0 ){
+      iFloor += j;
       if( iFloor < 0 ) iFloor = 0;
       floor[iFloor]->ListCurrentWithNum(); continue;}
-    else if(i == 0) { break;}
-    else if( i > 0 ) {
+    else if(j == 0) { break;}
+    else if( j > 0 ) {
       int  n_tree = floor[iFloor]->GetTreeEntry();
-      if( i > n_tree )
+      if( j > n_tree )
       {
-        if( i <= n_tree + floor[iFloor]->GetCommandEntry() )
+        if( j <= n_tree + floor[iFloor]->GetCommandEntry() )
         {
           floor[iFloor]->GetCommand(i-n_tree)->List();
           //iFloor++;
@@ -717,9 +717,9 @@ void G4UIGAG::CodeGenTclTree(G4UIcommandTree * tree, int level)
     pathName =  t->GetPathName();   
     title1 = t->GetTitle();
     title2 = "";
-    for(int i=0; i<(int)title1.length(); i++){
+    for(int k=0; k<(int)title1.length(); k++){
       char c[2];
-      c[0]=title1(i);
+      c[0]=title1(k);
       c[1]= '\0';
       if( c[0] == '\"') 
 	title2.append("\\\""); // a Backslash and a double quote

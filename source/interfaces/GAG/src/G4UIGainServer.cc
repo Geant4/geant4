@@ -573,29 +573,29 @@ void G4UIGainServer::TerminalHelp(G4String newCommand){
     }
     floor[iFloor]->ListCurrentWithNum();
     while(1){
-        int i;
+        int j;
         G4cout<<G4endl <<"Type the number (0:end, -n:n level back) :"<<std::flush;
-        G4cin >> i;
+        G4cin >> j;
         if(!G4cin.good()){
             G4cin.clear();
             G4cin.ignore(30,'\n');
             G4cout<<G4endl <<"Not a number,once more"<<G4endl; continue;
         }
-        else if(i<0){
-            iFloor += i;
+        else if(j<0){
+            iFloor += j;
             if(iFloor <0) iFloor =0;
             floor[iFloor]->ListCurrentWithNum(); continue;
         }
-        else if(i==0){break;}
-        else if(i>0){
+        else if(j==0){break;}
+        else if(j>0){
             int n_tree = floor[iFloor]->GetTreeEntry();
-            if(i>n_tree){
-                if(i<=n_tree+floor[iFloor]->GetCommandEntry()){
-                    floor[iFloor]->GetCommand(i-n_tree)->List();
+            if(j>n_tree){
+                if(j<=n_tree+floor[iFloor]->GetCommandEntry()){
+                    floor[iFloor]->GetCommand(j-n_tree)->List();
                 }
             }
             else{
-                floor[iFloor+1] = floor[iFloor]->GetTree(i);
+                floor[iFloor+1] = floor[iFloor]->GetTree(j);
                 iFloor++;
                 floor[iFloor]->ListCurrentWithNum();
             }

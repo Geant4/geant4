@@ -381,31 +381,31 @@ void G4VBasicShell::TerminalHelp(G4String newCommand)
   while(1){
    //G4cout << G4endl << "Type the number ( 0:end, -n:n level back ) : "<<std::flush;
     G4cout << G4endl << "Type the number ( 0:end, -n:n level back ) : "<<G4endl;
-    G4int i;
-    if(!GetHelpChoice(i)){
+    G4int j;
+    if(!GetHelpChoice(j)){
       G4cout << G4endl << "Not a number, once more" << G4endl; 
       continue;
-    } else if( i < 0 ){
-      if( iFloor < (size_t)-i ) iFloor = 0;
-      else iFloor += i;
-      //iFloor += i;
+    } else if( j < 0 ){
+      if( iFloor < (size_t)-j ) iFloor = 0;
+      else iFloor += j;
+      //iFloor += j;
       //if( iFloor < 0 ) iFloor = 0;
       floor[iFloor]->ListCurrentWithNum(); 
       continue;
-    } else if(i == 0) { 
+    } else if(j == 0) { 
       break;
-    } else if( i > 0 ) {
+    } else if( j > 0 ) {
       G4int n_tree = floor[iFloor]->GetTreeEntry();
-      if( i > n_tree )
+      if( j > n_tree )
       { 
-        if( i <= n_tree + floor[iFloor]->GetCommandEntry() )
+        if( j <= n_tree + floor[iFloor]->GetCommandEntry() )
         { 
-          floor[iFloor]->GetCommand(i-n_tree)->List(); 
+          floor[iFloor]->GetCommand(j-n_tree)->List(); 
         }
       }
       else
       {
-        floor[iFloor+1] = floor[iFloor]->GetTree(i);
+        floor[iFloor+1] = floor[iFloor]->GetTree(j);
         iFloor++;
         floor[iFloor]->ListCurrentWithNum();
       }

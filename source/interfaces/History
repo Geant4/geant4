@@ -17,6 +17,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11 July 2012 Laurent Garnier (interfaces-V09-05-08)
+- G4UIQt.cc : Small variable name changes and re-add scene tree viewer
+ (slow problem fixed in visualization)
+
+6 July 2012 Laurent Garnier (interfaces-V09-05-07)
+- G4VBasicShell.cc : Fix compilation warnings on Linux/gcc
+
+6 July 2012 Laurent Garnier (interfaces-V09-05-06)
+- G4UIGAG, G4UIQt : Fix compilation warnings on Linux/gcc
+
+6 July 2012 Laurent Garnier (interfaces-V09-05-05)
+- G4UIGAG, G4UIGainServer, G4UIQt : Fix compilation warnings on Linux/gcc
+
 21 June 2012 Laurent Garnier (interfaces-V09-05-04)
 - Remove scene tree from next tag. Slow some examples (DICOM) too much.
 

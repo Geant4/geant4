@@ -106,7 +106,7 @@ G4UIQt::G4UIQt (
 ,fHistoryTBWidget(NULL)
 ,fCoutTBWidget(NULL)
 ,fVisParametersTBWidget(NULL)
-,fViewComponentsTBWidget(NULL)
+,fSceneTreeComponentsTBWidget(NULL)
 ,fHelpLine(NULL)
 ,fTabWidget(NULL)
 ,fCoutText("Output")
@@ -172,11 +172,13 @@ G4UIQt::G4UIQt (
   fHistoryTBWidget = new QWidget(fToolBox);
   fCoutTBWidget = new QWidget(fToolBox);
   fVisParametersTBWidget = new QWidget(fToolBox);
-  //  fViewComponentsTBWidget = new QWidget(fToolBox);
+  fSceneTreeComponentsTBWidget = new QWidget(fToolBox);
+  fSceneTreeComponentsTBWidget->setLayout(new QVBoxLayout());
+
 #if QT_VERSION < 0x040200
-  //  fViewComponentsTBWidget->hide();
+  fSceneTreeComponentsTBWidget->hide();
 #else
-  //  fViewComponentsTBWidget->setVisible(false);
+  fSceneTreeComponentsTBWidget->setVisible(false);
 #endif
   
   CreateVisParametersTBWidget();
@@ -186,7 +188,7 @@ G4UIQt::G4UIQt (
 
   // the splitter 
   //  fToolBox->addItem(fVisParametersTBWidget,"Vis parameters");
-  //  fToolBox->addItem(fViewComponentsTBWidget,"Scene");
+  fToolBox->addItem(fSceneTreeComponentsTBWidget,"Scene");
   fToolBox->addItem(fHelpTBWidget,"Help");
   fToolBox->addItem(fCoutTBWidget,"Cout");
   fToolBox->addItem(fHistoryTBWidget,"History");
@@ -381,12 +383,12 @@ void G4UIQt::CreateVisParametersTBWidget(
 }
 
 
-/** Get the ViewComponents ToolBox Widget
+/** Get the ViewerComponents ToolBox Widget
  */
-QWidget* G4UIQt::GetViewComponentsTBWidget(
+QWidget* G4UIQt::GetSceneTreeComponentsTBWidget(
 )
 {
-  return fViewComponentsTBWidget;
+  return fSceneTreeComponentsTBWidget;
 }
 
 
@@ -479,7 +481,7 @@ bool G4UIQt::AddTabWidget(
   // then we have to force them on order to check the size
 
   fTabWidget->insertTab(fTabWidget->count(),aWidget,name);
-  
+
   fTabWidget->setCurrentIndex(fTabWidget->count()-1);
 
   // Set visible
@@ -665,9 +667,9 @@ void G4UIQt::SecondaryLoop (
   G4Qt* interactorManager = G4Qt::getInstance (); // TO KEEP ?
   Prompt(aPrompt); // TO KEEP
   exitPause = false; // TO KEEP
-  void* event; // TO KEEP
-  while((event = interactorManager->GetEvent())!=NULL) {  // TO KEEP
-    interactorManager->DispatchEvent(event); // TO KEEP
+  void* eventTmp; // TO KEEP
+  while((eventTmp = interactorManager->GetEvent())!=NULL) {  // TO KEEP
+    interactorManager->DispatchEvent(eventTmp); // TO KEEP
     if(exitPause==true) break; // TO KEEP
   } // TO KEEP
   Prompt("Session :"); // TO KEEP
@@ -776,12 +778,12 @@ void G4UIQt::AddButton (
   if(aLabel==NULL) return; // TO KEEP
   if(aCommand==NULL) return; // TO KEEP
 
-  QMenu *parent = (QMenu*)GetInteractor(aMenu);
+  QMenu *parentTmp = (QMenu*)GetInteractor(aMenu);
 
-  if(parent==NULL) return;
+  if(parentTmp==NULL) return;
   
   QSignalMapper *signalMapper = new QSignalMapper(this);
-  QAction *action = parent->addAction(aLabel, signalMapper, SLOT(map()));
+  QAction *action = parentTmp->addAction(aLabel, signalMapper, SLOT(map()));
 
   connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(ButtonCallback(const QString&)));
   signalMapper->setMapping(action, QString(aCommand));
@@ -1627,12 +1629,19 @@ void G4UIQt::TabCloseCallback(int a){
 
 
 void G4UIQt::ToolBoxActivated(int a){
-
+  
   if (fToolBox->widget(a) == fHelpTBWidget) {
     // Rebuild the help tree
     FillHelpTree();
+  } else if (fToolBox->widget(a) == fSceneTreeComponentsTBWidget) {
+#if QT_VERSION < 0x040200
+    fSceneTreeComponentsTBWidget->show();
+#else
+    fSceneTreeComponentsTBWidget->setVisible(true);
+#endif
   }
 }
+
 
 void G4QTabWidget::paintEvent(
 QPaintEvent *
