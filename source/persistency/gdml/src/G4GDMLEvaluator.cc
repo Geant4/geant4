@@ -89,6 +89,7 @@ void G4GDMLEvaluator::DefineMatrix(const G4String& name,
      G4Exception("G4GDMLEvaluator::DefineMatrix()", "InvalidSize",
                  FatalException, error_msg);
    }
+   /*
    if (size == 1)
    {
      G4String error_msg = "Matrix '" + name
@@ -97,6 +98,8 @@ void G4GDMLEvaluator::DefineMatrix(const G4String& name,
      G4Exception("G4GDMLEvaluator::DefineMatrix()", "InvalidSize",
                  FatalException, error_msg);
    }
+   */
+
    if (size % coldim != 0)
    {
      G4String error_msg = "Matrix '" + name + "' is not filled correctly!";

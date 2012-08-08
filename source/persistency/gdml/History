@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18 July 2012 Witek Pokorski (gdml-V09-05-04)
+- fixed wrong tag name
+
+18 July 2012 Witek Pokorski (gdml-V09-06-00)
+- handling of constant material properties added.
+
 5 July 2012 - Gabriele Cosmo (gdml-V09-05-03)
 - Explicitly use inclusion of headers for system of units and physical
   constants, in plan to remove implicit inclusion from globals.hh.

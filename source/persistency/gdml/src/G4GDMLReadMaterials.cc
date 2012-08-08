@@ -638,6 +638,7 @@ PropertyRead(const xercesc::DOMElement* const propertyElement,
       if (attName=="ref")  { matrix = GetMatrix(ref=attValue); }
    }
 
+   /*
    if (matrix.GetCols() != 2)
    {
      G4String error_msg = "Referenced matrix '" + ref
@@ -646,6 +647,8 @@ PropertyRead(const xercesc::DOMElement* const propertyElement,
      G4Exception("G4GDMLReadMaterials::PropertyRead()", "InvalidRead",
                  FatalException, error_msg);
    }
+   */
+
    if (matrix.GetRows() == 0) { return; }
 
    G4MaterialPropertiesTable* matprop=material->GetMaterialPropertiesTable();
