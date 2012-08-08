@@ -42,6 +42,8 @@
 // -----------------------------------------------------------------------------
 
 #include "G4PolarizedGammaConversion.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4PolarizedGammaConversionModel.hh"
 #include "G4Electron.hh"
 

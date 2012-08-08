@@ -48,6 +48,7 @@
 //
 
 #include "G4PolarizedAnnihilationCrossSection.hh"
+#include "G4PhysicalConstants.hh"
 
 G4PolarizedAnnihilationCrossSection::G4PolarizedAnnihilationCrossSection() :
   polxx(0.), polyy(0.), polzz(0.), polxz(0.), polzx(0.), polxy(0.), 

@@ -50,6 +50,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4PolarizedMollerBhabhaModel.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4ParticleChangeForLoss.hh"

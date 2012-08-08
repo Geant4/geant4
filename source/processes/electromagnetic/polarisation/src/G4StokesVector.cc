@@ -44,6 +44,7 @@
 //
 #include "G4StokesVector.hh"
 #include "G4PolarizationHelper.hh"
+#include "G4PhysicalConstants.hh"
 #include "Randomize.hh"
 
 const G4StokesVector G4StokesVector::ZERO=G4ThreeVector(0.,0.,0.);

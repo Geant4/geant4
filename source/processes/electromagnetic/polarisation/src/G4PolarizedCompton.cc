@@ -55,6 +55,7 @@
 
 
 #include "G4PolarizedCompton.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Electron.hh"
 
 #include "G4StokesVector.hh"

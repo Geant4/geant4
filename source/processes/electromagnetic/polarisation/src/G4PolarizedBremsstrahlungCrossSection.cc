@@ -39,8 +39,7 @@
 //
 
 #include "G4PolarizedBremsstrahlungCrossSection.hh"
-//#include "G4ePolarizedBremsstrahlungModel.hh"
-//#include "G4Element.hh"
+#include "G4PhysicalConstants.hh"
 
 G4bool G4PolarizedBremsstrahlungCrossSection::scrnInitialized=false;
 G4double G4PolarizedBremsstrahlungCrossSection::SCRN [3][20];  

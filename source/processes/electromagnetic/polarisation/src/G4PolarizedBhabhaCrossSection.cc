@@ -52,6 +52,7 @@
 //
 
 #include "G4PolarizedBhabhaCrossSection.hh"
+#include "G4PhysicalConstants.hh"
 
 G4PolarizedBhabhaCrossSection::G4PolarizedBhabhaCrossSection() : phi0(1.)
 {

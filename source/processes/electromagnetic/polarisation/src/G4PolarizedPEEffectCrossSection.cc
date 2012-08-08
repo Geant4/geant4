@@ -41,7 +41,7 @@
 // Class Description:
 //
 #include "G4PolarizedPEEffectCrossSection.hh"
-//#include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
 
 using namespace std;
 

@@ -48,6 +48,7 @@
 //
 
 #include "G4PolarizedMollerCrossSection.hh"
+#include "G4PhysicalConstants.hh"
 
 G4PolarizedMollerCrossSection::G4PolarizedMollerCrossSection() :
   phi0(0.)

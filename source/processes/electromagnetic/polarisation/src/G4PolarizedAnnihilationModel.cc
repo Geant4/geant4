@@ -53,6 +53,7 @@
 
 // -------------------------------------------------------------------
 #include "G4PolarizedAnnihilationModel.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4PolarizationManager.hh"
 #include "G4PolarizationHelper.hh"
 #include "G4StokesVector.hh"

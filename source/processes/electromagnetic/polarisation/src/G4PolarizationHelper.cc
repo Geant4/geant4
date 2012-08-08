@@ -42,6 +42,7 @@
 // Provides some basic polarization transformation routines.
 //
 #include "G4PolarizationHelper.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4StokesVector.hh"
 
 

@@ -45,6 +45,7 @@
 //   recalculated by P.Starovoitov
 //
 #include "G4PolarizedComptonCrossSection.hh"
+#include "G4PhysicalConstants.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
