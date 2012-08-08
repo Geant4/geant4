@@ -77,7 +77,11 @@ public: // with description
    G4SmoothTrajectory(G4SmoothTrajectory &);
    virtual ~G4SmoothTrajectory();
 
+private:
+   G4SmoothTrajectory& operator= (const G4SmoothTrajectory&);
+
 // Operators
+public:
    inline void* operator new(size_t);
    inline void  operator delete(void*);
    inline int operator == (const G4SmoothTrajectory& right) const

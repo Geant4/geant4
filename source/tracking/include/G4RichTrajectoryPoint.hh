@@ -81,6 +81,11 @@ public: // without description
   G4RichTrajectoryPoint(const G4RichTrajectoryPoint &right);
   virtual ~G4RichTrajectoryPoint();
 
+private:
+  G4RichTrajectoryPoint& operator= (const G4RichTrajectoryPoint&);
+
+public:
+
   // Get/Set functions
   const std::vector<G4ThreeVector>* GetAuxiliaryPoints() const
    { return fpAuxiliaryPointVector; }

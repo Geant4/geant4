@@ -72,8 +72,12 @@ public: // with description
   G4RichTrajectory(const G4Track* aTrack);
   G4RichTrajectory(G4RichTrajectory &);
   virtual ~G4RichTrajectory();
-  
+
+private:
+  G4RichTrajectory& operator= (const G4RichTrajectory &);
+
   // Operators
+public:
   inline void* operator new(size_t);
   inline void  operator delete(void*);
   inline int operator == (const G4RichTrajectory& right) const

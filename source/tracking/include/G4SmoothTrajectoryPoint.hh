@@ -62,6 +62,11 @@ public: // without description
    G4SmoothTrajectoryPoint(const G4SmoothTrajectoryPoint &right);
    virtual ~G4SmoothTrajectoryPoint();
 
+private:
+   G4SmoothTrajectoryPoint& operator= (const G4SmoothTrajectoryPoint&);
+
+public:
+
 // Operators
    inline void *operator new(size_t);
    inline void operator delete(void *aTrajectoryPoint);
