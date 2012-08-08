@@ -386,6 +386,15 @@ G4LundStringFragmentation::G4LundStringFragmentation()
    Prob_QQbar[0]=StrangeSuppress;         // Probability of ddbar production
    Prob_QQbar[1]=StrangeSuppress;         // Probability of uubar production
    Prob_QQbar[2]=StrangeSuppress/(2.+StrangeSuppress);//(1.-2.*StrangeSuppress); // Probability of ssbar production
+
+   //A.R. 25-Jul-2012 : Coverity fix.
+   for ( G4int i=0 ; i<35 ; i++ ) { 
+     FS_LeftHadron[i] = 0;
+     FS_RightHadron[i] = 0;
+     FS_Weight[i] = 0.0; 
+   }
+   NumberOf_FS = 0;
+
 }
 
 // --------------------------------------------------------------

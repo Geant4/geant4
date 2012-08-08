@@ -51,7 +51,9 @@ public:
    virtual ~G4VLongitudinalStringDecay();
 
 private:
-
+   // not implemented to protect/forbid use
+   G4VLongitudinalStringDecay(const G4VLongitudinalStringDecay &right);
+   const G4VLongitudinalStringDecay & operator=(const G4VLongitudinalStringDecay &right);
    int operator==(const G4VLongitudinalStringDecay &right) const;
    int operator!=(const G4VLongitudinalStringDecay &right) const;
 

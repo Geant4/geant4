@@ -56,6 +56,23 @@ G4FragmentingString::G4FragmentingString(const G4FragmentingString &old)
 	decaying=old.decaying;
 }
 
+G4FragmentingString & G4FragmentingString::operator =(const G4FragmentingString &old)
+{
+   if (this != &old)
+   {
+   LeftParton=old.LeftParton;
+   RightParton=old.RightParton;
+   Ptleft=old.Ptleft;
+   Ptright=old.Ptright;
+   Pplus=old.Pplus;
+   Pminus=old.Pminus;
+   theStableParton=old.theStableParton;
+   theDecayParton=old.theDecayParton;
+   decaying=old.decaying;
+   }
+   return *this;
+}
+
 //---------------------------------------------------------------------------------
 
 G4FragmentingString::G4FragmentingString(const G4ExcitedString &excited)

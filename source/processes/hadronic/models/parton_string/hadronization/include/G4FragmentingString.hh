@@ -62,6 +62,7 @@ class G4FragmentingString
 			  
       ~G4FragmentingString();
 
+      G4FragmentingString& operator=(const G4FragmentingString &);
       int operator==(const G4FragmentingString &right) const;
 
       int operator!=(const G4FragmentingString &right) const;
