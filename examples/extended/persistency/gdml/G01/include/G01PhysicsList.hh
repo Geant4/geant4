@@ -23,37 +23,35 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G01/include/DetectorConstruction.hh
-/// \brief Definition of the DetectorConstruction class
+/// \file persistency/gdml/G01/include/PhysicsList.hh
+/// \brief Definition of the G01PhysicsList class
 //
 //
-// $Id: DetectorConstruction.hh,v 1.2 2008-11-10 15:39:34 gcosmo Exp $
+// $Id: G01PhysicsList.hh,v 1.2 2008-11-10 15:39:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 
-#ifndef _DETECTORCONSTRUCTION_H_
-#define _DETECTORCONSTRUCTION_H_
+#ifndef _G01PHYSICSLIST_H_
+#define _G01PHYSICSLIST_H_
 
-#include "G4VUserDetectorConstruction.hh"
+#include "G4VUserPhysicsList.hh"
+#include "G4ParticleTypes.hh"
+#include "globals.hh"
 
-class DetectorConstruction : public G4VUserDetectorConstruction
+/// Minimal physics list just to demonstrate the use of GDML geometries
+
+class G01PhysicsList : public G4VUserPhysicsList
 {
   public:
- 
-    DetectorConstruction(G4VPhysicalVolume *setWorld = 0)
-    {   
-      World = setWorld;
-    }
+    G01PhysicsList();
+   ~G01PhysicsList();
 
-    G4VPhysicalVolume *Construct()
-    {
-      return World;
-    }
+  protected:
 
-  private:
-
-    G4VPhysicalVolume *World;
+    void ConstructParticle();
+    void ConstructProcess();
+    void SetCuts();
 };
 
 #endif

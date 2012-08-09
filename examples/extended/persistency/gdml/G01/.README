@@ -1,12 +1,11 @@
-$Id: README,v 1.4 2009-05-11 13:03:17 gcosmo Exp $
--------------------------------------------------------------------
+//$Id$
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+///\file "persistency/gdml/G01/.README"
+///\brief Example G01 README page
 
-                          GDML read/write
-                          ---------------
+/*! \page ExampleG01 Example G01
+
+\section G01_s1 GDML READ/WRITE
 
 This example demonstrates the usage of the GDML reader and writer. It allows
 to export geometry descriptions in an application independent format (GDML,
@@ -29,7 +28,7 @@ Several simple GDML files are provided:
 - auxiliary.gdml, showing association of volume with auxiliary information;
 - etc...
 
-HOW TO BUILD THE EXAMPLE ?
+\section G01_s2 HOW TO BUILD THE EXAMPLE ?
 
 - You need to have built the persistency/gdml module by having
   set the -DGEANT4_USE_GDML=ON flag during the CMAKE configuration step, 
@@ -37,14 +36,22 @@ HOW TO BUILD THE EXAMPLE ?
   the path where the XercesC XML parser package is installed in your system.
 
 - Compile and link to generate the executable (in your CMAKE build directory):
- 	      % make load_gdml
+\verbatim
+make load_gdml
+\endverbatim
+
 
 - Execute the application.
-  o For reading and visualize interactively a GDML file:
- 	      % load_gdml [GDML-file-in].gdml
-
-  o For reading, writing and visualize interactively a GDML file:
- 	      % load_gdml [GDML-file-in].gdml [GDML-file-out].gdml
-
-  o For reading, writing a GDML file and running in batch a macro:
- 	      % load_gdml [GDML-file-in].gdml [GDML-file-out].gdml [macro].in
+	- For reading and visualize interactively a GDML file:
+\verbatim
+load_gdml [GDML-file-in].gdml
+\endverbatim
+	- For reading, writing and visualize interactively a GDML file:
+\verbatim
+load_gdml [GDML-file-in].gdml [GDML-file-out].gdml
+\endverbatim
+	- For reading, writing a GDML file and running in batch a macro:
+\verbatim
+load_gdml [GDML-file-in].gdml [GDML-file-out].gdml [macro].in
+\endverbatim
+*/

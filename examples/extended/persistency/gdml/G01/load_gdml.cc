@@ -44,9 +44,9 @@
 #include "G4LogicalVolumeStore.hh"
 #include "G4TransportationManager.hh"
 
-#include "PrimaryGeneratorAction.hh"
-#include "DetectorConstruction.hh"
-#include "PhysicsList.hh"
+#include "G01PrimaryGeneratorAction.hh"
+#include "G01DetectorConstruction.hh"
+#include "G01PhysicsList.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -88,10 +88,10 @@ int main(int argc,char **argv)
 
    G4RunManager* runManager = new G4RunManager;
 
-   runManager->SetUserInitialization(new DetectorConstruction(
+   runManager->SetUserInitialization(new G01DetectorConstruction(
                                      parser.GetWorldVolume()));
-   runManager->SetUserInitialization(new PhysicsList);
-   runManager->SetUserAction(new PrimaryGeneratorAction);
+   runManager->SetUserInitialization(new G01PhysicsList);
+   runManager->SetUserAction(new G01PrimaryGeneratorAction);
 
    runManager->Initialize();
 

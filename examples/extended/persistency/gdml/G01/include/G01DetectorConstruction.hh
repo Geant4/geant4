@@ -23,54 +23,39 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G01/src/PrimaryGeneratorAction.cc
-/// \brief Implementation of the PrimaryGeneratorAction class
+/// \file persistency/gdml/G01/include/G01DetectorConstruction.hh
+/// \brief Definition of the G01DetectorConstruction class
 //
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.2 2008-11-10 15:39:34 gcosmo Exp $
+// $Id: G01DetectorConstruction.hh,v 1.2 2008-11-10 15:39:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 
-#include "PrimaryGeneratorAction.hh"
-#include "G4Event.hh"
-#include "G4ParticleGun.hh"
-#include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
+#ifndef _G01DETECTORCONSTRUCTION_H_
+#define _G01DETECTORCONSTRUCTION_H_
 
-PrimaryGeneratorAction::PrimaryGeneratorAction()
+#include "G4VUserDetectorConstruction.hh"
+
+/// Detector construction allowing to use the geometry read from the GDML file
+
+class G01DetectorConstruction : public G4VUserDetectorConstruction
 {
-  G4int n_particle = 1;
-  particleGun = new G4ParticleGun(n_particle);
+  public:
+ 
+    G01DetectorConstruction(G4VPhysicalVolume *setWorld = 0)
+    {   
+      fWorld = setWorld;
+    }
 
-  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  G4String particleName;
-  particleGun->SetParticleDefinition(
-               particleTable->FindParticle(particleName="geantino"));
-  particleGun->SetParticleEnergy(1.0*GeV);
-  particleGun->SetParticlePosition(G4ThreeVector(-2.0*m, 0.1, 0.1));
-}
+    G4VPhysicalVolume *Construct()
+    {
+      return fWorld;
+    }
 
-PrimaryGeneratorAction::~PrimaryGeneratorAction()
-{
-  delete particleGun;
-}
+  private:
 
-void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
-{
-  G4int i = anEvent->GetEventID() % 3;
-  G4ThreeVector v(1.0,0.0,0.0);
-  switch(i)
-  {
-    case 0:
-      break;
-    case 1:
-      v.setY(0.1);
-      break;
-    case 2:
-      v.setZ(0.1);
-      break;
-  }
-  particleGun->SetParticleMomentumDirection(v);
-  particleGun->GeneratePrimaryVertex(anEvent);
-}
+    G4VPhysicalVolume *fWorld;
+};
+
+#endif
