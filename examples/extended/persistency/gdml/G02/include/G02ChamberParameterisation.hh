@@ -23,14 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G02/include/ChamberParameterisation.hh
-/// \brief Definition of the ChamberParameterisation class
+/// \file persistency/gdml/G02/include/G02ChamberParameterisation.hh
+/// \brief Definition of the G02ChamberParameterisation class
 //
 //
-// $Id: ChamberParameterisation.hh,v 1.1 2008-08-27 10:30:18 gcosmo Exp $
+// $Id: G02ChamberParameterisation.hh,v 1.1 2008-08-27 10:30:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Class ChamberParameterisation
+// Class G02ChamberParameterisation
 //
 // A parameterisation that describes a series of boxes along Z
 // The boxes have equal width; their lengths are a linear equation.
@@ -38,8 +38,8 @@
 //
 // ----------------------------------------------------------------------------
 
-#ifndef ChamberParameterisation_H
-#define ChamberParameterisation_H 1
+#ifndef G02ChamberParameterisation_H
+#define G02ChamberParameterisation_H 1
 
 #include "globals.hh"
 #include "G4VPVParameterisation.hh"
@@ -63,18 +63,20 @@ class G4Polyhedra;
 
 // ----------------------------------------------------------------------------
 
-class ChamberParameterisation : public G4VPVParameterisation
+/// Chamber parametrisation used in the GDML read/write example
+
+class G02ChamberParameterisation : public G4VPVParameterisation
 { 
   public:
   
-    ChamberParameterisation(G4int    NoChambers, 
+    G02ChamberParameterisation(G4int    NoChambers, 
                             G4double startZ, 
                             G4double spacing,
                             G4double widthChamber, 
                             G4double lengthInitial,
                             G4double lengthFinal );
 
-    virtual ~ChamberParameterisation();
+    virtual ~G02ChamberParameterisation();
    
     void ComputeTransformation (const G4int copyNo,
                                 G4VPhysicalVolume* physVol) const;

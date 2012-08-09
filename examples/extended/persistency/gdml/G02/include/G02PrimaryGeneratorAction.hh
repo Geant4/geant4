@@ -23,55 +23,51 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G02/src/PrimaryGeneratorAction.cc
-/// \brief Implementation of the PrimaryGeneratorAction class
+/// \file persistency/gdml/G02/include/G02PrimaryGeneratorAction.hh
+/// \brief Definition of the G02PrimaryGeneratorAction class
 //
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.2 2008-12-18 12:57:08 gunter Exp $
+// $Id: G02PrimaryGeneratorAction.hh,v 1.1 2008-08-27 10:30:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Class PrimaryGeneratorAction implementation
+// Class G02PrimaryGeneratorAction
+//
+// Simple primary-generator action class.
 //
 // ----------------------------------------------------------------------------
 
-#include "PrimaryGeneratorAction.hh"
+#ifndef G02PrimaryGeneratorAction_h
+#define G02PrimaryGeneratorAction_h 1
 
-#include "globals.hh"
-#include "G4ParticleDefinition.hh"
+#include "G4ParticleTable.hh"
+#include "G4ParticleGun.hh"
+#include "G4Event.hh"
 
-// ----------------------------------------------------------------------------
-
-PrimaryGeneratorAction::PrimaryGeneratorAction()
-{
-  // Particle gun and particle table 
-  //
-  particleGun = new G4ParticleGun();
-  particleTable = G4ParticleTable::GetParticleTable();
-
-  // Default particle
-  //
-  particleGun->SetParticleDefinition(particleTable->FindParticle("geantino"));
-  particleGun->SetParticleEnergy( 1.0*MeV );
-
-  G4ThreeVector err1=G4ThreeVector(-1260,-560,40); // outside
-  G4ThreeVector err2=G4ThreeVector(100,-240,120);  // inside
-  G4ThreeVector err2v=(err2-err1).unit();
-  
-  particleGun->SetParticleMomentumDirection(err2v);
-  particleGun->SetParticlePosition(err1);
-
-}
+#include "G4VUserPrimaryGeneratorAction.hh"
 
 // ----------------------------------------------------------------------------
 
-PrimaryGeneratorAction::~PrimaryGeneratorAction()
+/// Primary generator action used in GDML read/write example
+
+class G02PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-  delete particleGun;
-}
+  public:
+
+    // Constructor and destructor
+    //
+    G02PrimaryGeneratorAction();
+   ~G02PrimaryGeneratorAction();
+
+    // Used by Geant4 to generate the primary particles of the event
+    //
+    void GeneratePrimaries(G4Event* anEvent);
+
+  private:
+
+    G4ParticleGun* fParticleGun;
+    G4ParticleTable * fParticleTable;
+};
 
 // ----------------------------------------------------------------------------
 
-void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
-{
-  particleGun->GeneratePrimaryVertex(anEvent);
-}
+#endif

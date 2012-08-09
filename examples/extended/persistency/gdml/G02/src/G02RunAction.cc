@@ -23,49 +23,54 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G02/include/PrimaryGeneratorAction.hh
-/// \brief Definition of the PrimaryGeneratorAction class
+/// \file persistency/gdml//src/G02G02RunAction.cc
+/// \brief Implementation of the G02RunAction class
 //
 //
-// $Id: PrimaryGeneratorAction.hh,v 1.1 2008-08-27 10:30:18 gcosmo Exp $
+// $Id: G02RunAction.cc,v 1.1 2008-08-27 10:30:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Class PrimaryGeneratorAction
-//
-// Simple primary-generator action class.
+// Class G02RunAction implementation
 //
 // ----------------------------------------------------------------------------
 
-#ifndef PrimaryGeneratorAction_h
-#define PrimaryGeneratorAction_h 1
+#include "G4ios.hh"
+#include <iomanip>
 
-#include "G4ParticleTable.hh"
-#include "G4ParticleGun.hh"
-#include "G4Event.hh"
+#include "globals.hh"
+#include "Randomize.hh"
+#include "G02RunAction.hh"
 
-#include "G4VUserPrimaryGeneratorAction.hh"
+#include "G4Run.hh"
+#include "G4UImanager.hh"
+#include "G4VVisManager.hh"
+#include "G4VisAttributes.hh"
 
-// ----------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+G02RunAction::G02RunAction()
+{ 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G02RunAction::~G02RunAction()
 {
-  public:
+}
 
-    // Constructor and destructor
-    //
-    PrimaryGeneratorAction();
-   ~PrimaryGeneratorAction();
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-    // Used by Geant4 to generate the primary particles of the event
-    //
-    void GeneratePrimaries(G4Event* anEvent);
+void G02RunAction::BeginOfRunAction(const G4Run* aRun)
+{  
+  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
+}
 
-  private:
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-    G4ParticleGun* particleGun;
-    G4ParticleTable * particleTable;
-};
-
-// ----------------------------------------------------------------------------
-
-#endif
+void G02RunAction::EndOfRunAction(const G4Run*)
+{
+  if (G4VVisManager::GetConcreteInstance())
+  {
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
+  } 
+}

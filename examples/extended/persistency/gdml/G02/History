@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 27th, 2011  Witek Pokorski G02-V09-05-00
+- Cosmetic changes to comply to coding conventions
+
 November 10th, 2011  Gabriele Cosmo G02-V09-04-01
 - Changed from no longer supported physics-list QGSP-BERT-EMV to QGSP-BERT.
 

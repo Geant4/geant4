@@ -22,19 +22,19 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//g
+/// \file persistency/gdml//src/G02G02DetectorConstruction.cc
+/// \brief Implementation of the G02DetectorConstruction class
 //
-/// \file persistency/gdml/G02/src/DetectorConstruction.cc
-/// \brief Implementation of the DetectorConstruction class
 //
-//
-// $Id: DetectorConstruction.cc,v 1.8 2009-04-24 15:47:13 gcosmo Exp $
+// $Id: G02DetectorConstruction.cc,v 1.8 2009-04-24 15:47:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Class DetectorConstruction implementation
+// Class G02DetectorConstruction implementation
 //
 // ----------------------------------------------------------------------------
 
-#include "DetectorConstruction.hh"
+#include "G02DetectorConstruction.hh"
 
 // Geant4 includes
 //
@@ -70,53 +70,53 @@
 
 // Volume parameterisations
 //
-#include "ChamberParameterisation.hh"
+#include "G02ChamberParameterisation.hh"
 
 // Messenger
 //
-#include "DetectorMessenger.hh"
+#include "G02DetectorMessenger.hh"
 
 // GDML parser include
 //
 #include "G4GDMLParser.hh"
 
-// ----------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 // Constructor
 //
-DetectorConstruction::DetectorConstruction()
-  : Air(0), Aluminum(0), Pb(0), Xenon(0)
+G02DetectorConstruction::G02DetectorConstruction()
+  : fAir(0), fAluminum(0), fPb(0), fXenon(0)
 {
-  expHall_x=5.*m;
+  fExpHall_x=5.*m;
   
   fReadFile ="test.gdml";
   fWriteFile="wtest.gdml";
   fStepFile ="mbb";
-  writingChoice=1;
+  fWritingChoice=1;
  
-  detectorMessenger = new DetectorMessenger( this );
+  fDetectorMessenger = new G02DetectorMessenger( this );
 }
 
-// ----------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 // Destructor
 //
-DetectorConstruction::~DetectorConstruction()
+G02DetectorConstruction::~G02DetectorConstruction()
 {
-  if(detectorMessenger) delete detectorMessenger;
+  if(fDetectorMessenger) delete fDetectorMessenger;
 }
 
-// ----------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 // Constructs geometries and materials
 //
-G4VPhysicalVolume* DetectorConstruction::Construct()
+G4VPhysicalVolume* G02DetectorConstruction::Construct()
 { 
   // Writing or Reading of Geometry using G4GDML
 
   G4VPhysicalVolume* fWorldPhysVol;
 
-  if(writingChoice==0)
+  if(fWritingChoice==0)
   {
     // **** LOOK HERE*** FOR READING GDML FILES
     //
@@ -124,15 +124,15 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     // ACTIVATING OVERLAP CHECK when read volumes are placed.
     // Can take long time in case of complex geometries
     //
-    // parser.SetOverlapCheck(true);
+    // fParser.SetOverlapCheck(true);
 
-    parser.Read(fReadFile);
+    fParser.Read(fReadFile);
 
     // READING GDML FILES OPTION: 2nd Boolean argument "Validate".
     // Flag to "false" disables check with the Schema when reading GDML file.
     // See the GDML Documentation for more information.
     //
-    // parser.Read(fReadFile,false);
+    // fParser.Read(fReadFile,false);
      
     // Prints the material information
     //
@@ -140,9 +140,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
          
     // Giving World Physical Volume from GDML Parser
     //
-    fWorldPhysVol = parser.GetWorldVolume();     
+    fWorldPhysVol = fParser.GetWorldVolume();     
   }
-  else if(writingChoice==1)
+  else if(fWritingChoice==1)
   {
     // **** LOOK HERE*** FOR WRITING GDML FILES
     // Detector Construction and WRITING to GDML
@@ -170,11 +170,11 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     //
     // or
     //
-    // parser.Write(fWriteFile, fWorldPhysVol, false);
+    // fParser.Write(fWriteFile, fWorldPhysVol, false);
     
     // Writing Geometry to GDML File
     //
-    parser.Write(fWriteFile, fWorldPhysVol);
+    fParser.Write(fWriteFile, fWorldPhysVol);
      
     // OPTION: SPECIFYING THE SCHEMA LOCATION
     //
@@ -188,7 +188,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     // You can change the Schema path by adding a parameter to the Write
     // command, as follows:
     //
-    // parser.Write(fWriteFile, fWorldPhysVol, "your-path-to-schema/gdml.xsd");
+    // fParser.Write(fWriteFile, fWorldPhysVol, "your-path-to-schema/gdml.xsd");
   }
   else   // Demonstration how to Read STEP files using GDML 
   {
@@ -198,23 +198,23 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
      // Arbitrary values that should enclose any reasonable geometry
      //
-     const G4double expHall_y = expHall_x/50.;
-     const G4double expHall_z = expHall_x/50.;
+     const G4double expHall_y = fExpHall_x/50.;
+     const G4double expHall_z = fExpHall_x/50.;
 
      // Create the hall
      //
      G4Box * experimentalHallBox
-       = new G4Box("ExpHallBox",expHall_x/50.,expHall_y,expHall_z);
+       = new G4Box("ExpHallBox",fExpHall_x/50.,expHall_y,expHall_z);
      G4LogicalVolume * experimentalHallLV
-       = new G4LogicalVolume(experimentalHallBox, Air,"ExpHallLV");
+       = new G4LogicalVolume(experimentalHallBox, fAir,"ExpHallLV");
      fWorldPhysVol
        = new G4PVPlacement(0, G4ThreeVector(0.0,0.0,0.0),
                            experimentalHallLV, "ExpHallPhys", 0, false, 0);
 
-     // DetectorConstruction via reading STEP File
+     // G02DetectorConstruction via reading STEP File
      //
      G4LogicalVolume* LogicalVolST
-       = parser.ParseST(fStepFile,Air,Aluminum);
+       = fParser.ParseST(fStepFile,fAir,fAluminum);
 
      // Placement inside of the hall
      //
@@ -230,11 +230,11 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   return fWorldPhysVol;
 }
 
-// ----------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 // Utility to build and list necessary materials
 //
-void DetectorConstruction::ListOfMaterials()
+void G02DetectorConstruction::ListOfMaterials()
 {
   G4double a;  // atomic mass
   G4double z;  // atomic number
@@ -261,23 +261,23 @@ void DetectorConstruction::ListOfMaterials()
   // Air
   //
   density = 1.29*mg/cm3;
-  Air = new G4Material(name="Air", density, ncomponents=2);
-  Air->AddElement(elN, fractionmass=0.7);
-  Air->AddElement(elO, fractionmass=0.3);
+  fAir = new G4Material(name="Air", density, ncomponents=2);
+  fAir->AddElement(elN, fractionmass=0.7);
+  fAir->AddElement(elO, fractionmass=0.3);
 
   // Aluminum
   //
   density = 2.70*g/cm3;
-  Aluminum = new G4Material(name="Aluminum", density, ncomponents=1);
-  Aluminum->AddElement(elAl, fractionmass=1.0);
+  fAluminum = new G4Material(name="Aluminum", density, ncomponents=1);
+  fAluminum->AddElement(elAl, fractionmass=1.0);
 
   // Lead
   //
-  Pb = new G4Material("Lead", z=82., a= 207.19*g/mole, density= 11.35*g/cm3);
+  fPb = new G4Material("Lead", z=82., a= 207.19*g/mole, density= 11.35*g/cm3);
 
   // Xenon gas
   //
-  Xenon = new G4Material("XenonGas", z=54., a=131.29*g/mole,
+  fXenon = new G4Material("XenonGas", z=54., a=131.29*g/mole,
                          density= 5.458*mg/cm3, kStateGas,
                          temperature= 293.15*kelvin, pressure= 1*atmosphere);
 
@@ -286,7 +286,7 @@ void DetectorConstruction::ListOfMaterials()
   G4cout << *(G4Material::GetMaterialTable() ) << G4endl;
 }
 
-// ----------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 // Detector Construction
 //
@@ -294,27 +294,27 @@ void DetectorConstruction::ListOfMaterials()
 // SubDetectors1 and 2 show how to use Reflection Factory and Assembly
 // SubDetectors 3 and 4 show how to use Parameterisation
 //
-G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
+G4VPhysicalVolume* G02DetectorConstruction::ConstructDetector()
 {
   // Arbitary values that should enclose any reasonable geometry
   //
-  const G4double expHall_y = expHall_x;
-  const G4double expHall_z = expHall_x;
+  const G4double expHall_y = fExpHall_x;
+  const G4double expHall_z = fExpHall_x;
 
   // Create the hall
   //
   G4Box * experimentalHallBox =
-      new G4Box("ExpHallBox", expHall_x, expHall_y, expHall_z);
+      new G4Box("ExpHallBox", fExpHall_x, expHall_y, expHall_z);
   G4LogicalVolume * experimentalHallLV =
-      new G4LogicalVolume(experimentalHallBox, Air, "ExpHallLV");
+      new G4LogicalVolume(experimentalHallBox, fAir, "ExpHallLV");
   G4PVPlacement * experimentalHallPhys =
       new G4PVPlacement(0, G4ThreeVector(0.0,0.0,0.0), experimentalHallLV,
                         "ExpHallPhys", 0, false, 0);
 
-  // DetectorConstruction
+  // G02DetectorConstruction
 
-  const G4double det_x = expHall_x*0.8;
-  const G4double det_y = expHall_x*0.7;
+  const G4double det_x = fExpHall_x*0.8;
+  const G4double det_y = fExpHall_x*0.7;
   const G4double det_z = det_y;
 
   // Create the detector box
@@ -322,28 +322,28 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
   G4Box * detectorBox =
       new G4Box("detectorBox", det_x, det_y, det_z);
   G4LogicalVolume * detectorLV =
-      new G4LogicalVolume(detectorBox, Air, "detLV");
+      new G4LogicalVolume(detectorBox, fAir, "detLV");
   // G4PVPlacement * detectorPhys = 
       new G4PVPlacement(0, G4ThreeVector(0.0,0.0,0.0), detectorLV,
                         "detPhys", experimentalHallLV, false, 0);
 
   // Create the Control room box
   //
-  const G4double room_x = expHall_x/20.;
+  const G4double room_x = fExpHall_x/20.;
   const G4double room_y = room_x;
   const G4double room_z = room_x;
 
   G4Box * roomBox =
       new G4Box("roomBox", room_x, room_y, room_z);
   G4LogicalVolume * roomLV =
-      new G4LogicalVolume(roomBox, Air, "roomLV");
+      new G4LogicalVolume(roomBox, fAir, "roomLV");
   // G4PVPlacement * roomPhys =
-      new G4PVPlacement(0, G4ThreeVector(expHall_x-room_x-10.,0.0,0.0), roomLV,
+      new G4PVPlacement(0, G4ThreeVector(fExpHall_x-room_x-10.,0.0,0.0), roomLV,
                         "roomPhys", experimentalHallLV, false, 0);
   
   // SubDetector1
   //
-  const G4double bigL=expHall_x/5.+50.;
+  const G4double bigL=fExpHall_x/5.+50.;
   G4LogicalVolume* subDetectorLV1 = ConstructSubDetector1();
   // G4PVPlacement * detPhys1 =
       new G4PVPlacement(0, G4ThreeVector(bigL,0.0,0.0), subDetectorLV1,
@@ -387,13 +387,13 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
   return experimentalHallPhys;
 }
 
-// ----------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 // SubDetector1
 //
-G4LogicalVolume* DetectorConstruction::ConstructSubDetector1()
+G4LogicalVolume* G02DetectorConstruction::ConstructSubDetector1()
 {    
-  const G4double sub_x = expHall_x/5.;
+  const G4double sub_x = fExpHall_x/5.;
   const G4double sub_y = sub_x;
 
   // Create the hall
@@ -401,7 +401,7 @@ G4LogicalVolume* DetectorConstruction::ConstructSubDetector1()
   G4Tubs * subTub =
     new G4Tubs("subTub", 0., sub_x, sub_y, -90.*deg, 180*deg);
   G4LogicalVolume * subTubLV =
-    new G4LogicalVolume(subTub, Pb, "tubLV");
+    new G4LogicalVolume(subTub, fPb, "tubLV");
   G4LogicalVolume *AssemblyLV = ConstructAssembly();
   // G4PVPlacement * detAss =
     new G4PVPlacement(0, G4ThreeVector(sub_x/3,0.0,0.0), AssemblyLV,
@@ -409,13 +409,13 @@ G4LogicalVolume* DetectorConstruction::ConstructSubDetector1()
   return subTubLV;  
 }  
 
-// ----------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 // SubDetector2
 //
-G4LogicalVolume* DetectorConstruction::ConstructSubDetector2()
+G4LogicalVolume* G02DetectorConstruction::ConstructSubDetector2()
 {    
-  const G4double sub_x = expHall_x/10.;
+  const G4double sub_x = fExpHall_x/10.;
   const G4double sub_y = sub_x*2.;
   const G4double sub_z = sub_x;
 
@@ -424,18 +424,18 @@ G4LogicalVolume* DetectorConstruction::ConstructSubDetector2()
   G4Box * detHallBox =
     new G4Box("detHallBox", sub_x, sub_y, sub_z);
   G4LogicalVolume * detHallLV =
-    new G4LogicalVolume(detHallBox, Aluminum, "detHallLV");
+    new G4LogicalVolume(detHallBox, fAluminum, "detHallLV");
 
   return detHallLV;  
 } 
 
-// ----------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 // Assembly
 //
-G4LogicalVolume* DetectorConstruction::ConstructAssembly()
+G4LogicalVolume* G02DetectorConstruction::ConstructAssembly()
 {    
-  const G4double big_x = expHall_x/17;
+  const G4double big_x = fExpHall_x/17;
   const G4double big_y = big_x;
   const G4double big_z = big_x;
 
@@ -444,7 +444,7 @@ G4LogicalVolume* DetectorConstruction::ConstructAssembly()
   G4Box * OuterBox =
     new G4Box("OuterBox", big_x, big_y, big_z);
   G4LogicalVolume * OuterBoxLV =
-    new G4LogicalVolume(OuterBox, Air, "OuterBoxLV");
+    new G4LogicalVolume(OuterBox, fAir, "OuterBoxLV");
   // G4PVPlacement * OuterBoxPhys = 
     new G4PVPlacement(0, G4ThreeVector(0.0,0.0,0.0), OuterBoxLV,
                       "OuterBoxPhys", 0, false, 0);
@@ -458,15 +458,15 @@ G4LogicalVolume* DetectorConstruction::ConstructAssembly()
   G4Box * BigBox =
     new G4Box("BBox", bigL, bigL, bigL);
   G4LogicalVolume * BigBoxLV =
-    new G4LogicalVolume(BigBox, Aluminum, "AlBigBoxLV");
+    new G4LogicalVolume(BigBox, fAluminum, "AlBigBoxLV");
   G4Box * MedBox =
     new G4Box("MBox", medL, medL, medL);
   G4LogicalVolume * MedBoxLV1 =
-    new G4LogicalVolume(MedBox, Aluminum, "AlMedBoxLV1");
+    new G4LogicalVolume(MedBox, fAluminum, "AlMedBoxLV1");
   G4Box * SmallBox =
     new G4Box("SBox", smalL, smalL, smalL);
   G4LogicalVolume * SmallBoxLV =
-    new G4LogicalVolume(SmallBox, Aluminum, "AlSmaBoxLV");
+    new G4LogicalVolume(SmallBox, fAluminum, "AlSmaBoxLV");
 
   const G4double bigPlace=bigL+10.;
   const G4double medPlace=medL+10.;
@@ -488,7 +488,7 @@ G4LogicalVolume* DetectorConstruction::ConstructAssembly()
   G4ReflectedSolid * ReflBig =
     new G4ReflectedSolid("Refll_Big", BigTube, transform);
   G4LogicalVolume * ReflBigLV =
-    new G4LogicalVolume(ReflBig, Xenon, "ReflBigAl");
+    new G4LogicalVolume(ReflBig, fXenon, "ReflBigAl");
    new G4PVPlacement(0, G4ThreeVector(0.,0.0,0.0), ReflBigLV,
                       "AlPhysBigTube", SmallBoxLV, false, 0); 
   //
@@ -532,13 +532,13 @@ G4LogicalVolume* DetectorConstruction::ConstructAssembly()
   return OuterBoxLV;  
 }
 
-// ----------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 // Parameterised Chamber
 //
-G4LogicalVolume* DetectorConstruction::ConstructParametrisationChamber()
+G4LogicalVolume* G02DetectorConstruction::ConstructParametrisationChamber()
 {    
-  const G4double chamber_x = expHall_x/12.;
+  const G4double chamber_x = fExpHall_x/12.;
   const G4double chamber_y = chamber_x;
   const G4double chamber_z = chamber_x;
 
@@ -547,7 +547,7 @@ G4LogicalVolume* DetectorConstruction::ConstructParametrisationChamber()
   G4Box * paramChamberBox =
     new G4Box("ChamberBox", chamber_x, chamber_y, chamber_z);
   G4LogicalVolume * paramChamberLV =
-    new G4LogicalVolume(paramChamberBox, Air, "ChamberLV");
+    new G4LogicalVolume(paramChamberBox, fAir, "ChamberLV");
 
   // Parametrisation Chamber (taken from N02 novice example)
   //
@@ -563,14 +563,14 @@ G4LogicalVolume* DetectorConstruction::ConstructParametrisationChamber()
   G4Box *solidChamber =
     new G4Box("chamber", 10*cm, 10*cm, 1*cm); 
   G4LogicalVolume* logicChamber =
-    new G4LogicalVolume(solidChamber, Aluminum, "Chamber", 0, 0, 0);
+    new G4LogicalVolume(solidChamber, fAluminum, "Chamber", 0, 0, 0);
     
   G4double firstPosition = -trackerSize + 0.5*ChamberWidth;
   G4double firstLength = fTrackerLength/10;
   G4double lastLength  = fTrackerLength;
 
   G4VPVParameterisation* chamberParam =
-    new ChamberParameterisation( NbOfChambers,          // NoChambers 
+    new G02ChamberParameterisation( NbOfChambers,          // NoChambers 
                                  firstPosition,         // Z of center of first 
                                  ChamberSpacing,        // Z spacing of centers
                                  ChamberWidth,          // Width Chamber 
@@ -586,32 +586,32 @@ G4LogicalVolume* DetectorConstruction::ConstructParametrisationChamber()
   return paramChamberLV;
 } 
 
-// ----------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 // SetReadFile
 //
-void DetectorConstruction::SetReadFile( const G4String& File )
+void G02DetectorConstruction::SetReadFile( const G4String& File )
 {
   fReadFile=File;
-  writingChoice=0;
+  fWritingChoice=0;
 }
 
-// ----------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 // SetWriteFile
 //
-void DetectorConstruction::SetWriteFile( const G4String& File )
+void G02DetectorConstruction::SetWriteFile( const G4String& File )
 {
   fWriteFile=File;
-  writingChoice=1;
+  fWritingChoice=1;
 }
 
-// ----------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 // SetStepFile
 //
-void DetectorConstruction::SetStepFile( const G4String& File )
+void G02DetectorConstruction::SetStepFile( const G4String& File )
 {
   fStepFile=File;
-  writingChoice=3;
+  fWritingChoice=3;
 }

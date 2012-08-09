@@ -23,41 +23,52 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G02/include/RunAction.hh
-/// \brief Definition of the RunAction class
+/// \file persistency/gdml/G02/include/DetectorMessenger.hh
+/// \brief Definition of the G02DetectorMessenger class
 //
 //
-// $Id: RunAction.hh,v 1.2 2008-12-18 12:57:00 gunter Exp $
+// $Id: G02DetectorMessenger.hh,v 1.1 2008-08-27 10:30:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Class RunAction
+// Class G02DetectorMessenger
 //
-// Simple run action class.
+// Utility messenger for defining run-time commands relative to the example.
 //
 // ----------------------------------------------------------------------------
 
-#ifndef RunAction_h
-#define RunAction_h 1
-
-#include <iostream>
+#ifndef G02DetectorMessenger_h
+#define G02DetectorMessenger_h 1
 
 #include "globals.hh"
-#include "G4UserRunAction.hh"
+#include "G4UImessenger.hh"
 
-class G4Run;
+class G02DetectorConstruction;
+class G4UIdirectory;
+class G4UIcmdWithAString;
+class G4UIcmdWithAnInteger;
 
 // ----------------------------------------------------------------------------
 
-class RunAction : public G4UserRunAction
+/// Detector messenger class used in GDML read/write example
+
+class G02DetectorMessenger: public G4UImessenger
 {
+
   public:
 
-    RunAction();
-   ~RunAction();
+    G02DetectorMessenger( G02DetectorConstruction* );
+   ~G02DetectorMessenger();
+    
+    void SetNewValue( G4UIcommand*, G4String );
+    void SetNewValue( G4UIcommand*, G4int );  
 
-    void BeginOfRunAction(const G4Run*);
-    void EndOfRunAction(const G4Run*);
-      
+  private:
+
+    G02DetectorConstruction*      fTheDetector;
+    G4UIdirectory*             fTheDetectorDir;
+    G4UIcmdWithAString*        fTheReadCommand;
+    G4UIcmdWithAString*        fTheWriteCommand;
+    G4UIcmdWithAString*        fTheStepCommand;
 };
 
 // ----------------------------------------------------------------------------

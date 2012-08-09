@@ -1,8 +1,12 @@
-$Id: README,v 1.2 2008-11-13 16:44:29 gcosmo Exp $
--------------------------------------------------------------------
+//$Id$
 
- Example of use GDML reader/writer in  Detector Construction
- -----------------------------------------------------------
+///\file "persistency/gdml/G02/.README"
+///\brief Example G02 README page
+
+/*! \page ExampleG02 Example G02
+
+
+\section G02_s1 EXAMPLE OF USE GDML READER/WRITER IN  DETECTOR CONSTRUCTION
 
  In this directory you can find a example showing how to use GDML module for
  reading and writing. It is also shown how to Read STEP Tools files.
@@ -18,31 +22,37 @@ $Id: README,v 1.2 2008-11-13 16:44:29 gcosmo Exp $
  Parameterisation. 
  Using commands or macros it possible to read or write GDML file.
   
- HOW TO BUILD THE EXAMPLE ?
+\section G02_s2 HOW TO BUILD THE EXAMPLE ?
  
+
  - You need to have built the persistency/gdml module by having
    set the -DGEANT4_USE_GDML=ON flag during the CMAKE configuration step, 
    as well as the -DXERCESC_ROOT_DIR=<path_to_xercesc> flag pointing to 
    the path where the XercesC XML parser package is installed in your system.
  
  - Compile and link to generate the executable (in your CMAKE build directory):
-               % make geotest
+\verbatim
+% make geotest
+\endverbatim
  
  - Execute the application:
-               % geotest [macro-file].mac
+\verbatim
+% geotest [macro-file].mac
+\endverbatim
 
  You can run this application with the following macro file:
    
-    write_gdml.mac : This macro will write the Geometry defined in file
+ -  write_gdml.mac : This macro will write the Geometry defined in file
                      "test.gdml" and output to a new file wtest.gdml
                      To change this name you can use command :
                      /mydet/writeFile FileName.gdml
 
-    read_gdml.mac : This macro will read the Geometry from file "test.gdml"
+ -  read_gdml.mac : This macro will read the Geometry from file "test.gdml"
                      To change this name you can use command :
                      /mydet/readFile FileName.gdml
 
-    read_step.mac : This macro will read the STEP Tool files "mbb.geom" and
+ -  read_step.mac : This macro will read the STEP Tool files "mbb.geom" and
                     "mbb.tree" and load them in memory.
                      To change this name you can use command :
                      /mydet/StepFile FileName
+*/

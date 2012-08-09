@@ -23,27 +23,27 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G02/src/ChamberParameterisation.cc
-/// \brief Implementation of the ChamberParameterisation class
+/// \file persistency/gdml//src/G02G02ChamberParameterisation.cc
+/// \brief Implementation of the G02ChamberParameterisation class
 //
 //
-// $Id: ChamberParameterisation.cc,v 1.2 2008-12-18 12:57:02 gunter Exp $
+// $Id: G02ChamberParameterisation.cc,v 1.2 2008-12-18 12:57:02 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Class ChamberParameterisation implementation
+// Class G02ChamberParameterisation implementation
 //
 // ----------------------------------------------------------------------------
 
-#include "ChamberParameterisation.hh"
+#include "G02ChamberParameterisation.hh"
 
 #include "G4ThreeVector.hh"
 #include "G4Box.hh"
 #include "G4VPhysicalVolume.hh"
 
-// ----------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ChamberParameterisation::
-ChamberParameterisation( G4int    NoChambers, 
+G02ChamberParameterisation::
+G02ChamberParameterisation( G4int    NoChambers, 
                          G4double startZ,          //  Z of center of first 
                          G4double spacingZ,        //  Z spacing of centers
                          G4double widthChamber, 
@@ -61,21 +61,21 @@ ChamberParameterisation( G4int    NoChambers,
     fHalfLengthIncr = 0.5 * (lengthFinal-lengthInitial)/NoChambers;
     if (spacingZ < widthChamber)
     {
-      G4Exception("ExN02ChamberParameterisation::ChamberParameterisation()",
+      G4Exception("ExN02G02ChamberParameterisation::G02ChamberParameterisation()",
                   "InvalidSetup", FatalException,
                   "Invalid construction: Width>Spacing");
     }
   }
 }
 
-// ----------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ChamberParameterisation::~ChamberParameterisation()
+G02ChamberParameterisation::~G02ChamberParameterisation()
 {}
 
-// ----------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ChamberParameterisation::
+void G02ChamberParameterisation::
 ComputeTransformation (const G4int copyNo, G4VPhysicalVolume* physVol) const
 {
   G4double Zposition = fStartZ + (copyNo+1) * fSpacing;
@@ -84,9 +84,9 @@ ComputeTransformation (const G4int copyNo, G4VPhysicalVolume* physVol) const
   physVol->SetRotation(0);
 }
 
-// ----------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ChamberParameterisation::
+void G02ChamberParameterisation::
 ComputeDimensions (G4Box& trackerChamber, const G4int copyNo,
                    const G4VPhysicalVolume*) const
 {
@@ -96,4 +96,4 @@ ComputeDimensions (G4Box& trackerChamber, const G4int copyNo,
   trackerChamber.SetZHalfLength(fHalfWidth);
 }
 
-// ----------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

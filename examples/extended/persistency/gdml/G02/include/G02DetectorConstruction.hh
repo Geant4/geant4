@@ -23,21 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G02/include/DetectorConstruction.hh
-/// \brief Definition of the DetectorConstruction class
+/// \file persistency/gdml/G02/include/G02DetectorConstruction.hh
+/// \brief Definition of the G02DetectorConstruction class
 //
 //
-// $Id: DetectorConstruction.hh,v 1.1 2008-08-27 10:30:18 gcosmo Exp $
+// $Id: G02DetectorConstruction.hh,v 1.1 2008-08-27 10:30:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Class DetectorConstruction
+// Class G02DetectorConstruction
 //
 // A detector construction class loading the geometry from GDML files.
 //
 // ----------------------------------------------------------------------------
 
-#ifndef DetectorConstruction_H
-#define DetectorConstruction_H 1
+#ifndef G02DetectorConstruction_H
+#define G02DetectorConstruction_H 1
 
 
 #include "G4VUserDetectorConstruction.hh"
@@ -47,18 +47,20 @@
 
 #include "globals.hh"
 
-class DetectorMessenger;
+class G02DetectorMessenger;
 
 // ----------------------------------------------------------------------------
 
-class DetectorConstruction : public G4VUserDetectorConstruction
+/// Detector construction used in GDML read/write example
+
+class G02DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
 
     // Constructor and destructor
     //
-    DetectorConstruction();
-   ~DetectorConstruction();
+    G02DetectorConstruction();
+   ~G02DetectorConstruction();
 
     // Construction of SubDetectors
     //
@@ -84,29 +86,29 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
   private:
 
-    G4Material* Air ;
-    G4Material* Aluminum ;
-    G4Material* Pb;
-    G4Material* Xenon;
+    G4Material* fAir ;
+    G4Material* fAluminum ;
+    G4Material* fPb;
+    G4Material* fXenon;
 
     // GDMLparser
     //
-    G4GDMLParser parser;
+    G4GDMLParser fParser;
         
     // Reading and Writing Settings
     //
     G4String fReadFile;
     G4String fWriteFile;
     G4String fStepFile;
-    G4int writingChoice;
+    G4int fWritingChoice;
 
     // Detector Messenger
     //
-    DetectorMessenger* detectorMessenger;
+    G02DetectorMessenger* fDetectorMessenger;
       
     // World Dimentions
     //
-    G4double expHall_x; 
+    G4double fExpHall_x; 
 };
 
 // ----------------------------------------------------------------------------

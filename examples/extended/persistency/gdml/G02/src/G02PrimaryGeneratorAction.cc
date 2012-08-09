@@ -23,54 +23,55 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G02/src/RunAction.cc
-/// \brief Implementation of the RunAction class
+/// \file persistency/gdml//src/G02G02PrimaryGeneratorAction.cc
+/// \brief Implementation of the G02PrimaryGeneratorAction class
 //
 //
-// $Id: RunAction.cc,v 1.1 2008-08-27 10:30:18 gcosmo Exp $
+// $Id: G02PrimaryGeneratorAction.cc,v 1.2 2008-12-18 12:57:08 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Class RunAction implementation
+// Class G02PrimaryGeneratorAction implementation
 //
 // ----------------------------------------------------------------------------
 
-#include "G4ios.hh"
-#include <iomanip>
+#include "G02PrimaryGeneratorAction.hh"
 
 #include "globals.hh"
-#include "Randomize.hh"
-#include "RunAction.hh"
+#include "G4ParticleDefinition.hh"
 
-#include "G4Run.hh"
-#include "G4UImanager.hh"
-#include "G4VVisManager.hh"
-#include "G4VisAttributes.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// ----------------------------------------------------------------------------
-
-RunAction::RunAction()
-{ 
-}
-
-// ----------------------------------------------------------------------------
-
-RunAction::~RunAction()
+G02PrimaryGeneratorAction::G02PrimaryGeneratorAction()
 {
+  // Particle gun and particle table 
+  //
+  fParticleGun = new G4ParticleGun();
+  fParticleTable = G4ParticleTable::GetParticleTable();
+
+  // Default particle
+  //
+  fParticleGun->SetParticleDefinition(fParticleTable->FindParticle("geantino"));
+  fParticleGun->SetParticleEnergy( 1.0*MeV );
+
+  G4ThreeVector err1=G4ThreeVector(-1260,-560,40); // outside
+  G4ThreeVector err2=G4ThreeVector(100,-240,120);  // inside
+  G4ThreeVector err2v=(err2-err1).unit();
+  
+  fParticleGun->SetParticleMomentumDirection(err2v);
+  fParticleGun->SetParticlePosition(err1);
+
 }
 
-// ----------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::BeginOfRunAction(const G4Run* aRun)
-{  
-  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
-}
-
-// ----------------------------------------------------------------------------
-
-void RunAction::EndOfRunAction(const G4Run*)
+G02PrimaryGeneratorAction::~G02PrimaryGeneratorAction()
 {
-  if (G4VVisManager::GetConcreteInstance())
-  {
-    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-  } 
+  delete fParticleGun;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G02PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
+{
+  fParticleGun->GeneratePrimaryVertex(anEvent);
 }
