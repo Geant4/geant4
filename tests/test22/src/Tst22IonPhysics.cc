@@ -30,7 +30,8 @@
 // 
 
 #include "Tst22IonPhysics.hh"
-
+#include "G4HadronElastic.hh"
+#include "G4HadronElasticProcess.hh"
 #include "globals.hh"
 #include "G4ios.hh"
 #include <iomanip>   
@@ -67,13 +68,12 @@ void Tst22IonPhysics::ConstructProcess()
   G4ProcessManager * pManager = 0;
   
   // Elastic Process
-  theElasticModel = new G4LElastic();
-  theElasticProcess.RegisterMe(theElasticModel);
+  G4HadronElasticProcess* theElasticProcess = new G4HadronElasticProcess();
+  theElasticProcess->RegisterMe(new G4HadronElastic());
 
   // Generic Ion
   pManager = G4GenericIon::GenericIon()->GetProcessManager();
   // add process
-  pManager->AddDiscreteProcess(&theElasticProcess);
 
   pManager->AddProcess(&fIonIonisation, ordInActive, 2, 2);
 
@@ -84,7 +84,7 @@ void Tst22IonPhysics::ConstructProcess()
   // Deuteron 
   pManager = G4Deuteron::Deuteron()->GetProcessManager();
   // add process
-  pManager->AddDiscreteProcess(&theElasticProcess);
+  pManager->AddDiscreteProcess(theElasticProcess);
 
   fDeuteronModel = new G4LEDeuteronInelastic();
   fDeuteronProcess.RegisterMe(fDeuteronModel);
@@ -99,7 +99,7 @@ void Tst22IonPhysics::ConstructProcess()
   // Triton 
   pManager = G4Triton::Triton()->GetProcessManager();
   // add process
-  pManager->AddDiscreteProcess(&theElasticProcess);
+  pManager->AddDiscreteProcess(theElasticProcess);
 
   fTritonModel = new G4LETritonInelastic();
   fTritonProcess.RegisterMe(fTritonModel);
@@ -114,7 +114,7 @@ void Tst22IonPhysics::ConstructProcess()
   // Alpha 
   pManager = G4Alpha::Alpha()->GetProcessManager();
   // add process
-  pManager->AddDiscreteProcess(&theElasticProcess);
+  pManager->AddDiscreteProcess(theElasticProcess);
 
   fAlphaModel = new G4LEAlphaInelastic();
   fAlphaProcess.RegisterMe(fAlphaModel);
@@ -129,7 +129,7 @@ void Tst22IonPhysics::ConstructProcess()
   // He3
   pManager = G4He3::He3()->GetProcessManager();
   // add process
-  pManager->AddDiscreteProcess(&theElasticProcess);
+  //pManager->AddDiscreteProcess(theElasticProcess);
 
   pManager->AddProcess(&fHe3Ionisation, ordInActive, 2, 2);
 

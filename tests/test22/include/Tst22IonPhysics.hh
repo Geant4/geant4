@@ -45,9 +45,6 @@
 
 #include "G4VPhysicsConstructor.hh"
 
-#include "G4HadronElasticProcess.hh"
-#include "G4LElastic.hh"
-
 #include "G4DeuteronInelasticProcess.hh"
 #include "G4LEDeuteronInelastic.hh"
 
@@ -77,9 +74,6 @@ class Tst22IonPhysics : public G4VPhysicsConstructor
     virtual void ConstructProcess();
 
   protected:
-   // Elastic Process
-   G4HadronElasticProcess theElasticProcess;
-   G4LElastic*            theElasticModel;
 
    // Generic Ion physics
    G4hMultipleScattering   fIonMultipleScattering;
