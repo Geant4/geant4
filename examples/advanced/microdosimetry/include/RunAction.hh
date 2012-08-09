@@ -40,12 +40,13 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class G4Run;
+class TrackingAction;
 
 class RunAction : public G4UserRunAction
 {
 public:
   
-  RunAction(DetectorConstruction*, HistoManager *);
+  RunAction(DetectorConstruction*, HistoManager *, TrackingAction* trackingAction);
   ~RunAction();
 
   void BeginOfRunAction(const G4Run*);
@@ -55,6 +56,7 @@ private:
 
   DetectorConstruction* Detector;    
   HistoManager* Histo;
+  TrackingAction* TrackingAct;
   
 };
 #endif

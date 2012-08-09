@@ -56,6 +56,11 @@ public:
   ~DetectorConstruction();
 
   G4VPhysicalVolume* Construct();
+
+  G4Region* GetTargetRegion()
+  {
+      return fRegion;
+  }
                          
 private:
    

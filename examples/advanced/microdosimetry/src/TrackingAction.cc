@@ -24,56 +24,73 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: RunAction.cc,v 1.2 2010-10-06 14:39:41 sincerti Exp $
+// $Id$
 // -------------------------------------------------------------------
 
-#include "RunAction.hh"
-#include "G4Run.hh"
 #include "TrackingAction.hh"
-#include "G4ParticleDefinition.hh"
+#include "G4Track.hh"
+#include "G4VSolid.hh"
+#include "G4Region.hh"
+#include "G4Electron.hh"
+#include "G4Gamma.hh"
+#include "DetectorConstruction.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+using namespace std;
 
-RunAction::RunAction(DetectorConstruction* det, HistoManager* his, TrackingAction* trackingAction)
-    :Detector(det),Histo(his),TrackingAct(trackingAction)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-RunAction::~RunAction()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void RunAction::BeginOfRunAction(const G4Run*)
-{  
-  // Histograms
-  Histo->book();
-}
- 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void PrintNParticles(std::map<const G4ParticleDefinition*, int>& container)
+TrackingAction::TrackingAction(DetectorConstruction* detector)
 {
-    std::map<const G4ParticleDefinition*, int>::iterator it;
-    for(it = container.begin() ;
-        it != container.end(); it ++)
+    fDetector = detector;
+    fTargetRegion = 0;
+}
+
+TrackingAction::~TrackingAction()
+{
+    fDetector = 0;
+    fTargetRegion = 0;
+}
+
+void TrackingAction::PreUserTrackingAction(const G4Track* track)
+{
+    const G4ParticleDefinition* particleDefinition = track->GetParticleDefinition();
+
+    if(particleDefinition == G4Electron::Definition() || particleDefinition == G4Gamma::Definition())
     {
-        G4cout << "N " << it->first->GetParticleName() << " : " << it->second << G4endl;
+        if(fTargetRegion == 0) // target region is initialized after detector construction instantiation
+        {
+            fTargetRegion = fDetector->GetTargetRegion();
+        }
+
+        const G4ThreeVector& position = track->GetPosition();
+
+        int N =  fTargetRegion->GetNumberOfRootVolumes();
+        std::vector<G4LogicalVolume*>::iterator it_logicalVolumeInRegion =
+                fTargetRegion->GetRootLogicalVolumeIterator();
+
+        bool inside_target = false;
+
+        for(int i = 0; i < N ; i++, it_logicalVolumeInRegion++)
+        {
+            EInside test_status = (*it_logicalVolumeInRegion)->GetSolid()->Inside(position) ;
+            if(test_status == kInside)
+            {
+                inside_target = true;
+                break;
+            }
+            /*
+            else if (test_status == kSurface)
+            {
+            }
+            */
+        }
+
+        if(inside_target == true)
+        {
+            fNParticleInTarget[particleDefinition]++;
+        }
+        else
+        {
+            fNParticleInWorld[particleDefinition]++;
+        }
     }
 }
 
-void RunAction::EndOfRunAction(const G4Run*)
-{
-  //save histograms      
-  Histo->save();
-
-  std::map<const G4ParticleDefinition*, int>&  particlesCreatedInWorld = TrackingAct->GetNParticlesCreatedInWorld();
-  G4cout << "Number and type of particles created outside region \"Target\" :" << G4endl;
-  PrintNParticles(particlesCreatedInWorld);
-
-  G4cout << "_______________________" << G4endl;
-  std::map<const G4ParticleDefinition*, int>&  particlesCreatedInTarget = TrackingAct->GetNParticlesCreatedInTarget();
-  G4cout << "Number and type of particles created in region \"Target\" :" << G4endl;
-  PrintNParticles(particlesCreatedInTarget);
-}

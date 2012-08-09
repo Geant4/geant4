@@ -10,6 +10,10 @@ $Id: History,v 1.24 2010-11-18 11:48:21 allison Exp $
                        --------------------
 
 
+23 July 2012 - M. Karamitros -  microdosimetry-V09-04-07
+- Added TrackingAction (count N secondaries created in/outside
+  "target" region) + Modified related classes (RunAct and main)
+
 18 August 2011 - S. Incerti -  microdosimetry-V09-04-06
 - Added scoring of msc 
 

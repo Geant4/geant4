@@ -24,56 +24,48 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: RunAction.cc,v 1.2 2010-10-06 14:39:41 sincerti Exp $
+// $Id$
 // -------------------------------------------------------------------
 
-#include "RunAction.hh"
-#include "G4Run.hh"
-#include "TrackingAction.hh"
-#include "G4ParticleDefinition.hh"
+#ifndef TRACKINGACTION_HH
+#define TRACKINGACTION_HH
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+#include "G4UserTrackingAction.hh"
+#include <map>
 
-RunAction::RunAction(DetectorConstruction* det, HistoManager* his, TrackingAction* trackingAction)
-    :Detector(det),Histo(his),TrackingAct(trackingAction)
-{}
+class G4Region;
+class G4ParticleDefinition;
+class DetectorConstruction;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-RunAction::~RunAction()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void RunAction::BeginOfRunAction(const G4Run*)
-{  
-  // Histograms
-  Histo->book();
-}
- 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void PrintNParticles(std::map<const G4ParticleDefinition*, int>& container)
+class TrackingAction : public G4UserTrackingAction
 {
-    std::map<const G4ParticleDefinition*, int>::iterator it;
-    for(it = container.begin() ;
-        it != container.end(); it ++)
+public:
+    TrackingAction(DetectorConstruction* detector = 0);
+    ~TrackingAction();
+
+    virtual void PreUserTrackingAction(const G4Track*);
+
+    void SetDetector(DetectorConstruction* detector)
     {
-        G4cout << "N " << it->first->GetParticleName() << " : " << it->second << G4endl;
+        fDetector = detector;
     }
-}
 
-void RunAction::EndOfRunAction(const G4Run*)
-{
-  //save histograms      
-  Histo->save();
+    std::map<const G4ParticleDefinition*, int>& GetNParticlesCreatedInTarget()
+    {
+        return fNParticleInTarget;
+    }
 
-  std::map<const G4ParticleDefinition*, int>&  particlesCreatedInWorld = TrackingAct->GetNParticlesCreatedInWorld();
-  G4cout << "Number and type of particles created outside region \"Target\" :" << G4endl;
-  PrintNParticles(particlesCreatedInWorld);
+    std::map<const G4ParticleDefinition*, int>& GetNParticlesCreatedInWorld()
+    {
+        return fNParticleInWorld;
+    }
 
-  G4cout << "_______________________" << G4endl;
-  std::map<const G4ParticleDefinition*, int>&  particlesCreatedInTarget = TrackingAct->GetNParticlesCreatedInTarget();
-  G4cout << "Number and type of particles created in region \"Target\" :" << G4endl;
-  PrintNParticles(particlesCreatedInTarget);
-}
+private:
+    DetectorConstruction* fDetector;
+    G4Region* fTargetRegion;
+    std::map<const G4ParticleDefinition*, int> fNParticleInTarget;
+    std::map<const G4ParticleDefinition*, int> fNParticleInWorld;
+};
+
+
+#endif // TRACKINGACTION_HH
