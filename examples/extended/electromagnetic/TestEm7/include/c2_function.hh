@@ -708,9 +708,9 @@ public:
 		{ this->set_function(&f); return f; }
 private:
 	/// \brief hidden non-const-safe version of operator=
-	void operator =(const c2_const_ptr<float_type> &f) { }
+	void operator =(const c2_const_ptr<float_type> &) { }
 	/// \brief hidden non-const-safe version of operator=
-	void operator =(const c2_function<float_type> &f) { }
+	void operator =(const c2_function<float_type> &) { }
 };
 
 /// \brief create a non-generic container for a c2_function which handles the reference counting.
@@ -756,9 +756,9 @@ public:
 		{ this->set_function(&f); }
 private:
 	/// \brief hidden downcasting version of operator=
-	void operator =(const c2_const_ptr<float_type> &f) { }
+	void operator =(const c2_const_ptr<float_type> &) { }
 	/// \brief hidden downcasting version of operator=. Use an explicit dynamic_cast<c2_class<float_type>&>(f) if you need to try this.
-	void operator =(const c2_function<float_type> &f) { }
+	void operator =(const c2_function<float_type> &) { }
 };
 
 /// \brief a container into which any other c2_function can be dropped, to allow expressions
@@ -1135,7 +1135,7 @@ template <typename float_type> class c2_constant_p : public c2_function<float_ty
 public:
 	c2_constant_p(float_type x) : c2_function<float_type>(), value(x) {}
 	void reset(float_type val) { value=val; }
-	virtual float_type value_with_derivatives(float_type x, float_type *yprime, float_type *yprime2) const throw(c2_exception) 
+	virtual float_type value_with_derivatives(float_type, float_type *yprime, float_type *yprime2) const throw(c2_exception) 
 	{ if(yprime) *yprime=0; if(yprime2) *yprime2=0; return value; }
 	
 private:
