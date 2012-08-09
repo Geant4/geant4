@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11-07-12 V.Ivant (testem10-V09-05-01)
+- Em10RunAction - cleanup initialisation
+
+10-07-12 V.Ivant (testem10-V09-05-00)
+- Em10RunAction - fixed write outside boundaries of C-array 
+
 03-10-11 G.Folger (testem10-V09-04-00)
 - Fix gcc46 compilation warning in Em10PrimaryGeneratorAction.cc 
     and src/Em10Materials.cc
