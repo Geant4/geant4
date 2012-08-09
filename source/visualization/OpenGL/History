@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+8th August 2012  John Allison  (opengl-V09-05-29)
+- G4OpenGLQtViewer.cc: Fixed "unused parameter" warning.
+
 8th August 2012  John Allison  (opengl-V09-05-28, coworks interfaces-V09-05-09)
 - Tagged.
 

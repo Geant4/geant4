@@ -3217,7 +3217,7 @@ void G4OpenGLQtViewer::changeDepthInSceneTree (int val){
 
 }
 
-void G4OpenGLQtViewer::changeColorAndTransparency(QTreeWidgetItem* item,int val) {
+void G4OpenGLQtViewer::changeColorAndTransparency(QTreeWidgetItem*,int) {
   QColor old = QColor(fSceneTreeComponentTreeWidget->selectedItems().first()->text(5));
   old.setAlphaF((fSceneTreeComponentTreeWidget->selectedItems().first()->text(4)).toDouble());
   QColor color = QColorDialog::getColor(old,
