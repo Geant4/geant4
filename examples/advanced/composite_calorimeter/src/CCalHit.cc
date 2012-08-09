@@ -76,8 +76,8 @@ void         CCalHit::setUnitID (unsigned int i) { theUnitID = i; }
 
 double       CCalHit::getTimeSlice() const       {return theTimeSlice; }
 void         CCalHit::setTimeSlice (double d)    { theTimeSlice = d; }
-int          CCalHit::getTimeSliceID() const     {return (int)theTimeSlice;}
-
+int          CCalHit::getTimeSliceID() const     { if ( theTimeSlice > 1.0E9 ) return 999999999;
+                                                   return (int)theTimeSlice;}
 
 void CCalHit::setEnergyDeposit(const double e) { 
   theEnergyDeposit = e; 
