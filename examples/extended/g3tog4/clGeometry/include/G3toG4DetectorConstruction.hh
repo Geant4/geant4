@@ -33,18 +33,17 @@
 #ifndef G3toG4DetectorConstruction_h
 #define G3toG4DetectorConstruction_h 1
 
-//--------------------------------------------------------------------------
-// G3toG4DetectorConstruction. Most the work is Done in
-// G4BuildGeom, which returns a G4LogicalVolume*, a pointer to the
-// top-level logiical volume in the detector defined by the call List file
-// inFile
-//--------------------------------------------------------------------------
-
 #include "G4VUserDetectorConstruction.hh"
 #include "G4PVPlacement.hh"
 #include "G4LogicalVolume.hh"
 #include "G3G4Interface.hh"
 #include "globals.hh"
+
+/// Detector construction class. 
+///
+/// Most the work is done in G4BuildGeom(), which returns a pointer to 
+/// the top-level logical volume in the detector defined by 
+/// the call list file inFile.
 
 class G3toG4DetectorConstruction : public G4VUserDetectorConstruction
 {
