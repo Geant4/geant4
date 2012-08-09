@@ -42,6 +42,8 @@ class G4Event;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+/// Event action for the persistency example
+
 class ExP01EventAction : public G4UserEventAction
 {
   public:

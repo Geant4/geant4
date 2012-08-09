@@ -43,6 +43,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+/// Hit implementation for the persistency example
+
 class ExP01TrackerHit : public G4VHit
 {
   public:

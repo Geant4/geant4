@@ -43,6 +43,8 @@ class G4ParticleGun;
 class G4Event;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+/// Primary generator action for the persistency example
  
 class ExP01PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {

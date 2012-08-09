@@ -40,6 +40,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+/// Stepping action for the persistency example
+
 class ExP01SteppingAction : public G4UserSteppingAction
 {
   public:

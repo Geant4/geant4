@@ -43,6 +43,8 @@
 
 class G4Run;
 
+/// Run action for the persistency example
+
 class ExP01RunAction : public G4UserRunAction
 {
   public:

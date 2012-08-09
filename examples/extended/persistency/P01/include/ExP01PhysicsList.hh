@@ -41,6 +41,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+/// Physics list for the persistency example
+
 class ExP01PhysicsList: public G4VUserPhysicsList
 {
   public:

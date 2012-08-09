@@ -44,6 +44,8 @@
  *  @date   2005-10-27
  */
 
+/// Root IO implementation for the persistency example
+
 class RootIO 
 {
 public: 

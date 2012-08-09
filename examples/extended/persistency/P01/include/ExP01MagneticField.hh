@@ -46,6 +46,7 @@ class G4FieldManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+/// Magnetic field for the persistency example
 
 class ExP01MagneticField: public G4UniformMagField
 {

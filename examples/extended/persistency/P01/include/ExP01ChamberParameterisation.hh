@@ -62,6 +62,8 @@ class G4Polyhedra;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+/// Chamber parameterisation for the persistency example 
+
 class ExP01ChamberParameterisation : public G4VPVParameterisation
 { 
   public:

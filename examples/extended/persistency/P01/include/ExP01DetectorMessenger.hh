@@ -46,6 +46,8 @@ class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+/// Detector messenger for the persistency example
+
 class ExP01DetectorMessenger: public G4UImessenger
 {
   public:

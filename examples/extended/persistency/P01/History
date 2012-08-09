@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+August 1st, 2012 W. Pokorski (exampleP01-V09-05-05)
+- cosmetic changes for the examples code review
+
 June 10th, 2012 P. Mato (exampleP01-V09-05-04)
 - disable building example if only static libraries are build
 

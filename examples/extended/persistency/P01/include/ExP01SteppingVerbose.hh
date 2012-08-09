@@ -46,6 +46,8 @@ class ExP01SteppingVerbose;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+/// Stepping verbose for the persistency example
+
 class ExP01SteppingVerbose : public G4SteppingVerbose 
 {
  public:

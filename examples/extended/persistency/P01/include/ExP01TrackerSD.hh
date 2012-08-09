@@ -44,6 +44,8 @@ class G4HCofThisEvent;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+/// Sensitive detector implementation for the ROOT hits persistency example
+
 class ExP01TrackerSD : public G4VSensitiveDetector
 {
   public:
@@ -55,8 +57,8 @@ class ExP01TrackerSD : public G4VSensitiveDetector
       void EndOfEvent(G4HCofThisEvent*);
 
   private:
-      ExP01TrackerHitsCollection* trackerCollection;
-
+      ExP01TrackerHitsCollection* fTrackerCollection;
+      G4int fHCID;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

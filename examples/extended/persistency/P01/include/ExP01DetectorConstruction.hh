@@ -48,6 +48,8 @@ class ExP01DetectorMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+/// Detector Construction for the persistency example
+
 class ExP01DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
