@@ -1,0 +1,28 @@
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Test 68 History file
+                    --------------------
+This file should be used by the test developer to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+08 Aug 2012 Alberto Ribon                test68-V09-05-02
+- Fixed small mistake.
+
+08 Aug 2012 Alberto Ribon                test68-V09-05-01
+- Can be built with CMake and ready for CTest.
+
+
+08 Aug 2012 Alberto Ribon                test68-V09-05-00
+- Created new test for the reproducibility of FTFP_BERT.
+  In this first version, only GNUmakefile (no CMake), and the
+  tests are steered by a shell script (not working on Windows),
+  which calls a Python script (also not working on Windows).
+

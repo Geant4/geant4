@@ -1,0 +1,22 @@
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            Test68
+                            ------
+
+Description:    reproducibility tests of FTFP_BERT.
+                It does 10 checks of reproducibility for each
+                of the following 5 cases of single hadrons
+                impinging on a simplified calorimeter:
+                  1.  20 GeV  kaon0L  on  Fe-Sci
+                  2.  20 GeV  pion-   on  Cu-LAr
+                  3.  20 GeV  neutron on  Pb-Sci
+                  4.  20 GeV  proton  on  W-LAr
+                  5.  20 GeV  kaon-   on  PbWO4
+
+Type of test:   run to completion
+
+Output:         run log
+
