@@ -55,7 +55,7 @@ RE02IonPhysics::~RE02IonPhysics()
 #include "G4ParticleTable.hh"
 
 #include "G4ProcessManager.hh"
-
+#include "G4HadronElastic.hh"
 
 void RE02IonPhysics::ConstructProcess()
 {
@@ -103,8 +103,7 @@ void RE02IonPhysics::ConstructProcess()
    // add process
    G4HadronElasticProcess* thedueElasticProcess
                          = new G4HadronElasticProcess();
-   G4LElastic* thedueElasticModel = new G4LElastic();
-   thedueElasticProcess->RegisterMe(thedueElasticModel);
+   thedueElasticProcess->RegisterMe(new G4HadronElastic());
    pManager->AddDiscreteProcess(thedueElasticProcess);
 
    G4DeuteronInelasticProcess* theDeuteronInelasticProcess
@@ -135,8 +134,7 @@ void RE02IonPhysics::ConstructProcess()
    // add process
    G4HadronElasticProcess* thetriElasticProcess
                          = new G4HadronElasticProcess();
-   G4LElastic* thetriElasticModel = new G4LElastic();
-   thetriElasticProcess->RegisterMe(thetriElasticModel);
+   thetriElasticProcess->RegisterMe(new G4HadronElastic());
    pManager->AddDiscreteProcess(thetriElasticProcess);
 
    G4TritonInelasticProcess* theTritonInelasticProcess
@@ -167,8 +165,7 @@ void RE02IonPhysics::ConstructProcess()
    // add processes
    G4HadronElasticProcess* thealElasticProcess
                          = new G4HadronElasticProcess();
-   G4LElastic* thealElasticModel = new G4LElastic();
-   thealElasticProcess->RegisterMe(thealElasticModel);
+   thealElasticProcess->RegisterMe(new G4HadronElastic());
    pManager->AddDiscreteProcess(thealElasticProcess);
 
    G4AlphaInelasticProcess* theAlphaInelasticProcess
@@ -197,12 +194,6 @@ void RE02IonPhysics::ConstructProcess()
    pManager = G4He3::He3()->GetProcessManager();
 
    // add processes
-   G4HadronElasticProcess* thehe3ElasticProcess
-                         = new G4HadronElasticProcess();
-   G4LElastic* thehe3ElasticModel = new G4LElastic();
-   thehe3ElasticProcess->RegisterMe(thehe3ElasticModel);
-   pManager->AddDiscreteProcess(thehe3ElasticProcess);
-
    G4VProcess* thehe3MultipleScattering = new G4hMultipleScattering();
    G4VProcess* thehe3Ionisation        = new G4hIonisation();
    //
