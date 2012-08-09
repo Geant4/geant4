@@ -47,7 +47,7 @@
 #include "G4AlphaInelasticProcess.hh"
 
 // models
-#include "G4LElastic.hh"
+#include "G4HadronElastic.hh"
 #include "G4LEDeuteronInelastic.hh"
 #include "G4LETritonInelastic.hh"
 #include "G4LEAlphaInelastic.hh"
@@ -74,8 +74,7 @@ void RE01IonPhysics::ConstructProcess()
   // Hadronic Elastic Process and Model (for all ions except generic ion)
 
   G4HadronElasticProcess* elasticProcess = new G4HadronElasticProcess();
-  G4LElastic* elasticModel = new G4LElastic();
-  elasticProcess->RegisterMe(elasticModel);
+  elasticProcess->RegisterMe(new G4HadronElastic());
 
   // Hadronic inelastic models
 
@@ -136,7 +135,7 @@ void RE01IonPhysics::ConstructProcess()
   pManager->AddProcess(new G4hIonisation(),        -1, 2, 2);
 
   // hadron elastic 
-  pManager->AddDiscreteProcess(elasticProcess);
+  // pManager->AddDiscreteProcess(elasticProcess);
 
   // NO INELASTIC PROCESS AVAILABLE FOR 3HE
 

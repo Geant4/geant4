@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Jul. 28, 2012 Vladimir Ivanchenko (exampleRE01-V09-05-00)
+- Fixed elastic physics
+
 Sep. 28, 2011 Pere Mato (exampleRE01-V09-04-00)
 - Changed SVN property eol to native for file sample.err needed for testing
 
