@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19/07/2012 I. Hrivnacova (excommon-V09-05-01)
+- Fix in the scripts (copying files from shared with an extension)
+
 05/06/2012 I. Hrivnacova (excommon-V09-05-00)
 - Updated scripts for copying shared files; the shared files are now
   defined in the SharedFilesList.txt file

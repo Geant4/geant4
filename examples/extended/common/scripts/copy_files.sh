@@ -165,7 +165,7 @@ for WORD in `cat SharedFilesList.txt`; do
     if [ $NEXT_SHARED_CLASSES_LIST = "yes" ]; then
       where $WORD
       if [ "$WHERE" != "" -a  "$WHERE" != "nowhere" ]; then
-        copy_file $WORD $COMMON_CLASSES_PATH $WHERE "SHARED"
+        copy_file $WORD $SHARED_CLASSES_PATH $WHERE "SHARED"
       else 
         copy_file $WORD$EXTH $SHARED_CLASSES_PATH include "SHARED"
         copy_file $WORD$EXTC $SHARED_CLASSES_PATH src "SHARED"

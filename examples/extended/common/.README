@@ -1,12 +1,9 @@
-$Id$
--------------------------------------------------------------------
+//$Id$
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+///\file "common/.README"
+///\brief Common classes README page
 
-                Common Classes for Extended Examples
-                -------------------------------------
+/*! \page Examples_common Common Classes for Extended Examples
 
   In order to reduce code duplication and to reduce the number of variants of 
   the code of same kind, we define a set of common classes which
@@ -14,25 +11,28 @@ $Id$
   This module is going to be enhanced in future. Currently it provides 
   the following sets of classes:
 
-  - analysis
+  - \ref extended_common_analysis :
     - ExG4HbookAnalysisManager - the analysis manager class for HBOOK
       As this class requires CERNLIB libraries, its compilation
       is optional. To build it, the following environment variables
       must be defined:
-      G4_USE_HBOOK = 1
-      CERNLIB = path to the CERNLIB installation
+\verbatim      
+G4_USE_HBOOK = 1
+CERNLIB = path to the CERNLIB installation
+\endverbatim
   
-  - detectorConstruction
+  - \ref extended_common_detectorConstruction :
     - two simple detector construction classes with a messenger
   
-  - physicsList
+  - \ref extended_common_physicsList :
     - ExG4PhysicsList00 - physics list with geantino and chargedgeantino only
   
-  - primaryGenerator
+  - \ref extended_common_primaryGenerator :
     - two simple primary generator classes (with G4ParticleGun and
       G4ParticleGeneralSource)
   
-  - userActions:
+  - \ref extended_common_userActions :
     - event action and run action classes with messengers
 
+*/
 
