@@ -20,6 +20,10 @@ committal in the CVS repository !
 History file for visualization/OpenInventor
 -------------------------------------------
 
+8th August 2012  John Allison  (openinventor-V09-05-06)
+- G4OpenInventorSceneHandler.cc:
+  o Intercepted 2D primitives - JustWarning printed.
+
 3rd July 2012  John Allison  (openinventor-V09-05-05)
 - Fixed some Coverity warnings.
 

@@ -57,6 +57,8 @@ protected:
   void KernelVisitDecision ();
   G4bool CompareForKernelVisit(G4ViewParameters&);
   void DrawDisplayLists ();
+  virtual void DisplayTimePOColourModification
+  (G4Colour&, size_t /*currentPOListIndex*/) {}
   G4OpenGLStoredSceneHandler& fG4OpenGLStoredSceneHandler;
   G4ViewParameters fLastVP;  // Memory for making kernel visit decisions.
 

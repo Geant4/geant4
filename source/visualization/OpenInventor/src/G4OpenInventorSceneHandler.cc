@@ -184,6 +184,18 @@ void G4OpenInventorSceneHandler::BeginPrimitives
 //
 void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyline& line)
 {
+  if (fProcessing2D) {
+    static G4bool warned = false;
+    if (!warned) {
+      warned = true;
+      G4Exception
+	("G4OpenInventorSceneHandler::AddPrimitive (const G4Polyline&)",
+	 "OpenInventor-0001", JustWarning,
+	 "2D polylines not implemented.  Ignored.");
+    }
+    return;
+  }
+
   AddProperties(line.GetVisAttributes());  // Transformation, colour, etc.
 
   G4int nPoints = line.size();
@@ -226,6 +238,18 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyline& line)
 
 void G4OpenInventorSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
 {
+  if (fProcessing2D) {
+    static G4bool warned = false;
+    if (!warned) {
+      warned = true;
+      G4Exception
+	("G4OpenInventorSceneHandler::AddPrimitive (const G4Polymarker&)",
+	 "OpenInventor-0002", JustWarning,
+	 "2D polymarkers not implemented.  Ignored.");
+    }
+    return;
+  }
+
   AddProperties(polymarker.GetVisAttributes()); // Transformation, colour, etc.
 
   G4int pointn = polymarker.size();
@@ -336,6 +360,18 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
 //
 void G4OpenInventorSceneHandler::AddPrimitive (const G4Text& text)
 {
+  if (fProcessing2D) {
+    static G4bool warned = false;
+    if (!warned) {
+      warned = true;
+      G4Exception
+	("G4OpenInventorSceneHandler::AddPrimitive (const G4Text&)",
+	 "OpenInventor-0003", JustWarning,
+	 "2D text not implemented.  Ignored.");
+    }
+    return;
+  }
+
   AddProperties(text.GetVisAttributes());  // Transformation, colour, etc.
 
   //
@@ -405,6 +441,18 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Square& square) {
 void G4OpenInventorSceneHandler::AddCircleSquare
 (G4OIMarker markerType, const G4VMarker& marker)
 {
+  if (fProcessing2D) {
+    static G4bool warned = false;
+    if (!warned) {
+      warned = true;
+      G4Exception
+	("G4OpenInventorSceneHandler::AddCircleSquare",
+	 "OpenInventor-0004", JustWarning,
+	 "2D circles and squares not implemented.  Ignored.");
+    }
+    return;
+  }
+
   AddProperties(marker.GetVisAttributes());  // Transformation, colour, etc.
 
   MarkerSizeType sizeType;
@@ -494,6 +542,18 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron)
 {
   if (polyhedron.GetNoFacets() == 0) return;
 
+  if (fProcessing2D) {
+    static G4bool warned = false;
+    if (!warned) {
+      warned = true;
+      G4Exception
+	("G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron&)",
+	 "OpenInventor-0005", JustWarning,
+	 "2D polyhedra not implemented.  Ignored.");
+    }
+    return;
+  }
+
   AddProperties(polyhedron.GetVisAttributes()); // Transformation, colour, etc.
 
   SoG4Polyhedron* soPolyhedron = new SoG4Polyhedron(polyhedron);
@@ -520,6 +580,18 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron)
 // Knots and Ctrl Pnts MUST be arrays of GLfloats.
 //
 void G4OpenInventorSceneHandler::AddPrimitive (const G4NURBS& nurb) {
+
+  if (fProcessing2D) {
+    static G4bool warned = false;
+    if (!warned) {
+      warned = true;
+      G4Exception
+	("G4OpenInventorSceneHandler::AddPrimitive (const G4NURBS&)",
+	 "OpenInventor-0006", JustWarning,
+	 "2D NURBS not implemented.  Ignored.");
+    }
+    return;
+  }
 
   AddProperties(nurb.GetVisAttributes()); // Transformation, colour, etc.
 

@@ -20,6 +20,10 @@ committal in the CVS repository !
 History file for visualization/VRML sub-category
 ------------------------------------------------
 
+8th August 2012  John Allison  (VRML-V09-05-05)
+- G4VRML1/2SceneHandlerFunc.icc;
+  o Intercepted 2D primitives - JustWarning printed.
+
 5th July 2012  Gabriele Cosmo  (VRML-V09-05-04)
 - Explicitly use inclusion of headers for system of units and physical
   constants, in plan to remove implicit inclusion from globals.hh.
