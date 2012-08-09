@@ -16,6 +16,18 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27/07/2012 I. Hrivnacova (excommon-analysis-V09-05-02)
+- Adding an additional information to analysis objects:
+  units, activation option (defined in G4HnInformation.hh)
+- Make possible to book histograms/ntuple before openning a file
+  (using new h1_booking, h2_booking and tools::ntuple_booking classes)
+- Using new bN::configure functions in SetHN(..)  
+- Messages from Fill functions only in verbose level 3
+- Fixes in memory management 
+  delete file before opening a new one (all)
+  delete ntuple before closing a file 
+- Based on g4tools 1.3.1 (by G. Barrand) - see History_tools  
+
 23/02/2012 I. Hrivnacova (excommon-analysis-V09-05-01)
 - Added functions to customize the HBOOK IDs by user:
      G4bool SetH1HbookIdOffset(G4int offset);

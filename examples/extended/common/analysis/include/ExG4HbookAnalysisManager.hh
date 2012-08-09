@@ -58,6 +58,37 @@ namespace G4Hbook {
   typedef ExG4HbookAnalysisManager G4AnalysisManager; 
 } 
 
+struct h1_booking {
+  h1_booking(G4int nbins, G4double xmin, G4double xmax)
+    : fTitle(""),
+      fNbins(nbins), 
+      fXmin(xmin), 
+      fXmax(xmax) {}
+  G4String fTitle;    
+  G4int fNbins;
+  G4double fXmin;
+  G4double fXmax;
+};  
+  
+struct h2_booking {
+  h2_booking(G4int nxbins, G4double xmin, G4double xmax,
+             G4int nybins, G4double ymin, G4double ymax)
+    : fTitle(""),
+      fNxbins(nxbins), 
+      fXmin(xmin), 
+      fXmax(xmax),
+      fNybins(nybins), 
+      fYmin(ymin), 
+      fYmax(ymax) {}
+  G4String fTitle;    
+  G4int fNxbins;
+  G4double fXmin;
+  G4double fXmax;
+  G4int fNybins;
+  G4double fYmin;
+  G4double fYmax;
+};    
+
 /// HBook Analysis manager
 ///
 /// The class implements the G4VAnalysisManager manager for HBook.
@@ -74,17 +105,28 @@ class ExG4HbookAnalysisManager : public G4VAnalysisManager
     static ExG4HbookAnalysisManager* Instance();
   
     // Methods to manipulate files
+    using G4VAnalysisManager::OpenFile;
     virtual G4bool OpenFile(const G4String& fileName);
     virtual G4bool Write();
     virtual G4bool CloseFile(); 
    
     // Methods to create histogrammes, ntuples
     virtual G4int CreateH1(const G4String& name, const G4String& title,
-                           G4int nbins, G4double xmin, G4double xmax);
+                           G4int nbins, G4double xmin, G4double xmax,
+                           G4double unit = 1.0);
     virtual G4int CreateH2(const G4String& name, const G4String& title,
                            G4int nxbins, G4double xmin, G4double xmax, 
-                           G4int nybins, G4double ymin, G4double ymax);
+                           G4int nybins, G4double ymin, G4double ymax,
+                           G4double xunit = 1.0, G4double yunit = 1.0);
 
+    virtual G4bool SetH1(G4int id,
+                           G4int nbins, G4double xmin, G4double xmax,
+                           G4double unit = 1.0);
+    virtual G4bool SetH2(G4int id,
+                           G4int nxbins, G4double xmin, G4double xmax, 
+                           G4int nybins, G4double ymin, G4double ymax,
+                           G4double xunit = 1.0, G4double yunit = 1.0);
+                           
     virtual void  CreateNtuple(const G4String& name, const G4String& title);
     virtual G4int CreateNtupleIColumn(const G4String& name);
     virtual G4int CreateNtupleFColumn(const G4String& name);
@@ -101,8 +143,10 @@ class ExG4HbookAnalysisManager : public G4VAnalysisManager
     virtual G4bool AddNtupleRow();
     
     // Access methods
-    virtual tools::hbook::h1*  GetH1(G4int id, G4bool warn = true) const;
-    virtual tools::hbook::h2*  GetH2(G4int id, G4bool warn = true) const;
+    virtual tools::hbook::h1*  GetH1(G4int id, G4bool warn = true,
+                                      G4bool onlyIfActive = true) const;
+    virtual tools::hbook::h2*  GetH2(G4int id, G4bool warn = true,
+                                      G4bool onlyIfActive = true) const;
     virtual tools::hbook::wntuple* GetNtuple() const;
     //tools::hbook::h1*  GetH1(const G4String& name, G4bool warn = true) const;
     
@@ -127,6 +171,9 @@ class ExG4HbookAnalysisManager : public G4VAnalysisManager
     G4int  GetH2HbookIdOffset() const;
     G4int  GetNtupleHbookId() const;
         
+  protected:
+    virtual G4bool WriteOnAscii(std::ofstream& output);
+
   private:
     // static data members
     //
@@ -137,10 +184,19 @@ class ExG4HbookAnalysisManager : public G4VAnalysisManager
     
     // methods
     //
+    void SetH1HbookIdOffset();
+    void SetH2HbookIdOffset();
+    void CreateH1FromBooking();
+    void CreateH2FromBooking();
+    void CreateNtupleFromBooking();
     tools::hbook::wntuple::column<int>*    GetNtupleIColumn(G4int id) const;
     tools::hbook::wntuple::column<float>*  GetNtupleFColumn(G4int id) const;
     tools::hbook::wntuple::column<double>* GetNtupleDColumn(G4int id) const;
+    void Reset();
  
+    virtual h1_booking* GetH1Booking(G4int id, G4bool warn = true) const;
+    virtual h2_booking* GetH2Booking(G4int id, G4bool warn = true) const;
+
     // data members
     //
     G4int fH1HbookIdOffset;
@@ -149,15 +205,13 @@ class ExG4HbookAnalysisManager : public G4VAnalysisManager
 
     tools::hbook::wfile*  fFile;
     
-    std::vector<tools::hbook::h1*>         fH1Vector;            
-    std::map<G4String, tools::hbook::h1*>  fH1MapByName;            
+    std::vector<tools::hbook::h1*>  fH1Vector;            
+    std::vector<tools::hbook::h2*>  fH2Vector;            
+    std::vector<h1_booking*>  fH1BookingVector;            
+    std::vector<h2_booking*>  fH2BookingVector;            
 
-    std::vector<tools::hbook::h2*>         fH2Vector;            
-    std::map<G4String, tools::hbook::h2*>  fH2MapByName;            
-
-    G4String  fNtupleName;
-    G4String  fNtupleTitle;
     tools::hbook::wntuple*  fNtuple; 
+    tools::ntuple_booking*  fNtupleBooking; 
     std::map<G4int, tools::hbook::wntuple::column<int>* >    fNtupleIColumnMap;           
     std::map<G4int, tools::hbook::wntuple::column<float>* >  fNtupleFColumnMap;           
     std::map<G4int, tools::hbook::wntuple::column<double>* > fNtupleDColumnMap;           
