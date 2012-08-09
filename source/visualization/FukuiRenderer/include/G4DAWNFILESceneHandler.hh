@@ -211,12 +211,6 @@ public:
 			G4int		ival4  ,
 			const char*	char_string );
 
-  void	SendStrDouble3Str(	const char*	char_string1 ,
-				G4double	dval1  ,
-				G4double	dval2  ,
-				G4double	dval3  ,
-				const char*	char_string2 );
-
   void	SendStrDouble6Str(	const char*	char_string1 ,
 				G4double	dval1  ,
 				G4double	dval2  ,

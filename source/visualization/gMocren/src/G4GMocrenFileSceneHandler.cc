@@ -528,17 +528,6 @@ void G4GMocrenFileSceneHandler::AddPrimitive (const G4Polyline& polyline)
   if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** AddPrimitive" << G4endl;
 
-  if (fProcessing2D) {
-    static G4bool warned = false;
-    if (!warned) {
-      warned = true;
-      G4Exception
-	("G4GMocrenFileSceneHandler::AddPrimitive (const G4Polyline&)",
-	 "gMocren1001", JustWarning,
-	 "2D polylines not implemented.  Ignored.");
-    }
-    return;
-  }
 
   //----- Initialize if necessary
   GFBeginModeling();
@@ -631,18 +620,6 @@ void G4GMocrenFileSceneHandler::AddPrimitive (const G4NURBS&)
 //----- Add text
 void G4GMocrenFileSceneHandler::AddPrimitive ( const G4Text& text )
 {
-  if (fProcessing2D) {
-    static G4bool warned = false;
-    if (!warned) {
-      warned = true;
-      G4Exception
-	("G4GMocrenFileSceneHandler::AddPrimitive (const G4Text&)",
-	 "gMocren1002", JustWarning,
-	 "2D text not implemented.  Ignored.");
-    }
-    return;
-  }
-
   // to avoid a warning in the compile process
   G4Text dummytext = text;
 
@@ -662,18 +639,6 @@ void G4GMocrenFileSceneHandler::AddPrimitive ( const G4Circle& mark_circle )
   // to avoid a warning in the compile process
   G4Circle dummycircle = mark_circle;
 
-  if (fProcessing2D) {
-    static G4bool warned = false;
-    if (!warned) {
-      warned = true;
-      G4Exception
-	("G4GMocrenFileSceneHandler::AddPrimitive (const G4Circle&)",
-	 "gMocren1003", JustWarning,
-	 "2D circles not implemented.  Ignored.");
-    }
-    return;
-  }
-
   //----- 
   if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** AddPrimitive( G4Circle )" << G4endl;
@@ -690,18 +655,6 @@ void G4GMocrenFileSceneHandler::AddPrimitive (const G4Square& mark_square )
 {
   // to avoid a warning in the compile process
   G4Square dummysquare = mark_square;
-
-  if (fProcessing2D) {
-    static G4bool warned = false;
-    if (!warned) {
-      warned = true;
-      G4Exception
-	("G4GMocrenFileSceneHandler::AddPrimitive (const G4Square&)",
-	 "gMocren1004", JustWarning,
-	 "2D squares not implemented.  Ignored.");
-    }
-    return;
-  }
 
   //----- 
   if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
@@ -722,18 +675,6 @@ void G4GMocrenFileSceneHandler::AddPrimitive ( const G4Polyhedron& polyhedron )
 
 
   if (polyhedron.GetNoFacets() == 0) return;
-
-  if (fProcessing2D) {
-    static G4bool warned = false;
-    if (!warned) {
-      warned = true;
-      G4Exception
-	("G4GMocrenFileSceneHandler::AddPrimitive (const G4Polyhedron&)",
-	 "gMocren1005", JustWarning,
-	 "2D polyhedra not implemented.  Ignored.");
-    }
-    return;
-  }
 
   //----- Initialize if necessary
   GFBeginModeling();

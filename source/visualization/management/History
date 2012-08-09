@@ -26,13 +26,6 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
-8th August 2012  John Allison  (visman-V09-05-26)
-- Tagged.
-
-6th August 2012  John Allison
-- G4VisCommandsSceneAdd.cc:
-  o /vis/scene/add/frame: Fixed bug in SetParameterRange.
-
 17th July 2012  John Allison  (visman-V09-05-25)
 - Tagged.
 

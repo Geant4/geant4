@@ -124,7 +124,6 @@ protected:
     G4int fDisplayListId;
     G4Transform3D fTransform;
     GLuint fPickName;
-    G4Colour fColour;
     G4TextPlus* fpG4TextPlus;
     G4bool fDisplayOnSecondPassForTransparency;
   };

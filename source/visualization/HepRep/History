@@ -20,9 +20,6 @@ committal in the CVS repository !
 History file for visualization/HepRep sub-category
 --------------------------------------------------
 
-8th August 2012  John Allison  (vis-HepRep-V09-05-05 and 06)
-- G4HepRepSceneHandler.cc: Intercepted 2D primitives.
-
 5th July 2012  Gabriele Cosmo  (vis-HepRep-V09-05-04)
 - Explicitly use inclusion of headers for system of units and physical
   constants, in plan to remove implicit inclusion from globals.hh.

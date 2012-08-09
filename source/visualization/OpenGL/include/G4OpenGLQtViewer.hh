@@ -68,7 +68,6 @@ class QTreeWidget;
 class QColor;
 class G4OpenGLSceneHandler;
 class G4OpenGLQtMovieDialog;
-class QLineEdit;
 
 class G4OpenGLQtViewer: public QObject, virtual public G4OpenGLViewer {
 
@@ -187,14 +186,12 @@ private:
                                      QTreeWidgetItem * treeNode,
                                      G4Colour color);
   QString getModelShortName(G4String modelShortName);
-  void cloneSceneTree(QTreeWidgetItem* rootItem);
+  void cloneSceneTree(QTreeWidgetItem* rootItem, QTreeWidgetItem* parent);
   void changeDepthOnSceneTreeItem(double lookForDepth,double currentDepth,QTreeWidgetItem* item);
   void updateQuickVisibilityMap(int POindex,Qt::CheckState checkState);
   bool isSameSceneTreeElement(QTreeWidgetItem* parentOldItem,QTreeWidgetItem* parentNewItem);
   void changeOpenCloseVisibleHiddenSelectedSceneTreeElement(QTreeWidgetItem* subItem);
   bool isPVVolume(QTreeWidgetItem* item);
-  QTreeWidgetItem* cloneWidgetItem(QTreeWidgetItem* item);
-  void clearSceneTreeSelection(QTreeWidgetItem*);
 
   QMenu *fContextMenu;
   mouseActions fMouseAction; // 1: rotate 2:move 3:pick 4:shortcuts 
@@ -245,7 +242,7 @@ private:
   QTreeWidget* fSceneTreeComponentTreeWidget;
   QWidget* fSceneTreeWidget;
   bool fPVRootNodeCreate;
-  QLineEdit* fHelpLine;
+
 
   QTreeWidget* fOldSceneTreeOpenComponentTreeWidget;
   QTreeWidget* fOldSceneTreeCloseComponentTreeWidget;
@@ -315,8 +312,6 @@ private Q_SLOTS :
   void sceneTreeComponentSelected();
   void changeTransparencyOnItem(int);
   void changeDepthInSceneTree(int);
-  void changeSearchSelection();
-  void changeColorAndTransparency(QTreeWidgetItem* item,int val);
   // Only use for Qt>4.0
   //  void dialogClosed();
 };

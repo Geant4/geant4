@@ -215,8 +215,6 @@ void G4OpenGLImmediateSceneHandler::BeginPrimitives2D
   glLoadIdentity();
   G4OpenGLTransform3D oglt (objectTransformation);
   glMultMatrixd (oglt.GetGLMatrix ());
-  glDisable(GL_DEPTH_TEST);  // But see parent scene handler!!  In
-  glDisable (GL_LIGHTING);   // some cases, we need to re-iterate this.
 }
 
 void G4OpenGLImmediateSceneHandler::EndPrimitives2D()

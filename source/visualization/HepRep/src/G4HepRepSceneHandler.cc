@@ -773,18 +773,6 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyline& line) {
 #endif
     if (dontWrite()) return;
 
-    if (fProcessing2D) {
-      static G4bool warned = false;
-      if (!warned) {
-	warned = true;
-	G4Exception
-	  ("G4HepRepSceneHandler::AddPrimitive (const G4Polyline&)",
-	   "vis-HepRep1001", JustWarning,
-	   "2D polylines not implemented.  Ignored.");
-      }
-      return;
-    }
-
     HepRepInstance* instance = factory->createHepRepInstance(getEventInstance(), getTrajectoryType());
 
     addAttributes(instance, getTrajectoryType());
@@ -808,18 +796,6 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polymarker& line) {
     cout << "G4HepRepSceneHandler::AddPrimitive(G4Polymarker&) " << line.size() << endl;
 #endif
     if (dontWrite()) return;
-
-    if (fProcessing2D) {
-      static G4bool warned = false;
-      if (!warned) {
-	warned = true;
-	G4Exception
-	  ("G4HepRepSceneHandler::AddPrimitive (const G4Polymarker&)",
-	   "vis-HepRep1002", JustWarning,
-	   "2D polymarkers not implemented.  Ignored.");
-      }
-      return;
-    }
 
     HepRepInstance* instance = factory->createHepRepInstance(getEventInstance(), getHitType());
 
@@ -859,18 +835,6 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Circle& circle) {
 #endif
     if (dontWrite()) return;
 
-    if (fProcessing2D) {
-      static G4bool warned = false;
-      if (!warned) {
-	warned = true;
-	G4Exception
-	  ("G4HepRepSceneHandler::AddPrimitive (const G4Circle&)",
-	   "vis-HepRep1003", JustWarning,
-	   "2D circles not implemented.  Ignored.");
-      }
-      return;
-    }
-
     HepRepInstance* instance = factory->createHepRepInstance(getEventInstance(), getHitType());
 
     addAttributes(instance, getHitType());
@@ -893,18 +857,6 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     cout << "G4HepRepSceneHandler::AddPrimitive(G4Polyhedron&) " << endl;
 #endif
     if (dontWrite()) return;
-
-    if (fProcessing2D) {
-      static G4bool warned = false;
-      if (!warned) {
-	warned = true;
-	G4Exception
-	  ("G4HepRepSceneHandler::AddPrimitive (const G4Polyhedron&)",
-	   "vis-HepRep1004", JustWarning,
-	   "2D polyhedra not implemented.  Ignored.");
-      }
-      return;
-    }
 
     G4Normal3D surfaceNormal;
     G4Point3D vertex;
@@ -956,20 +908,6 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Text&) {
 #endif
     if (dontWrite()) return;
 
-    /*** You may need this
-    if (fProcessing2D) {
-      static G4bool warned = false;
-      if (!warned) {
-	warned = true;
-	G4Exception
-	  ("G4HepRepSceneHandler::AddPrimitive (const G4Text&)",
-	   "vis-HepRep1005", JustWarning,
-	   "2D text not implemented.  Ignored.");
-      }
-      return;
-    }
-    ***/
-
     cout << "G4HepRepSceneHandler::AddPrimitive G4Text : not yet implemented. " << endl;
 }
 
@@ -979,18 +917,6 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Square& square) {
     cout << "G4HepRepSceneHandler::AddPrimitive(G4Square&) " << endl;
 #endif
     if (dontWrite()) return;
-
-    if (fProcessing2D) {
-      static G4bool warned = false;
-      if (!warned) {
-	warned = true;
-	G4Exception
-	  ("G4HepRepSceneHandler::AddPrimitive (const G4Square&)",
-	   "vis-HepRep1006", JustWarning,
-	   "2D squares not implemented.  Ignored.");
-      }
-      return;
-    }
 
     HepRepInstance* instance = factory->createHepRepInstance(getEventInstance(), getHitType());
 
@@ -1012,20 +938,6 @@ void G4HepRepSceneHandler::AddPrimitive (const G4NURBS&) {
     cout << "G4HepRepSceneHandler::AddPrimitive(G4NURBS&) " << endl;
 #endif
     if (dontWrite()) return;
-
-    /*** You may need this
-    if (fProcessing2D) {
-      static G4bool warned = false;
-      if (!warned) {
-	warned = true;
-	G4Exception
-	  ("G4HepRepSceneHandler::AddPrimitive (const G4NURBS&)",
-	   "vis-HepRep1007", JustWarning,
-	   "2D NURBS not implemented.  Ignored.");
-      }
-      return;
-    }
-    ***/
 
     cout << "G4HepRepSceneHandler::AddPrimitive G4NURBS : not yet implemented. " << endl;
 }

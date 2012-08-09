@@ -68,7 +68,6 @@ G4OpenGLStoredSceneHandler::PO::PO(const G4OpenGLStoredSceneHandler::PO& po):
   fDisplayListId(po.fDisplayListId),
   fTransform(po.fTransform),
   fPickName(po.fPickName),
-  fColour(po.fColour),
   fpG4TextPlus(po.fpG4TextPlus? new G4TextPlus(*po.fpG4TextPlus): 0),
   fDisplayOnSecondPassForTransparency(po.fDisplayOnSecondPassForTransparency)
 {}
@@ -93,7 +92,6 @@ G4OpenGLStoredSceneHandler::PO& G4OpenGLStoredSceneHandler::PO::operator=
   fDisplayListId = rhs.fDisplayListId;
   fTransform = rhs.fTransform;
   fPickName = rhs.fPickName;
-  fColour = rhs.fColour;
   fpG4TextPlus = rhs.fpG4TextPlus? new G4TextPlus(*rhs.fpG4TextPlus): 0;
   fDisplayOnSecondPassForTransparency =
     rhs.fDisplayOnSecondPassForTransparency;
@@ -267,15 +265,8 @@ G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible
     } else {
       PO po(fDisplayListId, fObjectTransformation);
       po.fPickName = fPickName;
-      po.fColour = c;
       po.fDisplayOnSecondPassForTransparency = fSecondPassForTransparency;
       fPOList.push_back(po);
-      // For permanent objects, colour is kept in the PO, so should
-      // *not* be in the display list.  This is so that sub-classes
-      // may implement colour modifications according to their own
-      // criteria, e.g., scen tree slider in Qt.  But for now set
-      // colour for immediate display.
-      glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
       G4bool usesGLCommands = ExtraPOProcessing(visible, fPOList.size() - 1);
       // Transients are displayed as they come (GL_COMPILE_AND_EXECUTE
       // above) but persistents are compiled into display lists
@@ -288,6 +279,7 @@ G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible
       // POList.
       if (!usesGLCommands) return false;
       glNewList (fDisplayListId, GL_COMPILE);
+      glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
     }
   } else {  // Out of memory (or being used when display lists not required).
     glDrawBuffer (GL_FRONT);
@@ -309,8 +301,6 @@ G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible
     glLoadIdentity();
     G4OpenGLTransform3D oglt (fObjectTransformation);
     glMultMatrixd (oglt.GetGLMatrix ());
-    glDisable(GL_DEPTH_TEST);  // But see parent scene handler!!  In
-    glDisable (GL_LIGHTING);   // some cases, we need to re-iterate this.
   }
 
   return true;
@@ -592,7 +582,6 @@ void G4OpenGLStoredSceneHandler::RequestPrimitives (const G4VSolid& solid)
 	fPickMap[++fPickName] = holder;
 	po.fPickName = fPickName;
       }
-      po.fColour = c;
       po.fDisplayOnSecondPassForTransparency = fSecondPassForTransparency;
       fPOList.push_back(po);
       // No need to test if gl commands are used (result of

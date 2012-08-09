@@ -77,9 +77,7 @@
 #include <qcolordialog.h>
 #include <qevent.h> //include <qcontextmenuevent.h>
 #include <qobject.h>
-#include <qgroupbox.h>
-#include <qcombobox.h>
-#include <qlineedit.h>
+
 
 //////////////////////////////////////////////////////////////////////////////
 void G4OpenGLQtViewer::CreateMainWindow (
@@ -215,7 +213,6 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
   ,fSceneTreeComponentTreeWidget(NULL)
   ,fSceneTreeWidget(NULL)
   ,fPVRootNodeCreate(false)
-  ,fHelpLine(NULL)
   ,fOldSceneTreeOpenComponentTreeWidget(NULL)
   ,fOldSceneTreeCloseComponentTreeWidget(NULL)
   ,fOldSceneTreeVisibleComponentTreeWidget(NULL)
@@ -1035,9 +1032,9 @@ void G4OpenGLQtViewer::actionChangeBackgroundColor() {
   if (color.isValid()) {
     QString com = "/vis/viewer/set/background ";
     QString num;
-    com += num.setNum(((float)color.red())/255)+" ";
-    com += num.setNum(((float)color.green())/255)+" ";
-    com += num.setNum(((float)color.blue())/255)+" ";
+    com += num.setNum(((float)color.red())/256)+" ";
+    com += num.setNum(((float)color.green())/256)+" ";
+    com += num.setNum(((float)color.blue())/256)+" ";
     G4UImanager::GetUIpointer()->ApplyCommand(com.toStdString().c_str());
     updateQWidget();
   }
@@ -1050,9 +1047,9 @@ void G4OpenGLQtViewer::actionChangeTextColor() {
   if (color.isValid()) {
     QString com = "/vis/viewer/set/defaultTextColour ";
     QString num;
-    com += num.setNum(((float)color.red())/255)+" ";
-    com += num.setNum(((float)color.green())/255)+" ";
-    com += num.setNum(((float)color.blue())/255)+" ";
+    com += num.setNum(((float)color.red())/256)+" ";
+    com += num.setNum(((float)color.green())/256)+" ";
+    com += num.setNum(((float)color.blue())/256)+" ";
     G4UImanager::GetUIpointer()->ApplyCommand(com.toStdString().c_str());
     updateQWidget();
   }
@@ -1065,9 +1062,9 @@ void G4OpenGLQtViewer::actionChangeDefaultColor() {
   if (color.isValid()) {
     QString com = "/vis/viewer/set/defaultColour ";
     QString num;
-    com += num.setNum(((float)color.red())/255)+" ";
-    com += num.setNum(((float)color.green())/255)+" ";
-    com += num.setNum(((float)color.blue())/255)+" ";
+    com += num.setNum(((float)color.red())/256)+" ";
+    com += num.setNum(((float)color.green())/256)+" ";
+    com += num.setNum(((float)color.blue())/256)+" ";
     G4UImanager::GetUIpointer()->ApplyCommand(com.toStdString().c_str());
     updateQWidget();
   }
@@ -2292,13 +2289,11 @@ void G4OpenGLQtViewer::initSceneTreeComponent(){
   fSceneTreeComponentTreeWidget->setColumnHidden (2,true);  // PO index
   fSceneTreeComponentTreeWidget->setColumnHidden (3,true);  // Informations
   fSceneTreeComponentTreeWidget->setColumnHidden (4,true);  // Alpha
-  fSceneTreeComponentTreeWidget->setColumnHidden (5,true);  // Hex color name
   
   layoutSceneTreeComponentsTBWidget->addWidget(fSceneTreeComponentTreeWidget);
 
   connect(fSceneTreeComponentTreeWidget,SIGNAL(itemChanged(QTreeWidgetItem*, int)),SLOT(sceneTreeComponentItemChanged(QTreeWidgetItem*, int)));
   connect(fSceneTreeComponentTreeWidget,SIGNAL(itemSelectionChanged ()),SLOT(sceneTreeComponentSelected()));
-  connect(fSceneTreeComponentTreeWidget,SIGNAL(itemDoubleClicked ( QTreeWidgetItem*, int)),SLOT(changeColorAndTransparency( QTreeWidgetItem*, int)));
 
 
   // Depth slider
@@ -2306,40 +2301,24 @@ void G4OpenGLQtViewer::initSceneTreeComponent(){
   depth->setText("Depth :");
 
   QWidget* depthWidget = new QWidget();
-  QGroupBox *groupBox = new QGroupBox(tr("Touchables slider"),depthWidget);
-  QHBoxLayout *groupBoxLayout = new QHBoxLayout(groupBox);
+  QHBoxLayout *depthLayout = new QHBoxLayout(depthWidget);
 
   QLabel *zero = new QLabel();
   zero->setText("Show all");          
   QLabel *one = new QLabel();
   one->setText("Hide all");
-  fSceneTreeDepthSlider = new QSlider ( Qt::Horizontal, groupBox);
+  fSceneTreeDepthSlider = new QSlider ( Qt::Horizontal, depthWidget);
   fSceneTreeDepthSlider->setMaximum (1000);
   fSceneTreeDepthSlider->setMinimum (0);
   fSceneTreeDepthSlider->setTickPosition(QSlider::TicksAbove);
-  groupBoxLayout->addWidget(zero);
-  groupBoxLayout->addWidget(fSceneTreeDepthSlider);
-  groupBoxLayout->addWidget(one);
+  depthLayout->addWidget(zero);
+  depthLayout->addWidget(fSceneTreeDepthSlider);
+  depthLayout->addWidget(one);
 
-  groupBox->setLayout(groupBoxLayout);
-  layoutSceneTreeComponentsTBWidget->addWidget(groupBox);
+  depthWidget->setLayout(depthLayout);
+  layoutSceneTreeComponentsTBWidget->addWidget(depthWidget);
 
   connect( fSceneTreeDepthSlider, SIGNAL( valueChanged(int) ), this, SLOT( changeDepthInSceneTree(int) ) );
-
-  // Search line
-  QWidget *helpWidget = new QWidget();
-  QHBoxLayout *helpLayout = new QHBoxLayout();
-  QPushButton* select = new QPushButton("select item(s)");
-  fHelpLine = new QLineEdit();
-  helpLayout->addWidget(new QLabel("Search :",helpWidget));
-  helpLayout->addWidget(fHelpLine);
-  helpLayout->addWidget(select);
-  helpWidget->setLayout(helpLayout);
-  layoutSceneTreeComponentsTBWidget->addWidget(helpWidget);
-
-  connect( fHelpLine, SIGNAL( returnPressed () ), this, SLOT(changeSearchSelection()));
-  connect( select, SIGNAL( clicked () ), this, SLOT(changeSearchSelection()));
-
 
   fTreeItemModels.clear();
   fSceneTreeQuickVisibilityMap.clear();
@@ -2509,7 +2488,7 @@ QTreeWidgetItem* G4OpenGLQtViewer::createTreeWidgetItem(
     }
   }
   QColor qc;
-  qc.setRgbF(color.GetRed(),color.GetGreen(),color.GetBlue(),color.GetAlpha());
+  qc.setRgbF(color.GetRed(),color.GetGreen(),color.GetBlue());
   QTreeWidgetItem * newItem = NULL;
   if (parentTreeNode == NULL) {
     newItem = new QTreeWidgetItem(fSceneTreeComponentTreeWidget);
@@ -2524,9 +2503,6 @@ QTreeWidgetItem* G4OpenGLQtViewer::createTreeWidgetItem(
   newItem->setData(0, Qt::UserRole, POIndex);
   newItem->setText(3,logicalName);
   newItem->setText(4,QString::number(color.GetAlpha()));
-  QColor c;
-  c.setRgbF(color.GetRed(),color.GetGreen(),color.GetBlue());
-  newItem->setText(5,c.name());
   newItem->setFlags(newItem->flags()|Qt::ItemIsUserCheckable);
   newItem->setCheckState(0,state);
   updateQuickVisibilityMap(POIndex,state);
@@ -2692,7 +2668,7 @@ bool G4OpenGLQtViewer::parseAndInsertInSceneTree(
           
           // set the pixmap 
           QColor qc;
-          qc.setRgbF(color.GetRed(),color.GetGreen(),color.GetBlue(),color.GetAlpha());
+          qc.setRgbF(color.GetRed(),color.GetGreen(),color.GetBlue());
           QPixmap pixmap = QPixmap(QSize(16, 16));
           pixmap.fill (qc);
           QPainter painter(&pixmap);
@@ -2786,25 +2762,15 @@ void G4OpenGLQtViewer::changeOpenCloseVisibleHiddenSelectedSceneTreeElement(
       } else {
         parentVisibleHiddenList = fOldSceneTreeHiddenComponentTreeWidget->findItems (subItem->text(0), Qt::MatchFixedString| Qt::MatchCaseSensitive, 0 );
       }
-      if (parentVisibleHiddenList.size() > 0) {
-        for (int i = 0; i < parentVisibleHiddenList.size(); ++i) {
-          if (isSameSceneTreeElement(parentVisibleHiddenList.at(i),subItem)) {
-            if (fNumberOldSceneTreeVisibleComponent < fNumberOldSceneTreeHiddenComponent) {
-              subItem->setCheckState(0,Qt::Checked);
-            } else {
-              subItem->setCheckState(0,Qt::Unchecked);
-            }
+      for (int i = 0; i < parentVisibleHiddenList.size(); ++i) {
+        if (isSameSceneTreeElement(parentVisibleHiddenList.at(i),subItem)) {
+          if (fNumberOldSceneTreeVisibleComponent < fNumberOldSceneTreeHiddenComponent) {
+            subItem->setCheckState(0,Qt::Checked);
+          } else {
+            subItem->setCheckState(0,Qt::Unchecked);
           }
-        } 
-        
-        // Not found in the old tree, then set it
-      } else {
-        if (fNumberOldSceneTreeVisibleComponent < fNumberOldSceneTreeHiddenComponent) {
-          subItem->setCheckState(0,Qt::Unchecked);
-        } else {
-          subItem->setCheckState(0,Qt::Checked);
         }
-      }
+      }    
     }
     
     QList<QTreeWidgetItem *> parentSelectedList;
@@ -3167,10 +3133,6 @@ void G4OpenGLQtViewer::changeTransparencyOnItem (int val){
     QString com = "/vis/geometry/set/colour "+item->text(3)+" 0 "+red+" "+green+" "+blue+" ";
     QString num;
     com += num.setNum((double)val/1000);
-
-    // Select this viewer (do not apply changes to other viewer
-    G4UImanager::GetUIpointer()->ApplyCommand(G4String("/vis/viewer/select ")+GetName().data());
-
     G4UImanager::GetUIpointer()->ApplyCommand(com.toStdString().c_str());
 #ifdef G4DEBUG_VIS_OGL
     printf("G4OpenGLQtViewer::changeTransparencyOnItem %d -%s-\n",val,com.toStdString().c_str() );
@@ -3204,6 +3166,7 @@ void G4OpenGLQtViewer::changeDepthInSceneTree (int val){
   G4bool currentAutoRefresh = fVP.IsAutoRefresh();
   fVP.SetAutoRefresh(false);
 
+  // Do not apply for TopLevel items ("Touchables", "Text", "Scale"...)
   for (int b=0;b<fSceneTreeComponentTreeWidget->topLevelItemCount();b++) {
     changeDepthOnSceneTreeItem(depth,1.,fSceneTreeComponentTreeWidget->topLevelItem(b));
   }
@@ -3214,64 +3177,6 @@ void G4OpenGLQtViewer::changeDepthInSceneTree (int val){
 
   // unlock update on scene tree items
   fCheckSceneTreeComponentSignalLock = false;
-
-}
-
-void G4OpenGLQtViewer::changeColorAndTransparency(QTreeWidgetItem*,int) {
-  QColor old = QColor(fSceneTreeComponentTreeWidget->selectedItems().first()->text(5));
-  old.setAlphaF((fSceneTreeComponentTreeWidget->selectedItems().first()->text(4)).toDouble());
-  QColor color = QColorDialog::getColor(old,
-                                        fSceneTreeComponentTreeWidget,
-                                        " Get color and transparency",
-                                        QColorDialog::ShowAlphaChannel);
-  
-  if (color.isValid()) {
-    QString com = "/vis/geometry/set/colour "+fSceneTreeComponentTreeWidget->selectedItems().first()->text(3)+" 0 ";
-    QString num;
-    com += num.setNum(((float)color.red())/255)+" ";
-    com += num.setNum(((float)color.green())/255)+" ";
-    com += num.setNum(((float)color.blue())/255)+" ";
-    com += num.setNum(((float)color.alpha())/255)+" ";
-    G4UImanager::GetUIpointer()->ApplyCommand(com.toStdString().c_str());
-    updateQWidget();
-  }
-}
-
-
-void G4OpenGLQtViewer::changeSearchSelection()
-{
-  QString searchText = fHelpLine->text();
-  if (fSceneTreeComponentTreeWidget == NULL) {
-    return;
-  }
-
-  // unselect all
-  for (int a=0; a<fSceneTreeComponentTreeWidget->topLevelItemCount(); a++) {
-    fSceneTreeComponentTreeWidget->topLevelItem(a)->setExpanded(false);
-    fSceneTreeComponentTreeWidget->topLevelItem(a)->setSelected(false);
-    clearSceneTreeSelection(fSceneTreeComponentTreeWidget->topLevelItem(a));
-  }
-
-  QList<QTreeWidgetItem *> itemList = fSceneTreeComponentTreeWidget->findItems (searchText,Qt::MatchContains | Qt::MatchRecursive,0);
-
-  for (int i = 0; i < itemList.size(); ++i) {
-    QTreeWidgetItem* expandParentItem = itemList.at(i);
-    while (expandParentItem->parent() != NULL) {
-      expandParentItem->parent()->setExpanded(true);
-      expandParentItem = expandParentItem->parent();
-    }
-    itemList.at(i)->setSelected(true);
-  }    
-
-}
-
-
-void G4OpenGLQtViewer::clearSceneTreeSelection(QTreeWidgetItem* item) {
-  for (int a=0; a<item->childCount(); a++) {
-    item->child(a)->setSelected(false);
-    item->child(a)->setExpanded(false);
-    clearSceneTreeSelection(item->child(a));
-  }
 
 }
 
@@ -3398,30 +3303,42 @@ void G4OpenGLQtViewer::clearTreeWidget(){
       fNumberOldSceneTreeSelectedComponent = 0;
 
       // Clone everything  
+      QTreeWidgetItem* cloneItem;
       for (int b=0;b<fSceneTreeComponentTreeWidget->topLevelItemCount();b++) {
 
-        updateQuickVisibilityMap(fSceneTreeComponentTreeWidget->topLevelItem(b)->data(0,Qt::UserRole).toInt(),fSceneTreeComponentTreeWidget->topLevelItem(b)->checkState(0));
+        cloneItem = new QTreeWidgetItem();
+        cloneItem->setText(0,fSceneTreeComponentTreeWidget->topLevelItem(b)->text(0));
+        cloneItem->setData(1,Qt::UserRole,fSceneTreeComponentTreeWidget->topLevelItem(b)->data(1,Qt::UserRole).toInt());
+        cloneItem->setText(2,fSceneTreeComponentTreeWidget->topLevelItem(b)->text(2));
+        cloneItem->setData(0, Qt::UserRole,fSceneTreeComponentTreeWidget->topLevelItem(b)->data(0,Qt::UserRole).toInt());
+        cloneItem->setText(3,fSceneTreeComponentTreeWidget->topLevelItem(b)->text(3));
+        cloneItem->setText(4,fSceneTreeComponentTreeWidget->topLevelItem(b)->text(4));
+        cloneItem->setFlags(fSceneTreeComponentTreeWidget->topLevelItem(b)->flags());
+        cloneItem->setToolTip(0,fSceneTreeComponentTreeWidget->topLevelItem(b)->toolTip(0));        
+        cloneItem->setCheckState(0,fSceneTreeComponentTreeWidget->topLevelItem(b)->checkState(0));
+        cloneItem->setSelected(fSceneTreeComponentTreeWidget->topLevelItem(b)->isSelected());       
     
         // put them into quick open/close tree
         if (fSceneTreeComponentTreeWidget->topLevelItem(b)->isExpanded ()) {
-          fOldSceneTreeOpenComponentTreeWidget->addTopLevelItem(cloneWidgetItem(fSceneTreeComponentTreeWidget->topLevelItem(b)));
+          fOldSceneTreeOpenComponentTreeWidget->addTopLevelItem(cloneItem);
         } else {
-          fOldSceneTreeCloseComponentTreeWidget->addTopLevelItem(cloneWidgetItem(fSceneTreeComponentTreeWidget->topLevelItem(b)));
+          fOldSceneTreeCloseComponentTreeWidget->addTopLevelItem(cloneItem);
         }
 
         // put them into quick visible/close tree
         if (fSceneTreeComponentTreeWidget->topLevelItem(b)->checkState(0) == Qt::Checked) {
-          fOldSceneTreeVisibleComponentTreeWidget->addTopLevelItem(cloneWidgetItem(fSceneTreeComponentTreeWidget->topLevelItem(b)));
+          fOldSceneTreeVisibleComponentTreeWidget->addTopLevelItem(cloneItem);
         } else {
-          fOldSceneTreeHiddenComponentTreeWidget->addTopLevelItem(cloneWidgetItem(fSceneTreeComponentTreeWidget->topLevelItem(b)));
+          fOldSceneTreeHiddenComponentTreeWidget->addTopLevelItem(cloneItem);
         }
-        
+
         // put them into quick "selected" tree (should be only one)
         if (fSceneTreeComponentTreeWidget->topLevelItem(b)->isSelected()) {
-          fOldSceneTreeSelectedComponentTreeWidget->addTopLevelItem(cloneWidgetItem(fSceneTreeComponentTreeWidget->topLevelItem(b)));
+          fOldSceneTreeSelectedComponentTreeWidget->addTopLevelItem(cloneItem);
         }
         
-        cloneSceneTree(fSceneTreeComponentTreeWidget->topLevelItem(b));
+        cloneItem->setExpanded(fSceneTreeComponentTreeWidget->topLevelItem(b)->isExpanded ());
+        cloneSceneTree(fSceneTreeComponentTreeWidget->topLevelItem(b),cloneItem);
       }
 
       fSceneTreeComponentTreeWidget->clear();
@@ -3434,80 +3351,62 @@ void G4OpenGLQtViewer::clearTreeWidget(){
       fMaxPOindexInserted = -1;
 
       // update the quick open/close/visible/hidden/selected variables
-      fNumberOldSceneTreeOpenComponent = 
-        fOldSceneTreeOpenComponentTreeWidget->topLevelItemCount ();
-
-      fNumberOldSceneTreeCloseComponent = 
-        fOldSceneTreeCloseComponentTreeWidget->topLevelItemCount ();
-
-      fNumberOldSceneTreeVisibleComponent = 
-        fOldSceneTreeVisibleComponentTreeWidget->topLevelItemCount ();
-
-      fNumberOldSceneTreeHiddenComponent = 
-        fOldSceneTreeHiddenComponentTreeWidget->topLevelItemCount ();
-
-      fNumberOldSceneTreeSelectedComponent = 
-        fOldSceneTreeSelectedComponentTreeWidget->topLevelItemCount ();
-      printf("-----visible:%d  hidden:%d open%d close:%d \n",
-             fNumberOldSceneTreeVisibleComponent,
-             fNumberOldSceneTreeHiddenComponent,
-             fNumberOldSceneTreeOpenComponent,
-             fNumberOldSceneTreeCloseComponent
-             );      
+      fNumberOldSceneTreeOpenComponent = fOldSceneTreeOpenComponentTreeWidget->topLevelItemCount ();
+      fNumberOldSceneTreeCloseComponent = fOldSceneTreeCloseComponentTreeWidget->topLevelItemCount ();
+      fNumberOldSceneTreeVisibleComponent = fOldSceneTreeVisibleComponentTreeWidget->topLevelItemCount ();
+      fNumberOldSceneTreeHiddenComponent = fOldSceneTreeHiddenComponentTreeWidget->topLevelItemCount ();
+      fNumberOldSceneTreeSelectedComponent = fOldSceneTreeSelectedComponentTreeWidget->topLevelItemCount ();
+      
     }
   }
 }
-
-
-QTreeWidgetItem * G4OpenGLQtViewer::cloneWidgetItem(QTreeWidgetItem* item) {
-  QTreeWidgetItem* cloneItem = new QTreeWidgetItem();
-  cloneItem->setText(0,item->text(0));
-  cloneItem->setData(1,Qt::UserRole,item->data(1,Qt::UserRole).toInt());
-  cloneItem->setText(2,item->text(2));
-  cloneItem->setData(0, Qt::UserRole,item->data(0,Qt::UserRole).toInt());
-  cloneItem->setText(3,item->text(3));
-  cloneItem->setText(4,item->text(4));
-  cloneItem->setText(5,item->text(5));
-  cloneItem->setFlags(item->flags());
-  cloneItem->setToolTip(0,item->toolTip(0));        
-  cloneItem->setCheckState(0,item->checkState(0));
-  cloneItem->setSelected(item->isSelected()); 
-  cloneItem->setExpanded(item->isExpanded ());
-      
-  return cloneItem;
-}
-
 
 /**
    Clone the current tree in order to get a snapshot of old version 
 */
 void G4OpenGLQtViewer::cloneSceneTree(
  QTreeWidgetItem* rootItem
+ ,QTreeWidgetItem*
 ) {
   
+  QTreeWidgetItem* cloneItem = NULL;
   for (int b=0;b< rootItem->childCount();b++) {
+    cloneItem = new QTreeWidgetItem();
+
+    cloneItem->setText(0,rootItem->child(b)->text(0));
+    cloneItem->setData(1,Qt::UserRole,rootItem->child(b)->data(1,Qt::UserRole).toInt());
+    cloneItem->setText(2,rootItem->child(b)->text(2));
+
+    cloneItem->setData(0,Qt::UserRole,rootItem->child(b)->data(0,Qt::UserRole).toInt());
+    cloneItem->setText(3,rootItem->child(b)->text(3));
+    cloneItem->setText(4,rootItem->child(b)->text(4));
+    cloneItem->setFlags(rootItem->child(b)->flags());
+    cloneItem->setCheckState(0,rootItem->child(b)->checkState(0));
     updateQuickVisibilityMap(rootItem->child(b)->data(0,Qt::UserRole).toInt(),rootItem->child(b)->checkState(0));
+
+    cloneItem->setSelected(rootItem->child(b)->isSelected());       
 
     // put them into quick open/close tree
     if (rootItem->child(b)->isExpanded ()) {
-      fOldSceneTreeOpenComponentTreeWidget->addTopLevelItem(cloneWidgetItem(rootItem->child(b)));
+      fOldSceneTreeOpenComponentTreeWidget->addTopLevelItem(cloneItem);
     } else {
-      fOldSceneTreeCloseComponentTreeWidget->addTopLevelItem(cloneWidgetItem(rootItem->child(b)));
+      fOldSceneTreeCloseComponentTreeWidget->addTopLevelItem(cloneItem);
     }
 
     // put them into quick visible/hidden tree
     if (rootItem->child(b)->checkState(0) == Qt::Checked) {
-      fOldSceneTreeVisibleComponentTreeWidget->addTopLevelItem(cloneWidgetItem(rootItem->child(b)));
+      fOldSceneTreeVisibleComponentTreeWidget->addTopLevelItem(cloneItem);
     } else {
-      fOldSceneTreeHiddenComponentTreeWidget->addTopLevelItem(cloneWidgetItem(rootItem->child(b)));
+      fOldSceneTreeHiddenComponentTreeWidget->addTopLevelItem(cloneItem);
     }
 
     // put them into quick selected tree
     if (rootItem->child(b)->isSelected()) {
-      fOldSceneTreeSelectedComponentTreeWidget->addTopLevelItem(cloneWidgetItem(rootItem->child(b)));
+      fOldSceneTreeSelectedComponentTreeWidget->addTopLevelItem(cloneItem);
     }
+    cloneItem->setExpanded(rootItem->child(b)->isExpanded ());
 
-    cloneSceneTree(rootItem->child(b));
+    cloneSceneTree(rootItem->child(b),cloneItem);
   }
 }
 
