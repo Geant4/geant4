@@ -17,6 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+8 August 2012 John Allison (interfaces-V09-05-10)
+- Linux compilation fixed (Laurent Garnier).
+
+8 August 2012 John Allison (interfaces-V09-05-09)
+- Tagged.
+
+3 August 2012 Laurent Garnier ()
+- G4UIQt.cc : Big changes in GUI window. Add some /vis/scene/add and 
+  /vis/viewer parameters widgets
+
 11 July 2012 Laurent Garnier (interfaces-V09-05-08)
 - G4UIQt.cc : Small variable name changes and re-add scene tree viewer
  (slow problem fixed in visualization)
