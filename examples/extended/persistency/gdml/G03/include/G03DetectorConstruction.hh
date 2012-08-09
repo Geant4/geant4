@@ -23,64 +23,82 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G03/src/DetectorMessenger.cc
-/// \brief Implementation of the DetectorMessenger class
+/// \file persistency/gdml/G03/include/G03DetectorConstruction.hh
+/// \brief Definition of the G03DetectorConstruction class
 //
 //
-// $Id: DetectorMessenger.cc,v 1.3 2009-04-15 13:26:26 gcosmo Exp $
+// $Id: G03DetectorConstruction.hh,v 1.2 2009-04-15 13:26:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Class DetectorMessenger implementation
+// Class G03DetectorConstruction
+//
+// A detector construction class loading the geometry from GDML files.
 //
 // ----------------------------------------------------------------------------
 
+#ifndef G03DetectorConstruction_H
+#define G03DetectorConstruction_H 1
+
 #include "globals.hh"
+#include "G4VUserDetectorConstruction.hh"
+#include "G4GDMLParser.hh"
 
-#include "DetectorMessenger.hh"
-#include "DetectorConstruction.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
+class G4Material;
+class G03DetectorMessenger;
 
-// ----------------------------------------------------------------------------
+/// Detector construction for the GDML extensions example
 
-DetectorMessenger::DetectorMessenger( DetectorConstruction* myDet )
-  : theDetector( myDet )
-{ 
-  theDetectorDir = new G4UIdirectory( "/mydet/" );
-  theDetectorDir->SetGuidance("Detector control.");
-
-  theReadCommand = new G4UIcmdWithAString("/mydet/readFile", this);
-  theReadCommand ->SetGuidance("READ GDML file with given name");
-  theReadCommand ->SetParameterName("FileRead", false);
-  theReadCommand ->SetDefaultValue("color_extension.gdml");
-  theReadCommand ->AvailableForStates(G4State_PreInit);
-
-  theWriteCommand = new G4UIcmdWithAString("/mydet/writeFile", this);
-  theWriteCommand ->SetGuidance("WRITE GDML file with given name");
-  theWriteCommand ->SetParameterName("FileWrite", false);
-  theWriteCommand ->SetDefaultValue("color_extension_test.gdml");
-  theWriteCommand ->AvailableForStates(G4State_PreInit);
-}
-
-// ----------------------------------------------------------------------------
-
-DetectorMessenger::~DetectorMessenger()
+class G03DetectorConstruction : public G4VUserDetectorConstruction
 {
-  delete theReadCommand;
-  delete theWriteCommand;
-  delete theDetectorDir;
-}
+  public:
+
+    // Constructor and destructor
+    //
+    G03DetectorConstruction();
+   ~G03DetectorConstruction();
+
+    // Construction of Detector
+    //
+    G4VPhysicalVolume* Construct();
+
+    // Make List of materials
+    //
+    void ListOfMaterials();
+
+    // Reading/writing GDML
+    //
+    void SetReadFile( const G4String& fname );
+    void SetWriteFile( const G4String& fname );
+
+  private:
+
+    G4Material* fAir ;
+    G4Material* fAluminum ;
+    G4Material* fPb;
+    G4Material* fXenon;
+
+    // Extended reader
+    //
+    G4GDMLReadStructure* fReader;
+
+    // Extended writer
+    //
+    G4GDMLWriteStructure* fWriter;
+
+    // GDMLparser
+    //
+    G4GDMLParser* fParser;
+        
+    // Read/write Settings
+    //
+    G4String fReadFile, fWriteFile;
+    G4bool fWritingChoice;
+ 
+    // Detector Messenger
+    //
+    G03DetectorMessenger* fDetectorMessenger;
+};
 
 // ----------------------------------------------------------------------------
 
-void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
-{ 
-  if ( command == theReadCommand )
-  { 
-    theDetector->SetReadFile(newValue);
-  }
-  if ( command == theWriteCommand )
-  { 
-    theDetector->SetWriteFile(newValue);
-  }
-}
+#endif

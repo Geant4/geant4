@@ -23,54 +23,64 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G03/src/RunAction.cc
-/// \brief Implementation of the RunAction class
+/// \file persistency/gdml/G03/src/G03DetectorMessenger.cc
+/// \brief Implementation of the G03DetectorMessenger class
 //
 //
-// $Id: RunAction.cc,v 1.1 2008-11-20 15:41:54 gcosmo Exp $
+// $Id: G03DetectorMessenger.cc,v 1.3 2009-04-15 13:26:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Class RunAction implementation
+// Class G03DetectorMessenger implementation
 //
 // ----------------------------------------------------------------------------
 
-#include "G4ios.hh"
-#include <iomanip>
-
 #include "globals.hh"
-#include "Randomize.hh"
-#include "RunAction.hh"
 
-#include "G4Run.hh"
-#include "G4UImanager.hh"
-#include "G4VVisManager.hh"
-#include "G4VisAttributes.hh"
+#include "G03DetectorMessenger.hh"
+#include "G03DetectorConstruction.hh"
+#include "G4UIdirectory.hh"
+#include "G4UIcmdWithAString.hh"
 
-// ----------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction()
+G03DetectorMessenger::G03DetectorMessenger( G03DetectorConstruction* myDet )
+  : fTheDetector( myDet )
 { 
+  fTheDetectorDir = new G4UIdirectory( "/mydet/" );
+  fTheDetectorDir->SetGuidance("Detector control.");
+
+  fTheReadCommand = new G4UIcmdWithAString("/mydet/readFile", this);
+  fTheReadCommand ->SetGuidance("READ GDML file with given name");
+  fTheReadCommand ->SetParameterName("FileRead", false);
+  fTheReadCommand ->SetDefaultValue("color_extension.gdml");
+  fTheReadCommand ->AvailableForStates(G4State_PreInit);
+
+  fTheWriteCommand = new G4UIcmdWithAString("/mydet/writeFile", this);
+  fTheWriteCommand ->SetGuidance("WRITE GDML file with given name");
+  fTheWriteCommand ->SetParameterName("FileWrite", false);
+  fTheWriteCommand ->SetDefaultValue("color_extension_test.gdml");
+  fTheWriteCommand ->AvailableForStates(G4State_PreInit);
 }
 
-// ----------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::~RunAction()
+G03DetectorMessenger::~G03DetectorMessenger()
 {
+  delete fTheReadCommand;
+  delete fTheWriteCommand;
+  delete fTheDetectorDir;
 }
 
-// ----------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::BeginOfRunAction(const G4Run* aRun)
-{  
-  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
-}
-
-// ----------------------------------------------------------------------------
-
-void RunAction::EndOfRunAction(const G4Run*)
-{
-  if (G4VVisManager::GetConcreteInstance())
-  {
-    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-  } 
+void G03DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{ 
+  if ( command == fTheReadCommand )
+  { 
+    fTheDetector->SetReadFile(newValue);
+  }
+  if ( command == fTheWriteCommand )
+  { 
+    fTheDetector->SetWriteFile(newValue);
+  }
 }

@@ -23,82 +23,49 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G03/include/DetectorConstruction.hh
-/// \brief Definition of the DetectorConstruction class
+/// \file persistency/gdml/G03/include/G03ColorReader.hh
+/// \brief Definition of the G03ColorReader class
 //
 //
-// $Id: DetectorConstruction.hh,v 1.2 2009-04-15 13:26:26 gcosmo Exp $
+// $Id: G03ColorReader.hh,v 1.3 2009-04-24 15:54:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Class DetectorConstruction
 //
-// A detector construction class loading the geometry from GDML files.
+// class G03ColorReader
 //
-// ----------------------------------------------------------------------------
+// Custom reader for handling "color" tags extensions in GDML.
+// -------------------------------------------------------------------------
 
-#ifndef DetectorConstruction_H
-#define DetectorConstruction_H 1
+#ifndef G03ColorReader_H
+#define G03ColorReader_H 1
 
-#include "globals.hh"
-#include "G4VUserDetectorConstruction.hh"
-#include "G4GDMLParser.hh"
+#include <map>
+#include "G4GDMLReadStructure.hh"
 
-class G4Material;
-class DetectorMessenger;
+class G4VisAttributes;
 
-// ----------------------------------------------------------------------------
+/// GDML reader for the color attributes
 
-class DetectorConstruction : public G4VUserDetectorConstruction
+class G03ColorReader : public G4GDMLReadStructure
 {
-  public:
 
-    // Constructor and destructor
-    //
-    DetectorConstruction();
-   ~DetectorConstruction();
+ public:
 
-    // Construction of Detector
-    //
-    G4VPhysicalVolume* Construct();
+   G03ColorReader();
+  ~G03ColorReader();
 
-    // Make List of materials
-    //
-    void ListOfMaterials();
+   void ExtensionRead(const xercesc::DOMElement* const element);
+   void ColorRead(const xercesc::DOMElement* const element);
 
-    // Reading/writing GDML
-    //
-    void SetReadFile( const G4String& fname );
-    void SetWriteFile( const G4String& fname );
+   G4VisAttributes* GetVisAttribute(const G4String& ref);
 
-  private:
+ protected:
 
-    G4Material* Air ;
-    G4Material* Aluminum ;
-    G4Material* Pb;
-    G4Material* Xenon;
+   void VolumeRead(const xercesc::DOMElement* const);
 
-    // Extended reader
-    //
-    G4GDMLReadStructure* reader;
+ private:
 
-    // Extended writer
-    //
-    G4GDMLWriteStructure* writer;
-
-    // GDMLparser
-    //
-    G4GDMLParser* parser;
-        
-    // Read/write Settings
-    //
-    G4String fReadFile, fWriteFile;
-    G4bool writingChoice;
- 
-    // Detector Messenger
-    //
-    DetectorMessenger* detectorMessenger;
+   std::map<G4String, G4VisAttributes*> fAttribs;
 };
-
-// ----------------------------------------------------------------------------
 
 #endif

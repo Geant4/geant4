@@ -23,32 +23,38 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G03/src/ColorReader.cc
-/// \brief Implementation of the ColorReader class
+/// \file persistency/gdml/G03/src/G03ColorReader.cc
+/// \brief Implementation of the G03ColorReader class
 //
-// $Id: ColorReader.cc,v 1.4 2009-04-24 15:54:21 gcosmo Exp $
+// $Id: G03ColorReader.cc,v 1.4 2009-04-24 15:54:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
 
-#include "ColorReader.hh"
+#include "G03ColorReader.hh"
 
 #include "G4LogicalVolume.hh"
 #include "G4VisAttributes.hh"
 
-ColorReader::ColorReader()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G03ColorReader::G03ColorReader()
   : G4GDMLReadStructure()
 {
 }
 
-ColorReader::~ColorReader()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G03ColorReader::~G03ColorReader()
 {
   std::map<G4String, G4VisAttributes*>::iterator pos;
-  for (pos=attribs.begin(); pos!=attribs.end(); pos++)
+  for (pos=fAttribs.begin(); pos!=fAttribs.end(); pos++)
   {  delete pos->second;  }
 }
 
-void ColorReader::ExtensionRead(const xercesc::DOMElement* const extElement)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G03ColorReader::ExtensionRead(const xercesc::DOMElement* const extElement)
 {
    G4cout << "G4GDML: Reading GDML extension..." << G4endl;
 
@@ -65,13 +71,15 @@ void ColorReader::ExtensionRead(const xercesc::DOMElement* const extElement)
       else
       {
         G4String error_msg = "Unknown tag in structure: " + tag;
-        G4Exception("ColorReader::ExtensionRead()",
+        G4Exception("G03ColorReader::ExtensionRead()",
                     "ReadError", FatalException, error_msg);
       }
    }
 }
 
-void ColorReader::VolumeRead(const xercesc::DOMElement* const volumeElement)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G03ColorReader::VolumeRead(const xercesc::DOMElement* const volumeElement)
 {
    G4VSolid* solidPtr = 0;
    G4Material* materialPtr = 0;
@@ -110,7 +118,9 @@ void ColorReader::VolumeRead(const xercesc::DOMElement* const volumeElement)
    Volume_contentRead(volumeElement);
 }
 
-void ColorReader::ColorRead(const xercesc::DOMElement* const colorElement)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G03ColorReader::ColorRead(const xercesc::DOMElement* const colorElement)
 {
    G4String name;
    G4VisAttributes* color = 0;
@@ -148,22 +158,24 @@ void ColorReader::ColorRead(const xercesc::DOMElement* const colorElement)
    G4cout << "Color attribute (R,G,B,A) is: "
           << r << ", " << g << ", " << b << ", " << a << " !" << G4endl;
    color = new G4VisAttributes(G4Color(r,g,b,a));
-   attribs.insert(std::make_pair(name,color));
+   fAttribs.insert(std::make_pair(name,color));
 }
 
-G4VisAttributes* ColorReader::GetVisAttribute(const G4String& ref)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4VisAttributes* G03ColorReader::GetVisAttribute(const G4String& ref)
 {
   G4VisAttributes* col = 0;
-  std::map<G4String, G4VisAttributes*>::iterator pos = attribs.find(ref);
+  std::map<G4String, G4VisAttributes*>::iterator pos = fAttribs.find(ref);
 
-  if (pos != attribs.end())
+  if (pos != fAttribs.end())
   {
     col = pos->second;
   }
   else
   {
     G4String err_mess = "Attribute: " + ref + " NOT found !";
-    G4Exception("ColorReader::GetVisAttribute()",
+    G4Exception("G03ColorReader::GetVisAttribute()",
                 "ReadError", FatalException, err_mess);
   }
   return col;

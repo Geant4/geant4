@@ -23,43 +23,54 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G03/include/RunAction.hh
-/// \brief Definition of the RunAction class
+/// \file persistency/gdml/G03/src/G03RunAction.cc
+/// \brief Implementation of the G03RunAction class
 //
 //
-// $Id: RunAction.hh,v 1.2 2008-12-18 12:57:10 gunter Exp $
+// $Id: G03RunAction.cc,v 1.1 2008-11-20 15:41:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Class RunAction
-//
-// Simple run action class.
+// Class G03RunAction implementation
 //
 // ----------------------------------------------------------------------------
 
-#ifndef RunAction_h
-#define RunAction_h 1
-
-#include <iostream>
+#include "G4ios.hh"
+#include <iomanip>
 
 #include "globals.hh"
-#include "G4UserRunAction.hh"
+#include "Randomize.hh"
+#include "G03RunAction.hh"
 
-class G4Run;
+#include "G4Run.hh"
+#include "G4UImanager.hh"
+#include "G4VVisManager.hh"
+#include "G4VisAttributes.hh"
 
-// ----------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class RunAction : public G4UserRunAction
+G03RunAction::G03RunAction()
+{ 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G03RunAction::~G03RunAction()
 {
-  public:
+}
 
-    RunAction();
-   ~RunAction();
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-    void BeginOfRunAction(const G4Run*);
-    void EndOfRunAction(const G4Run*);
-      
-};
+void G03RunAction::BeginOfRunAction(const G4Run* aRun)
+{  
+  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
+}
 
-// ----------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+void G03RunAction::EndOfRunAction(const G4Run*)
+{
+  if (G4VVisManager::GetConcreteInstance())
+  {
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
+  } 
+}

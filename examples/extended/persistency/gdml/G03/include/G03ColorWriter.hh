@@ -23,48 +23,49 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G03/include/DetectorMessenger.hh
-/// \brief Definition of the DetectorMessenger class
+/// \file persistency/gdml/G03/include/G03ColorWriter.hh
+/// \brief Definition of the G03ColorWriter class
 //
 //
-// $Id: DetectorMessenger.hh,v 1.2 2009-04-15 13:26:26 gcosmo Exp $
+// $Id: G03ColorWriter.hh,v 1.2 2009-04-24 15:54:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Class DetectorMessenger
 //
-// Utility messenger for defining run-time commands relative to the example.
+// class G03ColorWriter
 //
-// ----------------------------------------------------------------------------
+// Custom writer for handling "color" tags extensions in GDML.
+// -------------------------------------------------------------------------
 
-#ifndef DetectorMessenger_h
-#define DetectorMessenger_h 1
+#ifndef G03ColorWriter_H
+#define G03ColorWriter_H 1
 
-#include "globals.hh"
-#include "G4UImessenger.hh"
+#include <vector>
+#include "G4GDMLWriteStructure.hh"
 
-class DetectorConstruction;
-class G4UIdirectory;
-class G4UIcmdWithAString;
+class G4LogicalVolume;
+class G4VisAttributes;
 
-// ----------------------------------------------------------------------------
+/// GDML writer for the color attributes
 
-class DetectorMessenger: public G4UImessenger
+class G03ColorWriter : public G4GDMLWriteStructure
 {
 
-  public:
+ public:
 
-    DetectorMessenger( DetectorConstruction* );
-   ~DetectorMessenger();
-    
-    void SetNewValue( G4UIcommand*, G4String );
+   G03ColorWriter();
+  ~G03ColorWriter();
 
-  private:
+   void AddExtension(xercesc::DOMElement* volumeElement,
+                     const G4LogicalVolume* const vol);
+   void ExtensionWrite(xercesc::DOMElement* element);
+   void ColorWrite(xercesc::DOMElement* volumeElement,
+                   const G4VisAttributes* const att);
 
-    DetectorConstruction      *theDetector;
-    G4UIdirectory             *theDetectorDir;
-    G4UIcmdWithAString        *theReadCommand, *theWriteCommand;
+   G4bool BookAttribute(const G4VisAttributes* const att);
+
+ private:
+
+   std::vector<const G4VisAttributes*> fAttribs;
 };
-
-// ----------------------------------------------------------------------------
 
 #endif

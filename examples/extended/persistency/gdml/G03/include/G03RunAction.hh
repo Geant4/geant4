@@ -23,47 +23,43 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G03/include/ColorWriter.hh
-/// \brief Definition of the ColorWriter class
+/// \file persistency/gdml/G03/include/G03RunAction.hh
+/// \brief Definition of the G03RunAction class
 //
 //
-// $Id: ColorWriter.hh,v 1.2 2009-04-24 15:54:21 gcosmo Exp $
+// $Id: G03RunAction.hh,v 1.2 2008-12-18 12:57:10 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// Class G03RunAction
 //
-// class ColorWriter
+// Simple run action class.
 //
-// Custom writer for handling "color" tags extensions in GDML.
-// -------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
-#ifndef ColorWriter_H
-#define ColorWriter_H 1
+#ifndef G03RunAction_h
+#define G03RunAction_h 1
 
-#include <vector>
-#include "G4GDMLWriteStructure.hh"
+#include <iostream>
 
-class G4LogicalVolume;
-class G4VisAttributes;
+#include "globals.hh"
+#include "G4UserRunAction.hh"
 
-class ColorWriter : public G4GDMLWriteStructure
+class G4Run;
+
+/// Run action for the GDML extension example
+
+class G03RunAction : public G4UserRunAction
 {
+  public:
 
- public:
+    G03RunAction();
+   ~G03RunAction();
 
-   ColorWriter();
-  ~ColorWriter();
-
-   void AddExtension(xercesc::DOMElement* volumeElement,
-                     const G4LogicalVolume* const vol);
-   void ExtensionWrite(xercesc::DOMElement* element);
-   void ColorWrite(xercesc::DOMElement* volumeElement,
-                   const G4VisAttributes* const att);
-
-   G4bool BookAttribute(const G4VisAttributes* const att);
-
- private:
-
-   std::vector<const G4VisAttributes*> attribs;
+    void BeginOfRunAction(const G4Run*);
+    void EndOfRunAction(const G4Run*);
+      
 };
+
+// ----------------------------------------------------------------------------
 
 #endif

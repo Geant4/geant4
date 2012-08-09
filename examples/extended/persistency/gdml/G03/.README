@@ -1,8 +1,12 @@
-$Id: README,v 1.2 2009-04-15 13:26:26 gcosmo Exp $
--------------------------------------------------------------------
+//$Id$
 
- Example of definition of a GDML extension with associated reader and writer
- ---------------------------------------------------------------------------
+///\file "persistency/gdml/G03/.README"
+///\brief Example G03 README page
+
+/*! \page ExampleG03 Example G03
+
+\section G03_s1 EXAMPLE OF DEFINITION OF A GDML EXTENSION WITH ASSOCIATED READER AND WRITER
+ 
 
  In this directory you can find an example showing how to extend the GDML
  schema and plug-in a custom reader and writer to the system for handling
@@ -21,18 +25,26 @@ $Id: README,v 1.2 2009-04-15 13:26:26 gcosmo Exp $
  It is also possible to use UI commands or macros as arguments to read any
  standard GDML file.
   
- HOW TO BUILD THE EXAMPLE ?
+\section G03_s2 HOW TO BUILD THE EXAMPLE ?
  
  - You need to have built the persistency/gdml module by having
    set the -DGEANT4_USE_GDML=ON flag during the CMAKE configuration step, 
    as well as the -DXERCESC_ROOT_DIR=<path_to_xercesc> flag pointing to 
    the path where the XercesC XML parser package is installed in your system.
  
- - Compile and link to generate the executable (in your CMAKE build directory):
-               % make gdml_ext 
+ - Compile and link to generate the executable  (in your CMAKE build directory)::
+\verbatim
+% make gdml_ext
+\endverbatim
  
  - Execute the application for reading and visualizing the setup:
-               % gdml_ext read_ext.mac
+\verbatim
+% gdml_ext read_ext.mac
+\endverbatim
 
  - Execute the application for also writing the setup:
-               % gdml_ext [write_ext.mac]
+\verbatim
+% gdml_ext [write_ext.mac]
+\endverbatim
+
+*/

@@ -23,49 +23,55 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G03/include/PrimaryGeneratorAction.hh
-/// \brief Definition of the PrimaryGeneratorAction class
+/// \file persistency/gdml/G03/src/G03PrimaryGeneratorAction.cc
+/// \brief Implementation of the G03PrimaryGeneratorAction class
 //
 //
-// $Id: PrimaryGeneratorAction.hh,v 1.1 2008-11-20 15:41:54 gcosmo Exp $
+// $Id: G03PrimaryGeneratorAction.cc,v 1.2 2008-12-18 12:57:16 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Class PrimaryGeneratorAction
-//
-// Simple primary-generator action class.
+// Class G03PrimaryGeneratorAction implementation
 //
 // ----------------------------------------------------------------------------
 
-#ifndef PrimaryGeneratorAction_h
-#define PrimaryGeneratorAction_h 1
+#include "G03PrimaryGeneratorAction.hh"
 
-#include "G4ParticleTable.hh"
-#include "G4ParticleGun.hh"
-#include "G4Event.hh"
+#include "globals.hh"
+#include "G4ParticleDefinition.hh"
 
-#include "G4VUserPrimaryGeneratorAction.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// ----------------------------------------------------------------------------
-
-class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+G03PrimaryGeneratorAction::G03PrimaryGeneratorAction()
 {
-  public:
+  // Particle gun and particle table 
+  //
+  fParticleGun = new G4ParticleGun();
+  fParticleTable = G4ParticleTable::GetParticleTable();
 
-    // Constructor and destructor
-    //
-    PrimaryGeneratorAction();
-   ~PrimaryGeneratorAction();
+  // Default particle
+  //
+  fParticleGun->SetParticleDefinition(fParticleTable->FindParticle("geantino"));
+  fParticleGun->SetParticleEnergy( 1.0*MeV );
 
-    // Used by Geant4 to generate the primary particles of the event
-    //
-    void GeneratePrimaries(G4Event* anEvent);
+  G4ThreeVector err1=G4ThreeVector(-1260,-560,40); // outside
+  G4ThreeVector err2=G4ThreeVector(100,-240,120);  // inside
+  G4ThreeVector err2v=(err2-err1).unit();
+  
+  fParticleGun->SetParticleMomentumDirection(err2v);
+  fParticleGun->SetParticlePosition(err1);
 
-  private:
+}
 
-    G4ParticleGun* particleGun;
-    G4ParticleTable * particleTable;
-};
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// ----------------------------------------------------------------------------
+G03PrimaryGeneratorAction::~G03PrimaryGeneratorAction()
+{
+  delete fParticleGun;
+}
 
-#endif
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G03PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
+{
+  fParticleGun->GeneratePrimaryVertex(anEvent);
+}

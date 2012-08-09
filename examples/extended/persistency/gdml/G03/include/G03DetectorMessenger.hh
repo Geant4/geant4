@@ -23,47 +23,48 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G03/include/ColorReader.hh
-/// \brief Definition of the ColorReader class
+/// \file persistency/gdml/G03/include/G03DetectorMessenger.hh
+/// \brief Definition of the G03DetectorMessenger class
 //
 //
-// $Id: ColorReader.hh,v 1.3 2009-04-24 15:54:21 gcosmo Exp $
+// $Id: G03DetectorMessenger.hh,v 1.2 2009-04-15 13:26:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// Class G03DetectorMessenger
 //
-// class ColorReader
+// Utility messenger for defining run-time commands relative to the example.
 //
-// Custom reader for handling "color" tags extensions in GDML.
-// -------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
-#ifndef ColorReader_H
-#define ColorReader_H 1
+#ifndef G03DetectorMessenger_h
+#define G03DetectorMessenger_h 1
 
-#include <map>
-#include "G4GDMLReadStructure.hh"
+#include "globals.hh"
+#include "G4UImessenger.hh"
 
-class G4VisAttributes;
+class G03DetectorConstruction;
+class G4UIdirectory;
+class G4UIcmdWithAString;
 
-class ColorReader : public G4GDMLReadStructure
+/// Detector messenger for the GDML extensions example
+
+class G03DetectorMessenger: public G4UImessenger
 {
 
- public:
+  public:
 
-   ColorReader();
-  ~ColorReader();
+    G03DetectorMessenger( G03DetectorConstruction* );
+   ~G03DetectorMessenger();
+    
+    void SetNewValue( G4UIcommand*, G4String );
 
-   void ExtensionRead(const xercesc::DOMElement* const element);
-   void ColorRead(const xercesc::DOMElement* const element);
+  private:
 
-   G4VisAttributes* GetVisAttribute(const G4String& ref);
-
- protected:
-
-   void VolumeRead(const xercesc::DOMElement* const);
-
- private:
-
-   std::map<G4String, G4VisAttributes*> attribs;
+    G03DetectorConstruction      *fTheDetector;
+    G4UIdirectory             *fTheDetectorDir;
+    G4UIcmdWithAString        *fTheReadCommand, *fTheWriteCommand;
 };
+
+// ----------------------------------------------------------------------------
 
 #endif

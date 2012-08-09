@@ -23,36 +23,44 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G03/src/ColorWriter.cc
-/// \brief Implementation of the ColorWriter class
+/// \file persistency/gdml/G03/src/G03ColorWriter.cc
+/// \brief Implementation of the G03ColorWriter class
 //
-// $Id: ColorWriter.cc,v 1.2 2009-04-24 15:54:21 gcosmo Exp $
+// $Id: G03ColorWriter.cc,v 1.2 2009-04-24 15:54:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
 
-#include "ColorWriter.hh"
+#include "G03ColorWriter.hh"
 
 #include "G4LogicalVolume.hh"
 #include "G4VisAttributes.hh"
 
-ColorWriter::ColorWriter()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G03ColorWriter::G03ColorWriter()
   : G4GDMLWriteStructure()
 {
 }
 
-ColorWriter::~ColorWriter()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G03ColorWriter::~G03ColorWriter()
 {
 }
 
-void ColorWriter::AddExtension(xercesc::DOMElement* volumeElement,
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G03ColorWriter::AddExtension(xercesc::DOMElement* volumeElement,
                                const G4LogicalVolume* const vol)
 {
    const G4VisAttributes* vis = vol->GetVisAttributes();
    if (vis)  { ColorWrite(volumeElement, vis); }
 }
 
-void ColorWriter::ExtensionWrite(xercesc::DOMElement* element)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G03ColorWriter::ExtensionWrite(xercesc::DOMElement* element)
 {
    G4cout << "G4GDML: Writing GDML extension..." << G4endl;
 
@@ -62,7 +70,9 @@ void ColorWriter::ExtensionWrite(xercesc::DOMElement* element)
    element->appendChild(extElement);
 }
 
-void ColorWriter::ColorWrite(xercesc::DOMElement* volumeElement,
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G03ColorWriter::ColorWrite(xercesc::DOMElement* volumeElement,
                              const G4VisAttributes* const att)
 {
    G4bool book = BookAttribute(att);
@@ -91,14 +101,16 @@ void ColorWriter::ColorWrite(xercesc::DOMElement* volumeElement,
           << r << ", " << g << ", " << b << ", " << a << " !" << G4endl;
 }
 
-G4bool ColorWriter::BookAttribute(const G4VisAttributes* const ref)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4bool G03ColorWriter::BookAttribute(const G4VisAttributes* const ref)
 {
   G4bool booking = true;
   std::vector<const G4VisAttributes*>::const_iterator pos =
-     std::find(attribs.begin(), attribs.end(), ref);
+     std::find(fAttribs.begin(), fAttribs.end(), ref);
 
-  if (pos != attribs.end())  { booking = false; }
-  else                       { attribs.push_back(ref); }
+  if (pos != fAttribs.end())  { booking = false; }
+  else                       { fAttribs.push_back(ref); }
 
   return booking;
 }

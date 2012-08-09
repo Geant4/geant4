@@ -23,18 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G03/src/DetectorConstruction.cc
-/// \brief Implementation of the DetectorConstruction class
+/// \file persistency/gdml/G03/src/G03DetectorConstruction.cc
+/// \brief Implementation of the G03DetectorConstruction class
 //
 //
-// $Id: DetectorConstruction.cc,v 1.3 2009-04-15 13:26:26 gcosmo Exp $
+// $Id: G03DetectorConstruction.cc,v 1.3 2009-04-15 13:26:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Class DetectorConstruction implementation
+// Class G03DetectorConstruction implementation
 //
 // ----------------------------------------------------------------------------
 
-#include "DetectorConstruction.hh"
+#include "G03DetectorConstruction.hh"
 
 // Geant4 includes
 //
@@ -44,57 +44,51 @@
 
 // Messenger
 //
-#include "DetectorMessenger.hh"
+#include "G03DetectorMessenger.hh"
 
 // Color extension include for reading
 //
-#include "ColorReader.hh"
+#include "G03ColorReader.hh"
 
 // Color extension include for writing
 //
-#include "ColorWriter.hh"
+#include "G03ColorWriter.hh"
 
-// ----------------------------------------------------------------------------
-//
-// Constructor
-//
-DetectorConstruction::DetectorConstruction()
-  : Air(0), Aluminum(0), Pb(0), Xenon(0)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G03DetectorConstruction::G03DetectorConstruction()
+  : fAir(0), fAluminum(0), fPb(0), fXenon(0)
 {  
   fReadFile = "color_extension.gdml";
   fWriteFile = "color_extension_test.gdml";
-  writingChoice = 1;
+  fWritingChoice = 1;
 
-  detectorMessenger = new DetectorMessenger( this );
+  fDetectorMessenger = new G03DetectorMessenger( this );
 
-  reader = new ColorReader;
-  writer = new ColorWriter;
-  parser = new G4GDMLParser(reader, writer);
+  fReader = new G03ColorReader;
+  fWriter = new G03ColorWriter;
+  fParser = new G4GDMLParser(fReader, fWriter);
 }
 
-// ----------------------------------------------------------------------------
-//
-// Destructor
-//
-DetectorConstruction::~DetectorConstruction()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G03DetectorConstruction::~G03DetectorConstruction()
 {
-  delete detectorMessenger;
-  delete reader;
-  delete writer;
-  delete parser;
+  delete fDetectorMessenger;
+  delete fReader;
+  delete fWriter;
+  delete fParser;
 }
 
-// ----------------------------------------------------------------------------
-//
-// Constructs geometries and materials
-//
-G4VPhysicalVolume* DetectorConstruction::Construct()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4VPhysicalVolume* G03DetectorConstruction::Construct()
 { 
   // Reading of Geometry from GDML
 
   G4VPhysicalVolume* fWorldPhysVol;
 
-  parser->Read(fReadFile,false);
+  fParser->Read(fReadFile,false);
     //
     // 2nd Boolean argument "Validate" set to false.
     // Disabling Schema validation for reading extended GDML file.
@@ -105,22 +99,20 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   // Giving World Physical Volume from GDML Parser
   //
-  fWorldPhysVol = parser->GetWorldVolume();     
+  fWorldPhysVol = fParser->GetWorldVolume();     
 
-  if(writingChoice!=0)
+  if(fWritingChoice!=0)
   {
-    parser->Write(fWriteFile, fWorldPhysVol, true,
+    fParser->Write(fWriteFile, fWorldPhysVol, true,
                   "./SimpleExtensionSchema/SimpleExtension.xsd");
   }
       
   return fWorldPhysVol;
 }
 
-// ----------------------------------------------------------------------------
-//
-// Utility to build and list necessary materials
-//
-void DetectorConstruction::ListOfMaterials()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G03DetectorConstruction::ListOfMaterials()
 {
   G4double a;  // atomic mass
   G4double z;  // atomic number
@@ -147,23 +139,23 @@ void DetectorConstruction::ListOfMaterials()
   // Air
   //
   density = 1.29*mg/cm3;
-  Air = new G4Material(name="Air", density, ncomponents=2);
-  Air->AddElement(elN, fractionmass=0.7);
-  Air->AddElement(elO, fractionmass=0.3);
+  fAir = new G4Material(name="Air", density, ncomponents=2);
+  fAir->AddElement(elN, fractionmass=0.7);
+  fAir->AddElement(elO, fractionmass=0.3);
 
   // Aluminum
   //
   density = 2.70*g/cm3;
-  Aluminum = new G4Material(name="Aluminum", density, ncomponents=1);
-  Aluminum->AddElement(elAl, fractionmass=1.0);
+  fAluminum = new G4Material(name="Aluminum", density, ncomponents=1);
+  fAluminum->AddElement(elAl, fractionmass=1.0);
 
   // Lead
   //
-  Pb = new G4Material("Lead", z=82., a= 207.19*g/mole, density= 11.35*g/cm3);
+  fPb = new G4Material("Lead", z=82., a= 207.19*g/mole, density= 11.35*g/cm3);
 
   // Xenon gas
   //
-  Xenon = new G4Material("XenonGas", z=54., a=131.29*g/mole,
+  fXenon = new G4Material("XenonGas", z=54., a=131.29*g/mole,
                          density= 5.458*mg/cm3, kStateGas,
                          temperature= 293.15*kelvin, pressure= 1*atmosphere);
 
@@ -172,23 +164,18 @@ void DetectorConstruction::ListOfMaterials()
   G4cout << *(G4Material::GetMaterialTable() ) << G4endl;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// ----------------------------------------------------------------------------
-//
-// SetReadFile
-//
-void DetectorConstruction::SetReadFile( const G4String& fname )
+void G03DetectorConstruction::SetReadFile( const G4String& fname )
 {
   fReadFile=fname;
-  writingChoice=0;
+  fWritingChoice=0;
 }
 
-// ----------------------------------------------------------------------------
-//
-// SetWriteFile
-//
-void DetectorConstruction::SetWriteFile( const G4String& fname )
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G03DetectorConstruction::SetWriteFile( const G4String& fname )
 {
   fWriteFile=fname;
-  writingChoice=1;
+  fWritingChoice=1;
 }

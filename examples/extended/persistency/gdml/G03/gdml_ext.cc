@@ -48,9 +48,9 @@
 
 // Example includes
 //
-#include "DetectorConstruction.hh"
-#include "PrimaryGeneratorAction.hh"
-#include "RunAction.hh"
+#include "G03DetectorConstruction.hh"
+#include "G03PrimaryGeneratorAction.hh"
+#include "G03RunAction.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -69,11 +69,11 @@ int main(int argc, char** argv)
 
   // Set mandatory initialization and user action classes
   //
-  DetectorConstruction* detector = new DetectorConstruction;
+  G03DetectorConstruction* detector = new G03DetectorConstruction;
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new QGSP_BERT);
-  runManager->SetUserAction(new PrimaryGeneratorAction);
-  RunAction* runAction = new RunAction;
+  runManager->SetUserAction(new G03PrimaryGeneratorAction);
+  G03RunAction* runAction = new G03RunAction;
   runManager->SetUserAction(runAction);
       
   // Initialisation of runManager via macro for the interactive mode
