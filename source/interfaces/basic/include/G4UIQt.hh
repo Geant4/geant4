@@ -51,7 +51,7 @@ class QTreeWidgetItem;
 class QTextEdit;
 class QLabel;
 class QResizeEvent;
-class QTabWidget;
+class QToolBox;
 class QStringList;
 class QSplitter;
 
@@ -148,9 +148,6 @@ private:
   void OpenHelpTreeOnCommand(const QString &);
   QString GetShortCommandPath(QString);
   QString GetLongCommandPath(QTreeWidgetItem*);
-  G4bool IsGUICommand(const G4UIcommand*);
-  bool CreateVisCommandTabToolBox(G4UIcommand*,QString commandText);
-  bool CreateVisCommandGroupAndToolBox(G4UIcommand*,QString, QWidget*, int);
 
 private:
 
@@ -163,7 +160,7 @@ private:
   QLineEdit * fCommandArea;
   QTextEdit *fCoutTBTextArea;
   QTextEdit *fHelpArea;
-  QTabWidget* fUITabWidget;
+  QToolBox* fToolBox;
   QStringList fG4cout;
   QLineEdit * fCoutFilter;
 
@@ -198,8 +195,6 @@ private Q_SLOTS :
   void CoutFilterCallback(const QString&);
   void TabCloseCallback(int);
   void ToolBoxActivated(int);
-  void VisParameterCallback(QWidget*);
-  void ChangeColorCallback(QWidget*);
 };
 
 #endif
