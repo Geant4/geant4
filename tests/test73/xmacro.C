@@ -274,15 +274,24 @@ void xmacro(TString f1="thin.root", TString f2="thick.root", TString outf="resul
 	Double_t t1= ( fLp1 - fSp1 ) / TMath::Sqrt( fLp1_e*fLp1_e + fSp1_e*fLp1_e );
 	Double_t pval1 = TMath::StudentI( t1 , ndf );
 	if ( t1 > 0 ) pval1 = 1-pval1;
-	
-	cout<<"Student's t-test on intercept: "<<t0<<" p-value="<<pval0<<" (one-tailed)"<<endl;
-	cout<<"Student's t-test on slope: "<<t1<<" p-value="<<pval1<<" (one-tailed)"<<endl;
-	if ( pval0<0.025 ) cerr<<"Student's t-test failing for \"Intercept\" fitted value. Check file: "<<outf<<endl;
-	if ( pval1<0.025 ) cerr<<"Student's t-test failing for \"Slope\" fitted value. Check file: "<<outf<<endl;
+
+	cout<<"Student's t-test on intercept: "<<t0<<" p-value="<<pval0<<" (one-tailed)";//<<endl;
+	if ( pval0<0.025 ) 
+	  {
+	    cout<<" test is failing, limit is p-val=0.025";
+	    cerr<<"Student's t-test failing for \"Intercept\" fitted value. Check file: "<<outf<<endl;
+	  }
+	cout<<endl;
+	cout<<"Student's t-test on slope: "<<t1<<" p-value="<<pval1<<" (one-tailed)";//<<endl;
+	if ( pval1<0.025 ) { 
+		    cout<<" test is failing, limit is p-val=0.025";
+		    cerr<<"Student's t-test failing for \"Slope\" fitted value. Check file: "<<outf<<endl;
+	}
+	cout<<endl;
 
 	char textL94[100],textS94[100],textL92[100],textS92[100];
-   	sprintf(textL94," %g + %g /p_{T}", fitLx94->GetParameter(0), fitLx94->GetParameter(1));
-   	sprintf(textS94," %g + %g /p_{T}", fitSx94->GetParameter(0), fitSx94->GetParameter(1));
+   	sprintf(textL94,"Thick: %g + %g /p_{T}", fitLx94->GetParameter(0), fitLx94->GetParameter(1));
+   	sprintf(textS94,"Thin: %g + %g /p_{T}", fitSx94->GetParameter(0), fitSx94->GetParameter(1));
    	//sprintf(textL92," %g + %g /p_{T}", fitLx92->GetParameter(0), fitLx92->GetParameter(1));
    	//sprintf(textS92," %g + %g /p_{T}", fitSx92->GetParameter(0), fitSx92->GetParameter(1));
 	

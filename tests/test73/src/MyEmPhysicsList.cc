@@ -127,7 +127,7 @@ void MyEmPhysicsList::ConstructProcess()
 			//muon  
 			G4MuMultipleScattering* msc = new G4MuMultipleScattering();
 			msc->AddEmModel(0, new G4WentzelVIModel());
-			msc->SetStepLimitType(fUseDistanceToBoundary);
+			//msc->SetStepLimitType(fUseDistanceToBoundary);
 			pmanager->AddProcess(msc,                       -1, 1, 1);
 			G4MuIonisation* muIoni = new G4MuIonisation();
 			muIoni->SetStepFunction(0.2, 50*um);          
@@ -136,7 +136,7 @@ void MyEmPhysicsList::ConstructProcess()
 			pmanager->AddProcess(new G4MuPairProduction,    -1,-4, 4);
 			//AddStepMax(particle, pmanager);
 			//pmanager->AddProcess(new G4StepLimiter(), -1, -1, 5);
-			//pmanager->AddDiscreteProcess(new G4CoulombScattering());
+			pmanager->AddDiscreteProcess(new G4CoulombScattering());
 		}
 		
 		else if( particleName == "alpha" || particleName == "GenericIon" ) 
@@ -154,8 +154,8 @@ void MyEmPhysicsList::ConstructProcess()
 			//pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
 			G4MuMultipleScattering* msc = new G4MuMultipleScattering();
 			msc->AddEmModel(0, new G4WentzelVIModel());
-			msc->SetStepLimitType(fUseDistanceToBoundary);
-            msc->SetSkin(10);
+			//msc->SetStepLimitType(fUseDistanceToBoundary);
+			//msc->SetSkin(10);
 
 			pmanager->AddProcess(msc,                   -1, 1, 1);
 
@@ -164,7 +164,9 @@ void MyEmPhysicsList::ConstructProcess()
 			pmanager->AddProcess(hIoni,                     -1, 2, 2);
 			pmanager->AddProcess(new G4hBremsstrahlung,     -1,-3, 3);
 			pmanager->AddProcess(new G4hPairProduction,     -1,-4, 4);
-			//pmanager->AddDiscreteProcess(new G4CoulombScattering());
+			// this line is uncommented only because hadron 
+			// elastic is not used in this Physics List 
+			pmanager->AddDiscreteProcess(new G4CoulombScattering());
 		}
 
 		else if ((!particle->IsShortLived()) &&

@@ -5,8 +5,8 @@
 /control/alias nevents 10000
 
 #Set MSC parameters to make test pass
-/process/msc/StepLimit UseDistanceToBoundary
-/process/msc/Skin 10
+#/process/msc/StepLimit UseDistanceToBoundary
+#/process/msc/Skin 10
 
 #Loop on all particles
 /control/foreach run_singlePart.mac part e- pi- mu- 

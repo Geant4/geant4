@@ -11,6 +11,17 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27 July 2012, V.Ivanchenko (test73-V09-05-14)
+MyEmPhysicsList - use WentzelVI and CoulombScattering models for pions
+
+19 July 2012, V.Ivanchenko (test73-V09-05-13)
+MyEmPhysicsList - uncomment line in muon physics, which was a source of 
+  problem for muons   
+
+18 July 2012, Andrea Dotti (test73-V09-05-12)
+Improving output sentence in case of errors. Improving legends in PDF image.
+
 31 May 2012, Andrea Dotti (test73-V09-05-10, test73-V09-05-11)
 Adding LABELS property to test definition. Use of WORKING_DIRECTORY
 to correctly partse stderr. Needs cmake-V09-05-19
