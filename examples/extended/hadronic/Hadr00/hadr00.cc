@@ -80,16 +80,25 @@ int main(int argc,char** argv) {
 
   G4PhysListFactory factory;
   G4VModularPhysicsList* phys = 0;
+  G4String physName = "";
 
-  // Physics List name defined via 2nd argument
-  if (argc==3) {
-    G4String physName = argv[2];
-    if(factory.IsReferencePhysList(physName)) 
-      phys = factory.GetReferencePhysList(physName);
-  }
+  // Physics List name defined via 3nd argument
+  if (argc==3) { physName = argv[2]; }
 
   // Physics List is defined via environment variable PHYSLIST
-  if(!phys) phys = factory.ReferencePhysList();
+  if("" == physName) {
+    char* path = getenv("PHYSLIST");
+    if (path) { physName = G4String(path); }
+  }
+
+  // if name is not known to the factory use FTFP_BERT
+  if("" == physName || !factory.IsReferencePhysList(physName)) {
+    physName = "FTFP_BERT"; 
+  }
+
+  // reference PhysicsList via its name
+  phys = factory.GetReferencePhysList(physName);
+
   runManager->SetUserInitialization(phys);
 
   runManager->SetUserAction(new PrimaryGeneratorAction());
