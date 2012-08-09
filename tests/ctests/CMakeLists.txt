@@ -13,6 +13,14 @@ endif()
 find_package(ROOT QUIET)
 
 #-------------------------------------------------------------------------------------------------
+#---Consistency-----------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------
+GEANT4_ADD_TEST(validate-sources 
+                COMMAND ${CMAKE_MAKE_PROGRAM} validate_sources
+                WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+                LABELS Continuous) 
+
+#-------------------------------------------------------------------------------------------------
 #---Basic-----------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------------------
 GEANT4_ADD_TEST(example-bas-b1 
@@ -227,7 +235,7 @@ GEANT4_ADD_TEST(example-ext-geometry-olap
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/geometry/olap
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/geometry/olap
                 BUILD olapex)
-foreach(_i 00 01 02)
+foreach(_i 00 01 02 03)
   GEANT4_ADD_TEST(example-ext-hadronic-hadr${_i} 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/hadronic/Hadr${_i}/hadr${_i}
                           ${CMAKE_SOURCE_DIR}/examples/extended/hadronic/Hadr${_i}/hadr${_i}.in
@@ -486,6 +494,6 @@ GEANT4_ADD_TEST(example-adv-medical_linac-build
 #-------------------------------------------------------------------------------------------------
 #---Simplified Calorimeter-----------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------------------
-include( ${CMAKE_SOURCE_DIR}/SimplifiedCalorimeter/SimplifiedCalorimeter/CTestDefinitions.txt OPTIONAL)
+include( ${CMAKE_SOURCE_DIR}/verification/SimplifiedCalorimeter/physval/CTestDefinitions.txt OPTIONAL)
 
 

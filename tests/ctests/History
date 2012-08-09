@@ -17,6 +17,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ctests-V09-05-14 11th July 2012 Pere Mato
+- Improved "validate_sources" target as a new test
+
+ctests-V09-05-13 11th July 2012 Pere Mato
+- Added "validate_sources" target as a new test
+
+ctests-V09-05-12 10th July 2012 Andrea Dotti
+- Adding new path for SimplifiedCalorimeter
+
+ctests-V09-05-11 4th July 2012 Gunter Folger
+- Add examples/extended/hadronic/Hadr03 to testing
+
 ctests-V09-05-10 27th June 2012 Pere Mato
 - Fix for the advanced examples
 
