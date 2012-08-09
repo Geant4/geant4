@@ -77,7 +77,7 @@ void Test30VSecondaryGenerator::SetA(G4int A)
 	 << "  A(amu)= " << elm->GetN();
   if(targetA < targetZ) {
     targetA = 0; 
-    G4cout << "  Natural abandances"; 
+    G4cout << "  Natural abundances"; 
   } else {
     G4double mass = G4NucleiProperties::GetNuclearMass(targetA, targetZ);
     G4cout << "Mass from G4NucleiProperties(GeV)= " << mass/GeV << G4endl;

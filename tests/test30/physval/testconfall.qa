@@ -1,0 +1,68 @@
+#-*-python-*-
+# Configuration file for QA tests
+# This file should be a valid python file.
+# To test if format is correct, tye:
+# python testconf.qa
+# no output is produced if the code is correct
+#
+# The general format is:
+#     variable = value
+# There are few top-level variables: Binned and UnBinned for
+# binned and unbinned distributions respectively.
+# The value of the top-level variables is a dictionary of variable:values pairs.
+# See the following file as an example: <StatTest main Direcotry>/example/testconf.qa
+
+#Configuration for Binned distributions
+#These are tests to be performed on Histograms
+Binned = {
+    #Define the Test to be executed by Default
+    #If a test is specified for a specific histogram the latter will overwrite this
+    #Availble tests are defined in module: StatTest.Tests, there the function
+    # getTestByName is used to retrieve the test class corresponding to the name
+    #Specified here
+    'DefaultTestName' : 'BinnedWeighted1DChi2Test',
+    #Define the default thresholds for the test.
+    #These are used together with the test above
+    #Three special cases could be useful in special cases
+    # If Thresholds : [ 0 , 0 ] It will cause the test to always PASS (basically disabble test)
+    # If Thresholds : [ 0 , 1 ] Test will always be NOTPASSED (useful to force user to check results manually)
+    # If Thresholds : [ 1 , 1 ] Test will always FAIL
+    'DefaultThresholds' : [ 0.1,0.5],
+
+    #Define the default file from where retrieve the reference histograms.
+    #Reference histograms should have the same name (including ROOT's directory structure)
+    #of the tested histogram.
+    #Reference file is searched in working directory
+    'DefaultReferenceFile' : 'reference.root',
+    #It is possible to access remote files via HHTP (See documentation of ROOT's TWebFile'
+    #'DefaultReferenceFile' : 'http://someserver.org/somerootfile.root',
+
+    #Define inputs: histograms a list of dictionaries
+    'Histos' : [
+        #Each dictionary represents a configuration for a set of histograms.
+        #At least one configuration should be defined.
+
+        #Group 1
+        {
+            #The first element of the configuration is the name of the histogram
+            #  to be tested, the name can be an absolute path or a regular experession
+            #  For example the following is a configuration for an histogram 
+            'Name' : '.*',
+            #The second element is the test name, if not given the value in DefaultTestName
+            #will be used
+            #'TestName' : 'AndersonDarlingTest',
+            #The third element are the thresholds. This is a couple of p-values, if
+            #the result of the test (p-value) between the histogram and the reference is lower than
+            #the first element the test is FAILED, if larger than thge second element is PASSED,
+            #otherwise is NOTPASSED. If no thresholds are given the default will be used (see:
+            # Interface.Output class)
+            #'Thresholds' : [ 0.1 , 0.7 ]
+        },        
+        ] #End of Histos defintion
+
+    } #End of configuration
+
+#No TTrees to check
+UnBinned = {
+'DataSet' : [ {'Name':''} ]
+    } 

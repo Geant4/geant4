@@ -13,6 +13,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+test30-V09-05-13  31 July 2012 A. Dotti
+- Bug fix for test name in CMakeLists.txt for PhysicsChecks 
+
+test30-V09-05-12  11 July 2012 A. Dotti
+- Adding first support for ctest PhysicsChecks validation
 
 test30-V09-05-11  30 May 2012 V.Ivanchenko
 - Test30VSecondaryGenerator - use integer Z and A
