@@ -1,0 +1,29 @@
+# $Id: TestEm1.in,v 1.25 2008-09-12 16:32:25 maire Exp $
+#
+# Macro file for "Hadr14.cc"
+# (can be run in batch, without graphic)
+#
+# proton 10 MeV; all processes
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testhadr/det/setMat Molybdenum100
+###/testhadr/det/setMat G4_Mo
+#
+/testhadr/det/setSize 1000 m 
+#
+/run/initialize
+#
+/gun/particle proton
+/gun/energy 10 MeV
+#
+/process/inactivate ProtonInelastic
+#
+/testhadr/histo/setFileName elastic
+/testhadr/histo/setHisto 1  100  9. 11 MeV	# scaterred proton
+/testhadr/histo/setHisto 2  100  0. 50 keV	#recoil ion
+/testhadr/histo/setHisto 11 100 -700. 10 eV	#Q
+/testhadr/histo/setHisto 12 100  0. 15 MeV	#Pbalance
+#
+/run/beamOn 10000

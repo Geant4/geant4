@@ -1,0 +1,29 @@
+# $Id: TestEm1.in,v 1.25 2008-09-12 16:32:25 maire Exp $
+#
+# Macro file for "hadr03.cc"
+# (can be run in batch, without graphic)
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testhadr/det/setMat Boron10
+###/testhadr/det/setMat G4_B 
+/testhadr/det/setSize 1000 m
+#
+/run/initialize
+#
+/gun/particle neutron
+/gun/energy 0.1 keV
+#
+/process/inactivate hadElastic
+/process/inactivate NeutronInelastic
+#
+/testhadr/histo/setFileName nCapture
+/testhadr/histo/setHisto 2  100  0. 70 keV	#recoil ion
+/testhadr/histo/setHisto 3  100  0. 15 MeV	#gamma
+/testhadr/histo/setHisto 11 100  0. 70 MeV	#Q
+/testhadr/histo/setHisto 12 100  0. 15 MeV	#Pbalance
+#
+/testhadr/event/printModulo 10000
+#
+/run/beamOn 100000
