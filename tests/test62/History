@@ -12,6 +12,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05 July 2012, Alberto Ribon   (test62-V09-05-00)
+- Update test62.cc to replace the obsolete physics list QGSP_INCL_ABLA
+  with QGSP_INCLXX.
+
 15 June 2011, Gunter Folger   (test62-V09-04-01)
 - Update test62.in to replace obsolete /run/particle/SetCut by /run/SetCut
 

@@ -38,7 +38,7 @@
 
 #include "G4ios.hh"
 
-#include "QGSP_INCL_ABLA.hh"
+#include "QGSP_INCLXX.hh"
 
 int main(int argc,char** argv) {
 
@@ -51,7 +51,7 @@ int main(int argc,char** argv) {
 
   // UserInitialization classes
   runManager->SetUserInitialization(new Tst62DetectorConstruction);
-  runManager->SetUserInitialization(new QGSP_INCL_ABLA);
+  runManager->SetUserInitialization(new QGSP_INCLXX);
 
   // UserAction classes
   runManager->SetUserAction(new Tst62RunAction);
