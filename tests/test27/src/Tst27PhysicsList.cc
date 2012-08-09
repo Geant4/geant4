@@ -230,7 +230,7 @@ void Tst27PhysicsList::ConstructEM()
 
 // Low-energy Models
 
-#include "G4LElastic.hh"
+#include "G4HadronElastic.hh"
 #include "G4LFission.hh"
 #include "G4LCapture.hh"
 
@@ -334,20 +334,19 @@ void Tst27PhysicsList::ConstructHad()
     
     G4TripathiCrossSection * TripathiCrossSection= new G4TripathiCrossSection;
     G4IonsShenCrossSection * aShen = new G4IonsShenCrossSection;
-// replace the default string fragmentation function (Lund) to QGSM
-//      G4VLongitudinalStringDecay * theFragmentation = new G4QGSMFragmentation;
-//      G4ExcitedStringDecay * theStringDecay = new G4ExcitedStringDecay(theFragmentation);
-//      theStringModel->SetFragmentationModel(theStringDecay);
-// done with the generator model (most of the above is also available as default)
+    // replace the default string fragmentation function (Lund) to QGSM
+    //      G4VLongitudinalStringDecay * theFragmentation = new G4QGSMFragmentation;
+    //      G4ExcitedStringDecay * theStringDecay = new G4ExcitedStringDecay(theFragmentation);
+    //      theStringModel->SetFragmentationModel(theStringDecay);
+    // done with the generator model (most of the above is also available as default)
 
-   G4HadronElasticProcess* theElasticProcess = 
-                                    new G4HadronElasticProcess;
-   G4LElastic* theElasticModel = new G4LElastic;
-   theElasticProcess->RegisterMe(theElasticModel);
-   G4HadronElasticProcess* theElasticProcess1 = 
-                                    new G4HadronElasticProcess;
-   theParticleIterator->reset();
-   while ((*theParticleIterator)()) {
+    G4HadronElasticProcess* theElasticProcess = new G4HadronElasticProcess();
+    theElasticProcess->RegisterMe(new G4HadronElastic());
+    G4HadronElasticProcess* theElasticProcess1 = 
+      new G4HadronElasticProcess();
+
+    theParticleIterator->reset();
+    while ((*theParticleIterator)()) {
       G4ParticleDefinition* particle = theParticleIterator->value();
       G4ProcessManager* pmanager = particle->GetProcessManager();
       G4String particleName = particle->GetParticleName();
@@ -432,8 +431,7 @@ void Tst27PhysicsList::ConstructHad()
       else if (particleName == "neutron") {
          
           // elastic scattering
-         G4LElastic* theElasticModel1 = new G4LElastic;
-         theElasticProcess1->RegisterMe(theElasticModel1);
+         theElasticProcess1->RegisterMe(new G4HadronElastic);
          pmanager->AddDiscreteProcess(theElasticProcess1);
           // inelastic scattering
          G4NeutronInelasticProcess* theInelasticProcess = 
@@ -606,10 +604,10 @@ void Tst27PhysicsList::ConstructHad()
          pmanager->AddDiscreteProcess(theInelasticProcess);
       }
       else if (particleName == "GenericIon") {
-         pmanager->AddDiscreteProcess(theElasticProcess);
+	//pmanager->AddDiscreteProcess(theElasticProcess);
          G4IonInelasticProcess* theInelasticProcess = 
                             new G4IonInelasticProcess();
-	 theInelasticProcess->AddDataSet(TripathiCrossSection);
+	 // theInelasticProcess->AddDataSet(TripathiCrossSection);
 	 theInelasticProcess->AddDataSet(aShen);
          G4BinaryLightIonReaction * theGenIonBC= new G4BinaryLightIonReaction;
          theGenIonBC->SetMinEnergy(0*MeV);

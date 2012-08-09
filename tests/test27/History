@@ -12,6 +12,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27-July-2012, Vladimir Ivanchenko                (test27-V09-05-00)
+- Fixed hadron elastic 
+
 18-Mar-2010, Gunter Folger                       (test27-V09-03-00)
 -  Adapt to new multiple scattering classes
 -  fix mac file for SetCut 
