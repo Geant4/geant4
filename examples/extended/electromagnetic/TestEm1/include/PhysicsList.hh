@@ -57,6 +57,7 @@ class PhysicsList: public G4VModularPhysicsList
     void AddPhysicsList(const G4String& name);
     
     void AddDecay();
+    void AddRadioactiveDecay();
     void AddStepMax();
 
     void SetCuts();

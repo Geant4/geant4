@@ -177,8 +177,6 @@ void PhysicsList::ConstructParticle()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4EmProcessOptions.hh"
-#include "G4Decay.hh"
-#include "G4ProcessManager.hh"
 
 void PhysicsList::ConstructProcess()
 {
@@ -199,6 +197,10 @@ void PhysicsList::ConstructProcess()
   // Decay Process
   //
   AddDecay();
+    
+  // Decay Process
+  //
+  AddRadioactiveDecay();  
 
   // step limitation (as a full process)
   //  
@@ -270,6 +272,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include "G4ProcessManager.hh"
 #include "G4Decay.hh"
 
 void PhysicsList::AddDecay()
@@ -293,6 +296,22 @@ void PhysicsList::AddDecay()
 
     }
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "G4PhysicsListHelper.hh"
+#include "G4RadioactiveDecay.hh"
+
+void PhysicsList::AddRadioactiveDecay()
+{  
+  G4RadioactiveDecay* radioactiveDecay = new G4RadioactiveDecay();
+  radioactiveDecay->SetHLThreshold(-1.*s);
+  radioactiveDecay->SetICM(true);		//Internal Conversion
+  radioactiveDecay->SetARM(true);		//Atomic Rearangement
+  
+  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();  
+  ph->RegisterProcess(radioactiveDecay, G4GenericIon::GenericIon());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
