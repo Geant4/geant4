@@ -23,37 +23,60 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G04/include/DetectorConstruction.hh
-/// \brief Definition of the DetectorConstruction class
+/// \file persistency/gdml/G04/src/G04PrimaryGeneratorAction.cc
+/// \brief Implementation of the G04PrimaryGeneratorAction class
 //
 //
-// $Id: DetectorConstruction.hh,v 1.1 2010-10-11 08:40:51 gcosmo Exp $
+// $Id: G04PrimaryGeneratorAction.cc,v 1.1 2010-10-11 08:40:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 
-#ifndef _DETECTORCONSTRUCTION_H_
-#define _DETECTORCONSTRUCTION_H_
+#include "G04PrimaryGeneratorAction.hh"
+#include "G4Event.hh"
+#include "G4ParticleGun.hh"
+#include "G4ParticleTable.hh"
+#include "G4ParticleDefinition.hh"
 
-#include "G4VUserDetectorConstruction.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorConstruction : public G4VUserDetectorConstruction
+G04PrimaryGeneratorAction::G04PrimaryGeneratorAction()
 {
-  public:
- 
-    DetectorConstruction(G4VPhysicalVolume *setWorld = 0)
-    {   
-      World = setWorld;
-    }
+  G4int n_particle = 1;
+  fParticleGun = new G4ParticleGun(n_particle);
 
-    G4VPhysicalVolume *Construct()
-    {
-      return World;
-    }
+  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+  G4String particleName;
+  fParticleGun->SetParticleDefinition(
+               particleTable->FindParticle(particleName="geantino"));
+  fParticleGun->SetParticleEnergy(1.0*GeV);
+  fParticleGun->SetParticlePosition(G4ThreeVector(-2.0*m, 0.1, 0.1));
+}
 
-  private:
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-    G4VPhysicalVolume *World;
-};
+G04PrimaryGeneratorAction::~G04PrimaryGeneratorAction()
+{
+  delete fParticleGun;
+}
 
-#endif
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G04PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
+{
+  G4int i = anEvent->GetEventID() % 3;
+  G4ThreeVector v(1.0,0.0,0.0);
+  switch(i)
+  {
+    case 0:
+      break;
+    case 1:
+      v.setY(0.1);
+      break;
+    case 2:
+      v.setZ(0.1);
+      break;
+  }
+  fParticleGun->SetParticleMomentumDirection(v);
+  fParticleGun->GeneratePrimaryVertex(anEvent);
+}

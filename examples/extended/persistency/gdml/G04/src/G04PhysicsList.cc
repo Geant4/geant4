@@ -23,36 +23,46 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G04/src/PhysicsList.cc
-/// \brief Implementation of the PhysicsList class
+/// \file persistency/gdml/G04/src/G04PhysicsList.cc
+/// \brief Implementation of the G04PhysicsList class
 //
 //
-// $Id: PhysicsList.cc,v 1.1 2010-10-11 08:40:51 gcosmo Exp $
+// $Id: G04PhysicsList.cc,v 1.1 2010-10-11 08:40:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 
-#include "PhysicsList.hh"
+#include "G04PhysicsList.hh"
 
-PhysicsList::PhysicsList()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G04PhysicsList::G04PhysicsList()
 {
 }
 
-PhysicsList::~PhysicsList()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G04PhysicsList::~G04PhysicsList()
 {
 }
 
-void PhysicsList::ConstructParticle()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G04PhysicsList::ConstructParticle()
 {
    G4Geantino::GeantinoDefinition();
 }
 
-void PhysicsList::ConstructProcess()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G04PhysicsList::ConstructProcess()
 {
    AddTransportation();
 }
 
-void PhysicsList::SetCuts()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G04PhysicsList::SetCuts()
 {
    G4int temp = GetVerboseLevel();
    SetVerboseLevel(0);                                                           

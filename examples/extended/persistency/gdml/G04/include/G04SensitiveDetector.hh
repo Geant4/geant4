@@ -23,37 +23,36 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G04/include/PrimaryGeneratorAction.hh
-/// \brief Definition of the PrimaryGeneratorAction class
+/// \file persistency/gdml/G04/include/G04SensitiveDetector.hh
+/// \brief Definition of the G04SensitiveDetector class
 //
 //
-// $Id: PrimaryGeneratorAction.hh,v 1.1 2010-10-11 08:40:51 gcosmo Exp $
+// $Id: G04SensitiveDetector.hh,v 1.1 2010-10-11 08:40:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
 
-#ifndef _PRIMARYGENERATORACTION_H_
-#define _PRIMARYGENERATORACTION_H_
+#ifndef G04SensitiveDetector_h
+#define G04SensitiveDetector_h 1
 
-#include "G4VUserPrimaryGeneratorAction.hh"
+#include "G4VSensitiveDetector.hh"
 
-#include "globals.hh"
+class G4Step;
 
-class G4Event;
-class G4ParticleGun;
+/// Sensitive detector to be attached to the GDML geometry
 
-class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+class G04SensitiveDetector : public G4VSensitiveDetector
 {
   public:
+      G04SensitiveDetector(const G4String&);
+     ~G04SensitiveDetector();
 
-    PrimaryGeneratorAction();
-   ~PrimaryGeneratorAction();
-
-   void GeneratePrimaries(G4Event* anEvent);
+      void Initialize(G4HCofThisEvent*);
+      G4bool ProcessHits(G4Step*, G4TouchableHistory*);
+      void EndOfEvent(G4HCofThisEvent*);
 
   private:
 
-    G4ParticleGun* particleGun;
 };
 
 #endif
+

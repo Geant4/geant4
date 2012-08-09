@@ -23,44 +23,39 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G04/src/SensitiveDetector.cc
-/// \brief Implementation of the SensitiveDetector class
+/// \file persistency/gdml/G04/include/G04DetectorConstruction.hh
+/// \brief Definition of the G04DetectorConstruction class
 //
 //
-// $Id: SensitiveDetector.cc,v 1.2 2010-10-21 13:13:55 gcosmo Exp $
+// $Id: G04DetectorConstruction.hh,v 1.1 2010-10-11 08:40:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+//
 
-#include "SensitiveDetector.hh"
-#include "G4HCofThisEvent.hh"
-#include "G4Step.hh"
-#include "G4ThreeVector.hh"
-#include "G4SDManager.hh"
-#include "G4ios.hh"
+#ifndef _G04DETECTORCONSTRUCTION_H_
+#define _G04DETECTORCONSTRUCTION_H_
 
-SensitiveDetector::SensitiveDetector(const G4String& name)
-  : G4VSensitiveDetector(name)
+#include "G4VUserDetectorConstruction.hh"
+
+/// Detector construction for laoding GDML geometry
+
+class G04DetectorConstruction : public G4VUserDetectorConstruction
 {
-}
+  public:
+ 
+    G04DetectorConstruction(G4VPhysicalVolume *setWorld = 0)
+    {   
+      fWorld = setWorld;
+    }
 
+    G4VPhysicalVolume *Construct()
+    {
+      return fWorld;
+    }
 
-SensitiveDetector::~SensitiveDetector()
-{
-}
+  private:
 
+    G4VPhysicalVolume *fWorld;
+};
 
-void SensitiveDetector::Initialize(G4HCofThisEvent*)
-{
-}
-
-
-G4bool SensitiveDetector::ProcessHits(G4Step*, G4TouchableHistory*)
-{
-  G4cout << "Processing hits ...." << G4endl; 
-  return true;
-}
-
-
-void SensitiveDetector::EndOfEvent(G4HCofThisEvent*)
-{
-}
+#endif

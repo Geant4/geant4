@@ -23,27 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G04/include/PhysicsList.hh
-/// \brief Definition of the PhysicsList class
+/// \file persistency/gdml/G04/include/G04PhysicsList.hh
+/// \brief Definition of the G04PhysicsList class
 //
 //
-// $Id: PhysicsList.hh,v 1.1 2010-10-11 08:40:51 gcosmo Exp $
+// $Id: G04PhysicsList.hh,v 1.1 2010-10-11 08:40:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 
-#ifndef _PHYSICSLIST_H_
-#define _PHYSICSLIST_H_
+#ifndef _G04PHYSICSLIST_H_
+#define _G04PHYSICSLIST_H_
 
 #include "G4VUserPhysicsList.hh"
 #include "G4ParticleTypes.hh"
 #include "globals.hh"
 
-class PhysicsList : public G4VUserPhysicsList
+/// Physics list for the GDML senstive detector example
+
+class G04PhysicsList : public G4VUserPhysicsList
 {
   public:
-    PhysicsList();
-   ~PhysicsList();
+    G04PhysicsList();
+   ~G04PhysicsList();
 
   protected:
 

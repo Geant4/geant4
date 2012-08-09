@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 31st, 2012 W. Pokorski  (G04-V09-05-00)
+- adding CMake file + cosmetic changes
+
 November 9th, 2010  J.Allison (G04-V09-03-03)
 - Removed unnecessary #include "G4UIsession.hh".
 

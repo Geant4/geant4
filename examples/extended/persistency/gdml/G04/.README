@@ -1,13 +1,13 @@
-$Id: README,v 1.1 2010-10-11 08:40:51 gcosmo Exp $
--------------------------------------------------------------------
+//$Id$
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+///\file "persistency/gdml/G04/.README"
+///\brief Example G04 README page
 
-                     GDML detector sensitivity
-                     -------------------------
+/*! \page ExampleG04 Example G04
 
+
+\section G04_s1 GDML DETECTOR SENSITIVITY
+                    
 This example demonstrates the usage of the GDML auxiliary information for
 associating a sensitive detector to a volume.
 
@@ -20,16 +20,21 @@ A simple GDML files is provided:
 - auxiliary.gdml, showing association of a volume with the auxiliary
   information, related to the sensitive detector.
 
-HOW TO BUILD THE EXAMPLE ?
+\section G04_s2 HOW TO BUILD THE EXAMPLE ?
 
 - You need to have built the persistency/gdml module by having
   set the -DGEANT4_USE_GDML=ON flag during the CMAKE configuration step, 
   as well as the -DXERCESC_ROOT_DIR=<path_to_xercesc> flag pointing to 
   the path where the XercesC XML parser package is installed in your system.
- 
-- Compile and link to generate the executable (in your CMAKE build directory):
- 	      % make gdml_det
 
-- Execute the application.
-  o For parsing interactively the GDML file:
- 	      % gdml_det auxiliary.gdml
+- Compile and link to generate the executable (in your CMAKE build directory):
+\verbatim
+% make gdml_det
+\endverbatim
+
+- Execute the application for parsing interactively the GDML file:
+\verbatim
+% gdml_det auxiliary.gdml
+\endverbatim
+
+*/
