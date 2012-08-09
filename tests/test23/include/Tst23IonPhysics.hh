@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst23IonPhysics.hh,v 1.5 2010-03-19 00:00:24 dennis Exp $
+// $Id: Tst22IonPhysics.hh,v 1.3 2010-03-18 22:53:04 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,9 +44,6 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-
-#include "G4HadronElasticProcess.hh"
-#include "G4LElastic.hh"
 
 #include "G4DeuteronInelasticProcess.hh"
 #include "G4LEDeuteronInelastic.hh"
@@ -77,9 +74,6 @@ class Tst23IonPhysics : public G4VPhysicsConstructor
     virtual void ConstructProcess();
 
   protected:
-   // Elastic Process
-   G4HadronElasticProcess theElasticProcess;
-   G4LElastic*            theElasticModel;
 
    // Generic Ion physics
    G4hMultipleScattering   fIonMultipleScattering;
