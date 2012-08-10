@@ -1,16 +1,12 @@
 
-        ############################################
-        !!! WARNING - FPE detection is activated !!!
-        ############################################
-
 *************************************************************
- Geant4 version Name: geant4-09-06-beta-01    (29-June-2012)
+ Geant4 version Name: geant4-09-05-ref-07    (10-August-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
- creating G4RunManagerKernel 0x1d90d4f0
+ creating G4RunManagerKernel 0x5540c90
 
 The materials defined are : 
 
@@ -60,30 +56,33 @@ List of instantiated particles ============================================
 e+ e- gamma mu+ mu- pi+ pi- proton 
 physicsList->Construct() start.
  G4Transportation constructor> set fShortStepOptimisation to false
-0x1d97b190G4ErrorPhysicsList:: particle process manager e+ = 0x1d97c690
-0x1d97af80G4ErrorPhysicsList:: particle process manager e- = 0x1d97dca0
-0x1d97ad10G4ErrorPhysicsList:: particle process manager gamma = 0x1d97deb0
-0x1d97b3a0G4ErrorPhysicsList:: particle process manager mu+ = 0x1d97e100
-0x1d97b7d0G4ErrorPhysicsList:: particle process manager mu- = 0x1d97e350
-0x1d97bc40G4ErrorPhysicsList:: particle process manager pi+ = 0x1d97e5a0
-0x1d97c060G4ErrorPhysicsList:: particle process manager pi- = 0x1d97e7f0
-0x1d97c480G4ErrorPhysicsList:: particle process manager proton = 0x1d97ea40
+0x55a77f0G4ErrorPhysicsList:: particle process manager e+ = 0x55a8cf0
+0x55a75e0G4ErrorPhysicsList:: particle process manager e- = 0x55aa300
+0x55a7370G4ErrorPhysicsList:: particle process manager gamma = 0x55aa510
+0x55a7a00G4ErrorPhysicsList:: particle process manager mu+ = 0x55aa760
+0x55a7e30G4ErrorPhysicsList:: particle process manager mu- = 0x55aa9b0
+0x55a82a0G4ErrorPhysicsList:: particle process manager pi+ = 0x55aac00
+0x55a86c0G4ErrorPhysicsList:: particle process manager pi- = 0x55aae50
+0x55a8ae0G4ErrorPhysicsList:: particle process manager proton = 0x55ab0a0
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 
 conv:   for  gamma    SubType= 14
-      Lambda tables from 1.022 MeV to 10 TeV in 77 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=       10 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=      100 GeV
+     BetheHeitlerLPM :  Emin=      100 GeV   Emax=       10 TeV
 
 compt:   for  gamma    SubType= 13
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
+      LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
 phot:   for  gamma    SubType= 12
+      LambdaPrime table from 200 keV to 10 TeV in 54 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV
+       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila
 
 Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
  This region is in the mass world.
@@ -359,5 +358,4 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
   8.713066792134575e-07                       0   3.553011183568633e-05    0.004447277908978974                       0 
    5.94446560151063e-05                       0    0.004447277908978974      0.6278868499590836                       0 
                       0    0.004069145419631037                       0                       0      0.5408775310101931 
-
 

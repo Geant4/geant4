@@ -1,10 +1,6 @@
 
-        ############################################
-        !!! WARNING - FPE detection is activated !!!
-        ############################################
-
 *************************************************************
- Geant4 version Name: geant4-09-06-beta-01    (29-June-2012)
+ Geant4 version Name: geant4-09-05-ref-07    (10-August-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -195,7 +191,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 
- gamma (300 keV) in Germanium (density: 5.323 g/cm3 ;   radiation length: 2.30121 cm )
+ gamma (300 keV) in Germanium (density: 5.323 g/cm3    radiation length: 2.30121 cm )
 
   processes :                	         phot		        compt		         conv		        total
  
@@ -203,16 +199,16 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
  
   compCrossSectionPerVolume : 	     0.075796 cm^-1	     0.488969 cm^-1	            0 cm^-1	     0.564765 cm^-1
-  cross section per volume : 	     0.075796 cm^-1	     0.488955 cm^-1	            0 cm^-1	     0.564751 cm^-1
-  cross section per mass   : 	    0.0142393 cm2/g	     0.091857 cm2/g	            0 cm2/g	     0.106096 cm2/g
+  cross section per volume : 	     0.075796 cm^-1	     0.488954 cm^-1	            0 cm^-1	      0.56475 cm^-1
+  cross section per mass   : 	    0.0142393 cm2/g	    0.0918568 cm2/g	            0 cm2/g	     0.106096 cm2/g
  
-  mean free path           : 	      13.1933 cm 	      2.04518 cm 	 5.82593e+288 pc 	      1.77069 cm 
-        (g/cm2)            : 	       70.228 g/cm2 	      10.8865 g/cm2 	 2.88022e+285 kg/cm2	      9.42539 g/cm2 
+  mean free path           : 	      13.1933 cm 	      2.04518 cm 	 5.82593e+288 pc 	       1.7707 cm 
+        (g/cm2)            : 	       70.228 g/cm2 	      10.8865 g/cm2 	 2.88022e+285 kg/cm2	      9.42541 g/cm2 
 
 -------------------------------------------------------------
 
 
- e- (10 MeV) in Water (density: 1 g/cm3 ;   radiation length: 36.0924 cm )
+ e- (10 MeV) in Water (density: 1 g/cm3    radiation length: 36.0924 cm )
 
   Range cuts : 	 gamma      100 um 	 e-      100 um 
  Energy cuts : 	 gamma  1.11344 keV	 e-  85.1138 keV
@@ -240,5 +236,4 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
   critical energy (Rossi)  : 	 78.7732 MeV
   Moliere radius           : 	0.269193 X0 =  9.71583 cm 
 -------------------------------------------------------------
-
 

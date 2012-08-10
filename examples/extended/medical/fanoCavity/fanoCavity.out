@@ -1,10 +1,6 @@
 
-        ############################################
-        !!! WARNING - FPE detection is activated !!!
-        ############################################
-
 *************************************************************
- Geant4 version Name: geant4-09-06-beta-01    (29-June-2012)
+ Geant4 version Name: geant4-09-05-ref-07    (10-August-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -104,16 +100,18 @@ PhysicsList::SetCuts:CutLength : 10 km
 /run/beamOn 4000
 
 phot:   for  gamma    SubType= 12
+      LambdaPrime table from 200 keV to 10 GeV in 94 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :  Emin=        0 eV    Emax=       10 GeV
+       PhotoElectric :  Emin=        0 eV    Emax=       10 GeV   AngularGenSauterGavrila
 
 compt:   for  gamma    SubType= 13
-      Lambda tables from 100 eV  to 10 GeV in 160 bins, spline: 1
+      Lambda table from 100 eV  to 1 MeV in 80 bins, spline: 1
+      LambdaPrime table from 1 MeV to 10 GeV in 80 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
      myKlein-Nishina :  Emin=        0 eV    Emax=       10 GeV
 
 conv:   for  gamma    SubType= 14
-      Lambda tables from 1.022 MeV to 10 GeV in 160 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 GeV in 80 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       10 GeV
 
@@ -129,6 +127,11 @@ eIoni:   for  e-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
       myMollerBhabha :  Emin=        0 eV    Emax=       10 GeV
       CSDA range table up to 10 GeV in 160 bins
+
+msc:   for e+    SubType= 10
+      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 GeV  Table with 160 bins Emin=    100 eV    Emax=     10 GeV
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 GeV in 160 bins
@@ -200,50 +203,50 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 ----------------------------------------
 Start Run processing.
 
- ---> NbofEvents= 1000   NbOfelectr= 70593   Tkin= 585.624 keV (0.000 %)   NbOfelec in cav= 4560   Dose/EnFluence= 27.192 cm2/g (0.000 %)
+ ---> NbofEvents= 1000   NbOfelectr= 70270   Tkin= 588.201 keV (0.000 %)   NbOfelec in cav= 4831   Dose/EnFluence= 30.641 cm2/g (0.000 %)
 
- ---> NbofEvents= 2000   NbOfelectr= 140885   Tkin= 587.317 keV (0.289 %)   NbOfelec in cav= 9444   Dose/EnFluence= 27.577 cm2/g (1.415 %)
+ ---> NbofEvents= 2000   NbOfelectr= 140819   Tkin= 587.677 keV (-0.089 %)   NbOfelec in cav= 9931   Dose/EnFluence= 32.078 cm2/g (4.690 %)
 
- ---> NbofEvents= 3000   NbOfelectr= 211480   Tkin= 588.036 keV (0.122 %)   NbOfelec in cav= 14106   Dose/EnFluence= 28.541 cm2/g (3.499 %)
+ ---> NbofEvents= 3000   NbOfelectr= 211380   Tkin= 588.168 keV (0.084 %)   NbOfelec in cav= 14443   Dose/EnFluence= 31.310 cm2/g (-2.394 %)
 Run terminated.
 Run Summary
   Number of events processed : 4000
-  User=22.13s Real=22.13s Sys=0s
+  User=23.4s Real=25.15s Sys=0.01s
 
  ======================== run summary ======================
 
  The run consists of 4000 gamma of 1.250 MeV through 2*5.000 mm  of Water (density: 1.000 g/cm3 )
 
- the cavity is 2.000 mm  of Water_vapor (density: 1.000 mg/cm3); Mass = 0.628 mg
+ the cavity is 2.000 mm  of Water_vapor (density: 1.000 mg/cm3) Mass = 0.628 mg
 
  ============================================================
 
- Process calls frequency --->  compt= 281143  Transportation= 77477  msc= 2385798  eIoni= 1720704
+ Process calls frequency --->  compt= 282041  Transportation= 78691  msc= 2412733  eIoni= 1717779  conv= 1
 
- Gamma crossSections in wall material :  compt= 63.447 cm2/g   --> total= 63.447 cm2/g
+ Gamma crossSections in wall material :  compt= 63.447 cm2/g  conv= 0.000 cm2/g   --> total= 63.447 cm2/g
 
- Mean energy of secondary e- = 587.2916 keV +- 0.1034 %  (--> range in wall material = 2.2169 mm )
- Mass_energy_transfer coef: 29.8095 cm2/g
+ Mean energy of secondary e- = 588.3558 keV +- 0.1028 %  (--> range in wall material = 2.2223 mm )
+ Mass_energy_transfer coef: 29.8636 cm2/g
 
- StoppingPower in wall   = 1.9644 MeV*cm2/g
-               in cavity = 1.9644 MeV*cm2/g
+ StoppingPower in wall   = 1.9638 MeV*cm2/g
+               in cavity = 1.9638 MeV*cm2/g
 
  Charged particle flow in cavity :
-      Enter --> nbParticles = 18890	 Energy = 9.5596 GeV
-      Exit  --> nbParticles = 18901	 Energy = 9.5637 GeV
+      Enter --> nbParticles = 19054	 Energy = 9.6457 GeV
+      Exit  --> nbParticles = 19066	 Energy = 9.6488 GeV
 
- Total edep in cavity = 12.5175 MeV +- 2.6561 %	 Total charged trackLength = 52.0487 m     (mean value = 2.7554 mm )
- Total dose in cavity = 19.9222 MeV/mg
- Dose/EnergyFluence   = 28.1644 cm2/g
+ Total edep in cavity = 13.6364 MeV +- 3.5721 %	 Total charged trackLength = 52.9064 m     (mean value = 2.7767 mm )
+ Total dose in cavity = 21.7029 MeV/mg
+ Dose/EnergyFluence   = 30.6818 cm2/g
 
- (Dose/EnergyFluence)/Mass_energy_transfer = 0.94481 +- 0.02511
+ (Dose/EnergyFluence)/Mass_energy_transfer = 1.02740 +- 0.03671
 
- StepSize of ch. tracks in wall   = 113.4763 um  +- 72.0753 um 	 (nbSteps/track = 14.7515)
- StepSize of ch. tracks in cavity = 1.7868 mm  +- 1.3718 mm 	 (nbSteps/track = 1.5420)
+ StepSize of ch. tracks in wall   = 113.1497 um  +- 71.7225 um 	 (nbSteps/track = 14.7928)
+ StepSize of ch. tracks in cavity = 1.7960 mm  +- 1.3730 mm 	 (nbSteps/track = 1.5460)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 995474237, 608576926
+ Current couple of seeds = 25465259, 1572001709
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
@@ -256,4 +259,3 @@ Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
 RunManager is deleted.
-

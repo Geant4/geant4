@@ -1,10 +1,6 @@
 
-        ############################################
-        !!! WARNING - FPE detection is activated !!!
-        ############################################
-
 *************************************************************
- Geant4 version Name: geant4-09-06-beta-01    (29-June-2012)
+ Geant4 version Name: geant4-09-05-ref-07    (10-August-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -155,18 +151,21 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /run/beamOn 100000
 
 phot:   for  gamma    SubType= 12
+      LambdaPrime table from 200 keV to 10 TeV in 154 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV  FluoActive
+       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
 
 compt:   for  gamma    SubType= 13
-      Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
+      Lambda table from 10 eV  to 1 MeV in 100 bins, spline: 1
+      LambdaPrime table from 1 MeV to 10 TeV in 140 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         KleinNishina :  Emin=        0 eV    Emax=       10 TeV  FluoActive
 
 conv:   for  gamma    SubType= 14
-      Lambda tables from 1.022 MeV to 10 TeV in 240 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=       10 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=      100 GeV
+     BetheHeitlerLPM :  Emin=      100 GeV   Emax=       10 TeV
 
 ### ===  Deexcitation model UAtomDeexcitation is activated for regions:
           DefaultRegionForTheWorld
@@ -240,6 +239,15 @@ ionIoni:   for  GenericIon    SubType= 2
 nuclearStopping:   for  GenericIon    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :  Emin=        0 eV    Emax=       10 TeV
+
+ionIoni:   for  alpha    SubType= 2
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
+      finalRange(mm)= 0.001, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV
+          BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
+      CSDA range table up to 10 TeV in 240 bins
 
 nuclearStopping:   for  alpha    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -417,7 +425,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=1.46s Real=1.46s Sys=0s
+  User=1.45s Real=1.49s Sys=0s
 
  ======================== run summary ======================
 
@@ -425,19 +433,19 @@ Run Summary
  ===========================================================
 
 
- TrackLength= 1.0005 cm 	 nb of steps= 2.5031  stepSize= 3.997 mm 
+ TrackLength= 1.0005 cm 	 nb of steps= 2.5037  stepSize= 3.996 mm 
 
- d-rays  : eLoss/primary= 245.64 keV	  nb of d-rays= 0.23243  <Tkin>= 1.0568 MeV  Tmin= 351.89 keV  Tmax= 4.9755 MeV
+ d-rays  : eLoss/primary= 245.54 keV	  nb of d-rays= 0.23245  <Tkin>= 1.0563 MeV  Tmin= 351.89 keV  Tmax= 4.9755 MeV
 
- gamma   : eLoss/primary= 155.31 keV	  nb of gammas= 0.27277  <Tkin>= 569.37 keV  Tmin= 2.9421 keV  Tmax= 9.722 MeV
+ gamma   : eLoss/primary= 155.93 keV	  nb of gammas= 0.27303  <Tkin>= 571.1 keV  Tmin= 2.9412 keV  Tmax= 9.722 MeV
 
- deposit : eLoss/primary= 1.7327 MeV	 <dEcut > table= 1.7337 MeV   ---> simul/reference= 0.9994
+ deposit : eLoss/primary= 1.7327 MeV	 <dEcut > table= 1.7337 MeV   ---> simul/reference= 0.99937
 
- total   : eLoss/primary= 2.1337 MeV	 <dEfull> table= 2.1369 MeV   ---> simul/reference= 0.9985
+ total   : eLoss/primary= 2.1341 MeV	 <dEfull> table= 2.1369 MeV   ---> simul/reference= 0.99872
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 449827188, 2086854158
+ Current couple of seeds = 345363332, 1205476028
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
@@ -450,4 +458,3 @@ Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
 RunManager is deleted.
-

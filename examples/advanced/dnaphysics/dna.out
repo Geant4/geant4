@@ -1,10 +1,6 @@
 
-        ############################################
-        !!! WARNING - FPE detection is activated !!!
-        ############################################
-
 *************************************************************
- Geant4 version Name: geant4-09-06-beta-01    (29-June-2012)
+ Geant4 version Name: geant4-09-05-ref-07    (10-August-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -24,11 +20,6 @@ Current available graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  OpenGLStoredX (OGL)
-  OpenGLImmediateX (OGLI)
-  OpenGLStoredX (OGLS)
-  OpenGLImmediateX (OGLIX)
-  OpenGLStoredX (OGLSX)
 
 Registering model factories...
 
@@ -58,27 +49,31 @@ Available colours:
 -> Density of water material (g/cm3)=1
 
 phot:   for  gamma    SubType= 12
+      LambdaPrime table from 200 keV to 10 TeV in 54 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
- LivermorePhElectric :  Emin=        0 eV    Emax=        1 GeV  FluoActive
-       PhotoElectric :  Emin=        1 GeV   Emax=       10 TeV  FluoActive
+ LivermorePhElectric :  Emin=        0 eV    Emax=        1 GeV   AngularGenSauterGavrila  FluoActive
+       PhotoElectric :  Emin=        1 GeV   Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
 
 compt:   for  gamma    SubType= 13
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
+      LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
     LivermoreCompton :  Emin=        0 eV    Emax=        1 GeV  FluoActive
        Klein-Nishina :  Emin=        1 GeV   Emax=       10 TeV
 
 conv:   for  gamma    SubType= 14
-      Lambda tables from 1.022 MeV to 10 TeV in 77 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
  LivermoreConversion :  Emin=        0 eV    Emax=        1 GeV
-        BetheHeitler :  Emin=        1 GeV   Emax=       10 TeV
+        BetheHeitler :  Emin=        1 GeV   Emax=      100 GeV
+     BetheHeitlerLPM :  Emin=      100 GeV   Emax=       10 TeV
 
 Rayl:   for  gamma    SubType= 11
-      Lambda tables from 100 eV  to 10 TeV in 200 bins, spline: 1
+      Lambda table from 100 eV  to 100 keV in 21 bins, spline: 0
+      LambdaPrime table from 100 keV to 10 TeV in 56 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   LivermoreRayleigh :  Emin=        0 eV    Emax=        1 GeV
-   LivermoreRayleigh :  Emin=        1 GeV   Emax=      100 GeV
+   LivermoreRayleigh :  Emin=        0 eV    Emax=        1 GeV   CullenGenerator
+   LivermoreRayleigh :  Emin=        1 GeV   Emax=       10 TeV   CullenGenerator
 
 e-_G4DNAElastic:   for  e-    SubType= 51
  Total cross sections computed from DNAChampionElasticModel model
@@ -104,6 +99,11 @@ e-_G4DNAAttachment:   for  e-    SubType= 55
  Total cross sections computed from DNAMeltonAttachmentModel
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNAMeltonAttachmentModel :  Emin=        0 eV    Emax=       13 eV 
+
+msc:   for e+    SubType= 10
+      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 ### ===  Deexcitation model UAtomDeexcitation is activated for regions:
           DefaultRegionForTheWorld
@@ -159,76 +159,6 @@ alpha_G4DNAChargeDecrease:   for  alpha    SubType= 56
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNADingfelderChargeDecreaseModel :  Emin=        0 eV    Emax=      400 MeV
 
-alpha+_G4DNAExcitation:   for  alpha+    SubType= 52
- Total cross sections computed from DNAMillerGreenExcitationModel
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAMillerGreenExcitationModel :  Emin=        0 eV    Emax=      400 MeV
-
-alpha+_G4DNAIonisation:   for  alpha+    SubType= 53
- Total cross sections computed from DNARuddIonisationModel
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationModel :  Emin=        0 eV    Emax=      400 MeV  FluoActive
-
-alpha+_G4DNAChargeDecrease:   for  alpha+    SubType= 56
- Total cross sections computed from DNADingfelderChargeDecreaseModel model
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNADingfelderChargeDecreaseModel :  Emin=        0 eV    Emax=      400 MeV
-
-alpha+_G4DNAChargeIncrease:   for  alpha+    SubType= 57
- Total cross sections computed from DNADingfelderChargeIncreaseModel model
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNADingfelderChargeIncreaseModel :  Emin=        0 eV    Emax=      400 MeV
-
-carbon_G4DNAIonisation:   for  carbon    SubType= 53
- Total cross sections computed from DNARuddIonisationExtendedModel
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationExtendedModel :  Emin=        0 eV    Emax=       10 TeV  FluoActive
-
-helium_G4DNAExcitation:   for  helium    SubType= 52
- Total cross sections computed from DNAMillerGreenExcitationModel
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAMillerGreenExcitationModel :  Emin=        0 eV    Emax=      400 MeV
-
-helium_G4DNAIonisation:   for  helium    SubType= 53
- Total cross sections computed from DNARuddIonisationModel
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationModel :  Emin=        0 eV    Emax=      400 MeV  FluoActive
-
-helium_G4DNAChargeIncrease:   for  helium    SubType= 57
- Total cross sections computed from DNADingfelderChargeIncreaseModel model
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNADingfelderChargeIncreaseModel :  Emin=        0 eV    Emax=      400 MeV
-
-hydrogen_G4DNAExcitation:   for  hydrogen    SubType= 52
- Total cross sections computed from DNAMillerGreenExcitationModel
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAMillerGreenExcitationModel :  Emin=        0 eV    Emax=      500 keV
-
-hydrogen_G4DNAIonisation:   for  hydrogen    SubType= 53
- Total cross sections computed from DNARuddIonisationModel
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationModel :  Emin=        0 eV    Emax=      100 MeV  FluoActive
-
-hydrogen_G4DNAChargeIncrease:   for  hydrogen    SubType= 57
- Total cross sections computed from DNADingfelderChargeIncreaseModel model
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNADingfelderChargeIncreaseModel :  Emin=        0 eV    Emax=      100 MeV
-
-iron_G4DNAIonisation:   for  iron    SubType= 53
- Total cross sections computed from DNARuddIonisationExtendedModel
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationExtendedModel :  Emin=        0 eV    Emax=       10 TeV  FluoActive
-
-nitrogen_G4DNAIonisation:   for  nitrogen    SubType= 53
- Total cross sections computed from DNARuddIonisationExtendedModel
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationExtendedModel :  Emin=        0 eV    Emax=       10 TeV  FluoActive
-
-oxygen_G4DNAIonisation:   for  oxygen    SubType= 53
- Total cross sections computed from DNARuddIonisationExtendedModel
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationExtendedModel :  Emin=        0 eV    Emax=       10 TeV  FluoActive
-
 Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
  This region is in the mass world.
  Root logical volume(s) : World 
@@ -262,7 +192,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=3.05s Real=3.05s Sys=0s
+  User=3.17s Real=3.26s Sys=0s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
@@ -276,4 +206,3 @@ Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
 RunManager is deleted.
-
