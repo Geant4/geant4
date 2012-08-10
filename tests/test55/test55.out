@@ -1,10 +1,6 @@
 
-        ############################################
-        !!! WARNING - FPE detection is activated !!!
-        ############################################
-
 *************************************************************
- Geant4 version Name: geant4-09-06-beta-01    (29-June-2012)
+ Geant4 version Name: geant4-09-05-ref-07    (10-August-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -152,27 +148,29 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /run/beamOn 1000
 
 phot:   for  gamma    SubType= 12
+      LambdaPrime table from 200 keV to 10 TeV in 154 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
- LivermorePhElectric :  Emin=        0 eV    Emax=        1 GeV  FluoActive
-       PhotoElectric :  Emin=        1 GeV   Emax=       10 TeV  FluoActive
+ LivermorePhElectric :  Emin=        0 eV    Emax=        1 GeV   AngularGenSauterGavrila  FluoActive
+       PhotoElectric :  Emin=        1 GeV   Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
 
 compt:   for  gamma    SubType= 13
-      Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
+      Lambda table from 100 eV  to 1 MeV in 80 bins, spline: 1
+      LambdaPrime table from 1 MeV to 10 TeV in 140 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
     LivermoreCompton :  Emin=        0 eV    Emax=        1 GeV  FluoActive
        Klein-Nishina :  Emin=        1 GeV   Emax=       10 TeV
 
 conv:   for  gamma    SubType= 14
-      Lambda tables from 1.022 MeV to 10 TeV in 220 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
- LivermoreConversion :  Emin=        0 eV    Emax=        1 GeV
-        BetheHeitler :  Emin=        1 GeV   Emax=       10 TeV
+ LivermoreConversion :  Emin=        0 eV    Emax=      100 GeV
+     BetheHeitlerLPM :  Emin=      100 GeV   Emax=       10 TeV
 
 Rayl:   for  gamma    SubType= 11
-      Lambda tables from 100 eV  to 10 TeV in 200 bins, spline: 1
+      Lambda table from 100 eV  to 100 keV in 60 bins, spline: 0
+      LambdaPrime table from 100 keV to 10 TeV in 160 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   LivermoreRayleigh :  Emin=        0 eV    Emax=        1 GeV
-   LivermoreRayleigh :  Emin=        1 GeV   Emax=      100 GeV
+   LivermoreRayleigh :  Emin=        0 eV    Emax=       10 TeV   CullenGenerator
 
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
@@ -195,9 +193,13 @@ eBrem:   for  e-    SubType= 3
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           LowEnBrem :  Emin=        0 eV    Emax=       25 MeV   AngularGen2BS
-             eBremSB :  Emin=       25 MeV   Emax=        1 GeV   AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGenUrban
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGenUrban
+
+msc:   for e+    SubType= 10
+      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -231,6 +233,22 @@ hIoni:   for  proton    SubType= 2
                Bragg :  Emin=        0 eV    Emax=        2 MeV
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
 
+hBrems:   for  anti_proton    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+
+hPairProd:   for  anti_proton    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+nuclearStopping:   for  anti_proton    SubType= 8
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :  Emin=        0 eV    Emax=        1 MeV
+
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -248,9 +266,27 @@ nuclearStopping:   for  C12[0.0]    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :  Emin=        0 eV    Emax=       10 TeV
 
-nuclearStopping:   for  alpha    SubType= 8
+msc:   for alpha    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+
+ionIoni:   for  alpha    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV
+          BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
+
+nuclearStopping:   for  C12[0.0]    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for anti_proton    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -271,6 +307,10 @@ hPairProd:   for  anti_proton    SubType= 4
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+nuclearStopping:   for  anti_proton    SubType= 8
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :  Emin=        0 eV    Emax=        1 MeV
 
 msc:   for kaon+    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
@@ -297,6 +337,11 @@ hPairProd:   for  kaon+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
+msc:   for kaon-    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
@@ -304,6 +349,18 @@ hIoni:   for  kaon-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
           BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
+
+hBrems:   for  kaon+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+
+hPairProd:   for  kaon+    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 muMsc:   for mu+    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
@@ -332,10 +389,15 @@ muPairProd:   for  mu+    SubType= 4
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 CoulombScat:   for  mu+    SubType= 1
-      Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      Lambda table from 100 eV  to 10 TeV in 108 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+muMsc:   for mu-    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 muIoni:   for  mu-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -346,9 +408,21 @@ muIoni:   for  mu-    SubType= 2
           BetheBloch :  Emin=      200 keV   Emax=        1 GeV
         MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
 
+muBrems:   for  mu+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem :  Emin=        0 eV    Emax=       10 TeV
+
+muPairProd:   for  mu+    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :  Emin=        0 eV    Emax=       10 TeV
+
 CoulombScat:   for  mu-    SubType= 1
-      Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      Lambda table from 100 eV  to 10 TeV in 108 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -377,6 +451,11 @@ hPairProd:   for  pi+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
+msc:   for pi-    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
@@ -384,6 +463,18 @@ hIoni:   for  pi-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
+
+hBrems:   for  pi+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+
+hPairProd:   for  pi+    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 ========= Table of registered couples ==============================
 
@@ -415,7 +506,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.13s Real=2.18s Sys=0.05s
+  User=2.05s Real=2.21s Sys=0.05s
 
  The run consists of 1000 C12[0.0] of 144 MeV through 20 cm  of G4_Al (density: 2.699 g/cm3 )
 
@@ -720,12 +811,12 @@ Run Summary
 
  Projected Range= 70.14 um    rms= 0 fm 
  Mean number of primary steps = 73
- Total energy deposit= 8.26526 MeV
- NIEL energy deposit = 4.5805 keV
+ Total energy deposit= 8.26713 MeV
+ NIEL energy deposit = 4.57991 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 754300758, 237021762
+ Current couple of seeds = 1437236156, 1554839596
 ----------------------------------------
 
 ***** Table : Nb of materials = 9 *****
@@ -846,7 +937,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 754300758, 237021762
+ Current couple of seeds = 1437236156, 1554839596
 ----------------------------------------
 
 ---> Begin of Event: 0
@@ -855,12 +946,12 @@ Run Summary
 
  Projected Range= 29.333 um    rms= 0 fm 
  Mean number of primary steps = 32
- Total energy deposit= 2.82481 MeV
- NIEL energy deposit = 1.61494 keV
+ Total energy deposit= 2.82801 MeV
+ NIEL energy deposit = 1.61527 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1190091775, 443127304
+ Current couple of seeds = 2415717, 534964340
 ----------------------------------------
 
 ***** Table : Nb of materials = 10 *****
@@ -999,7 +1090,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1190091775, 443127304
+ Current couple of seeds = 2415717, 534964340
 ----------------------------------------
 
 ---> Begin of Event: 0
@@ -1008,12 +1099,12 @@ Run Summary
 
  Projected Range= 23.143 um    rms= 0 fm 
  Mean number of primary steps = 26
- Total energy deposit= 2.53131 MeV
- NIEL energy deposit = 1.41759 keV
+ Total energy deposit= 2.52994 MeV
+ NIEL energy deposit = 1.41751 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2137652348, 952030437
+ Current couple of seeds = 1764034780, 1392413352
 ----------------------------------------
 
 ***** Table : Nb of materials = 10 *****
@@ -1152,7 +1243,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2137652348, 952030437
+ Current couple of seeds = 1764034780, 1392413352
 ----------------------------------------
 
 ---> Begin of Event: 0
@@ -1161,12 +1252,12 @@ Run Summary
 
  Projected Range= 70.14 um    rms= 0 fm 
  Mean number of primary steps = 73
- Total energy deposit= 23.7128 MeV
- NIEL energy deposit = 11.7208 keV
+ Total energy deposit= 23.7214 MeV
+ NIEL energy deposit = 11.7214 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1304002041, 1731492550
+ Current couple of seeds = 53833888, 1019068372
 ----------------------------------------
 
 ***** Table : Nb of materials = 10 *****
@@ -1305,7 +1396,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1304002041, 1731492550
+ Current couple of seeds = 53833888, 1019068372
 ----------------------------------------
 
 ---> Begin of Event: 0
@@ -1314,12 +1405,12 @@ Run Summary
 
  Projected Range= 29.333 um    rms= 0 fm 
  Mean number of primary steps = 32
- Total energy deposit= 8.03356 MeV
- NIEL energy deposit = 4.06385 keV
+ Total energy deposit= 8.03035 MeV
+ NIEL energy deposit = 4.06403 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1412211142, 1361929721
+ Current couple of seeds = 1415095950, 307683752
 ----------------------------------------
 
 ***** Table : Nb of materials = 10 *****
@@ -1458,7 +1549,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1412211142, 1361929721
+ Current couple of seeds = 1415095950, 307683752
 ----------------------------------------
 
 ---> Begin of Event: 0
@@ -1467,12 +1558,12 @@ Run Summary
 
  Projected Range= 23.143 um    rms= 0 fm 
  Mean number of primary steps = 26
- Total energy deposit= 9.2217 MeV
- NIEL energy deposit = 4.80617 keV
+ Total energy deposit= 9.22751 MeV
+ NIEL energy deposit = 4.80662 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 380175123, 1550293229
+ Current couple of seeds = 1603516396, 89750952
 ----------------------------------------
 
 ***** Table : Nb of materials = 10 *****
@@ -1611,7 +1702,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 380175123, 1550293229
+ Current couple of seeds = 1603516396, 89750952
 ----------------------------------------
 
 ---> Begin of Event: 0
@@ -1620,12 +1711,12 @@ Run Summary
 
  Projected Range= 46.7 um    rms= 0 fm 
  Mean number of primary steps = 49
- Total energy deposit= 36.4248 MeV
- NIEL energy deposit = 19.4877 keV
+ Total energy deposit= 36.4414 MeV
+ NIEL energy deposit = 19.4907 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 787493418, 1951242702
+ Current couple of seeds = 1098942279, 1363241730
 ----------------------------------------
 
 ***** Table : Nb of materials = 10 *****
@@ -1764,7 +1855,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 787493418, 1951242702
+ Current couple of seeds = 1098942279, 1363241730
 ----------------------------------------
 
 ---> Begin of Event: 0
@@ -1773,12 +1864,12 @@ Run Summary
 
  Projected Range= 29.333 um    rms= 0 fm 
  Mean number of primary steps = 32
- Total energy deposit= 18.4492 MeV
- NIEL energy deposit = 9.85835 keV
+ Total energy deposit= 18.4364 MeV
+ NIEL energy deposit = 9.85734 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1155056443, 72446655
+ Current couple of seeds = 114789710, 716149629
 ----------------------------------------
 
 ***** Table : Nb of materials = 10 *****
@@ -1917,7 +2008,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1155056443, 72446655
+ Current couple of seeds = 114789710, 716149629
 ----------------------------------------
 
 ---> Begin of Event: 0
@@ -1926,12 +2017,12 @@ Run Summary
 
  Projected Range= 23.143 um    rms= 0 fm 
  Mean number of primary steps = 26
- Total energy deposit= 16.4418 MeV
- NIEL energy deposit = 8.60982 keV
+ Total energy deposit= 16.4329 MeV
+ NIEL energy deposit = 8.6095 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1655626790, 336103306
+ Current couple of seeds = 2092381952, 2112814489
 ----------------------------------------
 
 ===============================================================================
@@ -1962,17 +2053,16 @@ Run Summary
   Particle       Material      Energy    Ref.Value  Err.   Sim.Value  Diff. P/F
                                 (MeV)                (%)                (%)    
 -------------------------------------------------------------------------------
-  Li7[0.0]      G4_KAPTON        29.8      8.44 MeV  5.0  8.26526 MeV   2.1   P
-  Li7[0.0]  G4_POLYCAR...        29.8      2.93 MeV  5.0  2.82481 MeV   3.6   P
-  Li7[0.0]       G4_MYLAR        29.8      2.61 MeV  5.0  2.53131 MeV   3.0   P
-  C12[0.0]      G4_KAPTON        79.1     23.17 MeV  5.0  23.7128 MeV  -2.3   P
-  C12[0.0]  G4_POLYCAR...        79.1      7.34 MeV  5.0  8.03356 MeV  -9.4   F
-  C12[0.0]       G4_MYLAR        59.0      9.39 MeV  5.0   9.2217 MeV   1.8   P
-  O16[0.0]      G4_KAPTON        78.2     35.47 MeV  5.0  36.4248 MeV  -2.7   P
-  O16[0.0]  G4_POLYCAR...        78.2     18.18 MeV  5.0  18.4492 MeV  -1.5   P
-  O16[0.0]       G4_MYLAR        78.2     16.32 MeV  5.0  16.4418 MeV  -0.7   P
+  Li7[0.0]      G4_KAPTON        29.8      8.44 MeV  5.0  8.26713 MeV   2.0   P
+  Li7[0.0]  G4_POLYCAR...        29.8      2.93 MeV  5.0  2.82801 MeV   3.5   P
+  Li7[0.0]       G4_MYLAR        29.8      2.61 MeV  5.0  2.52994 MeV   3.1   P
+  C12[0.0]      G4_KAPTON        79.1     23.17 MeV  5.0  23.7214 MeV  -2.4   P
+  C12[0.0]  G4_POLYCAR...        79.1      7.34 MeV  5.0  8.03035 MeV  -9.4   F
+  C12[0.0]       G4_MYLAR        59.0      9.39 MeV  5.0  9.22751 MeV   1.7   P
+  O16[0.0]      G4_KAPTON        78.2     35.47 MeV  5.0  36.4414 MeV  -2.7   P
+  O16[0.0]  G4_POLYCAR...        78.2     18.18 MeV  5.0  18.4364 MeV  -1.4   P
+  O16[0.0]       G4_MYLAR        78.2     16.32 MeV  5.0  16.4329 MeV  -0.7   P
 -------------------------------------------------------------------------------
   TOTAL = 9, FAILED = 1, PASSED = 8
 ===============================================================================
-
 

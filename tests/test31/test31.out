@@ -1,10 +1,6 @@
 
-        ############################################
-        !!! WARNING - FPE detection is activated !!!
-        ############################################
-
 *************************************************************
- Geant4 version Name: geant4-09-06-beta-01    (29-June-2012)
+ Geant4 version Name: geant4-09-05-ref-07    (10-August-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -119,18 +115,27 @@ The meanExc(eV)= 78
 /run/beamOn 1
 
 phot:   for  gamma, applyCuts: 1     SubType= 12
+      LambdaPrime table from 200 keV to 10 TeV in 54 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV  FluoActive
+       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
 
 compt:   for  gamma, applyCuts: 1     SubType= 13
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
+      LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
 conv:   for  gamma, applyCuts: 1     SubType= 14
-      Lambda tables from 1.022 MeV to 10 TeV in 77 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=       10 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=      100 GeV
+     BetheHeitlerLPM :  Emin=      100 GeV   Emax=       10 TeV
+
+Rayl:   for  gamma, applyCuts: 1     SubType= 11
+      Lambda table from 100 eV  to 100 keV in 21 bins, spline: 0
+      LambdaPrime table from 100 keV to 10 TeV in 56 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LivermoreRayleigh :  Emin=        0 eV    Emax=       10 TeV   CullenGenerator
 
 msc:   for e-    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
@@ -154,10 +159,16 @@ eBrem:   for  e-    SubType= 3
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGen2BS
 
 CoulombScat:   for  e-, applyCuts: 1     SubType= 1
-      Lambda tables from 100 MeV to 10 TeV in 77 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=      100 MeV   Emax=       10 TeV
+
+msc:   for e+    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc93 :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=       10 TeV  Table with 35 bins Emin=    100 MeV   Emax=     10 TeV
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -179,8 +190,8 @@ annihil:   for  e+, applyCuts: 1     SubType= 5
             eplus2gg :  Emin=        0 eV    Emax=       10 TeV
 
 CoulombScat:   for  e+, applyCuts: 1     SubType= 1
-      Lambda tables from 100 MeV to 10 TeV in 77 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=      100 MeV   Emax=       10 TeV
 
@@ -197,6 +208,18 @@ hIoni:   for  proton    SubType= 2
                Bragg :  Emin=        0 eV    Emax=        2 MeV
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
 
+hBrems:   for  anti_proton    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+
+hPairProd:   for  anti_proton    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -210,6 +233,24 @@ ionIoni:   for  GenericIon    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :  Emin=        0 eV    Emax=        2 MeV
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+
+msc:   for alpha    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+
+ionIoni:   for  alpha    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV
+          BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
+
+muMsc:   for anti_proton    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -256,6 +297,11 @@ hPairProd:   for  kaon+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
+muMsc:   for kaon-    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -263,6 +309,18 @@ hIoni:   for  kaon-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
           BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
+
+hBrems:   for  kaon+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+
+hPairProd:   for  kaon+    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 muMsc:   for mu+    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
@@ -291,10 +349,15 @@ muPairProd:   for  mu+    SubType= 4
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 CoulombScat:   for  mu+, applyCuts: 1     SubType= 1
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      Lambda table from 100 eV  to 10 TeV in 43 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+muMsc:   for mu-    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 muIoni:   for  mu-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -305,9 +368,21 @@ muIoni:   for  mu-    SubType= 2
           BetheBloch :  Emin=      200 keV   Emax=        1 GeV
         MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
 
+muBrems:   for  mu+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem :  Emin=        0 eV    Emax=       10 TeV
+
+muPairProd:   for  mu+    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :  Emin=        0 eV    Emax=       10 TeV
+
 CoulombScat:   for  mu-, applyCuts: 1     SubType= 1
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      Lambda table from 100 eV  to 10 TeV in 43 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -336,6 +411,11 @@ hPairProd:   for  pi+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
+muMsc:   for pi-    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -343,6 +423,18 @@ hIoni:   for  pi-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
+
+hBrems:   for  pi+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+
+hPairProd:   for  pi+    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 ========= Table of registered couples ==============================
 
@@ -380,7 +472,7 @@ test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
 Initial particle               C12[0.0]   Ekin(GeV)= 1
-Range(mm)= 18.69; Stragling(mm)= 0 +- 0    1 events for range
+Range(mm)= 18.69 Stragling(mm)= 0 +- 0    1 events for range
 Number of events               1
 Average energy deposit         1000 MeV
 Average number of e-           0
@@ -495,18 +587,27 @@ Average number of pi+pi-       0
 /run/beamOn 100
 
 phot:   for  gamma, applyCuts: 1     SubType= 12
+      LambdaPrime table from 200 keV to 10 TeV in 54 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV  FluoActive
+       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
 
 compt:   for  gamma, applyCuts: 1     SubType= 13
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
+      LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
 conv:   for  gamma, applyCuts: 1     SubType= 14
-      Lambda tables from 1.022 MeV to 10 TeV in 77 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=       10 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=      100 GeV
+     BetheHeitlerLPM :  Emin=      100 GeV   Emax=       10 TeV
+
+Rayl:   for  gamma, applyCuts: 1     SubType= 11
+      Lambda table from 100 eV  to 100 keV in 21 bins, spline: 0
+      LambdaPrime table from 100 keV to 10 TeV in 56 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LivermoreRayleigh :  Emin=        0 eV    Emax=       10 TeV   CullenGenerator
 
 msc:   for e-    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
@@ -530,10 +631,16 @@ eBrem:   for  e-    SubType= 3
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGen2BS
 
 CoulombScat:   for  e-, applyCuts: 1     SubType= 1
-      Lambda tables from 100 MeV to 10 TeV in 77 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=      100 MeV   Emax=       10 TeV
+
+msc:   for e+    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc93 :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=       10 TeV  Table with 35 bins Emin=    100 MeV   Emax=     10 TeV
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -555,8 +662,8 @@ annihil:   for  e+, applyCuts: 1     SubType= 5
             eplus2gg :  Emin=        0 eV    Emax=       10 TeV
 
 CoulombScat:   for  e+, applyCuts: 1     SubType= 1
-      Lambda tables from 100 MeV to 10 TeV in 77 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=      100 MeV   Emax=       10 TeV
 
@@ -573,6 +680,18 @@ hIoni:   for  proton    SubType= 2
                Bragg :  Emin=        0 eV    Emax=        2 MeV
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
 
+hBrems:   for  anti_proton    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+
+hPairProd:   for  anti_proton    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -586,6 +705,24 @@ ionIoni:   for  GenericIon    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :  Emin=        0 eV    Emax=        2 MeV
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+
+msc:   for alpha    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV
+
+ionIoni:   for  alpha    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV
+          BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
+
+muMsc:   for anti_proton    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -632,6 +769,11 @@ hPairProd:   for  kaon+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
+muMsc:   for kaon-    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -639,6 +781,18 @@ hIoni:   for  kaon-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
           BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
+
+hBrems:   for  kaon+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+
+hPairProd:   for  kaon+    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 muMsc:   for mu+    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
@@ -667,10 +821,15 @@ muPairProd:   for  mu+    SubType= 4
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 CoulombScat:   for  mu+, applyCuts: 1     SubType= 1
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      Lambda table from 100 eV  to 10 TeV in 43 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+muMsc:   for mu-    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 muIoni:   for  mu-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -681,9 +840,21 @@ muIoni:   for  mu-    SubType= 2
           BetheBloch :  Emin=      200 keV   Emax=        1 GeV
         MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
 
+muBrems:   for  mu+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem :  Emin=        0 eV    Emax=       10 TeV
+
+muPairProd:   for  mu+    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :  Emin=        0 eV    Emax=       10 TeV
+
 CoulombScat:   for  mu-, applyCuts: 1     SubType= 1
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      Lambda table from 100 eV  to 10 TeV in 43 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -712,6 +883,11 @@ hPairProd:   for  pi+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
+muMsc:   for pi-    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -719,6 +895,18 @@ hIoni:   for  pi-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
+
+hBrems:   for  pi+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+
+hPairProd:   for  pi+    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 ========= Table of registered couples ==============================
 
@@ -753,33 +941,33 @@ G4EnergyLossForExtrapolator::ComputeElectronDEDX for e+
 G4EnergyLossForExtrapolator::ComputeMuonDEDX for mu+
 G4EnergyLossForExtrapolator::ComputeProtonDEDX for proton
 G4EnergyLossForExtrapolator::ComputeProtonDEDX for e-
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 631.639 Erec-E0(MeV)= 2813.5
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 40.1068 Erec-E0(MeV)= -352.057
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 223.706 Erec-E0(MeV)= 569.873
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 39.4602 Erec-E0(MeV)= -352.408
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 45.3638 Erec-E0(MeV)= -343.968
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 53.5267 Erec-E0(MeV)= -319.232
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 12.0181 Erec-E0(MeV)= -971.731
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 102.472 Erec-E0(MeV)= -86.5236
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 97.6119 Erec-E0(MeV)= -111.845
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 183.363 Erec-E0(MeV)= 349.058
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 78.5372 Erec-E0(MeV)= -208.512
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 56.7609 Erec-E0(MeV)= -307.067
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 1.34603 Erec-E0(MeV)= -996.28
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 100.372 Erec-E0(MeV)= -97.4871
 test31EventAction: Event # 100 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.7s Real=0.7s Sys=0s
+  User=0.68s Real=0.68s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
 Initial particle               e-   Ekin(GeV)= 1
-Range(mm)= 535.7; Stragling(mm)= 118.85 +- 12    1e+02 events for range
+Range(mm)= 547.42 Stragling(mm)= 103.89 +- 10    1e+02 events for range
 Number of events               100
-Average energy deposit         272.9 MeV
-Average number of e-           43.26
-Average number of gamma        48.98
-Average number of e+           2.73
-Average number of steps        1512
-Average number of leak charged 3.15
-Average number of leak gamma   19.75
+Average energy deposit         256.2 MeV
+Average number of e-           39.51
+Average number of gamma        44.78
+Average number of e+           2.33
+Average number of steps        1373
+Average number of leak charged 2.84
+Average number of leak gamma   18.23
 Average number of back charged 0
-Average number of back gamma   1.17
+Average number of back gamma   0.92
 Average number of mu+mu-       0
 Average number of pi+pi-       0
 ====================================================================
@@ -855,15 +1043,15 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 ### Run 2 start
 test31Histo:  AbsThick(mm)= 10 Nabs= 60 zmax= 600 nHisto= 0
 Start Run processing.
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 889.9 Erec-E0(MeV)= 16.36
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 872.4 Erec-E0(MeV)= -1.334
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 881.3 Erec-E0(MeV)= 7.652
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 890.1 Erec-E0(MeV)= 16.56
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 887.8 Erec-E0(MeV)= 14.28
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 868.6 Erec-E0(MeV)= -5.153
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 868.2 Erec-E0(MeV)= -5.607
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 865.6 Erec-E0(MeV)= -8.15
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 879.2 Erec-E0(MeV)= 5.595
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 857.1 Erec-E0(MeV)= -16.77
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 883.3 Erec-E0(MeV)= 9.644
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 879.8 Erec-E0(MeV)= 6.193
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 840 Erec-E0(MeV)= -34.07
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 889.2 Erec-E0(MeV)= 15.64
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 889 Erec-E0(MeV)= 15.42
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 870.1 Erec-E0(MeV)= -3.607
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 876.6 Erec-E0(MeV)= 2.938
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 881.2 Erec-E0(MeV)= 7.612
 test31EventAction: Event # 100 started
 test31EventAction: Event # 200 started
 test31EventAction: Event # 300 started
@@ -877,22 +1065,22 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.79s Real=0.79s Sys=0s
+  User=0.81s Real=0.81s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
 Initial particle               mu-   Ekin(GeV)= 1
-Range(mm)= 600; Stragling(mm)= 0 +- 0    1e+03 events for range
+Range(mm)= 600 Stragling(mm)= 0 +- 0    1e+03 events for range
 Number of events               1000
-Average energy deposit         124.9 MeV
-Average number of e-           15.96
-Average number of gamma        2.199
-Average number of e+           0.007
-Average number of steps        153.3
-Average number of leak charged 1.124
-Average number of leak gamma   0.299
+Average energy deposit         125 MeV
+Average number of e-           15.98
+Average number of gamma        2.249
+Average number of e+           0.005
+Average number of steps        153.9
+Average number of leak charged 1.128
+Average number of leak gamma   0.326
 Average number of back charged 0
-Average number of back gamma   0.059
+Average number of back gamma   0.051
 Average number of mu+mu-       0
 Average number of pi+pi-       0
 ====================================================================
@@ -968,15 +1156,15 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 ### Run 3 start
 test31Histo:  AbsThick(mm)= 10 Nabs= 60 zmax= 600 nHisto= 0
 Start Run processing.
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 840.5 Erec-E0(MeV)= -35.7
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 881.3 Erec-E0(MeV)= 5.494
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 888.1 Erec-E0(MeV)= 12.32
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 890.9 Erec-E0(MeV)= 15.17
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 888.6 Erec-E0(MeV)= 12.89
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 886 Erec-E0(MeV)= 10.19
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 855.9 Erec-E0(MeV)= -20.16
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 875.8 Erec-E0(MeV)= -0.09889
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 887.1 Erec-E0(MeV)= 11.33
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 887.4 Erec-E0(MeV)= 11.67
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 875.9 Erec-E0(MeV)= -0.001337
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 853.8 Erec-E0(MeV)= -22.26
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 866.8 Erec-E0(MeV)= -9.108
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 888.5 Erec-E0(MeV)= 12.77
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 882.1 Erec-E0(MeV)= 6.283
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 863.8 Erec-E0(MeV)= -12.17
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 870.3 Erec-E0(MeV)= -5.589
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 868.6 Erec-E0(MeV)= -7.294
 test31EventAction: Event # 100 started
 test31EventAction: Event # 200 started
 test31EventAction: Event # 300 started
@@ -990,22 +1178,22 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.74s Real=0.74s Sys=0s
+  User=0.75s Real=0.76s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
 Initial particle               pi+   Ekin(GeV)= 1
-Range(mm)= 600; Stragling(mm)= 0 +- 0    9.8e+02 events for range
+Range(mm)= 600 Stragling(mm)= 0 +- 0    9.9e+02 events for range
 Number of events               1000
-Average energy deposit         123.3 MeV
-Average number of e-           15.55
-Average number of gamma        1.884
-Average number of e+           0.002
-Average number of steps        146.2
-Average number of leak charged 1.095
-Average number of leak gamma   0.259
+Average energy deposit         122.5 MeV
+Average number of e-           15.45
+Average number of gamma        1.786
+Average number of e+           0
+Average number of steps        143.7
+Average number of leak charged 1.097
+Average number of leak gamma   0.217
 Average number of back charged 0
-Average number of back gamma   0.051
+Average number of back gamma   0.043
 Average number of mu+mu-       0
 Average number of pi+pi-       0
 ====================================================================
@@ -1081,15 +1269,15 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 ### Run 4 start
 test31Histo:  AbsThick(mm)= 10 Nabs= 60 zmax= 600 nHisto= 0
 Start Run processing.
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 868 Erec-E0(MeV)= 2.351
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 862.3 Erec-E0(MeV)= -3.242
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 864.5 Erec-E0(MeV)= -1.093
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 861.6 Erec-E0(MeV)= -3.874
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 864.2 Erec-E0(MeV)= -1.37
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 865.6 Erec-E0(MeV)= 0.02605
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 867.9 Erec-E0(MeV)= 2.203
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 863.1 Erec-E0(MeV)= -2.391
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 866.9 Erec-E0(MeV)= 1.241
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 869.8 Erec-E0(MeV)= 4.051
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 867.1 Erec-E0(MeV)= 1.435
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 868.4 Erec-E0(MeV)= 2.673
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 862.2 Erec-E0(MeV)= -3.271
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 864.8 Erec-E0(MeV)= -0.7752
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 862.8 Erec-E0(MeV)= -2.76
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 866.5 Erec-E0(MeV)= 0.8305
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 861.5 Erec-E0(MeV)= -3.964
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 864.4 Erec-E0(MeV)= -1.174
 test31EventAction: Event # 100 started
 test31EventAction: Event # 200 started
 test31EventAction: Event # 300 started
@@ -1103,22 +1291,22 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.61s Real=0.6s Sys=0s
+  User=0.6s Real=0.62s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
 Initial particle               proton   Ekin(GeV)= 1
-Range(mm)= 600; Stragling(mm)= 0 +- 0    1e+03 events for range
+Range(mm)= 600 Stragling(mm)= 0 +- 0    1e+03 events for range
 Number of events               1000
-Average energy deposit         134 MeV
-Average number of e-           13.64
-Average number of gamma        0.684
+Average energy deposit         134.1 MeV
+Average number of e-           13.69
+Average number of gamma        0.665
 Average number of e+           0
-Average number of steps        110.4
-Average number of leak charged 1.037
-Average number of leak gamma   0.038
+Average number of steps        110.8
+Average number of leak charged 1.028
+Average number of leak gamma   0.026
 Average number of back charged 0
-Average number of back gamma   0.018
+Average number of back gamma   0.012
 Average number of mu+mu-       0
 Average number of pi+pi-       0
 ====================================================================
@@ -1194,15 +1382,15 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 ### Run 5 start
 test31Histo:  AbsThick(mm)= 10 Nabs= 60 zmax= 600 nHisto= 0
 Start Run processing.
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 885.2 Erec-E0(MeV)= 9.452
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 875 Erec-E0(MeV)= -0.8962
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 858.9 Erec-E0(MeV)= -17.17
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 883.4 Erec-E0(MeV)= 7.602
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 875.7 Erec-E0(MeV)= -0.1304
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 876.5 Erec-E0(MeV)= 0.5856
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 885.3 Erec-E0(MeV)= 9.533
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 847.4 Erec-E0(MeV)= -28.77
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 877.1 Erec-E0(MeV)= 1.269
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 885.7 Erec-E0(MeV)= 9.896
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 883 Erec-E0(MeV)= 7.244
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 893.4 Erec-E0(MeV)= 17.7
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 874.3 Erec-E0(MeV)= -1.588
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 874.2 Erec-E0(MeV)= -1.652
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 880.7 Erec-E0(MeV)= 4.826
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 884.3 Erec-E0(MeV)= 8.52
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 850.4 Erec-E0(MeV)= -25.75
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 881.4 Erec-E0(MeV)= 5.608
 test31EventAction: Event # 100 started
 test31EventAction: Event # 200 started
 test31EventAction: Event # 300 started
@@ -1216,22 +1404,22 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.75s Real=0.75s Sys=0s
+  User=0.76s Real=1.29s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
 Initial particle               pi-   Ekin(GeV)= 1
-Range(mm)= 600; Stragling(mm)= 0 +- 0    9.9e+02 events for range
+Range(mm)= 600 Stragling(mm)= 0 +- 0    9.9e+02 events for range
 Number of events               1000
-Average energy deposit         123.4 MeV
-Average number of e-           15.7
-Average number of gamma        1.983
-Average number of e+           0.006
-Average number of steps        148.3
-Average number of leak charged 1.097
-Average number of leak gamma   0.257
+Average energy deposit         122.8 MeV
+Average number of e-           15.41
+Average number of gamma        1.908
+Average number of e+           0.002
+Average number of steps        147.6
+Average number of leak charged 1.106
+Average number of leak gamma   0.222
 Average number of back charged 0
-Average number of back gamma   0.056
+Average number of back gamma   0.066
 Average number of mu+mu-       0
 Average number of pi+pi-       0
 ====================================================================
@@ -1307,15 +1495,15 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 ### Run 6 start
 test31Histo:  AbsThick(mm)= 10 Nabs= 60 zmax= 600 nHisto= 0
 Start Run processing.
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 827.8 Erec-E0(MeV)= -1.526
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 825.6 Erec-E0(MeV)= -3.591
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 828.4 Erec-E0(MeV)= -1.012
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 832 Erec-E0(MeV)= 2.346
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 832.4 Erec-E0(MeV)= 2.653
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 835.5 Erec-E0(MeV)= 5.584
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 827.5 Erec-E0(MeV)= -1.805
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 829.4 Erec-E0(MeV)= -0.06489
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 833.8 Erec-E0(MeV)= 3.982
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 833.6 Erec-E0(MeV)= 3.758
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 827.4 Erec-E0(MeV)= -1.951
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 829.9 Erec-E0(MeV)= 0.3788
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 829.5 Erec-E0(MeV)= 0.04174
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 827.6 Erec-E0(MeV)= -1.699
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 829.5 Erec-E0(MeV)= 0.01892
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 828.7 Erec-E0(MeV)= -0.7321
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 825.7 Erec-E0(MeV)= -3.484
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 831.3 Erec-E0(MeV)= 1.69
 test31EventAction: Event # 100 started
 test31EventAction: Event # 200 started
 test31EventAction: Event # 300 started
@@ -1329,22 +1517,22 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.67s Real=0.66s Sys=0s
+  User=0.68s Real=0.69s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
 Initial particle               anti_deuteron   Ekin(GeV)= 1
-Range(mm)= 600; Stragling(mm)= 0 +- 0    1e+03 events for range
+Range(mm)= 600 Stragling(mm)= 0 +- 0    1e+03 events for range
 Number of events               1000
-Average energy deposit         169.9 MeV
-Average number of e-           13.77
-Average number of gamma        0.439
+Average energy deposit         170 MeV
+Average number of e-           13.93
+Average number of gamma        0.431
 Average number of e+           0
-Average number of steps        105.8
-Average number of leak charged 1.016
-Average number of leak gamma   0.018
+Average number of steps        106.1
+Average number of leak charged 1.021
+Average number of leak gamma   0.024
 Average number of back charged 0
-Average number of back gamma   0.014
+Average number of back gamma   0.009
 Average number of mu+mu-       0
 Average number of pi+pi-       0
 ====================================================================
@@ -1420,15 +1608,15 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 ### Run 7 start
 test31Histo:  AbsThick(mm)= 10 Nabs= 60 zmax= 600 nHisto= 0
 Start Run processing.
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 871.1 Erec-E0(MeV)= 5.288
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 866.3 Erec-E0(MeV)= 0.6423
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 865.6 Erec-E0(MeV)= -0.01793
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 868.4 Erec-E0(MeV)= 2.746
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 866.9 Erec-E0(MeV)= 1.209
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 868.3 Erec-E0(MeV)= 2.583
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 866.8 Erec-E0(MeV)= 1.143
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 865.8 Erec-E0(MeV)= 0.1871
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 868.7 Erec-E0(MeV)= 2.997
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 862.8 Erec-E0(MeV)= -2.748
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 869.5 Erec-E0(MeV)= 3.746
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 864.1 Erec-E0(MeV)= -1.421
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 865.4 Erec-E0(MeV)= -0.1577
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 865.4 Erec-E0(MeV)= -0.2074
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 865.5 Erec-E0(MeV)= -0.1081
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 865.5 Erec-E0(MeV)= -0.1297
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 869.2 Erec-E0(MeV)= 3.48
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 868.9 Erec-E0(MeV)= 3.147
 test31EventAction: Event # 100 started
 test31EventAction: Event # 200 started
 test31EventAction: Event # 300 started
@@ -1442,22 +1630,22 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.61s Real=0.61s Sys=0s
+  User=0.6s Real=0.6s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
 Initial particle               anti_proton   Ekin(GeV)= 1
-Range(mm)= 600; Stragling(mm)= 0 +- 0    1e+03 events for range
+Range(mm)= 600 Stragling(mm)= 0 +- 0    1e+03 events for range
 Number of events               1000
-Average energy deposit         134.1 MeV
-Average number of e-           13.83
-Average number of gamma        0.643
+Average energy deposit         133.9 MeV
+Average number of e-           13.55
+Average number of gamma        0.634
 Average number of e+           0
-Average number of steps        111.4
-Average number of leak charged 1.03
-Average number of leak gamma   0.034
+Average number of steps        110.4
+Average number of leak charged 1.04
+Average number of leak gamma   0.035
 Average number of back charged 0
-Average number of back gamma   0.019
+Average number of back gamma   0.021
 Average number of mu+mu-       0
 Average number of pi+pi-       0
 ====================================================================
@@ -1502,6 +1690,5 @@ Average number of pi+pi-       0
 
 =========   End of tets31Histo  ============================
 #
-  User=6.09s Real=6.09s Sys=0.01s
+  User=6.08s Real=6.7s Sys=0.02s
 G4 kernel has come to Quit state.
-

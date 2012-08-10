@@ -1,10 +1,6 @@
 
-        ############################################
-        !!! WARNING - FPE detection is activated !!!
-        ############################################
-
 *************************************************************
- Geant4 version Name: geant4-09-06-beta-01    (29-June-2012)
+ Geant4 version Name: geant4-09-05-ref-07    (10-August-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -24,11 +20,6 @@ Current available graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  OpenGLStoredX (OGL)
-  OpenGLImmediateX (OGLI)
-  OpenGLStoredX (OGLS)
-  OpenGLImmediateX (OGLIX)
-  OpenGLStoredX (OGLSX)
 
 Registering model factories...
 
@@ -134,56 +125,6 @@ DNAChargeDecrease:   for  alpha    SubType= 56
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNADingfelderChargeDecreaseModel :  Emin=        0 eV    Emax=      400 MeV
 
-DNAExcitation:   for  alpha+    SubType= 52
- Total cross sections computed from DNAMillerGreenExcitationModel
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAMillerGreenExcitationModel :  Emin=        0 eV    Emax=      400 MeV
-
-DNAIonisation:   for  alpha+    SubType= 53
- Total cross sections computed from DNARuddIonisationModel
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationModel :  Emin=        0 eV    Emax=      400 MeV
-
-DNAChargeDecrease:   for  alpha+    SubType= 56
- Total cross sections computed from DNADingfelderChargeDecreaseModel model
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNADingfelderChargeDecreaseModel :  Emin=        0 eV    Emax=      400 MeV
-
-DNAChargeIncrease:   for  alpha+    SubType= 57
- Total cross sections computed from DNADingfelderChargeIncreaseModel model
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNADingfelderChargeIncreaseModel :  Emin=        0 eV    Emax=      400 MeV
-
-DNAExcitation:   for  helium    SubType= 52
- Total cross sections computed from DNAMillerGreenExcitationModel
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAMillerGreenExcitationModel :  Emin=        0 eV    Emax=      400 MeV
-
-DNAIonisation:   for  helium    SubType= 53
- Total cross sections computed from DNARuddIonisationModel
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationModel :  Emin=        0 eV    Emax=      400 MeV
-
-DNAChargeIncrease:   for  helium    SubType= 57
- Total cross sections computed from DNADingfelderChargeIncreaseModel model
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNADingfelderChargeIncreaseModel :  Emin=        0 eV    Emax=      400 MeV
-
-DNAExcitation:   for  hydrogen    SubType= 52
- Total cross sections computed from DNAMillerGreenExcitationModel
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAMillerGreenExcitationModel :  Emin=        0 eV    Emax=      500 keV
-
-DNAIonisation:   for  hydrogen    SubType= 53
- Total cross sections computed from DNARuddIonisationModel
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationModel :  Emin=        0 eV    Emax=      100 MeV
-
-DNAChargeIncrease:   for  hydrogen    SubType= 57
- Total cross sections computed from DNADingfelderChargeIncreaseModel model
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNADingfelderChargeIncreaseModel :  Emin=        0 eV    Emax=      100 MeV
-
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
@@ -199,7 +140,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.29s Real=0.28s Sys=0s
+  User=0.29s Real=0.3s Sys=0s
 
  The run consists of 1 e- of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
@@ -226,7 +167,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.47s Real=0.47s Sys=0s
+  User=0.51s Real=0.54s Sys=0s
 
  The run consists of 1 proton of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
@@ -253,7 +194,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.46s Real=0.47s Sys=0s
+  User=0.5s Real=0.5s Sys=0s
 
  The run consists of 1 hydrogen of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
@@ -280,7 +221,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.87s Real=0.87s Sys=0s
+  User=0.92s Real=1.55s Sys=0s
 
  The run consists of 1 alpha of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
@@ -307,7 +248,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.88s Real=0.87s Sys=0s
+  User=0.93s Real=1.11s Sys=0s
 
  The run consists of 1 alpha+ of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
@@ -334,7 +275,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.85s Real=0.85s Sys=0s
+  User=0.91s Real=0.91s Sys=0s
 
  The run consists of 1 helium of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
@@ -345,4 +286,3 @@ Run Summary
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
-

@@ -1,10 +1,6 @@
 
-        ############################################
-        !!! WARNING - FPE detection is activated !!!
-        ############################################
-
 *************************************************************
- Geant4 version Name: geant4-09-06-beta-01    (29-June-2012)
+ Geant4 version Name: geant4-09-05-ref-07    (10-August-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -81,71 +77,70 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0      -20       100        0        0         0      Target initStep
     1        0        0      -19      98.7     1.32        1         1      Target Transportation
     2        0        0      -19      98.7        0        0         1      Target Transportation
-    3  0.00114 -0.00121      -18      97.2     1.47        1         2      Target Transportation
-    4  0.00307 -0.00314      -17      95.7     1.51        1         3      Target Transportation
-    5  0.00534 -0.00597      -16      94.2     1.49        1         4      Target Transportation
-    6    0.012  -0.0133      -15      92.8     1.46        1         5      Target Transportation
-    7    0.012  -0.0187      -14      91.2     1.52        1         6      Target Transportation
-    8   0.0179  -0.0267      -13      89.8     1.46        1         7      Target Transportation
-    9   0.0247  -0.0246      -12      88.2     1.55        1         8      Target Transportation
-   10   0.0337  -0.0272      -11      86.7     1.54        1         9      Target Transportation
-   11   0.0241  -0.0395      -10      85.1     1.55        1        10      Target Transportation
-   12  0.00276  -0.0509       -9      83.6     1.53        1        11      Target Transportation
-   13 -0.00822  -0.0718       -8        82     1.62        1        12      Target Transportation
-   14  -0.0271  -0.0954       -7      80.3     1.72        1        13      Target Transportation
-   15  -0.0438   -0.114       -6      78.6     1.64        1        14      Target Transportation
-   16  -0.0705    -0.13       -5        77     1.65        1        15      Target Transportation
-   17   -0.103   -0.148       -4      75.3     1.65        1        16      Target Transportation
-   18   -0.123   -0.166       -3      73.6     1.73        1        17      Target Transportation
-   19   -0.146   -0.174       -2      71.7     1.87        1        18      Target Transportation
-   20   -0.159   -0.185       -1        70     1.71        1        19      Target Transportation
-   21   -0.171   -0.199        0      68.3     1.75        1        20      Target Transportation
-   22   -0.189    -0.22        1      66.3     1.93        1        21      Target Transportation
-   23   -0.205   -0.251        2      64.4     1.99        1        22      Target Transportation
-   24   -0.217   -0.286        3      62.6      1.8        1        23      Target Transportation
-   25   -0.224   -0.326        4      60.7     1.84        1        24      Target Transportation
-   26   -0.222   -0.366        5      58.5     2.19        1        25      Target Transportation
-   27    -0.21     -0.4        6      56.4     2.14        1        26      Target Transportation
-   28   -0.209    -0.43        7      54.2     2.19        1        27      Target Transportation
-   29   -0.217   -0.463        8      52.1     2.11        1        28      Target Transportation
-   30   -0.225   -0.491        9      49.8     2.33        1        29      Target Transportation
-   31   -0.249   -0.527       10      47.4     2.35        1        30      Target Transportation
-   32   -0.278   -0.568       11      44.7     2.69        1        31      Target Transportation
-   33   -0.315   -0.617       12        42     2.76        1        32      Target Transportation
-   34   -0.358   -0.662       13      39.1     2.86        1        33      Target Transportation
-   35   -0.401   -0.692       14      36.2     2.94        1        34      Target Transportation
-   36   -0.462    -0.71       15      32.9     3.31        1        35      Target Transportation
-   37   -0.519   -0.743       16        29     3.86        1        36      Target Transportation
-   38   -0.622   -0.778       17      24.9     4.07    0.987        37      Target hIoni
-   39   -0.624   -0.778       17      24.8   0.0779   0.0197        37      Target Transportation
-   40   -0.624   -0.778       17      24.8        0        0        37      Target Transportation
-   41   -0.715   -0.787     17.8      21.3     3.53    0.788      37.8      Target hIoni
-   42   -0.731    -0.79       18      20.3     1.01    0.218        38      Target Transportation
-   43   -0.731    -0.79       18      20.3        0        0        38      Target Transportation
-   44   -0.758     -0.8     18.6      16.8     3.51    0.598      38.6      Target hIoni
-   45   -0.791   -0.813       19      14.2     2.62    0.405        39      Target Transportation
-   46   -0.791   -0.813       19      14.2        0        0        39      Target Transportation
-   47   -0.833   -0.829     19.4      11.4     2.76    0.387      39.4      Target hIoni
-   48   -0.874   -0.853     19.7      8.65     2.75     0.31      39.7      Target hIoni
-   49   -0.894   -0.855     19.9      5.88     2.78    0.242        40      Target hIoni
-   50   -0.897   -0.858       20      4.86     1.02   0.0688        40      Target Transportation
-   51   -0.897   -0.858       20      4.86        0        0        40       World Transportation
-   52   -0.961   -0.906       21      4.86 1.17e-24        1        41       World Transportation
-   53    -1.54    -1.34       30      4.86 1.05e-23     9.03      50.1  OutOfWorld Transportation
+    3  0.00763   -0.002      -18      97.2     1.48        1         2      Target Transportation
+    4   0.0141 -0.000228      -17      95.7     1.45        1         3      Target Transportation
+    5   0.0329  0.00657      -16      94.4     1.34        1         4      Target Transportation
+    6   0.0687   0.0186      -15      92.9     1.47        1         5      Target Transportation
+    7   0.0981   0.0132      -14      91.5     1.48        1         6      Target Transportation
+    8    0.119    0.007      -13      89.9     1.59        1         7      Target Transportation
+    9    0.148  0.00146      -12      88.4     1.47        1         8      Target Transportation
+   10    0.165  0.00379      -11      86.9     1.47        1         9      Target Transportation
+   11     0.18  0.00648      -10      85.3     1.61        1        10      Target Transportation
+   12    0.212  0.00879       -9      83.7     1.57        1        11      Target Transportation
+   13    0.246   0.0033       -8      82.3     1.48        1        12      Target Transportation
+   14    0.274   -0.013       -7      80.7     1.54        1        13      Target Transportation
+   15    0.297  -0.0277       -6        79     1.74        1        14      Target Transportation
+   16    0.314  -0.0453       -5      77.3     1.64        1        15      Target Transportation
+   17    0.331   -0.104       -4      75.6     1.72        1        16      Target Transportation
+   18    0.339   -0.164       -3      73.9     1.77        1        17      Target Transportation
+   19    0.337    -0.22       -2      72.1      1.8        1        18      Target Transportation
+   20    0.331   -0.275       -1      70.2     1.89        1        19      Target Transportation
+   21    0.322   -0.314        0      68.3     1.84        1        20      Target Transportation
+   22     0.32   -0.348        1      66.5     1.78        1        21      Target Transportation
+   23    0.307    -0.37        2      64.5     2.01        1        22      Target Transportation
+   24    0.287     -0.4        3      62.5     2.06        1        23      Target Transportation
+   25    0.282   -0.445        4      60.5     1.98        1        24      Target Transportation
+   26    0.267   -0.486        5      58.6     1.94        1        25      Target Transportation
+   27    0.244   -0.532        6      56.4     2.17        1        26      Target Transportation
+   28    0.226   -0.574        7      54.1     2.24        1        27      Target Transportation
+   29    0.219   -0.623        8      51.9     2.29        1        28      Target Transportation
+   30    0.208    -0.65        9      49.4     2.43        1        29      Target Transportation
+   31    0.209   -0.674       10      47.1     2.37        1        30      Target Transportation
+   32    0.201   -0.716       11      44.5     2.52        1        31      Target Transportation
+   33    0.209    -0.78       12      41.6     2.97        1        32      Target Transportation
+   34    0.188   -0.847       13      38.6     3.01        1        33      Target Transportation
+   35    0.155   -0.907       14      35.5     3.05        1        34      Target Transportation
+   36    0.159   -0.966       15      32.2     3.32        1        35      Target Transportation
+   37    0.159    -1.02       16      28.5     3.73        1        36      Target Transportation
+   38    0.166    -1.09       17      24.5     3.94    0.959        37      Target hIoni
+   39    0.166    -1.09       17      24.3    0.198   0.0435        37      Target Transportation
+   40    0.166    -1.09       17      24.3        0        0        37      Target Transportation
+   41    0.164    -1.15     17.8      20.8     3.55    0.764      37.8      Target hIoni
+   42    0.163    -1.17       18      19.5      1.3    0.239        38      Target Transportation
+   43    0.163    -1.17       18      19.5        0        0        38      Target Transportation
+   44    0.182    -1.23     18.6      16.3     3.21    0.566      38.6      Target hIoni
+   45    0.206    -1.29       19      13.3     2.97    0.442        39      Target Transportation
+   46    0.206    -1.29       19      13.3        0        0        39      Target Transportation
+   47    0.238    -1.31     19.4      10.4     2.87    0.361      39.4      Target hIoni
+   48    0.257    -1.35     19.8      7.66     2.75    0.284      39.7      Target hIoni
+   49    0.265    -1.38       20      4.75      2.9     0.22      39.9      Target hIoni
+   50    0.266    -1.39       20      4.38    0.369   0.0246      39.9      Target Transportation
+   51    0.266    -1.39       20      4.38        0        0      39.9       World Transportation
+   52    0.295    -1.48       21      4.38 1.28e-24     1.01      40.9       World Transportation
+   53    0.564    -2.35       30      4.38 1.16e-23     9.05        50  OutOfWorld Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        proton
 Beam Energy(MeV)                     100
 Number of events                     1
-Average energy deposit (MeV)         95.14   RMS(MeV) 0
+Average energy deposit (MeV)         95.62   RMS(MeV) 0
 Average number of steps of primary   51
 ========================================================
 
 #
 G4 kernel has come to Quit state.
-

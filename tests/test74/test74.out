@@ -1,10 +1,6 @@
 
-        ############################################
-        !!! WARNING - FPE detection is activated !!!
-        ############################################
-
 *************************************************************
- Geant4 version Name: geant4-09-06-beta-01    (29-June-2012)
+ Geant4 version Name: geant4-09-05-ref-07    (10-August-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -24,11 +20,6 @@ Current available graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  OpenGLStoredX (OGL)
-  OpenGLImmediateX (OGLI)
-  OpenGLStoredX (OGLS)
-  OpenGLImmediateX (OGLIX)
-  OpenGLStoredX (OGLSX)
 
 Registering model factories...
 
@@ -125,7 +116,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.27s Real=0.28s Sys=0s
+  User=0.23s Real=0.57s Sys=0.06s
 
  The run consists of 1 e- of 10 keV through 1 m   of G4_Si (density: 2.33 g/cm3 )
 
@@ -152,7 +143,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.59s Real=0.59s Sys=0s
+  User=0.6s Real=0.74s Sys=0s
 
  The run consists of 1 proton of 100 keV through 1 m   of G4_Si (density: 2.33 g/cm3 )
 
@@ -162,11 +153,6 @@ Run Summary
 #
 /gun/particle ion
 /gun/ion 20 48 15
-
-ion_G4MuElecInelastic:   for  GenericIon    SubType= 53
- Total cross sections computed from MuElecInelasticModel
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-MuElecInelasticModel :  Emin=        0 eV    Emax=      100 GeV
 /gun/energy 4.8 MeV
 /run/beamOn 1
 
@@ -185,7 +171,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=27.81s Real=27.83s Sys=0.02s
+  User=29.36s Real=32.66s Sys=0.02s
 
  The run consists of 1 Ca48[0.0] of 4.8 MeV through 1 m   of G4_Si (density: 2.33 g/cm3 )
 
@@ -196,4 +182,3 @@ Run Summary
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
-
