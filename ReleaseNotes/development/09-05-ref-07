@@ -1,0 +1,463 @@
+
+                       geant4-09-05-ref-07
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o Added preliminary support for Clang detection on CMake build system.
+ o Brought G4Py uptodate with recent patch release.
+ o New features in analysis module and updated to g4tools-1.3.1.
+ o Improved sampling for "thick" absorbers in G4UniversalFluctuation and
+   G4IonFluctuations.
+ o Introduced cash for material and element cross-sections in
+   G4CrossSectionDataStore to improve CPU performance.
+ o Archived obsolete INCL hadronic model, now replaced by INCL++.
+ o Updated scene tree viewer algorithm in OpenGL Qt viewer for speedup.
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+cmake                                            cmake-V09-05-38
+-----
+- Added preliminary support for Clang detection (CMake > 2.8.1).
+- Removed use of STATUS in error messages so all errors go to stderr
+  when validating source files.
+- Introduced module FindStatTest.cmake to be used to find and setup
+  utility program StatTest for automatic regression testing of Geant4
+  CTest outputs.
+
+config                                           config-V09-05-09
+------
+- Removed path to INCL package "processes/hadronic/models/incl".
+
+environments                                     envs-V09-05-02
+------------
+- G4Py:
+  o Updated scripts for use of internal CLHEP module.
+  o Added necessary updates for 9.5.p01. Addressing problem report #1317.
+  o Fixed logics in configuration script for specifying Python include
+    path. Addressing problem report #1316.
+  o Fixes in pyG4VisManager: added static statement for GetVerbosity() and
+    fixed GetConcreteInstance() returning an insufficient class pointer.
+    Addressing problem report #1318.
+
+analysis                                         analysis-V09-05-02
+--------
+- Updated anaylsis tools to g4tools-1.3.1.
+- Adding an additional information to the analysis objects: units, activation,
+  ascii output.
+- Implemented a possibility to book histograms/ntuples before opening a file.
+- Adding a messenger class allowing to configure file and directories
+  names, verbosity level and histogram parameters interactively.
+- Fixes in memory management: delete file before opening a new one (all);
+  delete ntuple before closing a file (csv, xml).
+
+error_propagation                                error_propagation-V09-05-03
+-----------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants.
+
+event                                            event-V09-05-07
+-----
+- G4TrajectoryContainer: added private copy constructor and assignment
+  operator in attempt to fix Coverity warnings.
+- Explicitly use inclusion of headers for system of units and physical
+  constants.
+
+g3tog4                                           g3tog4-V09-05-02
+------
+- Explicitly use inclusion of headers for system of units and physical
+  constants.
+
+global                                           global-V09-05-08
+------
+- Implemented workaround to aid for templated symbols of
+  G4ReferenceCountedHandle to be properly imported/exported
+  for DLL build on Windows systems based on CMake.
+  Addressing problem report #1329.
+- Explicitly use inclusion of headers for system of units and physical
+  constants.
+
+interfaces                                       interfaces-V09-05-08
+----------
+- G4UIQt: Re-add scene tree viewer; fixed visualziation slow-down problem
+  affecting the first version.
+- G4UIGAG, G4UIGainServer, G4UIQt, G4VBasicShell: fixed compilation
+  warnings on gcc-4.7.
+
+materials                                        materials-V09-05-29
+---------
+- G4SandiaTable: avoid use of std::pow() from all functions and use instead
+  precomuted values in static array; some CPU performance improvement
+  expected.
+
+parameterisations                                gpara-V09-05-00
+-----------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants.
+
+persistency                                      persistency-V09-05-02
+-----------
+- Explicitly use inclusion of headers for system of units and physical
+  constants.
+- gdml (gdml-V09-05-04)
+  o Added proper handling of constant material properties.
+
+physics_lists                                    phys-lists-V09-05-43
+-------------
+- G4EmPenelopePhysics, G4EmStandardPhysics_option3, G4EmLivermorePhysics,
+  G4EmPenelopePolarizedPhysics: added upper limit 1 MeV for nuclear stopping
+  for CPU performance
+- G4EmStandardPhysics, G4EmStandardPhysics_option1: use WentzelVI for pions
+  and kaons
+  G4EmStandardPhysics_option2: added Rayleigh scattering.
+  G4EmStandardPhysics_option3, G4EmLivermorePhysics, G4EmPenelopePhysics:
+  added nuclear stopping for protons and anti_protons, removed upper energy
+  limit for Rayleigh.
+- Substituted use of G4WHadronElasticPhysics by G4HadronElasticPhysics in
+  all elastic builders.
+- Replaced G4QandFTFStoppingPhysics with the new class
+  G4BertiniAndFritiofStoppingPhysics in FTFP_BERT and FTFP_BERT_TRV lists.
+- Coverity fixes in HadronPhysicsQGSP_BERT_HP, adding some
+  missing initialization; in G4ChipsKaonBuilder, adding private copy and
+  assignment operators, and in INCL++ ion builder.
+- Removed INCL builders and obsolete physics list QGSP_INCL_ABLA.
+- Updated G4EmDNAPhysicsChemistry; molecule's names changed.
+- Fixed warnings of shadowed variables.
+
+processes/cuts                                   procuts-V09-05-03
+--------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants.
+
+processes/decay                                  decay-V09-05-00
+---------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants.
+
+processes/electromagnetic/adjoint                emadjoint-V09-05-02
+---------------------------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants.
+
+processes/electromagnetic/dna                    emdna-V09-05-24
+-----------------------------
+- Fixed semantic warning related to forward declaration of G4ITNavigator_Lock
+  Modified molecule's name.
+- Explicitly use inclusion of headers for system of units and physical
+  constants.
+
+processes/electromagnetic/highenergy             emhighenergy-V09-05-02
+------------------------------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants.
+
+processes/electromagnetic/lowenergy              emlowen-V09-05-35
+-----------------------------------
+- Corrected G4PenelopeBremsstrahlungFS to avoid anomaly in the gamma-ray
+  spectrum close to the cut.
+- G4RayleighScattering: use high energy table above 100 keV.
+  Introduced new class G4RayleighAngularGenerator and new version for
+  G4LivermoreGammaConversionModel (temporarly keeping the old version as
+  G4Livermore2012GammaConversionModel).
+- Migration to the common SampleDirection() interface in
+  G4VEmAngularDistribution for Livermore and Penelope models..
+- G4Generator2BS: fixed sampling according to the original paper.
+- G4PhotoElectricAngularGeneratorPolarized: added protection against
+  possible infinite loop.
+- Explicitly use inclusion of headers for system of units and physical
+  constants.
+
+processes/electromagnetic/muons                  emmuons-V09-05-02
+-------------------------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants.
+
+processes/electromagnetic/pii                    empii-V09-05-02
+-----------------------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants.
+
+processes/electromagnetic/polarisation           empolar-V09-05-01
+--------------------------------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants.
+
+processes/electromagnetic/standard               emstand-V09-05-42
+----------------------------------
+- Fixed non-reproducibility in multiple-scattering models for the case when
+  more than several models are defined for different energy interval.
+- Implemented StartTracking() method in multiple-scattering models.
+- G4CoulombScattering: improved list of options/flags in constructor to
+  reduce size of cross-section tables.
+- G4ComptonScattering: build two cross-section tables, below and above
+  1 MeV using different technique for interpolation.
+  G4PhotoElectricEffect: build cross-section table above 200 keV.
+- G4GammaConversion: use relativistic model above 100 GeV; more accurate
+  cross-sections plus LPM effect at very high energy.
+- G4SeltzerBergerModel: optimisation of sampling for e+.
+  G4UniversalFluctuation, G4IonFluctuations: improved sampling for "thick"
+  absorber.
+- G4ModifiedTsai: improved sampling of bremsstarhlung in backward hemisphere.
+- Migrated to use SampleDirection() interface from G4VEmAngularDistribution
+  for G4DipBustGenerator, G4ModifiedTsai, G4SeltzerBergerModel,
+  G4eBremParametrizedModel, G4eBremsstrahlungModel, G4PEEffectFluoModel,
+  G4PEEffectModel and G4eBremsstrahlungRelModel.
+- G4SauterGavrilaAngularDistribution extracted from G4PEEffectModel,
+  changed limit gamma factor from 5 to 30 (no angular sampling above ~15 MeV
+  instead of 2.5 MeV).
+- G4NuclearStopping: added check of upper energy limit;
+  G4ICRU49NuclearStoppingModel: reduced upper limit for protons from 100 MeV
+  to 1 MeV (for CPU performance speedup)
+- G4GammaConversion, G4KleinNishinaModel, G4KleinNishinaCompton,
+  G4PEEffectFluoModel: minor cleanup of initialisation.
+- Explicitly use inclusion of headers for system of units and physical
+  constants. Fixed remaining cases of variable shadowing.
+
+processes/electromagnetic/utils                  emutils-V09-05-30
+-------------------------------
+- G4VEmProcess: added extra option allowing to build two different tables
+  for low-energy and high-energy using different interpolation method.
+  Applied fix partially addressing problem report #1314; force if step==1.
+- G4VMscModel: moved method Value() to G4VEmModel.
+- G4VEnergyLossProcess, G4VEmProcess: updated tracking parameters and flags
+  in PostStepGetPhysicalInteractionLength().
+- G4EmBiasingManager: fixed bug in Bremsstrahlung splitting.
+  Do not using dynamic weight for Russian roulette.
+- G4VEnergyLossProcess, G4VMultipleScattering, G4VEmModel: added implementation
+  of StartTracking() method. Changed initialisation in G4VMscModel of the new
+  track using this method.
+- G4EnergyLossMessenger: allow to apply biasing UI commands only in Idle state.
+- G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering: use the same
+  list of particles for printout at initialisation in the case of
+  verboseLevel=1.
+- G4VEmAngularDistribution: added temporary dummy implementation of virtual
+  sampling methods; will be removed when all generators will migrate to the
+  new signature.
+- Explicitly use inclusion of headers for system of units and physical
+  constants. Fixed remaining cases of variable shadowing.
+
+processes/electromagnetic/xrays                  xrays-V09-05-05
+-------------------------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants.
+
+processes/hadronic
+------------------
+- Removed obsolete "incl" module for INCL model; now replaced by INCL++.
+- cross_sections (hadr-cross-V09-05-26)
+  o G4CrossSectionDataStore: introduced cash for material and element
+    cross-sections in order to save CPU; cross-section for material
+    is not recomputed if material, primary particle and kinetic
+    energy are the same; cross-section for element is not recomputed
+    if material, element, primary particle and kinetic energy are the
+    same; G4Nucleus is updated using new method SetIsotope().
+    Take into account that all elements should have isotopes.
+  o G4HadronCrossSections: use cache of previous cross-section and G4Pow
+  o Removed unnecessary statics in CHIPS cross-sections and fixed case of
+    double-deletion.
+  o Fixed Coverity defects in G4CrossSectionPairGG for use of invalid iterator.
+  o Removed check for equal momenta in following interactions for kaons.
+- management (hadr-man-V09-05-08)
+  o G4HadronicProcess: improved quick check and full check for case of
+    electro-nuclear. Copes with case where both primary survives and
+    secondaries are created.
+    Fixed problem of flushing stdout/stderr for energy checking printout.
+    Added funtion GetTargetIsotope(); check cross-section in PostStepDoIt()
+    only for charged particles to improve CPU performance.
+  o G4HadronicProcessStore: added functions GetCrossSectionPerAtom()
+    and GetCrossSectionPerVolume().
+- models/abrasion (had-abrasion-V09-05-00)
+  o Fixed Coverity defect in G4WilsonAbrasionModel class.
+- models/cascade (hadr-casc-V09-05-13)
+  o G4CascadeCoalescence: fixed bug for clear at start of event of the list
+    of clusters already considered; entries from previous events prevented
+    formation of valid clusters. Also improved diagnostic messages.
+- models/chiral_inv_phase_space/interface (hadr-chips-inter-V09-05-03)
+- models/chiral_inv_phase_space/processes (hadr-chips-proc-V09-05-04)
+  o Fixed remaining cases of variable shadowing.
+- models/coherent_elastic (hadr-cohe-V09-05-08)
+  o Adopt factory mechanism for CHIPS cross-sections.
+- models/de_excitation (hadr-deex-V09-05-08)
+  o Fixed remaining cases of variable shadowing.
+- models/inclxx (hadr-inclxx-V09-05-19)
+  o Updated to INCL++ v5.1.1: including fixes for Coverity defects and
+    minor bugs.
+  o Removed relic class G4INCLBook.
+  o Fixed minor bug concerning transmission of delta resonances.
+- models/lend (hadr-lend-V09-05-02)
+  o Fixed GNUmakefile for use of internal expat library, if explicitely chosen.
+- models/parton_string/diffraction (hadr-string-diff-V09-05-12)
+  o Tuning of FTF parameters: Wdelta 0.25 -> 0.05, Dcor 0.4 -> 0.3,
+    E* 75 -> 100 MeV.
+  o Fixed Coverity defects.
+- models/parton_string/hadronization (had-hadronization-V09-05-05)
+- models/parton_string/qgsm (hadr-qgsm-V09-05-03)
+  o Fixed Coverity defects.
+- models/pre_equilibrium (hadr-pre-V09-05-03)
+  o Fixed remaining cases of variable shadowing.
+- models/qmd (hadr-qmd-V09-05-02)
+  o Added model name to G4QMDReaction.
+- models/radioactive_decay (radioactive_decay-V09-05-05)
+  o Set a flag 'isAllVolumesMode' in G4RadioactiveDecay to ensure that when
+    the geometry is changed, the 'AllVolume' mode is still considered.
+  o Use evaporation nuclear level data in G4RIsotope::GetMeanLifeTime()
+    for getting the mean life of an exited nuclei, when it is not provided in
+    the radioactive decay database.
+  o G4RadioactiveDecay: added call to LoadedNuclei.push_back() in
+    LoadDecayTable() also for the case where user data files are used.
+    Addressing problem report #1324.
+- models/theo_high_energy (had-theo-HE-V09-05-04)
+  o Fixed Coverity defects in G4TheoFSGenerator.
+- models/util (hadr-mod-util-V09-05-01)
+  o Fixed Coverity defects.
+- processes (hadr-proc-V09-05-07)
+  o Replaced G4Proton::Proton() with G4Alpha::Alpha() in constructor of
+    G4AlphaInelasticProcess. Addressing problem report #1309. 
+  o Make G4HadronElasticProcess a copy of G4WHadronElasticProcess, which
+    will be soon removed in future.
+- stopping (hadr-stopping-V09-05-15)
+  o Remoced class G4FTFCaptureAtRest and replaced with the new classes
+    G4HadronicAbsorptionFritiof, G4AntiProtonAbsorptionFritiof
+    and G4AntiSigmaPlusAbsorptionFritiof.
+  o G4MuonMinusBoundDecay, G4StopElementSelector: added data
+    for muon capture rate in Hydrogen and He4 from recent experimental data
+  o Fixed Coverity defects.
+- util (hadr-util-V09-05-06)
+  o G4Nucleus: added methods GetIsotope(), SetIsotope().
+  o Fixed Coverity defects in G4GHEKinematicsVector.
+
+processes/management                             procman-V09-05-02
+--------------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants.
+
+processes/optical                                op-V09-05-05
+-----------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants.
+
+processes/parameterisation                       param-V09-05-00
+--------------------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants.
+
+processes/scoring                                procscore-V09-05-02
+-----------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants.
+
+processes/transportation                         transport-V09-05-02
+------------------------
+- G4Transportation: corrected issues with initilisation of data members
+  reported by Coverity.
+- Explicitly use inclusion of headers for system of units and physical
+  constants.
+
+run                                              run-V09-05-04
+---
+- Explicitly use inclusion of headers for system of units and physical
+  constants.
+
+tracking                                         tracking-V09-05-03
+--------
+- Fixed Coverity defects in G4Rich/SmoothTrajectory* classes. 
+
+visualization                                    vis-V09-05-33
+-------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants.
+- management:
+  o Improved /vis/viewer/copyViewFrom command: added lights direction and move.
+  o Re-implemented commands /vis/scene/add/arrow and /vis/scene/add/axes.
+- modeling:
+  o Introduced G4ArrowModel. Re-implemented G4AxesModel to use it.
+- OpenGL:
+  o Fixed text layout in Qt. Improvements in Qt viewer.
+  o G4OpenGLQtViewer: updated scene tree viewer algorithm for speedup and
+    transparency fix.
+  o Improvements in X viewers: now 3D text is hidden, when appropiate,
+    by volumes drawn in surface mode.
+  o Now may be used by all and any driver.
+- RayTracer:
+  o Fixed some Coverity warnings.
+
+examples                                         examples-V09-05-07
+--------
+- Updated reference outputs.
+- advanced/composite_calorimeter (ccal-V09-05-00)
+  o Fixed crashes due to high global times converted to integers values.
+    Addressing problem report #1337.
+- advanced/hadrontherapy (hadrontherapy-V09-05-02)
+  o Replaced INCL with INCLXX in physics-list.
+- advanced/microdosimetry (microdosimetry-V09-04-07)
+  o Added TrackingAction, counting N secondaries created in/outside
+  "target" region.
+- extended/common (excommon-V09-05-01)
+  o Fix in the scripts (copying files from shared with an extension).
+- extended/common/analysis (excommon-analysis-V09-05-02)
+  o Adding additional information to analysis objects:
+    units, activation option.
+  o Make possible to book histograms/ntuple before opening a file.
+  o Using new bN::configure functions in SetHN(..).
+  o Messages from Fill() functions only in verbose level 3.
+  o Fixes in memory management.
+  o Based on new version 1.3.1 of g4tools.
+- extended/electromagnetic/TestEm1 (testem1-V09-05-07)
+  o Added radioactive-decay to physics-list and associated input macro.
+- extended/electromagnetic/TestEm7 (testem7-V09-05-05)
+  o Cleared not used arguments in c2_functions code.
+- extended/electromagnetic/TestEm10 (testem10-V09-05-01)
+  o Em10RunAction: fixed case of write outside boundaries of C-array.
+    Cleanup initialisation.
+- extended/g3tog4 (g3tog4Tests-V09-05-01)
+  o Updated class decription for Doxygen
+- extended/hadronic/Hadr00 (exhadr00-V09-05-05)
+  o Use FTFP_BERT as default in physics-list.
+- extended/hadronic/Hadr01 (exhadr01-V09-05-03)
+  o Added G4EmUserPhysics builder
+  o Use FTFP_BERT as default in physics-list.
+- extended/hadronic/Hadr03 (hadr03-V09-05-05)
+  o New example demonstrating how to compute total cross-section from the
+    direct evaluation of the mean free path.
+- extended/persistency/gdml/G01 (G01-V09-05-02)
+- extended/persistency/gdml/G02 (G02-V09-05-00)
+- extended/persistency/gdml/G03 (G03-V09-05-00)
+- extended/persistency/gdml/G04 (G04-V09-05-00)
+- extended/persistency/P01 (exampleP01-V09-05-05)
+  o Updated to comply to new coding conventions.
+- extended/runAndEvent/RE01 (exampleRE01-V09-05-00)
+- extended/runAndEvent/RE02 (exampleRE02-V09-05-01)
+  o Fixed elastic physics for ions in physics-list.
+
+tests                                            tests-V09-05-07
+-----
+- Updated reference outputs and tools.
+- tests/test22 (test22-V09-05-03)
+  o Fixed bug in ion elastic setup.
+- tests/test23 (test23-V09-05-03)
+  o Fixed bug in ion elastic setup.
+  o Updated test23-large_N.in macro to replace obsolete
+    /run/particle/setCut by /run/SetCut.
+- tests/test27 (test27-V09-05-00)
+- tests/test28 (test28-V09-05-00)
+  o Fixed hadron elastic setup.
+- tests/test30 (test30-V09-05-13)
+  o Adding first support for ctest PhysicsChecks validation.
+- tests/test35 (test35-V09-05-00)
+  o Replaced INCL with INCLXX in physics-list.
+- tests/test36 (test36-V09-05-03)
+  o Fixed case of write outside boundaries of C-array in RunAction.
+    Cleanup initialisation.
+- tests/test61 (test61-V09-05-00)
+  o Fixed hadron elastic setup.
+- tests/test62 (test62-V09-05-00)
+  o Updated main() to replace the obsolete physics list QGSP_INCL_ABLA
+    with QGSP_INCLXX.
+- tests/test68 (test68-V09-05-02)
+  o New test for verification of reproducibility for FTFP_BERT.
+- tests/test73 (test73-V09-05-14)
+  o Use WentzelVI and CoulombScattering models for pions.
+  o Improved output sentence in case of errors.
