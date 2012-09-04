@@ -46,6 +46,7 @@ set(G4analysis_HEADERS
     include/G4CsvAnalysisManager.hh
     include/g4csv_defs.hh
     include/g4csv.hh
+    include/G4Fcn.hh
     include/G4HnInformation.hh
     include/G4RootAnalysisManager.hh
     include/g4root_defs.hh

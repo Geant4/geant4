@@ -17,6 +17,9 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 4, 2012 I.Hrivnacova (analysis-V09-05-11)
+- Adding missing header file in CMakeLists.txt
+
 August 28, 2012 I.Hrivnacova (analysis-V09-05-10)
 - Adding SetH2Title() in all managers
 - Minor fixes
