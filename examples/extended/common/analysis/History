@@ -16,6 +16,16 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28/08/2012 I. Hrivnacova (excommon-analysis-V09-05-03)
+- Updated to analysis-V09-05-10
+- Adding a possibility to fill h1, h2 with values with automatically 
+  applied function (eg. log10, exp)
+- Pass units via a name instead of value
+- Adding getters for many h1, h2 attributes 
+- Adding ScaleH1(), ScaleH2()
+- Adding setters/getters for histogram axis titles 
+  (though they are not propagated to paw)
+
 27/07/2012 I. Hrivnacova (excommon-analysis-V09-05-02)
 - Adding an additional information to analysis objects:
   units, activation option (defined in G4HnInformation.hh)
