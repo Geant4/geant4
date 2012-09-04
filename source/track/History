@@ -17,6 +17,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- August 27, 2012 H.Kurashige (track-V09-05-18)
+- Fix a bug in copy constructor of G4VUUserTrackInformation (Problem #1346)
+
+- August 11, 2012 H.Kurashige (track-V09-05-17)
+- Fix a bug in G4VParticleChange::CheckSecondary
+  theParentGlobalTime is set to time at the pre-step point
+
+- August 9, 2012 V.Ivanchenko (track-V09-05-16)
+  (should be accompned by a new EM tag of emutils-V09-05-31)
+- G4ParticleChangeForMSC - allowed modification of position and
+    direction AlongStep 
 
 - June 26, 2012 G.Cosmo (track-V09-05-13)
 - Additional protection for parameter not used in G4VParticleChange when

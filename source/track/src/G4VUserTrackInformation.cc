@@ -49,7 +49,7 @@ G4VUserTrackInformation::~G4VUserTrackInformation()
 G4VUserTrackInformation::G4VUserTrackInformation(const  G4VUserTrackInformation& right) 
   :pType(0)
 {
-  pType = new G4String(*(right.pType));
+  if (right.pType!=0)  pType = new G4String(*(right.pType));
 }
 
 
@@ -57,7 +57,8 @@ G4VUserTrackInformation& G4VUserTrackInformation::operator=(const G4VUserTrackIn
 {
   if (this != &right) {
     if (pType !=0) delete pType;
-    pType = new G4String(*(right.pType));
+    if (right.pType) pType = new G4String(*(right.pType));
+    else pType=0;
   }
   return *this;
 }

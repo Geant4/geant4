@@ -460,7 +460,7 @@ G4bool G4VParticleChange::CheckSecondary(G4Track& aTrack)
   if (accuracy > accuracyForWarning){
     itsOKforTiming = false;
     nError += 1;
-    // exitWithError = (accuracy > accuracyForException);
+    exitWithError = (accuracy > accuracyForException);
 #ifdef G4VERBOSE
     if (nError < maxError) {
       G4cout << " G4VParticleChange::CheckSecondary  :   ";

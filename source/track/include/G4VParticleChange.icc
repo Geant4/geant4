@@ -204,8 +204,8 @@ inline void G4VParticleChange::InitializeParentWeight(const G4Track& track)
 
 inline void G4VParticleChange::InitializeParentGlobalTime(const G4Track& track)
 {
-  // set the parent track's global time
-  theParentGlobalTime = track.GetGlobalTime();
+  // set the parent track's global time at the pre-step point
+  theParentGlobalTime = track.GetStep()->GetPreStepPoint()->GetGlobalTime();
 } 
 
 

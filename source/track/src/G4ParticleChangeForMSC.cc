@@ -107,12 +107,21 @@ G4Step* G4ParticleChangeForMSC::UpdateStepForAlongStep(G4Step* pStep)
   //  Update the G4Step specific attributes
   pStep->SetStepLength(theTrueStepLength);
   theStatusChange = pStep->GetTrack()->GetTrackStatus();
+
+  // Multiple scattering calculates the final state of the particle
+  G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
+
+  // update  momentum direction
+  pPostStepPoint->SetMomentumDirection(theMomentumDirection);
+
+  // update position
+  pPostStepPoint->SetPosition( thePosition );
   return pStep;
 }
 
 G4Step* G4ParticleChangeForMSC::UpdateStepForPostStep(G4Step* pStep)
 {
-  // A physics process always calculates the final state of the particle
+  // Multiple scattering calculates the final state of the particle
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint();
 
   // update  momentum direction
