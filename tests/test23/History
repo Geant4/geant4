@@ -39,6 +39,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 August 2012  Pere Mato (test23-V09-05-04)
+----------------------------------------------------
+- CMakeLists.txt - Changed to avoid two builds of different targets running concurrenly 
+                   when CTest is used with -jN
+
 27 July 2012  Vladimir Ivanchenko (test23-V09-05-03)
 ----------------------------------------------------
 - Tst22IonPhysics - fixed bugs in ion elastic
