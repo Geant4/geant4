@@ -198,7 +198,7 @@ void PhysicsList::ConstructProcess()
   //emOptions.SetLambdaBinning(12*20);	//default=12*7
 
   emOptions.SetBuildCSDARange(true);     
-  //emOptions.SetMaxEnergyForCSDARange(100*TeV);
+  emOptions.SetMaxEnergyForCSDARange(10*GeV);
   //emOptions.SetDEDXBinningForCSDARange(12*20);
   
   //emOptions.SetSplineFlag(true);	//default
