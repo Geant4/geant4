@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 Aug 2012, Pere Mato     (test12-V09-05-04)
+- CMakeLists.txt - Changed to avoid two builds of different targets running concurrenly
+                   when CTest is used with -jN
+
 24 May 2012, Gunter Folger             (test12-V09-05-03)
 - Add exit as last line of input file
 
