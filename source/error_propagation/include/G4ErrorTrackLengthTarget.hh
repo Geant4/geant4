@@ -87,6 +87,7 @@ class G4ErrorTrackLengthTarget : public G4VDiscreteProcess,
  private:
 
   G4double theMaximumTrackLength;
+  G4VParticleChange theParticleChange;
 };
    
 #endif
