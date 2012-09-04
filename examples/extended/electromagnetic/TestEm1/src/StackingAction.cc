@@ -36,8 +36,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StackingAction::StackingAction(HistoManager* histo)
-:fHistoManager(histo)
+StackingAction::StackingAction()
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,7 +48,7 @@ StackingAction::~StackingAction()
 
 G4ClassificationOfNewTrack
 StackingAction::ClassifyNewTrack(const G4Track* track)
-{
+{  
   //keep primary particle
   if (track->GetParentID() == 0) return fUrgent;
 
@@ -59,9 +58,10 @@ StackingAction::ClassifyNewTrack(const G4Track* track)
   G4double energy = track->GetKineticEnergy();
   G4double charge = track->GetDefinition()->GetPDGCharge();
 
-  if (charge != 0.) fHistoManager->FillHisto(5,energy);
-  else              fHistoManager->FillHisto(6,energy);
-   
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  
+  if (charge != 0.) analysisManager->FillH1(5,energy);
+  else              analysisManager->FillH1(6,energy);   
   return fUrgent;
 }
 

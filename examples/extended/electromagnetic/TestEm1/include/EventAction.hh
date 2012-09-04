@@ -38,7 +38,6 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
-class HistoManager;
 class EventActionMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,7 +45,7 @@ class EventActionMessenger;
 class EventAction : public G4UserEventAction
 {
   public:
-    EventAction(HistoManager*);
+    EventAction();
    ~EventAction();
 
   public:
@@ -64,7 +63,6 @@ class EventAction : public G4UserEventAction
     G4String               fDrawFlag;
     G4int                  fPrintModulo;
     
-    HistoManager*          fHistoManager;                        
     EventActionMessenger*  fEventMessenger;
 };
 

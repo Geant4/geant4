@@ -36,14 +36,13 @@
 
 class PrimaryGeneratorAction;
 class RunAction;
-class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class TrackingAction : public G4UserTrackingAction {
 
   public:  
-    TrackingAction(PrimaryGeneratorAction*, RunAction*, HistoManager*);
+    TrackingAction(PrimaryGeneratorAction*, RunAction*);
    ~TrackingAction() {};
    
     void  PreUserTrackingAction(const G4Track*);
@@ -52,7 +51,6 @@ class TrackingAction : public G4UserTrackingAction {
   private:
     PrimaryGeneratorAction* fPrimary;
     RunAction*              fRunAction;
-    HistoManager*           fHistoManager;  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

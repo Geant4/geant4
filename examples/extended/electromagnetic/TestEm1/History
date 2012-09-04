@@ -15,6 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+25-08-12 mma (testem1-V09-05-08)
+- HistoManager functionalities transfered to G4Analysis and its messenger.
+    - Need analysis-V09-05-09
+    - all userAction classes and all macros affected
+     
 10-07-12 mma (testem1-V09-05-07)
 - PhysicsList : add G4RadioactiveDecay
 - associated macro radioactive.mac  

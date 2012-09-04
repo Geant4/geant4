@@ -38,9 +38,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(PrimaryGeneratorAction* prim, RunAction* run, 
-                               HistoManager* histo)
-:fPrimary(prim), fRunAction(run), fHistoManager(histo)
+TrackingAction::TrackingAction(PrimaryGeneratorAction* prim, RunAction* run)
+:fPrimary(prim), fRunAction(run)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,7 +55,7 @@ void TrackingAction::PreUserTrackingAction(const G4Track*)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
-{
+{  
   //increase nb of processed tracks 
   //count nb of steps of this track
   G4int   nbSteps = aTrack->GetCurrentStepNumber();
@@ -80,8 +79,9 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
     fRunAction->AddTransvDev(position.y());
     fRunAction->AddTransvDev(position.z());
     
-    fHistoManager->FillHisto(1,Trleng);
-    fHistoManager->FillHisto(2,(float)nbSteps);    
+    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+    analysisManager->FillH1(1,Trleng);
+    analysisManager->FillH1(2,(float)nbSteps);        
   }        
 }
 

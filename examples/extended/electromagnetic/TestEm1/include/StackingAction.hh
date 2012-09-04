@@ -35,20 +35,16 @@
 #include "G4UserStackingAction.hh"
 #include "globals.hh"
 
-class HistoManager;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class StackingAction : public G4UserStackingAction
 {
   public:
-    StackingAction(HistoManager* );
+    StackingAction();
    ~StackingAction();
      
     G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
     
-  private:
-    HistoManager* fHistoManager;        
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -42,8 +42,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction(HistoManager* histo)
-:fDrawFlag("none"),fPrintModulo(10000),fHistoManager(histo),fEventMessenger(0)
+EventAction::EventAction()
+:fDrawFlag("none"),fPrintModulo(10000),fEventMessenger(0)
 {
   fEventMessenger = new EventActionMessenger(this);
 }
@@ -74,7 +74,8 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
 
 void EventAction::EndOfEventAction(const G4Event*)
 {
-  fHistoManager->FillHisto(4,fTotalEnergyDeposit);
+
+  G4AnalysisManager::Instance()->FillH1(4,fTotalEnergyDeposit);
   
   if (fDrawFlag != "none") G4cout << " Energy deposit: "
                                  << G4BestUnit(fTotalEnergyDeposit,"Energy")
