@@ -97,6 +97,7 @@ G4IonINCLXXPhysics::G4IonINCLXXPhysics(const G4String& name,
   emax_t     = 3 * 3.0 * GeV;
   emax_he3   = 3 * 3.0 * GeV;
   emax_alpha = 4 * 3.0 * GeV;
+  emax       = 16 * 3.0 * GeV;
   emaxLHEP   = 1.*TeV;
   emin       = 0.*MeV;
   SetPhysicsType(bIons);

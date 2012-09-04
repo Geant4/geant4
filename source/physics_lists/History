@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23-08-2012, D.Mancusi                  (phys-lists-V09-05-44)
+- Fixes Coverity warning in INCL++ ion builder.
+
 27-07-2012, Vladimir Ivanchenko        (phys-lists-V09-05-43)
 - G4EmPenelopePhysics, G4EmStandardPhysics_option3,
   G4EmLivermorePhysics,  G4EmPenelopePolarizedPhysics -
