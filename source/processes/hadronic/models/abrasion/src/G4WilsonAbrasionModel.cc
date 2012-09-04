@@ -184,9 +184,9 @@ G4WilsonAbrasionModel::G4WilsonAbrasionModel(G4ExcitationHandler* aExcitationHan
 
   verboseLevel = 0;
 
-//A.R. 26-Jul-2012 Coverity fix.
-  theAblation = NULL;
-//                      
+  theAblation = NULL;   //A.R. 26-Jul-2012 Coverity fix.
+  useAblation = false;  //A.R. 14-Aug-2012 Coverity fix.
+                      
 //
 // The user is able to provide the excitation handler as well as an argument
 // which is provided in this instantiation is used to determine
@@ -212,6 +212,7 @@ G4WilsonAbrasionModel::G4WilsonAbrasionModel(G4ExcitationHandler* aExcitationHan
 // npK, when mutiplied by the nuclear Fermi momentum, determines the range of
 // momentum over which the secondary nucleon momentum is sampled.
 //
+  r0sq             = 0.0;  //A.R. 14-Aug-2012 Coverity fix. 
   npK              = 5.0;
   B                = 10.0 * MeV;
   third            = 1.0 / 3.0;
