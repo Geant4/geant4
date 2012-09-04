@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.2
+// INCL++ revision: v5.1.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -214,8 +214,8 @@ namespace G4INCL {
         restoreParticles();
 
         // Delete newly created particles
-        for( ParticleIter j = created.begin(); j != created.end(); ++j )
-          delete *j;
+        for( ParticleIter i = created.begin(); i != created.end(); ++i )
+          delete *i;
 
         FinalState *fsBlocked = new FinalState;
         delete fs;
@@ -275,8 +275,8 @@ namespace G4INCL {
       // ...except for pions beyond their surface radius.
       if((*i)->isOutOfWell()) continue;
 
-      const G4bool successBringParticlesInside = bringParticleInside(*i);
-      if( !successBringParticlesInside ) {
+      const G4bool success = bringParticleInside(*i);
+      if( !success ) {
         ERROR("Failed to bring particle inside the nucleus!" << std::endl);
       }
     }
@@ -300,6 +300,8 @@ namespace G4INCL {
 
         // Increment or decrement the participant counters
         if(goesBackToSpectator) {
+          DEBUG("The following particle goes back to spectator:" << std::endl
+              << (*i)->print() << std::endl);
           if(!(*i)->isTargetSpectator()) {
             theNucleus->getStore()->getBook()->decrementCascading();
           }
@@ -371,8 +373,9 @@ namespace G4INCL {
    * *** InteractionAvatar::ViolationEMomentumFunctor methods ***
    * ***                                                      ***/
 
-  InteractionAvatar::ViolationEMomentumFunctor::ViolationEMomentumFunctor(Nucleus * const nucleus, FinalState const * const finalState, ThreeVector const * const boost, const G4bool localE) 
-    : initialEnergy(finalState->getTotalEnergyBeforeInteraction()),
+  InteractionAvatar::ViolationEMomentumFunctor::ViolationEMomentumFunctor(Nucleus * const nucleus, FinalState const * const finalState, ThreeVector const * const boost, const G4bool localE) :
+    RootFunctor(0., 1E6),
+    initialEnergy(finalState->getTotalEnergyBeforeInteraction()),
     theNucleus(nucleus),
     boostVector(boost),
     shouldUseLocalEnergy(localE)
@@ -442,8 +445,9 @@ namespace G4INCL {
    * *** InteractionAvatar::ViolationEEnergyFunctor methods ***
    * ***                                                    ***/
 
-  InteractionAvatar::ViolationEEnergyFunctor::ViolationEEnergyFunctor(Nucleus * const nucleus, FinalState const * const finalState) 
-    : initialEnergy(finalState->getTotalEnergyBeforeInteraction()),
+  InteractionAvatar::ViolationEEnergyFunctor::ViolationEEnergyFunctor(Nucleus * const nucleus, FinalState const * const finalState) :
+    RootFunctor(0., 1E6),
+    initialEnergy(finalState->getTotalEnergyBeforeInteraction()),
     theNucleus(nucleus),
     theParticle(finalState->getModifiedParticles().front()),
     theEnergy(theParticle->getEnergy()),

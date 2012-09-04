@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.2
+// INCL++ revision: v5.1.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -74,11 +74,13 @@ namespace G4INCL {
     // We forbid transmission of resonances below the Fermi energy. Emitting a
     // delta particle below Tf can lead to negative excitation energies, since
     // CDPP assumes that particles stay in the Fermi sea.
-    const G4double theFermiEnergy = theNucleus->getPotential()->getFermiEnergy(theParticle);
-    if(theParticle->isResonance() && theParticle->getKineticEnergy()<theFermiEnergy) {
-      DEBUG("Particle " << theParticle->getID() << " is a resonance below Tf, reflection" << std::endl
-          << "  Tf=" << theFermiEnergy << ", EKin=" << theParticle->getKineticEnergy() << std::endl);
-      return new ReflectionChannel(theNucleus, theParticle);
+    if(theParticle->isResonance()) {
+      const G4double theFermiEnergy = theNucleus->getPotential()->getFermiEnergy(theParticle);
+      if(theParticle->getKineticEnergy()<theFermiEnergy) {
+        DEBUG("Particle " << theParticle->getID() << " is a resonance below Tf, reflection" << std::endl
+            << "  Tf=" << theFermiEnergy << ", EKin=" << theParticle->getKineticEnergy() << std::endl);
+        return new ReflectionChannel(theNucleus, theParticle);
+      }
     }
 
     // Don't try to make a cluster if the leading particle is too slow
@@ -86,13 +88,16 @@ namespace G4INCL {
 
     DEBUG("Transmission probability for particle " << theParticle->getID() << " = " << transmissionProbability << std::endl);
     /* Don't attempt to construct clusters when a projectile spectator is
-     * trying to escape. The idea behind this is that projectile spectators
-     * will later be collected in the projectile remnant, and trying to
-     * clusterise them somewhat feels like G4double counting. Moreover, applying
-     * the clustering algorithm on escaping projectile spectators makes the
-     * code *really* slow if the projectile is large.
+     * trying to escape during a nucleus-nucleus collision. The idea behind
+     * this is that projectile spectators will later be collected in the
+     * projectile remnant, and trying to clusterise them somewhat feels like
+     * G4double counting. Moreover, applying the clustering algorithm on escaping
+     * projectile spectators makes the code *really* slow if the projectile is
+     * large.
      */
-    if(theParticle->isNucleon() && !theParticle->isProjectileSpectator() && transmissionProbability>1.E-4) {
+    if(theParticle->isNucleon()
+        && (!theParticle->isProjectileSpectator() || !theNucleus->isNucleusNucleusCollision())
+        && transmissionProbability>1.E-4) {
       Cluster *candidateCluster = 0;
 
       candidateCluster = Clustering::getCluster(theNucleus, theParticle);
@@ -121,6 +126,15 @@ namespace G4INCL {
 
     // If we haven't transmitted a cluster (maybe cluster feature was
     // disabled or maybe we just can't produce an acceptable cluster):
+
+    // Always transmit projectile spectators if no cluster was formed and if
+    // transmission is energetically allowed
+    if(theParticle->isProjectileSpectator() && transmissionProbability>0.) {
+      DEBUG("Particle " << theParticle->getID() << " is a projectile spectator, transmission" << std::endl);
+      return new TransmissionChannel(theNucleus, theParticle);
+    }
+
+    // Transmit or reflect depending on the transmission probability
     const G4double x = Random::shoot();
 
     if(x <= transmissionProbability) { // Transmission

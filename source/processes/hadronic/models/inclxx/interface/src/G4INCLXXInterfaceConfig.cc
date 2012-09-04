@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.2
+// INCL++ revision: v5.1.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -49,11 +49,10 @@ G4INCLXXInterfaceConfig *G4INCLXXInterfaceConfig::theInstance = NULL;
 
 G4INCLXXInterfaceConfig::G4INCLXXInterfaceConfig() :
   dumpInput(false),
-  useInverseKinematics(true),
-  theMaxProjMassDefault(18),
+  accurateProjectile(true),
   theMaxClusterMassDefault(8),
-  theMaxProjMass(theMaxProjMassDefault),
-  theMaxClusterMass(theMaxClusterMassDefault)
+  theMaxClusterMass(theMaxClusterMassDefault),
+  theMaxProjMassINCL(18)
 {
   theINCLXXInterfaceMessenger = new G4INCLXXInterfaceMessenger(this);
 }

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.2
+// INCL++ revision: v5.1.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -56,6 +56,10 @@
 #include "G4INCLCluster.hh"
 #include "G4INCLClusterDecay.hh"
 #include "G4INCLDeJongSpin.hh"
+#include "G4INCLNuclearPotentialEnergyIsospinSmooth.hh"
+#include "G4INCLNuclearPotentialEnergyIsospin.hh"
+#include "G4INCLNuclearPotentialIsospin.hh"
+#include "G4INCLNuclearPotentialConstant.hh"
 #include <iterator>
 #include <cstdlib>
 #include <sstream>
@@ -64,7 +68,7 @@
 namespace G4INCL {
 
   Nucleus::Nucleus(G4int mass, G4int charge, Config const * const conf, const G4double universeRadius)
-    : Cluster(charge,mass,conf),
+    : Cluster(charge,mass),
      theInitialZ(charge), theInitialA(mass),
      theNpInitial(0), theNnInitial(0),
      initialInternalEnergy(0.),
@@ -79,8 +83,47 @@ namespace G4INCL {
      projectileA(0),
      theUniverseRadius(universeRadius),
      isNucleusNucleus(false),
-     theProjectileRemnant(NULL)
+     theProjectileRemnant(NULL),
+     theDensity(NULL),
+     thePotential(NULL)
   {
+    PotentialType potentialType;
+    G4bool pionPotential;
+    if(conf) {
+      potentialType = conf->getPotentialType();
+      pionPotential = conf->getPionPotential();
+    } else { // By default we don't use energy dependent
+      // potential. This is convenient for some tests.
+      potentialType = IsospinPotential;
+      pionPotential = true;
+    }
+    switch(potentialType) {
+      case IsospinEnergySmoothPotential:
+        thePotential = new NuclearPotential::NuclearPotentialEnergyIsospinSmooth(theA, theZ, pionPotential);
+        break;
+      case IsospinEnergyPotential:
+        thePotential = new NuclearPotential::NuclearPotentialEnergyIsospin(theA, theZ, pionPotential);
+        break;
+      case IsospinPotential:
+        thePotential = new NuclearPotential::NuclearPotentialIsospin(theA, theZ, pionPotential);
+        break;
+      case ConstantPotential:
+        thePotential = new NuclearPotential::NuclearPotentialConstant(theA, theZ, pionPotential);
+        break;
+      default:
+        FATAL("Unrecognized potential type at Nucleus creation." << std::endl);
+        std::exit(EXIT_FAILURE);
+        break;
+    }
+
+    ParticleTable::setProtonSeparationEnergy(thePotential->getSeparationEnergy(Proton));
+    ParticleTable::setNeutronSeparationEnergy(thePotential->getSeparationEnergy(Neutron));
+
+    theDensity = NuclearDensityFactory::createDensity(theA, theZ);
+
+    theParticleSampler->setPotential(thePotential);
+    theParticleSampler->setDensity(theDensity);
+
     if(theUniverseRadius<0)
       theUniverseRadius = theDensity->getMaximumRadius();
     theStore = new Store(conf);
@@ -89,12 +132,12 @@ namespace G4INCL {
 
   Nucleus::~Nucleus() {
     delete theStore;
+    delete thePotential;
     /* We don't delete the density here any more -- the Factory is caching them
     delete theDensity;*/
   }
 
-  void Nucleus::initializeParticles()
-  {
+  void Nucleus::initializeParticles() {
     // Reset the variables connected with the projectile remnant
     delete theProjectileRemnant;
     theProjectileRemnant = NULL;
@@ -179,12 +222,14 @@ namespace G4INCL {
     } else if(validity == PauliBlockedFS) {
       blockedDelta = finalstate->getBlockedDelta();
     } else if(validity == ParticleBelowFermiFS) {
+      DEBUG("A Particle is entering below the Fermi sea:" << std::endl << finalstate->print() << std::endl);
       tryCN = true;
       ParticleList const &entering = finalstate->getEnteringParticles();
       for(ParticleIter iter = entering.begin(); iter != entering.end(); ++iter) {
         insertParticle(*iter);
       }
     } else if(validity == ParticleBelowZeroFS) {
+      DEBUG("A Particle is entering below zero energy:" << std::endl << finalstate->print() << std::endl);
       forceTransparent = true;
       ParticleList const &entering = finalstate->getEnteringParticles();
       for(ParticleIter iter = entering.begin(); iter != entering.end(); ++iter) {
@@ -303,6 +348,8 @@ namespace G4INCL {
     if(deltas.empty()) return false;
 
     for(ParticleIter i = deltas.begin(); i != deltas.end(); ++i) {
+      DEBUG("Decay outgoing delta particle:" << std::endl
+          << (*i)->print() << std::endl);
       const ThreeVector beta = -(*i)->boostVector();
       const G4double deltaMass = (*i)->getMass();
 
@@ -365,6 +412,8 @@ namespace G4INCL {
 
     // Loop over the deltas, make them decay
     for(ParticleIter i = deltas.begin(); i != deltas.end(); ++i) {
+      DEBUG("Decay inside delta particle:" << std::endl
+          << (*i)->print() << std::endl);
       // Create a forced-decay avatar. Note the last boolean parameter. Note
       // also that if the remnant is unphysical we more or less explicitly give
       // up energy conservation and CDPP by passing a NULL pointer for the
@@ -526,9 +575,9 @@ namespace G4INCL {
       // Can apply exact 2-body kinematics here. Keep the CM emission angle of
       // the first particle.
       Particle *p1 = outgoing.front(), *p2 = outgoing.back();
-      const ThreeVector aBoostVector = incomingMomentum / initialEnergy;
+      const ThreeVector boostVector = incomingMomentum / initialEnergy;
       // Boost to the initial CM
-      p1->boost(aBoostVector);
+      p1->boost(boostVector);
       const G4double sqrts = std::sqrt(initialEnergy*initialEnergy - incomingMomentum.mag2());
       const G4double pcm = KinematicsUtils::momentumInCM(sqrts, p1->getMass(), p2->getMass());
       const G4double scale = pcm/(p1->getMomentum().mag());
@@ -538,8 +587,8 @@ namespace G4INCL {
       p1->adjustEnergyFromMomentum();
       p2->adjustEnergyFromMomentum();
       // Unboost
-      p1->boost(-aBoostVector);
-      p2->boost(-aBoostVector);
+      p1->boost(-boostVector);
+      p2->boost(-boostVector);
 
     } else {
 
@@ -820,25 +869,25 @@ namespace G4INCL {
     setMass(getTableMass() + theExcitationEnergy);
   }
 
-  void Nucleus::finalizeProjectileRemnant(const G4double anEmissionTime) {
+  void Nucleus::finalizeProjectileRemnant(const G4double emissionTime) {
     // Deal with the projectile remnant
     if(theProjectileRemnant->getA()>1) {
       // Set the mass
-      const G4double aMass = theProjectileRemnant->getInvariantMass();
-      theProjectileRemnant->setMass(aMass);
+      const G4double theMass = theProjectileRemnant->getInvariantMass();
+      theProjectileRemnant->setMass(theMass);
 
       // Compute the excitation energy from the invariant mass
-      const G4double anExcitationEnergy = aMass
+      const G4double theExcitationEnergy = theMass
         - ParticleTable::getTableMass(theProjectileRemnant->getA(), theProjectileRemnant->getZ());
 
       // Set the excitation energy
-      theProjectileRemnant->setExcitationEnergy(anExcitationEnergy);
+      theProjectileRemnant->setExcitationEnergy(theExcitationEnergy);
 
       // Set the spin
       theProjectileRemnant->setSpin(DeJongSpin::shoot(theProjectileRemnant->getNumberStoredComponents(), theProjectileRemnant->getA()));
 
       // Set the emission time
-      theProjectileRemnant->setEmissionTime(anEmissionTime);
+      theProjectileRemnant->setEmissionTime(emissionTime);
 
       // Put it in the outgoing list
       theStore->addToOutgoing(theProjectileRemnant);

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.2
+// INCL++ revision: v5.1.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -41,29 +41,20 @@
 
 namespace G4INCL {
 
-  void Cluster::initializeParticles()
-  {
+  void Cluster::initializeParticles() {
+// assert(theA>=2);
     const ThreeVector oldPosition = thePosition;
-    G4INCL::ParticleType type = G4INCL::Proton;
-    const G4int theMassNumber = theA;
-    const G4int theChargeNumber = theZ;
+    ParticleList theParticles = theParticleSampler->sampleParticles(thePosition);
+#if !defined(NDEBUG) && !defined(INCLXX_IN_GEANT4_MODE)
+    const G4int theMass = theA;
+    const G4int theCharge = theZ;
+#endif
     theA = 0;
     theZ = 0;
-    for(G4int i = 1; i <= theMassNumber; ++i) {
-      // DEBUG("Creating particle " << i << std::endl);
-      if(i == (theChargeNumber + 1)) { // Nucleons [Z+1..A] are neutrons
-        type = G4INCL::Neutron;
-      }
-
-      ThreeVector momentum = (thePotential->*(thePotential->shootRandomMomentum))(type);
-      const G4double pFermi = thePotential->getFermiMomentum(type);
-      ThreeVector position = oldPosition + (theDensity->*(theDensity->shootRandomPosition))(momentum, pFermi);
-      Particle *p = new Particle(type, momentum, position);
-      addParticle(p); // add the particle to the `particles' list
-    }
-
-// assert(theA==theMassNumber && theZ==theChargeNumber);
+    addParticles(theParticles); // add the particles to the `particles' list
     thePosition = oldPosition;
+// assert(theMass==theA && theCharge==theZ);
+    DEBUG("Cluster initialized:" << std::endl << print());
   }
 
 }

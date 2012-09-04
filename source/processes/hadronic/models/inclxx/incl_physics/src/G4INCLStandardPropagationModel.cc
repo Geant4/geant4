@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.2
+// INCL++ revision: v5.1.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -113,11 +113,13 @@ namespace G4INCL {
       const G4double traversalTime = distance / projectileVelocity;
       if(maximumTime < traversalTime)
         maximumTime = traversalTime;
+      DEBUG("Cascade stopping time is " << maximumTime << std::endl);
 
       // If Coulomb is activated, do not process events with impact
       // parameter larger than the maximum impact parameter, taking into
       // account Coulomb distortion.
       if(impactParameter>CoulombDistortion::maxImpactParameter(p,theNucleus)) {
+        DEBUG("impactParameter>CoulombDistortion::maxImpactParameter" << std::endl);
         delete p;
         return -1.;
       }
@@ -162,7 +164,7 @@ namespace G4INCL {
       currentTime = 0.0;
 
       // Create the ProjectileRemnant object
-      ProjectileRemnant *pr = new ProjectileRemnant(species, kineticEnergy, theNucleus->getStore()->getConfig());
+      ProjectileRemnant *pr = new ProjectileRemnant(species, kineticEnergy);
 
       // Same stopping time as for nucleon-nucleus
       maximumTime = 29.8 * std::pow(theNucleus->getA(), 0.16);
@@ -175,12 +177,14 @@ namespace G4INCL {
       const G4double traversalTime = distance / projectileVelocity;
       if(maximumTime < traversalTime)
         maximumTime = traversalTime;
+      DEBUG("Cascade stopping time is " << maximumTime << std::endl);
 
       // If Coulomb is activated, do not process events with impact
       // parameter larger than the maximum impact parameter, taking into
       // account Coulomb distortion.
       if(impactParameter>CoulombDistortion::maxImpactParameter(pr,theNucleus)) {
         pr->deleteParticles();
+        DEBUG("impactParameter>CoulombDistortion::maxImpactParameter" << std::endl);
         delete pr;
         return -1.;
       }
@@ -216,6 +220,7 @@ namespace G4INCL {
         = CoulombDistortion::bringToSurface(pr, theNucleus);
 
       if(theAvatarList.empty()) {
+        DEBUG("No ParticleEntryAvatar found, transparent event" << std::endl);
         pr->deleteParticles();
         delete pr;
         return -1.;
@@ -228,9 +233,6 @@ namespace G4INCL {
       theNucleus->setProjectileChargeNumber(pr->getZ());
       theNucleus->setProjectileMassNumber(pr->getA());
 
-      // Put the spectators on shell by extracting energy from the participants
-      // putSpectatorsOnShell(theAvatarList, the list of geometrical spectators);
-
       // Register the ParticleEntryAvatars
       theNucleus->getStore()->addParticleEntryAvatars(theAvatarList);
 
@@ -242,11 +244,8 @@ namespace G4INCL {
     }
 
     void StandardPropagationModel::setStoppingTime(G4double time) {
-      if(time > 0.0) {
-        maximumTime = time;
-      } else {
-        ERROR("new stopping time is smaller than 0!" << std::endl);
-      }
+// assert(time>0.0);
+      maximumTime = time;
     }
 
     G4double StandardPropagationModel::getCurrentTime() {

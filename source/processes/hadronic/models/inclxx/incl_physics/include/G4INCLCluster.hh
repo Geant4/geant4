@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.2
+// INCL++ revision: v5.1.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -40,13 +40,8 @@
 #define G4INCLCluster_hh 1
 
 #include "G4INCLParticle.hh"
-#include "G4INCLNuclearDensity.hh"
 #include "G4INCLNuclearDensityFactory.hh"
-#include "G4INCLNuclearPotentialConstant.hh"
-#include "G4INCLNuclearPotentialIsospin.hh"
-#include "G4INCLNuclearPotentialEnergyIsospin.hh"
-#include "G4INCLINuclearPotential.hh"
-#include "G4INCLConfig.hh"
+#include "G4INCLParticleSampler.hh"
 
 namespace G4INCL {
 
@@ -57,67 +52,23 @@ namespace G4INCL {
   class Cluster : public Particle {
   public:
 
-    /** \brief Build clusters with a NuclearDensity and a NuclearPotential
+    /** \brief Standard Cluster constructor
      *
      * This constructor should mainly be used when constructing Nucleus or
      * when constructing Clusters to be used as composite projectiles.
      */
-    Cluster(const G4int Z, const G4int A, Config const * const conf, const G4bool hardFermiSphere=true) :
+    Cluster(const G4int Z, const G4int A, const G4bool createParticleSampler=true) :
       Particle(),
-      theDensity(NULL),
-      thePotential(NULL),
       theExcitationEnergy(0.),
-      theSpin(0.,0.,0.)
+      theSpin(0.,0.,0.),
+      theParticleSampler(NULL)
     {
       setType(Composite);
       theZ = Z;
       theA = A;
       setINCLMass();
-
-      theDensity = NuclearDensityFactory::createDensity(theA, theZ, hardFermiSphere);
-
-      PotentialType potentialType;
-      G4bool pionPotential;
-      if(conf) {
-        potentialType = conf->getPotentialType();
-        pionPotential = conf->getPionPotential();
-      } else { // By default we don't use energy dependent
-        // potential. This is convenient for some tests.
-        potentialType = IsospinPotential;
-        pionPotential = true;
-      }
-      switch(potentialType) {
-        case IsospinEnergyPotential:
-          thePotential = new NuclearPotential::NuclearPotentialEnergyIsospin(theDensity, pionPotential, hardFermiSphere);
-          break;
-        case IsospinPotential:
-          thePotential = new NuclearPotential::NuclearPotentialIsospin(theDensity, pionPotential, hardFermiSphere);
-          break;
-        case ConstantPotential:
-          thePotential = new NuclearPotential::NuclearPotentialConstant(theDensity, pionPotential, hardFermiSphere);
-          break;
-        default:
-          FATAL("Unrecognized potential type at Nucleus creation." << std::endl);
-          std::exit(EXIT_FAILURE);
-          break;
-      }
-    }
-
-    /**
-     * We can build dummy clusters based on Z and A and set their properties
-     * later using standard setters (setEnergy, setPosition...).
-     */
-    Cluster(const G4int Z, const G4int A) :
-      Particle(),
-      theDensity(NULL),
-      thePotential(NULL),
-      theExcitationEnergy(0.),
-      theSpin(0.,0.,0.)
-    {
-      setType(Composite);
-      theZ = Z;
-      theA = A;
-      setINCLMass();
+      if(createParticleSampler)
+        theParticleSampler = NuclearDensityFactory::createParticleSampler(A,Z);
     }
 
     /**
@@ -125,10 +76,9 @@ namespace G4INCL {
      */
     Cluster(ParticleList *pl) :
       Particle(),
-      theDensity(NULL),
-      thePotential(NULL),
       theExcitationEnergy(0.),
-      theSpin(0.,0.,0.)
+      theSpin(0.,0.,0.),
+      theParticleSampler(NULL)
     {
       setType(Composite);
       for(ParticleIter i = pl->begin(); i != pl->end(); ++i) {
@@ -144,10 +94,9 @@ namespace G4INCL {
      */
     Cluster(const ParticleList &pl) :
       Particle(),
-      theDensity(NULL),
-      thePotential(NULL),
       theExcitationEnergy(0.),
-      theSpin(0.,0.,0.)
+      theSpin(0.,0.,0.),
+      theParticleSampler(NULL)
     {
       setType(Composite);
       for(ParticleIter i = pl.begin(); i != pl.end(); ++i) {
@@ -159,13 +108,11 @@ namespace G4INCL {
     };
 
     virtual ~Cluster() {
-      delete thePotential;
-    };
+      delete theParticleSampler;
+    }
 
     /// \brief Copy constructor
     Cluster(const Cluster &rhs) : Particle(rhs) {
-      theDensity = rhs.theDensity;
-      thePotential = rhs.thePotential;
       theExcitationEnergy = rhs.theExcitationEnergy;
       deleteParticles();
       for(ParticleIter p=rhs.particles.begin(); p!=rhs.particles.end(); ++p) {
@@ -185,11 +132,11 @@ namespace G4INCL {
     void swap(Cluster &rhs) {
       Particle::swap(rhs);
       std::swap(theExcitationEnergy, rhs.theExcitationEnergy);
-      std::swap(theDensity, rhs.theDensity);
-      std::swap(thePotential, rhs.thePotential);
+      std::swap(theSpin, rhs.theSpin);
       // std::swap is overloaded by std::list and guaranteed to operate in
       // constant time
       std::swap(particles, rhs.particles);
+      std::swap(theParticleSampler, rhs.theParticleSampler);
     }
 
     void deleteParticles() {
@@ -241,7 +188,13 @@ namespace G4INCL {
       theA += p->getA();
       theZ += p->getZ();
       nCollisions += p->getNumberOfCollisions();
-    };
+    }
+
+    /// \brief Add a list of particles to the cluster
+    void addParticles(ParticleList const &pL) {
+      for(ParticleIter p=pL.begin(); p!=pL.end(); ++p)
+        addParticle(*p);
+    }
 
     /// \brief Returns the list of particles that make up the cluster
     ParticleList getParticleList() const { return particles; }
@@ -265,20 +218,12 @@ namespace G4INCL {
         << std::endl;
       for(ParticleIter i=particles.begin(); i!=particles.end(); ++i)
         ss << (*i)->print();
+      ss << std::endl;
       return ss.str();
     }
 
-    NuclearDensity* getDensity() const { return theDensity; };
-
-    NuclearPotential::INuclearPotential* getPotential() const { return thePotential; };
-
     /// \brief Initialise the NuclearDensity pointer and sample the particles
     virtual void initializeParticles();
-
-    /// \brief Update the particle potential energy.
-    inline void updatePotentialEnergy(Particle *p) {
-      p->setPotentialEnergy(thePotential->computePotentialEnergy(p));
-    }
 
     /** \brief Boost to the CM of the component particles
      *
@@ -328,6 +273,8 @@ namespace G4INCL {
       theMomentum.setZ(0.0);
       theEnergy = getMass();
 
+      DEBUG("Cluster boosted to internal CM:" << std::endl << print());
+
     }
 
     /** \brief Put the cluster components off shell
@@ -347,6 +294,8 @@ namespace G4INCL {
         // and momentum-conservation laws
         (*p)->setEnergy(energy);
         (*p)->setMass(std::sqrt(energy*energy - momentum.mag2()));
+        DEBUG("Cluster components are now off shell:" << std::endl
+            << print());
       }
     }
 
@@ -371,13 +320,18 @@ namespace G4INCL {
      *
      * \param boostVector the velocity to boost to [c]
      */
-    void boost(const ThreeVector &aBoostVector) {
-      Particle::boost(aBoostVector);
+    void boost(const ThreeVector &boostVector) {
+      Particle::boost(boostVector);
       for(ParticleIter p=particles.begin(); p!=particles.end(); ++p) {
-        (*p)->boost(aBoostVector);
+        (*p)->boost(boostVector);
         // Apply Lorentz contraction to the particle position
-        (*p)->lorentzContract(aBoostVector,thePosition);
+        (*p)->lorentzContract(boostVector,thePosition);
       }
+
+      DEBUG("Cluster was boosted with (bx,by,bz)=("
+          << boostVector.getX() << ", " << boostVector.getY() << ", " << boostVector.getZ() << "):"
+          << std::endl << print());
+
     }
 
     /** \brief Freeze the internal motion of the particles
@@ -449,13 +403,6 @@ namespace G4INCL {
       return Particle::getAngularMomentum() + getSpin();
     }
 
-  protected:
-    ParticleList particles;
-    NuclearDensity *theDensity;
-    NuclearPotential::INuclearPotential *thePotential;
-    G4double theExcitationEnergy;
-    ThreeVector theSpin;
-
   private:
     /** \brief Compute the dynamical cluster potential
      *
@@ -475,6 +422,12 @@ namespace G4INCL {
 
       return theDynamicalPotential;
     }
+
+  protected:
+    ParticleList particles;
+    G4double theExcitationEnergy;
+    ThreeVector theSpin;
+    ParticleSampler *theParticleSampler;
 
   };
 

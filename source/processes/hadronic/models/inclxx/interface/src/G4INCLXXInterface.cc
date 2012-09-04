@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.2
+// INCL++ revision: v5.1.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -52,7 +52,8 @@ const G4int G4INCLXXInterface::maxWarnings = 50;
 
 G4INCLXXInterface::G4INCLXXInterface(const G4String& nam)
   :G4VIntraNuclearTransportModel(nam),
-  theInterfaceConfig(G4INCLXXInterfaceConfig::GetInstance())
+  theInterfaceConfig(G4INCLXXInterfaceConfig::GetInstance()),
+  complainedAboutBackupModel(false)
 {
   // Register this interface with the G4INCLXXInterfaceConfig singleton
   theInterfaceConfig->RegisterINCLXXInterface(this);
@@ -65,6 +66,8 @@ G4INCLXXInterface::G4INCLXXInterface(const G4String& nam)
   } else {
     theExcitationHandler = new G4ExcitationHandler;
   }
+
+  theBackupModel = new G4BinaryLightIonReaction;
 
   // Create the Config object
   theConfig = new G4INCL::Config;
@@ -82,10 +85,11 @@ G4INCLXXInterface::~G4INCLXXInterface()
   else
     delete theConfig;
 
+  delete theBackupModel;
   delete theExcitationHandler;
 }
 
-G4bool G4INCLXXInterface::ShouldUseInverseKinematics(const G4HadProjectile &aTrack, const G4Nucleus &theNucleus) {
+G4bool G4INCLXXInterface::AccurateProjectile(const G4HadProjectile &aTrack, const G4Nucleus &theNucleus) {
   // Use direct kinematics if the projectile is a nucleon or a pion
   const G4ParticleDefinition *projectileDef = aTrack.GetDefinition();
   if(projectileDef == G4Proton::Proton()
@@ -95,7 +99,7 @@ G4bool G4INCLXXInterface::ShouldUseInverseKinematics(const G4HadProjectile &aTra
      || projectileDef == G4PionMinus::PionMinus())
     return false;
 
-  // Here all projectiles should be light nuclei
+  // Here all projectiles should be nuclei
   const G4int pA = projectileDef->GetAtomicMass();
   if(pA<=0) {
     std::stringstream ss;
@@ -106,12 +110,19 @@ G4bool G4INCLXXInterface::ShouldUseInverseKinematics(const G4HadProjectile &aTra
     return true;
   }
 
-  // Use direct kinematics if the target is larger theMaxProjMass
-  const G4int tA = theNucleus.GetA_asInt();
-  if(tA>theInterfaceConfig->GetMaxProjMass())
+  // If the projectile is heavier than theMaxProjMassINCL, run the collision as
+  // light on heavy.
+  // Note that here we are sure that either the projectile of the target is
+  // smaller than theMaxProjMass; otherwise theBackupModel would have been
+  // called.
+  const G4int theMaxProjMassINCL = theInterfaceConfig->GetMaxProjMassINCL();
+  if(pA > theMaxProjMassINCL)
+    return true;
+  else
     return false;
 
   // If either nucleus is a LCP (A<=4), run the collision as light on heavy
+  const G4int tA = theNucleus.GetA_asInt();
   if(tA<=4 || pA<=4) {
     if(pA<tA)
       return false;
@@ -120,15 +131,33 @@ G4bool G4INCLXXInterface::ShouldUseInverseKinematics(const G4HadProjectile &aTra
   }
 
   // In all other cases, use the global setting
-  return theInterfaceConfig->GetUseInverseKinematics();
+  return theInterfaceConfig->GetAccurateProjectile();
 }
 
 G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& theNucleus)
 {
+  // For systems heavier than theMaxProjMassINCL, use another model (typically
+  // BIC)
+  const G4int theMaxProjMassINCL = theInterfaceConfig->GetMaxProjMassINCL();
+  if(aTrack.GetDefinition()->GetAtomicMass() > theMaxProjMassINCL
+      && theNucleus.GetA_asInt() > theMaxProjMassINCL) {
+    if(!complainedAboutBackupModel) {
+      complainedAboutBackupModel = true;
+      std::stringstream ss;
+      ss << "INCL++ refuses to handle reactions between nuclei with A>"
+        << theMaxProjMassINCL
+        << ". A backup model ("
+        << theBackupModel->GetModelName()
+        << ") will be used instead.";
+      G4cout << "[INCL++] Warning: " << ss.str() << G4endl;
+    }
+    return theBackupModel->ApplyYourself(aTrack, theNucleus);
+  }
+
   const G4int maxTries = 200;
 
   // Check if inverse kinematics should be used
-  const G4bool inverseKinematics = ShouldUseInverseKinematics(aTrack, theNucleus);
+  const G4bool inverseKinematics = AccurateProjectile(aTrack, theNucleus);
 
   // If we are running in inverse kinematics, redefine aTrack and theNucleus
   G4LorentzRotation *toInverseKinematics = NULL;

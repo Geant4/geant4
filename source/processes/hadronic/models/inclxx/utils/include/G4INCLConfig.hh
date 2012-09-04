@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.2
+// INCL++ revision: v5.1.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -226,6 +226,9 @@ namespace G4INCL {
 
     G4double getImpactParameter() const { return impactParameter; }
 
+    /// \brief Get the separation-energy type.
+    SeparationEnergyType getSeparationEnergyType() const { return separationEnergyType; }
+
   private:
     G4int verbosity;
     std::string inputFileName;
@@ -287,6 +290,10 @@ namespace G4INCL {
     G4bool useRealMasses;
 
     G4double impactParameter;
+
+    std::string separationEnergyString;
+    SeparationEnergyType separationEnergyType;
+
   };
 
 }

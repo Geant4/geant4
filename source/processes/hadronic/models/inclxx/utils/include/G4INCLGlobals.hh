@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.2
+// INCL++ revision: v5.1.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -74,6 +74,8 @@ namespace G4INCL {
     const G4double oneOverSqrtThree = 1./std::sqrt((G4double)3.);
     const G4double oneThird = 1./3.;
     const G4double twoThirds = 2./3.;
+    const G4double sqrtFiveThirds = std::sqrt(5./3.);
+    const G4double sqrtThreeFifths = std::sqrt(3./5.);
 
     inline G4double toDegrees(G4double radians) {
       return radians * (180.0 / pi);

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.2
+// INCL++ revision: v5.1.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -252,11 +252,6 @@ namespace G4INCL {
     }
 
     /**
-     * Set the config object
-     */
-    //    void setConfig(Config const * const c) { theConfig = c; };
-
-    /**
      * Get the config object
      */
     Config const * getConfig() { return theConfig; };
@@ -470,7 +465,7 @@ namespace G4INCL {
     /**
      * Pointer to the Config object
      */
-    Config const * const theConfig;
+    Config const * theConfig;
 
 #ifdef INCL_AVATAR_SEARCH_INCLSort
     /** \brief Internal stack for the INCLSort search algorithm.

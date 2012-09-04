@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.2
+// INCL++ revision: v5.1.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -48,15 +48,19 @@ namespace G4INCL {
   }
 
   Cluster* ClusteringModelIntercomparison::getCluster(Nucleus *nucleus, Particle *particle) {
+    // Set the maximum clustering mass dynamically, based on the current nucleus
+    runningMaxClusterAlgorithmMass = std::min(IClusteringModel::maxClusterAlgorithmMass, nucleus->getA()/2);
+
+    // Nucleus too small?
+    if(runningMaxClusterAlgorithmMass<=1)
+      return NULL;
+
     theNucleus = nucleus;
     theLeadingParticle = particle;
 
     sqtot = 50000.0;
     selectedA = 0;
     selectedZ = 0;
-
-    // Set the maximum clustering mass dynamically, based on the current nucleus
-    runningMaxClusterAlgorithmMass = std::min(IClusteringModel::maxClusterAlgorithmMass, nucleus->getA()/2);
 
     const G4double transp = 1.0;
     const G4double rmaxws = theNucleus->getDensity()->getMaximumRadius();

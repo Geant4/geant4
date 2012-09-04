@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.2
+// INCL++ revision: v5.1.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -57,7 +57,7 @@ namespace G4INCL {
     class NuclearPotentialIsospin : public INuclearPotential {
 
       public:
-        NuclearPotentialIsospin(NuclearDensity const * const density, const G4bool pionPotential, const G4bool hardFermiSphere=true);
+        NuclearPotentialIsospin(const G4int A, const G4int Z, const G4bool pionPotential);
         virtual ~NuclearPotentialIsospin();
 
         virtual G4double computePotentialEnergy(const Particle * const p) const;

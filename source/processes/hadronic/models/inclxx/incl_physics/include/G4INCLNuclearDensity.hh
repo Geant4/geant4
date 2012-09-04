@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.2
+// INCL++ revision: v5.1.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -43,16 +43,18 @@
 #include <map>
 // #include <cassert>
 #include "G4INCLThreeVector.hh"
-#include "G4INCLIFunction.hh"
+#include "G4INCLIFunction1D.hh"
 #include "G4INCLParticle.hh"
 #include "G4INCLGlobals.hh"
 #include "G4INCLRandom.hh"
+#include "G4INCLINuclearPotential.hh"
+#include "G4INCLInverseInterpolationTable.hh"
 
 namespace G4INCL {
 
   class NuclearDensity {
   public:
-    NuclearDensity(G4int A, G4int Z, IFunction1D *densityFunction, const G4bool hardFermiSphere);
+    NuclearDensity(G4int A, G4int Z, InverseInterpolationTable *rpCorrelationTable);
     ~NuclearDensity();
 
     /** \brief Get the maximum allowed radius for a given momentum.
@@ -95,74 +97,31 @@ namespace G4INCL {
 
     G4double getCentralRadius() { return theCentralRadius; }
 
-    /** \brief Draw a random position.
-     *
-     * Returns a random position ThreeVector that is uncorrelated with the
-     * particle momentum.
-     *
-     * \return A random momentum ThreeVector.
-     */
-    inline ThreeVector shootRandomPositionUncorrelated(const ThreeVector &/*momentumRatio*/, const G4double /*pFermi*/) const {
-      return Random::sphereVector(getMaxRFromP(Math::pow13(Random::shoot0())));
-    }
-
-    /** \brief Draw a random position correlated with the particle momentum.
-     *
-     * Returns a random position ThreeVector correlated with the particle
-     * momentum.
-     *
-     * \return A random momentum ThreeVector.
-     */
-    inline ThreeVector shootRandomPositionCorrelated(const ThreeVector &momentum, const G4double pFermi) const {
-      return Random::sphereVector(getMaxRFromP(momentum.mag()/pFermi));
-    }
-
-    typedef ThreeVector (NuclearDensity::*PositionSampler)(ThreeVector const &momentum, const G4double pFermi) const;
-    /** \brief Draw a random position.
-     *
-     *  Pointer to a function that returns a random ThreeVector. This can be
-     *  used to sample positions according to different algorithms. The
-     *  particle position can either be correlated to the particle momentum
-     *  (which is what we do in standard INCL for target nuclei) or it can be
-     *  drawn independently (which is what we do for composite projectiles).
-     *
-     *  All this junk should probably be refactored in a factory somehow.
-     *
-     *  \param momentumRatio ratio of the particle momentum to the Fermi momentum
-     *  \param t type of the particle
-     *  \return A random position ThreeVector.
-     */
-    PositionSampler shootRandomPosition;
-
   private:
-    G4double getMaxRFromPLegacy(G4double p) const;
-    G4double getMaxRFromPNew(G4double p) const;
 
-    void initializeDensity();
-    void initializeFirstDerivative();
     /** \brief Initialize the transmission radius. */
     void initializeTransmissionRadii();
-    G4double integrate(G4double ami, G4double ama, G4double step) const;
 
     void initCentralRadius() {
-      if(theA>=6 && theA<19)
+      const G4double theRadiusParameter = ParticleTable::getNuclearRadius(theA, theZ);
+      if(theA>=6 && theA<19) {
+        const G4double theDiffusenessParameter = ParticleTable::getSurfaceDiffuseness(theA, theZ);
         theCentralRadius = 1.581*theDiffusenessParameter*
           (2.+5.*theRadiusParameter)/(2.+3.*theRadiusParameter);
-      else
+      } else
         theCentralRadius = theRadiusParameter;
     }
 
-    G4int theA, theZ;
-    IFunction1D *densityFunction;
-    G4double theRadiusParameter, theMaximumRadius, theDiffusenessParameter;
+    const G4int theA, theZ;
+    G4double theMaximumRadius;
     /// \brief Represents INCL4.5's R0 variable
     G4double theCentralRadius;
 
     /* \brief map of transmission radii per particle type */
     std::map<ParticleType,G4double> transmissionRadius;
 
-    std::vector<G4double> x, y, s;
-    std::vector<G4double> r_t, tmin, s_loce;
+    InverseInterpolationTable *rFromP;
+    InverseInterpolationTable *tFromR;
   };
 
 }

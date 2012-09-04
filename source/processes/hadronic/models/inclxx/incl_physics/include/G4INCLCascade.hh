@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.2
+// INCL++ revision: v5.1.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -74,7 +74,7 @@ namespace G4INCL {
           const G4int targetZ
           );
 
-      void finaliseGlobalInfo();
+      void finalizeGlobalInfo();
       const GlobalInfo &getGlobalInfo() const { return theGlobalInfo; }
 
       std::string configToString() { return theConfig->echo(); }
@@ -97,7 +97,7 @@ namespace G4INCL {
       GlobalInfo theGlobalInfo;
 
       /// \brief Remnant size below which cascade stops
-      static const G4int minRemnantSize;
+      G4int minRemnantSize;
 
       /** \brief Rescale the energies of the outgoing particles.
        *

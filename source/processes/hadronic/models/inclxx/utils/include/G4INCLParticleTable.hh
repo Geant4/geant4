@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.2
+// INCL++ revision: v5.1.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -52,9 +52,8 @@
 #include "G4IonTable.hh"
 #include "G4ParticleTable.hh"
 #include "globals.hh"
-#else
-#include "G4INCLGlobals.hh"
 #endif
+#include "G4INCLGlobals.hh"
 
 namespace G4INCL {
   class ParticleTable {
@@ -153,6 +152,10 @@ namespace G4INCL {
     static NuclearMassFn getTableMass;
     static ParticleMassFn getTableParticleMass;
 
+    // Typedefs and pointers for transparent handling of separation energies
+    typedef G4double (*SeparationEnergyFn)(const ParticleType, const G4int, const G4int);
+    static SeparationEnergyFn getSeparationEnergy;
+
     /// \brief Get mass number from particle type
     static G4int getMassNumber(const ParticleType t) {
       switch(t) {
@@ -215,20 +218,54 @@ namespace G4INCL {
       if(Z<clusterTableZSize && A<clusterTableASize)
         return momentumRMS[Z][A];
       else
-        return momentumRMS[6][12];
+        return Math::sqrtThreeFifths * PhysicalConstants::Pf;
     }
 
-    /// \brief Get the separation energy for a particle type.
-    static G4double getSeparationEnergy(const ParticleType t) {
-      if(t==Proton || t==DeltaPlusPlus || t==DeltaPlus)
-        return protonSeparationEnergy;
-      else if(t==Neutron || t==DeltaZero || t==DeltaMinus)
-        return neutronSeparationEnergy;
+    /// \brief Return INCL's default separation energy
+    static G4double getSeparationEnergyINCL(const ParticleType t, const G4int /*A*/, const G4int /*Z*/) {
+      if(t==Proton)
+        return theINCLProtonSeparationEnergy;
+      else if(t==Neutron)
+        return theINCLNeutronSeparationEnergy;
       else {
-        ERROR("ParticleTable::getSeparationEnergy : Unknown particle type." << std::endl);
+        ERROR("ParticleTable::getSeparationEnergyINCL : Unknown particle type." << std::endl);
         return 0.0;
       }
     }
+
+    /// \brief Return the real separation energy
+    static G4double getSeparationEnergyReal(const ParticleType t, const G4int A, const G4int Z) {
+      // Real separation energies for all nuclei
+      if(t==Proton)
+        return (*getTableParticleMass)(Proton) + (*getTableMass)(A-1,Z-1) - (*getTableMass)(A,Z);
+      else if(t==Neutron)
+        return (*getTableParticleMass)(Neutron) + (*getTableMass)(A-1,Z) - (*getTableMass)(A,Z);
+      else {
+        ERROR("ParticleTable::getSeparationEnergyReal : Unknown particle type." << std::endl);
+        return 0.0;
+      }
+    }
+
+    /// \brief Return the real separation energy only for light nuclei
+    static G4double getSeparationEnergyRealForLight(const ParticleType t, const G4int A, const G4int Z) {
+      // Real separation energies for light nuclei, fixed values for heavy nuclei
+      if(Z<clusterTableZSize && A<clusterTableASize)
+        return getSeparationEnergyReal(t, A, Z);
+      else
+        return getSeparationEnergyINCL(t, A, Z);
+    }
+
+    /// \brief Getter for protonSeparationEnergy
+    static G4double getProtonSeparationEnergy() { return protonSeparationEnergy; }
+
+    /// \brief Getter for neutronSeparationEnergy
+    static G4double getNeutronSeparationEnergy() { return neutronSeparationEnergy; }
+
+    /// \brief Setter for protonSeparationEnergy
+    static void setProtonSeparationEnergy(const G4double s) { protonSeparationEnergy = s; }
+
+    /// \brief Setter for protonSeparationEnergy
+    static void setNeutronSeparationEnergy(const G4double s) { neutronSeparationEnergy  = s; }
 
     /// \brief Get the name of the element from the atomic number
     static std::string getElementName(const G4int Z);
@@ -296,8 +333,12 @@ namespace G4INCL {
   private:
     static const G4double theINCLNucleonMass;
     static const G4double theINCLPionMass;
+    static const G4double theINCLNeutronSeparationEnergy;
+    static const G4double theINCLProtonSeparationEnergy;
     static G4double protonMass;
     static G4double neutronMass;
+    static G4double neutronSeparationEnergy;
+    static G4double protonSeparationEnergy;
     static G4double piPlusMass, piMinusMass, piZeroMass;
     static G4double theRealProtonMass;
     static G4double theRealNeutronMass;
@@ -312,8 +353,6 @@ namespace G4INCL {
 
     const static std::string elementTable[elementTableSize];
     
-    const static G4double neutronSeparationEnergy, protonSeparationEnergy;
-
 #ifndef INCLXX_IN_GEANT4_MODE
     /// \brief Read nuclear masses from a data file
     static void readRealMasses(std::string const &path);

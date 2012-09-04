@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.2
+// INCL++ revision: v5.1.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -55,6 +55,9 @@
 
 // Geant4 de-excitation
 #include "G4ExcitationHandler.hh"
+
+// Binary cascade
+#include "G4BinaryLightIonReaction.hh"
 
 #include <fstream>
 #include <iostream>
@@ -92,13 +95,7 @@ class G4INCLXXInterfaceConfig;
 class G4INCLXXInterface : public G4VIntraNuclearTransportModel {
 public:
   G4INCLXXInterface(const G4String& name = "INCL++ cascade with G4ExcitationHandler");
-//  G4INCLXXInterface(const G4String& name = "INCL++ cascade with G4ExcitationHandler/ABLA");
   ~G4INCLXXInterface(); // Destructor
-
-/*  enum ModelEnum {
-    G4ExcitationHandlerModel,
-    ABLAModel
-  };*/
 
   G4int operator==(G4INCLXXInterface& right) {
     return (this == &right);
@@ -124,7 +121,7 @@ public:
   }
 
 private:
-  G4bool ShouldUseInverseKinematics(const G4HadProjectile &aTrack, const G4Nucleus &theTargetNucleus);
+  G4bool AccurateProjectile(const G4HadProjectile &aTrack, const G4Nucleus &theTargetNucleus);
 
   /** \brief Emit a warning to G4cout
    *
@@ -149,8 +146,12 @@ private:
 
   G4ExcitationHandler *theExcitationHandler;
 
+  G4HadronicInteraction *theBackupModel;
+
   G4INCL::Config *theConfig;
   G4INCLXXInterfaceConfig * const theInterfaceConfig;
+
+  G4bool complainedAboutBackupModel;
 
 };
 

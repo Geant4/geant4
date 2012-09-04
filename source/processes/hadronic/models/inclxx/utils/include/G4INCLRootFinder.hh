@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.2
+// INCL++ revision: v5.1.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -49,16 +49,18 @@
 #define G4INCLROOTFINDER_HH_
 
 #include <utility>
+#include "G4INCLIFunction1D.hh"
 
 namespace G4INCL {
 
-  class RootFunctor {
+  class RootFunctor : public IFunction1D {
   public:
-    virtual G4double operator()(const G4double x) const = 0;
     virtual void cleanUp(const G4bool success) const = 0;
     virtual ~RootFunctor() {};
   protected:
-    RootFunctor() {};
+    RootFunctor(const G4double xMin, const G4double xMax) :
+      IFunction1D(xMin, xMax)
+    {};
   };
 
   class RootFinder {

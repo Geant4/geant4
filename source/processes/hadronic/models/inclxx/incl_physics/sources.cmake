@@ -33,6 +33,8 @@ include_directories(${CMAKE_SOURCE_DIR}/source/particles/leptons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/cross_sections/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/binary_cascade/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/im_r_matrix/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
@@ -46,7 +48,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
     HEADERS
         G4INCLPauliBlocking.hh
         G4INCLINuclearPotential.hh
-        G4INCLIFunction.hh
         G4INCLInteractionAvatar.hh
         G4INCLTransmissionChannel.hh
         G4INCLElasticChannel.hh
@@ -54,6 +55,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLNucleus.hh
         G4INCLCluster.hh
         G4INCLParticleEntryChannel.hh
+        G4INCLNDFGaussian.hh
         G4INCLKinematicsUtils.hh
         G4INCLPionNucleonChannel.hh
         G4INCLEventAction.hh
@@ -62,8 +64,11 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLSurfaceAvatar.hh
         G4INCLReflectionChannel.hh
         G4INCLBinaryCollisionAvatar.hh
+        G4INCLNDFHardSphere.hh
         G4INCLStore.hh
+        G4INCLNDFWoodsSaxon.hh
         G4INCLPauliStandard.hh
+        G4INCLDeuteronDensity.hh
         G4INCLPauliGlobal.hh
         G4INCLClusterDecay.hh
         G4INCLProjectileRemnant.hh
@@ -82,11 +87,11 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLNuclearPotentialEnergyIsospinSmooth.hh
         G4INCLStandardPropagationModel.hh
         G4INCLCascade.hh
-        G4INCLSignalHandling.hh
         G4INCLCDPP.hh
         G4INCLDeltaProductionChannel.hh
         G4INCLCoulombNonRelativistic.hh
         G4INCLNuclearPotentialConstant.hh
+        G4INCLNDFModifiedHarmonicOscillator.hh
         G4INCLPauliStrict.hh
         G4INCLNuclearPotentialIsospin.hh
         G4INCLICoulomb.hh
@@ -94,12 +99,15 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLRecombinationChannel.hh
         G4INCLPauliStrictStandard.hh
         G4INCLNuclearDensity.hh
+        G4INCLParticleSampler.hh
         G4INCLPropagationAction.hh
         G4INCLConstantRandom.hh
+        G4INCLNDFParis.hh
         G4INCLClusteringModelIntercomparison.hh
 
     SOURCES
         G4INCLPauliStandard.cc
+        G4INCLParticleSampler.cc
         G4INCLNuclearDensityFactory.cc
         G4INCLProjectileRemnant.cc
         G4INCLNuclearPotentialConstant.cc
@@ -114,6 +122,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLINuclearPotential.cc
         G4INCLParticleEntryChannel.cc
         G4INCLPauliBlocking.cc
+        G4INCLDeuteronDensity.cc
         G4INCLSurfaceAvatar.cc
         G4INCLDeltaDecayChannel.cc
         G4INCLNuclearPotentialIsospin.cc

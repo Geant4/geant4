@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.2
+// INCL++ revision: v5.1.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -84,34 +84,26 @@ class G4INCLXXInterfaceConfig {
     }
   }
 
-  /// \brief Setter for useInverseKinematics
-  void SetUseInverseKinematics(const G4bool b) { useInverseKinematics=b; }
-
-  /*  /// \brief Setter for theDeexcitationModel
-      void SetDeexcitationModel(const ModelEnum m) { theDeexcitationModel=m; }*/
+  /// \brief Setter for accurateProjectile
+  void SetAccurateProjectile(const G4bool b) { accurateProjectile=b; }
 
   /// \brief Setter for theMaxClusterMass
-  void SetMaxClusterMass(const G4int aMass) { theMaxClusterMass=aMass; }
-
-  /// \brief Setter for theMaxProjMass
-  void SetMaxProjMass(const G4int aMass) { theMaxProjMass=aMass; }
+  void SetMaxClusterMass(const G4int m) { theMaxClusterMass=m; }
 
 
 
-  /// \brief Getter for useInverseKinematics
-  G4bool GetUseInverseKinematics() { return useInverseKinematics; }
 
-  /*  /// \brief Getter for theDeexcitationModel
-      ModelEnum GetDeexcitationModel(m) { return theDeexcitationModel; }*/
+  /// \brief Getter for accurateProjectile
+  G4bool GetAccurateProjectile() { return accurateProjectile; }
 
   /// \brief Getter for ClusterMaxMass
   G4int GetMaxClusterMass() { return theMaxClusterMass; }
 
-  /// \brief Getter for theMaxProjMass
-  G4int GetMaxProjMass() { return theMaxProjMass; }
-
   /// \brief Getter for dumpInput
   G4bool GetDumpInput() { return dumpInput; }
+
+  /// \brief Getter for theMaxProjMassINCL
+  G4int GetMaxProjMassINCL() { return theMaxProjMassINCL; }
 
   private:
   /** \brief Private constructor
@@ -131,12 +123,10 @@ class G4INCLXXInterfaceConfig {
   static G4INCLXXInterfaceConfig *theInstance;
 
   G4bool dumpInput;
-  G4bool useInverseKinematics;
-  //  ModelEnum theDeexcitationModel;
-  const G4int theMaxProjMassDefault;
+  G4bool accurateProjectile;
   const G4int theMaxClusterMassDefault;
-  G4int theMaxProjMass;
   G4int theMaxClusterMass;
+  const G4int theMaxProjMassINCL;
 
   G4INCLXXInterfaceMessenger *theINCLXXInterfaceMessenger;
 

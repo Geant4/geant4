@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.2
+// INCL++ revision: v5.1.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -124,16 +124,34 @@ namespace G4INCL {
     G4double computeSeparationEnergyBalance() const {
       G4double S = 0.0;
       ParticleList outgoing = theStore->getOutgoingParticles();
-      for(ParticleIter i = outgoing.begin(); i != outgoing.end(); ++i)
-        if((*i)->isNucleon() || (*i)->isResonance())
-          S += ParticleTable::getSeparationEnergy((*i)->getType());
-        else if((*i)->isCluster()) {
-          S += (*i)->getZ() * ParticleTable::getSeparationEnergy(Proton)
-            + ((*i)->getA() - (*i)->getZ()) * ParticleTable::getSeparationEnergy(Neutron);
+      for(ParticleIter i = outgoing.begin(); i != outgoing.end(); ++i) {
+        const ParticleType t = (*i)->getType();
+        switch(t) {
+          case Proton:
+          case Neutron:
+          case DeltaPlusPlus:
+          case DeltaPlus:
+          case DeltaZero:
+          case DeltaMinus:
+            S += thePotential->getSeparationEnergy(*i);
+            break;
+          case Composite:
+            S += (*i)->getZ() * thePotential->getSeparationEnergy(Proton)
+              + ((*i)->getA() - (*i)->getZ()) * thePotential->getSeparationEnergy(Neutron);
+            break;
+          case PiPlus:
+            S += thePotential->getSeparationEnergy(Proton) - thePotential->getSeparationEnergy(Neutron);
+            break;
+          case PiMinus:
+            S += thePotential->getSeparationEnergy(Neutron) - thePotential->getSeparationEnergy(Proton);
+            break;
+          default:
+            break;
         }
+      }
 
-      S -= theNpInitial * ParticleTable::getSeparationEnergy(Proton);
-      S -= theNnInitial * ParticleTable::getSeparationEnergy(Neutron);
+      S -= theNpInitial * thePotential->getSeparationEnergy(Proton);
+      S -= theNnInitial * thePotential->getSeparationEnergy(Neutron);
       return S;
     }
 
@@ -403,6 +421,17 @@ namespace G4INCL {
      */
     void finalizeProjectileRemnant(const G4double emissionTime);
 
+    /// \brief Update the particle potential energy.
+    inline void updatePotentialEnergy(Particle *p) {
+      p->setPotentialEnergy(thePotential->computePotentialEnergy(p));
+    }
+
+    /// \brief Getter for theDensity
+    NuclearDensity* getDensity() const { return theDensity; };
+
+    /// \brief Getter for thePotential
+    NuclearPotential::INuclearPotential* getPotential() const { return thePotential; };
+
   private:
     /** \brief Compute the recoil kinematics for a 1-nucleon remnant.
      *
@@ -446,6 +475,12 @@ namespace G4INCL {
 
     /// \brief Pointer to the quasi-projectile
     ProjectileRemnant *theProjectileRemnant;
+
+    /// \brief Pointer to the NuclearDensity object
+    NuclearDensity *theDensity;
+
+    /// \brief Pointer to the NuclearPotential object
+    NuclearPotential::INuclearPotential *thePotential;
 
   };
 

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.2
+// INCL++ revision: v5.1.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -379,8 +379,13 @@ namespace G4INCL {
     const G4double sigmapn = total(&protonProjectile, &neutronTarget);
     const G4double sigmanp = total(&neutronProjectile, &protonTarget);
     const G4double sigmann = total(&neutronProjectile, &neutronTarget);
-    const G4double averageSigma = 0.25 * (sigmapp + sigmapn + sigmanp + sigmann);
-    const G4double interactionDistance = std::sqrt(averageSigma/Math::tenPi);
+    /* We compute the interaction distance from the largest of the NN cross
+     * sections. Note that this is different from INCL4.6, which just takes the
+     * average of the four, and will in general lead to a different geometrical
+     * cross section.
+     */
+    const G4double largestSigma = std::max(sigmapp, std::max(sigmapn, std::max(sigmanp,sigmann)));
+    const G4double interactionDistance = std::sqrt(largestSigma/Math::tenPi);
 
     return interactionDistance;
   }
@@ -407,9 +412,13 @@ namespace G4INCL {
     const G4double sigmapi0n = total(&piZeroProjectile, &neutronTarget);
     const G4double sigmapimp = total(&piMinusProjectile, &protonTarget);
     const G4double sigmapimn = total(&piMinusProjectile, &neutronTarget);
-    const G4double averageSigma =
-      (sigmapipp + sigmapipn + sigmapi0p + sigmapi0n + sigmapimp + sigmapimn) / 6.;
-    const G4double interactionDistance = std::sqrt(averageSigma/Math::tenPi);
+    /* We compute the interaction distance from the largest of the pi-N cross
+     * sections. Note that this is different from INCL4.6, which just takes the
+     * average of the six, and will in general lead to a different geometrical
+     * cross section.
+     */
+    const G4double largestSigma = std::max(sigmapipp, std::max(sigmapipn, std::max(sigmapi0p, std::max(sigmapi0n, std::max(sigmapimp,sigmapimn)))));
+    const G4double interactionDistance = std::sqrt(largestSigma/Math::tenPi);
 
     return interactionDistance;
   }

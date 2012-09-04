@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.2
+// INCL++ revision: v5.1.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -92,6 +92,13 @@ namespace G4INCL {
   enum ClusterAlgorithmType {
     IntercomparisonClusterAlgorithm,
     NoClusterAlgorithm
+  };
+
+  // Enumerator for separation-energy types
+  enum SeparationEnergyType {
+    INCLSeparationEnergy,
+    RealSeparationEnergy,
+    RealForLightSeparationEnergy
   };
 
 }

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.2
+// INCL++ revision: v5.1.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -165,6 +165,7 @@ namespace G4INCL {
         ("cluster-max-mass", boost::program_options::value<G4int>(&clusterMaxMass)->default_value(8), "maximum mass of produced composites:\n  \tminimum 2\n  \tmaximum 12")
         ("back-to-spectator", boost::program_options::value<G4bool>(&backToSpectator)->default_value("true"), "whether to use back-to-spectator:\n  \ttrue, 1 (default)\n  \tfalse, 0")
         ("use-real-masses", boost::program_options::value<G4bool>(&useRealMasses)->default_value("true"), "whether to use real masses for the outgoing particle energies:\n  \ttrue, 1 (default)\n  \tfalse, 0")
+        ("separation-energies", boost::program_options::value<std::string>(&separationEnergyString)->default_value("INCL"), "how to assign the separation energies of the INCL nucleus:\n  \tINCL (default)\n  \treal\n  \treal-light")
         ;
 
       // Select options allowed on the command line
@@ -206,7 +207,30 @@ namespace G4INCL {
           std::exit(EXIT_FAILURE);
         } else {
           // Merge options from the input file
-          boost::program_options::store(boost::program_options::parse_config_file(inputFileStream, configFileOptions), variablesMap);
+          boost::program_options::parsed_options parsedOptions = boost::program_options::parse_config_file(inputFileStream, configFileOptions, true);
+
+          // Make sure that the unhandled options are all "*-datafile-path"
+          std::vector<std::string> unhandledOptions =
+            boost::program_options::collect_unrecognized(parsedOptions.options, boost::program_options::exclude_positional);
+          G4bool ignoreNext = false;
+          const std::string match = "-datafile-path";
+          for(std::vector<std::string>::const_iterator i=unhandledOptions.begin(); i!=unhandledOptions.end(); ++i) {
+            if(ignoreNext) {
+              ignoreNext=false;
+              continue;
+            }
+            if(i->rfind(match) == i->length()-match.length()) {
+              std::cerr << "Ignoring unrecognized option " << *i << std::endl;
+              ignoreNext = true;
+            } else {
+              std::cerr << "Error: unrecognized option " << *i << std::endl;
+              std::cerr << suggestHelpMsg;
+              std::exit(EXIT_FAILURE);
+            }
+          }
+
+          // Store the option values in the variablesMap
+          boost::program_options::store(parsedOptions, variablesMap);
           boost::program_options::notify(variablesMap);
         }
         inputFileStream.close();
@@ -223,7 +247,32 @@ namespace G4INCL {
             << " not found. Continuing the run regardless."
             << std::endl;
         } else {
-          boost::program_options::store(boost::program_options::parse_config_file(configFileStream, configFileOptions), variablesMap);
+          // Merge options from the input file
+          boost::program_options::parsed_options parsedOptions = boost::program_options::parse_config_file(configFileStream, configFileOptions, true);
+          boost::program_options::store(parsedOptions, variablesMap);
+
+          // Make sure that the unhandled options are all "*-datafile-path"
+          std::vector<std::string> unhandledOptions =
+            boost::program_options::collect_unrecognized(parsedOptions.options, boost::program_options::exclude_positional);
+          G4bool ignoreNext = false;
+          const std::string match = "-datafile-path";
+          for(std::vector<std::string>::const_iterator i=unhandledOptions.begin(); i!=unhandledOptions.end(); ++i) {
+            if(ignoreNext) {
+              ignoreNext=false;
+              continue;
+            }
+            if(i->rfind(match) == i->length()-match.length()) {
+              std::cerr << "Ignoring unrecognized option " << *i << std::endl;
+              ignoreNext = true;
+            } else {
+              std::cerr << "Error: unrecognized option " << *i << std::endl;
+              std::cerr << suggestHelpMsg;
+              std::exit(EXIT_FAILURE);
+            }
+          }
+
+          // Store the option values in the variablesMap
+          boost::program_options::store(parsedOptions, variablesMap);
           boost::program_options::notify(variablesMap);
         }
         configFileStream.close();
@@ -478,8 +527,33 @@ namespace G4INCL {
           std::exit(EXIT_FAILURE);
       }
 
+      // --separation-energies
+      if(variablesMap.count("separation-energies")) {
+        std::string separationEnergyNorm = separationEnergyString;
+        std::transform(separationEnergyNorm.begin(),
+            separationEnergyNorm.end(),
+            separationEnergyNorm.begin(), ::tolower);
+        if(separationEnergyNorm=="incl")
+          separationEnergyType = INCLSeparationEnergy;
+        else if(separationEnergyNorm=="real")
+          separationEnergyType = RealSeparationEnergy;
+        else if(separationEnergyNorm=="real-light")
+          separationEnergyType = RealForLightSeparationEnergy;
+        else {
+          std::cerr << "Unrecognized separation-energies option. "
+            << "Must be one of:" << std::endl
+            << "  INCL (default)" << std::endl
+            << "  real" << std::endl
+            << "  real-light" << std::endl;
+          std::cerr << suggestHelpMsg;
+          std::exit(EXIT_FAILURE);
+        }
+      } else {
+        separationEnergyType = INCLSeparationEnergy;
+      }
+
       // --output: construct a reasonable output file root if not specified
-      if(!variablesMap.count("output")) {
+      if(!variablesMap.count("output") && isFullRun) {
         // If an input file was specified, use its name as the output file root
         if(variablesMap.count("input-file"))
           outputFileRoot = inputFileName;
@@ -588,6 +662,8 @@ namespace G4INCL {
       backToSpectator = true;
       useRealMasses = true;
       impactParameter = -1.;
+      separationEnergyString = "INCL";
+      separationEnergyType = INCLSeparationEnergy;
   }
 
   std::string Config::summary() {
@@ -660,6 +736,7 @@ namespace G4INCL {
       << "cluster-max-mass = " << clusterMaxMass << "\t# maximum mass of produced composites. Must be between 2 and 12 (included)" << std::endl
       << "back-to-spectator = " << backToSpectator << "\t# whether to use back-to-spectator" << std::endl
       << "use-real-masses = " << useRealMasses << "\t# whether to use real masses for the outgoing particle energies" << std::endl
+      << "separation-energies = " << separationEnergyString << "\t# how to assign the separation energies of the INCL nucleus. Must be one of: INCL (default), real, real-light" << std::endl
       << std::endl << "# Technical options " << std::endl
       << "verbosity = " << verbosity << "\t# from 0 (quiet) to 10 (most verbose)" << std::endl
       << "verbose-event = " << verboseEvent << "\t# request verbose logging for the specified event only" << std::endl

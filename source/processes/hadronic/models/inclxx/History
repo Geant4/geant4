@@ -16,6 +16,30 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+27 August 2012 - Davide Mancusi (hadr-inclxx-V09-05-23)
+-----------------------------------------------------------
+- INCL++ refuses to handle reactions between nuclei with A>18. Those reactions
+  will be handled by BIC.
+- Fix the warning message about BIC being used instead of INCL++.
+
+26 August 2012 - Davide Mancusi (hadr-inclxx-V09-05-22)
+-----------------------------------------------------------
+- Hopefully fix some crashes on Windows.
+
+25 August 2012 - Davide Mancusi (hadr-inclxx-V09-05-21)
+-----------------------------------------------------------
+- Fix missing include paths in GNUmakefile
+- Emit a warning when the backup model is used.
+
+23 August 2012 - Davide Mancusi (hadr-inclxx-V09-05-20)
+-----------------------------------------------------------
+- INCL++ v5.1.3
+  o Realistic densities for deuterons
+  o Can be used for very light systems (e.g. p+alpha)
+  o Fixes some minor memory leaks
+  o Fixes a Coverity warning
+  o Should fix some crashes on Windows
+
 17 July 2012 - Davide Mancusi (hadr-inclxx-V09-05-19)
 -----------------------------------------------------------
 - Remove relic file utils/src/G4INCLBook.cc.

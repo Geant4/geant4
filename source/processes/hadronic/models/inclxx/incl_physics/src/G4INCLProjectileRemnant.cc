@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.2
+// INCL++ revision: v5.1.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -70,11 +70,15 @@ namespace G4INCL {
     }
     thePosition /= theA;
     setTableMass();
+    DEBUG("ProjectileRemnant object was reset:" << std::endl << print());
   }
 
   void ProjectileRemnant::removeParticle(Particle * const p, const G4double theProjectileCorrection) {
 // assert(p->isNucleon());
 
+    DEBUG("The following Particle is about to be removed from the ProjectileRemnant:"
+        << std::endl << p->print()
+        << "theProjectileCorrection=" << theProjectileCorrection << std::endl);
     // Update A, Z, momentum and energy of the projectile remnant
     theA -= p->getA();
     theZ -= p->getZ();
@@ -110,6 +114,8 @@ namespace G4INCL {
 
 // assert(std::abs((theTotalMomentum-theMomentum).mag())<theThreshold);
 // assert(std::abs(theTotalEnergy-theEnergy)<theThreshold);
+    DEBUG("After Particle removal, the ProjectileRemnant looks like this:"
+        << std::endl << print());
   }
 
   ParticleList ProjectileRemnant::addDynamicalSpectators(ParticleList pL) {

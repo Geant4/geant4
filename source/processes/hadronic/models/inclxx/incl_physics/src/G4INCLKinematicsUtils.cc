@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.2
+// INCL++ revision: v5.1.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -69,7 +69,7 @@ namespace G4INCL {
     if(kinE <= n->getPotential()->getFermiEnergy(p->getType())) {
       pfl0 = n->getPotential()->getFermiMomentum(p);
     } else {
-      const G4double tf0 = p->getPotentialEnergy() - ParticleTable::getSeparationEnergy(p->getType());
+      const G4double tf0 = p->getPotentialEnergy() - n->getPotential()->getSeparationEnergy(p);
       if(tf0<0.0) return 0.0;
       pfl0 = std::sqrt(tf0*(tf0 + 2.0*mass));
     }

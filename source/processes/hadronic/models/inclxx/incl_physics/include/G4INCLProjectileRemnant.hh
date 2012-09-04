@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.2
+// INCL++ revision: v5.1.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -59,8 +59,9 @@ namespace G4INCL {
     typedef std::map<long, G4double> EnergyLevelMap;
 
     public:
-    ProjectileRemnant(ParticleSpecies const species, const G4double kineticEnergy, Config const * const conf)
-      : Cluster(species.theZ, species.theA, conf, false) {
+    ProjectileRemnant(ParticleSpecies const species, const G4double kineticEnergy)
+      : Cluster(species.theZ, species.theA) {
+
       // Use the table mass
       setTableMass();
 
@@ -79,8 +80,8 @@ namespace G4INCL {
       storeEnergyLevels();
 
       // Boost the whole thing
-      const ThreeVector aBoostVector = ThreeVector(0.0, 0.0, momentumZ / energy);
-      boost(-aBoostVector);
+      const ThreeVector boostVector = ThreeVector(0.0, 0.0, momentumZ / energy);
+      boost(-boostVector);
 
       // Freeze the internal motion of the particles
       freezeInternalMotion();

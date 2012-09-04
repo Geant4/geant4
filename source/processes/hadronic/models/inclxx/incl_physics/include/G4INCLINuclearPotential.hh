@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.2
+// INCL++ revision: v5.1.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -51,8 +51,8 @@
 #define G4INCLINUCLEARPOTENTIAL_HH 1
 
 #include "G4INCLParticle.hh"
-#include "G4INCLNuclearDensity.hh"
 #include "G4INCLRandom.hh"
+#include "G4INCLDeuteronDensity.hh"
 #include <map>
 // #include <cassert>
 
@@ -62,16 +62,18 @@ namespace G4INCL {
 
     class INuclearPotential {
       public:
-        INuclearPotential(NuclearDensity const * const nuclearDensity, const G4bool pionPot, const G4bool hardFermiSphere)
-          : theDensity(nuclearDensity), pionPotential(pionPot)
+        INuclearPotential(const G4int A, const G4int Z, const G4bool pionPot) :
+          theA(A),
+          theZ(Z),
+          pionPotential(pionPot)
         {
           if(pionPotential) {
-            const G4double ZOverA = ((G4double) theDensity->getZ()) / ((G4double) theDensity->getA());
+            const G4double ZOverA = ((G4double) theZ) / ((G4double) theA);
             // As in INCL4.6, use the r0*A^(1/3) formula to estimate vc
-            const G4double r = 1.12*Math::pow13((G4double)theDensity->getA());
+            const G4double r = 1.12*Math::pow13((G4double)theA);
 
             const G4double xsi = 1. - 2.*ZOverA;
-            const G4double vc = 1.25*PhysicalConstants::eSquared*theDensity->getZ()/r;
+            const G4double vc = 1.25*PhysicalConstants::eSquared*theZ/r;
             vPiPlus = vPionDefault + 71.*xsi - vc;
             vPiZero = vPionDefault;
             vPiMinus = vPionDefault - 71.*xsi + vc;
@@ -80,23 +82,9 @@ namespace G4INCL {
             vPiZero = 0.0;
             vPiMinus = 0.0;
           }
-
-          if(hardFermiSphere) {
-            shootRandomMomentum = &INuclearPotential::shootRandomMomentumFermi;
-          } else {
-            shootRandomMomentum = &INuclearPotential::shootRandomMomentumGaussian;
-          }
         }
 
         virtual ~INuclearPotential() {}
-
-        inline NuclearDensity const *getDensity() const {
-          return theDensity;
-        }
-
-        void setDensity(NuclearDensity const * const nuclearDensity) {
-          theDensity = nuclearDensity;
-        }
 
         /// \brief Do we have a pion potential?
         G4bool hasPionPotential() { return pionPotential; }
@@ -108,14 +96,44 @@ namespace G4INCL {
          * \param p pointer to a Particle
          * \return Fermi energy for that particle type
          **/
-        inline G4double getFermiEnergy(const Particle * const p) const { return fermiEnergy.find(p->getType())->second; }
+        inline G4double getFermiEnergy(const Particle * const p) const {
+          std::map<ParticleType, G4double>::const_iterator i = fermiEnergy.find(p->getType());
+// assert(i!=fermiEnergy.end());
+          return i->second;
+        }
 
         /** \brief Return the Fermi energy for a particle type.
          *
          * \param t particle type
          * \return Fermi energy for that particle type
          **/
-        inline G4double getFermiEnergy(const ParticleType t) const { return fermiEnergy.find(t)->second; }
+        inline G4double getFermiEnergy(const ParticleType t) const {
+          std::map<ParticleType, G4double>::const_iterator i = fermiEnergy.find(t);
+// assert(i!=fermiEnergy.end());
+          return i->second;
+        }
+
+        /** \brief Return the separation energy for a particle.
+         *
+         * \param p pointer to a Particle
+         * \return separation energy for that particle type
+         **/
+        inline G4double getSeparationEnergy(const Particle * const p) const {
+          std::map<ParticleType, G4double>::const_iterator i = separationEnergy.find(p->getType());
+// assert(i!=separationEnergy.end());
+          return i->second;
+        }
+
+        /** \brief Return the separation energy for a particle type.
+         *
+         * \param t particle type
+         * \return separation energy for that particle type
+         **/
+        inline G4double getSeparationEnergy(const ParticleType t) const {
+          std::map<ParticleType, G4double>::const_iterator i = separationEnergy.find(t);
+// assert(i!=separationEnergy.end());
+          return i->second;
+        }
 
         /** \brief Return the Fermi momentum for a particle.
          *
@@ -126,8 +144,11 @@ namespace G4INCL {
           if(p->isDelta()) {
             const G4double Tf = getFermiEnergy(p), m = p->getMass();
             return std::sqrt(Tf*(Tf+2.*m));
-          } else
-            return fermiMomentum.find(p->getType())->second;
+          } else {
+            std::map<ParticleType, G4double>::const_iterator i = fermiMomentum.find(p->getType());
+// assert(i!=fermiMomentum.end());
+            return i->second;
+          }
         }
 
         /** \brief Return the Fermi momentum for a particle type.
@@ -137,20 +158,9 @@ namespace G4INCL {
          **/
         inline G4double getFermiMomentum(const ParticleType t) const {
 // assert(t!=DeltaPlusPlus && t!=DeltaPlus && t!=DeltaZero && t!=DeltaMinus);
-          return fermiMomentum.find(t)->second;
+          std::map<ParticleType, G4double>::const_iterator i = fermiMomentum.find(t);
+          return i->second;
         }
-
-        typedef ThreeVector (INuclearPotential::*MomentumSampler)(ParticleType const t) const;
-        /** \brief Draw a random momentum.
-         *
-         *  Pointer to a function that returns a random ThreeVector. This can be
-         *  used to sample momenta distributed according to the correct
-         *  distribution for the considered nuclide. We use Gaussian and Fermi
-         *  distributions for light and heavy nuclei, respectively.
-         *
-         *  \return A random momentum ThreeVector.
-         */
-        MomentumSampler shootRandomMomentum;
 
       protected:
         /// \brief Compute the potential energy for the given pion.
@@ -176,40 +186,22 @@ namespace G4INCL {
             return 0.0;
         }
 
-        /** \brief Draw a random Fermi momentum.
-         *
-         * Returns a random ThreeVector that follows the Fermi distribution.
-         *
-         * \return A random momentum ThreeVector.
-         */
-        inline ThreeVector shootRandomMomentumFermi(ParticleType const t) const {
-          return Random::sphereVector(getFermiMomentum(t));
-        }
-
-        /** \brief Draw a random Gaussian momentum.
-         *
-         * Returns a random ThreeVector that follows a Gaussian distribution.
-         *
-         * The distribution is isospin-independent.
-         *
-         * \return A random momentum ThreeVector.
-         */
-        inline ThreeVector shootRandomMomentumGaussian(ParticleType const /*t*/) const {
-          const G4double theMomentumRMS = ParticleTable::getMomentumRMS(theDensity->getA(),theDensity->getZ());
-          return Random::gaussVector(theMomentumRMS);
-        }
-
-        NuclearDensity const *theDensity;
-
+      protected:
+        /// \brief The mass number of the nucleus
+        const G4int theA;
+        /// \brief The charge number of the nucleus
+        const G4int theZ;
+      private:
+        const G4bool pionPotential;
+        G4double vPiPlus, vPiZero, vPiMinus;
+        static const G4double vPionDefault;
+      protected:
         /* \brief map of Fermi energies per particle type */
         std::map<ParticleType,G4double> fermiEnergy;
         /* \brief map of Fermi momenta per particle type */
         std::map<ParticleType,G4double> fermiMomentum;
-
-      private:
-        G4bool pionPotential;
-        G4double vPiPlus, vPiZero, vPiMinus;
-        static const G4double vPionDefault;
+        /* \brief map of separation energies per particle type */
+        std::map<ParticleType,G4double> separationEnergy;
 
     };
 

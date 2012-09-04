@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.2
+// INCL++ revision: v5.1.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -49,6 +49,8 @@ namespace G4INCL {
   ParticleTable::NuclearMassFn ParticleTable::getTableMass;
   /// \brief Static pointer to the mass function for particles
   ParticleTable::ParticleMassFn ParticleTable::getTableParticleMass;
+  /// \brief Static pointer to the separation-energy function
+  ParticleTable::SeparationEnergyFn ParticleTable::getSeparationEnergy;
 
   const G4double ParticleTable::theINCLNucleonMass = 938.2796;
   const G4double ParticleTable::theINCLPionMass = 138.0;
@@ -80,26 +82,26 @@ namespace G4INCL {
   const G4double ParticleTable::positionRMS[clusterTableZSize][clusterTableASize] = {
 /*     A=   0     1     2     3     4     5     6     7     8     9    10    11    12 */
 /* Z=0 */ {0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00},
-/* Z=1 */ {0.00, 0.00, 2.10, 1.80, 1.70, 1.83, 2.60, 2.50, 0.00, 0.00, 0.00, 0.00, 0.00, },
-/* Z=2 */ {0.00, 0.00, 0.00, 1.80, 1.68, 1.70, 2.60, 2.50, 2.50, 2.50, 2.50, 0.00, 0.00, },
-/* Z=3 */ {0.00, 0.00, 0.00, 0.00, 1.70, 1.83, 2.56, 2.40, 2.50, 2.50, 2.50, 2.50, 2.50, },
-/* Z=4 */ {0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 2.60, 2.50, 2.50, 2.51, 2.50, 2.50, 2.50, },
-/* Z=5 */ {0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 2.50, 2.50, 2.50, 2.50, 2.45, 2.40, 2.50, },
-/* Z=6 */ {0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 2.50, 2.50, 2.50, 2.50, 2.47, },
-/* Z=7 */ {0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 2.50, 2.50, 2.50, },
+/* Z=1 */ {0.00, 0.00, 2.10, 1.80, 1.70, 1.83, 2.60, 2.50, 0.00, 0.00, 0.00, 0.00, 0.00},
+/* Z=2 */ {0.00, 0.00, 0.00, 1.80, 1.68, 1.70, 2.60, 2.50, 2.50, 2.50, 2.50, 0.00, 0.00},
+/* Z=3 */ {0.00, 0.00, 0.00, 0.00, 1.70, 1.83, 2.56, 2.40, 2.50, 2.50, 2.50, 2.50, 2.50},
+/* Z=4 */ {0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 2.60, 2.50, 2.50, 2.51, 2.50, 2.50, 2.50},
+/* Z=5 */ {0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 2.50, 2.50, 2.50, 2.50, 2.45, 2.40, 2.50},
+/* Z=6 */ {0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 2.50, 2.50, 2.50, 2.50, 2.47},
+/* Z=7 */ {0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 2.50, 2.50, 2.50},
 /* Z=8 */ {0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 2.50}
   };
 
   const G4double ParticleTable::momentumRMS[clusterTableZSize][clusterTableASize] = {
 /*     A=   0     1     2     3     4     5     6     7     8     9    10    11    12 */
 /* Z=0 */ {0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00},
-/* Z=1 */ {0.00, 0.00, 77.0, 110., 153., 100., 100., 100., 0.00, 0.00, 0.00, 0.00, 0.00, },
-/* Z=2 */ {0.00, 0.00, 0.00, 110., 153., 100., 100., 100., 100., 100., 100., 0.00, 0.00, },
-/* Z=3 */ {0.00, 0.00, 0.00, 0.00, 153., 100., 100., 100., 100., 100., 100., 100., 100., },
-/* Z=4 */ {0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 100., 100., 100., 100., 100., 100., 100., },
-/* Z=5 */ {0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 100., 100., 100., 100., 100., 100., 100., },
-/* Z=6 */ {0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 100., 100., 100., 100., 100., },
-/* Z=7 */ {0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 100., 100., 100., },
+/* Z=1 */ {0.00, 0.00, 77.0, 110., 153., 100., 100., 100., 0.00, 0.00, 0.00, 0.00, 0.00},
+/* Z=2 */ {0.00, 0.00, 0.00, 110., 153., 100., 100., 100., 100., 100., 100., 0.00, 0.00},
+/* Z=3 */ {0.00, 0.00, 0.00, 0.00, 153., 100., 100., 100., 100., 100., 100., 100., 100.},
+/* Z=4 */ {0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 100., 100., 100., 100., 100., 100., 100.},
+/* Z=5 */ {0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 100., 100., 100., 100., 100., 100., 100.},
+/* Z=6 */ {0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 100., 100., 100., 100., 100.},
+/* Z=7 */ {0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 100., 100., 100.},
 /* Z=8 */ {0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 100.}
   };
 
@@ -281,8 +283,10 @@ namespace G4INCL {
   const G4double ParticleTable::effectiveDeltaDecayThreshold =
     ParticleTable::theRealNeutronMass + ParticleTable::theRealChargedPiMass
     + 0.5;
-  const G4double ParticleTable::protonSeparationEnergy = 6.83;
-  const G4double ParticleTable::neutronSeparationEnergy = ParticleTable::protonSeparationEnergy;
+  const G4double ParticleTable::theINCLProtonSeparationEnergy = 6.83;
+  const G4double ParticleTable::theINCLNeutronSeparationEnergy = ParticleTable::theINCLProtonSeparationEnergy;
+  G4double ParticleTable::protonSeparationEnergy = theINCLProtonSeparationEnergy;
+  G4double ParticleTable::neutronSeparationEnergy = theINCLNeutronSeparationEnergy;
 
 #ifdef INCLXX_IN_GEANT4_MODE
   G4IonTable *ParticleTable::theG4IonTable;
@@ -298,10 +302,10 @@ namespace G4INCL {
     piMinusMass = theINCLPionMass;
     piZeroMass = theINCLPionMass;
 
+#ifndef INCLXX_IN_GEANT4_MODE
     std::string dataFilePath;
     if(theConfig)
       dataFilePath = theConfig->getINCLXXDataFilePath();
-#ifndef INCLXX_IN_GEANT4_MODE
     readRealMasses(dataFilePath);
 #endif
 
@@ -320,6 +324,19 @@ namespace G4INCL {
     theRealChargedPiMass = theG4ParticleTable->FindParticle("pi+")->GetPDGMass() / MeV;
     theRealPiZeroMass = theG4ParticleTable->FindParticle("pi0")->GetPDGMass() / MeV;
 #endif
+
+    // Initialise the separation-energy function
+    if(!theConfig || theConfig->getSeparationEnergyType()==INCLSeparationEnergy)
+      getSeparationEnergy = ParticleTable::getSeparationEnergyINCL;
+    else if(theConfig->getSeparationEnergyType()==RealSeparationEnergy)
+      getSeparationEnergy = ParticleTable::getSeparationEnergyReal;
+    else if(theConfig->getSeparationEnergyType()==RealForLightSeparationEnergy)
+      getSeparationEnergy = ParticleTable::getSeparationEnergyRealForLight;
+    else {
+      FATAL("Unrecognized separation-energy type in ParticleTable initialization: " << theConfig->getSeparationEnergyType() << std::endl);
+      std::abort();
+    }
+
   }
 
   G4int ParticleTable::getIsospin(const ParticleType t) {
@@ -547,7 +564,7 @@ namespace G4INCL {
     } else if(A < 19 && A >= 6) {
       return 5.5 + 0.3 * (G4double(A) - 6.0)/12.0;
     } else if(A >= 2) {
-      return ParticleTable::getNuclearRadius(A, Z) + 2.5;
+      return ParticleTable::getNuclearRadius(A, Z) + 4.5;
     } else {
       ERROR("ParticleTable::getMaximumNuclearRadius : No maximum radius for nucleus A = " << A << " Z = " << Z << std::endl);
       return 0.0;
@@ -563,7 +580,7 @@ namespace G4INCL {
     } else if(A < 19 && A >= 6) {
       return mediumDiffuseness[A-1];
     } else if(A < 6 && A >= 2) {
-      return 0.57735 * ParticleTable::getNuclearRadius(A, Z);
+      return ParticleTable::getNuclearRadius(A, Z);
     } else {
       ERROR("ParticleTable::getSurfaceDiffuseness : No diffuseness for nucleus A = " << A << " Z = " << Z << std::endl);
       return 0.0;

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.2
+// INCL++ revision: v5.1.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -53,8 +53,8 @@ namespace G4INCL {
   namespace NuclearPotential {
 
     // Constructors
-    NuclearPotentialConstant::NuclearPotentialConstant(NuclearDensity const * const density, const G4bool aPionPotential, const G4bool hardFermiSphere/*=true*/)
-      : INuclearPotential(density, aPionPotential, hardFermiSphere)
+    NuclearPotentialConstant::NuclearPotentialConstant(const G4int A, const G4int Z, const G4bool pionPotential)
+      : INuclearPotential(A, Z, pionPotential)
     {
       initialize();
     }
@@ -65,21 +65,40 @@ namespace G4INCL {
 
     void NuclearPotentialConstant::initialize() {
       const G4double mp = ParticleTable::getINCLMass(Proton);
-      fermiMomentum[Proton] = PhysicalConstants::Pf;
-      fermiEnergy[Proton] = std::sqrt(PhysicalConstants::PfSquared + mp*mp) - mp;
-
       const G4double mn = ParticleTable::getINCLMass(Neutron);
-      fermiMomentum[Neutron] = PhysicalConstants::Pf;
-      fermiEnergy[Neutron] = std::sqrt(PhysicalConstants::PfSquared + mn*mn) - mn;
+
+      G4double theFermiMomentum;
+      if(theA<ParticleTable::clusterTableASize && theZ<ParticleTable::clusterTableZSize)
+        // Use momentum RMS from tables to define the Fermi momentum for light
+        // nuclei
+        theFermiMomentum = Math::sqrtFiveThirds * ParticleTable::getMomentumRMS(theA,theZ);
+      else
+        theFermiMomentum = PhysicalConstants::Pf;
+
+      fermiMomentum[Proton] = theFermiMomentum;
+      const G4double theProtonFermiEnergy = std::sqrt(theFermiMomentum*theFermiMomentum + mp*mp) - mp;
+      fermiEnergy[Proton] = theProtonFermiEnergy;
+
+      fermiMomentum[Neutron] = theFermiMomentum;
+      const G4double theNeutronFermiEnergy = std::sqrt(theFermiMomentum*theFermiMomentum + mn*mn) - mn;
+      fermiEnergy[Neutron] = theNeutronFermiEnergy;
 
       fermiEnergy[DeltaPlusPlus] = fermiEnergy.find(Proton)->second;
       fermiEnergy[DeltaPlus] = fermiEnergy.find(Proton)->second;
       fermiEnergy[DeltaZero] = fermiEnergy.find(Neutron)->second;
       fermiEnergy[DeltaMinus] = fermiEnergy.find(Neutron)->second;
 
-      vNucleon = 0.5*(fermiEnergy[Proton]+fermiEnergy[Neutron])
-        + 0.5*(ParticleTable::getSeparationEnergy(Proton)+ParticleTable::getSeparationEnergy(Neutron));
+      const G4double theAverageSeparationEnergy = 0.5*(ParticleTable::getSeparationEnergy(Proton,theA,theZ)+ParticleTable::getSeparationEnergy(Neutron,theA,theZ));
+      separationEnergy[Proton] = theAverageSeparationEnergy;
+      separationEnergy[Neutron] = theAverageSeparationEnergy;
+
+      // Use separation energies from the ParticleTable
+      vNucleon = 0.5*(theProtonFermiEnergy + theNeutronFermiEnergy) + theAverageSeparationEnergy;
       vDelta = vNucleon;
+      separationEnergy[DeltaPlusPlus] = vDelta - fermiEnergy.find(DeltaPlusPlus)->second;
+      separationEnergy[DeltaPlus] = vDelta - fermiEnergy.find(DeltaPlus)->second;
+      separationEnergy[DeltaZero] = vDelta - fermiEnergy.find(DeltaZero)->second;
+      separationEnergy[DeltaMinus] = vDelta - fermiEnergy.find(DeltaMinus)->second;
     }
 
     G4double NuclearPotentialConstant::computePotentialEnergy(const Particle *particle) const {

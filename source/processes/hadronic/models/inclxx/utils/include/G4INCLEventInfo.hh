@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.2
+// INCL++ revision: v5.1.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -61,6 +61,7 @@ namespace G4INCL {
     typedef G4int Int_t;
     typedef short Short_t;
     typedef G4float Float_t;
+    typedef G4double Double_t;
     typedef G4bool Bool_t;
 #endif
 

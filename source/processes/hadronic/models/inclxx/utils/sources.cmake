@@ -33,6 +33,8 @@ include_directories(${CMAKE_SOURCE_DIR}/source/particles/leptons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/cross_sections/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/binary_cascade/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/im_r_matrix/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
@@ -57,6 +59,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
         G4INCLIRandomGenerator.hh
         G4INCLIntersection.hh
         G4INCLGeant4Random.hh
+        G4INCLIFunction1D.hh
         G4INCLConfigEnums.hh
         G4INCLRandom.hh
         G4INCLEventInfo.hh
@@ -68,12 +71,14 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
         G4INCLThreeVector.hh
         G4INCLFinalState.hh
         G4INCLParticle.hh
+        G4INCLInverseInterpolationTable.hh
 
     SOURCES
         G4INCLThreeVector.cc
         G4INCLIRandomGenerator.cc
         G4INCLParticleTable.cc
         G4INCLIAvatar.cc
+        G4INCLIFunction1D.cc
         G4INCLEventInfo.cc
         G4INCLGlobals.cc
         G4INCLConfigVersion.cc
@@ -83,6 +88,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
         G4INCLRootFinder.cc
         G4INCLRanecu.cc
         G4INCLIChannel.cc
+        G4INCLInverseInterpolationTable.cc
         G4INCLRandom.cc
         G4INCLFinalState.cc
         G4INCLLogger.cc

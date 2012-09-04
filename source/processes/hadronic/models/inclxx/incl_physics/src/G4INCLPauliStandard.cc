@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.2
+// INCL++ revision: v5.1.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -43,7 +43,13 @@
 
 namespace G4INCL {
 
-  PauliStandard::PauliStandard() {}
+
+  PauliStandard::PauliStandard() :
+    cellSize(std::pow(2.38*4.5*Math::pi,1./6.)*std::sqrt(PhysicalConstants::hc))
+  {
+    DEBUG("Initialising PauliStandard. cellSize=" << cellSize << std::endl);
+  }
+
   PauliStandard::~PauliStandard() {}
 
   G4bool PauliStandard::isBlocked(ParticleList const pL, Nucleus const * const n) const {
@@ -55,8 +61,11 @@ namespace G4INCL {
   }
 
   G4double PauliStandard::getBlockingProbability(Particle const * const particle, Nucleus const * const nucleus) const {
-    const G4double rbl = 3.1848;
-    const G4double pbl = 200.0;
+    const G4double r0 = nucleus->getDensity()->getCentralRadius();
+    const G4double pFermi = nucleus->getPotential()->getFermiMomentum(particle);
+
+    const G4double pbl = cellSize * std::sqrt(pFermi/r0);
+    const G4double rbl = pbl * r0/pFermi;
     const G4double maxVolR = rbl;
     const G4double maxVolP = pbl;
     G4double vol = std::pow(4.*Math::pi/3.0, 2)

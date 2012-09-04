@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.2
+// INCL++ revision: v5.1.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -49,7 +49,6 @@
 #include "G4INCLXXInterfaceConfig.hh"
 #include "G4UImessenger.hh"
 #include "G4UIdirectory.hh"
-#include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithAString.hh"
 
@@ -64,15 +63,13 @@ class G4INCLXXInterfaceMessenger : public G4UImessenger
     void SetNewValue (G4UIcommand *command, G4String newValues);
     //    Identifies the command which has been invoked by the user, extracts the
     //    parameters associated with that command (held in newValues, and uses
-    //    these values with the appropriate member function of G4INCLXXInterface.
+    //    these values with the appropriate member function of G4INCLXXInterfaceConfig.
     //
   private:
     G4INCLXXInterfaceConfig *theINCLXXInterfaceConfig;
     G4UIdirectory *theINCLXXDirectory;
-    G4UIcmdWithABool *inverseKinematicsCmd;
-//    G4UIcmdWithAString *deexcitationModelCmd;
+    G4UIcmdWithAString *accurateNucleusCmd;
     G4UIcmdWithAnInteger *maxClusterMassCmd;
-    G4UIcmdWithAnInteger *maxProjMassCmd;
 };
 
 #endif

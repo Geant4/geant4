@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.2
+// INCL++ revision: v5.1.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -76,15 +76,16 @@
 
 namespace G4INCL {
 
-  const G4int INCL::minRemnantSize = 4;
-
   INCL::INCL(G4INCL::Config const * const config)
     :propagationModel(0), theA(208), theZ(82),
     targetInitSuccess(false),
     maxImpactParameter(0.),
+    maxUniverseRadius(0.),
     maxInteractionDistance(0.),
+    fixedImpactParameter(0.),
     theConfig(config),
-    nucleus(NULL)
+    nucleus(NULL),
+    minRemnantSize(4)
   {
     // Set the logger object.
     G4INCL::Logger::setLoggerSlave(new G4INCL::LoggerSlave(theConfig->getLogFileName()));
@@ -208,7 +209,7 @@ namespace G4INCL {
     G4double momentumZ = std::sqrt(energy*energy - projectileMass*projectileMass);
     G4INCL::ThreeVector momentum(0.0, 0.0, momentumZ);
     if(projectileSpecies.theType==Composite) {
-      G4INCL::Cluster *projectile = new G4INCL::Cluster(projectileSpecies.theZ,projectileSpecies.theA,theConfig);
+      G4INCL::Cluster *projectile = new G4INCL::Cluster(projectileSpecies.theZ,projectileSpecies.theA);
       projectile->setMass(projectileMass);
       projectile->setEnergy(energy);
       projectile->setMomentum(momentum);
@@ -229,6 +230,12 @@ namespace G4INCL {
     // Set the geometric cross section
     theGlobalInfo.geometricCrossSection =
       Math::tenPi*std::pow(maxImpactParameter,2);
+
+    // Set the minimum remnant size
+    if(projectileSpecies.theA > 0)
+      minRemnantSize = std::min(theA, 4);
+    else
+      minRemnantSize = std::min(theA-1, 4);
 
     return true;
   }
@@ -256,7 +263,7 @@ namespace G4INCL {
       FATAL("Fatal: natural targets are not supported yet." << std::endl);
       std::exit(EXIT_FAILURE);
     }
-    targetInitSuccess = prepareReaction(projectileSpecies, kineticEnergy, targetA, targetZ);
+    const G4bool targetInitSuccess = prepareReaction(projectileSpecies, kineticEnergy, targetA, targetZ);
 
     if(!targetInitSuccess) {
       WARN("Target initialisation failed for A=" << targetA << ", Z=" << targetZ << std::endl);
@@ -426,7 +433,10 @@ namespace G4INCL {
           && nucleus->getProjectileRemnant()
           && nucleus->getProjectileRemnant()->getParticles().size()==0) {
 
+        DEBUG("Cascade resulted in complete fusion, using realistic fusion kinematics" << std::endl);
+
         nucleus->useFusionKinematics();
+        nucleus->deleteProjectileRemnant();
 
         if(nucleus->getExcitationEnergy()<0.) {
           // Complete fusion is energetically impossible, return a transparent
@@ -531,9 +541,12 @@ namespace G4INCL {
     }
 
     if(!success || !atLeastOneNucleonEntering) {
+      DEBUG("No nucleon entering in forced CN, or some nucleons entering below zero, forcing a transparent" << std::endl);
       theEventInfo.transparent = true;
       theGlobalInfo.nTransparents++;
       theGlobalInfo.nForcedTransparents++;
+      nucleus->getProjectileRemnant()->deleteParticles();
+      nucleus->deleteProjectileRemnant();
       return;
     }
 
@@ -595,6 +608,7 @@ namespace G4INCL {
          * The constructor sets the private class members.
          */
         RecoilFunctor(Nucleus * const n, const EventInfo &ei) :
+          RootFunctor(0., 1E6),
           nucleus(n),
           outgoingParticles(n->getStore()->getOutgoingParticles()),
           theEventInfo(ei) {
@@ -670,6 +684,7 @@ namespace G4INCL {
          * The constructor sets the private class members.
          */
         RecoilCMFunctor(Nucleus * const n, const EventInfo &ei) :
+          RootFunctor(0., 1E6),
           nucleus(n),
           theIncomingMomentum(nucleus->getIncomingMomentum()),
           outgoingParticles(n->getStore()->getOutgoingParticles()),
@@ -795,19 +810,40 @@ namespace G4INCL {
 
   G4bool INCL::continueCascade() {
     // Stop if we have passed the stopping time
-    if(propagationModel->getCurrentTime() > propagationModel->getStoppingTime()) return false;
+    if(propagationModel->getCurrentTime() > propagationModel->getStoppingTime()) {
+      DEBUG("Cascade time (" << propagationModel->getCurrentTime()
+          << ") exceeded stopping time (" << propagationModel->getStoppingTime()
+          << "), stopping cascade" << std::endl);
+      return false;
+    }
     // Stop if there are no participants and no pions inside the nucleus
     if(nucleus->getStore()->getBook()->getCascading()==0 &&
-        nucleus->getStore()->getIncomingParticles().empty()) return false;
+        nucleus->getStore()->getIncomingParticles().empty()) {
+      DEBUG("No participants in the nucleus and no incoming particles left, stopping cascade" << std::endl);
+      return false;
+    }
     // Stop if the remnant is smaller than minRemnantSize
-    if(nucleus->getA() <= minRemnantSize) return false;
+    if(nucleus->getA() <= minRemnantSize) {
+      DEBUG("Remnant size (" << nucleus->getA()
+          << ") smaller than or equal to minimum (" << minRemnantSize
+          << "), stopping cascade" << std::endl);
+      return false;
+    }
     // Stop if we have to try and make a compound nucleus or if we have to
     // force a transparent
-    if(nucleus->getTryCompoundNucleus() || nucleus->isForcedTransparent()) return false;
+    if(nucleus->getTryCompoundNucleus()) {
+      DEBUG("Trying to make a compound nucleus, stopping cascade" << std::endl);
+      return false;
+    }
+    if(nucleus->isForcedTransparent()) {
+      DEBUG("Forcing a transparent, stopping cascade" << std::endl);
+      return false;
+    }
+
     return true;
   }
 
-  void INCL::finaliseGlobalInfo() {
+  void INCL::finalizeGlobalInfo() {
     theGlobalInfo.nucleonAbsorptionCrossSection = theGlobalInfo.geometricCrossSection *
       ((G4double) theGlobalInfo.nNucleonAbsorptions) / ((G4double) theGlobalInfo.nShots);
     theGlobalInfo.pionAbsorptionCrossSection = theGlobalInfo.geometricCrossSection *

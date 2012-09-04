@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.2
+// INCL++ revision: v5.1.3
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -136,6 +136,8 @@ namespace G4INCL {
       const G4int ZCN = theNucleus->getZ() + theParticle->getZ();
       // Correction to the Q-value of the entering particle
       theCorrection = theParticle->getEmissionQValueCorrection(ACN,ZCN);
+      DEBUG("The following Particle enters with correction " << theCorrection
+          << theParticle->print() << std::endl);
     }
 
     const G4double energyBefore = theParticle->getEnergy() - theCorrection;
@@ -168,6 +170,7 @@ namespace G4INCL {
     class IncomingEFunctor : public RootFunctor {
       public:
         IncomingEFunctor(Particle * const p, Nucleus const * const n, const G4double correction) :
+          RootFunctor(0., 1E6),
           theParticle(p),
           thePotential(n->getPotential()),
           theEnergy(theParticle->getEnergy()),
@@ -197,6 +200,7 @@ namespace G4INCL {
 
     G4double v = theNucleus->getPotential()->computePotentialEnergy(theParticle);
     if(theParticle->getKineticEnergy()+v-theQValueCorrection<0.) { // Particle entering below 0. Die gracefully
+      DEBUG("Particle " << theParticle->getID() << " is trying to enter below 0" << std::endl);
       return false;
     }
     G4bool success = RootFinder::solve(&theIncomingEFunctor, v);
