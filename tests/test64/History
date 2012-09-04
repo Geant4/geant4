@@ -1,0 +1,27 @@
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Test 64 History file
+                    --------------------
+This file should be used by the test developer to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+09 Aug 2012 Alberto Ribon                test64-V09-05-02
+- Ready to be proposed for testing, for the first time.
+
+08 Aug 2012 Alberto Ribon                test64-V09-05-01
+- Can be built with CMake and ready for CTest.
+  However, it creates too many tests, so it needs to be improved.
+
+08 Aug 2012 Alberto Ribon                test64-V09-05-00
+- Created a new test for BERT and FTFP nuclear capture at rest.
+  In this first version, only GNUmakefile (no CMake), and the
+  tests are steered by a shell script (not working on Windows).
+

@@ -1,0 +1,18 @@
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            Test64
+                            ------
+
+Description:    test of BERT and FTFP for nuclear capture at rest.
+                BERT is used for pi-, k-, and sigma-.
+                FTFP is used for anti_proton, and anti_sigma+.
+                The following 9 materials are tested: 
+                G4_Be, G4_He, G4_C, G4_Al, G4_Ar, G4_Fe, G4_Cu, G4_W, G4_Pb.
+
+Type of test:   run to completion
+
+Output:         run log
+

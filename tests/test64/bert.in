@@ -1,0 +1,32 @@
+#--- pi- ---
+BERT pi- G4_He 1000
+BERT pi- G4_Be 1000
+BERT pi- G4_C  1000
+BERT pi- G4_Al 1000
+BERT pi- G4_Ar 1000
+BERT pi- G4_Fe 1000
+BERT pi- G4_Cu 1000
+BERT pi- G4_W  1000
+BERT pi- G4_Pb 1000
+#
+#--- k- ---
+BERT kaon- G4_He 1000
+BERT kaon- G4_Be 1000
+BERT kaon- G4_C  1000
+BERT kaon- G4_Al 1000
+BERT kaon- G4_Ar 1000
+BERT kaon- G4_Fe 1000
+BERT kaon- G4_Cu 1000
+BERT kaon- G4_W  1000
+BERT kaon- G4_Pb 1000
+#
+#--- sigma- ---
+BERT sigma- G4_He 1000
+BERT sigma- G4_Be 1000
+BERT sigma- G4_C  1000
+BERT sigma- G4_Al 1000
+BERT sigma- G4_Ar 1000
+BERT sigma- G4_Fe 1000
+BERT sigma- G4_Cu 1000
+BERT sigma- G4_W  1000
+BERT sigma- G4_Pb 1000

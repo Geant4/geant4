@@ -1,0 +1,21 @@
+#--- anti_proton ---
+FTFP anti_proton G4_He 1000
+FTFP anti_proton G4_Be 1000
+FTFP anti_proton G4_C  1000
+FTFP anti_proton G4_Al 1000
+FTFP anti_proton G4_Ar 1000
+FTFP anti_proton G4_Fe 1000
+FTFP anti_proton G4_Cu 1000
+FTFP anti_proton G4_W  1000
+FTFP anti_proton G4_Pb 1000
+#
+#--- anti_sigma+ ---
+FTFP anti_sigma+ G4_He 1000
+FTFP anti_sigma+ G4_Be 1000
+FTFP anti_sigma+ G4_C  1000
+FTFP anti_sigma+ G4_Al 1000
+FTFP anti_sigma+ G4_Ar 1000
+FTFP anti_sigma+ G4_Fe 1000
+FTFP anti_sigma+ G4_Cu 1000
+FTFP anti_sigma+ G4_W  1000
+FTFP anti_sigma+ G4_Pb 1000
