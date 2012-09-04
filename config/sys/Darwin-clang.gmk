@@ -36,7 +36,7 @@ ifeq ($(G4SYSTEM),Darwin-clang)
   SHEXT   := dylib
   LOADLIBS += -lm -lstdc++
   ifndef X11FLAGS
-    X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
+    X11FLAGS  := -I/usr/X11R6/include/X11/extensions -I/usr/X11R6/include/X11
   endif
   ifndef X11LIBS
     X11LIBS   := -L/usr/X11R6/lib  -lXmu -lXt -lXext -lX11 -lXi -lSM -lICE
