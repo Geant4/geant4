@@ -84,13 +84,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   G4String partName = particle->GetParticleName();
   G4String nuclearChannel = partName;
   G4HadronicProcess* hproc = (G4HadronicProcess*) process;  
-  const G4Nucleus* nuc = hproc->GetTargetNucleus();
-  G4int Z = nuc->GetZ_asInt();
-  G4int A = nuc->GetA_asInt();
-  G4ParticleDefinition* target
-          = G4ParticleTable::GetParticleTable()->GetIon(Z,A,0*eV);
-  ///G4ParticleDefinition* target = hproc->GetTargetDefinition();	  
-  G4String targetName = target->GetParticleName();
+  G4String targetName = hproc->GetTargetIsotope()->GetName();
   nuclearChannel += " + " + targetName + " --> ";
     
   //scattered primary particle (if any)

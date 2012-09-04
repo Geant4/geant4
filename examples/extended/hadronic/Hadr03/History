@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+18-08-12 mma (exhadr03-V09-05-06)
+- SteppingAction : use GetTargetIsotope()
+     
 01-08-12 mma(exhadr03-V09-05-05) 
 - RunAction : use GetCrossSectionPerVolume()
      

@@ -13,16 +13,17 @@
 /run/initialize
 #
 /gun/particle neutron
-/gun/energy 1 MeV
+/gun/energy 0.1 keV
 #
 /process/inactivate hadElastic
+/process/inactivate hInelastic
+/process/inactivate NeutronInelastic
 #
-/testhadr/histo/setFileName neutron
-/testhadr/histo/setHisto 2  100  0. 2000 keV	#recoil ion
-/testhadr/histo/setHisto 3  100  0. 1000 keV	#gamma
-/testhadr/histo/setHisto 7  100  0. 3000 keV	#alpha
-/testhadr/histo/setHisto 11 100  0. 3000 keV	#Q
-/testhadr/histo/setHisto 12 100  0.  100 keV	#Pbalance
+/testhadr/histo/setFileName nCaptureHP
+/testhadr/histo/setHisto 2  100  0. 70 keV	#recoil ion
+/testhadr/histo/setHisto 3  100  0. 15 MeV	#gamma
+/testhadr/histo/setHisto 11 100  0. 70 MeV	#Q
+/testhadr/histo/setHisto 12 100  0. 15 MeV	#Pbalance
 #
 /testhadr/event/printModulo 10000
 #
