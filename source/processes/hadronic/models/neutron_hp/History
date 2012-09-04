@@ -14,6 +14,17 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+
+13 August 2012 Alberto Ribon (hadr-hpn-V09-05-16)
+- Fixed compilation error in G4NeutronHPCaptureFS.cc when the constructor
+  of the Lorentz vector is made explicit.
+
+
+31 July 2012  Tatsumi Koi (hadr-hpn-V09-05-15)
+- Add name 
+	G4NeutronHPJENDLHEData.cc
+
+
 14 June 2012  Tatsumi Koi (hadr-hpn-V09-05-14)
 - Bug fix which introduced in the fix compilation warnings for shadowed variables
 	src/G4NeutronHPThermalScattering.cc

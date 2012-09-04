@@ -62,6 +62,7 @@ G4NeutronHPJENDLHEData::G4NeutronHPJENDLHEData()
 
 
 G4NeutronHPJENDLHEData::G4NeutronHPJENDLHEData( G4String reaction , G4ParticleDefinition* pd )
+:G4VCrossSectionDataSet( "JENDLHE"+reaction+"CrossSection" )
 {
    reactionName = reaction;
    BuildPhysicsTable( *pd );

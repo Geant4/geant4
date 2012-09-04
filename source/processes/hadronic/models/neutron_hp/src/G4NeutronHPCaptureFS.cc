@@ -228,7 +228,7 @@
        {
           p_photons += theResult.GetSecondary(j)->GetParticle()->Get4Momentum();
           // To many 0 momentum photons -> Check PhotonDist 
-          if ( theResult.GetSecondary(j)->GetParticle()->Get4Momentum() > 0 ) nNonZero++;
+          if ( theResult.GetSecondary(j)->GetParticle()->Get4Momentum().e() > 0 ) nNonZero++;
        }
 
        // Can we include kinetic energy here?
