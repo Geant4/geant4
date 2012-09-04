@@ -212,8 +212,11 @@ TOPC_ACTION ParRunManager::CheckEventResult( void * input_buf, void *output_buf 
   // Geant4 6.0 requires the state to be G4State_GeomClosed
   // before calling EventManager::ProcessOneEvent(..)
 
-  if ( !userPrimaryGeneratorAction )
-    G4Exception("G4RunManager::BeamOn - G4VUserPrimaryGeneratorAction is not defined.");
+  if ( !userPrimaryGeneratorAction ) {
+    G4Exception("ParRunManager::CheckEventResult", "InvalidSetup", 
+                FatalException,
+                "G4VUserPrimaryGeneratorAction is not defined.");
+  }                
 
   //This creates a trivial event in lieu of GenerateEvent(i_event);
   currentEvent = new G4Event( i_event );

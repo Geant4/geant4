@@ -15,13 +15,26 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 30th, 2012 G.Cosmo - ParN02-V09-05-01
+-------------------------
+- Simplified GNUmake scripts.
+
+August 24th, 2012 I.Hrivnacova - ParN02-V09-05-00
+------------------------------
+- Migration to "new" G4Exception  
+- Fixing ParGNUmakefile to get the example compiled with standard 
+  Geant4 environment setting
+- Renaming documentation files to README, README.N02 (to be consistent
+  with all examples)
+- Adding .README files for Doxygen  
+
 April 13, 2011 - G.Cosmo - ParN02-V09-04-00
 ------------------------
 - Synchronised with current version of novice example N02.
   Includes fixes and missing migrations...
 
 November 5, 2010 - J.Allison - ParN02-V09-03-01
--------------------------
+----------------------------
 - Introduced G4UIExecutive.
 
 June 2, 2010 - J.Perl - ParN02-V09-03-00
