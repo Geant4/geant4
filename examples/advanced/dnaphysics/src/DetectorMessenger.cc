@@ -23,37 +23,49 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 
-#ifndef HistoManager_h
-#define HistoManager_h 1
+#include "DetectorMessenger.hh"
 
-#include "globals.hh"
-#include "g4root.hh"
+#include "DetectorConstruction.hh"
+#include "G4UIdirectory.hh"
+#include "G4UIcommand.hh"
+#include "G4UIparameter.hh"
+#include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithoutParameter.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class HistoManager
+DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
+:fDetector(Det)
+{ 
+  fMaterCmd = new G4UIcmdWithAString("/dna/det/setMat",this);
+  fMaterCmd->SetGuidance("Select material of the world.");
+  fMaterCmd->SetParameterName("choice",false);
+  fMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+       
+  fUpdateCmd = new G4UIcmdWithoutParameter("/dna/det/update",this);
+  fUpdateCmd->SetGuidance("Update geometry.");
+  fUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
+  fUpdateCmd->SetGuidance("if you changed geometrical value(s).");
+  fUpdateCmd->AvailableForStates(G4State_Idle);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+DetectorMessenger::~DetectorMessenger()
 {
-  public:
-
-    HistoManager();
-   ~HistoManager();
-
-    void SetFileName   (const G4String& name) { fileName[0] = name;};
-    void book();
-    void save();
-    void FillNtuple(G4int id, G4int col, G4double e, G4double weight = 1.0);
-    void FillNtupleIColumn(G4int icol, G4int ival);
-    void FillNtupleFColumn(G4int icol, G4float ival);
-    void FillNtupleDColumn(G4int icol, G4double ival);
-    void AddNtupleRow();
-    
-  private:
-
-    G4String         fileName[2];
-    G4bool           factoryOn;       
-};
+  delete fMaterCmd;
+  delete fUpdateCmd;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+{ 
+  if( command == fMaterCmd )
+   { fDetector->SetMaterial(newValue);}
+   
+  if( command == fUpdateCmd )
+   { fDetector->UpdateGeometry();}
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

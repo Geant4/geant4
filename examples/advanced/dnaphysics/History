@@ -5,6 +5,13 @@
                        Package History file
                        --------------------
 
+15 August 2012- tag dnaphysics-V09-05-01 - S. Incerti  
+- added messenger for material change
+- switched to new analysis interface from Guy Barrand
+
+11 August 2012- tag dnaphysics-V09-05-00 - S. Incerti  
+- updated README and SteppingAction.cc files
+
 05 November 2011- tag dnaphysics-V09-04-08 - S. Incerti  
 - removed export=root option in HistoManager.cc
 

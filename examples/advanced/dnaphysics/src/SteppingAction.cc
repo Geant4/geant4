@@ -102,12 +102,15 @@ void SteppingAction::UserSteppingAction(const G4Step* s)
    y=s->GetPreStepPoint()->GetPosition().y()/nanometer;
    z=s->GetPreStepPoint()->GetPosition().z()/nanometer;
    
-   Histo->FillNtuple(0, 0, flagParticle);
-   Histo->FillNtuple(0, 1, flagProcess);
-   Histo->FillNtuple(0, 2, x);
-   Histo->FillNtuple(0, 3, y);
-   Histo->FillNtuple(0, 4, z);
-   Histo->FillNtuple(0, 5, s->GetTotalEnergyDeposit()/eV);
-   Histo->AddRowNtuple(0);      
+   
+   Histo->FillNtupleDColumn(0, flagParticle);
+   Histo->FillNtupleDColumn(1, flagProcess);
+   Histo->FillNtupleDColumn(2, x);
+   Histo->FillNtupleDColumn(3, y);
+   Histo->FillNtupleDColumn(4, z);
+   Histo->FillNtupleDColumn(5, s->GetTotalEnergyDeposit()/eV);
+   
+   Histo->AddNtupleRow();
+         
  }
 }    

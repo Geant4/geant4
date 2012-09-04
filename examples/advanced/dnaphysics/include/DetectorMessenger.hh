@@ -23,34 +23,35 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 
-#ifndef HistoManager_h
-#define HistoManager_h 1
+#ifndef DetectorMessenger_h
+#define DetectorMessenger_h 1
 
 #include "globals.hh"
-#include "g4root.hh"
+#include "G4UImessenger.hh"
+
+class DetectorConstruction;
+class G4UIdirectory;
+class G4UIcommand;
+class G4UIcmdWithAString;
+class G4UIcmdWithoutParameter;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class HistoManager
+class DetectorMessenger: public G4UImessenger
 {
   public:
-
-    HistoManager();
-   ~HistoManager();
-
-    void SetFileName   (const G4String& name) { fileName[0] = name;};
-    void book();
-    void save();
-    void FillNtuple(G4int id, G4int col, G4double e, G4double weight = 1.0);
-    void FillNtupleIColumn(G4int icol, G4int ival);
-    void FillNtupleFColumn(G4int icol, G4float ival);
-    void FillNtupleDColumn(G4int icol, G4double ival);
-    void AddNtupleRow();
+  
+    DetectorMessenger(DetectorConstruction* );
+   ~DetectorMessenger();
+    
+    void SetNewValue(G4UIcommand*, G4String);
     
   private:
-
-    G4String         fileName[2];
-    G4bool           factoryOn;       
+  
+    DetectorConstruction*      fDetector;
+    
+    G4UIcmdWithAString*        fMaterCmd;
+    G4UIcmdWithoutParameter*   fUpdateCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
