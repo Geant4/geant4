@@ -927,6 +927,36 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   theTable->push_back(tmp);
   sizeOfTable +=1;
 
+  tmp.processTypeName = "DNADoubleIonisation";
+  tmp.processType     = 2;
+  tmp.processSubType  = 62;
+  tmp.ordering[0]     =  0;
+  tmp.ordering[1]     =  0;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;
+
+  tmp.processTypeName = "DNADoubleCapture";
+  tmp.processType     = 2;
+  tmp.processSubType  = 63;
+  tmp.ordering[0]     =  0;
+  tmp.ordering[1]     =  0;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;
+
+  tmp.processTypeName = "DNAIonisingTransfer";
+  tmp.processType     = 2;
+  tmp.processSubType  = 64;
+  tmp.ordering[0]     =  0;
+  tmp.ordering[1]     =  0;
+  tmp.ordering[2]     =  1000;
+  tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;
+
   tmp.processTypeName = "HadElastic";
   tmp.processType     = 4;
   tmp.processSubType  = 111;
