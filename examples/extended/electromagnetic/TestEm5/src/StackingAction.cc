@@ -40,8 +40,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StackingAction::StackingAction(RunAction* RA, EventAction* EA, HistoManager* HM)
-:fRunAction(RA), fEventAction(EA), fHistoManager(HM)
+StackingAction::StackingAction(RunAction* RA, EventAction* EA)
+:fRunAction(RA), fEventAction(EA)
 {
   fKillSecondary  = 0;
   fStackMessenger = new StackingMessenger(this);
@@ -59,6 +59,8 @@ StackingAction::~StackingAction()
 G4ClassificationOfNewTrack
 StackingAction::ClassifyNewTrack(const G4Track* aTrack)
 {
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+
   //keep primary particle
   if (aTrack->GetParentID() == 0) return fUrgent;
 
@@ -72,13 +74,13 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
   G4double charge = aTrack->GetDefinition()->GetPDGCharge();
 
   if (charge != 0.) {
-    fHistoManager->FillHisto(2,energy);
-    fHistoManager->FillHisto(4,energy);
+    analysisManager->FillH1(2,energy);
+    analysisManager->FillH1(4,energy);
   }
 
   if (aTrack->GetDefinition() == G4Gamma::Gamma()) {
-    fHistoManager->FillHisto(3,energy);
-    fHistoManager->FillHisto(5,energy);
+    analysisManager->FillH1(3,energy);
+    analysisManager->FillH1(5,energy);
   }  
 
   //stack or delete secondaries

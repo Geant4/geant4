@@ -36,7 +36,6 @@
 #include "globals.hh"
 
 class RunAction;
-class HistoManager;
 class EventMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,7 +43,7 @@ class EventMessenger;
 class EventAction : public G4UserEventAction
 {
   public:
-    EventAction(RunAction* , HistoManager*);
+    EventAction(RunAction*);
    ~EventAction();
 
   public:
@@ -68,7 +67,6 @@ class EventAction : public G4UserEventAction
         
   private:
     RunAction*    fRunAction;
-    HistoManager* fHistoManager;
     
     G4double fEnergyDeposit;
     G4double fTrakLenCharged, fTrakLenNeutral;

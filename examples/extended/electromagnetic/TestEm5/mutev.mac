@@ -18,7 +18,7 @@
 /testem/phys/addPhysics local
 ###/testem/phys/addPhysics emstandard_opt0
 #
-#/testem/phys/setCuts 1 mm
+/testem/phys/setCuts 1 km
 #
 /run/initialize
 #
@@ -29,9 +29,9 @@
 /gun/particle mu+
 /gun/energy 1000 GeV
 #
-#/testem/histo/setFileName mumsc/local
-/testem/histo/setHisto 14  100 -5.0  +5.0 mm		#x-position at exit  
-/testem/histo/setHisto 15  100  0.  +10.0 mm		#radius at exit  
+#/analysis/setFileName mumsc/local
+/analysis/h1/set 14  100 -5.0  +5.0 mm		#x-position at exit  
+/analysis/h1/set 15  100  0.  +10.0 mm		#radius at exit  
 #
 /testem/stack/killSecondaries 2
 #

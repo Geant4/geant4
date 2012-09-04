@@ -15,6 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+23-08-12 mma (testem5-V09-05-06)
+- HistoManager functionalities transfered to G4Analysis and its messenger.
+    - Need analysis-V09-05-09
+    - all userAction classes and all macros affected
+     
 20-05-12 SI (testem5-V09-05-05)
 - added fluo.mac
 

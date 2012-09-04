@@ -32,15 +32,15 @@
 #include "EventAction.hh"
 
 #include "RunAction.hh"
-#include "HistoManager.hh"
 #include "EventMessenger.hh"
+#include "HistoManager.hh"
 
 #include "G4Event.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction(RunAction* RA, HistoManager* histo)
-:fRunAction(RA),fHistoManager(histo),
+EventAction::EventAction(RunAction* RA)
+:fRunAction(RA),
  fDrawFlag("none"),fPrintModulo(10000)
 {
   fEventMessenger = new EventMessenger(this);
@@ -84,7 +84,7 @@ void EventAction::EndOfEventAction(const G4Event*)
  fRunAction->CountTransmit (fTransmitFlag);
  fRunAction->CountReflect  (fReflectFlag);
 
- fHistoManager->FillHisto(1,fEnergyDeposit);
+ G4AnalysisManager::Instance()->FillH1(1,fEnergyDeposit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

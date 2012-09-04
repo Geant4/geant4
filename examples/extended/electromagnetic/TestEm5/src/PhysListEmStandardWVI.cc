@@ -132,7 +132,6 @@ void PhysListEmStandardWVI::ConstructProcess()
       pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
       pmanager->AddProcess(new G4hBremsstrahlung,     -1, 3, 3);
       pmanager->AddProcess(new G4hPairProduction,     -1, 4, 4);
-      pmanager->AddProcess(new G4CoulombScattering,   -1,-1, 5);            
      
     } else if( particleName == "alpha" || 
 	       particleName == "He3"    ) {
@@ -156,10 +155,8 @@ void PhysListEmStandardWVI::ConstructProcess()
 	       (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
       G4hMultipleScattering* msc = new G4hMultipleScattering();
-      msc->AddEmModel(0, new G4WentzelVIModel());
       pmanager->AddProcess(msc,                       -1, 1, 1);
       pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
-      pmanager->AddProcess(new G4CoulombScattering,   -1,-1, 3);
     }
   }
 

@@ -42,8 +42,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TrackingAction::TrackingAction(DetectorConstruction* DET,RunAction* RA,
-                               EventAction* EA, HistoManager* HM)
-:fDetector(DET), fRunAction(RA), fEventAction(EA), fHistoManager(HM)
+                               EventAction* EA)
+:fDetector(DET), fRunAction(RA), fEventAction(EA)
 { }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,6 +63,8 @@ void TrackingAction::PreUserTrackingAction(const G4Track* aTrack )
 
 void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 {
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+
   G4ThreeVector position = aTrack->GetPosition();
   G4ThreeVector vertex   = aTrack->GetVertexPosition();  
   G4double charge        = aTrack->GetDefinition()->GetPDGCharge();
@@ -94,7 +96,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   else if (reflect  && neutral) id = 40;
 
   if (id>0)   
-  fHistoManager->FillHisto(id, aTrack->GetKineticEnergy());
+  analysisManager->FillH1(id, aTrack->GetKineticEnergy());
     
   //energy leakage
   //
@@ -118,10 +120,17 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 
   if (id>0) {
     G4double theta  = std::acos(direction.x());
-    G4double dteta  = fHistoManager->GetBinWidth(id);
-    G4double unit   = fHistoManager->GetHistoUnit(id);    
+    G4double dteta  = analysisManager->GetH1Width(id);
+    G4double unit   = analysisManager->GetH1Unit(id);    
     G4double weight = (unit*unit)/(twopi*std::sin(theta)*dteta);
-    fHistoManager->FillHisto(id,theta,weight);
+/*
+    G4cout << "theta, dteta, unit, weight: " 
+           << theta << "  "   
+           << dteta << "  "   
+           << unit << "  "   
+           << weight << G4endl;   
+*/
+    analysisManager->FillH1(id,theta,weight);
   }
   
   //energy fluence at exit : dE(MeV)/dOmega
@@ -134,11 +143,11 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 
   if (id>0) {
     G4double theta  = std::acos(direction.x());
-    G4double dteta  = fHistoManager->GetBinWidth(id);
-    G4double unit   = fHistoManager->GetHistoUnit(id);    
+    G4double dteta  = analysisManager->GetH1Width(id);
+    G4double unit   = analysisManager->GetH1Unit(id);    
     G4double weight = (unit*unit)/(twopi*std::sin(theta)*dteta);
     weight *= (aTrack->GetKineticEnergy()/MeV); 
-    fHistoManager->FillHisto(id,theta,weight);    
+    analysisManager->FillH1(id,theta,weight);    
   }
   
   //projected angles distribution at exit
@@ -151,11 +160,11 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 
   if(id>0) {
     G4double tet = std::atan(direction.y()/std::fabs(direction.x()));
-    fHistoManager->FillHisto(id,tet);
+    analysisManager->FillH1(id,tet);
     if (transmit && (flag == 2)) fRunAction->AddMscProjTheta(tet);
 
     tet = std::atan(direction.z()/std::fabs(direction.x()));
-    fHistoManager->FillHisto(id,tet);
+    analysisManager->FillH1(id,tet);
     if (transmit && (flag == 2)) fRunAction->AddMscProjTheta(tet);
   }
 
@@ -167,17 +176,17 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   if (id>0) {
     G4double y = position.y(), z = position.z();
     G4double r = std::sqrt(y*y + z*z);
-    fHistoManager->FillHisto(id,   y);
-    fHistoManager->FillHisto(id,   z);
-    fHistoManager->FillHisto(id+1, r);
+    analysisManager->FillH1(id,   y);
+    analysisManager->FillH1(id,   z);
+    analysisManager->FillH1(id+1, r);
   }
   
   //x-vertex of charged secondaries
   //
   if ((aTrack->GetParentID() == 1) && charged) {
     G4double xVertex = (aTrack->GetVertexPosition()).x();
-    fHistoManager->FillHisto(6, xVertex);
-    if (notabsor) fHistoManager->FillHisto(7, xVertex); 
+    analysisManager->FillH1(6, xVertex);
+    if (notabsor) analysisManager->FillH1(7, xVertex); 
   }
 }
 

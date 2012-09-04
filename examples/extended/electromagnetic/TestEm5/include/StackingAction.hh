@@ -37,7 +37,6 @@
 
 class RunAction;
 class EventAction;
-class HistoManager;
 class StackingMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,7 +44,7 @@ class StackingMessenger;
 class StackingAction : public G4UserStackingAction
 {
   public:
-    StackingAction(RunAction*,EventAction*,HistoManager* );
+    StackingAction(RunAction*,EventAction*);
    ~StackingAction();
    
     void SetKillStatus(G4int value) { fKillSecondary = value;};
@@ -55,7 +54,6 @@ class StackingAction : public G4UserStackingAction
   private:
     RunAction*          fRunAction;
     EventAction*        fEventAction;    
-    HistoManager*       fHistoManager;
     
     G4int               fKillSecondary;
     StackingMessenger*  fStackMessenger;

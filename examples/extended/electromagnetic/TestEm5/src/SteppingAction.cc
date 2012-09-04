@@ -41,8 +41,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(DetectorConstruction* DET, RunAction* RA,
-                               EventAction* EA, HistoManager* HM)
-:fDetector(DET), fRunAction(RA), fEventAction(EA), fHistoManager(HM)
+                               EventAction* EA)
+:fDetector(DET), fRunAction(RA), fEventAction(EA)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

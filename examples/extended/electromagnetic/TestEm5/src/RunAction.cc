@@ -44,15 +44,19 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin,
-                     HistoManager* histo)
-:fDetector(det), fPrimary(kin), fHistoManager(histo)
-{ }
+RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
+:fDetector(det), fPrimary(kin), fHistoManager(0)
+{ 
+  // Book predefined histograms
+  fHistoManager = new HistoManager();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::~RunAction()
-{ }
+{ 
+  delete fHistoManager;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -77,7 +81,10 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   
   fEnergyLeak[0] = fEnergyLeak[1] = fEnergyLeak2[0] = fEnergyLeak2[1] = 0.;
 
-  fHistoManager->book();
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  if ( analysisManager->IsActive() ) {
+    analysisManager->OpenFile();
+  } 
 
   // save Rndm status
   G4RunManager::GetRunManager()->SetRandomNumberStore(true);
@@ -266,24 +273,29 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   
   // normalize histograms
   //
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  
   G4int ih = 1;
-  G4double binWidth = fHistoManager->GetBinWidth(ih);
-  G4double unit     = fHistoManager->GetHistoUnit(ih);  
+  G4double binWidth = analysisManager->GetH1Width(ih);
+  G4double unit     = analysisManager->GetH1Unit(ih);  
   G4double fac = unit/(TotNbofEvents*binWidth);
-  fHistoManager->Normalize(ih,fac);
+  analysisManager->ScaleH1(ih,fac);
     
   ih = 10;
-  binWidth = fHistoManager->GetBinWidth(ih);
-  unit     = fHistoManager->GetHistoUnit(ih);  
+  binWidth = analysisManager->GetH1Width(ih);
+  unit     = analysisManager->GetH1Unit(ih);  
   fac = unit/(TotNbofEvents*binWidth);
-  fHistoManager->Normalize(ih,fac);
+  analysisManager->ScaleH1(ih,fac);
     
   ih = 12;
   fac = 1./TotNbofEvents;
-  fHistoManager->Normalize(ih,fac);
+  analysisManager->ScaleH1(ih,fac);
       
   // save histograms
-  fHistoManager->save();
+  if ( analysisManager->IsActive() ) {
+    analysisManager->Write();
+    analysisManager->CloseFile();
+  }  
 
   // show Rndm status
   CLHEP::HepRandom::showEngineStatus();

@@ -1,17 +1,15 @@
-$Id: README,v 1.26 2009-09-18 14:03:24 maire Exp $
------------------------------------------------------
+//$Id$
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+///\file "electromagnetic/TestEm5/.README"
+///\brief Example TestEm5 README page
 
-                            TestEm5   
-                            -------
+/*! \page ExampleTestEm5 Example TestEm5
+
  How to study the transmission, absorption and reflexion of particles through
  a single, thin or thick, layer of material.
  In particular, the effects of the multiple scattering can be ploted.  
 	
- 1- GEOMETRY DEFINITION
+\section TestEm5_s1 GEOMETRY DEFINITION
  
  The "absorber" is a box made of a given material.                
  	
@@ -29,7 +27,7 @@ $Id: README,v 1.26 2009-09-18 14:03:24 maire Exp $
  The parameters of the "World" can be changed, too. However, if World material
  is not set to vacuum, the plots 10->43 below may be not pertinent.
  
- 2- PHYSICS LIST
+\section TestEm5_s2 PHYSICS LIST
  
  Physics lists can be local (eg. in this example) or from G4 kernel
  physics_lists subdirectory.
@@ -56,22 +54,24 @@ $Id: README,v 1.26 2009-09-18 14:03:24 maire Exp $
  particle type.
 
          	
- 3- AN EVENT : THE PRIMARY GENERATOR
+\section TestEm5_s3 AN EVENT : THE PRIMARY GENERATOR
  
  The primary kinematic consists of a single particle which hits the absorber 
  perpendicular to the input face. The type of the particle and its energy are 
  set in the PrimaryGeneratorAction class, and can be changed via the G4 build-in
- commands of ParticleGun class (see the macros provided with this example).
+ commands of G4ParticleGun class (see the macros provided with this example).
 	
  In addition one can choose randomly the impact point of the incident particle.
  The interactive command is built in PrimaryGeneratorMessenger class.
  
- 4- VISUALIZATION
+\section TestEm5_s4 VISUALIZATION
  
- The Visualization Manager is set in the main().
+ The Visualization Manager is set in the main () (see TestEm5.cc).
  The initialisation of the drawing is done via the commands in vis.mac
  In interactive session:
+\verbatim
  PreInit or Idle > /control/execute vis.mac
+\endverbatim
  	
  The example has a default view which is a longitudinal view of the detector.
  	
@@ -79,15 +79,15 @@ $Id: README,v 1.26 2009-09-18 14:03:24 maire Exp $
  Optionaly one can choose to draw all particles, only the charged, or none.
  This command is defined in EventActionMessenger class.
  
- 5- TRACKING
+\section TestEm5_s5 TRACKING
  
  During the tracking, one can keep or not the secondaries : see StackingAction
- class and its Messenger.
+ class and its messenger (StackingMessenger).
  One can also limit 'by hand' the step lenght of the particle. As an example,
  this limitation is implemented as a 'full' process : see StepMax class and its
  Messenger. The 'StepMax process' is registered in the Physics List. 
   	
- 6- DETECTOR RESPONSE
+\section TestEm5_s6 DETECTOR RESPONSE
   	
  At the end of a run, from the histogram(s), one can study different
  physics quantities such as :
@@ -97,62 +97,66 @@ $Id: README,v 1.26 2009-09-18 14:03:24 maire Exp $
  - transmission and backscattering coefficients,
  -  ...
  
- 7- List of the built-in histograms
- ----------------------------------
+\section TestEm5_s7 List of the built-in histograms
         
- The test contains more than 20 built-in 1D histograms, which are managed by
- G4AnalysisManager class and its Messenger. The histos can be individually activated
+ The test contains more than 20 built-in 1D histograms, which are managed by the
+ HistoManager class and its Messenger. The histos can be individually activated
  with the command :
- /analysis/h1/set id nbBins  valMin valMax unit 
+\verbatim
+/testem/histo/setHisto id nbBins  valMin valMax unit 
+\endverbatim
  where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
  (see the macros xxxx.mac).
  
-	1	"energy deposit in absorber"
-	2	"energy of charged secondaries at creation"
-	3	"energy of neutral secondaries at creation"	
-	4	"energy of charged at creation (log10(Ekin))"
-	5	"energy of neutral at creation (log10(Ekin))"	
-	6       "x_vertex of charged secondaries (all)"
-	7       "x_vertex of charged secondaries (not absorbed)"
-	10	"(transmit, charged) : kinetic energy at exit of world"
-        11	"(transmit, charged) : ener fluence: dE(MeV)/dOmega"	
-	12	"(transmit, charged) : space angle dN/dOmega"
-	13	"(transmit, charged) : projected angle at exit of world"
-	14	"(transmit, charged) : projected position at exit of world"
-	15	"(transmit, charged) : radius at exit of world"	
-	20	"(transmit, neutral) : kinetic energy at exit of world"
-	21	"(transmit, neutral) : ener fluence: dE(MeV)/dOmega"	
-	22	"(transmit, neutral) : space angle dN/dOmega"
-	23	"(transmit, neutral) : projected angle at exit of world"
-	30	"(reflect , charged) : kinetic energy at exit of world"
-	31	"(reflect , charged) : ener fluence: dE(MeV)/dOmega"	
-	32	"(reflect , charged) : space angle dN/dOmega"
-	33	"(reflect , charged) : projected angle at exit of world"
-	40	"(reflect , neutral) : kinetic energy at exit of world"
-	41	"(reflect , neutral) : ener fluence: dE(MeV)/dOmega"	
-	42	"(reflect , neutral) : space angle dN/dOmega"
-	43	"(reflect , neutral) : projected angle at exit of world"
+      - 1 :  "energy deposit in absorber"
+      - 2 :  "energy of charged secondaries at creation"
+      - 3 :  "energy of neutral secondaries at creation"
+      - 4 :  "energy of charged at creation (log10(Ekin))"
+      - 5 :  "energy of neutral at creation (log10(Ekin))"
+      - 6 :  "x_vertex of charged secondaries (all)"
+      - 7 :  "x_vertex of charged secondaries (not absorbed)"
+      - 10 :  "(transmit, charged) : kinetic energy at exit of world"
+      - 11 :  "(transmit, charged) : ener fluence: dE(MeV)/dOmega"	
+      - 12 :  "(transmit, charged) : space angle dN/dOmega"
+      - 13 :  "(transmit, charged) : projected angle at exit of world"
+      - 14 :  "(transmit, charged) : projected position at exit of world"
+      - 15 :  "(transmit, charged) : radius at exit of world"	
+      - 20 :  "(transmit, neutral) : kinetic energy at exit of world"
+      - 21 :  "(transmit, neutral) : ener fluence: dE(MeV)/dOmega"	
+      - 22 :  "(transmit, neutral) : space angle dN/dOmega"
+      - 23 :  "(transmit, neutral) : projected angle at exit of world"
+      - 30 :  "(reflect , charged) : kinetic energy at exit of world"
+      - 31 :  "(reflect , charged) : ener fluence: dE(MeV)/dOmega"	
+      - 32 :  "(reflect , charged) : space angle dN/dOmega"
+      - 33 :  "(reflect , charged) : projected angle at exit of world"
+      - 40 :  "(reflect , neutral) : kinetic energy at exit of world"
+      - 41 :  "(reflect , neutral) : ener fluence: dE(MeV)/dOmega"	
+      - 42 :  "(reflect , neutral) : space angle dN/dOmega"
+      - 43 :  "(reflect , neutral) : projected angle at exit of world"
 
  The histograms can be viewed using ROOT or PAW.
  
  One can control the name of the histograms file with the command:
- /analysis/setFileName  name  (default testem5)
-   
+\verbatim
+/testem/histo/setFileName  name  (default testem5)
+\endverbatim
+    
  It is possible to choose the format of the histogram file : root (default),
  hbook, xml, csv, by using namespace in HistoManager.hh
      
  It is also possible to print selected histograms on an ascii file:
- /analysis/h1/setAscii id
+\verbatim
+/testem/histo/printHisto id
+\endverbatim
  All selected histos will be written on a file name.ascii  (default testem5) 
     
- Using hbook format
- ------------------
+\subsection TestEm5_subs1 Using hbook format
  
  Need a special treatement : the Cern Library must be installed and the
  environment variable CERNLIB correctly set. Then, *before* compiling,
  activate G4_USE_HBOOK in GNUmakefile and g4hbook.hh in HistoManager.hh
  				
- 8- GEANT4/GEANT3/DATA COMPARISON
+\section TestEm5_s8 GEANT4/GEANT3/DATA COMPARISON
 
  A Geant4/Geant3/exp. data comparison is given here for a few cases.
  These cases can be classified as follow:
@@ -160,7 +164,7 @@ $Id: README,v 1.26 2009-09-18 14:03:24 maire Exp $
  - 3 energy regimes: low: < 1MeV; medium: 1MeV -> few 10MeV; high: > 100MeV
  
  We indicate here the corresponding macros.
- 
+<pre> 
  	      |	low energy   |	medium energy	|  high energy
 	--------------------------------------------------------
 	      | acosta.mac   |                  |
@@ -171,22 +175,32 @@ $Id: README,v 1.26 2009-09-18 14:03:24 maire Exp $
 	others|	bichsel.mac  | 	vincour.mac	|  shen1.mac shen2.mac
 	      | 	     |	gottsch.mac	|  tramu.mac
 	--------------------------------------------------------
-
+</pre>
  The relevant part of the GEANT3 code is in the subdirectory geant3 together 
  with the xxxx.dat input files.
 	
- 9- HOW TO START ?
+\section TestEm5_s9 HOW TO START ?
  
  - compile and link to generate an executable
- 	% cd TestEm5
- 	% gmake
+\verbatim
+% cd TestEm5
+% gmake
+\endverbatim
  		
  - execute TestEm5 in 'batch' mode from macro files e.g.
- 	% $(G4INSTALL)/bin/$(G4SYSTEM)/TestEm5   myMacro.mac
+\verbatim
+% $(G4INSTALL)/bin/$(G4SYSTEM)/TestEm5   myMacro.mac
+\endverbatim
 		
  - execute TestEm5 in 'interactive' mode with visualization e.g.
- 	% $(G4INSTALL)/bin/$(G4SYSTEM)/TestEm5
-	Then type your commands, for instance :
-	Idle> control/execute vis.mac
-	Idle> run/beamOn 5
-	....
+\verbatim
+% $(G4INSTALL)/bin/$(G4SYSTEM)/TestEm5
+\endverbatim
+Then type your commands, for instance :
+\verbatim
+Idle> control/execute vis.mac
+Idle> run/beamOn 5
+....
+\endverbatim
+ 
+*/
