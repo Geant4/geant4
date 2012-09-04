@@ -12,7 +12,7 @@
   TH1D* hist2 = (TH1D*)f.Get("2");
   hist2->Draw("HIST");
   
-  TH1D* hist3 = (TH1D*)f.Get("21");
+  TH1D* hist3 = (TH1D*)f.Get("11");
   c1->SetLogy(1);
   c1->cd();
   c1->Update(); 
