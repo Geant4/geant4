@@ -95,11 +95,13 @@
 // 20120125  M. Kelsey -- In retryInelasticProton() check for empty output
 // 20120525  M. Kelsey -- In NoInteraction, check for Ekin<0., set to zero;
 //		use SetEnergyChange(0.) explicitly for good final states.
+// 20120822  M. Kelsey -- Move envvars to G4CascadeParameters.
 
 #include "G4CascadeInterface.hh"
 #include "globals.hh"
 #include "G4CascadeChannelTables.hh"
 #include "G4CascadeCheckBalance.hh"
+#include "G4CascadeParameters.hh"
 #include "G4CollisionOutput.hh"
 #include "G4DecayKineticTracks.hh"
 #include "G4DynamicParticle.hh"
@@ -119,7 +121,6 @@
 #include "G4Track.hh"
 #include "G4V3DNucleus.hh"
 #include <cmath>
-#include <stdlib.h>
 #include <iostream>
 
 using namespace G4InuclParticleNames;
@@ -130,7 +131,7 @@ typedef std::vector<G4InuclNuclei>::const_iterator nucleiIterator;
 
 // Filename to capture random seed, if specified by user at runtime
 
-const G4String G4CascadeInterface::randomFile(getenv("G4CASCADE_RANDOM_FILE")?getenv("G4CASCADE_RANDOM_FILE"):"");
+const G4String G4CascadeInterface::randomFile = G4CascadeParameters::randomFile();
 
 // Maximum number of iterations allowed for inelastic collision attempts
 
@@ -140,14 +141,15 @@ const G4int G4CascadeInterface::maximumTries = 20;
 // Constructor and destrutor
 
 G4CascadeInterface::G4CascadeInterface(const G4String& name)
-  : G4VIntraNuclearTransportModel(name),
-    verboseLevel(0), numberOfTries(0),
-    collider(new G4InuclCollider), 
-    balance(new G4CascadeCheckBalance(name)),
+  : G4VIntraNuclearTransportModel(name), numberOfTries(0),
+    collider(new G4InuclCollider), balance(new G4CascadeCheckBalance(name)),
     bullet(0), target(0), output(new G4CollisionOutput) {
   SetEnergyMomentumCheckLevels(5*perCent, 10*MeV);
   balance->setLimits(5*perCent, 10*MeV/GeV);	// Bertini internal units
   // Description();                                // Model description
+
+  this->SetVerboseLevel(G4CascadeParameters::verbose());
+  if (G4CascadeParameters::usePreCompound()) usePreCompoundDeexcitation();
 }
 
 
@@ -172,6 +174,10 @@ void G4CascadeInterface::ModelDescription(std::ostream& outFile) const
           << "transmitted through shell boundaries.\n";
 }
 
+void G4CascadeInterface::DumpConfiguration(std::ostream& outFile) const {
+  G4CascadeParameters::DumpConfiguration(outFile);
+}
+
 
 void G4CascadeInterface::clear() {
   bullet=0;
@@ -191,10 +197,10 @@ void G4CascadeInterface::usePreCompoundDeexcitation() {
 }
 
 
-// Apply verbosity to all member objects
+// Apply verbosity to all member objects (overrides base class version)
 
-void G4CascadeInterface::setVerboseLevel(G4int verbose) {
-  verboseLevel = verbose;
+void G4CascadeInterface::SetVerboseLevel(G4int verbose) {
+  G4HadronicInteraction::SetVerboseLevel(verbose);
   collider->setVerboseLevel(verbose);
   balance->setVerboseLevel(verbose);
   output->setVerboseLevel(verbose);

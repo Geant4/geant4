@@ -40,8 +40,10 @@
 //	     "ClusterCandidate"
 // 20110922  M. Kelsey -- Follow G4InuclParticle::print(ostream&) migration
 // 20110927  M. Kelsey -- Bug fix; missing <iterator> header, strtof -> strtod
+// 20120822  M. Kelsey -- Move envvars to G4CascadeParameters.
 
 #include "G4CascadeCoalescence.hh"
+#include "G4CascadeParameters.hh"
 #include "G4CollisionOutput.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
@@ -53,7 +55,6 @@
 #include <numeric>
 #include <algorithm>
 #include <iterator>
-#include <stdlib.h>
 
 
 // Short names for lists and iterators for convenience
@@ -63,14 +64,11 @@ typedef hadronList::const_iterator hadronIter;
 
 // Maximum relative momentum (in Bertini GeV) for nucleons in each cluster type
 
-const G4double G4CascadeCoalescence::dpMaxDoublet = 
-  getenv("DPMAX_2CLUSTER") ? strtod(getenv("DPMAX_2CLUSTER"),NULL) : 0.090;
+const G4double G4CascadeCoalescence::dpMaxDoublet = G4CascadeParameters::dpMaxDoublet();
 
-const G4double G4CascadeCoalescence::dpMaxTriplet = 
-  getenv("DPMAX_3CLUSTER") ? strtod(getenv("DPMAX_3CLUSTER"),NULL) : 0.108;
+const G4double G4CascadeCoalescence::dpMaxTriplet = G4CascadeParameters::dpMaxTriplet();
 
-const G4double G4CascadeCoalescence::dpMaxAlpha = 
-  getenv("DPMAX_4CLUSTER") ? strtod(getenv("DPMAX_4CLUSTER"),NULL) : 0.115;
+const G4double G4CascadeCoalescence::dpMaxAlpha = G4CascadeParameters::dpMaxAlpha();
 
 
 // Constructor and Destructor

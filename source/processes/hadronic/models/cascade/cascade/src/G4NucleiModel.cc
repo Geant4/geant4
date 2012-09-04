@@ -111,12 +111,14 @@
 // 20120320  M. Kelsey -- Bug fix: fill zone_volumes for single-zone case
 // 20120321  M. Kelsey -- Add check in isProjectile() for single-zone case.
 // 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
+// 20120822  M. Kelsey -- Move envvars to G4CascadeParameters.
 
 #include "G4NucleiModel.hh"
 #include "G4CascadeChannel.hh"
 #include "G4CascadeChannelTables.hh"
 #include "G4CascadeCheckBalance.hh"
 #include "G4CascadeInterpolator.hh"
+#include "G4CascadeParameters.hh"
 #include "G4CollisionOutput.hh"
 #include "G4ElementaryParticleCollider.hh"
 #include "G4HadTmpUtil.hh"
@@ -128,7 +130,6 @@
 #include "G4ParticleLargerBeta.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Proton.hh"
-#include <stdlib.h>
 #include <numeric>
 
 using namespace G4InuclParticleNames;
@@ -143,50 +144,35 @@ typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 //	setenv G4NUCMODEL_RAD_SMALL    1.992
 //	setenv G4NUCMODEL_RAD_ALPHA    0.84
 //	setenv G4NUCMODEL_FERMI_SCALE  0.685
-//	setenv G4NUCMODEL_RAD_TRAILING 1.2
+//	setenv G4NUCMODEL_RAD_TRAILING 0.70
 
 // Scaling factors for radii and cross-sections, currently different!
-const G4double G4NucleiModel::crossSectionUnits = 
-  getenv("G4NUCMODEL_XSEC_SCALE") ? strtod(getenv("G4NUCMODEL_XSEC_SCALE"),0)
-  : 1.0;
-
-#define OLD_RADIUS_UNITS (3.3836/1.2)
-const G4double G4NucleiModel::radiusUnits = 
-  getenv("G4NUCMODEL_RAD_SCALE") ? strtod(getenv("G4NUCMODEL_RAD_SCALE"),0)
-  : OLD_RADIUS_UNITS;
-
-const G4double G4NucleiModel::skinDepth = (1.7234/OLD_RADIUS_UNITS)*radiusUnits;
+const G4double G4NucleiModel::crossSectionUnits = G4CascadeParameters::xsecScale();
+const G4double G4NucleiModel::radiusUnits =  G4CascadeParameters::radiusScale();
+const G4double G4NucleiModel::skinDepth = 0.611207*radiusUnits;
 
 // One- vs. two-parameter nuclear radius based on envvar
 // ==> radius = radiusScale*cbrt(A) + radiusScale2/cbrt(A)
 
 const G4double G4NucleiModel::radiusScale  = 
-  (getenv("G4NUCMODEL_RAD_2PAR") ? 1.16 : 1.2) * radiusUnits;
+  (G4CascadeParameters::useTwoParam() ? 1.16 : 1.2) * radiusUnits;
 const G4double G4NucleiModel::radiusScale2 =
-  (getenv("G4NUCMODEL_RAD_2PAR") ? -1.3456 : 0.) * radiusUnits;
+  (G4CascadeParameters::useTwoParam() ? -1.3456 : 0.) * radiusUnits;
 
 // NOTE:  Old code used R_small = 8.0 (~2.83*units), and R_alpha = 0.7*R_small
 // Published data suggests R_small ~ 1.992 fm, R_alpha = 0.84*R_small
 
-const G4double G4NucleiModel::radiusForSmall =
-  (getenv("G4NUCMODEL_RAD_SMALL") ? strtod(getenv("G4NUCMODEL_RAD_SMALL"),0)
-   : 8.0/OLD_RADIUS_UNITS) * radiusUnits;
+const G4double G4NucleiModel::radiusForSmall = G4CascadeParameters::radiusSmall();
 
-const G4double G4NucleiModel::radScaleAlpha =
-  getenv("G4NUCMODEL_RAD_ALPHA") ? strtod(getenv("G4NUCMODEL_RAD_ALPHA"),0)
-  : 0.70;
+const G4double G4NucleiModel::radScaleAlpha = G4CascadeParameters::radiusAlpha();
 
 // Scale factor relating Fermi momentum to density of states, units GeV.fm
 // NOTE:  Old code has 0.685*units GeV.fm, literature suggests 0.470 GeV.fm,
 //        but this gives too small momentum; old value gives <P_F> ~ 270 MeV
-const G4double G4NucleiModel::fermiMomentum = 
-  (getenv("G4NUCMODEL_FERMI_SCALE") ? strtod(getenv("G4NUCMODEL_FERMI_SCALE"),0)
-   : 1.932/OLD_RADIUS_UNITS) * radiusUnits;
+const G4double G4NucleiModel::fermiMomentum = G4CascadeParameters::fermiScale();
 
 // Effective radius (0.87 to 1.2 fm) of nucleon, for trailing effect
-const G4double G4NucleiModel::R_nucleon = 
-  (getenv("G4NUCMODEL_RAD_TRAILING") ? strtod(getenv("G4NUCMODEL_RAD_TRAILING"),0)
-   : 0.0) * radiusUnits;
+const G4double G4NucleiModel::R_nucleon = G4CascadeParameters::radiusTrailing();
 
 // Zone boundaries as fraction of nuclear radius (from outside in)
 const G4double G4NucleiModel::alfa3[3] = { 0.7, 0.3, 0.01 };
@@ -1672,9 +1658,7 @@ G4double G4NucleiModel::absorptionCrossSection(G4double ke, G4int type) const {
 
   // Photon cross-section is binned from parametrization by Mi. Kossov
   if (type == photon) {
-    static const G4double gammaQDscale =
-      getenv("G4NUCMODEL_GAMMAQD")?strtod(getenv("G4NUCMODEL_GAMMAQD"),0):1.;
-
+    static const G4double gammaQDscale = G4CascadeParameters::gammaQDScale();
     static const G4double kebins[] =
       {  0.0,  0.01, 0.013, 0.018, 0.024, 0.032, 0.042, 0.056, 0.075, 0.1,
 	 0.13, 0.18, 0.24,  0.32,  0.42,  0.56,  0.75,  1.0,   1.3,   1.8,

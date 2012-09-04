@@ -52,6 +52,8 @@
 //		hadron and nucleus versions) to reduce memory churn
 // 20120522  M. Kelsey -- Implement base class IsApplicable, and add overloaded
 //		version which takes G4ParticleDefintion, a la G4VProcess.
+// 20120822  M. Kelsey -- Add function to dump user configuration settings.
+//		Remove local verboseLevel; shadows base class data member.
 
 #ifndef G4CASCADEINTERFACE_H
 #define G4CASCADEINTERFACE_H 1
@@ -92,7 +94,7 @@ public:
   G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
 				 G4Nucleus& theNucleus);
 
-  void setVerboseLevel(G4int verbose);
+  void SetVerboseLevel(G4int verbose);		// Overrides base class
 
   G4bool IsApplicable(const G4HadProjectile& aTrack,
 		      G4Nucleus& theNucleus);
@@ -104,6 +106,7 @@ public:
   void usePreCompoundDeexcitation();
 
   virtual void ModelDescription(std::ostream& outFile) const;
+  virtual void DumpConfiguration(std::ostream& outFile) const;
 
 protected:
   void clear();			// Delete previously created particles
@@ -150,10 +153,8 @@ private:
   }
 
   static const G4String randomFile;	// Filename to capture random seeds
-
   static const G4int maximumTries;	// Number of iterations for inelastic
 
-  G4int verboseLevel;
   G4int numberOfTries;
 
   G4InuclCollider* collider;
