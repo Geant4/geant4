@@ -105,12 +105,16 @@ G4NuclearLevelManager::NearestLevel(G4double energy,
   if (NumberOfLevels() <= 0) return 0;
 
   G4int iNear = -1;
+
+  //G4cout << "G4NuclearLevelManager::NearestLevel E(MeV)= " 
+  //	 << energy/MeV << " dEmax(MeV)= " << eDiffMax/MeV << G4endl;
   
   G4double diff = 9999. * GeV;
   for (unsigned int i=0; i<_levels->size(); i++)
     {
       G4double e = GetLevel(i)->Energy();
       G4double eDiff = std::abs(e - energy);
+      //G4cout << i << ".   eDiff(MeV)= " << eDiff/MeV << G4endl;
       if (eDiff < diff && eDiff <= eDiffMax)
 	{ 
 	  diff = eDiff; 

@@ -80,7 +80,8 @@ G4DiscreteGammaTransition::G4DiscreteGammaTransition(const G4NuclearLevel& level
   _levelManager = 0;
   _verbose = 0;
   //JMQ: added tolerence in the mismatch
-  _tolerance = CLHEP::keV;
+  //VI:  increased tolerence 
+  _tolerance = 10*CLHEP::keV;
 }
 
 G4DiscreteGammaTransition::~G4DiscreteGammaTransition() 
@@ -95,56 +96,67 @@ void G4DiscreteGammaTransition::SelectGamma()
   G4int nGammas = _level.NumberOfGammas();
   if (nGammas > 0)
     {
-      G4double random = G4UniformRand();
+      G4int iGamma = 0;
+      if(1 < nGammas) {
+	G4double random = G4UniformRand();
       
-      G4int iGamma;
-      for(iGamma=0; iGamma<nGammas; ++iGamma)
-	{
-	  if(random <= (_level.GammaCumulativeProbabilities())[iGamma])
-	    { break; }
-	}
-      
-      // Small correction due to the fact that there are mismatches between 
-      // nominal level energies and actular exitation energy
-      
-      G4double eCorrection = _level.Energy() - _excitation;      
-      _gammaEnergy = (_level.GammaEnergies())[iGamma] - eCorrection;
+	//G4cout << "G4DiscreteGammaTransition::SelectGamma  N= " 
+	//       << nGammas << " rand= " << random << G4endl;
+	for(iGamma=0; iGamma<nGammas; ++iGamma)
+	  {
+	    //G4cout << iGamma << "  prob= " 
+	    //	   << (_level.GammaCumulativeProbabilities())[iGamma] << G4endl;
+	    if(random <= (_level.GammaCumulativeProbabilities())[iGamma])
+	      { break; }
+	  }
+      }
+      /*     
+      G4cout << "Elevel(MeV)= " << _level.Energy()/MeV
+	     << " Etran(MeV)= " << (_level.GammaEnergies())[iGamma]/MeV
+	     << " Eexc(MeV)= " << _excitation/MeV << G4endl;
+      */
+
+      // VI: do not apply correction here in order do not make 
+      //     double correction
+      //G4double eCorrection = _level.Energy() - _excitation;      
+      //_gammaEnergy = (_level.GammaEnergies())[iGamma] - eCorrection;
+      _gammaEnergy = (_level.GammaEnergies())[iGamma];
             
       //JMQ: 
-      //1)If chosen gamma energy is close enough to excitation energy, the later
-      //  is used instead for gamma dacey to gs (it guarantees energy conservation)
-      //2)For energy conservation, level energy differences instead of  tabulated 
-      //  gamma energies must be used (origin of final fake photons)
+      //1)If chosen gamma energy is close enough to excitation energy, 
+      //  the later is used instead for gamma dacey to gs (it guarantees 
+      //  energy conservation)
+      //2)For energy conservation, level energy differences instead of  
+      //  tabulated gamma energies must be used (origin of final fake photons)
       
-      if(_excitation - _gammaEnergy < _tolerance)      
-	{ 
-	  _gammaEnergy =_excitation;
-	}
-      else
-	{		 
-	  _levelManager = G4NuclearLevelStore::GetInstance()->GetManager(_Z,_A);
-	  _gammaEnergy = _excitation - 
-	    _levelManager->NearestLevel(_excitation - _gammaEnergy)->Energy();
-	}
-      
-      //  Warning: the following check is needed to avoid loops:
+      // VI: remove fake photons - applied only for the last transition
+      //     do not applied on each transition
+      if(std::fabs(_excitation - _gammaEnergy) < _tolerance) { 
+	_gammaEnergy =_excitation;
+      }
+
+      //  JMQ: Warning: the following check is needed to avoid loops:
       //  Due essentially to missing nuclear levels in data files, it is
       //  possible that _gammaEnergy is so low as the nucleus doesn't change
       //  its level after the transition.
       //  When such case is found, force the full deexcitation of the nucleus.
       //
       //    NOTE: you should force the transition to the next lower level,
-      //          but this change needs a more complex revision of actual design.
+      //          but this change needs a more complex revision of actual 
+      //          design.
       //          I leave this for a later revision.
-      
-      if (_gammaEnergy < _level.Energy()*10.e-5) _gammaEnergy = _excitation;
+
+      // VI: the check has no sence and we make this very simple
+      if (_gammaEnergy < _tolerance) { 
+	_gammaEnergy = _excitation; 
+      }
 
       //G4cout << "G4DiscreteGammaTransition::SelectGamma: " << _gammaEnergy 
       //	     << " _icm: " << _icm << G4endl;
 
       // now decide whether Internal Coversion electron should be emitted instead
       if (_icm) {
-	random = G4UniformRand() ;
+	G4double random = G4UniformRand();
 	if ( random <= (_level.TotalConvertionProbabilities())[iGamma]
 	     *(_level.GammaWeights())[iGamma]
 	     /((_level.TotalConvertionProbabilities())[iGamma]*(_level.GammaWeights())[iGamma]

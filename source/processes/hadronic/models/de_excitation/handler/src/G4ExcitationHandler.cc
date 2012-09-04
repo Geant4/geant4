@@ -211,11 +211,11 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
 	  }
 	}
     }
-      
-  //G4cout << "## After first step " << theEvapList.size() << " for evap;  "
-  // << thePhotoEvapList.size() << " for photo-evap; " 
-  // << theResults.size() << " results. " << G4endl; 
-
+  /*
+  G4cout << "## After first step " << theEvapList.size() << " for evap;  "
+   << thePhotoEvapList.size() << " for photo-evap; " 
+   << theResults.size() << " results. " << G4endl; 
+  */
   // -----------------------------------
   // FermiBreakUp and De-excitation loop
   // -----------------------------------

@@ -139,6 +139,8 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
   if (_transition) {
     _transition->SelectGamma();  // it can be conversion electron too
     eGamma = _transition->GetGammaEnergy(); 
+    //G4cout << "G4VGammaDeexcitation::GenerateGamma - Egam(MeV)= " 
+    //	   << eGamma << G4endl; 
     if(eGamma <= 0.0) { return 0; }
   } else { return 0; }
 

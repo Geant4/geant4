@@ -192,12 +192,12 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
 
     // check if it is stable, then finish evaporation
     G4double abun = nist->GetIsotopeAbundance(Z, A); 
-    
-    // G4cout << "### G4Evaporation::BreakItUp step " << ia << " Z= " << Z
-    //	   << " A= " << A << " Eex(MeV)= " 
-    //	   << theResidualNucleus->GetExcitationEnergy()
-    //	   << " aban= " << abun << G4endl;
- 
+    /*
+    G4cout << "### G4Evaporation::BreakItUp step " << ia << " Z= " << Z
+    	   << " A= " << A << " Eex(MeV)= " 
+    	   << theResidualNucleus->GetExcitationEnergy()
+    	   << " aban= " << abun << G4endl;
+    */
     // stop deecitation loop in the case of the cold stable fragment 
     G4double Eex = theResidualNucleus->GetExcitationEnergy();
     if(Eex <= minExcitation && abun > 0.0) {
@@ -207,10 +207,10 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
  
     totprob = 0.0;
     maxchannel = nChannels;
-
-    //G4cout << "### Evaporation loop #" << ia 
-    //	   << "  Fragment: " << theResidualNucleus << G4endl;
-
+    /*
+    G4cout << "### Evaporation loop #" << ia 
+    	   << "  Fragment: " << theResidualNucleus << G4endl;
+    */
     // loop over evaporation channels
     for(i=0; i<nChannels; ++i) {
       prob = (*theChannels)[i]->GetEmissionProbability(theResidualNucleus);
