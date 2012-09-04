@@ -51,7 +51,6 @@
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
-#include <qtoolbox.h>
 #include <qsplitter.h>
 #include <qscrollbar.h>
 #include <qdialog.h>
@@ -66,6 +65,15 @@
 #include <qmenu.h>
 #include <qlistwidget.h>
 #include <qtreewidget.h>
+#include <qgroupbox.h>
+#include <qscrollarea.h>
+#include <qtoolbox.h>
+#include <qradiobutton.h>
+#include <qbuttongroup.h>
+#include <qcombobox.h>
+#include <qsignalmapper.h>
+#include <qpainter.h>
+#include <qcolordialog.h>
 
 
 
@@ -105,13 +113,13 @@ G4UIQt::G4UIQt (
 ,fHelpTBWidget(NULL)
 ,fHistoryTBWidget(NULL)
 ,fCoutTBWidget(NULL)
-,fVisParametersTBWidget(NULL)
 ,fSceneTreeComponentsTBWidget(NULL)
 ,fHelpLine(NULL)
 ,fTabWidget(NULL)
 ,fCoutText("Output")
 ,fLastQTabSizeX(0)
 ,fLastQTabSizeY(0)
+,fCommandParameterWidgets(NULL)
 {
 
   G4Qt* interactorManager = G4Qt::getInstance (argc,argv,(char*)"Qt");
@@ -141,9 +149,13 @@ G4UIQt::G4UIQt (
   printf("G4UIQt::Initialise after main window creation +++++++++++\n");
 #endif
 
+  // the left splitter
+  QSplitter* leftTabBarSplitter = new QSplitter(Qt::Vertical);
+
   QWidget *mainWidget = new QWidget(fMainWindow);
   fMyVSplitter = new QSplitter(Qt::Horizontal,fMainWindow);
-  fToolBox = new QToolBox();
+  fUITabWidget = new QTabWidget();
+  fUITabWidget->setMinimumHeight(100);
 
   // Set layouts
 
@@ -161,6 +173,9 @@ G4UIQt::G4UIQt (
   fCommandArea->setFocusPolicy ( Qt::StrongFocus );
   fCommandArea->setFocus(Qt::TabFocusReason);
 
+  commandLineWidget->setLayout(layoutCommandLine);
+  commandLineWidget->setSizePolicy (QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum));
+
 
 
   layoutCommandLine->addWidget(fCommandLabel);
@@ -168,11 +183,9 @@ G4UIQt::G4UIQt (
   QVBoxLayout *mainLayout;
   mainLayout = new QVBoxLayout();
 
-  fHelpTBWidget = new QWidget(fToolBox);
-  fHistoryTBWidget = new QWidget(fToolBox);
-  fCoutTBWidget = new QWidget(fToolBox);
-  fVisParametersTBWidget = new QWidget(fToolBox);
-  fSceneTreeComponentsTBWidget = new QWidget(fToolBox);
+  fHelpTBWidget = new QWidget(fUITabWidget);
+  fHistoryTBWidget = new QWidget(fUITabWidget);
+  fSceneTreeComponentsTBWidget = new QWidget(fUITabWidget);
   fSceneTreeComponentsTBWidget->setLayout(new QVBoxLayout());
 
 #if QT_VERSION < 0x040200
@@ -183,22 +196,30 @@ G4UIQt::G4UIQt (
   
   CreateVisParametersTBWidget();
   CreateHelpTBWidget();
-  CreateCoutTBWidget();
   CreateHistoryTBWidget();
 
-  // the splitter 
-  //  fToolBox->addItem(fVisParametersTBWidget,"Vis parameters");
-  fToolBox->addItem(fSceneTreeComponentsTBWidget,"Scene");
-  fToolBox->addItem(fHelpTBWidget,"Help");
-  fToolBox->addItem(fCoutTBWidget,"Cout");
-  fToolBox->addItem(fHistoryTBWidget,"History");
+  fCoutTBWidget = new QGroupBox("Output");
+  CreateCoutTBWidget();
 
-  // set default
-  fToolBox->setCurrentWidget(fCoutTBWidget);
+  // fill left splitter
+  leftTabBarSplitter->addWidget(fUITabWidget);
+  leftTabBarSplitter->addWidget(fCoutTBWidget);
 
-  fToolBox->resize (300,200);
+  // set the splitter size
+  QList<int> list2;
+  list2.append(400 );
+  list2.append(150 );
+  leftTabBarSplitter->setSizes(list2);
+  
 
-  fToolBox->setSizePolicy (QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
+  // fix size for cout
+  fCoutTBWidget->resize(100,100);
+
+  // the right splitter 
+  fUITabWidget->addTab(fSceneTreeComponentsTBWidget,"Scene tree");
+  fUITabWidget->addTab(fHelpTBWidget,"Help");
+  fUITabWidget->addTab(fHistoryTBWidget,"History");
+  fUITabWidget->setCurrentWidget(fSceneTreeComponentsTBWidget);
 
   fEmptyViewerTabLabel = new QLabel("         If you want to have a Viewer, please use /vis/open commands. ");
 
@@ -210,11 +231,17 @@ G4UIQt::G4UIQt (
  #endif
 
 
-  fMyVSplitter->addWidget(fToolBox);
+  fMyVSplitter->addWidget(leftTabBarSplitter);
   fMyVSplitter->addWidget(fEmptyViewerTabLabel);
 
-  commandLineWidget->setLayout(layoutCommandLine);
-  commandLineWidget->setSizePolicy (QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum));
+  // set the splitter size
+  QList<int> list;
+  list.append(200 );
+  list.append(650);
+  fMyVSplitter->setSizes(list);
+
+  
+
   mainLayout->addWidget(fMyVSplitter,1);
   mainLayout->addWidget(commandLineWidget);
 
@@ -239,13 +266,13 @@ G4UIQt::G4UIQt (
 
   // Connect signal
   connect(fCommandArea, SIGNAL(returnPressed()), SLOT(CommandEnteredCallback()));
-  connect(fToolBox, SIGNAL(currentChanged(int)), SLOT(ToolBoxActivated(int)));
+  connect(fUITabWidget, SIGNAL(currentChanged(int)), SLOT(ToolBoxActivated(int)));
 
   if(UI!=NULL) UI->SetCoutDestination(this);  // TO KEEP
 
   fMainWindow->setWindowTitle( tr("G4UI Session") ); 
-  fMainWindow->resize(900,600); 
-  fMainWindow->move(QPoint(50,100));
+  fMainWindow->resize(300,600); 
+  fMainWindow->move(QPoint(50,50));
 
   // Set not visible until session start
  #if QT_VERSION < 0x040200
@@ -318,7 +345,7 @@ void G4UIQt::CreateHelpTBWidget(
   // Create Help tree
   FillHelpTree();
   
-  fHelpArea = new QTextEdit(fHelpVSplitter);
+  fHelpArea = new QTextEdit();
   fHelpArea->setReadOnly(true);
   
   // Set layouts
@@ -328,12 +355,12 @@ void G4UIQt::CreateHelpTBWidget(
   }
   fHelpVSplitter->addWidget(fHelpArea);
   
-  
   vLayout->addWidget(helpWidget);
   vLayout->addWidget(fHelpVSplitter,1);
   
   fHelpTBWidget->setMinimumSize(50,50);
   fHelpTBWidget->setSizePolicy (QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum));
+
   // set the splitter size
   QList<int> list;
   list.append( 50 );
@@ -371,6 +398,11 @@ void G4UIQt::CreateCoutTBWidget(
   layoutCoutTB->addWidget(fCoutTBTextArea);
   layoutCoutTB->addWidget(coutButtonWidget);
 
+  fCoutTBWidget->resize(100,100);
+  fCoutTBTextArea->setMinimumHeight(10);
+  fCoutTBWidget->setMinimumHeight(150);
+  //  fCoutTBTextArea->setSizePolicy (QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum));
+  fCoutTBWidget->setSizePolicy (QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum));
   fCoutTBWidget->setLayout(layoutCoutTB);
 }
 
@@ -420,9 +452,6 @@ bool G4UIQt::AddTabWidget(
 #else
     fTabWidget->setUsesScrollButtons (true);
 #endif
-    
-    fTabWidget->setSizePolicy (QSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum));
-    
     QSizePolicy policy = fTabWidget->sizePolicy();
     policy.setHorizontalStretch(1);
     policy.setVerticalStretch(1);
@@ -474,7 +503,7 @@ bool G4UIQt::AddTabWidget(
       tabBarY = fTabWidget->height()-fTabWidget->widget(0)->height();
     }
 
-    fMainWindow->resize(tabBarX+fMainWindow->width()+sizeX-fTabWidget->width(),tabBarY+fMainWindow->height()+sizeY-fTabWidget->height());
+    //    fMainWindow->resize(tabBarX+fMainWindow->width()+sizeX-fTabWidget->width(),tabBarY+fMainWindow->height()+sizeY-fTabWidget->height());
   }
 
   // Problems with resize. The widgets are not realy drawn at this step,
@@ -491,6 +520,8 @@ bool G4UIQt::AddTabWidget(
    fTabWidget->setLastTabCreated(fTabWidget->currentIndex());
  #endif
   
+   fTabWidget->resize(sizeX,sizeY);
+
   return true;
 }
 
@@ -815,7 +846,7 @@ void G4UIQt::ActivateCommand(
     OpenHelpTreeOnCommand(targetCom.data());
   }
 
-  fToolBox->setCurrentWidget(fHelpTBWidget);
+  fUITabWidget->setCurrentWidget(fHelpTBWidget);
 }
 
 
@@ -826,13 +857,21 @@ void G4UIQt::ActivateCommand(
    @return the widget containing the tree or NULL if it could not have beeen created
  */
 
-void G4UIQt::InitHelpTree()
+void G4UIQt::InitHelpTreeAndVisParametersWidget()
 {
 
   if (! fHelpTreeWidget ) {
     fHelpTreeWidget = new QTreeWidget();
   }
 
+  // clean all previous Vis parameters command widgets
+  if (fCommandParameterWidgets.size() > 0) {
+    unsigned int a=0;
+    while (fCommandParameterWidgets.size() > 0) {
+      delete fCommandParameterWidgets[0];
+      a++;
+    }
+  }
 
   // build widget
   fHelpTreeWidget->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -854,7 +893,7 @@ void G4UIQt::InitHelpTree()
 void G4UIQt::FillHelpTree()
 {
   if (! fHelpTreeWidget ) {
-    InitHelpTree();
+    InitHelpTreeAndVisParametersWidget();
   }
 
   QString searchText = fHelpLine->text();
@@ -908,7 +947,7 @@ void G4UIQt::FillHelpTree()
     }
 
     // look for childs
-    CreateChildTree(newItem,treeTop->GetTree(a+1));
+    CreateHelpTreeAndVisParameterChild(newItem,treeTop->GetTree(a+1));
   }
 
 }
@@ -919,7 +958,7 @@ void G4UIQt::FillHelpTree()
    @param aParent : parent item to fill
    @param aCommandTree : commandTree node associate with this part of the Tree
 */
-void G4UIQt::CreateChildTree(
+void G4UIQt::CreateHelpTreeAndVisParameterChild(
  QTreeWidgetItem *aParent
 ,G4UIcommandTree *aCommandTree
 )
@@ -943,7 +982,7 @@ void G4UIQt::CreateChildTree(
       newItem = new QTreeWidgetItem(aParent);
       newItem->setText(0,GetShortCommandPath(commandText));
     }
-    CreateChildTree(newItem,aCommandTree->GetTree(a+1));
+    CreateHelpTreeAndVisParameterChild(newItem,aCommandTree->GetTree(a+1));
   }
 
 
@@ -960,6 +999,18 @@ void G4UIQt::CreateChildTree(
     if (newItem == NULL) {
       newItem = new QTreeWidgetItem(aParent);
       newItem->setText(0,GetShortCommandPath(commandText));
+
+      // Case for displaying viewer param and vis/scene/add params
+      G4UIcommand* command = aCommandTree->FindPath(commandText.toStdString().c_str());
+      //      if (IsGUICommand(command)) {
+        if (commandText.startsWith("/vis/scene/add")) {
+          CreateVisCommandTabToolBox(command,commandText.section("/",2));
+        }
+        if (commandText.startsWith("/vis/viewer")) {
+          CreateVisCommandTabToolBox(command,commandText.section("/",2));
+        }
+        //      }
+
 #if QT_VERSION < 0x040202
       fHelpTreeWidget->setItemExpanded(newItem,false); 
 #else
@@ -970,6 +1021,382 @@ void G4UIQt::CreateChildTree(
 }
 
  
+/**
+ Add the following command to the corresponding toolbox tab
+*/
+
+bool G4UIQt::CreateVisCommandTabToolBox(
+ G4UIcommand* command
+ ,QString commandText
+)
+{
+  // Look if tab is create
+  QScrollArea* scrollTab;
+  QToolBox* scrollableToolboxWidget;
+  bool found = false;
+  if (commandText.indexOf("/") != -1) {
+    QString section = commandText.left(commandText.indexOf("/"));
+    for (int a=0; a<fUITabWidget->count(); a++) {
+      if (fUITabWidget->tabText(a) == section) {
+        found = true;
+        scrollTab = dynamic_cast<QScrollArea*>(fUITabWidget->widget(a));
+        if (scrollTab != 0) {
+          scrollableToolboxWidget = dynamic_cast<QToolBox*>(scrollTab->widget());
+        }
+      }
+    }
+
+    // Not found ? create it
+    if (!found) {
+      scrollableToolboxWidget = new QToolBox();
+
+      scrollTab = new QScrollArea ();
+
+      // add it in the vis component vector
+      fCommandParameterWidgets.push_back(scrollTab);
+
+      CreateVisCommandGroupAndToolBox(command,commandText.section("/",1),scrollableToolboxWidget,1);
+      scrollTab->setWidgetResizable(true);
+
+      scrollTab->setWidget(scrollableToolboxWidget);
+      fUITabWidget->addTab(scrollTab,section);
+    } else {
+      CreateVisCommandGroupAndToolBox(command,commandText.section("/",1),scrollableToolboxWidget,1);
+    }
+  }
+
+  return true;
+}
+
+
+/**
+ Add the following command to the corresponding groupbox
+ If depthLevel is 1 : create ToolBox
+ If depthLevel is 2 or more : create GroupBox
+*/
+bool G4UIQt::CreateVisCommandGroupAndToolBox(
+ G4UIcommand* command
+,QString commandText
+,QWidget* parent
+,int depthLevel
+)
+{
+  if (commandText == NULL) {
+    return false;
+  }
+
+  // Look if groupBox is create
+  //  QGroupBox* gBoxCommandWidget;
+  QWidget* newParentWidget = NULL;
+  bool found = false;
+  QString commandSection = commandText.left(commandText.indexOf("/"));
+  
+  if (depthLevel == 1) {
+    QToolBox* currentParent = dynamic_cast<QToolBox*>(parent);
+    if (currentParent != 0){
+
+      // already exists ?
+      for (int a=0; a<currentParent->count(); a++) {
+        if (currentParent->itemText(a) == commandSection) {
+          found = true;
+          newParentWidget = currentParent->widget(a);
+        }
+      }
+      // Not found ? create it
+      if (!found) {
+        newParentWidget = new QGroupBox();
+        //        newParentWidget->setSizePolicy (QSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum));
+
+        newParentWidget->setLayout(new QVBoxLayout());
+        currentParent->addItem(newParentWidget,commandSection);
+
+        if (commandText.indexOf("/") == -1) {
+          
+          // Guidance
+          QString guidance;
+          G4int n_guidanceEntry = command->GetGuidanceEntries();
+          for( G4int i_thGuidance=0; i_thGuidance < n_guidanceEntry; i_thGuidance++ ) {
+            guidance += QString((char*)(command->GetGuidanceLine(i_thGuidance)).data()) + "\n";
+          }
+          currentParent->setItemToolTip(currentParent->count()-1,guidance);
+        }
+
+        QScrollArea* sc = dynamic_cast<QScrollArea*>(newParentWidget->parent()->parent());
+        if (sc != 0) {
+          sc->ensureWidgetVisible(newParentWidget);
+          //          sc->setSizePolicy (QSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum));
+
+        }
+      }
+    } else {
+      return false;
+    }
+  } else {
+
+    QGroupBox* currentParent = dynamic_cast<QGroupBox*>(parent);
+    if (currentParent != 0){
+
+      // if depth==2, then we add a [more parameters inside] to the toolBoxItem parent
+      // QGroupBox > QWidget > QScrollArea > QToolBox
+      if (depthLevel == 2){
+        QToolBox* parentToolBox = dynamic_cast<QToolBox*>(currentParent->parent()->parent()->parent());
+        if (parentToolBox != 0) {
+          //          parentToolBox->setItemText(parentToolBox->indexOf(currentParent),"[more parameters inside]");
+        }
+      }
+      for (int a=0; a<parent->layout()->count(); a++) {
+        QGroupBox* gb = dynamic_cast<QGroupBox*>(parent->layout()->itemAt(a)->widget());
+        if (gb != 0) {
+          if (gb->title() == commandSection) {
+            found = true;
+            newParentWidget = gb;
+          }
+        }
+      }
+      // Not found ? create it
+      if (!found) {
+        newParentWidget = new QGroupBox(commandSection);
+        newParentWidget->setLayout(new QVBoxLayout());
+
+        currentParent->layout()->addWidget(newParentWidget);
+
+        // set toolTip
+        // Guidance
+        QString guidance;
+        G4int n_guidanceEntry = command->GetGuidanceEntries();
+        for( G4int i_thGuidance=0; i_thGuidance < n_guidanceEntry; i_thGuidance++ ) {
+          guidance += QString((char*)(command->GetGuidanceLine(i_thGuidance)).data()) + "\n";
+        }
+        newParentWidget->setToolTip(guidance); 
+      }
+    } else {
+      return false;
+    }
+  }
+  
+  // fill command groupbox
+  if (commandText.indexOf("/") == -1) {
+
+    // parameters
+    G4int n_parameterEntry = command->GetParameterEntries();
+    if( n_parameterEntry > 0 ) {
+      G4UIparameter *param;
+      
+      // Re-implementation of G4UIparameter.cc
+      QWidget* paramWidget = new QWidget();
+      QGridLayout* gridLayout = new QGridLayout(paramWidget);
+      
+      // Special case for colour, try to display a color chooser if we found red/green/blue parameter
+      unsigned int nbColorParameter = 0;
+      bool isStillColorParameter = false;
+      bool isColorDialogAdded = false;
+      QLabel* redLabel = NULL;
+      QLabel* greenLabel = NULL;
+      QString redDefaultStr = "";
+      QString greenDefaultStr = "";
+      QString blueDefaultStr = "";
+      QWidget* redInput = NULL;
+      QWidget* greenInput = NULL;
+
+      for( G4int i_thParameter=0; i_thParameter<n_parameterEntry; i_thParameter++ ) {
+        QString txt;
+        param = command->GetParameter(i_thParameter);
+        QLabel* label = new QLabel(QString((char*)(param->GetParameterName()).data()));
+
+        if ((label->text() == "red") || (label->text() == "red_or_string")){
+          nbColorParameter ++;
+          isStillColorParameter = true;
+        } else if ((label->text() == "green") && isStillColorParameter) {
+          nbColorParameter ++;
+        } else if ((label->text() == "blue") && isStillColorParameter) {
+          nbColorParameter ++;
+        } else if (!isColorDialogAdded) {
+          
+          // not following red/green/blue parameters ?
+          if (nbColorParameter == 1) {
+            gridLayout->addWidget(redLabel,i_thParameter-1,0);
+            gridLayout->addWidget(redInput,i_thParameter-1,1);
+          } else if (nbColorParameter == 2) {
+            gridLayout->addWidget(redLabel,i_thParameter-2,0);
+            gridLayout->addWidget(redInput,i_thParameter-2,1);
+            gridLayout->addWidget(greenLabel,i_thParameter-1,0);
+            gridLayout->addWidget(greenInput,i_thParameter-1,1);
+          }
+          nbColorParameter = 0;
+        }
+        // Check parameter type, could be NULL if not found
+        QWidget* input = NULL;
+        if ((QString(QChar(param->GetParameterType())) == "d") || (QString(QChar(param->GetParameterType())) == "i")) {
+          input = new QLineEdit();
+          // set default value
+          dynamic_cast<QLineEdit*>(input)->setText(QString((char*)(param->GetDefaultValue()).data()));
+
+          if (((label->text() == "red") || (label->text() == "red_or_string")) && isStillColorParameter) {
+            redDefaultStr = QString((char*)(param->GetDefaultValue()).data());
+          } else if ((label->text() == "green") && isStillColorParameter) {
+            greenDefaultStr = QString((char*)(param->GetDefaultValue()).data());
+          } else if ((label->text() == "green") && isStillColorParameter) {
+            blueDefaultStr = QString((char*)(param->GetDefaultValue()).data());
+          }
+
+        } else if (QString(QChar(param->GetParameterType())) == "b") {
+          input = new QWidget();
+          QHBoxLayout* layout = new QHBoxLayout(input);
+
+          QButtonGroup* buttons = new QButtonGroup();
+          QRadioButton* radioOff = new QRadioButton("0");
+          QRadioButton* radioOn = new QRadioButton("1");
+          buttons->addButton(radioOn);
+          buttons->addButton(radioOff);
+          layout->addWidget(radioOn);
+          layout->addWidget(radioOff);
+
+          // set default value
+          QString defaultValue = QString((char*)(param->GetDefaultValue()).data());
+          if (defaultValue == "0") {
+            radioOff->setChecked(true);
+          } else if (defaultValue == "1") {
+            radioOn->setChecked(true);
+          }
+        } else if ((QString(QChar(param->GetParameterType())) == "s") && (!param->GetParameterCandidates().isNull())) {
+          input = new QComboBox();
+          QString candidates = QString((char*)(param->GetParameterCandidates()).data());
+          QStringList list = candidates.split (" ");
+
+          // add all candidates to widget
+          QString defaultValue = QString((char*)(param->GetDefaultValue()).data());
+          for (int a=0; a<list.size(); a++) {
+            dynamic_cast<QComboBox*>(input)->addItem(list.at(a));
+            if (list.at(a) == defaultValue) {
+              dynamic_cast<QComboBox*>(input)->setCurrentIndex(a);
+            }
+          }
+
+        } else if ((QString(QChar(param->GetParameterType())) == "s")) {  // string
+          input = new QLineEdit();
+          // set default value
+          dynamic_cast<QLineEdit*>(input)->setText(QString((char*)(param->GetDefaultValue()).data()));
+
+        } else if ((QString(QChar(param->GetParameterType())) == "c")) {  // on/off
+          input = new QWidget();
+          QHBoxLayout* layout = new QHBoxLayout(input);
+
+          QButtonGroup* buttons = new QButtonGroup();
+          QRadioButton* radioOff = new QRadioButton("off");
+          QRadioButton* radioOn = new QRadioButton("on");
+          buttons->addButton(radioOn);
+          buttons->addButton(radioOff);
+          layout->addWidget(radioOn);
+          layout->addWidget(radioOff);
+
+          // set default value
+          QString defaultValue = QString((char*)(param->GetDefaultValue()).data());
+          if (defaultValue == "off") {
+            radioOff->setChecked(true);
+          } else if (defaultValue == "on") {
+            radioOn->setChecked(true);
+          }
+
+        } else {
+          input = new QLineEdit();
+          dynamic_cast<QLineEdit*>(input)->setText(QString((char*)(param->GetDefaultValue()).data()));
+        }
+        
+        txt += "\nParameter : " + QString((char*)(param->GetParameterName()).data()) + "\n";
+        if( ! param->GetParameterGuidance().isNull() )
+          txt += QString((char*)(param->GetParameterGuidance()).data())+ "\n" ;
+
+        txt += " Parameter type  : " + QString(QChar(param->GetParameterType())) + "\n";
+        if(param->IsOmittable()){
+          txt += " Omittable       : True\n";
+        } else {
+          txt += " Omittable       : False\n";
+        }
+        if( param->GetCurrentAsDefault() ) {
+          txt += " Default value   : taken from the current value\n";
+        } else if( ! param->GetDefaultValue().isNull() ) {
+          txt += " Default value   : " + QString((char*)(param->GetDefaultValue()).data())+ "\n";
+        }
+        if( ! param->GetParameterRange().isNull() ) {
+          txt += " Parameter range : " + QString((char*)(param->GetParameterRange()).data())+ "\n";
+        }
+        if( ! param->GetParameterCandidates().isNull() ) {
+          txt += " Candidates      : " + QString((char*)(param->GetParameterCandidates()).data())+ "\n";
+        }
+        
+        if (isStillColorParameter && (nbColorParameter != 0)) {
+          if ((label->text() == "red") || (label->text() == "red_or_string")) {
+            redLabel = label;
+            redInput = input;
+          } else if (label->text() == "green") {
+            greenLabel = label;
+            greenInput = input;
+          } else if (label->text() == "blue") {
+
+            // we have all, then add a color chooser
+
+            // Create a pixmap with the default color
+            QColor qc;
+            if ((redDefaultStr != "") && (redDefaultStr != "") && (redDefaultStr != "")) {
+              qc.setRgbF(redDefaultStr.toDouble(),
+                         greenDefaultStr.toDouble(),
+                         blueDefaultStr.toDouble());
+            }
+            QPixmap pixmap = QPixmap(QSize(16, 16));
+            pixmap.fill (qc);
+            QPainter painter(&pixmap);
+            painter.setPen(Qt::black);
+            painter.drawRect(0,0,15,15); // Draw contour
+            
+            input = new QPushButton("Change color");
+            dynamic_cast<QPushButton*>(input)->setIcon(pixmap);
+            dynamic_cast<QPushButton*>(input)->setAccessibleName(redDefaultStr+" "+greenDefaultStr+" "+blueDefaultStr);
+            label = new QLabel("Choose color");
+
+            // less 1 because we have to add one to the row number
+            nbColorParameter--;
+            gridLayout->addWidget(label,i_thParameter-nbColorParameter,0);
+            input->setToolTip("Select the current color");
+            gridLayout->addWidget(input,i_thParameter-nbColorParameter,1);
+
+            // Connect pushButton to ColorDialog in callback
+            QSignalMapper* signalMapper = new QSignalMapper(this);
+            signalMapper->setMapping(input,input);
+            connect(input, SIGNAL(clicked()), signalMapper, SLOT(map()));
+            connect(signalMapper, SIGNAL(mapped(QWidget*)),this, SLOT(ChangeColorCallback(QWidget*)));
+
+            isColorDialogAdded = true;
+            isStillColorParameter = false;
+          }
+        } else {
+          gridLayout->addWidget(label,i_thParameter-nbColorParameter,0);
+          input->setToolTip(txt);
+          gridLayout->addWidget(input,i_thParameter-nbColorParameter,1);
+        }
+      }
+      // add command name in hidden value at last line position 0
+      QLabel* name = new QLabel(QString((char*)(command->GetCommandPath().data())));
+      name->hide();
+      gridLayout->addWidget(name,n_parameterEntry-nbColorParameter,0);
+
+      QPushButton* applyButton = new QPushButton("Apply");
+
+      gridLayout->addWidget(applyButton,n_parameterEntry-nbColorParameter,1);
+
+      QSignalMapper* signalMapper = new QSignalMapper(this);
+      signalMapper->setMapping(applyButton, paramWidget);
+      connect(applyButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
+      connect(signalMapper, SIGNAL(mapped(QWidget*)),this, SLOT(VisParameterCallback(QWidget*)));
+      newParentWidget->layout()->addWidget(paramWidget);
+    } 
+  }
+  
+  CreateVisCommandGroupAndToolBox(command,commandText.section("/",1),newParentWidget, depthLevel+1);
+
+  return true;
+}
+
+
 /** Find a treeItemWidget in the help tree
     @param aCommand item's String to look for
     @return item if found, NULL if not
@@ -1072,6 +1499,43 @@ QString G4UIQt::GetCommandList (
   return txt;
 }
 
+
+/**
+   Return true if this command takes almost a number (int, double, ...) as an input
+   or a string with a candidate list
+ */
+G4bool G4UIQt::IsGUICommand(
+ const G4UIcommand *aCommand
+)
+{
+  if (aCommand == NULL)
+    return false;
+
+  G4int n_parameterEntry = aCommand->GetParameterEntries();
+  
+  if( n_parameterEntry > 0 ) {
+    G4UIparameter *param;
+    
+    // Re-implementation of G4UIparameter.cc
+    
+    for( G4int i_thParameter=0; i_thParameter<n_parameterEntry; i_thParameter++ ) {
+      param = aCommand->GetParameter(i_thParameter);
+      if (QString(QChar(param->GetParameterType())) == "d") {
+        return true;
+      }
+      if (QString(QChar(param->GetParameterType())) == "b") {
+        return true;
+      }
+      if (QString(QChar(param->GetParameterType())) == "i") {
+        return true;
+      }
+      if (QString(QChar(param->GetParameterType())) == "s" && (!param->GetParameterCandidates().isNull())) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
 
 
 /**  Implement G4VBasicShell vurtual function
@@ -1240,6 +1704,67 @@ void G4UIQt::CommandEnteredCallback (
 
     if(exitSession==true) 
       SessionTerminate();
+  }
+}
+
+
+/** Callback when one of the scene/vis parameters has changed
+ */
+void G4UIQt::VisParameterCallback(QWidget* widget){
+  if (widget == NULL) {
+    return;
+  }
+  
+  // Look in all the Grid layout, but only column 1 (0 is the parameter name)
+  QGridLayout* grid = dynamic_cast<QGridLayout*>(widget->layout());
+  if (grid == 0) {
+    return;
+  }
+  QString command;
+  QWidget* name = grid->itemAtPosition(grid->rowCount()-1,0)->widget();
+  if (widget == NULL) {
+    return;
+  }
+  if (dynamic_cast<QLabel*>(name) == 0) {
+    return;
+  }
+  command += (dynamic_cast<QLabel*>(name))->text()+" ";
+  
+  for (int a=0;a<grid->rowCount()-1; a++) {
+    QWidget* widget = grid->itemAtPosition(a,1)->widget();
+    
+    // 4 kind of widgets : QLineEdit / QComboBox / radioButtonsGroup / QPushButton (color chooser)
+    if (widget != NULL) {
+
+      if (dynamic_cast<QLineEdit*>(widget) != 0) {
+        command += (dynamic_cast<QLineEdit*>(widget))->text()+" ";
+
+      } else if (dynamic_cast<QComboBox*>(widget) != 0){
+        command += (dynamic_cast<QComboBox*>(widget))->itemText((dynamic_cast<QComboBox*>(widget))->currentIndex())+" ";
+
+        // Color chooser 
+      } else if (dynamic_cast<QPushButton*>(widget) != 0){
+        command += widget->accessibleName()+" ";
+
+        // Check for Button group
+      } else if (dynamic_cast<QWidget*>(widget) != 0){
+        if (widget->layout()->count() > 0){
+          if (dynamic_cast<QRadioButton*>(widget->layout()->itemAt(0)->widget()) != 0) {
+            QAbstractButton * checked = (dynamic_cast<QRadioButton*>(widget->layout()->itemAt(0)->widget()))->group()->checkedButton();
+            if (checked != 0) {
+              command += (dynamic_cast<QRadioButton*>(widget->layout()->itemAt(0)->widget()))->group()->checkedButton()->text()+" ";
+            }
+          }
+        }
+
+      }
+    }
+  }
+  if (command != "") {
+    G4UImanager* UI = G4UImanager::GetUIpointer();
+    if(UI != NULL)  {
+      UI->ApplyCommand(command.toStdString().c_str());
+    }
   }
 }
 
@@ -1582,6 +2107,45 @@ QString G4UIQt::GetLongCommandPath(
   return itemText;
 }
 
+
+void G4UIQt::ChangeColorCallback(QWidget* widget) {
+  if (widget == NULL) {
+    return;
+  }
+  
+  QPushButton* button = dynamic_cast<QPushButton*>(widget);
+  if (button == 0) {
+    return;
+  }
+  QString value = button->accessibleName();
+
+  QColor old;
+  old.setRgbF(value.section(" ",0,1).toDouble(),
+              value.section(" ",1,2).toDouble(),
+              value.section(" ",2,3).toDouble());
+  QColor color = QColorDialog::getColor(old,
+                                        fUITabWidget,
+                                        "Change color");
+  
+  if (color.isValid()) {
+    // rebuild the widget icon
+    QPixmap pixmap = QPixmap(QSize(16, 16));
+    pixmap.fill (color);
+    QPainter painter(&pixmap);
+    painter.setPen(Qt::black);
+    painter.drawRect(0,0,15,15); // Draw contour
+
+    button->setAccessibleName(QString::number(color.redF())+" "+
+                              QString::number(color.greenF())+" "+
+                              QString::number(color.blueF())+" "
+                              );
+    button->setIcon(pixmap);
+    
+
+  }
+}
+
+
 G4QTabWidget::G4QTabWidget(
 QSplitter*& split
 ):QTabWidget(split)
@@ -1630,10 +2194,10 @@ void G4UIQt::TabCloseCallback(int a){
 
 void G4UIQt::ToolBoxActivated(int a){
   
-  if (fToolBox->widget(a) == fHelpTBWidget) {
+  if (fUITabWidget->widget(a) == fHelpTBWidget) {
     // Rebuild the help tree
     FillHelpTree();
-  } else if (fToolBox->widget(a) == fSceneTreeComponentsTBWidget) {
+  } else if (fUITabWidget->widget(a) == fSceneTreeComponentsTBWidget) {
 #if QT_VERSION < 0x040200
     fSceneTreeComponentsTBWidget->show();
 #else

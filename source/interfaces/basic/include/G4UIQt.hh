@@ -51,7 +51,7 @@ class QTreeWidgetItem;
 class QTextEdit;
 class QLabel;
 class QResizeEvent;
-class QToolBox;
+class QTabWidget;
 class QStringList;
 class QSplitter;
 
@@ -127,11 +127,11 @@ public:
 private:
   void SecondaryLoop(G4String); // a VIRER
   void CreateHelpWidget();
-  void InitHelpTree();
+  void InitHelpTreeAndVisParametersWidget();
   void FillHelpTree();
   void ExitHelp();
 
-  void CreateChildTree(QTreeWidgetItem*,G4UIcommandTree*);
+  void CreateHelpTreeAndVisParameterChild(QTreeWidgetItem*,G4UIcommandTree*);
   QTreeWidgetItem* FindTreeItem(QTreeWidgetItem *,const QString&);
 
   QString GetCommandList(const G4UIcommand*);
@@ -148,19 +148,18 @@ private:
   void OpenHelpTreeOnCommand(const QString &);
   QString GetShortCommandPath(QString);
   QString GetLongCommandPath(QTreeWidgetItem*);
+  G4bool IsGUICommand(const G4UIcommand*);
+  bool CreateVisCommandTabToolBox(G4UIcommand*,QString commandText);
+  bool CreateVisCommandGroupAndToolBox(G4UIcommand*,QString, QWidget*, int);
 
 private:
 
-  //  Widget form,shell,command,menuBar,text;
-  //  std::map<QAction*,G4String, std::less<QAction*> > commands;
-  //  static void commandEnteredCallback(Widget,XtPointer,XtPointer);
-  //  static void keyHandler(Widget,XtPointer,XEvent*,Boolean*);
   QMainWindow * fMainWindow;
   QLabel *fCommandLabel;
   QLineEdit * fCommandArea;
   QTextEdit *fCoutTBTextArea;
   QTextEdit *fHelpArea;
-  QToolBox* fToolBox;
+  QTabWidget* fUITabWidget;
   QStringList fG4cout;
   QLineEdit * fCoutFilter;
 
@@ -169,7 +168,6 @@ private:
   QWidget* fHelpTBWidget;
   QWidget* fHistoryTBWidget;
   QWidget* fCoutTBWidget;
-  QWidget* fVisParametersTBWidget;
   QWidget* fSceneTreeComponentsTBWidget;
   QLineEdit* fHelpLine;
   G4QTabWidget* fTabWidget;
@@ -179,6 +177,7 @@ private:
   QSplitter * fHelpVSplitter;
   int fLastQTabSizeX;
   int fLastQTabSizeY;
+  std::vector <QWidget*> fCommandParameterWidgets;
 
 private Q_SLOTS :
   void ExitSession();
@@ -195,6 +194,8 @@ private Q_SLOTS :
   void CoutFilterCallback(const QString&);
   void TabCloseCallback(int);
   void ToolBoxActivated(int);
+  void VisParameterCallback(QWidget*);
+  void ChangeColorCallback(QWidget*);
 };
 
 #endif
