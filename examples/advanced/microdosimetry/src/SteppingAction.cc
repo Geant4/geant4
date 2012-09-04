@@ -106,13 +106,14 @@ void SteppingAction::UserSteppingAction(const G4Step* s)
    yp=s->GetPostStepPoint()->GetPosition().y()/nanometer;
    zp=s->GetPostStepPoint()->GetPosition().z()/nanometer;
    
-   Histo->FillNtuple(0, 0, flagParticle);
-   Histo->FillNtuple(0, 1, flagProcess);
-   Histo->FillNtuple(0, 2, x);
-   Histo->FillNtuple(0, 3, y);
-   Histo->FillNtuple(0, 4, z);
-   Histo->FillNtuple(0, 5, s->GetTotalEnergyDeposit()/eV);
-   Histo->FillNtuple(0, 6, std::sqrt((x-xp)*(x-xp)+(y-yp)*(y-yp)+(z-zp)*(z-zp)));
-   Histo->AddRowNtuple(0);      
+   Histo->FillNtupleDColumn(0, flagParticle);
+   Histo->FillNtupleDColumn(1, flagProcess);
+   Histo->FillNtupleDColumn(2, x);
+   Histo->FillNtupleDColumn(3, y);
+   Histo->FillNtupleDColumn(4, z);
+   Histo->FillNtupleDColumn(5, s->GetTotalEnergyDeposit()/eV);
+   Histo->FillNtupleDColumn(6, std::sqrt((x-xp)*(x-xp)+(y-yp)*(y-yp)+(z-zp)*(z-zp)));
+   
+   Histo->AddNtupleRow();   
  }
 }    

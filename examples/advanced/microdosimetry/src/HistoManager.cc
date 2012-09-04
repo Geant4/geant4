@@ -22,135 +22,105 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-// $Id: HistoManager.cc,v 1.2 2010-11-09 23:31:59 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "HistoManager.hh"
 #include "G4UnitsTable.hh"
 
-#ifdef G4ANALYSIS_USE
-#include "AIDA/AIDA.h"
-#endif
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoManager::HistoManager()
-:af(0),tree(0),factoryOn(false)
 {
-#ifdef G4ANALYSIS_USE
-  // Creating the analysis factory
-  af = AIDA_createAnalysisFactory();
-  if(!af) {
-    G4cout << " HistoManager::HistoManager() :" 
-           << " problem creating the AIDA analysis factory."
-           << G4endl;
-  }
-#endif 
- 
-  fileName[0] = "microdosimetry";
-  fileType    = "root";
-  fileOption  = "export=root";
-  ntupl0=0;
-  
+  fileName[0]  = "microdosimetry";
+  factoryOn = false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoManager::~HistoManager()
 {
-#ifdef G4ANALYSIS_USE  
-  delete af;
-#endif  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HistoManager::book()
 {
-#ifdef G4ANALYSIS_USE
-  if(!af) return;
-
-  // Creating a tree mapped to an hbook file.
-  fileName[1] = fileName[0] + "." + fileType;
-  G4bool readOnly  = false;
-  G4bool createNew = true;
-  AIDA::ITreeFactory* tf  = af->createTreeFactory();
-  tree = tf->create(fileName[1], fileType, readOnly, createNew, fileOption);
-  delete tf;
-  if(!tree) {
-    G4cout << "HistoManager::book() :" 
-           << " problem creating the AIDA tree with "
-           << " storeName = " << fileName[1]
-           << " storeType = " << fileType
-           << " readOnly = "  << readOnly
-           << " createNew = " << createNew
-           << " options = "   << fileOption
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->SetVerboseLevel(1);
+  
+  G4String extension = analysisManager->GetFileType();
+  fileName[1] = fileName[0] + "." + extension;
+  
+  // open output file
+  
+  G4bool fileOpen = analysisManager->OpenFile(fileName[0]);
+  if (!fileOpen) {
+    G4cout << "\n---> HistoManager::book(): cannot open " << fileName[1] 
            << G4endl;
     return;
-  }
+  }  
 
-  // Creating a histogram & ntuplr factory
-  AIDA::IHistogramFactory* hf = af->createHistogramFactory(*tree);
-  AIDA::ITupleFactory* ntf = af->createTupleFactory(*tree);
- 
-  ntupl0 = ntf->create( "ntuple0", "Beam profile", "double flagParticle, flagProcess, x, y, z, e, d");
+  // create ntuple
+  
+  analysisManager->SetFirstHistoId(1);
+  
+  analysisManager->CreateNtuple("ntuple","micro");
+  
+  analysisManager->CreateNtupleDColumn("flagParticle");
+  analysisManager->CreateNtupleDColumn("flagProcess");
+  analysisManager->CreateNtupleDColumn("x");
+  analysisManager->CreateNtupleDColumn("y");
+  analysisManager->CreateNtupleDColumn("z");
+  analysisManager->CreateNtupleDColumn("edep");
+  analysisManager->CreateNtupleDColumn("stepLength");
+  
   factoryOn = true;
-
-  delete hf;
-  delete ntf;
-      
-  if (factoryOn) 
-     G4cout << "\n----> Histogram Tree is opened in " << fileName[1] << G4endl;
-#endif
+  
+  G4cout << "\n----> Histogram file is opened in " << fileName[1] << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HistoManager::save()
 {
-#ifdef G4ANALYSIS_USE
   if (factoryOn) {
-  
-    tree->commit();       // Writing the histograms to the file
-    tree->close();        // and closing the tree (and the file)
-    G4cout << "\n----> Histogram Tree is saved in " << fileName[1] << G4endl;
-
-    delete tree;
-    tree = 0;
+    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();    
+    analysisManager->Write();
+    analysisManager->CloseFile();
+    G4cout << "\n----> Histograms are saved in " << fileName[1] << G4endl;
+      
+    delete G4AnalysisManager::Instance();
     factoryOn = false;
-  }
-#endif
+  }         
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void HistoManager::FillNtuple(G4int nt, G4int column, G4double value)
+void HistoManager::FillNtupleIColumn(G4int icol, G4int ival)
 {
-  if (nt >= MaxNtupl) {
-    G4cout << "---> warning from HistoManager::FillNtuple() : Ntuple " << nt
-           << " does not exist " << column << value << G4endl;
-    return;
-  }
-#ifdef G4ANALYSIS_USE
-  if(nt==0) ntupl0->fill(column, value);
-#endif
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->FillNtupleIColumn(icol,ival);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void HistoManager::AddRowNtuple(G4int nt)
+void HistoManager::FillNtupleFColumn(G4int icol, G4float fval)
 {
-  if (nt >= MaxNtupl) {
-    G4cout << "---> warning from HistoManager::AddRowNtuple() : Ntuple " << nt
-           << " do not exist" << G4endl;
-    return;
-  }
-#ifdef G4ANALYSIS_USE
-  if(nt==0) ntupl0->addRow();
-#endif
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->FillNtupleFColumn(icol,fval);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void HistoManager::FillNtupleDColumn(G4int icol, G4double dval)
+{
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->FillNtupleDColumn(icol,dval);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void HistoManager::AddNtupleRow()
+{
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->AddNtupleRow();
+}

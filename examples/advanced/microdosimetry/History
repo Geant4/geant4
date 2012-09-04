@@ -10,6 +10,12 @@ $Id: History,v 1.24 2010-11-18 11:48:21 allison Exp $
                        --------------------
 
 
+16 Aug 2012 - S. Incerti - microdosimetry-V09-05-01
+- Switched to new analysis interface
+
+10 Aug 2012 - S. Incerti - microdosimetry-V09-05-00
+- Removed export=root option in HistoManager
+
 23 July 2012 - M. Karamitros -  microdosimetry-V09-04-07
 - Added TrackingAction (count N secondaries created in/outside
   "target" region) + Modified related classes (RunAct and main)
