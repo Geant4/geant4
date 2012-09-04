@@ -13,6 +13,11 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+13-Aug-2012 A.Ribon                         (hadr-chips-frag-V09-05-05)
+-----------------------------------------------------------------------
+Fixed compilation error in G4QFragmentation.cc when the constructor of
+the Lorentz vector is made explicit.
+
 14-Jun-2012 A.Ribon                         (hadr-chips-frag-V09-05-04)
 -----------------------------------------------------------------------
 Re-tagged for testing. No changes w.r.t. previous tag.
