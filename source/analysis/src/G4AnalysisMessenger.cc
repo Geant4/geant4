@@ -40,7 +40,6 @@
 #include "G4UIparameter.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
-#include "G4UnitsTable.hh"
 
 #include <iostream>
 
@@ -56,7 +55,10 @@ G4AnalysisMessenger::G4AnalysisMessenger(G4VAnalysisManager* manager)
     fH1Dir(0),  
     fCreateH1Cmd(0),
     fSetH1Cmd(0),
-    fSetH1Ascii(0) 
+    fSetH1AsciiCmd(0), 
+    fSetH1TitleCmd(0), 
+    fSetH1XAxisCmd(0), 
+    fSetH1YAxisCmd(0) 
 {  
   fAnalysisDir = new G4UIdirectory("/analysis/");
   fAnalysisDir->SetGuidance("analysis control");
@@ -84,6 +86,44 @@ G4AnalysisMessenger::G4AnalysisMessenger(G4VAnalysisManager* manager)
   fH1Dir = new G4UIdirectory("/analysis/h1/");
   fH1Dir->SetGuidance("1D histograms control");
 
+  CreateH1Cmd();
+  SetH1Cmd();
+  
+  fSetH1AsciiCmd = new G4UIcmdWithAnInteger("/analysis/h1/setAscii",this);
+  fSetH1AsciiCmd->SetGuidance("Print 1D histogram of #Id on ascii file.");
+  fSetH1AsciiCmd->SetParameterName("Id",false);
+  fSetH1AsciiCmd->SetRange("Id>=0");
+  fSetH1AsciiCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+  
+  SetH1TitleCmd();
+  SetH1XAxisCmd();
+  SetH1YAxisCmd();
+}
+
+//_____________________________________________________________________________
+G4AnalysisMessenger::~G4AnalysisMessenger()
+{
+  delete fSetFileNameCmd;
+  delete fSetHistoDirNameCmd;
+  delete fSetNtupleDirNameCmd;
+  delete fVerboseCmd;
+  delete fCreateH1Cmd;
+  delete fSetH1Cmd;
+  delete fSetH1AsciiCmd;  
+  delete fSetH1TitleCmd;  
+  delete fSetH1XAxisCmd;  
+  delete fSetH1YAxisCmd;  
+  delete fH1Dir;
+  delete fAnalysisDir;
+}
+
+//
+// private functions
+//
+
+//_____________________________________________________________________________
+void G4AnalysisMessenger::CreateH1Cmd()
+{
   G4UIparameter* h1Name = new G4UIparameter("name", 's', false);
   h1Name->SetGuidance("Histogram name (label)");
   
@@ -109,6 +149,14 @@ G4AnalysisMessenger::G4AnalysisMessenger(G4VAnalysisManager* manager)
   h1ValUnit0->SetGuidance("The unit of valMin0 and valMax0");
   h1ValUnit0->SetDefaultValue("none");
   
+  G4UIparameter* h1ValFcn0 = new G4UIparameter("valFcn0", 's', true);
+  G4String fcnGuidance = "The function applied to filled values (log, log10, exp).\n";
+  fcnGuidance += "Note that the unit parameter cannot be omitted in this case,\n";
+  fcnGuidance += "but none value should be used insted.";
+  h1ValFcn0->SetGuidance(fcnGuidance);
+  h1ValFcn0->SetParameterCandidates("log log10 exp");
+  h1ValFcn0->SetDefaultValue("none");
+  
   fCreateH1Cmd = new G4UIcommand("/analysis/h1/create", this);
   fCreateH1Cmd->SetGuidance("Create 1D histogram");
   fCreateH1Cmd->SetParameter(h1Name);
@@ -117,8 +165,14 @@ G4AnalysisMessenger::G4AnalysisMessenger(G4VAnalysisManager* manager)
   fCreateH1Cmd->SetParameter(h1ValMin0);
   fCreateH1Cmd->SetParameter(h1ValMax0);
   fCreateH1Cmd->SetParameter(h1ValUnit0);
+  fCreateH1Cmd->SetParameter(h1ValFcn0);
   fCreateH1Cmd->AvailableForStates(G4State_PreInit, G4State_Idle);
-  
+}  
+
+
+//_____________________________________________________________________________
+void G4AnalysisMessenger::SetH1Cmd()
+{
   G4UIparameter* h1Id = new G4UIparameter("id", 'i', false);
   h1Id->SetGuidance("Histogram id");
   h1Id->SetParameterRange("id>=0");
@@ -136,6 +190,14 @@ G4AnalysisMessenger::G4AnalysisMessenger(G4VAnalysisManager* manager)
   h1ValUnit->SetGuidance("The unit of valMin and valMax");
   h1ValUnit->SetDefaultValue("none");
  
+  G4UIparameter* h1ValFcn = new G4UIparameter("valFcn", 's', true);
+  h1ValFcn->SetParameterCandidates("log log10 exp");
+  G4String fcnGuidance = "The function applied to filled values (log, log10, exp).\n";
+  fcnGuidance += "Note that the unit parameter cannot be omitted in this case,\n";
+  fcnGuidance += "but none value should be used insted.";
+  h1ValFcn->SetGuidance(fcnGuidance);
+  h1ValFcn->SetDefaultValue("none");
+ 
   fSetH1Cmd = new G4UIcommand("/analysis/h1/set", this);
   fSetH1Cmd->SetGuidance("Set parameters for the 1D histogram of #Id :");
   fSetH1Cmd->SetGuidance("  nbins; valMin; valMax; unit (of vmin and vmax)");
@@ -144,28 +206,63 @@ G4AnalysisMessenger::G4AnalysisMessenger(G4VAnalysisManager* manager)
   fSetH1Cmd->SetParameter(h1ValMin);
   fSetH1Cmd->SetParameter(h1ValMax);
   fSetH1Cmd->SetParameter(h1ValUnit);
+  fSetH1Cmd->SetParameter(h1ValFcn);
   fSetH1Cmd->AvailableForStates(G4State_PreInit, G4State_Idle);
-
-  fSetH1Ascii = new G4UIcmdWithAnInteger("/analysis/h1/setAscii",this);
-  fSetH1Ascii->SetGuidance("Print 1D histogram of #Id on ascii file.");
-  fSetH1Ascii->SetParameterName("Id",false);
-  fSetH1Ascii->SetRange("Id>=0");
-  fSetH1Ascii->AvailableForStates(G4State_PreInit, G4State_Idle);
-}
+}  
 
 //_____________________________________________________________________________
-G4AnalysisMessenger::~G4AnalysisMessenger()
+void G4AnalysisMessenger::SetH1TitleCmd()
 {
-  delete fSetFileNameCmd;
-  delete fSetHistoDirNameCmd;
-  delete fSetNtupleDirNameCmd;
-  delete fVerboseCmd;
-  delete fCreateH1Cmd;
-  delete fSetH1Cmd;
-  delete fSetH1Ascii;  
-  delete fH1Dir;
-  delete fAnalysisDir;
-}
+  G4UIparameter* h1Id = new G4UIparameter("idTitle", 'i', false);
+  h1Id->SetGuidance("Histogram id");
+  h1Id->SetParameterRange("idTitle>=0");
+
+  G4UIparameter* h1Title = new G4UIparameter("h1Title", 's', true);
+  h1Title->SetGuidance("Histogram title");
+  h1Title->SetDefaultValue("none");
+
+  fSetH1TitleCmd = new G4UIcommand("/analysis/h1/setTitle", this);
+  fSetH1TitleCmd->SetGuidance("Set title for the 1D histogram of #Id");
+  fSetH1TitleCmd->SetParameter(h1Id);
+  fSetH1TitleCmd->SetParameter(h1Title);
+  fSetH1TitleCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+}  
+
+//_____________________________________________________________________________
+void G4AnalysisMessenger::SetH1XAxisCmd()
+{
+  G4UIparameter* h1Id = new G4UIparameter("idXaxis", 'i', false);
+  h1Id->SetGuidance("Histogram id");
+  h1Id->SetParameterRange("idXaxis>=0");
+
+  G4UIparameter* h1XAxis = new G4UIparameter("h1Xaxis", 's', true);
+  h1XAxis->SetGuidance("Histogram x-axis title");
+  h1XAxis->SetDefaultValue("none");
+
+  fSetH1XAxisCmd = new G4UIcommand("/analysis/h1/setXaxis", this);
+  fSetH1XAxisCmd->SetGuidance("Set x-axis title for the 1D histogram of #Id");
+  fSetH1XAxisCmd->SetParameter(h1Id);
+  fSetH1XAxisCmd->SetParameter(h1XAxis);
+  fSetH1XAxisCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+}  
+
+//_____________________________________________________________________________
+void G4AnalysisMessenger::SetH1YAxisCmd()
+{
+  G4UIparameter* h1Id = new G4UIparameter("idYaxis", 'i', false);
+  h1Id->SetGuidance("Histogram id");
+  h1Id->SetParameterRange("idYaxis>=0");
+
+  G4UIparameter* h1YAxis = new G4UIparameter("h1Yaxis", 's', true);
+  h1YAxis->SetGuidance("Histogram y-axis title");
+  h1YAxis->SetDefaultValue("none");
+
+  fSetH1YAxisCmd = new G4UIcommand("/analysis/h1/setYaxis", this);
+  fSetH1YAxisCmd->SetGuidance("Set y-axis title for the 1D histogram of #Id");
+  fSetH1YAxisCmd->SetParameter(h1Id);
+  fSetH1YAxisCmd->SetParameter(h1YAxis);
+  fSetH1YAxisCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+}  
 
 //_____________________________________________________________________________
 void G4AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
@@ -188,29 +285,47 @@ void G4AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
     G4int nbins; 
     G4double vmin,vmax; 
     G4String sunit;
+    G4String sfcn;
     std::istringstream is(newValues.data());
-    is >> name >> title >> nbins >> vmin >> vmax >> sunit;
-
-    G4double unit = 1.;
-    if ( sunit != "none" ) {
-      unit = G4UnitDefinition::GetValueOf(sunit);
-    }  
-    fManager->CreateH1(name, title, nbins, vmin, vmax, unit);     
+    is >> name >> title >> nbins >> vmin >> vmax >> sunit >> sfcn;
+    fManager->CreateH1(name, title, nbins, vmin, vmax, sunit, sfcn);     
   }
   else if ( command == fSetH1Cmd ) {
     G4int id; 
     G4int nbins; 
     G4double vmin, vmax; 
     G4String sunit;
+    G4String sfcn;
     std::istringstream is(newValues.data());
-    is >> id >> nbins >> vmin >> vmax >> sunit;
-    G4double unit = 1.;
-    if ( sunit != "none" ) unit = G4UnitDefinition::GetValueOf(sunit);
-    if ( unit == 0. ) unit = 1.;  
-    fManager->SetH1(id, nbins, vmin, vmax, unit);     
+    is >> id >> nbins >> vmin >> vmax >> sunit >> sfcn;
+    fManager->SetH1(id, nbins, vmin, vmax, sunit, sfcn);     
   }
-  else if ( command == fSetH1Ascii ) {
-    G4int id = fSetH1Ascii->GetNewIntValue(newValues);
+  else if ( command == fSetH1AsciiCmd ) {
+    G4int id = fSetH1AsciiCmd->GetNewIntValue(newValues);
     fManager->SetAscii(G4VAnalysisManager::kH1, id, true); 
   }      
+  else if ( command == fSetH1TitleCmd ) {
+    G4int id; 
+    G4String title;
+    std::istringstream is(newValues.data());
+    is >> id;
+    getline(is, title);
+    fManager->SetH1Title(id, title);     
+  }
+  else if ( command == fSetH1XAxisCmd ) {
+    G4int id; 
+    G4String xaxis;
+    std::istringstream is(newValues.data());
+    is >> id;
+    getline(is, xaxis);
+    fManager->SetH1XAxisTitle(id, xaxis);     
+  }
+  else if ( command == fSetH1YAxisCmd ) {
+    G4int id; 
+    G4String yaxis;
+    std::istringstream is(newValues.data());
+    is >> id;
+    getline(is, yaxis);
+    fManager->SetH1YAxisTitle(id, yaxis);     
+  }
 }  

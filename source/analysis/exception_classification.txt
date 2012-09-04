@@ -23,3 +23,8 @@ Analysis_W011: The histogram ID has to be redefined in the output as
                its generic value is not allowed in given output type
 Analysis_W012: The ntuple ID has to be redefined in the output as
                its generic value is not allowed in given output type
+
+Analysis_W013: Cannot apply histogram/ntuple attribute due to its
+               wrong definition
+Analysis_W013: Wrong histogram/ntuple attribute value
+              

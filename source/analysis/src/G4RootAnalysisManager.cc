@@ -279,6 +279,16 @@ G4bool G4RootAnalysisManager::Reset()
   return finalResult;
 }  
  
+//_____________________________________________________________________________
+void G4RootAnalysisManager::UpdateTitle(G4String& title, 
+                                        const G4String& unitName, 
+                                        const G4String& fcnName) const
+{
+  if ( fcnName != "none" )  { title += " "; title += fcnName; title += "("; }
+  if ( unitName != "none" ) { title += " ["; title += unitName; title += "]";}
+  if ( fcnName != "none" )  { title += ")"; }
+}  
+                                                          
 //
 // protected methods
 //
@@ -317,7 +327,56 @@ G4bool G4RootAnalysisManager::WriteOnAscii(std::ofstream& output)
   return true;
 }  
 
+//_____________________________________________________________________________
+tools::histo::h1d*  G4RootAnalysisManager::GetH1InFunction(G4int id, 
+                                      G4String functionName, G4bool warn,
+                                      G4bool onlyIfActive) const
+{
+  G4int index = id - fFirstHistoId;
+  if ( index < 0 || index >= G4int(fH1Vector.size()) ) {
+    if ( warn) {
+      G4String inFunction = "G4RootAnalysisManager::";
+      inFunction += functionName;
+      G4ExceptionDescription description;
+      description << "      " << "histogram " << id << " does not exist.";
+      G4Exception(inFunction, "Analysis_W007", JustWarning, description);
+    }
+    return 0;         
+  }
+  
+  // Do not return histogram if inactive 
+  if ( fActivation && onlyIfActive && ( ! GetActivation(kH1, id) ) ) {
+    return 0; 
+  }  
+  
+  return fH1Vector[index];
+}  
+                                      
+//_____________________________________________________________________________
+tools::histo::h2d*  G4RootAnalysisManager::GetH2InFunction(G4int id, 
+                                      G4String functionName, G4bool warn,
+                                      G4bool onlyIfActive) const
+{                                      
+  G4int index = id - fFirstHistoId;
+  if ( index < 0 || index >= G4int(fH2Vector.size()) ) {
+    if ( warn) {
+      G4String inFunction = "G4RootAnalysisManager::";
+      inFunction += functionName;
+      G4ExceptionDescription description;
+      description << "      " << "histogram " << id << " does not exist.";
+      G4Exception(inFunction, "Analysis_W007", JustWarning, description);
+    }
+    return 0;         
+  }
 
+  // Do not return histogram if inactive 
+  if ( fActivation  && onlyIfActive && ( ! GetActivation(kH2, id) ) ) {
+    return 0; 
+  }  
+  
+  return fH2Vector[index];
+}
+  
 // 
 // public methods
 //
@@ -390,7 +449,7 @@ G4bool G4RootAnalysisManager::Write()
       = to(*fHistoDirectory,*h1,info->fName);
     if ( ! result ) {
       G4ExceptionDescription description;
-      description << "      " << "saving histo " << info->fName << " failed";
+      description << "      " << "saving histogram " << info->fName << " failed";
       G4Exception("G4RootAnalysisManager::Write()",
                 "Analysis_W003", JustWarning, description);
       return false;       
@@ -412,7 +471,7 @@ G4bool G4RootAnalysisManager::Write()
       = to(*fHistoDirectory,*h2,info->fName);
     if ( ! result ) {
       G4ExceptionDescription description;
-      description << "      " << "saving histo " << info->fName << " failed";
+      description << "      " << "saving histogram " << info->fName << " failed";
       G4Exception("G4RootAnalysisManager::Write()",
                 "Analysis_W003", JustWarning, description);
       return false;       
@@ -476,18 +535,26 @@ G4bool G4RootAnalysisManager::CloseFile()
 //_____________________________________________________________________________
 G4int G4RootAnalysisManager::CreateH1(const G4String& name,  const G4String& title,
                                G4int nbins, G4double xmin, G4double xmax,
-                               G4double unit)
+                               const G4String& unitName, const G4String& fcnName)
 {
 #ifdef G4VERBOSE
   if ( fpVerboseL3 ) 
     fpVerboseL3->Message("create", "H1", name);
 #endif
   G4int index = fH1Vector.size();
-  tools::histo::h1d* h1 = new tools::histo::h1d(title, nbins, xmin, xmax);
+  G4double unit = GetUnitValue(unitName);
+  G4Fcn fcn = GetFunction(fcnName);
+  tools::histo::h1d* h1 
+    = new tools::histo::h1d(title, nbins, fcn(xmin), fcn(xmax));
             // h1 objects are deleted in destructor and reset when 
             // closing a file.
+
+  G4String axisTitle;
+  UpdateTitle(axisTitle,unitName, fcnName);        
+  h1->add_annotation(tools::histo::key_axis_x_title(), axisTitle);
+
   fH1Vector.push_back(h1);
-  AddH1Information(name, unit);
+  AddH1Information(name, unitName, fcnName, unit, fcn);
   
   fLockFirstHistoId = true;
 #ifdef G4VERBOSE
@@ -501,7 +568,8 @@ G4int G4RootAnalysisManager::CreateH1(const G4String& name,  const G4String& tit
 G4int G4RootAnalysisManager::CreateH2(const G4String& name,  const G4String& title,
                                G4int nxbins, G4double xmin, G4double xmax,
                                G4int nybins, G4double ymin, G4double ymax,
-                               G4double xunit, G4double yunit)
+                               const G4String& xunitName, const G4String& yunitName,
+                               const G4String& xfcnName, const G4String& yfcnName)
                                
 {
 #ifdef G4VERBOSE
@@ -509,12 +577,27 @@ G4int G4RootAnalysisManager::CreateH2(const G4String& name,  const G4String& tit
     fpVerboseL3->Message("create", "H2", name);
 #endif
   G4int index = fH2Vector.size();
+  G4double xunit = GetUnitValue(xunitName);
+  G4double yunit = GetUnitValue(yunitName);
+  G4Fcn xfcn = GetFunction(xfcnName);
+  G4Fcn yfcn = GetFunction(yfcnName);
   tools::histo::h2d* h2 
-    = new tools::histo::h2d(title, nxbins, xmin, xmax, nybins, ymin, ymax);
+    = new tools::histo::h2d(title, 
+                            nxbins, xfcn(xmin), xfcn(xmax), 
+                            nybins, yfcn(ymin), yfcn(ymax));
             // h2 objects are deleted in destructor and reset when 
             // closing a file.
+
+  G4String xaxisTitle;
+  G4String yaxisTitle;
+  UpdateTitle(xaxisTitle, xunitName, xfcnName);        
+  UpdateTitle(yaxisTitle, yunitName, yfcnName);        
+  h2->add_annotation(tools::histo::key_axis_x_title(), xaxisTitle);
+  h2->add_annotation(tools::histo::key_axis_y_title(), yaxisTitle);
+             
   fH2Vector.push_back(h2);
-  AddH2Information(name, xunit, yunit);
+  AddH2Information(name, xunitName, yunitName, xfcnName, yfcnName, 
+                   xunit, yunit, xfcn, yfcn);
   
   fLockFirstHistoId = true;
 #ifdef G4VERBOSE
@@ -527,17 +610,10 @@ G4int G4RootAnalysisManager::CreateH2(const G4String& name,  const G4String& tit
 //_____________________________________________________________________________
 G4bool G4RootAnalysisManager::SetH1(G4int id,
                                 G4int nbins, G4double xmin, G4double xmax,
-                                G4double unit)
+                                const G4String& unitName, const G4String& fcnName)
 {                                
-
-  tools::histo::h1d* h1d = GetH1(id, false, false);
-  if ( ! h1d ) {
-    G4ExceptionDescription description;
-    description << "      " << "histogram " << id << " does not exist.";
-    G4Exception("G4RootAnalysisManager::SetH1()",
-                "Analysis_W007", JustWarning, description);
-    return false;
-  }
+  tools::histo::h1d* h1d = GetH1InFunction(id, "SetH1", false, false);
+  if ( ! h1d ) return false;
 
   G4HnInformation* info = GetH1Information(id);
 #ifdef G4VERBOSE
@@ -545,10 +621,22 @@ G4bool G4RootAnalysisManager::SetH1(G4int id,
     fpVerboseL3->Message("configure", "H1", info->fName);
 #endif
 
-  h1d->configure(nbins, xmin, xmax);
+  G4double unit = GetUnitValue(unitName);
+  G4Fcn fcn = GetFunction(fcnName);
+  h1d->configure(nbins, fcn(xmin), fcn(xmax));
+  info->fXUnitName = unitName;
+  info->fYUnitName = unitName;
+  info->fXFcnName = fcnName;
+  info->fYFcnName = fcnName;
   info->fXUnit = unit;
   info->fYUnit = unit;
-  info->fActivation = true;
+  info->fXFcn = fcn;
+  info->fYFcn = fcn;
+  SetActivation(kH1, id, true); 
+
+  G4String axisTitle;
+  UpdateTitle(axisTitle,unitName, fcnName);        
+  h1d->add_annotation(tools::histo::key_axis_x_title(), axisTitle);
   
   return true;
 }
@@ -557,16 +645,11 @@ G4bool G4RootAnalysisManager::SetH1(G4int id,
 G4bool G4RootAnalysisManager::SetH2(G4int id,
                                 G4int nxbins, G4double xmin, G4double xmax, 
                                 G4int nybins, G4double ymin, G4double ymax,
-                                G4double xunit, G4double yunit) 
+                                const G4String& xunitName, const G4String& yunitName,
+                                const G4String& xfcnName, const G4String& yfcnName)
 {                                
-  tools::histo::h2d* h2d = GetH2(id, false, false);
-  if ( ! h2d ) {
-    G4ExceptionDescription description;
-    description << "      " << "histogram " << id << " does not exist.";
-    G4Exception("G4RootAnalysisManager::SetH2()",
-                "Analysis_W007", JustWarning, description);
-    return false;
-  }
+  tools::histo::h2d* h2d = GetH2InFunction(id, "SetH2", false, false);
+  if ( ! h2d ) return false;
 
   G4HnInformation* info = GetH2Information(id);
 #ifdef G4VERBOSE
@@ -574,14 +657,51 @@ G4bool G4RootAnalysisManager::SetH2(G4int id,
     fpVerboseL3->Message("configure", "H2", info->fName);
 #endif
 
-  h2d->configure(nxbins, xmin, xmax, nybins, ymin, ymax);
+  G4double xunit = GetUnitValue(xunitName);
+  G4double yunit = GetUnitValue(yunitName);
+  G4Fcn xfcn = GetFunction(xfcnName);
+  G4Fcn yfcn = GetFunction(yfcnName);
+  h2d->configure(nxbins, xfcn(xmin), xfcn(xmax), 
+                 nybins, yfcn(ymin), yfcn(ymax));
+
+  info->fXUnitName = xunitName;
+  info->fYUnitName = yunitName;
+  info->fXFcnName = xfcnName;
+  info->fYFcnName = yfcnName;
   info->fXUnit = xunit;
   info->fYUnit = yunit;
-  info->fActivation = true;
+  info->fXFcn = xfcn;
+  info->fYFcn = yfcn;
+  SetActivation(kH2, id, true); 
   
+  G4String xaxisTitle;
+  G4String yaxisTitle;
+  UpdateTitle(xaxisTitle, xunitName, xfcnName);        
+  UpdateTitle(yaxisTitle, yunitName, yfcnName);        
+  h2d->add_annotation(tools::histo::key_axis_x_title(), xaxisTitle);
+  h2d->add_annotation(tools::histo::key_axis_y_title(), yaxisTitle);
+
   return true;
 }
                                   
+//_____________________________________________________________________________
+G4bool G4RootAnalysisManager::ScaleH1(G4int id, G4double factor)
+{
+  tools::histo::h1d* h1d = GetH1InFunction(id, "ScaleH1", false, false);
+  if ( ! h1d ) return false;
+
+  return h1d->scale(factor);
+}  
+
+//_____________________________________________________________________________
+G4bool G4RootAnalysisManager::ScaleH2(G4int id, G4double factor)
+{
+  tools::histo::h2d* h2d = GetH2InFunction(id, "ScaleH2", false, false);
+  if ( ! h2d ) return false;
+
+  return h2d->scale(factor);
+}  
+                           
 //_____________________________________________________________________________
 void G4RootAnalysisManager::CreateNtuple(const G4String& name, 
                                          const G4String& title)
@@ -748,21 +868,16 @@ void G4RootAnalysisManager::FinishNtuple()
 //_____________________________________________________________________________
 G4bool G4RootAnalysisManager::FillH1(G4int id, G4double value, G4double weight)
 {
-  tools::histo::h1d* h1d = GetH1(id);
-  if ( ! h1d ) {
-    G4ExceptionDescription description;
-    description << "      " << "histogram " << id << " does not exist.";
-    G4Exception("G4RootAnalysisManager::FillH1()",
-                "Analysis_W007", JustWarning, description);
-    return false;
-  }
+  tools::histo::h1d* h1d = GetH1InFunction(id, "FillH1", true, false);
+  if ( ! h1d ) return false;
 
   if ( fActivation && ( ! GetActivation(kH1, id) ) ) {
     //G4cout << "Skipping FillH1 for " << id << G4endl; 
     return false; 
   }  
 
-  h1d->fill(value/GetXUnit(kH1, id), weight);
+  G4HnInformation* info = GetInformation(kH1, id);
+  h1d->fill(info->fXFcn(value/info->fXUnit), weight);
 #ifdef G4VERBOSE
   if ( fpVerboseL3 ) {
     G4ExceptionDescription description;
@@ -778,18 +893,14 @@ G4bool G4RootAnalysisManager::FillH2(G4int id,
                                      G4double xvalue, G4double yvalue, 
                                      G4double weight)
 {
-  tools::histo::h2d* h2d = GetH2(id);
-  if ( ! h2d ) {
-    G4ExceptionDescription description;
-    description << "      " << "histogram " << id << " does not exist.";
-    G4Exception("G4RootAnalysisManager::FillH2()",
-                "Analysis_W007", JustWarning, description);
-    return false;
-  }
+  tools::histo::h2d* h2d = GetH2InFunction(id, "FillH2", true, false);
+  if ( ! h2d ) return false;
 
   if ( fActivation && ( ! GetActivation(kH2, id) ) ) return false; 
 
-  h2d->fill(xvalue/GetXUnit(kH2, id), yvalue/GetYUnit(kH2, id), weight);
+  G4HnInformation* info = GetInformation(kH2, id);
+  h2d->fill(info->fXFcn(xvalue/info->fXUnit), 
+            info->fYFcn(yvalue/info->fYUnit), weight);
 #ifdef G4VERBOSE
   if ( fpVerboseL3 ) {
     G4ExceptionDescription description;
@@ -903,50 +1014,353 @@ G4bool G4RootAnalysisManager::AddNtupleRow()
 tools::histo::h1d*  G4RootAnalysisManager::GetH1(G4int id, G4bool warn,
                                                  G4bool onlyIfActive) const 
 {
-  G4int index = id - fFirstHistoId;
-  if ( index < 0 || index >= G4int(fH1Vector.size()) ) {
-    if ( warn) {
-      G4ExceptionDescription description;
-      description << "      " << "histo " << id << " does not exist.";
-      G4Exception("G4RootAnalysisManager::GetH1()",
-                  "Analysis_W007", JustWarning, description);
-    }
-    return 0;         
-  }
-  
-  // Do not return histogram if inactive 
-  if ( fActivation && onlyIfActive && ( ! GetActivation(kH1, id) ) ) {
-    return 0; 
-  }  
-  
-  return fH1Vector[index];
+  return GetH1InFunction(id, "GetH1", warn, onlyIfActive);
 }
 
 //_____________________________________________________________________________
 tools::histo::h2d*  G4RootAnalysisManager::GetH2(G4int id, G4bool warn,
                                                  G4bool onlyIfActive) const 
 {
-  G4int index = id - fFirstHistoId;
-  if ( index < 0 || index >= G4int(fH2Vector.size()) ) {
-    if ( warn) {
-      G4ExceptionDescription description;
-      description << "      " << "histo " << id << " does not exist.";
-      G4Exception("G4RootAnalysisManager::GetH2()",
-                  "Analysis_W007", JustWarning, description);
-    }
-    return 0;         
-  }
-
-  // Do not return histogram if inactive 
-  if ( fActivation  && onlyIfActive && ( ! GetActivation(kH2, id) ) ) {
-    return 0; 
-  }  
-  
-  return fH2Vector[index];
+  return GetH2InFunction(id, "GetH2", warn, onlyIfActive);
 }
 
 //_____________________________________________________________________________
 tools::wroot::ntuple* G4RootAnalysisManager::GetNtuple() const
 {
   return fNtuple;
+}  
+
+//_____________________________________________________________________________
+G4int G4RootAnalysisManager::GetH1Nbins(G4int id) const
+{
+  tools::histo::h1d* h1d = GetH1InFunction(id, "GetH1Nbins");
+  if ( ! h1d ) return 0;
+  
+  return h1d->axis().bins();
+}  
+
+//_____________________________________________________________________________
+G4double G4RootAnalysisManager::GetH1Xmin(G4int id) const
+{
+// Returns xmin value with applied unit and histogram function
+
+  tools::histo::h1d* h1d = GetH1InFunction(id, "GetH1Xmin");
+  if ( ! h1d ) return 0;
+  
+  G4HnInformation* info = GetInformation(kH1, id);
+  return info->fXFcn(h1d->axis().lower_edge()*info->fXUnit);
+}  
+
+//_____________________________________________________________________________
+G4double G4RootAnalysisManager::GetH1Xmax(G4int id) const
+{
+  tools::histo::h1d* h1d = GetH1InFunction(id, "GetH1Xmax");
+  if ( ! h1d ) return 0;
+  
+  G4HnInformation* info = GetInformation(kH1, id);
+  return info->fXFcn(h1d->axis().upper_edge()*info->fXUnit);
+}  
+
+//_____________________________________________________________________________
+G4double G4RootAnalysisManager::GetH1Width(G4int id) const
+{
+  tools::histo::h1d* h1d = GetH1InFunction(id, "GetH1XWidth");
+  if ( ! h1d ) return 0;
+  
+  G4int nbins = h1d->axis().bins();
+  if ( ! nbins ) {
+    G4ExceptionDescription description;
+    description << "    nbins = 0 (for h1 id = " << id << ").";
+    G4Exception("G4RootAnalysisManager::GetH1Width",
+                "Analysis_W014", JustWarning, description);
+    return 0;
+  }              
+  
+  G4HnInformation* info = GetInformation(kH1, id);
+  return ( info->fXFcn(h1d->axis().upper_edge()) 
+           - info->fXFcn(h1d->axis().lower_edge()))*info->fXUnit/nbins;
+}  
+
+//_____________________________________________________________________________
+G4int G4RootAnalysisManager::GetH2Nxbins(G4int id) const
+{
+  tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2NXbins");
+  if ( ! h2d ) return 0;
+  
+  return h2d->axis_x().bins();
+}  
+
+//_____________________________________________________________________________
+G4double G4RootAnalysisManager::GetH2Xmin(G4int id) const
+{
+// Returns xmin value with applied unit and histogram function
+
+  tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2Xmin");
+  if ( ! h2d ) return 0;
+  
+  G4HnInformation* info = GetInformation(kH2, id);
+  return info->fXFcn(h2d->axis_x().lower_edge()*info->fXUnit);
+}  
+
+//_____________________________________________________________________________
+G4double G4RootAnalysisManager::GetH2Xmax(G4int id) const
+{
+  tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2Xmax");
+  if ( ! h2d ) return 0;
+  
+  G4HnInformation* info = GetInformation(kH2, id);
+  return info->fXFcn(h2d->axis_x().upper_edge()*info->fXUnit);
+}  
+
+//_____________________________________________________________________________
+G4double G4RootAnalysisManager::GetH2XWidth(G4int id) const
+{
+  tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2XWidth");
+  if ( ! h2d ) return 0;
+  
+  G4int nbins = h2d->axis_x().bins();
+  if ( ! nbins ) {
+    G4ExceptionDescription description;
+    description << "    nbins = 0 (for h1 id = " << id << ").";
+    G4Exception("G4RootAnalysisManager::GetH2Width",
+                "Analysis_W014", JustWarning, description);
+    return 0;
+  }              
+  
+  G4HnInformation* info = GetInformation(kH2, id);
+  return ( info->fXFcn(h2d->axis_x().upper_edge()) 
+           - info->fXFcn(h2d->axis_x().lower_edge()))*info->fXUnit/nbins;
+}  
+
+//_____________________________________________________________________________
+G4int G4RootAnalysisManager::GetH2Nybins(G4int id) const
+{
+  tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2NYbins");
+  if ( ! h2d ) return 0;
+  
+  return h2d->axis_y().bins();
+}  
+
+//_____________________________________________________________________________
+G4double G4RootAnalysisManager::GetH2Ymin(G4int id) const
+{
+// Returns xmin value with applied unit and histogram function
+
+  tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2Ymin");
+  if ( ! h2d ) return 0;
+  
+  G4HnInformation* info = GetInformation(kH2, id);
+  return info->fYFcn(h2d->axis_y().lower_edge()*info->fYUnit);
+}  
+
+//_____________________________________________________________________________
+G4double G4RootAnalysisManager::GetH2Ymax(G4int id) const
+{
+  tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2Ymax");
+  if ( ! h2d ) return 0;
+  
+  G4HnInformation* info = GetInformation(kH2, id);
+  return info->fYFcn(h2d->axis_y().upper_edge()*info->fYUnit);
+}  
+
+//_____________________________________________________________________________
+G4double G4RootAnalysisManager::GetH2YWidth(G4int id) const
+{
+  tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2YWidth");
+  if ( ! h2d ) return 0;
+  
+  G4int nbins = h2d->axis_y().bins();
+  if ( ! nbins ) {
+    G4ExceptionDescription description;
+    description << "    nbins = 0 (for h1 id = " << id << ").";
+    G4Exception("G4RootAnalysisManager::GetH2Width",
+                "Analysis_W014", JustWarning, description);
+    return 0;
+  }              
+  
+  G4HnInformation* info = GetInformation(kH2, id);
+  return ( info->fYFcn(h2d->axis_y().upper_edge()) 
+           - info->fYFcn(h2d->axis_y().lower_edge()))*info->fYUnit/nbins;
+}  
+
+//_____________________________________________________________________________
+G4bool G4RootAnalysisManager::SetH1Title(G4int id, const G4String& title)
+{
+  tools::histo::h1d* h1d = GetH1InFunction(id, "SetH1Title");
+  if ( ! h1d ) return false;
+  
+  return h1d->set_title(title);
+}  
+
+//_____________________________________________________________________________
+G4bool G4RootAnalysisManager::SetH1XAxisTitle(G4int id, const G4String& title)
+{
+  tools::histo::h1d* h1d = GetH1InFunction(id, "SetH1XAxisTitle");
+  if ( ! h1d ) return false;
+  
+  h1d->add_annotation(tools::histo::key_axis_x_title(), title);
+  return true;
+}  
+
+//_____________________________________________________________________________
+G4bool G4RootAnalysisManager::SetH1YAxisTitle(G4int id, const G4String& title)
+{
+  tools::histo::h1d* h1d = GetH1InFunction(id, "SetH1YAxisTitle");
+  if ( ! h1d ) return false;
+  
+  h1d->add_annotation(tools::histo::key_axis_y_title(), title);
+  return true;
+}  
+
+//_____________________________________________________________________________
+G4bool G4RootAnalysisManager::SetH2Title(G4int id, const G4String& title)
+{
+  tools::histo::h2d* h2d = GetH2InFunction(id, "SetH2Title");
+  if ( ! h2d ) return false;
+  
+  return h2d->set_title(title);
+}  
+
+//_____________________________________________________________________________
+G4bool G4RootAnalysisManager::SetH2XAxisTitle(G4int id, const G4String& title)
+{
+  tools::histo::h2d* h2d = GetH2InFunction(id, "SetH2XAxisTitle");
+  if ( ! h2d ) return false;
+  
+  h2d->add_annotation(tools::histo::key_axis_x_title(), title);
+  return true;
+}  
+
+//_____________________________________________________________________________
+G4bool G4RootAnalysisManager::SetH2YAxisTitle(G4int id, const G4String& title)
+{
+  tools::histo::h2d* h2d = GetH2InFunction(id, "SetH2YAxisTitle");
+  if ( ! h2d ) return false;
+  
+  h2d->add_annotation(tools::histo::key_axis_x_title(), title);
+  return true;  
+}  
+
+//_____________________________________________________________________________
+G4bool G4RootAnalysisManager::SetH2ZAxisTitle(G4int id, const G4String& title)
+{
+  tools::histo::h2d* h2d = GetH2InFunction(id, "SetH2ZAxisTitle");
+  if ( ! h2d ) return false;
+  
+  h2d->add_annotation(tools::histo::key_axis_z_title(), title);
+  return true;  
+}  
+
+//_____________________________________________________________________________
+G4String G4RootAnalysisManager::GetH1Title(G4int id) const
+{
+  tools::histo::h1d* h1d = GetH1InFunction(id, "GetH1Title");
+  if ( ! h1d ) return "";
+  
+  return h1d->title();
+}  
+
+
+//_____________________________________________________________________________
+G4String G4RootAnalysisManager::GetH1XAxisTitle(G4int id) const 
+{
+  tools::histo::h1d* h1d = GetH1InFunction(id, "GetH1XAxisTitle");
+  if ( ! h1d ) return "";
+  
+  G4String title;
+  G4bool result = h1d->annotation(tools::histo::key_axis_x_title(), title);
+  if ( ! result ) {
+    G4ExceptionDescription description;
+    description << "    Failed to get x_axis title for h1 id = " << id << ").";
+    G4Exception("G4RootAnalysisManager::GetH1XAxisTitle",
+                "Analysis_W014", JustWarning, description);
+    return "";
+  }
+  
+  return title;              
+}  
+
+//_____________________________________________________________________________
+G4String G4RootAnalysisManager::GetH1YAxisTitle(G4int id) const 
+{
+  tools::histo::h1d* h1d = GetH1InFunction(id, "GetH1YAxisTitle");
+  if ( ! h1d ) return "";
+  
+  G4String title;
+  G4bool result = h1d->annotation(tools::histo::key_axis_y_title(), title);
+  if ( ! result ) {
+    G4ExceptionDescription description;
+    description << "    Failed to get y_axis title for h1 id = " << id << ").";
+    G4Exception("G4RootAnalysisManager::GetH1YAxisTitle",
+                "Analysis_W014", JustWarning, description);
+    return "";
+  }
+  
+  return title;              
+}  
+
+//_____________________________________________________________________________
+G4String G4RootAnalysisManager::GetH2Title(G4int id) const
+{
+  tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2Title");
+  if ( ! h2d ) return "";
+  
+  return h2d->title();
+}  
+
+//_____________________________________________________________________________
+G4String G4RootAnalysisManager::GetH2XAxisTitle(G4int id) const 
+{
+  tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2XAxisTitle");
+  if ( ! h2d ) return "";
+  
+  G4String title;
+  G4bool result = h2d->annotation(tools::histo::key_axis_x_title(), title);
+  if ( ! result ) {
+    G4ExceptionDescription description;
+    description << "    Failed to get x_axis title for h2 id = " << id << ").";
+    G4Exception("G4RootAnalysisManager::GetH2XAxisTitle",
+                "Analysis_W014", JustWarning, description);
+    return "";
+  }
+  
+  return title;              
+} 
+
+//_____________________________________________________________________________
+G4String G4RootAnalysisManager::GetH2YAxisTitle(G4int id) const 
+{
+  tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2YAxisTitle");
+  if ( ! h2d ) return "";
+  
+  G4String title;
+  G4bool result = h2d->annotation(tools::histo::key_axis_y_title(), title);
+  if ( ! result ) {
+    G4ExceptionDescription description;
+    description << "    Failed to get y_axis title for h2 id = " << id << ").";
+    G4Exception("G4RootAnalysisManager::GetH2YAxisTitle",
+                "Analysis_W014", JustWarning, description);
+    return "";
+  }
+  
+  return title;              
+}  
+
+//_____________________________________________________________________________
+G4String G4RootAnalysisManager::GetH2ZAxisTitle(G4int id) const 
+{
+  tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2ZAxisTitle");
+  if ( ! h2d ) return "";
+  
+  G4String title;
+  G4bool result = h2d->annotation(tools::histo::key_axis_z_title(), title);
+  if ( ! result ) {
+    G4ExceptionDescription description;
+    description << "    Failed to get z_axis title for h2 id = " << id << ").";
+    G4Exception("G4RootAnalysisManager::GetH2ZAxisTitle",
+                "Analysis_W014", JustWarning, description);
+    return "";
+  }
+  
+  return title;              
 }  

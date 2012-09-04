@@ -17,6 +17,26 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 28, 2012 I.Hrivnacova (analysis-V09-05-10)
+- Adding SetH2Title() in all managers
+- Minor fixes
+
+August 22, 2012 I.Hrivnacova (analysis-V09-05-09)
+- Updated to g4tools 1.4.1 (by G. Barrand) - see History_tools
+- Adding setters/getters for histogram axis titles 
+  and commands for setting histogram title and axis titles
+
+August 20, 2012 I.Hrivnacova (analysis-V09-05-08)
+- Updated to g4tools 1.3.2 (by G. Barrand) - see History_tools
+- Adding a possibility to fill h1, h2 with values with automatically 
+  applied function (eg. log10, exp)
+- Pass units via a name instead of value
+- Adding getters for many h1, h2 attributes 
+- Adding ScaleH1(), ScaleH2()
+- Fixed warning in G4RootAnalysisManager when trying to fill inactivated
+  histogram
+- Adding W013, W014 in exception classification
+
 July 27, 2012 I.Hrivnacova (analysis-V09-05-07)
 - Updated to g4tools 1.3.1 (by G. Barrand) - see History_tools
 - Messages from Fill functions only in verbose level 3

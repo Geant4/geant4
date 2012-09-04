@@ -58,19 +58,30 @@ class G4CsvAnalysisManager : public G4VAnalysisManager
     // Methods for handling histogrammes, ntuples
     virtual G4int CreateH1(const G4String& name, const G4String& title,
                            G4int nbins, G4double xmin, G4double xmax,
-                           G4double unit = 1.0);
+                           const G4String& unitName = "none",
+                           const G4String& fcnName = "none");
     virtual G4int CreateH2(const G4String& name, const G4String& title,
                            G4int nxbins, G4double xmin, G4double xmax, 
                            G4int nybins, G4double ymin, G4double ymax,
-                           G4double xunit = 1.0, G4double yunit = 1.0);
+                           const G4String& xunitName = "none", 
+                           const G4String& yunitName = "none",
+                           const G4String& xfcnName = "none", 
+                           const G4String& yfcnName = "none");
                            
     virtual G4bool SetH1(G4int id,
                            G4int nbins, G4double xmin, G4double xmax,
-                           G4double unit = 1.0);
+                           const G4String& unitName = "none",
+                           const G4String& fcnName = "none");
     virtual G4bool SetH2(G4int id,
                            G4int nxbins, G4double xmin, G4double xmax, 
                            G4int nybins, G4double ymin, G4double ymax,
-                           G4double xunit = 1.0, G4double yunit = 1.0);
+                           const G4String& xunitName = "none", 
+                           const G4String& yunitName = "none",
+                           const G4String& xfcnName = "none", 
+                           const G4String& yfcnName = "none");
+ 
+    virtual G4bool ScaleH1(G4int id, G4double factor);
+    virtual G4bool ScaleH2(G4int id, G4double factor);
                            
     virtual void  CreateNtuple(const G4String& name, const G4String& title);
     virtual G4int CreateNtupleIColumn(const G4String& name);
@@ -87,6 +98,40 @@ class G4CsvAnalysisManager : public G4VAnalysisManager
     virtual G4bool FillNtupleDColumn(G4int id, G4double value);
     virtual G4bool AddNtupleRow();
     
+    // Access to H1 parameters
+    virtual G4int    GetH1Nbins(G4int id) const;
+    virtual G4double GetH1Xmin(G4int id) const;
+    virtual G4double GetH1Xmax(G4int id) const;
+    virtual G4double GetH1Width(G4int id) const;
+
+    // Access to H2 parameters
+    virtual G4int    GetH2Nxbins(G4int id) const;
+    virtual G4double GetH2Xmin(G4int id) const;
+    virtual G4double GetH2Xmax(G4int id) const;
+    virtual G4double GetH2XWidth(G4int id) const;
+    virtual G4int    GetH2Nybins(G4int id) const;
+    virtual G4double GetH2Ymin(G4int id) const;
+    virtual G4double GetH2Ymax(G4int id) const;
+    virtual G4double GetH2YWidth(G4int id) const;
+
+    // Setters for attributes for plotting
+    virtual G4bool SetH1Title(G4int id, const G4String& title);
+    virtual G4bool SetH1XAxisTitle(G4int id, const G4String& title);
+    virtual G4bool SetH1YAxisTitle(G4int id, const G4String& title);
+    virtual G4bool SetH2Title(G4int id, const G4String& title);
+    virtual G4bool SetH2XAxisTitle(G4int id, const G4String& title);
+    virtual G4bool SetH2YAxisTitle(G4int id, const G4String& title);
+    virtual G4bool SetH2ZAxisTitle(G4int id, const G4String& title);
+
+    // Access attributes for plotting
+    virtual G4String GetH1Title(G4int id) const;
+    virtual G4String GetH1XAxisTitle(G4int id) const;
+    virtual G4String GetH1YAxisTitle(G4int id) const;
+    virtual G4String GetH2Title(G4int id) const;
+    virtual G4String GetH2XAxisTitle(G4int id) const;
+    virtual G4String GetH2YAxisTitle(G4int id) const;
+    virtual G4String GetH2ZAxisTitle(G4int id) const;
+        
     // Access methods
     virtual tools::wcsv::ntuple* GetNtuple() const;
         
@@ -104,6 +149,7 @@ class G4CsvAnalysisManager : public G4VAnalysisManager
     tools::wcsv::ntuple::column<float>*  GetNtupleFColumn(G4int id) const;
     tools::wcsv::ntuple::column<double>* GetNtupleDColumn(G4int id) const;
     virtual G4bool Reset();
+    void  ExceptionForHistograms(const G4String& inFunction) const;
  
     // data members
     //

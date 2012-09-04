@@ -28,6 +28,30 @@ namespace waxml {
     }
   }
   
+  typedef std::map<std::string,std::string> annotations_t;
+
+  inline void write_annotations(
+   const annotations_t& a_annotations
+  ,std::ostream& a_writer
+  ,int aShift
+  ){
+    if(a_annotations.empty()) return;
+
+    std::string spaces;
+    for(int i=0;i<aShift;i++) spaces += " ";
+  
+    a_writer << spaces << "    <annotation>" << std::endl;
+
+    annotations_t::const_iterator it;
+    for(it=a_annotations.begin();it!=a_annotations.end();++it){
+      a_writer << spaces << "      <item"
+           << " key=" << sout((*it).first)
+           << " value=" << sout((*it).second)
+           << "/>" << std::endl;
+    }
+    a_writer << spaces << "    </annotation>" << std::endl;
+  }
+  
   inline void write_axis(
    const histo::axis<double>& aAxis
   ,const std::string& aDirection
@@ -254,6 +278,9 @@ namespace waxml {
          << " title=" << sout(aObject.title())
          << ">" << std::endl;
   
+    // <annotations> :
+    write_annotations(aObject.annotations(),writer,aShift);
+  
     // <axis> :
     write_axis(aObject.axis(),"x",writer,aShift);
   
@@ -305,6 +332,8 @@ namespace waxml {
          << " title=" << sout(aObject.title())
          << ">" << std::endl;
   
+    // <annotations> :
+    write_annotations(aObject.annotations(),writer,aShift);
   
     // <axis> :
     write_axis(aObject.axis_x(),"x",writer,aShift);
@@ -383,6 +412,9 @@ namespace waxml {
          << " title=" << sout(aObject.title())
          << ">" << std::endl;
   
+    // <annotations> :
+    write_annotations(aObject.annotations(),writer,aShift);
+
     // <axis> :
     write_axis(aObject.axis_x(),"x",writer,aShift);
     write_axis(aObject.axis_y(),"y",writer,aShift);
@@ -570,6 +602,9 @@ namespace waxml {
          << " title=" << sout(aObject.title())
          << ">" << std::endl;
   
+    // <annotations> :
+    write_annotations(aObject.annotations(),writer,aShift);
+
     // <axis> :
     write_axis(aObject.axis(),"x",writer,aShift);
   
@@ -620,6 +655,9 @@ namespace waxml {
          << " title=" << sout(aObject.title())
          << ">" << std::endl;
   
+    // <annotations> :
+    write_annotations(aObject.annotations(),writer,aShift);
+
     // <axis> :
     write_axis(aObject.axis_x(),"x",writer,aShift);
     write_axis(aObject.axis_y(),"y",writer,aShift);

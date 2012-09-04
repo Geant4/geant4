@@ -1,3 +1,20 @@
+ 1.4.1 : 21 Aug 2012 : G.Barrand :
+ - wroot/file, free_seg : handle (and save) "free segments".
+   It permits to open the file correctly when opening back
+   from CERN-ROOT with "UPDATE" mode.
+
+ 1.4.0 : 20 Aug 2012 : G.Barrand :
+ - Handle "axis title for plotting" through annotations.
+   See examples/cpp/[wroot,waxml].cpp for examples.
+ - Arrange so that "axis title for plotting" be saved in .root file
+   so that ROOT plotting handle these titles.
+ - Save annotations for the AIDA file format.
+ - NOTE : it does not seem to have an HBOOK API to save
+   per histogram "axis title for plotting" in a HBOOK file.
+
+ 1.3.2 : 17 Aug 2012 : G.Barrand :
+ - base_histo : have annotations.
+
  1.3.1 : 24 Jul 2012 : G.Barrand :
  - hbook/h1,h2,p1 : have a configure() method to rebook.
  - hbook/h1,h2,p1,base_histo : have title(),reset(),all_entries()

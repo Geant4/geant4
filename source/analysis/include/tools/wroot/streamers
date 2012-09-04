@@ -57,14 +57,14 @@ inline bool AttAxis_stream(buffer& a_buffer) {
 
 inline bool axis_stream(buffer& a_buffer,
                         const histo::axis<double>& a_axis,
-                        const std::string& a_name) {
+                        const std::string& a_name,
+                        const std::string& a_title) {
     // Version 6 streaming (ROOT/v3-00-6).
 
     unsigned int beg;
     if(!a_buffer.write_version(6,beg)) return false;
 
-   {std::string title;
-    if(!Named_stream(a_buffer,a_name,title)) return false;}
+    if(!Named_stream(a_buffer,a_name,a_title)) return false;
 
     if(!AttAxis_stream(a_buffer)) return false;
 
@@ -107,6 +107,14 @@ inline bool List_empty_stream(buffer& a_buffer) {
   return true;
 }
 
+inline std::string axis_title(const hd_data& a_data,
+                              const std::string& a_key) {
+  typedef std::map<std::string,std::string> annotations_t;
+  annotations_t::const_iterator it = a_data.m_annotations.find(a_key);
+  if(it==a_data.m_annotations.end()) return std::string();
+  return (*it).second;
+}
+
 inline bool TH_write_1D(buffer& a_buffer,
                         const hd_data& a_data,
                         const std::string& a_name) {
@@ -122,22 +130,45 @@ inline bool TH_write_1D(buffer& a_buffer,
     if(!a_buffer.write((int)a_data.m_bin_number)) return false;
 
     //fXAxis
-   {//have a copy because of const.
-    histo::axis<double> haxis(a_data.m_axes[0]);
-    if(!axis_stream(a_buffer,haxis,"xaxis")) return false;}
-
     if(a_data.m_dimension==2) {
-     {histo::axis<double> haxis(a_data.m_axes[1]);
-      if(!axis_stream(a_buffer,haxis,"yaxis")) return false;}
 
-      histo::axis<double> dummy;
+     {histo::axis<double> haxis(a_data.m_axes[0]);
+      if(!axis_stream(a_buffer,haxis,"xaxis",
+            axis_title(a_data,histo::key_axis_x_title())))
+        return false;}
+
+     {histo::axis<double> haxis(a_data.m_axes[1]);
+      if(!axis_stream(a_buffer,haxis,"yaxis",
+            axis_title(a_data,histo::key_axis_y_title())))
+        return false;}
+
+     {histo::axis<double> dummy;
       dummy.configure(1,0,1);
-      if(!axis_stream(a_buffer,dummy,"zaxis")) return false;
+      if(!axis_stream(a_buffer,dummy,"zaxis",
+            axis_title(a_data,histo::key_axis_z_title())))
+        return false;}
+
+    } else if(a_data.m_dimension==1) {
+
+     {histo::axis<double> haxis(a_data.m_axes[0]);
+      if(!axis_stream(a_buffer,haxis,"xaxis",
+            axis_title(a_data,histo::key_axis_x_title())))
+        return false;}
+
+     {histo::axis<double> dummy;
+      dummy.configure(1,0,1);
+      if(!axis_stream(a_buffer,dummy,"yaxis",
+            axis_title(a_data,histo::key_axis_y_title())))
+        return false;}
+
+     {histo::axis<double> dummy;
+      dummy.configure(1,0,1);
+      if(!axis_stream(a_buffer,dummy,"zaxis",
+            axis_title(a_data,histo::key_axis_z_title())))
+        return false;}
+
     } else {
-      histo::axis<double> dummy;
-      dummy.configure(1,0,1);
-      if(!axis_stream(a_buffer,dummy,"yaxis")) return false;
-      if(!axis_stream(a_buffer,dummy,"zaxis")) return false;
+      return false;
     }
 
     if(!a_buffer.write((short)(1000 * 0.25))) return false; //fBarOffset

@@ -56,6 +56,10 @@ int main(int argc,char** argv) {
   for(unsigned int count=0;count<entries;count++) {
     h.fill(rg.shoot(),1.4);
   }
+  // plotting hints :
+  h.add_annotation(tools::histo::key_axis_x_title(),"rand gauss");
+  h.add_annotation(tools::histo::key_axis_y_title(),"1.4*entries");
+  // write :
   if(!tools::wroot::to(*dir,h,"rg")) return EXIT_FAILURE;}
 
  {tools::histo::p1d h("Profile",100,-5,5,-2,2);
@@ -68,6 +72,11 @@ int main(int argc,char** argv) {
   for(unsigned int count=0;count<entries;count++) {
     h.fill(rg.shoot(),rbw.shoot(),0.8);
   }
+  //plotting hints :
+  h.add_annotation(tools::histo::key_axis_x_title(),"rand gauss");
+  h.add_annotation(tools::histo::key_axis_y_title(),"rand bw");
+  h.add_annotation(tools::histo::key_axis_z_title(),"0.8*entries");
+  // write :
   if(!tools::wroot::to(*dir,h,"rgbw")) return EXIT_FAILURE;}
 
   //////////////////////////////////////////////////////////

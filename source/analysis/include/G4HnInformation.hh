@@ -31,26 +31,51 @@
 #define G4HnInformation_h 1
 
 #include "globals.hh"
+#include "G4Fcn.hh" 
 
 struct G4HnInformation
 {
   G4HnInformation() 
-    : fName(""),  
+    : fName(""), 
+      fXUnitName("none"), 
+      fYUnitName("none"), 
+      fXFcnName("none"),
+      fYFcnName("none"),
       fXUnit(1.0), 
       fYUnit(1.0), 
+      fXFcn(G4FcnIdentity),
+      fYFcn(G4FcnIdentity),
       fActivation(true),
-      fAscii(false) {}
+      fAscii(false)
+       {}
 
-  G4HnInformation(const G4String& name, G4double xunit, G4double yunit) 
+  G4HnInformation(const G4String& name, 
+                  const G4String& xunitName, const G4String& yunitName,
+                  const G4String& fxName, const G4String& fyName,
+                  G4double xunit, G4double yunit,
+                  G4Fcn fx, G4Fcn fy) 
     : fName(name),  
+      fXUnitName(xunitName), 
+      fYUnitName(yunitName), 
+      fXFcnName(fxName),
+      fYFcnName(fyName),
       fXUnit(xunit), 
       fYUnit(yunit), 
+      fXFcn(fx),
+      fYFcn(fy),
       fActivation(true),
-      fAscii(false) {}
+      fAscii(false)
+       {}
 
   G4String fName;
+  G4String fXUnitName;
+  G4String fYUnitName;
+  G4String fXFcnName;
+  G4String fYFcnName;
   G4double fXUnit;  
   G4double fYUnit;
+  G4Fcn    fXFcn;
+  G4Fcn    fYFcn;
   G4bool   fActivation;
   G4bool   fAscii;
 };

@@ -44,6 +44,7 @@ G4VAnalysisManager::G4VAnalysisManager(const G4String& type)
     fNtupleDirectoryName(""),
     fLockFirstHistoId(false),
     fLockFirstNtupleColumnId(false),
+    fLockFileName(false),
     fLockHistoDirectoryName(false), 
     fLockNtupleDirectoryName(false),
     fVerboseL1(type,1),
@@ -74,17 +75,28 @@ G4VAnalysisManager::~G4VAnalysisManager()
 
 //_____________________________________________________________________________
 void G4VAnalysisManager::AddH1Information(const G4String& name,
-                                          G4double unit)
+                                          const G4String& unitName,
+                                          const G4String& fcnName,
+                                          G4double unit, G4Fcn fcn)
 {
-  fH1Informations.push_back(new G4HnInformation(name, unit, unit));
+  fH1Informations.push_back(
+    new G4HnInformation(name, unitName, unitName, fcnName, fcnName,
+                        unit, unit, fcn, fcn));
   ++fNofActiveObjects;
 }  
 
 //_____________________________________________________________________________
 void  G4VAnalysisManager::AddH2Information(const G4String& name,
-                                           G4double xunit, G4double yunit)
+                                           const G4String& xunitName, 
+                                           const G4String& yunitName,
+                                           const G4String& xfcnName,
+                                           const G4String& yfcnName,
+                                           G4double xunit, G4double yunit,
+                                           G4Fcn xfcn, G4Fcn yfcn) 
 {
-  fH2Informations.push_back(new G4HnInformation(name, xunit, yunit));
+  fH2Informations.push_back(
+    new G4HnInformation(name, xunitName, yunitName, xfcnName, yfcnName,
+                        xunit, yunit, xfcn, yfcn));
   ++fNofActiveObjects;
 }  
 
@@ -124,6 +136,87 @@ G4bool G4VAnalysisManager::WriteAscii()
   return result;
 }     
 
+//_____________________________________________________________________________
+G4String G4VAnalysisManager::GetName(ObjectType type, G4int id) const
+{
+  G4HnInformation* info = GetInformation(type, id);
+
+  if ( ! info ) return "";
+    
+  return info->fName;
+}    
+
+//_____________________________________________________________________________
+G4double G4VAnalysisManager::GetXUnit(ObjectType type, G4int id) const
+{
+  G4HnInformation* info = GetInformation(type, id);
+
+  if ( ! info ) return 1.0;
+  
+  return info->fXUnit;
+}    
+
+//_____________________________________________________________________________
+G4double G4VAnalysisManager::GetYUnit(ObjectType type, G4int id) const
+{
+  G4HnInformation* info = GetInformation(type, id);
+
+  if ( ! info ) return 1.0;
+  
+  return info->fYUnit;
+}    
+
+//_____________________________________________________________________________
+G4bool G4VAnalysisManager::GetActivation(ObjectType type, G4int id) const
+{
+  G4HnInformation* info = GetInformation(type, id);
+
+  if ( ! info ) return true;
+  
+  return info->fActivation;
+}    
+
+//_____________________________________________________________________________
+G4bool G4VAnalysisManager::GetAscii(ObjectType type, G4int id) const
+{
+  G4HnInformation* info = GetInformation(type, id);
+
+  if ( ! info ) return false;
+  
+  return info->fAscii;
+}    
+
+//_____________________________________________________________________________
+G4double G4VAnalysisManager::GetUnitValue(const G4String& unit) const
+{
+   G4double value = 1.;
+   if ( unit != "none" ) {
+     value = G4UnitDefinition::GetValueOf(unit);
+     if ( value == 0. ) value = 1.; 
+   }  
+   return value;
+}   
+
+//_____________________________________________________________________________
+G4Fcn G4VAnalysisManager::GetFunction(const G4String& fcnName) const
+{
+  G4Fcn fcn = G4FcnIdentity;
+   if ( fcnName != "none" ) {
+    if      ( fcnName == "log" )  fcn = std::log;
+    else if ( fcnName == "log10") fcn = std::log10;
+    else if ( fcnName == "exp" )  fcn = std::exp;
+    else {
+      G4ExceptionDescription description;
+      description 
+        << "    \"" << fcnName << "\" function is not supported." << G4endl
+        << "    " << "No function will be applied to h1 values.";
+      G4Exception("G4AnalysisMessenger::GetFunction",
+                "Analysis_W013", JustWarning, description);
+    }              
+  }
+  return fcn;            
+}
+    
 // 
 // public methods
 //
@@ -370,61 +463,9 @@ void  G4VAnalysisManager::SetAscii(ObjectType type, G4int id, G4bool ascii)
 }    
 
 //_____________________________________________________________________________
-G4String G4VAnalysisManager::GetName(ObjectType type, G4int id) const
-{
-  G4HnInformation* info = GetInformation(type, id);
-
-  if ( ! info ) return "";
-    
-  return info->fName;
-}    
-
-//_____________________________________________________________________________
-G4double G4VAnalysisManager::GetXUnit(ObjectType type, G4int id) const
-{
-  G4HnInformation* info = GetInformation(type, id);
-
-  if ( ! info ) return 1.0;
-  
-  return info->fXUnit;
-}    
-
-//_____________________________________________________________________________
-G4double G4VAnalysisManager::GetYUnit(ObjectType type, G4int id) const
-{
-  G4HnInformation* info = GetInformation(type, id);
-
-  if ( ! info ) return 1.0;
-  
-  return info->fYUnit;
-}    
-
-//_____________________________________________________________________________
-G4bool G4VAnalysisManager::GetActivation(ObjectType type, G4int id) const
-{
-  G4HnInformation* info = GetInformation(type, id);
-
-  if ( ! info ) return true;
-  
-  return info->fActivation;
-}    
-
-//_____________________________________________________________________________
-G4bool G4VAnalysisManager::GetAscii(ObjectType type, G4int id) const
-{
-  G4HnInformation* info = GetInformation(type, id);
-
-  if ( ! info ) return false;
-  
-  return info->fAscii;
-}    
-
-
-//_____________________________________________________________________________
 G4String G4VAnalysisManager::GetFileType() const 
 {
   G4String fileType = fVerboseL1.GetType();
   fileType.toLower();
   return fileType;
 }                 
-

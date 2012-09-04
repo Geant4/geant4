@@ -26,54 +26,16 @@
 // $Id$
 
 // Author: Ivana Hrivnacova, 04/07/2012  (ivana@ipno.in2p3.fr)
-//
-// This messenger class is a generalization of the HistoMessenger class,
-// originally developed for the extended/electromagnetic examples
-// by Michel Maire (michel.maire@lapp.in2p3.fr)
 
-#ifndef G4AnalysisMessenger_h
-#define G4AnalysisMessenger_h 1
+#ifndef G4Fcn_h
+#define G4Fcn_h 1
 
-#include "G4UImessenger.hh"
 #include "globals.hh"
 
-class G4VAnalysisManager;
-class G4UIdirectory;
-class G4UIcommand;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
+// Generic function which can be applied to histogram/ntuple values
+typedef G4double (*G4Fcn) (G4double);
 
-class G4AnalysisMessenger : public G4UImessenger
-{
-  public:
-    G4AnalysisMessenger(G4VAnalysisManager* manager);
-    virtual ~G4AnalysisMessenger();
-   
-    // methods
-    virtual void SetNewValue(G4UIcommand* command, G4String value);
-    
-  private:
-    void CreateH1Cmd();
-    void SetH1Cmd();
-    void SetH1TitleCmd();
-    void SetH1XAxisCmd();
-    void SetH1YAxisCmd();
- 
-    G4VAnalysisManager*  fManager; ///< Associated class
-    
-    G4UIdirectory*         fAnalysisDir;   
-    G4UIcmdWithAString*    fSetFileNameCmd;
-    G4UIcmdWithAString*    fSetHistoDirNameCmd;
-    G4UIcmdWithAString*    fSetNtupleDirNameCmd;
-    G4UIcmdWithAnInteger*  fVerboseCmd;   
-    G4UIdirectory*         fH1Dir;   
-    G4UIcommand*           fCreateH1Cmd;
-    G4UIcommand*           fSetH1Cmd;
-    G4UIcmdWithAnInteger*  fSetH1AsciiCmd;   
-    G4UIcommand*           fSetH1TitleCmd;   
-    G4UIcommand*           fSetH1XAxisCmd;   
-    G4UIcommand*           fSetH1YAxisCmd;   
-};
-  
-#endif
+// Identity function
+inline G4double G4FcnIdentity(G4double value) { return value; }
 
+#endif  

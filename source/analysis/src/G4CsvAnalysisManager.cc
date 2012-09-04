@@ -144,6 +144,18 @@ G4bool G4CsvAnalysisManager::Reset()
   return true;
 }  
  
+//_____________________________________________________________________________
+void  G4CsvAnalysisManager::ExceptionForHistograms(
+                                        const G4String& functionName) const
+{
+  G4String inFunction = "G4CsvAnalysisManager::";
+  inFunction += functionName;
+  G4ExceptionDescription description;
+  description << "      " 
+              << "Histograms are not supported." ;
+  G4Exception(inFunction, "Analysis_W005", JustWarning, description);
+}  
+
 //
 // protected methods
 //
@@ -265,7 +277,7 @@ G4bool G4CsvAnalysisManager::CloseFile()
   if ( ! result ) {
       G4ExceptionDescription description;
       description << "      " << "Resetting data failed";
-      G4Exception("G4RootAnalysisManager::CloseFile()",
+      G4Exception("G4CsvAnalysisManager::CloseFile()",
                 "Analysis_W002", JustWarning, description);
       result = false;       
   } 
@@ -287,13 +299,10 @@ G4int G4CsvAnalysisManager::CreateH1(const G4String& /*name*/,
                                const G4String& /*title*/, 
                                G4int /*nbins*/, 
                                G4double /*xmin*/, G4double /*xmax*/,
-                               G4double /*unit*/)
+                               const G4String& /*unitName*/, 
+                               const G4String& /*fcnName*/)
 {
-  G4ExceptionDescription description;
-  description << "      " 
-              << "Histograms are not supported." ;
-  G4Exception("G4CsvAnalysisManager::CreateH1()",
-              "Analysis_W005", JustWarning, description);
+  ExceptionForHistograms("CreateH1");
   return 0;
 }                                         
 
@@ -304,13 +313,12 @@ G4int G4CsvAnalysisManager::CreateH2(const G4String& /*name*/,
                                G4double /*xmin*/, G4double /*xmax*/,
                                G4int /*nybins*/, 
                                G4double /*ymin*/, G4double /*ymax*/,
-                               G4double /*xunit*/, G4double /*yunit*/)
+                               const G4String& /*xunitName*/, 
+                               const G4String& /*yunitName*/, 
+                               const G4String& /*xfcnName*/,
+                               const G4String& /*yfcnName*/)
 {
-  G4ExceptionDescription description;
-  description << "      " 
-              << "Histograms are not supported." ;
-  G4Exception("G4CsvAnalysisManager::CreateH2()",
-              "Analysis_W005", JustWarning, description);
+  ExceptionForHistograms("CreateH2");
   return 0;
 }                                         
 
@@ -318,14 +326,10 @@ G4int G4CsvAnalysisManager::CreateH2(const G4String& /*name*/,
 G4bool G4CsvAnalysisManager::SetH1(G4int /*id*/,
                                 G4int /*nbins*/, 
                                 G4double /*xmin*/, G4double /*xmax*/,
-                                G4double  /*unit*/)
+                                const G4String& /*unitName*/, 
+                                const G4String& /*fcnName*/)
 {                                
-
-  G4ExceptionDescription description;
-  description << "      " 
-              << "Histograms are not supported." ;
-  G4Exception("G4CsvAnalysisManager::SetH1()",
-              "Analysis_W005", JustWarning, description);
+  ExceptionForHistograms("SetH1");
   return false;
 }
   
@@ -335,16 +339,29 @@ G4bool G4CsvAnalysisManager::SetH2(G4int /*id*/,
                                 G4double /*xmin*/, G4double /*xmax*/, 
                                 G4int /*nybins*/, 
                                 G4double /*ymin*/, G4double /*ymax*/,
-                                G4double  /*xunit*/, G4double  /*yunit*/) 
+                                const G4String& /*xunitName*/, 
+                                const G4String& /*yunitName*/, 
+                                const G4String& /*xfcnName*/,
+                                const G4String& /*yfcnName*/)
 {                                
-  G4ExceptionDescription description;
-  description << "      " 
-              << "Histograms are not supported." ;
-  G4Exception("G4CsvAnalysisManager::SetH2()",
-              "Analysis_W005", JustWarning, description);
+  ExceptionForHistograms("SetH2");
+  return false;
+}
+
+//_____________________________________________________________________________
+G4bool G4CsvAnalysisManager::ScaleH1(G4int /*id*/, G4double /*factor*/)
+{
+  ExceptionForHistograms("ScaleH1");
   return false;
 }
                                   
+//_____________________________________________________________________________
+G4bool G4CsvAnalysisManager::ScaleH2(G4int /*id*/, G4double /*factor*/)
+{
+  ExceptionForHistograms("ScaleH2");
+  return false;
+}
+
 //_____________________________________________________________________________
 void G4CsvAnalysisManager::CreateNtuple(const G4String& name, 
                                         const G4String& title)
@@ -627,3 +644,194 @@ tools::wcsv::ntuple* G4CsvAnalysisManager::GetNtuple() const
   return fNtuple;
 }  
 
+
+//_____________________________________________________________________________
+G4int G4CsvAnalysisManager::GetH1Nbins(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH1Nbins");
+  return 0;
+}
+  
+//_____________________________________________________________________________
+G4double G4CsvAnalysisManager::GetH1Xmin(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH1Xmin");
+  return 0;
+}
+  
+//_____________________________________________________________________________
+G4double G4CsvAnalysisManager::GetH1Xmax(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH1Xmax");
+  return 0;
+}
+  
+//_____________________________________________________________________________
+G4double G4CsvAnalysisManager::GetH1Width(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH1Xwidth");
+  return 0;
+}
+  
+//_____________________________________________________________________________
+G4int G4CsvAnalysisManager::GetH2Nxbins(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH2NXbins");
+  return 0;
+}
+  
+//_____________________________________________________________________________
+G4double G4CsvAnalysisManager::GetH2Xmin(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH2Xmin");
+  return 0;
+}
+  
+//_____________________________________________________________________________
+G4double G4CsvAnalysisManager::GetH2Xmax(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH2Xmin");
+  return 0;
+}
+  
+//_____________________________________________________________________________
+G4double G4CsvAnalysisManager::GetH2XWidth(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH2XWidth");
+  return 0;
+}
+  
+//_____________________________________________________________________________
+G4int G4CsvAnalysisManager::GetH2Nybins(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH2NYbins");
+  return 0;
+}
+  
+//_____________________________________________________________________________
+G4double G4CsvAnalysisManager::GetH2Ymin(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH2Ymin");
+  return 0;
+}
+  
+//_____________________________________________________________________________
+G4double G4CsvAnalysisManager::GetH2Ymax(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH2Ymax");
+  return 0;
+}
+  
+//_____________________________________________________________________________
+G4double G4CsvAnalysisManager::GetH2YWidth(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH2YWidth");
+  return 0;
+}
+
+//_____________________________________________________________________________
+G4bool G4CsvAnalysisManager::SetH1Title(G4int /*id*/, 
+                                        const G4String& /*title*/)
+{
+  ExceptionForHistograms("SetH1Title");
+  return false;
+}
+
+//_____________________________________________________________________________
+G4bool G4CsvAnalysisManager::SetH1XAxisTitle(G4int /*id*/, 
+                                             const G4String& /*title*/)
+{
+  ExceptionForHistograms("SetH1XAxisTitle");
+  return false;
+}
+
+//_____________________________________________________________________________
+G4bool G4CsvAnalysisManager::SetH1YAxisTitle(G4int /*id*/, 
+                                             const G4String& /*title*/)
+{
+  ExceptionForHistograms("SetH1YAxisTitle");
+  return false;
+}
+
+//_____________________________________________________________________________
+G4bool G4CsvAnalysisManager::SetH2Title(G4int /*id*/, 
+                                        const G4String& /*title*/)
+{
+  ExceptionForHistograms("SetH2Title");
+  return false;
+}
+
+//_____________________________________________________________________________
+G4bool G4CsvAnalysisManager::SetH2XAxisTitle(G4int /*id*/, 
+                                             const G4String& /*title*/)
+{
+  ExceptionForHistograms("SetH2XAxisTitle");
+  return false;
+}
+
+//_____________________________________________________________________________
+G4bool G4CsvAnalysisManager::SetH2YAxisTitle(G4int /*id*/, 
+                                             const G4String& /*title*/)
+{
+  ExceptionForHistograms("SetH2YAxisTitle");
+  return false;
+}
+
+//_____________________________________________________________________________
+G4bool G4CsvAnalysisManager::SetH2ZAxisTitle(G4int /*id*/, 
+                                             const G4String& /*title*/)
+{
+  ExceptionForHistograms("SetH2ZAxisTitle");
+  return false;
+}
+
+//_____________________________________________________________________________
+G4String G4CsvAnalysisManager::GetH1XAxisTitle(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH1XAxisTitle");
+  return "";
+}
+
+//_____________________________________________________________________________
+G4String G4CsvAnalysisManager::GetH1Title(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH1Title");
+  return "";
+}
+  
+//_____________________________________________________________________________
+G4String G4CsvAnalysisManager::GetH1YAxisTitle(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH1YAxisTitle");
+  return "";
+}
+
+
+//_____________________________________________________________________________
+G4String G4CsvAnalysisManager::GetH2Title(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH2Title");
+  return "";
+}
+  
+//_____________________________________________________________________________
+G4String G4CsvAnalysisManager::GetH2XAxisTitle(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH2XAxisTitle");
+  return "";
+}
+
+//_____________________________________________________________________________
+G4String G4CsvAnalysisManager::GetH2YAxisTitle(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH2YAxisTitle");
+  return "";
+}
+
+//_____________________________________________________________________________
+G4String G4CsvAnalysisManager::GetH2ZAxisTitle(G4int /*id*/) const
+{
+  ExceptionForHistograms("GetH2ZAxisTitle");
+  return "";
+}
+  

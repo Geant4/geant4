@@ -37,6 +37,10 @@ int main(int,char**) {
   for(unsigned int count=0;count<entries;count++) {
     h.fill(rg.shoot(),1.4);
   }
+  // plotting hints :
+  h.add_annotation(tools::histo::key_axis_x_title(),"rand gauss");
+  h.add_annotation(tools::histo::key_axis_y_title(),"1.4*entries");
+  // write :
   if(!tools::waxml::write(writer,h,"/histo","rg")) {
     std::cout << "can't write h1d." << std::endl;
     return EXIT_FAILURE;
@@ -55,6 +59,11 @@ int main(int,char**) {
   for(unsigned int count=0;count<entries;count++) {
     h.fill(rg.shoot(),rbw.shoot(),0.8);
   }
+  //plotting hints :
+  h.add_annotation(tools::histo::key_axis_x_title(),"rand gauss");
+  h.add_annotation(tools::histo::key_axis_y_title(),"rand bw");
+  h.add_annotation(tools::histo::key_axis_z_title(),"0.8*entries");
+  // write :
   if(!tools::waxml::write(writer,h,"/histo","rgbw")) {
     std::cout << "can't write h2d." << std::endl;
     return EXIT_FAILURE;
