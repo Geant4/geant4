@@ -1,18 +1,16 @@
-$Id: README,v 1.10 2009-11-21 00:22:55 perl Exp $
+//$Id$
 
-    =========================================================
-    Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-    =========================================================
+///\file "analysis/A01/.README"
+///\brief Example A01 README page
 
-                       Extended Example A01
-                       -------------------- 
+/*! \page ExampleA01 Example A01
 
   Example A01 implements a double-arm spectrometer with wire chambers, 
   hodoscopes and calorimeters.  Event simulation and collection are 
   enabled, as well as event display and analysis.
 
 
-  1. GEOMETRY
+\section A01_s1 GEOMETRY
 
      The spectrometer consists of two detector arms.  One arm provides 
      position and timing information of the incident particle while the 
@@ -21,55 +19,50 @@ $Id: README,v 1.10 2009-11-21 00:22:55 perl Exp $
      spectrometer pivot point.
  
        - First arm:  box filled with air, also containing:
-
-           1 hodoscope (15 vertical strips of plastic scintillator)
-           1 drift chamber (5 horizontal argon gas layers with a 
+           - 1 hodoscope (15 vertical strips of plastic scintillator)
+           - 1 drift chamber (5 horizontal argon gas layers with a 
                             "virtual wire" at the center of each layer)
 
        - Magnetic field region: air-filled cylinder which contains
                                 the field
 
        - Second arm:  box filled with air, also containing:
-
-           1 hodoscope (25 vertical strips of plastic scintillator)
-           1 drift chamber (5 horizontal argon gas layers with a 
+           - 1 hodoscope (25 vertical strips of plastic scintillator)
+           - 1 drift chamber (5 horizontal argon gas layers with a 
                             "virtual wire" at the center of each layer)
-           1 electromagnetic calorimeter: 
+           - 1 electromagnetic calorimeter: 
                  a box sub-divided along x,y and z
                  axes into cells of CsI 
-           1 hadronic calorimeter: 
+           - 1 hadronic calorimeter: 
                  a box sub-divided along x,y, and z axes
                  into cells of lead, with a layer of 
                  plastic scintillator placed at the center 
                  of each cell
 
 
-  2. PHYSICS
+\section A01_s2 PHYSICS
 
      This example uses the following physics processes:
-
        - electromagnetic:
-           photo-electric effect
-           Compton scattering
-           pair production
-           bremsstrahlung
-           ionization
-           multiple scattering
-           annihilation
-
+           - photo-electric effect
+           - Compton scattering
+           - pair production
+           - bremsstrahlung
+           - ionization
+           - multiple scattering
+           - annihilation
        - decay
-
        - transportation in a field
 
      and defines the following particles:
-        geantino, charged geantino, gamma, all leptons, 
-        pions, charged kaons
+      -  geantino, charged geantino, gamma, all leptons, 
+         pions, charged kaons
 
      Note that even though hadrons are defined, no hadronic processes 
      are invoked in this example.
 
 
-  3. EVENT:
+\section A01_s3 EVENT
 
      An event consists of the generation of a single particle which is 
      transported through the first spectrometer arm.  Here, a scintillator 
@@ -87,7 +80,6 @@ $Id: README,v 1.10 2009-11-21 00:22:55 perl Exp $
      three-dimensional array of scintillator-lead sandwiches.
 
      Several aspects of the event may be changed interactively by the user:
-
        - initial particle type
        - initial momentum and angle
        - momentum and angle spreads
@@ -96,34 +88,34 @@ $Id: README,v 1.10 2009-11-21 00:22:55 perl Exp $
        - angle of the second spectrometer arm
 
 
-  4. DETECTOR RESPONSE:
+\section A01_s4 DETECTOR RESPONSE
 
      All the information required to simulate and analyze an event is 
      recorded in HITS.  This information is recorded in the following 
      sensitive detectors:
 
        - hodoscope: 
-           particle time
-           particle position
-           strip ID
+           - particle time
+           - particle position
+           - strip ID
 
        - drift chamber: 
-           particle time
-           particle position
-           layer ID
+           - particle time
+           - particle position
+           - layer ID
  
        - electromagnetic calorimeter: 
-           particle position 
-           energy deposited in cell
-           cell ID
+           - particle position 
+           - energy deposited in cell
+           - cell ID
   
        - hadronic calorimeter:   
-           particle position 
-           energy deposited in cell
-           cell ID
+           - particle position 
+           - energy deposited in cell
+           - cell ID
 
 
-  5. VISUALIZATION:
+\section A01_s5 VISUALIZATION
   
      Simulated events can be displayed on top of a representation of the spectrometer.
 
@@ -153,7 +145,7 @@ $Id: README,v 1.10 2009-11-21 00:22:55 perl Exp $
      by WIRED4 (not by HepRApp).
 
 
-  6. ANALYSIS:
+\section A01_s6 ANALYSIS
 
      This example implements an AIDA-compliant analysis system which
      creates histograms, ntuples and plotters.  If you have built Geant4 with
@@ -162,4 +154,7 @@ $Id: README,v 1.10 2009-11-21 00:22:55 perl Exp $
      a file A01.aida is produced which contains these data structures.
      This file can be used as an input to the Java Analysis Studio (JAS) which allows
      the histograms and ntuples to examined, manipulated, saved and printed.
-     For further details, see also README.AIDA.
+
+     For further details, see also \link ExampleA01AIDA README.AIDA \endlink.
+*/
+

@@ -47,12 +47,12 @@ class A01AnalysisManager {
 public:
 
   virtual ~A01AnalysisManager();
-  static A01AnalysisManager* GetInstance();
+  static A01AnalysisManager* getInstance();
   static void dispose();
 
-  IHistogramFactory* GetHistogramFactory();
-  ITupleFactory* GetTupleFactory();
-  IPlotter* GetPlotter();
+  IHistogramFactory* getHistogramFactory();
+  ITupleFactory* getTupleFactory();
+  IPlotter* getPlotter();
 
 private:
   A01AnalysisManager();

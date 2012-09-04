@@ -77,20 +77,20 @@ A01AnalysisManager::~A01AnalysisManager()
     delete fAnalysisFactory;
   }
 }
-IHistogramFactory* A01AnalysisManager::GetHistogramFactory()
+IHistogramFactory* A01AnalysisManager::getHistogramFactory()
 {
   return fFactory;
 }
-ITupleFactory* A01AnalysisManager::GetTupleFactory()
+ITupleFactory* A01AnalysisManager::getTupleFactory()
 {
   return tFactory;
 }
-IPlotter* A01AnalysisManager::GetPlotter()
+IPlotter* A01AnalysisManager::getPlotter()
 {
   return fPlotter;
 }
 
-A01AnalysisManager* A01AnalysisManager::GetInstance()
+A01AnalysisManager* A01AnalysisManager::getInstance()
 {
   if (fInstance == 0) fInstance = new A01AnalysisManager();
   return fInstance;
