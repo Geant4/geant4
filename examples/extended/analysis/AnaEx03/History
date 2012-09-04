@@ -15,6 +15,17 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+03-09-12 I. Hrivnacova (AnaEx03-V09-05-04)   
+- New tag to be synchronized with the update in tests/ctest;
+  no changes in the example itself   
+
+31-08-12 I. Hrivnacova (AnaEx03-V09-05-03)      
+- Updated CMakeLists.tx:
+  adding install target, minor fixes
+- Added .README
+- UseOpenScientist.txt, InstallAida.txt moved in A01 
+  (as README.AIDA, README.OpenScientist)
+
 21 June 2012 Ivana Hrivnacova (AnaEx03-V09-05-02)   
 - Updated CMakeLists.txt to get FindAIDA.cmake module found 
   by CMake automatically
