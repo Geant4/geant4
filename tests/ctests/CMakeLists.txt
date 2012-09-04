@@ -11,14 +11,15 @@ endif()
 
 #---Need to see if ROOT is available to enable some of the tests
 find_package(ROOT QUIET)
+find_package(AIDA QUIET)
 
 #-------------------------------------------------------------------------------------------------
 #---Consistency-----------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------------------
-GEANT4_ADD_TEST(validate-sources 
-                COMMAND ${CMAKE_MAKE_PROGRAM} validate_sources
-                WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-                LABELS Continuous) 
+#GEANT4_ADD_TEST(validate-sources 
+#                COMMAND ${CMAKE_MAKE_PROGRAM} validate_sources
+#                WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+#                LABELS Continuous) 
 
 #-------------------------------------------------------------------------------------------------
 #---Basic-----------------------------------------------------------------------------------------
@@ -141,18 +142,20 @@ if(ROOT_FOUND)
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/analysis/AnaEx02
                   BUILD AnaEx02 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 endif()
-GEANT4_ADD_TEST(example-ext-analysis-anaex03 
-                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/analysis/AnaEx03/AnaEx03 
-                        ${CMAKE_SOURCE_DIR}/examples/extended/analysis/AnaEx03/AnaEx03.in
-                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/analysis/AnaEx03
-                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/analysis/AnaEx03
-                BUILD AnaEx03 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+if(AIDA_FOUND)
+  GEANT4_ADD_TEST(example-ext-analysis-anaex03
+                  COMMAND ${CMAKE_BINARY_DIR}/examples/extended/analysis/AnaEx03/AnaEx03
+                          ${CMAKE_SOURCE_DIR}/examples/extended/analysis/AnaEx03/AnaEx03.in
+                  SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/analysis/AnaEx03
+                  BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/analysis/AnaEx03
+                  BUILD AnaEx03 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+endif()
 GEANT4_ADD_TEST(example-ext-analysis-n03con 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/extended/analysis/N03Con/exampleN03Con 
                         ${CMAKE_SOURCE_DIR}/examples/extended/analysis/N03Con/exampleN03Con.in
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/analysis/N03Con
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/analysis/N03Con
-                BUILD exampleN03Con ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+                BUILD exampleN03Con PROJECT N03Con ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-ext-biasing-b01 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/extended/biasing/B01/exampleB01
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/biasing/B01

@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ctests-V09-05-16 3rd September 2012 Ivana Hrivnacova
+- Synchronizing tests with updated CMakeLists.txt in example/extended: 
+  example-ext-analysis-anaex03: now built only when AIDA is found
+  example-ext-analysis-n03con: the project name is now different from the 
+  executable name (by Pere Mato) 
+
+ctests-V09-05-15 9th August 2012 Pere Mato
+- Disabling "validate_sources" test to understand random failures of tests on the macosx platform
+
 ctests-V09-05-14 11th July 2012 Pere Mato
 - Improved "validate_sources" target as a new test
 
