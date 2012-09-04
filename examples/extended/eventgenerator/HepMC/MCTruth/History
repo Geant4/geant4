@@ -15,6 +15,15 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30 August 2012 W. Pokorski (mctruthex-V09-05-02)
+- fixes in Cmake file
+
+29 August 2012 W. Pokorski (mctruthex-V09-05-01)
+- updating README files
+
+29 August 2012 W. Pokorski (mctruthex-V09-05-00)
+- adding CMake file and fixing uninitialized variable
+
 3 May 2011 G.Cosmo (mctruthex-V09-04-00)
 - Fixed compilation errors on MacOS for use of std::fmod() in MCTruthManager.
 

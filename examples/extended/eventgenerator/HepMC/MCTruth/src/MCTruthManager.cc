@@ -43,7 +43,7 @@
 
 static MCTruthManager* instance = 0;
 
-MCTruthManager::MCTruthManager() : config(0)
+MCTruthManager::MCTruthManager() : event(0), config(0) 
 {}
 
 MCTruthManager::~MCTruthManager() 
