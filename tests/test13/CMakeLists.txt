@@ -5,12 +5,14 @@ include(${Geant4_USE_FILE})
 
 GEANT4_EXECUTABLE(test13 test13.cc src/*.cc)
 GEANT4_EXECUTABLE(test13_hadronic_exerciser test13_hadronic_exerciser.cc)
+add_custom_target(test13-all DEPENDS test13 test13_hadronic_exerciser)
 
 #---Test definitions----------------------------------------------------------------------------------
+
+GEANT4_ADD_TEST(test13-build BUILD test13-all)
 GEANT4_ADD_TEST(test13_hadronic_exerciser COMMAND test13_hadronic_exerciser
                                           OUTPUT  test13.in
-                                          BUILD test13_hadronic_exerciser)
+                                          DEPENDS test13-build)
 GEANT4_ADD_TEST(test13 COMMAND test13 test13.in
-                       BUILD test13
                        ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
                        DEPENDS test13_hadronic_exerciser)
