@@ -22,7 +22,6 @@ endif
 MACROFILE=ParN04.in
 # MACROFILE=ParN04.EMtest.large_N.in
 
-DATAFILE=
 DATAFILE=pythia_event.data
 
 # Everything below here should be set automatically based on
@@ -33,24 +32,9 @@ ifndef PARTARGET
   PARTARGET = ${G4TARGET}
 endif
 
-ifndef G4INSTALL
-  G4INSTALL = _Environment_variable_G4INSTALL_must_be_defined_
-endif
+include $(G4INSTALL)/config/architecture.gmk
 
-ifndef G4WORKDIR
-  G4WORKDIR = ${G4INSTALL}
-endif
-
-ifndef G4BIN
-  G4BIN = $$G4WORKDIR/bin
-endif
-ifndef G4BINDIR
-  G4BINDIR = ${G4BIN}/$$G4SYSTEM
-endif
-
-EXECUTABLE=${G4BIN}/$$G4SYSTEM/${PARTARGET}
-
-G4DEBUG = 1
+EXECUTABLE=${G4BIN}/${G4SYSTEM}/${PARTARGET}
 
 TOPC_LIBS   =  $(shell topc-config ${MEM_MODEL} --libs)
 TOPC_CFLAGS = -DG4USE_TOPC $(shell topc-config ${MEM_MODEL} --cflags)
