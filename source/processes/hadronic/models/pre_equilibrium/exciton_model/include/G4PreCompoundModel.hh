@@ -45,7 +45,8 @@
 //                - CEM transition probabilities (if useCEMtr=true)
 // 30.10.2009 J.M.Quesada CEM transition probabilities are set as default
 // 20.08.2010 V.Ivanchenko Cleanup of the code - changed data members and inline methods
-// 03.01.2012 V.Ivanchenko Added pointer to G4ExcitationHandler to the constructor
+// 03.01.2012 V.Ivanchenko Added pointer to G4ExcitationHandler to the 
+//                         constructor
 
 #ifndef G4PreCompoundModel_h
 #define G4PreCompoundModel_h 1

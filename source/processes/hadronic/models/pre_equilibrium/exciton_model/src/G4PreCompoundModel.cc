@@ -43,7 +43,8 @@
 //                      - emission and transition classes created at initialisation
 //                      - options are set at initialisation
 //                      - do not use copy-constructors for G4Fragment  
-// 03.01.2012 V.Ivanchenko Added pointer to G4ExcitationHandler to the constructor
+// 03.01.2012 V.Ivanchenko Added pointer to G4ExcitationHandler to the 
+//                         constructor
 
 #include "G4PreCompoundModel.hh"
 #include "G4PreCompoundEmission.hh"
