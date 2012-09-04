@@ -43,11 +43,23 @@
 #include "G4KaonPlus.hh"                       // 31 May 2011
 #include "G4KaonMinus.hh"                      // 31 May 2011
 
-G4FTFParameters::G4FTFParameters()
-{ 
-  //A.R. 25-Jul-2012 : Coverity fix.
-  FTFxsManager = 0; 
-}
+G4FTFParameters::G4FTFParameters() :
+  //A.R. 14-Aug-2012 : Coverity fix.
+  FTFhNcmsEnergy(0.0), 
+  FTFxsManager(0),
+  FTFXtotal(0.0), FTFXelastic(0.0), FTFXinelastic(0.0), FTFXannihilation(0.0),
+  ProbabilityOfAnnihilation(0.0), ProbabilityOfElasticScatt(0.0),
+  RadiusOfHNinteractions2(0.0), FTFSlope(0.0), 
+  AvaragePt2ofElasticScattering(0.0), FTFGamma0(0.0),
+  MagQuarkExchange(0.0), SlopeQuarkExchange(0.0), DeltaProbAtQuarkExchange(0.0),
+  ProbOfSameQuarkExchange(0.0), ProjMinDiffMass(0.0), ProjMinNonDiffMass(0.0),
+  ProbabilityOfProjDiff(0.0), TarMinDiffMass(0.0), TarMinNonDiffMass(0.0),
+  ProbabilityOfTarDiff(0.0), AveragePt2(0.0), ProbLogDistr(0.0),
+  Pt2kink(0.0),
+  MaxNumberOfCollisions(0.0), ProbOfInelInteraction(0.0), CofNuclearDestruction(0.0),
+  R2ofNuclearDestruction(0.0), ExcitationEnergyPerWoundedNucleon(0.0),
+  DofNuclearDestruction(0.0), Pt2ofNuclearDestruction(0.0), MaxPt2ofNuclearDestruction(0.0) 
+{}
 
 
 G4FTFParameters::~G4FTFParameters()

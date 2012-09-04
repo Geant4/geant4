@@ -15,6 +15,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+15 August 2012, A.Ribon  (hadr-string-diff-V09-05-17)
+-  Coverity fixes in G4FTFParticipants.cc.
+
+14 August 2012, A.Ribon  (hadr-string-diff-V09-05-16)
+-  Coverity fixes in G4FTFParticipants.cc and G4FTFParameters.cc.
+
 25 July 2012, A.Ribon   (hadr-string-diff-V09-05-15)
 -  Coverity fixes in: G4FTFModel, G4FTFAnnihilation,
    G4ElasticHNScattering, G4FTFParameters, G4FTFParticipants.
