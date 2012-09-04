@@ -11,6 +11,11 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+13-Aug-2012 A.Ribon (hadr-chips-body-V09-05-08)
+--------------------------------------------------------------------------
+- Fixed compilation error in G4QEnvironment.cc and G4Quasmon.cc when
+  the constructor of the Lorentz vector is made explicit.
+
 19-Jun-2012 A.Ribon (hadr-chips-body-V09-05-07)
 --------------------------------------------------------------------------
 - Fix memory leak in G4QEnvironment.cc .

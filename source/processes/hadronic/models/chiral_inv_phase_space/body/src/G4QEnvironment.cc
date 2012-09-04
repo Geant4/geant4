@@ -2173,7 +2173,7 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
 #endif
                     G4int hPDG = curH->GetPDGCode();      //                            ^ ^
                     G4LorentzVector h4M = curH->Get4Momentum(); //                      ^ ^
-                    if(EnvA>1 && qhdBN>-1 && qhdBN<2 && h4M > 0.000001 && hPDG>111 && //^ ^
+                    if(EnvA>1 && qhdBN>-1 && qhdBN<2 && h4M.vect().mag() > 0.000001 && hPDG>111 && //^ ^
                        hPDG!=222 && hPDG!=333)//** Quasi-free interaction is possible **^ ^
                     { //                                                                ^ ^
                       --EnvA;                             //                            ^ ^
