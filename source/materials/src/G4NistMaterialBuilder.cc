@@ -825,10 +825,10 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction( 1, 0.077418);
   AddElementByWeightFraction( 6, 0.922582);
 
-  AddMaterial("G4_ADENINE", 1.35, 0, 71.4, 3);
-  AddElementByWeightFraction( 1, 0.037294);
-  AddElementByWeightFraction( 6, 0.44443 );
-  AddElementByWeightFraction( 7, 0.518275);
+  AddMaterial("G4_ADENINE", 1.6/*1.35*/, 0, 71.4, 3);
+  AddElementByAtomCount("H",5 );
+  AddElementByAtomCount("C",5 );
+  AddElementByAtomCount("N",5 );
 
   AddMaterial("G4_ADIPOSE_TISSUE_ICRP", 0.95, 0, 63.2, 7);
   AddElementByWeightFraction( 1, 0.114);
@@ -1236,11 +1236,11 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction( 6, 0.391262);
   AddElementByWeightFraction( 8, 0.521185);
 
-  AddMaterial("G4_GUANINE", 1.58, 0, 75. ,4);
-  AddElementByWeightFraction( 1, 0.033346);
-  AddElementByWeightFraction( 6, 0.39738 );
-  AddElementByWeightFraction( 7, 0.463407);
-  AddElementByWeightFraction( 8, 0.105867);
+  AddMaterial("G4_GUANINE", 2.2/*1.58*/, 0, 75. ,4);
+  AddElementByAtomCount("H",5 );
+  AddElementByAtomCount("C",5 );
+  AddElementByAtomCount("N",5 );
+  AddElementByAtomCount("O",1 );
 
   AddMaterial("G4_GYPSUM", 2.32, 0, 129.7, 4);
   AddElementByWeightFraction( 1, 0.023416);
@@ -1875,6 +1875,24 @@ void G4NistMaterialBuilder::SpaceMaterials()
 
 void G4NistMaterialBuilder::BioChemicalMaterials()
 {
+  AddMaterial("G4_CYTOSINE", 1.55, 0, 72., 4);
+  AddElementByAtomCount("H", 5);
+  AddElementByAtomCount("C", 4);
+  AddElementByAtomCount("N", 3);
+  AddElementByAtomCount("O", 1);
+
+  AddMaterial("G4_THYMINE", 1.23, 0, 72., 4);
+  AddElementByAtomCount("H", 6);
+  AddElementByAtomCount("C", 5);
+  AddElementByAtomCount("N", 2);
+  AddElementByAtomCount("O", 2);
+
+  AddMaterial("G4_URACIL", 1.32, 0, 72., 4);
+  AddElementByAtomCount("H", 4);
+  AddElementByAtomCount("C", 4);
+  AddElementByAtomCount("N", 2);
+  AddElementByAtomCount("O", 2);
+
   // DNA_Nucleobase (Nucleobase-1H)
   AddMaterial("G4_DNA_ADENINE", 1, 0, 72., 3);
   AddElementByAtomCount("H",4 );
@@ -1900,7 +1918,7 @@ void G4NistMaterialBuilder::BioChemicalMaterials()
   AddElementByAtomCount("O", 2);
 
   AddMaterial("G4_DNA_URACIL", 1, 0, 72., 4);
-  AddElementByAtomCount("H", 4);
+  AddElementByAtomCount("H", 3);
   AddElementByAtomCount("C", 4);
   AddElementByAtomCount("N", 2);
   AddElementByAtomCount("O", 2);

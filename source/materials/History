@@ -17,11 +17,25 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-05-11-12 V.Ivanchenko (materials-V09-05-29)
-05-11-12 V.Ivanchenko (materials-V09-05-28)
+30-08-12 Pere Mato (materials-V09-05-31)
+- Added test/CMakeLists.txt
+
+15-08-12 V.Ivanchenko (materials-V09-05-30)
+- G4AtomicShell - reorder shells decenting in energy (in past shells
+    were ordered by quantum numbers and for high Z atoms low-energy
+    outer shells have lower indexes than some shells with higher quantum 
+    numbers) 
+- G4Material - when construct material from the base one use mean 
+    excitation energy from base material and not recompute from scratch
+- G4NistMaterialBuilder - added G4_THYMINE, G4_CYTOSINE and G4_URACIL;
+    for G4_ADENINE and G4_GUANINE use combination by atom numbers and not
+    by mass fraction
+
+11-07-12 V.Ivanchenko (materials-V09-05-29)
+11-07-12 V.Ivanchenko (materials-V09-05-28)
 - Fixed bug of previous tag
 
-05-11-12 V.Ivanchenko (materials-V09-05-27)
+11-07-12 V.Ivanchenko (materials-V09-05-27)
 - G4SandiaTable - move inline methods with static variables to the source
 
 05-07-12 V.Ivanchenko (materials-V09-05-26)

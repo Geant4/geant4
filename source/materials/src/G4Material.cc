@@ -332,6 +332,7 @@ void G4Material::CopyPointersOfBaseMaterial()
   fIonisation  = new G4IonisParamMat(this);
 
   fSandiaTable = fBaseMaterial->GetSandiaTable();
+  fIonisation->SetMeanExcitationEnergy(fBaseMaterial->GetIonisation()->GetMeanExcitationEnergy());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
