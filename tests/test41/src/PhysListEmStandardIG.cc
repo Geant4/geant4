@@ -103,7 +103,7 @@ void PhysListEmStandardIG::ConstructProcess()
       //muon  
       G4MuMultipleScattering* msc = new G4MuMultipleScattering();
       G4WentzelVIModel* wvi = new G4WentzelVIModel();
-      msc->SetRangeFactor(0.1);
+      //msc->SetRangeFactor(0.1);
       msc->AddEmModel(0, wvi);
       pmanager->AddProcess(msc, -1, 1, 1);
       pmanager->AddProcess(new G4MuIonisation,       -1, 2, 2);
@@ -138,8 +138,8 @@ void PhysListEmStandardIG::ConstructProcess()
   opt.SetMaxEnergy(10.*GeV);
   opt.SetDEDXBinning(56);
   opt.SetLambdaBinning(56);
-  //  opt.SetLinearLossLimit(1.e-2);
-  // opt.SetSplineFlag(true);
+
+  //opt.SetPolarAngleLimit(CLHEP::pi);
   opt.SetPolarAngleLimit(0.2);
 }
 
