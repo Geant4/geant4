@@ -13,6 +13,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+test30-V09-05-15  11 August 2012 V.Ivanchenko
+- removed CMakeLists.txt 
+
+test30-V09-05-14  11 August 2012 V.Ivanchenko
+- delete unapropriate directory physval
+
 test30-V09-05-13  31 July 2012 A. Dotti
 - Bug fix for test name in CMakeLists.txt for PhysicsChecks 
 
