@@ -29,6 +29,21 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30th August 2012 Pere Mato (cmake-V09-05-42)
+- Modules/Geant4CTest.cmake - Added Unit Tests and some re-organization of the module
+- Modules/Geant4MacroUtilities.cmake - Moved macro GEANT4_LATEST_VERSION to this module
+
+29th August 2012 Witek Pokorski (cmake-V09-05-41)
+- Adding FindHepMC module.
+
+28th August 2012 - Pere Mato 
+- Modules/Geant4MacroUtilities.cmake: Defined new macro GEANT4_ADD_UNIT_TESTS
+- Modules/Geant4LibraryBuildOptions.cmake: Added new option GEANT4_BUILD_TESTS
+
+28th August 2012 - Gunter Folger (cmake-V09-05-39)
+- Modules/Geant4InstallData.cmake: Use RadioactiveDecay3.5
+
 16th July 2012 - Ben Morgan (cmake-V09-05-38)
 - Use correct tag name. Update tag number to ensure numerical sequence.
 

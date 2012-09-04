@@ -119,6 +119,10 @@ option(GEANT4_BUILD_EXAMPLES "Build all the examples of the project" OFF)
 GEANT4_ADD_FEATURE(GEANT4_BUILD_EXAMPLES "Build all the examples of the project")
 mark_as_advanced(GEANT4_BUILD_EXAMPLES)
 
+option(GEANT4_BUILD_TESTS "Build all the tests of the project" OFF)
+GEANT4_ADD_FEATURE(GEANT4_BUILD_TESTS "Build all the tests of the project")
+mark_as_advanced(GEANT4_BUILD_TESTS)
+
 # - Testing system only functional on 2.8 and above
 if(NOT ${CMAKE_VERSION} VERSION_GREATER 2.7)
   if(GEANT4_ENABLE_TESTING)

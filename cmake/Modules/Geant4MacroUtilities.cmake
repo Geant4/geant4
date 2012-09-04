@@ -39,3 +39,76 @@ macro(GEANT4_PRINT_ENABLED_FEATURES)
 
     message(STATUS "${_currentFeatureText}\n")
 endmacro(GEANT4_PRINT_ENABLED_FEATURES)
+
+
+#----------------------------------------------------------------------------
+#---Helper function to locate the most recent version of a dataset-----------
+#
+function(GEANT4_LATEST_VERSION dir name var)
+  file(GLOB files RELATIVE ${dir} ${dir}/${name}*)
+  set(newer)
+  foreach(file ${files})
+    string(REPLACE ${name} "" version ${file})
+    if("${version}" VERSION_GREATER "${newer}")
+      set(newer ${version})
+    endif()
+  endforeach()
+  set(${var} ${dir}/${name}${newer} PARENT_SCOPE)
+endfunction()
+
+
+#----------------------------------------------------------------------------
+# function GEANT4_ADD_UNIT_TESTS(test1 test2 ... [dir1 ...]
+#                                INCLUDE_DIRS dir1 dir2 ...
+#                                LIBRARIES library1 library2 ... )
+#
+function(GEANT4_ADD_UNIT_TESTS)
+  CMAKE_PARSE_ARGUMENTS(ARG "" "" "INCLUDE_DIRS;LIBRARIES" ${ARGN})
+
+  foreach(incdir ${ARG_INCLUDE_DIRS})
+    if(IS_ABSOLUTE ${incdir})
+      include_directories(${incdir})
+    else()
+      include_directories(${CMAKE_SOURCE_DIR}/source/${incdir})
+    endif()
+  endforeach()
+  
+  if(ARG_UNPARSED_ARGUMENTS)
+    set(tnames ${ARG_UNPARSED_ARGUMENTS})
+  else()
+    set(tnames test*.cc)
+  endif()
+  
+  set(alltests)
+  foreach(tname ${tnames})
+    if(tname STREQUAL ".")
+      set(tests ".")
+    else()
+      file(GLOB tests RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${tname})
+    endif()
+    set(alltests ${alltests} ${tests})
+  endforeach()
+  
+  if(NOT TARGET tests)
+    add_custom_target(tests)
+  endif()
+  
+  foreach(test ${alltests})
+    if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${test})
+      file(GLOB sources ${test}/src/*.cc)
+      include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/${test}/include)
+      file(GLOB test ${test}/*.cc)
+    else()
+      set(sources)
+    endif()
+    get_filename_component(name ${test} NAME_WE)
+    add_executable(${name} EXCLUDE_FROM_ALL ${test} ${sources})
+    target_link_libraries(${name} ${ARG_LIBRARIES})
+    set_target_properties(${name} PROPERTIES OUTPUT_NAME ${name})
+    add_dependencies(tests ${name})
+    add_test(NAME ${name} COMMAND ${name})
+    set_property(TEST ${name} PROPERTY LABELS UnitTests)
+    set_property(TEST ${name} PROPERTY TIMEOUT 60)
+  endforeach()
+
+endfunction()
