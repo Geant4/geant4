@@ -14,6 +14,24 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+17 August 2012 Witek Pokorski (hadr-stopping-V09-05-19)
+------------------------------------------------------------
+- removed obsolete CHIPS includes 
+
+14 August 2012 Alberto Ribon (hadr-stopping-V09-05-18)
+------------------------------------------------------------
+- Fixed Coverity complain in G4KaonMinusAbsorptionAtRest.cc
+
+13 August 2012 Alberto Ribon (hadr-stopping-V09-05-17)
+------------------------------------------------------------
+- Proposed for testing a tag to fix a compilation error in
+  G4MuMinusCapturePrecompound.cc when the constructor of the
+  Lorentz vector is made explicit.
+
+10 August 2012 Julia Yarba (hadr-stopping-V09-05-16)
+------------------------------------------------------------
+- Internal tag
+
 27 July 2012 Alberto Ribon (hadr-stopping-V09-05-15)
 ------------------------------------------------------------
 - Replaced (deleted) the class G4FTFCaptureAtRest with the new

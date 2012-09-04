@@ -137,6 +137,7 @@ G4VParticleChange* G4KaonMinusAbsorptionAtRest::AtRestDoIt
   if ( ! absorptionProducts ) {
     G4Exception("G4KaonMinusAbsorptionAtRest::AtRestDoIt()", "HAD_STOP_0001",
                 FatalException, "NULL absorptionProducts");
+    return 0;
   }
   
   // Secondary interactions

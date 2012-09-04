@@ -98,9 +98,13 @@ G4MuMinusCapturePrecompound::ApplyYourself(const G4HadProjectile& projectile,
 	 << muBindingEnergy << G4endl;
   */
   // Energy on K-shell
+  G4double muEnergy = fMuMass + muBindingEnergy;
   G4double muMom = std::sqrt(muBindingEnergy*(muBindingEnergy + 2.0*fMuMass));
   G4double availableEnergy = massA + fMuMass - muBindingEnergy;
   G4double residualMass = G4NucleiProperties::GetNuclearMass(A, Z - 1);
+
+  G4ThreeVector vmu = muMom*G4RandomDirection();
+  G4LorentzVector aMuMom(vmu, muEnergy);
 
   // p or 3He as a target 
   // two body reaction mu- + A(Z,A) -> nuMu + A(Z-1,A)
@@ -126,10 +130,15 @@ G4MuMinusCapturePrecompound::ApplyYourself(const G4HadProjectile& projectile,
     // sample mu- + p -> nuMu + n reaction in CM of muonic atom
 
     // muon
-    G4double emu = (availableEnergy*availableEnergy - massA*massA
-		    + fMuMass*fMuMass)/(2*availableEnergy);
-    G4ThreeVector mudir = G4RandomDirection();
-    G4LorentzVector momMuon(std::sqrt(emu*emu - fMuMass*fMuMass)*mudir, emu);
+//    
+// NOTE by K.Genser and J.Yarba:
+// The code below isn't working because emu always turns smaller than fMuMass
+// For this reason the sqrt is producing a NaN    
+//
+//    G4double emu = (availableEnergy*availableEnergy - massA*massA
+//		    + fMuMass*fMuMass)/(2*availableEnergy);
+//    G4ThreeVector mudir = G4RandomDirection();
+//    G4LorentzVector momMuon(std::sqrt(emu*emu - fMuMass*fMuMass)*mudir, emu);
 
     // nucleus
     G4LorentzVector momInitial(0.0,0.0,0.0,availableEnergy);
@@ -154,7 +163,7 @@ G4MuMinusCapturePrecompound::ApplyYourself(const G4HadProjectile& projectile,
       G4LorentzVector momP = nucleons[index].Get4Momentum();
 
       // Get CMS kinematics
-      G4LorentzVector theCMS = momP + muMom;
+      G4LorentzVector theCMS = momP + aMuMom;
       G4ThreeVector bst = theCMS.boostVector();
 
       G4double Ecms = theCMS.mag();
@@ -192,9 +201,9 @@ G4MuMinusCapturePrecompound::ApplyYourself(const G4HadProjectile& projectile,
 	G4ExceptionDescription ed;
 	ed << "Call for " << GetModelName() << G4endl;
 	ed << "Target  Z= " << Z  
-	   << "  A= " << G4endl;
+	   << "  A= " << A << G4endl;
 	ed << " ApplyYourself does not completed after 100 attempts" << G4endl;
-	G4Exception("G4HadronStoppingProcess::AtRestDoIt", "had006", 
+	G4Exception("G4MuMinusCapturePrecompound::AtRestDoIt", "had006", 
 		    FatalException, ed);        
       }
     } while(eEx <= 0.0);
