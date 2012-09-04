@@ -874,6 +874,8 @@ void G4VEnergyLossProcess::StartTracking(G4Track* track)
 
   // reset ion
   if(isIon) {
+    chargeSqRatio = 1.0;
+
     G4double newmass = track->GetDefinition()->GetPDGMass();
     if(baseParticle) {
       massRatio = baseParticle->GetPDGMass()/newmass;

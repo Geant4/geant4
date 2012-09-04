@@ -369,6 +369,10 @@ G4VMultipleScattering::PostStepGetPhysicalInteractionLength(
 G4VParticleChange* 
 G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
 {
+  const G4StepPoint* p = step.GetPostStepPoint();
+  fParticleChange.ProposeMomentumDirection(p->GetMomentumDirection());
+  fParticleChange.ProposePosition(p->GetPosition());
+
   if(currentModel->IsActive(track.GetKineticEnergy())) {
     fParticleChange.ProposeTrueStepLength(currentModel->ComputeTrueStepLength(step.GetStepLength()));
   } else {

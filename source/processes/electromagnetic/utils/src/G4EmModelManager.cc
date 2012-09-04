@@ -684,13 +684,17 @@ void G4EmModelManager::DumpModelList(G4int verb)
 	       << std::setw(8) << G4BestUnit(emax,"Energy");
 	G4PhysicsTable* table = model->GetCrossSectionTable();
         if(table) {
-          G4PhysicsVector* v = (*table)[0];
-          if(v) {
-	    G4int nn = v->GetVectorLength() - 1;
-	    G4cout << "  Table with " << nn << " bins Emin= "
-	       << std::setw(6) << G4BestUnit(v->Energy(0),"Energy")
-	       << "   Emax= " 
-	       << std::setw(6) << G4BestUnit(v->Energy(nn),"Energy");
+	  size_t kk = table->size();
+          for(size_t k=0; k<kk; ++k) {
+	    G4PhysicsVector* v = (*table)[k];
+	    if(v) {
+	      G4int nn = v->GetVectorLength() - 1;
+	      G4cout << "  Table with " << nn << " bins Emin= "
+		     << std::setw(6) << G4BestUnit(v->Energy(0),"Energy")
+		     << "   Emax= " 
+		     << std::setw(6) << G4BestUnit(v->Energy(nn),"Energy");
+	      break;
+	    }
 	  }
 	}
 	G4VEmAngularDistribution* an = model->GetAngularDistribution();

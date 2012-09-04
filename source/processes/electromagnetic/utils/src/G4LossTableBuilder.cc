@@ -253,10 +253,11 @@ G4LossTableBuilder::InitialiseBaseMaterials(G4PhysicsTable* table)
   size_t nFlags = theFlag->size();
 
   if(nCouples == nFlags && isInitialized) { return; }
+
   isInitialized = true;
 
-  //G4cout << "%%%%%% Ncouples= " << nCouples << "  FlagSize= " << nFlags 
-  //	 << "  IsInitialise= " << isInitialized << G4endl; 
+  //G4cout << "%%%%%% G4LossTableBuilder::InitialiseBaseMaterials Ncouples= " 
+  //	 << nCouples << "  FlagSize= " << nFlags << G4endl; 
 
   // variable density check
   const G4ProductionCutsTable* theCoupleTable=
@@ -319,10 +320,12 @@ G4LossTableBuilder::InitialiseBaseMaterials(G4PhysicsTable* table)
   /*
   for(size_t i=0; i<nCouples; ++i) {
     G4cout << "CoupleIdx= " << i << "  Flag= " <<  (*theFlag)[i] 
-	   << " tableFlag= " << table->GetFlag(i) << "  "
+	   << "  TableFlag= " << table->GetFlag(i) << "  "
 	   << theCoupleTable->GetMaterialCutsCouple(i)->GetMaterial()->GetName()
 	   << G4endl;
   }
+  G4cout << "%%%%%% G4LossTableBuilder::InitialiseBaseMaterials end" 
+	 << G4endl; 
   */
 }
 
@@ -330,13 +333,14 @@ G4LossTableBuilder::InitialiseBaseMaterials(G4PhysicsTable* table)
 
 void G4LossTableBuilder::InitialiseCouples()
 {
-  //G4cout << "%%%%%% InitialiseCouples= " << G4endl; 
   isInitialized = true;
 
   // variable density initialisation for the cas without tables 
   const G4ProductionCutsTable* theCoupleTable=
     G4ProductionCutsTable::GetProductionCutsTable();
   size_t nCouples = theCoupleTable->GetTableSize();
+  //G4cout << "%%%%%% G4LossTableBuilder::InitialiseCouples() nCouples= " 
+  //	 << nCouples << G4endl; 
 
   theDensityFactor->resize(nCouples, 1.0);
   theDensityIdx->resize(nCouples, -1);
@@ -380,6 +384,15 @@ void G4LossTableBuilder::InitialiseCouples()
       }
     }
   }
+  /*  
+  for(size_t i=0; i<nCouples; ++i) {
+    G4cout << "CoupleIdx= " << i << "  Flag= " <<  (*theFlag)[i] << "  "
+	   << theCoupleTable->GetMaterialCutsCouple(i)->GetMaterial()->GetName()
+	   << "  DensityFactor= " << (*theDensityFactor)[i]
+	   << G4endl;
+  }
+  G4cout << "%%%%%% G4LossTableBuilder::InitialiseCouples() end" << G4endl; 
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -391,7 +404,7 @@ G4LossTableBuilder::BuildTableForModel(G4PhysicsTable* aTable,
 				       G4double emin, G4double emax,
 				       G4bool spline)
 {
-  // cheack input
+  // check input
   G4PhysicsTable* table = G4PhysicsTableHelper::PreparePhysicsTable(aTable);
   if(!table) { return table; }
   if(emin >= emax) { 
@@ -415,6 +428,8 @@ G4LossTableBuilder::BuildTableForModel(G4PhysicsTable* aTable,
   G4PhysicsLogVector* bVector = 0;
 
   for(size_t i=0; i<numOfCouples; ++i) {
+
+    //G4cout<< "i= " << i << " Flag=  " << GetFlag(i) << G4endl;
 
     if (GetFlag(i)) {
 
@@ -457,10 +472,11 @@ G4LossTableBuilder::BuildTableForModel(G4PhysicsTable* aTable,
       G4PhysicsTableHelper::SetPhysicsVector(table, i, aVector);
     }
   }
-
-  //  G4cout << "G4LossTableBuilder::BuildTableForModel done for "
-  //         << particle->GetParticleName()
-  //         << G4endl;
+  /*
+  G4cout << "G4LossTableBuilder::BuildTableForModel done for "
+	 << part->GetParticleName() << " and "<< model->GetName()
+	 << "  " << table << G4endl;
+  */
   return table; 
 }
 

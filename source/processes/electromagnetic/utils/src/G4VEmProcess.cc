@@ -505,9 +505,8 @@ void G4VEmProcess::StartTracking(G4Track* track)
   // reset parameters for the new track
   currentParticle = track->GetParticleDefinition();
   theNumberOfInteractionLengthLeft = -1.0;
-  currentInteractionLength = -1.0;
-  theNumberOfInteractionLengthLeft = -1.0;
-  theInitialNumberOfInteractionLength=-1.0;
+  //currentInteractionLength = -1.0;
+  //  theInitialNumberOfInteractionLength=-1.0;
   mfpKinEnergy = DBL_MAX; 
 
   // forced biasing only for primary particles
