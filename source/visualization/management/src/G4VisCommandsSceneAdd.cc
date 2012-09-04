@@ -635,7 +635,7 @@ G4VisCommandSceneAddFrame::G4VisCommandSceneAddFrame () {
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("size", 'd', omitable = true);
   parameter -> SetGuidance ("Size of frame.  1 = full window.");
-  parameter -> SetParameterRange ("size > 0 and size <=1");
+  parameter -> SetParameterRange ("size > 0 && size <=1");
   parameter -> SetDefaultValue (0.97);
   fpCommand -> SetParameter (parameter);
 }

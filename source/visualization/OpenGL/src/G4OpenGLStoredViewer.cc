@@ -173,6 +173,13 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 	    }
 	  }
 	  if (isPicking) glLoadName(po.fPickName);
+	  G4Colour c = po.fColour;
+	  // A sub-class may modify the colour/transparency.  If the
+	  // transparency is modified the rendering may not be optimal
+	  // since the order of rendering is determined by the above
+	  // code at POList construction time.
+	  DisplayTimePOColourModification(c,iPO);
+	  glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
 	  if (po.fpG4TextPlus) {
 	    if (po.fpG4TextPlus->fProcessing2D) {
 	      glMatrixMode (GL_PROJECTION);

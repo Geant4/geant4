@@ -186,9 +186,12 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
 
   // Note: colour treated in sub-class.
 
-  if (fpViewer -> GetViewParameters ().IsMarkerNotHidden ())
-    glDisable (GL_DEPTH_TEST);
-  else {glEnable (GL_DEPTH_TEST); glDepthFunc (GL_LEQUAL);}
+  if (fProcessing2D) glDisable (GL_DEPTH_TEST);
+  else {
+    if (fpViewer -> GetViewParameters ().IsMarkerNotHidden ())
+      glDisable (GL_DEPTH_TEST);
+    else {glEnable (GL_DEPTH_TEST); glDepthFunc (GL_LEQUAL);}
+  }
 
   glDisable (GL_LIGHTING);
 
@@ -223,12 +226,13 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
 
   // Note: colour treated in sub-class.
 
-  if (fpViewer -> GetViewParameters ().IsMarkerNotHidden ()) {
-    glDisable (GL_DEPTH_TEST);
-  } else {
-    glEnable (GL_DEPTH_TEST); glDepthFunc (GL_LEQUAL);
+  if (fProcessing2D) glDisable (GL_DEPTH_TEST);
+  else {
+    if (fpViewer -> GetViewParameters ().IsMarkerNotHidden ())
+      glDisable (GL_DEPTH_TEST);
+    else {glEnable (GL_DEPTH_TEST); glDepthFunc (GL_LEQUAL);}
   }
-  
+
   glDisable (GL_LIGHTING);
   
   // Get vis attributes - pick up defaults if none.

@@ -24,7 +24,52 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
-17th July 2012  John Allison  (vis-V09-05-33, co-works interfaces-V09-05-08
+9th August 2012  John Allison  (vis-V09-05-35, co-works interfaces-V09-05-11)
+- Tagged.
+
+8th August 2012  John Allison
+- opengl-V09-05-29: Fixes "unused parameter" warning.
+
+8th August 2012  John Allison  (vis-V09-05-34, co-works interfaces-V09-05-09)
+- vis-HepRep-V09-05-06, openinventor-V09-05-06,
+  VRML-V09-05-05, gMocren-V09-05-05:
+  o Intercepted 2D primitives - JustWarning printed.
+- visman-V09-05-26:
+  o /vis/scene/add/frame: Fixed bug in SetParameterRange.
+- opengl-V09-05-28, coworks interfaces-V09-05-09:
+  o Big changes to Qt interface
+  o G4OpenGLStoredSceneHandler:
+    . Moved colour from display list to PO so that a sub-class may
+      modify through the new virtual function below.
+  o G4OpenGLStoredViewer:
+    . Added virtual void DisplayTimePOColourModification
+          (G4Colour&, size_t /*currentPOListIndex*/) {}
+      so that a sub-class may modify the colur/transparency.  (If the
+      transparency is modified the rendering may not be optimal since
+      the order of rendering is determined at POList construction time.)
+
+30th July 2012 Laurent Garnier
+- G4OpenGLQtViewer.cc :
+  o Add search widget in scene tree
+  o Double click now allow to change color/transparency
+
+23th July 2012 Laurent Garnier
+- G4OpenGLQtViewer.cc :
+  o Do not apply changes to other viewer when moving scene tree slider
+  o Fix a problem on scene tree with non touchable volumes
+ 
+19th July 2012  John Allison
+- G4OpenGLStored/ImmediateSceneHandler.cc:
+  o Disabled GL_DEPTH_TEST and GL_LIGHTING for 2D objects, but see...
+- G4OpenGLSceneHandler.cc:
+  o Disabled GL_DEPTH_TEST and GL_LIGHTING
+
+20th July 2012  John Allison
+- DAWN-V09-05-05:
+  o Implemented 2D text.
+  o Added print-once warnings for other 2D.
+
+17th July 2012  John Allison  (vis-V09-05-33, co-works interfaces-V09-05-08)
 - opengl-V09-05-27:
   o Fix Linux compiler warnings.
   o More Qt improvements.

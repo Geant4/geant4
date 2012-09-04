@@ -43,6 +43,17 @@ void G4FRSCENEHANDLER::AddPrimitive (const G4Polyline& polyline)
   if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
       G4cout << "***** AddPrimitive\n";
 #endif 
+     if (fProcessing2D) {
+          static G4bool warned = false;
+          if (!warned) {
+               warned = true;
+               G4Exception
+               ("G4FRSCENEHANDLER::AddPrimitive (const G4Polyline&)",
+                "dawn0001", JustWarning,
+                "2D polylines not implemented.  Ignored.");
+          }
+          return;
+     }
 		//----- Initialize Fukui Renderer IF NECESSARY
      FRBeginModeling();
 
@@ -153,7 +164,7 @@ void G4FRSCENEHANDLER::AddPrimitive ( const G4Text& text )
 		strncpy ( buf, vis_text, MAX_STR_LENGTH ) ;
 	}
 
-		//----- select string command 
+		//----- select string command for 3D drawing
 	char  text_command[32];
 	switch (size_type) {
 	case world:
@@ -166,10 +177,20 @@ void G4FRSCENEHANDLER::AddPrimitive ( const G4Text& text )
 	}
 
 		//----- Send string command 
-	SendStrDouble6Str(	text_command, \
-				position.x() , position.y() , position.z(), 
-				fontsize     , x_offset     , y_offset    , 
-				buf                                    );
+	if (fProcessing2D) {
+		// Map -1<x<1, -1<y<1 to 10<x<200, 53<y<243
+		G4double x_mm = 95. * position.x() + 105.;
+		G4double y_mm = 95. * position.y() + 148.;
+		SendStrDouble3Str(	FR_TEXT_2DS,
+					x_mm, y_mm , 
+					fontsize   , 
+					buf         );
+	} else {
+		SendStrDouble6Str(	text_command, \
+					position.x() , position.y() , position.z(), 
+					fontsize     , x_offset     , y_offset    , 
+					buf                                    );
+	}
 
 		//----- delete buffer
 	delete [] buf ;
@@ -185,6 +206,17 @@ void G4FRSCENEHANDLER::AddPrimitive ( const G4Circle& mark_circle )
   if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** AddPrimitive( G4Circle )\n";
 #endif
+     if (fProcessing2D) {
+          static G4bool warned = false;
+          if (!warned) {
+               warned = true;
+               G4Exception
+               ("G4FRSCENEHANDLER::AddPrimitive (const G4Circle&)",
+                "dawn0002", JustWarning,
+                "2D circles not implemented.  Ignored.");
+          }
+          return;
+     }
 		//----- Initialize Fukui Renderer IF NECESSARY
 	FRBeginModeling();
 
@@ -229,6 +261,17 @@ void G4FRSCENEHANDLER::AddPrimitive (const G4Square& mark_square )
   if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** AddPrimitive( G4Square )\n";
 #endif
+     if (fProcessing2D) {
+          static G4bool warned = false;
+          if (!warned) {
+               warned = true;
+               G4Exception
+               ("G4FRSCENEHANDLER::AddPrimitive (const G4Square&)",
+                "dawn0003", JustWarning,
+                "2D squares not implemented.  Ignored.");
+          }
+          return;
+     }
 		//----- Initialize Fukui Renderer IF NECESSARY
 	FRBeginModeling();
 
@@ -273,6 +316,17 @@ void G4FRSCENEHANDLER::AddPrimitive ( const G4Polyhedron& polyhedron )
   if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** AddPrimitive( G4Polyhedron )\n";
 #endif
+     if (fProcessing2D) {
+          static G4bool warned = false;
+          if (!warned) {
+               warned = true;
+               G4Exception
+               ("G4FRSCENEHANDLER::AddPrimitive (const G4Polyhedron&)",
+                "dawn0004", JustWarning,
+                "2D polyhedrons not implemented.  Ignored.");
+          }
+          return;
+     }
 
 	if (polyhedron.GetNoFacets() == 0) return;
 
@@ -1437,6 +1491,34 @@ G4FRSCENEHANDLER::SendInt4Str(	G4int		ival1  ,
 	SendStr( command );
 	delete [] command ;
 }
+
+//----- 
+void 
+G4FRSCENEHANDLER::SendStrDouble3Str(	const char*	char_string1 ,
+						G4double	dval1  ,
+						G4double	dval2  ,
+						G4double	dval3  ,
+						const char*	char_string2 )
+{
+		//----- make command char_string and send 
+	G4int	num_char ;
+	char*	command = new char [ COMMAND_BUF_SIZE ];
+
+	num_char  = sprintf(	command, "%s  %*.*g %*.*g %*.*g %s", \
+				char_string1,\
+				fPrec2, fPrec, dval1 , \
+				fPrec2, fPrec, dval2 , \
+				fPrec2, fPrec, dval3 , \
+				char_string2              );
+	if( num_char < 0 ) { 
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+		G4cout << "ERROR G4FRSCENEHANDLER::SendStrDouble6Str(), 1\n" ;
+	}
+	SendStr( command );
+	delete [] command ;
+
+} 
+
 
 //----- 
 void 

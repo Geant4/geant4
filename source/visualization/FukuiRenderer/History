@@ -20,6 +20,18 @@ committal in the CVS repository !
 History file for visualization/FukuiRenderer sub-category
 ---------------------------------------------------------
 
+20th July 2012  John Allison  (DAWN-V09-05-05)
+- Added print-once warnings for 2D.
+
+19th July 2012  John Allison
+- G4FukuiRendererSceneHandler.hh, G4DAWNFILESceneHandler.hh:
+  o Added SendStrDouble3Str.
+- G4FRSceneFunc.icc:
+  o G4FRSCENEHANDLER::AddPrimitive ( const G4Text& text ):
+    . Intercepted 2D text.
+    . First try: Mapped -1<x<1, -1<y<1 to 10<x<200, 53<y<243.
+  o Implemented SendStrDouble3Str.
+
 5th July 2012  Gabriele Cosmo  (DAWN-V09-05-04)
 - Explicitly use inclusion of headers for system of units and physical
   constants, in plan to remove implicit inclusion from globals.hh.
