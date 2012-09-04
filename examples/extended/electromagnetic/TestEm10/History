@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18-08-12 V.Ivant (testem10-V09-05-02)
+- Em10SteppingAction - rewritten (old code was very non-optimized and 
+  provides crashes)
+
 11-07-12 V.Ivant (testem10-V09-05-01)
 - Em10RunAction - cleanup initialisation
 
