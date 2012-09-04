@@ -26,56 +26,60 @@
 /// \file medical/GammaTherapy/include/StepLimiterPerRegion.hh
 /// \brief Definition of the StepLimiterPerRegion class
 //
-// $Id: StepLimiterPerRegion.hh,v 1.3 2008-08-05 10:38:35 vnivanch Exp $
+// $Id: StepLimiter.hh,v 1.3 2008-08-05 10:38:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef StepLimiterPerRegion_h
-#define StepLimiterPerRegion_h 1
+#ifndef StepLimiter_h
+#define StepLimiter_h 1
 
 #include "globals.hh"
 #include "G4VDiscreteProcess.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Step.hh"
+#include "G4Track.hh"
 
 class StepLimiterMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class StepLimiterPerRegion : public G4VDiscreteProcess
+class StepLimiter : public G4VDiscreteProcess
 {
 public:
 
-  StepLimiterPerRegion(const G4String& processName = "UserMaxStep");
-  virtual ~StepLimiterPerRegion();
+  StepLimiter(const G4String& processName = "UserMaxStep");
+  virtual ~StepLimiter();
 
   G4bool IsApplicable(const G4ParticleDefinition&);
 
-  void SetMaxStep(G4double);
+  //G4double GetMaxStep() {return MaxChargedStep;};
 
-  G4double GetMaxStep() {return MaxChargedStep;};
-
-  G4double PostStepGetPhysicalInteractionLength( const G4Track& track,
-			                       G4double previousStepSize,
-			                       G4ForceCondition* condition);
+  G4double PostStepGetPhysicalInteractionLength(const G4Track& track,
+						G4double previousStepSize,
+						G4ForceCondition* condition);
 
   G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 
-  G4double GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*)
-  {return 0.;};    
+  G4double GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*);
+
+  inline void SetMaxStep(G4double);
 
 private:
 
-  StepLimiterPerRegion & operator=(const StepLimiterPerRegion &right);
-  StepLimiterPerRegion(const StepLimiterPerRegion&);
+  StepLimiter & operator=(const StepLimiter &right);
+  StepLimiter(const StepLimiter&);
 
-  G4double MaxChargedStep;
-  G4double ProposedStep;
+  G4double fMaxChargedStep;
 
-  StepLimiterMessenger*  pMess;
+  StepLimiterMessenger* fMessenger;
 };
+
+inline void StepLimiter::SetMaxStep(G4double value) 
+{
+  fMaxChargedStep = value;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

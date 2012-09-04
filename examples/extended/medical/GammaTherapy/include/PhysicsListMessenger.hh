@@ -51,21 +51,24 @@ class PhysicsListMessenger: public G4UImessenger
 public:
   
   PhysicsListMessenger(PhysicsList* );
-  ~PhysicsListMessenger();
+  virtual ~PhysicsListMessenger();
     
   void SetNewValue(G4UIcommand*, G4String);
     
 private:
+
+  PhysicsListMessenger & operator=(const PhysicsListMessenger &right);
+  PhysicsListMessenger(const PhysicsListMessenger&);
   
-  PhysicsList*               pPhysicsList;
+  PhysicsList*               fPhysicsList;
     
-  G4UIdirectory*             physDir;    
-  G4UIcmdWithADoubleAndUnit* gammaCutCmd;
-  G4UIcmdWithADoubleAndUnit* electCutCmd;
-  G4UIcmdWithADoubleAndUnit* protoCutCmd;    
-  G4UIcmdWithADoubleAndUnit* allCutCmd;    
-  G4UIcmdWithAnInteger*      verbCmd;
-  G4UIcmdWithAString*        pListCmd;
+  G4UIdirectory*             fPhysDir;    
+  G4UIcmdWithADoubleAndUnit* fGammaCutCmd;
+  G4UIcmdWithADoubleAndUnit* fElectCutCmd;
+  G4UIcmdWithADoubleAndUnit* fPositCutCmd;    
+  G4UIcmdWithADoubleAndUnit* fAllCutCmd;    
+  G4UIcmdWithAnInteger*      fVerbCmd;
+  G4UIcmdWithAString*        fListCmd;
     
 };
 

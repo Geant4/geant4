@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14-08-12  V.Ivant (gtherapy-V09-05-01)
+- Added forgoten class
+
+09-08-12  V.Ivant (gtherapy-V09-05-00)
+- Applied code convension
+
 15-11-11  V.Ivant (gtherapy-V09-04-00)
 - rename step limiter classes to avoid clash with class name in kernel
 

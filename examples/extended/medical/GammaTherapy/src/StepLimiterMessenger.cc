@@ -33,37 +33,36 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "StepLimiterMessenger.hh"
-
-#include "StepLimiterPerRegion.hh"
+#include "StepLimiter.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StepLimiterMessenger::StepLimiterMessenger(StepLimiterPerRegion* stepM)
-:stepLimiter(stepM)
+StepLimiterMessenger::StepLimiterMessenger(StepLimiter* limiter)
+:fStepLimiter(limiter)
 {
-  stepMaxCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/stepMax",this);
-  stepMaxCmd->SetGuidance("Set max allowed step length for the default region");
-  stepMaxCmd->SetParameterName("mxStep",false);
-  stepMaxCmd->SetRange("mxStep>0.");
-  stepMaxCmd->SetUnitCategory("Length");
-  stepMaxCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fStepMaxCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/fStepMax",this);
+  fStepMaxCmd->SetGuidance("Set max allowed step length for the default region");
+  fStepMaxCmd->SetParameterName("mxStep",false);
+  fStepMaxCmd->SetRange("mxStep>0.");
+  fStepMaxCmd->SetUnitCategory("Length");
+  fStepMaxCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StepLimiterMessenger::~StepLimiterMessenger()
 {
-  delete stepMaxCmd;
+  delete fStepMaxCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void StepLimiterMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  if (command == stepMaxCmd)
-    { stepLimiter->SetMaxStep(stepMaxCmd->GetNewDoubleValue(newValue));}
+  if (command == fStepMaxCmd)
+    { fStepLimiter->SetMaxStep(fStepMaxCmd->GetNewDoubleValue(newValue)); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

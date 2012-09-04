@@ -23,42 +23,67 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/GammaTherapy/include/EventActionMessenger.hh
-/// \brief Definition of the EventActionMessenger class
+/// \file medical/GammaTherapy/src/StepLimiter.cc
+/// \brief Implementation of the StepLimiter class
 //
-// $Id: EventActionMessenger.hh,v 1.2 2006-06-29 17:25:54 gunter Exp $
+// $Id: StepLimiter.cc,v 1.2 2006-06-29 21:58:03 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef EventActionMessenger_h
-#define EventActionMessenger_h 1
-
-#include "globals.hh"
-#include "G4UImessenger.hh"
-
-class EventAction;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
+#include "StepLimiter.hh"
+#include "StepLimiterMessenger.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class EventActionMessenger: public G4UImessenger
+StepLimiter::StepLimiter(const G4String& processName)
+ : G4VDiscreteProcess(processName),
+   fMaxChargedStep(DBL_MAX)
 {
-public:
-  EventActionMessenger(EventAction*);
-  ~EventActionMessenger();
-    
-  void SetNewValue(G4UIcommand*, G4String);
-    
-private:
-
-  EventAction* eventAction;   
-  G4UIcmdWithAString* DrawCmd;
-  G4UIcmdWithAnInteger* PrintCmd;    
-};
+  fMessenger = new StepLimiterMessenger(this);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+StepLimiter::~StepLimiter() 
+{ 
+  delete fMessenger; 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4bool StepLimiter::IsApplicable(const G4ParticleDefinition& particle)
+{
+  return (particle.GetPDGCharge() != 0. && !(particle.IsShortLived()));
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double StepLimiter::PostStepGetPhysicalInteractionLength(
+                                              const G4Track&,
+                                                    G4double,
+                                                    G4ForceCondition* condition )
+{
+  *condition = NotForced;
+  return fMaxChargedStep;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4VParticleChange* 
+StepLimiter::PostStepDoIt(const G4Track& aTrack, const G4Step&)
+{
+  aParticleChange.Initialize(aTrack);
+  return &aParticleChange;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double 
+StepLimiter::GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*)
+{
+  return DBL_MAX;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

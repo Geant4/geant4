@@ -41,15 +41,13 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class StepLimiterPerRegion;
-
 class StepLimiterBuilder : public G4VPhysicsConstructor
 {
 public:
+
   StepLimiterBuilder(const G4String& name = "stepLimiter");
   virtual ~StepLimiterBuilder();
 
-public:
   // This method is dummy for physics
   virtual void ConstructParticle();
 
@@ -63,8 +61,6 @@ private:
    // hide assignment operator
   StepLimiterBuilder & operator=(const StepLimiterBuilder &right);
   StepLimiterBuilder(const StepLimiterBuilder&);
-
-  StepLimiterPerRegion* stepMax;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
