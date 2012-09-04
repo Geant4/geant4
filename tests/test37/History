@@ -14,6 +14,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23-08-12  V.Ivanchenko (test37-V09-05-02)
+- IG Physics List - use 0.2 for polar angle limit
+
+23-08-12  V.Ivanchenko (test37-V09-05-01)
+- IG Physics List - use pi for polar angle limit
+
 09-02-12  V.Ivanchenko (test37-V09-05-00)
 - Fixed IG Physics List - use G4MuMultipleScattering for e- (only this
     Physics List allowing combination with single scattering so far)

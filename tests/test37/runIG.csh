@@ -8,7 +8,7 @@ rm *
 set    work = "$G4MY/test37"
 set    dir  = "$G4INSTALL/tests/test37/"
 
-setenv PHYSLIST    standardIG
+setenv PHYSLIST    emstandardWVI
 set    phys = "optG"
 source ${dir}run_single.csh ${phys} ${work} ${dir}
 

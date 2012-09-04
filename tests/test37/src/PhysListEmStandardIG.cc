@@ -87,7 +87,7 @@ void PhysListEmStandardIG::ConstructProcess()
       
     } else if (particleName == "e-") {
       //electron
-      G4MuMultipleScattering* msc = new G4MuMultipleScattering();
+      G4eMultipleScattering* msc = new G4eMultipleScattering();
       msc->AddEmModel(0,new G4WentzelVIModel());
       //      msc->SetRangeFactor(0.1);
       pmanager->AddProcess(msc,                     -1, 1,1);
@@ -97,9 +97,9 @@ void PhysListEmStandardIG::ConstructProcess()
 	    
     } else if (particleName == "e+") {
       //positron
-      G4MuMultipleScattering* msc = new G4MuMultipleScattering();
+      G4eMultipleScattering* msc = new G4eMultipleScattering();
       msc->AddEmModel(0,new G4WentzelVIModel());
-      //      msc->SetRangeFactor(0.1);
+      //msc->SetRangeFactor(0.1);
       pmanager->AddProcess(msc,                     -1, 1,1);
       pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,   -1,-3,3);
@@ -142,9 +142,9 @@ void PhysListEmStandardIG::ConstructProcess()
   opt.SetMaxEnergy(10.*GeV);
   opt.SetDEDXBinning(56);
   opt.SetLambdaBinning(56);
-  //  opt.SetLinearLossLimit(1.e-2);
-  // opt.SetSplineFlag(true);
+
   opt.SetPolarAngleLimit(0.2);
+  //  opt.SetMscRangeFactor(0.04);
 
   // Deexcitation
   //
