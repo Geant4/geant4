@@ -215,12 +215,12 @@ G4HESigmaMinusInelastic::FirstIntInCasSigmaMinus(G4bool& inElastic,
 // protons/neutrons by kaons or strange baryons according to the average
 // multiplicity per inelastic reaction.
 {
-  static const G4double expxu = std::log(MAXFLOAT); // upper bound for arg. of exp
-  static const G4double expxl = -expxu;             // lower bound for arg. of exp
+  static const G4double expxu = 82.;     // upper bound for arg. of exp
+  static const G4double expxl = -expxu;  // lower bound for arg. of exp
 
   static const G4double protb = 0.7;
   static const G4double neutb = 0.7;              
-  static const G4double     c = 1.25;
+  static const G4double c = 1.25;
 
   static const G4int numMul = 1200;
   static const G4int numSec = 60;
@@ -259,25 +259,21 @@ G4HESigmaMinusInelastic::FirstIntInCasSigmaMinus(G4bool& inElastic,
       }
     }
 
-    for( i=0; i<numMul; i++ )neutmul[i]  = 0.0;
-    for( i=0; i<numSec; i++ )neutnorm[i] = 0.0;
+    for (i = 0; i < numMul; i++) neutmul[i]  = 0.0;
+    for (i = 0; i < numSec; i++) neutnorm[i] = 0.0;
     counter = -1;
     for (npos = 0; npos < numSec/3; npos++) {
-            for( nneg=npos; nneg<=(npos+2); nneg++ ) 
-               {
-                 for( nzero=0; nzero<numSec/3; nzero++ ) 
-                    {
-                      if( ++counter < numMul ) 
-                        {
-                          nt = npos+nneg+nzero;
-                          if( (nt>0) && (nt<=numSec) ) 
-                            {
-                               neutmul[counter] = pmltpc(npos,nneg,nzero,nt,neutb,c);
-                               neutnorm[nt-1] += neutmul[counter];
-                            }
-                        }
-                    }
-               }
+      for (nneg = npos; nneg <= (npos+2); nneg++) {
+        for (nzero = 0; nzero < numSec/3; nzero++) {
+          if (++counter < numMul) {
+            nt = npos+nneg+nzero;
+            if ((nt>0) && (nt<=numSec) ) {
+              neutmul[counter] = pmltpc(npos,nneg,nzero,nt,neutb,c);
+              neutnorm[nt-1] += neutmul[counter];
+            }
+          }
+        }
+      }
     }
     for (i = 0; i < numSec; i++) {
       if (protnorm[i] > 0.0 )protnorm[i] = 1.0/protnorm[i];
@@ -294,43 +290,31 @@ G4HESigmaMinusInelastic::FirstIntInCasSigmaMinus(G4bool& inElastic,
     G4int iplab = G4int( std::min( 9.0, incidentTotalMomentum*2.5 ) );
     if (G4UniformRand() < cech[iplab]/std::pow(atomicWeight,0.42) ) {
       G4double ran = G4UniformRand();
-           if( targetCode == neutronCode)
-             {
-               pv[0] = Neutron;
-               pv[1] = SigmaMinus;
-             }              
-           else
-             { 
-               if(ran < 0.2)
-                 {
-                   pv[0] = SigmaZero;
-                   pv[1] = Neutron;  
-                 }
-               else if(ran < 0.4)
-                 {
-                   pv[0] = Lambda;
-                   pv[1] = Neutron;
-                 }
-               else if(ran < 0.6)
-                 {
-                   pv[0] = Proton;
-                   pv[1] = SigmaMinus;
-                 } 
-               else if(ran < 0.8)
-                 {
-                   pv[0] = Neutron;
-                   pv[1] = SigmaZero;
-                 }
-               else
-                 {
-                   pv[0] = Neutron;
-                   pv[1] = Lambda;
-                 }  
-             }
+      if (targetCode == neutronCode) {
+        pv[0] = Neutron;
+        pv[1] = SigmaMinus;
+      } else { 
+        if (ran < 0.2) {
+          pv[0] = SigmaZero;
+          pv[1] = Neutron;  
+        } else if (ran < 0.4) {
+          pv[0] = Lambda;
+          pv[1] = Neutron;
+        } else if (ran < 0.6) {
+          pv[0] = Proton;
+          pv[1] = SigmaMinus;
+        } else if (ran < 0.8) {
+          pv[0] = Neutron;
+          pv[1] = SigmaZero;
+        } else {
+          pv[0] = Neutron;
+          pv[1] = Lambda;
+        }  
+      }
     }
     return;
-  } else if (availableEnergy <= PionPlus.getMass())
-       return;
+
+  } else if (availableEnergy <= PionPlus.getMass()) return;
 
   //   inelastic scattering
   npos = 0, nneg = 0, nzero = 0;
@@ -344,22 +328,21 @@ G4HESigmaMinusInelastic::FirstIntInCasSigmaMinus(G4bool& inElastic,
   // calculate first the sum of all constants, check for numerical problems.
   G4double test, dum, anpn = 0.0;
 
-   for (nt=1; nt<=numSec; nt++) {
-     test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
-     dum = pi*nt/(2.0*n*n);
-     if (std::fabs(dum) < 1.0) {
-       if (test >= 1.0e-10) anpn += dum*test;
-     } else { 
-       anpn += dum*test;
-     }
-   }
+  for (nt = 1; nt <= numSec; nt++) {
+    test = std::exp(std::min(expxu, std::max(expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+    dum = pi*nt/(2.0*n*n);
+    if (std::fabs(dum) < 1.0) {
+      if (test >= 1.0e-10) anpn += dum*test;
+    } else { 
+      anpn += dum*test;
+    }
+  }
    
-   G4double ran = G4UniformRand();
-   G4double excs = 0.0;
-   if( targetCode == protonCode ) 
-     {
-       counter = -1;
-       for (npos=0; npos<numSec/3; npos++) {
+  G4double ran = G4UniformRand();
+  G4double excs = 0.0;
+  if (targetCode == protonCode) {
+    counter = -1;
+    for (npos=0; npos<numSec/3; npos++) {
          for (nneg=std::max(0,npos-1); nneg<=(npos+1); nneg++) {
            for (nzero=0; nzero<numSec/3; nzero++) {
              if (++counter < numMul) {
@@ -377,14 +360,13 @@ G4HESigmaMinusInelastic::FirstIntInCasSigmaMinus(G4bool& inElastic,
 	     }
 	   }
 	 }
-       }
+    }
        
-       // 3 previous loops continued to the end
-       inElastic = false;                 // quasi-elastic scattering   
-       return;
-     }
-   else   
-     {                                         // target must be a neutron
+    // 3 previous loops continued to the end
+    inElastic = false;                 // quasi-elastic scattering   
+    return;
+
+  } else {  // target must be a neutron
        counter = -1;
        for (npos=0; npos<numSec/3; npos++) {
          for (nneg=npos; nneg<=(npos+2); nneg++) {
@@ -405,12 +387,13 @@ G4HESigmaMinusInelastic::FirstIntInCasSigmaMinus(G4bool& inElastic,
 	   }
 	 }
        }
-       // 3 previous loops continued to the end
-       inElastic = false;                         // quasi-elastic scattering.
-       return;
-     }
+    // 3 previous loops continued to the end
+
+    inElastic = false;   // quasi-elastic scattering.
+    return;
+  }
  
-   outOfLoop:           //  <-------------------------------------------   
+  outOfLoop:           //  <-------------------------------------------   
     
   ran = G4UniformRand();
   if (targetCode == neutronCode) {

@@ -212,15 +212,15 @@ G4HENeutronInelastic::FirstIntInCasNeutron(G4bool& inElastic,
 // protons/neutrons by kaons or strange baryons according to the average
 // multiplicity per inelastic reaction.
 {
-  static const G4double expxu = std::log(MAXFLOAT); // upper bound for arg. of exp
-  static const G4double expxl = -expxu;             // lower bound for arg. of exp
+  static const G4double expxu = 82.;     // upper bound for arg. of exp
+  static const G4double expxl = -expxu;  // lower bound for arg. of exp
 
   static const G4double protb = 0.35;
   static const G4double neutb = 0.35;              
-  static const G4double     c = 1.25;
+  static const G4double c = 1.25;
 
-  static const G4int   numMul = 1200;
-  static const G4int   numSec = 60;
+  static const G4int numMul = 1200;
+  static const G4int numSec = 60;
 
   G4int neutronCode = Neutron.getCode();
   G4int protonCode  = Proton.getCode();
@@ -237,16 +237,14 @@ G4HENeutronInelastic::FirstIntInCasNeutron(G4bool& inElastic,
 
   G4int i, counter, nt, npos, nneg, nzero;
 
-   if( first ) 
-     {     // compute normalization constants, this will only be done once
-       first = false;
-       for( i=0; i<numMul; i++ )protmul[i]  = 0.0;
-       for( i=0; i<numSec; i++ )protnorm[i] = 0.0;
-       counter = -1;
-       for( npos=0; npos<(numSec/3); npos++ ) 
-          {
-            for( nneg=std::max(0,npos-1); nneg<=(npos+1); nneg++ ) 
-               {
+  if (first) {
+    // compute normalization constants, this will only be done once
+    first = false;
+    for (i = 0; i < numMul; i++) protmul[i] = 0.0;
+    for (i = 0; i < numSec; i++) protnorm[i] = 0.0;
+    counter = -1;
+    for (npos = 0; npos < (numSec/3); npos++) {
+      for (nneg = std::max(0,npos-1); nneg <= (npos+1); nneg++) {
                  for( nzero=0; nzero<numSec/3; nzero++ ) 
                     {
                       if( ++counter < numMul ) 
@@ -260,11 +258,12 @@ G4HENeutronInelastic::FirstIntInCasNeutron(G4bool& inElastic,
                             }
                         }
                     }
-               }
-          }
-       for( i=0; i<numMul; i++ )neutmul[i]  = 0.0;
-       for( i=0; i<numSec; i++ )neutnorm[i] = 0.0;
-       counter = -1;
+      }
+    }
+
+    for( i=0; i<numMul; i++ )neutmul[i]  = 0.0;
+    for( i=0; i<numSec; i++ )neutnorm[i] = 0.0;
+    counter = -1;
        for( npos=0; npos<numSec/3; npos++ ) 
           {
             for( nneg=npos; nneg<=(npos+2); nneg++ ) 

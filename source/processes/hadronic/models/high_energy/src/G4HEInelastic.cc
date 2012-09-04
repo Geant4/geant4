@@ -149,8 +149,8 @@ G4HEInelastic::NuclearInelasticity(G4double incidentKineticEnergy,
                                    G4double atomicWeight,
                                    G4double /* atomicNumber*/)
   {
-    G4double expu   = std::log(MAXFLOAT);
-    G4double expl   = -expu;
+    G4double expu = 82.;
+    G4double expl = -expu;
     G4double ala    = std::log(atomicWeight);
     G4double ale    = std::log(incidentKineticEnergy);
     G4double sig1   = 0.5;
@@ -232,7 +232,7 @@ G4double
 G4HEInelastic::pmltpc(G4int npos, G4int nneg, G4int nzero, G4int n, 
                       G4double b, G4double c)
  { 
-   G4double expxu = std::log(MAXFLOAT);
+   G4double expxu = 82.;
    G4double expxl = -expxu;
    G4int i;
    G4double npf = 0.0, nmf = 0.0, nzf = 0.0;
@@ -2429,7 +2429,7 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool& successful,
    pvmx[3].setEnergy( std::sqrt(pf*pf + rmc*rmc) );
    pvmx[4].setEnergy( std::sqrt(pf*pf + rmd*rmd) );
    
-   G4double tvalue = -MAXFLOAT;
+   G4double tvalue = -DBL_MAX;
    G4double bvalue = Amax(0.01, 4.0 + 1.6*std::log(incidentTotalMomentum));
    if (bvalue != 0.0) tvalue = std::log(G4UniformRand())/bvalue;
    G4double pin = pvmx[1].Length();
@@ -4349,7 +4349,7 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool& successful,
    pvmx[3].setEnergy( std::sqrt(pf*pf + rmc*rmc) );
    pvmx[4].setEnergy( std::sqrt(pf*pf + rmd*rmd) );
    
-   G4double tvalue = -MAXFLOAT;
+   G4double tvalue = -DBL_MAX;
    G4double bvalue = Amax(0.01, 4.0 + 1.6*std::log(incidentTotalMomentum));
    if (bvalue != 0.0) tvalue = std::log(G4UniformRand())/bvalue;
    G4double pin = pvmx[1].Length();

@@ -200,8 +200,8 @@ G4HEAntiXiMinusInelastic::FirstIntInCasAntiXiMinus(G4bool& inElastic,
 // As in Geant3, we think that this routine has absolutely no influence
 // on the whole performance of the program. Take AntiLambda instaed. 
 {
-  static const G4double expxu = std::log(MAXFLOAT); // upper bound for arg. of exp
-  static const G4double expxl = -expxu;             // lower bound for arg. of exp
+  static const G4double expxu = 82.;     // upper bound for arg. of exp
+  static const G4double expxl = -expxu;  // lower bound for arg. of exp
 
   static const G4double protb = 0.7;
   static const G4double neutb = 0.7;

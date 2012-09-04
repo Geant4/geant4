@@ -214,8 +214,8 @@ G4HEAntiKaonZeroInelastic::FirstIntInCasAntiKaonZero(G4bool& inElastic,
 // protons/neutrons by kaons or strange baryons according to the average
 // multiplicity per inelastic reaction.
 {
-  static const G4double expxu = std::log(MAXFLOAT); // upper bound for arg. of exp
-  static const G4double expxl = -expxu;             // lower bound for arg. of exp
+  static const G4double expxu = 82.;      // upper bound for arg. of exp
+  static const G4double expxl = -expxu;   // lower bound for arg. of exp
 
   static const G4double protb = 0.7;
   static const G4double neutb = 0.7;
@@ -352,46 +352,46 @@ G4HEAntiKaonZeroInelastic::FirstIntInCasAntiKaonZero(G4bool& inElastic,
     // calculate first the sum of all constants, check for numerical problems.   
     G4double test, dum, anpn = 0.0;
 
-       for (nt=1; nt<=numSec; nt++) {
-         test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
-         dum = pi*nt/(2.0*n*n);
-         if (std::fabs(dum) < 1.0) { 
-           if( test >= 1.0e-10 )anpn += dum*test;
-         } else { 
-           anpn += dum*test;
-         }
-       }
+    for (nt=1; nt<=numSec; nt++) {
+      test = std::exp(std::min(expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+      dum = pi*nt/(2.0*n*n);
+      if (std::fabs(dum) < 1.0) { 
+        if( test >= 1.0e-10 )anpn += dum*test;
+      } else { 
+        anpn += dum*test;
+      }
+    }
    
-       G4double ran = G4UniformRand();
-       G4double excs = 0.0;
-       if (targetCode == protonCode) {
-         counter = -1;
-         for (npos=0; npos<numSec/3; npos++) {
-           for (nneg=std::max(0,npos-2); nneg<=npos; nneg++) {
-             for (nzero=0; nzero<numSec/3; nzero++) {
-               if (++counter < numMul) {
-                 nt = npos+nneg+nzero;
-                 if( (nt>0) && (nt<=numSec) ) {
-                   test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
-                   dum = (pi/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
+    G4double ran = G4UniformRand();
+    G4double excs = 0.0;
+    if (targetCode == protonCode) {
+      counter = -1;
+      for (npos=0; npos<numSec/3; npos++) {
+        for (nneg=std::max(0,npos-2); nneg<=npos; nneg++) {
+          for (nzero=0; nzero<numSec/3; nzero++) {
+            if (++counter < numMul) {
+              nt = npos+nneg+nzero;
+              if ((nt>0) && (nt<=numSec) ) {
+                test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                dum = (pi/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
 
-                   if (std::fabs(dum) < 1.0) { 
-                     if( test >= 1.0e-10 )excs += dum*test;
-                   } else { 
-                     excs += dum*test;
-		   }
+                if (std::fabs(dum) < 1.0) { 
+                  if( test >= 1.0e-10 )excs += dum*test;
+                } else { 
+                  excs += dum*test;
+                }
 
-                   if (ran < excs) goto outOfLoop;      //----------------------->
-		 }
-	       }
-             }
-           }
-	 }
+                if (ran < excs) goto outOfLoop;      //----------------------->
+              }
+            }
+          }
+        }
+      }
                                             // 3 previous loops continued to the end
-         inElastic = false;                 // quasi-elastic scattering   
-         return;
+      inElastic = false;                 // quasi-elastic scattering   
+      return;
 
-       } else {         // target must be a neutron
+    } else {         // target must be a neutron
          counter = -1;
          for (npos=0; npos<numSec/3; npos++) {
            for (nneg=std::max(0,npos-1); nneg<=(npos+1); nneg++) {
@@ -417,35 +417,27 @@ G4HEAntiKaonZeroInelastic::FirstIntInCasAntiKaonZero(G4bool& inElastic,
                                                   // 3 previous loops continued to the end
          inElastic = false;                     // quasi-elastic scattering.
          return;
-       }
-     } 
-   outOfLoop:           //  <------------------------------------------------------------------------   
+    }
+  }  // if (iplab < 10 .... )
+ 
+  outOfLoop:           //  <------------------------------------------------------------------------   
     
-   if( targetCode == protonCode)
-     {
-       if( npos == nneg)
-         {
-         }
-       else if (npos == (1+nneg))
-         {
-           if( G4UniformRand() < 0.5)
-             {
-               pv[0] = KaonMinus;
-             }
-           else
-             {
-               pv[1] = Neutron;
-             }
-         }
-       else      
-         {
-           pv[0] = KaonMinus;
-           pv[1] = Neutron;
-         } 
-     }  
-   else
-     {
-       if( npos == nneg)
+  if (targetCode == protonCode) {
+    if (npos == nneg) {
+
+    } else if (npos == (1+nneg)) {
+      if (G4UniformRand() < 0.5) {
+        pv[0] = KaonMinus;
+      } else {
+        pv[1] = Neutron;
+      }
+    } else {
+      pv[0] = KaonMinus;
+      pv[1] = Neutron;
+    }
+
+  } else {
+      if( npos == nneg)
          {
            if( G4UniformRand() < 0.75)
              {
@@ -464,39 +456,29 @@ G4HEAntiKaonZeroInelastic::FirstIntInCasAntiKaonZero(G4bool& inElastic,
          {
            pv[1] = Proton;
          }
-     }      
+  }      
 
+  if (G4UniformRand() < 0.5) {
+    if (((pv[0].getCode() == kaonMinusCode)
+          && (pv[1].getCode() == neutronCode) )
+        || ((pv[0].getCode() == kaonZeroCode)
+             && (pv[1].getCode() == protonCode) )
+        || ((pv[0].getCode() == antiKaonZeroCode)
+               && (pv[1].getCode() == protonCode) ) ) {
 
-   if( G4UniformRand() < 0.5 )   
-     {
-       if(    (    (pv[0].getCode() == kaonMinusCode)
-                && (pv[1].getCode() == neutronCode)  )
-           || (    (pv[0].getCode() == kaonZeroCode)
-                && (pv[1].getCode() == protonCode)   )
-           || (    (pv[0].getCode() == antiKaonZeroCode)
-                && (pv[1].getCode() == protonCode)   )   )
-         {
-           G4double ran = G4UniformRand();
-           if( pv[1].getCode() == protonCode)
-             { 
-               if(ran < 0.68)
-                 {
-                   pv[0] = PionPlus;
-                   pv[1] = Lambda;
-                 }
-               else if (ran < 0.84)
-                 {
-                   pv[0] = PionZero;
-                   pv[1] = SigmaPlus;
-                 }
-               else
-                 {
-                   pv[0] = PionPlus;
-                   pv[1] = SigmaZero;
-                 }
-             }
-           else
-             {
+      G4double ran = G4UniformRand();
+      if (pv[1].getCode() == protonCode) { 
+        if (ran < 0.68) {
+          pv[0] = PionPlus;
+          pv[1] = Lambda;
+        } else if (ran < 0.84) {
+          pv[0] = PionZero;
+          pv[1] = SigmaPlus;
+        } else {
+          pv[0] = PionPlus;
+          pv[1] = SigmaZero;
+        }
+      } else {
                if(ran < 0.68)
                  {
                    pv[0] = PionMinus;
@@ -512,10 +494,8 @@ G4HEAntiKaonZeroInelastic::FirstIntInCasAntiKaonZero(G4bool& inElastic,
                    pv[0] = PionZero;
                    pv[1] = SigmaMinus;
                  }
-             }
-         } 
-       else
-         {
+      }
+    } else {
            G4double ran = G4UniformRand();
            if (ran < 0.67)
               {
@@ -537,56 +517,41 @@ G4HEAntiKaonZeroInelastic::FirstIntInCasAntiKaonZero(G4bool& inElastic,
                 pv[0] = PionPlus;
                 pv[1] = SigmaMinus;
               }
-         }
-     }
+    }
+  }  // if rand < 0.5
                
-
-   nt = npos + nneg + nzero;
-   while ( nt > 0)
-       {
-         G4double ran = G4UniformRand();
-         if ( ran < (G4double)npos/nt)
-            { 
-              if( npos > 0 ) 
-                { pv[vecLen++] = PionPlus;
-                  npos--;
-                }
-            }
-         else if ( ran < (G4double)(npos+nneg)/nt)
-            {   
-              if( nneg > 0 )
-                { 
-                  pv[vecLen++] = PionMinus;
-                  nneg--;
-                }
-            }
-         else
-            {
-              if( nzero > 0 )
-                { 
-                  pv[vecLen++] = PionZero;
-                  nzero--;
-                }
-            }
-         nt = npos + nneg + nzero;
-       } 
-   if (verboseLevel > 1)
-      {
-        G4cout << "Particles produced: " ;
-        G4cout << pv[0].getName() << " " ;
-        G4cout << pv[1].getName() << " " ;
-        for (i=2; i < vecLen; i++)   
-            { 
-              G4cout << pv[i].getName() << " " ;
-            }
-         G4cout << G4endl;
+  nt = npos + nneg + nzero;
+  while (nt > 0) {
+    G4double ran = G4UniformRand();
+    if (ran < (G4double)npos/nt) { 
+      if (npos > 0) {
+        pv[vecLen++] = PionPlus;
+        npos--;
       }
-   return;
+    } else if (ran < (G4double)(npos+nneg)/nt) {   
+      if (nneg > 0) { 
+        pv[vecLen++] = PionMinus;
+        nneg--;
+      }
+    } else {
+      if (nzero > 0) { 
+        pv[vecLen++] = PionZero;
+        nzero--;
+      }
+    }
+    nt = npos + nneg + nzero;
+  }
+ 
+  if (verboseLevel > 1) {
+    G4cout << "Particles produced: " ;
+    G4cout << pv[0].getName() << " " ;
+    G4cout << pv[1].getName() << " " ;
+    for (i=2; i < vecLen; i++) { 
+      G4cout << pv[i].getName() << " " ;
+    }
+    G4cout << G4endl;
+  }
+
+  return;
  }
-
-
-
-
-
-
 

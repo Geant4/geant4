@@ -204,18 +204,17 @@ G4HEXiZeroInelastic::FirstIntInCasXiZero(G4bool& inElastic,
 // protons/neutrons by kaons or strange baryons according to the average
 // multiplicity per inelastic reaction.
 {
-  static const G4double expxu = std::log(MAXFLOAT); // upper bound for arg. of exp
-  static const G4double expxl = -expxu;             // lower bound for arg. of exp
+  static const G4double expxu = 82.;     // upper bound for arg. of exp
+  static const G4double expxl = -expxu;  // lower bound for arg. of exp
 
   static const G4double protb = 0.7;
   static const G4double neutb = 0.7;              
-  static const G4double     c = 1.25;
+  static const G4double c = 1.25;
 
   static const G4int numMul = 1200;
   static const G4int numSec = 60;
 
   G4int protonCode = Proton.getCode();
-
   G4int targetCode = targetParticle.getCode();
   G4double incidentTotalMomentum = incidentParticle.getTotalMomentum();
 
@@ -228,33 +227,29 @@ G4HEXiZeroInelastic::FirstIntInCasXiZero(G4bool& inElastic,
 
   G4int i, counter, nt, npos, nneg, nzero;
 
-   if( first ) 
-     {     // compute normalization constants, this will only be done once
-       first = false;
-       for( i=0; i<numMul; i++ )protmul[i]  = 0.0;
-       for( i=0; i<numSec; i++ )protnorm[i] = 0.0;
-       counter = -1;
-       for( npos=0; npos<(numSec/3); npos++ ) 
-          {
-            for( nneg=std::max(0,npos-2); nneg<=npos; nneg++ ) 
-               {
-                 for( nzero=0; nzero<numSec/3; nzero++ ) 
-                    {
-                      if( ++counter < numMul ) 
-                        {
-                          nt = npos+nneg+nzero;
-                          if( (nt>0) && (nt<=numSec) ) 
-                            {
-                              protmul[counter] = pmltpc(npos,nneg,nzero,nt,protb,c);
-                              protnorm[nt-1] += protmul[counter];
-                            }
-                        }
-                    }
-               }
+  if (first) {
+    // compute normalization constants, this will only be done once
+    first = false;
+    for (i = 0; i < numMul; i++) protmul[i] = 0.0;
+    for (i = 0; i < numSec; i++) protnorm[i] = 0.0;
+    counter = -1;
+    for (npos = 0; npos < (numSec/3); npos++) {
+      for (nneg = std::max(0,npos-2); nneg <= npos; nneg++) {
+        for (nzero = 0; nzero < numSec/3; nzero++) {
+          if (++counter < numMul) {
+            nt = npos+nneg+nzero;
+            if ((nt>0) && (nt<=numSec) ) {
+              protmul[counter] = pmltpc(npos,nneg,nzero,nt,protb,c);
+              protnorm[nt-1] += protmul[counter];
+            }
           }
-       for( i=0; i<numMul; i++ )neutmul[i]  = 0.0;
-       for( i=0; i<numSec; i++ )neutnorm[i] = 0.0;
-       counter = -1;
+        }
+      }
+    }
+
+    for( i=0; i<numMul; i++ )neutmul[i]  = 0.0;
+    for( i=0; i<numSec; i++ )neutnorm[i] = 0.0;
+    counter = -1;
        for( npos=0; npos<numSec/3; npos++ ) 
           {
             for( nneg=std::max(0,npos-1); nneg<=(npos+1); nneg++ ) 
@@ -273,19 +268,16 @@ G4HEXiZeroInelastic::FirstIntInCasXiZero(G4bool& inElastic,
                     }
                }
           }
-       for( i=0; i<numSec; i++ ) 
-          {
-            if( protnorm[i] > 0.0 )protnorm[i] = 1.0/protnorm[i];
-            if( neutnorm[i] > 0.0 )neutnorm[i] = 1.0/neutnorm[i];
-          }
-     }                                          // end of initialization
-
+    for (i = 0; i < numSec; i++) {
+      if (protnorm[i] > 0.0) protnorm[i] = 1.0/protnorm[i];
+      if (neutnorm[i] > 0.0) neutnorm[i] = 1.0/neutnorm[i];
+    }
+  }  // end of initialization
          
-                                              // initialize the first two places
-                                              // the same as beam and target                                    
-   pv[0] = incidentParticle;
-   pv[1] = targetParticle;
-   vecLen = 2;
+  // initialize the first two places the same as beam and target                                    
+  pv[0] = incidentParticle;
+  pv[1] = targetParticle;
+  vecLen = 2;
 
    if( !inElastic ) 
      {                                     // quasi-elastic scattering, no pions produced

@@ -202,8 +202,8 @@ G4HEAntiProtonInelastic::FirstIntInCasAntiProton(G4bool& inElastic,
 // protons/neutrons by kaons or strange baryons according to the average
 // multiplicity per inelastic reaction.
 {
-  static const G4double expxu = std::log(MAXFLOAT); // upper bound for arg. of exp
-  static const G4double expxl = -expxu;             // lower bound for arg. of exp
+  static const G4double expxu = 82;      // upper bound for arg. of exp
+  static const G4double expxl = -expxu;  // lower bound for arg. of exp
 
   static const G4double protb = 0.7;
   static const G4double neutb = 0.7;

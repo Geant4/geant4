@@ -202,8 +202,8 @@ G4HEAntiSigmaPlusInelastic::FirstIntInCasAntiSigmaPlus(G4bool& inElastic,
 // protons/neutrons by kaons or strange baryons according to the average
 // multiplicity per inelastic reaction.
 {
-  static const G4double expxu = std::log(MAXFLOAT); // upper bound for arg. of exp
-  static const G4double expxl = -expxu;             // lower bound for arg. of exp
+  static const G4double expxu = 82.;     // upper bound for arg. of exp
+  static const G4double expxl = -expxu;  // lower bound for arg. of exp
 
   static const G4double protb = 0.7;
   static const G4double neutb = 0.7;
@@ -229,181 +229,147 @@ G4HEAntiSigmaPlusInelastic::FirstIntInCasAntiSigmaPlus(G4bool& inElastic,
 
   G4int i, counter, nt, npos, nneg, nzero;
 
-   if( first ) 
-     {         // compute normalization constants, this will only be done once
-       first = false;
-       for( i=0; i<numMul  ; i++ ) protmul[i]  = 0.0;
-       for( i=0; i<numSec  ; i++ ) protnorm[i] = 0.0;
-       counter = -1;
-       for( npos=0; npos<(numSec/3); npos++ ) 
-          {
-            for( nneg=std::max(0,npos-1); nneg<=(npos+1); nneg++ ) 
-               {
-                 for( nzero=0; nzero<numSec/3; nzero++ ) 
-                    {
-                      if( ++counter < numMul ) 
-                        {
-                          nt = npos+nneg+nzero;
-                          if( (nt>0) && (nt<=numSec) ) 
-                            {
-                              protmul[counter] = pmltpc(npos,nneg,nzero,nt,protb,c);
-                              protnorm[nt-1] += protmul[counter];
-                            }
-                        }
-                    }
-               }
+  if (first) {
+    // compute normalization constants, this will only be done once
+    first = false;
+    for( i=0; i<numMul  ; i++ ) protmul[i]  = 0.0;
+    for( i=0; i<numSec  ; i++ ) protnorm[i] = 0.0;
+    counter = -1;
+    for (npos = 0; npos < (numSec/3); npos++) {
+      for (nneg = std::max(0,npos-1); nneg <= (npos+1); nneg++) {
+        for (nzero = 0; nzero < numSec/3; nzero++) {
+          if (++counter < numMul) {
+            nt = npos+nneg+nzero;
+            if ((nt>0) && (nt<=numSec) ) {
+              protmul[counter] = pmltpc(npos,nneg,nzero,nt,protb,c);
+              protnorm[nt-1] += protmul[counter];
+            }
           }
-       for( i=0; i<numMul; i++ )neutmul[i]  = 0.0;
-       for( i=0; i<numSec; i++ )neutnorm[i] = 0.0;
-       counter = -1;
-       for( npos=0; npos<numSec/3; npos++ ) 
-          {
-            for( nneg=npos; nneg<=(npos+2); nneg++ ) 
-               {
-                 for( nzero=0; nzero<numSec/3; nzero++ ) 
-                    {
-                      if( ++counter < numMul ) 
-                        {
-                          nt = npos+nneg+nzero;
-                          if( (nt>0) && (nt<=numSec) ) 
-                            {
-                               neutmul[counter] = pmltpc(npos,nneg,nzero,nt,neutb,c);
-                               neutnorm[nt-1] += neutmul[counter];
-                            }
-                        }
-                    }
-               }
+        }
+      }
+    }
+
+    for (i = 0; i < numMul; i++) neutmul[i]  = 0.0;
+    for (i = 0; i < numSec; i++) neutnorm[i] = 0.0;
+    counter = -1;
+    for (npos = 0; npos < numSec/3; npos++) {
+      for (nneg = npos; nneg <= (npos+2); nneg++) {
+        for (nzero = 0; nzero < numSec/3; nzero++) {
+          if (++counter < numMul) {
+            nt = npos+nneg+nzero;
+            if ((nt>0) && (nt<=numSec) ) {
+              neutmul[counter] = pmltpc(npos,nneg,nzero,nt,neutb,c);
+              neutnorm[nt-1] += neutmul[counter];
+            }
           }
-       for( i=0; i<numSec; i++ ) 
-          {
-            if( protnorm[i] > 0.0 )protnorm[i] = 1.0/protnorm[i];
-            if( neutnorm[i] > 0.0 )neutnorm[i] = 1.0/neutnorm[i];
+        }
+      }
+    }
+
+    for (i = 0; i < numSec; i++) {
+      if (protnorm[i] > 0.0 )protnorm[i] = 1.0/protnorm[i];
+      if (neutnorm[i] > 0.0 )neutnorm[i] = 1.0/neutnorm[i];
+    }
+
+    // annihilation
+    for (i = 0; i < numMulAn; i++) protmulAn[i] = 0.0;
+    for (i = 0; i < numSec; i++) protnormAn[i] = 0.0;
+    counter = -1;
+    for (npos = 1; npos < (numSec/3); npos++) {
+      nneg = npos; 
+      for (nzero = 0; nzero < numSec/3; nzero++) {
+        if (++counter < numMulAn) {
+          nt = npos+nneg+nzero;
+          if ((nt>1) && (nt<=numSec) ) {
+            protmulAn[counter] = pmltpc(npos,nneg,nzero,nt,protb,c);
+            protnormAn[nt-1] += protmulAn[counter];
           }
-                                                                   // annihilation
-       for( i=0; i<numMulAn  ; i++ ) protmulAn[i]  = 0.0;
-       for( i=0; i<numSec    ; i++ ) protnormAn[i] = 0.0;
-       counter = -1;
-       for( npos=1; npos<(numSec/3); npos++ ) 
-          {
-            nneg = npos; 
-            for( nzero=0; nzero<numSec/3; nzero++ ) 
-               {
-                 if( ++counter < numMulAn ) 
-                   {
-                     nt = npos+nneg+nzero;
-                     if( (nt>1) && (nt<=numSec) ) 
-                       {
-                         protmulAn[counter] = pmltpc(npos,nneg,nzero,nt,protb,c);
-                         protnormAn[nt-1] += protmulAn[counter];
-                       }
-                   }
-               }
+        }
+      }
+    }
+
+    for (i = 0; i < numMulAn; i++) neutmulAn[i]  = 0.0;
+    for (i = 0; i < numSec; i++) neutnormAn[i] = 0.0;
+    counter = -1;
+    for (npos = 0; npos < numSec/3; npos++) {
+      nneg = npos+1; 
+      for (nzero = 0; nzero < numSec/3; nzero++) {
+        if (++counter < numMulAn) {
+          nt = npos+nneg+nzero;
+          if ((nt>1) && (nt<=numSec) ) {
+            neutmulAn[counter] = pmltpc(npos,nneg,nzero,nt,neutb,c);
+            neutnormAn[nt-1] += neutmulAn[counter];
           }
-       for( i=0; i<numMulAn; i++ ) neutmulAn[i]  = 0.0;
-       for( i=0; i<numSec;   i++ ) neutnormAn[i] = 0.0;
-       counter = -1;
-       for( npos=0; npos<numSec/3; npos++ ) 
-          {
-            nneg = npos+1; 
-            for( nzero=0; nzero<numSec/3; nzero++ ) 
-               {
-                 if( ++counter < numMulAn ) 
-                   {
-                     nt = npos+nneg+nzero;
-                     if( (nt>1) && (nt<=numSec) ) 
-                       {
-                          neutmulAn[counter] = pmltpc(npos,nneg,nzero,nt,neutb,c);
-                          neutnormAn[nt-1] += neutmulAn[counter];
-                       }
-                   }
-               }
-          }
-       for( i=0; i<numSec; i++ ) 
-          {
-            if( protnormAn[i] > 0.0 )protnormAn[i] = 1.0/protnormAn[i];
-            if( neutnormAn[i] > 0.0 )neutnormAn[i] = 1.0/neutnormAn[i];
-          }
-     }                                          // end of initialization
+        }
+      }
+    }
+    for (i = 0; i < numSec; i++) {
+      if( protnormAn[i] > 0.0 )protnormAn[i] = 1.0/protnormAn[i];
+      if( neutnormAn[i] > 0.0 )neutnormAn[i] = 1.0/neutnormAn[i];
+    }
+  }  // end of initialization
 
          
-                                              // initialize the first two places
-                                              // the same as beam and target                                    
-   pv[0] = incidentParticle;
-   pv[1] = targetParticle;
-   vecLen = 2;
+  // initialize the first two places the same as beam and target                                    
+  pv[0] = incidentParticle;
+  pv[1] = targetParticle;
+  vecLen = 2;
 
-   if( !inElastic ) 
-     {                                        // some two-body reactions 
-       G4double cech[] = {0.50, 0.45, 0.40, 0.35, 0.30, 0.25, 0.06, 0.04, 0.005, 0.};
+  if (!inElastic) {  // some two-body reactions 
+    G4double cech[] = {0.50, 0.45, 0.40, 0.35, 0.30, 0.25, 0.06, 0.04, 0.005, 0.};
 
-       G4int iplab = std::min(9, G4int( incidentTotalMomentum*2.5));
-       if( G4UniformRand() < cech[iplab]/std::pow(atomicWeight,0.42) ) 
-         {           
-           G4double ran = G4UniformRand();
+    G4int iplab = std::min(9, G4int( incidentTotalMomentum*2.5));
+    if (G4UniformRand() < cech[iplab]/std::pow(atomicWeight,0.42) ) {           
+      G4double ran = G4UniformRand();
 
-           if ( targetCode == protonCode)
-             {
-               if(ran < 0.2)
-                 {
-                   pv[0] = Proton;
-                   pv[1] = AntiSigmaPlus;
-                 }
-               else if (ran < 0.4)
-                 {
-                   pv[0] = AntiLambda;
-                   pv[1] = Neutron;
-                 }
-               else if (ran < 0.6)
-                 {
-                   pv[0] = Neutron;
-                   pv[1] = AntiLambda;
-                 }
-               else if (ran < 0.8)
-                 {
-                   pv[0] = Neutron;
-                   pv[1] = AntiSigmaZero;
-                 }
-               else
-                 {
-                   pv[0] = AntiSigmaZero;
-                   pv[1] = Neutron;
-                 }     
-             }
-           else
-             {
-               pv[0] = Neutron;
-               pv[1] = AntiSigmaPlus;
-             }  
-         }   
-       return;
-     }
-   else if (availableEnergy <= PionPlus.getMass())
-       return;
-
-                                                  //   inelastic scattering
-
-   npos = 0; nneg = 0; nzero = 0;
-   G4double anhl[] = {1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 0.97, 0.88, 
-                      0.85, 0.81, 0.75, 0.64, 0.64, 0.55, 0.55, 0.45, 0.47, 0.40, 
-                      0.39, 0.36, 0.33, 0.10, 0.01};
-   G4int            iplab =      G4int( incidentTotalMomentum*10.);
-   if ( iplab >  9) iplab = 10 + G4int( (incidentTotalMomentum  -1.)*5. );          
-   if ( iplab > 14) iplab = 15 + G4int(  incidentTotalMomentum  -2.     );
-   if ( iplab > 22) iplab = 23 + G4int( (incidentTotalMomentum -10.)/10.); 
-                    iplab = std::min(24, iplab);
-
-   if ( G4UniformRand() > anhl[iplab] )
-     {                                           // non- annihilation channels
-
-                         //  number of total particles vs. centre of mass Energy - 2*proton mass
+      if (targetCode == protonCode) {
+        if (ran < 0.2) {
+          pv[0] = Proton;
+          pv[1] = AntiSigmaPlus;
+        } else if (ran < 0.4) {
+          pv[0] = AntiLambda;
+          pv[1] = Neutron;
+        } else if (ran < 0.6) {
+          pv[0] = Neutron;
+          pv[1] = AntiLambda;
+        } else if (ran < 0.8) {
+          pv[0] = Neutron;
+          pv[1] = AntiSigmaZero;
+        } else {
+          pv[0] = AntiSigmaZero;
+          pv[1] = Neutron;
+        }     
+      } else {
+        pv[0] = Neutron;
+        pv[1] = AntiSigmaPlus;
+      }  
+    }
    
-           G4double aleab = std::log(availableEnergy);
-           G4double n     = 3.62567+aleab*(0.665843+aleab*(0.336514
-                            + aleab*(0.117712+0.0136912*aleab))) - 2.0;
+    return;
+  }
+  else if (availableEnergy <= PionPlus.getMass()) return;
+
+  // inelastic scattering
+  npos = 0; nneg = 0; nzero = 0;
+  G4double anhl[] = {1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 0.97, 0.88, 
+                     0.85, 0.81, 0.75, 0.64, 0.64, 0.55, 0.55, 0.45, 0.47, 0.40, 
+                     0.39, 0.36, 0.33, 0.10, 0.01};
+  G4int iplab = G4int( incidentTotalMomentum*10.);
+  if ( iplab >  9) iplab = 10 + G4int( (incidentTotalMomentum  -1.)*5. );          
+  if ( iplab > 14) iplab = 15 + G4int(  incidentTotalMomentum  -2.     );
+  if ( iplab > 22) iplab = 23 + G4int( (incidentTotalMomentum -10.)/10.); 
+  iplab = std::min(24, iplab);
+
+  if ( G4UniformRand() > anhl[iplab] ) {  // non- annihilation channels
+
+    // number of total particles vs. centre of mass Energy - 2*proton mass
+    G4double aleab = std::log(availableEnergy);
+    G4double n = 3.62567+aleab*(0.665843+aleab*(0.336514
+                 + aleab*(0.117712+0.0136912*aleab))) - 2.0;
    
-                         // normalization constant for kno-distribution.
-                         // calculate first the sum of all constants, check for numerical problems.   
-           G4double test, dum, anpn = 0.0;
+    // normalization constant for kno-distribution.
+    // calculate first the sum of all constants, check for numerical problems.   
+    G4double test, dum, anpn = 0.0;
 
            for (nt=1; nt<=numSec; nt++) {
              test = std::exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );

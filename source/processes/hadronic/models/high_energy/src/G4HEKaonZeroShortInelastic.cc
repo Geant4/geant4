@@ -222,15 +222,15 @@ G4HEKaonZeroShortInelastic::FirstIntInCasKaonZero(G4bool& inElastic,
 // protons/neutrons by kaons or strange baryons according to the average
 // multiplicity per inelastic reaction.
 {
-  static const G4double expxu = std::log(MAXFLOAT); // upper bound for arg. of exp
-  static const G4double expxl = -expxu;             // lower bound for arg. of exp
+  static const G4double expxu = 82.;     // upper bound for arg. of exp
+  static const G4double expxl = -expxu;  // lower bound for arg. of exp
 
   static const G4double protb = 0.7;
   static const G4double neutb = 0.7;
-  static const G4double     c = 1.25;
+  static const G4double c = 1.25;
 
-  static const G4int   numMul = 1200;
-  static const G4int   numSec = 60;
+  static const G4int numMul = 1200;
+  static const G4int numSec = 60;
 
   G4int neutronCode = Neutron.getCode();
   G4int protonCode  = Proton.getCode();
@@ -543,12 +543,12 @@ G4HEKaonZeroShortInelastic::FirstIntInCasAntiKaonZero(G4bool& inElastic,
 // protons/neutrons by kaons or strange baryons according to the average
 // multiplicity per inelastic reaction.
 {
-  static const G4double expxu = std::log(MAXFLOAT); // upper bound for arg. of exp
-  static const G4double expxl = -expxu;             // lower bound for arg. of exp
+  static const G4double expxu = 82.;     // upper bound for arg. of exp
+  static const G4double expxl = -expxu;  // lower bound for arg. of exp
 
   static const G4double protb = 0.7;
   static const G4double neutb = 0.7;
-  static const G4double     c = 1.25;
+  static const G4double c = 1.25;
 
   static const G4int numMul = 1200;
   static const G4int numSec = 60;
