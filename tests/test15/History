@@ -15,6 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 Aug 2012, Pere Mato     (test15-V09-05-01)
+-------------------------------------------------
+- CMakeLists.txt - Changed to avoid two builds of different targets running concurrenly
+                   when CTest is used with -jN
+
 23 Jan 2011  Dennis Wright  (test15-V09-05-00)
 ----------------------------------------------
 - Tst15DetectorConstruction : add C material
