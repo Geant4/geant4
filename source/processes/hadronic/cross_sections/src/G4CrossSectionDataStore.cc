@@ -59,6 +59,7 @@ G4CrossSectionDataStore::G4CrossSectionDataStore() :
 {
   nist = G4NistManager::Instance();
   currentMaterial = elmMaterial = 0;
+  currentElement = 0;  //ALB 14-Aug-2012 Coverity fix.
   matParticle = elmParticle = 0;
   matKinEnergy = elmKinEnergy = matCrossSection = elmCrossSection = 0.0;
 }
@@ -100,7 +101,7 @@ G4CrossSectionDataStore::GetCrossSection(const G4DynamicParticle* part,
   if(mat == elmMaterial && elm == currentElement &&
      part->GetDefinition() == elmParticle &&
      part->GetKineticEnergy() == elmKinEnergy) 
-    { return matCrossSection; }
+    { return elmCrossSection; }
 
   elmMaterial = mat;
   currentElement = elm;
@@ -125,7 +126,7 @@ G4CrossSectionDataStore::GetCrossSection(const G4DynamicParticle* part,
 	     << " has no isotopes " << G4endl; 
       throw G4HadronicException(__FILE__, __LINE__, 
                       " Isotope vector is not defined");
-      return elmCrossSection;
+      //ALB 14-Aug-2012 Coverity fix.  return elmCrossSection;
     }
     // user-defined isotope abundances        
     G4IsotopeVector* isoVector = elm->GetIsotopeVector();
