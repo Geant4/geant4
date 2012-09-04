@@ -1,12 +1,10 @@
-$Id: README,v 1.3 2008-09-26 20:15:04 maire Exp $
--------------------------------------------------------------------
+//$Id$
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
- 
-                            TestEm17
-                            --------
+///\file "electromagnetic/TestEm17/.README"
+///\brief Example TestEm17 README page
+
+/*! \page ExampleTestEm17 Example TestEm17
+
         This example is intended to check implementation of the processes 
         of muon interactions: ionization, direct (e+,e-) production,
 	bremsstrahlung, mu-nuclear interaction.
@@ -14,7 +12,7 @@ $Id: README,v 1.3 2008-09-26 20:15:04 maire Exp $
 	energy transfered to secondaries), total cross sections and to compare
 	with analytic calculations.
 	
- 1- GEOMETRY DEFINITION
+\section TestEm17_s1 GEOMETRY DEFINITION
  
  	It is a single box of homogeneous medium.
  	Two parameters define the geometry :
@@ -25,7 +23,7 @@ $Id: README,v 1.3 2008-09-26 20:15:04 maire Exp $
 	DetectorConstruction, but the above parameters can be changed 
 	interactively via the commands defined in DetectorMessenger.
  	
- 2- PHYSICS LIST
+\section TestEm17_s2 PHYSICS LIST
  
  	The Physics List of the example uses the main local physics constructor
         (builder) which called "standard". In this builder a limited set 
@@ -33,10 +31,10 @@ $Id: README,v 1.3 2008-09-26 20:15:04 maire Exp $
         ionisation, bremsstrahlung and e+e- pair production. Energy range 
         for these processes is from 100*eV to 1000*PeV.
 
-        Optionally "muNucl" builder may be added activating muon-nuclear 
+        Optionally "muNucl" builder, MuNuclearBuilder, may be added activating muon-nuclear 
         inelastic interaction.
 	 	 
- 3- AN EVENT : THE PRIMARY GENERATOR
+\section TestEm17_s3 AN EVENT : THE PRIMARY GENERATOR
  
  	The primary kinematic consists of a single particle starting at the edge
 	of the box. The type of the particle and its energy are set in 
@@ -44,7 +42,7 @@ $Id: README,v 1.3 2008-09-26 20:15:04 maire Exp $
  	build-in commands of ParticleGun class (see the macros provided with 
  	this example).
  	
- 4- PHYSICS
+\section TestEm17_s4 PHYSICS
  
 	The incident particle is a muon. During the tracking, secondary
 	particles are killed.
@@ -54,60 +52,74 @@ $Id: README,v 1.3 2008-09-26 20:15:04 maire Exp $
 	The total number of interactions is recorded, and the total cross section
 	computed from this.  
 
-        At EndOfRun, the above results are compared with analytic calculations.
+        At RunAction::EndOfRunAction(), the above results are compared with analytic calculations.
 	The functions which compute the theoretical cross sections have been
 	provided by the G4 MEPhI group, and grouped in MuCrossSections class.
 
- 5- HISTOGRAMS
+\section TestEm17_s5 HISTOGRAMS
          
 	The test contains 4 built-in 1D histograms, which are managed by the
-	HistoManager class and its Messenger.
+	HistoManager class and its Messenger, HistoMessenger.
 
-        1 Monte-Carlo relative transferred energy distribution histo
+        - 1 Monte-Carlo relative transferred energy distribution histo
             (log10(eps/Emu kin) for knock-on electrons (ionization)
-        2  -"- direct (e+,e-) pair production
-        3  -"- bremsstrahlung
-        4  -"- nuclear interaction
+        - 2  ... direct (e+,e-) pair production
+        - 3  ... bremsstrahlung
+        - 4  ... nuclear interaction
 	
 	The histos can be activated individually with the command :
-	/testem/histo/setHisto id nbBins  valMin valMax : 
+\verbatim
+/testem/histo/setHisto id nbBins  valMin valMax 
+\endverbatim
           min and max values of log10(eps/Emu kin).
 	
-	At EndOfRun the corresponding histos for analytic calculations are
+	At RunAction::EndOfRunAction() the corresponding histos for analytic calculations are
 	automatically created and filled (histo 11 to 14).
 							  
  	One can control the name and the type of the histograms file with 
 	the command:
- 	/testem/histo/setFileName  name  (default testem17)
+\verbatim
+/testem/histo/setFileName  name  (default testem17)
+\endverbatim
    
         It is possible to choose the format of the histogram file :
         root (default), xml, csv, by using namespace in HistoManager.hh
      	 				
- 6- VISUALIZATION
+\section TestEm17_s6- VISUALIZATION
  
- 	The Visualization Manager is set in the main().
+ 	The Visualization Manager is set in the main () (see TestEm17.cc).
  	The initialisation of the drawing is done via the commands
  	/vis/... in the macro vis.mac. To get visualisation:
- 	> /control/execute vis.mac
+\verbatim
+> /control/execute vis.mac
+\endverbatim
  	
  	The detector has a default view which is a longitudinal view of the 
  	box.
  	
  	The tracks are drawn at the end of event, and erased at the end of run.
 	
- 7- HOW TO START ?
+\section TestEm17_s7- HOW TO START ?
  
 	compile and link to generate an executable
- 		% cd geant4/examples/extended/electromagnetic/TestEm17
- 		% gmake
+\verbatim
+% cd geant4/examples/extended/electromagnetic/TestEm17
+% gmake
+\endverbatim
  		
 	execute TestEm17 in 'batch' mode from macro files :
- 		% TestEm17   allproc.mac
+\verbatim
+% TestEm17   allproc.mac
+\endverbatim
  		
 	execute TestEm17 in 'interactive mode' with visualization :
- 		% TestEm17
-		Idle> control/execute vis.mac
- 		....
- 		Idle> type your commands
- 		....
- 		Idle> exit
+\verbatim
+% TestEm17
+Idle> control/execute vis.mac
+....
+Idle> type your commands
+....
+Idle> exit
+\endverbatim
+  
+*/
