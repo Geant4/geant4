@@ -74,6 +74,8 @@ void ExN04PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   if(currentGenerator)
     currentGenerator-> GeneratePrimaryVertex(anEvent);
   else 
-    G4Exception("generator is not instanciated.");
+    G4Exception("ExN04PrimaryGeneratorAction::GeneratePrimaries", 
+                "PrimaryGeneratorAction001", FatalException,
+                "generator is not instanciated." );
 }
 

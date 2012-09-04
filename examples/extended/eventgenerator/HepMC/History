@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 24th, 2012 I. Hrivnacova (exHepMC-V09-05-00)
+- Migration to "new" G4Exception  
+- Fixed building Pythia6 in HepMCEx01 so that it works without CERNLIB
+and updated documentation accordingly.
+- Adding .README files for Doxygen  
+
 December 10th 2010 K.Murakami (exHepMC-V09-03-03)
 - HepMCEx01: update for latest HepMC version (2.06.03)
 - HepMCEx01/02 : use QGSP_BERT physics list
