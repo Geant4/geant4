@@ -82,12 +82,6 @@ G4KineticTrackVector *G4ExcitedStringDecay::FragmentStrings
   for ( unsigned int astring=0; astring < theStrings->size(); astring++)
   {
 	KTsum+= theStrings->operator[](astring)->Get4Momentum();
-
-	if( !(KTsum.e()<1) && !(KTsum.e()>-1) )
-	{
-          throw G4HadronicException(__FILE__, __LINE__, 
-	                           "G4ExcitedStringDecay::FragmentStrings received nan string...");
-	}
   }
 
   G4KineticTrackVector * theResult = new G4KineticTrackVector;
@@ -181,27 +175,13 @@ G4bool G4ExcitedStringDecay::EnergyAndMomentumCorrector
     G4double        SumMass = 0;     
     G4double        TotalCollisionMass = TotalCollisionMom.m();
 
-    if( !(TotalCollisionMass<1) && !(TotalCollisionMass>-1) )
-    {
-      std::cout << "TotalCollisionMomentum = "<<TotalCollisionMom<<G4endl;
-      throw G4HadronicException(__FILE__, __LINE__, "G4ExcitedStringDecay received nan mass...");
-    }
-
 //G4cout<<G4endl<<"EnergyAndMomentumCorrector "<<Output->size()<<G4endl;
     // Calculate sum hadron 4-momenta and summing hadron mass
     unsigned int cHadron;
     for(cHadron = 0; cHadron < Output->size(); cHadron++)
     {
         SumMom  += Output->operator[](cHadron)->Get4Momentum();
-	if( !(SumMom<1) && !(SumMom>-1) )
-	{
-          throw G4HadronicException(__FILE__, __LINE__, "G4ExcitedStringDecay::EnergyAndMomentumCorrector() received nan momentum...");
-	}
         SumMass += Output->operator[](cHadron)->GetDefinition()->GetPDGMass();
-	if( !(SumMass<1) && !(SumMass>-1) )
-	{
-          throw G4HadronicException(__FILE__, __LINE__, "G4ExcitedStringDecay::EnergyAndMomentumCorrector() received nan mass...");
-	}
     }
 
 //G4cout<<"SumMass TotalCollisionMass "<<SumMass<<" "<<TotalCollisionMass<<G4endl;
