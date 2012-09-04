@@ -1,9 +1,9 @@
  $Id$
 
-///\file "pythia6Decayer/.README"
-///\brief Example N1 README page
+///\file "eventgenerator/pythia/decayer6/.README"
+///\brief Example decayer6 page
 
-/*! \page ExamplePythia6Decayer Example Pythia6Ddecayer 
+/*! \page Exampledecayer6 Example decayer6 
 
  This is an example of the external decayer implementation 
  with PYTHIA6.
@@ -21,7 +21,8 @@
  <hr>
 
  The use of the external decayer is demonstrated with using the 
- classes from common examples repository.
+ classes from common examples repository, see below their complete 
+ list.
  
  The G4Pythia6Decayer class provides the implementation of the
  G4VExternalDecayer interface with using PYTHIA6. In order
@@ -67,7 +68,7 @@ export PYTHIA6_VERSION="6.4.23"
    
 - 3. Compilation:
 \verbatim
-% cd $G4INSTALL/example/extended/new/decay/pythia6Decayer/
+% cd $G4INSTALL/example/extended/eventgenerator/pythia/decayer6
 % make setup
 % make
 \endverbatim                
@@ -76,5 +77,14 @@ export PYTHIA6_VERSION="6.4.23"
 \verbatim
 % pythia6_decayer pythia6_decayer.in
 \endverbatim                
+
+ The list of classes used from common:
+ - ExG4DetectorConstruction01
+ - ExG4DetectorConstruction01Messenger
+ - ExG4PrimaryGeneratorAction01 
+ - ExG4EventAction01 
+ - ExG4EventAction01Messenger
+ - ExG4RunAction01
+ - ExG4RunAction01Messenger 
 
 */   
