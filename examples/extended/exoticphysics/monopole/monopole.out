@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-07    (10-August-2012)
+ Geant4 version Name: geant4-09-05-ref-08    (7-September-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -15,7 +15,7 @@ G4PhysListFactory::GetReferencePhysList <FTFP_BERT>  EMoption= 0
 
 /monopole/setup 
 Monopole is created: m(GeV)= 100 Qel= 0 Qmag= 68.518
-/control/execute /build/cdash/G4/release/09-05-ref-07_branch/examples/extended/exoticphysics/monopole/monopole.in
+/control/execute /build/cdash/G4/release/09-05-ref-08_branch/examples/extended/exoticphysics/monopole/monopole.in
 /control/verbose 1
 /run/verbose 0
 /testex/run/verbose 1

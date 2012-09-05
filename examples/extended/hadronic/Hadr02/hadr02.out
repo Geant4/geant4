@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-07    (10-August-2012)
+ Geant4 version Name: geant4-09-05-ref-08    (7-September-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -558,28 +558,28 @@ EventAction: Event # 90 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.21s Real=0.21s Sys=0s
+  User=0.2s Real=0.21s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        S32[0.0]
 Beam Energy(GeV)                     200
 Number of events                     100
-Average energy deposit (GeV)         6.471   RMS(GeV) 4.444
-Average number of steps              54.98
-Average number of gamma              1.82
+Average energy deposit (GeV)         7.106   RMS(GeV) 3.924
+Average number of steps              60.31
+Average number of gamma              2.08
 Average number of e-                 0
 Average number of e+                 0
-Average number of neutrons           14.58
-Average number of protons            14.86
+Average number of neutrons           14.66
+Average number of protons            14.7
 Average number of antiprotons        0
-Average number of pi+ & pi-          1.93
-Average number of pi0                0.86
-Average number of kaons              0
+Average number of pi+ & pi-          1.86
+Average number of pi0                0.82
+Average number of kaons              0.07
 Average number of muons              0
-Average number of deuterons+tritons  0.77
-Average number of He3+alpha          0.79
-Average number of ions               0.61
+Average number of deuterons+tritons  0.8
+Average number of He3+alpha          0.75
+Average number of ions               0.6
 ========================================================
 
 G4 kernel has come to Quit state.

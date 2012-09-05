@@ -1,12 +1,12 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-07    (10-August-2012)
+ Geant4 version Name: geant4-09-05-ref-08    (7-September-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
- creating G4RunManagerKernel 0x5540c90
+ creating G4RunManagerKernel 0x6c5fc90
 
 The materials defined are : 
 
@@ -56,14 +56,14 @@ List of instantiated particles ============================================
 e+ e- gamma mu+ mu- pi+ pi- proton 
 physicsList->Construct() start.
  G4Transportation constructor> set fShortStepOptimisation to false
-0x55a77f0G4ErrorPhysicsList:: particle process manager e+ = 0x55a8cf0
-0x55a75e0G4ErrorPhysicsList:: particle process manager e- = 0x55aa300
-0x55a7370G4ErrorPhysicsList:: particle process manager gamma = 0x55aa510
-0x55a7a00G4ErrorPhysicsList:: particle process manager mu+ = 0x55aa760
-0x55a7e30G4ErrorPhysicsList:: particle process manager mu- = 0x55aa9b0
-0x55a82a0G4ErrorPhysicsList:: particle process manager pi+ = 0x55aac00
-0x55a86c0G4ErrorPhysicsList:: particle process manager pi- = 0x55aae50
-0x55a8ae0G4ErrorPhysicsList:: particle process manager proton = 0x55ab0a0
+0x6cc6d60G4ErrorPhysicsList:: particle process manager e+ = 0x6cc8280
+0x6cc6b50G4ErrorPhysicsList:: particle process manager e- = 0x6cc9890
+0x6cc6430G4ErrorPhysicsList:: particle process manager gamma = 0x6cc9aa0
+0x6cc6f70G4ErrorPhysicsList:: particle process manager mu+ = 0x6cc9cf0
+0x6cc73c0G4ErrorPhysicsList:: particle process manager mu- = 0x6cc9f40
+0x6cc7830G4ErrorPhysicsList:: particle process manager pi+ = 0x6cca190
+0x6cc7c50G4ErrorPhysicsList:: particle process manager pi- = 0x6cca3e0
+0x6cc8070G4ErrorPhysicsList:: particle process manager proton = 0x6cca630
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 

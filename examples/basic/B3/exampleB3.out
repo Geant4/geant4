@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-07    (10-August-2012)
+ Geant4 version Name: geant4-09-05-ref-08    (7-September-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -194,7 +194,7 @@ Available colours:
 ### Run 0 start.
 
 ---> Begin of event: 0
-G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /data/cdash/G4/release/slc5-gcc43/data/RadioactiveDecay3.4/z8.a18
+G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /data/cdash/G4/release/slc5-gcc43/data/RadioactiveDecay3.5/z8.a18
 
 --------------------End of Run------------------------------
  The run was 10000 F18[0.0] Nb of 'good' e+ annihilations: 1291

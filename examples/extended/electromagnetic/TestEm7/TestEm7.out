@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-07    (10-August-2012)
+ Geant4 version Name: geant4-09-05-ref-08    (7-September-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -50,7 +50,7 @@
           ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
 
 
- Material: Water_1.05 H_2O   density:  1.050 g/cm3   RadL:  34.365 cm   Nucl.Int.Length:  71.921 cm   Imean:  75.000 eV 
+ Material: Water_1.05 H_2O   density:  1.050 g/cm3   RadL:  34.365 cm   Nucl.Int.Length:  71.921 cm   Imean:  78.000 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -493,7 +493,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=9.6s Real=10.51s Sys=0.51s
+  User=10.07s Real=12.09s Sys=0.26s
 
  The run consists of 10000 proton of 160 MeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
@@ -561,7 +561,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=4.27s Real=5.77s Sys=0.04s
+  User=4.25s Real=4.52s Sys=0.02s
 
  The run consists of 1000 C12[0.0] of 3.5 GeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
@@ -620,7 +620,7 @@ Run Summary
           ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
 
 
- Material: Water_1.05 H_2O   density:  1.050 g/cm3   RadL:  34.365 cm   Nucl.Int.Length:  71.921 cm   Imean:  75.000 eV 
+ Material: Water_1.05 H_2O   density:  1.050 g/cm3   RadL:  34.365 cm   Nucl.Int.Length:  71.921 cm   Imean:  78.000 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -1046,7 +1046,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.74s Real=2.1s Sys=0.03s
+  User=1.72s Real=1.89s Sys=0.02s
 
  The run consists of 1000 kaon+ of 100 MeV through 20 cm  of G4_Cu (density: 8.96 g/cm3 )
 
@@ -1094,7 +1094,7 @@ Run Summary
           ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
 
 
- Material: Water_1.05 H_2O   density:  1.050 g/cm3   RadL:  34.365 cm   Nucl.Int.Length:  71.921 cm   Imean:  75.000 eV 
+ Material: Water_1.05 H_2O   density:  1.050 g/cm3   RadL:  34.365 cm   Nucl.Int.Length:  71.921 cm   Imean:  78.000 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -1525,7 +1525,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0.18s Sys=0.01s
 
  The run consists of 100 alpha of 265 eV  through 20 cm  of TechVacuum (density: 0.01 kg/m3 )
 
@@ -1573,7 +1573,7 @@ Run Summary
           ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
 
 
- Material: Water_1.05 H_2O   density:  1.050 g/cm3   RadL:  34.365 cm   Nucl.Int.Length:  71.921 cm   Imean:  75.000 eV 
+ Material: Water_1.05 H_2O   density:  1.050 g/cm3   RadL:  34.365 cm   Nucl.Int.Length:  71.921 cm   Imean:  78.000 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -2401,7 +2401,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=3.33s Real=4.19s Sys=0s
+  User=3.35s Real=3.54s Sys=0.01s
 
  The run consists of 10 Xe131[0.0] of 1.217 GeV through 20 cm  of G4_Si (density: 2.33 g/cm3 )
 
@@ -2758,10 +2758,12 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : G4_WATER
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  2.94056 keV    e-  351.877 keV    e+  342.545 keV proton 100 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : G4_Cu
@@ -2804,14 +2806,14 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.88s Real=1.11s Sys=0.04s
+  User=0.88s Real=1.3s Sys=0.03s
 
  The run consists of 1000 proton of 160 MeV through 20 cm  of Water_1.05 (density: 1.05 g/cm3 )
 
- Projected Range= 16.8904 cm    rms= 1.84685 mm 
- Mean number of primary steps = 177.96
- Total energy deposit= 160 MeV
- niel energy deposit = 101.324 eV 
+ Projected Range= 16.8922 cm    rms= 1.778 mm 
+ Mean number of primary steps = 177.937
+ Total energy deposit= 159.943 MeV
+ niel energy deposit = 118.865 eV 
 ... write Root file : testem7.root - done
 ... close Root file : testem7.root - done
 
@@ -2819,6 +2821,6 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1760899747, 131187286
+ Current couple of seeds = 774237066, 538025345
 ----------------------------------------
 G4 kernel has come to Quit state.

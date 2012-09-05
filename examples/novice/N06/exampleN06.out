@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-07    (10-August-2012)
+ Geant4 version Name: geant4-09-05-ref-08    (7-September-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -249,7 +249,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 0.1197816422982748
       Energy Deposit (MeV)  : 0.01780954340767608
       -----------------------------------------------------------------------
@@ -281,16 +281,6 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       -----------------------------------------------------------------------
 
     ++List of secondaries generated (x,y,z,kE,t,PID):  No. of secodaries = 0
- G4VParticleChange::CheckSecondary  :   the global time of secondary goes back comapared to the parent  !!  Difference:  0.000434176[ns] 
-opticalphoton E=4.13009e-06 pos=4.16819e-06, 2.97925e-07, 8.76578e-07 time=1.66039e-05 parent time=0.00045078
- G4VParticleChange::CheckSecondary  :   the global time of secondary goes back comapared to the parent  !!  Difference:  0.00043977[ns] 
-opticalphoton E=3.41832e-06 pos=2.76384e-06, 1.97548e-07, 5.8124e-07 time=1.10097e-05 parent time=0.00045078
- G4VParticleChange::CheckSecondary  :   the global time of secondary goes back comapared to the parent  !!  Difference:  2.73569e-05[ns] 
-opticalphoton E=3.84243e-06 pos=0.000106295, 7.59751e-06, 2.2354e-05 time=0.000423423 parent time=0.00045078
- G4VParticleChange::CheckSecondary  :   the global time of secondary goes back comapared to the parent  !!  Difference:  3.937e-05[ns] 
-opticalphoton E=4.05679e-06 pos=0.000103279, 7.38196e-06, 2.17198e-05 time=0.00041141 parent time=0.00045078
- G4VParticleChange::CheckSecondary  :   the global time of secondary goes back comapared to the parent  !!  Difference:  4.59624e-05[ns] 
-opticalphoton E=3.11967e-06 pos=0.000101624, 7.26367e-06, 2.13717e-05 time=0.000404817 parent time=0.00045078
 
  Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = 5
 ### G4EmSaturation::FindBirksCoefficient Birks coefficient for Water  0.126 mm/MeV
@@ -303,7 +293,7 @@ opticalphoton E=3.11967e-06 pos=0.000101624, 7.26367e-06, 2.13717e-05 time=0.000
       2) msc
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 0.1197816422982748
       Energy Deposit (MeV)  : 0.01780954340767608
       -----------------------------------------------------------------------
@@ -359,7 +349,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9594cb0
+      Address of G4Track    : 0x2344220
       Step Length (mm)      : 6141.043767296815
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -407,7 +397,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9594cb0
+      Address of G4Track    : 0x2344220
       Step Length (mm)      : 6141.043767296815
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -449,7 +439,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9594cb0
+      Address of G4Track    : 0x2344220
       Step Length (mm)      : 8067.828304318135
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -488,7 +478,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9594cb0
+      Address of G4Track    : 0x2344220
       Step Length (mm)      : 8067.828304318135
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -537,7 +527,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9594bb0
+      Address of G4Track    : 0x2344120
       Step Length (mm)      : 6420.930464664852
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -585,7 +575,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9594bb0
+      Address of G4Track    : 0x2344120
       Step Length (mm)      : 6420.930464664852
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -627,7 +617,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9594bb0
+      Address of G4Track    : 0x2344120
       Step Length (mm)      : 9580.300517036536
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -666,7 +656,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9594bb0
+      Address of G4Track    : 0x2344120
       Step Length (mm)      : 9580.300517036536
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -715,7 +705,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95945b0
+      Address of G4Track    : 0x2343b20
       Step Length (mm)      : 5811.03553432302
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -763,7 +753,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95945b0
+      Address of G4Track    : 0x2343b20
       Step Length (mm)      : 5811.03553432302
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -805,7 +795,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95945b0
+      Address of G4Track    : 0x2343b20
       Step Length (mm)      : 6913.010253476094
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -844,7 +834,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95945b0
+      Address of G4Track    : 0x2343b20
       Step Length (mm)      : 6913.010253476094
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -893,7 +883,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95944b0
+      Address of G4Track    : 0x2343a20
       Step Length (mm)      : 5376.762599623115
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -941,7 +931,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95944b0
+      Address of G4Track    : 0x2343a20
       Step Length (mm)      : 5376.762599623115
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -983,7 +973,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95944b0
+      Address of G4Track    : 0x2343a20
       Step Length (mm)      : 5774.643859965227
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -1022,7 +1012,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95944b0
+      Address of G4Track    : 0x2343a20
       Step Length (mm)      : 5774.643859965227
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -1071,7 +1061,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95943b0
+      Address of G4Track    : 0x2343920
       Step Length (mm)      : 6908.859747063356
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -1119,7 +1109,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95943b0
+      Address of G4Track    : 0x2343920
       Step Length (mm)      : 6908.859747063356
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -1161,7 +1151,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95943b0
+      Address of G4Track    : 0x2343920
       Step Length (mm)      : 6680.520691355492
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -1200,7 +1190,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95943b0
+      Address of G4Track    : 0x2343920
       Step Length (mm)      : 6680.520691355492
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -1249,7 +1239,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95935b0
+      Address of G4Track    : 0x2342b20
       Step Length (mm)      : 2308.195633758561
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -1291,7 +1281,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95935b0
+      Address of G4Track    : 0x2342b20
       Step Length (mm)      : 2308.195633758561
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -1340,7 +1330,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95934b0
+      Address of G4Track    : 0x2342a20
       Step Length (mm)      : 1445.74266774751
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -1382,7 +1372,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95934b0
+      Address of G4Track    : 0x2342a20
       Step Length (mm)      : 1445.74266774751
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -1434,7 +1424,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 0.9307020206247484
       Energy Deposit (MeV)  : 0.1760313217220601
       -----------------------------------------------------------------------
@@ -1466,22 +1456,6 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       -----------------------------------------------------------------------
 
     ++List of secondaries generated (x,y,z,kE,t,PID):  No. of secodaries = 0
- G4VParticleChange::CheckSecondary  :   the global time of secondary goes back comapared to the parent  !!  Difference:  0.00156515[ns] 
-opticalphoton E=2.73751e-06 pos=0.000350236, 0.000129873, 2.49901e-05 time=0.0016798 parent time=0.00324494
- G4VParticleChange::CheckSecondary  :   the global time of secondary goes back comapared to the parent  !!  Difference:  0.000832845[ns] 
-opticalphoton E=4.00954e-06 pos=0.000489443, 0.000202291, 2.52686e-05 time=0.0024121 parent time=0.00324494
- G4VParticleChange::CheckSecondary  :   the global time of secondary goes back comapared to the parent  !!  Difference:  0.00221334[ns] 
-opticalphoton E=3.35947e-06 pos=0.000227019, 6.57732e-05, 2.47435e-05 time=0.00103161 parent time=0.00324494
- G4VParticleChange::CheckSecondary  :   the global time of secondary goes back comapared to the parent  !!  Difference:  0.00118623[ns] 
-opticalphoton E=2.61876e-06 pos=0.000422266, 0.000167345, 2.51342e-05 time=0.00205871 parent time=0.00324494
- G4VParticleChange::CheckSecondary  :   the global time of secondary goes back comapared to the parent  !!  Difference:  0.00257231[ns] 
-opticalphoton E=3.27982e-06 pos=0.00015878, 3.02737e-05, 2.4607e-05 time=0.000672632 parent time=0.00324494
- G4VParticleChange::CheckSecondary  :   the global time of secondary goes back comapared to the parent  !!  Difference:  0.000218304[ns] 
-opticalphoton E=3.41597e-06 pos=0.000606264, 0.000263064, 2.55023e-05 time=0.00302664 parent time=0.00324494
- G4VParticleChange::CheckSecondary  :   the global time of secondary goes back comapared to the parent  !!  Difference:  0.00253577[ns] 
-opticalphoton E=3.35702e-06 pos=0.000165727, 3.38877e-05, 2.46209e-05 time=0.000709176 parent time=0.00324494
- G4VParticleChange::CheckSecondary  :   the global time of secondary goes back comapared to the parent  !!  Difference:  0.00201882[ns] 
-opticalphoton E=3.32353e-06 pos=0.000263996, 8.5009e-05, 2.48175e-05 time=0.00122612 parent time=0.00324494
 
  Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = 11
 
@@ -1493,7 +1467,7 @@ opticalphoton E=3.32353e-06 pos=0.000263996, 8.5009e-05, 2.48175e-05 time=0.0012
       2) msc
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 0.9307020206247484
       Energy Deposit (MeV)  : 0.1760313217220601
       -----------------------------------------------------------------------
@@ -1558,7 +1532,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596d10
+      Address of G4Track    : 0x2346280
       Step Length (mm)      : 514.3543611612879
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -1600,7 +1574,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596d10
+      Address of G4Track    : 0x2346280
       Step Length (mm)      : 514.3543611612879
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -1649,7 +1623,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596c10
+      Address of G4Track    : 0x2346180
       Step Length (mm)      : 6732.532380647053
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -1691,7 +1665,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596c10
+      Address of G4Track    : 0x2346180
       Step Length (mm)      : 6732.532380647053
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -1740,7 +1714,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596a10
+      Address of G4Track    : 0x2345f80
       Step Length (mm)      : 5974.556579336848
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -1788,7 +1762,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596a10
+      Address of G4Track    : 0x2345f80
       Step Length (mm)      : 5974.556579336848
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -1830,7 +1804,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596a10
+      Address of G4Track    : 0x2345f80
       Step Length (mm)      : 7455.778953502755
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -1869,7 +1843,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596a10
+      Address of G4Track    : 0x2345f80
       Step Length (mm)      : 7455.778953502755
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -1918,7 +1892,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596910
+      Address of G4Track    : 0x2345e80
       Step Length (mm)      : 3153.282664880179
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -1960,7 +1934,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596910
+      Address of G4Track    : 0x2345e80
       Step Length (mm)      : 3153.282664880179
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -2009,7 +1983,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596810
+      Address of G4Track    : 0x2345d80
       Step Length (mm)      : 3367.467319158336
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -2051,7 +2025,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596810
+      Address of G4Track    : 0x2345d80
       Step Length (mm)      : 3367.467319158336
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -2100,7 +2074,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 4532.061678616088
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -2142,7 +2116,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 4532.061678616088
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -2191,7 +2165,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 5647.873927071861
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -2239,7 +2213,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 5647.873927071861
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -2281,7 +2255,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 6444.943589430388
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -2320,7 +2294,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 6444.943589430388
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -2369,7 +2343,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596010
+      Address of G4Track    : 0x2345580
       Step Length (mm)      : 7175.42354102417
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -2417,7 +2391,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596010
+      Address of G4Track    : 0x2345580
       Step Length (mm)      : 7175.42354102417
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -2459,7 +2433,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596010
+      Address of G4Track    : 0x2345580
       Step Length (mm)      : 6005.013787932589
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -2498,7 +2472,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596010
+      Address of G4Track    : 0x2345580
       Step Length (mm)      : 6005.013787932589
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -2547,7 +2521,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9594db0
+      Address of G4Track    : 0x2344320
       Step Length (mm)      : 5894.56519099308
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -2595,7 +2569,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9594db0
+      Address of G4Track    : 0x2344320
       Step Length (mm)      : 5894.56519099308
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -2637,7 +2611,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9594db0
+      Address of G4Track    : 0x2344320
       Step Length (mm)      : 7193.546832737444
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -2676,7 +2650,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9594db0
+      Address of G4Track    : 0x2344320
       Step Length (mm)      : 7193.546832737444
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -2725,7 +2699,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9594cb0
+      Address of G4Track    : 0x2344220
       Step Length (mm)      : 6523.407930049173
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -2773,7 +2747,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9594cb0
+      Address of G4Track    : 0x2344220
       Step Length (mm)      : 6523.407930049173
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -2815,7 +2789,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9594cb0
+      Address of G4Track    : 0x2344220
       Step Length (mm)      : 10179.42526667279
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -2854,7 +2828,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9594cb0
+      Address of G4Track    : 0x2344220
       Step Length (mm)      : 10179.42526667279
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -2903,7 +2877,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9594bb0
+      Address of G4Track    : 0x2344120
       Step Length (mm)      : 7274.565476124034
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -2951,7 +2925,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9594bb0
+      Address of G4Track    : 0x2344120
       Step Length (mm)      : 7274.565476124034
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -2993,7 +2967,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9594bb0
+      Address of G4Track    : 0x2344120
       Step Length (mm)      : 6246.838659778526
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -3032,7 +3006,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9594bb0
+      Address of G4Track    : 0x2344120
       Step Length (mm)      : 6246.838659778526
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -3081,7 +3055,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95945b0
+      Address of G4Track    : 0x2343b20
       Step Length (mm)      : 6740.751489074779
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -3129,7 +3103,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95945b0
+      Address of G4Track    : 0x2343b20
       Step Length (mm)      : 6740.751489074779
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -3171,7 +3145,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95945b0
+      Address of G4Track    : 0x2343b20
       Step Length (mm)      : 6743.055198249069
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -3210,7 +3184,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95945b0
+      Address of G4Track    : 0x2343b20
       Step Length (mm)      : 6743.055198249069
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -3259,7 +3233,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95944b0
+      Address of G4Track    : 0x2343a20
       Step Length (mm)      : 862.898307585634
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -3301,7 +3275,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95944b0
+      Address of G4Track    : 0x2343a20
       Step Length (mm)      : 862.898307585634
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -3350,7 +3324,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95943b0
+      Address of G4Track    : 0x2343920
       Step Length (mm)      : 5434.700535091519
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -3398,7 +3372,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95943b0
+      Address of G4Track    : 0x2343920
       Step Length (mm)      : 5434.700535091519
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -3440,7 +3414,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95943b0
+      Address of G4Track    : 0x2343920
       Step Length (mm)      : 5892.378678863773
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -3479,7 +3453,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95943b0
+      Address of G4Track    : 0x2343920
       Step Length (mm)      : 5892.378678863773
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -3528,7 +3502,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95935b0
+      Address of G4Track    : 0x2342b20
       Step Length (mm)      : 6473.145265473531
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -3576,7 +3550,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95935b0
+      Address of G4Track    : 0x2342b20
       Step Length (mm)      : 6473.145265473531
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -3618,7 +3592,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95935b0
+      Address of G4Track    : 0x2342b20
       Step Length (mm)      : 7280.896555313286
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -3657,7 +3631,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95935b0
+      Address of G4Track    : 0x2342b20
       Step Length (mm)      : 7280.896555313286
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -3706,7 +3680,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95934b0
+      Address of G4Track    : 0x2342a20
       Step Length (mm)      : 5808.112948949893
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -3754,7 +3728,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95934b0
+      Address of G4Track    : 0x2342a20
       Step Length (mm)      : 5808.112948949893
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -3796,7 +3770,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95934b0
+      Address of G4Track    : 0x2342a20
       Step Length (mm)      : 6890.822754118613
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -3835,7 +3809,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95934b0
+      Address of G4Track    : 0x2342a20
       Step Length (mm)      : 6890.822754118613
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -3887,7 +3861,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 0.2571724236625706
       Energy Deposit (MeV)  : 0.06564259393010793
       -----------------------------------------------------------------------
@@ -3919,8 +3893,6 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       -----------------------------------------------------------------------
 
     ++List of secondaries generated (x,y,z,kE,t,PID):  No. of secodaries = 0
- G4VParticleChange::CheckSecondary  :   the global time of secondary goes back comapared to the parent  !!  Difference:  0.000894638[ns] 
-opticalphoton E=2.67592e-06 pos=0.00084401, 0.000387497, 3.83086e-05 time=0.00331221 parent time=0.00420685
 
  Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = 1
 
@@ -3932,7 +3904,7 @@ opticalphoton E=2.67592e-06 pos=0.00084401, 0.000387497, 3.83086e-05 time=0.0033
       2) msc
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 0.2571724236625706
       Energy Deposit (MeV)  : 0.06564259393010793
       -----------------------------------------------------------------------
@@ -3985,7 +3957,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95944b0
+      Address of G4Track    : 0x2343a20
       Step Length (mm)      : 5380.038761956588
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -4033,7 +4005,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95944b0
+      Address of G4Track    : 0x2343a20
       Step Length (mm)      : 5380.038761956588
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -4075,7 +4047,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95944b0
+      Address of G4Track    : 0x2343a20
       Step Length (mm)      : 5777.757075437653
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -4114,7 +4086,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95944b0
+      Address of G4Track    : 0x2343a20
       Step Length (mm)      : 5777.757075437653
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -4163,7 +4135,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95943b0
+      Address of G4Track    : 0x2343920
       Step Length (mm)      : 5032.745369260186
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -4211,7 +4183,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95943b0
+      Address of G4Track    : 0x2343920
       Step Length (mm)      : 5032.745369260186
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -4253,7 +4225,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95943b0
+      Address of G4Track    : 0x2343920
       Step Length (mm)      : 5062.362769490703
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -4292,7 +4264,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95943b0
+      Address of G4Track    : 0x2343920
       Step Length (mm)      : 5062.362769490703
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -4341,7 +4313,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95935b0
+      Address of G4Track    : 0x2342b20
       Step Length (mm)      : 1141.341637177452
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -4392,7 +4364,7 @@ Momentum Change: (0.584255,0.766455,-0.26682)
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95935b0
+      Address of G4Track    : 0x2342b20
       Step Length (mm)      : 1141.341637177452
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -4434,7 +4406,7 @@ Momentum Change: (0.584255,0.766455,-0.26682)
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95935b0
+      Address of G4Track    : 0x2342b20
       Step Length (mm)      : 5271.188126061739
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -4482,7 +4454,7 @@ Momentum Change: (0.584255,0.766455,-0.26682)
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95935b0
+      Address of G4Track    : 0x2342b20
       Step Length (mm)      : 5271.188126061739
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -4524,7 +4496,7 @@ Momentum Change: (0.584255,0.766455,-0.26682)
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95935b0
+      Address of G4Track    : 0x2342b20
       Step Length (mm)      : 7989.981481721517
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -4563,7 +4535,7 @@ Momentum Change: (0.584255,0.766455,-0.26682)
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95935b0
+      Address of G4Track    : 0x2342b20
       Step Length (mm)      : 7989.981481721517
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -4612,7 +4584,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95934b0
+      Address of G4Track    : 0x2342a20
       Step Length (mm)      : 5498.094432272076
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -4660,7 +4632,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95934b0
+      Address of G4Track    : 0x2342a20
       Step Length (mm)      : 5498.094432272076
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -4702,7 +4674,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95934b0
+      Address of G4Track    : 0x2342a20
       Step Length (mm)      : 6045.617445914741
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -4741,7 +4713,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95934b0
+      Address of G4Track    : 0x2342a20
       Step Length (mm)      : 6045.617445914741
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -4793,7 +4765,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 0.5778627668516352
       Energy Deposit (MeV)  : 0.2405165409401559
       -----------------------------------------------------------------------
@@ -4835,7 +4807,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) eBrem (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 0.5778627668516352
       Energy Deposit (MeV)  : 0.2405165409401559
       -----------------------------------------------------------------------
@@ -4903,7 +4875,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 47.37490397390689
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -4942,7 +4914,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) compt (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 47.37490397390689
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -4985,7 +4957,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 170.9403667868648
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -5025,7 +4997,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) compt (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 170.9403667868648
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -5069,7 +5041,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 92.37258454891821
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -5110,7 +5082,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) compt (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 92.37258454891821
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -5155,7 +5127,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 98.91490020311787
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -5197,7 +5169,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) compt (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 98.91490020311787
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -5243,7 +5215,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 2.36711818313602
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -5286,7 +5258,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) compt (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 2.36711818313602
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -5333,7 +5305,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 6.92030650340665
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -5377,7 +5349,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) compt (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 6.92030650340665
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -5425,7 +5397,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 14.73416833247763
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -5470,7 +5442,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) compt (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 14.73416833247763
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -5519,7 +5491,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 7.921551679540126
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -5565,7 +5537,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) compt (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 7.921551679540126
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -5615,7 +5587,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 75.96337615131149
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -5662,7 +5634,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) compt (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 75.96337615131149
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -5713,7 +5685,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 348.0202171045935
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -5761,7 +5733,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) compt (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 348.0202171045935
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -5813,7 +5785,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 15.74868606362861
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -5862,7 +5834,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) compt (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 15.74868606362861
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -5915,7 +5887,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 47.34266626086759
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -5965,7 +5937,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) compt (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 47.34266626086759
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -6019,7 +5991,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 2.106546890020899
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -6070,7 +6042,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) compt (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 2.106546890020899
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -6125,7 +6097,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 152.1606314818897
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -6177,7 +6149,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) phot (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 152.1606314818897
       Energy Deposit (MeV)  : 0.0005431
       -----------------------------------------------------------------------
@@ -6243,7 +6215,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x95980b0
+      Address of G4Track    : 0x2347620
       Step Length (mm)      : 0.04406657887895799
       Energy Deposit (MeV)  : 0.05093856534399256
       -----------------------------------------------------------------------
@@ -6285,7 +6257,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) eBrem (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x95980b0
+      Address of G4Track    : 0x2347620
       Step Length (mm)      : 0.04406657887895799
       Energy Deposit (MeV)  : 0.05093856534399256
       -----------------------------------------------------------------------
@@ -6342,7 +6314,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95981b0
+      Address of G4Track    : 0x2347720
       Step Length (mm)      : 4038.679661677326
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -6384,7 +6356,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95981b0
+      Address of G4Track    : 0x2347720
       Step Length (mm)      : 4038.679661677326
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -6433,7 +6405,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 6355.201316625171
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -6481,7 +6453,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 6355.201316625171
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -6523,7 +6495,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 8757.069102354155
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -6562,7 +6534,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 8757.069102354155
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -6614,7 +6586,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597ab0
+      Address of G4Track    : 0x2347020
       Step Length (mm)      : 4.156794584545467e-06
       Energy Deposit (MeV)  : 6.931723394298234e-05
       -----------------------------------------------------------------------
@@ -6653,7 +6625,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) msc
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597ab0
+      Address of G4Track    : 0x2347020
       Step Length (mm)      : 4.156794584545467e-06
       Energy Deposit (MeV)  : 6.931723394298234e-05
       -----------------------------------------------------------------------
@@ -6711,7 +6683,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x95979b0
+      Address of G4Track    : 0x2346f20
       Step Length (mm)      : 0.003478231878949457
       Energy Deposit (MeV)  : 0.01210907617009352
       -----------------------------------------------------------------------
@@ -6751,7 +6723,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) eBrem (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x95979b0
+      Address of G4Track    : 0x2346f20
       Step Length (mm)      : 0.003478231878949457
       Energy Deposit (MeV)  : 0.01210907617009352
       -----------------------------------------------------------------------
@@ -6809,7 +6781,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x95978b0
+      Address of G4Track    : 0x2346e20
       Step Length (mm)      : 0.002252314747145683
       Energy Deposit (MeV)  : 0.009457754159905324
       -----------------------------------------------------------------------
@@ -6849,7 +6821,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) eBrem (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x95978b0
+      Address of G4Track    : 0x2346e20
       Step Length (mm)      : 0.002252314747145683
       Energy Deposit (MeV)  : 0.009457754159905324
       -----------------------------------------------------------------------
@@ -6907,7 +6879,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597630
+      Address of G4Track    : 0x2346ba0
       Step Length (mm)      : 0.001085221729868129
       Energy Deposit (MeV)  : 0.0062218512687824
       -----------------------------------------------------------------------
@@ -6947,7 +6919,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) eBrem (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597630
+      Address of G4Track    : 0x2346ba0
       Step Length (mm)      : 0.001085221729868129
       Energy Deposit (MeV)  : 0.0062218512687824
       -----------------------------------------------------------------------
@@ -7005,7 +6977,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597530
+      Address of G4Track    : 0x2346aa0
       Step Length (mm)      : 0.00506072335487187
       Energy Deposit (MeV)  : 0.01497431211074381
       -----------------------------------------------------------------------
@@ -7045,7 +7017,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) eBrem (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597530
+      Address of G4Track    : 0x2346aa0
       Step Length (mm)      : 0.00506072335487187
       Energy Deposit (MeV)  : 0.01497431211074381
       -----------------------------------------------------------------------
@@ -7103,7 +7075,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597430
+      Address of G4Track    : 0x23469a0
       Step Length (mm)      : 0.0161480719620326
       Energy Deposit (MeV)  : 0.02882953450640674
       -----------------------------------------------------------------------
@@ -7145,7 +7117,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) eBrem (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597430
+      Address of G4Track    : 0x23469a0
       Step Length (mm)      : 0.0161480719620326
       Energy Deposit (MeV)  : 0.02882953450640674
       -----------------------------------------------------------------------
@@ -7201,7 +7173,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597530
+      Address of G4Track    : 0x2346aa0
       Step Length (mm)      : 6301.908596301611
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -7249,7 +7221,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597530
+      Address of G4Track    : 0x2346aa0
       Step Length (mm)      : 6301.908596301611
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -7291,7 +7263,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597530
+      Address of G4Track    : 0x2346aa0
       Step Length (mm)      : 9296.775496093294
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -7330,7 +7302,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597530
+      Address of G4Track    : 0x2346aa0
       Step Length (mm)      : 9296.775496093294
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -7382,7 +7354,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596e10
+      Address of G4Track    : 0x2346380
       Step Length (mm)      : 0.001197284796410704
       Energy Deposit (MeV)  : 0.006584710739539409
       -----------------------------------------------------------------------
@@ -7422,7 +7394,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) eBrem (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596e10
+      Address of G4Track    : 0x2346380
       Step Length (mm)      : 0.001197284796410704
       Energy Deposit (MeV)  : 0.006584710739539409
       -----------------------------------------------------------------------
@@ -7480,7 +7452,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596d10
+      Address of G4Track    : 0x2346280
       Step Length (mm)      : 0.007024184440838755
       Energy Deposit (MeV)  : 0.0180219704778716
       -----------------------------------------------------------------------
@@ -7520,7 +7492,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) eBrem (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596d10
+      Address of G4Track    : 0x2346280
       Step Length (mm)      : 0.007024184440838755
       Energy Deposit (MeV)  : 0.0180219704778716
       -----------------------------------------------------------------------
@@ -7578,7 +7550,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596c10
+      Address of G4Track    : 0x2346180
       Step Length (mm)      : 0.0009982608958727557
       Energy Deposit (MeV)  : 0.005928647518695179
       -----------------------------------------------------------------------
@@ -7620,7 +7592,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) eBrem (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596c10
+      Address of G4Track    : 0x2346180
       Step Length (mm)      : 0.0009982608958727557
       Energy Deposit (MeV)  : 0.005928647518695179
       -----------------------------------------------------------------------
@@ -7676,7 +7648,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596d10
+      Address of G4Track    : 0x2346280
       Step Length (mm)      : 3308.70798405807
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -7727,7 +7699,7 @@ Momentum Change: (-0.787637,0.608305,-0.0979437)
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596d10
+      Address of G4Track    : 0x2346280
       Step Length (mm)      : 3308.70798405807
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -7769,7 +7741,7 @@ Momentum Change: (-0.787637,0.608305,-0.0979437)
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596d10
+      Address of G4Track    : 0x2346280
       Step Length (mm)      : 2351.339731748077
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -7811,7 +7783,7 @@ Momentum Change: (-0.787637,0.608305,-0.0979437)
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596d10
+      Address of G4Track    : 0x2346280
       Step Length (mm)      : 2351.339731748077
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -7863,7 +7835,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596a10
+      Address of G4Track    : 0x2345f80
       Step Length (mm)      : 0.01462022332622346
       Energy Deposit (MeV)  : 0.02725611201372102
       -----------------------------------------------------------------------
@@ -7905,7 +7877,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) eBrem (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596a10
+      Address of G4Track    : 0x2345f80
       Step Length (mm)      : 0.01462022332622346
       Energy Deposit (MeV)  : 0.02725611201372102
       -----------------------------------------------------------------------
@@ -7963,7 +7935,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596e10
+      Address of G4Track    : 0x2346380
       Step Length (mm)      : 6423.264405082698
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -8011,7 +7983,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596e10
+      Address of G4Track    : 0x2346380
       Step Length (mm)      : 6423.264405082698
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -8053,7 +8025,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596e10
+      Address of G4Track    : 0x2346380
       Step Length (mm)      : 6759.350354687766
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -8092,7 +8064,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596e10
+      Address of G4Track    : 0x2346380
       Step Length (mm)      : 6759.350354687766
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -8141,7 +8113,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596c10
+      Address of G4Track    : 0x2346180
       Step Length (mm)      : 5600.399845489777
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -8189,7 +8161,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596c10
+      Address of G4Track    : 0x2346180
       Step Length (mm)      : 5600.399845489777
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -8231,7 +8203,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596c10
+      Address of G4Track    : 0x2346180
       Step Length (mm)      : 7448.074719966275
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -8270,7 +8242,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596c10
+      Address of G4Track    : 0x2346180
       Step Length (mm)      : 7448.074719966275
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -8319,7 +8291,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596d10
+      Address of G4Track    : 0x2346280
       Step Length (mm)      : 6583.853612092033
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -8367,7 +8339,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596d10
+      Address of G4Track    : 0x2346280
       Step Length (mm)      : 6583.853612092033
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -8409,7 +8381,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596d10
+      Address of G4Track    : 0x2346280
       Step Length (mm)      : 9735.495193861208
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -8448,7 +8420,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596d10
+      Address of G4Track    : 0x2346280
       Step Length (mm)      : 9735.495193861208
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -8500,7 +8472,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596910
+      Address of G4Track    : 0x2345e80
       Step Length (mm)      : 0.2291516814784729
       Energy Deposit (MeV)  : 0.1332225259727718
       -----------------------------------------------------------------------
@@ -8542,7 +8514,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) eBrem (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596910
+      Address of G4Track    : 0x2345e80
       Step Length (mm)      : 0.2291516814784729
       Energy Deposit (MeV)  : 0.1332225259727718
       -----------------------------------------------------------------------
@@ -8604,7 +8576,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597630
+      Address of G4Track    : 0x2346ba0
       Step Length (mm)      : 6235.550030866141
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -8652,7 +8624,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597630
+      Address of G4Track    : 0x2346ba0
       Step Length (mm)      : 6235.550030866141
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -8694,7 +8666,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597630
+      Address of G4Track    : 0x2346ba0
       Step Length (mm)      : 7789.222399434329
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -8733,7 +8705,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597630
+      Address of G4Track    : 0x2346ba0
       Step Length (mm)      : 7789.222399434329
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -8782,7 +8754,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597430
+      Address of G4Track    : 0x23469a0
       Step Length (mm)      : 5011.061042293045
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -8830,7 +8802,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597430
+      Address of G4Track    : 0x23469a0
       Step Length (mm)      : 5011.061042293045
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -8872,7 +8844,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597430
+      Address of G4Track    : 0x23469a0
       Step Length (mm)      : 5135.416379161925
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -8911,7 +8883,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597430
+      Address of G4Track    : 0x23469a0
       Step Length (mm)      : 5135.416379161925
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -8960,7 +8932,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597530
+      Address of G4Track    : 0x2346aa0
       Step Length (mm)      : 5483.709874022993
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -9008,7 +8980,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597530
+      Address of G4Track    : 0x2346aa0
       Step Length (mm)      : 5483.709874022993
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -9050,7 +9022,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597530
+      Address of G4Track    : 0x2346aa0
       Step Length (mm)      : 6877.141437248271
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -9089,7 +9061,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597530
+      Address of G4Track    : 0x2346aa0
       Step Length (mm)      : 6877.141437248271
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -9138,7 +9110,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596a10
+      Address of G4Track    : 0x2345f80
       Step Length (mm)      : 5916.438389471922
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -9186,7 +9158,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596a10
+      Address of G4Track    : 0x2345f80
       Step Length (mm)      : 5916.438389471922
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -9228,7 +9200,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596a10
+      Address of G4Track    : 0x2345f80
       Step Length (mm)      : 6334.412146511621
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -9267,7 +9239,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596a10
+      Address of G4Track    : 0x2345f80
       Step Length (mm)      : 6334.412146511621
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -9316,7 +9288,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596e10
+      Address of G4Track    : 0x2346380
       Step Length (mm)      : 6356.374459138799
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -9364,7 +9336,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596e10
+      Address of G4Track    : 0x2346380
       Step Length (mm)      : 6356.374459138799
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -9406,7 +9378,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596e10
+      Address of G4Track    : 0x2346380
       Step Length (mm)      : 6988.668485895445
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -9445,7 +9417,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596e10
+      Address of G4Track    : 0x2346380
       Step Length (mm)      : 6988.668485895445
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -9494,7 +9466,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596c10
+      Address of G4Track    : 0x2346180
       Step Length (mm)      : 6950.723479090536
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -9542,7 +9514,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596c10
+      Address of G4Track    : 0x2346180
       Step Length (mm)      : 6950.723479090536
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -9584,7 +9556,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596c10
+      Address of G4Track    : 0x2346180
       Step Length (mm)      : 8964.404951905219
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -9623,7 +9595,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596c10
+      Address of G4Track    : 0x2346180
       Step Length (mm)      : 8964.404951905219
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -9672,7 +9644,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596d10
+      Address of G4Track    : 0x2346280
       Step Length (mm)      : 6732.174922482004
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -9720,7 +9692,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596d10
+      Address of G4Track    : 0x2346280
       Step Length (mm)      : 6732.174922482004
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -9762,7 +9734,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596d10
+      Address of G4Track    : 0x2346280
       Step Length (mm)      : 6511.682602333474
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -9801,7 +9773,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596d10
+      Address of G4Track    : 0x2346280
       Step Length (mm)      : 6511.682602333474
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -9853,7 +9825,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596810
+      Address of G4Track    : 0x2345d80
       Step Length (mm)      : 0.2283051369692299
       Energy Deposit (MeV)  : 0.1329262625242009
       -----------------------------------------------------------------------
@@ -9895,7 +9867,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) eBrem (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596810
+      Address of G4Track    : 0x2345d80
       Step Length (mm)      : 0.2283051369692299
       Energy Deposit (MeV)  : 0.1329262625242009
       -----------------------------------------------------------------------
@@ -9958,7 +9930,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596910
+      Address of G4Track    : 0x2345e80
       Step Length (mm)      : 469.103100848378
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -10009,7 +9981,7 @@ Momentum Change: (0.59827,0.760233,-0.253217)
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596910
+      Address of G4Track    : 0x2345e80
       Step Length (mm)      : 469.103100848378
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -10051,7 +10023,7 @@ Momentum Change: (0.59827,0.760233,-0.253217)
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596910
+      Address of G4Track    : 0x2345e80
       Step Length (mm)      : 1117.261872408517
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -10093,7 +10065,7 @@ Momentum Change: (0.59827,0.760233,-0.253217)
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596910
+      Address of G4Track    : 0x2345e80
       Step Length (mm)      : 1117.261872408517
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -10142,7 +10114,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597630
+      Address of G4Track    : 0x2346ba0
       Step Length (mm)      : 5233.186576388836
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -10190,7 +10162,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597630
+      Address of G4Track    : 0x2346ba0
       Step Length (mm)      : 5233.186576388836
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -10232,7 +10204,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597630
+      Address of G4Track    : 0x2346ba0
       Step Length (mm)      : 5283.303494673981
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -10271,7 +10243,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597630
+      Address of G4Track    : 0x2346ba0
       Step Length (mm)      : 5283.303494673981
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -10320,7 +10292,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597430
+      Address of G4Track    : 0x23469a0
       Step Length (mm)      : 5078.939447711745
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -10368,7 +10340,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597430
+      Address of G4Track    : 0x23469a0
       Step Length (mm)      : 5078.939447711745
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -10410,7 +10382,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597430
+      Address of G4Track    : 0x23469a0
       Step Length (mm)      : 5160.371457844028
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -10449,7 +10421,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597430
+      Address of G4Track    : 0x23469a0
       Step Length (mm)      : 5160.371457844028
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -10498,7 +10470,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597530
+      Address of G4Track    : 0x2346aa0
       Step Length (mm)      : 5064.349547418941
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -10546,7 +10518,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597530
+      Address of G4Track    : 0x2346aa0
       Step Length (mm)      : 5064.349547418941
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -10588,7 +10560,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597530
+      Address of G4Track    : 0x2346aa0
       Step Length (mm)      : 5106.703663044344
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -10627,7 +10599,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597530
+      Address of G4Track    : 0x2346aa0
       Step Length (mm)      : 5106.703663044344
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -10676,7 +10648,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596a10
+      Address of G4Track    : 0x2345f80
       Step Length (mm)      : 6974.107032909121
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -10724,7 +10696,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596a10
+      Address of G4Track    : 0x2345f80
       Step Length (mm)      : 6974.107032909121
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -10766,7 +10738,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596a10
+      Address of G4Track    : 0x2345f80
       Step Length (mm)      : 6271.437760630724
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -10805,7 +10777,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596a10
+      Address of G4Track    : 0x2345f80
       Step Length (mm)      : 6271.437760630724
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -10854,7 +10826,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596e10
+      Address of G4Track    : 0x2346380
       Step Length (mm)      : 6344.055740259915
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -10902,7 +10874,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596e10
+      Address of G4Track    : 0x2346380
       Step Length (mm)      : 6344.055740259915
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -10944,7 +10916,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596e10
+      Address of G4Track    : 0x2346380
       Step Length (mm)      : 6720.019464278685
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -10983,7 +10955,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596e10
+      Address of G4Track    : 0x2346380
       Step Length (mm)      : 6720.019464278685
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -11032,7 +11004,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596c10
+      Address of G4Track    : 0x2346180
       Step Length (mm)      : 1401.156161497492
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -11083,7 +11055,7 @@ Momentum Change: (-0.701592,0.708648,0.0747406)
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596c10
+      Address of G4Track    : 0x2346180
       Step Length (mm)      : 1401.156161497492
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -11125,7 +11097,7 @@ Momentum Change: (-0.701592,0.708648,0.0747406)
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596c10
+      Address of G4Track    : 0x2346180
       Step Length (mm)      : 5249.636543899302
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -11173,7 +11145,7 @@ Momentum Change: (-0.701592,0.708648,0.0747406)
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596c10
+      Address of G4Track    : 0x2346180
       Step Length (mm)      : 5249.636543899302
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -11215,7 +11187,7 @@ Momentum Change: (-0.701592,0.708648,0.0747406)
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596c10
+      Address of G4Track    : 0x2346180
       Step Length (mm)      : 5668.851598013002
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -11254,7 +11226,7 @@ Momentum Change: (-0.701592,0.708648,0.0747406)
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596c10
+      Address of G4Track    : 0x2346180
       Step Length (mm)      : 5668.851598013002
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -11303,7 +11275,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596d10
+      Address of G4Track    : 0x2346280
       Step Length (mm)      : 6623.177484933554
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -11351,7 +11323,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596d10
+      Address of G4Track    : 0x2346280
       Step Length (mm)      : 6623.177484933554
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -11393,7 +11365,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596d10
+      Address of G4Track    : 0x2346280
       Step Length (mm)      : 6600.091264264806
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -11432,7 +11404,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596d10
+      Address of G4Track    : 0x2346280
       Step Length (mm)      : 6600.091264264806
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -11484,7 +11456,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 0.06549748250621557
       Energy Deposit (MeV)  : 0.06391516995933277
       -----------------------------------------------------------------------
@@ -11526,7 +11498,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) eBrem (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 0.06549748250621557
       Energy Deposit (MeV)  : 0.06391516995933277
       -----------------------------------------------------------------------
@@ -11585,7 +11557,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596a10
+      Address of G4Track    : 0x2345f80
       Step Length (mm)      : 5562.684796800389
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -11627,7 +11599,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596a10
+      Address of G4Track    : 0x2345f80
       Step Length (mm)      : 5562.684796800389
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -11676,7 +11648,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596e10
+      Address of G4Track    : 0x2346380
       Step Length (mm)      : 2155.469068793719
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -11718,7 +11690,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596e10
+      Address of G4Track    : 0x2346380
       Step Length (mm)      : 2155.469068793719
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -11767,7 +11739,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596c10
+      Address of G4Track    : 0x2346180
       Step Length (mm)      : 5103.619639068559
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -11815,7 +11787,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596c10
+      Address of G4Track    : 0x2346180
       Step Length (mm)      : 5103.619639068559
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -11857,7 +11829,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596c10
+      Address of G4Track    : 0x2346180
       Step Length (mm)      : 5201.536917209976
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -11896,7 +11868,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596c10
+      Address of G4Track    : 0x2346180
       Step Length (mm)      : 5201.536917209976
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -11945,7 +11917,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596d10
+      Address of G4Track    : 0x2346280
       Step Length (mm)      : 6795.313176637567
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -11993,7 +11965,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596d10
+      Address of G4Track    : 0x2346280
       Step Length (mm)      : 6795.313176637567
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -12035,7 +12007,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596d10
+      Address of G4Track    : 0x2346280
       Step Length (mm)      : 8309.021275932289
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -12074,7 +12046,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596d10
+      Address of G4Track    : 0x2346280
       Step Length (mm)      : 8309.021275932289
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -12123,7 +12095,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 109.0795083219521
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -12162,7 +12134,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) compt (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 109.0795083219521
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -12205,7 +12177,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 133.5461912766015
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -12245,7 +12217,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) compt (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 133.5461912766015
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -12289,7 +12261,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 21.7939894828007
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -12330,7 +12302,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) compt (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 21.7939894828007
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -12375,7 +12347,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 19.90966706220064
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -12417,7 +12389,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) compt (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 19.90966706220064
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -12463,7 +12435,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 15.89232774168123
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -12506,7 +12478,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) compt (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 15.89232774168123
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -12553,7 +12525,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 111.9977402277772
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -12597,7 +12569,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) compt (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 111.9977402277772
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -12645,7 +12617,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 21.47645963402169
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -12690,7 +12662,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) compt (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 21.47645963402169
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -12739,7 +12711,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 16.61318041439795
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -12785,7 +12757,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) compt (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 16.61318041439795
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -12835,7 +12807,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 21.68644695332464
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -12882,7 +12854,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) compt (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 21.68644695332464
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -12933,7 +12905,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 79.48449654950207
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -12981,7 +12953,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) compt (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 79.48449654950207
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -13033,7 +13005,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 8.919192106464202
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -13082,7 +13054,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) compt (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 8.919192106464202
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -13135,7 +13107,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 15.63793212897475
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -13185,7 +13157,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) compt (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 15.63793212897475
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -13239,7 +13211,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 2.011597523264966
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -13290,7 +13262,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) compt (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 2.011597523264966
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -13345,7 +13317,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 1.995102466136165
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -13397,7 +13369,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) compt (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 1.995102466136165
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -13453,7 +13425,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 47.54128056373756
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -13506,7 +13478,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) compt (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 47.54128056373756
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -13563,7 +13535,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 76.40297977522805
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -13617,7 +13589,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) compt (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 76.40297977522805
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -13675,7 +13647,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 2.561640235733974
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -13730,7 +13702,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) compt (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 2.561640235733974
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -13789,7 +13761,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 68.44295782521033
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -13845,7 +13817,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) phot (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596110
+      Address of G4Track    : 0x2345680
       Step Length (mm)      : 68.44295782521033
       Energy Deposit (MeV)  : 0.0005431
       -----------------------------------------------------------------------
@@ -13915,7 +13887,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x9598650
+      Address of G4Track    : 0x2347bc0
       Step Length (mm)      : 0.01547776986003806
       Energy Deposit (MeV)  : 0.02814751703277273
       -----------------------------------------------------------------------
@@ -13955,7 +13927,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) eBrem (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9598650
+      Address of G4Track    : 0x2347bc0
       Step Length (mm)      : 0.01547776986003806
       Energy Deposit (MeV)  : 0.02814751703277273
       -----------------------------------------------------------------------
@@ -14013,7 +13985,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x95982b0
+      Address of G4Track    : 0x2347820
       Step Length (mm)      : 0.0002019031581702642
       Energy Deposit (MeV)  : 0.002298930254819882
       -----------------------------------------------------------------------
@@ -14052,7 +14024,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) msc
 
     ++G4Step Information 
-      Address of G4Track    : 0x95982b0
+      Address of G4Track    : 0x2347820
       Step Length (mm)      : 0.0002019031581702642
       Energy Deposit (MeV)  : 0.002298930254819882
       -----------------------------------------------------------------------
@@ -14110,7 +14082,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x95980b0
+      Address of G4Track    : 0x2347620
       Step Length (mm)      : 0.0005551259510495584
       Energy Deposit (MeV)  : 0.004211638084536617
       -----------------------------------------------------------------------
@@ -14150,7 +14122,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) eBrem (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x95980b0
+      Address of G4Track    : 0x2347620
       Step Length (mm)      : 0.0005551259510495584
       Energy Deposit (MeV)  : 0.004211638084536617
       -----------------------------------------------------------------------
@@ -14208,7 +14180,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x95981b0
+      Address of G4Track    : 0x2347720
       Step Length (mm)      : 0.0006688852527860397
       Energy Deposit (MeV)  : 0.004697637133651872
       -----------------------------------------------------------------------
@@ -14248,7 +14220,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) eBrem (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x95981b0
+      Address of G4Track    : 0x2347720
       Step Length (mm)      : 0.0006688852527860397
       Energy Deposit (MeV)  : 0.004697637133651872
       -----------------------------------------------------------------------
@@ -14306,7 +14278,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 0.0007057435902377515
       Energy Deposit (MeV)  : 0.004847073509629742
       -----------------------------------------------------------------------
@@ -14346,7 +14318,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) eBrem (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 0.0007057435902377515
       Energy Deposit (MeV)  : 0.004847073509629742
       -----------------------------------------------------------------------
@@ -14404,7 +14376,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597ab0
+      Address of G4Track    : 0x2347020
       Step Length (mm)      : 0.0001223193334261927
       Energy Deposit (MeV)  : 0.001683859363176693
       -----------------------------------------------------------------------
@@ -14445,7 +14417,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) msc
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597ab0
+      Address of G4Track    : 0x2347020
       Step Length (mm)      : 0.0001223193334261927
       Energy Deposit (MeV)  : 0.001683859363176693
       -----------------------------------------------------------------------
@@ -14501,7 +14473,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 2255.623653925032
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -14549,7 +14521,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596210
+      Address of G4Track    : 0x2345780
       Step Length (mm)      : 2255.623653925032
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -14601,7 +14573,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x95979b0
+      Address of G4Track    : 0x2346f20
       Step Length (mm)      : 0.001995828234629502
       Energy Deposit (MeV)  : 0.008827263494973148
       -----------------------------------------------------------------------
@@ -14641,7 +14613,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) eBrem (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x95979b0
+      Address of G4Track    : 0x2346f20
       Step Length (mm)      : 0.001995828234629502
       Energy Deposit (MeV)  : 0.008827263494973148
       -----------------------------------------------------------------------
@@ -14699,7 +14671,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x95978b0
+      Address of G4Track    : 0x2346e20
       Step Length (mm)      : 8.466238249170083e-05
       Energy Deposit (MeV)  : 0.001330287157579789
       -----------------------------------------------------------------------
@@ -14738,7 +14710,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) msc
 
     ++G4Step Information 
-      Address of G4Track    : 0x95978b0
+      Address of G4Track    : 0x2346e20
       Step Length (mm)      : 8.466238249170083e-05
       Energy Deposit (MeV)  : 0.001330287157579789
       -----------------------------------------------------------------------
@@ -14796,7 +14768,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596810
+      Address of G4Track    : 0x2345d80
       Step Length (mm)      : 0.0001561689802336739
       Energy Deposit (MeV)  : 0.001962182385457284
       -----------------------------------------------------------------------
@@ -14835,7 +14807,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) msc
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596810
+      Address of G4Track    : 0x2345d80
       Step Length (mm)      : 0.0001561689802336739
       Energy Deposit (MeV)  : 0.001962182385457284
       -----------------------------------------------------------------------
@@ -14893,7 +14865,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596910
+      Address of G4Track    : 0x2345e80
       Step Length (mm)      : 0.0008748812107937639
       Energy Deposit (MeV)  : 0.005492394006306328
       -----------------------------------------------------------------------
@@ -14933,7 +14905,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) eBrem (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596910
+      Address of G4Track    : 0x2345e80
       Step Length (mm)      : 0.0008748812107937639
       Energy Deposit (MeV)  : 0.005492394006306328
       -----------------------------------------------------------------------
@@ -14991,7 +14963,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597630
+      Address of G4Track    : 0x2346ba0
       Step Length (mm)      : 0.003249390485829581
       Energy Deposit (MeV)  : 0.01165032990306421
       -----------------------------------------------------------------------
@@ -15033,7 +15005,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) eBrem (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597630
+      Address of G4Track    : 0x2346ba0
       Step Length (mm)      : 0.003249390485829581
       Energy Deposit (MeV)  : 0.01165032990306421
       -----------------------------------------------------------------------
@@ -15089,7 +15061,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596910
+      Address of G4Track    : 0x2345e80
       Step Length (mm)      : 167.1185977764606
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -15131,7 +15103,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596910
+      Address of G4Track    : 0x2345e80
       Step Length (mm)      : 167.1185977764606
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -15183,7 +15155,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597430
+      Address of G4Track    : 0x23469a0
       Step Length (mm)      : 0.005528452201214435
       Energy Deposit (MeV)  : 0.01574181358432365
       -----------------------------------------------------------------------
@@ -15225,7 +15197,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) eBrem (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597430
+      Address of G4Track    : 0x23469a0
       Step Length (mm)      : 0.005528452201214435
       Energy Deposit (MeV)  : 0.01574181358432365
       -----------------------------------------------------------------------
@@ -15282,7 +15254,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597630
+      Address of G4Track    : 0x2346ba0
       Step Length (mm)      : 7904.77086668988
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -15330,7 +15302,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597630
+      Address of G4Track    : 0x2346ba0
       Step Length (mm)      : 7904.77086668988
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -15372,7 +15344,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597630
+      Address of G4Track    : 0x2346ba0
       Step Length (mm)      : 0
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -15415,7 +15387,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597630
+      Address of G4Track    : 0x2346ba0
       Step Length (mm)      : 0
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -15457,7 +15429,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597630
+      Address of G4Track    : 0x2346ba0
       Step Length (mm)      : 950.9208107693095
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -15499,7 +15471,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597630
+      Address of G4Track    : 0x2346ba0
       Step Length (mm)      : 950.9208107693095
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -15548,7 +15520,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596910
+      Address of G4Track    : 0x2345e80
       Step Length (mm)      : 6307.638366666995
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -15596,7 +15568,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596910
+      Address of G4Track    : 0x2345e80
       Step Length (mm)      : 6307.638366666995
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -15638,7 +15610,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596910
+      Address of G4Track    : 0x2345e80
       Step Length (mm)      : 8103.959160890504
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -15677,7 +15649,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596910
+      Address of G4Track    : 0x2345e80
       Step Length (mm)      : 8103.959160890504
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -15729,7 +15701,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597530
+      Address of G4Track    : 0x2346aa0
       Step Length (mm)      : 0.004987276561390136
       Energy Deposit (MeV)  : 0.01485099714308299
       -----------------------------------------------------------------------
@@ -15769,7 +15741,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) eBrem (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597530
+      Address of G4Track    : 0x2346aa0
       Step Length (mm)      : 0.004987276561390136
       Energy Deposit (MeV)  : 0.01485099714308299
       -----------------------------------------------------------------------
@@ -15827,7 +15799,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 5.635672062848513e-06
       Energy Deposit (MeV)  : 0.000124171496063627
       -----------------------------------------------------------------------
@@ -15866,7 +15838,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) msc
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 5.635672062848513e-06
       Energy Deposit (MeV)  : 0.000124171496063627
       -----------------------------------------------------------------------
@@ -15924,7 +15896,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596a10
+      Address of G4Track    : 0x2345f80
       Step Length (mm)      : 0.03422989371864221
       Energy Deposit (MeV)  : 0.04411512202120468
       -----------------------------------------------------------------------
@@ -15966,7 +15938,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) eBrem (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596a10
+      Address of G4Track    : 0x2345f80
       Step Length (mm)      : 0.03422989371864221
       Energy Deposit (MeV)  : 0.04411512202120468
       -----------------------------------------------------------------------
@@ -16022,7 +15994,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 1733.347178103057
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -16073,7 +16045,7 @@ Momentum Change: (0.525748,0.274948,0.80498)
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 1733.347178103057
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -16115,7 +16087,7 @@ Momentum Change: (0.525748,0.274948,0.80498)
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 6826.102446186597
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -16163,7 +16135,7 @@ Momentum Change: (0.525748,0.274948,0.80498)
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 6826.102446186597
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -16205,7 +16177,7 @@ Momentum Change: (0.525748,0.274948,0.80498)
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 0
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -16248,7 +16220,7 @@ Momentum Change: (0.525748,0.274948,0.80498)
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 0
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -16290,7 +16262,7 @@ Momentum Change: (0.525748,0.274948,0.80498)
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 11555.41905009886
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -16338,7 +16310,7 @@ Momentum Change: (0.525748,0.274948,0.80498)
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 11555.41905009886
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -16380,7 +16352,7 @@ Momentum Change: (0.525748,0.274948,0.80498)
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 8448.714809309777
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -16419,7 +16391,7 @@ Momentum Change: (0.525748,0.274948,0.80498)
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 8448.714809309777
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -16471,7 +16443,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596e10
+      Address of G4Track    : 0x2346380
       Step Length (mm)      : 0.01643041593894631
       Energy Deposit (MeV)  : 0.02911315008292872
       -----------------------------------------------------------------------
@@ -16513,7 +16485,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) eBrem (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596e10
+      Address of G4Track    : 0x2346380
       Step Length (mm)      : 0.01643041593894631
       Energy Deposit (MeV)  : 0.02911315008292872
       -----------------------------------------------------------------------
@@ -16570,7 +16542,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596a10
+      Address of G4Track    : 0x2345f80
       Step Length (mm)      : 1632.598540129393
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -16612,7 +16584,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596a10
+      Address of G4Track    : 0x2345f80
       Step Length (mm)      : 1632.598540129393
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -16661,7 +16633,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 8119.698687510279
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -16709,7 +16681,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 8119.698687510279
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -16751,7 +16723,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 0
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -16794,7 +16766,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 0
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -16836,7 +16808,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 1300.759112773735
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -16884,7 +16856,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 1300.759112773735
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -16926,7 +16898,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 0
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -16969,7 +16941,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 0
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -17011,7 +16983,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 6656.080916957345
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -17053,7 +17025,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 6656.080916957345
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -17105,7 +17077,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596c10
+      Address of G4Track    : 0x2346180
       Step Length (mm)      : 0.002507506431318908
       Energy Deposit (MeV)  : 0.01005416814395263
       -----------------------------------------------------------------------
@@ -17147,7 +17119,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) eBrem (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596c10
+      Address of G4Track    : 0x2346180
       Step Length (mm)      : 0.002507506431318908
       Energy Deposit (MeV)  : 0.01005416814395263
       -----------------------------------------------------------------------
@@ -17203,7 +17175,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 6483.434447189728
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -17251,7 +17223,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 6483.434447189728
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -17293,7 +17265,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 7051.290757762398
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -17332,7 +17304,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 7051.290757762398
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -17384,7 +17356,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596d10
+      Address of G4Track    : 0x2346280
       Step Length (mm)      : 0.323447024224756
       Energy Deposit (MeV)  : 0.1443337642423912
       -----------------------------------------------------------------------
@@ -17425,7 +17397,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) msc
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596d10
+      Address of G4Track    : 0x2346280
       Step Length (mm)      : 0.323447024224756
       Energy Deposit (MeV)  : 0.1443337642423912
       -----------------------------------------------------------------------
@@ -17481,7 +17453,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597630
+      Address of G4Track    : 0x2346ba0
       Step Length (mm)      : 1511.434550502516
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -17523,7 +17495,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597630
+      Address of G4Track    : 0x2346ba0
       Step Length (mm)      : 1511.434550502516
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -17572,7 +17544,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596910
+      Address of G4Track    : 0x2345e80
       Step Length (mm)      : 6915.459589529321
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -17620,7 +17592,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596910
+      Address of G4Track    : 0x2345e80
       Step Length (mm)      : 6915.459589529321
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -17662,7 +17634,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596910
+      Address of G4Track    : 0x2345e80
       Step Length (mm)      : 0
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -17705,7 +17677,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596910
+      Address of G4Track    : 0x2345e80
       Step Length (mm)      : 0
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -17747,7 +17719,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596910
+      Address of G4Track    : 0x2345e80
       Step Length (mm)      : 12546.07486768544
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -17789,7 +17761,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596910
+      Address of G4Track    : 0x2345e80
       Step Length (mm)      : 12546.07486768544
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -17838,7 +17810,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597530
+      Address of G4Track    : 0x2346aa0
       Step Length (mm)      : 5210.502536507425
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -17886,7 +17858,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597530
+      Address of G4Track    : 0x2346aa0
       Step Length (mm)      : 5210.502536507425
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -17928,7 +17900,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597530
+      Address of G4Track    : 0x2346aa0
       Step Length (mm)      : 5387.254327863143
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -17967,7 +17939,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597530
+      Address of G4Track    : 0x2346aa0
       Step Length (mm)      : 5387.254327863143
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -18016,7 +17988,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596e10
+      Address of G4Track    : 0x2346380
       Step Length (mm)      : 5034.31522696014
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -18064,7 +18036,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596e10
+      Address of G4Track    : 0x2346380
       Step Length (mm)      : 5034.31522696014
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -18106,7 +18078,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596e10
+      Address of G4Track    : 0x2346380
       Step Length (mm)      : 5080.253328398005
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -18145,7 +18117,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596e10
+      Address of G4Track    : 0x2346380
       Step Length (mm)      : 5080.253328398005
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -18194,7 +18166,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596a10
+      Address of G4Track    : 0x2345f80
       Step Length (mm)      : 6211.524759874966
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -18242,7 +18214,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596a10
+      Address of G4Track    : 0x2345f80
       Step Length (mm)      : 6211.524759874966
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -18284,7 +18256,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596a10
+      Address of G4Track    : 0x2345f80
       Step Length (mm)      : 0
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -18327,7 +18299,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596a10
+      Address of G4Track    : 0x2345f80
       Step Length (mm)      : 0
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -18369,7 +18341,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596a10
+      Address of G4Track    : 0x2345f80
       Step Length (mm)      : 12160.26715020618
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -18417,7 +18389,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596a10
+      Address of G4Track    : 0x2345f80
       Step Length (mm)      : 12160.26715020618
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -18459,7 +18431,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596a10
+      Address of G4Track    : 0x2345f80
       Step Length (mm)      : 7842.56231825818
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -18498,7 +18470,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596a10
+      Address of G4Track    : 0x2345f80
       Step Length (mm)      : 7842.56231825818
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -18547,7 +18519,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596c10
+      Address of G4Track    : 0x2346180
       Step Length (mm)      : 5960.975989985573
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -18595,7 +18567,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596c10
+      Address of G4Track    : 0x2346180
       Step Length (mm)      : 5960.975989985573
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -18637,7 +18609,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596c10
+      Address of G4Track    : 0x2346180
       Step Length (mm)      : 7402.892373986237
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -18676,7 +18648,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596c10
+      Address of G4Track    : 0x2346180
       Step Length (mm)      : 7402.892373986237
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -18725,7 +18697,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 5701.359213572347
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -18773,7 +18745,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 5701.359213572347
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -18815,7 +18787,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 6560.771391920417
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -18854,7 +18826,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 6560.771391920417
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -18906,7 +18878,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       4) eBrem
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596d10
+      Address of G4Track    : 0x2346280
       Step Length (mm)      : 0.3651115635766853
       Energy Deposit (MeV)  : 0.1769735109600841
       -----------------------------------------------------------------------
@@ -18948,7 +18920,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) eBrem (Forced)
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596d10
+      Address of G4Track    : 0x2346280
       Step Length (mm)      : 0.3651115635766853
       Energy Deposit (MeV)  : 0.1769735109600841
       -----------------------------------------------------------------------
@@ -19012,7 +18984,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596810
+      Address of G4Track    : 0x2345d80
       Step Length (mm)      : 5190.658153058035
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -19060,7 +19032,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596810
+      Address of G4Track    : 0x2345d80
       Step Length (mm)      : 5190.658153058035
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -19102,7 +19074,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596810
+      Address of G4Track    : 0x2345d80
       Step Length (mm)      : 5373.164472788504
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -19141,7 +19113,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596810
+      Address of G4Track    : 0x2345d80
       Step Length (mm)      : 5373.164472788504
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -19190,7 +19162,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597430
+      Address of G4Track    : 0x23469a0
       Step Length (mm)      : 6178.487393458517
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -19238,7 +19210,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597430
+      Address of G4Track    : 0x23469a0
       Step Length (mm)      : 6178.487393458517
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -19280,7 +19252,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597430
+      Address of G4Track    : 0x23469a0
       Step Length (mm)      : 7750.731702640142
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -19319,7 +19291,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597430
+      Address of G4Track    : 0x23469a0
       Step Length (mm)      : 7750.731702640142
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -19368,7 +19340,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597630
+      Address of G4Track    : 0x2346ba0
       Step Length (mm)      : 5914.879123793682
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -19416,7 +19388,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597630
+      Address of G4Track    : 0x2346ba0
       Step Length (mm)      : 5914.879123793682
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -19458,7 +19430,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597630
+      Address of G4Track    : 0x2346ba0
       Step Length (mm)      : 7723.606832681045
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -19497,7 +19469,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597630
+      Address of G4Track    : 0x2346ba0
       Step Length (mm)      : 7723.606832681045
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -19546,7 +19518,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596910
+      Address of G4Track    : 0x2345e80
       Step Length (mm)      : 5239.752448480017
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -19594,7 +19566,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596910
+      Address of G4Track    : 0x2345e80
       Step Length (mm)      : 5239.752448480017
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -19636,7 +19608,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596910
+      Address of G4Track    : 0x2345e80
       Step Length (mm)      : 5465.479299998264
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -19675,7 +19647,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596910
+      Address of G4Track    : 0x2345e80
       Step Length (mm)      : 5465.479299998264
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -19724,7 +19696,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597530
+      Address of G4Track    : 0x2346aa0
       Step Length (mm)      : 738.136970147248
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -19766,7 +19738,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9597530
+      Address of G4Track    : 0x2346aa0
       Step Length (mm)      : 738.136970147248
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -19815,7 +19787,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596e10
+      Address of G4Track    : 0x2346380
       Step Length (mm)      : 5096.964981061913
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -19863,7 +19835,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596e10
+      Address of G4Track    : 0x2346380
       Step Length (mm)      : 5096.964981061913
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -19905,7 +19877,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596e10
+      Address of G4Track    : 0x2346380
       Step Length (mm)      : 5183.864044254661
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -19944,7 +19916,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596e10
+      Address of G4Track    : 0x2346380
       Step Length (mm)      : 5183.864044254661
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -19993,7 +19965,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596a10
+      Address of G4Track    : 0x2345f80
       Step Length (mm)      : 5433.808140679152
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -20041,7 +20013,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596a10
+      Address of G4Track    : 0x2345f80
       Step Length (mm)      : 5433.808140679152
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -20083,7 +20055,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596a10
+      Address of G4Track    : 0x2345f80
       Step Length (mm)      : 5904.38483895612
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -20122,7 +20094,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596a10
+      Address of G4Track    : 0x2345f80
       Step Length (mm)      : 5904.38483895612
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -20171,7 +20143,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596c10
+      Address of G4Track    : 0x2346180
       Step Length (mm)      : 1889.19632956147
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -20222,7 +20194,7 @@ Momentum Change: (-0.11251,0.541543,-0.83311)
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596c10
+      Address of G4Track    : 0x2346180
       Step Length (mm)      : 1889.19632956147
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -20264,7 +20236,7 @@ Momentum Change: (-0.11251,0.541543,-0.83311)
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596c10
+      Address of G4Track    : 0x2346180
       Step Length (mm)      : 5976.70778007209
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -20312,7 +20284,7 @@ Momentum Change: (-0.11251,0.541543,-0.83311)
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596c10
+      Address of G4Track    : 0x2346180
       Step Length (mm)      : 5976.70778007209
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -20354,7 +20326,7 @@ Momentum Change: (-0.11251,0.541543,-0.83311)
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596c10
+      Address of G4Track    : 0x2346180
       Step Length (mm)      : 7576.635047651145
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -20393,7 +20365,7 @@ Momentum Change: (-0.11251,0.541543,-0.83311)
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596c10
+      Address of G4Track    : 0x2346180
       Step Length (mm)      : 7576.635047651145
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -20442,7 +20414,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 5060.865512377974
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -20490,7 +20462,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 5060.865512377974
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -20532,7 +20504,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 5111.661334505116
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -20571,7 +20543,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95933b0
+      Address of G4Track    : 0x2342920
       Step Length (mm)      : 5111.661334505116
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -20620,7 +20592,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596010
+      Address of G4Track    : 0x2345580
       Step Length (mm)      : 7711.0491730538
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -20668,7 +20640,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596010
+      Address of G4Track    : 0x2345580
       Step Length (mm)      : 7711.0491730538
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -20710,7 +20682,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596010
+      Address of G4Track    : 0x2345580
       Step Length (mm)      : 0
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -20753,7 +20725,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596010
+      Address of G4Track    : 0x2345580
       Step Length (mm)      : 0
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -20795,7 +20767,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596010
+      Address of G4Track    : 0x2345580
       Step Length (mm)      : 244.0729594290723
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -20837,7 +20809,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9596010
+      Address of G4Track    : 0x2345580
       Step Length (mm)      : 244.0729594290723
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -20886,7 +20858,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9594db0
+      Address of G4Track    : 0x2344320
       Step Length (mm)      : 7194.335858132299
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -20934,7 +20906,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9594db0
+      Address of G4Track    : 0x2344320
       Step Length (mm)      : 7194.335858132299
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -20976,7 +20948,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9594db0
+      Address of G4Track    : 0x2344320
       Step Length (mm)      : 0
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -21019,7 +20991,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9594db0
+      Address of G4Track    : 0x2344320
       Step Length (mm)      : 0
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -21061,7 +21033,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9594db0
+      Address of G4Track    : 0x2344320
       Step Length (mm)      : 4586.473242573549
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -21103,7 +21075,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9594db0
+      Address of G4Track    : 0x2344320
       Step Length (mm)      : 4586.473242573549
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -21152,7 +21124,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9594cb0
+      Address of G4Track    : 0x2344220
       Step Length (mm)      : 7276.909619429865
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -21200,7 +21172,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9594cb0
+      Address of G4Track    : 0x2344220
       Step Length (mm)      : 7276.909619429865
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -21242,7 +21214,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9594cb0
+      Address of G4Track    : 0x2344220
       Step Length (mm)      : 5622.16398455399
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -21281,7 +21253,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9594cb0
+      Address of G4Track    : 0x2344220
       Step Length (mm)      : 5622.16398455399
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -21330,7 +21302,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9594bb0
+      Address of G4Track    : 0x2344120
       Step Length (mm)      : 5044.469219288591
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -21378,7 +21350,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9594bb0
+      Address of G4Track    : 0x2344120
       Step Length (mm)      : 5044.469219288591
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -21420,7 +21392,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x9594bb0
+      Address of G4Track    : 0x2344120
       Step Length (mm)      : 5084.667586573891
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -21459,7 +21431,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x9594bb0
+      Address of G4Track    : 0x2344120
       Step Length (mm)      : 5084.667586573891
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -21508,7 +21480,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95945b0
+      Address of G4Track    : 0x2343b20
       Step Length (mm)      : 7171.990860036406
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -21556,7 +21528,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95945b0
+      Address of G4Track    : 0x2343b20
       Step Length (mm)      : 7171.990860036406
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -21598,7 +21570,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95945b0
+      Address of G4Track    : 0x2343b20
       Step Length (mm)      : 6773.95796174252
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -21637,7 +21609,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95945b0
+      Address of G4Track    : 0x2343b20
       Step Length (mm)      : 6773.95796174252
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -21686,7 +21658,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95944b0
+      Address of G4Track    : 0x2343a20
       Step Length (mm)      : 5370.011832032126
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -21734,7 +21706,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95944b0
+      Address of G4Track    : 0x2343a20
       Step Length (mm)      : 5370.011832032126
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -21776,7 +21748,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95944b0
+      Address of G4Track    : 0x2343a20
       Step Length (mm)      : 5752.151195601377
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -21815,7 +21787,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95944b0
+      Address of G4Track    : 0x2343a20
       Step Length (mm)      : 5752.151195601377
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -21864,7 +21836,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95943b0
+      Address of G4Track    : 0x2343920
       Step Length (mm)      : 6849.890174992471
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -21912,7 +21884,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95943b0
+      Address of G4Track    : 0x2343920
       Step Length (mm)      : 6849.890174992471
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -21954,7 +21926,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95943b0
+      Address of G4Track    : 0x2343920
       Step Length (mm)      : 5801.588912747417
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -21993,7 +21965,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95943b0
+      Address of G4Track    : 0x2343920
       Step Length (mm)      : 5801.588912747417
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -22042,7 +22014,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95935b0
+      Address of G4Track    : 0x2342b20
       Step Length (mm)      : 7097.384755436898
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -22090,7 +22062,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95935b0
+      Address of G4Track    : 0x2342b20
       Step Length (mm)      : 7097.384755436898
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -22132,7 +22104,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95935b0
+      Address of G4Track    : 0x2342b20
       Step Length (mm)      : 7333.391764701963
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -22171,7 +22143,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95935b0
+      Address of G4Track    : 0x2342b20
       Step Length (mm)      : 7333.391764701963
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -22220,7 +22192,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95934b0
+      Address of G4Track    : 0x2342a20
       Step Length (mm)      : 7584.409535546622
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -22268,7 +22240,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95934b0
+      Address of G4Track    : 0x2342a20
       Step Length (mm)      : 7584.409535546622
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -22310,7 +22282,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95934b0
+      Address of G4Track    : 0x2342a20
       Step Length (mm)      : 0
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -22353,7 +22325,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95934b0
+      Address of G4Track    : 0x2342a20
       Step Length (mm)      : 0
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -22395,7 +22367,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95934b0
+      Address of G4Track    : 0x2342a20
       Step Length (mm)      : 15168.05796570003
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -22443,7 +22415,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95934b0
+      Address of G4Track    : 0x2342a20
       Step Length (mm)      : 15168.05796570003
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -22485,7 +22457,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95934b0
+      Address of G4Track    : 0x2342a20
       Step Length (mm)      : 0
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -22528,7 +22500,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       2) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95934b0
+      Address of G4Track    : 0x2342a20
       Step Length (mm)      : 0
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -22570,7 +22542,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       1) Transportation
 
     ++G4Step Information 
-      Address of G4Track    : 0x95934b0
+      Address of G4Track    : 0x2342a20
       Step Length (mm)      : 302.7339960150668
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -22612,7 +22584,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
       3) OpBoundary
 
     ++G4Step Information 
-      Address of G4Track    : 0x95934b0
+      Address of G4Track    : 0x2342a20
       Step Length (mm)      : 302.7339960150668
       Energy Deposit (MeV)  : 0
       -----------------------------------------------------------------------
@@ -22649,7 +22621,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 #Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     5   3.96 m   -4.42 m     4.8 m     2.1 eV      0 eV   30.3 cm   23.1 m          Tank  OpAbsorption
 Number of optical photons produced in this event : 86
-number of event = 1 User=0.08s Real=0.2s Sys=0.04s
+number of event = 1 User=0.1s Real=0.2s Sys=0.03s
 #
 #/process/inactivate Scintillation
 #/N06/phys/verbose 0

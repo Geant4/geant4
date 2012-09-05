@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-07    (10-August-2012)
+ Geant4 version Name: geant4-09-05-ref-08    (7-September-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -117,8 +117,8 @@ G4NistElementBuilder: Build Element <Be>  Z= 4  A= 9.01218  with natural isotope
 G4Material: Mean excitation energy is changed for G4_BERYLLIUM_OXIDE Iold= 83.15eV Inew= 93.2 eV
 G4NistMaterialBuilder::FindOrBuildMaterial Scintillator
 G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Scintillator> is not found out
-New material Scintillator is prepeared  nMaterials= 314 nComponents= 806 nCurrent= 2
-G4NistMaterialBuilder: BuildMaterial #313
+New material Scintillator is prepeared  nMaterials= 317 nComponents= 818 nCurrent= 2
+G4NistMaterialBuilder: BuildMaterial #316
 New material nComponents= 2
 
 The materials defined are: 

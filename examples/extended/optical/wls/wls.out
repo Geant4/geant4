@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-07    (10-August-2012)
+ Geant4 version Name: geant4-09-05-ref-08    (7-September-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -75,28 +75,28 @@ G4NistElementBuilder: Build Element <Ar>  Z= 18  A= 39.9477  with natural isotop
 G4Material: Mean excitation energy is changed for G4_AIR Iold= 85.6689eV Inew= 85.7 eV
 G4NistMaterialBuilder::FindOrBuildMaterial PMMA
 G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <PMMA> is not found out
-New material PMMA is prepeared  nMaterials= 314 nComponents= 806 nCurrent= 3
-G4NistMaterialBuilder: BuildMaterial #313
+New material PMMA is prepeared  nMaterials= 317 nComponents= 818 nCurrent= 3
+G4NistMaterialBuilder: BuildMaterial #316
 New material nComponents= 3
 G4NistMaterialBuilder::FindOrBuildMaterial Pethylene
 G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Pethylene> is not found out
-New material Pethylene is prepeared  nMaterials= 315 nComponents= 809 nCurrent= 2
-G4NistMaterialBuilder: BuildMaterial #314
+New material Pethylene is prepeared  nMaterials= 318 nComponents= 821 nCurrent= 2
+G4NistMaterialBuilder: BuildMaterial #317
 New material nComponents= 2
 G4NistMaterialBuilder::FindOrBuildMaterial FPethylene
 G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <FPethylene> is not found out
-New material FPethylene is prepeared  nMaterials= 316 nComponents= 811 nCurrent= 2
-G4NistMaterialBuilder: BuildMaterial #315
+New material FPethylene is prepeared  nMaterials= 319 nComponents= 823 nCurrent= 2
+G4NistMaterialBuilder: BuildMaterial #318
 New material nComponents= 2
 G4NistMaterialBuilder::FindOrBuildMaterial Polystyrene
 G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Polystyrene> is not found out
-New material Polystyrene is prepeared  nMaterials= 317 nComponents= 813 nCurrent= 2
-G4NistMaterialBuilder: BuildMaterial #316
+New material Polystyrene is prepeared  nMaterials= 320 nComponents= 825 nCurrent= 2
+G4NistMaterialBuilder: BuildMaterial #319
 New material nComponents= 2
 G4NistMaterialBuilder::FindOrBuildMaterial Silicone
 G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Silicone> is not found out
-New material Silicone is prepeared  nMaterials= 318 nComponents= 815 nCurrent= 2
-G4NistMaterialBuilder: BuildMaterial #317
+New material Silicone is prepeared  nMaterials= 321 nComponents= 827 nCurrent= 2
+G4NistMaterialBuilder: BuildMaterial #320
 New material nComponents= 2
 G4NistMaterialBuilder::FindOrBuildMaterial G4_Al
 G4NistMaterialBuilder: BuildMaterial #12
@@ -105,8 +105,8 @@ G4NistElementBuilder: Build Element <Al>  Z= 13  A= 26.9815  with natural isotop
 G4Material: Mean excitation energy is changed for G4_Al Iold= 166eV Inew= 166 eV
 G4NistMaterialBuilder::FindOrBuildMaterial TiO2
 G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <TiO2> is not found out
-New material TiO2 is prepeared  nMaterials= 319 nComponents= 817 nCurrent= 2
-G4NistMaterialBuilder: BuildMaterial #318
+New material TiO2 is prepeared  nMaterials= 322 nComponents= 829 nCurrent= 2
+G4NistMaterialBuilder: BuildMaterial #321
 New material nComponents= 2
 G4NistElementBuilder: Build Element <Ti>  Z= 22  A= 47.8667  with natural isotope composition
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
