@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-07    (10-August-2012)
+ Geant4 version Name: geant4-09-05-ref-08    (7-September-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -423,7 +423,7 @@ Event number 9
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.73s Real=1.31s Sys=0s
+  User=0.75s Real=0.76s Sys=0s
 /gun/energy 1.0 GeV
 /run/beamOn 10
 
@@ -465,7 +465,7 @@ Event number 19
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.45s Real=0.46s Sys=0s
+  User=0.47s Real=0.48s Sys=0s
 /gun/energy 0.75 GeV
 /run/beamOn 10
 
@@ -507,7 +507,7 @@ Event number 29
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.37s Real=0.37s Sys=0s
+  User=0.38s Real=0.37s Sys=0s
 /gun/energy 0.150 GeV
 /run/beamOn 10
 
@@ -549,7 +549,7 @@ Event number 39
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.08s Real=0.08s Sys=0s
+  User=0.08s Real=0.09s Sys=0s
 /gun/energy 0.050 GeV
 /run/beamOn 10
 
@@ -723,7 +723,7 @@ Event number 79
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.37s Real=1.41s Sys=0s
+  User=1.36s Real=1.41s Sys=0s
 /gun/energy 3 GeV
 /run/beamOn 10
 
@@ -765,7 +765,7 @@ Event number 89
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.97s Real=0.98s Sys=0s
+  User=0.96s Real=0.97s Sys=0s
 /gun/energy 2.5 GeV
 /run/beamOn 10
 
@@ -807,7 +807,7 @@ Event number 99
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.87s Real=0.95s Sys=0.01s
+  User=0.77s Real=0.79s Sys=0s
 /gun/energy 1.0 GeV
 /run/beamOn 10
 
@@ -849,7 +849,7 @@ Event number 109
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.52s Real=0.52s Sys=0s
+  User=0.45s Real=0.51s Sys=0s
 /gun/energy 0.75 GeV
 /run/beamOn 10
 
@@ -891,7 +891,7 @@ Event number 119
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.4s Real=0.41s Sys=0s
+  User=0.3s Real=0.3s Sys=0s
 /gun/energy 0.150 GeV
 /run/beamOn 10
 
@@ -933,7 +933,7 @@ Event number 129
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.11s Real=0.12s Sys=0s
+  User=0.13s Real=0.13s Sys=0s
 /gun/energy 0.050 GeV
 /run/beamOn 10
 
@@ -975,7 +975,7 @@ Event number 139
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.05s Real=0.04s Sys=0s
+  User=0.04s Real=0.04s Sys=0s
 /gun/energy 0.015 GeV
 /run/beamOn 10
 
@@ -1107,7 +1107,7 @@ Event number 169
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=2.35s Real=2.42s Sys=0s
+  User=2.33s Real=2.38s Sys=0s
 /gun/energy 3 GeV
 /run/beamOn 10
 
@@ -1149,7 +1149,7 @@ Event number 179
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.51s Real=1.61s Sys=0s
+  User=1.39s Real=1.39s Sys=0s
 /gun/energy 2.5 GeV
 /run/beamOn 10
 
@@ -1191,7 +1191,7 @@ Event number 189
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.27s Real=2.12s Sys=0s
+  User=1.31s Real=1.32s Sys=0s
 /gun/energy 1.0 GeV
 /run/beamOn 10
 
@@ -1233,7 +1233,7 @@ Event number 199
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.51s Real=0.51s Sys=0s
+  User=0.51s Real=0.52s Sys=0s
 /gun/energy 0.75 GeV
 /run/beamOn 10
 
@@ -1275,7 +1275,7 @@ Event number 209
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.41s Real=0.41s Sys=0s
+  User=0.33s Real=0.42s Sys=0s
 /gun/energy 0.150 GeV
 /run/beamOn 10
 
@@ -1317,7 +1317,7 @@ Event number 219
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.06s Real=0.07s Sys=0s
+  User=0.07s Real=0.06s Sys=0s
 /gun/energy 0.050 GeV
 /run/beamOn 10
 
@@ -1359,7 +1359,7 @@ Event number 229
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.02s Real=0.01s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 /gun/energy 0.015 GeV
 /run/beamOn 10
 
@@ -1401,7 +1401,7 @@ Event number 239
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0s Real=0.01s Sys=0s
+  User=0.01s Real=0s Sys=0s
 /gun/energy 0.0015 GeV
 /run/beamOn 10
 
@@ -1717,7 +1717,7 @@ Event number 259
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.35s Real=0.35s Sys=0s
+  User=0.41s Real=0.44s Sys=0s
 /gun/energy 1.0 GeV
 /run/beamOn 10
 
@@ -1764,7 +1764,7 @@ Event number 269
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.24s Real=0.24s Sys=0s
+  User=0.23s Real=0.22s Sys=0s
 /gun/energy 0.75 GeV
 /run/beamOn 10
 
@@ -1811,7 +1811,7 @@ Event number 279
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.2s Real=0.2s Sys=0s
+  User=0.22s Real=0.24s Sys=0s
 /gun/energy 0.150 GeV
 /run/beamOn 10
 
@@ -1858,7 +1858,7 @@ Event number 289
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.05s Real=0.06s Sys=0s
+  User=0.06s Real=0.06s Sys=0s
 /gun/energy 0.050 GeV
 /run/beamOn 10
 
@@ -1952,7 +1952,7 @@ Event number 309
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.01s Real=0.01s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 /gun/energy 0.0015 GeV
 /run/beamOn 10
 
@@ -1999,7 +1999,7 @@ Event number 319
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # electron in Al
 #
@@ -2049,14 +2049,10 @@ Event number 326
 Event number 327
 Event number 328
 Event number 329
-G4Fragment::CalculateExcitationEnergy(): WARNING 
-Fragment: A =  26, Z =  12, U = -1.628e-01 MeV
-          P = (1.102e+02,5.201e+00,2.567e+01) MeV   E = 2.420e+04 MeV
-
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.83s Real=0.83s Sys=0s
+  User=0.8s Real=0.81s Sys=0s
 /gun/energy 3 GeV
 /run/beamOn 10
 
@@ -2103,7 +2099,7 @@ Event number 339
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.5s Real=0.54s Sys=0s
+  User=0.53s Real=0.54s Sys=0s
 /gun/energy 2.5 GeV
 /run/beamOn 10
 
@@ -2150,7 +2146,7 @@ Event number 349
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.47s Real=0.47s Sys=0s
+  User=0.49s Real=0.5s Sys=0s
 /gun/energy 1.0 GeV
 /run/beamOn 10
 
@@ -2197,7 +2193,7 @@ Event number 359
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.22s Real=0.22s Sys=0s
+  User=0.29s Real=0.31s Sys=0s
 /gun/energy 0.75 GeV
 /run/beamOn 10
 
@@ -2244,7 +2240,7 @@ Event number 369
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.19s Real=0.2s Sys=0s
+  User=0.2s Real=0.21s Sys=0s
 /gun/energy 0.150 GeV
 /run/beamOn 10
 
@@ -2291,7 +2287,7 @@ Event number 379
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.08s Real=0.07s Sys=0s
+  User=0.1s Real=0.1s Sys=0s
 /gun/energy 0.050 GeV
 /run/beamOn 10
 
@@ -2338,7 +2334,7 @@ Event number 389
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.03s Real=0.04s Sys=0s
+  User=0.03s Real=0.02s Sys=0s
 /gun/energy 0.015 GeV
 /run/beamOn 10
 
@@ -2485,7 +2481,7 @@ Event number 419
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.15s Real=1.15s Sys=0s
+  User=1.25s Real=1.28s Sys=0s
 /gun/energy 3 GeV
 /run/beamOn 10
 
@@ -2532,7 +2528,7 @@ Event number 429
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.76s Real=0.76s Sys=0s
+  User=0.68s Real=0.76s Sys=0s
 /gun/energy 2.5 GeV
 /run/beamOn 10
 
@@ -2579,7 +2575,7 @@ Event number 439
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.7s Real=0.91s Sys=0s
+  User=0.64s Real=0.64s Sys=0s
 /gun/energy 1.0 GeV
 /run/beamOn 10
 
@@ -2626,7 +2622,7 @@ Event number 449
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.25s Real=0.29s Sys=0s
+  User=0.32s Real=0.32s Sys=0s
 /gun/energy 0.75 GeV
 /run/beamOn 10
 
@@ -2673,7 +2669,7 @@ Event number 459
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.24s Real=0.25s Sys=0s
+  User=0.21s Real=0.21s Sys=0s
 /gun/energy 0.150 GeV
 /run/beamOn 10
 
@@ -2767,7 +2763,7 @@ Event number 479
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.02s Real=0.01s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /gun/energy 0.015 GeV
 /run/beamOn 10
 
@@ -2814,7 +2810,7 @@ Event number 489
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /gun/energy 0.0015 GeV
 /run/beamOn 10
 
@@ -2861,7 +2857,7 @@ Event number 499
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 # gamma in Air
 #
@@ -3192,7 +3188,7 @@ Event number 519
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 /gun/energy 0.75 GeV
 /run/beamOn 10
 
@@ -3510,7 +3506,7 @@ Event number 579
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=2.02s Real=2.05s Sys=0.01s
+  User=1.72s Real=1.79s Sys=0s
 /gun/energy 3 GeV
 /run/beamOn 10
 
@@ -3562,7 +3558,7 @@ Event number 589
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.96s Real=2.4s Sys=0s
+  User=1.35s Real=1.36s Sys=0s
 /gun/energy 2.5 GeV
 /run/beamOn 10
 
@@ -3614,7 +3610,7 @@ Event number 599
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.04s Real=1.04s Sys=0s
+  User=1.19s Real=1.19s Sys=0s
 /gun/energy 1.0 GeV
 /run/beamOn 10
 
@@ -3666,7 +3662,7 @@ Event number 609
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.73s Real=0.74s Sys=0s
+  User=0.69s Real=0.89s Sys=0s
 /gun/energy 0.75 GeV
 /run/beamOn 10
 
@@ -3718,7 +3714,7 @@ Event number 619
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.59s Real=0.6s Sys=0s
+  User=0.64s Real=1.17s Sys=0s
 /gun/energy 0.150 GeV
 /run/beamOn 10
 
@@ -3770,7 +3766,7 @@ Event number 629
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.29s Real=0.29s Sys=0s
+  User=0.18s Real=0.34s Sys=0s
 /gun/energy 0.050 GeV
 /run/beamOn 10
 
@@ -3822,7 +3818,7 @@ Event number 639
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.05s Real=0.05s Sys=0s
+  User=0.07s Real=0.08s Sys=0s
 /gun/energy 0.015 GeV
 /run/beamOn 10
 
@@ -3874,7 +3870,7 @@ Event number 649
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0s Real=0.01s Sys=0s
+  User=0.01s Real=0s Sys=0s
 /gun/energy 0.0015 GeV
 /run/beamOn 10
 
@@ -3926,7 +3922,7 @@ Event number 659
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # positron in Air
 #
@@ -4140,7 +4136,7 @@ Event number 699
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0s Real=0.01s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /gun/energy 0.75 GeV
 /run/beamOn 10
 
@@ -4192,7 +4188,7 @@ Event number 709
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0s Sys=0s
 /gun/energy 0.150 GeV
 /run/beamOn 10
 
@@ -4348,7 +4344,7 @@ Event number 739
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /gun/energy 0.0015 GeV
 /run/beamOn 10
 
@@ -4400,7 +4396,7 @@ Event number 749
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.01s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

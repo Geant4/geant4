@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-07    (10-August-2012)
+ Geant4 version Name: geant4-09-05-ref-08    (7-September-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -453,7 +453,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=5.79s Real=10.66s Sys=3.98s
+  User=5.87s Real=9.75s Sys=3.23s
 
  ======================== run summary ======================
 
@@ -922,7 +922,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=6.52s Real=12.28s Sys=4.03s
+  User=6.58s Real=10.04s Sys=3.14s
 
  ======================== run summary ======================
 
