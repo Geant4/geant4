@@ -115,7 +115,7 @@ $Id: README,v 1.1 2009-09-19 16:09:43 maire Exp $
  8- HOW TO START ?
  
  - compile and link to generate an executable
- 	% cd eBenchmarkV1
+ 	% cd electronScattering
  	% gmake
  		
  - execute eBenchmarkV1 in 'batch' mode from macro files e.g.

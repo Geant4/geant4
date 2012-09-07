@@ -16,8 +16,8 @@ draws a simple logo.
       
 2) In the main program, UVA_VisAction is instantiated and
    its pointer registerd with the visualization manager. You may
-   register only one vis action.  You may optionally specify an extent
-   at this point to assist the viewers to locate the objects.
+   optionally specify an extent at this point to assist the viewers to
+   locate the objects.
 
 3) To visualise, use the usual Geant4 vis commands to create a view
    and scene, then add the vis action to the scene with
@@ -29,4 +29,4 @@ view".  You may zoom, etc., from this standard view.
 
 
 John Allison
-18th October 2005
+11th June 2012

@@ -125,11 +125,11 @@ Marker size parameter ('setPointSize')
 			    
  	/vis/blineTracer/stockLines aBool
 		Parameters: boolean aBool
-		Desscription: If true the next computed field lines are stored
+		Description: If true the next computed field lines are stored
 			      as Polylines for further visualisation
 	/vis/blineTracer/stockLines aBool
 		Parameters: boolean aBool
-		Desscription: If true the next computed field lines are stored
+		Description: If true the next computed field lines are stored
 			      as Polymarkers for further visualisation
 			      
   	/vis/blineTracer/setPointSize point_size

@@ -1,0 +1,17 @@
+//$Id$
+
+///\file "exoticphysics/.README"
+///\brief Examples  exoticphysics README page
+
+/*! \page Examples_exoticphysics Category "exoticphysics"
+
+ Examples in this directory demonstrate exotic physics applications. 
+ Currently, only one example is provided:
+
+\link Examplemonopole monopole \endlink
+
+This example is devoted to the energy deposited by classical magnetic
+monopole.
+
+*/
+

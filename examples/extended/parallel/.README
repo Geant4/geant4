@@ -1,0 +1,23 @@
+//$Id$
+
+///\file "parallel/.README"
+///\brief Examples parallel README page
+
+/*! \page Examples_parallel Category "parallel"
+
+This directory includes example applications to demonstrate the usage of
+different techniques for achieving event parallelism with Geant4.
+
+- \link ExampleParN02 ParN02 \endlink and 
+  \link ExampleParN04 ParN04 \endlink are modified versions of the novice examples N02 and N04
+  adapted to be run together with the TOP-C communication layer application
+  on either a cluster of systems or multi-processor machines.
+
+- \link Examples_MPI MPI \endlink is a native interface with MPI libraries. 
+  The directory contains 
+  a Geant4 UI library and a couple of parallelized examples.
+  Using this interface, users applications can be parllelized with 
+  different MPI compliant libraries, such as LAM/MPI, MPICH2, OpenMPI,
+  and so on.
+
+*/

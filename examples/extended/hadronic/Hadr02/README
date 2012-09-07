@@ -13,8 +13,8 @@
                      (ESA contract 22712/09/NL/AT)
 
 
-This example application iproviding simulation of ion beam interaction with different 
-targets. Hadronic aspects of beam target interaction are demonstrating in the example 
+This example application is providing simulation of ion beam interaction with different 
+targets. Hadronic aspects of beam target interaction are demonstrated in the example 
 including longitudinal profile of energy deposition, spectra of secondary  particles,
 isotope production spectra. The results are presenting in a form of average numbers 
 and histograms. All ion/ion models of Geant4 are available and also the interface to

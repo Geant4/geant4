@@ -91,7 +91,7 @@ $Id: README,v 1.4 2008-09-26 20:26:01 maire Exp $
  	% gmake
  		
     execute TestEm18 in 'batch' mode from macro files :
- 	% TestEm18   electron.mac.mac
+ 	% TestEm18   electron.mac
  		
     execute TestEm18 in 'interactive mode' with visualization :
  	% TestEm18

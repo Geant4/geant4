@@ -1,0 +1,12 @@
+
+        Geant4 extended examples - exotic physics
+        ----------------------------------------------
+
+ Examples in this directory demonstrate exotic physics applications. 
+ Currently, only one example is provided:
+
+monopole
+---------
+
+This example is devoted to the energy deposited by classical magnetic
+monopole.

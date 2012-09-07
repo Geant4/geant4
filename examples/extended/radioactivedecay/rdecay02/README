@@ -88,7 +88,7 @@
 
        - Emission particles in the RadioactiveDecay process: 
            particle PDGcode,
-           partilce kinetic energy,
+           particle kinetic energy,
 	   particle creation time,
            particle weight.
 

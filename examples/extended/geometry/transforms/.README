@@ -3,7 +3,7 @@ $Id$
 ///\file "geometry/transforms/.README"
 ///\brief Extended example Transforms README page
 
-/*! \page ExampleTransforms Example Transforms
+/*! \page ExampleTransforms Example transforms
 			    
  This example shows various ways of definition of 3D transformations for 
  placing volumes.

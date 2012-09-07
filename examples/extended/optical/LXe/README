@@ -2,177 +2,6 @@
                             LXe Example
                             -----------
 
-**************
-*Classes Used*
-**************
-
-main()
-------
-
- ==> Use G4UItcsh if available
-
- ==> Provide interactive and macro mode
-
-G4VModularPhysicsList 
-------------------
-(class: LXePhysicsList)
-
- ==> Registers General, EM, Muon, and Optical physics lists
-
- ==> define particles; including *** G4OpticalPhoton     ***
-     define processes; including *** G4Cerenkov          ***
-                                 *** G4Scintillation     ***
-                                 *** G4OpAbsorption      ***
-                                 *** G4OpRayleigh        ***
-                                 *** G4OpBoundaryProcess ***
-				 *** G4OpWLS             ***
-
-G4VUserDetectorConstruction 
----------------------------
-(class: LXeDetectorConstruction)
-
- ==> define material: LXe (liquid xenon), Aluminum, Air, Vacuum, Glass,...
-     define G4Box geometry with aluminum housing and LXe volume inside
-     define G4Tubs placed around the housing walls
-     define G4Sphere to demonstrate skin surfaces inside volumes
-     *** add G4MaterialPropertiesTable to G4Material         ***
-     *** define G4OpticalSurface(s)                          ***
-     *** define G4LogicalBorderSurface(s)                    ***
-     *** define G4LogicalSkinSurface(s)                      ***
-     *** add G4MaterialPropertiesTable to G4OpticalSurface(s)***
-
- ==> Mesenger to change many of the dectector geometry properties
-
- ==> Uses a alternative style of geometry definition. See "Geometry" section.
-
-G4VUserPrimaryGeneratorAction
------------------------------
-(class: LXePrimaryGeneratorAction)
-
- ==> Use G4ParticleGun to shoot a 511 keV gamma through the housing into
-     liquid xenon scintillator
- 
-G4UserStackingAction
---------------------
-(class: LXeStackingAction)
-
- ==> show how to count the number of secondary particles in an event
-     differentiates between different creator processes
-
-G4UserRunAction
----------------
-(class: LXeRunAction)
-
- ==> Call recorder class for begin and end of run
-
-G4UserSteppingAction
---------------------
-(class: LXeSteppingAction)
-
- ==> Identify which secondaries were generated during a particular step
-
- ==> ***Count reflections/absorptions/detections due to G4OpBoundaryProcess***
-     ***Count absorptions due to G4OpAbsorption                            ***
-     Manually trigger a sensitive detector when a boundary process detects
-
- ==> Call recorder class at end of step
-
-G4UserTrackingAction
-____________________
-(class: LXeTrackingAction)
-
- ==> Determine if the trajectory should be drawn by checking if it hit the
-     sphere(if enabled) and a pmt.
-
- ==> Call recorder class at end of track
-
-G4UserEventAction
------------------
-(class: LXeEventAction)
-
- ==> Triggers drawing of trajectories
-
- ==> Calculates and stores data in a G4VUserEventInformation object
-
- ==> Outputs basic event data at end of event
-
- ==> Decides if the random seed should be saved for this event
-
- ==> Call recorder class at begin and end of event
-
-G4VSensitiveDetector
---------------------
-(classes: LXePMTSD, LXeScintSD)
-
- ==> Basic sensitive detectors keeping hit collections
-     Keep one G4VHit object per hit
-      or
-     Keep one G4VHit object per volume containing hits
-
- ==> LXePMTSD decides if the hits it is creating should be redrawn
-
-G4VHit
-------
-(classes: LXePMTHit, LXeScintHIT)
-
- ==> Store individual hit positions
-      or
-     Store a count of hits in a particular volume
-
- ==> Selectively redraw volumes containing hits at the end of event
-
-G4VUserEventInformation & G4VUserTrackInformation
--------------------------------------------------
-(classes: LXeUserEventInformation, LXeUserTrackInformation)
-
- ==> Store aditional information along with the G4Event/G4Track objects
-
-G4VSteppingVerbose
-------------------
-(classes: LXeSteppingVerbose)
- 
- ==> Custom verbose stepping output to use G4BestUnit and print current volume
-      rather than next volume
- ==> Same as ExN03SteppingVerbose but output reformated to fit nicer into 
-      tables.
-
-G4UImessenger
--------------
-(classes: LXeDetectorMessenger, LXeEventMessenger, LXeSteppingMessenger)
-
- ==> Create /LXe and /LXe/detector interactive command folders
-
- ==> Create new commands
-
- ==> See interactive help when running the example for descriptions of commands
-
-G4Trajectory
-------------
-(class: LXeTrajectory)
-
- ==> Derived from G4Trajectory to use most of the basic trajectory functions
-     already defined
-
- ==> Uses a coppied and modified version of DrawTrajectory from G4VTrajectory
-     to enable/disable drawing of individual trajectories and to redefine
-     the colours used
-
-G4VisManager
-------------
-(class: LXeVisManager)
-
- ==> Initialize graphics systems geant4 is configured for
-
-RecorderBase
-------------
-
- ==> Virtual class provided for recording of simulation data
-
- ==> Derive your own implementation from it and instantiate the recorder
-     object in main()
-
- ==> For full description see RecorderBase.hh
-
 **********
 *Geometry*
 **********
@@ -551,3 +380,178 @@ defaults.mac
 -This resets all values that can be changed with the /LXe/ commands back to
 their initial configuration including those that are not reset with
 /LXe/detector/defaults
+
+**************
+*Classes Used*
+**************
+
+main()
+------
+
+ See LXe.cc.
+
+ ==> Use G4UItcsh if available
+
+ ==> Provide interactive and macro mode
+
+G4VModularPhysicsList 
+------------------
+(class: LXePhysicsList)
+
+ ==> Registers General, EM, Muon, and Optical physics lists
+
+ ==> define particles; including *** G4OpticalPhoton     ***
+     define processes; including *** G4Cerenkov          ***
+                                 *** G4Scintillation     ***
+                                 *** G4OpAbsorption      ***
+                                 *** G4OpRayleigh        ***
+                                 *** G4OpBoundaryProcess ***
+				 *** G4OpWLS             ***
+
+G4VUserDetectorConstruction 
+---------------------------
+(class: LXeDetectorConstruction)
+
+ ==> define material: LXe (liquid xenon), Aluminum, Air, Vacuum, Glass,...
+     define G4Box geometry with aluminum housing and LXe volume inside
+     define G4Tubs placed around the housing walls
+     define G4Sphere to demonstrate skin surfaces inside volumes
+     *** add G4MaterialPropertiesTable to G4Material         ***
+     *** define G4OpticalSurface(s)                          ***
+     *** define G4LogicalBorderSurface(s)                    ***
+     *** define G4LogicalSkinSurface(s)                      ***
+     *** add G4MaterialPropertiesTable to G4OpticalSurface(s)***
+
+ ==> Mesenger to change many of the dectector geometry properties
+
+ ==> Uses a alternative style of geometry definition. See "Geometry" section.
+
+G4VUserPrimaryGeneratorAction
+-----------------------------
+(class: LXePrimaryGeneratorAction)
+
+ ==> Use G4ParticleGun to shoot a 511 keV gamma through the housing into
+     liquid xenon scintillator
+ 
+G4UserStackingAction
+--------------------
+(class: LXeStackingAction)
+
+ ==> show how to count the number of secondary particles in an event
+     differentiates between different creator processes
+
+G4UserRunAction
+---------------
+(class: LXeRunAction)
+
+ ==> Call recorder class for begin and end of run
+
+G4UserSteppingAction
+--------------------
+(class: LXeSteppingAction)
+
+ ==> Identify which secondaries were generated during a particular step
+
+ ==> ***Count reflections/absorptions/detections due to G4OpBoundaryProcess***
+     ***Count absorptions due to G4OpAbsorption                            ***
+     Manually trigger a sensitive detector when a boundary process detects
+
+ ==> Call recorder class at end of step
+
+G4UserTrackingAction
+____________________
+(class: LXeTrackingAction)
+
+ ==> Determine if the trajectory should be drawn by checking if it hit the
+     sphere(if enabled) and a pmt.
+
+ ==> Call recorder class at end of track
+
+G4UserEventAction
+-----------------
+(class: LXeEventAction)
+
+ ==> Triggers drawing of trajectories
+
+ ==> Calculates and stores data in a G4VUserEventInformation object
+
+ ==> Outputs basic event data at end of event
+
+ ==> Decides if the random seed should be saved for this event
+
+ ==> Call recorder class at begin and end of event
+
+G4VSensitiveDetector
+--------------------
+(classes: LXePMTSD, LXeScintSD)
+
+ ==> Basic sensitive detectors keeping hit collections
+     Keep one G4VHit object per hit
+      or
+     Keep one G4VHit object per volume containing hits
+
+ ==> LXePMTSD decides if the hits it is creating should be redrawn
+
+G4VHit
+------
+(classes: LXePMTHit, LXeScintHIT)
+
+ ==> Store individual hit positions
+      or
+     Store a count of hits in a particular volume
+
+ ==> Selectively redraw volumes containing hits at the end of event
+
+G4VUserEventInformation & G4VUserTrackInformation
+-------------------------------------------------
+(classes: LXeUserEventInformation, LXeUserTrackInformation)
+
+ ==> Store aditional information along with the G4Event/G4Track objects
+
+G4VSteppingVerbose
+------------------
+(classes: LXeSteppingVerbose)
+ 
+ ==> Custom verbose stepping output to use G4BestUnit and print current volume
+      rather than next volume
+ ==> Same as ExN03SteppingVerbose but output reformated to fit nicer into 
+      tables.
+
+G4UImessenger
+-------------
+(classes: LXeDetectorMessenger, LXeEventMessenger, LXeSteppingMessenger)
+
+ ==> Create /LXe and /LXe/detector interactive command folders
+
+ ==> Create new commands
+
+ ==> See interactive help when running the example for descriptions of commands
+
+G4Trajectory
+------------
+(class: LXeTrajectory)
+
+ ==> Derived from G4Trajectory to use most of the basic trajectory functions
+     already defined
+
+ ==> Uses a coppied and modified version of DrawTrajectory from G4VTrajectory
+     to enable/disable drawing of individual trajectories and to redefine
+     the colours used
+
+G4VisManager
+------------
+(class: LXeVisManager)
+
+ ==> Initialize graphics systems geant4 is configured for
+
+RecorderBase
+------------
+
+ ==> Virtual class provided for recording of simulation data
+
+ ==> Derive your own implementation from it and instantiate the recorder
+     object in main()
+
+ ==> For full description see RecorderBase.hh
+
+

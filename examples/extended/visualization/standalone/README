@@ -6,7 +6,7 @@
                ------------------------------------------
 
 This example illustrates how one might use the Geant Visualization
-System as a "stand-alone" graphics library and viewer.  It makes use
+System as a "stand alone" graphics library and viewer.  It makes use
 of the "user action" feature of the Geant4 vis manager - for a fuller
 example of the use of this feature see
 examples/extended/visualization/userVisAction.
@@ -21,9 +21,9 @@ examples/extended/visualization/userVisAction.
    The last is included for interest, not as a recommendation.
       
 2) In the main program, StandaloneVisAction must be instantiated and
-   its pointer registerd with the visualization manager. You may
-   register only one vis action.  You may optionally specify an extent
-   at this point to assist the viewers to locate the objects.
+   its pointer registered with the visualization manager. You may
+   optionally specify an extent at this point to assist the viewers to
+   locate the objects.
 
 3) To visualise, use the usual Geant4 vis commands to create a view
    and scene, then add the vis action to the scene, optionally with an
@@ -35,4 +35,4 @@ view".  You may zoom, etc., from this standard view.
 
 
 John Allison
-18th October 2005
+11th June 2012

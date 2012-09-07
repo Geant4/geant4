@@ -278,9 +278,9 @@ The outputs of a forward simulation are:
 ------------------
 The following example run macro files are distributed with the code:
 	
-	-run_adjoint_simulation_electron.g4mac and  run_adjoint_simulation_proton.g4mac for adjoint simulations 
+	-run_adjoint_simulation_electron.mac and  run_adjoint_simulation_proton.mac for adjoint simulations 
 	
-	-run_forward_simulation_electron.g4mac  and run_forward_simulation_proton.g4mac for forward simulations
+	-run_forward_simulation_electron.mac  and run_forward_simulation_proton.mac for forward simulations
 	
 
 3.5. Comparison of adjoint and forward simulation results:
@@ -295,7 +295,7 @@ This normalization factor is explained by the following:
 	-For the forward simulation the results are given  per number of events. It corresponds  
 	to a normalization to a  fluence of 1 particle emanating from the external source. 
 	
-	-In run_fwd_simulation.g4mac the source is set on a sphere of 10 cm radius (see /gps commands in
+	-In run_fwd_simulation.mac the source is set on a sphere of 10 cm radius (see /gps commands in
 	 macrofile).Therefore the omnidirectional  fluence for the fwd simulation  is 1./(pi*R^2) with R=10cm. 
 	
 	-The adjoint results  are normalized to a fluence of 1/cm2.

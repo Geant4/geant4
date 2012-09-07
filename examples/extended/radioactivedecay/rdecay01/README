@@ -19,7 +19,7 @@ $Id: README,v 1.2 2010-09-17 11:21:45 maire Exp $
  2- Physics list
     ------------
 
- PhysicsList.cc defines only G4RadioactiveDecay, Transportation processes,
+ PhysicsList.cc defines only G4RadioactiveDecay, G4Transportation processes,
  and relevant particle definitions.
  Therefore, once created, particles or ions travel as geantino.
          	
@@ -36,7 +36,7 @@ $Id: README,v 1.2 2010-09-17 11:21:45 maire Exp $
  A flag, /rdecay01/fullChain (false or true), allows to limit to
  single decay (default) or full decay chain.
  
- In case of full decay chain, TrackStatus of ions is set to fStopButAlive
+ In case of full decay chain, G4TrackStatus of ions is set to fStopButAlive
  in order to force decay at rest.  
    
  At each decay, one counts and plots energy spectrum of created particles and

@@ -4,17 +4,17 @@
 |                        README                           |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-The DICOM application has been orignal developed by the Geant4 users:
-Louis Archambault,*Luc Beaulieu, +Vincent Hubert-Tremblay.
+The DICOM application has been originally developed by the Geant4 users:
+Louis Archambault,+Luc Beaulieu, ++Vincent Hubert-Tremblay.
 
-*Centre Hospitalier Universitaire de Quebec (CHUQ),
++ Centre Hospitalier Universitaire de Quebec (CHUQ),
 Hotel-Dieu de Quebec, departement de Radio-oncologie
 11 cote du palais. Quebec, QC, Canada, G1R 2J6
 tel (418) 525-4444 #6720
 fax (418) 691 5268
 web : thomson.phy.ulaval.ca/phys_med 
 
-+ Université Laval, Québec (QC) Canada
+++ Université Laval, Québec (QC) Canada
 
 And it has been deeply reviewed by Pedro Arce in December 2007.
 Very small changes by Stephane Chauvie in January 2008.
@@ -148,20 +148,19 @@ by
 
 --->10) Calculating dose in phantom voxels for regular navigation
 
-As mentioned above the regular navigation has the option to keep voxel frontiers when two voxels share the same material, what can make the CPU time several times smaller. But this option makes that all energy deposited is computed in the last voxel, instead of distributing it along the voxels traversed. 
+As mentioned above the regular navigation has the option to keip voxel frontiers when two voxels share the same material, what can make the CPU time several times smaller. But this option makes that all energy deposited is computed in the last voxel, instead of distributing it along the voxels traversed. To properly calculate the dose in each voxel the G4PSDoseDeposit_RegNav scorer can be used.
 
-To properly calculate the dose in each voxel the G4PSDoseDeposit_RegNav scorer can be used.
-It takes into account the fact that,  when the particle travels through the voxels it loses energy and therefore the energy lost per length (dEdx) is bigger and also the effect of the multiple scattering is bigger. 
-The algorithm to make this correction is an iterative one, as the step length increase due multiple scattering (that converts the geometrical step length into what we will call the 'true' step length) and the energy loss are correlated.
+It takes into account the fact that,  when the particle travels through the voxels it looses energy and therefore the energy lost per length (dEdx) is bigger and also the effect of the multiple scattering is bigger. 
+The algorithm to make this correction is an iterative one, as the step length increase due multiple scattering (that converts the geometrical step length in what we will call the true step length) and the energy loss are correlated.
 It works in the folloing way: first the total true step length is distributed among the voxels proportionally to their geometrical step length; with these values it is calculated one voxel after another the value of dEdx and then the value of the kinetic energy at the entrance of each voxel; with these values it is calculated the geometrical to true step corrections due to multiple scattering for each voxel; finally these new values are used to recalculate the energy lost in each voxel. It has been demonstrated for dose in a water phantom and in a real phantom that the two-step iteration described is enough to reproduce the dose calcualted when no skipping of voxel frontiers is done.
 
 This scorer is implemented in this examples if the regular navigation option is 
-chosen. It is triggered at the method RegularDicomDetectorConstruction::ConstructPatient() by the call
+chosen. It is triggered at the method RegularDicomDetectorConstruction::ConstructPhantom() by the call
 
 SetScorer(voxel_logic);
 
 --->11) Output
-dicom.out is produced by running the macro file run.mac. It has 2 columns: the first is the number of 
+dicom.out is produced running the macro file run.mac. It has 2 columns: the first is the number of 
 voxel (ordered in x,y,z) and the second the dose there deposited (in Gy)
 It is produced, as an example, with a compression value of 32
 

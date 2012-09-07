@@ -3,7 +3,7 @@
 ///\file "hadronic/.README"
 ///\brief Examples hadronic README page
 
-/*! \page Examples_hadronic Geant4 extended examples - Hadronic processes
+/*! \page Examples_hadronic Category "hadronic"
 
  Examples in this directory demonstrate specific hadronic physics simulation 
  with histogramming.
