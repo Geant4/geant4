@@ -60,6 +60,9 @@
 #include "G4CashKarpRKF45.hh"
 #include "G4RKG3_Stepper.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 //////////////////////////////////////////////////////////////////////////
 //
 //  Constructors:
@@ -126,7 +129,7 @@ void F02ElectricFieldSetup::UpdateField()
   // fChordFinder = new G4ChordFinder( fEMfield, fMinStep, fStepper);
 
   fIntgrDriver = new G4MagInt_Driver(fMinStep, 
-				     fStepper, 
+                                     fStepper, 
                                      fStepper->GetNumberOfVariables() );
 
   fChordFinder = new G4ChordFinder(fIntgrDriver);
@@ -244,5 +247,5 @@ void F02ElectricFieldSetup::SetFieldValue(G4ThreeVector fieldVector)
 G4FieldManager*  F02ElectricFieldSetup::GetGlobalFieldManager()
 {
   return G4TransportationManager::GetTransportationManager()
-	 ->GetFieldManager();
+         ->GetFieldManager();
 }

@@ -23,57 +23,25 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file field/field02/include/F02PrimaryGeneratorAction.hh
-/// \brief Definition of the F02PrimaryGeneratorAction class
 //
-//
-// $Id: F02PrimaryGeneratorAction.hh,v 1.4 2006-06-29 17:17:28 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
+// $Id$
 // 
+/// \file testBlineTracer.cc
+/// \brief Test program for the G4BlineTracer class
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+#include "G4BlineTracer.hh"
 
-#ifndef F02PrimaryGeneratorAction_h
-#define F02PrimaryGeneratorAction_h 1
+// test program which only instantiates the G4BlineTracer class
 
-#include "G4VUserPrimaryGeneratorAction.hh"
-#include "globals.hh"
-
-class G4ParticleGun;
-class G4Event;
-class F02DetectorConstruction;
-class F02PrimaryGeneratorMessenger;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-class F02PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+int main()
 {
-  public:
-    F02PrimaryGeneratorAction(F02DetectorConstruction*);    
-   ~F02PrimaryGeneratorAction();
+  // Instantiate the G4BlineTracer class
+  G4BlineTracer* theBlineTool = new G4BlineTracer();
+  
+  // delete it
+  delete theBlineTool;
 
-  public:
-    void GeneratePrimaries(G4Event*);
-    void SetRndmFlag(G4String val) { rndmFlag = val;}
-    void Setxvertex(G4double x) ;
-    void Setyvertex(G4double y) ;
-    void Setzvertex(G4double z) ;
+  return 0;
+}
 
-    static G4String GetPrimaryName() ;                
 
-  private:
-    G4ParticleGun*                particleGun;  // pointer a to G4 service class
-    F02DetectorConstruction*      F02Detector;  // pointer to the geometry
-    
-    F02PrimaryGeneratorMessenger* gunMessenger; // messenger of this class
-    G4String                      rndmFlag;     // flag for a random impact point       
-
-    static G4String thePrimaryParticleName ;
-    G4double xvertex,yvertex,zvertex;
-    G4bool vertexdefined ;
-
-};
-
-#endif

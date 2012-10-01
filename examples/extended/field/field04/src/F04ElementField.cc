@@ -33,6 +33,8 @@
 
 #include "F04GlobalField.hh"
 
+#include "G4SystemOfUnits.hh"
+
 G4Navigator* F04ElementField::fNavigator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

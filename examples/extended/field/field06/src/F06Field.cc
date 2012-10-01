@@ -44,6 +44,8 @@
 
 #include "G4ClassicalRK4.hh"
 
+#include "G4SystemOfUnits.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F06Field::F06Field() : G4UniformGravityField()

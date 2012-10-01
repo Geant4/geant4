@@ -38,6 +38,7 @@
 #include "G4Step.hh"
 #include "G4Track.hh"
 #include "G4ProcessTable.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

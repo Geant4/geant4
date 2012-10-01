@@ -44,6 +44,7 @@
 
 #include "G4MagIntegratorStepper.hh"
 #include "G4ClassicalRK4.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

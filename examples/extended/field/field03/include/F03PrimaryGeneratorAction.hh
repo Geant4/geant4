@@ -64,7 +64,7 @@ class F03PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     static G4String GetPrimaryName() ;                
 
   private:
-    G4ParticleGun*                particleGun;	// pointer a to G4 service class
+    G4ParticleGun*                particleGun;        // pointer a to G4 service class
     F03DetectorConstruction*      F03Detector;  // pointer to the geometry
     
     F03PrimaryGeneratorMessenger* gunMessenger; // messenger of this class

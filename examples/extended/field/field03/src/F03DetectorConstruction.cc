@@ -52,6 +52,8 @@
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
 /////////////////////////////////////////////////////////////////////////////
@@ -258,20 +260,20 @@ G4VPhysicalVolume* F03DetectorConstruction::ConstructCalorimeter()
     G4SolidStore::GetInstance()->Clean();
   }
 
-  solidWorld = new G4Tubs("World",				// its name
-                   0.,WorldSizeR,WorldSizeZ/2.,0.,twopi);       // its size
+  solidWorld = new G4Tubs("World",                       // its name
+                   0.,WorldSizeR,WorldSizeZ/2.,0.,twopi);// its size
                          
-  logicWorld = new G4LogicalVolume(solidWorld,		// its solid
-                                   WorldMaterial,	// its material
-                                   "World");		// its name
+  logicWorld = new G4LogicalVolume(solidWorld,           // its solid
+                                   WorldMaterial,        // its material
+                                   "World");             // its name
                                    
-  physiWorld = new G4PVPlacement(0,			// no rotation
-  				 G4ThreeVector(),	// at (0,0,0)
-                                 "World",		// its name
-                                 logicWorld,		// its logical volume
-                                 0,			// its mother  volume
-                                 false,			// no boolean operation
-                                 0);			// copy number
+  physiWorld = new G4PVPlacement(0,                      // no rotation
+                                 G4ThreeVector(),        // at (0,0,0)
+                                 "World",                // its name
+                                 logicWorld,             // its logical volume
+                                 0,                      // its mother  volume
+                                 false,                  // no boolean operation
+                                 0);                     // copy number
 
   // TR radiator envelope
 
@@ -287,12 +289,12 @@ G4VPhysicalVolume* F03DetectorConstruction::ConstructCalorimeter()
   G4cout<<"WorldMaterial = "<<WorldMaterial->GetName()<<G4endl ;
  
   solidRadiator = new G4Tubs("Radiator",0.0, 
-                                              1.01*AbsorberRadius, 
-                                              0.5*radThick,0.0,twopi             ) ; 
+                             1.01*AbsorberRadius, 
+                             0.5*radThick,0.0, twopi) ; 
                          
-  logicRadiator = new G4LogicalVolume(solidRadiator,	
-                                                       WorldMaterial,      
-                                                       "Radiator");	
+  logicRadiator = new G4LogicalVolume(solidRadiator,        
+                                      WorldMaterial,      
+                                      "Radiator");        
 
   // Set local field manager and local field in radiator and its daughters:
 
@@ -303,15 +305,15 @@ G4VPhysicalVolume* F03DetectorConstruction::ConstructCalorimeter()
 
        
   physiRadiator = new G4PVPlacement(0,
-                                     G4ThreeVector(0,0,zRad),	        
-                                     "Radiator", logicRadiator,		
-                                     physiWorld, false,	0       );
+                                    G4ThreeVector(0,0,zRad),                
+                                    "Radiator", logicRadiator,                
+                                    physiWorld, false, 0);
 
   fSolidRadSlice = new G4Tubs("RadSlice",0.0,
                                 AbsorberRadius,0.5*fRadThickness,0.0,twopi ) ;
 
   fLogicRadSlice = new G4LogicalVolume(fSolidRadSlice,fRadiatorMat,
-                                          "RadSlice",0,0,0);
+                                       "RadSlice",0,0,0);
 
   zModule = zRad + 0.5*radThick/1.02 ;
   G4cout<<"zModule = "<<zModule/mm<<" mm"<<G4endl ;
@@ -339,11 +341,11 @@ G4VPhysicalVolume* F03DetectorConstruction::ConstructCalorimeter()
                                   0.0,twopi); 
                           
       logicAbsorber = new G4LogicalVolume(solidAbsorber,    
-      			                  AbsorberMaterial, 
-      			                  "Absorber");     
-      			                  
-      physiAbsorber = new G4PVPlacement(0,		   
-      		          G4ThreeVector(0.,0.,zAbsorber),        
+                                          AbsorberMaterial, 
+                                          "Absorber");     
+                                                
+      physiAbsorber = new G4PVPlacement(0,                   
+                                G4ThreeVector(0.,0.,zAbsorber),        
                                         "Absorber",        
                                         logicAbsorber,     
                                         physiWorld,       

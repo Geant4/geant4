@@ -38,6 +38,7 @@
 #include "G4SimpleHeum.hh"
 #include "G4ClassicalRK4.hh"
 #include "G4CashKarpRKF45.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "F04GlobalField.hh"
 

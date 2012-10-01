@@ -51,14 +51,14 @@ class F01StepCut : public G4VDiscreteProcess
 
      G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
-			     G4double   previousStepSize,
-			     G4ForceCondition* condition
-			    );
+                             G4double   previousStepSize,
+                             G4ForceCondition* condition
+                            );
 
      G4VParticleChange* PostStepDoIt(
-			     const G4Track& ,
-			     const G4Step& 
-			    );
+                             const G4Track& ,
+                             const G4Step& 
+                            );
 
     void SetMaxStep(G4double);
 
@@ -70,7 +70,7 @@ class F01StepCut : public G4VDiscreteProcess
                              G4ForceCondition* condition
                             );
 
-			    
+                            
   private:
   
   // hide assignment operator as private 

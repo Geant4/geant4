@@ -64,11 +64,11 @@ class F01PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     static G4String GetPrimaryName() ;                
 
   private:
-    G4ParticleGun*                particleGun;	//pointer a to G4 service class
+    G4ParticleGun*                particleGun; //pointer a to G4 service class
     F01DetectorConstruction*      F01Detector; //pointer to the geometry
     
     F01PrimaryGeneratorMessenger* gunMessenger; //messenger of this class
-    G4String                      rndmFlag;	//flag for a random impact point       
+    G4String                      rndmFlag;     //flag for a random impact point       
 
     static G4String thePrimaryParticleName ;
     G4double xvertex,yvertex,zvertex;

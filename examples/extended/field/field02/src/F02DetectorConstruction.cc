@@ -54,6 +54,8 @@
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
 /////////////////////////////////////////////////////////////////////////////
@@ -246,33 +248,33 @@ G4VPhysicalVolume* F02DetectorConstruction::ConstructCalorimeter()
 
   // World
   
-  solidWorld = new G4Tubs("World",				//its name
-                   0.,WorldSizeR,WorldSizeZ/2.,0.,twopi);       //its size
+  solidWorld = new G4Tubs("World",                       //its name
+                   0.,WorldSizeR,WorldSizeZ/2.,0.,twopi);//its size
                          
-  logicWorld = new G4LogicalVolume(solidWorld,		//its solid
-                                   WorldMaterial,	//its material
-                                   "World");		//its name
+  logicWorld = new G4LogicalVolume(solidWorld,           //its solid
+                                   WorldMaterial,        //its material
+                                   "World");             //its name
                                    
-  physiWorld = new G4PVPlacement(0,			//no rotation
-  				 G4ThreeVector(),	//at (0,0,0)
-                                 "World",		//its name
-                                 logicWorld,		//its logical volume
-                                 0,			//its mother  volume
-                                 false,			//no boolean operation
-                                 0);			//copy number                             
+  physiWorld = new G4PVPlacement(0,                      //no rotation
+                                 G4ThreeVector(),        //at (0,0,0)
+                                 "World",                //its name
+                                 logicWorld,             //its logical volume
+                                 0,                      //its mother  volume
+                                 false,                  //no boolean operation
+                                 0);                     //copy number                             
   // Absorber
 
   if (AbsorberThickness > 0.) 
   { 
-      solidAbsorber = new G4Tubs("Absorber",		
+      solidAbsorber = new G4Tubs("Absorber",                
                           0.,AbsorberRadius,AbsorberThickness/2.,0.,twopi); 
                           
       logicAbsorber = new G4LogicalVolume(solidAbsorber,    
-      			                  AbsorberMaterial, 
-      			                  "Absorber");     
-      			                  
-      physiAbsorber = new G4PVPlacement(0,		   
-      		    G4ThreeVector(0.,0.,zAbsorber),        
+                                          AbsorberMaterial, 
+                                          "Absorber");     
+                                                
+      physiAbsorber = new G4PVPlacement(0,                   
+                          G4ThreeVector(0.,0.,zAbsorber),        
                                         "Absorber",        
                                         logicAbsorber,     
                                         physiWorld,       
@@ -325,7 +327,7 @@ void F02DetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
    { pttoMaterial = (*theMaterialTable)[J];     
      if(pttoMaterial->GetName() == materialChoice)
         {
-	  AbsorberMaterial = pttoMaterial;
+          AbsorberMaterial = pttoMaterial;
           logicAbsorber->SetMaterial(pttoMaterial); 
         }             
    }
@@ -346,7 +348,7 @@ void F02DetectorConstruction::SetWorldMaterial(G4String materialChoice)
    { pttoMaterial = (*theMaterialTable)[J];     
      if(pttoMaterial->GetName() == materialChoice)
         {
-	  WorldMaterial = pttoMaterial;
+          WorldMaterial = pttoMaterial;
           logicWorld->SetMaterial(pttoMaterial); 
         }             
    }

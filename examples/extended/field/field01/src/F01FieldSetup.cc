@@ -55,6 +55,9 @@
 #include "G4CashKarpRKF45.hh"
 #include "G4RKG3_Stepper.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 // #include "G4SIunits.hh"
 
 //////////////////////////////////////////////////////////////////////////
@@ -67,7 +70,7 @@ F01FieldSetup::F01FieldSetup(G4ThreeVector fieldVector)
   fMagneticField = new G4UniformMagField( fieldVector ); 
     // G4ThreeVector(3.3*tesla, 0.0, 0.0 ));
   G4cout << " F01FieldSetup: magnetic field set to Uniform( "
-	 << fieldVector << " ) " << G4endl;
+         << fieldVector << " ) " << G4endl;
   InitialiseAll();
 }
 
@@ -192,7 +195,7 @@ void F01FieldSetup::SetFieldValue(G4double fieldStrength)
 {
 #ifdef G4VERBOSE
   G4cout << "Setting Field strength to " 
-	 << fieldStrength / gauss  << " Gauss."; // << G4endl;
+         << fieldStrength / gauss  << " Gauss."; // << G4endl;
 #endif
 
   G4ThreeVector fieldSetVec(0.0, 0.0, fieldStrength);
@@ -207,15 +210,15 @@ void F01FieldSetup::SetFieldValue(G4double fieldStrength)
     G4ThreeVector fieldVec(fieldValue[0], fieldValue[1], fieldValue[2]); 
     // G4cout << " fMagneticField is now " << fMagneticField 
     G4cout << " Magnetic field vector is " 
-	   << fieldVec / gauss << " G " << G4endl; 
+           << fieldVec / gauss << " G " << G4endl; 
   }else{
     if( fMagneticField == 0 )
       G4cout << " Magnetic field pointer is null." << G4endl;
     else
       G4Exception("F01FieldSetup::SetFieldValue(double)",
-		  "IncorrectForZeroField",
-		  FatalException,
-		  "fMagneticField ptr should be set to 0 for no field."); 
+                  "IncorrectForZeroField",
+                  FatalException,
+                  "fMagneticField ptr should be set to 0 for no field."); 
   }
 #endif
 }
@@ -256,5 +259,5 @@ void F01FieldSetup::SetFieldValue(G4ThreeVector fieldVector)
 G4FieldManager*  F01FieldSetup::GetGlobalFieldManager()
 {
   return G4TransportationManager::GetTransportationManager()
-	                        ->GetFieldManager();
+                                ->GetFieldManager();
 }

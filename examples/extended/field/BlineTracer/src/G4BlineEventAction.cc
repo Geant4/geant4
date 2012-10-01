@@ -62,8 +62,8 @@ G4BlineEventAction::G4BlineEventAction(G4BlineTracer* aBlineTool)
 
 G4BlineEventAction::~G4BlineEventAction()
 {
-  for (size_t i=0; i<TrajectoryVisAttributes.size(); i++)
-    delete TrajectoryVisAttributes[i];
+  for (size_t i=0; i<fTrajectoryVisAttributes.size(); i++)
+    delete fTrajectoryVisAttributes[i];
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -85,30 +85,30 @@ void G4BlineEventAction::EndOfEventAction(const G4Event* evt)
     // visualisation
     // -------------
   
-    if (DrawBline || DrawPoints)
+    if (fDrawBline || fDrawPoints)
     {
       G4int n_point = (*(evt->GetTrajectoryContainer()))[0]->GetPointEntries();
        
       G4Polyline pPolyline;
       G4Polymarker stepPoints;
-      TrajectoryVisAttributes.push_back(new G4VisAttributes(DrawColour));
+      fTrajectoryVisAttributes.push_back(new G4VisAttributes(fDrawColour));
       stepPoints.SetMarkerType(G4Polymarker::circles);
-      stepPoints.SetScreenSize(PointSize);
+      stepPoints.SetScreenSize(fPointSize);
       stepPoints.SetFillStyle(G4VMarker::filled);
-      stepPoints.SetVisAttributes(TrajectoryVisAttributes.back());
+      stepPoints.SetVisAttributes(fTrajectoryVisAttributes.back());
 
       for(G4int i=0; i<n_point; i++)
       {
         G4ThreeVector pos = ((G4TrajectoryPoint*)
           ((*(evt->GetTrajectoryContainer()))[0]->GetPoint(i)))->GetPosition();
-        if (DrawBline)  pPolyline.push_back( pos);
-        if (DrawPoints)  stepPoints.push_back(pos);
+        if (fDrawBline)  pPolyline.push_back( pos);
+        if (fDrawPoints)  stepPoints.push_back(pos);
       }
 
-      pPolyline.SetVisAttributes(TrajectoryVisAttributes.back());
+      pPolyline.SetVisAttributes(fTrajectoryVisAttributes.back());
 
-      TrajectoryPolyline.push_back(pPolyline);
-      TrajectoryPoints.push_back(stepPoints);
+      fTrajectoryPolyline.push_back(pPolyline);
+      fTrajectoryPoints.push_back(stepPoints);
     }
   }
 }
@@ -118,8 +118,8 @@ void G4BlineEventAction::EndOfEventAction(const G4Event* evt)
 void G4BlineEventAction::
 DrawFieldLines( G4double, G4double, G4double )
 {
-  size_t nline = TrajectoryPolyline.size();
-  size_t npoints =TrajectoryPoints.size();
+  size_t nline = fTrajectoryPolyline.size();
+  size_t npoints =fTrajectoryPoints.size();
 
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   if (!pVVisManager) 
@@ -140,9 +140,9 @@ DrawFieldLines( G4double, G4double, G4double )
   G4UImanager::GetUIpointer () -> ApplyCommand ("/vis/drawVolume");
 
   for (size_t i=0;i<nline;i++)
-    pVVisManager->Draw(TrajectoryPolyline[i]);
+    pVVisManager->Draw(fTrajectoryPolyline[i]);
   for (size_t i=0;i<npoints;i++)
-    pVVisManager->Draw(TrajectoryPoints[i]); 
+    pVVisManager->Draw(fTrajectoryPoints[i]); 
 
   // ((G4VisManager*)pVVisManager)->GetCurrentViewer()->DrawView();   
   // ((G4VisManager*)pVVisManager)->GetCurrentViewer()->ShowView();
@@ -152,7 +152,7 @@ DrawFieldLines( G4double, G4double, G4double )
 
 void G4BlineEventAction::ResetVectorObjectToBeDrawn()
 {
-  TrajectoryVisAttributes.clear();
-  TrajectoryPolyline.clear();
-  TrajectoryPoints.clear();
+  fTrajectoryVisAttributes.clear();
+  fTrajectoryPolyline.clear();
+  fTrajectoryPoints.clear();
 }

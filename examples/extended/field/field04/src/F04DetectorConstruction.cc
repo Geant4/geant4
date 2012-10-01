@@ -55,6 +55,9 @@
 
 #include "G4RunManager.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 #include "F04DetectorConstruction.hh"
 #include "F04DetectorMessenger.hh"
 #include "F04Materials.hh"
@@ -148,7 +151,7 @@ G4VPhysicalVolume* F04DetectorConstruction::ConstructDetector()
                                    "World");
 
   fPhysiWorld = new G4PVPlacement(0,
-  				 G4ThreeVector(),
+                                 G4ThreeVector(),
                                  "World",
                                  fLogicWorld,
                                  0,
@@ -271,13 +274,13 @@ G4VPhysicalVolume* F04DetectorConstruction::ConstructDetector()
                       GetDegraderThickness()/2., 0.,twopi);
  
       fLogicDegrader = new G4LogicalVolume(fSolidDegrader,
-      			                  GetDegraderMaterial(),
-      			                  "Degrader");
+                                                GetDegraderMaterial(),
+                                                "Degrader");
 
       G4ThreeVector degraderCenter = G4ThreeVector(0.,0.,GetDegraderPos());
 
       fPhysiDegrader = new G4PVPlacement(0,
-      		                        degraderCenter,
+                                        degraderCenter,
                                         "Degrader",
                                         fLogicDegrader,
                                         fPhysiTransferMgnt,
@@ -520,7 +523,7 @@ G4RotationMatrix
 
         G4double angle;
         char* p(0);
-	G4String current=rotation.substr(place+1);
+        G4String current=rotation.substr(place+1);
         angle = strtod(current.c_str(),&p) * deg;
 
         if (!p || (*p != ',' && *p != '\0')) {

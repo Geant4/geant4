@@ -83,7 +83,7 @@ void F02RunMessenger::SetNewValue(G4UIcommand* command,G4String newValues)
 { 
   if (command == RndmSaveCmd)
       runAction->SetRndmFreq(RndmSaveCmd->GetNewIntValue(newValues));
-		 
+                 
   if (command == RndmReadCmd)
     { G4cout << "\n---> rndm status restored from file: "
              << newValues << G4endl;

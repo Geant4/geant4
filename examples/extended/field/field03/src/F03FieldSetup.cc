@@ -55,6 +55,7 @@
 #include "G4HelixSimpleRunge.hh"
 #include "G4CashKarpRKF45.hh"
 #include "G4RKG3_Stepper.hh"
+#include "G4SystemOfUnits.hh"
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -64,13 +65,13 @@ F03FieldSetup::F03FieldSetup()
   :  fChordFinder(0), fLocalChordFinder(0), fStepper(0)
 {
   fMagneticField = new G4UniformMagField(
-		       G4ThreeVector(3.3*tesla,
-                                     0.0,              // 0.5*tesla,
-                                     0.0       ));
+                         G4ThreeVector(3.3*tesla,
+                                       0.0,              // 0.5*tesla,
+                                       0.0       ));
   fLocalMagneticField = new G4UniformMagField(
-		            G4ThreeVector(3.3*tesla,
-                                          0.0,         // 0.5*tesla,
-                                          0.0  ));
+                              G4ThreeVector(3.3*tesla,
+                                            0.0,         // 0.5*tesla,
+                                            0.0  ));
 
   fFieldMessenger = new F03FieldMessenger(this) ;  
  
@@ -243,7 +244,7 @@ void F03FieldSetup::SetFieldValue(G4ThreeVector fieldVector)
 G4FieldManager*  F03FieldSetup::GetGlobalFieldManager()
 {
   return G4TransportationManager::GetTransportationManager()
-	                        ->GetFieldManager();
+                                ->GetFieldManager();
 }
 
 

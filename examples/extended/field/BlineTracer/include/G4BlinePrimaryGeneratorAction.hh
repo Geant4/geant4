@@ -63,18 +63,18 @@ class G4BlinePrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
   public:  // with description
 
     G4BlinePrimaryGeneratorAction();    
-    ~G4BlinePrimaryGeneratorAction();
+    virtual ~G4BlinePrimaryGeneratorAction();
 
-    void GeneratePrimaries(G4Event* anEvent);
+    virtual  void GeneratePrimaries(G4Event* anEvent);
     inline void SetUserPrimaryAction(G4VUserPrimaryGeneratorAction* anAction)
       { fUserPrimaryAction=anAction; }
 
   private:
 
     G4VUserPrimaryGeneratorAction* fUserPrimaryAction;
-    G4bool FirstPartOfBline;
-    G4ThreeVector BlineStartPosition;
-    G4double T0;
+    G4bool fFirstPartOfBline;
+    G4ThreeVector fBlineStartPosition;
+    G4double fT0;
 };
 
 #endif

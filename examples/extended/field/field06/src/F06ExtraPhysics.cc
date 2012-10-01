@@ -40,6 +40,7 @@
 
 #include "G4UserSpecialCuts.hh"
 #include "G4StepLimiter.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "F06ExtraPhysics.hh"
 

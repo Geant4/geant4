@@ -29,6 +29,7 @@
 //
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "F04PrimaryGeneratorAction.hh"
 #include "F04PrimaryGeneratorMessenger.hh"

@@ -88,11 +88,7 @@ class F04TrajectoryPoint : public G4TrajectoryPoint {
 
 };
 
-#if defined G4TRACKING_ALLOC_EXPORT
-  extern G4DLLEXPORT G4Allocator<F04TrajectoryPoint> aTrajPointAllocator;
-#else
-  extern G4DLLIMPORT G4Allocator<F04TrajectoryPoint> aTrajPointAllocator;
-#endif
+extern G4DLLEXPORT G4Allocator<F04TrajectoryPoint> aTrajPointAllocator;
 
 inline void* F04TrajectoryPoint::operator new(size_t)
 {
