@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr03/hadr03.cc
+/// \file hadronic/Hadr03/Hadr03.cc
 /// \brief Main program of the hadronic/Hadr03 example
 //
 //

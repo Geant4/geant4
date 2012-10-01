@@ -15,6 +15,7 @@
 /gun/particle proton
 /gun/energy 10 MeV
 #
+/process/list
 /process/inactivate hadElastic
 #
 /testhadr/histo/setFileName inelastic

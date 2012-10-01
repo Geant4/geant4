@@ -12,6 +12,8 @@
 #
 /run/initialize
 #
+/process/list
+#
 /gun/particle proton
 /gun/energy 10 MeV
 #

@@ -51,8 +51,8 @@
    given by G4HadronicProcessStore and used by Geant4.
    
    The list of nuclear reactions that occured is printed. Here, only name of
-   particles are given; there can have several identical particles in the 
-   reaction.
+   particles are given; there can have several particles on the same species in
+   the reaction (for example several gamma).
    
    Then, comes the total list of generated particles and ions.	
    The energy spectrum of the scattered particle (if any) and of the created 
@@ -97,7 +97,7 @@
    
    One can control the name of the histograms file with the command:
 \verbatim
-/testem/histo/setFileName  name  (default hadr03)
+/testem/histo/setFileName  name  (default Hadr03)
 \endverbatim
    
    It is possible to choose the format of the histogram file : root (default),
@@ -107,7 +107,7 @@
 \verbatim
 /testem/histo/printHisto id
 \endverbatim
-   All selected histos will be written on a file name.ascii (default hadr03) 
+   All selected histos will be written on a file name.ascii (default Hadr03) 
  	 				
 \section Hadr03_s6 VISUALIZATION
  
@@ -129,12 +129,12 @@
 % gmake
 \endverbatim
  		
-   Execute hadr03 in 'batch' mode from macro files :
+   Execute Hadr03 in 'batch' mode from macro files :
 \verbatim
-% hadr03   inelastic.mac
+% Hadr03   inelastic.mac
 \endverbatim
  		
-   Execute hadr03 in 'interactive mode' with visualization :
+   Execute Hadr03 in 'interactive mode' with visualization :
 \verbatim
 Idle> exit
 \endverbatim

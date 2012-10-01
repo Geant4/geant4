@@ -18,7 +18,9 @@
 /gun/particle proton
 /gun/energy 10 MeV
 #
+/process/list
 /process/inactivate ProtonInelastic
+/process/inactivate hInelastic
 #
 /testhadr/histo/setFileName elastic
 /testhadr/histo/setHisto 1  100  9. 11 MeV	# scaterred proton

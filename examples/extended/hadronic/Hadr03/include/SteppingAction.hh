@@ -58,7 +58,7 @@ class SteppingAction : public G4UserSteppingAction
     PrimaryGeneratorAction* fPrimary;
     RunAction*              fRunAction;
     HistoManager*           fHistoManager;
-    std::map<G4ParticleDefinition*,G4bool> fParticleFlag;    
+    std::map<G4ParticleDefinition*,G4int> fParticleFlag;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

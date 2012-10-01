@@ -39,12 +39,13 @@
 #include "G4Event.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det)
-:fDetector(det)					       
+:fDetector(det)                                               
 {
   fParticleGun  = new G4ParticleGun(1);
   G4ParticleDefinition* particle

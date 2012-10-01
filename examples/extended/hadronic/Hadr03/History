@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+30-09-12 mma (exhadr03-V09-05-07)
+- SteppingAction : print number of particles in nuclear reaction (not gamma)
+     
 18-08-12 mma (exhadr03-V09-05-06)
 - SteppingAction : use GetTargetIsotope()
      

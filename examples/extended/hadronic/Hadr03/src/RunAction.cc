@@ -42,6 +42,7 @@
 #include "G4RunManager.hh"
 #include "G4HadronicProcessStore.hh"
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "Randomize.hh"
 #include <iomanip>
@@ -125,9 +126,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4double energy = fPrimary->GetParticleGun()->GetParticleEnergy();
   G4cout << "\n The run consists of " << NbOfEvents << " "<< Particle << " of "
          << G4BestUnit(energy,"Energy") << " through " 
-	 << G4BestUnit(fDetector->GetSize(),"Length") << " of "
-	 << material->GetName() << " (density: " 
-	 << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
+         << G4BestUnit(fDetector->GetSize(),"Length") << " of "
+         << material->GetName() << " (density: " 
+         << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
   
   //frequency of processes
   G4cout << "\n Process calls frequency --->";
@@ -142,7 +143,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   if (survive > 0) {
     G4cout << "\n\n Nb of incident particles surviving after "
            << G4BestUnit(fDetector->GetSize(),"Length") << " of "
-	   << material->GetName() << " : " << survive << G4endl;
+           << material->GetName() << " : " << survive << G4endl;
   }
   
   if (fTotalCount == 0) fTotalCount = 1;   //force printing anyway
@@ -160,9 +161,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
          << " +- "                   << G4BestUnit( rms,"Length")
          << "\tmassic: "             << G4BestUnit(massicMFP, "Mass/Surface")
          << "\n CrossSection:\t"     << CrossSection*cm << " cm^-1 "
-	 << "\t\tmassic: "         << G4BestUnit(massicCS, "Surface/Mass")
+         << "\t\tmassic: "         << G4BestUnit(massicCS, "Surface/Mass")
          << G4endl;
-	 
+         
   //check cross section from G4HadronicProcessStore
   //
   G4cout << "\n Verification : "
@@ -174,15 +175,15 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     const G4VProcess* process = it->first;
     G4double xs =
     store->GetCrossSectionPerVolume(particle,energy,process,material);                   
-    G4double massSigma = xs/density;    					      
+    G4double massSigma = xs/density;                                                  
     sumc += massSigma;
     G4String procName = process->GetProcessName();    
     G4cout << "\n    " << procName << "= " 
            << G4BestUnit(massSigma, "Surface/Mass");
-  }  	   
+  }             
   G4cout << "\n    total = " 
          << G4BestUnit(sumc, "Surface/Mass") << G4endl;
-	 
+         
  //nuclear channel count
  //
  G4cout << "\n   List of nuclear reactions: \n" << G4endl;
@@ -195,7 +196,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
          
     G4cout << "  " << std::setw(50) << name << ": " << std::setw(7) << count
            << "   Q = " << std::setw(wid) << G4BestUnit(Q, "Energy")
-           << G4endl;	   
+           << G4endl;           
  } 
       
  //particle count
@@ -211,23 +212,23 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
          
     G4cout << "  " << std::setw(13) << name << ": " << std::setw(7) << count
            << "  Emean = " << std::setw(wid) << G4BestUnit(eMean, "Energy")
-	   << "\t( "  << G4BestUnit(eMin, "Energy")
-	   << " --> " << G4BestUnit(eMax, "Energy") 
-           << ")" << G4endl;	   
+           << "\t( "  << G4BestUnit(eMin, "Energy")
+           << " --> " << G4BestUnit(eMax, "Energy") 
+           << ")" << G4endl;           
  }
   
  //energy momentum balance
  //
  if (fTotalCount > 1) {
-    G4double Pbmean = fPbalance[0]/fTotalCount;	   
+    G4double Pbmean = fPbalance[0]/fTotalCount;           
     G4cout << "\n   Momentum balance: Pmean = " 
-	   << std::setw(wid) << G4BestUnit(Pbmean, "Energy")
-	   << "\t( "  << G4BestUnit(fPbalance[1], "Energy")
-	   << " --> " << G4BestUnit(fPbalance[2], "Energy")
-	   << ") \n" << G4endl;
+           << std::setw(wid) << G4BestUnit(Pbmean, "Energy")
+           << "\t( "  << G4BestUnit(fPbalance[1], "Energy")
+           << " --> " << G4BestUnit(fPbalance[2], "Energy")
+           << ") \n" << G4endl;
  }
-	 	 
-  //restore default format	 
+                  
+  //restore default format         
   G4cout.precision(dfprec);
            
   // remove all contents in fProcCounter 

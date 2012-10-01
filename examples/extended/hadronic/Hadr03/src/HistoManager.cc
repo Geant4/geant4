@@ -41,7 +41,7 @@
 
 HistoManager::HistoManager()
 {
-  fileName[0]  = "hadr03";
+  fileName[0]  = "Hadr03";
   factoryOn = false;
   fNbHist   = 0;
 
@@ -148,21 +148,21 @@ void HistoManager::SetHisto(G4int ih,
   
  const G4String id[] = {"0","1","2","3","4","5","6","7","8","9","10","11","12"};
  const G4String title[] = 
-                { "dummy",						//0
-                  "kinetic energy of scattered primary particle",	//1
-		  "kinetic energy of recoil nuclei",			//2
-		  "kinetic energy of gamma",				//3
-		  "kinetic energy of neutrons",				//4
-		  "kinetic energy of protons",				//5
-		  "kinetic energy of deuterons",			//6
-		  "kinetic energy of alphas",				//7
-		  "kinetic energy of all others ions",			//8
-		  "kinetic energy of all others mesons",		//9
-		  "kinetic energy of all others baryons",		//10
-		  "Q = Ekin out - Ekin in",				//11
-		  "Pbalance = mag(P_out - P_in)"			//12
+                { "dummy",                                              //0
+                  "kinetic energy of scattered primary particle",       //1
+                  "kinetic energy of recoil nuclei",                    //2
+                  "kinetic energy of gamma",                            //3
+                  "kinetic energy of neutrons",                         //4
+                  "kinetic energy of protons",                          //5
+                  "kinetic energy of deuterons",                        //6
+                  "kinetic energy of alphas",                           //7
+                  "kinetic energy of all others ions",                  //8
+                  "kinetic energy of all others mesons",                //9
+                  "kinetic energy of all others baryons",               //10
+                  "Q = Ekin out - Ekin in",                             //11
+                  "Pbalance = mag(P_out - P_in)"                        //12
                  };
-		 
+                 
   G4String titl = title[ih];
   fUnit[ih] = 1.;
 
@@ -237,9 +237,9 @@ void HistoManager::saveAscii()
      
       for (G4int iBin=0; iBin<fNbins[ih]; iBin++) {
          File << "  " << iBin << "\t" 
-	      << fHistPt[ih]->axis().bin_center(iBin) << "\t"
-	      << fHistPt[ih]->bin_height(iBin) 
-	      << G4endl;
+              << fHistPt[ih]->axis().bin_center(iBin) << "\t"
+              << fHistPt[ih]->bin_height(iBin) 
+              << G4endl;
       } 
     }
  } 

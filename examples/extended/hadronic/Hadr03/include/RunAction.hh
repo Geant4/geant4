@@ -61,11 +61,11 @@ class RunAction : public G4UserRunAction
 
     void CountProcesses(const G4VProcess* process) 
                   {fProcCounter[process]++;};
-				
+                                
     void SumTrack (G4double track) 
                 {fTotalCount++; fSumTrack += track; fSumTrack2 += track*track;};
-		
-    void CountNuclearChannel(G4String, G4double);		
+                
+    void CountNuclearChannel(G4String, G4double);                
     void ParticleCount(G4String, G4double);
     void Balance(G4double);
                             

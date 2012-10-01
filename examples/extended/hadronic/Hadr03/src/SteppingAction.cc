@@ -127,7 +127,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     Q        += energy;
     Pbalance += momentum;
     //particle flag
-    fParticleFlag[particle] = true;
+    fParticleFlag[particle]++;
   }
   
   //energy-momentum balance
@@ -139,11 +139,17 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   fHistoManager->FillHisto(ih,Pbal);  
   
   // nuclear channel
- std::map<G4ParticleDefinition*,G4bool>::iterator ip;               
- for (ip = fParticleFlag.begin(); ip != fParticleFlag.end(); ip++) { 
-    G4String name = ip->first->GetParticleName();
+ const G4String conver[] = {"0","","2 ","3 ","4 ","5 ","6 ","7 ","8 ","9 ",
+                            "10 ","11 "};
+ std::map<G4ParticleDefinition*,G4int>::iterator ip;               
+ for (ip = fParticleFlag.begin(); ip != fParticleFlag.end(); ip++) {
+    particle = ip->first; 
+    G4String name = particle->GetParticleName();
+    G4String nb;
+    if (particle == G4Gamma::Gamma()) nb = "N ";
+    else nb = conver[ip->second];
     if (ip != fParticleFlag.begin()) nuclearChannel += " + ";
-    nuclearChannel += name;
+    nuclearChannel += nb + name;
  }
  
   ///G4cout << "\n nuclear channel: " << nuclearChannel << G4endl;
