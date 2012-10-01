@@ -1,0 +1,9 @@
+/control/verbose 2
+/vis/verbose parameters
+/vis/open OGL
+/vis/scene/create
+/vis/scene/add/userAction
+/vis/scene/add/axes
+/vis/scene/add/scale
+/vis/sceneHandler/attach
+/vis/viewer/flush

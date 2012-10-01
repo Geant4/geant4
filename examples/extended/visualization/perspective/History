@@ -16,6 +16,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+11th June 2012  John Allison  (exam-ext-vis-persp-V09-05-03)
+- Added .README for doxygen.
+
 9th April 2012  John Allison  (exam-ext-vis-persp-V09-05-02)
 - perspective.cc: Corrected vis user action extent.
 - vis.mac, visXm.mac: Removed arguments from /vis/scene/add/userAction.

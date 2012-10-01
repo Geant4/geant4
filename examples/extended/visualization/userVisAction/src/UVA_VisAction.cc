@@ -38,6 +38,7 @@
 #include "G4Box.hh"
 #include "G4SubtractionSolid.hh"
 #include "G4Text.hh"
+#include "G4SystemOfUnits.hh"
 
 void UVA_VisAction::Draw() {
   G4VVisManager* pVisManager = G4VVisManager::GetConcreteInstance();

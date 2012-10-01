@@ -35,6 +35,7 @@
 #include "G4VisExtent.hh"
 #include "G4UImanager.hh"
 #include "G4UIExecutive.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "PerspectiveVisAction.hh"
 

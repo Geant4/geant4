@@ -35,21 +35,22 @@
 #include "G4VisExtent.hh"
 #include "G4UImanager.hh"
 #include "G4UIExecutive.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "StandaloneVisAction.hh"
 
 int main(int argc,char** argv) {
 
   G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize ();
-
-  visManager->SetUserAction
-    (new StandaloneVisAction,
+  visManager->RegisterRunDurationUserVisAction
+    ("A standalone example - 3 boxes, 2 with boolean subtracted cutout",
+     new StandaloneVisAction,
      G4VisExtent(-10*m,10*m,-10*m,10*m,-10*m,10*m));
+  visManager->Initialize ();
 
   G4UIExecutive* ui = new G4UIExecutive(argc, argv);
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
-  UImanager->ApplyCommand ("/control/execute standalone.g4m");
+  UImanager->ApplyCommand ("/control/execute standalone.mac");
   ui->SessionStart();
 
   delete ui;

@@ -16,6 +16,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11th June 2012  John Allison  (exam-ext-vis-UVA-V09-05-04)
+- Improved README.
+- Added .README for doxygen.
+
 10th April 2012  John Allison  (exam-ext-vis-UVA-V09-05-03)
 - Fixed run1/2.mac and userVisAction.out.
 

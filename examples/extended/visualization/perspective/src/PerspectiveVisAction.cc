@@ -40,6 +40,7 @@
 #include "G4Polyhedron.hh"
 #include "G4Vector3D.hh"
 #include "G4Point3D.hh"
+#include "G4SystemOfUnits.hh"
 
 PerspectiveVisAction::PerspectiveVisAction():
   fpVisManager(0),
@@ -78,7 +79,7 @@ void PerspectiveVisAction::Draw()
 
     if (fScene == "room-and-chair" )
       {
-	RoomAndChair();
+        RoomAndChair();
       }
   }
 }
@@ -147,13 +148,13 @@ void PerspectiveVisAction::Chair
   for (int i = -1; i < 2; i+=2) {
     for (int j = -1; j < 2; j+=2) {
       ExtendedDraw
-	(G4Box("chair-leg",fChairThickness,
-	       fChairThickness,
-	       fChairSeat - fChairThickness),
-	 visAtts, transform *
-	 G4Translate3D(i * (fChairX - fChairThickness),
-		       j * (fChairY - fChairThickness),
-		       fChairSeat - fChairThickness));
+        (G4Box("chair-leg",fChairThickness,
+               fChairThickness,
+               fChairSeat - fChairThickness),
+         visAtts, transform *
+         G4Translate3D(i * (fChairX - fChairThickness),
+                       j * (fChairY - fChairThickness),
+                       fChairSeat - fChairThickness));
     }
   }
 }
@@ -180,36 +181,36 @@ void PerspectiveVisAction::ExtendedDraw
       G4bool isAuxEdgeVisible = false;  // How do I pick this up???   Can't.
       G4bool notLastFace;
       do {
-	G4int n;
-	G4Point3D nodes[4];
-	notLastFace = polyhedron->GetNextFacet(n, nodes);
-	G4bool notLastEdge;
-	do {
-	  G4Point3D v1, v2;
-	  G4int edgeFlag;
-	  notLastEdge = polyhedron->GetNextEdge(v1, v2, edgeFlag);
-	  if (isAuxEdgeVisible || edgeFlag > 0) {
-	    G4Vector3D v21 = v2 - v1;
-	    // Check for components of actual edge...
-	    G4Vector3D v21a = v21;
-	    v21a.transform(transform);
-	    // G4cout << "v21a: " << v21a << G4endl;
-	    using namespace std;
-	    if (A ||
-		(Z && abs(v21a.z()) >
-		 sqrt(v21a.x()*v21a.x()+v21a.y()*v21a.y())) ||
-		(X && abs(v21a.x()) >
-		 sqrt(v21a.y()*v21a.y()+v21a.z()*v21a.z())) ||
-		(Y && abs(v21a.y()) >
-		 sqrt(v21a.x()*v21a.x()+v21a.x()*v21a.z()))) {
-	      G4Polyline edge;
-	      edge.SetVisAttributes(G4Colour(.2,.2,.2));
-	      edge.push_back(v1 - extender * v21.unit());
-	      edge.push_back(v2 + extender * v21.unit());
-	      fpVisManager->Draw(edge, transform);
-	    }
-	  }
-	} while (notLastEdge);
+        G4int n;
+        G4Point3D nodes[4];
+        notLastFace = polyhedron->GetNextFacet(n, nodes);
+        G4bool notLastEdge;
+        do {
+          G4Point3D v1, v2;
+          G4int edgeFlag;
+          notLastEdge = polyhedron->GetNextEdge(v1, v2, edgeFlag);
+          if (isAuxEdgeVisible || edgeFlag > 0) {
+            G4Vector3D v21 = v2 - v1;
+            // Check for components of actual edge...
+            G4Vector3D v21a = v21;
+            v21a.transform(transform);
+            // G4cout << "v21a: " << v21a << G4endl;
+            using namespace std;
+            if (A ||
+                (Z && abs(v21a.z()) >
+                 sqrt(v21a.x()*v21a.x()+v21a.y()*v21a.y())) ||
+                (X && abs(v21a.x()) >
+                 sqrt(v21a.y()*v21a.y()+v21a.z()*v21a.z())) ||
+                (Y && abs(v21a.y()) >
+                 sqrt(v21a.x()*v21a.x()+v21a.x()*v21a.z()))) {
+              G4Polyline edge;
+              edge.SetVisAttributes(G4Colour(.2,.2,.2));
+              edge.push_back(v1 - extender * v21.unit());
+              edge.push_back(v2 + extender * v21.unit());
+              fpVisManager->Draw(edge, transform);
+            }
+          }
+        } while (notLastEdge);
       } while (notLastFace);
     }
 

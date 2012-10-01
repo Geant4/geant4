@@ -37,6 +37,7 @@
 #include "G4Polyhedron.hh"
 #include "G4Box.hh"
 #include "G4SubtractionSolid.hh"
+#include "G4SystemOfUnits.hh"
 
 void StandaloneVisAction::Draw() {
   G4VVisManager* pVisManager = G4VVisManager::GetConcreteInstance();
@@ -44,7 +45,7 @@ void StandaloneVisAction::Draw() {
 
     // Simple box...
     pVisManager->Draw(G4Box("box",2*m,2*m,2*m),
-		      G4VisAttributes(G4Colour(1,1,0)));
+                      G4VisAttributes(G4Colour(1,1,0)));
 
     // Boolean solid...
     G4Box boxA("boxA",3*m,3*m,3*m);

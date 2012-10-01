@@ -53,6 +53,8 @@
 #include "G4UIExecutive.hh"
 #endif
 
+#include "G4SystemOfUnits.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv) {
