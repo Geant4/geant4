@@ -106,14 +106,14 @@ void PhysListEmStandard::ConstructProcess()
       pmanager->AddProcess(new G4MuPairProduction,   -1, 4,4);       
      
     } else if( particleName == "alpha" || 
-	       particleName == "He3" || 
-	       particleName == "GenericIon" ) { 
+               particleName == "He3" || 
+               particleName == "GenericIon" ) { 
       pmanager->AddProcess(new G4hMultipleScattering,  -1, 1,1);
       pmanager->AddProcess(new G4ionIonisation,        -1, 2,2);
 
     } else if ((!particle->IsShortLived()) &&
-	       (particle->GetPDGCharge() != 0.0) && 
-	       (particle->GetParticleName() != "chargedgeantino")) {
+               (particle->GetPDGCharge() != 0.0) && 
+               (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
       pmanager->AddProcess(new G4hMultipleScattering, -1,1,1);
       pmanager->AddProcess(new G4hIonisation,         -1,2,2);

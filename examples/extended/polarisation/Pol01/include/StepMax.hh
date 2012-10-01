@@ -56,8 +56,8 @@ class StepMax : public G4VDiscreteProcess
      G4double GetMaxStep() {return MaxChargedStep;};
      
      G4double PostStepGetPhysicalInteractionLength( const G4Track& track,
-			                     G4double   previousStepSize,
-			                     G4ForceCondition* condition);
+                                             G4double   previousStepSize,
+                                             G4ForceCondition* condition);
 
      G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 

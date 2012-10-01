@@ -1,6 +1,6 @@
 # $Id: pol01.in,v 1.3 2006-11-17 09:49:41 vnivanch Exp $
 #
-# Macro file for "pol01.cc"
+# Macro file for "Pol01.cc"
 # (can be run in batch, without graphic, without analysis)
 #
 /control/verbose 2

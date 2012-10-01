@@ -82,9 +82,9 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RunAction::FillData(const G4String & particleName,
-			 G4double kinEnergy, G4double costheta, 
-			 G4double /* phi*/,
-			 G4double longitudinalPolarization)
+                         G4double kinEnergy, G4double costheta, 
+                         G4double /* phi*/,
+                         G4double longitudinalPolarization)
 {
   if (particleName=="gamma") 
     photonStats.FillData(kinEnergy, costheta, longitudinalPolarization);
@@ -124,9 +124,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4double energy = primary->GetParticleGun()->GetParticleEnergy();
   G4cout << "\n The run consists of " << NbOfEvents << " "<< Particle << " of "
          << G4BestUnit(energy,"Energy") << " through " 
-	 << G4BestUnit(detector->GetBoxSizeZ(),"Length") << " of "
-	 << material->GetName() << " (density: " 
-	 << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
+         << G4BestUnit(detector->GetBoxSizeZ(),"Length") << " of "
+         << material->GetName() << " (density: " 
+         << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
   
   //frequency of processes
   G4cout << "\n Process calls frequency --->\n";
@@ -149,7 +149,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   //  G4cout << "\n Verification from G4EmCalculator. \n";  
   //  G4EmCalculator emCal;
 
-  //restore default format	 
+  //restore default format         
   G4cout.precision(prec);         
 
   // write out histograms  
@@ -195,8 +195,8 @@ void RunAction::ParticleStatistics::EventFinished()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::ParticleStatistics:: FillData(G4double kinEnergy, 
-					      G4double costheta,
-					      G4double longitudinalPolarization)
+                                              G4double costheta,
+                                              G4double longitudinalPolarization)
 {
   ++currentNumber;
   sumEnergy+=kinEnergy;
@@ -212,17 +212,17 @@ void RunAction::ParticleStatistics:: FillData(G4double kinEnergy,
 void RunAction::ParticleStatistics::PrintResults(G4int totalNumberOfEvents)
 {
   G4cout<<"Mean Number per Event :"
-	<<G4double(totalNumber)/G4double(totalNumberOfEvents)<<"\n";
+        <<G4double(totalNumber)/G4double(totalNumberOfEvents)<<"\n";
   if (totalNumber==0) totalNumber=1;
   G4double energyMean=sumEnergy/totalNumber;
   G4double energyRms=std::sqrt(sumEnergy2/totalNumber-energyMean*energyMean);
   G4cout<<"Mean Energy :"<< G4BestUnit(energyMean,"Energy")
-	<<" +- "<<G4BestUnit(energyRms,"Energy")<<"\n";
+        <<" +- "<<G4BestUnit(energyRms,"Energy")<<"\n";
   G4double polarizationMean=sumPolarization/totalNumber;
   G4double polarizationRms=
     std::sqrt(sumPolarization2/totalNumber-polarizationMean*polarizationMean);
   G4cout<<"Mean Polarization :"<< polarizationMean
-	<<" +- "<<polarizationRms<<"\n";
+        <<" +- "<<polarizationRms<<"\n";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

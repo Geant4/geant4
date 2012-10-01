@@ -41,7 +41,7 @@ public class plotResults
 {
    public static void main(String[] argv) throws IOException
       {
-	  String fileName="pol01.aida";
+	  String fileName="Pol01.aida";
 	  if (argv.length>0) {
 	      fileName=argv[0];
 	      System.out.println("using file name "+fileName);

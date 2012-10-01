@@ -107,7 +107,7 @@
 
         If AIDA is available, i.e. if G4ANALYSIS_USE is set, these
         histograms are stored in a compressed XML file
-        (pol01.aida). These results can be displayed using a small
+        (Pol01.aida). These results can be displayed using a small
         program (plotResults.java) based on JAIDA by simply calling 
 
 \verbatim
@@ -126,14 +126,14 @@
 % gmake
 \endverbatim
  		
-	execute pol01 in 'batch' mode from the default macro file :
+	execute Pol01 in 'batch' mode from the default macro file :
 \verbatim
-% pol01   pol01.in
+% Pol01   pol01.in
 \endverbatim
 
-	or execute pol01 in 'batch' mode including aida output :
+	or execute Pol01 in 'batch' mode including aida output :
 \verbatim
-% pol01   histos.mac
+% Pol01   histos.mac
 \endverbatim
 
         if available use JAIDA to display the results via
@@ -143,7 +143,7 @@
 
 	a visualisation example is available by calling 
 \verbatim
-% pol01  
+% Pol01  
 [...]
 PreInit> /control/execute vis.mac
 \endverbatim

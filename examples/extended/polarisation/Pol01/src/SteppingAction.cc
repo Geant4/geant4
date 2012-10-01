@@ -45,7 +45,7 @@
 
 SteppingAction::SteppingAction(DetectorConstruction* det,
                                PrimaryGeneratorAction* prim, RunAction* RuAct, 
-			       HistoManager* Hist)
+                               HistoManager* Hist)
 :detector(det), primary(prim), runAction(RuAct), histoManager(Hist)
 { }
 

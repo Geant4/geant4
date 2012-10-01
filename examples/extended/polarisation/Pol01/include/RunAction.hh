@@ -56,7 +56,7 @@ class RunAction : public G4UserRunAction
     ~ParticleStatistics();
     void EventFinished();
     void FillData(G4double kinEnergy, G4double costheta,
-		  G4double longitudinalPolarization);
+                  G4double longitudinalPolarization);
     void PrintResults(G4int totalNumberOfEvents);
     void Clear();
   private:
@@ -78,10 +78,10 @@ public:
   void CountProcesses(G4String);
 
   void FillData(const G4String & particleName,
-		G4double kinEnergy, G4double costheta, G4double phi,
-		G4double longitudinalPolarization);
+                G4double kinEnergy, G4double costheta, G4double phi,
+                G4double longitudinalPolarization);
   void EventFinished();
-	 	 	           
+                                     
 private:
   DetectorConstruction*   detector;
   PrimaryGeneratorAction* primary;

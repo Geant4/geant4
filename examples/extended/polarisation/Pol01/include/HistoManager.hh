@@ -66,8 +66,8 @@ public:
   void FillHisto(G4int id, G4double e, G4double weight = 1.0);
 
   void FillHistos(const G4String & particleName,
-		  G4double kinEnergy, G4double costheta, G4double phi,
-		  G4double longitudinalPolarization);
+                  G4double kinEnergy, G4double costheta, G4double phi,
+                  G4double longitudinalPolarization);
 
   void RemoveHisto (G4int);
 
