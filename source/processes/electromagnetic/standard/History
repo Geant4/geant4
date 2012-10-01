@@ -17,7 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-1 October 12: G.Cosmo (emstand-V09-05-50)
+01 September 12: V.Ivanchenko (emstand-V09-05-51)
+- G4KleinNishinaModel - fixed infinite loop
+
+01 October 12: G.Cosmo (emstand-V09-05-50)
 - Explicitly use inclusion of header for system of units in G4GammaConversion.
 
 28 September 12: V.Ivanchenko (emstand-V09-05-49)

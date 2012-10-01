@@ -160,29 +160,32 @@ void G4KleinNishinaModel::SampleSecondaries(
   G4double totprob = 0.0;
   G4int i;
   for(i=0; i<nShells; ++i) {
-    G4double bindingEnergy = elm->GetAtomicShell(i);
-    totprob += elm->GetNbOfShellElectrons(i)/(bindingEnergy*bindingEnergy);
+    //G4double bindingEnergy = elm->GetAtomicShell(i);
+    totprob += elm->GetNbOfShellElectrons(i);
+    //totprob += elm->GetNbOfShellElectrons(i)/(bindingEnergy*bindingEnergy);
     fProbabilities[i] = totprob; 
   }
   //if(totprob == 0.0) { return; }
 
   // Loop on sampling
-  G4double eKinEnergy;
   //  const G4int nlooplim = 100;
-  G4int nloop = 0;
+  //G4int nloop = 0;
 
-  G4double xprob = totprob*G4UniformRand();
+  G4double bindingEnergy, ePotEnergy, eKinEnergy;
+  G4double gamEnergy0, gamEnergy1;
 
-  // select shell
-  for(i=0; i<nShells; ++i) { if(xprob <= fProbabilities[i]) {break;} }
-   
-  G4double bindingEnergy = elm->GetAtomicShell(i);
-  G4double ePotEnergy    = bindingEnergy;
-  G4double limitEnergy   = limitFactor*bindingEnergy;
+  static const G4double eminus2 =  1.0 - exp(-2.0);
 
   do {
-    ++nloop;
-    G4double gamEnergy0  = energy;
+    //++nloop;
+    G4double xprob = totprob*G4UniformRand();
+
+    // select shell
+    for(i=0; i<nShells; ++i) { if(xprob <= fProbabilities[i]) {break;} }
+   
+    bindingEnergy = elm->GetAtomicShell(i);
+    //    ePotEnergy    = bindingEnergy;
+    gamEnergy0  = energy;
     lv1.set(0.0,0.0,energy,energy);
 
     //G4cout << "nShells= " << nShells << " i= " << i 
@@ -190,63 +193,28 @@ void G4KleinNishinaModel::SampleSecondaries(
     //   << " Elim= " << limitEnergy 
     //   << G4endl;
 
-    // shortcut if the loop is too long
-      /*
-    if(nloop >= nlooplim) {
-      lv1.set(0.0,0.0,0.0,0.0);
+    // for rest frame of the electron
+    G4double x;
+    do {
+      x  = -log(1.0 - eminus2*G4UniformRand());
+    } while (x*x < 4*G4UniformRand()); 
 
-      eKinEnergy = energy - bindingEnergy;
-      if(eKinEnergy < 0.0) { eKinEnergy = 0.0; }
-      G4double eTotMomentum = sqrt(eKinEnergy*(eKinEnergy + 2*electron_mass_c2));
-      G4double phi = G4UniformRand()*twopi;
-      G4double costet = 2*G4UniformRand() - 1;
-      G4double sintet = sqrt((1 - costet)*(1 + costet));
-      lv2.set(eTotMomentum*sintet*cos(phi),eTotMomentum*sintet*sin(phi),
-	      eTotMomentum*costet,eKinEnergy + electron_mass_c2);
-      break;
-    }
-    
-      */
+    eKinEnergy = bindingEnergy*x;
+    ePotEnergy = bindingEnergy*(2.0 - x);
 
-    // for low energy rest frame of the electron
-    if(energy < limitEnergy) { 
-      G4double x, x2, y = 0.0;
-      do {
-	x  = -log(G4UniformRand());
-	x2 = x*x;
-	y  = x2;
-	if(x < 2.0) { y = 4*G4UniformRand(); }
-      } while (x2 < y); 
-
-      eKinEnergy = bindingEnergy*x;
-      ePotEnergy = bindingEnergy*(2.0 - x);
-
-      // for rest frame of the electron
-      G4double eTotMomentum = sqrt(eKinEnergy*(eKinEnergy + 2*electron_mass_c2));
-      G4double phi = G4UniformRand()*twopi;
-      G4double costet = 2*G4UniformRand() - 1;
-      G4double sintet = sqrt((1 - costet)*(1 + costet));
-      lv2.set(eTotMomentum*sintet*cos(phi),eTotMomentum*sintet*sin(phi),
-	      eTotMomentum*costet,eKinEnergy + electron_mass_c2);
-      bst = lv2.boostVector();
-      lv1.boost(-bst);
-      gamEnergy0 = lv1.e();
-    }
-
-      /*
-      G4double eTotMomentum = sqrt(bindingEnergy*(bindingEnergy + 2*electron_mass_c2));
-      G4double phi = G4UniformRand()*twopi;
-      G4double costet = 2*G4UniformRand() - 1;
-      G4double sintet = sqrt((1 - costet)*(1 + costet));
-      lv2.set(eTotMomentum*sintet*cos(phi),eTotMomentum*sintet*sin(phi),
-	      eTotMomentum*costet,bindingEnergy + electron_mass_c2);
-      bst = lv2.boostVector();
-      lv1.boost(-bst);
-      gamEnergy0 = lv1.e();
-    }
-    */
+    // for rest frame of the electron
+    G4double eTotMomentum = sqrt(eKinEnergy*(eKinEnergy + 2*electron_mass_c2));
+    G4double phi = G4UniformRand()*twopi;
+    G4double costet = 2*G4UniformRand() - 1;
+    G4double sintet = sqrt((1 - costet)*(1 + costet));
+    lv2.set(eTotMomentum*sintet*cos(phi),eTotMomentum*sintet*sin(phi),
+	    eTotMomentum*costet,eKinEnergy + electron_mass_c2);
+    bst = lv2.boostVector();
+    lv1.boost(-bst);
+    gamEnergy0 = lv1.e();
+   
     // In the rest frame of the electron
-    // The scattered gamma energy is sampled according to Klein - Nishina formula.
+    // The scattered gamma energy is sampled according to Klein-Nishina formula
     // The random number techniques of Butcher & Messel are used 
     // (Nuc Phys 20(1960),15). 
     G4double E0_m = gamEnergy0/electron_mass_c2;
@@ -270,14 +238,14 @@ void G4KleinNishinaModel::SampleSecondaries(
       } else {
 	epsilonsq = epsilon0sq + (1.- epsilon0sq)*G4UniformRand();
 	epsilon   = sqrt(epsilonsq);
-      };
+      }
 
       onecost = (1.- epsilon)/(epsilon*E0_m);
       sint2   = onecost*(2.-onecost);
       greject = 1. - epsilon*sint2/(1.+ epsilonsq);
 
     } while (greject < G4UniformRand());
-    G4double gamEnergy1 = epsilon*gamEnergy0;
+    gamEnergy1 = epsilon*gamEnergy0;
  
     // before scattering total 4-momentum in e- system
     lv2.set(0.0,0.0,0.0,electron_mass_c2);
@@ -287,31 +255,21 @@ void G4KleinNishinaModel::SampleSecondaries(
     // scattered gamma angles. ( Z - axis along the parent gamma)
     //
     if(sint2 < 0.0) { sint2 = 0.0; }
-    G4double cosTeta = 1. - onecost; 
-    G4double sinTeta = sqrt(sint2);
-    G4double Phi  = twopi * G4UniformRand();
+    costet = 1. - onecost; 
+    sintet = sqrt(sint2);
+    phi  = twopi * G4UniformRand();
 
     // e- recoil
     //
     // in  rest frame of the electron
-    if(energy < limitEnergy) { 
-      G4ThreeVector gamDir = lv1.vect().unit();
-      G4ThreeVector v = G4ThreeVector(sinTeta*cos(Phi),sinTeta*sin(Phi),cosTeta);
-      v.rotateUz(gamDir);
-      lv1.set(gamEnergy1*v.x(),gamEnergy1*v.y(),gamEnergy1*v.z(),gamEnergy1);
-      lv2 -= lv1;
-      //G4cout << "Egam= " << lv1.e() << "  Ee= " << lv2.e()-electron_mass_c2 << G4endl;
-      lv2.boost(bst);
-      lv1.boost(bst);
-      eKinEnergy = lv2.e() - electron_mass_c2 - ePotEnergy;
-      
-    } else {
-      lv1.set(gamEnergy1*sinTeta*cos(Phi),gamEnergy1*sinTeta*sin(Phi),
-	      gamEnergy1*cosTeta,gamEnergy1);
-      lv2 -= lv1;
-      eKinEnergy = lv2.e() - electron_mass_c2 - ePotEnergy;
-    }
-   
+    G4ThreeVector gamDir = lv1.vect().unit();
+    G4ThreeVector v = G4ThreeVector(sintet*cos(phi),sintet*sin(phi),costet);
+    v.rotateUz(gamDir);
+    lv1.set(gamEnergy1*v.x(),gamEnergy1*v.y(),gamEnergy1*v.z(),gamEnergy1);
+    lv2 -= lv1;
+    //G4cout<<"Egam= "<<lv1.e()<<" Ee= "<< lv2.e()-electron_mass_c2 << G4endl;
+    lv2.boost(bst);
+    eKinEnergy = lv2.e() - electron_mass_c2 - ePotEnergy;   
     //G4cout << "eKinEnergy= " << eKinEnergy << G4endl;
 
   } while ( eKinEnergy < 0.0 );
@@ -320,7 +278,8 @@ void G4KleinNishinaModel::SampleSecondaries(
   // update G4VParticleChange for the scattered gamma
   //
    
-  G4double gamEnergy1 = lv1.e();
+  lv1.boost(bst);
+  gamEnergy1 = lv1.e();
   if(gamEnergy1 > lowestGammaEnergy) {
     G4ThreeVector gamDirection1 = lv1.vect().unit();
     gamDirection1.rotateUz(direction);
@@ -338,7 +297,8 @@ void G4KleinNishinaModel::SampleSecondaries(
   if(eKinEnergy > lowestGammaEnergy) {
     G4ThreeVector eDirection = lv2.vect().unit();
     eDirection.rotateUz(direction);
-    G4DynamicParticle* dp = new G4DynamicParticle(theElectron,eDirection,eKinEnergy);
+    G4DynamicParticle* dp = 
+      new G4DynamicParticle(theElectron,eDirection,eKinEnergy);
     fvect->push_back(dp);
   } else { eKinEnergy = 0.0; }
 
@@ -351,7 +311,7 @@ void G4KleinNishinaModel::SampleSecondaries(
     if(fAtomDeexcitation->CheckDeexcitationActiveRegion(index)) {
       G4int Z = G4lrint(elm->GetZ());
       G4AtomicShellEnumerator as = G4AtomicShellEnumerator(i);
-      const G4AtomicShell* shell = fAtomDeexcitation->GetAtomicShell(Z, as);    
+      const G4AtomicShell* shell = fAtomDeexcitation->GetAtomicShell(Z, as);
       size_t nbefore = fvect->size();
       fAtomDeexcitation->GenerateParticles(fvect, shell, Z, index);
       size_t nafter = fvect->size();
