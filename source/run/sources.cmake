@@ -82,8 +82,8 @@ GEANT4_DEFINE_MODULE(NAME G4run
         G4MSSteppingAction.cc
         G4MatScanMessenger.cc
         G4MaterialScanner.cc
-	    G4PhysicsListHelper.cc
-	    G4PhysicsListOrderingParamater.cc
+	G4PhysicsListHelper.cc
+	G4PhysicsListOrderingParamater.cc
         G4Run.cc
         G4RunManager.cc
         G4RunManagerKernel.cc
@@ -94,6 +94,7 @@ GEANT4_DEFINE_MODULE(NAME G4run
         G4VPersistencyManager.cc
         G4VUserDetectorConstruction.cc
         G4VUserParallelWorld.cc
+        G4VPhysicsConstructor.cc
         G4VUserPhysicsList.cc
         G4VUserPrimaryGeneratorAction.cc
     GRANULAR_DEPENDENCIES
