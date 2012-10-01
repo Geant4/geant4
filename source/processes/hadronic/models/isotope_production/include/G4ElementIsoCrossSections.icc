@@ -62,7 +62,7 @@ Init(const G4Element * anElement)
     for (G4int i=0; i<nIsotopes; i++)
     {
       G4int A = anElement->GetIsotope(i)->GetN();
-      G4double frac = anElement->GetRelativeAbundanceVector()[i]/perCent;
+      G4double frac = anElement->GetRelativeAbundanceVector()[i]/CLHEP::perCent;
       theData[i] = new IsoIsoCrossSectionType;
       theData[i]->Init(A, Z, frac);
     }

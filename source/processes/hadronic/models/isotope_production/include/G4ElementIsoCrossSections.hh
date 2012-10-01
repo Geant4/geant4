@@ -26,6 +26,8 @@
 #ifndef G4ElementIsoCrossSections_h
 #define G4ElementIsoCrossSections_h
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4StableIsotopes.hh"
 #include "G4IsoResult.hh"
 #include "Randomize.hh"

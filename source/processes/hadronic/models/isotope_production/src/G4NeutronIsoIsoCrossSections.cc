@@ -24,6 +24,7 @@
 // ********************************************************************
 //
 #include "G4NeutronIsoIsoCrossSections.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4NeutronHPDataUsed.hh"
 #include "G4NeutronInelasticCrossSection.hh"
 

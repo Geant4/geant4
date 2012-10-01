@@ -16,6 +16,11 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+26 September 2012 - Gabriele Cosmo (hadr-isopro-V09-05-02)
+----------------------------------------------------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
 12 June 2012 - Dennis Wright  (hadr-isopro-V09-05-01)
 -----------------------------------------------------
 - replace shadowed variable "aName" with "dName" in 

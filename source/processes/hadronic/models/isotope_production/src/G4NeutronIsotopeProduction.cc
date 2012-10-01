@@ -24,6 +24,7 @@
 // ********************************************************************
 //
 #include "G4NeutronIsotopeProduction.hh"
+#include "G4SystemOfUnits.hh"
 
 G4NeutronIsotopeProduction::G4NeutronIsotopeProduction()
 {
