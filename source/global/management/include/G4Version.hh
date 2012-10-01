@@ -57,7 +57,7 @@
 
 #include "G4String.hh"
 
-static const G4String G4Version = "$Name: geant4-09-05-ref-08 $";
-static const G4String G4Date    = "(7-September-2012)";
+static const G4String G4Version = "$Name: geant4-09-05-ref-09 $";
+static const G4String G4Date    = "(2-October-2012)";
 
 #endif
