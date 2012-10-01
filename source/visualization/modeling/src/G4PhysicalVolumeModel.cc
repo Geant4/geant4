@@ -629,10 +629,10 @@ G4bool G4PhysicalVolumeModel::Validate (G4bool warn)
   else {
     if (warn) {
       G4cout <<
-	"G4PhysicalVolumeModel::Validate(): A volume of the same name and"
+	"G4PhysicalVolumeModel::Validate(): No volume of name and"
 	"\n  copy number (\""
 	     << fTopPVName << "\", copy " << fTopPVCopyNo
-	     << ") no longer exists."
+	     << ") exists."
 	     << G4endl;
     }
     return false;

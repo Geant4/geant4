@@ -40,6 +40,7 @@
 #include "G4OpenGLStoredQtSceneHandler.hh"
 #include "G4OpenGLStoredQtViewer.hh"
 #include "G4OpenGLViewerMessenger.hh"
+#include "G4UIQt.hh"
 
 G4OpenGLStoredQt::G4OpenGLStoredQt ():
   G4VGraphicsSystem ("OpenGLStoredQt",
@@ -61,9 +62,18 @@ G4VViewer* G4OpenGLStoredQt::CreateViewer
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredQt::CreateViewer \n");
 #endif
-  G4VViewer* pView =
-    new G4OpenGLStoredQtViewer
-    ((G4OpenGLStoredQtSceneHandler&) scene, name);
+  G4VViewer* pView = 0;
+  // Check that a Qt session has been opened
+  if (G4UIQt::IsInstantiated()) {
+    pView =
+    new G4OpenGLStoredQtViewer((G4OpenGLStoredSceneHandler&) scene, name);
+  } else {
+    G4Exception
+    ("G4OpenGLStoredQt::CreateViewer",
+     "opengl3002", JustWarning,
+     "Attempt to open a Qt viewer in a non-Qt session.  Start again with"
+     "\na Qt session or open a non-Qt viewer, such as OGLSX.");
+  }
   if (pView) {
     if (pView -> GetViewId () < 0) {
       G4cerr << "G4OpenGLStoredQt::CreateViewer: error flagged by negative"
@@ -73,15 +83,14 @@ G4VViewer* G4OpenGLStoredQt::CreateViewer
       delete pView;
       pView = 0;
     }
-  }
-  else {
+  } else {
     G4cerr << "G4OpenGLStoredQt::CreateViewer: null pointer on"
       " new G4OpenGLStoredQtViewer." << G4endl;
   }
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredQt::CreateViewer END \n");
 #endif
-   return pView;
+  return pView;
 }
 
 #endif

@@ -55,6 +55,8 @@
 #include "G4Polyhedron.hh"
 #include "G4AttHolder.hh"
 
+#include <typeinfo>
+
 G4OpenGLImmediateSceneHandler::G4OpenGLImmediateSceneHandler
 (G4VGraphicsSystem& system,const G4String& name):
   G4OpenGLSceneHandler (system, fSceneIdCount++, name)
@@ -69,21 +71,66 @@ G4bool G4OpenGLImmediateSceneHandler::AddPrimitivePreamble(const G4Visible& visi
 {
   const G4Colour& c = GetColour (visible);
   G4double opacity = c.GetAlpha ();
-
-  if (!fSecondPassForTransparency) {
-    G4bool transparency_enabled = true;
-    G4OpenGLViewer* pViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
-    if (pViewer) transparency_enabled = pViewer->transparency_enabled;
-    if (transparency_enabled && opacity < 1.) {
-      // On first pass, transparent objects are not drawn, but flag is set...
-      fSecondPassForTransparencyRequested = true;
-      return false;
-    }
+  
+  G4bool transparency_enabled = true;
+  G4bool isMarkerNotHidden = true;
+  G4OpenGLViewer* pViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
+  if (pViewer) {
+    transparency_enabled = pViewer->transparency_enabled;
+    isMarkerNotHidden = pViewer->fVP.IsMarkerNotHidden();
   }
-
-  // On second pass, opaque objects are not drwan...
-  if (fSecondPassForTransparency && opacity >= 1.) return false;
-
+  
+  G4bool isMarker = false;
+  try {
+    dynamic_cast<const G4VMarker&>(visible);
+    isMarker = true;
+  }
+  catch (std::bad_cast) {}
+  
+  G4bool isPolyline = false;
+  try {
+    dynamic_cast<const G4Polyline&>(visible);
+    isPolyline = true;
+  }
+  catch (std::bad_cast) {}
+  
+  G4bool treatAsTransparent = transparency_enabled && opacity < 1.;
+  G4bool treatAsNotHidden = isMarkerNotHidden && (isMarker || isPolyline);
+  
+  if (fThreePassCapable) {
+    
+    // Ensure transparent objects are drawn opaque ones and before
+    // non-hidden markers.  The problem of blending/transparency/alpha
+    // is quite a tricky one - see History of opengl-V07-01-01/2/3.
+    if (!(fSecondPassForTransparency || fThirdPassForNonHiddenMarkers)) {
+      // First pass...
+      if (treatAsTransparent) {  // Request pass for transparent objects...
+        fSecondPassForTransparencyRequested = true;
+      }
+      if (treatAsNotHidden) {    // Request pass for non-hidden markers...
+        fThirdPassForNonHiddenMarkersRequested = true;
+      }
+      // On first pass, transparent objects and non-hidden markers are not drawn...
+      if (treatAsTransparent || treatAsNotHidden) {
+        return false;
+      }
+    }
+    
+    // On second pass, only transparent objects are drawn...
+    if (fSecondPassForTransparency) {
+      if (!treatAsTransparent) {
+        return false;
+      }
+    }
+    
+    // On third pass, only non-hidden markers are drawn...
+    if (fThirdPassForNonHiddenMarkers) {
+      if (!treatAsNotHidden) {
+        return false;
+      }
+    }
+  }  // fThreePassCapable
+  
   // Loads G4Atts for picking...
   if (fpViewer->GetViewParameters().IsPicking()) {
     glLoadName(++fPickName);
@@ -92,7 +139,11 @@ G4bool G4OpenGLImmediateSceneHandler::AddPrimitivePreamble(const G4Visible& visi
     fPickMap[fPickName] = holder;
   }
 
-  glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
+  if (transparency_enabled) {
+    glColor4d(c.GetRed(),c.GetGreen(),c.GetBlue(),c.GetAlpha());
+  } else {
+    glColor3d(c.GetRed(),c.GetGreen(),c.GetBlue());    
+  }
 
   return true;
 }

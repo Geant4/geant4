@@ -35,6 +35,7 @@
 
 #include "G4OpenGLStoredQtViewer.hh"
 
+#include "G4OpenGLStoredSceneHandler.hh"
 #include "G4ios.hh"
 
 G4OpenGLStoredQtViewer::G4OpenGLStoredQtViewer
@@ -328,6 +329,13 @@ void G4OpenGLStoredQtViewer::ShowView (
   activateWindow();
   glFlush();
 
+}
+
+
+void G4OpenGLStoredQtViewer::DisplayTimePOColourModification (
+G4Colour& c,
+size_t poIndex) {
+  c = getColorForPoIndex(poIndex);
 }
 
 #endif

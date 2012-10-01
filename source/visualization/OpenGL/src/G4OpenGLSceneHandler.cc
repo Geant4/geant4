@@ -67,16 +67,19 @@
 #include "G4PhysicalConstants.hh"
 
 G4OpenGLSceneHandler::G4OpenGLSceneHandler (G4VGraphicsSystem& system,
-			      G4int id,
-			      const G4String& name):
-  G4VSceneHandler (system, id, name),
-  fPickName(0),
-  // glFlush take about 90% time.  Dividing glFlush number by 100 will
-  // change the first vis time from 100% to 10+90/100 = 10,9%.
-  fEventsDrawInterval(1),
-  fEventsWaitingToBeFlushed(0),
-  fSecondPassForTransparencyRequested(false),
-  fSecondPassForTransparency(false)
+                                            G4int id,
+                                            const G4String& name):
+G4VSceneHandler (system, id, name),
+fPickName(0),
+// glFlush take about 90% time.  Dividing glFlush number by 100 will
+// change the first vis time from 100% to 10+90/100 = 10,9%.
+fEventsDrawInterval(1),
+fEventsWaitingToBeFlushed(0),
+fThreePassCapable(false),
+fSecondPassForTransparencyRequested(false),
+fSecondPassForTransparency(false),
+fThirdPassForNonHiddenMarkersRequested(false),
+fThirdPassForNonHiddenMarkers(false)
 {}
 
 G4OpenGLSceneHandler::~G4OpenGLSceneHandler ()
@@ -120,7 +123,10 @@ void G4OpenGLSceneHandler::ScaledFlush()
 
 void G4OpenGLSceneHandler::ProcessScene()
 {
+  fThreePassCapable = true;
+  
   G4VSceneHandler::ProcessScene();
+
   // Repeat if required...
   if (fSecondPassForTransparencyRequested) {
     fSecondPassForTransparency = true;
@@ -128,6 +134,16 @@ void G4OpenGLSceneHandler::ProcessScene()
     fSecondPassForTransparency = false;
     fSecondPassForTransparencyRequested = false;
   }
+
+  // And again if required...
+  if (fThirdPassForNonHiddenMarkersRequested) {
+    fThirdPassForNonHiddenMarkers = true;
+    G4VSceneHandler::ProcessScene();
+    fThirdPassForNonHiddenMarkers = false;
+    fThirdPassForNonHiddenMarkersRequested = false;
+  }
+  
+  fThreePassCapable = false;
 }
 
 void G4OpenGLSceneHandler::PreAddSolid
@@ -375,6 +391,11 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   
   if (polyhedron.GetNoFacets() == 0) return;
 
+  // Need access to data in G4OpenGLViewer.  static_cast doesn't work
+  // with a virtual base class, so use dynamic_cast.
+  G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
+  if (!pGLViewer) return;
+  
   // Get vis attributes - pick up defaults if none.
   const G4VisAttributes* pVA =
     fpViewer -> GetApplicableVisAttributes (polyhedron.GetVisAttributes ());
@@ -383,28 +404,24 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   // attributes, thereby over-riding the current view parameter.
   G4ViewParameters::DrawingStyle drawing_style = GetDrawingStyle (pVA);
 
-  // Get colour, etc...
-  // Need access to data in G4OpenGLViewer.  static_cast doesn't work
-  // with a virtual base class, so use dynamic_cast.  No need to test
-  // the outcome since viewer is guaranteed to be a G4OpenGLViewer.
-  G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
-  const G4bool& transparency_enabled = pGLViewer->transparency_enabled;
-  const G4Colour& c = pVA->GetColour();
-  GLfloat materialColour [4];
-  materialColour [0] = c.GetRed ();
-  materialColour [1] = c.GetGreen ();
-  materialColour [2] = c.GetBlue ();
-  if (transparency_enabled) {
-    materialColour [3] = c.GetAlpha ();
-  } else {
-    materialColour [3] = 1.;
+  // Note that in stored mode, because this call gets embedded in a display
+  //  list, it is the colour _at the time of_ creation of the display list, so
+  //  even if the colour is changed, for example, by interaction with a Qt
+  //  window, current_colour does not change.
+  GLfloat current_colour [4];
+  glGetFloatv (GL_CURRENT_COLOR, current_colour);
+  
+  G4bool isTransparent = false;
+  if (current_colour[3] < 1.) {  // This object is transparent
+    isTransparent = true;
   }
 
-  G4double lineWidth = GetLineWidth(pVA);
-  pGLViewer->ChangeLineWidth(lineWidth);
-
+  // This is the colour used to paint surfaces in hlr mode.
   GLfloat clear_colour[4];
   glGetFloatv (GL_COLOR_CLEAR_VALUE, clear_colour);
+  
+  G4double lineWidth = GetLineWidth(pVA);
+  pGLViewer->ChangeLineWidth(lineWidth);
 
   G4bool isAuxEdgeVisible = GetAuxEdgeVisible (pVA);
 
@@ -424,44 +441,53 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     glStencilOp (GL_INVERT, GL_INVERT, GL_INVERT);
     glEnable (GL_DEPTH_TEST);
     glDepthFunc (GL_LEQUAL);
-    if (materialColour[3] < 1.) {
+    if (isTransparent) {
       // Transparent...
+      glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+      glEnable(GL_COLOR_MATERIAL);
       glDisable (GL_CULL_FACE);
       glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
     } else {
       // Opaque...
       if (clipping) {
+        glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+        glEnable(GL_COLOR_MATERIAL);
 	glDisable (GL_CULL_FACE);
 	glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
       } else {
+        glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+        glEnable(GL_COLOR_MATERIAL);
 	glEnable (GL_CULL_FACE);
 	glCullFace (GL_BACK);
 	glPolygonMode (GL_FRONT, GL_LINE);
       }
     }
-    glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
     break;
   case (G4ViewParameters::hsr):
     glEnable (GL_DEPTH_TEST);
     glDepthFunc (GL_LEQUAL);    
-    if (materialColour[3] < 1.) {
+    if (isTransparent) {
       // Transparent...
       glDepthMask (GL_FALSE);  // Make depth buffer read-only.
+      glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+      glEnable(GL_COLOR_MATERIAL);
       glDisable (GL_CULL_FACE);
       glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
-      glMaterialfv (GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, materialColour);
     } else {
       // Opaque...
       glDepthMask (GL_TRUE);  // Make depth buffer writable (default).
       if (clipping) {
+        glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+        glEnable(GL_COLOR_MATERIAL);
 	glDisable (GL_CULL_FACE);
 	glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
       } else {
+        glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+        glEnable(GL_COLOR_MATERIAL);
 	glEnable (GL_CULL_FACE);
 	glCullFace (GL_BACK);
 	glPolygonMode (GL_FRONT, GL_FILL);
       }
-      glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, materialColour);
     }
     if (!fProcessing2D) glEnable (GL_LIGHTING);
     break;
@@ -471,7 +497,6 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     glDepthFunc (GL_LEQUAL);    //??? was GL_ALWAYS
     glDisable (GL_CULL_FACE);
     glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
-    glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
     break;
   }
 
@@ -538,6 +563,8 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 	"\n   G4Polyhedron facet with " << nEdges << " edges" << G4endl;
     }
 
+    glDisable(GL_COLOR_MATERIAL); // Revert to glMaterial for hlr/sr.
+
     // Do it all over again (twice) for hlr...
     if  (drawing_style == G4ViewParameters::hlr ||
 	 drawing_style == G4ViewParameters::hlhsr) {
@@ -558,7 +585,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       }
       glEnable (GL_DEPTH_TEST);
       glDepthFunc (GL_LEQUAL);    
-      if (materialColour[3] < 1.) {
+      if (isTransparent) {
 	// Transparent...
 	glDepthMask (GL_FALSE);  // Make depth buffer read-only.
 	glDisable (GL_CULL_FACE);
@@ -577,15 +604,15 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       }
       GLfloat* painting_colour;
       if  (drawing_style == G4ViewParameters::hlr) {
-	if (materialColour[3] < 1.) {
+	if (isTransparent) {
 	  // Transparent - don't paint...
 	  goto end_of_drawing_through_stencil;
 	}
 	painting_colour = clear_colour;
       } else {  // drawing_style == G4ViewParameters::hlhsr
-	painting_colour = materialColour;
+	painting_colour = current_colour;
       }
-      if (materialColour[3] < 1.) {
+      if (isTransparent) {
 	// Transparent...
 	glMaterialfv (GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, painting_colour);
       } else {
@@ -614,7 +641,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       glStencilFunc (GL_ALWAYS, 0, 1);
       glStencilOp (GL_INVERT, GL_INVERT, GL_INVERT);
       glDepthFunc (GL_LEQUAL);  // to make sure line gets drawn.  
-      if (materialColour[3] < 1.) {
+      if (isTransparent) {
 	// Transparent...
 	glDisable (GL_CULL_FACE);
 	glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
@@ -630,7 +657,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 	}
       }
       glDisable (GL_LIGHTING);
-      glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
+      glColor4fv (current_colour);
       glBegin (GL_QUADS);
       for (int edgeCount = 0; edgeCount < 4; ++edgeCount) {
 	if (edgeFlag[edgeCount] > 0) {
@@ -730,7 +757,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4NURBS& nurb) {
     glDisable (GL_NORMALIZE);
     gluNurbsProperty (gl_nurb, GLU_DISPLAY_MODE, GLU_OUTLINE_POLYGON);
     gluNurbsProperty (gl_nurb, GLU_SAMPLING_TOLERANCE, 50.0);
-    glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
+    glColor4d(c.GetRed(), c.GetGreen(), c.GetBlue(),c.GetAlpha());
     break;
   }	
 

@@ -36,6 +36,7 @@
 
 #include "G4OpenGLStoredXViewer.hh"
 
+#include "G4OpenGLStoredSceneHandler.hh"
 #include "G4ios.hh"
 
 G4OpenGLStoredXViewer::

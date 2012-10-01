@@ -43,6 +43,7 @@
 #include "G4Circle.hh"
 #include "G4UnitsTable.hh"
 #include "G4Scene.hh"
+#include "G4OpenGLTransform3D.hh"
 
 G4OpenGLStoredViewer::G4OpenGLStoredViewer
 (G4OpenGLStoredSceneHandler& sceneHandler):
@@ -136,21 +137,22 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
   const G4Planes& cutaways = fVP.GetCutawayPlanes();
   G4bool cutawayUnion = fVP.IsCutaway() &&
     fVP.GetCutawayMode() == G4ViewParameters::cutawayUnion;
-  const size_t nPassesForCutaways = cutawayUnion? cutaways.size(): 1;
+  const size_t nCutaways = cutawayUnion? cutaways.size(): 1;
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredViewer::DrawDisplayLists");
 #endif
-  G4int iPassForTransparency = 1;
+  G4int iPass = 1;
   G4bool secondPassForTransparencyRequested = false;
+  G4bool thirdPassForNonHiddenMarkersRequested = false;
   do {
-    for (size_t iPass = 0; iPass < nPassesForCutaways; ++iPass) {
+    for (size_t iCutaway = 0; iCutaway < nCutaways; ++iCutaway) {
 
       if (cutawayUnion) {
 	double a[4];
-	a[0] = cutaways[iPass].a();
-	a[1] = cutaways[iPass].b();
-	a[2] = cutaways[iPass].c();
-	a[3] = cutaways[iPass].d();
+	a[0] = cutaways[iCutaway].a();
+	a[1] = cutaways[iCutaway].b();
+	a[2] = cutaways[iCutaway].c();
+	a[3] = cutaways[iCutaway].d();
 	glClipPlane (GL_CLIP_PLANE2, a);
 	glEnable (GL_CLIP_PLANE2);
       }
@@ -162,16 +164,24 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 	if (POSelected(iPO)) {
 	  G4OpenGLStoredSceneHandler::PO& po =
 	    fG4OpenGLStoredSceneHandler.fPOList[iPO];
-	  if (iPassForTransparency == 1) {  // First pass for transparency.
-	    if (po.fDisplayOnSecondPassForTransparency) {
+	  if ( iPass == 1) {
+	    if (po.fTransparent && transparency_enabled) {
 	      secondPassForTransparencyRequested = true;
 	      continue;
 	    }
-	  } else {  // Second pass for transparency.
-	    if (!po.fDisplayOnSecondPassForTransparency) {
+	    if (po.fMarkerOrPolyline && fVP.IsMarkerNotHidden()) {
+	      thirdPassForNonHiddenMarkersRequested = true;
 	      continue;
 	    }
-	  }
+	  } else if (iPass == 2) {  // Second pass for transparency.
+	    if (!po.fTransparent) {
+	      continue;
+	    }
+	  } else {  // Third pass for non-hidden markers
+	    if (!po.fMarkerOrPolyline) {
+	      continue;
+	    }            
+          }
 	  if (isPicking) glLoadName(po.fPickName);
 	  G4Colour c = po.fColour;
 	  // A sub-class may modify the colour/transparency.  If the
@@ -179,7 +189,11 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 	  // since the order of rendering is determined by the above
 	  // code at POList construction time.
 	  DisplayTimePOColourModification(c,iPO);
-	  glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
+          if (transparency_enabled) {
+            glColor4d(c.GetRed(),c.GetGreen(),c.GetBlue(),c.GetAlpha());
+          } else {
+            glColor3d(c.GetRed(),c.GetGreen(),c.GetBlue());
+          }
 	  if (po.fpG4TextPlus) {
 	    if (po.fpG4TextPlus->fProcessing2D) {
 	      glMatrixMode (GL_PROJECTION);
@@ -218,16 +232,24 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 	if (TOSelected(iTO)) {
 	  G4OpenGLStoredSceneHandler::TO& to =
 	    fG4OpenGLStoredSceneHandler.fTOList[iTO];
-	  if (iPassForTransparency == 1) {  // First pass for transparency.
-	    if (to.fDisplayOnSecondPassForTransparency) {
+	  if ( iPass == 1) {
+	    if (to.fTransparent && transparency_enabled) {
 	      secondPassForTransparencyRequested = true;
 	      continue;
 	    }
-	  } else {  // Second pass for transparency.
-	    if (!to.fDisplayOnSecondPassForTransparency) {
+	    if (to.fMarkerOrPolyline && fVP.IsMarkerNotHidden()) {
+	      thirdPassForNonHiddenMarkersRequested = true;
 	      continue;
 	    }
-	  }
+	  } else if (iPass == 2) {  // Second pass for transparency.
+	    if (!to.fTransparent) {
+	      continue;
+	    }
+	  } else {  // Third pass for non-hidden markers
+	    if (!to.fMarkerOrPolyline) {
+	      continue;
+	    }
+          }
 	  if (to.fEndTime >= fStartTime && to.fStartTime <= fEndTime) {
 	    if (fVP.IsPicking()) glLoadName(to.fPickName);
 	    if (to.fpG4TextPlus) {
@@ -243,7 +265,11 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 	      G4OpenGLTransform3D oglt (to.fTransform);
 	      glMultMatrixd (oglt.GetGLMatrix ());
 	      const G4Colour& c = to.fColour;
-	      glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
+              if (transparency_enabled) {
+                glColor4d(c.GetRed(),c.GetGreen(),c.GetBlue(),c.GetAlpha());
+              } else {
+                glColor3d(c.GetRed(),c.GetGreen(),c.GetBlue());
+              }
 	      fOpenGLSceneHandler.G4OpenGLSceneHandler::AddPrimitive
 		(to.fpG4TextPlus->fG4Text);
 	      if (to.fpG4TextPlus->fProcessing2D) {
@@ -268,12 +294,24 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 		G4double bsf = 1. - fFadeFactor *
 		  ((fEndTime - to.fEndTime) / (fEndTime - fStartTime));
 		const G4Colour& bg = fVP.GetBackgroundColour();
-		glColor3d
+                if (transparency_enabled) {
+                  glColor4d
+		  (bsf * c.GetRed() + (1. - bsf) * bg.GetRed(),
+		   bsf * c.GetGreen() + (1. - bsf) * bg.GetGreen(),
+		   bsf * c.GetBlue() + (1. - bsf) * bg.GetBlue(),
+                   bsf * c.GetAlpha() + (1. - bsf) * bg.GetAlpha());
+                } else {
+                  glColor3d
 		  (bsf * c.GetRed() + (1. - bsf) * bg.GetRed(),
 		   bsf * c.GetGreen() + (1. - bsf) * bg.GetGreen(),
 		   bsf * c.GetBlue() + (1. - bsf) * bg.GetBlue());
+                }
 	      } else {
-		glColor3d(c.GetRed(), c.GetGreen(), c.GetBlue());
+                if (transparency_enabled) {
+                  glColor4d(c.GetRed(),c.GetGreen(),c.GetBlue(),c.GetAlpha());
+                } else {
+                  glColor3d(c.GetRed(),c.GetGreen(),c.GetBlue());
+                }
 	      }
 	      glCallList (to.fDisplayListId);
 	    }
@@ -288,9 +326,16 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
       }
 
       if (cutawayUnion) glDisable (GL_CLIP_PLANE2);
-    }  // nPassesForCutaways
-  } while (secondPassForTransparencyRequested &&
-	   ++iPassForTransparency <= 2);
+    }  // iCutaway
+    
+    if (iPass == 2) secondPassForTransparencyRequested = false;  // Done.
+    if (iPass == 3) thirdPassForNonHiddenMarkersRequested = false;  // Done.
+    
+    if (secondPassForTransparencyRequested) iPass = 2;
+    else if (thirdPassForNonHiddenMarkersRequested) iPass = 3;
+    else break;
+
+  } while (true);
 
   // Display time at "head" of time range, which is fEndTime...
   if (fDisplayHeadTime && fEndTime < DBL_MAX) {

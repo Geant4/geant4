@@ -63,7 +63,7 @@ void G4OpenGLImmediateQtViewer::Initialise() {
   printf("G4OpenGLImmediateQtViewer::Initialise \n");
 #endif
   fReadyToPaint = false;
-  CreateMainWindow (this,QString(fName));
+  CreateMainWindow (this,QString(GetName()));
   CreateFontLists ();
 
   fReadyToPaint = true;

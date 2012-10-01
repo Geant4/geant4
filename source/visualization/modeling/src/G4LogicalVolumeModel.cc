@@ -59,7 +59,7 @@ G4LogicalVolumeModel::G4LogicalVolumeModel
   G4PhysicalVolumeModel
 (new G4PVPlacement (0,                   // No rotation.
 		    G4ThreeVector(),     // Null traslation.
-		    "PhysVol representaion of LogVol " + pLV -> GetName (),
+		    "PhysVol representation of LogVol " + pLV -> GetName (),
 		    pLV,
 		    0,                   // No mother.
 		    false,               // Not "MANY".

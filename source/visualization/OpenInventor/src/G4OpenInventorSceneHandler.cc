@@ -196,7 +196,12 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyline& line)
     return;
   }
 
-  AddProperties(line.GetVisAttributes());  // Transformation, colour, etc.
+  // Get vis attributes - pick up defaults if none.
+  const G4VisAttributes* pVA =
+  fpViewer -> GetApplicableVisAttributes (line.GetVisAttributes ());
+  
+  AddProperties(pVA);  // Colour, etc.
+  AddTransform();      // Transformation
 
   G4int nPoints = line.size();
   SbVec3f* pCoords = new SbVec3f[nPoints];
@@ -250,7 +255,12 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
     return;
   }
 
-  AddProperties(polymarker.GetVisAttributes()); // Transformation, colour, etc.
+  // Get vis attributes - pick up defaults if none.
+  const G4VisAttributes* pVA =
+  fpViewer -> GetApplicableVisAttributes (polymarker.GetVisAttributes ());
+
+  AddProperties(pVA);  // Colour, etc.
+  AddTransform();      // Transformation
 
   G4int pointn = polymarker.size();
   if(pointn<=0) return;
@@ -346,16 +356,6 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
   delete [] points;
 }
 
-// ********* NOTE ********* NOTE ********* NOTE ********* NOTE *********
-//
-//  This method (Text) has not been tested, as it is 
-//  innaccessible from the menu in the current configuration
-//
-//  Currently draws at the origin!  How do I get it to draw at
-//  text.GetPosition()?  JA
-//
-// ********* NOTE ********* NOTE ********* NOTE ********* NOTE *********
-//
 // Method for handling G4Text objects
 //
 void G4OpenInventorSceneHandler::AddPrimitive (const G4Text& text)
@@ -372,7 +372,8 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Text& text)
     return;
   }
 
-  AddProperties(text.GetVisAttributes());  // Transformation, colour, etc.
+  AddProperties(text.GetVisAttributes());  // Colour, etc.
+  AddTransform(text.GetPosition());        // Transformation
 
   //
   // Color.  Note: text colour is worked out differently.  This
@@ -453,7 +454,12 @@ void G4OpenInventorSceneHandler::AddCircleSquare
     return;
   }
 
-  AddProperties(marker.GetVisAttributes());  // Transformation, colour, etc.
+  // Get vis attributes - pick up defaults if none.
+  const G4VisAttributes* pVA =
+  fpViewer -> GetApplicableVisAttributes (marker.GetVisAttributes ());
+
+  AddProperties(pVA);  // Colour, etc.
+  AddTransform();      // Transformation
 
   MarkerSizeType sizeType;
   G4double screenSize = GetMarkerSize (marker, sizeType);
@@ -554,7 +560,12 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron)
     return;
   }
 
-  AddProperties(polyhedron.GetVisAttributes()); // Transformation, colour, etc.
+  // Get vis attributes - pick up defaults if none.
+  const G4VisAttributes* pVA =
+  fpViewer -> GetApplicableVisAttributes (polyhedron.GetVisAttributes ());
+
+  AddProperties(pVA);  // Colour, etc.
+  AddTransform();      // Transformation
 
   SoG4Polyhedron* soPolyhedron = new SoG4Polyhedron(polyhedron);
 
@@ -593,7 +604,12 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4NURBS& nurb) {
     return;
   }
 
-  AddProperties(nurb.GetVisAttributes()); // Transformation, colour, etc.
+  // Get vis attributes - pick up defaults if none.
+  const G4VisAttributes* pVA =
+  fpViewer -> GetApplicableVisAttributes (nurb.GetVisAttributes ());
+
+  AddProperties(pVA);  // Colour, etc.
+  AddTransform();      // Transformation
 
   G4float *u_knot_array, *u_knot_array_ptr;
   u_knot_array = u_knot_array_ptr = new G4float [nurb.GetnbrKnots(G4NURBS::U)];
@@ -878,12 +894,17 @@ void G4OpenInventorSceneHandler::AddProperties(const G4VisAttributes* visAtts)
     fModelingSolid ? fStyleCache->getLightModelPhong() : 
     fStyleCache->getLightModelBaseColor();
   fCurrentSeparator->addChild(lightModel);
+}
 
-  // Set up the geometrical transformation for the coming 
+void G4OpenInventorSceneHandler::AddTransform(const G4Point3D& translation)
+{
+  // AddTransform takes fObjectTransformation and "adds" a translation.
+  // Set up the geometrical transformation for the coming
   fCurrentSeparator->addChild(fStyleCache->getResetTransform());
 
   SoMatrixTransform* matrixTransform = new SoMatrixTransform;
-  G4OpenInventorTransform3D oiTran(fObjectTransformation);
+  G4OpenInventorTransform3D oiTran
+  (fObjectTransformation * G4Translate3D(translation));
   SbMatrix* sbMatrix = oiTran.GetSbMatrix();
 
   const G4Vector3D scale = fpViewer->GetViewParameters().GetScaleFactor();

@@ -55,6 +55,7 @@ class QContextMenuEvent;
 class QMenu;
 class QImage;
 class QAction;
+class QTabWidget;
 class QMouseEvent;
 class QKeyEvent;
 class QWheelEvent;
@@ -69,6 +70,7 @@ class QColor;
 class G4OpenGLSceneHandler;
 class G4OpenGLQtMovieDialog;
 class QLineEdit;
+class G4UIQt;
 
 class G4OpenGLQtViewer: public QObject, virtual public G4OpenGLViewer {
 
@@ -141,6 +143,7 @@ protected:
   void FinishView();
   void updateKeyModifierState(Qt::KeyboardModifiers);
   void displaySceneTreeComponent();
+  G4Colour getColorForPoIndex(int poIndex);
 
 protected:
   QGLWidget* fWindow;
@@ -154,7 +157,6 @@ protected:
   bool fIsRepainting;
 
 private:
-  enum mouseActions {STYLE1,STYLE2,STYLE3,STYLE4}; 
   enum RECORDING_STEP {WAIT,START,PAUSE,CONTINUE,STOP,READY_TO_ENCODE,ENCODING,FAILED,SUCCESS,BAD_ENCODER,BAD_OUTPUT,BAD_TMP,SAVE}; 
 
   void createPopupMenu();
@@ -189,15 +191,24 @@ private:
   QString getModelShortName(G4String modelShortName);
   void cloneSceneTree(QTreeWidgetItem* rootItem);
   void changeDepthOnSceneTreeItem(double lookForDepth,double currentDepth,QTreeWidgetItem* item);
-  void updateQuickVisibilityMap(int POindex,Qt::CheckState checkState);
+  void updatePositivePoIndexSceneTreeWidgetQuickMap(int POindex,QTreeWidgetItem* item);
+  void changeQColorForTreeWidgetItem(QTreeWidgetItem* item, QColor);
+
   bool isSameSceneTreeElement(QTreeWidgetItem* parentOldItem,QTreeWidgetItem* parentNewItem);
-  void changeOpenCloseVisibleHiddenSelectedSceneTreeElement(QTreeWidgetItem* subItem);
+  void changeOpenCloseVisibleHiddenSelectedColorSceneTreeElement(QTreeWidgetItem* subItem);
   bool isPVVolume(QTreeWidgetItem* item);
   QTreeWidgetItem* cloneWidgetItem(QTreeWidgetItem* item);
   void clearSceneTreeSelection(QTreeWidgetItem*);
+  void clearTreeWidgetElements(QTreeWidgetItem* item);
+
+  // Get the tree wigdet item for POindex if exists
+  QTreeWidgetItem* getTreeWidgetItem(int POindex);
+
+  // Get the old tree wigdet item for POindex if exists
+  QTreeWidgetItem* getOldTreeWidgetItem(int POindex);
+
 
   QMenu *fContextMenu;
-  mouseActions fMouseAction; // 1: rotate 2:move 3:pick 4:shortcuts 
   QPoint fLastPos1;
   QPoint fLastPos2;
   QPoint fLastPos3;
@@ -235,7 +246,7 @@ private:
   int fNbMaxFramesPerSec;
   float fNbMaxAnglePerSec;
   int fLaunchSpinDelay;
-  QWidget* fUISceneTreeComponentsTBWidget;
+  QTabWidget* fUISceneTreeComponentsTBWidget;
   bool fNoKeyPress;
   bool fAltKeyPress;
   bool fControlKeyPress;
@@ -243,30 +254,16 @@ private:
   bool fBatchMode;
   bool fCheckSceneTreeComponentSignalLock;
   QTreeWidget* fSceneTreeComponentTreeWidget;
+  // This is only use to hold the old "expand" value, see file:///Developer/Documentation/Qt/html/qtreewidgetitem.html#setExpanded 
+  QTreeWidget* fOldSceneTreeComponentTreeWidget;
   QWidget* fSceneTreeWidget;
   bool fPVRootNodeCreate;
   QLineEdit* fHelpLine;
-
-  QTreeWidget* fOldSceneTreeOpenComponentTreeWidget;
-  QTreeWidget* fOldSceneTreeCloseComponentTreeWidget;
-
-  QTreeWidget* fOldSceneTreeVisibleComponentTreeWidget;
-  QTreeWidget* fOldSceneTreeHiddenComponentTreeWidget;
-
-  QTreeWidget* fOldSceneTreeSelectedComponentTreeWidget;
-
-  unsigned int fNumberOldSceneTreeOpenComponent;
-  unsigned int fNumberOldSceneTreeCloseComponent;
-  unsigned int fNumberOldSceneTreeVisibleComponent;
-  unsigned int fNumberOldSceneTreeHiddenComponent;
-  unsigned int fNumberOldSceneTreeSelectedComponent;
-
 
 
   int fNbRotation ;
   int fTimeRotation;
   QString fTouchableVolumes;
-  QDialog* fTreeInfoDialog;
   QDialog* fShortcutsDialog;
   QTextEdit *fTreeInfoDialogInfos;
   QPushButton * fSceneTreeButtonApply;
@@ -274,11 +271,27 @@ private:
   QSlider* fSceneTreeDepthSlider;
   std::map <int, PVPath > fTreeItemModels;
   std::map <int, PVPath > fOldTreeItemModels;
-  std::map <int, Qt::CheckState> fSceneTreeQuickVisibilityMap;
+
+  // quick scene tree map
+  std::map <int, QTreeWidgetItem*> fPositivePoIndexSceneTreeWidgetQuickMap;
+  // old scene tree map
+  std::map <int, QTreeWidgetItem*> fOldPositivePoIndexSceneTreeWidgetQuickMap;
+  std::vector <QTreeWidgetItem*> fOldNullPoIndexSceneTreeWidgetQuickVector;
+  // old vis attr color map
+  std::map <int, QColor> fOldVisAttrColorMap;
+
   unsigned int fSceneTreeDepth;
   QTreeWidgetItem* fModelShortNameItem;
   int fNumber;
   int fMaxPOindexInserted;
+  G4UIQt* fUiQt;
+
+  // quick map index to find next item
+  std::map <int, QTreeWidgetItem*>::const_iterator fLastSceneTreeWidgetAskFor;
+
+  // quick map index to find next item
+  std::map <int, QTreeWidgetItem*>::const_iterator fOldLastSceneTreeWidgetAskFor;
+
 
 public Q_SLOTS :
   void startPauseVideo();
@@ -299,7 +312,6 @@ private Q_SLOTS :
 
   void showShortcuts();
   void toggleDrawingAction(int);
-  void toggleMouseAction(mouseActions);
   void toggleRepresentation(bool);
   void toggleProjection(bool);
   void toggleTransparency(bool);
@@ -313,7 +325,6 @@ private Q_SLOTS :
   void processEncodeStdout();
   void sceneTreeComponentItemChanged(QTreeWidgetItem* item, int id);
   void sceneTreeComponentSelected();
-  void changeTransparencyOnItem(int);
   void changeDepthInSceneTree(int);
   void changeSearchSelection();
   void changeColorAndTransparency(QTreeWidgetItem* item,int val);

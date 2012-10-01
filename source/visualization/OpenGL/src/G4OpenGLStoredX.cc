@@ -36,7 +36,7 @@
 
 #include "G4VisFeaturesOfOpenGL.hh"
 #include "G4VSceneHandler.hh"
-#include "G4OpenGLSceneHandler.hh"
+#include "G4OpenGLStoredSceneHandler.hh"
 #include "G4OpenGLViewer.hh"
 #include "G4OpenGLStoredX.hh"
 #include "G4OpenGLStoredXViewer.hh"

@@ -38,14 +38,10 @@
 #ifndef G4OPENGLSTOREDVIEWER_HH
 #define G4OPENGLSTOREDVIEWER_HH
 
-#include "G4VViewer.hh"
 #include "G4OpenGLViewer.hh"
-#include "G4OpenGLSceneHandler.hh"
-#include "G4OpenGLStoredSceneHandler.hh"
-#include "G4OpenGLTransform3D.hh"
-#include "globals.hh"
 
 class G4OpenGLStoredSceneHandler;
+class G4Colour;
 
 class G4OpenGLStoredViewer: virtual public G4OpenGLViewer {
   

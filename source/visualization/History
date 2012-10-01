@@ -24,6 +24,48 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+27th September 2012  John Allison  (vis-V09-05-39)
+- opengl-V09-05-38: Fix for smal bug and compiler warnings.
+
+27th September 2012  John Allison  (vis-V09-05-38)
+- visman-V09-05-32:
+  o Added an extra refresh for auto-refresh viewers at end of run.
+- opengl-V09-05-37:
+  o Major re-design of scene and transient processing.
+
+26th September 2012  John Allison
+- visman-V09-05-31: G4ViewParameters: Added useful Set methods.
+- visman-V09-05-29: Added G4VViewer::RefreshView().
+
+25th September 2012  John Allison  (vis-V09-05-37, co-works interfaces-V09-05-15)
+- modeling-V09-05-11:
+  o G4ArrowModel.cc: Added protection (limited width to length/50).
+- visman-V09-05-28:
+  o /vis/scene/add/axes: Added protection (limited width of axes to length/50).
+- opengl-V09-05-35:
+  o  Tidied up.
+- opengl-V09-05-36:
+  o A fix in Qt.
+- openinventor-V09-05-08:
+  o Pick up default vis attributes if primitive has none.
+
+24th September 2012  John Allison
+- opengl-V09-05-34 - needs interfaces-V09-05-15:
+  o Material (for surface rendering) follows glColor at all times.
+  o Changed glColor3d to glColor4d throughout.
+
+6th September 2012  John Allison  (vis-V09-05-36, co-works interfaces-V09-05-12)
+- visman-V09-05-27:
+  o Removed multi-requested parameter guidance.  Collapsed guidance to one
+    long string with '\n' for new lines.  (G4UIparameter cannot cope with
+    multi-line guidance.)
+- opengl-V09-05-31:
+  o G4OpenGLSceneHandler and G4OpenGLStoredSceneHandler:
+    . Protected against null result of dynamic_cast on viewer (shouldn't happen!!).
+
+4th September 2012  John Allison
+- modeling-V09-05-10: Bug fix for G4LogicalVolumeModel.
+
 9th August 2012  John Allison  (vis-V09-05-35, co-works interfaces-V09-05-11)
 - Tagged.
 

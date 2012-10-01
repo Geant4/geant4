@@ -83,6 +83,9 @@ public: // With description
   virtual void DrawView () = 0;
   // Draw view of the scene currently attached to the scene handler -
   // see example of a minimal function at end of this file.
+  
+  void RefreshView ();
+  // Simply invokes SetView, ClearView, DrawView.
 
   virtual void ShowView ();
   // Show view (for graphics systems which require to process

@@ -95,7 +95,7 @@ void G4OpenGLXViewer::SetView () {
   Bool success = glXMakeCurrent (dpy, win, cx);
   if (!success) {
     fViewId = -1;  // This flags an error.
-    G4cerr << "G4OpenGLViewer::G4OpenGLViewer failed to attach a GLX context."
+    G4cerr << "G4OpenGLXViewer::G4OpenGLXViewer failed to attach a GLX context."
            << G4endl;
     GLint error = GL_NO_ERROR;
     while ((error = glGetError()) != GL_NO_ERROR) {
@@ -132,14 +132,14 @@ void G4OpenGLXViewer::GetXConnection () {
   dpy = XOpenDisplay (0);
   if (!dpy) {
     fViewId = -1;  // This flags an error.
-    G4cerr << "G4OpenGLViewer::G4OpenGLViewer couldn't open display." << G4endl;
+    G4cerr << "G4OpenGLXViewer::G4OpenGLXViewer couldn't open display." << G4endl;
     return;
   }
 
 // make sure OpenGL is supported and installed properly.
   if (!glXQueryExtension (dpy, &errorBase, &eventBase)) {
     fViewId = -1;  // This flags an error.
-    G4cerr << "G4OpenGLViewer::G4OpenGLViewer X Server has no GLX extension." 
+    G4cerr << "G4OpenGLXViewer::G4OpenGLXViewer X Server has no GLX extension." 
 	 << G4endl;
     return;
   }
@@ -152,7 +152,7 @@ void G4OpenGLXViewer::CreateGLXContext (XVisualInfo* v) {
 // get window's attributes
   if (!XGetWindowAttributes(dpy, XRootWindow (dpy, vi -> screen), &xwa)) {
     fViewId = -1;  // This flags an error.
-    G4cerr << "G4OpenGLViewer::G4OpenGLViewer couldn't return window attributes"
+    G4cerr << "G4OpenGLXViewer::G4OpenGLXViewer couldn't return window attributes"
 	 << G4endl;
     return;
   }
@@ -161,7 +161,7 @@ void G4OpenGLXViewer::CreateGLXContext (XVisualInfo* v) {
   cx = glXCreateContext (dpy, vi, 0, true);
   if (!cx) {
     fViewId = -1;  // This flags an error.
-    G4cerr << "G4OpenGLViewer::G4OpenGLViewer couldn't create context."
+    G4cerr << "G4OpenGLXViewer::G4OpenGLXViewer couldn't create context."
 	 << G4endl;
     return;
   }
@@ -199,7 +199,7 @@ void G4OpenGLXViewer::CreateGLXContext (XVisualInfo* v) {
       fViewId = -1;  // This flags an error.
       if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cerr <<
-  "G4OpenGLViewer::G4OpenGLViewer failed to allocate a standard colormap."
+  "G4OpenGLXViewer::G4OpenGLXViewer failed to allocate a standard colormap."
 	       << G4endl;
       return;
     }
@@ -217,7 +217,7 @@ void G4OpenGLXViewer::CreateGLXContext (XVisualInfo* v) {
   if (!cmap) {
     fViewId = -1;  // This flags an error.
     if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
-      G4cout << "G4OpenGLViewer::G4OpenGLViewer failed to allocate a Colormap."
+      G4cout << "G4OpenGLXViewer::G4OpenGLXViewer failed to allocate a Colormap."
 	     << G4endl;
     return;
   }
@@ -294,7 +294,7 @@ void G4OpenGLXViewer::CreateMainWindow () {
   Bool success = glXMakeCurrent (dpy, win, cx);
   if (!success) {
     fViewId = -1;  // This flags an error.
-    G4cerr << "G4OpenGLViewer::G4OpenGLViewer failed to attach a GLX context."
+    G4cerr << "G4OpenGLXViewer::G4OpenGLXViewer failed to attach a GLX context."
 	 << G4endl;
     GLint error = GL_NO_ERROR;
     while ((error = glGetError()) != GL_NO_ERROR) {
@@ -374,7 +374,7 @@ void G4OpenGLXViewer::DrawText(const G4Text& g4text)
     }
 
     const G4Colour& c = fSceneHandler.GetTextColour(g4text);
-    glColor3d(c.GetRed(),c.GetGreen(),c.GetBlue());
+    glColor4d(c.GetRed(),c.GetGreen(),c.GetBlue(),c.GetAlpha());
 
     G4Point3D position = g4text.GetPosition();
 

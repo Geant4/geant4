@@ -17,6 +17,109 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27th September 2012  John Allison (opengl-V09-05-38)
+- G4OpenGLStoredSceneHandler, 
+  o Minor name changes to improve readability.
+  o Added #include <typeinfo> to fix compiler warnings on Linux.
+- G4OpenGLStoredViewer:
+  o Fix to enable switching from hidden markers to non-hidden and transparent
+    to opaque and v.v.
+- G4OpenGLSceneHandler.cc:
+  o Fix compiler warning on Linux.
+
+27th September 2012  John Allison (opengl-V09-05-37)
+- G4OpenGLSceneHandler, G4OpenGLImmediateSceneHandler, G4OpenGLStoredSceneHandler,
+  G4OpenGLStoredViewer:
+  o Major re-design of scene and transient processing:
+    . Three categories foreseen:
+      ~ Opaque
+      ~ To be treated as transparent
+      ~ To be treated as non-hidden.  This applies to markers and polylines if
+        hidden markers is _not_ requested, which is the default so that
+        trajectories are always visible even if drawing in surface style.
+        To change this - /vis/viewer/set/hiddenMarker true.
+    . Thus G4OpenGLSceneHandler::ProcessScene() is three-pass-capable.
+    . Also G4OpenGLStoredViewer::DrawDisplayLists makes three passes.
+    . Appropriate information is stored in the PO or TO.
+
+26th September 2012  Laurent Garnier
+- G4OpenGLQtViewer : Remove all "ApplyCommand"
+
+25th September 2012  John Allison (opengl-V09-05-36)
+- Tagged for system testing.
+
+25th September 2012  Laurent Garnier
+- G4OpenGLQtViewer : Fix a bug with setting color when changing vis parameters 
+  not taken in account
+
+25th September 2012  John Allison (opengl-V09-05-35)
+- G4OpenGLViewer:
+  o Revert to previous version.  glColorMaterial now in G4OpenGLSceneHandler.
+- G4OpenGLSceneHandler:
+  o Uses glColorMaterial judiciously for wireframe and surface (hsr) drawing:
+    . GL_FRONT_AND_BACK for transparent polyhedra;
+    . GL_FRONT for opaque (since back surfaces always hidden).
+  o However, use glMaterial as before for hidden edge (hlr and hlhsr).  Un-
+    fortunately this means "temporary" changes of colour, such as may be obtained
+    with the Qt viewer, are not respected.
+- G4OpenGLImmediateSceneHandler, G4OpenGLStoredSceneHandler, G4OpenGLStoredViewer:
+  o Paid proper respect to transparency_enabled (default = true).  If true use
+    glColor4d, else use glColor3d.
+
+24th September 2012  John Allison (opengl-V09-05-34 - needs interfaces-V09-05-15)
+- G4OpenGLImmediate/StoredQt.cc;
+  o Checked instantiation of G4UIQt.
+- G4OpenGLViewer::InitializeGLView:
+    // Material (for surface rendering) follows glColor at all times.
+    glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+    glEnable(GL_COLOR_MATERIAL);
+- G4OpenGLSceneHandler.cc:
+  o Commented out all uses of glMaterial.  Material now determined by glColor, since
+    we now specify glColorMaterial - see G4OpenGLViewer::InitializeGLView.
+  o Changed glColor3d to glColor4d.
+- G4OpenGLStoredViewer.cc:
+  o Changed glColor3d to glColor4d (except for "head time").
+- G4OpenGLViewer, G4OpenGLQtViewer.cc, G4OpenGLStoredSceneHandler, G4OpenGLXViewer.cc:
+  o Changed glColor3d to glColor4d.
+
+24th September 2012  John Allison (opengl-V09-05-33)
+- Tidied headers and improved comments.
+
+20th September Laurent Garnier
+- G4OpenGLViewer.cc : Fix uninitialize value
+- G4OpenGLQtViewer :
+  o 10x faster when getting color or visibility on element
+  o Avoid changing Vis Attributes when changing color on PO objects
+  o Fix problem on close/expand sometimes when rebuilding the scene
+  -> But last point means that the scene tree viewer is no longer working
+  on changing color/transparency, will be fix in next commit
+
+7th August 2012  Laurent Garnier
+- G4OpenGLViewer : Fix layout problem on gl2ps text
+- G4OpenGLXViewer : Typo
+
+6th August 2012  John Allison  (opengl-V09-05-31)
+- G4OpenGLSceneHandler and G4OpenGLStoredSceneHandler:
+  o Protected against null result of dynmic_cast on viewer (shouldn't happen!!).
+
+5th August 2012  Laurent Garnier
+- G4OpenGLQtViewer.cc, G4OpenGLStoredSceneHandler.cc
+  o Fix default 43903 43943 ...
+  o Fix potentiel compilation warning
+
+5th August 2012  Laurent Garnier  (opengl-V09-05-30, coworks interfaces-V09-05-12)
+- G4OpenGLImmediateQtViewer : Minor fix
+- G4OpenGLQtViewer.cc :
+  o Now take in account the GUI (interface package) icons status for move/rotate/pick
+  o Move scene tree widgets into tab instead of VBox
+  o Implement Zoom In/Out function, now it zoom on a specific point
+
+11th August 2012 Laurent Garnier
+- G4OpenGLQtViewer.cc/G4OpenGLStoredQtViewer: 
+  o Remove /vis/viewer/select command when changing transparency
+  o Fixed compilation warning
+  o Beginning of removing /vis/geometry/set/colour commands
+
 8th August 2012  John Allison  (opengl-V09-05-29)
 - G4OpenGLQtViewer.cc: Fixed "unused parameter" warning.
 
@@ -653,7 +756,7 @@ committal in the CVS repository !
 - Fix G4OpenGLXmViewer::get_boolean_userData (mask lower 16 bits).
 
 11th Octobre 2011 Laurent Garnier
-- move pan and rotation sensibility management in G4OpenGLViewer claa
+- move pan and rotation sensibility management in G4OpenGLViewer class
 - Integrate free rotation in all GL viewers
 - G4OpenGLQtViewer : Remove emit of non-used move/rotate signals, remove unused methods
 - OpenGL viewer : Implement ResetView (useful for Xm and Qt for the moment)

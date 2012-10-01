@@ -141,7 +141,7 @@ void G4OpenGLViewer::InitializeGLView ()
   
   glEnable (GL_BLEND);
   glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+  
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLViewer::InitializeGLView END\n");
 #endif
@@ -677,14 +677,24 @@ void G4OpenGLViewer::DrawText(const G4Text& g4text)
   if (isGl2psWriting()) {
 
     const G4Colour& c = fSceneHandler.GetTextColour(g4text);
-    glColor3d(c.GetRed(),c.GetGreen(),c.GetBlue());
+    glColor4d(c.GetRed(),c.GetGreen(),c.GetBlue(),c.GetAlpha());
     G4VSceneHandler::MarkerSizeType sizeType;
     G4double size = fSceneHandler.GetMarkerSize(g4text,sizeType);
-    //G4Point3D position = g4text.GetPosition();
+    G4Point3D position = g4text.GetPosition();
+
     G4String textString = g4text.GetText();
     const char* textCString = textString.c_str();
-    // Don't care about position
-    gl2psText(textCString,"Times-Roman",GLshort(size));
+
+    glRasterPos3d(position.x(),position.y(),position.z());
+    GLint align = GL2PS_TEXT_B;
+
+    switch (g4text.GetLayout()) {
+    case G4Text::left: align = GL2PS_TEXT_BL; break;
+    case G4Text::centre: align = GL2PS_TEXT_B; break;
+    case G4Text::right: align = GL2PS_TEXT_BR;
+    }
+    
+    gl2psTextOpt(textCString,"Times-Roman",GLshort(size),align,0);
 
   } else {
 
@@ -1085,5 +1095,6 @@ void G4OpenGLViewer::rotateSceneInViewDirection(G4double dx, G4double dy)
    fVP.SetUpVector(new_upUnit);
    fVP.SetViewAndLights (viewPoint);
 }
+
 
 #endif

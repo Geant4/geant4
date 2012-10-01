@@ -26,6 +26,30 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+27th September 2012  John Allison  (visman-V09-05-32)
+- G4VisManager.cc:
+  o Added an extra refresh for auto-refresh viewers at end of run.
+
+26th September 2012  John Allison  (visman-V09-05-31)
+- G4ViewParameters: Added:
+  o SetOrthogonalProjection();
+  o SetPerspectiveProjection(G4double fieldHalfAngle = 30. * deg);
+  o SetDefaultColour(const G4Colour&);
+  o SetDefaultTextColour(const G4Colour&);
+
+26th September 2012  John Allison  (visman-V09-05-29)
+- G4VViewer: Added non-virtual RefreshView() that simply calls SetView(),
+  ClearView(); DrawView().
+
+25th September 2012  John Allison  (visman-V09-05-28)
+- G4VisCommandsSceneAdd.cc: /vis/scene/add/axes:
+  o Added protection, limited width to length/50.
+
+6th September 2012  John Allison  (visman-V09-05-27)
+- G4VisCommandsSceneAdd.cc:
+  o Removed multi-requested parameter guidance.  Collapsed guidance to one
+    long string with '\n' for new lines.
+
 8th August 2012  John Allison  (visman-V09-05-26)
 - Tagged.
 

@@ -335,9 +335,11 @@ void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand*, G4String newValue) {
   }
   G4String annotation = G4BestUnit(length,"Length");
 
-  // Consult scene for arrow width.
+  // Consult scene for arrow width...
   G4double arrowWidth =
     0.005 * fCurrentLineWidth * sceneExtent.GetExtentRadius();
+  // ...but limit it to length/50.
+  if (arrowWidth > length/50.) arrowWidth = length/50.;
 
   G4VModel* model = new G4AxesModel
     (x0, y0, z0, length, arrowWidth, colourString, newValue);
@@ -1179,17 +1181,16 @@ G4VisCommandSceneAddLogo::G4VisCommandSceneAddLogo () {
   parameter->SetDefaultValue (1.);
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("unit", 's', omitable = true);
-  parameter->SetGuidance ("auto or valid length unit - defaults to auto.");
   parameter->SetGuidance
-    ("If automatic, roughly one tenth of scene extent.");
+    ("auto or valid length unit - defaults to auto."
+     "\nIf auto, height is roughly one tenth of scene extent.");
   parameter->SetDefaultValue ("auto");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("direction", 's', omitable = true);
-  parameter->SetGuidance ("auto|[-]x|[-]y|[-]z - defaults to auto.");
   parameter->SetGuidance
-    ("Direction of outward-facing normal to front face of logo.");
-  parameter->SetGuidance
-    ("If automatic, faces the user in the current viewer.");
+    ("auto|[-]x|[-]y|[-]z - defaults to auto."
+     "\nDirection of outward-facing normal to front face of logo."
+     "\nIf automatic, logo faces the user in the current viewer.");
   parameter->SetDefaultValue ("auto");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("red", 'd', omitable = true);
@@ -1702,15 +1703,15 @@ G4VisCommandSceneAddScale::G4VisCommandSceneAddScale () {
   parameter->SetDefaultValue (1.);
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("unit", 's', omitable = true);
-  parameter->SetGuidance ("auto or valid length unit - defaults to auto.");
   parameter->SetGuidance
-    ("If automatic, roughly one tenth of scene extent.");
+  ("auto or valid length unit - defaults to auto."
+   "\nIf auto, length is roughly one tenth of the scene extent.");
   parameter->SetDefaultValue ("auto");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("direction", 's', omitable = true);
-  parameter->SetGuidance ("auto|x|y|z - defaults to auto.");
   parameter->SetGuidance
-    ("If automatic, roughly in the plane of the current view.");
+  ("auto|x|y|z - defaults to auto."
+   "\nIf auto, scale is roughly in the plane of the current view.");
   parameter->SetDefaultValue ("auto");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("red", 'd', omitable = true);
@@ -1724,9 +1725,8 @@ G4VisCommandSceneAddScale::G4VisCommandSceneAddScale () {
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("auto|manual", 's', omitable = true);
   parameter->SetGuidance
-    ("Automatic placement or manual placement at (xmid,ymid,zmid).");
-  parameter->SetGuidance
-    ("If automatic, placed at bottom left of current view.");
+  ("Automatic placement or manual placement at (xmid,ymid,zmid)."
+   "\nIf automatic, scale is placed at bottom left of current view.");
   parameter -> SetParameterCandidates("auto manual");
   parameter->SetDefaultValue  ("auto");
   fpCommand->SetParameter     (parameter);

@@ -63,12 +63,15 @@ G4ArrowModel::G4ArrowModel
 
   // Make a cylinder slightly shorter than the arrow length so that it
   // doesn't stick out of the head.
-  const G4double shaftRadius = width/2.;
   const G4double shaftLength = std::sqrt
     (std::pow(x2-x1,2)+std::pow(y2-y1,2)+std::pow(z2-z1,2));
+  G4double shaftRadius = width/2.;
+  // Limit the radius
+  if (shaftRadius > shaftLength/100.) shaftRadius = shaftLength/100.;
   const G4double halfShaftLength = shaftLength/2.;
-  const G4double halfReduction = 2.*width;
-  G4Tubs shaft("shaft",0.,shaftRadius,halfShaftLength-halfReduction,0.,twopi);
+  const G4double halfReduction = 4.*shaftRadius;
+  const G4double halfLength = halfShaftLength-halfReduction;
+  G4Tubs shaft("shaft",0.,shaftRadius,halfLength,0.,twopi);
   fpShaftPolyhedron = shaft.CreatePolyhedron();
   // Move it a little so that the tail is at z = -halfShaftLength.
   fpShaftPolyhedron->Transform(G4Translate3D(0,0,-halfReduction));
@@ -78,8 +81,8 @@ G4ArrowModel::G4ArrowModel
   G4double r[] = {0,4,0};
   G4double z[] = {0,-6,-4};
   for (G4int i = 0; i < numRZ; i++) {
-    r[i] *= width;
-    z[i] = halfShaftLength + z[i] * width;
+    r[i] *= 2.*shaftRadius;
+    z[i] = halfShaftLength + z[i] * 2.*shaftRadius;
   }
   G4Polycone head("head",0,twopi,numRZ,r,z);
   fpHeadPolyhedron = head.CreatePolyhedron();

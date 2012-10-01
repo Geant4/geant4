@@ -1614,6 +1614,10 @@ void G4VisManager::EndOfRun ()
 	// action is taken for normal viewers like OGL, but
 	// file-writing viewers have to close the file.
 	fpViewer->ShowView();
+        // An extra refresh for auto-refresh viewers
+        if (fpViewer->GetViewParameters().IsAutoRefresh()) {
+          fpViewer->RefreshView();
+        }
 	fpSceneHandler->SetMarkForClearingTransientStore(true);
       }
     }

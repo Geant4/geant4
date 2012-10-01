@@ -40,6 +40,7 @@
 #include "G4OpenGLImmediateQtViewer.hh"
 #include "G4OpenGLViewerMessenger.hh"
 #include "G4OpenGLImmediateSceneHandler.hh"
+#include "G4UIQt.hh"
 
 G4OpenGLImmediateQt::G4OpenGLImmediateQt ():
   G4VGraphicsSystem ("OpenGLImmediateQt",
@@ -61,9 +62,18 @@ G4VViewer* G4OpenGLImmediateQt::CreateViewer
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLImmediateQt::CreateViewer \n");
 #endif
-  G4VViewer* pView =
-    new G4OpenGLImmediateQtViewer
-    ((G4OpenGLImmediateSceneHandler&) scene, name);
+  G4VViewer* pView = 0;
+  // Check that a Qt session has been opened
+  if (G4UIQt::IsInstantiated()) {
+    pView =
+    new G4OpenGLImmediateQtViewer((G4OpenGLImmediateSceneHandler&) scene, name);
+  } else {
+    G4Exception
+    ("G4OpenGLImmediateQt::CreateViewer",
+     "opengl3001", JustWarning,
+     "Attempt to open a Qt viewer in a non-Qt session.  Start again with"
+     "\na Qt session or open a non-Qt viewer, such as OGLIX.");
+  }
   if (pView) {
     if (pView -> GetViewId () < 0) {
       G4cerr << "G4OpenGLImmediateQt::CreateViewer: error flagged by negative"
@@ -81,7 +91,7 @@ G4VViewer* G4OpenGLImmediateQt::CreateViewer
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLImmediateQt::CreateViewer END \n");
 #endif
-   return pView;
+  return pView;
 }
 
 #endif

@@ -66,6 +66,8 @@ public: // With description
 
   void DescribeYourselfTo (G4VGraphicsScene&);
 
+  G4bool Validate (G4bool) {return true;}
+
 protected:
 
   // This called from G4PhysicalVolumeModel::DescribeAndDescend by the

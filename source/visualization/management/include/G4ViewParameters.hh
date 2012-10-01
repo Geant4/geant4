@@ -219,6 +219,8 @@ public: // With description
   // Also sets lightpoint direction according to G4bool fLightsMoveWithCamera.
   void SetUpVector             (const G4Vector3D& upVector);
   void SetFieldHalfAngle       (G4double fieldHalfAngle);
+  void SetOrthogonalProjection ();  // This and next use SetFieldHalfAngle.
+  void SetPerspectiveProjection(G4double fieldHalfAngle = 30. * deg);
   void SetZoomFactor           (G4double zoomFactor);
   void MultiplyZoomFactor      (G4double zoomFactorMultiplier);
   void SetScaleFactor          (const G4Vector3D& scaleFactor);
@@ -234,7 +236,9 @@ public: // With description
   void IncrementPan            (G4double right, G4double up, G4double forward);
   // Increment currentTarget point also along viewpoint direction.
   void SetDefaultVisAttributes (const G4VisAttributes&);
+  void SetDefaultColour        (const G4Colour&);  // Uses SetDefaultVisAttributes.
   void SetDefaultTextVisAttributes (const G4VisAttributes&);
+  void SetDefaultTextColour    (const G4Colour&);  // SetDefaultTextVisAttributes.
   void SetDefaultMarker        (const G4VMarker& defaultMarker);
   void SetGlobalMarkerScale    (G4double globalMarkerScale);
   void SetGlobalLineWidthScale (G4double globalLineWidthScale);

@@ -126,7 +126,8 @@ protected:
     GLuint fPickName;
     G4Colour fColour;
     G4TextPlus* fpG4TextPlus;
-    G4bool fDisplayOnSecondPassForTransparency;
+    G4bool fTransparent;
+    G4bool fMarkerOrPolyline;
   };
   std::vector<PO> fPOList; 
   
@@ -143,7 +144,8 @@ protected:
     G4double fStartTime, fEndTime;  // Time range (e.g., for trajectory steps).
     G4Colour fColour;
     G4TextPlus* fpG4TextPlus;
-    G4bool fDisplayOnSecondPassForTransparency;
+    G4bool fTransparent;
+    G4bool fMarkerOrPolyline;
   };
   std::vector<TO> fTOList; 
   

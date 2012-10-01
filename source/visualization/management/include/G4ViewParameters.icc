@@ -286,6 +286,14 @@ inline void G4ViewParameters::SetFieldHalfAngle (G4double fieldHalfAngle) {
   fFieldHalfAngle = fieldHalfAngle;
 }
 
+inline void G4ViewParameters::SetOrthogonalProjection () {
+  SetFieldHalfAngle(0.);
+}
+
+inline void G4ViewParameters::SetPerspectiveProjection(G4double fieldHalfAngle) {
+  SetFieldHalfAngle(fieldHalfAngle);
+}
+
 inline void G4ViewParameters::SetZoomFactor (G4double zoomFactor) {
   fZoomFactor = zoomFactor;
 }
@@ -321,9 +329,17 @@ inline void G4ViewParameters::SetDefaultVisAttributes
   fDefaultVisAttributes = defaultVisAttributes;
 }
 
+inline void G4ViewParameters::SetDefaultColour (const G4Colour& colour) {
+  fDefaultVisAttributes.SetColour (colour);
+}
+
 inline void G4ViewParameters::SetDefaultTextVisAttributes
 (const G4VisAttributes& defaultTextVisAttributes) {
   fDefaultTextVisAttributes = defaultTextVisAttributes;
+}
+
+inline void G4ViewParameters::SetDefaultTextColour (const G4Colour& colour) {
+  fDefaultTextVisAttributes.SetColour (colour);
 }
 
 inline void

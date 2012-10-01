@@ -57,11 +57,14 @@
 #include "G4OpenGLViewer.hh"
 #include "G4AttHolder.hh"
 
+#include <typeinfo>
+
 G4OpenGLStoredSceneHandler::PO::PO():
   fDisplayListId(0),
   fPickName(0),
   fpG4TextPlus(0),
-  fDisplayOnSecondPassForTransparency(false)
+  fTransparent(false),
+  fMarkerOrPolyline(false)
 {}
 
 G4OpenGLStoredSceneHandler::PO::PO(const G4OpenGLStoredSceneHandler::PO& po):
@@ -70,7 +73,8 @@ G4OpenGLStoredSceneHandler::PO::PO(const G4OpenGLStoredSceneHandler::PO& po):
   fPickName(po.fPickName),
   fColour(po.fColour),
   fpG4TextPlus(po.fpG4TextPlus? new G4TextPlus(*po.fpG4TextPlus): 0),
-  fDisplayOnSecondPassForTransparency(po.fDisplayOnSecondPassForTransparency)
+  fTransparent(po.fTransparent),
+  fMarkerOrPolyline(po.fMarkerOrPolyline)
 {}
 
 G4OpenGLStoredSceneHandler::PO::PO(G4int id, const G4Transform3D& tr):
@@ -78,7 +82,8 @@ G4OpenGLStoredSceneHandler::PO::PO(G4int id, const G4Transform3D& tr):
   fTransform(tr),
   fPickName(0),
   fpG4TextPlus(0),
-  fDisplayOnSecondPassForTransparency(false)
+  fTransparent(false),
+  fMarkerOrPolyline(false)
 {}
 
 G4OpenGLStoredSceneHandler::PO::~PO()
@@ -95,8 +100,8 @@ G4OpenGLStoredSceneHandler::PO& G4OpenGLStoredSceneHandler::PO::operator=
   fPickName = rhs.fPickName;
   fColour = rhs.fColour;
   fpG4TextPlus = rhs.fpG4TextPlus? new G4TextPlus(*rhs.fpG4TextPlus): 0;
-  fDisplayOnSecondPassForTransparency =
-    rhs.fDisplayOnSecondPassForTransparency;
+  fTransparent = rhs.fTransparent;
+  fMarkerOrPolyline = rhs.fMarkerOrPolyline;
   return *this;
 }
 
@@ -106,7 +111,8 @@ G4OpenGLStoredSceneHandler::TO::TO():
   fStartTime(-DBL_MAX),
   fEndTime(DBL_MAX),
   fpG4TextPlus(0),
-  fDisplayOnSecondPassForTransparency(false)
+  fTransparent(false),
+  fMarkerOrPolyline(false)
 {}
 
 G4OpenGLStoredSceneHandler::TO::TO(const G4OpenGLStoredSceneHandler::TO& to):
@@ -117,7 +123,8 @@ G4OpenGLStoredSceneHandler::TO::TO(const G4OpenGLStoredSceneHandler::TO& to):
   fEndTime(to.fEndTime),
   fColour(to.fColour),
   fpG4TextPlus(to.fpG4TextPlus? new G4TextPlus(*to.fpG4TextPlus): 0),
-  fDisplayOnSecondPassForTransparency(to.fDisplayOnSecondPassForTransparency)
+  fTransparent(to.fTransparent),
+  fMarkerOrPolyline(to.fMarkerOrPolyline)
 {}
 
 G4OpenGLStoredSceneHandler::TO::TO(G4int id, const G4Transform3D& tr):
@@ -127,7 +134,8 @@ G4OpenGLStoredSceneHandler::TO::TO(G4int id, const G4Transform3D& tr):
   fStartTime(-DBL_MAX),
   fEndTime(DBL_MAX),
   fpG4TextPlus(0),
-  fDisplayOnSecondPassForTransparency(false)
+  fTransparent(false),
+  fMarkerOrPolyline(false)
 {}
 
 G4OpenGLStoredSceneHandler::TO::~TO()
@@ -146,8 +154,8 @@ G4OpenGLStoredSceneHandler::TO& G4OpenGLStoredSceneHandler::TO::operator=
   fEndTime = rhs.fEndTime;
   fColour = rhs.fColour;
   fpG4TextPlus = rhs.fpG4TextPlus? new G4TextPlus(*rhs.fpG4TextPlus): 0;
-  fDisplayOnSecondPassForTransparency =
-    rhs.fDisplayOnSecondPassForTransparency;
+  fTransparent = rhs.fTransparent;
+  fMarkerOrPolyline = rhs.fMarkerOrPolyline;
   return *this;
 }
 
@@ -197,20 +205,68 @@ G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible
   const G4Colour& c = GetColour (visible);
   G4double opacity = c.GetAlpha ();
 
-  if (!fSecondPassForTransparency) {
-    G4bool transparency_enabled = true;
-    G4OpenGLViewer* pViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
-    if (pViewer) transparency_enabled = pViewer->transparency_enabled;
-    if (transparency_enabled && opacity < 1.) {
-      // On first pass, transparent objects are not drawn, but flag is set...
-      fSecondPassForTransparencyRequested = true;
-      return false;
-    }
+  G4bool transparency_enabled = true;
+  G4bool isMarkerNotHidden = true;
+  G4OpenGLViewer* pViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
+  if (pViewer) {
+    transparency_enabled = pViewer->transparency_enabled;
+    isMarkerNotHidden = pViewer->fVP.IsMarkerNotHidden();
   }
-
-  // On second pass, opaque objects are not drwan...
-  if (fSecondPassForTransparency && opacity >= 1.) return false;
-
+  
+  G4bool isMarker = false;
+  try {
+    dynamic_cast<const G4VMarker&>(visible);
+    isMarker = true;
+  }
+  catch (std::bad_cast) {}
+  
+  G4bool isPolyline = false;
+  try {
+    dynamic_cast<const G4Polyline&>(visible);
+    isPolyline = true;
+  }
+  catch (std::bad_cast) {}
+  
+  G4bool isTransparent = opacity < 1.;
+  G4bool isMarkerOrPolyline = isMarker || isPolyline;
+  G4bool treatAsTransparent = transparency_enabled && isTransparent;
+  G4bool treatAsNotHidden = isMarkerNotHidden && isMarkerOrPolyline;
+  
+  if (fThreePassCapable) {
+    
+    // Ensure transparent objects are drawn opaque ones and before
+    // non-hidden markers.  The problem of blending/transparency/alpha
+    // is quite a tricky one - see History of opengl-V07-01-01/2/3.
+    if (!(fSecondPassForTransparency || fThirdPassForNonHiddenMarkers)) {
+      // First pass...
+      if (treatAsTransparent) {  // Request pass for transparent objects...
+        fSecondPassForTransparencyRequested = true;
+      }
+      if (treatAsNotHidden) {    // Request pass for non-hidden markers...
+        fThirdPassForNonHiddenMarkersRequested = true;
+      }
+      // On first pass, transparent objects and non-hidden markers are not drawn...
+      if (treatAsTransparent || treatAsNotHidden) {
+        return false;
+      }
+    }
+    
+    // On second pass, only transparent objects are drawn...
+    if (fSecondPassForTransparency) {
+      if (!treatAsTransparent) {
+        return false;
+      }
+    }
+    
+    // On third pass, only non-hidden markers are drawn...
+    if (fThirdPassForNonHiddenMarkers) {
+      if (!treatAsNotHidden) {
+        return false;
+        
+      }
+    }
+  }  // fThreePassCapable
+  
   // Loads G4Atts for picking...
   if (fpViewer->GetViewParameters().IsPicking()) {
     glLoadName(++fPickName);
@@ -248,7 +304,8 @@ G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible
 	fpViewer->GetApplicableVisAttributes(visible.GetVisAttributes());
       to.fStartTime = pVA->GetStartTime();
       to.fEndTime = pVA->GetEndTime();
-      to.fDisplayOnSecondPassForTransparency = fSecondPassForTransparency;
+      to.fTransparent = isTransparent;
+      to.fMarkerOrPolyline = isMarkerOrPolyline;
       fTOList.push_back(to);
       // For transient objects, colour, transformation, are kept in
       // the TO, so should *not* be in the display list.  As mentioned
@@ -258,24 +315,33 @@ G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible
       glPushMatrix();
       G4OpenGLTransform3D oglt (fObjectTransformation);
       glMultMatrixd (oglt.GetGLMatrix ());
-      glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
+      if (transparency_enabled) {
+        glColor4d(c.GetRed(),c.GetGreen(),c.GetBlue(),c.GetAlpha());
+      } else {
+        glColor3d(c.GetRed(),c.GetGreen(),c.GetBlue());
+      }
       (void) ExtraTOProcessing(visible, fTOList.size() - 1);
-      // Ignore result of the above.  If this visible does not use gl
-      // commands, a display list is created that is empty and not
+      // Ignore return value of the above.  If this visible does not use
+      // gl commands, a display list is created that is empty and not
       // used.
       glNewList (fDisplayListId, GL_COMPILE_AND_EXECUTE);
     } else {
       PO po(fDisplayListId, fObjectTransformation);
       po.fPickName = fPickName;
       po.fColour = c;
-      po.fDisplayOnSecondPassForTransparency = fSecondPassForTransparency;
+      po.fTransparent = isTransparent;
+      po.fMarkerOrPolyline = isMarkerOrPolyline;
       fPOList.push_back(po);
       // For permanent objects, colour is kept in the PO, so should
       // *not* be in the display list.  This is so that sub-classes
       // may implement colour modifications according to their own
       // criteria, e.g., scen tree slider in Qt.  But for now set
       // colour for immediate display.
-      glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
+      if (transparency_enabled) {
+        glColor4d(c.GetRed(),c.GetGreen(),c.GetBlue(),c.GetAlpha());
+      } else {
+        glColor3d(c.GetRed(),c.GetGreen(),c.GetBlue());
+      }
       G4bool usesGLCommands = ExtraPOProcessing(visible, fPOList.size() - 1);
       // Transients are displayed as they come (GL_COMPILE_AND_EXECUTE
       // above) but persistents are compiled into display lists
@@ -294,7 +360,11 @@ G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible
     glPushMatrix();
     G4OpenGLTransform3D oglt (fObjectTransformation);
     glMultMatrixd (oglt.GetGLMatrix ());
-    glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
+    if (transparency_enabled) {
+      glColor4d(c.GetRed(),c.GetGreen(),c.GetBlue(),c.GetAlpha());
+    } else {
+      glColor3d(c.GetRed(),c.GetGreen(),c.GetBlue());
+    }
   }
 
   if (fProcessing2D) {
@@ -522,33 +592,42 @@ void G4OpenGLStoredSceneHandler::RequestPrimitives (const G4VSolid& solid)
     return;
   }
 
-  // For non-transient (run-duration) objects, ensure transparent
-  // objects are drawn last.  The problem of
-  // blending/transparency/alpha is quite a tricky one - see History
-  // of opengl-V07-01-01/2/3.
+  if (fThirdPassForNonHiddenMarkers) {
+    // Always draw non-hidden markers.
+    G4VSceneHandler::RequestPrimitives (solid);
+    return;
+  }
+  
   // Get vis attributes - pick up defaults if none.
   const G4VisAttributes* pVA =
-    fpViewer -> GetApplicableVisAttributes(fpVisAttribs);
+  fpViewer -> GetApplicableVisAttributes(fpVisAttribs);
+
   const G4Colour& c = pVA -> GetColour ();
   G4double opacity = c.GetAlpha ();
+  G4bool isOpaque = opacity >= 1.;
+  G4bool isTransparent = opacity < 1.;
 
+  // Ensure transparent objects are drawn opaque ones and before
+  // non-hidden markers.  The problem of blending/transparency/alpha
+  // is quite a tricky one - see History of opengl-V07-01-01/2/3.
   if (!fSecondPassForTransparency) {
     G4bool transparency_enabled = true;
     // Need access to method in G4OpenGLViewer.  static_cast doesn't work
-    // with a virtual base class, so use dynamic_cast.  No need to test
-    // the outcome since viewer is guaranteed to be a G4OpenGLViewer.
+    // with a virtual base class, so use dynamic_cast.
     G4OpenGLViewer* pViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
-    transparency_enabled = pViewer->transparency_enabled;
-    if (transparency_enabled && opacity < 1.) {
-      // On first pass, transparent objects are not drawn, but flag is set...
-      fSecondPassForTransparencyRequested = true;
-      return;
+    if (pViewer) {
+      transparency_enabled = pViewer->transparency_enabled;
+      if (transparency_enabled && isTransparent) {
+        // On first pass, transparent objects are not drawn, but flag is set...
+        fSecondPassForTransparencyRequested = true;
+        return;
+      }
     }
   }
 
   // On second pass, opaque objects are not drwan...
-  if (fSecondPassForTransparency && opacity >= 1.) return;
-
+  if (fSecondPassForTransparency && isOpaque) return;
+  
   G4PhysicalVolumeModel* pPVModel =
     dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
  
@@ -593,7 +672,7 @@ void G4OpenGLStoredSceneHandler::RequestPrimitives (const G4VSolid& solid)
 	po.fPickName = fPickName;
       }
       po.fColour = c;
-      po.fDisplayOnSecondPassForTransparency = fSecondPassForTransparency;
+      po.fTransparent = isTransparent;
       fPOList.push_back(po);
       // No need to test if gl commands are used (result of
       // ExtraPOProcessing) because we have already decided they will

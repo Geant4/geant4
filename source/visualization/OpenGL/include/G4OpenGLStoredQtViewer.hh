@@ -60,6 +60,7 @@ public:
   void paintGL();
   void updateQWidget();
   void ShowView ();
+  void DisplayTimePOColourModification (G4Colour&,size_t);
 
 protected:
 

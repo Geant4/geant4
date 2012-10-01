@@ -110,10 +110,16 @@ protected:
   G4int fEventsDrawInterval;
   // Number of events waiting to be flushed
   G4int fEventsWaitingToBeFlushed;
+  
+  // True if caller of primitives is capable of processing three passes.
+  G4bool fThreePassCapable;
 
   G4bool fSecondPassForTransparencyRequested;
-  G4bool fSecondPassForTransparency;       // ...in process.
-
+  G4bool fSecondPassForTransparency;
+  
+  G4bool fThirdPassForNonHiddenMarkersRequested;
+  G4bool fThirdPassForNonHiddenMarkers;
+  
   static const GLubyte fStippleMaskHashed [128];
 };
 

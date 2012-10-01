@@ -33,6 +33,7 @@
 
 #include "G4OpenGLViewer.hh"
 #include "G4OpenGLStoredViewer.hh"
+#include "G4OpenGLStoredSceneHandler.hh"
 #include "G4UImanager.hh"
 #include "G4UIcommand.hh"
 #include "G4UIdirectory.hh"

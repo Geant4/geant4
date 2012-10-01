@@ -90,6 +90,8 @@ private:
   void AddCircleSquare (G4OIMarker markerType, const G4VMarker&);
   void GeneratePrerequisites();
   void AddProperties(const G4VisAttributes*);
+  // AddTransform takes fObjectTransformation and "adds" a translation.
+  void AddTransform(const G4Point3D& translation = G4Point3D());
   std::map <G4LogicalVolume*, SoSeparator*,
     std::less <G4LogicalVolume*> > fSeparatorMap;
   SoSeparator* fRoot;
