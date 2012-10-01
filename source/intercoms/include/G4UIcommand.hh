@@ -142,6 +142,8 @@ class G4UIcommand
       { return parameter[i]; }
       inline std::vector<G4ApplicationState>* GetStateList()
       { return &availabelStateList; }
+      inline G4UImessenger * GetMessenger() const
+      { return messenger; }
   public: // with description
       inline void SetParameter(G4UIparameter *const newParameter)
       {
