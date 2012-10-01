@@ -50,6 +50,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4HadronicProcessStore.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Element.hh"
 #include "G4ProcessManager.hh"
 #include "G4Electron.hh"
@@ -135,11 +136,11 @@ G4HadronicProcessStore::G4HadronicProcessStore()
 G4double G4HadronicProcessStore::GetCrossSectionPerAtom(
                                  const G4ParticleDefinition* particle,
                                  G4double energy,
-                                 const G4VProcess* process,
+                                 const G4VProcess* proc,
                                  const G4Element*  element)
 {
   G4double cross = 0.;    
-  G4int subType = process->GetProcessSubType();      
+  G4int subType = proc->GetProcessSubType();      
   if (subType == fHadronElastic)   
     cross = GetElasticCrossSectionPerAtom(particle,energy,element);
   else if (subType == fHadronInelastic)   
@@ -158,11 +159,11 @@ G4double G4HadronicProcessStore::GetCrossSectionPerAtom(
 G4double G4HadronicProcessStore::GetCrossSectionPerVolume(
                                  const G4ParticleDefinition* particle,
                                  G4double energy,
-                                 const G4VProcess* process,
+                                 const G4VProcess* proc,
                                  const G4Material* material)
 {
   G4double cross = 0.;    
-  G4int subType = process->GetProcessSubType();      
+  G4int subType = proc->GetProcessSubType();      
   if (subType == fHadronElastic)   
     cross = GetElasticCrossSectionPerVolume(particle,energy,material);
   else if (subType == fHadronInelastic)   
@@ -695,7 +696,9 @@ void G4HadronicProcessStore::Dump(G4int level)
 			   pname == "pi+" ||
 			   pname == "pi-" ||
                            pname == "gamma" ||
+                           pname == "e+" ||
                            pname == "e-" ||
+                           pname == "mu+" ||
                            pname == "mu-" ||
 			   pname == "kaon+" ||
 			   pname == "kaon-" ||

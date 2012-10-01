@@ -35,6 +35,7 @@
 //
 // 17-JUN-98 F.W.Jones: removed extraneous code causing core dump.
 // 01-SEP-2008 V.Ivanchenko: use methods from the base class
+// 14-Sep-12 M.Kelsey -- Pass subType code to base ctor
 //
  
 #include "G4HadronInelasticProcess.hh"
@@ -44,9 +45,8 @@
   
 G4HadronInelasticProcess::G4HadronInelasticProcess(const G4String& processName,
                                                    G4ParticleDefinition* aParticle):
-  G4HadronicProcess(processName)
+  G4HadronicProcess(processName,fHadronInelastic)
 {
-  SetProcessSubType(fHadronInelastic);
   AddDataSet(new G4HadronInelasticDataSet());
   theParticle = aParticle;
 }

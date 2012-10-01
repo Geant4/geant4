@@ -42,7 +42,9 @@
 // 19-May-2008 V.Ivanchenko cleanup and added comments
 // 05-Jul-2010 V.Ivanchenko cleanup commented lines
 // 28-Jul-2012 M.Maire add function GetTargetDefinition() 
-//
+// 14-Sep-2012 Inherit from RestDiscrete, use subtype code (now in ctor) to
+//		configure base-class
+// 28-Sep-2012 M. Kelsey -- Undo inheritance change, keep new ctor
 
 #ifndef G4HadronicProcess_h
 #define G4HadronicProcess_h 1
@@ -68,9 +70,12 @@ class G4ParticleChange;
 class G4HadronicProcess : public G4VDiscreteProcess
 {
 public:
-    
-  G4HadronicProcess(const G4String& processName = "Hadronic", 
-		    G4ProcessType aType = fHadronic);    
+  G4HadronicProcess(const G4String& processName="Hadronic",
+		    G4ProcessType procType=fHadronic);    
+
+  // Preferred signature for subclasses, specifying their subtype here
+  G4HadronicProcess(const G4String& processName, 
+		    G4HadronicProcessType subType);    
 
   virtual ~G4HadronicProcess();
 
@@ -201,13 +206,15 @@ protected:
   void CheckEnergyMomentumConservation(const G4Track&, const G4Nucleus&);
 
 private:
-    
   G4double XBiasSurvivalProbability();
   G4double XBiasSecondaryWeight();
 
   // hide assignment operator as private 
   G4HadronicProcess& operator=(const G4HadronicProcess& right);
   G4HadronicProcess(const G4HadronicProcess&);
+
+  // Set E/p conservation check levels from environment variables
+  void GetEnergyMomentumCheckEnvvars();
 
 protected:
 
