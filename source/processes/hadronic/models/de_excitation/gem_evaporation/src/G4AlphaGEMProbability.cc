@@ -33,6 +33,7 @@
 // (based on notes added on proof in Dostrovskii's paper)
 
 #include "G4AlphaGEMProbability.hh"
+#include "G4SystemOfUnits.hh"
 
 G4AlphaGEMProbability::G4AlphaGEMProbability() :
     G4GEMProbability(4,2,0.0) // A,Z,Gamma

@@ -44,6 +44,8 @@
 // 04.05.2011 J. M. Quesada: added detailed printout for testing
 
 #include "G4FermiFragmentsPool.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4StableFermiFragment.hh"
 #include "G4B9FermiFragment.hh"
 #include "G4Be8FermiFragment.hh"

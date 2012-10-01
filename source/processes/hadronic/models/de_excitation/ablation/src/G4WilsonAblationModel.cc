@@ -76,7 +76,12 @@
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ////////////////////////////////////////////////////////////////////////////////
 //
+#include <iomanip>
+#include <numeric>
+
 #include "G4WilsonAblationModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
@@ -95,8 +100,6 @@
 #include "G4LorentzVector.hh"
 #include "G4VEvaporationChannel.hh"
 
-#include <iomanip>
-#include <numeric>
 ////////////////////////////////////////////////////////////////////////////////
 //
 G4WilsonAblationModel::G4WilsonAblationModel()

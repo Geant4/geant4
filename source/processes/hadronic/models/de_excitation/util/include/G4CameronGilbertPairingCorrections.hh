@@ -34,8 +34,8 @@
 #ifndef G4CameronGilbertPairingCorrections_h
 #define G4CameronGilbertPairingCorrections_h 1
 
+#include <CLHEP/Units/SystemOfUnits.h>
 #include "globals.hh"
-
 
 //#define verbose 1
 
@@ -60,7 +60,7 @@ public:
 
   G4double GetPairingZ(const G4int Z) const 
   {
-    if (IsInTableThisZ(Z)) return PairingZTable[Z-ZTableMin]*MeV;
+    if (IsInTableThisZ(Z)) return PairingZTable[Z-ZTableMin]*CLHEP::MeV;
     else {
 #ifdef verbose
       G4cerr << "G4CameronGilbertPairingCorrections: out of table for Z = " << Z << G4endl;
@@ -78,7 +78,7 @@ public:
 	
   G4double GetPairingN(const G4int N) const 
   {
-   if (IsInTableThisN(N)) return PairingNTable[N-NTableMin]*MeV;
+   if (IsInTableThisN(N)) return PairingNTable[N-NTableMin]*CLHEP::MeV;
     else {
 #ifdef verbose
       G4cerr << "G4CameronGilbertPairingCorrections: out of table for N = " << N << G4endl;

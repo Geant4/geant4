@@ -41,6 +41,8 @@
 // 28.10.10 V.Ivanchenko defined members in constructor and cleaned up
 
 #include "G4StatMFMacroTemperature.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 G4StatMFMacroTemperature::G4StatMFMacroTemperature(const G4double anA, const G4double aZ, 
   const G4double ExEnergy, const G4double FreeE0, const G4double kappa, 

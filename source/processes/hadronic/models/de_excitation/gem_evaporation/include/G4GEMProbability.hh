@@ -42,6 +42,8 @@
 #ifndef G4GEMProbability_h
 #define G4GEMProbability_h 1
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4VEmissionProbability.hh"
 #include "G4VLevelDensityParameter.hh"
 #include "G4EvaporationLevelDensityParameter.hh"
@@ -218,7 +220,7 @@ G4GEMProbability::CalcBetaParam(const G4Fragment & fragment) const
   //on proof in Dostrovskii's paper)
   G4double res;
   if(GetZ_asInt() == 0) {
-    res = (1.66/fG4pow->Z23(fragment.GetA_asInt()-GetA_asInt())-0.05)*MeV/
+    res = (1.66/fG4pow->Z23(fragment.GetA_asInt()-GetA_asInt())-0.05)*CLHEP::MeV/
 	   CalcAlphaParam(fragment);
   } else {
     res = -GetCoulombBarrier(fragment);

@@ -31,8 +31,8 @@
 // by V. Lara
 
 #include "G4StatMFFragment.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4HadronicException.hh"
-
 
 // Copy constructor
 G4StatMFFragment::G4StatMFFragment(const G4StatMFFragment & )

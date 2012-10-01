@@ -36,6 +36,7 @@
 // 17-11-2010 V.Ivanchenko integer Z and A
 
 #include "G4TritonEvaporationProbability.hh"
+#include "G4SystemOfUnits.hh"
 
 G4TritonEvaporationProbability::G4TritonEvaporationProbability() :
     G4EvaporationProbability(3,1,2,&theCoulombBarrier) // A,Z,Gamma,&theCoulombBarrier

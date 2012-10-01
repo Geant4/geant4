@@ -37,7 +37,7 @@
 
 
 #include "G4DeuteronEvaporationProbability.hh"
-
+#include "G4SystemOfUnits.hh"
 
 G4DeuteronEvaporationProbability::G4DeuteronEvaporationProbability() :
     G4EvaporationProbability(2,1,3,&theCoulombBarrier) // A,Z,Gamma (fixed JMQ)

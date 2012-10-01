@@ -31,6 +31,8 @@
 //
 
 #include "G4O17GEMProbability.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 G4O17GEMProbability::G4O17GEMProbability() :
   G4GEMProbability(17,9,5.0/2.0) // A,Z,Spin

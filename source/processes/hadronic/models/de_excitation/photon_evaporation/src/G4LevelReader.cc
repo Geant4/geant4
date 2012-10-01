@@ -42,6 +42,7 @@
 
 #include "G4LevelReader.hh"
 #include "G4NucLevel.hh"
+#include "G4SystemOfUnits.hh"
 
 G4LevelReader::G4LevelReader() 
   : nLevels(0),nLevelMax(50),fVerbose(0),fMinProbability(1.e-10)

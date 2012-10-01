@@ -31,6 +31,8 @@
 // by V. Lara
 
 #include "G4StatMFMacroNucleon.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 // Operators
 

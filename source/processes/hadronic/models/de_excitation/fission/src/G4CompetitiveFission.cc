@@ -39,6 +39,8 @@
 #include "G4PairingCorrection.hh"
 #include "G4ParticleMomentum.hh"
 #include "G4Pow.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 G4CompetitiveFission::G4CompetitiveFission() : G4VEvaporationChannel("fission")
 {

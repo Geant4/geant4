@@ -29,8 +29,8 @@
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
 
-
 #include "G4PairingCorrection.hh"
+#include "G4SystemOfUnits.hh"
 
 G4PairingCorrection* G4PairingCorrection::theInstance = 0;
 

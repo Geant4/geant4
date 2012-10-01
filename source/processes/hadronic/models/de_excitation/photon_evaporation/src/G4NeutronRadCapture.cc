@@ -36,6 +36,7 @@
 //
 
 #include "G4NeutronRadCapture.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Fragment.hh"
 #include "G4FragmentVector.hh"

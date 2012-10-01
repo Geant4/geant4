@@ -63,7 +63,10 @@
 //    objects, propagate G4PhotonEvaporation pointer to G4Evaporation class and 
 //    not delete it here 
 
+#include <list>
+
 #include "G4ExcitationHandler.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4LorentzVector.hh"
 #include "G4NistManager.hh"
 #include "G4ParticleTable.hh"
@@ -81,8 +84,6 @@
 #include "G4PhotonEvaporation.hh"
 #include "G4FermiBreakUp.hh"
 #include "G4FermiFragmentsPool.hh"
-
-#include <list>
 
 G4ExcitationHandler::G4ExcitationHandler():
   maxZForFermiBreakUp(9),maxAForFermiBreakUp(17),minEForMultiFrag(4*GeV),

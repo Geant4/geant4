@@ -38,6 +38,8 @@
 
 #include "G4GEMChannel.hh"
 #include "G4PairingCorrection.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Pow.hh"
 
 G4GEMChannel::G4GEMChannel(G4int theA, G4int theZ, const G4String & aName,

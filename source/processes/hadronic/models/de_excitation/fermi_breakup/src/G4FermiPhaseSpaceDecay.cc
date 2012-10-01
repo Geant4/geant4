@@ -36,11 +36,11 @@
 //          - DumpProblem method is added providing more information
 //          - Reduced usage of exotic std functions  
 
+#include <numeric>
 
 #include "G4FermiPhaseSpaceDecay.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4HadronicException.hh"
-
-#include <numeric>
 
 G4FermiPhaseSpaceDecay::G4FermiPhaseSpaceDecay()
 {

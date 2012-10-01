@@ -52,6 +52,8 @@
 
 #include "G4GEMProbability.hh"
 #include "G4PairingCorrection.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 G4GEMProbability:: G4GEMProbability(G4int anA, G4int aZ, G4double aSpin) : 
   theA(anA), theZ(aZ), Spin(aSpin), theCoulombBarrierPtr(0), 

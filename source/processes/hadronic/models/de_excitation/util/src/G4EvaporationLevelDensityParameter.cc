@@ -33,6 +33,7 @@
 
 
 #include "G4EvaporationLevelDensityParameter.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4HadronicException.hh"
 
 // Those values are from table 3 in 

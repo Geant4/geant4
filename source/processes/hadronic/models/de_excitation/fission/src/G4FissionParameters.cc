@@ -34,6 +34,7 @@
 //J. M. Quesada (30.10.09): retuning for IAEA spallation data
 
 #include "G4FissionParameters.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4HadronicException.hh"
 
 

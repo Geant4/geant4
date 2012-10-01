@@ -30,11 +30,13 @@
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
 
+#include <numeric>
 
 #include "G4StatMFMicroCanonical.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4HadronicException.hh"
 #include "G4Pow.hh"
-#include <numeric>
 
 // constructor
 G4StatMFMicroCanonical::G4StatMFMicroCanonical(G4Fragment const & theFragment) 

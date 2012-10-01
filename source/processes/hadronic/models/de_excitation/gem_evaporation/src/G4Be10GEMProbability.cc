@@ -31,8 +31,8 @@
 // by V. Lara (Nov 1999)
 //
 
-
 #include "G4Be10GEMProbability.hh"
+#include "G4SystemOfUnits.hh"
 
 G4Be10GEMProbability::G4Be10GEMProbability() :
   G4GEMProbability(10,4,0.0) // A,Z,Spin

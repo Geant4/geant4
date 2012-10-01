@@ -36,6 +36,7 @@
 // 17-11-2010 V.Ivanchenko integer Z and A
 
 #include "G4NeutronEvaporationProbability.hh"
+#include "G4SystemOfUnits.hh"
 
 G4NeutronEvaporationProbability::G4NeutronEvaporationProbability() :
     G4EvaporationProbability(1,0,2,&theCoulombBarrier) // A,Z,Gamma,&theCoulombBarrier

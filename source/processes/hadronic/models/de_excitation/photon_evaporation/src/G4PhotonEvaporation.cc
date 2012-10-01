@@ -59,6 +59,7 @@
 #include "G4PhotonEvaporation.hh"
 
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4Gamma.hh"
 #include "G4LorentzVector.hh"

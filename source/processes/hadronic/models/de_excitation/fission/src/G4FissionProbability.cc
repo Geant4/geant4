@@ -35,6 +35,7 @@
 
 
 #include "G4FissionProbability.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4PairingCorrection.hh"
 
 G4FissionProbability::G4FissionProbability()

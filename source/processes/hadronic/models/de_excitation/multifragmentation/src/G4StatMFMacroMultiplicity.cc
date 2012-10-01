@@ -37,6 +37,7 @@
 //          solver of equation for the chemical potential
 
 #include "G4StatMFMacroMultiplicity.hh"
+#include "G4PhysicalConstants.hh"
 
 // operators definitions
 G4StatMFMacroMultiplicity & 

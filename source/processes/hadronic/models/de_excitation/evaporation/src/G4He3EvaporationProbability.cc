@@ -36,6 +36,7 @@
 // 17-11-2010 V.Ivanchenko integer Z and A
 
 #include "G4He3EvaporationProbability.hh"
+#include "G4SystemOfUnits.hh"
 
 G4He3EvaporationProbability::G4He3EvaporationProbability() :
    G4EvaporationProbability(3,2,2,&theCoulombBarrier) // A,Z,Gamma,&theCoulombBarrier

@@ -37,6 +37,8 @@
 //          symmetry energy 
 
 #include "G4StatMFMacroMultiNucleon.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 // Default constructor
 G4StatMFMacroMultiNucleon::

@@ -30,6 +30,8 @@
 #include "G4GEMCoulombBarrier.hh"
 #include "G4HadronicException.hh"
 #include "G4Pow.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 G4GEMCoulombBarrier::G4GEMCoulombBarrier(G4int anA, G4int aZ) :
   G4VCoulombBarrier(anA,aZ) 

@@ -36,6 +36,8 @@
 // 17-11-2010 V.Ivanchenko integer Z and A
 
 #include "G4ProtonEvaporationProbability.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 G4ProtonEvaporationProbability::G4ProtonEvaporationProbability() :
     G4EvaporationProbability(1,1,2,&theCoulombBarrier) // A,Z,Gamma,&theCoulombBarrier

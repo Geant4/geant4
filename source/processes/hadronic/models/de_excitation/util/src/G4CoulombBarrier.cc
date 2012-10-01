@@ -32,10 +32,13 @@
 // 14-11-2007 modified barrier by JMQ (test30) 
 // 15-11-2010 V.Ivanchenko use G4Pow and cleanup 
 
+#include <sstream>
+
 #include "G4CoulombBarrier.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4HadronicException.hh"
 #include "G4Pow.hh"
-#include <sstream>
 
 G4CoulombBarrier::G4CoulombBarrier(): G4VCoulombBarrier(1,0) 
 {}

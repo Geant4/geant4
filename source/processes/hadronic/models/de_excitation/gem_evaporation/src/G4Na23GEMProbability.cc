@@ -31,6 +31,7 @@
 //
 
 #include "G4Na23GEMProbability.hh"
+#include "G4SystemOfUnits.hh"
 
 G4Na23GEMProbability::G4Na23GEMProbability() :
   G4GEMProbability(23,11,3.0/2.0) // A,Z,Spin

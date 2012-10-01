@@ -54,9 +54,11 @@
 #ifndef G4NUCLEARLEVELMANAGER_HH
 #define G4NUCLEARLEVELMANAGER_HH 1
 
+#include <iosfwd>
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
 #include "G4PtrLevelVector.hh"
-#include <iosfwd>
 
 class G4NuclearLevel;
 
@@ -81,7 +83,7 @@ public:
   const G4NuclearLevel* GetLevel(G4int i) const;
 
   const G4NuclearLevel* NearestLevel(G4double energy,
-				     G4double eDiffMax=9999.*GeV) const;
+				     G4double eDiffMax=9999.*CLHEP::GeV) const;
 
   const G4NuclearLevel* LowestLevel() const;
   const G4NuclearLevel* HighestLevel() const;

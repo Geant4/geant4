@@ -31,8 +31,9 @@
 // --------------------------------------------------------------------
 
 #include "G4StatMFMicroPartition.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4HadronicException.hh"
-
 
 // Copy constructor
 G4StatMFMicroPartition::G4StatMFMicroPartition(const G4StatMFMicroPartition & )

@@ -37,8 +37,9 @@
 //          a fagment with Z=A; fixed memory leak
 
 #include "G4StatMFMacroCanonical.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Pow.hh"
-
 
 // constructor
 G4StatMFMacroCanonical::G4StatMFMacroCanonical(const G4Fragment & theFragment) 

@@ -32,7 +32,7 @@
 
 
 #include "G4StatMFParameters.hh"
-
+#include "G4SystemOfUnits.hh"
 
 const G4double G4StatMFParameters::_Kappa = 1.0; // dimensionless
 

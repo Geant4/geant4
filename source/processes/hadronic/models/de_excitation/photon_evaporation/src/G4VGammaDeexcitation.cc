@@ -59,6 +59,7 @@
 #include "G4VGammaDeexcitation.hh"
 
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
 #include "Randomize.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"

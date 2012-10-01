@@ -44,6 +44,7 @@
 
 #include "G4UnstableFragmentBreakUp.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4LorentzVector.hh"
 #include "G4Fragment.hh"
 #include "G4FragmentVector.hh"

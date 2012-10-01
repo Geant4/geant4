@@ -31,6 +31,7 @@
 //
 
 #include "G4Ne21GEMProbability.hh"
+#include "G4SystemOfUnits.hh"
 
 G4Ne21GEMProbability::G4Ne21GEMProbability() :
   G4GEMProbability(21,10,3.0/2.0) // A,Z,Spin

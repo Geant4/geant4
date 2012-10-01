@@ -35,10 +35,11 @@
 #ifndef G4CoulombBarrier_h
 #define G4CoulombBarrier_h 1
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
+#include "globals.hh"
 #include "G4VCoulombBarrier.hh"
 #include "G4HadronicException.hh"
-#include "globals.hh"
-
 
 class G4CoulombBarrier : public G4VCoulombBarrier
 {
@@ -62,7 +63,7 @@ private:
 
   inline G4double CalcCompoundRadius(const G4double ZRes) const 
   {
-    return 2.173*fermi*(1.0+0.006103*static_cast<G4double>(GetZ())*ZRes)/
+    return 2.173*CLHEP::fermi*(1.0+0.006103*static_cast<G4double>(GetZ())*ZRes)/
       (1.0+0.009443*static_cast<G4double>(GetZ())*ZRes);
   }
 };

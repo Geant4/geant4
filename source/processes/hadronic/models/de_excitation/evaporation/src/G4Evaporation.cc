@@ -48,6 +48,7 @@
 // V.Ivanchenko (23 January 2012) added pointer of G4VPhotonEvaporation 
 
 #include "G4Evaporation.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4EvaporationFactory.hh"
 #include "G4EvaporationGEMFactory.hh"
 #include "G4EvaporationDefaultGEMFactory.hh"

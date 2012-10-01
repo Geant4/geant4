@@ -31,6 +31,8 @@
 //
 
 #include "G4F20GEMProbability.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 G4F20GEMProbability::G4F20GEMProbability() :
   G4GEMProbability(20,9,2.0) // A,Z,Spin

@@ -55,6 +55,8 @@
 #include "G4VLevelDensityParameter.hh"
 #include "G4ConstantLevelDensityParameter.hh"
 #include "G4RandGeneralTmp.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4Pow.hh"
 

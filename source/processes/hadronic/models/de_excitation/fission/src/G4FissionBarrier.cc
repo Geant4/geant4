@@ -33,6 +33,7 @@
 // 17.11.2010 V.Ivanchenko cleanup and add usage of G4Pow
 
 #include "G4FissionBarrier.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Pow.hh"
 
 G4FissionBarrier::G4FissionBarrier()

@@ -30,8 +30,8 @@
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
 
-
 #include "G4StatMFMacroChemicalPotential.hh"
+#include "G4PhysicalConstants.hh"
 
 // operators definitions
 G4StatMFMacroChemicalPotential & 

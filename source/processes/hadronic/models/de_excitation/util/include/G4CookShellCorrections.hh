@@ -34,6 +34,8 @@
 #ifndef G4CookShellCorrections_h
 #define G4CookShellCorrections_h 1
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh" 
 
 //#define verbose 1
@@ -60,7 +62,7 @@ public:
 
   G4double GetShellZ(const G4int Z) const 
   {
-    if ( this->IsInTableThisZ(Z) ) return ShellZTable[Z-ZTableMin]*MeV;
+    if ( this->IsInTableThisZ(Z) ) return ShellZTable[Z-ZTableMin]*CLHEP::MeV;
     else {
 #ifdef verbose
       G4cerr << "G4CookShellCorrections: out of table for Z = " << Z << G4endl;
@@ -77,7 +79,7 @@ public:
   
   G4double GetShellN(const G4int N) const 
   {
-    if ( this->IsInTableThisN(N) ) return ShellNTable[N-NTableMin]*MeV;
+    if ( this->IsInTableThisN(N) ) return ShellNTable[N-NTableMin]*CLHEP::MeV;
     else {
 #ifdef verbose
       G4cerr << "G4CookShellCorrections: out of table for N = " << N << G4endl;

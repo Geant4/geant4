@@ -31,6 +31,7 @@
 //
 
 #include "G4Li9GEMProbability.hh"
+#include "G4SystemOfUnits.hh"
 
 G4Li9GEMProbability::G4Li9GEMProbability() :
   G4GEMProbability(9,3,3.0/2.0) // A,Z,Spin

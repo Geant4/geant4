@@ -43,6 +43,7 @@
 #include "G4E1Probability.hh"
 #include "Randomize.hh"
 #include "G4Pow.hh"
+#include "G4SystemOfUnits.hh"
 
 // Constructors and operators
 //

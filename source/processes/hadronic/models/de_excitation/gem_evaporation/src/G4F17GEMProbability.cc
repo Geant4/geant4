@@ -31,6 +31,7 @@
 //
 
 #include "G4F17GEMProbability.hh"
+#include "G4SystemOfUnits.hh"
 
 G4F17GEMProbability::G4F17GEMProbability() :
   G4GEMProbability(17,9,5.0/2.0) // A,Z,Spin

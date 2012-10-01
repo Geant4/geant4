@@ -44,6 +44,8 @@
 #include "G4NucleiProperties.hh"
 #include "G4Pow.hh"
 #include "G4EvaporationLevelDensityParameter.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4Alpha.hh"
 
