@@ -61,6 +61,7 @@
 //
 
 #include "G4FissionLibrary.hh"
+#include "G4SystemOfUnits.hh"
 
 G4FissionLibrary::G4FissionLibrary()
   : G4NeutronHPFinalState()

@@ -58,6 +58,7 @@
 
 #include <cmath>
 #include "G4fissionEvent.hh"
+#include "G4PhysicalConstants.hh"
 
 void G4fissionEvent::G4SmpIsoDir(G4double* cosdiru, G4double* cosdirv, G4double* cosdirw) {
 

@@ -60,6 +60,7 @@
 // A prototype of the low energy neutron transport model.
 //
 #include "G4FissLib.hh"
+#include "G4SystemOfUnits.hh"
 
 G4FissLib::G4FissLib()
 {
