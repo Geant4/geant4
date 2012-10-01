@@ -77,11 +77,8 @@ void G4BlineEventAction::BeginOfEventAction(const G4Event*)
 void G4BlineEventAction::EndOfEventAction(const G4Event* evt)
 {
   G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
-  G4int n_trajectories = 0;
   if(trajectoryContainer) 
   {
-    n_trajectories = trajectoryContainer->entries(); 
-   
     // visualisation
     // -------------
   

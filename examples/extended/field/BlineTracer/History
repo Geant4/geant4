@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+
+21st September 2012  Ivana Hrivnacova (BlineTracer-V09-05-02)
+- Fixed compiler warning (unused variable in G4BlineEventAction.cc)
+
 5th April 2012  Laurent Desorgher  (BlineTracer-V09-05-01)
 - Update/Review of the code according to coding guide line 2.1
 
