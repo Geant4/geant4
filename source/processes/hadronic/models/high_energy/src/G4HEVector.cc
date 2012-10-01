@@ -29,9 +29,6 @@
 //
 //
 
-#include "globals.hh"
-#include "G4ios.hh"
-
 //
 // G4 Gheisha friend class G4GHEVector
 // J.L. Chuma, TRIUMF, 22-Feb-1996
@@ -39,6 +36,10 @@
 // Fesefeldt, bug fixed in Defs1, 14 August 2000
 
 #include "G4HEVector.hh"
+#include "globals.hh"
+#include "G4ios.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 
 G4HEVector::G4HEVector(const G4HadProjectile * aParticle)

@@ -26,9 +26,6 @@
 // $Id: G4HEXiMinusInelastic.cc,v 1.17 2010-11-29 05:44:44 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
-#include "globals.hh"
-#include "G4ios.hh"
-
 // G4 Process: Gheisha High Energy Collision model.
 // This includes the high energy cascading model, the two-body-resonance model
 // and the low energy two-body model. Not included are the low energy stuff
@@ -38,7 +35,9 @@
 // H. Fesefeldt, RWTH-Aachen, 23-October-1996
  
 #include "G4HEXiMinusInelastic.hh"
-
+#include "globals.hh"
+#include "G4ios.hh"
+#include "G4PhysicalConstants.hh"
 
 void G4HEXiMinusInelastic::ModelDescription(std::ostream& outFile) const
 {

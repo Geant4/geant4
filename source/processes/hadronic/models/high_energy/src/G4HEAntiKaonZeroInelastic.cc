@@ -27,9 +27,6 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#include "globals.hh"
-#include "G4ios.hh"
-
 // G4 Process: Gheisha High Energy Collision model.
 // This includes the high energy cascading model, the two-body-resonance model
 // and the low energy two-body model. Not included is the low energy stuff like
@@ -40,8 +37,10 @@
 //
  
 #include "G4HEAntiKaonZeroInelastic.hh"
-#include <iostream>
-
+#include "globals.hh"
+#include "G4ios.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 G4HEAntiKaonZeroInelastic::G4HEAntiKaonZeroInelastic(const G4String& name)
  : G4HEInelastic(name)

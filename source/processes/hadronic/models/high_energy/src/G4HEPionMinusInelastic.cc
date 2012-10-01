@@ -29,10 +29,6 @@
 // 11-OCT-2007 F.W. Jones: fixed incorrect Imax (should be Imin) in
 //             sampling of charge exchange.
 
-
-#include "globals.hh"
-#include "G4ios.hh"
-
 // G4 Process: Gheisha High Energy Collision model.
 // This includes the high energy cascading model, the two-body-resonance model
 // and the low energy two-body model. Not included are the low energy stuff
@@ -42,7 +38,9 @@
 // H. Fesefeldt, RWTH-Aachen, 23-October-1996
  
 #include "G4HEPionMinusInelastic.hh"
-
+#include "globals.hh"
+#include "G4ios.hh"
+#include "G4PhysicalConstants.hh"
 
 void G4HEPionMinusInelastic::ModelDescription(std::ostream& outFile) const
 {

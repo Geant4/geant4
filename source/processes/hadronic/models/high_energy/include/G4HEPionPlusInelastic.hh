@@ -46,6 +46,8 @@
 
 // Class Description - End
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4HEInelastic.hh"
 
 class G4HEPionPlusInelastic : public G4HEInelastic  
@@ -54,8 +56,8 @@ class G4HEPionPlusInelastic : public G4HEInelastic
     G4HEPionPlusInelastic() : G4HEInelastic("G4HEPionPlusInelastic")
     {
       vecLength = 0;
-      theMinEnergy = 45*GeV;
-      theMaxEnergy = 10*TeV;
+      theMinEnergy = 45*CLHEP::GeV;
+      theMaxEnergy = 10*CLHEP::TeV;
       MAXPART      = 2048;
       verboseLevel = 0; 
     }

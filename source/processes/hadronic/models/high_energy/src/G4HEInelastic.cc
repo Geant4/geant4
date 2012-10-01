@@ -25,9 +25,6 @@
 //
 //
 
-#include "globals.hh"
-#include "G4ios.hh"
-
 //
 // G4 Process: Gheisha High Energy Collision model.
 // This includes the high energy cascading model, the two-body-resonance model
@@ -43,6 +40,10 @@
 // Fesefeldt, fixed next bug in TuningOfHighEnergyCascading, 14 August 2000
 //
 #include "G4HEInelastic.hh"
+#include "globals.hh"
+#include "G4ios.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4HEVector.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4DynamicParticle.hh"

@@ -46,6 +46,7 @@
 
 // Class Description - End
 
+#include <CLHEP/Units/SystemOfUnits.h>
 #include "G4HEInelastic.hh"
 
 class G4HEAntiXiZeroInelastic : public G4HEInelastic  
@@ -54,8 +55,8 @@ class G4HEAntiXiZeroInelastic : public G4HEInelastic
     G4HEAntiXiZeroInelastic() : G4HEInelastic("G4HEAntiXiZeroInelastic")
     {
       vecLength = 0;
-      theMinEnergy = 20*GeV;
-      theMaxEnergy = 10*TeV;
+      theMinEnergy = 20*CLHEP::GeV;
+      theMaxEnergy = 10*CLHEP::TeV;
       MAXPART      = 2048;
       verboseLevel = 0; 
     }

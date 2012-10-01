@@ -47,6 +47,7 @@
 
 // Class Description - End
 
+#include <CLHEP/Units/SystemOfUnits.h>
 
 #include "G4HEInelastic.hh"
 
@@ -55,8 +56,8 @@ class G4HEKaonZeroShortInelastic : public G4HEInelastic
   public:  // with description
     G4HEKaonZeroShortInelastic() : G4HEInelastic("G4HEKaonZeroShortInelastic") 
     {
-      theMinEnergy = 20*GeV;
-      theMaxEnergy = 10*TeV;
+      theMinEnergy = 20*CLHEP::GeV;
+      theMaxEnergy = 10*CLHEP::TeV;
       MAXPART      = 2048;
       verboseLevel = 0; 
     }
