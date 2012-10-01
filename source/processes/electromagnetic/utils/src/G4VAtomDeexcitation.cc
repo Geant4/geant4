@@ -84,6 +84,10 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
   // Define list of couples
   theCoupleTable = G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
+
+  // needed for unit tests
+  if(0 == numOfCouples) { numOfCouples = 1; }
+
   activeDeexcitationMedia.resize(numOfCouples, false);
   activeAugerMedia.resize(numOfCouples, false);
   activePIXEMedia.resize(numOfCouples, false);
