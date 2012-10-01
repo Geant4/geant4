@@ -23,77 +23,56 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4teoCrossSection.hh,v 1.7 2011-01-03 19:35:11 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
+// Author: Alfonso Mantero
 //         
 //
 // History:
 // -----------
-//  21 Apr 2008   ALF  1st implementation
-//  29 Apr 2009   ALF Updated Desing for Integration
-//  15 Mar 2011   ALF introduced the usage of G4AtomicShellEnumerator
-//  09 Mar 2012   LP  Changed signature of methods
+//  05 Sep 2012   ALF 1st implementation based on G4VecpssrLiModel.hh
 //
 // -------------------------------------------------------------------
 
 // Class description:
-// Low Energy Electromagnetic Physics, Cross section, p ionisation, K shell
+// Low Energy Electromagnetic Physics, Cross section, p and alpha ionisation, L shell
 // Further documentation available from http://www.ge.infn.it/geant4/lowE
 
 // -------------------------------------------------------------------
 
 
-#ifndef G4TEOCROSSSECTION_HH
-#define G4TEOCROSSSECTION_HH 1
+#ifndef G4VECPSSRMIMODEL_HH
+#define G4VECPSSRMIMODEL_HH 1
 
 #include "globals.hh"
-#include "G4VhShellCrossSection.hh"
 
-class G4VecpssrKModel;
-class G4VecpssrLiModel;
-class G4VecpssrMiModel;
-
-class G4teoCrossSection : public G4VhShellCrossSection 
+class G4VecpssrMiModel 
 {
+
 public:
 
-  G4teoCrossSection(const G4String& name);
+  G4VecpssrMiModel();
 
-  virtual ~G4teoCrossSection();
+  virtual ~G4VecpssrMiModel();
 			     
-  std::vector<G4double> GetCrossSection(G4int Z,
-					G4double incidentEnergy,
-					G4double mass,
-					G4double deltaEnergy = 0,
-					const G4Material* mat=0);
+  virtual G4double CalculateM1CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident) = 0;
 
-  G4double CrossSection(G4int Z, G4AtomicShellEnumerator shell,
-			G4double incidentEnergy,
-			G4double mass,
-			const G4Material* mat);
+  virtual G4double CalculateM2CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident) = 0;
 
-  std::vector<G4double> Probabilities(G4int Z,
-				      G4double incidentEnergy,
-				      G4double mass,
-				      G4double deltaEnergy = 0,
-				      const G4Material* mat=0);
-  
-  
-  void SetTotalCS(G4double);
-    
+  virtual G4double CalculateM3CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident) = 0;
+
+  virtual G4double CalculateM4CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident) = 0;
+
+  virtual G4double CalculateM5CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident) = 0;
+				    
+
+   
+
 private:
-  
-  G4double totalCS;
-              
-  G4VecpssrKModel*  ecpssrShellK;
-  G4VecpssrLiModel*  ecpssrShellLi;
-  G4VecpssrMiModel*  ecpssrShellMi;
-			
-			
-  G4teoCrossSection(const G4teoCrossSection&);
-  G4teoCrossSection & operator = (const G4teoCrossSection &right);
-  
+
+
+  G4VecpssrMiModel(const G4VecpssrMiModel&);
+  G4VecpssrMiModel & operator = (const G4VecpssrMiModel &right);
+
 };
 
 #endif

@@ -249,7 +249,7 @@ G4ThreeVector& G4Generator2BN::SampleDirection(const G4DynamicParticle* dp,
       }
     }
 
-  } while(u*dmax > ds);
+  } while(u*dmax > ds || t > CLHEP::pi);
 
   G4double sint = sin(t);
   G4double phi  = twopi*G4UniformRand(); 

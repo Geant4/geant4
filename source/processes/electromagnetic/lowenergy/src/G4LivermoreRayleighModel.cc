@@ -29,6 +29,7 @@
 //
 
 #include "G4LivermoreRayleighModel.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4RayleighAngularGenerator.hh"
 
 using namespace std;
@@ -159,7 +160,7 @@ void G4LivermoreRayleighModel::ReadData(size_t Z, const char* path)
     ed << "G4LivermoreRayleighModel data file <" << ostCS.str().c_str()
        << "> is not opened!" << G4endl;
     G4Exception("G4LivermoreRayleighModel::ReadData()","em0003",FatalException,
-		ed,"G4LEDATA version should be G4EMLOW6.26 or later.");
+		ed,"G4LEDATA version should be G4EMLOW6.27 or later.");
     return;
   } 
   else 

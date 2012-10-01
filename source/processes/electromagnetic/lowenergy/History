@@ -17,6 +17,28 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28.09.2012  G.Cosmo, tag emlowen-V09-05-42
+            Explicitly use inclusion of headers for system of units and
+            physical constants, in plan to remove implicit inclusion from
+            globals.hh.
+
+26.09.2012  S.Incerti, tag emlowen-V09-05-41
+            Added renamed Compton low energy model by JB et al.
+
+21.09.2012  V.Ivanchenko, tag emlowen-V09-05-40
+            G4PhotoElectricAngularGeneratorPolarized, G4Generator2BN,
+            G4Generator2BS, G4RayleighAngularGenerator - added 
+              protection against cos(theta) < -1 to avoid numerical
+              problems
+            G4LivermoreRayleighModel - fix exception printout
+            G4Livermore2012GammaConversionModel - temporary class removed
+
+17.09.2012  S. Incerti, tag emlowen-V09-05-39 to 37
+            Updated sources.cmake       
+
+17.09.2012  S. Incerti, tag emlowen-V09-05-36
+            Renamed Monash U. Compton model       
+
 01.08.2012  V.Ivanchenko, tag emlowen-V09-05-35
             G4LivermorePolarizedPhotoElectricModel - removed debug cout 
 

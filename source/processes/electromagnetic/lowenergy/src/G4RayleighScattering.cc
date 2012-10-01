@@ -33,6 +33,7 @@
 // -----------------------------------------------------------------------------
 
 #include "G4RayleighScattering.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4LivermoreRayleighModel.hh"
 #include "G4Gamma.hh"
 

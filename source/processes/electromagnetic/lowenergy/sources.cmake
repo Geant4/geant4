@@ -60,6 +60,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4ecpssrBaseLixsModel.hh
 	G4ecpssrFormFactorKxsModel.hh
 	G4ecpssrFormFactorLixsModel.hh
+	G4ecpssrFormFactorMixsModel.hh
         G4eCrossSectionHandler.hh
         G4eIonisationCrossSectionHandler.hh
         G4eIonisationParameters.hh
@@ -93,7 +94,6 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LinInterpolation.hh
         G4LinLogInterpolation.hh
         G4LinLogLogInterpolation.hh
-        G4Livermore2012GammaConversionModel.hh
         G4LivermoreBremsstrahlungModel.hh
         G4LivermoreComptonModel.hh
         G4LivermoreComptonModifiedModel.hh
@@ -109,7 +109,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LivermorePolarizedRayleighModel.hh
         G4LivermoreRayleighModel.hh
         G4LogLogInterpolation.hh
-        G4MUComptonModel.hh
+        G4LowEPComptonModel.hh
         G4MuElecCrossSectionDataSet.hh
         G4MuElecElastic.hh
         G4MuElecElasticModel.hh
@@ -151,6 +151,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4VDataSetAlgorithm.hh
         G4VecpssrKModel.hh
         G4VecpssrLiModel.hh
+        G4VecpssrMiModel.hh
         G4VeLowEnergyLoss.hh
         G4VEMDataSet.hh
         G4VEnergySpectrum.hh
@@ -181,6 +182,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4ecpssrBaseLixsModel.cc
 	G4ecpssrFormFactorKxsModel.cc
 	G4ecpssrFormFactorLixsModel.cc
+        G4ecpssrFormFactorMixsModel.cc
         G4eCrossSectionHandler.cc
         G4eIonisationCrossSectionHandler.cc
         G4eIonisationParameters.cc
@@ -213,7 +215,6 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LinInterpolation.cc
         G4LinLogInterpolation.cc
         G4LinLogLogInterpolation.cc
-        G4Livermore2012GammaConversionModel.cc
         G4LivermoreBremsstrahlungModel.cc
         G4LivermoreComptonModel.cc
         G4LivermoreComptonModifiedModel.cc
@@ -229,7 +230,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LivermorePolarizedRayleighModel.cc
         G4LivermoreRayleighModel.cc
         G4LogLogInterpolation.cc
-        G4MUComptonModel.cc
+        G4LowEPComptonModel.cc
         G4MuElecCrossSectionDataSet.cc
         G4MuElecElastic.cc
         G4MuElecElasticModel.cc
@@ -269,6 +270,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4VCrossSectionHandler.cc
         G4VecpssrKModel.cc
         G4VecpssrLiModel.cc
+        G4VecpssrMiModel.cc
         G4VeLowEnergyLoss.cc
         G4VEMDataSet.cc
         G4VhElectronicStoppingPower.cc

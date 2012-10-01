@@ -59,6 +59,7 @@
 #include "G4Generator2BS.hh"
 #include "Randomize.hh"   
 #include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Pow.hh"   
 
 G4Generator2BS::G4Generator2BS(const G4String&)
@@ -124,7 +125,7 @@ G4ThreeVector& G4Generator2BS::SampleDirection(const G4DynamicParticle* dp,
       }
     }
 
-  } while(G4UniformRand()*gMax > gfun || y > 4*ymax);
+  } while(G4UniformRand()*gMax > gfun || y > ymax);
 
   
   G4double cost = 1 - 2*y/ymax;

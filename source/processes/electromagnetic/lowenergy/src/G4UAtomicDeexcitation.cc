@@ -270,7 +270,7 @@ void G4UAtomicDeexcitation::GenerateParticles(
 	    if  ( provShellId >0) 
 	      {
 		aParticle = GenerateFluorescence(Z,givenShellId,provShellId);
-		//if (aParticle != 0) { G4cout << "****FLUO!****" << G4endl;} //debug  
+		//if (aParticle != 0) { G4cout << "****FLUO!_1**** " << aParticle->GetParticleDefinition()->GetParticleType() << " " << aParticle->GetKineticEnergy()/keV << G4endl ;} //debug  
 	      }
 	    else if ( provShellId == -1)
 	      {
@@ -290,7 +290,7 @@ void G4UAtomicDeexcitation::GenerateParticles(
 	    if  (provShellId >0)
 	      {
 		aParticle = GenerateFluorescence(Z,newShellId,provShellId);
-		//if (aParticle != 0) { G4cout << "****FLUO!****" << G4endl;} //debug
+		//if (aParticle != 0) { G4cout << "****FLUO!_2****" << aParticle->GetParticleDefinition()->GetParticleType() << " " << aParticle->GetKineticEnergy()/keV << G4endl;} //debug
 	      }
 	    else if ( provShellId == -1)
 	      {

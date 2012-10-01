@@ -22,10 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
+// ********************************************************************
 // *********************************************************************
 // |                                                                   |
-// |             G4MUComptonModel -- Geant4 Monash University          |
+// |             G4LowEPComptonModel-- Geant4 Monash University        |
 // |                   low energy Compton scattering model.            |
 // |             J. M. C. Brown, Monash University, Australia          |
 // |                    ## Unpolarised photons only ##                 |
@@ -40,8 +40,8 @@
 // | direction taken from:                                             |
 // |                                                                   |
 // | J. M. C. Brown, M. R. Dimmock, J. E. Gillam and D. M. Paganin,    |
-// | "The Monash University low energy Compton scattering model",      |
-// | IEEE Transactions on Nuclear Science, in preparation.             |
+// | "A low energy bound atomic electron Compton scattering model      |
+// |  for Geant4", IEEE Transactions on Nuclear Science, submitted.    |
 // |                                                                   |
 // | The author acknowledges the work of the Geant4 collaboration      |
 // | in developing the following algorithms that have been employed    |
@@ -59,9 +59,11 @@
 // |                                                                   |
 // | Nov. 2011 JMCB       - First version                              |
 // | Feb. 2012 JMCB       - Migration to Geant4 9.5                    |
+// | Sep. 2012 JMCB       - Final fixes for Geant4 9.6                 |
+// |                                                                   |
 // *********************************************************************
 
-#include "G4MUComptonModel.hh"
+#include "G4LowEPComptonModel.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Electron.hh"
@@ -80,7 +82,7 @@ using namespace std;
 
 //****************************************************************************
 
-G4MUComptonModel::G4MUComptonModel(const G4ParticleDefinition*,
+G4LowEPComptonModel::G4LowEPComptonModel(const G4ParticleDefinition*,
 						 const G4String& nam)
   :G4VEmModel(nam),fParticleChange(0),isInitialised(false),
    scatterFunctionData(0),crossSectionHandler(0),fAtomDeexcitation(0)
@@ -97,7 +99,7 @@ G4MUComptonModel::G4MUComptonModel(const G4ParticleDefinition*,
   // 4 = entering in methods
 
   if(  verboseLevel>0 ) { 
-    G4cout << "Monash University Compton model is constructed " << G4endl
+    G4cout << "Low energy photon Compton model is constructed " << G4endl
 	   << "Energy range: "
 	   << lowEnergyLimit / eV << " eV - "
 	   << highEnergyLimit / GeV << " GeV"
@@ -111,7 +113,7 @@ G4MUComptonModel::G4MUComptonModel(const G4ParticleDefinition*,
 
 //****************************************************************************
 
-G4MUComptonModel::~G4MUComptonModel()
+G4LowEPComptonModel::~G4LowEPComptonModel()
 {  
   delete crossSectionHandler;
   delete scatterFunctionData;
@@ -119,11 +121,11 @@ G4MUComptonModel::~G4MUComptonModel()
 
 //****************************************************************************
 
-void G4MUComptonModel::Initialise(const G4ParticleDefinition* particle,
+void G4LowEPComptonModel::Initialise(const G4ParticleDefinition* particle,
 					 const G4DataVector& cuts)
 {
   if (verboseLevel > 2) {
-    G4cout << "Calling G4MUComptonModel::Initialise()" << G4endl;
+    G4cout << "Calling G4LowEPComptonModel::Initialise()" << G4endl;
   }
 
   if (crossSectionHandler)
@@ -151,7 +153,7 @@ void G4MUComptonModel::Initialise(const G4ParticleDefinition* particle,
   InitialiseElementSelectors(particle,cuts);
 
   if (verboseLevel > 2) {
-    G4cout << "Loaded cross section files for Monash University Compton model" << G4endl;
+    G4cout << "Loaded cross section files for low energy photon Compton model" << G4endl;
   }
 
   if(isInitialised) { return; }
@@ -162,7 +164,7 @@ void G4MUComptonModel::Initialise(const G4ParticleDefinition* particle,
   fAtomDeexcitation  = G4LossTableManager::Instance()->AtomDeexcitation();
 
   if(  verboseLevel>0 ) { 
-    G4cout << "Monash University Compton model is initialized " << G4endl
+    G4cout << "Low energy photon Compton model is initialized " << G4endl
 	   << "Energy range: "
 	   << LowEnergyLimit() / eV << " eV - "
 	   << HighEnergyLimit() / GeV << " GeV"
@@ -172,14 +174,14 @@ void G4MUComptonModel::Initialise(const G4ParticleDefinition* particle,
 
 //****************************************************************************
 
-G4double G4MUComptonModel::ComputeCrossSectionPerAtom(
+G4double G4LowEPComptonModel::ComputeCrossSectionPerAtom(
                                        const G4ParticleDefinition*,
                                              G4double GammaEnergy,
                                              G4double Z, G4double,
                                              G4double, G4double)
 {
   if (verboseLevel > 3) {
-    G4cout << "Calling ComputeCrossSectionPerAtom() of G4MUComptonModel" << G4endl;
+    G4cout << "Calling ComputeCrossSectionPerAtom() of G4LowEPComptonModel" << G4endl;
   }
   if (GammaEnergy < lowEnergyLimit || GammaEnergy > highEnergyLimit) { return 0.0; }
     
@@ -194,7 +196,7 @@ G4double G4MUComptonModel::ComputeCrossSectionPerAtom(
 //****************************************************************************
 
 
-void G4MUComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
+void G4LowEPComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
 						const G4MaterialCutsCouple* couple,
 						const G4DynamicParticle* aDynamicGamma,
 						G4double, G4double)
@@ -217,7 +219,7 @@ void G4MUComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
   G4double photonEnergy0 = aDynamicGamma->GetKineticEnergy()/MeV;
 
   if (verboseLevel > 3) {
-    G4cout << "G4MUComptonModel::SampleSecondaries() E(MeV)= " 
+    G4cout << "G4LowEPComptonModel::SampleSecondaries() E(MeV)= " 
 	   << photonEnergy0/MeV << " in " << couple->GetMaterial()->GetName() 
 	   << G4endl;
   }
@@ -239,16 +241,16 @@ void G4MUComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
   const G4Element* elm = SelectRandomAtom(couple,particle,photonEnergy0);
   G4int Z = (G4int)elm->GetZ();
 
-  G4double MUCepsilon0 = 1. / (1. + 2. * e0m);
-  G4double MUCepsilon0Sq = MUCepsilon0 * MUCepsilon0;
-  G4double alpha1 = -std::log(MUCepsilon0);
-  G4double alpha2 = 0.5 * (1. - MUCepsilon0Sq);
+  G4double LowEPCepsilon0 = 1. / (1. + 2. * e0m);
+  G4double LowEPCepsilon0Sq = LowEPCepsilon0 * LowEPCepsilon0;
+  G4double alpha1 = -std::log(LowEPCepsilon0);
+  G4double alpha2 = 0.5 * (1. - LowEPCepsilon0Sq);
 
   G4double wlPhoton = h_Planck*c_light/photonEnergy0;
 
   // Sample the energy of the scattered photon
-  G4double MUCepsilon;
-  G4double MUCepsilonSq;
+  G4double LowEPCepsilon;
+  G4double LowEPCepsilonSq;
   G4double oneCosT;
   G4double sinT2;
   G4double gReject;
@@ -257,20 +259,20 @@ void G4MUComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
     {
       if ( alpha1/(alpha1+alpha2) > G4UniformRand())
 	{
-	  MUCepsilon = std::exp(-alpha1 * G4UniformRand());  
-	  MUCepsilonSq = MUCepsilon * MUCepsilon;
+	  LowEPCepsilon = std::exp(-alpha1 * G4UniformRand());  
+	  LowEPCepsilonSq = LowEPCepsilon * LowEPCepsilon;
 	}
       else
 	{
-	  MUCepsilonSq = MUCepsilon0Sq + (1. - MUCepsilon0Sq) * G4UniformRand();
-	  MUCepsilon = std::sqrt(MUCepsilonSq);
+	  LowEPCepsilonSq = LowEPCepsilon0Sq + (1. - LowEPCepsilon0Sq) * G4UniformRand();
+	  LowEPCepsilon = std::sqrt(LowEPCepsilonSq);
 	}
 
-      oneCosT = (1. - MUCepsilon) / ( MUCepsilon * e0m);
+      oneCosT = (1. - LowEPCepsilon) / ( LowEPCepsilon * e0m);
       sinT2 = oneCosT * (2. - oneCosT);
       G4double x = std::sqrt(oneCosT/2.) / (wlPhoton/cm);
       G4double scatteringFunction = scatterFunctionData->FindValue(x,Z-1);
-      gReject = (1. - MUCepsilon * sinT2 / (1. + MUCepsilonSq)) * scatteringFunction;
+      gReject = (1. - LowEPCepsilon * sinT2 / (1. + LowEPCepsilonSq)) * scatteringFunction;
 
     } while(gReject < G4UniformRand()*Z); 
 
@@ -284,8 +286,8 @@ void G4MUComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
   
   // Scatter photon energy and Compton electron direction - Method based on:
   // J. M. C. Brown, M. R. Dimmock, J. E. Gillam and D. M. Paganin'
-  // "The Monash University low energy Compton scattering model"
-  // TNS ISSUE, PG, 2011
+  // "A low energy bound atomic electron Compton scattering model for Geant4"
+  // TNS ISSUE, PG, 2012
   
   // Set constants and initialize scattering parameters
 

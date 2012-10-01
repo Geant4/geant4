@@ -211,7 +211,7 @@ G4PhotoElectricAngularGeneratorPolarized::PhotoElectronGeneratePhiAndTheta(
     //	   << " max= " << maxBeta << G4endl;
     if(crossSectionValue < 0.0) { crossSectionValue = maxBeta; }
 
-  } while(maxBeta > crossSectionValue);
+  } while(maxBeta > crossSectionValue || theta > CLHEP::pi);
 
   *pphi = phi;
   *ptheta = theta;

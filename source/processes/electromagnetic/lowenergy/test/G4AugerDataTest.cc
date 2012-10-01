@@ -46,6 +46,7 @@
 #include <iomanip>
 #include "AIDA/AIDA.h"
 #include "G4AugerData.hh"
+#include <assert.h>
 
 int main(int argc, char* argv[])
 {
@@ -193,7 +194,7 @@ int main(int argc, char* argv[])
        	nMax = n;
 	n = a1+1;
 
-	if (a1 >= nMax) G4Exception("max Index number must be less than number of available shells");
+	if (a1 >= nMax) G4cout << "max Index number must be less than number of available shells" << G4endl;
       }
       for (G4int initIndex = a1; initIndex < n; initIndex++){
 
@@ -213,7 +214,7 @@ int main(int argc, char* argv[])
 	  nMax=nAuger;
 	  nAuger = a2 +1;
 	  
-	  if (a2 >= nMax) G4Exception("max Index number must be less than number of available shells");
+	  if (a2 >= nMax) G4cout << ("max Index number must be less than number of available shells") << G4endl;
 	}	
 
 	for (G4int augerIndex = a2; augerIndex < nAuger; augerIndex++){

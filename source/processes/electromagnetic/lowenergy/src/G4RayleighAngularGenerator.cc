@@ -53,6 +53,8 @@
 //    
 
 #include "G4RayleighAngularGenerator.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 using namespace std;
@@ -137,10 +139,10 @@ G4RayleighAngularGenerator::SampleDirection(const G4DynamicParticle* dp,
     G4double y = w*G4UniformRand();
     if(y < numlim) { x = y*n*( 1 + 0.5*(n + 1)*y*(1 - (n + 2)*y/3.)); }
     else           { x = 1.0/std::pow(1 - y, n) - 1.0; }
-    cost = 1 - x/(b*xx);
+    cost = 1.0 - x/(b*xx);
     //G4cout << "cost = " << cost << " w= " << w << " n= " << n 
-    // << " b= " << b << G4endl;  
-  } while (2*G4UniformRand() > 1.0 + cost*cost);
+    //	   << " b= " << b << " x= " << x << " xx= " << xx << G4endl;  
+  } while (2*G4UniformRand() > 1.0 + cost*cost || cost < -1.0);
 
   G4double phi  = twopi*G4UniformRand();
   G4double sint = sqrt((1. - cost)*(1.0 + cost));

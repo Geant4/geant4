@@ -27,6 +27,7 @@
 #include "globals.hh"
 #include "G4ios.hh"
 #include <vector>
+#include <assert.h>
 
 int main() {
 
@@ -103,25 +104,31 @@ int main() {
 
     for (shellIndex=shellIndexMin; shellIndex<=shellIndexMax; shellIndex++) {
       
-      G4cout << G4endl << "Testing G4FluoTransition "<<G4endl;
-      std::vector<G4double> transEnergies = transManager->ReachableShell(Z,shellIndex)->TransitionEnergies();
-      std::vector<G4int> transIds = transManager->ReachableShell(Z,shellIndex)->OriginatingShellIds();
-      std::vector<G4double> transProbs = transManager->ReachableShell(Z,shellIndex)->TransitionProbabilities();
+      std::vector<G4double> transEnergies;
       
-      for (G4int trans=0; trans<transIds.size(); trans++) {
+      const G4FluoTransition* transIt = transManager->ReachableShell(Z,shellIndex);
+      
+      G4cout << G4endl << "Testing G4FluoTransition "<<G4endl;
+      if ( transIt ) {transEnergies = transManager->ReachableShell(Z,shellIndex)->TransitionEnergies();
+	std::vector<G4int> transIds = transManager->ReachableShell(Z,shellIndex)->OriginatingShellIds();
+	std::vector<G4double> transProbs = transManager->ReachableShell(Z,shellIndex)->TransitionProbabilities();
 	
-	G4cout << G4endl << "Vacancy filled by e- from shell [vector]: " << transIds[trans] << G4endl;
-	G4cout << "Vacancy filled by e- from shell [single eval]: " << 
-	  transManager->ReachableShell(Z,shellIndex)->OriginatingShellId(trans) << G4endl;
 	
-	G4cout << "Photon energy [vector]: " << transEnergies[trans] << G4endl;
-	G4cout << "Photon energy [single eval]: " << 
-	  transManager->ReachableShell(Z,shellIndex)->TransitionEnergy(trans) << G4endl;
-	
-	G4cout << "Transition probability [vector]: " << transProbs[trans] << G4endl;
-	G4cout << "Transition probability [single eval]: " << 
-	  transManager->ReachableShell(Z,shellIndex)->TransitionProbability(trans) << G4endl;
-	
+	for (G4int trans=0; trans<transIds.size(); trans++) {
+	  
+	  G4cout << G4endl << "Vacancy filled by e- from shell [vector]: " << transIds[trans] << G4endl;
+	  G4cout << "Vacancy filled by e- from shell [single eval]: " << 
+	    transManager->ReachableShell(Z,shellIndex)->OriginatingShellId(trans) << G4endl;
+	  
+	  G4cout << "Photon energy [vector]: " << transEnergies[trans] << G4endl;
+	  G4cout << "Photon energy [single eval]: " << 
+	    transManager->ReachableShell(Z,shellIndex)->TransitionEnergy(trans) << G4endl;
+	  
+	  G4cout << "Transition probability [vector]: " << transProbs[trans] << G4endl;
+	  G4cout << "Transition probability [single eval]: " << 
+	    transManager->ReachableShell(Z,shellIndex)->TransitionProbability(trans) << G4endl;
+	  
+	}
       }
     }
     /* ===Atention=== the data given out by the following code usually doesn't
@@ -183,9 +190,7 @@ int main() {
 	    
 	    
 	    augerTransition->AugerOriginatingShellId(trans, transId) << G4endl;
-	  
-	  
-	  
+	  	  
 	  G4cout << "Auger energy [vector]: " << augerEnergies[trans] << G4endl;
 	  G4cout << "Auger energy [single eval]: " << 
 	    augerTransition->AugerTransitionEnergy(trans, transId) << G4endl;

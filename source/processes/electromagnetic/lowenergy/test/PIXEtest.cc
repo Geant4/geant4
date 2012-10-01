@@ -80,7 +80,7 @@ int main()
    //  implementation from REIS et al.
    //  G4hShellCrossSectionDoubleExp is previous work with ownmade fitting functions to Paul for Alpha.
 
-   G4cout << "Enter model (Analytical/ECPSSR_FormFactor/empirical): " << G4endl;
+   G4cout << "Enter model (Analytical / ECPSSR_FormFactor / empirical): " << G4endl;
    G4cin >> model;
 
    if (model == "Analytical" || model == "ECPSSR_FormFactor") {
@@ -115,13 +115,19 @@ int main()
      } 
   
 
-   G4cout << "Enter shell Index (0=K 3=L3): " << G4endl;
+   G4cout << "Enter shell Index (0=K 3=L3 4-8=M1-M5): " << G4endl;
    G4cin >> shellNumber;
 
    if (shellNumber == 0) {shellName = "K";}
    else if (shellNumber == 1) {shellName = "L1";}
    else if (shellNumber == 2) {shellName = "L2";}
    else if (shellNumber == 3) {shellName = "L3";}
+   else if (shellNumber == 4) {shellName = "M1";}
+   else if (shellNumber == 5) {shellName = "M2";}
+   else if (shellNumber == 6) {shellName = "M3";}
+   else if (shellNumber == 7) {shellName = "M4";}
+   else if (shellNumber == 8) {shellName = "M5";}
+
 
    if (model  == "Analytical" ) { nameId = "A";}
    else if (model  == "ECPSSR_FormFactor" ) { nameId = "I";}

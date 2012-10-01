@@ -22,11 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-
+// ********************************************************************
 // *********************************************************************
 // |                                                                   |
-// |             G4MUComptonModel -- Geant4 Monash University          |
+// |             G4LowEPComptonModel-- Geant4 Monash University        |
 // |                   low energy Compton scattering model.            |
 // |             J. M. C. Brown, Monash University, Australia          |
 // |                    ## Unpolarised photons only ##                 |
@@ -41,8 +40,8 @@
 // | direction taken from:                                             |
 // |                                                                   |
 // | J. M. C. Brown, M. R. Dimmock, J. E. Gillam and D. M. Paganin,    |
-// | "The Monash University low energy Compton scattering model",      |
-// | IEEE Transactions on Nuclear Science, in preparation.             |
+// | "A low energy bound atomic electron Compton scattering model      |
+// |  for Geant4", IEEE Transactions on Nuclear Science, submitted.    |
 // |                                                                   |
 // | The author acknowledges the work of the Geant4 collaboration      |
 // | in developing the following algorithms that have been employed    |
@@ -60,10 +59,12 @@
 // |                                                                   |
 // | Nov. 2011 JMCB       - First version                              |
 // | Feb. 2012 JMCB       - Migration to Geant4 9.5                    |
+// | Sep. 2012 JMCB       - Final fixes for Geant4 9.6                 |
+// |                                                                   |
 // *********************************************************************
 
-#ifndef G4MUComptonModel_h
-#define G4MUComptonModel_h 1
+#ifndef G4LowEPComptonModel_h
+#define G4LowEPComptonModel_h 1
 
 #include "G4VEmModel.hh"
 #include "G4ShellData.hh"
@@ -74,15 +75,15 @@ class G4VCrossSectionHandler;
 class G4VAtomDeexcitation;
 class G4VEMDataSet;
 
-class G4MUComptonModel : public G4VEmModel
+class G4LowEPComptonModel : public G4VEmModel
 {
 
 public:
 
-  G4MUComptonModel(const G4ParticleDefinition* p = 0, 
-		          const G4String& nam = "MUCompton");
+  G4LowEPComptonModel(const G4ParticleDefinition* p = 0, 
+		          const G4String& nam = "LowEPComptonModel");
   
-  virtual ~G4MUComptonModel();
+  virtual ~G4LowEPComptonModel();
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
@@ -118,8 +119,8 @@ private:
   G4ShellData shellData;
   G4DopplerProfile profileData;
 
-  G4MUComptonModel & operator=(const  G4MUComptonModel &right);
-  G4MUComptonModel(const  G4MUComptonModel&);
+  G4LowEPComptonModel & operator=(const  G4LowEPComptonModel &right);
+  G4LowEPComptonModel(const  G4LowEPComptonModel&);
 
   
 };

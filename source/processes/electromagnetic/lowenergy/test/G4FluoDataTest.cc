@@ -49,6 +49,7 @@
 #include <iomanip>
 #include "AIDA/AIDA.h"
 #include "G4FluoData.hh"
+#include <assert.h>
 
 
 int main(int argc, char* argv[])
