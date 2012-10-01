@@ -28,7 +28,9 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4EventGenerator
+
 #include "G4EventGenerator.hh"
+#include "G4SystemOfUnits.hh"
 
 G4EventGenerator::G4EventGenerator()
 {

@@ -23,12 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifndef G4FTFParameters_h
-#define G4FTFParameters_h 1
 //
 // $Id: G4FTFParameters.hh,v 1.10 2010/12/07 10:42:40 vuzhinsk Exp $
 // GEANT4 tag $Name:  $
 //
+#ifndef G4FTFParameters_h
+#define G4FTFParameters_h 1
+
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
 #include "G4ChipsComponentXS.hh"
@@ -259,21 +262,21 @@ inline void G4FTFParameters::SetProbOfSameQuarkExchange(const G4double aValue)
              {ProbOfSameQuarkExchange = aValue;}
 
 inline  void G4FTFParameters::SetProjMinDiffMass(const G4double aValue)
-             {ProjMinDiffMass = aValue*GeV;}
+             {ProjMinDiffMass = aValue*CLHEP::GeV;}
 inline  void G4FTFParameters::SetProjMinNonDiffMass(const G4double aValue)
-             {ProjMinNonDiffMass = aValue*GeV;}
+             {ProjMinNonDiffMass = aValue*CLHEP::GeV;}
 inline  void G4FTFParameters::SetProbabilityOfProjDiff(const G4double aValue)
              {ProbabilityOfProjDiff = aValue;}
 
 inline  void G4FTFParameters::SetTarMinDiffMass(const G4double aValue)
-             {TarMinDiffMass = aValue*GeV;}
+             {TarMinDiffMass = aValue*CLHEP::GeV;}
 inline  void G4FTFParameters::SetTarMinNonDiffMass(const G4double aValue)
-             {TarMinNonDiffMass = aValue*GeV;}
+             {TarMinNonDiffMass = aValue*CLHEP::GeV;}
 inline  void G4FTFParameters::SetProbabilityOfTarDiff(const G4double aValue)
              {ProbabilityOfTarDiff = aValue;}
 
 inline  void G4FTFParameters::SetAveragePt2(const G4double aValue)
-             {AveragePt2 = aValue*GeV*GeV;}
+             {AveragePt2 = aValue*CLHEP::GeV*CLHEP::GeV;}
 
 inline  void G4FTFParameters::SetProbLogDistr(const G4double aValue)
              {ProbLogDistr = aValue;}

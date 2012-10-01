@@ -33,9 +33,11 @@
 //      History: first implementation, Maxim Komogorov, 1-Jul-1998
 //               redesign  Gunter Folger, August/September 2001
 // -----------------------------------------------------------------------------
+#include "G4VLongitudinalStringDecay.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 #include "Randomize.hh"
-#include "G4VLongitudinalStringDecay.hh"
 #include "G4FragmentingString.hh"
 
 #include "G4ParticleDefinition.hh"

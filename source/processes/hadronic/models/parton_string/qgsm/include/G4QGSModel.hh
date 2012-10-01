@@ -32,6 +32,9 @@
 // To be used in your physics list, in case you need this kind of physics.
 // Class Description - End
 
+#include <cmath>
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4ExcitedStringVector.hh"
 #include "G4KineticTrackVector.hh"
 #include "G4PomeronCrossSection.hh"
@@ -42,8 +45,6 @@
 #include "G4DiffractiveStringBuilder.hh"
 #include "G4SoftStringBuilder.hh"
 #include "G4PartonPair.hh"
-
-#include <cmath>
 
 //*********************************************************************************************** 
 

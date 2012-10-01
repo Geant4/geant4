@@ -36,7 +36,12 @@
 //       class implementing the excitation in the FTF Parton String Model
 // ------------------------------------------------------------
 
+#include <utility> 
+
 #include "G4FTFModel.hh"
+#include "G4ios.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4FTFParameters.hh"
 #include "G4FTFParticipants.hh"
 #include "G4DiffractiveSplitableHadron.hh"
@@ -44,8 +49,6 @@
 #include "G4LorentzRotation.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
-#include "G4ios.hh"
-#include <utility> 
 #include "G4IonTable.hh"
 
 // Class G4FTFModel 

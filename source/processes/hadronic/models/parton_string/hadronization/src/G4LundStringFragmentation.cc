@@ -33,11 +33,12 @@
 //      History: first implementation, Maxim Komogorov, 10-Jul-1998
 // -----------------------------------------------------------------------------
 #include "G4LundStringFragmentation.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
 #include "G4FragmentingString.hh"
 #include "G4DiQuarks.hh"
 #include "G4Quarks.hh"
-
-#include "Randomize.hh"
 
 // Class G4LundStringFragmentation 
 //*************************************************************************************

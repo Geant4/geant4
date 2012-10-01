@@ -35,17 +35,16 @@
 //	excite the projectile and target
 // ------------------------------------------------------------
 
-
-#include "globals.hh"
-#include "Randomize.hh"
-
 #include "G4SingleDiffractiveExcitation.hh"
+#include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
 #include "G4LorentzRotation.hh"
 #include "G4ThreeVector.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4VSplitableHadron.hh"
 #include "G4ExcitedString.hh"
-//#include "G4ios.hh"
 
 G4SingleDiffractiveExcitation::G4SingleDiffractiveExcitation(G4double sigmaPt, G4double minextraMass,G4double x0mass)
 :

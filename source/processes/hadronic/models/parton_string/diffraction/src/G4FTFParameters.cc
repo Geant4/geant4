@@ -28,10 +28,13 @@
 // GEANT4 tag $Name:  $
 //
 
+#include <utility>                                        
+
 #include "G4FTFParameters.hh"
 
 #include "G4ios.hh"
-#include <utility>                                        
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4ParticleDefinition.hh"             // 31 May 2011
 

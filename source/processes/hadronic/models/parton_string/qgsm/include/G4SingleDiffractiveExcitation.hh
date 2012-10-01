@@ -38,18 +38,23 @@
 //	excite the projectile and target
 // ------------------------------------------------------------
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
-class G4VSplitableHadron;
-class G4ExcitedString;
 #include "G4ThreeVector.hh"
 #include "G4QGSDiffractiveExcitation.hh"
+
+class G4VSplitableHadron;
+class G4ExcitedString;
 
 class G4SingleDiffractiveExcitation : public G4QGSDiffractiveExcitation
 {
 
 public:
 
-	G4SingleDiffractiveExcitation(G4double sigmaPt=0.6*GeV, G4double minExtraMass=250*MeV,G4double x0mass=250*MeV);
+	G4SingleDiffractiveExcitation(G4double sigmaPt=0.6*CLHEP::GeV,
+                                      G4double minExtraMass=250*CLHEP::MeV,
+                                      G4double x0mass=250*CLHEP::MeV);
 	~G4SingleDiffractiveExcitation();
 
 	G4bool ExciteParticipants (G4VSplitableHadron *aPartner, G4VSplitableHadron * bPartner) const;

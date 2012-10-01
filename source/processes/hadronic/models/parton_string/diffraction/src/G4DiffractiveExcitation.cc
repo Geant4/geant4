@@ -45,6 +45,8 @@
 
 #include "globals.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4DiffractiveExcitation.hh"
 #include "G4FTFParameters.hh"

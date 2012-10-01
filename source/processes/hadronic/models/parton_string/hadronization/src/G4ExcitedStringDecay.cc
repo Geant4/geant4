@@ -24,7 +24,9 @@
 // ********************************************************************
 //
 // Historic fragment from M.Komogorov; clean-up still necessary @@@
+
 #include "G4ExcitedStringDecay.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4KineticTrack.hh"
 
 G4ExcitedStringDecay::G4ExcitedStringDecay() : G4VStringFragmentation(),

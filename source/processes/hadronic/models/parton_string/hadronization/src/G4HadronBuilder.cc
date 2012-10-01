@@ -36,8 +36,9 @@
 // -----------------------------------------------------------------------------
 
 #include "G4HadronBuilder.hh"
-#include "G4HadronicException.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
+#include "G4HadronicException.hh"
 #include "G4ParticleTable.hh"
 
 G4HadronBuilder::G4HadronBuilder(G4double mesonMix, G4double barionMix,

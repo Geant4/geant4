@@ -38,6 +38,7 @@
 
 #include "globals.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
 
 #include "G4ElasticHNScattering.hh"
 #include "G4LorentzRotation.hh"

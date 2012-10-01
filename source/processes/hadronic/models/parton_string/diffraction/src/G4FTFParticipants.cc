@@ -39,16 +39,17 @@
 //                    (February 2011)
 // ------------------------------------------------------------
 
-#include "G4FTFParameters.hh"                            // Uzhi 29.03.08
-#include "G4FTFParticipants.hh"
-#include "G4DiffractiveSplitableHadron.hh"
-#include "G4VSplitableHadron.hh"
-#include "Randomize.hh"
-#include <utility>                                        // Uzhi 29.03.08
-#include "G4ios.hh"
+#include <utility>
 #include <vector>
 #include <algorithm>
-// Class G4FTFParticipants 
+
+#include "G4FTFParticipants.hh"
+#include "G4ios.hh"
+#include "Randomize.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4FTFParameters.hh"                            // Uzhi 29.03.08
+#include "G4DiffractiveSplitableHadron.hh"
+#include "G4VSplitableHadron.hh"
 
 G4FTFParticipants::G4FTFParticipants() :
   theProjectileNucleus(0),

@@ -33,12 +33,12 @@
 //      History: first implementation, Maxim Komogorov, 10-Jul-1998
 // -----------------------------------------------------------------------------
 #include "G4QGSMFragmentation.hh"
+#include "G4PhysicalConstants.hh"
+#include "Randomize.hh"
+#include "G4ios.hh"
 #include "G4FragmentingString.hh"
 #include "G4DiQuarks.hh"
 #include "G4Quarks.hh"
-
-#include "Randomize.hh"
-#include "G4ios.hh"
 
 // Class G4QGSMFragmentation 
 //****************************************************************************************

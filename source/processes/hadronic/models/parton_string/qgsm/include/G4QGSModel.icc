@@ -23,14 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// #include "G4ios.hh"
 
 //****************************************************************************************************************
 template<class ParticipantType>
 G4QGSModel<ParticipantType>::G4QGSModel() 
     {
 	G4VPartonStringModel::SetThisPointer(this);
-	SetEnergyMomentumCheckLevels(2*perCent, 150*MeV);
+	SetEnergyMomentumCheckLevels(2*CLHEP::perCent, 150*CLHEP::MeV);
     }
 template<class ParticipantType>
 G4QGSModel<ParticipantType>::G4QGSModel(const G4QGSModel &right)

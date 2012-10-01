@@ -29,10 +29,15 @@
 //
 
 #include "G4PomeronCrossSection.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Pow.hh"					 // factorial()
 
-G4PomeronCrossSection::G4PomeronCrossSection()
-{;}
+G4PomeronCrossSection::G4PomeronCrossSection() :
+   pomeron_Alpha(0), pomeron_Alpha_Hard(0), pomeron_Alphaprime(0),
+   pomeron_C(0), pomeron_Gamma(0), pomeron_Gamma_Hard(0),
+   pomeron_Rsquare(0), pomeron_S(0)
+{}
 
 
 G4PomeronCrossSection::~G4PomeronCrossSection()

@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#include "globals.hh"
-#include "G4QGSParticipants.hh"
-#include "G4LorentzVector.hh"
 #include <utility>
+
+#include "G4QGSParticipants.hh"
+#include "globals.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4LorentzVector.hh"
 
 // Class G4QGSParticipants 
 

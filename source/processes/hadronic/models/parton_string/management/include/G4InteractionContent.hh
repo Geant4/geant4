@@ -54,12 +54,11 @@ class G4InteractionContent
 
   public:
 
+      G4InteractionContent() {}
       G4InteractionContent(G4VSplitableHadron *aPrimaryParticipant);
 
       ~G4InteractionContent();
 
-      int operator==(const G4InteractionContent &right) const;
-      int operator!=(const G4InteractionContent &right) const;
       G4bool operator<(const G4InteractionContent &right) const;
       
       G4VSplitableHadron * GetProjectile() const ;
@@ -89,12 +88,11 @@ class G4InteractionContent
 #endif      
      
 
-public:
-      G4InteractionContent(){}
-      const G4InteractionContent & operator=(const G4InteractionContent &right);
-
 private:
+      G4InteractionContent & operator=(const G4InteractionContent &right);
       G4InteractionContent(const G4InteractionContent &right);
+      int operator==(const G4InteractionContent &right) const;
+      int operator!=(const G4InteractionContent &right) const;
 
   protected:
 
