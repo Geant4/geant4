@@ -51,8 +51,6 @@
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
-#include "QBBC.hh"
-#include "QGSP.hh"
 #include "PrimaryGeneratorAction.hh"
 
 #include "RunAction.hh"
@@ -75,8 +73,6 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(new DetectorConstruction());
 
   runManager->SetUserInitialization(new PhysicsList);
-  //runManager->SetUserInitialization(new QBBC(1,"QBEC_HP"));
-  //runManager->SetUserInitialization(new QGSP);
 
   runManager->SetUserAction(new PrimaryGeneratorAction());
 
