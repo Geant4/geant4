@@ -17,6 +17,45 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27 September 12: V.Ivant (emutils-V09-05-41)
+- G4VMscModel - added GetDEDX method
+
+21 September 12: V.Ivant (emutils-V09-05-40)
+- G4VAtomDeexcitation - removed forgotten debug printout
+- G4VMultipleScatteringProcess - minor cleanup
+
+20 September 12: V.Ivant (emutils-V09-05-39)
+- G4VAtomDeexcitation - fixed logic of activation of de-excitation
+    per region and for all geometry
+
+20 September 12: V.Ivant (emutils-V09-05-38)
+- G4VAtomDeexcitation - added computation of sum of energies of
+    de-excitation gamma and electron produced AlongStep;
+    use logical OR instead of AND for de-exitation flags 
+- G4VEnergyLossProcess - fixed energy balance for the case of de-excitation
+    AlongStep  
+
+17 September 12: V.Ivant (emutils-V09-05-37)
+- G4VAtomDeexcitation - fixed de-excitation AlongStep by substitution 
+    which limited de-ecitation from ion ionisation
+- G4VEnergyLossProcess - take into account modifications for
+    G4VAtomDeexcitation in order to keep energy balance  
+
+06 August 12: V.Ivant (emutils-V09-05-36)
+- G4VMultipleScatteringProcess - added call to ReLocate PostStep
+
+06 August 12: V.Ivant (emutils-V09-05-35)
+- G4VMultipleScatteringProcess - change final position PostStep to
+    bypass bug in parallel transportation
+
+28 August 12: V.Ivant (emutils-V09-05-34)
+- G4VMultipleScatteringProcess - improved debug printout
+
+24 August 12: V.Ivant (emutils-V09-05-33)
+- G4VMultipleScatteringProcess, G4VMscModel - sampling scattering
+    is moved from PostStep to AlongStep
+- G4VEmProcess - fixed minor memory leak at destruction
+
 14 August 12: V.Ivant (emutils-V09-05-32)
 - G4VEnergyLossProcess - fixed non-reproducibility by extention
     of initialisation in StertTracking method for ions

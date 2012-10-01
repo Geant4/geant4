@@ -61,6 +61,7 @@
 #include "G4VEnergyLossProcess.hh"
 #include "G4LossTableManager.hh"
 #include "G4PhysicsTable.hh"
+#include "G4ThreeVector.hh"
 #include <vector>
 
 class G4ParticleChangeForMSC;
@@ -81,8 +82,8 @@ public:
 
   virtual G4double ComputeTrueStepLength(G4double geomPathLength);
 
-  virtual void SampleScattering(const G4DynamicParticle*,
-				G4double safety);
+  virtual G4ThreeVector& SampleScattering(const G4DynamicParticle*,
+					  G4double safety);
 
   // empty method
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
@@ -127,14 +128,10 @@ protected:
   G4ParticleChangeForMSC* 
   GetParticleChangeForMSC(const G4ParticleDefinition* p = 0);
 
-  // shift point of the track PostStep 
-  void ComputeDisplacement(G4ParticleChangeForMSC*,  
-			   const G4ThreeVector& displDir,
-                           G4double displacement,
-			   G4double postsafety);
-
   // convert true length to geometry length
   inline G4double ConvertTrueToGeom(G4double& tLength, G4double& gLength);
+
+public:
 
   // compute safety
   inline G4double ComputeSafety(const G4ThreeVector& position, G4double limit);
@@ -142,6 +139,10 @@ protected:
   // compute linear distance to a geometry boundary
   inline G4double ComputeGeomLimit(const G4Track&, G4double& presafety, 
 				   G4double limit);
+
+  inline G4double GetDEDX(const G4ParticleDefinition* part,
+			  G4double kineticEnergy,
+			  const G4MaterialCutsCouple* couple);
 
   inline G4double GetRange(const G4ParticleDefinition* part,
                            G4double kineticEnergy,
@@ -182,6 +183,7 @@ protected:
   G4double geomMin;
   G4double geomMax;
 
+  G4ThreeVector      fDisplacement;
   G4MscStepLimitType steppingAlgorithm;
 
   G4bool   samplez;
@@ -264,6 +266,22 @@ inline G4double G4VMscModel::ComputeGeomLimit(const G4Track& track,
 	  limit, presafety);
   }
   return res;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double 
+G4VMscModel::GetDEDX(const G4ParticleDefinition* part,
+		     G4double kinEnergy, const G4MaterialCutsCouple* couple)
+{
+  localtkin = kinEnergy;
+  G4double x;
+  if(ionisation) { x = ionisation->GetDEDX(localtkin, couple); }
+  else { 
+    G4double q = part->GetPDGCharge()/CLHEP::eplus;
+    x = dedx*q*q;
+  }
+  return x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

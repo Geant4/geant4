@@ -150,6 +150,10 @@ G4VEmProcess::~G4VEmProcess()
     theLambdaTable->clearAndDestroy();
     delete theLambdaTable;
   }
+  if(theLambdaTablePrim) {
+    theLambdaTablePrim->clearAndDestroy();
+    delete theLambdaTablePrim;
+  }
   delete modelManager;
   delete biasManager;
   (G4LossTableManager::Instance())->DeRegister(this);

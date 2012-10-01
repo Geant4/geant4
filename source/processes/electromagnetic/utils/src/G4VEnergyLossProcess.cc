@@ -1073,7 +1073,8 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
     if (useDeexcitation) {
       atomDeexcitation->AlongStepDeexcitation(scTracks, step, 
 					      eloss, currentCoupleIndex);
-      FillSecondariesAlongStep(eloss, weight);
+      if(scTracks.size() > 0) { FillSecondariesAlongStep(eloss, weight); }
+      if(eloss < 0.0) { eloss = 0.0; }
     }
     fParticleChange.SetProposedKineticEnergy(0.0);
     fParticleChange.ProposeLocalEnergyDeposit(eloss);
@@ -1208,11 +1209,41 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 
   // deexcitation
   if (useDeexcitation) {
-    G4double eloss_before = eloss;
+    G4double esecfluo = preStepKinEnergy - esec;
+    G4double de = esecfluo;
+    //G4double eloss0 = eloss;
+    /*
+    G4cout << "### 1: E(keV)= " << preStepKinEnergy/keV
+	   << " Efluomax(keV)= " << de/keV
+	   << " Eloss(keV)= " << eloss/keV << G4endl; 
+    */
     atomDeexcitation->AlongStepDeexcitation(scTracks, step, 
-					    eloss, currentCoupleIndex);
-    esec += eloss_before - eloss;
+					    de, currentCoupleIndex);
+
+    // sum of de-excitation energies
+    esecfluo -= de;
+
+    // subtracted from energy loss
+    if(eloss >= esecfluo) {
+      esec  += esecfluo;
+      eloss -= esecfluo;
+    } else {
+      esec += esecfluo;
+      eloss = 0.0; 
+    } 
+    /*    
+    if(esecfluo > 0.0) {
+      G4cout << "### 2: E(keV)= " << preStepKinEnergy/keV
+	     << " Esec(keV)= " << esec/keV
+	     << " Esecf(kV)= " << esecfluo/keV
+	     << " Eloss0(kV)= " << eloss0/keV
+	     << " Eloss(keV)= " << eloss/keV 
+	     << G4endl; 
+    } 
+    */   
   }
+  G4double etest = 0.0;
+  if(scTracks.size() > 0) { FillSecondariesAlongStep(etest, weight); }
 
   // Energy balanse
   G4double finalT = preStepKinEnergy - eloss - esec;
@@ -1225,32 +1256,30 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 				      currentMaterial,finalT));
   }
 
-  FillSecondariesAlongStep(eloss, weight);
+  if(eloss < 0.0) { eloss = 0.0; }
   fParticleChange.SetProposedKineticEnergy(finalT);
   fParticleChange.ProposeLocalEnergyDeposit(eloss);
 
-  /*  
-  if(-1 < verboseLevel) {
+  if(1 < verboseLevel) {
+    G4double del = finalT + eloss + etest - preStepKinEnergy;
     G4cout << "Final value eloss(MeV)= " << eloss/MeV
            << " preStepKinEnergy= " << preStepKinEnergy
            << " postStepKinEnergy= " << finalT
+	   << " de(keV)= " << del/keV
            << " lossFlag= " << lossFluctuationFlag
            << "  status= " << track.GetTrackStatus()
            << G4endl;
   }
-  */  
-
+  
   return &fParticleChange;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void 
-G4VEnergyLossProcess::FillSecondariesAlongStep(G4double& eloss, G4double& weight)
+G4VEnergyLossProcess::FillSecondariesAlongStep(G4double&, G4double& weight)
 {
-  if(eloss < 0.0) { eloss = 0.0; }
   G4int n = scTracks.size();
-  if(0 == n) { return; }
 
   // weight may be changed by biasing manager
   G4bool weightNotChanged = true;
@@ -1265,6 +1294,7 @@ G4VEnergyLossProcess::FillSecondariesAlongStep(G4double& eloss, G4double& weight
   fParticleChange.SetNumberOfSecondaries(n);
   for(G4int i=0; i<n; ++i) {
     G4Track* t = scTracks[i];
+    //eloss += t->GetKineticEnergy();
     if(t) {
       if(weightNotChanged) { t->SetWeight(weight); }
       pParticleChange->AddSecondary(t);

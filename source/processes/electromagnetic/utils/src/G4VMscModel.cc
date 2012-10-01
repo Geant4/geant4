@@ -121,43 +121,11 @@ G4VMscModel::GetParticleChangeForMSC(const G4ParticleDefinition* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4VMscModel::ComputeDisplacement(G4ParticleChangeForMSC* fParticleChange,  
-				      const G4ThreeVector& dir,
-				      G4double displacement,
-				      G4double postsafety)
+G4ThreeVector& 
+G4VMscModel::SampleScattering(const G4DynamicParticle*, G4double)
 {
-  if(displacement <= geomMin) { return; }
-  const G4ThreeVector* pos = fParticleChange->GetProposedPosition();
-
-  // displaced point is definitely within the volume
-  if(displacement < postsafety) {
-
-    // compute new endpoint of the Step
-    G4ThreeVector newPosition = *pos + displacement*dir;
-    safetyHelper->ReLocateWithinVolume(newPosition);
-    fParticleChange->ProposePosition(newPosition);
-    return;
-  }
-
-  // displaced point may be outside the volume
-  G4double newsafety = safetyHelper->ComputeSafety(*pos);
-
-  // add a factor which ensure numerical stability
-  G4double r = std::min(displacement, newsafety*0.99); 
-
-  if(r > geomMin) {
-
-    // compute new endpoint of the Step
-    G4ThreeVector newPosition = *pos + r*dir;
-    safetyHelper->ReLocateWithinVolume(newPosition);
-    fParticleChange->ProposePosition(newPosition);
-  }
+  return fDisplacement;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4VMscModel::SampleScattering(const G4DynamicParticle*, G4double)
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

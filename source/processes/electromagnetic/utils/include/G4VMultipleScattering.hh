@@ -85,6 +85,7 @@
 class G4ParticleDefinition;
 class G4VEnergyLossProcess;
 class G4LossTableManager;
+class G4SafetyHelper;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -255,6 +256,8 @@ private:
 
   // ======== Parameters of the class fixed at initialisation =======
 
+  G4SafetyHelper*             safetyHelper;
+
   std::vector<G4VMscModel*>   mscModels;
   G4int                       numberOfModels;
 
@@ -263,6 +266,7 @@ private:
 
   G4MscStepLimitType          stepLimit;
 
+  G4double                    geomMin;
   G4double                    skin;
   G4double                    facrange;
   G4double                    facgeom;
@@ -282,6 +286,14 @@ private:
 
   // cache
   G4VMscModel*                currentModel;
+  G4VEnergyLossProcess*       fIonisation;
+
+  G4double                    physStepLimit;
+  G4double                    tPathLength;
+  G4double                    gPathLength;
+
+  G4ThreeVector               fNewPosition;
+  G4bool                      fPositionChanged;
 
 };
 
