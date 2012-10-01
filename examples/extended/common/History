@@ -15,6 +15,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26/09/2012 I. Hrivnacova (excommon-V09-05-02)
+- Added/updated CMakeLists.txt files:
+  adding copying macros, install target, comment lines
+  and HBOOK external package in analysis
+- Added explicit includes of G4SystemOfUnits.hh and G4PhysicalConstants.hh
+- Replaced tabulators with space characters
+- Updated script for generating CMakeLists.txt files
+
 19/07/2012 I. Hrivnacova (excommon-V09-05-01)
 - Fix in the scripts (copying files from shared with an extension)
 

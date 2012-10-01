@@ -1,0 +1,6 @@
+#----------------------------------------------------------------------------
+# Add program to the project targets
+# (this avoids the need of typing the program name after make)
+#
+add_custom_target(EXAMPLE_NAME DEPENDS EXAMPLE_PROGRAM_NAME)
+

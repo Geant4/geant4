@@ -1,0 +1,6 @@
+#----------------------------------------------------------------------------
+# Add the executable, and link it to the Geant4 libraries
+#
+add_executable(EXAMPLE_PROGRAM_NAME EXAMPLE_PROGRAM_NAME.cc ${sources} ${headers})
+target_link_libraries(EXAMPLE_PROGRAM_NAME ${Geant4_LIBRARIES} ${EXTERN_PACKAGE_TO_UPPER_LIBRARIES} FIX_XT)
+

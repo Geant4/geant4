@@ -36,9 +36,8 @@
 #include "ExG4DetectorConstruction01Messenger.hh"
 
 #include "G4ThreeVector.hh"
-#include "globals.hh"
 
-
+#include "CLHEP/Units/SystemOfUnits.h"
 
 class G4LogicalVolume;
 class G4Material;
@@ -51,7 +50,9 @@ class ExG4DetectorConstruction01 : public G4VUserDetectorConstruction
   public:
     ExG4DetectorConstruction01(
        const G4String& materialName = "G4_AIR",
-       G4double hx = 50*cm, G4double hy = 50*cm, G4double hz = 50*cm);
+       G4double hx = 50*CLHEP::cm, 
+       G4double hy = 50*CLHEP::cm, 
+       G4double hz = 50*CLHEP::cm);
     ~ExG4DetectorConstruction01();
 
   public:

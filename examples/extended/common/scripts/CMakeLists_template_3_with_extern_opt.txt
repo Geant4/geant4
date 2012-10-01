@@ -1,0 +1,10 @@
+#----------------------------------------------------------------------------
+# Find EXTERN_PACKAGE (optional package)
+#
+find_package(EXTERN_PACKAGE)
+if(EXTERN_PACKAGE_TO_UPPER_FOUND QUIET)
+  message(STATUS "G4 Examples: EXTERN_PACKAGE found. --> EXAMPLE_NAME example with EXTERN_PACKAGE enabled.") 
+  # Uncomment this line if suitable (some customization may be needed)
+  # add_definitions(-DG4EXTERN_PACKAGE_USE)   
+endif()
+

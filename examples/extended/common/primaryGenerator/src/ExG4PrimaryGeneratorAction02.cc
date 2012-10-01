@@ -32,6 +32,7 @@
 
 #include "G4Event.hh"
 #include "G4GeneralParticleSource.hh"
+#include "G4SystemOfUnits.hh"
 
 const G4String ExG4PrimaryGeneratorAction02::fgkDefaultParticleName = "e-";
 const G4double ExG4PrimaryGeneratorAction02::fgkDefaultEnergy = 1*MeV;
