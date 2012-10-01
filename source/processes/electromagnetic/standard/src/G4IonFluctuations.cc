@@ -141,21 +141,25 @@ G4double G4IonFluctuations::SampleFluctuations(const G4Material* material,
   }
   siga = sqrt(siga);
   G4double sn = meanLoss/siga;
+  G4double twomeanLoss = meanLoss + meanLoss;
   //  G4cout << "siga= " << siga << "  sn= " << sn << G4endl;
   
   // thick target case  
   if (sn >= 2.0) {
 
-    G4double twomeanLoss = meanLoss + meanLoss;
     do {
       loss = G4RandGauss::shoot(meanLoss,siga);
     } while (0.0 > loss || twomeanLoss < loss);
 
     // Gamma distribution
-  } else {
+  } else if(sn > 0.1) {
 
     G4double neff = sn*sn;
     loss = meanLoss*CLHEP::RandGamma::shoot(neff,1.0)/neff;
+
+    // uniform distribution for very small steps
+  } else {
+    loss = twomeanLoss*G4UniformRand();
   }
 
   //G4cout << "meanLoss= " << meanLoss << " loss= " << loss << G4endl;

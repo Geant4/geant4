@@ -259,6 +259,7 @@ G4SeltzerBergerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
     G4double ylim = std::min(ylimit[Z],1.1*dataSB[Z]->Value(0.97, y)); 
     if(ylim > vmax) { vmax = ylim; }
   }
+  if(x0 < 0.05) { vmax *= 1.2; }
 
   //G4cout<<"y= "<<y<<" xmin= "<<xmin<<" xmax= "<<xmax<<" vmax= "<<vmax<<G4endl;
   //  G4int ncount = 0;
@@ -285,7 +286,7 @@ G4SeltzerBergerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
     if (v > 1.05*vmax && nwarn < 20) {
       ++nwarn;
       G4cout << "### G4SeltzerBergerModel Warning: Majoranta exceeded! "
-	     << v << " > " << vmax
+	     << v << " > " << vmax << " by " << v/vmax
 	     << " Egamma(MeV)= " << gammaEnergy
 	     << " Ee(MeV)= " << kineticEnergy
 	     << " Z= " << Z << "  " << particle->GetParticleName()

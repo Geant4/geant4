@@ -151,31 +151,32 @@ G4GoudsmitSaundersonMscModel::ComputeCrossSectionPerAtom(const G4ParticleDefinit
 }  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void 
-G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParticle,
-					       G4double safety)
-{    
+G4ThreeVector& 
+G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParticle, G4double)
+{
+  fDisplacement.set(0.0,0.0,0.0);
   G4double kineticEnergy = dynParticle->GetKineticEnergy();
   if((kineticEnergy <= 0.0) || (tPathLength <= tlimitminfix)||
-     (tPathLength/tausmall < lambda1)) { return; }
+     (tPathLength/tausmall < lambda1)) { return fDisplacement; }
 
   ///////////////////////////////////////////
   // Effective energy 
-  G4double eloss    = kineticEnergy;
-  G4double rrr      = currentRange-tPathLength;
-  if(rrr > 0.0) {
-    G4double T1 = GetEnergy(particle,currentRange-tPathLength,currentCouple);
-    if(T1 < kineticEnergy) { eloss = kineticEnergy - T1; }
-    else { eloss = 0.0; }
+  G4double eloss  = 0.0;
+  if (tPathLength > currentRange*dtrl) {
+    eloss = kineticEnergy - 
+      GetEnergy(particle,currentRange-tPathLength,currentCouple);
+  } else {
+    eloss = tPathLength*GetDEDX(particle,kineticEnergy,currentCouple);
   }
-  if(eloss > 0.0) {
-    G4double ee       = kineticEnergy - 0.5*eloss;
-    G4double ttau     = ee/electron_mass_c2;
-    G4double ttau2    = ttau*ttau;
-    G4double epsilonpp= eloss/ee;
-    G4double cst1=epsilonpp*epsilonpp*(6+10*ttau+5*ttau2)/(24*ttau2+48*ttau+72);
-    kineticEnergy *= (1 - cst1);
-  }
+  /*
+  G4double ttau      = kineticEnergy/electron_mass_c2;
+  G4double ttau2     = ttau*ttau;
+  G4double epsilonpp = eloss/kineticEnergy;
+  G4double cst1  = epsilonpp*epsilonpp*(6+10*ttau+5*ttau2)/(24*ttau2+48*ttau+72);
+  kineticEnergy *= (1 - cst1);
+  */
+  kineticEnergy -= 0.5*eloss;
+ 
   ///////////////////////////////////////////
   // additivity rule for mixture and compound xsection's
   const G4Material* mat = currentCouple->GetMaterial();
@@ -217,7 +218,7 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
   G4double lambdan=0.;
 
   if(lambda0>0.0) { lambdan=tPathLength/lambda0; }
-  if(lambdan<=1.0e-12)return;
+  if(lambdan<=1.0e-12) { return fDisplacement; }
  
   //G4cout << "E(eV)= " << kineticEnergy/eV << " L0= " << lambda0
   //	<< " L1= " << lambda1 << G4endl;
@@ -232,10 +233,8 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
   G4double epsilon1=G4UniformRand();
   G4double expn = std::exp(-lambdan);
 
-  // V.Ivanchenko added logical variable
-  G4bool sampleDisplacement = latDisplasment;
   if(epsilon1<expn)// no scattering 
-    {return;}
+    { return fDisplacement; }
   else if((epsilon1<((1.+lambdan)*expn))||(lambdan<1.))//single or plural scattering (Rutherford DCS's)
     {
       G4double xi=G4UniformRand();
@@ -247,7 +246,6 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
       G4double phi0=CLHEP::twopi*G4UniformRand(); 
       us=wss*cos(phi0);
       vs=wss*sin(phi0);
-      sampleDisplacement = false;
     }
   else // multiple scattering
     {
@@ -281,44 +279,35 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
 	vs=wss*std::sin(phi1);
       }
     }
-
     
   G4ThreeVector oldDirection = dynParticle->GetMomentumDirection();
   G4ThreeVector newDirection(us,vs,ws);
   newDirection.rotateUz(oldDirection);
   fParticleChange->ProposeMomentumDirection(newDirection);
-  
-  // V.Ivanchenko added check on logical variable
-  if(sampleDisplacement && (safety > tlimitminfix))
-    { 
-      if(Qn1<0.02)// corresponding to error less than 1% in the exact formula of <z>
-      z_coord = 1.0 - Qn1*(0.5 - Qn1/6.);
-      else z_coord = (1.-std::exp(-Qn1))/Qn1;
-      G4double rr=std::sqrt((1.- z_coord*z_coord)/(1.-ws*ws));
-      x_coord = rr*us;
-      y_coord = rr*vs;
+ 
+  // corresponding to error less than 1% in the exact formula of <z>
+  if(Qn1<0.02) { z_coord = 1.0 - Qn1*(0.5 - Qn1/6.); }
+  else         { z_coord = (1.-std::exp(-Qn1))/Qn1; }
+  G4double rr = zPathLength*std::sqrt((1.- z_coord*z_coord)/(1.-ws*ws));
+  x_coord  = rr*us;
+  y_coord  = rr*vs;
 
-      // displacement is computed relatively to the end point
-      z_coord -= 1.0;
-      rr = std::sqrt(x_coord*x_coord+y_coord*y_coord+z_coord*z_coord);
-      G4double r  = rr*zPathLength;
-      /*
-      G4cout << "G4GS::SampleSecondaries: e(MeV)= " << kineticEnergy
-	     << " sinTheta= " << sqrt(1.0 - ws*ws) << " r(mm)= " << r
-	     << " trueStep(mm)= " << tPathLength
-	     << " geomStep(mm)= " << zPathLength
-	     << G4endl;
-      */
+  // displacement is computed relatively to the end point
+  z_coord -= 1.0;
+  z_coord *= zPathLength;
+  /*
+    G4cout << "G4GS::SampleSecondaries: e(MeV)= " << kineticEnergy
+    << " sinTheta= " << sqrt(1.0 - ws*ws) 
+    << " trueStep(mm)= " << tPathLength
+    << " geomStep(mm)= " << zPathLength
+    << G4endl;
+  */
 
-      if(r > tlimitminfix) {
+  fDisplacement.set(x_coord,y_coord,z_coord);
+  fDisplacement.rotateUz(oldDirection);
 
-        G4ThreeVector Direction(x_coord/rr,y_coord/rr,z_coord/rr);
-        Direction.rotateUz(oldDirection);
-
-	ComputeDisplacement(fParticleChange, Direction, r, safety);
-      }     
-    }
-}
+  return fDisplacement;
+}     
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -478,8 +467,9 @@ G4GoudsmitSaundersonMscModel::ComputeTruePathLengthLimit(const G4Track& track,
   lambda1 = GetTransportMeanFreePath(particle,currentKinEnergy);
 
   // stop here if small range particle
-  if(inside) return ConvertTrueToGeom(tPathLength, currentMinimalStep);
-  
+  if(inside || tPathLength < tlimitminfix) {
+    return ConvertTrueToGeom(tPathLength, currentMinimalStep);
+  }  
   if(tPathLength > currentRange) tPathLength = currentRange;
 
   G4double presafety = sp->GetSafety();
@@ -693,7 +683,6 @@ G4double G4GoudsmitSaundersonMscModel::ComputeGeomPathLength(G4double)
       zmean = 1./(par1*par3) ;
   } else {
     G4double T1 = GetEnergy(particle,currentRange-tPathLength,currentCouple);
-
 
     lambda11 = GetTransportMeanFreePath(particle,T1);
 

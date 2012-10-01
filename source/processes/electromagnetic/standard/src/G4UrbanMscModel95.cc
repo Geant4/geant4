@@ -445,17 +445,19 @@ G4double G4UrbanMscModel95::ComputeTruePathLengthLimit(
   lambda0 = GetTransportMeanFreePath(particle,currentKinEnergy);
 
   // stop here if small range particle
-  if(inside) { return ConvertTrueToGeom(tPathLength, currentMinimalStep); }
+  if(inside || tPathLength < tlimitminfix) { 
+    return ConvertTrueToGeom(tPathLength, currentMinimalStep); 
+  }
   
   if(tPathLength > currentRange) { tPathLength = currentRange; }
 
   presafety = sp->GetSafety();
-
-  // G4cout << "G4Urban2::StepLimit tPathLength= " 
-  // 	 <<tPathLength<<" safety= " << presafety
-  //        << " range= " <<currentRange<< " lambda= "<<lambda0
-  // 	 << " Alg: " << steppingAlgorithm <<G4endl;
-
+  /*
+  G4cout << "G4Urban95::StepLimit tPathLength= " 
+   	 <<tPathLength<<" safety= " << presafety
+          << " range= " <<currentRange<< " lambda= "<<lambda0
+   	 << " Alg: " << steppingAlgorithm <<G4endl;
+  */
   // far from geometry boundary
   if(currentRange < presafety)
     {
@@ -583,7 +585,12 @@ G4double G4UrbanMscModel95::ComputeTruePathLengthLimit(
       // i.e. when it is needed for optimization purposes
       if((stepStatus != fGeomBoundary) && (presafety < tlimitminfix)) 
 	presafety = ComputeSafety(sp->GetPosition(),tPathLength); 
-
+      /*
+      G4cout << "presafety= " << presafety
+	     << " firstStep= " << firstStep
+	     << " stepStatus= " << stepStatus 
+	     << G4endl;
+      */
       // is far from boundary
       if(currentRange < presafety)
         {
@@ -759,7 +766,8 @@ G4double G4UrbanMscModel95::ComputeTrueStepLength(G4double geomStepLength)
     }  
   }
   if(tPathLength < geomStepLength) tPathLength = geomStepLength;
-  //G4cout << "tPathLength= " << tPathLength << " step= " << geomStepLength << G4endl;
+  //G4cout << "Urban95::ComputeTrueLength: tPathLength= " << tPathLength 
+  //	 << " step= " << geomStepLength << G4endl;
 
   return tPathLength;
 }
@@ -789,18 +797,25 @@ G4double G4UrbanMscModel95::ComputeTheta0(G4double trueStepLength,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4UrbanMscModel95::SampleScattering(const G4DynamicParticle* dynParticle,
-					 G4double safety)
+G4ThreeVector& 
+G4UrbanMscModel95::SampleScattering(const G4DynamicParticle* dynParticle,
+				    G4double safety)
 {
-  G4double kineticEnergy = dynParticle->GetKineticEnergy();
+  fDisplacement.set(0.0,0.0,0.0);
+  G4double kineticEnergy = currentKinEnergy;
+  if (tPathLength > currentRange*dtrl) {
+    kineticEnergy = GetEnergy(particle,currentRange-tPathLength,couple);
+  } else {
+    kineticEnergy -= tPathLength*GetDEDX(particle,currentKinEnergy,couple);
+  }
 
   if((kineticEnergy <= 0.0) || (tPathLength <= tlimitminfix) ||
-     (tPathLength/tausmall < lambda0)) return;
+     (tPathLength/tausmall < lambda0)) { return fDisplacement; }
 
   G4double cth  = SampleCosineTheta(tPathLength,kineticEnergy);
 
   // protection against 'bad' cth values
-  if(std::fabs(cth) > 1.) return;
+  if(std::fabs(cth) > 1.) { return fDisplacement; }
 
   // extra protection agaist high energy particles backscattered 
   if(cth < 1.0 - 1000*tPathLength/lambda0 && kineticEnergy > 20*MeV) { 
@@ -833,7 +848,13 @@ void G4UrbanMscModel95::SampleScattering(const G4DynamicParticle* dynParticle,
   G4ThreeVector newDirection(dirx,diry,cth);
   newDirection.rotateUz(oldDirection);
   fParticleChange->ProposeMomentumDirection(newDirection);
-
+  /*
+  G4cout << "G4UrbanMscModel95::SampleSecondaries: e(MeV)= " << kineticEnergy
+	 << " sinTheta= " << sth << " safety(mm)= " << safety
+	 << " trueStep(mm)= " << tPathLength
+	 << " geomStep(mm)= " << zPathLength
+	 << G4endl;
+  */
   if (latDisplasment && safety > tlimitminfix) {
 
     G4double r = SampleDisplacement();
@@ -866,12 +887,11 @@ void G4UrbanMscModel95::SampleScattering(const G4DynamicParticle* dynParticle,
         dirx = std::cos(Phi);
         diry = std::sin(Phi);
 
-        G4ThreeVector latDirection(dirx,diry,0.0);
-        latDirection.rotateUz(oldDirection);
-
-	ComputeDisplacement(fParticleChange, latDirection, r, safety);
+        fDisplacement.set(r*dirx,r*diry,0.0);
+        fDisplacement.rotateUz(oldDirection);
       }
   }
+  return fDisplacement;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -880,7 +900,9 @@ G4double G4UrbanMscModel95::SampleCosineTheta(G4double trueStepLength,
 					      G4double KineticEnergy)
 {
   G4double cth = 1. ;
-  G4double tau = trueStepLength/lambda0 ;
+  G4double tau = trueStepLength/lambda0;
+  currentTau   = tau;
+  lambdaeff    = lambda0;
 
   Zeff = couple->GetMaterial()->GetTotNbOfElectPerVolume()/
          couple->GetMaterial()->GetTotNbOfAtomsPerVolume() ;

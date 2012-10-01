@@ -87,7 +87,8 @@ public:
 					      G4double cut = DBL_MAX,
 					      G4double emax= DBL_MAX);
 
-  virtual void SampleScattering(const G4DynamicParticle*, G4double safety);
+  virtual G4ThreeVector& SampleScattering(const G4DynamicParticle*, 
+					  G4double safety);
 
   virtual G4double ComputeTruePathLengthLimit(const G4Track& track,
 					      G4double& currentMinimalStep);

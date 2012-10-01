@@ -193,7 +193,9 @@ G4double G4WentzelVIRelModel::ComputeTruePathLengthLimit(
   if(tlimit > currentRange) { tlimit = currentRange; }
 
   // stop here if small range particle
-  if(inside) { return ConvertTrueToGeom(tlimit, currentMinimalStep); }
+  if(inside || tlimit < tlimitminfix) { 
+    return ConvertTrueToGeom(tlimit, currentMinimalStep); 
+  }
 
   // pre step
   G4double presafety = sp->GetSafety();
@@ -383,16 +385,18 @@ G4double G4WentzelVIRelModel::ComputeTrueStepLength(G4double geomStepLength)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4WentzelVIRelModel::SampleScattering(const G4DynamicParticle* dynParticle,
-					G4double safety)
+G4ThreeVector& 
+G4WentzelVIRelModel::SampleScattering(const G4DynamicParticle* dynParticle,
+				      G4double safety)
 {
+  fDisplacement.set(0.0,0.0,0.0);
   //G4cout << "!##! G4WentzelVIRelModel::SampleScattering for " 
   //	 << particle->GetParticleName() << G4endl;
 
   // ignore scattering for zero step length and energy below the limit
   G4double tkin = dynParticle->GetKineticEnergy();
   if(tkin < lowEnergyLimit || tPathLength <= 0.0) 
-    { return; }
+    { return fDisplacement; }
   
   G4double invlambda = 0.0;
   if(lambdaeff < DBL_MAX) { invlambda = 0.5/lambdaeff; }
@@ -433,7 +437,7 @@ void G4WentzelVIRelModel::SampleScattering(const G4DynamicParticle* dynParticle,
   // because of magnetic field geometry is computed relatively to the 
   // end point of the step 
   G4ThreeVector dir(0.0,0.0,1.0);
-  G4ThreeVector pos(0.0,0.0,-zPathLength);
+  fDisplacement.set(0.0,0.0,-zPathLength);
   G4double mscfac = zPathLength/tPathLength;
 
   // start a loop 
@@ -457,7 +461,7 @@ void G4WentzelVIRelModel::SampleScattering(const G4DynamicParticle* dynParticle,
     }
 
     // new position
-    pos += step*mscfac*dir;
+    fDisplacement += step*mscfac*dir;
 
     if(singleScat) {
 
@@ -492,8 +496,15 @@ void G4WentzelVIRelModel::SampleScattering(const G4DynamicParticle* dynParticle,
         G4double z0 = x0*invlambda;
 
 	// correction to keep first moment
-        if(z0 > 0.1) { z0 /= (1.0 - 1.0/(z0*(exp(1.0/z0) - 1.0))); }
-	do { z = -z0*log(G4UniformRand()); } while (z >= 1.0); 
+ 
+	// sample z in interval 0 - 1
+        if(z0 > 5.0) { z = G4UniformRand(); }
+	else {
+	  G4double zzz = 0.0;
+	  if(z0 > 0.01) { zzz = exp(-1.0/z0); }
+	  z = -z0*log(1.0 - (1.0 - zzz)*G4UniformRand());
+	  //  /(1.0 - (1.0/z0 + 1.0)*zzz); 
+	}
 
 	cost = 1.0 - 2.0*z/*factCM*/;
 	if(cost > 1.0)       { cost = 1.0; }
@@ -503,25 +514,27 @@ void G4WentzelVIRelModel::SampleScattering(const G4DynamicParticle* dynParticle,
 	G4double vx1 = sint*cos(phi);
 	G4double vy1 = sint*sin(phi);
 
+	// change direction
+	temp.set(vx1,vy1,cost);
+	temp.rotateUz(dir);
+	dir = temp;
+
 	// lateral displacement  
-	if (latDisplasment && safety > tlimitminfix && step > tlimitminfix) {
+	if (latDisplasment && x0 > tlimitminfix) {
 	  G4double rms = invsqrt12*sqrt(2*z0);
-	  G4double dx = x0*(0.5*vx1 + rms*G4RandGauss::shoot(0.0,1.0));
-	  G4double dy = x0*(0.5*vy1 + rms*G4RandGauss::shoot(0.0,1.0));
+          G4double r   = x0*mscfac;
+	  G4double dx  = r*(0.5*vx1 + rms*G4RandGauss::shoot(0.0,1.0));
+	  G4double dy  = r*(0.5*vy1 + rms*G4RandGauss::shoot(0.0,1.0));
 	  G4double dz;
-	  G4double d = x0*x0 - dx*dx - dy*dy;
-	  if(d >= 0.0)  { dz = sqrt(d) - step; }
+	  G4double d   = r*r - dx*dx - dy*dy;
+	  if(d >= 0.0)  { dz = sqrt(d) - r; }
 	  else          { dx = dy = dz = 0.0; }
 
 	  // change position
 	  temp.set(dx,dy,dz);
 	  temp.rotateUz(dir); 
-	  pos += temp;
+	  fDisplacement += temp;
 	}
-	// change direction
-	temp.set(vx1,vy1,cost);
-	temp.rotateUz(dir);
-	dir = temp;
       }
     }
   } while (0 < nMscSteps);
@@ -534,24 +547,21 @@ void G4WentzelVIRelModel::SampleScattering(const G4DynamicParticle* dynParticle,
   fParticleChange->ProposeMomentumDirection(dir);
 
   // lateral displacement  
-  if (latDisplasment && safety > tlimitminfix) {
-    pos.rotateUz(oldDirection);
-    G4double r = pos.mag();
+  fDisplacement.rotateUz(oldDirection);
 
-    /*            
-    G4cout << " r(mm)= " << r << " safety= " << safety
-           << " trueStep(mm)= " << tPathLength
-           << " geomStep(mm)= " << zPathLength
-	   << " x= " << pos.x() << " y= " << pos.y() << " z= " << pos.z()
-           << G4endl;
-    */
+  /*            
+	 G4cout << " r(mm)= " << fDisplacement.mag() 
+		<< " safety= " << safety
+		<< " trueStep(mm)= " << tPathLength
+		<< " geomStep(mm)= " << zPathLength
+		<< " x= " << fDisplacement.x() 
+		<< " y= " << fDisplacement.y() 
+		<< " z= " << fDisplacement.z()
+		<< G4endl;
+  */
 
-    if(r > tlimitminfix) {
-      pos /= r;
-      ComputeDisplacement(fParticleChange, pos, r, safety);
-    }
-  }
-  //G4cout << "G4WentzelVIRelModel::SampleScattering end NewDir= " << dir << G4endl;
+  //G4cout<< "G4WentzelVIRelModel::SampleScattering end NewDir= " << dir<< G4endl;
+  return fDisplacement;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

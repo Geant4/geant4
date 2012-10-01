@@ -122,17 +122,19 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
   currentCouple = 0;
   cosThetaMin = cos(PolarAngleLimit());
   wokvi->Initialise(p, cosThetaMin);
-  /*  
+  /*    
   G4cout << "G4eCoulombScatteringModel: " << particle->GetParticleName()
          << "  1-cos(ThetaLimit)= " << 1 - cosThetaMin
 	 << "  cos(thetaMax)= " <<  cosThetaMax
 	 << G4endl;
   */
   pCuts = G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(3);
-  //G4cout << "!!! G4eCoulombScatteringModel::Initialise for " 
-  //	 << p->GetParticleName() << "  cos(TetMin)= " << cosThetaMin 
-  //	 << "  cos(TetMax)= " << cosThetaMax <<G4endl;
-  // G4cout << "cut0= " << cuts[0] << "  cut1= " << cuts[1] << G4endl;
+  /*
+  G4cout << "!!! G4eCoulombScatteringModel::Initialise for " 
+  	 << p->GetParticleName() << "  cos(TetMin)= " << cosThetaMin 
+  	 << "  cos(TetMax)= " << cosThetaMax <<G4endl;
+  G4cout << "cut0= " << cuts[0] << "  cut1= " << cuts[1] << G4endl;
+  */
   if(!isInitialised) {
     isInitialised = true;
     fParticleChange = GetParticleChangeForGamma();
@@ -202,11 +204,11 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   }
   SetupParticle(dp->GetDefinition());
   DefineMaterial(couple);
-
-  //G4cout << "G4eCoulombScatteringModel::SampleSecondaries e(MeV)= " 
-  //	 << kinEnergy << "  " << particle->GetParticleName() 
-  //	 << " cut= " << cutEnergy<< G4endl;
- 
+  /*
+  G4cout << "G4eCoulombScatteringModel::SampleSecondaries e(MeV)= " 
+  	 << kinEnergy << "  " << particle->GetParticleName() 
+  	 << " cut= " << cutEnergy<< G4endl;
+  */
   // Choose nucleus
   const G4Element* currentElement = 
     SelectRandomAtom(couple,particle,kinEnergy,cutEnergy,kinEnergy);

@@ -67,7 +67,6 @@ G4DipBustGenerator::SampleDirection(const G4DynamicParticle* dp,
 				    G4double, G4int, const G4Material*)
 {
   G4double c, cosTheta, delta, cofA, signc = 1., a, power = 1./3.;
-  G4double gamma, beta;
 
   G4double eTkin = dp->GetKineticEnergy();
 
@@ -87,8 +86,8 @@ G4DipBustGenerator::SampleDirection(const G4DynamicParticle* dp,
 
   cosTheta = cofA - 1./cofA;
 
-  gamma = 1. + eTkin/electron_mass_c2;
-  beta = std::sqrt(1. - 1./gamma/gamma);
+  G4double tau = eTkin/electron_mass_c2;
+  G4double beta = std::sqrt(tau*(tau + 2.))/(tau + 1.);
 
   cosTheta = (cosTheta + beta)/(1 + cosTheta*beta);
 

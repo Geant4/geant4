@@ -68,6 +68,7 @@
 #include "G4ParticleChangeForLoss.hh"
 #include "G4LossTableManager.hh"
 #include "G4ModifiedTsai.hh"
+#include "G4DipBustGenerator.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -101,6 +102,7 @@ G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(const G4ParticleDefinition*
 
   SetLPMFlag(true);
   SetAngularDistribution(new G4ModifiedTsai());
+  //  SetAngularDistribution(new G4DipBustGenerator());
 
   particleMass = kinEnergy = totalEnergy = currentZ = z13 = z23 = lnZ = Fel 
     = Finel = fCoulomb = fMax = densityFactor = densityCorr = lpmEnergy 

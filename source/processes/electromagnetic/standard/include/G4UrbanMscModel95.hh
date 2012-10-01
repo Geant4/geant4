@@ -84,8 +84,7 @@ public:
 				      G4double cut =0.,
 				      G4double emax=DBL_MAX);
 
-  void SampleScattering(const G4DynamicParticle*,
-			G4double safety);
+  G4ThreeVector& SampleScattering(const G4DynamicParticle*, G4double safety);
 
   G4double ComputeTruePathLengthLimit(const G4Track& track,
 				      G4double& currentMinimalStep);
@@ -170,7 +169,6 @@ private:
   G4bool   firstStep;
   G4bool   inside;
   G4bool   insideskin;
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

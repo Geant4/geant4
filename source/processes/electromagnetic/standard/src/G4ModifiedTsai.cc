@@ -84,7 +84,6 @@ G4ModifiedTsai::SampleDirection(const G4DynamicParticle* dp,
   G4double u;
 
   do {
-
     u = - std::log(G4UniformRand()*G4UniformRand());
 
     if ( border > G4UniformRand() ) { u /= a1; }

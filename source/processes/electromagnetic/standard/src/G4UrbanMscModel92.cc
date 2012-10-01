@@ -474,7 +474,9 @@ G4double G4UrbanMscModel92::ComputeTruePathLengthLimit(
   lambda0 = GetTransportMeanFreePath(particle,currentKinEnergy);
 
   // stop here if small range particle
-  if(inside) return ConvertTrueToGeom(tPathLength, currentMinimalStep);            
+  if(inside || tPathLength < tlimitminfix) {
+    return ConvertTrueToGeom(tPathLength, currentMinimalStep);
+  }
   
   if(tPathLength > currentRange) tPathLength = currentRange;
 
@@ -788,18 +790,24 @@ G4double G4UrbanMscModel92::ComputeTheta0(G4double trueStepLength,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4UrbanMscModel92::SampleScattering(const G4DynamicParticle* dynParticle,
-					 G4double safety)
+G4ThreeVector& 
+G4UrbanMscModel92::SampleScattering(const G4DynamicParticle* dynParticle,
+				    G4double safety)
 {
-  G4double kineticEnergy = dynParticle->GetKineticEnergy();
-
+  fDisplacement.set(0.0,0.0,0.0);
+  G4double kineticEnergy = currentKinEnergy;
+  if (tPathLength > currentRange*dtrl) {
+    kineticEnergy = GetEnergy(particle,currentRange-tPathLength,couple);
+  } else {
+    kineticEnergy -= tPathLength*GetDEDX(particle,currentKinEnergy,couple);
+  }
   if((kineticEnergy <= 0.0) || (tPathLength <= tlimitminfix) ||
-     (tPathLength/tausmall < lambda0)) return;
+     (tPathLength/tausmall < lambda0)) return fDisplacement;
 
   G4double cth  = SampleCosineTheta(tPathLength,kineticEnergy);
 
   // protection against 'bad' cth values
-  if(std::abs(cth) > 1.) return;
+  if(std::abs(cth) > 1.) return fDisplacement;
 
   // extra protection agaist high energy particles backscattered 
   if(cth < 1.0 - 1000*tPathLength/lambda0 && kineticEnergy > 20*MeV) { 
@@ -862,15 +870,14 @@ void G4UrbanMscModel92::SampleScattering(const G4DynamicParticle* dynParticle,
             Phi = phi-psi;
         }
 
-        dirx = std::cos(Phi);
-        diry = std::sin(Phi);
+        dirx = r*std::cos(Phi);
+        diry = r*std::sin(Phi);
 
-        G4ThreeVector latDirection(dirx,diry,0.0);
-        latDirection.rotateUz(oldDirection);
-
-	ComputeDisplacement(fParticleChange, latDirection, r, safety);
+        fDisplacement.set(dirx,diry,0.0);
+        fDisplacement.rotateUz(oldDirection);
       }
   }
+  return fDisplacement;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

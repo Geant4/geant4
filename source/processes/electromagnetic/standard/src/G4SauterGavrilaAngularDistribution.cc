@@ -57,23 +57,23 @@ G4ThreeVector&
 G4SauterGavrilaAngularDistribution::SampleDirection(
        const G4DynamicParticle* dp, G4double, G4int, const G4Material*)
 {
-  G4double gamma = 1. + dp->GetKineticEnergy()/electron_mass_c2;
-  const G4double gammalimit = 30.0;
+  G4double tau = dp->GetKineticEnergy()/electron_mass_c2;
+  const G4double taulimit = 30.0;
 
-  if (gamma > gammalimit) {
+  if (tau > taulimit) {
     fLocalDirection = dp->GetMomentumDirection(); 
     // Bugzilla 1120
     // SI on 05/09/2010 as suggested by JG 04/09/10 
   } else {
  
-    G4double invgamma = 1.0/gamma;
-    G4double beta  = std::sqrt((gamma - 1)*(gamma + 1))*invgamma;
-    G4double b     = 0.5*gamma*(gamma-1)*(gamma-2);
+    G4double invgamma  = 1.0/(tau + 1.0);
+    G4double beta      = std::sqrt(tau*(tau + 2.0))*invgamma;
+    G4double b         = 0.5*tau*(tau*tau - 1.0);
     G4double invgamma2 = invgamma*invgamma;
    
     G4double rndm,term,greject,grejsup,costeta,sint2;
-    if (gamma < 2.) { grejsup = (1.+b-beta*b)/invgamma2; }
-    else            { grejsup = (1.+b+beta*b)/invgamma2; }
+    if (tau < 1.) { grejsup = (1.+b-beta*b)/invgamma2; }
+    else          { grejsup = (1.+b+beta*b)/invgamma2; }
 
     do { 
       rndm    = 1 - 2*G4UniformRand();

@@ -119,7 +119,7 @@ void G4WentzelVIModel::Initialise(const G4ParticleDefinition* p,
 
   cosThetaMax = cos(PolarAngleLimit());
   wokvi->Initialise(p, cosThetaMax);
-  /*  
+  /*
   G4cout << "G4WentzelVIModel: " << particle->GetParticleName()
          << "  1-cos(ThetaLimit)= " << 1 - cosThetaMax 
 	 << G4endl;
@@ -190,12 +190,17 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
   currentRange = GetRange(particle,preKinEnergy,currentCouple);
   cosTetMaxNuc = wokvi->SetupKinematic(preKinEnergy, currentMaterial);
 
+  //G4cout << "lambdaeff= " << lambdaeff << " Range= " << currentRange
+  //	 << " tlimit= " << tlimit << " 1-cost= " << 1 - cosTetMaxNuc << G4endl;
+
   // extra check for abnormal situation
   // this check needed to run MSC with eIoni and eBrem inactivated
   if(tlimit > currentRange) { tlimit = currentRange; }
 
   // stop here if small range particle
-  if(inside) { return ConvertTrueToGeom(tlimit, currentMinimalStep); }
+  if(inside || tlimit < tlimitminfix) { 
+    return ConvertTrueToGeom(tlimit, currentMinimalStep); 
+  }
 
   // pre step
   G4double presafety = sp->GetSafety();
@@ -214,7 +219,7 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
       return ConvertTrueToGeom(tlimit, currentMinimalStep);
     }
   }
-  /*  
+  /*
   G4cout << "e(MeV)= " << preKinEnergy/MeV
 	 << "  " << particle->GetParticleName() 
 	 << " CurLimit(mm)= " << tlimit/mm <<" safety(mm)= " << presafety/mm
@@ -301,9 +306,11 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
   // initialisation of single scattering x-section
   xtsec = 0.0;
   cosThetaMin = cosTetMaxNuc;
-
-  //G4cout << "Step= " << geomStepLength << "  Lambda= " <<  lambdaeff 
-  //	 << " 1-cosThetaMaxNuc= " << 1 - cosTetMaxNuc << G4endl;
+  /*
+  G4cout << "ComputeTrueStepLength: Step= " << geomStepLength 
+	 << "  Lambda= " <<  lambdaeff 
+  	 << " 1-cosThetaMaxNuc= " << 1 - cosTetMaxNuc << G4endl;
+  */
   // pathalogical case
   if(lambdaeff == DBL_MAX) { 
     singleScatteringMode = true;
@@ -374,38 +381,42 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
     } 
   }
 
-  /*      
+  /*   
   G4cout <<"Comp.true: zLength= "<<zPathLength<<" tLength= "<<tPathLength
 	 <<" Leff(mm)= "<<lambdaeff/mm<<" sig0(1/mm)= " << xtsec <<G4endl;
   G4cout << particle->GetParticleName() << " 1-cosThetaMin= " << 1-cosThetaMin
 	 << " 1-cosTetMaxNuc= " << 1-cosTetMaxNuc 
-	 << " e(MeV)= " << preKinEnergy/MeV << "  "  << singleScatteringMode << G4endl;
+	 << " e(MeV)= " << preKinEnergy/MeV << "  "  
+	 << singleScatteringMode << G4endl;
   */
   return tPathLength;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
-					G4double safety)
+G4ThreeVector& 
+G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
+				   G4double safety)
 {
+  fDisplacement.set(0.0,0.0,0.0);
   //G4cout << "!##! G4WentzelVIModel::SampleScattering for " 
   //	 << particle->GetParticleName() << G4endl;
 
   // ignore scattering for zero step length and energy below the limit
   G4double tkin = dynParticle->GetKineticEnergy();
   if(tkin < lowEnergyLimit || tPathLength <= 0.0) 
-    { return; }
+    { return fDisplacement; }
   
   G4double invlambda = 0.0;
   if(lambdaeff < DBL_MAX) { invlambda = 0.5/lambdaeff; }
 
   // use average kinetic energy over the step
   G4double cut = (*currentCuts)[currentMaterialIndex];
-  /*
+  /*  
   G4cout <<"SampleScat: E0(MeV)= "<< preKinEnergy/MeV
   	 << " Leff= " << lambdaeff <<" sig0(1/mm)= " << xtsec 
- 	 << " xmsc= " <<  tPathLength*invlambda << " safety= " << safety << G4endl;
+ 	 << " xmsc= " <<  tPathLength*invlambda 
+	 << " safety= " << safety << G4endl;
   */
 
   // step limit due msc
@@ -436,17 +447,17 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
   // because of magnetic field geometry is computed relatively to the 
   // end point of the step 
   G4ThreeVector dir(0.0,0.0,1.0);
-  G4ThreeVector pos(0.0,0.0,-zPathLength);
+  fDisplacement.set(0.0,0.0,-zPathLength);
   G4double mscfac = zPathLength/tPathLength;
 
   // start a loop 
   G4double x2 = x0;
   G4double step, z;
   G4bool singleScat;
-  /*
-    G4cout << "Start of the loop x1(mm)= " << x1 << "  x2(mm)= " << x2 
-  	 << " 1-cost1= " << 1 - cosThetaMin << "  " << singleScatteringMode 
-  	 << " xtsec= " << xtsec << G4endl;
+  /*  
+      G4cout << "Start of the loop x1(mm)= " << x1 << "  x2(mm)= " << x2 
+      << " 1-cost1= " << 1 - cosThetaMin << "  " << singleScatteringMode 
+      << " xtsec= " << xtsec << G4endl;
   */
   do {
 
@@ -460,7 +471,7 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
     }
 
     // new position
-    pos += step*mscfac*dir;
+    fDisplacement += step*mscfac*dir;
 
     if(singleScat) {
 
@@ -495,13 +506,11 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
         G4double z0 = x0*invlambda;
 
 	// sample z in interval 0 - 1
-        if(z0 > 5.0) { z = G4UniformRand(); }
-	else {
+	do {
 	  G4double zzz = 0.0;
 	  if(z0 > 0.1) { zzz = exp(-1.0/z0); }
-	  z = -z0*log(1.0 - (1.0 - zzz)*G4UniformRand())
-	    /(1.0 - (1.0/z0 + 1.0)*zzz); 
-	}
+	  z = -z0*log(1.0 - (1.0 - zzz)*G4UniformRand());
+	} while(z > 1.0);
 	cost = 1.0 - 2.0*z/*factCM*/;
 	if(cost > 1.0)       { cost = 1.0; }
 	else if(cost < -1.0) { cost =-1.0; }
@@ -510,25 +519,27 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
 	G4double vx1 = sint*cos(phi);
 	G4double vy1 = sint*sin(phi);
 
+	// change direction
+	temp.set(vx1,vy1,cost);
+	temp.rotateUz(dir);
+	dir = temp;
+
 	// lateral displacement  
-	if (latDisplasment && safety > tlimitminfix && step > tlimitminfix) {
+	if (latDisplasment && x0 > tlimitminfix) {
 	  G4double rms = invsqrt12*sqrt(2*z0);
-	  G4double dx = x0*(0.5*vx1 + rms*G4RandGauss::shoot(0.0,1.0));
-	  G4double dy = x0*(0.5*vy1 + rms*G4RandGauss::shoot(0.0,1.0));
+          G4double r   = x0*mscfac;
+	  G4double dx  = r*(0.5*vx1 + rms*G4RandGauss::shoot(0.0,1.0));
+	  G4double dy  = r*(0.5*vy1 + rms*G4RandGauss::shoot(0.0,1.0));
 	  G4double dz;
-	  G4double d = x0*x0 - dx*dx - dy*dy;
-	  if(d >= 0.0)  { dz = sqrt(d) - step; }
+	  G4double d   = r*r - dx*dx - dy*dy;
+	  if(d >= 0.0)  { dz = sqrt(d) - r; }
 	  else          { dx = dy = dz = 0.0; }
 
 	  // change position
 	  temp.set(dx,dy,dz);
 	  temp.rotateUz(dir); 
-	  pos += temp;
+	  fDisplacement += temp;
 	}
-	// change direction
-	temp.set(vx1,vy1,cost);
-	temp.rotateUz(dir);
-	dir = temp;
       }
     }
   } while (0 < nMscSteps);
@@ -541,24 +552,21 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
   fParticleChange->ProposeMomentumDirection(dir);
 
   // lateral displacement  
-  if (latDisplasment && safety > tlimitminfix) {
-    pos.rotateUz(oldDirection);
-    G4double r = pos.mag();
+  fDisplacement.rotateUz(oldDirection);
 
-    /*            
-    G4cout << " r(mm)= " << r << " safety= " << safety
-           << " trueStep(mm)= " << tPathLength
-           << " geomStep(mm)= " << zPathLength
-	   << " x= " << pos.x() << " y= " << pos.y() << " z= " << pos.z()
-           << G4endl;
-    */
+  /*            
+	 G4cout << " r(mm)= " << fDisplacement.mag() 
+		<< " safety= " << safety
+		<< " trueStep(mm)= " << tPathLength
+		<< " geomStep(mm)= " << zPathLength
+		<< " x= " << fDisplacement.x() 
+		<< " y= " << fDisplacement.y() 
+		<< " z= " << fDisplacement.z()
+		<< G4endl;
+  */
 
-    if(r > tlimitminfix) {
-      pos /= r;
-      ComputeDisplacement(fParticleChange, pos, r, safety);
-    }
-  }
-  //G4cout << "G4WentzelVIModel::SampleScattering end NewDir= " << dir << G4endl;
+  //G4cout<< "G4WentzelVIModel::SampleScattering end NewDir= " << dir<< G4endl;
+  return fDisplacement;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

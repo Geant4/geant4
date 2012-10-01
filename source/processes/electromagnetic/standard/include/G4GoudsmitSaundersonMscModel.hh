@@ -88,8 +88,8 @@ public:
 					      G4double AtomicNumber, G4double, 
 					      G4double, G4double);
 
-  virtual void SampleScattering(const G4DynamicParticle* ,
-				G4double );
+  virtual G4ThreeVector& SampleScattering(const G4DynamicParticle*, 
+					  G4double safety);
 
   virtual G4double ComputeTruePathLengthLimit(const G4Track& track,
 					      G4double& currentMinimalStep);

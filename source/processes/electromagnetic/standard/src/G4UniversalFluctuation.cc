@@ -132,6 +132,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
   //
   G4double meanLoss = averageLoss;
   G4double tkin  = dp->GetKineticEnergy();
+  //G4cout<< "Emean= "<< meanLoss<< " tmax= "<< tmax<< " L= "<<length<<G4endl;
   if (meanLoss < minLoss) { return meanLoss; }
 
   if(!particle) { InitialiseMe(dp->GetDefinition()); }
@@ -176,7 +177,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
 	G4double neff = sn*sn;
 	loss = meanLoss*CLHEP::RandGamma::shoot(neff,1.0)/neff;
       }
-
+      //G4cout << "Gauss: " << loss << G4endl;
       return loss;
     }
   }
@@ -336,6 +337,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
 
     losstot += loss;
   }
+  //G4cout << "Vavilov: " << losstot << "  Nstep= " << nstep << G4endl;
               
   return losstot;
 

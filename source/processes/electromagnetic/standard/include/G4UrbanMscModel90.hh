@@ -90,8 +90,7 @@ public:
 			 G4double,
 			 G4double);
 
-  void SampleScattering(const G4DynamicParticle*,
-			G4double safety);
+  G4ThreeVector& SampleScattering(const G4DynamicParticle*, G4double safety);
 
   G4double ComputeTruePathLengthLimit(const G4Track& track,
 				      G4double& currentMinimalStep);

@@ -405,7 +405,9 @@ G4double G4UrbanMscModel90::ComputeTruePathLengthLimit(
   lambda0 = GetTransportMeanFreePath(particle,currentKinEnergy);
 
   // stop here if small range particle
-  if(inside) { return ConvertTrueToGeom(tPathLength, currentMinimalStep); }
+  if(inside || tPathLength < tlimitminfix) { 
+    return ConvertTrueToGeom(tPathLength, currentMinimalStep); 
+  }
   
   if(tPathLength > currentRange) { tPathLength = currentRange; }
 
@@ -724,16 +726,23 @@ G4double G4UrbanMscModel90::ComputeTheta0(G4double trueStepLength,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4UrbanMscModel90::SampleScattering(const G4DynamicParticle* dynParticle,
-					 G4double safety)
+G4ThreeVector& 
+G4UrbanMscModel90::SampleScattering(const G4DynamicParticle* dynParticle,
+				    G4double safety)
 {
-  G4double kineticEnergy = dynParticle->GetKineticEnergy();
+  fDisplacement.set(0.0,0.0,0.0);
+  G4double kineticEnergy = currentKinEnergy;
+  if (tPathLength > currentRange*dtrl) {
+    kineticEnergy = GetEnergy(particle,currentRange-tPathLength,couple);
+  } else {
+    kineticEnergy -= tPathLength*GetDEDX(particle,currentKinEnergy,couple);
+  }
   if((kineticEnergy <= 0.0) || (tPathLength <= tlimitminfix) ||
-     (tPathLength/tausmall < lambda0) ) return;
+     (tPathLength/tausmall < lambda0) ) { return fDisplacement; }
 
   G4double cth  = SampleCosineTheta(tPathLength,kineticEnergy);
   // protection against 'bad' cth values
-  if(std::fabs(cth) > 1.) return;
+  if(std::fabs(cth) > 1.) { return fDisplacement; }
 
   const G4double checkEnergy = GeV;
   if(kineticEnergy > checkEnergy && cth < 0.0 
@@ -746,7 +755,7 @@ void G4UrbanMscModel90::SampleScattering(const G4DynamicParticle* dynParticle,
        << " scattering angle is set to zero" << G4endl;
     G4Exception("G4UrbanMscModel90::SampleScattering","em0004",JustWarning,
                 ed,"Please, send bug report in the case of this message");
-    return;
+    return fDisplacement;
   }
 
   G4double sth  = sqrt((1.0 - cth)*(1.0 + cth));
@@ -788,11 +797,11 @@ void G4UrbanMscModel90::SampleScattering(const G4DynamicParticle* dynParticle,
         dirx = std::cos(Phi);
         diry = std::sin(Phi);
 
-        G4ThreeVector latDirection(dirx,diry,0.0);
-        latDirection.rotateUz(oldDirection);
-	ComputeDisplacement(fParticleChange, latDirection, r, safety);
+        fDisplacement.set(r*dirx,r*diry,0.0);
+        fDisplacement.rotateUz(oldDirection);
       }
   }
+  return fDisplacement;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

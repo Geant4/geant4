@@ -63,7 +63,7 @@ G4CoulombScattering::G4CoulombScattering(const G4String& name)
 {
   //  G4cout << "G4CoulombScattering constructor "<< G4endl;
   SetBuildTableFlag(true);
-  SetStartFromNullFlag(true);
+  SetStartFromNullFlag(false);
   SetIntegral(true);
   SetSecondaryParticle(G4Proton::Proton());
   SetProcessSubType(fCoulombScattering);
@@ -90,6 +90,11 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
     *CLHEP::hbarc/CLHEP::fermi;
   q2Max = 0.5*a*a;
   G4double theta = PolarAngleLimit();
+
+  // restricted or non-restricted cross section table
+  G4bool yes = false;
+  if(theta == CLHEP::pi) { yes = true; }
+  SetStartFromNullFlag(yes);
   /*
   G4cout << "### G4CoulombScattering::InitialiseProcess: "
   	 << p->GetParticleName()
@@ -143,8 +148,9 @@ G4double G4CoulombScattering::MinPrimaryEnergy(const G4ParticleDefinition* part,
   G4double emin = 0.0;
 
   // Coulomb scattering combined with multiple or hadronic scattering
-  if(0.0 < PolarAngleLimit()) {
-    G4double p2 = 0.5*q2Max*mat->GetIonisation()->GetInvA23();
+  G4double theta = PolarAngleLimit();
+  if(0.0 < theta) {
+    G4double p2 = q2Max*mat->GetIonisation()->GetInvA23()/(1.0 - cos(theta));
     G4double mass = part->GetPDGMass();
     emin = sqrt(p2 + mass*mass) - mass;
   }

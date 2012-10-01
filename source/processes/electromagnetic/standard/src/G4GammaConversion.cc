@@ -68,6 +68,7 @@
 
 #include "G4GammaConversion.hh"
 #include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4BetheHeitlerModel.hh"
 #include "G4PairProductionRelModel.hh"
 #include "G4Electron.hh"
@@ -105,17 +106,21 @@ void G4GammaConversion::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
-    const G4double limit = 100*GeV;
+    const G4double limit = 80*GeV;
     G4double emin = std::max(MinKinEnergy(), 2*electron_mass_c2);
     G4double emax = MaxKinEnergy();
     SetMinKinEnergy(emin);
+
     if(!EmModel(1)) { SetEmModel(new G4BetheHeitlerModel(), 1); }
     EmModel(1)->SetLowEnergyLimit(emin);
-    EmModel(1)->SetHighEnergyLimit(std::min(emax,limit));
+    G4double ehigh = std::min(emax,limit);
+    ehigh = std::min(ehigh,EmModel(1)->HighEnergyLimit());
+    EmModel(1)->SetHighEnergyLimit(ehigh);
     AddEmModel(1, EmModel(1));
-    if(emax > limit) {
+
+    if(emax > ehigh) {
       if(!EmModel(2)) { SetEmModel(new G4PairProductionRelModel(), 2); }
-      EmModel(2)->SetLowEnergyLimit(limit);
+      EmModel(2)->SetLowEnergyLimit(ehigh);
       EmModel(2)->SetHighEnergyLimit(emax);
       AddEmModel(2, EmModel(2));
     }

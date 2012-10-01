@@ -17,6 +17,56 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+1 October 12: G.Cosmo (emstand-V09-05-50)
+- Explicitly use inclusion of header for system of units in G4GammaConversion.
+
+28 September 12: V.Ivanchenko (emstand-V09-05-49)
+- G4WentzelVIModel, G4WentzelVIRelModel - fixed non-reproducibility
+    recently introduced
+- G4eBremssrahlungRelModel - return back G4ModifiedTsai as a default
+
+28 September 12: V.Ivanchenko (emstand-V09-05-48)
+- G4UrbanMscModel90, G4UrbanMscModel92, G4UrbanMscModel93, 
+  G4UrbanMscModel95, G4GoudsmitSaundersonMscModel - fixed computations 
+    of effective electron energy at a step
+- G4ModifiedTsai - fixed angular distribution in backward hemisphere
+- G4GammaConversion - explicit inclusion of header for units.
+- G4KleinNishinaModel - minor cleanup
+
+21 September 12: V.Ivanchenko (emstand-V09-05-47)
+- G4DipBustGenerator, G4SauterGavrilaAngularDistribution - added
+    protection to angular sampling theta < pi, and optimise 
+    computation for ultrarelativistic particles
+
+20 September 12: V.Ivanchenko (emstand-V09-05-46)
+- G4GammaConversion - changed low energy limit of the high energy 
+    model from 100 to 80 GeV
+- G4eBremsstrahlungRelModel - use G4DipBustGenerator for sampling of
+    bremsstrahlung angle instead of G4ModifiedTsai
+- G4SeltzerBergerModel - for the cut on gamma energy below 5% added
+    extra factor 1.2 to max value of the cross section when sample
+    gamma energy (reduced number of cases when differencial cross 
+    section exceed estimated maximum of the cross section. 
+
+18 September 12: V.Ivanchenko (emstand-V09-05-45)
+- G4UrbanMscModel90, G4UrbanMscModel92, G4UrbanMscModel93, 
+    G4UrbanMscModel95, G4WentzelVIModel, 
+    G4GoudsmitSaundersonMscModel - added protection: step limit
+    from msc cannot be smaller than tlimitminfix (to address bug#1345)
+- G4IonFluctuations - added simplified fluctuations for very small steps
+    (to address bug#1345)
+
+28 August 12: V.Ivanchenko (emstand-V09-05-44)
+- G4CoulombScattering - fixed initilisation for the case when polar angle
+    limit is below pi
+
+24 August 12: V.Ivanchenko (emstand-V09-05-43)
+- G4CoulombScatteringModel, G4eCoulombScatteringModel, G4UrbanMscModel90
+  G4UrbanMscModel92, G4UrbanMscModel93, G4UrbanMscModel95, 
+  G4WentzelVIModel, G4GoudsmitSaundersonMscModel - sampling of scattering
+    moved from PostStep to AlongStep
+- G4KleinNishinaModel - added simplified PDF function
+
 27 July 12: V.Ivanchenko (emstand-V09-05-42)
 - G4NuclearStopping - added check of upper energy limit (for CPU 
     performance reasons)
