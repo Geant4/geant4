@@ -34,6 +34,7 @@
 //
 
 #include "G4HETCChargedFragment.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4VCoulombBarrier.hh"
 #include "G4PreCompoundParameters.hh"
 

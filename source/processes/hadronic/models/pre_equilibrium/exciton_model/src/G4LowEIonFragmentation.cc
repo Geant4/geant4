@@ -38,11 +38,14 @@
 // 28 Oct 2010 V.Ivanchenko complete migration to integer Z and A; 
 //                          use updated G4Fragment methods
 
+#include <algorithm>
+
 #include "G4LowEIonFragmentation.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Fancy3DNucleus.hh"
 #include "G4Proton.hh"
 #include "G4NucleiProperties.hh"
-#include <algorithm>
 
 G4int G4LowEIonFragmentation::hits = 0;
 G4int G4LowEIonFragmentation::totalTries = 0;

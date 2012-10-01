@@ -44,6 +44,8 @@
 //
 
 #include "G4PreCompoundProton.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Proton.hh"
 
 G4PreCompoundProton::G4PreCompoundProton()

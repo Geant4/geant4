@@ -30,6 +30,8 @@
 //
  
 #include "G4VPreCompoundTransitions.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 G4VPreCompoundTransitions::G4VPreCompoundTransitions()
   :useNGB(false),useCEMtr(false),  

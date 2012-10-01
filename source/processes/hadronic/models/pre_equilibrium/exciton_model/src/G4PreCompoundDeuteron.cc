@@ -42,6 +42,7 @@
 //
 
 #include "G4PreCompoundDeuteron.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Deuteron.hh"
 
 G4PreCompoundDeuteron::G4PreCompoundDeuteron()

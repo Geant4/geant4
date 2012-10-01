@@ -29,6 +29,8 @@
 // 20.08.2010 V.Ivanchenko move constructor and destructor to the source 
 
 #include "G4GNASHTransitions.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4PreCompoundParameters.hh"
 #include "G4HadronicException.hh"
 

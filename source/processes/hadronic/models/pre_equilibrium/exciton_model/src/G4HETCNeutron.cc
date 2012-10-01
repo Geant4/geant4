@@ -33,6 +33,8 @@
 //            the source, use G4Pow
 
 #include "G4HETCNeutron.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Neutron.hh"
 
 G4HETCNeutron::G4HETCNeutron() 

@@ -43,6 +43,7 @@
 // 
 
 #include "G4PreCompoundNeutron.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Neutron.hh"
 
 G4PreCompoundNeutron::G4PreCompoundNeutron()

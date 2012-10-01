@@ -33,6 +33,7 @@
 //            the source, use G4Pow
  
 #include "G4HETCFragment.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4PreCompoundParameters.hh"
 
 G4HETCFragment::

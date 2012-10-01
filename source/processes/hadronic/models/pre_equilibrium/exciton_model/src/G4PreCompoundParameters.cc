@@ -32,6 +32,7 @@
 //
 
 #include "G4PreCompoundParameters.hh"
+#include "G4SystemOfUnits.hh"
 
 G4PreCompoundParameters* G4PreCompoundParameters::theParameters = 0;
 

@@ -42,6 +42,7 @@
 //
 
 #include "G4PreCompoundAlpha.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Alpha.hh"
 
 G4PreCompoundAlpha::G4PreCompoundAlpha()

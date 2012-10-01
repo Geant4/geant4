@@ -33,6 +33,7 @@
 //                         use int Z and A and cleanup
 
 #include "G4VPreCompoundFragment.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4PreCompoundParameters.hh"
 #include "G4NucleiProperties.hh"
 

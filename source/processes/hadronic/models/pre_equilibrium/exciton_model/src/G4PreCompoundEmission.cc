@@ -44,12 +44,14 @@
 //
 
 #include "G4PreCompoundEmission.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4Pow.hh"
+#include "Randomize.hh"
 #include "G4PreCompoundParameters.hh"
 #include "G4PreCompoundEmissionFactory.hh"
 #include "G4HETCEmissionFactory.hh"
 #include "G4HadronicException.hh"
-#include "G4Pow.hh"
-#include "Randomize.hh"
 
 G4PreCompoundEmission::G4PreCompoundEmission()
 {

@@ -42,6 +42,7 @@
 //
 
 #include "G4PreCompoundIon.hh"
+#include "G4PhysicalConstants.hh"
 
 G4PreCompoundIon::
 G4PreCompoundIon(const G4ParticleDefinition* part,

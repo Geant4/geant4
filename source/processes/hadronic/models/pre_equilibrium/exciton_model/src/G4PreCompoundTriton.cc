@@ -42,6 +42,7 @@
 //
  
 #include "G4PreCompoundTriton.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Triton.hh"
 
 G4PreCompoundTriton::G4PreCompoundTriton()

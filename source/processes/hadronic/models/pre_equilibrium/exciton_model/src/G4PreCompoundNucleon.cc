@@ -42,6 +42,8 @@
 //
 
 #include "G4PreCompoundNucleon.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 G4PreCompoundNucleon::
 G4PreCompoundNucleon(const G4ParticleDefinition* part,

@@ -47,11 +47,13 @@
 // 30.08.2011 M.Kelsey - Skip CalculateProbability if no excitons
 
 #include "G4PreCompoundTransitions.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
+#include "G4Pow.hh"
 #include "G4HadronicException.hh"
 #include "G4PreCompoundParameters.hh"
 #include "G4Proton.hh"
-#include "Randomize.hh"
-#include "G4Pow.hh"
 
 G4PreCompoundTransitions::G4PreCompoundTransitions() 
 {

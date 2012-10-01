@@ -42,6 +42,7 @@
 //
  
 #include "G4PreCompoundHe3.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4He3.hh"
 
 G4PreCompoundHe3::G4PreCompoundHe3()

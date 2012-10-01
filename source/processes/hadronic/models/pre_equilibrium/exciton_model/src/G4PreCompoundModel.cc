@@ -47,6 +47,8 @@
 //                         constructor
 
 #include "G4PreCompoundModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4PreCompoundEmission.hh"
 #include "G4PreCompoundTransitions.hh"
 #include "G4GNASHTransitions.hh"
