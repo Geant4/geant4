@@ -78,8 +78,7 @@
 #include "HsQGSPInterface.hh"
 #include "HsQGSCInterface.hh"
 #include "HsQGSBInterface.hh"
-#include "G4InclAblaCascadeInterface.hh"
-#include "G4InclLightIonInterface.hh"
+#include "G4INCLXXInterface.hh"
 
 #include "G4LElastic.hh"
 #include "G4HadronElastic.hh"
@@ -217,13 +216,7 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     man->AddDiscreteProcess(theProcess);
 
   } else if(gen_name == "incl") {
-    G4InclAblaCascadeInterface* hkm = new G4InclAblaCascadeInterface();
-    sg = new Test30VSecondaryGenerator(hkm, mat);
-    theProcess->SetSecondaryGenerator(sg);
-    man->AddDiscreteProcess(theProcess);
-
-  } else if(gen_name == "incl_ion") {
-    G4InclLightIonInterface* hkm = new G4InclLightIonInterface();
+    G4INCLXXInterface* hkm = new G4INCLXXInterface();
     sg = new Test30VSecondaryGenerator(hkm, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
@@ -257,8 +250,8 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
 
   } else if(gen_name == "Elastic") {
     G4HadronElastic* els = new G4HadronElastic();
-    els->SetHEModelLowLimit(0.0);
-    els->SetQModelLowLimit(0.0);
+    //els->SetHEModelLowLimit(0.0);
+    //els->SetQModelLowLimit(0.0);
     els->SetLowestEnergyLimit(0.0);
     sg = new Test30VSecondaryGenerator(els, mat);
     theProcess->SetSecondaryGenerator(sg);
@@ -269,8 +262,8 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     G4TheoFSGenerator* theModel = new G4TheoFSGenerator;
     G4FTFModel* theStringModel = new G4FTFModel();
     G4GeneratorPrecompoundInterface* theCascade =
-      new G4GeneratorPrecompoundInterface;
-    theCascade->SetDeExcitation(thePreCompound);
+      new G4GeneratorPrecompoundInterface();
+    // theCascade->SetDeExcitation(thePreCompound); // can NOT do this here because thePreCo == 0 !!!
     theCascade->SetCaptureThreshold(10*MeV);   // Uzhi 25.09.10
     G4ExcitedStringDecay* theStringDecay = 
       new G4ExcitedStringDecay(new G4LundStringFragmentation());

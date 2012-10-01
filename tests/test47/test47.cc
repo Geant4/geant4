@@ -107,11 +107,11 @@ int main(int argc, char** argv) {
   G4double theStep   = 0.01*micrometer;
   G4Material* material = 0;
   G4bool isBNL = false;
-  G4bool gtran = false;
-  G4bool gemis = false;
+  //G4bool gtran = false;
+  //G4bool gemis = false;
   G4int  verbose  = 0; 
   G4bool xsbgg    = true;
-  G4bool nevap    = true;
+  //G4bool nevap    = true;
   G4long myseed   = 135799753;
 
   // Choose the Random engine
@@ -245,11 +245,11 @@ int main(int argc, char** argv) {
         end = false;
         break;
       } else if(line == "#HETCEmission") {
-        gemis = true;
+        //gemis = true;
       } else if(line == "#GNASHTransition") {
-        gtran = true;
+        //gtran = true;
       } else if(line == "#GEMEvaporation") {
-        nevap = true;
+        //nevap = true;
       } else if(line == "#randomSeed") {
         (*fin) >> myseed;
 	CLHEP::HepRandom::setTheSeed(myseed);
@@ -370,7 +370,8 @@ int main(int argc, char** argv) {
       cross_sec = cs->GetCrossSection(&dParticle, elm);
     } else {
       cross_sec = (G4HadronCrossSections::Instance())->
-        GetInelasticCrossSection(&dParticle, elm);
+        // GetInelasticCrossSection(&dParticle, elm);
+        GetInelasticCrossSection(&dParticle, Z, A );
     }
     cross_sec /= millibarn;
     G4cout << "    cross(b)= " << cross_sec << " mb" << G4endl;
