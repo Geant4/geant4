@@ -59,6 +59,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
 #include "G4EMDissociation.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Evaporation.hh"
 #include "G4FermiBreakUp.hh"
 #include "G4StatMF.hh"
