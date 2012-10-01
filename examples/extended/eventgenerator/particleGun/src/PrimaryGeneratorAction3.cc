@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/particleGun/src/PrimaryGeneratorAction3.cc
+/// \brief Implementation of the PrimaryGeneratorAction3 class
+//
 //
 // $Id: PrimaryGeneratorAction3.cc,v 1.3 2010-07-16 07:37:48 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
@@ -37,6 +40,8 @@
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,10 +53,10 @@ PrimaryGeneratorAction3::PrimaryGeneratorAction3(G4ParticleGun* gun)
   //
   G4double theta = 90*deg, phi = 45*deg;
   fNewUz = G4ThreeVector(std::sin(theta)*std::cos(phi),
-                        std::sin(theta)*std::sin(phi),
-			std::cos(theta));
-			
-  fAlphaMax = 15*deg;			
+                         std::sin(theta)*std::sin(phi),
+                         std::cos(theta));
+                        
+  fAlphaMax = 15*deg;                        
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,11 +74,11 @@ void PrimaryGeneratorAction3::GeneratePrimaries(G4Event* anEvent)
   //cosAlpha uniform in [cos(0), cos(fAlphaMax)]
   G4double cosAlpha = 1. - G4UniformRand()*(1.- std::cos(fAlphaMax));
   G4double sinAlpha = std::sqrt(1. - cosAlpha*cosAlpha);
-  G4double psi      = twopi*G4UniformRand();	//psi uniform in [0, 2*pi]  
+  G4double psi      = twopi*G4UniformRand();  //psi uniform in [0, 2*pi]  
   G4ThreeVector dir(sinAlpha*std::cos(psi),sinAlpha*std::sin(psi),cosAlpha);
   
   //2- rotate dir   (rotateUz transforms uz to fNewUz)
-  dir.rotateUz(fNewUz);	   
+  dir.rotateUz(fNewUz);           
 
   fParticleGun->SetParticleMomentumDirection(dir);
   

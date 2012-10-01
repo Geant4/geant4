@@ -63,7 +63,7 @@ void H02MuonSD::Initialize(G4HCofThisEvent* HCE)
 {
   static int HCID=-1;
   hitCollection= new H02MuonHitsCollection(SensitiveDetectorName, 
-					  collectionName[0]); 
+                                          collectionName[0]); 
   if(HCID<0) HCID= GetCollectionID(0);
   HCE-> AddHitsCollection(HCID, hitCollection);
 }

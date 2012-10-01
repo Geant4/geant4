@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/particleGun/src/DetectorConstruction.cc
+/// \brief Implementation of the DetectorConstruction class
+//
 //
 // $Id: DetectorConstruction.cc,v 1.1 2010-06-09 01:55:38 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
@@ -36,6 +39,7 @@
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -64,22 +68,22 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   // World
   //
   G4Box*  
-  solidWorld = new G4Box("World",				//its name
-                   fWorldSizeXY/2,fWorldSizeXY/2,fWorldSizeZ/2);	//its size
-		   
+  solidWorld = new G4Box("World",                                //its name
+                   fWorldSizeXY/2,fWorldSizeXY/2,fWorldSizeZ/2); //its size
+                   
   G4LogicalVolume*                         
-  logicWorld = new G4LogicalVolume(solidWorld,		//its solid
-                                   Air,			//its material
-                                   "World");		//its name
+  logicWorld = new G4LogicalVolume(solidWorld,           //its solid
+                                   Air,                  //its material
+                                   "World");             //its name
   G4VPhysicalVolume*                                   
-  physiWorld = new G4PVPlacement(0,			//no rotation
-  				 G4ThreeVector(),	//at (0,0,0)
-                                 logicWorld,		//its logical volume
-                                 "World",		//its name
-                                 0,			//its mother  volume
-                                 false,			//no boolean operation
-                                 0);			//copy number
-       	 
+  physiWorld = new G4PVPlacement(0,                      //no rotation
+                                 G4ThreeVector(),        //at (0,0,0)
+                                 logicWorld,             //its logical volume
+                                 "World",                //its name
+                                 0,                      //its mother  volume
+                                 false,                  //no boolean operation
+                                 0);                     //copy number
+                
   //
   //always return the physical World
   //  

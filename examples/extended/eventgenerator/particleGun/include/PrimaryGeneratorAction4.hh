@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/particleGun/include/PrimaryGeneratorAction4.hh
+/// \brief Definition of the PrimaryGeneratorAction4 class
+//
 //
 // $Id: PrimaryGeneratorAction4.hh,v 1.2 2010-07-16 07:37:48 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
@@ -58,9 +61,9 @@ class PrimaryGeneratorAction4
             
   private:
     G4double fRmin3;
-    G4double fRmax3;		//vertex volume
+    G4double fRmax3;              //vertex volume
     G4double fCosAlphaMin;
-    G4double fCosAlphaMax;	//opening angle
+    G4double fCosAlphaMax;        //opening angle
 
     G4ParticleGun*  fParticleGun;
 };

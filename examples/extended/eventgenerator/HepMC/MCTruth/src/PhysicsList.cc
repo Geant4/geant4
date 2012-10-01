@@ -44,6 +44,7 @@
 
 #include "G4ProcessManager.hh"
 #include "G4ParticleTypes.hh"
+#include "G4SystemOfUnits.hh"
 
 PhysicsList::PhysicsList():  G4VUserPhysicsList()
 {

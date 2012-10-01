@@ -37,6 +37,7 @@
 #include "G4Circle.hh"
 #include "G4Colour.hh"
 #include "G4VisAttributes.hh"
+#include "G4SystemOfUnits.hh"
 #include <iomanip>
 
 G4Allocator<H02MuonHit> H02MuonHitAllocator;
@@ -50,8 +51,8 @@ H02MuonHit::H02MuonHit()
 
 /////////////////////////////////////////////////////////////
 H02MuonHit::H02MuonHit(G4int imod, G4String aname, 
-		     const G4ThreeVector& pxyz, 
-		     const G4ThreeVector& xyz, G4double atof)
+                     const G4ThreeVector& pxyz, 
+                     const G4ThreeVector& xyz, G4double atof)
   : moduleID(imod), pname(aname), momentum(pxyz),
     position(xyz), tof(atof)
 /////////////////////////////////////////////////////////////
@@ -125,8 +126,8 @@ void H02MuonHit::Print()
     tag="E";
   }
   G4cout << tag << id << " :" << std::setw(12) << pname.c_str()
-	 << " : pT=" << std::setprecision(3)  << momentum.perp()/GeV
-	 << " : TOF=" << std::setprecision(3) << tof/ns 
-	 << " : x="  << std::setprecision(3) << position*(1./m) 
-	 << G4endl;
+         << " : pT=" << std::setprecision(3)  << momentum.perp()/GeV
+         << " : TOF=" << std::setprecision(3) << tof/ns 
+         << " : x="  << std::setprecision(3) << position*(1./m) 
+         << G4endl;
 }

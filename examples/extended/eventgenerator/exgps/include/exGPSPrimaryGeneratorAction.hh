@@ -39,14 +39,14 @@ class exGPSPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
     exGPSPrimaryGeneratorAction();
-    ~exGPSPrimaryGeneratorAction();
+    virtual ~exGPSPrimaryGeneratorAction();
 
   public:
-    void GeneratePrimaries(G4Event* anEvent);
+    virtual void GeneratePrimaries(G4Event* anEvent);
 
   private:
 
-    G4GeneralParticleSource* particleGun;
+    G4GeneralParticleSource* fParticleGun;
 };
 
 #endif

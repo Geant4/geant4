@@ -55,7 +55,7 @@ int main(int argc,char** argv) {
 
 #ifdef G4ANALYSIS_USE
   //constructe the analysis manager (need here to activate the UI)
-  exGPSAnalysisManager::getInstance(); 
+  exGPSAnalysisManager::GetInstance();
 #endif
 
   // set mandatory initialization classes
@@ -103,7 +103,7 @@ int main(int argc,char** argv) {
   // job termination
 
 #ifdef G4ANALYSIS_USE
-  exGPSAnalysisManager::dispose();
+  exGPSAnalysisManager::Dispose();
 #endif
 
 #ifdef G4VIS_USE

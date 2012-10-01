@@ -65,7 +65,7 @@ void exGPSRunAction::BeginOfRunAction(const G4Run* aRun)
 #endif
 #ifdef G4ANALYSIS_USE
   // If analysis is used reset the histograms
-  exGPSAnalysisManager::getInstance()->BeginOfRun();
+  exGPSAnalysisManager::GetInstance()->BeginOfRun();
 #endif
 }
 
@@ -80,7 +80,7 @@ void exGPSRunAction::EndOfRunAction(const G4Run* )
 #endif
   // If analysis is used
 #ifdef G4ANALYSIS_USE 
-  exGPSAnalysisManager::getInstance()->EndOfRun();
+  exGPSAnalysisManager::GetInstance()->EndOfRun();
 #endif
 }
 

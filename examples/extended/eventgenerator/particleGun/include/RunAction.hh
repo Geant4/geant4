@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/particleGun/include/RunAction.hh
+/// \brief Definition of the RunAction class
+//
 //
 // $Id: RunAction.hh,v 1.1 2010-06-09 01:55:38 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

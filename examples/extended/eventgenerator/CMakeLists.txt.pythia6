@@ -1,0 +1,21 @@
+# CMake configuration file for building Pythia6 from the source
+
+#----------------------------------------------------------------------------
+# Setup the project
+cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+project(pythia6 Fortran)
+
+#----------------------------------------------------------------------------
+# Locate sources and headers for this project
+#
+file(GLOB sources ${PROJECT_SOURCE_DIR}/*.f)
+
+#----------------------------------------------------------------------------
+# Add library
+#
+add_library(Pythia6 SHARED ${sources})
+
+#----------------------------------------------------------------------------
+# Install library
+#
+install(TARGETS Pythia6 DESTINATION lib)

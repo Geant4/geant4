@@ -39,12 +39,12 @@ class G4Run;
 class exGPSRunAction : public G4UserRunAction
 {
   public:
-  exGPSRunAction();
-  ~exGPSRunAction();
+   exGPSRunAction();
+   virtual ~exGPSRunAction();
 
   public:
-    void BeginOfRunAction(const G4Run*);
-    void EndOfRunAction(const G4Run*);
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void EndOfRunAction(const G4Run*);
   private:
 };
 

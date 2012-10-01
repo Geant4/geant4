@@ -67,7 +67,7 @@ public:
 
   // call pyxxx
   void CallPyinit(G4String frame, G4String beam, G4String target, 
-		  G4double win);
+                  G4double win);
   void CallPystat(G4int istat);
 
   // random numbers operations

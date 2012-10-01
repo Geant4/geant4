@@ -45,20 +45,20 @@ class exGPSAnalysisMessenger: public G4UImessenger
 {
 public:
   exGPSAnalysisMessenger(exGPSAnalysisManager* );
-  ~exGPSAnalysisMessenger();
+  virtual ~exGPSAnalysisMessenger();
   
-  void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String);
   
 private:
-  exGPSAnalysisManager* exGPSAnalysis;
-  G4UIdirectory*              exGPSAnalysisDir;
+  exGPSAnalysisManager* fExGPSAnalysis;
+  G4UIdirectory*              fExGPSAnalysisDir;
   
-  G4UIcmdWithAString*               FileNameCmd;
-  G4UIcmdWithAString*               FileTypeCmd;
-  G4UIcmdWithADoubleAndUnit*        MaxEngCmd;
-  G4UIcmdWithADoubleAndUnit*        MinEngCmd;
-  G4UIcmdWithADoubleAndUnit*        MaxPosCmd;
-  G4UIcmdWithADoubleAndUnit*        MinPosCmd;
+  G4UIcmdWithAString*               fFileNameCmd;
+  G4UIcmdWithAString*               fFileTypeCmd;
+  G4UIcmdWithADoubleAndUnit*        fMaxEngCmd;
+  G4UIcmdWithADoubleAndUnit*        fMinEngCmd;
+  G4UIcmdWithADoubleAndUnit*        fMaxPosCmd;
+  G4UIcmdWithADoubleAndUnit*        fMinPosCmd;
 };
 
 #endif // G4ANALYSIS_USE

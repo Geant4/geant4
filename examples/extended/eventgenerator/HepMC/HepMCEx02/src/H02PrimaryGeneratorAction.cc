@@ -75,6 +75,8 @@ void H02PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   if(currentGenerator)
     currentGenerator-> GeneratePrimaryVertex(anEvent);
   else 
-    G4Exception("generator is not instanciated.");
+    G4Exception("H02PrimaryGeneratorAction::GeneratePrimaries",
+                "InvalidSetup", FatalException,
+                "Generator is not instanciated.");
 }
 

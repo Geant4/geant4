@@ -142,7 +142,7 @@ HepMCG4PythiaMessenger::~HepMCG4PythiaMessenger()
 
 //////////////////////////////////////////////////////////////
 void HepMCG4PythiaMessenger::SetNewValue(G4UIcommand* command, 
-					 G4String newValues)
+                                         G4String newValues)
 //////////////////////////////////////////////////////////////
 {
   if(command == verbose) {  // /verbose ...

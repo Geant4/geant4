@@ -51,7 +51,7 @@ private:
 public:
   H02MuonHit();
   H02MuonHit(G4int imod, G4String aname, const G4ThreeVector& pxyz,
-	    const G4ThreeVector& xyz, G4double atof);
+            const G4ThreeVector& xyz, G4double atof);
   ~H02MuonHit();
 
   H02MuonHit(const H02MuonHit& right);

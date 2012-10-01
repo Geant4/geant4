@@ -5,7 +5,7 @@
 
 /*! \page Exampleexgps Example exgps 
 
-  exGPS is created to demonstrate the usage of G4GeneralParticleSource for generating 
+  exgps is created to demonstrate the usage of G4GeneralParticleSource for generating 
   primary incident particle according to user defined distributions. These range from simple 
   monocromatic point source to complicated mutiple sources with various biasing schemes. 
   
@@ -108,19 +108,19 @@
 	unset G4ANALYSIS_USE=1 (bash shell) 
         \endverbatim
     
-- ii) Build the exGPS executable:
+- ii) Build the exgps executable:
      \verbatim
          cd to exgps
          gmake clean
          gmake
      \endverbatim
      gmake will create tmp and bin directories in your $G4TMP and $G4BIN directories. 
-     The executable, named exGPS, will be created in the $G4BIN/$G4SYSTEM/ directory.
+     The executable, named exgps, will be created in the $G4BIN/$G4SYSTEM/ directory.
     
 - iii) Run the executable: 
       while in the exgps directory do 
 \verbatim
-         $G4BIN/$G4SYSTEM/exGPS exrgps.in
+         $G4BIN/$G4SYSTEM/exgps exrgps.in
 \endverbatim
 
      If G4ANALYSIS_USE is defined, and depending on the particular AIDA system used, e.g. JAIDA, one could see 

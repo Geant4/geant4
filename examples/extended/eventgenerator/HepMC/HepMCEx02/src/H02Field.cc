@@ -34,6 +34,7 @@
 // ====================================================================
 
 #include "H02Field.hh"
+#include "G4SystemOfUnits.hh"
 
 ////////////////////////////////////////////////////////////////////////////
 void H02Field::GetFieldValue(const G4double Point[3], G4double* Bfield) const

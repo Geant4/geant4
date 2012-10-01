@@ -74,13 +74,13 @@ ExN04PrimaryGeneratorMessenger::~ExN04PrimaryGeneratorMessenger()
 
 //////////////////////////////////////////////////////////////////////
 void ExN04PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command, 
-					      G4String newValues)
+                                              G4String newValues)
 //////////////////////////////////////////////////////////////////////
 {
   if ( command==select) {
     primaryAction-> SetGenerator(newValues);
     G4cout << "current generator type: " 
-	    << primaryAction-> GetGeneratorName() << G4endl;
+            << primaryAction-> GetGeneratorName() << G4endl;
   } else {
   }
 }

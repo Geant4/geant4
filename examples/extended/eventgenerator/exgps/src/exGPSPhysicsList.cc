@@ -79,7 +79,9 @@ void exGPSPhysicsList::ConstructBosons()
   // optical photon
   G4OpticalPhoton::OpticalPhotonDefinition();
 }
- //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 #include "G4LeptonConstructor.hh"
 void exGPSPhysicsList::ConstructLeptons()
 {
@@ -89,6 +91,7 @@ void exGPSPhysicsList::ConstructLeptons()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 #include "G4MesonConstructor.hh"
 void exGPSPhysicsList::ConstructMesons()
 {
@@ -97,7 +100,9 @@ void exGPSPhysicsList::ConstructMesons()
   pConstructor.ConstructParticle();
 }
 
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 #include "G4BaryonConstructor.hh"
 void exGPSPhysicsList::ConstructBaryons()
 {
@@ -105,6 +110,8 @@ void exGPSPhysicsList::ConstructBaryons()
   G4BaryonConstructor  pConstructor;
   pConstructor.ConstructParticle(); 
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void exGPSPhysicsList::ConstructNuclei()
 {
@@ -122,6 +129,7 @@ void exGPSPhysicsList::ConstructProcess()
   AddTransportation();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void exGPSPhysicsList::SetCuts()
 {
@@ -136,7 +144,4 @@ void exGPSPhysicsList::SetCuts()
   SetVerboseLevel(temp);  
 }
 
-
-
-
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -87,7 +87,7 @@ void HepMCG4PythiaInterface::CallPygive(G4String par)
 
 //////////////////////////////////////////////////////////////////////
 void HepMCG4PythiaInterface::CallPyinit(G4String frame, G4String beam, 
-					G4String target, G4double win)
+                                        G4String target, G4double win)
 //////////////////////////////////////////////////////////////////////
 {
   call_pyinit(frame.c_str(), beam.c_str(), target.c_str(), win);
@@ -139,8 +139,8 @@ void HepMCG4PythiaInterface::SetUserParameters()
 ////////////////////////////////////////////////
 {
   G4cout << "set user parameters of PYTHIA common." << G4endl
-	 << "nothing to be done in default."
-	 << G4endl;
+         << "nothing to be done in default."
+         << G4endl;
 }
 
 /////////////////////////////////////////////////////////////

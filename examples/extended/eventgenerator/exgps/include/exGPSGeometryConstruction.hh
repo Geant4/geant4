@@ -39,16 +39,16 @@ class exGPSGeometryConstruction : public G4VUserDetectorConstruction
 {
   public:
     exGPSGeometryConstruction ();
-    ~exGPSGeometryConstruction ();
+    virtual ~exGPSGeometryConstruction ();
 
   public:
-     G4VPhysicalVolume *Construct ();
+    virtual G4VPhysicalVolume *Construct ();
 
   private:
 
-  G4VPhysicalVolume * universe_phys ;
-  G4VPhysicalVolume * Al_phys ;
-  G4VPhysicalVolume * aSphere_phys;
+  G4VPhysicalVolume * fUniverse_phys ;
+  G4VPhysicalVolume * fAl_phys ;
+  G4VPhysicalVolume * fSphere_phys;
 
 };
 ////////////////////////////////////////////////////////////////////////////////

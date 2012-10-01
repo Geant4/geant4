@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file eventgenerator/particleGun/src/PrimaryGeneratorAction1.cc
+/// \brief Implementation of the PrimaryGeneratorAction1 class
+//
 //
 // $Id: PrimaryGeneratorAction1.cc,v 1.2 2010-07-16 07:37:48 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
@@ -37,6 +40,8 @@
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,10 +64,10 @@ void PrimaryGeneratorAction1::GeneratePrimaries(G4Event* anEvent)
   
   //vertex 1 uniform on cylinder
   //
-  G4double alpha = twopi*G4UniformRand();	//alpha uniform in (0, 2*pi)
+  G4double alpha = twopi*G4UniformRand();  //alpha uniform in (0, 2*pi)
   G4double ux = std::cos(alpha);
   G4double uy = std::sin(alpha);
-  G4double z = zmax*(2*G4UniformRand() - 1);	//z uniform in (-zmax, +zmax)
+  G4double z = zmax*(2*G4UniformRand() - 1);  //z uniform in (-zmax, +zmax)
         
   fParticleGun->SetParticlePosition(G4ThreeVector(r*ux,r*uy,z));
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(ux,uy,0));    

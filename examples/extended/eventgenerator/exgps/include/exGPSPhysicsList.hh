@@ -39,12 +39,12 @@ class exGPSPhysicsList: public G4VUserPhysicsList
 {
   public:
     exGPSPhysicsList();
-   ~exGPSPhysicsList();
+    virtual ~exGPSPhysicsList();
 
   protected:
     // Construct particle and physics
-    void ConstructParticle();
-    void ConstructProcess();
+    virtual void ConstructParticle();
+    virtual void ConstructProcess();
     void SetCuts();
 
   public:

@@ -72,7 +72,7 @@ HepMCG4AsciiReaderMessenger::~HepMCG4AsciiReaderMessenger()
 
 ///////////////////////////////////////////////////////////////////
 void HepMCG4AsciiReaderMessenger::SetNewValue(G4UIcommand* command,
-					      G4String newValues)
+                                              G4String newValues)
 ///////////////////////////////////////////////////////////////////
 {
   if (command==verbose) {
@@ -81,7 +81,7 @@ void HepMCG4AsciiReaderMessenger::SetNewValue(G4UIcommand* command,
   } else if (command==open) {
     gen-> SetFileName(newValues);
     G4cout << "HepMC Ascii inputfile: " 
-	   << gen-> GetFileName() << G4endl;
+           << gen-> GetFileName() << G4endl;
     gen-> Initialize();
   }
 }

@@ -57,14 +57,14 @@ class exGPSEventActionMessenger: public G4UImessenger
 {
   public:
     exGPSEventActionMessenger(exGPSEventAction*);
-   ~exGPSEventActionMessenger();
+    virtual ~exGPSEventActionMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    exGPSEventAction*   eventAction;   
-    G4UIcmdWithAString* DrawCmd;
-    G4UIcmdWithAnInteger* PrintCmd;    
+    exGPSEventAction*   fEventAction;   
+    G4UIcmdWithAString* fDrawCmd;
+    G4UIcmdWithAnInteger* fPrintCmd;    
 };
 
 #endif

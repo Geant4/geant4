@@ -46,6 +46,8 @@
 #include "G4ThreeVector.hh"
 #include "G4PVPlacement.hh"
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 DetectorConstruction::DetectorConstruction() :  
   Iron(0), Copper(0), Tungsten(0), Lead(0), Uranium(0), PbWO4(0),

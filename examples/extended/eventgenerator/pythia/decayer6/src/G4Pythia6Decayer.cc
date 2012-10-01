@@ -42,6 +42,7 @@
 #include "G4DecayTable.hh"
 #include "G4ParticleTable.hh"
 #include "G4Track.hh"
+#include "G4SystemOfUnits.hh"
 
 #include <CLHEP/Vector/LorentzVector.h>
 
