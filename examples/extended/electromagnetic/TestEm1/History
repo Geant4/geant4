@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06-09-12 V.Ivant (testem1-V09-05-09)
+- Ivana Hrivnacova updated CMakeLists.txt
      
 25-08-12 mma (testem1-V09-05-08)
 - HistoManager functionalities transfered to G4Analysis and its messenger.
