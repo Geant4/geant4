@@ -56,6 +56,7 @@ G4ElectronCapture::G4ElectronCapture(const G4String& regName, G4double ekinlim)
   if(regName == "" || regName == "world") { 
     regionName = "DefaultRegionForTheWorld";
   }
+  pParticleChange = &fParticleChange;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -116,6 +117,7 @@ G4VParticleChange* G4ElectronCapture::PostStepDoIt(const G4Track& aTrack,
   pParticleChange->Initialize(aTrack);
   pParticleChange->ProposeTrackStatus(fStopAndKill);
   pParticleChange->ProposeLocalEnergyDeposit(aTrack.GetKineticEnergy());
+  fParticleChange.SetProposedKineticEnergy(0.0);
   return pParticleChange;
 }
 

@@ -9,6 +9,8 @@ $Id: History,v 1.24 2010-11-18 11:48:21 allison Exp $
                        Package History file
                        --------------------
 
+1 Oct 2012 - V. Ivantchenko - microdosimetry-V09-05-02
+- G4ElectronCapture - clean up killing captured electron
 
 16 Aug 2012 - S. Incerti - microdosimetry-V09-05-01
 - Switched to new analysis interface

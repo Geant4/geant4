@@ -1,4 +1,4 @@
-/tracking/verbose 1
+/tracking/verbose 0
 /run/verbose 2
 /process/eLoss/verbose 1
 /gun/particle alpha+

@@ -56,6 +56,7 @@
 
 #include "G4VDiscreteProcess.hh"
 #include "globals.hh"
+#include "G4ParticleChangeForGamma.hh"
 
 class G4Region;
 
@@ -94,6 +95,7 @@ private:
   G4double kinEnergyThreshold;
   G4String regionName;
   G4Region* region;
+  G4ParticleChangeForGamma fParticleChange;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
