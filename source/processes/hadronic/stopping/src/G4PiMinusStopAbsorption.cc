@@ -53,6 +53,11 @@ G4PiMinusStopAbsorption::G4PiMinusStopAbsorption(G4PiMinusStopMaterial* material
 						 const G4double Z, const G4double A)
   
 {
+  static G4bool dowarn = true;
+  if (dowarn)
+    G4cout << "WARNING: " << __FILE__ << " is deprecated and will be removed."
+	   << G4endl;  
+  dowarn = false;
   _materialAlgo = materialAlgo;
   _nucleusZ = Z;
   _nucleusA = A;

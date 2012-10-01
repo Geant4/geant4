@@ -27,14 +27,16 @@
 //   Larry Felawka (TRIUMF), April 1998
 //---------------------------------------------------------------------
 
+#include <string.h>
+#include <cmath>
+#include <stdio.h>
+
 #include "G4AntiProtonAnnihilationAtRest.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4DynamicParticle.hh"
 #include "G4ParticleTypes.hh"
 #include "Randomize.hh" 
 #include "G4HadronicProcessStore.hh"
-#include <string.h>
-#include <cmath>
-#include <stdio.h>
  
 #define MAX_SECONDARIES 100
 
@@ -60,6 +62,12 @@ G4AntiProtonAnnihilationAtRest::G4AntiProtonAnnihilationAtRest(const G4String& p
   pdefTriton(G4Triton::Triton()),
   pdefAlpha(G4Alpha::Alpha())
 {
+  static G4bool dowarn = true;
+  if (dowarn)
+    G4cout << "WARNING: " << __FILE__ << " is deprecated and will be removed."
+	   << G4endl;  
+  dowarn = false;
+
   if (verboseLevel>0) {
     G4cout << GetProcessName() << " is created "<< G4endl;
   }

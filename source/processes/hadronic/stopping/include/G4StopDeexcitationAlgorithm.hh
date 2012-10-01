@@ -38,6 +38,7 @@
 #include "G4ReactionProduct.hh"
 #include "G4ReactionProductVector.hh"
 #include "G4ThreeVector.hh"
+#include "G4ios.hh"
 
 class G4StopDeexcitationAlgorithm 
 {  
@@ -53,7 +54,13 @@ private:
 public:
 
   // Constructor
-  G4StopDeexcitationAlgorithm() {};
+  G4StopDeexcitationAlgorithm() {
+    static G4bool dowarn = true;
+    if (dowarn)
+      G4cout << "WARNING: " << __FILE__ << " is deprecated and will be removed."
+	     << G4endl;
+    dowarn = false;
+  }
 
   // Destructor
   virtual ~G4StopDeexcitationAlgorithm() {};

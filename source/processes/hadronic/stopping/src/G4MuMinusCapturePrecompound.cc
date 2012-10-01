@@ -46,6 +46,8 @@
 #include "G4MuMinusCapturePrecompound.hh"
 #include "Randomize.hh" 
 #include "G4RandomDirection.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4MuonMinus.hh"
 #include "G4NeutrinoMu.hh"
 #include "G4Neutron.hh"

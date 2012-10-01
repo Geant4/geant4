@@ -40,6 +40,8 @@
 //----------------------------------------------------------------------
 
 #include "G4MuMinusCaptureCascade.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4LorentzVector.hh"
 #include "G4ParticleMomentum.hh"
 #include "G4MuonMinus.hh"

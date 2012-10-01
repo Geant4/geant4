@@ -43,6 +43,12 @@
 
 G4StopDummyDeexcitation::G4StopDummyDeexcitation()  
 {
+  static G4bool dowarn = true;
+  if (dowarn)
+    G4cout << "WARNING: " << __FILE__ << " is deprecated and will be removed."
+	   << G4endl;
+  dowarn = false;
+
   _products = 0;
 }
 

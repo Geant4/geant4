@@ -39,6 +39,7 @@
 #include "G4StopTheoDeexcitation.hh"
 
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ThreeVector.hh"
 #include "G4LorentzVector.hh"
 #include "G4NucleiProperties.hh"
@@ -49,7 +50,12 @@
 // Constructor
 
 G4StopTheoDeexcitation::G4StopTheoDeexcitation()
-{}
+{ static G4bool dowarn = true;
+  if (dowarn)
+    G4cout << "WARNING: " << __FILE__ << " is deprecated and will be removed."
+	 << G4endl;
+  dowarn = false;
+}
 
 // Destructor
 

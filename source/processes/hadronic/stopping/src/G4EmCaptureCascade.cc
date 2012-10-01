@@ -44,6 +44,8 @@
 //-----------------------------------------------------------------------------
 
 #include "G4EmCaptureCascade.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh" 
 #include "G4MuonMinus.hh"
 #include "G4Electron.hh"

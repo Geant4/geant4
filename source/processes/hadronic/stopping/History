@@ -14,32 +14,79 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+28 September 2012 Michael Kelsey (hadr-stopping-V09-05-25)
+----------------------------------------------------------
+- G4HadronStoppingProcess:  Follow reversion of G4HadProc to G4VDiscrete:
+  set enableXYZDoIt flags in ctor, add GetMeanLifeTime with forced-action.
+
+26 September 2012 Michael Kelsey (hadr-stopping-V09-05-24)
+----------------------------------------------------------
+Per Gabriele and Alberto, change the warning messages below from G4cerr to
+G4cout.  Also include static flag to limit message to one occurrence.
+
+24 September 2012 Michael Kelsey (hadr-stopping-V09-05-23)
+----------------------------------------------------------
+The following classes will be deprecated in the 9.6 release, and removed for
+10.0 development; warnings are added to the constructors.  Stopping hadrons
+are now handled by Bertini and Fritiof models, and muon capture by the more
+complex process with atomic cascade effects.
+
+  G4AntiNeutronAnnihilationAtRest.cc	G4PiMinusStopCu.cc		  
+  G4AntiProtonAnnihilationAtRest.cc	G4PiMinusStopLi.cc		  
+  G4DistributionGenerator.cc		G4PiMinusStopMaterial.cc	  
+  G4KaonMinusAbsorption.cc		G4PiMinusStopN.cc		  
+  G4KaonMinusAbsorptionAtRest.cc	G4PiMinusStopO.cc
+  G4MuonMinusCaptureAtRest.cc		G4PiMinusStopPb.cc		  
+  G4NeutronCaptureAtRest.cc		G4PiMinusStopTa.cc		  
+  G4PiMinusAbsorptionAtRest.cc		G4PionMinusAbsorptionAtRest.cc	  
+  G4PiMinusStopAbsorption.cc		G4StopDeexcitation.cc		  
+  G4PiMinusStopAl.cc			G4StopDeexcitationAlgorithm.hh	  
+  G4PiMinusStopC.cc			G4StopDummyDeexcitation.cc	  
+  G4PiMinusStopCo.cc			G4StopTheoDeexcitation.cc         
+
+19 September 2012 Gabriele Cosmo (hadr-stopping-V09-05-22)
+----------------------------------------------------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+17 September 2012 Michael Kelsey (hadr-stopping-V09-05-21)
+----------------------------------------------------------
+- G4HadronStoppingProcess.cc:  Follow migration of G4HadronicProcess
+  inheritance and ctor signature.
+
+Requires co-working base tag hadr-man-V09-05-16
+
+5 September 2012  Michael Kelsey  (hadr-stopping-V09-05-20)
+-----------------------------------------------------------
+- G4HadronicAbsorptionBertini.cc: Drop list of "allowed" hadrons, so Bertini
+  can take care of any negative hadron thrown at it.
+
 17 August 2012 Witek Pokorski (hadr-stopping-V09-05-19)
-------------------------------------------------------------
+-------------------------------------------------------
 - removed obsolete CHIPS includes 
 
 14 August 2012 Alberto Ribon (hadr-stopping-V09-05-18)
-------------------------------------------------------------
+------------------------------------------------------
 - Fixed Coverity complain in G4KaonMinusAbsorptionAtRest.cc
 
 13 August 2012 Alberto Ribon (hadr-stopping-V09-05-17)
-------------------------------------------------------------
+------------------------------------------------------
 - Proposed for testing a tag to fix a compilation error in
   G4MuMinusCapturePrecompound.cc when the constructor of the
   Lorentz vector is made explicit.
 
 10 August 2012 Julia Yarba (hadr-stopping-V09-05-16)
-------------------------------------------------------------
+----------------------------------------------------
 - Internal tag
 
 27 July 2012 Alberto Ribon (hadr-stopping-V09-05-15)
-------------------------------------------------------------
+----------------------------------------------------
 - Replaced (deleted) the class G4FTFCaptureAtRest with the new
   classes G4HadronicAbsorptionFritiof, G4AntiProtonAbsorptionFritiof
   and G4AntiSigmaPlusAbsorptionFritiof
 
 26 July 2012 Alberto Ribon (hadr-stopping-V09-05-14)
-------------------------------------------------------------
+----------------------------------------------------
 - Fixed Coverity complains in G4KaonMinusAbsorptionAtRest.cc and
   G4PiMinusStopMaterial.cc
 
@@ -47,7 +94,7 @@ code and to keep track of all tags.
     from recent experimental data
 
 19 June 2012 Vladimir Ivanchenko (hadr-stopping-V09-05-13)
-------------------------------------------------------------
+----------------------------------------------------------
 - G4MuonMinusBoundDecay, G4StopElementSelector - added data
    for muon capture rate in Hydrogen from recent experimental data
 

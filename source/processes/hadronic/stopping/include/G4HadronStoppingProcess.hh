@@ -40,7 +40,7 @@
 // Base process class for nuclear capture of negatively charged particles
 //
 // Modifications: 
-//
+// 20120928  M. Kelsey -- Add GetMeanLifeTime() here, instead of in base.
 //------------------------------------------------------------------------
 
 #ifndef G4HadronStoppingProcess_h
@@ -89,6 +89,12 @@ public:
   inline void SetEmCascade(G4HadronicInteraction* ptr);
 
   inline void SetBoundDecay(G4HadronicInteraction* ptr);
+
+protected:
+  // set effective lifetime for at-rest process (default is forced action)
+  // FIXME: This should be computed by subprocesses via cross-section analogue
+  G4double GetMeanLifeTime(const G4Track& /*aTrack*/,
+                           G4ForceCondition* /*condition*/) { return -1.0; }
 
 private:
 

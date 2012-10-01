@@ -39,6 +39,7 @@
 
 #include "G4PiMinusAbsorptionAtRest.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4PiMinusStopLi.hh"
 #include "G4PiMinusStopC.hh"
 #include "G4PiMinusStopN.hh"
@@ -63,6 +64,11 @@ G4PiMinusAbsorptionAtRest::G4PiMinusAbsorptionAtRest(const G4String& processName
                                                      G4ProcessType aType) :
   G4VRestProcess (processName, aType)
 {
+  static G4bool dowarn = true;
+  if (dowarn)
+    G4cout << "WARNING: " << __FILE__ << " is deprecated and will be removed."
+	   << G4endl;  
+  dowarn = false;
   SetProcessSubType(fHadronAtRest);
 
   _indexDeexcitation = 0;

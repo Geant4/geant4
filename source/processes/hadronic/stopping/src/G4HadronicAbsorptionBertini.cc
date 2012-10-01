@@ -28,6 +28,9 @@
 //
 // Intermediate class for hadronic absorption at rest using Bertini
 // Physics lists should reference the concrete subclasses for pi-, K-, Sigma-
+//
+// 20120905  M. Kelsey -- Drop explicit list of "allowed" particles; Bertini
+//		can handle anything, or return no-interaction if not.
 
 #include "G4HadronicAbsorptionBertini.hh"
 #include "G4CascadeInterface.hh"
@@ -52,9 +55,7 @@ G4HadronicAbsorptionBertini(G4ParticleDefinition* pdef)
 
 G4bool G4HadronicAbsorptionBertini::IsApplicable(const G4ParticleDefinition& particle)
 {
-  return ( (0==pdefApplicable && (&particle == G4PionMinus::Definition() ||
-				  &particle == G4KaonMinus::Definition() ||
-				  &particle == G4SigmaMinus::Definition()))
+  return ( (!pdefApplicable && G4HadronStoppingProcess::IsApplicable(particle))
 	   || (&particle == pdefApplicable) 
 	   );
 }
@@ -64,7 +65,7 @@ G4bool G4HadronicAbsorptionBertini::IsApplicable(const G4ParticleDefinition& par
 
 void 
 G4HadronicAbsorptionBertini::ProcessDescription(std::ostream& os) const {
-  os << "Stopping and absorption of charged hadrons (pi-, K-, or Sigma-)\n"
+  os << "Stopping and absorption of charged hadrons (pi-, K-, Sigma-)\n"
      << "using Bertini-like intranuclear cascade.\n"
      << "Native PreCompound model is used for nuclear de-excitation"
      << std::endl;

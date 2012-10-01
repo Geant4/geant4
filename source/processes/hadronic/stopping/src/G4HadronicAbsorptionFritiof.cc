@@ -41,6 +41,9 @@
 //
 //---------------------------------------------------------------------------
 
+#include <iostream>
+
+#include "G4SystemOfUnits.hh"
 #include "G4HadronicAbsorptionFritiof.hh"
 #include "G4ExcitationHandler.hh"
 #include "G4PreCompoundModel.hh"
@@ -51,7 +54,6 @@
 #include "G4TheoFSGenerator.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
-#include <iostream>
 
 
 // Constructor

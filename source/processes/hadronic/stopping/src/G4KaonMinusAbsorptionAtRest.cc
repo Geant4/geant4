@@ -48,6 +48,12 @@ G4KaonMinusAbsorptionAtRest::G4KaonMinusAbsorptionAtRest(const G4String& process
                                       G4ProcessType   aType ) :
   G4VRestProcess (processName, aType)
 {
+  static G4bool dowarn = true;
+  if (dowarn)
+    G4cout << "WARNING: " << __FILE__ << " is deprecated and will be removed."
+	   << G4endl; 
+  dowarn = false; 
+
   if (verboseLevel>0) {
     G4cout << GetProcessName() << " is created "<< G4endl;
   }

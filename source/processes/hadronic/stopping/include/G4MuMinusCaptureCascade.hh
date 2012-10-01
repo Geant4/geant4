@@ -37,6 +37,8 @@
 #ifndef G4MuMinusCaptureCascade_h
 #define G4MuMinusCaptureCascade_h 1
 
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "globals.hh"
 #include "Randomize.hh" 
 #include "G4ParticleDefinition.hh"
@@ -114,7 +116,7 @@ inline G4ThreeVector& G4MuMinusCaptureCascade::GetRandomVec()
   //
   G4double cost = 2.0 * G4UniformRand() - 1.0;
   G4double sint = std::sqrt((1.0 - cost)*(1.0 + cost));
-  G4double Phi  = twopi * G4UniformRand();
+  G4double Phi  = CLHEP::twopi * G4UniformRand();
   randomVect = G4ThreeVector(sint * std::cos(Phi), sint * std::sin(Phi), cost);
   return randomVect;
 }

@@ -41,6 +41,7 @@
 //
 // Modifications: 
 //   20120522  M. Kelsey -- Set enableAtRestDoIt flag for G4ProcessManager
+//   20120914  M. Kelsey -- Pass subType in base ctor, remove enable flags
 //------------------------------------------------------------------------
 
 #include "G4HadronStoppingProcess.hh"
@@ -55,13 +56,13 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4HadronStoppingProcess::G4HadronStoppingProcess(const G4String& nam) 
-  : G4HadronicProcess(nam, fHadronic)
+G4HadronStoppingProcess::G4HadronStoppingProcess(const G4String& name) 
+  : G4HadronicProcess(name, fHadronAtRest)
 {
-  enableAtRestDoIt = true;	// Base class flags must be reset from
-  enablePostStepDoIt = false;	// G4VDiscreteProcess defaults
+  // Modify G4VProcess flags to emulate G4VRest instead of G4VDiscrete
+  enableAtRestDoIt = true;
+  enablePostStepDoIt = false;
 
-  SetProcessSubType(fHadronAtRest);
   fElementSelector = new G4ElementSelector();
   fEmCascade = new G4EmCaptureCascade();	// Owned by InteractionRegistry
   fBoundDecay = 0;

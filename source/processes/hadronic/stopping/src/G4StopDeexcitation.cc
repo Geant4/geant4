@@ -47,6 +47,11 @@
 G4StopDeexcitation::G4StopDeexcitation(G4StopDeexcitationAlgorithm* algorithm)
   
 {
+  static G4bool dowarn = true;
+  if (dowarn)
+    G4cout << "WARNING: " << __FILE__ << " is deprecated and will be removed."
+	 << G4endl; 
+  dowarn = false;
   _algorithm = algorithm;
 }
 
