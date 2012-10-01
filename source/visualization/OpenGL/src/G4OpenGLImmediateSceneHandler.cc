@@ -82,14 +82,14 @@ G4bool G4OpenGLImmediateSceneHandler::AddPrimitivePreamble(const G4Visible& visi
   
   G4bool isMarker = false;
   try {
-    dynamic_cast<const G4VMarker&>(visible);
+    (void) dynamic_cast<const G4VMarker&>(visible);
     isMarker = true;
   }
   catch (std::bad_cast) {}
   
   G4bool isPolyline = false;
   try {
-    dynamic_cast<const G4Polyline&>(visible);
+    (void) dynamic_cast<const G4Polyline&>(visible);
     isPolyline = true;
   }
   catch (std::bad_cast) {}

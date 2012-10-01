@@ -17,6 +17,30 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28th September 2012  Laurent Garnier (opengl-V09-05-42)
+- G4OpenGLQtViewer:
+  o Fixed compiler warning
+
+28th September 2012  Gabriele Cosmo (opengl-V09-05-41)
+- Explicitly include units header in G4OpenGLQtViewer.cc.
+
+28th September 2012  Laurent Garnier (opengl-V09-05-40)
+- G4OpenGLQtViewer:
+  o Fixed compiler warning and remove dead code
+
+27th September 2012  John Allison
+- G4OpenGLImmediate/StoredSceneHandler.cc:
+  o Fixed clang compiler warning.
+
+27th September 2012  John Allison (opengl-V09-05-39)
+- G4OpenGLStoredSceneHandler:
+  o Removed RequestPrimitives.  Previously, G4OpenGLStoredSceneHandler had its
+    own version of RequestPrimitives, which attempted to re-use a display list
+    if the geometry object had been encountered earlier with a different
+    transformation.  The transformation is kept in the PO and the display list
+    is re-used.  One has to be careful about replicas and transformations.  Now
+    this code has been moved to AddPrimitivePreAmble.
+
 27th September 2012  John Allison (opengl-V09-05-38)
 - G4OpenGLStoredSceneHandler, 
   o Minor name changes to improve readability.

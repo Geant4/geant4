@@ -51,6 +51,8 @@
 #include "G4PhysicalVolumeModel.hh"
 #include "G4Text.hh"
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include <typeinfo>
 
 #include <qlayout.h>
@@ -773,7 +775,7 @@ void G4OpenGLQtViewer::toggleProjection(bool check) {
   if (check == 1) {
     fVP.SetFieldHalfAngle(0.);
   } else {
-    fVP.SetFieldHalfAngle(30.*deg);
+    fVP.SetFieldHalfAngle(30.*CLHEP::deg);
   }  
   updateQWidget();
 }
@@ -2663,9 +2665,9 @@ bool G4OpenGLQtViewer::parseAndInsertInSceneTree(
       // then check for the Transform3D
       bool sameTransform = true;
       if (parentItemPOIndex >= 0) {
-        const PVPath fullPath = fTreeItemModels[parentItemPOIndex];
-        if (fullPath.size() > 0) {
-          if (fullPath.at(fullPath.size()-1).GetTransform () == pPVModel->GetTransformation ()) {
+        const PVPath fullPathTmp = fTreeItemModels[parentItemPOIndex];
+        if (fullPathTmp.size() > 0) {
+          if (fullPathTmp.at(fullPathTmp.size()-1).GetTransform () == pPVModel->GetTransformation ()) {
             sameTransform = true;
           } else {
             sameTransform = false;
@@ -2822,7 +2824,6 @@ void G4OpenGLQtViewer::changeOpenCloseVisibleHiddenSelectedColorSceneTreeElement
     itVis = fOldVisAttrColorMap.find(oldPOIndex);
 
     QColor oldVisAttrColor = QColor();
-    QColor oldPOColor = QColor();
     QColor newVisAttrColor = subItem->data(2,Qt::UserRole).value<QColor>();
 
     bool visAttrChange = false;
@@ -3279,10 +3280,6 @@ void G4OpenGLQtViewer::changeDepthOnSceneTreeItem(
         // volume that will came after and with a different alpha level
         // Good thing to do is to check and suppress doubles in changeDepthInSceneTree
         // and then check if last (transparents volumes) has to change alpha
-        QColor qc = QColor(color.GetRed()*255,
-                           color.GetGreen()*255,
-                           color.GetBlue()*255,
-                           transparencyLevel*255);
 
         changeQColorForTreeWidgetItem(item,QColor(color.GetRed()*255,
                                                   color.GetGreen()*255,
@@ -3347,10 +3344,10 @@ void G4OpenGLQtViewer::clearTreeWidget(){
       fOldTreeItemModels.insert(fTreeItemModels.begin(), fTreeItemModels.end());  
 
       // all is copy, then clear scene tree
-      int tmp = fSceneTreeComponentTreeWidget->topLevelItemCount();
-      while (tmp > 0) {
+      int tmp2 = fSceneTreeComponentTreeWidget->topLevelItemCount();
+      while (tmp2 > 0) {
         delete fSceneTreeComponentTreeWidget->takeTopLevelItem (0);
-        tmp = fSceneTreeComponentTreeWidget->topLevelItemCount();
+        tmp2 = fSceneTreeComponentTreeWidget->topLevelItemCount();
       }
       fPositivePoIndexSceneTreeWidgetQuickMap.clear();
 

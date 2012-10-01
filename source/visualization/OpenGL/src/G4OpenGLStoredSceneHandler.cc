@@ -215,14 +215,14 @@ G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible
   
   G4bool isMarker = false;
   try {
-    dynamic_cast<const G4VMarker&>(visible);
+    (void) dynamic_cast<const G4VMarker&>(visible);
     isMarker = true;
   }
   catch (std::bad_cast) {}
   
   G4bool isPolyline = false;
   try {
-    dynamic_cast<const G4Polyline&>(visible);
+    (void) dynamic_cast<const G4Polyline&>(visible);
     isPolyline = true;
   }
   catch (std::bad_cast) {}
@@ -247,58 +247,106 @@ G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible
       }
       // On first pass, transparent objects and non-hidden markers are not drawn...
       if (treatAsTransparent || treatAsNotHidden) {
-        return false;
+        return false;  // No further processing.
       }
     }
     
     // On second pass, only transparent objects are drawn...
     if (fSecondPassForTransparency) {
       if (!treatAsTransparent) {
-        return false;
+        return false;  // No further processing.
       }
     }
     
     // On third pass, only non-hidden markers are drawn...
     if (fThirdPassForNonHiddenMarkers) {
       if (!treatAsNotHidden) {
-        return false;
+        return false;  // No further processing.
         
       }
     }
   }  // fThreePassCapable
   
   // Loads G4Atts for picking...
+  G4bool isPicking = false;
   if (fpViewer->GetViewParameters().IsPicking()) {
+    isPicking = true;
     glLoadName(++fPickName);
     G4AttHolder* holder = new G4AttHolder;
     LoadAtts(visible, holder);
     fPickMap[fPickName] = holder;
   }
+  
+  // Can we re-use a display list?
+  const G4VSolid* pSolid = 0;
+  G4PhysicalVolumeModel* pPVModel =
+  dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+  if (pPVModel) {
+    // If part of the geometry hierarchy, i.e., from a
+    // G4PhysicalVolumeModel, check if a display list already exists for
+    // this solid, re-use it if possible.  We could be smarter, and
+    // recognise repeated branches of the geometry hierarchy, for
+    // example.  But this algorithm should be secure, I think...
+    pSolid = pPVModel->GetCurrentPV()->GetLogicalVolume()->GetSolid();
+    EAxis axis = kRho;
+    G4VPhysicalVolume* pCurrentPV = pPVModel->GetCurrentPV();
+    if (pCurrentPV -> IsReplicated ()) {
+      G4int nReplicas;
+      G4double width;
+      G4double offset;
+      G4bool consuming;
+      pCurrentPV->GetReplicationData(axis,nReplicas,width,offset,consuming);
+    }
+    // Provided it is not parametrised (because if so, the
+    // solid's parameters might have been changed)...
+    if (!(pCurrentPV -> IsParameterised ()) &&
+	// Provided it is not replicated radially (because if so, the
+	// solid's parameters will have been changed)...
+	!(pCurrentPV -> IsReplicated () && axis == kRho) &&
+	// ...and if the solid has already been rendered...
+	(fSolidMap.find (pSolid) != fSolidMap.end ())) {
+      fDisplayListId = fSolidMap [pSolid];
+      PO po(fDisplayListId,fObjectTransformation);
+      if (isPicking) po.fPickName = fPickName;
+      po.fColour = c;
+      po.fTransparent = isTransparent;
+      po.fMarkerOrPolyline = isMarkerOrPolyline;
+      fPOList.push_back(po);
+      // No need to test if gl commands are used (result of
+      // ExtraPOProcessing) because we have already decided they will
+      // not, at least not here.  Also, pass a dummy G4Visible since
+      // not relevant for G4PhysicalVolumeModel.
+      (void) ExtraPOProcessing(G4Visible(), fPOList.size() - 1);
+      return false;  // No further processing.
+    }
+  }
 
   // Because of our need to control colour of transients (display by
   // time fading), display lists may only cover a single primitive.
   // So display list setup is here.
-
+  
   if (fMemoryForDisplayLists) {
     fDisplayListId = glGenLists (1);
     if (glGetError() == GL_OUT_OF_MEMORY ||
 	fDisplayListId > fDisplayListLimit) {
       G4cout <<
-  "********************* WARNING! ********************"
-  "\n*  Display list limit reached in OpenGL."
-  "\n*  Continuing drawing WITHOUT STORING. Scene only partially refreshable."
-  "\n*  Current limit: " << fDisplayListLimit <<
-  ".  Change with \"/vis/ogl/set/displayListLimit\"."
-  "\n***************************************************"
-	     << G4endl;
+      "********************* WARNING! ********************"
+      "\n*  Display list limit reached in OpenGL."
+      "\n*  Continuing drawing WITHOUT STORING. Scene only partially refreshable."
+      "\n*  Current limit: " << fDisplayListLimit <<
+      ".  Change with \"/vis/ogl/set/displayListLimit\"."
+      "\n***************************************************"
+      << G4endl;
       fMemoryForDisplayLists = false;
     }
   }
+  
+  if (pSolid) fSolidMap [pSolid] = fDisplayListId;
 
   if (fMemoryForDisplayLists) {
     if (fReadyForTransients) {
       TO to(fDisplayListId, fObjectTransformation);
-      to.fPickName = fPickName;
+      if (isPicking) to.fPickName = fPickName;
       to.fColour = c;
       const G4VisAttributes* pVA =
 	fpViewer->GetApplicableVisAttributes(visible.GetVisAttributes());
@@ -327,7 +375,7 @@ G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible
       glNewList (fDisplayListId, GL_COMPILE_AND_EXECUTE);
     } else {
       PO po(fDisplayListId, fObjectTransformation);
-      po.fPickName = fPickName;
+      if (isPicking) po.fPickName = fPickName;
       po.fColour = c;
       po.fTransparent = isTransparent;
       po.fMarkerOrPolyline = isMarkerOrPolyline;
@@ -579,116 +627,6 @@ void G4OpenGLStoredSceneHandler::ClearTransientStore ()
     fpViewer -> ClearView ();
     fpViewer -> DrawView ();
   }
-}
-
-void G4OpenGLStoredSceneHandler::RequestPrimitives (const G4VSolid& solid)
-{
-  if (fReadyForTransients) {
-    // Always draw transient solids, e.g., hits represented as solids.
-    // (As we have no control over the order of drawing of transient
-    // objects, we cannot do anything about transparent ones, as
-    // below, so always draw them.)
-    G4VSceneHandler::RequestPrimitives (solid);
-    return;
-  }
-
-  if (fThirdPassForNonHiddenMarkers) {
-    // Always draw non-hidden markers.
-    G4VSceneHandler::RequestPrimitives (solid);
-    return;
-  }
-  
-  // Get vis attributes - pick up defaults if none.
-  const G4VisAttributes* pVA =
-  fpViewer -> GetApplicableVisAttributes(fpVisAttribs);
-
-  const G4Colour& c = pVA -> GetColour ();
-  G4double opacity = c.GetAlpha ();
-  G4bool isOpaque = opacity >= 1.;
-  G4bool isTransparent = opacity < 1.;
-
-  // Ensure transparent objects are drawn opaque ones and before
-  // non-hidden markers.  The problem of blending/transparency/alpha
-  // is quite a tricky one - see History of opengl-V07-01-01/2/3.
-  if (!fSecondPassForTransparency) {
-    G4bool transparency_enabled = true;
-    // Need access to method in G4OpenGLViewer.  static_cast doesn't work
-    // with a virtual base class, so use dynamic_cast.
-    G4OpenGLViewer* pViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
-    if (pViewer) {
-      transparency_enabled = pViewer->transparency_enabled;
-      if (transparency_enabled && isTransparent) {
-        // On first pass, transparent objects are not drawn, but flag is set...
-        fSecondPassForTransparencyRequested = true;
-        return;
-      }
-    }
-  }
-
-  // On second pass, opaque objects are not drwan...
-  if (fSecondPassForTransparency && isOpaque) return;
-  
-  G4PhysicalVolumeModel* pPVModel =
-    dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
- 
-  if (pPVModel) {
-    // If part of the geometry hierarchy, i.e., from a
-    // G4PhysicalVolumeModel, check if a display list already exists for
-    // this solid, re-use it if possible.  We could be smarter, and
-    // recognise repeated branches of the geometry hierarchy, for
-    // example.  But this algorithm should be secure, I think...
-    const G4VSolid* pSolid = &solid;
-    EAxis axis = kRho;
-    G4VPhysicalVolume* pCurrentPV = pPVModel->GetCurrentPV();
-    if (pCurrentPV -> IsReplicated ()) {
-      G4int nReplicas;
-      G4double width;
-      G4double offset;
-      G4bool consuming;
-      pCurrentPV->GetReplicationData(axis,nReplicas,width,offset,consuming);
-    }
-    // Provided it is not parametrised (because if so, the
-    // solid's parameters might have been changed)...
-    if (!(pCurrentPV -> IsParameterised ()) &&
-	// Provided it is not replicated radially (because if so, the
-	// solid's parameters will have been changed)...
-	!(pCurrentPV -> IsReplicated () && axis == kRho) &&
-	// ...and if the solid has already been rendered...
-	(fSolidMap.find (pSolid) != fSolidMap.end ())) {
-      fDisplayListId = fSolidMap [pSolid];
-      PO po(fDisplayListId,fObjectTransformation);
-      if (fpViewer->GetViewParameters().IsPicking()) {
-	G4AttHolder* holder = new G4AttHolder;
-	// Load G4Atts from G4VisAttributes, if any...
-	const G4VisAttributes* va = pPVModel->GetCurrentLV()->GetVisAttributes();
-	if (va) {
-	  const std::map<G4String,G4AttDef>* vaDefs = va->GetAttDefs();
-	  if (vaDefs) holder->AddAtts(va->CreateAttValues(), vaDefs);
-	}
-	// Load G4Atts from G4PhysicalVolumeModel...
-	const std::map<G4String,G4AttDef>* defs = pPVModel->GetAttDefs();
-	if (defs) holder->AddAtts(pPVModel->CreateCurrentAttValues(), defs);
-	fPickMap[++fPickName] = holder;
-	po.fPickName = fPickName;
-      }
-      po.fColour = c;
-      po.fTransparent = isTransparent;
-      fPOList.push_back(po);
-      // No need to test if gl commands are used (result of
-      // ExtraPOProcessing) because we have already decided they will
-      // not, at least not here.  Also, pass a dummy G4Visible since
-      // not relevant for G4PhysicalVolumeModel.
-      (void) ExtraPOProcessing(G4Visible(), fPOList.size() - 1);
-    }
-    else {
-      G4VSceneHandler::RequestPrimitives (solid);
-      fSolidMap [pSolid] = fDisplayListId;
-    }
-    return;
-  }
-
-  // Otherwise invoke base class method...
-  G4VSceneHandler::RequestPrimitives (solid);
 }
 
 G4int G4OpenGLStoredSceneHandler::fSceneIdCount = 0;

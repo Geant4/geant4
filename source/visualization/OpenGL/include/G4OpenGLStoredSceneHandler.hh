@@ -74,11 +74,6 @@ public:
 
 protected:
 
-  void RequestPrimitives (const G4VSolid& solid);
-  // G4OpenGLStoredSceneHandler's version of RequestPrimitives that
-  // intercepts repeated solids, but otherwise calls the base class
-  // method.
-
   G4bool AddPrimitivePreamble(const G4Visible& visible);
   // Return false if no further processing required.
 
