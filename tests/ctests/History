@@ -17,6 +17,38 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ctests-V09-05-22 29th September 2012 Ivana Hrivnacova
+- Synchronizing tests with updated CMakeLists.txt in 
+  example/extended/eventGenerator, hadronic, polarisation
+  (exEventgenerator-V09-05-01, exHadronic-V09-05-01, 
+  exPolarisation-V09-05-01)
+
+ctests-V09-05-21 26th September 2012 Ivana Hrivnacova
+- Synchronizing tests with updated CMakeLists.txt in 
+  example/extended/eventGenerator (exEventgenerator-V09-05-00)
+
+ctests-V09-05-20 24th September 2012 Ivana Hrivnacova
+- Synchronizing tests with updated CMakeLists.txt in 
+  example/extended/parameterisations, persistency, polarisation
+  (exParameterisations-V09-05-00, exPersistency-V09-05-00,
+   exPolarisation-V09-05-00)
+- Fixed test example-ext-biasing-reversemc01   
+
+ctests-V09-05-19 21st September 2012 Ivana Hrivnacova
+- Synchronizing tests with updated CMakeLists.txt in 
+  example/extended/hadronic, medical 
+  (exHadronic-V09-05-00, exMedical-V09-05-00)
+
+ctests-V09-05-18 20th September 2012 Ivana Hrivnacova
+- Synchronizing tests with updated CMakeLists.txt in 
+  example/extended/geometry, errorpropagation 
+  (exGeometry-V09-05-00, exerrprop-V09-05-05) 
+- Added geometry/transforms and field/field06 in tests
+
+ctests-V09-05-17 19th September 2012 Ivana Hrivnacova
+- Synchronizing tests with updated CMakeLists.txt in example/extended: 
+  exbiasing-V09-05-01
+
 ctests-V09-05-16 3rd September 2012 Ivana Hrivnacova
 - Synchronizing tests with updated CMakeLists.txt in example/extended: 
   example-ext-analysis-anaex03: now built only when AIDA is found

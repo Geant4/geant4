@@ -160,7 +160,7 @@ GEANT4_ADD_TEST(example-ext-biasing-b01
                 COMMAND ${CMAKE_BINARY_DIR}/examples/extended/biasing/B01/exampleB01
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/biasing/B01
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/biasing/B01
-                BUILD exampleB01 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+                BUILD exampleB01 PROJECT B01 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-ext-biasing-b02 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/extended/biasing/B02/exampleB02
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/biasing/B02
@@ -168,10 +168,10 @@ GEANT4_ADD_TEST(example-ext-biasing-b02
                 BUILD exampleB02 PROJECT B02)
 GEANT4_ADD_TEST(example-ext-biasing-reversemc01 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/extended/biasing/ReverseMC01/exampleRMC01
-                        ${CMAKE_SOURCE_DIR}/examples/extended/biasing/ReverseMC01/run_adjoint_simulation_electron.g4mac
+                        ${CMAKE_SOURCE_DIR}/examples/extended/biasing/ReverseMC01/run_adjoint_simulation_electron.mac
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/biasing/ReverseMC01
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/biasing/ReverseMC01
-                BUILD exampleRMC01 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+                BUILD exampleRMC01 PROJECT ReverseMC01 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 foreach(_i 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18)
   GEANT4_ADD_TEST(example-ext-electromagnetic-testem${_i}
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/electromagnetic/TestEm${_i}/TestEm${_i} 
@@ -185,16 +185,16 @@ GEANT4_ADD_TEST(example-ext-errorpropagation
                 COMMAND ${CMAKE_BINARY_DIR}/examples/extended/errorpropagation/errprop
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/errorpropagation
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/errorpropagation
-                BUILD errprop
+                BUILD errprop PROJECT errorpropagation 
                 ENVIRONMENT G4ERROR_TARGET=PLANE_SURFACE
                             G4ERROR_MODE=BACKWARDS
                             G4ERROR_PROP=UNTIL_TARGET )
 GEANT4_ADD_TEST(example-ext-eventgenerator-exgps 
-                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/eventgenerator/exgps/exGPS
+                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/eventgenerator/exgps/exgps
                         ${CMAKE_SOURCE_DIR}/examples/extended/eventgenerator/exgps/exgps_batch.in
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/eventgenerator/exgps
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/eventgenerator/exgps
-                BUILD exGPS)
+                BUILD exgps )
 GEANT4_ADD_TEST(example-ext-eventgenerator-particleGun-build 
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/eventgenerator/particleGun
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/eventgenerator/particleGun
@@ -213,7 +213,7 @@ GEANT4_ADD_TEST(example-ext-exoticphysics-monopole
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/monopole
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/monopole
                 BUILD monopole ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT} )
-foreach(_i 01 02 03 04 05)
+foreach(_i 01 02 03 04 05 06)
   GEANT4_ADD_TEST(example-ext-field-field${_i} 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/field/field${_i}/field${_i} 
                           ${CMAKE_SOURCE_DIR}/examples/extended/field/field${_i}/field${_i}.in
@@ -237,21 +237,27 @@ GEANT4_ADD_TEST(example-ext-geometry-olap
                 POSTCMD ${CMAKE_COMMAND} -E compare_files batch.err ${CMAKE_SOURCE_DIR}/examples/extended/geometry/olap/batch.err
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/geometry/olap
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/geometry/olap
-                BUILD olapex)
+                BUILD olapex PROJECT olap )
+GEANT4_ADD_TEST(example-ext-geometry-transforms 
+                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/geometry/transforms/transforms
+                        ${CMAKE_SOURCE_DIR}/examples/extended/geometry/transforms/debug.mac
+                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/geometry/transforms
+                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/geometry/transforms
+                BUILD transforms )
 foreach(_i 00 01 02 03)
   GEANT4_ADD_TEST(example-ext-hadronic-hadr${_i} 
-                  COMMAND ${CMAKE_BINARY_DIR}/examples/extended/hadronic/Hadr${_i}/hadr${_i}
+                  COMMAND ${CMAKE_BINARY_DIR}/examples/extended/hadronic/Hadr${_i}/Hadr${_i}
                           ${CMAKE_SOURCE_DIR}/examples/extended/hadronic/Hadr${_i}/hadr${_i}.in
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/hadronic/Hadr${_i}
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/hadronic/Hadr${_i}
-                  BUILD hadr${_i} ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+                  BUILD Hadr${_i} ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 endforeach()
 GEANT4_ADD_TEST(example-ext-medical-dicom 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/extended/medical/DICOM/dicom
                         ${CMAKE_SOURCE_DIR}/examples/extended/medical/DICOM/run.mac
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/medical/DICOM
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/medical/DICOM
-                BUILD dicom)
+                BUILD dicom PROJECT DICOM )
 GEANT4_ADD_TEST(example-ext-medical-electronScattering 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/extended/medical/electronScattering/electronScattering
                         ${CMAKE_SOURCE_DIR}/examples/extended/medical/electronScattering/electronScattering.in
@@ -294,7 +300,7 @@ GEANT4_ADD_TEST(example-ext-parameterisations-gflash
                         ${CMAKE_SOURCE_DIR}/examples/extended/parameterisations/gflash/test.mac
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/parameterisations/gflash
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/parameterisations/gflash
-                BUILD ExGflash ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+                BUILD ExGflash PROJECT gflash ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 if(GEANT4_USE_GDML)
   GEANT4_ADD_TEST(example-ext-persistency-gdml-g01 
                   PRECMD  ${CMAKE_COMMAND} -E remove -f g01.gdml
@@ -304,14 +310,14 @@ if(GEANT4_USE_GDML)
                           ${CMAKE_SOURCE_DIR}/examples/extended/persistency/gdml/G01/g01.in
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/persistency/gdml/G01
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/persistency/gdml/G01
-                  BUILD load_gdml)
+                  BUILD load_gdml PROJECT G01)
   GEANT4_ADD_TEST(example-ext-persistency-gdml-g04 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/persistency/gdml/G04/gdml_det
                           ${CMAKE_SOURCE_DIR}/examples/extended/persistency/gdml/G04/auxiliary.gdml 
                           ${CMAKE_SOURCE_DIR}/examples/extended/persistency/gdml/G04/g04.mac
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/persistency/gdml/G04
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/persistency/gdml/G04
-                  BUILD gdml_det)
+                  BUILD gdml_det PROJECT G04)
 endif()
 if(ROOT_FOUND AND BUILD_SHARED_LIBS)
   GEANT4_ADD_TEST(example-ext-persistency-p01-write 
@@ -319,13 +325,13 @@ if(ROOT_FOUND AND BUILD_SHARED_LIBS)
                           ${CMAKE_SOURCE_DIR}/examples/extended/persistency/P01/run.mac
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/persistency/P01
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/persistency/P01
-                  BUILD exampleP01 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+                  BUILD exampleP01 PROJECT P01 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
                   
   GEANT4_ADD_TEST(example-ext-persistency-p01-read 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/persistency/P01/readHits hits.root
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/persistency/P01
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/persistency/P01
-                  BUILD readHits ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
+                  BUILD readHits PROJECT P01 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
                   DEPENDS example-ext-persistency-p01-write)
 endif()
 
@@ -335,13 +341,13 @@ GEANT4_ADD_TEST(example-ext-persistency-p03
                         ${CMAKE_SOURCE_DIR}/examples/extended/persistency/P03/batch.mac
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/persistency/P03
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/persistency/P03
-                BUILD textGeom ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+                BUILD textGeom  PROJECT P03 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-ext-polarisation-pol01 
-                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/polarisation/Pol01/pol01
+                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/polarisation/Pol01/Pol01
                         ${CMAKE_SOURCE_DIR}/examples/extended/polarisation/Pol01/pol01.in
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/polarisation/Pol01
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/polarisation/Pol01
-                BUILD pol01)
+                BUILD Pol01 )
 foreach(_i 01 02)
   GEANT4_ADD_TEST(example-ext-radioactivedecay-rdecay${_i} 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/extended/radioactivedecay/rdecay${_i}/rdecay${_i}
