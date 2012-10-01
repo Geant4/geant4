@@ -42,23 +42,23 @@
 // 24.02.11 V.Ivanchenko use particle name in IfApplicable, 
 //                       added anti particles for light ions
 // 07.09.11 M.Kelsey: Follow chanhe to G4HadFinalState interface
+// 14.09.12 M.Kelsey: Pass subType code to base ctor
 //
 
+#include <iostream>
+#include <typeinfo>
+
 #include "G4WHadronElasticProcess.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Nucleus.hh"
 #include "G4ProcessManager.hh"
 #include "G4CrossSectionDataStore.hh"
 #include "G4HadronElasticDataSet.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4HadronicException.hh"
-#include <iostream>
-#include <typeinfo>
-
 
 G4WHadronElasticProcess::G4WHadronElasticProcess(const G4String& pName)
-  : G4HadronicProcess(pName) 
-{
-  SetProcessSubType(fHadronElastic);
+  : G4HadronicProcess(pName, fHadronElastic) {
   AddDataSet(new G4HadronElasticDataSet);
   theNeutron  = G4Neutron::Neutron();
   lowestEnergy = 1.*keV;
@@ -94,25 +94,27 @@ void G4WHadronElasticProcess::Description() const
 }
 
 
-G4VParticleChange* G4WHadronElasticProcess::PostStepDoIt(
-				  const G4Track& track, 
-				  const G4Step& step)
+G4VParticleChange* 
+G4WHadronElasticProcess::PostStepDoIt(const G4Track& track, 
+				      const G4Step& /*step*/)
 {
-  aParticleChange.Initialize(track);
+  theTotalResult->Clear();
+  theTotalResult->Initialize(track);
   G4double weight = track.GetWeight();
-  aParticleChange.ProposeWeight(weight);
+  theTotalResult->ProposeWeight(weight);
+
+  // For elastic scattering, _any_ result is considered an interaction
+  ClearNumberOfInteractionLengthLeft();
 
   G4double kineticEnergy = track.GetKineticEnergy();
   const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
   const G4ParticleDefinition* part = dynParticle->GetDefinition();
 
-  // protection against numerical problems
-  // primary energy cannot be very low
-  if(part == theNeutron) {
-    if(kineticEnergy <= lowestEnergyNeutron) 
-      { return G4VDiscreteProcess::PostStepDoIt(track,step); }
-  } else if(kineticEnergy <= lowestEnergy)
-      { return G4VDiscreteProcess::PostStepDoIt(track,step); }
+  // NOTE:  Very low energy scatters were causing numerical (FPE) errors
+  //        in earlier releases; these limits have not been changed since.
+  if (part == theNeutron) {
+    if(kineticEnergy <= lowestEnergyNeutron) return theTotalResult;
+  } else if(kineticEnergy <= lowestEnergy)   return theTotalResult;
 
   G4Material* material = track.GetMaterial();
   G4Nucleus* targNucleus = GetTargetNucleusPointer();
@@ -208,7 +210,8 @@ G4VParticleChange* G4WHadronElasticProcess::PostStepDoIt(
   if(efinal < 0.0) { efinal = 0.0; }
   if(edep < 0.0)   { edep = 0.0; }
 
-  // protection against numerical problems
+  // NOTE:  Very low energy scatters were causing numerical (FPE) errors
+  //        in earlier releases; these limits have not been changed since.
   if((part == theNeutron && efinal <= lowestEnergyNeutron) || 
      (part != theNeutron && efinal <= lowestEnergy)) {
     edep += efinal;
@@ -216,30 +219,30 @@ G4VParticleChange* G4WHadronElasticProcess::PostStepDoIt(
   }
 
   // primary change
-  aParticleChange.ProposeEnergy(efinal);
+  theTotalResult->ProposeEnergy(efinal);
 
   G4TrackStatus status = track.GetTrackStatus();
   if(efinal > 0.0) {
     outdir.rotate(phi, it);
     outdir.rotateUz(indir);
-    aParticleChange.ProposeMomentumDirection(outdir);
+    theTotalResult->ProposeMomentumDirection(outdir);
   } else {
     if(part->GetProcessManager()->GetAtRestProcessVector()->size() > 0)
          { status = fStopButAlive; }
     else { status = fStopAndKill; }
-    aParticleChange.ProposeTrackStatus(status);
+    theTotalResult->ProposeTrackStatus(status);
   }
 
   //G4cout << "Efinal= " << efinal << "  TrackStatus= " << status << G4endl;
 
-  aParticleChange.SetNumberOfSecondaries(0);
+  theTotalResult->SetNumberOfSecondaries(0);
 
   // recoil
   if(result->GetNumberOfSecondaries() > 0) {
     G4DynamicParticle* p = result->GetSecondary(0)->GetParticle();
 
     if(p->GetKineticEnergy() > lowestEnergy) {
-      aParticleChange.SetNumberOfSecondaries(1);
+      theTotalResult->SetNumberOfSecondaries(1);
       G4ThreeVector pdir = p->GetMomentumDirection();
       // G4cout << "recoil " << pdir << G4endl;
       //!! is not needed for models inheriting G4HadronElastic
@@ -253,17 +256,16 @@ G4VParticleChange* G4WHadronElasticProcess::PostStepDoIt(
 			       track.GetPosition());
       t->SetWeight(weight);
       t->SetTouchableHandle(track.GetTouchableHandle());
-      aParticleChange.AddSecondary(t);
+      theTotalResult->AddSecondary(t);
 
     } else {
       edep += p->GetKineticEnergy();
       delete p;
     }
   }
-  aParticleChange.ProposeLocalEnergyDeposit(edep);
-  aParticleChange.ProposeNonIonizingEnergyDeposit(edep);
+  theTotalResult->ProposeLocalEnergyDeposit(edep);
+  theTotalResult->ProposeNonIonizingEnergyDeposit(edep);
   result->Clear();
 
-  return G4VDiscreteProcess::PostStepDoIt(track,step);
+  return theTotalResult;
 }
-

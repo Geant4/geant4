@@ -37,6 +37,7 @@
 // G4CrossSectionDataSet/DataStore class design.
 // 29-JUN-98 FWJ: default data set G4HadronCrossSections
 // 01-SEP-2008 V.Ivanchenko: use methods from the base class
+// 14-Sep-12 M.Kelsey -- Pass subType code to base ctor
 //
 
 #include "G4HadronFissionProcess.hh"
@@ -44,9 +45,8 @@
 #include "G4Neutron.hh"
 
 G4HadronFissionProcess::G4HadronFissionProcess(const G4String& processName) : 
-  G4HadronicProcess(processName)
+  G4HadronicProcess(processName,fFission)
 {
-  SetProcessSubType(fFission);
   AddDataSet(new G4HadronFissionDataSet());
 }
 

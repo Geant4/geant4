@@ -16,6 +16,29 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+20 September 2012 Gabriele Cosmo (hadr-proc-V09-05-10)
+-------------------------------------------------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+17 September 2012 Michael Kelsey (hadr-proc-V09-05-09)
+-------------------------------------------------------
+- G4HadronElasticProcess.cc, G4WHadronElasticProcess.cc: Comment out "step"
+  in PostStepDoIt() signature, as no longer used (fixes compiler warning on
+  Linux).
+
+17 September 2012 Michael Kelsey (hadr-proc-V09-05-08)
+-------------------------------------------------------
+- G4HadronFissionProcess.cc, G4HadronElasticProcess.cc,
+  G4MuonNuclearProcess.cc, G4WHadronElasticProcess.cc,
+  G4HadronCaptureProcess.cc:  Follow migration of G4HadronicProcess
+  inheritance and ctor signature.
+
+- G4*HadronElasticProcess.cc: Replace use of "aParticleChange" with
+  "theTotalResult", and drop callback to G4VDiscreteProcess::PostStepDoIt().
+
+Requires co-working base tag hadr-man-V09-05-16
+
 28 July 2012 Vladimir Ivantchenko (hadr-proc-V09-05-07)
 --------------------------------------------------------
 26 July 2012 Vladimir Ivantchenko (hadr-proc-V09-05-06)

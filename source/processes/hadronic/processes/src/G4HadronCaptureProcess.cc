@@ -38,6 +38,7 @@
 // 29-JUN-98 FWJ: default data set G4HadronCrossSections
 // design re-done removing most of the original parts: JPW 2003.
 // 01-SEP-2008 V.Ivanchenko: use methods from the base class
+// 14-Sep-12 M.Kelsey -- Pass subType code to base ctor
 
 
 #include "G4HadronCaptureProcess.hh"
@@ -45,9 +46,8 @@
 #include "G4HadronCaptureDataSet.hh"
 
 G4HadronCaptureProcess::G4HadronCaptureProcess(const G4String& processName) : 
-   G4HadronicProcess(processName)
+  G4HadronicProcess(processName, fCapture)
 {
-  SetProcessSubType(fCapture);
   G4HadronicProcess::AddDataSet(new G4HadronCaptureDataSet());
 }
 
