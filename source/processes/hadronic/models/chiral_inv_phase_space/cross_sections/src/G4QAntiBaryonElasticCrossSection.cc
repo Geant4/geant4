@@ -44,6 +44,7 @@
 //#define sdebug
 
 #include "G4QAntiBaryonElasticCrossSection.hh"
+#include "G4SystemOfUnits.hh"
 
 // Initialization of the static parameters
 const G4int G4QAntiBaryonElasticCrossSection::nPoints=128;//#ofPt in AMDB table(>anyPar)(D)

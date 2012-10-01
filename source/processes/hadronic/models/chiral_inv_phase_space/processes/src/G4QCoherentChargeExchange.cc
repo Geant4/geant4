@@ -59,6 +59,7 @@
 //#define ppdebug
 
 #include "G4QCoherentChargeExchange.hh"
+#include "G4SystemOfUnits.hh"
 
 // Initialization of static vectors
 //G4int    G4QCoherentChargeExchange::nPartCWorld=152;// #of particles initialized in CHIPS

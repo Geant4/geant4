@@ -44,12 +44,15 @@
 //#define pardeb
 //#define ppdebug
 
-#include "G4QNucleus.hh"
-#include "Randomize.hh"
 #include <algorithm>
 #include <cmath>
 #include <vector>
-//#include <cstdlib>
+
+#include "G4QNucleus.hh"
+#include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 using namespace std;
 
 // Static parameters definition

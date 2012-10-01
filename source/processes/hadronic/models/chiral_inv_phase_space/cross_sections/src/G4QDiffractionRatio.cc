@@ -43,6 +43,7 @@
 //#define nandebug
 
 #include "G4QDiffractionRatio.hh"
+#include "G4SystemOfUnits.hh"
 
 // Returns Pointer to the G4VQCrossSection class
 G4QDiffractionRatio* G4QDiffractionRatio::GetPointer()

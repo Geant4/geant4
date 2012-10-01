@@ -47,6 +47,8 @@
 //#define tdebug
 
 #include "G4QCaptureAtRest.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 G4QCaptureAtRest::G4QCaptureAtRest(const G4String& processName)
   : G4VRestProcess(processName, fHadronic), Time(0.), EnergyDeposition(0.)

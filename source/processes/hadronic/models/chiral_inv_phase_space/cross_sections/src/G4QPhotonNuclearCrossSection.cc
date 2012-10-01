@@ -47,6 +47,7 @@
 //#define debugs
 
 #include "G4QPhotonNuclearCrossSection.hh"
+#include "G4SystemOfUnits.hh"
 
 // Initialization of the static variables
 G4bool    G4QPhotonNuclearCrossSection::onlyCS=true;// Flag to calculate only CS

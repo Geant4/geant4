@@ -48,6 +48,8 @@
 //#define ppdebug
 
 #include "G4QFragmentation.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 // Promoting model parameters from local variables class properties @@(? M.K.)
 

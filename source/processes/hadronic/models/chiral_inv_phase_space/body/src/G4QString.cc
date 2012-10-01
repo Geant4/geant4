@@ -52,8 +52,12 @@
 //#define pdebug
 //#define edebug
 
-#include "G4QString.hh"
 #include <algorithm>
+
+#include "G4QString.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 // Static parameters definition
 G4double G4QString::MassCut=350.*MeV;     // minimum mass cut for the string
 G4double G4QString::SigmaQT=0.5*GeV;      // quarkTransverseMomentum distribution parameter

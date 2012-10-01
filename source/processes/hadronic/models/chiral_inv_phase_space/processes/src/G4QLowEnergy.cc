@@ -43,6 +43,7 @@
 //#define ppdebug
 
 #include "G4QLowEnergy.hh"
+#include "G4SystemOfUnits.hh"
 
 // Initialization of static vectors
 //G4int    G4QLowEnergy::nPartCWorld=152;  // #of particles initialized in CHIPS

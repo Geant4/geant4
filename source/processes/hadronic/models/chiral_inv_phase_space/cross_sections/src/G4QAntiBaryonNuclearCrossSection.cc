@@ -45,6 +45,7 @@
 //#define debugs
 
 #include "G4QAntiBaryonNuclearCrossSection.hh"
+#include "G4SystemOfUnits.hh"
 
 // Initialization of the
 G4double* G4QAntiBaryonNuclearCrossSection::lastLEN=0; // Pointer to lastArray of LowEn CS

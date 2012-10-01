@@ -43,6 +43,7 @@
 //#define nandebug
 
 #include "G4QuasiFreeRatios.hh"
+#include "G4SystemOfUnits.hh"
 
 // initialisation of statics
 std::vector<G4double*> G4QuasiFreeRatios::vT; // Vector of pointers to LinTable in C++ heap

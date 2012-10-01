@@ -45,6 +45,7 @@
 //#define debugs
 
 #include "G4QHyperonNuclearCrossSection.hh"
+#include "G4SystemOfUnits.hh"
 
 // Initialization of the
 G4double* G4QHyperonNuclearCrossSection::lastLEN=0; // Pointer to the lastArray of LowEn CS

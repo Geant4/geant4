@@ -43,7 +43,9 @@
 //#define pdebug
 
 #include "G4QSynchRad.hh"
- 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 // Constructor
 G4QSynchRad::G4QSynchRad(const G4String& Name, G4ProcessType Type):
   G4VDiscreteProcess (Name, Type), minGamma(227.), Polarization(0.,0.,1.) {}

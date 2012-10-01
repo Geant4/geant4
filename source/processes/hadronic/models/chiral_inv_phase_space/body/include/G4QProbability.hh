@@ -47,6 +47,7 @@
 // cross-section). They describe inelastic processes at high energies.
 // ------------------------------------------------------------------
 
+#include <CLHEP/Units/PhysicalConstants.h>
 #include "globals.hh"
 
 class G4QProbability
@@ -56,7 +57,7 @@ class G4QProbability
   ~G4QProbability(){;}
   void SetS0(G4double aS0)                        {S0 = aS0;}
   void SetPom_Gamma(G4double aPom_Gamma)          {pom_Gamma = aPom_Gamma;}
-  void SetGamma(const G4double aGam)              {pom_Gamma=aGam/GeV/GeV;}// @@ Temporary?
+  void SetGamma(const G4double aGam)              {pom_Gamma=aGam/CLHEP::GeV/CLHEP::GeV;}// @@ Temporary?
   void SetPom_C(G4double aPom_C)                  {pom_C = aPom_C;}
   void SetPom_R2(G4double aPom_R2)                {pom_R2 = aPom_R2;}
   void SetPom_Alpha(G4double aPom_Alpha)          {pom_Alpha = aPom_Alpha;}
@@ -101,16 +102,16 @@ class G4QProbability
   G4double Expand(G4double z);
   G4double PowerQex(const G4double s_value)  {return qex_Gamma/(s_value/S0);} // qex_Alpha=0 (anti-p?)
   G4double PowerPom(const G4double s_value)  {return pom_Gamma*std::pow(s_value/S0, pom_Alpha-1.);}
-  G4double SigQex(const G4double s_value)    {return 8*pi*hbarc_squared*PowerQex(s_value);}
-  G4double SigPom(const G4double s_value)    {return 8*pi*hbarc_squared*PowerPom(s_value);}
+  G4double SigQex(const G4double s_value)    {return 8*CLHEP::pi*CLHEP::hbarc_squared*PowerQex(s_value);}
+  G4double SigPom(const G4double s_value)    {return 8*CLHEP::pi*CLHEP::hbarc_squared*PowerPom(s_value);}
   G4double LambdaQex(const G4double s_value) {return qex_R2+qex_Alphaprime*std::log(s_value/S0);}
   G4double LambdaPom(const G4double s_value) {return pom_R2+pom_Alphaprime*std::log(s_value/S0);}
   G4double ZQex(const G4double s_value)      {return 2*PowerQex(s_value)/LambdaQex(s_value);} // qex_C=1.
   G4double ZPom(const G4double s_value)      {return 2*pom_C*PowerPom(s_value)/LambdaPom(s_value);}
   G4double QexEikonal(const G4double s_value, const G4double imp2)
-                         {return ZQex(s_value)*std::exp(-imp2/LambdaQex(s_value)/hbarc_squared/4)/2;}
+                         {return ZQex(s_value)*std::exp(-imp2/LambdaQex(s_value)/CLHEP::hbarc_squared/4)/2;}
   G4double PomEikonal(G4double s_value, G4double imp2)
-                         {return ZPom(s_value)*std::exp(-imp2/LambdaPom(s_value)/hbarc_squared/4)/2;}
+                         {return ZPom(s_value)*std::exp(-imp2/LambdaPom(s_value)/CLHEP::hbarc_squared/4)/2;}
   // Body
   G4double S0;
   G4double pom_Gamma;

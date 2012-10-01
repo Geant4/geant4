@@ -43,6 +43,7 @@
 //#define nandebug
 
 #include "G4QNeutronCaptureRatio.hh"
+#include "G4SystemOfUnits.hh"
 
 // Returns Pointer to the  class G4QNeutronCaptureRatio
 G4QNeutronCaptureRatio* G4QNeutronCaptureRatio::GetPointer()

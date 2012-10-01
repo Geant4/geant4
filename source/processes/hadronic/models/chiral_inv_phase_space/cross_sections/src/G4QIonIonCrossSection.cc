@@ -45,6 +45,7 @@
 //#define debugs
 
 #include "G4QIonIonCrossSection.hh"
+#include "G4SystemOfUnits.hh"
 
 // Initialization of the
 G4double* G4QIonIonCrossSection::lastLENI=0;// Pointer to the lastArray of LowEn Inelast CS

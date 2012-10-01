@@ -64,9 +64,12 @@
 //#define chdebug
 //#define tdebug
 //#define sdebug
-#include "G4Quasmon.hh"
 #include <cmath>
 #include <cstdlib>
+
+#include "G4Quasmon.hh"
+#include "G4SystemOfUnits.hh"
+
 using namespace std;
 
 G4Quasmon::G4Quasmon(G4QContent qQCont, G4LorentzVector q4M, G4LorentzVector ph4M)

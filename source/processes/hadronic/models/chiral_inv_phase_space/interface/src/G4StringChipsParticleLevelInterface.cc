@@ -32,11 +32,13 @@
 //#define pdebug
 //#define ppdebug
 
-#include "G4StringChipsParticleLevelInterface.hh"
-#include "globals.hh"
 #include <utility>
 #include <list>
 #include <vector>
+
+#include "G4StringChipsParticleLevelInterface.hh"
+#include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4KineticTrackVector.hh"
 #include "G4Nucleon.hh"
 #include "G4Proton.hh"

@@ -58,9 +58,13 @@
 //#define pcdebug
 //#define mudebug
 
-#include "G4QEnvironment.hh" 
 #include <cmath>
 #include <cstdlib>
+
+#include "G4QEnvironment.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 using namespace std;
 
 G4QEnvironment::G4QEnvironment(const G4QNucleus& theEnv)

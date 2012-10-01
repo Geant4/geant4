@@ -29,11 +29,13 @@
 //#define debug
 //#define pdebug
 
-#include "G4QStringChipsParticleLevelInterface.hh"
-#include "globals.hh"
 #include <utility>
 #include <list>
 #include <vector>
+
+#include "G4QStringChipsParticleLevelInterface.hh"
+#include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4KineticTrackVector.hh"
 #include "G4Nucleon.hh"
 #include "G4Proton.hh"

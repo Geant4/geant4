@@ -43,8 +43,12 @@
 //#define sdebug
 //#define ppdebug
 
-#include "G4QHadron.hh"
 #include <cmath>
+
+#include "G4QHadron.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 using namespace std;
 
 G4double G4QHadron::StrangeSuppress = 0.48;         // ? M.K.

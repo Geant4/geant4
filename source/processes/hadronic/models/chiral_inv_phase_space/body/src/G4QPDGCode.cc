@@ -45,9 +45,11 @@
 //#define idebug
 //#define sdebug
 
-#include "G4QPDGCodeVector.hh"
 #include <cmath>
 #include <cstdlib>
+
+#include "G4QPDGCodeVector.hh"
+
 using namespace std;
 
 G4QPDGCode::G4QPDGCode(G4int PDGCode): thePDGCode(PDGCode)

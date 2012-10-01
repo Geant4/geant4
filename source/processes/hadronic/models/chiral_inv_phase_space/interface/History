@@ -12,6 +12,15 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+25-Sep-2012 Gabriele Cosmo                     (hadr-chips-inter-V09-05-05)
+--------------------------------------------------------------------------
+Explicitly use inclusion of headers for system of units and physical
+constants, in plan to remove implicit inclusion from globals.hh.
+
+21-Sep-2012 Andrea Dotti		       (hadr-chips-inter-V09-05-04)
+---------------------------------------------------------------------------
+Bug fixing in ElectroNuclearReaction to correct for bug #1354
+
 06-Jul-2012 Alberto Ribon                      (hadr-chips-inter-V09-05-03)
 ---------------------------------------------------------------------------
 - Fixed warning of shadowed variable in the class G4QHadronInelasticDataSet.

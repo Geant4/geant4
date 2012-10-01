@@ -51,6 +51,7 @@
 //#define sdebug
 
 #include "G4QTauNuclearCrossSection.hh"
+#include "G4SystemOfUnits.hh"
 
 // Initialization of the
 G4bool    G4QTauNuclearCrossSection::onlyCS=true;// Flag to calculate only CS

@@ -42,6 +42,7 @@
 //#define nandebug
 
 #include "G4QFreeScattering.hh"
+#include "G4SystemOfUnits.hh"
 
 // initialisation of statics
 std::vector<std::pair<G4double,G4double>*> G4QFreeScattering::vX; // ETPointers to LogTable

@@ -44,6 +44,8 @@
 //#define qedebug
 
 #include "G4QInelastic.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 // Initialization of static vectors
 std::vector<G4int> G4QInelastic::ElementZ;            // Z of the element(i) in theLastCalc

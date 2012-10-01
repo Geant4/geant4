@@ -46,6 +46,7 @@
 // ------------------------------------------------------------------
 
 #include "G4QProbability.hh"
+#include "G4SystemOfUnits.hh"
 
 G4QProbability::G4QProbability(G4int PDG)
 {

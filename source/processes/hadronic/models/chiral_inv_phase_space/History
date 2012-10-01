@@ -11,6 +11,22 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+25-Sep-2012 G.Cosmo (hadr-chips-V09-05-04)
+--------------------------------------------------------------------------
+Explicitly use inclusion of headers for system of units and physical
+constants, in plan to remove implicit inclusion from globals.hh.
+
+06-May-2012 G.Folger ( ..trunk.. )
+--------------------------------------------------------------------------
+Revert changes by Mikhail ( rev. r58253 )
+
+27-Apr-2012 M.Kosov (hadr-chips-V09-05-03)
+The body calcul cross_sections fragmentation processes test CHIPS directories
+are moved to hadronic/chips. The interface directory is kept, but in future
+its files, which do not belong to the CHIPS, will be distributed throug the
+corresponding hadronic directories. The emty nucleus & utils directories and
+the absolete xs_dependent directory are temporary kept here (to be deleted).
+
 25-Apr-2012 M.Kosov (hadr-chips-V09-05-02)
 --------------------------------------------------------------------------
 Reflection of the new G4QNGamma class in processes/sources.cmake

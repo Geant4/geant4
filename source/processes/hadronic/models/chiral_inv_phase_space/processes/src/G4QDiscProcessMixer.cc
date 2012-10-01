@@ -37,6 +37,8 @@
 //#define debug
 
 #include "G4QDiscProcessMixer.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 // Constructor
 G4QDiscProcessMixer::G4QDiscProcessMixer(const G4String& name,
@@ -57,21 +59,21 @@ G4QDiscProcessMixer::~G4QDiscProcessMixer()
   //for_each(theDPVector.begin(), theDPVector.end(), DeleteDiscreteProcess());
 }
 
-void G4QDiscProcessMixer::AddDiscreteProcess(G4VDiscreteProcess* DP, G4double ME)
+void G4QDiscProcessMixer::AddDiscreteProcess(G4VProcess* DP, G4double ME)
 {
   static const G4double maxEn = 1.E8*megaelectronvolt; // Conditional INF
   if(!theDPVector.size()) // The first process in the DiscreteProcessVector (MaxE=INF)
   {
-    std::pair<G4VDiscreteProcess*, G4double>* QDiscProc =
-                                   new std::pair<G4VDiscreteProcess*, G4double>(DP, maxEn);
+    std::pair<G4VProcess*, G4double>* QDiscProc =
+                                   new std::pair<G4VProcess*, G4double>(DP, maxEn);
     theDPVector.push_back( QDiscProc );
   }
   else
   {
     if(ME < theDPVector[theDPVector.size()-1]->second)
     {
-      std::pair<G4VDiscreteProcess*, G4double>* QDiscProc =
-                                      new std::pair<G4VDiscreteProcess*, G4double>(DP, ME);
+      std::pair<G4VProcess*, G4double>* QDiscProc =
+                                      new std::pair<G4VProcess*, G4double>(DP, ME);
       theDPVector.push_back( QDiscProc );
     }
     else // Wrong Max Energy Order for the new process in the sequence of processes

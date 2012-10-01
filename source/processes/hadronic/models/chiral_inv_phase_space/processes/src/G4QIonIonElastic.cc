@@ -44,6 +44,7 @@
 //#define ppdebug
 
 #include "G4QIonIonElastic.hh"
+#include "G4SystemOfUnits.hh"
 
 // Initialization of static vectors
 //G4int G4QIonIonElastic::nPartCWorld=152;   // The#of particles initialized in CHIPS World

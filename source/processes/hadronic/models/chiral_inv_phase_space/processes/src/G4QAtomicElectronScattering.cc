@@ -49,6 +49,7 @@
 //#define pdebug
 
 #include "G4QAtomicElectronScattering.hh"
+#include "G4PhysicalConstants.hh"
 
 G4QAtomicElectronScattering::G4QAtomicElectronScattering(const G4String& processName):
  G4VDiscreteProcess(processName, fElectromagnetic)

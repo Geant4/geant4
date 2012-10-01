@@ -28,6 +28,8 @@
 #ifndef G4PionMinusNuclearAtRestChips_h
 #define G4PionMinusNuclearAtRestChips_h
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
 #include "G4VRestProcess.hh"
 #include "G4StopElementSelector.hh"
@@ -105,7 +107,7 @@ AtRestGetPhysicalInteractionLength(const G4Track&track, G4ForceCondition*conditi
     G4cout << "[ " << GetProcessName() << "]" <<G4endl;
     track.GetDynamicParticle()->DumpInfo();
     G4cout << " in Material  " << track.GetMaterial()->GetName() <<G4endl;
-    G4cout << "MeanLifeTime = " << currentInteractionLength/ns << "[ns]" <<G4endl;
+    G4cout << "MeanLifeTime = " << currentInteractionLength/CLHEP::ns << "[ns]" <<G4endl;
   }
 #endif
   return theNumberOfInteractionLengthLeft * currentInteractionLength;
