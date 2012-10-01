@@ -15,6 +15,68 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+25 September 2012 Gabriele Cosmo (hadr-casc-V09-05-21)
+------------------------------------------------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+18 September 2012 Michael Kelsey (hadr-casc-V09-05-20)
+------------------------------------------------------
+- G4CascadeParamMessenger.cc:  Fix complier warning from ctor initializers.
+
+13 September 2012 Michael Kelsey (hadr-casc-V09-05-19)
+------------------------------------------------------
+- G4CascadeParamMessenger:  NEW class to define UI macro commands for
+  setting the G4CascadeParameters (string) values, as an alternative to
+  environment variables.
+
+- G4CascadeParameters:  Add new G4CascadeParamMessenger (with friendship)
+  to fill envvar-mapped parameters (const char*) from UI interface.
+
+- sources.cmake:  Add G4CascadeParamMessenger.hh,cc, add dependences on
+  G4intercoms (libraries and include dirs).
+
+- GNUmakefile:  Add -I.../intercoms/include.
+
+9 September 2012 Michael Kelsey (hadr-casc-V09-05-18)
+-----------------------------------------------------
+- G4CascadePPChannel.hh, G4CascadeNPChannel.hh: Replace 'typedef' with
+  subclass of templated base.  Declare overridden findCrossSection()
+  function.
+
+- G4CascadePPChannel.cc, G4CascadeNPChannel.cc: Implement overrrided
+  findCrossSection() function to apply analytic (parametrized) function for
+  very low energy projectiles, falling back to base interpolation otherwise.
+
+7 September 2012 Michael Kelsey (hadr-casc-V09-05-17)
+-----------------------------------------------------
+- sources.cmake:  Forgot to change list of source files to match renaming.
+
+4 September 2012 Michael Kelsey (hadr-casc-V09-05-16)
+-----------------------------------------------------
+Per Dennis, rename all three nucleon-nucleon channel files to remove the
+isospin designation.  Files now match corresponding .hh files:
+
+	G4CascadeT1ppChannel.cc -> G4CascadePPChannel.cc
+	G4CascadeT1nnChannel.cc -> G4CascadeNNChannel.cc
+	G4CascadeT0npChannel.cc -> G4CascadeNPChannel.cc
+
+4 September 2012 Michael Kelsey
+-------------------------------
+- G4CascadeT0npChannel.cc:  Fix misplaced semicolon in exclusive xsec list.
+
+3 September 2012 Dennis Wright
+------------------------------
+- G4CascadeT1ppChannel.cc, G4CascadeT1nnChannel.cc, G4CascadeT0npChannel.cc:
+  Use SAID calculations for total and elastic cross-sections up to 320 MeV.
+
+31 August 2012 Michael Kelsey
+-----------------------------
+- G4CascadeT1NNChannel.cc:  REMOVE.  Split into separate pp and nn files.
+- G4CascadeT1ppChannel.cc:  NEW.  Only proton-proton part of T1NNChannel.
+- G4CascadeT1nnChannel.cc:  NEW.  Only neutron-neutron part of T1NNChannel.
+- sources.cmake:  Remove T1NNChannel, add T1ppChannel and T1nnChannel.
+
 22 August 2012 Michael Kelsey (hadr-casc-V09-05-15)
 ---------------------------------------------------
 Consolidate all user-configurable environment variables into singleton

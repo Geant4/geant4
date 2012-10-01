@@ -30,7 +30,7 @@
 // 20120608  M. Kelsey -- Change vars 's','m','m2' to avoid name collisions
 
 #include "G4BEChargedChannel.hh"
-
+#include "G4SystemOfUnits.hh"
 
 G4BEChargedChannel::G4BEChargedChannel()
 {

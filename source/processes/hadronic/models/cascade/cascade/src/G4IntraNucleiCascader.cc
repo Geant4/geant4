@@ -112,7 +112,10 @@
 // 20120521  A. Ribon -- Specify mass when decay trapped particle.
 // 20120822  M. Kelsey -- Move envvars to G4CascadeParameters.
 
+#include <algorithm>
+
 #include "G4IntraNucleiCascader.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4CascadeChannelTables.hh"
 #include "G4CascadeCoalescence.hh"
 #include "G4CascadeParameters.hh"
@@ -137,7 +140,6 @@
 #include "G4Proton.hh"
 #include "G4V3DNucleus.hh"
 #include "Randomize.hh"
-#include <algorithm>
 
 using namespace G4InuclParticleNames;
 using namespace G4InuclSpecialFunctions;

@@ -45,8 +45,11 @@
 // 20110308  M. Kelsey -- Follow new G4Fragment interface for hole types
 // 20110722  M. Kelsey -- For IntraNucleiCascader, take G4CollOut as argument
 
+#include <vector>
+
 #include "G4CascadeRecoilMaker.hh"
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4CascadParticle.hh"
 #include "G4CascadeCheckBalance.hh"
 #include "G4CollisionOutput.hh"
@@ -56,7 +59,6 @@
 #include "G4InuclParticle.hh"
 #include "G4InuclSpecialFunctions.hh"
 #include "G4LorentzVector.hh"
-#include <vector>
 
 using namespace G4InuclSpecialFunctions;
 

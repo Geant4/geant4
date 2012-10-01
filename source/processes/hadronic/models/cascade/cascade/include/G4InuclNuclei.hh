@@ -55,6 +55,8 @@
 #ifndef G4INUCL_NUCLEI_HH
 #define G4INUCL_NUCLEI_HH
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4InuclParticle.hh"
 #include "G4LorentzVector.hh"
 #include "G4ExitonConfiguration.hh"
@@ -137,14 +139,14 @@ public:
   G4int getZ() const { return getDefinition()->GetAtomicNumber(); }
 
   G4double getNucleiMass() const {
-    return getDefinition()->GetPDGMass()*MeV/GeV;	// From G4 to Bertini
+    return getDefinition()->GetPDGMass()*CLHEP::MeV/CLHEP::GeV;	// From G4 to Bertini
   }
 
   G4double getExitationEnergy() const {
-    return (getMass()-getNucleiMass())*GeV/MeV;		// Always in MeV
+    return (getMass()-getNucleiMass())*CLHEP::GeV/CLHEP::MeV; // Always in MeV
   }
 
-  G4double getExitationEnergyInGeV() const { return getExitationEnergy()/GeV; }
+  G4double getExitationEnergyInGeV() const { return getExitationEnergy()/CLHEP::GeV; }
 
   const G4ExitonConfiguration& getExitonConfiguration() const {
     return theExitonConfiguration;
@@ -168,9 +170,3 @@ private:
 };        
 
 #endif // G4INUCL_NUCLEI_HH 
-
-
-
-
-
-

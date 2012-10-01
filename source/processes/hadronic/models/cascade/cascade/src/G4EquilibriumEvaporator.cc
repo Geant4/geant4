@@ -65,6 +65,7 @@
 // 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
 
 #include "G4EquilibriumEvaporator.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4BigBanger.hh"
 #include "G4CascadeInterpolator.hh"
 #include "G4CollisionOutput.hh"

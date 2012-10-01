@@ -30,6 +30,7 @@
 // 20101019  M. Kelsey -- CoVerity report: unitialized constructor
 
 #include "G4RegionModel.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4HadronicException.hh"
 #include "G4InuclSpecialFunctions.hh"
 

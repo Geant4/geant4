@@ -46,13 +46,15 @@
 // 20110922  M. Kelsey -- Follow G4InuclParticle::print(ostream&) migration
 // 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
 
+#include <algorithm>
+
 #include "G4BigBanger.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4CollisionOutput.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclSpecialFunctions.hh"
 #include "G4ParticleLargerEkin.hh"
-#include <algorithm>
 
 using namespace G4InuclSpecialFunctions;
 

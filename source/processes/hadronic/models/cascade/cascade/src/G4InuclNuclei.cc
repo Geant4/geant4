@@ -50,7 +50,12 @@
 // 20110919  M. Kelsey -- Special case:  Allow fill(A=0,Z=0) to make dummy
 // 20110922  M. Kelsey -- Add stream argument to printParticle() => print()
 
+#include <assert.h>
+#include <sstream>
+#include <map>
+
 #include "G4InuclNuclei.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Fragment.hh"
 #include "G4HadronicException.hh"
 #include "G4InuclSpecialFunctions.hh"
@@ -61,9 +66,6 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4V3DNucleus.hh"
-#include <assert.h>
-#include <sstream>
-#include <map>
 
 using namespace G4InuclSpecialFunctions;
 

@@ -41,6 +41,7 @@
 
 #include "G4InuclElementaryParticle.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"

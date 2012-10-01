@@ -26,6 +26,7 @@
 // G4CascadeParameters.hh
 // Encapsulate all user-configurable parameters with associated envvars
 //
+// 20120912  M. Kelsey -- Add interface to support UI commands
 
 #ifndef G4CascadeParameters_hh
 #define G4CascadeParameters_hh 1
@@ -33,11 +34,13 @@
 #include "globals.hh"
 #include <iosfwd>
 
+class G4CascadeParamMessenger;
+
 
 class G4CascadeParameters {
 public:
   static const G4CascadeParameters* Instance();		// Singleton
-  ~G4CascadeParameters() {;}
+  ~G4CascadeParameters();
 
   // Top-level configuration flags
   static G4int verbose()              { return Instance()->VERBOSE_LEVEL; }
@@ -80,6 +83,8 @@ private:	// Environment variable values, null pointers mean not set
   const char* DPMAX_3CLUSTER;
   const char* DPMAX_4CLUSTER;
 
+  void Initialize();		// Fill parameter values from envvar strings
+
   G4int VERBOSE_LEVEL;		// Top-level configuration flags
   G4bool USE_PRECOMPOUND;
   G4bool DO_COALESCENCE;
@@ -102,6 +107,9 @@ private:	// Environment variable values, null pointers mean not set
 private:	// Singleton -- no public constructor
   G4CascadeParameters();
   void DumpConfig(std::ostream& os) const;
+
+  G4CascadeParamMessenger* messenger;		// For access via UI commands
+  friend class G4CascadeParamMessenger;
 };
 
 #endif	/* G4CascadeParameters_hh */

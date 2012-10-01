@@ -113,7 +113,11 @@
 // 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
 // 20120822  M. Kelsey -- Move envvars to G4CascadeParameters.
 
+#include <numeric>
+
 #include "G4NucleiModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4CascadeChannel.hh"
 #include "G4CascadeChannelTables.hh"
 #include "G4CascadeCheckBalance.hh"
@@ -130,7 +134,6 @@
 #include "G4ParticleLargerBeta.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Proton.hh"
-#include <numeric>
 
 using namespace G4InuclParticleNames;
 using namespace G4InuclSpecialFunctions;

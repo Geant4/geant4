@@ -25,6 +25,8 @@
 //
 // $Id: G4CascadeNPChannel.hh,v 1.3 2010-06-25 09:42:26 gunter Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
+//
+// 20120907  M. Kelsey -- Subclass and overload findCrossSection() function.
 
 #ifndef G4_CASCADE_NP_CHANNEL_HH
 #define G4_CASCADE_NP_CHANNEL_HH
@@ -38,6 +40,17 @@ struct G4CascadeNPChannelData {
   static data_t data;
 };
 
-typedef G4CascadeFunctions<G4CascadeNPChannelData,G4PionNucSampler> G4CascadeNPChannel;
+
+class G4CascadeNPChannel
+  : public G4CascadeFunctions<G4CascadeNPChannelData,G4PionNucSampler> {
+public:
+  G4CascadeNPChannel()
+    : G4CascadeFunctions<G4CascadeNPChannelData,G4PionNucSampler>() {;}
+  virtual ~G4CascadeNPChannel() {;}
+
+  // Will replace interpolation of 0-20 MeV bin on total and elastic
+  virtual G4double 
+  findCrossSection(double ke, const G4double (&xsec)[30]) const;
+};
 
 #endif	/* G4_CASCADE_NP_CHANNEL_HH */

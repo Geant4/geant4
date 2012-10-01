@@ -97,8 +97,12 @@
 //		use SetEnergyChange(0.) explicitly for good final states.
 // 20120822  M. Kelsey -- Move envvars to G4CascadeParameters.
 
+#include <cmath>
+#include <iostream>
+
 #include "G4CascadeInterface.hh"
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4CascadeChannelTables.hh"
 #include "G4CascadeCheckBalance.hh"
 #include "G4CascadeParameters.hh"
@@ -120,8 +124,6 @@
 #include "G4ReactionProductVector.hh"
 #include "G4Track.hh"
 #include "G4V3DNucleus.hh"
-#include <cmath>
-#include <iostream>
 
 using namespace G4InuclParticleNames;
 

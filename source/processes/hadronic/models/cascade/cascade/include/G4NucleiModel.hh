@@ -67,12 +67,14 @@
 #ifndef G4NUCLEI_MODEL_HH
 #define G4NUCLEI_MODEL_HH
 
+#include <algorithm>
+#include <vector>
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4InuclElementaryParticle.hh"
 #include "G4CascadParticle.hh"
 #include "G4CollisionOutput.hh"
 #include "G4LorentzConvertor.hh"
-#include <algorithm>
-#include <vector>
 
 class G4InuclNuclei;
 class G4ElementaryParticleCollider;
@@ -115,7 +117,7 @@ public:
   }
 
   // Factor to convert GEANT4 lengths to internal units
-  G4double getRadiusUnits() const { return radiusUnits*fermi; }
+  G4double getRadiusUnits() const { return radiusUnits*CLHEP::fermi; }
 
   G4double getRadius() const { return nuclei_radius; }
   G4double getRadius(G4int izone) const {

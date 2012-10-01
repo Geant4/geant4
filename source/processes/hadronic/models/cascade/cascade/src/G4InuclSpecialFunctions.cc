@@ -31,11 +31,13 @@
 //		verbosity.
 // 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
 
+#include <cmath>
+
 #include "G4InuclSpecialFunctions.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4LorentzVector.hh"
 #include "G4ThreeVector.hh"
 #include "Randomize.hh"
-#include <cmath>
 
 
 G4double G4InuclSpecialFunctions::getAL(G4int A) {

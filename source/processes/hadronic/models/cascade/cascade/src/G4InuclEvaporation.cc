@@ -42,10 +42,12 @@
 // 20110728  M. Kelsey -- Fix Coverity #28776, remove return after throw.
 // 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
 
-#include "G4InuclEvaporation.hh"
 #include <numeric>
-#include "G4IonTable.hh"
+
+#include "G4InuclEvaporation.hh"
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4IonTable.hh"
 #include "G4V3DNucleus.hh"
 #include "G4DynamicParticleVector.hh"
 #include "G4EvaporationInuclCollider.hh"

@@ -30,6 +30,7 @@
 // 20110719  M. Kelsey -- Add initial state code to ctor
 // 20110725  M. Kelsey -- Instantiate cross-section object for self-registration
 // 20110916  M. Kelsey -- Drop self-registration due to platform inconsistencies
+// 20120907  M. Kelsey -- Subclass and overload findCrossSection() function.
 
 #include "G4CascadeNPChannel.hh"
 #include "G4InuclParticleNames.hh"
@@ -102,18 +103,19 @@ namespace {
 namespace {
   // Total n p cross section as a function of kinetic energy
   static const G4double npTotXSec[30] = 
-   {20357.0, 912.6, 788.6, 582.1, 415.0, 272.0, 198.8, 145.0, 100.4,  71.1,
-       58.8,  45.7,  38.9,  34.4,  34.0,  35.0,  37.5,  39.02, 40.29, 40.72,
-       42.36, 41.19, 42.04, 41.67, 40.96, 39.48, 39.79, 39.39, 39.36, 39.34};
-
+  // Use SAID cross sections up to 320 MeV
+  {20357.0, 945.5, 732.7, 535.6, 397.0, 287.3, 208.2, 147.0, 103.8,  75.5,
+      58.8,  45.9,  39.1,  34.9,  34.0,  35.0,  37.5,  39.02, 40.29, 40.72,
+      42.36, 41.19, 42.04, 41.67, 40.96, 39.48, 39.79, 39.39, 39.36, 39.34};
+      
   static const G4double npCrossSections[108][30] = {
   //
   // multiplicity 2 (1 channel)
   //
   //  p n (p n)
-   {20357.0, 912.6, 788.6, 582.1, 415.0, 272.0, 198.8, 145.0, 100.4, 71.1,
-       58.8,  45.7,  38.9,  34.4,  31.0,  27.0,  23.0,  19.0,  17.0, 15.5,
-       14.0,  13.0,  12.0,  11.0,  10.0,   9.5,   9.0,   8.5,   8.0,  7.7 },
+  {20357.0, 945.5, 732.7, 535.6, 397.0, 287.3, 208.2, 147.0, 103.8, 75.5,
+      58.8,  45.9,  39.1,  34.9,  31.0,  27.0,  23.0,  19.0,  17.0, 15.5,
+      14.0,  13.0,  12.0,  11.0,  10.0,   9.5,   9.0,   8.5,   8.0,  7.7},
   //
   // multiplicity 3 (9 channels)
   //
@@ -671,3 +673,22 @@ G4CascadeNPChannelData::data_t
 G4CascadeNPChannelData::data(np2bfs, np3bfs, np4bfs, np5bfs, np6bfs, np7bfs,
 			     np8bfs, np9bfs, npCrossSections, npTotXSec,
 			     neu*pro, "NeutronProton");
+
+
+// Overload base class interpolator to use function for 0-20 MeV total, elastic
+
+G4double 
+G4CascadeNPChannel::findCrossSection(double ke,
+				     const G4double (&xsec)[30]) const {
+  if (ke < 0.020 && (xsec == npTotXSec || xsec == npCrossSections[0])) {
+    // Function is a/(b*E + (1-c*E)^2) + d/(e*E + (1-f*E)^2)
+    const G4double parA=2730.,  parB=350.,  parC=55.3;
+    const G4double parD=17630., parE=6800., parF=344.;
+    G4double Cless1 = 1. - parC*ke;
+    G4double Fless1 = 1. - parF*ke;
+    return (parA/(parB*ke + Cless1*Cless1) +
+	    parD/(parE*ke + Fless1*Fless1) );
+  }
+   
+  return G4PionNucSampler::findCrossSection(ke, xsec);	// Call through to base
+}

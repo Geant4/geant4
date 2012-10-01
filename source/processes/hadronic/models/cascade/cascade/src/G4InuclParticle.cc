@@ -31,10 +31,11 @@
 //		don't have to call SetModel()).
 // 20110922  M. Kelsey -- Add stream argument to printParticle() => print()
 
-#include "G4InuclParticle.hh"
-#include "G4ios.hh"
 #include <cmath>
 
+#include "G4InuclParticle.hh"
+#include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 
 // Internal constructor only usable by subclasses
 G4InuclParticle::G4InuclParticle(G4ParticleDefinition* pd,

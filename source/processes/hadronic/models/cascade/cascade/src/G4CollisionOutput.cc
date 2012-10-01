@@ -57,7 +57,10 @@
 // 20110922  M. Kelsey -- Follow G4InuclParticle::print(ostream&) migration,
 //		Add optional stream argument to printCollisionOutput
 
+#include <algorithm>
+
 #include "G4CollisionOutput.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4CascadParticle.hh"
 #include "G4ParticleLargerEkin.hh"
 #include "G4LorentzConvertor.hh"
@@ -66,7 +69,6 @@
 #include "G4ReactionProductVector.hh"
 #include "G4ReactionProduct.hh"
 #include "G4ThreeVector.hh"
-#include <algorithm>
 
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 typedef std::vector<G4InuclNuclei>::iterator nucleiIterator;

@@ -30,6 +30,8 @@
 
 #include "globals.hh"
 #include "G4BertiniEvaporation.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4BENeutronChannel.hh"
 #include "G4BEProtonChannel.hh"
 #include "G4BEDeuteronChannel.hh"
