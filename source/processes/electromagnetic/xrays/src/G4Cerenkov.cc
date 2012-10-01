@@ -93,13 +93,6 @@
 G4Cerenkov::G4Cerenkov(const G4String& processName, G4ProcessType type)
            : G4VProcess(processName, type)
 {
-        G4cout << "G4Cerenkov::G4Cerenkov constructor" << G4endl;
-        G4cout << "NOTE: this is now a G4VProcess!" << G4endl;
-        G4cout << "Required change in UserPhysicsList: " << G4endl;
-        G4cout << "change: pmanager->AddContinuousProcess(theCerenkovProcess);" << G4endl;
-        G4cout << "to:     pmanager->AddProcess(theCerenkovProcess);" << G4endl;
-        G4cout << "        pmanager->SetProcessOrdering(theCerenkovProcess,idxPostStep);" << G4endl;
-
         SetProcessSubType(fCerenkov);
 
 	fTrackSecondariesFirst = false;
@@ -349,8 +342,8 @@ G4Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	}
 
 	if (verboseLevel>0) {
-	G4cout << "\n Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = " 
-	     << aParticleChange.GetNumberOfSecondaries() << G4endl;
+	   G4cout <<"\n Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = "
+	          << aParticleChange.GetNumberOfSecondaries() << G4endl;
 	}
 
         return pParticleChange;
