@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+19 September 2012 - P.Arce (error_propagation-V09-05-05)
+- Changes in G4ErrorFreeTrajState (partType -> partName) and delete code not needed in G4ErrorPhysicsList
+
 23 August 2012 - P.Arce (error_propagation-V09-05-04)
 - Changes in G4ErrorTrackLengthTarget and G4VErrorLimitProcess to solve memory leak
 
