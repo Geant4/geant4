@@ -30,10 +30,12 @@
 // J.L. Chuma, TRIUMF, 18-Feb-1997
 // Modified by J.L.Chuma 30-Apr-97: added originalTarget for CalculateMomenta
  
-#include "G4LELambdaInelastic.hh"
-#include "Randomize.hh"
 #include <iostream>
 
+#include "G4LELambdaInelastic.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
 
 G4LELambdaInelastic::G4LELambdaInelastic(const G4String& name)
  :G4InelasticInteraction(name)

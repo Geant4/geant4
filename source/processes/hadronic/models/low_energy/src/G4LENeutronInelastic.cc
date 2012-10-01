@@ -26,11 +26,13 @@
 // Hadronic Process: Low Energy Neutron Inelastic Process
 // J.L. Chuma, TRIUMF, 04-Feb-1997
  
-#include "G4LENeutronInelastic.hh"
-#include "Randomize.hh"
-#include "G4Electron.hh"
 #include <iostream>
 
+#include "G4LENeutronInelastic.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
+#include "G4Electron.hh"
 
 void G4LENeutronInelastic::ModelDescription(std::ostream& outFile) const
 {

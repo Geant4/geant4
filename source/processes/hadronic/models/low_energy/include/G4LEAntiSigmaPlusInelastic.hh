@@ -39,6 +39,8 @@
 // the corresponding process.
 // Class Description - End
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4InelasticInteraction.hh"
  
 class G4LEAntiSigmaPlusInelastic : public G4InelasticInteraction
@@ -48,7 +50,7 @@ class G4LEAntiSigmaPlusInelastic : public G4InelasticInteraction
     G4LEAntiSigmaPlusInelastic() : G4InelasticInteraction("G4LEAntiSigmaPlusInelastic")
     {
       SetMinEnergy( 0.0 );
-      SetMaxEnergy( 25.*GeV );
+      SetMaxEnergy( 25.*CLHEP::GeV );
     }
     
     ~G4LEAntiSigmaPlusInelastic() { }

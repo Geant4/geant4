@@ -27,10 +27,12 @@
 // J.L. Chuma, TRIUMF, 19-Nov-1996
 // Modified by J.L.Chuma 30-Apr-97: added originalTarget for CalculateMomenta
  
-#include "G4LEPionMinusInelastic.hh"
-#include "Randomize.hh"
 #include <iostream>
 
+#include "G4LEPionMinusInelastic.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
 
 G4LEPionMinusInelastic::G4LEPionMinusInelastic(const G4String& name)
  : G4InelasticInteraction(name)

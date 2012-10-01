@@ -29,11 +29,13 @@
 // Hadronic Process: Low Energy KaonPlus Inelastic Process
 // J.L. Chuma, TRIUMF, 05-Feb-1997
 // Modified by J.L.Chuma 30-Apr-97: added originalTarget for CalculateMomenta
+
+#include <iostream>
  
 #include "G4LEKaonPlusInelastic.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
-#include <iostream>
-
 
 G4LEKaonPlusInelastic::G4LEKaonPlusInelastic(const G4String& name)
  :G4InelasticInteraction(name)

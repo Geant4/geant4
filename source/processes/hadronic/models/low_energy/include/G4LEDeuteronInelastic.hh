@@ -39,6 +39,8 @@
 // the corresponding process.
 // Class Description - End
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4InelasticInteraction.hh"
  
 class G4LEDeuteronInelastic : public G4InelasticInteraction
@@ -48,9 +50,9 @@ class G4LEDeuteronInelastic : public G4InelasticInteraction
     G4LEDeuteronInelastic() : G4InelasticInteraction("G4LEDeuteronInelastic")
     {
       SetMinEnergy( 0.0 );
-      // SetMaxEnergy( 100.*MeV );  // NUCREC only worked for energies < 100MeV
+      // SetMaxEnergy( 100.*CLHEP::MeV );  // NUCREC only worked for energies < 100MeV
       // Work around to avoid exception in G4EnergyRangeManager
-      SetMaxEnergy( 10.*TeV );  // NUCREC only worked for energies < 100MeV
+      SetMaxEnergy( 10.*CLHEP::TeV );  // NUCREC only worked for energies < 100MeV
     }
     
     ~G4LEDeuteronInelastic() {}

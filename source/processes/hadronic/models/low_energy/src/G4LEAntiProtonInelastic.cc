@@ -32,9 +32,12 @@
 // Modified by J.L.Chuma 30-Apr-97: added originalTarget for CalculateMomenta
 //
  
-#include "G4LEAntiProtonInelastic.hh"
-#include "Randomize.hh"
 #include <iostream>
+
+#include "G4LEAntiProtonInelastic.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
 
 
 G4LEAntiProtonInelastic::G4LEAntiProtonInelastic(const G4String& name)

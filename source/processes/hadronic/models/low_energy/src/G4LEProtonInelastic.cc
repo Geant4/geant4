@@ -26,10 +26,12 @@
 // Hadronic Process: Low Energy Proton Inelastic Process
 // J.L. Chuma, TRIUMF, 19-Nov-1996
  
-#include "G4LEProtonInelastic.hh"
-#include "Randomize.hh"
 #include <iostream>
 
+#include "G4LEProtonInelastic.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
 
 G4LEProtonInelastic::G4LEProtonInelastic(const G4String& name)
  :G4InelasticInteraction(name)

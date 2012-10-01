@@ -33,6 +33,8 @@
 #ifndef G4LEKaonZeroSInelastic_h
 #define G4LEKaonZeroSInelastic_h 1
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4LEKaonZeroInelastic.hh"
 #include "G4LEAntiKaonZeroInelastic.hh"
 #include "Randomize.hh"
@@ -43,7 +45,7 @@ class G4LEKaonZeroSInelastic : public G4InelasticInteraction
     G4LEKaonZeroSInelastic() : G4InelasticInteraction("G4LEKaonZeroSInelastic")
     {
       SetMinEnergy(0.0);
-      SetMaxEnergy(25.*GeV);
+      SetMaxEnergy(25.*CLHEP::GeV);
     }
 
     virtual ~G4LEKaonZeroSInelastic(){ }

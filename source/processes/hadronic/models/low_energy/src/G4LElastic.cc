@@ -34,13 +34,15 @@
 // 14-DEC-05 V.Ivanchenko: restore 1.19 version (7.0)
 // 23-JAN-07 V.Ivanchenko: add protection inside sqrt
 
-#include "globals.hh"
+#include <iostream>
+
 #include "G4LElastic.hh"
+#include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
-#include <iostream>
-
 
 G4LElastic::G4LElastic(const G4String& name)
  :G4HadronicInteraction(name)

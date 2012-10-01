@@ -31,11 +31,13 @@
 // J.P.Wellisch 23-Apr-97: bug-hunting (missing initialization of npos,nneg,nzero
 //    fixed)
 // Modified by J.L.Chuma 30-Apr-97: added originalTarget for CalculateMomenta
- 
-#include "G4LEKaonMinusInelastic.hh"
-#include "Randomize.hh"
+
 #include <iostream>
 
+#include "G4LEKaonMinusInelastic.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
 
 G4LEKaonMinusInelastic::G4LEKaonMinusInelastic(const G4String& name)
  :G4InelasticInteraction(name)

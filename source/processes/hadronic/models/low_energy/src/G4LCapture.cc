@@ -41,11 +41,13 @@
 // 25-JUN-98 FWJ: replaced missing Initialize for ParticleChange.
 //
 
-#include "globals.hh"
-#include "G4LCapture.hh"
-#include "Randomize.hh"
 #include <iostream>
 
+#include "globals.hh"
+#include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4LCapture.hh"
 
 G4LCapture::G4LCapture(const G4String& name)
  : G4HadronicInteraction(name)

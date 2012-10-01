@@ -32,10 +32,12 @@
 // Modified by J.L.Chuma 30-Apr-97: added originalTarget for CalculateMomenta
 // fixing charge exchange - HPW Sep 2002.
  
-#include "G4LEPionPlusInelastic.hh"
-#include "Randomize.hh"
 #include <iostream>
 
+#include "G4LEPionPlusInelastic.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
 
 G4LEPionPlusInelastic::G4LEPionPlusInelastic(const G4String& name)
  :G4InelasticInteraction(name)

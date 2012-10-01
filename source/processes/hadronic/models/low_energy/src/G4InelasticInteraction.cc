@@ -43,6 +43,8 @@
 // 23-Jan-2009 V.Ivanchenko move constructor and destructor to the body
  
 #include "G4InelasticInteraction.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4HadReentrentException.hh"
 #include "G4IsoResult.hh"

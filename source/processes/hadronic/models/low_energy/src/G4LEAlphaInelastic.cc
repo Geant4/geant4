@@ -28,11 +28,12 @@
 // J.L. Chuma, 08-May-2001: Update original incident passed back in vec[0]
 //                          from NuclearReaction
 
-#include "G4LEAlphaInelastic.hh"
-#include "Randomize.hh"
-#include "G4Electron.hh"
 #include <iostream>
 
+#include "G4LEAlphaInelastic.hh"
+#include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
+#include "G4Electron.hh"
 
 G4LEAlphaInelastic::G4LEAlphaInelastic(const G4String& name)
  : G4InelasticInteraction(name)

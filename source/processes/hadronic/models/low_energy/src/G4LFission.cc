@@ -40,11 +40,13 @@
 //
 // 25-JUN-98 FWJ: replaced missing Initialize for ParticleChange.
 
-#include "globals.hh"
-#include "G4LFission.hh"
-#include "Randomize.hh"
 #include <iostream>
 
+#include "G4LFission.hh"
+#include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
 
 G4LFission::G4LFission(const G4String& name)
  : G4HadronicInteraction(name)

@@ -35,8 +35,9 @@
 //        below is just a copy of the Cascade from the OmegaMinus particle.
  
 #include "G4LEAntiOmegaMinusInelastic.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
-
 
 void G4LEAntiOmegaMinusInelastic::ModelDescription(std::ostream& outFile) const
 {

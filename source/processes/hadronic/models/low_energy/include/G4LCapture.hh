@@ -47,7 +47,9 @@
 
 #ifndef G4LCapture_h
 #define G4LCapture_h 1
- 
+
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
 #include "Randomize.hh"
 #include "G4Element.hh"
@@ -85,7 +87,7 @@ class G4LCapture : public G4HadronicInteraction
     inline
     G4double Atomas(const G4double A, const G4double Z)
     {
-      return G4LFission::Atomas(A, Z)/GeV;
+      return G4LFission::Atomas(A, Z)/CLHEP::GeV;
     }
 };
 #endif

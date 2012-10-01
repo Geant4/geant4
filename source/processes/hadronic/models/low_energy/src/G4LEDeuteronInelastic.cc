@@ -29,6 +29,7 @@
 //                          from NuclearReaction
 
 #include "G4LEDeuteronInelastic.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4Electron.hh"
 

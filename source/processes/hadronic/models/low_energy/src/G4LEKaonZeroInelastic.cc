@@ -33,6 +33,8 @@
  // Modified by J.L.Chuma 30-Apr-97: added originalTarget for CalculateMomenta
  
 #include "G4LEKaonZeroInelastic.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 void G4LEKaonZeroInelastic::ModelDescription(std::ostream& outFile) const
