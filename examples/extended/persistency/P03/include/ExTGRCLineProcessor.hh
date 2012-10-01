@@ -27,15 +27,6 @@
 /// \brief Definition of the ExTGRCLineProcessor class
 //
 // $Id: ExTGRCLineProcessor.hh,v 1.2 2010-11-05 08:52:34 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// Description:
-//
-// This class is a G4tgrFileReader that adds the definition of regions
-//
-// Author:      P. Arce
-// Changes:     creation   May 2007
-// ---------------------------------------------------------------------------
 
 #ifndef ExTGRCLineProcessor_H
 #define ExTGRCLineProcessor_H 1
@@ -44,6 +35,11 @@
 #include <vector>
 
 #include "G4tgrLineProcessor.hh"
+
+/// Line processor that adds the definition of regions
+///
+/// Changes:     creation   May 2007
+/// \author      P. Arce
 
 class ExTGRCLineProcessor : public G4tgrLineProcessor
 {

@@ -14,7 +14,21 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17 July 2012 I. Hrivnacova (exampleP03-V09-05-02)
+--------------------------
+- Restored file descriptions in .hh and moved class description
+  at the right place
+
+17 July 2012 I. Hrivnacova (exampleP03-V09-05-01)
+--------------------------
+- Improved .README file
+
+6 July 2012 P. Arce (exampleP03-V09-05-00)
+--------------------------
+- Reviewed examples according to coding guidelines
+
 25 January 2011  G.Folger  (exampleP03-V09-04-00)
+--------------------------
 - re-tag, as tag was not included in geant4-09-04
 
 9 November 2010  G.Folger  (exampleP03-V09-03-04)

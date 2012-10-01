@@ -42,7 +42,7 @@ int main(int argc,char** argv)
   // initialize ROOT
   TSystem ts;
   gSystem->Load("libCintex");
-  gSystem->Load("libClassesDict");
+  gSystem->Load("libExP01ClassesDict");
   //  ROOT::Cintex::Cintex::SetDebug(2);
   ROOT::Cintex::Cintex::Enable();
   if(argc<2) G4cout << "Missing name of the file to read!" << G4endl;

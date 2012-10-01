@@ -23,14 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/P03/src/ExTGTrackerSD.cc
-/// \brief Implementation of the ExTGTrackerSD class
-//
 //
 // $Id: ExTGTrackerSD.cc,v 1.2 2010-11-05 08:52:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// ---------------------------------------------------------------------------
+/// \file ExTGTrackerSD.cc
+/// \brief Implementation of the ExTGTrackerSD class
 
 #include "ExTGTrackerSD.hh"
 #include "G4HCofThisEvent.hh"
@@ -39,8 +37,7 @@
 #include "G4SDManager.hh"
 #include "G4ios.hh"
 
-// ---------------------------------------------------------------------------
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExTGTrackerSD::ExTGTrackerSD(G4String name)
 :G4VSensitiveDetector(name)
 {
@@ -48,28 +45,25 @@ ExTGTrackerSD::ExTGTrackerSD(G4String name)
   collectionName.insert(HCname="trackerCollection");
 }
 
-// ---------------------------------------------------------------------------
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExTGTrackerSD::~ExTGTrackerSD()
 {
 }
 
-// ---------------------------------------------------------------------------
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExTGTrackerSD::Initialize(G4HCofThisEvent* HCE)
 {
-  trackerCollection = new ExTGTrackerHitsCollection
+  fTrackerCollection = new ExTGTrackerHitsCollection
                           (SensitiveDetectorName,collectionName[0]); 
   static G4int HCID = -1;
   if ( HCID<0 )
   {
     HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]);
   }
-  HCE->AddHitsCollection( HCID, trackerCollection ); 
+  HCE->AddHitsCollection( HCID, fTrackerCollection ); 
 }
 
-// ---------------------------------------------------------------------------
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4bool ExTGTrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
@@ -82,7 +76,7 @@ G4bool ExTGTrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
                                                ->GetCopyNumber());
   newHit->SetEdep     (edep);
   newHit->SetPos      (aStep->GetPostStepPoint()->GetPosition());
-  trackerCollection->insert( newHit );
+  fTrackerCollection->insert( newHit );
   
   //newHit->Print();
   //newHit->Draw();
@@ -90,17 +84,15 @@ G4bool ExTGTrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   return true;
 }
 
-// ---------------------------------------------------------------------------
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExTGTrackerSD::EndOfEvent(G4HCofThisEvent*)
 {
-   G4int NbHits = trackerCollection->entries();
+   G4int NbHits = fTrackerCollection->entries();
    G4cout << "\n-------->Hits Collection: in this event there are " << NbHits 
           << " hits in the tracker chambers: " << G4endl;
    for (G4int i=0;i<NbHits;i++)
    {
-     (*trackerCollection)[i]->Print();
+     (*fTrackerCollection)[i]->Print();
    }
 }
 
-// ---------------------------------------------------------------------------

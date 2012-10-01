@@ -43,7 +43,9 @@ class G4ParticleGun;
 class G4Event;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
+/// Primary generator action 
+
 class ExP02PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
@@ -54,8 +56,8 @@ class ExP02PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     void GeneratePrimaries(G4Event*);
 
   private:
-    G4ParticleGun* particleGun;
-    ExP02DetectorConstruction* myDetector;
+    G4ParticleGun* fParticleGun;
+    ExP02DetectorConstruction* fMyDetector;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

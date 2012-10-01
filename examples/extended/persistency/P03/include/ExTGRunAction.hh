@@ -26,11 +26,7 @@
 /// \file persistency/P03/include/ExTGRunAction.hh
 /// \brief Definition of the ExTGRunAction class
 //
-//
 // $Id: ExTGRunAction.hh,v 1.2 2010-11-05 08:52:34 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-// 
-// ---------------------------------------------------------------------------
 
 #ifndef ExTGRunAction_h
 #define ExTGRunAction_h 1
@@ -39,6 +35,8 @@
 #include "globals.hh"
 
 class G4Run;
+
+/// Dumps geometry in text format
 
 class ExTGRunAction : public G4UserRunAction
 {

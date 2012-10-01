@@ -98,7 +98,7 @@ int main(int argc,char **argv)
    if (argc>=3)
    {
       parser.Write(argv[2], G4TransportationManager::GetTransportationManager()->
-		   GetNavigatorForTracking()->GetWorldVolume()->GetLogicalVolume());
+                   GetNavigatorForTracking()->GetWorldVolume()->GetLogicalVolume());
    }
 
    G4UImanager* UImanager = G4UImanager::GetUIpointer();

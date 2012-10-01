@@ -54,6 +54,8 @@
 //
 #include "G03ColorWriter.hh"
 
+#include "G4SystemOfUnits.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G03DetectorConstruction::G03DetectorConstruction()

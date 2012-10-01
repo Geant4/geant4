@@ -23,14 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/P03/src/ExTGDetectorConstructionWithSD.cc
-/// \brief Implementation of the ExTGDetectorConstructionWithSD class
-//
 //
 // $Id: ExTGDetectorConstructionWithSD.cc,v 1.3 2010-11-05 08:52:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// ---------------------------------------------------------------------------
+/// \file ExTGDetectorConstructionWithSD.cc
+/// \brief Implementation of the ExTGDetectorConstructionWithSD class
+
  
 #include "ExTGDetectorConstructionWithSD.hh"
 #include "ExTGTrackerSD.hh"
@@ -41,18 +40,19 @@
 #include "G4tgbVolumeMgr.hh"
 #include "G4tgrMessenger.hh"
 
-// ---------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExTGDetectorConstructionWithSD::ExTGDetectorConstructionWithSD()
 {
-  messenger = new G4tgrMessenger;
+  fMessenger = new G4tgrMessenger;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExTGDetectorConstructionWithSD::~ExTGDetectorConstructionWithSD()
 {
-  delete messenger;
+  delete fMessenger;
 }
 
-// ---------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4VPhysicalVolume* ExTGDetectorConstructionWithSD::Construct()
 {
   //------------------------------------------------ 

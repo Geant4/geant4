@@ -26,18 +26,14 @@
 /// \file persistency/P03/include/ExTGPhysicsList.hh
 /// \brief Definition of the ExTGPhysicsList class
 //
-//
 // $Id: ExTGPhysicsList.hh,v 1.2 2010-11-05 08:52:34 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// ---------------------------------------------------------------------------
 
 #ifndef ExTGPhysicsList_h
 #define ExTGPhysicsList_h 1
 
 #include "G4VUserPhysicsList.hh"
 
-// ---------------------------------------------------------------------------
+/// Example of physics list
 
 class ExTGPhysicsList : public G4VUserPhysicsList
 {

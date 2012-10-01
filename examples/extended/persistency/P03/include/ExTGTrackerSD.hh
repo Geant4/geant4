@@ -26,11 +26,7 @@
 /// \file persistency/P03/include/ExTGTrackerSD.hh
 /// \brief Definition of the ExTGTrackerSD class
 //
-//
 // $Id: ExTGTrackerSD.hh,v 1.2 2010-11-05 08:52:34 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// ---------------------------------------------------------------------------
 
 #ifndef ExTGTrackerSD_h
 #define ExTGTrackerSD_h 1
@@ -40,6 +36,8 @@
 
 class G4Step;
 class G4HCofThisEvent;
+
+/// Example of Sensitive detector
 
 class ExTGTrackerSD : public G4VSensitiveDetector
 {
@@ -54,7 +52,7 @@ class ExTGTrackerSD : public G4VSensitiveDetector
 
   private:
 
-    ExTGTrackerHitsCollection* trackerCollection;
+    ExTGTrackerHitsCollection* fTrackerCollection;
 };
 
 #endif

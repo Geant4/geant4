@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G02/include/DetectorMessenger.hh
+/// \file persistency/gdml/G02/include/G02DetectorMessenger.hh
 /// \brief Definition of the G02DetectorMessenger class
 //
 //

@@ -23,37 +23,34 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/P03/src/ExTGPhysicsList.cc
-/// \brief Implementation of the ExTGPhysicsList class
-//
 //
 // $Id: ExTGPhysicsList.cc,v 1.4 2010-11-05 08:52:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// ---------------------------------------------------------------------------
+/// \file ExTGPhysicsList.cc
+/// \brief Implementation of the ExTGPhysicsList class
+
 
 #include "globals.hh"
 #include "ExTGPhysicsList.hh"
 
 #include "G4ProcessManager.hh"
 #include "G4ParticleTypes.hh"
+#include "G4SystemOfUnits.hh"
 
-// ---------------------------------------------------------------------------
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExTGPhysicsList::ExTGPhysicsList():  G4VUserPhysicsList()
 {
   defaultCutValue = 1.0*cm;
    SetVerboseLevel(1);
 }
 
-// ---------------------------------------------------------------------------
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExTGPhysicsList::~ExTGPhysicsList()
 {
 }
 
-// ---------------------------------------------------------------------------
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExTGPhysicsList::ConstructParticle()
 {
   // In this method, static member functions should be called
@@ -67,8 +64,7 @@ void ExTGPhysicsList::ConstructParticle()
   ConstructBaryons();
 }
 
-// ---------------------------------------------------------------------------
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExTGPhysicsList::ConstructBosons()
 {
   // pseudo-particles
@@ -79,8 +75,7 @@ void ExTGPhysicsList::ConstructBosons()
   G4Gamma::GammaDefinition();
 }
 
-// ---------------------------------------------------------------------------
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExTGPhysicsList::ConstructLeptons()
 {
   // leptons
@@ -98,8 +93,7 @@ void ExTGPhysicsList::ConstructLeptons()
   G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
 }
 
-// ---------------------------------------------------------------------------
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExTGPhysicsList::ConstructMesons()
 {
   //  mesons
@@ -117,8 +111,7 @@ void ExTGPhysicsList::ConstructMesons()
   G4KaonZeroShort::KaonZeroShortDefinition();
 }
 
-// ---------------------------------------------------------------------------
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExTGPhysicsList::ConstructBaryons()
 {
   //  barions
@@ -129,8 +122,7 @@ void ExTGPhysicsList::ConstructBaryons()
   G4AntiNeutron::AntiNeutronDefinition();
 }
 
-// ---------------------------------------------------------------------------
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExTGPhysicsList::ConstructProcess()
 {
   AddTransportation();
@@ -138,8 +130,7 @@ void ExTGPhysicsList::ConstructProcess()
   ConstructGeneral();
 }
 
-// ---------------------------------------------------------------------------
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
@@ -161,7 +152,6 @@ void ExTGPhysicsList::ConstructProcess()
 #include "G4StepLimiter.hh"
 #include "G4UserSpecialCuts.hh"
 
-// ---------------------------------------------------------------------------
 
 void ExTGPhysicsList::ConstructEM()
 {
@@ -211,8 +201,7 @@ void ExTGPhysicsList::ConstructEM()
   }
 }
 
-// ---------------------------------------------------------------------------
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 #include "G4Decay.hh"
 void ExTGPhysicsList::ConstructGeneral()
 {
@@ -231,8 +220,7 @@ void ExTGPhysicsList::ConstructGeneral()
   }
 }
 
-// ---------------------------------------------------------------------------
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExTGPhysicsList::SetCuts()
 {
   //G4VUserPhysicsList::SetCutsWithDefault method sets 
@@ -243,5 +231,4 @@ void ExTGPhysicsList::SetCuts()
   if (verboseLevel>0) DumpCutValuesTable();
 }
 
-// ---------------------------------------------------------------------------
 

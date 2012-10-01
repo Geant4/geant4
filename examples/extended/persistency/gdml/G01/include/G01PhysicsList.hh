@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml/G01/include/PhysicsList.hh
+/// \file persistency/gdml/G01/include/G01PhysicsList.hh
 /// \brief Definition of the G01PhysicsList class
 //
 //

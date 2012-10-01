@@ -27,8 +27,6 @@
 /// \brief Definition of the ExTGDetectorConstruction class
 //
 // $Id: ExTGDetectorConstruction.hh,v 1.4 2010-11-05 08:52:34 gcosmo Exp $
-//
-// ---------------------------------------------------------------------------
 
 #ifndef ExTGDetectorConstruction_HH
 #define ExTGDetectorConstruction_HH
@@ -37,6 +35,8 @@
 #include "G4VUserDetectorConstruction.hh"
 
 class G4tgrMessenger;
+
+/// Detector construction class using text geometry file
 
 class ExTGDetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -49,7 +49,7 @@ class ExTGDetectorConstruction : public G4VUserDetectorConstruction
 
   private:
 
-    G4tgrMessenger* messenger;
+    G4tgrMessenger* fMessenger;
 };
 
 #endif

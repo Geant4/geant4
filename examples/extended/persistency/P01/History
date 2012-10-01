@@ -15,6 +15,15 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 25th, 2012 I. Hrivnacova (exPersistency-V09-05-01)
+- Taking into account renaming the dictionary also in macros, code
+  and GNUmake build 
+- Fixes in GNUmakefile (was failing when building with internal
+  CLHEP and xerces-c)  
+
+September 25th, 2012 I. Hrivnacova (exampleP01-V09-05-06)
+- renamed Classes.hh to ExP01Classes.hh
+
 August 1st, 2012 W. Pokorski (exampleP01-V09-05-05)
 - cosmetic changes for the examples code review
 

@@ -27,11 +27,6 @@
 /// \brief Definition of the ExTGRCDetectorBuilder class
 //
 // $Id: ExTGRCDetectorBuilder.hh,v 1.5 2010-11-05 08:52:34 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// Author:      P. Arce
-// Changes:     creation   May 2007
-// ---------------------------------------------------------------------------
 
 #ifndef ExTGRCDetectorBuilder_h
 #define ExTGRCDetectorBuilder_h
@@ -42,6 +37,11 @@
 //---------------------------------------------------------------------------- 
 
 class ExTGRCLineProcessor;
+
+/// Detector builder class implementing cuts per region
+///
+/// Changes:     creation   May 2007
+/// \author:    P. Arce
 
 class ExTGRCDetectorBuilder : public G4tgbDetectorBuilder
 { 
@@ -54,7 +54,7 @@ class ExTGRCDetectorBuilder : public G4tgbDetectorBuilder
     virtual G4VPhysicalVolume* ConstructDetector( const G4tgrVolume* tgrVoltop);
   private:
 
-    ExTGRCLineProcessor* tlproc;
+    ExTGRCLineProcessor* fTlproc;
 };
 
 #endif

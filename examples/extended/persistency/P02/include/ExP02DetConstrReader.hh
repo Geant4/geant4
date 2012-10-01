@@ -35,6 +35,8 @@
 
 class G4VPhysicalVolume;
 
+/// Detector construction reader using ROOT I/O 
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class ExP02DetConstrReader : public G4VUserDetectorConstruction

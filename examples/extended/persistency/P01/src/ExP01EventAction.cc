@@ -73,7 +73,7 @@ void ExP01EventAction::EndOfEventAction(const G4Event* evt)
   if (event_id < 100 || event_id%100 == 0) {
     G4cout << ">>> Event " << evt->GetEventID() << G4endl;
     G4cout << "    " << n_trajectories 
-	   << " trajectories stored in this event." << G4endl;
+           << " trajectories stored in this event." << G4endl;
   }
 }
 

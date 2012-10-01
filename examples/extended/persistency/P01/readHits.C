@@ -7,7 +7,7 @@
 // To run this macro in cint do (after replacing the location_of_your_libraries below):
 // .include  $G4INCLUDE
 // gSystem->Load("libCintex.so");
-// gSystem->Load("<location_of_your_libraries>/libClassesDict.so");
+// gSystem->Load("<location_of_your_libraries>/libExP01ClassesDict.so");
 // ROOT::Cintex::Cintex::Enable();
 // .L hits.C++
 // hits();

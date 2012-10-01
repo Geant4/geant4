@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml//src/G02G02PrimaryGeneratorAction.cc
+/// \file persistency/gdml//src/G02PrimaryGeneratorAction.cc
 /// \brief Implementation of the G02PrimaryGeneratorAction class
 //
 //
@@ -38,6 +38,7 @@
 
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

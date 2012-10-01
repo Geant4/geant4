@@ -43,7 +43,7 @@ RootIO::RootIO():Nevents(0)
 {
   // initialize ROOT
   TSystem ts;
-  gSystem->Load("libClassesDict");
+  gSystem->Load("libExP01ClassesDict");
 
   ROOT::Cintex::Cintex::SetDebug(0);
   ROOT::Cintex::Cintex::Enable();

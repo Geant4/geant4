@@ -75,7 +75,7 @@ class ExP01ChamberParameterisation : public G4VPVParameterisation
                                  G4double lengthInitial,
                                  G4double lengthFinal );
 
-    virtual				 
+    virtual                                 
    ~ExP01ChamberParameterisation();
    
     void ComputeTransformation (const G4int copyNo,

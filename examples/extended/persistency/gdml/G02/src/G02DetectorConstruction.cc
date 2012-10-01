@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //g
-/// \file persistency/gdml//src/G02G02DetectorConstruction.cc
+/// \file persistency/gdml//src/G02DetectorConstruction.cc
 /// \brief Implementation of the G02DetectorConstruction class
 //
 //
@@ -79,6 +79,9 @@
 // GDML parser include
 //
 #include "G4GDMLParser.hh"
+
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //

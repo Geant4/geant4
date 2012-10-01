@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 25th, 2012 I. Hrivnacova (exPersistency-V09-05-01)
+- Fixes in GNUmakefile (was failing when building with internal CLHEP)
+
 November 30th, 2010  I.Hrivnacova (exampleP02-V09-03-02)
 - Migrated to use particle-based multiple-scattering.
 

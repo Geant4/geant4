@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/gdml//src/G02G02ChamberParameterisation.cc
+/// \file persistency/gdml//src/G02ChamberParameterisation.cc
 /// \brief Implementation of the G02ChamberParameterisation class
 //
 //

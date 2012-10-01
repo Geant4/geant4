@@ -58,8 +58,8 @@ ExP01ChamberParameterisation::ExP01ChamberParameterisation(
    if( NoChambers > 0 ){
       fHalfLengthIncr =  0.5 * (lengthFinal-lengthInitial)/NoChambers;
       if (spacingZ < widthChamber) {
-	G4cout << "ExP01ChamberParameterisation construction: Width>Spacing" << G4endl;
-	exit(1);;
+        G4cout << "ExP01ChamberParameterisation construction: Width>Spacing" << G4endl;
+        exit(1);;
       }
    }
    

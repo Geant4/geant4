@@ -27,11 +27,6 @@
 /// \brief Definition of the ExTGRCRegionCutsMgr class
 //
 // $Id: ExTGRCRegionCutsMgr.hh,v 1.3 2010-11-05 08:52:34 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// Author:      P. Arce
-// Changes:     creation   May 2007
-// ---------------------------------------------------------------------------
 
 #ifndef ExTGRCRegionCutsMgr_h
 #define ExTGRCRegionCutsMgr_h
@@ -40,6 +35,11 @@
 #include "globals.hh"
 
 class ExTGRCRegionData;
+
+/// Region cuts manager
+///
+/// Changes:     creation   May 2007
+/// \author      P. Arce
 
 class ExTGRCRegionCutsMgr 
 { 
@@ -65,8 +65,8 @@ class ExTGRCRegionCutsMgr
 
   private:
 
-    static ExTGRCRegionCutsMgr* theInstance;
-    std::vector<ExTGRCRegionData*> theRegionDatae;
+    static ExTGRCRegionCutsMgr* fInstance;
+    std::vector<ExTGRCRegionData*> fRegionDatae;
 };
 
 #endif

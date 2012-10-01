@@ -23,14 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/P03/src/ExTGTrackerHit.cc
-/// \brief Implementation of the ExTGTrackerHit class
-//
 //
 // $Id: ExTGTrackerHit.cc,v 1.2 2010-11-05 08:52:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// ---------------------------------------------------------------------------
+/// \file ExTGTrackerHit.cc
+/// \brief Implementation of the ExTGTrackerHit class
 
 #include "ExTGTrackerHit.hh"
 #include "G4UnitsTable.hh"
@@ -41,55 +39,49 @@
 
 G4Allocator<ExTGTrackerHit> ExTGTrackerHitAllocator;
 
-// ---------------------------------------------------------------------------
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExTGTrackerHit::ExTGTrackerHit()
 {
 }
 
-// ---------------------------------------------------------------------------
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExTGTrackerHit::~ExTGTrackerHit()
 {
 }
 
-// ---------------------------------------------------------------------------
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExTGTrackerHit::ExTGTrackerHit(const ExTGTrackerHit& right)
   : G4VHit()
 {
-  trackID   = right.trackID;
-  chamberNb = right.chamberNb;
-  edep      = right.edep;
-  pos       = right.pos;
+  fTrackID   = right.fTrackID;
+  fChamberNb = right.fChamberNb;
+  fEdep      = right.fEdep;
+  fPos       = right.fPos;
 }
 
-// ---------------------------------------------------------------------------
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 const ExTGTrackerHit& ExTGTrackerHit::operator=(const ExTGTrackerHit& right)
 {
-  trackID   = right.trackID;
-  chamberNb = right.chamberNb;
-  edep      = right.edep;
-  pos       = right.pos;
+  fTrackID   = right.fTrackID;
+  fChamberNb = right.fChamberNb;
+  fEdep      = right.fEdep;
+  fPos       = right.fPos;
   return *this;
 }
 
-// ---------------------------------------------------------------------------
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4int ExTGTrackerHit::operator==(const ExTGTrackerHit& right) const
 {
   return (this==&right) ? 1 : 0;
 }
 
-// ---------------------------------------------------------------------------
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExTGTrackerHit::Draw()
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   if(pVVisManager)
   {
-    G4Circle circle(pos);
+    G4Circle circle(fPos);
     circle.SetScreenSize(2.);
     circle.SetFillStyle(G4Circle::filled);
     G4Colour colour(1.,0.,0.);
@@ -99,14 +91,12 @@ void ExTGTrackerHit::Draw()
   }
 }
 
-// ---------------------------------------------------------------------------
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExTGTrackerHit::Print()
 {
-  G4cout << "  trackID: " << trackID << "  chamberNb: " << chamberNb
-         << "  energy deposit: " << G4BestUnit(edep,"Energy")
-	 << "  position: " << G4BestUnit(pos,"Length") << G4endl;
+  G4cout << "  trackID: " << fTrackID << "  chamberNb: " << fChamberNb
+         << "  energy deposit: " << G4BestUnit(fEdep,"Energy")
+         << "  position: " << G4BestUnit(fPos,"Length") << G4endl;
 }
 
-// ---------------------------------------------------------------------------
 

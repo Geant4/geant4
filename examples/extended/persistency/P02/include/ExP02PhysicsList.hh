@@ -41,6 +41,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+/// Physics list
+
 class ExP02PhysicsList: public G4VUserPhysicsList
 {
   public:

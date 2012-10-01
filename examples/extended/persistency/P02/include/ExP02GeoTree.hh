@@ -37,6 +37,9 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 
+/// Helper class needed for the ROOT I/O. It contains pointers to geometry tree,
+/// element table and material table.
+
 class ExP02GeoTree {
 public: 
 
@@ -49,9 +52,9 @@ public:
 
 private:
 
-  G4VPhysicalVolume* topV;
-  const G4ElementTable* eltab;
-  const G4MaterialTable* mattab;
+  G4VPhysicalVolume* fTopV;
+  const G4ElementTable* fEltab;
+  const G4MaterialTable* fMattab;
   
 };
 #endif // INCLUDE_EXP02GEOTREE_H

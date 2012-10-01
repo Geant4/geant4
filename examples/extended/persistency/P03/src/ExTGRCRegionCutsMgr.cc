@@ -23,15 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/P03/src/ExTGRCRegionCutsMgr.cc
-/// \brief Implementation of the ExTGRCRegionCutsMgr class
-//
 // $Id: ExTGRCRegionCutsMgr.cc,v 1.4 2010-11-05 08:52:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Author:      P. Arce
-// Changes:     creation   May 2007
-// ---------------------------------------------------------------------------
+/// \file ExTGRCRegionCutsMgr.cc
+/// \brief Implementation of the ExTGRCRegionCutsMgr class
 
 #include "ExTGRCRegionCutsMgr.hh"
 #include "ExTGRCRegionData.hh"
@@ -44,31 +40,30 @@
 #include "G4tgrUtils.hh"
 #include "G4UIcommand.hh"
 
-//----------------------------------------------------------------------
-ExTGRCRegionCutsMgr* ExTGRCRegionCutsMgr::theInstance = 0;
+ExTGRCRegionCutsMgr* ExTGRCRegionCutsMgr::fInstance = 0;
 
-//----------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExTGRCRegionCutsMgr* ExTGRCRegionCutsMgr::GetInstance()
 {
-  if( !theInstance )
+  if( !fInstance )
   {
-    theInstance = new ExTGRCRegionCutsMgr;
+    fInstance = new ExTGRCRegionCutsMgr;
   }
-  return theInstance;
+  return fInstance;
 }
 
-//-----------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExTGRCRegionCutsMgr::ExTGRCRegionCutsMgr()
 {
 }
 
-//-----------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExTGRCRegionCutsMgr::~ExTGRCRegionCutsMgr()
 {
-  delete theInstance;
+  delete fInstance;
 }
 
-//-----------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExTGRCRegionCutsMgr::AddRegionData( const std::vector<G4String>& rd )
 {
 
@@ -79,10 +74,10 @@ void ExTGRCRegionCutsMgr::AddRegionData( const std::vector<G4String>& rd )
                 G4String("Region already exists: " + rd[0]).c_str() );
     return;
   }
-  theRegionDatae.push_back( new ExTGRCRegionData( rd ) );
+  fRegionDatae.push_back( new ExTGRCRegionData( rd ) );
 }
 
-//-----------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExTGRCRegionCutsMgr::AddRegionCuts( const std::vector<G4String>& rc )
 {
   if( rc.size() == 0 )
@@ -112,13 +107,12 @@ void ExTGRCRegionCutsMgr::AddRegionCuts( const std::vector<G4String>& rc )
   }
 }
 
-//-----------------------------------------------------------------------
 std::vector<ExTGRCRegionData*>
 ExTGRCRegionCutsMgr::FindRegionData( const G4String& name)
 {
   std::vector<ExTGRCRegionData*> regs;
   std::vector<ExTGRCRegionData*>::const_iterator iter;
-  for( iter = theRegionDatae.begin(); iter != theRegionDatae.end(); iter++ )
+  for( iter = fRegionDatae.begin(); iter != fRegionDatae.end(); iter++ )
   {
     if( G4tgrUtils::AreWordsEquivalent( name , (*iter)->GetRegionName()) )
     {
@@ -128,13 +122,13 @@ ExTGRCRegionCutsMgr::FindRegionData( const G4String& name)
   return regs; 
 }
 
-//-----------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExTGRCRegionCutsMgr::BuildRegions()
 {
   std::vector<ExTGRCRegionData*>::const_iterator iter;
   std::vector<G4String>::const_iterator ites;
   std::vector<G4LogicalVolume*>::const_iterator itelv;
-  for( iter = theRegionDatae.begin(); iter != theRegionDatae.end(); iter++ )
+  for( iter = fRegionDatae.begin(); iter != fRegionDatae.end(); iter++ )
   {
     G4Region* reg = new G4Region( (*iter)->GetRegionName() );
     std::vector<G4String> lvs = (*iter)->GetLVNames();
@@ -147,23 +141,23 @@ void ExTGRCRegionCutsMgr::BuildRegions()
   }
 }
 
-//-----------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExTGRCRegionCutsMgr::BuildProductionCuts()
 {
   std::vector<ExTGRCRegionData*>::const_iterator iter;
   G4RegionStore* regions = G4RegionStore::GetInstance();
   //----- loop to region datae
-  for( iter = theRegionDatae.begin(); iter != theRegionDatae.end(); iter++ )
+  for( iter = fRegionDatae.begin(); iter != fRegionDatae.end(); iter++ )
   {
     if( (*iter)->CutsAreSet() )
     {
       G4Region* reg = regions->GetRegion( (*iter)->GetRegionName() );
       if( !reg )
       { 
-	G4Exception("ExTGRCRegionCutsMgr::BuildProductionCuts()",
+        G4Exception("ExTGRCRegionCutsMgr::BuildProductionCuts()",
                     "InvalidArgument", FatalErrorInArgument,
         G4String("Region not found: " + (*iter)->GetRegionName()).c_str() );
-      }	
+      }        
       G4ProductionCuts* cuts = new G4ProductionCuts ;
 
       cuts->SetProductionCut((*iter)->GetGammaCut(),"gamma");
