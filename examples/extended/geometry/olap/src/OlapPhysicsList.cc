@@ -46,6 +46,7 @@
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
 #include "G4Material.hh"
+#include "G4SystemOfUnits.hh"
 
 OlapPhysicsList::OlapPhysicsList():  G4VUserPhysicsList()
 {

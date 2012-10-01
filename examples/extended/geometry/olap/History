@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 4th, 2012 I.Hrivnacova  - olapex-V09-05-00
+- Updated CMakeLists.txt:
+  adding visualization, copying macros, install target and comment lines 
+- Added .README  
+
 November 16th, 2011 G.Cosmo    - olapex-V09-04-02
 - Fixed compilation warning for unused parameter.
 

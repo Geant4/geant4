@@ -56,11 +56,11 @@ class OlapInfo
 {
 public:
    OlapInfo(G4NavigationHistory & h1,
-	    G4NavigationHistory & h2,
-	    G4ThreeVector & p1,
-	    G4ThreeVector & p2,
-	    G4int a=0,
-	    G4LogicalVolume* original=0)
+            G4NavigationHistory & h2,
+            G4ThreeVector & p1,
+            G4ThreeVector & p2,
+            G4int a=0,
+            G4LogicalVolume* original=0)
      : hist1(h1), hist2(h2), v1(p1), v2(p2),axis(a),
        info(""), probNot(false), originalMother(original) {}
    
@@ -75,16 +75,13 @@ public:
    std::vector<OlapStepInfo *> stAB;
    std::vector<OlapStepInfo *> stBA;
    G4String info;
-   G4bool probNot ;	    
+   G4bool probNot ;            
    G4LogicalVolume* originalMother;
 };
 
-std::ostream & 
-   operator<<(std::ostream& flux,  OlapInfo & oi);
-
+std::ostream & operator<<(std::ostream& flux,  OlapInfo & oi);
 
 // ------------==============-------------==============----------------
-
 
 class OlapEventAction : public G4UserEventAction
 {
@@ -104,4 +101,5 @@ public:
    std::vector<OlapStepInfo*> BASteps;
    G4bool dontDelete;
 };
+
 #endif

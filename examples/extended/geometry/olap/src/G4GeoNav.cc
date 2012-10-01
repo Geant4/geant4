@@ -87,7 +87,7 @@ G4int G4GeoNav::FilterLV(const G4String & aRegexStr,
   FindLV(&aRegex,aNode,result,stopAtFirst);
   regfree(&aRegex);
   return result.size();  
-}			 
+}                         
 
 
 void G4GeoNav::FindLV(regex_t * aRegex, LVTree::node_t * node, 
@@ -110,7 +110,7 @@ void G4GeoNav::FindLV(regex_t * aRegex, LVTree::node_t * node,
     i = i->nextSibling();
   }  
 
-}	
+}        
 
 G4int G4GeoNav::PathLV(std::vector<G4LogicalVolume*> & result)
 {
@@ -126,8 +126,8 @@ G4int G4GeoNav::PathLV(std::vector<G4LogicalVolume*> & result)
    }
    return level;  
 }
-	      	   
-		      
+                         
+                      
 G4int G4GeoNav::Tokenize(const G4String & aStr,
                          std::vector<G4String>& tokens)
 {
@@ -157,8 +157,8 @@ G4int G4GeoNav::Tokenize(const G4String & aStr,
        idx = i;
        if(curStr[idx]==sep[idx2]) {
           #ifdef QT_DEBUG_3
-	    G4cout << i << " " << curStr[i] << G4endl;
-	  #endif 
+            G4cout << i << " " << curStr[i] << G4endl;
+          #endif 
           pos.push_back(i);
        }  
     }    
@@ -173,7 +173,7 @@ G4int G4GeoNav::Tokenize(const G4String & aStr,
     for (i=1; i<pos.size(); i++)
     {
        G4String newString;
-       	 
+                
        for(G4int j=pos[i-1]; j<=pos[i]; j++) {
           idx = j;
           if (curStr[idx]!=sep[idx2])
@@ -186,7 +186,7 @@ G4int G4GeoNav::Tokenize(const G4String & aStr,
     #ifdef QT_DEBUG 
     for (G4int i=0; i<tokens.size(); i++) 
       G4cout << "tok " << i << " " << tokens[i] << G4endl;
-    #endif   		           	    
+    #endif                                          
     
     return tokens.size();
 }
@@ -205,7 +205,7 @@ G4LogicalVolume * G4GeoNav::ChangeLV(const G4String & aRegExp)
       if (*it==G4String("/"))
       {                        // absolute or relative
          anItem = theRootLV;
-	 it++;
+         it++;
       } 
       
       while ( it != tokens.end() )
@@ -213,65 +213,65 @@ G4LogicalVolume * G4GeoNav::ChangeLV(const G4String & aRegExp)
         //regex_t aRegex;
         if (*it == G4String(".."))
         {
-	   anItem = anItem->parent();
-	   if (!anItem) {
-	      G4cerr << "not found!" << G4endl;
-	      return 0;
-	   }     
-	   it++;    
-	}
-	else
+           anItem = anItem->parent();
+           if (!anItem) {
+              G4cerr << "not found!" << G4endl;
+              return 0;
+           }     
+           it++;    
+        }
+        else
         {
-	   regex_t aRegex;
+           regex_t aRegex;
            const char * aRegexCStr = (*it).data();
            if (regcomp(&aRegex,aRegexCStr,0))
            { 
                G4cerr << "failed to interpret regex-string" << G4endl;
                return 0;
-	   }	   
+           }           
            
-	   G4int children = anItem->childCount();
+           G4int children = anItem->childCount();
            
-	   if (!children)
+           if (!children)
            {
-	      G4cerr << "not found!!" << G4endl;
-	      return 0;
-	   }
-	   
-	   //LVTree::node_t * temp = *(anItem->firstChild());
-	   //anItem = temp;
-	   
-	   // loop over children
-	   LVTree::node_t * u= anItem->firstChild();
-	   G4bool found=false;
-	   while (u)
+              G4cerr << "not found!!" << G4endl;
+              return 0;
+           }
+           
+           //LVTree::node_t * temp = *(anItem->firstChild());
+           //anItem = temp;
+           
+           // loop over children
+           LVTree::node_t * u= anItem->firstChild();
+           G4bool found=false;
+           while (u)
            {   
-	     if ( !regexec(&aRegex, u->data()->GetName().data(),0,0,0))
+             if ( !regexec(&aRegex, u->data()->GetName().data(),0,0,0))
              {
-	        found=true;
-		anItem = u;
-	        break;   
-	     }
-	     u = u->nextSibling();
-	   }
-	   
-	   regfree(&aRegex);
-	   if (!found)
+                found=true;
+                anItem = u;
+                break;   
+             }
+             u = u->nextSibling();
+           }
+           
+           regfree(&aRegex);
+           if (!found)
            {
-	      G4cerr << "not found!!!!" << G4endl;
-	      return 0;
-	   }   
-           it++;	
-	}
-	
+              G4cerr << "not found!!!!" << G4endl;
+              return 0;
+           }   
+           it++;        
+        }
+        
       }
       
       if (anItem!=anItemBefore)
       {
         theCurLV=anItem;
         return anItem->data();
-      } 	
-      return 0;	    
+      }         
+      return 0;            
     }
   return 0;  
 }

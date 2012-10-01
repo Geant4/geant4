@@ -69,15 +69,15 @@ public:
       {
         if(!parent->firstChild_)
         {
-	  parent->firstChild_=this;
-	  parent->lastChild_=this;
-	}  
-	else
+          parent->firstChild_=this;
+          parent->lastChild_=this;
+        }  
+        else
         {
-	  parent->lastChild_->nextSibling_ = this;
-	  parent->lastChild_=this;
-	}   
-      }	
+          parent->lastChild_->nextSibling_ = this;
+          parent->lastChild_=this;
+        }   
+      }        
     }
     
   ~TreeNode() // deletes the whole subtree as well!
@@ -85,12 +85,12 @@ public:
       if (parent_)
       {
         TreeNode * i = parent_->firstChild_;
-	while(*i)
+        while(*i)
         {
-	  TreeNode * temp = i;
-	  i = i->nextSibling_;
-	  delete temp;
-	}
+          TreeNode * temp = i;
+          i = i->nextSibling_;
+          delete temp;
+        }
       } 
     } 
 
@@ -120,8 +120,8 @@ protected:
   Data data_;
   
 private:  
-   TreeNode(const TreeNode &);
-   TreeNode & operator=(const TreeNode *);
+  TreeNode(const TreeNode &);
+  TreeNode & operator=(const TreeNode *);
 };
 
 
@@ -177,10 +177,10 @@ public:
        if (curpos_->nextSibling_)
        {
          curpos_ = curpos_->nextSibling_;
-         return curpos_;	 
-       }	 
+         return curpos_;         
+       }         
      }  
-     return 0;   	     
+     return 0;                
   }
   
 protected:

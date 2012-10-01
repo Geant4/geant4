@@ -51,6 +51,7 @@
 #include "G4UIcmdWith3Vector.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWith3VectorAndUnit.hh"
+#include "G4SystemOfUnits.hh"
 
 OlapManagerMessenger::OlapManagerMessenger(OlapManager* aManager)
   : theManager(aManager)

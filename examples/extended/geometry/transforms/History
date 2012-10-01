@@ -14,6 +14,14 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06/09/2012 I. Hrivnacova (exTransforms-V09-05-03)
+- Fixed warning on windows from DetectorConstruction
+
+04/09/2012 I. Hrivnacova (exTransforms-V09-05-02)
+- Updated CMakeLists.txt:
+  adding visualization, copying macros, install target and comment lines 
+- Minor fixes in .README  
      
 25/06/2012 mma (exTransforms-V09-05-01)
  - update readme and .readme

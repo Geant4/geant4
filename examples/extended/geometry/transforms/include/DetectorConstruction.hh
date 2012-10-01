@@ -33,10 +33,9 @@
 
 #include "G4VUserDetectorConstruction.hh"
 
-#include "DetectorMessenger.hh"
-
 #include "globals.hh"
 
+class DetectorMessenger;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
 
@@ -89,7 +88,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     void PlaceWithReflections();
 
     // data members
-    DetectorMessenger  fMessenger;
+    DetectorMessenger* fMessenger;
     EMethod  fMethod;
     G4LogicalVolume* fWorldVolume;
     G4LogicalVolume* fTrdVolume;

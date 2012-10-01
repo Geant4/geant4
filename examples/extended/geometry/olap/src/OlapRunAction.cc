@@ -107,11 +107,11 @@ void OlapRunAction::EndOfRunAction(const G4Run* aRun)
      {
        G4String volume;
        if((*it)->hist1.GetDepth() >= 1)
-	 volume = (*it)->hist1.GetVolume(1)->GetName();
+         volume = (*it)->hist1.GetVolume(1)->GetName();
        else if((*it)->hist2.GetDepth() >= 1)
-	 volume = (*it)->hist2.GetVolume(1)->GetName();
+         volume = (*it)->hist2.GetVolume(1)->GetName();
        else
-	 G4cerr << "error: did not get the filename" << G4endl;
+         G4cerr << "error: did not get the filename" << G4endl;
 
        fname = logManager->logPath + volume + ".log";
      }

@@ -59,4 +59,4 @@ private:
   G4double worldDim_;
 };
 
-#endif	
+#endif        

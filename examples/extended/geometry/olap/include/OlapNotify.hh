@@ -59,6 +59,6 @@ public:
   
   virtual void worldChanged(G4LogicalVolume* newWorld) = 0;
   virtual void overlaps(const std::vector<OlapInfo*> &)=0;
-				  
-};								  		  		  
+                                  
+};                                                                                                      
 #endif

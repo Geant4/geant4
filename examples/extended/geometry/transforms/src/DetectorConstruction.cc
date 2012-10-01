@@ -29,6 +29,7 @@
 /// \brief Implementation of the DetectorConstruction class
 
 #include "DetectorConstruction.hh"
+#include "DetectorMessenger.hh"
 
 #include "G4Material.hh"
 #include "G4NistManager.hh"
@@ -44,20 +45,24 @@
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
  : G4VUserDetectorConstruction(),
-   fMessenger(this),
+   fMessenger(0),
    fMethod(kWithDirectMatrix)
 {
+  fMessenger = new DetectorMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::~DetectorConstruction()
 { 
+  delete fMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -170,7 +175,7 @@ void DetectorConstruction::PlaceWithDirectMatrix()
   G4RotationMatrix rotm2  = G4RotationMatrix(u, v, w);
   G4ThreeVector position2 = og*w;
   G4Transform3D transform2 = G4Transform3D(rotm2,position2);
-  new G4PVPlacement(transform2,          //position, rotation        
+  new G4PVPlacement(transform2,         //position, rotation        
                     fTrdVolume,         //logical volume
                     "Trd",              //name
                     fWorldVolume,       //mother volume
@@ -241,7 +246,7 @@ void DetectorConstruction::PlaceWithAxialRotations()
   G4ThreeVector position1 = og*w;
   G4Transform3D transform1(rotm1,position1);
 
-  new G4PVPlacement(transform1,           //rotation,position
+  new G4PVPlacement(transform1,          //rotation,position
                     fTrdVolume,          //logical volume
                     "Trd",               //name
                     fWorldVolume,        //mother volume
@@ -259,8 +264,8 @@ void DetectorConstruction::PlaceWithAxialRotations()
   w = G4ThreeVector(std::cos(phi), std::sin(phi),0.);    
   G4ThreeVector position2 = og*w;
   
-  new G4PVPlacement(rotm2Inv,		//rotation
-  		    position2,		//position	 		    
+  new G4PVPlacement(rotm2Inv,           //rotation
+                    position2,          //position                             
                     fTrdVolume,         //logical volume
                     "Trd",              //name
                     fWorldVolume,       //mother volume
@@ -296,7 +301,7 @@ void DetectorConstruction::PlaceWithEulerAngles()
   G4ThreeVector position1 = og*w;
   G4Transform3D transform1 = G4Transform3D(rotm1,position1);
 
-  new G4PVPlacement(transform1,          //position, rotation        
+  new G4PVPlacement(transform1,         //position, rotation        
                     fTrdVolume,         //logical volume
                     "Trd",              //name
                     fWorldVolume,       //mother volume
@@ -313,8 +318,8 @@ void DetectorConstruction::PlaceWithEulerAngles()
   w = G4ThreeVector(std::cos(phi),  std::sin(phi),0.);
   G4ThreeVector position2 = og*w;
                            
-  new G4PVPlacement(rotm2Inv,		//rotation
-  		    position2,		//position	             
+  new G4PVPlacement(rotm2Inv,           //rotation
+                    position2,          //position                     
                     fTrdVolume,         //logical volume
                     "Trd",              //name
                     fWorldVolume,       //mother volume

@@ -112,14 +112,14 @@ void OlapGenerator::GeneratePrimaries(G4Event * anEvent)
   dirBA[grid.axis] = -1;
   
   #ifdef OLAPDEBUG1
-    G4int runID = G4RunManager::GetRunManager()->GetCurrentRun()->GetRunID();
-    G4int evtID = anEvent->GetEventID();
-    G4cout << "generator: " 
-           << "run=" << runID << " evt=" << evtID
-           << " axis=" << grid.axis << " out=" << grid.count[out]
-           << " in=" << grid.count[in] 
-           << " posAB=" << posAB 
-	   << " posBA=" << posBA << G4endl;
+  G4int runID = G4RunManager::GetRunManager()->GetCurrentRun()->GetRunID();
+  G4int evtID = anEvent->GetEventID();
+  G4cout << "generator: " 
+         << "run=" << runID << " evt=" << evtID
+         << " axis=" << grid.axis << " out=" << grid.count[out]
+         << " in=" << grid.count[in] 
+         << " posAB=" << posAB 
+         << " posBA=" << posBA << G4endl;
   #endif
   
   // now generator 2 geantinos flying in opposite direction from A->B and B->A
