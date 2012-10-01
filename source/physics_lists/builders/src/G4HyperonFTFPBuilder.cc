@@ -37,6 +37,7 @@
 //
 #include "G4HyperonFTFPBuilder.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"

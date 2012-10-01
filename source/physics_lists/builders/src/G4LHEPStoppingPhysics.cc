@@ -34,7 +34,8 @@
 //
 // Modified:
 // 10.11.2005 V.Ivanchenko edit to provide a standard and add mu-
-//
+// 20120921  M. Kelsey -- Replace G4MuonMinusCaptureAtRest with new
+//		G4MuonMinusCapture.
 //----------------------------------------------------------------------------
 //
 
@@ -50,7 +51,7 @@
 #include "G4KaonMinus.hh"
 #include "G4AntiProton.hh"
 #include "G4AntiNeutron.hh"
-#include "G4MuonMinusCaptureAtRest.hh"
+#include "G4MuonMinusCapture.hh"
 #include "G4PionMinusAbsorptionAtRest.hh"
 #include "G4KaonMinusAbsorption.hh"
 #include "G4AntiProtonAnnihilationAtRest.hh"
@@ -101,7 +102,7 @@ void G4LHEPStoppingPhysics::ConstructProcess()
 
   // Muon Minus Physics
   aProcMan = G4MuonMinus::MuonMinus()->GetProcessManager();
-  muProcess = new G4MuonMinusCaptureAtRest();
+  muProcess = new G4MuonMinusCapture();
   aProcMan->AddRestProcess(muProcess);
 
   // PionMinus

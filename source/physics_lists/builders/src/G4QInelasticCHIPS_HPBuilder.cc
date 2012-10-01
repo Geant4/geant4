@@ -46,6 +46,7 @@
 //#define debug
 
 #include "G4QInelasticCHIPS_HPBuilder.hh"
+#include "G4SystemOfUnits.hh"
 
 G4QInelasticCHIPS_HPBuilder::G4QInelasticCHIPS_HPBuilder(G4int ver):
     verbose(ver)

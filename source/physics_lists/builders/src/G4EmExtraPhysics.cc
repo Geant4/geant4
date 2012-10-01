@@ -41,6 +41,7 @@
 
 #include "G4EmExtraPhysics.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4SynchrotronRadiation.hh"
 
 #include "G4ParticleDefinition.hh"

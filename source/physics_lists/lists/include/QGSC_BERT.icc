@@ -39,7 +39,10 @@
 //
 //----------------------------------------------------------------------------
 //
+#include <iomanip>   
+
 #include "globals.hh"
+#include "G4ios.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 #include "G4ParticleTypes.hh"
@@ -47,8 +50,6 @@
 
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
-#include "G4ios.hh"
-#include <iomanip>   
 
 #include "G4DecayPhysics.hh"
 #include "G4EmStandardPhysics.hh"
@@ -66,11 +67,11 @@
 template<class T> TQGSC_BERT<T>::TQGSC_BERT(G4int ver):  T()
 {
   // default cut value  (1.0mm) 
-  // defaultCutValue = 1.0*mm;
+  // defaultCutValue = 1.0*CLHEP::mm;
   G4DataQuestionaire it(photon);
   G4cout << "<<< Geant4 Physics List simulation engine: QGSC_BERT 1.1"<<G4endl;
   G4cout <<G4endl<<G4endl;
-  this->defaultCutValue = 0.7*mm;  
+  this->defaultCutValue = 0.7*CLHEP::mm;  
   this->SetVerboseLevel(ver);
 
   G4WarnPLStatus exp;

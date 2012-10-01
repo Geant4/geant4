@@ -40,6 +40,7 @@
 
 #include "MaxTimeCuts.hh"
 
+#include "G4PhysicalConstants.hh"
 #include "G4Step.hh"
 #include "G4UserLimits.hh"
 #include "G4VParticleChange.hh"

@@ -39,6 +39,8 @@
 
 #include "G4HadronInelasticQBBC.hh"
 
+#include "G4SystemOfUnits.hh"
+
 #include "G4HadronInelasticProcess.hh"
 #include "G4HadronicInteraction.hh"
 

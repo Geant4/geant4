@@ -54,12 +54,13 @@
 // MiscQGSC class (QGS with the Energy Flow interface to CHIPS), covering all
 // particles, which are not N, pi, or K, defined by the separate builders. 
 //---------------------------------------------------------------------------
+#include <iomanip>   
 
 #include "HadronPhysicsQGSC_CHIPS.hh"
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <iomanip>   
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 

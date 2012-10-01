@@ -38,6 +38,7 @@
 //
 
 #include "G4VHadronPhysics.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4VCrossSectionDataSet.hh"
 #include "G4HadronicProcessType.hh"

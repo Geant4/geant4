@@ -50,6 +50,7 @@
 
 #include "G4HadronElasticPhysics.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 

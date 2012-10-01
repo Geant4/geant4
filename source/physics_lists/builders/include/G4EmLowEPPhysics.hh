@@ -24,24 +24,24 @@
 // ********************************************************************
 //
 
-#ifndef G4EmLivermoreMUPhysics_h
-#define G4EmLivermoreMUPhysics_h 1
+#ifndef G4EmLowEPPhysics_h
+#define G4EmLowEPPhysics_h 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4EmLivermoreMUPhysics : public G4VPhysicsConstructor
+class G4EmLowEPPhysics : public G4VPhysicsConstructor
 {
 public:
 
-  G4EmLivermoreMUPhysics(G4int ver = 1);
+  G4EmLowEPPhysics(G4int ver = 1);
 
   // obsolete
-  G4EmLivermoreMUPhysics(G4int ver, const G4String& name);
+  G4EmLowEPPhysics(G4int ver, const G4String& name);
 
-  virtual ~G4EmLivermoreMUPhysics();
+  virtual ~G4EmLowEPPhysics();
 
   virtual void ConstructParticle();
   virtual void ConstructProcess();

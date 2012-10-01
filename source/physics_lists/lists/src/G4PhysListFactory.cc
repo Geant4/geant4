@@ -62,6 +62,7 @@
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
+#include "G4EmStandardPhysics_option4.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
 
@@ -81,8 +82,8 @@ G4PhysListFactory::G4PhysListFactory()
     listnames_hadr.push_back(ss[i]);
   }
 
-  nlists_em = 6;
-  G4String s1[6] = {"","_EMV","_EMX","_EMY","_LIV","_PEN"};
+  nlists_em = 7;
+  G4String s1[7] = {"","_EMV","_EMX","_EMY","_EMZ","_LIV","_PEN"};
   for(size_t i=0; i<nlists_em; ++i) {
     listnames_em.push_back(s1[i]);
   }
@@ -159,7 +160,6 @@ G4PhysListFactory::GetReferencePhysList(const G4String& name)
   else if(had_name == "QGSP_FTFP_BERT") {p = new QGSP_FTFP_BERT(verbose);}
   else if(had_name == "QGS_BIC")        {p = new QGS_BIC(verbose);}
   else if(had_name == "QGSP_INCLXX")    {p = new QGSP_INCLXX(verbose);}
-  //  else if(had_name == "QGSP_INCL_ABLA") {p = new QGSP_INCL_ABLA(verbose);}
   else if(had_name == "Shielding")      {p = new Shielding(verbose);}
   else if(had_name == "ShieldingLEND")  {p = new Shielding(verbose,"LEND");}
   else {
@@ -180,8 +180,10 @@ G4PhysListFactory::GetReferencePhysList(const G4String& name)
       } else if(3 == em_opt) {
 	p->ReplacePhysics(new G4EmStandardPhysics_option3(verbose)); 
       } else if(4 == em_opt) {
-	p->ReplacePhysics(new G4EmLivermorePhysics(verbose)); 
+	p->ReplacePhysics(new G4EmStandardPhysics_option4(verbose)); 
       } else if(5 == em_opt) {
+	p->ReplacePhysics(new G4EmLivermorePhysics(verbose)); 
+      } else if(6 == em_opt) {
 	p->ReplacePhysics(new G4EmPenelopePhysics(verbose)); 
       }
     }

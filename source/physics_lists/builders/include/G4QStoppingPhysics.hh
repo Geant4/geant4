@@ -33,7 +33,8 @@
 // Author: 11 April 2006 V. Ivanchenko
 //
 // Modified:
-//
+// 20120921  M. Kelsey -- Replace G4MuonMinusCaptureAtRest with new
+//		G4MuonMinusCapture.  Make forward declaration.
 //----------------------------------------------------------------------------
 //
 
@@ -42,9 +43,10 @@
 
 #include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
-#include "G4MuonMinusCaptureAtRest.hh"
 
 class G4QCaptureAtRest;
+class G4MuonMinusCapture;
+
 
 class G4QStoppingPhysics : public G4VPhysicsConstructor
 {
@@ -67,12 +69,12 @@ public:
 
 private:
 
-  G4MuonMinusCaptureAtRest* muProcess;
+  G4MuonMinusCapture* muProcess;
   G4QCaptureAtRest* hProcess;
 
   G4int    verbose;
   G4bool   wasActivated;
-  G4bool   useMuonMinusCaptureAtRest;
+  G4bool   useMuonMinusCapture;
 };
 
 #endif

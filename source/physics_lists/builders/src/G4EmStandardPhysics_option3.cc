@@ -41,6 +41,7 @@
 
 #include "G4EmStandardPhysics_option3.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4LossTableManager.hh"
 #include "G4EmProcessOptions.hh"
@@ -179,12 +180,12 @@ void G4EmStandardPhysics_option3::ConstructProcess()
   // muon & hadron multiple scattering
   G4MuMultipleScattering* mumsc = new G4MuMultipleScattering();
   mumsc->AddEmModel(0, new G4WentzelVIModel());
-  G4MuMultipleScattering* pimsc = new G4MuMultipleScattering();
-  pimsc->AddEmModel(0, new G4WentzelVIModel());
-  G4MuMultipleScattering* kmsc = new G4MuMultipleScattering();
-  kmsc->AddEmModel(0, new G4WentzelVIModel());
-  G4MuMultipleScattering* pmsc = new G4MuMultipleScattering();
-  pmsc->AddEmModel(0, new G4WentzelVIModel());
+  //G4hMultipleScattering* pimsc = new G4hMultipleScattering();
+  // pimsc->AddEmModel(0, new G4WentzelVIModel());
+  // G4hMultipleScattering* kmsc = new G4hMultipleScattering();
+  // kmsc->AddEmModel(0, new G4WentzelVIModel());
+  //G4hMultipleScattering* pmsc = new G4hMultipleScattering();
+  //pmsc->AddEmModel(0, new G4WentzelVIModel());
   G4hMultipleScattering* hmsc = new G4hMultipleScattering();
 
   // nuclear stopping
@@ -219,15 +220,6 @@ void G4EmStandardPhysics_option3::ConstructProcess()
       eIoni->SetStepFunction(0.2, 100*um);      
 
       G4eBremsstrahlung* brem = new G4eBremsstrahlung();
-      /*
-      G4SeltzerBergerModel* br1 = new G4SeltzerBergerModel();
-      G4eBremsstrahlungRelModel* br2 = new G4eBremsstrahlungRelModel();
-      br1->SetAngularDistribution(new G4Generator2BS());
-      br2->SetAngularDistribution(new G4Generator2BS());
-      brem->SetEmModel(br1,1);
-      brem->SetEmModel(br2,2);
-      br2->SetLowEnergyLimit(GeV);
-      */
       ph->RegisterProcess(msc, particle);
       ph->RegisterProcess(eIoni, particle);
       ph->RegisterProcess(brem, particle);
@@ -377,7 +369,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
   // Deexcitation
   G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
   G4LossTableManager::Instance()->SetAtomDeexcitation(de);
-
+  de->SetFluo(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

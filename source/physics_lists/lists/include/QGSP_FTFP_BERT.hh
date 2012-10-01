@@ -39,8 +39,10 @@
 #ifndef TQGSP_FTFP_BERT_h
 #define TQGSP_FTFP_BERT_h 1
 
-#include "G4VModularPhysicsList.hh"
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
+#include "G4VModularPhysicsList.hh"
 #include "CompileTimeConstraints.hh"
 
 template<class T>

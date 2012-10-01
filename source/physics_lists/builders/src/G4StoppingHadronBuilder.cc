@@ -34,11 +34,17 @@
 //
 // Modified:
 // 10.11.2005 V.Ivanchenko edit to provide a standard and add mu-
-//
+// 20120921  M. Kelsey -- Replace G4MuonMinusCaptureAtRest with new
+//		G4MuonMinusCapture.  Move #includes here from .hh file.
 //----------------------------------------------------------------------------
 //
 
 #include "G4StoppingHadronBuilder.hh"
+#include "G4MuonMinusCapture.hh"
+#include "G4AntiProtonAnnihilationAtRest.hh"
+#include "G4AntiNeutronAnnihilationAtRest.hh"
+#include "G4PionMinusAbsorptionAtRest.hh"
+#include "G4KaonMinusAbsorption.hh"
 
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
@@ -73,7 +79,7 @@ void G4StoppingHadronBuilder::Build()
 
   // Muon Minus Physics
   aProcMan = G4MuonMinus::MuonMinus()->GetProcessManager();
-  theMuonMinusAbsorption = new G4MuonMinusCaptureAtRest();
+  theMuonMinusAbsorption = new G4MuonMinusCapture();
   aProcMan->AddRestProcess(theMuonMinusAbsorption);
 
   // PionMinus

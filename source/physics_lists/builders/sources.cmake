@@ -127,9 +127,9 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4EmDNAPhysics.hh
         G4EmExtraPhysics.hh
         G4EmExtraBertiniPhysics.hh
-        G4EmLivermoreMUPhysics.hh
         G4EmLivermorePhysics.hh
         G4EmLivermorePolarizedPhysics.hh
+        G4EmLowEPPhysics.hh
         G4EmMessenger.hh
         G4EmBertiniMessenger.hh
         G4EmPenelopePhysics.hh
@@ -137,6 +137,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4EmStandardPhysics_option1.hh
         G4EmStandardPhysics_option2.hh
         G4EmStandardPhysics_option3.hh
+        G4EmStandardPhysics_option4.hh
         G4FTFBinaryKaonBuilder.hh
         G4FTFBinaryNeutronBuilder.hh
         G4FTFBinaryPiKBuilder.hh
@@ -262,9 +263,9 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4EmDNAPhysicsChemistry.cc
         G4EmExtraPhysics.cc
         G4EmExtraBertiniPhysics.cc
-        G4EmLivermoreMUPhysics.cc
         G4EmLivermorePhysics.cc
         G4EmLivermorePolarizedPhysics.cc
+        G4EmLowEPPhysics.cc
         G4EmMessenger.cc
         G4EmBertiniMessenger.cc
         G4EmPenelopePhysics.cc
@@ -272,6 +273,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4EmStandardPhysics_option1.cc
         G4EmStandardPhysics_option2.cc
         G4EmStandardPhysics_option3.cc
+        G4EmStandardPhysics_option4.cc
         G4FTFBinaryKaonBuilder.cc
         G4FTFBinaryNeutronBuilder.cc
         G4FTFBinaryPiKBuilder.cc

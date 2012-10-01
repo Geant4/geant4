@@ -39,12 +39,13 @@
 // 30.03.2007 G.Folger: Add code for quasielastic
 // 12.11.2007 G.Folger: Add code for projectileDiffraction for proton/neutron
 //
+#include <iomanip>   
 
 #include "HadronPhysicsQGSP.hh"
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <iomanip>   
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 

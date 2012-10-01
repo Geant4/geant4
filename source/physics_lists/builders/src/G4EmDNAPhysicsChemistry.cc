@@ -24,6 +24,8 @@
 // ********************************************************************
 //
 #include "G4EmDNAPhysicsChemistry.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4DNAMolecularDecayDisplacer.hh"
 #include "G4DNAChemistryManager.hh"
 #include "G4ITStepManager.hh"

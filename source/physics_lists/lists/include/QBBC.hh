@@ -39,8 +39,8 @@
 #ifndef QBBC_h
 #define QBBC_h 1
 
-#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
+#include "G4VModularPhysicsList.hh"
 
 class QBBC : public G4VModularPhysicsList
 {

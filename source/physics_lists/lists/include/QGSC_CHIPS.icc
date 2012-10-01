@@ -47,8 +47,10 @@
 //  interaction is temporary taken from the QGSC algorithm, which is not expected
 //  to work at low energies, but temporary can be used as an interface to CHIPS.
 //------------------------------------------------------------------------------
+#include <iomanip>   
 
 #include "globals.hh"
+#include "G4ios.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 #include "G4ParticleTypes.hh"
@@ -56,8 +58,6 @@
 
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
-#include "G4ios.hh"
-#include <iomanip>   
 
 #include "G4DecayPhysics.hh"
 #include "G4EmStandardPhysics.hh"
@@ -78,7 +78,7 @@ template<class T> TQGSC_CHIPS<T>::TQGSC_CHIPS(G4int ver):  T()
   G4cout << "<<< Geant4 Physics List simulation engine: QGSC_CHIPS 1.0"<<G4endl;
   G4cout <<G4endl<<G4endl;
   // default cut value  (1.0 mm) 
-  this->defaultCutValue = 0.7*mm;
+  this->defaultCutValue = 0.7*CLHEP::mm;
   this->SetVerboseLevel(ver);
 
   G4WarnPLStatus obs;

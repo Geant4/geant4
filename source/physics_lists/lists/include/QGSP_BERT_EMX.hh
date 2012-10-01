@@ -40,8 +40,8 @@
 #ifndef TQGSP_BERT_EMX_h
 #define TQGSP_BERT_EMX_h 1
 
-#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
+#include "G4VModularPhysicsList.hh"
 #include "CompileTimeConstraints.hh"
 
 template<class T>

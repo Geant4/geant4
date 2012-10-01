@@ -41,6 +41,7 @@
 // HP model for n with E < 20 MeV
 
 #include "G4HadronElasticPhysicsHP.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4Neutron.hh"
 #include "G4HadronicProcess.hh"

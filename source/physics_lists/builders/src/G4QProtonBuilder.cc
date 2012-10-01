@@ -39,6 +39,7 @@
 //-----------------------------------------------------------------------------
 //
 #include "G4QProtonBuilder.hh"
+#include "G4SystemOfUnits.hh"
 
 G4QProtonBuilder::G4QProtonBuilder(): wasActivated(false)  
 {

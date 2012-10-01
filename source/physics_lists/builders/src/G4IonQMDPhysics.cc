@@ -40,6 +40,7 @@
 
 #include "G4IonQMDPhysics.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4DeuteronInelasticProcess.hh"
 #include "G4TritonInelasticProcess.hh"
 #include "G4AlphaInelasticProcess.hh"

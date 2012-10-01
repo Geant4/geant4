@@ -48,6 +48,7 @@
 
 #include "G4EmStandardPhysics_option2.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4LossTableManager.hh"
 #include "G4EmProcessOptions.hh"
@@ -190,13 +191,13 @@ void G4EmStandardPhysics_option2::ConstructProcess()
 
   G4hMultipleScattering* hmsc = new G4hMultipleScattering();
 
-  G4MuMultipleScattering* pmsc = new G4MuMultipleScattering();
+  G4hMultipleScattering* pmsc = new G4hMultipleScattering();
   pmsc->AddEmModel(0, new G4WentzelVIModel());
 
-  G4MuMultipleScattering* pimsc = new G4MuMultipleScattering();
+  G4hMultipleScattering* pimsc = new G4hMultipleScattering();
   pimsc->AddEmModel(0, new G4WentzelVIModel());
 
-  G4MuMultipleScattering* kmsc = new G4MuMultipleScattering();
+  G4hMultipleScattering* kmsc = new G4hMultipleScattering();
   kmsc->AddEmModel(0, new G4WentzelVIModel());
 
   // high energy limit for e+- scattering models and bremsstrahlung

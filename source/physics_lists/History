@@ -15,6 +15,27 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28-09-2012, G.Cosmo			(phys-lists-V09-05-48)
+- G4EmStandardPhysics_option4 - new builder combining standard
+    and low-energy as "the best combination"
+- G4PhysListFactory - added EM opt4
+- G4EmStandardPhysics_option3, G4EmLivermorePhysics - fixed variable 
+    shadowing and cleanup
+
+27-09-2012, G.Cosmo			(phys-lists-V09-05-47)
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+21-09-2012, M.Kelsey			(phys-lists-V09-05-46)
+- Replace G4MuonMinusCaptureAtRest with G4MuonMinusCapture everywhere:
+  G4BertiniAndFritiofStoppingPhysics, G4QStoppingPhysics
+  G4LHEPStoppingPhysics, G4StoppingHadronBuilder, LBE.icc
+  Also, move #includes from .hh to .cc above to reduce compile dependencies.
+
+17-09-2012, S.Incerti			(phys-lists-V09-05-45)
+- Created physics builder G4EmLowEPPhysics to take into account renamed Monash
+U. Compton model, and removed G4EmLivermoreMUPhysics builder.
+
 23-08-2012, D.Mancusi                  (phys-lists-V09-05-44)
 - Fixes Coverity warning in INCL++ ion builder.
 

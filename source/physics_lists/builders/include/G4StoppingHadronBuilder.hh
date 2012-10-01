@@ -34,7 +34,8 @@
 //
 // Modified:
 // 10.11.2005 V.Ivanchenko edit to provide a standard and add mu-
-//
+// 20120921  M. Kelsey -- Make all #include forward declarations; replace
+//		G4MuonMinusCaptureAtRest with G4MuonMinusCapture.
 //----------------------------------------------------------------------------
 //
 
@@ -43,11 +44,11 @@
 
 #include "globals.hh"
 
-#include "G4MuonMinusCaptureAtRest.hh"
-#include "G4AntiProtonAnnihilationAtRest.hh"
-#include "G4AntiNeutronAnnihilationAtRest.hh"
-#include "G4PionMinusAbsorptionAtRest.hh"
-#include "G4KaonMinusAbsorption.hh"
+class G4MuonMinusCapture;
+class G4AntiProtonAnnihilationAtRest;
+class G4AntiNeutronAnnihilationAtRest;
+class G4PionMinusAbsorptionAtRest;
+class G4KaonMinusAbsorption;
 
 
 class G4StoppingHadronBuilder
@@ -60,7 +61,7 @@ public:
 
 private:
 
-  G4MuonMinusCaptureAtRest*        theMuonMinusAbsorption;
+  G4MuonMinusCapture*              theMuonMinusAbsorption;
   G4PionMinusAbsorptionAtRest*     thePionMinusAbsorption;
   G4KaonMinusAbsorption*           theKaonMinusAbsorption;
   G4AntiProtonAnnihilationAtRest*  theAntiProtonAnnihilation;

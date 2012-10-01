@@ -35,6 +35,8 @@
 // Date:       27 July 2012
 //
 // Modified:  
+// 20120921  M. Kelsey -- Move MuonMinusCapture.hh here; replace G4MMCAtRest
+//		with new G4MuonMinusCapture.
 //
 // Class Description:
 //
@@ -52,11 +54,11 @@
 
 #include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
-#include "G4MuonMinusCaptureAtRest.hh"
 
 
 class G4HadronicAbsorptionBertini;
 class G4HadronicAbsorptionFritiof;
+class G4MuonMinusCapture;
 
 
 class G4BertiniAndFritiofStoppingPhysics : public G4VPhysicsConstructor {
@@ -84,13 +86,13 @@ public:
 
 private:
 
-  G4MuonMinusCaptureAtRest* muProcess;
+  G4MuonMinusCapture* muProcess;
   G4HadronicAbsorptionBertini* hBertiniProcess;
   G4HadronicAbsorptionFritiof* hFritiofProcess;
   
   G4int  verbose;
   G4bool wasActivated;
-  G4bool useMuonMinusCaptureAtRest;
+  G4bool useMuonMinusCapture;
 };
 
 

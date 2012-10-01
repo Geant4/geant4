@@ -23,56 +23,57 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#include "G4QGSC_QGSCProtonBuilder.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTable.hh"
-#include "G4ProcessManager.hh"
+//
+// $Id: G4EmStandardPhysics_option4.hh,v 1.2 2010-06-02 17:21:29 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4EmStandardPhysics_option4
+//
+// Author:      V.Ivanchenko 28.09.2012
+//
+// Modified:
+//
+//----------------------------------------------------------------------------
+//
+// This class provides construction of EM physics using the best models
+// of standard and low-energy packages and set of 
+// the most adavced options allowing precise simulation at low
+// and intermediate energies
+//
 
-G4QGSC_QGSCProtonBuilder::
-G4QGSC_QGSCProtonBuilder(G4bool quasiElastic) 
+#ifndef G4EmStandardPhysics_option4_h
+#define G4EmStandardPhysics_option4_h 1
+
+#include "G4VPhysicsConstructor.hh"
+#include "globals.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class G4EmStandardPhysics_option4 : public G4VPhysicsConstructor
 {
-  theMin = 0*GeV;
-  theModel = new G4TheoFSGenerator("QGSC");
+public:
+  G4EmStandardPhysics_option4(G4int ver = 1);
 
-  theStringModel = new G4QGSModel< G4QGSParticipants >;
-  theStringDecay = new G4ExcitedStringDecay(new G4QGSMFragmentation);
-  theStringModel->SetFragmentationModel(theStringDecay);
-  
-  theCascade = new G4QStringChipsParticleLevelInterface;
+  // obsolete
+  G4EmStandardPhysics_option4(G4int ver, const G4String& name);
 
-  theModel->SetHighEnergyGenerator(theStringModel);
-  theModel->SetTransport(theCascade);
-  if (quasiElastic)
-  {
-     theQuasiElastic=new G4QuasiElasticChannel;
-     theModel->SetQuasiElasticChannel(theQuasiElastic);
-  } else 
-  {  theQuasiElastic=0;}  
-}
+  virtual ~G4EmStandardPhysics_option4();
 
-G4QGSC_QGSCProtonBuilder::
-~G4QGSC_QGSCProtonBuilder() 
-{
-  delete theCascade;
-  delete theStringDecay;
-  delete theStringModel; 
-  if ( theQuasiElastic ) delete theQuasiElastic;
-  delete theModel;
-}
+  virtual void ConstructParticle();
+  virtual void ConstructProcess();
 
-void G4QGSC_QGSCProtonBuilder::
-Build(G4HadronElasticProcess * )
-{
-}
+private:
+  G4int  verbose;
+};
 
-void G4QGSC_QGSCProtonBuilder::
-Build(G4ProtonInelasticProcess * aP)
-{
-  theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(100*TeV);
-  aP->RegisterMe(theModel);
-  aP->AddDataSet(&theXSec);  
-}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// 2009 by M. Kosov
+#endif
+
+
+
+
+
+

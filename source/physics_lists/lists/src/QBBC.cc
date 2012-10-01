@@ -43,6 +43,8 @@
 
 #include "QBBC.hh"
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 
 #include "G4DecayPhysics.hh"

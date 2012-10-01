@@ -39,6 +39,7 @@
 //----------------------------------------------------------------------------
 //
 #include "G4QNeutronHPBuilder.hh"
+#include "G4SystemOfUnits.hh"
 
 G4QNeutronHPBuilder::G4QNeutronHPBuilder(): 
     theNeutrons(0)

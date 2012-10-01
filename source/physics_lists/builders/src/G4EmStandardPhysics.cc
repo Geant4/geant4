@@ -44,6 +44,7 @@
 //
 
 #include "G4EmStandardPhysics.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4LossTableManager.hh"
 #include "G4EmProcessOptions.hh"

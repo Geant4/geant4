@@ -27,8 +27,8 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4EmPenelopePhysics.hh"
-
 #include "G4ParticleDefinition.hh"
+#include "G4SystemOfUnits.hh"
 
 // *** Processes and models
 

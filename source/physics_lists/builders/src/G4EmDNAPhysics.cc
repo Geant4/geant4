@@ -28,6 +28,8 @@
 
 #include "G4EmDNAPhysics.hh"
 
+#include "G4SystemOfUnits.hh"
+
 #include "G4DNAGenericIonsManager.hh"
 
 // *** Processes and models for Geant4-DNA

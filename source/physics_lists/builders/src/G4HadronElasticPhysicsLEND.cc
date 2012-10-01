@@ -42,6 +42,7 @@
 // LEND cross sections for n n with E < 20 MeV
 
 #include "G4HadronElasticPhysicsLEND.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4Neutron.hh"
 #include "G4HadronicProcess.hh"

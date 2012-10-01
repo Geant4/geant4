@@ -33,13 +33,16 @@
 // Author: 11 April 2006 V. Ivanchenko
 //
 // Modified:
-//
+// 20120921  M. Kelsey -- Replace G4MuonMinusCaptureAtRest with new
+//		G4MuonMinusCapture.
 //----------------------------------------------------------------------------
 //
 
 #include "G4QStoppingPhysics.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4QCaptureAtRest.hh"
+#include "G4MuonMinusCapture.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
@@ -53,7 +56,7 @@ G4QStoppingPhysics::G4QStoppingPhysics(G4int ver)
   :  G4VPhysicsConstructor("stopping")
     , muProcess(0), hProcess(0)
 , verbose(ver), wasActivated(false) ,
-     useMuonMinusCaptureAtRest(true)
+     useMuonMinusCapture(true)
 {
   if(verbose > 1) G4cout << "### G4QStoppingPhysics" << G4endl;
 }
@@ -63,7 +66,7 @@ G4QStoppingPhysics::G4QStoppingPhysics(const G4String& name, G4int ver,
   :  G4VPhysicsConstructor(name)
     , muProcess(0), hProcess(0)
     , verbose(ver), wasActivated(false) ,
-     useMuonMinusCaptureAtRest(UseMuonMinusCapture)
+     useMuonMinusCapture(UseMuonMinusCapture)
 {
   if(verbose > 1) G4cout << "### G4QStoppingPhysics" << G4endl;
 }
@@ -97,9 +100,9 @@ void G4QStoppingPhysics::ConstructProcess()
   if(wasActivated) return;
   wasActivated = true;
 
-  if ( useMuonMinusCaptureAtRest )
+  if ( useMuonMinusCapture )
   {
-     muProcess = new G4MuonMinusCaptureAtRest();
+     muProcess = new G4MuonMinusCapture();
   } else {
      muProcess = 0;
   }   
@@ -117,11 +120,11 @@ void G4QStoppingPhysics::ConstructProcess()
     particle = theParticleIterator->value();
     pmanager = particle->GetProcessManager();
     if(particle == G4MuonMinus::MuonMinus()) {
-      if ( useMuonMinusCaptureAtRest ) 
+      if ( useMuonMinusCapture ) 
       {
 	 pmanager->AddRestProcess(muProcess);
          if(verbose > 1)
-          G4cout << "### QStoppingPhysics added G4MuonMinusCaptureAtRest for " 
+          G4cout << "### QStoppingPhysics added G4MuonMinusCapture for " 
 	         << particle->GetParticleName() << G4endl;
       } else {
          pmanager->AddRestProcess(hProcess);

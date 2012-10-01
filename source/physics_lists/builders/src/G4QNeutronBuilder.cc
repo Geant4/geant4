@@ -39,6 +39,7 @@
 //-----------------------------------------------------------------------------
 //
 #include "G4QNeutronBuilder.hh"
+#include "G4SystemOfUnits.hh"
 
 G4QNeutronBuilder::G4QNeutronBuilder(): wasActivated(false) 
 {
