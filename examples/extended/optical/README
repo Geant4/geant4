@@ -1,0 +1,18 @@
+
+                         Optical processes
+			 -----------------
+
+This directory includes examples demonstrating the use of optical processes
+in the simulation.
+
+LXe
+----
+Multi-purpose detector setup implementing:
+(1) scintillation inside a bulk scintillator with PMTs
+(2) large wall of small PMTs opposite a Cerenkov slab to show the cone
+(3) plastic scintillator with wave-length-shifting fiber readout.
+
+WLS
+----
+This application simulates the propagation of photons inside a Wave Length
+Shifting (WLS) fiber.

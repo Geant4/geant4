@@ -1,0 +1,345 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+/// \file optical/wls/src/WLSSteppingAction.cc
+/// \brief Implementation of the WLSSteppingAction class
+//
+//
+//
+
+#include "G4Run.hh"
+#include "G4Step.hh"
+#include "G4Track.hh"
+#include "G4StepPoint.hh"
+#include "G4TrackStatus.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4ParticleDefinition.hh"
+
+#include "WLSSteppingAction.hh"
+#include "WLSDetectorConstruction.hh"
+#include "WLSSteppingActionMessenger.hh"
+#include "WLSPhotonDetSD.hh"
+
+#include "G4ParticleTypes.hh"
+
+#include "WLSUserTrackInformation.hh"
+
+#include "G4ProcessManager.hh"
+#include "G4OpBoundaryProcess.hh"
+
+#include "G4RunManager.hh"
+#include "G4SDManager.hh"
+#include "G4UImanager.hh"
+
+#include "G4ThreeVector.hh"
+#include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
+#include <sstream>
+
+// Purpose: Save relevant information into User Track Information
+
+static const G4ThreeVector ZHat = G4ThreeVector(0.0,0.0,1.0);
+
+G4int WLSSteppingAction::maxRndmSave = 10000;
+
+WLSSteppingAction::WLSSteppingAction(WLSDetectorConstruction* DC)
+  : detector(DC)
+{
+  steppingMessenger = new WLSSteppingActionMessenger(this);
+
+  counterEnd = 0;
+  counterMid = 0;
+  bounceLimit = 100000;
+ 
+  ResetCounters();
+}
+
+WLSSteppingAction::~WLSSteppingAction()
+{
+  delete steppingMessenger;
+}
+
+void  WLSSteppingAction::SetBounceLimit(G4int i)   {bounceLimit = i;}
+G4int WLSSteppingAction::GetNumberOfBounces()      {return counterBounce;}
+G4int WLSSteppingAction::GetNumberOfClad1Bounces() {return counterClad1Bounce;}
+G4int WLSSteppingAction::GetNumberOfClad2Bounces() {return counterClad2Bounce;}
+G4int WLSSteppingAction::GetNumberOfWLSBounces()   {return counterWLSBounce;}
+G4int WLSSteppingAction::ResetSuccessCounter()     {
+      G4int temp = counterEnd; counterEnd = 0; return temp;
+}
+
+// save the random status into a sub-directory
+// Pre: subDir must be empty or ended with "/"
+inline void WLSSteppingAction::saveRandomStatus(G4String subDir) {
+ 
+    // don't save if the maximum amount has been reached
+    if (WLSSteppingAction::maxRndmSave == 0) return;
+
+    G4RunManager* theRunManager = G4RunManager::GetRunManager();
+    G4String randomNumberStatusDir = theRunManager->GetRandomNumberStoreDir();
+ 
+    G4String fileIn  = randomNumberStatusDir + "currentEvent.rndm";
+
+    std::ostringstream os;
+
+    os << "run" << theRunManager->GetCurrentRun()->GetRunID() << "evt"
+       << theRunManager->GetCurrentEvent()->GetEventID() << ".rndm" << '\0';
+
+    G4String fileOut = randomNumberStatusDir + subDir + os.str();
+
+    G4String copCmd = "/control/shell cp "+fileIn+" "+fileOut;
+    G4UImanager::GetUIpointer()->ApplyCommand(copCmd);
+
+    WLSSteppingAction::maxRndmSave--;
+}
+
+void WLSSteppingAction::UpdateHistogramSuccess(G4StepPoint* ,G4Track* ) {}
+
+void WLSSteppingAction::UpdateHistogramReflect(G4StepPoint* ,G4Track* ) {}
+
+void WLSSteppingAction::UpdateHistogramEscape(G4StepPoint* , G4Track* ) {}
+
+void WLSSteppingAction::UpdateHistogramAbsorb(G4StepPoint* , G4Track* ) {}
+
+void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
+{
+  G4Track* theTrack = theStep->GetTrack();
+  WLSUserTrackInformation* trackInformation
+      = (WLSUserTrackInformation*)theTrack->GetUserInformation();
+ 
+  G4StepPoint* thePrePoint  = theStep->GetPreStepPoint();
+  G4StepPoint* thePostPoint = theStep->GetPostStepPoint();
+
+  G4VPhysicalVolume* thePrePV  = thePrePoint->GetPhysicalVolume();
+  G4VPhysicalVolume* thePostPV = thePostPoint->GetPhysicalVolume();
+
+  G4String thePrePVname  = " ";
+  G4String thePostPVname = " ";
+
+  if (thePostPV) {
+     thePrePVname  = thePrePV->GetName();
+     thePostPVname = thePostPV->GetName();
+  }
+
+  //Recording data for start
+  if (theTrack->GetParentID()==0) {
+     //This is a primary track
+     if ( theTrack->GetCurrentStepNumber() == 1 ) {
+//        G4double x  = theTrack->GetVertexPosition().x();
+//        G4double y  = theTrack->GetVertexPosition().y();
+        G4double z  = theTrack->GetVertexPosition().z();
+//        G4double pz = theTrack->GetVertexMomentumDirection().z();
+        initTheta = theTrack->GetVertexMomentumDirection().angle(ZHat);
+        initZ = z;
+     }
+  }
+
+  // Retrieve the status of the photon
+  G4OpBoundaryProcessStatus theStatus = Undefined;
+
+  G4ProcessManager* OpManager =
+                      G4OpticalPhoton::OpticalPhoton()->GetProcessManager();
+
+  if (OpManager) {
+     G4int MAXofPostStepLoops =
+              OpManager->GetPostStepProcessVector()->entries();
+     G4ProcessVector* fPostStepDoItVector =
+              OpManager->GetPostStepProcessVector(typeDoIt);
+
+     for ( G4int i=0; i<MAXofPostStepLoops; i++) {
+         G4VProcess* fCurrentProcess = (*fPostStepDoItVector)[i];
+         opProcess = dynamic_cast<G4OpBoundaryProcess*>(fCurrentProcess);
+         if (opProcess) { theStatus = opProcess->GetStatus(); break;}
+     }
+  }
+
+  // Find the skewness of the ray at first change of boundary
+  if ( initGamma == -1 &&
+       (theStatus == TotalInternalReflection
+        || theStatus == FresnelReflection
+        || theStatus == FresnelRefraction)
+        && trackInformation->isStatus(InsideOfFiber) ) {
+
+        G4double px = theTrack->GetVertexMomentumDirection().x();
+        G4double py = theTrack->GetVertexMomentumDirection().y();
+        G4double x  = theTrack->GetPosition().x();
+        G4double y  = theTrack->GetPosition().y();
+
+        initGamma = x * px + y * py;
+
+        initGamma = initGamma / std::sqrt(px*px + py*py) / std::sqrt(x*x + y*y);
+
+        initGamma = std::acos(initGamma*rad);
+
+        if ( initGamma / deg > 90.0)  { initGamma = 180 * deg - initGamma;}
+  }
+  // Record Photons that missed the photon detector but escaped from readout
+  if ( !thePostPV && trackInformation->isStatus(EscapedFromReadOut) ) {
+//     UpdateHistogramSuccess(thePostPoint,theTrack);
+     ResetCounters();
+ 
+     return;
+  }
+
+  // Assumed photons are originated at the fiber OR
+  // the fiber is the first material the photon hits
+  switch (theStatus) {
+ 
+     // Exiting the fiber
+     case FresnelRefraction:
+     case SameMaterial:
+
+       G4bool isFiber;
+       isFiber = thePostPVname == "WLSFiber"
+                     || thePostPVname == "Clad1"
+                     || thePostPVname == "Clad2";
+ 
+       if ( isFiber ) {
+
+           if (trackInformation->isStatus(OutsideOfFiber))
+                               trackInformation->AddStatusFlag(InsideOfFiber);
+
+       // Set the Exit flag when the photon refracted out of the fiber
+       } else if (trackInformation->isStatus(InsideOfFiber)) {
+
+           // EscapedFromReadOut if the z position is the same as fiber's end
+           if (theTrack->GetPosition().z() == detector->GetWLSFiberEnd())
+           {
+              trackInformation->AddStatusFlag(EscapedFromReadOut);
+              counterEnd++;
+           }
+           else // Escaped from side
+           {
+              trackInformation->AddStatusFlag(EscapedFromSide);
+              trackInformation->SetExitPosition(theTrack->GetPosition());
+
+//              UpdateHistogramEscape(thePostPoint,theTrack);
+
+              counterMid++;
+              ResetCounters();
+           }
+
+           trackInformation->AddStatusFlag(OutsideOfFiber);
+           trackInformation->SetExitPosition(theTrack->GetPosition());
+
+       }
+
+       return;
+ 
+     // Internal Reflections
+     case TotalInternalReflection:
+ 
+       // Kill the track if it's number of bounces exceeded the limit
+       if (bounceLimit > 0 && counterBounce >= bounceLimit)
+       {
+          theTrack->SetTrackStatus(fStopAndKill);
+          trackInformation->AddStatusFlag(murderee);
+          ResetCounters();
+          G4cout << "\n Bounce Limit Exceeded" << G4endl;
+          return;
+       }
+ 
+     case FresnelReflection:
+
+       counterBounce++;
+ 
+       if ( thePrePVname == "WLSFiber") counterWLSBounce++;
+
+       else if ( thePrePVname == "Clad1") counterClad1Bounce++;
+
+       else if ( thePrePVname == "Clad2") counterClad2Bounce++;
+ 
+       // Determine if the photon has reflected off the read-out end
+       if (theTrack->GetPosition().z() == detector->GetWLSFiberEnd())
+       {
+          if (!trackInformation->isStatus(ReflectedAtReadOut) &&
+              trackInformation->isStatus(InsideOfFiber))
+          {
+             trackInformation->AddStatusFlag(ReflectedAtReadOut);
+
+             if (detector->IsPerfectFiber() &&
+                 theStatus == TotalInternalReflection)
+             {
+                theTrack->SetTrackStatus(fStopAndKill);
+                trackInformation->AddStatusFlag(murderee);
+//                UpdateHistogramReflect(thePostPoint,theTrack);
+                     ResetCounters();
+                return;
+             }
+          }
+       }
+       return;
+
+     // Reflection of the mirror
+     case LambertianReflection:
+     case LobeReflection:
+     case SpikeReflection:
+
+       // Check if it hits the mirror
+       if ( thePostPVname == "Mirror" )
+          trackInformation->AddStatusFlag(ReflectedAtMirror);
+ 
+       return;
+
+     // Detected by a detector
+     case Detection:
+
+       // Check if the photon hits the detector and process the hit if it does
+       if ( thePostPVname == "PhotonDet" ) {
+
+          G4SDManager* SDman = G4SDManager::GetSDMpointer();
+          G4String SDname="WLS/PhotonDet";
+          WLSPhotonDetSD* mppcSD =
+                        (WLSPhotonDetSD*)SDman->FindSensitiveDetector(SDname);
+
+          if (mppcSD) mppcSD->ProcessHits_constStep(theStep,NULL);
+
+          // Record Photons that escaped at the end
+//          if (trackInformation->isStatus(EscapedFromReadOut))
+//                              UpdateHistogramSuccess(thePostPoint,theTrack);
+
+          // Stop Tracking when it hits the detector's surface
+          ResetCounters();
+          theTrack->SetTrackStatus(fStopAndKill);
+
+          return;
+       }
+
+       break;
+
+     default: break;
+
+  }
+ 
+  // Check for absorbed photons
+  if (theTrack->GetTrackStatus() != fAlive  &&
+      trackInformation->isStatus(InsideOfFiber))
+  {
+//     UpdateHistogramAbsorb(thePostPoint,theTrack);
+     ResetCounters();
+     return;
+  }
+ 
+}

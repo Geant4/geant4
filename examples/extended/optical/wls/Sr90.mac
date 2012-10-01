@@ -1,0 +1,32 @@
+#/control/verbose 1
+
+#/run/verbose 1
+#/event/verbose 1
+#/tracking/verbose 1
+
+/run/initialize
+
+#/WLS/phys/verbose 1
+#/WLS/setAbsorption f
+
+/gps/particle ion
+/gps/ion 38 90 0 0
+
+/gps/energy 0 keV
+
+#/gps/particle e-
+#/gps/energy 1 MeV
+
+/gps/pos/type Plane
+/gps/pos/shape Circle
+/gps/pos/radius 0.5 mm
+
+/gps/pos/centre 1.0 0.0 0.0 cm
+/gps/pos/rot1 0 1 0
+/gps/pos/rot2 0 0 1
+
+/gps/ang/type iso
+/gps/ang/mintheta   0.0 deg
+/gps/ang/maxtheta  90.0 deg
+
+/run/beamOn 10

@@ -1,0 +1,83 @@
+$Id: History,v 1.15 2010-10-25 15:16:41 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    LXe History file
+                    ----------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+18 September 2012 Ivana Hrivnacova (exOptical-V09-05-00)
+- RecorderBase renamed to LXeRecorderBase (by P. Gumplinger)
+  See also ../History for general changes
+
+20 June 2012 Peter Gumplinger (LXe-V09-05-00)
+- add debugging which will help spot when a wrong normal may have been returned
+
+08 November 2011 Peter Gumplinger (LXe-V09-04-00)
+- exercise the optics_engine in LXe.in
+
+03 June 2010 Peter Gumplinger    (LXe-V09-03-01)
+-  in LXeEventAction.cc fix initialisation of G4ThreeVector required by 
+   CLHEP 2.1.x.
+   
+03 June 2010 Peter Gumplinger    (LXe-V09-03-00)
+-  modify LXeTrajectory class to compile without warnings against
+   tracking-V09-03-03 by implementing a DrawTrajectory() method.
+
+09 November 2009 Peter Gumplinger (LXe-V09-02-01)
+- exhibit the usage of a complex index of refraction for the photo cathode
+  show usage of G4OpticalPhysics builder/messenger (instead of LXeOpticalPhysics)
+
+30 October 2009 John Allison (LXe-V09-02-00)
+- Introduced G4UIExecutive.
+
+20 November 2008 Peter Gumplinger (LXe-V09-01-01)
+- update code in LXeOpticalPhysics.cc
+
+16 July 2008 Peter Gumplinger (LXe-V09-01-00)
+- add Birks Constant for the LXe scintillator, Polystyrene scintillator
+  modified: LXeDetectorConstruction.cc, LXeOpticalPhysics.cc
+
+30 Sept 2007 Peter Gumplinger (LXe-V09-00-00)
+- adjust to the G4Cerenkov process now being a G4VDiscreteProcess
+
+14 Sept 2006 Peter Gumplinger (LXe-V08-01-00)
+- bug fix (889): set the pointers to G4MaterialPropertiesTable LXe_mt
+  and MPTPStyrene to NULL in the class constructor of LXeDetectorConstruction.
+
+11 May 2006 Peter Gumplinger (LXe-V08-00-01)
+- thanks to Andreia Trindade and Pedro Rodrigues, the WLS time delay
+  can now be a delta function or exponential.
+
+15 March 2006 Peter Gumplinger (LXe-V08-00-00)
+- reinstate the logic between scintillator and fiber: scintillate at
+  short wavelength and WLS to long wavelength. This fixes log. error
+  introduced with LXe-V07-00-00
+
+27 June 2005 Peter Gumplinger (LXe-V07-00-00)
+- Fix material dependent input for AbsFiber
+
+3rd May 2005  John Allison  (examples-V07-00-03)
+- Replaced vis manager with G4VisExecutive.
+
+December 3rd, 2004 Gabriele Cosmo (LXe-V06-02-01)
+---------------------------------
+- Implemented migration to <cmath>.
+
+August 25th, 2004 Trevor MacPhail (LXe-V06-02-00)
+---------------------------------
+- fixed compilation error in LXeSteppingVerbose.cc
+- fixed compilation warnings in LXePMTSD.cc, LXeScintHit.cc, LXeScintSD.cc
+
+May 31st, 2004 Trevor MacPhail (LXe-V06-01-00)
+------------------------------
+- First release of LXe setup for optical processes.

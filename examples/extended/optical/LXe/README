@@ -1,0 +1,557 @@
+
+                            LXe Example
+                            -----------
+
+**********
+*Geometry*
+**********
+The way the geometry is constructed is an experiment for a new, more object
+oriented, way to construct geometry. It seperates the concept of how a volume
+is built from where it is placed. Each major volume in the geometry is defined
+as a class derived from G4PVPlacement. In this example, just the main LXe
+volume, the WLS scintillator slab, and the WLS fibers were chosen. To place
+one of these volumes, simply create an instance of it with the appropriate
+rotation, translation, and mother volumes.
+
+-------
+LXeMainVolume(G4RotationMatrix *pRot,
+              const G4ThreeVector &tlate,
+              G4LogicalVolume *pMotherLogical,
+              G4bool pMany,
+              G4int pCopyNo,
+              LXeDetectorConstruction* c);
+-------
+
+Also necessary are the pMany and pCopyNo variables with the same usage as in 
+G4PVPlacement. Additionally, the detector construction must be passed to the
+main volume as a way to communicate the many parameters to the volume and its
+sub-volumes. The communication is done from the CopyValues() function which
+retrieves the information from the detector constructor.
+
+Notably, the name and logical volume parameters are no longer part of the
+constructor. This is because they are both to be decided by the volume itself.
+The volume must specify its own name and a temporary logical volume. The
+constructor will then procede to define its logical volume in the normal way.
+Once complete, the logical volume can be assigned to the physical volume using
+the SetLogicalVolume() function.
+
+To handle instances of the same type of volume, a new logical volume should not
+be defined for each one. Instead, the logical volume is kept as a static member
+and defined only once. 
+
+------
+if(!housing_log || updated){
+//...
+//Define logical volume
+//...
+}
+SetLogicalVolume(housing_log);
+------
+
+The updated variable is to signal that the volume needs to be updated and a new
+logical volume made.
+
+***********************************
+*Modifying the geometry at runtime*
+***********************************
+This example allows the user to modify the geometry definition at runtime. This
+is accomplished through LXeDetecotrMessenger, a derived class of G4UImessenger.
+The commands it adds change variables stored in LXeDetectorConstructor that
+are used when constructing the geometry. After changing these variables
+the /LXe/detector/update command must be issued to reconstruct the geometry
+with the new values.
+
+------
+void LXeDetectorConstruction::UpdateGeometry(){
+  // clean-up previous geometry
+  G4SolidStore::GetInstance()->Clean();
+  G4LogicalVolumeStore::GetInstance()->Clean();
+  G4PhysicalVolumeStore::GetInstance()->Clean();
+
+  //define new one
+  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructDetector());
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
+}
+
+************************
+*PMT sensitive detector*
+************************
+The PMT sensitive detector cannot be triggered like a normal sensitive detector
+because the sensitive volume does not allow photons to pass through it. Rather,
+it detects them in the OpBoundary process based on an efficiency set on the
+skin of the volume.
+
+------
+
+  G4OpticalSurface* photocath_opsurf=
+     new G4OpticalSurface("photocath_opsurf",glisur,polished,
+                           dielectric_metal);
+  G4double photocath_EFF[num]={1.,1.};
+  G4double photocath_REFL[num]={0.,0.};
+  G4MaterialPropertiesTable* photocath_mt = new G4MaterialPropertiesTable();
+  photocath_mt->AddProperty("EFFICIENCY",Ephoton,photocath_EFF,num);
+  photocath_mt->AddProperty("REFLECTIVITY",Ephoton,photocath_REFL,num);
+  photocath_opsurf->SetMaterialPropertiesTable(photocath_mt);
+  new G4LogicalSkinSurface("photocath_surf",photocath_log,photocath_opsurf);
+
+------
+
+A normal sensitive detector would have its ProcessHits 
+function called for each step by a particle inside the volume. So, to record
+these hits with a sensitive detector we watched the status of the OpBoundary
+process from the stepping manager whenever a photon hit the sensitive volume
+of the pmt. If the status was 'Detection', we retrieve the sensitive detector
+from G4SDManager and call its ProcessHits function.
+
+------
+
+  boundaryStatus=boundary->GetStatus();
+  //Check to see if the particle was actually at a boundary
+  //Otherwise the boundary status may not be valid
+  //Prior to Geant4.6.0-p1 this would not have been enough to check
+  if(thePostPoint->GetStepStatus()==fGeomBoundary){
+    switch(boundaryStatus){
+    //...    
+      case Detection: //Note, this assumes that the volume causing detection
+                      //is the photocathode because it is the only one with
+	              //non-zero efficiency
+	{
+	  //Trigger sensitive detector manually since photon is
+	  //absorbed but status was Detection
+	  G4SDManager* SDman = G4SDManager::GetSDMpointer();
+	  G4String sdName="/LXeDet/pmtSD";
+	  LXePMTSD* pmtSD = (LXePMTSD*)SDman
+	    ->FindSensitiveDetector(sdName);
+	  if(pmtSD)
+	    pmtSD->ProcessHits_constStep(theStep,NULL);
+	  break;
+	}
+      //...
+    }
+
+**********************
+*Modular Physics List*
+**********************
+Using a modular physics list is an easy way to organize the physics list into
+categories for easier maintenance. It can also assist with testing code
+by making it easy to disable an entire category of physics at once if
+necessary. The physics list instantiated in main() is a derived class of
+G4VModularPhysics list rather than the usual G4VUserPhysicsList. The only
+function aside from the constructor that is necessary in this class is
+SetCuts(). The constructor must register the other physics lists individually.
+
+RegisterPhysics( new LXeGeneralPhysics("general") );
+
+The other physics lists (the modules) are derived from G4VPhysicsConstructor 
+and it is necessary to write the ConstructParticle() and ConstructProcess() 
+functions for each list. They work in the same way as in G4VUserPhysicsList.
+
+Do not create instances of the individual physics processes as members of the
+modules. Instead, use pointers to the processes and create the instances
+in the ConstructProcess() function. The reason for this is that the materials
+needed to build physics tables for the processes will not have been created
+at the time that the modules are created but will have been created before the
+ConstructProcess() function is called.
+
+**********************************************************
+*Selectively drawing trajectories or highlighting volumes*
+**********************************************************
+In a simulation such as this one, where an average of 6000 trajectories are
+generated in a small space, there is little use in drawing all of them. There
+are two ways to select which ones to draw. The first of which is to decide
+while looping through the trajectory container which ones to draw and only call
+DrawTrajectory on the important ones. However, trajectories only contain a
+small portion of the information from the track it represents. This may not
+be enough to decide if a trajectory is worth drawing.
+
+The alternative is to define your own trajectory class to store additional
+information to help decide if it should be drawn. To use your custom trajectory
+you must create it in the PreUserTrackingAction:
+
+fpTrackingManager->SetTrajectory(new LXeTrajectory(aTrack));
+
+Then at any point you can get access to the trajectory you can update the extra
+information within it. When it comes to drawing, you can then use this to
+decide if you want to call DrawTrajectory. Or you can call DrawTrajectory for
+all trajectories and have the logic decide how and if a trajectory should
+be drawn inside the DrawTrajectory function itself.
+
+Selectively highlighting volumes is useful to show which volumes were hit. To
+do this, you simply need a pointer to the physical volume. With that, you can
+modify its vis attributes and instruct the vis manager to redraw the volume
+with the new vis attributes.
+
+------
+  G4VisAttributes attribs(G4Colour(1.,0.,0.));
+  attribs.SetForceSolid(true);
+  G4RotationMatrix rot;
+  if(physVol->GetRotation())//If a rotation is defined use it
+    rot=*(physVol->GetRotation());
+  G4Transform3D trans(rot,physVol->GetTranslation());//Create transform
+  pVVisManager->Draw(*physVol,attribs,trans);//Draw it
+------
+
+In this case, it is done in Draw function of a PMT hit but it can be placed
+anywhere. The logic to decide if it should be drawn or not may be similar to
+the logic used in choosing which trajectories to draw.
+
+See /LXe/detector/volumes/sphere in "UI commands" below for info on what 
+trajectories are drawn in this simulation.
+
+****************************
+*Saving random engine seeds*
+****************************
+At times it may be necessary to review a particular event of interest. To do
+this without redoing an entire run, which may take a long time, you must store
+the random engine seed from the beginning of the event. The run manager
+has some functions that help in this task.
+
+G4RunManager::SetRandomNumberStore(G4bool)
+
+When set to true, this causes the run manager to write the seed for the
+beginning of the current run to CurrentRun.rndm and the current event to 
+CurrentEvent.rndm. However, at the beginning of each event this file will be 
+overwritten with the new event. To keep a copy for a particular event there is
+a function to copy this file to run###evt###.rndm.
+
+G4RunManager::rndmSaveThisEvent()
+
+This can be done for every event so you can review any event you like but this
+may be awkward for runs with very large numbers of events. Instead, implement
+some form of logic in EndOfEventAction to decide if the event is worth saving.
+If it is, then call rndmSaveThisEvent(). By default, these files are stored in
+the current working directory. There is a function to change this as well.
+Typically you would call that at the same time SetRandomNumberStore. The
+directory to save in must exist first. GEANT4 will not create it for you.
+
+G4RunManager::SetRandomNumberStoreDir(G4String)
+
+**************
+*RecorderBase*
+**************
+RecorderBase is a virtual class to serve as a template for how to add
+histogram functionality to a GEANT4 application. To use it, derive a
+class from it and instantiate that in main(). Each of your user action classes
+to do any recording must have a pointer to this instance. Then at the end of 
+the critical functions in each user action, call the appropriate recorder
+function. The recorder functions and the functions to call them from are listed
+here:
+
+  RecordBeginOfRun(const G4Run*)
+	-Call from BeginOfRunAction()
+  RecordEndOfRun(const G4Run*)
+	-Call from EndOfRunAction()
+  RecordBeginOfEvent(const G4Event*)
+	-Call from BeginOfEventAction()
+  RecordEndOfEvent(const G4Event*)
+	-Call from EndOfEventAction()
+  RecordTrack(const G4Track*)
+	-Call from PostUserTrackingAction()
+  RecordStep(const G4Step*)
+	-Call from UserSteppingAction()
+
+For the reasoning behind why it is done this way see RecorderBase.hh
+
+*************
+*UI commands*
+*************
+The method to define UI commands is well documented in the GEANT4 documentation
+so will not be discussed here. This is a description of the commands added to
+this example.
+
+Directories:
+/LXe/ - All custom commands belong below this directory
+/LXe/detector/ - Geometry related commands
+/LXe/detector/volumes/ - Commands to enable/disable volumes in the geometry
+
+Commands:
+/LXe/saveThreshold <int, default = 4500>
+-Specifies a threshold for saving the random seed for an event. If the number
+of photons generated in an event is below this number then the random seed is
+saved to ./random/run###evt###.rndm. See "Saving random engine seeds".
+
+/LXe/eventVerbose <int, default = 1>
+-Enables end of event verbose data to be printed. This includes information
+counted and calculated by the user action classes.
+
+/LXe/pmtThreshold <int, default = 1>
+-Sets the PMT threshold in # of photons being detected by the PMT. PMTs below
+with fewer hits than the threshold will not count as being hit and will also
+not be highlighted at the end of the event.
+
+/LXe/oneStepPrimaries <bool>
+-This causes primary particles to be killed after going only one step inside
+the scintillator volume. This is useful to view the photons generated during 
+the initial conversion of the primary particle.
+
+/LXe/forceDrawPhotons <bool>
+-Forces all optical photon trajectories to be drawn at the end of the event 
+regardless of the scheme mentioned in /LXe/detector/volumes/sphere below.
+
+/LXe/forceDrawNoPhotons <bool>
+-Forces all optical photon trajectories to NOT be drawn at the end of the 
+event regardless of the scheme mentioned in /LXe/detector/volumes/sphere below.
+-If /LXe/forceDrawPhotons is set to true, this has no effect.
+
+/LXe/detector/dimensions <double x y z> <unit, default = cm>
+-Sets the dimensions of the main scintillator volume.
+
+/LXe/detector/housingThickness <double>
+-Sets the thickness of the housing surrounding the main detector volume.
+
+/LXe/detector/pmtRadius <double> <unit, default = cm>
+-Sets the radius of the PMTs
+
+/LXe/detector/nx
+/LXe/detector/ny
+/LXe/detector/nz
+-Sets the number of PMTs placed in a row along each axis.
+
+/LXe/detector/reflectivity <double>
+-Sets the reflectivity of the inside of the aluminum housing. The geometry
+uses a default value of 1.00 for a fully reflective surface.
+
+/LXe/detector/nfibers <int>
+-Sets the number of WLS fibers placed in the WLS scintillator slab. The
+geometry uses a default value of 15 fibers.
+
+/LXe/detector/scintYieldFactor <double>
+-Sets the yield factor for the scintillation process. This is cumulative with
+the yield factor set on individual materials. Set to 0 to produce no 
+scintillation photons.
+
+/LXe/detector/update
+-Builds the new geometry based on any parameters that have been updated with
+the other UI commands. ***This must be called for the changes to take effect***
+
+/LXe/detector/defaults
+-Resets all detector values customizable with commands above to their defaults.
+
+/LXe/detector/volumes/sphere <bool>
+-Enables/disables the sphere placed inside the main scintillator volume. When
+the sphere is enabled, only photons that hit the sphere and hit a PMT are
+drawn. If it is disabled, then all photons that hit PMTs are drawn.
+
+/LXe/detector/volumes/wls <bool>
+-Enables/disables the WLS scintillator slab containing WLS fibers. By default
+this is not part of the geometry. Enabling it will place it behind the LXe
+scintillator volume.
+
+/LXe/detector/volumes/lxe <bool>
+-Enables/disables the main LXe scintillator volume. By default this is part of
+the geometry.
+
+*************
+*Macro files*
+*************
+The following are the macro files included in this example and what they do.
+
+LXe.in
+-This produces a standard event with a 511 keV gamma fired into the LXe volume.
+All values are left at their default states but verbose output has been
+enabled.
+
+cerenkov.mac
+-This is to demonstrate the cerenkov process. It disables the scintillation
+process and uses a 200MeV mu+ to produce cerenkov photons. The volume has
+been resized and the number of pmts has been increased to more accurately
+show the cone. OneStepPrimaries has been enabled so that the cone does not fill
+itself in as the muon slows down.
+
+wls.mac
+-This disables the main volume and enables the WLS slab volume. It sets the
+particle gun to use an e- to produce scintillation in the slab which will be
+absorbed by the WLS fibers and re-emited at a different wavelength.
+
+vis.mac
+-This is a standard vis.mac file to tell the vis manager how to visualize the
+simulation.
+
+photon.mac
+-A very simple test in which the gun is set to produce a single photon inside 
+the main scintillator volume.
+
+reviewEvent.mac
+-This is to review an event by loading in a random seed and running the event
+with verbose output. Modify the file to specify the filename of the random 
+seed.
+
+defaults.mac
+-This resets all values that can be changed with the /LXe/ commands back to
+their initial configuration including those that are not reset with
+/LXe/detector/defaults
+
+**************
+*Classes Used*
+**************
+
+main()
+------
+
+ See LXe.cc.
+
+ ==> Use G4UItcsh if available
+
+ ==> Provide interactive and macro mode
+
+G4VModularPhysicsList 
+------------------
+(class: LXePhysicsList)
+
+ ==> Registers General, EM, Muon, and Optical physics lists
+
+ ==> define particles; including *** G4OpticalPhoton     ***
+     define processes; including *** G4Cerenkov          ***
+                                 *** G4Scintillation     ***
+                                 *** G4OpAbsorption      ***
+                                 *** G4OpRayleigh        ***
+                                 *** G4OpBoundaryProcess ***
+				 *** G4OpWLS             ***
+
+G4VUserDetectorConstruction 
+---------------------------
+(class: LXeDetectorConstruction)
+
+ ==> define material: LXe (liquid xenon), Aluminum, Air, Vacuum, Glass,...
+     define G4Box geometry with aluminum housing and LXe volume inside
+     define G4Tubs placed around the housing walls
+     define G4Sphere to demonstrate skin surfaces inside volumes
+     *** add G4MaterialPropertiesTable to G4Material         ***
+     *** define G4OpticalSurface(s)                          ***
+     *** define G4LogicalBorderSurface(s)                    ***
+     *** define G4LogicalSkinSurface(s)                      ***
+     *** add G4MaterialPropertiesTable to G4OpticalSurface(s)***
+
+ ==> Mesenger to change many of the dectector geometry properties
+
+ ==> Uses a alternative style of geometry definition. See "Geometry" section.
+
+G4VUserPrimaryGeneratorAction
+-----------------------------
+(class: LXePrimaryGeneratorAction)
+
+ ==> Use G4ParticleGun to shoot a 511 keV gamma through the housing into
+     liquid xenon scintillator
+ 
+G4UserStackingAction
+--------------------
+(class: LXeStackingAction)
+
+ ==> show how to count the number of secondary particles in an event
+     differentiates between different creator processes
+
+G4UserRunAction
+---------------
+(class: LXeRunAction)
+
+ ==> Call recorder class for begin and end of run
+
+G4UserSteppingAction
+--------------------
+(class: LXeSteppingAction)
+
+ ==> Identify which secondaries were generated during a particular step
+
+ ==> ***Count reflections/absorptions/detections due to G4OpBoundaryProcess***
+     ***Count absorptions due to G4OpAbsorption                            ***
+     Manually trigger a sensitive detector when a boundary process detects
+
+ ==> Call recorder class at end of step
+
+G4UserTrackingAction
+____________________
+(class: LXeTrackingAction)
+
+ ==> Determine if the trajectory should be drawn by checking if it hit the
+     sphere(if enabled) and a pmt.
+
+ ==> Call recorder class at end of track
+
+G4UserEventAction
+-----------------
+(class: LXeEventAction)
+
+ ==> Triggers drawing of trajectories
+
+ ==> Calculates and stores data in a G4VUserEventInformation object
+
+ ==> Outputs basic event data at end of event
+
+ ==> Decides if the random seed should be saved for this event
+
+ ==> Call recorder class at begin and end of event
+
+G4VSensitiveDetector
+--------------------
+(classes: LXePMTSD, LXeScintSD)
+
+ ==> Basic sensitive detectors keeping hit collections
+     Keep one G4VHit object per hit
+      or
+     Keep one G4VHit object per volume containing hits
+
+ ==> LXePMTSD decides if the hits it is creating should be redrawn
+
+G4VHit
+------
+(classes: LXePMTHit, LXeScintHIT)
+
+ ==> Store individual hit positions
+      or
+     Store a count of hits in a particular volume
+
+ ==> Selectively redraw volumes containing hits at the end of event
+
+G4VUserEventInformation & G4VUserTrackInformation
+-------------------------------------------------
+(classes: LXeUserEventInformation, LXeUserTrackInformation)
+
+ ==> Store aditional information along with the G4Event/G4Track objects
+
+G4VSteppingVerbose
+------------------
+(classes: LXeSteppingVerbose)
+ 
+ ==> Custom verbose stepping output to use G4BestUnit and print current volume
+      rather than next volume
+ ==> Same as ExN03SteppingVerbose but output reformated to fit nicer into 
+      tables.
+
+G4UImessenger
+-------------
+(classes: LXeDetectorMessenger, LXeEventMessenger, LXeSteppingMessenger)
+
+ ==> Create /LXe and /LXe/detector interactive command folders
+
+ ==> Create new commands
+
+ ==> See interactive help when running the example for descriptions of commands
+
+G4Trajectory
+------------
+(class: LXeTrajectory)
+
+ ==> Derived from G4Trajectory to use most of the basic trajectory functions
+     already defined
+
+ ==> Uses a coppied and modified version of DrawTrajectory from G4VTrajectory
+     to enable/disable drawing of individual trajectories and to redefine
+     the colours used
+
+G4VisManager
+------------
+(class: LXeVisManager)
+
+ ==> Initialize graphics systems geant4 is configured for
+
+RecorderBase
+------------
+
+ ==> Virtual class provided for recording of simulation data
+
+ ==> Derive your own implementation from it and instantiate the recorder
+     object in main()
+
+ ==> For full description see RecorderBase.hh
+
+

@@ -1,0 +1,76 @@
+$Id: History,v 1.9 2010-11-21 00:50:09 gum Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    WLS History file
+                    ----------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+ 
+     ----------------------------------------------------------
+
+Sep 17th, 2012 Peter Gumplinger (WLS-V09-05-01)
+    remove G4TRACKING_ALLOC_EXPORT, G4DLLEXPORT and G4DLLIMPORT from
+    WLSTrajectory and WLSTrajectoryPoint.
+
+Jun 20th, 2012 Peter Gumplinger (WLS-V09-05-00)
+    remove SetModel from  WLSOpticalPhysics.cc to work with op-V09-05-04
+
+Nov 18th, 2011 Gunter Folger    (WLS-V09-04-03)
+-----------------------------------------------
+    migrate to new G4Exception
+
+Oct 14th, 2011 Peter Gumpinger  (WLS-V09-04-02)
+-----------------------------------------------
+    modify to work with materials-V09-04-15
+
+Oct 10th, 2011 Gunter Folger    (WLS-V09-04-01)
+-----------------------------------------------
+    Fix compilation gcc46 compilation warning in WLSMaterials.cc and
+      WLSPrimaryGeneratorAction.cc
+    
+Feb 3rd, 2011 Gunter Folger     (WLS-V09-04-00)
+-----------------------------------------------
+    add missing #include <ctime> in  src/WLSRunAction.cc (Windows)
+
+Nov 20th, 2010 Peter Gumplinger (WLS-V09-03-04)
+-----------------------------------------------
+   do not make a new Sensitive Detector at every UpdateGeometry()
+
+Oct 24th, 2010 Peter Gumplinger (WLS-V09-03-03)
+-----------------------------------------------
+   include Mie scattering process and update usage of G4PhysListFactory
+
+Jun 3rd, 2010 Peter Gumplinger    (WLS-V09-03-02)
+--------------------------------------------------
+   modify WLSTrajectory class to compile without warnings against
+   tracking-V09-03-03 by implementing a DrawTrajectory() method.
+
+Mar 25th, 2010 Gunter Folger    (WLS-V09-03-01)
+-----------------------------------------------
+   replace use of 2*M_PI by twopi. M_PI is defind in math.h in Linux, but 
+   not in Windows; pi/twopi is defined in CLHEP.
+
+Jan 11th, 2010 Peter Gumplinger (WLS-V09-03-00)
+-----------------------------------------------
+   add initialization macro init.in as per README
+
+Dec 8th,  2009 Gunter Folger    (WLS-V09-02-02)
+-----------------------------------------------
+- make gcc4.3 really happy:
+   WLSDetectorConstruction.cc modified to avoid wrong error messages ( gcc bug?)
+   WLSUserTrackInformation.cc add brackets to avoid warnings.
+   
+Dec 7th,  2009 Peter Gumplinger (WLS-V09-02-01)
+- keep gcc 4.3 compiler on SLC5 happy (modified WLSDetectorConstruction.cc)
+
+Nov 24th, 2009 Siu Pak Mok / Peter Gumplinger (WLS-V09-02-00)
+-------------------------------------------------------------
+- First release of WLS setup for optical processes.

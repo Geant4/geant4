@@ -1,0 +1,76 @@
+#LXe Example Walkthrough
+#-----------------------
+#
+#Follow these steps to see what this example can do.
+#
+#You can also execute steps 3-7 of this walkthrough as a macro file
+#/control/execute WALKTHROUGH
+
+#1) Compile
+#>cd LXe/
+#>gmake
+
+#2) Launch the program
+#>$G4WORKDIR/bin/$G4SYSTEM/LXe
+
+#3) Run a basic event
+
+#3a) Run initialize - do this only once
+/run/initialize
+
+#3b)Turn on verbose output at end of event
+#   We'll leave it on for the rest of the events in the walkthrough too
+/LXe/eventVerbose 1
+
+#3c)Run
+/run/beamOn
+
+#You will see a blue trajectory representing the gamma and some green
+#trajectories representing the optical photons that hit the sphere and
+#went into a pmt. Any pmt that had a trajectory drawn and is above it's
+#threshold(1) will be redrawn red.
+
+#4) Run a cerenkov cone event
+/control/execute cerenkov.mac
+/run/beamOn
+
+#You will see a circle of PMTs that have lit up from the optical photons
+#produced by the cerenkov process. The cone does not fill in because the
+#primary particle was killed after one step in the scintillator.
+
+#5) Run a wls event
+/control/execute wls.mac
+/run/beamOn
+
+#You will see a number of green and red trajectories drawn. The green ones
+#are the optical photons produced by scintillation. The red ones are created
+#by the wavelength shifting(WLS) fibers which absorbed the scintillation
+#photons and re-emited them at a different wavelength. Most of the WLS photons
+#then travel down the fibers to the edge of the slab.
+
+#6) Modify the geometry yourself
+
+#6a)Turning the sphere off
+/LXe/detector/defaults
+/LXe/detector/volumes/sphere 0
+/LXe/detector/update
+
+#6b)Changing the dimensions
+/LXe/detector/dimensions 15 15 50 cm
+/LXe/detector/update
+
+#6c)Changing the PMTs
+/LXe/detector/pmtRadius 0.5 cm
+/LXe/detector/nx 15
+/LXe/detector/ny 15
+/LXe/detector/nz 50
+/LXe/detector/update
+
+#7) Test your new geometry
+/gun/particle gamma
+/run/beamOn
+
+#Done
+#
+#For more specific information 
+/random/setDirectoryName random2
