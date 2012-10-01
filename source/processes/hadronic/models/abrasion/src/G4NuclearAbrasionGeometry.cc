@@ -66,6 +66,8 @@
 //
 #include "G4NuclearAbrasionGeometry.hh"
 #include "G4WilsonRadius.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 ////////////////////////////////////////////////////////////////////////////////
 //
 G4NuclearAbrasionGeometry::G4NuclearAbrasionGeometry (G4double AP1,

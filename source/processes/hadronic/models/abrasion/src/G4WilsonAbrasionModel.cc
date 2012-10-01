@@ -86,6 +86,8 @@
 #include "G4NuclearAbrasionGeometry.hh"
 #include "G4WilsonAblationModel.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ExcitationHandler.hh"
 #include "G4Evaporation.hh"
 #include "G4FermiBreakUp.hh"
