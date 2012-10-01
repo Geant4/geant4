@@ -30,9 +30,35 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26th September 2012 Ivana Hrivnacova (cmake-V09-05-48)
+- Adding FindPythia6 module.
+- Modules/FindHepMC.cmake: support also HEPMC_DIR environment variable (which
+  is used in GNUmake build); added HEPMC_FIO_LIBRARIES
+
+25th September 2012 Ivana Hrivnacova (cmake-V09-05-47)
+- Adding FindAIDA module.
+
+24th September - Pere Mato (cmake-V09-05-46)
+- Modules/Geant4TestDriver.cmake : Use the argument TIM=<timeout> to set a shorter timeout than CTest
+- Templates/UseGeant4_internal.cmake : Generate TIM argument from test TIMEOUT property
+
+24th September - Ben Morgan (cmake-V09-05-45)
+- Modules/ResolveCompilerPaths.cmake : Remove extraneous quotes around
+  resolved include paths (patch from Fabian Kislat, BUGFIX #1357)
+
+19th September - Ben Morgan (cmake-V09-05-44)
+- Modules/Geant4MakeRules_cxx.cmake : Remove optimization flags from
+  TestRelease build mode flags on all platforms (BUGFIX #1263).
+- Modules/Geant4BuildModes.cmake : Remove obsolete "TestReleaseDebug" build
+  mode (BUGFIX #1263)
+
+17th September - Ben Morgan (cmake-V09-05-43)
+- Modules/Geant4InstallData.cmake : Update G4EMLOW dataset to version 6.29
+  and update MD5 sum.
+
 30th August 2012 Pere Mato (cmake-V09-05-42)
-- Modules/Geant4CTest.cmake - Added Unit Tests and some re-organization of the module
-- Modules/Geant4MacroUtilities.cmake - Moved macro GEANT4_LATEST_VERSION to this module
+- Modules/Geant4CTest.cmake : Added Unit Tests and some re-organization of the module
+- Modules/Geant4MacroUtilities.cmake : Moved macro GEANT4_LATEST_VERSION to this module
 
 29th August 2012 Witek Pokorski (cmake-V09-05-41)
 - Adding FindHepMC module.

@@ -11,9 +11,9 @@
 # In addition, two types specifically for development are added:
 #
 # TestRelease:
-#   For trial production and extended testing. It is optimized, has verbose
+#   For trial production and extended testing. It has verbose
 #   output, has debugging symbols, and adds definitions to allow FPE
-#   and physics conservation law testing.
+#   and physics conservation law testing where supported.
 #
 # Maintainer:
 #   For development of the toolkit. It adds debugging, and enables the use
@@ -31,10 +31,6 @@ set(CMAKE_CXX_FLAGS_TESTRELEASE "${CMAKE_CXX_FLAGS_TESTRELEASE_INIT}"
   CACHE STRING "Flags used by the compiler during TestRelease builds"
 )
 
-set(CMAKE_CXX_FLAGS_TESTRELEASEDEBUG "${CMAKE_CXX_FLAGS_TESTRELEASEDEBUG_INIT}"
-  CACHE STRING "Flags used by the compiler during TestReleaseDebug builds"
-)
-
 
 #------------------------------------------------------------------------------
 # Add Maintainer Mode
@@ -48,7 +44,6 @@ set(CMAKE_CXX_FLAGS_MAINTAINER "${CMAKE_CXX_FLAGS_MAINTAINER_INIT}"
 # never need to see them
 mark_as_advanced(
   CMAKE_CXX_FLAGS_TESTRELEASE
-  CMAKE_CXX_FLAGS_TESTRELEASEDEBUG
   CMAKE_CXX_FLAGS_MAINTAINER
 )
 

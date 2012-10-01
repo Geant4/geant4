@@ -171,6 +171,10 @@ function(GEANT4_ADD_TEST test)
   if(ARG_WORKING_DIRECTORY)
     set(_command ${_command} -DCWD=${ARG_WORKING_DIRECTORY})
   endif()
+  
+  if(ARG_TIMEOUT)
+    set(_command ${_command} -DTIM=${ARG_TIMEOUT})
+  endif()
 
   #- Handle ENVIRONMENT argument
   if(ARG_ENVIRONMENT)

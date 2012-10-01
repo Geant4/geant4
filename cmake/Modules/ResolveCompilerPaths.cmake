@@ -39,6 +39,10 @@
 #  assuming both directories exist.
 #  Note: as currently implemented, the -I/string will be picked up mistakenly (cry, cry)
 
+# Code from Jed Brown:
+#  https://github.com/jedbrown/cmake-modules/blob/master/ResolveCompilerPaths.cmake
+# See COPYING-CMAKE-SCRIPTS for licensing information (BSD)
+
 macro (RESOLVE_LIBRARIES LIBS LINK_LINE)
   string (REGEX MATCHALL "((-L|-l|-Wl)([^\" ]+|\"[^\"]+\")|/[^\" ]+(a|so|dll))" _all_tokens "${LINK_LINE}")
   set (_libs_found)
@@ -82,6 +86,8 @@ macro (RESOLVE_INCLUDES INCS COMPILE_LINE)
   foreach (token ${_all_tokens})
     string (REGEX REPLACE "^-I" "" token ${token})
     string (REGEX REPLACE "//" "/" token ${token})
+    # - Remove any residual quotes (from Fabian Kislat: Bug #1357)
+    string (REGEX REPLACE "(^\"|\"$)" "" token ${token})
     if (EXISTS ${token})
       list (APPEND _incs_found ${token})
     else (EXISTS ${token})
