@@ -17,6 +17,10 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 28, 2012 I.Hrivnacova (analysis-V09-05-12)
+- Fixed loops in G4Root/XmlAnalysisManager::WriteOnAscii;
+  (causing compilation warning for shadowing)
+
 September 4, 2012 I.Hrivnacova (analysis-V09-05-11)
 - Adding missing header file in CMakeLists.txt
 

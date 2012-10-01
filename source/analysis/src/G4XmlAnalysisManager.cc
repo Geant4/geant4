@@ -298,10 +298,10 @@ G4bool G4XmlAnalysisManager::WriteOnAscii(std::ofstream& output)
     output << "\n  1D histogram " << id << ": " << h1->title() 
            << "\n \n \t     X \t\t     Y" << G4endl;
     
-    for (G4int i=0; i< G4int(h1->axis().bins()); ++i) {
-       output << "  " << i << "\t" 
-              << h1->axis().bin_center(i) << "\t"
-              << h1->bin_height(i) << G4endl;
+    for (G4int j=0; j< G4int(h1->axis().bins()); ++j) {
+       output << "  " << j << "\t" 
+              << h1->axis().bin_center(j) << "\t"
+              << h1->bin_height(j) << G4endl;
     } 
   }
   
