@@ -41,6 +41,9 @@
 
 #include "G4ElectroVDNuclearModel.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 #include "G4ElectroNuclearCrossSection.hh"
 #include "G4PhotoNuclearCrossSection.hh"
 

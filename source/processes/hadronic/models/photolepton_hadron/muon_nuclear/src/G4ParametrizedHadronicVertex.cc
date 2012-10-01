@@ -30,6 +30,8 @@
 // --------------------------------------------------------------
 
 #include "G4ParametrizedHadronicVertex.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4HadFinalState.hh"
 #include "G4HadProjectile.hh"
 #include "G4LEPionPlusInelastic.hh"
