@@ -26,6 +26,7 @@
 // hpw: done, but low quality at present.
 
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4AngularDistribution.hh"
 #include "Randomize.hh"
 

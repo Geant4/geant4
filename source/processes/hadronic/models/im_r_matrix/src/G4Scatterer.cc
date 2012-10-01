@@ -26,8 +26,11 @@
 // $Id: G4Scatterer.cc,v 1.16 2010-03-12 15:45:18 gunter Exp $ //
 //
 
-#include "globals.hh"
 #include <vector>
+
+#include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 #include "G4Scatterer.hh"
 #include "G4KineticTrack.hh"
@@ -42,7 +45,6 @@
 #include "G4CollisionInitialState.hh"
 #include "G4HadTmpUtil.hh"
 #include "G4Pair.hh"
-
 
 // Declare the categories of collisions the Scatterer can handle
 typedef GROUP2(G4CollisionNN, G4CollisionMesonBaryon) theChannels;

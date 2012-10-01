@@ -45,6 +45,8 @@
 #ifndef G4VANGULARDISTRIBUTION_HH
 #define G4VANGULARDISTRIBUTION_HH
 
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "globals.hh"
 #include "G4HadronicException.hh"
 #include "Randomize.hh"
@@ -61,7 +63,7 @@ public:
 
   virtual G4double CosTheta(G4double s, G4double m1, G4double m2) const = 0;
 
-  virtual G4double Phi() const { return 2.*pi*G4UniformRand(); }
+  virtual G4double Phi() const { return 2.*CLHEP::pi*G4UniformRand(); }
 
 protected:
 
@@ -70,17 +72,3 @@ private:
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-

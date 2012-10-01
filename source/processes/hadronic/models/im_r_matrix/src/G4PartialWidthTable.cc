@@ -40,11 +40,11 @@
 // -------------------------------------------------------------------
 
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4HadronicException.hh"
 #include "G4ios.hh"
 #include "G4PartialWidthTable.hh"
 #include "G4KineticTrack.hh"
-
 
 G4PartialWidthTable::G4PartialWidthTable(const G4double* energies, G4int entries) : nEnergies(entries)
 { 

@@ -27,6 +27,7 @@
 //
 
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4HadronicException.hh"
 #include "G4ios.hh"
 #include "G4VCrossSectionSource.hh"

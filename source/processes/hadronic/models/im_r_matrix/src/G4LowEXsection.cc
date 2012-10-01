@@ -23,8 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#include "G4LowEXsection.hh"
+
 #include <cmath>
+
+#include "G4LowEXsection.hh"
+#include "G4SystemOfUnits.hh"
 
 G4double G4LowEXsection::
  CrossSection(G4double aX) const

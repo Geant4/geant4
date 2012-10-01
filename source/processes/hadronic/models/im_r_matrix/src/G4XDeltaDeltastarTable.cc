@@ -34,12 +34,11 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4XDeltaDeltastarTable.hh"
 #include "G4PhysicsFreeVector.hh"
 
-
 const G4int G4XDeltaDeltastarTable::sizeDeltaDeltastar = 121;
-
 
 // Energies (GeV) corresponding to the cross section table
 // Units are assigned while filling the PhysicsVector

@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#include "G4XpimNTotal.hh"
 #include <cmath>
+
+#include "G4XpimNTotal.hh"
+#include "G4SystemOfUnits.hh"
 
 G4XpimNTotal::
  G4XpimNTotal()

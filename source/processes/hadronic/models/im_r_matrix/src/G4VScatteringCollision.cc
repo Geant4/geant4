@@ -27,7 +27,9 @@
 // @hpw@ to be usefull for resonance resonance scattering.
 
 #include <typeinfo>
+
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4VScatteringCollision.hh"
 #include "G4KineticTrack.hh"
 #include "G4VCrossSectionSource.hh"

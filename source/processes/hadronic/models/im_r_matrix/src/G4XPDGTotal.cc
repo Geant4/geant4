@@ -29,6 +29,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4XPDGTotal.hh"
 #include "G4KineticTrack.hh"
 #include "G4ParticleDefinition.hh"

@@ -24,6 +24,7 @@
 // ********************************************************************
 //
 #include "G4DetailedBalancePhaseSpaceIntegral.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ResonanceID.hh"
 
   G4double G4DetailedBalancePhaseSpaceIntegral::sqrts[120] = 

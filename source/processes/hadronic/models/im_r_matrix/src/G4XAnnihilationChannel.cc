@@ -25,6 +25,7 @@
 //
 #include "globals.hh"
 #include "G4ios.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4XAnnihilationChannel.hh"
 #include "G4KineticTrack.hh"
 #include "G4ParticleDefinition.hh"

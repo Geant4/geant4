@@ -27,6 +27,7 @@
 // $Id: G4CollisionComposite.cc,v 1.9 2010-03-12 15:45:18 gunter Exp $ //
 
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4CollisionComposite.hh"
 #include "G4VCollision.hh"
 #include "G4CollisionVector.hh"
@@ -154,19 +155,29 @@ BufferCrossSection(const G4ParticleDefinition * aP, const G4ParticleDefinition *
      G4double crossSect = 0;
      // The total cross-section is summed over all the component channels
      
+     //A.R. 28-Sep-2012 Fix reproducibility problem
+     //                 Assign the kinetic energy to the lightest of the
+     //                 two particles, instead to the first one always.
      G4double atime = 0;
-     G4ThreeVector aPosition(0,0,0);
-     G4double aM = aP->GetPDGMass();
-     G4double aE = aM+aT;
-     G4ThreeVector aMom(0,0,std::sqrt(aE*aE-aM*aM));
-     G4LorentzVector a4Momentum(aE, aMom);
-     G4KineticTrack a(const_cast<G4ParticleDefinition *>(aP), atime, aPosition, a4Momentum);
-
      G4double btime = 0;
+     G4ThreeVector aPosition(0,0,0);
      G4ThreeVector bPosition(0,0,0);
-     G4ThreeVector bMom(0,0,0*MeV);
-     G4double bE = bP->GetPDGMass();
+     G4double aM = aP->GetPDGMass();
+     G4double bM = bP->GetPDGMass();
+     G4double aE = aM;
+     G4double bE = bM;
+     G4ThreeVector aMom(0,0,0);
+     G4ThreeVector bMom(0,0,0);
+     if ( aM <= bM ) {
+      aE += aT;
+      aMom = G4ThreeVector(0,0,std::sqrt(aE*aE-aM*aM));
+     } else {
+      bE += aT;
+      bMom = G4ThreeVector(0,0,std::sqrt(bE*bE-bM*bM));
+     }
+     G4LorentzVector a4Momentum(aE, aMom);
      G4LorentzVector b4Momentum(bE, bMom);
+     G4KineticTrack a(const_cast<G4ParticleDefinition *>(aP), atime, aPosition, a4Momentum);
      G4KineticTrack b(const_cast<G4ParticleDefinition *>(bP), btime, bPosition, b4Momentum);
      
      for (i=0; i<components.size(); i++)
