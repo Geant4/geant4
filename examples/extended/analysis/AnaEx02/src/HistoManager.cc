@@ -34,6 +34,7 @@
 
 #include "HistoManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "TH1D.h"
 #include "TFile.h"
@@ -114,7 +115,7 @@ void HistoManager::FillHisto(G4int ih, G4double xbin, G4double weight)
   if (ih >= MaxHisto) {
     G4cout << "---> warning from HistoManager::FillHisto() : histo " << ih
            << " does not exist. (xbin=" << xbin << " weight=" << weight << ")"
-	   << G4endl;
+           << G4endl;
     return;
   }
  if  (histo[ih]) { histo[ih]->Fill(xbin, weight); }
@@ -155,7 +156,7 @@ void HistoManager::PrintStatistic()
     G4cout 
     << " EAbs : mean = " << G4BestUnit(histo[1]->GetMean(), "Energy") 
             << " rms = " << G4BestUnit(histo[1]->GetRMS(),  "Energy") << G4endl;
-    G4cout 	       
+    G4cout                
     << " EGap : mean = " << G4BestUnit(histo[2]->GetMean(), "Energy") 
             << " rms = " << G4BestUnit(histo[2]->GetRMS(),  "Energy") << G4endl;
     G4cout 

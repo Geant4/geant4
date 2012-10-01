@@ -69,7 +69,7 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
   if (evtNb%fPrintModulo == 0) { 
     G4cout << "\n---> Begin of event: " << evtNb << G4endl;
     CLHEP::HepRandom::showEngineStatus();
-}
+  }
  
  // initialisation per event
  fEnergyAbs = fEnergyGap = 0.;
@@ -88,7 +88,7 @@ void EventAction::EndOfEventAction(const G4Event* evt)
   //
   G4int evtNb = evt->GetEventID();
   if (evtNb%fPrintModulo == 0) {
-    G4cout << "---> End of event: " << evtNb << G4endl;	
+    G4cout << "---> End of event: " << evtNb << G4endl;        
 
     G4cout
        << "   Absorber: total energy: " << std::setw(7)
@@ -101,7 +101,7 @@ void EventAction::EndOfEventAction(const G4Event* evt)
        << "       total track length: " << std::setw(7)
                                         << G4BestUnit(fTrackLGap,"Length")
        << G4endl;
-	  
+          
   }
 }  
 

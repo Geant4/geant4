@@ -73,7 +73,7 @@ class HistoManager
     AIDA::ITree*             tree;
     
     AIDA::IHistogram1D*      histo[MaxHisto];            
-    AIDA::ITuple*      	     ntupl;    
+    AIDA::ITuple*            ntupl;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

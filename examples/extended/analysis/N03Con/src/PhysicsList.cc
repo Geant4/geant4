@@ -45,6 +45,7 @@
 #include "G4BosonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 #include "G4IonConstructor.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -163,7 +164,7 @@ void PhysicsList::ConstructEM()
       pmanager->AddProcess(new G4hPairProduction,     -1, 4, 4);       
      
     } else if( particleName == "alpha" || 
-	       particleName == "He3" )     {
+               particleName == "He3" )     {
       //alpha 
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4ionIonisation,       -1, 2, 2);
@@ -174,8 +175,8 @@ void PhysicsList::ConstructEM()
       pmanager->AddProcess(new G4ionIonisation,       -1, 2, 2);     
       
       } else if ((!particle->IsShortLived()) &&
-	       (particle->GetPDGCharge() != 0.0) && 
-	       (particle->GetParticleName() != "chargedgeantino")) {
+                 (particle->GetPDGCharge() != 0.0) && 
+                 (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
       pmanager->AddProcess(new G4hMultipleScattering,-1, 1, 1);
       pmanager->AddProcess(new G4hIonisation,        -1, 2, 2);        

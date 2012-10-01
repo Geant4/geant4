@@ -48,7 +48,7 @@
 
 SteppingAction::SteppingAction(DetectorConstruction* det,
                                          EventAction* evt)
-:fDetector(det), fEventaction(evt)					 
+:fDetector(det), fEventaction(evt)                                         
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -32,6 +32,7 @@
 
 #include "A01MagneticField.hh"
 #include "A01MagneticFieldMessenger.hh"
+#include "G4SystemOfUnits.hh"
 #include "globals.hh"
 
 A01MagneticField::A01MagneticField()

@@ -34,6 +34,7 @@
 
 #include "G4VPhysicalVolume.hh"
 #include "G4ThreeVector.hh"
+#include "G4SystemOfUnits.hh"
 
 A01CellParameterisation::A01CellParameterisation()
 {

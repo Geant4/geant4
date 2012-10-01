@@ -46,6 +46,7 @@
 
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 #include <iomanip>
 

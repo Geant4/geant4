@@ -35,6 +35,7 @@
 
 #include "HistoManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -91,19 +92,19 @@ void HistoManager::book()
   fHistId[1] = analysisManager->CreateH1("1","Edep in absorber (MeV)",
                                               100, 0., 800*MeV);
   fHistPt[1] = analysisManager->GetH1(fHistId[1]);
-  					 
+                                           
   fHistId[2] = analysisManager->CreateH1("2","Edep in gap (MeV)",
                                               100, 0., 100*MeV);
   fHistPt[2] = analysisManager->GetH1(fHistId[2]);
-  					 
+                                           
   fHistId[3] = analysisManager->CreateH1("3","trackL in absorber (mm)",
                                               100, 0., 1*m);
   fHistPt[3] = analysisManager->GetH1(fHistId[3]);
-  					 
+                                           
   fHistId[4] = analysisManager->CreateH1("4","trackL in gap (mm)",
                                               100, 0., 50*cm);
   fHistPt[4] = analysisManager->GetH1(fHistId[4]);
-  				
+                                  
   // Create 1 ntuple
   //    
   analysisManager->CreateNtuple("101", "Edep and TrackL");
@@ -181,19 +182,19 @@ void HistoManager::PrintStatistic()
     G4cout 
        << " EAbs : mean = " << G4BestUnit(fHistPt[1]->mean(), "Energy") 
                << " rms = " << G4BestUnit(fHistPt[1]->rms(),  "Energy") 
-	       << G4endl;
-    G4cout 	       
+               << G4endl;
+    G4cout                
        << " EGap : mean = " << G4BestUnit(fHistPt[2]->mean(), "Energy") 
                << " rms = " << G4BestUnit(fHistPt[2]->rms(),  "Energy") 
-	       << G4endl;
+               << G4endl;
     G4cout 
        << " LAbs : mean = " << G4BestUnit(fHistPt[3]->mean(), "Length") 
                << " rms = " << G4BestUnit(fHistPt[3]->rms(),  "Length") 
-	       << G4endl;
+               << G4endl;
     G4cout 
        << " LGap : mean = " << G4BestUnit(fHistPt[4]->mean(), "Length") 
                << " rms = " << G4BestUnit(fHistPt[4]->rms(),  "Length") 
-	       << G4endl;
+               << G4endl;
   }
 }
 

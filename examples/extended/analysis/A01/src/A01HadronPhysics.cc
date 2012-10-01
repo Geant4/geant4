@@ -35,6 +35,7 @@
 #include "A01HadronPhysics.hh"
 
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 #include <iomanip>   
 

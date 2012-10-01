@@ -56,8 +56,8 @@ class A01DriftChamberHit : public G4VHit
       inline void *operator new(size_t);
       inline void operator delete(void *aHit);
 
-	  inline float x();
-	  inline float y();
+      inline float x();
+      inline float y();
 
       virtual void Draw();
       virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;

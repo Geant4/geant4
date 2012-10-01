@@ -65,12 +65,12 @@ class A01EventAction : public G4UserEventAction
 
 #ifdef G4ANALYSIS_USE
     IHistogram1D* fDc1Hits;
-	IHistogram1D* fDc2Hits;
-	ICloud2D* fDc1XY;
-	ICloud2D* fDc2XY;
-	ICloud2D* fEvstof;
-	ITuple* fTuple;
-	IPlotter* fPlotter;
+    IHistogram1D* fDc2Hits;
+    ICloud2D* fDc1XY;
+    ICloud2D* fDc2XY;
+    ICloud2D* fEvstof;
+    ITuple* fTuple;
+    IPlotter* fPlotter;
 #endif // G4ANALYSIS_USE
 
   public:

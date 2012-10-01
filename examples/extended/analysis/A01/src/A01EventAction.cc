@@ -46,11 +46,11 @@
 #include "G4SDManager.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "A01HodoscopeHit.hh"
 #include "A01DriftChamberHit.hh"
 #include "A01EmCalorimeterHit.hh"
-
 
 #include "A01HadCalorimeterHit.hh"
 
@@ -173,9 +173,9 @@ void A01EventAction::EndOfEventAction(const G4Event* evt)
 
   if (fTuple)
   {
-	if (fDHC1) fTuple->fill(0,fDHC1->entries());
-	if (fDHC2) fTuple->fill(1,fDHC2->entries());
-	if(ECHC)
+    if (fDHC1) fTuple->fill(0,fDHC1->entries());
+    if (fDHC2) fTuple->fill(1,fDHC2->entries());
+    if(ECHC)
     {
       int iHit = 0;
       double totalE = 0.;
@@ -191,11 +191,11 @@ void A01EventAction::EndOfEventAction(const G4Event* evt)
       }
       fTuple->fill(2,totalE);
 
-	  if (fHHC1 && fHHC2 && fHHC1->entries()==1 && fHHC2->entries()==1)
-	  {
-	     double tof = (*fHHC2)[0]->GetTime() - (*fHHC1)[0]->GetTime();
-		 if (fEvstof) fEvstof->fill(tof,totalE);
-	  }
+          if (fHHC1 && fHHC2 && fHHC1->entries()==1 && fHHC2->entries()==1)
+          {
+             double tof = (*fHHC2)[0]->GetTime() - (*fHHC1)[0]->GetTime();
+                 if (fEvstof) fEvstof->fill(tof,totalE);
+          }
     }
     if(HCHC)
     {
@@ -213,9 +213,9 @@ void A01EventAction::EndOfEventAction(const G4Event* evt)
       }
       fTuple->fill(3,totalE);
     }
-	if (fHHC1 && fHHC1->entries()==1) fTuple->fill(4,(*fHHC1)[0]->GetTime());
-	if (fHHC2 && fHHC2->entries()==1) fTuple->fill(5,(*fHHC2)[0]->GetTime());
-	fTuple->addRow();
+    if (fHHC1 && fHHC1->entries()==1) fTuple->fill(4,(*fHHC1)[0]->GetTime());
+    if (fHHC2 && fHHC2->entries()==1) fTuple->fill(5,(*fHHC2)[0]->GetTime());
+        fTuple->addRow();
   }
   if (fPlotter) fPlotter->refresh();
 #endif // G4ANALYSIS_USE

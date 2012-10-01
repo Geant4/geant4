@@ -58,11 +58,11 @@ public:
   void SetRndmFlag(G4String val) { fRndmFlag = val;}
 
 private:
-  G4ParticleGun*           fParticleGun;	 //pointer a to G4  class
+  G4ParticleGun*           fParticleGun;  //pointer a to G4  class
   DetectorConstruction*    fDetector;     //pointer to the geometry
     
-  PrimaryGeneratorMessenger* fGunMessenger;   //messenger of this class
-  G4String                   fRndmFlag;	     //flag for a rndm impact point
+  PrimaryGeneratorMessenger* fGunMessenger; //messenger of this class
+  G4String                   fRndmFlag;     //flag for a rndm impact point
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

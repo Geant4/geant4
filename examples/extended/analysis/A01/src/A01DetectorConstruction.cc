@@ -58,6 +58,7 @@
 #include "G4Colour.hh"
 
 #include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "A01DetectorConstMessenger.hh"
 #include "A01MagneticField.hh"

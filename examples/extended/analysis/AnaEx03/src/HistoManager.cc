@@ -34,6 +34,7 @@
 
 #include "HistoManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 
 #ifdef G4ANALYSIS_USE
 #include "AIDA/AIDA.h"
@@ -52,7 +53,7 @@ HistoManager::HistoManager()
     G4cout << " HistoManager::HistoManager :" 
            << " problem creating the AIDA analysis factory."
            << G4endl;
-  }	   
+  }           
 #endif
       
   // histograms
@@ -76,16 +77,16 @@ HistoManager::~HistoManager()
 void HistoManager::book()
 { 
 #ifdef G4ANALYSIS_USE
-  if(!af) return;    	    
+  if(!af) return;                
  
  // Creating a tree container to handle histograms and ntuples.
  // This tree is associated to an output file.
  //
  G4String fileName = "AnaEx03";
- G4String fileType    = "root";		// hbook  root  xml
+ G4String fileType    = "root";                // hbook  root  xml
  G4String fileOption  = " ";
- //// G4String fileOption  = "uncompress compress=no";		//for xml     
- //// G4String fileOption  = "--noErrors";			//for hbook
+ //// G4String fileOption  = "uncompress compress=no";  //for xml     
+ //// G4String fileOption  = "--noErrors";              //for hbook
 
  fileName = fileName + "." + fileType;
  G4bool readOnly  = false;
@@ -167,7 +168,7 @@ void HistoManager::FillHisto(G4int ih, G4double xbin, G4double weight)
   if (ih >= MaxHisto) {
     G4cout << "---> warning from HistoManager::FillHisto() : histo " << ih
            << " does not exist. (xbin=" << xbin << " weight=" << weight << ")"
-	   << G4endl;
+           << G4endl;
     return;
   }
 #ifdef G4ANALYSIS_USE
@@ -219,7 +220,7 @@ void HistoManager::PrintStatistic()
     G4cout 
        << " EAbs : mean = " << G4BestUnit(histo[1]->mean(), "Energy") 
                << " rms = " << G4BestUnit(histo[1]->rms(),  "Energy") << G4endl;
-    G4cout 	       
+    G4cout                
        << " EGap : mean = " << G4BestUnit(histo[2]->mean(), "Energy") 
                << " rms = " << G4BestUnit(histo[2]->rms(),  "Energy") << G4endl;
     G4cout 
