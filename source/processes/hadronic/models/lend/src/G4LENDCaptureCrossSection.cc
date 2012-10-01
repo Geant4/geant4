@@ -24,6 +24,7 @@
 // ********************************************************************
 //
 #include "G4LENDCaptureCrossSection.hh"
+#include "G4SystemOfUnits.hh"
 
 G4double G4LENDCaptureCrossSection::getLENDCrossSection( G4GIDI_target* target , G4double ke , G4double temperature ) 
 {

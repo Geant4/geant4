@@ -38,7 +38,7 @@
 // 101118 Name modifications for release T. Koi (SLAC/PPA)
 
 #include "G4LENDCrossSection.hh"
-
+#include "G4SystemOfUnits.hh"
 #include "G4ElementTable.hh"
 #include "G4HadronicException.hh"
 

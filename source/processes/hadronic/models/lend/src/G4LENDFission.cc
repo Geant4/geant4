@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 #include "G4LENDFission.hh"
-
+#include "G4SystemOfUnits.hh"
 #include "G4Nucleus.hh"
 #include "G4ParticleTable.hh"
   

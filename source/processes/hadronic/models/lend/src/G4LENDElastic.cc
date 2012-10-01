@@ -25,7 +25,8 @@
 //
 
 #include "G4LENDElastic.hh"
-
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Nucleus.hh"
 #include "G4ParticleTable.hh"
 

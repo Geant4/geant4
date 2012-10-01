@@ -38,6 +38,8 @@
 // 101118 Name modifications for release T. Koi (SLAC/PPA)
 
 #include "G4LENDModel.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4NistManager.hh"
 
 G4LENDModel::G4LENDModel( G4String name )

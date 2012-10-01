@@ -25,6 +25,7 @@
 //
 
 #include "G4LENDInelasticCrossSection.hh"
+#include "G4SystemOfUnits.hh"
 
 G4double G4LENDInelasticCrossSection::getLENDCrossSection( G4GIDI_target* target , G4double ke , G4double temperature ) 
 {
