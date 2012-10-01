@@ -1,0 +1,35 @@
+tav10.log
+#################################################################################
+#                                                                              	#
+# ESA-CERN GEANT4 RADIOACTIVE DECAY MODULE                                     	#
+# VALIDATION TEST NUMBER 10                                                 	#	
+# 									      	#
+# THIS TEST SHOWS THE DECAYS OF THE NE-24 TO MG-24 CHAIN IN VARIANCE 		#
+# REDUCTION MODE USING USER SUPPLIED SOURCE-PROFILE-FUNCTION AND                #
+# DECAY-BIAS-FUNCTION.		      						#
+#                                                                              	#
+# F LEI, DERA FARNBOROUGH, 8 MARCH 2000                                        	#
+#                                                                              	#
+#################################################################################
+#
+# NOTE THAT THE FIRST RECORD IN THIS MACROFILE IS THE OUTPUT LOG-FILE NAME.
+# NOW SET VERBOSE LEVELS FOR RUN, EVENT, TRACKING AND THE RDM PROCESS.
+#
+
+/run/verbose 0
+/event/verbose 0
+/tracking/verbose 0
+
+grdm/analogueMC 0
+grdm/verbose 0
+grdm/sourceTimeProfile source.data
+grdm/decayBiasProfile bias.data
+
+grdm/ion 24 10 0
+run/beamOn 20
+
+
+
+
+
+

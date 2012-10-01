@@ -25,6 +25,7 @@
 //
 
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4BetaDecayType.hh"
 #include "G4BetaDecayCorrections.hh"
 

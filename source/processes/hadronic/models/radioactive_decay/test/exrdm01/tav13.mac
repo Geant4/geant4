@@ -1,0 +1,56 @@
+tav13.log
+#################################################################################
+#                                                                              	#
+# ESA-CERN GEANT4 RADIOACTIVE DECAY MODULE                                     	#
+# VALIDATION TEST NUMBER 13                                                  	#	
+# 									      	#
+# THIS TEST IS TO DEMONSTRAT THE CAPABILITY IN RDM TO RESTRICT THE PROCESS     	#
+# TO SPECIFIED VOLUMES ONLY     					       	#
+#										#
+# BY DEFAULT RDM IS APPLIED TO ALL VOLUMES					#
+#                                                                              	#
+#	IT SELECT A NA-24 NUCLEI WITH NO KINETIC ENERGY				#
+#										#
+#	1)  DECAY NA-24								#
+#	2)  SWITCH-OFF RDM FOR ALL VOLUMES, NA-24 DOSE NOT DECAY                #
+#	3)  SWITCH-ON THE VOLUME WHERE THE NA-24 IS LOCATED, IT DECAYS AGAIN	#
+#	4)  SWITCH-OFF THE VOLUME WHERE THE NA-24 IS LOCATED. IT DOSE NOT DECAY #	
+#                                                                              	#
+# F LEI, DERA FARNBOROUGH, 8 MARCH 2000                                        	#
+#                                                                              	#
+#################################################################################
+
+# NOTE THAT THE FIRST RECORD IN THIS MACROFILE IS THE OUTPUT LOG-FILE NAME.
+# NOW SET VERBOSE LEVELS FOR RUN, EVENT, TRACKING AND THE RDM PROCESS.
+#
+/run/verbose 0
+/event/verbose 0
+/tracking/verbose 0
+grdm/analogueMC 1
+grdm/verbose 0
+
+# SELECT NA-24
+grdm/ion 24 11 0
+gun/energy 0
+
+# 1) ALL VOLUMES SELECTED
+run/beamOn 
+
+# 2) ALL VOLUMES DESELECTED
+grdm/noVolumes
+run/beamOn
+
+# 3) SELECT THE VOLUME CONTAINS THE NA-24
+grdm/selectVolume aSphere_L2
+run/beamOn
+
+# 4) DESELECT THE VOLUME CONTAINS THE NA-24
+grdm/deselectVolume aSphere_L2
+run/beamOn
+
+
+
+
+
+
+

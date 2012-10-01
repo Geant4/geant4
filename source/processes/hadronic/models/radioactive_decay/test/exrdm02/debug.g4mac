@@ -1,0 +1,6 @@
+grdm/analoguemc 0
+grdm/ion 24 9 0.
+grdm/brbias 1
+grdm/sourcetimeprofile source.data
+grdm/decaybiasprofile bias.data
+run/beamOn 

@@ -13,9 +13,18 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
+22 September 2012  Laurent Desorgher  radioactive_decay-V09-05-07
+--------------------------------------------------------------
+- Reset a print message in G4RIsotopeTable to verbose level 1 to avoid some systematic printing for some decays.
+  Problem reported by Michel Maire.
 
-27 July 2012  Laurent  Desorgher radioactive_decay-V09-05-05
---------------------------------------------------------
+21 September 2012  Gabriele Cosmo  radioactive_decay-V09-05-06
+--------------------------------------------------------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+27 July 2012  Laurent Desorgher  radioactive_decay-V09-05-05
+------------------------------------------------------------
  -Set a flag isAllVolumesMode in G4RadioactiveDecay to ensure  that  when 
   the geometry is changed, the AllVolume Mode is still considered.
   Problem reported by Tatsumi Koi.  
@@ -25,8 +34,8 @@ track of all tags.
  	radioactive decay database. Solving of a problem reported by Tatsumi Koi.
 
 
-10 July 2012  L. Desorgher radioactive_decay-V09-05-04
---------------------------------------------------------
+10 July 2012  Laurent Desorgher  radioactive_decay-V09-05-04
+---------------------===------------------------------------
  -G4RadiocativeDecay::LoadDecayTable
  	Add LoadedNuclei.push_back(theParentNucleus.GetParticleName())
  	also for the case where user data files are used. Correction for bug

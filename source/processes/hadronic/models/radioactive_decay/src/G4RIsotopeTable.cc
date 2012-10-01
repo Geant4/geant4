@@ -194,11 +194,11 @@ G4double G4RIsotopeTable::GetMeanLifeTime(G4int Z, G4int A, G4double& aE)
 
   G4bool found_in_raddecay_data(false);
   if (!DecaySchemeFile) {
-    //if (GetVerboseLevel()>1) {
+    if (GetVerboseLevel()>1) {
       G4cout <<"G4RIsotopeTable::GetMeanLife() : "
 	     <<"cannot find ion radioactive decay file: " 
 	     <<file <<G4endl;
-    //}
+    }
   } else {
     char inputChars[100]={' '};
     G4String inputLine;

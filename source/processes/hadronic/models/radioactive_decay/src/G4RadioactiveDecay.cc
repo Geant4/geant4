@@ -93,6 +93,7 @@
 #include "G4RadioactiveDecay.hh"
 #include "G4RadioactiveDecaymessenger.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4DynamicParticle.hh"
 #include "G4DecayProducts.hh"
 #include "G4DecayTable.hh"

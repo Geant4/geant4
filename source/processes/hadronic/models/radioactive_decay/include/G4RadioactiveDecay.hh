@@ -54,6 +54,10 @@
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ////////////////////////////////////////////////////////////////////////////////
 //
+#include <vector>
+#include <map>
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4ios.hh"
 #include "globals.hh"
 #include "G4VRestDiscreteProcess.hh"
@@ -66,9 +70,6 @@
 #include "G4RIsotopeTable.hh"
 #include "G4RadioactivityTable.hh"
 #include "G4ThreeVector.hh"
-
-#include <vector>
-#include <map>
 
 class G4RadioactiveDecaymessenger;
 
@@ -182,7 +183,7 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
 
     inline void SetAnalogueMonteCarlo (G4bool r ) { 
       AnalogueMC  = r; 
-      if (!AnalogueMC) halflifethreshold = 1e-6*s;
+      if (!AnalogueMC) halflifethreshold = 1e-6*CLHEP::s;
     }
     // Controls whether G4RadioactiveDecay runs in analogue mode or
     // variance reduction mode.
@@ -217,14 +218,14 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
       return forceDecayDirection; 
     }
 
-    inline void SetDecayHalfAngle(G4double halfAngle=0.*deg) {
-      forceDecayHalfAngle = std::min(std::max(0.*deg,halfAngle),180.*deg);
+    inline void SetDecayHalfAngle(G4double halfAngle=0.*CLHEP::deg) {
+      forceDecayHalfAngle = std::min(std::max(0.*CLHEP::deg,halfAngle),180.*CLHEP::deg);
     }
 
     inline G4double GetDecayHalfAngle() const {return forceDecayHalfAngle;}
 
     inline void SetDecayCollimation(const G4ThreeVector& theDir,
-                                    G4double halfAngle = 0.*deg) {
+                                    G4double halfAngle = 0.*CLHEP::deg) {
       SetDecayDirection(theDir);
       SetDecayHalfAngle(halfAngle);
     }

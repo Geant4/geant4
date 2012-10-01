@@ -47,6 +47,8 @@
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ////////////////////////////////////////////////////////////////////////////////
 //
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
 #include "G4NuclearDecayChannel.hh"
 #include "G4RadioactiveDecayMode.hh"
@@ -69,7 +71,7 @@ class G4KshellECDecayChannel : public G4NuclearDecayChannel
                             G4double theDaughterExcitation=0.0) :
       G4NuclearDecayChannel (KshellEC, Verbose, theParentNucleus, theBR,
                              theQtransit, theParentNucleus->GetBaryonNumber(),
-                             int(theParentNucleus->GetPDGCharge()/eplus)-1,
+                             int(theParentNucleus->GetPDGCharge()/CLHEP::eplus)-1,
                              theDaughterExcitation, "nu_e")
     {
 #ifdef G4VERBOSE
