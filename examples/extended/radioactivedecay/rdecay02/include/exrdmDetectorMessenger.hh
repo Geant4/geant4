@@ -45,7 +45,7 @@ class exrdmDetectorMessenger: public G4UImessenger
 {
   public:
     exrdmDetectorMessenger(exrdmDetectorConstruction*);
-    virtual 	~exrdmDetectorMessenger();
+    virtual         ~exrdmDetectorMessenger();
     
     virtual void SetNewValue(G4UIcommand*, G4String);
     

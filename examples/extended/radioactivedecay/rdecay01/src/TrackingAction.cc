@@ -118,7 +118,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
   //   
   G4double time = track->GetGlobalTime();
   G4int ID = track->GetTrackID();
-  if (ID == 1) fRun->PrimaryTiming(time);	//time of life of primary ion  
+  if (ID == 1) fRun->PrimaryTiming(time);        //time of life of primary ion  
       
   //energy and momentum balance (from secondaries)
   //
@@ -137,8 +137,8 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
        G4Track* trk = (*secondaries)[itr];
        EkinTot += trk->GetKineticEnergy();
        //exclude gamma desexcitation from momentum balance
-       if (trk->GetDefinition() != G4Gamma::Gamma())	 
-         Pbalance += trk->GetMomentum();	         
+       if (trk->GetDefinition() != G4Gamma::Gamma())         
+         Pbalance += trk->GetMomentum();                 
     }
     G4double Pbal = Pbalance.mag();  
     fRun->Balance(EkinTot,Pbal);  
@@ -149,7 +149,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
   //no secondaries --> end of chain    
   //  
   if (!nbtrk) {
-    fRun->EventTiming(time);		//total time of life
+    fRun->EventTiming(time);                     //total time of life
     fHistoManager->FillHisto(8,time);
   }
 }

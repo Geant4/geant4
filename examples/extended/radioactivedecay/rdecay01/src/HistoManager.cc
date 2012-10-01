@@ -148,15 +148,15 @@ void HistoManager::SetHisto(G4int ih,
   
   const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7" , "8" };
   const G4String title[] = 
-          { "dummy",					//0
-            "energy spectrum (%): e+ e-",		//1
-            "energy spectrum (%): nu_e anti_nu_e",	//2
-            "energy spectrum (%): gamma",		//3		  
-            "energy spectrum (%): alpha",		//4
-            "energy spectrum (%): ions",		//5
-            "total kinetic energy (Q)",			//6	    	    
-            "momentum balance",				//7
-            "total time of life of decay chain"		//8
+          { "dummy",                                    //0
+            "energy spectrum (%): e+ e-",               //1
+            "energy spectrum (%): nu_e anti_nu_e",      //2
+            "energy spectrum (%): gamma",               //3                  
+            "energy spectrum (%): alpha",               //4
+            "energy spectrum (%): ions",                //5
+            "total kinetic energy (Q)",                 //6                        
+            "momentum balance",                         //7
+            "total time of life of decay chain"         //8
           };
 
 
@@ -234,9 +234,9 @@ void HistoManager::saveAscii()
      
       for (G4int iBin=0; iBin<fNbins[ih]; iBin++) {
          File << "  " << iBin << "\t" 
-	      << fHistPt[ih]->axis().bin_center(iBin) << "\t"
-	      << fHistPt[ih]->bin_height(iBin) 
-	      << G4endl;
+              << fHistPt[ih]->axis().bin_center(iBin) << "\t"
+              << fHistPt[ih]->bin_height(iBin) 
+              << G4endl;
       } 
     }
  } 

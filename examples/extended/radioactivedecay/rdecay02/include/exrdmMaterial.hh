@@ -30,6 +30,7 @@
 #define exrdmMaterial_HH
 ////////////////////////////////////////////////////////////////////////////////
 #include "G4Material.hh"
+#include "CLHEP/Units/PhysicalConstants.h"
 #include <vector>
 
 class exrdmMaterialMessenger;
@@ -45,8 +46,8 @@ public:
 public:
 
   void  AddMaterial (G4String, G4String, G4double, G4String, 
-		     G4double tem = STP_Temperature, 
-		     G4double pres = STP_Pressure);
+                     G4double tem = CLHEP::STP_Temperature, 
+                     G4double pres = CLHEP::STP_Pressure);
   G4Material* GetMaterial (G4int i)  {return fMaterial[i];};
   G4Material* GetMaterial (G4String name)
     {return G4Material::GetMaterial(name);} ;

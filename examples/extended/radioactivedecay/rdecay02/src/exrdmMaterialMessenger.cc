@@ -29,10 +29,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
 #include "exrdmMaterialMessenger.hh"
+#include "exrdmMaterial.hh"
+
+#include "G4SystemOfUnits.hh"
 
 #include <sstream>
 
-#include "exrdmMaterial.hh"
 ////////////////////////////////////////////////////////////////////////////////
 //
 exrdmMaterialMessenger::exrdmMaterialMessenger (exrdmMaterial * exrdmMat)
@@ -103,7 +105,8 @@ exrdmMaterialMessenger::~exrdmMaterialMessenger ()
 }
 ////////////////////////////////////////////////////////////////////////////////
 //
-void exrdmMaterialMessenger::SetNewValue (G4UIcommand* command,G4String newValue)
+void exrdmMaterialMessenger::SetNewValue (G4UIcommand* command,
+                                          G4String newValue)
 {    
   if (command == fDeleteIntCmd) {
     fMaterialsManager->DeleteMaterial(fDeleteIntCmd->GetNewIntValue(newValue));

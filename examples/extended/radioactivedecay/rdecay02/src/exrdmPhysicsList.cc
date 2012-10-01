@@ -62,18 +62,18 @@
 #include "G4NeutronTrackingCut.hh"
 #include "G4DecayPhysics.hh"
 
+#include "G4SystemOfUnits.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-exrdmPhysicsList::exrdmPhysicsList() : G4VModularPhysicsList()
+exrdmPhysicsList::exrdmPhysicsList() :
+ G4VModularPhysicsList(),
+ fCutForGamma(1.*mm), fCutForElectron(1.*mm),
+ fCutForPositron(1.*mm), fHadPhysicsList(0),
+ fNhadcomp(0),fDetectorCuts(0), fTargetCuts(0)
 {
   G4LossTableManager::Instance();
-  defaultCutValue = 1.*mm;
-  fCutForGamma     = defaultCutValue;
-  fCutForElectron  = defaultCutValue;
-  fCutForPositron  = defaultCutValue;
-
-  fDetectorCuts = 0;
-  fTargetCuts   = 0;
+  defaultCutValue =1.*mm;
 
   fPMessenger = new exrdmPhysicsListMessenger(this);
 
@@ -88,9 +88,7 @@ exrdmPhysicsList::exrdmPhysicsList() : G4VModularPhysicsList()
   // EM physics
   fEmPhysicsList = new G4EmStandardPhysics();
   
-  // Had physics 
-  fHadPhysicsList = 0;
-  fNhadcomp = 0;
+
 
 }
 
@@ -167,7 +165,7 @@ void exrdmPhysicsList::SelectPhysicsList(const G4String& name)
       fEmPhysicsList = new G4EmStandardPhysics();
   } else {
       G4cout << "exrdmPhysicsList WARNING wrong or unkonwn <" 
-	     << name << "> Physics " << G4endl;
+             << name << "> Physics " << G4endl;
   }
 }
 
@@ -178,7 +176,7 @@ void exrdmPhysicsList::AddExtraBuilders(G4bool flagHP)
   fNhadcomp = 5;
   fHadronPhys.push_back( new G4EmExtraPhysics("extra EM"));
   fHadronPhys.push_back( new G4HadronElasticPhysics("elastic",verboseLevel,
-						   flagHP));
+                                                   flagHP));
   fHadronPhys.push_back( new G4QStoppingPhysics("stopping",verboseLevel));
   fHadronPhys.push_back( new G4IonBinaryCascadePhysics("ionBIC"));
   fHadronPhys.push_back( new G4NeutronTrackingCut("Neutron tracking cut"));

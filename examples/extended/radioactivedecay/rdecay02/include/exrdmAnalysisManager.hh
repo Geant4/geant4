@@ -48,13 +48,11 @@
 //----------------------------------------------------------------------------
 //
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #include "globals.hh"
 #include "exrdmEnergyDeposition.hh"
 #include <vector>
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class exrdmHisto;
 
@@ -85,7 +83,8 @@ public: // Without description
   void AddParticle(G4double, G4double, G4double, G4double);
   void AddIsotope(G4double, G4double, G4double);
   void AddEnergy(G4double, G4double, G4double);
-  void AddDecayProduct(G4double pid,G4int Z, G4int A, G4double energy, G4double time,G4double weight);
+  void AddDecayProduct(G4double pid,G4int Z, G4int A,
+                             G4double energy, G4double time,G4double weight);
 
   void SetVerbose(G4int val) {fVerbose = val;};
   G4int GetVerbose() const {return fVerbose;};
@@ -121,16 +120,7 @@ private:
   G4double fHistEMax;
   G4double fHistEMin;
   G4int fHistNBin;
-  /*
-  G4bool histTarget;
-  G4bool histDetector;
-  G4bool histCoin;
-  G4bool histAntiCD;
-  G4bool histAntiCT;
-  G4bool histEmission;
-  G4bool ntupleEmission;
-  G4bool ntupleIsotope;
-  */
+
   G4double fTargetThresE;
   G4double fDetectorThresE;
   G4double fPulseWidth;
@@ -141,5 +131,7 @@ private:
   exrdmHisto*  fHisto;
   
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

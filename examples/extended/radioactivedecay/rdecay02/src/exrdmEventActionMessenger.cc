@@ -37,7 +37,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-exrdmEventActionMessenger::exrdmEventActionMessenger(exrdmEventAction* EvAct)
+exrdmEventActionMessenger::exrdmEventActionMessenger(
+                                                               exrdmEventAction* EvAct)
 :fEventAction(EvAct)
 { 
   fDrawCmd = new G4UIcmdWithAString("/event/draw",this);
@@ -58,7 +59,8 @@ exrdmEventActionMessenger::~exrdmEventActionMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void exrdmEventActionMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
+void exrdmEventActionMessenger::SetNewValue(G4UIcommand * command,
+                                                                      G4String newValue)
 { 
   if(command == fDrawCmd)
     {fEventAction->SetDrawFlag(newValue);}

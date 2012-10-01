@@ -72,8 +72,15 @@
 #include "G4RadioactiveDecay.hh"
 #include "G4GenericIon.hh"
 
+#include "G4SystemOfUnits.hh"
+
+
 exrdmPhysListHadron::exrdmPhysListHadron(const G4String& name)
-  :  G4VPhysicsConstructor(name)
+  :  G4VPhysicsConstructor(name),
+   fTheNeutronElasticProcess(0), fTheFissionProcess(0),
+   fTheCaptureProcess(0),fTheDeuteronInelasticProcess(0),
+   fTheTritonInelasticProcess(0), fTheAlphaInelasticProcess(0),
+   fTheIonInelasticProcess(0)
 {}
 
 exrdmPhysListHadron::~exrdmPhysListHadron()
@@ -104,9 +111,10 @@ void exrdmPhysListHadron::ConstructProcess()
   // a no-cascade generator-precompound interaface
   G4GeneratorPrecompoundInterface * theCascade = new G4GeneratorPrecompoundInterface;
   theCascade->SetDeExcitation(thePreEquilib);  
-	
+        
   // here come the high energy parts
-  // the string model; still not quite according to design - Explicite use of the forseen interfaces     
+  // the string model; still not quite according to design
+  // - Explicite use of the forseen interfaces
   G4VPartonStringModel * theStringModel;
   theStringModel = new G4QGSModel<G4QGSParticipants>;
   theTheoModel->SetTransport(theCascade);
@@ -133,12 +141,12 @@ void exrdmPhysListHadron::ConstructProcess()
     if (particleName != "neutron") {  
       G4ProcessManager* pManager = particle->GetProcessManager();
       if (particle->GetPDGMass() > 110.*MeV && fTheElasticProcess.IsApplicable(*particle)
-	  && !particle->IsShortLived()) { 
-	pManager->AddDiscreteProcess(&fTheElasticProcess);
-	//
-	//	G4cout << "### Elastic model are registered for " 
-	//       << particle->GetParticleName()
-	//       << G4endl;
+          && !particle->IsShortLived()) { 
+        pManager->AddDiscreteProcess(&fTheElasticProcess);
+        //
+        //        G4cout << "### Elastic model are registered for " 
+        //       << particle->GetParticleName()
+        //       << G4endl;
       }
     }
   }

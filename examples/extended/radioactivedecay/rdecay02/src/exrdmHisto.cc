@@ -51,15 +51,10 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 exrdmHisto::exrdmHisto()
+:fHistName("exrdm"), fHistType("root"),
+ fNHisto(0), fNTuple(0), fVerbose(0),
+ fDefaultAct(1)
 {
-  fVerbose    = 1;
-  fHistName   = "exrdm";
-  //  fHistType   = "fAida";
-  fHistType   = "root";
-  fNHisto     = 0;
-  fNTuple     = 0;
-  fDefaultAct = 1;
-  //
 #ifdef G4ANALYSIS_USE
   fAida = 0;
   fTree = 0;
@@ -144,7 +139,8 @@ void exrdmHisto::Book()
         G4cout<<"Book: histogram "<< i << " id= " << fIds[i] <<G4endl;
       G4String tit = fIds[i];
       if(fHistType == "root") tit = "h" + fIds[i];
-      fHisto[i] = hf->createHistogram1D(tit, fTitles[i], fBins[i], fXmin[i], fXmax[i]);
+      fHisto[i] = hf->createHistogram1D(tit, fTitles[i], fBins[i], fXmin[i],
+                                        fXmax[i]);
     }
   }
   delete hf;
@@ -155,7 +151,8 @@ void exrdmHisto::Book()
   G4cout << "AIDA will Book " << fNTuple << " ntuples" << G4endl;
   for(G4int i=0; i<fNTuple; i++) {
     if(fTupleList[i] != "") {
-      G4cout << "Creating Ntuple: " << fTupleName[i] <<":" <<fTupleList[i] <<G4endl;
+      G4cout << "Creating Ntuple: " << fTupleName[i] <<":" <<fTupleList[i]
+             << G4endl;
       fNtup[i] = tpf->create(fTupleId[i], fTupleName[i], fTupleList[i],"");
     }
   }
@@ -173,7 +170,8 @@ void exrdmHisto::Book()
     if(fActive[i]) {
       G4String id = G4String("h")+fIds[i];
       fROOThisto[i] = new TH1D(id, fTitles[i], fBins[i], fXmin[i], fXmax[i]);
-      G4cout << "ROOT Histo " << fIds[i] << " " << fTitles[i] << " booked " << G4endl;
+      G4cout << "ROOT Histo " << fIds[i] << " " << fTitles[i] << " booked "
+             << G4endl;
     }
   }
   // Now the ntuples  
@@ -181,9 +179,10 @@ void exrdmHisto::Book()
     if(fTupleListROOT[i] != "") {
       G4String id = G4String("t")+fTupleId[i];
       G4cout << "Creating Ntuple "<<fTupleId[i] << " in ROOT file: " 
-	     << fTupleName[i] << G4endl;
+             << fTupleName[i] << G4endl;
       fROOTntup[i] = new TNtuple(id, fTupleName[i], fTupleListROOT[i]);
-      G4cout << "ROOT Ntuple " << id << " " << fTupleName[i] <<" "<< fTupleListROOT[i]<< " booked " << G4endl;
+      G4cout << "ROOT Ntuple " << id << " " << fTupleName[i] <<" "
+             << fTupleListROOT[i]<< " booked " << G4endl;
     }
   }
 #endif
@@ -223,7 +222,7 @@ void exrdmHisto::Save()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void exrdmHisto::Add1D(const G4String& id, const G4String& name, G4int nb, 
-                  G4double x1, G4double x2, G4double u)
+                       G4double x1, G4double x2, G4double u)
 {
   if(fVerbose > 0) {
     G4cout << "New histogram will be booked: #" << id << "  <" << name 
@@ -263,7 +262,8 @@ void exrdmHisto::SetHisto1D(G4int i, G4int nb, G4double x1, G4double x2, G4doubl
     fXmax[i] = x2;
     fUnit[i] = u;
   } else {
-    G4cout << "exrdmHisto::setexrdmHisto1D: WARNING! wrong histogram index " << i << G4endl;
+    G4cout << "exrdmHisto::setexrdmHisto1D: WARNING! wrong histogram index "
+           << i << G4endl;
   }
 }
 
@@ -280,14 +280,16 @@ void exrdmHisto::FillHisto(G4int i, G4double x, G4double w)
   if(i>=0 && i<fNHisto) {
     fHisto[i]->fill(x/fUnit[i], w);
   } else {
-    G4cout << "exrdmHisto::fill: WARNING! wrong AIDA histogram index " << i << G4endl;
+    G4cout << "exrdmHisto::fill: WARNING! wrong AIDA histogram index "
+           << i << G4endl;
   }
 #endif
 #ifdef G4ANALYSIS_USE_ROOT  
   if(i>=0 && i<fNHisto) {
     fROOThisto[i]->Fill(x/fUnit[i],w);
   } else {
-    G4cout << "exrdmHisto::fill: WARNING! wrong ROOT histogram index " << i << G4endl;
+    G4cout << "exrdmHisto::fill: WARNING! wrong ROOT histogram index "
+           << i << G4endl;
   }
 #endif
 }
@@ -302,14 +304,16 @@ void exrdmHisto::ScaleHisto(G4int i, G4double x)
 #ifdef G4ANALYSIS_USE
   if(i>=0 && i<fNHisto) {
     fHisto[i]->scale(x);
-    G4cout << "exrdmHisto::scale: WARNING! wrong AIDA histogram index " << i << G4endl;
+    G4cout << "exrdmHisto::scale: WARNING! wrong AIDA histogram index "
+           << i << G4endl;
   }
 #endif
 #ifdef G4ANALYSIS_USE_ROOT  
   if(i>=0 && i<fNHisto) {
     fROOThisto[i]->Scale(x);
   } else {
-    G4cout << "exrdmHisto::scale: WARNING! wrong ROOT histogram index " << i << G4endl;
+    G4cout << "exrdmHisto::scale: WARNING! wrong ROOT histogram index "
+           << i << G4endl;
   }
 #endif
 }
@@ -317,12 +321,15 @@ void exrdmHisto::ScaleHisto(G4int i, G4double x)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifdef G4ANALYSIS_USE
-void exrdmHisto::AddTuple(const G4String& w1, const G4String& w2, const G4String& w3 )
+void exrdmHisto::AddTuple(const G4String& w1, const G4String& w2,
+                          const G4String& w3 )
 #else
 #ifdef G4ANALYSIS_USE_ROOT
-void exrdmHisto::AddTuple(const G4String& w1, const G4String& w2, const G4String& w3 )
+void exrdmHisto::AddTuple(const G4String& w1, const G4String& w2,
+                          const G4String& w3 )
 #else
-void exrdmHisto::AddTuple(const G4String& w1, const G4String& w2, const G4String& )
+void exrdmHisto::AddTuple(const G4String& w1, const G4String& w2,
+                          const G4String& )
 #endif
 #endif
 
@@ -367,7 +374,7 @@ void exrdmHisto::FillTuple(G4int i, const G4String& parname, G4double x)
 {
   if(fVerbose > 1) 
     G4cout << "fill tuple # " << i 
-	   <<" with  parameter <" << parname << "> = " << x << G4endl; 
+           <<" with  parameter <" << parname << "> = " << x << G4endl; 
 #ifdef G4ANALYSIS_USE
   if(fNtup[i]) fNtup[i]->fill(fNtup[i]->findColumn(parname), x);
 #endif
@@ -379,7 +386,7 @@ void exrdmHisto::FillTuple(G4int i, G4int col, G4double x)
 {
   if(fVerbose > 1) {
     G4cout << "fill tuple # " << i 
-	   <<" in column < " << col << "> = " << x << G4endl; 
+           <<" in column < " << col << "> = " << x << G4endl; 
   }
 #ifdef G4ANALYSIS_USE
   if(fNtup[i]) fNtup[i]->fill(col,double(x));
@@ -397,7 +404,7 @@ void exrdmHisto::FillTuple(G4int i, const G4String& parname, G4String& x)
 {
   if(fVerbose > 1) {
     G4cout << "fill tuple # " << i 
-	   <<" with  parameter <" << parname << "> = " << x << G4endl; 
+           <<" with  parameter <" << parname << "> = " << x << G4endl; 
   }
 #ifdef G4ANALYSIS_USE
   if(fNtup[i]) fNtup[i]->fill(fNtup[i]->findColumn(parname), x);
@@ -411,7 +418,7 @@ void exrdmHisto::AddRow(G4int i)
 {
   if(fVerbose > 1) G4cout << "Added a raw #" << i << " to tuple" << G4endl; 
 #ifdef G4ANALYSIS_USE
-  if(fNtup[i]) fNtup[i]->AddRow();
+  if(fNtup[i]) fNtup[i]->addRow();
 #endif
 
 #ifdef G4ANALYSIS_USE_ROOT

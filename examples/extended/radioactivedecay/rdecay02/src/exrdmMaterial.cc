@@ -34,6 +34,8 @@
 
 #include "globals.hh"
 #include "G4UnitsTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 #include <vector>
 #include <iomanip>  
@@ -83,8 +85,8 @@ exrdmMaterial::~exrdmMaterial ()
 }
 ////////////////////////////////////////////////////////////////////////////////
 //
-void exrdmMaterial::AddMaterial (G4String name, G4String formula, G4double density,
-			      G4String state, G4double tem, G4double pres)
+void exrdmMaterial::AddMaterial (G4String name, G4String formula,
+                G4double density, G4String state, G4double tem, G4double pres)
 {
   G4int isotope, Z;
   size_t i;
@@ -117,16 +119,17 @@ void exrdmMaterial::AddMaterial (G4String name, G4String formula, G4double densi
   delete[] sname;
 
   G4Material* aMaterial = 0;
-  G4cout << name <<" "<< formula << " " << density/(g/cm3) << " " << tem <<" " <<pres << G4endl;
+  G4cout << name <<" "<< formula << " " << density/(g/cm3) << " " << tem <<" "
+                                                                       <<pres << G4endl;
  
   if (state == "") {
     aMaterial = new G4Material(name, density, ncomponents);
   } else if (state == "solid" && tem > 0.) {
     aMaterial = new G4Material(name, density, ncomponents, 
-					   kStateSolid, tem );
+                                           kStateSolid, tem );
   } else if (state == "gas" && pres > 0.) {
     aMaterial = new G4Material(name, density, ncomponents, 
-					   kStateGas, tem, pres );
+                                           kStateGas, tem, pres );
   }
   if (aMaterial == 0) {
     G4cerr <<" AddMaterial : Name " <<name <<"." <<G4endl;
@@ -169,7 +172,7 @@ void exrdmMaterial::AddMaterial (G4String name, G4String formula, G4double densi
                <<element <<G4endl;
         G4cerr <<"--> Command rejected." <<G4endl;
 //        delete aMaterial;
-//	fMaterial[NbMat] = NULL;
+//        fMaterial[NbMat] = NULL;
         return;
       }
 
@@ -181,7 +184,7 @@ void exrdmMaterial::AddMaterial (G4String name, G4String formula, G4double densi
         natoms = atoi((s.substr(id,ls-id)).c_str());
       }
       if (natoms < 1) fatoms = atof((s.substr(id,ls-id)).c_str());
-      //	G4cout << "   Elements = " << element << G4endl;
+      //        G4cout << "   Elements = " << element << G4endl;
       //G4cout << "   Nb of atoms = " << natoms << G4endl;
     } else {
       element = s.substr(0,ll);
@@ -205,7 +208,7 @@ void exrdmMaterial::AddMaterial (G4String name, G4String formula, G4double densi
                <<element <<G4endl;
         G4cerr <<"--> Command rejected." <<G4endl;
 //        delete aMaterial;
-//	fMaterial[NbMat] = NULL;
+//        fMaterial[NbMat] = NULL;
         return;
       }
 
@@ -220,45 +223,44 @@ void exrdmMaterial::AddMaterial (G4String name, G4String formula, G4double densi
       if (natoms < 1)  fatoms = atof((s.substr(id,ls-id)).c_str());
       if (fatoms == 0.) natoms = 1;
       //
-      //	G4cout << "   Elements = " << element << G4endl;
+      //        G4cout << "   Elements = " << element << G4endl;
       //   G4cout << "   fIsotope Nb = " << isotope << G4endl;
-      //	G4cout << "   Nb of atoms = " << natoms << G4endl;
+      //        G4cout << "   Nb of atoms = " << natoms << G4endl;
     }
     if (isotope != 0) {
       if (G4Isotope::GetIsotope(isotopename) == NULL) {
-	//        G4Isotope* aIsotope = new G4Isotope(isotopename, Z, isotope, fA[Z-1]*g/mole);
         G4Isotope* aIsotope = new G4Isotope(isotopename, Z, isotope, isotope*g/mole);
         G4Element* aElement = new G4Element(isotopename, element, 1);
         aElement->AddIsotope(aIsotope, 100.*perCent);
         fIsotope.push_back(aIsotope);
         if (natoms>0) { 
-	  aMaterial->AddElement(aElement, natoms);
-	} else {
-	  aMaterial->AddElement(aElement, fatoms);
-	}
+          aMaterial->AddElement(aElement, natoms);
+        } else {
+          aMaterial->AddElement(aElement, fatoms);
+        }
         fElement.push_back(aElement);
       } else {
         if (natoms>0) { 
-	  aMaterial->AddElement( G4Element::GetElement(isotopename,false) , natoms);
-	} else {
-	  aMaterial->AddElement( G4Element::GetElement(isotopename,false) , fatoms);
-	}
+          aMaterial->AddElement( G4Element::GetElement(isotopename,false) , natoms);
+        } else {
+          aMaterial->AddElement( G4Element::GetElement(isotopename,false) , fatoms);
+        }
       }      
     } else {
       if ( G4Element::GetElement(element,false) == NULL) {
         G4Element* aElement = new G4Element(element, element, Z, fA[Z-1]*g/mole);
-	if (natoms>0) { 
-	  aMaterial->AddElement(aElement, natoms);
-	} else {
-	  aMaterial->AddElement(aElement, fatoms);
-	}
+        if (natoms>0) { 
+          aMaterial->AddElement(aElement, natoms);
+        } else {
+          aMaterial->AddElement(aElement, fatoms);
+        }
         fElement.push_back(aElement);
       } else {
-	if (natoms>0) { 
-	  aMaterial->AddElement( G4Element::GetElement(element,false) , natoms);
-	} else {
-	  aMaterial->AddElement( G4Element::GetElement(element,false) , fatoms);
-	} 
+        if (natoms>0) { 
+          aMaterial->AddElement( G4Element::GetElement(element,false) , natoms);
+        } else {
+          aMaterial->AddElement( G4Element::GetElement(element,false) , fatoms);
+        } 
       }
     }
     tokenPtr1 = strtok( NULL, "-");

@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25/09/2012  Ivana Hrivnacova (exRadioactivedecay-V09-05-00)
+- Fixed AIDA dependent code 
+
+13/06/2012  Laurent Desorgher  (rdecay02-V09-05-02)
+ - Update/Review of the code according to coding guide lines 2.1-3.1 
+
 01/05/2012  Laurent Desorgher  (rdecay02-V09-05-01)     
 - Adding of tuple RDecayProducts registering Z,A,time,energy, PID,weight of each radioactive decay product
 - Changes in  UserRadDataCf238Test.mac and UserRadData_z82.a210 to check  

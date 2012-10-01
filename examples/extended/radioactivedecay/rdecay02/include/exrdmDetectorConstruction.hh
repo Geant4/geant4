@@ -96,12 +96,15 @@ class exrdmDetectorConstruction : public G4VUserDetectorConstruction
      G4Material* fTargetMater;           // Target material
      G4Material* fDetectorMater;         // Detector material
  
-     G4double fWorldLength;            // Full length the world volume
+
      G4double fTargetLength;           // Full length of the target
-     G4double fDetectorLength;         // Full length of the Detector
-     G4double fWorldRadius;            // Radius of  the world volume
      G4double fTargetRadius;           // Radius of the target
+     G4double fDetectorLength;         // Full length of the Detector
      G4double fDetectorThickness;      // Thickness of the Detector
+     G4double fWorldLength;            // Full length the world volume
+     G4double fWorldRadius;            // Radius of  the world volume
+
+
 
      G4Region*   fTargetRegion;
      G4Region*   fDetectorRegion;

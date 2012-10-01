@@ -97,7 +97,8 @@ exrdmHistoMessenger::~exrdmHistoMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void exrdmHistoMessenger::SetNewValue(G4UIcommand* command,G4String newValues)
+void exrdmHistoMessenger::SetNewValue(G4UIcommand* command,
+                                      G4String newValues)
 {
   if (command == fActoryCmd)
     fHisto->SetFileName(newValues);

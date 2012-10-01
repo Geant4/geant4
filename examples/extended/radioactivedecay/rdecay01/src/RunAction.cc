@@ -40,6 +40,8 @@
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -110,7 +112,7 @@ void RunAction::EventTiming(G4double time)
   fEventTime[0] += time;
   if (fTimeCount == 1) fEventTime[1] = fEventTime[2] = time;  
   if (time < fEventTime[1]) fEventTime[1] = time;
-  if (time > fEventTime[2]) fEventTime[2] = time;	     
+  if (time > fEventTime[2]) fEventTime[2] = time;             
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -154,9 +156,9 @@ void RunAction::EndOfRunAction(const G4Run* run)
          
     G4cout << "  " << std::setw(13) << name << ": " << std::setw(7) << count
            << "  Emean = " << std::setw(wid) << G4BestUnit(eMean, "Energy")
-	   << "\t( "  << G4BestUnit(eMin, "Energy")
-	   << " --> " << G4BestUnit(eMax, "Energy") 
-           << ")" << G4endl;	   
+           << "\t( "  << G4BestUnit(eMin, "Energy")
+           << " --> " << G4BestUnit(eMax, "Energy") 
+           << ")" << G4endl;           
  }
  
  //energy momentum balance
@@ -167,18 +169,18 @@ void RunAction::EndOfRunAction(const G4Run* run)
     G4double Pbmean = fPbalance[0]/fDecayCount;
          
     G4cout << "\n   Ekin Total (Q): mean = "
-	   << std::setw(wid) << G4BestUnit(Ebmean, "Energy")
-	   << "\t( "  << G4BestUnit(fEkinTot[1], "Energy")
-	   << " --> " << G4BestUnit(fEkinTot[2], "Energy")
-	   << ")" << G4endl;    
-	   
+           << std::setw(wid) << G4BestUnit(Ebmean, "Energy")
+           << "\t( "  << G4BestUnit(fEkinTot[1], "Energy")
+           << " --> " << G4BestUnit(fEkinTot[2], "Energy")
+           << ")" << G4endl;    
+           
     G4cout << "\n   Momentum balance (excluding gamma desexcitation): mean = " 
-	   << std::setw(wid) << G4BestUnit(Pbmean, "Energy")
-	   << "\t( "  << G4BestUnit(fPbalance[1], "Energy")
-	   << " --> " << G4BestUnit(fPbalance[2], "Energy")
-	   << ")" << G4endl;
+           << std::setw(wid) << G4BestUnit(Pbmean, "Energy")
+           << "\t( "  << G4BestUnit(fPbalance[1], "Energy")
+           << " --> " << G4BestUnit(fPbalance[2], "Energy")
+           << ")" << G4endl;
  }
-	    
+            
  //total time of life
  //
  if (fTimeCount > 0) {
@@ -186,14 +188,14 @@ void RunAction::EndOfRunAction(const G4Run* run)
     G4double halfLife = Tmean*std::log(2.);
    
     G4cout << "\n   Total time of life : mean = "
-	   << std::setw(wid) << G4BestUnit(Tmean, "Time")
-	   << "  half-life = "
-	   << std::setw(wid) << G4BestUnit(halfLife, "Time")
-	   << "   ( "  << G4BestUnit(fEventTime[1], "Time")
-	   << " --> "  << G4BestUnit(fEventTime[2], "Time")
-	   << ")" << G4endl;
+           << std::setw(wid) << G4BestUnit(Tmean, "Time")
+           << "  half-life = "
+           << std::setw(wid) << G4BestUnit(halfLife, "Time")
+           << "   ( "  << G4BestUnit(fEventTime[1], "Time")
+           << " --> "  << G4BestUnit(fEventTime[2], "Time")
+           << ")" << G4endl;
  }
-	    
+            
  //activity of primary ion
  //
  G4double pTimeMean = fPrimaryTime/nbEvents;
@@ -205,10 +207,10 @@ void RunAction::EndOfRunAction(const G4Run* run)
    
  G4cout << "\n   Activity of " << partName << " = "
             << std::setw(wid)  << Activity_perUnitOfMass*g/becquerel
-	    << " Bq/g   ("     << Activity_perUnitOfMass*g/curie
-	    << " Ci/g) \n" 
-	    << G4endl;
-    	    	   	         
+            << " Bq/g   ("     << Activity_perUnitOfMass*g/curie
+            << " Ci/g) \n" 
+            << G4endl;
+                                            
  // remove all contents in fParticleCount
  // 
  fParticleCount.clear(); 
