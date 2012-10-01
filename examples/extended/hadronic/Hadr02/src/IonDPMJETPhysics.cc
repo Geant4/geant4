@@ -70,6 +70,8 @@
 #include "G4DPMJET2_5CrossSection.hh"
 #endif
 
+#include "G4SystemOfUnits.hh"
+
 using namespace std;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -124,8 +126,8 @@ void IonDPMJETPhysics::ConstructProcess()
 }
 
 void IonDPMJETPhysics::AddProcess(const G4String& name,
-				  G4ParticleDefinition* part,
-				  G4bool isIon)
+                                  G4ParticleDefinition* part,
+                                  G4bool isIon)
 {
   G4HadronInelasticProcess* hadi = new G4HadronInelasticProcess(name, part);
   G4ProcessManager* pManager = part->GetProcessManager();

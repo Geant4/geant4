@@ -109,15 +109,15 @@ void IonUrQMDPhysics::ConstructProcess()
 
   if(fVerbose > 1) {
     G4cout << "IonUrQMDPhysics::ConstructProcess done! " 
-	   << G4endl;
+           << G4endl;
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void IonUrQMDPhysics::AddProcess(const G4String& name, 
-				 G4ParticleDefinition* part, 
-				 G4bool isIon)
+                                 G4ParticleDefinition* part, 
+                                 G4bool isIon)
 {
   G4HadronInelasticProcess* hadi = new G4HadronInelasticProcess(name, part);
   G4ProcessManager* pManager = part->GetProcessManager();

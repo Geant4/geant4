@@ -36,7 +36,7 @@
 // Created: 31.01.03 V.Ivanchenko
 //
 // Modified:
-// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+// 04.06.2006 Adoptation of Hadr01 (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
 //
@@ -77,7 +77,7 @@ EventActionMessenger::~EventActionMessenger()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventActionMessenger::SetNewValue(G4UIcommand* command,
-				       G4String newValue)
+                                       G4String newValue)
 { 
   if(command == fPrintCmd)
     {fEventAction->SetPrintModulo(fPrintCmd->GetNewIntValue(newValue));}

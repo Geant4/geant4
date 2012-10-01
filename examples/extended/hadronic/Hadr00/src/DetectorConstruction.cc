@@ -62,6 +62,9 @@
 
 #include "G4NistManager.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
@@ -103,8 +106,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4Tubs* solidW = new G4Tubs("World", 0., worldR, 0.5*worldZ, 0., twopi);
   fLogicWorld = new G4LogicalVolume(solidW, fWorldMaterial,"World");
   G4VPhysicalVolume* world = new G4PVPlacement(0, G4ThreeVector(),
-					       fLogicWorld, "World", 
-					       0, false, 0);
+                                               fLogicWorld, "World", 
+                                               0, false, 0);
 
   //
   // Target volume
@@ -112,7 +115,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4Tubs* solidA = new G4Tubs("Target", 0., fRadius, 0.5*fLength, 0.,twopi);
   fLogicTarget = new G4LogicalVolume( solidA, fTargetMaterial, "Target");
   new G4PVPlacement(0, G4ThreeVector(), fLogicTarget, "Target",
-		    fLogicWorld, false, 0);
+                    fLogicWorld, false, 0);
 
   G4cout << "### Target consist of " 
          << fTargetMaterial->GetName() 

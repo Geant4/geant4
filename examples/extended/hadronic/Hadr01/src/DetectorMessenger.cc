@@ -36,7 +36,7 @@
 // Created: 31.01.03 V.Ivanchenko
 //
 // Modified:
-// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+// 04.06.2006 Adoptation of Hadr01 (V.Ivanchenko)
 // 16.11.2006 Add beamCmd (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////

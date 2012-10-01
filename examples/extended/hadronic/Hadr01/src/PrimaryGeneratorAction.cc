@@ -36,7 +36,7 @@
 // Created: 31.01.03 V.Ivanchenko
 //
 // Modified:
-// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+// 04.06.2006 Adoptation of Hadr01 (V.Ivanchenko)
 // 16.11.2006 Add option allowing to have user defined beam position (VI)
 //
 ////////////////////////////////////////////////////////////////////////
@@ -44,6 +44,7 @@
 
 #include "PrimaryGeneratorAction.hh"
 #include "G4ParticleGun.hh"
+#include "G4SystemOfUnits.hh"
 #include "HistoManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

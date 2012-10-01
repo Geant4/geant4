@@ -168,10 +168,10 @@ HadronPhysicsUrQMD::FindInelasticProcess(const G4ParticleDefinition* p)
      size_t n = pvec->size();
      if(0 < n) {
        for(size_t i=0; i<n; ++i) {
-	 if(fHadronInelastic == ((*pvec)[i])->GetProcessSubType()) {
-	   had = static_cast<G4HadronicProcess*>((*pvec)[i]);
-	   break;
-	 }
+         if(fHadronInelastic == ((*pvec)[i])->GetProcessSubType()) {
+           had = static_cast<G4HadronicProcess*>((*pvec)[i]);
+           break;
+         }
        }
      }
   }

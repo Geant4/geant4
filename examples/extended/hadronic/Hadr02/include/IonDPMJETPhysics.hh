@@ -76,7 +76,7 @@ public:
 private:
 
   void AddProcess(const G4String& name, G4ParticleDefinition* part,
-		  G4bool isIon);
+                  G4bool isIon);
 
   G4VCrossSectionDataSet* fTripathi;
   G4VCrossSectionDataSet* fTripathiLight;

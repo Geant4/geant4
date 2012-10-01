@@ -1,6 +1,6 @@
 #/bin/csh
 #================================================
-#     Macro file for hadr00 run over all Physics Lists
+#     Macro file for Hadr00 run over all Physics Lists
 #     26.06.2009 V.Ivanchneko
 #================================================
 

@@ -44,7 +44,7 @@ Two environment variables should be defined:
 
 To run the example with DPMJET:
 
-  	$G4WORKDIR/bin/Linux-g++/hadr02 dpmjet.in QGSP_BIC
+  	$G4WORKDIR/bin/Linux-g++/Hadr02 dpmjet.in QGSP_BIC
 
 The last parameter is optional. It is the name of Geant4 reference Physics List on
 top of which a new ion physics is added. Alternatively Physics List can be defined via 
@@ -69,7 +69,7 @@ ion-ion interactions or use the provided UrQMD physics list (all hadron inelasti
 use UrQMD).
 To run the example with UrQMD only for ion-ion physics:
 
-	$G4WORKDIR/bin/Linux-g++/hadr02 urqmd.in QGSP_BIC
+	$G4WORKDIR/bin/Linux-g++/Hadr02 urqmd.in QGSP_BIC
 
 The last parameter is optional. It is the name of Geant4 reference Physics List on
 top of which a new ion physics is added. Alternatively Physics List can be defined via 
@@ -79,10 +79,10 @@ environment variable
 
 To run the examplw with the full UrQMD physics:
 
-	$G4WORKDIR/bin/Linux-g++/hadr02 default.in UrQMD
+	$G4WORKDIR/bin/Linux-g++/Hadr02 default.in UrQMD
 or:
 	setenv PHYSLIST UrQMD
-	$G4WORKDIR/bin/Linux-g++/hadr02 default.in
+	$G4WORKDIR/bin/Linux-g++/Hadr02 default.in
 
 UrQMD physics list can be used in any application, releavant headers and source files (*UrQDM*)
 should be copied in your application source tree, together with the urqmd1_3 sub-directory.

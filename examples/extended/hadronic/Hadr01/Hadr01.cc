@@ -23,20 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr02/hadr02.cc
-/// \brief Main program of the hadronic/Hadr02 example
+/// \file hadronic/Hadr01/Hadr01.cc
+/// \brief Main program of the hadronic/Hadr01 example
 //
-// $Id: hadr02.cc,v 1.4 2010-05-27 18:09:56 vnivanch Exp $
+//
+// $Id: Hadr01.cc,v 1.12 2010-05-26 11:53:40 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------
-//      GEANT4 hadr02
+//      GEANT4 Hadr01
 //
-//  Application demonstrating Geant4 hadronic cross sections
+//  Application demonstrating Geant4 hadronic physics:
+//  beam interaction with a target
 //
-//  Author: V.Ivanchenko 20 June 2008
+//  Authors: A.Bagulya, I.Gudowska, V.Ivanchenko, N.Starkov
 //
 //  Modified: 
+//  29.12.2009 V.Ivanchenko introduced access to reference PhysLists
 //
 // -------------------------------------------------------------
 //
@@ -49,14 +52,16 @@
 #include "Randomize.hh"
 
 #include "DetectorConstruction.hh"
+#include "PhysicsList.hh"
 #include "G4PhysListFactory.hh"
 #include "G4VModularPhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
+#include "PhysicsListMessenger.hh"
+#include "G4EmUserPhysics.hh"
 
 #include "RunAction.hh"
 #include "EventAction.hh"
 #include "StackingAction.hh"
-#include "HistoManager.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -66,7 +71,6 @@
 #include "G4UIExecutive.hh"
 #endif
 
-#include "UrQMD.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv) {
@@ -82,28 +86,34 @@ int main(int argc,char** argv) {
 
   G4PhysListFactory factory;
   G4VModularPhysicsList* phys = 0;
+  PhysicsListMessenger* mess = 0;
+  G4String physName = "";
 
-  // default Physics List for this example
-  G4String physName = "QBBC";
-
-  // Physics List name defined via 2nd argument
+  // Physics List name defined via 3nd argument
   if (argc==3) { physName = argv[2]; }
-  else {
+
+  // Physics List name defined via environment variable
+  if("" == physName) {
     char* path = getenv("PHYSLIST");
     if (path) { physName = G4String(path); }
   }
-  if ( physName == "UrQMD" ) { phys = new UrQMD; }
-  else { phys = factory.GetReferencePhysList(physName); }
 
-  // Physics List is defined via environment variable PHYSLIST
-  if(!phys) {
-    G4cout << "Hadr02 FATAL ERROR: Physics List is not defined"
-	   << G4endl;
-    return 1;
-  }
+  // reference PhysicsList via its name
+  if("" != physName && factory.IsReferencePhysList(physName)) {
+    phys = factory.GetReferencePhysList(physName);
+
+    // added extra EM options
+    phys->RegisterPhysics(new G4EmUserPhysics(1));
+
+    // instantiated messenger
+    mess = new PhysicsListMessenger();
+  } 
+
+  // local Physics List
+  if(!phys) { phys = new PhysicsList(); }
+
+  // define physics
   runManager->SetUserInitialization(phys);
-  HistoManager::GetPointer()->SetPhysicsList(phys);
-
   runManager->SetUserAction(new PrimaryGeneratorAction());
 
   //set user action classes
@@ -132,16 +142,17 @@ int main(int argc,char** argv) {
     }
   else           // Batch mode
     {
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UImanager->ApplyCommand(command+fileName);
+      G4String command = "/control/execute ";
+      G4String fileName = argv[1];
+      UImanager->ApplyCommand(command+fileName);
     }
 
   //job termination
 #ifdef G4VIS_USE
-   delete visManager;
-#endif
+  delete visManager;
+#endif     
   delete runManager;
+  delete mess;
 
   return 0;
 }

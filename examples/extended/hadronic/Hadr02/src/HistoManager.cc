@@ -78,6 +78,7 @@
 #include "G4NistManager.hh"
 #include "G4Material.hh"
 #include "G4BuilderType.hh"
+#include "G4SystemOfUnits.hh"
 //#ifdef G4_USE_URQMD
 #include "IonUrQMDPhysics.hh"
 //#endif
@@ -158,7 +159,7 @@ HistoManager::~HistoManager()
 void HistoManager::BookHisto()
 {
   fHisto->Add1D("0","Energy deposition (MeV/mm/event) in the target",
-	       fNSlices,0.0,fLength/mm,MeV/mm);
+               fNSlices,0.0,fLength/mm,MeV/mm);
   fHisto->Add1D("1","Log10 Energy (GeV) of gammas",fNBinsE,-5.,5.,1.0);
   fHisto->Add1D("2","Log10 Energy (GeV) of electrons",fNBinsE,-5.,5.,1.0);
   fHisto->Add1D("3","Log10 Energy (GeV) of positrons",fNBinsE,-5.,5.,1.0);
@@ -231,12 +232,12 @@ void HistoManager::EndOfRun()
   else               fEdepSum2 = 0.0;
 
   G4cout                         << "Beam particle                        "
-				 << fPrimaryDef->GetParticleName() <<G4endl;
+                                 << fPrimaryDef->GetParticleName() <<G4endl;
   G4cout                         << "Beam Energy(GeV)                     " 
-				 << fPrimaryKineticEnergy/GeV <<G4endl;
+                                 << fPrimaryKineticEnergy/GeV <<G4endl;
   G4cout                         << "Number of events                     " << fNevt <<G4endl;
   G4cout << std::setprecision(4) << "Average energy deposit (GeV)         " << fEdepSum/GeV 
-	 << "   RMS(GeV) " << fEdepSum2/GeV << G4endl;
+         << "   RMS(GeV) " << fEdepSum2/GeV << G4endl;
   G4cout << std::setprecision(4) << "Average number of steps              " << xs << G4endl;
   G4cout << std::setprecision(4) << "Average number of gamma              " << xg << G4endl;
   G4cout << std::setprecision(4) << "Average number of e-                 " << xe << G4endl;
@@ -301,21 +302,21 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
     G4ThreeVector dir = track->GetMomentumDirection();
     if(1 < fVerbose) 
       G4cout << "### Primary " << name 
-	     << " kinE(GeV)= " << e/GeV
-	     << "; m(GeV)= " << pd->GetPDGMass()/GeV
-	     << "; pos(mm)= " << track->GetPosition()/mm 
-	     << ";  dir= " << track->GetMomentumDirection() 
-	     << G4endl;
+             << " kinE(GeV)= " << e/GeV
+             << "; m(GeV)= " << pd->GetPDGMass()/GeV
+             << "; pos(mm)= " << track->GetPosition()/mm 
+             << ";  dir= " << track->GetMomentumDirection() 
+             << G4endl;
  
     // Secondary track
   } else {
     if(1 < fVerbose) 
       G4cout << "=== Secondary " << name 
-	     << " kinE(GeV)= " << e/GeV
-	     << "; m(GeV)= " << pd->GetPDGMass()/GeV
-	     << "; pos(mm)= " << track->GetPosition()/mm 
-	     << ";  dir= " << track->GetMomentumDirection() 
-	     << G4endl;
+             << " kinE(GeV)= " << e/GeV
+             << "; m(GeV)= " << pd->GetPDGMass()/GeV
+             << "; pos(mm)= " << track->GetPosition()/mm 
+             << ";  dir= " << track->GetMomentumDirection() 
+             << G4endl;
     e = std::log10(e/GeV);
     if(pd == G4Gamma::Gamma()) {
       fNgam++;
@@ -365,11 +366,11 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
       G4double Z = pd->GetPDGCharge()/eplus;
       G4double A = (G4double)pd->GetBaryonNumber();
       if(e > 0.0) {
-	fHisto->Fill(16,Z,1.0);
-	fHisto->Fill(17,A,1.0);
+        fHisto->Fill(16,Z,1.0);
+        fHisto->Fill(17,A,1.0);
       } else {
-	fHisto->Fill(18,Z,1.0);
-	fHisto->Fill(19,A,1.0);
+        fHisto->Fill(18,Z,1.0);
+        fHisto->Fill(19,A,1.0);
       }
       fHisto->Fill(20,Z,1.0);
       fHisto->Fill(21,A,1.0);
@@ -401,11 +402,11 @@ void HistoManager::AddTargetStep(const G4Step* step)
     if(1 < fVerbose) {
       const G4Track* track = step->GetTrack();
       G4cout << "HistoManager::AddEnergy: e(keV)= " << edep/keV
-	     << "; z(mm)= " << z/mm
-	     << "; step(mm)= " << step->GetStepLength()/mm
-	     << " by " << track->GetDefinition()->GetParticleName()
-	     << " E(GeV)= " << track->GetKineticEnergy()/GeV
-	     << G4endl;
+             << "; z(mm)= " << z/mm
+             << "; step(mm)= " << step->GetStepLength()/mm
+             << " by " << track->GetDefinition()->GetParticleName()
+             << " E(GeV)= " << track->GetKineticEnergy()/GeV
+             << G4endl;
     }
   }
 }
@@ -431,33 +432,33 @@ void HistoManager::SetIonPhysics(const G4String& nam)
 {
   if(fIonPhysics) {
     G4cout << "### HistoManager WARNING: Ion Physics is already defined: <"
-	   << nam << "> is ignored!" << G4endl;
+           << nam << "> is ignored!" << G4endl;
   } else if(nam == "DPMJET") {
     fIonPhysics = new IonDPMJETPhysics(false);
     fPhysList->ReplacePhysics(fIonPhysics);
     G4RunManager::GetRunManager()->PhysicsHasBeenModified();
     G4cout << "### SetIonPhysics: Ion Physics DPMJET/Binary is added"
-	   << G4endl;
+           << G4endl;
   } else if(nam == "FTF") {
     fIonPhysics = new G4IonFTFPBinaryCascadePhysics();
     fPhysList->ReplacePhysics(fIonPhysics);
     G4RunManager::GetRunManager()->PhysicsHasBeenModified();
     G4cout << "### SetIonPhysics: Ion Physics FTFP/Binary is added"
-	   << G4endl;
+           << G4endl;
   } else if(nam == "UrQMD") {
 #ifdef G4_USE_URQMD
     fIonPhysics = new IonUrQMDPhysics(1);
     fPhysList->ReplacePhysics(fIonPhysics);
     G4RunManager::GetRunManager()->PhysicsHasBeenModified();
     G4cout << "### SetIonPhysics: Ion Physics UrQMD is added"
-	   << G4endl;
+           << G4endl;
 #else
     G4cout << "Error: Ion Physics UrQMD is requested but is not available"
-	   <<G4endl;
+           <<G4endl;
 #endif
   } else {
     G4cout << "### HistoManager WARNING: Ion Physics <"
-	   << nam << "> is unknown!" << G4endl;
+           << nam << "> is unknown!" << G4endl;
   }
 }
 

@@ -37,7 +37,7 @@
 // Created: 31.04.2006 V.Ivanchenko
 //
 // Modified:
-// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+// 04.06.2006 Adoptation of Hadr01 (V.Ivanchenko)
 // 26.04.2007 Physics according to 8.3 Physics List (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
@@ -394,13 +394,13 @@ void PhysicsList::SetCutForProton(G4double cut)
 void PhysicsList::List()
 {
   G4cout << "### PhysicsLists available: FTFP_BERT FTFP_BERT_EMV FTFP_BERT_EMX FTF_BIC"
-	 << G4endl;
+         << G4endl;
   G4cout << "                            LHEP LHEP_EMV QBBC QGS_BIC QGSP"
-	 << G4endl; 
+         << G4endl; 
   G4cout << "                            QGSC_BERT QGSP_BERT QGSP_BERT_EMV QGSP_BIC_EMY"
-	 << G4endl; 
+         << G4endl; 
   G4cout << "                            QGSP_BERT_EMX QGSP_BERT_HP QGSP_BIC QGSP_BIC_HP" 
-	 << G4endl; 
+         << G4endl; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -103,7 +103,7 @@ The reference Physics List name may be defined in the 3d argument of the
 run command: 
 
 \verbatim
-$G4BIN/Linux++/hadr01 my.macro QGSP_BERT 
+$G4BIN/Linux++/Hadr01 my.macro QGSP_BERT 
 \endverbatim
 
 If 3d argument is not set then the PHYSLIST environment variable is checked. 

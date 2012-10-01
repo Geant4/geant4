@@ -40,12 +40,12 @@
 // MODULE:           G4UrQMD1_3Model.hh
 //
 // Version:          0.B
-// Date:	     20/12/12
-// Author:	     Kh. Abdel-Waged and Nuha Felemban
+// Date:             20/12/12
+// Author:           Kh. Abdel-Waged and Nuha Felemban
 // Revised by:       V.V. Uzhinskii
 //                   SPONSERED BY
-// Customer:	     KAUST/NCMP
-// Contract:	     31-465
+// Customer:         KAUST/NCMP
+// Contract:         31-465
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //

@@ -4,7 +4,7 @@
 # GNUmakefile for examples module 
 # --------------------------------------------------------------
 
-name := hadr00
+name := Hadr00
 G4TARGET := $(name)
 G4EXLIB := true
 

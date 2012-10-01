@@ -38,7 +38,7 @@
 // Created: 31.01.2006 V.Ivanchenko
 //
 // Modified:
-// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+// 04.06.2006 Adoptation of Hadr01 (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
 //
@@ -165,20 +165,20 @@ void PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     if(fPhysicsList) {
       G4String name = newValue;
       if(name == "PHYSLIST") {
-	char* path = getenv(name);
-	if (path) name = G4String(path);
-	else {
-	  G4cout << "### PhysicsListMessenger WARNING: "
-		 << " environment variable PHYSLIST is not defined"
-		 << G4endl;
-	  return; 
-	}
+        char* path = getenv(name);
+        if (path) name = G4String(path);
+        else {
+          G4cout << "### PhysicsListMessenger WARNING: "
+                 << " environment variable PHYSLIST is not defined"
+                 << G4endl;
+          return; 
+        }
       }
       fPhysicsList->AddPhysicsList(name);
     } else {
       G4cout << "### PhysicsListMessenger WARNING: "
-	     << " /testhadr/Physics UI command is not available "
-	     << "for reference Physics List" << G4endl;
+             << " /testhadr/Physics UI command is not available "
+             << "for reference Physics List" << G4endl;
     }
 
   } else if( command == fListCmd ) {
@@ -186,8 +186,8 @@ void PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
       fPhysicsList->List();
     } else { 
       G4cout << "### PhysicsListMessenger WARNING: "
-	     << " /testhadr/ListPhysics UI command is not available "
-	     << "for reference Physics List" << G4endl;
+             << " /testhadr/ListPhysics UI command is not available "
+             << "for reference Physics List" << G4endl;
     }
   }
 }

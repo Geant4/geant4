@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file hadronic/Hadr01/src/G4EmUserPhysics.cc
+/// \brief Implementation of the G4EmUserPhysics class
+//
 // $Id: G4EmUserPhysics.cc,v 1.22 2010-12-19 18:11:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -47,6 +50,7 @@
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 #include "G4EmProcessSubType.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -83,8 +87,8 @@ void G4EmUserPhysics::ConstructProcess()
       G4double elim = 1.e-6*eV;
       eloss->SetLowestEnergyLimit(elim);
       G4cout << "### G4EmUserPhysics::ConstructProcess: "
-	     << "set new lowest energy limit " << elim/eV << " eV for "
-	     << pbar->GetParticleName() << G4endl;
+             << "set new lowest energy limit " << elim/eV << " eV for "
+             << pbar->GetParticleName() << G4endl;
       break;
     }
   }

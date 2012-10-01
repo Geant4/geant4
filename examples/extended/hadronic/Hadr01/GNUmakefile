@@ -4,7 +4,7 @@
 # GNUmakefile for examples module with AIDA interface
 # --------------------------------------------------------------
 
-name := hadr01
+name := Hadr01
 G4TARGET := $(name)
 G4EXLIB := true
 

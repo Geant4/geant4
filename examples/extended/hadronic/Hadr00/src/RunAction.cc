@@ -43,6 +43,7 @@
 #include "HistoManager.hh"
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

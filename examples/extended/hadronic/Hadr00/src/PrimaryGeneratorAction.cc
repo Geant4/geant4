@@ -43,6 +43,7 @@
 #include "PrimaryGeneratorAction.hh"
 #include "G4ParticleGun.hh"
 #include "G4Proton.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

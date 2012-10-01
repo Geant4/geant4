@@ -36,7 +36,7 @@
 // Created: 31.04.2006 V.Ivanchenko
 //
 // Modified:
-// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+// 04.06.2006 Adoptation of Hadr01 (V.Ivanchenko)
 //
 ////////////////////////////////////////////////////////////////////////
 // 
@@ -47,6 +47,7 @@
 #include "G4Track.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -80,10 +81,10 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
 
   if(fHistoManager->GetVerbose() > 1 ) {
     G4cout << "Track #"
-	   << aTrack->GetTrackID() << " of " << part->GetParticleName()
-	   << " E(MeV)= " << aTrack->GetKineticEnergy()/MeV
-	   << " produced by Track ID= " << aTrack->GetParentID()
-	   << G4endl;
+           << aTrack->GetTrackID() << " of " << part->GetParticleName()
+           << " E(MeV)= " << aTrack->GetKineticEnergy()/MeV
+           << " produced by Track ID= " << aTrack->GetParentID()
+           << G4endl;
   }
 
   //stack or delete secondaries

@@ -23,23 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr01/hadr01.cc
-/// \brief Main program of the hadronic/Hadr01 example
+/// \file hadronic/Hadr00/Hadr00.cc
+/// \brief Main program of the hadronic/Hadr00 example
 //
 //
-// $Id: hadr01.cc,v 1.12 2010-05-26 11:53:40 allison Exp $
+// $Id: Hadr00.cc,v 1.4 2010-05-27 18:09:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------
-//      GEANT4 hadr01
+//      GEANT4 Hadr00
 //
-//  Application demonstrating Geant4 hadronic physics:
-//  beam interaction with a target
+//  Application demonstrating Geant4 hadronic cross sections
 //
-//  Authors: A.Bagulya, I.Gudowska, V.Ivanchenko, N.Starkov
+//  Author: V.Ivanchenko 20 June 2008
 //
 //  Modified: 
-//  29.12.2009 V.Ivanchenko introduced access to reference PhysLists
 //
 // -------------------------------------------------------------
 //
@@ -52,16 +50,12 @@
 #include "Randomize.hh"
 
 #include "DetectorConstruction.hh"
-#include "PhysicsList.hh"
 #include "G4PhysListFactory.hh"
 #include "G4VModularPhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
-#include "PhysicsListMessenger.hh"
-#include "G4EmUserPhysics.hh"
 
 #include "RunAction.hh"
 #include "EventAction.hh"
-#include "StackingAction.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -86,45 +80,37 @@ int main(int argc,char** argv) {
 
   G4PhysListFactory factory;
   G4VModularPhysicsList* phys = 0;
-  PhysicsListMessenger* mess = 0;
   G4String physName = "";
 
   // Physics List name defined via 3nd argument
   if (argc==3) { physName = argv[2]; }
 
-  // Physics List name defined via environment variable
+  // Physics List is defined via environment variable PHYSLIST
   if("" == physName) {
     char* path = getenv("PHYSLIST");
     if (path) { physName = G4String(path); }
   }
 
+  // if name is not known to the factory use FTFP_BERT
+  if("" == physName || !factory.IsReferencePhysList(physName)) {
+    physName = "FTFP_BERT"; 
+  }
+
   // reference PhysicsList via its name
-  if("" != physName && factory.IsReferencePhysList(physName)) {
-    phys = factory.GetReferencePhysList(physName);
+  phys = factory.GetReferencePhysList(physName);
 
-    // added extra EM options
-    phys->RegisterPhysics(new G4EmUserPhysics(1));
-
-    // instantiated messenger
-    mess = new PhysicsListMessenger();
-  } 
-
-  // local Physics List
-  if(!phys) { phys = new PhysicsList(); }
-
-  // define physics
   runManager->SetUserInitialization(phys);
+
   runManager->SetUserAction(new PrimaryGeneratorAction());
 
   //set user action classes
   runManager->SetUserAction(new RunAction());
   runManager->SetUserAction(new EventAction());
-  runManager->SetUserAction(new StackingAction());
 
   //get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 #ifdef G4VIS_USE
-   G4VisManager* visManager = 0;
+  G4VisManager* visManager = 0;
 #endif
 
   if (argc==1)   // Define UI terminal for interactive mode
@@ -142,17 +128,16 @@ int main(int argc,char** argv) {
     }
   else           // Batch mode
     {
-      G4String command = "/control/execute ";
-      G4String fileName = argv[1];
-      UImanager->ApplyCommand(command+fileName);
+     G4String command = "/control/execute ";
+     G4String fileName = argv[1];
+     UImanager->ApplyCommand(command+fileName);
     }
 
   //job termination
 #ifdef G4VIS_USE
   delete visManager;
-#endif     
+#endif
   delete runManager;
-  delete mess;
 
   return 0;
 }

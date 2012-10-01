@@ -77,7 +77,7 @@ EventActionMessenger::~EventActionMessenger()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventActionMessenger::SetNewValue(G4UIcommand* command,
-				       G4String newValue)
+                                       G4String newValue)
 { 
   if(command == fPrintCmd)
     {fEventAction->SetPrintModulo(fPrintCmd->GetNewIntValue(newValue));}

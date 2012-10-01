@@ -37,7 +37,7 @@
 // Author:      V.Ivanchenko 30/01/01
 //
 // Modified:
-// 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
+// 04.06.2006 Adoptation of Hadr01 (V.Ivanchenko)
 // 16.11.2006 Add beamFlag (V.Ivanchenko)
 //
 //----------------------------------------------------------------------------
@@ -71,6 +71,7 @@
 #include "G4Alpha.hh"
 #include "Histo.hh"
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -119,7 +120,7 @@ void HistoManager::bookHisto()
 {
   fHistoBooked = true;
   fHisto->Add1D("1","Energy deposition (MeV/mm/event) in the target",
-	       fNSlices,0.0,fLength/mm,MeV/mm);
+               fNSlices,0.0,fLength/mm,MeV/mm);
   fHisto->Add1D("2","Log10 Energy (MeV) of gammas",fNBinsE,-5.,5.,1.0);
   fHisto->Add1D("3","Log10 Energy (MeV) of electrons",fNBinsE,-5.,5.,1.0);
   fHisto->Add1D("4","Log10 Energy (MeV) of positrons",fNBinsE,-5.,5.,1.0);
@@ -141,13 +142,13 @@ void HistoManager::bookHisto()
   fHisto->Add1D("20","Log10 Energy (MeV) of pi+",fNBinsE,-4.,6.,1.0);
   fHisto->Add1D("21","Log10 Energy (MeV) of pi-",fNBinsE,-4.,6.,1.0);
   fHisto->Add1D("22","Energy deposition in the target normalized to beam energy",
-	       110,0.0,1.1,1.0);
+               110,0.0,1.1,1.0);
   fHisto->Add1D("23","EM energy deposition in the target normalized to beam energy",
-	       110,0.0,1.1,1.0);
+               110,0.0,1.1,1.0);
   fHisto->Add1D("24","Pion energy deposition in the target normalized to beam energy",
-	       110,0.0,1.1,1.0);
+               110,0.0,1.1,1.0);
   fHisto->Add1D("25","Proton energy deposition in the target normalized to beam energy",
-	       110,0.0,1.1,1.0);
+               110,0.0,1.1,1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -228,12 +229,12 @@ void HistoManager::EndOfRun()
   else                { fEdepSum2 = 0.0; }
 
   G4cout                         << "Beam particle                        "
-				 << fPrimaryDef->GetParticleName() <<G4endl;
+                                 << fPrimaryDef->GetParticleName() <<G4endl;
   G4cout                         << "Beam Energy(MeV)                     " 
-				 << fPrimaryKineticEnergy/MeV <<G4endl;
+                                 << fPrimaryKineticEnergy/MeV <<G4endl;
   G4cout                         << "Number of events                     " << fNevt <<G4endl;
   G4cout << std::setprecision(4) << "Average energy deposit (MeV)         " << fEdepSum/MeV 
-	 << "   RMS(MeV) " << fEdepSum2/MeV << G4endl;
+         << "   RMS(MeV) " << fEdepSum2/MeV << G4endl;
   G4cout << std::setprecision(4) << "Average number of steps              " << xs << G4endl;
   G4cout << std::setprecision(4) << "Average number of gamma              " << xg << G4endl;
   G4cout << std::setprecision(4) << "Average number of e-                 " << xe << G4endl;
@@ -303,21 +304,21 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
     G4ThreeVector dir = track->GetMomentumDirection();
     if(1 < fVerbose) 
       G4cout << "### Primary " << name 
-	     << " kinE(MeV)= " << e/MeV
-	     << "; m(MeV)= " << pd->GetPDGMass()/MeV
-	     << "; pos(mm)= " << track->GetPosition()/mm 
-	     << ";  dir= " << track->GetMomentumDirection() 
-	     << G4endl;
+             << " kinE(MeV)= " << e/MeV
+             << "; m(MeV)= " << pd->GetPDGMass()/MeV
+             << "; pos(mm)= " << track->GetPosition()/mm 
+             << ";  dir= " << track->GetMomentumDirection() 
+             << G4endl;
 
     // Secondary track
   } else {
     if(1 < fVerbose) 
       G4cout << "=== Secondary " << name 
-	     << " kinE(MeV)= " << e/MeV
-	     << "; m(MeV)= " << pd->GetPDGMass()/MeV
-	     << "; pos(mm)= " << track->GetPosition()/mm 
-	     << ";  dir= " << track->GetMomentumDirection() 
-	     << G4endl;
+             << " kinE(MeV)= " << e/MeV
+             << "; m(MeV)= " << pd->GetPDGMass()/MeV
+             << "; pos(mm)= " << track->GetPosition()/mm 
+             << ";  dir= " << track->GetMomentumDirection() 
+             << G4endl;
     e = std::log10(e/MeV);
     if(pd == G4Gamma::Gamma()) {
       fNgam++;
@@ -402,11 +403,11 @@ void HistoManager::AddTargetStep(const G4Step* step)
 
     if(1 < fVerbose) {
       G4cout << "HistoManager::AddEnergy: e(keV)= " << fEdep/keV
-	     << "; z(mm)= " << z/mm
-	     << "; step(mm)= " << step->GetStepLength()/mm
-	     << " by " << pd->GetParticleName()
-	     << " E(MeV)= " << track->GetKineticEnergy()/MeV
-	     << G4endl;
+             << "; z(mm)= " << z/mm
+             << "; step(mm)= " << step->GetStepLength()/mm
+             << " by " << pd->GetParticleName()
+             << " E(MeV)= " << track->GetKineticEnergy()/MeV
+             << G4endl;
     }
   }
 }
