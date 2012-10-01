@@ -68,7 +68,8 @@ G4PhaseSpaceDecayChannel::G4PhaseSpaceDecayChannel(
 					  theDaughterName1,
 					  theDaughterName2,
 					  theDaughterName3,
-					  theDaughterName4)
+					  theDaughterName4),
+			  current_parent_mass(0.0)
 {
 
 }
