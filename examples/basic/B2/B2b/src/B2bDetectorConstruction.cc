@@ -53,6 +53,8 @@
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 
+#include "G4SystemOfUnits.hh"
+
 //#include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -224,7 +226,7 @@ G4VPhysicalVolume* B2bDetectorConstruction::DefineVolumes()
                                   chamberWidth,  // chamber width
                                   firstLength,    // initial length 
                                   lastLength);    // final length
-			   
+                           
   // dummy value : kZAxis -- modified by parameterised volume
 
   new G4PVParameterised("Chamber",       // their name
@@ -238,7 +240,7 @@ G4VPhysicalVolume* B2bDetectorConstruction::DefineVolumes()
   G4cout << "There are " << NbOfChambers << " chambers in the tracker region. "
          << "\nThe chambers are " << chamberWidth/cm << " cm of " 
          << fChamberMaterial->GetName() << "\nThe distance between chamber is "
-	 << chamberSpacing/cm << " cm" << G4endl;
+         << chamberSpacing/cm << " cm" << G4endl;
 
   // Sensitive detectors
 

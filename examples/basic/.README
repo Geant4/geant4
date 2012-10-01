@@ -3,7 +3,7 @@
 ///\file "basic/.README"
 ///\brief Geant4 Basic Examples README page
 
-/*! \page README_basic Geant4 Basic Examples
+/*! \page README_basic Basic Examples
 
 The set of basic examples is oriented to "novice" users and covering many
 basic general use-cases typical of an "application"-oriented kind of

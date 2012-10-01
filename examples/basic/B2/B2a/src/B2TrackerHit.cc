@@ -91,7 +91,7 @@ void B2TrackerHit::Draw()
   if(pVVisManager)
   {
     G4Circle circle(fPos);
-    circle.SetScreenSize(2.);
+    circle.SetScreenSize(4.);
     circle.SetFillStyle(G4Circle::filled);
     G4Colour colour(1.,0.,0.);
     G4VisAttributes attribs(colour);

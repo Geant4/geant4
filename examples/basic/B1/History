@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18/09/12 I. Hrivnacova (exbasic-V09-05-00)
+- Adding explicit includes of G4SystemOfUnits.hh and G4PhysicalConstants.hh
+  where needed
+
 29/11/11 B.Morgan (exbasic-V09-04-05)
 - Fixed CMakeLists.txt to setup UI and VIS as needed, and copy all macros
   to build directory so executable is runnable directly.
