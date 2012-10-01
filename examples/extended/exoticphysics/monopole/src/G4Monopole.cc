@@ -45,6 +45,8 @@
 
 #include "G4Monopole.hh"
 #include "G4ParticleTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 // ######################################################################
 // ###                        Monopole                                ###
@@ -87,7 +89,7 @@ G4Monopole::~G4Monopole()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4Monopole* G4Monopole::MonopoleDefinition(G4double mass, G4double mCharge, 
-					   G4double eCharge)
+                                           G4double eCharge)
 {    
   if(!theMonopole) {
     magCharge = eplus * mCharge / fine_structure_const * 0.5;
@@ -100,9 +102,9 @@ G4Monopole* G4Monopole::MonopoleDefinition(G4double mass, G4double mCharge,
     
     
     G4cout << "Monopole is created: m(GeV)= " << theMonopole->GetPDGMass()/GeV 
-	   << " Qel= " << theMonopole->GetPDGCharge()/eplus
-	   << " Qmag= " << magCharge/eplus
-	   << G4endl;
+           << " Qel= " << theMonopole->GetPDGCharge()/eplus
+           << " Qmag= " << magCharge/eplus
+           << G4endl;
   }
   return theMonopole;
 }

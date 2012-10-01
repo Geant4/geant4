@@ -56,10 +56,10 @@ public:
     
 private:
   
-  RunAction*	       	 fRunAction;
+  RunAction*             fRunAction;
     
   G4UIdirectory*         fActDir;    
-  G4UIcmdWithADouble*	 fBinSizeCmd;
+  G4UIcmdWithADouble*    fBinSizeCmd;
   G4UIcmdWithAnInteger*  fVerboseCmd;
 };
 

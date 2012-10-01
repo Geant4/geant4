@@ -66,6 +66,8 @@
 // #include "G4CashKarpRKF45.hh"
 // #include "G4RKG3_Stepper.hh"
 
+#include "G4SystemOfUnits.hh"
+
 G4MonopoleFieldSetup* G4MonopoleFieldSetup::fMonopoleFieldSetup=0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -163,7 +165,7 @@ void G4MonopoleFieldSetup::SetStepperAndChordFinder(G4int val)
         fChordFinder = new G4ChordFinder( fMagneticField, fMinStep, fStepper);      
         break;
       case 1: 
-	fChordFinder = new G4ChordFinder( fMagneticField, fMinStep, fMonopoleStepper);
+        fChordFinder = new G4ChordFinder( fMagneticField, fMinStep, fMonopoleStepper);
         break;
     }   
   

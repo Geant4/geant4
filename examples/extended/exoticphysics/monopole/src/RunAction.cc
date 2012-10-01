@@ -40,6 +40,7 @@
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
 #include "Histo.hh"
@@ -117,11 +118,11 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   if(GetVerbose() > 0){
     G4cout << "\n The run consists of " << nEvents << " "<< particle << " of "
            << G4BestUnit(energy,"Energy") << " through " 
-	   << G4BestUnit(fDetector->GetAbsorSizeX(),"Length") << " of "
-	   << matName << " (density: " 
-	   << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
+           << G4BestUnit(fDetector->GetAbsorSizeX(),"Length") << " of "
+           << matName << " (density: " 
+           << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
   };
-	 
+         
   //compute projected range and straggling
 
   fProjRange /= nEvents; fProjRange2 /= nEvents;
@@ -152,8 +153,8 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     G4cout << "### Stopping Powers" << G4endl;
     for(i=0; i<100; i++) {
       G4cout << " E(MeV)= " << ekin[i] << "  dedxp= " << dedxproton[i]
-	     << " dedxmp= " << dedxmp[i]
-	     << G4endl;
+             << " dedxmp= " << dedxmp[i]
+             << G4endl;
     }
   }
   G4cout << "### End of stopping power table" << G4endl;
@@ -186,7 +187,7 @@ void RunAction::FillHisto(G4int ih, G4double x, G4double weight)
 {
   if(GetVerbose() > 1) {
     G4cout << "FillHisto " << ih << "  x=" << x << " weight= " << weight 
-	   << G4endl;
+           << G4endl;
   }
   fHisto->Fill(ih, x, weight);
 }

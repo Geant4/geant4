@@ -72,7 +72,7 @@ private:
   Histo*                  fHisto;    
   DetectorConstruction*   fDetector;
   PrimaryGeneratorAction* fKinematic;
-  RunActionMessenger*	  fRunActionMessenger;
+  RunActionMessenger*     fRunActionMessenger;
 
   G4int                   fVerboseLevel;
 

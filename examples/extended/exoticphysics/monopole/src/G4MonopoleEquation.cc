@@ -57,6 +57,8 @@
 
 #include "G4MonopoleEquation.hh"
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -83,8 +85,8 @@ G4MonopoleEquation::SetChargeMomentumMass(G4double particleMagneticCharge,
   fMagCharge =  eplus*particleMagneticCharge*c_light ;
 
   // G4cout << " G4MonopoleEquation: ElectricCharge=" << particleElectricCharge
-  // 	  << "; MagneticCharge=" << particleMagneticCharge
-  // 	  << G4endl;
+  //           << "; MagneticCharge=" << particleMagneticCharge
+  //           << G4endl;
  
   fMassCof = particleMass*particleMass ; 
 }
@@ -93,8 +95,8 @@ G4MonopoleEquation::SetChargeMomentumMass(G4double particleMagneticCharge,
 
 void
 G4MonopoleEquation::EvaluateRhsGivenB(const G4double y[],
-				      const G4double Field[],
-				      G4double dydx[] ) const
+                                      const G4double Field[],
+                                      G4double dydx[] ) const
 {
   // Components of y:
   //    0-2 dr/ds, 
@@ -131,15 +133,15 @@ G4MonopoleEquation::EvaluateRhsGivenB(const G4double y[],
   dydx[5] = cofMag * Field[2] + cofEl * (y[3]*Field[1] - y[4]*Field[0]); 
    
   //        G4cout << std::setprecision(5)<< "E=" << Energy
-  // 	      << "; p="<< 1/pModuleInverse
-  // 	      << "; mC="<< magCharge
-  // 	      <<"; x=" << y[0]
-  // 	      <<"; y=" << y[1]
-  // 	      <<"; z=" << y[2]
-  // 	      <<"; dydx[3]=" << dydx[3]
-  // 	      <<"; dydx[4]=" << dydx[4]
-  // 	      <<"; dydx[5]=" << dydx[5]
-  // 	      << G4endl;
+  //               << "; p="<< 1/pModuleInverse
+  //               << "; mC="<< magCharge
+  //               <<"; x=" << y[0]
+  //               <<"; y=" << y[1]
+  //               <<"; z=" << y[2]
+  //               <<"; dydx[3]=" << dydx[3]
+  //               <<"; dydx[4]=" << dydx[4]
+  //               <<"; dydx[5]=" << dydx[5]
+  //               << G4endl;
 
   dydx[6] = 0.;//not used
    

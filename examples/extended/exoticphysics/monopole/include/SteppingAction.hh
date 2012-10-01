@@ -52,7 +52,7 @@ public:
     
 private:
 
-  RunAction*            fRunAction;
+  RunAction*  fRunAction;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

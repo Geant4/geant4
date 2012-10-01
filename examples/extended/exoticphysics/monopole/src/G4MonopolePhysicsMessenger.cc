@@ -109,7 +109,7 @@ G4MonopolePhysicsMessenger::~G4MonopolePhysicsMessenger()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4MonopolePhysicsMessenger::SetNewValue(G4UIcommand* command, 
-					     G4String newValue)
+                                             G4String newValue)
 { 
   if (command == fPhysicsCmd)
    { G4double q, m; G4double mass; 

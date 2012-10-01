@@ -81,7 +81,7 @@ int main(int argc,char** argv) {
 #ifdef G4VIS_USE
   G4VisManager* visManager = 0;
 #endif
-	
+        
   //get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 

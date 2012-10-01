@@ -49,6 +49,8 @@
 #include "G4ParticleDefinition.hh"
 #include "globals.hh"
 
+#include "CLHEP/Units/SystemOfUnits.h"
+
 // ######################################################################
 // ###                       Monopole                                 ###
 // ######################################################################
@@ -74,7 +76,7 @@ private:
 
 public: 
   
-  static G4Monopole* MonopoleDefinition(G4double mass = 100.*GeV, 
+  static G4Monopole* MonopoleDefinition(G4double mass = 100.*CLHEP::GeV, 
                                         G4double magCharge = 1.0, 
                                         G4double elCharge  = 0.0);
 

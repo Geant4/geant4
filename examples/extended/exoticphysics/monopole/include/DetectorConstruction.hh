@@ -78,7 +78,7 @@ private:
   G4Material*         fWorldMaterial;           
   G4double            fAbsorSizeX;
   G4double            fAbsorSizeYZ;
-  G4double	      fMaxStepSize;
+  G4double            fMaxStepSize;
   G4Material*         fAbsorMaterial;
 
   G4UniformMagField*    fMagField;

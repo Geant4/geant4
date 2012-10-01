@@ -56,8 +56,8 @@ public:
     
 private:
 
-  G4ParticleGun*             fParticleGun;
-  DetectorConstruction*      fDetector;
+  G4ParticleGun*         fParticleGun;
+  DetectorConstruction*  fDetector;
 
 };
 

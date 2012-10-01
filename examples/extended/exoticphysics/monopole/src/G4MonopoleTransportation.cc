@@ -52,13 +52,14 @@
 #include "G4FieldManagerStore.hh"
 #include "G4Monopole.hh"
 #include "G4TransportationProcessType.hh"
+#include "G4SystemOfUnits.hh"
 
 class G4VSensitiveDetector;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4MonopoleTransportation::G4MonopoleTransportation( const G4Monopole* mpl,
-						    G4int verb)
+                                                    G4int verb)
   : G4VProcess( G4String("MonopoleTransportation"), fTransportation ),
     fParticleIsLooping( false ),
     fPreviousSftOrigin (0.,0.,0.),
@@ -110,7 +111,7 @@ G4MonopoleTransportation::~G4MonopoleTransportation()
 {
   if( (fVerboseLevel > 0) && (fSumEnergyKilled > 0.0 ) ){ 
     G4cout << " G4MonopoleTransportation: Statistics for looping particles " 
-	   << G4endl;
+           << G4endl;
     G4cout << "   Sum of energy of loopers killed: " <<  fSumEnergyKilled << G4endl;
     G4cout << "   Max energy of loopers killed: " <<  fMaxEnergyKilled << G4endl;
   } 
@@ -203,7 +204,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   }
 
   // G4cout << " G4Transport:  field exerts force= " << fieldExertsForce
-  // 	 << "  fieldMgr= " << fieldMgr << G4endl;
+  //          << "  fieldMgr= " << fieldMgr << G4endl;
 
   // Choose the calculation of the transportation: Field or not 
   //
@@ -296,7 +297,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
                                                           currentSafety,
                                                           track.GetVolume() ) ;
         fGeometryLimitedStep= lengthAlongCurve < currentMinimumStep; 
-	if( fGeometryLimitedStep ) {
+        if( fGeometryLimitedStep ) {
            geometryStepLength   = lengthAlongCurve ;
         } else {
            geometryStepLength   = currentMinimumStep ;
@@ -351,25 +352,25 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
  
       if( particleMagneticCharge != 0.0 ) {
 
-	 G4double endSafety =
+         G4double endSafety =
                fLinearNavigator->ComputeSafety( fTransportEndPosition) ;
-	 currentSafety      = endSafety ;
-	 fPreviousSftOrigin = fTransportEndPosition ;
-	 fPreviousSafety    = currentSafety ; 
-	 fpSafetyHelper->SetCurrentSafety( currentSafety, fTransportEndPosition);
+         currentSafety      = endSafety ;
+         fPreviousSftOrigin = fTransportEndPosition ;
+         fPreviousSafety    = currentSafety ; 
+         fpSafetyHelper->SetCurrentSafety( currentSafety, fTransportEndPosition);
 
-	 // Because the Stepping Manager assumes it is from the start point, 
-	 //  add the StepLength
-	 //
-	 currentSafety     += endpointDistance ;
+         // Because the Stepping Manager assumes it is from the start point, 
+         //  add the StepLength
+         //
+         currentSafety     += endpointDistance ;
 
 #ifdef G4DEBUG_TRANSPORT 
-	 G4cout.precision(12) ;
-	 G4cout << "***G4MonopoleTransportation::AlongStepGPIL ** " << G4endl  ;
-	 G4cout << "  Called Navigator->ComputeSafety at " << fTransportEndPosition
-		<< "    and it returned safety= " << endSafety << G4endl ; 
-	 G4cout << "  Adding endpoint distance " << endpointDistance 
-		<< "   to obtain pseudo-safety= " << currentSafety << G4endl ; 
+         G4cout.precision(12) ;
+         G4cout << "***G4MonopoleTransportation::AlongStepGPIL ** " << G4endl  ;
+         G4cout << "  Called Navigator->ComputeSafety at " << fTransportEndPosition
+                << "    and it returned safety= " << endSafety << G4endl ; 
+         G4cout << "  Adding endpoint distance " << endpointDistance 
+                << "   to obtain pseudo-safety= " << currentSafety << G4endl ; 
 #endif
       }
   }            
@@ -469,38 +470,38 @@ G4VParticleChange* G4MonopoleTransportation::AlongStepDoIt( const G4Track& track
       G4double endEnergy= fTransportEndKineticEnergy;
 
       if( (endEnergy < fThreshold_Important_Energy) 
-	  || (fNoLooperTrials >= fThresholdTrials ) ){
-	// Kill the looping particle 
-	//
-	fParticleChange.ProposeTrackStatus( fStopAndKill )  ;
+          || (fNoLooperTrials >= fThresholdTrials ) ){
+        // Kill the looping particle 
+        //
+        fParticleChange.ProposeTrackStatus( fStopAndKill )  ;
 
         // 'Bare' statistics
         fSumEnergyKilled += endEnergy; 
-	if( endEnergy > fMaxEnergyKilled) { fMaxEnergyKilled= endEnergy; }
+        if( endEnergy > fMaxEnergyKilled) { fMaxEnergyKilled= endEnergy; }
 
 #ifdef G4VERBOSE
-	if( (fVerboseLevel > 1) || 
-	    ( endEnergy > fThreshold_Warning_Energy )  ) { 
-	  G4cout << " G4MonopoleTransportation is killing track that is looping or stuck "
-		 << G4endl
-		 << "   This track has " << track.GetKineticEnergy() / MeV
-		 << " MeV energy." << G4endl;
-	  G4cout << "   Number of trials = " << fNoLooperTrials 
-		 << "   No of calls to AlongStepDoIt = " << noCalls 
-		 << G4endl;
-	}
+        if( (fVerboseLevel > 1) || 
+            ( endEnergy > fThreshold_Warning_Energy )  ) { 
+          G4cout << " G4MonopoleTransportation is killing track that is looping or stuck "
+                 << G4endl
+                 << "   This track has " << track.GetKineticEnergy() / MeV
+                 << " MeV energy." << G4endl;
+          G4cout << "   Number of trials = " << fNoLooperTrials 
+                 << "   No of calls to AlongStepDoIt = " << noCalls 
+                 << G4endl;
+        }
 #endif
-	fNoLooperTrials=0; 
+        fNoLooperTrials=0; 
       }
       else{
-	fNoLooperTrials ++; 
+        fNoLooperTrials ++; 
 #ifdef G4VERBOSE
-	if( (fVerboseLevel > 2) ){
-	  G4cout << "   G4MonopoleTransportation::AlongStepDoIt(): Particle looping -  "
-		 << "   Number of trials = " << fNoLooperTrials 
-		 << "   No of calls to  = " << noCalls 
-		 << G4endl;
-	}
+        if( (fVerboseLevel > 2) ){
+          G4cout << "   G4MonopoleTransportation::AlongStepDoIt(): Particle looping -  "
+                 << "   Number of trials = " << fNoLooperTrials 
+                 << "   No of calls to  = " << noCalls 
+                 << G4endl;
+        }
 #endif
       }
   }else{
