@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,8 +39,8 @@
 /** \file G4INCLRecombinationChannel.cc
  * \brief Delta-nucleon recombination channel.
  *
- *  Created on: 25 March 2011
- *      Author: Davide Mancusi
+ *  \date 25 March 2011
+ * \author Davide Mancusi
  */
 
 #include "G4INCLRecombinationChannel.hh"

@@ -30,22 +30,22 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
-#include "globals.hh"
+#include <cmath>
 
+#include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4INCLXXInterface.hh"
 #include "G4INCLXXFactory.hh"
-#include <cmath>
 #include "G4GenericIon.hh"
-#include "CLHEP/Random/Random.h"
 #include "G4INCLCascade.hh"
 #include "G4ReactionProductVector.hh"
 #include "G4ReactionProduct.hh"
 #include "G4INCLXXInterfaceConfig.hh"
-#include "G4String.hh"
 
 G4int G4INCLXXInterface::nWarnings = 0;
 const G4int G4INCLXXInterface::maxWarnings = 50;

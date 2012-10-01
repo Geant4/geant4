@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,8 +39,8 @@
 /*
  * IAvatar.cc
  *
- *  Created on: 4 juin 2009
- *      Author: Pekka Kaitaniemi
+ *  \date 4 juin 2009
+ * \author Pekka Kaitaniemi
  */
 
 #include "G4INCLIAvatar.hh"
@@ -67,7 +67,6 @@ namespace G4INCL {
   }
 
   IAvatar::~IAvatar() {
-    // TODO Auto-generated destructor stub
   }
 
   std::string IAvatar::toString() {

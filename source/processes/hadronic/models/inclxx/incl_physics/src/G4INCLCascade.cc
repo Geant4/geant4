@@ -30,12 +30,16 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
 
+/** \file G4INCLCascade.cc
+ *
+ * INCL Cascade
+ */
 #include "G4INCLCascade.hh"
 #include "G4INCLRandom.hh"
 #include "G4INCLRanecu.hh"
@@ -127,11 +131,8 @@ namespace G4INCL {
 
     // Select the clustering algorithm:
     G4INCL::ClusterAlgorithmType clusterAlgorithm = theConfig->getClusterAlgorithm();
-    if(clusterAlgorithm == G4INCL::IntercomparisonClusterAlgorithm) {
-      G4INCL::Clustering::setClusteringModel(new G4INCL::ClusteringModelIntercomparison);
-      // Set the maximum mass for the clustering algorithm
-      G4INCL::IClusteringModel::maxClusterAlgorithmMass = theConfig->getClusterMaxMass();
-    }
+    if(clusterAlgorithm == G4INCL::IntercomparisonClusterAlgorithm)
+      G4INCL::Clustering::setClusteringModel(new G4INCL::ClusteringModelIntercomparison(theConfig));
     else // if(clusterAlgorithm == G4INCL::NoClusterAlgorithm)
       G4INCL::Clustering::setClusteringModel(new G4INCL::ClusteringModelNone);
 
@@ -150,8 +151,8 @@ namespace G4INCL {
     propagationAction = new PropagationAction();
     avatarAction = new AvatarAction();
 
-    std::strcpy(theGlobalInfo.cascadeModel, theConfig->getVersionID().c_str());
-    std::strcpy(theGlobalInfo.deexcitationModel, "none");
+    theGlobalInfo.cascadeModel = theConfig->getVersionID().c_str();
+    theGlobalInfo.deexcitationModel = "none";
 
 #ifndef INCLXX_IN_GEANT4_MODE
     // Fill in the global information
@@ -196,8 +197,8 @@ namespace G4INCL {
     initUniverseRadius(projectileSpecies, kineticEnergy, A, Z);
 
     // Set the maximum impact parameter
-    // TODO: for natural target abundances, make this the largest impact
-    // parameter for all the isotopes.
+    // \todo{for natural target abundances, make this the largest impact
+    // parameter for all the isotopes.}
     delete nucleus;
     nucleus = new Nucleus(A, Z, theConfig, maxUniverseRadius);
     G4double projectileMass;
@@ -259,11 +260,11 @@ namespace G4INCL {
       ) {
     // Set the target and the projectile
     if(theConfig->isNaturalTarget()) {
-      // TODO: support for natural targets
+      // \todo{support for natural targets}
       FATAL("Fatal: natural targets are not supported yet." << std::endl);
       std::exit(EXIT_FAILURE);
     }
-    const G4bool targetInitSuccess = prepareReaction(projectileSpecies, kineticEnergy, targetA, targetZ);
+    targetInitSuccess = prepareReaction(projectileSpecies, kineticEnergy, targetA, targetZ);
 
     if(!targetInitSuccess) {
       WARN("Target initialisation failed for A=" << targetA << ", Z=" << targetZ << std::endl);

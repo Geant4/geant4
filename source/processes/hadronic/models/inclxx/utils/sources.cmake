@@ -75,7 +75,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
 
     SOURCES
         G4INCLThreeVector.cc
-        G4INCLIRandomGenerator.cc
         G4INCLParticleTable.cc
         G4INCLIAvatar.cc
         G4INCLIFunction1D.cc
@@ -87,7 +86,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
         G4INCLConfig.cc
         G4INCLRootFinder.cc
         G4INCLRanecu.cc
-        G4INCLIChannel.cc
         G4INCLInverseInterpolationTable.cc
         G4INCLRandom.cc
         G4INCLFinalState.cc

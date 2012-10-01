@@ -30,12 +30,12 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
-
+#include "G4SystemOfUnits.hh"
 #include "G4INCLParticleTable.hh"
 #include <algorithm>
 // #include <cassert>

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -50,17 +50,17 @@ namespace G4INCL {
 
   class ClusteringModelIntercomparison : public IClusteringModel {
   public:
-    ClusteringModelIntercomparison() :
+    ClusteringModelIntercomparison(Config const * const theConfig) :
     protonMass(ParticleTable::getRealMass(Proton)),
     neutronMass(ParticleTable::getRealMass(Neutron)),
-    runningMaxClusterAlgorithmMass(IClusteringModel::maxClusterAlgorithmMass)
+    runningMaxClusterAlgorithmMass(theConfig->getClusterMaxMass())
     {
       zeroOut();
 
       // Set up the maximum charge and neutron number for clusters
       clusterZMaxAll = 0;
       clusterNMaxAll = 0;
-      for(G4int A=0; A<=maxClusterAlgorithmMass; ++A) {
+      for(G4int A=0; A<=runningMaxClusterAlgorithmMass; ++A) {
         if(ParticleTable::clusterZMax[A]>clusterZMaxAll)
           clusterZMaxAll = ParticleTable::clusterZMax[A];
         if(A-ParticleTable::clusterZMin[A]>clusterNMaxAll)

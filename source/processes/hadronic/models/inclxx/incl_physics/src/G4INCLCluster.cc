@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -46,14 +46,14 @@ namespace G4INCL {
     const ThreeVector oldPosition = thePosition;
     ParticleList theParticles = theParticleSampler->sampleParticles(thePosition);
 #if !defined(NDEBUG) && !defined(INCLXX_IN_GEANT4_MODE)
-    const G4int theMass = theA;
-    const G4int theCharge = theZ;
+    const G4int theMassNumber = theA;
+    const G4int theChargeNumber = theZ;
 #endif
     theA = 0;
     theZ = 0;
     addParticles(theParticles); // add the particles to the `particles' list
     thePosition = oldPosition;
-// assert(theMass==theA && theCharge==theZ);
+// assert(theMassNumber==theA && theChargeNumber==theZ);
     DEBUG("Cluster initialized:" << std::endl << print());
   }
 

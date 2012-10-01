@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -51,7 +51,6 @@ namespace G4INCL {
       incidentDirection(aParticle->getMomentum())
   {
     setType(DecayAvatarType);
-    // TODO Auto-generated constructor stub
   }
 
   DecayAvatar::~DecayAvatar() {
@@ -86,11 +85,11 @@ namespace G4INCL {
         /* If the decay was Pauli-blocked, make sure the propagation model
          * generates a new decay avatar on the next call to propagate().
          *
-         * Note that we don't generate new decay avatars for deltas that could
-         * not satisfy energy conservation. This is in keeping with INCL4.6,
-         * but doesn't seem to make much sense to me (DM), as energy
+         * \bug{Note that we don't generate new decay avatars for deltas that
+         * could not satisfy energy conservation. This is in keeping with
+         * INCL4.6, but doesn't seem to make much sense to me (DM), as energy
          * conservation can be impossible to satisfy due to weird local-energy
-         * conditions, for example, that evolve with time. Therefore, FIXME.
+         * conditions, for example, that evolve with time.}
          */
         fs->setBlockedDelta(particle1);
 

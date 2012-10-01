@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -329,7 +329,7 @@ namespace G4INCL {
       }
 
       // -t/--target: target species
-      // TODO: natural targets
+      // \todo{natural targets}
       if(variablesMap.count("target")) {
         targetSpecies = ParticleSpecies(targetString);
         if(targetSpecies.theType!=Composite) {
@@ -621,7 +621,7 @@ namespace G4INCL {
 
   }
 #else
-    Config::Config(G4int /*argc*/, char ** /*argv*/, G4bool /*isFullRun*/)
+    Config::Config(G4int /*argc*/, char * /*argv*/ [], G4bool /*isFullRun*/)
     {
       init();
     }

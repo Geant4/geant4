@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -114,7 +114,7 @@ namespace G4INCL {
        *
        * Also feeds the balance variables in theEventInfo.
        *
-       * \param afterRescaling whether to take into account nuclear recoil
+       * \param afterRecoil whether to take into account nuclear recoil
        */
       void globalConservationChecks(G4bool afterRecoil);
 #endif
@@ -128,14 +128,14 @@ namespace G4INCL {
 
       /** \brief Make a projectile pre-fragment out of geometrical spectators
        *
-       * The projectile pre-fragment is assigned an excitation energy given by
-       * \f$E_\mathrm{sp}-E_\mathrm{i,A}\f$, where \f$E_\mathrm{sp}\f$ is the
-       * sum of the energies of the spectator particles, and
-       * \f$E_\mathrm{i,A}\f$ is the sum of the smallest \f$A\f$ particle
-       * energies initially present in the projectile, \f$A\f$ being the mass
-       * of the projectile pre-fragment. This is equivalent to assuming that
-       * the excitation energy is given by the sum of the transitions of all
-       * excited projectile components to the "holes" left by the participants.
+       * The projectile pre-fragment is assigned an excitation energy given
+       * by \f$E_\mathrm{sp}-E_\mathrm{i,A}\f$, where \f$E_\mathrm{sp}\f$ is the
+       * sum of the energies of the spectator particles, and \f$E_\mathrm{i,A}\f$
+       * is the sum of the smallest \f$A\f$ particle energies initially present
+       * in the projectile, \f$A\f$ being the mass of the projectile
+       * pre-fragment. This is equivalent to assuming that the excitation
+       * energy is given by the sum of the transitions of all excited
+       * projectile components to the "holes" left by the participants.
        *
        * This method can modify the outgoing list and adds a projectile
        * pre-fragment.

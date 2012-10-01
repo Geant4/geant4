@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,8 +39,8 @@
 /** \file G4INCLICoulomb.hh
  * \brief Abstract interface for Coulomb distortion.
  *
- * Created on: 14 February 2011
- *     Author: Davide Mancusi
+ * \date 14 February 2011
+ * \author Davide Mancusi
  */
 
 #ifndef G4INCLICOULOMB_HH_
@@ -88,7 +88,7 @@ namespace G4INCL {
        * This method returns a list of ParticleEntry avatars for the
        * participant nucleons
        *
-       * \param pn incoming heavy ion
+       * \param c incoming heavy ion
        * \param n distorting nucleus
        * \return a list of ParticleEntryAvatars
        **/

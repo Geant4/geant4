@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -41,8 +41,8 @@
  *
  * Provides a constant nuclear potential (V0).
  *
- * Created on: 17 January 2011
- *     Author: Davide Mancusi
+ * \date 17 January 2011
+ * \author Davide Mancusi
  */
 
 #include "G4INCLNuclearPotentialConstant.hh"
@@ -53,8 +53,8 @@ namespace G4INCL {
   namespace NuclearPotential {
 
     // Constructors
-    NuclearPotentialConstant::NuclearPotentialConstant(const G4int A, const G4int Z, const G4bool pionPotential)
-      : INuclearPotential(A, Z, pionPotential)
+    NuclearPotentialConstant::NuclearPotentialConstant(const G4int A, const G4int Z, const G4bool aPionPotential)
+      : INuclearPotential(A, Z, aPionPotential)
     {
       initialize();
     }

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,8 +39,8 @@
 /** \file G4INCLIFunction1D.hh
  * \brief Functor for 1-dimensional mathematical functions
  *
- * Created on: 16 July 2012
- *     Author: Davide Mancusi
+ * \date 16 July 2012
+ * \author Davide Mancusi
  */
 
 #ifndef G4INCLIFUNCTION1D_HH_
@@ -82,6 +82,7 @@ namespace G4INCL {
        *
        * \param x0 lower integration bound
        * \param x1 upper integration bound
+       * \param step largest integration step size; if <0, 45 steps will be used
        * \return \f$\int_{x_0}^{x_1} f(x) dx\f$
        */
       virtual G4double integrate(const G4double x0, const G4double x1, const G4double step=-1.) const;

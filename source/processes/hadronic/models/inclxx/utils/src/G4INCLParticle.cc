@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,8 +39,8 @@
 /*
  * Particle.cc
  *
- *  Created on: Jun 5, 2009
- *      Author: Pekka Kaitaniemi
+ *  \date Jun 5, 2009
+ * \author Pekka Kaitaniemi
  */
 
 #include "G4INCLParticle.hh"
@@ -117,10 +117,6 @@ namespace G4INCL {
     G4double energy = std::sqrt(theMomentum.mag2() + theMass*theMass);
     theEnergy = energy;
     theFrozenEnergy = theEnergy;
-  }
-
-  Particle::~Particle() {
-    // TODO Auto-generated destructor stub
   }
 
   const ThreeVector &Particle::adjustMomentumFromEnergy() {

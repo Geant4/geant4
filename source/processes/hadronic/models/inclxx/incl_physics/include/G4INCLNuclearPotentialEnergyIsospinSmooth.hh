@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -42,8 +42,8 @@
  * Provides an isospin- and energy-dependent nuclear potential. The cusp at 200
  * MeV is replaced by a smooth exponential.
  *
- * Created on: 16 February 2011
- *     Author: Davide Mancusi
+ * \date 16 February 2011
+ * \author Davide Mancusi
  */
 
 #ifndef G4INCLNUCLEARPOTENTIALENERGYISOSPINSMOOTH_HH

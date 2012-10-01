@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,8 +39,8 @@
 /** \file G4INCLProjectileRemnant.hh
  * \brief Class for constructing a projectile-like remnant.
  *
- * Created on: 20 March 2012
- *     Author: Davide Mancusi
+ * \date 20 March 2012
+ * \author Davide Mancusi
  */
 
 #ifndef G4INCLPROJECTILEREMNANT_HH_
@@ -80,8 +80,8 @@ namespace G4INCL {
       storeEnergyLevels();
 
       // Boost the whole thing
-      const ThreeVector boostVector = ThreeVector(0.0, 0.0, momentumZ / energy);
-      boost(-boostVector);
+      const ThreeVector aBoostVector = ThreeVector(0.0, 0.0, momentumZ / energy);
+      boost(-aBoostVector);
 
       // Freeze the internal motion of the particles
       freezeInternalMotion();

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,8 +39,8 @@
 /*
  * G4INCLRandom.hh
  *
- *  Created on: 7 June 2009
- *      Author: Pekka Kaitaniemi
+ *  \date 7 June 2009
+ * \author Pekka Kaitaniemi
  */
 
 #ifndef G4INCLRANDOM_HH_
@@ -57,8 +57,8 @@ namespace G4INCL {
 
   class Random {
   private:
-    Random();
-    virtual ~Random();
+    Random() {}
+    virtual ~Random() {}
 
   private:
     static IRandomGenerator *theGenerator;

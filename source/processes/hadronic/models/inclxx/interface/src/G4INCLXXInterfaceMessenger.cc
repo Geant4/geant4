@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,8 +39,8 @@
 /** \file G4INCLXXInterfaceMessenger.cc
  * \brief Messenger class for the Geant4 INCL++ interface.
  *
- * Created on: 26th April 2012
- *     Author: Davide Mancusi
+ * \date 26th April 2012
+ * \author Davide Mancusi
  */
 
 #include "G4INCLXXInterfaceMessenger.hh"

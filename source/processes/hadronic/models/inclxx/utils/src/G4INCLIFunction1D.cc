@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,8 +39,8 @@
 /** \file G4INCLIFunction1D.cc
  * \brief Functor for 1-dimensional mathematical functions
  *
- * Created on: 16 July 2011
- *     Author: Davide Mancusi
+ * \date 16 July 2011
+ * \author Davide Mancusi
  */
 
 #include <algorithm>

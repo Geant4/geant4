@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,8 +39,8 @@
 /** \file G4INCLClustering.hh
  * \brief Static class for cluster formation
  *
- * Created on: 13th July 2011
- *     Author: Davide Mancusi
+ * \date 13th July 2011
+ * \author Davide Mancusi
  */
 
 #ifndef G4INCLCLUSTERING_HH

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,8 +39,8 @@
 /** \file G4INCLClusterDecay.cc
  * \brief Static class for carrying out cluster decays
  *
- * Created on: 6th July 2011
- *     Author: Davide Mancusi
+ * \date 6th July 2011
+ * \author Davide Mancusi
  */
 
 #include "G4INCLClusterDecay.hh"

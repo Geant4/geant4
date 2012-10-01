@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,8 +39,8 @@
 /** \file G4INCLInverseInterpolationTable.cc
  * \brief Simple interpolation table for the inverse of a IFunction1D functor
  *
- * Created on: 17 July 2012
- *     Author: Davide Mancusi
+ * \date 17 July 2012
+ * \author Davide Mancusi
  */
 
 // #include <cassert>
@@ -58,8 +58,8 @@ namespace G4INCL {
 
     // Build the nodes
     G4double last = f(x0);
-    InterpolationNode node(last, x0, 0.);
-    nodes.push_back(node);
+    InterpolationNode firstNode(last, x0, 0.);
+    nodes.push_back(firstNode);
     G4int skippedNodes = 0;
     for(unsigned i = 1; i < nNodes; i++) {
       const G4double xi = x0 + i*(x1-x0)/((G4double)(nNodes-1));

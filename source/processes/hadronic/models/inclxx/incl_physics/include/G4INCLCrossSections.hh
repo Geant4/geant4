@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -55,7 +55,7 @@ namespace G4INCL {
     static G4double deltaProduction(Particle const * const p1, Particle const * const p2);
     /** \brief Calculate the slope of the NN DDXS.
      *
-     * \param pl absolute value of the momentum in the CM frame, in MeV/c
+     * \param energyCM energy in the CM frame, in MeV
      * \param iso total isospin of the system
      *
      * \return the slope of the angular distribution

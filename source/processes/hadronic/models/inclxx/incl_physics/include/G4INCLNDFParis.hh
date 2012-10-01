@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -40,8 +40,8 @@
  * \brief NDF* class for the deuteron density according to the Paris
  *        potential.
  *
- * Created on: 16 July 2012
- *     Author: Davide Mancusi
+ * \date 16 July 2012
+ * \author Davide Mancusi
  */
 
 #ifndef G4INCLNDFPARIS_HH_

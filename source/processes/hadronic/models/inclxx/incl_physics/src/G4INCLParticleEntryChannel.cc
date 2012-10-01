@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -160,7 +160,7 @@ namespace G4INCL {
 
   G4bool ParticleEntryChannel::particleEnters(const G4double theQValueCorrection) {
 
-    // TODO: this is the place to add refraction
+    // \todo{this is the place to add refraction}
 
     theParticle->setINCLMass(); // Will automatically put the particle on shell
 

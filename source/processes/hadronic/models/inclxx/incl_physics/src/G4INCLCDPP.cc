@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -75,7 +75,7 @@ namespace G4INCL {
         if(T > Tf) {
           const G4double sep = nucleus->getPotential()->getSeparationEnergy(*i);
           Sk += sep;
-        } else { // Ugly! We should use total energies everywhere! FIXME
+        } else { // Ugly! We should use total energies everywhere!
           TbelowTf += (*i)->getEnergy() - ParticleTable::getINCLMass(Proton) - (*i)->getPotentialEnergy();
         }
       } else if((*i)->getType() == PiPlus)

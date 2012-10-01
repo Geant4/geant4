@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -254,10 +254,10 @@ namespace G4INCL {
 
       // Loop again to boost and reposition
       for(ParticleIter p=particles.begin(); p!=particles.end(); ++p) {
-        // We should do the following, but the Fortran version actually does
-        // not!
+        // \bug{We should do the following, but the Fortran version actually
+        // does not!
         // (*p)->boost(betaCM);
-        // FIXME: here is what the Fortran version does:
+        // Here is what the Fortran version does:}
         (*p)->setMomentum(((*p)->getMomentum()-theTotalMomentum/theA)*rescaling);
 
         // Set the CM position of the particles
@@ -318,18 +318,18 @@ namespace G4INCL {
      * moreover, the internal components (particles list) are also boosted,
      * according to Alain Boudard's off-shell recipe.
      *
-     * \param boostVector the velocity to boost to [c]
+     * \param aBoostVector the velocity to boost to [c]
      */
-    void boost(const ThreeVector &boostVector) {
-      Particle::boost(boostVector);
+    void boost(const ThreeVector &aBoostVector) {
+      Particle::boost(aBoostVector);
       for(ParticleIter p=particles.begin(); p!=particles.end(); ++p) {
-        (*p)->boost(boostVector);
+        (*p)->boost(aBoostVector);
         // Apply Lorentz contraction to the particle position
-        (*p)->lorentzContract(boostVector,thePosition);
+        (*p)->lorentzContract(aBoostVector,thePosition);
       }
 
       DEBUG("Cluster was boosted with (bx,by,bz)=("
-          << boostVector.getX() << ", " << boostVector.getY() << ", " << boostVector.getZ() << "):"
+          << aBoostVector.getX() << ", " << aBoostVector.getY() << ", " << aBoostVector.getZ() << "):"
           << std::endl << print());
 
     }
@@ -409,8 +409,6 @@ namespace G4INCL {
      * Alain Boudard's boost prescription for low-energy beams requires to
      * define a "dynamical potential" that allows us to conserve momentum and
      * energy when boosting the projectile cluster.
-     *
-     * \param boostVector the velocity to boost to [c]
      */
     G4double computeDynamicalPotential() {
       G4double theDynamicalPotential = 0.0;

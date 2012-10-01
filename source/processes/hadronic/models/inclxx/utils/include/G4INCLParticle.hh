@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,8 +39,8 @@
 /*
  * Particle.hh
  *
- *  Created on: Jun 5, 2009
- *      Author: Pekka Kaitaniemi
+ *  \date Jun 5, 2009
+ * \author Pekka Kaitaniemi
  */
 
 #ifndef PARTICLE_HH_
@@ -67,7 +67,7 @@ namespace G4INCL {
     Particle();
     Particle(ParticleType t, G4double energy, ThreeVector momentum, ThreeVector position);
     Particle(ParticleType t, ThreeVector momentum, ThreeVector position);
-    virtual ~Particle();
+    virtual ~Particle() {}
 
     /** \brief Copy constructor
      *
@@ -287,13 +287,13 @@ namespace G4INCL {
      * Example (go to the particle rest frame):
      * particle->boost(particle->boostVector());
      */
-    void boost(const ThreeVector &boostVector) {
-      const G4double beta2 = boostVector.mag2();
+    void boost(const ThreeVector &aBoostVector) {
+      const G4double beta2 = aBoostVector.mag2();
       const G4double gamma = 1.0 / std::sqrt(1.0 - beta2);
-      const G4double bp = theMomentum.dot(boostVector);
+      const G4double bp = theMomentum.dot(aBoostVector);
       const G4double alpha = (gamma*gamma)/(1.0 + gamma);
 
-      theMomentum = theMomentum + boostVector * (alpha * bp - gamma * theEnergy);
+      theMomentum = theMomentum + aBoostVector * (alpha * bp - gamma * theEnergy);
       theEnergy = gamma * (theEnergy - bp);
     }
 
@@ -302,14 +302,14 @@ namespace G4INCL {
      * Apply Lorentz contraction to the position component along the
      * direction of the boost vector.
      *
-     * \param boostVector the boost vector (velocity) [c]
+     * \param aBoostVector the boost vector (velocity) [c]
      * \param refPos the reference position
      */
-    void lorentzContract(const ThreeVector &boostVector, const ThreeVector &refPos) {
-      const G4double beta2 = boostVector.mag2();
+    void lorentzContract(const ThreeVector &aBoostVector, const ThreeVector &refPos) {
+      const G4double beta2 = aBoostVector.mag2();
       const G4double gamma = 1.0 / std::sqrt(1.0 - beta2);
       const ThreeVector theRelativePosition = thePosition - refPos;
-      const ThreeVector transversePosition = theRelativePosition - boostVector * (theRelativePosition.dot(boostVector) / boostVector.mag2());
+      const ThreeVector transversePosition = theRelativePosition - aBoostVector * (theRelativePosition.dot(aBoostVector) / aBoostVector.mag2());
       const ThreeVector longitudinalPosition = theRelativePosition - transversePosition;
 
       thePosition = refPos + transversePosition + longitudinalPosition / gamma;

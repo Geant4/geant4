@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,8 +39,8 @@
 /** \file G4INCLDeuteronDensity.cc
  * \brief Deuteron density in r and p according to the Paris potential.
  *
- * Created on: 6 March 2012
- *     Author: Davide Mancusi
+ * \date 6 March 2012
+ * \author Davide Mancusi
  */
 
 #include "G4INCLDeuteronDensity.hh"

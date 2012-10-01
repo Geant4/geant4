@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,8 +39,8 @@
 /*
  * IPropagationModel.hh
  *
- *  Created on: 4 juin 2009
- *      Author: Pekka Kaitaniemi
+ *  \date 4 juin 2009
+ * \author Pekka Kaitaniemi
  */
 
 #ifndef G4INCLIPropagationModel_hh
@@ -63,8 +63,8 @@ namespace G4INCL {
      */
     class IPropagationModel {
     public:
-      IPropagationModel();
-      virtual ~IPropagationModel();
+      IPropagationModel() {}
+      virtual ~IPropagationModel() {}
 
       /**
        * Set the nucleus for the propagation model.

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -64,8 +64,6 @@ namespace G4INCL {
      * Determine whether cluster can escape or not.
      */
     virtual G4bool clusterCanEscape(Nucleus const * const, Cluster const * const) = 0;
-
-    static G4int maxClusterAlgorithmMass;
   };
 
 }

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -64,8 +64,9 @@
 
 using namespace std;
 
-/**
- * <h1>INCL++ intra-nuclear cascade with G4ExcitationHandler for de-excitation</h1>
+class G4INCLXXInterfaceConfig;
+
+/** \brief INCL++ intra-nuclear cascade with G4ExcitationHandler for de-excitation
  *
  * Interface for INCL++. This interface handles basic hadron bullet particles
  * (protons, neutrons, pions), as well as light ions.
@@ -89,9 +90,6 @@ using namespace std;
  * The same setup procedure is needed for neutron, pion and generic-ion
  * inelastic processes as well.
  */
-
-class G4INCLXXInterfaceConfig;
-
 class G4INCLXXInterface : public G4VIntraNuclearTransportModel {
 public:
   G4INCLXXInterface(const G4String& name = "INCL++ cascade with G4ExcitationHandler");
@@ -125,7 +123,7 @@ private:
 
   /** \brief Emit a warning to G4cout
    *
-   * The interface will not emit more than <maxWarnings> warnings.
+   * The interface will not emit more than maxWarnings warnings.
    */
   void EmitWarning(const G4String &message);
 

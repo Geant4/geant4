@@ -116,7 +116,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLReflectionChannel.cc
         G4INCLCoulombNone.cc
         G4INCLCDPP.cc
-        G4INCLIPropagationModel.cc
         G4INCLInteractionAvatar.cc
         G4INCLCascade.cc
         G4INCLINuclearPotential.cc
@@ -130,7 +129,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLPionNucleonChannel.cc
         G4INCLRecombinationChannel.cc
         G4INCLParticleEntryAvatar.cc
-        G4INCLIClusteringModel.cc
         G4INCLDeltaProductionChannel.cc
         G4INCLAvatarAction.cc
         G4INCLDeJongSpin.cc

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -43,8 +43,8 @@
  * potential of a particle in a particular context. For example, an instance of
  * a NuclearPotential class should be associated to every nucleus.
  *
- * Created on: 31 March 2011
- *     Author: Davide Mancusi
+ * \date 31 March 2011
+ * \author Davide Mancusi
  */
 
 #include "G4INCLINuclearPotential.hh"

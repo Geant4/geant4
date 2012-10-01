@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,8 +39,8 @@
 /*
  * G4INCLParticleSpecies.hh
  *
- *  Created on: Nov 25, 2011
- *      Author: Davide Mancusi
+ *  \date Nov 25, 2011
+ * \author Davide Mancusi
  */
 
 #ifndef G4INCLPARTICLESPECIES_HH_
@@ -87,7 +87,7 @@ namespace G4INCL {
        *
        * Note: this function is UGLY. Look at it at your own peril.
        *
-       * \param pS a normalised string (lowercase)
+       * \param s a normalised string (lowercase)
        * \return true if the parsing succeeded
        */
       G4bool parseIUPACElement(std::string const &s);

@@ -16,6 +16,20 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+26 September 2012 - Gabriele Cosmo (hadr-inclxx-V09-05-26)
+-----------------------------------------------------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+4 September 2012 - Davide Mancusi (hadr-inclxx-V09-05-25)
+-----------------------------------------------------------
+- Fixes GNUmake compilation errors
+
+3 September 2012 - Davide Mancusi (hadr-inclxx-V09-05-24)
+-----------------------------------------------------------
+- INCL++ v5.1.4
+  o Fixes some shadowing warnings
+
 27 August 2012 - Davide Mancusi (hadr-inclxx-V09-05-23)
 -----------------------------------------------------------
 - INCL++ refuses to handle reactions between nuclei with A>18. Those reactions

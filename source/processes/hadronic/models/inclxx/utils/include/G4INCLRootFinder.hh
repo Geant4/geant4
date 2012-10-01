@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -41,8 +41,8 @@
  *
  * Provides a (nearly) stateless root-finder algorithm.
  *
- * Created on: 2nd March 2011
- *     Author: Davide Mancusi
+ * \date 2nd March 2011
+ * \author Davide Mancusi
  */
 
 #ifndef G4INCLROOTFINDER_HH_
@@ -58,8 +58,8 @@ namespace G4INCL {
     virtual void cleanUp(const G4bool success) const = 0;
     virtual ~RootFunctor() {};
   protected:
-    RootFunctor(const G4double xMin, const G4double xMax) :
-      IFunction1D(xMin, xMax)
+    RootFunctor(const G4double x0, const G4double x1) :
+      IFunction1D(x0, x1)
     {};
   };
 

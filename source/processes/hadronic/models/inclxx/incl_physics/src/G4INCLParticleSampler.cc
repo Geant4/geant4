@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,8 +39,8 @@
 /** \file G4INCLParticleSampler.cc
  * \brief Class for sampling particles in a nucleus
  *
- * Created on: 18 July 2012
- *     Author: Davide Mancusi
+ * \date 18 July 2012
+ * \author Davide Mancusi
  */
 
 #include "G4INCLParticleSampler.hh"

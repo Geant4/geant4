@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,8 +39,8 @@
 /** \file G4INCLXXInterfaceConfig.hh
  * \brief Singleton class for configuring the INCL++ Geant4 interface.
  *
- * Created on: 24 May 2012
- *     Author: Davide Mancusi
+ * \date 24 May 2012
+ * \author Davide Mancusi
  */
 
 #ifndef G4INCLXXINTERFACECONFIG_HH_
@@ -88,7 +88,7 @@ class G4INCLXXInterfaceConfig {
   void SetAccurateProjectile(const G4bool b) { accurateProjectile=b; }
 
   /// \brief Setter for theMaxClusterMass
-  void SetMaxClusterMass(const G4int m) { theMaxClusterMass=m; }
+  void SetMaxClusterMass(const G4int aMass) { theMaxClusterMass=aMass; }
 
 
 

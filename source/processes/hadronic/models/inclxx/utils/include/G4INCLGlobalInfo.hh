@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -41,8 +41,8 @@
  *
  * Contains the final results of an INCL calculation.
  *
- * Created on: 21 January 2011
- *     Author: Davide Mancusi
+ * \date 21 January 2011
+ * \author Davide Mancusi
  */
 
 #ifndef G4INCLGLOBALINFO_HH
@@ -91,7 +91,7 @@ namespace G4INCL {
       /** \brief Error on the calculated reaction cross section */
       Float_t errorReactionCrossSection;
 
-      // TODO: echo all the input parameters here
+      // \todo{echo all the input parameters here}
       /** \brief Projectile mass number given as input */
       Short_t Ap;
       /** \brief Projectile charge number given as input */
@@ -103,12 +103,10 @@ namespace G4INCL {
       /** \brief Projectile kinetic energy given as input */
       Float_t Ep;
 
-      /** \brief Maximum model name size */
-      static const Short_t maxModelSize = 200;
       /** \brief Name of the cascade model */
-      char cascadeModel[maxModelSize];
+      std::string cascadeModel;
       /** \brief Name of the de-excitation model */
-      char deexcitationModel[maxModelSize];
+      std::string deexcitationModel;
     };
 }
 

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -42,8 +42,8 @@
  *
  * Reference: De Jong, Ignatyuk and Schmidt, Nucl. Phys. A613 (1997) 435-444.
  *
- * Created on: 2 April 2012
- *     Author: Davide Mancusi
+ * \date 2 April 2012
+ * \author Davide Mancusi
  */
 
 #include "G4INCLDeJongSpin.hh"

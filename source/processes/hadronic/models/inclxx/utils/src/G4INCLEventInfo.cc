@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -41,8 +41,8 @@
  *
  * Contains the results of an INCL cascade.
  *
- * Created on: 21 January 2011
- *     Author: Davide Mancusi
+ * \date 21 January 2011
+ * \author Davide Mancusi
  */
 
 #include "G4INCLEventInfo.hh"

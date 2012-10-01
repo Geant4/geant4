@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,8 +39,8 @@
 /*
  * IAvatar.hh
  *
- *  Created on: 4 June 2009
- *      Author: Pekka Kaitaniemi
+ *  \date 4 June 2009
+ * \author Pekka Kaitaniemi
  */
 
 #ifndef IAVATAR_HH_

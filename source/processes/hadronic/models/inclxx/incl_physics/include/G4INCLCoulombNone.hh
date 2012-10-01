@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,8 +39,8 @@
 /** \file G4INCLCoulombNone.hh
  * \brief Placeholder class for no Coulomb distortion.
  *
- * Created on: 14 February 2011
- *     Author: Davide Mancusi
+ * \date 14 February 2011
+ * \author Davide Mancusi
  */
 
 #ifndef G4INCLCOULOMBNONE_HH_
@@ -80,9 +80,6 @@ namespace G4INCL {
     /** \brief Modify the momenta of the outgoing particles.
      *
      * This method does not perform any distortion.
-     *
-     * \param pL list of outgoing particles
-     * \param n distorting nucleus
      */
     void distortOut(ParticleList const & /* pL */, Nucleus const * const /* n */) const {}
 

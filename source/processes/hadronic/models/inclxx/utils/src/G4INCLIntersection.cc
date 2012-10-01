@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,8 +39,8 @@
 /** \file G4INCLIntersection.cc
  * \brief Simple class for computing intersections between a straight line and a sphere.
  *
- * Created on: 12 December 2011
- *     Author: Davide Mancusi
+ * \date 12 December 2011
+ * \author Davide Mancusi
  */
 
 #include "G4INCLIntersection.hh"

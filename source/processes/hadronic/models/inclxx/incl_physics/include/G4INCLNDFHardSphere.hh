@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.3
+// INCL++ revision: v5.1.4
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -40,8 +40,8 @@
  * \brief NDF* class for the deuteron density according to the HardSphere
  *        potential.
  *
- * Created on: 16 July 2012
- *     Author: Davide Mancusi
+ * \date 16 July 2012
+ * \author Davide Mancusi
  */
 
 #ifndef G4INCLNDFHARDSPHERE_HH_
@@ -57,12 +57,12 @@ namespace G4INCL {
 
     class HardSphere : public IFunction1D {
       public:
-        HardSphere(const G4double xMax) :
+        HardSphere(const G4double rMax) :
           // We let the function go up to rMax. This can be the Fermi momentum
           // for a sphere in momentum space, or the surface radius for a
           // hard-sphere nucleus.
-          IFunction1D(0., xMax),
-          normalisation(3./std::pow(xMax,3.))
+          IFunction1D(0., rMax),
+          normalisation(3./std::pow(rMax,3.))
       {};
 
         inline G4double operator()(const G4double x) const {
