@@ -20,6 +20,9 @@ committal in the CVS repository !
 History file for visualization/modeling
 ---------------------------------------
 
+28th September 2012  Gabriele Cosmo  (modeling-V09-05-12)
+- Explicitly include units header in G4ArrowModel.cc.
+
 25th September 2012  John Allison  (modeling-V09-05-11)
 - G4ArrowModel.cc:
   o Added protection, limited width to length/50.

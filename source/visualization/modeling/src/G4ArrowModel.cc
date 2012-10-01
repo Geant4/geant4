@@ -33,6 +33,7 @@
 
 #include "G4ArrowModel.hh"
 
+#include "G4PhysicalConstants.hh"
 #include "G4VGraphicsScene.hh"
 #include "G4VisAttributes.hh"
 #include "G4Tubs.hh"
