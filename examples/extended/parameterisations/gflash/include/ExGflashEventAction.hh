@@ -34,15 +34,15 @@
 
 
 class ExGflashEventAction: public G4UserEventAction {
-	public:
-	ExGflashEventAction();
-	~ExGflashEventAction();
-	
-	void BeginOfEventAction(const G4Event*);
-	void EndOfEventAction(const G4Event*);
-	private:
-	G4int nevent;
-	G4double dtime;
-	G4int calorimeterCollectionId;
+  public:
+    ExGflashEventAction();
+    ~ExGflashEventAction();
+    
+    void BeginOfEventAction(const G4Event*);
+    void EndOfEventAction(const G4Event*);
+  private:
+    G4int nevent;
+    G4double dtime;
+    G4int calorimeterCollectionId;
 };
 #endif

@@ -35,15 +35,15 @@
 
 ExGflashPrimaryGeneratorAction::ExGflashPrimaryGeneratorAction()
 {
-	particleGun=new G4GeneralParticleSource;
+  particleGun=new G4GeneralParticleSource;
 }
 
 ExGflashPrimaryGeneratorAction::~ExGflashPrimaryGeneratorAction()
 {
-	delete particleGun;
+  delete particleGun;
 }
 
 void ExGflashPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 { 
-	particleGun->GeneratePrimaryVertex(anEvent);
+  particleGun->GeneratePrimaryVertex(anEvent);
 }

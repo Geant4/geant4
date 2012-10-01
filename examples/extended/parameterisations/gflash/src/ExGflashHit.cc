@@ -74,9 +74,9 @@ const ExGflashHit & ExGflashHit::operator=(const ExGflashHit &right)
 int ExGflashHit::operator==(const ExGflashHit &right) const
 {
 // @@@@ return 0;
-	if ((pos==right.pos) &&  (edep == right.edep)) return true;
-	else return false;
-	
+  if ((pos==right.pos) &&  (edep == right.edep)) return true;
+  else return false;
+  
 }
 
 void ExGflashHit::Draw()

@@ -39,13 +39,13 @@ class G4Event;
 
 class ExGflashPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
 
-public:
-	ExGflashPrimaryGeneratorAction();
-	~ExGflashPrimaryGeneratorAction();
-	void GeneratePrimaries(G4Event* anEvent);
+  public:
+    ExGflashPrimaryGeneratorAction();
+    ~ExGflashPrimaryGeneratorAction();
+    void GeneratePrimaries(G4Event* anEvent);
 
-private:
-  G4GeneralParticleSource	* particleGun;
+  private:
+    G4GeneralParticleSource    * particleGun;
 };
 
 #endif
