@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm5/include/RunAction.hh
+/// \brief Definition of the RunAction class
+//
 // $Id: RunAction.hh,v 1.9 2009-01-22 17:41:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -71,8 +74,8 @@ public:
 
     void AddMscProjTheta (G4double theta)
                  {if (std::abs(theta) <= fMscThetaCentral) { fMscEntryCentral++;
-		    fMscProjecTheta += theta;  fMscProjecTheta2 += theta*theta;}
-		 };
+                    fMscProjecTheta += theta;  fMscProjecTheta2 += theta*theta;}
+                 };
 
     void CountStepsCharg (G4int nSteps)
                  {fNbStepsCharged += nSteps; fNbStepsCharged2 += nSteps*nSteps;};
@@ -82,16 +85,16 @@ public:
 
     void CountParticles (G4ParticleDefinition* part)
                  {     if (part == G4Gamma::Gamma())       fNbGamma++ ;
-		  else if (part == G4Electron::Electron()) fNbElect++ ;
-		  else if (part == G4Positron::Positron()) fNbPosit++ ; };
+                  else if (part == G4Electron::Electron()) fNbElect++ ;
+                  else if (part == G4Positron::Positron()) fNbPosit++ ; };
 
     void CountTransmit (G4int flag)
                  {     if (flag == 1)  fTransmit[0]++;
-		  else if (flag == 2) {fTransmit[0]++; fTransmit[1]++; }};
+                  else if (flag == 2) {fTransmit[0]++; fTransmit[1]++; }};
 
     void CountReflect (G4int flag)
                  {     if (flag == 1)  fReflect[0]++;
-		  else if (flag == 2) {fReflect[0]++; fReflect[1]++; }};
+                  else if (flag == 2) {fReflect[0]++; fReflect[1]++; }};
 
     G4double ComputeMscHighland();
     

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm5/src/PhysicsList.cc
+/// \brief Implementation of the PhysicsList class
+//
 // $Id: PhysicsList.cc,v 1.42 2010-11-19 16:29:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -49,6 +52,7 @@
 #include "StepMax.hh"
 
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
@@ -186,7 +190,7 @@ void PhysicsList::AddStepMax()
 
       if (stepMaxProcess->IsApplicable(*particle) && !particle->IsShortLived())
         {
-	  pmanager ->AddDiscreteProcess(stepMaxProcess);
+          pmanager ->AddDiscreteProcess(stepMaxProcess);
         }
   }
 }

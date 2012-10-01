@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm5/src/StepMax.cc
+/// \brief Implementation of the StepMax class
+//
 // $Id: StepMax.cc,v 1.2 2006-06-29 16:56:21 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm5/src/RunAction.cc
+/// \brief Implementation of the RunAction class
+//
 // $Id: RunAction.cc,v 1.29 2009-06-18 19:08:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -40,6 +43,7 @@
 #include "G4EmCalculator.hh"
 
 #include "Randomize.hh"
+#include "G4SystemOfUnits.hh"
 #include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -144,8 +148,10 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   if (fMscEntryCentral > 0) {
     fMscProjecTheta /= fMscEntryCentral; fMscProjecTheta2 /= fMscEntryCentral;
     rmsMsc = fMscProjecTheta2 - fMscProjecTheta*fMscProjecTheta;
-    if (rmsMsc > 0.) rmsMsc = std::sqrt(rmsMsc);
-    tailMsc = 100.- (100.*fMscEntryCentral)/(2*fTransmit[1]);    
+    if (rmsMsc > 0.) { rmsMsc = std::sqrt(rmsMsc); }
+    if(fTransmit[1] > 0.0) {
+      tailMsc = 100.- (100.*fMscEntryCentral)/(2*fTransmit[1]);
+    }    
   }
   
   fEnergyLeak[0] /= TotNbofEvents; fEnergyLeak2[0] /= TotNbofEvents;
@@ -190,9 +196,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   
   G4cout << "\n The run was " << TotNbofEvents << " " << partName << " of "
          << G4BestUnit(energy,"Energy") << " through " 
-	 << G4BestUnit(length,"Length") << " of "
-	 << material->GetName() << " (density: " 
-	 << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
+         << G4BestUnit(length,"Length") << " of "
+         << material->GetName() << " (density: " 
+         << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
   
   G4cout.precision(4);
   
@@ -200,32 +206,32 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
          << G4BestUnit(fEnergyDeposit,"Energy") << " +- "
          << G4BestUnit(rmsEdep,      "Energy") 
          << G4endl;
-	 
+         
   G4cout << "\n -----> Mean dE/dx = " << meandEdx/(MeV/cm) << " MeV/cm"
          << "\t(" << stopPower/(MeV*cm2/g) << " MeV*cm2/g)"
-	 << G4endl;
-	 
+         << G4endl;
+         
   G4cout << "\n From formulas :" << G4endl; 
   G4cout << "   restricted dEdx = " << dEdxTable/(MeV/cm) << " MeV/cm"
          << "\t(" << stopTable/(MeV*cm2/g) << " MeV*cm2/g)"
-	 << G4endl;
-	 
+         << G4endl;
+         
   G4cout << "   full dEdx       = " << dEdxFull/(MeV/cm) << " MeV/cm"
          << "\t(" << stopFull/(MeV*cm2/g) << " MeV*cm2/g)"
-	 << G4endl;
-	 
+         << G4endl;
+         
   G4cout << "\n Leakage :  primary = "
          << G4BestUnit(fEnergyLeak[0],"Energy") << " +- "
          << G4BestUnit(rmsEl0,       "Energy")
-	 << "   secondaries = "
+         << "   secondaries = "
          << G4BestUnit(fEnergyLeak[1],"Energy") << " +- "
-         << G4BestUnit(rmsEl1,       "Energy")	  
+         << G4BestUnit(rmsEl1,       "Energy")          
          << G4endl;
-	 
+         
   G4cout << " Energy balance :  edep + eleak = "
          << G4BestUnit(EnergyBalance,"Energy")
-         << G4endl;	 
-	 	 	 
+         << G4endl;         
+                           
   G4cout << "\n Total track length (charged) in absorber per event = "
          << G4BestUnit(fTrakLenCharged,"Length") << " +- "
          << G4BestUnit(rmsTLCh,       "Length") << G4endl;
@@ -242,7 +248,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
   G4cout << "\n Number of secondaries per event : Gammas = " << Gamma
          << ";   electrons = " << Elect
-  	 << ";   positrons = " << Posit << G4endl;
+           << ";   positrons = " << Posit << G4endl;
 
   G4cout << "\n Number of events with the primary particle transmitted = "
          << transmit[1] << " %" << G4endl;
@@ -259,15 +265,15 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   // compute width of the Gaussian central part of the MultipleScattering
   //
   G4cout << "\n MultipleScattering:" 
-	 << "\n  rms proj angle of transmit primary particle = "
-	 << rmsMsc/mrad << " mrad (central part only)" << G4endl;
+         << "\n  rms proj angle of transmit primary particle = "
+         << rmsMsc/mrad << " mrad (central part only)" << G4endl;
 
   G4cout << "  computed theta0 (Highland formula)          = "
-	 << ComputeMscHighland()/mrad << " mrad" << G4endl;
-	   
+         << ComputeMscHighland()/mrad << " mrad" << G4endl;
+           
   G4cout << "  central part defined as +- "
-	 << fMscThetaCentral/mrad << " mrad; " 
-	 << "  Tail ratio = " << tailMsc << " %" << G4endl;	   
+         << fMscThetaCentral/mrad << " mrad; " 
+         << "  Tail ratio = " << tailMsc << " %" << G4endl;           
 
   G4cout.precision(prec);
   
@@ -275,24 +281,25 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   //
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   
-  G4int ih = 1;
-  G4double binWidth = analysisManager->GetH1Width(ih);
-  G4double unit     = analysisManager->GetH1Unit(ih);  
-  G4double fac = unit/(TotNbofEvents*binWidth);
-  analysisManager->ScaleH1(ih,fac);
-    
-  ih = 10;
-  binWidth = analysisManager->GetH1Width(ih);
-  unit     = analysisManager->GetH1Unit(ih);  
-  fac = unit/(TotNbofEvents*binWidth);
-  analysisManager->ScaleH1(ih,fac);
-    
-  ih = 12;
-  fac = 1./TotNbofEvents;
-  analysisManager->ScaleH1(ih,fac);
-      
-  // save histograms
   if ( analysisManager->IsActive() ) {
+    G4int ih = 1;
+    G4double binWidth = analysisManager->GetH1Width(ih);
+    G4double unit     = analysisManager->GetH1Unit(ih);  
+    if(binWidth > 0.0) {
+      G4double fac = unit/(TotNbofEvents*binWidth);
+      analysisManager->ScaleH1(ih,fac);
+    }
+    ih = 10;
+    binWidth = analysisManager->GetH1Width(ih);
+    unit     = analysisManager->GetH1Unit(ih);  
+    if(binWidth > 0.0) {
+      G4double fac = unit/(TotNbofEvents*binWidth);
+      analysisManager->ScaleH1(ih,fac);
+    }
+    ih = 12;
+    analysisManager->ScaleH1(ih,1./TotNbofEvents);
+      
+    // save histograms
     analysisManager->Write();
     analysisManager->CloseFile();
   }  

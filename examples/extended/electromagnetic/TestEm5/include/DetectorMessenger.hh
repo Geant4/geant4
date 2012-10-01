@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm5/include/DetectorMessenger.hh
+/// \brief Definition of the DetectorMessenger class
+//
 // $Id: DetectorMessenger.hh,v 1.5 2006-06-29 16:54:33 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

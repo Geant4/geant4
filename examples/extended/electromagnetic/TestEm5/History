@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24-09-12 V.Ivant (testem5-V09-05-07)
+- Added code cleanup and protections against division by zero
      
 23-08-12 mma (testem5-V09-05-06)
 - HistoManager functionalities transfered to G4Analysis and its messenger.

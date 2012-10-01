@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm5/src/ExG4HbookAnalysisManager.cc
+/// \brief Implementation of the ExG4HbookAnalysisManager class
+//
 // $Id$
 //
 /// \file ExG4HbookAnalysisManager.cc

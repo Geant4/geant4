@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm5/include/PhysListEmStandardWVI.hh
+/// \brief Definition of the PhysListEmStandardWVI class
+//
 //
 // $Id: PhysListEmStandardWVI.hh,v 1.1 2010-11-19 15:59:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

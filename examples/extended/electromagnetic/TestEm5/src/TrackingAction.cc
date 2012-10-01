@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm5/src/TrackingAction.cc
+/// \brief Implementation of the TrackingAction class
+//
 //
 // $Id: TrackingAction.cc,v 1.18 2008-08-28 15:28:04 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
@@ -38,6 +41,8 @@
 #include "HistoManager.hh"
 
 #include "G4Track.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -120,52 +125,62 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 
   if (id>0) {
     G4double theta  = std::acos(direction.x());
-    G4double dteta  = analysisManager->GetH1Width(id);
-    G4double unit   = analysisManager->GetH1Unit(id);    
-    G4double weight = (unit*unit)/(twopi*std::sin(theta)*dteta);
-/*
-    G4cout << "theta, dteta, unit, weight: " 
-           << theta << "  "   
-           << dteta << "  "   
-           << unit << "  "   
-           << weight << G4endl;   
-*/
-    analysisManager->FillH1(id,theta,weight);
+    if(theta > 0.0) {
+      G4double dteta  = analysisManager->GetH1Width(id);
+      G4double unit   = analysisManager->GetH1Unit(id);    
+      if(dteta > 0.0) {
+        G4double weight = (unit*unit)/(twopi*std::sin(theta)*dteta);
+        /*
+          G4cout << "theta, dteta, unit, weight: " 
+          << theta << "  "   
+          << dteta << "  "   
+          << unit << "  "   
+          << weight << G4endl;   
+        */
+        analysisManager->FillH1(id,theta,weight);
+      }
+    }
   }
   
   //energy fluence at exit : dE(MeV)/dOmega
   //
   id = 0;  
-       if (transmit && charged) id = 11;
+  if (transmit && charged) id = 11;
   else if (transmit && neutral) id = 21;
   else if (reflect  && charged) id = 31;
   else if (reflect  && neutral) id = 41;
 
   if (id>0) {
     G4double theta  = std::acos(direction.x());
-    G4double dteta  = analysisManager->GetH1Width(id);
-    G4double unit   = analysisManager->GetH1Unit(id);    
-    G4double weight = (unit*unit)/(twopi*std::sin(theta)*dteta);
-    weight *= (aTrack->GetKineticEnergy()/MeV); 
-    analysisManager->FillH1(id,theta,weight);    
+    if(theta>0.0) {
+      G4double dteta  = analysisManager->GetH1Width(id);
+      G4double unit   = analysisManager->GetH1Unit(id);    
+      if(dteta > 0.0) {
+        G4double weight = (unit*unit)/(twopi*std::sin(theta)*dteta);
+        weight *= (aTrack->GetKineticEnergy()/MeV); 
+        analysisManager->FillH1(id,theta,weight);
+      }   
+    } 
   }
   
   //projected angles distribution at exit
   //
   id = 0;   
-       if (transmit && charged) id = 13;
+  if (transmit && charged) id = 13;
   else if (transmit && neutral) id = 23;
   else if (reflect  && charged) id = 33;
   else if (reflect  && neutral) id = 43;
 
   if(id>0) {
-    G4double tet = std::atan(direction.y()/std::fabs(direction.x()));
-    analysisManager->FillH1(id,tet);
-    if (transmit && (flag == 2)) fRunAction->AddMscProjTheta(tet);
+    if(direction.x() != 0.0) {
+      G4double tet = std::atan(direction.y()/std::fabs(direction.x()));
+      analysisManager->FillH1(id,tet);
+      if (transmit && (flag == 2)) fRunAction->AddMscProjTheta(tet);
 
-    tet = std::atan(direction.z()/std::fabs(direction.x()));
-    analysisManager->FillH1(id,tet);
-    if (transmit && (flag == 2)) fRunAction->AddMscProjTheta(tet);
+      tet = std::atan(direction.z()/std::fabs(direction.x()));
+      analysisManager->FillH1(id,tet);
+      if (transmit && (flag == 2)) fRunAction->AddMscProjTheta(tet);
+    }
   }
 
   //projected position and radius at exit
