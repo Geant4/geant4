@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm15/src/DetectorConstruction.cc
+/// \brief Implementation of the DetectorConstruction class
+//
 // $Id: DetectorConstruction.cc,v 1.3 2006-06-29 16:46:47 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -43,6 +46,8 @@
 #include "G4SolidStore.hh"
 
 #include "G4UnitsTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -167,41 +172,41 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   // World
   //
   G4Box*
-  sWorld = new G4Box("World",					//name
-                   fWorldSize/2,fWorldSize/2,fWorldSize/2);	//dimensions
+  sWorld = new G4Box("World",                                        //name
+                   fWorldSize/2,fWorldSize/2,fWorldSize/2);        //dimensions
 
-  G4LogicalVolume*		   			                      
-  lWorld = new G4LogicalVolume(sWorld,			//shape
-                               fWMaterial,		//material
-                              "World");			//name
+  G4LogicalVolume*                                                                 
+  lWorld = new G4LogicalVolume(sWorld,                        //shape
+                               fWMaterial,                //material
+                              "World");                        //name
 
-  fWorld = new G4PVPlacement(0,				//no rotation
-  			   G4ThreeVector(),		//at (0,0,0)
-                           lWorld,			//logical volume
-			   "World",			//name
-                           0,	       		        //mother  volume
-                           false,			//no boolean operation
-                           0);				//copy number
-			   			   
+  fWorld = new G4PVPlacement(0,                                //no rotation
+                             G4ThreeVector(),                //at (0,0,0)
+                           lWorld,                        //logical volume
+                           "World",                        //name
+                           0,                                       //mother  volume
+                           false,                        //no boolean operation
+                           0);                                //copy number
+                                                      
   // Box
-  //			   
+  //                           
   G4Box*
-  sBox = new G4Box("Container",				//its name
-                   fBoxSize/2,fBoxSize/2,fBoxSize/2);	//its dimensions
-		   
+  sBox = new G4Box("Container",                                //its name
+                   fBoxSize/2,fBoxSize/2,fBoxSize/2);        //its dimensions
+                   
   G4LogicalVolume*
-  lBox = new G4LogicalVolume(sBox,			//its shape
-                             fMaterial,			//its material
-                             fMaterial->GetName());	//its name
+  lBox = new G4LogicalVolume(sBox,                        //its shape
+                             fMaterial,                        //its material
+                             fMaterial->GetName());        //its name
 
-  fBox = new G4PVPlacement(0,				//no rotation
-  			   G4ThreeVector(),		//at (0,0,0)
-                           lBox,			//its logical volume			   
-                           fMaterial->GetName(),	//its name
-                           lWorld,			//its mother  volume
-                           false,			//no boolean operation
-                           0);				//copy number
-			   
+  fBox = new G4PVPlacement(0,                                //no rotation
+                             G4ThreeVector(),                //at (0,0,0)
+                           lBox,                        //its logical volume                           
+                           fMaterial->GetName(),        //its name
+                           lWorld,                        //its mother  volume
+                           false,                        //no boolean operation
+                           0);                                //copy number
+                           
   PrintParameters();
   
   //always return the root volume

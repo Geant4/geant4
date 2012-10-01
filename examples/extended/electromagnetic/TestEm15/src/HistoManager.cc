@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm15/src/HistoManager.cc
+/// \brief Implementation of the HistoManager class
+//
 //
 // $Id: HistoManager.cc,v 1.1 2010-09-16 16:26:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
@@ -145,16 +148,16 @@ void HistoManager::SetHisto(G4int ih,
   
   const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
   const G4String title[] = 
-                { "dummy",						//0
-                  "Multiple Scattering. True step length",		//1
-		  "Multiple Scattering. Geom step length",		//2
-		  "Multiple Scattering. Ratio geomSl/trueSl",		//3
-		  "Multiple Scattering. Lateral displacement: radius",	//4
-		  "Multiple Scattering. Lateral displac: psi_space",	//5
-		  "Multiple Scattering. Angular distrib: theta_plane",	//6
-		  "Multiple Scattering. Phi-position angle",		//7
-		  "Multiple Scattering. Phi-direction angle",		//8
-		  "Multiple Scattering. Correlation: std::cos(phiPos-phiDir)"//9
+                { "dummy",                                                //0
+                  "Multiple Scattering. True step length",                //1
+                  "Multiple Scattering. Geom step length",                //2
+                  "Multiple Scattering. Ratio geomSl/trueSl",                //3
+                  "Multiple Scattering. Lateral displacement: radius",        //4
+                  "Multiple Scattering. Lateral displac: psi_space",        //5
+                  "Multiple Scattering. Angular distrib: theta_plane",        //6
+                  "Multiple Scattering. Phi-position angle",                //7
+                  "Multiple Scattering. Phi-direction angle",                //8
+                  "Multiple Scattering. Correlation: std::cos(phiPos-phiDir)"//9
                  };
 
   G4String titl = title[ih];
@@ -231,9 +234,9 @@ void HistoManager::saveAscii()
      
       for (G4int iBin=0; iBin<fNbins[ih]; iBin++) {
          File << "  " << iBin << "\t" 
-	      << fHistPt[ih]->axis().bin_center(iBin) << "\t"
-	      << fHistPt[ih]->bin_height(iBin) 
-	      << G4endl;
+              << fHistPt[ih]->axis().bin_center(iBin) << "\t"
+              << fHistPt[ih]->bin_height(iBin) 
+              << G4endl;
       } 
     }
  } 

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm15/include/RunAction.hh
+/// \brief Definition of the RunAction class
+//
 // $Id: RunAction.hh,v 1.3 2006-06-29 16:46:36 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -58,24 +61,24 @@ class RunAction : public G4UserRunAction
     void CountProcesses(G4String);
     void SumPathLength (G4double truepl, G4double geompl) 
          {fTotalCount++; 
-	  fTruePL += truepl; fTruePL2 += truepl*truepl;
-	  fGeomPL += geompl; fGeomPL2 += geompl*geompl;
-	 };
-	 
+          fTruePL += truepl; fTruePL2 += truepl*truepl;
+          fGeomPL += geompl; fGeomPL2 += geompl*geompl;
+         };
+         
     void SumLateralDisplacement (G4double displa)  
          {fLDispl += displa; fLDispl2 += displa*displa;}
-	 
+         
     void SumPsi (G4double psi)  
          {fPsiSpa += psi; fPsiSpa2 += psi*psi;}
-	 
+         
     void SumTetaPlane (G4double teta)  
          {fTetPrj += teta; fTetPrj2 += teta*teta;}
-	 	 
+                  
     void SumPhiCorrel (G4double correl)  
          {fPhiCor += correl; fPhiCor2 += correl*correl;}
-	 	 
+                  
    G4double ComputeMscHighland(G4double pathLength);
-	 	 	           
+                                     
   private:
     DetectorConstruction*   fDetector;
     PrimaryGeneratorAction* fPrimary;

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm15/src/PhysicsList.cc
+/// \brief Implementation of the PhysicsList class
+//
 // 
 // $Id: PhysicsList.cc,v 1.2 2006-06-29 16:47:04 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
@@ -37,6 +40,7 @@
 
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -191,6 +195,8 @@ void PhysicsList::ConstructProcess()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include "G4EmStandardPhysics_option3.hh"
+
 void PhysicsList::AddPhysicsList(const G4String& name)
 {
   if (verboseLevel>0) {
@@ -204,7 +210,13 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new PhysListEmStandard(name);
-            
+
+  } else if (name == "emstandard_opt3") {
+
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option3();
+                
   } else {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
            << " is not defined"
@@ -229,7 +241,7 @@ void PhysicsList::AddStepMax()
 
       if (stepMaxProcess->IsApplicable(*particle) && pmanager)
         {
-	  pmanager ->AddDiscreteProcess(stepMaxProcess);
+          pmanager ->AddDiscreteProcess(stepMaxProcess);
         }
   }
 }

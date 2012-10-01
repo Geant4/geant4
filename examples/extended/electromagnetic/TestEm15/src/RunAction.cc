@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm15/src/RunAction.cc
+/// \brief Implementation of the RunAction class
+//
 // $Id: RunAction.cc,v 1.5 2006-06-29 16:47:13 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
@@ -41,6 +44,7 @@
 #include "G4EmCalculator.hh"
 
 #include "Randomize.hh"
+#include "G4SystemOfUnits.hh"
 #include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -107,9 +111,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4double energy = fPrimary->GetParticleGun()->GetParticleEnergy();
   G4cout << "\n The run consists of " << NbOfEvents << " "<< Particle << " of "
          << G4BestUnit(energy,"Energy") << " through " 
-	 << G4BestUnit(fDetector->GetBoxSize(),"Length") << " of "
-	 << material->GetName() << " (density: " 
-	 << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
+         << G4BestUnit(fDetector->GetBoxSize(),"Length") << " of "
+         << material->GetName() << " (density: " 
+         << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
   
   //frequency of processes
   G4cout << "\n Process calls frequency --->";
@@ -154,18 +158,18 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
          <<   "\n lateralDisplac :\t" << G4BestUnit(MeanLaD,"Length")
          << " +- "                    << G4BestUnit( rmsLaD,"Length")
          <<   "\n Psi            :\t" << MeanPsi/mrad << " mrad"
-	 << " +- "                    << rmsPsi /mrad << " mrad"
+         << " +- "                    << rmsPsi /mrad << " mrad"
          <<   "  ("                   << MeanPsi/deg  << " deg"
-	 << " +- "                    << rmsPsi /deg  << " deg)"
+         << " +- "                    << rmsPsi /deg  << " deg)"
          << G4endl;
-	 	 	 
+                           
   G4cout <<   "\n Theta_plane    :\t" << rmsTeta/mrad << " mrad"
          <<   "  ("                   << rmsTeta/deg  << " deg)"
          <<   "\n phi correlation:\t" << MeanCorrel 
-	 << " +- "                    << rmsCorrel
-	 << "  (std::cos(phi_pos - phi_dir))"	 	 
+         << " +- "                    << rmsCorrel
+         << "  (std::cos(phi_pos - phi_dir))"                  
          << G4endl;
-	 
+         
 
   //cross check from G4EmCalculator
   //
@@ -185,15 +189,15 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
   G4cout << "\n transport mean free path :\t" << G4BestUnit(MSmfp,"Length")
          << "\n range from restrict dE/dx:\t" << G4BestUnit(range,"Length")
-	 << "\n ---> effective facRange  :\t" << efFacrange
+         << "\n ---> effective facRange  :\t" << efFacrange
          << G4endl;
 
   G4cout << "\n compute theta0 from Highland :\t"
- 	 << ComputeMscHighland(MeanTPL)/mrad << " mrad" 
-	 << "  (" << ComputeMscHighland(MeanTPL)/deg << " deg)" 
-	 << G4endl;
-	 	 	 
-  //restore default format	 
+          << ComputeMscHighland(MeanTPL)/mrad << " mrad" 
+         << "  (" << ComputeMscHighland(MeanTPL)/deg << " deg)" 
+         << G4endl;
+                           
+  //restore default format         
   G4cout.precision(prec);         
 
   // delete and remove all contents in fProcCounter 

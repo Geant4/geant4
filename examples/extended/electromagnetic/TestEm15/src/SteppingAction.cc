@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm15/src/SteppingAction.cc
+/// \brief Implementation of the SteppingAction class
+//
 // $Id: SteppingAction.cc,v 1.6 2007-03-15 15:52:39 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
@@ -41,7 +44,7 @@
 
 SteppingAction::SteppingAction(DetectorConstruction* det,
                                PrimaryGeneratorAction* prim, RunAction* RuAct, 
-			       HistoManager* Hist)
+                               HistoManager* Hist)
 :fDetector(det), fPrimary(prim), fRunAction(RuAct), fHistoManager(Hist)
 { }
 
@@ -70,7 +73,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   G4String procName = endPoint->GetProcessDefinedStep()->GetProcessName();
   fRunAction->CountProcesses(procName);
       
-  if (procName != "msc" && procName != "stepMax") return;
+  if (procName != "msc" && procName != "muMsc" && procName != "stepMax") return;
   
   //below, only multiple Scattering happens
   //

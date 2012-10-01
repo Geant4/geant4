@@ -6,19 +6,23 @@
 /control/verbose 2
 /run/verbose 2
 #
-/testem/det/setMat Water
+/testem/det/setMat Air
+#
+/testem/phys/addPhysics emstandard_opt3
 #
 /run/initialize
 #
 /testem/phys/setCuts 1 mm
 #
 /process/list
-/process/inactivate hIoni
+/process/inactivate muIoni
+/process/inactivate muBrems
+/process/inactivate muPairProd
 #
-/gun/particle proton
-/gun/energy 100 MeV
+/gun/particle mu-
+/gun/energy 900 MeV
 #
-/testem/histo/setFileName proton
+/testem/histo/setFileName muon
 /testem/histo/setHisto 1  100  0     10 cm	#true step length
 /testem/histo/setHisto 2  100  0     10 cm	#geom step length
 /testem/histo/setHisto 3  100  0     1.1 none	#ratio geom/true
@@ -31,5 +35,7 @@
 #
 ##/tracking/verbose 2
 ##/run/beamOn 1
+#
+/testem/stepMax 2 m
 #
 /run/beamOn 100000
