@@ -40,6 +40,7 @@
 
 #include "G4ChipsPionMinusInelasticXS.hh"
 #include "G4ChipsPionPlusInelasticXS.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4PionMinus.hh"

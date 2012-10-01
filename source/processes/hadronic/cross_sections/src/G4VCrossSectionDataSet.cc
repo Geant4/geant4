@@ -41,6 +41,7 @@
 //
 
 #include "G4VCrossSectionDataSet.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4CrossSectionDataSetRegistry.hh"
 #include "G4DynamicParticle.hh"
 #include "G4Material.hh"

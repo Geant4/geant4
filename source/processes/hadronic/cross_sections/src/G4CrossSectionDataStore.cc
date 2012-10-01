@@ -41,6 +41,7 @@
 //
 
 #include "G4CrossSectionDataStore.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4HadronicException.hh"
 #include "G4HadTmpUtil.hh"
 #include "Randomize.hh"

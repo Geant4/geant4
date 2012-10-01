@@ -38,17 +38,18 @@
 // Modifications:
 //
 
+#include <iostream>
+#include <fstream>
+#include <sstream>
+
 #include "G4HadronicException.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4NeutronCaptureXS.hh"
 #include "G4Element.hh"
 #include "G4ElementTable.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsVector.hh"
 #include "G4DynamicParticle.hh"
-
-#include <iostream>
-#include <fstream>
-#include <sstream>
 
 using namespace std;
 

@@ -37,10 +37,11 @@
 //#define tdebug
 //#define sdebug
 
-#include "G4ElectroNuclearCrossSection.hh"
-#include "G4HadTmpUtil.hh"
 #include <iostream>
 
+#include "G4ElectroNuclearCrossSection.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4HadTmpUtil.hh"
 
 // Initialization of statics
 // Last used in the cross section TheEnergy

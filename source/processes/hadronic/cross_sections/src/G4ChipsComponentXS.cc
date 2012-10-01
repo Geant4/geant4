@@ -32,6 +32,7 @@
 
 #include "G4ChipsComponentXS.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
 #include "G4ParticleDefinition.hh"

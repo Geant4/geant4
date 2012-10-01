@@ -14,10 +14,15 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+20 September 2012 G.Cosmo (hadr-cross-V09-05-29)
+------------------------------------------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
 22 August 2012 V.Ivanchenko (hadr-cross-V09-05-28)
 --------------------------------------------------
 - G4CrossSectionDataStore - Pere Mato fixed a bug in cash mechanism
-    for element cross section
+  for element cross section
 
 14 August 2012 A.Ribon (hadr-cross-V09-05-27)
 -----------------------------------------------
@@ -26,40 +31,40 @@ code and to keep track of all tags.
 31 July 2012 V.Ivanchenko (hadr-cross-V09-05-26)
 -----------------------------------------------
 - G4CrossSectionDataStore - introduced cash for material and element
-    cross sections in order to save CPU; cross section for material
-    is not recomputed if material, primary particle and kinetic
-    energy are the same; cross section for element is not recomputed
-    if material, element, primary particle and kinetic energy are the 
-    same; G4Nucleus is updated using new method SetIsotope
+  cross sections in order to save CPU; cross section for material
+  is not recomputed if material, primary particle and kinetic
+  energy are the same; cross section for element is not recomputed
+  if material, element, primary particle and kinetic energy are the 
+  same; G4Nucleus is updated using new method SetIsotope
 
 20 July 2012 W.Pokorski (hadr-cross-V09-05-25)
 -----------------------------------------------
-- removing unnecesary statics in all the Chips cross sections
+- Removing unnecesary statics in all the Chips cross sections.
 
 20 July 2012 W.Pokorski (hadr-cross-V09-05-24)
 -----------------------------------------------
-- removing check for equal momenta in following interactions for kaons
+- Removing check for equal momenta in following interactions for kaons.
 
 17 July 2012 W.Pokorski (hadr-cross-V09-05-23)
 -----------------------------------------------
-- removing first bunch of statics from Chips XS
+- Removing first bunch of statics from Chips XS.
 
 17 July 2012 G.Folger  (hadr-cross-V09-05-22)
 -----------------------------------------------
--  correct order for initialising data members in ctor.
+- Correct order for initialising data members in ctor.
 
 17 July 2012 G.Folger  (hadr-cross-V09-05-21)
 -----------------------------------------------
-- add missing headers and sources to sources.cmake
+- Add missing headers and sources to sources.cmake.
 
 13 July 2012 G.Folger  (hadr-cross-V09-05-20)
 -----------------------------------------------
-- fix coverity warning in G4CrossSectionPairGG.cc, where an invalid iterator 
-   could be used, beyond container.
+- Fix coverity warning in G4CrossSectionPairGG.cc, where an invalid iterator 
+  could be used, beyond container.
 
 4 July 2012 W.Pokorski (hadr-cross-V09-05-19)
 -----------------------------------------------
-- fixing double deletion in Chips cross sections
+- Fixing double deletion in Chips cross sections
 
 2 July 2012 V.Ivanchenko (hadr-cross-V09-05-18)
 -----------------------------------------------
@@ -67,37 +72,38 @@ code and to keep track of all tags.
 
 2 July 2012 V.Ivanchenko (hadr-cross-V09-05-17)
 -----------------------------------------------
+- Tagged.
 
 22 June 2012 W.Pokorski 
 -----------------------------------------------
-- removing fix from hadr-cross-V09-05-16, which was wrong and not
-needed. Sorry for the noise.
+- Removing fix from hadr-cross-V09-05-16, which was wrong and not
+  needed. Sorry for the noise.
 
 22 June 2012 V.Ivanchenko  
 -----------------------------------------------
 - G4HadronCrossSections - use cache of previous x-section and G4Pow
 - G4CrossSectionDataStore - take into account that all elements 
-    should have isotopes 
+  should have isotopes 
 
 22 June 2012 W.Pokorski  (hadr-cross-V09-05-16)
 -----------------------------------------------
-- fix to avoid double deletion on exit
+- Fix to avoid double deletion on exit
 
 15 June 2012 P. Mato  (hadr-cross-V09-05-15)
 -----------------------------------------------
-- minor changes in the references to also please Windows
+- Minor changes in the references to also please Windows
 
 15 June 2012 P. Mato  (hadr-cross-V09-05-14)
 -----------------------------------------------
-- add references to factories to make it work with static libraries
+- Add references to factories to make it work with static libraries
 
 12 June 2012 W.Pokorski  (hadr-cross-V09-05-13)
 -----------------------------------------------
-- making Chips elastic cross sections to use factory mechanism
+- Making Chips elastic cross sections to use factory mechanism
 
 11 June 2012 W.Pokorski  (hadr-cross-V09-05-12)
 -----------------------------------------------
-- making Chips inelastic cross sections to use factory mechanism
+- Making Chips inelastic cross sections to use factory mechanism
 
 08 June 2012 V.Ivanchenko  (hadr-cross-V09-05-11)
 -----------------------------------------------
@@ -105,55 +111,47 @@ needed. Sorry for the noise.
 
 08 June 2012 Gabriele Cosmo  (hadr-cross-V09-05-10)
 -----------------------------------------------
-Fixed trivial cases of hidden variable visibility, detected with
-'-Wshadow' compilation option on gcc compiler.
+- Fixed trivial cases of hidden variable visibility, detected with
+  '-Wshadow' compilation option on gcc compiler.
 
 03 June 2012 Witek Pokorski  (hadr-cross-V09-05-09)
 -----------------------------------------------
-
-extending the functionality of G4CrossSectionDataSetRegistry to allow
-sharing of cross sections sets
+- Extending the functionality of G4CrossSectionDataSetRegistry to allow
+  sharing of cross sections sets.
 
 11 May 2012 Witek Pokorski  (hadr-cross-V09-05-08)
 -----------------------------------------------
-
-making GetExchangeT method public to be used in coherent_elastic
+- Making GetExchangeT method public to be used in coherent_elastic.
 
 11 May 2012 Witek Pokorski  (hadr-cross-V09-05-07)
 -----------------------------------------------
-
-further fixes for double deletion in the new Chips cross sections
+- Further fixes for double deletion in the new Chips cross sections.
 
 10 May 2012 Witek Pokorski  (hadr-cross-V09-05-06)
 -----------------------------------------------
-
-removed double deletion in the new Chips cross sections
+- Removed double deletion in the new Chips cross sections.
 
 10 May 2012 Witek Pokorski  (hadr-cross-V09-05-05)
 -----------------------------------------------
-
-added elastic cross-sections extracted from CHIPS
+- Added elastic cross-sections extracted from CHIPS.
 
 4 May 2012 Witek Pokorski  (hadr-cross-V09-05-04)
 -----------------------------------------------
-
-added inelastic cross-sections extracted from CHIPS
-
+- Added inelastic cross-sections extracted from CHIPS.
 
 4 May 2012 Vladimir Grichine 
 -----------------------------------------------
-
-new class G4ComponentGGNuclNuclXsc based on G4GGNuclNuclCrossSection 
-(Glauber-Gribov for ion-ion xsc) was added and component interface was implemented
-
-new class G4ComponentBarNucleonNucleusXsc based on G4NucleonNuclearCrossSection 
-(Barashenkov xsc) was added and component interface was implemented
+- New class G4ComponentGGNuclNuclXsc based on G4GGNuclNuclCrossSection 
+  (Glauber-Gribov for ion-ion xsc) was added and component interface was
+  implemented
+- New class G4ComponentBarNucleonNucleusXsc based on
+  G4NucleonNuclearCrossSection (Barashenkov xsc) was added and component
+  interface was implemented.
 
 27 April 2012 Vladimir Grichine 
 -----------------------------------------------
-
-new class G4ComponentGGHadronNucleusXsc based on G4GlauberGribovCrossSection 
-was added and component interface was implemented
+- New class G4ComponentGGHadronNucleusXsc based on G4GlauberGribovCrossSection 
+  was added and component interface was implemented
 
 24 April 2012 Alberto Ribon  (hadr-cross-V09-05-03)
 ---------------------------------------------------

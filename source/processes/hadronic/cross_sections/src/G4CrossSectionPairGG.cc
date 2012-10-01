@@ -38,6 +38,8 @@
 #include "G4CrossSectionPairGG.hh"
 
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4HadTmpUtil.hh"
 #include "G4NistManager.hh"
 #include "G4ThreeVector.hh"

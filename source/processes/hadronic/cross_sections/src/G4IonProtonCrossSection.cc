@@ -39,6 +39,7 @@
 //
 
 #include "G4IonProtonCrossSection.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ProtonInelasticCrossSection.hh"
 #include "G4DynamicParticle.hh"
 #include "G4Element.hh"

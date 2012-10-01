@@ -51,9 +51,9 @@
 //    inelastic cross sections
 //
 
-
 #include "G4HadronCrossSections.hh"
 #include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4HadronicException.hh"
 #include "G4Pow.hh"
  

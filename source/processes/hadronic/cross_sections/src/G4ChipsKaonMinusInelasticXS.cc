@@ -38,6 +38,7 @@
 //
 
 #include "G4ChipsKaonMinusInelasticXS.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4KaonMinus.hh"

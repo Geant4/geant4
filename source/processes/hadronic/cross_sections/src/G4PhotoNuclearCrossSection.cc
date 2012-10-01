@@ -36,10 +36,12 @@
 //#define debugn
 //#define debugs
 
-#include "G4PhotoNuclearCrossSection.hh"
-#include "G4HadTmpUtil.hh"
 #include <iostream>
 #include <fstream>
+
+#include "G4PhotoNuclearCrossSection.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4HadTmpUtil.hh"
 
 // Initialization of the statics
 G4int G4PhotoNuclearCrossSection::lastN=0;  

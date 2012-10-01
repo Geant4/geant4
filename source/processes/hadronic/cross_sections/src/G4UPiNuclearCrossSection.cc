@@ -36,6 +36,7 @@
 //
 
 #include "G4UPiNuclearCrossSection.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4LPhysicsFreeVector.hh"
 #include "G4PionMinus.hh"
 #include "G4PionPlus.hh"

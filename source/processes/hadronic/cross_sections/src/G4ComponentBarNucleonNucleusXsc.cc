@@ -32,6 +32,7 @@
 //
 
 #include "G4ComponentBarNucleonNucleusXsc.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4DynamicParticle.hh"
 #include "G4Neutron.hh"
 #include "G4Proton.hh"

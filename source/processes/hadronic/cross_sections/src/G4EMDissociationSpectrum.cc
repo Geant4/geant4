@@ -60,6 +60,8 @@
 //
 #include "G4EMDissociationSpectrum.hh"
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 ////////////////////////////////////////////////////////////////////////////////
 //
 G4EMDissociationSpectrum::G4EMDissociationSpectrum ()

@@ -31,6 +31,8 @@
 // 19-Aug-2011 V.Ivanchenko move to new design and make x-section per element
 
 #include "G4IonsKoxCrossSection.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4DynamicParticle.hh"
 #include "G4NucleiProperties.hh"
 #include "G4HadTmpUtil.hh"

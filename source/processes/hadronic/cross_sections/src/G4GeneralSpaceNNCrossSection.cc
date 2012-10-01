@@ -60,7 +60,10 @@
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ///////////////////////////////////////////////////////////////////////////////
 //
+#include <iomanip>
+
 #include "G4GeneralSpaceNNCrossSection.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ProtonInelasticCrossSection.hh"
 #include "G4IonProtonCrossSection.hh"
 #include "G4TripathiLightCrossSection.hh"
@@ -71,9 +74,6 @@
 #include "G4ParticleDefinition.hh"
 #include "G4HadTmpUtil.hh"
 #include "G4Proton.hh"
-
-#include <iomanip>
-
 
 G4GeneralSpaceNNCrossSection::G4GeneralSpaceNNCrossSection ()
  : G4VCrossSectionDataSet("General Space NN")
