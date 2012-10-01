@@ -39,11 +39,11 @@
 #ifndef G4QDiscreteProcessVector_h
 #define G4QDiscreteProcessVector_h 1
 
-#include "G4VProcess.hh"
+#include "G4VDiscreteProcess.hh"
 #include <vector>
 
-typedef std::vector<std::pair<G4VProcess*, G4double>*> G4QDiscreteProcessVector;
-struct DeleteDiscreteProcess { void operator()(std::pair<G4VProcess*,G4double>* DP)
+typedef std::vector<std::pair<G4VDiscreteProcess*, G4double>*> G4QDiscreteProcessVector;
+struct DeleteDiscreteProcess { void operator()(std::pair<G4VDiscreteProcess*,G4double>* DP)
                                {delete DP->first; delete DP;} };
 
 #endif

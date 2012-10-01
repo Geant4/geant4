@@ -78,7 +78,7 @@ public:
   // The MaxE for the first (highest energy process) is always infinity (automatic)
   // The MinE = MaxE of the lower energy process (MinE=0 for the lowest energy process)
 
-  void AddDiscreteProcess(G4VProcess* DP, G4double MaxE);
+  void AddDiscreteProcess(G4VDiscreteProcess* DP, G4double MaxE);
 
   //G4LorentzVector GetEnegryMomentumConservation();
 
