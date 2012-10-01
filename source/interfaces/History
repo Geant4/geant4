@@ -17,6 +17,50 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28th September 2012  Laurent Garnier (interfaces-V09-05-17 & interfaces-V09-05-18)
+- G4UIQt :
+  o Fixed compiler warning and remove dead code
+
+27th September 2012 John Allison (interfaces-V09-05-16)
+- Tagged.
+
+26th September 2012  Laurent Garnier
+- G4UIQt:
+ o Move Icon creation in a generic method : AddIcon()
+ o Move command line on the right widget
+ o Add warning when creating new menu if command not found
+ o Re-order lot lof things to be able to call widget dialog box for parameters outside
+   view/scene tab stack component.
+ o A menu/icon with a command without parameter will open a parameter dialog box
+
+20th September 2012  Laurent Garnier (interfaces-V09-05-15)
+- G4UIQt : Fix a compiler warning on  uninitialized parameter
+
+19th September 2012  John Allison (interfaces-V09-05-14)
+- G4UIQt: Introduced static G4bool IsInstantiated() for use by vis system.
+
+18th Septembre 2012 Hisaya Kurashige (interfaces-V09-05-13)
+- Same as interfaces-V09-05-12
+  (Re-tagged because of system test )
+
+5th Septembre 2012 Laurent Garnier (interfaces-V09-05-12)
+- G4UIQt.cc :
+  o Add Perspective/Ortho icons
+  o Add new OGL S/I mode
+  o Remove warnings
+  o Add Zoom In/Out icons
+  o Fix icon radio button problem
+ 
+2nd Septembre 2012 Laurent Garnier
+- G4UIQt.cc : 
+  o Add Load/Macro icons and actions (not finish!)
+  o Fix a problem when no tab was displayed and creating first vis tab 
+
+23 August 2012 Laurent Garnier
+- G4UIQt.cc : Begin of changing lot of things in UI
+  o Add some icons (not finish!)
+  o Change some layout (to be continue)
+
 9 August 2012 Laurent Garnier (interfaces-V09-05-11)
 - G4UIQt.cc :
   o Fix problem with component size

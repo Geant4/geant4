@@ -74,6 +74,8 @@
 #include <qsignalmapper.h>
 #include <qpainter.h>
 #include <qcolordialog.h>
+#include <qtoolbar.h>
+#include <qfiledialog.h>
 
 
 
@@ -82,6 +84,8 @@
 // Pourquoi Static et non  variables de classe ?
 static G4bool exitSession = true;
 static G4bool exitPause = true;
+
+G4bool G4UIQt::fIsInstantiated = false;
 
 /**   Build a Qt window with a menubar, output area and promt area<br> 
 <pre>
@@ -107,7 +111,11 @@ G4UIQt::G4UIQt (
  int argc
 ,char** argv
 )
-:fHelpArea(NULL)
+:fMainWindow(NULL)
+,fCommandLabel(NULL)
+,fCommandArea(NULL)
+,fCoutTBTextArea(NULL)
+,fHelpArea(NULL)
 ,fG4cout("")
 ,fHelpTreeWidget(NULL)
 ,fHelpTBWidget(NULL)
@@ -115,11 +123,12 @@ G4UIQt::G4UIQt (
 ,fCoutTBWidget(NULL)
 ,fSceneTreeComponentsTBWidget(NULL)
 ,fHelpLine(NULL)
-,fTabWidget(NULL)
+,fViewerTabWidget(NULL)
 ,fCoutText("Output")
 ,fLastQTabSizeX(0)
 ,fLastQTabSizeY(0)
-,fCommandParameterWidgets(NULL)
+,fToolbarApp(NULL)
+,fToolbarUser(NULL)
 {
 
   G4Qt* interactorManager = G4Qt::getInstance (argc,argv,(char*)"Qt");
@@ -127,6 +136,8 @@ G4UIQt::G4UIQt (
     G4cout        << "G4UIQt : Unable to init Qt. Aborted" << G4endl;
   }
   
+  fIsInstantiated = true;
+
   G4UImanager* UI = G4UImanager::GetUIpointer();
   if(UI!=NULL) UI->SetSession(this);
   if(UI!=NULL) UI->SetG4UIWindow(this);
@@ -145,22 +156,58 @@ G4UIQt::G4UIQt (
   }
   fMainWindow = new QMainWindow();
 
+
+  // open/save
+  AddIcon("Open macro file","open","/control/execute");
+  AddIcon("Save viewer state","save","");
+
+  // Cursors style : Should be for all viewers
+  
+  AddIcon("Move","move","");
+  AddIcon("Pick","pick","");
+  AddIcon("Zoom out","zoom_out","");
+  AddIcon("Zoom in","zoom_in","");
+  AddIcon("Rotate","rotate","");
+  SetIconRotateSelected();
+
+  // Surface Style : Should be change when changing current viewer
+  AddIcon("Hidden line removal","hidden_line_removal","");
+  AddIcon("Hidden line removal","hidden_line_and_surface_removal","");
+  AddIcon("Hidden line removal","solid","");
+  AddIcon("Hidden line removal","wireframe","");
+  SetIconWireframeSelected();
+
+  // Perspective/Ortho
+  AddIcon("Perspective","perspective","");
+  AddIcon("Orthographic","ortho","");
+  SetIconOrthoSelected();
+
+  // Try : changebackground
+  //  AddIcon("change background","/Users/garnier/Desktop/Captures/a.jpg","/vis/viewer/set/background");
+
+
+ 
 #ifdef G4DEBUG_INTERFACES_BASIC
   printf("G4UIQt::Initialise after main window creation +++++++++++\n");
 #endif
 
-  // the left splitter
-  QSplitter* leftTabBarSplitter = new QSplitter(Qt::Vertical);
 
-  QWidget *mainWidget = new QWidget(fMainWindow);
-  fMyVSplitter = new QSplitter(Qt::Horizontal,fMainWindow);
+  // the splitter
+  fMainSplitterWidget = new QSplitter(Qt::Horizontal,fMainWindow);
+
+  QWidget *leftSplitterWidget = new QWidget(fMainSplitterWidget);
+  QVBoxLayout * layoutLeftSplitterWidget = new QVBoxLayout();
+  leftSplitterWidget->setLayout(layoutLeftSplitterWidget);
+  fRightSplitterWidget = new QSplitter(Qt::Vertical,fMainSplitterWidget);
+
+
   fUITabWidget = new QTabWidget();
-  fUITabWidget->setMinimumHeight(100);
+  //  fUITabWidget->setMinimumHeight(100);
 
   // Set layouts
-
-  QWidget* commandLineWidget = new QWidget(mainWidget);
+  QWidget* commandLineWidget = new QWidget();
   QVBoxLayout *layoutCommandLine = new QVBoxLayout();
+  commandLineWidget->setLayout(layoutCommandLine);
 
   // fill them
 
@@ -173,55 +220,55 @@ G4UIQt::G4UIQt (
   fCommandArea->setFocusPolicy ( Qt::StrongFocus );
   fCommandArea->setFocus(Qt::TabFocusReason);
 
-  commandLineWidget->setLayout(layoutCommandLine);
   commandLineWidget->setSizePolicy (QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum));
-
 
 
   layoutCommandLine->addWidget(fCommandLabel);
   layoutCommandLine->addWidget(fCommandArea);
-  QVBoxLayout *mainLayout;
-  mainLayout = new QVBoxLayout();
 
   fHelpTBWidget = new QWidget(fUITabWidget);
   fHistoryTBWidget = new QWidget(fUITabWidget);
-  fSceneTreeComponentsTBWidget = new QWidget(fUITabWidget);
-  fSceneTreeComponentsTBWidget->setLayout(new QVBoxLayout());
+  fSceneTreeComponentsTBWidget = new QTabWidget(fUITabWidget);
 
 #if QT_VERSION < 0x040200
   fSceneTreeComponentsTBWidget->hide();
 #else
   fSceneTreeComponentsTBWidget->setVisible(false);
 #endif
+
+  fEmptyViewerTabLabel = new QLabel("         If you want to have a Viewer, please use /vis/open commands. ");
+
+  layoutLeftSplitterWidget->addWidget(fUITabWidget);
+
+  fCoutTBWidget = new QGroupBox("Output");
+
+  // fill right splitter
+  fRightSplitterWidget->addWidget(fEmptyViewerTabLabel);
+  fRightSplitterWidget->addWidget(fCoutTBWidget);
+  fRightSplitterWidget->addWidget(commandLineWidget);
+
+  // set the splitter size
+  QList<int> list2;
+  list2.append(600);
+  list2.append(150);
+  //  fRightSplitterWidget->setSizes(list2);
+
   
   CreateVisParametersTBWidget();
   CreateHelpTBWidget();
   CreateHistoryTBWidget();
 
-  fCoutTBWidget = new QGroupBox("Output");
   CreateCoutTBWidget();
 
-  // fill left splitter
-  leftTabBarSplitter->addWidget(fUITabWidget);
-  leftTabBarSplitter->addWidget(fCoutTBWidget);
 
-  // set the splitter size
-  QList<int> list2;
-  list2.append(400 );
-  list2.append(150 );
-  leftTabBarSplitter->setSizes(list2);
   
 
-  // fix size for cout
-  fCoutTBWidget->resize(100,100);
 
   // the right splitter 
   fUITabWidget->addTab(fSceneTreeComponentsTBWidget,"Scene tree");
   fUITabWidget->addTab(fHelpTBWidget,"Help");
   fUITabWidget->addTab(fHistoryTBWidget,"History");
   fUITabWidget->setCurrentWidget(fSceneTreeComponentsTBWidget);
-
-  fEmptyViewerTabLabel = new QLabel("         If you want to have a Viewer, please use /vis/open commands. ");
 
   // Only at creation. Will be set visible when sessionStart();
  #if QT_VERSION < 0x040200
@@ -231,27 +278,21 @@ G4UIQt::G4UIQt (
  #endif
 
 
-  fMyVSplitter->addWidget(leftTabBarSplitter);
-  fMyVSplitter->addWidget(fEmptyViewerTabLabel);
-
+  fMainSplitterWidget->addWidget(leftSplitterWidget);
+  fMainSplitterWidget->addWidget(fRightSplitterWidget);
   // set the splitter size
   QList<int> list;
   list.append(200 );
   list.append(650);
-  fMyVSplitter->setSizes(list);
+  fMainSplitterWidget->setSizes(list);
 
-  
-
-  mainLayout->addWidget(fMyVSplitter,1);
-  mainLayout->addWidget(commandLineWidget);
 
 #ifdef G4DEBUG_INTERFACES_BASIC
   printf("G4UIQt::G4UIQt :: 5\n");
 #endif
 
-  mainWidget->setLayout(mainLayout);
 
-  fMainWindow->setCentralWidget(mainWidget);
+  fMainWindow->setCentralWidget(fMainSplitterWidget);
 
 
   // Add a quit subMenu
@@ -417,7 +458,7 @@ void G4UIQt::CreateVisParametersTBWidget(
 
 /** Get the ViewerComponents ToolBox Widget
  */
-QWidget* G4UIQt::GetSceneTreeComponentsTBWidget(
+QTabWidget* G4UIQt::GetSceneTreeComponentsTBWidget(
 )
 {
   return fSceneTreeComponentsTBWidget;
@@ -438,30 +479,31 @@ bool G4UIQt::AddTabWidget(
   printf("G4UIQt::AddTabWidget %d %d\n",sizeX, sizeY);
 #endif
 
-  if (fTabWidget == NULL) {
+  if (fViewerTabWidget == NULL) {
 #ifdef G4DEBUG_INTERFACES_BASIC
     printf("G4UIQt::AddTabWidget +++++\n");
 #endif
-    fTabWidget = new G4QTabWidget(fMyVSplitter);
+
+    fViewerTabWidget = new G4QTabWidget(fRightSplitterWidget);
 #if QT_VERSION < 0x040500
 #else
-    fTabWidget->setTabsClosable (true); 
+    fViewerTabWidget->setTabsClosable (true); 
 #endif
     
 #if QT_VERSION < 0x040200
 #else
-    fTabWidget->setUsesScrollButtons (true);
+    fViewerTabWidget->setUsesScrollButtons (true);
 #endif
-    QSizePolicy policy = fTabWidget->sizePolicy();
+    QSizePolicy policy = fViewerTabWidget->sizePolicy();
     policy.setHorizontalStretch(1);
     policy.setVerticalStretch(1);
-    fTabWidget->setSizePolicy(policy);
+    fViewerTabWidget->setSizePolicy(policy);
     
 #if QT_VERSION < 0x040500
 #else
-    connect(fTabWidget,   SIGNAL(tabCloseRequested(int)), this, SLOT(TabCloseCallback(int)));
+    connect(fViewerTabWidget,   SIGNAL(tabCloseRequested(int)), this, SLOT(TabCloseCallback(int)));
 #endif
-    connect(fTabWidget, SIGNAL(currentChanged ( int ) ), SLOT(UpdateTabWidget(int))); 
+    connect(fViewerTabWidget, SIGNAL(currentChanged ( int ) ), SLOT(UpdateTabWidget(int))); 
   }
 
   fLastQTabSizeX = sizeX;
@@ -476,51 +518,39 @@ bool G4UIQt::AddTabWidget(
   // L.Garnier 26/05/2010 : not exactly the same in qt3. Could cause some
   // troubles
   if (fEmptyViewerTabLabel != NULL) {
-    if ( fMyVSplitter->indexOf(fEmptyViewerTabLabel) != -1) {
-      
+    int index = fRightSplitterWidget->indexOf(fEmptyViewerTabLabel);
+    if ( index != -1) {
       fEmptyViewerTabLabel->hide();
       fEmptyViewerTabLabel->setParent(NULL);
       delete fEmptyViewerTabLabel;
       fEmptyViewerTabLabel = NULL;
       
-      fMyVSplitter->addWidget(fTabWidget);
+      fRightSplitterWidget->insertWidget(index,fViewerTabWidget);
       
-      aWidget->setParent(fTabWidget);
+      aWidget->setParent(fViewerTabWidget);
     }
   }
 
 #ifdef G4DEBUG_INTERFACES_BASIC
-  printf("G4UIQt::AddTabWidget ADD %d %d + %d %d---------------------------------------------------\n",sizeX, sizeY,sizeX-fTabWidget->width(),sizeY-fTabWidget->height());
+  printf("G4UIQt::AddTabWidget ADD %d %d + %d %d---------------------------------------------------\n",sizeX, sizeY,sizeX-fViewerTabWidget->width(),sizeY-fViewerTabWidget->height());
 #endif
 
-  if (fMainWindow->isVisible()) {
-
-    // get the size of the tabbar
-    int tabBarX = 0;
-    int tabBarY = 0;
-    if (fTabWidget->count() >0) {
-      tabBarX = fTabWidget->width()-fTabWidget->widget(0)->width();
-      tabBarY = fTabWidget->height()-fTabWidget->widget(0)->height();
-    }
-
-    //    fMainWindow->resize(tabBarX+fMainWindow->width()+sizeX-fTabWidget->width(),tabBarY+fMainWindow->height()+sizeY-fTabWidget->height());
-  }
 
   // Problems with resize. The widgets are not realy drawn at this step,
   // then we have to force them on order to check the size
 
-  fTabWidget->insertTab(fTabWidget->count(),aWidget,name);
+  fViewerTabWidget->insertTab(fViewerTabWidget->count(),aWidget,name);
 
-  fTabWidget->setCurrentIndex(fTabWidget->count()-1);
+  fViewerTabWidget->setCurrentIndex(fViewerTabWidget->count()-1);
 
   // Set visible
  #if QT_VERSION < 0x040200
-   fTabWidget->setLastTabCreated(fTabWidget->currentIndex());
+   fViewerTabWidget->setLastTabCreated(fViewerTabWidget->currentIndex());
  #else
-   fTabWidget->setLastTabCreated(fTabWidget->currentIndex());
+   fViewerTabWidget->setLastTabCreated(fViewerTabWidget->currentIndex());
  #endif
   
-   fTabWidget->resize(sizeX,sizeY);
+   fViewerTabWidget->resize(sizeX,sizeY);
 
   return true;
 }
@@ -530,27 +560,27 @@ void G4UIQt::UpdateTabWidget(int tabNumber) {
 #ifdef G4DEBUG_INTERFACES_BASIC
   printf("G4UIQt::UpdateTabWidget %d\n",tabNumber);
 #endif
-  if ( fTabWidget == NULL) {
-    fTabWidget = new G4QTabWidget;
+  if ( fViewerTabWidget == NULL) {
+    fViewerTabWidget = new G4QTabWidget;
   }
   
 #ifdef G4DEBUG_INTERFACES_BASIC
   printf("G4UIQt::UpdateTabWidget CALL REPAINT tabGL\n");
 #endif
 
-  fTabWidget->setCurrentIndex(tabNumber);
+  fViewerTabWidget->setCurrentIndex(tabNumber);
 
   // Send this signal to unblock graphic updates !
-  fTabWidget->setTabSelected(false);
+  fViewerTabWidget->setTabSelected(false);
 
  #if QT_VERSION < 0x040200
-  fTabWidget->show();
+  fViewerTabWidget->show();
  #else
-  fTabWidget->setVisible(true);
+  fViewerTabWidget->setVisible(true);
  #endif
 
   // This will send a paintEvent to OGL Viewers
-  fTabWidget->setTabSelected(true);
+  fViewerTabWidget->setTabSelected(true);
 
   QCoreApplication::sendPostedEvents () ;
 
@@ -563,11 +593,11 @@ void G4UIQt::UpdateTabWidget(int tabNumber) {
 /** Send resize event to all tabs
  */
 void G4UIQt::ResizeTabWidget( QResizeEvent* e) {
-  for (G4int a=0;a<fTabWidget->count() ;a++) {
+  for (G4int a=0;a<fViewerTabWidget->count() ;a++) {
 #ifdef G4DEBUG_INTERFACES_BASIC
     printf("G4UIQt::ResizeTabWidget +++++++++++++++++++++++++++++++++++++++\n");
 #endif
-    fTabWidget->widget(a)->resize(e->size());
+    fViewerTabWidget->widget(a)->resize(e->size());
   }
 }
 
@@ -588,8 +618,8 @@ G4UIsession* G4UIQt::SessionStart (
 /*
   if (fEmptyViewerTabLabel != NULL) {
     bool visible = false;
-    if (fTabWidget != NULL) {
-      if (fTabWidget->isVisible()) {
+    if (fViewerTabWidget != NULL) {
+      if (fViewerTabWidget->isVisible()) {
         visible = true;
       }
     }
@@ -604,9 +634,9 @@ G4UIsession* G4UIQt::SessionStart (
   int tabBarX = 0;
   int tabBarY = 0;
 
-  if (fTabWidget != NULL) {
-    tabBarX = -fTabWidget->widget(0)->width();
-    tabBarY = -fTabWidget->widget(0)->height();
+  if (fViewerTabWidget != NULL) {
+    tabBarX = -fViewerTabWidget->widget(0)->width();
+    tabBarY = -fViewerTabWidget->widget(0)->height();
   }
   fMainWindow->resize(tabBarX+fMainWindow->width()+fLastQTabSizeX,tabBarY+fMainWindow->height()+fLastQTabSizeY);
 
@@ -811,8 +841,19 @@ void G4UIQt::AddButton (
 
   QMenu *parentTmp = (QMenu*)GetInteractor(aMenu);
 
-  if(parentTmp==NULL) return;
+  if(parentTmp==NULL) {
+    G4cout << "Menu name " << aMenu<< " does not exist, please define it before using it."<< G4endl;
+  }
   
+  // Find the command in the command tree
+  G4UImanager* UI = G4UImanager::GetUIpointer();
+  if(UI==NULL) return;
+  G4UIcommandTree * treeTop = UI->GetTree();
+
+  if(treeTop->FindPath(aCommand) == NULL) {
+    G4cout << "Warning: command '"<< aCommand <<"' does not exist, please define it before using it."<< G4endl;
+  }
+
   QSignalMapper *signalMapper = new QSignalMapper(this);
   QAction *action = parentTmp->addAction(aLabel, signalMapper, SLOT(map()));
 
@@ -820,6 +861,832 @@ void G4UIQt::AddButton (
   signalMapper->setMapping(action, QString(aCommand));
 }
 
+
+
+
+/**
+ special case for the "open" icon. It will open a file selector and map the return file to the given command.
+*/
+void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCommand){
+  if(aLabel==NULL) return; // TO KEEP
+  if(aCommand==NULL) return; // TO KEEP
+
+  QPixmap pix;
+  bool userToolBar = false;
+  if (std::string(aIconFile) == "open") {
+    const char * const xpm[]={
+      "32 32 33 1",                       
+          "       c None",                    
+          "+      c #09091E",                 
+          "@      c #191B18",                 
+          "#      c #5F615F",                 
+          "$      c #777977",                 
+          "%      c #AEB1AF",                 
+          "&      c #929491",                 
+          "*      c #515250",                 
+          "=      c #858784",                 
+          "-      c #333533",                 
+          ";      c #000100",                 
+          ">      c #272926",                 
+          ",      c #424341",                 
+          "'      c #696C6A",                 
+          ")      c #5F4927",                 
+          "!      c #583D18",                 
+          "~      c #6E6A5B",                 
+          "{      c #47351D",                 
+          "]      c #E0A554",                 
+          "^      c #FFD67B",                 
+          "/      c #EFB465",                 
+          "(      c #FDBF6C",                 
+          "_      c #FFCD76",                 
+          ":      c #806238",                 
+          "<      c #362611",                 
+          "[      c #0B0D0A",                 
+          "}      c #68471B",                 
+          "|      c #523E22",                 
+          "1      c #B78A51",                 
+          "2      c #A17B44",                 
+          "3      c #D6A45E",                 
+          "4      c #C29354",                 
+          "5      c #A1A3A0",                 
+          "                                ", 
+          "                                ", 
+          "                     +@@@#      ", 
+          "                    $%   +&   * ", 
+          "                   #=     $  -; ", 
+          "                           %>;+ ", 
+          "                           ,;;+ ", 
+          "  &#$''#'                 >;;;+ ", 
+          " =)!)!!!!~                *#$'' ", 
+          " {]^/((_({-  %%%%%%%%%%%        ", 
+          " {(^_^^^^:<{{{{{{{{{{{{{[&      ", 
+          " {/_/(((((/]]]]]]]]]]]/]!#      ", 
+          " {/^(((((_^^^^^^^^^^^^^^:#      ", 
+          " {/^(((_^^____________^^}$      ", 
+          " {/^(((((/////////////((!#      ", 
+          " {/^/^_:<|||||||||||||||@@****1 ", 
+          " {/^/^(<[)||||||||||||||))!!}<; ", 
+          " {/^_(:|234444444444444444432)1 ", 
+          " {/_^/<)34444444444444444443},  ", 
+          " {/^(2{:41111111111111111142|5  ", 
+          " {3^3<:31111111111111111143}-   ", 
+          " {/^2<:31111111111111111441|'   ", 
+          " {_/<:41111111111111111143},    ", 
+          " {(4<:31111111111111111144!#    ", 
+          " )4))44111111111111111144},     ", 
+          " )2<:31111111111111111144{#     ", 
+          " @|:14444444444444444444}*      ", 
+          " ;@434444444444444444434<#      ", 
+          " ;[))))))))))))))))))))!~       ", 
+          " ++++++++++++++++++++++;%       ", 
+          "                                ", 
+          "                                "}
+    ;
+    pix = QPixmap(xpm);
+
+  } else if (std::string(aIconFile) == "save") {
+    const char * const xpm[]={
+      "32 32 24 1",                      
+      "       c None",                    
+      "+      c #000200",                
+      "@      c #141E43",                
+      "#      c #000C56",                
+      "$      c #494A47",                
+      "%      c #636662",                
+      "&      c #312F2A",                
+      "*      c #191B19",                
+      "=      c #002992",                
+      "-      c #003DFF",                
+      ";      c #041DA5",                
+      ">      c #A8A9A3",                
+      ",      c #FDFFFC",                
+      "'      c #DDE0DD",                
+      ")      c #818783",                
+      "!      c #C9CBC8",                
+      "~      c #0116C3",                
+      "{      c #C5C8FA",                
+      "]      c #6596FC",                
+      "^      c #A0B4F9",                
+      "/      c #0B2AFD",                
+      "(      c #799BE3",                
+      "_      c #5F4826",                
+      ":      c #D5D8D5",                
+      "                                ",
+      "                                ",
+      "   +++++++++++++++++++++++++    ",
+      "  +@##+$%%%%%%%%%%%%%%%&*$%&+   ",
+      "  +=-;@>,,''',,,,,,,',,)&!,)+   ",
+      "  +;-~@>,,,,,,,,,,,,,,,>$!,)+   ",
+      "  +=-~@>,,,,,{]]]]]^,,,>*&$&+   ",
+      "  +=-~@>,,,,,'{^{^^{,,,>*#=#+   ",
+      "  +=-~@>,,,,,,,,,,,,,,,>@~/=+   ",
+      "  +=-~@>,,,{{{''''{',,,>@~-=+   ",
+      "  +=-~@>,,'^]]]]]]({,,,>@~-=+   ",
+      "  +=-~@>,,,{{{{{{{{{,,,>@~-=+   ",
+      "  +=-~@>,,,,,'{^{{^{,,,>@~-=+   ",
+      "  +=-~@>,,,,,]]]]]]],,,>@~-=+   ",
+      "  +=-~*>,,,,,,,,,,,,,,,>@~-=+   ",
+      "  +=-~@>,,,,,,,,,,,,,,,>@~-=+   ",
+      "  +=-/=$%%%%%%%%%%%%%%%$=/-=+   ",
+      "  +=---;###############;---=+   ",
+      "  +=---////////////////----=+   ",
+      "  +=----------------///----=+   ",
+      "  +=---=@##############@#--=+   ",
+      "  +=---@+++++++++++*%))_+~-=+   ",
+      "  +=---#+++++++++++&:,,>@~-=+   ",
+      "  +=---#+++++++++++$',,>@~-=+   ",
+      "  +=---#+++++++++++&!,,>@~-=+   ",
+      "  +=/--#+++++++++++&',,>@~-=+   ",
+      "   @;--#+++++++++++$',,>@~-=+   ",
+      "    @;;@+++++++++++*)!>%@=;#+   ",
+      "     @++++++++++++++*&**++@++   ",
+      "                                ",
+      "                                ",
+      "                                "}
+    ;
+    pix = QPixmap(xpm);
+  } else if (std::string(aIconFile) == "move") {
+    const char * const xpm[]={
+        "32 32 16 1",                       
+          "       c None",                    
+          ".      c #F1F1F1",                 
+          "+      c #939393",                 
+          "@      c #282828",                 
+          "#      c #787878",                 
+          "$      c #000000",                 
+          "%      c #CCCCCC",                 
+          "&      c #1A1A1A",                 
+          "*      c #0D0D0D",                 
+          "=      c #5D5D5D",                 
+          "-      c #AEAEAE",                 
+          ";      c #BBBBBB",                 
+          ">      c #C9C9C9",                 
+          ",      c #D6D6D6",                 
+          "'      c #FFFFFF",                 
+          ")      c #999999",                 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "               ..               ", 
+          "               ++               ", 
+          "              .@@.              ", 
+          "              #$$#              ", 
+          "             %&$$*%             ", 
+          "             =$$$$=             ", 
+          "            -**$$**-            ", 
+          "            %;%&*>;%            ", 
+          "          -%   @&   %-          ", 
+          "        ,=*;   @&   ;*=,        ", 
+          "      .#*$$>        >$$*#.      ", 
+          "    ')&$$$$*@@    @@*$$$$&)'    ", 
+          "    ')&$$$$*@@    @@*$$$$&+'    ", 
+          "      .#*$$>        >$$*#.      ", 
+          "        ,=*;   @&   ;*=,        ", 
+          "          -%   @&   %-          ", 
+          "            %;%&*>>%            ", 
+          "            -**$$**-            ", 
+          "             =$$$$=             ", 
+          "             %&$$*%             ", 
+          "              #$$#              ", 
+          "              .@@.              ", 
+          "               ++               ", 
+          "               ..               ", 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "                                "}
+      ;
+  pix = QPixmap(xpm);
+
+  } else if (std::string(aIconFile) == "rotate") {
+    const char * const xpm[]={
+        "32 32 27 1",                       
+          "       c None",                    
+          ".      c #003333",                 
+          "+      c #000066",                 
+          "@      c #1A1A1A",                 
+          "#      c #003399",                 
+          "$      c #3333CC",                 
+          "%      c #000033",                 
+          "&      c #353535",                 
+          "*      c #434343",                 
+          "=      c #336699",                 
+          "-      c #3399FF",                 
+          ";      c #003366",                 
+          ">      c #5D5D5D",                 
+          ",      c #282828",                 
+          "'      c #3399CC",                 
+          ")      c #333333",                 
+          "!      c #3366CC",                 
+          "~      c #333399",                 
+          "{      c #505050",                 
+          "]      c #666666",                 
+          "^      c #333366",                 
+          "/      c #0033CC",                 
+          "(      c #3366FF",                 
+          "_      c #336666",                 
+          ":      c #787878",                 
+          "<      c #868686",                 
+          "[      c #6B6B6B",                 
+          "                   .++@         ", 
+          "                  #$$%&*        ", 
+          "                 =--; *>,       ", 
+          "                 '-=  )>&       ", 
+          "                !-',  ,>*       ", 
+          "             !!=--=    >*       ", 
+          "            =------!!~@&)@      ", 
+          "             --------!*{{{*&,   ", 
+          "             -------=){*{{{>>{) ", 
+          "            ,!-----=  ){&  ,&{{@", 
+          "          ,*>!----=   &>&     )@", 
+          "         ){>)~---=    *])      @", 
+          "        @*>,  --!     ,&@       ", 
+          "        @{*   '!      ,-!=~^,@  ", 
+          "        @&    ==      {/(----!^ ", 
+          "         _           ]:;(----'  ", 
+          "         ==_         >{+(----~  ", 
+          "          !-!!======!!(((---!   ", 
+          "           ='--------------!    ", 
+          "             =!!!!'!!=; !-!     ", 
+          "                   &<*  !~      ", 
+          "              @.  *[*   ;       ", 
+          "               ;+)>*            ", 
+          "                 @@             ", 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "                                "}
+      ;
+  pix = QPixmap(xpm);
+
+  } else if (std::string(aIconFile) == "pick") {
+    const char * const xpm[]={
+        "32 32 2 1",                        
+          "       c None",                    
+          ".      c #000000",                 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "            .                   ", 
+          "            ..                  ", 
+          "            ...                 ", 
+          "            ....                ", 
+          "            .....               ", 
+          "            ......              ", 
+          "            .......             ", 
+          "            .......             ", 
+          "            ........            ", 
+          "            .....               ", 
+          "            ......              ", 
+          "            ..  ..              ", 
+          "            .   ..              ", 
+          "                ...             ", 
+          "                 ..             ", 
+          "                 ..             ", 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "                                "}
+      ;
+  pix = QPixmap(xpm);
+  } else if (std::string(aIconFile) == "zoom_in") {
+    const char * const xpm[]={
+        "32 32 11 1",                       
+          "       c None",                    
+          ".      c #C9CBC8",                 
+          "+      c #A8A9A3",                 
+          "@      c #818783",                 
+          "#      c #D5D8D5",                 
+          "$      c #9BCCCC",                 
+          "%      c #5FC7F4",                 
+          "&      c #FDFFFC",                 
+          "*      c #636662",                 
+          "=      c #9599CE",                 
+          "-      c #DDE0DD",                 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "          .++@@++.              ", 
+          "         +++..#.+++             ", 
+          "       .@+...++++#+@.           ", 
+          "       @$.%%+&&&@%..@           ", 
+          "      ++.%%%+&&&*%%.++          ", 
+          "     .+#%%%%+&&&*%%.#+          ", 
+          "     ++..%%%+&&&*%%%.++         ", 
+          "     +#.+++++&&&*++++.+         ", 
+          "     @.+&&&&&&&&&&&&&+@         ", 
+          "     @#+&&&&&&&&&&&&&+@         ", 
+          "     @.+&&&&&&&&&&&&&+.         ", 
+          "     +++@***+&&&****@+.         ", 
+          "     ....++++&&&*++++..         ", 
+          "      ++.===+&&&*%=.++          ", 
+          "       @..==+&&&*=..@#&         ", 
+          "       .@+#.+&&&@-+@@*@         ", 
+          "         +++.++++++ *+@*        ", 
+          "          .+@@@++.  @**+*       ", 
+          "                    .*@*+*      ", 
+          "                     .*@*+*     ", 
+          "                      +*@@*     ", 
+          "                       .**+     ", 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "                                "}
+      ;
+  pix = QPixmap(xpm);
+  } else if (std::string(aIconFile) == "zoom_out") {
+    const char * const xpm[]={
+        "32 32 11 1",                       
+          "       c None",                    
+          ".      c #C9CBC8",                 
+          "+      c #A8A9A3",                 
+          "@      c #818783",                 
+          "#      c #D5D8D5",                 
+          "$      c #5FC7F4",                 
+          "%      c #9BCCCC",                 
+          "&      c #FDFFFC",                 
+          "*      c #636662",                 
+          "=      c #9599CE",                 
+          "-      c #DDE0DD",                 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "          .++@@++.              ", 
+          "         +++..#.+++             ", 
+          "       .@+..$$$$.#+@.           ", 
+          "       @%.$$$$$$$$..@           ", 
+          "      ++.$$$$$$$$$$.++          ", 
+          "     .+#$$$$$$$$$$$.#+          ", 
+          "     ++..$$$$$$$$$$$.++         ", 
+          "     +#.+++++++++++++.+         ", 
+          "     @.+&&&&&&&&&&&&&+@         ", 
+          "     @#+&&&&&&&&&&&&&+@         ", 
+          "     @.+&&&&&&&&&&&&&+.         ", 
+          "     +++@***********@+.         ", 
+          "     ....++++++++++++..         ", 
+          "      ++.===$$$$$$=.++          ", 
+          "       @..===$$$$=..@#&         ", 
+          "       .@+#.$$$..-+@@*@         ", 
+          "         +++#--.+++ *+@*        ", 
+          "          .+@@@++.  @**+*       ", 
+          "                    .*@*+*      ", 
+          "                     .*@*+*     ", 
+          "                      +*@@*     ", 
+          "                       .**+     ", 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "                                "}
+      ;
+  pix = QPixmap(xpm);
+  } else if (std::string(aIconFile) == "wireframe") {
+    const char * const xpm[]={
+        "32 32 24 1",                       
+          "       c None",                    
+          "+      c #E4E4E4",                 
+          "@      c #D5D5D5",                 
+          "#      c #E1E1E1",                 
+          "$      c #E7E7E7",                 
+          "%      c #D8D8D8",                 
+          "&      c #A7A7A7",                 
+          "*      c #000000",                 
+          "=      c #989898",                 
+          "-      c #8A8A8A",                 
+          ";      c #B5B5B5",                 
+          ">      c #1B1B1B",                 
+          ",      c #676767",                 
+          "'      c #959595",                 
+          ")      c #4A4A4A",                 
+          "!      c #878787",                 
+          "~      c #D3D3D3",                 
+          "{      c #C4C4C4",                 
+          "]      c #A4A4A4",                 
+          "^      c #5B5B5B",                 
+          "/      c #B3B3B3",                 
+          "(      c #787878",                 
+          "_      c #C7C7C7",                 
+          ":      c #585858",                 
+          "                                ", 
+          "                  +@@#          ", 
+          "          $%@@@@@&****=+        ", 
+          "        +&********&@-***;       ", 
+          "   +@@@&**&@@@@@@$  @*-&>&+     ", 
+          "  +*****&+          %*@ ,**'#   ", 
+          "  @***)!~           @*{&*****+  ", 
+          "  @*!]***&+        +-*^**'~!*@  ", 
+          "  @*~ +@&**&@@@@@@&****&+  ~*@  ", 
+          "  @*@    +&********&-*=    @*@  ", 
+          "  @*@      $%@-*-@$ @*@    @*@  ", 
+          "  @*@         @*@   %*%    @*@  ", 
+          "  @*@         %*%   %*%    @*@  ", 
+          "  @*@         %*%   %*%    @*@  ", 
+          "  @*@         %*%   %*%    @*@  ", 
+          "  @*@         %*%   %*%    @*@  ", 
+          "  @*@         %*%   %*%    @*@  ", 
+          "  @*@         @*@   %*%    @*@  ", 
+          "  @*@         =*-+  @*@    @*@  ", 
+          "  @*@    $%@@&****&@-*-+   @*@  ", 
+          "  @*@ $@&*****&@@&******&~~!*@  ", 
+          "  @*{/***&@@%$    $@-*-&*****+  ", 
+          "  @*)*)(-~          @*@ ~)**]   ", 
+          "  +*******&@@@@+    %*_+]**]    ", 
+          "   +@@@@@&******&@%+_*^**]#     ", 
+          "          $%@@@&****:**&+       ", 
+          "                +%@&**&         ", 
+          "                    ++          ", 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "                                "}
+      ;
+  pix = QPixmap(xpm);
+  } else if (std::string(aIconFile) == "solid") {
+    const char * const xpm[]={
+        "32 32 33 1",                       
+          "       c None",                    
+          "+      c #C2DEDE",                 
+          "@      c #B5D7DF",                 
+          "#      c #ACD6E6",                 
+          "$      c #60C0EC",                 
+          "%      c #4EB7EE",                 
+          "&      c #53B9ED",                 
+          "*      c #82CEEA",                 
+          "=      c #CFDDDA",                 
+          "-      c #94C9E8",                 
+          ";      c #0960FF",                 
+          ">      c #0943FF",                 
+          ",      c #0949FF",                 
+          "'      c #3CB3F0",                 
+          ")      c #71C7EB",                 
+          "!      c #73CBE5",                 
+          "~      c #D3DDDB",                 
+          "{      c #C4DDDE",                 
+          "]      c #B7D5DF",                 
+          "^      c #2DACF5",                 
+          "/      c #59C1ED",                 
+          "(      c #5FC0ED",                 
+          "_      c #85CEE9",                 
+          ":      c #096BFF",                 
+          "<      c #2AACF6",                 
+          "[      c #5CBEEC",                 
+          "}      c #7ACAE4",                 
+          "|      c #73CAEB",                 
+          "1      c #71C8E5",                 
+          "2      c #D1DDDA",                 
+          "3      c #CBDDD9",                 
+          "4      c #67C1EB",                 
+          "5      c #80CDEA",                 
+          "                                ", 
+          "                                ", 
+          "          +@@@@@@#$%&*=         ", 
+          "        +-;>>>>>>>>>,')!~       ", 
+          "   {]@@-;>>>>>>>>>>>>^/(_=      ", 
+          "  {:>>>>>>>>>>>>>>>>><//[)!=    ", 
+          "  ]>>>>>>>>>>>>>>>>>><////[)}   ", 
+          "  @>>>>>>>>>>>>>>>>>><//////|   ", 
+          "  @>>>>>>>>>>>>>>>>>><//////|   ", 
+          "  @>>>>>>>>>>>>>>>>>><//////|   ", 
+          "  @>>>>>>>>>>>>>>>>>><//////|   ", 
+          "  @>>>>>>>>>>>>>>>>>><//////|   ", 
+          "  @>>>>>>>>>>>>>>>>>><//////|   ", 
+          "  @>>>>>>>>>>>>>>>>>><//////|   ", 
+          "  @>>>>>>>>>>>>>>>>>><//////|   ", 
+          "  @>>>>>>>>>>>>>>>>>><//////|   ", 
+          "  @>>>>>>>>>>>>>>>>>><//////|   ", 
+          "  @>>>>>>>>>>>>>>>>>><//////|   ", 
+          "  @>>>>>>>>>>>>>>>>>><//////|   ", 
+          "  @>>>>>>>>>>>>>>>>>><//////|   ", 
+          "  @>>>>>>>>>>>>>>>>>><//////|   ", 
+          "  @>>>>>>>>>>>>>>>>>></////[1   ", 
+          "  @>>>>>>>>>>>>>>>>>><////[*2   ", 
+          "  {:>>>>>>>>>>>>>>>>><//[)12    ", 
+          "   +@@@@@-;>>>>>>>>>><[)13      ", 
+          "          {]@@@-;>>>,'*3        ", 
+          "                +@@#452         ", 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "                                "}
+    ;
+    pix = QPixmap(xpm);
+  } else if (std::string(aIconFile) == "hidden_line_removal") {
+    const char * const xpm[]={
+        "32 32 15 1",                       
+          "       c None",                    
+          "+      c #D5D5D5",                 
+          "@      c #C7C7C7",                 
+          "#      c #9C9C9C",                 
+          "$      c #000000",                 
+          "%      c #8E8E8E",                 
+          "&      c #808080",                 
+          "*      c #A9A9A9",                 
+          "=      c #D8D8D8",                 
+          "-      c #CACACA",                 
+          ";      c #181818",                 
+          ">      c #9F9F9F",                 
+          ",      c #ACACAC",                 
+          "'      c #B9B9B9",                 
+          ")      c #555555",                 
+          "                                ", 
+          "                  +@@+          ", 
+          "          +@@@@@@#$$$$%+        ", 
+          "        +#$$$$$$$$#@&$$$*       ", 
+          "   =-@@#$$#@@@@@-=  @$&#;>=     ", 
+          "  =$$$$$#+          -$@ *$$%+   ", 
+          "  -$&@-=            -$-  #$$$=  ", 
+          "  -$@               -$-   +&$-  ", 
+          "  @$@               @$@    @$@  ", 
+          "  @$@               @$@    @$@  ", 
+          "  @$@               @$@    @$@  ", 
+          "  @$@               @$@    @$@  ", 
+          "  @$@               @$@    @$@  ", 
+          "  @$@               @$@    @$@  ", 
+          "  @$@               @$@    @$@  ", 
+          "  @$@               @$@    @$@  ", 
+          "  @$@               @$@    @$@  ", 
+          "  @$@               @$@    @$@  ", 
+          "  @$@               @$@    @$@  ", 
+          "  @$@               @$@    @$@  ", 
+          "  @$@               @$@    @$@  ", 
+          "  @$@               @$@    #$=  ", 
+          "  -$&@@@-=          -$-  =>;,   ", 
+          "  =$$$$$$$#@@@-=    -$'+#$$,    ", 
+          "   =-@@@@#$$$$$$#@-+'$)$$#+     ", 
+          "          =-@@@#$$$$)$$#+       ", 
+          "                +@@#$$#         ", 
+          "                    ++          ", 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "                                "}
+      ;
+    pix = QPixmap(xpm);
+  } else if (std::string(aIconFile) == "hidden_line_and_surface_removal") {
+    const char * const xpm[]={
+        "32 32 40 1",                       
+          "       c None",                    
+          "+      c #FFFFFF",                 
+          "@      c #89A2E9",                 
+          "#      c #5378E3",                 
+          "$      c #A2B5ED",                 
+          "%      c #5379E3",                 
+          "&      c #5076E3",                 
+          "*      c #3E69E4",                 
+          "=      c #0C43F8",                 
+          "-      c #043FFE",                 
+          ";      c #CDD9ED",                 
+          ">      c #BDCDE9",                 
+          ",      c #FBFCFC",                 
+          "'      c #406AE4",                 
+          ")      c #0439FE",                 
+          "!      c #0137FF",                 
+          "~      c #4F75E3",                 
+          "{      c #9EB5E3",                 
+          "]      c #829FE0",                 
+          "^      c #B6C6E7",                 
+          "/      c #9DB4E3",                 
+          "(      c #7E9CE0",                 
+          "_      c #B2C3E9",                 
+          ":      c #7E9AE0",                 
+          "<      c #86A2E1",                 
+          "[      c #CAD6ED",                 
+          "}      c #5177E3",                 
+          "|      c #829CE0",                 
+          "1      c #BCCCE9",                 
+          "2      c #3A67E6",                 
+          "3      c #0A43FA",                 
+          "4      c #95ACE1",                 
+          "5      c #BBCBE9",                 
+          "6      c #A9BBE5",                 
+          "7      c #96AFE1",                 
+          "8      c #BDCBE9",                 
+          "9      c #4067E4",                 
+          "0      c #6485E5",                 
+          "a      c #E3EAF3",                 
+          "b      c #CAD6F3",                 
+          "                                ", 
+          "                                ", 
+          "                  ++++          ", 
+          "          ++++++++@#$+++        ", 
+          "        ++@%####&*=-#+;>,       ", 
+          "   +++++@'=)))))))!)~+{]^++     ", 
+          "   +$%&*=)!!!!!!!!!)~+/(]_+++   ", 
+          "   +#-))!!!!!!!!!!!)~+/(::<[+   ", 
+          "   +#)!!!!!!!!!!!!!!}+/::::{+   ", 
+          "   +#)!!!!!!!!!!!!!!}+/::::{+   ", 
+          "   +#)!!!!!!!!!!!!!!}+/::::{+   ", 
+          "   +#)!!!!!!!!!!!!!!}+/::::{+   ", 
+          "   +#)!!!!!!!!!!!!!!}+/::::{+   ", 
+          "   +#)!!!!!!!!!!!!!!}+/::::{+   ", 
+          "   +#)!!!!!!!!!!!!!!}+/::::{+   ", 
+          "   +#)!!!!!!!!!!!!!!}+/::::{+   ", 
+          "   +#)!!!!!!!!!!!!!!}+/::::{+   ", 
+          "   +#)!!!!!!!!!!!!!!}+/::::{+   ", 
+          "   +#)!!!!!!!!!!!!!!}+/::::{+   ", 
+          "   +#)!!!!!!!!!!!!!!}+/::::{+   ", 
+          "   +#)!!!!!!!!!!!!!!}+/::::{+   ", 
+          "   +#)!!!!!!!!!!!!!!}+/:::|1+   ", 
+          "   +$#}}~23!!!!!!!!)~+/(]45,    ", 
+          "   +++++++@#}}~23!!)~+678++     ", 
+          "          ++++++@#~90+a++       ", 
+          "                ++++b++         ", 
+          "                    ++          ", 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "                                "}
+      ;
+    pix = QPixmap(xpm);
+  } else if (std::string(aIconFile) == "perspective") {
+    const char * const xpm[]={
+        "32 32 3 1",                        
+          "       c None",                    
+          ".      c #D5D8D5",                 
+          "+      c #000000",                 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "           ................     ", 
+          "       ....+++++++++++++++.     ", 
+          "    ...++++..+.........+++.     ", 
+          "   ..++..............++..+.     ", 
+          "   .+++++++++++++++++.. .+.     ", 
+          "   .+...............+.  .+.     ", 
+          "   .+.      .+.    .+.  .+.     ", 
+          "   .+.      .+.    .+.  .+.     ", 
+          "   .+.      .+.    .+.  .+.     ", 
+          "   .+.      .+.    .+.  .+.     ", 
+          "   .+.      .+.    .+.  .+.     ", 
+          "   .+.      .+.    .+.  .+.     ", 
+          "   .+.      .+.    .+.  .+.     ", 
+          "   .+.      .+.    .+.  .+.     ", 
+          "   .+.      .+......+....+.     ", 
+          "   .+.     ..++++++.+.++++.     ", 
+          "   .+.    .++.......+...+..     ", 
+          "   .+.   .++.      .+..++.      ", 
+          "   .+. ..+..       .+..+.       ", 
+          "   .+..++.         .+.+.        ", 
+          "   .+.++.          .+++.        ", 
+          "   .+++.............++.         ", 
+          "   .+++++++++++++++++.          ", 
+          "   ...................          ", 
+          "                                ", 
+          "                                ", 
+          "                                "}
+      ;
+    pix = QPixmap(xpm);
+  } else if (std::string(aIconFile) == "ortho") {
+    const char * const xpm[]={
+        "32 32 3 1",                        
+          "       c None",                    
+          ".      c #D5D8D5",                 
+          "@      c #000000",                 
+          "                                ", 
+          "                                ", 
+          "                                ", 
+          "          ...................   ", 
+          "         ..@@@@@@@@@@@@@@@@@.   ", 
+          "       ..@@@.............@@@.   ", 
+          "      ..@@.@.         ..@..@.   ", 
+          "    ..@@ ..@.        .@@...@.   ", 
+          "   ..@@..............@@.. .@.   ", 
+          "   .@@@@@@@@@@@@@@@@@..   .@.   ", 
+          "   .@...............@.    .@.   ", 
+          "   .@.    .@.      .@.    .@.   ", 
+          "   .@.    .@.      .@.    .@.   ", 
+          "   .@.    .@.      .@.    .@.   ", 
+          "   .@.    .@.      .@.    .@.   ", 
+          "   .@.    .@.      .@.    .@.   ", 
+          "   .@.    .@.      .@.    .@.   ", 
+          "   .@.    .@.      .@.    .@.   ", 
+          "   .@.    .@.      .@.    .@.   ", 
+          "   .@.    .@.      .@.    .@.   ", 
+          "   .@.    .@.      .@.    .@.   ", 
+          "   .@.    .@........@......@.   ", 
+          "   .@.   .@@@@@@@@@.@.@@@@@@.   ", 
+          "   .@.  .@@+........@....@@..   ", 
+          "   .@...@.         .@...@...    ", 
+          "   .@.@@.          .@.@@ .      ", 
+          "   .@@@.............@@@..       ", 
+          "   .@@@@@@@@@@@@@@@@@...        ", 
+          "   ...................          ", 
+          "                                ", 
+          "                                ", 
+          "                                "}
+      ;
+    pix = QPixmap(xpm);
+  } else {
+    // try to open a file
+    pix = QPixmap(aIconFile);
+    if (pix.isNull()) {
+      G4cout << "Warning: file '"<< aIconFile <<"' does not exist, this command will not be build"<< G4endl;
+      return;
+    }
+    userToolBar = true;
+  }
+  QToolBar *currentToolbar = NULL;
+  if (userToolBar) {
+    if (fToolbarUser == NULL) {
+      fToolbarUser = new QToolBar(fMainWindow);
+      fToolbarUser->setIconSize (QSize(20,20));
+      fMainWindow->addToolBar(Qt::TopToolBarArea, fToolbarUser);
+    }
+    currentToolbar = fToolbarUser;
+  } else {
+    if (fToolbarApp == NULL) {
+      fToolbarApp = new QToolBar(fMainWindow);
+      fToolbarApp->setIconSize (QSize(20,20));
+      fMainWindow->addToolBar(Qt::TopToolBarArea, fToolbarApp);
+    }
+    currentToolbar = fToolbarApp;
+  }
+
+  QSignalMapper *signalMapper = new QSignalMapper(this);
+  QAction *action = currentToolbar->addAction(pix,aLabel, signalMapper, SLOT(map()));
+  
+
+  // special cases :"open"
+  if (std::string(aIconFile) == "open") {
+    connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(OpenIconCallback(const QString&)));
+    signalMapper->setMapping(action, QString(aCommand));
+
+  // special cases :"close"
+  } else if (std::string(aIconFile) == "save") {
+    connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(SaveIconCallback(const QString&)));
+    signalMapper->setMapping(action, QString(aCommand));
+
+  // special cases : cursor style
+  } else if ((std::string(aIconFile) == "move") ||
+             (std::string(aIconFile) == "rotate") ||
+             (std::string(aIconFile) == "pick") ||
+             (std::string(aIconFile) == "zoom_out") ||
+             (std::string(aIconFile) == "zoom_in")) {
+    action->setCheckable(TRUE);
+    action->setChecked(TRUE);
+    action->setData(aIconFile);
+
+    connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(ChangeCursorStyle(const QString&)));
+    signalMapper->setMapping(action, QString(aIconFile));
+
+    // special case : surface style
+  } else if ((std::string(aIconFile) == "hidden_line_removal") ||
+             (std::string(aIconFile) == "hidden_line_and_surface_removal") ||
+             (std::string(aIconFile) == "solid") ||
+             (std::string(aIconFile) == "wireframe")) {
+    action->setCheckable(TRUE);
+    action->setChecked(TRUE);
+    action->setData(aIconFile);
+    connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(ChangeSurfaceStyle(const QString&)));
+signalMapper->setMapping(action, QString(aIconFile));
+
+    // special case : perspective/ortho
+  } else if ((std::string(aIconFile) == "perspective") ||
+             (std::string(aIconFile) == "ortho")) {
+    action->setCheckable(TRUE);
+    action->setChecked(TRUE);
+    action->setData(aIconFile);
+    connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(ChangePerspectiveOrtho(const QString&)));
+signalMapper->setMapping(action, QString(aIconFile));
+
+  } else {
+
+    // Find the command in the command tree
+    G4UImanager* UI = G4UImanager::GetUIpointer();
+    if(UI==NULL) return;
+    G4UIcommandTree * treeTop = UI->GetTree();
+    
+    if(treeTop->FindPath(aCommand) == NULL) {
+      G4cout << "Warning: command '"<< aCommand <<"' does not exist, please define it before using it."<< G4endl;
+    }
+    
+    connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(ButtonCallback(const QString&)));
+    signalMapper->setMapping(action, QString(aCommand));
+  }
+}
 
 
 
@@ -1032,7 +1899,7 @@ bool G4UIQt::CreateVisCommandTabToolBox(
 {
   // Look if tab is create
   QScrollArea* scrollTab;
-  QToolBox* scrollableToolboxWidget;
+  QToolBox* scrollableToolboxWidget = NULL;
   bool found = false;
   if (commandText.indexOf("/") != -1) {
     QString section = commandText.left(commandText.indexOf("/"));
@@ -1055,13 +1922,13 @@ bool G4UIQt::CreateVisCommandTabToolBox(
       // add it in the vis component vector
       fCommandParameterWidgets.push_back(scrollTab);
 
-      CreateVisCommandGroupAndToolBox(command,commandText.section("/",1),scrollableToolboxWidget,1);
+      CreateVisCommandGroupAndToolBox(command,scrollableToolboxWidget,commandText.count("/"),false);
       scrollTab->setWidgetResizable(true);
 
       scrollTab->setWidget(scrollableToolboxWidget);
       fUITabWidget->addTab(scrollTab,section);
     } else {
-      CreateVisCommandGroupAndToolBox(command,commandText.section("/",1),scrollableToolboxWidget,1);
+      CreateVisCommandGroupAndToolBox(command,scrollableToolboxWidget,commandText.count("/"),false);
     }
   }
 
@@ -1075,12 +1942,14 @@ bool G4UIQt::CreateVisCommandTabToolBox(
  If depthLevel is 2 or more : create GroupBox
 */
 bool G4UIQt::CreateVisCommandGroupAndToolBox(
- G4UIcommand* command
-,QString commandText
-,QWidget* parent
-,int depthLevel
+ G4UIcommand* aCommand
+,QWidget* aParent
+,int aDepthLevel
+,bool isDialog
 )
 {
+  QString commandText = QString((char*)(aCommand->GetCommandPath().data())).section("/",-aDepthLevel);
+
   if (commandText == NULL) {
     return false;
   }
@@ -1091,8 +1960,8 @@ bool G4UIQt::CreateVisCommandGroupAndToolBox(
   bool found = false;
   QString commandSection = commandText.left(commandText.indexOf("/"));
   
-  if (depthLevel == 1) {
-    QToolBox* currentParent = dynamic_cast<QToolBox*>(parent);
+  if (aDepthLevel == 1) {
+    QToolBox* currentParent = dynamic_cast<QToolBox*>(aParent);
     if (currentParent != 0){
 
       // already exists ?
@@ -1102,50 +1971,55 @@ bool G4UIQt::CreateVisCommandGroupAndToolBox(
           newParentWidget = currentParent->widget(a);
         }
       }
-      // Not found ? create it
-      if (!found) {
-        newParentWidget = new QGroupBox();
-        //        newParentWidget->setSizePolicy (QSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum));
-
-        newParentWidget->setLayout(new QVBoxLayout());
+    }
+    // Not found ? create it
+    if (!found) {
+      newParentWidget = new QGroupBox();
+      //        newParentWidget->setSizePolicy (QSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum));
+      newParentWidget->setLayout(new QVBoxLayout());
+      if (currentParent != 0){
         currentParent->addItem(newParentWidget,commandSection);
-
-        if (commandText.indexOf("/") == -1) {
-          
-          // Guidance
-          QString guidance;
-          G4int n_guidanceEntry = command->GetGuidanceEntries();
-          for( G4int i_thGuidance=0; i_thGuidance < n_guidanceEntry; i_thGuidance++ ) {
-            guidance += QString((char*)(command->GetGuidanceLine(i_thGuidance)).data()) + "\n";
-          }
-          currentParent->setItemToolTip(currentParent->count()-1,guidance);
+      } else {
+        if (!aParent->layout()) {
+          aParent->setLayout(new QVBoxLayout());
         }
-
-        QScrollArea* sc = dynamic_cast<QScrollArea*>(newParentWidget->parent()->parent());
-        if (sc != 0) {
-          sc->ensureWidgetVisible(newParentWidget);
-          //          sc->setSizePolicy (QSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum));
-
-        }
+        aParent->layout()->addWidget(newParentWidget);
       }
-    } else {
-      return false;
+
+      if (commandText.indexOf("/") == -1) {
+        
+        // Guidance
+        QString guidance;
+        G4int n_guidanceEntry = aCommand->GetGuidanceEntries();
+        for( G4int i_thGuidance=0; i_thGuidance < n_guidanceEntry; i_thGuidance++ ) {
+          guidance += QString((char*)(aCommand->GetGuidanceLine(i_thGuidance)).data()) + "\n";
+        }
+        newParentWidget->setToolTip(guidance);
+      }
+      
+      QScrollArea* sc = dynamic_cast<QScrollArea*>(newParentWidget->parent()->parent());
+      if (sc != 0) {
+        sc->ensureWidgetVisible(newParentWidget);
+        //          sc->setSizePolicy (QSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum));
+        
+      }
     }
   } else {
 
-    QGroupBox* currentParent = dynamic_cast<QGroupBox*>(parent);
+    // try to know if this level is already there
+    QGroupBox* currentParent = dynamic_cast<QGroupBox*>(aParent);
     if (currentParent != 0){
 
       // if depth==2, then we add a [more parameters inside] to the toolBoxItem parent
       // QGroupBox > QWidget > QScrollArea > QToolBox
-      if (depthLevel == 2){
+      if (aDepthLevel == 2){
         QToolBox* parentToolBox = dynamic_cast<QToolBox*>(currentParent->parent()->parent()->parent());
         if (parentToolBox != 0) {
           //          parentToolBox->setItemText(parentToolBox->indexOf(currentParent),"[more parameters inside]");
         }
       }
-      for (int a=0; a<parent->layout()->count(); a++) {
-        QGroupBox* gb = dynamic_cast<QGroupBox*>(parent->layout()->itemAt(a)->widget());
+      for (int a=0; a<aParent->layout()->count(); a++) {
+        QGroupBox* gb = dynamic_cast<QGroupBox*>(aParent->layout()->itemAt(a)->widget());
         if (gb != 0) {
           if (gb->title() == commandSection) {
             found = true;
@@ -1153,245 +2027,303 @@ bool G4UIQt::CreateVisCommandGroupAndToolBox(
           }
         }
       }
-      // Not found ? create it
-      if (!found) {
-        newParentWidget = new QGroupBox(commandSection);
-        newParentWidget->setLayout(new QVBoxLayout());
-
-        currentParent->layout()->addWidget(newParentWidget);
-
-        // set toolTip
-        // Guidance
-        QString guidance;
-        G4int n_guidanceEntry = command->GetGuidanceEntries();
-        for( G4int i_thGuidance=0; i_thGuidance < n_guidanceEntry; i_thGuidance++ ) {
-          guidance += QString((char*)(command->GetGuidanceLine(i_thGuidance)).data()) + "\n";
-        }
-        newParentWidget->setToolTip(guidance); 
+    }
+    
+    // Not found ? create it
+    if (!found) {
+      newParentWidget = new QGroupBox(commandSection);
+      newParentWidget->setLayout(new QVBoxLayout());
+      if (!aParent->layout()) {
+        aParent->setLayout(new QVBoxLayout());
       }
-    } else {
-      return false;
+      aParent->layout()->addWidget(newParentWidget);
+
+      // set toolTip
+      // Guidance
+      QString guidance;
+      G4int n_guidanceEntry = aCommand->GetGuidanceEntries();
+      for( G4int i_thGuidance=0; i_thGuidance < n_guidanceEntry; i_thGuidance++ ) {
+        guidance += QString((char*)(aCommand->GetGuidanceLine(i_thGuidance)).data()) + "\n";
+      }
+      newParentWidget->setToolTip(guidance);
     }
   }
   
   // fill command groupbox
   if (commandText.indexOf("/") == -1) {
+    if (CreateCommandWidget(aCommand, newParentWidget,isDialog)) {
+      return true;
+    }
+  } else {
+    CreateVisCommandGroupAndToolBox(aCommand,newParentWidget, aDepthLevel-1,isDialog);
+  }
 
-    // parameters
-    G4int n_parameterEntry = command->GetParameterEntries();
-    if( n_parameterEntry > 0 ) {
-      G4UIparameter *param;
+  return true;
+}
+
+
+
+/** Create a widget the the command parameters inside
+    @param command: command line
+    @parent : parent widget
+    @isDialog : true if we want apply/cancel button and close at end, false if we want only apply
+*/
+bool G4UIQt::CreateCommandWidget(G4UIcommand* aCommand, QWidget* aParent, bool isDialog) {
+
+  if (aCommand == NULL) {
+    return false;
+  }
+
+
+  // parameters
+  G4int n_parameterEntry = aCommand->GetParameterEntries();
+  if( n_parameterEntry > 0 ) {
+    G4UIparameter *param;
       
-      // Re-implementation of G4UIparameter.cc
-      QWidget* paramWidget = new QWidget();
-      QGridLayout* gridLayout = new QGridLayout(paramWidget);
+    // Re-implementation of G4UIparameter.cc
+    QWidget* paramWidget = new QWidget();
+    QGridLayout* gridLayout = new QGridLayout(paramWidget);
       
-      // Special case for colour, try to display a color chooser if we found red/green/blue parameter
-      unsigned int nbColorParameter = 0;
-      bool isStillColorParameter = false;
-      bool isColorDialogAdded = false;
-      QLabel* redLabel = NULL;
-      QLabel* greenLabel = NULL;
-      QString redDefaultStr = "";
-      QString greenDefaultStr = "";
-      QString blueDefaultStr = "";
-      QWidget* redInput = NULL;
-      QWidget* greenInput = NULL;
+    // Special case for colour, try to display a color chooser if we found red/green/blue parameter
+    unsigned int nbColorParameter = 0;
+    bool isStillColorParameter = false;
+    bool isColorDialogAdded = false;
+    QLabel* redLabel = NULL;
+    QLabel* greenLabel = NULL;
+    QString redDefaultStr = "";
+    QString greenDefaultStr = "";
+    QString blueDefaultStr = "";
+    QWidget* redInput = NULL;
+    QWidget* greenInput = NULL;
 
-      for( G4int i_thParameter=0; i_thParameter<n_parameterEntry; i_thParameter++ ) {
-        QString txt;
-        param = command->GetParameter(i_thParameter);
-        QLabel* label = new QLabel(QString((char*)(param->GetParameterName()).data()));
+    for( G4int i_thParameter=0; i_thParameter<n_parameterEntry; i_thParameter++ ) {
+      QString txt;
+      param = aCommand->GetParameter(i_thParameter);
+      QLabel* label = new QLabel(QString((char*)(param->GetParameterName()).data()));
 
-        if ((label->text() == "red") || (label->text() == "red_or_string")){
-          nbColorParameter ++;
-          isStillColorParameter = true;
-        } else if ((label->text() == "green") && isStillColorParameter) {
-          nbColorParameter ++;
-        } else if ((label->text() == "blue") && isStillColorParameter) {
-          nbColorParameter ++;
-        } else if (!isColorDialogAdded) {
+      if ((label->text() == "red") || (label->text() == "red_or_string")){
+        nbColorParameter ++;
+        isStillColorParameter = true;
+      } else if ((label->text() == "green") && isStillColorParameter) {
+        nbColorParameter ++;
+      } else if ((label->text() == "blue") && isStillColorParameter) {
+        nbColorParameter ++;
+      } else if (!isColorDialogAdded) {
           
-          // not following red/green/blue parameters ?
-          if (nbColorParameter == 1) {
-            gridLayout->addWidget(redLabel,i_thParameter-1,0);
-            gridLayout->addWidget(redInput,i_thParameter-1,1);
-          } else if (nbColorParameter == 2) {
-            gridLayout->addWidget(redLabel,i_thParameter-2,0);
-            gridLayout->addWidget(redInput,i_thParameter-2,1);
-            gridLayout->addWidget(greenLabel,i_thParameter-1,0);
-            gridLayout->addWidget(greenInput,i_thParameter-1,1);
-          }
-          nbColorParameter = 0;
+        // not following red/green/blue parameters ?
+        if (nbColorParameter == 1) {
+          gridLayout->addWidget(redLabel,i_thParameter-1,0);
+          gridLayout->addWidget(redInput,i_thParameter-1,1);
+        } else if (nbColorParameter == 2) {
+          gridLayout->addWidget(redLabel,i_thParameter-2,0);
+          gridLayout->addWidget(redInput,i_thParameter-2,1);
+          gridLayout->addWidget(greenLabel,i_thParameter-1,0);
+          gridLayout->addWidget(greenInput,i_thParameter-1,1);
         }
-        // Check parameter type, could be NULL if not found
-        QWidget* input = NULL;
-        if ((QString(QChar(param->GetParameterType())) == "d") || (QString(QChar(param->GetParameterType())) == "i")) {
-          input = new QLineEdit();
-          // set default value
-          dynamic_cast<QLineEdit*>(input)->setText(QString((char*)(param->GetDefaultValue()).data()));
-
-          if (((label->text() == "red") || (label->text() == "red_or_string")) && isStillColorParameter) {
-            redDefaultStr = QString((char*)(param->GetDefaultValue()).data());
-          } else if ((label->text() == "green") && isStillColorParameter) {
-            greenDefaultStr = QString((char*)(param->GetDefaultValue()).data());
-          } else if ((label->text() == "green") && isStillColorParameter) {
-            blueDefaultStr = QString((char*)(param->GetDefaultValue()).data());
-          }
-
-        } else if (QString(QChar(param->GetParameterType())) == "b") {
-          input = new QWidget();
-          QHBoxLayout* layout = new QHBoxLayout(input);
-
-          QButtonGroup* buttons = new QButtonGroup();
-          QRadioButton* radioOff = new QRadioButton("0");
-          QRadioButton* radioOn = new QRadioButton("1");
-          buttons->addButton(radioOn);
-          buttons->addButton(radioOff);
-          layout->addWidget(radioOn);
-          layout->addWidget(radioOff);
-
-          // set default value
-          QString defaultValue = QString((char*)(param->GetDefaultValue()).data());
-          if (defaultValue == "0") {
-            radioOff->setChecked(true);
-          } else if (defaultValue == "1") {
-            radioOn->setChecked(true);
-          }
-        } else if ((QString(QChar(param->GetParameterType())) == "s") && (!param->GetParameterCandidates().isNull())) {
-          input = new QComboBox();
-          QString candidates = QString((char*)(param->GetParameterCandidates()).data());
-          QStringList list = candidates.split (" ");
-
-          // add all candidates to widget
-          QString defaultValue = QString((char*)(param->GetDefaultValue()).data());
-          for (int a=0; a<list.size(); a++) {
-            dynamic_cast<QComboBox*>(input)->addItem(list.at(a));
-            if (list.at(a) == defaultValue) {
-              dynamic_cast<QComboBox*>(input)->setCurrentIndex(a);
-            }
-          }
-
-        } else if ((QString(QChar(param->GetParameterType())) == "s")) {  // string
-          input = new QLineEdit();
-          // set default value
-          dynamic_cast<QLineEdit*>(input)->setText(QString((char*)(param->GetDefaultValue()).data()));
-
-        } else if ((QString(QChar(param->GetParameterType())) == "c")) {  // on/off
-          input = new QWidget();
-          QHBoxLayout* layout = new QHBoxLayout(input);
-
-          QButtonGroup* buttons = new QButtonGroup();
-          QRadioButton* radioOff = new QRadioButton("off");
-          QRadioButton* radioOn = new QRadioButton("on");
-          buttons->addButton(radioOn);
-          buttons->addButton(radioOff);
-          layout->addWidget(radioOn);
-          layout->addWidget(radioOff);
-
-          // set default value
-          QString defaultValue = QString((char*)(param->GetDefaultValue()).data());
-          if (defaultValue == "off") {
-            radioOff->setChecked(true);
-          } else if (defaultValue == "on") {
-            radioOn->setChecked(true);
-          }
-
-        } else {
-          input = new QLineEdit();
-          dynamic_cast<QLineEdit*>(input)->setText(QString((char*)(param->GetDefaultValue()).data()));
-        }
-        
-        txt += "\nParameter : " + QString((char*)(param->GetParameterName()).data()) + "\n";
-        if( ! param->GetParameterGuidance().isNull() )
-          txt += QString((char*)(param->GetParameterGuidance()).data())+ "\n" ;
-
-        txt += " Parameter type  : " + QString(QChar(param->GetParameterType())) + "\n";
-        if(param->IsOmittable()){
-          txt += " Omittable       : True\n";
-        } else {
-          txt += " Omittable       : False\n";
-        }
-        if( param->GetCurrentAsDefault() ) {
-          txt += " Default value   : taken from the current value\n";
-        } else if( ! param->GetDefaultValue().isNull() ) {
-          txt += " Default value   : " + QString((char*)(param->GetDefaultValue()).data())+ "\n";
-        }
-        if( ! param->GetParameterRange().isNull() ) {
-          txt += " Parameter range : " + QString((char*)(param->GetParameterRange()).data())+ "\n";
-        }
-        if( ! param->GetParameterCandidates().isNull() ) {
-          txt += " Candidates      : " + QString((char*)(param->GetParameterCandidates()).data())+ "\n";
-        }
-        
-        if (isStillColorParameter && (nbColorParameter != 0)) {
-          if ((label->text() == "red") || (label->text() == "red_or_string")) {
-            redLabel = label;
-            redInput = input;
-          } else if (label->text() == "green") {
-            greenLabel = label;
-            greenInput = input;
-          } else if (label->text() == "blue") {
-
-            // we have all, then add a color chooser
-
-            // Create a pixmap with the default color
-            QColor qc;
-            if ((redDefaultStr != "") && (redDefaultStr != "") && (redDefaultStr != "")) {
-              qc.setRgbF(redDefaultStr.toDouble(),
-                         greenDefaultStr.toDouble(),
-                         blueDefaultStr.toDouble());
-            }
-            QPixmap pixmap = QPixmap(QSize(16, 16));
-            pixmap.fill (qc);
-            QPainter painter(&pixmap);
-            painter.setPen(Qt::black);
-            painter.drawRect(0,0,15,15); // Draw contour
-            
-            input = new QPushButton("Change color");
-            dynamic_cast<QPushButton*>(input)->setIcon(pixmap);
-            dynamic_cast<QPushButton*>(input)->setAccessibleName(redDefaultStr+" "+greenDefaultStr+" "+blueDefaultStr);
-            label = new QLabel("Choose color");
-
-            // less 1 because we have to add one to the row number
-            nbColorParameter--;
-            gridLayout->addWidget(label,i_thParameter-nbColorParameter,0);
-            input->setToolTip("Select the current color");
-            gridLayout->addWidget(input,i_thParameter-nbColorParameter,1);
-
-            // Connect pushButton to ColorDialog in callback
-            QSignalMapper* signalMapper = new QSignalMapper(this);
-            signalMapper->setMapping(input,input);
-            connect(input, SIGNAL(clicked()), signalMapper, SLOT(map()));
-            connect(signalMapper, SIGNAL(mapped(QWidget*)),this, SLOT(ChangeColorCallback(QWidget*)));
-
-            isColorDialogAdded = true;
-            isStillColorParameter = false;
-          }
-        } else {
-          gridLayout->addWidget(label,i_thParameter-nbColorParameter,0);
-          input->setToolTip(txt);
-          gridLayout->addWidget(input,i_thParameter-nbColorParameter,1);
-        }
+        nbColorParameter = 0;
       }
-      // add command name in hidden value at last line position 0
-      QLabel* name = new QLabel(QString((char*)(command->GetCommandPath().data())));
-      name->hide();
-      gridLayout->addWidget(name,n_parameterEntry-nbColorParameter,0);
+      // Check parameter type, could be NULL if not found
+      QWidget* input = NULL;
+      if ((QString(QChar(param->GetParameterType())) == "d") || (QString(QChar(param->GetParameterType())) == "i")) {
+        input = new QLineEdit();
+        // set default value
+        dynamic_cast<QLineEdit*>(input)->setText(QString((char*)(param->GetDefaultValue()).data()));
 
-      QPushButton* applyButton = new QPushButton("Apply");
+        if (((label->text() == "red") || (label->text() == "red_or_string")) && isStillColorParameter) {
+          redDefaultStr = QString((char*)(param->GetDefaultValue()).data());
+        } else if ((label->text() == "green") && isStillColorParameter) {
+          greenDefaultStr = QString((char*)(param->GetDefaultValue()).data());
+        } else if ((label->text() == "green") && isStillColorParameter) {
+          blueDefaultStr = QString((char*)(param->GetDefaultValue()).data());
+        }
 
+      } else if (QString(QChar(param->GetParameterType())) == "b") {
+        input = new QWidget();
+        QHBoxLayout* layout = new QHBoxLayout(input);
+
+        QButtonGroup* buttons = new QButtonGroup();
+        QRadioButton* radioOff = new QRadioButton("0");
+        QRadioButton* radioOn = new QRadioButton("1");
+        buttons->addButton(radioOn);
+        buttons->addButton(radioOff);
+        layout->addWidget(radioOn);
+        layout->addWidget(radioOff);
+
+        // set default value
+        QString defaultValue = QString((char*)(param->GetDefaultValue()).data());
+        if (defaultValue == "0") {
+          radioOff->setChecked(true);
+        } else if (defaultValue == "1") {
+          radioOn->setChecked(true);
+        }
+      } else if ((QString(QChar(param->GetParameterType())) == "s") && (!param->GetParameterCandidates().isNull())) {
+        input = new QComboBox();
+        QString candidates = QString((char*)(param->GetParameterCandidates()).data());
+        QStringList list = candidates.split (" ");
+
+        // add all candidates to widget
+        QString defaultValue = QString((char*)(param->GetDefaultValue()).data());
+        for (int a=0; a<list.size(); a++) {
+          dynamic_cast<QComboBox*>(input)->addItem(list.at(a));
+          if (list.at(a) == defaultValue) {
+            dynamic_cast<QComboBox*>(input)->setCurrentIndex(a);
+          }
+        }
+
+      } else if ((QString(QChar(param->GetParameterType())) == "s")) {  // string
+        input = new QLineEdit();
+        // set default value
+        dynamic_cast<QLineEdit*>(input)->setText(QString((char*)(param->GetDefaultValue()).data()));
+
+      } else if ((QString(QChar(param->GetParameterType())) == "c")) {  // on/off
+        input = new QWidget();
+        QHBoxLayout* layout = new QHBoxLayout(input);
+
+        QButtonGroup* buttons = new QButtonGroup();
+        QRadioButton* radioOff = new QRadioButton("off");
+        QRadioButton* radioOn = new QRadioButton("on");
+        buttons->addButton(radioOn);
+        buttons->addButton(radioOff);
+        layout->addWidget(radioOn);
+        layout->addWidget(radioOff);
+
+        // set default value
+        QString defaultValue = QString((char*)(param->GetDefaultValue()).data());
+        if (defaultValue == "off") {
+          radioOff->setChecked(true);
+        } else if (defaultValue == "on") {
+          radioOn->setChecked(true);
+        }
+
+      } else {
+        input = new QLineEdit();
+        dynamic_cast<QLineEdit*>(input)->setText(QString((char*)(param->GetDefaultValue()).data()));
+      }
+        
+      txt += "\nParameter : " + QString((char*)(param->GetParameterName()).data()) + "\n";
+      if( ! param->GetParameterGuidance().isNull() )
+        txt += QString((char*)(param->GetParameterGuidance()).data())+ "\n" ;
+
+      txt += " Parameter type  : " + QString(QChar(param->GetParameterType())) + "\n";
+      if(param->IsOmittable()){
+        txt += " Omittable       : True\n";
+      } else {
+        txt += " Omittable       : False\n";
+      }
+      if( param->GetCurrentAsDefault() ) {
+        txt += " Default value   : taken from the current value\n";
+      } else if( ! param->GetDefaultValue().isNull() ) {
+        txt += " Default value   : " + QString((char*)(param->GetDefaultValue()).data())+ "\n";
+      }
+      if( ! param->GetParameterRange().isNull() ) {
+        txt += " Parameter range : " + QString((char*)(param->GetParameterRange()).data())+ "\n";
+      }
+      if( ! param->GetParameterCandidates().isNull() ) {
+        txt += " Candidates      : " + QString((char*)(param->GetParameterCandidates()).data())+ "\n";
+      }
+        
+      if (isStillColorParameter && (nbColorParameter != 0)) {
+        if ((label->text() == "red") || (label->text() == "red_or_string")) {
+          redLabel = label;
+          redInput = input;
+        } else if (label->text() == "green") {
+          greenLabel = label;
+          greenInput = input;
+        } else if (label->text() == "blue") {
+
+          // we have all, then add a color chooser
+
+          // Create a pixmap with the default color
+          QColor qc;
+          if ((redDefaultStr != "") && (redDefaultStr != "") && (redDefaultStr != "")) {
+            qc.setRgbF(redDefaultStr.toDouble(),
+                       greenDefaultStr.toDouble(),
+                       blueDefaultStr.toDouble());
+          }
+          QPixmap pixmap = QPixmap(QSize(16, 16));
+          pixmap.fill (qc);
+          QPainter painter(&pixmap);
+          painter.setPen(Qt::black);
+          painter.drawRect(0,0,15,15); // Draw contour
+            
+          input = new QPushButton("Change color");
+          dynamic_cast<QPushButton*>(input)->setIcon(pixmap);
+          dynamic_cast<QPushButton*>(input)->setAccessibleName(redDefaultStr+" "+greenDefaultStr+" "+blueDefaultStr);
+          label = new QLabel("Choose color");
+
+          // less 1 because we have to add one to the row number
+          nbColorParameter--;
+          gridLayout->addWidget(label,i_thParameter-nbColorParameter,0);
+          input->setToolTip("Select the current color");
+          gridLayout->addWidget(input,i_thParameter-nbColorParameter,1);
+
+          // Connect pushButton to ColorDialog in callback
+          QSignalMapper* signalMapper = new QSignalMapper(this);
+          signalMapper->setMapping(input,input);
+          connect(input, SIGNAL(clicked()), signalMapper, SLOT(map()));
+          connect(signalMapper, SIGNAL(mapped(QWidget*)),this, SLOT(ChangeColorCallback(QWidget*)));
+
+          isColorDialogAdded = true;
+          isStillColorParameter = false;
+        }
+      } else {
+        gridLayout->addWidget(label,i_thParameter-nbColorParameter,0);
+        input->setToolTip(txt);
+        gridLayout->addWidget(input,i_thParameter-nbColorParameter,1);
+      }
+    }
+    // add command name in hidden value at last line position 0
+    QLabel* name = new QLabel(QString((char*)(aCommand->GetCommandPath().data())));
+    name->hide();
+    gridLayout->addWidget(name,n_parameterEntry-nbColorParameter,0);
+
+    QPushButton* applyButton = new QPushButton("Apply");
+    if (!isDialog) {
+      
       gridLayout->addWidget(applyButton,n_parameterEntry-nbColorParameter,1);
-
+      
       QSignalMapper* signalMapper = new QSignalMapper(this);
       signalMapper->setMapping(applyButton, paramWidget);
       connect(applyButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
       connect(signalMapper, SIGNAL(mapped(QWidget*)),this, SLOT(VisParameterCallback(QWidget*)));
-      newParentWidget->layout()->addWidget(paramWidget);
-    } 
-  }
-  
-  CreateVisCommandGroupAndToolBox(command,commandText.section("/",1),newParentWidget, depthLevel+1);
+    } else {
+      // Apply/Cancel buttons
+      
+      applyButton->setAutoDefault( TRUE );
+      applyButton->setDefault( TRUE );
+      gridLayout->addWidget(applyButton,n_parameterEntry-nbColorParameter,0);
+
+      QPushButton* cancelButton = new QPushButton( tr( "&Cancel" ));
+      cancelButton->setAutoDefault( TRUE );
+      gridLayout->addWidget(cancelButton,n_parameterEntry-nbColorParameter,1);
+      
+      QSignalMapper* signalMapper = new QSignalMapper(this);
+      signalMapper->setMapping(applyButton, paramWidget);
+      connect(applyButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
+      connect(signalMapper, SIGNAL(mapped(QWidget*)),this, SLOT(VisParameterCallback(QWidget*)));
+
+      QWidget * parentCheck = aParent;
+      QDialog* parentDialog = NULL;
+      bool found = false;
+      while ((parentCheck->parentWidget()) != NULL) {
+        parentCheck = parentCheck->parentWidget();
+        parentDialog = dynamic_cast<QDialog*>(parentCheck);
+        if (parentDialog) {
+          connect( applyButton, SIGNAL( clicked() ), parentDialog, SLOT( accept() ) );
+          connect( cancelButton, SIGNAL( clicked() ), parentDialog, SLOT( reject() ) );
+          found = true;
+        }
+      }
+      if (!found) {
+        return false;
+      }
+    }
+    
+    if (!aParent->layout()) {
+      aParent->setLayout(new QVBoxLayout());
+    }
+    aParent->layout()->addWidget(paramWidget);
+  } 
 
   return true;
 }
@@ -1501,7 +2433,8 @@ QString G4UIQt::GetCommandList (
 
 
 /**
-   Return true if this command takes almost a number (int, double, ...) as an input
+   Return true if this command takes almost a number (int, double, bool, 
+   string) as an input
    or a string with a candidate list
  */
 G4bool G4UIQt::IsGUICommand(
@@ -1731,28 +2664,28 @@ void G4UIQt::VisParameterCallback(QWidget* widget){
   command += (dynamic_cast<QLabel*>(name))->text()+" ";
   
   for (int a=0;a<grid->rowCount()-1; a++) {
-    QWidget* widget = grid->itemAtPosition(a,1)->widget();
+    QWidget* widgetTmp = grid->itemAtPosition(a,1)->widget();
     
     // 4 kind of widgets : QLineEdit / QComboBox / radioButtonsGroup / QPushButton (color chooser)
-    if (widget != NULL) {
+    if (widgetTmp != NULL) {
 
-      if (dynamic_cast<QLineEdit*>(widget) != 0) {
-        command += (dynamic_cast<QLineEdit*>(widget))->text()+" ";
+      if (dynamic_cast<QLineEdit*>(widgetTmp) != 0) {
+        command += (dynamic_cast<QLineEdit*>(widgetTmp))->text()+" ";
 
-      } else if (dynamic_cast<QComboBox*>(widget) != 0){
-        command += (dynamic_cast<QComboBox*>(widget))->itemText((dynamic_cast<QComboBox*>(widget))->currentIndex())+" ";
+      } else if (dynamic_cast<QComboBox*>(widgetTmp) != 0){
+        command += (dynamic_cast<QComboBox*>(widgetTmp))->itemText((dynamic_cast<QComboBox*>(widgetTmp))->currentIndex())+" ";
 
         // Color chooser 
-      } else if (dynamic_cast<QPushButton*>(widget) != 0){
-        command += widget->accessibleName()+" ";
+      } else if (dynamic_cast<QPushButton*>(widgetTmp) != 0){
+        command += widgetTmp->accessibleName()+" ";
 
         // Check for Button group
-      } else if (dynamic_cast<QWidget*>(widget) != 0){
-        if (widget->layout()->count() > 0){
-          if (dynamic_cast<QRadioButton*>(widget->layout()->itemAt(0)->widget()) != 0) {
-            QAbstractButton * checked = (dynamic_cast<QRadioButton*>(widget->layout()->itemAt(0)->widget()))->group()->checkedButton();
+      } else if (dynamic_cast<QWidget*>(widgetTmp) != 0){
+        if (widgetTmp->layout()->count() > 0){
+          if (dynamic_cast<QRadioButton*>(widgetTmp->layout()->itemAt(0)->widget()) != 0) {
+            QAbstractButton * checked = (dynamic_cast<QRadioButton*>(widgetTmp->layout()->itemAt(0)->widget()))->group()->checkedButton();
             if (checked != 0) {
-              command += (dynamic_cast<QRadioButton*>(widget->layout()->itemAt(0)->widget()))->group()->checkedButton()->text()+" ";
+              command += (dynamic_cast<QRadioButton*>(widgetTmp->layout()->itemAt(0)->widget()))->group()->checkedButton()->text()+" ";
             }
           }
         }
@@ -1770,14 +2703,39 @@ void G4UIQt::VisParameterCallback(QWidget* widget){
 
 
 /**   Callback call when "enter" clicked on the command zone.<br>
-   Send the command to geant4
-   @param aCommand
+      If command has no parameters :send the command to geant4
+      Else, open a dialog for parameters input
+      @param aCommand
 */
 void G4UIQt::ButtonCallback (
  const QString& aCommand
 )
 {
   G4String ss = G4String(aCommand.toStdString().c_str());
+  ss = ss.strip(G4String::leading);
+
+  G4UImanager* UI = G4UImanager::GetUIpointer();
+  if(UI==NULL) return;
+  G4UIcommandTree * treeTop = UI->GetTree();
+
+  G4UIcommand* command = treeTop->FindPath(ss);
+
+  if (command) {
+    // if is GUI, then open a dialog
+    if (IsGUICommand(command)) {
+      QDialog* menuParameterDialog = new QDialog();
+
+      if (CreateVisCommandGroupAndToolBox(command,menuParameterDialog,1,true)) {
+        menuParameterDialog->setWindowTitle (aCommand);
+        menuParameterDialog->setSizePolicy (QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum));
+
+        // exec this dialog, apply the command automaticaly, and return
+        menuParameterDialog->exec();
+        return;
+      }
+    }
+  }
+
   ApplyShellCommand(ss,exitSession,exitPause);
 
   // Rebuild help tree
@@ -2146,6 +3104,395 @@ void G4UIQt::ChangeColorCallback(QWidget* widget) {
 }
 
 
+void G4UIQt::ChangeCursorStyle(const QString& action) {
+
+  // Theses actions should be in the app toolbar
+
+  QList<QAction *> list = fToolbarApp->actions ();
+  for (int i = 0; i < list.size(); ++i) {
+    if (list.at(i)->data().toString () == action) {
+      list.at(i)->setChecked(TRUE);
+    } else if (list.at(i)->data().toString () == "move") {
+      list.at(i)->setChecked(FALSE);
+    } else if (list.at(i)->data().toString () == "pick") {
+      list.at(i)->setChecked(FALSE);
+    } else if (list.at(i)->data().toString () == "rotate") {
+      list.at(i)->setChecked(FALSE);
+    } else if (list.at(i)->data().toString () == "zoom_in") {
+      list.at(i)->setChecked(FALSE);
+    } else if (list.at(i)->data().toString () == "zoom_out") {
+      list.at(i)->setChecked(FALSE);
+    }
+  }
+  // FIXME : Should connect this to Vis
+}
+
+
+/* A little bit like "void G4OpenGLQtViewer::toggleDrawingAction(int aAction)"
+   But for all viewers, not only Qt
+
+FIXME : Should be a feedback when changing viewer !
+
+ */
+void G4UIQt::ChangeSurfaceStyle(const QString& action) {
+
+  // Theses actions should be in the app toolbar
+
+  QList<QAction *> list = fToolbarApp->actions ();
+  for (int i = 0; i < list.size(); ++i) {
+    if (list.at(i)->data().toString () == action) {
+      list.at(i)->setChecked(TRUE);
+    } else if (list.at(i)->data().toString () == "hidden_line_removal") {
+      list.at(i)->setChecked(FALSE);
+    } else if (list.at(i)->data().toString () == "hidden_line_and_surface_removal") {
+      list.at(i)->setChecked(FALSE);
+    } else if (list.at(i)->data().toString () == "solid") {
+      list.at(i)->setChecked(FALSE);
+    } else if (list.at(i)->data().toString () == "wireframe") {
+      list.at(i)->setChecked(FALSE);
+    }
+  }
+  // FIXME : Should connect this to Vis
+
+  if (action == "hidden_line_removal") {
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/set/style w");
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/set/hiddenEdge 1");
+
+  } else if (action == "hidden_line_and_surface_removal") {
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/set/style s");
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/set/hiddenEdge 1");
+
+  } else if (action == "solid") {
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/set/style s");
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/set/hiddenEdge 0");
+
+  } else if (action == "wireframe") {
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/set/style w");
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/set/hiddenEdge 0");
+  }
+}
+
+
+void G4UIQt::OpenIconCallback(const QString& aCommand) {
+
+  QString nomFich = QFileDialog::getOpenFileName(fMainWindow, "Load", ".mac", "Macro files (*.mac)");
+  if (nomFich != "") {
+    G4UImanager::GetUIpointer()->ApplyCommand((QString(aCommand)+ nomFich).toStdString().c_str());
+  }
+}
+
+
+void G4UIQt::SaveIconCallback(const QString& aCommand) {
+  QString nomFich = QFileDialog::getSaveFileName(fMainWindow, "Save", ".mac", "Macro files (*.mac)");
+  if (nomFich != "") {
+    G4UImanager::GetUIpointer()->ApplyCommand((QString(aCommand)+ nomFich).toStdString().c_str());
+  }
+}
+
+
+  
+void G4UIQt::ChangePerspectiveOrtho(const QString& action) {
+
+  // Theses actions should be in the app toolbar
+
+  QList<QAction *> list = fToolbarApp->actions ();
+  QString checked = "";
+  for (int i = 0; i < list.size(); ++i) {
+    if (list.at(i)->data().toString () == action) {
+      list.at(i)->setChecked(TRUE);
+      checked = list.at(i)->data().toString ();
+    } else if (list.at(i)->data().toString () == "persepective") {
+      list.at(i)->setChecked(FALSE);
+    } else if (list.at(i)->data().toString () == "ortho") {
+      list.at(i)->setChecked(FALSE);
+    }
+  }
+
+  if ((action == "ortho") && (checked == "ortho")) {
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/set/projection o");
+  } else if ((action == "perspective") && (checked == "perspective")) {
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/set/projection p");
+  }
+}
+
+
+bool G4UIQt::IsIconMoveSelected() {
+  // Theses actions should be in the app toolbar
+
+  QList<QAction *> list = fToolbarApp->actions ();
+  for (int i = 0; i < list.size(); ++i) {
+    if (list.at(i)->data().toString () == "move") {
+      if (list.at(i)->isChecked ()) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+
+bool G4UIQt::IsIconRotateSelected() {
+  // Theses actions should be in the app toolbar
+
+  QList<QAction *> list = fToolbarApp->actions ();
+  for (int i = 0; i < list.size(); ++i) {
+    if (list.at(i)->data().toString () == "rotate") {
+      if (list.at(i)->isChecked ()) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+
+bool G4UIQt::IsIconPickSelected() {
+  // Theses actions should be in the app toolbar
+
+  QList<QAction *> list = fToolbarApp->actions ();
+  for (int i = 0; i < list.size(); ++i) {
+    if (list.at(i)->data().toString () == "pick") {
+      if (list.at(i)->isChecked ()) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+
+bool G4UIQt::IsIconZoomInSelected() {
+  // Theses actions should be in the app toolbar
+
+  QList<QAction *> list = fToolbarApp->actions ();
+  for (int i = 0; i < list.size(); ++i) {
+    if (list.at(i)->data().toString () == "zoom_in") {
+      if (list.at(i)->isChecked ()) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+
+bool G4UIQt::IsIconZoomOutSelected() {
+  // Theses actions should be in the app toolbar
+
+  QList<QAction *> list = fToolbarApp->actions ();
+  for (int i = 0; i < list.size(); ++i) {
+    if (list.at(i)->data().toString () == "zoom_out") {
+      if (list.at(i)->isChecked ()) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+
+void G4UIQt::SetIconMoveSelected() {
+  // Theses actions should be in the app toolbar
+
+  QList<QAction *> list = fToolbarApp->actions ();
+  for (int i = 0; i < list.size(); ++i) {
+    if (list.at(i)->data().toString () == "move") {
+      list.at(i)->setChecked(TRUE);
+    } else if (list.at(i)->data().toString () == "rotate") {
+      list.at(i)->setChecked(FALSE);
+    } else if (list.at(i)->data().toString () == "pick") {
+      list.at(i)->setChecked(FALSE);
+    } else if (list.at(i)->data().toString () == "zoom_in") {
+      list.at(i)->setChecked(FALSE);
+    } else if (list.at(i)->data().toString () == "zoom_out") {
+      list.at(i)->setChecked(FALSE);
+    } 
+  }
+}
+
+
+void G4UIQt::SetIconRotateSelected() {
+  // Theses actions should be in the app toolbar
+
+  QList<QAction *> list = fToolbarApp->actions ();
+  for (int i = 0; i < list.size(); ++i) {
+    if (list.at(i)->data().toString () == "rotate") {
+      list.at(i)->setChecked(TRUE);
+    } else if (list.at(i)->data().toString () == "move") {
+      list.at(i)->setChecked(FALSE);
+    } else if (list.at(i)->data().toString () == "pick") {
+      list.at(i)->setChecked(FALSE);
+    } else if (list.at(i)->data().toString () == "zoom_in") {
+      list.at(i)->setChecked(FALSE);
+    } else if (list.at(i)->data().toString () == "zoom_out") {
+      list.at(i)->setChecked(FALSE);
+    } 
+  }
+}
+ 
+
+void G4UIQt::SetIconPickSelected() {
+  // Theses actions should be in the app toolbar
+
+  QList<QAction *> list = fToolbarApp->actions ();
+  for (int i = 0; i < list.size(); ++i) {
+    if (list.at(i)->data().toString () == "pick") {
+      list.at(i)->setChecked(TRUE);
+    } else if (list.at(i)->data().toString () == "move") {
+      list.at(i)->setChecked(FALSE);
+    } else if (list.at(i)->data().toString () == "rotate") {
+      list.at(i)->setChecked(FALSE);
+    } else if (list.at(i)->data().toString () == "zoom_in") {
+      list.at(i)->setChecked(FALSE);
+    } else if (list.at(i)->data().toString () == "zoom_out") {
+      list.at(i)->setChecked(FALSE);
+    } 
+  }
+}
+ 
+
+void G4UIQt::SetIconZoomInSelected() {
+  // Theses actions should be in the app toolbar
+
+  QList<QAction *> list = fToolbarApp->actions ();
+  for (int i = 0; i < list.size(); ++i) {
+    if (list.at(i)->data().toString () == "zoom_in") {
+      list.at(i)->setChecked(TRUE);
+    } else if (list.at(i)->data().toString () == "move") {
+      list.at(i)->setChecked(FALSE);
+    } else if (list.at(i)->data().toString () == "rotate") {
+      list.at(i)->setChecked(FALSE);
+    } else if (list.at(i)->data().toString () == "pick") {
+      list.at(i)->setChecked(FALSE);
+    } else if (list.at(i)->data().toString () == "zoom_out") {
+      list.at(i)->setChecked(FALSE);
+    } 
+  }
+}
+ 
+
+void G4UIQt::SetIconZoomOutSelected() {
+  // Theses actions should be in the app toolbar
+
+  QList<QAction *> list = fToolbarApp->actions ();
+  for (int i = 0; i < list.size(); ++i) {
+    if (list.at(i)->data().toString () == "zoom_out") {
+      list.at(i)->setChecked(TRUE);
+    } else if (list.at(i)->data().toString () == "move") {
+      list.at(i)->setChecked(FALSE);
+    } else if (list.at(i)->data().toString () == "rotate") {
+      list.at(i)->setChecked(FALSE);
+    } else if (list.at(i)->data().toString () == "pick") {
+      list.at(i)->setChecked(FALSE);
+    } else if (list.at(i)->data().toString () == "zoom_in") {
+      list.at(i)->setChecked(FALSE);
+    } 
+  }
+}
+
+
+void G4UIQt::SetIconSolidSelected() {
+  // Theses actions should be in the app toolbar
+
+  QList<QAction *> list = fToolbarApp->actions ();
+  for (int i = 0; i < list.size(); ++i) {
+    if (list.at(i)->data().toString () == "solid") {
+      list.at(i)->setChecked(TRUE);
+    } else if (list.at(i)->data().toString () == "hidden_line_removal") {
+      list.at(i)->setChecked(FALSE);
+    } else if (list.at(i)->data().toString () == "hidden_line_and_surface_removal") {
+      list.at(i)->setChecked(FALSE);
+    } else if (list.at(i)->data().toString () == "wireframe") {
+      list.at(i)->setChecked(FALSE);
+    } 
+  }
+}
+
+
+void G4UIQt::SetIconWireframeSelected() {
+  // Theses actions should be in the app toolbar
+
+  QList<QAction *> list = fToolbarApp->actions ();
+  for (int i = 0; i < list.size(); ++i) {
+    if (list.at(i)->data().toString () == "wireframe") {
+      list.at(i)->setChecked(TRUE);
+    } else if (list.at(i)->data().toString () == "hidden_line_removal") {
+      list.at(i)->setChecked(FALSE);
+    } else if (list.at(i)->data().toString () == "hidden_line_and_surface_removal") {
+      list.at(i)->setChecked(FALSE);
+    } else if (list.at(i)->data().toString () == "solid") {
+      list.at(i)->setChecked(FALSE);
+    } 
+  }
+}
+
+
+void G4UIQt::SetIconHLRSelected() {
+  // Theses actions should be in the app toolbar
+
+  QList<QAction *> list = fToolbarApp->actions ();
+  for (int i = 0; i < list.size(); ++i) {
+    if (list.at(i)->data().toString () == "hidden_line_removal") {
+      list.at(i)->setChecked(TRUE);
+    } else if (list.at(i)->data().toString () == "solid") {
+      list.at(i)->setChecked(FALSE);
+    } else if (list.at(i)->data().toString () == "hidden_line_and_surface_removal") {
+      list.at(i)->setChecked(FALSE);
+    } else if (list.at(i)->data().toString () == "wireframe") {
+      list.at(i)->setChecked(FALSE);
+    } 
+  }
+}
+
+
+void G4UIQt::SetIconHLSRSelected() {
+  // Theses actions should be in the app toolbar
+
+  QList<QAction *> list = fToolbarApp->actions ();
+  for (int i = 0; i < list.size(); ++i) {
+    if (list.at(i)->data().toString () == "hidden_line_and_surface_removal") {
+      list.at(i)->setChecked(TRUE);
+    } else if (list.at(i)->data().toString () == "solid") {
+      list.at(i)->setChecked(FALSE);
+    } else if (list.at(i)->data().toString () == "hidden_line_removal") {
+      list.at(i)->setChecked(FALSE);
+    } else if (list.at(i)->data().toString () == "wireframe") {
+      list.at(i)->setChecked(FALSE);
+    } 
+  }
+}
+
+
+void G4UIQt::SetIconPerspectiveSelected() {
+  // Theses actions should be in the app toolbar
+
+  QList<QAction *> list = fToolbarApp->actions ();
+  for (int i = 0; i < list.size(); ++i) {
+    if (list.at(i)->data().toString () == "perspective") {
+      list.at(i)->setChecked(TRUE);
+    } else if (list.at(i)->data().toString () == "ortho") {
+      list.at(i)->setChecked(FALSE);
+    } 
+  }
+}
+
+
+
+void G4UIQt::SetIconOrthoSelected() {
+  // Theses actions should be in the app toolbar
+
+  QList<QAction *> list = fToolbarApp->actions ();
+  for (int i = 0; i < list.size(); ++i) {
+    if (list.at(i)->data().toString () == "ortho") {
+      list.at(i)->setChecked(TRUE);
+    } else if (list.at(i)->data().toString () == "perspective") {
+      list.at(i)->setChecked(FALSE);
+    } 
+  }
+}
+
+
+
 G4QTabWidget::G4QTabWidget(
 QSplitter*& split
 ):QTabWidget(split)
@@ -2170,23 +3517,25 @@ void G4UIQt::TabCloseCallback(int a){
 #endif
 #if QT_VERSION < 0x040500
 #else
-  QWidget* temp = fTabWidget->widget(a);
-  fTabWidget->removeTab (a);
+  QWidget* temp = fViewerTabWidget->widget(a);
+  fViewerTabWidget->removeTab (a);
 
   delete temp;
 
-  if (fTabWidget->count() == 0) {
+  if (fViewerTabWidget->count() == 0) {
     if (fEmptyViewerTabLabel == NULL) {
       fEmptyViewerTabLabel = new QLabel("         If you want to have a Viewer, please use /vis/open commands. ");
     }
 
-    fMyVSplitter->addWidget(fEmptyViewerTabLabel);
-    fMyVSplitter->show();
+  // fill right splitter
+    fRightSplitterWidget->insertWidget(0,fEmptyViewerTabLabel);
+
+    fMainSplitterWidget->show();
     fEmptyViewerTabLabel->show();
-    fTabWidget->setParent(0);
-    fTabWidget->setVisible(false);
-    delete fTabWidget;
-    fTabWidget = NULL;
+    fViewerTabWidget->setParent(0);
+    fViewerTabWidget->setVisible(false);
+    delete fViewerTabWidget;
+    fViewerTabWidget = NULL;
   }
 #endif
 }
