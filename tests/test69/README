@@ -42,3 +42,8 @@ p    +  C    @ 1 GeV
 n    +  C    @ 1 GeV
 pi+  +  C    @ 1 GeV
 pi-  +  C    @ 1 GeV
+
+d    +  Pb   @ 1 AGeV
+a    +  Pb   @ 500 AMeV
+C12  +  C    @ 290 AMeV
+C12  +  Pb   @ 500 AMeV
