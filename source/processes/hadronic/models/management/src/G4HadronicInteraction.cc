@@ -33,11 +33,12 @@
 // reimplemented 1.11.2003 JPW.
 // 23-Jan-2009 V.Ivanchenko move constructor and destructor to the body
 
-#include "G4HadronicInteraction.hh"
-#include "G4HadronicInteractionRegistry.hh"
-#include "G4HadronicException.hh"
 #include <iostream>
 
+#include "G4HadronicInteraction.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4HadronicInteractionRegistry.hh"
+#include "G4HadronicException.hh"
 
 G4HadronicInteraction::G4HadronicInteraction(const G4String& modelName) :
   verboseLevel(0), theMinEnergy(0.0), theMaxEnergy(25.0*GeV), 
