@@ -26,17 +26,6 @@
 /// \file errorpropagation/include/ExErrorMagneticField.hh
 /// \brief Definition of the ExErrorMagneticField class
 //
-// ------------------------------------------------------------
-//      GEANT 4 class header file 
-// ------------------------------------------------------------
-//
-// Class Description:
-//
-//  A uniform 1 kilogauss field along the Z axis
-//
-// History:
-// - Created:   P. Arce    May 2007
-//
 
 #ifndef ExErrorMagneticField_H
 #define ExErrorMagneticField_H
@@ -45,7 +34,15 @@
 
 class G4FieldManager;
 
+/// Magnetic field class
+///
+/// A uniform 1 kilogauss field along the Z axis
+///
+/// History:
+/// Created:   May 2007
+/// \author   P. Arce 
 //------------------------------------------------------------------------
+
 class ExErrorMagneticField: public G4UniformMagField
 {
   public:

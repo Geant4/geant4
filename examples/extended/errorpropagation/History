@@ -17,6 +17,25 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Sep 4, 2012  I.Hrivnacova (exerrprop-V09-05-05)
+- Adding explicit includes of G4SystemOfUnits.hh and G4PhysicalConstants.hh
+  where needed
+- Replaced tabulators with space characters  
+
+Sep 4, 2012  I.Hrivnacova (exerrprop-V09-05-04)
+- Updated CMakeLists.txt:
+  adding copying macros (empty), install target and comment lines 
+
+Jul 17, 2012  I.Hrivnacova (exerrprop-V09-05-03)
+- Restored files descriptions and moved class descriptions in .hh
+  at the right place
+
+Jul 17, 2012  I.Hrivnacova (exerrprop-V09-05-02)
+- Improved .README file
+
+Jul 6, 2012  P.Arce (exerrprop-V09-05-01)
+- Reviewed examples according to coding guidelines
+
 Oct 3, 2011  G.Folger (exerrprop-V09-04-01)
 - Fix one left old style G4Exception.
 
