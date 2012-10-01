@@ -531,7 +531,7 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
     }
     else                    // (2s+1 is even) Baryons
     {
-      G4int s_value=r/2;
+      s_value=r/2;
       if(s_value%2)         // ((2s+1)/2 is odd) N Family
       {
         if     (p==211) return Q+=1;
