@@ -57,11 +57,11 @@ public:
   B02CellScorer(AIDA::IHistogram1D *h);
   virtual ~B02CellScorer();
   virtual void ScoreAnExitingStep(const G4Step &aStep, 
-				  const G4GeometryCell &gCell);
+                                  const G4GeometryCell &gCell);
   virtual void ScoreAnEnteringStep(const G4Step &aStep, 
-				   const G4GeometryCell &gCell);
+                                   const G4GeometryCell &gCell);
   virtual void ScoreAnInVolumeStep(const G4Step &aStep, 
-				   const G4GeometryCell &gCell);
+                                   const G4GeometryCell &gCell);
 
   G4CellScorer &GetG4CellScorer(){
     return fG4CellScorer;

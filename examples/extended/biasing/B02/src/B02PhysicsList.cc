@@ -309,7 +309,7 @@ void B02PhysicsList::ConstructHad()
         theHandler->SetMultiFragmentation(theMF);
         theHandler->SetMaxAandZForFermiBreakUp(12, 6);
         theHandler->SetMinEForMultiFrag(3*MeV);
-	
+        
     // Pre equilibrium stage 
     G4PreCompoundModel * thePreEquilib = new G4PreCompoundModel(theHandler);
 
@@ -317,7 +317,7 @@ void B02PhysicsList::ConstructHad()
     // a no-cascade generator-precompound interaface
     G4GeneratorPrecompoundInterface * theCascade = new G4GeneratorPrecompoundInterface;
             theCascade->SetDeExcitation(thePreEquilib);  
-	
+        
     // here come the high energy parts
     // the string model; still not quite according to design - Explicite use of the forseen interfaces 
     // will be tested and documented in this program by beta-02 at latest.
@@ -456,7 +456,7 @@ void B02PhysicsList::ConstructHad()
          G4LEAntiNeutronInelastic* theInelasticModel = 
                                new G4LEAntiNeutronInelastic;
          theInelasticProcess->RegisterMe(theInelasticModel);
-	 theInelasticProcess->RegisterMe(theTheoModel);
+         theInelasticProcess->RegisterMe(theTheoModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
       }
       else if (particleName == "lambda") {
@@ -656,11 +656,11 @@ void B02PhysicsList::AddScoringProcess(){
     while( (*theParticleIterator)() ){
       G4ParticleDefinition* particle = theParticleIterator->value();
       if ( !particle->IsShortLived() ){
-	G4ProcessManager* pmanager = particle->GetProcessManager();
-	pmanager->AddProcess(theParallelWorldScoringProcess);
-	pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess,idxAtRest);
-	pmanager->SetProcessOrdering(theParallelWorldScoringProcess,idxAlongStep,1);
-	pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess,idxPostStep);
+        G4ProcessManager* pmanager = particle->GetProcessManager();
+        pmanager->AddProcess(theParallelWorldScoringProcess);
+        pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess,idxAtRest);
+        pmanager->SetProcessOrdering(theParallelWorldScoringProcess,idxAlongStep,1);
+        pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess,idxPostStep);
       }
     }
   }

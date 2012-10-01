@@ -30,36 +30,43 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //////////////////////////////////////////////////////////////
-//      Class Name:	RMC01RunAction
-//	Author:       	L. Desorgher
-// 	Organisation: 	SpaceIT GmbH
-//	Contract:	ESA contract 21435/08/NL/AT
-// 	Customer:     	ESA/ESTEC
+//      Class Name:        RMC01RunAction
+//        Author:               L. Desorgher
+//         Organisation:         SpaceIT GmbH
+//        Contract:        ESA contract 21435/08/NL/AT
+//         Customer:             ESA/ESTEC
 //////////////////////////////////////////////////////////////
-#include "RMC01RunAction.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "RMC01RunAction.hh"
 #include "RMC01AnalysisManager.hh"
 
-///////////////////////////////////////////////////////////////////////////////////
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 RMC01RunAction::RMC01RunAction() 
-{ theAnalysisManager = RMC01AnalysisManager::GetInstance();  
+{ fAnalysisManager = RMC01AnalysisManager::GetInstance();  
 }
-///////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 RMC01RunAction::~RMC01RunAction()
-{ if (theAnalysisManager) delete theAnalysisManager;
+{ if (fAnalysisManager) delete fAnalysisManager;
 }
-///////////////////////////////////////////////////////////////////////////////////
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void RMC01RunAction::BeginOfRunAction(const G4Run* aRun)
 {
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
-  theAnalysisManager->BeginOfRun(aRun);
+  fAnalysisManager->BeginOfRun(aRun);
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void RMC01RunAction::EndOfRunAction(const G4Run* aRun)
-{ theAnalysisManager->EndOfRun(aRun); 
+{ fAnalysisManager->EndOfRun(aRun); 
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

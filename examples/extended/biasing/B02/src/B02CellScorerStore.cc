@@ -54,7 +54,7 @@ AddG4CellScorer(const G4GeometryCell &g) {
 
 void B02CellScorerStore::
 AddB02CellScorer(B02CellScorer *b02scorer,
-		 const G4GeometryCell &g) {
+                 const G4GeometryCell &g) {
   fMapGeometryCellB02CellScorer[g] = b02scorer;
 }
 

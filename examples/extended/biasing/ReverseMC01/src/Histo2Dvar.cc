@@ -30,12 +30,12 @@
 //
 // MODULE:              Histo2DVar.cc
 //
-// Version:		1.0
-// Date:		09/03/00
-// Author:		P R Truscott, F Lei
-// Organisation:	DERA UK
-// Customer:		ESA/ESTEC, NOORDWIJK
-// Contract:		12115/96/NL/JG Work Order No. 3
+// Version:                1.0
+// Date:                09/03/00
+// Author:                P R Truscott, F Lei
+// Organisation:        DERA UK
+// Customer:                ESA/ESTEC, NOORDWIJK
+// Contract:                12115/96/NL/JG Work Order No. 3
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -233,13 +233,13 @@ double Histo2DVar::get_bin_error (int i, int j)
     //  totalWeight[i][j]*totalWeight[i][j]);}
     { 
       if (nEvents[i][j]>0) {
-	error = totalWeight[i][j]/std::sqrt((G4double) nEvents[i][j]);
+        error = totalWeight[i][j]/std::sqrt((G4double) nEvents[i][j]);
       }else {
-	error = 0.;} }
+        error = 0.;} }
   else
     {error = std::sqrt(uoflowTotalWeightSquared[xSpecialBin][ySpecialBin] -
-		  uoflowTotalWeight[xSpecialBin][ySpecialBin]*
-		  uoflowTotalWeight[xSpecialBin][ySpecialBin]);}
+                  uoflowTotalWeight[xSpecialBin][ySpecialBin]*
+                  uoflowTotalWeight[xSpecialBin][ySpecialBin]);}
       return error;
 }
 

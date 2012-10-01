@@ -74,7 +74,7 @@ public:
   const G4MapGeometryCellCellScorer &GetMapGeometryCellCellScorer()  ;
 
   void AddB02CellScorer(B02CellScorer *b02cellScorer,
-			const G4GeometryCell &gCell);
+                        const G4GeometryCell &gCell);
   const B02MapGeometryCellB02CellScorer &GetMapGeometryCellB02CellScorer() const ;
   
 private:

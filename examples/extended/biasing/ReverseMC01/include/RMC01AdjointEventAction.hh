@@ -30,18 +30,22 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //////////////////////////////////////////////////////////////
-//      Class Name:	RMC01AdjointEventAction
-//	Author:       	L. Desorgher
-// 	Organisation: 	SpaceIT GmbH
-//	Contract:	ESA contract 21435/08/NL/AT
-// 	Customer:     	ESA/ESTEC
+//  Class Name:        RMC01AdjointEventAction
+//        Author:               L. Desorgher
+//         Organisation:         SpaceIT GmbH
+//        Contract:        ESA contract 21435/08/NL/AT
+//         Customer:             ESA/ESTEC
 //////////////////////////////////////////////////////////////
 // CHANGE HISTORY
 //--------------
 //      ChangeHistory:
-//	 	17-11-2009 creation by L. Desorgher
+//                 17-11-2009 creation by L. Desorgher
 //
 //-------------------------------------------------------------
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #ifndef RMC01AdjointEventAction_h
 #define RMC01AdjointEventAction_h 1
 
@@ -56,13 +60,16 @@ class RMC01AdjointEventAction : public G4UserEventAction
 {
  public:
    RMC01AdjointEventAction();
-  ~RMC01AdjointEventAction();
+   virtual ~RMC01AdjointEventAction();
   
  public:
-   void  BeginOfEventAction(const G4Event*);
-   void  EndOfEventAction(const G4Event*);
+   virtual void  BeginOfEventAction(const G4Event*);
+   virtual void  EndOfEventAction(const G4Event*);
 
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif
 
     

@@ -30,40 +30,42 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //////////////////////////////////////////////////////////////
-//      Class Name:	RMC01PrimaryGeneratorAction
-//	Author:       	L. Desorgher
-// 	Organisation: 	SpaceIT GmbH
-//	Contract:	ESA contract 21435/08/NL/AT
-// 	Customer:     	ESA/ESTEC
+//  Class Name:        RMC01PrimaryGeneratorAction
+//        Author:               L. Desorgher
+//         Organisation:         SpaceIT GmbH
+//        Contract:        ESA contract 21435/08/NL/AT
+//         Customer:             ESA/ESTEC
 //////////////////////////////////////////////////////////////
 // CHANGE HISTORY
 //--------------
 //      ChangeHistory:
-//	 	17-11-2009 creation by L. Desorgher
+//                 17-11-2009 creation by L. Desorgher
 //
 //-------------------------------------------------------------
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #ifndef RMC01PrimaryGeneratorAction_h
 #define RMC01PrimaryGeneratorAction_h 1
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
 #include "G4GeneralParticleSource.hh"
-class OnExternalSurfacePrimaryGenerator;
-class G4ParticleGun;
-class G4Event;
-class G4SingleParticleSource;
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 class RMC01PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
     RMC01PrimaryGeneratorAction();    
-   ~RMC01PrimaryGeneratorAction();
+    virtual ~RMC01PrimaryGeneratorAction();
 
   public:
-    void GeneratePrimaries(G4Event*);
+    virtual void GeneratePrimaries(G4Event*);
   
   private:
-    G4GeneralParticleSource* theParticleSource;
+    G4GeneralParticleSource* fParticleSource;
 
 };
 

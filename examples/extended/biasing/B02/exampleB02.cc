@@ -62,6 +62,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "B02DetectorConstruction.hh"
 #include "B02PhysicsList.hh"

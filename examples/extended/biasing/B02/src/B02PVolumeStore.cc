@@ -52,7 +52,7 @@ void B02PVolumeStore::AddPVolume(const G4GeometryCell &cell){
     fSetGeometryCell.find(cell);
   if (it != fSetGeometryCell.end()) {
     G4cout << "B02PVolumeStore::AddPVolume: cell already stored" 
-	   << G4endl;
+           << G4endl;
     return;
   }
 
@@ -73,7 +73,7 @@ GetPVolume(const G4String &name) const {
   }
   if (!pvol) {
     G4cout << "B02PVolumeStore::GetPVolume: no physical volume named: " 
-	   << name << ", found" << G4endl;
+           << name << ", found" << G4endl;
   }
   return pvol;
 }

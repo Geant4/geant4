@@ -82,28 +82,28 @@ B01Run::B01Run(const std::vector<G4String> mfdName): G4Run()
       (G4MultiFunctionalDetector*)(SDman->FindSensitiveDetector(detName));
     //
     if ( mfd ){
-	//--- Loop over the registered primitive scorers.
-	for (G4int icol = 0; icol < mfd->GetNumberOfPrimitives(); icol++){
-	    // Get Primitive Scorer object.
-	    G4VPrimitiveScorer* scorer=mfd->GetPrimitive(icol);
-	    // collection name and collectionID for HitsCollection,
+        //--- Loop over the registered primitive scorers.
+        for (G4int icol = 0; icol < mfd->GetNumberOfPrimitives(); icol++){
+            // Get Primitive Scorer object.
+            G4VPrimitiveScorer* scorer=mfd->GetPrimitive(icol);
+            // collection name and collectionID for HitsCollection,
             // where type of HitsCollection is G4THitsMap in case of primitive scorer.
             // The collection name is given by <MFD name>/<Primitive Scorer name>.
-	    G4String collectionName = scorer->GetName();
-	    G4String fullCollectionName = detName+"/"+collectionName;
-	    G4int    collectionID = SDman->GetCollectionID(fullCollectionName);
-	    //
-	    if ( collectionID >= 0 ){
-		G4cout << "++ "<<fullCollectionName<< " id " << collectionID << G4endl;
-		// Store obtained HitsCollection information into data members.
-		// And, creates new G4THitsMap for accumulating quantities during RUN.
-		theCollName.push_back(fullCollectionName);
-		theCollID.push_back(collectionID);
-		theRunMap.push_back(new G4THitsMap<G4double>(detName,collectionName));
-	    }else{
-		G4cout << "** collection " << fullCollectionName << " not found. "<<G4endl;
-	    }
-	}
+            G4String collectionName = scorer->GetName();
+            G4String fullCollectionName = detName+"/"+collectionName;
+            G4int    collectionID = SDman->GetCollectionID(fullCollectionName);
+            //
+            if ( collectionID >= 0 ){
+                G4cout << "++ "<<fullCollectionName<< " id " << collectionID << G4endl;
+                // Store obtained HitsCollection information into data members.
+                // And, creates new G4THitsMap for accumulating quantities during RUN.
+                theCollName.push_back(fullCollectionName);
+                theCollID.push_back(collectionID);
+                theRunMap.push_back(new G4THitsMap<G4double>(detName,collectionName));
+            }else{
+                G4cout << "** collection " << fullCollectionName << " not found. "<<G4endl;
+            }
+        }
     }
   }
 }
@@ -165,7 +165,7 @@ void B01Run::RecordEvent(const G4Event* aEvent)
 // Access HitsMap.
 //  By  MultiFunctionalDetector name and Collection Name.
 G4THitsMap<G4double>* B01Run::GetHitsMap(const G4String& detName,
-					 const G4String& colName){
+                                         const G4String& colName){
     G4String fullName = detName+"/"+colName;
     return GetHitsMap(fullName);
 }
@@ -177,9 +177,9 @@ G4THitsMap<G4double>* B01Run::GetHitsMap(const G4String& detName,
 G4THitsMap<G4double>* B01Run::GetHitsMap(const G4String& fullName){
     G4int Ncol = theCollName.size();
     for ( G4int i = 0; i < Ncol; i++){
-	if ( theCollName[i] == fullName ){
-	    return theRunMap[i];
-	}
+        if ( theCollName[i] == fullName ){
+            return theRunMap[i];
+        }
     }
     return NULL;
 }
@@ -196,13 +196,13 @@ void B01Run::DumpAllScorer(){
     G4THitsMap<G4double>* RunMap =GetHitsMap(i);
     if ( RunMap ) {
       G4cout << " PrimitiveScorer RUN " 
-	     << RunMap->GetSDname() <<","<< RunMap->GetName() << G4endl;
+             << RunMap->GetSDname() <<","<< RunMap->GetName() << G4endl;
       G4cout << " Number of entries " << RunMap->entries() << G4endl;
       std::map<G4int,G4double*>::iterator itr = RunMap->GetMap()->begin();
       for(; itr != RunMap->GetMap()->end(); itr++) {
-	G4cout << "  copy no.: " << itr->first
-	       << "  Run Value : " << *(itr->second) 
-	       << G4endl;
+        G4cout << "  copy no.: " << itr->first
+               << "  Run Value : " << *(itr->second) 
+               << G4endl;
       }
     }
   }

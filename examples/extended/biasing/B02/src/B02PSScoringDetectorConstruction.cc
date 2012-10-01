@@ -41,6 +41,8 @@
 #include "G4LogicalVolume.hh"
 #include "G4ThreeVector.hh"
 #include "G4PVPlacement.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 // For Primitive Scorers
 #include "G4SDManager.hh"
@@ -125,14 +127,13 @@ void B02PSScoringDetectorConstruction::Construct()
     G4double pos_x = 0*cm;
     G4double pos_y = 0*cm;
     G4double pos_z = startz + (i-1) * (2*hightShield);
-    G4VPhysicalVolume *pvol = 
-      new G4PVPlacement(0, 
-			G4ThreeVector(pos_x, pos_y, pos_z),
-			aShield_log, 
-			name, 
-			worldLogical, 
-			false, 
-			i);
+    new G4PVPlacement(0, 
+                     G4ThreeVector(pos_x, pos_y, pos_z),
+                     aShield_log, 
+                     name, 
+                     worldLogical, 
+                     false, 
+                     i);
     //G4GeometryCell cell(*pvol, i);
     //fPVolumeStore.AddPVolume(cell);
   }
@@ -147,11 +148,11 @@ void B02PSScoringDetectorConstruction::Construct()
   spanningAngleShield    = 360*deg;
 
   G4Tubs *aRest = new G4Tubs("Rest",
-			     innerRadiusShield,
-			     outerRadiusShield,
-			     hightShield,
-			     startAngleShield,
-			     spanningAngleShield);
+                             innerRadiusShield,
+                             outerRadiusShield,
+                             hightShield,
+                             startAngleShield,
+                             spanningAngleShield);
   
   G4LogicalVolume *aRest_log = 
     new G4LogicalVolume(aRest, Galactic, "aRest_log");
@@ -161,14 +162,13 @@ void B02PSScoringDetectorConstruction::Construct()
   G4double pos_x = 0*cm;
   G4double pos_y = 0*cm;
   G4double pos_z = 95*cm;
-  G4VPhysicalVolume *pvol = 
-    new G4PVPlacement(0, 
-		      G4ThreeVector(pos_x, pos_y, pos_z),
-		      aRest_log, 
-		      name, 
-		      worldLogical, 
-		      false, 
-		      19); // i = 19
+  new G4PVPlacement(0, 
+                    G4ThreeVector(pos_x, pos_y, pos_z),
+                    aRest_log, 
+                    name, 
+                    worldLogical, 
+                    false, 
+                    19); // i = 19
   //G4GeometryCell cell(*pvol, i);
   //fPVolumeStore.AddPVolume(cell);
 

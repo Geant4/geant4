@@ -124,8 +124,8 @@ int main(int argc, char **argv)
     aWWstore = detector->CreateWeightWindowStore();
 
     wwAlg = new G4WeightWindowAlgorithm(1,    // upper limit factor
-					1,    // survival factor 
-					100); // max. number of splitting
+                                        1,    // survival factor 
+                                        100); // max. number of splitting
       
     mgs.PrepareWeightWindow(aWWstore, wwAlg, onBoundary);  // place of action
   }

@@ -30,18 +30,22 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //////////////////////////////////////////////////////////////
-//      Class Name:	RMC01AnalysisManagerMessenger
-//	Author:       	L. Desorgher
-// 	Organisation: 	SpaceIT GmbH
-//	Contract:	ESA contract 21435/08/NL/AT
-// 	Customer:     	ESA/ESTEC
+//  Class Name:        RMC01AnalysisManagerMessenger
+//        Author:               L. Desorgher
+//         Organisation:         SpaceIT GmbH
+//        Contract:        ESA contract 21435/08/NL/AT
+//         Customer:             ESA/ESTEC
 //////////////////////////////////////////////////////////////
 // CHANGE HISTORY
 //--------------
 //      ChangeHistory:
-//	 	17-11-2009 creation by L. Desorgher
+//                 17-11-2009 creation by L. Desorgher
 //
 //-------------------------------------------------------------
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef RMC01AnalysisManagerMessenger_h
 #define RMC01AnalysisManagerMessenger_h 1
@@ -53,8 +57,6 @@ class RMC01AnalysisManager;
 class G4UIdirectory;
 class G4UIcmdWithADouble;
 
-
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class RMC01AnalysisManagerMessenger: public G4UImessenger
@@ -62,25 +64,18 @@ class RMC01AnalysisManagerMessenger: public G4UImessenger
   public:
     RMC01AnalysisManagerMessenger(RMC01AnalysisManager* );
     
-   ~RMC01AnalysisManagerMessenger();
+    virtual ~RMC01AnalysisManagerMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    RMC01AnalysisManager* theAnalysisManager;
+    RMC01AnalysisManager* fAnalysisManager;
     
-   
-    G4UIdirectory*             analysisDir;
-    
+    G4UIdirectory*             fAnalysisDir;
   
-    G4UIcmdWithADouble* SetPrecisionForConvergenceTestCmd;
-    G4UIcommand* SetExponentialSpectrumToNormaliseAdjointResultsCmd;
-    G4UIcommand* SetPowerLawSpectrumToNormaliseAdjointResultsCmd;
-    
-    
-   
-       
-    
+    G4UIcmdWithADouble* fSetPrecisionForConvergenceTestCmd;
+    G4UIcommand* fSetExpSpectrumToNormaliseAdjResCmd;
+    G4UIcommand* fSetPowerLawSpectrumToNormaliseAdjResCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

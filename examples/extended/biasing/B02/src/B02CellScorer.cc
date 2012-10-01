@@ -51,19 +51,19 @@ B02CellScorer::~B02CellScorer()
 {}
 
 void B02CellScorer::ScoreAnExitingStep(const G4Step &aStep,
-				       const G4GeometryCell &pre_gCell){
+                                       const G4GeometryCell &pre_gCell){
   fG4CellScorer.ScoreAnExitingStep(aStep, pre_gCell);
   FillHisto(aStep);
 }
 
 void B02CellScorer::ScoreAnEnteringStep(const G4Step &aStep,
-					const G4GeometryCell &post_gCell){
+                                        const G4GeometryCell &post_gCell){
   fG4CellScorer.ScoreAnEnteringStep(aStep, post_gCell);
   return;
 }
 
 void B02CellScorer::ScoreAnInVolumeStep(const G4Step &aStep,
-					const G4GeometryCell &post_gCell){
+                                        const G4GeometryCell &post_gCell){
   fG4CellScorer.ScoreAnInVolumeStep(aStep, post_gCell);
   FillHisto(aStep);
 }

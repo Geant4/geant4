@@ -39,6 +39,7 @@
 #include "G4ParticleGun.hh"
 #include "G4Neutron.hh"
 #include "G4ThreeVector.hh"
+#include "G4SystemOfUnits.hh"
 
 B01PrimaryGeneratorAction::B01PrimaryGeneratorAction()
 {
