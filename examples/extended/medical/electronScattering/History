@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04-09-12 I. Hrivnacova (electronScattering-V09-05-06)
+ - Updated CMakeLists.txt:
+   adding visualization, copying macros, install target and comment lines 
+ - Added .README  
      
 19-04-12 mma (electronScattering-V09-05-05)
 - all classes : apply G4 coding conventions
