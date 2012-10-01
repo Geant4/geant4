@@ -14,11 +14,16 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-31 jul 2012  Vladimir Ivanchenko        (hadr-util-V09-05-06)
+19 Sep 2012  Gabriele Cosmo (hadr-util-V09-05-08, hadr-util-V09-05-07)
+----------------------------------------------------------------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+31 Jul 2012  Vladimir Ivanchenko        (hadr-util-V09-05-06)
 -------------------------------------------------------------
 - G4Nucleus - added methods GetIsotope, SetIsotope
 
-13 jul 2012  Gunter Folger              (hadr-util-V09-05-05)
+13 Jul 2012  Gunter Folger              (hadr-util-V09-05-05)
 -------------------------------------------------------------
 - G4GHEKinematicsVector: Fix coverity warning about self assignment
     in assignment operator

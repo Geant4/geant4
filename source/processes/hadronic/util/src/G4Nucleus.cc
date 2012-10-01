@@ -41,6 +41,8 @@
  
 #include "G4Nucleus.hh"
 #include "G4NucleiProperties.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4HadronicException.hh"
  

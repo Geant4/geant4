@@ -200,7 +200,7 @@ class G4GHEKinematicsVector
            {
              G4double cost = 1.0- 2.0*G4UniformRand();
              G4double sint = std::sqrt(1. - cost*cost);
-             G4double phi  = twopi* G4UniformRand();
+             G4double phi  = CLHEP::twopi* G4UniformRand();
              momentum.setX( momnew * sint * std::cos(phi));
              momentum.setY( momnew * sint * std::sin(phi));
              momentum.setZ( momnew * cost);
@@ -240,7 +240,7 @@ class G4GHEKinematicsVector
            {
              G4double cost = 1.0-2.0*G4UniformRand();
              G4double sint = std::sqrt(1. - cost*cost);
-             G4double phi  = twopi* G4UniformRand();
+             G4double phi  = CLHEP::twopi* G4UniformRand();
              momentum.setX( momnew * sint * std::cos(phi));
              momentum.setY( momnew * sint * std::sin(phi));
              momentum.setZ( momnew * cost);
@@ -285,7 +285,7 @@ class G4GHEKinematicsVector
             { 
               G4double cost = 1.-2.*G4UniformRand();
               G4double sint = std::sqrt(1.-cost*cost);
-              G4double phi  = twopi*G4UniformRand();
+              G4double phi  = CLHEP::twopi*G4UniformRand();
               momentum.setX( momnew*sint*std::cos(phi));
               momentum.setY( momnew*sint*std::sin(phi));
               momentum.setZ( momnew*cost);
@@ -585,7 +585,7 @@ class G4GHEKinematicsVector
           G4double cost  = p2.momentum.z()/p2.momentum.mag(); 
           G4double sint  = 0.5 * (  std::sqrt(std::fabs((1.-cost)*(1.+cost))) 
                                   + std::sqrt(pt2)/p2.momentum.mag());
-          (p2.momentum.y() < 0.) ? ph = 1.5*pi : ph = halfpi;
+          (p2.momentum.y() < 0.) ? ph = 1.5*CLHEP::pi : ph = CLHEP::halfpi;
           if( p2.momentum.x() != 0.0) 
              ph = std::atan2(p2.momentum.y(),p2.momentum.x());             
           px =   cost*std::cos(ph)*p1.momentum.x() - std::sin(ph)*p1.momentum.y()

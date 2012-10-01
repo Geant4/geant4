@@ -35,6 +35,7 @@
 //-----------------------------------------------------------------------------
 
 #include "G4ReactionKinematics.hh"
+#include "G4PhysicalConstants.hh"
 
 // ************************************************************
 void G4ReactionKinematics::TwoBodyScattering(
