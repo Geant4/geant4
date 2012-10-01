@@ -210,7 +210,7 @@ G4HadFinalState* G4ElectroNuclearReaction::ApplyYourself(const G4HadProjectile& 
   }
   G4DynamicParticle* theDynamicPhoton = new 
                      G4DynamicParticle(G4Gamma::GammaDefinition(), 
-                     G4ParticleMomentum(1.,0.,0.), photonEnergy*MeV);         //----->-*
+                     G4ParticleMomentum(1.,0.,0.), photonEnergy*CLHEP::MeV);         //----->-*
   G4double sigNu=thePhotonData->GetCrossSection(theDynamicPhoton, anElement); //       |
   theDynamicPhoton->SetKineticEnergy(W);  // Redefine photon with equivalent energy    |
   G4double sigK =thePhotonData->GetCrossSection(theDynamicPhoton, anElement); //       |
