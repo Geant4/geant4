@@ -47,6 +47,7 @@
 //#define sdebug
 
 #include "G4NeutronElasticCrossSection.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Nucleus.hh"
 
 // Initialization of the static parameters

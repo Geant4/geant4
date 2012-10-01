@@ -45,6 +45,8 @@
 //#define nandebug
 
 #include "G4QuasiElRatios.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
 #include "G4Deuteron.hh"
