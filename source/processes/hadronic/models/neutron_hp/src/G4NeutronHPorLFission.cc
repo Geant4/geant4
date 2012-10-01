@@ -36,6 +36,7 @@
 // A prototype of the low energy neutron transport model.
 //
 #include "G4NeutronHPorLFission.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4NeutronHPFissionFS.hh"
 
 G4NeutronHPorLFission::G4NeutronHPorLFission()

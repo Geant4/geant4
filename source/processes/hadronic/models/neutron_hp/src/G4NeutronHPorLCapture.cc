@@ -37,6 +37,7 @@
 // A prototype of the low energy neutron transport model.
 //
 #include "G4NeutronHPorLCapture.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4NeutronHPCaptureFS.hh"
 
 G4NeutronHPorLCapture::G4NeutronHPorLCapture()

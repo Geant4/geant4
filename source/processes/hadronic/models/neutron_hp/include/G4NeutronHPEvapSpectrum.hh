@@ -30,11 +30,13 @@
 #ifndef G4NeutronHPEvapSpectrum_h
 #define G4NeutronHPEvapSpectrum_h 1
 
-#include "globals.hh"
-#include "G4NeutronHPVector.hh"
-#include "Randomize.hh"
-#include "G4ios.hh"
 #include <fstream>
+#include <CLHEP/Units/SystemOfUnits.h>
+
+#include "globals.hh"
+#include "G4ios.hh"
+#include "Randomize.hh"
+#include "G4NeutronHPVector.hh"
 #include "G4VNeutronHPEDis.hh"
 
 // we will need a List of these .... one per term.
@@ -67,7 +69,7 @@ class G4NeutronHPEvapSpectrum : public G4VNeutronHPEDis
     G4double x = theXDist.Sample();
     G4double theta = theThetaDist.GetY(anEnergy);
     G4double result = x*theta;
-    return result*eV;
+    return result*CLHEP::eV;
   }
   
   private:

@@ -32,6 +32,8 @@
 // 080904 Add Protection for negative energy results in very low energy ( 1E-6 eV ) scattering by T. Koi
 //
 #include "G4NeutronHPElasticFS.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ReactionProduct.hh"
 #include "G4Nucleus.hh"
 #include "G4Proton.hh"

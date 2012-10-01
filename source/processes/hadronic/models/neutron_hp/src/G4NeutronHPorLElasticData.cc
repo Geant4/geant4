@@ -32,6 +32,7 @@
 //
 
 #include "G4NeutronHPorLElasticData.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Neutron.hh"
 #include "G4ElementTable.hh"
 #include "G4NeutronHPData.hh"

@@ -30,13 +30,14 @@
 #ifndef G4NeutronHPProduct_h
 #define G4NeutronHPProduct_h 1
 
-#include "G4HadronicException.hh"
-#include "globals.hh"
-#include "G4NeutronHPVector.hh"
-#include "Randomize.hh"
-#include "G4ios.hh"
 #include <fstream>
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
+#include "G4ios.hh"
+#include "Randomize.hh"
+#include "G4HadronicException.hh"
+#include "G4NeutronHPVector.hh"
 #include "G4VNeutronHPEnergyAngular.hh"
 #include "G4ReactionProductVector.hh"
 
@@ -68,9 +69,9 @@ class G4NeutronHPProduct
   {
     aDataFile >> theMassCode>>theMass>>theIsomerFlag>>theDistLaw
               >> theGroundStateQValue>>theActualStateQValue;
-    theGroundStateQValue*= eV;
-    theActualStateQValue*= eV;
-    theYield.Init(aDataFile, eV);
+    theGroundStateQValue*= CLHEP::eV;
+    theActualStateQValue*= CLHEP::eV;
+    theYield.Init(aDataFile, CLHEP::eV);
     if(theDistLaw==0)
     {
       // distribution not known, use E-independent, isotropic angular distribution

@@ -31,12 +31,11 @@
 // 07-Sep-11 M. Kelsey -- Follow change to G4HadFinalState interface
 
 #include "G4NeutronHPFissionFS.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4Nucleus.hh"
 #include "G4DynamicParticleVector.hh"
 #include "G4NeutronHPFissionERelease.hh"
 #include "G4ParticleTable.hh"
-
-
 
  void G4NeutronHPFissionFS::Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType)
  {

@@ -30,6 +30,7 @@
 // 080801 Prohibit level transition to oneself by T. Koi
 //
 #include "G4NeutronHPDeExGammas.hh"
+#include "G4SystemOfUnits.hh"
 
 void G4NeutronHPDeExGammas::Init(std::ifstream & aDataFile)
 {

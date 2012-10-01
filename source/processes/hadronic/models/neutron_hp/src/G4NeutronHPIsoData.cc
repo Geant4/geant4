@@ -30,6 +30,7 @@
 //080901 Avoiding troubles which caused by G4PhysicsVecotor of length 0 by T. Koi
 //
 #include "G4NeutronHPIsoData.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4NeutronHPDataUsed.hh"
 
   //G4bool G4NeutronHPIsoData::Init(G4int A, G4int Z, G4double abun, G4String dirName, G4String aFSType)

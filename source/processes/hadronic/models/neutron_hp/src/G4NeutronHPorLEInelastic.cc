@@ -35,6 +35,7 @@
 // A prototype of the low energy neutron transport model.
 //
 #include "G4NeutronHPorLEInelastic.hh"
+#include "G4SystemOfUnits.hh"
 //#include "G4NeutronHPInelasticFS.hh"
 
 G4NeutronHPorLEInelastic::G4NeutronHPorLEInelastic()

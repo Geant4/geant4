@@ -28,6 +28,8 @@
 // A prototype of the low energy neutron transport model.
 //
 #include "G4NeutronHPIsotropic.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"

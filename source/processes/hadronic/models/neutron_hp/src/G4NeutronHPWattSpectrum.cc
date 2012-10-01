@@ -26,7 +26,9 @@
 // neutron_hp -- source file
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
+
 #include "G4NeutronHPWattSpectrum.hh"
+#include "G4SystemOfUnits.hh"
 
   G4double G4NeutronHPWattSpectrum::Sample(G4double anEnergy) 
   {

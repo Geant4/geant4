@@ -30,6 +30,9 @@
 // 080808 Bug fix in serching mu bin and index for theBuff2b by T. Koi
 //
 #include "G4NeutronHPLabAngularEnergy.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
@@ -39,7 +42,6 @@
 #include "G4Triton.hh"
 #include "G4He3.hh"
 #include "G4Alpha.hh"
-#include "Randomize.hh"
 
 void G4NeutronHPLabAngularEnergy::Init(std::ifstream & aDataFile)
 {

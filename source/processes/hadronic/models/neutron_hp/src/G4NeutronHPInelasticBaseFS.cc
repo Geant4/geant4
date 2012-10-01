@@ -33,6 +33,7 @@
 // 101111 Add Special treatment for Be9(n,2n)Be8(2a) case by T. Koi
 //
 #include "G4NeutronHPInelasticBaseFS.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Nucleus.hh"
 #include "G4NucleiProperties.hh"
 #include "G4He3.hh"

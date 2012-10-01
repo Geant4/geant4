@@ -28,6 +28,7 @@
 // A prototype of the low energy neutron transport model.
 //
 #include "G4NeutronHPFissionBaseFS.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ReactionProduct.hh"
 #include "G4Nucleus.hh"
 #include "G4Proton.hh"

@@ -29,12 +29,11 @@
 //101110 Set lower limit for gamma energy(1keV) by T. Koi
 
 #include "G4NeutronHPFinalState.hh"
-
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 #include "G4Gamma.hh"
 #include "G4Neutron.hh"
-
-
 
 void G4NeutronHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
 {

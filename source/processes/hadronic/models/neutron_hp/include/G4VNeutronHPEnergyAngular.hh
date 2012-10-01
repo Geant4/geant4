@@ -32,9 +32,10 @@
 #ifndef G4VNeutronHPEnergyAngular_h
 #define G4VNeutronHPEnergyAngular_h 1
 
-#include "G4ios.hh"
 #include <fstream>
+
 #include "globals.hh"
+#include "G4ios.hh"
 #include "G4ReactionProduct.hh"
 
 class G4VNeutronHPEnergyAngular

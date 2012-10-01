@@ -31,6 +31,7 @@
 // 08-08-06 delete unnecessary and harmed declaration; Bug Report[857]
 //
 #include "G4NeutronHPFission.hh"
+#include "G4SystemOfUnits.hh"
 
   G4NeutronHPFission::G4NeutronHPFission()
     :G4HadronicInteraction("NeutronHPFission")

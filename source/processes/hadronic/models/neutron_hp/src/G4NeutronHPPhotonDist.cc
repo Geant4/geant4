@@ -42,12 +42,14 @@
 //
 // there is a lot of unused (and undebugged) code in this file. Kept for the moment just in case. @@
 
+#include <numeric>
+
 #include "G4NeutronHPPhotonDist.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4NeutronHPLegendreStore.hh"
 #include "G4Electron.hh"
 #include "G4Poisson.hh"
-
-#include <numeric>
 
 G4bool G4NeutronHPPhotonDist::InitMean(std::ifstream & aDataFile)
 {

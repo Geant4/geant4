@@ -33,6 +33,8 @@
 // 110510 delete above protection with more coordinated work to other classes 
 //
 #include "G4NeutronHPAngular.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 void G4NeutronHPAngular::Init(std::ifstream & aDataFile)
 {

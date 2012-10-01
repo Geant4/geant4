@@ -43,6 +43,7 @@
 //
 
 #include "G4NeutronHPBGGNucleonInelasticXS.hh"
+#include "G4SystemOfUnits.hh"
 /*
 #include "G4GlauberGribovCrossSection.hh"
 #include "G4NucleonNuclearCrossSection.hh"

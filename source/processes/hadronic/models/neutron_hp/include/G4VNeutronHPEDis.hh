@@ -30,11 +30,12 @@
 #ifndef G4VNeutronHPEDis_h
 #define G4VNeutronHPEDis_h 1
 
-#include "globals.hh"
-#include "G4NeutronHPVector.hh"
-#include "Randomize.hh"
-#include "G4ios.hh"
 #include <fstream>
+
+#include "globals.hh"
+#include "G4ios.hh"
+#include "Randomize.hh"
+#include "G4NeutronHPVector.hh"
 
 class G4VNeutronHPEDis
 {

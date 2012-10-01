@@ -42,10 +42,9 @@
 // 100729 Add model name in constructor Problem #1116
 
 #include "G4NeutronHPThermalScattering.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Neutron.hh"
 #include "G4ElementTable.hh"
-
-
 
 G4NeutronHPThermalScattering::G4NeutronHPThermalScattering()
                              :G4HadronicInteraction("NeutronHPThermalScattering")

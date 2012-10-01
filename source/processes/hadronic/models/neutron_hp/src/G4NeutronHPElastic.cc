@@ -31,6 +31,7 @@
 // 080319 Compilation warnings - gcc-4.3.0 fix by T. Koi
 //
 #include "G4NeutronHPElastic.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4NeutronHPElasticFS.hh"
 
   G4NeutronHPElastic::G4NeutronHPElastic()

@@ -39,12 +39,14 @@
 // 15-Nov-06 First implementation is done by T. Koi (SLAC/SCCS)
 // 070625 implement clearCurrentXSData to fix memory leaking by T. Koi
 
+#include <list>
+#include <algorithm>
+
 #include "G4NeutronHPThermalScatteringData.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Neutron.hh"
 #include "G4ElementTable.hh"
 //#include "G4NeutronHPData.hh"
-#include <list>
-#include <algorithm>
 
 G4NeutronHPThermalScatteringData::G4NeutronHPThermalScatteringData()
 :G4VCrossSectionDataSet("NeutronHPThermalScatteringData")

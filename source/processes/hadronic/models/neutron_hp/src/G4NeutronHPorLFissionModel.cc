@@ -31,6 +31,7 @@
 //
 
 #include "G4NeutronHPorLFissionModel.hh"
+#include "G4SystemOfUnits.hh"
 
 G4NeutronHPorLFissionModel::G4NeutronHPorLFissionModel()
 {

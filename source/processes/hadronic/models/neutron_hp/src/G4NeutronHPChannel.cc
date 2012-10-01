@@ -32,8 +32,9 @@
 // 081203 bug fix in Register method by T. Koi
 //
 #include "G4NeutronHPChannel.hh"
-#include "G4NeutronHPFinalState.hh"
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4NeutronHPFinalState.hh"
 #include "G4HadTmpUtil.hh"
 
   G4double G4NeutronHPChannel::GetXsec(G4double energy)

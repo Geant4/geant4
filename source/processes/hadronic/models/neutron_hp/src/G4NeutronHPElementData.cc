@@ -30,6 +30,7 @@
 // 02-08-06 Modified Harmonise to reslove cross section trouble at high-end. T. KOI
 //
 #include "G4NeutronHPElementData.hh"
+#include "G4SystemOfUnits.hh"
 
   G4NeutronHPElementData::G4NeutronHPElementData()
   {

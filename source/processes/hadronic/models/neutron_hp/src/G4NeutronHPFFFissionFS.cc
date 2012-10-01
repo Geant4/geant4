@@ -28,6 +28,7 @@
 // A prototype of the low energy neutron transport model.
 //
 #include "G4NeutronHPFFFissionFS.hh"
+#include "G4SystemOfUnits.hh"
 
 void G4NeutronHPFFFissionFS::Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & )
 {

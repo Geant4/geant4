@@ -44,6 +44,8 @@
 // 110430 add Reaction Q value and break up flag (MF3::QI and LR)
 //
 #include "G4NeutronHPInelasticCompFS.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Nucleus.hh"
 #include "G4NucleiProperties.hh"
 #include "G4He3.hh"

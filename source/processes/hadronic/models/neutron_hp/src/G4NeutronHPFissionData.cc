@@ -34,6 +34,7 @@
 // 100729 Add safty for 0 lenght cross sections by T. Koi
 
 #include "G4NeutronHPFissionData.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Neutron.hh"
 #include "G4ElementTable.hh"
 #include "G4NeutronHPData.hh"

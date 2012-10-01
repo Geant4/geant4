@@ -38,6 +38,8 @@
 //
 
 #include "G4NeutronHPContAngularPar.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4NeutronHPLegendreStore.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"

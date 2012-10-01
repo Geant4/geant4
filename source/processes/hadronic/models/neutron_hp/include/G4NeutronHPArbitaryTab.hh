@@ -30,11 +30,13 @@
 #ifndef G4NeutronHPArbitaryTab_h
 #define G4NeutronHPArbitaryTab_h 1
 
-#include "globals.hh"
-#include "G4NeutronHPVector.hh"
-#include "Randomize.hh"
-#include "G4ios.hh"
 #include <fstream>
+#include <CLHEP/Units/SystemOfUnits.h>
+
+#include "globals.hh"
+#include "G4ios.hh"
+#include "Randomize.hh"
+#include "G4NeutronHPVector.hh"
 #include "G4VNeutronHPEDis.hh"
 #include "G4InterpolationManager.hh"
 
@@ -55,7 +57,7 @@ class G4NeutronHPArbitaryTab : public G4VNeutronHPEDis
   inline void Init(std::ifstream & theData)
   {
     G4int i;
-    theFractionalProb.Init(theData, eV);
+    theFractionalProb.Init(theData, CLHEP::eV);
     theData >> nDistFunc; // = number of incoming n energy points
     theDistFunc = new G4NeutronHPVector [nDistFunc];
     theManager.Init(theData);
@@ -63,8 +65,8 @@ class G4NeutronHPArbitaryTab : public G4VNeutronHPEDis
     for(i=0; i<nDistFunc; i++)
     {
       theData >> currentEnergy;
-      theDistFunc[i].SetLabel(currentEnergy*eV);
-      theDistFunc[i].Init(theData, eV);
+      theDistFunc[i].SetLabel(currentEnergy*CLHEP::eV);
+      theDistFunc[i].Init(theData, CLHEP::eV);
       //************************************************************************
       //EMendoza:
       //ThinOut() assumes that the data is linear-linear, what is false:

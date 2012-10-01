@@ -39,6 +39,7 @@
 // 081203 limit maximum trial for creating final states add protection for 1H isotope case by T. Koi
 //
 #include "G4NeutronHPInelastic.hh"
+#include "G4SystemOfUnits.hh"
 
   G4NeutronHPInelastic::G4NeutronHPInelastic()
     :G4HadronicInteraction("NeutronHPInelastic")

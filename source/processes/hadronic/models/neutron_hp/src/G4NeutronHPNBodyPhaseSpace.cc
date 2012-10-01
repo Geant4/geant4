@@ -28,6 +28,9 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4NeutronHPNBodyPhaseSpace.hh"
+#include "G4PhysicalConstants.hh"
+#include "Randomize.hh"
+#include "G4ThreeVector.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
@@ -37,8 +40,6 @@
 #include "G4Triton.hh"
 #include "G4He3.hh"
 #include "G4Alpha.hh"
-#include "Randomize.hh"
-#include "G4ThreeVector.hh"
 
 G4ReactionProduct * G4NeutronHPNBodyPhaseSpace::Sample(G4double anEnergy, G4double massCode, G4double )
 {

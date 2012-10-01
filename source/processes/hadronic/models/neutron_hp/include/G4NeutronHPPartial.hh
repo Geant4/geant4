@@ -32,6 +32,8 @@
 #ifndef G4NeutronHPPartial_h
 #define G4NeutronHPPartial_h 1
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
 #include "G4NeutronHPVector.hh"
 #include "G4InterpolationManager.hh"
@@ -74,9 +76,9 @@ class G4NeutronHPPartial
     for( i=0; i<nData; i++)
     {
       aDataFile >> e;
-      e *= eV;
+      e *= CLHEP::eV;
       SetX(i,e);
-      InitData(i, aDataFile, eV); // energy and probability for gammas
+      InitData(i, aDataFile, CLHEP::eV); // energy and probability for gammas
     }  
   }
   

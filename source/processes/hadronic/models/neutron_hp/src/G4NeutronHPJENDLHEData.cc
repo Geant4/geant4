@@ -31,6 +31,7 @@
 // 15-Nov-06 First Implementation is done by T. Koi (SLAC/SCCS)
 
 #include "G4NeutronHPJENDLHEData.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4LPhysicsFreeVector.hh"
 #include "G4ElementTable.hh"
 #include "G4NeutronHPData.hh"

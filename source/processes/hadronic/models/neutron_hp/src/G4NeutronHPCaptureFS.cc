@@ -34,6 +34,8 @@
 // 110430 Temporary solution in the case of being MF6 final state in Capture reaction (MT102)
 //
 #include "G4NeutronHPCaptureFS.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Gamma.hh"
 #include "G4ReactionProduct.hh"
 #include "G4Nucleus.hh"

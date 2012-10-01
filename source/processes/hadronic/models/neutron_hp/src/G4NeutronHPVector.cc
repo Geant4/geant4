@@ -31,7 +31,8 @@
 // 080808 bug fix in Sample() and GetXsec() by T. Koi
 //
 #include "G4NeutronHPVector.hh"
- 
+#include "G4SystemOfUnits.hh"
+
   // if the ranges do not match, constant extrapolation is used.
   G4NeutronHPVector & operator + (G4NeutronHPVector & left, G4NeutronHPVector & right)
   {

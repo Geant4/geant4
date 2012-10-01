@@ -30,6 +30,7 @@
 // 080801 Protect div0 error, when theCompundFraction is 1 by T. Koi
 //
 #include "G4NeutronHPKallbachMannSyst.hh" 
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh" 
 #include "G4HadronicException.hh" 
 

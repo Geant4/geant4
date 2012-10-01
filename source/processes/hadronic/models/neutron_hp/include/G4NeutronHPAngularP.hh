@@ -30,6 +30,8 @@
 #ifndef G4NeutronHPAngularP_h
 #define G4NeutronHPAngularP_h 1
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
 #include "G4InterpolationManager.hh"
 
@@ -54,7 +56,7 @@ class G4NeutronHPAngularP
     G4int nProb;
     aDataFile >> eNeu >> nProb;
     theManager.Init(aDataFile);
-    eNeu *= eV;
+    eNeu *= CLHEP::eV;
     Init(eNeu, nProb);
     for (G4int iii=0; iii<nProb; iii++)
     {

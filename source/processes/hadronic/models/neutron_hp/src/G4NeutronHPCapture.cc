@@ -30,6 +30,7 @@
 // 070523 bug fix for G4FPE_DEBUG on by A. Howard ( and T. Koi)
 //
 #include "G4NeutronHPCapture.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4NeutronHPCaptureFS.hh"
 #include "G4NeutronHPDeExGammas.hh"
 #include "G4ParticleTable.hh"

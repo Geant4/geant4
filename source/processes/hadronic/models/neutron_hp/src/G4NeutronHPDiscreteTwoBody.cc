@@ -32,6 +32,7 @@
 //101110 Bug fix in MF=6, LAW=2 case; contribution from E. Mendoza, D. Cano-Ott (CIEMAT)
 //
 #include "G4NeutronHPDiscreteTwoBody.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"

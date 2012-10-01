@@ -33,6 +33,7 @@
 // 05-11-21 NeutronHP or Low Energy Prameterization Models
 
 #include "G4NeutronHPorLElasticModel.hh"
+#include "G4SystemOfUnits.hh"
 
 G4NeutronHPorLElasticModel::G4NeutronHPorLElasticModel()
 {
