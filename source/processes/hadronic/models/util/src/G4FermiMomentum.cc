@@ -26,6 +26,7 @@
 //
 //
 #include "G4FermiMomentum.hh"
+#include "G4PhysicalConstants.hh"
 
 G4FermiMomentum::G4FermiMomentum() :
    theA(0), theZ(0),

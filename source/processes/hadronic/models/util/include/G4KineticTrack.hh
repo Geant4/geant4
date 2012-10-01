@@ -35,6 +35,8 @@
 #ifndef G4KineticTrack_h
 #define G4KineticTrack_h 1
 
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "globals.hh"
 #include "G4ios.hh"
 
@@ -372,7 +374,7 @@ inline G4double G4KineticTrack::EvaluateTotalActualWidth()
 inline G4double G4KineticTrack::SampleResidualLifetime()
 {
  G4double theTotalActualWidth = this->EvaluateTotalActualWidth();
- G4double tau = hbar_Planck * (-1.0 / theTotalActualWidth);
+ G4double tau = CLHEP::hbar_Planck * (-1.0 / theTotalActualWidth);
  G4double theResidualLifetime = tau * std::log(G4UniformRand());
  return theResidualLifetime*the4Momentum.gamma();
 }
@@ -395,7 +397,7 @@ inline G4double G4KineticTrack::EvaluateCMMomentum(const G4double mass,
 
 inline G4double G4KineticTrack::BrWig(const G4double Gamma, const G4double rmass, const G4double mass) const 
 {                
-  G4double Norm = twopi;
+  G4double Norm = CLHEP::twopi;
   return (Gamma/((mass-rmass)*(mass-rmass)+Gamma*Gamma/4.))/Norm;
 }
       

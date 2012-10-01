@@ -35,15 +35,17 @@
 //		to .hh.  Move testSums, places, momentum and fermiM to
 //		class data members for reuse.
 
+#include <algorithm>
+
 #include "G4Fancy3DNucleus.hh"
 #include "G4Fancy3DNucleusHelper.hh"
 #include "G4NuclearFermiDensity.hh"
 #include "G4NuclearShellModelDensity.hh"
 #include "G4NucleiProperties.hh"
 #include "G4Nucleon.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4ios.hh"
-#include <algorithm>
 #include "G4HadronicException.hh"
 
 

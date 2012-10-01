@@ -27,6 +27,8 @@
 //
 
 #include "G4NuclearShellModelDensity.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 G4NuclearShellModelDensity::G4NuclearShellModelDensity(G4int anA, G4int aZ) 
 : theA(anA), theZ(aZ)
