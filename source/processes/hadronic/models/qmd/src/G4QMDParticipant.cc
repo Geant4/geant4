@@ -24,6 +24,7 @@
 // ********************************************************************
 //
 #include "G4QMDParticipant.hh"
+#include "G4SystemOfUnits.hh"
 
 G4QMDParticipant::G4QMDParticipant( G4ParticleDefinition* pd , G4ThreeVector p , G4ThreeVector r )
 : definition ( pd )

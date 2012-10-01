@@ -32,6 +32,8 @@
 //
 #include "G4QMDCollision.hh"
 #include "G4Scatterer.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 G4QMDCollision::G4QMDCollision()

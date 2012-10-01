@@ -32,6 +32,7 @@
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
 
+#include "G4PhysicalConstants.hh"
 #include "Randomize.hh"
 
 G4QMDGroundStateNucleus::G4QMDGroundStateNucleus( G4int z , G4int a )

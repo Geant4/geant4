@@ -25,16 +25,18 @@
 //
 // 081120 Add Update by T. Koi
 //
-#include "G4QMDMeanField.hh"
-#include "G4QMDParameters.hh"
-
-#include "Randomize.hh"
-
-#include <CLHEP/Random/Stat.h>
 
 #include <map>
 #include <algorithm>
 #include <numeric>
+
+#include <CLHEP/Random/Stat.h>
+
+#include "G4QMDMeanField.hh"
+#include "G4QMDParameters.hh"
+
+#include "G4PhysicalConstants.hh"
+#include "Randomize.hh"
 
 G4QMDMeanField::G4QMDMeanField()
 : rclds ( 4.0 )    // distance for cluster judgement        

@@ -38,6 +38,8 @@
 #include "G4QMDNucleus.hh"
 #include "G4QMDGroundStateNucleus.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4NistManager.hh"
 
 G4QMDReaction::G4QMDReaction()
