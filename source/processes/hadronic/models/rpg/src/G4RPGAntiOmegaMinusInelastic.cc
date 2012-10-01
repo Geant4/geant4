@@ -32,6 +32,8 @@
 //        below is just a copy of the Cascade from the OmegaMinus particle.
  
 #include "G4RPGAntiOmegaMinusInelastic.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 G4HadFinalState*

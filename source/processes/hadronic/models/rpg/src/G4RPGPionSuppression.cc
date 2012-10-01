@@ -27,12 +27,13 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  
-#include "G4RPGPionSuppression.hh"
-#include "Randomize.hh"
 #include <iostream>
-#include "G4HadReentrentException.hh"
 #include <signal.h>
 
+#include "G4RPGPionSuppression.hh"
+#include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
+#include "G4HadReentrentException.hh"
 
 G4RPGPionSuppression::G4RPGPionSuppression()
   : G4RPGReaction() {}

@@ -28,6 +28,7 @@
 //
  
 #include "G4RPGPiMinusInelastic.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 G4HadFinalState*

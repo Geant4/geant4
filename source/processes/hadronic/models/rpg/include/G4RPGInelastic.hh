@@ -37,8 +37,9 @@
 //
 // Base class for re-parameterized Gheisha-style models.
 
-#include "globals.hh"
 #include <vector>
+
+#include "globals.hh"
 #include "G4FastVector.hh"
 #include "G4HadronicInteraction.hh"
 #include "G4ReactionProduct.hh"

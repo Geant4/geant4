@@ -37,7 +37,7 @@
 #ifndef G4RPGAntiLambdaInelastic_h
 #define G4RPGAntiLambdaInelastic_h 1
  
-
+#include <CLHEP/Units/SystemOfUnits.h>
 #include "G4RPGInelastic.hh"
  
  class G4RPGAntiLambdaInelastic : public G4RPGInelastic
@@ -47,7 +47,7 @@
     G4RPGAntiLambdaInelastic() : G4RPGInelastic("G4RPGAntiLambdaInelastic")
     {
       SetMinEnergy( 0.0 );
-      SetMaxEnergy( 25.*GeV );
+      SetMaxEnergy( 25.*CLHEP::GeV );
     }
     
     ~G4RPGAntiLambdaInelastic() { }

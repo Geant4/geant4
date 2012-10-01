@@ -27,14 +27,13 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  
-#include "G4RPGStrangeProduction.hh"
-// #include "G4AntiProton.hh"
-// #include "G4AntiNeutron.hh"
-#include "Randomize.hh"
 #include <iostream>
-#include "G4HadReentrentException.hh"
 #include <signal.h>
 
+#include "G4RPGStrangeProduction.hh"
+#include "Randomize.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4HadReentrentException.hh"
 
 G4RPGStrangeProduction::G4RPGStrangeProduction()
   : G4RPGReaction() {}

@@ -27,10 +27,12 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#include "G4RPGReaction.hh"
-#include "Randomize.hh"
 #include <iostream>
 
+#include "G4RPGReaction.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
 
 G4bool G4RPGReaction::
 ReactionStage(const G4HadProjectile* /*originalIncident*/,

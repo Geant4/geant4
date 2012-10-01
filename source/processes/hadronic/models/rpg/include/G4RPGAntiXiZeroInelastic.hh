@@ -39,7 +39,7 @@
 #ifndef G4RPGAntiXiZeroInelastic_h
 #define G4RPGAntiXiZeroInelastic_h 1
  
-
+#include <CLHEP/Units/SystemOfUnits.h>
 #include "G4RPGInelastic.hh"
  
  class G4RPGAntiXiZeroInelastic : public G4RPGInelastic
@@ -49,7 +49,7 @@
     G4RPGAntiXiZeroInelastic() : G4RPGInelastic("G4RPGAntiXiZeroInelastic")
     {
       SetMinEnergy( 0.0 );
-      SetMaxEnergy( 25.*GeV );
+      SetMaxEnergy( 25.*CLHEP::GeV );
     }
     
     ~G4RPGAntiXiZeroInelastic() { }

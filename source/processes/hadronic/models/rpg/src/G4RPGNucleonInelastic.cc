@@ -28,6 +28,7 @@
 //
  
 #include "G4RPGNucleonInelastic.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 G4RPGNucleonInelastic::G4RPGNucleonInelastic(const G4String& modelName)

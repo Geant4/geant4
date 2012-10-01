@@ -37,7 +37,7 @@
 #ifndef G4RPGAntiSigmaPlusInelastic_h
 #define G4RPGAntiSigmaPlusInelastic_h 1
  
-
+#include <CLHEP/Units/SystemOfUnits.h>
 #include "G4RPGInelastic.hh"
  
  class G4RPGAntiSigmaPlusInelastic : public G4RPGInelastic
@@ -47,7 +47,7 @@
     G4RPGAntiSigmaPlusInelastic() : G4RPGInelastic("G4RPGAntiSigmaPlusInelastic")
     {
       SetMinEnergy( 0.0 );
-      SetMaxEnergy( 25.*GeV );
+      SetMaxEnergy( 25.*CLHEP::GeV );
     }
     
     ~G4RPGAntiSigmaPlusInelastic() { }

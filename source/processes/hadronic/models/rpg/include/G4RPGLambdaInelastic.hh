@@ -38,7 +38,7 @@
 #ifndef G4RPGLambdaInelastic_h
 #define G4RPGLambdaInelastic_h 1
  
-
+#include <CLHEP/Units/SystemOfUnits.h>
 #include "G4RPGInelastic.hh"
  
 
@@ -49,7 +49,7 @@
     G4RPGLambdaInelastic() : G4RPGInelastic("G4RPGLambdaInelastic")
     {
       SetMinEnergy( 0.0 );
-      SetMaxEnergy( 25.*GeV );
+      SetMaxEnergy( 25.*CLHEP::GeV );
     }
     
     ~G4RPGLambdaInelastic() { }

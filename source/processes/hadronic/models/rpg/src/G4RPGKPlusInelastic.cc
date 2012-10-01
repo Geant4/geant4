@@ -29,6 +29,8 @@
 //
  
 #include "G4RPGKPlusInelastic.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
  
 G4HadFinalState*

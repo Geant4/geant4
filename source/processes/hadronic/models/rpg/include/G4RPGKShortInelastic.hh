@@ -38,11 +38,11 @@
 #ifndef G4RPGKShortInelastic_h
 #define G4RPGKShortInelastic_h 1
 
+#include <CLHEP/Units/SystemOfUnits.h>
 #include "G4RPGInelastic.hh"
 #include "G4RPGKZeroInelastic.hh"
 #include "G4RPGAntiKZeroInelastic.hh"
 #include "Randomize.hh"
-
 
 class G4RPGKShortInelastic : public G4RPGInelastic
 {
@@ -50,7 +50,7 @@ class G4RPGKShortInelastic : public G4RPGInelastic
     G4RPGKShortInelastic() : G4RPGInelastic("G4RPGKShortInelastic")
     {
       SetMinEnergy( 0.0 );
-      SetMaxEnergy( 25.*GeV );
+      SetMaxEnergy( 25.*CLHEP::GeV );
     }
 
     virtual ~G4RPGKShortInelastic(){ }

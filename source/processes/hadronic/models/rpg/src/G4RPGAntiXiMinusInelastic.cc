@@ -32,6 +32,8 @@
 //        below is just a copy of the ApplyYourself from the XiMinus particle.
  
 #include "G4RPGAntiXiMinusInelastic.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
  
 G4HadFinalState*

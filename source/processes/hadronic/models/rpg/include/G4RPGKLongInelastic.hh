@@ -39,6 +39,7 @@
 #ifndef G4RPGKLongInelastic_h
 #define G4RPGKLongInelastic_h 1
 
+#include <CLHEP/Units/SystemOfUnits.h>
 #include "G4RPGInelastic.hh"
 #include "G4RPGKZeroInelastic.hh"
 #include "G4RPGAntiKZeroInelastic.hh"
@@ -51,7 +52,7 @@ class G4RPGKLongInelastic : public G4RPGInelastic
     G4RPGKLongInelastic() : G4RPGInelastic("G4RPGKLongInelastic")  
     {
       SetMinEnergy( 0.0 );
-      SetMaxEnergy( 25.*GeV );
+      SetMaxEnergy( 25.*CLHEP::GeV );
     }
 
     virtual ~G4RPGKLongInelastic(){ }

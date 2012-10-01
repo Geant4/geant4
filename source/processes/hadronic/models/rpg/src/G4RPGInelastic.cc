@@ -29,6 +29,8 @@
 
 #include "G4RPGInelastic.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4HadReentrentException.hh"
 #include "G4RPGStrangeProduction.hh"
 #include "G4RPGTwoBody.hh"

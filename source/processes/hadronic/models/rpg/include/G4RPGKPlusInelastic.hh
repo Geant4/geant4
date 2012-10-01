@@ -38,6 +38,7 @@
 // Final state production model for K+ inelastic scattering
 // using the re-parameterized Gheisha model.
 
+#include <CLHEP/Units/SystemOfUnits.h>
 #include "G4RPGInelastic.hh"
  
  class G4RPGKPlusInelastic : public G4RPGInelastic
@@ -47,7 +48,7 @@
     G4RPGKPlusInelastic() : G4RPGInelastic("G4RPGKPlusInelastic")
     {
       SetMinEnergy( 0.0 );
-      SetMaxEnergy( 25.*GeV );
+      SetMaxEnergy( 25.*CLHEP::GeV );
     }
     
     ~G4RPGKPlusInelastic()

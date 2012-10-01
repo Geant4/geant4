@@ -28,8 +28,9 @@
 //
  
 #include "G4RPGNeutronInelastic.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
-
 
 G4HadFinalState* 
 G4RPGNeutronInelastic::ApplyYourself(const G4HadProjectile& aTrack,
