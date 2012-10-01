@@ -76,6 +76,7 @@
 #define G4VIEWPARAMETERS_HH
 
 #include <vector>
+#include <CLHEP/Units/SystemOfUnits.h>
 #include "G4Vector3D.hh"
 #include "G4Point3D.hh"
 #include "G4Plane3D.hh"
@@ -220,7 +221,7 @@ public: // With description
   void SetUpVector             (const G4Vector3D& upVector);
   void SetFieldHalfAngle       (G4double fieldHalfAngle);
   void SetOrthogonalProjection ();  // This and next use SetFieldHalfAngle.
-  void SetPerspectiveProjection(G4double fieldHalfAngle = 30. * deg);
+  void SetPerspectiveProjection(G4double fieldHalfAngle = 30. * CLHEP::deg);
   void SetZoomFactor           (G4double zoomFactor);
   void MultiplyZoomFactor      (G4double zoomFactorMultiplier);
   void SetScaleFactor          (const G4Vector3D& scaleFactor);

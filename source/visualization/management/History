@@ -26,6 +26,9 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+28th September 2012  Gabriele Cosmo  (visman-V09-05-33)
+- Explicitly include units header in G4ViewParameters.hh.
+
 27th September 2012  John Allison  (visman-V09-05-32)
 - G4VisManager.cc:
   o Added an extra refresh for auto-refresh viewers at end of run.
