@@ -41,6 +41,8 @@
  // Results are extracted from RA Arndt's PSA of 1998  
  // CM Angle range: 0.5 - 179.5 degrees in 1 degree steps  
 
+ #include "G4Types.hh"
+
  // CM momentum (GeV/c)
  G4float G4LEpp::Pcm[NENERGY] = {
      0.685E-01, 0.969E-01, 0.137, 0.181, 0.217, 0.237, 0.256,

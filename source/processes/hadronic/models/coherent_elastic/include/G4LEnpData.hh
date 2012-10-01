@@ -42,6 +42,8 @@
 // Appended at end: cm momentum (GeV/c), Lab Energy (GeV), max 
 // dsigma/domega-CM (mb/sr), total cross section 
 
+ #include "G4Types.hh"
+
  G4float G4LEnp::sig[NENERGY][NANGLE] = {
    //------------  0.01 GeV
   {0.00007,   0.00030,   0.00066,   0.00118,   0.00184,   0.00265,   0.00360,
