@@ -14,7 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-18 September 2012 Michael Kelsey   (hadr-man-V09-05-20)
+01 October 2012 Alberto Ribon      (hadr-man-V09-05-21)
+-------------------------------------------------------
+- Fixed warnings in G4HadronicProcessStore.cc.
+
+28 September 2012 Michael Kelsey   (hadr-man-V09-05-20)
 -------------------------------------------------------
 - G4HadronicProcess:  Restore inheritance from G4VDiscreteProcess; this
   migration will be done during 10.0 development.  Remove deprecation
@@ -23,7 +27,7 @@ code and to keep track of all tags.
 
 28 September 2012 Alberto Ribon    (hadr-man-V09-05-19)
 -------------------------------------------------------
-- Fixed warning in G4HadronicProcessStore.cc.
+- Fixed warnings in G4HadronicProcessStore.cc.
 
 20 September 2012 Gabriele Cosmo   (hadr-man-V09-05-18)
 -------------------------------------------------------

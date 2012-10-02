@@ -134,7 +134,7 @@ G4HadronicProcessStore::G4HadronicProcessStore()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4double G4HadronicProcessStore::GetCrossSectionPerAtom(
-                                 const G4ParticleDefinition* particle,
+                                 const G4ParticleDefinition* part,
                                  G4double energy,
                                  const G4VProcess* proc,
                                  const G4Element*  element)
@@ -142,22 +142,22 @@ G4double G4HadronicProcessStore::GetCrossSectionPerAtom(
   G4double cross = 0.;    
   G4int subType = proc->GetProcessSubType();      
   if (subType == fHadronElastic)   
-    cross = GetElasticCrossSectionPerAtom(particle,energy,element);
+    cross = GetElasticCrossSectionPerAtom(part,energy,element);
   else if (subType == fHadronInelastic)   
-    cross = GetInelasticCrossSectionPerAtom(particle,energy,element);
+    cross = GetInelasticCrossSectionPerAtom(part,energy,element);
   else if (subType == fCapture)   
-    cross = GetCaptureCrossSectionPerAtom(particle,energy,element);      
+    cross = GetCaptureCrossSectionPerAtom(part,energy,element);      
   else if (subType == fFission)   
-    cross = GetFissionCrossSectionPerAtom(particle,energy,element); 
+    cross = GetFissionCrossSectionPerAtom(part,energy,element); 
   else if (subType == fChargeExchange)   
-    cross = GetChargeExchangeCrossSectionPerAtom(particle,energy,element);
+    cross = GetChargeExchangeCrossSectionPerAtom(part,energy,element);
   return cross;
 }  	   
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4double G4HadronicProcessStore::GetCrossSectionPerVolume(
-                                 const G4ParticleDefinition* particle,
+                                 const G4ParticleDefinition* part,
                                  G4double energy,
                                  const G4VProcess* proc,
                                  const G4Material* material)
@@ -165,15 +165,15 @@ G4double G4HadronicProcessStore::GetCrossSectionPerVolume(
   G4double cross = 0.;    
   G4int subType = proc->GetProcessSubType();      
   if (subType == fHadronElastic)   
-    cross = GetElasticCrossSectionPerVolume(particle,energy,material);
+    cross = GetElasticCrossSectionPerVolume(part,energy,material);
   else if (subType == fHadronInelastic)   
-    cross = GetInelasticCrossSectionPerVolume(particle,energy,material);
+    cross = GetInelasticCrossSectionPerVolume(part,energy,material);
   else if (subType == fCapture)   
-    cross = GetCaptureCrossSectionPerVolume(particle,energy,material);      
+    cross = GetCaptureCrossSectionPerVolume(part,energy,material);      
   else if (subType == fFission)   
-    cross = GetFissionCrossSectionPerVolume(particle,energy,material); 
+    cross = GetFissionCrossSectionPerVolume(part,energy,material); 
   else if (subType == fChargeExchange)   
-    cross = GetChargeExchangeCrossSectionPerVolume(particle,energy,material);
+    cross = GetChargeExchangeCrossSectionPerVolume(part,energy,material);
   return cross;
 }  	   
 
