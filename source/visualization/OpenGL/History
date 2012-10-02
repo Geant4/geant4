@@ -17,6 +17,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+2nd October 2012  John Allison (opengl-V09-05-45)
+- G4OpenGLStoredWin32Viewer.cc:
+  o Re-add inclusion of missing header files on Win32
+
+2nd October 2012  Laurent Garnier (opengl-V09-05-44)
+- G4OpenGLStoredWin32.cc:
+  o Re-add inclusion of missing header files on Win32
+
+1st October 2012  John Allison (opengl-V09-05-43)
+- G4OpenGLStoredViewer.cc:
+  o Removed hidden marker from list of parameters that of changed trigger a
+    kernel re-visit.  DisplayLists() can now cope with a change because the
+    required information is in the PO/TO.
+
 28th September 2012  Laurent Garnier (opengl-V09-05-42)
 - G4OpenGLQtViewer:
   o Fixed compiler warning

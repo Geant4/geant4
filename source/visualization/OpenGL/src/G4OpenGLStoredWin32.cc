@@ -39,6 +39,7 @@
 #include "G4OpenGLViewer.hh"
 #include "G4OpenGLStoredWin32.hh"
 #include "G4OpenGLStoredWin32Viewer.hh"
+#include "G4OpenGLStoredSceneHandler.hh"
 #include "G4OpenGLViewerMessenger.hh"
 
 G4OpenGLStoredWin32::G4OpenGLStoredWin32 ():
