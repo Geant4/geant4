@@ -1,0 +1,365 @@
+
+                       geant4-09-05-ref-09
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o First version of G4GenericMessenger class, useful for defining user
+   specific messengers in a standard way.
+ o Major re-design of scene and transient processing for Qt visualization
+   driver.
+ o Modified sampling of scattering, now moved from post-step to alongs-step
+   for EM multiple-scattering models.
+ o G4VAtomDeexcitation: fixed logic of activation of de-excitation per region
+   and for all geometries.
+ o New data set for low-energy processes G4EMLOW-6.29.
+ o Flagged deprecated classes for stopping, to be removed in next major release.
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+cmake                                            cmake-V09-05-42
+-----
+- Added FindPythia6 and FindAIDA modules. Added support for HEPMC_DIR path
+  variable in FindHepMC module.
+- Use the argument TIM=<timeout> to set a shorter timeout than CTest default.
+- Removed extraneous quotes around resolved include paths (kind contribution
+  by F.Kislat). Addresses problem report #1357.
+- Removed optimization flags from "TestRelease" build mode on all platforms.
+  Removed obsolete "TestReleaseDebug" build mode.
+  Addresses problem report #1263.
+- Updated G4EMLOW dataset to version 6.29.
+
+analysis                                         analysis-V09-05-12
+--------
+- Fixed loops in G4Root/XmlAnalysisManager::WriteOnAscii(), causing
+  compilation warning for shadowing.
+
+error_propagation                                error_propagation-V09-05-05
+-----------------
+- Changes in G4ErrorFreeTrajState (partType -> partName) and delete code
+  not needed in G4ErrorPhysicsList.
+
+graphics_reps                                    greps-V09-05-13
+-------------
+- Updated History. No functional changes.
+
+intercoms                                        intercoms-V09-05-02
+---------
+- Added first version of G4GenericMessenger class.
+  Added related G4AnyType and G4AnyMethod utility classes.
+
+interfaces                                       interfaces-V09-05-18
+----------
+- G4UIQt: reviewed implementation to be able to call widget dialog box for
+  parameters outside view/scene tab stack component.
+  A menu/icon with a command without parameter will open a parameter dialog
+  box. Added warning when creating new menu if command not found.
+  Introduced static IsInstantiated() method for use by visualization system.
+  Moved icon creation in a generic method AddIcon().
+  Moved command line on the right widget.
+
+particles                                        particles-V09-05-07
+---------
+- Fix in constructor of G4PhaseSpaceDecayChannel.
+
+physics_lists                                    phys-lists-V09-05-48
+-------------
+- New builder G4EmStandardPhysics_option, combining standard and low-energy
+  physics configuration as best combination. Added "opt4" to G4PhysListFactory.
+- New physics builder G4EmLowEPPhysics to take into account renamed Monash
+  U. Compton model. Removed obsolete G4EmLivermoreMUPhysics builder.
+- Replaced G4MuonMinusCaptureAtRest with G4MuonMinusCapture where applicable.
+  Also, moved #includes from .hh to .cc to reduce compile dependencies.
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+processes/electromagnetic/lowenergy              emlowen-V09-05-42
+-----------------------------------
+- Added renamed Compton low energy model by JB et al.
+  Renamed Monash U. Compton model.
+  Requires new data set G4EMLOW-6.29.
+- Added protection against cos(theta) < -1 to avoid numerical problems in
+  G4PhotoElectricAngularGeneratorPolarized, G4Generator2BN, G4Generator2BS,
+  G4RayleighAngularGenerator.
+  Fixed exception printout in G4LivermoreRayleighModel
+- Removed temporary class G4Livermore2012GammaConversionModel
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+processes/electromagnetic/standard               emstand-V09-05-51
+----------------------------------
+- G4CoulombScatteringModel, G4eCoulombScatteringModel, G4UrbanMscModel90
+  G4UrbanMscModel92, G4UrbanMscModel93, G4UrbanMscModel95,
+  G4WentzelVIModel, G4GoudsmitSaundersonMscModel: sampling of scattering
+  moved from PostStep to AlongStep.
+- G4UrbanMscModel90, G4UrbanMscModel92, G4UrbanMscModel93,
+  G4UrbanMscModel95, G4GoudsmitSaundersonMscModel: added protection to step
+  limit. Addressing problem report #1345.
+  Fixed computations of effective electron energy at a step.
+- Added simplified fluctuations for very small steps in G4IonFluctuations.
+  Addressing problem report #1345.
+- G4CoulombScattering: fixed initilisation for the case when polar angle
+  limit is below pi.
+- G4WentzelVIModel, G4WentzelVIRelModel: fixed non-reproducibility recently
+  introduced.
+- G4GammaConversion: changed low energy limit of the high energy model
+  from 100 to 80 GeV.
+- G4SeltzerBergerModel: for the cut on gamma energy below 5%, added extra
+  factor 1.2 to max value of the cross-section when sampling gamma energy
+  (reduced number of cases when differencial cross-section exceeds estimated
+  maximum of the cross-section).
+- G4KleinNishinaModel: added simplified PDF function and fixed infinite loop.
+- G4ModifiedTsai: fixed angular distribution in backward hemisphere.
+- G4DipBustGenerator, G4SauterGavrilaAngularDistribution: added protection
+  to angular sampling theta < pi, and optimise computation for
+  ultra-relativistic particles.
+
+processes/electromagnetic/utils                  emutils-V09-05-42
+-------------------------------
+- G4VAtomDeexcitation: fixed logic of activation of de-excitation per region
+  and for all geometries. Updated initialisation for the case when
+  de-excitation is not used. Added computation of sum of energies of
+  de-excitation gamma and electron produced AlongStep; use logical OR instead
+  of AND for de-exitation flags. Fixed de-excitation AlongStep by substitution
+  which limited de-ecitation from ion ionisation.
+- G4VEnergyLossProcess: take into account modifications for G4VAtomDeexcitation
+  in order to keep energy balance
+- G4VMultipleScatteringProcess, G4VMscModel: sampling scattering is moved
+  from PostStep to AlongStep.
+- G4VMultipleScatteringProcess: change final position PostStep to cope with
+  parallel transportation. Added call to ReLocate PostStep.
+- G4VEmProcess: fixed minor memory leak at destruction.
+- G4VMscModel: added GetDEDX() method.
+
+processes/electromagnetic/xrays                  xrays-V09-05-06
+-------------------------------
+- Removed warning in G4Cerenkov constructor.
+
+processes/hadronic
+------------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+- cross_sections (hadr-cross-V09-05-29)
+  o System of units and physical constants headers explicit inclusion.
+- management (hadr-man-V09-05-21)
+  o G4HadronicProcessStore: added functions GetCrossSectionPerAtom(),
+    GetTargetDefinition() and GetCrossSectionPerVolume().
+    Added e+ and mu+ to level-1 reporting.
+  o G4HadronicProcess: improved quick check and full check for case of
+    electro-nuclear. Copes with case that both primary survives and secondaries
+    are created. Fixed problem of flushing stdout/stderr for energy checking
+    printout. Removed GetTargetDefinition(); instead added GetTargetIsotope();
+    check cross-section in PostStepDoIt only for charged particles (for
+    performance reasons).
+- models/abrasion (had-abrasion-V09-05-03)
+  o Fixed Coverity defects in G4WilsonAbrasionModel.
+- models/cascade (hadr-casc-V09-05-21)
+  o G4CascadeParamMessenger: new class to define UI macro commands for
+    setting G4CascadeParameters (string) values, as an alternative to
+    environment variables.
+  o G4CascadeParameters: added friendship with G4CascadeParamMessenger
+    to fill mapped parameters from UI interface.
+  o G4CascadePPChannel, G4CascadeNPChannel: replaced 'typedef' with
+    subclass of templated base. Implement overrrided findCrossSection()
+    function to apply analytic (parametrized) function for very low energy
+    projectiles, falling back to base interpolation otherwise.
+  o Removed G4CascadeT1NNChannel class and plit into separate pp and nn files,
+    G4CascadeT1ppChannel (only proton-proton part of T1NNChannel) and
+    G4CascadeT1nnChannel (only neutron-neutron part of T1NNChannel).
+    Use SAID calculations for total and elastic cross-sections up to 320 MeV.
+    Renamed all three nucleon-nucleon channel files to remove the
+    isospin designation. Files now match corresponding .hh files.
+- models/chiral_inv_phase_space (hadr-chips-V09-05-04)
+  o System of units and physical constants headers explicit inclusion.
+  o Fixed warning in G4QPDGCode (hadr-chips-body-V09-05-08).
+  o Fixed bug in ElectroNuclearReaction (hadr-chips-inter-V09-05-06).
+    Addressing problem report #1354.
+- models/coherent_elastic (hadr-cohe-V09-05-11)
+  o Initialisation of subtype field for G4ChargeExchangeProcess.
+- models/de_excitation (hadr-deex-V09-05-11)
+- models/em_dissociation (hadr-emd-V09-05-01)
+- models/high_energy (hadr-hep-V09-05-05)
+  o System of units and physical constants headers explicit inclusion.
+- models/im_r_matrix (hadr-im_r-V09-05-06)
+  o Fixed reproducibility violation in G4CollisionComposite.
+- models/inclxx (hadr-inclxx-V09-05-26)
+  o Updated to v5.1.4: fixed some shadowing warnings.
+- models/isotope_production (hadr-isopro-V09-05-02)
+- models/lend (hadr-lend-V09-05-03)
+- models/lll_fission (hadr-lllfis-V09-05-01)
+- models/low_energy (hadr-lep-V09-05-09)
+- models/management (hadr-modman-V09-05-07)
+- models/neutron_hp (hadr-hpn-V09-05-17)
+  o System of units and physical constants headers explicit inclusion.
+- models/parton_string (hadr-prtn-V09-05-00)
+  o Fixed Coverity defects in G4InteractionContent and G4PomeronCrossSection.
+- models/photolepton_hadron/muon_nuclear (hadr-munuclear-V09-05-08)
+- models/pre_equilibrium (hadr-pre-V09-05-06)
+- models/qmd (hadr-qmd-V09-05-03)
+- models/quasi_elastic (hadr-qelastic-V09-05-04)
+  o System of units and physical constants headers explicit inclusion.
+- models/radioactive_decay (radioactive_decay-V09-05-07)
+  o Reset print message in G4RIsotopeTable to verbose level 1 to avoid
+    systematic printing for some decays.
+- models/rpg (hadr-rpg-V09-05-01)
+- models/util (hadr-mod-util-V09-05-03)
+  o System of units and physical constants headers explicit inclusion.
+- processes (hadr-proc-V09-05-10)
+  o G4*HadronElasticProcess: replaced use of "aParticleChange" with
+    "theTotalResult", and drop callback to G4VDiscreteProcess::PostStepDoIt().
+    Comment out "step" in PostStepDoIt() signature, as no longer used.
+- stopping (hadr-stopping-V09-05-25)
+  o Flag deprecated classes in the 9.6 release, to be removed for next
+    major release; added warnings to constructors. Stopping hadrons are
+    now handled by Bertini and Fritiof models, and muon capture by the more
+    complex process with atomic cascade effects:
+    G4AntiNeutronAnnihilationAtRest    G4PiMinusStopCu
+    G4AntiProtonAnnihilationAtRest     G4PiMinusStopLi
+    G4DistributionGenerator            G4PiMinusStopMaterial
+    G4KaonMinusAbsorption              G4PiMinusStopN
+    G4KaonMinusAbsorptionAtRest        G4PiMinusStopO
+    G4MuonMinusCaptureAtRest           G4PiMinusStopPb
+    G4NeutronCaptureAtRest             G4PiMinusStopTa
+    G4PiMinusAbsorptionAtRest          G4PionMinusAbsorptionAtRest
+    G4PiMinusStopAbsorption            G4StopDeexcitation
+    G4PiMinusStopAl                    G4StopDeexcitationAlgorithm
+    G4PiMinusStopC                     G4StopDummyDeexcitation
+    G4PiMinusStopCo                    G4StopTheoDeexcitation
+  o G4HadronicAbsorptionBertini: drop list of "allowed" hadrons, so Bertini
+    can take care of any negative hadron thrown at it.
+- util (hadr-util-V09-05-08)
+  o System of units and physical constants headers explicit inclusion.
+
+run                                              run-V09-05-08
+---
+- Fixed ordering parameter for DNA processs (62,63,64).
+- Fixed Coverity defects in G4UserPhysicsListMessenger.
+- Moved constructors and destructor for G4VPhysicsConstructor base class
+  to source.
+
+visualization                                    vis-V09-05-39
+-------------
+- management (visman-V09-05-33):
+  o Added an extra refresh for auto-refresh viewers at end of run.
+  o Removed multi-requested parameter guidance.
+    Collapsed guidance to one long string with '\n' for new lines.
+  o G4ViewParameters: Added useful Set methods.
+  o Added G4VViewer::RefreshView().
+  o /vis/scene/add/axes: added protection (limited width of axes to length/50).
+- modeling (modeling-V09-05-12):
+  o G4ArrowModel.cc: added protection (limited width to length/50).
+  o Bug fix for G4LogicalVolumeModel.
+- Opengl (opengl-V09-05-45):
+  o Major re-design of scene and transient processing.
+  o Material (for surface rendering) follows glColor at all times.
+  o Changed glColor3d to glColor4d throughout.
+  o G4OpenGLSceneHandler and G4OpenGLStoredSceneHandler: added protection
+    against null result of dynamic_cast on viewer.
+  o Removed hidden marker from list of parameters in G4OpenGLStoredViewer.
+- OpenInventor:
+  o Pick up default vis attributes if primitive has none.
+
+data sets
+---------
+- G4EMLOW.6.29:
+  o Added new ionisation cross-section data for incident protons and alphas
+    from the work of A. Taborda et al.
+  o Updated Bremsstarhlung data; added updated Bremsstrahlung data files
+    with extended grid from NIST (as in Penelope2008); added probabilities
+    of scattering off electrons from S.M.Seltzer and M.J.Berger Atom. Data
+    and Nucl. Data Tables 35 (1986) 345-418.
+
+examples                                         examples-V09-05-09
+--------
+- Updated reference outputs.
+- advanced/microdosimetry (microdosimetry-V09-05-02)
+  o G4ElectronCapture: clean up killing captured electron.
+- basic (exbasic-V09-05-00)
+- extended/analysis (analysisExample-V09-05-04)
+  o Replaced tabulators with space characters.
+  o System of units and physical constants headers explicit inclusion.
+- extended/biasing (exbiasing-V09-05-02)
+- extended/common (excommon-V09-05-02)
+  o Replaced tabulators with space characters.
+  o System of units and physical constants headers explicit inclusion.
+  o Updated CMake script: added visualization (if used), macros copying,
+    install target and comment lines.
+- extended/electromagnetic/TestEm0 (testem0-V09-05-04)
+- extended/electromagnetic/TestEm1 (testem1-V09-05-09)
+  o Updated CMake script.
+- extended/electromagnetic/TestEm5 (testem5-V09-05-07)
+  o Code cleanup and added protections against division by zero.
+- extended/electromagnetic/TestEm15 (testem15-V09-05-03)
+  o Added emstandard_opt3 in PhysicsList to allow muMsc WVI model.
+  o SteppingAction: set process name to 'muMsc'.
+  o Add input macro muon.mac.
+- extended/errorpropagation (exerrprop-V09-05-05)
+  o Replaced tabulators with space characters.
+  o System of units and physical constants headers explicit inclusion.
+  o Updated CMake script: adding copying macros (empty), install target
+    and comment lines.
+- extended/eventgenerator (exEventgenerator-V09-05-01)
+  o Replaced tabulators with space characters.
+  o System of units and physical constants headers explicit inclusion.
+  o Updated CMake script: added visualization (if used), macros copying,
+    install target and comment lines.
+  o Renamed exGPS.cc to exgps.cc to match exactly with directory name,
+  o Fixed G4Exception in HepMCEx02.
+- extended/exoticphysics/monopole (monopole-V09-05-03)
+  o Replaced tabulators with space characters.
+  o System of units and physical constants headers explicit inclusion.
+  o Updated CMake script: added visualization (if used), macros copying,
+    install target and comment lines.
+- extended/hadronic (exHadronic-V09-05-01)
+  o Replaced tabulators with space characters.
+  o System of units and physical constants headers explicit inclusion.
+  o Updated CMake script: added visualization (if used), macros copying,
+    install target and comment lines.
+  o Renamed hadr0N.cc to Hadr0N.cc to match exactly with directory name.
+- extended/hadronic/Hadr03 (hadr03-V09-05-07)
+  o SteppingAction : print number of particles in nuclear reaction (not gamma).
+- extended/medical/electronScattering (electronScattering-V09-05-06)
+- extended/medical/electronScattering2 (exampleES2-V09-05-05)
+- extended/medical/fanoCavity (fano-V09-05-06)
+- extended/medical/fanoCavity2 (fano2-V09-05-05)
+- extended/medical/GammaTherapy (gtherapy-V09-05-02)
+  o Updated CMake script: added visualization (if used), macros copying,
+    install target and comment lines.
+- extended/optical (exOptical-V09-05-00)
+- extended/parameterisations (exParameterisations-V09-05-00)
+- extended/persistency (exPersistency-V09-05-04)
+  o Replaced tabulators with space characters.
+  o System of units and physical constants headers explicit inclusion.
+  o Updated CMake script: added visualization (if used), macros copying,
+    install target and comment lines.
+- extended/polarisation (exPolarisation-V09-05-01)
+  o Replaced tabulators with space characters.
+  o System of units and physical constants headers explicit inclusion.
+  o Updated CMake script: added visualization, optional external package
+    (AIDA), copying macros, install target and comment lines.
+- extended/radioactivedecay (exRadioactivedecay-V09-05-00)
+  o Replaced tabulators with space characters.
+  o System of units and physical constants headers explicit inclusion.
+  o Updated CMake script: added visualization, optional external package
+    (rdecay02), copying macros, install target and comment lines.
+- extended/visualization (exVisualization-V09-05-00)
+  o Replaced tabulators with space characters.
+  o System of units and physical constants headers explicit inclusion.
+  o Updated CMake script: added visualization (if used), macros copying,
+    install target and comment lines.
+
+tests                                            tests-V09-05-09
+-----
+- Updated reference outputs and tools.
+- tests/test44 (test44-V09-05-00)
+  o Removed obsolete headers.
+- tests/test47 (test47-V09-05-00)
+  o Added possibility of testing Bertini with de-excitation from default.
+    Also added histograms to look at pion and kaon production at ITEP energies.
+  o Migrated to the new cross sections and new INCL++.
+- tests/test69 (test69-V09-05-01)
+  o Split into small tests, so that it can be run in parallel.
+  o Moved all macro files in a dedicated directory.
