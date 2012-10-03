@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-08    (7-September-2012)
+ Geant4 version Name: geant4-09-05-ref-09    (2-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -58,8 +62,8 @@ compt:   for  gamma    SubType= 13
 conv:   for  gamma    SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=      100 GeV
-     BetheHeitlerLPM :  Emin=      100 GeV   Emax=       10 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
 
 Rayl:   for  gamma    SubType= 11
       Lambda table from 10 eV  to 100 keV in 80 bins, spline: 0
@@ -71,6 +75,9 @@ msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+
+### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
+          DefaultRegionForTheWorld
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -439,7 +446,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20000
-  User=2.98s Real=4.22s Sys=0.69s
+  User=3.21s Real=4.32s Sys=0.66s
 
  ======================== run summary ======================
 
@@ -448,20 +455,20 @@ Run Summary
 
  ============================================================
 
- Total Energy deposited        = 453.388 keV +- 100.343 keV
+ Total Energy deposited        = 452.141 keV +- 102.583 keV
 
- Track length of primary track = 888.204 um  +- 188.008 um 
+ Track length of primary track = 884.801 um  +- 191.337 um 
  Range from EmCalculator = 942.835 um  (from full dE/dx)
 
- Projected range               = 318.874 um  +- 204.225 um 
+ Projected range               = 317.840 um  +- 203.118 um 
 
- Nb of steps of primary track  = 21.38 +- 4.78	 Step size= 42.067 um  +- 7.247 um 
+ Nb of steps of primary track  = 21.26 +- 4.80	 Step size= 42.126 um  +- 7.364 um 
 
- absorbed = 80.15 %   transmit = 4.39 %   reflected = 15.46 %
+ absorbed = 80.08 %   transmit = 4.22 %   reflected = 15.70 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1617141239, 191283423
+ Current couple of seeds = 1939344723, 2000940603
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-08    (7-September-2012)
+ Geant4 version Name: geant4-09-05-ref-09    (2-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -201,7 +205,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=2.12s Real=2.39s Sys=0.25s
+  User=2.29s Real=2.95s Sys=0.33s
 
  ======================== run summary ======================
 
@@ -209,18 +213,18 @@ Run Summary
 
  ============================================================
 
- Total Energy deposited        = 3.948 MeV +- 209.768 keV
+ Total Energy deposited        = 3.946 MeV +- 216.144 keV
 
- Track length of primary track = 2.039 cm  +- 2.786 mm 
+ Track length of primary track = 2.039 cm  +- 2.753 mm 
  Range from EmCalculator       = 2.038 cm  (from full dE/dx)
 
- Projected range               = 1.323 cm  +- 3.872 mm 
+ Projected range               = 1.330 cm  +- 3.827 mm 
 
- Nb of steps of primary track  = 16.27 +- 3.06	 Step size= 1.292 mm  +- 280.036 um 
+ Nb of steps of primary track  = 16.29 +- 3.05	 Step size= 1.290 mm  +- 279.095 um 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1919924198, 706328299
+ Current couple of seeds = 1388222864, 2114628671
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

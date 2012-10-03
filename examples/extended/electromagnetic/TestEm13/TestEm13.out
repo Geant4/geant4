@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-08    (7-September-2012)
+ Geant4 version Name: geant4-09-05-ref-09    (2-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -190,10 +194,10 @@ compt:   for  gamma    SubType= 13
 conv:   for  gamma    SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=      100 GeV
-     BetheHeitlerLPM :  Emin=      100 GeV   Emax=       10 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
 
-### ===  Deexcitation model UAtomDeexcitation is activated for regions:
+### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
           DefaultRegionForTheWorld
 
 eIoni:   for  e-    SubType= 2
@@ -396,22 +400,22 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=4.82s Real=4.97s Sys=0s
+  User=4.98s Real=4.99s Sys=0s
 
  The run consists of 1000000 gamma of 100 keV through 1 cm  of Water (density: 1 g/cm3 )
 
- Process calls frequency --->	Transportation = 849332	compt = 148274	phot = 2394
+ Process calls frequency --->	Transportation = 847723	compt = 149924	phot = 2353
 
- Nb of incident particles unaltered after 1 cm  of Water : 849332 over 1000000 incident particles.  Ratio = 84.933 %
- ---> CrossSection per volume:	0.16331 cm^-1 	CrossSection per mass: 0.16331 cm2/g
+ Nb of incident particles unaltered after 1 cm  of Water : 847723 over 1000000 incident particles.  Ratio = 84.772 %
+ ---> CrossSection per volume:	0.1652 cm^-1 	CrossSection per mass: 0.1652 cm2/g
 
  Verification from G4EmCalculator: 
-	compt= 0.16103 cm2/g	phot= 0.0026853 cm2/g	total= 0.16372 cm2/g
-	Expected ratio of transmitted particles= 84.898 %
+	compt= 0.1623 cm2/g	phot= 0.0026853 cm2/g	total= 0.16499 cm2/g
+	Expected ratio of transmitted particles= 84.791 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1346311652, 1371428520
+ Current couple of seeds = 1278787233, 1679906606
 ----------------------------------------
 #
 /gun/particle e-
@@ -446,7 +450,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1346311652, 1371428520
+ Current couple of seeds = 1278787233, 1679906606
 ----------------------------------------
 Start Run processing.
 
@@ -472,14 +476,14 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=5.38s Real=5.55s Sys=0s
+  User=5.35s Real=5.37s Sys=0.01s
 
  The run consists of 1000000 e- of 100 MeV through 1 cm  of Water (density: 1 g/cm3 )
 
- Process calls frequency --->	Transportation = 541088	eBrem = 277314	eIoni = 181598
+ Process calls frequency --->	Transportation = 540919	eBrem = 277097	eIoni = 181984
 
- Nb of incident particles unaltered after 1 cm  of Water : 541088 over 1000000 incident particles.  Ratio = 54.109 %
- ---> CrossSection per volume:	0.61417 cm^-1 	CrossSection per mass: 0.61417 cm2/g
+ Nb of incident particles unaltered after 1 cm  of Water : 540919 over 1000000 incident particles.  Ratio = 54.092 %
+ ---> CrossSection per volume:	0.61449 cm^-1 	CrossSection per mass: 0.61449 cm2/g
 
  Verification from G4EmCalculator: 
 	eBrem= 0.3716 cm2/g	eIoni= 0.24337 cm2/g	total= 0.61497 cm2/g
@@ -487,7 +491,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 731628189, 1594337515
+ Current couple of seeds = 480582568, 1640327310
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

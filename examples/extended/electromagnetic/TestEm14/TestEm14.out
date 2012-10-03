@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-08    (7-September-2012)
+ Geant4 version Name: geant4-09-05-ref-09    (2-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -219,10 +223,10 @@ compt:   for  gamma    SubType= 13
 conv:   for  gamma    SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=      100 GeV
-     BetheHeitlerLPM :  Emin=      100 GeV   Emax=       10 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
 
-### ===  Deexcitation model UAtomDeexcitation is activated for regions:
+### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
           DefaultRegionForTheWorld
 
 eIoni:   for  e-    SubType= 2
@@ -425,23 +429,23 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=7.01s Real=7.44s Sys=0s
+  User=7.75s Real=7.77s Sys=0s
 
  The run consists of 1000000 gamma of 100 keV through 100 m   of Water (density: 1 g/cm3 )
 
- Process calls frequency --->	compt = 983719	phot = 16281
+ Process calls frequency --->	compt = 983793	phot = 16207
 
- MeanFreePath:	6.1114 cm  +- 6.112 cm 	massic: 6.1114 g/cm2 
- CrossSection:	0.16363 cm^-1 			massic: 0.16363 cm2/g
+ MeanFreePath:	6.0654 cm  +- 6.0534 cm 	massic: 6.0654 g/cm2 
+ CrossSection:	0.16487 cm^-1 			massic: 0.16487 cm2/g
 
- mean energy of charged secondaries: 15.161 keV	mass_energy_transfer coef: 0.024808 cm2/g
+ mean energy of charged secondaries: 15.284 keV	mass_energy_transfer coef: 0.025199 cm2/g
 
  Verification : crossSections from G4EmCalculator 
-	compt= 0.16103 cm2/g	phot= 0.0026853 cm2/g	total= 0.16372 cm2/g
+	compt= 0.1623 cm2/g	phot= 0.0026853 cm2/g	total= 0.16499 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 69856097, 560921198
+ Current couple of seeds = 1065753589, 1314918706
 ----------------------------------------
 #
 /gun/particle e-
@@ -477,7 +481,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 69856097, 560921198
+ Current couple of seeds = 1065753589, 1314918706
 ----------------------------------------
 Start Run processing.
 
@@ -503,23 +507,23 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=6.44s Real=6.51s Sys=0s
+  User=6.44s Real=6.52s Sys=0.01s
 
  The run consists of 1000000 e- of 100 MeV through 100 m   of Water (density: 1 g/cm3 )
 
- Process calls frequency --->	eBrem = 603927	eIoni = 396073
+ Process calls frequency --->	eBrem = 603728	eIoni = 396272
 
- MeanFreePath:	1.6271 cm  +- 1.6218 cm 	massic: 1.6271 g/cm2 
- CrossSection:	0.6146 cm^-1 			massic: 0.6146 cm2/g
+ MeanFreePath:	1.6274 cm  +- 1.6256 cm 	massic: 1.6274 g/cm2 
+ CrossSection:	0.61449 cm^-1 			massic: 0.61449 cm2/g
 
- mean energy of charged secondaries: 748.67 keV	mass_energy_transfer coef: 0.0046013 cm2/g
+ mean energy of charged secondaries: 743.01 keV	mass_energy_transfer coef: 0.0045658 cm2/g
 
  Verification : crossSections from G4EmCalculator 
 	eBrem= 0.3716 cm2/g	eIoni= 0.24337 cm2/g	total= 0.61497 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 17192649, 1655643933
+ Current couple of seeds = 344291177, 1620077974
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

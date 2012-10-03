@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-08    (7-September-2012)
+ Geant4 version Name: geant4-09-05-ref-09    (2-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -202,6 +206,16 @@ Current available graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
+  OpenGLStoredQt (OGL)
+  OpenGLImmediateQt (OGLI)
+  OpenGLStoredQt (OGLS)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+  OpenGLImmediateXm (OGLIXm)
+  OpenGLStoredXm (OGLSXm)
+  OpenGLImmediateQt (OGLIQt)
+  OpenGLStoredQt (OGLSQt)
+  RayTracerX (RayTracerX)
 
 Registering model factories...
 
@@ -243,8 +257,8 @@ compt:   for  gamma    SubType= 13
 conv:   for  gamma    SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=      100 GeV
-     BetheHeitlerLPM :  Emin=      100 GeV   Emax=       10 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
 
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
@@ -517,16 +531,16 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 261.414 MeV       total track length: 18.3403 cm 
-        Gap: total energy: 16.1148 MeV       total track length: 8.38782 cm 
+   Absorber: total energy: 281.221 MeV       total track length: 19.9444 cm 
+        Gap: total energy: 15.8305 MeV       total track length:  7.8482 cm 
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 261.414 MeV +- 0 eV 
- mean Energy in Gap      : 16.1148 MeV +- 0 eV 
+ mean Energy in Absorber : 281.221 MeV +- 0 eV 
+ mean Energy in Gap      : 15.8305 MeV +- 0 eV 
 
- mean trackLength in Absorber : 18.3403 cm  +- 0 fm 
- mean trackLength in Gap      : 8.38782 cm  +- 0 fm 
+ mean trackLength in Absorber : 19.9444 cm  +- 0 fm 
+ mean trackLength in Gap      : 7.8482 cm  +- 0 fm 
 ------------------------------------------------------------
 
      Transportation,                msc,              hIoni,            ionIoni
@@ -549,8 +563,8 @@ compt:   for  gamma    SubType= 13
 conv:   for  gamma    SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=      100 GeV
-     BetheHeitlerLPM :  Emin=      100 GeV   Emax=       10 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
 
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
@@ -794,19 +808,19 @@ hPairProd:   for  pi-    SubType= 4
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 839351611, 1460791031
+ Current couple of seeds = 1385361968, 524527604
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy:  289.96 MeV       total track length: 20.4217 cm 
-        Gap: total energy: 8.76876 MeV       total track length: 4.13544 cm 
+   Absorber: total energy: 286.415 MeV       total track length: 20.5543 cm 
+        Gap: total energy:  12.205 MeV       total track length: 6.00775 cm 
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 289.96 MeV +- 0 eV 
- mean Energy in Gap      : 8.76876 MeV +- 0 eV 
+ mean Energy in Absorber : 286.415 MeV +- 0 eV 
+ mean Energy in Gap      : 12.205 MeV +- 0 eV 
 
- mean trackLength in Absorber : 20.4217 cm  +- 0 fm 
- mean trackLength in Gap      : 4.13544 cm  +- 0 fm 
+ mean trackLength in Absorber : 20.5543 cm  +- 0 fm 
+ mean trackLength in Gap      : 6.00775 cm  +- 0 fm 
 ------------------------------------------------------------
 
 
@@ -828,8 +842,8 @@ compt:   for  gamma    SubType= 13
 conv:   for  gamma    SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=      100 GeV
-     BetheHeitlerLPM :  Emin=      100 GeV   Emax=       10 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
 
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
@@ -1073,19 +1087,19 @@ hPairProd:   for  pi-    SubType= 4
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2042905052, 2144225800
+ Current couple of seeds = 218486165, 1724696774
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy:  367.84 MeV       total track length: 88.4656 cm 
-        Gap: total energy: 75.0866 MeV       total track length: 2.10337 m  
+   Absorber: total energy: 389.333 MeV       total track length: 91.3567 cm 
+        Gap: total energy: 75.6781 MeV       total track length: 2.06624 m  
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 367.84 MeV +- 0 eV 
- mean Energy in Gap      : 75.0866 MeV +- 0 eV 
+ mean Energy in Absorber : 389.333 MeV +- 0 eV 
+ mean Energy in Gap      : 75.6781 MeV +- 0 eV 
 
- mean trackLength in Absorber : 88.4656 cm  +- 0 fm 
- mean trackLength in Gap      : 2.10337 m   +- 0 fm 
+ mean trackLength in Absorber : 91.3567 cm  +- 0 fm 
+ mean trackLength in Gap      : 2.06624 m   +- 0 fm 
 ------------------------------------------------------------
 
 Graphics systems deleted.

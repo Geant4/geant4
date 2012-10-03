@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-08    (7-September-2012)
+ Geant4 version Name: geant4-09-05-ref-09    (2-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -83,8 +87,8 @@ compt:   for  gamma    SubType= 13
 conv:   for  gamma    SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=      100 GeV
-     BetheHeitlerLPM :  Emin=      100 GeV   Emax=       10 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
 
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
@@ -454,33 +458,33 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=3.5s Real=4.55s Sys=0.12s
+  User=3.67s Real=3.75s Sys=0.02s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 780.26 MeV :  16.61 MeV     2.129 +- 0.2129 %      54.7 cm  +- 1.23 cm 
-   liquidArgon: 210.67 MeV :  17.15 MeV     8.139 +- 0.8139 %      1.04 m   +- 8.74 cm 
+          Lead: 780.65 MeV :   16.6 MeV     2.126 +- 0.2126 %      54.7 cm  +- 1.25 cm 
+   liquidArgon: 209.67 MeV :  16.38 MeV     7.812 +- 0.7812 %      1.04 m   +- 8.16 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
- Mean number of gamma  502
- Mean number of e-     864
- Mean number of e+     53.3
+ Mean number of gamma  503
+ Mean number of e-     863
+ Mean number of e+     52.9
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 780.062 MeV
-liquidArgon:	 210.881 MeV
+      Lead:	 780.559 MeV
+liquidArgon:	 209.764 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 857165938, 1823972404
+ Current couple of seeds = 375449557, 1935886250
 ----------------------------------------
 #
 /process/em/setSecBiasing eIoni World 0.3 2 MeV
@@ -512,8 +516,8 @@ compt:   for  gamma    SubType= 13
 conv:   for  gamma    SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=      100 GeV
-     BetheHeitlerLPM :  Emin=      100 GeV   Emax=       10 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
 
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
@@ -856,7 +860,7 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 857165938, 1823972404
+ Current couple of seeds = 375449557, 1935886250
 ----------------------------------------
 Start Run processing.
 
@@ -866,33 +870,33 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=3.04s Real=3.87s Sys=0.01s
+  User=3.17s Real=3.42s Sys=0s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 779.71 MeV :  21.63 MeV     2.774 +- 0.2774 %        52 cm  +- 1.19 cm 
-   liquidArgon: 212.23 MeV :  16.01 MeV     7.545 +- 0.7545 %      1.01 m   +- 8.13 cm 
+          Lead: 779.21 MeV :  20.64 MeV     2.649 +- 0.2649 %      52.1 cm  +- 1.25 cm 
+   liquidArgon: 209.86 MeV :  15.14 MeV     7.216 +- 0.7216 %      99.7 cm  +-  7.2 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
  Mean number of gamma  292
- Mean number of e-     560
- Mean number of e+     53.9
+ Mean number of e-     557
+ Mean number of e+     53.6
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 776.49 MeV
-liquidArgon:	 213.449 MeV
+      Lead:	 778.544 MeV
+liquidArgon:	 211.473 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 728483711, 58156351
+ Current couple of seeds = 2081531144, 357936030
 ----------------------------------------
 #
 G4 kernel has come to Quit state.
