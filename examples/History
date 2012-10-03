@@ -17,6 +17,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+2nd October 2012  Gabriele Cosmo (examples-V09-05-09)
+- Updated reference outputs according to reference tag geant4-09-05-ref-09.
+- Includes tags: microdosimetry-V09-05-02, exbasic-V09-05-00,
+                 analysisExample-V09-05-04, exbiasing-V09-05-02,
+                 excommon-V09-05-02, testem0-V09-05-04, testem1-V09-05-09,
+                 testem5-V09-05-07, testem15-V09-05-03, exerrprop-V09-05-05,
+                 exEventgenerator-V09-05-01, monopole-V09-05-03,
+                 fieldex-V09-05-02, BlineTracer-V09-05-02, exGeometry-V09-05-00.
+                 exHadronic-V09-05-01, exhadr03-V09-05-07, fano-V09-05-06,
+                 electronScattering-V09-05-06, exampleES2-V09-05-05,
+                 fano2-V09-05-05, gtherapy-V09-05-02, exOptical-V09-05-00,
+                 exParameterisations-V09-05-00, exPersistency-V09-05-04,
+                 exPolarisation-V09-05-01, exRadioactivedecay-V09-05-00,
+                 rdecay01-V09-05-11, exVisualization-V09-05-00.
+
 5th September 2012  Gabriele Cosmo (examples-V09-05-08)
 - Updated reference outputs according to reference tag geant4-09-05-ref-08.
 - Added README and .README documentation in most extended examples.
