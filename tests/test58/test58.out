@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-08    (7-September-2012)
+ Geant4 version Name: geant4-09-05-ref-09    (2-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -69,8 +73,8 @@ compt:   for  gamma    SubType= 13
 conv:   for  gamma    SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=      100 GeV
-     BetheHeitlerLPM :  Emin=      100 GeV   Emax=       10 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -322,7 +326,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.21s Real=1.22s Sys=0s
+  User=1.16s Real=1.36s Sys=0s
 
  ======================== run summary ======================
 
@@ -423,7 +427,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=4.44s Real=5.31s Sys=0.09s
+  User=4.65s Real=4.69s Sys=0.01s
 
  ======================== run summary ======================
 
@@ -436,43 +440,43 @@ Run Summary
  ============= Primary particle statistics ==============
 
  Total track length in absorber:
- 99.51 um  +- 147.3 nm 
+ 99.29 um  +- 184.1 nm 
 
  Mean Number of Steps :
- 1.063e+04 +/- 1537
+ 1.19e+04 +/- 1616
 
  Mean Free Path :
- 9.358 nm  +/- 1.353 nm 
+ 8.342 nm  +/- 1.133 nm 
 
  Mean Cross Section :
- 2.139e+07 barn   +/- 3.093e+06 barn  
+ 2.4e+07 barn   +/- 3.258e+06 barn  
 
  Mean scattering angle :
- 19.29 deg  +/- 3.44 deg 
+ 21.91 deg  +/- 3.804 deg 
 
  Total energy deposit in absorber:
- 78.51 MeV +/- 122.8 keV
------> dE/dx total= 7889 MeV/cm	(3386 MeV*cm2/g)
+ 78.59 MeV +/- 129.6 keV
+-----> dE/dx total= 7915 MeV/cm	(3397 MeV*cm2/g)
 
  Nuclear energy deposit in absorber:
- 71.28 MeV +/- 49.96 keV
------> dE/dx  nucl = 7163 MeV/cm	(3074 MeV*cm2/g)
+ 71.29 MeV +/- 51.1 keV
+-----> dE/dx  nucl = 7180 MeV/cm	(3082 MeV*cm2/g)
 
  NIEL in absorber (Th>21 eV):
- 0.0004629 eV  +/- 0 eV 
------> NIEL = 4.652e-08 MeV/cm	(1.996e-08 MeV*cm2/g)
+ 0.0004627 eV  +/- 0 eV 
+-----> NIEL = 4.66e-08 MeV/cm	(2e-08 MeV*cm2/g)
 
 ----------------------------------------------------------------
 
- Total Number of primary knock-on atoms: PKA = 194046
- Mean Kinetic Energy of PKA = 36.73 keV +/- 0 eV 
- Total Frenkel-pairs Concentration: FP = 0.0886 #/cm3
+ Total Number of primary knock-on atoms: PKA = 224170
+ Mean Kinetic Energy of PKA = 31.8 keV +/- 0 eV 
+ Total Frenkel-pairs Concentration: FP = 0.08875 #/cm3
 
 ----------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1184006902, 1612594687
+ Current couple of seeds = 2045185342, 343322745
 ----------------------------------------
 
  ===========================================================
@@ -517,7 +521,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1184006902, 1612594687
+ Current couple of seeds = 2045185342, 343322745
 ----------------------------------------
 Start Run processing.
 
@@ -525,7 +529,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=90.2s Real=93.49s Sys=0.03s
+  User=84.26s Real=84.78s Sys=0.12s
 
  ======================== run summary ======================
 
@@ -538,43 +542,43 @@ Run Summary
  ============= Primary particle statistics ==============
 
  Total track length in absorber:
- 52.29 um  +- 388.2 nm 
+ 52.22 um  +- 369.2 nm 
 
  Mean Number of Steps :
- 1.855e+05 +/- 5452
+ 1.891e+05 +/- 5053
 
  Mean Free Path :
- 2.819 Ang +/- 8546 fm 
+ 2.762 Ang +/- 7636 fm 
 
  Mean Cross Section :
- 7.1e+08 barn   +/- 2.152e+07 barn  
+ 7.247e+08 barn   +/- 2.004e+07 barn  
 
  Mean scattering angle :
- 1.558 rad  +/- 4.099 deg 
+ 1.446 rad  +/- 3.885 deg 
 
  Total energy deposit in absorber:
- 560 MeV +/- 0.7629 eV 
------> dE/dx total= 1.071e+05 MeV/cm	(4.596e+04 MeV*cm2/g)
+ 560 MeV +/- 2.019 eV 
+-----> dE/dx total= 1.072e+05 MeV/cm	(4.603e+04 MeV*cm2/g)
 
  Nuclear energy deposit in absorber:
- 453.3 MeV +/- 679.5 keV
------> dE/dx  nucl = 8.669e+04 MeV/cm	(3.721e+04 MeV*cm2/g)
+ 453.5 MeV +/- 632.4 keV
+-----> dE/dx  nucl = 8.684e+04 MeV/cm	(3.727e+04 MeV*cm2/g)
 
  NIEL in absorber (Th>21 eV):
- 0.0003348 eV  +/- 0 eV 
------> NIEL = 6.403e-08 MeV/cm	(2.748e-08 MeV*cm2/g)
+ 0.000334 eV  +/- 0 eV 
+-----> NIEL = 6.397e-08 MeV/cm	(2.745e-08 MeV*cm2/g)
 
 ----------------------------------------------------------------
 
- Total Number of primary knock-on atoms: PKA = 4386475
- Mean Kinetic Energy of PKA = 10.33 keV +/- 0 eV 
- Total Frenkel-pairs Concentration: FP = 0.122 #/cm3
+ Total Number of primary knock-on atoms: PKA = 4472255
+ Mean Kinetic Energy of PKA = 10.14 keV +/- 0 eV 
+ Total Frenkel-pairs Concentration: FP = 0.1218 #/cm3
 
 ----------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1545851216, 567041444
+ Current couple of seeds = 1865948408, 562473943
 ----------------------------------------
 
  ===========================================================
@@ -619,7 +623,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1545851216, 567041444
+ Current couple of seeds = 1865948408, 562473943
 ----------------------------------------
 Start Run processing.
 
@@ -627,7 +631,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=85.04s Real=96.66s Sys=0.02s
+  User=73.22s Real=73.6s Sys=0.13s
 
  ======================== run summary ======================
 
@@ -640,43 +644,43 @@ Run Summary
  ============= Primary particle statistics ==============
 
  Total track length in absorber:
- 59.57 um  +- 472.4 nm 
+ 59.86 um  +- 396.6 nm 
 
  Mean Number of Steps :
- 1.804e+05 +/- 6814
+ 1.674e+05 +/- 7548
 
  Mean Free Path :
- 3.303 Ang +/- 1.275e+04 fm 
+ 3.575 Ang +/- 1.629e+04 fm 
 
  Mean Cross Section :
- 6.06e+08 barn   +/- 2.339e+07 barn  
+ 5.599e+08 barn   +/- 2.551e+07 barn  
 
  Mean scattering angle :
- 1.221 rad  +/- 3.179 deg 
+ 1.281 rad  +/- 3.604 deg 
 
  Total energy deposit in absorber:
- 1.12 GeV +/- 3.738 eV 
------> dE/dx total= 1.88e+05 MeV/cm	(8.069e+04 MeV*cm2/g)
+ 1.12 GeV +/- 4.316 eV 
+-----> dE/dx total= 1.871e+05 MeV/cm	(8.03e+04 MeV*cm2/g)
 
  Nuclear energy deposit in absorber:
- 840.2 MeV +/- 1.911 MeV
------> dE/dx  nucl = 1.41e+05 MeV/cm	(6.053e+04 MeV*cm2/g)
+ 839.8 MeV +/- 1.733 MeV
+-----> dE/dx  nucl = 1.403e+05 MeV/cm	(6.021e+04 MeV*cm2/g)
 
  NIEL in absorber (Th>21 eV):
  0.0003587 eV  +/- 0 eV 
------> NIEL = 6.021e-08 MeV/cm	(2.584e-08 MeV*cm2/g)
+-----> NIEL = 5.993e-08 MeV/cm	(2.572e-08 MeV*cm2/g)
 
 ----------------------------------------------------------------
 
- Total Number of primary knock-on atoms: PKA = 4265029
- Mean Kinetic Energy of PKA = 19.7 keV +/- 0 eV 
- Total Frenkel-pairs Concentration: FP = 0.1147 #/cm3
+ Total Number of primary knock-on atoms: PKA = 3960828
+ Mean Kinetic Energy of PKA = 21.2 keV +/- 0 eV 
+ Total Frenkel-pairs Concentration: FP = 0.1141 #/cm3
 
 ----------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 750770294, 2105273232
+ Current couple of seeds = 129361733, 1985274912
 ----------------------------------------
 
  ===========================================================
@@ -720,7 +724,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 750770294, 2105273232
+ Current couple of seeds = 129361733, 1985274912
 ----------------------------------------
 Start Run processing.
 
@@ -728,7 +732,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=3.36s Real=3.76s Sys=0.01s
+  User=3.42s Real=3.42s Sys=0s
 
  ======================== run summary ======================
 
@@ -741,43 +745,43 @@ Run Summary
  ============= Primary particle statistics ==============
 
  Total track length in absorber:
- 99.52 um  +- 43.22 nm 
+ 99.47 um  +- 55.78 nm 
 
  Mean Number of Steps :
- 212.2 +/- 1.344
+ 208 +/- 1.506
 
  Mean Free Path :
- 469 nm  +/- 2.978 nm 
+ 478.2 nm  +/- 3.472 nm 
 
  Mean Cross Section :
- 4.268e+05 barn   +/- 2710 barn  
+ 4.186e+05 barn   +/- 3039 barn  
 
  Mean scattering angle :
- 0.001197 mrad +/- 0.0001187 mrad
+ 0.006225 mrad +/- 0.005122 mrad
 
  Total energy deposit in absorber:
- 125 keV +/- 90.61 keV
------> dE/dx total= 12.56 MeV/cm	(5.39 MeV*cm2/g)
+ 1.236 MeV +/- 1.195 MeV
+-----> dE/dx total= 124.2 MeV/cm	(53.31 MeV*cm2/g)
 
  Nuclear energy deposit in absorber:
- 91.1 keV +/- 90.64 keV
------> dE/dx  nucl = 9.154 MeV/cm	(3.929 MeV*cm2/g)
+ 1.201 MeV +/- 1.195 MeV
+-----> dE/dx  nucl = 120.8 MeV/cm	(51.83 MeV*cm2/g)
 
  NIEL in absorber (Th>21 eV):
- 9.832e-10 eV  +/- 6.917e-11 eV 
------> NIEL = 9.879e-14 MeV/cm	(4.24e-14 MeV*cm2/g)
+ 8.138e-10 eV  +/- 0 eV 
+-----> NIEL = 8.181e-14 MeV/cm	(3.511e-14 MeV*cm2/g)
 
 ----------------------------------------------------------------
 
- Total Number of primary knock-on atoms: PKA = 18992
- Mean Kinetic Energy of PKA = 0.03482 eV  +/- 0 eV 
- Total Frenkel-pairs Concentration: FP = 1.882e-07 #/cm3
+ Total Number of primary knock-on atoms: PKA = 18716
+ Mean Kinetic Energy of PKA = 0.02224 eV  +/- 0 eV 
+ Total Frenkel-pairs Concentration: FP = 1.558e-07 #/cm3
 
 ----------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 291597572, 123573909
+ Current couple of seeds = 861046554, 1377937296
 ----------------------------------------
 
  ===========================================================

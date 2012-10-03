@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-08    (7-September-2012)
+ Geant4 version Name: geant4-09-05-ref-09    (2-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -41,8 +45,8 @@ compt:   for  gamma    SubType= 13
 conv:   for  gamma    SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=      100 GeV
-     BetheHeitlerLPM :  Emin=      100 GeV   Emax=       10 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
 
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
@@ -380,7 +384,15 @@ AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Ema
  AntiProtonInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
-          hFritiofCaptureAtRest
+          hBertiniCaptureAtRest
+
+                                  Hadronic Processes for <e+>
+                                  -----------------------------------
+     PositronNuclear  Models:      G4ElectroVDNuclearModel: Emin(GeV)=    0  Emax(GeV)= 1e+06
+
+     PositronNuclear  Crs sctns:          ElectroNuclearXS: Emin(GeV)=    0  Emax(GeV)= 100000
+                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+
 
                                   Hadronic Processes for <e->
                                   -----------------------------------
@@ -517,7 +529,7 @@ AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Ema
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 ============================================================================================
-   time(s) spent user  time: 23.73s, wall time: 24.85s
+   time(s) spent user  time: 22.78s, wall time: 23.51s
 #
 # neutron at 100 GeV in Pb
 #
@@ -527,7 +539,7 @@ AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Ema
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
-   time(s) spent user  time: 20.36s, wall time: 22.32s
+   time(s) spent user  time: 18.7s, wall time: 19.01s
 #
 # pi+ at 100 GeV in Pb
 #
@@ -537,7 +549,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
-   time(s) spent user  time: 17.28s, wall time: 18.09s
+   time(s) spent user  time: 17.7s, wall time: 17.99s
 #
 # pi- at 100 GeV in Pb
 #
@@ -547,7 +559,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
-   time(s) spent user  time: 17.69s, wall time: 17.83s
+   time(s) spent user  time: 17.01s, wall time: 17.13s
 #
 # kaon+ at 100 GeV in Pb
 #
@@ -557,7 +569,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
-   time(s) spent user  time: 18.09s, wall time: 18.52s
+   time(s) spent user  time: 18.24s, wall time: 18.41s
 #
 # kaon- at 100 GeV in Pb
 #
@@ -567,7 +579,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
-   time(s) spent user  time: 17.79s, wall time: 18.94s
+   time(s) spent user  time: 17.89s, wall time: 18.16s
 #
 # kaon0S at 100 GeV in Pb
 #
@@ -577,7 +589,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
-   time(s) spent user  time: 17.36s, wall time: 17.42s
+   time(s) spent user  time: 17.06s, wall time: 17.1s
 #
 # kaon0L at 100 GeV in Pb
 #
@@ -587,7 +599,11 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
-   time(s) spent user  time: 17.16s, wall time: 18.53s
+G4Fragment::CalculateExcitationEnergy(): WARNING 
+Fragment: A = 175, Z =  64, U = -5.950e-01 MeV  IsStable= 1
+          P = (-2.321e+02,2.830e+02,-7.430e+02) MeV   E = 1.630e+05 MeV
+
+   time(s) spent user  time: 17.57s, wall time: 17.8s
 #
 # proton at 100 GeV in Al
 #
@@ -611,8 +627,8 @@ compt:   for  gamma    SubType= 13
 conv:   for  gamma    SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=      100 GeV
-     BetheHeitlerLPM :  Emin=      100 GeV   Emax=       10 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
 
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
@@ -912,11 +928,7 @@ hPairProd:   for  pi+    SubType= 4
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
-G4Fragment::CalculateExcitationEnergy(): WARNING 
-Fragment: A =  26, Z =  12, U = -1.174e+00 MeV  IsStable= 1
-          P = (4.491e+01,2.000e+02,1.333e+02) MeV   E = 2.420e+04 MeV
-
-   time(s) spent user  time: 2.53s, wall time: 2.53s
+   time(s) spent user  time: 2.47s, wall time: 2.51s
 #
 # neutron at 100 GeV in Al
 #
@@ -925,7 +937,7 @@ Fragment: A =  26, Z =  12, U = -1.174e+00 MeV  IsStable= 1
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
-   time(s) spent user  time: 1.71s, wall time: 1.71s
+   time(s) spent user  time: 1.68s, wall time: 1.7s
 #
 # pi+ at 100 GeV in Al
 #
@@ -934,7 +946,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
-   time(s) spent user  time: 1.46s, wall time: 1.46s
+   time(s) spent user  time: 1.54s, wall time: 1.53s
 #
 # pi- at 100 GeV in Al
 #
@@ -943,7 +955,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
-   time(s) spent user  time: 1.37s, wall time: 1.37s
+   time(s) spent user  time: 1.35s, wall time: 1.36s
 #
 # kaon+ at 100 GeV in Al
 #
@@ -952,7 +964,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
-   time(s) spent user  time: 1.39s, wall time: 1.39s
+   time(s) spent user  time: 1.32s, wall time: 1.32s
 #
 # kaon- at 100 GeV in Al
 #
@@ -961,7 +973,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
-   time(s) spent user  time: 1.46s, wall time: 1.46s
+   time(s) spent user  time: 1.38s, wall time: 1.38s
 #
 # kaon0S at 100 GeV in Al
 #
@@ -970,7 +982,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
-   time(s) spent user  time: 1.4s, wall time: 1.4s
+   time(s) spent user  time: 1.3s, wall time: 1.33s
 #
 # kaon0L at 100 GeV in Al
 #
@@ -979,7 +991,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
-   time(s) spent user  time: 1.43s, wall time: 1.52s
+   time(s) spent user  time: 1.36s, wall time: 1.38s
 #
 # proton at 100 GeV in Air
 #
@@ -1003,8 +1015,8 @@ compt:   for  gamma    SubType= 13
 conv:   for  gamma    SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=      100 GeV
-     BetheHeitlerLPM :  Emin=      100 GeV   Emax=       10 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
 
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
@@ -1304,7 +1316,7 @@ hPairProd:   for  pi+    SubType= 4
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
-   time(s) spent user  time: 0s, wall time: 0s
+   time(s) spent user  time: 0s, wall time: 0.01s
 #
 # neutron at 100 GeV in Air
 #
@@ -1331,7 +1343,7 @@ SimpleBox is now made of Air
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
 /run/beamOn 100
-   time(s) spent user  time: 0.01s, wall time: 0s
+   time(s) spent user  time: 0s, wall time: 0s
 #
 # kaon+ at 100 GeV in Air
 #
@@ -1349,7 +1361,7 @@ SimpleBox is now made of Air
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
 /run/beamOn 100
-   time(s) spent user  time: 0s, wall time: 0.01s
+   time(s) spent user  time: 0.01s, wall time: 0s
 #
 # kaon0S at 100 GeV in Air
 #
@@ -1367,7 +1379,7 @@ SimpleBox is now made of Air
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
 /run/beamOn 100
-   time(s) spent user  time: 0s, wall time: 0s
+   time(s) spent user  time: 0s, wall time: 0.01s
 #
 # anti_proton at 10 GeV in Pb
 #
@@ -1377,7 +1389,7 @@ SimpleBox is now made of Air
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 5
-   time(s) spent user  time: 0.11s, wall time: 0.1s
+   time(s) spent user  time: 0.19s, wall time: 0.19s
 #
 # anti_neutron at 10 GeV in Pb
 #
@@ -1387,7 +1399,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 5
-   time(s) spent user  time: 0.18s, wall time: 0.2s
+   time(s) spent user  time: 0.18s, wall time: 0.17s
 #
 # anti_deuteron at 10 GeV in Pb
 #
@@ -1397,7 +1409,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 5
-   time(s) spent user  time: 0.05s, wall time: 0.08s
+   time(s) spent user  time: 0.03s, wall time: 0.04s
 #
 # anti_triton at 10 GeV in Pb
 #
@@ -1407,7 +1419,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 5
-   time(s) spent user  time: 0s, wall time: 0s
+   time(s) spent user  time: 0.01s, wall time: 0s
 #
 # anti_He3 at 10 GeV in Pb
 #
@@ -1417,7 +1429,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 5
-   time(s) spent user  time: 0.01s, wall time: 0.01s
+   time(s) spent user  time: 0s, wall time: 0.01s
 #
 # anti_alpha at 10 GeV in Pb
 #
@@ -1436,7 +1448,7 @@ SimpleBox is now made of Pb
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 5
-   time(s) spent user  time: 0.02s, wall time: 0.01s
+   time(s) spent user  time: 0.01s, wall time: 0.02s
 #
 # anti_neutron at 10 GeV in Al
 #
@@ -1445,7 +1457,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 5
-   time(s) spent user  time: 0s, wall time: 0.01s
+   time(s) spent user  time: 0.03s, wall time: 0.02s
 #
 # anti_deuteron at 10 GeV in Al
 #
@@ -1454,7 +1466,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 5
-   time(s) spent user  time: 0.02s, wall time: 0.02s
+   time(s) spent user  time: 0.01s, wall time: 0.02s
 #
 # anti_triton at 10 GeV in Al
 #
@@ -1490,7 +1502,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
 /run/beamOn 5
-   time(s) spent user  time: 0s, wall time: 0s
+   time(s) spent user  time: 0s, wall time: 0.01s
 #
 # anti_neutron at 10 GeV in Air
 #

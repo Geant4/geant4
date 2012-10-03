@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-08    (7-September-2012)
+ Geant4 version Name: geant4-09-05-ref-09    (2-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -31,8 +35,8 @@ SimpleBox is now made of U
 conv:   for  gamma    SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=      100 GeV
-     BetheHeitlerLPM :  Emin=      100 GeV   Emax=       10 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
 
 compt:   for  gamma    SubType= 13
       Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
@@ -405,7 +409,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.69s Real=0.84s Sys=0.01s
+  User=0.53s Real=0.6s Sys=0.01s
 #
 # deuteron at 1 GeV/nucleon on H
 #
@@ -418,8 +422,8 @@ SimpleBox is now made of H
 conv:   for  gamma    SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=      100 GeV
-     BetheHeitlerLPM :  Emin=      100 GeV   Emax=       10 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
 
 compt:   for  gamma    SubType= 13
       Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
@@ -678,8 +682,8 @@ SimpleBox is now made of Si
 conv:   for  gamma    SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=      100 GeV
-     BetheHeitlerLPM :  Emin=      100 GeV   Emax=       10 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
 
 compt:   for  gamma    SubType= 13
       Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
@@ -930,7 +934,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.21s Real=0.21s Sys=0s
+  User=0.22s Real=0.21s Sys=0s
 #
 #
 # deuteron at 200 MeV in U
@@ -979,7 +983,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 #
 # deuteron at 200 MeV/nucleon on H
 #
@@ -1075,7 +1079,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 #
 #  .....end deuteron.............
 #
@@ -1125,7 +1129,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.2s Real=0.21s Sys=0s
+  User=0.3s Real=0.32s Sys=0.01s
 #
 # alpha at 1 GeV/nucleon on H
 #
@@ -1221,7 +1225,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.1s Real=0.1s Sys=0s
+  User=0.07s Real=0.07s Sys=0s
 #
 # deuteron at 200 MeV/nucleon in U
 #
@@ -1514,7 +1518,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.03s Real=0.03s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -1528,8 +1532,8 @@ SimpleBox is now made of H2O
 conv:   for  gamma    SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=      100 GeV
-     BetheHeitlerLPM :  Emin=      100 GeV   Emax=       10 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
 
 compt:   for  gamma    SubType= 13
       Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
@@ -1785,7 +1789,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0s Sys=0s
+  User=0.04s Real=0.04s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1894,7 +1898,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0.01s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on Silicon
 #
@@ -1965,8 +1969,8 @@ SimpleBox is now made of Pb
 conv:   for  gamma    SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=      100 GeV
-     BetheHeitlerLPM :  Emin=      100 GeV   Emax=       10 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
 
 compt:   for  gamma    SubType= 13
       Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1

@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-08    (7-September-2012)
+ Geant4 version Name: geant4-09-05-ref-09    (2-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -34,8 +38,8 @@ compt:   for  gamma    SubType= 13
 conv:   for  gamma    SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=      100 GeV
-     BetheHeitlerLPM :  Emin=      100 GeV   Emax=       10 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
 
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -360,5 +364,5 @@ Test23 event # 700
 Test23 event # 800
 Test23 event # 900
 Test23 event # 1000
-Test23_Result: gam=78(4.62571), e-=1404(19.3724), e+=9(5.27523), p=334(5.13982), n=1881(3.86606), d=88(5.17438), t=27(6.09411), He3=8(9.37778), alph=177(2.9936), nu=1345(53.2469), anu=741(33.6207), others=17093*0.112386
+Test23_Result: gam=97(4.50632), e-=1545(17.9881), e+=16(6.26131), p=315(4.61346), n=1852(3.55838), d=82(6.45234), t=30(6.86816), He3=7(7.55512), alph=163(3.51594), nu=1355(53.7015), anu=760(32.2699), others=17321*0.109004
 Test23 is done

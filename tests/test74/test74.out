@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-08    (7-September-2012)
+ Geant4 version Name: geant4-09-05-ref-09    (2-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -116,7 +120,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.28s Real=0.35s Sys=0s
+  User=0.27s Real=0.28s Sys=0s
 
  The run consists of 1 e- of 10 keV through 1 m   of G4_Si (density: 2.33 g/cm3 )
 
@@ -143,7 +147,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.61s Real=0.62s Sys=0s
+  User=0.6s Real=0.63s Sys=0s
 
  The run consists of 1 proton of 100 keV through 1 m   of G4_Si (density: 2.33 g/cm3 )
 
@@ -171,7 +175,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=29.67s Real=30.26s Sys=0.02s
+  User=29.05s Real=29.19s Sys=0.05s
 
  The run consists of 1 Ca48[0.0] of 4.8 MeV through 1 m   of G4_Si (density: 2.33 g/cm3 )
 

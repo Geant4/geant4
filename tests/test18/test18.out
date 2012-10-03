@@ -1,11 +1,17 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-08    (7-September-2012)
+ Geant4 version Name: geant4-09-05-ref-09    (2-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
+WARNING: /ec/build/release/09-05-ref-09_branch/source/processes/hadronic/stopping/src/G4KaonMinusAbsorptionAtRest.cc is deprecated and will be removed.
+WARNING: /ec/build/release/09-05-ref-09_branch/source/processes/hadronic/stopping/src/G4PiMinusAbsorptionAtRest.cc is deprecated and will be removed.
 /run/verbose 1
 /event/verbose 0
 /tracking/verbose 0
@@ -362,22 +368,16 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 ### Run : 0
 Start Run processing.
 /gun/direction 1.0 0.0 0.0
-G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /data/cdash/G4/release/slc5-gcc43/data/RadioactiveDecay3.5/z12.a24
-G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /data/cdash/G4/release/slc5-gcc43/data/RadioactiveDecay3.5/z12.a24
-G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /data/cdash/G4/release/slc5-gcc43/data/RadioactiveDecay3.5/z12.a24
-G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /data/cdash/G4/release/slc5-gcc43/data/RadioactiveDecay3.5/z12.a24
-G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /data/cdash/G4/release/slc5-gcc43/data/RadioactiveDecay3.5/z12.a24
-G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /data/cdash/G4/release/slc5-gcc43/data/RadioactiveDecay3.5/z12.a24
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
     1000.000           1           0     Na24[0.0]
          348           1    4.61e+04     e-
     1.04e+03           1    4.61e+04     anti_nu_e
       0.0554           1    4.61e+04     Mg24[4122.9]
     2.75e+03           1    4.61e+04     gamma
-      0.0554           1    4.61e+04     Mg24[1368.8]
+        0.05           1    4.61e+04     Mg24[1368.8]
     1.37e+03           1    4.61e+04     gamma
            0           1    4.61e+04     Mg24[0.0]
 
@@ -419,20 +419,22 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0s Sys=0s
        1e+03           1           0     Ne24[0.0]
-         873           1       192.4     e-
-    1.12e+03           1       192.4     anti_nu_e
-     0.00203           1       192.4     Na24[472.2]
-         472           1       192.4     gamma
-           0           1       192.4     Na24[0.0]
-         357           1   1.851e+04     e-
-    1.03e+03           1   1.851e+04     anti_nu_e
-       0.067           1   1.851e+04     Mg24[4122.9]
-    2.75e+03           1   1.851e+04     gamma
-       0.067           1   1.851e+04     Mg24[1368.8]
-    1.37e+03           1   1.851e+04     gamma
-           0           1   1.851e+04     Mg24[0.0]
+         263           1       131.5     e-
+         860           1       131.5     anti_nu_e
+      0.0202           1       131.5     Na24[1346.6]
+         874           1       131.5     gamma
+           0           1       131.5     Na24[472.2]
+         472           1       131.5     gamma
+           0           1       131.5     Na24[0.0]
+         590           1   1.329e+05     e-
+         800           1   1.329e+05     anti_nu_e
+      0.0594           1   1.329e+05     Mg24[4122.9]
+    2.75e+03           1   1.329e+05     gamma
+      0.0161           1   1.329e+05     Mg24[1368.8]
+    1.37e+03           1   1.329e+05     gamma
+      0.0107           1   1.329e+05     Mg24[0.0]
 
 #
 #
@@ -474,23 +476,23 @@ Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
        1e+03           1           0     F24[0.0]
-    6.96e+03           1      0.4313     e-
-    5.76e+03           1      0.4313     anti_nu_e
-         1.2           1      0.4313     Ne24[1981.6]
-    1.98e+03           1      0.4313     gamma
-         1.2           1      0.4313     Ne24[0.0]
-         406           1       174.3     e-
-    1.59e+03           1       174.3     anti_nu_e
-      0.0828           1       174.3     Na24[472.2]
-         472           1       174.4     gamma
-           0           1       174.4     Na24[0.0]
-         773           1   1.621e+05     e-
-         618           1   1.621e+05     anti_nu_e
-      0.0579           1   1.621e+05     Mg24[4122.9]
-    2.75e+03           1   1.621e+05     gamma
-      0.0579           1   1.621e+05     Mg24[1368.8]
-    1.37e+03           1   1.621e+05     gamma
-      0.0579           1   1.621e+05     Mg24[0.0]
+     9.1e+03           1      0.1861     e-
+    3.62e+03           1      0.1861     anti_nu_e
+       0.926           1      0.1861     Ne24[1981.6]
+    1.98e+03           1      0.1861     gamma
+       0.926           1      0.1861     Ne24[0.0]
+    1.03e+03           1         263     e-
+         970           1         263     anti_nu_e
+      0.0484           1         263     Na24[472.2]
+         472           1         263     gamma
+           0           1         263     Na24[0.0]
+          64           1   1.551e+04     e-
+    1.33e+03           1   1.551e+04     anti_nu_e
+      0.0475           1   1.551e+04     Mg24[4122.9]
+    2.75e+03           1   1.551e+04     gamma
+       0.039           1   1.551e+04     Mg24[1368.8]
+    1.37e+03           1   1.551e+04     gamma
+      0.0378           1   1.551e+04     Mg24[0.0]
 
 #
 #
@@ -527,39 +529,24 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 
 Start Run processing.
 /gun/direction 1.0 0.0 0.0
-G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /data/cdash/G4/release/slc5-gcc43/data/RadioactiveDecay3.5/z12.a24
-G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /data/cdash/G4/release/slc5-gcc43/data/RadioactiveDecay3.5/z12.a24
-G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /data/cdash/G4/release/slc5-gcc43/data/RadioactiveDecay3.5/z12.a24
-G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /data/cdash/G4/release/slc5-gcc43/data/RadioactiveDecay3.5/z12.a24
-G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /data/cdash/G4/release/slc5-gcc43/data/RadioactiveDecay3.5/z12.a24
-G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /data/cdash/G4/release/slc5-gcc43/data/RadioactiveDecay3.5/z12.a24
-G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /data/cdash/G4/release/slc5-gcc43/data/RadioactiveDecay3.5/z12.a24
-G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /data/cdash/G4/release/slc5-gcc43/data/RadioactiveDecay3.5/z12.a24
-G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /data/cdash/G4/release/slc5-gcc43/data/RadioactiveDecay3.5/z12.a24
-G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /data/cdash/G4/release/slc5-gcc43/data/RadioactiveDecay3.5/z12.a24
-G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /data/cdash/G4/release/slc5-gcc43/data/RadioactiveDecay3.5/z12.a24
-G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /data/cdash/G4/release/slc5-gcc43/data/RadioactiveDecay3.5/z12.a24
-G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /data/cdash/G4/release/slc5-gcc43/data/RadioactiveDecay3.5/z12.a24
-G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /data/cdash/G4/release/slc5-gcc43/data/RadioactiveDecay3.5/z12.a24
-G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /data/cdash/G4/release/slc5-gcc43/data/RadioactiveDecay3.5/z12.a24
-G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /data/cdash/G4/release/slc5-gcc43/data/RadioactiveDecay3.5/z12.a24
-G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /data/cdash/G4/release/slc5-gcc43/data/RadioactiveDecay3.5/z12.a24
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
        1e+03           1           0     Al24[0.0]
-    2.74e+03           1      0.4547     e+
-         511           1      0.4547     gamma
-         511           1      0.4547     gamma
-    1.68e+03           1      0.4547     nu_e
-       0.366           1      0.4547     Mg24[8439.3]
-    4.32e+03           1      0.4547     gamma
-       0.366           1      0.4547     Mg24[4123.3]
-    2.75e+03           1      0.4547     gamma
-       0.366           1      0.4547     Mg24[1369.3]
-    1.37e+03           1      0.4547     gamma
-           0           1      0.4547     Mg24[0.0]
+    1.48e+03           1       5.803     e+
+         511           1       5.803     gamma
+         511           1       5.803     gamma
+    1.86e+03           1       5.803     nu_e
+        0.14           1       5.803     Mg24[9516.2]
+    1.08e+03           1       5.803     gamma
+       0.138           1       5.803     Mg24[8439.3]
+     4.2e+03           1       5.803     gamma
+       0.137           1       5.803     Mg24[4238.8]
+    2.87e+03           1       5.803     gamma
+       0.113           1       5.803     Mg24[1369.3]
+    1.37e+03           1       5.803     gamma
+           0           1       5.803     Mg24[0.0]
 
 #
 #
@@ -601,15 +588,15 @@ Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
        1e+03           1           0     Na24[472.0]
-         472           1     0.02992     gamma
-           0           1     0.02992     Na24[0.0]
-         896           1   2.335e+04     e-
-         494           1   2.335e+04     anti_nu_e
-       0.035           1   2.335e+04     Mg24[4122.9]
-    2.75e+03           1   2.335e+04     gamma
-       0.035           1   2.335e+04     Mg24[1368.8]
-    1.37e+03           1   2.335e+04     gamma
-           0           1   2.335e+04     Mg24[0.0]
+         472           1     0.04387     gamma
+           0           1     0.04387     Na24[0.0]
+         987           1        5229     e-
+         404           1        5229     anti_nu_e
+      0.0517           1        5229     Mg24[4122.9]
+    2.75e+03           1        5229     gamma
+      0.0509           1        5229     Mg24[1368.8]
+    1.37e+03           1        5229     gamma
+           0           1        5229     Mg24[0.0]
 
 #
 #
@@ -646,24 +633,21 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 
 Start Run processing.
 /gun/direction 1.0 0.0 0.0
-G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /data/cdash/G4/release/slc5-gcc43/data/RadioactiveDecay3.5/z22.a46
-G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /data/cdash/G4/release/slc5-gcc43/data/RadioactiveDecay3.5/z22.a46
-G4RIsotopeTable::GetMeanLife() : cannot find ion radioactive decay file: /data/cdash/G4/release/slc5-gcc43/data/RadioactiveDecay3.5/z22.a46
 Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
        1e+03           1           0     Cr46[0.0]
-    2.08e+03           1      0.4359     e+
-         511           1      0.4359     gamma
-         511           1      0.4359     gamma
-     4.5e+03           1      0.4359     nu_e
-      0.0899           1      0.4359     V46[0.0]
-    3.41e+03           1      0.7983     e+
-         511           1      0.7983     gamma
-         511           1      0.7983     gamma
-    2.62e+03           1      0.7983     nu_e
-       0.402           1      0.7983     Ti46[0.0]
+    2.09e+03           1       0.265     e+
+         511           1       0.265     gamma
+         511           1       0.265     gamma
+    4.49e+03           1       0.265     nu_e
+       0.214           1       0.265     V46[0.0]
+    1.81e+03           1      0.5733     e+
+         511           1      0.5733     gamma
+         511           1      0.5733     gamma
+    4.22e+03           1      0.5733     nu_e
+       0.231           1      0.5733     Ti46[0.0]
 
 #
 #
@@ -703,9 +687,9 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0s Sys=0s
        1e+03           1           0     Po215[0.0]
-    7.39e+03           1     0.00346     alpha
-         140           1     0.00346     Pb211[0.0]
+    7.39e+03           1    0.004899     alpha
+         140           1    0.004899     Pb211[0.0]
 
 G4 kernel has come to Quit state.

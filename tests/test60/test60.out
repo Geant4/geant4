@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-08    (7-September-2012)
+ Geant4 version Name: geant4-09-05-ref-09    (2-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -140,7 +144,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.3s Real=0.3s Sys=0s
+  User=0.29s Real=0.3s Sys=0s
 
  The run consists of 1 e- of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
@@ -167,7 +171,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.48s Real=0.49s Sys=0s
+  User=0.48s Real=0.48s Sys=0s
 
  The run consists of 1 proton of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
@@ -194,7 +198,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.48s Real=0.48s Sys=0s
+  User=0.47s Real=0.47s Sys=0s
 
  The run consists of 1 hydrogen of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
@@ -221,7 +225,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.87s Real=0.87s Sys=0s
+  User=0.87s Real=0.86s Sys=0s
 
  The run consists of 1 alpha of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
@@ -248,7 +252,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.86s Real=0.86s Sys=0s
+  User=0.86s Real=0.89s Sys=0s
 
  The run consists of 1 alpha+ of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
@@ -275,7 +279,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.85s Real=0.85s Sys=0s
+  User=0.85s Real=0.86s Sys=0s
 
  The run consists of 1 helium of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
 

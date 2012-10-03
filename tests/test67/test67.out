@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-08    (7-September-2012)
+ Geant4 version Name: geant4-09-05-ref-09    (2-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -80,7 +84,7 @@ msc:   for e-    SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
-### ===  Deexcitation model UAtomDeexcitation is activated for regions:
+### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
           DefaultRegionForTheWorld
 
 eIoni:   for  e-    SubType= 2
@@ -417,8 +421,8 @@ Index : 3     used in the geometry : Yes     recalculation needed : No
 Choosing random seed according to time(0) 
 
 --------- Ranecu engine status ---------
- Initial seed (index) = 23
- Current couple of seeds = 976836683, 791083653
+ Initial seed (index) = 117
+ Current couple of seeds = 1388505883, 654300323
 ----------------------------------------
 Primary energy: 45 keV 
 
@@ -1632,4 +1636,4 @@ Primary energy: 2000 keV
 
 ---> Begin Of Event: 99000
 Execution terminated
-User=22.1s Real=24.05s Sys=0.03s
+User=22.54s Real=22.63s Sys=0.07s
