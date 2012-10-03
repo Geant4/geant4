@@ -345,6 +345,9 @@ examples                                         examples-V09-05-09
   o System of units and physical constants headers explicit inclusion.
   o Updated CMake script: added visualization, optional external package
     (rdecay02), copying macros, install target and comment lines.
+- extended/radioactivedecay/rdecay01 (rdecay01-V09-05-11)
+  o Removed initialisation of de-excitation in PhysicsLists, to be compliant
+    with changes in kernel processes.
 - extended/visualization (exVisualization-V09-05-00)
   o Replaced tabulators with space characters.
   o System of units and physical constants headers explicit inclusion.
