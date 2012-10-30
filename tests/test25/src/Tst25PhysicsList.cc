@@ -27,8 +27,9 @@
 // $Id: Tst25PhysicsList.cc,v 1.6 2010-03-18 15:36:20 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-#include "globals.hh"
 #include "Tst25PhysicsList.hh"
+#include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"

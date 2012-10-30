@@ -12,11 +12,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-18-Mar-2010, Gunter Folger                       (test25-V09-03-00)
--  Adapt to new multiple scattering classes
--  fix mac file for SetCut 
+9th October 2012  Gabriele Cosmo (test25-V09-05-00)
+- Explicit inclusion of units and constants headers.
 
-2 March 2009, Gunter Folger     (test25-V09-02-00)
+18th March 2010  Gunter Folger (test25-V09-03-00)
+- Adapt to new multiple scattering classes.
+- Fix mac file for SetCut.
+
+2nd March 2009  Gunter Folger (test25-V09-02-00)
 - Fixed warnings on unused variables from gcc 4.3/slc5
 
 6th December 2005  Gabriele Cosmo
