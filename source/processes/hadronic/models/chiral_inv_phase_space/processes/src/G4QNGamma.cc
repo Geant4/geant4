@@ -41,6 +41,8 @@
 //#define pdebug
 
 #include "G4QNGamma.hh"
+#include "G4HadronicDeprecate.hh"
+
 
 // Initialization of static Material/Element/Isotope vectors
 std::vector<G4int> G4QNGamma::ElementZ;            // Z of the element(i) in the Last Calc
@@ -52,6 +54,8 @@ std::vector<std::vector<G4double>*>G4QNGamma::IsoProbInEl;//SumProbabIsotopes in
 G4QNGamma::G4QNGamma(const G4String& processName)
  : G4VDiscreteProcess(processName, fHadronic)
 {
+  G4HadronicDeprecate("G4QNGamma");
+
   EnMomConservation = G4LorentzVector(0.,0.,0.,0.);
   nOfNeutrons       = 0;
 #ifdef debug

@@ -12,6 +12,11 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+10-Oct-2012 A.Ribon                       (hadr-chips-proc-V09-05-08)
+----------------------------------------------------------------------
+Added deprecate warning message (to be ready to drop CHIPS in G4 10)
+to all constructors.
+
 28-Sep-2012 A.Ribon                       (hadr-chips-proc-V09-05-07)
 ----------------------------------------------------------------------
 Bringing back G4QDiscProcessMixer and G4QDiscreteProcessVector to use

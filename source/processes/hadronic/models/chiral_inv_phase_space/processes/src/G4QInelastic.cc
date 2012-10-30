@@ -46,6 +46,8 @@
 #include "G4QInelastic.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4HadronicDeprecate.hh"
+
 
 // Initialization of static vectors
 std::vector<G4int> G4QInelastic::ElementZ;            // Z of the element(i) in theLastCalc
@@ -56,6 +58,8 @@ std::vector<std::vector<G4double>*>G4QInelastic::IsoProbInEl;//SumProbabIsotopes
 G4QInelastic::G4QInelastic(const G4String& processName): 
  G4VDiscreteProcess(processName, fHadronic)
 {
+  G4HadronicDeprecate("G4QInelastic");
+
   EnMomConservation = G4LorentzVector(0.,0.,0.,0.);
   nOfNeutrons       = 0;
 #ifdef debug

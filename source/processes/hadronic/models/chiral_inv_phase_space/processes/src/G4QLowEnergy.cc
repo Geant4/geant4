@@ -44,6 +44,8 @@
 
 #include "G4QLowEnergy.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4HadronicDeprecate.hh"
+
 
 // Initialization of static vectors
 //G4int    G4QLowEnergy::nPartCWorld=152;  // #of particles initialized in CHIPS
@@ -58,6 +60,8 @@ std::vector<std::vector<G4double>*>G4QLowEnergy::IsoProbInEl;//SumProbIsotE(i)
 G4QLowEnergy::G4QLowEnergy(const G4String& processName):
   G4VDiscreteProcess(processName, fHadronic), evaporate(true)
 {
+  G4HadronicDeprecate("G4QLowEnergy");
+
 #ifdef debug
   G4cout<<"G4QLowEnergy::Constructor is called processName="<<processName<<G4endl;
 #endif

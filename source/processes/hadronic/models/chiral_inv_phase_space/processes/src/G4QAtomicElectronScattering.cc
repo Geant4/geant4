@@ -50,10 +50,15 @@
 
 #include "G4QAtomicElectronScattering.hh"
 #include "G4PhysicalConstants.hh"
+#include "G4HadronicDeprecate.hh"
+
 
 G4QAtomicElectronScattering::G4QAtomicElectronScattering(const G4String& processName):
  G4VDiscreteProcess(processName, fElectromagnetic)
 {
+
+ G4HadronicDeprecate("G4QAtomicElectronScattering");
+
 #ifdef debug
   G4cout<<"G4QAtomicElectronScattering::Constructor is called"<<G4endl;
 #endif

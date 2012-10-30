@@ -49,10 +49,15 @@
 #include "G4QCaptureAtRest.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4HadronicDeprecate.hh"
+
 
 G4QCaptureAtRest::G4QCaptureAtRest(const G4String& processName)
   : G4VRestProcess(processName, fHadronic), Time(0.), EnergyDeposition(0.)
 {
+
+  G4HadronicDeprecate("G4QCaptureAtRest");
+
 #ifdef debug
   G4cout<<"G4QCaptureAtRest::Constructor is called"<<G4endl;
 #endif

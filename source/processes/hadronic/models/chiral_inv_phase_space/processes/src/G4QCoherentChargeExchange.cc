@@ -60,6 +60,8 @@
 
 #include "G4QCoherentChargeExchange.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4HadronicDeprecate.hh"
+
 
 // Initialization of static vectors
 //G4int    G4QCoherentChargeExchange::nPartCWorld=152;// #of particles initialized in CHIPS
@@ -74,6 +76,8 @@ std::vector<std::vector<G4double>*>G4QCoherentChargeExchange::IsoProbInEl;//SumP
 G4QCoherentChargeExchange::G4QCoherentChargeExchange(const G4String& processName)
   : G4VDiscreteProcess(processName, fHadronic)
 {
+  G4HadronicDeprecate("G4QCoherentChargeExchange");
+
 #ifdef debug
   G4cout<<"G4QCohChargeEx::Constructor is called processName="<<processName<<G4endl;
 #endif

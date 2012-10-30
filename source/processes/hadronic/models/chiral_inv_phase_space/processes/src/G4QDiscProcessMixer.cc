@@ -39,6 +39,8 @@
 #include "G4QDiscProcessMixer.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4HadronicDeprecate.hh"
+
 
 // Constructor
 G4QDiscProcessMixer::G4QDiscProcessMixer(const G4String& name,
@@ -46,6 +48,8 @@ G4QDiscProcessMixer::G4QDiscProcessMixer(const G4String& name,
                                          G4ProcessType pType):
   G4VDiscreteProcess(name, pType), DPParticle(particle)
 {
+  G4HadronicDeprecate("G4QDiscProcessMixer");
+
 #ifdef debug
   G4cout<<"G4QDiscProcessMixer::Constructor is called processName="<<name<<G4endl;
 #endif

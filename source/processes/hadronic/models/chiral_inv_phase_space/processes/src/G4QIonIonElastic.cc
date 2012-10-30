@@ -45,6 +45,8 @@
 
 #include "G4QIonIonElastic.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4HadronicDeprecate.hh"
+
 
 // Initialization of static vectors
 //G4int G4QIonIonElastic::nPartCWorld=152;   // The#of particles initialized in CHIPS World
@@ -59,6 +61,8 @@ std::vector<std::vector<G4double>*>G4QIonIonElastic::IsoProbInEl;//SumProbabIsot
 G4QIonIonElastic::G4QIonIonElastic(const G4String& processName):
   G4VDiscreteProcess(processName, fHadronic)
 {
+  G4HadronicDeprecate("G4QIonIonElastic");
+
 #ifdef debug
   G4cout<<"G4QIonIonElastic::Constructor is called processName="<<processName<<G4endl;
 #endif

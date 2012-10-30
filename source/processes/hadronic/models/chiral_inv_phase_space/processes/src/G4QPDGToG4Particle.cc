@@ -42,9 +42,12 @@
 //#define pdebug
 
 #include "G4QPDGToG4Particle.hh"
+#include "G4HadronicDeprecate.hh"
+
 
 G4QPDGToG4Particle::G4QPDGToG4Particle()
 {
+  G4HadronicDeprecate("G4QPDGToG4Particle");
 }
 
 G4QPDGToG4Particle::~G4QPDGToG4Particle() // The map is distructed only in the EndOfJob

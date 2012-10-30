@@ -49,6 +49,8 @@
 
 #include "G4QDiffraction.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4HadronicDeprecate.hh"
+
 
 // Initialization of static vectors
 //G4int    G4QDiffraction::nPartCWorld=152;  // #of particles initialized in CHIPS
@@ -63,6 +65,8 @@ std::vector<std::vector<G4double>*>G4QDiffraction::IsoProbInEl;//SumProbIsotE(i)
 G4QDiffraction::G4QDiffraction(const G4String& processName):
  G4VDiscreteProcess(processName, fHadronic)
 {
+  G4HadronicDeprecate("G4QDiffraction");
+
 #ifdef debug
   G4cout<<"G4QDiffraction::Constructor is called processName="<<processName<<G4endl;
 #endif
