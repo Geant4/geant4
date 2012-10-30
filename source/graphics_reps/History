@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+1st October 2012  John Allison (greps-V09-05-14)
+- G4DimensionedType: Another attempt to keep compilers happy:
+  o Created G4DimensionedType.cc.
+  o Moved "Helper class" HasName and utility function GetUnitValue from
+    G4DimensionedType.hh to G4DimensionedTypeUtils.cc inside a new
+    namespace, G4DimensionedTypeUtils.
+
 27th September 2012  John Allison (greps-V09-05-13)
 - G4DimensionedType.hh:
   o Reverted to r53697.
