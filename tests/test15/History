@@ -15,10 +15,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-21 Aug 2012, Pere Mato     (test15-V09-05-01)
--------------------------------------------------
-- CMakeLists.txt - Changed to avoid two builds of different targets running concurrenly
-                   when CTest is used with -jN
+9 Oct 2012, Gabriele Cosmo  (test15-V09-05-02)
+----------------------------------------------
+- Explicit inclusion of units and constants headers.
+
+21 Aug 2012, Pere Mato      (test15-V09-05-01)
+----------------------------------------------
+- CMakeLists.txt - Changed to avoid two builds of different targets
+  running concurrenly when CTest is used with -jN.
 
 23 Jan 2011  Dennis Wright  (test15-V09-05-00)
 ----------------------------------------------
@@ -29,12 +33,12 @@ track of all tags.
     Move isotope production calls from process to model.
     Enable isotope production for models G4LENeutronInelastic and
       G4LEProtonInelastic.
-
 - Tst15SteppingAction.cc :
     Change from listing secondaries to printing out isotope information
     using updated G4IsoParticleChange class.
  
-29 Mar 2011, Gunter Folger              (test15-V09-04-00)
+29 Mar 2011, Gunter Folger  (test15-V09-04-00)
+----------------------------------------------
 - Correct GNUmakefile_hadronic_exerciser to work with global shared libs.
 
 18 Mar 2010  Dennis Wright  (test15-V09-03-01)
