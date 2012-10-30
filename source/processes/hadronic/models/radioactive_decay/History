@@ -13,6 +13,28 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
+
+03 October 2012  Vladimir Ivantchenko  radioactive_decay-V09-05-10
+------------------------------------------------------------------
+- G4RadioactiveDecay - added isInitialised flag to reduce 
+    initialisation printout
+
+03 October 2012  Vladimir Ivantchenko  radioactive_decay-V09-05-09
+------------------------------------------------------------------
+- G4RadioactiveDecay - removed internal PhysicsVector of mean free
+    path and implement the same algorithm as one of G4Decay,
+    PhysicsVector here useless because introduce extra objects but
+    do not save any CPU
+
+02 October 2012  Vladimir Ivantchenko  radioactive_decay-V09-05-08
+------------------------------------------------------------------
+- G4RadioactiveDecay - modified BuildPhysicsTable method: substitute
+    obsolete methods to access PhysicsVector, add spline, add
+    initialisation of atomic de-excitation (needed for the case when
+    radioactive decay is used alone), modified GetMeanFreePath - 
+    sabstitute obsolete access method to the PhysicsVector
+- source.cmake and GNUmakefile - remove dependence on emlowenergy
+
 22 September 2012  Laurent Desorgher  radioactive_decay-V09-05-07
 --------------------------------------------------------------
 - Reset a print message in G4RIsotopeTable to verbose level 1 to avoid some systematic printing for some decays.

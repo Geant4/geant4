@@ -43,6 +43,8 @@
 // 
 // CHANGE HISTORY
 // --------------
+// 03 Oct  2012, V. Ivanchenko removed internal table for mean free path 
+//                             similar to what is done for as G4Decay
 // 10 July 2012, L. Desorgher
 //			-In LoadDecayTable:  Add LoadedNuclei.push_back(theParentNucleus.GetParticleName());
 //			also for the case where user data files are used. Correction for bug
@@ -126,6 +128,8 @@
 
 #include "G4HadTmpUtil.hh"
 #include "G4HadronicProcessType.hh"
+#include "G4LossTableManager.hh"
+#include "G4VAtomDeexcitation.hh"
 
 #include <vector>
 #include <sstream>
@@ -138,8 +142,8 @@ const G4double G4RadioactiveDecay::levelTolerance =2.0*keV;
 const G4ThreeVector G4RadioactiveDecay::origin(0.,0.,0.);
 
 G4RadioactiveDecay::G4RadioactiveDecay(const G4String& processName)
- : G4VRestDiscreteProcess(processName, fDecay), HighestBinValue(10.0),
-   LowestBinValue(1.0e-3), TotBin(200), forceDecayDirection(0.,0.,0.),
+ : G4VRestDiscreteProcess(processName, fDecay), HighestValue(20.0),
+   isInitialised(false), forceDecayDirection(0.,0.,0.), 
    forceDecayHalfAngle(0.*deg), verboseLevel(0)
 {
 #ifdef G4VERBOSE
@@ -152,7 +156,6 @@ G4RadioactiveDecay::G4RadioactiveDecay(const G4String& processName)
 
   theRadioactiveDecaymessenger = new G4RadioactiveDecaymessenger(this);
   theIsotopeTable              = new G4RIsotopeTable();
-  aPhysicsTable                = 0;
   pParticleChange              = &fParticleChangeForRadDecay;
 
   // Now register the Isotope table with G4IonTable.
@@ -203,10 +206,6 @@ G4RadioactiveDecay::G4RadioactiveDecay(const G4String& processName)
 
 G4RadioactiveDecay::~G4RadioactiveDecay()
 {
-  if (aPhysicsTable != 0) {
-    aPhysicsTable->clearAndDestroy();
-    delete aPhysicsTable;
-  }
   delete theRadioactiveDecaymessenger;
 }
 
@@ -585,18 +584,15 @@ G4double G4RadioactiveDecay::GetMeanLifeTime(const G4Track& theTrack,
   return  meanlife;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//                                                                            //
-//  GetMeanFreePath (similar in function to GetMeanFreeTime)                  //
-//                                                                            //
-////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+//                                                                    //
+//  GetMeanFreePath for decay in flight                               //
+//                                                                    //
+////////////////////////////////////////////////////////////////////////
 
 G4double G4RadioactiveDecay::GetMeanFreePath (const G4Track& aTrack,
 					      G4double, G4ForceCondition*)
 {
-  // constants
-  G4bool isOutRange ;
-
   // get particle
   const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
 
@@ -637,29 +633,24 @@ G4double G4RadioactiveDecay::GetMeanFreePath (const G4Track& aTrack,
   } else {
     //calculate the mean free path
     // by using normalized kinetic energy (= Ekin/mass)
-    G4double   rKineticEnergy = aParticle->GetKineticEnergy()/aMass;
-    if ( rKineticEnergy > HighestBinValue) {
+    G4double rKineticEnergy = aParticle->GetKineticEnergy()/aMass;
+    if ( rKineticEnergy > HighestValue) {
       // beta >> 1
       pathlength = ( rKineticEnergy + 1.0)* aCtau;
-    } else if ( rKineticEnergy > LowestBinValue) {
-      // check if aPhysicsTable exists
-      if (aPhysicsTable == 0) BuildPhysicsTable(*aParticleDef);
-      // beta is in the range valid for PhysicsTable
-      pathlength = aCtau *
-	((*aPhysicsTable)(0))-> GetValue(rKineticEnergy,isOutRange);
     } else if ( rKineticEnergy < DBL_MIN ) {
       // too slow particle
 #ifdef G4VERBOSE
       if (GetVerboseLevel()>2) {
 	G4cout << "G4Decay::GetMeanFreePath()   !!particle stops!!";
 	G4cout << aParticleDef->GetParticleName() << G4endl;
-	G4cout << "KineticEnergy:" << aParticle->GetKineticEnergy()/GeV <<"[GeV]";
+	G4cout << "KineticEnergy:" << aParticle->GetKineticEnergy()/GeV 
+	       <<"[GeV]";
       }
 #endif
       pathlength = DBL_MIN;
     } else {
       // beta << 1
-      pathlength = (aParticle->GetTotalMomentum())/aMass*aCtau ;
+      pathlength = aCtau*(aParticle->GetTotalMomentum())/aMass;
     }
   }
 #ifdef G4VERBOSE
@@ -670,31 +661,19 @@ G4double G4RadioactiveDecay::GetMeanFreePath (const G4Track& aTrack,
   return  pathlength;
 }
 
+////////////////////////////////////////////////////////////////////////
+//                                                                    //
+//  BuildPhysicsTable - initialisation of atomic de-excitation        //
+//                                                                    //
+////////////////////////////////////////////////////////////////////////
 
 void G4RadioactiveDecay::BuildPhysicsTable(const G4ParticleDefinition&)
 {
-  // if aPhysicsTableis has already been created, do nothing
-  if (aPhysicsTable != 0) return;
-
-  // create  aPhysicsTable
-  if (GetVerboseLevel()>1) G4cerr <<" G4Decay::BuildPhysicsTable() "<< G4endl;
-  aPhysicsTable = new G4PhysicsTable(1);
-
-  //create physics vector
-  G4PhysicsLogVector* aVector = new G4PhysicsLogVector(
-						       LowestBinValue,
-						       HighestBinValue,
-						       TotBin);
-
-  G4double beta, gammainv;
-  // fill physics Vector
-  G4int i;
-  for ( i = 0 ; i < TotBin ; i++ ) {
-    gammainv = 1.0/(aVector->GetLowEdgeEnergy(i) + 1.0);
-    beta  = std::sqrt((1.0 - gammainv)*(1.0 +gammainv));
-    aVector->PutValue(i, beta/gammainv);
+  if(!isInitialised) {
+    isInitialised = true;
+    G4VAtomDeexcitation* p = G4LossTableManager::Instance()->AtomDeexcitation();
+    if(p) { p->InitialiseAtomicDeexcitation(); }
   }
-  aPhysicsTable->insert(aVector);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

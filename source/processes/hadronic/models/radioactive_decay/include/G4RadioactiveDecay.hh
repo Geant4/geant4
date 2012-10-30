@@ -265,16 +265,13 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
     G4RadioactiveDecay & operator=(const G4RadioactiveDecay &right);
 
     G4RadioactiveDecaymessenger* theRadioactiveDecaymessenger;
-    G4PhysicsTable* aPhysicsTable;
     G4RIsotopeTable* theIsotopeTable;
 
     G4NucleusLimits theNucleusLimits;
 
-    const G4double HighestBinValue;
-    const G4double LowestBinValue;
+    G4double HighestValue;
 
-    const G4int TotBin;
-
+    G4bool isInitialised;
     G4bool AnalogueMC;
     G4bool BRBias;
     G4bool FBeta;
