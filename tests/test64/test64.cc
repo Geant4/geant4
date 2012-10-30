@@ -205,7 +205,7 @@ int main( int argc, char** argv ) {
     }
     G4cout << "\t Initial total energy = " << initialTotalEnergy << " GeV" << G4endl;  
 
-    G4VParticleChange* aChange;
+    G4VParticleChange* aChange = 0;
     G4Track* sec = 0;
     G4String secName;
     G4double secKE = 0.0;

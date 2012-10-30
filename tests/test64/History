@@ -13,6 +13,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08 Oct 2012 Alberto Ribon                test64-V09-05-04
+- Fixed warning on Windows.
+
+05 Oct 2012 Alberto Ribon                test64-V09-05-03
+- Moved from "Experimental" group to "Nightly" and "Continuous".
+
 09 Aug 2012 Alberto Ribon                test64-V09-05-02
 - Ready to be proposed for testing, for the first time.
 
