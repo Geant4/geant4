@@ -17,6 +17,24 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 10th, 2012, P.Mato (event-V09-05-10)
+- Fixed problem with new implementation of G4StackManager::TransferOneStackedTrack
+
+October 5th, 2012, P.Mato (event-V09-05-09)
+- Fixed problem with G4SmartTrackStack not to use particle defitions 
+  pointers and use PDG code instead
+
+October 5th, 2012, S. Kamperis, P.Mato (event-V09-05-08)
+- G4StackTrack, G4StackedTrack: Changed the implementation of G4StackTrack to use a 
+  std::vector<G4StackedTrack> (by value!) instead of double linked list. Performance
+  has been measured to be 35% better with a simple test program in test/testStackManager.cc
+
+- G4SmartTrackStack: Introduced the changes provided by Stathis Kamperis (GSOC) with the
+  best tunning for the parameters (4-5% persistent reduction in total execution time in FullCMS)
+  See his presentation at: https://indico.cern.ch/getFile.py/access?contribId=35&sessionId=4&resId=0&materialId=slides&confId=199138
+
+- Enabled by default the use of G4SmartTrackStack (-DG4_USESMARTSTACK)
+
 July 5th, 2012, G.Cosmo (event-V09-05-07)
 - Explicitly use inclusion of headers for system of units and physical
   constants, in plan to remove implicit inclusion from globals.hh.

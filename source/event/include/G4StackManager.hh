@@ -27,7 +27,8 @@
 // $Id: G4StackManager.hh,v 1.13 2009-08-15 15:45:50 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
+//  Last Modification : 04/Oct/11 P. Mato - making use of G4TrackStack with value semantics
+///
 
 
 #ifndef G4StackManager_h
@@ -42,22 +43,22 @@
 #include "G4TrackStatus.hh"
 #include "globals.hh"
 #include "evmandefs.hh"
+
 class G4StackingMessenger;
 class G4VTrajectory;
 
 // class description:
 //
-//  This is the manager class of handling stacks of G4Track objects.
+// This is the manager class of handling stacks of G4Track objects.
 // This class must be a singleton and be constructed by G4EventManager.
 // Almost all methods must be invoked exclusively by G4EventManager.
 // Especially, some Clear() methods MUST NOT be invoked by the user.
 // Event abortion is handled by G4EventManager.
 //
-//  This G4StackingManager has three stacks, the urgent stack, the
+// This G4StackingManager has three stacks, the urgent stack, the
 // waiting stack, and the postpone to next event stack. The meanings
 // of each stack is descrived in the Geant4 user's manual.
 //
-
 
 class G4StackManager 
 {
@@ -66,8 +67,7 @@ class G4StackManager
       ~G4StackManager();
 
   private:
-      const G4StackManager & operator=
-                          (const G4StackManager &right);
+      const G4StackManager& operator=(const G4StackManager &right);
       G4int operator==(const G4StackManager &right) const;
       G4int operator!=(const G4StackManager &right) const;
 
