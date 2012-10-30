@@ -30,6 +30,7 @@
 
 #include "Tst202PrimaryGeneratorAction.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4Event.hh"
 
 #ifdef GPS
