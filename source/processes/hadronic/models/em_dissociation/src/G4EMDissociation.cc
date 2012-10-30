@@ -79,52 +79,40 @@
 #include "G4ReactionProductVector.hh"
 #include "Randomize.hh"
 #include "globals.hh"
-////////////////////////////////////////////////////////////////////////////////
-//
-G4EMDissociation::G4EMDissociation():G4HadronicInteraction("EMDissociation")
-{
-//
-//
-// Send message to stdout to advise that the G4EMDissociation model is being
-// used.
-//
+
+G4EMDissociation::G4EMDissociation():G4HadronicInteraction("EMDissociation") {
+
+  // Send message to stdout to advise that the G4EMDissociation model is being
+  // used.
   PrintWelcomeMessage();
-//
-//
-// No de-excitation handler has been supplied - define the default handler.
-//
-  theExcitationHandler             = new G4ExcitationHandler;
-  G4Evaporation * theEvaporation   = new G4Evaporation;
-  G4FermiBreakUp * theFermiBreakUp = new G4FermiBreakUp;
-  G4StatMF * theMF                 = new G4StatMF;
+
+  // No de-excitation handler has been supplied - define the default handler.
+  theExcitationHandler            = new G4ExcitationHandler;
+  G4Evaporation* theEvaporation   = new G4Evaporation;
+  G4FermiBreakUp* theFermiBreakUp = new G4FermiBreakUp;
+  G4StatMF* theMF                 = new G4StatMF;
   theExcitationHandler->SetEvaporation(theEvaporation);
   theExcitationHandler->SetFermiModel(theFermiBreakUp);
   theExcitationHandler->SetMultiFragmentation(theMF);
   theExcitationHandler->SetMaxAandZForFermiBreakUp(12, 6);
   theExcitationHandler->SetMinEForMultiFrag(5.0*MeV);
   handlerDefinedInternally = true;
-//
-//
-// This EM dissociation model needs access to the cross-sections held in
-// G4EMDissociationCrossSection.
-//
+
+  // This EM dissociation model needs access to the cross-sections held in
+  // G4EMDissociationCrossSection.
   dissociationCrossSection = new G4EMDissociationCrossSection;
   thePhotonSpectrum = new G4EMDissociationSpectrum;
-//
-//
-// Set the minimum and maximum range for the model (despite nomanclature, this
-// is in energy per nucleon number).  
-//  
+
+  // Set the minimum and maximum range for the model (despite nomanclature, this
+  // is in energy per nucleon number).    
   SetMinEnergy(100.0*MeV);
   SetMaxEnergy(500.0*GeV);
-//
-//
-// Set the default verbose level to 0 - no output.
-//
+
+  // Set the default verbose level to 0 - no output.
   verboseLevel = 0;
 }
-////////////////////////////////////////////////////////////////////////////////
-//
+
+
 G4EMDissociation::G4EMDissociation (G4ExcitationHandler *aExcitationHandler)
 {
 //
@@ -156,16 +144,17 @@ G4EMDissociation::G4EMDissociation (G4ExcitationHandler *aExcitationHandler)
 //
   verboseLevel = 0;
 }
-////////////////////////////////////////////////////////////////////////////////
-//
-G4EMDissociation::~G4EMDissociation ()
-{
+
+
+G4EMDissociation::~G4EMDissociation() {
   if (handlerDefinedInternally) delete theExcitationHandler;
-  delete dissociationCrossSection;
+  // delete dissociationCrossSection;
+  // Cross section deleted by G4CrossSectionRegistry; don't do it here
+  // Bug reported by Gong Ding in Bug Report #1339
   delete thePhotonSpectrum;
 }
-////////////////////////////////////////////////////////////////////////////////
-//
+
+
 G4HadFinalState *G4EMDissociation::ApplyYourself
   (const G4HadProjectile &theTrack, G4Nucleus &theTarget)
 {

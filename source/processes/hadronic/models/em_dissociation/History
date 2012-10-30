@@ -14,6 +14,11 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+ 4 October 2012 - Dennis Wright (hadr-emd-V09-05-02)
+----------------------------------------------------
+- implemented user-reported bug fix (#1339) of double deletion of cross section
+  in dtor of G4EMDissociation
+
 25 Sep 2012 - Gabriele Cosmo (hadr-emd-V09-05-01)
 -------------------------------------------------
 - Explicitly use inclusion of headers for system of units and physical
