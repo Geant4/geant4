@@ -49,15 +49,18 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim,
-                     HistoManager* histo)
-  : fDetector(det), fPrimary(prim), fHistoManager(histo)
-{ }
+RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim)
+  : fDetector(det), fPrimary(prim)
+{
+ fHistoManager = new HistoManager(); 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::~RunAction()
-{ }
+{
+ delete fHistoManager;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -69,11 +72,17 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
   CLHEP::HepRandom::showEngineStatus();
 
-  fTotalCount = 0;
+  fTotalCount = fGammaCount = 0;
   fSumTrack = fSumTrack2 = 0.;
-  for (G4int i=0; i<3; i++) fPbalance[i] = 0. ;  
-  
-  fHistoManager->book();
+  for (G4int i=0; i<3; i++) { fPbalance[i] = 0. ; } 
+  for (G4int i=0; i<3; i++) { fNbGamma[i] = 0 ; }
+       
+  //histograms
+  //
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  if ( analysisManager->IsActive() ) {
+    analysisManager->OpenFile();
+  }     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -105,6 +114,18 @@ void RunAction::Balance(G4double Pbal)
   if (fTotalCount == 1) fPbalance[1] = fPbalance[2] = Pbal;  
   if (Pbal < fPbalance[1]) fPbalance[1] = Pbal;
   if (Pbal > fPbalance[2]) fPbalance[2] = Pbal;    
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::CountGamma(G4int nGamma)
+{ 
+  fGammaCount++;
+  fNbGamma[0] += nGamma;
+  //update min max   
+  if (fGammaCount == 1) fNbGamma[1] = fNbGamma[2] = nGamma;  
+  if (nGamma < fNbGamma[1]) fNbGamma[1] = nGamma;
+  if (nGamma > fNbGamma[2]) fNbGamma[2] = nGamma;    
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -198,8 +219,15 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
            << "   Q = " << std::setw(wid) << G4BestUnit(Q, "Energy")
            << G4endl;           
  } 
-      
- //particle count
+ 
+ //Gamma count
+ //
+ if (fGammaCount > 0) {       
+   G4cout << "\n" << std::setw(58) << "Number of gamma: N = " 
+           << fNbGamma[1] << " --> " << fNbGamma[2] << G4endl;
+ }
+       
+ //particles count
  //
  G4cout << "\n   List of generated particles: \n" << G4endl;
      
@@ -216,7 +244,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
            << " --> " << G4BestUnit(eMax, "Energy") 
            << ")" << G4endl;           
  }
-  
+ 
  //energy momentum balance
  //
  if (fTotalCount > 1) {
@@ -240,8 +268,13 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   fParticleCount.clear(); 
   fEmean.clear();  fEmin.clear(); fEmax.clear();  
   
-  fHistoManager->save();
-
+  //save histograms      
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();  
+  if ( analysisManager->IsActive() ) {
+    analysisManager->Write();
+    analysisManager->CloseFile();
+  }
+      
   // show Rndm status
   CLHEP::HepRandom::showEngineStatus();
 }

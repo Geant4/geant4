@@ -30,6 +30,8 @@
 
 #include "PhysicsList.hh"
 
+#include "G4UnitsTable.hh"
+
 #include "G4HadronElasticPhysics.hh"
 #include "HadronPhysicsQGSP_BERT_HP.hh"
 #include "G4HadronInelasticQBBC.hh"
@@ -53,7 +55,12 @@ PhysicsList::PhysicsList()
 {
   G4int verb = 1;  
   SetVerboseLevel(verb);
-
+  
+  //add new units for cross sections
+  // 
+  new G4UnitDefinition( "mm2/g", "mm2/g","Surface/Mass", mm2/g);
+  new G4UnitDefinition( "um2/mg", "um2/mg","Surface/Mass", um*um/mg);  
+  
   // Hadron Elastic scattering
   RegisterPhysics( new G4HadronElasticPhysics(verb) );
 

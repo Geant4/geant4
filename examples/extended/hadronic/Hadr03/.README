@@ -50,10 +50,9 @@
    The result is compared with the 'input' value, i.e. with the cross sections
    given by G4HadronicProcessStore and used by Geant4.
    
-   The list of nuclear reactions that occured is printed. Here, only name of
-   particles are given; there can have several particles on the same species in
-   the reaction (for example several gamma).
-   
+   The list of nuclear reactions that occured is printed. 
+   (the number of gamma of deexcitation is not printed).
+      
    Then, comes the total list of generated particles and ions.	
    The energy spectrum of the scattered particle (if any) and of the created 
    secondaries are plotted (see SteppingAction).

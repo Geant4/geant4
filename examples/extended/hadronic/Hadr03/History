@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+ 06-10-12 mma (exhadr03-V09-05-08)
+- SteppingAction, RunAction : print number of gamma
+- use G4Analysis
+    
 30-09-12 mma (exhadr03-V09-05-07)
 - SteppingAction : print number of particles in nuclear reaction (not gamma)
      

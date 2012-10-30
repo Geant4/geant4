@@ -44,8 +44,8 @@ class GammaPhysics : public G4VPhysicsConstructor
    ~GammaPhysics();
 
   public:
-    void ConstructParticle() { };
-    void ConstructProcess();
+    virtual void ConstructParticle() { };
+    virtual void ConstructProcess();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

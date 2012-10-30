@@ -14,9 +14,9 @@
 /gun/particle gamma
 /gun/energy 20 MeV
 #
-/testhadr/histo/setFileName gamma
-/testhadr/histo/setHisto 2  100  -1. 30 keV	#recoil ion
-/testhadr/histo/setHisto 11 100 -10.  1 MeV	#Q
+/analysis/setFileName gamma
+/analysis/h1/set 2  100  -1. 30 keV	#recoil ion
+/analysis/h1/set 11 100 -10.  1 MeV	#Q
 #
 /testhadr/event/printModulo 1000
 #

@@ -42,8 +42,8 @@ public:
  ~PhysicsList();
 
 public:
-  void ConstructParticle();
-  void SetCuts();
+  virtual void ConstructParticle();
+  virtual void SetCuts();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

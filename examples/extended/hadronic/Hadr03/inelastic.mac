@@ -18,9 +18,9 @@
 /process/list
 /process/inactivate hadElastic
 #
-/testhadr/histo/setFileName inelastic
-/testhadr/histo/setHisto 2  100  0.  400 keV	#recoil ion
-/testhadr/histo/setHisto 3  100  0. 8000 keV	#gamma
-/testhadr/histo/setHisto 11 100 -10  +0  MeV	#Q
+/analysis/setFileName inelastic
+/analysis/h1/set 2  100  0.  400 keV	#recoil ion
+/analysis/h1/set 3  100  0. 8000 keV	#gamma
+/analysis/h1/set 11 100 -10  +0  MeV	#Q
 #
 /run/beamOn 10000

@@ -42,22 +42,20 @@
 class G4ParticleDefinition;
 class PrimaryGeneratorAction;
 class RunAction;
-class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class SteppingAction : public G4UserSteppingAction
 {
   public:
-    SteppingAction(PrimaryGeneratorAction*, RunAction*, HistoManager*);
+    SteppingAction(PrimaryGeneratorAction*, RunAction*);
    ~SteppingAction();
 
-    void UserSteppingAction(const G4Step*);
+    virtual void UserSteppingAction(const G4Step*);
     
   private:
     PrimaryGeneratorAction* fPrimary;
     RunAction*              fRunAction;
-    HistoManager*           fHistoManager;
     std::map<G4ParticleDefinition*,G4int> fParticleFlag;    
 };
 
