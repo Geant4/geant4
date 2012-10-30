@@ -23,12 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+#include <vector>
+
 #include "Tst18SteppingAction.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Track.hh"
 #include "globals.hh"
 #include "G4SteppingManager.hh"
-
-#include <vector>
 
 extern std::vector<G4String> Particles;
 extern std::vector<G4double> Energies;
