@@ -39,6 +39,8 @@
 #include "G4TouchableHistory.hh"
 
 #include "G4Colour.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 ExN05PionShowerModel::ExN05PionShowerModel(G4String modelName, G4Region* envelope)
 : G4VFastSimulationModel(modelName, envelope)
@@ -83,7 +85,7 @@ G4bool ExN05PionShowerModel::ModelTrigger(const G4FastTrack&)
 }
 
 void ExN05PionShowerModel::DoIt(const G4FastTrack& fastTrack, 
-		     G4FastStep& fastStep)
+                     G4FastStep& fastStep)
 {
   //  G4cout << "ExN05PionShowerModel::DoIt" << G4endl;
 
@@ -111,7 +113,7 @@ void ExN05PionShowerModel::Explode(const G4FastTrack& fastTrack)
   G4double distOut;
   distOut = fastTrack.GetEnvelopeSolid()->
     DistanceToOut(fastTrack.GetPrimaryTrackLocalPosition(),
-		  fastTrack.GetPrimaryTrackLocalDirection());
+                  fastTrack.GetPrimaryTrackLocalDirection());
   showerCenter = fastTrack.GetPrimaryTrackLocalPosition() + 
     (distOut/2.)*fastTrack.GetPrimaryTrackLocalDirection();
 
@@ -142,8 +144,8 @@ void ExN05PionShowerModel::Explode(const G4FastTrack& fastTrack)
       r   = G4RandGauss::shoot(0,10*cm);
       phi = G4UniformRand()*twopi;
       ePoint = showerCenter +
-	z*zShower +
-	r*std::cos(phi)*xShower + r*std::sin(phi)*yShower;
+        z*zShower +
+        r*std::cos(phi)*xShower + r*std::sin(phi)*yShower;
       eSpot.SetPosition(ePoint);
       feSpotList.push_back(eSpot);
     }
@@ -186,11 +188,11 @@ void ExN05PionShowerModel::AssignSpotAndCallHit(const ExN05EnergySpot &eSpot)
   if( pCurrentVolume != 0 )
     {
       pSensitive = pCurrentVolume->GetLogicalVolume()->
-	GetSensitiveDetector();
+        GetSensitiveDetector();
       if( pSensitive != 0 )
-	{
-	  pSensitive->Hit(fFakeStep);
-	}
+        {
+          pSensitive->Hit(fFakeStep);
+        }
     }
 }
 
@@ -203,21 +205,21 @@ void ExN05PionShowerModel::FillFakeStep(const ExN05EnergySpot &eSpot)
   if (!fNaviSetup)
     {
       fpNavigator->
-	SetWorldVolume(G4TransportationManager::GetTransportationManager()->
-		       GetNavigatorForTracking()->GetWorldVolume());
+        SetWorldVolume(G4TransportationManager::GetTransportationManager()->
+                       GetNavigatorForTracking()->GetWorldVolume());
       fpNavigator->
-	LocateGlobalPointAndUpdateTouchableHandle(eSpot.GetPosition(),
+        LocateGlobalPointAndUpdateTouchableHandle(eSpot.GetPosition(),
                                             G4ThreeVector(0.,0.,0.),
-					    fTouchableHandle,
-					    false);
+                                            fTouchableHandle,
+                                            false);
       fNaviSetup = true;
     }
   else
     {
       fpNavigator->
-	LocateGlobalPointAndUpdateTouchableHandle(eSpot.GetPosition(),
+        LocateGlobalPointAndUpdateTouchableHandle(eSpot.GetPosition(),
                                             G4ThreeVector(0.,0.,0.),
-					    fTouchableHandle);
+                                            fTouchableHandle);
      }
   //--------------------------------------
   // Fills attribute of the G4Step needed

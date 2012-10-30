@@ -81,7 +81,7 @@ G4bool ExN05PiModel::ModelTrigger(const G4FastTrack& fastTrack) {
 }
 
 void ExN05PiModel::DoIt(const G4FastTrack& fastTrack, 
-		     G4FastStep& fastStep)
+                     G4FastStep& fastStep)
   //--------------------------------------------------
   //
   // User method to code the parameterisation properly
@@ -105,7 +105,7 @@ void ExN05PiModel::DoIt(const G4FastTrack& fastTrack,
   G4double distance;
   distance = fastTrack.GetEnvelopeSolid()->
     DistanceToOut(fastTrack.GetPrimaryTrackLocalPosition(),
-		  fastTrack.GetPrimaryTrackLocalDirection());
+                  fastTrack.GetPrimaryTrackLocalDirection());
   position = fastTrack.GetPrimaryTrackLocalPosition() + 
     distance*fastTrack.GetPrimaryTrackLocalDirection();
 
@@ -132,14 +132,14 @@ void ExN05PiModel::DoIt(const G4FastTrack& fastTrack,
   // -- dynamics (Note that many constructors exists for G4DynamicParticle
   // -- see prototype/particle+matter/particles/management/include/G4DynamicParticle.hh)
   G4DynamicParticle dynamique(G4Gamma::GammaDefinition(),
-			      direction,
-			      fastTrack.GetPrimaryTrack()->
-			      GetKineticEnergy()/2.);
+                              direction,
+                              fastTrack.GetPrimaryTrack()->
+                              GetKineticEnergy()/2.);
   // -- position:
   G4double Dist;
   Dist = fastTrack.GetEnvelopeSolid()->
     DistanceToOut(fastTrack.GetPrimaryTrackLocalPosition(),
-		  direction);
+                  direction);
   G4ThreeVector posi;
   posi = fastTrack.GetPrimaryTrackLocalPosition() + Dist*direction;
   
@@ -147,6 +147,6 @@ void ExN05PiModel::DoIt(const G4FastTrack& fastTrack,
   //-- Creation of the secondary Track:
   //------------------------------------
   fastStep.CreateSecondaryTrack(dynamique, posi, 
-		       fastTrack.GetPrimaryTrack()->GetGlobalTime());
+                       fastTrack.GetPrimaryTrack()->GetGlobalTime());
 
 }

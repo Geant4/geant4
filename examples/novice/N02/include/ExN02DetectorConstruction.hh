@@ -102,7 +102,7 @@ class ExN02DetectorConstruction : public G4VUserDetectorConstruction
      G4double fTrackerLength;          // Full length of Tracker
      G4int    NbOfChambers;            // Nb of chambers in the tracker region
      G4double ChamberWidth;            // width of the chambers
-     G4double ChamberSpacing;	       // distance between chambers
+     G4double ChamberSpacing;          // distance between chambers
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

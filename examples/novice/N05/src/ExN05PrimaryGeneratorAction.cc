@@ -35,6 +35,7 @@
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 
 ExN05PrimaryGeneratorAction::ExN05PrimaryGeneratorAction()
 {

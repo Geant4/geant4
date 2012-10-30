@@ -24,13 +24,14 @@
 // ********************************************************************
 //
 #include "ExN05ParallelWorldForPion.hh"
+#include "ExN05PionShowerModel.hh"
+
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Region.hh"
 #include "G4PVPlacement.hh"
 #include "G4ThreeVector.hh"
-#include "ExN05PionShowerModel.hh"
-
+#include "G4SystemOfUnits.hh"
 
 ExN05ParallelWorldForPion::ExN05ParallelWorldForPion(G4String worldName)
   : G4VUserParallelWorld(worldName)
@@ -72,14 +73,14 @@ void ExN05ParallelWorldForPion::Construct()
   // -- Build the subsequent logical volume:
   G4LogicalVolume* ghostLogical
     = new G4LogicalVolume(ghostBox,
-			  Air,               // -- no material : IMPOSSIBLE !!!
-     			  "GhostLogical", 
-     			  0, 0, 0);
+                          Air,               // -- no material : IMPOSSIBLE !!!
+                          "GhostLogical", 
+                          0, 0, 0);
   // -- And place this logical volume in the parallel geometry:
   new G4PVPlacement(0,G4ThreeVector(0., 0., 175*cm),
-		    "GhostPhysical",
-		    ghostLogical,
-		    ghostWorld,false,0);
+                    "GhostPhysical",
+                    ghostLogical,
+                    ghostWorld,false,0);
 
   // -----------------------
   //  Setup fast simulation:

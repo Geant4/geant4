@@ -1,8 +1,14 @@
-#---Add all subdirectories that contains a CMakeLists.txt file -------------------------------------
-file(GLOB_RECURSE files RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} CMakeLists.txt)
-foreach( file ${files} )
-  get_filename_component(path ${file} PATH)
-  if(path)
-    add_subdirectory(${path})
-  endif()
-endforeach()
+#---Adding examples subdirectories explicitly 
+#   and a custom target to for building all basic examples -------------
+
+cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+
+add_subdirectory(N01)
+add_subdirectory(N02)
+add_subdirectory(N03)
+add_subdirectory(N04)
+add_subdirectory(N05)
+add_subdirectory(N06)
+add_subdirectory(N07)
+
+add_custom_target(novice DEPENDS N01 N02 N03 N04 N05 N06 N07)

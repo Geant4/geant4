@@ -47,6 +47,7 @@
 #include "G4VSDFilter.hh"
 #include "G4SDParticleFilter.hh"
 #include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 
 ExN07ParallelWorld::ExN07ParallelWorld(G4String worldName)
 :G4VUserParallelWorld(worldName),constructed(false),serial(false)

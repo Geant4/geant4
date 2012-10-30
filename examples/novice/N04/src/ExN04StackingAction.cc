@@ -34,6 +34,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
 #include "ExN04StackingActionMessenger.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
 ExN04StackingAction::ExN04StackingAction()

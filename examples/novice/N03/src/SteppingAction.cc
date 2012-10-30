@@ -42,12 +42,12 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction()					 
+SteppingAction::SteppingAction()                                         
 {
   detector = (DetectorConstruction*)
              G4RunManager::GetRunManager()->GetUserDetectorConstruction();
   eventaction = (EventAction*)
-                G4RunManager::GetRunManager()->GetUserEventAction();	       
+                G4RunManager::GetRunManager()->GetUserEventAction();               
  }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

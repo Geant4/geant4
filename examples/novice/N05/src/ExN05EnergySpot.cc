@@ -34,7 +34,7 @@
 #include "G4Polyline.hh"
 #include "G4VVisManager.hh"
 #include "G4Step.hh"
-
+#include "G4SystemOfUnits.hh"
 
 ExN05EnergySpot::ExN05EnergySpot()
 {;}

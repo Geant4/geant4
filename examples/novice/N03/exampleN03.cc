@@ -113,7 +113,7 @@ int main(int argc,char** argv)
       UImanager->ApplyCommand("/control/execute vis.mac"); 
 #endif
       if (ui->IsGUI())
-	UImanager->ApplyCommand("/control/execute gui.mac");
+        UImanager->ApplyCommand("/control/execute gui.mac");
       ui->SessionStart();
       delete ui;
 #endif
