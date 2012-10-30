@@ -42,7 +42,7 @@
 
 #include "G4SystemOfUnits.hh"
 #include "G4QCaptureAtRest.hh"
-#include "G4MuonMinusCapture.hh"
+#include "G4MuonMinusCaptureAtRest.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
@@ -102,7 +102,7 @@ void G4QStoppingPhysics::ConstructProcess()
 
   if ( useMuonMinusCapture )
   {
-     muProcess = new G4MuonMinusCapture();
+     muProcess = new G4MuonMinusCaptureAtRest();
   } else {
      muProcess = 0;
   }   
@@ -124,7 +124,7 @@ void G4QStoppingPhysics::ConstructProcess()
       {
 	 pmanager->AddRestProcess(muProcess);
          if(verbose > 1)
-          G4cout << "### QStoppingPhysics added G4MuonMinusCapture for " 
+          G4cout << "### QStoppingPhysics added G4MuonMinusCaptureAtRest for " 
 	         << particle->GetParticleName() << G4endl;
       } else {
          pmanager->AddRestProcess(hProcess);

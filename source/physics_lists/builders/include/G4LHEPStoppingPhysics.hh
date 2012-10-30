@@ -33,8 +33,6 @@
 // Author: 30 April 2006 V. Ivanchenko
 //
 // Modified:
-// 20120921  M. Kelsey -- Replace G4MuonMinusCaptureAtRest with new
-//		G4MuonMinusCapture.
 //----------------------------------------------------------------------------
 //
 
@@ -44,7 +42,7 @@
 #include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
 
-class G4MuonMinusCapture;
+class G4MuonMinusCaptureAtRest;
 class G4PionMinusAbsorptionAtRest;
 class G4KaonMinusAbsorption;
 class G4AntiProtonAnnihilationAtRest;
@@ -69,7 +67,7 @@ public:
 
 private:
 
-  G4MuonMinusCapture* muProcess;
+  G4MuonMinusCaptureAtRest* muProcess;
   G4PionMinusAbsorptionAtRest* piProcess;
   G4KaonMinusAbsorption* kProcess;
   G4AntiProtonAnnihilationAtRest* apProcess;

@@ -34,8 +34,6 @@
 //
 // Modified:
 // 10.11.2005 V.Ivanchenko edit to provide a standard and add mu-
-// 20120921  M. Kelsey -- Make all #include forward declarations; replace
-//		G4MuonMinusCaptureAtRest with G4MuonMinusCapture.
 //----------------------------------------------------------------------------
 //
 
@@ -44,7 +42,7 @@
 
 #include "globals.hh"
 
-class G4MuonMinusCapture;
+class G4MuonMinusCaptureAtRest;
 class G4AntiProtonAnnihilationAtRest;
 class G4AntiNeutronAnnihilationAtRest;
 class G4PionMinusAbsorptionAtRest;
@@ -61,7 +59,7 @@ public:
 
 private:
 
-  G4MuonMinusCapture*              theMuonMinusAbsorption;
+  G4MuonMinusCaptureAtRest*        theMuonMinusAbsorption;
   G4PionMinusAbsorptionAtRest*     thePionMinusAbsorption;
   G4KaonMinusAbsorption*           theKaonMinusAbsorption;
   G4AntiProtonAnnihilationAtRest*  theAntiProtonAnnihilation;
