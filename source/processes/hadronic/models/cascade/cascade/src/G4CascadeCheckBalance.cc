@@ -48,6 +48,7 @@
 // 20110722  M. Kelsey -- For IntraNucleiCascader, take G4CollOut as argument
 // 20120525  M. Kelsey -- Follow process-level checking: allow _either_ rel.
 //		or abs. to pass (instead of requiring both)
+// 20121002  M. Kelsey -- Add strangeness check (useful for Omega- beam)
 
 #include "G4CascadeCheckBalance.hh"
 #include "globals.hh"
@@ -65,17 +66,18 @@
 const G4double G4CascadeCheckBalance::tolerance = 1e-6;	// How small is zero?
 
 G4CascadeCheckBalance::G4CascadeCheckBalance(const char* owner)
-  : G4VCascadeCollider(owner),
-    relativeLimit(G4CascadeCheckBalance::tolerance),
+  : G4VCascadeCollider(owner), relativeLimit(G4CascadeCheckBalance::tolerance),
     absoluteLimit(G4CascadeCheckBalance::tolerance), initialBaryon(0),
-    finalBaryon(0), initialCharge(0), finalCharge(0) {}
+    finalBaryon(0), initialCharge(0), finalCharge(0), initialStrange(0),
+    finalStrange(0) {}
 
 G4CascadeCheckBalance::G4CascadeCheckBalance(G4double relative,
 					     G4double absolute,
 					     const char* owner)
   : G4VCascadeCollider(owner), relativeLimit(relative),
     absoluteLimit(absolute), initialBaryon(0), finalBaryon(0),
-    initialCharge(0), finalCharge(0) {}
+    initialCharge(0), finalCharge(0), initialStrange(0),
+    finalStrange(0) {}
 
 
 // Pseudo-collision just computes input and output four-vectors
@@ -91,7 +93,7 @@ void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
   if (bullet) initial += bullet->getMomentum();
   if (target) initial += target->getMomentum();
 
-  // Baryon number and charge must be computed "by hand"
+  // Baryon number, charge and strangeness must be computed "by hand"
   initialCharge = 0;
   if (bullet) initialCharge += G4int(bullet->getCharge());
   if (target) initialCharge += G4int(target->getCharge());
@@ -108,19 +110,27 @@ void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
     ((pbullet ? pbullet->baryon() : nbullet ? nbullet->getA() : 0) +
      (ptarget ? ptarget->baryon() : ntarget ? ntarget->getA() : 0) );
 
+  // NOTE:  Currently we ignore possibility of hypernucleus target
+  initialStrange = 0;
+  if (pbullet) initialStrange += pbullet->getStrangeness();
+  if (ptarget) initialStrange += ptarget->getStrangeness();
+
   // Final state totals are computed for us
   final = output.getTotalOutputMomentum();
   finalBaryon = output.getTotalBaryonNumber();
   finalCharge = output.getTotalCharge();
+  finalStrange = output.getTotalStrangeness();
 
   // Report results
-  if (verboseLevel>1) {
+  if (verboseLevel) {
     G4cout << " initial px " << initial.px() << " py " << initial.py()
 	   << " pz " << initial.pz() << " E " << initial.e()
 	   << " baryon " << initialBaryon << " charge " << initialCharge
-	   << "\n   final px " << final.px() << " py " << final.py()
+	   << " strange " << initialStrange << G4endl
+	   << "   final px " << final.px() << " py " << final.py()
 	   << " pz " << final.pz() << " E " << final.e()
-	   << " baryon " << finalBaryon << " charge " << finalCharge << G4endl;
+	   << " baryon " << finalBaryon << " charge " << finalCharge
+	   << " strange " << finalStrange << G4endl;
   }
 }
 
@@ -257,4 +267,14 @@ G4bool G4CascadeCheckBalance::chargeOkay() const {
 	   << G4endl;
 
   return qokay;
+}
+
+G4bool G4CascadeCheckBalance::strangeOkay() const {
+  G4bool sokay = (deltaS() == 0);	// Must be perfect!
+
+  if (verboseLevel && !sokay)
+    G4cerr << theName << ": Strangeness conservation VIOLATED " << deltaS()
+	   << G4endl;
+
+  return sokay;
 }

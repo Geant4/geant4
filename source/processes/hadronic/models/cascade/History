@@ -15,6 +15,22 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+9 October 2012 Michael Kelsey (hadr-casc-V09-05-24)
+---------------------------------------------------
+- G4ExitonConfiguration: Add empty() function to test exciton state, reduce
+  printout to single line.
+
+- G4InuclNuclei.cc:  Report non-empty exciton configuration in print().
+
+- G4NonEquilibriumEvaporator.cc:  Add additional diagnostic messages.
+
+- G4EquilibriumEvaporator.cc:  Add additional diagnostic messages.
+
+- G4CascadeCollisionOutput:  Add calculations of net strangeness.
+
+- G4CascadeCheckBalance:  Add reporting of strangeness conservation (but do
+  not require validation).
+
 1 October 2012 Michael Kelsey (hadr-casc-V09-05-23)
 ---------------------------------------------------
 - sources.cmake:  Add G4CascadeOmegaMinus*Channel.hh and .cc.

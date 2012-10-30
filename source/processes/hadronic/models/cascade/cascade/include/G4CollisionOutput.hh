@@ -44,6 +44,7 @@
 // 20110311  M. Kelsey -- Add function to boost individual four-vector
 // 20110323  M. Kelsey -- Add non-const access to lists (for G4NucleiModel)
 // 20110922  M. Kelsey -- Add optional stream argument to printCollisionOutput
+// 20121002  M. Kelsey -- Add strangeness calculation
 
 #ifndef G4COLLISION_OUTPUT_HH
 #define G4COLLISION_OUTPUT_HH
@@ -147,6 +148,7 @@ public:
   G4LorentzVector getTotalOutputMomentum() const;
   G4int getTotalCharge() const;			// NOTE:  No fractional charges!
   G4int getTotalBaryonNumber() const;
+  G4int getTotalStrangeness() const;
 
   void printCollisionOutput(std::ostream& os=G4cout) const;
 

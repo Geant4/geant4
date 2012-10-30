@@ -49,6 +49,7 @@
 // 20110829  M. Kelsey -- Add constructor to copy G4V3DNucleus input
 // 20110919  M. Kelsey -- Special case:  Allow fill(A=0,Z=0) to make dummy
 // 20110922  M. Kelsey -- Add stream argument to printParticle() => print()
+// 20121009  M. Kelsey -- Add report of excitons if non-empty
 
 #include <assert.h>
 #include <sstream>
@@ -278,4 +279,7 @@ void G4InuclNuclei::print(std::ostream& os) const {
   os << G4endl << " Nucleus: " << getDefinition()->GetParticleName() 
      << " A " << getA() << " Z " << getZ() << " mass " << getMass()
      << " Eex (MeV) " << getExitationEnergy();
+
+  if (!theExitonConfiguration.empty())
+    os << G4endl << "         " << theExitonConfiguration;
 }

@@ -56,6 +56,7 @@
 //		G4ReactionProductVector
 // 20110922  M. Kelsey -- Follow G4InuclParticle::print(ostream&) migration,
 //		Add optional stream argument to printCollisionOutput
+// 20121002  M. Kelsey -- Add strangeness calculation
 
 #include <algorithm>
 
@@ -257,6 +258,19 @@ G4int G4CollisionOutput::getTotalBaryonNumber() const {
   baryon += theRecoilFragment.GetA_asInt();
 
   return baryon;
+}
+
+G4int G4CollisionOutput::getTotalStrangeness() const {
+  if (verboseLevel > 1)
+    G4cout << " >>> G4CollisionOutput::getTotalStrangeness" << G4endl;
+
+  G4int strange = 0;
+  G4int i(0);
+  for(i=0; i < G4int(outgoingParticles.size()); i++) {
+    strange += outgoingParticles[i].getStrangeness();
+  }
+
+  return strange;
 }
 
 
