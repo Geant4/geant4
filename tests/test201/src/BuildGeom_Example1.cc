@@ -31,11 +31,12 @@
 // Makoto Asai - based on Long Baseline Neutrino Observatory experiment.
 // "Complete" detector but no rotated volumes.
 
-#include "BuildGeom_Example1.hh"
-
 #include <cmath>
 
+#include "BuildGeom_Example1.hh"
+
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ThreeVector.hh"
 #include "G4Navigator.hh"
 #include "G4GeometryManager.hh"

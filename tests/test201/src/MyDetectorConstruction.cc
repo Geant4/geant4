@@ -30,6 +30,7 @@
 // 
 #include "MyDetectorConstruction.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "MyDetectorMessenger.hh"
 #include "MyCalorimeterSD.hh"
 #include "MyTrackerSD.hh"

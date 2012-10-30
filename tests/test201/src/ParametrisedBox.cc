@@ -31,6 +31,7 @@
 // Test of parametrisation.  Based on Hans-Peter Wellisch's test.
 
 #include "ParametrisedBox.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4Box.hh"
 

@@ -31,6 +31,8 @@
 
 #include "BuildShapes.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4PVPlacement.hh"
 #include "G4LogicalVolume.hh"
 
