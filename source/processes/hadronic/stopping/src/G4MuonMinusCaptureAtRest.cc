@@ -64,12 +64,6 @@ G4MuonMinusCaptureAtRest::G4MuonMinusCaptureAtRest(const G4String& processName,
   G4VRestProcess (processName, aType), nCascade(0), targetZ(0), targetA(0), 
   isInitialised(false)
 {
-  static G4bool dowarn = true;
-  if (dowarn)
-    G4cout << "WARNING: " << __FILE__ << " is deprecated and will be removed."
-	   << G4endl; 
-  dowarn = false;
-
   SetProcessSubType(fHadronAtRest);
   Cascade    = new G4GHEKinematicsVector [17];
   pSelector  = new G4StopElementSelector();

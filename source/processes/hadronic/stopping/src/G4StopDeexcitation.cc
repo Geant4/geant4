@@ -40,18 +40,14 @@
 #include "G4ParticleTypes.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ThreeVector.hh"
+#include "G4HadronicDeprecate.hh"
 
 
 // Constructor
 
 G4StopDeexcitation::G4StopDeexcitation(G4StopDeexcitationAlgorithm* algorithm)
-  
 {
-  static G4bool dowarn = true;
-  if (dowarn)
-    G4cout << "WARNING: " << __FILE__ << " is deprecated and will be removed."
-	 << G4endl; 
-  dowarn = false;
+  G4HadronicDeprecate("G4StopDeexcitation");
   _algorithm = algorithm;
 }
 

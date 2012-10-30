@@ -46,15 +46,12 @@
 #include "G4Fragment.hh"
 #include "G4ExcitationHandler.hh"
 #include "G4DynamicParticleVector.hh"
+#include "G4HadronicDeprecate.hh"
 
 // Constructor
 
-G4StopTheoDeexcitation::G4StopTheoDeexcitation()
-{ static G4bool dowarn = true;
-  if (dowarn)
-    G4cout << "WARNING: " << __FILE__ << " is deprecated and will be removed."
-	 << G4endl;
-  dowarn = false;
+G4StopTheoDeexcitation::G4StopTheoDeexcitation() {
+  G4HadronicDeprecate("G4StopTheoDeexcitation");
 }
 
 // Destructor

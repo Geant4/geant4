@@ -92,12 +92,6 @@ G4double G4PiMinusStopCo::angle[8] = { 0.5, 0.7, 0.87, 1.4, 2.1,
 G4PiMinusStopCo::G4PiMinusStopCo()
   
 {
-  static G4bool dowarn = true;
-  if (dowarn)
-    G4cout << "WARNING: " << __FILE__ << " is deprecated and will be removed."
-	   << G4endl; 
-  dowarn = false;
-
   // Cluster size: nucleon pair, alpha, triton etc.
   // First implementation: interaction with nucleon pair only
   _clusterSize = 2;

@@ -37,7 +37,8 @@
 #include "G4ParticleTypes.hh"
 #include "Randomize.hh" 
 #include "G4HadronicProcessStore.hh"
- 
+#include "G4HadronicDeprecate.hh"
+
 #define MAX_SECONDARIES 100
 
 // constructor
@@ -53,12 +54,7 @@ G4NeutronCaptureAtRest::G4NeutronCaptureAtRest(const G4String& processName,
   pdefGamma(G4Gamma::Gamma()),
   pdefNeutron(G4Neutron::Neutron())
 {
-  static G4bool dowarn = true;
-  if (dowarn)
-    G4cout << "WARNING: " << __FILE__ << " is deprecated and will be removed."
-	   << G4endl;  
-  dowarn = false;
-
+  G4HadronicDeprecate("G4NeutronCaptureAtRest");
   if (verboseLevel>0) {
     G4cout << GetProcessName() << " is created "<< G4endl;
   }

@@ -14,6 +14,24 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+5 October 2012 Michael Kelsey (hadr-stopping-V09-05-26)
+-------------------------------------------------------
+Replace replicated code blocks for deprecation messages with new
+hadronic/util/G4HadronicDeprecate macro.
+
+  G4MuonMinusCaptureAtRest.cc		G4StopDummyDeexcitation.cc
+  G4PionMinusAbsorptionAtRest.cc	G4StopTheoDeexcitation.cc
+  G4PiMinusStopAl.cc			G4PiMinusAbsorptionAtRest.cc
+  G4PiMinusStopO.cc			G4PiMinusStopPb.cc
+  G4AntiProtonAnnihilationAtRest.cc	G4StopDeexcitation.cc
+  G4KaonMinusAbsorptionAtRest.cc	G4NeutronCaptureAtRest.cc
+  G4KaonMinusAbsorption.cc		G4PiMinusStopN.cc
+  G4PiMinusStopMaterial.cc		G4PiMinusStopCo.cc
+  G4PiMinusStopTa.cc			G4PiMinusStopLi.cc
+  G4PiMinusStopCu.cc			G4DistributionGenerator.cc
+  G4AntiNeutronAnnihilationAtRest.cc	G4PiMinusStopAbsorption.cc
+  G4PiMinusStopC.cc			G4StopDeexcitationAlgorithm.hh
+
 28 September 2012 Michael Kelsey (hadr-stopping-V09-05-25)
 ----------------------------------------------------------
 - G4HadronStoppingProcess:  Follow reversion of G4HadProc to G4VDiscrete:

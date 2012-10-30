@@ -33,6 +33,7 @@
 
 #include "globals.hh"
 #include "G4DistributionGenerator.hh"
+#include "G4HadronicDeprecate.hh"
 #include "G4ios.hh"
 #include <assert.h>
 
@@ -42,12 +43,7 @@ G4DistributionGenerator::G4DistributionGenerator(std::vector<G4double>& x,
 						 std::vector<G4double>& values)
   
 {
-  static G4bool dowarn = true;
-  if (dowarn)
-    G4cout << "WARNING: " << __FILE__ << " is deprecated and will be removed."
-	   << G4endl;  
-  dowarn = false;
-
+  G4HadronicDeprecate("G4DistributionGenerator");
   _x = x;
 
   // Check boundaries: must be size(x) = size(values) + 1

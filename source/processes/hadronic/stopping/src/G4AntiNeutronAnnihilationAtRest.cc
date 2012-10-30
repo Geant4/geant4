@@ -36,6 +36,7 @@
 #include "G4DynamicParticle.hh"
 #include "G4ParticleTypes.hh"
 #include "G4HadronicProcessStore.hh"
+#include "G4HadronicDeprecate.hh"
 #include "Randomize.hh" 
  
 #define MAX_SECONDARIES 100
@@ -62,12 +63,7 @@ G4AntiNeutronAnnihilationAtRest::G4AntiNeutronAnnihilationAtRest(const G4String&
   pdefTriton(G4Triton::Triton()),
   pdefAlpha(G4Alpha::Alpha())
 {
-  static G4bool dowarn = true;
-  if (dowarn)
-    G4cout << "WARNING: " << __FILE__ << " is deprecated and will be removed."
-	   << G4endl; 
-  dowarn = false;
-
+  G4HadronicDeprecate("G4AntiNeutronAnnihilationAtRest");
   if (verboseLevel>0) {
     G4cout << GetProcessName() << " is created "<< G4endl;
   }

@@ -54,12 +54,6 @@
 
 G4PiMinusStopMaterial::G4PiMinusStopMaterial()
 {
-  static G4bool dowarn = true;
-  if (dowarn)
-    G4cout << "WARNING: " << __FILE__ << " is deprecated and will be removed."
-	   << G4endl; 
-  dowarn = false;
-
   _definitions = 0;
   _momenta = 0;
   _distributionE = 0;

@@ -38,17 +38,13 @@
 #include "globals.hh"
 #include "G4DynamicParticleVector.hh"
 #include "G4ThreeVector.hh"
+#include "G4HadronicDeprecate.hh"
 
 // Constructor
 
 G4StopDummyDeexcitation::G4StopDummyDeexcitation()  
 {
-  static G4bool dowarn = true;
-  if (dowarn)
-    G4cout << "WARNING: " << __FILE__ << " is deprecated and will be removed."
-	   << G4endl;
-  dowarn = false;
-
+  G4HadronicDeprecate("G4StopDummyDeexcitation");
   _products = 0;
 }
 
