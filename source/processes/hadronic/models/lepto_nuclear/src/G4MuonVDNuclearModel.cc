@@ -37,9 +37,9 @@
 
 #include "G4MuonVDNuclearModel.hh"
 
+#include "Randomize.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
-#include "Randomize.hh"
 #include "G4CascadeInterface.hh"
 #include "G4TheoFSGenerator.hh" 
 #include "G4GeneratorPrecompoundInterface.hh"

@@ -1,7 +1,7 @@
 #------------------------------------------------------------------------------
 # CMakeLists.txt
-# Module : G4had_muon_nuclear
-# Package: Geant4.src.G4processes.G4hadronic.G4hadronic_models.G4photolepton_hadron.G4had_muon_nuclear
+# Module : G4had_lept_nuclear
+# Package: Geant4.src.G4processes.G4hadronic.G4hadronic_models.G4lepto_nuclear
 #
 # CMakeLists.txt for building a single granular library.
 #

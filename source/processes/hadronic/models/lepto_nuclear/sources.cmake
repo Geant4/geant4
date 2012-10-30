@@ -1,7 +1,7 @@
 #------------------------------------------------------------------------------
 # sources.cmake
 # Module : G4had_muon_nuclear
-# Package: Geant4.src.G4processes.G4hadronic.G4hadronic_models.G4photolepton_hadron.G4had_muon_nuclear
+# Package: Geant4.src.G4processes.G4hadronic.G4hadronic_models.G4lepto_nuclear
 #
 # Sources description for a library.
 # Lists the sources and headers of the code explicitely.
@@ -22,7 +22,6 @@ include_directories(${CLHEP_INCLUDE_DIRS})
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/volumes/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPGeometry/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPNumerics/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPRandom/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/materials/include)
@@ -32,8 +31,6 @@ include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/ions/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/mesons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/leptons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/particles/shortlived/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/lowenergy/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/cross_sections/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/binary_cascade/include)
@@ -65,21 +62,16 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 # Define the Geant4 Module.
 #
 include(Geant4MacroDefineModule)
-GEANT4_DEFINE_MODULE(NAME G4had_muon_nuclear
+GEANT4_DEFINE_MODULE(NAME G4had_lept_nuclear
     HEADERS
         G4ElectroVDNuclearModel.hh
-        G4MuNuclearInteraction.hh
-        G4ParametrizedHadronicVertex.hh
         G4MuonVDNuclearModel.hh
     SOURCES
         G4ElectroVDNuclearModel.cc
-        G4MuNuclearInteraction.cc
-        G4ParametrizedHadronicVertex.cc
         G4MuonVDNuclearModel.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons
-        G4emlowenergy
         G4geometrymng
         G4globman
         G4had_mod_man
@@ -90,7 +82,6 @@ GEANT4_DEFINE_MODULE(NAME G4had_muon_nuclear
         G4had_string_man
         G4had_theo_max
         G4hadronic_bert_cascade
-        G4hadronic_binary
         G4hadronic_deex_evaporation
         G4hadronic_deex_fermi_breakup
         G4hadronic_deex_handler
@@ -106,14 +97,12 @@ GEANT4_DEFINE_MODULE(NAME G4had_muon_nuclear
         G4hadronic_proc
         G4hadronic_util
         G4hadronic_xsect
-        G4hepnumerics
         G4ions
         G4leptons
         G4materials
         G4mesons
         G4partman
         G4procman
-        G4shortlived
         G4track
         G4volumes
     GLOBAL_DEPENDENCIES
