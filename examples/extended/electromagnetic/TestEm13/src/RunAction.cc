@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm13/src/RunAction.cc
+/// \brief Implementation of the RunAction class
+//
 // $Id: RunAction.cc,v 1.8 2010-04-05 13:45:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
@@ -40,6 +43,7 @@
 #include "G4EmCalculator.hh"
 #include "G4Gamma.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include <iomanip>
 
@@ -84,9 +88,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4double energy = fPrimary->GetParticleGun()->GetParticleEnergy();
   G4cout << "\n The run consists of " << NbOfEvents << " "<< Particle << " of "
          << G4BestUnit(energy,"Energy") << " through " 
-	 << G4BestUnit(tickness,"Length") << " of "
-	 << material->GetName() << " (density: " 
-	 << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
+         << G4BestUnit(tickness,"Length") << " of "
+         << material->GetName() << " (density: " 
+         << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
   
   //frequency of processes
   G4int totalCount = 0;
@@ -107,9 +111,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   
   G4cout << "\n Nb of incident particles unaltered after "
          << G4BestUnit(tickness,"Length") << " of "
-	 << material->GetName() << " : " << survive 
-	 << " over " << totalCount << " incident particles."
-	 << "  Ratio = " << 100*ratio << " %" << G4endl;
+         << material->GetName() << " : " << survive 
+         << " over " << totalCount << " incident particles."
+         << "  Ratio = " << 100*ratio << " %" << G4endl;
   
   if (ratio == 0.) return;
   
@@ -119,7 +123,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4double massicCS  = CrossSection/density;
    
   G4cout << " ---> CrossSection per volume:\t" << CrossSection*cm << " cm^-1 "
-	 << "\tCrossSection per mass: " << G4BestUnit(massicCS, "Surface/Mass")
+         << "\tCrossSection per mass: " << G4BestUnit(massicCS, "Surface/Mass")
          << G4endl;
 
   //check cross section from G4EmCalculator
@@ -140,16 +144,16 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     if (procName != "Transportation")
       G4cout << "\t" << procName << "= " 
              << G4BestUnit(massSigma, "Surface/Mass");
-  }  	   
+  }             
   G4cout << "\ttotal= " 
          << G4BestUnit(sumc, "Surface/Mass") << G4endl;
-	 
+         
   //expected ratio of transmitted particles
   G4double Ratio = std::exp(-sumc*density*tickness);
   G4cout << "\tExpected ratio of transmitted particles= " 
-         << 100*Ratio << " %" << G4endl;	 
-	 	 
-  //restore default format	 
+         << 100*Ratio << " %" << G4endl;         
+                  
+  //restore default format         
   G4cout.precision(prec);         
 
   // remove all contents in fProcCounter 
