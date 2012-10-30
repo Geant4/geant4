@@ -30,6 +30,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4StepLimiterPerRegion.hh"
+#include "G4SystemOfUnits.hh"
 // #include "G4StepLimiterMessenger.hh"
 #include "G4VPhysicalVolume.hh"
 // #include "Histo.hh"

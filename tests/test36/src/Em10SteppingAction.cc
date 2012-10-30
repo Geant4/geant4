@@ -32,7 +32,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+#include <iomanip>
+
 #include "Em10DetectorConstruction.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4EnergyLossTables.hh"
 #include "G4SteppingManager.hh"
 #include "G4TrackVector.hh"
@@ -44,7 +47,6 @@
 #include "G4EventManager.hh"
 #include "Em10SteppingMessenger.hh"
 #include "G4ios.hh"
-#include <iomanip>
 #include "G4UImanager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

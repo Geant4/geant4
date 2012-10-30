@@ -34,6 +34,7 @@
 
 #include "Em10PrimaryGeneratorMessenger.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "Em10PrimaryGeneratorAction.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"

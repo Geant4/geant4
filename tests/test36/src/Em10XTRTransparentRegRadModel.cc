@@ -29,6 +29,7 @@
 
 #include "Em10XTRTransparentRegRadModel.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4Integrator.hh"
 #include "G4Gamma.hh"
 

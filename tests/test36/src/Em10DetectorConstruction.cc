@@ -34,6 +34,7 @@
 #include "Em10CalorimeterSD.hh"
 #include "Em10Materials.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4Material.hh"
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
