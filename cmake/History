@@ -30,6 +30,9 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+4th October 2012 - Gunter Folger     (cmake-V09-05-49)
+- Modules/Geant4InstallData.cmake: Use G4EMLOW.6.30
+
 26th September 2012 Ivana Hrivnacova (cmake-V09-05-48)
 - Adding FindPythia6 module.
 - Modules/FindHepMC.cmake: support also HEPMC_DIR environment variable (which
