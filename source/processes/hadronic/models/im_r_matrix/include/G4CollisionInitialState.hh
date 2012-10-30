@@ -44,43 +44,40 @@
 
 class G4BCAction;
 
-class G4CollisionInitialState 
+class G4CollisionInitialState
 {
 
 public:
   G4CollisionInitialState();
   G4CollisionInitialState(G4double time, G4KineticTrack * aPrimary,
 			  G4KineticTrack * aTarget);
-// +new interface post pion:
   G4CollisionInitialState(G4double time, G4KineticTrack * aPrimary,
 			  const G4KineticTrackVector & aTarget,
 			  G4BCAction * aFSGenerator);
-// -new interface post pion:
-
 
   ~G4CollisionInitialState() { }
 
   G4CollisionInitialState(const G4CollisionInitialState & right);
   G4CollisionInitialState & operator=(const G4CollisionInitialState & right);
-      
+
   int operator<(const G4CollisionInitialState & right) const
     {return (theCollisionTime < right.theCollisionTime);}
-      
+
   int operator==(const G4CollisionInitialState& right) const
     {return (theCollisionTime == right.theCollisionTime);}
 
-  G4KineticTrack * GetPrimary(void)            
+
+  G4KineticTrack * GetPrimary(void)
     {return thePrimary;}
-  void SetPrimary(G4KineticTrack * aPrimary)   
+  void SetPrimary(G4KineticTrack * aPrimary)
     {thePrimary = aPrimary;}
- 
-  G4KineticTrack * GetTarget(void)             
+
+  G4KineticTrack * GetTarget(void)
     {return theTarget;}
-  void SetTarget(G4KineticTrack * aTarget)     
+  void SetTarget(G4KineticTrack * aTarget)
     {theTarget = aTarget;}
 
-// +new interface post pion:
-  void AddTarget(G4KineticTrack * aTarget)     
+  void AddTarget(G4KineticTrack * aTarget)
     {theTs.push_back(aTarget);}
   G4KineticTrackVector  & GetTargetCollection(void)
     {return theTs;}
@@ -103,12 +100,12 @@ public:
     }
     return G4lrint(result);
   }
-    
+
 // -new interface post pion:
 
-  G4double GetCollisionTime(void)             
+  G4double GetCollisionTime(void)
     {return theCollisionTime;}
-  void SetCollisionTime(G4double value)       
+  void SetCollisionTime(G4double value)
     {theCollisionTime = value;}
 
 // for debugging only
@@ -116,6 +113,16 @@ public:
   {
     return theFSGenerator;
   }
+
+
+  void Print() const;
+
+//  friend std::ostream& operator<<(std::ostream & out, const G4CollisionInitialState & collision){
+//  out=1;
+//  return out;
+//  }
+
+
 private:
 
   G4double theCollisionTime;

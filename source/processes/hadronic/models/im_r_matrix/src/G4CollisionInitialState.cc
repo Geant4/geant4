@@ -32,7 +32,7 @@
 
 #include "G4CollisionInitialState.hh"
 #include "G4BCAction.hh"
-// Class G4CollisionInitialState 
+// Class G4CollisionInitialState
 
 G4CollisionInitialState::G4CollisionInitialState() :
    theCollisionTime(DBL_MAX), thePrimary(0), theTarget(0), theFSGenerator(0)
@@ -40,7 +40,7 @@ G4CollisionInitialState::G4CollisionInitialState() :
 }
 
 
-G4CollisionInitialState::G4CollisionInitialState(G4double time, 
+G4CollisionInitialState::G4CollisionInitialState(G4double time,
    G4KineticTrack * aPrimary, G4KineticTrack * aTarget)
 {
    theCollisionTime = time;
@@ -51,7 +51,7 @@ G4CollisionInitialState::G4CollisionInitialState(G4double time,
 }
 
 // +new interface post pion:
-G4CollisionInitialState::G4CollisionInitialState(G4double time, 
+G4CollisionInitialState::G4CollisionInitialState(G4double time,
    G4KineticTrack * aPrimary, const G4KineticTrackVector & aTarget,
    G4BCAction * aFSGenerator)
 {
@@ -99,7 +99,31 @@ G4CollisionInitialState & G4CollisionInitialState::operator=(const G4CollisionIn
     return theFSGenerator->GetFinalState(thePrimary, theTs);
   }
 
+//#include <typeinfo>
 
+void G4CollisionInitialState::Print() const
+{
+   G4int tgtPdg=theTarget ?
+     theTarget->GetDefinition()->GetPDGEncoding() : 0;
+   G4cout << "  collision " << this << " time: "
+     << theCollisionTime/second << " proj: "
+     << thePrimary << "/pdg=" << thePrimary->GetDefinition()->GetPDGEncoding()
+     << " tgt: " << theTarget << "/pdg=" << tgtPdg
+     << " Collision type: "<< typeid(*theFSGenerator).name();
 
+}
 
+  /*
+std::ostream& G4CollisionInitialState::operator<<(std::ostream& out, const G4CollisionInitialState & collision)
+{
+  G4int tgtPdg=collision.GetTarget() ?
+    collision.GetTarget()->GetDefinition()->GetPDGEncoding() : 0;
+  out << "  collision " << collision << " time: "
+    << collision.GetCollisionTime()/second << " proj: "
+    << collision.GetPrimary() << "/pdg=" << collision.GetPrimary()->GetDefinition()->GetPDGEncoding()
+    << " tgt: " << collision.GetTarget() << "/pdg=" << tgtPdg
+    << " Collision type: "<< typeid(*collision.GetGenerator()).name();
 
+  return out;
+}
+*/
