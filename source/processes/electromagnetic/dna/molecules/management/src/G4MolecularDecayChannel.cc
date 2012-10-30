@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MolecularDecayChannel.cc 60428 2012-07-11 16:35:19Z matkara $
+// $Id$
 //
 // ----------------------------------------------------------------------
 //      GEANT 4 class implementation file

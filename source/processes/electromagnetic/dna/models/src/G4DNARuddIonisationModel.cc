@@ -567,6 +567,7 @@ void G4DNARuddIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
 
     if (k < lowLim)
     {
+        fParticleChangeForGamma->SetProposedKineticEnergy(0.);
         fParticleChangeForGamma->ProposeTrackStatus(fStopAndKill);
         fParticleChangeForGamma->ProposeLocalEnergyDeposit(k);
     }

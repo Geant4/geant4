@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMolecularStepByStepModel.cc 60429 2012-07-11 16:37:12Z matkara $
+// $Id$
 //
 #include "G4DNAMolecularStepByStepModel.hh"
 #include "G4VDNAReactionModel.hh"

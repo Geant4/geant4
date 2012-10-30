@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4OH.cc 60495 2012-07-12 14:49:48Z gcosmo $
+// $Id$
 //
 // Author: Mathieu Karamitors 
 //

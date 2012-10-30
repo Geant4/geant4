@@ -25,7 +25,7 @@
 //
 //
 // Id: From G4Navigator.hh,v 1.34 2010-12-15 13:46:39 gcosmo Exp
-// $Id: G4ITNavigator.hh 60427 2012-07-11 16:34:35Z matkara $
+// $Id$
 //
 //
 // class G4ITNavigator

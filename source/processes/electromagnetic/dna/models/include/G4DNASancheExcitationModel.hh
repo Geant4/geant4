@@ -70,7 +70,9 @@ public:
 
   G4double PartialCrossSection(G4double energy,G4int level);
 
-  inline void ExtendLowEnergyLimit (G4double /*threshold*/);		 
+  inline void ExtendLowEnergyLimit (G4double /*threshold*/);		
+
+  inline void SetVerboseLevel(int verbose){verboseLevel = verbose;} 
 
 protected:
 

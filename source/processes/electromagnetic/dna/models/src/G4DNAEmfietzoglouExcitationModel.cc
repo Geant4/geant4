@@ -188,18 +188,9 @@ void G4DNAEmfietzoglouExcitationModel::SampleSecondaries(std::vector<G4DynamicPa
 
     if (electronEnergy0 < highEnergyLimit)
     {
-        if (newEnergy >= lowEnergyLimit)
-        {
             fParticleChangeForGamma->ProposeMomentumDirection(aDynamicElectron->GetMomentumDirection());
             fParticleChangeForGamma->SetProposedKineticEnergy(newEnergy);
             fParticleChangeForGamma->ProposeLocalEnergyDeposit(excitationEnergy);
-        }
-
-        else
-        {
-            fParticleChangeForGamma->ProposeTrackStatus(fStopAndKill);
-            fParticleChangeForGamma->ProposeLocalEnergyDeposit(electronEnergy0);
-        }
 
         const G4Track * theIncomingTrack = fParticleChangeForGamma->GetCurrentTrack();
         G4DNAChemistryManager::Instance()->CreateWaterMolecule(eExcitedMolecule,

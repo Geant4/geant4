@@ -234,6 +234,7 @@ void G4DNAMeltonAttachmentModel::SampleSecondaries(std::vector<G4DynamicParticle
     // Electron is killed
 
     G4double electronEnergy0 = aDynamicElectron->GetKineticEnergy();
+    fParticleChangeForGamma->SetProposedKineticEnergy(0.);
     fParticleChangeForGamma->ProposeTrackStatus(fStopAndKill);
     fParticleChangeForGamma->ProposeLocalEnergyDeposit(electronEnergy0);
 

@@ -29,6 +29,7 @@
 #include "G4Molecule.hh"
 #include <map>
 #include "G4ParticleDefinition.hh"
+#include <memory>
 
 using namespace std;
 
@@ -71,7 +72,7 @@ public:
 
     static  G4MoleculeCounter* GetMoleculeCounter();
     inline const NbMoleculeAgainstTime& GetNbMoleculeAgainstTime(const G4Molecule &molecule);
-    vector<G4Molecule> RecordMolecules();
+    std::auto_ptr<vector<G4Molecule> > GetRecordedMolecules();
     virtual void AddAMoleculeAtTime(const G4Molecule&, G4double);
     virtual void RemoveAMoleculeAtTime(const G4Molecule&, G4double);
 
@@ -79,7 +80,7 @@ public:
     inline virtual void DontRegister(const G4MoleculeDefinition*);
     inline virtual void ResetDontRegister();
 
-    void Use(G4bool flag)
+    void Use(G4bool flag = true)
     {
         fUse=flag;
     }

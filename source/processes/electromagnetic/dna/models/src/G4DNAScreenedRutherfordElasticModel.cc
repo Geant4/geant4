@@ -267,6 +267,7 @@ void G4DNAScreenedRutherfordElasticModel::SampleSecondaries(std::vector<G4Dynami
 
     if (electronEnergy0 < killBelowEnergy)
     {
+        fParticleChangeForGamma->SetProposedKineticEnergy(0.);
         fParticleChangeForGamma->ProposeTrackStatus(fStopAndKill);
         fParticleChangeForGamma->ProposeLocalEnergyDeposit(electronEnergy0);
         return ;

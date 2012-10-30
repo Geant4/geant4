@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNADamages.cc 60423 2012-07-11 16:30:17Z matkara $
+// $Id$
 //
 #include "G4DNADamages.hh"
 #include "G4UnitsTable.hh"

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITTransportation.cc 60495 2012-07-12 14:49:48Z gcosmo $
+// $Id$
 //
 // This class is slightly modified version of G4Transportation
 // But it should use the exact same algorithm

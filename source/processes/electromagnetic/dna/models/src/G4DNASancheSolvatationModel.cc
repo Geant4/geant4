@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNASancheSolvatationModel.cc 60495 2012-07-12 14:49:48Z gcosmo $
+// $Id$
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -195,6 +195,7 @@ void G4DNASancheSolvatationModel::SampleSecondaries(std::vector<G4DynamicParticl
 
         G4DNAChemistryManager::Instance()->CreateSolvatedElectron(theIncomingTrack,&finalPosition);
 
+        fParticleChangeForGamma->SetProposedKineticEnergy(25.e-3*eV);
         fParticleChangeForGamma->ProposeTrackStatus(fStopAndKill);
         fParticleChangeForGamma->ProposeLocalEnergyDeposit(k);
     }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VITRestProcess.hh 60495 2012-07-12 14:49:48Z gcosmo $
+// $Id$
 //
 /// \brief Identical to G4VRestProcess with dependency from G4VITProcess
 //

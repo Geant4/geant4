@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MoleculeCounter.cc 60428 2012-07-11 16:35:19Z matkara $
+// $Id$
 //
 #include "G4MoleculeCounter.hh"
 #include "G4UIcommand.hh"
@@ -256,7 +256,7 @@ void G4MoleculeCounter::RemoveAMoleculeAtTime(const G4Molecule& molecule, G4doub
     }
 }
 
-vector<G4Molecule> G4MoleculeCounter::RecordMolecules()
+std::auto_ptr<vector<G4Molecule> > G4MoleculeCounter::GetRecordedMolecules()
 {
     if(fVerbose > 1)
     {
@@ -264,11 +264,11 @@ vector<G4Molecule> G4MoleculeCounter::RecordMolecules()
     }
 
     CounterMapType::iterator it;
-    vector<G4Molecule> output;
+    std::auto_ptr< vector<G4Molecule> > output (new vector<G4Molecule>) ;
 
     for(it = fCounterMap.begin() ; it != fCounterMap.end() ; it++)
     {
-        output.push_back((*it).first);
+        output->push_back((*it).first);
     }
     return output;
 }

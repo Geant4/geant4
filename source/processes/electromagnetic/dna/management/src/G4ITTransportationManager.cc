@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITTransportationManager.cc 60427 2012-07-11 16:34:35Z matkara $
+// $Id$
 //
 // History:
 // -----------

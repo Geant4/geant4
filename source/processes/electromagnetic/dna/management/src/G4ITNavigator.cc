@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // Id: From G4ITNavigator.cc,v 1.46 2010-11-15 14:03:27 gcosmo Exp
-// $Id: G4ITNavigator.cc 60495 2012-07-12 14:49:48Z gcosmo $
+// $Id$
 // 
 // class G4ITNavigator Implementation
 //

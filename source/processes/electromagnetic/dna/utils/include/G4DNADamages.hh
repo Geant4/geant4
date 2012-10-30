@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNADamages.hh 60439 2012-07-11 16:51:39Z matkara $
+// $Id$
 //
 #ifndef G4DNADAMAGES_HH
 #define G4DNADAMAGES_HH 1

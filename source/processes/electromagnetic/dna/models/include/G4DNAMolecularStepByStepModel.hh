@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMolecularStepByStepModel.hh 60435 2012-07-11 16:44:44Z matkara $
+// $Id$
 //
 // Author: Mathieu Karamitros (kara@cenbg.in2p3.fr)
 //

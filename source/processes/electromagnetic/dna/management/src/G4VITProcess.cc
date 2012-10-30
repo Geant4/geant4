@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VITProcess.cc 60495 2012-07-12 14:49:48Z gcosmo $
+// $Id$
 //
 #include "G4VITProcess.hh"
 #include "G4SystemOfUnits.hh"

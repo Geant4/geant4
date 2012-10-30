@@ -278,6 +278,7 @@ void G4DNAChampionElasticModel::SampleSecondaries(std::vector<G4DynamicParticle*
   
   if (electronEnergy0 < killBelowEnergy)
   {
+    fParticleChangeForGamma->SetProposedKineticEnergy(0.);
     fParticleChangeForGamma->ProposeTrackStatus(fStopAndKill);
     fParticleChangeForGamma->ProposeLocalEnergyDeposit(electronEnergy0);
     return ;

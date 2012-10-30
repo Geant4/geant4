@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ReferenceCast.hh 60427 2012-07-11 16:34:35Z matkara $
+// $Id$
 #ifndef G4REFERENCECAST_HH
 #define G4REFERENCECAST_HH
 
