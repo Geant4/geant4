@@ -40,6 +40,19 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
+
+G4HESigmaPlusInelastic::G4HESigmaPlusInelastic(const G4String& name)
+ : G4HEInelastic(name)
+{
+  vecLength = 0;
+  theMinEnergy = 20*GeV;
+  theMaxEnergy = 10*TeV;
+  MAXPART      = 2048;
+  verboseLevel = 0;
+  G4cout << "WARNING: model G4HESigmaPlusInelastic is being deprecated and will\n"
+         << "disappear in Geant4 version 10.0"  << G4endl;
+} 
+
 void G4HESigmaPlusInelastic::ModelDescription(std::ostream& outFile) const
 {
   outFile << "G4HESigmaPlusInelastic is one of the High Energy\n"
@@ -52,18 +65,6 @@ void G4HESigmaPlusInelastic::ModelDescription(std::ostream& outFile) const
           << "basis.  It may be applied to Sigma+ with initial energies\n"
           << "above 20 GeV.\n";
 }
-
-
-G4HESigmaPlusInelastic::G4HESigmaPlusInelastic(const G4String& name)
- : G4HEInelastic(name)
-{
-  vecLength = 0;
-  theMinEnergy = 20*GeV;
-  theMaxEnergy = 10*TeV;
-  MAXPART      = 2048;
-  verboseLevel = 0;
-//  Description();
-} 
 
 
 G4HadFinalState*

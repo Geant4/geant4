@@ -50,6 +50,8 @@ G4HEAntiKaonZeroInelastic::G4HEAntiKaonZeroInelastic(const G4String& name)
   theMaxEnergy = 10*TeV;
   MAXPART      = 2048;
   verboseLevel = 0;
+  G4cout << "WARNING: model G4HEAntiKaonZeroInelastic is being deprecated and will\n"
+         << "disappear in Geant4 version 10.0"  << G4endl;  
 }
 
 

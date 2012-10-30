@@ -49,6 +49,8 @@ G4HEAntiLambdaInelastic::G4HEAntiLambdaInelastic(const G4String& name)
   theMaxEnergy = 10*TeV;
   MAXPART      = 2048;
   verboseLevel = 0;
+  G4cout << "WARNING: model G4HEAntiLambdaInelastic is being deprecated and will\n"
+         << "disappear in Geant4 version 10.0"  << G4endl;  
 }
 
 

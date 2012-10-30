@@ -60,6 +60,8 @@ class G4HEAntiProtonInelastic : public G4HEInelastic
       theMaxEnergy = 10*CLHEP::TeV;
       MAXPART      = 2048;
       verboseLevel = 0; 
+      G4cout << "WARNING: model G4HEAntiProtonInelastic is being deprecated and will\n"
+             << "disappear in Geant4 version 10.0"  << G4endl;  
     }
 
     ~G4HEAntiProtonInelastic() {};
