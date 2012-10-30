@@ -12,6 +12,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+10-Oct-2012 Alberto Ribon                     (hadr-chips-inter-V09-05-07)
+--------------------------------------------------------------------------
+Added deprecate warning message (to be ready to drop CHIPS in G4 10) to
+G4PionMinusNuclearAtRestChips and G4ProtonAntiProtonAtRestChips.
+
 28-Sep-2012 Gabriele Cosmo                     (hadr-chips-inter-V09-05-06)
 --------------------------------------------------------------------------
 Missing correction in file G4ElectroNuclearReaction.hh...

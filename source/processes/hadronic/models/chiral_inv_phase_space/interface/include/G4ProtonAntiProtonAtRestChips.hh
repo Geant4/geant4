@@ -43,6 +43,8 @@
 #include "G4StopElementSelector.hh"
 #include "G4ChiralInvariantPhaseSpace.hh"
 #include "G4HadronicProcessType.hh"
+#include "G4HadronicDeprecate.hh"
+
 
 class G4ProtonAntiProtonAtRestChips : public G4VRestProcess
 {
@@ -57,6 +59,7 @@ class G4ProtonAntiProtonAtRestChips : public G4VRestProcess
                                                             "AntiProtonAnnihilationAtRest")
       : G4VRestProcess (processName, fHadronic) 
      {
+       G4HadronicDeprecate("G4ProtonAntiProtonAtRestChips");
        SetProcessSubType(fHadronAtRest);
      }
  
