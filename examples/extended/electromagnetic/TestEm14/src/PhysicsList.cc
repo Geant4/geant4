@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm14/src/PhysicsList.cc
+/// \brief Implementation of the PhysicsList class
+//
 // 
 // $Id: PhysicsList.cc,v 1.8 2010-04-05 18:02:39 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
@@ -39,6 +42,7 @@
 
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -59,7 +63,11 @@ PhysicsList::PhysicsList()
   // EM physics
   fEmName = G4String("standard");
   fEmPhysicsList = new PhysListEmStandard(fEmName);
-
+  
+  //add new units for cross sections
+  // 
+  new G4UnitDefinition( "mm2/g", "mm2/g","Surface/Mass", mm2/g);
+  new G4UnitDefinition( "um2/mg", "um2/mg","Surface/Mass", um*um/mg);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

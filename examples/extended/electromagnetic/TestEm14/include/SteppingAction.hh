@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm14/include/SteppingAction.hh
+/// \brief Definition of the SteppingAction class
+//
 // $Id: SteppingAction.hh,v 1.5 2010-04-02 13:22:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -37,22 +40,20 @@
 
 class PrimaryGeneratorAction;
 class RunAction;
-class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class SteppingAction : public G4UserSteppingAction
 {
   public:
-    SteppingAction(PrimaryGeneratorAction*, RunAction*, HistoManager*);
+    SteppingAction(PrimaryGeneratorAction*, RunAction*);
    ~SteppingAction();
 
-    void UserSteppingAction(const G4Step*);
+    virtual void UserSteppingAction(const G4Step*);
     
   private:
     PrimaryGeneratorAction* fPrimary;
     RunAction*              fRunAction;
-    HistoManager*           fHistoManager;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

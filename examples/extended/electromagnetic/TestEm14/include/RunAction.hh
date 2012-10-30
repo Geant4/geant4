@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm14/include/RunAction.hh
+/// \brief Definition of the RunAction class
+//
 // $Id: RunAction.hh,v 1.5 2010-04-05 18:02:39 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -48,19 +51,19 @@ class G4Run;
 class RunAction : public G4UserRunAction
 {
   public:
-    RunAction(DetectorConstruction*, PrimaryGeneratorAction*, HistoManager*);
+    RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
    ~RunAction();
 
   public:
-    void BeginOfRunAction(const G4Run*);
-    void   EndOfRunAction(const G4Run*);
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void   EndOfRunAction(const G4Run*);
 
     void CountProcesses(G4String procName) 
                 {fProcCounter[procName]++;};
     void SumTrack (G4double track) 
                 {fTotalCount++; fSumTrack += track; fSumTrack2 += track*track;};
     void SumeTransf (G4double energy) 
-                {fEnTransfer += energy;};	 
+                {fEnTransfer += energy;};         
                     
   private:
     DetectorConstruction*      fDetector;

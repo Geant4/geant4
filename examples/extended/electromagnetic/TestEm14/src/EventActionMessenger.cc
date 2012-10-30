@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm14/src/EventActionMessenger.cc
+/// \brief Implementation of the EventActionMessenger class
+//
 // $Id: EventActionMessenger.cc,v 1.3 2006-06-29 16:45:39 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
