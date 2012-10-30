@@ -24,6 +24,7 @@
 // ********************************************************************
 //
 #include "Tst34MaterialManager.hh"
+#include "G4SystemOfUnits.hh"
 
 Tst34MaterialManager* Tst34MaterialManager::mpointer=0;
 

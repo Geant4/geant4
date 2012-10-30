@@ -24,8 +24,12 @@
 // ********************************************************************
 //
 
+#include <iostream>
+#include <algorithm>
+
 #include "Tst34EventAction.hh"
 #include "Tst34Hit.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4EventManager.hh"
 #include "G4SDManager.hh"
 #include "G4TrajectoryContainer.hh"
@@ -33,9 +37,6 @@
 #include "G4UImanager.hh"
 #include "G4TrajectoryContainer.hh"
 #include "G4Event.hh"
-
-#include <iostream>
-#include <algorithm>
 
 #include "G4Timer.hh"
 extern G4Timer Timer;
