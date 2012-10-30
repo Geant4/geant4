@@ -1,4 +1,4 @@
--n $Id: History,v 1.40 2010-09-01 17:29:29 sincerti Exp $
+$Id: History,v 1.40 2010-09-01 17:29:29 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,33 +15,36 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-30 Sept 2011 G.Folger tag test14-V09-04-03
-             Fix gcc46 compilation warning in Tst14DetectorConstruction.cc
+9 Oct 2012  - G.Cosmo tag test14-V09-05-00
+              - Explicit inclusion of units and constants headers.
 
-07 June 2011  - V.Ivanchenko tag test14-V09-04-02
-              - reduce size of log output for teh default macro
+30 Sep 2011 - G.Folger tag test14-V09-04-03
+              - Fix gcc46 compilation warning in Tst14DetectorConstruction.cc.
+
+07 Jun 2011 - V.Ivanchenko tag test14-V09-04-02
+              - Reduce size of log output for the default macro.
 
 30 May 2011 - V.Ivanchenko tag test14-V09-04-01
-              - fixed macro test14_polarised.in providing infine
-                computation
+              - Fixed macro test14_polarised.in providing long computation.
 
-19 Jan 2011 - L. Pandola tag test14-V09-04-00
-	      -code cleaning (removed commented #includes to 
-	      obsolete physics processes)
+19 Jan 2011 - L.Pandola tag test14-V09-04-00
+	      - Code cleaning (removed commented #includes to 
+	        obsolete physics processes).
 
-1 Sep 2010  - S. Incerti tag test14-V09-03-05
-              -added migrated Penelope positron models
-              -added high energy limits to Physics
+1 Sep 2010  - S.Incerti tag test14-V09-03-05
+              - Added migrated Penelope positron models.
+              - Added high energy limits to Physics.
 
 30 Aug 2010 - S. Incerti tag test14-V09-03-04
-              -updated *.in files
+              - Updated *.in files.
 
-29 Aug 2010 - S. Incerti tag test14-V09-03-03
-              -updated handling of cuts in PhysicsList and PhysicsListMessenger
-              -updated test14.in
+29 Aug 2010 - S.Incerti tag test14-V09-03-03
+              - Updated handling of cuts in PhysicsList and
+                PhysicsListMessenger.
+              - Updated test14.in.
 
-28 Aug 2010 - S. Incerti tag test14-V09-03-02
-              migrated all physics models
+28 Aug 2010 - S.Incerti tag test14-V09-03-02
+              - Migrated all physics models.
 
 05 May 2010 - V.Ivanchenko tag test14-V09-03-01
               nothing changed only to propose the migration

@@ -36,6 +36,7 @@
 // -------------------------------------------------------------------
 
 #include "Tst14PhysicsList.hh"
+#include "G4SystemOfUnits.hh"
 #include "Tst14PhysicsListMessenger.hh"
 #include "Tst14Particles.hh"
 #include "Tst14PhotonStandard.hh"

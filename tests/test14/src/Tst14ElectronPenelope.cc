@@ -38,6 +38,7 @@
 
 #include "Tst14ElectronPenelope.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4ProcessManager.hh"
 #include "G4Gamma.hh"
 #include "G4ParticleDefinition.hh"

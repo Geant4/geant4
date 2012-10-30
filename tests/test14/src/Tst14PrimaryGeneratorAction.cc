@@ -37,6 +37,8 @@
 #include "Tst14DetectorConstruction.hh"
 //#include "Tst14PrimaryGeneratorMessenger.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
