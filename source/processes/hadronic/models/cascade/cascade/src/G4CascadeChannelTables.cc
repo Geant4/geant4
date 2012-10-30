@@ -138,6 +138,8 @@ void G4CascadeChannelTables::PrintTable(G4int initialState, std::ostream& os) {
 #include "G4CascadeXiMinusPChannel.hh"
 #include "G4CascadeXiZeroNChannel.hh"
 #include "G4CascadeXiZeroPChannel.hh"
+#include "G4CascadeOmegaMinusNChannel.hh"
+#include "G4CascadeOmegaMinusPChannel.hh"
 #include "G4InuclParticleNames.hh"
 using namespace G4InuclParticleNames;
 
@@ -179,6 +181,8 @@ const G4CascadeChannel* G4CascadeChannelTables::LoadTable(G4int initialState) {
   case xi0*pro: tbl = new G4CascadeXiZeroPChannel; break;
   case xim*neu: tbl = new G4CascadeXiMinusNChannel; break;
   case xim*pro: tbl = new G4CascadeXiMinusPChannel; break;
+  case om*neu:  tbl = new G4CascadeOmegaMinusNChannel; break;
+  case om*pro:  tbl = new G4CascadeOmegaMinusPChannel; break;
   default: tbl = 0;
   }
 

@@ -15,6 +15,17 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+1 October 2012 Michael Kelsey (hadr-casc-V09-05-23)
+---------------------------------------------------
+- sources.cmake:  Add G4CascadeOmegaMinus*Channel.hh and .cc.
+
+1 October 2012 Dennis Wright, M. Kelsey (hadr-casc-V09-05-22)
+-------------------------------------------------------------
+- G4CascadeChannelTables.cc: Add "om*pro" and "om*neu" to LoadTables.
+
+- create classes G4CascadeOmegaMinusPChannel and G4CascadeOmegaMinusNChannel
+  containing partial cross sections for omega- p and omega- n reactions
+  
 25 September 2012 Gabriele Cosmo (hadr-casc-V09-05-21)
 ------------------------------------------------------
 - Explicitly use inclusion of headers for system of units and physical

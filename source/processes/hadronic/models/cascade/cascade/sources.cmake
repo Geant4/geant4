@@ -99,6 +99,8 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4CascadeLambdaPChannel.hh
         G4CascadeNNChannel.hh
         G4CascadeNPChannel.hh
+        G4CascadeOmegaMinusNChannel.hh
+        G4CascadeOmegaMinusPChannel.hh
 	G4CascadeParameters.hh
 	G4CascadeParamMessenger.hh
 	G4CascadeParamMessenger.icc
@@ -181,6 +183,8 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4CascadeLambdaPChannel.cc
         G4CascadeNNChannel.cc
         G4CascadeNPChannel.cc
+        G4CascadeOmegaMinusNChannel.cc
+        G4CascadeOmegaMinusPChannel.cc
         G4CascadePPChannel.cc
         G4CascadeRecoilMaker.cc
         G4CascadeSigmaMinusNChannel.cc
