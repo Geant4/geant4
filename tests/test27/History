@@ -12,16 +12,18 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-27-July-2012, Vladimir Ivanchenko                (test27-V09-05-00)
-- Fixed hadron elastic 
+09-Oct-2012, Gabriele Cosmo                      (test27-V09-05-01)
+- Explicit inclusion of units and constants headers.
+
+27-Jul-2012, Vladimir Ivanchenko                 (test27-V09-05-00)
+- Fixed hadron elastic.
 
 18-Mar-2010, Gunter Folger                       (test27-V09-03-00)
--  Adapt to new multiple scattering classes
--  fix mac file for SetCut 
+- Adapt to new multiple scattering classes.
+- Fix mac file for SetCut.
 
-
-06.12.2005, G.Cosmo
+06-Dec-2005, Gabriele Cosmo
 - Trivial changes for support of CLHEP-2.0.X series.
 
-04.11.2003, G.Folger
+04-Nov-2003, Gunter Folger
 - Created the test.
