@@ -60,6 +60,7 @@ $Id:
     - "emstandard_opt1" best CPU performance standard physics for LHC
     - "emstandard_opt2"     
     - "emstandard_opt3" 
+    - "emstandard_opt4" (since geant4-09-05-ref-09)
     - "emlivermore" 
     - "empenelope" (Penelope physics, v2008)
     - "penelope08" (alias of "empenelope") 

@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05-Oct-2012 L.Pandola (test67-V09-05-02)
+        Register the new EM builder G4EmStandardPhysics_option4 as 
+        a valid option. Applicable since geant4-09-05-ref-09. 
+
 16-Apr-2012 L.Pandola (test67-V09-05-01)
 	Copy of the previous tag (rejected for other reasons)
 

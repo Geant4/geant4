@@ -46,6 +46,7 @@
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
+#include "G4EmStandardPhysics_option4.hh"
 #include "G4EmPenelopePhysics.hh"
 #include "G4EmLivermorePhysics.hh"
 
@@ -151,6 +152,10 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics_option3();
+  } else if (name == "emstandard_opt4") {
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmStandardPhysics_option4();
   } else if (name == "empenelope" || name == "penelope08"){
     //the default Penelope version is now 2008. The two
     //are aliases now.
