@@ -36,6 +36,7 @@
 #include "G4MaterialTable.hh"
 #include "G4Element.hh"
 #include "G4ElementTable.hh"
+#include "G4NistManager.hh"
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 #include "G4ThreeVector.hh"
@@ -106,8 +107,14 @@ void Tst24DetectorConstruction::SelectMaterialPointer()
   { selectedMaterial = theSi; }
   else if(materialChoice=="Cu")
   { selectedMaterial = theCu; }
-  else
+  else if(materialChoice=="U")
   { selectedMaterial = theU; }
+  else
+  { selectedMaterial=G4NistManager::Instance()->
+     FindOrBuildMaterial(materialChoice);
+     if ( selectedMaterial ) G4cout << " Using geant4 material " << selectedMaterial->GetName() << G4endl;
+     else G4cout <<" material " << materialChoice << " not found, using default material " << G4endl;
+; }
 
   if(simpleBoxLog)
   { simpleBoxLog->SetMaterial(selectedMaterial); }

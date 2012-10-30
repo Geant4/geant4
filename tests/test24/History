@@ -12,6 +12,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08-Oct-2012, Gunter Folger                       (test24-V09-05-00)
+-  Do not create Precompound with local setting for deexcitation models
+     this would now be re-used by binary, and create energy non-conservation
+-  Extend testing to Be and C
+     
 18-Mar-2010, Gunter Folger                       (test24-V09-03-00)
 -  Adapt to new multiple scattering classes
 -  fix mac file for SetCut 

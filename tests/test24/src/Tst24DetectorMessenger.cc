@@ -49,8 +49,8 @@ Tst24DetectorMessenger::Tst24DetectorMessenger(Tst24DetectorConstruction * myDC)
   selMatCmd->SetGuidance("Select Material of the SimpleBox.");
   selMatCmd->SetGuidance("  Choice : H, Si, Cu, U (default)");
   selMatCmd->SetParameterName("choice",true);
-  selMatCmd->SetDefaultValue("U");
-  selMatCmd->SetCandidates("H Si Cu U");
+//  selMatCmd->SetDefaultValue("U");
+//  selMatCmd->SetCandidates("H Si Cu U");
   selMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   myDetector->SelectMaterial(defParam="U");

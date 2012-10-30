@@ -91,6 +91,62 @@
 /mydet/SelectMaterial Si
 /run/beamOn 20
 #
+# proton at 10 GeV in Carbon
+#
+/gun/particle proton
+/gun/energy 10 GeV
+/mydet/SelectMaterial G4_C
+/run/beamOn 20
+#
+# neutron at 10 GeV in Carbon
+#
+/gun/particle neutron
+/gun/energy 10 GeV
+/mydet/SelectMaterial G4_C
+/run/beamOn 20
+#
+# pi+ at 10 GeV in Carbon
+#
+/gun/particle pi+
+/gun/energy 10 GeV
+/mydet/SelectMaterial G4_C
+/run/beamOn 20
+#
+# pi- at 10 GeV in Carbon
+#
+/gun/particle pi-
+/gun/energy 10 GeV
+/mydet/SelectMaterial G4_C
+/run/beamOn 20
+#
+# proton at 10 GeV in Beryllium
+#
+/gun/particle proton
+/gun/energy 10 GeV
+/mydet/SelectMaterial G4_Be
+/run/beamOn 20
+#
+# neutron at 10 GeV in Beryllium
+#
+/gun/particle neutron
+/gun/energy 10 GeV
+/mydet/SelectMaterial G4_Be
+/run/beamOn 20
+#
+# pi+ at 10 GeV in Beryllium
+#
+/gun/particle pi+
+/gun/energy 10 GeV
+/mydet/SelectMaterial G4_Be
+/run/beamOn 20
+#
+# pi- at 10 GeV in Beryllium
+#
+/gun/particle pi-
+/gun/energy 10 GeV
+/mydet/SelectMaterial G4_Be
+/run/beamOn 20
+#
 # proton at 10 GeV in H
 #
 /gun/particle proton
