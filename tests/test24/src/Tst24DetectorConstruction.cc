@@ -32,6 +32,7 @@
 
 #include "Tst24DetectorMessenger.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4Element.hh"

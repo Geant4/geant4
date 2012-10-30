@@ -27,8 +27,13 @@
 // $Id: Tst24PhysicsList.cc,v 1.6 2010-03-18 15:33:05 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-#include "globals.hh"
+
+#include <iomanip>
+
 #include "Tst24PhysicsList.hh"
+#include "globals.hh"
+#include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"
@@ -43,9 +48,6 @@
 #include "G4ShortLivedConstructor.hh"
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
-#include "G4ios.hh"
-#include <iomanip>
-
 
 Tst24PhysicsList::Tst24PhysicsList():  G4VUserPhysicsList()
 {

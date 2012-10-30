@@ -24,7 +24,11 @@
 // ********************************************************************
 //
 
+#include <iomanip>
+
 #include "Tst24SteppingAction.hh"
+#include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4SteppingManager.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
@@ -34,8 +38,6 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
-#include "G4ios.hh"
-#include <iomanip>
 
 Tst24SteppingAction::Tst24SteppingAction()
 {;}
