@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm1/src/RunAction.cc
+/// \brief Implementation of the RunAction class
+//
 // $Id: RunAction.cc,v 1.20 2010-04-06 11:11:24 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
@@ -104,15 +107,15 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   
   G4cout << "\n The run was: " << NbOfEvents << " " << partName << " of "
          << G4BestUnit(energy,"Energy") << " through " 
-	 << G4BestUnit(length,"Length") << " of "
-	 << material->GetName() << " (density: " 
-	 << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
-	 
+         << G4BestUnit(length,"Length") << " of "
+         << material->GetName() << " (density: " 
+         << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
+         
  G4cout << "\n ============================================================\n";
  
  G4cout << "\n total energy deposit: " 
         << G4BestUnit(fEdep/dNbOfEvents, "Energy") << G4endl;
-	     
+             
  //nb of tracks and steps per event
  //           
  G4cout << "\n nb tracks/event"
@@ -162,16 +165,16 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
  G4cout << "\n proj Range = " << G4BestUnit(fProjRange,"Length")
         << "   rms = "        << G4BestUnit(projRms,  "Length");
-	     
+             
  G4cout << "\n proj/true  = " << fProjRange/fTrueRange;
-      	     
+                   
  G4cout << "\n transverse dispersion at end = " 
         << G4BestUnit(trvsRms,"Length");
-	
+        
  G4cout << "\n      mass true Range from simulation = " 
         << G4BestUnit(fTrueRange*density, "Mass/Surface")
-	<< "\n       from PhysicsTable (csda range) = " 
-        << G4BestUnit(rangeTable*density, "Mass/Surface");	
+        << "\n       from PhysicsTable (csda range) = " 
+        << G4BestUnit(rangeTable*density, "Mass/Surface");        
  G4cout << "\n---------------------------------------------------------\n";
  G4cout << G4endl;
  

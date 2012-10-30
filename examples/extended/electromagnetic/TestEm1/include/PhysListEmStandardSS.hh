@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm1/include/PhysListEmStandardSS.hh
+/// \brief Definition of the PhysListEmStandardSS class
+//
 // $Id: PhysListEmStandardSS.hh,v 1.1 2006-08-10 08:45:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -45,12 +48,12 @@ public:
 
 public: 
   // This method is dummy for physics
-  void ConstructParticle() {};
+  virtual void ConstructParticle() {};
  
   // This method will be invoked in the Construct() method.
   // each physics process will be instantiated and
   // registered to the process manager of each particle type 
-  void ConstructProcess();
+  virtual void ConstructProcess();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

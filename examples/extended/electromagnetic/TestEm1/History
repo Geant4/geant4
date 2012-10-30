@@ -14,7 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+     
+10-10-12 mma (testem1-V09-05-10)
+- PhysicsList: add G4EmstandardPhysics_option4
+- coding conventions: virtual
+    
 06-09-12 V.Ivant (testem1-V09-05-09)
 - Ivana Hrivnacova updated CMakeLists.txt
      

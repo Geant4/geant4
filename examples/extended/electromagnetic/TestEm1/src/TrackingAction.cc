@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm1/src/TrackingAction.cc
+/// \brief Implementation of the TrackingAction class
+//
 // $Id: TrackingAction.cc,v 1.10 2006-06-29 16:37:36 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm1/src/PhysicsList.cc
+/// \brief Implementation of the PhysicsList class
+//
 // 
 // $Id: PhysicsList.cc,v 1.12 2009-09-15 12:51:49 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
@@ -40,6 +43,7 @@
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
+#include "G4EmStandardPhysics_option4.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
 
@@ -47,6 +51,7 @@
 
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -247,6 +252,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option3();
     
+  } else if (name == "emstandard_opt4") {
+
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option4();
+        
   } else if (name == "standardSS") {
 
     fEmName = name;
@@ -307,8 +318,8 @@ void PhysicsList::AddRadioactiveDecay()
 {  
   G4RadioactiveDecay* radioactiveDecay = new G4RadioactiveDecay();
   radioactiveDecay->SetHLThreshold(-1.*s);
-  radioactiveDecay->SetICM(true);		//Internal Conversion
-  radioactiveDecay->SetARM(true);		//Atomic Rearangement
+  radioactiveDecay->SetICM(true);                //Internal Conversion
+  radioactiveDecay->SetARM(true);                //Atomic Rearangement
   
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();  
   ph->RegisterProcess(radioactiveDecay, G4GenericIon::GenericIon());
@@ -330,7 +341,7 @@ void PhysicsList::AddStepMax()
 
       if (stepMaxProcess->IsApplicable(*particle))
         {
-	  pmanager ->AddDiscreteProcess(stepMaxProcess);
+          pmanager ->AddDiscreteProcess(stepMaxProcess);
         }
   }
 }

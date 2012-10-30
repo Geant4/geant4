@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm1/include/RunAction.hh
+/// \brief Definition of the RunAction class
+//
 // $Id: RunAction.hh,v 1.9 2010-04-06 11:11:24 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -52,8 +55,8 @@ class RunAction : public G4UserRunAction
    ~RunAction();
 
   public:
-    void BeginOfRunAction(const G4Run*);
-    void   EndOfRunAction(const G4Run*);
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void   EndOfRunAction(const G4Run*);
     
     void CountTraks0(G4int nt) { fNbOfTraks0 += nt;}
     void CountTraks1(G4int nt) { fNbOfTraks1 += nt;}

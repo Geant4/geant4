@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm1/src/HistoManager.cc
+/// \brief Implementation of the HistoManager class
+//
 //
 // $Id: HistoManager.cc,v 1.1 2010-09-16 16:26:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
@@ -67,12 +70,12 @@ void HistoManager::Book()
   const G4int kMaxHisto = 6;
   const G4String name[] = { "1", "2", "3" , "4", "5", "6"};
   const G4String title[] = 
-                { "total track length of primary particle",	//1
-                  "nb steps of primary particle",		//2
-                  "step size of primary particle",		//3
-                  "total energy deposit",			//4
-                  "energy of charged secondaries at creation",	//5
-		  "energy of neutral secondaries at creation"	//6		  
+                { "total track length of primary particle",      //1
+                  "nb steps of primary particle",                //2
+                  "step size of primary particle",               //3
+                  "total energy deposit",                        //4
+                  "energy of charged secondaries at creation",   //5
+                  "energy of neutral secondaries at creation"    //6                  
                  };
   // Default values (to be reset via /analysis/h1/set command)               
   G4int nbins = 100;
