@@ -15,6 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+03-10-12 mma (testem3-V09-05-04)
+- apply coding conventions in DetectorConstruction and PhysicsList
+     
+02-10-12 mma (testem3-V09-05-03)
+- HistoManager functionalies transfered to G4Analysis
+- suppress HistoMessenger
+     
 29-08-12 mma (testem3-V09-05-02)
 - add .README
      

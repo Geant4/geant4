@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm3/include/PhysListEmStandard.hh
+/// \brief Definition of the PhysListEmStandard class
+//
 // $Id: PhysListEmStandard.hh,v 1.4 2006-06-29 16:51:42 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -40,17 +43,17 @@
 class PhysListEmStandard : public G4VPhysicsConstructor
 {
   public: 
-    PhysListEmStandard(const G4String& name = "standard");
+     PhysListEmStandard(const G4String& name = "standard");
     ~PhysListEmStandard();
 
   public: 
     // This method is dummy for physics
-    void ConstructParticle() {};
+    virtual void ConstructParticle() {};
  
     // This method will be invoked in the Construct() method.
     // each physics process will be instantiated and
     // registered to the process manager of each particle type 
-    void ConstructProcess();
+    virtual void ConstructProcess();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

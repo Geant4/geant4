@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm3/src/EventAction.cc
+/// \brief Implementation of the EventAction class
+//
 // $Id: EventAction.cc,v 1.18 2010-06-07 05:40:46 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -39,9 +42,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction(DetectorConstruction* det, RunAction* run,
-                         HistoManager* hist)
-:fDetector(det), fRunAct(run), fHistoManager(hist)
+EventAction::EventAction(DetectorConstruction* det, RunAction* run)
+:fDetector(det), fRunAct(run)
 {
   fDrawFlag = "none";
   fPrintModulo = 10000;
@@ -77,8 +79,9 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
 void EventAction::EndOfEventAction(const G4Event*)
 {
   for (G4int k=1; k<=fDetector->GetNbOfAbsor(); k++) {
-     fRunAct->FillPerEvent(k,fEnergyDeposit[k],fTrackLengthCh[k]);		       
-     if (fEnergyDeposit[k] > 0.) fHistoManager->FillHisto(k, fEnergyDeposit[k]);
+     fRunAct->FillPerEvent(k,fEnergyDeposit[k],fTrackLengthCh[k]);                       
+     if (fEnergyDeposit[k] > 0.)
+             G4AnalysisManager::Instance()->FillH1(k, fEnergyDeposit[k]);
   }
 }
 

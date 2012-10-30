@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm3/src/RunAction.cc
+/// \brief Implementation of the RunAction class
+//
 // $Id: RunAction.cc,v 1.38 2010-01-24 17:25:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -38,7 +41,6 @@
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
-#include "G4UnitsTable.hh"
 
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
@@ -49,15 +51,18 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4LossTableManager.hh"
 
+#include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
+
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim,
-                     HistoManager* hist)
-:fDetector(det), fPrimary(prim), fHistoManager(hist)
+RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim)
+:fDetector(det), fPrimary(prim), fRunMessenger(0), fHistoManager(0)
 {
   fRunMessenger = new RunActionMessenger(this);
+  fHistoManager = new HistoManager();
   fApplyLimit = false;
 
   for (G4int k=0; k<MaxAbsor; k++) { fEdeptrue[k] = fRmstrue[k] = 1.;
@@ -103,7 +108,8 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   
   //histograms
   //
-  fHistoManager->book();
+  G4AnalysisManager* analysis = G4AnalysisManager::Instance();
+  if (analysis->IsActive()) analysis->OpenFile();
    
   //example of print dEdx tables
   //
@@ -144,8 +150,8 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout << "\n------------------------------------------------------------\n";
   G4cout << std::setw(14) << "material"
          << std::setw(17) << "Edep       RMS"
-	 << std::setw(33) << "sqrt(E0(GeV))*rmsE/Emean"
-	 << std::setw(23) << "total tracklen \n \n";
+         << std::setw(33) << "sqrt(E0(GeV))*rmsE/Emean"
+         << std::setw(23) << "total tracklen \n \n";
 
   for (G4int k=1; k<=fDetector->GetNbOfAbsor(); k++)
     {
@@ -158,7 +164,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
         G4int    nn    = 0;
         G4double sume  = 0.0;
         G4double sume2 = 0.0;
-	// compute trancated means  
+        // compute trancated means  
         G4double lim   = rmsEAbs * 2.5;
         for(G4int i=0; i<nEvt; i++) {
           G4double e = (fEnergyDeposit[k])[i];
@@ -166,13 +172,13 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
             sume  += e;
             sume2 += e*e;
             nn++;
-	  }
-	}
+          }
+        }
         G4double norm1 = G4double(nn);
         if(norm1 > 0.0) norm1 = 1.0/norm1;
-	MeanEAbs  = sume*norm1;
-	MeanEAbs2 = sume2*norm1;
-	rmsEAbs  = std::sqrt(std::abs(MeanEAbs2 - MeanEAbs*MeanEAbs));
+        MeanEAbs  = sume*norm1;
+        MeanEAbs2 = sume2*norm1;
+        rmsEAbs  = std::sqrt(std::abs(MeanEAbs2 - MeanEAbs*MeanEAbs));
       }
 
       resolution= 100.*sqbeam*rmsEAbs/MeanEAbs;
@@ -204,9 +210,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout << "\n------------------------------------------------------------\n";
 
   G4cout << " Beam particle " 
-	 << fPrimary->GetParticleGun()->
+         << fPrimary->GetParticleGun()->
     GetParticleDefinition()->GetParticleName()
-	 << "  E = " << G4BestUnit(beamEnergy,"Energy") << G4endl;
+         << "  E = " << G4BestUnit(beamEnergy,"Energy") << G4endl;
   G4cout << " Mean number of gamma  " << (G4double)fN_gamma*norm << G4endl;
   G4cout << " Mean number of e-     " << (G4double)fN_elec*norm << G4endl;
   G4cout << " Mean number of e+     " << (G4double)fN_pos*norm << G4endl;
@@ -214,10 +220,11 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   
   //Energy flow
   //
+  G4AnalysisManager* analysis = G4AnalysisManager::Instance();
   G4int Idmax = (fDetector->GetNbOfLayers())*(fDetector->GetNbOfAbsor());
   for (G4int Id=1; Id<=Idmax+1; Id++) {
-    fHistoManager->FillHisto(2*MaxAbsor+1, (G4double)Id, fEnergyFlow[Id]);
-    fHistoManager->FillHisto(2*MaxAbsor+2, (G4double)Id, fLateralEleak[Id]);
+    analysis->FillH1(2*MaxAbsor+1, (G4double)Id, fEnergyFlow[Id]);
+    analysis->FillH1(2*MaxAbsor+2, (G4double)Id, fLateralEleak[Id]);
   }
   
   //Energy deposit from energy flow balance
@@ -254,7 +261,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     if (fLimittrue[j] < DBL_MAX) {
       if (!isStarted) {
         acc.BeginOfAcceptance("Sampling Calorimeter",nEvt);
-	isStarted = true;
+        isStarted = true;
       }
       MeanEAbs = fSumEAbs[j];
       rmsEAbs  = fSum2EAbs[j];
@@ -270,11 +277,14 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   //normalize histograms
   //
   for (G4int ih = MaxAbsor+1; ih < MaxHisto; ih++) {
-    fHistoManager->Normalize(ih,norm/MeV);
+    analysis->ScaleH1(ih,norm/MeV);
   }
   
-  //save histograms   
-  fHistoManager->save();
+  //save histograms
+  if (analysis->IsActive()) {   
+    analysis->Write();
+    analysis->CloseFile();
+  }    
 
   // show Rndm status
   CLHEP::HepRandom::showEngineStatus();
@@ -341,7 +351,7 @@ void RunAction::PrintDedxTables()
       G4cout.precision(2);
       G4cout << "\nERAN  " << tkmin/GeV << " (ekmin)\t"
                            << tkmax/GeV << " (ekmax)\t"
-			   << nbin      << " (nekbin)";
+                           << nbin      << " (nekbin)";
       G4double cutgam =
          (*(theCoupleTable->GetEnergyCutsVector(idxG4GammaCut)))[index];
       if (cutgam < tkmin) cutgam = tkmin;
@@ -358,9 +368,9 @@ void RunAction::PrintDedxTables()
       for (G4int l=0;l<nbin; ++l)
          {
            G4double dedx = G4LossTableManager::Instance()
-	                                       ->GetDEDX(part,tk[l],couple);
+                                               ->GetDEDX(part,tk[l],couple);
            G4cout << dedx/(MeV/cm) << "\t";
-	   if ((l+1)%ncolumn == 0) G4cout << "\n ";
+           if ((l+1)%ncolumn == 0) G4cout << "\n ";
          }
       G4cout << G4endl;
      }

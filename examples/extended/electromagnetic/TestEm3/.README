@@ -162,7 +162,7 @@ Idle> exit
   
  One can control the binning of the histo with the command:
 \verbatim
-/testem/histo/setHisto   idAbsor  nbin  Emin  Emax  unit 
+/analysis/h1/set   idAbsor  nbin  Emin  Emax  unit 
 \endverbatim
   etc.,  
   where unit is the desired energy unit for that histo (see TestEm3.in).
@@ -181,7 +181,7 @@ Idle> exit
         
   One can control the name of the histograms file with the command:
 \verbatim
-/testem/histo/setFileName  name  (default testem3)
+/analysis/setFileName  name  (default testem3)
 \endverbatim
    
   It is possible to choose the format of the histogram file : root (default),
@@ -189,7 +189,7 @@ Idle> exit
    	
  It is also possible to print selected histograms on an ascii file:
 \verbatim
-/testem/histo/printHisto id
+/analysis/h1/setAscii id
  \endverbatim
  All selected histos will be written on a file name.ascii  (default testem3)
     

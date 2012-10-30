@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm3/include/g4hbook_defs.hh
+/// \brief Definition of the g4hbook_defs class
+//
 // $Id$
 
 // Author: Ivana Hrivnacova, 15/06/2011  (ivana@ipno.in2p3.fr)

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm3/src/SteppingAction.cc
+/// \brief Implementation of the SteppingAction class
+//
 // $Id: SteppingAction.cc,v 1.28 2008-05-29 16:59:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -39,13 +42,13 @@
 #include "G4Step.hh"
 #include "G4Positron.hh"
 #include "G4RunManager.hh"
+#include "G4PhysicalConstants.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(DetectorConstruction* det, RunAction* run,
-                               EventAction* evt, HistoManager* hist)
-:G4UserSteppingAction(),fDetector(det),fRunAct(run),fEventAct(evt),
- fHistoManager(hist) 
+                               EventAction* evt)
+:G4UserSteppingAction(),fDetector(det),fRunAct(run),fEventAct(evt) 
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -87,8 +90,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   fEventAct->SumEnergy(absorNum,edep,stepl);
   
   //longitudinal profile of edep per absorber
-  if (edep>0.) fHistoManager->FillHisto(MaxAbsor+absorNum, 
-				       G4double(layerNum+1), edep);
+  if (edep>0.) G4AnalysisManager::Instance()->FillH1(MaxAbsor+absorNum, 
+                                                    G4double(layerNum+1), edep);
   
   //energy flow
   //

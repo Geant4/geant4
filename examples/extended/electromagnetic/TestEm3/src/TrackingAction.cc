@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm3/src/TrackingAction.cc
+/// \brief Implementation of the TrackingAction class
+//
 //
 // $Id: TrackingAction.cc,v 1.3 2010-01-24 17:25:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
@@ -39,12 +42,13 @@
 
 #include "G4Track.hh"
 #include "G4Positron.hh"
+#include "G4PhysicalConstants.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TrackingAction::TrackingAction(DetectorConstruction* det,RunAction* run,
-                               EventAction* evt, HistoManager* hist)
-:fDetector(det), fRunAct(run), fEventAct(evt), fHistoManager(hist)
+                               EventAction* evt)
+:fDetector(det), fRunAct(run), fEventAct(evt)
 { }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

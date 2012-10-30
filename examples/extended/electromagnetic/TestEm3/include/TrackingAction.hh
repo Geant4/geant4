@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm3/include/TrackingAction.hh
+/// \brief Definition of the TrackingAction class
+//
 // $Id: TrackingAction.hh,v 1.2 2006-06-29 16:52:20 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -38,24 +41,22 @@
 class DetectorConstruction;
 class RunAction;
 class EventAction;
-class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class TrackingAction : public G4UserTrackingAction {
 
   public:  
-    TrackingAction(DetectorConstruction*,RunAction*,EventAction*,HistoManager* );
+    TrackingAction(DetectorConstruction*,RunAction*,EventAction*);
    ~TrackingAction() {};
    
-    void  PreUserTrackingAction(const G4Track*);   
-    void PostUserTrackingAction(const G4Track*);
+    virtual void  PreUserTrackingAction(const G4Track*);   
+    virtual void PostUserTrackingAction(const G4Track*);
     
   private:
     DetectorConstruction* fDetector;
     RunAction*            fRunAct;    
     EventAction*          fEventAct;
-    HistoManager*         fHistoManager;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
