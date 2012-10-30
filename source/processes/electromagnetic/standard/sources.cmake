@@ -90,6 +90,7 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4UrbanMscModel92.hh
         G4UrbanMscModel93.hh
         G4UrbanMscModel95.hh
+        G4UrbanMscModel96.hh
         G4WaterStopping.hh
         G4WentzelOKandVIxSection.hh
         G4WentzelVIModel.hh
@@ -156,6 +157,7 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4UrbanMscModel92.cc
         G4UrbanMscModel93.cc
         G4UrbanMscModel95.cc
+        G4UrbanMscModel96.cc
         G4WaterStopping.cc
         G4WentzelOKandVIxSection.cc
         G4WentzelVIModel.cc

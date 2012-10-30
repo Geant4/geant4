@@ -174,18 +174,18 @@ void G4KleinNishinaModel::SampleSecondaries(
   G4double bindingEnergy, ePotEnergy, eKinEnergy;
   G4double gamEnergy0, gamEnergy1;
 
-  static const G4double eminus2 =  1.0 - exp(-2.0);
+  //static const G4double eminus2 =  1.0 - exp(-2.0);
 
   do {
     //++nloop;
     G4double xprob = totprob*G4UniformRand();
 
     // select shell
-    for(i=0; i<nShells; ++i) { if(xprob <= fProbabilities[i]) {break;} }
+    for(i=0; i<nShells; ++i) { if(xprob <= fProbabilities[i]) { break; } }
    
     bindingEnergy = elm->GetAtomicShell(i);
     //    ePotEnergy    = bindingEnergy;
-    gamEnergy0  = energy;
+    //    gamEnergy0 = energy;
     lv1.set(0.0,0.0,energy,energy);
 
     //G4cout << "nShells= " << nShells << " i= " << i 
@@ -194,13 +194,9 @@ void G4KleinNishinaModel::SampleSecondaries(
     //   << G4endl;
 
     // for rest frame of the electron
-    G4double x;
-    do {
-      x  = -log(1.0 - eminus2*G4UniformRand());
-    } while (x*x < 4*G4UniformRand()); 
-
+    G4double x = -log(G4UniformRand());
     eKinEnergy = bindingEnergy*x;
-    ePotEnergy = bindingEnergy*(2.0 - x);
+    ePotEnergy = bindingEnergy*(1.0 + x);
 
     // for rest frame of the electron
     G4double eTotMomentum = sqrt(eKinEnergy*(eKinEnergy + 2*electron_mass_c2));
@@ -211,6 +207,7 @@ void G4KleinNishinaModel::SampleSecondaries(
 	    eTotMomentum*costet,eKinEnergy + electron_mass_c2);
     bst = lv2.boostVector();
     lv1.boost(-bst);
+
     gamEnergy0 = lv1.e();
    
     // In the rest frame of the electron

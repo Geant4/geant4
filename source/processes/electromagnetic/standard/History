@@ -17,7 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-01 September 12: V.Ivanchenko (emstand-V09-05-51)
+08 October 12: V.Ivanchenko (emstand-V09-05-53)
+- G4KleinNishinaModel - fixed computation of electron energy
+
+05 October 12: V.Ivanchenko (emstand-V09-05-52)
+- G4eBremParametrizedModel - migration to new angular generator interface
+- G4UrbanMscModel95 - added protection into GetTrueStepLength method (true
+    legth cannot exceed physics path length 
+- G4UrbanMscModel96 - new version of the model
+
+01 October 12: V.Ivanchenko (emstand-V09-05-51)
 - G4KleinNishinaModel - fixed infinite loop
 
 01 October 12: G.Cosmo (emstand-V09-05-50)
