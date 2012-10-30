@@ -45,7 +45,7 @@
 
 DetectorConstruction::DetectorConstruction()
 {
-  fWorldSize = 2*um;
+  fWorldSize = 2*mm;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

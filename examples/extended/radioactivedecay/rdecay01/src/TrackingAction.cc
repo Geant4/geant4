@@ -46,9 +46,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(HistoManager* histo,
-                               RunAction* RA, EventAction* EA)
-:fHistoManager(histo),fRun(RA),fEvent(EA)
+TrackingAction::TrackingAction(RunAction* RA, EventAction* EA)
+:fRun(RA),fEvent(EA)
 {
   fullChain = false;
   fTrackMessenger = new TrackingMessenger(this);   
@@ -89,7 +88,7 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
   else if (particle == G4Gamma::Gamma()) ih = 3;
   else if (particle == G4Alpha::Alpha()) ih = 4;
   else if (fCharge > 2.) ih = 5;
-  if (ih) fHistoManager->FillHisto(ih, Ekin);
+  if (ih) G4AnalysisManager::Instance()->FillH1(ih, Ekin);
   
   //fullChain: stop ion and print decay chain
   //
@@ -114,6 +113,8 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
   //
   if (fCharge < 3. ) return;
 
+  G4AnalysisManager* analysis = G4AnalysisManager::Instance();
+  
   //get time
   //   
   G4double time = track->GetGlobalTime();
@@ -142,15 +143,15 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
     }
     G4double Pbal = Pbalance.mag();  
     fRun->Balance(EkinTot,Pbal);  
-    fHistoManager->FillHisto(6,EkinTot);
-    fHistoManager->FillHisto(7,Pbal);
+    analysis->FillH1(6,EkinTot);
+    analysis->FillH1(7,Pbal);
   }
   
   //no secondaries --> end of chain    
   //  
   if (!nbtrk) {
     fRun->EventTiming(time);                     //total time of life
-    fHistoManager->FillHisto(8,time);
+    analysis->FillH1(8,time);
   }
 }
 

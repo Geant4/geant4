@@ -111,7 +111,7 @@ void PhysicsList::ConstructProcess()
   de->SetFluo(true);
   de->SetAuger(true);   
   de->SetPIXE(false);  
-  G4LossTableManager::Instance()->SetAtomDeexcitation(de);
+  G4LossTableManager::Instance()->SetAtomDeexcitation(de);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

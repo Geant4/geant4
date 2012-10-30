@@ -14,11 +14,17 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+07-10-12 mma (rdecay01-V09-05-12)
+- use G4AnalysisManager
 
 02-10-12 V.Ivantchenko (rdecay01-V09-05-11)
 - PhysicsList - removed initialisation of de-excitation, because it can 
     be called only after initialisation of geometry and not when 
     processes are instantiated
+     
+22-09-12 mma
+- DetectorConstruction : fWorldSize = 2 cm
      
 05-05-12 mma (rdecay01-V09-05-10)
 - add macro No252.mac to demonstrate UserEvapData file

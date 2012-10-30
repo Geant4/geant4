@@ -47,8 +47,8 @@ public:
   SteppingVerbose();
  ~SteppingVerbose();
 
-  void StepInfo();
-  void TrackingStarted();
+  virtual void StepInfo();
+  virtual void TrackingStarted();
 
 };
 

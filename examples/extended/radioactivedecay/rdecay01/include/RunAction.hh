@@ -49,11 +49,11 @@ class PrimaryGeneratorAction;
 class RunAction : public G4UserRunAction
 {
   public:
-    RunAction(HistoManager*, PrimaryGeneratorAction*);
+    RunAction(PrimaryGeneratorAction*);
    ~RunAction();
    
-    void BeginOfRunAction(const G4Run*);
-    void   EndOfRunAction(const G4Run*);
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void   EndOfRunAction(const G4Run*);
     
     void ParticleCount(G4String, G4double);
     void Balance(G4double,G4double);

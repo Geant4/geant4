@@ -46,14 +46,18 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction(HistoManager* histo, PrimaryGeneratorAction* kin)
-:fHistoManager(histo), fPrimary(kin)
-{ }
+RunAction::RunAction(PrimaryGeneratorAction* kin)
+:fPrimary(kin)
+{
+  fHistoManager = new HistoManager();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::~RunAction()
-{ }
+{ 
+  delete fHistoManager;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -67,7 +71,10 @@ void RunAction::BeginOfRunAction(const G4Run*)
           
   //histograms
   //
-  fHistoManager->book();
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  if ( analysisManager->IsActive() ) {
+    analysisManager->OpenFile();
+  }     
   
   //inform the runManager to save random number seed
   //
@@ -222,13 +229,17 @@ void RunAction::EndOfRunAction(const G4Run* run)
             
  //normalize and save histograms
  //
+ G4AnalysisManager* analysisManager = G4AnalysisManager::Instance(); 
  G4double factor = 100./nbEvents;
- fHistoManager->Normalize(1,factor);
- fHistoManager->Normalize(2,factor);
- fHistoManager->Normalize(3,factor);
- fHistoManager->Normalize(4,factor);
- fHistoManager->Normalize(5,factor);   
- fHistoManager->save();
+ analysisManager->ScaleH1(1,factor);
+ analysisManager->ScaleH1(2,factor);
+ analysisManager->ScaleH1(3,factor);
+ analysisManager->ScaleH1(4,factor);
+ analysisManager->ScaleH1(5,factor);   
+ if ( analysisManager->IsActive() ) {
+  analysisManager->Write();
+  analysisManager->CloseFile();
+ } 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

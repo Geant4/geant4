@@ -47,7 +47,8 @@ class DetectorConstruction : public G4VUserDetectorConstruction
   
     DetectorConstruction();
    ~DetectorConstruction();
-     
+
+    virtual     
     G4VPhysicalVolume* Construct();
                         
     G4double GetWorldSize() {return fWorldSize;}; 

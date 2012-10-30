@@ -4,6 +4,7 @@
 #
 /gun/particle ion
 /gun/ion 95 241
+###/gun/ion 43 99 0 142.7
 #
 /rdecay01/fullChain true
 #  

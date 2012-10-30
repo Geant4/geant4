@@ -39,7 +39,6 @@
 #include "G4UserTrackingAction.hh"
 #include "globals.hh"
 
-class HistoManager;
 class RunAction;
 class EventAction;
 class TrackingMessenger;
@@ -49,16 +48,15 @@ class TrackingMessenger;
 class TrackingAction : public G4UserTrackingAction {
 
   public:  
-    TrackingAction(HistoManager*, RunAction*, EventAction*);
+    TrackingAction(RunAction*, EventAction*);
    ~TrackingAction();
    
-    void  PreUserTrackingAction(const G4Track*);
-    void PostUserTrackingAction(const G4Track*);
+    virtual void  PreUserTrackingAction(const G4Track*);
+    virtual void PostUserTrackingAction(const G4Track*);
     
     void SetFullChain(G4bool flag) { fullChain = flag;};
     
   private:
-    HistoManager*       fHistoManager;
     RunAction*          fRun;
     EventAction*        fEvent;
     TrackingMessenger*  fTrackMessenger;
