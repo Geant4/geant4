@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct 9th, 2012, Gabriele Cosmo (test07-V09-05-00)
+- Explicit inclusion of units and constants headers.
+
 Jul 20th, 2011  Gabriele Cosmo  (test07-V09-04-01)
 - Removed vis setup.
 
