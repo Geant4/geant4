@@ -53,7 +53,7 @@
 PhysicsList::PhysicsList() 
 : G4VModularPhysicsList(),fCutForGamma(0),fCutForElectron(0),fCutForPositron(0),
   fCurrentDefaultCut(0),fEmPhysicsList(0),fEmName("local"),fMessenger(0)
-{
+{    
   G4LossTableManager::Instance();
   
   fCurrentDefaultCut   = 1.0*mm;
@@ -68,7 +68,11 @@ PhysicsList::PhysicsList()
   // EM physics
   fEmName = G4String("local");
   fEmPhysicsList = new PhysListEmStandard(fEmName);
-
+  
+  //add new units for cross sections
+  // 
+  new G4UnitDefinition( "mm2/g", "mm2/g","Surface/Mass", mm2/g);
+  new G4UnitDefinition( "um2/mg", "um2/mg","Surface/Mass", um*um/mg);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
