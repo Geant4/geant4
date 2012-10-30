@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+05 Oct 2012  Michael Kelsey (hadr-util-V09-05-10, hadr-util-V09-05-09)
+----------------------------------------------------------------------
+- G4HadronicDeprecate.hh:  Macro function to generate deprecation messages.
+  Used by hadronic/stopping and hadronic/models/low_energy (so far).
+
 19 Sep 2012  Gabriele Cosmo (hadr-util-V09-05-08, hadr-util-V09-05-07)
 ----------------------------------------------------------------------
 - Explicitly use inclusion of headers for system of units and physical
