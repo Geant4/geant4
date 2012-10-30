@@ -36,6 +36,7 @@
 
 #include "Tst33ParallelGeometry.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"

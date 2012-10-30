@@ -35,6 +35,8 @@
 // ----------------------------------------------------------------------
 
 #include "Tst33MaterialFactory.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Element.hh"
 #include "G4Material.hh"
 

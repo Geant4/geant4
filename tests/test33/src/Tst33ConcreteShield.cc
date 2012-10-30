@@ -35,6 +35,7 @@
 // ----------------------------------------------------------------------
 
 #include "Tst33ConcreteShield.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"

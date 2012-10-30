@@ -28,10 +28,10 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#include "globals.hh"
-
 #include "Tst33PrimaryGeneratorAction.hh"
 
+#include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4Neutron.hh"

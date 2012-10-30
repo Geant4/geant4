@@ -28,10 +28,11 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-#include "globals.hh"
-
 #include "Tst33ScoringDetectorConstruction.hh"
 
+#include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Material.hh"
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"

@@ -35,10 +35,11 @@
 // ----------------------------------------------------------------------
 
 #include "Tst33WeightWindowStoreBuilder.hh"
+#include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4WeightWindowStore.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4GeometryCell.hh"
-#include "globals.hh"
 #include "Tst33VGeometry.hh"
 
 Tst33WeightWindowStoreBuilder::Tst33WeightWindowStoreBuilder()
