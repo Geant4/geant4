@@ -27,22 +27,23 @@
 #ifndef Tst12StackingAction_h
 #define Tst12StackingAction_h
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4UserStackingAction.hh"
 #include "G4ClassificationOfNewTrack.hh"
 #include "G4Track.hh"
 
 class Tst12StackingAction : public G4UserStackingAction
 {
-      virtual G4ClassificationOfNewTrack
-        ClassifyNewTrack(const G4Track* aTrack)
+      G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* aTrack)
 	{
 	  G4ClassificationOfNewTrack result(fUrgent);
 	  if(aTrack->GetDefinition()->GetPDGCharge() == 0 && 
-	    aTrack->GetDefinition()->GetPDGMass()<200*MeV)
+	    aTrack->GetDefinition()->GetPDGMass()<200*CLHEP::MeV)
 	  {
 	    result = fKill;
 	  }
-	  if(aTrack->GetKineticEnergy()<3.5*GeV)
+	  if(aTrack->GetKineticEnergy()<3.5*CLHEP::GeV)
 	  {
 	    result = fKill;
 	  }
