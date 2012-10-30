@@ -45,6 +45,7 @@
 #include "G4Colour.hh"
 
 #include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4TriangularFacet.hh"
 #include "G4QuadrangularFacet.hh"
