@@ -32,6 +32,8 @@
 
 #include "Tst23DetectorMessenger.hh"
 
+#include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4Element.hh"
@@ -41,7 +43,6 @@
 #include "G4ThreeVector.hh"
 #include "G4PVPlacement.hh"
 #include "G4UImanager.hh"
-#include "G4ios.hh"
 
 Tst23DetectorConstruction::Tst23DetectorConstruction()
 :simpleBoxLog(NULL),selectedMaterial(NULL),Air(NULL),Al(NULL),Pb(NULL)
