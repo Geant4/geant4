@@ -40,6 +40,8 @@ G4LEAlphaInelastic::G4LEAlphaInelastic(const G4String& name)
 {
   SetMinEnergy(0.0*GeV);
   SetMaxEnergy(10.*TeV);
+  G4cout << "WARNING: model G4LEAlphaInelastic is being deprecated and will\n"
+         << "disappear in Geant4 version 10.0"  << G4endl;
 }
 
 

@@ -46,6 +46,8 @@ class G4LEKaonZeroSInelastic : public G4InelasticInteraction
     {
       SetMinEnergy(0.0);
       SetMaxEnergy(25.*CLHEP::GeV);
+      G4cout << "WARNING: model G4LEKaonZeroSInelastic is being deprecated and will\n"
+             << "disappear in Geant4 version 10.0"  << G4endl;
     }
 
     virtual ~G4LEKaonZeroSInelastic(){ }

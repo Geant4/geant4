@@ -53,6 +53,8 @@ class G4LEDeuteronInelastic : public G4InelasticInteraction
       // SetMaxEnergy( 100.*CLHEP::MeV );  // NUCREC only worked for energies < 100MeV
       // Work around to avoid exception in G4EnergyRangeManager
       SetMaxEnergy( 10.*CLHEP::TeV );  // NUCREC only worked for energies < 100MeV
+      G4cout << "WARNING: model G4LEDeuteronInelastic is being deprecated and will\n"
+             << "disappear in Geant4 version 10.0"  << G4endl;
     }
     
     ~G4LEDeuteronInelastic() {}

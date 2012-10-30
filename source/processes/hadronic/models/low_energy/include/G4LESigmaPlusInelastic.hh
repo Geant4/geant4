@@ -51,6 +51,8 @@ class G4LESigmaPlusInelastic : public G4InelasticInteraction
     {
       SetMinEnergy( 0.0 );
       SetMaxEnergy( 25.*CLHEP::GeV );
+      G4cout << "WARNING: model G4LESigmaPlusInelastic is being deprecated and will\n"
+             << "disappear in Geant4 version 10.0"  << G4endl;
     }
     
     ~G4LESigmaPlusInelastic() { }
