@@ -1,0 +1,10 @@
+#!/bin/csh -f
+\rm *.log
+which gps
+which exrdm01
+foreach i (` ls test*.g4mac`)
+	echo 'Running ' $i
+	time gps $i >& $i.log
+end
+exit	
+

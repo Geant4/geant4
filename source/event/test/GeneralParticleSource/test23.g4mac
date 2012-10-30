@@ -1,0 +1,49 @@
+/control/verbose 0
+/tracking/verbose 0
+/event/verbose 0
+/run/initialize
+/gun/particle alpha
+/gps/verbose 2
+/gps/particle proton
+/gps/type Plane
+/gps/shape Square
+/gps/centre 1. 2. 1. cm
+/gps/halfx 2. cm
+/gps/halfy 2. cm
+/gps/angtype user
+/gps/histname theta
+/gps/histpoint 0. 0.
+/gps/histpoint 1. 1.
+/gps/histpoint 2. 5.
+/gps/histpoint 3.1 1.
+/gps/histname phi
+/gps/histpoint 0. 0.
+/gps/histpoint 1. 0.1
+/gps/histpoint 3. 4.
+/gps/histpoint 5. 6.
+/gps/histpoint 6.25 1.
+/gps/energytype Epn
+/gps/histname epn
+/gps/histpoint 0.0 0.
+/gps/histpoint 1.0 5.
+/gps/histpoint 2.0 2.
+/gps/histpoint 3.0 1.
+/gps/histpoint 4.0 1.
+/gps/histpoint 5.0 4.
+/gps/histpoint 6.0 5.
+/gps/histpoint 7.0 5.
+/gps/histpoint 8.0 1.
+/gps/histpoint 9.0 1.
+/gps/histpoint 10. 1.
+/gps/histname biasx
+/gps/histpoint 0. 0.
+/gps/histpoint 0.2 1.
+/gps/histpoint 0.8 0.
+/gps/histpoint 1. 1.
+/gps/histname biasy
+/gps/histpoint 0. 0.
+/gps/histpoint 0.2 1.
+/gps/histpoint 0.8 0.
+/gps/histpoint 1. 1.
+/run/beamOn 10000
+

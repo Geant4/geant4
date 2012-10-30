@@ -1,0 +1,30 @@
+/control/verbose 0
+/tracking/verbose 0
+/event/verbose 0
+/run/initialize
+/gps/verbose 2
+/gps/particle geantino
+/gps/type Plane
+/gps/shape Square
+/gps/centre 1. 2. 1. cm
+/gps/halfx 2. cm
+/gps/halfy 2. cm
+/gps/angtype cos
+/gps/energytype Lin
+/gps/emin 2. MeV
+/gps/emax 10. MeV
+/gps/gradient 1.
+/gps/intercept 1.
+/gps/histname biase
+/gps/histpoint 0. 0.
+/gps/histpoint 0.25 1.
+/gps/histpoint 0.5 2.
+/gps/histpoint 0.75 1.
+/gps/histpoint 1. 0.1
+/gps/mintheta 1. rad
+/gps/maxtheta 2. rad
+/gps/minphi 1.5 rad
+/gps/maxphi 3. rad
+/run/beamOn 10000
+
+

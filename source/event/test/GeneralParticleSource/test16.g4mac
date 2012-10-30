@@ -1,0 +1,21 @@
+/control/verbose 0
+/tracking/verbose 0
+/event/verbose 0
+/run/initialize
+/gps/verbose 2
+/gps/particle geantino 
+/gps/type Volume
+/gps/shape Para
+/gps/centre 2. 2. 2. cm
+/gps/halfx 2. cm
+/gps/halfy 3. cm
+/gps/halfz 4. cm
+/gps/posrot1 1. 0.57735 0.
+/gps/posrot2 -0.57735 1. -0.66667
+/gps/angtype iso
+/gps/energytype Brem
+/gps/emin 1. keV
+/gps/emax 2. MeV
+/gps/temp 2e9
+/run/beamOn 10000
+

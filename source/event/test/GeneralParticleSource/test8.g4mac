@@ -1,0 +1,19 @@
+/control/verbose 0
+/tracking/verbose 0
+/event/verbose 0
+/run/initialize
+/gps/verbose 2
+/gps/particle geantino
+/gps/type Surface
+/gps/shape Ellipsoid
+/gps/centre 2. 2. 2. cm
+/gps/halfx 2. cm
+/gps/halfy 3. cm
+/gps/halfz 5. cm
+/gps/angtype iso
+/gps/energytype Lin
+/gps/emin 2. MeV
+/gps/emax 10. MeV
+/gps/gradient 0.
+/gps/intercept 2.
+/run/beamOn 10000
