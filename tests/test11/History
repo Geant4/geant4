@@ -14,9 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-21 Aug 2012, Pere Mato     (test11-V09-05-01)
-- CMakeLists.txt - Changed to avoid two builds of different targets running concurrenly
-                   when CTest is used with -jN
+
+9 Oct 2012  Gabriele Cosmo              (test11-V09-05-02)
+- Explicit inclusion of units and constants headers.
+
+21 Aug 2012  Pere Mato                  (test11-V09-05-01)
+- CMakeLists.txt - Changed to avoid two builds of different targets running
+  concurrenly when CTest is used with -jN.
 
 12 June 2012  Tatsumi Koi		(test11-V09-05-00)
 - Comment out "Cross Section Dump" for reducing output

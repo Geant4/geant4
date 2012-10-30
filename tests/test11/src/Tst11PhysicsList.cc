@@ -34,8 +34,12 @@
 //        From Process::GetMicroscopicCrossSection
 //        To Process::GetElementCrossSection
 //
-#include "globals.hh"
+#include <iomanip>                
+
 #include "Tst11PhysicsList.hh"
+#include "globals.hh"
+#include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"
@@ -50,8 +54,6 @@
 #include "G4ShortLivedConstructor.hh"
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
-#include "G4ios.hh"
-#include <iomanip>                
 
 
 Tst11PhysicsList::Tst11PhysicsList():  G4VUserPhysicsList()
