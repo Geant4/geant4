@@ -15,37 +15,40 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct 9th 2012 Gabriele Cosmo   (test29-V09-05-01)
+- Explicit inclusion of units and constants headers.
+
 Apr 20th 2012 Mikhail Kosov   (test29-V09-05-00)
-- workaround with a seed
+- Workaround with a seed.
 
 Nov 17th 2011 G.Folger        (test29-V09-04-05)
-- send "## end of run ##.." messages to stdout, not stderr
+- Send "## end of run ##.." messages to stdout, not stderr.
 
 Nov 16th 2011 G.Folger        (test29-V09-04-04)
-- Migrate to new G4Exception
+- Migrate to new G4Exception.
 
 Nov 8th 2011 Mikhail Kossov tag (test29-V09-04-03)
-- Navigator is out of all loops (for 9.4-ref10)
+- Navigator is out of all loops (for 9.4-ref10).
 
 Nov 4th 2011 Mikhail Kossov tag (test29-V09-04-02)
 - With implementation of rescattering the sqEM limit is
-  increased from .27 to .5
+  increased from .27 to .5.
 
 Sept 30th 2011 G.Folger tag    (test29-V09-04-01)
-- Fix gcc46 compilation warning in test29.cc
+- Fix gcc46 compilation warning in test29.cc.
 	     
 Jan 20th, 2010 Luciano Pandola (test29-V09-04-00)
 - removed obsolete G4hLowEnergyIonisation from the 
-  physics list
+  physics list.
 
 Jun 1st, 2010  Mikhail Kossov (test29-V09-03-00)
-- Get rid of G4MultipleScattering in Test29PhysicsList
+- Get rid of G4MultipleScattering in Test29PhysicsList.
 
 Oct 12th, 2009  Mikhail Kossov (test29-V09-02-04)
-- Soft version with warnings
+- Soft version with warnings.
 
 Aug 6th, 2009  Mikhail Kossov (test29-V09-02-03)
-- Restored correct CVS Head as in "test29-V09-02-01"
+- Restored correct CVS Head as in "test29-V09-02-01".
 
 Aug 6th, 2009  Mikhail Kossov (test29-V09-02-02)
 - Internal tag...

@@ -29,6 +29,7 @@
 // **********************************************************************
 
 #include "Test29PhysicsList.hh"
+#include "G4SystemOfUnits.hh"
 
 Test29PhysicsList::Test29PhysicsList():  G4VUserPhysicsList()
 {
