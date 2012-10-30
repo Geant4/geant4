@@ -17,8 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-30 Sept 2011 G.Folger                (test17-V09-04-02)
-             Fix gcc46 compilation warning in Test17SteppingAction
+9 October 2012, Gabriele Cosmo  (test17-V09-05-00)
+             Explicit inclusion of units and constants headers.
+
+30 September 2011 G.Folger                (test17-V09-04-02)
+             Fix gcc46 compilation warning in Test17SteppingAction.
 	     
 20 July 2011  G.Cosmo (test17-V09-04-01)
              Removed vis commands from init.mac macro.

@@ -32,6 +32,7 @@
 #include "PhysicsList.hh"
 #include "PhysicsListMessenger.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "PhysListEmStandard.hh"
 #include "PhysListEmStandardSS.hh"
 #include "PhysListEmStandardGS.hh"

@@ -24,12 +24,8 @@
 // ********************************************************************
 //
 //
-// -------------------------------------------------------------
-//      GEANT 4 class example
-//
-//      History: based on object model of
-//      2nd December 1995, G.Cosmo
 //      ---------- Test17DetectorConstruction -------
+//
 //                by Vladimir Ivanchenko, 23 July 1999
 //
 
@@ -39,6 +35,7 @@
 #include "Test17DetectorConstruction.hh"
 #include "Test17DetectorMessenger.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4Material.hh"
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"

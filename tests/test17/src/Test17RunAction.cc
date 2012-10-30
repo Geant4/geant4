@@ -31,6 +31,7 @@
 
 #include "Test17RunAction.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4Run.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"

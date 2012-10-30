@@ -29,10 +29,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "Test17DetectorConstruction.hh"
 #include "Test17SteppingAction.hh"
+#include "Test17DetectorConstruction.hh"
 #include "Test17EventAction.hh"
 #include "Test17RunAction.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4UImanager.hh"
