@@ -35,15 +35,16 @@
 #include "Tst10PrimaryGeneratorAction.hh"
 #include "Tst10DetectorConstruction.hh"
 
+#include <iostream>
+#include <fstream>
+
+#include "globals.hh"
+#include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
-#include "Randomize.hh"
-#include "globals.hh"
-
-#include <iostream>
-#include <fstream>
 
 Tst10PrimaryGeneratorAction::
 Tst10PrimaryGeneratorAction(Tst10DetectorConstruction*det)

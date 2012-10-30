@@ -15,8 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct 9, 2012  Gabriele Cosmo (test10-V09-05-00)
+- Explicit inclusion of units and constants headers.
+
 Nov 14, 2011  Peter Gumplinger (test10-V09-04-03)
-- update to the new style G4Exception
+- Update to the new style G4Exception.
 
 Nov 1, 2011  Tatiana Nikitina (test10-V09-04-02)
 - Added G4CutTubs shape to the test suite.

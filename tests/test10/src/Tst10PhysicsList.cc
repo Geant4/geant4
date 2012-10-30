@@ -33,7 +33,11 @@
 //        add decay at rest          26  Feb. 1998 by H.Kurashige
 // ------------------------------------------------------------
 
+#include <iomanip>                
+
 #include "globals.hh"
+#include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 #include "Tst10PhysicsList.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleWithCuts.hh"
@@ -44,8 +48,6 @@
 #include "G4ParticleTable.hh"
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
-#include "G4ios.hh"
-#include <iomanip>                
 
 
 Tst10PhysicsList::Tst10PhysicsList():  G4VUserPhysicsList()
