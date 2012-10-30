@@ -59,6 +59,7 @@ class G4ParticleChange;
 #include "G4VProcess.hh"
 #include "G4FieldTrack.hh"
 #include "G4TouchableHandle.hh"
+#include "G4MultiNavigator.hh"
 
 //------------------------------------------
 //
@@ -164,6 +165,18 @@ private:
   // Flag for material switching
   //-----------------------------------------------------------------------
   G4bool layeredMaterialFlag;
+
+  //-----------------------------------------------------------------------
+  // Static G4Step object for "Hyper-step"
+  //-----------------------------------------------------------------------
+public:
+  static const G4Step* GetHyperStep();
+  static G4int GetHypNavigatorID();
+private:
+  static G4Step* fpHyperStep;
+  static G4int nParallelWorlds;
+  static G4int fNavIDHyp;
+  G4int iParallelWorld;
 };
 
 #endif
