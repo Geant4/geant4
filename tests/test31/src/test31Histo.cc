@@ -36,8 +36,13 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+#include <iomanip>
+#include <fstream>
+
 #include "test31Histo.hh"
 #include "Histo.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Proton.hh"
@@ -53,8 +58,6 @@
 #include "G4NucleiProperties.hh"
 #include "G4WaterStopping.hh"
 #include "G4AtomicShells.hh"
-#include <iomanip>
-#include <fstream>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

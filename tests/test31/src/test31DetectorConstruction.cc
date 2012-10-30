@@ -39,11 +39,15 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "test31DetectorConstruction.hh"
+
 #include "test31DetectorMessenger.hh"
 #include "test31EventAction.hh"
 #include "test31SD.hh"
 #include "test31Histo.hh"
 
+#include "globals.hh"
+#include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Material.hh"
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
@@ -59,9 +63,6 @@
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
 #include "G4NistManager.hh"
-
-#include "globals.hh"
-#include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

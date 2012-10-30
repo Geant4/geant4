@@ -26,11 +26,6 @@
 // -------------------------------------------------------------
 //
 //
-// -------------------------------------------------------------
-//      GEANT4 test31
-//
-//      History: based on object model of
-//      2nd December 1995, G.Cosmo
 //      ---------- test31SD -------------
 //              
 //  Modified: 05.04.01 Vladimir Ivanchenko new design of test31 
@@ -42,12 +37,14 @@
 
 #include "test31SD.hh"
 
+#include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4RunManager.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Track.hh"
 #include "G4Positron.hh"
-#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
