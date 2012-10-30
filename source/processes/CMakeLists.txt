@@ -82,6 +82,7 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
             hadronic/models/inclxx/interface/sources.cmake
             hadronic/models/isotope_production/sources.cmake
             hadronic/models/lend/sources.cmake
+            hadronic/models/lepto_nuclear/sources.cmake
             hadronic/models/lll_fission/sources.cmake
             hadronic/models/low_energy/sources.cmake
             hadronic/models/management/sources.cmake
@@ -90,7 +91,6 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
             hadronic/models/parton_string/hadronization/sources.cmake
             hadronic/models/parton_string/management/sources.cmake
             hadronic/models/parton_string/qgsm/sources.cmake
-            hadronic/models/photolepton_hadron/muon_nuclear/sources.cmake
             hadronic/models/pre_equilibrium/exciton_model/sources.cmake
             hadronic/models/qmd/sources.cmake
             hadronic/models/radioactive_decay/sources.cmake
