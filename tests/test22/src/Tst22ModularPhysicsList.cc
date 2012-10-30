@@ -30,6 +30,7 @@
 // 
 
 #include "Tst22ModularPhysicsList.hh"
+#include "G4SystemOfUnits.hh"
 
 Tst22ModularPhysicsList::Tst22ModularPhysicsList():  G4VModularPhysicsList()
 {

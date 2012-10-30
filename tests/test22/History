@@ -15,9 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+9 October 2012  Gabriele Cosmo (test22-V09-05-04)
+-------------------------------------------------
+- Explicit inclusion of units and constants headers.
+
 27 July 2012  Vladimir Ivanchenko (test22-V09-05-03)
 ----------------------------------------------------
-- Tst22IonPhysics - fixed bugs in ion elastic
+- Tst22IonPhysics - fixed bugs in ion elastic.
 
 07 June 2012  John Apostolakis (test22-V09-05-02)
 ------------------------------------------------

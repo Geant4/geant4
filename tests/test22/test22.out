@@ -1,20 +1,12 @@
 
-        ############################################
-        !!! WARNING - FPE detection is activated !!!
-        ############################################
-
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-09    (2-October-2012)
+ Geant4 version Name: geant4-09-05-ref-04    (30-April-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
 SimpleBox is now made of Pb
-WARNING: /ec/build/release/09-05-ref-09_branch/source/processes/hadronic/stopping/src/G4MuonMinusCaptureAtRest.cc is deprecated and will be removed.
-WARNING: /ec/build/release/09-05-ref-09_branch/source/processes/hadronic/stopping/src/G4PiMinusAbsorptionAtRest.cc is deprecated and will be removed.
-WARNING: /ec/build/release/09-05-ref-09_branch/source/processes/hadronic/stopping/src/G4AntiProtonAnnihilationAtRest.cc is deprecated and will be removed.
-WARNING: /ec/build/release/09-05-ref-09_branch/source/processes/hadronic/stopping/src/G4AntiNeutronAnnihilationAtRest.cc is deprecated and will be removed.
 /run/verbose 2
 /run/initialize
 userDetector->Construct() start.
@@ -38,21 +30,18 @@ SimpleBox is now made of Pb
 /run/beamOn 10
 
 phot:   for  gamma    SubType= 12
-      LambdaPrime table from 200 keV to 10 TeV in 54 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila
+       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV
 
 compt:   for  gamma    SubType= 13
-      Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
-      LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda tables from 1.022 MeV to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
-     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       10 TeV
 
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -97,11 +86,6 @@ eIoni:   for  e+    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
 
-msc:   for e+    SubType= 10
-      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
-
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -115,27 +99,7 @@ msc:   for proton    SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
-hIoni:   for  GenericIon    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=        2 MeV
-          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
-
 msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
-
-hIoni:   for  alpha    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=   7.9452 MeV
-          BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
-
-msc:   for alpha    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
@@ -147,11 +111,6 @@ hIoni:   for  anti_proton    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=        2 MeV
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
-
-msc:   for anti_proton    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -173,11 +132,6 @@ hIoni:   for  kaon-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
           BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
-
-msc:   for kaon-    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -226,11 +180,6 @@ muPairProd:   for  mu-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-muMsc:   for mu-    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
-
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -238,11 +187,6 @@ hIoni:   for  pi+    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
-
-msc:   for pi+    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -261,9 +205,9 @@ msc:   for pi-    SubType= 10
 
                                   Hadronic Processes for <anti_neutron>
                                   -----------------------------------
-          hadElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
+       HadronElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
 
-          hadElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
+       HadronElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 AntiNeutronInelastic  Models:     G4LEAntiNeutronInelastic: Emin(GeV)=    0  Emax(GeV)= 25
                                   G4HEAntiNeutronInelastic: Emin(GeV)=   20  Emax(GeV)= 10000
@@ -274,9 +218,9 @@ AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Ema
 
                                   Hadronic Processes for <anti_proton>
                                   -----------------------------------
-          hadElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
+       HadronElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
 
-          hadElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
+       HadronElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
  AntiProtonInelastic  Models:      G4LEAntiProtonInelastic: Emin(GeV)=    0  Emax(GeV)= 25
                                    G4HEAntiProtonInelastic: Emin(GeV)=   20  Emax(GeV)= 10000
@@ -285,17 +229,9 @@ AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Ema
 
           AntiProtonAnnihilationAtRest
 
-                                  Hadronic Processes for <e+>
-                                  -----------------------------------
-     PositronNuclear  Models:          CHIPSElectroNuclear: Emin(GeV)=    0  Emax(GeV)= 100000
-
-     PositronNuclear  Crs sctns:          ElectroNuclearXS: Emin(GeV)=    0  Emax(GeV)= 100000
-                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-
                                   Hadronic Processes for <e->
                                   -----------------------------------
-      ElectroNuclear  Models:          CHIPSElectroNuclear: Emin(GeV)=    0  Emax(GeV)= 100000
+      ElectroNuclear  Models:          CHIPSElectroNuclear: Emin(GeV)=    0  Emax(GeV)= 30000
 
       ElectroNuclear  Crs sctns:          ElectroNuclearXS: Emin(GeV)=    0  Emax(GeV)= 100000
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
@@ -312,9 +248,9 @@ AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Ema
 
                                   Hadronic Processes for <kaon+>
                                   -----------------------------------
-          hadElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
+       HadronElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
 
-          hadElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
+       HadronElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
    KaonPlusInelastic  Models:        G4LEKaonPlusInelastic: Emin(GeV)=    0  Emax(GeV)= 25
                                      G4HEKaonPlusInelastic: Emin(GeV)=   20  Emax(GeV)= 10000
@@ -324,9 +260,9 @@ AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Ema
 
                                   Hadronic Processes for <kaon->
                                   -----------------------------------
-          hadElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
+       HadronElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
 
-          hadElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
+       HadronElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
   KaonMinusInelastic  Models:       G4LEKaonMinusInelastic: Emin(GeV)=    0  Emax(GeV)= 25
                                     G4HEKaonMinusInelastic: Emin(GeV)=   20  Emax(GeV)= 10000
@@ -336,9 +272,9 @@ AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Ema
 
                                   Hadronic Processes for <lambda>
                                   -----------------------------------
-          hadElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
+       HadronElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
 
-          hadElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
+       HadronElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
      LambdaInelastic  Models:          G4LELambdaInelastic: Emin(GeV)=    0  Emax(GeV)= 25
                                        G4HELambdaInelastic: Emin(GeV)=   20  Emax(GeV)= 10000
@@ -348,9 +284,9 @@ AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Ema
 
                                   Hadronic Processes for <neutron>
                                   -----------------------------------
-          hadElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
+       HadronElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
 
-          hadElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
+       HadronElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
     NeutronInelastic  Models:         G4LENeutronInelastic: Emin(GeV)=    0  Emax(GeV)= 55
                                       G4HENeutronInelastic: Emin(GeV)=   45  Emax(GeV)= 10000
@@ -360,9 +296,9 @@ AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Ema
 
                                   Hadronic Processes for <pi+>
                                   -----------------------------------
-          hadElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
+       HadronElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
 
-          hadElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
+       HadronElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
    PionPlusInelastic  Models:        G4LEPionPlusInelastic: Emin(GeV)=    0  Emax(GeV)= 55
                                      G4HEPionPlusInelastic: Emin(GeV)=   45  Emax(GeV)= 10000
@@ -372,9 +308,9 @@ AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Ema
 
                                   Hadronic Processes for <pi->
                                   -----------------------------------
-          hadElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
+       HadronElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
 
-          hadElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
+       HadronElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
   PionMinusInelastic  Models:       G4LEPionMinusInelastic: Emin(GeV)=    0  Emax(GeV)= 55
                                     G4HEPionMinusInelastic: Emin(GeV)=   45  Emax(GeV)= 10000
@@ -385,9 +321,9 @@ AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Ema
 
                                   Hadronic Processes for <proton>
                                   -----------------------------------
-          hadElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
+       HadronElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
 
-          hadElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
+       HadronElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
      ProtonInelastic  Models:          G4LEProtonInelastic: Emin(GeV)=    0  Emax(GeV)= 55
                                        G4HEProtonInelastic: Emin(GeV)=   45  Emax(GeV)= 10000
@@ -439,7 +375,7 @@ Event number 9
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.66s Real=0.66s Sys=0s
+  User=0.8s Real=1.42s Sys=0s
 /gun/energy 1.0 GeV
 /run/beamOn 10
 
@@ -481,7 +417,7 @@ Event number 19
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.52s Real=0.53s Sys=0s
+  User=0.46s Real=0.46s Sys=0s
 /gun/energy 0.75 GeV
 /run/beamOn 10
 
@@ -514,13 +450,6 @@ Event number 20
 Event number 21
 Event number 22
 Event number 23
-WARNING: /ec/build/release/09-05-ref-09_branch/source/processes/hadronic/stopping/src/G4PiMinusStopMaterial.cc is deprecated and will be removed.
-WARNING: /ec/build/release/09-05-ref-09_branch/source/processes/hadronic/stopping/src/G4PiMinusStopTa.cc is deprecated and will be removed.
-WARNING: /ec/build/release/09-05-ref-09_branch/source/processes/hadronic/stopping/src/G4DistributionGenerator.cc is deprecated and will be removed.
-WARNING: /ec/build/release/09-05-ref-09_branch/source/processes/hadronic/stopping/src/G4PiMinusStopAbsorption.cc is deprecated and will be removed.
-WARNING: /ec/build/release/09-05-ref-09_branch/source/processes/hadronic/stopping/include/G4StopDeexcitationAlgorithm.hh is deprecated and will be removed.
-WARNING: /ec/build/release/09-05-ref-09_branch/source/processes/hadronic/stopping/src/G4StopTheoDeexcitation.cc is deprecated and will be removed.
-WARNING: /ec/build/release/09-05-ref-09_branch/source/processes/hadronic/stopping/src/G4StopDeexcitation.cc is deprecated and will be removed.
 Event number 24
 Event number 25
 Event number 26
@@ -530,7 +459,7 @@ Event number 29
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.31s Real=0.31s Sys=0s
+  User=0.36s Real=0.36s Sys=0s
 /gun/energy 0.150 GeV
 /run/beamOn 10
 
@@ -572,7 +501,7 @@ Event number 39
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.09s Real=0.09s Sys=0s
+  User=0.08s Real=0.08s Sys=0s
 /gun/energy 0.050 GeV
 /run/beamOn 10
 
@@ -746,7 +675,7 @@ Event number 79
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.62s Real=1.66s Sys=0s
+  User=1.45s Real=1.45s Sys=0s
 /gun/energy 3 GeV
 /run/beamOn 10
 
@@ -788,7 +717,7 @@ Event number 89
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.86s Real=0.87s Sys=0s
+  User=0.83s Real=0.83s Sys=0s
 /gun/energy 2.5 GeV
 /run/beamOn 10
 
@@ -830,7 +759,7 @@ Event number 99
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.76s Real=0.76s Sys=0s
+  User=0.79s Real=0.79s Sys=0s
 /gun/energy 1.0 GeV
 /run/beamOn 10
 
@@ -872,7 +801,7 @@ Event number 109
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.48s Real=0.48s Sys=0.01s
+  User=0.46s Real=0.47s Sys=0s
 /gun/energy 0.75 GeV
 /run/beamOn 10
 
@@ -914,7 +843,7 @@ Event number 119
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.29s Real=0.29s Sys=0s
+  User=0.33s Real=0.32s Sys=0s
 /gun/energy 0.150 GeV
 /run/beamOn 10
 
@@ -956,7 +885,7 @@ Event number 129
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.12s Real=0.12s Sys=0s
+  User=0.13s Real=0.13s Sys=0s
 /gun/energy 0.050 GeV
 /run/beamOn 10
 
@@ -998,7 +927,7 @@ Event number 139
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.05s Real=0.05s Sys=0s
+  User=0.04s Real=0.04s Sys=0s
 /gun/energy 0.015 GeV
 /run/beamOn 10
 
@@ -1130,7 +1059,7 @@ Event number 169
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=2.45s Real=2.52s Sys=0.01s
+  User=2.2s Real=2.2s Sys=0s
 /gun/energy 3 GeV
 /run/beamOn 10
 
@@ -1172,7 +1101,7 @@ Event number 179
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.41s Real=1.41s Sys=0s
+  User=1.53s Real=1.53s Sys=0s
 /gun/energy 2.5 GeV
 /run/beamOn 10
 
@@ -1214,7 +1143,7 @@ Event number 189
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.3s Real=1.31s Sys=0s
+  User=1.11s Real=1.12s Sys=0s
 /gun/energy 1.0 GeV
 /run/beamOn 10
 
@@ -1256,7 +1185,7 @@ Event number 199
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.5s Real=0.51s Sys=0.01s
+  User=0.52s Real=0.52s Sys=0s
 /gun/energy 0.75 GeV
 /run/beamOn 10
 
@@ -1298,7 +1227,7 @@ Event number 209
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.4s Real=0.4s Sys=0s
+  User=0.41s Real=0.41s Sys=0.01s
 /gun/energy 0.150 GeV
 /run/beamOn 10
 
@@ -1340,7 +1269,7 @@ Event number 219
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.07s Real=0.06s Sys=0s
+  User=0.06s Real=0.05s Sys=0s
 /gun/energy 0.050 GeV
 /run/beamOn 10
 
@@ -1382,7 +1311,7 @@ Event number 229
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.01s Real=0.02s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 /gun/energy 0.015 GeV
 /run/beamOn 10
 
@@ -1424,7 +1353,7 @@ Event number 239
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 /gun/energy 0.0015 GeV
 /run/beamOn 10
 
@@ -1477,21 +1406,18 @@ SimpleBox is now made of Al
 /run/beamOn 10
 
 phot:   for  gamma    SubType= 12
-      LambdaPrime table from 200 keV to 10 TeV in 54 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila
+       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV
 
 compt:   for  gamma    SubType= 13
-      Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
-      LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda tables from 1.022 MeV to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
-     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       10 TeV
 
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -1536,11 +1462,6 @@ eIoni:   for  e+    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
 
-msc:   for e+    SubType= 10
-      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
-
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -1554,28 +1475,7 @@ msc:   for proton    SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
-hIoni:   for  GenericIon    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=        2 MeV
-          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
-
 msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
-
-hIoni:   for  alpha    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=   7.9452 MeV
-          BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
-
-msc:   for alpha    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
@@ -1587,11 +1487,6 @@ hIoni:   for  anti_proton    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=        2 MeV
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
-
-msc:   for anti_proton    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -1613,11 +1508,6 @@ hIoni:   for  kaon-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
           BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
-
-msc:   for kaon-    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -1666,11 +1556,6 @@ muPairProd:   for  mu-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-muMsc:   for mu-    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
-
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -1678,11 +1563,6 @@ hIoni:   for  pi+    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
-
-msc:   for pi+    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -1732,7 +1612,6 @@ Event number 251
 Event number 252
 Event number 253
 Event number 254
-WARNING: /ec/build/release/09-05-ref-09_branch/source/processes/hadronic/stopping/src/G4PiMinusStopAl.cc is deprecated and will be removed.
 Event number 255
 Event number 256
 Event number 257
@@ -1741,7 +1620,7 @@ Event number 259
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.32s Real=0.32s Sys=0s
+  User=0.39s Real=0.4s Sys=0s
 /gun/energy 1.0 GeV
 /run/beamOn 10
 
@@ -1788,7 +1667,7 @@ Event number 269
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.25s Real=0.25s Sys=0.01s
+  User=0.24s Real=0.23s Sys=0s
 /gun/energy 0.75 GeV
 /run/beamOn 10
 
@@ -1835,7 +1714,7 @@ Event number 279
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.22s Real=0.22s Sys=0s
+  User=0.16s Real=0.17s Sys=0s
 /gun/energy 0.150 GeV
 /run/beamOn 10
 
@@ -1882,7 +1761,7 @@ Event number 289
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.04s Real=0.05s Sys=0s
+  User=0.05s Real=0.05s Sys=0s
 /gun/energy 0.050 GeV
 /run/beamOn 10
 
@@ -1929,7 +1808,7 @@ Event number 299
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.02s Real=0.02s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /gun/energy 0.015 GeV
 /run/beamOn 10
 
@@ -1976,7 +1855,7 @@ Event number 309
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.02s Real=0.01s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /gun/energy 0.0015 GeV
 /run/beamOn 10
 
@@ -2076,7 +1955,7 @@ Event number 329
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.76s Real=0.76s Sys=0s
+  User=0.87s Real=0.87s Sys=0s
 /gun/energy 3 GeV
 /run/beamOn 10
 
@@ -2123,7 +2002,7 @@ Event number 339
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.53s Real=0.52s Sys=0s
+  User=0.55s Real=0.55s Sys=0s
 /gun/energy 2.5 GeV
 /run/beamOn 10
 
@@ -2170,7 +2049,7 @@ Event number 349
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.45s Real=0.46s Sys=0s
+  User=0.48s Real=0.48s Sys=0s
 /gun/energy 1.0 GeV
 /run/beamOn 10
 
@@ -2217,7 +2096,7 @@ Event number 359
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.26s Real=0.27s Sys=0s
+  User=0.24s Real=0.24s Sys=0s
 /gun/energy 0.75 GeV
 /run/beamOn 10
 
@@ -2264,7 +2143,7 @@ Event number 369
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.22s Real=0.22s Sys=0s
+  User=0.19s Real=0.19s Sys=0s
 /gun/energy 0.150 GeV
 /run/beamOn 10
 
@@ -2311,7 +2190,7 @@ Event number 379
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.06s Real=0.06s Sys=0s
+  User=0.07s Real=0.07s Sys=0s
 /gun/energy 0.050 GeV
 /run/beamOn 10
 
@@ -2358,7 +2237,7 @@ Event number 389
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.03s Real=0.02s Sys=0s
+  User=0.03s Real=0.03s Sys=0s
 /gun/energy 0.015 GeV
 /run/beamOn 10
 
@@ -2405,7 +2284,7 @@ Event number 399
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /gun/energy 0.0015 GeV
 /run/beamOn 10
 
@@ -2505,7 +2384,7 @@ Event number 419
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.33s Real=1.35s Sys=0s
+  User=1.16s Real=1.16s Sys=0s
 /gun/energy 3 GeV
 /run/beamOn 10
 
@@ -2552,7 +2431,7 @@ Event number 429
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.75s Real=0.76s Sys=0s
+  User=0.76s Real=0.76s Sys=0s
 /gun/energy 2.5 GeV
 /run/beamOn 10
 
@@ -2599,7 +2478,7 @@ Event number 439
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.61s Real=0.62s Sys=0.01s
+  User=0.72s Real=0.72s Sys=0s
 /gun/energy 1.0 GeV
 /run/beamOn 10
 
@@ -2646,7 +2525,7 @@ Event number 449
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.34s Real=0.34s Sys=0s
+  User=0.27s Real=0.27s Sys=0s
 /gun/energy 0.75 GeV
 /run/beamOn 10
 
@@ -2693,7 +2572,7 @@ Event number 459
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.2s Real=0.22s Sys=0s
+  User=0.23s Real=0.23s Sys=0s
 /gun/energy 0.150 GeV
 /run/beamOn 10
 
@@ -2740,7 +2619,7 @@ Event number 469
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.03s Real=0.03s Sys=0s
+  User=0.04s Real=0.04s Sys=0s
 /gun/energy 0.050 GeV
 /run/beamOn 10
 
@@ -2881,7 +2760,7 @@ Event number 499
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # gamma in Air
 #
@@ -2892,21 +2771,18 @@ SimpleBox is now made of Air
 /run/beamOn 10
 
 phot:   for  gamma    SubType= 12
-      LambdaPrime table from 200 keV to 10 TeV in 54 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila
+       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV
 
 compt:   for  gamma    SubType= 13
-      Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
-      LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda tables from 1.022 MeV to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
-     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       10 TeV
 
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -2951,11 +2827,6 @@ eIoni:   for  e+    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
 
-msc:   for e+    SubType= 10
-      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
-
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -2969,28 +2840,7 @@ msc:   for proton    SubType= 10
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
-hIoni:   for  GenericIon    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=        2 MeV
-          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
-
 msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
-
-hIoni:   for  alpha    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=   7.9452 MeV
-          BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
-
-msc:   for alpha    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
@@ -3002,11 +2852,6 @@ hIoni:   for  anti_proton    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=        2 MeV
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
-
-msc:   for anti_proton    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -3028,11 +2873,6 @@ hIoni:   for  kaon-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
           BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
-
-msc:   for kaon-    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -3081,11 +2921,6 @@ muPairProd:   for  mu-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-muMsc:   for mu-    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
-
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -3093,11 +2928,6 @@ hIoni:   for  pi+    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
-
-msc:   for pi+    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -3264,7 +3094,7 @@ Event number 529
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.07s Real=0.06s Sys=0s
+  User=0s Real=0s Sys=0s
 /gun/energy 0.150 GeV
 /run/beamOn 10
 
@@ -3420,7 +3250,7 @@ Event number 559
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /gun/energy 0.0015 GeV
 /run/beamOn 10
 
@@ -3530,7 +3360,7 @@ Event number 579
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.64s Real=1.64s Sys=0s
+  User=1.93s Real=1.94s Sys=0.01s
 /gun/energy 3 GeV
 /run/beamOn 10
 
@@ -3582,7 +3412,7 @@ Event number 589
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.48s Real=1.48s Sys=0.01s
+  User=1.36s Real=1.36s Sys=0s
 /gun/energy 2.5 GeV
 /run/beamOn 10
 
@@ -3634,7 +3464,7 @@ Event number 599
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.49s Real=1.5s Sys=0s
+  User=1.46s Real=1.46s Sys=0s
 /gun/energy 1.0 GeV
 /run/beamOn 10
 
@@ -3686,7 +3516,7 @@ Event number 609
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.56s Real=0.56s Sys=0.01s
+  User=0.67s Real=0.67s Sys=0s
 /gun/energy 0.75 GeV
 /run/beamOn 10
 
@@ -3738,7 +3568,7 @@ Event number 619
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.49s Real=0.49s Sys=0s
+  User=0.64s Real=0.64s Sys=0s
 /gun/energy 0.150 GeV
 /run/beamOn 10
 
@@ -3790,7 +3620,7 @@ Event number 629
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.19s Real=0.19s Sys=0s
+  User=0.18s Real=0.18s Sys=0s
 /gun/energy 0.050 GeV
 /run/beamOn 10
 
@@ -3842,7 +3672,7 @@ Event number 639
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.08s Real=0.08s Sys=0s
+  User=0.03s Real=0.03s Sys=0s
 /gun/energy 0.015 GeV
 /run/beamOn 10
 
@@ -3946,7 +3776,7 @@ Event number 659
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # positron in Air
 #
@@ -4004,7 +3834,7 @@ Event number 669
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /gun/energy 3 GeV
 /run/beamOn 10
 
@@ -4056,7 +3886,7 @@ Event number 679
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /gun/energy 2.5 GeV
 /run/beamOn 10
 
@@ -4160,7 +3990,7 @@ Event number 699
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 /gun/energy 0.75 GeV
 /run/beamOn 10
 
@@ -4212,7 +4042,7 @@ Event number 709
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0s Sys=0s
 /gun/energy 0.150 GeV
 /run/beamOn 10
 
@@ -4264,7 +4094,7 @@ Event number 719
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /gun/energy 0.050 GeV
 /run/beamOn 10
 
@@ -4316,7 +4146,7 @@ Event number 729
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /gun/energy 0.015 GeV
 /run/beamOn 10
 
@@ -4422,14 +4252,14 @@ Run Summary
   Number of events processed : 10
   User=0s Real=0.01s Sys=0s
 #
-G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
+G4 kernel has come to Quit state.
 EventManager deleted.
 UImanager deleted.
 Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
-RunManager is deleted.
+RunManager is deleting.
