@@ -41,10 +41,12 @@
 //      09.05.06 Return back to test30
 // -------------------------------------------------------------------
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include <fstream>
 #include <iomanip>
+
+#include "globals.hh"
+#include "G4ios.hh"
+#include "G4PhysicalConstants.hh"
 
 #include "G4Material.hh"
 #include "G4MaterialCutsCouple.hh"
