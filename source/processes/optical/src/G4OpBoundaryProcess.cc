@@ -198,19 +198,17 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                      G4TransportationManager::GetTransportationManager()->
                                               GetNavigatorForTracking();
 
-        G4ThreeVector theLocalPoint = theNavigator->
-                                      GetGlobalToLocalTransform().
-                                      TransformPoint(theGlobalPoint);
-
-        G4ThreeVector theLocalNormal;   // Normal points back into volume
-
         G4bool valid;
-        theLocalNormal = theNavigator->GetLocalExitNormal(&valid);
+        //  Use the new method for Exit Normal in global coordinates,
+        //    which provides the normal more reliably. 
+        theGlobalNormal = 
+                     theNavigator->GetGlobalExitNormal(theGlobalPoint,&valid);
 
         if (valid) {
-          theLocalNormal = -theLocalNormal;
+          theGlobalNormal = -theGlobalNormal;
         }
-        else {
+        else 
+        {
           G4ExceptionDescription ed;
           ed << " G4OpBoundaryProcess/PostStepDoIt(): "
                  << " The Navigator reports that it returned an invalid normal"
@@ -220,16 +218,21 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                       "Invalid Surface Normal - Geometry must return valid surface normal");
         }
 
-        theGlobalNormal = theNavigator->GetLocalToGlobalTransform().
-                                        TransformAxis(theLocalNormal);
-
         if (OldMomentum * theGlobalNormal > 0.0) {
-#ifdef G4DEBUG_OPTICAL
-           G4cerr << " G4OpBoundaryProcess/PostStepDoIt(): "
-                  << " theGlobalNormal points the wrong direction "
-                  << G4endl;
-#endif
-           theGlobalNormal = -theGlobalNormal;
+           G4ExceptionDescription ed;
+           ed << " G4OpBoundaryProcess/PostStepDoIt(): "
+              << " theGlobalNormal points in a wrong direction. "
+              << G4endl;
+           ed << "    The momentum of the photon arriving at interface (oldMomentum)"
+              << " must exit the volume cross in the step. " << G4endl;
+           ed << "  So it MUST have dot < 0 with the normal that Exits the new volume (globalNormal)." << G4endl;
+           ed << "  >> The dot product of oldMomentum and global Normal is " << OldMomentum*theGlobalNormal << G4endl;
+           ed << "     Old Momentum  (during step)     = " << OldMomentum << G4endl;
+           ed << "     Global Normal (Exiting New Vol) = " << theGlobalNormal << G4endl;
+           ed << G4endl;
+           G4Exception("G4OpBoundaryProcess::PostStepDoIt", "OpBoun02",
+                      EventMustBeAborted,ed,
+                      "Invalid Surface Normal - Geometry must return valid surface normal pointing in the right direction");
         }
 
 	G4MaterialPropertiesTable* aMaterialPropertiesTable;
