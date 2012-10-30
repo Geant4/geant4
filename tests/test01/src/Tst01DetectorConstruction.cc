@@ -24,12 +24,14 @@
 // ********************************************************************
 //
 
+#include <sstream>
+
 #include "Tst01DetectorConstruction.hh"
 
 #include "G4ios.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Tst01DetectorMessenger.hh"
-
-#include <sstream>
 
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"

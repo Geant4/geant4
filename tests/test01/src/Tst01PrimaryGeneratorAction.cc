@@ -24,10 +24,13 @@
 // ********************************************************************
 //
 
+#include <CLHEP/Random/RandFlat.h>
+
 #include "Tst01PrimaryGeneratorAction.hh"
 
 #include "globals.hh"
-#include <CLHEP/Random/RandFlat.h>
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "Tst01PrimaryGeneratorMessenger.hh"
 #include "Tst01DetectorConstruction.hh"
