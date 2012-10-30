@@ -42,6 +42,7 @@
 #include "G4PVPlacement.hh"
 #include "G4UImanager.hh"
 #include "G4RunManager.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
 Tst02DetectorConstruction::Tst02DetectorConstruction()
