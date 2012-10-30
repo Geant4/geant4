@@ -366,19 +366,19 @@ GEANT4_ADD_TEST(example-ext-runandevent-re01
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/runAndEvent/RE01
                 BUILD RE01 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-ext-runandevent-re02 
-                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/runAndEvent/RE02/exampleRE02
+                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/runAndEvent/RE02/RE02
                         ${CMAKE_SOURCE_DIR}/examples/extended/runAndEvent/RE02/run.mac
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/runAndEvent/RE02
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/runAndEvent/RE02
-                BUILD exampleRE02 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+                BUILD RE02 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-ext-runandevent-re02-run3 
-                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/runAndEvent/RE02/exampleRE02
+                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/runAndEvent/RE02/RE02
                         ${CMAKE_SOURCE_DIR}/examples/extended/runAndEvent/RE02/run3.mac
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/runAndEvent/RE02
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/runAndEvent/RE02
                 DEPENDS example-ext-runandevent-re02 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-ext-runandevent-re02-run4 
-                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/runAndEvent/RE02/exampleRE02
+                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/runAndEvent/RE02/RE02
                         ${CMAKE_SOURCE_DIR}/examples/extended/runAndEvent/RE02/run4.mac
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/runAndEvent/RE02
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/runAndEvent/RE02

@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ctests-V09-05-23 08th October 2012 Ivana Hrivnacova
+- Synchronizing tests with updated CMakeLists.txt in 
+  example/extended/runAndEvent (exRunAndEvent-V09-05-00)
+
 ctests-V09-05-22 29th September 2012 Ivana Hrivnacova
 - Synchronizing tests with updated CMakeLists.txt in 
   example/extended/eventGenerator, hadronic, polarisation
