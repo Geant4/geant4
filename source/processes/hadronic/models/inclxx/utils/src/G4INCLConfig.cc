@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.4
+// INCL++ revision: v5.1.5
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -237,50 +237,58 @@ namespace G4INCL {
       }
 
       // Process the options from the user-specific config file ~/.inclxxrc
-      if(getenv("HOME")) { // Check if we can find the home directory
-        std::string homeDirectory = getenv("HOME");
-        std::string configFileName = homeDirectory + "/.inclxxrc";
-        std::ifstream configFileStream(configFileName.c_str());
-        std::cout << "Reading config file " << configFileName << std::endl;
-        if(!configFileStream) {
-          std::cerr << "INCL++ config file " << configFileName
-            << " not found. Continuing the run regardless."
-            << std::endl;
+      std::string configFileName;
+      const char * const configFileVar = getenv("INCLXXRC");
+      if(configFileVar)
+        configFileName = configFileVar;
+      else {
+        const char * const homeDirectoryPointer = getenv("HOME");
+        if(homeDirectoryPointer) { // Check if we can find the home directory
+          std::string homeDirectory(homeDirectoryPointer);
+          configFileName = homeDirectory + "/.inclxxrc";
         } else {
-          // Merge options from the input file
-          boost::program_options::parsed_options parsedOptions = boost::program_options::parse_config_file(configFileStream, configFileOptions, true);
-          boost::program_options::store(parsedOptions, variablesMap);
-
-          // Make sure that the unhandled options are all "*-datafile-path"
-          std::vector<std::string> unhandledOptions =
-            boost::program_options::collect_unrecognized(parsedOptions.options, boost::program_options::exclude_positional);
-          G4bool ignoreNext = false;
-          const std::string match = "-datafile-path";
-          for(std::vector<std::string>::const_iterator i=unhandledOptions.begin(); i!=unhandledOptions.end(); ++i) {
-            if(ignoreNext) {
-              ignoreNext=false;
-              continue;
-            }
-            if(i->rfind(match) == i->length()-match.length()) {
-              std::cerr << "Ignoring unrecognized option " << *i << std::endl;
-              ignoreNext = true;
-            } else {
-              std::cerr << "Error: unrecognized option " << *i << std::endl;
-              std::cerr << suggestHelpMsg;
-              std::exit(EXIT_FAILURE);
-            }
-          }
-
-          // Store the option values in the variablesMap
-          boost::program_options::store(parsedOptions, variablesMap);
-          boost::program_options::notify(variablesMap);
+          std::cerr << "Could not determine the user's home directory. "
+            << "Are you running Linux, Unix or BSD?"<< std::endl;
+          std::exit(EXIT_FAILURE);
         }
-        configFileStream.close();
-      } else {
-        std::cerr << "Could not determine the user's home directory. "
-          << "Are you running Linux, Unix or BSD?"<< std::endl;
-        std::exit(EXIT_FAILURE);
       }
+
+      std::ifstream configFileStream(configFileName.c_str());
+      std::cout << "Reading config file " << configFileName << std::endl;
+      if(!configFileStream) {
+        std::cerr << "INCL++ config file " << configFileName
+          << " not found. Continuing the run regardless."
+          << std::endl;
+      } else {
+        // Merge options from the input file
+        boost::program_options::parsed_options parsedOptions = boost::program_options::parse_config_file(configFileStream, configFileOptions, true);
+        boost::program_options::store(parsedOptions, variablesMap);
+
+        // Make sure that the unhandled options are all "*-datafile-path"
+        std::vector<std::string> unhandledOptions =
+          boost::program_options::collect_unrecognized(parsedOptions.options, boost::program_options::exclude_positional);
+        G4bool ignoreNext = false;
+        const std::string match = "-datafile-path";
+        for(std::vector<std::string>::const_iterator i=unhandledOptions.begin(); i!=unhandledOptions.end(); ++i) {
+          if(ignoreNext) {
+            ignoreNext=false;
+            continue;
+          }
+          if(i->rfind(match) == i->length()-match.length()) {
+            std::cerr << "Ignoring unrecognized option " << *i << std::endl;
+            ignoreNext = true;
+          } else {
+            std::cerr << "Error: unrecognized option " << *i << std::endl;
+            std::cerr << suggestHelpMsg;
+            std::exit(EXIT_FAILURE);
+          }
+        }
+
+        // Store the option values in the variablesMap
+        boost::program_options::store(parsedOptions, variablesMap);
+        boost::program_options::notify(variablesMap);
+      }
+      configFileStream.close();
 
       /* *******************
        * Process the options

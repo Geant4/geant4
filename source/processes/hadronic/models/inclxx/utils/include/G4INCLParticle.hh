@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.4
+// INCL++ revision: v5.1.5
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -73,36 +73,35 @@ namespace G4INCL {
      *
      * Does not copy the particle ID.
      */
-    Particle(const Particle &rhs) {
-      theZ = rhs.theZ;
-      theA = rhs.theA;
-      theParticipantType = rhs.theParticipantType;
-      theType = rhs.theType;
-      theEnergy = rhs.theEnergy;
-      theFrozenEnergy = rhs.theFrozenEnergy;
-      if(rhs.thePropagationEnergy == &(rhs.theFrozenEnergy))
-        thePropagationEnergy = &theFrozenEnergy;
-      else
-        thePropagationEnergy = &theEnergy;
-      theMomentum = rhs.theMomentum;
-      theFrozenMomentum = rhs.theFrozenMomentum;
-      if(rhs.thePropagationMomentum == &(rhs.theFrozenMomentum))
-        thePropagationMomentum = &theFrozenMomentum;
-      else
-        thePropagationMomentum = &theMomentum;
-      thePosition = rhs.thePosition;
-      nCollisions = rhs.nCollisions;
-      nDecays = rhs.nDecays;
-      thePotentialEnergy = rhs.thePotentialEnergy;
-      // ID intentionally not copied
-      ID = nextID++;
-
-      theHelicity = rhs.theHelicity;
-      emissionTime = rhs.emissionTime;
-      outOfWell = rhs.outOfWell;
-
-      theMass = rhs.theMass;
-    }
+    Particle(const Particle &rhs) :
+      theZ(rhs.theZ),
+      theA(rhs.theA),
+      theParticipantType(rhs.theParticipantType),
+      theType(rhs.theType),
+      theEnergy(rhs.theEnergy),
+      theFrozenEnergy(rhs.theFrozenEnergy),
+      theMomentum(rhs.theMomentum),
+      theFrozenMomentum(rhs.theFrozenMomentum),
+      thePosition(rhs.thePosition),
+      nCollisions(rhs.nCollisions),
+      nDecays(rhs.nDecays),
+      thePotentialEnergy(rhs.thePotentialEnergy),
+      theHelicity(rhs.theHelicity),
+      emissionTime(rhs.emissionTime),
+      outOfWell(rhs.outOfWell),
+      theMass(rhs.theMass)
+      {
+        if(rhs.thePropagationEnergy == &(rhs.theFrozenEnergy))
+          thePropagationEnergy = &theFrozenEnergy;
+        else
+          thePropagationEnergy = &theEnergy;
+        if(rhs.thePropagationMomentum == &(rhs.theFrozenMomentum))
+          thePropagationMomentum = &theFrozenMomentum;
+        else
+          thePropagationMomentum = &theMomentum;
+        // ID intentionally not copied
+        ID = nextID++;
+      }
 
   protected:
     /// \brief Helper method for the assignment operator
@@ -625,9 +624,7 @@ namespace G4INCL {
 
     /** \brief Check if the particle belongs to a given list **/
     G4bool isInList(ParticleList const &l) const {
-      for(ParticleIter i=l.begin(); i!=l.end(); ++i)
-        if((*i)->getID()==ID) return true;
-      return false;
+      return (std::find(l.begin(), l.end(), this)!=l.end());
     }
 
     G4bool isCluster() const {

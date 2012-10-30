@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.4
+// INCL++ revision: v5.1.5
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -48,15 +48,23 @@
 
 namespace G4INCL {
 
+  /// \brief Cluster coalescence algorithm used in the IAEA intercomparison
   class ClusteringModelIntercomparison : public IClusteringModel {
   public:
     ClusteringModelIntercomparison(Config const * const theConfig) :
-    protonMass(ParticleTable::getRealMass(Proton)),
-    neutronMass(ParticleTable::getRealMass(Neutron)),
-    runningMaxClusterAlgorithmMass(theConfig->getClusterMaxMass())
+      theNucleus(NULL),
+      selectedA(0),
+      selectedZ(0),
+      sqtot(0.),
+      cascadingEnergyPool(0.),
+      protonMass(ParticleTable::getRealMass(Proton)),
+      neutronMass(ParticleTable::getRealMass(Neutron)),
+      runningMaxClusterAlgorithmMass(theConfig->getClusterMaxMass()),
+      nConsideredMax(0),
+      nConsidered(0),
+      consideredPartners(NULL),
+      isInRunningConfiguration(NULL)
     {
-      zeroOut();
-
       // Set up the maximum charge and neutron number for clusters
       clusterZMaxAll = 0;
       clusterNMaxAll = 0;
@@ -66,20 +74,22 @@ namespace G4INCL {
         if(A-ParticleTable::clusterZMin[A]>clusterNMaxAll)
           clusterNMaxAll = A-ParticleTable::clusterZMin[A];
       }
-    }
+      std::fill(candidateConfiguration,
+                candidateConfiguration + ParticleTable::maxClusterMass,
+                static_cast<Particle*>(NULL));
 
-    void cleanUp() {
-      delete candidateConfiguration;
-      consideredPartners.clear();
-      runningConfiguration.clear();
-    }
+      std::fill(runningEnergies,
+                runningEnergies + ParticleTable::maxClusterMass,
+                0.0);
 
-    void zeroOut() {
-      candidateConfiguration = 0;
+      std::fill(runningPotentials,
+                runningPotentials + ParticleTable::maxClusterMass,
+                0.0);
     }
 
     virtual ~ClusteringModelIntercomparison() {
-      cleanUp();
+      delete [] consideredPartners;
+      delete [] isInRunningConfiguration;
     }
 
     virtual Cluster* getCluster(Nucleus*, Particle*);
@@ -87,17 +97,13 @@ namespace G4INCL {
 
   private:
     void findClusterStartingFrom(const G4int oldA, const G4int oldZ);
-    G4double getPhaseSpace(G4int oldA, Particle *p);
+    G4double getPhaseSpace(const G4int oldA, Particle const * const p);
 
     Nucleus *theNucleus;
-    Particle *theLeadingParticle;
-    ParticleList consideredPartners;
-    ParticleList* candidateConfiguration;
 
     G4double runningEnergies[ParticleTable::maxClusterMass];
     ThreeVector runningMomenta[ParticleTable::maxClusterMass];
     ThreeVector runningPositions[ParticleTable::maxClusterMass];
-    ParticleList runningConfiguration; // Use deque instead?
     G4double runningPotentials[ParticleTable::maxClusterMass];
 
     G4int selectedA, selectedZ;
@@ -113,6 +119,38 @@ namespace G4INCL {
     const G4double neutronMass;
 
     G4int runningMaxClusterAlgorithmMass;
+
+    G4int nConsideredMax;
+    G4int nConsidered;
+
+    /** \brief Array of considered cluster partners
+     *
+     * A dynamical array of Particle* is allocated on this variable and filled
+     * with pointers to nucleons which are eligible for clustering. We used to
+     * use a ParticleList for this purpose, but this made it very cumbersome to
+     * check whether nucleons had already been included in the running
+     * configuration. Using an array of Particle* coupled with a boolean mask
+     * (\see{isInRunningConfiguration}) reduces the overhead by a large amount.
+     * Running times for 1-GeV p+Pb208 went down by almost 30% (!).
+     *
+     * Lesson learnt: when you need speed, nothing beats a good ol' array.
+     */
+    Particle **consideredPartners;
+
+    /** \brief Array of flags for nucleons in the running configuration
+     *
+     * Clustering partners that are already used in the running cluster
+     * configuration are flagged as "true" in this array.
+     */
+    G4bool *isInRunningConfiguration;
+
+    /** \brief Best cluster configuration
+     *
+     * A dynamical array of Particle* is allocated on this variable and filled
+     * with pointers to the nucleons which make up the best cluster
+     * configuration that has been found so far.
+     */
+    Particle *candidateConfiguration[ParticleTable::maxClusterMass];
   };
 
 }

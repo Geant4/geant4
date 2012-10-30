@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.4
+// INCL++ revision: v5.1.5
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -46,16 +46,18 @@
 #include "G4INCLXXInterfaceMessenger.hh"
 #include <sstream>
 
-G4INCLXXInterfaceMessenger::G4INCLXXInterfaceMessenger(G4INCLXXInterfaceConfig *anInterfaceConfig) :
-  theINCLXXInterfaceConfig(anInterfaceConfig)
+const G4String G4INCLXXInterfaceMessenger::theUIDirectory = "/process/had/inclxx/";
+
+G4INCLXXInterfaceMessenger::G4INCLXXInterfaceMessenger(G4INCLXXInterfaceStore *anInterfaceStore) :
+  theINCLXXInterfaceStore(anInterfaceStore)
 {
   // Create a directory for the INCL++ commands
-  theINCLXXDirectory = new G4UIdirectory("/inclxx/");
-  theINCLXXDirectory->SetGuidance("Controls for the INCL++ interface.");
+  theINCLXXDirectory = new G4UIdirectory(theUIDirectory);
+  theINCLXXDirectory->SetGuidance("Parameters for the INCL++ model");
 
   // This command controls whether nucleus-nucleus reactions should accurately
   // describe the projectile or the target nucleus (default: projectile)
-  accurateNucleusCmd = new G4UIcmdWithAString ("/inclxx/accurateNucleus",this);
+  accurateNucleusCmd = new G4UIcmdWithAString((theUIDirectory + "accurateNucleus").data(),this);
   accurateNucleusCmd->SetGuidance("Set which nucleus will be accurately described in nucleus-nucleus reactions.");
   accurateNucleusCmd->SetGuidance(" projectile: accurate description of projectile-related quantities");
   accurateNucleusCmd->SetGuidance(" target: accurate description of target-related quantities");
@@ -65,7 +67,7 @@ G4INCLXXInterfaceMessenger::G4INCLXXInterfaceMessenger(G4INCLXXInterfaceConfig *
 
   // This command selects the maximum mass number of clusters to be produced in
   // the INCL++ cascade
-  maxClusterMassCmd = new G4UIcmdWithAnInteger ("/inclxx/maxClusterMass",this);
+  maxClusterMassCmd = new G4UIcmdWithAnInteger((theUIDirectory + "maxClusterMass").data(),this);
   maxClusterMassCmd->SetGuidance("Set the maximum cluster mass.");
   maxClusterMassCmd->SetGuidance(" The INCL++ cascade stage will produce clusters with mass up to the value of this parameter (included)");
   maxClusterMassCmd->SetGuidance(" Allowed range: [2,12]");
@@ -85,17 +87,12 @@ void G4INCLXXInterfaceMessenger::SetNewValue(G4UIcommand *command, G4String newV
   if(command==accurateNucleusCmd) {
     newValues.toLower();
     if(newValues=="projectile") {
-      G4cout << "INCL++ interface: accurate description of the projectile in nucleus-nucleus reactions." << G4endl;
-      theINCLXXInterfaceConfig->SetAccurateProjectile(true);
+      theINCLXXInterfaceStore->SetAccurateProjectile(true);
     } else if(newValues=="target") {
-      G4cout << "INCL++ interface: accurate description of the target in nucleus-nucleus reactions." << G4endl;
-      theINCLXXInterfaceConfig->SetAccurateProjectile(false);
+      theINCLXXInterfaceStore->SetAccurateProjectile(false);
     }
   } else if(command==maxClusterMassCmd) {
     const G4int parameter = maxClusterMassCmd->GetNewIntValue(newValues);
-    G4cout << "INCL++ interface: setting maximum cluster mass to " << parameter << "." << G4endl;
-    theINCLXXInterfaceConfig->SetMaxClusterMass(parameter);
+    theINCLXXInterfaceStore->SetMaxClusterMass(parameter);
   }
-
-  theINCLXXInterfaceConfig->DeleteModels();
 }

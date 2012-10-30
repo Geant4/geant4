@@ -16,6 +16,17 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+9 October 2012 - Davide Mancusi (hadr-inclxx-V09-05-27)
+-----------------------------------------------------------
+- INCL++ v5.1.5
+  o Only one model instance for all processes
+  o Messenger interface now creates commands in /process/had/inclxx, for
+    consistency with Bertini
+  o Optimisation of the cluster-coalescence algorithm reduces CPU time by about
+    40% in 1-GeV p+208Pb
+  o Fixes Coverity warnings
+  o Bug fixes
+
 26 September 2012 - Gabriele Cosmo (hadr-inclxx-V09-05-26)
 -----------------------------------------------------------
 - Explicitly use inclusion of headers for system of units and physical

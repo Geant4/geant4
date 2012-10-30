@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.4
+// INCL++ revision: v5.1.5
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -56,6 +56,15 @@ namespace G4INCL {
   public:
     NuclearDensity(G4int A, G4int Z, InverseInterpolationTable *rpCorrelationTable);
     ~NuclearDensity();
+
+    /// \brief Copy constructor
+    NuclearDensity(const NuclearDensity &rhs);
+
+    /// \brief Assignment operator
+    NuclearDensity &operator=(const NuclearDensity &rhs);
+
+    /// \brief Helper method for the assignment operator
+    void swap(NuclearDensity &rhs);
 
     /** \brief Get the maximum allowed radius for a given momentum.
      *  \param p Absolute value of the particle momentum, divided by the
@@ -112,7 +121,7 @@ namespace G4INCL {
         theCentralRadius = theRadiusParameter;
     }
 
-    const G4int theA, theZ;
+    G4int theA, theZ;
     G4double theMaximumRadius;
     /// \brief Represents INCL4.5's R0 variable
     G4double theCentralRadius;

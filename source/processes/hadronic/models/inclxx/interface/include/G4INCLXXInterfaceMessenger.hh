@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.4
+// INCL++ revision: v5.1.5
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -46,27 +46,29 @@
 #ifndef G4INCLXXInterfaceMessenger_hh
 #define G4INCLXXInterfaceMessenger_hh
 
-#include "G4INCLXXInterfaceConfig.hh"
+#include "G4INCLXXInterfaceStore.hh"
 #include "G4UImessenger.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4String.hh"
 
-class G4INCLXXInterfaceConfig;
+class G4INCLXXInterfaceStore;
 
 class G4INCLXXInterfaceMessenger : public G4UImessenger
 {
 
   public:
-    G4INCLXXInterfaceMessenger (G4INCLXXInterfaceConfig *anInterfaceConfig);
+    G4INCLXXInterfaceMessenger (G4INCLXXInterfaceStore *anInterfaceStore);
     ~G4INCLXXInterfaceMessenger ();
     void SetNewValue (G4UIcommand *command, G4String newValues);
     //    Identifies the command which has been invoked by the user, extracts the
     //    parameters associated with that command (held in newValues, and uses
-    //    these values with the appropriate member function of G4INCLXXInterfaceConfig.
+    //    these values with the appropriate member function of G4INCLXXInterfaceStore.
     //
   private:
-    G4INCLXXInterfaceConfig *theINCLXXInterfaceConfig;
+    static const G4String theUIDirectory;
+    G4INCLXXInterfaceStore *theINCLXXInterfaceStore;
     G4UIdirectory *theINCLXXDirectory;
     G4UIcmdWithAString *accurateNucleusCmd;
     G4UIcmdWithAnInteger *maxClusterMassCmd;

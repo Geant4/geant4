@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.4
+// INCL++ revision: v5.1.5
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -95,7 +95,7 @@ namespace G4INCL {
     G4double maxImpactParameter(Cluster const * const c, Nucleus const *
         const n) const {
       return 2.*ParticleTable::getNuclearRadius(c->getA(),c->getZ())
-        + n->getDensity()->getMaximumRadius();
+        + n->getUniverseRadius();
     }
   };
 }

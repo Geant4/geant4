@@ -30,14 +30,14 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.4
+// INCL++ revision: v5.1.5
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
 
-/** \file G4INCLXXInterfaceConfig.cc
- * \brief Singleton class for configuring the INCL++ Geant4 interface.
+/** \file G4INCLXXInterfaceStore.cc
+ * \brief The G4INCLXXInterfaceStore class implementation
  *
  * \date 24 May 2012
  * \author Davide Mancusi
@@ -45,18 +45,46 @@
 
 #include "G4INCLXXInterfaceMessenger.hh"
 
-G4INCLXXInterfaceConfig *G4INCLXXInterfaceConfig::theInstance = NULL;
+G4INCLXXInterfaceStore *G4INCLXXInterfaceStore::theInstance = NULL;
 
-G4INCLXXInterfaceConfig::G4INCLXXInterfaceConfig() :
+G4INCLXXInterfaceStore::G4INCLXXInterfaceStore() :
   dumpInput(false),
   accurateProjectile(true),
   theMaxClusterMassDefault(8),
   theMaxClusterMass(theMaxClusterMassDefault),
-  theMaxProjMassINCL(18)
+  theMaxProjMassINCL(18),
+  theINCLModel(NULL),
+  nWarnings(0),
+  maxWarnings(50)
 {
   theINCLXXInterfaceMessenger = new G4INCLXXInterfaceMessenger(this);
 }
 
-G4INCLXXInterfaceConfig::~G4INCLXXInterfaceConfig() {
+G4INCLXXInterfaceStore::~G4INCLXXInterfaceStore() {
   delete theINCLXXInterfaceMessenger;
+  delete theINCLModel;
 }
+
+void G4INCLXXInterfaceStore::EmitWarning(const G4String &message) {
+  if(++nWarnings<=maxWarnings) {
+    G4cout << "[INCL++] Warning: " << message << G4endl;
+    if(nWarnings==maxWarnings) {
+      G4cout << "[INCL++] INCL++ has already emitted " << maxWarnings << " warnings and will emit no more." << G4endl;
+    }
+  }
+}
+
+void G4INCLXXInterfaceStore::EmitBigWarning(const G4String &message) const {
+  G4cout
+    << G4endl
+    << "================================================================================"
+    << G4endl
+    << "                                 INCL++ WARNING                                 "
+    << G4endl
+    << message
+    << G4endl
+    << "================================================================================"
+    << G4endl
+    << G4endl;
+}
+

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.4
+// INCL++ revision: v5.1.5
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,12 +39,13 @@
 #include "G4INCLClusteringModelIntercomparison.hh"
 #include "G4INCLCluster.hh"
 #include "G4INCLRandom.hh"
+#include <algorithm>
 
 namespace G4INCL {
   const G4double ClusteringModelIntercomparison::limitCosEscapeAngle = 0.7;
 
-  static G4bool cascadingFirstPredicate(Particle *lhs, Particle * /*rhs*/) {
-    return !lhs->isTargetSpectator();
+  static G4bool cascadingFirstPredicate(Particle *aParticle) {
+    return !aParticle->isTargetSpectator();
   }
 
   Cluster* ClusteringModelIntercomparison::getCluster(Nucleus *nucleus, Particle *particle) {
@@ -57,41 +58,65 @@ namespace G4INCL {
       return NULL;
 
     theNucleus = nucleus;
-    theLeadingParticle = particle;
+    Particle *theLeadingParticle = particle;
 
+    // Initialise sqtot to a large number
     sqtot = 50000.0;
     selectedA = 0;
     selectedZ = 0;
 
+    // The distance parameter, known as h in publications.
+    // Default value is 1 fm.
     const G4double transp = 1.0;
-    const G4double rmaxws = theNucleus->getDensity()->getMaximumRadius();
 
+    const G4double rmaxws = theNucleus->getUniverseRadius();
+
+    // Radius of the sphere where the leading particle is positioned.
     const G4double Rprime = theNucleus->getDensity()->getCentralRadius() + transp;
-    const G4double pk = theLeadingParticle->getMomentum().mag();
 
+    // Bring the leading particle back to the coalescence sphere
+    const G4double pk = theLeadingParticle->getMomentum().mag();
     const G4double cospr = theLeadingParticle->getPosition().dot(theLeadingParticle->getMomentum())/(theNucleus->getUniverseRadius() * pk);
     const G4double arg = rmaxws*rmaxws - Rprime*Rprime;
-    G4double translat = 0.0;
+    G4double translat;
 
     if(arg > 0.0) {
+      // coalescence sphere smaller than Rmax
       const G4double cosmin = std::sqrt(arg)/rmaxws;
       if(cospr <= cosmin) {
-	translat = rmaxws * cospr;
+        // there is an intersection with the coalescence sphere
+        translat = rmaxws * cospr;
       } else {
-	translat = rmaxws * (cospr - std::sqrt(cospr*cospr - cosmin*cosmin));
+        // no intersection with the coalescence sphere
+        translat = rmaxws * (cospr - std::sqrt(cospr*cospr - cosmin*cosmin));
       }
     } else {
+      // coalescence sphere larger than Rmax
       translat = rmaxws * cospr - std::sqrt(Rprime*Rprime - rmaxws*rmaxws*(1.0 - cospr*cospr));
     }
 
     const ThreeVector oldLeadingParticlePosition = theLeadingParticle->getPosition();
     const ThreeVector leadingParticlePosition = oldLeadingParticlePosition - theLeadingParticle->getMomentum() * (translat/pk);
-    const ThreeVector leadingParticleMomentum = theLeadingParticle->getMomentum();
+    const ThreeVector &leadingParticleMomentum = theLeadingParticle->getMomentum();
     theLeadingParticle->setPosition(leadingParticlePosition);
+
+    // Initialise the array of considered nucleons
+    const G4int theNucleusA = theNucleus->getA();
+    if(nConsideredMax < theNucleusA) {
+      delete [] consideredPartners;
+      delete [] isInRunningConfiguration;
+      nConsideredMax = 2*theNucleusA;
+      consideredPartners = new Particle *[nConsideredMax];
+      isInRunningConfiguration = new G4bool [nConsideredMax];
+      std::fill(isInRunningConfiguration,
+                isInRunningConfiguration + nConsideredMax,
+                false);
+    }
 
     // Select the subset of nucleons that will be considered in the
     // cluster production:
     cascadingEnergyPool = 0.;
+    nConsidered = 0;
     const ParticleList particles = theNucleus->getStore()->getParticles();
     for(ParticleIter i = particles.begin(); i != particles.end(); ++i) {
       if (!(*i)->isNucleon()) continue; // Only nucleons are allowed in clusters
@@ -100,41 +125,57 @@ namespace G4INCL {
       G4double space = ((*i)->getPosition() - leadingParticlePosition).mag2();
       G4double momentum = ((*i)->getMomentum() - leadingParticleMomentum).mag2();
       G4double size = space*momentum*ParticleTable::clusterPosFact2[runningMaxClusterAlgorithmMass];
+      // Nucleons are accepted only if they are "close enough" in phase space
+      // to the leading nucleon. The selected phase-space parameter corresponds
+      // to the running maximum cluster mass.
       if(size < ParticleTable::clusterPhaseSpaceCut[runningMaxClusterAlgorithmMass]) {
-	consideredPartners.push_back((*i));
+	consideredPartners[nConsidered] = *i;
+        // Keep trace of how much energy is carried by cascading nucleons. This
+        // is used to stop the clustering algorithm as soon as possible.
         if(!(*i)->isTargetSpectator())
           cascadingEnergyPool += (*i)->getEnergy() - (*i)->getPotentialEnergy() - 931.3;
+        nConsidered++;
+        // Make sure we don't exceed the array size
+// assert(nConsidered<=nConsideredMax);
       }
     }
     // Sort the list of considered partners so that we give priority
     // to participants. As soon as we encounter the first spectator in
     // the list we know that all the remaining nucleons will be
     // spectators too.
-    consideredPartners.sort(cascadingFirstPredicate);
+    std::partition(consideredPartners, consideredPartners+nConsidered, cascadingFirstPredicate);
 
-    runningConfiguration.push_back(theLeadingParticle);
-    runningPositions[1] = theLeadingParticle->getPosition();
-    runningMomenta[1] = theLeadingParticle->getMomentum();
+    // Initialise position, momentum and energy of the running cluster
+    // configuration
+    runningPositions[1] = leadingParticlePosition;
+    runningMomenta[1] = leadingParticleMomentum;
     runningEnergies[1] = theLeadingParticle->getEnergy();
     runningPotentials[1] = theLeadingParticle->getPotentialEnergy();
+
+    // Make sure that all the elements of isInRunningConfiguration are false.
+// assert(std::count(isInRunningConfiguration, isInRunningConfiguration+nConsidered, true)==0);
 
     // Start the cluster search!
     findClusterStartingFrom(1, theLeadingParticle->getZ());
 
+    // Again, make sure that all the elements of isInRunningConfiguration have
+    // been reset to false. This is a sanity check.
+// assert(std::count(isInRunningConfiguration, isInRunningConfiguration+nConsidered, true)==0);
+
     Cluster *chosenCluster = 0;
     if(selectedA!=0) { // A cluster was found!
-      chosenCluster =  new Cluster(candidateConfiguration);
+      candidateConfiguration[selectedA-1] = theLeadingParticle;
+      chosenCluster =  new Cluster(candidateConfiguration,
+          candidateConfiguration + selectedA);
     }
 
     // Restore the original position of the leading particle
     theLeadingParticle->setPosition(oldLeadingParticlePosition);
 
-    cleanUp();
-    zeroOut();
     return chosenCluster;
   }
 
-  G4double ClusteringModelIntercomparison::getPhaseSpace(G4int oldA, Particle *p) {
+  G4double ClusteringModelIntercomparison::getPhaseSpace(const G4int oldA, Particle const * const p) {
     const G4double psSpace = (p->getPosition() - runningPositions[oldA]).mag2();
     const G4double psMomentum = (p->getMomentum()*oldA - runningMomenta[oldA]).mag2();
     return psSpace * psMomentum * ParticleTable::clusterPosFact2[oldA + 1];
@@ -142,15 +183,17 @@ namespace G4INCL {
 
   void ClusteringModelIntercomparison::findClusterStartingFrom(const G4int oldA, const G4int oldZ) {
     const G4int newA = oldA + 1;
-    G4int newZ = 0;
-    G4int newN = 0;
+    G4int newZ;
+    G4int newN;
 
-    for(ParticleIter i = consideredPartners.begin(); i != consideredPartners.end();
-	++i) {
+    for(G4int i=0; i<nConsidered; ++i) {
       // Only accept particles that are not already part of the cluster
-      if((*i)->isInList(runningConfiguration)) continue;
+      if(isInRunningConfiguration[i]) continue;
 
-      newZ = oldZ + (*i)->getZ();
+      Particle * const candidateNucleon = consideredPartners[i];
+
+      // Z and A of the new cluster
+      newZ = oldZ + candidateNucleon->getZ();
       newN = newA - newZ;
 
       // Skip this nucleon if we already have too many protons or neutrons
@@ -160,54 +203,75 @@ namespace G4INCL {
       // Compute the phase space factor for a new cluster which
       // consists of the previous running cluster and the new
       // candidate nucleon:
-      const G4double phaseSpace = getPhaseSpace(oldA, (*i));
+      const G4double phaseSpace = getPhaseSpace(oldA, candidateNucleon);
       if(phaseSpace > ParticleTable::clusterPhaseSpaceCut[newA]) continue;
 
-      // eclst:
-      runningEnergies[newA] = runningEnergies[oldA] + (*i)->getEnergy();
-      // vcl:
-      runningPotentials[newA] = runningPotentials[oldA] + (*i)->getPotentialEnergy();
+      // Sum of the total energies of the cluster components
+      runningEnergies[newA] = runningEnergies[oldA] + candidateNucleon->getEnergy();
+      // Sum of the potential energies of the cluster components
+      runningPotentials[newA] = runningPotentials[oldA] + candidateNucleon->getPotentialEnergy();
 
-      // Update the available participant kinetic energy
+      // Update the available cascading kinetic energy
       G4double oldCascadingEnergyPool = cascadingEnergyPool;
-      if(!(*i)->isTargetSpectator())
-        cascadingEnergyPool -= (*i)->getEnergy() - (*i)->getPotentialEnergy() - 931.3;
+      if(!candidateNucleon->isTargetSpectator())
+        cascadingEnergyPool -= candidateNucleon->getEnergy() - candidateNucleon->getPotentialEnergy() - 931.3;
 
-      // Check an approximate Coulomb barrier
-      const G4double halfB = 0.72 * newZ * theNucleus->getZ()/(theNucleus->getDensity()->getCentralRadius()+1.7);
-      const G4double tout = runningEnergies[newA] - runningPotentials[newA] - 931.3*newA;
+      // Check an approximate Coulomb barrier. If the cluster is below
+      // 0.5*barrier and the remaining available energy from cascading nucleons
+      // will not bring it above, reject the cluster.
+      const G4double halfB = 0.72 * newZ *
+        theNucleus->getZ()/(theNucleus->getDensity()->getCentralRadius()+1.7);
+      const G4double tout = runningEnergies[newA] - runningPotentials[newA] -
+        931.3*newA;
       if(tout<=halfB && tout+cascadingEnergyPool<=halfB) {
         cascadingEnergyPool = oldCascadingEnergyPool;
         continue;
       }
 
-      // Accept the nucleon in the cluster
-      runningConfiguration.push_back((*i));
-      runningPositions[newA] = (runningPositions[oldA] * oldA + (*i)->getPosition())*ParticleTable::clusterPosFact[newA];
-      runningMomenta[newA] = runningMomenta[oldA] + (*i)->getMomentum();
+      // Here the nucleon has passed all the tests. Accept it in the cluster.
+      runningPositions[newA] = (runningPositions[oldA] * oldA + candidateNucleon->getPosition())*ParticleTable::clusterPosFact[newA];
+      runningMomenta[newA] = runningMomenta[oldA] + candidateNucleon->getMomentum();
+
+      // Set the flag that reminds us that this nucleon has already been taken
+      // in the running configuration
+      isInRunningConfiguration[i] = true;
 
       // Keep track of the best physical cluster
-      if(newZ >= ParticleTable::clusterZMin[newA] && newZ <= ParticleTable::clusterZMax[newA]) {
+      if(newZ >= ParticleTable::clusterZMin[newA]
+          && newZ <= ParticleTable::clusterZMax[newA]) {
         // Note: sqc is real kinetic energy, not the square of the kinetic energy!
-        G4double sqc = KinematicsUtils::invariantMass(runningEnergies[newA], runningMomenta[newA]);
+        G4double sqc = KinematicsUtils::invariantMass(runningEnergies[newA],
+            runningMomenta[newA]);
         G4double sqct = (sqc - 2.*newZ*protonMass - 2.*(newA-newZ)*neutronMass
              + ParticleTable::getRealMass(newA, newZ))
           *ParticleTable::clusterPosFact[newA];
 
         if(sqct < sqtot) {
+          // This is the best cluster we have found so far. Store its
+          // kinematics.
           sqtot = sqct;
           selectedA = newA;
           selectedZ = newZ;
-          delete candidateConfiguration;
-          candidateConfiguration = new ParticleList(runningConfiguration);
+
+          // Store the running configuration in a ParticleList
+          G4int nCandidate = 0;
+          for(G4int index=0; index<nConsidered && nCandidate<selectedA-1; ++index) {
+            if(isInRunningConfiguration[index])
+              candidateConfiguration[nCandidate++] = consideredPartners[index];
+          }
+
+          // Sanity check on number of nucleons in running configuration
+// assert(std::count(isInRunningConfiguration, isInRunningConfiguration+nConsidered, true)==selectedA-1);
         }
       }
 
+      // The method recursively calls itself for the next mass
       if(newA < runningMaxClusterAlgorithmMass && newA+1 < theNucleus->getA()) {
 	findClusterStartingFrom(newA, newZ);
       }
 
-      runningConfiguration.pop_back();
+      // Reset the running configuration flag and the cascading energy pool
+      isInRunningConfiguration[i] = false;
       cascadingEnergyPool = oldCascadingEnergyPool;
     }
   }

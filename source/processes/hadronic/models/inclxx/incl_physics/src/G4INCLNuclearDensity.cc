@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.4
+// INCL++ revision: v5.1.5
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -64,6 +64,36 @@ namespace G4INCL {
     // NuclearDensityFactory
     delete tFromR;
   }
+
+  NuclearDensity::NuclearDensity(const NuclearDensity &rhs) :
+    theA(rhs.theA),
+    theZ(rhs.theZ),
+    theMaximumRadius(rhs.theMaximumRadius),
+    theCentralRadius(rhs.theCentralRadius),
+    transmissionRadius(rhs.transmissionRadius),
+    // rFromP is owned by NuclearDensityFactory, so shallow copy is sufficient
+    rFromP(rhs.rFromP)
+  {
+    // deep copy for tFromR
+    delete tFromR;
+    tFromR = new InverseInterpolationTable(*(rhs.tFromR));
+  }
+
+  NuclearDensity &NuclearDensity::operator=(const NuclearDensity &rhs) {
+    NuclearDensity temporaryDensity(rhs);
+    swap(temporaryDensity);
+    return *this;
+  }
+
+  void NuclearDensity::swap(NuclearDensity &rhs) {
+    std::swap(theA, rhs.theA);
+    std::swap(theZ, rhs.theZ);
+    std::swap(theMaximumRadius, rhs.theMaximumRadius);
+    std::swap(theCentralRadius, rhs.theCentralRadius);
+    std::swap(transmissionRadius, rhs.transmissionRadius);
+    std::swap(rFromP, rhs.rFromP);
+    std::swap(tFromR, rhs.tFromR);
+ }
 
   void NuclearDensity::initializeTransmissionRadii() {
     const G4double r0 = 1.12;

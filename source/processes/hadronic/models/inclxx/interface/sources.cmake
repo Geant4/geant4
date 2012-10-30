@@ -46,16 +46,14 @@ include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_interface
     HEADERS
-        G4INCLXXFactory.hh
-        G4INCLXXInterfaceConfig.hh
+        G4INCLXXInterfaceStore.hh
         G4INCLXXInterface.hh
         G4INCLXXInterfaceMessenger.hh
 
     SOURCES
         G4INCLXXInterface.cc
         G4INCLXXInterfaceMessenger.cc
-        G4INCLXXInterfaceConfig.cc
-        G4INCLXXFactory.cc
+        G4INCLXXInterfaceStore.cc
 
     GRANULAR_DEPENDENCIES
         G4baryons

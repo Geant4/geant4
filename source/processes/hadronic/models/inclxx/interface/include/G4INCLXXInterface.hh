@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.4
+// INCL++ revision: v5.1.5
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -48,10 +48,12 @@
 #include "G4ParticleChange.hh"
 #include "G4ReactionProductVector.hh"
 #include "G4ReactionProduct.hh"
+#include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 // INCL++
 #include "G4INCLCascade.hh"
-#include "G4INCLConfig.hh"
 
 // Geant4 de-excitation
 #include "G4ExcitationHandler.hh"
@@ -64,7 +66,7 @@
 
 using namespace std;
 
-class G4INCLXXInterfaceConfig;
+class G4INCLXXInterfaceStore;
 
 /** \brief INCL++ intra-nuclear cascade with G4ExcitationHandler for de-excitation
  *
@@ -119,25 +121,33 @@ public:
   }
 
 private:
-  G4bool AccurateProjectile(const G4HadProjectile &aTrack, const G4Nucleus &theTargetNucleus);
-
-  /** \brief Emit a warning to G4cout
-   *
-   * The interface will not emit more than maxWarnings warnings.
-   */
-  void EmitWarning(const G4String &message);
-
-  /// \brief Static warning counter
-  static G4int nWarnings;
-
-  /// \brief Maximum number of warnings
-  static const G4int maxWarnings;
+  G4bool AccurateProjectile(const G4HadProjectile &aTrack, const G4Nucleus &theTargetNucleus) const;
 
   /// \brief Dummy copy constructor to shut up Coverity warnings
   G4INCLXXInterface(const G4INCLXXInterface &rhs);
 
   /// \brief Dummy assignment operator to shut up Coverity warnings
   G4INCLXXInterface &operator=(G4INCLXXInterface const &rhs);
+
+  /// \brief Convert G4ParticleDefinition to corresponding INCL particle type
+  G4INCL::ParticleType toINCLParticleType(G4ParticleDefinition const * const) const;
+
+  /// \brief Convert G4HadProjectile to corresponding INCL particle species
+  G4INCL::ParticleSpecies toINCLParticleSpecies(G4HadProjectile const &) const;
+
+  /// \brief Convert G4HadProjectile to corresponding INCL particle kinetic energy
+  G4double toINCLKineticEnergy(G4HadProjectile const &) const;
+
+  /// \brief Convert an INCL particle to a G4DynamicParticle
+  G4DynamicParticle *toG4Particle(G4int A, G4int Z , G4double kinE, G4double px, G4double py, G4double pz) const;
+
+  /// \brief Convert A and Z to a G4ParticleDefinition
+  G4ParticleDefinition *toG4ParticleDefinition (G4int A, G4int Z) const;
+
+  /// \brief Rescale remnant momentum if necessary
+  G4double remnant4MomentumScaling(G4double mass,
+      G4double kineticE,
+      G4double px, G4double py, G4double pz) const;
 
   G4INCL::INCL *theINCLModel;
   G4HadFinalState theResult;
@@ -146,8 +156,7 @@ private:
 
   G4HadronicInteraction *theBackupModel;
 
-  G4INCL::Config *theConfig;
-  G4INCLXXInterfaceConfig * const theInterfaceConfig;
+  G4INCLXXInterfaceStore * const theInterfaceStore;
 
   G4bool complainedAboutBackupModel;
 

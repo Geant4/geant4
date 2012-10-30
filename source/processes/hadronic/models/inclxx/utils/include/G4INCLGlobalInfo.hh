@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.4
+// INCL++ revision: v5.1.5
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -51,6 +51,8 @@
 #ifdef INCL_ROOT_USE
 #include <Rtypes.h>
 #endif
+
+#include <string>
 
 namespace G4INCL {
 #ifndef INCL_ROOT_USE

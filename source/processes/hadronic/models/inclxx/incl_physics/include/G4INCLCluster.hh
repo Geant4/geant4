@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.4
+// INCL++ revision: v5.1.5
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -74,46 +74,31 @@ namespace G4INCL {
     /**
      * A cluster can be directly built from a list of particles.
      */
-    Cluster(ParticleList *pl) :
-      Particle(),
-      theExcitationEnergy(0.),
-      theSpin(0.,0.,0.),
-      theParticleSampler(NULL)
+    template<class Iterator>
+      Cluster(Iterator begin, Iterator end) :
+        Particle(),
+        theExcitationEnergy(0.),
+        theSpin(0.,0.,0.),
+        theParticleSampler(NULL)
     {
       setType(Composite);
-      for(ParticleIter i = pl->begin(); i != pl->end(); ++i) {
-	addParticle((*i));
+      for(Iterator i = begin; i != end; ++i) {
+        addParticle(*i);
       }
       thePosition /= theA;
       setINCLMass();
       adjustMomentumFromEnergy();
-    };
-
-    /**
-     * A cluster can be directly built from a list of particles.
-     */
-    Cluster(const ParticleList &pl) :
-      Particle(),
-      theExcitationEnergy(0.),
-      theSpin(0.,0.,0.),
-      theParticleSampler(NULL)
-    {
-      setType(Composite);
-      for(ParticleIter i = pl.begin(); i != pl.end(); ++i) {
-	addParticle((*i));
-      }
-      thePosition /= theA;
-      setINCLMass();
-      adjustMomentumFromEnergy();
-    };
+    }
 
     virtual ~Cluster() {
       delete theParticleSampler;
     }
 
     /// \brief Copy constructor
-    Cluster(const Cluster &rhs) : Particle(rhs) {
-      theExcitationEnergy = rhs.theExcitationEnergy;
+    Cluster(const Cluster &rhs) :
+      Particle(rhs),
+      theExcitationEnergy(rhs.theExcitationEnergy)
+    {
       deleteParticles();
       for(ParticleIter p=rhs.particles.begin(); p!=rhs.particles.end(); ++p) {
         particles.push_back(new Particle(**p));
@@ -245,7 +230,8 @@ namespace G4INCL {
 // assert((unsigned int)theA==particles.size());
 
       // Now determine the CM velocity of the particles
-      ThreeVector betaCM = theTotalMomentum / theTotalEnergy;
+      // commented out because currently unused, see below
+      // ThreeVector betaCM = theTotalMomentum / theTotalEnergy;
 
       // The new particle positions and momenta are scaled by a factor of
       // \f$\sqrt{A/(A-1)}\f$, so that the resulting density distributions in
