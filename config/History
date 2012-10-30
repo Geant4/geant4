@@ -16,11 +16,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-23 August 2012 Gabriele Cosmo (config-V09-05-10)
+4th October 2012 Gabriele Cosmo (config-V09-05-12, config-V09-05-11)
+- binmake.gmk: replaced "photolepton_hadron" module with "lepto_nuclear".
+- Cowork with tag "hadr-V09-05-00".
+
+23rd August 2012 Gabriele Cosmo (config-V09-05-10)
 - Updated paths for X11 in X11FLAGS on Darwin targets, for porting on
   MacOSX 10.8.
 
-09 July 2012 Alberto Ribon (config-V09-05-09)
+9th July 2012 Alberto Ribon (config-V09-05-09)
 - Removed INCL package: processes/hadronic/models/incl .
 
 22th May 2012 Garnier Laurent (config-V09-05-08)
