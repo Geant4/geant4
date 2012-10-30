@@ -32,6 +32,7 @@
 
 
 #include "RE01Field.hh"
+#include "G4SystemOfUnits.hh"    
 
 RE01Field::RE01Field()
 {

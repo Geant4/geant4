@@ -41,7 +41,7 @@
 #include "G4UIcommand.hh"
 #include "G4UnitsTable.hh"
 #include "G4VisAttributes.hh"
-
+#include "G4SystemOfUnits.hh"    
 
 G4Allocator<RE01TrackerHit> RE01TrackerHitAllocator;
 
@@ -107,7 +107,7 @@ const std::map<G4String,G4AttDef>* RE01TrackerHit::GetAttDefs() const
 
     G4String Pos("Pos");
     (*store)[Pos] = G4AttDef(Pos, "Position",
-		      "Physics","G4BestUnit","G4ThreeVector");
+                      "Physics","G4BestUnit","G4ThreeVector");
   }
   return store;
 }

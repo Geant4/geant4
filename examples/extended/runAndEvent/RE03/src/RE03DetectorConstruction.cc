@@ -50,6 +50,7 @@
 #include "G4PSNofStep.hh"
 #include "G4SDParticleFilter.hh"
 
+#include "G4SystemOfUnits.hh"    
 #include "G4ios.hh"
 
 RE03DetectorConstruction::RE03DetectorConstruction()

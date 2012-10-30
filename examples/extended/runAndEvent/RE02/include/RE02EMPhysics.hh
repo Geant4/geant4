@@ -31,7 +31,6 @@
 //
 // 09-Oct-2003 Chhange gamma, electron, positorn process T. Koi
 
-
 #ifndef RE02EMPhysics_h
 #define RE02EMPhysics_h 1
 
@@ -48,6 +47,24 @@
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
 
+//
+/// User electromagnetic physics constructor
+///
+///  applys related processes to gamma and e-/+
+///
+/// - void ConstructParticle()
+///     does nothing
+///
+/// - void ConstructProcess()
+///     adds processes to each particles
+///     gamma :
+///       G4GammaConversion, G4ComptonScattering and G4PHotoElectricEffect
+///     electron : 
+///       G4eMultipleScattering, G4eIonisation and G4eBremsstrahlung
+///     positron :
+///       G4eMultipleScattering, G4eIonisation, G4eBremsstrahlung and
+///       G4ePlusAnnihilation
+//
 class RE02EMPhysics : public G4VPhysicsConstructor
 {
   public:
@@ -67,6 +84,5 @@ class RE02EMPhysics : public G4VPhysicsConstructor
   protected:
 
 };
-
 
 #endif

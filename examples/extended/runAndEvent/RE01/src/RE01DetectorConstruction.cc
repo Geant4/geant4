@@ -59,6 +59,7 @@
 #include "G4Colour.hh"
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
+#include "G4SystemOfUnits.hh"    
 
 RE01DetectorConstruction::RE01DetectorConstruction()
 {
@@ -159,7 +160,7 @@ G4VPhysicalVolume* RE01DetectorConstruction::Construct()
     = new G4LogicalVolume(tracker_tubs,Ar,"trackerT_L",0,0,0);
   // G4VPhysicalVolume * tracker_phys =
       new G4PVPlacement(0,G4ThreeVector(),tracker_log,"tracker_phys",
-			experimentalHall_log,false,0);
+                        experimentalHall_log,false,0);
   G4VisAttributes* tracker_logVisAtt
     = new G4VisAttributes(G4Colour(1.0,0.0,1.0));
   tracker_logVisAtt->SetForceWireframe(true);
@@ -185,7 +186,7 @@ G4VPhysicalVolume* RE01DetectorConstruction::Construct()
   // dummy value : kXAxis -- modified by parameterised volume
   // G4VPhysicalVolume *trackerLayer_phys =
       new G4PVParameterised("trackerLayer_phys",trackerLayer_log,tracker_log,
-			   kXAxis, notrkLayers, trackerParam);
+                           kXAxis, notrkLayers, trackerParam);
   G4VisAttributes* trackerLayer_logVisAtt
     = new G4VisAttributes(G4Colour(0.5,0.0,1.0));
   trackerLayer_logVisAtt->SetForceWireframe(true);
@@ -194,12 +195,12 @@ G4VPhysicalVolume* RE01DetectorConstruction::Construct()
   //------------------------------ calorimeter
   G4VSolid * calorimeter_tubs
     = new G4Tubs("calorimeter_tubs",caloTubs_rmin,caloTubs_rmax,
-		  caloTubs_dz,caloTubs_sphi,caloTubs_dphi);
+                  caloTubs_dz,caloTubs_sphi,caloTubs_dphi);
   G4LogicalVolume * calorimeter_log
     = new G4LogicalVolume(calorimeter_tubs,Scinti,"caloT_L",0,0,0);
   // G4VPhysicalVolume * calorimeter_phys =
       new G4PVPlacement(0,G4ThreeVector(),calorimeter_log,"caloM_P",
-			experimentalHall_log,false,0);
+                        experimentalHall_log,false,0);
   G4VisAttributes* calorimeter_logVisATT
     = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
   calorimeter_logVisATT->SetForceWireframe(true);
@@ -216,7 +217,7 @@ G4VPhysicalVolume* RE01DetectorConstruction::Construct()
   // dummy values for G4Tubs -- modified by parameterised volume
   G4VSolid * caloLayer_tubs
     = new G4Tubs("caloLayer_tubs",caloRing_rmin,caloRing_rmax,
-		  caloRing_dz,caloRing_sphi,caloRing_dphi);
+                  caloRing_dz,caloRing_sphi,caloRing_dphi);
   G4LogicalVolume * caloLayer_log
     = new G4LogicalVolume(caloLayer_tubs,Lead,"caloR_L",0,0,0);
   G4VPVParameterisation * calorimeterParam
@@ -224,7 +225,7 @@ G4VPhysicalVolume* RE01DetectorConstruction::Construct()
   // dummy value : kXAxis -- modified by parameterised volume
   // G4VPhysicalVolume * caloLayer_phys =
       new G4PVParameterised("caloLayer_phys",caloLayer_log,calorimeter_log,
-			   kXAxis, nocaloLayers, calorimeterParam);
+                           kXAxis, nocaloLayers, calorimeterParam);
   G4VisAttributes* caloLayer_logVisAtt
     = new G4VisAttributes(G4Colour(0.7,1.0,0.0));
   caloLayer_logVisAtt->SetForceWireframe(true);

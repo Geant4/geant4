@@ -33,19 +33,19 @@
 // 09-Oct-2003 Change gamma, electron, positorn process T. Koi
 // 10-Jan-2004 Add Brems. of AlongStepDoIt for e+- T. Koi
 
-
 #include "RE02EMPhysics.hh"
 
 #include "globals.hh"
 #include "G4ios.hh"
 #include <iomanip>
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE02EMPhysics::RE02EMPhysics(const G4String& name)
                :  G4VPhysicsConstructor(name)
 {
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE02EMPhysics::~RE02EMPhysics()
 {
 }
@@ -63,6 +63,7 @@ RE02EMPhysics::~RE02EMPhysics()
 
 #include "G4ProcessManager.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE02EMPhysics::ConstructProcess()
 {
    G4ProcessManager * pManager = 0;

@@ -33,6 +33,7 @@
 
 #include "RE01TrackInformation.hh"
 #include "G4ios.hh"
+#include "G4SystemOfUnits.hh"    
 
 G4Allocator<RE01TrackInformation> aTrackInformationAllocator;
 

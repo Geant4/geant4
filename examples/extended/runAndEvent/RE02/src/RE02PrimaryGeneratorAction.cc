@@ -39,45 +39,50 @@
 #include "G4ParticleDefinition.hh"
 #include "Randomize.hh"
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"    
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 RE02PrimaryGeneratorAction::RE02PrimaryGeneratorAction()
 {
   G4int n_particle = 1;
-  particleGun = new G4ParticleGun(n_particle);
+  fParticleGun = new G4ParticleGun(n_particle);
 
 // default particle
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition* particle = particleTable->FindParticle("proton");
-  particleGun->SetParticleDefinition(particle);
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.0,0.0,1.));
-  particleGun->SetParticleEnergy(150.0*MeV);
+  fParticleGun->SetParticleDefinition(particle);
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.0,0.0,1.));
+  fParticleGun->SetParticleEnergy(150.0*MeV);
 //
 // default beam position
   G4double position = -200./2.*cm;
 //
 // Initial beam spot size in sigma.; This is not a part of ParticleGun.
-  fsigmaPosition = 10.* mm;
+  fSigmaPosition = 10.* mm;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
-  particleGun->SetParticlePosition(G4ThreeVector(0.*cm, 0.*cm, position));
+  fParticleGun->SetParticlePosition(G4ThreeVector(0.*cm, 0.*cm, position));
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 RE02PrimaryGeneratorAction::~RE02PrimaryGeneratorAction()
 {
-  delete particleGun;
+  delete fParticleGun;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 void RE02PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 { 
 
-  G4ThreeVector position = particleGun->GetParticlePosition();
-  G4double dx = (G4UniformRand()-0.5)*fsigmaPosition;
-  G4double dy = (G4UniformRand()-0.5)*fsigmaPosition;
+  G4ThreeVector position = fParticleGun->GetParticlePosition();
+  G4double dx = (G4UniformRand()-0.5)*fSigmaPosition;
+  G4double dy = (G4UniformRand()-0.5)*fSigmaPosition;
   position.setX(dx);
   position.setY(dy);
-  particleGun->SetParticlePosition(position);
-  particleGun->GeneratePrimaryVertex(anEvent);
+  fParticleGun->SetParticlePosition(position);
+  fParticleGun->GeneratePrimaryVertex(anEvent);
 }

@@ -38,6 +38,18 @@
 
 #include "G4VPhysicsConstructor.hh"
 
+//
+/// User general physics constructor
+///
+///   creates all particles and applys decay
+///
+/// - void ConstructParticle()
+///     construcs all barions, all bosons (including geantinos),
+///     all ions, all leptons, all mesons, resonaces and quarks
+///
+/// - void ConstructProcess()
+///     adds the decay process
+//
 class RE02GeneralPhysics : public G4VPhysicsConstructor
 {
   public:

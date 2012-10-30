@@ -36,12 +36,11 @@
 
 #include "G4PSEnergyDeposit.hh"
 ///////////////////////////////////////////////////////////////////////////////
-// Description:
+// (Description)
 //   This is a primitive scorer class for scoring energy deposit.
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura 
 ///////////////////////////////////////////////////////////////////////////////
-
 
 class RE02PSEnergyDeposit : public G4PSEnergyDeposit
 {

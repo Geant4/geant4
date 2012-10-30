@@ -39,15 +39,23 @@
 class G4Event;
 
 //
+/// User event action class
+///
+/// - void BeginOfEventAction(const G4Event *)
+///     does nothing
+///
+/// - void EndOfEventAction(const G4Event *)
+///     shows the number of stored trajectories in each event
+//
 class RE02EventAction : public G4UserEventAction
 {
-  public:
-    RE02EventAction();
-   ~RE02EventAction();
+public:
+  RE02EventAction();
+  ~RE02EventAction();
 
-  public:
-    void BeginOfEventAction(const G4Event*);
-    void EndOfEventAction(const G4Event*);
+public:
+  virtual void BeginOfEventAction(const G4Event*);
+  virtual void EndOfEventAction(const G4Event*);
 };
 
 //

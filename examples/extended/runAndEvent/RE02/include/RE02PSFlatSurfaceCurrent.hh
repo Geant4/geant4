@@ -54,12 +54,11 @@
 // 17-Nov-2005 T.Aso, Bug fix for area definition.
 ///////////////////////////////////////////////////////////////////////////////
 
-
 class RE02PSFlatSurfaceCurrent : public G4PSFlatSurfaceCurrent
 {
    public: // with description
       RE02PSFlatSurfaceCurrent(G4String name, G4int direction,
-			       G4int nx,G4int ny, G4int nz);
+                               G4int nx,G4int ny, G4int nz);
       virtual ~RE02PSFlatSurfaceCurrent();
 
   protected: // with description

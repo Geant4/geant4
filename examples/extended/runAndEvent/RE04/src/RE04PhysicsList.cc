@@ -26,7 +26,8 @@
 /// \file runAndEvent/RE04/src/RE04PhysicsList.cc
 /// \brief Implementation of the RE04PhysicsList class
 //
-
+// $Id: $
+//
 #include "RE04PhysicsList.hh"
 
 #include "G4EmStandardPhysics.hh"
@@ -36,9 +37,11 @@
 #include "HadronPhysicsQGSP_BERT.hh"
 #include "G4QStoppingPhysics.hh"
 #include "G4IonPhysics.hh"
+#include "G4SystemOfUnits.hh"    
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE04PhysicsList::RE04PhysicsList(G4String& parWorldName)
-:pWorldName(parWorldName)
+:fpWorldName(parWorldName)
 {
   defaultCutValue = 0.01*mm;
   G4int ver = 1;
@@ -47,7 +50,7 @@ RE04PhysicsList::RE04PhysicsList(G4String& parWorldName)
   // EM Physics
   this->RegisterPhysics( new G4EmStandardPhysics(ver) );
 
-  // Synchroton Radiation & GN Physics
+  // Synchrotron Radiation & GN Physics
   this->RegisterPhysics( new G4EmExtraPhysics(ver) );
 
   // Decays
@@ -67,9 +70,11 @@ RE04PhysicsList::RE04PhysicsList(G4String& parWorldName)
 
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE04PhysicsList::~RE04PhysicsList()
 {}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE04PhysicsList::ConstructProcess()
 {
   AddTransportation();
@@ -90,12 +95,13 @@ void RE04PhysicsList::ConstructProcess()
 
 #include "G4ParallelWorldProcess.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE04PhysicsList::AddParallelWorldProcess()
 {
   // Add parallel world process
   G4ParallelWorldProcess* theParallelWorldProcess
       = new G4ParallelWorldProcess("paraWorldProc");
-  theParallelWorldProcess->SetParallelWorld(pWorldName);
+  theParallelWorldProcess->SetParallelWorld(fpWorldName);
   theParallelWorldProcess->SetLayeredMaterialFlag();
 
   theParticleIterator->reset();
@@ -105,13 +111,14 @@ void RE04PhysicsList::AddParallelWorldProcess()
       G4ProcessManager* pmanager = particle->GetProcessManager();
       pmanager->AddProcess(theParallelWorldProcess);
       if(theParallelWorldProcess->IsAtRestRequired(particle))
-      { pmanager->SetProcessOrdering(theParallelWorldProcess, idxAtRest, 9999); }
+      {pmanager->SetProcessOrdering(theParallelWorldProcess, idxAtRest, 9999);}
       pmanager->SetProcessOrdering(theParallelWorldProcess, idxAlongStep, 1);
       pmanager->SetProcessOrdering(theParallelWorldProcess, idxPostStep, 9999);
     }
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE04PhysicsList::SetCuts()
 {
   SetCutsWithDefault();

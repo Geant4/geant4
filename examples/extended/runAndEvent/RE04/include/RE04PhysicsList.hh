@@ -26,13 +26,31 @@
 /// \file runAndEvent/RE04/include/RE04PhysicsList.hh
 /// \brief Definition of the RE04PhysicsList class
 //
-
+// $Id: $
+//
 #ifndef RE04PhysicsList_h
 #define RE04PhysicsList_h 1
 
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
 
+//
+/// Physics list class
+///
+/// - constructor
+///     registers EM, synchrotron radiation, GN, decays, hadron
+///     elastic scattering, hadron, stopping and ion physics
+///
+/// - void ConstructProcess()
+///     invokes AddParallelWorldProcess() and
+///     constructs processes with a G4VPhysicsConstructor vector
+///
+/// - AddParallelWorldProcess()
+///     adds a parallel world process, "paraWorldProc"
+///
+/// - void SetCuts()
+///     invokes default SetCuts methods with SetCutsWithDefault()
+//
 class RE04PhysicsList: public G4VModularPhysicsList
 {
   public:
@@ -48,7 +66,7 @@ class RE04PhysicsList: public G4VModularPhysicsList
     void AddParallelWorldProcess();
 
   private:
-    G4String pWorldName;
+    G4String fpWorldName;
 
 };
 

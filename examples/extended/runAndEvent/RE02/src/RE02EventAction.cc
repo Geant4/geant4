@@ -38,19 +38,19 @@
 #include "G4TrajectoryContainer.hh"
 #include "G4Trajectory.hh"
 
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE02EventAction::RE02EventAction()
 {}
 
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE02EventAction::~RE02EventAction()
 {}
 
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE02EventAction::BeginOfEventAction(const G4Event*)
 {}
 
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE02EventAction::EndOfEventAction(const G4Event* evt)
 {
   G4int event_id = evt->GetEventID();

@@ -226,16 +226,16 @@ const std::map<G4String,G4AttDef>* RE01Trajectory::GetAttDefs() const
 
     G4String IMom("IMom");
     (*store)[IMom] = G4AttDef(IMom, "Momentum of track at start of trajectory",
-			      "Physics","G4BestUnit","G4ThreeVector");
+                              "Physics","G4BestUnit","G4ThreeVector");
 
     G4String IMag("IMag");
     (*store)[IMag] = 
       G4AttDef(IMag, "Magnitude of momentum of track at start of trajectory",
-	       "Physics","G4BestUnit","G4double");
+               "Physics","G4BestUnit","G4double");
 
     G4String VtxPos("VtxPos");
     (*store)[VtxPos] = G4AttDef(VtxPos, "Vertex position",
-			      "Physics","G4BestUnit","G4ThreeVector");
+                              "Physics","G4BestUnit","G4ThreeVector");
 
     G4String NTP("NTP");
     (*store)[NTP] = G4AttDef(NTP,"No. of points","Bookkeeping","","G4int");

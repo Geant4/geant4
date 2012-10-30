@@ -23,24 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE02/exampleRE02.cc
+/// \file runAndEvent/RE02/RE02.cc
 /// \brief Main program of the runAndEvent/RE02 example
 //
 //
-// $Id: exampleRE02.cc,v 1.5 2010-11-08 18:48:54 allison Exp $
+// $Id: RE02.cc,v 1.5 2010-11-08 18:48:54 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-//
-//
+
 #include "RE02DetectorConstruction.hh"
-#include "RE02PhysicsList.hh"
+#include "QGS_BIC.hh"
 #include "RE02PrimaryGeneratorAction.hh"
 #include "RE02RunAction.hh"
 #include "RE02EventAction.hh"
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
+#include "G4SystemOfUnits.hh"    
 
 #ifdef G4UI_USE
 #include "G4UIExecutive.hh"
@@ -72,7 +72,8 @@ int main(int argc,char** argv) {
   //detector->SetLeadSegment(FALSE); // Homogeneous water phantom
   //
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new RE02PhysicsList);
+  //
+  runManager->SetUserInitialization(new QGS_BIC());
   
 #ifdef G4VIS_USE
   // Visualization, if you choose to have it!
@@ -89,7 +90,7 @@ int main(int argc,char** argv) {
   runManager->Initialize();
       
   //get the pointer to the User Interface manager 
-  G4UImanager * UI = G4UImanager::GetUIpointer();  
+  G4UImanager * pUI = G4UImanager::GetUIpointer();  
 
   if(argc==1)
   // Define (G)UI terminal for interactive mode  
@@ -97,7 +98,7 @@ int main(int argc,char** argv) {
 #ifdef G4UI_USE
      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
 #ifdef G4VIS_USE
-     UI->ApplyCommand("/control/execute vis.mac");    
+     pUI->ApplyCommand("/control/execute vis.mac");    
 #endif
      ui->SessionStart();
      delete ui;
@@ -108,7 +109,7 @@ int main(int argc,char** argv) {
   { 
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
-    UI->ApplyCommand(command+fileName);
+    pUI->ApplyCommand(command+fileName);
   }
 
 #ifdef G4VIS_USE

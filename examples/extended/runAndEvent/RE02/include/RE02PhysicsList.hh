@@ -35,6 +35,15 @@
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
 
+//
+/// Physics list class
+///
+/// - constructor
+///     registers general, standard EM, muon, hadron and ion physics
+///
+/// - void SetCuts()
+///     invokes default SetCuts methods with SetCutsWithDefault()
+//
 class RE02PhysicsList: public G4VModularPhysicsList
 {
 public:
@@ -45,9 +54,7 @@ public:
   // SetCuts()
   virtual void SetCuts();
 
-
 };
-
 
 #endif
 

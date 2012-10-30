@@ -58,14 +58,18 @@
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
-RE02PSFlatSurfaceCurrent::RE02PSFlatSurfaceCurrent(G4String name, G4int direction,
-					     G4int nx, G4int ny, G4int nz)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+RE02PSFlatSurfaceCurrent::RE02PSFlatSurfaceCurrent(G4String name,
+                                                   G4int direction,
+                                                   G4int nx, G4int ny, G4int nz)
   :G4PSFlatSurfaceCurrent(name,direction),fNx(nx),fNy(ny),fNz(nz)
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE02PSFlatSurfaceCurrent::~RE02PSFlatSurfaceCurrent()
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4int RE02PSFlatSurfaceCurrent::GetIndex(G4Step* aStep)
 {
   const G4VTouchable* touchable = aStep->GetPreStepPoint()->GetTouchable();

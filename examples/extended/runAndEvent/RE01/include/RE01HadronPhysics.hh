@@ -205,7 +205,7 @@ class RE01HadronPhysics : public G4VPhysicsConstructor
    G4HEKaonPlusInelastic* theHEKaonPlusModel;
    G4MultipleScattering theKaonPlusMult;
    G4hIonisation theKaonPlusIonisation;
-	
+        
    // K -
    G4KaonMinusInelasticProcess theKaonMinusInelastic;
    G4LEKaonMinusInelastic* theLEKaonMinusModel;

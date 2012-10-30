@@ -36,6 +36,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4ThreeVector.hh"
 #include "G4Tubs.hh"
+#include "G4SystemOfUnits.hh"
 
 RE01CalorimeterParametrisation::RE01CalorimeterParametrisation()
 {

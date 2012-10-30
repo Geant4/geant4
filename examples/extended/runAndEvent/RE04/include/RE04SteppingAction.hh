@@ -26,12 +26,19 @@
 /// \file runAndEvent/RE04/include/RE04SteppingAction.hh
 /// \brief Definition of the RE04SteppingAction class
 //
-
+// $Id: $
+//
 #ifndef RE04SteppingAction_h
 #define RE04SteppingAction_h 1
 
 #include "G4UserSteppingAction.hh"
 
+//
+/// User stepping action class
+///
+/// - void UserSteppingAction(const G4Step*)
+///     shows pre-step and post-step positions and material
+//
 class RE04SteppingAction : public G4UserSteppingAction
 {
   public:

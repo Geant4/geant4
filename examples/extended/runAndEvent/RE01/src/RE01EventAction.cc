@@ -48,6 +48,7 @@
 #include "RE01Trajectory.hh"
 #include "G4PrimaryVertex.hh"
 #include "G4PrimaryParticle.hh"
+#include "G4SystemOfUnits.hh"    
 
 RE01EventAction::RE01EventAction()
 {

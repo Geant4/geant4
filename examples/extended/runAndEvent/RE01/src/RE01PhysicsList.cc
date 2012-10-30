@@ -38,6 +38,7 @@
 #include "RE01LeptonPhysics.hh"
 #include "RE01HadronPhysics.hh"
 #include "RE01IonPhysics.hh"
+#include "G4SystemOfUnits.hh"    
 
 RE01PhysicsList::RE01PhysicsList():  G4VModularPhysicsList()
 {

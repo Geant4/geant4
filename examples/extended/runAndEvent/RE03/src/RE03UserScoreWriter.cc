@@ -69,7 +69,7 @@ void RE03UserScoreWriter::DumpQuantityToFile(const G4String & psName, const G4St
   std::ofstream ofile(fileName);
   if(!ofile) {
     G4cerr << "ERROR : DumpToFile : File open error -> "
-	   << fileName << G4endl;
+           << fileName << G4endl;
     return;
   }
   ofile << "# mesh name: " << fScoringMesh->GetWorldName() << G4endl;
@@ -82,7 +82,7 @@ void RE03UserScoreWriter::DumpQuantityToFile(const G4String & psName, const G4St
   MeshScoreMap::const_iterator msMapItr = fSMap.find(psName);
   if(msMapItr == fSMap.end()) {
     G4cerr << "ERROR : DumpToFile : Unknown quantity, \""
-	   << psName << "\"." << G4endl;
+           << psName << "\"." << G4endl;
     return;
   }
   std::map<G4int, G4double*> * score = msMapItr->second->GetMap();
@@ -103,10 +103,10 @@ void RE03UserScoreWriter::DumpQuantityToFile(const G4String & psName, const G4St
     for(int y = 0; y < fNMeshSegments[1]; y++) {
       for(int z = 0; z < fNMeshSegments[2]; z++) {
 
-	G4int idx = GetIndex(x, y, z);
-	
-	std::map<G4int, G4double*>::iterator value = score->find(idx);
-	if(value != score->end()) projxy[x][y] += *(value->second);
+        G4int idx = GetIndex(x, y, z);
+        
+        std::map<G4int, G4double*>::iterator value = score->find(idx);
+        if(value != score->end()) projxy[x][y] += *(value->second);
 
       } // z
     } // y

@@ -58,13 +58,17 @@
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
-RE02PSPassageCellFlux::RE02PSPassageCellFlux(G4String name,G4int nx, G4int ny, G4int nz)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+RE02PSPassageCellFlux::RE02PSPassageCellFlux(G4String name,
+                                             G4int nx, G4int ny, G4int nz)
   :G4PSPassageCellFlux(name),fNx(nx),fNy(ny),fNz(nz)
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE02PSPassageCellFlux::~RE02PSPassageCellFlux()
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4int RE02PSPassageCellFlux::GetIndex(G4Step* aStep)
 {
   const G4VTouchable* touchable = aStep->GetPreStepPoint()->GetTouchable();

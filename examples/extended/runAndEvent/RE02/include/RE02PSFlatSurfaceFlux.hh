@@ -57,11 +57,11 @@
 //                      Bug fix. Area definition.
 ///////////////////////////////////////////////////////////////////////////////
 
-
 class RE02PSFlatSurfaceFlux : public G4PSFlatSurfaceFlux
 {
    public: // with description
-      RE02PSFlatSurfaceFlux(G4String name, G4int direction, G4int nx,G4int ny, G4int nz);
+      RE02PSFlatSurfaceFlux(G4String name, G4int direction,
+                            G4int nx,G4int ny, G4int nz);
       virtual ~RE02PSFlatSurfaceFlux();
 
   protected: // with description

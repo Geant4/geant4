@@ -59,6 +59,35 @@
 #include "G4ionIonisation.hh"
 #include "G4hMultipleScattering.hh"
 
+//
+/// User ion physics constructor
+///
+///  applys related processes to ions
+///
+/// - void ConstructParticle()
+///     does nothing
+///
+/// - void ConstructProcess()
+///     adds processes to each particle
+///     generic ion :
+///       G4HadronInelasticProcess with G4TripathiCrossSection,
+///       G4IonsShenCrossSection and G4BinaryLightIonReaction,
+///       G4hMultipleScattering and G4ionIonisation
+///     deuteron :
+///       G4HadronElasticProcess with G4HadronElastic,
+///       G4DeuteronInelasticProcess with G4LEDeuteronInelastic,
+///       G4hMultipleScattering and G4hIonisation
+///     triton :
+///       G4HadronElasticProcess with G4HadronElastic,
+///       G4TritonInelasticProcess with G4LETritonInelastic,
+///       G4hMultipleScattering and G4hIonisation
+///     alpha :
+///       G4HadronElasticProcess with G4HadronElastic,
+///       G4AlphaInelasticProcess with G4LEAlphaInelastic,
+///       G4hMultipleScattering and G4hIonisation
+///     He3 :
+///       G4hMultipleScattering and G4hIonisation
+//
 class RE02IonPhysics : public G4VPhysicsConstructor
 {
   public:
@@ -77,7 +106,6 @@ class RE02IonPhysics : public G4VPhysicsConstructor
 
   protected:
 };
-
 
 #endif
 

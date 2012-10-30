@@ -48,7 +48,6 @@
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
 ///////////////////////////////////////////////////////////////////////////////
 
-
 class RE02PSPassageCellFlux : public G4PSPassageCellFlux
 {
    public: // with description
@@ -61,5 +60,6 @@ class RE02PSPassageCellFlux : public G4PSPassageCellFlux
   private:
       G4int fNx, fNy, fNz;
 };
+
 #endif
 

@@ -1,7 +1,7 @@
 #----------------------------------------------------------------------------
 # Setup the project
 cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
-project(RE04)
+project(RE03)
 
 #----------------------------------------------------------------------------
 # Find Geant4 package, activating all available UI and Vis drivers by default
@@ -19,7 +19,6 @@ endif()
 # Setup Geant4 include directories and compile definitions
 #
 include(${Geant4_USE_FILE})
-include_directories(${PROJECT_SOURCE_DIR}/include)
 
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
@@ -32,19 +31,19 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
-add_executable(RE04 RE04.cc ${sources} ${headers})
-target_link_libraries(RE04 ${Geant4_LIBRARIES} )
+add_executable(RE03 RE03.cc ${sources} ${headers})
+target_link_libraries(RE03 ${Geant4_LIBRARIES} )
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
-# build RE04. This is so that we can run the executable directly because it
+# build RE03. This is so that we can run the executable directly because it
 # relies on these scripts being in the current working directory.
 #
-set(RE04_SCRIPTS
-    batch.mac score.mac vis.mac
+set(RE03_SCRIPTS
+    drawCylinderSlice.mac drawSlice.mac run1.mac run2.mac run3.mac run4.mac vis.mac
   )
 
-foreach(_script ${RE04_SCRIPTS})
+foreach(_script ${RE03_SCRIPTS})
   configure_file(
     ${PROJECT_SOURCE_DIR}/${_script}
     ${PROJECT_BINARY_DIR}/${_script}
@@ -55,4 +54,5 @@ endforeach()
 #----------------------------------------------------------------------------
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
-install(TARGETS RE04 DESTINATION bin)
+install(TARGETS RE03 DESTINATION bin)
+

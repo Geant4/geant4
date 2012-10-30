@@ -32,6 +32,7 @@
 //
 
 #include "RE01HadronPhysics.hh"
+
 #include "G4MesonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
@@ -127,6 +128,8 @@
 #include "G4ExcitedStringDecay.hh"
 #include "G4QGSParticipants.hh"
 #include "G4QGSModel.hh"
+
+#include "G4SystemOfUnits.hh"
 
 
 RE01HadronPhysics::RE01HadronPhysics(const G4String& name)

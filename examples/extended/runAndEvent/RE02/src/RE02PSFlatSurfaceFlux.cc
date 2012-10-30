@@ -58,14 +58,17 @@
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE02PSFlatSurfaceFlux::RE02PSFlatSurfaceFlux(G4String name, G4int direction,
-					     G4int nx, G4int ny, G4int nz)
+                                             G4int nx, G4int ny, G4int nz)
   :G4PSFlatSurfaceFlux(name,direction),fNx(nx),fNy(ny),fNz(nz)
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE02PSFlatSurfaceFlux::~RE02PSFlatSurfaceFlux()
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4int RE02PSFlatSurfaceFlux::GetIndex(G4Step* aStep)
 {
   const G4VTouchable* touchable = aStep->GetPreStepPoint()->GetTouchable();

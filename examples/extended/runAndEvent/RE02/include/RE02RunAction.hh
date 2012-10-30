@@ -51,6 +51,22 @@ class G4Run;
 //
 //=======================================================================
 //
+/// User run action class
+///
+/// - G4Run* GenerateRun()
+///     instanciates a run of RE02Run with a sensitive detector name
+///
+/// - void BeginOfRunAction(const G4Run*)
+///     shows the run number 
+///
+/// - void EndOfRunAction(const G4Run*)
+///     shows accumulated information of primitive scorers and
+///     outputs total energy deposit into "totED.txt" file
+///
+/// - G4int CopyNo(G4int ix, G4int iy, G4int iz)
+///     returns a copy number of the segment number of the water phantom
+///     indicated by three dimentional indexes
+//
 class RE02RunAction : public G4UserRunAction
 {
 public:
@@ -70,11 +86,10 @@ public:
   G4int CopyNo(G4int ix, G4int iy, G4int iz)
   {  return (iy*(fNx*fNz)+ix*fNz+iz); }
 
-
 private:
   // Data member 
   // - vector of MultiFunctionalDetecor names.
-  std::vector<G4String> theSDName;  
+  std::vector<G4String> fSDName;  
 
   // for conversion of sengment number to copyNo.
   G4int fNx, fNy, fNz;

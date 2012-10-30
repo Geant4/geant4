@@ -26,7 +26,8 @@
 /// \file runAndEvent/RE04/include/RE04ParallelWorldConstruction.hh
 /// \brief Definition of the RE04ParallelWorldConstruction class
 //
-
+// $Id: $
+//
 #ifndef RE04ParallelWorldConstruction_h
 #define RE04ParallelWorldConstruction_h 1
 
@@ -36,6 +37,12 @@
 class G4LogicalVolume;
 class G4VPhysicalVolume;
 
+//
+/// A parallel world construction class
+///
+/// - void Construct()
+///     creates a parallel world in the mass world and parameterized volumes
+//
 class RE04ParallelWorldConstruction : public G4VUserParallelWorld
 {
   public:
@@ -46,7 +53,7 @@ class RE04ParallelWorldConstruction : public G4VUserParallelWorld
     virtual void Construct();
 
   private:
-    G4bool constructed;
+    G4bool fConstructed;
 };
 
 #endif

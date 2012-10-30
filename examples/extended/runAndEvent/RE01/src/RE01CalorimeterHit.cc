@@ -43,6 +43,7 @@
 #include "G4UnitsTable.hh"
 #include "G4VisAttributes.hh"
 #include "G4LogicalVolume.hh"
+#include "G4SystemOfUnits.hh"    
 
 G4Allocator<RE01CalorimeterHit> RE01CalorimeterHitAllocator;
 
@@ -127,7 +128,7 @@ const std::map<G4String,G4AttDef>* RE01CalorimeterHit::GetAttDefs() const
 
     G4String Pos("Pos");
     (*store)[Pos] = G4AttDef(Pos, "Position",
-		      "Physics","G4BestUnit","G4ThreeVector");
+                      "Physics","G4BestUnit","G4ThreeVector");
 
     G4String LVol("LVol");
     (*store)[LVol] = G4AttDef(LVol,"Logical Volume","Physics","","G4String");
