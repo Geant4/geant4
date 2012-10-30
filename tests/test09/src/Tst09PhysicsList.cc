@@ -34,6 +34,7 @@
 
 #include "Tst09PhysicsList.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 #include "G4ParticleTypes.hh"

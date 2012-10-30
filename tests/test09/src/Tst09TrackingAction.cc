@@ -25,10 +25,11 @@
 //
 
 #include "Tst09TrackingAction.hh"
+#include "globals.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4TrackingManager.hh"
 #include "G4Track.hh"
 #include "G4Gamma.hh"
-#include "globals.hh"
 
 void Tst09TrackingAction::PreUserTrackingAction(const G4Track* aTrack )
 {
