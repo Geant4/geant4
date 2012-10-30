@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm0/src/PhysicsList.cc
+/// \brief Implementation of the PhysicsList class
+//
 // 
 // $Id: PhysicsList.cc,v 1.9 2010-03-21 19:07:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
@@ -43,11 +46,13 @@
 
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList() 
-: G4VModularPhysicsList()
+: G4VModularPhysicsList(),fCutForGamma(0),fCutForElectron(0),fCutForPositron(0),
+  fCurrentDefaultCut(0),fEmPhysicsList(0),fEmName("local"),fMessenger(0)
 {
   G4LossTableManager::Instance();
   
@@ -192,16 +197,16 @@ void PhysicsList::ConstructProcess()
   
   //physics tables
   //
-  //emOptions.SetMinEnergy(100*eV);	//default    
-  //emOptions.SetMaxEnergy(100*TeV);	//default  
-  //emOptions.SetDEDXBinning(12*20);	//default=12*7  
-  //emOptions.SetLambdaBinning(12*20);	//default=12*7
+  //emOptions.SetMinEnergy(100*eV);        //default    
+  //emOptions.SetMaxEnergy(100*TeV);        //default  
+  //emOptions.SetDEDXBinning(12*20);        //default=12*7  
+  //emOptions.SetLambdaBinning(12*20);        //default=12*7
 
   emOptions.SetBuildCSDARange(true);     
   emOptions.SetMaxEnergyForCSDARange(10*GeV);
   //emOptions.SetDEDXBinningForCSDARange(12*20);
   
-  //emOptions.SetSplineFlag(true);	//default
+  //emOptions.SetSplineFlag(true);        //default
      
   emOptions.SetVerbose(0);  
 }

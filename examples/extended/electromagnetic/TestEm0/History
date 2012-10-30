@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+01-10-12 mma (testem0-V09-05-05)
+- coding conventions : virtual and initialisation list
 
 06-09-12 I.Hrivnacova (testem0-V09-05-04)
 - Fixed libraries in CMakeLists.txt

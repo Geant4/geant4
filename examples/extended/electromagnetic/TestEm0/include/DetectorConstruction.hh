@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm0/include/DetectorConstruction.hh
+/// \brief Definition of the DetectorConstruction class
+//
 //
 // $Id: DetectorConstruction.hh,v 1.2 2006-06-29 16:35:29 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
@@ -52,7 +55,8 @@ class DetectorConstruction : public G4VUserDetectorConstruction
    ~DetectorConstruction();
 
   public:
-  
+    
+     virtual
      G4VPhysicalVolume* Construct();             
      void SetMaterial (G4String);            
      

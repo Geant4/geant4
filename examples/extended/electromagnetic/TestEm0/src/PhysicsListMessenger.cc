@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm0/src/PhysicsListMessenger.cc
+/// \brief Implementation of the PhysicsListMessenger class
+//
 // $Id: PhysicsListMessenger.cc,v 1.2 2006-06-29 16:35:55 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -39,7 +42,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
-:fPhysicsList(pPhys)
+:fPhysicsList(pPhys),fPhysDir(0),fGammaCutCmd(0),fElectCutCmd(0),
+ fProtoCutCmd(0),fAllCutCmd(0),fListCmd(0)
 { 
   fPhysDir = new G4UIdirectory("/testem/phys/");
   fPhysDir->SetGuidance("physics list commands");

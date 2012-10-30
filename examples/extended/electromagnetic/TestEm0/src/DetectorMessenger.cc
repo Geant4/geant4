@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm0/src/DetectorMessenger.cc
+/// \brief Implementation of the DetectorMessenger class
+//
 // $Id: fDetectorMessenger.cc,v 1.2 2006-06-29 16:35:48 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -38,7 +41,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
-:fDetector(Det)
+:fDetector(Det),fTestemDir(0),fDetDir(0),fMaterCmd(0)
 { 
   fTestemDir = new G4UIdirectory("/testem/");
   fTestemDir->SetGuidance("commands specific to this example");
