@@ -39,6 +39,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "HsFTFCInterface.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4LundStringFragmentation.hh"
 #include "G4FTFModel.hh"
 #include "G4ParticleDefinition.hh"

@@ -38,6 +38,7 @@
 
 #include "Test30Material.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 #include "G4Material.hh"
 #include "G4NistManager.hh"
