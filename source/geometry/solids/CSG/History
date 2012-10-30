@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct  4, 2012   J.Apostolakis             geom-csg-V09-05-06
+- G4Torus: Revised the values of delta, to account for precision loss 
+            in calculating radius 'pt'.
+           Added printing in case of not finding normal when on surface.
+
 Oct  3, 2012   J.Apostolakis             geom-csg-V09-05-05
 - G4Para::SurfaceNormal(): Fixed calculation of sin(alpha) from cosine 
    and tangent.

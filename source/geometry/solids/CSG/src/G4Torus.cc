@@ -748,21 +748,23 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
   G4double distRMin = kInfinity;
   G4double distSPhi = kInfinity, distEPhi = kInfinity;
 
-  static const G4double delta = 0.5*kCarTolerance;
-  static const G4double dAngle = 0.5*kAngTolerance;
+  const G4double delta = std::max(10.0*kCarTolerance,
+                                   1.0e-8*(fRtor+fRmax));  // To cope with precision loss
+  const G4double dAngle = 10.0*kAngTolerance;
 
   G4ThreeVector nR, nPs, nPe;
   G4ThreeVector norm, sumnorm(0.,0.,0.);
 
   rho2 = p.x()*p.x() + p.y()*p.y();
   rho = std::sqrt(rho2);
-  pt2 = std::fabs(rho2+p.z()*p.z() +fRtor*fRtor - 2*fRtor*rho);
+  pt2 = rho2+p.z()*p.z() +fRtor * (fRtor-2*rho);
+  pt2 = std::max(pt2, 0.0); // std::fabs(pt2);
   pt = std::sqrt(pt2) ;
 
   G4double  distRMax = std::fabs(pt - fRmax);
   if(fRmin) distRMin = std::fabs(pt - fRmin);
 
-  if( rho > delta )
+  if( rho > delta && pt != 0.0 )
   {
     nR = G4ThreeVector( p.x()*(1-fRtor/rho)/pt,
                         p.y()*(1-fRtor/rho)/pt,
@@ -789,7 +791,7 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
     noSurfaces ++;
     sumnorm += nR;
   }
-  if( fRmin && distRMin <= delta )
+  if( fRmin && (distRMin <= delta) )
   {
     noSurfaces ++;
     sumnorm -= nR;
@@ -809,15 +811,46 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
   }
   if ( noSurfaces == 0 )
   {
+     G4ExceptionDescription ed;
+     ed.precision(16);
+
+     EInside  inIt= Inside( p );
+     
+     if( inIt != kSurface ){
+        ed << " ERROR>  Surface Normal was called for Torus, with point not on surface." << G4endl;
+     }else{
+        ed << " ERROR>  Surface Normal has not found a surface - despite the point being on the surface. " <<G4endl;
+     }
+
+     if( inIt != kInside){
+         ed << " Safety (Dist To In)  = " << DistanceToIn(p) << G4endl;
+     }
+     if( inIt != kOutside){
+         ed << " Safety (Dist to Out) = " << DistanceToOut(p) << G4endl;
+     }
+     ed << " Coordinates of point : " << p << G4endl;
+     ed << " Parameters  of solid : " << G4endl << *this << G4endl;
+
+     if( inIt == kSurface ){
+        G4Exception("G4Torus::SurfaceNormal(p)", "GeomSolids1002",
+                    JustWarning, ed,
+                    "Method *fails* to find normal, even though point is on surface!" );
+     }else{
 #ifdef G4CSGDEBUG
-    G4Exception("G4Torus::SurfaceNormal(p)", "GeomSolids1002",
-                JustWarning, "Point p is not on surface !?" );
-#endif 
+        static const char* NameInside[3]= { "Inside", "Surface", "Outside" };
+        ed << "  The point is " << NameInside[inIt] << " the solid. "<< G4endl;
+        G4Exception("G4Torus::SurfaceNormal(p)", "GeomSolids1002",
+                JustWarning, ed, "Point p is not on surface !?" );
+#endif
+     }
+
      norm = ApproxSurfaceNormal(p);
   }
   else if ( noSurfaces == 1 )  { norm = sumnorm; }
   else                         { norm = sumnorm.unit(); }
 
+  //   G4cout << "G4Torus::SurfaceNormal p= " << p << " returns norm= " << norm << G4endl;
+   
   return norm ;
 }
 
@@ -838,6 +871,13 @@ G4ThreeVector G4Torus::ApproxSurfaceNormal( const G4ThreeVector& p ) const
   pt2 = std::fabs(rho2+p.z()*p.z() +fRtor*fRtor - 2*fRtor*rho) ;
   pt = std::sqrt(pt2) ;
 
+#ifdef G4CSGDEBUG
+  G4cout << " G4Torus::ApproximateSurfaceNormal called for point " << p
+   << G4endl;
+   // << " in the following solid: " << G4endl;
+   // G4cout << *this << G4endl;
+#endif
+   
   distRMax = std::fabs(pt - fRmax) ;
 
   if(fRmin)  // First minimum radius
