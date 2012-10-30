@@ -71,6 +71,8 @@ void HistoManager::book()
   analysisManager->CreateNtupleDColumn("y");
   analysisManager->CreateNtupleDColumn("z");
   analysisManager->CreateNtupleDColumn("edep");
+  analysisManager->CreateNtupleDColumn("size");
+  analysisManager->CreateNtupleDColumn("diffKin");
   
   factoryOn = true;
   

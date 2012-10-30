@@ -59,8 +59,8 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(new PhysicsList);
 
   // Set mandatory user action classes
-  runManager->SetUserAction(new PrimaryGeneratorAction(detector));
   PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
+  runManager->SetUserAction(primary);
 
   HistoManager*  histo = new HistoManager();
 

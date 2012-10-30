@@ -56,7 +56,7 @@ void SteppingAction::UserSteppingAction(const G4Step* s)
 { 
  G4double flagParticle=0.;
  G4double flagProcess=0.;
- G4double x,y,z;
+ G4double x,y,z,xp,yp,zp;
  
  if (s->GetTrack()->GetDynamicParticle()->GetDefinition() ->GetParticleName() == "e-")       flagParticle = 1;    
  if (s->GetTrack()->GetDynamicParticle()->GetDefinition() ->GetParticleName() == "proton")   flagParticle = 2;
@@ -101,6 +101,9 @@ void SteppingAction::UserSteppingAction(const G4Step* s)
    x=s->GetPreStepPoint()->GetPosition().x()/nanometer;
    y=s->GetPreStepPoint()->GetPosition().y()/nanometer;
    z=s->GetPreStepPoint()->GetPosition().z()/nanometer;
+   xp=s->GetPostStepPoint()->GetPosition().x()/nanometer;
+   yp=s->GetPostStepPoint()->GetPosition().y()/nanometer;
+   zp=s->GetPostStepPoint()->GetPosition().z()/nanometer;
    
    
    Histo->FillNtupleDColumn(0, flagParticle);
@@ -109,6 +112,8 @@ void SteppingAction::UserSteppingAction(const G4Step* s)
    Histo->FillNtupleDColumn(3, y);
    Histo->FillNtupleDColumn(4, z);
    Histo->FillNtupleDColumn(5, s->GetTotalEnergyDeposit()/eV);
+   Histo->FillNtupleDColumn(6, sqrt((x-xp)*(x-xp)+(y-yp)*(y-yp)+(z-zp)*(z-zp))/nm);
+   Histo->FillNtupleDColumn(7, (s->GetPreStepPoint()->GetKineticEnergy() - s->GetPostStepPoint()->GetKineticEnergy())/eV );
    
    Histo->AddNtupleRow();
          
