@@ -82,13 +82,13 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/models/inclxx/incl_physics/include \
             -I$(G4BASE)/processes/hadronic/models/inclxx/interface/include \
             -I$(G4BASE)/processes/hadronic/models/lend/include \
+            -I$(G4BASE)/processes/hadronic/models/lepto_nuclear/include \
             -I$(G4BASE)/processes/hadronic/models/low_energy/include \
             -I$(G4BASE)/processes/hadronic/models/neutron_hp/include \
             -I$(G4BASE)/processes/hadronic/models/parton_string/diffraction/include \
             -I$(G4BASE)/processes/hadronic/models/parton_string/hadronization/include \
             -I$(G4BASE)/processes/hadronic/models/parton_string/management/include \
             -I$(G4BASE)/processes/hadronic/models/parton_string/qgsm/include \
-            -I$(G4BASE)/processes/hadronic/models/photolepton_hadron/muon_nuclear/include \
             -I$(G4BASE)/processes/hadronic/models/pre_equilibrium/exciton_model/include \
             -I$(G4BASE)/processes/hadronic/models/radioactive_decay/include \
             -I$(G4BASE)/processes/hadronic/models/theo_high_energy/include \

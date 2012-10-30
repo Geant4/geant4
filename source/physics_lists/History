@@ -15,7 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-28-09-2012, G.Cosmo			(phys-lists-V09-05-48)
+04-10-2012, G.Cosmo			(phys-lists-V09-05-49)
+- Replaced "photonlepton_nuclear" module with "lepto_nuclear" in CMake
+  and GNUmake build scripts.
+
+28-09-2012, V.Ivantchenko		(phys-lists-V09-05-48)
 - G4EmStandardPhysics_option4 - new builder combining standard
     and low-energy as "the best combination"
 - G4PhysListFactory - added EM opt4
@@ -33,8 +37,8 @@ track of all tags.
   Also, move #includes from .hh to .cc above to reduce compile dependencies.
 
 17-09-2012, S.Incerti			(phys-lists-V09-05-45)
-- Created physics builder G4EmLowEPPhysics to take into account renamed Monash
-U. Compton model, and removed G4EmLivermoreMUPhysics builder.
+- Created physics builder G4EmLowEPPhysics to take into account renamed
+  Monash U. Compton model, and removed G4EmLivermoreMUPhysics builder.
 
 23-08-2012, D.Mancusi                  (phys-lists-V09-05-44)
 - Fixes Coverity warning in INCL++ ion builder.
