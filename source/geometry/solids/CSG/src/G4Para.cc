@@ -495,7 +495,7 @@ G4ThreeVector G4Para::SurfaceNormal( const G4ThreeVector& p ) const
   newpy  = p.y()-fTthetaSphi*p.z();
 
   calpha = 1/std::sqrt(1+fTalpha*fTalpha);
-  if (fTalpha) {salpha = -calpha/fTalpha;} // NOTE: using MINUS std::sin(alpha)
+  if (fTalpha) {salpha = -calpha*fTalpha;} // NOTE: using MINUS std::sin(alpha)
   else         {salpha = 0.;}
   
   //  xshift = newpx*calpha+newpy*salpha;

@@ -17,19 +17,23 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-June 12, 2012  G.Cosmo                   geom-csg-V09-05-04
-- Explicitly use inclusion of headers for system of units and physical
-  constants, in plan to remove implicit inclusion from globals.hh.
+Oct  3, 2012   J.Apostolakis             geom-csg-V09-05-05
+- G4Para::SurfaceNormal(): Fixed calculation of sin(alpha) from cosine 
+   and tangent.
 
-May 14, 2012  G.Cosmo                    geom-csg-V09-05-03
+June 12, 2012 G.Cosmo                    geom-csg-V09-05-04
+- Explicitly use inclusion of headers for system of units and physical
+   constants, in plan to remove implicit inclusion from globals.hh.
+
+May 14, 2012   G.Cosmo                   geom-csg-V09-05-03
 - Fixed spurious cases of hidden variable visibility, detected with
   '-Wshadow' compilation option on gcc compiler.
 
-May 4, 2012  G.Cosmo                     geom-csg-V09-05-02
+May 4, 2012    G.Cosmo                   geom-csg-V09-05-02
 - Restored G4CSGSolid::GetRadiusInRing() to non-inline to avoid propagating
   dependency on random generators.
 
-May 3, 2012  G.Cosmo                     geom-csg-V09-05-01
+May 3, 2012    G.Cosmo                   geom-csg-V09-05-01
 - Made utility method GetRadiusInRing() inline and corrected implementation.
 
 April 6, 2012  M.Kelsey                  geom-csg-V09-05-00
