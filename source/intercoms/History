@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+2 October, 2012 P. Mato (intercoms-V09-05-03)
+ - Added some protection when getting the value of a command which is a method 
+
 1 October, 2012 P. Mato (intercoms-V09-05-02)
  - Fixed windows warning
 

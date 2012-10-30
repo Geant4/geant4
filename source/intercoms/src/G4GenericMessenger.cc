@@ -36,6 +36,14 @@
 
 #include <iostream>
 
+class G4InvalidUICommand: public std::bad_cast {
+public:
+  G4InvalidUICommand() {}
+  virtual const char* what() const throw() {
+    return "G4InvalidUICommand: command does not exists or is of invalid type";
+  }
+};
+
 
 G4GenericMessenger::G4GenericMessenger(void* obj, const G4String& dir, const G4String& doc): directory(dir), object(obj) {
   dircmd = new G4UIdirectory(dir);
@@ -78,8 +86,13 @@ G4GenericMessenger::DeclareMethod(const G4String& name, const G4AnyMethod& fun, 
 }
 
 G4String G4GenericMessenger::GetCurrentValue(G4UIcommand* command) {
-  Property& p = properties[command->GetCommandName()];
-  return p.variable.ToString();
+  if ( properties.find(command->GetCommandName()) != properties.end()) {
+    Property& p = properties[command->GetCommandName()];
+    return p.variable.ToString();
+  }
+  else {
+    throw G4InvalidUICommand();
+  }
 }
 
 void G4GenericMessenger::SetNewValue(G4UIcommand* command, G4String newValue) {
@@ -95,7 +108,7 @@ void G4GenericMessenger::SetNewValue(G4UIcommand* command, G4String newValue) {
       m.method.operator()(m.object,newValue);
     }
     else {
-      throw G4BadArgument();
+      throw G4InvalidUICommand();
     }
   }
 }
