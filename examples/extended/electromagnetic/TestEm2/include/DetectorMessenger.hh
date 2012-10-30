@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm2/include/DetectorMessenger.hh
+/// \brief Definition of the DetectorMessenger class
+//
 // $Id: DetectorMessenger.hh,v 1.6 2006-06-29 16:49:32 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
@@ -50,7 +53,7 @@ public:
   DetectorMessenger(DetectorConstruction* );
  ~DetectorMessenger();
 
-  void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String);
 
 private:
   DetectorConstruction*      fDetector;

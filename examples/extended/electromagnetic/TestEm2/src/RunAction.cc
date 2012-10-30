@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm2/src/RunAction.cc
+/// \brief Implementation of the RunAction class
+//
 // $Id: RunAction.cc,v 1.26 2010-11-09 21:25:15 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
@@ -40,6 +43,7 @@
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
 
+#include "G4SystemOfUnits.hh"
 #include <iomanip>
 
 #include "Randomize.hh"
@@ -114,30 +118,30 @@ void RunAction::BookHisto()
 
   analysisManager->CreateH1( "4","longit energy profile (% of E inc)",
                                     f_nLbin,0.,f_nLbin*dLradl);
-				    
+                                    
   analysisManager->CreateH1( "5","rms on longit Edep (% of E inc)",
                                   f_nLbin,0.,f_nLbin*dLradl);
 
   G4double Zmin=0.5*dLradl, Zmax=Zmin+f_nLbin*dLradl;
   analysisManager->CreateH1( "6","cumul longit energy dep (% of E inc)",
                                   f_nLbin,Zmin,Zmax);
-				    
+                                    
   analysisManager->CreateH1( "7","rms on cumul longit Edep (% of E inc)",
                                   f_nLbin,Zmin,Zmax);
 
   analysisManager->CreateH1( "8","radial energy profile (% of E inc)",
                                   f_nRbin,0.,f_nRbin*dRradl);
-				    				    
+                                                                        
   analysisManager->CreateH1( "9","rms on radial Edep (% of E inc)",
-                                  f_nRbin,0.,f_nRbin*dRradl);	    
+                                  f_nRbin,0.,f_nRbin*dRradl);            
 
   G4double Rmin=0.5*dRradl, Rmax=Rmin+f_nRbin*dRradl;
   analysisManager->CreateH1("10","cumul radial energy dep (% of E inc)",
                                   f_nRbin,Rmin,Rmax);
 
   analysisManager->CreateH1("11","rms on cumul radial Edep (% of E inc)",
-                                  f_nRbin,Rmin,Rmax);		    
-				    
+                                  f_nRbin,Rmin,Rmax);                    
+                                    
  G4cout << "\n----> Histogram file is opened in " << fHistoName[1] << G4endl;
 }
 
@@ -304,7 +308,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     G4double ratio = (EMoliere - MeanERadialCumul[imin]) /
                      (MeanERadialCumul[imin+1] - MeanERadialCumul[imin]);
     iMoliere = 1. + imin + ratio;
-  }  		     
+  }                       
       
   //track length
   //
@@ -381,14 +385,14 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout << " neutral traklen: "
          << std::setw(7)  << MeanNeutrTrLength << " radl +- "
          << std::setw(7)  <<  rmsNeutrTrLength << " radl" << G4endl;
-	 
+         
   if (iMoliere > 0. ) {
     G4double RMoliere1 = iMoliere*fDet->GetdRradl();
-    G4double RMoliere2 = iMoliere*fDet->GetdRlength(); 	 
+    G4double RMoliere2 = iMoliere*fDet->GetdRlength();          
     G4cout << "\n " << EMoliere << " % confinement: radius = "
            << RMoliere1 << " radl  ("
-	   << G4BestUnit( RMoliere2, "Length") << ")" << G4endl;
-  }	   
+           << G4BestUnit( RMoliere2, "Length") << ")" << G4endl;
+  }           
 
   G4cout.setf(mode,std::ios::floatfield);
   G4cout.precision(prec);

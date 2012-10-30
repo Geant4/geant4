@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm2/src/DetectorConstruction.cc
+/// \brief Implementation of the DetectorConstruction class
+//
 // 
 // $Id: DetectorConstruction.cc,v 1.14 2009-09-16 18:07:30 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
@@ -50,6 +53,7 @@
 #include "G4RunManager.hh"
 
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -205,9 +209,9 @@ void DetectorConstruction::SetMagField(G4double fieldValue)
   G4FieldManager* fieldMgr
    = G4TransportationManager::GetTransportationManager()->GetFieldManager();
 
-  if(fMagField) delete fMagField;		//delete the existing magn field
+  if(fMagField) delete fMagField;                //delete the existing magn field
 
-  if(fieldValue!=0.)			// create a new one if non nul
+  if(fieldValue!=0.)                        // create a new one if non nul
   { fMagField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));
     fieldMgr->SetDetectorField(fMagField);
     fieldMgr->CreateChordFinder(fMagField);

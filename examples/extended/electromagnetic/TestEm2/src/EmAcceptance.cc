@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm2/src/EmAcceptance.cc
+/// \brief Implementation of the Emeptance class
+//
 // $Id: EmAcceptance.cc,v 1.5 2006-06-29 16:50:22 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm2/include/EmAcceptance.hh
+/// \brief Definition of the EmAcceptance class
+//
 // $Id: EmAcceptance.hh,v 1.3 2006-06-29 16:49:35 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -48,7 +51,7 @@ class EmAcceptance
 
     void EmAcceptanceGauss(const G4String& title, G4int stat, 
                                  G4double avr, G4double avr0, 
-		                 G4double rms, G4double limit);
+                                 G4double rms, G4double limit);
 
   private:
     G4bool fIsAccepted;
