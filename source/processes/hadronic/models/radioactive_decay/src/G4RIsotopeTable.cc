@@ -54,6 +54,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
 #include "G4DecayTable.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 #include "G4IsotopeProperty.hh"
 #include "G4RIsotopeTable.hh"

@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
 
+04 October 2012  Gabriele Cosmo  radioactive_decay-V09-05-11
+------------------------------------------------------------
+- G4RIsotopeTable.cc: added inclusion of units header...
+ 
 03 October 2012  Vladimir Ivantchenko  radioactive_decay-V09-05-10
 ------------------------------------------------------------------
 - G4RadioactiveDecay - added isInitialised flag to reduce 
