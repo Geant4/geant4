@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 9, 2012 G.Cosmo (global-V09-05-09)
+- Temporarily comment out inclusion of headers for system of units and
+  physical constants in globals.hh.
+
 August 8, 2012 G.Cosmo (global-V09-05-08)
 - Fixed more cases for explicitly use inclusion of headers for system of
   units and physical constants.
