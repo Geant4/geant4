@@ -8,20 +8,23 @@ if(GEANT4_ENABLE_TESTING)
   enable_testing()
   include(CTest)
 
+  #---Geant4_DIR is needed to locate GeantConfig.cmake file required by tests and examples-------------
+  set(Geant4_DIR ${CMAKE_BINARY_DIR} CACHE PATH "Current build directory")
+
   #---Many tests require access to the Geant4 data----------------------------------------------------
   if(GEANT4_INSTALL_DATA)
     set(GEANT4_DATA_DIR ${CMAKE_BINARY_DIR}/data CACHE PATH "Directory where the Geant4 data is located")
+  elseif(NOT "$ENV{GEANT4_DATA_DIR}" STREQUAL "")
+    set(GEANT4_DATA_DIR  "$ENV{GEANT4_DATA_DIR}" CACHE PATH "Directory where the Geant4 data is located" FORCE)
   else()
-    set(GEANT4_DATA_DIR "" CACHE PATH "Directory where the Geant4 data is located")
+    set(GEANT4_DATA_DIR "" CACHE PATH "Directory where the Geant4 data is located" FORCE)
   endif()
   
   if(NOT GEANT4_DATA_DIR)
-    message(WARNING "GEANT4_DATA_DIR not defined! This may cause many Geant4 tests to fail")
+    message(STATUS  "  GEANT4_DATA_DIR not defined! This may cause many Geant4 tests to fail\n"
+                    "     Add -DGEANT4_DATA_DIR=<path> to the cmake command or define environment")
     return()
   endif()
-
-  #---Geant4_DIR is needed to locate GeantConfig.cmake file required by tests and examples-------------
-  set(Geant4_DIR ${CMAKE_BINARY_DIR} CACHE PATH "Current build directory")
 
   #---Define the TEST environment (basically the varibles pointing to DATA files)----------------------
   foreach( tuple "G4LEVELGAMMADATA;PhotonEvaporation"
@@ -48,7 +51,6 @@ if(GEANT4_BUILD_TESTS)
   foreach( file ${files} )
     get_filename_component(path ${file} PATH)
     if(path MATCHES "/test$")
-      message("PATH = ${path}")
       add_subdirectory(${path})
     endif()
   endforeach()

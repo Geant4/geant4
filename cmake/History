@@ -29,6 +29,8 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+9th October 2012 Pere Mato (cmake-V09-05-50)
+- Modules/Geant4CTest.cmake: minor changes to avoid user traps
 
 4th October 2012 - Gunter Folger     (cmake-V09-05-49)
 - Modules/Geant4InstallData.cmake: Use G4EMLOW.6.30
