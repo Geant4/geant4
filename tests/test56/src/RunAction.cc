@@ -77,7 +77,6 @@ void RunAction::BeginOfRunAction(const G4Run* run)
   histoManager->book();
 
   // do not save Rndm status
-  G4RunManager::GetRunManager()->SetRandomNumberStore(false);
   CLHEP::HepRandom::showEngineStatus();
 }
 
