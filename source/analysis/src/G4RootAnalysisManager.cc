@@ -1100,7 +1100,7 @@ G4double G4RootAnalysisManager::GetH1Xmax(G4int id) const
 //_____________________________________________________________________________
 G4double G4RootAnalysisManager::GetH1Width(G4int id) const
 {
-  tools::histo::h1d* h1d = GetH1InFunction(id, "GetH1XWidth");
+  tools::histo::h1d* h1d = GetH1InFunction(id, "GetH1XWidth", true, false);
   if ( ! h1d ) return 0;
   
   G4int nbins = h1d->axis().bins();
@@ -1151,7 +1151,7 @@ G4double G4RootAnalysisManager::GetH2Xmax(G4int id) const
 //_____________________________________________________________________________
 G4double G4RootAnalysisManager::GetH2XWidth(G4int id) const
 {
-  tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2XWidth");
+  tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2XWidth", true, false);
   if ( ! h2d ) return 0;
   
   G4int nbins = h2d->axis_x().bins();
@@ -1202,7 +1202,7 @@ G4double G4RootAnalysisManager::GetH2Ymax(G4int id) const
 //_____________________________________________________________________________
 G4double G4RootAnalysisManager::GetH2YWidth(G4int id) const
 {
-  tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2YWidth");
+  tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2YWidth", true, false);
   if ( ! h2d ) return 0;
   
   G4int nbins = h2d->axis_y().bins();

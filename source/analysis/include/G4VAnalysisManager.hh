@@ -140,6 +140,7 @@ class G4VAnalysisManager
 
     // Setters for additional information by fields
     // (other fields are set by SetH1, SetH2 methods)
+    void  SetActivation(ObjectType type, G4bool activation);
     void  SetActivation(ObjectType type, G4int id, G4bool activation);
     void  SetAscii(ObjectType type, G4int id, G4bool ascii);
     

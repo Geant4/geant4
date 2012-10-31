@@ -40,6 +40,7 @@
 #include "G4UIparameter.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
+#include "G4UIcmdWithABool.hh"
 
 #include <iostream>
 
@@ -51,6 +52,7 @@ G4AnalysisMessenger::G4AnalysisMessenger(G4VAnalysisManager* manager)
     fSetFileNameCmd(0),
     fSetHistoDirNameCmd(0),
     fSetNtupleDirNameCmd(0),
+    fSetActivationCmd(0),
     fVerboseCmd(0),
     fH1Dir(0),  
     fCreateH1Cmd(0),
@@ -59,13 +61,17 @@ G4AnalysisMessenger::G4AnalysisMessenger(G4VAnalysisManager* manager)
     fSetH1TitleCmd(0), 
     fSetH1XAxisCmd(0), 
     fSetH1YAxisCmd(0), 
+    fSetH1ActivationCmd(0),
+    fSetH1ActivationAllCmd(0),
     fH2Dir(0),  
     fCreateH2Cmd(0),
     fSetH2Cmd(0),
     fSetH2AsciiCmd(0), 
     fSetH2TitleCmd(0), 
     fSetH2XAxisCmd(0), 
-    fSetH2YAxisCmd(0) 
+    fSetH2YAxisCmd(0), 
+    fSetH2ActivationCmd(0),
+    fSetH2ActivationAllCmd(0)
 {  
   fAnalysisDir = new G4UIdirectory("/analysis/");
   fAnalysisDir->SetGuidance("analysis control");
@@ -85,6 +91,14 @@ G4AnalysisMessenger::G4AnalysisMessenger(G4VAnalysisManager* manager)
   fSetNtupleDirNameCmd->SetParameterName("NtupleDirName", false);
   fSetNtupleDirNameCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   
+  fSetActivationCmd = new G4UIcmdWithABool("/analysis/setActivation",this);
+  G4String guidance = "Set activation. \n";
+  guidance += "When this option is enabled, only the histograms marked as activated\n";
+  guidance += "are returned, filled or saved on file.\n";
+  guidance += "No warning is issued when Get or Fill is called on inactive histogram.";
+  fSetActivationCmd->SetGuidance(guidance);
+  fSetActivationCmd->SetParameterName("Activation",false);
+
   fVerboseCmd = new G4UIcmdWithAnInteger("/analysis/verbose",this);
   fVerboseCmd->SetGuidance("Set verbose level");
   fVerboseCmd->SetParameterName("VerboseLevel",false);
@@ -105,6 +119,11 @@ G4AnalysisMessenger::G4AnalysisMessenger(G4VAnalysisManager* manager)
   SetH1TitleCmd();
   SetH1XAxisCmd();
   SetH1YAxisCmd();
+  SetH1ActivationCmd();
+
+  fSetH1ActivationAllCmd = new G4UIcmdWithABool("/analysis/h1/setActivationToAll",this);
+  fSetH1ActivationAllCmd->SetGuidance("Set activation to all 1D histograms.");
+  fSetH1ActivationAllCmd->SetParameterName("Activation",false);
 
   fH2Dir = new G4UIdirectory("/analysis/h2/");
   fH2Dir->SetGuidance("2D histograms control");
@@ -112,7 +131,7 @@ G4AnalysisMessenger::G4AnalysisMessenger(G4VAnalysisManager* manager)
   CreateH2Cmd();
   SetH2Cmd();
   
-  fSetH2AsciiCmd = new G4UIcmdWithAnInteger("/analysis/h1/setAscii",this);
+  fSetH2AsciiCmd = new G4UIcmdWithAnInteger("/analysis/h2/setAscii",this);
   fSetH2AsciiCmd->SetGuidance("Print 2D histogram of #Id on ascii file.");
   fSetH2AsciiCmd->SetParameterName("Id",false);
   fSetH2AsciiCmd->SetRange("Id>=0");
@@ -122,6 +141,12 @@ G4AnalysisMessenger::G4AnalysisMessenger(G4VAnalysisManager* manager)
   SetH2XAxisCmd();
   SetH2YAxisCmd();
   SetH2ZAxisCmd();
+  SetH2ActivationCmd();
+
+  fSetH2ActivationAllCmd = new G4UIcmdWithABool("/analysis/h2/setActivationToAll",this);
+  fSetH2ActivationAllCmd->SetGuidance("Set activation to all 2D histograms.");
+  fSetH2ActivationAllCmd->SetParameterName("Activation",false);
+
 }
 
 //_____________________________________________________________________________
@@ -130,6 +155,7 @@ G4AnalysisMessenger::~G4AnalysisMessenger()
   delete fSetFileNameCmd;
   delete fSetHistoDirNameCmd;
   delete fSetNtupleDirNameCmd;
+  delete fSetActivationCmd;
   delete fVerboseCmd;
   delete fCreateH1Cmd;
   delete fSetH1Cmd;
@@ -137,6 +163,8 @@ G4AnalysisMessenger::~G4AnalysisMessenger()
   delete fSetH1TitleCmd;  
   delete fSetH1XAxisCmd;  
   delete fSetH1YAxisCmd;  
+  delete fSetH1ActivationCmd;
+  delete fSetH1ActivationAllCmd;
   delete fH1Dir;
   delete fCreateH2Cmd;
   delete fSetH2Cmd;
@@ -145,6 +173,8 @@ G4AnalysisMessenger::~G4AnalysisMessenger()
   delete fSetH2XAxisCmd;  
   delete fSetH2YAxisCmd;  
   delete fSetH2ZAxisCmd;  
+  delete fSetH2ActivationCmd;
+  delete fSetH2ActivationAllCmd;
   delete fH2Dir;
   delete fAnalysisDir;
 }
@@ -294,6 +324,24 @@ void G4AnalysisMessenger::SetH1YAxisCmd()
   fSetH1YAxisCmd->SetParameter(h1Id);
   fSetH1YAxisCmd->SetParameter(h1YAxis);
   fSetH1YAxisCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+}  
+
+//_____________________________________________________________________________
+void G4AnalysisMessenger::SetH1ActivationCmd()
+{
+  G4UIparameter* h1Id = new G4UIparameter("idActivation", 'i', false);
+  h1Id->SetGuidance("Histogram id");
+  h1Id->SetParameterRange("idActivation>=0");
+
+  G4UIparameter* h1Activation = new G4UIparameter("h1Activation", 's', true);
+  h1Activation->SetGuidance("Histogram activation");
+  h1Activation->SetDefaultValue("none");
+
+  fSetH1ActivationCmd = new G4UIcommand("/analysis/h1/setActivation", this);
+  fSetH1ActivationCmd->SetGuidance("Set activation for the 1D histogram of #Id");
+  fSetH1ActivationCmd->SetParameter(h1Id);
+  fSetH1ActivationCmd->SetParameter(h1Activation);
+  fSetH1ActivationCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 }  
 
 //_____________________________________________________________________________
@@ -516,6 +564,24 @@ void G4AnalysisMessenger::SetH2ZAxisCmd()
 }  
 
 //_____________________________________________________________________________
+void G4AnalysisMessenger::SetH2ActivationCmd()
+{
+  G4UIparameter* h2Id = new G4UIparameter("idActivation", 'i', false);
+  h2Id->SetGuidance("Histogram id");
+  h2Id->SetParameterRange("idActivation>=0");
+
+  G4UIparameter* h2Activation = new G4UIparameter("h2Activation", 's', true);
+  h2Activation->SetGuidance("Histogram activation");
+  h2Activation->SetDefaultValue("none");
+
+  fSetH2ActivationCmd = new G4UIcommand("/analysis/h2/setActivation", this);
+  fSetH2ActivationCmd->SetGuidance("Set activation for the 2D histogram of #Id");
+  fSetH2ActivationCmd->SetParameter(h2Id);
+  fSetH2ActivationCmd->SetParameter(h2Activation);
+  fSetH2ActivationCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+}  
+
+//_____________________________________________________________________________
 void G4AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
 {
   if ( command == fSetFileNameCmd ) {
@@ -527,6 +593,9 @@ void G4AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
   }  
   else if ( command == fSetNtupleDirNameCmd ) {
     fManager->SetNtupleDirectoryName(newValues);
+  }  
+  else if ( command == fSetActivationCmd ) {
+    fManager->SetActivation(fSetActivationCmd->GetNewBoolValue(newValues));
   }  
   else if ( command == fVerboseCmd ) {
     fManager->SetVerboseLevel(fVerboseCmd->GetNewIntValue(newValues));
@@ -579,6 +648,18 @@ void G4AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
     getline(is, yaxis);
     fManager->SetH1YAxisTitle(id, yaxis);     
   }
+  else if ( command == fSetH1ActivationCmd ) {
+    G4int id; 
+    G4String sactivation;
+    std::istringstream is(newValues.data());
+    is >> id >> sactivation;
+    G4bool activation = G4UIcommand::ConvertToBool(sactivation);
+    fManager->SetActivation(G4VAnalysisManager::kH1, id, activation);     
+  }
+  else if ( command == fSetH1ActivationAllCmd ) {
+    G4bool activation = fSetH1ActivationAllCmd->GetNewBoolValue(newValues);
+    fManager->SetActivation(G4VAnalysisManager::kH1, activation);
+  }  
   else if ( command == fCreateH2Cmd ) { 
     G4String name, title;
     G4int xnbins, ynbins; 
@@ -641,4 +722,16 @@ void G4AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
     getline(is, zaxis);
     fManager->SetH2ZAxisTitle(id, zaxis);     
   }
+  else if ( command == fSetH2ActivationCmd ) {
+    G4int id; 
+    G4String sactivation;
+    std::istringstream is(newValues.data());
+    is >> id >> sactivation;
+    G4bool activation = G4UIcommand::ConvertToBool(sactivation);
+    fManager->SetActivation(G4VAnalysisManager::kH2, id, activation);     
+  }
+  else if ( command == fSetH2ActivationAllCmd ) {
+    G4bool activation = fSetH2ActivationAllCmd->GetNewBoolValue(newValues);
+    fManager->SetActivation(G4VAnalysisManager::kH2, activation);
+  }  
 }  

@@ -41,6 +41,7 @@ class G4VAnalysisManager;
 class G4UIdirectory;
 class G4UIcommand;
 class G4UIcmdWithAString;
+class G4UIcmdWithABool;
 class G4UIcmdWithAnInteger;
 
 class G4AnalysisMessenger : public G4UImessenger
@@ -58,12 +59,14 @@ class G4AnalysisMessenger : public G4UImessenger
     void SetH1TitleCmd();
     void SetH1XAxisCmd();
     void SetH1YAxisCmd();
+    void SetH1ActivationCmd();
     void CreateH2Cmd();
     void SetH2Cmd();
     void SetH2TitleCmd();
     void SetH2XAxisCmd();
     void SetH2YAxisCmd();
     void SetH2ZAxisCmd();
+    void SetH2ActivationCmd();
  
     G4VAnalysisManager*  fManager; ///< Associated class
     
@@ -71,6 +74,7 @@ class G4AnalysisMessenger : public G4UImessenger
     G4UIcmdWithAString*    fSetFileNameCmd;
     G4UIcmdWithAString*    fSetHistoDirNameCmd;
     G4UIcmdWithAString*    fSetNtupleDirNameCmd;
+    G4UIcmdWithABool*      fSetActivationCmd;   
     G4UIcmdWithAnInteger*  fVerboseCmd;   
     G4UIdirectory*         fH1Dir;   
     G4UIcommand*           fCreateH1Cmd;
@@ -79,6 +83,8 @@ class G4AnalysisMessenger : public G4UImessenger
     G4UIcommand*           fSetH1TitleCmd;   
     G4UIcommand*           fSetH1XAxisCmd;   
     G4UIcommand*           fSetH1YAxisCmd;   
+    G4UIcommand*           fSetH1ActivationCmd;   
+    G4UIcmdWithABool*      fSetH1ActivationAllCmd;   
     G4UIdirectory*         fH2Dir;   
     G4UIcommand*           fCreateH2Cmd;
     G4UIcommand*           fSetH2Cmd;
@@ -87,6 +93,8 @@ class G4AnalysisMessenger : public G4UImessenger
     G4UIcommand*           fSetH2XAxisCmd;   
     G4UIcommand*           fSetH2YAxisCmd;   
     G4UIcommand*           fSetH2ZAxisCmd;   
+    G4UIcommand*           fSetH2ActivationCmd;   
+    G4UIcmdWithABool*      fSetH2ActivationAllCmd;   
 };
   
 #endif

@@ -17,6 +17,13 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 14, 2012 I.Hrivnacova (analysis-V09-05-14)
+- Adding function  G4VAnalysisManager::SetActivation(..) 
+  for setting activation to all histograms of one type
+- Adding commands to activate/inactivate 1D, 2D histograms
+- Fixed GetH1[2]Width: return the correct value also when histogram is
+  inactive.
+
 October 10, 2012 I.Hrivnacova (analysis-V09-05-13)
 - Adding commands for handling h2d histograms.
 - Adding functions for accessing h1d, h2d by name

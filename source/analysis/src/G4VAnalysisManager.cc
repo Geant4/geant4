@@ -441,6 +441,8 @@ G4HnInformation* G4VAnalysisManager::GetInformation(ObjectType objType, G4int id
 void  G4VAnalysisManager::SetActivation(ObjectType type, G4int id, 
                                         G4bool activation)
 {
+// Set activation to a given object
+
   G4HnInformation* info = GetInformation(type, id);
 
   if ( ! info ) return;
@@ -454,6 +456,43 @@ void  G4VAnalysisManager::SetActivation(ObjectType type, G4int id,
     fNofActiveObjects++;
   else
     fNofActiveObjects--;   
+}    
+
+//_____________________________________________________________________________
+void  G4VAnalysisManager::SetActivation(ObjectType type, G4bool activation)
+{
+// Set activation to all objects of the given type
+
+  std::vector<G4HnInformation*>* informations;
+  if ( type == kH1 ) 
+    informations = &fH1Informations;
+  else if ( type == kH2 )
+    informations = &fH2Informations;
+  else  if ( type == kNtuple ) {
+    return;
+  }
+  else {  
+    G4ExceptionDescription description;
+    description << "Wrong object type.";
+    G4Exception("G4VAnalysisManager::SetActivation()",
+              "Analysis_W010", FatalException, description);
+    return;
+  }   
+  
+  std::vector<G4HnInformation*>::iterator it;
+  for ( it = informations->begin(); it != informations->end(); it++ ) {
+    G4HnInformation* info = *it;
+
+    // Do nothing if activation does not change
+    if ( info->fActivation == activation ) continue;
+  
+    // Change activation and account it in fNofActiveObjects
+    info->fActivation = activation;
+    if ( activation ) 
+      fNofActiveObjects++;
+    else
+      fNofActiveObjects--; 
+  }     
 }    
 
 //_____________________________________________________________________________
