@@ -56,7 +56,7 @@
 
 #include "G4EmExtraPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
-#include "G4QStoppingPhysics.hh"
+#include "G4StoppingPhysics.hh"
 #include "G4IonBinaryCascadePhysics.hh"
 #include "G4RadioactiveDecayPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
@@ -177,7 +177,7 @@ void exrdmPhysicsList::AddExtraBuilders(G4bool flagHP)
   fHadronPhys.push_back( new G4EmExtraPhysics("extra EM"));
   fHadronPhys.push_back( new G4HadronElasticPhysics("elastic",verboseLevel,
                                                    flagHP));
-  fHadronPhys.push_back( new G4QStoppingPhysics("stopping",verboseLevel));
+  fHadronPhys.push_back( new G4StoppingPhysics("stopping",verboseLevel));
   fHadronPhys.push_back( new G4IonBinaryCascadePhysics("ionBIC"));
   fHadronPhys.push_back( new G4NeutronTrackingCut("Neutron tracking cut"));
 }

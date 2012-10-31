@@ -15,7 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-25/09/2012  Ivana Hrivnacova (exRadioactivedecay-V09-05-00)
+24/10/2012  Alberto Ribon  (rdecay02-V09-05-03)
+- Migrated to the new stopping physics.
+
+25/09/2012  Ivana Hrivnacova
 - Fixed AIDA dependent code 
 
 13/06/2012  Laurent Desorgher  (rdecay02-V09-05-02)
