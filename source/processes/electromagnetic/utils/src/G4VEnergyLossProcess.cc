@@ -1246,8 +1246,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
     } 
     */   
   }
-  G4double etest = 0.0;
-  if(scTracks.size() > 0) { FillSecondariesAlongStep(etest, weight); }
+  if(scTracks.size() > 0) { FillSecondariesAlongStep(eloss, weight); }
 
   // Energy balanse
   G4double finalT = preStepKinEnergy - eloss - esec;
@@ -1265,7 +1264,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   fParticleChange.ProposeLocalEnergyDeposit(eloss);
 
   if(1 < verboseLevel) {
-    G4double del = finalT + eloss + etest - preStepKinEnergy;
+    G4double del = finalT + eloss + esec - preStepKinEnergy;
     G4cout << "Final value eloss(MeV)= " << eloss/MeV
            << " preStepKinEnergy= " << preStepKinEnergy
            << " postStepKinEnergy= " << finalT
@@ -1283,24 +1282,23 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 void 
 G4VEnergyLossProcess::FillSecondariesAlongStep(G4double&, G4double& weight)
 {
-  G4int n = scTracks.size();
-
   // weight may be changed by biasing manager
-  G4bool weightNotChanged = true;
   if(biasManager) {
     if(biasManager->SecondaryBiasingRegion(currentCoupleIndex)) {
-      biasManager->ApplySecondaryBiasing(scTracks,weight,currentCoupleIndex);
-      weightNotChanged = false;
+      weight *=
+	biasManager->ApplySecondaryBiasing(scTracks, currentCoupleIndex);
     }
-  }	  
+  } 
 
   // fill secondaries
+  G4int n = scTracks.size();
   fParticleChange.SetNumberOfSecondaries(n);
+
   for(G4int i=0; i<n; ++i) {
     G4Track* t = scTracks[i];
-    //eloss += t->GetKineticEnergy();
     if(t) {
-      if(weightNotChanged) { t->SetWeight(weight); }
+      //esec += t->GetKineticEnergy();
+      t->SetWeight(weight); 
       pParticleChange->AddSecondary(t);
       //G4cout << "Secondary(along step) has weight " << t->GetWeight() 
       //<< ", kenergy " << t->GetKineticEnergy()/MeV << " MeV" <<G4endl;
@@ -1405,7 +1403,7 @@ G4VEnergyLossProcess::SampleSubCutSecondaries(std::vector<G4Track*>& tracks,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
-                                                      const G4Step&)
+                                                      const G4Step& step)
 {
   // In all cases clear number of interaction lengths
   theNumberOfInteractionLengthLeft = -1.0;
@@ -1474,19 +1472,26 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
   // bremsstrahlung splitting or Russian roulette  
   if(biasManager) {
     if(biasManager->SecondaryBiasingRegion(currentCoupleIndex)) {
-      weight *= biasManager->ApplySecondaryBiasing(secParticles,currentCoupleIndex,
-						   currentModel,
-						   currentCouple, &track, 
-						   tcut, &fParticleChange);
+      G4double eloss = 0.0;
+      weight *= biasManager->ApplySecondaryBiasing(secParticles,
+						   track, currentModel, 
+						   &fParticleChange, eloss,
+						   currentCoupleIndex, tcut, 
+						   step.GetPostStepPoint()->GetSafety());
+      if(eloss > 0.0) {
+	eloss += fParticleChange.GetLocalEnergyDeposit();
+        fParticleChange.ProposeLocalEnergyDeposit(eloss);
+      }
     }
   }
 
   // save secondaries
   G4int num = secParticles.size();
   if(num > 0) {
-    fParticleChange.SetNumberOfSecondaries(num);
-    for (G4int i=0; i<num; ++i) {
 
+    fParticleChange.SetNumberOfSecondaries(num);
+
+    for (G4int i=0; i<num; ++i) {
       if(secParticles[i]) {
 	G4Track* t = new G4Track(secParticles[i], track.GetGlobalTime(), 
 				 track.GetPosition());
@@ -2069,7 +2074,12 @@ G4VEnergyLossProcess::ActivateSecondaryBiasing(const G4String& region,
 					       G4double factor, 
 					       G4double energyLimit)
 {
-  if (0.0 < factor) { 
+  if (0.0 <= factor) {
+
+    // Range cut can be applied only for e-
+    if(0.0 == factor && secondaryParticle != G4Electron::Electron())
+      { return; }
+
     if(!biasManager) { biasManager = new G4EmBiasingManager(); }
     biasManager->ActivateSecondaryBiasing(region, factor, energyLimit);
     if(1 < verboseLevel) {

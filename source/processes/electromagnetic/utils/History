@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 October 12: V.Ivant (emutils-V09-05-48)
+- G4EmBiasingManager - cleanup the code; do not modify ParticleChange
+    when apply RussianRoulette (monor CPU saving); moved
+    RussianRoulette method to inline; added range cut option
+- G4VEmProcess, G4VEnergyLossProcess, G4EmProcessOption - add
+    corresponding modifiction needed for biasing interface
+
 20 October 12: V.Ivant (emutils-V09-05-47)
 - G4VMultipleScatteringModel - fixed typo in previous tag;
     compute true path length even is msc model is inactive 

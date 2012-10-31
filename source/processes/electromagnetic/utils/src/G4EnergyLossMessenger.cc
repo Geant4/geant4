@@ -549,7 +549,6 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     std::istringstream is(newValue);
     is >> s1 >> s2 >> fb >> en >> unt;
     en *= G4UIcommand::ValueOf(unt);    
-
     if (s1=="phot"||s1=="compt"||s1=="conv") 
                 opt->ActivateSecondaryBiasingForGamma(s1,s2,fb,en);
     else opt->ActivateSecondaryBiasing(s1,s2,fb,en);

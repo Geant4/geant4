@@ -613,7 +613,7 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
-                                              const G4Step&)
+                                              const G4Step& step)
 {
   // In all cases clear number of interaction lengths
   theNumberOfInteractionLengthLeft = -1.0;
@@ -682,11 +682,17 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
   // bremsstrahlung splitting or Russian roulette
   if(biasManager) {
     if(biasManager->SecondaryBiasingRegion(currentCoupleIndex)) {
+      G4double eloss = 0.0;
       weight *= biasManager->ApplySecondaryBiasing(secParticles,
-						   currentCoupleIndex,currentModel,
-						   currentCouple, &track, 
-						   (*theCuts)[currentCoupleIndex], 
-						   &fParticleChange);
+						   track, currentModel,
+						   &fParticleChange,
+						   eloss, currentCoupleIndex, 
+						   (*theCuts)[currentCoupleIndex],
+						   step.GetPostStepPoint()->GetSafety());
+      if(eloss > 0.0) {
+	eloss += fParticleChange.GetLocalEnergyDeposit();
+        fParticleChange.ProposeLocalEnergyDeposit(eloss);
+      }
     }
   }
 
@@ -1044,7 +1050,12 @@ G4VEmProcess::ActivateSecondaryBiasing(const G4String& region,
                  G4double factor,
                  G4double energyLimit)
 {
-  if (0.0 < factor) {
+  if (0.0 <= factor) {
+
+    // Range cut can be applied only for e-
+    if(0.0 == factor && secondaryParticle != G4Electron::Electron())
+      { return; }
+
     if(!biasManager) { biasManager = new G4EmBiasingManager(); }
     biasManager->ActivateSecondaryBiasing(region, factor, energyLimit);
     if(1 < verboseLevel) {

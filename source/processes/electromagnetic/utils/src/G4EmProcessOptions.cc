@@ -484,7 +484,7 @@ G4EmProcessOptions::ActivateSecondaryBiasing(const G4String& name,
 					     G4double factor,
 					     G4double energyLimit)
 {
-  if(0.0 >= factor) { return; }
+  if(0.0 > factor) { return; }
   const std::vector<G4VEnergyLossProcess*>& v =
         theManager->GetEnergyLossProcessVector();
   std::vector<G4VEnergyLossProcess*>::const_iterator itr;
@@ -506,7 +506,7 @@ G4EmProcessOptions::ActivateSecondaryBiasingForGamma(const G4String& name,
 					     G4double factor,
 					     G4double energyLimit)
 {
-  if(0.0 >= factor) { return; }
+  if(0.0 > factor) { return; }
   const std::vector<G4VEmProcess*>& v =
         theManager->GetEmProcessVector();
   std::vector<G4VEmProcess*>::const_iterator itr;
