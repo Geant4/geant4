@@ -32,11 +32,13 @@
 // design and code review.
 //
 
-#include "globals.hh"
 #include <map>
+
+#include "globals.hh"
 
 #include "G4HumanPhantomConstruction.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4HumanPhantomSD.hh"
 #include "G4SDManager.hh"
 

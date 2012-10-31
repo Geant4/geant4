@@ -35,17 +35,14 @@
 #include "G4HumanPhantomConstruction.hh"
 #include "G4HumanPhantomPrimaryGeneratorMessenger.hh"
 
+#include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
-#include "globals.hh"
 
 #include "G4RunManager.hh"
-//#ifdef G$ANALYSIS_USE
-//#include "G4HumanPhantomAnalysisManager.hh"
-//#endif
-
 #include "G4ios.hh"
 
 G4HumanPhantomPrimaryGeneratorAction::G4HumanPhantomPrimaryGeneratorAction()

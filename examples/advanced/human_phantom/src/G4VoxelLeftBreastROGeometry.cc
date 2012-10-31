@@ -32,6 +32,8 @@
 // design and code review.
 //
 #include "G4VoxelLeftBreastROGeometry.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4HumanDummyLeftBreastSD.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
@@ -43,9 +45,8 @@
 #include "G4Material.hh"
 #include "G4Tubs.hh"
 
-G4VoxelLeftBreastROGeometry::G4VoxelLeftBreastROGeometry(G4String aString):
-                                               
-  G4VReadOutGeometry(aString), ROvoxel_phys(0)
+G4VoxelLeftBreastROGeometry::G4VoxelLeftBreastROGeometry(G4String aString)
+ : G4VReadOutGeometry(aString), ROvoxel_phys(0)
 {
 }
 

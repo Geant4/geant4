@@ -34,6 +34,7 @@
 #include "G4MIRDPelvis.hh"
 
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
 #include "G4HumanPhantomMaterial.hh"
@@ -47,6 +48,7 @@
 #include "G4VSolid.hh"
 #include "G4LogicalVolume.hh"
 #include "G4HumanPhantomColour.hh"
+
 G4MIRDPelvis::G4MIRDPelvis()
 {
 }

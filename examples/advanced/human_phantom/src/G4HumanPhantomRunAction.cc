@@ -34,9 +34,10 @@
 
 #include "G4HumanPhantomRunAction.hh"
 #include "G4HumanPhantomAnalysis.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 #include "G4ios.hh"
 #include "G4Run.hh"
-#include "G4UnitsTable.hh"
 
 G4HumanPhantomRunAction::G4HumanPhantomRunAction()
 {
