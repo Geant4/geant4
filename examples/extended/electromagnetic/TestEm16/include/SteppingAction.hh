@@ -39,21 +39,19 @@
 #include "globals.hh"
 
 class RunAction;
-class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class SteppingAction : public G4UserSteppingAction
 {
 public:
-  SteppingAction(RunAction*, HistoManager*);
-  ~SteppingAction();
+  SteppingAction(RunAction*);
+ ~SteppingAction();
 
-  void UserSteppingAction(const G4Step*);
+  virtual void UserSteppingAction(const G4Step*);
 
 private:
   RunAction*    fRunAction;
-  HistoManager* fHistoManager;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

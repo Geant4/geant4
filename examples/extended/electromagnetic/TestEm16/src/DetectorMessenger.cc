@@ -85,7 +85,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
 
   fTrackdir = new G4UIdirectory("/testem/tracking/");
   fTrackdir->SetGuidance("step length");
-  fMaxStepLength = new G4UIcmdWithADoubleAndUnit("/testem/tracking/setfMaxStepLength",this);
+  fMaxStepLength = new G4UIcmdWithADoubleAndUnit("/testem/tracking/setMaxStepLength",this);
   fMaxStepLength->SetGuidance("Set the maximum length of tracking step");
   fMaxStepLength->SetGuidance("when integrating magnetic field line.");
   fMaxStepLength->SetParameterName("Size",false);

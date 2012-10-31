@@ -49,9 +49,9 @@ class PhysicsListMessenger: public G4UImessenger
 public:
 
   PhysicsListMessenger(PhysicsList*);
-  virtual ~PhysicsListMessenger();
+ ~PhysicsListMessenger();
 
-  void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String);
 
 private:
 

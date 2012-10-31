@@ -19,6 +19,7 @@
 /process/inactivate phot
 /process/inactivate compt
 /process/inactivate conv
+/process/inactivate Rayl
 #
 /testem/det/setField 1.0 tesla
 #

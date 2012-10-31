@@ -46,18 +46,18 @@ class PhysicsList: public G4VUserPhysicsList
 {
 public:
   PhysicsList();
-  ~PhysicsList();
+ ~PhysicsList();
 
   // Construct particles
-  void ConstructParticle();
+  virtual void ConstructParticle();
   void ConstructBosons();
   void ConstructLeptons();
 
-  void SetCuts();
+  virtual void SetCuts();
   void SetAnalyticSR(G4bool val) {fSRType = val;};
 
   // Construct processes and register them
-  void ConstructProcess();
+  virtual void ConstructProcess();
   void ConstructGeneral();
   void ConstructEM();
 

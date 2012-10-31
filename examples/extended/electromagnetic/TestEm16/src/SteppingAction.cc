@@ -44,8 +44,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(RunAction* RuAct, HistoManager* histo)
-:fRunAction(RuAct), fHistoManager(histo)
+SteppingAction::SteppingAction(RunAction* RuAct)
+:fRunAction(RuAct)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -102,12 +102,14 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
                      << " #secondaries lp=" << lp
                      << '\n';
             }
-          fHistoManager->FillHisto(1,Egamma);
+	    
+	  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+          analysisManager->FillH1(1,Egamma);
 
           // power spectrum : gamma weighted with its energy
-          fHistoManager->FillHisto(2,Egamma,Egamma/keV); 
+          analysisManager->FillH1(2,Egamma,Egamma/keV); 
 
-          fHistoManager->FillHisto(3,aStep->GetStepLength());
+          analysisManager->FillH1(3,aStep->GetStepLength());
         }
     }
 }
