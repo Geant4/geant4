@@ -51,16 +51,16 @@ class F01PrimaryGeneratorMessenger: public G4UImessenger
 {
   public:
     F01PrimaryGeneratorMessenger(F01PrimaryGeneratorAction*);
-   ~F01PrimaryGeneratorMessenger();
+    ~F01PrimaryGeneratorMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    F01PrimaryGeneratorAction* F01Action; 
-    G4UIcmdWithAString*        RndmCmd;
-    G4UIcmdWithADoubleAndUnit* setxvertexCmd;
-    G4UIcmdWithADoubleAndUnit* setyvertexCmd;
-    G4UIcmdWithADoubleAndUnit* setzvertexCmd;
+    F01PrimaryGeneratorAction* fAction; 
+    G4UIcmdWithAString*        fRndmCmd;
+    G4UIcmdWithADoubleAndUnit* fSetXVertexCmd;
+    G4UIcmdWithADoubleAndUnit* fSetYVertexCmd;
+    G4UIcmdWithADoubleAndUnit* fSetZVertexCmd;
 };
 
 #endif

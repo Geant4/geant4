@@ -57,17 +57,17 @@ class F01RunMessenger: public G4UImessenger
   public:
 
    F01RunMessenger(F01RunAction* );
-  ~F01RunMessenger();
+   ~F01RunMessenger();
 
-   void SetNewValue(G4UIcommand* ,G4String );
+   virtual void SetNewValue(G4UIcommand* ,G4String );
 
   private:
 
-   F01RunAction*              runAction;
+   F01RunAction*              fRunAction;
    
-   G4UIdirectory*             RndmDir;
-   G4UIcmdWithAnInteger*      RndmSaveCmd;    
-   G4UIcmdWithAString*        RndmReadCmd;    
+   G4UIdirectory*             fRndmDir;
+   G4UIcmdWithAnInteger*      fRndmSaveCmd;    
+   G4UIcmdWithAString*        fRndmReadCmd;    
  
 };
 

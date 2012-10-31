@@ -53,19 +53,19 @@ class F01RunAction : public G4UserRunAction
 {
   public:
     F01RunAction();
-   ~F01RunAction();
+    ~F01RunAction();
 
   public:
-    void BeginOfRunAction(const G4Run*);
-    void   EndOfRunAction(const G4Run*);
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void   EndOfRunAction(const G4Run*);
 
-    void  SetRndmFreq(G4int val) {saveRndm = val;}
-    G4int GetRndmFreq()          {return saveRndm;}
+    void  SetRndmFreq(G4int val) {fSaveRndm = val;}
+    G4int GetRndmFreq() const    {return fSaveRndm;}
 
   private:
 
-    F01RunMessenger* runMessenger;
-    G4int saveRndm;    
+    F01RunMessenger* fMessenger;
+    G4int fSaveRndm;    
 };
 
 #endif

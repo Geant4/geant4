@@ -152,7 +152,7 @@ void F01SteppingVerbose::TrackingStarted()
 {
 
   CopyState();
-G4int prec = G4cout.precision(6);
+  G4int prec = G4cout.precision(6);
   if( verboseLevel > 0 ){
 
     G4cout << std::setw( 5) << "Step#"      << " "

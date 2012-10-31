@@ -33,6 +33,9 @@
 //   User Field setup class implementation.
 //
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 #include "F01FieldSetup.hh"
 #include "F01FieldMessenger.hh"
 
@@ -60,30 +63,45 @@
 
 // #include "G4SIunits.hh"
 
-//////////////////////////////////////////////////////////////////////////
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 //  Constructors:
 
 F01FieldSetup::F01FieldSetup(G4ThreeVector fieldVector)
-  : fChordFinder(0), fStepper(0)
-{
-  fMagneticField = new G4UniformMagField( fieldVector ); 
+ : fFieldManager(0),
+   fChordFinder(0),
+   fEquation(0), 
+   fMagneticField(new G4UniformMagField(fieldVector)),
     // G4ThreeVector(3.3*tesla, 0.0, 0.0 ));
+   fStepper(0),
+   fStepperType(0),
+   fMinStep(0.),
+   fFieldMessenger(0)
+{
   G4cout << " F01FieldSetup: magnetic field set to Uniform( "
          << fieldVector << " ) " << G4endl;
   InitialiseAll();
 }
 
 F01FieldSetup::F01FieldSetup()
-  : fChordFinder(0), fStepper(0)
+ : fFieldManager(0),
+   fChordFinder(0),
+   fEquation(0), 
+   fMagneticField(new G4UniformMagField(G4ThreeVector())),
+    // G4ThreeVector(0.0, 0.0, 0.0 ));
+   fStepper(0),
+   fStepperType(0),
+   fMinStep(0.),
+   fFieldMessenger(0)
 {
-  fMagneticField = new G4UniformMagField( G4ThreeVector(0.0, 0.0, 0.0 ) );
-  G4cout << " F01FieldSetup: magnetic field set to Uniform( 0.0, 0, 0 ) " << G4endl;
+  G4cout << " F01FieldSetup: magnetic field set to Uniform( 0.0, 0, 0 ) " 
+         << G4endl;
   InitialiseAll();
 }
 
-void
-F01FieldSetup::InitialiseAll()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void F01FieldSetup::InitialiseAll()
 {
   fFieldMessenger = new F01FieldMessenger(this) ;  
  
@@ -94,34 +112,33 @@ F01FieldSetup::InitialiseAll()
   fStepperType = 4 ;      // ClassicalRK4 is default stepper
 
   fFieldManager = G4TransportationManager::GetTransportationManager()
-                                         ->GetFieldManager();
+                    ->GetFieldManager();
   CreateStepperAndChordFinder();
 }
 
-////////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 F01FieldSetup::~F01FieldSetup()
 {
   // GetGlobalFieldManager()->SetDetectorField(0);
 
-  if(fMagneticField) delete fMagneticField;
-  if(fChordFinder)   delete fChordFinder;
-  if(fStepper)       delete fStepper;
+  if (fMagneticField) delete fMagneticField;
+  if (fChordFinder)   delete fChordFinder;
+  if (fStepper)       delete fStepper;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Update field
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void F01FieldSetup::CreateStepperAndChordFinder()
 {
+// Update field
+
   SetStepper();
   G4cout<<"The minimal step is equal to "<<fMinStep/mm<<" mm"<<G4endl ;
 
   fFieldManager->SetDetectorField(fMagneticField );
 
-  if(fChordFinder) delete fChordFinder;
+  if (fChordFinder) delete fChordFinder;
 
   fChordFinder = new G4ChordFinder( fMagneticField, fMinStep,fStepper);
 
@@ -130,14 +147,13 @@ void F01FieldSetup::CreateStepperAndChordFinder()
   return;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Set stepper according to the stepper type
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void F01FieldSetup::SetStepper()
 {
-  if(fStepper) delete fStepper;
+// Set stepper according to the stepper type
+
+  if (fStepper) delete fStepper;
 
   switch ( fStepperType ) 
   {
@@ -186,13 +202,12 @@ void F01FieldSetup::SetStepper()
   return; 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Set the value of the Global Field to fieldValue along Z
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void F01FieldSetup::SetFieldValue(G4double fieldStrength)
 {
+// Set the value of the Global Field to fieldValue along Z
+
 #ifdef G4VERBOSE
   G4cout << "Setting Field strength to " 
          << fieldStrength / gauss  << " Gauss."; // << G4endl;
@@ -205,14 +220,14 @@ void F01FieldSetup::SetFieldValue(G4double fieldStrength)
 #ifdef G4VERBOSE
   G4double fieldValue[6],  position[4]; 
   position[0] = position[1] = position[2] = position[3] = 0.0; 
-  if( fieldStrength != 0.0 ){
+  if ( fieldStrength != 0.0 ) {
     fMagneticField->GetFieldValue( position, fieldValue);
     G4ThreeVector fieldVec(fieldValue[0], fieldValue[1], fieldValue[2]); 
     // G4cout << " fMagneticField is now " << fMagneticField 
     G4cout << " Magnetic field vector is " 
            << fieldVec / gauss << " G " << G4endl; 
-  }else{
-    if( fMagneticField == 0 )
+  } else {
+    if ( fMagneticField == 0 )
       G4cout << " Magnetic field pointer is null." << G4endl;
     else
       G4Exception("F01FieldSetup::SetFieldValue(double)",
@@ -223,18 +238,17 @@ void F01FieldSetup::SetFieldValue(G4double fieldStrength)
 #endif
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Set the value of the Global Field
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void F01FieldSetup::SetFieldValue(G4ThreeVector fieldVector)
 {
-  if(fMagneticField) delete fMagneticField;
+// Set the value of the Global Field
+
+  if (fMagneticField) delete fMagneticField;
     
-  if(fieldVector != G4ThreeVector(0.,0.,0.))
+  if (fieldVector != G4ThreeVector(0.,0.,0.))
   { 
-    fMagneticField = new  G4UniformMagField(fieldVector);
+    fMagneticField = new G4UniformMagField(fieldVector);
     // CreateStepperAndChordFinder();
   }
   else 
@@ -252,12 +266,15 @@ void F01FieldSetup::SetFieldValue(G4ThreeVector fieldVector)
 
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4FieldManager* F01FieldSetup::GetGlobalFieldManager()
+{
 //  Utility method
 
-G4FieldManager*  F01FieldSetup::GetGlobalFieldManager()
-{
   return G4TransportationManager::GetTransportationManager()
-                                ->GetFieldManager();
+           ->GetFieldManager();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+

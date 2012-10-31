@@ -42,7 +42,6 @@
 #include "G4UImessenger.hh"
 
 class F01EventAction;
-class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithADoubleAndUnit;
 
@@ -57,10 +56,9 @@ class F01EventActionMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    F01EventAction* eventAction;   
-    G4UIcmdWithAnInteger* setVerboseCmd;
-    G4UIcmdWithAString*   DrawCmd;
-    G4UIcmdWithAnInteger* PrintCmd;
+    F01EventAction* fEventAction;   
+    G4UIcmdWithAnInteger* fSetVerboseCmd;
+    G4UIcmdWithAnInteger* fPrintCmd;
 };
 
 #endif

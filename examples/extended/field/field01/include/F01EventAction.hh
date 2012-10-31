@@ -50,26 +50,21 @@ class F01EventAction : public G4UserEventAction
 {
   public:
     F01EventAction(F01RunAction* F01RA);
-   ~F01EventAction();
+    ~F01EventAction();
 
   public:
-    void BeginOfEventAction(const G4Event*);
-    void EndOfEventAction(const G4Event*);
+    virtual void BeginOfEventAction(const G4Event*);
+    virtual void EndOfEventAction(const G4Event*);
 
-    G4int GetEventno();
-    void setEventVerbose(G4int level);
-    
-    void SetDrawFlag(G4String val)  {drawFlag = val;};
-    void SetPrintModulo(G4int val)  {printModulo = val;};
+    void SetEventVerbose(G4int level);
+    void SetPrintModulo(G4int val)  {fPrintModulo = val;};
         
   private:
-    G4int    calorimeterCollID;
-    F01EventActionMessenger*  eventMessenger;
-    F01RunAction* runaction;
-    G4int verboselevel;
-    
-    G4String drawFlag;
-    G4int    printModulo;             
+    G4int    fCalorimeterCollID;
+    F01EventActionMessenger*  fEventMessenger;
+    F01RunAction* fRunAction;
+    G4int fVerboseLevel;
+    G4int fPrintModulo;             
 };
 
 #endif

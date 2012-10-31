@@ -62,7 +62,7 @@ public:
   F01FieldSetup(G4ThreeVector) ;  //  The value of the field
   F01FieldSetup() ;               //  A zero field
 
- ~F01FieldSetup() ;  
+  ~F01FieldSetup() ;  
       
   
   void SetStepperType( G4int i) { fStepperType = i ; }

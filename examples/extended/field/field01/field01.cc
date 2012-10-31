@@ -50,7 +50,6 @@
 #include "F01PrimaryGeneratorAction.hh"
 #include "F01RunAction.hh"
 #include "F01EventAction.hh"
-#include "F01SteppingAction.hh"
 #include "F01SteppingVerbose.hh"
 
 #ifdef G4VIS_USE
@@ -98,9 +97,6 @@ int main(int argc,char** argv)
   F01EventAction* eventAction = new F01EventAction(runAction);
 
   runManager->SetUserAction(eventAction);
-
-  F01SteppingAction* steppingAction = new F01SteppingAction();
-  runManager->SetUserAction(steppingAction);
   
   // Initialize G4 kernel, physics tables ...
 

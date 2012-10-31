@@ -49,7 +49,7 @@ class F01CalorHit : public G4VHit
   public:
 
       F01CalorHit();
-     ~F01CalorHit();
+      ~F01CalorHit();
       F01CalorHit(const F01CalorHit&);
       const F01CalorHit& operator=(const F01CalorHit&);
       G4int operator==(const F01CalorHit&) const;
@@ -57,22 +57,22 @@ class F01CalorHit : public G4VHit
       inline void* operator new(size_t);
       inline void  operator delete(void*);
 
-      void Print();
+      virtual void Print();
       
   public:
   
-      void AddAbs(G4double de, G4double dl) {EdepAbs += de; TrackLengthAbs += dl;};
-      void AddGap(G4double de, G4double dl) {EdepGap += de; TrackLengthGap += dl;};      
+      void AddAbs(G4double de, G4double dl) {fEdepAbs += de; fTrackLengthAbs += dl;};
+      void AddGap(G4double de, G4double dl) {fEdepGap += de; fTrackLengthGap += dl;};      
                  
-      G4double GetEdepAbs()     { return EdepAbs; };
-      G4double GetTrakAbs()     { return TrackLengthAbs; };
-      G4double GetEdepGap()     { return EdepGap; };
-      G4double GetTrakGap()     { return TrackLengthGap; };
+      G4double GetEdepAbs()     { return fEdepAbs; };
+      G4double GetTrackAbs()    { return fTrackLengthAbs; };
+      G4double GetEdepGap()     { return fEdepGap; };
+      G4double GetTrackGap()    { return fTrackLengthGap; };
      
   private:
   
-      G4double EdepAbs, TrackLengthAbs;
-      G4double EdepGap, TrackLengthGap;
+      G4double fEdepAbs, fTrackLengthAbs;
+      G4double fEdepGap, fTrackLengthGap;
       
 };
 

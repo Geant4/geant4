@@ -32,6 +32,8 @@
 //
 // 
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "F01RunAction.hh"
 #include "F01RunMessenger.hh"
@@ -44,29 +46,31 @@
 
 #include "Randomize.hh"
 
-//////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 F01RunAction::F01RunAction()
-  : saveRndm(0)
+  : G4UserRunAction(),
+    fMessenger(0),
+    fSaveRndm(0)
 {
-  runMessenger = new F01RunMessenger(this);
+  fMessenger = new F01RunMessenger(this);
 }
 
-////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 F01RunAction::~F01RunAction()
 {
-  delete runMessenger;
+  delete fMessenger;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void F01RunAction::BeginOfRunAction(const G4Run* aRun)
+void F01RunAction::BeginOfRunAction(const G4Run* run)
 {  
-  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
+  G4cout << "### Run " << run->GetRunID() << " start." << G4endl;
   
   // save Rndm status
-  if (saveRndm > 0)
+  if (fSaveRndm > 0)
   { 
       CLHEP::HepRandom::showEngineStatus();
       CLHEP::HepRandom::saveEngineStatus("beginOfRun.rndm");
@@ -78,7 +82,7 @@ void F01RunAction::BeginOfRunAction(const G4Run* aRun)
   if(pVVisManager)    UI->ApplyCommand("/vis/scene/notifyHandlers");
 }
 
-/////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void F01RunAction::EndOfRunAction(const G4Run*)
 {
@@ -89,13 +93,11 @@ void F01RunAction::EndOfRunAction(const G4Run*)
 
   // save Rndm status
 
-  if (saveRndm == 1)
+  if (fSaveRndm == 1)
   { 
     CLHEP::HepRandom::showEngineStatus();
     CLHEP::HepRandom::saveEngineStatus("endOfRun.rndm");
   }     
 }
 
-//
-//
-////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
