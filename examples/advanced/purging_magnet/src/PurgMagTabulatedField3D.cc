@@ -37,6 +37,7 @@
 //
 
 #include "PurgMagTabulatedField3D.hh"
+#include "G4SystemOfUnits.hh"
 
 PurgMagTabulatedField3D::PurgMagTabulatedField3D( const char* filename, double zOffset ) 
   :fZoffset(zOffset),invertX(false),invertY(false),invertZ(false)

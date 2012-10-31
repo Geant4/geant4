@@ -37,8 +37,10 @@
 //
 #include "PurgMagDetectorConstruction.hh"
 #include "PurgMagTabulatedField3D.hh"
-#include "G4ThreeVector.hh"
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4ThreeVector.hh"
 #include "G4Material.hh"
 #include "G4Box.hh"
 #include "G4Trd.hh"

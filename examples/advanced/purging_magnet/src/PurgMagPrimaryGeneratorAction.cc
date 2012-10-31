@@ -42,12 +42,13 @@
 
 #include "PurgMagDetectorConstruction.hh"
 
+#include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "Randomize.hh"
-#include "G4UnitsTable.hh"
 
 //Print position of primaries.
 #define POSITION 0

@@ -9,6 +9,9 @@ $Id: History,v 1.13 2010-11-18 13:10:47 allison Exp $
                       Category History file
                       ---------------------
 
+12.10.2012 - Gabriele Cosmo (purmag-V09-05-01)
+- Explicit inclusion of units and constants headers.
+
 08.12.2011 - Pere Mato (purtag-V09-05-00)
 - Added CMakeLists.txt file
 
