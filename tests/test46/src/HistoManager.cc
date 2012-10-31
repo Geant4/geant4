@@ -43,6 +43,8 @@
 
 #include "DetectorConstruction.hh"
 #include "HistoManager.hh"
+#include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 #include "G4Neutron.hh"
 #include "G4Proton.hh"
@@ -51,7 +53,6 @@
 #include "G4Gamma.hh"
 #include "Histo.hh"
 #include "G4Track.hh"
-#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
