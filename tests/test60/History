@@ -15,8 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-30 Sept 2011 G.Folger     tag test60-V09-04-03
-- Fix gcc46 compilation warning in PrimaryGeneratorAction.cc
+11 Oct 2012   G.Cosmo     tag test60-V09-05-00
+            - Explicit inclusion of units and constants headers.
+
+30 Sep 2011   G.Folger    tag test60-V09-04-03
+            - Fix gcc46 compilation warning in PrimaryGeneratorAction.cc
 
 Sep 10, 2011  Pere Mato   tag test60-V09-04-02
               Fixed missing dependency between tests in CMakeLists.txt
