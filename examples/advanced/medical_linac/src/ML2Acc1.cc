@@ -43,6 +43,7 @@
 
 #include "ML2Acc1.hh"
 #include "ML2Acc1Messenger.hh"
+#include "G4SystemOfUnits.hh"
 
 CML2Acc1::CML2Acc1()
 {

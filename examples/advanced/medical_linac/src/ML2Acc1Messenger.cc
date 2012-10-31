@@ -43,6 +43,7 @@
 
 #include "ML2Acc1Messenger.hh"
 #include "ML2Acc1.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"

@@ -40,8 +40,8 @@
 //
 //*******************************************************//
 
-
 #include "ML2Ph_BoxInBox.hh"
+#include "G4SystemOfUnits.hh"
 
 CML2Ph_BoxInBox::CML2Ph_BoxInBox()
 {// phantom size

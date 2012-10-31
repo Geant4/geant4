@@ -40,10 +40,9 @@
 //
 //*******************************************************//
 
-
 #include "ML2AcceleratorConstruction.hh"
 #include "ML2AcceleratorConstructionMessenger.hh"
-
+#include "G4SystemOfUnits.hh"
 
 CML2AcceleratorConstruction::CML2AcceleratorConstruction(void)
 {
