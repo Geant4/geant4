@@ -72,7 +72,8 @@ G4Track::G4Track(G4DynamicParticle* apValueDynamicParticle,
     fpUserInformation(0),
     prev_mat(0),  groupvel(0),
     prev_velocity(0.0), prev_momentum(0.0),
-    is_OpticalPhoton(false)
+    is_OpticalPhoton(false),
+    useGivenVelocity(false)
 {    
   static G4bool isFirstTime = true;
   static G4ParticleDefinition* fOpticalPhoton =0;
@@ -207,7 +208,8 @@ void G4Track::CopyTrackInfo(const G4Track& right)
 G4double G4Track::CalculateVelocity() const
 ///////////////////
 { 
-    
+  if (useGivenVelocity) return fVelocity;    
+
   G4double velocity = c_light ;
   
   G4double mass = fpDynamicParticle->GetMass();

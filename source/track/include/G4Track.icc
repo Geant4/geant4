@@ -126,8 +126,14 @@
    { return fVelocity; }
 
    inline void  G4Track::SetVelocity(G4double val)
-   { fVelocity = val; }
- 
+   { fVelocity = val; } 
+
+   inline G4bool   G4Track::UseGivenVelocity() const
+   { return  useGivenVelocity;}
+
+   inline void     G4Track::UseGivenVelocity(G4bool val)
+   { useGivenVelocity = val;}
+
 
 // volume
    inline G4VPhysicalVolume* G4Track::GetVolume() const
