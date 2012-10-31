@@ -77,6 +77,8 @@
 
 using namespace CLHEP;
 
+// const char *StrInside[3]= { "Outside", "Surface", "Inside" };
+
 ///////////////////////////////////////////////////////////////
 //
 // Constructor - check parameters, convert angles so 0<sphi+dpshi<=2_PI
@@ -766,9 +768,11 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
 
   if( rho > delta && pt != 0.0 )
   {
-    nR = G4ThreeVector( p.x()*(1-fRtor/rho)/pt,
-                        p.y()*(1-fRtor/rho)/pt,
-                        p.z()/pt                 );
+    G4double redFactor= (rho-fRtor)/rho;
+    nR = G4ThreeVector( p.x()*redFactor,  // p.x()*(1.-fRtor/rho),
+                        p.y()*redFactor,  // p.y()*(1.-fRtor/rho),
+                        p.z()          );
+    nR *= 1.0/pt;
   }
 
   if ( fDPhi < twopi ) // && rho ) // old limitation against (0,0,z)
@@ -791,12 +795,14 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
     noSurfaces ++;
     sumnorm += nR;
   }
-  if( fRmin && (distRMin <= delta) )
+  else if( fRmin && (distRMin <= delta) )  // Must not be on both Outer and Inner
   {
     noSurfaces ++;
     sumnorm -= nR;
   }
-  if( fDPhi < twopi )   
+
+  //  To be on one of the 'phi' surfaces, it must be within the 'tube' - with tolerance
+  if( (fDPhi < twopi) && (fRmin-delta <= pt) && (pt <= (fRmax+delta)) )
   {
     if (distSPhi <= dAngle)
     {
@@ -805,6 +811,7 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
     }
     if (distEPhi <= dAngle) 
     {
+
       noSurfaces ++;
       sumnorm += nPe;
     }
@@ -836,12 +843,12 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
                     JustWarning, ed,
                     "Method *fails* to find normal, even though point is on surface!" );
      }else{
-#ifdef G4CSGDEBUG
+        // #ifdef G4CSGDEBUG
         static const char* NameInside[3]= { "Inside", "Surface", "Outside" };
         ed << "  The point is " << NameInside[inIt] << " the solid. "<< G4endl;
         G4Exception("G4Torus::SurfaceNormal(p)", "GeomSolids1002",
                 JustWarning, ed, "Point p is not on surface !?" );
-#endif
+        // #endif
      }
 
      norm = ApproxSurfaceNormal(p);
@@ -849,8 +856,8 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
   else if ( noSurfaces == 1 )  { norm = sumnorm; }
   else                         { norm = sumnorm.unit(); }
 
-  //   G4cout << "G4Torus::SurfaceNormal p= " << p << " returns norm= " << norm << G4endl;
-   
+  // G4cout << "G4Torus::SurfaceNormal p= " << p << " returns norm= " << norm << G4endl;
+
   return norm ;
 }
 
@@ -1026,10 +1033,13 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
   G4double Rtor2 = fRtor*fRtor ;
 
   snxt = SolveNumericJT(p,v,fRmax,true);
+   //    **************
+
   if (fRmin)  // Possible Rmin intersection
   {
     sd[0] = SolveNumericJT(p,v,fRmin,true);
-    if ( sd[0] < snxt )  { snxt = sd[0] ; }
+     //     **************
+     if ( sd[0] < snxt )  { snxt = sd[0] ; }
   }
 
   //
@@ -1071,7 +1081,7 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
             // with correct half-plane
             //
             if ((yi*cosCPhi-xi*sinCPhi)<=0)  { snxt=sphi; }
-          }    
+          }
         }
       }
     }
@@ -1087,6 +1097,7 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
       if (Dist < halfCarTolerance )
       {
         sphi = Dist/Comp ;
+
         if (sphi < snxt )
         {
           if (sphi < 0 )  { sphi = 0 ; }
@@ -1102,7 +1113,7 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
             // z and r intersections good - check intersecting
             // with correct half-plane
             //
-            if ((yi*cosCPhi-xi*sinCPhi)>=0)  { snxt=sphi; }
+            if ((yi*cosCPhi-xi*sinCPhi)>=0) { snxt=sphi; }
           }    
         }
       }
@@ -1196,12 +1207,18 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
   // To be done: Check the precision of this calculation.
   // If you want return always validNorm = false, then take the version below
   
-  G4double Rtor2 = fRtor*fRtor ;
+  // G4double Rtor2 = fRtor*fRtor ;
   G4double rho2  = p.x()*p.x()+p.y()*p.y();
   G4double rho   = std::sqrt(rho2) ;
 
 
-  G4double pt2   = std::fabs(rho2 + p.z()*p.z() + Rtor2 - 2*fRtor*rho) ;
+  G4double pt2   = rho2 + p.z()*p.z() + fRtor * (fRtor - 2.0*rho); // Regroup for slightly better FP accuracy
+  if( pt2 < 0.0){
+     G4cerr << " Accuracy ERROR in calculation of 'pt2' in G4SubtractionSolid::DistanceToOut " << G4endl
+     << "   Pt2 is negative  pt2= " <<  pt2 << "   whereas it is length Vector^2, so it should be >= 0.0" << G4endl;
+     pt2= std::fabs( pt2 );
+  }
+     
   G4double pt    = std::sqrt(pt2) ;
 
   G4double pDotV = p.x()*v.x() + p.y()*v.y() + p.z()*v.z() ;
@@ -1224,6 +1241,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
                           p.z()/pt                  ) ;
       *validNorm = true ;
     }
+     
     return snxt = 0 ; // Leaving by Rmax immediately
   }
   
@@ -1312,7 +1330,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
                             && (pDistE >  halfCarTolerance) ) )  )
       {
         // Inside both phi *full* planes
-          
+         
         if ( compS < 0 )
         {
           sphi = pDistS/compS ;
@@ -1422,6 +1440,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
       snxt=sphi;
       side=sidephi;
     }
+     
   }
 
   G4double rhoi2,rhoi,it2,it,iDotxyNmax ;

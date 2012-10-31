@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct 11, 2012   J.Apostolakis             geom-csg-V09-05-07
+- G4Torus: Small additional changes, to reorder a few computation 
+            for better FP accuracy.
+
 Oct  4, 2012   J.Apostolakis             geom-csg-V09-05-06
 - G4Torus: Revised the values of delta, to account for precision loss 
             in calculating radius 'pt'.
