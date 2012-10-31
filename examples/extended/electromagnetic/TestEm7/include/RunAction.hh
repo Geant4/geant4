@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm7/include/RunAction.hh
+/// \brief Definition of the RunAction class
+//
 // $Id: RunAction.hh,v 1.15 2010-09-17 18:45:43 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -34,10 +37,11 @@
 
 #include "G4UserRunAction.hh"
 #include "globals.hh"
+#include "g4root.hh"
+//#include "g4xml.hh"
 
 class DetectorConstruction;
 class PhysicsList;
-class HistoManager;
 class PrimaryGeneratorAction;
 
 class G4Run;
@@ -47,25 +51,25 @@ class G4Run;
 class RunAction : public G4UserRunAction
 {
 public:
-  RunAction(DetectorConstruction*, PhysicsList*, HistoManager*,
-	    PrimaryGeneratorAction*);
+
+  RunAction(DetectorConstruction*, PhysicsList*, PrimaryGeneratorAction*);
   virtual ~RunAction();
 
-  void BeginOfRunAction(const G4Run*);
-  void   EndOfRunAction(const G4Run*);
+  virtual void BeginOfRunAction(const G4Run*);
+  virtual void   EndOfRunAction(const G4Run*);
     
-  void FillTallyEdep(G4int n, G4double e)  {fTallyEdep[n] += e;};
-  void FillEdep(G4double de, G4double eni) {fEdeptot += de; fEniel += eni;};
-    
-  void AddProjRange (G4double x) 
-  {fProjRange += x; fProjRange2 += x*x; fRange++;};
-  void AddPrimaryStep() {fNbPrimarySteps++;};
+  inline void FillTallyEdep(G4int n, G4double e);
+  inline void FillEdep(G4double de, G4double eni, G4double x);
+  inline void AddProjRange (G4double x);
+  inline void AddPrimaryStep();
                    
 private:  
     
+  void BookHisto();
+
+  G4AnalysisManager*      fAnalysisManager;
   DetectorConstruction*   fDetector;
   PhysicsList*            fPhysics;
-  HistoManager*           fHistoManager;
   PrimaryGeneratorAction* fKinematic;
   G4double*               fTallyEdep;   
   G4double                fProjRange, fProjRange2;
@@ -73,6 +77,37 @@ private:
   G4int                   fNbPrimarySteps;
   G4int                   fRange;
 };
+
+inline void RunAction::FillTallyEdep(G4int n, G4double e)  
+{
+  fTallyEdep[n] += e;
+}
+  
+inline void RunAction::FillEdep(G4double de, G4double eni, G4double x) 
+{
+  fEdeptot += de; 
+  fEniel += eni;
+  if (fAnalysisManager->IsActive()) {
+    fAnalysisManager->FillH1(1, x, de);
+    fAnalysisManager->FillH1(2, x, de);
+  }
+}
+    
+inline void RunAction::AddProjRange (G4double x) 
+{
+  fProjRange += x; 
+  fProjRange2 += x*x; 
+  ++fRange;
+  if (fAnalysisManager->IsActive()) {
+    fAnalysisManager->FillH1(3, x);
+  }
+}
+
+inline void RunAction::AddPrimaryStep() 
+{
+  ++fNbPrimarySteps;
+}
+                   
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm7/include/DetectorConstruction.hh
+/// \brief Definition of the DetectorConstruction class
+//
 // $Id: DetectorConstruction.hh,v 1.2 2006-06-29 16:57:29 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -41,7 +44,7 @@ class G4Material;
 class G4UniformMagField;
 class DetectorMessenger;
 
-      const G4int MaxTally = 21;		// 0 + 20
+      const G4int MaxTally = 21;                // 0 + 20
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -63,7 +66,8 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      void SetTallySize     (G4int, G4ThreeVector);
      void SetTallyMaterial (G4int, G4String);
      void SetTallyPosition (G4int, G4ThreeVector);
-     
+
+     virtual     
      G4VPhysicalVolume* Construct();
      void               UpdateGeometry();
      

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm7/src/TrackingAction.cc
+/// \brief Implementation of the TrackingAction class
+//
 // $Id: TrackingAction.cc,v 1.6 2010-09-17 18:45:43 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -30,19 +33,20 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "TrackingAction.hh"
-
 #include "DetectorConstruction.hh"
-#include "HistoManager.hh"
 #include "RunAction.hh"
-
 #include "G4Track.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(DetectorConstruction* det, HistoManager* histo,
-                               RunAction* run)
-:fDetector(det), fHistoManager(histo), fRunAction(run)
-{ }
+TrackingAction::TrackingAction(DetectorConstruction* det, RunAction* run)
+:fDetector(det), fRunAction(run)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+TrackingAction::~TrackingAction()
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -52,7 +56,6 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
   if (track->GetTrackID() == 1) {
     G4double x = track->GetPosition().x() + 0.5*fDetector->GetAbsorSizeX();
     if(x > 0.0) fRunAction->AddProjRange(x);
-    fHistoManager->FillHisto(3, x);
   }  
 }
 

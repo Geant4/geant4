@@ -15,6 +15,18 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12-10-12 V.Ivant (testem7-V09-05-07)
+- Migration to the updated analysis tool and inplicit units
+- RunAction - added functionality from HistoManager, which not
+    needed anymore and deleted, added protection against division
+    by zero
+- SteppinAction and RunAction - moved histogram filling into
+    RunAction
+- PhysicsList - added Opt4 builder
+     
+07-10-12 mma (testem7-V09-05-06)
+- HistoManager : use G4AnalysisManager
+
 11-07-12 V.Ivant (testem7-V09-05-05)
 - c2_functions - rmoved not used arguments
 

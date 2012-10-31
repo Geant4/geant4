@@ -145,18 +145,18 @@ $Id: README,v 1.23 2010-09-17 18:45:43 maire Exp $
 
      The next histogram allows to have a zoom around the Bragg peak. Its bining
      should be defined via UI command: 
-     /testem/histo/setHisto 2 nbins xmin xmax unit
+     /analysis/h1/set 2 nbins xmin xmax unit
 
      The last histogram shows the projectile range. Its bining should be defined
      similary by the UI command:
-     /testem/histo/setHisto 3 nbins xmin xmax unit
+     /analysis/h1/set 3 nbins xmin xmax unit
          
    One can control the name of the histograms file with the command:
-   /testem/histo/setFileName  name  (default testem7)
+   /analysis/setFileName  name  (default testem7)
    
    It is possible to choose the format of the histogram file : root (default),
    xml, csv, by using namespace in HistoManager.hh 
      
    It is also possible to print selected histograms on an ascii file:
-   /testem/histo/printHisto id
+   /analysis/h1/setAscii id
    All selected histos will be written on a file name.ascii  (default testem7)

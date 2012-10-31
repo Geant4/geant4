@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm7/TestEm7.cc
+/// \brief Main program of the electromagnetic/TestEm7 example
+//
 // $Id: TestEm7.cc,v 1.10 2010-09-17 18:45:43 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
@@ -42,7 +45,6 @@
 #include "TrackingAction.hh"
 #include "SteppingAction.hh"
 #include "SteppingVerbose.hh"
-#include "HistoManager.hh"
 
 #ifdef G4VIS_USE
  #include "G4VisExecutive.hh"
@@ -75,12 +77,11 @@ int main(int argc,char** argv) {
   
   //set user action classes
   //
-  HistoManager*           histo = new HistoManager();
   PrimaryGeneratorAction* kin   = new PrimaryGeneratorAction(det);  
-  RunAction*              run   = new RunAction(det,phys,histo,kin);
+  RunAction*              run   = new RunAction(det,phys,kin);
   EventAction*            event = new EventAction();
-  TrackingAction*         track = new TrackingAction(det,histo,run);
-  SteppingAction*         step  = new SteppingAction(det,histo,run);
+  TrackingAction*         track = new TrackingAction(det,run);
+  SteppingAction*         step  = new SteppingAction(det,run);
   
   runManager->SetUserAction(kin); 
   runManager->SetUserAction(run); 

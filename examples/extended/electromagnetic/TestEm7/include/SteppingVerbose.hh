@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm7/include/SteppingVerbose.hh
+/// \brief Definition of the SteppingVerbose class
+//
 // $Id: SteppingVerbose.hh,v 1.2 2006-06-29 16:58:07 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -43,8 +46,8 @@ public:
   SteppingVerbose();
  ~SteppingVerbose();
 
-  void StepInfo();
-  void TrackingStarted();
+  virtual void StepInfo();
+  virtual void TrackingStarted();
 
 };
 

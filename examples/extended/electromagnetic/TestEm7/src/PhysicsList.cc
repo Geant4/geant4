@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm7/src/PhysicsList.cc
+/// \brief Implementation of the PhysicsList class
+//
 // $Id: PhysicsList.cc,v 1.39 2010-06-04 15:42:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -39,6 +42,7 @@
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
+#include "G4EmStandardPhysics_option4.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
 
@@ -66,6 +70,9 @@
 
 #include "G4BraggIonGasModel.hh"
 #include "G4BetheBlochIonGasModel.hh"
+
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -178,6 +185,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option3();    
 
+  } else if (name == "emstandard_opt4") {
+
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option4();    
+
   } else if (name == "standardSS") {
 
     fEmName = name;
@@ -252,7 +265,7 @@ void PhysicsList::AddStepMax()
 
     if (fStepMaxProcess->IsApplicable(*particle) && pmanager)
       {
-	pmanager ->AddDiscreteProcess(fStepMaxProcess);
+        pmanager ->AddDiscreteProcess(fStepMaxProcess);
       }
   }
 }
@@ -314,9 +327,9 @@ void PhysicsList::AddIonGasModels()
       G4BetheBlochIonGasModel* mod2 = new G4BetheBlochIonGasModel();
       G4double eth = 2.*MeV*particle->GetPDGMass()/proton_mass_c2;
       em_config->SetExtraEmModel(partname,"ionIoni",mod1,"",0.0,eth,
-				 new G4IonFluctuations());
+                                 new G4IonFluctuations());
       em_config->SetExtraEmModel(partname,"ionIoni",mod2,"",eth,100*TeV,
-				 new G4UniversalFluctuation());
+                                 new G4UniversalFluctuation());
 
     }
   }
