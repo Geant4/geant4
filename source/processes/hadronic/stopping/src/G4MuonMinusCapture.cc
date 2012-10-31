@@ -40,8 +40,11 @@
 // Base process class for stopping of mu-
 //
 // Modifications: 
-//   20121003 K. Genser - Changed the constructor argument type
-//                        Used two argument base constructor
+//
+//  20121003  K. Genser -- Changed the constructor argument type
+//                         Used two argument base constructor
+//  20121016  K. Genser -- Reverting to use one argument base c'tor
+//
 //------------------------------------------------------------------------
 
 #include "G4MuonMinusCapture.hh"
@@ -54,7 +57,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4MuonMinusCapture::G4MuonMinusCapture(G4HadronicInteraction* hiptr)
-  : G4HadronStoppingProcess ("muMinusCaptureAtRest",fLeptonAtRest)
+  : G4HadronStoppingProcess ("muMinusCaptureAtRest")
 {
   SetBoundDecay(new G4MuonMinusBoundDecay()); // Owned by InteractionRegistry
   if (!hiptr) {

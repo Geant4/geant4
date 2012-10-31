@@ -40,8 +40,9 @@
 // Base process class for nuclear capture of negatively charged particles
 //
 // Modifications: 
-// 20120928  M. Kelsey -- Add GetMeanLifeTime() here, instead of in base.
-// 20121004  K. Genser -- defined two argument constructor with defaults
+//  20120928  M. Kelsey -- Add GetMeanLifeTime() here, instead of in base.
+//  20121004  K. Genser -- defined two argument constructor with defaults
+//  20121016  K. Genser -- Reverting to use one argument c'tor
 //
 //------------------------------------------------------------------------
 
@@ -63,8 +64,7 @@ class G4HadronStoppingProcess : public G4HadronicProcess
 { 
 public:
  
-  explicit G4HadronStoppingProcess(const G4String& name = "hadronCaptureAtRest", 
-                                   G4HadronicProcessType subType=fHadronAtRest);
+  explicit G4HadronStoppingProcess(const G4String& name = "hadronCaptureAtRest");
 
   virtual ~G4HadronStoppingProcess();
 

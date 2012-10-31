@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// 20121017  M. Kelsey -- Add local cache of Bertini pointer
 
 #ifndef G4HadronicAbsorptionBertini_h
 #define G4HadronicAbsorptionBertini_h 1
@@ -59,6 +60,7 @@ private:
   
 private:
   G4ParticleDefinition* pdefApplicable;
+  G4CascadeInterface* theCascade;
 };
 
 #endif

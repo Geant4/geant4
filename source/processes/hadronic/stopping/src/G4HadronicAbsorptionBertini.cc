@@ -31,6 +31,7 @@
 //
 // 20120905  M. Kelsey -- Drop explicit list of "allowed" particles; Bertini
 //		can handle anything, or return no-interaction if not.
+// 20121017  M. Kelsey -- Use Bertini's IsApplicable to check particle allowed
 
 #include "G4HadronicAbsorptionBertini.hh"
 #include "G4CascadeInterface.hh"
@@ -44,10 +45,10 @@
 G4HadronicAbsorptionBertini::
 G4HadronicAbsorptionBertini(G4ParticleDefinition* pdef)
   : G4HadronStoppingProcess("hBertiniCaptureAtRest"), pdefApplicable(pdef) {
-  G4CascadeInterface* cascade = new G4CascadeInterface;
-  cascade->SetMinEnergy(0.);			// Ensure it gets used at rest
-  cascade->usePreCompoundDeexcitation();
-  RegisterMe(cascade);
+  theCascade = new G4CascadeInterface;
+  theCascade->SetMinEnergy(0.);			// Ensure it gets used at rest
+  theCascade->usePreCompoundDeexcitation();
+  RegisterMe(theCascade);			// Transfers ownership
 }
 
 
@@ -55,9 +56,13 @@ G4HadronicAbsorptionBertini(G4ParticleDefinition* pdef)
 
 G4bool G4HadronicAbsorptionBertini::IsApplicable(const G4ParticleDefinition& particle)
 {
-  return ( (!pdefApplicable && G4HadronStoppingProcess::IsApplicable(particle))
-	   || (&particle == pdefApplicable) 
-	   );
+  // Exclusive match (if registered for specific projectile
+  if (pdefApplicable) return (&particle == pdefApplicable);
+
+  // Any negative particles known to Bertini, excluding nuclei
+  return (G4HadronStoppingProcess::IsApplicable(particle) &&
+	  particle.GetAtomicMass() <= 1 &&
+	  theCascade->IsApplicable(&particle));
 }
 
 

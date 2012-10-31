@@ -37,7 +37,7 @@
 //
 // Intermediate class for hadronic absorption at rest using FTF/Preco.
 // Physics lists should reference the concrete subclasses for:
-// anti_proton, anti_sigma+.
+// anti_proton, anti_sigma+, and all anti-nuclei.
 //
 //---------------------------------------------------------------------------
 
@@ -90,7 +90,8 @@ G4bool G4HadronicAbsorptionFritiof::
 IsApplicable( const G4ParticleDefinition& particle ) {
   return ( ( 0 == pdefApplicable && 
              ( &particle == G4AntiProton::Definition() ||
-	       &particle == G4AntiSigmaPlus::Definition() ) )
+	       &particle == G4AntiSigmaPlus::Definition() ||
+               particle.GetBaryonNumber() < -1 ) )     // Anti-nuclei
 	   || ( &particle == pdefApplicable ) );
 }
 
@@ -98,8 +99,8 @@ IsApplicable( const G4ParticleDefinition& particle ) {
 // Documentation of purpose
 void G4HadronicAbsorptionFritiof::
 ProcessDescription( std::ostream& os ) const {
-  os << "Stopping and absorption of anti_protons and anti_sigma+ \n"
-     << "using Fritiof (FTF) string model.\n"
+  os << "Stopping and absorption of anti_protons, anti_sigma+, and \n"
+     << "all anti-nuclei using Fritiof (FTF) string model.\n"
      << "Geant4 PreCompound model is used for nuclear de-excitation."
      << std::endl;
 }

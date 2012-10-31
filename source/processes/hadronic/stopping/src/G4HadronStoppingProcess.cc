@@ -39,10 +39,13 @@
 //
 // Base process class for nuclear capture of negatively charged particles
 //
-// Modifications: 
-//   20120522  M. Kelsey -- Set enableAtRestDoIt flag for G4ProcessManager
-//   20120914  M. Kelsey -- Pass subType in base ctor, remove enable flags
-//   20121004  K. Genser -- use G4HadronicProcessType in the constructor
+// Modifications:
+//
+//  20120522  M. Kelsey -- Set enableAtRestDoIt flag for G4ProcessManager
+//  20120914  M. Kelsey -- Pass subType in base ctor, remove enable flags
+//  20121004  K. Genser -- use G4HadronicProcessType in the constructor
+//  20121016  K. Genser -- Reverting to use one argument c'tor
+//
 //------------------------------------------------------------------------
 
 #include "G4HadronStoppingProcess.hh"
@@ -58,9 +61,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4HadronStoppingProcess::G4HadronStoppingProcess(const G4String& name, 
-                                                 G4HadronicProcessType subType) 
-  : G4HadronicProcess(name, subType)
+G4HadronStoppingProcess::G4HadronStoppingProcess(const G4String& name)
+  : G4HadronicProcess(name, fHadronAtRest)
 {
   // Modify G4VProcess flags to emulate G4VRest instead of G4VDiscrete
   enableAtRestDoIt = true;
