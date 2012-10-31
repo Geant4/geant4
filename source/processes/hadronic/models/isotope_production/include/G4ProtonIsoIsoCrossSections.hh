@@ -35,7 +35,10 @@ class G4ProtonIsoIsoCrossSections
 
 public:
 
-  G4ProtonIsoIsoCrossSections();
+  G4ProtonIsoIsoCrossSections() {
+    G4cout << "WARNING: G4ProtonIsoIsoCrossSections is deprecated and will be removed with Geant4 version 10"
+           << G4endl;
+  }
   ~G4ProtonIsoIsoCrossSections();
   void Init(G4int A, G4int Z, G4double frac);
   G4double GetCrossSection(G4double anEnergy);

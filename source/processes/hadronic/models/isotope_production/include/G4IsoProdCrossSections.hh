@@ -32,8 +32,11 @@
 class G4IsoProdCrossSections
 {
 public:
-  G4IsoProdCrossSections(G4String aString)
-  { theProductName=aString; }
+  G4IsoProdCrossSections(G4String aString) {
+    theProductName=aString;
+    G4cout << "WARNING: G4IsoProdCrossSections is deprecated and will be removed with Geant4 version 10"
+           << G4endl;
+  }
   void Init(std::ifstream & aDataSet);
   G4double GetProductionCrossSection(G4double anEnergy);
   G4String GetProductIsotope();

@@ -44,7 +44,10 @@
 class G4ProtonIsotopeProduction : public G4VIsotopeProduction
 {
   public: 
-    G4ProtonIsotopeProduction();
+    G4ProtonIsotopeProduction() {
+      G4cout << "WARNING: G4ProtonIsotopeProduction is deprecated and will be removed with Geant4 version 10" 
+             << G4endl;
+    }
     ~G4ProtonIsotopeProduction();
 
     G4IsoResult* GetIsotope(const G4HadProjectile* aTrack,

@@ -38,6 +38,8 @@ G4NeutronIsotopeProduction::G4NeutronIsotopeProduction()
       theData[i]->Init((*(G4Element::GetElementTable()))[i]);
     }
   }
+  G4cout << "WARNING: G4NeutronIsotopeProduction is deprecated and will be removed with Geant4 version 10"
+         << G4endl;
 }
 
 

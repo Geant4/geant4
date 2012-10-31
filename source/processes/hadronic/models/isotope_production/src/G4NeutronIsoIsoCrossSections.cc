@@ -37,6 +37,8 @@ G4NeutronIsoIsoCrossSections()
   theNumberOfProducts = 0;
   theZ = 0;
   theA = 0;
+  G4cout << "WARNING: G4NeutronIsoIsoCrossSections is deprecated and will be removed with Geant4 version 10"
+         << G4endl;
 }
 
 G4NeutronIsoIsoCrossSections::
