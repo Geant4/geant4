@@ -9,6 +9,9 @@ $Id: History,v 1.35 2010-11-29 10:56:53 cirrone Exp $
                       Category History file
                       ---------------------
 
+12.10.2012 -  L. Pandola; tag brachy-V09-05-01
+	      Added a CMakeLists.txt file
+
 11.10.2012 -  G. Cosmo; tag brachy-V09-05-00
               Explicit inclusion of units and constants headers.
 
