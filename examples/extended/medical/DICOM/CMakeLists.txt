@@ -41,6 +41,8 @@ target_link_libraries(DICOM ${Geant4_LIBRARIES} )
 #
 set(DICOM_SCRIPTS
     dicom.out run.mac vis.mac
+    1.dcm 2.dcm 3.dcm 1.g4  2.g4 3.g4 1.g4dcm 2.g4dcm 3.g4dcm
+    ColourMap.dat  CT2Density.dat Data.dat Data.partial.dat
   )
 
 foreach(_script ${DICOM_SCRIPTS})
