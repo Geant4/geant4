@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26.10.2012   Luciano Pandola, tag xraytel-V09-05-01
+	     Edit main(): added #ifdef to protect G4VisExecutive and 
+             G4UIExecutive. 
+             Create CMakeLists.txt file
+
 12.10.2012   Gabriele Cosmo, Tag xraytel-V09-05-00
              Explicit inclusion of units and constants headers.
 
