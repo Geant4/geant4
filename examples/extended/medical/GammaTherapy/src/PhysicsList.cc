@@ -60,7 +60,7 @@
 #include "G4HadronInelasticQBBC.hh"
 #include "G4IonBinaryCascadePhysics.hh"
 #include "G4EmExtraPhysics.hh"
-#include "G4QStoppingPhysics.hh"
+#include "G4StoppingPhysics.hh"
 
 #include "G4UnitsTable.hh"
 #include "G4LossTableManager.hh"
@@ -178,7 +178,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     fGnucIsRegisted = true;
 
   } else if (name == "stopping" && !fStopIsRegisted && fEmBuilderIsRegisted) {
-    RegisterPhysics(new G4QStoppingPhysics());
+    RegisterPhysics(new G4StoppingPhysics());
     fStopIsRegisted = true;
     
   } else if(!fEmBuilderIsRegisted) {
