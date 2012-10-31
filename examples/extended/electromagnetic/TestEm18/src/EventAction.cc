@@ -42,9 +42,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction(RunAction* RA, HistoManager* histo)
-:fRunAction(RA),fHistoManager(histo),
- fDrawFlag("none"),fPrintModulo(10000)
+EventAction::EventAction(RunAction* RA)
+:fRunAction(RA),fDrawFlag("none"),fPrintModulo(10000)
 {
   fEventMessenger = new EventMessenger(this);
 }
@@ -75,9 +74,11 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
 void EventAction::EndOfEventAction(const G4Event*)
 {
  fRunAction->AddEnergyDeposit(fEnergyDeposit);
- fHistoManager->FillHisto(1, fEnergyDeposit);
- fHistoManager->FillHisto(2, fEnergySecondary);
- fHistoManager->FillHisto(3, fEnergyDeposit+fEnergySecondary);
+ 
+ G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+ analysisManager->FillH1(1, fEnergyDeposit);
+ analysisManager->FillH1(2, fEnergySecondary);
+ analysisManager->FillH1(3, fEnergyDeposit+fEnergySecondary);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

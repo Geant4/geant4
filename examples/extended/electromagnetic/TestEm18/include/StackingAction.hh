@@ -40,22 +40,20 @@
 
 class RunAction;
 class EventAction;
-class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class StackingAction : public G4UserStackingAction
 {
   public:
-    StackingAction(RunAction*, EventAction*, HistoManager* );
+    StackingAction(RunAction*, EventAction*);
    ~StackingAction();
      
-    G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
+    virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
     
   private:
     RunAction*    fRunaction;
     EventAction*  fEventaction;
-    HistoManager* fHistoManager;        
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

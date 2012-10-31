@@ -42,8 +42,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StackingAction::StackingAction(RunAction* RA,EventAction* EA, HistoManager* HM)
-:fRunaction(RA), fEventaction(EA), fHistoManager(HM)
+StackingAction::StackingAction(RunAction* RA,EventAction* EA)
+:fRunaction(RA), fEventaction(EA)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,12 +64,14 @@ StackingAction::ClassifyNewTrack(const G4Track* track)
   G4double energy = track->GetKineticEnergy();
   G4bool  charged = (track->GetDefinition()->GetPDGCharge() != 0.);
 
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  
   if (charged) {
     fRunaction->AddChargedSecondary(energy);
-    fHistoManager->FillHisto(4,energy);
+    analysisManager->FillH1(4,energy);
   } else {
     fRunaction->AddNeutralSecondary(energy);
-    fHistoManager->FillHisto(5,energy);
+    analysisManager->FillH1(5,energy);
   }
     
   fEventaction->AddSecondary(energy);  

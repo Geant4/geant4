@@ -42,8 +42,7 @@ class PhysListEmPenelope : public G4VPhysicsConstructor
 {
 public:
   PhysListEmPenelope(const G4String& name = "Penelope");
-
-  virtual ~PhysListEmPenelope();
+ ~PhysListEmPenelope();
 
   virtual void ConstructParticle() { };
   virtual void ConstructProcess();

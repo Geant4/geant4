@@ -42,8 +42,7 @@ class PhysListEmLivermore : public G4VPhysicsConstructor
 {
 public:
   PhysListEmLivermore(const G4String& name = "Livermore");
-
-  virtual ~PhysListEmLivermore();
+ ~PhysListEmLivermore();
 
   virtual void ConstructParticle() { };
   virtual void ConstructProcess();

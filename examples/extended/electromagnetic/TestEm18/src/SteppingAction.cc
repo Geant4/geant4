@@ -42,8 +42,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(RunAction* RA, EventAction* EA, HistoManager* HM)
-:fRunaction(RA), fEventaction(EA), fHistoManager(HM)
+SteppingAction::SteppingAction(RunAction* RA, EventAction* EA)
+:fRunaction(RA), fEventaction(EA)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,7 +61,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
  //step size
  G4double stepSize = step->GetStepLength();  
  fRunaction->AddTrackLength(stepSize);
- fHistoManager->FillHisto(6,stepSize);
+ G4AnalysisManager::Instance()->FillH1(6,stepSize);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

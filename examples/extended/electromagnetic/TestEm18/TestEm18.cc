@@ -45,7 +45,6 @@
 #include "SteppingAction.hh"
 #include "SteppingVerbose.hh"
 #include "StackingAction.hh"
-#include "HistoManager.hh"
 
 #ifdef G4VIS_USE
  #include "G4VisExecutive.hh"
@@ -74,8 +73,6 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new PhysicsList());
 
-  HistoManager* histo = new HistoManager();
-
   // set user action classes
   //
   //primaryGenerator
@@ -83,21 +80,19 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(primary);
 
   //runAction
-  RunAction* runaction = new RunAction(detector,primary,histo);
+  RunAction* runaction = new RunAction(detector,primary);
   runManager->SetUserAction(runaction);
 
   //eventAction
-  EventAction* eventaction = new EventAction(runaction,histo);
+  EventAction* eventaction = new EventAction(runaction);
   runManager->SetUserAction(eventaction);
 
   //stepAction
-  SteppingAction* steppingaction = new SteppingAction(runaction, eventaction,
-                                                      histo);
+  SteppingAction* steppingaction = new SteppingAction(runaction, eventaction);
   runManager->SetUserAction(steppingaction);
   
   //stackAction
-  StackingAction* stackingaction = new StackingAction(runaction, eventaction,
-                                                      histo);
+  StackingAction* stackingaction = new StackingAction(runaction, eventaction);
   runManager->SetUserAction(stackingaction);      
    
   // get the pointer to the User Interface manager 
@@ -130,7 +125,6 @@ int main(int argc,char** argv) {
     
   // job termination
   // 
-  delete histo;
   delete runManager;
 
   return 0;

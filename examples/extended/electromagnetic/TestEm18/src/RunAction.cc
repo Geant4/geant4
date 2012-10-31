@@ -47,15 +47,18 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin,
-                     HistoManager* histo)
-:fDetector(det), fPrimary(kin), fHistoManager(histo)
-{ }
+RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
+:fDetector(det), fPrimary(kin)
+{ 
+  fHistoManager = new HistoManager(); 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::~RunAction()
-{ }
+{ 
+  delete fHistoManager; 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -73,9 +76,14 @@ void RunAction::BeginOfRunAction(const G4Run* run)
   fEmax[0] = fEmax[1] = 0.;    
     
   fNbSteps = 0;
-  fTrackLength = 0.; 
-
-  fHistoManager->book();
+  fTrackLength = 0.;
+   
+  //histograms
+  //
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  if ( analysisManager->IsActive() ) {
+    analysisManager->OpenFile();
+  }       
 
   // do not save Rndm status
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
@@ -108,7 +116,12 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout << "\n ===========================================================\n";
   G4cout << G4endl;
   
-  fHistoManager->save();
+  //save histograms      
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();  
+  if ( analysisManager->IsActive() ) {
+    analysisManager->Write();
+    analysisManager->CloseFile();
+  }      
     
   if (particle->GetPDGCharge() == 0.) return;
    
