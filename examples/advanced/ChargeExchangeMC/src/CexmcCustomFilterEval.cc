@@ -60,6 +60,8 @@ CexmcCustomFilterEval::CexmcCustomFilterEval( const G4String &  sourceFileName,
     if ( ! sourceFile )
         throw CexmcException( CexmcCFBadSource );
 
+    bool            commandIsPending( false );
+
     while ( ! sourceFile.eof() )
     {
         std::string  line;
@@ -69,62 +71,75 @@ CexmcCustomFilterEval::CexmcCustomFilterEval( const G4String &  sourceFileName,
         if ( commentStartPos != std::string::npos )
             line.erase( commentStartPos );
 
-        command += line;
-
-        if ( ! command.empty() )
+        if ( line.empty() ||
+             line.find_first_not_of( " \t" ) == std::string::npos )
         {
-            size_t  length( command.length() );
-
-            if ( command[ length - 1 ] == '\\' )
-            {
-                command.erase( length - 1 );
-                continue;
-            }
-
-            CexmcCustomFilter::ParseResult  curParseResult;
-
-            std::string::const_iterator   begin( command.begin() );
-            std::string::const_iterator   end( command.end() );
-
-            try
-            {
-                if ( ! CexmcCustomFilter::phrase_parse( begin, end, grammar,
-                                CexmcCustomFilter::space, curParseResult ) ||
-                     begin != end )
-                {
-                    throw CexmcException( CexmcCFParseError );
-                }
-            }
-            catch ( ... )
+            if ( commandIsPending )
             {
                 sourceFile.close();
-                throw;
+                throw CexmcException( CexmcCFParseError );
             }
+            continue;
+        }
+
+        command += line;
+
+        size_t  length( command.length() );
+
+        if ( command[ length - 1 ] == '\\' )
+        {
+            command.erase( length - 1 );
+            commandIsPending = true;
+            continue;
+        }
+
+        CexmcCustomFilter::ParseResult  curParseResult;
+
+        std::string::const_iterator   begin( command.begin() );
+        std::string::const_iterator   end( command.end() );
+
+        try
+        {
+            if ( ! CexmcCustomFilter::phrase_parse( begin, end, grammar,
+                                CexmcCustomFilter::space, curParseResult ) ||
+                 begin != end )
+            {
+                throw CexmcException( CexmcCFParseError );
+            }
+        }
+        catch ( ... )
+        {
+            sourceFile.close();
+            throw;
+        }
 
 #ifdef CEXMC_DEBUG_CF
-            G4cout << "Parsed expression AST:" << G4endl;
-            curParseResult.expression.Print();
+        G4cout << "Parsed expression AST:" << G4endl;
+        curParseResult.expression.Print();
 #endif
 
-            switch ( curParseResult.action )
-            {
-            case CexmcCustomFilter::KeepTPT :
-            case CexmcCustomFilter::DeleteTPT :
-                parseResultTPT.push_back( curParseResult );
-                break;
-            case CexmcCustomFilter::KeepEDT :
-            case CexmcCustomFilter::DeleteEDT :
-                parseResultEDT.push_back( curParseResult );
-                break;
-            default :
-                break;
-            }
+        switch ( curParseResult.action )
+        {
+        case CexmcCustomFilter::KeepTPT :
+        case CexmcCustomFilter::DeleteTPT :
+            parseResultTPT.push_back( curParseResult );
+            break;
+        case CexmcCustomFilter::KeepEDT :
+        case CexmcCustomFilter::DeleteEDT :
+            parseResultEDT.push_back( curParseResult );
+            break;
+        default :
+            break;
         }
 
         command = "";
+        commandIsPending = false;
     }
 
     sourceFile.close();
+
+    if ( commandIsPending )
+        throw CexmcException( CexmcCFParseError );
 }
 
 

@@ -7,6 +7,12 @@ cirrone@lns.infn.it
              History file of the ChargeExchangeMC application
          ====================================================
 
+
+17.10.2012, L.Pandola & A.Radkov, Tag: ChargeExchangeMC-V09-05-01
+            - Fix to compile the code against Geant4 9.6
+            - Edit GNUmakefile such that the default version does not 
+              depend on boost
+
 11.10.2012, G.Cosmo,  Tag: ChargeExchangeMC-V09-05-00
 	    - Explicit inclusion of units and constants headers.
 
