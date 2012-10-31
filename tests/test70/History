@@ -11,6 +11,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11 October 2012, Gabriele Cosmo (test70-V09-05-09)
+------------------------------------------------------
+- Explicit inclusion of units and constants headers.
+
 26 March 2012, M.K      (test70-V09-05-08)
 ------------------------------------------------------
 - Remove [system("rm output.txt");] in test70.cc
@@ -32,7 +37,7 @@ comment struct timespec fStart, fEnd; in LaunchG4
 20 March 2012, M.K      (test70-V09-05-04)
 ------------------------------------------------------
 - Remove "-lrt" library dependence which failed the compilation
- on certain platform
+  on certain platform
 
 16 March 2012, Pere Mato      (test70-V09-05-03)
 ------------------------------------------------------

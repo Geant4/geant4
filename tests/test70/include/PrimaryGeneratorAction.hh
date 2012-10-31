@@ -32,6 +32,8 @@
 #ifndef PrimaryGeneratorAction_h
 #define PrimaryGeneratorAction_h 1
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4ParticleGun.hh"
 #include "DetectorConstruction.hh"
@@ -61,7 +63,7 @@ private:
 
 inline void PrimaryGeneratorAction :: SetIncidentEnergy (G4double e)
 {
-    e0 = e*keV;
+    e0 = e*CLHEP::keV;
 }
 
 inline G4double PrimaryGeneratorAction :: GetIncidentEnergy()

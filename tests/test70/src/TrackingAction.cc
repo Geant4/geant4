@@ -24,6 +24,7 @@
 // ********************************************************************
 //
 #include "TrackingAction.hh"
+#include "G4SystemOfUnits.hh"
 
 TrackingAction::TrackingAction(): G4UserTrackingAction()
 {
