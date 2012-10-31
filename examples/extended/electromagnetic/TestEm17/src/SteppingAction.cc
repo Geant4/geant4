@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm17/src/SteppingAction.cc
+/// \brief Implementation of the SteppingAction class
+//
 // $Id: SteppingAction.cc,v 1.4 2008-03-31 10:22:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
@@ -76,7 +79,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   else if (procName == "hIoni")      id = 5; 
   else if (procName == "hPairProd")  id = 6;
   else if (procName == "hBrems")     id = 7;
-  fHistoManager->FillHisto(id,lgepsE);		       
+  fHistoManager->FillHisto(id,lgepsE);                       
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

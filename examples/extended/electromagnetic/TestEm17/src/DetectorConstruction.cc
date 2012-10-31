@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm17/src/DetectorConstruction.cc
+/// \brief Implementation of the DetectorConstruction class
+//
 //
 // $Id: DetectorConstruction.cc,v 1.3 2007-05-12 16:33:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
@@ -44,6 +47,8 @@
 #include "G4SolidStore.hh"
 
 #include "G4UnitsTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -128,21 +133,21 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   G4SolidStore::GetInstance()->Clean();
 
   G4Box*
-  sBox = new G4Box("Container",				//its name
-                   fBoxSize/2,fBoxSize/2,fBoxSize/2);	//its dimensions
+  sBox = new G4Box("Container",                                //its name
+                   fBoxSize/2,fBoxSize/2,fBoxSize/2);        //its dimensions
 
-  fLBox = new G4LogicalVolume(sBox,			//its shape
-                             fMaterial,			//its material
-                             fMaterial->GetName());	//its name
+  fLBox = new G4LogicalVolume(sBox,                        //its shape
+                             fMaterial,                        //its material
+                             fMaterial->GetName());        //its name
 
-  fPBox = new G4PVPlacement(0,				//no rotation
-  			   G4ThreeVector(),		//at (0,0,0)
-                           fLBox,			//its logical volume			   
-                           fMaterial->GetName(),	//its name
-                           0,				//its mother  volume
-                           false,			//no boolean operation
-                           0);				//copy number
-			   
+  fPBox = new G4PVPlacement(0,                                //no rotation
+                             G4ThreeVector(),                //at (0,0,0)
+                           fLBox,                        //its logical volume                           
+                           fMaterial->GetName(),        //its name
+                           0,                                //its mother  volume
+                           false,                        //no boolean operation
+                           0);                                //copy number
+                           
   PrintParameters();
   
   //always return the root volume

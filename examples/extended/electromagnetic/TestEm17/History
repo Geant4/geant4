@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12-10-12 V.Ivant (testem17-V09-05-05)
+- Migration to the updated analysis tool and inplicit units
+
 19-08-12 V.Ivanchenko (testem17-V09-05-04)
 - MuNuclearBuilder - use G4MuonNuclearProcess instead of 
     G4MuNuclearInteraction (as in all reference Physics Lists)

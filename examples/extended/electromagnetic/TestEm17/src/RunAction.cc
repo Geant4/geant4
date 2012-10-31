@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm17/src/RunAction.cc
+/// \brief Implementation of the RunAction class
+//
 // $Id: RunAction.cc,v 1.4 2008-03-31 10:22:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
@@ -40,6 +43,8 @@
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -102,9 +107,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   
   G4cout << "\n The run consists of " << NbOfEvents << " "<< particle << " of "
          << G4BestUnit(energy,"Energy") << " through " 
-	 << G4BestUnit(length,"Length") << " of "
-	 << material->GetName() << " (density: " 
-	 << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
+         << G4BestUnit(length,"Length") << " of "
+         << material->GetName() << " (density: " 
+         << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
   
   //total number of process calls
   G4double countTot = 0.;
@@ -139,19 +144,19 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     for (size_t i=0; i< fProcCounter->size();i++) {
       G4String procName = (*fProcCounter)[i]->GetName();
       if (procName != "Transportation")
-	totalCrossSection += ComputeTheory(procName, NbOfEvents);
+        totalCrossSection += ComputeTheory(procName, NbOfEvents);
     }
   
     MeanFreePath     = 1./totalCrossSection;
     massCrossSection = totalCrossSection/density;
   
     G4cout << " Theory:     "
-	   <<    "total CrossSection = " << totalCrossSection*cm << " /cm"
-	   << "\t MeanFreePath = "       << G4BestUnit(MeanFreePath,"Length")
-	   << "\t massicCrossSection = " << massCrossSection*g/cm2 << " cm2/g"
-	   << G4endl;
+           <<    "total CrossSection = " << totalCrossSection*cm << " /cm"
+           << "\t MeanFreePath = "       << G4BestUnit(MeanFreePath,"Length")
+           << "\t massicCrossSection = " << massCrossSection*g/cm2 << " cm2/g"
+           << G4endl;
   }
-	 	 	               	                           
+                                                                            
   G4cout.setf(mode,std::ios::floatfield);
   G4cout.precision(prec);         
 
@@ -198,7 +203,7 @@ G4double RunAction::ComputeTheory(G4String process, G4int NbOfMu)
     
   const G4String label[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
                     "10", "11", "12", "13", "14", "15", "16", "17", "18", "19"};
-		      
+                      
   G4AnaH1* histoTh = 0;
   ////G4AnaH1* histoMC = 0;     
   if (fHistoManager->HistoExist(id)) {
@@ -261,4 +266,4 @@ G4double RunAction::GetEnergyCut(G4Material* material, G4int idParticle)
 } 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-    	       
+                   
