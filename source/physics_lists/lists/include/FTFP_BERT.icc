@@ -56,7 +56,13 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 
-#include "G4PhysicsConstructorRegistry.hh"
+#include "G4DecayPhysics.hh"
+#include "G4EmStandardPhysics.hh"
+#include "G4EmExtraBertiniPhysics.hh"
+#include "G4IonFTFPBinaryCascadePhysics.hh"
+#include "G4BertiniAndFritiofStoppingPhysics.hh"
+#include "G4HadronElasticPhysics.hh"
+#include "G4NeutronTrackingCut.hh"
 
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsFTFP_BERT.hh"
@@ -71,31 +77,29 @@ template<class T> TFTFP_BERT<T>::TFTFP_BERT(G4int ver):  T()
   this->defaultCutValue = 0.7*CLHEP::mm;  
   this->SetVerboseLevel(ver);
 
-  G4PhysicsConstructorRegistry* registry = G4PhysicsConstructorRegistry::Instance();
-
  // EM Physics
-  this->RegisterPhysics(registry->GetPhysicsConstructor("G4EmStandardPhysics"));
+  this->RegisterPhysics( new G4EmStandardPhysics(ver));
 
   // Synchroton Radiation & GN Physics
-  this->RegisterPhysics(registry->GetPhysicsConstructor("G4EmExtraBertiniPhysics"));
+  this->RegisterPhysics( new G4EmExtraBertiniPhysics(ver) );
 
   // Decays 
-  this->RegisterPhysics(registry->GetPhysicsConstructor("G4DecayPhysics"));
+  this->RegisterPhysics( new G4DecayPhysics(ver) );
 
    // Hadron Elastic scattering
-  this->RegisterPhysics(registry->GetPhysicsConstructor("G4HadronElasticPhysics"));
+  this->RegisterPhysics( new G4HadronElasticPhysics(ver) );
 
    // Hadron Physics
-  this->RegisterPhysics(registry->GetPhysicsConstructor("HadronPhysicsFTFP_BERT"));
+  this->RegisterPhysics(  new HadronPhysicsFTFP_BERT(ver));
 
   // Stopping Physics
-  this->RegisterPhysics(registry->GetPhysicsConstructor("G4BertiniAndFritiofStoppingPhysics"));
+  this->RegisterPhysics( new G4BertiniAndFritiofStoppingPhysics(ver) );
 
   // Ion Physics
-  this->RegisterPhysics(registry->GetPhysicsConstructor("G4IonFTFPBinaryCascadePhysics"));
+  this->RegisterPhysics( new G4IonFTFPBinaryCascadePhysics(ver));
   
   // Neutron tracking cut
-  this->RegisterPhysics(registry->GetPhysicsConstructor("G4NeutronTrackingCut"));
+  this->RegisterPhysics( new G4NeutronTrackingCut(ver));
 }
 
 template<class T> TFTFP_BERT<T>::~TFTFP_BERT()

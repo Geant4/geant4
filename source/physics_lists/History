@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15-10-2012, W.Pokorski			(phys-lists-V09-05-55)
+- reverting the changes in FTFP_BERT (not using factories for the moment)
+
+12-10-2012, W.Pokorski			(phys-lists-V09-05-54)
+- another fix for GNUbuild (dependencies): moving registry to builders
+
 12-10-2012, W.Pokorski			(phys-lists-V09-05-53)
 - fixing the static builds and a bug introduced in the previous tag
 

@@ -105,6 +105,7 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4phys_builders
     HEADERS
         G4PhysicsConstructorFactory.hh
+        G4PhysicsConstructorRegistry.hh
         CompileTimeConstraints.hh
         G4AntiBarionBuilder.hh
         G4BertiniAndFritiofStoppingPhysics.hh
@@ -244,6 +245,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4WarnPLStatus.hh
         TheoModelFactory.hh
     SOURCES
+        G4PhysicsConstructorRegistry.cc
         G4AntiBarionBuilder.cc
         G4BertiniAndFritiofStoppingPhysics.cc
         G4BertiniKaonBuilder.cc

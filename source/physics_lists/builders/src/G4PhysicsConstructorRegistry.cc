@@ -44,17 +44,6 @@
 #include "G4VPhysicsConstructor.hh"
 #include "G4PhysicsConstructorFactory.hh"
 
-// Neeed for running with 'static' libraries to pull the references of the 
-// declared factories
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmStandardPhysics);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4EmExtraBertiniPhysics);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4DecayPhysics);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4HadronElasticPhysics);
-G4_REFERENCE_PHYSCONSTR_FACTORY(HadronPhysicsFTFP_BERT);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4BertiniAndFritiofStoppingPhysics);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4IonFTFPBinaryCascadePhysics);
-G4_REFERENCE_PHYSCONSTR_FACTORY(G4NeutronTrackingCut);
-
 G4PhysicsConstructorRegistry* G4PhysicsConstructorRegistry::theInstance = 0;
 
 G4PhysicsConstructorRegistry* G4PhysicsConstructorRegistry::Instance()
