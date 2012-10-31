@@ -77,8 +77,6 @@
 
 using namespace CLHEP;
 
-// const char *StrInside[3]= { "Outside", "Surface", "Inside" };
-
 ///////////////////////////////////////////////////////////////
 //
 // Constructor - check parameters, convert angles so 0<sphi+dpshi<=2_PI
@@ -750,8 +748,10 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
   G4double distRMin = kInfinity;
   G4double distSPhi = kInfinity, distEPhi = kInfinity;
 
+  // To cope with precision loss
+  //
   const G4double delta = std::max(10.0*kCarTolerance,
-                                   1.0e-8*(fRtor+fRmax));  // To cope with precision loss
+                                  1.0e-8*(fRtor+fRmax));
   const G4double dAngle = 10.0*kAngTolerance;
 
   G4ThreeVector nR, nPs, nPe;
@@ -795,13 +795,15 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
     noSurfaces ++;
     sumnorm += nR;
   }
-  else if( fRmin && (distRMin <= delta) )  // Must not be on both Outer and Inner
+  else if( fRmin && (distRMin <= delta) ) // Must not be on both Outer and Inner
   {
     noSurfaces ++;
     sumnorm -= nR;
   }
 
-  //  To be on one of the 'phi' surfaces, it must be within the 'tube' - with tolerance
+  //  To be on one of the 'phi' surfaces,
+  //  it must be within the 'tube' - with tolerance
+
   if( (fDPhi < twopi) && (fRmin-delta <= pt) && (pt <= (fRmax+delta)) )
   {
     if (distSPhi <= dAngle)
@@ -811,46 +813,54 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
     }
     if (distEPhi <= dAngle) 
     {
-
       noSurfaces ++;
       sumnorm += nPe;
     }
   }
   if ( noSurfaces == 0 )
   {
+#ifdef G4CSGDEBUG
      G4ExceptionDescription ed;
      ed.precision(16);
 
      EInside  inIt= Inside( p );
      
-     if( inIt != kSurface ){
-        ed << " ERROR>  Surface Normal was called for Torus, with point not on surface." << G4endl;
-     }else{
-        ed << " ERROR>  Surface Normal has not found a surface - despite the point being on the surface. " <<G4endl;
+     if( inIt != kSurface )
+     {
+        ed << " ERROR>  Surface Normal was called for Torus,"
+           << " with point not on surface." << G4endl;
+     }
+     else
+     {
+        ed << " ERROR>  Surface Normal has not found a surface, "
+           << " despite the point being on the surface. " <<G4endl;
      }
 
-     if( inIt != kInside){
+     if( inIt != kInside)
+     {
          ed << " Safety (Dist To In)  = " << DistanceToIn(p) << G4endl;
      }
-     if( inIt != kOutside){
+     if( inIt != kOutside)
+     {
          ed << " Safety (Dist to Out) = " << DistanceToOut(p) << G4endl;
      }
      ed << " Coordinates of point : " << p << G4endl;
      ed << " Parameters  of solid : " << G4endl << *this << G4endl;
 
-     if( inIt == kSurface ){
+     if( inIt == kSurface )
+     {
         G4Exception("G4Torus::SurfaceNormal(p)", "GeomSolids1002",
                     JustWarning, ed,
-                    "Method *fails* to find normal, even though point is on surface!" );
-     }else{
-        // #ifdef G4CSGDEBUG
+                    "Failing to find normal, even though point is on surface!" );
+     }
+     else
+     {
         static const char* NameInside[3]= { "Inside", "Surface", "Outside" };
         ed << "  The point is " << NameInside[inIt] << " the solid. "<< G4endl;
         G4Exception("G4Torus::SurfaceNormal(p)", "GeomSolids1002",
-                JustWarning, ed, "Point p is not on surface !?" );
-        // #endif
+                    JustWarning, ed, "Point p is not on surface !?" );
      }
-
+#endif
      norm = ApproxSurfaceNormal(p);
   }
   else if ( noSurfaces == 1 )  { norm = sumnorm; }
@@ -880,9 +890,7 @@ G4ThreeVector G4Torus::ApproxSurfaceNormal( const G4ThreeVector& p ) const
 
 #ifdef G4CSGDEBUG
   G4cout << " G4Torus::ApproximateSurfaceNormal called for point " << p
-   << G4endl;
-   // << " in the following solid: " << G4endl;
-   // G4cout << *this << G4endl;
+         << G4endl;
 #endif
    
   distRMax = std::fabs(pt - fRmax) ;
@@ -1033,13 +1041,11 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
   G4double Rtor2 = fRtor*fRtor ;
 
   snxt = SolveNumericJT(p,v,fRmax,true);
-   //    **************
 
   if (fRmin)  // Possible Rmin intersection
   {
     sd[0] = SolveNumericJT(p,v,fRmin,true);
-     //     **************
-     if ( sd[0] < snxt )  { snxt = sd[0] ; }
+    if ( sd[0] < snxt )  { snxt = sd[0] ; }
   }
 
   //
@@ -1113,7 +1119,7 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
             // z and r intersections good - check intersecting
             // with correct half-plane
             //
-            if ((yi*cosCPhi-xi*sinCPhi)>=0) { snxt=sphi; }
+            if ((yi*cosCPhi-xi*sinCPhi)>=0)  { snxt=sphi; }
           }    
         }
       }
@@ -1207,15 +1213,14 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
   // To be done: Check the precision of this calculation.
   // If you want return always validNorm = false, then take the version below
   
-  // G4double Rtor2 = fRtor*fRtor ;
   G4double rho2  = p.x()*p.x()+p.y()*p.y();
   G4double rho   = std::sqrt(rho2) ;
 
+  G4double pt2   = rho2 + p.z()*p.z() + fRtor * (fRtor - 2.0*rho);
+    // Regroup for slightly better FP accuracy
 
-  G4double pt2   = rho2 + p.z()*p.z() + fRtor * (fRtor - 2.0*rho); // Regroup for slightly better FP accuracy
-  if( pt2 < 0.0){
-     G4cerr << " Accuracy ERROR in calculation of 'pt2' in G4SubtractionSolid::DistanceToOut " << G4endl
-     << "   Pt2 is negative  pt2= " <<  pt2 << "   whereas it is length Vector^2, so it should be >= 0.0" << G4endl;
+  if( pt2 < 0.0)
+  {
      pt2= std::fabs( pt2 );
   }
      
@@ -1330,7 +1335,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
                             && (pDistE >  halfCarTolerance) ) )  )
       {
         // Inside both phi *full* planes
-         
+
         if ( compS < 0 )
         {
           sphi = pDistS/compS ;
@@ -1439,8 +1444,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
     {
       snxt=sphi;
       side=sidephi;
-    }
-     
+    }     
   }
 
   G4double rhoi2,rhoi,it2,it,iDotxyNmax ;
