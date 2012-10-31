@@ -405,13 +405,16 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 
   if(part.GetParticleType() == "nucleus") {
 
-    // if generic ion or nucleus with Z>=2 
-    if(part.GetPDGCharge() > 1.5*eplus || 
-       part.GetParticleName() == "GenericIon") { 
+    G4String pname = part.GetParticleName();
+    if(pname != "deuteron" && pname != "triton" &&
+       pname != "alpha+"   && pname != "helium" &&
+       pname != "hydrogen") {
+
       theGenericIon = G4GenericIon::GenericIon();
       isIon = true; 
       // process is shared between all ions inheriting G4GenericIon
-      if(part.GetPDGCharge() > 2.5*eplus) { particle = theGenericIon; }
+      // for all excluding He3 and alpha
+      if(pname != "He3" && pname != "alpha") { particle = theGenericIon; }
     }
   }
 

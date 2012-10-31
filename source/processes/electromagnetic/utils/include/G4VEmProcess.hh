@@ -257,7 +257,6 @@ public:
           G4double energyLimit);
           
 
-
   // Single scattering parameters
   inline void SetPolarAngleLimit(G4double a);
   inline G4double PolarAngleLimit() const;
@@ -461,34 +460,33 @@ G4VEmModel* G4VEmProcess::SelectModelForMaterial(G4double kinEnergy,
 
 inline G4double G4VEmProcess::GetLambdaFromTable(G4double e)
 {
-  return fFactor*((*theLambdaTable)[basedCoupleIndex])->Value(e);
+  return ((*theLambdaTable)[basedCoupleIndex])->Value(e);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEmProcess::GetLambdaFromTablePrim(G4double e)
 {
-  return fFactor*((*theLambdaTablePrim)[basedCoupleIndex])->Value(e)*CLHEP::MeV/e;
+  return ((*theLambdaTablePrim)[basedCoupleIndex])->Value(e)/e;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEmProcess::ComputeCurrentLambda(G4double e)
 {
-  return fFactor *
-    (currentModel->CrossSectionPerVolume(baseMaterial,currentParticle,
-					 e,(*theCuts)[currentCoupleIndex]));
+  return currentModel->CrossSectionPerVolume(baseMaterial,currentParticle,
+					     e,(*theCuts)[currentCoupleIndex]);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEmProcess::GetCurrentLambda(G4double e)
 {
-  G4double x = 0.0;
+  G4double x;
   if(e >= minKinEnergyPrim) { x = GetLambdaFromTablePrim(e); }
   else if(theLambdaTable)   { x = GetLambdaFromTable(e); }
   else                      { x = ComputeCurrentLambda(e); }
-  return x;
+  return fFactor*x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -509,7 +507,7 @@ G4VEmProcess::RecalculateLambda(G4double e, const G4MaterialCutsCouple* couple)
 {
   DefineMaterial(couple);
   SelectModel(e, currentCoupleIndex);
-  return ComputeCurrentLambda(e);
+  return fFactor*ComputeCurrentLambda(e);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -17,6 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18 October 12: V.Ivant (emutils-V09-05-44)
+- G4VEnergyLossProcess - define flag isIon fo all nucleus except
+    deuteron, triton and special DNA ions
+- G4VEmProcess, G4EmModelManager - minor reduce of number of operations
+    at each step
+- G4VMscModel - minor optimisation of inline methods
+
+05 October 12: V.Ivant (emutils-V09-05-43)
+- G4VMultipleScatteringProcess - check that true step length proposed
+    by msc model do not exceed physical true length
+
 01 October 12: V.Ivant (emutils-V09-05-42)
 - G4VAtomDeexcitation - updated initialisation for the case
     when de-excitation is not used

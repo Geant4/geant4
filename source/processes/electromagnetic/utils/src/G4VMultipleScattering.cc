@@ -346,6 +346,7 @@ G4double G4VMultipleScattering::AlongStepGetPhysicalInteractionLength(
   physStepLimit = gPathLength = tPathLength = currentMinimalStep;
   
   G4double ekin = track.GetKineticEnergy();
+  // isIon flag is used only to select a model
   if(isIon) { 
     ekin *= proton_mass_c2/track.GetParticleDefinition()->GetPDGMass(); 
   }
