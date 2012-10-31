@@ -164,7 +164,7 @@ G4String G4VUIshell::GetAbsCommandDirPath(const G4String& apath) const
       continue;
     }
     if(jslash != G4int(G4String::npos)) {
-      if((G4String)bpath(indx,jslash-indx) == ".."){  // directory up
+      if(bpath.substr(indx,jslash-indx) == ".."){  // directory up
         if(absPath == "/") {
           indx = jslash+1;
           continue;
@@ -174,7 +174,7 @@ G4String G4VUIshell::GetAbsCommandDirPath(const G4String& apath) const
           G4int jpre= absPath.last('/');
           if(jpre != G4int(G4String::npos)) absPath.remove(jpre+1);
         }
-      } else if((G4String)bpath(indx,jslash-indx) == "."){  // nothing to do
+      } else if(bpath.substr(indx,jslash-indx) == "."){  // nothing to do
       } else { // add
         if( !(jslash==indx && bpath(indx)=='/') ) // truncate "////"
           absPath+= bpath(indx, jslash-indx+1);

@@ -85,7 +85,7 @@ G4UIsession * G4UIGAG::SessionStart()
   return NULL;
 }
 
-void G4UIGAG::PauseSessionStart(G4String msg)
+void G4UIGAG::PauseSessionStart(const G4String& msg)
 {
   promptCharacter = msg;
   G4cout << "@@PROMPT \"" << promptCharacter << "\"" << G4endl;
@@ -98,7 +98,7 @@ void G4UIGAG::PauseSessionStart(G4String msg)
   }
 }
 
-void G4UIGAG::ExecuteCommand(G4String aCommand)
+void G4UIGAG::ExecuteCommand(const G4String& aCommand)
 {
   G4UIcommandTree * tree = UI->GetTree();
   if(aCommand.length()<2) return;
@@ -170,19 +170,19 @@ void G4UIGAG::ExecuteCommand(G4String aCommand)
 }
 
 
-G4int G4UIGAG::ReceiveG4cout(G4String coutString)
+G4int G4UIGAG::ReceiveG4cout(const G4String& coutString)
 {
   std::cout << coutString << std::flush;
   return 0;
 }
 
-G4int G4UIGAG::ReceiveG4cerr(G4String cerrString)
+G4int G4UIGAG::ReceiveG4cerr(const G4String& cerrString)
 {
   std::cerr << cerrString << std::flush;
   return 0;
 }                                                    
 
-void G4UIGAG::Prompt(G4String aPrompt)
+void G4UIGAG::Prompt(const G4String& aPrompt)
 {
   promptCharacter = aPrompt;
 }
@@ -301,9 +301,11 @@ G4String G4UIGAG::GetCommand()
   return GetFullPath(newCommand);
 }
 
-G4String G4UIGAG::GetFullPath( G4String aNewCommand )
+G4String G4UIGAG::GetFullPath(const G4String& aNewCommand )
 {
-  G4String newCommand = aNewCommand.strip(G4String::both);
+  G4String newCommand = aNewCommand;
+  newCommand.strip(G4String::both);
+
   G4String tmpString;
   if( newCommand(0) == '/' ) 
   { tmpString = newCommand; }
@@ -338,9 +340,9 @@ void G4UIGAG::SessionTerminate()
   G4cout << "***** Terminal session end *****" << G4endl;
 }
 
-void G4UIGAG::ShowCurrent( G4String newCommand )
+void G4UIGAG::ShowCurrent(const G4String& newCommand )
 {
-  G4String theCommand = GetFullPath(newCommand(1,newCommand.length()-1));
+  G4String theCommand = GetFullPath(newCommand.substr(1,newCommand.length()-1));
   G4String curV = UI->GetCurrentValues(theCommand);
   if( ! (curV.isNull()||curV(0)=='\0' ) ) {
     if (uiMode == terminal_mode){
@@ -355,14 +357,14 @@ void G4UIGAG::ShowCurrent( G4String newCommand )
     }
 }
 
-void G4UIGAG::ChangeDirectory( G4String newCommand )
+void G4UIGAG::ChangeDirectory(const G4String& newCommand )
 {
   G4String savedPrefix = prefix;
   if( newCommand.length() <= 3 )
   { prefix = "/"; }
   else
   {
-    G4String aNewPrefix = newCommand(3,newCommand.length()-3);
+    G4String aNewPrefix = newCommand.substr(3,newCommand.length()-3);
     G4String newPrefix = aNewPrefix.strip(G4String::both);
     if( newPrefix(0) == '/' )
     { prefix = newPrefix; }
@@ -382,14 +384,14 @@ void G4UIGAG::ChangeDirectory( G4String newCommand )
   }
 }
 
-void G4UIGAG::ListDirectory( G4String newCommand )
+void G4UIGAG::ListDirectory(const G4String& newCommand )
 {
   G4String targetDir('\0');
   if( newCommand.length() <= 3 )
   { targetDir = prefix; }
   else
   {
-    G4String newPrefix = newCommand(3,newCommand.length()-3);
+    G4String newPrefix = newCommand.substr(3,newCommand.length()-3);
     newPrefix.strip(G4String::both);
     if( newPrefix(0) == '/' )
     { targetDir = newPrefix; }
@@ -399,7 +401,7 @@ void G4UIGAG::ListDirectory( G4String newCommand )
       targetDir += newPrefix;
     }
     else
-    { targetDir = ModifyPrefix( newPrefix ); }
+    { targetDir = ModifyPrefix(newPrefix); }
   }
   if( targetDir( targetDir.length() - 1 ) != '/' )
   { targetDir += "/"; }
@@ -410,13 +412,13 @@ void G4UIGAG::ListDirectory( G4String newCommand )
   { commandTree->ListCurrent(); }
 }
 
-void G4UIGAG::TerminalHelp(G4String newCommand)
+void G4UIGAG::TerminalHelp(const G4String& newCommand)
 {
   G4UIcommandTree * treeTop = UI->GetTree();
   /*int*/str_size i = newCommand.index(" ");
   if( i != std::string::npos )
   {
-    G4String newValue = newCommand(i+1,newCommand.length()-(i+1));
+    G4String newValue = newCommand.substr(i+1,newCommand.length()-(i+1));
     newValue.strip(G4String::both);
     if( newValue(0) != '/' )
     { newValue.prepend( prefix ); }
@@ -486,18 +488,12 @@ void G4UIGAG::TerminalHelp(G4String newCommand)
   G4cin.getline( temp, 100 );
 }
 
-
-
-
-
-
-
 G4String G4UIGAG::ModifyPrefix(G4String newCommand)
 {
   G4String newPrefix = prefix;
   while( 1 )
   {
-    if( newCommand(0,2) == ".." )
+    if( newCommand.substr(0,2) == ".." )
     {
       if( newPrefix != "/" )
       { 
@@ -512,19 +508,19 @@ G4String G4UIGAG::ModifyPrefix(G4String newCommand)
     }
     if( newCommand == ".." || newCommand == "../" )
     { break; }
-    newCommand = newCommand(3,newCommand.length()-3);
+    newCommand = newCommand.substr(3,newCommand.length()-3);
   }
   return newPrefix;
 }
 
-G4UIcommandTree * G4UIGAG::FindDirPath(G4String newCommand)
+G4UIcommandTree * G4UIGAG::FindDirPath(const G4String& newCommand)
 {
   G4UIcommandTree * comTree = UI->GetTree();
   /*int*/ unsigned idx = 1;
   while( idx < newCommand.length()-1 )
   {
     int i = newCommand.index("/",idx);
-    comTree = comTree->GetTree(G4String(newCommand(0,i+1)));
+    comTree = comTree->GetTree(G4String(newCommand.substr(0,i+1)));
     if( comTree == NULL ) 
     { return NULL; }
     idx = i+1;

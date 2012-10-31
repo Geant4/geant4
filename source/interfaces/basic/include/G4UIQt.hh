@@ -123,11 +123,23 @@ public: // With description
   // Get the viewComponent
 
   bool IsSplitterReleased();
-  bool IsIconMoveSelected();
-  bool IsIconRotateSelected();
-  bool IsIconPickSelected();
-  bool IsIconZoomInSelected();
-  bool IsIconZoomOutSelected();
+
+  inline bool IsIconMoveSelected() {
+    return fMoveSelected;
+  };
+  inline bool IsIconRotateSelected() {
+    return fRotateSelected;
+  };
+  inline bool IsIconPickSelected() {
+    return fPickSelected;
+  };
+  inline bool IsIconZoomInSelected() {
+    return fZoomInSelected;
+  };
+  inline bool IsIconZoomOutSelected() {
+    return fZoomOutSelected;
+  };
+
   void SetIconMoveSelected();
   void SetIconRotateSelected();
   void SetIconPickSelected();
@@ -144,9 +156,9 @@ public:
   ~G4UIQt();
   void Prompt(G4String);
   void SessionTerminate();
-  void PauseSessionStart(G4String);
-  G4int ReceiveG4cout(G4String);
-  G4int ReceiveG4cerr(G4String);
+  virtual void PauseSessionStart(const G4String&);
+  virtual G4int ReceiveG4cout(const G4String&);
+  virtual G4int ReceiveG4cerr(const G4String&);
   //   G4String GetCommand(Widget);
 
 private:
@@ -155,14 +167,14 @@ private:
   void CreateHelpWidget();
   void InitHelpTreeAndVisParametersWidget();
   void FillHelpTree();
-  void ExitHelp();
+  virtual void ExitHelp() const;
 
   void CreateHelpTree(QTreeWidgetItem*,G4UIcommandTree*);
   QTreeWidgetItem* FindTreeItem(QTreeWidgetItem *,const QString&);
 
   QString GetCommandList(const G4UIcommand*);
 
-  G4bool GetHelpChoice(G4int&) ;// have to be implemeted because we heritate from G4VBasicShell
+  virtual G4bool GetHelpChoice(G4int&);// have to be implemeted because we heritate from G4VBasicShell
   bool eventFilter(QObject*,QEvent*);
   void ActivateCommand(G4String);
   QMap<int,QString> LookForHelpStringInChildTree(G4UIcommandTree *,const QString&);
@@ -208,6 +220,11 @@ private:
   QToolBar *fToolbarApp;
   QToolBar *fToolbarUser;
 
+  bool fMoveSelected;
+  bool fRotateSelected;
+  bool fPickSelected;
+  bool fZoomInSelected;
+  bool fZoomOutSelected;
 
 private Q_SLOTS :
   void ExitSession();

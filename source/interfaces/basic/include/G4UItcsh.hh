@@ -97,7 +97,7 @@ protected:
   void PreviousCommand();        // previous command
 
   void ListMatchedCommand();     // list matched commands
-  void CompleteCommand();        // complete command
+  void CompleteCommand();        // complete command  
   
   // utilities...
   G4String GetFirstMatchedString(const G4String& str1, 

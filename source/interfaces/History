@@ -17,9 +17,53 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-21th October, 2012 Koichi Murakami (interfaces-V09-05-28)
+23th October, 2012 Koichi Murakami (interfaces-V09-05-30)
+- UIExecutive, fixed Windows error, add SelectSessionByBestGuess().
+
+22th October, 2012 Koichi Murakami (interfaces-V09-05-29)
 - GetCommandLine in G4UIshell-related is changed to GetCommandLineString
   due to expected conflict on Windows. 
+
+(interfaces-V09-05-28 is used intarnally. It was tagged on the branch,
+interfaces-V09-05-24-check_on_win, for testing errors on Windows)
+
+20th October, 2012 Koichi Murakami (interfaces-V09-05-27)
+- ReceiveG4cout/cerr in G4coutDestion arguments is changed to const G4String&,
+  the correspoinding methods in delived classes are updated.
+- add "const" for constant-functions.
+- G4UItcsh, command completion method is changed, dynamically optimize path.
+- G4UIExecutive, fixed case-insensitivity in .g4session, with some modfications.
+  For Windows, logic is back to the original, csh is active and fallback.
+
+19th October 2012  Laurent Garnier 
+- G4UIQt
+  o Manage mouse style with bool instead of Icon status
+  o Prevent case of no-icons on toolbar
+
+- G4InteractorMessenger.cc : Allow "addIcon" command to have ommitables parameters
+
+19th October 2012  John Allison
+- G4UIExecutive.cc
+  o Re-ordered printing of available sessions.
+
+19th October 2012  John Allison  (interfaces-V09-05-26)
+- G4UIExecutive.cc
+  o Resuscitate GAG on Windows.
+- G4UIQt.cc:
+  o Fixed compiler warning.
+
+19th October 2012  Laurent Garnier 
+- G4UIQt.cc
+  o Resolved bug <a href="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1365">1365</a>
+    some code was removed since interfaces-V09-05-18
+
+19th October 2012  John Allison  (interfaces-V09-05-25)
+- G4UIExecutive.cc
+  o Fixed compiler errors on Windows.
+  o Re-introduced Xm.
+
+18th October 2012  Laurent Garnier
+- G4UIQt : Fix a Qt < 4.5 issue for ColorDialog
 
 18th October, 2012 Koichi Murakami (interfaces-V09-05-24)
 - G4UIExective
@@ -42,15 +86,15 @@ committal in the CVS repository !
 - G4UIExecutive.icc
   o Some problem with Xm - commented out.
 
-12th October 2012  John Allison  (interfaces-V09-05-20, co-works vis-V09-05-42)
+12th October 2012  John Allison  (interfaces-V09-05-20, co-works vis-V09-05-47)
 - G4UIExecutive:
   o Introduced string-driven-selection of UI session.
 - G4UIXaw.cc:
   o Deprecated.
 
-10th Octobre 2012  Laurent Garnier (co-works
+10th Octobre 2012  Laurent Garnier (co-works 
 - G4UIQt :
- o Add the same command thanks to John /vis/viewer/save
+ o Add a "save" command to "save" icon thanks to John /vis/viewer/save
 
 9th Octobre 2012  Laurent Garnier  (interfaces-V09-05-19)
 - G4UIQt :

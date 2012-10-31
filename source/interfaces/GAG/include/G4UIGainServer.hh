@@ -111,13 +111,10 @@ public:
   // Usage: delete gainSession;
   //
 
-
-   G4UIsession* SessionStart();  
-   void PauseSessionStart(G4String msg);
-   G4int ReceiveG4cout(G4String coutString);
-   G4int ReceiveG4cerr(G4String cerrString);
-
-
+  G4UIsession* SessionStart();  
+  virtual void PauseSessionStart(const G4String& msg);
+  virtual G4int ReceiveG4cout(const G4String& coutString);
+  virtual G4int ReceiveG4cerr(const G4String& cerrString);
 
 public:
   //  G4UIGainServer(G4VUIshell* aShell=0);
@@ -132,9 +129,9 @@ public:
   G4String GetCommand();
 
 private:
-  void ExecuteCommand(G4String aCommand);
-  G4bool GetHelpChoice(G4int& aInt);
-  void ExitHelp();
+  virtual void ExecuteCommand(const G4String& aCommand);
+  virtual G4bool GetHelpChoice(G4int& aInt);
+  virtual void ExitHelp() const;
   bool SetUPServer();
   void WaitingConnection();
   void CloseConnection();

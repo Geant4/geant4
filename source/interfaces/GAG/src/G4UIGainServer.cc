@@ -111,7 +111,7 @@ G4UIsession* G4UIGainServer::SessionStart()
 }
 
 //////////////////////////////////////////////////
-void G4UIGainServer::PauseSessionStart(G4String msg)
+void G4UIGainServer::PauseSessionStart(const G4String& msg)
 //////////////////////////////////////////////////
 {
     promptCharacter = msg;
@@ -129,7 +129,7 @@ void G4UIGainServer::PauseSessionStart(G4String msg)
 }
 
 ////////////////////////////////////////////////////
-void G4UIGainServer::ExecuteCommand(G4String aCommand)
+void G4UIGainServer::ExecuteCommand(const G4String& aCommand)
 ////////////////////////////////////////////////////
 {
     if(aCommand.length()<2) return;
@@ -312,7 +312,7 @@ G4String G4UIGainServer::GetCommand()
 }
 
 //////////////////////////////////////////////////////
-G4int G4UIGainServer::ReceiveG4cout(G4String coutString)
+G4int G4UIGainServer::ReceiveG4cout(const G4String& coutString)
 //////////////////////////////////////////////////////
 {
     if(socketD[1]>0){
@@ -320,18 +320,12 @@ G4int G4UIGainServer::ReceiveG4cout(G4String coutString)
     }
     return 0;
 
-
-
-
-
-
-
   //std::cout << coutString << std::flush;
   //return 0;
 }
 
 //////////////////////////////////////////////////////
-G4int G4UIGainServer::ReceiveG4cerr(G4String cerrString)
+G4int G4UIGainServer::ReceiveG4cerr(const G4String& cerrString)
 //////////////////////////////////////////////////////
 {
     if(socketD[2]>0){
@@ -339,15 +333,13 @@ G4int G4UIGainServer::ReceiveG4cerr(G4String cerrString)
     }
     return 0;
 
-
-
   //std::cerr << cerrString << std::flush;
   //return 0;
 }
 
-///////////////////////////////////////////////
+/////////////////////////////////////////////////
 G4bool G4UIGainServer::GetHelpChoice(G4int& aInt)
-///////////////////////////////////////////////
+/////////////////////////////////////////////////
 {
     G4cin >> aInt;
     if(!G4cin.good()){
@@ -359,7 +351,7 @@ G4bool G4UIGainServer::GetHelpChoice(G4int& aInt)
 }
 
 /////////////////////////////
-void G4UIGainServer::ExitHelp()
+void G4UIGainServer::ExitHelp() const
 /////////////////////////////
 {
     char temp[100];
@@ -787,8 +779,9 @@ void G4UIGainServer::SendDisableList(G4UIcommandTree* tree,int level){
 //####### update check routines ####################################
 
 ///////////////////////////////
-void G4UIGainServer::UpdateState(void){
+void G4UIGainServer::UpdateState(void)
 ///////////////////////////////
+{
    static G4ApplicationState previousState= G4State_PreInit;
    G4ApplicationState  newState;
    G4StateManager *statM = G4StateManager::GetStateManager();

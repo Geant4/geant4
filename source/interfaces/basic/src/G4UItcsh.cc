@@ -443,6 +443,11 @@ void G4UItcsh::CompleteCommand()
     input= input.strip(G4String::leading);
   }
 
+  // tail string
+  size_t thead = input.find_last_of('/');
+  G4String strtail = input;
+  if (thead != G4String::npos) strtail = input(thead+1, input.size()-thead-1);
+
   // command tree of "user specified directory"  
   G4String vpath= currentCommandDir;
   G4String vcmd;
@@ -503,8 +508,6 @@ void G4UItcsh::CompleteCommand()
     }
   }
 
-  if(nMatch==0) return;  // no matched
-
   // display...
   input= commandLine;
   // target token is last token
@@ -512,11 +515,7 @@ void G4UItcsh::CompleteCommand()
   if(jhead == G4int(G4String::npos)) jhead=0;
   else jhead++;
 
-  G4int jt= input.find_last_of('/');
-  if(jt<jhead) jt=G4int(G4String::npos);
-
-  if(jt==G4int(G4String::npos)) jt= jhead;
-  else jt++;
+  G4int jt = jhead;
 
   G4String dspstr; 
   G4int i;
@@ -524,17 +523,18 @@ void G4UItcsh::CompleteCommand()
   for(i=jt; i<=G4int(input.length())-1; i++) dspstr+= G4String(' '); 
   for(i=jt; i<=G4int(input.length())-1; i++) dspstr+= G4String(AsciiBS); 
 
-  dspstr+= stream;
-  G4cout << dspstr << std::flush; 
+  dspstr+= (vpath + stream);
+  if (nMatch == 0) dspstr+= strtail;
+  G4cout << dspstr << std::flush;
 
   // command line string
   input.remove(jt);
-  input+= stream;
+  input+= (vpath + stream);
+  if (nMatch==0) input+= strtail;
 
   commandLine= input;
   cursorPosition= commandLine.length()+1;
 }
-
 
 // --------------------------------------------------------------------
 //      commad line
@@ -639,9 +639,9 @@ G4String G4UItcsh::ReadLine()
   return commandLine;
 }
 
-//////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 G4String G4UItcsh::GetCommandLineString(const char* msg)
-//////////////////////////////////////////////////
+////////////////////////////////////////////////////////
 {
   SetTermToInputMode();
 

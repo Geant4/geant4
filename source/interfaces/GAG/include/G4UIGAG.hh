@@ -67,14 +67,14 @@ class G4UIGAG : public G4UIsession
       // "gagSession"  is deleted.
       // Usage: delete gagSession;
       //
-      void PauseSessionStart(G4String);
-      G4int ReceiveG4cout(G4String);
-      G4int ReceiveG4cerr(G4String);         
+      void PauseSessionStart(const G4String&);
+      G4int ReceiveG4cout(const G4String&);
+      G4int ReceiveG4cerr(const G4String&);         
       // These methods are implementation of the virtual methods of
       // G4UIsession class. 
       //
       void SessionTerminate();
-      void Prompt(G4String);
+      void Prompt(const G4String&);
       G4String GetCommand();
       // These methods are not for users.
   private:
@@ -88,14 +88,14 @@ class G4UIGAG : public G4UIsession
   private:
       G4String JVersion;
       G4String TVersion;
-      void ExecuteCommand(G4String);
-      void ChangeDirectory(G4String);
-      void ListDirectory(G4String);
-      void TerminalHelp(G4String);
-      G4String ModifyPrefix(G4String);
-      G4UIcommandTree * FindDirPath(G4String);
-      void ShowCurrent(G4String);
-      G4String GetFullPath(G4String);
+      void ExecuteCommand(const G4String&);
+      void ChangeDirectory(const G4String&);
+      void ListDirectory(const G4String&);
+      void TerminalHelp(const G4String&);
+     G4String ModifyPrefix(G4String);
+      G4UIcommandTree* FindDirPath(const G4String&);
+      void ShowCurrent(const G4String&);
+      G4String GetFullPath(const G4String&);
 
     void SendCommandProperties(G4UIcommandTree *);
     void SendParameterProperties(G4UIcommandTree *);

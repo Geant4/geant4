@@ -129,6 +129,11 @@ G4UIQt::G4UIQt (
 ,fLastQTabSizeY(0)
 ,fToolbarApp(NULL)
 ,fToolbarUser(NULL)
+,fMoveSelected(false)
+,fRotateSelected(true)
+,fPickSelected(false)
+,fZoomInSelected(false)
+,fZoomOutSelected(false)
 {
 
   G4Qt* interactorManager = G4Qt::getInstance (argc,argv,(char*)"Qt");
@@ -168,19 +173,16 @@ G4UIQt::G4UIQt (
   AddIcon("Zoom out","zoom_out","");
   AddIcon("Zoom in","zoom_in","");
   AddIcon("Rotate","rotate","");
-  SetIconRotateSelected();
 
   // Surface Style : Should be change when changing current viewer
   AddIcon("Hidden line removal","hidden_line_removal","");
   AddIcon("Hidden line removal","hidden_line_and_surface_removal","");
   AddIcon("Hidden line removal","solid","");
   AddIcon("Hidden line removal","wireframe","");
-  SetIconWireframeSelected();
 
   // Perspective/Ortho
   AddIcon("Perspective","perspective","");
   AddIcon("Orthographic","ortho","");
-  SetIconOrthoSelected();
 
   // Try : changebackground
   //  AddIcon("change background","/Users/garnier/Desktop/Captures/a.jpg","/vis/viewer/set/background");
@@ -698,7 +700,7 @@ void G4UIQt::SessionTerminate (
    @see : G4VisCommandReviewKeptEvents::SetNewValue
 */
 void G4UIQt::PauseSessionStart (
- G4String aState
+ const G4String& aState
 )
 {
   if (!aState) return;
@@ -744,7 +746,7 @@ void G4UIQt::SecondaryLoop (
    @return 0
 */
 G4int G4UIQt::ReceiveG4cout (
- G4String aString
+ const G4String& aString
  )
 {
   if (!aString) return 0;
@@ -775,7 +777,7 @@ G4int G4UIQt::ReceiveG4cout (
    @return 0
 */
 G4int G4UIQt::ReceiveG4cerr (
- G4String aString
+ const G4String& aString
 )
 {
   if (!aString) return 0;
@@ -869,7 +871,8 @@ void G4UIQt::AddButton (
 */
 void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCommand, const char* aFileName){
   if(aLabel==NULL) return; // TO KEEP
-  if(aCommand==NULL) return; // TO KEEP
+  // special case, aCommand could be NULL if aIconFile is not user_icon
+  if ((aCommand==NULL) && (std::string(aIconFile) == "user_icon")) return; // TO KEEP
 
   QPixmap pix;
   bool userToolBar = false;
@@ -1656,6 +1659,22 @@ void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCom
     connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(ChangeCursorStyle(const QString&)));
     signalMapper->setMapping(action, QString(aIconFile));
 
+    if (std::string(aIconFile) == "move") {
+      SetIconMoveSelected();
+    }
+    if (std::string(aIconFile) == "rotate") {
+      SetIconRotateSelected();
+    }
+    if (std::string(aIconFile) == "pick") {
+      SetIconPickSelected();
+    }
+    if (std::string(aIconFile) == "zoom_in") {
+      SetIconZoomInSelected();
+    }
+    if (std::string(aIconFile) == "zoom_out") {
+      SetIconZoomOutSelected();
+    }
+
     // special case : surface style
   } else if ((std::string(aIconFile) == "hidden_line_removal") ||
              (std::string(aIconFile) == "hidden_line_and_surface_removal") ||
@@ -1667,6 +1686,19 @@ void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCom
     connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(ChangeSurfaceStyle(const QString&)));
     signalMapper->setMapping(action, QString(aIconFile));
 
+    if (std::string(aIconFile) == "hidden_line_removal") {
+      SetIconHLRSelected();
+    }
+    if (std::string(aIconFile) == "hidden_line_and_surface_removal") {
+      SetIconHLHSRSelected();
+    }
+    if (std::string(aIconFile) == "solid") {
+      SetIconSolidSelected();
+    }
+    if (std::string(aIconFile) == "wireframe") {
+      SetIconWireframeSelected();
+    }
+
     // special case : perspective/ortho
   } else if ((std::string(aIconFile) == "perspective") ||
              (std::string(aIconFile) == "ortho")) {
@@ -1675,6 +1707,13 @@ void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCom
     action->setData(aIconFile);
     connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(ChangePerspectiveOrtho(const QString&)));
     signalMapper->setMapping(action, QString(aIconFile));
+
+    if (std::string(aIconFile) == "perspective") {
+      SetIconPerspectiveSelected();
+    }
+    if (std::string(aIconFile) == "ortho") {
+      SetIconOrthoSelected();
+    }
 
   } else {
 
@@ -1845,6 +1884,27 @@ void G4UIQt::CreateHelpTree(
       newItem->setText(0,GetShortCommandPath(commandText));
     }
     CreateHelpTree(newItem,aCommandTree->GetTree(a+1));
+  }
+
+  // Get the Commands
+
+  for (int a=0;a<aCommandTree->GetCommandEntry();a++) {
+    
+    QStringList stringList;
+    commandText = QString((char*)(aCommandTree->GetCommand(a+1)->GetCommandPath()).data()).trimmed();
+
+    // if already exist, don't create it !
+    newItem = FindTreeItem(aParent,commandText);
+    if (newItem == NULL) {
+      newItem = new QTreeWidgetItem(aParent);
+      newItem->setText(0,GetShortCommandPath(commandText));
+
+#if QT_VERSION < 0x040202
+      fHelpTreeWidget->setItemExpanded(newItem,false); 
+#else
+      newItem->setExpanded(false);
+#endif
+    }
   }
 }
 
@@ -2521,7 +2581,7 @@ void G4UIQt::ExitSession (
 }
 
 void G4UIQt::ExitHelp(
-)
+) const
 {
 }
 
@@ -2569,7 +2629,11 @@ void G4UIQt::VisParameterCallback(QWidget* widget){
     return;
   }
   QString command;
+#if QT_VERSION < 0x040400
+  QWidget* name = grid->itemAt(grid->columnCount()*(grid->rowCount()-2))->widget();
+#else
   QWidget* name = grid->itemAtPosition(grid->rowCount()-1,0)->widget();
+#endif
   if (widget == NULL) {
     return;
   }
@@ -2579,7 +2643,11 @@ void G4UIQt::VisParameterCallback(QWidget* widget){
   command += (dynamic_cast<QLabel*>(name))->text()+" ";
   
   for (int a=0;a<grid->rowCount()-1; a++) {
+#if QT_VERSION < 0x040400
+    QWidget* widgetTmp = grid->itemAt(a*grid->columnCount()+1)->widget();
+#else
     QWidget* widgetTmp = grid->itemAtPosition(a,1)->widget();
+#endif
     
     // 4 kind of widgets : QLineEdit / QComboBox / radioButtonsGroup / QPushButton (color chooser)
     if (widgetTmp != NULL) {
@@ -2996,9 +3064,16 @@ void G4UIQt::ChangeColorCallback(QWidget* widget) {
   old.setRgbF(value.section(" ",0,1).toDouble(),
               value.section(" ",1,2).toDouble(),
               value.section(" ",2,3).toDouble());
+#if QT_VERSION < 0x040500
+  bool a;
+  QColor color = QColor(QColorDialog::getRgba (old.rgba(),&a,fUITabWidget));
+#else
   QColor color = QColorDialog::getColor(old,
                                         fUITabWidget,
-                                        "Change color");
+                                        "Change color",
+					QColorDialog::ShowAlphaChannel);
+#endif
+
   
   if (color.isValid()) {
     // rebuild the widget icon
@@ -3023,19 +3098,31 @@ void G4UIQt::ChangeCursorStyle(const QString& action) {
 
   // Theses actions should be in the app toolbar
 
+  fMoveSelected = true;
+  fPickSelected = true;
+  fRotateSelected = true;
+  fZoomInSelected = true;
+  fZoomOutSelected = true;
+  
+  if (fToolbarApp == NULL) return; 
   QList<QAction *> list = fToolbarApp->actions ();
   for (int i = 0; i < list.size(); ++i) {
     if (list.at(i)->data().toString () == action) {
       list.at(i)->setChecked(TRUE);
     } else if (list.at(i)->data().toString () == "move") {
+      fMoveSelected = false;
       list.at(i)->setChecked(FALSE);
     } else if (list.at(i)->data().toString () == "pick") {
+      fPickSelected = false;
       list.at(i)->setChecked(FALSE);
     } else if (list.at(i)->data().toString () == "rotate") {
+      fRotateSelected = false;
       list.at(i)->setChecked(FALSE);
     } else if (list.at(i)->data().toString () == "zoom_in") {
+      fZoomInSelected = false;
       list.at(i)->setChecked(FALSE);
     } else if (list.at(i)->data().toString () == "zoom_out") {
+      fZoomOutSelected = false;
       list.at(i)->setChecked(FALSE);
     }
   }
@@ -3053,6 +3140,7 @@ void G4UIQt::ChangeSurfaceStyle(const QString& action) {
 
   // Theses actions should be in the app toolbar
 
+  if (fToolbarApp == NULL) return; 
   QList<QAction *> list = fToolbarApp->actions ();
   for (int i = 0; i < list.size(); ++i) {
     if (list.at(i)->data().toString () == action) {
@@ -3111,6 +3199,7 @@ void G4UIQt::ChangePerspectiveOrtho(const QString& action) {
 
   // Theses actions should be in the app toolbar
 
+  if (fToolbarApp == NULL) return; 
   QList<QAction *> list = fToolbarApp->actions ();
   QString checked = "";
   for (int i = 0; i < list.size(); ++i) {
@@ -3132,84 +3221,16 @@ void G4UIQt::ChangePerspectiveOrtho(const QString& action) {
 }
 
 
-bool G4UIQt::IsIconMoveSelected() {
-  // Theses actions should be in the app toolbar
-
-  QList<QAction *> list = fToolbarApp->actions ();
-  for (int i = 0; i < list.size(); ++i) {
-    if (list.at(i)->data().toString () == "move") {
-      if (list.at(i)->isChecked ()) {
-        return true;
-      }
-    }
-  }
-  return false;
-}
-
-
-bool G4UIQt::IsIconRotateSelected() {
-  // Theses actions should be in the app toolbar
-
-  QList<QAction *> list = fToolbarApp->actions ();
-  for (int i = 0; i < list.size(); ++i) {
-    if (list.at(i)->data().toString () == "rotate") {
-      if (list.at(i)->isChecked ()) {
-        return true;
-      }
-    }
-  }
-  return false;
-}
-
-
-bool G4UIQt::IsIconPickSelected() {
-  // Theses actions should be in the app toolbar
-
-  QList<QAction *> list = fToolbarApp->actions ();
-  for (int i = 0; i < list.size(); ++i) {
-    if (list.at(i)->data().toString () == "pick") {
-      if (list.at(i)->isChecked ()) {
-        return true;
-      }
-    }
-  }
-  return false;
-}
-
-
-bool G4UIQt::IsIconZoomInSelected() {
-  // Theses actions should be in the app toolbar
-
-  QList<QAction *> list = fToolbarApp->actions ();
-  for (int i = 0; i < list.size(); ++i) {
-    if (list.at(i)->data().toString () == "zoom_in") {
-      if (list.at(i)->isChecked ()) {
-        return true;
-      }
-    }
-  }
-  return false;
-}
-
-
-bool G4UIQt::IsIconZoomOutSelected() {
-  // Theses actions should be in the app toolbar
-
-  QList<QAction *> list = fToolbarApp->actions ();
-  for (int i = 0; i < list.size(); ++i) {
-    if (list.at(i)->data().toString () == "zoom_out") {
-      if (list.at(i)->isChecked ()) {
-        return true;
-      }
-    }
-  }
-  return false;
-}
-
 
 void G4UIQt::SetIconMoveSelected() {
   // Theses actions should be in the app toolbar
+  fMoveSelected = true;
+  fRotateSelected = false;
+  fPickSelected = false;
+  fZoomInSelected = false;
+  fZoomOutSelected = false;
 
+  if (fToolbarApp == NULL) return; 
   QList<QAction *> list = fToolbarApp->actions ();
   for (int i = 0; i < list.size(); ++i) {
     if (list.at(i)->data().toString () == "move") {
@@ -3229,7 +3250,13 @@ void G4UIQt::SetIconMoveSelected() {
 
 void G4UIQt::SetIconRotateSelected() {
   // Theses actions should be in the app toolbar
+  fRotateSelected = true;
+  fMoveSelected = false;
+  fPickSelected = false;
+  fZoomInSelected = false;
+  fZoomOutSelected = false;
 
+  if (fToolbarApp == NULL) return; 
   QList<QAction *> list = fToolbarApp->actions ();
   for (int i = 0; i < list.size(); ++i) {
     if (list.at(i)->data().toString () == "rotate") {
@@ -3249,7 +3276,13 @@ void G4UIQt::SetIconRotateSelected() {
 
 void G4UIQt::SetIconPickSelected() {
   // Theses actions should be in the app toolbar
+  fPickSelected = true;
+  fMoveSelected = false;
+  fRotateSelected = false;
+  fZoomInSelected = false;
+  fZoomOutSelected = false;
 
+  if (fToolbarApp == NULL) return; 
   QList<QAction *> list = fToolbarApp->actions ();
   for (int i = 0; i < list.size(); ++i) {
     if (list.at(i)->data().toString () == "pick") {
@@ -3269,7 +3302,13 @@ void G4UIQt::SetIconPickSelected() {
 
 void G4UIQt::SetIconZoomInSelected() {
   // Theses actions should be in the app toolbar
+  fZoomInSelected = true;
+  fMoveSelected = false;
+  fRotateSelected = false;
+  fPickSelected = false;
+  fZoomOutSelected = false;
 
+  if (fToolbarApp == NULL) return; 
   QList<QAction *> list = fToolbarApp->actions ();
   for (int i = 0; i < list.size(); ++i) {
     if (list.at(i)->data().toString () == "zoom_in") {
@@ -3289,7 +3328,13 @@ void G4UIQt::SetIconZoomInSelected() {
 
 void G4UIQt::SetIconZoomOutSelected() {
   // Theses actions should be in the app toolbar
+  fZoomOutSelected = true;
+  fMoveSelected = false;
+  fRotateSelected = false;
+  fPickSelected = false;
+  fZoomInSelected = false;
 
+  if (fToolbarApp == NULL) return; 
   QList<QAction *> list = fToolbarApp->actions ();
   for (int i = 0; i < list.size(); ++i) {
     if (list.at(i)->data().toString () == "zoom_out") {
@@ -3310,6 +3355,7 @@ void G4UIQt::SetIconZoomOutSelected() {
 void G4UIQt::SetIconSolidSelected() {
   // Theses actions should be in the app toolbar
 
+  if (fToolbarApp == NULL) return; 
   QList<QAction *> list = fToolbarApp->actions ();
   for (int i = 0; i < list.size(); ++i) {
     if (list.at(i)->data().toString () == "solid") {
@@ -3328,6 +3374,7 @@ void G4UIQt::SetIconSolidSelected() {
 void G4UIQt::SetIconWireframeSelected() {
   // Theses actions should be in the app toolbar
 
+  if (fToolbarApp == NULL) return; 
   QList<QAction *> list = fToolbarApp->actions ();
   for (int i = 0; i < list.size(); ++i) {
     if (list.at(i)->data().toString () == "wireframe") {
@@ -3346,6 +3393,7 @@ void G4UIQt::SetIconWireframeSelected() {
 void G4UIQt::SetIconHLRSelected() {
   // Theses actions should be in the app toolbar
 
+  if (fToolbarApp == NULL) return; 
   QList<QAction *> list = fToolbarApp->actions ();
   for (int i = 0; i < list.size(); ++i) {
     if (list.at(i)->data().toString () == "hidden_line_removal") {
@@ -3364,6 +3412,7 @@ void G4UIQt::SetIconHLRSelected() {
 void G4UIQt::SetIconHLHSRSelected() {
   // Theses actions should be in the app toolbar
 
+  if (fToolbarApp == NULL) return; 
   QList<QAction *> list = fToolbarApp->actions ();
   for (int i = 0; i < list.size(); ++i) {
     if (list.at(i)->data().toString () == "hidden_line_and_surface_removal") {
@@ -3382,6 +3431,7 @@ void G4UIQt::SetIconHLHSRSelected() {
 void G4UIQt::SetIconPerspectiveSelected() {
   // Theses actions should be in the app toolbar
 
+  if (fToolbarApp == NULL) return; 
   QList<QAction *> list = fToolbarApp->actions ();
   for (int i = 0; i < list.size(); ++i) {
     if (list.at(i)->data().toString () == "perspective") {
@@ -3397,6 +3447,7 @@ void G4UIQt::SetIconPerspectiveSelected() {
 void G4UIQt::SetIconOrthoSelected() {
   // Theses actions should be in the app toolbar
 
+  if (fToolbarApp == NULL) return; 
   QList<QAction *> list = fToolbarApp->actions ();
   for (int i = 0; i < list.size(); ++i) {
     if (list.at(i)->data().toString () == "ortho") {

@@ -86,19 +86,18 @@ public:
   void SetPrompt(const G4String& prompt);
 
 private:
-  void ExecuteCommand(G4String aCommand);
+  virtual void ExecuteCommand(const G4String& aCommand);
+  virtual G4bool GetHelpChoice(G4int& aInt);
+  virtual void ExitHelp() const;
   G4String GetCommand(const char* msg=0);
-  G4bool GetHelpChoice(G4int& aInt);
-  void ExitHelp();
   
 public:
   // These methods are implementation of corresponding virtual methods
   // of G4UIsession class.
   virtual G4UIsession* SessionStart();  
-  virtual void PauseSessionStart(G4String msg);
-  virtual G4int ReceiveG4cout(G4String coutString);
-  virtual G4int ReceiveG4cerr(G4String cerrString);
-
+  virtual void PauseSessionStart(const G4String& msg);
+  virtual G4int ReceiveG4cout(const G4String& coutString);
+  virtual G4int ReceiveG4cerr(const G4String& cerrString);
 };
 
 #endif

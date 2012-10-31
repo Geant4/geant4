@@ -86,6 +86,7 @@ private:
   void SelectSessionByArg(const G4String& stype);
   void SelectSessionByEnv();
   void SelectSessionByFile(const G4String& appname);
+  void SelectSessionByBestGuess();
 };
 
 // ====================================================================

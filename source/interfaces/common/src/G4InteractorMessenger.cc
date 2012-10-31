@@ -106,12 +106,12 @@ G4InteractorMessenger::G4InteractorMessenger (
   ("open save move rotate pick zoom_in zoom_out wireframe solid hidden_line_removal hidden_line_and_surface_removal perspective ortho user_icon");
   addIcon->SetParameter (parameter);
 
-  parameter = new G4UIparameter("Command",'s',false);
-  parameter->SetDefaultValue("");
+  parameter = new G4UIparameter("Command",'s',true);
+  parameter->SetDefaultValue("no_command");
   addIcon->SetParameter (parameter);
 
   parameter = new G4UIparameter("File",'s',true);
-  parameter->SetDefaultValue("");
+  parameter->SetDefaultValue("no_file");
   addIcon->SetParameter (parameter);
 
   // /gui/system :

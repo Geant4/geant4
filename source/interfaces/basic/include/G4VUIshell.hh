@@ -37,7 +37,7 @@
 //   Description: 
 //   This class is the abstract base class for various UI shells.
 //
-//   GetCommadLine() (virtual) returns a command string input from
+//   GetCommadLineString() (virtual) returns a command string input from
 //    a commad line.
 //
 //   Two pre-inplemented shell commands(still virtual) are also included, 

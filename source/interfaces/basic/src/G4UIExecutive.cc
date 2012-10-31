@@ -35,7 +35,7 @@
 #endif
 
 #if defined(G4UI_BUILD_XM_SESSION)
-//#include "G4UIXm.hh"
+#include "G4UIXm.hh"
 #endif
 
 #if defined(G4UI_BUILD_WIN32_SESSION)
@@ -120,6 +120,9 @@ G4UIExecutive::G4UIExecutive(G4int argc, char** argv, const G4String& type)
 
     SelectSessionByFile(appname);
   }
+
+  // 4th, best guess of session type  
+  if ( selected == kNone) SelectSessionByBestGuess();
     
   // instantiate a session...
   switch ( selected ) {
@@ -131,8 +134,8 @@ G4UIExecutive::G4UIExecutive(G4int argc, char** argv, const G4String& type)
     break;
   case kXm:
 #if defined(G4UI_BUILD_XM_SESSION)
-    //session = new G4UIXm(argc, argv);
-    //isGUI = true;
+    session = new G4UIXm(argc, argv);
+    isGUI = true;
 #endif
     break;
   case kWin32:
@@ -176,14 +179,15 @@ G4UIExecutive::G4UIExecutive(G4int argc, char** argv, const G4String& type)
     G4Exception("G4UIExecutive::G4UIExecutive()", 
                 "UI0002",
                 JustWarning,
-                "Specified session type is not build in your system.\n"
-                "Use a fallback session type.");
-    
+                "Specified session type is not build in your system,\n"
+                "or no session type is specified.\n"
+                "A fallback session type is used.");
+
     selected = kCsh;
     DISCARD_PARAMETER(argc);
     DISCARD_PARAMETER(argv);
     shell = new G4UIcsh;
-    session = new G4UIterminal(shell);    
+    session = new G4UIterminal(shell);
   }
 }
 
@@ -197,7 +201,7 @@ G4UIExecutive::~G4UIExecutive()
 void G4UIExecutive::SelectSessionByArg(const G4String& stype)
 {
   if ( qt_build && stype == "qt" ) selected = kQt;
-  // else if ( xm_build && stype == "xm" ) selected = kXm;
+  else if ( xm_build && stype == "xm" ) selected = kXm;
   else if ( win32_build && stype == "win32" ) selected = kWin32;
   //else if ( wt_build && stype == "wt" ) selected = kWt;
   else if ( stype == "gag" ) selected = kGag;
@@ -209,11 +213,11 @@ void G4UIExecutive::SelectSessionByArg(const G4String& stype)
 void G4UIExecutive::SelectSessionByEnv()
 {
   if ( qt_build && getenv("G4UI_USE_QT") ) selected = kQt;
-  //else if ( xm_build && getenv("G4UI_USE_XM") ) selected = kXm;
+  else if ( xm_build && getenv("G4UI_USE_XM") ) selected = kXm;
   else if ( win32_build && getenv("G4UI_USE_WIN32") ) selected = kWin32;
   //else if ( wt_build && getenv("G4UI_USE_WT") ) selected = kWt;
   else if ( getenv("G4UI_USE_GAG") ) selected = kGag;
-  else if (tcsh_build && getenv("G4UI_USE_TCSH") ) selected = kTcsh;
+  else if ( tcsh_build && getenv("G4UI_USE_TCSH") ) selected = kTcsh;
 }
 
 // --------------------------------------------------------------------------
@@ -230,12 +234,14 @@ void G4UIExecutive::SelectSessionByFile(const G4String& appname)
   G4String default_session = "";
   G4int iline = 1;
   sessionMap.clear();
-  while (fsession.good()) {
-    if(fsession.eof()) break;
+  while( fsession.good() ) {
+    if( fsession.eof()) break;
     fsession.getline(linebuf, BUFSIZE);
     G4String aline = linebuf;
     aline.strip(G4String::both);
-    if ( iline == 1 ) default_session = aline;   
+    if ( aline(0) == '#' ) continue;
+    if ( iline == 1 )
+      default_session = aline;
     else {
       size_t idx = aline.find_first_of(" ");
       if ( idx == G4String::npos ) break;
@@ -243,7 +249,6 @@ void G4UIExecutive::SelectSessionByFile(const G4String& appname)
       idx = aline.find_first_not_of(" ", idx);
       if (idx == G4String::npos ) break;
       G4String sname = aline.substr(idx, aline.size()-idx);
-      sname.toLower();
       sessionMap[aname] = sname;
     }
     iline++;
@@ -254,15 +259,25 @@ void G4UIExecutive::SelectSessionByFile(const G4String& appname)
   std::map<G4String, G4String>::iterator it = sessionMap.find(appname);
   if ( it != sessionMap.end() ) stype = sessionMap[appname];
   else stype = default_session;
+  stype.toLower();
 
   // select session...
   if ( qt_build && stype == "qt" ) selected = kQt;
-  // else if ( xm_build && stype == "xm" ) selected = kXm;
+  else if ( xm_build && stype == "xm" ) selected = kXm;
   else if ( win32_build && stype == "win32" ) selected = kWin32;
   //else if ( wt_build && stype == "wt" ) selected = kWt;
   else if ( stype == "gag" ) selected = kGag;
   else if ( tcsh_build && stype == "tcsh" ) selected = kTcsh;
   else if ( stype == "csh" ) selected = kCsh;
+}
+
+// --------------------------------------------------------------------------
+void G4UIExecutive::SelectSessionByBestGuess()
+{
+  if ( qt_build ) selected = kQt;
+  else if ( tcsh_build ) selected = kTcsh;
+  else if ( xm_build ) selected = kXm;
+  else if ( win32_build ) selected = kWin32;
 }
 
 // --------------------------------------------------------------------------
