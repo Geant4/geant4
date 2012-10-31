@@ -28,6 +28,7 @@
 // -------------------------------------------------------------------
 
 #include "MicrobeamPhantomConfiguration.hh"
+#include "G4SystemOfUnits.hh"
 
 G4int MicrobeamPhantomConfiguration::phantomTotalPixels = 0;
 G4int MicrobeamPhantomConfiguration::nucleusTotalPixels = 0;

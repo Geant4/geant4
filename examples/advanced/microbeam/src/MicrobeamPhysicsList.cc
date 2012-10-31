@@ -32,6 +32,9 @@
 #include "MicrobeamPhysicsList.hh"
 #include "MicrobeamPhysicsListMessenger.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 #include "G4StepLimiter.hh"
 
 #include "G4EmStandardPhysics.hh"
@@ -50,7 +53,6 @@
 
 #include "G4LossTableManager.hh"
 #include "G4EmConfigurator.hh"
-#include "G4UnitsTable.hh"
 
 #include "G4ProcessManager.hh"
 #include "G4Decay.hh"

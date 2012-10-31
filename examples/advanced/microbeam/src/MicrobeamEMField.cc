@@ -28,6 +28,7 @@
 // -------------------------------------------------------------------
 
 #include "MicrobeamEMField.hh"
+#include "G4SystemOfUnits.hh"
 
 MicrobeamEMField::MicrobeamEMField() 
 {    
