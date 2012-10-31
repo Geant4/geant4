@@ -312,7 +312,7 @@ G4PhysicsVector::ComputeSecondDerivatives(G4double firstPointDerivative,
                                           G4double endPointDerivative)
   //  A standard method of computation of second derivatives 
   //  First derivatives at the first and the last point should be provided
-  //  See for example W.H. Press et al. "Numerical reciptes and C"
+  //  See for example W.H. Press et al. "Numerical recipes in C"
   //  Cambridge University Press, 1997.
 {
   if(4 > numberOfNodes)   // cannot compute derivatives for less than 4 bins

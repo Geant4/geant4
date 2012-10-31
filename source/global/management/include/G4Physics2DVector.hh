@@ -101,7 +101,10 @@ public:  // with description
 
   inline G4PhysicsVectorType GetType() const;
   // Get physics vector type
-  
+
+  inline void SetBicubicInterpolation(G4bool);
+  // Activate/deactivate bicubic interpolation.
+
   void Store(std::ofstream& fOut);
   G4bool Retrieve(std::ifstream& fIn);
   // To store/retrieve persistent data to/from file streams.
@@ -114,7 +117,7 @@ public:  // with description
   // Get cache values 
 
   inline void SetVerboseLevel(G4int value);
-  inline G4int GetVerboseLevel(G4int);
+  inline G4int GetVerboseLevel() const;
   // Set/Get Verbose level
 
 protected:
@@ -126,7 +129,11 @@ protected:
   void CopyData(const G4Physics2DVector& vec);
 
   void ComputeValue(G4double x, G4double y);
-  // Main method to interpolate 2D vector
+  // Main method to interpolate 2D vector 
+  //   by default by linear interpolation
+
+  void BicubicInterpolation(size_t idx, size_t idy);
+  // Bicubic interpolation of 2D vector  
 
   size_t FindBinLocation(G4double z, const G4PV2DDataVector&);
   // Main method to local bin
@@ -139,6 +146,11 @@ protected:
   // Starting from 0 
 
 private:
+
+  inline G4double DerivativeX(size_t idx, size_t idy, G4double fac);
+  inline G4double DerivativeY(size_t idx, size_t idy, G4double fac);
+  inline G4double DerivativeXY(size_t idx, size_t idy, G4double fac);
+  // computation of derivatives
 
   G4int operator==(const G4Physics2DVector &right) const ;
   G4int operator!=(const G4Physics2DVector &right) const ;
@@ -154,7 +166,8 @@ private:
   G4PV2DDataVector  yVector;
   std::vector<G4PV2DDataVector*> value;
 
-  G4int verboseLevel;
+  G4int  verboseLevel;
+  G4bool useBicubic;
 };
 
 #include "G4Physics2DVector.icc"
