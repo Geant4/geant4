@@ -26,6 +26,8 @@
 #ifndef ADDONTARGETLAYER_HH
 #define ADDONTARGETLAYER_HH
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "TargetComponent.hh"
 #include "globals.hh"
 
@@ -43,7 +45,7 @@ class AddOnTargetLayer : public TargetComponent {
                     TargetGeometryManager* geomManager,
                     G4String layerName,
                     G4String material = "Beryllium",
-                    G4double thickn = 1.0 * cm);
+                    G4double thickn = 1.0 * CLHEP::cm);
    ~AddOnTargetLayer();
 
    void GeometryUpdate(TargetGeometryManager*);

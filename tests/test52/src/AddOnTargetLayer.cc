@@ -28,6 +28,7 @@
 #include "TargetGeometryManager.hh"
 #include "TargetLayerSD.hh"
 #include "Materials.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4SDManager.hh"
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"

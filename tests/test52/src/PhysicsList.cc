@@ -35,6 +35,7 @@
 #include "EMPhotonEPDL.hh"
 #include "EMPhotonPenelope.hh"
 #include "EMPhotonStandard.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4VPhysicsConstructor.hh"
 #include "G4RegionStore.hh"
 #include "G4Region.hh"

@@ -29,6 +29,7 @@
 #include "SemiInfiniteTarget.hh"
 #include "AddOnTargetLayer.hh"
 
+#include "G4SystemOfUnits.hh"
 
 TargetGeometryManager::TargetGeometryManager() {
 

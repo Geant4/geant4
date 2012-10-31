@@ -26,6 +26,8 @@
 #ifndef SEMIINFINITETARGET_HH
 #define SEMIINFINITETARGET_HH
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "TargetComponent.hh"
 #include "globals.hh"
 
@@ -43,9 +45,9 @@ class SemiInfiniteTarget : public TargetComponent {
                       TargetGeometryManager* geomManager,
                       G4VPhysicalVolume* world,
                       G4String material = "Beryllium",
-                      G4double thickn = 10.0 * cm,
-                      G4double rad = 5.0 * cm,
-                      G4double maxStep = 0.001 * mm);
+                      G4double thickn = 10.0 * CLHEP::cm,
+                      G4double rad = 5.0 * CLHEP::cm,
+                      G4double maxStep = 0.001 * CLHEP::mm);
    ~SemiInfiniteTarget(); 
 
    void GeometryUpdate(TargetGeometryManager*);

@@ -17,15 +17,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11-10-2012 Gabriele Cosmo tag test52-V09-05-00
+           Explicit inclusion of units and constants headers.
+
 28-07-2011 Gabriele Cosmo tag test52-V09-04-01
            Synchronised with versioning on main trunk.
 
 19-01-2011 Luciano Pandola tag test52-V09-04-00
-	   Clean-up, remove obsolete EM models
+	   Clean-up, remove obsolete EM models.
 
 16-11-2007 Anton Lechner tag test52-V09-00-00
-           Equivalent to CVS head of obsolete version
+           Equivalent to CVS head of obsolete version.
 
-12-4-2007 Susanna Guatelli (tag test52-V08-02-00)
-          - Created, Sandia test       
+12-04-2007 Susanna Guatelli (tag test52-V08-02-00)
+           Created, Sandia test.
 

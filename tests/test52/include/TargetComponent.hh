@@ -26,6 +26,8 @@
 #ifndef TARGETCOMPONENT_HH
 #define TARGETCOMPONENT_HH
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "Materials.hh"
 #include "globals.hh"
 
@@ -57,7 +59,7 @@ class TargetComponent {
    }
 
    G4double Thickness(G4double thickn = 0.0) {
-     if(thickn > 0.0 * cm) thickness = thickn; 
+     if(thickn > 0.0 * CLHEP::cm) thickness = thickn; 
      return thickness;
    }
 
@@ -84,8 +86,8 @@ class TargetComponent {
       }
 
       thickness = thickn;
-      if(thickness <= 0.0 * cm) {
-	 thickness = 1.0 * cm;
+      if(thickness <= 0.0) {
+	 thickness = 1.0 * CLHEP::cm;
          std::cerr << "Error. Invalid thickness. Using 1cm." 
                    << std::endl;
       } 

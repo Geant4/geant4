@@ -32,6 +32,7 @@
 #include "TargetGeometryManager.hh"
 #include "AnalysisManager.hh"
 #include "Materials.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4RunManager.hh"
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"

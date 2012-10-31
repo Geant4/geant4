@@ -26,6 +26,7 @@
 
 #include "PrimaryGenerator.hh"
 #include "PrimaryGeneratorMessenger.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Electron.hh"
 #include "G4ParticleGun.hh"
 #include "G4Event.hh"
