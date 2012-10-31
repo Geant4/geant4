@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12-10-12 V.Ivant (testem1-V09-05-11)
+- Migration to the updated analysis tool and inplicit units
+- do not save random number per event
      
 10-10-12 mma (testem1-V09-05-10)
 - PhysicsList: add G4EmstandardPhysics_option4
