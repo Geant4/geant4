@@ -9,6 +9,9 @@ $Id: History,v 1.31 2010-11-17 20:42:36 allison Exp $
                        Package History file
                        --------------------
 
+16 October 2012 - S.Incerti - tag microbeam-V09-05-03
+- Added CMakeLists.txt (thanks to Luciano)
+
 12 October 2012 - G.Cosmo - tag microbeam-V09-05-02
 - Explicit inclusion of units and constants headers.
 
