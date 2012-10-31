@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct 11th 2012 G.Cosmo        (test49-V09-05-00)
+- Explicit inclusion of units and constants headers.
+
 Nov 16th 2011 G.Folger       (test49-V09-04-05)
 - Migrate to new G4Exception
 

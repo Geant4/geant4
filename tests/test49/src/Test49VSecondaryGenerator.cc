@@ -25,6 +25,7 @@
 //
 
 #include "Test49VSecondaryGenerator.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Track.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
