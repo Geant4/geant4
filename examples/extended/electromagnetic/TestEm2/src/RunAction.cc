@@ -72,6 +72,9 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
   fEdeptrue = 1.;
   fRmstrue  = 1.;
   fLimittrue = DBL_MAX;
+
+  fChargedStep = 0.0;
+  fNeutralStep = 0.0;    
   
   fVerbose = 0;
 }
@@ -164,8 +167,11 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
 
   // save Rndm status
-  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+  //  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   CLHEP::HepRandom::showEngineStatus();
+
+  fChargedStep = 0.0;
+  fNeutralStep = 0.0;    
 
   f_nLbin = fDet->GetnLtot();
   f_nRbin = fDet->GetnRtot();
@@ -184,6 +190,21 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   //histograms
   //
   if (aRun->GetRunID() == 0) BookHisto();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::InitializePerEvent()
+{
+  //initialize arrays of energy deposit per bin
+  for (G4int i=0; i<f_nLbin; i++)
+     { f_dEdL[i] = 0.; }
+     
+  for (G4int j=0; j<f_nRbin; j++)
+     { f_dEdR[j] = 0.; }     
+  
+  //initialize tracklength 
+    fChargTrLength = fNeutrTrLength = 0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -239,6 +260,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4int NbOfEvents = aRun->GetNumberOfEvent();
   G4double kinEnergy = fKin->GetParticleGun()->GetParticleEnergy();
   assert(NbOfEvents*kinEnergy > 0);
+
+  fChargedStep /= G4double(NbOfEvents);
+  fNeutralStep /= G4double(NbOfEvents);    
 
   G4double mass=fKin->GetParticleGun()->GetParticleDefinition()->GetPDGMass();
   G4double norme = 100./(NbOfEvents*(kinEnergy+mass));
@@ -376,6 +400,12 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   }
   
   G4cout << "\n SUMMARY \n" << G4endl;
+
+  G4cout << "\n"
+	 << " Mean number of charged steps:  " << fChargedStep << G4endl;
+  G4cout << " Mean number of neutral steps:  " << fNeutralStep 
+	 << "\n" << G4endl;
+
   G4cout << " energy deposit : "
          << std::setw(7)  << MeanELongitCumul[f_nLbin-1] << " % E0 +- "
          << std::setw(7)  <<  rmsELongitCumul[f_nLbin-1] << " % E0" << G4endl;
@@ -391,7 +421,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     G4double RMoliere2 = iMoliere*fDet->GetdRlength();          
     G4cout << "\n " << EMoliere << " % confinement: radius = "
            << RMoliere1 << " radl  ("
-           << G4BestUnit( RMoliere2, "Length") << ")" << G4endl;
+           << G4BestUnit( RMoliere2, "Length") << ")" << "\n" << G4endl;
   }           
 
   G4cout.setf(mode,std::ios::floatfield);

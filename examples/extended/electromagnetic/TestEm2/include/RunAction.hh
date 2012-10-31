@@ -68,10 +68,11 @@ class RunAction : public G4UserRunAction
     virtual void BeginOfRunAction(const G4Run*);
     virtual void   EndOfRunAction(const G4Run*);
 
-    inline void InitializePerEvent();
+           void InitializePerEvent();
            void FillPerEvent();
     inline void FillPerTrack(G4double,G4double);
     inline void FillPerStep (G4double,G4int,G4int);
+    inline void AddStep (G4double q);
     
     void SetVerbose(G4int val)  {fVerbose = val;};
     
@@ -123,27 +124,14 @@ class RunAction : public G4UserRunAction
     G4double fEdeptrue;
     G4double fRmstrue;
     G4double fLimittrue;
+
+    G4double fChargedStep;
+    G4double fNeutralStep;    
     
     G4int    fVerbose;
     
     G4String fHistoName[2];
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline
-void RunAction::InitializePerEvent()
-{
-  //initialize arrays of energy deposit per bin
-  for (G4int i=0; i<f_nLbin; i++)
-     { f_dEdL[i] = 0.; }
-     
-  for (G4int j=0; j<f_nRbin; j++)
-     { f_dEdR[j] = 0.; }     
-  
-  //initialize tracklength 
-    fChargTrLength = fNeutrTrLength = 0.;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -160,6 +148,12 @@ inline
 void RunAction::FillPerStep(G4double dEstep, G4int Lbin, G4int Rbin)
 {
   f_dEdL[Lbin] += dEstep; f_dEdR[Rbin] += dEstep;
+}
+
+inline void RunAction::AddStep(G4double q)
+{
+  if(0.0 == q) { fNeutralStep += 1.0; }
+  else         { fChargedStep += 1.0; }  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

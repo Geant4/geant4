@@ -57,6 +57,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
  // energy deposit
  //
  G4double dEStep = step->GetTotalEnergyDeposit();
+ fRun->AddStep(step->GetTrack()->GetDefinition()->GetPDGCharge());
  if (dEStep > 0.) {
    G4ThreeVector prePoint  = step->GetPreStepPoint()->GetPosition();
    G4ThreeVector postPoint = step->GetPostStepPoint()->GetPosition();
@@ -64,8 +65,8 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
    G4double x = position.x(), y = position.y(), z = position.z();
    G4double radius = std::sqrt(x*x + y*y);
    G4double offset = 0.5*fDetector->GetfullLength();
-   G4int SlideNb = int((z + offset)/fDetector->GetdLlength());
-   G4int RingNb  = int(radius/fDetector->GetdRlength());        
+   G4int SlideNb = G4int((z + offset)/fDetector->GetdLlength());
+   G4int RingNb  = G4int(radius/fDetector->GetdRlength());        
    fRun->FillPerStep(dEStep,SlideNb,RingNb);
  }
 }
