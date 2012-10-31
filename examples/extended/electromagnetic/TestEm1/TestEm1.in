@@ -12,6 +12,7 @@
 /testem/det/setSize 10 m
 #
 /testem/phys/addPhysics  emstandard_opt0
+###/testem/phys/addPhysics  local
 #
 /run/initialize
 #

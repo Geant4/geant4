@@ -67,7 +67,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   
   // save Rndm status
-  //G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+  ////G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   CLHEP::HepRandom::showEngineStatus();
 
   fNbOfTraks0 = fNbOfTraks1 = fNbOfSteps0 = fNbOfSteps1 = 0;
