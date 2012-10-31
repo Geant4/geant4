@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm10/src/Em10RunAction.cc
+/// \brief Implementation of the Em10RunAction class
+//
 //
 // $Id: Em10RunAction.cc,v 1.9 2006-06-29 16:38:59 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
@@ -39,6 +42,8 @@
 #include "G4ios.hh"
 #include <iomanip>
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 //////////////////////////////////////////////////////////////////////////////

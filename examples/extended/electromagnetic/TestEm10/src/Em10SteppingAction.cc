@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm10/src/Em10SteppingAction.cc
+/// \brief Implementation of the Em10SteppingAction class
+//
 //
 // $Id: Em10SteppingAction.cc,v 1.6 2006-06-29 16:39:06 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
@@ -41,6 +44,7 @@
 #include "Em10RunAction.hh"
 #include "G4Event.hh"
 #include "G4VPhysicalVolume.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4ios.hh"
 #include <iomanip>
 
@@ -82,24 +86,24 @@ void Em10SteppingAction::UserSteppingAction(const G4Step* aStep)
   if(IDnow != IDold) {
     IDold=IDnow ;
     if(trackID > 1 && (particle == G4Electron::Electron() || 
-		       particle == G4Positron::Positron() || 
-		       particle == G4Gamma::Gamma())) {
-      runaction->Fillvertexz(track->GetVertexPosition().x());
+                       particle == G4Positron::Positron() || 
+                       particle == G4Gamma::Gamma())) {
+      runaction->Fillvertexz(track->GetVertexPosition().z());
 
       if(preVol->GetName()=="Absorber") {
-	if(particle == G4Gamma::Gamma()) {
-	  eventaction->AddNeutral() ;
-	} else {
-	  eventaction->AddCharged() ;
-	  Tsec = track->GetKineticEnergy() ;  
-	  Tsec += aStep->GetTotalEnergyDeposit() ; 
-	  runaction->FillTsec(Tsec) ;
-	  if(particle == G4Electron::Electron()) {
-	    eventaction->AddE() ;
-	  } else {
-	    eventaction->AddP() ;
-	  }
-	}
+        if(particle == G4Gamma::Gamma()) {
+          eventaction->AddNeutral() ;
+        } else {
+          eventaction->AddCharged() ;
+          Tsec = track->GetKineticEnergy() ;  
+          Tsec += aStep->GetTotalEnergyDeposit() ; 
+          runaction->FillTsec(Tsec) ;
+          if(particle == G4Electron::Electron()) {
+            eventaction->AddE() ;
+          } else {
+            eventaction->AddP() ;
+          }
+        }
       }
     }
   }
@@ -117,32 +121,32 @@ void Em10SteppingAction::UserSteppingAction(const G4Step* aStep)
        preVol != postVol) {
 
       if(trackID == 1) {
-	if(track->GetMomentumDirection().x()>0.) {
+        if(track->GetMomentumDirection().z()>0.) {
 
-	  eventaction->SetTr();
-	  Theta = std::acos(track->GetMomentumDirection().x()) ;
-	  runaction->FillTh(Theta) ;
-	  Ttrans = track->GetKineticEnergy() ;
-	  runaction->FillTt(Ttrans) ;
-	  yend= aStep->GetTrack()->GetPosition().y() ;
-	  zend= aStep->GetTrack()->GetPosition().z() ;
-	  rend = std::sqrt(yend*yend+zend*zend) ;
-	  runaction->FillR(rend);
+          eventaction->SetTr();
+          Theta = std::acos(track->GetMomentumDirection().z()) ;
+          runaction->FillTh(Theta) ;
+          Ttrans = track->GetKineticEnergy() ;
+          runaction->FillTt(Ttrans) ;
+          yend= aStep->GetTrack()->GetPosition().y() ;
+          zend= aStep->GetTrack()->GetPosition().x() ;
+          rend = std::sqrt(yend*yend+zend*zend) ;
+          runaction->FillR(rend);
 
-	} else {
-	  eventaction->SetRef();
-	  Thetaback = std::acos(aStep->GetTrack()->GetMomentumDirection().x());
-	  Thetaback -= 0.5*pi ;
-	  runaction->FillThBack(Thetaback) ;
-	  Tback  = aStep->GetTrack()->GetKineticEnergy() ;
-	  runaction->FillTb(Tback) ;
-	}
+        } else {
+          eventaction->SetRef();
+          Thetaback = std::acos(aStep->GetTrack()->GetMomentumDirection().z());
+          Thetaback -= 0.5*pi ;
+          runaction->FillThBack(Thetaback) ;
+          Tback  = aStep->GetTrack()->GetKineticEnergy() ;
+          runaction->FillTb(Tback) ;
+        }
       }
-      if(track->GetMomentumDirection().x()>0. && 
-	 particle == G4Gamma::Gamma()) {
-	
-	Egamma = aStep->GetTrack()->GetKineticEnergy() ;
-	runaction->FillGammaSpectrum(Egamma) ;
+      if(track->GetMomentumDirection().z()>0. && 
+         particle == G4Gamma::Gamma()) {
+        
+        Egamma = aStep->GetTrack()->GetKineticEnergy() ;
+        runaction->FillGammaSpectrum(Egamma) ;
       }
     }
   }      

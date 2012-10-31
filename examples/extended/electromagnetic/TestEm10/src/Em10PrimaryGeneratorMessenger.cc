@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm10/src/Em10PrimaryGeneratorMessenger.cc
+/// \brief Implementation of the Em10PrimaryGeneratorMessenger class
+//
 //
 // $Id: Em10PrimaryGeneratorMessenger.cc,v 1.4 2006-06-29 16:38:57 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
@@ -37,6 +40,7 @@
 #include "Em10PrimaryGeneratorAction.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

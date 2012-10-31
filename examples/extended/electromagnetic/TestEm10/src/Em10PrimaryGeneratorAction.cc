@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm10/src/Em10PrimaryGeneratorAction.cc
+/// \brief Implementation of the Em10PrimaryGeneratorAction class
+//
 //
 // $Id: Em10PrimaryGeneratorAction.cc,v 1.6 2006-06-29 16:38:55 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
@@ -43,6 +46,8 @@
 #include "G4ParticleDefinition.hh"
 #include "Randomize.hh"
 #include "G4ios.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  

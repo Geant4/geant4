@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm10/include/Em10Materials.hh
+/// \brief Definition of the Em10Materials class
+//
 //
 // -------------------------------------------------------------
 //      GEANT 4 class 
@@ -48,12 +51,12 @@ class Em10Materials
     Em10Materials();
    ~Em10Materials();
      
-	G4Material* GetMaterial(const G4String&);     
+        G4Material* GetMaterial(const G4String&);     
                       
   private:
 
-	void Initialise();
-	     
+        void Initialise();
+             
 };
 
 #endif

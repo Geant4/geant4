@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm10/include/Em10StepCut.hh
+/// \brief Definition of the Em10StepCut class
+//
 //
 // $Id: Em10StepCut.hh,v 1.5 2006-06-29 16:38:12 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
@@ -48,14 +51,14 @@ class Em10StepCut : public G4VDiscreteProcess
 
      G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
-			     G4double   previousStepSize,
-			     G4ForceCondition* condition
-			    );
+                             G4double   previousStepSize,
+                             G4ForceCondition* condition
+                            );
 
      G4VParticleChange* PostStepDoIt(
-			     const G4Track& ,
-			     const G4Step& 
-			    );
+                             const G4Track& ,
+                             const G4Step& 
+                            );
 
     void SetMaxStep(G4double);
 
@@ -67,7 +70,7 @@ class Em10StepCut : public G4VDiscreteProcess
                              G4ForceCondition* condition
                             );
 
-			    
+                            
   private:
   
   // hide assignment operator as private 
