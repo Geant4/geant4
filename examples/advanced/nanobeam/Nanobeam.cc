@@ -29,9 +29,11 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
 #include "Randomize.hh"
-#include "G4UItcsh.hh"
+
+#ifdef G4UI_USE
+  #include "G4UIExecutive.hh"
+#endif
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
@@ -76,25 +78,26 @@ int main(int argc,char** argv) {
   runManager->Initialize();
     
   // Get the pointer to the User Interface manager 
-  G4UImanager* UI = G4UImanager::GetUIpointer();  
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
 
   //
   remove ("nanobeam.root");
   
   if (argc==1)   // Define UI session for interactive mode.
   { 
-    // G4UIterminal is a (dumb) terminal.
-    G4UIsession * session = new G4UIterminal;    
-    UI->ApplyCommand("/control/execute default.mac");
-    session->SessionStart();
-    delete session;
+#ifdef G4UI_USE
+    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+    UImanager->ApplyCommand("/control/execute default.mac");     
+    ui->SessionStart();
+    delete ui;
+#endif
   }
      
   else           // Batch mode
   { 
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
-    UI->ApplyCommand(command+fileName);
+    UImanager->ApplyCommand(command+fileName);
   }
 
   delete runManager;
