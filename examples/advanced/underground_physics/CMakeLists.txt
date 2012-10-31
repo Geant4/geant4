@@ -22,7 +22,19 @@ endif()
 include(${Geant4_USE_FILE})
 
 #Check here for DMXENV_GPS_USE
-if(DEFINED ENV{DMXENV_GPS_USE})
+#Use GPS if the environment variable is set, and the user has *not* supplied the CMake 
+#command line argument. Otherwise, the argument of the command line has the priority.
+#
+if("$ENV{DMXENV_GPS_USE}" AND NOT DEFINED DMXENV_GPS_USE)
+  set(DMXENV_GPS_USE_DEFAULT ON)
+else()
+  set(DMXENV_GPS_USE_DEFAULT ${DMXENV_GPS_USE})
+endif()
+
+option(DMXENV_GPS_USE "Build DMX with support for GPS" ${DMXENV_GPS_USE_DEFAULT})
+mark_as_advanced(DMXENV_GPS_USE)
+
+if(DMXENV_GPS_USE)
   add_definitions(-DDMXENV_GPS_USE)
 endif()
 
