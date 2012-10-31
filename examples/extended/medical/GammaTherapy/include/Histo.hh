@@ -80,8 +80,8 @@ public:
   void ScoreNewTrack(const G4Track* aTrack);
 
   void AddPhantomStep(G4double e, G4double r1, G4double z1, 
-		      G4double r2, G4double z2,
-		      G4double r0, G4double z0);
+                      G4double r2, G4double z2,
+                      G4double r0, G4double z0);
 
   void AddPhantomGamma(G4double e, G4double r);
 

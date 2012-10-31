@@ -60,6 +60,7 @@
 // Hadrons
 #include "G4Proton.hh"
 
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -131,7 +132,7 @@ void PhysicsList::AddStepMax()
 
       if (stepMaxProcess->IsApplicable(*particle) && !particle->IsShortLived())
         {
-	  pmanager ->AddDiscreteProcess(stepMaxProcess);
+          pmanager ->AddDiscreteProcess(stepMaxProcess);
         }
   }
 }

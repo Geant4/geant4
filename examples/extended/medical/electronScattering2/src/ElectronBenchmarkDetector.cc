@@ -51,6 +51,7 @@
 #include "G4VPrimitiveScorer.hh"
 #include "G4PSCellFlux.hh"
 #include "G4PSPopulation.hh"
+#include "G4SystemOfUnits.hh"
 
 ElectronBenchmarkDetector::ElectronBenchmarkDetector()
 :fLogWorld(NULL),

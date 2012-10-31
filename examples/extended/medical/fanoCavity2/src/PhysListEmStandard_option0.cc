@@ -55,6 +55,8 @@
 #include "G4EmProcessOptions.hh"
 #include "G4MscStepLimitType.hh"
 
+#include "G4SystemOfUnits.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysListEmStandard_option0::PhysListEmStandard_option0(const G4String& name,
@@ -96,7 +98,7 @@ void PhysListEmStandard_option0::ConstructProcess()
       pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
       pmanager->AddProcess(eIoni,                     -1, 2, 2);
 ///      pmanager->AddProcess(new G4eBremsstrahlung,     -1, 3, 3);
-	    
+            
     } else if (particleName == "e+") {
       //positron
       
@@ -124,9 +126,9 @@ void PhysListEmStandard_option0::ConstructProcess()
            
   //build CSDA range
   //
-  emOptions.SetBuildCSDARange(true);		//default=false
+  emOptions.SetBuildCSDARange(true);                //default=false
   emOptions.SetMaxEnergyForCSDARange(10*GeV);  
-  emOptions.SetDEDXBinningForCSDARange(8*7);	//default=8*7
+  emOptions.SetDEDXBinningForCSDARange(8*7);        //default=8*7
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -47,6 +47,8 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4RootAnalysisManager.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -118,13 +120,13 @@ void Histo::BeginOfHisto()
   fScoreBin = (G4int)(fScoreZ/fStepZ + 0.5);
 
   G4cout << "   "<< fNBinsR << " bins R   stepR= " << fStepR/mm << " mm " 
-	 << G4endl;
+         << G4endl;
   G4cout << "   "<< fNBinsZ << " bins Z   stepZ= " << fStepZ/mm << " mm " 
-	 << G4endl;
+         << G4endl;
   G4cout << "   "<< fNBinsE << " bins E   stepE= " << fStepE/MeV << " MeV " 
-	 << G4endl;
+         << G4endl;
   G4cout << "   "<< fScoreBin << "-th bin in Z is used for R distribution" 
-	 << G4endl;
+         << G4endl;
 
   fVolumeR.resize(fNBinsR);
   fEdep.resize(fNBinsR, 0.0);
@@ -145,11 +147,11 @@ void Histo::BeginOfHisto()
     }
     if(fVerbose > 0) {
       G4cout << "Histo: Histograms are booked and run has been started"
-	     << G4endl;
+             << G4endl;
     }
   } else if(fVerbose > 0) {
     G4cout << "Histo: Histograms are not booked because file name is not set"
-	   << G4endl;
+           << G4endl;
   }
 }
 
@@ -176,27 +178,27 @@ void Histo::EndOfHisto()
   G4double xphe= x*(G4double)fNePh;
 
   G4cout                    << "Number of events                             " 
-			    << std::setprecision(8) << fNevt <<G4endl;
+                            << std::setprecision(8) << fNevt <<G4endl;
   G4cout << std::setprecision(4) << "Average number of e-                         " 
-	 << xe << G4endl;
+         << xe << G4endl;
   G4cout << std::setprecision(4) << "Average number of gamma                      " 
-	 << xg << G4endl;
+         << xg << G4endl;
   G4cout << std::setprecision(4) << "Average number of e+                         " 
-	 << xp << G4endl;
+         << xp << G4endl;
   G4cout << std::setprecision(4) << "Average number of steps in the phantom       " 
-	 << xs << G4endl;
+         << xs << G4endl;
   G4cout << std::setprecision(4) << "Average number of e- steps in the target     " 
-	 << xes << G4endl;
+         << xes << G4endl;
   G4cout << std::setprecision(4) << "Average number of g  produced in the target  " 
-	 << xgt << G4endl;
+         << xgt << G4endl;
   G4cout << std::setprecision(4) << "Average number of e- produced in the target  " 
-	 << xet << G4endl;
+         << xet << G4endl;
   G4cout << std::setprecision(4) << "Average number of g produced in the phantom  " 
-	 << xph << G4endl;
+         << xph << G4endl;
   G4cout << std::setprecision(4) << "Average number of e- produced in the phantom " 
-	 << xphe << G4endl;
+         << xphe << G4endl;
   G4cout << std::setprecision(4) << "Total fGamma fluence in front of the phantom " 
-	 << x*fSumR/MeV
+         << x*fSumR/MeV
          << " MeV " << G4endl;
   G4cout<<"========================================================"<<G4endl;
   G4cout<<G4endl;
@@ -342,10 +344,10 @@ void Histo::ScoreNewTrack(const G4Track* aTrack)
       G4ThreeVector pos = aTrack->GetVertexPosition();
       G4ThreeVector dir = aTrack->GetMomentumDirection();
       G4cout << "TrackingAction: Primary "
-	     << particle->GetParticleName()
-	     << " Ekin(MeV)= " 
-	     << aTrack->GetKineticEnergy()/MeV
-	     << "; pos= " << pos << ";  dir= " << dir << G4endl;
+             << particle->GetParticleName()
+             << " Ekin(MeV)= " 
+             << aTrack->GetKineticEnergy()/MeV
+             << "; pos= " << pos << ";  dir= " << dir << G4endl;
     }
 
     // secondary electron
@@ -397,8 +399,8 @@ void Histo::AddPhantomGamma(G4double e, G4double r)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Histo::AddPhantomStep(G4double edep, G4double r1, G4double z1, 
-			   G4double r2, G4double z2,
-			   G4double r0, G4double z0)
+                           G4double r2, G4double z2,
+                           G4double r0, G4double z0)
 {
   ++fNstep;
   G4int nzbin = (G4int)(z0/fStepZ);
@@ -407,7 +409,7 @@ void Histo::AddPhantomStep(G4double edep, G4double r1, G4double z1,
            << " r1= " << r1 << " z1= " << z1
            << " r2= " << r2 << " z2= " << z2
            << " r0= " << r0 << " z0= " << z0
-	   << G4endl;
+           << G4endl;
   }
   if(nzbin == fScoreBin) {
     G4int bin  = (G4int)(r0/fStepR);
@@ -452,14 +454,14 @@ void Histo::AddPhantomStep(G4double edep, G4double r1, G4double z1,
     G4double rr2 = r1 + dr*(zz2-zz1)/dz;
     for(bin=bin1; bin<=bin2; bin++) {
       if(fAnalysisManager) {
-	G4double de = edep*(zz2 - zz1)/dz;
-	G4double zf = (zz1+zz2)*0.5;
-	{ fAnalysisManager->FillH1(fHisto[3],zf,de); }
-	if(rr1 < fStepR) {
-	  G4double w = de;
-	  if(rr2 > fStepR) w *= (fStepR - rr1)/(rr2 - rr1);
-	  { fAnalysisManager->FillH1(fHisto[4],zf,w); }
-	}
+        G4double de = edep*(zz2 - zz1)/dz;
+        G4double zf = (zz1+zz2)*0.5;
+        { fAnalysisManager->FillH1(fHisto[3],zf,de); }
+        if(rr1 < fStepR) {
+          G4double w = de;
+          if(rr2 > fStepR) w *= (fStepR - rr1)/(rr2 - rr1);
+          { fAnalysisManager->FillH1(fHisto[4],zf,w); }
+        }
       }
       zz1 = zz2;
       zz2 = std::min(z2, zz1+fStepZ);

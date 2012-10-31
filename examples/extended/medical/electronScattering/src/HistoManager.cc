@@ -147,13 +147,13 @@ void HistoManager::SetHisto(G4int ih,
   }
   
   const G4String id[] = { "0", "1", "2", "3", "4" };
-			
+                        
   const G4String title[] =
-         { "dummy",					//0
-           "projected angle at exit",			//1
-           "dN/dS = f(r) at exit",			//2
-           "d(N/cost)/dS = f(r) at exit",		//3
-	   "normalized d(N/cost)/dS = f(r) at exit"	//4		  
+         { "dummy",                                      //0
+           "projected angle at exit",                    //1
+           "dN/dS = f(r) at exit",                       //2
+           "d(N/cost)/dS = f(r) at exit",                //3
+           "normalized d(N/cost)/dS = f(r) at exit"      //4                  
           };
 
   G4String titl = title[ih];
@@ -230,9 +230,9 @@ void HistoManager::saveAscii()
      
       for (G4int iBin=0; iBin<fNbins[ih]; iBin++) {
          File << "  " << iBin << "\t" 
-	      << fHistPt[ih]->axis().bin_center(iBin) << "\t"
-	      << fHistPt[ih]->bin_height(iBin) 
-	      << G4endl;
+              << fHistPt[ih]->axis().bin_center(iBin) << "\t"
+              << fHistPt[ih]->bin_height(iBin) 
+              << G4endl;
       } 
     }
  } 

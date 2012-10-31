@@ -27,7 +27,7 @@
 /// \brief Definition of the DicomPrimaryGeneratorAction class
 //
 // The code was written by :
-//	*Louis Archambault louis.archambault@phy.ulaval.ca,
+//      *Louis Archambault louis.archambault@phy.ulaval.ca,
 //      *Luc Beaulieu beaulieu@phy.ulaval.ca
 //      +Vincent Hubert-Tremblay at tigre.2@sympatico.ca
 //
@@ -62,7 +62,7 @@ public:
   void GeneratePrimaries(G4Event*);
   
 private:
-  G4ParticleGun* particleGun;
+  G4ParticleGun* fParticleGun;
 };
 
 #endif

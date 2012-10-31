@@ -23,29 +23,35 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/DICOM/include/RegularDicomDetectorConstruction.hh
-/// \brief Definition of the RegularDicomDetectorConstruction class
+/// \file medical/DICOM/include/DicomRegularDetectorConstruction.hh
+/// \brief Definition of the DicomRegularDetectorConstruction class
 //
 // Author: P. Arce
 // History: 30.11.07  First version
 //*******************************************************
 //
-// RegularDicomDetectorConstruction.hh :
-//	- Construct the phantom using DicomPhantomParameterisationColour
-//*******************************************************
 
-#ifndef RegularDicomDetectorConstruction_h
-#define RegularDicomDetectorConstruction_h 1
+#ifndef DicomRegularDetectorConstruction_h
+#define DicomRegularDetectorConstruction_h 1
 
 #include "globals.hh"
 #include "DicomDetectorConstruction.hh"
 
-class RegularDicomDetectorConstruction : public DicomDetectorConstruction
+//*******************************************************
+/// DicomRegularDetectorConstruction class
+///
+/// Construct the phantom using DicomPhantomParameterisatin
+///
+/// History: 30.11.07  First version
+/// \author  P. Arce
+//*******************************************************
+
+class DicomRegularDetectorConstruction : public DicomDetectorConstruction
 {
 public:
 
-  RegularDicomDetectorConstruction();
-  ~RegularDicomDetectorConstruction();
+  DicomRegularDetectorConstruction();
+  ~DicomRegularDetectorConstruction();
 
 private:
 
@@ -54,4 +60,3 @@ private:
 };
 
 #endif
-

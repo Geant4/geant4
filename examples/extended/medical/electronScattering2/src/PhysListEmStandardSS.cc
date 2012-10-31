@@ -55,6 +55,8 @@
 #include "G4ionIonisation.hh"
 #include "G4EmProcessOptions.hh"
 
+#include "G4SystemOfUnits.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysListEmStandardSS::PhysListEmStandardSS(const G4String& name)

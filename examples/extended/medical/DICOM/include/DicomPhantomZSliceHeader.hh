@@ -26,13 +26,6 @@
 /// \file medical/DICOM/include/DicomPhantomZSliceHeader.hh
 /// \brief Definition of the DicomPhantomZSliceHeader class
 //
-// Author: P. Arce
-// History: 30.11.07  First version
-//*******************************************************
-//
-// DicomPhantomZSliceHeader.hh :
-//	- Contains the meta data information corresponding to one or several Z slices (number of voxels, dimension)
-//*******************************************************
 
 #ifndef DicomPhantomZSliceHeader_h
 #define DicomPhantomZSliceHeader_h 1
@@ -42,6 +35,15 @@ class G4material;
 #include <fstream>
 #include <vector>
 
+//*******************************************************
+/// DicomPhantomZSliceHeader class
+///
+/// Contains the meta data information corresponding to one or several 
+/// Z slices (number of voxels, dimension)
+///
+/// History: 30.11.07  First version
+/// \author  P. Arce
+//*******************************************************
 
 class DicomPhantomZSliceHeader 
 {

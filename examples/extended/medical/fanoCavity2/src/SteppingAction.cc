@@ -47,7 +47,7 @@
 
 SteppingAction::SteppingAction(DetectorConstruction* det, RunAction* RuAct,
                                EventAction* EvAct,TrackingAction* TrAct,
-			       HistoManager* histo)
+                               HistoManager* histo)
 :fDetector(det), fRunAction(RuAct), fEventAction(EvAct), fTrackAction(TrAct),
  fHistoManager(histo), fWall(0), fCavity(0)
 { 
@@ -130,7 +130,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
                             ->SurfaceNormal(point1->GetPosition());
      fHistoManager->FillHisto(6,std::acos(-fDirectionIn*normal));
      fHistoManager->FillHisto(7,std::acos(-directionOut*normal));
-   }		   
+   }                   
  }
   
  //within cavity

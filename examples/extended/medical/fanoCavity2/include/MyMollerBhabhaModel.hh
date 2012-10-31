@@ -45,14 +45,14 @@ class MyMollerBhabhaModel : public G4MollerBhabhaModel
 public:
 
   MyMollerBhabhaModel(const G4ParticleDefinition* p = 0, 
-		      const G4String& nam = "myMollerBhabha");
+                      const G4String& nam = "myMollerBhabha");
 
   virtual ~MyMollerBhabhaModel();
-								 
+                                                                 
   virtual G4double ComputeDEDXPerVolume(const G4Material*,
-				const G4ParticleDefinition*,
-				G4double kineticEnergy,
-				G4double cutEnergy);
+                                const G4ParticleDefinition*,
+                                G4double kineticEnergy,
+                                G4double cutEnergy);
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

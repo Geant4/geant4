@@ -42,12 +42,12 @@ In the application the phantom is placed on a table.
 
  - batch mode:
 \verbatim
-$G4INSTALL/bin/Linux-g++/dicom run.mac 
+$G4INSTALL/bin/Linux-g++/DICOM run.mac 
 \endverbatim
 
  - interactive mode:
 \verbatim
-$G4INSTALL/bin/Linux-g++/dicom
+$G4INSTALL/bin/Linux-g++/DICOM
 \endverbatim
    the file vis.mac is read in order to visualise the phantom with OpenGL, DAWN or VRML
 

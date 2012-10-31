@@ -41,6 +41,8 @@
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include <iomanip>
 
@@ -95,9 +97,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   
   G4cout << "\n The run was " << TotNbofEvents << " " << partName << " of "
          << G4BestUnit(energy,"Energy") << " through " 
-	 << G4BestUnit(length,"Length") << " of "
-	 << material->GetName() << " (density: " 
-	 << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
+         << G4BestUnit(length,"Length") << " of "
+         << material->GetName() << " (density: " 
+         << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
 
   G4cout.precision(prec);
 
@@ -226,8 +228,8 @@ void RunAction::PrintFluence(G4int TotEvents)
      if (fluence1[bin] > 0.) error =  100*fluence2[bin]/fluence1[bin];
      File << "  " << bin << "\t " << rmean/mm << "\t " << fNbEntries[bin]
           << "\t " << fluence[bin]/double(TotEvents) << "\t " << fluence1[bin] 
-	  << "\t " << error
-	  << G4endl;	  
+          << "\t " << error
+          << G4endl;          
   }
     
   // restaure default formats

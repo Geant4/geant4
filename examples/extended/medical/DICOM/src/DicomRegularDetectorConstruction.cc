@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/DICOM/src/RegularDicomDetectorConstruction.cc
-/// \brief Implementation of the RegularDicomDetectorConstruction class
+/// \file DicomRegularDetectorConstruction.cc
+/// \brief Implementation of the DicomRegularDetectorConstruction clas
 //
 // History:
-//	Pedro Arce  
+//        Pedro Arce  
 //
 //*******************************************************
 
@@ -44,32 +44,34 @@
 #include "G4Colour.hh"
 #include "G4ios.hh"
 
-#include "RegularDicomDetectorConstruction.hh"
+#include "DicomRegularDetectorConstruction.hh"
 #include "DicomPhantomParameterisationColour.hh"
 
-RegularDicomDetectorConstruction::RegularDicomDetectorConstruction() : DicomDetectorConstruction()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+DicomRegularDetectorConstruction::DicomRegularDetectorConstruction() : DicomDetectorConstruction()
 {
 }
 
-RegularDicomDetectorConstruction::~RegularDicomDetectorConstruction()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+DicomRegularDetectorConstruction::~DicomRegularDetectorConstruction()
 {
 }
 
-//-------------------------------------------------------------
-void RegularDicomDetectorConstruction::ConstructPhantom()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void DicomRegularDetectorConstruction::ConstructPhantom()
 {
 #ifdef G4VERBOSE
-  G4cout << "RegularDicomDetectorConstruction::ConstructPhantom " << G4endl;
+  G4cout << "DicomRegularDetectorConstruction::ConstructPhantom " << G4endl;
 #endif
 
   //----- Create parameterisation 
   DicomPhantomParameterisationColour* param = new DicomPhantomParameterisationColour();
 
   //----- Set voxel dimensions
-  param->SetVoxelDimensions( voxelHalfDimX, voxelHalfDimY, voxelHalfDimZ );
+  param->SetVoxelDimensions( fVoxelHalfDimX, fVoxelHalfDimY, fVoxelHalfDimZ );
 
   //----- Set number of voxels 
-  param->SetNoVoxel( nVoxelX, nVoxelY, nVoxelZ );
+  param->SetNoVoxel( fNVoxelX, fNVoxelY, fNVoxelZ );
 
   //----- Set list of materials
   param->SetMaterials( fMaterials ); 
@@ -78,21 +80,21 @@ void RegularDicomDetectorConstruction::ConstructPhantom()
   param->SetMaterialIndices( fMateIDs );
 
   //----- Define voxel logical volume
-  G4Box* voxel_solid = new G4Box( "Voxel", voxelHalfDimX, voxelHalfDimY, voxelHalfDimZ);
+  G4Box* voxel_solid = new G4Box( "Voxel", fVoxelHalfDimX, fVoxelHalfDimY, fVoxelHalfDimZ);
   G4LogicalVolume* voxel_logic = new G4LogicalVolume(voxel_solid,fMaterials[0],"VoxelLogical",0,0,0); // material is not relevant, it will be changed by the ComputeMaterial method of the parameterisation
 
-  //--- Assign the container volume of the parameterisation
-  param->BuildContainerSolid(container_phys);
+  //--- Assign the fContainer volume of the parameterisation
+  param->BuildContainerSolid(fContainer_phys);
 
-  //--- Assure yourself that the voxels are completely filling the container volume
-  param->CheckVoxelsFillContainer( container_solid->GetXHalfLength(), 
-                                   container_solid->GetYHalfLength(), 
-                                   container_solid->GetZHalfLength() );
+  //--- Assure yourself that the voxels are completely filling the fContainer volume
+  param->CheckVoxelsFillContainer( fContainer_solid->GetXHalfLength(), 
+                                   fContainer_solid->GetYHalfLength(), 
+                                   fContainer_solid->GetZHalfLength() );
 
 
-  //----- The G4PVParameterised object that uses the created parameterisation should be placed in the container logical volume
-  G4PVParameterised * phantom_phys = new G4PVParameterised("phantom",voxel_logic,container_logic,
-			kXAxis, nVoxelX*nVoxelY*nVoxelZ, param);
+  //----- The G4PVParameterised object that uses the created parameterisation should be placed in the fContainer logical volume
+  G4PVParameterised * phantom_phys = new G4PVParameterised("phantom",voxel_logic,fContainer_logic,
+                        kXAxis, fNVoxelX*fNVoxelY*fNVoxelZ, param);
   // if axis is set as kUndefined instead of kXAxis, GEANT4 will do an smart voxel optimisation (not needed if G4RegularNavigation is used)
 
   //----- Set this physical volume as having a regular structure of type 1, so that G4RegularNavigation is used

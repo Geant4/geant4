@@ -40,6 +40,7 @@
 #include "G4Event.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

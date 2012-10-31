@@ -89,7 +89,7 @@ void PhysListEmStandardSS::ConstructProcess()
       pmanager->AddProcess(new G4eIonisation,        -1, 1, 1);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1, 2, 2);
       pmanager->AddDiscreteProcess(new G4CoulombScattering);            
-	    
+            
     } else if (particleName == "e+") {
       //positron
       pmanager->AddProcess(new G4eIonisation,        -1, 1, 1);
@@ -118,8 +118,8 @@ void PhysListEmStandardSS::ConstructProcess()
       pmanager->AddDiscreteProcess(cs);
      
     } else if ((!particle->IsShortLived()) &&
-	       (particle->GetPDGCharge() != 0.0) && 
-	       (particle->GetParticleName() != "chargedgeantino")) {
+               (particle->GetPDGCharge() != 0.0) && 
+               (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
       pmanager->AddDiscreteProcess(new G4CoulombScattering);            
       pmanager->AddProcess(new G4hIonisation,        -1, 1, 1);

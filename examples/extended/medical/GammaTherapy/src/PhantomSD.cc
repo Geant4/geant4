@@ -43,6 +43,7 @@
 #include "G4HCofThisEvent.hh"
 #include "G4TouchableHistory.hh"
 #include "G4Step.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

@@ -74,9 +74,9 @@ class RunAction : public G4UserRunAction
     G4int                   fNbBins;
     G4double                fDr;
     std::vector<G4double>   fluence;
-    std::vector<G4double>   fluence1;	//normalized fluence    
-    std::vector<G4double>   fluence2;	//rms on norm. fl
-    std::vector<G4int>      fNbEntries;	//entries per bin            
+    std::vector<G4double>   fluence1;        //normalized fluence    
+    std::vector<G4double>   fluence2;        //rms on norm. fl
+    std::vector<G4int>      fNbEntries;      //entries per bin            
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

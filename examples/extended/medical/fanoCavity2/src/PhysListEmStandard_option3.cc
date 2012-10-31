@@ -56,6 +56,8 @@
 #include "G4EmProcessOptions.hh"
 #include "G4MscStepLimitType.hh"
 
+#include "G4SystemOfUnits.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysListEmStandard_option3::PhysListEmStandard_option3(const G4String& name,
@@ -99,7 +101,7 @@ void PhysListEmStandard_option3::ConstructProcess()
       pmanager->AddProcess(msc,                       -1, 1, 1);
       pmanager->AddProcess(eIoni,                     -1, 2, 2);
 ///      pmanager->AddProcess(new G4eBremsstrahlung,     -1, 3, 3);
-	    
+            
     } else if (particleName == "e+") {
       //positron
       G4eMultipleScattering* msc = new G4eMultipleScattering();
@@ -129,11 +131,11 @@ void PhysListEmStandard_option3::ConstructProcess()
   
   //physics tables
   //
-  emOptions.SetMinEnergy(100*eV);	//default    
-  emOptions.SetMaxEnergy(10*GeV);	//default  
-  emOptions.SetDEDXBinning(8*20);	//default=8*7
-  emOptions.SetLambdaBinning(8*20);	//default=8*7
-  emOptions.SetSplineFlag(true);	//default
+  emOptions.SetMinEnergy(100*eV);        //default    
+  emOptions.SetMaxEnergy(10*GeV);        //default  
+  emOptions.SetDEDXBinning(8*20);        //default=8*7
+  emOptions.SetLambdaBinning(8*20);      //default=8*7
+  emOptions.SetSplineFlag(true);         //default
       
   //multiple coulomb scattering
   //
@@ -141,17 +143,17 @@ void PhysListEmStandard_option3::ConstructProcess()
       
   //energy loss
   //
-  emOptions.SetStepFunction(0.2, 10*um);	//default=(0.2, 1*mm)   
+  emOptions.SetStepFunction(0.2, 10*um); //default=(0.2, 1*mm)   
            
   //build CSDA range
   //
-  emOptions.SetBuildCSDARange(true);		//default=false
-  emOptions.SetMaxEnergyForCSDARange(10*GeV);  
-  emOptions.SetDEDXBinningForCSDARange(8*20);	//default=8*7
+  emOptions.SetBuildCSDARange(true);          //default=false
+  emOptions.SetMaxEnergyForCSDARange(10*GeV); 
+  emOptions.SetDEDXBinningForCSDARange(8*20); //default=8*7
           
   //ionization
   //
-  emOptions.SetSubCutoff(false);	//default
+  emOptions.SetSubCutoff(false);         //default
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

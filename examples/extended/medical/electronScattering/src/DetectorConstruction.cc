@@ -46,6 +46,8 @@
 #include "G4SolidStore.hh"
 
 #include "G4UnitsTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -108,7 +110,7 @@ G4Element* Au = new G4Element("Gold",     "Au", z=79, a= 196.9666*g/mole);
 G4Material* Air = 
 new G4Material("Air", density= 1.205*mg/cm3, ncomponents=4,
                       kStateGas, 293.*kelvin, 1.*atmosphere);
-Air->AddElement(C, fractionmass=0.000124);		      
+Air->AddElement(C, fractionmass=0.000124);                      
 Air->AddElement(N, fractionmass=0.755267);
 Air->AddElement(O, fractionmass=0.231782);
 Air->AddElement(Ar,fractionmass=0.012827);
@@ -134,7 +136,7 @@ Mylar->AddElement(O, natoms=2);
 G4Material* Helium = 
 new G4Material("Helium", density= 0.166*mg/cm3, ncomponents=1,
                       kStateGas, 293.*kelvin, 1.*atmosphere);
-Helium->AddElement(He, fractionmass=1.0);		      
+Helium->AddElement(He, fractionmass=1.0);                      
 
 // Aluminium
 //
@@ -180,12 +182,12 @@ temperature = 2.73*kelvin;
 G4Material* Vacuum =
 new G4Material("Galactic", z=1, a=1.01*g/mole,density,
                           kStateGas,temperature,pressure);
-			  
+                          
 //print
 //
 G4cout << *(G4Material::GetMaterialTable()) << G4endl;
   
-  			  
+                            
 // assign materials
 //
 fMaterial_World       = Vacuum;
@@ -240,200 +242,200 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   // World
   //
   G4Tubs*
-  svol_World = new G4Tubs("World",			//name
-                         0*cm, fRadius_World,		//r1, r2
-			 0.5*fThickness_World,		//half-length 
-			 0., twopi);			//theta1, theta2
+  svol_World = new G4Tubs("World",                        //name
+                         0*cm, fRadius_World,             //r1, r2
+                         0.5*fThickness_World,            //half-length 
+                         0., twopi);                      //theta1, theta2
 
   G4LogicalVolume*                           
-  lvol_World = new G4LogicalVolume(svol_World,		//its solid
-                                   fMaterial_World,	//its material
-                                   "World");		//its name
+  lvol_World = new G4LogicalVolume(svol_World,            //its solid
+                                   fMaterial_World,       //its material
+                                   "World");              //its name
                                    
-  fPvol_World = new G4PVPlacement(0,			//no rotation
-  				 G4ThreeVector(),	//no translation
-                                 lvol_World,		//its logical volume
-                                 "World",		//its name
-                                 0,			//its mother  volume
-                                 false,			//no boolean operation
-                                 0);			//copy number
-				 
+  fPvol_World = new G4PVPlacement(0,                      //no rotation
+                                  G4ThreeVector(),        //no translation
+                                  lvol_World,             //its logical volume
+                                  "World",                //its name
+                                  0,                      //its mother  volume
+                                  false,                  //no boolean operation
+                                  0);                     //copy number
+                                 
   // Frame
   //
   G4Tubs*
-  svol_Frame = new G4Tubs("Frame",			//name
-                         0*cm, fRadius_World,		//r1, r2
-			 0.5*fThickness_Frame,		//half-length 
-			 0., twopi);			//theta1, theta2
-			 
+  svol_Frame = new G4Tubs("Frame",                        //name
+                         0*cm, fRadius_World,             //r1, r2
+                         0.5*fThickness_Frame,            //half-length 
+                         0., twopi);                      //theta1, theta2
+                         
   G4LogicalVolume*                            
-  lvol_Frame = new G4LogicalVolume(svol_Frame,		//its solid
-                                   fMaterial_Frame,	//its material
-                                   "Frame");		//its name
-				   
+  lvol_Frame = new G4LogicalVolume(svol_Frame,            //its solid
+                                   fMaterial_Frame,       //its material
+                                   "Frame");              //its name
+                                   
   G4double 
   zpos = fZfront_Frame;
                                      
-  fPvol_Frame = new G4PVPlacement(0,			//no rotation
-  		      G4ThreeVector(0,0,zpos),		//translation
-                                 lvol_Frame,		//its logical volume
-                                 "Frame",		//its name
-                                 lvol_World,		//its mother  volume
-                                 false,			//no boolean operation
-                                 0);			//copy number				 
+  fPvol_Frame = new G4PVPlacement(0,                      //no rotation
+                        G4ThreeVector(0,0,zpos),          //translation
+                                 lvol_Frame,              //its logical volume
+                                 "Frame",                 //its name
+                                 lvol_World,              //its mother  volume
+                                 false,                   //no boolean operation
+                                 0);                      //copy number                                 
 
-               				 
+                                                
   // ExitWindow
   //
   G4Tubs*
-  svol_ExitWindow = new G4Tubs("ExitWindow",		//name
-                         0*cm, fRadius_World,		//r1, r2
-			 0.5*fThickness_ExitWindow,	//half-length 
-			 0., twopi);			//theta1, theta2
+  svol_ExitWindow = new G4Tubs("ExitWindow",              //name
+                         0*cm, fRadius_World,             //r1, r2
+                         0.5*fThickness_ExitWindow,       //half-length 
+                         0., twopi);                      //theta1, theta2
 
   G4LogicalVolume*                         
-  lvol_ExitWindow = new G4LogicalVolume(svol_ExitWindow,	//solid
-                                   fMaterial_ExitWindow,	//material
-                                   "ExitWindow");	//name
-				   
+  lvol_ExitWindow = new G4LogicalVolume(svol_ExitWindow,  //solid
+                                   fMaterial_ExitWindow,  //material
+                                   "ExitWindow");         //name
+                                   
   zpos = fZfront_ExitWindow + 0.5*fThickness_ExitWindow - 0.5*fThickness_Frame;
   
-                   new G4PVPlacement(0,			//no rotation
-  			  G4ThreeVector(0,0,zpos),	//translation
-                                 lvol_ExitWindow,	//logical volume
-                                 "ExitWindow",		//name
-                                 lvol_Frame,		//mother volume
-                                 false,			//no boolean operation
-                                 0);			//copy number
-               				 
+                   new G4PVPlacement(0,                   //no rotation
+                            G4ThreeVector(0,0,zpos),      //translation
+                                 lvol_ExitWindow,         //logical volume
+                                 "ExitWindow",            //name
+                                 lvol_Frame,              //mother volume
+                                 false,                   //no boolean operation
+                                 0);                      //copy number
+                                                
   // Monitor Chamber
   //
   G4Tubs*
-  svol_MonitorChbr = new G4Tubs("MonitorChbr",		//name
-                         0*cm, fRadius_World,		//r1, r2
-			 0.5*fThickness_MonitorChbr,	//half-length 
-			 0., twopi);			//theta1, theta2
+  svol_MonitorChbr = new G4Tubs("MonitorChbr",            //name
+                         0*cm, fRadius_World,             //r1, r2
+                         0.5*fThickness_MonitorChbr,      //half-length 
+                         0., twopi);                      //theta1, theta2
 
   G4LogicalVolume*                         
-  lvol_MonitorChbr = new G4LogicalVolume(svol_MonitorChbr,	//solid
-                                   fMaterial_MonitorChbr,	//material
-                                   "MonitorChbr");		//name
-				   
+  lvol_MonitorChbr = new G4LogicalVolume(svol_MonitorChbr,//solid
+                                   fMaterial_MonitorChbr, //material
+                                   "MonitorChbr");        //name
+                                   
   zpos = fZfront_MonitorChbr + 0.5*fThickness_MonitorChbr - 0.5*fThickness_Frame;
   
-                     new G4PVPlacement(0,		//no rotation
-  			  G4ThreeVector(0,0,zpos),	//translation
-                                 lvol_MonitorChbr,	//logical volume
-                                 "MonitorChbr",		//name
-                                 lvol_Frame,		//mother volume
-                                 false,			//no boolean operation
-                                 0);			//copy number
-				 
-               				 
+                     new G4PVPlacement(0,                 //no rotation
+                            G4ThreeVector(0,0,zpos),      //translation
+                                 lvol_MonitorChbr,        //logical volume
+                                 "MonitorChbr",           //name
+                                 lvol_Frame,              //mother volume
+                                 false,                   //no boolean operation
+                                 0);                      //copy number
+                                 
+                                                
   // Bag
   //
   G4Tubs*
-  svol_Bag = new G4Tubs("Bag",				//name
-                         0*cm, fRadius_World,		//r1, r2
-			 0.5*fThickness_Bag,		//half-length 
-			 0., twopi);			//theta1, theta2
+  svol_Bag = new G4Tubs("Bag",                            //name
+                         0*cm, fRadius_World,             //r1, r2
+                         0.5*fThickness_Bag,              //half-length 
+                         0., twopi);                      //theta1, theta2
 
   G4LogicalVolume*                         
-  lvol_Bag = new G4LogicalVolume(svol_Bag,		//solid
-                                   fMaterial_Bag,	//material
-                                   "Bag");		//name
-				   
+  lvol_Bag = new G4LogicalVolume(svol_Bag,                //solid
+                                 fMaterial_Bag,           //material
+                                 "Bag");                  //name
+                                   
   zpos = fZfront_Bag + 0.5*fThickness_Bag - 0.5*fThickness_Frame;
   
-             new G4PVPlacement(0,			//no rotation
-  			  G4ThreeVector(0,0,zpos),	//translation
-                                 lvol_Bag,		//logical volume
-                                 "Bag",			//name
-                                 lvol_Frame,		//mother volume
-                                 false,			//no boolean operation
-                                 0);			//copy number				 
-				 
-               				 
+             new G4PVPlacement(0,                         //no rotation
+                            G4ThreeVector(0,0,zpos),      //translation
+                                 lvol_Bag,                //logical volume
+                                 "Bag",                   //name
+                                 lvol_Frame,              //mother volume
+                                 false,                   //no boolean operation
+                                 0);                      //copy number                                 
+                                 
+                                                
   // Gas
   //
   G4Tubs*
-  svol_Gas = new G4Tubs("Gas",				//name
-                         0*cm, fRadius_World,		//r1, r2
-			 0.5*fThickness_Gas,		//half-length 
-			 0., twopi);			//theta1, theta2
+  svol_Gas = new G4Tubs("Gas",                            //name
+                         0*cm, fRadius_World,             //r1, r2
+                         0.5*fThickness_Gas,              //half-length 
+                         0., twopi);                      //theta1, theta2
 
   G4LogicalVolume*                         
-  lvol_Gas = new G4LogicalVolume(svol_Gas,		//solid
-                                   fMaterial_Gas,	//material
-                                   "Gas");		//name
+  lvol_Gas = new G4LogicalVolume(svol_Gas,                //solid
+                                 fMaterial_Gas,           //material
+                                 "Gas");                  //name
   
 
-             new G4PVPlacement(0,			//no rotation
-  			  G4ThreeVector(),		//no translation
-                                 lvol_Gas,		//logical volume
-                                 "Gas",			//name
-                                 lvol_Bag,		//mother volume
-                                 false,			//no boolean operation
-                                 0);			//copy number				 
+             new G4PVPlacement(0,                         //no rotation
+                            G4ThreeVector(),              //no translation
+                                 lvol_Gas,                //logical volume
+                                 "Gas",                   //name
+                                 lvol_Bag,                //mother volume
+                                 false,                   //no boolean operation
+                                 0);                      //copy number                                 
 
 
   // Rings
   //
   G4Tubs*
-  svol_Ring = new G4Tubs("Ring",			//name
-                       fInnerRadius_Ring, fRadius_World, //r1, r2
-			 0.5*fThickness_Ring,		//half-length 
-			 0., twopi);			//theta1, theta2
+  svol_Ring = new G4Tubs("Ring",                          //name
+                       fInnerRadius_Ring, fRadius_World,  //r1, r2
+                         0.5*fThickness_Ring,             //half-length 
+                         0., twopi);                      //theta1, theta2
 
   G4LogicalVolume*                         
-  lvol_Ring = new G4LogicalVolume(svol_Ring,		//solid
-                                   fMaterial_Ring,	//material
-                                   "Ring");		//name
-				   
+  lvol_Ring = new G4LogicalVolume(svol_Ring,              //solid
+                                   fMaterial_Ring,        //material
+                                   "Ring");               //name
+                                   
   zpos = 0.5*(fThickness_Gas - fThickness_Ring);
   
-              new G4PVPlacement(0,			//no rotation
-  			  G4ThreeVector(0,0,zpos),	//translation
-                                 lvol_Ring,		//logical volume
-                                 "Ring",		//name
-                                 lvol_Gas,		//mother volume
-                                 false,			//no boolean operation
-                                 1);			//copy number
+              new G4PVPlacement(0,                        //no rotation
+                            G4ThreeVector(0,0,zpos),      //translation
+                                 lvol_Ring,               //logical volume
+                                 "Ring",                  //name
+                                 lvol_Gas,                //mother volume
+                                 false,                   //no boolean operation
+                                 1);                      //copy number
 
-              new G4PVPlacement(0,			//no rotation
-  			  G4ThreeVector(0,0,-zpos),	//translation
-                                 lvol_Ring,		//logical volume
-                                 "Ring",		//name
-                                 lvol_Gas,		//mother volume
-                                 false,			//no boolean operation
-                                 2);			//copy number				 
+              new G4PVPlacement(0,                        //no rotation
+                            G4ThreeVector(0,0,-zpos),     //translation
+                                 lvol_Ring,               //logical volume
+                                 "Ring",                  //name
+                                 lvol_Gas,                //mother volume
+                                 false,                   //no boolean operation
+                                 2);                      //copy number                                 
 
-               				 
+                                                
   // ScatterFoil (only if it is not Air)
   //
   if ((fMaterial_ScatterFoil != fMaterial_Frame) && (fThickness_ScatterFoil > 0.))
    {
     G4Tubs*
-    svol_ScatterFoil = new G4Tubs("ScatterFoil",		//name
-                         0*cm, fRadius_World,		//r1, r2
-			 0.5*fThickness_ScatterFoil,	//half-length 
-			 0., twopi);			//theta1, theta2
+    svol_ScatterFoil = new G4Tubs("ScatterFoil",          //name
+                         0*cm, fRadius_World,             //r1, r2
+                         0.5*fThickness_ScatterFoil,      //half-length 
+                         0., twopi);                      //theta1, theta2
 
     G4LogicalVolume*                         
-    lvol_ScatterFoil = new G4LogicalVolume(svol_ScatterFoil,	//solid
-                                   fMaterial_ScatterFoil,	//material
-                                   "ScatterFoil");		//name
-				   
+    lvol_ScatterFoil = new G4LogicalVolume(svol_ScatterFoil,//solid
+                                   fMaterial_ScatterFoil,   //material
+                                   "ScatterFoil");          //name
+                                   
     zpos = fZfront_ScatterFoil + 0.5*fThickness_ScatterFoil - 0.5*fThickness_Frame;
   
-                   new G4PVPlacement(0,			//no rotation
-  			  G4ThreeVector(0,0,zpos),	//translation
-                                 lvol_ScatterFoil,	//logical volume
-                                 "ScatterFoil",		//name
-                                 lvol_Frame,		//mother volume
-                                 false,			//no boolean operation
-                                 0);			//copy number
-  }				 
+                   new G4PVPlacement(0,                    //no rotation
+                            G4ThreeVector(0,0,zpos),       //translation
+                                 lvol_ScatterFoil,         //logical volume
+                                 "ScatterFoil",            //name
+                                 lvol_Frame,               //mother volume
+                                 false,                    //no boolean operation
+                                 0);                       //copy number
+  }                                 
                                         
    PrintGeometry();         
   
@@ -457,13 +459,13 @@ void DetectorConstruction::PrintGeometry()
   G4cout << "\n  ExitWindow \t" << fMaterial_ExitWindow->GetName()
          << "\t" << G4BestUnit(fZfront_ExitWindow,"Length")
          << "\t" << G4BestUnit(fThickness_ExitWindow,"Length");
-	 
-  if (fMaterial_ScatterFoil != fMaterial_Frame) {	 
+         
+  if (fMaterial_ScatterFoil != fMaterial_Frame) {         
     G4cout << "\n  ScatterFoil \t" << fMaterial_ScatterFoil->GetName() << "\t"
            << "\t" << G4BestUnit(fZfront_ScatterFoil,"Length")
            << "\t" << G4BestUnit(fThickness_ScatterFoil,"Length");
   }
-  	 	 
+                    
   G4cout << "\n  MonitorChbr \t" << fMaterial_MonitorChbr->GetName() << "\t"
          << "\t" << G4BestUnit(fZfront_MonitorChbr,"Length")
          << "\t" << G4BestUnit(fThickness_MonitorChbr,"Length");
@@ -471,25 +473,25 @@ void DetectorConstruction::PrintGeometry()
   G4double thickBagWindow = 0.5*(fThickness_Bag - fThickness_Gas);
   G4double zfrontGas = fZfront_Bag + thickBagWindow;
   G4double zfrontBagWindow2 = zfrontGas + fThickness_Gas;
-   	 
+            
   G4cout << "\n  BagWindow1 \t" << fMaterial_Bag->GetName() << "\t"
          << "\t" << G4BestUnit(fZfront_Bag,"Length")
          << "\t" << G4BestUnit(thickBagWindow,"Length");
-   	 
+            
   G4cout << "\n  Gas       \t" << fMaterial_Gas->GetName() << "\t"
          << "\t" << G4BestUnit(zfrontGas,"Length")
          << "\t" << G4BestUnit(fThickness_Gas,"Length");
-	    	 
+                     
   G4cout << "\n  BagWindow2 \t" << fMaterial_Bag->GetName() << "\t"
          << "\t" << G4BestUnit(zfrontBagWindow2,"Length")
          << "\t" << G4BestUnit(thickBagWindow,"Length");
-	    	 
+                     
   G4cout << "\n  ScoringPlane \t" << fMaterial_Frame->GetName() << "\t"
          << "\t" << G4BestUnit(fThickness_Frame,"Length") << "\n" << G4endl;
-	 
+         
   // restaure default formats
   G4cout.setf(mode,std::ios::floatfield);
-  G4cout.precision(prec);    	 
+  G4cout.precision(prec);             
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

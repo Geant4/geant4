@@ -29,7 +29,7 @@
 // $Id: DicomNestedPhantomParameterisation.hh,v 1.6 2010-11-09 09:02:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// --------------------------------------------------------------------
+
 #ifndef DICOMNESTEDPARAMETERISATION_HH
 #define DICOMNESTEDPARAMETERISATION_HH
 
@@ -58,6 +58,8 @@ class G4Para;
 class G4Polycone;
 class G4Polyhedra;
 class G4Hype;
+
+/// Implements a G4VNestedParameterisation
 
 class DicomNestedPhantomParameterisation : public G4VNestedParameterisation
 {

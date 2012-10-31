@@ -64,7 +64,7 @@ class RunAction : public G4UserRunAction
     
     void FlowInCavity(G4int k, G4double e) { fEnerFlowCavity[k] += e;  
                                              fPartFlowCavity[k]++;};
-					     
+                                             
     void AddEdepCavity(G4double de) { fEdepCavity += de; fEdepCavity2 += de*de;
                                       fNbEventCavity++;};
     void AddTrakCavity(G4double dt) { fTrkSegmCavity += dt;};

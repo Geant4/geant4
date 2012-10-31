@@ -48,10 +48,10 @@ public:
 
   MyKleinNishinaCompton(DetectorConstruction*,
                         const G4ParticleDefinition* p = 0, 
-			const G4String& nam = "myKlein-Nishina");
+                        const G4String& nam = "myKlein-Nishina");
 
   virtual ~MyKleinNishinaCompton();
-				      
+                                      
   virtual G4double CrossSectionPerVolume(
                                 const G4Material*,
                                 const G4ParticleDefinition*,
@@ -60,11 +60,11 @@ public:
                                       G4double emax);
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double tmin,
-				 G4double maxEnergy);
-				      
+                                 const G4MaterialCutsCouple*,
+                                 const G4DynamicParticle*,
+                                 G4double tmin,
+                                 G4double maxEnergy);
+                                      
   void SetCSFactor(G4double factor) {fCrossSectionFactor = factor;};
 
 protected:

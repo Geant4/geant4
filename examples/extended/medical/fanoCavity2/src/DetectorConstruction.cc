@@ -48,6 +48,8 @@
 #include "G4SolidStore.hh"
 
 #include "G4UnitsTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -122,47 +124,47 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   G4PhysicalVolumeStore::GetInstance()->Clean();
   G4LogicalVolumeStore::GetInstance()->Clean();
   G4SolidStore::GetInstance()->Clean();
-		   
+                   
   // Wall
   //
   fWorldThickness = fCavityThickness + 2*fWallThickness;
   
   G4Tubs* 
-  sWall = new G4Tubs("Wall",						//name
-    		      0.,fWorldRadius,0.5*fWorldThickness,0.,twopi);	//size
+  sWall = new G4Tubs("Wall",                                         //name
+                      0.,fWorldRadius,0.5*fWorldThickness,0.,twopi); //size
 
   G4LogicalVolume*
-  lWall = new G4LogicalVolume(sWall,			//solid
-      			       fWallMaterial,		//material
-      			      "Wall");			//name
-				   
-  fWall = new G4PVPlacement(0,				//no rotation
-                             G4ThreeVector(),		//at (0,0,0)
-                             lWall,			//logical volume
-                            "Wall",			//name
-                             0,				//mother  volume
-                             false,			//no boolean operation
-                             0);			//copy number
+  lWall = new G4LogicalVolume(sWall,                   //solid
+                              fWallMaterial,           //material
+                              "Wall");                 //name
+                                   
+  fWall = new G4PVPlacement(0,                         //no rotation
+                            G4ThreeVector(),           //at (0,0,0)
+                            lWall,                     //logical volume
+                            "Wall",                    //name
+                            0,                         //mother  volume
+                            false,                     //no boolean operation
+                            0);                        //copy number
 
   // Cavity
-  //  			   
+  //                             
   G4Tubs*
-  sCavity = new G4Tubs("Cavity",	
+  sCavity = new G4Tubs("Cavity",        
                        0.,fWorldRadius,0.5*fCavityThickness,0.,twopi);
-		 
-  G4LogicalVolume*		   			                      
-  lCavity = new G4LogicalVolume(sCavity,		//shape
-                                fCavityMaterial,		//material
-                                "Cavity");		//name
-				
-  fCavity = new G4PVPlacement(0,			//no rotation
-                             G4ThreeVector(),		//at (0,0,0)
-                             lCavity,			//logical volume
-                            "Cavity",			//name
-                             lWall,			//mother  volume
-                             false,			//no boolean operation
-                             1);			//copy number
-				
+                 
+  G4LogicalVolume*                                                                 
+  lCavity = new G4LogicalVolume(sCavity,               //shape
+                                fCavityMaterial,       //material
+                                "Cavity");             //name
+                                
+  fCavity = new G4PVPlacement(0,                       //no rotation
+                             G4ThreeVector(),          //at (0,0,0)
+                             lCavity,                  //logical volume
+                             "Cavity",                 //name
+                             lWall,                    //mother  volume
+                             false,                    //no boolean operation
+                             1);                       //copy number
+                                
   PrintParameters();
     
   //
@@ -178,10 +180,10 @@ void DetectorConstruction::PrintParameters()
   G4cout << "\n---------------------------------------------------------\n";
   G4cout << "---> The Wall is " << G4BestUnit(fWallThickness,"Length")
          << " of " << fWallMaterial->GetName() << " ( " 
-	 << G4BestUnit(fWallMaterial->GetDensity(),"Volumic Mass") << " )\n";
+         << G4BestUnit(fWallMaterial->GetDensity(),"Volumic Mass") << " )\n";
   G4cout << "     The Cavity is " << G4BestUnit(fCavityThickness,"Length")
          << " of " << fCavityMaterial->GetName() << " ( " 
-	 << G4BestUnit(fCavityMaterial->GetDensity(),"Volumic Mass") << " )";	 	 
+         << G4BestUnit(fCavityMaterial->GetDensity(),"Volumic Mass") << " )";                  
   G4cout << "\n---------------------------------------------------------\n";
   G4cout << G4endl;
 }

@@ -102,7 +102,7 @@ void PhysListEmStandardWVI::ConstructProcess()
       pmanager->AddProcess(new G4eIonisation,         -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung,     -1, 3, 3);
       pmanager->AddProcess(new G4CoulombScattering,   -1,-1, 4);
-      	    
+                  
     } else if (particleName == "e+") {
       //positron
       G4MuMultipleScattering* msc = new G4MuMultipleScattering();
@@ -135,7 +135,7 @@ void PhysListEmStandardWVI::ConstructProcess()
       pmanager->AddProcess(new G4hPairProduction,     -1, 4, 4);
      
     } else if( particleName == "alpha" || 
-	       particleName == "He3"    ) {
+               particleName == "He3"    ) {
       //alpha
       G4hMultipleScattering* msc = new G4hMultipleScattering();
       pmanager->AddProcess(msc,                       -1, 1, 1);
@@ -152,8 +152,8 @@ void PhysListEmStandardWVI::ConstructProcess()
       pmanager->AddProcess(new G4NuclearStopping,     -1, 3,-1);      
       
     } else if ((!particle->IsShortLived()) &&
-	       (particle->GetPDGCharge() != 0.0) && 
-	       (particle->GetParticleName() != "chargedgeantino")) {
+               (particle->GetPDGCharge() != 0.0) && 
+               (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
       G4hMultipleScattering* msc = new G4hMultipleScattering();
       pmanager->AddProcess(msc,                       -1, 1, 1);      

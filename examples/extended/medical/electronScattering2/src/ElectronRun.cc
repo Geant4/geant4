@@ -31,6 +31,7 @@
 #include "G4MultiFunctionalDetector.hh"
 #include "G4SDManager.hh"
 #include "G4VPrimitiveScorer.hh"
+#include "G4SystemOfUnits.hh"
 #include <assert.h>
 
 ElectronRun::ElectronRun(const G4String& detectorName)

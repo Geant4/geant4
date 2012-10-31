@@ -23,29 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/DICOM/include/NestedParamDicomDetectorConstruction.hh
-/// \brief Definition of the NestedParamDicomDetectorConstruction class
+/// \file medical/DICOM/include/DicomNestedParamDetectorConstruction.hh
+/// \brief Definition of the DicomNestedParamDetectorConstruction class
 //
-// Author: P. Arce
-// History: 30.11.07  First version
-//*******************************************************
-//
-// NestedParamDicomDetectorConstruction.hh :
-//	- Construct the phantom using DicomPhantomParameterisationColour
-//*******************************************************
 
-#ifndef NestedParamDicomDetectorConstruction_h
-#define NestedParamDicomDetectorConstruction_h 1
+#ifndef DicomNestedParamDetectorConstruction_h
+#define DicomNestedParamDetectorConstruction_h 1
 
 #include "globals.hh"
 #include "DicomDetectorConstruction.hh"
 
-class NestedParamDicomDetectorConstruction : public DicomDetectorConstruction
+//*******************************************************
+/// Construct the phantom using DicomPhantomParameterisationColour
+///
+/// History: 30.11.07  First version
+/// \author  P. Arce
+//*******************************************************
+
+class DicomNestedParamDetectorConstruction : public DicomDetectorConstruction
 {
 public:
 
-  NestedParamDicomDetectorConstruction();
-  ~NestedParamDicomDetectorConstruction();
+  DicomNestedParamDetectorConstruction();
+  ~DicomNestedParamDetectorConstruction();
 
 private:
 

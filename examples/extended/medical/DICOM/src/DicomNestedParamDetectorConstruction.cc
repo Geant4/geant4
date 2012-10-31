@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/DICOM/src/NestedParamDicomDetectorConstruction.cc
-/// \brief Implementation of the NestedParamDicomDetectorConstruction class
+/// \file medical/DICOM/src/DicomNestedParamDetectorConstruction.cc
+/// \brief Implementation of the DicomNestedParamDetectorConstruction class
 //
 // History:
-//	Pedro Arce  
+//        Pedro Arce  
 //
 //*******************************************************
 
@@ -39,65 +39,66 @@
 #include "G4PVPlacement.hh"
 #include "G4PVParameterised.hh"
 
-#include "NestedParamDicomDetectorConstruction.hh"
+#include "DicomNestedParamDetectorConstruction.hh"
 #include "DicomNestedPhantomParameterisation.hh"
 
-NestedParamDicomDetectorConstruction::NestedParamDicomDetectorConstruction() : DicomDetectorConstruction()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+DicomNestedParamDetectorConstruction::DicomNestedParamDetectorConstruction() : DicomDetectorConstruction()
 {
 }
 
-NestedParamDicomDetectorConstruction::~NestedParamDicomDetectorConstruction()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+DicomNestedParamDetectorConstruction::~DicomNestedParamDetectorConstruction()
 {
 }
 
-
-//-------------------------------------------------------------
-void NestedParamDicomDetectorConstruction::ConstructPhantom()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void DicomNestedParamDetectorConstruction::ConstructPhantom()
 {
 #ifdef G4VERBOSE
-  G4cout << "NestedParamDicomDetectorConstruction::ConstructPhantom " << G4endl;
+  G4cout << "DicomNestedParamDetectorConstruction::ConstructPhantom " << G4endl;
 #endif
 
   //----- Replication of Water Phantom Volume.
   //--- Y Slice
   G4String yRepName("RepY");
   G4VSolid* solYRep =
-    new G4Box(yRepName,nVoxelX*voxelHalfDimX,voxelHalfDimY,nVoxelZ*voxelHalfDimZ);
+    new G4Box(yRepName,fNVoxelX*fVoxelHalfDimX,fVoxelHalfDimY,fNVoxelZ*fVoxelHalfDimZ);
   G4LogicalVolume* logYRep =
-    new G4LogicalVolume(solYRep,air,yRepName);
-  new G4PVReplica(yRepName,logYRep,container_logic,kYAxis,nVoxelY,voxelHalfDimY*2.);
+    new G4LogicalVolume(solYRep,fAir,yRepName);
+  new G4PVReplica(yRepName,logYRep,fContainer_logic,kYAxis,fNVoxelY,fVoxelHalfDimY*2.);
 
   //--- X Slice
   G4String xRepName("RepX");
   G4VSolid* solXRep =
-    new G4Box(xRepName,voxelHalfDimX,voxelHalfDimY,nVoxelZ*voxelHalfDimZ);
+    new G4Box(xRepName,fVoxelHalfDimX,fVoxelHalfDimY,fNVoxelZ*fVoxelHalfDimZ);
   G4LogicalVolume* logXRep =
-    new G4LogicalVolume(solXRep,air,xRepName);
-  new G4PVReplica(xRepName,logXRep,logYRep,kXAxis,nVoxelX,voxelHalfDimX*2.);
+    new G4LogicalVolume(solXRep,fAir,xRepName);
+  new G4PVReplica(xRepName,logXRep,logYRep,kXAxis,fNVoxelX,fVoxelHalfDimX*2.);
 
   //----- Voxel solid and logical volumes
   //--- Z Slice
   G4VSolid* solVoxel = 
-    new G4Box("phantom",voxelHalfDimX,voxelHalfDimY,voxelHalfDimZ);
-  G4LogicalVolume* logicVoxel = new G4LogicalVolume(solVoxel,air,"phantom");
+    new G4Box("phantom",fVoxelHalfDimX,fVoxelHalfDimY,fVoxelHalfDimZ);
+  G4LogicalVolume* logicVoxel = new G4LogicalVolume(solVoxel,fAir,"phantom");
 
   //
   // Parameterisation for transformation of voxels.
   //  (voxel size is fixed in this example. 
   //    e.g. nested parameterisation handles material and transfomation of voxels.)
-  G4ThreeVector voxelSize(voxelHalfDimX,voxelHalfDimY,voxelHalfDimZ);
+  G4ThreeVector voxelSize(fVoxelHalfDimX,fVoxelHalfDimY,fVoxelHalfDimZ);
   DicomNestedPhantomParameterisation* param
     = new DicomNestedPhantomParameterisation(voxelSize,fMaterials);
 
   new G4PVParameterised("phantom",    // their name
-			logicVoxel, // their logical volume
-			logXRep,      // Mother logical volume
-			kZAxis,       // Are placed along this axis 
-			//			  kUndefined,        // Are placed along this axis 
-			nVoxelZ,      // Number of cells
-			param);       // Parameterisation.
+                        logicVoxel, // their logical volume
+                        logXRep,      // Mother logical volume
+                        kZAxis,       // Are placed along this axis 
+                        //                          kUndefined,        // Are placed along this axis 
+                        fNVoxelZ,      // Number of cells
+                        param);       // Parameterisation.
   
   param->SetMaterialIndices( fMateIDs );
-  param->SetNoVoxel( nVoxelX, nVoxelY, nVoxelZ );
+  param->SetNoVoxel( fNVoxelX, fNVoxelY, fNVoxelZ );
 
 }

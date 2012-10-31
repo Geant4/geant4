@@ -69,6 +69,8 @@
 #include "G4LossTableManager.hh"
 #include "G4UAtomicDeexcitation.hh"
 
+#include "G4SystemOfUnits.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysListEmStandard::PhysListEmStandard(const G4String& name)

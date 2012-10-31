@@ -40,6 +40,8 @@
 #include "HistoManager.hh"
 
 #include "G4Track.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

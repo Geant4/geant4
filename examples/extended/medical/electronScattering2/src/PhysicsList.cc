@@ -72,6 +72,8 @@
 #include "G4BaryonConstructor.hh"
 #include "G4IonConstructor.hh"
 
+#include "G4SystemOfUnits.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList() : G4VModularPhysicsList()

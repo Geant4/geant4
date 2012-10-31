@@ -47,6 +47,7 @@
 #include "globals.hh"
 #include "Histo.hh"
 #include "G4Gamma.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -79,7 +80,7 @@ G4bool CheckVolumeSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   }
   if(1 < fHisto->GetVerbose()) {
       G4cout << "CheckVolumeSD: energy = " << e/MeV
-	     << G4endl;
+             << G4endl;
   }
   return true;
 }

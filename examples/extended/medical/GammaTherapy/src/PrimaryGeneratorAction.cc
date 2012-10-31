@@ -47,6 +47,8 @@
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Histo.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -154,21 +156,21 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     G4cout << "ParticleName= " << particleName
            << "  PDGcode= " << particle->GetPDGEncoding()
            << std::setprecision(5)
-	   << "   KinEnergy(GeV)= "
-	   << fEnergy/GeV
-	   << "   x(mm)= "
-	   << x/mm
-	   << " y(mm)= "
-	   << y/mm
-	   << " z(mm)= "
-	   << z/mm
+           << "   KinEnergy(GeV)= "
+           << fEnergy/GeV
+           << "   x(mm)= "
+           << x/mm
+           << " y(mm)= "
+           << y/mm
+           << " z(mm)= "
+           << z/mm
            << "   ux= "
-	   << ux
-	   << " uy= "
-	   << uy
-	   << " uz= "
-	   << uz
-	   << G4endl;
+           << ux
+           << " uy= "
+           << uy
+           << " uz= "
+           << uz
+           << G4endl;
     }
 
   fParticleGun->GeneratePrimaryVertex(anEvent);

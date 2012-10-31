@@ -8,6 +8,26 @@ $Id: History,v 1.31 2010-12-23 11:34:22 chauvie Exp $
                       Category History file
 
                       ---------------------
+13.10.2012 - Andrea Dotti (DICOM-V09-05-08)
+	   Removing previous tag modification (not needed)
+
+13.10.2012 - Andrea Dotti (DICOM-V09-05-07)
+	     Adding explicit use of system of units
+
+05.09.2012 - Ivana Hrivnacova (DICOM-V09-05-06)
+             Fixed compiler warning
+
+04.09.2012 - Pedro Arce    (DICOM-V09-05-05)
+             Remove old renamed files
+             Updated CMakeLists.txt (By I.Hrivnacova)
+             Adding visualization, copying macros, install target and 
+             comment lines 
+
+17.07.2012 - Ivana Hrivnacova (DICOM-V09-05-04)
+             Improved README files
+
+06.07.2012 - Pedro Arce    (DICOM-V09-05-03)
+             Reviewed examples according to coding guidelines
 
 13.06.2012 - Gabriele Cosmo   (DICOM-V09-05-02)
              Assign return value for fread() and fscanf() calls in

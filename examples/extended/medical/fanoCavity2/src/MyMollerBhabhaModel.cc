@@ -34,6 +34,9 @@
 
 #include "MyMollerBhabhaModel.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 using namespace std;
@@ -51,7 +54,7 @@ MyMollerBhabhaModel::~MyMollerBhabhaModel()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double MyMollerBhabhaModel::ComputeDEDXPerVolume(
-					  const G4Material* material,
+                                          const G4Material* material,
                                           const G4ParticleDefinition* p,
                                                 G4double kineticEnergy,
                                                 G4double cutEnergy)

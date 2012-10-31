@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/GammaTherapy/include/StepLimiterPerRegion.hh
-/// \brief Definition of the StepLimiterPerRegion class
+/// \file medical/GammaTherapy/include/StepLimiter.hh
+/// \brief Definition of the StepLimiter class
 //
 // $Id: StepLimiter.hh,v 1.3 2008-08-05 10:38:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
@@ -57,8 +57,8 @@ public:
   //G4double GetMaxStep() {return MaxChargedStep;};
 
   G4double PostStepGetPhysicalInteractionLength(const G4Track& track,
-						G4double previousStepSize,
-						G4ForceCondition* condition);
+                                                G4double previousStepSize,
+                                                G4ForceCondition* condition);
 
   G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 

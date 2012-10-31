@@ -41,6 +41,7 @@
 #include "Randomize.hh"
 #include "G4DataVector.hh"
 #include "G4ParticleChangeForGamma.hh"
+#include "G4PhysicalConstants.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -78,7 +79,7 @@ G4double MyKleinNishinaCompton::CrossSectionPerVolume(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void MyKleinNishinaCompton::SampleSecondaries(
-			     std::vector<G4DynamicParticle*>* fvect,
+                             std::vector<G4DynamicParticle*>* fvect,
                              const G4MaterialCutsCouple*,
                              const G4DynamicParticle* aDynamicGamma,
                                    G4double,

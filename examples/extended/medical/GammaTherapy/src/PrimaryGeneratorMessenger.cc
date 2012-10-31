@@ -141,7 +141,7 @@ PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
-					    G4String newValue)
+                                            G4String newValue)
 {
 
   if(1 < (Histo::GetPointer())->GetVerbose()) {
