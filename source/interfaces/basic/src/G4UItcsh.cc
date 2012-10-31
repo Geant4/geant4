@@ -403,10 +403,11 @@ void G4UItcsh::ListMatchedCommand()
     input.remove(0, jhead);
     input= input.strip(G4String::leading);
   }
+  //G4cout << "@@@@ input=" << input << G4endl;
 
   // command tree of "user specified directory"
-  G4String vpath= currentCommandDir;
-  G4String vcmd;
+  G4String vpath = currentCommandDir;
+  G4String vcmd = "";
 
   if( !input.empty() ) {
     G4int len= input.length();
@@ -415,7 +416,7 @@ void G4UItcsh::ListMatchedCommand()
       if(input[(size_t)i]=='/') {
         indx= i;
         break;
-      }   
+      }
     }
     // get abs. path
     if(indx != -1) vpath= GetAbsCommandDirPath(input(0,indx+1));  
@@ -423,6 +424,7 @@ void G4UItcsh::ListMatchedCommand()
   }
 
   // list matched dirs/commands
+  //G4cout << "@@@ vpath=" << vpath <<":vcmd=" << vcmd << G4endl;
   ListCommand(vpath, vpath+vcmd);
 
   G4cout << promptString << commandLine << std::flush;
@@ -455,7 +457,7 @@ void G4UItcsh::CompleteCommand()
       }   
     }
     // get abs. path
-    if(indx != -1) vpath= GetAbsCommandDirPath(input(0,indx+1));  
+    if(indx != -1) vpath= GetAbsCommandDirPath(input(0,indx+1));
     if(!(indx==0  && len==1)) vcmd= input(indx+1,len-indx-1);  // care for "/"
   }
 
@@ -638,7 +640,7 @@ G4String G4UItcsh::ReadLine()
 }
 
 //////////////////////////////////////////////////
-G4String G4UItcsh::GetCommandLine(const char* msg)
+G4String G4UItcsh::GetCommandLineString(const char* msg)
 //////////////////////////////////////////////////
 {
   SetTermToInputMode();

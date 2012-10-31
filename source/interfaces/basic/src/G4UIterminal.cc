@@ -216,7 +216,7 @@ G4String G4UIterminal::GetCommand(const char* msg)
   G4String newCommand;
   G4String nullString;
 
-  newCommand= shell-> GetCommandLine(msg);
+  newCommand= shell-> GetCommandLineString(msg);
 
   G4String nC= newCommand.strip(G4String::leading);
   if( nC.length() == 0 ) {
@@ -226,11 +226,11 @@ G4String G4UIterminal::GetCommand(const char* msg)
     G4cout << nC << G4endl;
     newCommand= nullString;
 
-  } else if(nC=="ls" || nC(0,3)=="ls " ) {  // list commands
+  } else if(nC=="ls" || (G4String)nC(0,3)=="ls " ) {  // list commands
     ListDirectory(nC); 
     newCommand= nullString;
 
-  } else if(nC=="lc" || nC(0,3)=="lc " ) {  // ... by shell
+  } else if(nC=="lc" || (G4String)nC(0,3)=="lc " ) {  // ... by shell
     shell-> ListCommand(nC.remove(0,2)); 
     newCommand= nullString;
 
@@ -243,12 +243,12 @@ G4String G4UIterminal::GetCommand(const char* msg)
     shell-> ShowCurrentDirectory();
     newCommand= nullString;
 
-  } else if(nC == "cd" || nC(0,3) == "cd ") {  // "cd"
+  } else if(nC == "cd" || (G4String)nC(0,3) == "cd ") {  // "cd"
     ChangeDirectoryCommand(nC); 
     shell-> SetCurrentDirectory(GetCurrentWorkingDirectory());
     newCommand= nullString;
 
-  } else if(nC == "help" || nC(0,5) == "help ") {  // "help"
+  } else if(nC == "help" || (G4String)nC(0,5) == "help ") {  // "help"
     TerminalHelp(nC);
     newCommand= nullString;
 

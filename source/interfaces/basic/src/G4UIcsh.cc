@@ -45,7 +45,7 @@ G4UIcsh::~G4UIcsh()
 
 
 //////////////////////////////////
-G4String G4UIcsh::GetCommandLine(const char* msg)
+G4String G4UIcsh::GetCommandLineString(const char* msg)
 //////////////////////////////////
 {
   MakePrompt(msg);

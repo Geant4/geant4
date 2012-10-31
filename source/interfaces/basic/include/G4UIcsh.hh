@@ -45,7 +45,7 @@ public:
   G4UIcsh(const G4String& prompt="%s> ");
   ~G4UIcsh();
   
-  virtual G4String GetCommandLine(const char* msg=0);
+  virtual G4String GetCommandLineString(const char* msg=0);
 
 };
 

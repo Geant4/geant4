@@ -101,7 +101,7 @@ class G4VBasicShell : public G4UIsession
   private:
     G4String currentDirectory;
 
-    G4String ModifyPath(G4String tempPath);
+    G4String ModifyPath(const G4String& tempPath);
 };
 
 #endif

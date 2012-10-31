@@ -95,7 +95,7 @@ public:
   //  "candidate" is specified with full path.
 
   // get command string from a command line
-  virtual G4String GetCommandLine(const char* msg=0)= 0;
+  virtual G4String GetCommandLineString(const char* msg=0)= 0;
 
   virtual void ResetTerminal();
 };

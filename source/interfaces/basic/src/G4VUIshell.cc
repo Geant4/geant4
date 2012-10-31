@@ -159,23 +159,33 @@ G4String G4VUIshell::GetAbsCommandDirPath(const G4String& apath) const
   G4String absPath= "/";
   for(G4int indx=1; indx<=G4int(bpath.length())-1; ) {
     G4int jslash= bpath.index("/", indx);  // search index begin with "/"
+    if(indx == jslash) { // skip first '///'
+      indx++;
+      continue;
+    }
     if(jslash != G4int(G4String::npos)) {
-      if(bpath(indx,jslash-indx) == ".."){  // directory up
-        if(absPath.length() >=1) {
+      if((G4String)bpath(indx,jslash-indx) == ".."){  // directory up
+        if(absPath == "/") {
+          indx = jslash+1;
+          continue;
+        }
+        if(absPath.length() >= 2) {
           absPath.remove(absPath.length()-1);  // remove last  "/"
           G4int jpre= absPath.last('/');
           if(jpre != G4int(G4String::npos)) absPath.remove(jpre+1);
         }
-      } else if(bpath(indx,jslash-indx) == "."){  // nothing to do
+      } else if((G4String)bpath(indx,jslash-indx) == "."){  // nothing to do
       } else { // add
         if( !(jslash==indx && bpath(indx)=='/') ) // truncate "////"
           absPath+= bpath(indx, jslash-indx+1);
           // better to be check directory existence. (it costs!)
       }
+      indx= jslash+1;
     } else { // directory ONLY (ignore non-"/" terminated string)
+      break;
     }
-    indx= jslash+1;
   }
+
   return  absPath;
 }
 

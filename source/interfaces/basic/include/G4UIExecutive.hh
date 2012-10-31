@@ -50,33 +50,53 @@
 //     ...
 //
 // ====================================================================
-#ifndef G4UI_EXECUTIVE_H
-#define G4UI_EXECUTIVE_H 1
+#ifndef G4UI_EXECUTIVE_HH
+#define G4UI_EXECUTIVE_HH
 
 #include "G4VUIshell.hh"
+#include <map>
 
 class G4UIsession;
 
 class G4UIExecutive {
-private:
-  G4UIsession* session;
-  G4VUIshell* shell;
-  G4bool isGUI;
-
 public:
-  G4UIExecutive(G4int argc, char** argv);
+  G4UIExecutive(G4int argc, char** argv, const G4String& type = "");
   ~G4UIExecutive();
 
-  G4bool IsGUI() const;
   G4UIsession* GetSession() const;
+
+  G4bool IsGUI() const;
 
   void SetPrompt(const G4String& prompt);
   void SetLsColor(TermColorIndex dirColor, TermColorIndex cmdColor);
 
   void SessionStart();
-  
+
+private:
+  enum SessionType { kNone, kQt, kXm, kWin32, kWt, kGag, kTcsh, kCsh };
+  SessionType selected;
+
+  G4UIsession* session;
+  G4VUIshell* shell;
+
+  G4bool isGUI;
+
+  std::map<G4String, G4String> sessionMap;
+
+  void SelectSessionByArg(const G4String& stype);
+  void SelectSessionByEnv();
+  void SelectSessionByFile(const G4String& appname);
 };
 
-#include "G4UIExecutive.icc"
+// ====================================================================
+inline G4UIsession* G4UIExecutive::GetSession() const
+{
+  return session;
+}
+
+inline G4bool G4UIExecutive::IsGUI() const
+{
+  return isGUI;
+}
 
 #endif

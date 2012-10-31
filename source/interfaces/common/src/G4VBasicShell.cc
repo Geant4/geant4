@@ -122,44 +122,52 @@ G4UIcommand* G4VBasicShell::FindCommand(const char* commandName)
   return G4UImanager::GetUIpointer()->GetTree()->FindPath(targetCom);
 }
 
-G4String G4VBasicShell::ModifyPath(G4String tempPath)
+G4String G4VBasicShell::ModifyPath(const G4String& tempPath)
 {
-  G4String newPath = currentDirectory;
+  if( tempPath.length() == 0 ) return tempPath;
 
-  if( tempPath.length()>0 )
-  {
+  G4String newPath = "";
 
-  if( tempPath(0) == '/' )   // full path is given
-  { newPath = tempPath; }
-  else if( tempPath(0) != '.' ) // add current prefix
-  { newPath += tempPath; }
-  else if( tempPath(0,2) == "./" ) // add current prefix
-  { newPath += (G4String)tempPath(2,tempPath.length()-2); }
-  else                       // swim up with ".."
-  {
-    while( 1 )
-    {
-      if( tempPath(0,2) == ".." )
-      {
-        if( newPath != "/" )
-        { 
-	  G4String tmpString = (G4String)newPath(0,newPath.length()-1);
-          newPath = (G4String)newPath(0,tmpString.last('/')+1); 
-        }
-        if( tempPath == ".." || tempPath == "../" )
-        { break; }
-        tempPath = (G4String)tempPath(3,tempPath.length()-3);
-      }
-      else
-      {
-        newPath += tempPath;
-        break;
-      }
+  // temporal full path
+  if( tempPath(0) == '/') newPath = tempPath;
+  else newPath = currentDirectory + tempPath;
+
+  // body of path...
+  while(1){
+    size_t idx = newPath.find("/./");
+    if( idx == G4String::npos) break;
+    newPath.erase(idx,2);
+  }
+
+  while(1) {
+    size_t idx = newPath.find("/../");
+    if( idx == G4String::npos) break;
+    if( idx == 0) {
+      newPath.erase(1,3);
+      continue;
+    }
+    size_t idx2 = newPath.find_last_of('/', idx-1);
+    if(idx2 != G4String::npos) newPath.erase(idx2, idx-idx2+3);
+  }
+
+  // end of path...
+  if(newPath(newPath.size()-3,3) == "/..") {
+    if( newPath.size() == 3) {
+      newPath = "/";
+    } else {
+      size_t idx = newPath.find_last_of('/', newPath.size()-4);
+      if(idx != G4String::npos) newPath.erase(idx+1);
     }
   }
+  if(newPath(newPath.size()-2,2) == "/.") newPath.erase(newPath.size()-1,1);
 
+  // truncate "/////" to "/"
+  while(1) {
+    size_t idx = newPath.find("//");
+    if( idx == G4String::npos) break;
+    newPath.erase(idx,1);
   }
-
+  
   return newPath;
 }
 ////////////////////////////////////////////

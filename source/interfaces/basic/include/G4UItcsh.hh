@@ -124,7 +124,7 @@ public:
   ~G4UItcsh();
   
   void SetLsColor(TermColorIndex dirColor, TermColorIndex cmdColor);
-  virtual G4String GetCommandLine(const char* msg=0);
+  virtual G4String GetCommandLineString(const char* msg=0);
 
   virtual void ResetTerminal();
 };

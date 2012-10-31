@@ -159,7 +159,7 @@ G4UIQt::G4UIQt (
 
   // open/save
   AddIcon("Open macro file","open","/control/execute");
-  AddIcon("Save viewer state","save","");
+  AddIcon("Save viewer state","save","/vis/viewer/save");
 
   // Cursors style : Should be for all viewers
   
@@ -867,13 +867,22 @@ void G4UIQt::AddButton (
 /**
  special case for the "open" icon. It will open a file selector and map the return file to the given command.
 */
-void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCommand){
+void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCommand, const char* aFileName){
   if(aLabel==NULL) return; // TO KEEP
   if(aCommand==NULL) return; // TO KEEP
 
   QPixmap pix;
   bool userToolBar = false;
-  if (std::string(aIconFile) == "open") {
+
+  if (std::string(aIconFile) == "user_icon") {
+    // try to open a file
+    pix = QPixmap(aFileName);
+    if (pix.isNull()) {
+      G4cout << "Warning: file '"<< aIconFile <<"' is incorrect or does not exist, this command will not be build"<< G4endl;
+      return;
+    }
+    userToolBar = true; 
+  } else if (std::string(aIconFile) == "open") {
     const char * const xpm[]={
       "32 32 33 1",                       
           "       c None",                    
@@ -1600,13 +1609,8 @@ void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCom
       ;
     pix = QPixmap(xpm);
   } else {
-    // try to open a file
-    pix = QPixmap(aIconFile);
-    if (pix.isNull()) {
-      G4cout << "Warning: file '"<< aIconFile <<"' does not exist, this command will not be build"<< G4endl;
-      return;
-    }
-    userToolBar = true;
+    G4cout << "Parameter"<< aIconFile <<" not defined"<< G4endl;
+    return;
   }
   QToolBar *currentToolbar = NULL;
   if (userToolBar) {
@@ -1634,7 +1638,7 @@ void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCom
     connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(OpenIconCallback(const QString&)));
     signalMapper->setMapping(action, QString(aCommand));
 
-  // special cases :"close"
+  // special cases :"save"
   } else if (std::string(aIconFile) == "save") {
     connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(SaveIconCallback(const QString&)));
     signalMapper->setMapping(action, QString(aCommand));
@@ -1661,7 +1665,7 @@ void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCom
     action->setChecked(TRUE);
     action->setData(aIconFile);
     connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(ChangeSurfaceStyle(const QString&)));
-signalMapper->setMapping(action, QString(aIconFile));
+    signalMapper->setMapping(action, QString(aIconFile));
 
     // special case : perspective/ortho
   } else if ((std::string(aIconFile) == "perspective") ||
@@ -1670,7 +1674,7 @@ signalMapper->setMapping(action, QString(aIconFile));
     action->setChecked(TRUE);
     action->setData(aIconFile);
     connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(ChangePerspectiveOrtho(const QString&)));
-signalMapper->setMapping(action, QString(aIconFile));
+    signalMapper->setMapping(action, QString(aIconFile));
 
   } else {
 
@@ -1729,15 +1733,6 @@ void G4UIQt::InitHelpTreeAndVisParametersWidget()
 
   if (! fHelpTreeWidget ) {
     fHelpTreeWidget = new QTreeWidget();
-  }
-
-  // clean all previous Vis parameters command widgets
-  if (fCommandParameterWidgets.size() > 0) {
-    unsigned int a=0;
-    while (fCommandParameterWidgets.size() > 0) {
-      delete fCommandParameterWidgets[0];
-      a++;
-    }
   }
 
   // build widget
@@ -1814,7 +1809,7 @@ void G4UIQt::FillHelpTree()
     }
 
     // look for childs
-    CreateHelpTreeAndVisParameterChild(newItem,treeTop->GetTree(a+1));
+    CreateHelpTree(newItem,treeTop->GetTree(a+1));
   }
 
 }
@@ -1825,7 +1820,7 @@ void G4UIQt::FillHelpTree()
    @param aParent : parent item to fill
    @param aCommandTree : commandTree node associate with this part of the Tree
 */
-void G4UIQt::CreateHelpTreeAndVisParameterChild(
+void G4UIQt::CreateHelpTree(
  QTreeWidgetItem *aParent
 ,G4UIcommandTree *aCommandTree
 )
@@ -1849,91 +1844,11 @@ void G4UIQt::CreateHelpTreeAndVisParameterChild(
       newItem = new QTreeWidgetItem(aParent);
       newItem->setText(0,GetShortCommandPath(commandText));
     }
-    CreateHelpTreeAndVisParameterChild(newItem,aCommandTree->GetTree(a+1));
-  }
-
-
-
-  // Get the Commands
-
-  for (int a=0;a<aCommandTree->GetCommandEntry();a++) {
-    
-    QStringList stringList;
-    commandText = QString((char*)(aCommandTree->GetCommand(a+1)->GetCommandPath()).data()).trimmed();
-
-    // if already exist, don't create it !
-    newItem = FindTreeItem(aParent,commandText);
-    if (newItem == NULL) {
-      newItem = new QTreeWidgetItem(aParent);
-      newItem->setText(0,GetShortCommandPath(commandText));
-
-      // Case for displaying viewer param and vis/scene/add params
-      G4UIcommand* command = aCommandTree->FindPath(commandText.toStdString().c_str());
-      //      if (IsGUICommand(command)) {
-        if (commandText.startsWith("/vis/scene/add")) {
-          CreateVisCommandTabToolBox(command,commandText.section("/",2));
-        }
-        if (commandText.startsWith("/vis/viewer")) {
-          CreateVisCommandTabToolBox(command,commandText.section("/",2));
-        }
-        //      }
-
-#if QT_VERSION < 0x040202
-      fHelpTreeWidget->setItemExpanded(newItem,false); 
-#else
-      newItem->setExpanded(false);
-#endif
-    }
+    CreateHelpTree(newItem,aCommandTree->GetTree(a+1));
   }
 }
 
  
-/**
- Add the following command to the corresponding toolbox tab
-*/
-
-bool G4UIQt::CreateVisCommandTabToolBox(
- G4UIcommand* command
- ,QString commandText
-)
-{
-  // Look if tab is create
-  QScrollArea* scrollTab;
-  QToolBox* scrollableToolboxWidget = NULL;
-  bool found = false;
-  if (commandText.indexOf("/") != -1) {
-    QString section = commandText.left(commandText.indexOf("/"));
-    for (int a=0; a<fUITabWidget->count(); a++) {
-      if (fUITabWidget->tabText(a) == section) {
-        found = true;
-        scrollTab = dynamic_cast<QScrollArea*>(fUITabWidget->widget(a));
-        if (scrollTab != 0) {
-          scrollableToolboxWidget = dynamic_cast<QToolBox*>(scrollTab->widget());
-        }
-      }
-    }
-
-    // Not found ? create it
-    if (!found) {
-      scrollableToolboxWidget = new QToolBox();
-
-      scrollTab = new QScrollArea ();
-
-      // add it in the vis component vector
-      fCommandParameterWidgets.push_back(scrollTab);
-
-      CreateVisCommandGroupAndToolBox(command,scrollableToolboxWidget,commandText.count("/"),false);
-      scrollTab->setWidgetResizable(true);
-
-      scrollTab->setWidget(scrollableToolboxWidget);
-      fUITabWidget->addTab(scrollTab,section);
-    } else {
-      CreateVisCommandGroupAndToolBox(command,scrollableToolboxWidget,commandText.count("/"),false);
-    }
-  }
-
-  return true;
-}
 
 
 /**
@@ -2063,7 +1978,7 @@ bool G4UIQt::CreateVisCommandGroupAndToolBox(
 
 
 
-/** Create a widget the the command parameters inside
+/** Create a widget with the command parameters inside
     @param command: command line
     @parent : parent widget
     @isDialog : true if we want apply/cancel button and close at end, false if we want only apply
@@ -3175,17 +3090,18 @@ void G4UIQt::ChangeSurfaceStyle(const QString& action) {
 
 void G4UIQt::OpenIconCallback(const QString& aCommand) {
 
-  QString nomFich = QFileDialog::getOpenFileName(fMainWindow, "Load", ".mac", "Macro files (*.mac)");
-  if (nomFich != "") {
-    G4UImanager::GetUIpointer()->ApplyCommand((QString(aCommand)+ nomFich).toStdString().c_str());
-  }
+  QString nomFich = QFileDialog::getOpenFileName(fMainWindow, "Load", "vis", "Macro files (*.mac)");
+   if (nomFich != "") {
+     G4UImanager::GetUIpointer()->ApplyCommand((QString(aCommand)+ QString(" ")+ nomFich).toStdString().c_str());
+   }
 }
 
 
 void G4UIQt::SaveIconCallback(const QString& aCommand) {
-  QString nomFich = QFileDialog::getSaveFileName(fMainWindow, "Save", ".mac", "Macro files (*.mac)");
+
+  QString nomFich = QFileDialog::getSaveFileName(fMainWindow, "Save", "viewerState", "Macro files (*.mac)");
   if (nomFich != "") {
-    G4UImanager::GetUIpointer()->ApplyCommand((QString(aCommand)+ nomFich).toStdString().c_str());
+    G4UImanager::GetUIpointer()->ApplyCommand((QString(aCommand)+ QString(" ")+nomFich).toStdString().c_str());
   }
 }
 
@@ -3445,7 +3361,7 @@ void G4UIQt::SetIconHLRSelected() {
 }
 
 
-void G4UIQt::SetIconHLSRSelected() {
+void G4UIQt::SetIconHLHSRSelected() {
   // Theses actions should be in the app toolbar
 
   QList<QAction *> list = fToolbarApp->actions ();

@@ -62,7 +62,7 @@ class QToolBar;
 // G4UIQt is the Qt version of G4UIterminal.
 //
 //  A command box is at disposal for entering/recalling Geant4 commands.
-//  A menubar could be customized through the AddMenu, AddButton methods.
+//  A menubar could be customized through the AddMenu, AddButton, AddIcon methods.
 //  Note that there are corresponding Geant4 commands to add a 
 // menus in the menubar and add buttons in a menu.
 //  Ex : 
@@ -109,7 +109,7 @@ public: // With description
   // Second argument is the label of the button.
   // Third argument is the Geant4 command executed when the button is fired.
   // Ex : AddButton("my_menu","Run","/run/beamOn 1"); 
-  void AddIcon(const char* userLabel, const char* iconFile, const char* command);
+  void AddIcon(const char* userLabel, const char* iconFile, const char* command, const char* file_name="");
   // To add a icon in the toolbar
   // First argument is the label of the icon.
   // Second argument is the icon file.
@@ -133,7 +133,7 @@ public: // With description
   void SetIconPickSelected();
   void SetIconZoomInSelected();
   void SetIconZoomOutSelected();
-  void SetIconHLSRSelected();
+  void SetIconHLHSRSelected();
   void SetIconHLRSelected();
   void SetIconSolidSelected();
   void SetIconWireframeSelected();
@@ -157,7 +157,7 @@ private:
   void FillHelpTree();
   void ExitHelp();
 
-  void CreateHelpTreeAndVisParameterChild(QTreeWidgetItem*,G4UIcommandTree*);
+  void CreateHelpTree(QTreeWidgetItem*,G4UIcommandTree*);
   QTreeWidgetItem* FindTreeItem(QTreeWidgetItem *,const QString&);
 
   QString GetCommandList(const G4UIcommand*);
@@ -175,7 +175,6 @@ private:
   QString GetShortCommandPath(QString);
   QString GetLongCommandPath(QTreeWidgetItem*);
   G4bool IsGUICommand(const G4UIcommand*);
-  bool CreateVisCommandTabToolBox(G4UIcommand*,QString commandText);
   bool CreateVisCommandGroupAndToolBox(G4UIcommand*, QWidget*, int, bool isDialog);
   bool CreateCommandWidget(G4UIcommand* command, QWidget* parent, bool isDialog);
 
@@ -205,7 +204,6 @@ private:
   QSplitter * fHelpVSplitter;
   int fLastQTabSizeX;
   int fLastQTabSizeY;
-  std::vector <QWidget*> fCommandParameterWidgets;
 
   QToolBar *fToolbarApp;
   QToolBar *fToolbarUser;

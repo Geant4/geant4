@@ -17,6 +17,50 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21th October, 2012 Koichi Murakami (interfaces-V09-05-28)
+- GetCommandLine in G4UIshell-related is changed to GetCommandLineString
+  due to expected conflict on Windows. 
+
+18th October, 2012 Koichi Murakami (interfaces-V09-05-24)
+- G4UIExective
+ o additional code clean-up
+ o treat case-insensitve session type for .g4session
+
+18th October, 2012 Koichi Murakami (interfaces-V09-05-23)
+- G4VUIshell, G4UItcsh, G4VBasicShell, G4UIterminal
+ o improve swimming among command directories wih ".", ".."
+- G4UIExective
+ o introduce run-time session selection scheme
+ o new G4UIExective.cc instead of G4UIExecutive.icc
+ o sources.cmake updated
+
+18th October 2012  John Allison  (interfaces-V09-05-22)
+- G4UIExecutive.icc
+  o Fixed compiler errors on Windows.
+
+12th October 2012  John Allison  (interfaces-V09-05-21)
+- G4UIExecutive.icc
+  o Some problem with Xm - commented out.
+
+12th October 2012  John Allison  (interfaces-V09-05-20, co-works vis-V09-05-42)
+- G4UIExecutive:
+  o Introduced string-driven-selection of UI session.
+- G4UIXaw.cc:
+  o Deprecated.
+
+10th Octobre 2012  Laurent Garnier (co-works
+- G4UIQt :
+ o Add the same command thanks to John /vis/viewer/save
+
+9th Octobre 2012  Laurent Garnier  (interfaces-V09-05-19)
+- G4UIQt :
+ o Fix a bad naming method
+
+5th Octobre 2012  Laurent Garnier
+- G4UIQt/G4VInteractiveSession/G4InteractorMessenger : 
+ o Add a new command /gui/addIcon to be able to add an icon on the toolbar
+ o Remove "Scene" and "viewer" components
+
 28th September 2012  Laurent Garnier (interfaces-V09-05-17 & interfaces-V09-05-18)
 - G4UIQt :
   o Fixed compiler warning and remove dead code
