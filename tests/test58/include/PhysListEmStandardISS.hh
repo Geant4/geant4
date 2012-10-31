@@ -32,8 +32,10 @@
 #ifndef PhysListEmStandardISS_h
 #define PhysListEmStandardISS_h 1
 
-#include "G4VPhysicsConstructor.hh"
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
+#include "G4VPhysicsConstructor.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -41,7 +43,7 @@
 class PhysListEmStandardISS : public G4VPhysicsConstructor
 {
 public: 
-  PhysListEmStandardISS(const G4String& name = "standardISS", G4double Th=21*eV );
+  PhysListEmStandardISS(const G4String& name = "standardISS", G4double Th=21*CLHEP::eV );
   virtual ~PhysListEmStandardISS();
 
 public: 

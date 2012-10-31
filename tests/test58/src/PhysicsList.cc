@@ -34,6 +34,7 @@
 #include "PhysListEmStandardISS.hh"
 #include "PhysListEmStandardSS.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"

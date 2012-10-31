@@ -14,21 +14,24 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11-10-12  G.Cosmo (test58-V09-05-00)
+- Explicit inclusion of units and constants headers.
+
 31-10-11  V.Ivanchenko (test58-V09-04-03)
 - Added testing of the new single scattering model for e-
-    G4eSingleCoulombScatteringModel
+  G4eSingleCoulombScatteringModel.
 
 17-06-11  V.Ivanchenko (test58-V09-04-02)
-- Changed method to define cuts (use /run/ UI commends)
-- RunAction - added protetion for the case of zero number of recoils 
-- StackingAction - cleanup
+- Changed method to define cuts (use /run/ UI commends).
+- RunAction - added protetion for the case of zero number of recoils.
+- StackingAction - cleanup.
 
 10-05-11  V.Ivanchenko (test58-V09-04-01)
-- Removed obsolete header of CoulombScatteringModel
+- Removed obsolete header of CoulombScatteringModel.
 
 22-04-11  V.Ivanchenko (test58-V09-04-00)
-- Removed obsolete headers of hadron elastic builders
+- Removed obsolete headers of hadron elastic builders.
 
 19-11-10  V.Ivanchenko (test58-V09-03-00)
-- First version
+- First version.
 

@@ -36,8 +36,9 @@
 #include "DetectorConstruction.hh"
 #include "StackingMessenger.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Track.hh"
-//#include "G4UnitsTable.hh"
 #include "G4Material.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
