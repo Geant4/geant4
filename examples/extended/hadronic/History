@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13-10-12 A. Dotti (exHadronic-V09-05-02)
+- Adding explicit use of system of units
+
 29-09-12 I. Hrivnacova (exHadronic-V09-05-01)
 - Renamed hadr0N.cc to Hadr0N.cc to match exactly with the example directory name
   (this allows to configure CMake build in the same way on both case sensitive

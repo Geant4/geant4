@@ -14,6 +14,8 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+13-10-12  A. Dotti (exhadr01-V09-05-04)
+- Adding explicit use of system of units
 
 12-07-12  V.Ivant (exhadr01-V09-05-03)
 - Upgraded README
