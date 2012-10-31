@@ -59,8 +59,8 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      void SetNbOfLayers (G4int nb);                    
      void SetMagField   (G4double);
           
-     G4VPhysicalVolume* Construct();
-     void               UpdateGeometry();
+     virtual G4VPhysicalVolume* Construct();
+     void UpdateGeometry();
      
   public:  
                     

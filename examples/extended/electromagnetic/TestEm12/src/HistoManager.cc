@@ -31,7 +31,7 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "HistoManager.hh"
 #include "HistoMessenger.hh"
@@ -151,15 +151,15 @@ void HistoManager::SetHisto(G4int ih,
   
   const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8" };
   const G4String title[] = 
-                { "dummy",                                        //0
-                  "dE/dr (MeV/mm) along radius",                 //1
+                { "dummy",                                      //0
+                  "dE/dr (MeV/mm) along radius",                //1
                   "total Energy deposited in absorber",         //2
-                  "true track length of the primary particle",        //3
-                  "true step size of the primary particle",        //4
-                  "projected range of the primary particle",        //5
-                  "true track length of charged secondaries",        //6
-                  "true step size of charged secondaries",        //7
-                  "d(E/E0)/d(r/r0) along r/r0"                        //8
+                  "true track length of the primary particle",  //3
+                  "true step size of the primary particle",     //4
+                  "projected range of the primary particle",    //5
+                  "true track length of charged secondaries",   //6
+                  "true step size of charged secondaries",      //7
+                  "d(E/E0)/d(r/r0) along r/r0"                  //8
                  };
 
   G4String titl = title[ih];

@@ -52,7 +52,7 @@ class TrackingAction : public G4UserTrackingAction {
                                           HistoManager*);
    ~TrackingAction() {};
    
-    void PostUserTrackingAction(const G4Track*);
+    virtual void PostUserTrackingAction(const G4Track*);
     
   private:
     DetectorConstruction*   fDetector;

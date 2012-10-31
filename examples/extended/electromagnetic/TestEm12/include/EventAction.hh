@@ -51,8 +51,8 @@ class EventAction : public G4UserEventAction
    ~EventAction();
 
   public:
-    void BeginOfEventAction(const G4Event*);
-    void   EndOfEventAction(const G4Event*);
+    virtual void BeginOfEventAction(const G4Event*);
+    virtual void   EndOfEventAction(const G4Event*);
     
     void AddEdep(G4double edep) {fTotalEdep += edep;};
     

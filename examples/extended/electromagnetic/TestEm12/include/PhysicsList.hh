@@ -54,15 +54,15 @@ class PhysicsList: public G4VModularPhysicsList
     PhysicsList();
    ~PhysicsList();
 
-    void ConstructParticle();
+    virtual void ConstructParticle();
     
-    void SetCuts();
+    virtual void SetCuts();
     void SetCutForGamma(G4double);
     void SetCutForElectron(G4double);
     void SetCutForPositron(G4double);        
         
     void AddPhysicsList(const G4String& name);
-    void ConstructProcess();
+    virtual void ConstructProcess();
 
     void AddDecay();    
     void AddStepMax();       
