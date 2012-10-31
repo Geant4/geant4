@@ -15,7 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-27-07-2012, Vladimir Ivanchenko        (phys-lists-V09-05-62)
+24-10-2012, W.Pokorski			(phys-lists-V09-05-63)
+- moving FTFP_BERT to use BGGNucleonInelastic
+
+20-10-2012, Vladimir Ivanchenko        (phys-lists-V09-05-62)
 - EM builders - substitute obsolete method SetModel() by SetEmModel()
 - G4VHadronPhysics - include name of the hadron in the name of the process
 - G4HadronInelasticQBBC - reuse G4PreCompoundModel if it is already 

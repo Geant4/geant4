@@ -102,6 +102,9 @@ class HadronPhysicsFTFP_BERT : public G4VPhysicsConstructor
     G4VCrossSectionDataSet * ChipsKaonMinus;
     G4VCrossSectionDataSet * ChipsKaonPlus;
     G4VCrossSectionDataSet * ChipsKaonZero;
+    G4VCrossSectionDataSet * BGGProton;
+    G4VCrossSectionDataSet * BGGNeutron;
+    
 };
 
 #endif
