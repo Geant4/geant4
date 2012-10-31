@@ -28,7 +28,10 @@ if(NOT ROOT_FOUND)
   message(STATUS "G4 Examples: ROOT package not found. --> P02 example disabled")  
   return()
 endif()
-
+if(NOT GCCXML)
+   message(STATUS "G4 Examples: GCCXML not found. --> P02 example disabled")
+   return()
+endif() 
 #----------------------------------------------------------------------------
 # P02 requires shared libraries
 #
