@@ -36,6 +36,7 @@
 // Modified:
 // 04.06.2006 Adoptation of hadr01 (V.Ivanchenko)
 // 26.04.2007 Physics according to 8.3 Physics List (V.Ivanchenko)
+// 24.10.2012 Migrate to the new stopping physics (A.Ribon)
 //
 ////////////////////////////////////////////////////////////////////////
 // 
@@ -57,7 +58,7 @@
 #include "G4HadronElasticPhysicsLHEP.hh"
 #include "G4NeutronTrackingCut.hh"
 #include "G4NeutronCrossSectionXS.hh"
-#include "G4QStoppingPhysics.hh"
+#include "G4StoppingPhysics.hh"
 #include "G4LHEPStoppingPhysics.hh"
 #include "G4IonBinaryCascadePhysics.hh"
 #include "G4IonPhysics.hh"
@@ -77,8 +78,6 @@
 #include "HadronPhysicsQGSP_BIC_HP.hh"
 #include "HadronPhysicsQGSP_FTFP_BERT.hh"
 #include "HadronPhysicsQGS_BIC.hh"
-
-#include "G4IonPhysics.hh"
 
 #include "G4LossTableManager.hh"
 
@@ -272,7 +271,7 @@ void PhysicsList::SetBuilderList0(G4bool flagHP)
   } else {
     hadronPhys.push_back( new G4HadronElasticPhysics(verboseLevel) );
   }
-  hadronPhys.push_back( new G4QStoppingPhysics(verboseLevel));
+  hadronPhys.push_back( new G4StoppingPhysics(verboseLevel));
   hadronPhys.push_back( new G4IonBinaryCascadePhysics(verboseLevel));
   hadronPhys.push_back( new G4NeutronTrackingCut(verboseLevel));
 }
@@ -287,7 +286,7 @@ void PhysicsList::SetBuilderList1(G4bool flagHP)
   } else {
     hadronPhys.push_back( new G4HadronElasticPhysics(verboseLevel) );
   }
-  hadronPhys.push_back( new G4QStoppingPhysics(verboseLevel));
+  hadronPhys.push_back( new G4StoppingPhysics(verboseLevel));
   hadronPhys.push_back( new G4IonPhysics(verboseLevel));
   hadronPhys.push_back( new G4NeutronTrackingCut(verboseLevel));
 }
@@ -298,7 +297,7 @@ void PhysicsList::SetBuilderList2(G4bool addStopping)
 {
   hadronPhys.push_back( new G4EmExtraPhysics(verboseLevel));
   hadronPhys.push_back( new G4HadronElasticPhysicsLHEP(verboseLevel));
-  if(addStopping) { hadronPhys.push_back( new G4QStoppingPhysics(verboseLevel)); }
+  if(addStopping) { hadronPhys.push_back( new G4StoppingPhysics(verboseLevel)); }
   hadronPhys.push_back( new G4IonPhysics(verboseLevel));
 }
 
@@ -308,7 +307,7 @@ void PhysicsList::SetBuilderList3()
 {
   hadronPhys.push_back( new G4EmExtraPhysics(verboseLevel));
   RegisterPhysics( new G4HadronElasticPhysicsXS(verboseLevel) );
-  hadronPhys.push_back( new G4QStoppingPhysics(verboseLevel));
+  hadronPhys.push_back( new G4StoppingPhysics(verboseLevel));
   hadronPhys.push_back( new G4IonBinaryCascadePhysics(verboseLevel));
   hadronPhys.push_back( new G4NeutronTrackingCut(verboseLevel));
 }
