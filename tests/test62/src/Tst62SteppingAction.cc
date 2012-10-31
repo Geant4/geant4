@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+#include <iomanip>
 
 #include "Tst62SteppingAction.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4SteppingManager.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
@@ -35,7 +37,6 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
 #include "G4ios.hh"
-#include <iomanip>
 
 Tst62SteppingAction::Tst62SteppingAction()
 {;}
