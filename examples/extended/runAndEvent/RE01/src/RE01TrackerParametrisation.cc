@@ -30,7 +30,6 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-
 #include "RE01TrackerParametrisation.hh"
 
 #include "G4VPhysicalVolume.hh"
@@ -38,29 +37,32 @@
 #include "G4Tubs.hh"
 #include "G4SystemOfUnits.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 RE01TrackerParametrisation::RE01TrackerParametrisation()
+  : G4VPVParameterisation()
 {
-
 #include "RE01DetectorParameterDef.icc"
-
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 RE01TrackerParametrisation::~RE01TrackerParametrisation()
 {;}
 
-void RE01TrackerParametrisation::ComputeTransformation
-(const G4int, G4VPhysicalVolume* physVol) const
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+void RE01TrackerParametrisation
+::ComputeTransformation(const G4int, G4VPhysicalVolume* physVol) const
 {
   G4ThreeVector origin;
   physVol->SetTranslation(origin);
 }
 
-void RE01TrackerParametrisation::ComputeDimensions
-(G4Tubs& trackerLayer, const G4int copyNo, const G4VPhysicalVolume*) const
+void RE01TrackerParametrisation
+::ComputeDimensions(G4Tubs& trackerLayer, const G4int copyNo, 
+                    const G4VPhysicalVolume*) const
 {
-  trackerLayer.SetInnerRadius(tracker_radius[copyNo]);
-  trackerLayer.SetOuterRadius(tracker_radius[copyNo]+tracker_thick);
-  trackerLayer.SetZHalfLength(tracker_length[copyNo]);
-  trackerLayer.SetStartPhiAngle(trkTubs_sphi);
-  trackerLayer.SetDeltaPhiAngle(trkTubs_dphi);
+  trackerLayer.SetInnerRadius(fTracker_radius[copyNo]);
+  trackerLayer.SetOuterRadius(fTracker_radius[copyNo]+fTracker_thick);
+  trackerLayer.SetZHalfLength(fTracker_length[copyNo]);
+  trackerLayer.SetStartPhiAngle(fTrkTubs_sphi);
+  trackerLayer.SetDeltaPhiAngle(fTrkTubs_dphi);
 }

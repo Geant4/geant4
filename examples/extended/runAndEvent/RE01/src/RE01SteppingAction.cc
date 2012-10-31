@@ -30,8 +30,9 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-
 #include "RE01SteppingAction.hh"
+#include "RE01RegionInformation.hh"
+
 #include "G4Track.hh"
 #include "G4Step.hh"
 #include "G4StepPoint.hh"
@@ -39,14 +40,17 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Region.hh"
-#include "RE01RegionInformation.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 RE01SteppingAction::RE01SteppingAction()
+  : G4UserSteppingAction()
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 RE01SteppingAction::~RE01SteppingAction()
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 void RE01SteppingAction::UserSteppingAction(const G4Step * theStep)
 {
   // Suspend a track if it is entering into the calorimeter
@@ -57,11 +61,13 @@ void RE01SteppingAction::UserSteppingAction(const G4Step * theStep)
 
   // get region information
   G4StepPoint * thePrePoint = theStep->GetPreStepPoint();
-  G4LogicalVolume * thePreLV = thePrePoint->GetPhysicalVolume()->GetLogicalVolume();
+  G4LogicalVolume * thePreLV = 
+    thePrePoint->GetPhysicalVolume()->GetLogicalVolume();
   RE01RegionInformation* thePreRInfo
    = (RE01RegionInformation*)(thePreLV->GetRegion()->GetUserInformation());
   G4StepPoint * thePostPoint = theStep->GetPostStepPoint();
-  G4LogicalVolume * thePostLV = thePostPoint->GetPhysicalVolume()->GetLogicalVolume();
+  G4LogicalVolume * thePostLV = 
+    thePostPoint->GetPhysicalVolume()->GetLogicalVolume();
   RE01RegionInformation* thePostRInfo
    = (RE01RegionInformation*)(thePostLV->GetRegion()->GetUserInformation());
 
@@ -69,5 +75,3 @@ void RE01SteppingAction::UserSteppingAction(const G4Step * theStep)
   if(!(thePreRInfo->IsCalorimeter()) && (thePostRInfo->IsCalorimeter()))
   { theTrack->SetTrackStatus(fSuspend); }
 }
-
-

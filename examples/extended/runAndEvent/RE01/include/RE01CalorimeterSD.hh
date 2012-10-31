@@ -30,7 +30,6 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-
 #ifndef RE01CalorimeterSD_h
 #define RE01CalorimeterSD_h 1
 
@@ -43,26 +42,21 @@ class G4TouchableHistory;
 class RE01CalorimeterSD : public G4VSensitiveDetector
 {
 
-  public:
-      RE01CalorimeterSD(G4String name);
-      ~RE01CalorimeterSD();
+public:
+  RE01CalorimeterSD(G4String name);
+  virtual ~RE01CalorimeterSD();
+  
+  virtual void Initialize(G4HCofThisEvent*HCE);
 
-      void Initialize(G4HCofThisEvent*HCE);
-      G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);
-      void EndOfEvent(G4HCofThisEvent*HCE);
-      void clear();
-      void DrawAll();
-      void PrintAll();
-
-  private:
-      RE01CalorimeterHitsCollection *CalCollection;
-      int CellID[20][48];
-      const int numberOfCellsInZ;
-      const int numberOfCellsInPhi;
+protected:
+  virtual G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);
+  
+private:
+  RE01CalorimeterHitsCollection *fCalCollection;
+  int   fCellID[20][48];
+  const int fNumberOfCellsInZ;
+  const int fNumberOfCellsInPhi;
 };
-
-
-
 
 #endif
 

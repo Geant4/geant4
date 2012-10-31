@@ -30,7 +30,6 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-
 #ifndef RE01TrackerSD_h
 #define RE01TrackerSD_h 1
 
@@ -42,26 +41,20 @@ class G4TouchableHistory;
 
 class RE01TrackerSD : public G4VSensitiveDetector
 {
+public:
+  RE01TrackerSD(G4String name);
+  virtual ~RE01TrackerSD();
 
-  public:
-      RE01TrackerSD(G4String name);
-      ~RE01TrackerSD();
+  virtual void Initialize(G4HCofThisEvent*HCE);
+  virtual void EndOfEvent(G4HCofThisEvent*HCE);
+  
+protected:
+  virtual G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);
 
-      void Initialize(G4HCofThisEvent*HCE);
-      G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);
-      void EndOfEvent(G4HCofThisEvent*HCE);
-      void clear();
-      void DrawAll();
-      void PrintAll();
+private:
+  RE01TrackerHitsCollection *fTrackerCollection;
 
-  private:
-      RE01TrackerHitsCollection *trackerCollection;
-
-  public:
 };
-
-
-
 
 #endif
 

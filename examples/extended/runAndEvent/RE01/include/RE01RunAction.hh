@@ -37,20 +37,18 @@
 #include "G4UserRunAction.hh"
 #include "globals.hh"
 
-
 class G4Run;
 
 class RE01RunAction : public G4UserRunAction
 {
-  public:
-    RE01RunAction();
-   ~RE01RunAction();
+public:
+  RE01RunAction();
+  virtual ~RE01RunAction();
 
-  public:
-    void BeginOfRunAction(const G4Run*);
-    void EndOfRunAction(const G4Run*);
+public:
+  virtual void BeginOfRunAction(const G4Run*);
+  virtual void EndOfRunAction(const G4Run*);
 };
-
 
 #endif
 

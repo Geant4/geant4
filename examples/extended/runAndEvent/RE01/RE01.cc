@@ -27,8 +27,7 @@
 /// \brief Main program of the runAndEvent/RE01 example
 //
 //
-// $Id: RE01.cc,v 1.4 2010-11-08 17:42:28 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: $
 //
 // 
 // --------------------------------------------------------------
@@ -45,7 +44,7 @@
 #include "G4UImanager.hh"
 
 #include "RE01DetectorConstruction.hh"
-#include "RE01PhysicsList.hh"
+#include "QGS_BIC.hh"
 #include "RE01PrimaryGeneratorAction.hh"
 #include "RE01RunAction.hh"
 #include "RE01EventAction.hh"
@@ -72,7 +71,7 @@ int main(int argc,char** argv)
 #endif
 
   runManager->SetUserInitialization(new RE01DetectorConstruction);
-  runManager->SetUserInitialization(new RE01PhysicsList);
+  runManager->SetUserInitialization(new QGS_BIC);
   
   runManager->Initialize();
 

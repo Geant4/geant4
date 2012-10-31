@@ -37,26 +37,25 @@
 #include "G4RunManager.hh"
 #include "G4ios.hh"
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 RE01RunAction::RE01RunAction()
-{}
+  :G4UserRunAction()
+{;}
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 RE01RunAction::~RE01RunAction()
-{}
+{;}
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 void RE01RunAction::BeginOfRunAction(const G4Run* aRun)
 {
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
-  
   G4RunManager::GetRunManager()->SetRandomNumberStore(true);
-
 }
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 void RE01RunAction::EndOfRunAction(const G4Run*)
-{ }
+{;}
 
 
 

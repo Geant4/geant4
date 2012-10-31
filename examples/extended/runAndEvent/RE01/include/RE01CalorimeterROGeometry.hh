@@ -30,7 +30,6 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-
 #ifndef RE01CalorimeterROGeometry_h
 #define RE01CalorimeterROGeometry_h 1
 
@@ -41,11 +40,12 @@ class RE01CalorimeterROGeometry : public G4VReadOutGeometry
 public:
   RE01CalorimeterROGeometry();
   RE01CalorimeterROGeometry(G4String);
-  ~RE01CalorimeterROGeometry();
+  virtual ~RE01CalorimeterROGeometry();
+
+protected:
+  virtual G4VPhysicalVolume* Build();
 
 private:
-  G4VPhysicalVolume* Build();
-
 #include "RE01DetectorParameterDef.hh"
 
 };

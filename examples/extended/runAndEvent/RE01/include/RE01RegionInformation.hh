@@ -39,23 +39,20 @@
 
 class RE01RegionInformation : public G4VUserRegionInformation
 {
-  public:
-    RE01RegionInformation(); 
-    ~RE01RegionInformation();
-    void Print() const;
+public:
+  RE01RegionInformation(); 
+  virtual ~RE01RegionInformation();
+  virtual void Print() const;
 
-  private:
-    G4bool isWorld;
-    G4bool isTracker;
-    G4bool isCalorimeter;
+  inline void SetWorld(G4bool v=true) {fIsWorld = v;}
+  inline void SetTracker(G4bool v=true) {fIsTracker = v;}
+  inline void SetCalorimeter(G4bool v=true) {fIsCalorimeter = v;}
+  inline G4bool IsCalorimeter() const {return fIsCalorimeter;}
 
-  public:
-    inline void SetWorld(G4bool v=true) {isWorld = v;}
-    inline void SetTracker(G4bool v=true) {isTracker = v;}
-    inline void SetCalorimeter(G4bool v=true) {isCalorimeter = v;}
-    inline G4bool IsWorld() const {return isWorld;}
-    inline G4bool IsTracker() const {return isTracker;}
-    inline G4bool IsCalorimeter() const {return isCalorimeter;}
+private:
+  G4bool fIsWorld;
+  G4bool fIsTracker;
+  G4bool fIsCalorimeter;
 };
 
 #endif

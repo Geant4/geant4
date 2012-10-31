@@ -30,7 +30,6 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-
 #ifndef RE01PrimaryGeneratorAction_h
 #define RE01PrimaryGeneratorAction_h 1
 
@@ -41,26 +40,25 @@ class G4VPrimaryGenerator;
 class G4Event;
 class RE01PrimaryGeneratorMessenger;
 
-class RE01PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+class RE01PrimaryGeneratorAction:public G4VUserPrimaryGeneratorAction
 {
-  public:
-    RE01PrimaryGeneratorAction();
-    ~RE01PrimaryGeneratorAction();
+public:
+  RE01PrimaryGeneratorAction();
+  virtual ~RE01PrimaryGeneratorAction();
 
-  public:
-    void GeneratePrimaries(G4Event* anEvent);
+public:
+  virtual void GeneratePrimaries(G4Event* anEvent);
+  inline  void SetHEPEvtGenerator(G4bool f)
+  { fUseHEPEvt = f; }
+  inline G4bool GetHEPEvtGenerator()
+  { return fUseHEPEvt; }
 
-  private:
-    G4VPrimaryGenerator* HEPEvt;
-    G4VPrimaryGenerator* particleGun;
-    RE01PrimaryGeneratorMessenger* messenger;
-    G4bool useHEPEvt;
+private:
+  G4VPrimaryGenerator* fHEPEvt;
+  G4VPrimaryGenerator* fParticleGun;
+  RE01PrimaryGeneratorMessenger* fMessenger;
+  G4bool fUseHEPEvt;
 
-  public:
-    inline void SetHEPEvtGenerator(G4bool f)
-    { useHEPEvt = f; }
-    inline G4bool GetHEPEvtGenerator()
-    { return useHEPEvt; }
 };
 
 #endif

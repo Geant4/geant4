@@ -30,7 +30,6 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-
 #ifndef RE01SteppingAction_H
 #define RE01SteppingAction_H 1
 
@@ -39,11 +38,11 @@
 
 class RE01SteppingAction : public G4UserSteppingAction
 {
-  public:
-    RE01SteppingAction();
-    virtual ~RE01SteppingAction();
-
-    virtual void UserSteppingAction(const G4Step*);
+public:
+  RE01SteppingAction();
+  virtual ~RE01SteppingAction();
+  
+  virtual void UserSteppingAction(const G4Step*);
 };
 
 #endif

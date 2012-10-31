@@ -14,7 +14,7 @@
 primary particles and hits. It also utilize some user-information
 classes.
 
-\subsection RE01_sub_s11 Geometry and region information
+\subsection RE01_s11 Geometry and region information
 
  It has a quite simple sylindrical tracker of 5 layers and a
 sylindrical calorimeter of lead and scintillator. Dedicated regions
@@ -25,13 +25,13 @@ class for this purpose.
  A "readout geometry" is attached to the calorimeter to define
 its cells.
 
-\subsection RE01_sub_s12 Physics
+\subsection RE01_s12 Physics
 
  This example basically uses LHEP_BERT physics list. In addition 
 to this, RE01DecayPhysics is used for adding G4UnknownParticle and
 G4UnknownDecay process.
 
-\subsection RE01_sub_13 Event generator
+\subsection RE01_s13 Event generator
 
  An event sample is attached. This event has a Higgs particle
 which decays into e+e- and mu+mu- pairs through two Z bosons.
@@ -48,18 +48,18 @@ particle or a track born is the tracking region. This information
 is stored in RE01TrackInformation class object and copied from
 a parent track to its daughters.
 
-\subsection RE01_sub_s21 Track suspension
+\subsection RE01_s21 Track suspension
 
  All source tracks are suspended for their tracking when they are
 getting into the calorimeter region. Thus, all tracks in the tracker
 region are tracked before generating any shower in the calorimeter.
 
-\subsection RE01_sub_s22 Tracker hits associated with primary particle information
+\subsection RE01_s22 Tracker hits associated with primary particle information
 
  Information kept in RE01TrackInformation is used to connect each
 tracker hit to the primary particle.
 
-\subsection RE01_sub_s23 Energy deposition of each source track
+\subsection RE01_s23 Energy deposition of each source track
 
  Utilizing RE01StackingAction, shower generation is done for each
 souorce track separately, and thus energy deposition in calorimeter

@@ -30,7 +30,6 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-
 #include "RE01CalorimeterParametrisation.hh"
 
 #include "G4VPhysicalVolume.hh"
@@ -38,14 +37,18 @@
 #include "G4Tubs.hh"
 #include "G4SystemOfUnits.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE01CalorimeterParametrisation::RE01CalorimeterParametrisation()
+  :G4VPVParameterisation()
 {
 #include "RE01DetectorParameterDef.icc"
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE01CalorimeterParametrisation::~RE01CalorimeterParametrisation()
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE01CalorimeterParametrisation::ComputeTransformation
 (const G4int,G4VPhysicalVolume *physVol) const
 {
@@ -53,14 +56,15 @@ void RE01CalorimeterParametrisation::ComputeTransformation
   physVol->SetTranslation(origin);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE01CalorimeterParametrisation::ComputeDimensions
 (G4Tubs & calorimeterLayer, const G4int copyNo, const G4VPhysicalVolume*) const
 {
-  G4double innerRad = caloTubs_rmin
-              + copyNo*(absorber_thick+scinti_thick);
+  G4double innerRad = fCaloTubs_rmin
+              + copyNo*(fAbsorber_thick+fScinti_thick);
   calorimeterLayer.SetInnerRadius(innerRad);
-  calorimeterLayer.SetOuterRadius(innerRad+absorber_thick);
-  calorimeterLayer.SetZHalfLength(caloTubs_dz);
-  calorimeterLayer.SetStartPhiAngle(caloTubs_sphi);
-  calorimeterLayer.SetDeltaPhiAngle(caloTubs_dphi);
+  calorimeterLayer.SetOuterRadius(innerRad+fAbsorber_thick);
+  calorimeterLayer.SetZHalfLength(fCaloTubs_dz);
+  calorimeterLayer.SetStartPhiAngle(fCaloTubs_sphi);
+  calorimeterLayer.SetDeltaPhiAngle(fCaloTubs_dphi);
 }

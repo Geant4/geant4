@@ -30,7 +30,6 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-
 #ifndef RE01DetectorConstruction_h
 #define RE01DetectorConstruction_h 1
 
@@ -41,15 +40,14 @@ class G4VPhysicalVolume;
 
 class RE01DetectorConstruction : public G4VUserDetectorConstruction
 {
-  public:
-    RE01DetectorConstruction();
-    ~RE01DetectorConstruction();
-
-  public:
-     G4VPhysicalVolume* Construct();
-
-  private:
-
+public:
+  RE01DetectorConstruction();
+  virtual ~RE01DetectorConstruction();
+  
+public:
+  virtual G4VPhysicalVolume* Construct();
+  
+private:
 #include "RE01DetectorParameterDef.hh"
 
 };

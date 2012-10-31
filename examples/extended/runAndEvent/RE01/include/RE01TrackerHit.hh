@@ -30,7 +30,6 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-
 #ifndef RE01TrackerHit_h
 #define RE01TrackerHit_h 1
 
@@ -44,40 +43,36 @@ class G4AttValue;
 
 class RE01TrackerHit : public G4VHit
 {
-  public:
+public:
 
-      RE01TrackerHit();
-      ~RE01TrackerHit();
-      RE01TrackerHit(const RE01TrackerHit &right);
-      const RE01TrackerHit& operator=(const RE01TrackerHit &right);
-      G4int operator==(const RE01TrackerHit &right) const;
+  RE01TrackerHit();
+  virtual ~RE01TrackerHit();
+  
+  inline void *operator new(size_t);
+  inline void operator delete(void *aHit);
+  
+  virtual void Draw();
+  virtual void Print();
+  virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
+  virtual std::vector<G4AttValue>* CreateAttValues() const;
 
-      inline void *operator new(size_t);
-      inline void operator delete(void *aHit);
+public:
+  inline void SetEdep(G4double de)
+  { fEdep = de; }
+  inline G4double GetEdep() const
+  { return fEdep; }
+  inline void SetPos(G4ThreeVector xyz)
+  { fPos = xyz; }
+  inline void SetTrackID(G4int i)
+  { fTrackID = i; }
+  inline G4int GetTrackID() const
+  { return fTrackID; }
 
-      void Draw();
-      virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
-      virtual std::vector<G4AttValue>* CreateAttValues() const;
-      void Print();
+private:
+  G4double fEdep;
+  G4ThreeVector fPos;
+  G4int fTrackID;
 
-  private:
-      G4double edep;
-      G4ThreeVector pos;
-      G4int trackID;
-
-  public:
-      inline void SetEdep(G4double de)
-      { edep = de; }
-      inline G4double GetEdep() const
-      { return edep; }
-      inline void SetPos(G4ThreeVector xyz)
-      { pos = xyz; }
-      inline G4ThreeVector GetPos() const
-      { return pos; }
-      inline void SetTrackID(G4int i)
-      { trackID = i; }
-      inline G4int GetTrackID() const
-      { return trackID; }
 };
 
 typedef G4THitsCollection<RE01TrackerHit> RE01TrackerHitsCollection;
