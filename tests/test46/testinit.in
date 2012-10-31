@@ -10,6 +10,8 @@
 /testCalorim/addPreShower
 #######
 /run/initialize
+#/process/eLoss/maxKinEnergy 1 GeV
+#/process/eLoss/binsDEDX 40
 /run/setCut 0.7 mm
 /run/setCutForRegion HcalRegion 0.7 mm
 /gun/particle pi-

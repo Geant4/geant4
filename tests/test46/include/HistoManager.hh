@@ -86,8 +86,8 @@ public:
   void EndOfEvent();
   void Fill(G4int id, G4double x, G4double w);
 
-  void AddEcalHit(const G4ParticleDefinition*, G4int, G4double);
-  void AddHcalHit(const G4ParticleDefinition*, G4int, G4double);
+  void AddEcalHit(const G4ParticleDefinition*, G4int, G4double, G4double);
+  void AddHcalHit(const G4ParticleDefinition*, G4int, G4double, G4double);
   void AddHcalAbsorberHit(const G4ParticleDefinition*, G4double);
 
   void AddStep(const G4ParticleDefinition*);

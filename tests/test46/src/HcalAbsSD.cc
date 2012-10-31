@@ -70,6 +70,7 @@ G4bool HcalAbsSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   const G4ParticleDefinition* part = aStep->GetTrack()->GetDefinition();
   theHisto->AddStep(part);
   if(edep > 0.0) {
+    edep *= aStep->GetTrack()->GetWeight();
     theHisto->AddHcalAbsorberHit(part, edep);
   }
   return true;

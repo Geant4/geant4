@@ -71,6 +71,7 @@ G4bool EcalSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   const G4ParticleDefinition* part = aStep->GetTrack()->GetDefinition();
   theHisto->AddStep(part);
   if(edep > 0.0) {
+    edep *= aStep->GetTrack()->GetWeight();
     G4StepPoint* preStepPoint = aStep->GetPreStepPoint();
     G4TouchableHandle theTouchable = preStepPoint->GetTouchableHandle();
     G4int copyNo = theTouchable->GetCopyNumber();
@@ -78,7 +79,7 @@ G4bool EcalSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 	   <<  preStepPoint->GetPhysicalVolume()->GetName()<< "  " 
 	   <<  preStepPoint->GetPhysicalVolume()->GetCopyNo() 
 	   << G4endl;*/
-    theHisto->AddEcalHit(part, copyNo, edep);
+    theHisto->AddEcalHit(part, copyNo, edep, aStep->GetTrack()->GetGlobalTime());
   }
   return true;
 }

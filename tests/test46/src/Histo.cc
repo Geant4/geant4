@@ -51,14 +51,14 @@ Histo::Histo()
   fManager   = 0;
   fMessenger = new HistoMessenger(this);
  
-  fHistName   = "test";
+  fHistName   = "test46";
   fHistType   = "root";
   fTupleName  = "tuple";
   fTupleTitle = "test";
   fNHisto     = 0;
   fVerbose    = 0;
   fDefaultAct = true;
-  fHistoActive= false;
+  fHistoActive= true;
   fNtupleActive= false;
 }
 

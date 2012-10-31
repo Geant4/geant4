@@ -42,7 +42,9 @@
 #define StackingAction_h 1
 
 #include "G4UserStackingAction.hh"
+#include "G4ParticleDefinition.hh"
 #include "globals.hh"
+#include <vector>
 
 class HistoManager;
 class StackingMessenger;
@@ -57,8 +59,10 @@ public:
   StackingAction();
   virtual ~StackingAction();
    
-  void SetKillStatus(G4bool value)    {killSecondary = value;};
-  void SetKill(const G4String& name)  {pname = name;};
+  void ActivateSecondaryBiasing(const G4String& pname, G4double f, G4double e);
+
+  inline void SetKillStatus(G4bool value)    { killSecondary = value; };
+  inline void SetKill(const G4String& name)  { pname = name; };
      
   G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
     
@@ -69,6 +73,11 @@ private:
 
   G4String            pname;
   G4bool              killSecondary;
+
+  G4int               nBiased;
+  std::vector<G4ParticleDefinition*> biasedParticle;
+  std::vector<G4double> rrProbability;
+  std::vector<G4double> biasedEnergy;
 
 };
 

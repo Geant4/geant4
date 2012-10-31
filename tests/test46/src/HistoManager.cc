@@ -98,7 +98,7 @@ HistoManager::~HistoManager()
 
 void HistoManager::bookHisto()
 { 
-  nHisto = 14;
+  nHisto = 20;
   histo->Add1D("0","e0, Evis in central crystal (GeV)",nBins,0.,maxEnergy,GeV);
   histo->Add1D("1","e9, Evis in 3x3 (GeV)",nBins,0.,maxEnergy,GeV);
   histo->Add1D("2","e25, Evis in 5x5 (GeV)",nBins,0.,maxEnergy,GeV);
@@ -113,6 +113,12 @@ void HistoManager::bookHisto()
   histo->Add1D("11","Energy computed (GeV)",nBins,0.,maxEnergy,GeV);
   histo->Add1D("12","Energy deposition total (GeV)",nBins,0.,maxEnergy,GeV);
   histo->Add1D("13","ECAL hits log10(edep/MeV)",100,-6.,4.,1.0);
+  histo->Add1D("14","Time (ns) ECAL",100,-1.,99.,ns);
+  histo->Add1D("15","Time (ns) HCAL",100,-1.,99.,ns);
+  histo->Add1D("16","Gamma energy at creation log10(E/MeV)",180,-3.,6.,1.0);
+  histo->Add1D("17","Electron energy at creation log10(E/MeV)",180,-3.,6.,1.0);
+  histo->Add1D("18","Proton energy at creation log10(E/MeV)",180,-4.,5.,1.0);
+  histo->Add1D("19","Neutron energy at creation log10(E/MeV)",180,-4.,5.,1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -360,30 +366,39 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
   if(0 == track->GetParentID()) {
     primaryKineticEnergy = e;
     primaryDef = pd;
+  } else {
+    const G4ParticleDefinition* pd = track->GetDefinition();
+
+    if(pd == G4Gamma::Gamma())            { histo->Fill(16,e,1.0); }
+    else if(pd == G4Electron::Electron()) { histo->Fill(17,e,1.0); }
+    else if(pd == G4Proton::Proton())     { histo->Fill(18,e,1.0); }
+    else if(pd == G4Neutron::Neutron())   { histo->Fill(19,e,1.0); }
   }
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HistoManager::AddEcalHit(const G4ParticleDefinition* part, 
-			      G4int copyNo, G4double edep)
+			      G4int copyNo, G4double edep, G4double time)
 {
   n_step++;
   E[copyNo] += edep;
   //  G4cout << "### edep= " << edep << "   #copyNo =" << copyNo << G4endl;
   if(part->GetPDGMass() < MeV) { Eecal += edep; }
   //  G4cout << "### Eecal= " << Eecal << G4endl;
-  if(edep > eV) { histo->Fill(13,std::log10(edep/MeV),1.0); }
+  histo->Fill(13,std::log10(edep/MeV),1.0); 
+  histo->Fill(14,time,edep); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
 void HistoManager::AddHcalHit(const G4ParticleDefinition* part, 
-			      G4int, G4double edep)
+			      G4int, G4double edep, G4double time)
 {
   n_step++;
   Ehcal += edep;
   if(part->GetPDGMass() < MeV) { Eehcal += edep; }
+  histo->Fill(15,time,edep); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

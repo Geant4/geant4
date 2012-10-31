@@ -45,10 +45,7 @@
 #include "DetectorConstruction.hh"
 #include "DetectorMessenger.hh"
 
-#include <iomanip>
-
 #include "G4SystemOfUnits.hh"
-#include "G4UnitsTable.hh"
 #include "G4NistManager.hh"
 #include "G4Material.hh"
 #include "G4Box.hh"
@@ -82,6 +79,8 @@
 #include "EcalSD.hh"
 
 #include "G4UImanager.hh"
+#include "G4UnitsTable.hh"
+#include <iomanip>
 
 #include "HistoManager.hh"
 

@@ -48,6 +48,7 @@
 class StackingAction;
 class G4UIcmdWithABool;
 class G4UIcmdWithAString;
+class G4UIcommand;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -66,6 +67,7 @@ private:
     
   G4UIcmdWithABool*   killCmd;
   G4UIcmdWithAString* kCmd;
+  G4UIcommand*        brCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

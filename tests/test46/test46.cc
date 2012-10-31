@@ -58,6 +58,9 @@
 #include "StackingAction.hh"
 #include "G4Timer.hh"
 
+#include "QGSPCMS_FTFP_BERT_EML.hh"
+#include "QGSPCMS_FTFP_BERT_EML95msc93.hh"
+
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
 
@@ -79,13 +82,20 @@ int main(int argc,char** argv) {
 
   // Physics List name defined via environment variable
   // or the default test46 name is used
+  G4VModularPhysicsList* phys = 0;
   G4String physName = "";
   char* path = getenv("PHYSLIST");
   if(path) { physName = G4String(path); }
-  if("" == physName) { physName = "FTFP_BERT_EMV"; }
+  if("QGSP_FTFP_BERT_EML" == physName) { phys = new QGSPCMS_FTFP_BERT_EML(); }
+  else if("QGSP_FTFP_BERT_EML95msc93" == physName) { 
+    phys = new QGSPCMS_FTFP_BERT_EML95msc93(); }
+  else if("" == physName) { physName = "FTFP_BERT_EMV"; }
 
-  G4PhysListFactory factory;
-  G4VModularPhysicsList* phys = factory.GetReferencePhysList(physName);
+  if(!phys) {
+    G4PhysListFactory factory;
+    phys = factory.GetReferencePhysList(physName);
+    if(!phys) { exit(1); }
+  }
 
   runManager->SetUserInitialization(phys);
 

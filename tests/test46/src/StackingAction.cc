@@ -44,6 +44,8 @@
 
 #include "G4SystemOfUnits.hh"
 #include "G4Track.hh"
+#include "G4ParticleTable.hh"
+#include "Randomize.hh"
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,6 +56,7 @@ StackingAction::StackingAction()
   histoManager   = HistoManager::GetPointer();
   killSecondary  = false;
   pname          = ""; 
+  nBiased        = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -70,12 +73,12 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
 {
   G4ClassificationOfNewTrack status = fUrgent;
 
-  if (aTrack->GetTrackStatus() == fAlive) 
+  if (aTrack->GetTrackStatus() == fAlive) {
     histoManager->ScoreNewTrack(aTrack);
-
-  const G4String name = aTrack->GetDefinition()->GetParticleName();
+  }
 
   if(histoManager->GetVerbose() > 1 ) {
+    const G4String name = aTrack->GetDefinition()->GetParticleName();
     G4cout << "Track #"
 	   << aTrack->GetTrackID() << " of " << name
 	   << " E(MeV)= " << aTrack->GetKineticEnergy()/MeV
@@ -83,13 +86,46 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
 	   << " ID= " << aTrack->GetParentID()
 	   << G4endl;
   }
-  if(aTrack->GetTrackID() == 1) return status;
+  if(aTrack->GetTrackID() == 1) { 
+    return status; 
+
+  } else if(0 < nBiased) {
+    for(G4int i=0; i<nBiased; ++i) {
+      if(aTrack->GetDefinition() == biasedParticle[i]) {
+        if(aTrack->GetKineticEnergy() < biasedEnergy[i]) {
+	  if(G4UniformRand() < rrProbability[i]) {
+	    const_cast<G4Track*>(aTrack)->SetWeight(aTrack->GetWeight()/rrProbability[i]);
+	  } else {
+	    status = fKill;
+	  }
+	}
+	break;
+      }
+    }
+  }
 
   //stack or delete secondaries
-  if (killSecondary)      status = fKill;
-  else if(pname == name)  status = fKill; 
+  //if (killSecondary)      { status = fKill; }
+  //else if(pname == name)  { status = fKill; }
 
   return status;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void 
+StackingAction::ActivateSecondaryBiasing(const G4String& pname, 
+					 G4double f, G4double e)
+{
+  G4ParticleDefinition* part = 
+    G4ParticleTable::GetParticleTable()->FindParticle(pname);
+  if(part) {
+
+    biasedParticle.push_back(part);
+    rrProbability.push_back(f);
+    biasedEnergy.push_back(e);
+    ++nBiased;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
