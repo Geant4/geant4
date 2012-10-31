@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18 October 12: V.Ivanchenko (emstand-V09-05-55)
+-  G4BetheBlochModel, G4BraggIonModel, G4BraggModel - define flag isIon 
+     for all nucleus except deuteron, triton and special DNA ions
+
 14 October 12: V.Ivanchenko (emstand-V09-05-54) 
 - G4XrayRayleighModel - V. Grichine, update of xsc and angular distribution
 - G4eBremParametrizedModel - use G4DipBustGenerator for angular distribution

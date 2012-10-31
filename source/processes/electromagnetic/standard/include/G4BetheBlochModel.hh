@@ -174,7 +174,7 @@ inline void G4BetheBlochModel::SetParticle(const G4ParticleDefinition* p)
 {
   if(particle != p) {
     particle = p;
-    if (p->GetPDGCharge()/CLHEP::eplus > 1.5 && p->GetBaryonNumber() > 2) 
+    if(p->GetBaryonNumber() > 3 || p->GetPDGCharge() > 1.5*CLHEP::eplus) 
       { isIon = true; }
     SetupParameters();
   }

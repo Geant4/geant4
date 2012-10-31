@@ -120,7 +120,9 @@ void G4BraggModel::Initialise(const G4ParticleDefinition* p,
 
     G4String pname = particle->GetParticleName();
     if(particle->GetParticleType() == "nucleus" && 
-       pname != "deuteron" && pname != "triton") { isIon = true; }
+       pname != "deuteron" && pname != "triton" &&
+       pname != "alpha+"   && pname != "helium" &&
+       pname != "hydrogen") { isIon = true; }
 
     fParticleChange = GetParticleChangeForLoss();
   }
