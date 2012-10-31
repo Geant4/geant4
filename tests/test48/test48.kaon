@@ -1,0 +1,32 @@
+#verbose
+-1
+#rad
+#events
+10000
+//--------Proton_processes
+#particle
+kaon-
+#position(mm)
+0. 0. 0.
+#direction
+0. 0. 1.
+//--------
+#material
+H
+#momentum(MeV/c)
+0.0
+// ---
+#generator
+Bertini
+#run
+#generator
+CHIPS
+#run
+#generator
+stopping
+#run
+#exit
+#generator
+stopping-alt
+#run
+#exit

@@ -1,0 +1,38 @@
+//parsing of this file is very fragile
+//make sure #line is immediately followed by its data
+#verbose
+-1
+#rad
+#events
+10000
+//--------muon_processes
+#particle
+mu-
+#position(mm)
+0. 0. 0.
+#direction
+0. 0. 1.
+//--------
+#material
+Al
+#momentum(MeV/c)
+0.0
+// ---
+#generator
+stopping
+#run
+#generator
+captureUpdate
+#run
+#generator
+CHIPS
+#run
+//#generator
+//newmustopping
+//#run
+//#exit
+// it does not look like Bertini implements stopping mu-
+//#generator
+//Bertini
+//#run
+#exit

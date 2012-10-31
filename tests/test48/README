@@ -1,0 +1,164 @@
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            test48
+                            ------
+                   Responsible: J.Yarba (Fermilab)
+
+
+   *** INTRODUCTION ***
+
+This package is intended for comparison of results of the G4 code/models
+for stopping particle vs one another, as well as vs experimental data.
+
+
+For stopping particles, we have "traditional" processes/hadronic/stopping
+code and the newer code that's a part of the CHIPS model.
+Staring Geant4.9.4.ref10, Bertini Cascade model has been adapted to model 
+stopping pi- and K-. Unfortunately, the interface wont be ready until 2012.
+However, a preliminary, simplified prototype of such interface has been added
+to the package, to test the performance of the Bertini Cascade or the Bartini 
+Cascade backed with PreCompound model for deexcitation.
+Also starting Geant4.9.4.ref10 there'll also be a possibility to use FTF model 
+to simulate stopping pbar. 
+
+It needs to be noted that the "traditional" code includes "alternative" models 
+for pi- and K-.
+Apparently those are early attempts to develop more sophisticated alternatives
+to the simplified "traditional" model, but they appear to be abandoned.
+They were used in earlier validation rounds, but the outcome didn't look good
+or promissing, and the collaboration is currently considering decommissionning 
+of that code. 
+
+We currently use experimental data (table) for stopped pi- from this paper:
+-- R.Madey et al., Phys.Rev.C25, 2050 (1982)
+
+For stopped pbar, there's a large volume of materials, incl. from LEAR
+(Crystal Barrel), as well as much earlier data from 70's and 80's.
+As a starting point we use these 3 reviews:
+-- C. Amsler, Rev. Mod. Phys. 70, 1293 (1998)
+-- C. Amsler and F. Myher, Ann. Rev. Nucl. Part. Sci. 41, 219 (1991)
+-- C.B. Dover et al., Prog. Part. Nucl. Phys., Vol.29, pp.87-173 (1992)
+
+Unfortunately, the collection of experimental data for K- and Sigma- capture appears 
+to be limited to K- or Sigma- on H only.
+However, we have recently extreacted the initial set of experimaental data points
+for validation, from these papers:
+-- K.Larson et al., Phys.Rev.D47,799(1993) (K-)
+-- M.Goossens et al., in in Low and Intermediate energy kaon physics,
+   ed.E.Ferrari and G.Violini (Riedel, Holland, 1980), p.243 (Sigma-)
+
+At present, for each type of incoming particles, we look at the quantities 
+of general interest, such as overal multiplicity of the secondary paricles 
+or multiplicities of secondary particles of specific type (pions, kaons,...), 
+momentum spectra, etc.
+
+Where experimental data are available, we look for specific distributions. 
+For example, for pi- absorptions we look at the number of outcoming neutrons
+as a function of the kinetic energy of the final state particle.
+
+   *** HOW TO COMPILE AND RUN ***
+
+In order to compile the application one needs to setup Geant4 version (at FNAL,
+CLHEP sets automatically with each G4 release), and the desired version of Root, 
+for histograms.
+One also needs to set several Geant4 related products, update LD_LIBRARY_PATH,
+and specify work directory.
+Example settings are here: g4setup.csh
+
+Once settings are done, the code can be build via supplied GNUmakefile (by issuing 
+gmake at the system propmt), and results in test48 executable in the G4EXE area.
+
+The application can be configured at run time, with beam, target, and Geant4 model.
+Example application configurations are these:
+test48.picapture - pi- case
+test48.apcapture - antiproton case
+test48.kaon - K- case
+test48.sigma - Sigma- case
+
+Please note that the pi- configuration runs sequentially all 3 Geant4 models in test
+(CHIPS, stopping, and stopping-alt, where the later stands for "alternative" pi- 
+absorption code). 
+The target in this example is Cu (other targets are: C, N, O, Al, Ta, Pb).
+
+The pbar application runs CHIPS model and "traditional" stopping model (port of the
+old GHEISHA code) for pbar annihilation on H.
+
+Example usage:
+> $G4EXE/test48 test48.picapture
+> $G4EXE/test48 test48.apcapture
+> $G4EXE/test48 test48.kaon
+> $G4EXE/test48 test48.sigma
+
+The output will be in a form of a Root histogram file. 
+For each beam/target/model combination there will be a separate output.
+
+For example, the output of the pi- example will result in 4 Root histogram files:
+-- piminusCBertiniPreCo.root
+-- piminusCCHIPS.root
+-- piminusCustopping.root
+(similar for K- and Sigma-, but a user need to remember that for H target 
+Bertini+PreCompound wont be any different from just Bertini, because there'd be 
+no excited nuclei).
+
+For the pbar case, the output will result in 3 Root histogram files:
+-- antiprotonHFTF.root
+-- antiprotonHCHIPS.root
+-- antiprotonHstopping.root
+
+   *** HOW TO ANALYZE THE OUTPUT AND MAKE COMPARISON ***
+
+Additional analysis and comparion vs available experimental data can be done with
+a collection of Root macro's supplied in: PlotStopping.C
+
+For example, to plot number of neutrons coming of pi- on Cu as a function of kinetic
+energy of the final state neutron, one can do the following in a interactive Root
+session:
+root [0] gROOT->LoadMacro("PlotPiMinusStopping.C")
+root [1] plotPiMinus("C")
+
+If you wish to display both the above spectrum and the MC/Data, you can do the following:
+root [0] gROOT->LoadMacro("PlotPiMinusStopping.C")
+root [1] plotPiMinusSummary2("C")
+
+
+If you wish to display results on pi- absorptions on all of the 7 targets in the test, 
+you can do it like this:
+root [0] gROOT->LoadMacro("PlotPiMinusStopping.C")
+root [1] plotPiMinusAll()
+
+In order to compare the output of pbar annihilation on H vs experimental data (momentum
+spectra of final state charged pions or multiplicity of the final state pions) one can
+do the following:
+root [0] gROOT->LoadMacro("PlotKMinusStopping.C")
+root [1] plotAntiProton("H")
+
+As an example of viewing plots for K-, you can do the following:
+root [0] gROOT->LoadMacro("PlotStopping.C")
+root [1] plotKMinus2("H")
+This will desplay two most illustrative plots that will include comparison vs data.
+
+To display the Sigma- plot, you can do this:
+root [0] gROOT->LoadMacro("PlotSigmaMinusStopping.C")
+root [1] plotSigmaMinus("H")
+
+
+NOTE1: At present, the tests are executed manually (interactively) but in the future 
+some level of automation maybe added.
+
+   *** HOW TO PRESENT EXPERIMENTAL DATA POINTS AS ROOT OBJECTS ***
+   
+As already mentioned, experimental data points are stored in the ASCII form.
+However, for pi- we've implemented a PiMinusExpData.C utility to present/store them in a form
+of Root Graph and Root histogram (TH1F).
+Example usage for Carbon target:
+root [0] .L PiMinusExpData.C
+root [1] PiMinusExpData("C")
+This will produce an output Root file expdata_piminusC.root containing 2 objects: a TGraph
+and a TH1F with the data points.
+This macro can be executed in a root session or in a "batch-like" mode.
+
+
+

@@ -1,0 +1,53 @@
+$Id: $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Test 48 History file
+                    --------------------
+This file should be used by the test developer to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+
+October 22, 2012 Krzysztof Genser (test48-V09-05-06)
+- disabled the test in cmake file if ROOT package is not found
+
+October 19, 2012 Krzysztof Genser (test48-V09-05-05)
+- removed unused parameter in TestStoppingPhysics::GetProcess
+
+October 19, 2012 Krzysztof Genser (test48-V09-05-04)
+- more explicitly used SystemOfUnits
+
+October 19, 2012 Krzysztof Genser (test48-V09-05-03)
+- removed unused MaterialsList; explicitly used SystemOfUnits
+
+October 18, 2012 Krzysztof Genser (test48-V09-05-02)
+- retagging to repropose the tag due to a cdash script problem?
+
+October 17, 2012 Krzysztof Genser (test48-V09-05-01)
+- renamed mu2e used physics constructor G4MuonMinusCapture to G4MuonMinusCapturePhysics plus other changes
+- other changes by Julia Yarba
+
+
+August 23, 2012 - Julia Yarba (test48-V09-06-00) 
+- Tagged to correspond to g4.9.6(-beta)
+- Includes updates
+  -- README
+  -- Root macros (added ReadExpData and PiMinusExpData) 
+
+
+
+August 14, 2012 - Julia Yarba (test48-V00-00-00)
+- Fisrt official tag 
+- Includes tools for the following testing and comparison vs exp.data: 
+  -- "traditional", CHIPS and Bertini models for pi-, K-, Sigma- 
+  -- "traditional", "new infrastructure" (since g4.9.6.b01), CHIPS for mu-
+  -- CHIPS and FTF for pbar 
+

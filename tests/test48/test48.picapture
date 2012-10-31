@@ -1,0 +1,28 @@
+#verbose
+0
+#rad
+#events
+1000000
+//--------Proton_processes
+#particle
+pi-
+#position(mm)
+0. 0. 0.
+#direction
+0. 0. 1.
+//--------
+#material
+C
+#momentum(MeV/c)
+0.0
+// ---
+#generator
+BertiniPreCo
+#run
+#generator
+CHIPS
+#run
+#generator
+stopping
+#run
+#exit
