@@ -36,6 +36,8 @@
 //
 // ************************************************************
 
+#include <vector>
+
 #include "GammaRayTelDigitizer.hh"
 #include "GammaRayTelDigi.hh"
 #include "GammaRayTelDigitizerMessenger.hh"
@@ -44,14 +46,12 @@
 #include "GammaRayTelCalorimeterHit.hh"
 #include "GammaRayTelAnticoincidenceHit.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4EventManager.hh"
 #include "G4Event.hh"
 #include "G4SDManager.hh"
 #include "G4DigiManager.hh"
 #include "G4ios.hh"
-
-//#include "G4CollectionNameVector.hh"
-#include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

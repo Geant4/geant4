@@ -45,6 +45,8 @@
 #include "GammaRayTelDetectorConstruction.hh"
 #include "GammaRayTelPrimaryGeneratorMessenger.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4GeneralParticleSource.hh"

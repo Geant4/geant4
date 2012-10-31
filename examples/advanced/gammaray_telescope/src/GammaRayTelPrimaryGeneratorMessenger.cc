@@ -42,6 +42,7 @@
 #include "GammaRayTelPrimaryGeneratorMessenger.hh"
 
 #include "GammaRayTelPrimaryGeneratorAction.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"

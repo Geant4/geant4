@@ -42,6 +42,7 @@
 #include "GammaRayTelDigitizerMessenger.hh"
 
 #include "GammaRayTelDigitizer.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
