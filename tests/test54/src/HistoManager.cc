@@ -31,6 +31,7 @@
 
 #include "HistoManager.hh"
 #include "HistoMessenger.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 
 #ifdef G4ANALYSIS_USE
