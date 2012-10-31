@@ -84,6 +84,8 @@ G4MuBremsstrahlung::G4MuBremsstrahlung(const G4String& name)
     isInitialised(false)
 {
   SetProcessSubType(fBremsstrahlung);
+  SetSecondaryParticle(G4Gamma::Gamma());
+  SetIonisation(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -118,8 +120,6 @@ void G4MuBremsstrahlung::InitialiseEnergyLossProcess(
     isInitialised = true;
 
     theParticle = part;
-    SetSecondaryParticle(G4Gamma::Gamma());
-    SetIonisation(false);
 
     if (!EmModel()) { SetEmModel(new G4MuBremsstrahlungModel()); }
 

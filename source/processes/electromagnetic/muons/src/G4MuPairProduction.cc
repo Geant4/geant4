@@ -91,6 +91,8 @@ G4MuPairProduction::G4MuPairProduction(const G4String& name)
     isInitialised(false)
 {
   SetProcessSubType(fPairProdByCharged);
+  SetSecondaryParticle(G4Positron::Positron());
+  SetIonisation(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -124,8 +126,6 @@ void G4MuPairProduction::InitialiseEnergyLossProcess(
     isInitialised = true;
 
     theParticle = part;
-    SetSecondaryParticle(G4Positron::Positron());
-    SetIonisation(false);
 
     if (!EmModel()) { SetEmModel(new G4MuPairProductionModel()); }
 

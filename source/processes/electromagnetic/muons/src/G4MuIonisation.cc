@@ -107,6 +107,7 @@ G4MuIonisation::G4MuIonisation(const G4String& name)
   //SetIntegral(true);
   //SetVerboseLevel(1);
   SetProcessSubType(fIonisation);
+  SetSecondaryParticle(G4Electron::Electron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -145,7 +146,6 @@ void G4MuIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* par
     mass = theParticle->GetPDGMass();
     G4double q = theParticle->GetPDGCharge();
     G4double elow = 0.2*MeV;
-    SetSecondaryParticle(G4Electron::Electron());
 
     // Bragg peak model
     if (!EmModel(1)) {
