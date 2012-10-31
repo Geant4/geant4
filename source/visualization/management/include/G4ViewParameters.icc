@@ -212,6 +212,11 @@ inline G4bool G4ViewParameters::IsPicking () const {
 inline G4ViewParameters::RotationStyle
 G4ViewParameters::GetRotationStyle() const {return fRotationStyle;}
 
+inline const std::vector<G4ModelingParameters::VisAttributesModifier>&
+G4ViewParameters::GetVisAttributesModifiers() const {
+  return fVisAttributesModifiers;
+}
+
 inline void
 G4ViewParameters::SetDrawingStyle (G4ViewParameters::DrawingStyle style) {
   fDrawingStyle = style;
@@ -390,4 +395,9 @@ inline void G4ViewParameters::SetPicking (G4bool picking) {
 inline void G4ViewParameters::SetRotationStyle
   (G4ViewParameters::RotationStyle style) {
   fRotationStyle = style;
+}
+
+inline void G4ViewParameters::AddVisAttributesModifier
+(const G4ModelingParameters::VisAttributesModifier& vam) {
+  fVisAttributesModifiers.push_back(vam);
 }

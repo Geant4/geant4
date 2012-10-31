@@ -44,6 +44,7 @@
 #include "G4OpenGLStoredSceneHandler.hh"
 
 #include "G4PhysicalVolumeModel.hh"
+#include "G4LogicalVolumeModel.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Polyline.hh"
@@ -63,7 +64,6 @@ G4OpenGLStoredSceneHandler::PO::PO():
   fDisplayListId(0),
   fPickName(0),
   fpG4TextPlus(0),
-  fTransparent(false),
   fMarkerOrPolyline(false)
 {}
 
@@ -73,7 +73,6 @@ G4OpenGLStoredSceneHandler::PO::PO(const G4OpenGLStoredSceneHandler::PO& po):
   fPickName(po.fPickName),
   fColour(po.fColour),
   fpG4TextPlus(po.fpG4TextPlus? new G4TextPlus(*po.fpG4TextPlus): 0),
-  fTransparent(po.fTransparent),
   fMarkerOrPolyline(po.fMarkerOrPolyline)
 {}
 
@@ -82,7 +81,6 @@ G4OpenGLStoredSceneHandler::PO::PO(G4int id, const G4Transform3D& tr):
   fTransform(tr),
   fPickName(0),
   fpG4TextPlus(0),
-  fTransparent(false),
   fMarkerOrPolyline(false)
 {}
 
@@ -100,7 +98,6 @@ G4OpenGLStoredSceneHandler::PO& G4OpenGLStoredSceneHandler::PO::operator=
   fPickName = rhs.fPickName;
   fColour = rhs.fColour;
   fpG4TextPlus = rhs.fpG4TextPlus? new G4TextPlus(*rhs.fpG4TextPlus): 0;
-  fTransparent = rhs.fTransparent;
   fMarkerOrPolyline = rhs.fMarkerOrPolyline;
   return *this;
 }
@@ -111,7 +108,6 @@ G4OpenGLStoredSceneHandler::TO::TO():
   fStartTime(-DBL_MAX),
   fEndTime(DBL_MAX),
   fpG4TextPlus(0),
-  fTransparent(false),
   fMarkerOrPolyline(false)
 {}
 
@@ -123,7 +119,6 @@ G4OpenGLStoredSceneHandler::TO::TO(const G4OpenGLStoredSceneHandler::TO& to):
   fEndTime(to.fEndTime),
   fColour(to.fColour),
   fpG4TextPlus(to.fpG4TextPlus? new G4TextPlus(*to.fpG4TextPlus): 0),
-  fTransparent(to.fTransparent),
   fMarkerOrPolyline(to.fMarkerOrPolyline)
 {}
 
@@ -134,7 +129,6 @@ G4OpenGLStoredSceneHandler::TO::TO(G4int id, const G4Transform3D& tr):
   fStartTime(-DBL_MAX),
   fEndTime(DBL_MAX),
   fpG4TextPlus(0),
-  fTransparent(false),
   fMarkerOrPolyline(false)
 {}
 
@@ -154,7 +148,6 @@ G4OpenGLStoredSceneHandler::TO& G4OpenGLStoredSceneHandler::TO::operator=
   fEndTime = rhs.fEndTime;
   fColour = rhs.fColour;
   fpG4TextPlus = rhs.fpG4TextPlus? new G4TextPlus(*rhs.fpG4TextPlus): 0;
-  fTransparent = rhs.fTransparent;
   fMarkerOrPolyline = rhs.fMarkerOrPolyline;
   return *this;
 }
@@ -232,6 +225,13 @@ G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible
   G4bool treatAsTransparent = transparency_enabled && isTransparent;
   G4bool treatAsNotHidden = isMarkerNotHidden && isMarkerOrPolyline;
   
+  if (fProcessing2D) glDisable (GL_DEPTH_TEST);
+  else {
+    if (isMarkerOrPolyline && isMarkerNotHidden)
+      glDisable (GL_DEPTH_TEST);
+    else {glEnable (GL_DEPTH_TEST); glDepthFunc (GL_LEQUAL);}
+  }
+
   if (fThreePassCapable) {
     
     // Ensure transparent objects are drawn opaque ones and before
@@ -282,42 +282,47 @@ G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible
   G4PhysicalVolumeModel* pPVModel =
   dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
   if (pPVModel) {
-    // If part of the geometry hierarchy, i.e., from a
-    // G4PhysicalVolumeModel, check if a display list already exists for
-    // this solid, re-use it if possible.  We could be smarter, and
-    // recognise repeated branches of the geometry hierarchy, for
-    // example.  But this algorithm should be secure, I think...
-    pSolid = pPVModel->GetCurrentPV()->GetLogicalVolume()->GetSolid();
-    EAxis axis = kRho;
-    G4VPhysicalVolume* pCurrentPV = pPVModel->GetCurrentPV();
-    if (pCurrentPV -> IsReplicated ()) {
-      G4int nReplicas;
-      G4double width;
-      G4double offset;
-      G4bool consuming;
-      pCurrentPV->GetReplicationData(axis,nReplicas,width,offset,consuming);
-    }
-    // Provided it is not parametrised (because if so, the
-    // solid's parameters might have been changed)...
-    if (!(pCurrentPV -> IsParameterised ()) &&
-	// Provided it is not replicated radially (because if so, the
-	// solid's parameters will have been changed)...
-	!(pCurrentPV -> IsReplicated () && axis == kRho) &&
-	// ...and if the solid has already been rendered...
-	(fSolidMap.find (pSolid) != fSolidMap.end ())) {
-      fDisplayListId = fSolidMap [pSolid];
-      PO po(fDisplayListId,fObjectTransformation);
-      if (isPicking) po.fPickName = fPickName;
-      po.fColour = c;
-      po.fTransparent = isTransparent;
-      po.fMarkerOrPolyline = isMarkerOrPolyline;
-      fPOList.push_back(po);
-      // No need to test if gl commands are used (result of
-      // ExtraPOProcessing) because we have already decided they will
-      // not, at least not here.  Also, pass a dummy G4Visible since
-      // not relevant for G4PhysicalVolumeModel.
-      (void) ExtraPOProcessing(G4Visible(), fPOList.size() - 1);
-      return false;  // No further processing.
+    // Check that it isn't a G4LogicalVolumeModel (which is a sub-class of
+    // G4PhysicalVolumeModel).
+    G4LogicalVolumeModel* pLVModel =
+    dynamic_cast<G4LogicalVolumeModel*>(pPVModel);
+    if (!pLVModel) {
+      // If part of the geometry hierarchy, i.e., from a
+      // G4PhysicalVolumeModel, check if a display list already exists for
+      // this solid, re-use it if possible.  We could be smarter, and
+      // recognise repeated branches of the geometry hierarchy, for
+      // example.  But this algorithm should be secure, I think...
+      pSolid = pPVModel->GetCurrentPV()->GetLogicalVolume()->GetSolid();
+      EAxis axis = kRho;
+      G4VPhysicalVolume* pCurrentPV = pPVModel->GetCurrentPV();
+      if (pCurrentPV -> IsReplicated ()) {
+        G4int nReplicas;
+        G4double width;
+        G4double offset;
+        G4bool consuming;
+        pCurrentPV->GetReplicationData(axis,nReplicas,width,offset,consuming);
+      }
+      // Provided it is not parametrised (because if so, the
+      // solid's parameters might have been changed)...
+      if (!(pCurrentPV -> IsParameterised ()) &&
+          // Provided it is not replicated radially (because if so, the
+          // solid's parameters will have been changed)...
+          !(pCurrentPV -> IsReplicated () && axis == kRho) &&
+          // ...and if the solid has already been rendered...
+          (fSolidMap.find (pSolid) != fSolidMap.end ())) {
+        fDisplayListId = fSolidMap [pSolid];
+        PO po(fDisplayListId,fObjectTransformation);
+        if (isPicking) po.fPickName = fPickName;
+        po.fColour = c;
+        po.fMarkerOrPolyline = isMarkerOrPolyline;
+        fPOList.push_back(po);
+        // No need to test if gl commands are used (result of
+        // ExtraPOProcessing) because we have already decided they will
+        // not, at least not here.  Also, pass a dummy G4Visible since
+        // not relevant for G4PhysicalVolumeModel.
+        (void) ExtraPOProcessing(G4Visible(), fPOList.size() - 1);
+        return false;  // No further processing.
+      }
     }
   }
 
@@ -352,7 +357,6 @@ G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible
 	fpViewer->GetApplicableVisAttributes(visible.GetVisAttributes());
       to.fStartTime = pVA->GetStartTime();
       to.fEndTime = pVA->GetEndTime();
-      to.fTransparent = isTransparent;
       to.fMarkerOrPolyline = isMarkerOrPolyline;
       fTOList.push_back(to);
       // For transient objects, colour, transformation, are kept in
@@ -377,7 +381,6 @@ G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible
       PO po(fDisplayListId, fObjectTransformation);
       if (isPicking) po.fPickName = fPickName;
       po.fColour = c;
-      po.fTransparent = isTransparent;
       po.fMarkerOrPolyline = isMarkerOrPolyline;
       fPOList.push_back(po);
       // For permanent objects, colour is kept in the PO, so should

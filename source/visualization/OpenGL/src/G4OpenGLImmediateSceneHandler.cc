@@ -94,9 +94,17 @@ G4bool G4OpenGLImmediateSceneHandler::AddPrimitivePreamble(const G4Visible& visi
   }
   catch (std::bad_cast) {}
   
+  G4bool isMarkerOrPolyline = isMarker || isPolyline;
   G4bool treatAsTransparent = transparency_enabled && opacity < 1.;
   G4bool treatAsNotHidden = isMarkerNotHidden && (isMarker || isPolyline);
   
+  if (fProcessing2D) glDisable (GL_DEPTH_TEST);
+  else {
+    if (isMarkerOrPolyline && isMarkerNotHidden)
+      glDisable (GL_DEPTH_TEST);
+    else {glEnable (GL_DEPTH_TEST); glDepthFunc (GL_LEQUAL);}
+  }
+
   if (fThreePassCapable) {
     
     // Ensure transparent objects are drawn opaque ones and before

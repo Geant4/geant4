@@ -26,6 +26,73 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+18th October 2012  John Allison  (visman-V09-05-41)
+- G4VisExecutive.icc:
+  o Reverted to G4OpenInventorXt as the default OI for X Windows.
+  o Get G4OpenInventorXtExtended with "/vis/open OIXE".
+
+17th October 2012  John Allison  (visman-V09-05-40)
+- G4VisExecutive.icc:
+  o Added G4OpenInventorXtExtended and made it the default OI for X Windows.
+
+11th October 2012  John Allison  (visman-V09-05-39)
+- G4ViewParameters:
+  o Added "Commands" functions for saving state to /vis/ commands.
+- G4VisManager, G4VisCommandsViewer.cc:
+  o Added /vis/viewer/save.
+- G4VSceneHandler:
+  o Tidied.
+
+9th October 2012  John Allison  (visman-V09-05-38)
+- G4VisCommandsTouchableSet:
+  o Fixed compiler warnings on Windows.
+- G4VisManager.cc:
+  o Fixed run-time warning about command directory.
+
+9th October 2012  John Allison  (visman-V09-05-37)
+- Completed /vis/touchable/set/ commands.
+
+8th October 2012  John Allison
+- First attempt at /vis/touchable/set/ commands.
+- Only /vis/set/touchable and /vis/touchable/set/colour implemented.
+- sources.cmake:
+  o Added new files G4VisCommandsTouchableSet.hh/cc.
+- G4VisManager.cc:
+  o Added the above commands.
+- G4VVisCommand.cc:
+  o Added static cache for current touchable path.
+- G4VisCommandsSet.cc:
+  o Added /vis/set/touchable.
+- G4VisCommandsTouchableSet:
+  o New class for /vis/touchable/set/ commands.
+
+7th October 2012  John Allison  (visman-V09-05-36)
+- G4ViewParameters:
+  o Added VisAttributesModifiers.  This is to be used by new commands,
+    /vis/touchable/set/...
+- G4VSceneHandler:: CreateModelingParameters:
+  o Added copying of VisAttributesModifiers.
+- G4VisCommandsSceneAdd.cc:
+  o Code tidy.
+
+6th October 2012  John Allison  (visman-V09-05-35)
+- G4VisCommandSceneAdd.cc: G4VisCommandSceneAddVolume:
+  o Pick up found full path from G4PhysicalVolumeSearchScene so that it can
+    be passed to G4PhysicalVolumeModel as a base.  The base full path is the
+    full path of the top physical volume (actually the full path of the mother
+    of the top physical volume), so that even if a user issues
+    "/vis/drawVolume sub-detector", the full path includes the base full path,
+    i.e., the full path up to the world volume.
+- G4VSceneHandler:
+  o Deprecated NURBS at next major release.
+  o Changed G4Exception labels to 101+.
+
+1st October 2012  John Allison  (visman-V09-05-34)
+- G4VSceneHandler::LoadAtts:
+  o Added G4Atts from trajectories model to access event ID.
+- G4VisCommandSceneAddTrajectories:
+  o Print G4Atts from trajectories (to advertise availability of event ID).
+
 28th September 2012  Gabriele Cosmo  (visman-V09-05-33)
 - Explicitly include units header in G4ViewParameters.hh.
 

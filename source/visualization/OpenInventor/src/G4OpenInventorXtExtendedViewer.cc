@@ -38,16 +38,18 @@
  * gb 09 November 2004 : have gl2ps file production.
  * gb 14 November 2004 : inherit G4OpenInventorViewer.
  */
+// Frederick Jones and TJR  October 2012
+// Extended viewer based on G4OpenInventorXt.hh
+// Uses G4OpenInventorXtExaminerViewer.
 
 #ifdef G4VIS_BUILD_OIX_DRIVER
 
 // this :
-#include "G4OpenInventorXtViewer.hh"
+#include "G4OpenInventorXtExtendedViewer.hh"
 
 #include <Inventor/nodes/SoSelection.h>
-
 #include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
+#include <Inventor/Xt/viewers/SoXtFlyViewer.h>
 
 #include <X11/StringDefs.h>
 #include <X11/Shell.h>
@@ -63,24 +65,25 @@
 
 #include "G4OpenInventor.hh"
 #include "G4OpenInventorSceneHandler.hh"
+#include "G4OpenInventorXtExaminerViewer.hh"
 #include "G4VInteractorManager.hh"
 #include "G4VisManager.hh"
+#include "G4AttCheck.hh"
 
-G4OpenInventorXtViewer::G4OpenInventorXtViewer(
+G4OpenInventorXtExtendedViewer::G4OpenInventorXtExtendedViewer(
  G4OpenInventorSceneHandler& sceneHandler
 ,const G4String& name)
-:G4OpenInventorViewer (sceneHandler, name)
-,fShell(0)
+:G4OpenInventorXtViewer (sceneHandler, name)
 ,fViewer(0)
-,fHelpForm(0)
-,fHelpText(0)
 {
   if (G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "Window name: " << fName << G4endl;
 }
 
+G4OpenInventorXtExtendedViewer::~G4OpenInventorXtExtendedViewer()
+{}
 
-void G4OpenInventorXtViewer::Initialise() {
+void G4OpenInventorXtExtendedViewer::Initialise() {
   
   G4String wName = fName;
   
@@ -117,25 +120,34 @@ void G4OpenInventorXtViewer::Initialise() {
     fShell = XtAppCreateShell(shellName.c_str(),"Inventor",
 	  		       topLevelShellWidgetClass,
 			       SoXt::getDisplay(),
-			       args,3); 
+			       args,3);
+    
+    fViewer = new G4OpenInventorXtExaminerViewer(fShell, wName.c_str(), TRUE);
+    fViewer->addEscapeCallback(EscapeFromKeyboardCbk, (void *)this);
+     
+    // FWJ (viewpoints don't work with this!)
+    //    fViewer->setAutoClipping((SbBool)0);
 
-    XtSetArg(args[0],XmNtopAttachment   ,XmATTACH_FORM);
-    XtSetArg(args[1],XmNleftAttachment  ,XmATTACH_FORM);
-    XtSetArg(args[2],XmNrightAttachment ,XmATTACH_FORM);
-    XtSetArg(args[3],XmNbottomAttachment,XmATTACH_FORM);
-    Widget form = XmCreateForm (fShell,(char*)"form",args,4);
-    XtManageChild (form);
+    //XtSetArg(args[0],XmNtopAttachment   ,XmATTACH_FORM);
+    //XtSetArg(args[1],XmNleftAttachment  ,XmATTACH_FORM);
+    //XtSetArg(args[2],XmNrightAttachment ,XmATTACH_FORM);
+    //XtSetArg(args[3],XmNbottomAttachment,XmATTACH_FORM);
+    //Widget form = XmCreateForm (fShell,(char*)"form",args,4);
+    //XtManageChild (form);
 
-    XtSetArg(args[0],XmNtopAttachment   ,XmATTACH_FORM);
-    XtSetArg(args[1],XmNleftAttachment  ,XmATTACH_FORM);
-    XtSetArg(args[2],XmNrightAttachment ,XmATTACH_FORM);
-    Widget menuBar = XmCreateMenuBar (form,(char*)"menuBar",args,3);
-    XtManageChild(menuBar);
+    Widget menuBar = fViewer->getMenuBar();
+    
+    //XtSetArg(args[0],XmNtopAttachment   ,XmATTACH_FORM);
+    //XtSetArg(args[1],XmNleftAttachment  ,XmATTACH_FORM);
+    //XtSetArg(args[2],XmNrightAttachment ,XmATTACH_FORM);
+    //Widget menuBar = XmCreateMenuBar (form,(char*)"menuBar",args,3);
+    //XtManageChild(menuBar);
 
-   {Widget menu = AddMenu(menuBar,"File","File");
+   {Widget menu = fViewer->getMenu();
+   //{Widget menu = AddMenu(menuBar,"File","File");
     AddButton(menu,"PS (gl2ps)",PostScriptCbk);
     AddButton(menu,"PS (pixmap)",PixmapPostScriptCbk);
-    AddButton(menu,"IV",WriteInventorCbk);
+    AddButton(menu,"Write IV",WriteInventorCbk);
     AddButton(menu,"Escape",EscapeCbk);}
 
    {Widget menu = AddMenu(menuBar,"Etc","Etc");
@@ -154,7 +166,7 @@ void G4OpenInventorXtViewer::Initialise() {
    {Widget menu = AddMenu(menuBar,"Help","Help");
     AddButton(menu,"Controls",HelpCbk);}
 
-    fViewer = new SoXtExaminerViewer(form,wName.c_str(),TRUE);
+    //fViewer = new SoXtExaminerViewer(form,wName.c_str(),TRUE);
     
     XtSetArg(args[0],XmNtopAttachment   ,XmATTACH_WIDGET);
     XtSetArg(args[1],XmNtopWidget       ,menuBar);
@@ -183,8 +195,14 @@ void G4OpenInventorXtViewer::Initialise() {
   } else {
     char* str = fInteractorManager->GetCreationString();
     if(str!=0) wName = str;
-    fViewer = new SoXtExaminerViewer(parent,wName.c_str(),TRUE);
+    fViewer = new G4OpenInventorXtExaminerViewer(parent, wName.c_str(), TRUE);
   }
+
+  // Use our own SelectionCB for the Xt viewer to allow for abbreviated output
+  // when picking a trajectory
+  fSoSelection->removeSelectionCallback(G4OpenInventorViewer::SelectionCB,
+                                        this);
+//  fSoSelection->addSelectionCallback(SelectionCB, this);
 
   fViewer->setSize(SbVec2s(width,height));
 
@@ -204,175 +222,18 @@ void G4OpenInventorXtViewer::Initialise() {
     fInteractorManager->FlushAndWaitExecution ();
   }
   fInteractorManager->SetCreatedInteractor (fViewer -> getWidget());
+  // TJR added:
+  fViewer->setTransparencyType(SoGLRenderAction::SORTED_OBJECT_ADD);
 }
-
-G4OpenInventorXtViewer::~G4OpenInventorXtViewer () {
-  if(fShell) fInteractorManager->RemoveShell(fShell);
-  if(fViewer) {
-    fViewer->setSceneGraph(0);
-    //FIXME : SGI : the below "delete" block things.
-    //FIXME : CoinXt : the below "delete" crashe in ~SoXtRenderArea.
-    //FIXME : delete fViewer;
-  }
-  if(fShell) XtDestroyWidget(fShell);
-}
-
-void G4OpenInventorXtViewer::FinishView () {
-  if(!fViewer) return;
-  fViewer->viewAll();
-  fViewer->saveHomePosition();
-}
-
-void G4OpenInventorXtViewer::SetView () {
-  G4OpenInventorViewer::SetView ();
-  if(!fViewer) return;
-  // Background.
-  G4Colour b = fVP.GetBackgroundColour ();
-  fViewer->setBackgroundColor
-    (SbColor((float)b.GetRed(),(float)b.GetGreen(),(float)b.GetBlue()));
-}
-
-
-void G4OpenInventorXtViewer::ViewerRender () {
-  if(!fViewer) return;
-  fViewer->render();
-}
-
-SoCamera* G4OpenInventorXtViewer::GetCamera () {
-  if(!fViewer) return 0;
-  return fViewer->getCamera();
-}
-
-Widget G4OpenInventorXtViewer::AddMenu(
- Widget aMenuBar
-,const G4String& aName
-,const G4String& aLabel
-)
-{
-  // Pulldown menu :
-  Widget menu = XmCreatePulldownMenu(aMenuBar,(char*)aName.c_str(),NULL,0);
-  // Cascade button :
-  Arg args[2];
-  XmString cps = 
-    XmStringLtoRCreate((char*)aLabel.c_str(),XmSTRING_DEFAULT_CHARSET);
-  XtSetArg (args[0],XmNlabelString,cps);
-  XtSetArg (args[1],XmNsubMenuId,menu);
-  Widget widget = XmCreateCascadeButton(aMenuBar,(char*)aName.c_str(),args,2);
-  XmStringFree (cps);
-  XtManageChild(widget);
-  return menu;
-}
-void G4OpenInventorXtViewer::AddButton (
- Widget aMenu
-,const G4String& aLabel
-,XtCallbackProc aCallback
-)
-{
-  Widget widget = XmCreatePushButton(aMenu,(char*)aLabel.c_str(),NULL,0);
-  XtManageChild(widget);
-  XtAddCallback(widget,XmNactivateCallback,aCallback,(XtPointer)this);
-}
-
-void G4OpenInventorXtViewer::HelpCancelCbk(
-  Widget,XtPointer aData,XtPointer) {
-  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
-  XtUnmanageChild(This->fHelpForm);
-}
-
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
-void G4OpenInventorXtViewer::EscapeCbk(
-  Widget,XtPointer aData,XtPointer) {
-  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
+// Allow escape from X event loop via key
+void G4OpenInventorXtExtendedViewer::EscapeFromKeyboardCbk(void* o) {
+  G4OpenInventorXtExtendedViewer* This = (G4OpenInventorXtExtendedViewer*)o;
   This->Escape();
-}
-
-void G4OpenInventorXtViewer::PostScriptCbk(
-  Widget,XtPointer aData,XtPointer) {
-  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
-  This->WritePostScript();
-}
-
-void G4OpenInventorXtViewer::PixmapPostScriptCbk(
-  Widget,XtPointer aData,XtPointer) {
-  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
-  This->WritePixmapPostScript();
-}
-
-void G4OpenInventorXtViewer::SceneGraphStatisticsCbk(
-  Widget,XtPointer aData,XtPointer) {
-  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
-  This->SceneGraphStatistics();
-}
-
-void G4OpenInventorXtViewer::WriteInventorCbk(
-  Widget,XtPointer aData,XtPointer) {
-  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
-  This->WriteInventor();
-}
-
-void G4OpenInventorXtViewer::EraseDetectorCbk(
-  Widget,XtPointer aData,XtPointer) {
-  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
-  This->EraseDetector();
-}
-
-void G4OpenInventorXtViewer::EraseEventCbk(
-  Widget,XtPointer aData,XtPointer) {
-  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
-  This->EraseEvent();
-}
-
-void G4OpenInventorXtViewer::SetSolidCbk(
-  Widget,XtPointer aData,XtPointer) {
-  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
-  This->SetSolid();
-}
-
-void G4OpenInventorXtViewer::SetWireFrameCbk(
-  Widget,XtPointer aData,XtPointer) {
-  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
-  This->SetWireFrame();
-}
-
-void G4OpenInventorXtViewer::SetReducedWireFrameCbk(
-  Widget,XtPointer aData,XtPointer) {
-  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
-  This->SetReducedWireFrame(true);
-}
-
-void G4OpenInventorXtViewer::SetFullWireFrameCbk(
-  Widget,XtPointer aData,XtPointer) {
-  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
-  This->SetReducedWireFrame(false);
-}
-
-void G4OpenInventorXtViewer::UpdateSceneCbk(
-  Widget,XtPointer aData,XtPointer) {
-  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
-  This->UpdateScene();
-}
-
-void G4OpenInventorXtViewer::SetPreviewCbk(
-  Widget,XtPointer aData,XtPointer) {
-  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
-  This->SetPreview();
-}
-
-void G4OpenInventorXtViewer::SetPreviewAndFullCbk(
-  Widget,XtPointer aData,XtPointer) {
-  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
-  This->SetPreviewAndFull();
-}
-
-void G4OpenInventorXtViewer::HelpCbk(
-  Widget,XtPointer aData,XtPointer) {
-  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
-  XtManageChild(This->fHelpForm);
-  XmTextSetString(This->fHelpText,(char*)This->Help().c_str());
 }
 
 #endif

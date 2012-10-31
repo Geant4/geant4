@@ -70,6 +70,7 @@ class QColor;
 class G4OpenGLSceneHandler;
 class G4OpenGLQtMovieDialog;
 class QLineEdit;
+class QSignalMapper;
 class G4UIQt;
 
 class G4OpenGLQtViewer: public QObject, virtual public G4OpenGLViewer {
@@ -116,12 +117,12 @@ public:
   void displayRecordingStatus();
   void DrawText(const G4Text&);
   void ResetView ();
-  void addPVSceneTreeElement(const G4String model,
+  void addPVSceneTreeElement(const G4String& model,
                              G4PhysicalVolumeModel* pPVModel,
                              int currentPVPOIndex);
-  void addNonPVSceneTreeElement(const G4String model,
+  void addNonPVSceneTreeElement(const G4String& model,
                                 int currentPVPOIndex,
-                                std::string modelDescription,
+                                const std::string& modelDescription,
                                 const G4Visible& visible);
   bool isTouchableVisible(int POindex);
   void clearTreeWidget();
@@ -135,13 +136,13 @@ public:
 
 protected:
   void CreateGLQtContext ();
-  virtual void CreateMainWindow (QGLWidget*,QString);
+  virtual void CreateMainWindow (QGLWidget*,const QString&);
   void G4manageContextMenuEvent(QContextMenuEvent *e);
   void rotateQtScene(float, float);
   void rotateQtSceneToggle(float, float);
   void moveScene(float, float, float,bool);
   void FinishView();
-  void updateKeyModifierState(Qt::KeyboardModifiers);
+  void updateKeyModifierState(const Qt::KeyboardModifiers&);
   void displaySceneTreeComponent();
   G4Colour getColorForPoIndex(int poIndex);
 
@@ -168,31 +169,31 @@ private:
   QString createTempFolder();
   QString removeTempFolder();
   void setRecordingStatus(RECORDING_STEP);
-  void setRecordingInfos(QString);
+  void setRecordingInfos(const QString&);
   QString getProcessErrorMsg();
   QWidget* getParentWidget();
   bool parseAndInsertInSceneTree(QTreeWidgetItem *,
                                   G4PhysicalVolumeModel* pPVModel,
                                  unsigned int fullPathIndex,
-                                 QString parentRoot,
+                                 const QString& parentRoot,
                                  unsigned int currentIndex,
                                  int currentPVPOIndex);
   void setCheckComponent(QTreeWidgetItem* item,bool check);
   void initSceneTreeComponent();
   bool parseAndCheckVisibility(QTreeWidgetItem * treeNode,int POindex);
-  QTreeWidgetItem* createTreeWidgetItem(PVPath fullPath,
-                                     QString name,
+  QTreeWidgetItem* createTreeWidgetItem(const PVPath& fullPath,
+                                     const QString& name,
                                      int copyNb,
                                      int POIndex,
-                                     QString logicalName,
+                                     const QString& logicalName,
                                      Qt::CheckState state,
                                      QTreeWidgetItem * treeNode,
-                                     G4Colour color);
-  QString getModelShortName(G4String modelShortName);
+                                     const G4Colour& color);
+  QString getModelShortName(const G4String& modelShortName);
   void cloneSceneTree(QTreeWidgetItem* rootItem);
   void changeDepthOnSceneTreeItem(double lookForDepth,double currentDepth,QTreeWidgetItem* item);
   void updatePositivePoIndexSceneTreeWidgetQuickMap(int POindex,QTreeWidgetItem* item);
-  void changeQColorForTreeWidgetItem(QTreeWidgetItem* item, QColor);
+  void changeQColorForTreeWidgetItem(QTreeWidgetItem* item, const QColor&);
 
   bool isSameSceneTreeElement(QTreeWidgetItem* parentOldItem,QTreeWidgetItem* parentNewItem);
   void changeOpenCloseVisibleHiddenSelectedColorSceneTreeElement(QTreeWidgetItem* subItem);
@@ -229,15 +230,19 @@ private:
   QString fMovieTempFolderPath;
   QString fSaveFileName;
   QString fParameterFileName;
-  QAction *fRotateAction;
-  QAction *fMoveAction;
-  QAction *fPickAction;
+  QAction *fMouseRotateAction;
+  QAction *fMouseMoveAction;
+  QAction *fMousePickAction;
+  QAction *fMouseZoomInAction;
+  QAction *fMouseZoomOutAction;
   QAction *fFullScreenOn;
   QAction *fFullScreenOff;
   QAction *fDrawingWireframe;
   QAction *fDrawingLineRemoval;
   QAction *fDrawingSurfaceRemoval;
   QAction *fDrawingLineSurfaceRemoval;
+  QAction *fProjectionOrtho;
+  QAction *fProjectionPerspective;
   G4OpenGLQtMovieDialog* fMovieParametersDialog;
   RECORDING_STEP fRecordingStep;
   QProcess *fProcess;
@@ -285,6 +290,8 @@ private:
   int fNumber;
   int fMaxPOindexInserted;
   G4UIQt* fUiQt;
+  QSignalMapper *signalMapperMouse;
+  QSignalMapper *signalMapperSurface;
 
   // quick map index to find next item
   std::map <int, QTreeWidgetItem*>::const_iterator fLastSceneTreeWidgetAskFor;
@@ -296,14 +303,10 @@ private:
 public Q_SLOTS :
   void startPauseVideo();
 
+protected Q_SLOTS :
+  void updateToolbarAndMouseContextMenu();
+
 private Q_SLOTS :
-  void actionMouseRotate();
-  void actionMouseMove();
-  void actionMousePick();
-  void actionDrawingWireframe();
-  void actionDrawingLineRemoval();
-  void actionDrawingSurfaceRemoval();
-  void actionDrawingLineSurfaceRemoval();
   void actionSaveImage();
   void actionChangeBackgroundColor();
   void actionChangeTextColor();
@@ -311,7 +314,8 @@ private Q_SLOTS :
   void actionMovieParameters();
 
   void showShortcuts();
-  void toggleDrawingAction(int);
+  void toggleMouseAction(int);
+  void toggleSurfaceAction(int);
   void toggleRepresentation(bool);
   void toggleProjection(bool);
   void toggleTransparency(bool);
@@ -328,8 +332,6 @@ private Q_SLOTS :
   void changeDepthInSceneTree(int);
   void changeSearchSelection();
   void changeColorAndTransparency(QTreeWidgetItem* item,int val);
-  // Only use for Qt>4.0
-  //  void dialogClosed();
 };
 
 #endif

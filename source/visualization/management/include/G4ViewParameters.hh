@@ -75,13 +75,16 @@
 #ifndef G4VIEWPARAMETERS_HH
 #define G4VIEWPARAMETERS_HH
 
-#include <vector>
 #include <CLHEP/Units/SystemOfUnits.h>
 #include "G4Vector3D.hh"
 #include "G4Point3D.hh"
 #include "G4Plane3D.hh"
 #include "G4VisAttributes.hh"
 #include "G4VMarker.hh"
+#include "G4ModelingParameters.hh"
+
+#include <vector>
+#include <utility>
 
 typedef std::vector<G4Plane3D> G4Planes;
 
@@ -194,7 +197,9 @@ public: // With description
 			       G4double nearDistance, G4double radius) const;
   G4double GetFrontHalfHeight (G4double nearDistance, G4double radius) const;
   RotationStyle GetRotationStyle() const;
-
+  const std::vector<G4ModelingParameters::VisAttributesModifier>&
+  GetVisAttributesModifiers() const;
+  
   // Set, Add, Multiply, Increment, Unset and Clear functions.
   void SetDrawingStyle         (G4ViewParameters::DrawingStyle style);
   void SetAuxEdgeVisible       (G4bool);
@@ -252,10 +257,22 @@ public: // With description
   void SetBackgroundColour     (const G4Colour&);
   void SetPicking              (G4bool);
   void SetRotationStyle        (RotationStyle);
+  void AddVisAttributesModifier
+  (const G4ModelingParameters::VisAttributesModifier&);
 
+  // Command dumping functions.
+  // For camera commands we need to provide the standard target point from
+  // the current scene.
+  G4String CameraAndLightingCommands(const G4Point3D standardTargetPoint) const;
+  G4String DrawingStyleCommands  () const;
+  G4String SceneModifyingCommands() const;
+  G4String TouchableCommands     () const;
+  
+  // Other functions.
   void PrintDifferences (const G4ViewParameters& v) const;
 
 private:
+  
   G4int ParseGeometry ( const char *string, G4int *x, G4int *y, unsigned int *width, unsigned int *height);
   G4int ReadInteger(char *string, char **NextString);
 
@@ -308,6 +325,8 @@ private:
   G4Colour     fBackgroundColour;
   G4bool       fPicking;         // Request picking.
   RotationStyle fRotationStyle;  // Rotation style.
+  std::vector<G4ModelingParameters::VisAttributesModifier>
+  fVisAttributesModifiers;
 
   enum { // Constants for geometry mask in ParseGeometry and related functions.
     fNoValue     = 0,

@@ -153,7 +153,15 @@ void G4PhysicalVolumeModel::DescribeYourselfTo
   fpCurrentPV       = 0;
   fpCurrentLV       = 0;
   fpCurrentMaterial = 0;
-  fFullPVPath.clear();
+  if (fFullPVPath.size() != fBaseFullPVPath.size()) {
+    // They should be equal if pushing and popping is happening properly.
+    G4Exception
+    ("G4PhysicalVolumeModel::DescribeYourselfTo",
+     "modeling0013",
+     FatalException,
+     "Path at start of modeling not equal to base path.  Something badly"
+     "\nwrong.  Please contact visualisation coordinator.");
+  }
   fDrawnPVPath.clear();
 }
 
@@ -346,7 +354,6 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   if (fCurrentDepth != 0) theNewAT = theAT * theLT;
   fpCurrentTransform = &theNewAT;
 
-  // Make decision to draw...
   const G4VisAttributes* pVisAttribs = pLV->GetVisAttributes();
   if (!pVisAttribs) pVisAttribs = fpMP->GetDefaultVisAttributes();
   // Beware - pVisAttribs might still be zero - create a temporary default one...
@@ -355,10 +362,106 @@ void G4PhysicalVolumeModel::DescribeAndDescend
     pVisAttribs = new G4VisAttributes;
     visAttsCreated = true;
   }
-
   // From here, can assume pVisAttribs is a valid pointer.
-
+  
+  // Make decision to draw...
   G4bool thisToBeDrawn = true;
+  
+  // Update full path of physical volumes...
+  G4int copyNo = fpCurrentPV->GetCopyNo();
+  fFullPVPath.push_back
+  (G4PhysicalVolumeNodeID
+   (fpCurrentPV,copyNo,fCurrentDepth,*fpCurrentTransform));
+  
+  // In case we need to copy the vis atts for modification...
+  G4bool copyForVAM = false;
+  const G4VisAttributes* pUnmodifiedVisAtts = pVisAttribs;
+  G4VisAttributes* pModifiedVisAtts = 0;
+  
+  // Check if vis attributes are to be modified by a /vis/touchable/set/ command.
+  const std::vector<G4ModelingParameters::VisAttributesModifier>& vams =
+    fpMP->GetVisAttributesModifiers();
+  std::vector<G4ModelingParameters::VisAttributesModifier>::const_iterator
+    iModifier;
+  for (iModifier = vams.begin();
+       iModifier != vams.end();
+       ++iModifier) {
+    const G4ModelingParameters::PVNameCopyNoPath& vamPath =
+      iModifier->GetPVNameCopyNoPath();
+    if (vamPath.size() == fFullPVPath.size()) {
+      // OK - there's a size match.  Check it out.
+//      G4cout << "Size match" << G4endl;
+      G4ModelingParameters::PVNameCopyNoPathConstIterator iVAMNameCopyNo;
+      std::vector<G4PhysicalVolumeNodeID>::const_iterator iPVNodeId;
+      for (iVAMNameCopyNo = vamPath.begin(), iPVNodeId = fFullPVPath.begin();
+           iVAMNameCopyNo != vamPath.end();
+           ++iVAMNameCopyNo, ++iPVNodeId) {
+//        G4cout
+//        << iVAMNameCopyNo->fName
+//        << ',' << iVAMNameCopyNo->fCopyNo
+//        << "; " << iPVNodeId->GetPhysicalVolume()->GetName()
+//        << ','  << iPVNodeId->GetPhysicalVolume()->GetCopyNo()
+//        << G4endl;
+        if (!(
+              iVAMNameCopyNo->GetName() ==
+              iPVNodeId->GetPhysicalVolume()->GetName() &&
+              iVAMNameCopyNo->GetCopyNo() ==
+              iPVNodeId->GetPhysicalVolume()->GetCopyNo()
+              )) {
+          break;
+        }
+      }
+      if (iVAMNameCopyNo == vamPath.end()) {
+//        G4cout << "Match found" << G4endl;
+        if (!copyForVAM) {
+          pModifiedVisAtts = new G4VisAttributes(*pUnmodifiedVisAtts);
+          pVisAttribs = pModifiedVisAtts;
+          copyForVAM = true;
+        }
+        const G4VisAttributes& transVisAtts = iModifier->GetVisAttributes();
+        switch (iModifier->GetVisAttributesSignifier()) {
+          case G4ModelingParameters::VASVisibility:
+            pModifiedVisAtts->SetVisibility(transVisAtts.IsVisible());
+            break;
+          case G4ModelingParameters::VASDaughtersInvisible:
+            pModifiedVisAtts->SetDaughtersInvisible
+            (transVisAtts.IsDaughtersInvisible());
+            break;
+          case G4ModelingParameters::VASColour:
+            pModifiedVisAtts->SetColour(transVisAtts.GetColour());
+            break;
+          case G4ModelingParameters::VASLineStyle:
+            pModifiedVisAtts->SetLineStyle(transVisAtts.GetLineStyle());
+            break;
+          case G4ModelingParameters::VASLineWidth:
+            pModifiedVisAtts->SetLineWidth(transVisAtts.GetLineWidth());
+            break;
+          case G4ModelingParameters::VASForceWireframe:
+            if (transVisAtts.GetForcedDrawingStyle() ==
+                G4VisAttributes::wireframe) {
+              pModifiedVisAtts->SetForceWireframe
+              (transVisAtts.IsForceDrawingStyle());
+            }
+            break;
+          case G4ModelingParameters::VASForceSolid:
+            if (transVisAtts.GetForcedDrawingStyle() ==
+                G4VisAttributes::solid) {
+              pModifiedVisAtts->SetForceSolid
+              (transVisAtts.IsForceDrawingStyle());
+            }
+            break;
+          case G4ModelingParameters::VASForceAuxEdgeVisible:
+            pModifiedVisAtts->SetForceAuxEdgeVisible
+            (transVisAtts.IsForceAuxEdgeVisible());
+            break;
+          case G4ModelingParameters::VASForceLineSegmentsPerCircle:
+            pModifiedVisAtts->SetForceLineSegmentsPerCircle
+            (transVisAtts.GetForcedLineSegmentsPerCircle());
+            break;
+        }
+      }
+    }
+  }
 
   // There are various reasons why this volume
   // might not be drawn...
@@ -382,12 +485,9 @@ void G4PhysicalVolumeModel::DescribeAndDescend
       if (density < densityCut) thisToBeDrawn = false;
     }
   }
-
-  // Update full path of physical volumes...
-  G4int copyNo = fpCurrentPV->GetCopyNo();
-  fFullPVPath.push_back
-    (G4PhysicalVolumeNodeID
-     (fpCurrentPV,copyNo,fCurrentDepth,*fpCurrentTransform,thisToBeDrawn));
+  
+  // Record thisToBeDrawn in path...
+  fFullPVPath.back().SetDrawn(thisToBeDrawn);
 
   if (thisToBeDrawn) {
 
@@ -468,6 +568,12 @@ void G4PhysicalVolumeModel::DescribeAndDescend
     }
   }
 
+  // Delete modified vis atts if created...
+  if (copyForVAM) {
+    delete pModifiedVisAtts;
+    pVisAttribs = pUnmodifiedVisAtts;
+  }
+  
   // Vis atts for this volume no longer needed if created...
   if (visAttsCreated) delete pVisAttribs;
 
@@ -665,12 +771,12 @@ const std::map<G4String,G4AttDef>* G4PhysicalVolumeModel::GetAttDefs() const
 	G4AttDef("State","Material State (enum undefined,solid,liquid,gas)","Physics","","G4String");
       (*store)["Radlen"] =
 	G4AttDef("Radlen","Material Radiation Length","Physics","G4BestUnit","G4double");
-    }
       (*store)["Region"] =
 	G4AttDef("Region","Cuts Region","Physics","","G4String");
       (*store)["RootRegion"] =
 	G4AttDef("RootRegion","Root Region (0/1 = false/true)","Physics","","G4bool");
-    return store;
+    }
+  return store;
 }
 
 #include <iomanip>

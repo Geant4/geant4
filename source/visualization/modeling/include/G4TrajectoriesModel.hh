@@ -43,7 +43,12 @@
 
 #include "G4VModel.hh"
 
+#include <vector>
+#include <map>
+
 class G4VTrajectory;
+class G4AttDef;
+class G4AttValue;
 
 class G4TrajectoriesModel: public G4VModel {
 
@@ -64,11 +69,15 @@ public: // With description
   const G4VTrajectory* GetCurrentTrajectory() const
   {return fpCurrentTrajectory;}
 
+  const std::map<G4String,G4AttDef>* GetAttDefs() const;
+  std::vector<G4AttValue>* CreateCurrentAttValues() const;
+  
 private:
 
   G4bool fDrawingModeSet;
   G4int fDrawingMode;
   const G4VTrajectory* fpCurrentTrajectory;
+  G4int fEventID;
 
 };
 

@@ -55,6 +55,9 @@ G4PhysicalVolumeSearchScene::~G4PhysicalVolumeSearchScene () {}
 
 void G4PhysicalVolumeSearchScene::FindVolume (const G4VSolid&) {
 
+  typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
+  typedef std::vector<PVNodeID> PVPath;
+  const PVPath& fullPVPath = fpPVModel->GetFullPVPath();
   G4int currentDepth = fpPVModel->GetCurrentDepth();
   G4VPhysicalVolume* pCurrentPV = fpPVModel->GetCurrentPV();
   G4LogicalVolume* pCurrentLV = fpPVModel->GetCurrentLV();
@@ -73,6 +76,7 @@ void G4PhysicalVolumeSearchScene::FindVolume (const G4VSolid&) {
        fRequiredCopyNo             == pCurrentPV -> GetCopyNo ())) {
     // Current policy - take first one found!!
     if (!fpFoundPV) {  // i.e., if not already found.
+      fFoundFullPVPath           = fullPVPath;
       fFoundDepth                = currentDepth;
       fpFoundPV                  = pCurrentPV;
       fpFoundLV                  = pCurrentLV;

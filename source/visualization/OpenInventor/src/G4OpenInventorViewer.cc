@@ -185,7 +185,9 @@ G4bool G4OpenInventorViewer::CompareForKernelVisit(G4ViewParameters& vp) {
       // Scaling for Open Inventor is done by the scene handler so it
       // needs a kernel visit.  (In this respect, it differs from the
       // OpenGL drivers, where it's done in SetView.)
-      (vp.GetScaleFactor ()     != fVP.GetScaleFactor ())
+      (vp.GetScaleFactor ()     != fVP.GetScaleFactor ())     ||
+      (vp.GetVisAttributesModifiers().size() !=
+       fVP.GetVisAttributesModifiers().size())
       )
     return true;
 

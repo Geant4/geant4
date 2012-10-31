@@ -133,7 +133,9 @@ G4bool G4XXXSGViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
        fVP.GetDefaultVisAttributes()->GetColour())                ||
       (lastVP.GetDefaultTextVisAttributes()->GetColour() !=
        fVP.GetDefaultTextVisAttributes()->GetColour())            ||
-      (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())
+      (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())||
+      (lastVP.GetVisAttributesModifiers().size() !=
+       fVP.GetVisAttributesModifiers().size())
       ) {
     return true;
   }

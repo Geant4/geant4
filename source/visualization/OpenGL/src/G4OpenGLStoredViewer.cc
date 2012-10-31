@@ -93,7 +93,9 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
       (lastVP.GetDefaultTextVisAttributes()->GetColour() !=
        fVP.GetDefaultTextVisAttributes()->GetColour())            ||
       (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())||
-      (lastVP.IsPicking ()          != fVP.IsPicking ())
+      (lastVP.IsPicking ()          != fVP.IsPicking ())          ||
+      (lastVP.GetVisAttributesModifiers().size() !=
+       fVP.GetVisAttributesModifiers().size())
       )
     return true;
   
@@ -163,8 +165,11 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 	if (POSelected(iPO)) {
 	  G4OpenGLStoredSceneHandler::PO& po =
 	    fG4OpenGLStoredSceneHandler.fPOList[iPO];
+	  G4Colour c = po.fColour;
+	  DisplayTimePOColourModification(c,iPO);
+          const G4bool isTransparent = c.GetAlpha() < 1.;
 	  if ( iPass == 1) {
-	    if (po.fTransparent && transparency_enabled) {
+	    if (isTransparent && transparency_enabled) {
 	      secondPassForTransparencyRequested = true;
 	      continue;
 	    }
@@ -173,7 +178,7 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 	      continue;
 	    }
 	  } else if (iPass == 2) {  // Second pass for transparency.
-	    if (!po.fTransparent) {
+	    if (!isTransparent) {
 	      continue;
 	    }
 	  } else {  // Third pass for non-hidden markers
@@ -182,17 +187,14 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 	    }            
           }
 	  if (isPicking) glLoadName(po.fPickName);
-	  G4Colour c = po.fColour;
-	  // A sub-class may modify the colour/transparency.  If the
-	  // transparency is modified the rendering may not be optimal
-	  // since the order of rendering is determined by the above
-	  // code at POList construction time.
-	  DisplayTimePOColourModification(c,iPO);
           if (transparency_enabled) {
             glColor4d(c.GetRed(),c.GetGreen(),c.GetBlue(),c.GetAlpha());
           } else {
             glColor3d(c.GetRed(),c.GetGreen(),c.GetBlue());
           }
+          if (po.fMarkerOrPolyline && fVP.IsMarkerNotHidden())
+            glDisable (GL_DEPTH_TEST);
+          else {glEnable (GL_DEPTH_TEST); glDepthFunc (GL_LEQUAL);}
 	  if (po.fpG4TextPlus) {
 	    if (po.fpG4TextPlus->fProcessing2D) {
 	      glMatrixMode (GL_PROJECTION);
@@ -231,8 +233,10 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 	if (TOSelected(iTO)) {
 	  G4OpenGLStoredSceneHandler::TO& to =
 	    fG4OpenGLStoredSceneHandler.fTOList[iTO];
+          const G4Colour& c = to.fColour;
+          const G4bool isTransparent = c.GetAlpha() < 1.;
 	  if ( iPass == 1) {
-	    if (to.fTransparent && transparency_enabled) {
+	    if (isTransparent && transparency_enabled) {
 	      secondPassForTransparencyRequested = true;
 	      continue;
 	    }
@@ -241,7 +245,7 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 	      continue;
 	    }
 	  } else if (iPass == 2) {  // Second pass for transparency.
-	    if (!to.fTransparent) {
+	    if (!isTransparent) {
 	      continue;
 	    }
 	  } else {  // Third pass for non-hidden markers
@@ -249,6 +253,9 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 	      continue;
 	    }
           }
+          if (to.fMarkerOrPolyline && fVP.IsMarkerNotHidden())
+            glDisable (GL_DEPTH_TEST);
+          else {glEnable (GL_DEPTH_TEST); glDepthFunc (GL_LEQUAL);}
 	  if (to.fEndTime >= fStartTime && to.fStartTime <= fEndTime) {
 	    if (fVP.IsPicking()) glLoadName(to.fPickName);
 	    if (to.fpG4TextPlus) {
@@ -263,7 +270,6 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 	      }
 	      G4OpenGLTransform3D oglt (to.fTransform);
 	      glMultMatrixd (oglt.GetGLMatrix ());
-	      const G4Colour& c = to.fColour;
               if (transparency_enabled) {
                 glColor4d(c.GetRed(),c.GetGreen(),c.GetBlue(),c.GetAlpha());
               } else {

@@ -36,9 +36,11 @@
 #include "G4ModelingParameters.hh"
 #include "G4VGraphicsScene.hh"
 #include "G4Event.hh"
+#include "G4AttDefStore.hh"
 #include "G4AttValue.hh"
 #include "G4AttDef.hh"
 #include "G4AttCheck.hh"
+#include "G4UIcommand.hh"
 
 G4TrajectoriesModel::G4TrajectoriesModel ():
   fDrawingModeSet(false),
@@ -73,6 +75,8 @@ void G4TrajectoriesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
 
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   if (!pVVisManager) return;
+  
+  fEventID = event->GetEventID();
 
   pVVisManager->BeginDraw();
   // The use of Begin/EndDraw (optional methods to improve drawing
@@ -125,6 +129,26 @@ void G4TrajectoriesModel::SetDrawingMode(G4int drawingMode)
        "\n  and will be removed at the next major release."
        );
   }
+}
+
+const std::map<G4String,G4AttDef>* G4TrajectoriesModel::GetAttDefs() const
+{
+  G4bool isNew;
+  std::map<G4String,G4AttDef>* store
+  = G4AttDefStore::GetInstance("G4TrajectoriesModel", isNew);
+  if (isNew) {
+    (*store)["EventID"] =
+    G4AttDef("EventID","Event ID","Physics","","G4int");
+  }
+  return store;
+}
+
+std::vector<G4AttValue>* G4TrajectoriesModel::CreateCurrentAttValues() const
+{
+  std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
+  values->push_back
+  (G4AttValue("EventID",G4UIcommand::ConvertToString(fEventID),""));
+  return values;
 }
 
 // Debug material...

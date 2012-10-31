@@ -38,6 +38,8 @@
 #include "G4ExceptionSeverity.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4VSolid.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4PhysicalVolumeModel.hh"
 
 G4ModelingParameters::G4ModelingParameters ():
   fWarning               (true),
@@ -84,6 +86,26 @@ G4ModelingParameters::~G4ModelingParameters ()
 {
   delete fpSectionSolid;
   delete fpCutawaySolid;
+}
+
+G4ModelingParameters::VisAttributesModifier::VisAttributesModifier
+(const G4VisAttributes& visAtts,
+ G4ModelingParameters::VisAttributesSignifier signifier,
+ const std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>& path):
+fVisAtts(visAtts), fSignifier(signifier)
+{
+  typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
+  typedef std::vector<PVNodeID> PVPath;
+  typedef PVPath::const_iterator PVPathConstIterator;
+  PVPathConstIterator i;
+  for (i = path.begin();
+       i != path.end();
+       ++i) {
+    fPVNameCopyNoPath.push_back
+    (PVNameCopyNo
+     (i->GetPhysicalVolume()->GetName(),
+      i->GetCopyNo()));
+  }
 }
 
 void G4ModelingParameters::SetVisibleDensity (G4double visibleDensity) {
@@ -215,3 +237,18 @@ G4bool G4ModelingParameters::operator !=
 
   return false;
 }
+
+std::ostream& operator <<
+(std::ostream& os, const G4ModelingParameters::PVNameCopyNoPath& path)
+{
+  os << "Touchable path: physical-volume-name:copy-number pairs:\n  ";
+  G4ModelingParameters::PVNameCopyNoPathConstIterator i;
+  for (i = path.begin(); i != path.end(); ++i) {
+    if (i != path.begin()) {
+      os << ", ";
+    }
+    os << i->GetName() << ':' << i->GetCopyNo();
+  }
+  return os;
+}
+

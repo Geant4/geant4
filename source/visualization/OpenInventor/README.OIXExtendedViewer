@@ -1,0 +1,186 @@
+Extended OI Xt viewer
+=====================
+INCOMPLETE DRAFT
+
+G4OpenInventorXtExaminerViewer is based on and is
+a plug-in replacement for SoXtExaminerViewer which
+is a base class viewer provided by the SoXt (Coin3d)
+library.  SoXtExaminerViewer is the normal viewer
+that you get when doing /vis/open OIX.
+These viewers depend on X, Xt and Xm and so are
+limited to UNIX/MAC and will not run on native
+Windows.
+
+The SoXtExaminerViewer is instantiated by
+G4OpenInventorXtViewer.  This has been temporarily
+disabled and has been replaced by an instantiation
+of G4OpenInventorXtExaminerViewer, together with
+some additional configuration.  The intention
+is to find a suitable mechanism to allow a choice
+of viewer (standard or extended) at run time.
+
+No modifications to user code or to any other
+Geant4 categories are required to use the extended
+viewer.  Many of the implemented features are made
+possible by the SCENE GRAPH technology in Open
+Inventor which stores the scene elements and
+associated information in a structured way.
+
+Features
+========
+
+Reference Path navigation
+-------------------------
+
+Most of the new features are concerned with navigation
+along a "reference path" which is a piecewise
+linear path through the world.  The reference path
+can be any particle trajectory, chosen as follows:
+
+   The application can attach a "reference trajectory"
+   attribute to a particular trajectory.
+
+   If there is no such designated trajectory, the viewer
+   chooses the longest trajectory as the initial reference
+   path.
+
+   Any other trajectory can be selected as the reference
+   by selecting it with the mouse.
+
+   Elements are assigned a "distance" along the reference
+   path, based on the perpendicular from the element's
+   placement coordinates to the path.  Elements are then
+   sorted by distance and the list is displayed in an
+   auxiliary window of the viewer.  NOTE: at present
+   the path is not extrapolated at the ends, so elements
+   "before" or "after" the path are assigned distances
+   of 0 or the total path length respectively.  This
+   will be generalized in future.
+
+Reference path navigation controls:
+
+   Select an element from the list: navigate along the
+   path to the element's "location" (distance along
+   the path.
+
+   L,R,U,D refer to the arrow keys.
+
+   Shift-L and Shift-R: navigate to the previous or next
+   element on the path (with wraparound).
+
+   L and R: rotate 90 degrees around the vertical axis
+   
+   U and D: rotate 90 degrees around the path
+
+   Ctrl-L and Ctrl-R: rotate 90 degrees around the horizontal axis
+
+   All these keys have a "repeat" function for continuous motion.
+
+   The rotation keys put the camera in a definite orientation.
+   The Shift-L and Shift-R keys can be used to "fly" along the
+   path in whatever orientation is in effect.
+   NOTE: if this appears to be "stuck", try switching from
+   orthonormal camera to perspective camera ("cube" viewer button).
+
+   Tools / Go to start of reference path:  useful if you get lost
+
+   Tools / Invert reference path: flips the direction of travel
+      and the distance readout
+
+
+Reference path animation
+
+   This is a special mode which flys the camera steadily along the
+   path, without wraparound.  Special controls are:
+
+   Tools / Animate Ref Particle:  start animation mode
+
+   Page-Up: increase speed
+   Page-Down:  decrease speed
+   U: raise camera
+   D: lower camera
+   ESC: exit animation mode
+
+   For suitable geometries the U and D keys can be used to
+   get "Star Wars" style fly-over and fly-under effects.
+
+Bookmarks
+
+   At any time, the viewpoint and other camera parameters can
+   be saved in a file as a labelled "bookmark".
+   The view can then be restored later in the current run or
+   in another run.
+
+   The default name for the bookmark file is ".bookmarkFile"
+   The first time a viewpoint is saved, this file will be
+   created if it does not already exist.  When the viewer
+   is first opened, it will automatically read this file
+   if present and load the viewpoints into the left-hand
+   panel of the viewer's auxiliary window.
+
+   Controls:
+
+   Select viewpoint from list: restore this view
+
+   Right-arrow VIEWER button:   go to next viewpoint
+   Left-arrow VIEWER button:   go to next viewpoint
+
+   "Floppy Disk" button: save current view.
+       The user can type in a label for the view,
+       or use the default label provided.
+
+   File / Open Viewpoint File:  loads an existing bookmark file
+   File / New Viewpoint File:   creates a new bookmark file for
+                                saving subsequent views
+
+
+Special Picking Modes
+
+   "Console" VIEWER button: enable brief trajectory picking and
+                            mouse-over element readout
+       For trajectories, the list of all trajectory points is
+       replaced by the first and last point only, allowing easier
+       identification of the particle without scrolling back.
+       Passing the mouse over an element will give a readout
+       of the volume name, material, and position on the
+       reference path.
+
+   "Star" VIEWER button: select new reference path
+       The cursor will change to a small cross (+)
+       after which a trajectory can be selected to become
+       the new reference path.
+
+Convenience feature
+
+   Escape from viewer without using the mouse:
+   In addition to the File / Escape menu item, pressing the "e"
+   key on the keyboard will exit from the viewer's X event loop.
+   The viewer becomes inactive and control returns to the 
+   Geant4 UI prompt.
+
+Prototype only:
+
+   File / Save-Load Ref Coords:  status to be determined
+
+   File / Save-Load Scene Graph:  this saves the current scene graph,
+        (whatever is being viewed and navigated in the viewer)
+        including the geometry, camera, lighting information, into a
+        file which can be read back, thus returning to a previous
+        viewing "experience".  This only partially works and some
+        or all of the geometry may be missing.  Geant4-specific
+        scene elements may be lacking a "save" method.
+
+Known problems:
+
+   Viewer occasionally hangs in an unknown state.
+   Usually can be "cleared" by trying various viewer buttons
+   or menu items.  Last resort: escape to the G4 prompt and
+   run more events.  Viewer will usually be o.k. afterwards.
+
+   Unpredictable mode-switching behaviour: switching between
+   orthonormal and perspective camera may give wierd results.
+   Navigation may appear "stuck" with orthonormal camera.
+
+   Both the standard and extended viewers can crash the
+   executable or even the X server if they are pushed
+   too far (e.g. by excessive zooming).

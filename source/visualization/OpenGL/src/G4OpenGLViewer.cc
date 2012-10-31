@@ -676,8 +676,6 @@ void G4OpenGLViewer::DrawText(const G4Text& g4text)
   // gl2ps or GL window ?
   if (isGl2psWriting()) {
 
-    const G4Colour& c = fSceneHandler.GetTextColour(g4text);
-    glColor4d(c.GetRed(),c.GetGreen(),c.GetBlue(),c.GetAlpha());
     G4VSceneHandler::MarkerSizeType sizeType;
     G4double size = fSceneHandler.GetMarkerSize(g4text,sizeType);
     G4Point3D position = g4text.GetPosition();

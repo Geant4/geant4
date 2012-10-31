@@ -81,6 +81,7 @@
 
 #ifdef G4VIS_USE_OIX
 #include "G4OpenInventorX.hh"
+#include "G4OpenInventorXtExtended.hh"
 #endif
 
 #ifdef G4VIS_USE_OIWIN32
@@ -233,6 +234,7 @@ G4VisExecutive::RegisterGraphicsSystems () {
 
 #ifdef G4VIS_USE_OIX
   RegisterGraphicsSystem (new G4OpenInventorX);
+  RegisterGraphicsSystem (new G4OpenInventorXtExtended);
 #endif
 
 #ifdef G4VIS_USE_OIWIN32

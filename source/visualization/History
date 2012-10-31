@@ -24,10 +24,102 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
-27th September 2012  John Allison  (vis-V09-05-39)
-- opengl-V09-05-38: Fix for smal bug and compiler warnings.
+18th October 2012  John Allison  (vis-V09-05-44)
+- visman-V09-05-41:
+  o Reverted to G4OpenInventorXt as the default OI for X Windows.
+  o Get G4OpenInventorXtExtended with "/vis/open OIXE".
+- openinventor-V09-05-12:
+  o Bug fixes.
+  o Disabled initial auto setting to first viewpoint of the new
+    G4OpenInventorXtExaminerViewer.
 
-27th September 2012  John Allison  (vis-V09-05-38)
+17th October 2012  John Allison  (vis-V09-05-43)
+- visman-V09-05-40:
+  o Added G4OpenInventorXtExtended and made it the default OI for
+    X Windows.
+- openinventor-V09-05-11:
+  o Encapsulated Fred's code in a new driver, G4OpenInventorXtExtended
+  (OIXE).
+- openinventor-V09-05-10:
+  o G4OpenInventorXtExaminerViewer
+    . New class implements functional extensions to the 
+      Xt-based viewer.  A plug-in replacement for
+      SoXtExaminerViewer (the standard viewer provided
+      with Coin3d).
+  o G4OpenInventorXtViewer
+    . Instantiates G4OpenInventorXtExaminerViewer instead
+      of SoXtExaminerViewer.  Added some additional menu items.
+
+12th October 2012  John Allison  (vis-V09-05-42)
+- opengl-V09-05-47, co-works interfaces-V09-05-20:
+  o Introduced some trial code for capturing touchable colour changes.
+
+11th October 2012  John Allison
+- modeling-V09-05-21: Tidied.
+- visman-V09-05-39: Added /vis/viewer/save.
+
+9th October 2012  John Allison
+- modeling-V09-05-20: Tidied.
+- visman-V09-05-38: Fixed warnings.
+
+9th October 2012  John Allison  (vis-V09-05-41)
+- modeling-V09-05-19:
+  o Added some utility functions.
+- visman-V09-05-37:
+  o Completed /vis/touchable/set/ commands.
+
+8th October 2012  John Allison
+- modeling-V09-05-17 and modeling-V09-05-18:
+  o Further refinement for /vis/touchable/set/...
+- modeling-V09-05-16:
+  o Refined and added code for /vis/touchable/set/...
+
+7th October 2012  John Allison
+- modeling-V09-05-15: G4ModelingParameters:
+  o Added VisAttributesModifiers, enums and a nested class for communicating a
+    modification to the vis attributes for a specfic touchable defined by
+    PVNameCopyNoPath, to be used by new commands, /vis/touchable/set/...
+- visman-V09-05-36:
+  o Added the copying of VisAttributesModifiers to modeling parameters, ready
+    for use by new commands, /vis/touchable/set/...
+- visXXX-V09-05-04:
+  o Added test of VisAttributesModifiers to list checked for kernel visit.
+- openinventor-V09-05-09:
+  o Added test of VisAttributesModifiers to list checked for kernel visit.
+
+6th October 2012  John Allison
+- modeling-V09-05-14:
+  o G4PhysicalVolumeModel: Added SetBaseFullPVPath.  The base full path is the
+    full path of the top physical volume (actually the full path of the mother
+    of the top physical volume), so that even if a user issues
+    "/vis/drawVolume sub-detector", the full path includes the base full path,
+    i.e., the full path up to the world volume.
+- visman-V09-05-35:
+  o G4VisCommandSceneAdd.cc: G4VisCommandSceneAddVolume:
+    Pick up found full path from G4PhysicalVolumeSearchScene so that it can
+    be passed to G4PhysicalVolumeModel as a base, as described above.
+  o G4VSceneHandler: Deprecated NURBS to be removed at next major release.
+
+3rd October 2012  John Allison
+- visXXX-V09-05-03: Protected the case of G4LogicalVolumeModel.
+
+1st October 2012  John Allison  (vis-V09-05-40)
+- modeling-V09-05-13:
+  o G4TrajectoriesModel: Added GetAttDefs and CreateCurrentAttValues for event ID.
+- visman-V09-05-34: Added eventID to G4Atts for trajectories.
+- visman-V09-05-33: Explicitly include units header.
+- opengl-V09-05-43: Improved performance for hidden markers.
+- opengl-V09-05-42: Fixed compiler warning.
+- opengl-V09-05-41: Explicitly include units header.
+- opengl-V09-05-40: Fixed compiler warnings.
+
+27th September 2012  John Allison
+- opengl-V09-05-39: Improved display list re-use.
+
+27th September 2012  John Allison  (vis-V09-05-39)
+- opengl-V09-05-38: Fix for small bug and compiler warnings.
+
+27th September 2012  John Allison  (vis-V09-05-38, co-works interfaces-V09-05-16)
 - visman-V09-05-32:
   o Added an extra refresh for auto-refresh viewers at end of run.
 - opengl-V09-05-37:

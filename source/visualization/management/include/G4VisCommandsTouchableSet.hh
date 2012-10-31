@@ -24,36 +24,40 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeSearchScene.icc,v 1.6 2006-06-29 21:30:38 gunter Exp $
+// $Id: G4VisCommandsTouchableSet.hh,v 1.4 2010-06-15 16:33:55 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
-// 
-// John Allison  10th August 1998.
-// An artificial scene to find physical volumes.
 
-inline void G4PhysicalVolumeSearchScene::PreAddSolid
-(const G4Transform3D& objectTransformation,
- const G4VisAttributes&) {
-  fpCurrentObjectTransformation = &objectTransformation;
-}
+// /vis/touchable/set commands - John Allison  8th October 2012
 
-inline void G4PhysicalVolumeSearchScene::PostAddSolid () {}
+#ifndef G4VISCOMMANDSTOUCHABLESET_HH
+#define G4VISCOMMANDSTOUCHABLESET_HH
 
-inline const std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>&
-G4PhysicalVolumeSearchScene::GetFoundFullPVPath () const {
-  return fFoundFullPVPath;
-}
+#include "G4VisCommandsViewer.hh"
 
-inline G4int G4PhysicalVolumeSearchScene::GetFoundDepth () const {
-  return fFoundDepth;
-}
+class G4UIcommand;
+class G4UIcmdWithABool;
+class G4UIcmdWithADouble;
+class G4UIcmdWithAnInteger;
+class G4UIcmdWithAString;
 
-inline G4VPhysicalVolume*
-G4PhysicalVolumeSearchScene::GetFoundVolume () const {
-  return fpFoundPV;
-}
+class G4VisCommandsTouchableSet: public G4VVisCommandViewer {
+public:
+  G4VisCommandsTouchableSet ();
+  virtual ~G4VisCommandsTouchableSet ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandsTouchableSet (const G4VisCommandsTouchableSet&);
+  G4VisCommandsTouchableSet& operator = (const G4VisCommandsTouchableSet&);
+  G4UIcommand*          fpCommandSetColour;
+  G4UIcmdWithABool*     fpCommandSetDaughtersInvisible;
+  G4UIcmdWithABool*     fpCommandSetForceAuxEdgeVisible;
+  G4UIcmdWithAnInteger* fpCommandSetLineSegmentsPerCircle;
+  G4UIcmdWithABool*     fpCommandSetForceSolid;
+  G4UIcmdWithABool*     fpCommandSetForceWireframe;
+  G4UIcmdWithAString*   fpCommandSetLineStyle;
+  G4UIcmdWithADouble*   fpCommandSetLineWidth;
+  G4UIcmdWithABool*     fpCommandSetVisibility;
+};
 
-inline const G4Transform3D&
-G4PhysicalVolumeSearchScene::GetFoundTransformation () const {
-  return fFoundObjectTransformation;
-}
+#endif

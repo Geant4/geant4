@@ -36,6 +36,7 @@
 
 #include "G4XXXSGViewer.hh"
 #include "G4PhysicalVolumeModel.hh"
+#include "G4LogicalVolumeModel.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Box.hh"
@@ -78,6 +79,7 @@ void G4XXXSGSceneHandler::PrintThings() {
       "\n  current physical volume: "
            << pPVModel->GetCurrentPV()->GetName() <<
       "\n  current logical volume: "
+// There might be a problem with the LV pointer if this is a G4LogicalVolumeModel
            << pPVModel->GetCurrentLV()->GetName() <<
       "\n  current depth of geometry tree: "
            << pPVModel->GetCurrentDepth();
@@ -91,8 +93,9 @@ void G4XXXSGSceneHandler::CreateCurrentItem(const G4String& /*header*/) {
   
   G4PhysicalVolumeModel* pPVModel =
     dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
-  
-  if (pPVModel) {
+  G4LogicalVolumeModel* pLVModel =
+    dynamic_cast<G4LogicalVolumeModel*>(pPVModel);
+  if (pPVModel && !pLVModel) {
 
     // This call comes from a G4PhysicalVolumeModel.  drawnPVPath is
     // the path of the current drawn (non-culled) volume in terms of

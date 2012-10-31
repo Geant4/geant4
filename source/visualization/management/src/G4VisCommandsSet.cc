@@ -36,6 +36,7 @@
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithAString.hh"
 #include <cctype>
+#include <sstream>
 
 ////////////// /vis/set/colour ////////////////////////////////////
 
@@ -266,3 +267,88 @@ void G4VisCommandSetTextLayout::SetNewValue (G4UIcommand*, G4String newValue)
 	   << G4endl;
   }
 }
+
+////////////// /vis/set/touchable ////////////////////////////////////
+
+G4VisCommandSetTouchable::G4VisCommandSetTouchable ()
+{
+  G4bool omitable;
+  G4UIparameter* parameter;
+  fpCommand = new G4UIcommand("/vis/set/touchable", this);
+  fpCommand->SetGuidance
+  ("Defines touchable for future \"/vis/touchable/set/\" commands.");
+  fpCommand->SetGuidance
+  ("Please provide a list of space-separated physical volume names and"
+   "\ncopy number pairs starting at the world volume, e.g:"
+   "\n/vis/set/touchable World 0 Envelope 0 Shape1 0");
+  parameter = new G4UIparameter ("list", 's', omitable = false);
+  parameter->SetGuidance
+  ("List of physical volume names and copy number pairs");
+  fpCommand->SetParameter (parameter);
+}
+
+G4VisCommandSetTouchable::~G4VisCommandSetTouchable ()
+{
+  delete fpCommand;
+}
+
+G4String G4VisCommandSetTouchable::GetCurrentValue (G4UIcommand*)
+{
+  return G4String();
+}
+
+void G4VisCommandSetTouchable::SetNewValue (G4UIcommand*, G4String newValue)
+{
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+  
+  G4ModelingParameters::PVNameCopyNoPath currentTouchablePath;
+  
+  // Algorithm from Josuttis p.476.
+  G4String::size_type iBegin, iEnd;
+  iBegin = newValue.find_first_not_of(' ');
+  while (iBegin != G4String::npos) {
+    iEnd = newValue.find_first_of(' ',iBegin);
+    if (iEnd == G4String::npos) {
+      iEnd = newValue.length();
+    }
+    G4String name(newValue.substr(iBegin,iEnd-iBegin));
+    iBegin = newValue.find_first_not_of(' ',iEnd);
+    if (iBegin == G4String::npos) {
+      if (verbosity >= G4VisManager::warnings) {
+        G4cout <<
+        "WARNING: G4VisCommandSetTouchable::SetNewValue"
+        "\n  A pair not found.  (Did you have an even number of parameters?)"
+        "\n  Command ignored."
+        << G4endl;
+        return;
+      }
+    }
+    iEnd = newValue.find_first_of(' ',iBegin);
+    if (iEnd == G4String::npos) {
+      iEnd = newValue.length();
+    }
+    G4int copyNo;
+    std::istringstream iss(newValue.substr(iBegin,iEnd-iBegin));
+    if (!(iss >> copyNo)) {
+      if (verbosity >= G4VisManager::warnings) {
+        G4cout <<
+        "WARNING: G4VisCommandSetTouchable::SetNewValue"
+        "\n  Error reading copy number - it was not numeric?"
+        "\n  Command ignored."
+        << G4endl;
+        return;
+      }
+    }
+    currentTouchablePath.push_back
+    (G4ModelingParameters::PVNameCopyNo(name,copyNo));
+    iBegin = newValue.find_first_not_of(' ',iEnd);
+  }
+  
+  fCurrentTouchablePath = currentTouchablePath;
+  
+  if (verbosity >= G4VisManager::confirmations) {
+    G4cout    << fCurrentTouchablePath
+    << G4endl;
+  }
+}
+

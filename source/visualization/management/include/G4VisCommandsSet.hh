@@ -87,4 +87,16 @@ private:
   G4UIcmdWithAString* fpCommand;
 };
 
+class G4VisCommandSetTouchable: public G4VVisCommand {
+public:
+  G4VisCommandSetTouchable ();
+  virtual ~G4VisCommandSetTouchable ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSetTouchable (const G4VisCommandSetTouchable&);
+  G4VisCommandSetTouchable& operator = (const G4VisCommandSetTouchable&);
+  G4UIcommand* fpCommand;
+};
+
 #endif

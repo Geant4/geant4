@@ -41,9 +41,11 @@
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWith3Vector.hh"
+#include "G4Point3D.hh"
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"
 #include <sstream>
+#include <fstream>
 
 G4VVisCommandViewer::G4VVisCommandViewer () {}
 
@@ -947,7 +949,8 @@ void G4VisCommandViewerList::SetNewValue (G4UIcommand*, G4String newValue) {
     currentViewerShortName = "none";
   }
 
-  const G4SceneHandlerList& sceneHandlerList = fpVisManager -> GetAvailableSceneHandlers ();
+  const G4SceneHandlerList& sceneHandlerList =
+    fpVisManager -> GetAvailableSceneHandlers ();
   G4int nHandlers = sceneHandlerList.size ();
   G4bool found = false;
   G4bool foundCurrent = false;
@@ -1301,6 +1304,114 @@ void G4VisCommandViewerReset::SetNewValue (G4UIcommand*, G4String newValue) {
 
   viewer->ResetView();
   RefreshIfRequired(viewer);
+}
+
+////////////// /vis/viewer/save ///////////////////////////////////////
+
+G4VisCommandViewerSave::G4VisCommandViewerSave () {
+  G4bool omitable;
+  fpCommand = new G4UIcmdWithAString ("/vis/viewer/save", this);
+  fpCommand -> SetGuidance
+  ("Write commands that define the current view to file.");
+  fpCommand -> SetParameterName ("file-name", omitable = true);
+  fpCommand -> SetDefaultValue ("G4cout");
+}
+
+G4VisCommandViewerSave::~G4VisCommandViewerSave () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandViewerSave::GetCurrentValue
+(G4UIcommand*) {
+  return "";
+}
+
+namespace {
+  void WriteCommands
+  (std::ostream& os,
+   const G4ViewParameters& vp,
+   const G4Point3D& stp)
+  {
+    os
+    << vp.CameraAndLightingCommands(stp)
+    << vp.DrawingStyleCommands()
+    << vp.SceneModifyingCommands()
+    << vp.TouchableCommands()
+    << std::endl;
+  }
+}
+
+void G4VisCommandViewerSave::SetNewValue (G4UIcommand*, G4String newValue) {
+  
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+  
+  const G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
+  if (!currentViewer) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<
+      "ERROR: G4VisCommandsViewerSave::SetNewValue: no current viewer."
+      << G4endl;
+    }
+    return;
+  }
+  
+  const G4Scene* currentScene = currentViewer->GetSceneHandler()->GetScene();
+  if (!currentScene) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<
+      "ERROR: G4VisCommandsViewerSave::SetNewValue: no current scene."
+      << G4endl;
+    }
+    return;
+  }
+  
+  std::ofstream ofs;
+  if (newValue != "G4cout") {
+    // Check if file exists
+    std::ifstream ifs(newValue);
+    if (ifs) {
+      if (verbosity >= G4VisManager::errors) {
+        G4cout <<
+        "ERROR: G4VisCommandsViewerSave::SetNewValue: File \""
+        << newValue << "\" already exists."
+        << G4endl;
+      }
+      ifs.close();
+      return;
+    }
+    ofs.open(newValue);
+    if (!ofs) {
+      if (verbosity >= G4VisManager::errors) {
+        G4cout <<
+        "ERROR: G4VisCommandsViewerSave::SetNewValue: Trouble opening file \""
+        << newValue << "\"."
+        << G4endl;
+      }
+      ofs.close();
+      return;
+    }
+  }
+  
+  const G4ViewParameters& vp = currentViewer->GetViewParameters();
+  const G4Point3D& stp = currentScene->GetStandardTargetPoint();
+  
+  if (newValue == "G4cout") {
+    WriteCommands(G4cout,vp,stp);
+  } else {
+    WriteCommands(ofs,vp,stp);
+    ofs.close();
+  }
+
+  if (verbosity >= G4VisManager::confirmations) {
+    G4cout << "Viewer \"" << currentViewer -> GetName ()
+    << "\"" << " saved to ";
+    if (newValue == "G4cout") {
+      G4cout << "G4cout.";
+    } else {
+      G4cout << "file \'" << newValue << "\".";
+    }
+    G4cout << G4endl;
+  }
 }
 
 ////////////// /vis/viewer/scale and scaleTo ////////////////////////////

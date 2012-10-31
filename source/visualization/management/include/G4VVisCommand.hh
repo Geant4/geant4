@@ -39,6 +39,7 @@
 #include "G4Text.hh"
 #include "G4VisAttributes.hh"
 #include "G4VMarker.hh"
+#include "G4ModelingParameters.hh"
 #include <vector>
 
 class G4UIcommand;
@@ -74,6 +75,7 @@ protected:
   //static G4VisAttributes::LineStyle fCurrentLineStyle;  Not yet used.
   //static G4VMarker::FillStyle       fCurrentFillStyle;  Not yet used.
   //static G4VMarker::SizeType        fCurrentSizeType;  Not yet used.
+  static G4ModelingParameters::PVNameCopyNoPath fCurrentTouchablePath;
 };
 
 #include "G4VVisCommand.icc"

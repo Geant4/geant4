@@ -150,7 +150,7 @@ void G4VSceneHandler::BeginPrimitives
   if (fNestingDepth > 1)
     G4Exception
       ("G4VSceneHandler::BeginPrimitives",
-       "visman0003", FatalException,
+       "visman0101", FatalException,
        "Nesting detected. It is illegal to nest Begin/EndPrimitives.");
   fObjectTransformation = objectTransformation;
 }
@@ -158,7 +158,7 @@ void G4VSceneHandler::BeginPrimitives
 void G4VSceneHandler::EndPrimitives () {
   if (fNestingDepth <= 0)
     G4Exception("G4VSceneHandler::EndPrimitives",
-		"visman0004", FatalException, "Nesting error.");
+		"visman0102", FatalException, "Nesting error.");
   fNestingDepth--;
   if (fReadyForTransients) {
     fTransientsDrawnThisEvent = true;
@@ -172,7 +172,7 @@ void G4VSceneHandler::BeginPrimitives2D
   if (fNestingDepth > 1)
     G4Exception
       ("G4VSceneHandler::BeginPrimitives2D",
-       "visman0005", FatalException,
+       "visman0103", FatalException,
        "Nesting detected. It is illegal to nest Begin/EndPrimitives.");
   fObjectTransformation = objectTransformation;
   fProcessing2D = true;
@@ -181,7 +181,7 @@ void G4VSceneHandler::BeginPrimitives2D
 void G4VSceneHandler::EndPrimitives2D () {
   if (fNestingDepth <= 0)
     G4Exception("G4VSceneHandler::EndPrimitives2D",
-		"visman0006", FatalException, "Nesting error.");
+		"visman0104", FatalException, "Nesting error.");
   fNestingDepth--;
   if (fReadyForTransients) {
     fTransientsDrawnThisEvent = true;
@@ -262,7 +262,7 @@ void G4VSceneHandler::AddCompound (const G4VTrajectory& traj) {
     dynamic_cast<G4TrajectoriesModel*>(fpModel);
   if (!trajectoriesModel) G4Exception
     ("G4VSceneHandler::AddCompound(const G4VTrajectory&)",
-     "visman0007", FatalException, "Not a G4TrajectoriesModel.");
+     "visman0105", FatalException, "Not a G4TrajectoriesModel.");
   else {
     if (trajectoriesModel->IsDrawingModeSet()) {
       traj.DrawTrajectory(trajectoriesModel->GetDrawingMode());
@@ -486,6 +486,15 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
   case G4ViewParameters::nurbs:
     pNURBS = solid.CreateNURBS ();
     if (pNURBS) {
+      static G4bool warned = false;
+      if (!warned) {
+        warned = true;
+        G4cout <<
+  "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+  "!!!!! NURBS are deprecated and will be removed in the next major release."
+  "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+        << G4endl;
+      }
       pNURBS -> SetVisAttributes (fpVisAttribs);
       AddPrimitive (*pNURBS);
       delete pNURBS;
@@ -742,6 +751,8 @@ G4ModelingParameters* G4VSceneHandler::CreateModelingParameters ()
   pModelingParams->SetSectionSolid(CreateSectionSolid());
   pModelingParams->SetCutawaySolid(CreateCutawaySolid());
   // The polyhedron objects are deleted in the modeling parameters destructor.
+  
+  pModelingParams->SetVisAttributesModifiers(vp.GetVisAttributesModifiers());
 
   return pModelingParams;
 }
@@ -802,6 +813,11 @@ void G4VSceneHandler::LoadAtts(const G4Visible& visible, G4AttHolder* holder)
 
   G4TrajectoriesModel* trajModel = dynamic_cast<G4TrajectoriesModel*>(fpModel);
   if (trajModel) {
+    // Load G4Atts from trajectory model...
+    const std::map<G4String,G4AttDef>* trajModelDefs = trajModel->GetAttDefs();
+    if (trajModelDefs) {
+      holder->AddAtts(trajModel->CreateCurrentAttValues(), trajModelDefs);
+    }
     // Load G4Atts from trajectory...
     const G4VTrajectory* traj = trajModel->GetCurrentTrajectory();
     const std::map<G4String,G4AttDef>* trajDefs = traj->GetAttDefs();

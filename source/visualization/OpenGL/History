@@ -17,6 +17,86 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13th October 2012  John Allison
+- G4OpenGLSceneHandler.cc, G4OpenGLImmediateSceneHandler.cc,
+  G4OpenGLStoredSceneHandler.cc, G4OpenGLStoredViewer.cc:
+  o Moved depth testing out of display list for polylines and markers.
+    This allows on-the-fly changing of hidden markers, i.e., without
+    a kernel visit and rebuilding of display lists.
+
+12th October 2012  Laurent Garnier
+- G4OpenGLQtViewer:
+  o Prevent context menu to be called in a non-interactive session
+
+12th October 2012  John Allison (opengl-V09-05-47, co-works
+interfaces-V09-05-20)
+- G4OpenGLQtViewer:
+  o Introduced some trial code for capturing touchable colour changes.
+  o Changed values to references where possible.
+ 
+12th October 2012  Laurent Garnier
+- G4OpenGLStoredQt/G4OpenGLImmediateQt:
+  o Improve instantiation of G4UIQt in all G4VInteractiveSession mode case
+
+11th October 2012  Laurent Garnier
+- G4OpenGLStoredQt/G4OpenGLImmediateQt:
+  o Improve instantiation of G4UIQt in terminal mode case
+
+10th October 2012  Laurent Garnier
+- G4OpenGLStoredQt/G4OpenGLImmediateQt:
+  o Improve instantiation of G4UIQt in batch mode case
+
+9th October 2012  John Allison
+- G4OpenGLSceneHandler::AddPrimitive(const G4Polymarker& polymarker):
+  o Removed glEnable(GL_BLEND) and glBlendFunc(…).  They are in 
+    G4OpenGLViewer::InitializeGLView, which is, I think, all it needs.
+
+9th October 2012  Laurent Garnier (opengl-V09-05-46, co-works interfaces-V09-05-19)
+- G4OpenGLQtViewer/G4OpenGLStoredQtViewer/G4OpenGLImmediateQtViewer : 
+  o Change mapping of context menu/icon in order to get all working together. 
+    Now a click on an icon will change the mouse context menu.
+
+7th October 2012  John Allison
+- G4OpenGLStoredViewer::CompareForKernelVisit:
+  o Added test of VisAttributesModifiers to list checked for kernel visit.
+
+4nd October 2012  Laurent Garnier
+- G4OpenGLQtViewer
+  o Changing color on non touchables now ok (except text)
+  o In DrawText, remove unnecessary (and wrong) glColor change
+- G4OpenGLViewer
+  o In DrawText, remove unnecessary (and wrong) glColor change
+  o Use SetOrthogonalProjection/SetPerspectiveProjection/
+    SetDefaultColour/SetDefaultTextColour instead of hard coded methods
+
+3nd October 2012  Laurent Garnier
+- G4OpenGLQtViewer :
+  o Fix a bug when cloning scene tree in scene tree viewer (bad fix yesterday)
+  o Change color for PO=-1 to "no color" instead of unspecified color
+
+3rd October 2012  John Allison
+- G4OpenGLSceneHandler, G4OpenGLStoredSceneHandler::AddPrimitivePreamble,
+  G4OpenGLStoredQtSceneHandler::ExtraPOProcessing:
+  o Protected the case of G4LogicalVolumeModel.
+
+2nd October 2012  Laurent Garnier
+- G4OpenGLQtViewer : Fix a bug when cloning scene tree in scene tree viewer
+
+2nd October 2012  John Allison
+- G4OpenGLStoredViewer.cc:
+  o Improved algorithm in DrawDisplayLists so that if the
+    transparency if changed in DisplayTimePOColourModification,
+    the drawing order is honoured immediately, i.e.,
+    without needing a rebuild.  Objects are drawn in the
+    following order:
+    . Opaque;
+    . Transparent;
+    . Markers and polylines that are "not hidden".
+- G4OpenGLStoredSceneHandler:
+  o Rationalised the recording of transparency in the PO/TO.  (It
+    is not necessary to keep a separate flag for transparency; it
+    is enough to inspect the alpha value of the colour.)
+
 2nd October 2012  John Allison (opengl-V09-05-45)
 - G4OpenGLStoredWin32Viewer.cc:
   o Re-add inclusion of missing header files on Win32

@@ -36,6 +36,7 @@
 
 #include "G4XXXStoredViewer.hh"
 #include "G4PhysicalVolumeModel.hh"
+#include "G4LogicalVolumeModel.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Box.hh"
@@ -81,6 +82,7 @@ void G4XXXStoredSceneHandler::PrintThings() {
       "\n  current physical volume: "
            << pPVModel->GetCurrentPV()->GetName() <<
       "\n  current logical volume: "
+// There might be a problem with the LV pointer if this is a G4LogicalVolumeModel
            << pPVModel->GetCurrentLV()->GetName() <<
       "\n  current depth of geometry tree: "
            << pPVModel->GetCurrentDepth();

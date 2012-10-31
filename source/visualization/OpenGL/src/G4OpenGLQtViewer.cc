@@ -82,11 +82,12 @@
 #include <qgroupbox.h>
 #include <qcombobox.h>
 #include <qlineedit.h>
+#include <qsignalmapper.h>
 
 //////////////////////////////////////////////////////////////////////////////
 void G4OpenGLQtViewer::CreateMainWindow (
  QGLWidget* glWidget
- ,QString name
+ ,const QString& name
 ) 
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
@@ -113,8 +114,11 @@ void G4OpenGLQtViewer::CreateMainWindow (
   G4UImanager* UI = G4UImanager::GetUIpointer();
   if (UI == NULL) return;
 
-  if (! static_cast<G4UIQt*> (UI->GetG4UIWindow())) return;
-
+  if (! static_cast<G4UIQt*> (UI->GetG4UIWindow())) {
+    // NO UI, should be batch mode
+    fBatchMode = true;
+    return;
+  }
   fUiQt = static_cast<G4UIQt*> (UI->GetG4UIWindow());
   
   bool isTabbedView = false;
@@ -227,6 +231,8 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
   ,fModelShortNameItem(NULL)
   ,fMaxPOindexInserted(-1)
   ,fUiQt(NULL)
+  ,signalMapperMouse(NULL)
+  ,signalMapperSurface(NULL)
 {
 
   // launch Qt if not
@@ -242,6 +248,8 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
   initMovieParameters();
 
   fLastEventTime = new QTime();
+  signalMapperMouse = new QSignalMapper(this);
+  signalMapperSurface = new QSignalMapper(this);
 
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLQtViewer::G4OpenGLQtViewer END\n");
@@ -277,37 +285,28 @@ void G4OpenGLQtViewer::createPopupMenu()    {
 
   QMenu *mMouseAction = fContextMenu->addMenu("&Mouse actions");
 
-  fRotateAction = mMouseAction->addAction("Rotate");
-  fMoveAction = mMouseAction->addAction("Move");
-  fPickAction = mMouseAction->addAction("Pick");
+  fMouseRotateAction = mMouseAction->addAction("Rotate", signalMapperMouse, SLOT(map()));
+  fMouseMoveAction = mMouseAction->addAction("Move", signalMapperMouse, SLOT(map()));
+  fMousePickAction = mMouseAction->addAction("Pick", signalMapperMouse, SLOT(map()));
+  fMouseZoomOutAction = mMouseAction->addAction("Zoom out", signalMapperMouse, SLOT(map()));
+  fMouseZoomInAction = mMouseAction->addAction("Zoom in", signalMapperMouse, SLOT(map()));
   QAction *shortcutsAction = mMouseAction->addAction("Show shortcuts");
 
-  fRotateAction->setCheckable(true);
-  fMoveAction->setCheckable(false);
-  fPickAction->setCheckable(false);
+  fMouseRotateAction->setCheckable(true);
+  fMouseMoveAction->setCheckable(true);
+  fMousePickAction->setCheckable(true);
+  fMouseZoomOutAction->setCheckable(true);
+  fMouseZoomInAction->setCheckable(true);
   shortcutsAction->setCheckable(false);
 
-  fRotateAction->setChecked(true);
-  fMoveAction->setChecked(false);
-  fPickAction->setChecked(false);
-  shortcutsAction->setChecked(false);
+  connect(signalMapperMouse, SIGNAL(mapped(int)),this, SLOT(toggleMouseAction(int)));
+  signalMapperMouse->setMapping(fMouseRotateAction,1);
+  signalMapperMouse->setMapping(fMouseMoveAction,2);
+  signalMapperMouse->setMapping(fMousePickAction,3);
+  signalMapperMouse->setMapping(fMouseZoomOutAction,4);
+  signalMapperMouse->setMapping(fMouseZoomInAction,5);
 
-  QObject ::connect(fRotateAction, 
-                    SIGNAL(triggered(bool)),
-                    this, 
-                    SLOT(actionMouseRotate()));
-
-  QObject ::connect(fMoveAction, 
-                    SIGNAL(triggered(bool)),
-                    this, 
-                    SLOT(actionMouseMove()));
-
-  QObject ::connect(fPickAction, 
-                    SIGNAL(triggered(bool)),
-                    this, 
-                    SLOT(actionMousePick()));
-
-  QObject ::connect(shortcutsAction, 
+  QObject::connect(shortcutsAction, 
                     SIGNAL(triggered(bool)),
                     this, 
                     SLOT(showShortcuts()));
@@ -320,8 +319,8 @@ void G4OpenGLQtViewer::createPopupMenu()    {
   QAction *polyhedron = mRepresentation->addAction("Polyhedron");
   QAction *nurbs = mRepresentation->addAction("NURBS");
 
-  QAction *ortho = mProjection->addAction("Orthographic");
-  QAction *perspective = mProjection->addAction("Persepective");
+  fProjectionOrtho = mProjection->addAction("Orthographic", signalMapperSurface, SLOT(map()));
+  fProjectionPerspective = mProjection->addAction("Persepective", signalMapperSurface, SLOT(map()));
 
   // INIT mRepresentation
   G4ViewParameters::RepStyle style;
@@ -336,56 +335,33 @@ void G4OpenGLQtViewer::createPopupMenu()    {
 
   // INIT mProjection
   if (fVP.GetFieldHalfAngle() == 0) {
-    createRadioAction(ortho, perspective,SLOT(toggleProjection(bool)),1);
+    createRadioAction(fProjectionOrtho, fProjectionPerspective,SLOT(toggleProjection(bool)),1);
   } else {
-    createRadioAction(ortho, perspective,SLOT(toggleProjection(bool)),2);
+    createRadioAction(fProjectionOrtho, fProjectionPerspective,SLOT(toggleProjection(bool)),2);
   }
 
   // === Drawing Menu ===
   QMenu *mDrawing = mStyle->addMenu("&Drawing");
 
-  fDrawingWireframe = mDrawing->addAction("Wireframe");
+  fDrawingWireframe = mDrawing->addAction("Wireframe", signalMapperSurface, SLOT(map()));
+
+  fDrawingLineRemoval = mDrawing->addAction("Hidden line removal", signalMapperSurface, SLOT(map()));
+
+  fDrawingSurfaceRemoval = mDrawing->addAction("Hidden Surface removal", signalMapperSurface, SLOT(map()));
+
+  fDrawingLineSurfaceRemoval = mDrawing->addAction("Hidden line and surface removal", signalMapperSurface, SLOT(map()));
+
   fDrawingWireframe->setCheckable(true);
-
-  fDrawingLineRemoval = mDrawing->addAction("Hidden line removal");
   fDrawingLineRemoval->setCheckable(true);
-
-  fDrawingSurfaceRemoval = mDrawing->addAction("Hidden Surface removal");
   fDrawingSurfaceRemoval->setCheckable(true);
-
-  fDrawingLineSurfaceRemoval = mDrawing->addAction("Hidden line and surface removal");
   fDrawingLineSurfaceRemoval->setCheckable(true);
-  // INIT Drawing
-  G4ViewParameters::DrawingStyle d_style;
-  d_style = fVP.GetDrawingStyle();
-  
-  if (d_style == G4ViewParameters::wireframe) {
-    fDrawingWireframe->setChecked(true);
-  } else if (d_style == G4ViewParameters::hlr) {
-    fDrawingLineRemoval->setChecked(true);
-  } else if (d_style == G4ViewParameters::hsr) {
-    fDrawingSurfaceRemoval->setChecked(true);
-  } else if (d_style == G4ViewParameters::hlhsr) {
-    fDrawingLineSurfaceRemoval->setChecked(true);
-  } else {
-    mDrawing->clear();
-  }
-  QObject ::connect(fDrawingWireframe, 
-                    SIGNAL(triggered(bool)),
-                    this, 
-                    SLOT(actionDrawingWireframe()));
-  QObject ::connect(fDrawingLineRemoval, 
-                    SIGNAL(triggered(bool)),
-                    this, 
-                    SLOT(actionDrawingLineRemoval()));
-  QObject ::connect(fDrawingSurfaceRemoval, 
-                    SIGNAL(triggered(bool)),
-                    this, 
-                    SLOT(actionDrawingSurfaceRemoval()));
-  QObject ::connect(fDrawingLineSurfaceRemoval, 
-                    SIGNAL(triggered(bool)),
-                    this, 
-                    SLOT(actionDrawingLineSurfaceRemoval()));
+
+  connect(signalMapperSurface, SIGNAL(mapped(int)),this, SLOT(toggleSurfaceAction(int)));
+  signalMapperSurface->setMapping(fDrawingWireframe,1);
+  signalMapperSurface->setMapping(fDrawingLineRemoval,2);
+  signalMapperSurface->setMapping(fDrawingSurfaceRemoval,3);
+  signalMapperSurface->setMapping(fDrawingLineSurfaceRemoval,4);
+
 
   // Background Color
 
@@ -500,6 +476,8 @@ void G4OpenGLQtViewer::createPopupMenu()    {
   fFullScreenOff = mFullScreen->addAction("Off");
   createRadioAction(fFullScreenOn,fFullScreenOff,SLOT(toggleFullScreen(bool)),2);
 
+  // INIT All
+  updateToolbarAndMouseContextMenu();
 }
 
 
@@ -547,79 +525,6 @@ void G4OpenGLQtViewer::createRadioAction(QAction *action1,QAction *action2, cons
 
 }
 
-/**
-   Slot activate when mouseAction->rotate menu is set 
-*/
-void G4OpenGLQtViewer::actionMouseRotate() {
-  if (fUiQt) {
-    fUiQt->SetIconRotateSelected();
-  }
-}
-
-
-/**
-   Slot activate when mouseAction->rotate menu is set 
-*/
-void G4OpenGLQtViewer::actionMouseMove() {
-  if (fUiQt) {
-    fUiQt->SetIconMoveSelected();
-  }
-}
-
-
-/**
-   Slot activate when mouseAction->pick menu is set 
-*/
-void G4OpenGLQtViewer::actionMousePick() {
-  if (fUiQt) {
-    fUiQt->SetIconPickSelected();
-  }
-}
-
-
-/**
-   Slot activate when drawing->wireframe menu is set 
-*/
-void G4OpenGLQtViewer::actionDrawingWireframe() {
-#if QT_VERSION >= 0x040400
-  Q_EMIT toggleDrawingAction(1);
-#else
-  emit( toggleDrawingAction(1));
-#endif
-}
-
-/**
-   Slot activate when drawing->line removal menu is set 
-*/
-void G4OpenGLQtViewer::actionDrawingLineRemoval() {
-#if QT_VERSION >= 0x040400
-  Q_EMIT toggleDrawingAction(2);
-#else
-  emit( toggleDrawingAction(2));
-#endif
-}
-
-/**
-   Slot activate when drawing->surface removal menu is set 
-*/
-void G4OpenGLQtViewer::actionDrawingSurfaceRemoval() {
-#if QT_VERSION >= 0x040400
-  Q_EMIT toggleDrawingAction(3);
-#else
-  emit( toggleDrawingAction(3));
-#endif
-}
-
-/**
-   Slot activate when drawing->wireframe menu is set 
-*/
-void G4OpenGLQtViewer::actionDrawingLineSurfaceRemoval() {
-#if QT_VERSION >= 0x040400
-  Q_EMIT toggleDrawingAction(4);
-#else
-  emit( toggleDrawingAction(4));
-#endif
-}
 
 
 /**
@@ -691,6 +596,30 @@ void G4OpenGLQtViewer::showShortcuts() {
 
 
 /**
+   Slot activated when mouse action is toggle
+   @param aAction : 1 rotate, 2 move, 3 pick, 4 zoom out, 5 zoom in
+   @see G4OpenGLStoredQtViewer::DrawView
+   @see G4XXXStoredViewer::CompareForKernelVisit
+*/
+void G4OpenGLQtViewer::toggleMouseAction(int aAction) {
+
+  if (aAction == 1) {
+    fUiQt->SetIconRotateSelected();
+  } else  if (aAction == 2) {
+    fUiQt->SetIconMoveSelected();
+  } else  if (aAction == 3) {
+    fUiQt->SetIconPickSelected();
+  } else  if (aAction == 4) {
+    fUiQt->SetIconZoomOutSelected();
+  } else  if (aAction == 5) {
+    fUiQt->SetIconZoomInSelected();
+  }
+
+  updateToolbarAndMouseContextMenu();
+}
+
+
+/**
    Slot activated when drawing menu is toggle
    Warning : When G4OpenGLStoredQtViewer::DrawView() method call,
    KernelVisitDecision () will be call and will set the fNeedKernelVisit
@@ -700,39 +629,25 @@ void G4OpenGLQtViewer::showShortcuts() {
    @see G4OpenGLStoredQtViewer::DrawView
    @see G4XXXStoredViewer::CompareForKernelVisit
 */
-void G4OpenGLQtViewer::toggleDrawingAction(int aAction) {
+void G4OpenGLQtViewer::toggleSurfaceAction(int aAction) {
 
   G4ViewParameters::DrawingStyle d_style = G4ViewParameters::wireframe;
   
-
-  // initialize
-  if ((aAction >0) && (aAction <5)) {
-    fDrawingWireframe->setChecked (false);
-    fDrawingLineRemoval->setChecked (false);
-    fDrawingSurfaceRemoval->setChecked (false);
-    fDrawingLineSurfaceRemoval->setChecked (false);
-  }
   if (aAction ==1) {
-    fDrawingWireframe->setChecked (true);
-
     d_style = G4ViewParameters::wireframe;
 
   } else  if (aAction ==2) {
-    fDrawingLineRemoval->setChecked (true);
-
     d_style = G4ViewParameters::hlr;
 
   } else  if (aAction ==3) {
-    fDrawingSurfaceRemoval->setChecked (true);
-
     d_style = G4ViewParameters::hsr;
 
   } else  if (aAction ==4) {
-    fDrawingLineSurfaceRemoval->setChecked (true);
     d_style = G4ViewParameters::hlhsr;
   }
   fVP.SetDrawingStyle(d_style);
 
+  updateToolbarAndMouseContextMenu();
   updateQWidget();
 }
 
@@ -757,6 +672,7 @@ void G4OpenGLQtViewer::toggleRepresentation(bool check) {
   }
   fVP.SetRepStyle (style);
 
+  updateToolbarAndMouseContextMenu();
   updateQWidget();
 }
 
@@ -773,10 +689,11 @@ void G4OpenGLQtViewer::toggleRepresentation(bool check) {
 void G4OpenGLQtViewer::toggleProjection(bool check) {
 
   if (check == 1) {
-    fVP.SetFieldHalfAngle(0.);
+    fVP.SetOrthogonalProjection ();
   } else {
-    fVP.SetFieldHalfAngle(30.*CLHEP::deg);
+    fVP.SetPerspectiveProjection();
   }  
+  updateToolbarAndMouseContextMenu();
   updateQWidget();
 }
 
@@ -793,6 +710,7 @@ void G4OpenGLQtViewer::toggleTransparency(bool check) {
     transparency_enabled = true;
   }
   SetNeedKernelVisit (true);
+  updateToolbarAndMouseContextMenu();
   updateQWidget();
 }
 
@@ -814,6 +732,7 @@ void G4OpenGLQtViewer::toggleAntialiasing(bool check) {
     glHint (GL_POLYGON_SMOOTH_HINT, GL_NICEST);
   }
 
+  updateToolbarAndMouseContextMenu();
   updateQWidget();
 }
 
@@ -829,6 +748,7 @@ void G4OpenGLQtViewer::toggleHaloing(bool check) {
     haloing_enabled = true;
   }
 
+  updateToolbarAndMouseContextMenu();
   updateQWidget();
 
 }
@@ -844,6 +764,7 @@ void G4OpenGLQtViewer::toggleAux(bool check) {
     fVP.SetAuxEdgeVisible(false);
   }
   SetNeedKernelVisit (true);
+  updateToolbarAndMouseContextMenu();
   updateQWidget();
 }
 
@@ -858,6 +779,7 @@ void G4OpenGLQtViewer::toggleHiddenMarkers(bool check) {
     fVP.SetMarkerNotHidden();
   }
   //  SetNeedKernelVisit (true);
+  updateToolbarAndMouseContextMenu();
   updateQWidget();
 }
 
@@ -996,60 +918,59 @@ void G4OpenGLQtViewer::actionChangeBackgroundColor() {
   //   // (Note added by JA 13/9/2005) Background now handled in view
   //   // parameters.  A kernel visit is triggered on change of background.
 
-  QColor color;
-  color = QColorDialog::getColor(Qt::black,
-                                 fGLWindow,
-                                 " Get background color and transparency",
-                                 QColorDialog::ShowAlphaChannel);
+  const QColor color =
+    QColorDialog::getColor(Qt::black,
+                           fGLWindow,
+                           " Get background color and transparency",
+                           QColorDialog::ShowAlphaChannel);
   if (color.isValid()) {
-    G4Colour colour = G4Colour(((G4double)color.red())/255,
-                               ((G4double)color.green())/255,
-                               ((G4double)color.blue())/255,
-                               ((G4double)color.alpha())/255);
+    G4Colour colour(((G4double)color.red())/255,
+                    ((G4double)color.green())/255,
+                    ((G4double)color.blue())/255,
+                    ((G4double)color.alpha())/255);
     fVP.SetBackgroundColour(colour);
 
+    updateToolbarAndMouseContextMenu();
     updateQWidget();
   }
 }
 
 void G4OpenGLQtViewer::actionChangeTextColor() {
 
-  QColor color;
-  color = QColorDialog::getColor(Qt::yellow,
-                                 fGLWindow,
-                                 " Get text color and transparency",
-                                 QColorDialog::ShowAlphaChannel);
+  const QColor& color =
+    QColorDialog::getColor(Qt::yellow,
+                           fGLWindow,
+                           " Get text color and transparency",
+                           QColorDialog::ShowAlphaChannel);
   if (color.isValid()) {
-    G4Colour colour = G4Colour(((G4double)color.red())/255,
-                               ((G4double)color.green())/255,
-                               ((G4double)color.blue())/255,
-                               ((G4double)color.alpha())/255);
+    G4Colour colour(((G4double)color.red())/255,
+                    ((G4double)color.green())/255,
+                    ((G4double)color.blue())/255,
+                    ((G4double)color.alpha())/255);
 
-    G4VisAttributes va = fVP.GetDefaultTextVisAttributes();
-    va.SetColour(colour);
-    fVP.SetDefaultTextVisAttributes(va);
+    fVP.SetDefaultTextColour(colour);
 
+    updateToolbarAndMouseContextMenu();
     updateQWidget();
   }
 }
 
 void G4OpenGLQtViewer::actionChangeDefaultColor() {
 
-  QColor color;
-  color = QColorDialog::getColor(Qt::white,
-                                 fGLWindow,
-                                 " Get default color and transparency",
-                                 QColorDialog::ShowAlphaChannel);
+  const QColor& color =
+    QColorDialog::getColor(Qt::white,
+                           fGLWindow,
+                           " Get default color and transparency",
+                           QColorDialog::ShowAlphaChannel);
   if (color.isValid()) {
-    G4Colour colour = G4Colour(((G4double)color.red())/255,
-                               ((G4double)color.green())/255,
-                               ((G4double)color.blue())/255,
-                               ((G4double)color.alpha())/255);
+    G4Colour colour(((G4double)color.red())/255,
+                    ((G4double)color.green())/255,
+                    ((G4double)color.blue())/255,
+                    ((G4double)color.alpha())/255);
 
-    G4VisAttributes va = fVP.GetDefaultVisAttributes();
-    va.SetColour(colour);
-    fVP.SetDefaultVisAttributes(va);
+    fVP.SetDefaultColour(colour);
 
+    updateToolbarAndMouseContextMenu();
     updateQWidget();
   }
 }
@@ -1107,7 +1028,7 @@ void G4OpenGLQtViewer::FinishView()
 */
 void G4OpenGLQtViewer::G4MousePressEvent(QMouseEvent *evnt)
 {
-  if (evnt->buttons() & Qt::LeftButton) {
+  if ((evnt->buttons() & Qt::LeftButton) && (! (evnt->modifiers() & Qt::ControlModifier ))){
     fWindow->setMouseTracking(true);
     fAutoMove = false; // stop automove
     fLastPos1 = evnt->pos();
@@ -1564,7 +1485,7 @@ void G4OpenGLQtViewer::G4keyPressEvent (QKeyEvent * evnt)
 }
   
 
-void  G4OpenGLQtViewer::updateKeyModifierState(Qt::KeyboardModifiers modifier) {
+void  G4OpenGLQtViewer::updateKeyModifierState(const Qt::KeyboardModifiers& modifier) {
   // Check Qt Versions for META Keys
     
   fNoKeyPress = true;
@@ -1713,7 +1634,7 @@ void G4OpenGLQtViewer::displayRecordingStatus() {
 }
 
 
-void G4OpenGLQtViewer::setRecordingInfos(QString txt) {
+void G4OpenGLQtViewer::setRecordingInfos(const QString& txt) {
   if (fMovieParametersDialog) {
     fMovieParametersDialog->setRecordingInfos(txt);
   } else {
@@ -2266,7 +2187,7 @@ QWidget *G4OpenGLQtViewer::getParentWidget()
   // launch Qt if not
   G4Qt* interactorManager = G4Qt::getInstance ();
   // G4UImanager* UI = 
-  G4UImanager::GetUIpointer();
+  // G4UImanager::GetUIpointer();
   
   bool found = false;
   
@@ -2418,13 +2339,10 @@ void G4OpenGLQtViewer::DrawText(const G4Text& g4text)
 
     QFont font = QFont();
     font.setPointSizeF(size);
-  
-    const G4Colour& c = fSceneHandler.GetTextColour(g4text);
-    glColor4d(c.GetRed(),c.GetGreen(),c.GetBlue(),c.GetAlpha());
 
     G4Point3D position = g4text.GetPosition();
 
-    G4String textString = g4text.GetText();
+    const G4String& textString = g4text.GetText();
     const char* textCString = textString.c_str();
   
     // Calculate move for centre and right adjustment
@@ -2461,9 +2379,9 @@ void G4OpenGLQtViewer::ResetView () {
 
 
 
-void G4OpenGLQtViewer::addPVSceneTreeElement(const G4String model, G4PhysicalVolumeModel* pPVModel, int currentPOIndex) {
+void G4OpenGLQtViewer::addPVSceneTreeElement(const G4String& model, G4PhysicalVolumeModel* pPVModel, int currentPOIndex) {
 
-  QString modelShortName = getModelShortName(model);
+  const QString& modelShortName = getModelShortName(model);
 
   if (modelShortName == "") {
     return ;
@@ -2484,7 +2402,7 @@ void G4OpenGLQtViewer::addPVSceneTreeElement(const G4String model, G4PhysicalVol
   //  if (fSceneTreeComponentTreeWidget->topLevelItemCount () == 0) {
   if (!fPVRootNodeCreate) {
     const G4VisAttributes* visAttr = GetApplicableVisAttributes(pPVModel->GetFullPVPath().at(0).GetPhysicalVolume()->GetLogicalVolume()->GetVisAttributes());
-    G4Colour color = visAttr->GetColour();
+    const G4Colour& color = visAttr->GetColour();
     
     fModelShortNameItem = createTreeWidgetItem(pPVModel->GetFullPVPath(),
                                                modelShortName,
@@ -2511,14 +2429,14 @@ void G4OpenGLQtViewer::addPVSceneTreeElement(const G4String model, G4PhysicalVol
    @return the inserted item
 */
 QTreeWidgetItem* G4OpenGLQtViewer::createTreeWidgetItem(
- PVPath fullPath
- ,QString name
+ const PVPath& fullPath
+ ,const QString& name
  ,int copyNb
  ,int POIndex
- ,QString logicalName
+ ,const QString& logicalName
  ,Qt::CheckState state
  ,QTreeWidgetItem * parentTreeNode
- ,G4Colour color
+ ,const G4Colour& color
 ) {
 
   // Set depth
@@ -2599,7 +2517,7 @@ bool G4OpenGLQtViewer::parseAndInsertInSceneTree(
  QTreeWidgetItem * parentItem
  ,G4PhysicalVolumeModel* pPVModel
  ,unsigned int fullPathIndex
- ,QString parentRoot
+ ,const QString& parentRoot
  ,unsigned int currentIndexInTreeSceneHandler
  ,int currentPVPOIndex
 ) {
@@ -2608,7 +2526,7 @@ bool G4OpenGLQtViewer::parseAndInsertInSceneTree(
     return false;
   }
 
-  const PVPath fullPath = pPVModel->GetFullPVPath();
+  const PVPath& fullPath = pPVModel->GetFullPVPath();
 
   std::ostringstream oss;
   oss << fullPath.at(fullPathIndex).GetCopyNo();
@@ -2617,7 +2535,7 @@ bool G4OpenGLQtViewer::parseAndInsertInSceneTree(
   int currentPVCopyNb = fullPath.at(fullPathIndex).GetCopyNo();
 
   const G4VisAttributes* visAttr = GetApplicableVisAttributes(fullPath.at(fullPathIndex).GetPhysicalVolume()->GetLogicalVolume()->GetVisAttributes());
-  G4Colour color = visAttr->GetColour();
+  const G4Colour& color = visAttr->GetColour();
 
   // look in all children in order to get if their is already a
   // child corresponding:
@@ -2645,7 +2563,7 @@ bool G4OpenGLQtViewer::parseAndInsertInSceneTree(
   }
    
   for (int i = 0; i < parentItemList.size(); ++i) {
-    std::string parentItemName = parentItemList.at(i)->text(0).toStdString();
+    const std::string& parentItemName = parentItemList.at(i)->text(0).toStdString();
     int parentItemCopyNb = parentItemList.at(i)->data(1,Qt::UserRole).toInt();
     int parentItemPOIndex = parentItemList.at(i)->data(0,Qt::UserRole).toInt();
         
@@ -2665,7 +2583,7 @@ bool G4OpenGLQtViewer::parseAndInsertInSceneTree(
       // then check for the Transform3D
       bool sameTransform = true;
       if (parentItemPOIndex >= 0) {
-        const PVPath fullPathTmp = fTreeItemModels[parentItemPOIndex];
+        const PVPath& fullPathTmp = fTreeItemModels[parentItemPOIndex];
         if (fullPathTmp.size() > 0) {
           if (fullPathTmp.at(fullPathTmp.size()-1).GetTransform () == pPVModel->GetTransformation ()) {
             sameTransform = true;
@@ -2817,14 +2735,14 @@ void G4OpenGLQtViewer::changeOpenCloseVisibleHiddenSelectedColorSceneTreeElement
     // getOldPO
     int oldPOIndex = oldItem->data(0,Qt::UserRole).toInt();
     it = fOldPositivePoIndexSceneTreeWidgetQuickMap.find(oldPOIndex);
-    QColor color = QColor();
+    QColor color;
 
     // get old Vis Attr Color
     std::map <int, QColor >::iterator itVis;
     itVis = fOldVisAttrColorMap.find(oldPOIndex);
 
-    QColor oldVisAttrColor = QColor();
-    QColor newVisAttrColor = subItem->data(2,Qt::UserRole).value<QColor>();
+    QColor oldVisAttrColor;
+    const QColor& newVisAttrColor = subItem->data(2,Qt::UserRole).value<QColor>();
 
     bool visAttrChange = false;
     // if old vis attr color found
@@ -2872,9 +2790,9 @@ bool G4OpenGLQtViewer::isSameSceneTreeElement(
   
   int newCpNumber = -1;
   int oldCpNumber = -1;
-  
+
   bool firstWhile = true;
-  
+
   while ((parentOldItem != NULL) && (parentNewItem != NULL)) {
 
     // check transform, optimize getting data(..,..) that consume lot of time
@@ -2886,8 +2804,8 @@ bool G4OpenGLQtViewer::isSameSceneTreeElement(
     
     if ((oldPO >= 0) &&
         (newPO >= 0)) {
-      const PVPath oldFullPath = fOldTreeItemModels[oldPO];
-      const PVPath newFullPath = fTreeItemModels[newPO];
+      const PVPath& oldFullPath = fOldTreeItemModels[oldPO];
+      const PVPath& newFullPath = fTreeItemModels[newPO];
       if ((oldFullPath.size() > 0) &&
           (newFullPath.size() > 0)) {
         if (oldFullPath.size() != newFullPath.size()) {
@@ -2929,9 +2847,9 @@ bool G4OpenGLQtViewer::isSameSceneTreeElement(
 
 
 void G4OpenGLQtViewer::addNonPVSceneTreeElement(
- const G4String model
+ const G4String& model
  ,int currentPOIndex
- ,std::string modelDescription
+ ,const std::string& modelDescription
  ,const G4Visible& visible
 ) {
 
@@ -2982,7 +2900,7 @@ void G4OpenGLQtViewer::addNonPVSceneTreeElement(
   }
 
   // Is this volume already in the tree AND PO is not the same?
-  QList<QTreeWidgetItem *> resItems;
+  const QList<QTreeWidgetItem *>&
   resItems =  fSceneTreeComponentTreeWidget->findItems (QString(modelDescription.c_str()), Qt::MatchFixedString| Qt::MatchCaseSensitive|Qt::MatchRecursive, 0 );
   
   bool alreadyPresent = false;
@@ -3009,7 +2927,7 @@ void G4OpenGLQtViewer::addNonPVSceneTreeElement(
 /**
    Get the short name for a given label
 */
-QString G4OpenGLQtViewer::getModelShortName(G4String model) {
+QString G4OpenGLQtViewer::getModelShortName(const G4String& model) {
 
   QString modelShortName = model.data();
   if (modelShortName.mid(0,modelShortName.indexOf(" ")) == "G4PhysicalVolumeModel") {
@@ -3088,7 +3006,7 @@ void G4OpenGLQtViewer::sceneTreeComponentSelected() {
       QTreeWidgetItem* item = fSceneTreeComponentTreeWidget->selectedItems ().first();
       if (item) {
 
-        const PVPath fullPath = fTreeItemModels[item->data(0,Qt::UserRole).toInt()];
+        const PVPath& fullPath = fTreeItemModels[item->data(0,Qt::UserRole).toInt()];
         if (fullPath.size() > 0) {
           const G4VisAttributes* visAttr2 = GetApplicableVisAttributes(fullPath.at(fullPath.size()-1).GetPhysicalVolume()->GetLogicalVolume()->GetVisAttributes());
           
@@ -3142,9 +3060,9 @@ void G4OpenGLQtViewer::changeColorAndTransparency(QTreeWidgetItem* item,int) {
   if (item == NULL) {
     return;
   }
-  QColor old = QColor(item->data(2,Qt::UserRole).value<QColor>());
+  const QColor& old = QColor(item->data(2,Qt::UserRole).value<QColor>());
 
-  QColor color = QColorDialog::getColor(old,
+  const QColor& color = QColorDialog::getColor(old,
                                         fSceneTreeComponentTreeWidget,
                                         " Get color and transparency",
                                         QColorDialog::ShowAlphaChannel);
@@ -3152,12 +3070,35 @@ void G4OpenGLQtViewer::changeColorAndTransparency(QTreeWidgetItem* item,int) {
   if (color.isValid()) {
 
     // change vis attributes to set new colour
-    const PVPath fullPath = fTreeItemModels[item->data(0,Qt::UserRole).toInt()];
-    if (fullPath.size() > 0) {
-
-      // set scene tree parameters
-      changeQColorForTreeWidgetItem(item,color);
+    G4int iPO = item->data(0,Qt::UserRole).toInt();
+    if (iPO >= 0 && fTreeItemModels.find(iPO) != fTreeItemModels.end()) {
+      const PVPath& fullPath = fTreeItemModels[iPO];
+      // If a physical volume
+      if (fullPath.size()) {
+      
+        // Instantiate a working copy of a G4VisAttributes object...
+        G4VisAttributes workingVisAtts;
+        // and set the colour.
+        G4Colour g4c(((G4double)color.red())/255,
+                     ((G4double)color.green())/255,
+                     ((G4double)color.blue())/255,
+                     ((G4double)color.alpha())/255);
+        workingVisAtts.SetColour(g4c);
+        
+        // Add a vis atts modifier to the view parameters...
+        fVP.AddVisAttributesModifier
+        (G4ModelingParameters::VisAttributesModifier
+         (workingVisAtts,
+          G4ModelingParameters::VASColour,
+          fullPath));
+        // G4ModelingParameters::VASColour tells G4PhysicalVolumeModel that it is
+        // the colour that should be picked out and merged with the touchable's
+        // normal vis attributes.
+      }
     }
+    
+    // set scene tree parameters
+    changeQColorForTreeWidgetItem(item,color);
   }
 }
 
@@ -3168,7 +3109,7 @@ G4Colour G4OpenGLQtViewer::getColorForPoIndex(int poIndex) {
 
   if (item != NULL) {
     
-    QColor color = item->data(2,Qt::UserRole).value<QColor>(); 
+    const QColor& color = item->data(2,Qt::UserRole).value<QColor>();
     G4Colour g4c(((G4double)color.red())/255,
                  ((G4double)color.green())/255,
                  ((G4double)color.blue())/255,
@@ -3182,7 +3123,7 @@ G4Colour G4OpenGLQtViewer::getColorForPoIndex(int poIndex) {
 
 void G4OpenGLQtViewer::changeSearchSelection()
 {
-  QString searchText = fHelpLine->text();
+  const QString& searchText = fHelpLine->text();
   if (fSceneTreeComponentTreeWidget == NULL) {
     return;
   }
@@ -3261,7 +3202,7 @@ void G4OpenGLQtViewer::changeDepthOnSceneTreeItem(
   }
   
   if (item->data(0,Qt::UserRole).toInt() >= 0) {
-    G4Colour color = getColorForPoIndex(item->data(0,Qt::UserRole).toInt());
+    const G4Colour& color = getColorForPoIndex(item->data(0,Qt::UserRole).toInt());
     
     // We are less depper (ex:tree depth:2) than lookForDepth (ex:3.1)
     // -> Have to hide this level ONLY if it was not hidden before
@@ -3370,12 +3311,22 @@ void G4OpenGLQtViewer::clearTreeWidget(){
 */
 QTreeWidgetItem * G4OpenGLQtViewer::cloneWidgetItem(QTreeWidgetItem* item) {
 
-  QTreeWidgetItem* cloneItem  = new QTreeWidgetItem(*item);
+  QTreeWidgetItem* cloneItem = new QTreeWidgetItem();
 
-  // This is only use to hold the old "expand" value, see file:///Developer/Documentation/Qt/html/qtreewidgetitem.html#setExpanded 
-  fOldSceneTreeComponentTreeWidget->addTopLevelItem(cloneItem);
+  // Clone what is create createTreeWidgetItem step
 
-  cloneItem->setExpanded(item->isExpanded ());  // expand
+  cloneItem->setText(0,item->text(0));
+  cloneItem->setData(1,Qt::UserRole,item->data(1,Qt::UserRole).toInt());
+  cloneItem->setText(2,item->text(2));
+  cloneItem->setData(0, Qt::UserRole,item->data(0,Qt::UserRole).toInt());
+  cloneItem->setText(3,item->text(3));
+  cloneItem->setFlags(item->flags());
+  cloneItem->setToolTip(0,item->toolTip(0));        
+  cloneItem->setCheckState(0,item->checkState(0));
+  cloneItem->setSelected(item->isSelected()); 
+  cloneItem->setExpanded(item->isExpanded ());
+
+  cloneItem->setData(2,Qt::UserRole,item->data(2,Qt::UserRole).value<QColor>());
 
   return cloneItem;
 }
@@ -3423,13 +3374,17 @@ void G4OpenGLQtViewer::cloneSceneTree(
 
 
 
-void G4OpenGLQtViewer::changeQColorForTreeWidgetItem(QTreeWidgetItem* item,QColor qc) {
+void G4OpenGLQtViewer::changeQColorForTreeWidgetItem(QTreeWidgetItem* item,const QColor& qc) {
 
   int POIndex = item->data(0,Qt::UserRole).toInt();
   updatePositivePoIndexSceneTreeWidgetQuickMap(POIndex,item );
 
   QPixmap pixmap = QPixmap(QSize(16, 16));
-  pixmap.fill (qc);
+  if (item->data(0,Qt::UserRole).toInt() != -1) {
+    pixmap.fill (qc);
+  } else {
+    pixmap.fill (QColor(255,255,255,255));
+  }
   QPainter painter(&pixmap);
   painter.setPen(Qt::black);
   painter.drawRect(0,0,15,15); // Draw contour
@@ -3525,6 +3480,108 @@ void G4OpenGLQtViewer::displaySceneTreeComponent() {
   fSceneTreeComponentTreeWidget->sortItems (0, Qt::AscendingOrder );
 
   return;
+}
+
+
+/**
+   Update the toolbar Icons/Mouse context menu
+   - Change ortho/perspective
+   - Change surface style
+   - Change cursor style
+ */
+void G4OpenGLQtViewer::updateToolbarAndMouseContextMenu(){
+   if (fBatchMode) {
+     return;
+   }
+
+  G4ViewParameters::DrawingStyle
+  d_style = fVP.GetDrawingStyle();
+  
+  // Surface style
+  if (d_style == G4ViewParameters::wireframe) {
+    if (fUiQt) fUiQt->SetIconWireframeSelected();
+    fDrawingWireframe->setChecked(true);
+    fDrawingLineRemoval->setChecked(false);
+    fDrawingSurfaceRemoval->setChecked(false);
+    fDrawingLineSurfaceRemoval->setChecked(false);
+    
+  } else if (d_style == G4ViewParameters::hlr) {
+    if (fUiQt) fUiQt->SetIconHLRSelected();
+    fDrawingLineRemoval->setChecked(true);
+    fDrawingWireframe->setChecked(false);
+    fDrawingSurfaceRemoval->setChecked(false);
+    fDrawingLineSurfaceRemoval->setChecked(false);
+    
+  } else if (d_style == G4ViewParameters::hsr) {
+    if (fUiQt) fUiQt->SetIconSolidSelected();
+    fDrawingSurfaceRemoval->setChecked(true);
+    fDrawingWireframe->setChecked(false);
+    fDrawingLineRemoval->setChecked(false);
+    fDrawingLineSurfaceRemoval->setChecked(false);
+    
+  } else if (d_style == G4ViewParameters::hlhsr) {
+    if (fUiQt) fUiQt->SetIconHLHSRSelected();
+    fDrawingLineSurfaceRemoval->setChecked(true);
+    fDrawingWireframe->setChecked(false);
+    fDrawingLineRemoval->setChecked(false);
+    fDrawingSurfaceRemoval->setChecked(false);
+    fDrawingLineSurfaceRemoval->setChecked(false);
+
+  }
+  
+  
+  // projection style
+  G4double d_proj = fVP.GetFieldHalfAngle () ;
+  if (d_proj == 0.) { // ortho
+    if (fUiQt) fUiQt->SetIconOrthoSelected();
+    fProjectionOrtho->setChecked(true);
+    fProjectionPerspective->setChecked(false);
+    
+  } else {
+    if (fUiQt) fUiQt->SetIconPerspectiveSelected();
+    fProjectionPerspective->setChecked(true);
+    fProjectionOrtho->setChecked(false);
+  }
+  
+  
+  // mouse style : They are controlled by UI !
+  if (fUiQt) {
+    if (fUiQt->IsIconPickSelected()) {
+      fMousePickAction->setChecked(true);
+      fMouseZoomOutAction->setChecked(false);
+      fMouseZoomInAction->setChecked(false);
+      fMouseRotateAction->setChecked(false);
+      fMouseMoveAction->setChecked(false);
+      
+    } else if (fUiQt->IsIconZoomOutSelected()) {
+      fMouseZoomOutAction->setChecked(true);
+      fMousePickAction->setChecked(false);
+      fMouseZoomInAction->setChecked(false);
+      fMouseRotateAction->setChecked(false);
+      fMouseMoveAction->setChecked(false);
+      
+    } else if (fUiQt->IsIconZoomInSelected()) {
+      fMouseZoomInAction->setChecked(true);
+      fMousePickAction->setChecked(false);
+      fMouseZoomOutAction->setChecked(false);
+      fMouseRotateAction->setChecked(false);
+      fMouseMoveAction->setChecked(false);
+      
+    } else if (fUiQt->IsIconRotateSelected()) {
+      fMouseRotateAction->setChecked(true);
+      fMousePickAction->setChecked(false);
+      fMouseZoomOutAction->setChecked(false);
+      fMouseZoomInAction->setChecked(false);
+      fMouseMoveAction->setChecked(false);
+      
+    } else if (fUiQt->IsIconMoveSelected()) {
+      fMouseMoveAction->setChecked(true);
+      fMousePickAction->setChecked(false);
+      fMouseZoomOutAction->setChecked(false);
+      fMouseZoomInAction->setChecked(false);
+      fMouseRotateAction->setChecked(false);
+    }
+  }
 }
 
 

@@ -246,6 +246,18 @@ private:
   G4UIcmdWithAString* fpCommand;
 };
 
+class G4VisCommandViewerSave: public G4VVisCommandViewer {
+public:
+  G4VisCommandViewerSave ();
+  virtual ~G4VisCommandViewerSave ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandViewerSave (const G4VisCommandViewerSave&);
+  G4VisCommandViewerSave& operator = (const G4VisCommandViewerSave&);
+  G4UIcmdWithAString* fpCommand;
+};
+
 class G4VisCommandViewerScale: public G4VVisCommandViewer {
 public:
   G4VisCommandViewerScale ();

@@ -48,6 +48,7 @@
 #include "G4Polyhedra.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
+#include "G4PhysicalVolumeModel.hh"
 
 class G4PhysicalVolumeSearchScene: public G4VGraphicsScene {
 
@@ -75,9 +76,12 @@ public:
   void AddCompound (const G4VHit&) {}
   void AddCompound (const G4VDigi&) {}
   void AddCompound (const G4THitsMap<G4double>&) {}
-  G4int                GetFoundDepth          () const;
-  G4VPhysicalVolume*   GetFoundVolume         () const;
-  const G4Transform3D& GetFoundTransformation () const;
+  
+  const std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>&
+                        GetFoundFullPVPath     () const;
+  G4int                 GetFoundDepth          () const;
+  G4VPhysicalVolume*    GetFoundVolume         () const;
+  const G4Transform3D&  GetFoundTransformation () const;
 
   ////////////////////////////////////////////////////////////////
   // Functions not used but required by the abstract interface.
@@ -101,10 +105,12 @@ private:
   G4String             fRequiredPhysicalVolumeName;
   G4int                fRequiredCopyNo;
   const G4Transform3D* fpCurrentObjectTransformation;
-  G4int                fFoundDepth;                  // Found depth.
-  G4VPhysicalVolume*   fpFoundPV;                    // Found physical volume.
-  G4LogicalVolume*     fpFoundLV;                    // Found logical volume.
-  G4Transform3D        fFoundObjectTransformation;   // Found transformation.
+  std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>
+                       fFoundFullPVPath;            // Found full path.
+  G4int                fFoundDepth;                 // Found depth.
+  G4VPhysicalVolume*   fpFoundPV;                   // Found physical volume.
+  G4LogicalVolume*     fpFoundLV;                   // Found logical volume.
+  G4Transform3D        fFoundObjectTransformation;  // Found transformation.
   G4bool               fMultipleOccurrence;
 };
 

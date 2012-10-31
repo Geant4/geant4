@@ -41,6 +41,9 @@
 #include "G4OpenGLStoredQtViewer.hh"
 #include "G4OpenGLViewerMessenger.hh"
 #include "G4UIQt.hh"
+#include "G4UImanager.hh"
+#include "G4VBasicShell.hh"
+#include "G4VInteractiveSession.hh"
 
 G4OpenGLStoredQt::G4OpenGLStoredQt ():
   G4VGraphicsSystem ("OpenGLStoredQt",
@@ -64,15 +67,37 @@ G4VViewer* G4OpenGLStoredQt::CreateViewer
 #endif
   G4VViewer* pView = 0;
   // Check that a Qt session has been opened
-  if (G4UIQt::IsInstantiated()) {
-    pView =
-    new G4OpenGLStoredQtViewer((G4OpenGLStoredSceneHandler&) scene, name);
+
+  G4UImanager* UI = G4UImanager::GetUIpointer();
+
+  if (UI == NULL) {
+      G4Exception
+        ("G4OpenGLStoredQt::CreateViewer",
+         "opengl3002", JustWarning,
+         "G4UImanager is not initialised!.");
   } else {
-    G4Exception
-    ("G4OpenGLStoredQt::CreateViewer",
-     "opengl3002", JustWarning,
-     "Attempt to open a Qt viewer in a non-Qt session.  Start again with"
-     "\na Qt session or open a non-Qt viewer, such as OGLSX.");
+    // Batch -> G4UISession
+    // terminal -> G4VBasicShell -> G4UIsession
+    // tcsh/csh -> G4VUIshell
+    // Qt/Win/X/.. -> G4VBasicShell + G4VInteractiveSession -> G4UIsession
+
+    bool userShellAllowed = true;
+    G4VBasicShell* shell = dynamic_cast<G4VBasicShell*> (UI->GetSession());
+    if (shell) {
+      if (dynamic_cast<G4VInteractiveSession*> (shell)) {
+        userShellAllowed = false;
+      }
+    }
+    if ((G4UIQt::IsInstantiated()) || (userShellAllowed)) {
+      pView =
+        new G4OpenGLStoredQtViewer((G4OpenGLStoredSceneHandler&) scene, name);
+    } else {
+      G4Exception
+        ("G4OpenGLStoredQt::CreateViewer",
+         "opengl3002", JustWarning,
+         "Attempt to open a Qt viewer in a non-Qt session.  Start again with"
+         "\na Qt session or open a non-Qt viewer, such as OGLSX.");
+    }
   }
   if (pView) {
     if (pView -> GetViewId () < 0) {

@@ -106,6 +106,7 @@ public: // With description
     G4int GetNonCulledDepth() const {return fNonCulledDepth;}
     const G4Transform3D& GetTransform() const {return fTransform;}
     G4bool GetDrawn() const {return fDrawn;}
+    void SetDrawn(G4bool drawn) {fDrawn = drawn;}
     G4bool operator< (const G4PhysicalVolumeNodeID& right) const;
   private:
     G4VPhysicalVolume* fpPV;
@@ -196,6 +197,13 @@ public: // With description
   // G4XXXStoredSceneHandler::PreAddSolid for how to access and
   // G4VTrajectory::ShowTrajectory for an example of the use of
   // G4Atts.
+  
+  void SetBaseFullPVPath
+    (const std::vector<G4PhysicalVolumeNodeID>&
+     baseFullPVPath) {
+      fBaseFullPVPath = baseFullPVPath;
+      fFullPVPath = baseFullPVPath;
+  }
 
   void SetRequestedDepth (G4int requestedDepth) {
     fRequestedDepth = requestedDepth;
@@ -250,6 +258,7 @@ protected:
   G4LogicalVolume*   fpCurrentLV;    // Current logical volume.
   G4Material*    fpCurrentMaterial;  // Current material.
   G4Transform3D* fpCurrentTransform; // Current transform.
+  std::vector<G4PhysicalVolumeNodeID> fBaseFullPVPath;
   std::vector<G4PhysicalVolumeNodeID> fFullPVPath;
   std::vector<G4PhysicalVolumeNodeID> fDrawnPVPath;
   G4bool             fCurtailDescent;// Can be set to curtail descent.

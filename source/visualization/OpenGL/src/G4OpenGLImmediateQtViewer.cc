@@ -146,6 +146,8 @@ void G4OpenGLImmediateQtViewer::resizeGL(
 
 void G4OpenGLImmediateQtViewer::paintGL()
 {
+  updateToolbarAndMouseContextMenu();
+
   if (fIsRepainting) {
     //    return ;
   }

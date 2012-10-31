@@ -207,6 +207,8 @@ void G4OpenGLStoredQtViewer::resizeGL(
  
 void G4OpenGLStoredQtViewer::paintGL()
 {
+  updateToolbarAndMouseContextMenu();
+
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredQtViewer::paintGL \n");
 #endif

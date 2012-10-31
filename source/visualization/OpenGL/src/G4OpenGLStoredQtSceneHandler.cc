@@ -35,6 +35,7 @@
 #include "G4OpenGLStoredQtSceneHandler.hh"
 
 #include "G4PhysicalVolumeModel.hh"
+#include "G4LogicalVolumeModel.hh"
 #include "G4Text.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4OpenGLQtViewer.hh"
@@ -66,7 +67,9 @@ G4bool G4OpenGLStoredQtSceneHandler::ExtraPOProcessing
 
   G4PhysicalVolumeModel* pPVModel =
     dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
-  if (pPVModel) {
+  G4LogicalVolumeModel* pLVModel =
+    dynamic_cast<G4LogicalVolumeModel*>(pPVModel);
+  if (pPVModel && !pLVModel) {
 
     // This call comes from a G4PhysicalVolumeModel.  drawnPVPath is
     // the path of the current drawn (non-culled) volume in terms of

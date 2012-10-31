@@ -24,36 +24,30 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeSearchScene.icc,v 1.6 2006-06-29 21:30:38 gunter Exp $
+// $Id: G4OpenInventorXt.hh,v 1.3 2006-06-29 21:20:38 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// John Allison  10th August 1998.
-// An artificial scene to find physical volumes.
+// Andrew Walkden  27th March 1996
+// OpenInventor graphics system factory.
+// Frederick Jones and TJR  October 2012
+// Extended driver based on G4OpenInventorXt.hh
+// Uses G4OpenInventorXtExaminerViewer.
 
-inline void G4PhysicalVolumeSearchScene::PreAddSolid
-(const G4Transform3D& objectTransformation,
- const G4VisAttributes&) {
-  fpCurrentObjectTransformation = &objectTransformation;
-}
+#ifndef G4OPENINVENTORXTEXTENDED_HH
+#define G4OPENINVENTORXTEXTENDED_HH
 
-inline void G4PhysicalVolumeSearchScene::PostAddSolid () {}
+#include "G4OpenInventor.hh"
 
-inline const std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>&
-G4PhysicalVolumeSearchScene::GetFoundFullPVPath () const {
-  return fFoundFullPVPath;
-}
+class G4OpenInventorXtExtended: public G4OpenInventor {
+public:
+  G4OpenInventorXtExtended ();
+  virtual ~G4OpenInventorXtExtended ();
+  G4VViewer* CreateViewer(G4VSceneHandler&,const G4String& name = "");
+private:
+  virtual void Initialize();
+private:
+  bool fInited;
+};
 
-inline G4int G4PhysicalVolumeSearchScene::GetFoundDepth () const {
-  return fFoundDepth;
-}
-
-inline G4VPhysicalVolume*
-G4PhysicalVolumeSearchScene::GetFoundVolume () const {
-  return fpFoundPV;
-}
-
-inline const G4Transform3D&
-G4PhysicalVolumeSearchScene::GetFoundTransformation () const {
-  return fFoundObjectTransformation;
-}
+#endif

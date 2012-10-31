@@ -39,6 +39,7 @@
 #include "G4VisCommandsScene.hh"
 #include "G4VisCommandsSceneAdd.hh"
 #include "G4VisCommandsSceneHandler.hh"
+#include "G4VisCommandsTouchableSet.hh"
 #include "G4VisCommandsViewer.hh"
 #include "G4VisCommandsViewerDefault.hh"
 #include "G4VisCommandsViewerSet.hh"
@@ -331,6 +332,169 @@ void G4VisManager::Initialise () {
   }
 
   fInitialised = true;
+}
+
+void G4VisManager::RegisterMessengers () {
+  
+  // Instantiate individual messengers/commands (often - but not
+  // always - one command per messenger).
+  
+  G4UIcommand* directory;
+  
+  // *Basic* top level commands were instantiated in the constructor
+  // so that they can be used immediately after instantiation of the
+  // vis manager.  Other top level and lower level commands are
+  // instantiated here.
+  
+  // Other top level commands...
+  RegisterMessenger(new G4VisCommandAbortReviewKeptEvents);
+  RegisterMessenger(new G4VisCommandEnable);
+  RegisterMessenger(new G4VisCommandList);
+  RegisterMessenger(new G4VisCommandReviewKeptEvents);
+  
+  // Compound commands...
+  RegisterMessenger(new G4VisCommandDrawTree);
+  RegisterMessenger(new G4VisCommandDrawView);
+  RegisterMessenger(new G4VisCommandDrawVolume);
+  RegisterMessenger(new G4VisCommandOpen);
+  RegisterMessenger(new G4VisCommandSpecify);
+  
+  directory = new G4UIdirectory ("/vis/geometry/");
+  directory -> SetGuidance("Operations on vis attributes of Geant4 geometry.");
+  fDirectoryList.push_back (directory);
+  RegisterMessenger(new G4VisCommandGeometryList);
+  RegisterMessenger(new G4VisCommandGeometryRestore);
+  
+  directory = new G4UIdirectory ("/vis/geometry/set/");
+  directory -> SetGuidance("Set vis attributes of Geant4 geometry.");
+  fDirectoryList.push_back (directory);
+  RegisterMessenger(new G4VisCommandGeometrySetColour);
+  RegisterMessenger(new G4VisCommandGeometrySetDaughtersInvisible);
+  RegisterMessenger(new G4VisCommandGeometrySetLineStyle);
+  RegisterMessenger(new G4VisCommandGeometrySetLineWidth);
+  RegisterMessenger(new G4VisCommandGeometrySetForceAuxEdgeVisible);
+  RegisterMessenger(new G4VisCommandGeometrySetForceLineSegmentsPerCircle);
+  RegisterMessenger(new G4VisCommandGeometrySetForceSolid);
+  RegisterMessenger(new G4VisCommandGeometrySetForceWireframe);
+  RegisterMessenger(new G4VisCommandGeometrySetVisibility);
+  
+  directory = new G4UIdirectory ("/vis/set/");
+  directory -> SetGuidance("Set quantities for use in appropriate commands.");
+  fDirectoryList.push_back (directory);
+  RegisterMessenger(new G4VisCommandSetColour);
+  RegisterMessenger(new G4VisCommandSetLineWidth);
+  RegisterMessenger(new G4VisCommandSetTextColour);
+  RegisterMessenger(new G4VisCommandSetTextLayout);
+  RegisterMessenger(new G4VisCommandSetTouchable);
+  
+  directory = new G4UIdirectory ("/vis/scene/");
+  directory -> SetGuidance ("Operations on Geant4 scenes.");
+  fDirectoryList.push_back (directory);
+  RegisterMessenger(new G4VisCommandSceneActivateModel);
+  RegisterMessenger(new G4VisCommandSceneCreate);
+  RegisterMessenger(new G4VisCommandSceneEndOfEventAction);
+  RegisterMessenger(new G4VisCommandSceneEndOfRunAction);
+  RegisterMessenger(new G4VisCommandSceneList);
+  RegisterMessenger(new G4VisCommandSceneNotifyHandlers);
+  RegisterMessenger(new G4VisCommandSceneSelect);
+  
+  directory = new G4UIdirectory ("/vis/scene/add/");
+  directory -> SetGuidance ("Add model to current scene.");
+  fDirectoryList.push_back (directory);
+  RegisterMessenger(new G4VisCommandSceneAddArrow);
+  RegisterMessenger(new G4VisCommandSceneAddArrow2D);
+  RegisterMessenger(new G4VisCommandSceneAddAxes);
+  RegisterMessenger(new G4VisCommandSceneAddDate);
+  RegisterMessenger(new G4VisCommandSceneAddDigis);
+  RegisterMessenger(new G4VisCommandSceneAddEventID);
+  RegisterMessenger(new G4VisCommandSceneAddFrame);
+  RegisterMessenger(new G4VisCommandSceneAddGhosts);
+  RegisterMessenger(new G4VisCommandSceneAddHits);
+  RegisterMessenger(new G4VisCommandSceneAddLine);
+  RegisterMessenger(new G4VisCommandSceneAddLine2D);
+  RegisterMessenger(new G4VisCommandSceneAddLogicalVolume);
+  RegisterMessenger(new G4VisCommandSceneAddLogo);
+  RegisterMessenger(new G4VisCommandSceneAddLogo2D);
+  RegisterMessenger(new G4VisCommandSceneAddPSHits);
+  RegisterMessenger(new G4VisCommandSceneAddScale);
+  RegisterMessenger(new G4VisCommandSceneAddText);
+  RegisterMessenger(new G4VisCommandSceneAddText2D);
+  RegisterMessenger(new G4VisCommandSceneAddTrajectories);
+  RegisterMessenger(new G4VisCommandSceneAddUserAction);
+  RegisterMessenger(new G4VisCommandSceneAddVolume);
+  
+  directory = new G4UIdirectory ("/vis/sceneHandler/");
+  directory -> SetGuidance ("Operations on Geant4 scene handlers.");
+  fDirectoryList.push_back (directory);
+  RegisterMessenger(new G4VisCommandSceneHandlerAttach);
+  RegisterMessenger(new G4VisCommandSceneHandlerCreate);
+  RegisterMessenger(new G4VisCommandSceneHandlerList);
+  RegisterMessenger(new G4VisCommandSceneHandlerSelect);
+  
+  directory = new G4UIdirectory ("/vis/touchable/");
+  directory = new G4UIdirectory ("/vis/touchable/set/");
+  directory -> SetGuidance ("Set vis attributes of current touchable.");
+  fDirectoryList.push_back (directory);
+  RegisterMessenger(new G4VisCommandsTouchableSet);
+
+  directory = new G4UIdirectory ("/vis/viewer/");
+  directory -> SetGuidance ("Operations on Geant4 viewers.");
+  fDirectoryList.push_back (directory);
+  RegisterMessenger(new G4VisCommandViewerAddCutawayPlane);
+  RegisterMessenger(new G4VisCommandViewerChangeCutawayPlane);
+  RegisterMessenger(new G4VisCommandViewerClear);
+  RegisterMessenger(new G4VisCommandViewerClearCutawayPlanes);
+  RegisterMessenger(new G4VisCommandViewerClearTransients);
+  RegisterMessenger(new G4VisCommandViewerClone);
+  RegisterMessenger(new G4VisCommandViewerCopyViewFrom);
+  RegisterMessenger(new G4VisCommandViewerCreate);
+  RegisterMessenger(new G4VisCommandViewerDolly);
+  RegisterMessenger(new G4VisCommandViewerFlush);
+  RegisterMessenger(new G4VisCommandViewerList);
+  RegisterMessenger(new G4VisCommandViewerPan);
+  RegisterMessenger(new G4VisCommandViewerRebuild);
+  RegisterMessenger(new G4VisCommandViewerRefresh);
+  RegisterMessenger(new G4VisCommandViewerReset);
+  RegisterMessenger(new G4VisCommandViewerSave);
+  RegisterMessenger(new G4VisCommandViewerScale);
+  RegisterMessenger(new G4VisCommandViewerSelect);
+  RegisterMessenger(new G4VisCommandViewerUpdate);
+  RegisterMessenger(new G4VisCommandViewerZoom);
+  
+  directory = new G4UIdirectory ("/vis/viewer/default/");
+  directory -> SetGuidance("Set default values for future viewers.");
+  fDirectoryList.push_back (directory);
+  RegisterMessenger(new G4VisCommandViewerDefaultHiddenEdge);
+  RegisterMessenger(new G4VisCommandViewerDefaultStyle);
+  
+  directory = new G4UIdirectory ("/vis/viewer/set/");
+  directory -> SetGuidance ("Set view parameters of current viewer.");
+  fDirectoryList.push_back (directory);
+  RegisterMessenger(new G4VisCommandsViewerSet);
+  
+  // List manager commands
+  RegisterMessenger(new G4VisCommandListManagerList< G4VisModelManager<G4VTrajectoryModel> >
+		    (fpTrajDrawModelMgr, fpTrajDrawModelMgr->Placement()));
+  RegisterMessenger(new G4VisCommandListManagerSelect< G4VisModelManager<G4VTrajectoryModel> >
+		    (fpTrajDrawModelMgr, fpTrajDrawModelMgr->Placement()));
+  
+  // Trajectory filter manager commands
+  RegisterMessenger(new G4VisCommandListManagerList< G4VisFilterManager<G4VTrajectory> >
+                    (fpTrajFilterMgr, fpTrajFilterMgr->Placement()));
+  RegisterMessenger(new G4VisCommandManagerMode< G4VisFilterManager<G4VTrajectory> >
+                    (fpTrajFilterMgr, fpTrajFilterMgr->Placement()));
+  
+  // Hit filter manager commands
+  RegisterMessenger(new G4VisCommandListManagerList< G4VisFilterManager<G4VHit> >
+                    (fpHitFilterMgr, fpHitFilterMgr->Placement()));
+  RegisterMessenger(new G4VisCommandManagerMode< G4VisFilterManager<G4VHit> >
+                    (fpHitFilterMgr, fpHitFilterMgr->Placement()));
+  
+  // Digi filter manager commands
+  RegisterMessenger(new G4VisCommandListManagerList< G4VisFilterManager<G4VDigi> >
+                    (fpDigiFilterMgr, fpDigiFilterMgr->Placement()));
+  RegisterMessenger(new G4VisCommandManagerMode< G4VisFilterManager<G4VDigi> >
+                    (fpDigiFilterMgr, fpDigiFilterMgr->Placement()));
 }
 
 void G4VisManager::Enable() {
@@ -1197,161 +1361,6 @@ void G4VisManager::SetCurrentViewer (G4VViewer* pViewer) {
 	     << G4endl;
     }
   }
-}
-
-void G4VisManager::RegisterMessengers () {
-
-  // Instantiate individual messengers/commands (often - but not
-  // always - one command per messenger).
-
-  G4UIcommand* directory;
-
-  // *Basic* top level commands were instantiated in the constructor
-  // so that they can be used immediately after instantiation of the
-  // vis manager.  Other top level and lower level commands are
-  // instantiated here.
-
-  // Other top level commands...
-  RegisterMessenger(new G4VisCommandAbortReviewKeptEvents);
-  RegisterMessenger(new G4VisCommandEnable);
-  RegisterMessenger(new G4VisCommandList);
-  RegisterMessenger(new G4VisCommandReviewKeptEvents);
-
-  // Compound commands...
-  RegisterMessenger(new G4VisCommandDrawTree);
-  RegisterMessenger(new G4VisCommandDrawView);
-  RegisterMessenger(new G4VisCommandDrawVolume);
-  RegisterMessenger(new G4VisCommandOpen);
-  RegisterMessenger(new G4VisCommandSpecify);
-
-  directory = new G4UIdirectory ("/vis/geometry/");
-  directory -> SetGuidance("Operations on vis attributes of Geant4 geometry.");
-  fDirectoryList.push_back (directory);
-  RegisterMessenger(new G4VisCommandGeometryList);
-  RegisterMessenger(new G4VisCommandGeometryRestore);
-
-  directory = new G4UIdirectory ("/vis/geometry/set/");
-  directory -> SetGuidance("Set vis attributes of Geant4 geometry.");
-  fDirectoryList.push_back (directory);
-  RegisterMessenger(new G4VisCommandGeometrySetColour);
-  RegisterMessenger(new G4VisCommandGeometrySetDaughtersInvisible);
-  RegisterMessenger(new G4VisCommandGeometrySetLineStyle);
-  RegisterMessenger(new G4VisCommandGeometrySetLineWidth);
-  RegisterMessenger(new G4VisCommandGeometrySetForceAuxEdgeVisible);
-  RegisterMessenger(new G4VisCommandGeometrySetForceLineSegmentsPerCircle);
-  RegisterMessenger(new G4VisCommandGeometrySetForceSolid);
-  RegisterMessenger(new G4VisCommandGeometrySetForceWireframe);
-  RegisterMessenger(new G4VisCommandGeometrySetVisibility);
-
-  directory = new G4UIdirectory ("/vis/set/");
-  directory -> SetGuidance("Set quantities for use in appropriate commands.");
-  fDirectoryList.push_back (directory);
-  RegisterMessenger(new G4VisCommandSetColour);
-  RegisterMessenger(new G4VisCommandSetLineWidth);
-  RegisterMessenger(new G4VisCommandSetTextColour);
-  RegisterMessenger(new G4VisCommandSetTextLayout);
-
-  directory = new G4UIdirectory ("/vis/scene/");
-  directory -> SetGuidance ("Operations on Geant4 scenes.");
-  fDirectoryList.push_back (directory);
-  RegisterMessenger(new G4VisCommandSceneActivateModel);
-  RegisterMessenger(new G4VisCommandSceneCreate);
-  RegisterMessenger(new G4VisCommandSceneEndOfEventAction);
-  RegisterMessenger(new G4VisCommandSceneEndOfRunAction);
-  RegisterMessenger(new G4VisCommandSceneList);
-  RegisterMessenger(new G4VisCommandSceneNotifyHandlers);
-  RegisterMessenger(new G4VisCommandSceneSelect);
-
-  directory = new G4UIdirectory ("/vis/scene/add/");
-  directory -> SetGuidance ("Add model to current scene.");
-  fDirectoryList.push_back (directory);
-  RegisterMessenger(new G4VisCommandSceneAddArrow);
-  RegisterMessenger(new G4VisCommandSceneAddArrow2D);
-  RegisterMessenger(new G4VisCommandSceneAddAxes);
-  RegisterMessenger(new G4VisCommandSceneAddDate);
-  RegisterMessenger(new G4VisCommandSceneAddDigis);
-  RegisterMessenger(new G4VisCommandSceneAddEventID);
-  RegisterMessenger(new G4VisCommandSceneAddFrame);
-  RegisterMessenger(new G4VisCommandSceneAddGhosts);
-  RegisterMessenger(new G4VisCommandSceneAddHits);
-  RegisterMessenger(new G4VisCommandSceneAddLine);
-  RegisterMessenger(new G4VisCommandSceneAddLine2D);
-  RegisterMessenger(new G4VisCommandSceneAddLogicalVolume);
-  RegisterMessenger(new G4VisCommandSceneAddLogo);
-  RegisterMessenger(new G4VisCommandSceneAddLogo2D);
-  RegisterMessenger(new G4VisCommandSceneAddPSHits);
-  RegisterMessenger(new G4VisCommandSceneAddScale);
-  RegisterMessenger(new G4VisCommandSceneAddText);
-  RegisterMessenger(new G4VisCommandSceneAddText2D);
-  RegisterMessenger(new G4VisCommandSceneAddTrajectories);
-  RegisterMessenger(new G4VisCommandSceneAddUserAction);
-  RegisterMessenger(new G4VisCommandSceneAddVolume);
-
-  directory = new G4UIdirectory ("/vis/sceneHandler/");
-  directory -> SetGuidance ("Operations on Geant4 scene handlers.");
-  fDirectoryList.push_back (directory);
-  RegisterMessenger(new G4VisCommandSceneHandlerAttach);
-  RegisterMessenger(new G4VisCommandSceneHandlerCreate);
-  RegisterMessenger(new G4VisCommandSceneHandlerList);
-  RegisterMessenger(new G4VisCommandSceneHandlerSelect);
-
-  directory = new G4UIdirectory ("/vis/viewer/");
-  directory -> SetGuidance ("Operations on Geant4 viewers.");
-  fDirectoryList.push_back (directory);
-  RegisterMessenger(new G4VisCommandViewerAddCutawayPlane);
-  RegisterMessenger(new G4VisCommandViewerChangeCutawayPlane);
-  RegisterMessenger(new G4VisCommandViewerClear);
-  RegisterMessenger(new G4VisCommandViewerClearCutawayPlanes);
-  RegisterMessenger(new G4VisCommandViewerClearTransients);
-  RegisterMessenger(new G4VisCommandViewerClone);
-  RegisterMessenger(new G4VisCommandViewerCopyViewFrom);
-  RegisterMessenger(new G4VisCommandViewerCreate);
-  RegisterMessenger(new G4VisCommandViewerDolly);
-  RegisterMessenger(new G4VisCommandViewerFlush);
-  RegisterMessenger(new G4VisCommandViewerList);
-  RegisterMessenger(new G4VisCommandViewerPan);
-  RegisterMessenger(new G4VisCommandViewerRebuild);
-  RegisterMessenger(new G4VisCommandViewerRefresh);
-  RegisterMessenger(new G4VisCommandViewerReset);
-  RegisterMessenger(new G4VisCommandViewerScale);
-  RegisterMessenger(new G4VisCommandViewerSelect);
-  RegisterMessenger(new G4VisCommandViewerUpdate);
-  RegisterMessenger(new G4VisCommandViewerZoom);
-
-  directory = new G4UIdirectory ("/vis/viewer/default/");
-  directory -> SetGuidance("Set default values for future viewers.");
-  fDirectoryList.push_back (directory);
-  RegisterMessenger(new G4VisCommandViewerDefaultHiddenEdge);
-  RegisterMessenger(new G4VisCommandViewerDefaultStyle);
-
-  directory = new G4UIdirectory ("/vis/viewer/set/");
-  directory -> SetGuidance ("Set view parameters of current viewer.");
-  fDirectoryList.push_back (directory);
-  RegisterMessenger(new G4VisCommandsViewerSet);
-
-  // List manager commands
-  RegisterMessenger(new G4VisCommandListManagerList< G4VisModelManager<G4VTrajectoryModel> >
-		    (fpTrajDrawModelMgr, fpTrajDrawModelMgr->Placement()));
-  RegisterMessenger(new G4VisCommandListManagerSelect< G4VisModelManager<G4VTrajectoryModel> >
-		    (fpTrajDrawModelMgr, fpTrajDrawModelMgr->Placement()));  
-
-  // Trajectory filter manager commands
-  RegisterMessenger(new G4VisCommandListManagerList< G4VisFilterManager<G4VTrajectory> >
-                    (fpTrajFilterMgr, fpTrajFilterMgr->Placement()));
-  RegisterMessenger(new G4VisCommandManagerMode< G4VisFilterManager<G4VTrajectory> >
-                    (fpTrajFilterMgr, fpTrajFilterMgr->Placement()));
-
-  // Hit filter manager commands
-  RegisterMessenger(new G4VisCommandListManagerList< G4VisFilterManager<G4VHit> >
-                    (fpHitFilterMgr, fpHitFilterMgr->Placement()));
-  RegisterMessenger(new G4VisCommandManagerMode< G4VisFilterManager<G4VHit> >
-                    (fpHitFilterMgr, fpHitFilterMgr->Placement()));
-
-  // Digi filter manager commands
-  RegisterMessenger(new G4VisCommandListManagerList< G4VisFilterManager<G4VDigi> >
-                    (fpDigiFilterMgr, fpDigiFilterMgr->Placement()));
-  RegisterMessenger(new G4VisCommandManagerMode< G4VisFilterManager<G4VDigi> >
-                    (fpDigiFilterMgr, fpDigiFilterMgr->Placement()));
 }
 
 void G4VisManager::PrintAvailableGraphicsSystems () const {

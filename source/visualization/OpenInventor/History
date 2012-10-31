@@ -20,6 +20,33 @@ committal in the CVS repository !
 History file for visualization/OpenInventor
 -------------------------------------------
 
+17th October 2012  John Allison  (openinventor-V09-05-12)
+- G4OpenInventorXtExaminerViewer.cc:
+  o Disabled initial auto setting to first viewpoint (FWJ).
+- G4OpenInventorXtExtendedViewer
+  o Bug fix.  Inherit all except G4OpenInventorXtExaminerViewer* fViewer.
+- G4OpenInventorXtViewer:
+  o Bug fix.  Was not fully reverted.  None of Fred's stuff remains;
+    it's now only in G4OpenInventorXtExtendedViewer.
+
+17th October 2012  John Allison  (openinventor-V09-05-11)
+- Encapsulated Fred's code in a new driver, G4OpenInventorXtExtended
+  (OIXE).
+
+16 October 2012  Frederick Jones  (openinventor-V09-05-10)
+- G4OpenInventorXtExaminerViewer
+  o New class implements functional extensions to the 
+    Xt-based viewer.  A plug-in replacement for
+    SoXtExaminerViewer (the standard viewer provided
+    with Coin3d).
+- G4OpenInventorXtViewer
+  o Instantiates G4OpenInventorXtExaminerViewer instead
+    of SoXtExaminerViewer.  Added some additional menu items.
+
+7th October 2012  John Allison  (openinventor-V09-05-09)
+- G4OpenInventorViewer::CompareForKernelVisit:
+  o Added test of VisAttributesModifiers to list checked for kernel visit.
+
 25th September 2012  John Allison (openinventor-V09-05-08)
 - G4OpenInventorSceneHandler:
   o Pick up default vis attributes if primitive has none.

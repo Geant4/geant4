@@ -2374,6 +2374,7 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
       "\n  \"/vis/modeling/trajectories/create/drawByAttribute\" and"
       "\n  \"/vis/filtering/trajectories/create/attributeFilter\" commands:"
 	   << G4endl;
+    G4cout << G4TrajectoriesModel().GetAttDefs();
     if (rich) {
       G4cout << G4RichTrajectory().GetAttDefs()
 	     << G4RichTrajectoryPoint().GetAttDefs();
@@ -2722,6 +2723,9 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
   std::vector<G4PhysicalVolumeModel*> models;
   std::vector<G4VPhysicalVolume*> foundVolumes;
   G4VPhysicalVolume* foundWorld = 0;
+  typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
+  typedef std::vector<PVNodeID> PVPath;
+  PVPath foundFullPVPath;
   std::vector<G4int> foundDepths;
   std::vector<G4Transform3D> transformations;
 
@@ -2768,7 +2772,8 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
       if (foundVolume) {
 	foundWorld = *iterWorld;
 	foundVolumes.push_back(foundVolume);
-	foundDepths.push_back(searchScene.GetFoundDepth());
+        foundFullPVPath = searchScene.GetFoundFullPVPath();
+        foundDepths.push_back(searchScene.GetFoundDepth());
 	transformations.push_back(searchScene.GetFoundTransformation());
 	break;
       }
@@ -2776,9 +2781,11 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
 
     if (foundVolumes.size()) {
       for (size_t i = 0; i < foundVolumes.size(); ++i) {
-	models.push_back
-	  (new G4PhysicalVolumeModel
-	   (foundVolumes[i], requestedDepthOfDescent, transformations[i]));
+        G4PhysicalVolumeModel* foundPVModel = new G4PhysicalVolumeModel
+        (foundVolumes[i], requestedDepthOfDescent, transformations[i]);
+        foundFullPVPath.pop_back();  // "Base" is "Found - 1".
+        foundPVModel->SetBaseFullPVPath(foundFullPVPath);
+	models.push_back(foundPVModel);
       }
     } else {
       if (verbosity >= G4VisManager::errors) {

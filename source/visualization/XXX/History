@@ -20,6 +20,13 @@ committal in the CVS repository !
 History file for visualization/XXX sub-category (a template graphics system)
 ---------------------------------------------------------------------------
 
+7th October 2012  John Allison  (visXXX-V09-05-04)
+- G4XXXStoredViewer::, G4XXXSGViewer::CompareForKernelVisit:
+  o Added test of VisAttributesModifiers to list checked for kernel visit.
+
+3rd October 2012  John Allison  (visXXX-V09-05-03)
+  o Protected the case of G4LogicalVolumeModel.
+
 8th June 2012  John Allison  (visXXX-V09-05-02)
 - Shadow clean.
 

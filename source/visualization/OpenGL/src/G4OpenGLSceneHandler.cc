@@ -200,14 +200,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
   G4int nPoints = line.size ();
   if (nPoints <= 0) return;
 
-  // Note: colour treated in sub-class.
-
-  if (fProcessing2D) glDisable (GL_DEPTH_TEST);
-  else {
-    if (fpViewer -> GetViewParameters ().IsMarkerNotHidden ())
-      glDisable (GL_DEPTH_TEST);
-    else {glEnable (GL_DEPTH_TEST); glDepthFunc (GL_LEQUAL);}
-  }
+  // Note: colour and depth test treated in sub-class.
 
   glDisable (GL_LIGHTING);
 
@@ -240,14 +233,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
     return;
   }
 
-  // Note: colour treated in sub-class.
-
-  if (fProcessing2D) glDisable (GL_DEPTH_TEST);
-  else {
-    if (fpViewer -> GetViewParameters ().IsMarkerNotHidden ())
-      glDisable (GL_DEPTH_TEST);
-    else {glEnable (GL_DEPTH_TEST); glDepthFunc (GL_LEQUAL);}
-  }
+  // Note: colour and depth test treated in sub-class.
 
   glDisable (GL_LIGHTING);
   
@@ -343,9 +329,6 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
     case G4Polymarker::squares:
       glDisable (GL_POINT_SMOOTH); break;
     }
-    //Transparency
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
       
     glBegin (GL_POINTS);
     for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {
@@ -548,18 +531,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     // Trap situation where number of edges is > 4...
     if (nEdges > 4) {
       G4cerr <<
-	"G4OpenGLSceneHandler::AddPrimitive(G4Polyhedron): WARNING";
-      G4PhysicalVolumeModel* pPVModel =
-	dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
-      if (pPVModel) {
-	G4VPhysicalVolume* pCurrentPV = pPVModel->GetCurrentPV();
-	G4LogicalVolume* pCurrentLV = pPVModel->GetCurrentLV();
-	G4cerr <<
-	"\n  Volume " << pCurrentPV->GetName() <<
-	", Solid " << pCurrentLV->GetSolid()->GetName() <<
-	  " (" << pCurrentLV->GetSolid()->GetEntityType();
-      }
-      G4cerr<<
+	"G4OpenGLSceneHandler::AddPrimitive(G4Polyhedron): WARNING"
 	"\n   G4Polyhedron facet with " << nEdges << " edges" << G4endl;
     }
 
