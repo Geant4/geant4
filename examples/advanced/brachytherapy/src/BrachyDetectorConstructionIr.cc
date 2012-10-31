@@ -41,6 +41,7 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "BrachyDetectorConstructionIr.hh"
 #include "G4Sphere.hh"
 #include "G4RunManager.hh"

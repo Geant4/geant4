@@ -43,6 +43,7 @@
 //
 
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "BrachyDetectorConstructionLeipzig.hh"
 #include "G4CSGSolid.hh"
 #include "G4Sphere.hh"

@@ -49,7 +49,7 @@ public:
 
 public:
   // store a quantity into a file
-  void DumpQuantityToFile(G4String & psName, G4String & fileName, G4String & option);
+  void DumpQuantityToFile(const G4String & psName, const G4String & fileName, const G4String & option);
 };
 
 #endif
