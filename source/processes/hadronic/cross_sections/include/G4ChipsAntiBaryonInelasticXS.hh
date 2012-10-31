@@ -44,9 +44,8 @@
 #include "G4NucleiProperties.hh"
 #include <vector>
 #include "G4VCrossSectionDataSet.hh"
-#include "G4ChipsBaseXS.hh"
 
-class G4ChipsAntiBaryonInelasticXS :   public G4VCrossSectionDataSet, public G4ChipsBaseXS
+class G4ChipsAntiBaryonInelasticXS :   public G4VCrossSectionDataSet
 {
 public:
 
@@ -75,6 +74,7 @@ private:
   G4double CrossSectionLin(G4int targZ, G4int targN, G4double P);
   G4double CrossSectionLog(G4int targZ, G4int targN, G4double lP);
   G4double CrossSectionFormula(G4int targZ, G4int targN, G4double P, G4double lP);
+  G4double EquLinearFit(G4double X, G4int N, G4double X0, G4double DX, G4double* Y);
 // Body
 private:
   G4int pPDG;

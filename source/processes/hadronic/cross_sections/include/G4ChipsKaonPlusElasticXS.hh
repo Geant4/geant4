@@ -43,9 +43,8 @@
 #include <vector>
 #include "Randomize.hh"
 #include "G4VCrossSectionDataSet.hh"
-#include "G4ChipsBaseXS.hh"
 
-class G4ChipsKaonPlusElasticXS : public G4VCrossSectionDataSet, public G4ChipsBaseXS
+class G4ChipsKaonPlusElasticXS : public G4VCrossSectionDataSet
 {
 public:
 

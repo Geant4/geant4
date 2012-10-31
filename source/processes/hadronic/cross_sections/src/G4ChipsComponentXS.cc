@@ -85,53 +85,55 @@ G4double G4ChipsComponentXS::GetTotalElementCrossSection
   G4double momentum = std::sqrt(kinEnergy*(kinEnergy+2.*aParticle->GetPDGMass()));
   G4int PDGcode=aParticle->GetPDGEncoding();
 
-  G4ChipsBaseXS* CHIPSmanagerEl=0; 
-  G4ChipsBaseXS* CHIPSmanagerInEl=0;
+  G4double Xelastic(0.), Xinelastic(0.);
 
   if     (PDGcode == 2212)   // Projectile is Proton
   {
-   CHIPSmanagerEl=PxsManagerEl;  CHIPSmanagerInEl=PxsManagerInEl;
+   Xelastic   = PxsManagerEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode);  
+   Xinelastic = PxsManagerInEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode);
   } else if(PDGcode == 2112)  // Projectile is Neutron 
   {
-   CHIPSmanagerEl=NxsManagerEl;  CHIPSmanagerInEl=NxsManagerInEl;   
+   Xelastic = NxsManagerEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode);  
+   Xinelastic = NxsManagerInEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode);   
   } else if(PDGcode == -2212) // Projectile is Anti-Proton
   {
-   CHIPSmanagerEl=PBARxsManagerEl; CHIPSmanagerInEl=PBARxsManagerInEl;
+   Xelastic = PBARxsManagerEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode); 
+   Xinelastic = PBARxsManagerInEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode);
   } else if(PDGcode == -2112) // Projectile is Anti-Neutron
   {
-   CHIPSmanagerEl=PBARxsManagerEl; CHIPSmanagerInEl=PBARxsManagerInEl;
+   Xelastic = PBARxsManagerEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode); 
+   Xinelastic = PBARxsManagerInEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode);
   }else if(PDGcode == -3122 || PDGcode == -3222  || PDGcode == -3212  || PDGcode == -3112  || PDGcode == -3322  
 	   || PDGcode == -3312  || PDGcode == -3334) // Projectile is other Anti-baryon
   {
-   CHIPSmanagerEl=PBARxsManagerEl; CHIPSmanagerInEl=PBARxsManagerInEl;
+   Xelastic = PBARxsManagerEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode); 
+   Xinelastic = PBARxsManagerInEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode);
   } else if(PDGcode ==   211) // Projectile is Pi+ 
   {
-   CHIPSmanagerEl=PIPxsManagerEl; CHIPSmanagerInEl=PIPxsManagerInEl;
+   Xelastic = PIPxsManagerEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode); 
+   Xinelastic = PIPxsManagerInEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode);
   } else if(PDGcode ==  -211) // Projectile is Pi-
   {
-   CHIPSmanagerEl=PIMxsManagerEl; CHIPSmanagerInEl=PIMxsManagerInEl;
+   Xelastic = PIMxsManagerEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode); 
+   Xinelastic = PIMxsManagerInEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode);
   } else if(PDGcode ==  321)  // Projectile is K+ 
   {
-   CHIPSmanagerEl=KPxsManagerEl; CHIPSmanagerInEl=KPxsManagerInEl; 
+   Xelastic = KPxsManagerEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode); 
+   Xinelastic = KPxsManagerInEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode); 
   } else if(PDGcode ==  -321) // Projectile is K- 
   {
-   CHIPSmanagerEl=KMxsManagerEl; CHIPSmanagerInEl=KMxsManagerInEl;  
+   Xelastic = KMxsManagerEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode); 
+   Xinelastic = KMxsManagerInEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode);  
   } else if(PDGcode ==  130 || PDGcode ==  310 || PDGcode ==  311 || PDGcode ==  -311) // Projectile is K0
   {
-   CHIPSmanagerEl=KZxsManagerEl; CHIPSmanagerInEl=KZxsManagerInEl; 
+   Xelastic = KZxsManagerEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode); 
+   Xinelastic = KZxsManagerInEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode); 
   }else if(PDGcode ==   3122 || PDGcode ==  3222 || PDGcode ==  3112 || PDGcode ==  3212
 	   || PDGcode ==   3312 || PDGcode ==  3322 || PDGcode ==   3334) // Projectile is hyperon
   {
-   CHIPSmanagerEl=HxsManagerEl; CHIPSmanagerInEl=HxsManagerInEl; 
+   Xelastic = HxsManagerEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode); 
+   Xinelastic = HxsManagerInEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode); 
   } 
-
-  G4double Xelastic(0.), Xinelastic(0.);
-
-  if((CHIPSmanagerEl != 0) && (CHIPSmanagerInEl != 0))
-  { 
-   Xelastic   = CHIPSmanagerEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode);
-   Xinelastic = CHIPSmanagerInEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode);
-  }
 
   return Xelastic+Xinelastic; 
 }
@@ -148,40 +150,34 @@ G4double G4ChipsComponentXS::GetInelasticElementCrossSection
   G4double momentum = std::sqrt(kinEnergy*(kinEnergy+2.*aParticle->GetPDGMass()));
   G4int PDGcode=aParticle->GetPDGEncoding();
 
-  G4ChipsBaseXS* CHIPSmanagerInEl=0;
+  G4double Xinelastic(0.);
 
   if     (PDGcode == 2212)   // Projectile is Proton
   {
-   CHIPSmanagerInEl=PxsManagerInEl;
+   Xinelastic = PxsManagerInEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode);
   } else if(PDGcode == 2112)  // Projectile is Neutron 
   {
-   CHIPSmanagerInEl=NxsManagerInEl;   
+   Xinelastic = NxsManagerInEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode);
   } else if(PDGcode == -2212) // Projectile is Anti-Proton
   {
-   CHIPSmanagerInEl=PBARxsManagerInEl;
+   Xinelastic = PBARxsManagerInEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode);
   } else if(PDGcode == -2112) // Projectile is Anti-Neutron
   {
-   CHIPSmanagerInEl=PBARxsManagerInEl;
+   Xinelastic = PBARxsManagerInEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode);
   } else if(PDGcode ==   211) // Projectile is Pi+ 
   {
-   CHIPSmanagerInEl=PIPxsManagerInEl;
+   Xinelastic = PIPxsManagerInEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode);
   } else if(PDGcode ==  -211) // Projectile is Pi-
   {
-   CHIPSmanagerInEl=PIMxsManagerInEl;
+   Xinelastic = PIMxsManagerInEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode);
   } else if(PDGcode ==  321)  // Projectile is K+ 
   {
-   CHIPSmanagerInEl=KPxsManagerInEl; 
+   Xinelastic = KPxsManagerInEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode);
   } else if(PDGcode ==  -321) // Projectile is K- 
   {
-   CHIPSmanagerInEl=KMxsManagerInEl; 
+   Xinelastic = KMxsManagerInEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode);; 
   } 
 
-  G4double Xinelastic(0.);
-
-  if(CHIPSmanagerInEl != 0)
-  { 
-   Xinelastic = CHIPSmanagerInEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode);
-  }
   return Xinelastic; 
 }
 
@@ -197,40 +193,33 @@ G4double G4ChipsComponentXS::GetElasticElementCrossSection
   G4double momentum = std::sqrt(kinEnergy*(kinEnergy+2.*aParticle->GetPDGMass()));
   G4int PDGcode=aParticle->GetPDGEncoding();
 
-  G4ChipsBaseXS* CHIPSmanagerEl=0; 
-
+  G4double Xelastic(0.);
+  
   if     (PDGcode == 2212)   // Projectile is Proton
   {
-   CHIPSmanagerEl=PxsManagerEl;
+   Xelastic=PxsManagerEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode);
   } else if(PDGcode == 2112)  // Projectile is Neutron 
   {
-   CHIPSmanagerEl=NxsManagerEl;   
+   Xelastic=NxsManagerEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode);   
   } else if(PDGcode == -2212) // Projectile is Anti-Proton
   {
-   CHIPSmanagerEl=PBARxsManagerEl;
+   Xelastic=PBARxsManagerEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode);
   } else if(PDGcode == -2112) // Projectile is Anti-Neutron
   {
-   CHIPSmanagerEl=PBARxsManagerEl;
+   Xelastic=PBARxsManagerEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode);
   } else if(PDGcode ==   211) // Projectile is Pi+ 
   {
-   CHIPSmanagerEl=PIPxsManagerEl;
+   Xelastic=PIPxsManagerEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode);
   } else if(PDGcode ==  -211) // Projectile is Pi-
   {
-   CHIPSmanagerEl=PIMxsManagerEl;
+   Xelastic=PIMxsManagerEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode);
   } else if(PDGcode ==  321)  // Projectile is K+ 
   {
-   CHIPSmanagerEl=KPxsManagerEl;
+   Xelastic=KPxsManagerEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode);
   } else if(PDGcode ==  -321) // Projectile is K- 
   {
-   CHIPSmanagerEl=KMxsManagerEl;
+   Xelastic=KMxsManagerEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode);
   } 
-
-  G4double Xelastic(0.);
-
-  if(CHIPSmanagerEl != 0)
-  { 
-   Xelastic   = CHIPSmanagerEl->GetChipsCrossSection(momentum,Z,(G4int)N,PDGcode);
-  }
   return Xelastic; 
 }
  

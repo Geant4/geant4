@@ -44,11 +44,10 @@
 #include "G4NucleiProperties.hh"
 #include <vector>
 #include "G4VCrossSectionDataSet.hh"
-#include "G4ChipsBaseXS.hh"
 #include "G4ChipsKaonPlusInelasticXS.hh"
 #include "G4ChipsKaonMinusInelasticXS.hh"
 
-class G4ChipsKaonZeroInelasticXS : public G4VCrossSectionDataSet, public G4ChipsBaseXS
+class G4ChipsKaonZeroInelasticXS : public G4VCrossSectionDataSet
 {
 
 
@@ -70,7 +69,7 @@ public:
 				      const G4Element* elm = 0,
 				      const G4Material* mat = 0);
 
-  virtual G4double GetChipsCrossSection(G4double momentum, G4int Z, G4int N, G4int pdg);  
+  G4double GetChipsCrossSection(G4double momentum, G4int Z, G4int N, G4int pdg);  
 
 // Body
 private:

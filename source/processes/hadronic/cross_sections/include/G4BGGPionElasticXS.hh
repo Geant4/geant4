@@ -57,6 +57,7 @@
 class G4GlauberGribovCrossSection;
 class G4UPiNuclearCrossSection;
 class G4HadronNucleonXsc;
+class G4ComponentSAIDTotalXS;
 class G4Material;
 class G4Element;
 class G4Isotope;
@@ -95,21 +96,22 @@ public:
 
 private:
 
-  G4double CoulombFactor(G4double kinEnergy, G4int A);
-
   G4BGGPionElasticXS & operator=(const G4BGGPionElasticXS &right);
   G4BGGPionElasticXS(const G4BGGPionElasticXS&);
 
   G4double fGlauberEnergy;  
   G4double fLowEnergy;  
+  G4double fSAIDHighEnergyLimit;
   G4double theGlauberFac[93];
   G4double theCoulombFac[93];
   G4int    theA[93];
 
   const G4ParticleDefinition*     particle;
+  const G4ParticleDefinition*     theProton;
   G4GlauberGribovCrossSection*    fGlauber;
   G4UPiNuclearCrossSection*       fPion;
   G4HadronNucleonXsc*             fHadron;
+  G4ComponentSAIDTotalXS*         fSAID;
   G4bool                          isPiplus;
   G4bool                          isInitialized;
 };

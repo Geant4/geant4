@@ -322,3 +322,23 @@ G4double G4ChipsKaonMinusInelasticXS::CrossSectionFormula(G4int tZ, G4int tN,
   if(sigma<0.) return 0.;
   return sigma;  
 }
+
+G4double G4ChipsKaonMinusInelasticXS::EquLinearFit(G4double X, G4int N, G4double X0, G4double DX, G4double* Y)
+{
+  if(DX<=0. || N<2)
+    {
+      G4cerr<<"***G4ChipsKaonMinusInelasticXS::EquLinearFit: DX="<<DX<<", N="<<N<<G4endl;
+      return Y[0];
+    }
+  
+  G4int    N2=N-2;
+  G4double d=(X-X0)/DX;
+  G4int         j=static_cast<int>(d);
+  if     (j<0)  j=0;
+  else if(j>N2) j=N2;
+  d-=j; // excess
+  G4double yi=Y[j];
+  G4double sigma=yi+(Y[j+1]-yi)*d;
+  
+  return sigma;
+}

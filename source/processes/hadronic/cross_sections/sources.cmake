@@ -50,7 +50,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
 	G4BGGPionInelasticXS.hh
 	G4ChipsAntiBaryonElasticXS.hh
 	G4ChipsAntiBaryonInelasticXS.hh
-	G4ChipsBaseXS.hh
 	G4ChipsComponentXS.hh
 	G4ChipsHyperonElasticXS.hh
 	G4ChipsHyperonInelasticXS.hh
@@ -118,7 +117,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
 	G4BGGPionInelasticXS.cc
 	G4ChipsAntiBaryonElasticXS.cc
 	G4ChipsAntiBaryonInelasticXS.cc
-	G4ChipsBaseXS.cc
 	G4ChipsComponentXS.cc
 	G4ChipsHyperonElasticXS.cc
 	G4ChipsHyperonInelasticXS.cc

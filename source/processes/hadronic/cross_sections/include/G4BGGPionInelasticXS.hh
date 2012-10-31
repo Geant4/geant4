@@ -60,7 +60,8 @@
 class G4GlauberGribovCrossSection;
 class G4UPiNuclearCrossSection;
 class G4HadronNucleonXsc;
-class G4HadronInelasticDataSet;
+//class G4HadronInelasticDataSet;
+class G4ComponentSAIDTotalXS;
 class G4Material;
 class G4Element;
 class G4Isotope;
@@ -106,6 +107,7 @@ private:
 
   G4double fGlauberEnergy;  
   G4double fLowEnergy;  
+  G4double fSAIDHighEnergyLimit;
   G4double theGlauberFac[93];
   G4double theCoulombFac[93];
   G4int    theA[93];
@@ -115,7 +117,8 @@ private:
   G4GlauberGribovCrossSection*    fGlauber;
   G4UPiNuclearCrossSection*       fPion;
   G4HadronNucleonXsc*             fHadron;
-  G4HadronInelasticDataSet*       fGHEISHA;
+  // G4HadronInelasticDataSet*       fGHEISHA;
+  G4ComponentSAIDTotalXS*         fSAID;
   G4bool                          isPiplus;
   G4bool                          isInitialized;
 };

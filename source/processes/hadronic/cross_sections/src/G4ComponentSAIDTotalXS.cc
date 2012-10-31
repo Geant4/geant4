@@ -111,7 +111,7 @@ G4ComponentSAIDTotalXS::GetInelasticIsotopeCrossSection(
     G4int idx = G4int(tp);
     if(!inelastdata[idx]) { Initialise(tp); }
     if(inelastdata[idx]) { 
-      cross = (inelastdata[idx])->Value(kinEnergy); 
+      cross = (inelastdata[idx])->Value(kinEnergy);
     }
   }
   return cross;
@@ -205,6 +205,7 @@ G4ComponentSAIDTotalXS::GetType(const G4ParticleDefinition* prim,
       }
     }
   }
+  //G4cout << "G4ComponentSAIDTotalXS::Type= " << type << G4endl;
   return type;
 }
 
@@ -220,9 +221,12 @@ void G4ComponentSAIDTotalXS::Initialise(G4SAIDCrossSectionType tp)
     return;
   }
   if(idx <= 4) {
+    elastdata[idx] = new G4LPhysicsFreeVector();
+    inelastdata[idx] = new G4LPhysicsFreeVector();
     ReadData(idx,elastdata[idx],path,"_el.dat");
     ReadData(idx,inelastdata[idx],path,"_in.dat");
   } else {
+    inelastdata[idx] = new G4LPhysicsFreeVector();
     ReadData(idx,inelastdata[idx],path,".dat");
   }
 }
@@ -232,7 +236,6 @@ void G4ComponentSAIDTotalXS::ReadData(G4int index,
 				      const G4String& ss1, 
 				      const G4String& ss2)
 {
-  v = new G4LPhysicsFreeVector();
   std::ostringstream ost;
   ost << ss1 << "/" << fnames[index] << ss2;
   std::ifstream filein(ost.str().c_str());
@@ -248,6 +251,8 @@ void G4ComponentSAIDTotalXS::ReadData(G4int index,
     }
     // retrieve data from DB
     v->Retrieve(filein, true);
+    v->ScaleVector(CLHEP::MeV,CLHEP::millibarn);
+    v->SetSpline(true);
   } 
 }
 
