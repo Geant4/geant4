@@ -47,6 +47,7 @@ enum G4HadronicProcessType
   fCapture =          131,
   fFission =          141,
   fHadronAtRest =     151,
+  fLeptonAtRest =     152,
   fChargeExchange =   161,
   fRadioactiveDecay = 210
 };
