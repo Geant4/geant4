@@ -16,6 +16,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+October 19th, 2012 Ben Morgan
+- Simplify CMake syntax to find Geant4 with gdml support
 
 July 25th, 2012 Witek Pokorski G01-V09-05-02
 - a few more cosmetic changes to comply to coding convetions

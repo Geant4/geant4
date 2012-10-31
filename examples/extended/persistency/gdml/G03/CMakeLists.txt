@@ -10,23 +10,15 @@ project(G03)
 #
 option(WITH_GEANT4_VIS "Build example with Geant4 Vis drivers" ON)
 if(WITH_GEANT4_VIS)
-  find_package(Geant4 REQUIRED vis_all)
+  find_package(Geant4 REQUIRED gdml vis_all)
 else()
-  find_package(Geant4 REQUIRED)
+  find_package(Geant4 REQUIRED gdml)
 endif()
 
 #----------------------------------------------------------------------------
 # Setup Geant4 include directories and compile definitions
 #
 include(${Geant4_USE_FILE})
-
-#----------------------------------------------------------------------------
-# Requires Geant4 built with GDML
-#
-if(NOT GEANT4_USE_GDML)
-  message(STATUS "G4 Examples: GDML not installed --> G03 example disabled")  
-  return()
-endif()
 
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project

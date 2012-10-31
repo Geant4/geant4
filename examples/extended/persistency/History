@@ -16,6 +16,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 22th, 2012 I. Hrivnacova (exPersistency-V09-05-06)
+- Fixed handling GDML option in CMake build:
+  The "gdml" component is added to find_package call in G0*/CMakeLists.txt
+  examples (Ben Morgan); check on existence of Geant4_gdml_FOUND only in the
+  persistency/CMakeLists.txt
+
 October 18th, 2012 I. Hrivnacova (exPersistency-V09-05-05)
 - Adding a test for GEANT4_USE_GDML option in CMake files
 
