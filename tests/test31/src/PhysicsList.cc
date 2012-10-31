@@ -34,6 +34,7 @@
 //
 // Modified:
 // 16.11.06 Use components from physics_lists subdirectory (V.Ivanchenko)
+// 24.10.12 Migrate to the new stopping and ion physics (A.Ribon)
 //
 //----------------------------------------------------------------------------
 //
@@ -56,9 +57,9 @@
 #include "G4DecayPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4HadronInelasticQBBC.hh"
-#include "G4IonBinaryCascadePhysics.hh"
+#include "G4IonPhysics.hh"
 #include "G4EmExtraPhysics.hh"
-#include "G4QStoppingPhysics.hh"
+#include "G4StoppingPhysics.hh"
 
 #include "G4UnitsTable.hh"
 #include "G4LossTableManager.hh"
@@ -183,7 +184,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
     
   } else if (name == "binary_ion" && !ionIsRegisted && emBuilderIsRegisted) {
-    RegisterPhysics(new G4IonBinaryCascadePhysics());
+    RegisterPhysics(new G4IonPhysics());
     ionIsRegisted = true;
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
 
@@ -193,7 +194,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
 
   } else if (name == "stopping" && !stopIsRegisted && emBuilderIsRegisted) {
-    RegisterPhysics(new G4QStoppingPhysics());
+    RegisterPhysics(new G4StoppingPhysics());
     gnucIsRegisted = true;
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
     
