@@ -105,6 +105,8 @@ G4UrbanMscModel90::G4UrbanMscModel90(const G4String& nam)
   currentMaterialIndex = -1;
   fParticleChange = 0;
   couple = 0;
+  G4cout << "### G4UrbanMscModel90 is obsolete and will be removed for "
+	 << "the next Geant4 version" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -128,6 +130,7 @@ void G4UrbanMscModel90::Initialise(const G4ParticleDefinition* p,
     G4cout << "###          This model should be used only for heavy particles" 
 	   << G4endl;
   }
+
 
   fParticleChange = GetParticleChangeForMSC(p);
 }

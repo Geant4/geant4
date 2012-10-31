@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25 October 12: V.Ivanchenko (emstand-V09-05-58)
+-  G4hMultipleScattering - use G4UrbanMscModel95 as a default
+
 21 October 12: V.Ivanchenko (emstand-V09-05-57)
 - G4eBremsstrahlung, G4eIonisation,  G4hIonisation, G4ionIonisation -
     secondary particle type defined in constructors and not in Initialise() 
