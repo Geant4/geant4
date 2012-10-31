@@ -12,17 +12,20 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-27-July-2012, Vladimir Ivanchenko (test61-V09-05-00)
-- Fixed hadron elastic 
+11-Oct-2012, G.Cosmo (test61-V09-05-01)
+- Explicit inclusion of units and constants headers.
 
-07 Nov. 2011, Pere Mato   (test61-V09-04-01)
-- Added ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT} to the CTest definition
+27-Jul-2012, Vladimir Ivanchenko (test61-V09-05-00)
+- Fixed hadron elastic.
 
-15 June 2011, Gunter Folger   (test61-V09-04-00)
-- Update test61.in to replace obsolete /run/particle/SetCut by /run/SetCut
+07-Nov-2011, Pere Mato (test61-V09-04-01)
+- Added ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT} to the CTest definition.
 
-09.11.18 KOI, Tatsumi ( test61-V09-02-00)
-- Change multiple scattering processes to particle dedicated
+15-Jun-2011, Gunter Folger (test61-V09-04-00)
+- Update test61.in to replace obsolete /run/particle/SetCut by /run/SetCut.
 
-08.10.28  KOI, Tatsumi ( test61-V09-01-00 )
-- Created the test for QMD
+18-Nov-2009, Tatsumi Koi (test61-V09-02-00)
+- Change multiple scattering processes to particle dedicated.
+
+28-Oct-2008, Tatsumi Koi (test61-V09-01-00)
+- Created the test for QMD.
