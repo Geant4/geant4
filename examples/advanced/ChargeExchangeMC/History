@@ -7,6 +7,9 @@ cirrone@lns.infn.it
              History file of the ChargeExchangeMC application
          ====================================================
 
+25.10.2012, L.Pandola & A.Radkov, Tag: ChargeExchangeMC-V09-05-03
+            - Fix the CMakeLists.txt file to make Qt optional
+
 18.10.2012, L.Pandola & A.Radkov, Tag: ChargeExchangeMC-V09-05-02
 	    - Add the CMakeLists.txt file (first version, to be checked)
 

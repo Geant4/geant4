@@ -4,14 +4,31 @@ include(CMakeDependentOption)
 set(name ChargeExchangeMC)
 project(${name})
 
-find_package(Geant4 REQUIRED gdml)
+# the project requires Geant4 GDML support!
+find_package(Geant4 REQUIRED COMPONENTS gdml)
+
+# if CEXMC_USE_TCSH is 'yes' then tcsh session support will be built
+option(CEXMC_USE_TCSH
+    "Build ${name} with tcsh session support
+    (requires Geant4 tcsh support)" ON)
+if(CEXMC_USE_TCSH)
+    find_package(Geant4 COMPONENTS ui_tcsh)
+    if(NOT Geant4_ui_tcsh_FOUND)
+        message(WARNING
+            "Could not find Geant4 tcsh binding, skip tcsh session support")
+    endif()
+endif()
 
 # if CEXMC_USE_GUI is 'yes' then GUI session support will be built
 option(CEXMC_USE_GUI
-    "Build ${name} with GUI support
+    "Build ${name} with GUI session support
     (requires Geant4 Qt backend)" ON)
 if(CEXMC_USE_GUI)
-    find_package(Geant4 REQUIRED qt)
+    find_package(Geant4 COMPONENTS qt)
+    if(NOT Geant4_qt_FOUND)
+        message(WARNING
+            "Could not find Geant4 Qt backend, skip GUI session support")
+    endif()
 endif()
 
 include(${Geant4_USE_FILE})
@@ -25,12 +42,19 @@ option(CEXMC_USE_PERSISTENCY
     "Build ${name} with data persistency support
     (requires Boost Serialization library)" ON)
 if(CEXMC_USE_PERSISTENCY)
-    find_package(Boost REQUIRED serialization)
-    add_definitions(-DCEXMC_USE_PERSISTENCY)
-    include_directories(${Boost_INCLUDE_DIRS})
-    link_directories(${Boost_LIBRARY_DIRS})
-    list(APPEND EXTRA_LIBRARIES ${Boost_LIBRARIES})
-    message(STATUS "Library ${Boost_LIBRARIES} was added to the linkage list")
+    find_package(Boost COMPONENTS serialization)
+    if(Boost_SERIALIZATION_FOUND)
+        add_definitions(-DCEXMC_USE_PERSISTENCY)
+        include_directories(${Boost_INCLUDE_DIRS})
+        link_directories(${Boost_LIBRARY_DIRS})
+        list(APPEND EXTRA_LIBRARIES ${Boost_LIBRARIES})
+        message(STATUS
+            "Library ${Boost_LIBRARIES} was added to the linkage list")
+    else()
+        message(WARNING
+            "Could not find Boost Serialization library, "
+            "skip data persistency support")
+    endif()
 endif()
 
 # if CEXMC_USE_CUSTOM_FILTER is 'yes' then Custom filter can be used for
