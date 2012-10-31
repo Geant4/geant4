@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19th Oct.2012 G.Cosmo (op-V09-05-12)
+              Corrected debug flag in G4OpBoundaryProcess.cc to be
+              G4OPTICAL_DEBUG, as the one defined in GNUmakefile...
+
 17th Oct.2012 J.Apostolakis (op-V09-05-11)
 	      Avoid the 'new' Event-abort exception, by 'protecting' 
                  it with G4DEBUG_OPTICAL_PROC flag.

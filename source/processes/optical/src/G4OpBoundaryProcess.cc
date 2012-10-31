@@ -219,7 +219,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         }
 
         if (OldMomentum * theGlobalNormal > 0.0) {
-#ifdef G4DEBUG_OPTICAL_PROC
+#ifdef G4OPTICAL_DEBUG
            G4ExceptionDescription ed;
            ed << " G4OpBoundaryProcess/PostStepDoIt(): "
               << " theGlobalNormal points in a wrong direction. "
