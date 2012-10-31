@@ -42,9 +42,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(DetectorConstruction* det, RunAction* run,
-                               HistoManager* histo)
-:fDetector(det),fRunAction(run), fHistoManager(histo)
+TrackingAction::TrackingAction(DetectorConstruction* det, RunAction* run)
+:fDetector(det),fRunAction(run)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,22 +51,24 @@ TrackingAction::TrackingAction(DetectorConstruction* det, RunAction* run,
 void TrackingAction::PostUserTrackingAction(const G4Track* track)
 {
  G4int trackID = track->GetTrackID();
-  
+ 
+ G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+        
  //track length of primary particle or charged secondaries
  //
  G4double tracklen = track->GetTrackLength();
  if (trackID == 1) {
     fRunAction->AddTrackLength(tracklen);
-    fHistoManager->FillHisto(3, tracklen);
+    analysisManager->FillH1(3, tracklen);
  } else if (track->GetDefinition()->GetPDGCharge() != 0.)
-    fHistoManager->FillHisto(6, tracklen);
+    analysisManager->FillH1(6, tracklen);
            
  //extract projected range of primary particle
  //
  if (trackID == 1) {
    G4double x = track->GetPosition().x() + 0.5*fDetector->GetAbsorSizeX();
    fRunAction->AddProjRange(x);
-   fHistoManager->FillHisto(5, x);
+   analysisManager->FillH1(5, x);
  }
             
  //mean step size of primary particle

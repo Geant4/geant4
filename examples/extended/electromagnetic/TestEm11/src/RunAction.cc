@@ -50,14 +50,19 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(DetectorConstruction* det, PhysicsList* phys,
-                     PrimaryGeneratorAction* kin, HistoManager* histo)
-:fDetector(det),fPhysics(phys),fKinematic(kin),fHistoManager(histo)
-{ }
+                     PrimaryGeneratorAction* kin)
+:fDetector(det),fPhysics(phys),fKinematic(kin)
+{
+  // Book predefined histograms
+  fHistoManager = new HistoManager();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::~RunAction()
-{ }
+{
+  delete fHistoManager;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -66,7 +71,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   
   // save Rndm status
-  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+  ////G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   CLHEP::HepRandom::showEngineStatus();
   
   //initialize total energy deposit
@@ -97,26 +102,31 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
     
   //histograms
   //
-  fHistoManager->book();
-  
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  if ( analysisManager->IsActive() ) {
+    analysisManager->OpenFile();
+  } 
+    
   //set StepMax from histos 1 and 8
-  //
+  //e
   G4double stepMax = DBL_MAX;
   G4int ih = 1;
-  if (fHistoManager->HistoExist(ih)) stepMax = fHistoManager->GetBinWidth(ih);     
+  if (analysisManager->GetH1Activation(ih))
+                                    stepMax = analysisManager->GetH1Width(ih);
   //
   ih = 8;
   G4ParticleDefinition* particle = fKinematic->GetParticleGun()
                                           ->GetParticleDefinition();
   if (particle->GetPDGCharge() != 0.) {
-    G4double width = fHistoManager->GetBinWidth(ih);                                               
+    G4double width = analysisManager->GetH1Width(ih);
+    if (width == 0.) width = 1.;                                               
     G4EmCalculator emCalculator;
     G4double energy = fKinematic->GetParticleGun()->GetParticleEnergy();
     G4int NbOfAbsor = fDetector->GetNbOfAbsor();
     for (G4int i=1; i<= NbOfAbsor; i++) {
       G4Material* material = fDetector->GetAbsorMaterial(i);  
       fCsdaRange[i] = emCalculator.GetCSDARange(energy,particle,material);
-      if (fHistoManager->HistoExist(ih))
+      if (analysisManager->GetH1Activation(ih))
         stepMax = std::min(stepMax, width*fCsdaRange[i]);
       if (i>1) {
         G4double thickness = fDetector->GetAbsorThickness(i-1);
@@ -240,22 +250,28 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
      
   // normalize histograms of longitudinal energy profile
   //
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   G4int ih = 1;
-  G4double binWidth = fHistoManager->GetBinWidth(ih);
+  G4double binWidth = analysisManager->GetH1Width(ih);
+  if (binWidth == 0.) binWidth = 1.;  
   G4double fac = (1./(NbofEvents*binWidth))*(mm/MeV);
-  fHistoManager->Normalize(ih,fac);
-  
-  ih = 8;
-  binWidth = fHistoManager->GetBinWidth(ih);
-  fac = (1./(NbofEvents*binWidth))*(g/(MeV*cm2));
-  fHistoManager->Normalize(ih,fac);
+  analysisManager->ScaleH1(ih,fac);
     
+  ih = 8;
+  binWidth = analysisManager->GetH1Width(ih);
+  if (binWidth == 0.) binWidth = 1.;        
+  fac = (1./(NbofEvents*binWidth))*(g/(MeV*cm2));
+  analysisManager->ScaleH1(ih,fac);
+      
    // reset default formats
   G4cout.setf(mode,std::ios::floatfield);
   G4cout.precision(prec);
   
   // save histograms
-  fHistoManager->save();
+  if ( analysisManager->IsActive() ) {  
+    analysisManager->Write();
+    analysisManager->CloseFile();
+  }    
  
   // show Rndm status
   CLHEP::HepRandom::showEngineStatus();

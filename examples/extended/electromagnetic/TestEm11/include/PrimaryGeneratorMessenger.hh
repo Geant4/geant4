@@ -50,7 +50,7 @@ class PrimaryGeneratorMessenger: public G4UImessenger
     PrimaryGeneratorMessenger(PrimaryGeneratorAction*);
    ~PrimaryGeneratorMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
     
   private:
     PrimaryGeneratorAction*    fAction;

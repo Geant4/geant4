@@ -44,8 +44,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(DetectorConstruction* det, RunAction* RuAct,
-                               EventAction* event, HistoManager* histo)
-:fDetector(det), fRunAction(RuAct), fEventAction(event), fHistoManager(histo)
+                               EventAction* event)
+:fDetector(det), fRunAction(RuAct), fEventAction(event)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,7 +62,9 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
  
  //total energy deposit in absorber
  //
- fEventAction->AddEdep(edep);     
+ fEventAction->AddEdep(edep);
+ 
+ G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();     
  
  //longitudinal profile of deposited energy
  //randomize point of energy deposotion
@@ -74,7 +76,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
  G4ThreeVector point = P1 + G4UniformRand()*(P2 - P1);
  G4double x = point.x();
  G4double xshifted = x + 0.5*fDetector->GetAbsorSizeX();  
- fHistoManager->FillHisto(1, xshifted, edep);
+ analysisManager->FillH1(1, xshifted, edep);
 
  //"normalized" histogram
  // 
@@ -85,16 +87,16 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
    G4double xfront  = fDetector->GetXfront(iabs);
    G4double xfrontNorm = fRunAction->GetXfrontNorm(iabs);
    G4double xnorm = xfrontNorm + (x - xfront)/csdaRange;
-   fHistoManager->FillHisto(8, xnorm, edep/(csdaRange*density));
+   analysisManager->FillH1(8, xnorm, edep/(csdaRange*density));
  }
    
  //step size of primary particle or charged secondaries
  //
  G4double steplen = step->GetStepLength();
  const G4Track* track = step->GetTrack();
- if      (track->GetTrackID() == 1) fHistoManager->FillHisto(4, steplen);
+ if      (track->GetTrackID() == 1) analysisManager->FillH1(4, steplen);
  else if (track->GetDefinition()->GetPDGCharge() != 0.)
-                                    fHistoManager->FillHisto(7, steplen); 
+                                    analysisManager->FillH1(7, steplen); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

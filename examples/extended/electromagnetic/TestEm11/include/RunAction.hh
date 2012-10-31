@@ -49,13 +49,12 @@ class HistoManager;
 class RunAction : public G4UserRunAction
 {
   public:
-    RunAction(DetectorConstruction*, PhysicsList*,PrimaryGeneratorAction*,
-              HistoManager*);
+    RunAction(DetectorConstruction*, PhysicsList*,PrimaryGeneratorAction*);
    ~RunAction();
 
   public:
-    void BeginOfRunAction(const G4Run*);
-    void   EndOfRunAction(const G4Run*);
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void   EndOfRunAction(const G4Run*);
     
     void AddEdep (G4double e)        { fEdeposit  += e; fEdeposit2  += e*e;};
     void AddTrackLength (G4double t) { fTrackLen  += t; fTrackLen2  += t*t;};

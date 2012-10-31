@@ -67,7 +67,7 @@ public:
     
   void SetMagField      (G4double);
      
-  G4VPhysicalVolume* Construct();
+  virtual G4VPhysicalVolume* Construct();
   void               UpdateGeometry();
      
 public:

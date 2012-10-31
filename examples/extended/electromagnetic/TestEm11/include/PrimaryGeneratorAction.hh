@@ -53,7 +53,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
   public:  
     void SetRndmBeam(G4double val)  {fRndmBeam = val;}   
-    void GeneratePrimaries(G4Event*);
+    virtual void GeneratePrimaries(G4Event*);
          
     G4ParticleGun* GetParticleGun() {return fParticleGun;}
     
