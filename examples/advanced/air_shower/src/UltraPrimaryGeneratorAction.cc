@@ -44,6 +44,8 @@
 #include "UltraPrimaryGeneratorAction.hh"
 #include "UltraDetectorConstruction.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4RunManager.hh"
 #include "G4Event.hh"
 #include "G4GeneralParticleSource.hh"

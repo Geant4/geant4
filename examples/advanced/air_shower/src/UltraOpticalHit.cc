@@ -39,6 +39,7 @@
 //    Data members are the photon energy and incidence position 
 //
 #include "UltraOpticalHit.hh"
+#include "G4SystemOfUnits.hh"
 
 G4Allocator<UltraOpticalHit> UltraOpticalHitAllocator;
 

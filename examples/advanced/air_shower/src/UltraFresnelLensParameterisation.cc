@@ -41,9 +41,11 @@
 //    An  UltraFresnelLensParameterisation object is created in the UltraFresnelLens class
 //
 #include <cmath>
+
 #include "UltraFresnelLensParameterisation.hh"
 #include "UltraFresnelLens.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4ThreeVector.hh"
 #include "G4Cons.hh"
