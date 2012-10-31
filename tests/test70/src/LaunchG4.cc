@@ -61,6 +61,8 @@
 //#include "G4VisExecutive.hh"
 //#endif
 
+#include "G4UImanager.hh"
+
 #ifdef G4UI_USE
 #include "G4UIExecutive.hh"
 #endif

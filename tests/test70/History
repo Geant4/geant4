@@ -12,6 +12,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23 October 2012, M.K (test70-V09-05-11)
+------------------------------------------------------
+Add #include "G4UImanager.hh" in LaunchG4.cc
+
+17 October 2012, M.K (test70-V09-05-10)
+------------------------------------------------------
+Rename G4DNADiffustionControlledModel to G4DNASmoluchowskiReactionModel
+
 11 October 2012, Gabriele Cosmo (test70-V09-05-09)
 ------------------------------------------------------
 - Explicit inclusion of units and constants headers.
