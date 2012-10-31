@@ -43,6 +43,8 @@
 #include "G4TessellatedSolid.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
+#include "G4AffineTransform.hh"
+#include "G4VoxelLimits.hh"
 
 void G4STRead::TessellatedRead(const std::string& line)
 {

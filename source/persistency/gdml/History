@@ -17,11 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-18 July 2012 Witek Pokorski (gdml-V09-05-04)
-- fixed wrong tag name
+25 October 2012 Gabriele Cosmo (gdml-V09-05-05)
+- Added inclusion of headers to G4STRead.cc to make it self consistent.
 
-18 July 2012 Witek Pokorski (gdml-V09-06-00)
-- handling of constant material properties added.
+18 July 2012 Witek Pokorski (gdml-V09-05-04)
+- Corrected handling of constant material properties.
 
 5 July 2012 - Gabriele Cosmo (gdml-V09-05-03)
 - Explicitly use inclusion of headers for system of units and physical
