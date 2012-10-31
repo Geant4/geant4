@@ -29,6 +29,29 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+16th October 2012 Ben Morgan (cmake-V09-05-52)
+- Modules/Geant4InstallData.cmake : Update version and MD5 of
+  G4NEUTRONXS for 1.2 release, add new G4SAIDDATA dataset,
+  version 1.1
+- Modules/Geant4ToolchainBackwardCompatibility.cmake : Export
+  new G4SAIDDATA dataset to scripts.
+- Modules/Geant4CTest.cmake : Add new G4SAIDDATA dataset to
+  CTest environment, and remove obsolete G4ELASTICDATA and 
+  NeutronHPCrossSections environment variables.
+- Templates/geant4-env-skeleton.in : Add expansion variable for
+  export of new G4SAIDDATA dataset.
+- Templates/geant4make-skeleton.in : Add expansion variable for
+  export of new G4SAIDDATA dataset.
+
+
+12th October 2012 Ben Morgan (cmake-V09-05-51)
+- Modules/FindInventor.cmake: BUGFIX #1320: Remove find of Inventor
+  debug libraries and do not use the "optimized;debug" technique.
+  Add find for of SoXt headers.
+- Modules/Geant4InterfaceOptions.cmake: BUGFIX #1320: Add SoXt headers
+  to INVENTOR_INCLUDE_DIR when on UNIX, and FATAL_ERROR if SoXt not
+  located. Add X11 Xt library when SoXt is used on Mac OS X
+ 
 9th October 2012 Pere Mato (cmake-V09-05-50)
 - Modules/Geant4CTest.cmake: minor changes to avoid user traps
 

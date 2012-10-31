@@ -1,17 +1,18 @@
 # - Basic setup for testing Geant4 using CMake/CTest
 #
-# 
 
-#---Do the nexesseray to enable CTest and construct a test environment --------------------------------
+#-----------------------------------------------------------------------
+# Configure CTest and relevant Geant4 settings, if required
+#
 if(GEANT4_ENABLE_TESTING)
-
+  # - Core CTest
   enable_testing()
   include(CTest)
 
-  #---Geant4_DIR is needed to locate GeantConfig.cmake file required by tests and examples-------------
+  # - Geant4_DIR is needed to locate GeantConfig.cmake file required by tests and examples
   set(Geant4_DIR ${CMAKE_BINARY_DIR} CACHE PATH "Current build directory")
 
-  #---Many tests require access to the Geant4 data----------------------------------------------------
+  # - Configure data location, as most tests will require access to these
   if(GEANT4_INSTALL_DATA)
     set(GEANT4_DATA_DIR ${CMAKE_BINARY_DIR}/data CACHE PATH "Directory where the Geant4 data is located")
   elseif(NOT "$ENV{GEANT4_DATA_DIR}" STREQUAL "")
@@ -26,27 +27,29 @@ if(GEANT4_ENABLE_TESTING)
     return()
   endif()
 
-  #---Define the TEST environment (basically the varibles pointing to DATA files)----------------------
-  foreach( tuple "G4LEVELGAMMADATA;PhotonEvaporation"
+  # - Configure test environment (basically, the data library pointers)
+  foreach( tuple "G4NEUTRONHPDATA;G4NDL"
                  "G4LEDATA;G4EMLOW"
+                 "G4LEVELGAMMADATA;PhotonEvaporation"
                  "G4RADIOACTIVEDATA;RadioactiveDecay"
-                 "G4ELASTICDATA;G4ELASTIC"
-                 "NeutronHPCrossSections;G4NDL"
-                 "G4NEUTRONHPDATA;G4NDL"
                  "G4ABLADATA;G4ABLA"
+                 "G4NEUTRONXSDATA;G4NEUTRONXS"
                  "G4PIIDATA;G4PII"
-                 "G4NEUTRONXSDATA;G4NEUTRONXS")
+                 "G4REALSURFACEDATA;RealSurface"
+                 "G4SAIDXSDATA;G4SAIDDATA"                 
+                 )
     list(GET tuple 0 envname)
     list(GET tuple 1 dirname)
     GEANT4_LATEST_VERSION(${GEANT4_DATA_DIR} ${dirname} _result)
+    message(STATUS "${envname}=${_result}")
     list(APPEND GEANT4_TEST_ENVIRONMENT ${envname}=${_result})
-  endforeach()
-  
+  endforeach() 
 endif()
 
+#-----------------------------------------------------------------------
+# Add Unit Tests if required
+#
 if(GEANT4_BUILD_TESTS)
-
-  #---Add all directories with Unit Tests---------------------------------------------------------------
   file(GLOB_RECURSE files RELATIVE ${CMAKE_SOURCE_DIR} source/CMakeLists.txt)
   foreach( file ${files} )
     get_filename_component(path ${file} PATH)
@@ -54,5 +57,4 @@ if(GEANT4_BUILD_TESTS)
       add_subdirectory(${path})
     endif()
   endforeach()
-  
 endif()

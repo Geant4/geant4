@@ -137,6 +137,7 @@
 @GEANT4_TC_G4PIIDATA@
 @GEANT4_TC_G4RADIOACTIVEDATA@
 @GEANT4_TC_G4REALSURFACEDATA@
+@GEANT4_TC_G4SAIDXSDATA@
 
 #-----------------------------------------------------------------------
 # Optional components.
