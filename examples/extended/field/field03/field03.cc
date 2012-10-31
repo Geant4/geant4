@@ -26,32 +26,23 @@
 /// \file field/field03/field03.cc
 /// \brief Main program of the field/field03 example
 //
+// $Id$
 //
-// $Id: field03.cc,v 1.9 2010-05-12 16:41:42 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// 
-// --------------------------------------------------------------
-//      GEANT 4 - Example F03
-//
-// --------------------------------------------------------------
-// Comments
-//     
-//   
-// --------------------------------------------------------------
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 
 #include "F03DetectorConstruction.hh"
-// #include "F03FieldSetup.hh"
 #include "F03PhysicsList.hh"
 #include "F03PrimaryGeneratorAction.hh"
 #include "F03RunAction.hh"
 #include "F03EventAction.hh"
-#include "F03SteppingAction.hh"
 #include "F03SteppingVerbose.hh"
+
+#include "G4RunManager.hh"
+#include "G4UImanager.hh"
+#include "Randomize.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -94,9 +85,6 @@ int main(int argc,char** argv)
   F03EventAction* eventAction = new F03EventAction(runAction);
 
   runManager->SetUserAction(eventAction);
-
-  F03SteppingAction* steppingAction = new F03SteppingAction();
-  runManager->SetUserAction(steppingAction);
   
   // Initialize G4 kernel, physics tables ...
 
@@ -139,4 +127,3 @@ int main(int argc,char** argv)
 
   return 0;
 }
-

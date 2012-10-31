@@ -26,10 +26,9 @@
 /// \file field/field03/src/F03SteppingVerbose.cc
 /// \brief Implementation of the F03SteppingVerbose class
 //
+// $Id$
 //
-// $Id: F03SteppingVerbose.cc,v 1.5 2006-06-29 17:19:58 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
@@ -41,6 +40,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 F03SteppingVerbose::F03SteppingVerbose()
+ : G4SteppingVerbose() 
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
