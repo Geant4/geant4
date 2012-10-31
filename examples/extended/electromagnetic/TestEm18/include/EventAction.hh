@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm18/include/EventAction.hh
+/// \brief Definition of the EventAction class
+//
 // $Id: EventAction.hh,v 1.1 2007-02-13 17:57:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -53,7 +56,7 @@ class EventAction : public G4UserEventAction
     
     void AddEnergyDeposit(G4double edep)   {fEnergyDeposit  += edep;};
     void AddSecondary(G4double ekin)     {fEnergySecondary  += ekin;};
-    			           	  
+                                                 
     void SetDrawFlag(G4String val)  {fDrawFlag = val;};
     void SetPrintModulo(G4int val)  {fPrintModulo = val;};
         

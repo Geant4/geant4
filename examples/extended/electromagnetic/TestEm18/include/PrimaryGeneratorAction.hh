@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm18/include/PrimaryGeneratorAction.hh
+/// \brief Definition of the PrimaryGeneratorAction class
+//
 // $Id: PrimaryGeneratorAction.hh,v 1.1 2007-02-13 17:57:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm18/src/HistoManager.cc
+/// \brief Implementation of the HistoManager class
+//
 //
 // $Id: HistoManager.cc,v 1.1 2010-09-16 16:26:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
@@ -145,13 +148,13 @@ void HistoManager::SetHisto(G4int ih,
 
   const G4String id[] = { "0", "1", "2", "3", "4", "5", "6" };
   const G4String title[] =
-                { "dummy",					//0
-                  "continuous energy loss along primary track",	//1
-                  "energy from secondaries",			//2
-                  "total energy lost by primary track",		//3
-		  "energy spectrum of e-+",			//4
-		  "energy spectrum of gamma",			//5
-		  "step size"					//6
+                { "dummy",                                        //0
+                  "continuous energy loss along primary track",        //1
+                  "energy from secondaries",                        //2
+                  "total energy lost by primary track",                //3
+                  "energy spectrum of e-+",                        //4
+                  "energy spectrum of gamma",                        //5
+                  "step size"                                        //6
                  };
 
   G4String titl = title[ih];
@@ -228,9 +231,9 @@ void HistoManager::saveAscii()
      
       for (G4int iBin=0; iBin<fNbins[ih]; iBin++) {
          File << "  " << iBin << "\t" 
-	      << fHistPt[ih]->axis().bin_center(iBin) << "\t"
-	      << fHistPt[ih]->bin_height(iBin) 
-	      << G4endl;
+              << fHistPt[ih]->axis().bin_center(iBin) << "\t"
+              << fHistPt[ih]->bin_height(iBin) 
+              << G4endl;
       } 
     }
  } 

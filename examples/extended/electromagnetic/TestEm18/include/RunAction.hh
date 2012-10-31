@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm18/include/RunAction.hh
+/// \brief Definition of the RunAction class
+//
 // $Id: RunAction.hh,v 1.1 2007-02-13 17:57:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -63,26 +66,26 @@ class RunAction : public G4UserRunAction
 
     void AddTrackLength (G4double step)
                  {fTrackLength += step; fNbSteps++;};
-		 
+                 
     void AddChargedSecondary (G4double ekin)
                  {fEnergyCharged += ekin; fNbCharged++;
-		  if (ekin<fEmin[0]) fEmin[0] = ekin;
-		  if (ekin>fEmax[0]) fEmax[0] = ekin;
-		 };
-		 
+                  if (ekin<fEmin[0]) fEmin[0] = ekin;
+                  if (ekin>fEmax[0]) fEmax[0] = ekin;
+                 };
+                 
     void AddNeutralSecondary (G4double ekin)
                  {fEnergyNeutral += ekin; fNbNeutral++;
-		  if (ekin<fEmin[1]) fEmin[1] = ekin;
-		  if (ekin>fEmax[1]) fEmax[1] = ekin;
-		 };
-		
+                  if (ekin<fEmin[1]) fEmin[1] = ekin;
+                  if (ekin>fEmax[1]) fEmax[1] = ekin;
+                 };
+                
   public:
     G4double GetEnergyFromRestrictedRange
              (G4double,G4ParticleDefinition*,G4Material*,G4double);
-	     	  
+                       
     G4double GetEnergyFromCSDARange
-             (G4double,G4ParticleDefinition*,G4Material*,G4double);		 
-		 
+             (G4double,G4ParticleDefinition*,G4Material*,G4double);                 
+                 
   private:
     G4double fEnergyDeposit;
     G4double fTrackLength;

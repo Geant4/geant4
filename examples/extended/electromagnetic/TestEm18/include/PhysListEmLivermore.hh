@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm18/include/PhysListEmLivermore.hh
+/// \brief Definition of the PhysListEmLivermore class
+//
 //
 // $Id: PhysListEmLivermore.hh,v 1.4 2011-01-06 18:34:38 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

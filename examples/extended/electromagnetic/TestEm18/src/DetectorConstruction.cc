@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm18/src/DetectorConstruction.cc
+/// \brief Implementation of the DetectorConstruction class
+//
 // $Id: DetectorConstruction.cc,v 1.4 2010-11-19 12:17:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -44,6 +47,7 @@
 #include "G4SolidStore.hh"
 
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -115,8 +119,8 @@ void DetectorConstruction::DefineMaterials()
   new G4Material("Lead"       , z=82., a=207.19*g/mole, density= 11.35*g/cm3);
   
   new G4Material("ArgonGas"   , z=18., a=39.948*g/mole, density= 1.782*mg/cm3,
-		 kStateGas, 273.15*kelvin, 1*atmosphere);
-		 
+                 kStateGas, 273.15*kelvin, 1*atmosphere);
+                 
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 
@@ -131,21 +135,21 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   G4SolidStore::GetInstance()->Clean();
 
   G4Box*
-  sBox = new G4Box("Container",				//its name
-                   fBoxSize/2,fBoxSize/2,fBoxSize/2);	//its dimensions
+  sBox = new G4Box("Container",                                //its name
+                   fBoxSize/2,fBoxSize/2,fBoxSize/2);        //its dimensions
 
-  fLBox = new G4LogicalVolume(sBox,			//its shape
-                             fMaterial,			//its material
-                             fMaterial->GetName());	//its name
+  fLBox = new G4LogicalVolume(sBox,                        //its shape
+                             fMaterial,                        //its material
+                             fMaterial->GetName());        //its name
 
-  fPBox = new G4PVPlacement(0,				//no rotation
-  			   G4ThreeVector(),		//at (0,0,0)
-                           fLBox,			//its logical volume			   
-                           fMaterial->GetName(),	//its name
-                           0,				//its mother  volume
-                           false,			//no boolean operation
-                           0);				//copy number
-			   
+  fPBox = new G4PVPlacement(0,                                //no rotation
+                             G4ThreeVector(),                //at (0,0,0)
+                           fLBox,                        //its logical volume                           
+                           fMaterial->GetName(),        //its name
+                           0,                                //its mother  volume
+                           false,                        //no boolean operation
+                           0);                                //copy number
+                           
   PrintParameters();
   
   //always return the root volume

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm18/src/PhysicsList.cc
+/// \brief Implementation of the PhysicsList class
+//
 // $Id: PhysicsList.cc,v 1.9 2011-01-06 18:34:38 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -38,6 +41,7 @@
 
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -184,10 +188,10 @@ void PhysicsList::ConstructProcess()
   
   //physics tables
   //
-  emOptions.SetMinEnergy(10*eV);	//default 100 eV    
-  emOptions.SetMaxEnergy(10*TeV);	//default 100 TeV 
-  emOptions.SetDEDXBinning(12*20);	//default=12*7  
-  emOptions.SetLambdaBinning(12*20);	//default=12*7
+  emOptions.SetMinEnergy(10*eV);        //default 100 eV    
+  emOptions.SetMaxEnergy(10*TeV);        //default 100 TeV 
+  emOptions.SetDEDXBinning(12*20);        //default=12*7  
+  emOptions.SetLambdaBinning(12*20);        //default=12*7
           
   //build CSDA range
   //
@@ -197,7 +201,7 @@ void PhysicsList::ConstructProcess()
    
   //ionization
   //
-  emOptions.SetSubCutoff(false);	//default  
+  emOptions.SetSubCutoff(false);        //default  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -217,7 +221,7 @@ void PhysicsList::AddStepMax()
 
       if (stepMaxProcess->IsApplicable(*particle) && !particle->IsShortLived())
         {
-	  pmanager ->AddDiscreteProcess(stepMaxProcess);
+          pmanager ->AddDiscreteProcess(stepMaxProcess);
         }
   }
 }

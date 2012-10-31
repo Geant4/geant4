@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm18/src/RunAction.cc
+/// \brief Implementation of the RunAction class
+//
 // $Id: RunAction.cc,v 1.4 2011-01-06 18:34:38 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -99,9 +102,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout << "\n ======================== run summary ======================\n";  
   G4cout << "\n The run was " << nbEvents << " " << partName << " of "
          << G4BestUnit(ePrimary,"Energy") << " through " 
-	 << G4BestUnit(length,"Length") << " of "
-	 << material->GetName() << " (density: " 
-	 << G4BestUnit(density,"Volumic Mass") << ")";
+         << G4BestUnit(length,"Length") << " of "
+         << material->GetName() << " (density: " 
+         << G4BestUnit(density,"Volumic Mass") << ")";
   G4cout << "\n ===========================================================\n";
   G4cout << G4endl;
   
@@ -235,9 +238,9 @@ G4double RunAction::GetEnergyFromRestrictedRange(G4double range,
     << "   Energy = " << G4BestUnit(Energy,"Energy")
     << "   err = " << err
     << "   iter = " << iter << G4endl;
-  }	 
-	 
-  return Energy;	 
+  }         
+         
+  return Energy;         
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -267,9 +270,9 @@ G4double RunAction::GetEnergyFromCSDARange(G4double range,
     << "   Energy = " << G4BestUnit(Energy,"Energy")
     << "   err = " << err
     << "   iter = " << iter << G4endl;
-  }	 
-	 
-  return Energy;	 
+  }         
+         
+  return Energy;         
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
