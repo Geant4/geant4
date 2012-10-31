@@ -54,12 +54,14 @@
 //#define pdebug
 //#define fdebug
 // ------------------------------------- FLAGS ------------------
-#include "G4UIterminal.hh"
-#include "globals.hh"
-#include "G4ios.hh"
 #include <iostream>
 #include <fstream>
 #include <iomanip>
+
+#include "G4UIterminal.hh"
+#include "globals.hh"
+#include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 
 // Fake classes for this test
 #include "G4RunManager.hh"
