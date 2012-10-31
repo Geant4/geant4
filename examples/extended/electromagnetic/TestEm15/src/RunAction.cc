@@ -49,15 +49,18 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim,
-                     HistoManager* histo)
-  : fDetector(det), fPrimary(prim), fProcCounter(0), fHistoManager(histo)
-{ }
+RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim)
+  : fDetector(det), fPrimary(prim), fProcCounter(0)
+{
+  fHistoManager = new HistoManager(); 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::~RunAction()
-{ }
+{
+  delete fHistoManager; 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -76,8 +79,13 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   fLDispl = fLDispl2 = fPsiSpa = fPsiSpa2 = 0.;
   fTetPrj = fTetPrj2 = 0.;
   fPhiCor = fPhiCor2 = 0.;
-  
-  fHistoManager->book();
+     
+  //histograms
+  //
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  if ( analysisManager->IsActive() ) {
+    analysisManager->OpenFile();
+  }       
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -208,7 +216,12 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   }
   delete fProcCounter;
   
-  fHistoManager->save();
+  //save histograms      
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();  
+  if ( analysisManager->IsActive() ) {
+    analysisManager->Write();
+    analysisManager->CloseFile();
+  }       
 
   // show Rndm status
   CLHEP::HepRandom::showEngineStatus();

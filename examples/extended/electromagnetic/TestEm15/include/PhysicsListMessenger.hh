@@ -52,7 +52,7 @@ class PhysicsListMessenger: public G4UImessenger
     PhysicsListMessenger(PhysicsList* );
    ~PhysicsListMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
     
   private:
   

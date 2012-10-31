@@ -43,9 +43,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(DetectorConstruction* det,
-                               PrimaryGeneratorAction* prim, RunAction* RuAct, 
-                               HistoManager* Hist)
-:fDetector(det), fPrimary(prim), fRunAction(RuAct), fHistoManager(Hist)
+                               PrimaryGeneratorAction* prim, RunAction* RuAct)
+:fDetector(det), fPrimary(prim), fRunAction(RuAct)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -60,7 +59,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   G4StepPoint* prePoint = aStep->GetPreStepPoint();
   
   // if World --> return
-  if (prePoint->GetTouchableHandle()->GetVolume()==fDetector->GetWorld()) return;
+  if(prePoint->GetTouchableHandle()->GetVolume()==fDetector->GetWorld()) return;
   
   // here we enter in the absorber Box
   // tag the event to be killed anyway after this step
@@ -84,37 +83,38 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   G4double geomPathLength = position.x() + 0.5*fDetector->GetBoxSize();
   G4double ratio = geomPathLength/truePathLength;
   fRunAction->SumPathLength(truePathLength,geomPathLength);
-  fHistoManager->FillHisto(1,truePathLength);
-  fHistoManager->FillHisto(2,geomPathLength);
-  fHistoManager->FillHisto(3,ratio);
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();  
+  analysisManager->FillH1(1,truePathLength);
+  analysisManager->FillH1(2,geomPathLength);
+  analysisManager->FillH1(3,ratio);
    
   G4double yend = position.y(), zend = position.z();
   G4double lateralDisplacement = std::sqrt(yend*yend + zend*zend);
   fRunAction->SumLateralDisplacement(lateralDisplacement);
-  fHistoManager->FillHisto(4,lateralDisplacement);
+  analysisManager->FillH1(4,lateralDisplacement);
   
   G4double psi = std::atan(lateralDisplacement/geomPathLength); 
   fRunAction->SumPsi(psi);
-  fHistoManager->FillHisto(5,psi);
+  analysisManager->FillH1(5,psi);
   
   G4double xdir = direction.x(),  ydir = direction.y(), zdir = direction.z();
   G4double tetaPlane = std::atan2(ydir, xdir); 
   fRunAction->SumTetaPlane(tetaPlane);
-  fHistoManager->FillHisto(6,tetaPlane);
+  analysisManager->FillH1(6,tetaPlane);
   tetaPlane = std::atan2(zdir, xdir); 
   fRunAction->SumTetaPlane(tetaPlane);
-  fHistoManager->FillHisto(6,tetaPlane);
+  analysisManager->FillH1(6,tetaPlane);
   
   G4double phiPos = std::atan2(zend, yend); 
-  fHistoManager->FillHisto(7,phiPos);
+  analysisManager->FillH1(7,phiPos);
   G4double phiDir = std::atan2(zdir, ydir); 
-  fHistoManager->FillHisto(8,phiDir);
+  analysisManager->FillH1(8,phiDir);
 
   G4double phiCorrel = 0.;
   if (lateralDisplacement > 0.)  
     phiCorrel = (yend*ydir + zend*zdir)/lateralDisplacement;
   fRunAction->SumPhiCorrel(phiCorrel);
-  fHistoManager->FillHisto(9,phiCorrel);    
+  analysisManager->FillH1(9,phiCorrel);    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
