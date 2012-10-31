@@ -48,7 +48,7 @@
 #include "G4MuMultipleScattering.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4WentzelVIModel.hh"
-#include "G4UrbanMscModel90.hh"
+#include "G4UrbanMscModel95.hh"
 #include "G4MscStepLimitType.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -60,8 +60,6 @@ G4MuMultipleScattering::G4MuMultipleScattering(const G4String& pnam)
 {
   isInitialized = false;  
   SetStepLimitType(fMinimal);
-  //SetPolarAngleLimit(CLHEP::twopi);
-  //SetRangeFactor(0.2);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -82,7 +80,7 @@ void G4MuMultipleScattering::InitialiseProcess(const G4ParticleDefinition*)
 {
   // Modification of parameters between runs
   if(isInitialized) { return; }
-  if(!EmModel(1)) { SetEmModel(new G4UrbanMscModel90(), 1); }
+  if(!EmModel(1)) { SetEmModel(new G4UrbanMscModel95(), 1); }
   AddEmModel(1, EmModel(1));
   isInitialized = true;
 }

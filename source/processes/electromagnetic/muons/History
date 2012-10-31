@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25 October 2012: V.Ivant (emmuons-V09-05-05)
+- G4MuMultipleScattering - use G4UrbanMscModel95 as a default
+
 21 October 2012: V.Ivant (emmuons-V09-05-04)
 - G4MuBremsstrahlung, G4MuIonisation,  G4MuPairProduction -
     secondary particle type defined in constructors and not in Initialise() 
