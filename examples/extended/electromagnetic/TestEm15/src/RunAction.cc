@@ -69,7 +69,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   
   // save Rndm status
-  G4RunManager::GetRunManager()->SetRandomNumberStore(false);
+  ////G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   CLHEP::HepRandom::showEngineStatus();
 
   fProcCounter = new ProcessesCount;

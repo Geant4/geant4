@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+21-10-12 mma (testem15-V09-05-05)
+- PhysListEmStandard: use msc model96
+     
 16-10-12 mma (testem15-V09-05-04)
 - use G4AnalysisManager
 - coding convention: virtual
