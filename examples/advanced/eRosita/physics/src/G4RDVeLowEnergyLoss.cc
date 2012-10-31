@@ -48,6 +48,8 @@
 // --------------------------------------------------------------
 
 #include "G4RDVeLowEnergyLoss.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ProductionCutsTable.hh"
 
 G4double     G4RDVeLowEnergyLoss::ParticleMass ;

@@ -46,6 +46,8 @@
 #ifndef G4RDEMDATASET_HH
 #define G4RDEMDATASET_HH 1
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
 #include "G4RDVEMDataSet.hh"
 
@@ -56,16 +58,16 @@ class G4RDEMDataSet : public G4RDVEMDataSet
 public:
   G4RDEMDataSet(G4int argZ, 
 	      G4RDVDataSetAlgorithm* algo, 
-	      G4double xUnit=MeV, 
-	      G4double yUnit=barn,
+	      G4double xUnit=CLHEP::MeV, 
+	      G4double yUnit=CLHEP::barn,
               G4bool random=false);
 
   G4RDEMDataSet(G4int argZ, 
 	      G4DataVector* xData, 
 	      G4DataVector* data, 
 	      G4RDVDataSetAlgorithm* algo, 
-	      G4double xUnit=MeV, 
-	      G4double yUnit=barn,
+	      G4double xUnit=CLHEP::MeV, 
+	      G4double yUnit=CLHEP::barn,
 	      G4bool random=false);
 
   virtual ~G4RDEMDataSet();

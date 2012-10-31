@@ -45,6 +45,8 @@
 // -------------------------------------------------------------------
 
 #include "G4RDeIonisationCrossSectionHandler.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4RDVEnergySpectrum.hh"
 #include "G4DataVector.hh"
 #include "G4RDCompositeEMDataSet.hh"

@@ -53,6 +53,7 @@
 
 #include "G4RDModifiedTsai.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
 //    
 
 G4RDModifiedTsai::G4RDModifiedTsai(const G4String& name):G4RDVBremAngularDistribution(name)

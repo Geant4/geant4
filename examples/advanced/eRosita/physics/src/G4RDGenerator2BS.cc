@@ -54,6 +54,7 @@
 
 #include "G4RDGenerator2BS.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
 //    
 
 G4RDGenerator2BS::G4RDGenerator2BS(const G4String& name):G4RDVBremAngularDistribution(name)

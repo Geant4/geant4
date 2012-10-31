@@ -33,11 +33,12 @@
 #include "eRositaPrimaryGeneratorAction.hh"
 #include "eRositaDetectorConstruction.hh"
 
+#include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
-#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -54,6 +54,8 @@
 
 #include "G4RDGenerator2BN.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 //    
 
 G4double G4RDGenerator2BN::Atab[320] =

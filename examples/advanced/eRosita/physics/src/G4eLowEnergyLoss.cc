@@ -66,6 +66,7 @@
 // --------------------------------------------------------------
 
 #include "G4eLowEnergyLoss.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4EnergyLossMessenger.hh"
 #include "G4Poisson.hh"
 #include "G4ProductionCutsTable.hh"

@@ -33,11 +33,13 @@
 //
 // -------------------------------------------------------------------
 
-#include "G4RDFluoData.hh"
-#include "G4DataVector.hh"
-#include "G4RDFluoTransition.hh"
 #include <fstream>
 #include <sstream>
+
+#include "G4RDFluoData.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4DataVector.hh"
+#include "G4RDFluoTransition.hh"
 
 G4RDFluoData::G4RDFluoData()
 {

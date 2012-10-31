@@ -50,6 +50,7 @@
 #include "G4RDeBremsstrahlungSpectrum.hh"
 #include "G4RDBremsstrahlungParameters.hh"
 #include "Randomize.hh"
+#include "G4SystemOfUnits.hh"
 
 
 G4RDeBremsstrahlungSpectrum::G4RDeBremsstrahlungSpectrum(const G4DataVector& bins,

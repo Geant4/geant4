@@ -46,6 +46,8 @@
 
 #include "G4LowEnergyCompton.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"

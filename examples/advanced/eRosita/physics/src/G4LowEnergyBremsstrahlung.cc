@@ -74,6 +74,8 @@
 #include "G4RDLogLogInterpolation.hh"
 #include "G4RDVEMDataSet.hh"
 #include "G4EnergyLossTables.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 #include "G4Electron.hh"
 #include "G4Gamma.hh"

@@ -43,6 +43,9 @@
 //
 // -------------------------------------------------------------------
 
+#include <fstream>
+#include <sstream>
+
 #include "G4RDeIonisationParameters.hh"
 #include "G4RDVEMDataSet.hh"
 #include "G4RDShellEMDataSet.hh"
@@ -52,11 +55,9 @@
 #include "G4RDLogLogInterpolation.hh"
 #include "G4RDLinLogLogInterpolation.hh"
 #include "G4RDSemiLogInterpolation.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Material.hh"
 #include "G4DataVector.hh"
-#include <fstream>
-#include <sstream>
-
 
 G4RDeIonisationParameters:: G4RDeIonisationParameters(G4int minZ, G4int maxZ)
   : zMin(minZ), zMax(maxZ),

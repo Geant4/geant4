@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11.10.2012, G.Cosmo, tag eRosita-V09-05-00
+            Explicit inclusion of units and constants headers.
+
 28.11.2011, G.Cosmo, tag eRosita V09-04-01
             Migration to new G4Exception signature and compilation warnings
             correction on gcc-4.6.

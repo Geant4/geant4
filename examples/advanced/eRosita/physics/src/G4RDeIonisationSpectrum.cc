@@ -52,6 +52,8 @@
 #include "G4RDeIonisationSpectrum.hh"
 #include "G4RDAtomicTransitionManager.hh"
 #include "G4RDAtomicShell.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4DataVector.hh"
 #include "Randomize.hh"
 
