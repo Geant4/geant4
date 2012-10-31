@@ -67,10 +67,10 @@ int main(int argc, char** argv)
     
   if (argc < 2 || argc >= 4) {
     G4cerr << "clGeometry: Correct syntax: clGeometry <call_list_file> [ <macro_file> ]"
-	   << G4endl;
+           << G4endl;
     G4cerr << "If only one argument is specified, interactive mode will be "
-	   << "entered." << G4endl << "The second argument, if specified, is "
-	   << "the name of the macro file (batch mode)." << G4endl;
+           << "entered." << G4endl << "The second argument, if specified, is "
+           << "the name of the macro file (batch mode)." << G4endl;
         
     return EXIT_FAILURE;
   }

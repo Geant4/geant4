@@ -37,12 +37,14 @@
 // inFile
 //--------------------------------------------------------------------------
 
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 #include "G3toG4DetectorConstruction.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 #include "G4Material.hh"
 #include "G4Box.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -50,15 +52,15 @@ G3toG4DetectorConstruction::G3toG4DetectorConstruction(G4String inFile)
   : G4VUserDetectorConstruction(),
     fInFile(inFile)
 {
-    G4cout << "Instantiated G3toG4DetectorConstruction using call list file \""
-           << fInFile << "\"" << G4endl;
+  G4cout << "Instantiated G3toG4DetectorConstruction using call list file \""
+         << fInFile << "\"" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G3toG4DetectorConstruction::~G3toG4DetectorConstruction()
 {
-  //    G4cout << "Deleted G3toG4DetectorConstruction..." << G4endl;
+  // G4cout << "Deleted G3toG4DetectorConstruction..." << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -71,7 +73,7 @@ G4VPhysicalVolume* G3toG4DetectorConstruction::Construct()
     G4VPhysicalVolume* pv
       = new G4PVPlacement(0, G4ThreeVector(), lv, lv->GetName(), 0, false, 0);
     G4cout << "Top-level G3toG4 logical volume " << lv->GetName() << " "
-	   << *(lv -> GetVisAttributes()) << G4endl;
+           << *(lv -> GetVisAttributes()) << G4endl;
     return pv;       
   } 
 
@@ -102,26 +104,25 @@ G4LogicalVolume* G3toG4DetectorConstruction::SimpleConstruct()
   G4Material* air = new G4Material(name="Air"  , density, ncomponents=2);
   air->AddElement(eN, fractionmass=0.7);
   air->AddElement(eO, fractionmass=0.3);
-  G4VSolid* mother = new G4Box("TestMother",		//its name
-				100*cm, 100*cm, 100*cm); //its size
+  G4VSolid* mother = new G4Box("TestMother",             //its name
+                                100*cm, 100*cm, 100*cm); //its size
 
   G4VSolid* daughter = new G4Box("TestDaughter", 50*cm, 20*cm, 10*cm);
 
-  G4LogicalVolume* logicMother = new G4LogicalVolume(mother,	//its solid
-						     air,	//its material
-						     "LTestMother");//its name
+  G4LogicalVolume* logicMother = new G4LogicalVolume(mother,     //its solid
+                                                     air,        //its material
+                                                     "LTestMother");//its name
 
   G4LogicalVolume* logicDaughter = new G4LogicalVolume(daughter, //its solid
-						       air,	//its material
-						       "LTestDaughter");
+                                                       air,      //its material
+                                                       "LTestDaughter");
 
-  // G4VPhysicalVolume* physiDaughter =
-     new G4PVPlacement(0,
-		       G4ThreeVector(),
-		       logicDaughter,
-		       "PTestDaughter",
-		       logicMother,
-		       false,0);
+  new G4PVPlacement(0,
+                    G4ThreeVector(),
+                    logicDaughter,
+                    "PTestDaughter",
+                    logicMother,
+                    false,0);
   //
   // Visualization attributes
   //
@@ -134,13 +135,3 @@ G4LogicalVolume* G3toG4DetectorConstruction::SimpleConstruct()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-
-
-
-
-
-
-
-
-
