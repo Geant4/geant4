@@ -12,8 +12,8 @@ classes.
 
 1.1 Geometry and region information
 
- It has a quite simple sylindrical tracker of 5 layers and a
-sylindrical calorimeter of lead and scintillator. Dedicated regions
+ It has a quite simple cylindrical tracker of 5 layers and a
+cylindrical calorimeter of lead and scintillator. Dedicated regions
 are assigned to both tracker and calorimeter mother volumes not
 for setting additional production thresholds but for adding some
 more information to these regions. RE01RegionInformation is the
@@ -23,9 +23,9 @@ its cells.
 
 1.2 Physics
 
- This example basically uses LHEP_BERT physics list. In addition 
-to this, RE01DecayPhysics is used for adding G4UnknownParticle and
-G4UnknownDecay process.
+ This example basically uses QGSP_BERT physics list. In addition 
+to this, RE01UnknownDecayPhysics is used for adding decay process to
+G4UnknownParticle.
 
 1.3 Event generator
 
