@@ -13,6 +13,37 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+24 Oct 2012 Gunter Folger        had-binary-V09-05-09
+-  Attempt to fix warning in G4BinaryLightIonCascade when target is very light:
+   - split very long ApplyYourSelf() into smaller bits.
+   - fixed problem: do not try to correct spectators momentum, when there are no spectators
+   
+04 Oct 2012 Gunter Folger        had-binary-V09-05-08
+-  Fix left-over bug for Propagate() interface introduced in had-binary-V09-05-04
+   Fix charge/baryon number violation for Propagate() interface ( G4RKPropagtion)
+   Add method to optionally check baryon/charge conservation 
+   
+21 Sep 2012 Vladimir Ivanchenko  had-binary-V09-05-07
+- G4BinaryCasacade, G4BinaryLightIonReaction and
+  G4GeneratorPrecompoundInterface - reuse already instantiated
+    pre-compound model (if exist)
+
+20 Sep 2012 Gabriele Cosmo       had-binary-V09-05-06
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+31 Aug 2012 Gunter Folger        had-binary-V09-05-05
+- fix bug introduced in G4BianryCasacde & G4BianryLightIonCascade by
+   previous changes. 
+
+31 Aug 2012 Gunter Folger        had-binary-V09-05-04
+-  Binary Cascade: code cleanup & splitting of long methods.
+-  add model descriptions also for Propagate()
+-  fixes for coverity warnings
+
+17 Jul 2012 Gunter Folger
+-  fix coverity warnings
+
 13 Jun 2012 Gunter Folger        had-binary-V09-05-03
 -  fix warnings from shadowed variables
 

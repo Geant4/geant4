@@ -39,13 +39,15 @@
 #ifndef G4PionZeroField_h
 #define  G4PionZeroField_h 1
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4VNuclearField.hh"
 #include "G4V3DNucleus.hh"
 
 class G4PionZeroField: public G4VNuclearField
 {
 public:
-  G4PionZeroField(G4V3DNucleus * nucleus, G4double coeff = 0.042*fermi);
+  G4PionZeroField(G4V3DNucleus * nucleus, G4double coeff = 0.042*CLHEP::fermi);
   virtual ~G4PionZeroField();
 
 private:

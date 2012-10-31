@@ -25,6 +25,8 @@
 //
 // G4RKFieldIntegrator
 #include "G4RKFieldIntegrator.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4NucleiProperties.hh"
 #include "G4FermiMomentum.hh"
 #include "G4NuclearFermiDensity.hh"

@@ -35,10 +35,12 @@
 // 
 //      Creation date: 5 June 2000
 // -------------------------------------------------------------------
+
 #include "G4NeutronField.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4VNuclearDensity.hh"
 #include "G4FermiMomentum.hh"
-
 
 G4NeutronField::G4NeutronField(G4V3DNucleus * aNucleus) : 
     G4VNuclearField(aNucleus), theDensity(theNucleus->GetNuclearDensity())

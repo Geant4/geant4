@@ -35,13 +35,14 @@
 // 
 //      Creation date: 5 June 2000
 // -------------------------------------------------------------------
+
 #include "G4PionZeroField.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4NucleiProperties.hh"
 #include "G4VNuclearDensity.hh"
 #include "G4FermiMomentum.hh"
 #include "G4PionZero.hh"
 #include "G4HadTmpUtil.hh"
-
 
 G4PionZeroField::G4PionZeroField(G4V3DNucleus * nucleus, G4double coeff)
   : G4VNuclearField(nucleus)

@@ -37,6 +37,7 @@
 // -------------------------------------------------------------------
 #include "G4VNuclearField.hh"
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 
 G4VNuclearField::G4VNuclearField(G4V3DNucleus * aNucleus) : 
 theNucleus(aNucleus),

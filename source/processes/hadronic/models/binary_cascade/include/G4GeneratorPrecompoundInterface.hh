@@ -31,7 +31,7 @@
 //      GEANT 4 class header file
 //
 //      History: first implementation
-//      HPW, 10DEC 98, the decay part originally written by Gunter Folger 
+//      HPW, 10DEC 98, the decay part originally written by Gunter Folger
 //                in his FTF-test-program.
 //
 //
@@ -39,7 +39,7 @@
 //
 // Class Description
 // Trivial implementation of an intra-nuclear transport. It pworvides coupling
-// of high energy generators with pre equilibrium decay models. 
+// of high energy generators with pre equilibrium decay models.
 // To be used in your physics list in case you need this physics.
 // Class Description - End
 
@@ -56,20 +56,22 @@ class G4KineticTrackVector;
 class G4V3DNucleus;
 class G4ParticleDefinition;
 
-class G4GeneratorPrecompoundInterface : public G4VIntraNuclearTransportModel 
+class G4GeneratorPrecompoundInterface : public G4VIntraNuclearTransportModel
 {
 public:
 
-  G4GeneratorPrecompoundInterface(G4VPreCompoundModel* p = 0);    
+  G4GeneratorPrecompoundInterface(G4VPreCompoundModel* p = 0);
   virtual ~G4GeneratorPrecompoundInterface();
 
-  virtual G4HadFinalState* 
+  virtual G4HadFinalState*
   ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus &targetNucleus );
 
-  virtual G4ReactionProductVector* 
+  virtual G4ReactionProductVector*
   Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus);
- 
+
   inline void SetCaptureThreshold(G4double);
+
+  virtual void PropagateModelDescription(std::ostream&) const;
 
 private:
 
@@ -83,7 +85,7 @@ private:
   const G4ParticleDefinition* neutron;
 };
 
-inline 
+inline
 void G4GeneratorPrecompoundInterface::SetCaptureThreshold(G4double value)
 {
   CaptureThreshold=value;
