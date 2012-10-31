@@ -14,7 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+12-10-12 V.Ivant (testem5-V09-05-09)
+- Migration to the updated analysis tool and inplicit units
+- RunAction - by default do not save random number for each event
+    -because it is a serious overhead in CPU performance    
+ 
 11-10-12 mma (testem5-V09-05-08)
 - PhysicsList: add EM option4
 
