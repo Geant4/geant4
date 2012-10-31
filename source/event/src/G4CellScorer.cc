@@ -41,7 +41,15 @@
 #include "G4Event.hh"
 
 G4CellScorer::G4CellScorer()
-{}
+{
+  G4cout << "--------------------------------------------------------" << G4endl
+         << "WARNING: Class  <G4CellScorer>  is  now obsolete |" << G4endl
+         << "         and will be removed starting from next Geant4 |" << G4endl
+         << "         major release.  Please, consider switching to |" << G4endl
+         << "         general purpose scoring functionality.        |" << G4endl
+         << "--------------------------------------------------------"
+         << G4endl;
+}
 
 G4CellScorer::~G4CellScorer()
 {}

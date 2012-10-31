@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 15th, 2012, M.Asai (event-V09-05-12)
+- Added warning messages to G4CennScorer and G4CellScorerStore classes which will 
+be dropped fromversion 10.0.
+
 October 11th, 2012, P.Mato (event-V09-05-11)
 - Fixed warning of a possible use of uninitialized variable
 
