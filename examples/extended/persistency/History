@@ -16,6 +16,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 18th, 2012 I. Hrivnacova (exPersistency-V09-05-05)
+- Adding a test for GEANT4_USE_GDML option in CMake files
+
 October 1st, 2012 I. Hrivnacova (exPersistency-V09-05-04)
 - The same version as in previous tag
 

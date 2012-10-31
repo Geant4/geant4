@@ -16,7 +16,7 @@ track of all tags.
      ----------------------------------------------------------
 
 12-10-12 V.Ivant (testem0-V09-05-08)
-- Migration to the updated analysis tool and inplicit units
+- Migration to the updated analysis tool and implicit units
      
 09-10-12 mma (testem0-V09-05-07)
 - PhysicsList : add G4EmStandardPhysics_option4

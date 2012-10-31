@@ -21,6 +21,14 @@ endif()
 include(${Geant4_USE_FILE})
 
 #----------------------------------------------------------------------------
+# Requires Geant4 built with GDML
+#
+if(NOT GEANT4_USE_GDML)
+  message(STATUS "G4 Examples: GDML not installed --> G04 example disabled")  
+  return()
+endif()
+
+#----------------------------------------------------------------------------
 # Locate sources and headers for this project
 #
 include_directories(${PROJECT_SOURCE_DIR}/include 

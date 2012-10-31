@@ -1,8 +1,24 @@
-#---Add all subdirectories that contains a CMakeLists.txt file -------------------------------------
-file(GLOB_RECURSE files RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} CMakeLists.txt)
-foreach( file ${files} )
-  get_filename_component(path ${file} PATH)
-  if(path)
-    add_subdirectory(${path})
-  endif()
-endforeach()
+#---Adding all extended examples subdirectories explicitly 
+
+cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+
+add_subdirectory(analysis)
+add_subdirectory(biasing)
+add_subdirectory(common)
+add_subdirectory(electromagnetic)
+add_subdirectory(errorpropagation)
+add_subdirectory(eventgenerator)
+add_subdirectory(exoticphysics)
+add_subdirectory(field)
+add_subdirectory(g3tog4)
+add_subdirectory(geometry)
+add_subdirectory(hadronic)
+add_subdirectory(medical)
+add_subdirectory(optical)
+#add_subdirectory(parallel
+add_subdirectory(parameterisations)
+add_subdirectory(persistency)
+add_subdirectory(polarisation)
+add_subdirectory(radioactivedecay)
+add_subdirectory(runAndEvent)
+add_subdirectory(visualization)
