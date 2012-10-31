@@ -9,6 +9,9 @@ $Id: History,v 1.11 2010-11-11 17:43:55 gunter Exp $
                           History file
                           ------------
 
+25.10.2012   Luciano Pandola, Tag: gammaraytel-V09-05-01
+	     Replace CMakeLists.txt to deal with UI/VIS     
+
 11.10.2012   Gabriele Cosmo,  Tag: gammaraytel-V09-05-00
              Explicit inclusion of units and constants headers.
 
