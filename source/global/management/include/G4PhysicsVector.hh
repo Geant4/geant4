@@ -167,13 +167,6 @@ class G4PhysicsVector
     inline G4bool IsFilledVectorExist() const;
          // Is non-empty physics vector already exist?
 
-    inline void PutComment(const G4String& theComment);
-         // Put a comment to the G4PhysicsVector. This may help to check
-         // whether your are accessing to the one you want. 
-
-    inline const G4String& GetComment() const;
-         // Retrieve the comment of the G4PhysicsVector.
-
     inline G4PhysicsVectorType GetType() const;
          // Get physics vector type
   
@@ -233,7 +226,6 @@ class G4PhysicsVector
 
     inline void Interpolation(G4int lastBin);
 
-    G4String   comment;
     G4bool     useSpline;
 
   protected:

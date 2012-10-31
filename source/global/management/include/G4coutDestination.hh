@@ -46,8 +46,8 @@ class G4coutDestination
     G4coutDestination();
     virtual ~G4coutDestination();
 
-    virtual G4int ReceiveG4cout(G4String);
-    virtual G4int ReceiveG4cerr(G4String);
+    virtual G4int ReceiveG4cout(const G4String&);
+    virtual G4int ReceiveG4cerr(const G4String&);
 };
 
 #endif

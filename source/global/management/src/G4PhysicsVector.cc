@@ -138,7 +138,6 @@ void G4PhysicsVector::CopyData(const G4PhysicsVector& vec)
   cache->lastValue = vec.GetLastValue();
   cache->lastBin = vec.GetLastBin();
   useSpline = vec.useSpline;
-  comment = vec.comment;
 
   size_t i;
   dataVector.clear();
@@ -206,7 +205,6 @@ G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
   dataVector.clear();
   binVector.clear();
   secDerivative.clear();
-  comment = "";
 
   // retrieve in ascii mode
   if (ascii){

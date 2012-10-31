@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 24, 2012 G.Cosmo (global-V09-05-12)
+- Use 'const G4String&' as arguments in G4coutdestination instead of
+  plain string copy to reduce memory churn (K.Murakami).
+- Removed unnecessary string data member in G4PhysicsVector to reduce
+  memory footprint. Removed related Get/SetComment() methods.
+- Co-works with tags: intercoms-V09-05-06 and interfaces-V09-05-29.
+
 October 22, 2012 V.Ivantchenko (global-V09-05-11)
 - G4Physics2DVector: added bicubic interpolation option.
   No effect on results if option is not active.

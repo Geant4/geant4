@@ -214,22 +214,6 @@ inline
 //---------------------------------------------------------------
 
 inline 
- void G4PhysicsVector::PutComment(const G4String& theComment)
-{
-  comment = theComment;
-}
-
-//---------------------------------------------------------------
-
-inline 
- const G4String& G4PhysicsVector::GetComment() const
-{
-  return comment;
-}
-
-//---------------------------------------------------------------
-
-inline 
  G4PhysicsVectorType G4PhysicsVector::GetType() const
 {
   return type;

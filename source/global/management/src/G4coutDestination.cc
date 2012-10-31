@@ -42,12 +42,12 @@ G4coutDestination::~G4coutDestination()
 {
 }
 
-G4int G4coutDestination::ReceiveG4cout(G4String)
+G4int G4coutDestination::ReceiveG4cout(const G4String&)
 {
   return 0;
 }
 
-G4int G4coutDestination::ReceiveG4cerr(G4String)
+G4int G4coutDestination::ReceiveG4cerr(const G4String&)
 {
   return 0;
 }
