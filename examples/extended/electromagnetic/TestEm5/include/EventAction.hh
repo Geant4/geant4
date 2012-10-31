@@ -50,8 +50,8 @@ class EventAction : public G4UserEventAction
    ~EventAction();
 
   public:
-    void BeginOfEventAction(const G4Event*);
-    void   EndOfEventAction(const G4Event*);
+    virtual void BeginOfEventAction(const G4Event*);
+    virtual void   EndOfEventAction(const G4Event*);
     
     void AddEnergy      (G4double edep)   {fEnergyDeposit  += edep;};
     void AddTrakLenCharg(G4double length) {fTrakLenCharged += length;};

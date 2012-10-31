@@ -75,36 +75,36 @@ void HistoManager::Book()
                         
   const G4String title[] =
                 { "dummy",                                                //0
-                  "energy deposit in absorber",                                //1
-                  "energy of charged secondaries at creation",                //2
-                  "energy of neutral secondaries at creation",                //3
-                  "energy of charged at creation (log scale)",                //4
-                  "energy of neutral at creation (log scale)",                //5
+                  "energy deposit in absorber",                           //1
+                  "energy of charged secondaries at creation",            //2
+                  "energy of neutral secondaries at creation",            //3
+                  "energy of charged at creation (log scale)",            //4
+                  "energy of neutral at creation (log scale)",            //5
                   "x_vertex of charged secondaries (all)",                //6
-                  "x_vertex of charged secondaries (not absorbed)",        //7
+                  "x_vertex of charged secondaries (not absorbed)",       //7
                   "dummy","dummy",                                        //8-9
-                  "(transmit, charged) : kinetic energy at exit",        //10
-                  "(transmit, charged) : ener fluence: dE(MeV)/dOmega",        //11
-                  "(transmit, charged) : space angle: dN/dOmega",        //12
+                  "(transmit, charged) : kinetic energy at exit",         //10
+                  "(transmit, charged) : ener fluence: dE(MeV)/dOmega",   //11
+                  "(transmit, charged) : space angle: dN/dOmega",         //12
                   "(transmit, charged) : projected angle at exit",        //13
-                  "(transmit, charged) : projected position at exit",        //14
-                  "(transmit, charged) : radius at exit",                //15
+                  "(transmit, charged) : projected position at exit",     //14
+                  "(transmit, charged) : radius at exit",                 //15
                   "dummy","dummy","dummy","dummy",                        //16-19
-                  "(transmit, neutral) : kinetic energy at exit",        //20
-                  "(transmit, neutral) : ener fluence: dE(MeV)/dOmega",        //21
-                  "(transmit, neutral) : space angle: dN/dOmega",        //22
+                  "(transmit, neutral) : kinetic energy at exit",         //20
+                  "(transmit, neutral) : ener fluence: dE(MeV)/dOmega",   //21
+                  "(transmit, neutral) : space angle: dN/dOmega",         //22
                   "(transmit, neutral) : projected angle at exit",        //23
                   "dummy","dummy","dummy","dummy","dummy","dummy",        //24-29
-                  "(reflect , charged) : kinetic energy at exit",        //30
-                  "(reflect , charged) : ener fluence: dE(MeV)/dOmega",        //31
-                  "(reflect , charged) : space angle: dN/dOmega",        //32
+                  "(reflect , charged) : kinetic energy at exit",         //30
+                  "(reflect , charged) : ener fluence: dE(MeV)/dOmega",   //31
+                  "(reflect , charged) : space angle: dN/dOmega",         //32
                   "(reflect , charged) : projected angle at exit",        //33
                   "dummy","dummy","dummy","dummy","dummy","dummy",        //34-39
-                  "(reflect , neutral) : kinetic energy at exit",        //40
-                  "(reflect , neutral) : ener fluence: dE(MeV)/dOmega",        //41
-                  "(reflect , neutral) : space angle: dN/dOmega",        //42
+                  "(reflect , neutral) : kinetic energy at exit",         //40
+                  "(reflect , neutral) : ener fluence: dE(MeV)/dOmega",   //41
+                  "(reflect , neutral) : space angle: dN/dOmega",         //42
                   "(reflect , neutral) : projected angle at exit",        //43
-                  "dummy","dummy","dummy","dummy","dummy","dummy"        //44-49
+                  "dummy","dummy","dummy","dummy","dummy","dummy"         //44-49
                  };
 
   // Default values (to be reset via /analysis/h1/set command)               

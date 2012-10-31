@@ -58,10 +58,10 @@ class RunAction : public G4UserRunAction
 public:
 
     RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
-    virtual ~RunAction();
+   ~RunAction();
 
-    void BeginOfRunAction(const G4Run*);
-    void   EndOfRunAction(const G4Run*);
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void   EndOfRunAction(const G4Run*);
 
     void AddEnergy (G4double edep)
                  {fEnergyDeposit += edep; fEnergyDeposit2 += edep*edep;};

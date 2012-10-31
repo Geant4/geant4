@@ -52,7 +52,7 @@ class StackingAction : public G4UserStackingAction
    
     void SetKillStatus(G4int value) { fKillSecondary = value;};
      
-    G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
+    virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
     
   private:
     RunAction*          fRunAction;
