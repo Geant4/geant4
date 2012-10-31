@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm3/src/PhysListEmStandard.cc
-/// \brief Implementation of the PhysListEmStandard class
-//
 // $Id: PhysListEmStandard.cc,v 1.24 2009-11-15 22:10:03 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -44,6 +41,7 @@
 #include "G4KleinNishinaModel.hh"
 
 #include "G4eMultipleScattering.hh"
+#include "G4UrbanMscModel96.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
@@ -105,20 +103,29 @@ void PhysListEmStandard::ConstructProcess()
      
     } else if (particleName == "e-") {
     
-      ph->RegisterProcess(new G4eMultipleScattering(), particle);            
+      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      msc -> AddEmModel(0, new G4UrbanMscModel96());    
+      ph->RegisterProcess(msc, particle);
+      //            
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetStepFunction(0.1, 100*um);      
       ph->RegisterProcess(eIoni, particle);
+      //
       ph->RegisterProcess(new G4eBremsstrahlung(), particle);      
             
     } else if (particleName == "e+") {
-
-      ph->RegisterProcess(new G4eMultipleScattering(), particle);                  
+    
+      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      msc -> AddEmModel(0, new G4UrbanMscModel96());    
+      ph->RegisterProcess(msc, particle);
+      //     
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetStepFunction(0.1, 100*um);      
       ph->RegisterProcess(eIoni, particle);
+      //
       ph->RegisterProcess(new G4eBremsstrahlung(), particle);
-      ph->RegisterProcess(new G4eplusAnnihilation(), particle);
+      //
+      ph->RegisterProcess(new G4eplusAnnihilation(), particle);    
                   
     } else if (particleName == "mu+" || 
                particleName == "mu-"    ) {
@@ -142,7 +149,7 @@ void PhysListEmStandard::ConstructProcess()
       ph->RegisterProcess(new G4hPairProduction(), particle);            
      
     } else if( particleName == "alpha" || 
-               particleName == "He3"    ) {
+	       particleName == "He3"    ) {
 
       ph->RegisterProcess(new G4hMultipleScattering(), particle);           
       G4ionIonisation* ionIoni = new G4ionIonisation();
@@ -160,9 +167,9 @@ void PhysListEmStandard::ConstructProcess()
       ph->RegisterProcess(new G4NuclearStopping(), particle);                   
       
     } else if ((!particle->IsShortLived()) &&
-               (particle->GetPDGCharge() != 0.0) && 
-               (particle->GetParticleName() != "chargedgeantino")) {
-               
+	       (particle->GetPDGCharge() != 0.0) && 
+	       (particle->GetParticleName() != "chargedgeantino")) {
+	       
       //all others charged particles except geantino
       ph->RegisterProcess(new G4hMultipleScattering(), particle);
       ph->RegisterProcess(new G4hIonisation(), particle);
@@ -178,14 +185,14 @@ void PhysListEmStandard::ConstructProcess()
   
   //physics tables
   //
-  emOptions.SetMinEnergy(10*eV);        //default 100 eV   
-  emOptions.SetMaxEnergy(10*TeV);        //default 100 TeV 
-  emOptions.SetDEDXBinning(12*10);        //default=12*7
-  emOptions.SetLambdaBinning(12*10);        //default=12*7
+  emOptions.SetMinEnergy(10*eV);	//default 100 eV   
+  emOptions.SetMaxEnergy(10*TeV);	//default 100 TeV 
+  emOptions.SetDEDXBinning(12*10);	//default=12*7
+  emOptions.SetLambdaBinning(12*10);	//default=12*7
   
   //multiple coulomb scattering
   //
-  emOptions.SetMscStepLimitation(fUseDistanceToBoundary);  //default fUseSafety
+  emOptions.SetMscStepLimitation(fUseDistanceToBoundary);  //default=fUseSafety
     
   // Deexcitation
   //

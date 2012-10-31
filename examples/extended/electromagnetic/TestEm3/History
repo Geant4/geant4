@@ -14,9 +14,15 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+     
+19-10-12 mma (testem3-V09-05-11)
+- HistoManager: vmax=100
+     
+19-10-12 mma (testem3-V09-05-10)
+- PhysListEmStandard: use G4UrbanMsc96
+ 
 12-10-12 V.Ivant (testem3-V09-05-09)
-- Do not save random seed per event
+- Do not save random seed per even
 
 12-10-12 V.Ivant (testem3-V09-05-08)
 - Added statistics on number of charged and neutral steps
