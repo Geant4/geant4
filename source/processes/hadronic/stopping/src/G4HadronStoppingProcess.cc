@@ -42,10 +42,12 @@
 // Modifications: 
 //   20120522  M. Kelsey -- Set enableAtRestDoIt flag for G4ProcessManager
 //   20120914  M. Kelsey -- Pass subType in base ctor, remove enable flags
+//   20121004  K. Genser -- use G4HadronicProcessType in the constructor
 //------------------------------------------------------------------------
 
 #include "G4HadronStoppingProcess.hh"
 #include "G4HadronicProcessStore.hh"
+#include "G4HadronicProcessType.hh"
 #include "G4EmCaptureCascade.hh"
 #include "G4Nucleus.hh"
 #include "G4HadFinalState.hh"
@@ -56,8 +58,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4HadronStoppingProcess::G4HadronStoppingProcess(const G4String& name) 
-  : G4HadronicProcess(name, fHadronAtRest)
+G4HadronStoppingProcess::G4HadronStoppingProcess(const G4String& name, 
+                                                 G4HadronicProcessType subType) 
+  : G4HadronicProcess(name, subType)
 {
   // Modify G4VProcess flags to emulate G4VRest instead of G4VDiscrete
   enableAtRestDoIt = true;

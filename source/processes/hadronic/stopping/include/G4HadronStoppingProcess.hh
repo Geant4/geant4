@@ -41,6 +41,8 @@
 //
 // Modifications: 
 // 20120928  M. Kelsey -- Add GetMeanLifeTime() here, instead of in base.
+// 20121004  K. Genser -- defined two argument constructor with defaults
+//
 //------------------------------------------------------------------------
 
 #ifndef G4HadronStoppingProcess_h
@@ -61,7 +63,8 @@ class G4HadronStoppingProcess : public G4HadronicProcess
 { 
 public:
  
-  G4HadronStoppingProcess(const G4String& name = "hadronCaptureAtRest");
+  explicit G4HadronStoppingProcess(const G4String& name = "hadronCaptureAtRest", 
+                                   G4HadronicProcessType subType=fHadronAtRest);
 
   virtual ~G4HadronStoppingProcess();
 

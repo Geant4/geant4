@@ -40,6 +40,7 @@
 // Stopping of mu-
 //
 // Modifications: 
+//   20121003 K. Genser - Changed the constructor argument type
 //
 //------------------------------------------------------------------------
 
@@ -50,13 +51,13 @@
 #include "G4HadronStoppingProcess.hh"
 #include "G4ParticleDefinition.hh"
 
-class G4VPreCompoundModel;
+class G4HadronicInteraction;
 
 class G4MuonMinusCapture : public G4HadronStoppingProcess 
 { 
 public:
  
-  G4MuonMinusCapture(G4VPreCompoundModel* ptr=0);
+  explicit G4MuonMinusCapture(G4HadronicInteraction* hiptr=0);
 
   ~G4MuonMinusCapture();
 
