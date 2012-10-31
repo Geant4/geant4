@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm9/src/StepMax.cc
+/// \brief Implementation of the StepMax class
+//
 // $Id: StepMax.cc,v 1.3 2006-06-29 17:00:49 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -67,8 +70,8 @@ void StepMax::SetMaxStep(G4double step)
 
 G4double 
 StepMax::PostStepGetPhysicalInteractionLength(const G4Track&,
-					      G4double,
-					      G4ForceCondition* condition)
+                                              G4double,
+                                              G4ForceCondition* condition)
 {
   // condition is set to "Not Forced"
   *condition = NotForced;

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm9/src/TrackingAction.cc
+/// \brief Implementation of the TrackingAction class
+//
 
 //---------------------------------------------------------------------------
 //
@@ -49,6 +52,7 @@
 #include "G4Electron.hh"
 #include "G4EventManager.hh"
 #include "G4Event.hh"
+#include "G4SystemOfUnits.hh"
 #include "HistoManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

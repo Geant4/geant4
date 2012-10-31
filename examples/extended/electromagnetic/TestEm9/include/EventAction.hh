@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm9/include/EventAction.hh
+/// \brief Definition of the EventAction class
+//
 #ifndef EventAction_h
 #define EventAction_h 1
 

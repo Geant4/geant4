@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm9/src/DetectorConstruction.cc
+/// \brief Implementation of the DetectorConstruction class
+//
 //
 // $Id: DetectorConstruction.cc,v 1.14 2009-11-21 17:28:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
@@ -67,6 +70,7 @@
 #include "G4Colour.hh"
 
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -174,7 +178,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   G4Box* solidW = new G4Box("World",worldX,worldX,fWorldZ);
   fLogicWorld = new G4LogicalVolume( solidW,fWorldMaterial,"World");
   G4VPhysicalVolume* world = new G4PVPlacement(0,G4ThreeVector(),
-					       "World",fLogicWorld,0,false,0);
+                                               "World",fLogicWorld,0,false,0);
 
   //
   // Ecal
@@ -183,13 +187,13 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   G4LogicalVolume* logicECal = 
     new G4LogicalVolume( solidE,fWorldMaterial,"VolE");
   G4VPhysicalVolume* physE = new G4PVPlacement(0,G4ThreeVector(0.,0.,ecalZ),
-					       "VolE",logicECal,world,false,0);
+                                               "VolE",logicECal,world,false,0);
 
   G4Box* solidC = new G4Box("Ecal",fEcalWidth*0.5,fEcalWidth*0.5,fEcalLength*0.5);
   fLogicCal = new G4LogicalVolume( solidC,fCalMaterial,"Ecal");
 
   G4cout << "Ecal is " << G4BestUnit(fEcalLength,"Length")
-	 << " of " << fCalMaterial->GetName() << G4endl;
+         << " of " << fCalMaterial->GetName() << G4endl;
 
   // Crystals
 
@@ -216,10 +220,10 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   G4Box* solidA = new G4Box("Abso",worldX,worldX,fAbsLength*0.5);
   fLogicA2 = new G4LogicalVolume( solidA,fAbsMaterial,"Abs2");
   new G4PVPlacement(0,G4ThreeVector(0.,0.,absZ2),
-			 "Abs2",fLogicA2,world,false,0);
+                         "Abs2",fLogicA2,world,false,0);
 
   G4cout << "Absorber is " << G4BestUnit(fAbsLength,"Length")
-	 << " of " << fAbsMaterial->GetName() << G4endl;
+         << " of " << fAbsMaterial->GetName() << G4endl;
 
   //York
 
@@ -227,39 +231,39 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   G4LogicalVolume* logicYV = 
     new G4LogicalVolume( solidYV,fYorkMaterial,"VolY");
   G4VPhysicalVolume* physYV = new G4PVPlacement(0,G4ThreeVector(0.,0.,yorkZ),
-						"VolY",logicYV,world,false,0);
+                                                "VolY",logicYV,world,false,0);
 
   G4Box* solidY = new G4Box("York",worldX,worldX,york*0.5);
   G4LogicalVolume* logicY = 
     new G4LogicalVolume( solidY,fYorkMaterial,"York");
   new G4PVPlacement(0,G4ThreeVector(),
-			 "York",logicY,physYV,false,0);
+                         "York",logicY,physYV,false,0);
 
   fLogicA3 = new G4LogicalVolume( solidA,fAbsMaterial,"Abs3");
   fLogicA4 = new G4LogicalVolume( solidA,fAbsMaterial,"Abs4");
 
   new G4PVPlacement(0,G4ThreeVector(0.,0.,-(york+fAbsLength)*0.5),
-			 "Abs3",fLogicA3,physYV,false,0);
+                         "Abs3",fLogicA3,physYV,false,0);
   new G4PVPlacement(0,G4ThreeVector(0.,0.,(york+fAbsLength)*0.5),
-			 "Abs4",fLogicA4,physYV,false,0);
+                         "Abs4",fLogicA4,physYV,false,0);
 
   //Vertex volume
   G4Box* solidVV = new G4Box("VolV",worldX,worldX,fVertexLength*2.+fAbsLength+gap);
   G4LogicalVolume* logicVV = 
     new G4LogicalVolume( solidVV,fWorldMaterial,"VolV");
   G4VPhysicalVolume* physVV = new G4PVPlacement(0,G4ThreeVector(0.,0.,vertexZ),
-						"VolV",logicVV,world,false,0);
+                                                "VolV",logicVV,world,false,0);
 
   //Absorber
   fLogicA1 = new G4LogicalVolume( solidA,fAbsMaterial,"Abs1");
   new G4PVPlacement(0,G4ThreeVector(0.,0.,fVertexLength*2.-fAbsLength*0.5),
-			 "Abs1",fLogicA1,physVV,false,0);
+                         "Abs1",fLogicA1,physVV,false,0);
 
   //Vertex
   G4double vertWidth = fEcalWidth/5.;
   G4int npads = (G4int)(vertWidth/fPadWidth);
   //G4cout << " vertWidth= " << vertWidth << " padWidth= " << padWidth 
-  //	 << " npads= " << npads << G4endl;
+  //         << " npads= " << npads << G4endl;
   // insure beam to hit a middle of central pad
   npads = (npads/2)*2 + 1;
   x0 = -0.5*(fPadWidth + vertWidth);
@@ -291,7 +295,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   G4cout << "Vertex is " << G4BestUnit(fVertexLength,"Length")
          << " of 3 layers of Si of " << G4BestUnit(fPadLength,"Length")
          << " npads= " << npads
-	 << G4endl;
+         << G4endl;
 
   // Define region for the vertex detector
   fVertexRegion->AddRootLogicalVolume(logicVV);

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm9/src/PrimaryGeneratorAction.cc
+/// \brief Implementation of the PrimaryGeneratorAction class
+//
 //
 // $Id: PrimaryGeneratorAction.cc,v 1.3 2006-06-29 17:03:46 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
@@ -50,6 +53,7 @@
 #include "G4ParticleTable.hh"
 #include "G4Electron.hh"
 #include "HistoManager.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -79,9 +83,9 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     (HistoManager::GetPointer())->SetBeamEnergy(fParticleGun->GetParticleEnergy());
     G4cout << "### PrimaryGeneratorAction::GeneratePrimaries ##########" << G4endl;
     G4cout << "### " << fParticleGun->GetParticleDefinition()->GetParticleName()
-	   << "  E(MeV)= " << fParticleGun->GetParticleEnergy()/MeV << G4endl;
+           << "  E(MeV)= " << fParticleGun->GetParticleEnergy()/MeV << G4endl;
     G4cout << "########################################################"
-	   << G4endl;
+           << G4endl;
   }
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }

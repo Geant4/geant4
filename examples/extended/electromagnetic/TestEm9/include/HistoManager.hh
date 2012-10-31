@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm9/include/HistoManager.hh
+/// \brief Definition of the HistoManager class
+//
 // $Id: HistoManager.hh,v 1.13 2011-01-06 15:56:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 

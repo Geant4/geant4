@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm9/src/HistoManager.cc
+/// \brief Implementation of the HistoManager class
+//
 //---------------------------------------------------------------------------
 //
 // ClassName:   HistoManager
@@ -48,6 +51,7 @@
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -102,7 +106,7 @@ void HistoManager::bookHisto()
   fHisto->Add1D("11","Evis/E0 in 3x3",fBinsED,0.0,1.0,1.0);
   fHisto->Add1D("12","Evis/E0 in 5x5",fBinsED,0.0,1.0,1.0);
   fHisto->Add1D("13","Energy (MeV) of delta-electrons",
-		fBinsE,0.0,fMaxEnergy,MeV);
+                fBinsE,0.0,fMaxEnergy,MeV);
   fHisto->Add1D("14","Energy (MeV) of gammas",fBinsE,0.0,fMaxEnergy,MeV);
   fHisto->Add1D("15","Energy (MeV) in abs1",fBinsEA,0.0,fMaxEnergyAbs,MeV);
   fHisto->Add1D("16","Energy (MeV) in abs2",fBinsEA,0.0,fMaxEnergyAbs,MeV);
@@ -167,13 +171,13 @@ void HistoManager::EndOfRun(G4int runID)
 {
 
   G4cout << "HistoManager: End of run actions are started   RunID# " 
-	 << runID << G4endl;
+         << runID << G4endl;
   G4String nam[6] = {"1x1", "3x3", "5x5", "E1/E9 ", "E1/E25", "E9/E25"};
 
   // average
 
   G4cout<<"================================================================="
-	<<G4endl;
+        <<G4endl;
   G4double x = (G4double)fEvt;
   if(fEvt > 0) x = 1.0/x;
   G4int j;
@@ -224,7 +228,7 @@ void HistoManager::EndOfRun(G4int runID)
       G4double s = fErms[j];
       G4double r = s*std::sqrt(x);
       G4cout << std::setprecision(4) << "Edep " << nam[j] << " =                   " << e
-	     << " +- " << r;
+             << " +- " << r;
       if(e > 0.0) G4cout << "  res=  " << f*s/e << " %";
       G4cout << G4endl;
     }
@@ -243,7 +247,7 @@ void HistoManager::EndOfRun(G4int runID)
     G4cout << G4endl;
   }
   G4cout << std::setprecision(4) << "Beam Energy                  " << fBeamEnergy/GeV 
-	 << " GeV" << G4endl;
+         << " GeV" << G4endl;
   if(fLowe > 0)          G4cout << "Number of events E/E0<0.8    " << fLowe << G4endl; 
   G4cout<<"=================================================================="<<G4endl;
   G4cout<<G4endl;
@@ -284,7 +288,7 @@ void HistoManager::EndOfRun(G4int runID)
     G4int n4 = G4int(fConv[j]*x);
     if(n1 + n2 + n3 + n4 > 0) {
       G4cout << std::setw(4) << j << std::setw(12) << n1 << std::setw(12) << n2
-	     << std::setw(12) << n3 << std::setw(12) << n4 << G4endl;
+             << std::setw(12) << n3 << std::setw(12) << n4 << G4endl;
     }
   }
 }
@@ -416,30 +420,30 @@ void HistoManager::ScoreNewTrack(const G4Track* aTrack)
     G4int type = proc->GetProcessSubType();
     if(type == fBremsstrahlung) {
       const G4Element* elm = 
-	static_cast<const G4VEnergyLossProcess*>(proc)->GetCurrentElement();
+        static_cast<const G4VEnergyLossProcess*>(proc)->GetCurrentElement();
       if(elm) {
-	G4int Z = G4lrint(elm->GetZ());
+        G4int Z = G4lrint(elm->GetZ());
         if(Z > 0 && Z < 93) { fBrem[Z] += 1.0; }
       }
     } else if(type == fPhotoElectricEffect) {
       const G4Element* elm = 
-	static_cast<const G4VEmProcess*>(proc)->GetCurrentElement();
+        static_cast<const G4VEmProcess*>(proc)->GetCurrentElement();
       if(elm) {
-	G4int Z = G4lrint(elm->GetZ());
+        G4int Z = G4lrint(elm->GetZ());
         if(Z > 0 && Z < 93) { fPhot[Z] += 1.0; }
       }
     } else if(type == fGammaConversion) {
       const G4Element* elm = 
-	static_cast<const G4VEmProcess*>(proc)->GetCurrentElement();
+        static_cast<const G4VEmProcess*>(proc)->GetCurrentElement();
       if(elm) {
-	G4int Z = G4lrint(elm->GetZ());
+        G4int Z = G4lrint(elm->GetZ());
         if(Z > 0 && Z < 93) { fConv[Z] += 1.0; }
       }
     } else if(type == fComptonScattering) {
       const G4Element* elm = 
-	static_cast<const G4VEmProcess*>(proc)->GetCurrentElement();
+        static_cast<const G4VEmProcess*>(proc)->GetCurrentElement();
       if(elm) {
-	G4int Z = G4lrint(elm->GetZ());
+        G4int Z = G4lrint(elm->GetZ());
         if(Z > 0 && Z < 93) { fComp[Z] += 1.0; }
       }
     }
@@ -447,20 +451,20 @@ void HistoManager::ScoreNewTrack(const G4Track* aTrack)
     // delta-electron
     if (particle == fElectron) {
       if(1 < fVerbose) {
-	G4cout << "TrackingAction: Secondary electron " << G4endl;
+        G4cout << "TrackingAction: Secondary electron " << G4endl;
       }
       AddDeltaElectron(dynParticle);
 
     } else if (particle == fPositron) {
       if(1 < fVerbose) {
-	G4cout << "TrackingAction: Secondary positron " << G4endl;
+        G4cout << "TrackingAction: Secondary positron " << G4endl;
       }
       AddPositron(dynParticle);
 
     } else if (particle == fGamma) {
       if(1 < fVerbose) {
-	G4cout << "TrackingAction: Secondary gamma; parentID= " << pid
-	       << " E= " << kinE << G4endl;
+        G4cout << "TrackingAction: Secondary gamma; parentID= " << pid
+               << " E= " << kinE << G4endl;
       }
       AddPhoton(dynParticle);
     }

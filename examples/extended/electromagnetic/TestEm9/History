@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12-10-12 V.Ivant (testem9-V09-05-03)
+- Migration to the updated analysis tool
+- Added Opt4 Physics List and decreased limit on cuts
+
 23-05-12 V.Ivant (testem9-V09-05-02)
 - Histo - fixed n-tuples
 

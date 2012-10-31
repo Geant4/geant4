@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm9/src/PhysicsList.cc
+/// \brief Implementation of the PhysicsList class
+//
 // $Id: PhysicsList.cc,v 1.26 2010-08-12 11:38:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -49,6 +52,7 @@
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
+#include "G4EmStandardPhysics_option4.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
 #include "G4DecayPhysics.hh"
@@ -71,6 +75,7 @@
 #include "G4Proton.hh"
 
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4LossTableManager.hh"
 #include "StepMax.hh"
 
@@ -181,6 +186,13 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     if (verboseLevel > 0) 
       G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
 
+  } else if (name == "emstandard_opt4") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option4();
+    if (verboseLevel > 0) 
+      G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
+
   } else if (name == "emstandard_local") {
     fEmName = name;
     delete fEmPhysicsList;
@@ -243,7 +255,7 @@ void PhysicsList::AddStepMax()
 
     if (fStepMaxProcess->IsApplicable(*particle) && !particle->IsShortLived())
       {
-	pmanager ->AddDiscreteProcess(fStepMaxProcess);
+        pmanager ->AddDiscreteProcess(fStepMaxProcess);
       }
   }
 }
@@ -257,7 +269,7 @@ void PhysicsList::SetCuts()
   SetCutValue(fCutForElectron, "e+", "DefaultRegionForTheWorld");
   SetCutValue(fCutForProton, "proton", "DefaultRegionForTheWorld");
   //  G4cout << "PhysicsList: world cuts are set cutG= " << cutForGamma/mm 
-  //	 << " mm    cutE= " << fCutForElectron/mm << " mm " << G4endl;
+  //         << " mm    cutE= " << fCutForElectron/mm << " mm " << G4endl;
 
   //G4cout << " cutV= " << fCutForVertexDetector 
   //     << " cutM= " << fCutForMuonDetector<<G4endl;

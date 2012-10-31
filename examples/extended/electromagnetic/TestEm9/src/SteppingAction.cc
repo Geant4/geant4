@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm9/src/SteppingAction.cc
+/// \brief Implementation of the SteppingAction class
+//
 //
 // $Id: SteppingAction.cc,v 1.2 2006-06-29 17:03:57 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $

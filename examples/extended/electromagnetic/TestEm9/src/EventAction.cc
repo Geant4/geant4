@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm9/src/EventAction.cc
+/// \brief Implementation of the EventAction class
+//
 // $Id: EventAction.cc,v 1.6 2010-06-07 05:40:46 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
@@ -90,7 +93,7 @@ void EventAction::EndOfEventAction(const G4Event* event)
 
   if(fVerbose > 0) {
     G4cout << "EventAction: Event # " << event->GetEventID() 
-	   << " ended" << G4endl;
+           << " ended" << G4endl;
   }
 }
 

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm9/src/Histo.cc
+/// \brief Implementation of the Histo class
+//
 // $Id: Histo.cc,v 1.2 2010-09-28 19:08:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -90,7 +93,7 @@ void Histo::Book()
     return; 
   }
   G4cout << "### Histo::Save: Opended file <" << nam << ">  for " 
-	 << fNHisto << " histograms " << G4endl;
+         << fNHisto << " histograms " << G4endl;
 
   // Creating an 1-dimensional histograms in the root directory of the tree
   for(G4int i=0; i<fNHisto; ++i) {
@@ -98,8 +101,8 @@ void Histo::Book()
       G4String ss = "h" + fIds[i];
       fHisto[i] = fManager->CreateH1(ss, fTitles[i], fBins[i], fXmin[i], fXmax[i]);
       if(fVerbose > 0) {
-	G4cout << "Created histogram #" << i << "  id= " << fHisto[i]
-	       << "  "  << ss << "  " << fTitles[i] << G4endl;
+        G4cout << "Created histogram #" << i << "  id= " << fHisto[i]
+               << "  "  << ss << "  " << fTitles[i] << G4endl;
       }
     }
   }
@@ -279,7 +282,7 @@ void Histo::FillTupleI(G4int i, G4int x)
   if(i >= 0 && i < n) {
     if(fVerbose > 1) {
       G4cout << "Histo::FillTupleI: i= " << i << "  id= " << fTupleI[i]
-	     << "   <" << fNtupleI[i] << "> = " << x << G4endl; 
+             << "   <" << fNtupleI[i] << "> = " << x << G4endl; 
     }
     fManager->FillNtupleIColumn(fTupleI[i], x); 
   } else {
@@ -296,7 +299,7 @@ void Histo::FillTupleF(G4int i, G4float x)
   if(i >= 0 && i < n) {
     if(fVerbose > 1) {
       G4cout << "Histo::FillTupleF: i= " << i << "  id= " << fTupleF[i]
-	     << "   <" << fNtupleF[i] << "> = " << x << G4endl; 
+             << "   <" << fNtupleF[i] << "> = " << x << G4endl; 
     }
     fManager->FillNtupleFColumn(fTupleF[i], x); 
   } else {
@@ -313,7 +316,7 @@ void Histo::FillTupleD(G4int i, G4double x)
   if(i >= 0 && i < n) {
     if(fVerbose > 1) {
       G4cout << "Histo::FillTupleD: i= " << i << "  id= " << fTupleD[i]
-	     << "   <" << fNtupleD[i] << "> = " << x << G4endl; 
+             << "   <" << fNtupleD[i] << "> = " << x << G4endl; 
     }
     fManager->FillNtupleDColumn(fTupleD[i], x); 
   } else {
@@ -344,7 +347,7 @@ void Histo::SetFileType(const G4String& nam)
   if(nam == "root" || nam == "ROOT" )   { fHistType = "root"; }
   else if(nam == "xml" || nam == "XML") { fHistType = "xml"; }
   else if(nam == "ascii" || nam == "ASCII" || 
-	  nam == "Csv" || nam == "csv" || nam == "CSV") { fHistType = "ascii"; }
+          nam == "Csv" || nam == "csv" || nam == "CSV") { fHistType = "ascii"; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
