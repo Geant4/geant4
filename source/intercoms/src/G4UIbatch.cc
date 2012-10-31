@@ -98,6 +98,7 @@ G4String G4UIbatch::ReadCommand()
 {
   enum { BUFSIZE= 4096 };
   static char linebuf[BUFSIZE];
+  const char ctrM = 0x0d;
 
   G4String cmdtotal= "";
   G4bool qcontinued= false;
@@ -114,6 +115,7 @@ G4String G4UIbatch::ReadCommand()
 
     // strip
     cmdline= cmdline.strip(G4String::both);
+    cmdline= cmdline.strip(G4String::trailing, ctrM);
 
     // skip null line if single line
     if(!qcontinued && cmdline.size()==0) continue;

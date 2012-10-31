@@ -156,7 +156,8 @@ class G4UImanager : public G4VStateDependent
       G4int maxHistSize;
       G4bool pauseAtBeginOfEvent;
       G4bool pauseAtEndOfEvent;
-
+      G4String searchPath;
+      std::vector<G4String> searchDirs;
 
   public: // with description
       G4String GetCurrentStringValue(const char * aCommand, 
@@ -231,6 +232,13 @@ class G4UImanager : public G4VStateDependent
       inline G4int GetMaxHistSize() const
       { return maxHistSize; }
 
+      inline void SetMacroSearchPath(const G4String& path)
+      { searchPath = path; }
+      inline const G4String& GetMacroSearchPath() const
+      { return searchPath; }
+      void ParseMacroSearchPath();
+      G4String FindMacroPath(const G4String& fname) const;
+
   // Old methods kept for backward compatibility
   //    inline G4UIcommandTree * GetTree() const
   //    { return treeTop; };
@@ -242,4 +250,3 @@ class G4UImanager : public G4VStateDependent
 };
 
 #endif
-

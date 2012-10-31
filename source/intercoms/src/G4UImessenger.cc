@@ -31,13 +31,26 @@
 #include "G4UImessenger.hh"
 #include "G4UImanager.hh"
 #include "G4UIcommand.hh"
+#include "G4UIdirectory.hh"
+#include "G4UIcommandTree.hh"
 #include "G4ios.hh"
 #include <sstream>
 
+G4UImessenger::G4UImessenger()
+  : baseDir(NULL), baseDirName("")
+{ 
+}
 
-G4UImessenger::G4UImessenger() { }
+G4UImessenger::G4UImessenger(const G4String& path, const G4String& dsc)
+  : baseDir(NULL), baseDirName("")
+{
+  CreateDirectory(path, dsc);
+}
 
-G4UImessenger::~G4UImessenger() { }
+G4UImessenger::~G4UImessenger()
+{
+  if(baseDir) delete baseDir;
+}
 
 G4String G4UImessenger::GetCurrentValue(G4UIcommand*) 
 { 
@@ -108,3 +121,19 @@ void G4UImessenger::AddUIcommand(G4UIcommand * newCommand)
          << newCommand->GetCommandPath() << ">." << G4endl;
 }
 
+void G4UImessenger::CreateDirectory(const G4String& path, const G4String& dsc)
+{
+  G4UImanager* ui = G4UImanager::GetUIpointer();
+
+  G4String fullpath = path;
+  if(fullpath(fullpath.length()-1) != '/') fullpath.append("/");
+
+  G4UIcommandTree* tree= ui-> GetTree()-> FindCommandTree(fullpath.c_str());
+  if (tree) {
+    baseDirName = tree-> GetPathName();
+  } else {
+    baseDir = new G4UIdirectory(fullpath.c_str());
+    baseDirName = fullpath;
+    baseDir-> SetGuidance(dsc.c_str());
+  }
+}

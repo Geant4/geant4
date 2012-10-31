@@ -44,6 +44,7 @@ class G4UIcommand;
 // commands affecting to the G4UImanager. Commands defined by
 // this messenger are
 //   /control/ 
+//   /control/macroPath
 //   /control/execute
 //   /control/loop
 //   /control/foreach
@@ -76,6 +77,7 @@ class G4UIcontrolMessenger : public G4UImessenger
 
   private:
       G4UIdirectory * controlDirectory;
+      G4UIcmdWithAString * macroPathCommand;
       G4UIcmdWithAString * ExecuteCommand;
       G4UIcmdWithAnInteger * suppressAbortionCommand;
       G4UIcmdWithAnInteger * verboseCommand;

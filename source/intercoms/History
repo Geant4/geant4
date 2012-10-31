@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+17 October, 2012 K. Murakami (intercoms-V09-05-04)
+ - Added macro path feature with /control/macroPath command (G4UImanager)
+ - Added a shortcut way for defining UImacro commands (G4UImessenger)
+ - Fixed on executing a macro file containing Windows return codes.
 
 2 October, 2012 P. Mato (intercoms-V09-05-03)
  - Added some protection when getting the value of a command which is a method 

@@ -44,7 +44,7 @@
 #include "G4Tokenizer.hh"
 
 #include <sstream>
-
+#include <fstream>
 
 G4UImanager * G4UImanager::fUImanager = 0;
 G4bool G4UImanager::fUImanagerHasBeenKilled = false;
@@ -79,6 +79,7 @@ G4UImanager::G4UImanager()
   pauseAtBeginOfEvent = false;
   pauseAtEndOfEvent = false;
   maxHistSize = 20;
+  searchPath="";
 }
 
 void G4UImanager::CreateMessenger()
@@ -560,3 +561,53 @@ void G4UImanager::CreateHTML(const char* dir)
   { G4cerr << "Directory <" << dir << "> is not found." << G4endl; }
 }
 
+void G4UImanager::ParseMacroSearchPath()
+{
+  searchDirs.clear();
+
+  // nothing specified, read from current dir
+  if (searchPath == "") {
+    searchDirs.push_back(".");
+    return;
+  }
+
+  size_t idxfirst = 0;
+  size_t idxend = 0;
+  G4String pathstring = "";
+  while( (idxend = searchPath.index(':', idxfirst)) != G4String::npos) {
+    pathstring = searchPath(idxfirst, idxend-idxfirst); 
+    if(pathstring.size() != 0) searchDirs.push_back(pathstring);
+    idxfirst = idxend + 1;
+  }
+
+  pathstring = searchPath(idxfirst, searchPath.size()-idxfirst);
+  if(pathstring.size() != 0) searchDirs.push_back(pathstring);
+}
+
+
+static G4bool FileFound(const G4String& fname)
+{
+  G4bool qopen = false;
+  std::ifstream fs;
+  fs.open(fname.c_str(), std::ios::in);
+  if(fs.good()) {
+    fs.close();
+    qopen = true;
+  }
+  return qopen;
+}
+
+G4String G4UImanager::FindMacroPath(const G4String& fname) const
+{ 
+  G4String macrofile = fname;
+
+  for (size_t i = 0; i < searchDirs.size(); i++) {
+    G4String fullpath = searchDirs[i] + "/" + fname;
+    if ( FileFound(fullpath) ) {
+      macrofile = fullpath;
+      break;
+    }
+  }
+
+  return macrofile;
+}
