@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm4/src/EventAction.cc
+/// \brief Implementation of the EventAction class
+//
 // $Id: EventAction.cc,v 1.9 2010-06-07 05:40:46 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -36,6 +39,7 @@
 
 #include "G4Event.hh"
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -69,7 +73,7 @@ void EventAction::BeginOfEventAction( const G4Event* evt)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::EndOfEventAction( const G4Event*)
-{	 		 
+{                          
   if (fDrawFlag != "none") 
     G4cout << " Energy deposit: " 
            << G4BestUnit(fTotalEnergyDeposit,"Energy") << G4endl;

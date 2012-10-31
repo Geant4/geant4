@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm4/src/PhysicsList.cc
+/// \brief Implementation of the PhysicsList class
+//
 //
 // $Id: PhysicsList.cc,v 1.7 2008-04-07 13:09:43 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
@@ -37,6 +40,8 @@
 #include "G4ProcessManager.hh"
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
+
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
