@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ctests-V09-05-25 19th October 2012 Ivana Hrivnacova
+- Fix in example-ext-medical-dicom: added ENVIRONMENT
+
 ctests-V09-05-24 16th October 2012 Ivana Hrivnacova
 - Synchronizing tests with updated CMakeLists.txt in 
   example/extended/medical (exMedical-V09-05-01)

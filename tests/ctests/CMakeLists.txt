@@ -257,7 +257,7 @@ GEANT4_ADD_TEST(example-ext-medical-dicom
                         ${CMAKE_SOURCE_DIR}/examples/extended/medical/DICOM/run.mac
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/medical/DICOM
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/medical/DICOM
-                BUILD DICOM )
+                BUILD DICOM ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-ext-medical-electronScattering 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/extended/medical/electronScattering/electronScattering
                         ${CMAKE_SOURCE_DIR}/examples/extended/medical/electronScattering/electronScattering.in
