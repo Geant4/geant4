@@ -44,9 +44,13 @@
 // some minor modifications.
 //////////////////////////////////////////////////////////////////////////////
 
+#include <fstream>
+#include <iomanip>               
+
 #include "DMXParticleSourceMessenger.hh"
 #include "DMXParticleSource.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4Geantino.hh"
 #include "G4ThreeVector.hh"
 #include "G4ParticleTable.hh"
@@ -60,8 +64,6 @@
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4ios.hh"
-#include <fstream>
-#include <iomanip>               
 #include "G4Tokenizer.hh"
 
 ///////////////////////////////////////////////////////////////////////////////

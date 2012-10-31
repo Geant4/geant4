@@ -51,9 +51,12 @@
 //
 // --------------------------------------------------------------
 
+#include <iomanip>  
+
 #include "DMXPhysicsList.hh"
 
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 
@@ -63,10 +66,7 @@
 #include "G4ParticleTable.hh"
 
 #include "G4ios.hh"
-#include <iomanip>  
-
 #include "G4UserLimits.hh"
-
 
 // Constructor /////////////////////////////////////////////////////////////
 DMXPhysicsList::DMXPhysicsList() : G4VUserPhysicsList() 
@@ -460,8 +460,6 @@ void DMXPhysicsList::ConstructOp()
   theAbsorptionProcess->SetVerboseLevel(OpVerbLevel);
   // theRayleighScatteringProcess->SetVerboseLevel(OpVerbLevel);
   theBoundaryProcess->SetVerboseLevel(OpVerbLevel);
-  G4OpticalSurfaceModel themodel = unified;
-  theBoundaryProcess->SetModel(themodel);
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() )
