@@ -32,6 +32,7 @@
 #include "SteppingAction.hh"
 #include "DetectorConstruction.hh"
 #include "RunAction.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4SteppingManager.hh"
 #include "Randomize.hh"
 

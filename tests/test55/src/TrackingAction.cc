@@ -33,6 +33,7 @@
 
 #include "RunAction.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4Track.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

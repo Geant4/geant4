@@ -24,10 +24,11 @@
 // ********************************************************************
 //
 
-#include "Test.hh"
-#include "G4UnitsTable.hh"
 #include <iomanip>
 
+#include "Test.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 
 Test::Test(const G4String& physQuantity, 
            const G4String& category, 
