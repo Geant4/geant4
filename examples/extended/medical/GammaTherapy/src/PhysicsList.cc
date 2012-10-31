@@ -66,6 +66,9 @@
 #include "G4LossTableManager.hh"
 #include "G4EmProcessOptions.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList(): G4VModularPhysicsList()
