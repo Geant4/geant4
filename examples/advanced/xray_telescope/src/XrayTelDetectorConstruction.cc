@@ -49,6 +49,11 @@
 //
 // **********************************************************************
 
+#include "XrayTelDetectorConstruction.hh"
+
+#include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 #include "G4VUserDetectorConstruction.hh"
 #include "G4Material.hh"
@@ -65,10 +70,6 @@
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
-
-#include "globals.hh"
-
-#include "XrayTelDetectorConstruction.hh"
 
 XrayTelDetectorConstruction::XrayTelDetectorConstruction()
 {
