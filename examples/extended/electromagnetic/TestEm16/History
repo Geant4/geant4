@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12-10-12 V.Ivant (testem16-V09-05-02)
+- Migration to the updated analysis tool and inplicit units
+- Added Rayleigh scattering in the PhysicsList
      
 15-04-12 mma (testem16-V09-05-01)
 - all classes : apply G4 coding conventions 

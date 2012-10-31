@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm16/include/RunAction.hh
+/// \brief Definition of the RunAction class
+//
 // $Id: RunAction.hh,v 1.5 2007-01-18 09:07:20 hbu Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

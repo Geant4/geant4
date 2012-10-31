@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm16/include/HistoMessenger.hh
+/// \brief Definition of the HistoMessenger class
+//
 //
 // $Id: HistoMessenger.hh,v 1.1 2010-09-16 16:26:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
