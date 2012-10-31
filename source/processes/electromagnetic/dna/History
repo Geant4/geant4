@@ -13,6 +13,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
+24-10-2012  M.K                 tag emdna-V09-05-31
+            G4ITNavigator is updated to new interface of ReplicaNavigation::ComputeStep
+            (previously commented)
+
 23-10-2012  M.K                 tag emdna-V09-05-30
             Add exception in G4DNASecondOrderReaction
             Add carriage return in G4DNASmoluchowskiReaction cc and hh

@@ -904,7 +904,7 @@ G4double G4ITNavigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
     // edge/corner problem by itself
     //
     G4bool exitingReplica = fExitedMother;
-//  G4bool calculatedExitNormal= false;
+    G4bool calculatedExitNormal= false;
     
     Step = freplicaNav.ComputeStep(pGlobalpoint,
                                    pDirection,
@@ -914,7 +914,7 @@ G4double G4ITNavigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
                                    pNewSafety,
                                    fHistory,
                                    fValidExitNormal,
-                                   //calculatedExitNormal,
+                                   calculatedExitNormal,
                                    fExitNormal,
                                    exitingReplica,
                                    fEntering,
