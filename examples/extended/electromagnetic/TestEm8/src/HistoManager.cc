@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm8/src/HistoManager.cc
+/// \brief Implementation of the HistoManager class
+//
 // $Id: HistoManager.cc,v 1.4 2010-11-19 10:15:33 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -44,6 +47,7 @@
 #include "G4Step.hh"
 #include "G4LossTableManager.hh"
 #include "G4ElectronIonPair.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -86,9 +90,9 @@ HistoManager::~HistoManager()
 void HistoManager::bookHisto()
 {
   fHisto->Add1D("10","Energy deposition in detector (keV)",
-		fBinsE,0.0,fMaxEnergy/keV,1.0);
+                fBinsE,0.0,fMaxEnergy/keV,1.0);
   fHisto->Add1D("11","Number of primary clusters",
-		fBinsCluster,-0.5,fBinsCluster-0.5,1.0);
+                fBinsCluster,-0.5,fBinsCluster-0.5,1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -113,7 +117,7 @@ void HistoManager::BeginOfRun()
     G4cout << "HistoManager: Histograms are booked and run has been started"
            << G4endl;
     G4cout << " BinsCluster= " << fBinsCluster << "    BinsE= " <<  fBinsE
-	   << "   Emax(keV)= " << fMaxEnergy/keV << G4endl;
+           << "   Emax(keV)= " << fMaxEnergy/keV << G4endl;
   }
 }
 
@@ -157,12 +161,12 @@ void HistoManager::EndOfRun()
   if(y1 > 0.0) { G4cout << "   RMS/Emean = " << y2/y1; }
   G4cout << G4endl;
   G4cout << "   Mean number of steps in absorber= " 
-	 << fTotStepGas << ";  mean number of ion-clusters = " << fTotCluster    
+         << fTotStepGas << ";  mean number of ion-clusters = " << fTotCluster    
          << G4endl;
   G4cout << G4endl;
 
   G4cout << " ====== Energy deposit distribution   Noverflows= " << fOverflow 
-	 << " ====== " << G4endl ;
+         << " ====== " << G4endl ;
   G4cout << " bin nb      Elow      entries     normalized " << G4endl;
 
   std::ofstream fileOut("distribution.out", std::ios::out );
@@ -175,8 +179,8 @@ void HistoManager::EndOfRun()
   for(G4int j=0; j<fBinsE; ++j) 
   {
     G4cout << std::setw(5) << j << std::setw(10) << x1/keV 
-	   << std::setw(12) << fEgas[j] << std::setw(12) << fEgas[j]*norm 
-	   << G4endl ;
+           << std::setw(12) << fEgas[j] << std::setw(12) << fEgas[j]*norm 
+           << G4endl ;
     fileOut << x1/keV << "\t" << fEgas[j] << G4endl;
     x1 += de;
   }

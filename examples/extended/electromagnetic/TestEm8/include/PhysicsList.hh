@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm8/include/PhysicsList.hh
+/// \brief Definition of the PhysicsList class
+//
 // $Id: PhysicsList.hh,v 1.5 2010-09-08 09:12:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -74,7 +77,7 @@ private:
 
   void  AddPAIModel(const G4String&);
   void  NewPAIModel(const G4ParticleDefinition*, const G4String& modname, 
-		    const G4String& procname);
+                    const G4String& procname);
 
   G4EmConfigurator* fConfig;
 

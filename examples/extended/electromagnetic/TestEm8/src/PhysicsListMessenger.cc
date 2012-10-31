@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm8/src/PhysicsListMessenger.cc
+/// \brief Implementation of the PhysicsListMessenger class
+//
 // $Id: PhysicsListMessenger.cc,v 1.3 2010-09-08 09:12:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

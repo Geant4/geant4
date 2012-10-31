@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm8/include/StepMax.hh
+/// \brief Definition of the StepMax class
+//
 // $Id: StepMax.hh,v 1.2 2006-06-29 16:59:52 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -56,8 +59,8 @@ public:
 
   virtual G4double 
   PostStepGetPhysicalInteractionLength(const G4Track& track,
-				       G4double previousStepSize,
-				       G4ForceCondition* condition);
+                                       G4double previousStepSize,
+                                       G4ForceCondition* condition);
 
   virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 

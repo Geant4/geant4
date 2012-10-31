@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm8/src/PhysicsList.cc
+/// \brief Implementation of the PhysicsList class
+//
 // $Id: PhysicsList.cc,v 1.24 2010-11-29 12:11:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -47,6 +50,7 @@
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
+#include "G4EmStandardPhysics_option4.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
 #include "G4DecayPhysics.hh"
@@ -60,7 +64,9 @@
 #include "G4Proton.hh"
 
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4LossTableManager.hh"
+#include "G4ProductionCutsTable.hh"
 
 #include "StepMax.hh"
 
@@ -152,6 +158,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option3();
 
+  } else if (name == "emstandard_opt4") {
+
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option4();
+
   } else if (name == "emlivermore") {
 
     fEmName = name;
@@ -205,7 +217,7 @@ void PhysicsList::AddStepMax()
 
 void PhysicsList::SetCuts()
 {
-
+  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(100.*eV,1e5);
   if ( verboseLevel > 0 )
   {
     G4cout << "PhysicsList::SetCuts:";
@@ -271,9 +283,9 @@ void PhysicsList::AddPAIModel(const G4String& modname)
       NewPAIModel(particle, modname, "muIoni");
 
     } else if(partname == "proton" ||
-	      partname == "pi+" ||
+              partname == "pi+" ||
               partname == "pi-"   
-	      ) {
+              ) {
       NewPAIModel(particle, modname, "hIoni");
     }
   }
@@ -282,18 +294,18 @@ void PhysicsList::AddPAIModel(const G4String& modname)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::NewPAIModel(const G4ParticleDefinition* part, 
-			      const G4String& modname,
-			      const G4String& procname)
+                              const G4String& modname,
+                              const G4String& procname)
 {
   G4String partname = part->GetParticleName();
   if(modname == "pai") {
     G4PAIModel* pai = new G4PAIModel(part,"PAIModel");
     fConfig->SetExtraEmModel(partname,procname,pai,"GasDetector",
-			      0.0,100.*TeV,pai);
+                              0.0,100.*TeV,pai);
   } else if(modname == "pai_photon") {
     G4PAIPhotonModel* pai = new G4PAIPhotonModel(part,"PAIPhotModel");
     fConfig->SetExtraEmModel(partname,procname,pai,"GasDetector",
-			      0.0,100.*TeV,pai);
+                              0.0,100.*TeV,pai);
   }
 }
 
