@@ -34,6 +34,8 @@
 //
 // Modified:
 // 10.11.2005 V.Ivanchenko edit to provide a standard and add mu-
+// 16.10.2012 A.Ribon: deprecated class, to be removed in G4 version 10.
+//
 //----------------------------------------------------------------------------
 //
 
@@ -54,17 +56,23 @@
 #include "G4KaonMinusAbsorption.hh"
 #include "G4AntiProtonAnnihilationAtRest.hh"
 #include "G4AntiNeutronAnnihilationAtRest.hh"
+#include "G4HadronicDeprecate.hh"
+
 
 G4LHEPStoppingPhysics::G4LHEPStoppingPhysics(G4int ver)
   : G4VPhysicsConstructor("LHEP Stopping")
  , muProcess(0), piProcess(0), kProcess(0), apProcess(0), anProcess(0)
     , verbose(ver), wasActivated(false)
-{}
+{
+  G4HadronicDeprecate("G4LHEPStoppingPhysics");
+}
 
 G4LHEPStoppingPhysics::G4LHEPStoppingPhysics(const G4String& nam, G4int ver)
 : G4VPhysicsConstructor(nam), muProcess(0), piProcess(0), kProcess(0), apProcess(0), anProcess(0)
 , verbose(ver), wasActivated(false)
-{}
+{
+  G4HadronicDeprecate("G4LHEPStoppingPhysics");
+}
 
 G4LHEPStoppingPhysics::~G4LHEPStoppingPhysics()
 {

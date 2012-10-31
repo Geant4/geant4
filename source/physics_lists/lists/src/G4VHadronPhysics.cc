@@ -239,7 +239,7 @@ G4VHadronPhysics::FindInelasticProcess(const G4ParticleDefinition* p)
     }
   }
   G4ParticleDefinition* part = const_cast<G4ParticleDefinition*>(p);
-  had = new G4HadronInelasticProcess("hInelastic",part);
+  had = new G4HadronInelasticProcess(part->GetParticleName()+"Inelastic",part);
   pmanager->AddDiscreteProcess(had);
   return had;
 }

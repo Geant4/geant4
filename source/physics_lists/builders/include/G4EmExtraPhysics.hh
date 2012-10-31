@@ -35,6 +35,7 @@
 // Modified:
 // 10.11.2005 V.Ivanchenko edit to provide a standard
 // 19.06.2006 V.Ivanchenko add mu-nuclear process
+// 16.10.2012 A.Ribon: renamed G4EmExtraBertiniPhysics as G4EmExtraPhysics
 //
 //----------------------------------------------------------------------------
 //
@@ -48,7 +49,7 @@
 #include "G4EmMessenger.hh"
 
 #include "G4SynchrotronRadiation.hh"
-#include "G4ElectroNuclearBuilder.hh"
+#include "G4BertiniElectroNuclearBuilder.hh"
 #include "G4MuonNuclearProcess.hh"
 #include "G4MuonVDNuclearModel.hh"
 
@@ -87,7 +88,7 @@ private:
   G4EmMessenger*           theMessenger;
   G4SynchrotronRadiation*  theElectronSynch;
   G4SynchrotronRadiation*  thePositronSynch;
-  G4ElectroNuclearBuilder* theGNPhysics;
+  G4BertiniElectroNuclearBuilder* theGNPhysics;
   G4MuonNuclearProcess* muNucProcess;
   G4MuonVDNuclearModel* muNucModel;
 

@@ -39,6 +39,7 @@
 // 26.04.2007 G.Folger: Enable quasielastic for QGS string model
 // 16.05.2007 V.Ivanchenko: rename EM builders
 // 16.08.2010 H.Kurashige: Remove inclusion of G4ParticleWithCuts 
+// 16.10.2012 A.Ribon: Use new default stopping
 //
 //----------------------------------------------------------------------------
 //
@@ -58,7 +59,7 @@
 #include "G4EmStandardPhysics.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4IonPhysics.hh"
-#include "G4QStoppingPhysics.hh"
+#include "G4StoppingPhysics.hh"
 #include "G4HadronQElasticPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 
@@ -99,7 +100,7 @@ template<class T> TQGSP_QEL<T>::TQGSP_QEL(G4int ver):  T()
   this->RegisterPhysics( new HadronPhysicsQGSP("hadron",quasiElastic=true));
 
   // Stopping Physics
-  this->RegisterPhysics( new G4QStoppingPhysics(ver) );
+  this->RegisterPhysics( new G4StoppingPhysics(ver) );
 
   // Ion Physics
   this->RegisterPhysics( new G4IonPhysics("ion"));

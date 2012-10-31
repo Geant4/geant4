@@ -75,6 +75,7 @@
 #include "G4PreCompoundModel.hh"
 #include "G4ExcitationHandler.hh"
 #include "G4Evaporation.hh"
+#include "G4HadronicInteractionRegistry.hh"
 
 G4HadronInelasticQBBC::G4HadronInelasticQBBC(G4int ver) 
   : G4VHadronPhysics("hInelastic"),verbose(ver),wasActivated(false)
@@ -112,9 +113,13 @@ void G4HadronInelasticQBBC::ConstructProcess()
   //G4cout << "G4HadronInelasticQBBC::ConstructProcess new PRECO"<< G4endl;
 
   // PreCompound and Evaporation models are instantiated here
-  G4ExcitationHandler* handler = new G4ExcitationHandler();
-  G4PreCompoundModel* thePreCompound = new G4PreCompoundModel(handler);
-
+  G4PreCompoundModel* thePreCompound = 0;
+  G4HadronicInteraction* p =
+    G4HadronicInteractionRegistry::Instance()->FindModel("PRECO");
+  thePreCompound = static_cast<G4PreCompoundModel*>(p);
+  if(!thePreCompound) { thePreCompound = new G4PreCompoundModel(); }
+  //G4ExcitationHandler* handler = thePreCompound->GetExcitationHandler();
+ 
   // configure models
   //G4HadronicInteraction* theQGSP = 
   //  BuildModel(new G4QGSBuilder("QGSP",thePreCompound,true,false),12.5*GeV,emax);

@@ -37,6 +37,7 @@
 // 27.11.2009 G.Folger: Remove experimental status
 // 04.06.2010 G.Folger: Use new ctor for builders
 // 16.08.2010 H.Kurashige: Remove inclusion of G4ParticleWithCuts 
+// 16.10.2012 A.Ribon: Use new default stopping and ion physics
 //
 //----------------------------------------------------------------------------
 //
@@ -56,7 +57,7 @@
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4IonPhysics.hh"
-#include "G4QStoppingPhysics.hh"
+#include "GQStoppingPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 
@@ -89,7 +90,7 @@ template<class T> TFTFP_BERT_EMV<T>::TFTFP_BERT_EMV(G4int ver):  T()
   this->RegisterPhysics( new HadronPhysicsFTFP_BERT(ver));
 
   // Stopping Physics
-  this->RegisterPhysics( new G4QStoppingPhysics(ver) );
+  this->RegisterPhysics( new G4StoppingPhysics(ver) );
 
   // Ion Physics
   this->RegisterPhysics( new G4IonPhysics(ver));

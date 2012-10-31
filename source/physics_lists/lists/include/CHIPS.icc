@@ -60,6 +60,7 @@
 
 #include "G4WarnPLStatus.hh"
 
+
 template<class T> TCHIPS<T>::TCHIPS(G4int ver):  T()
 {
   // default cut value  (1.0mm) 
@@ -70,8 +71,8 @@ template<class T> TCHIPS<T>::TCHIPS(G4int ver):  T()
   this->defaultCutValue = 0.7*CLHEP::mm;  
   this->SetVerboseLevel(ver);
 
-  G4WarnPLStatus exp;
-  exp.Experimental("CHIPS");
+  G4WarnPLStatus obs;
+  obs.Unsupported("CHIPS", "FTFP_BERT");
 
   // EM Physics
   //this->RegisterPhysics( new G4QAtomicPhysics(ver));

@@ -86,6 +86,9 @@ Build()
   
   theProcMan = G4AntiDeuteron::AntiDeuteron()->GetProcessManager();
   theProcMan->AddDiscreteProcess(theAntiDeuteronInelastic);
+
+  theProcMan = G4AntiTriton::AntiTriton()->GetProcessManager();
+  theProcMan->AddDiscreteProcess(theAntiTritonInelastic);
   
   theProcMan = G4AntiHe3::AntiHe3()->GetProcessManager();
   theProcMan->AddDiscreteProcess(theAntiHe3Inelastic);

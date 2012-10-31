@@ -49,10 +49,13 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4Gamma.hh"
+#include "G4HadronicDeprecate.hh"
+
 
 G4QEmExtraPhysics::G4QEmExtraPhysics(G4int ver)
   :  G4VPhysicsConstructor("QEmExtra"), hProcess(0), verbose(ver), wasActivated(false) 
 {
+  G4HadronicDeprecate("G4QEmExtraPhysics");
   if(verbose > 1) G4cout << "### G4QEmExtraPhysics" << G4endl;
 }
 

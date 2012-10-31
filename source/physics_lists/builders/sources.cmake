@@ -108,7 +108,6 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4PhysicsConstructorRegistry.hh
         CompileTimeConstraints.hh
         G4AntiBarionBuilder.hh
-        G4BertiniAndFritiofStoppingPhysics.hh
         G4BertiniKaonBuilder.hh
         G4BertiniNeutronBuilder.hh
         G4BertiniPiKBuilder.hh
@@ -128,13 +127,13 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4EmDNAPhysicsChemistry.hh
         G4EmDNAPhysics.hh
         G4EmExtraPhysics.hh
-        G4EmExtraBertiniPhysics.hh
         G4EmLivermorePhysics.hh
         G4EmLivermorePolarizedPhysics.hh
         G4EmLowEPPhysics.hh
         G4EmMessenger.hh
-        G4EmBertiniMessenger.hh
         G4EmPenelopePhysics.hh
+        G4EmQExtraPhysics.hh
+        G4EmQMessenger.hh
         G4EmStandardPhysics.hh
         G4EmStandardPhysics_option1.hh
         G4EmStandardPhysics_option2.hh
@@ -168,8 +167,8 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4INCLXXPiKBuilder.hh
         G4INCLXXProtonBuilder.hh
         G4IonBinaryCascadePhysics.hh
-        G4IonFTFPBinaryCascadePhysics.hh
         G4IonINCLXXPhysics.hh
+        G4IonLHEPPhysics.hh
         G4IonPhysics.hh
         G4IonQMDPhysics.hh
         G4KaonBuilder.hh
@@ -181,6 +180,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4LHEPNeutronBuilder.hh
         G4LHEPPiKBuilder.hh
         G4LHEPProtonBuilder.hh
+        G4LHEPStoppingHadronBuilder.hh
         G4LHEPStoppingPhysics.hh
         G4MiscCHIPSBuilder.hh
         G4MiscLHEPBuilder.hh
@@ -235,6 +235,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4RadioactiveDecayPhysics.hh
         G4StepLimiterBuilder.hh
         G4StoppingHadronBuilder.hh
+        G4StoppingPhysics.hh
         G4VAntiBarionBuilder.hh
         G4VHadronModelBuilder.hh
         G4VKaonBuilder.hh
@@ -247,7 +248,6 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
     SOURCES
         G4PhysicsConstructorRegistry.cc
         G4AntiBarionBuilder.cc
-        G4BertiniAndFritiofStoppingPhysics.cc
         G4BertiniKaonBuilder.cc
         G4BertiniNeutronBuilder.cc
         G4BertiniPiKBuilder.cc
@@ -265,13 +265,13 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4EmDNAPhysics.cc
         G4EmDNAPhysicsChemistry.cc
         G4EmExtraPhysics.cc
-        G4EmExtraBertiniPhysics.cc
         G4EmLivermorePhysics.cc
         G4EmLivermorePolarizedPhysics.cc
         G4EmLowEPPhysics.cc
         G4EmMessenger.cc
-        G4EmBertiniMessenger.cc
         G4EmPenelopePhysics.cc
+        G4EmQExtraPhysics.cc
+        G4EmQMessenger.cc
         G4EmStandardPhysics.cc
         G4EmStandardPhysics_option1.cc
         G4EmStandardPhysics_option2.cc
@@ -305,8 +305,8 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4INCLXXPiKBuilder.cc
         G4INCLXXProtonBuilder.cc
         G4IonBinaryCascadePhysics.cc
-        G4IonFTFPBinaryCascadePhysics.cc
         G4IonINCLXXPhysics.cc
+        G4IonLHEPPhysics.cc
         G4IonPhysics.cc
         G4IonQMDPhysics.cc
         G4KaonBuilder.cc
@@ -318,6 +318,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4LHEPNeutronBuilder.cc
         G4LHEPPiKBuilder.cc
         G4LHEPProtonBuilder.cc
+        G4LHEPStoppingHadronBuilder.cc
         G4LHEPStoppingPhysics.cc
         G4MiscCHIPSBuilder.cc
         G4MiscLHEPBuilder.cc
@@ -371,6 +372,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4RadioactiveDecayPhysics.cc
         G4StepLimiterBuilder.cc
         G4StoppingHadronBuilder.cc
+        G4StoppingPhysics.cc
         G4VAntiBarionBuilder.cc
         G4VHadronModelBuilder.cc
         G4VKaonBuilder.cc

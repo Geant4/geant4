@@ -39,6 +39,7 @@
 // 18.10.2011 A.Ribon: Replace CHIPS with FTF/Preco for nuclear capture
 //                     at rest of anti-protons.
 // 27.07.2012 A.Ribon:  Use the new class G4BertiniAndFritiofStoppingPhysics
+// 16.10.2012 A.Ribon:  Renamed the physics classes used
 //
 //----------------------------------------------------------------------------
 //
@@ -56,9 +57,9 @@
 
 #include "G4DecayPhysics.hh"
 #include "G4EmStandardPhysics.hh"
-#include "G4EmExtraBertiniPhysics.hh"
+#include "G4EmExtraPhysics.hh"
 #include "G4IonPhysics.hh"
-#include "G4BertiniAndFritiofStoppingPhysics.hh"
+#include "G4StoppingPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 
@@ -84,7 +85,7 @@ template<class T> TFTFP_BERT_TRV<T>::TFTFP_BERT_TRV(G4int ver):  T()
   this->RegisterPhysics( new G4EmStandardPhysics(ver) );
 
   // Synchroton Radiation & GN Physics
-  this->RegisterPhysics( new G4EmExtraBertiniPhysics(ver) );
+  this->RegisterPhysics( new G4EmExtraPhysics(ver) );
 
   // Decays 
   this->RegisterPhysics( new G4DecayPhysics(ver) );
@@ -96,7 +97,7 @@ template<class T> TFTFP_BERT_TRV<T>::TFTFP_BERT_TRV(G4int ver):  T()
   this->RegisterPhysics(  new HadronPhysicsFTFP_BERT_TRV(ver));
 
   // Stopping Physics
-  this->RegisterPhysics( new G4BertiniAndFritiofStoppingPhysics(ver) );
+  this->RegisterPhysics( new G4StoppingPhysics(ver) );
 
   // Ion Physics
   this->RegisterPhysics( new G4IonPhysics(ver));

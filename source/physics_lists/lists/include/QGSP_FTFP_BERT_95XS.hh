@@ -23,69 +23,49 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonFTFPBinaryCascadePhysics.hh,v 1.0 2010/08/26 10:51:25 antoni Exp $
-// GRAS tag $Name: $
+// $Id: QGSP_FTFP_BERT_95XS.hh,v 1.1 2009-04-23 19:04:18 japost Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// Header:    G4IonFTFPBinaryCascadePhysics
+// ClassName: QGSP_FTFP_BERT_95XS
 //
-// Author:    V.Ivanchenko  02.03.2011
+// Author: 18-Oct-2012 A. Ribon
 //
-// 
+// Description: Modified version of the physics list QGSP_FTFP_BERT 
+//              to provide the same cross sections as QGSP_FTFP_BERT
+//              in version G4 9.5 (but the components: stopping,
+//              lepto-nuclear, and ion physics are not the same)
 //
-// Modified:     
+// Modified:
 //
-// ------------------------------------------------------------
+//----------------------------------------------------------------------------
 //
+#ifndef TQGSP_FTFP_BERT_95XS_h
+#define TQGSP_FTFP_BERT_95XS_h 1
 
-#ifndef G4IonFTFPBinaryCascadePhysics_h
-#define G4IonFTFPBinaryCascadePhysics_h 1
+#include <CLHEP/Units/SystemOfUnits.h>
 
-#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
+#include "G4VModularPhysicsList.hh"
+#include "CompileTimeConstraints.hh"
 
-class G4HadronicInteraction;
-class G4VCrossSectionDataSet;
-class G4FTFBuilder;
-class G4BinaryLightIonReaction;
-
-class G4IonFTFPBinaryCascadePhysics : public G4VPhysicsConstructor
+template<class T>
+class TQGSP_FTFP_BERT_95XS: public T
 {
 public:
-
-  G4IonFTFPBinaryCascadePhysics(G4int ver = 0);
-  virtual ~G4IonFTFPBinaryCascadePhysics();
-
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type
-  void ConstructParticle();
-  void ConstructProcess();
+  TQGSP_FTFP_BERT_95XS(G4int ver = 1);
+  virtual ~TQGSP_FTFP_BERT_95XS();
+  
+public:
+  // SetCuts() 
+  virtual void SetCuts();
 
 private:
-
-  void AddProcess(const G4String&, G4ParticleDefinition*, G4bool isIon);
-
-  G4VCrossSectionDataSet*   fTripathi;
-  G4VCrossSectionDataSet*   fTripathiLight;
-  G4VCrossSectionDataSet*   fShen;
-  G4VCrossSectionDataSet*   fIonH;
-  G4BinaryLightIonReaction* theIonBC;
-  G4HadronicInteraction*    theFTFP;
-  G4FTFBuilder*             theBuilder;
-
-  G4int  verbose;
-  G4bool wasActivated;
+  enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };
 };
 
+#include "QGSP_FTFP_BERT_95XS.icc"
+typedef TQGSP_FTFP_BERT_95XS<G4VModularPhysicsList> QGSP_FTFP_BERT_95XS;
 
 #endif
-
-
-
-
-
-
-
-

@@ -36,6 +36,7 @@
 // Modified:
 // 04.06.2010 G.Folger: Use new ctor for builders
 // 16.08.2010 H.Kurashige: Remove inclusion of G4ParticleWithCuts 
+// 16.10.2012 A.Ribon: Use new default stopping
 //
 //----------------------------------------------------------------------------
 //
@@ -55,7 +56,7 @@
 #include "G4EmStandardPhysics_option3.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4IonBinaryCascadePhysics.hh"
-#include "G4QStoppingPhysics.hh"
+#include "G4StoppingPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 
@@ -90,7 +91,7 @@ template<class T> TQGSP_BIC_EMY<T>::TQGSP_BIC_EMY(G4int ver):  T()
   this->RegisterPhysics( new HadronPhysicsQGSP_BIC(ver));
 
   // Stopping Physics
-  this->RegisterPhysics( new G4QStoppingPhysics(ver) );
+  this->RegisterPhysics( new G4StoppingPhysics(ver) );
 
   // Ion Physics
   this->RegisterPhysics( new G4IonBinaryCascadePhysics(ver));

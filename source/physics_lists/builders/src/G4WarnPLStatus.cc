@@ -94,7 +94,8 @@ void G4WarnPLStatus::Unsupported(const G4String aPL, const G4String Replacement)
 "*=====================================================================" <<G4endl <<
 "*                                                                     " <<G4endl <<
 "*   The Physics list "<<aPL<<" is NO LONGER SUPPORTED !   " <<G4endl <<
-"*   and is likely to be deleted in a future release of Geant4             " <<G4endl <<
+//"*   and is likely to be deleted in a future release of Geant4             " <<G4endl <<
+"*   and will be deleted in the next release, Geant4 10                " <<G4endl <<
 "*                                                                     " <<G4endl;
    if (Replacement.size() > 0)
    {

@@ -39,7 +39,7 @@
 #ifndef TQGSP_h
 #define TQGSP_h 1
 
-#include <CLHEP/Units/SystemOfUnits>
+#include <CLHEP/Units/SystemOfUnits.h>
 
 #include "globals.hh"
 #include "G4VModularPhysicsList.hh"

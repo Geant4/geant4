@@ -15,6 +15,38 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27-07-2012, Vladimir Ivanchenko        (phys-lists-V09-05-62)
+- EM builders - substitute obsolete method SetModel() by SetEmModel()
+- G4VHadronPhysics - include name of the hadron in the name of the process
+- G4HadronInelasticQBBC - reuse G4PreCompoundModel if it is already 
+    instantiated
+
+19-10-2012, A. Ribon                    (phys-lists-V09-05-61)
+- Created 4 new physics lists: QGSP_BERT_95, QGSP_BERT_95XS,
+  QGSP_FTFP_BERT_95, QGSP_FTFP_BERT_95XS.
+
+18-10-2012, A. Ribon			(phys-lists-V09-05-60)
+- Replaced G4IonBinaryCascadePhysics with G4IonPhysics in some
+  physics lists. Replaced also G4HadronicDeprecate with G4WarnPLStatus
+  for physics lists.
+
+17-10-2012, M. Karamitros               (phys-lists-V09-05-59)
+- G4EmDNAPhysicsChemistry :
+    Rename G4DNADiffusionControlledModel to G4DNASmoluchowskiReactionModel
+
+17-10-2012, G. Cosmo                    (phys-lists-V09-05-58)
+- Fixed typo in QGSP.hh header.
+
+17-10-2012, A. Ribon			(phys-lists-V09-05-57)
+- Added nuclear capture at rest of anti-nuclei with Fritiof/Precompound.
+
+16-10-2012, A. Ribon			(phys-lists-V09-05-56)
+- Changed default physics for stopping, lepto-nuclear, and ion.
+  Only LHEP- and CHIPS-based physics lists keep using exactly
+  the same physics as before, whereas all other physics lists
+  migrate to the new default.
+  Deprecated the physics lists that will be removed in G4 10.
+
 15-10-2012, W.Pokorski			(phys-lists-V09-05-55)
 - reverting the changes in FTFP_BERT (not using factories for the moment)
 
@@ -94,7 +126,7 @@ generic physics list, modifying FTFP_BERT to use the registry
    and assignment operator.
 
 13-07-2012, M.Karamitros               (phys-lists-V09-05-38)
-- Update G4EmDNAPhysicsChemistry : molecule's names changed
+- Update G4EmDNAPhysicsChemistry : molecules' names changed
 
 09-07-2012, A.Ribon                    (phys-lists-V09-05-37)
 - Fixed a few forgotten changes to remove INCL builders.

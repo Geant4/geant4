@@ -60,6 +60,7 @@
 #include "G4MscStepLimitType.hh"
 #include "G4UrbanMscModel93.hh"
 #include "G4UrbanMscModel95.hh"
+#include "G4UrbanMscModel96.hh"
 #include "G4DummyModel.hh"
 #include "G4WentzelVIModel.hh"
 #include "G4CoulombScattering.hh"
@@ -218,7 +219,7 @@ void G4EmStandardPhysics_option4::ConstructProcess()
       G4PhotoElectricEffect* pe = new G4PhotoElectricEffect();
       G4VEmModel* theLivermorePEModel = new G4LivermorePhotoElectricModel();
       theLivermorePEModel->SetHighEnergyLimit(100*GeV);
-      pe->AddEmModel(0,theLivermorePEModel);
+      pe->SetEmModel(theLivermorePEModel,1);
       ph->RegisterProcess(pe, particle);
 
       // Gamma conversion
@@ -235,7 +236,7 @@ void G4EmStandardPhysics_option4::ConstructProcess()
 
       // multiple scattering
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-      //msc->AddEmModel(0, new G4UrbanMscModel95());
+      msc->SetEmModel(new G4UrbanMscModel96(),1);
       msc->SetStepLimitType(fUseDistanceToBoundary);
       ph->RegisterProcess(msc, particle);
 
@@ -255,7 +256,7 @@ void G4EmStandardPhysics_option4::ConstructProcess()
 
       // multiple scattering
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-      //msc->AddEmModel(0, new G4UrbanMscModel95());
+      msc->SetEmModel(new G4UrbanMscModel96(),1);
       msc->SetStepLimitType(fUseDistanceToBoundary);
       ph->RegisterProcess(msc, particle);
 

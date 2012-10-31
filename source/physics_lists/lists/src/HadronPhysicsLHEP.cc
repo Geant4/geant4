@@ -34,6 +34,7 @@
 //
 // Modified:
 // 21.11.2005 G.Folger: don't  keep processes as data members, but new these
+// 16.10.2012 A.Ribon: renamed stopping builder
 //
 //----------------------------------------------------------------------------
 //
@@ -85,7 +86,7 @@ void HadronPhysicsLHEP::CreateModels()
   thePiK->RegisterMe(theLHEPPiK=new G4LHEPPiKBuilder);
 
   theMiscLHEP=new G4MiscLHEPBuilder;
-  theStoppingHadron=new G4StoppingHadronBuilder;  
+  theStoppingHadron=new G4LHEPStoppingHadronBuilder;  
 }
 
 HadronPhysicsLHEP::~HadronPhysicsLHEP()

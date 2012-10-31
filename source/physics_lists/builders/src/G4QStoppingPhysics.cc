@@ -51,6 +51,8 @@
 #include "G4MesonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 #include "G4MuonMinus.hh"
+#include "G4HadronicDeprecate.hh"
+
 
 G4QStoppingPhysics::G4QStoppingPhysics(G4int ver)
   :  G4VPhysicsConstructor("stopping")
@@ -58,6 +60,7 @@ G4QStoppingPhysics::G4QStoppingPhysics(G4int ver)
 , verbose(ver), wasActivated(false) ,
      useMuonMinusCapture(true)
 {
+  G4HadronicDeprecate("G4QStoppingPhysics");
   if(verbose > 1) G4cout << "### G4QStoppingPhysics" << G4endl;
 }
 
@@ -68,6 +71,7 @@ G4QStoppingPhysics::G4QStoppingPhysics(const G4String& name, G4int ver,
     , verbose(ver), wasActivated(false) ,
      useMuonMinusCapture(UseMuonMinusCapture)
 {
+  G4HadronicDeprecate("G4QStoppingPhysics");
   if(verbose > 1) G4cout << "### G4QStoppingPhysics" << G4endl;
 }
 

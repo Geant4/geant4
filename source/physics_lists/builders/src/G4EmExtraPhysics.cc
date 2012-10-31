@@ -35,6 +35,7 @@
 // Modified:
 // 10.11.2005 V.Ivanchenko edit to provide a standard
 // 19.06.2006 V.Ivanchenko add mu-nuclear process
+// 16.10.2012 A.Ribon: renamed G4EmExtraBertiniPhysics as G4EmExtraPhysics
 //
 //----------------------------------------------------------------------------
 //
@@ -149,7 +150,7 @@ void G4EmExtraPhysics::BuildGammaNuclear()
   if(gnActivated) return;
   gnActivated = true;
 
-  theGNPhysics = new G4ElectroNuclearBuilder();
+  theGNPhysics = new G4BertiniElectroNuclearBuilder();
   theGNPhysics->Build();
 }
 

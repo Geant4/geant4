@@ -37,6 +37,7 @@
 // Modified:
 // 16.08.2010 H.Kurashige: Remove inclusion of G4ParticleWithCuts 
 // 26.04.2011 T.Koi: Add G4RadioactiveDecayPhysics
+// 16.10.2012 A.Ribon: Use new default stopping
 //
 //----------------------------------------------------------------------------
 //
@@ -58,7 +59,7 @@
 #include "G4EmStandardPhysics.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4IonQMDPhysics.hh"
-#include "G4QStoppingPhysics.hh"
+#include "G4StoppingPhysics.hh"
 #include "G4HadronElasticPhysicsHP.hh"
 #include "G4HadronElasticPhysicsLEND.hh"
 
@@ -137,7 +138,7 @@ G4cout << LEN_model << G4endl;
 
 
   // Stopping Physics
-  this->RegisterPhysics( new G4QStoppingPhysics(verbose) );
+  this->RegisterPhysics( new G4StoppingPhysics(verbose) );
 
   // Ion Physics
   this->RegisterPhysics( new G4IonQMDPhysics(verbose));

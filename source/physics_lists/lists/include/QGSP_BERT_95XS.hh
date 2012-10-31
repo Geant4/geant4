@@ -23,77 +23,49 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BertiniAndFritiofStoppingPhysics.hh,v 1.6 2010-06-04 09:59:47 vnivanch Exp $
+// $Id: QGSP_BERT_95XS.hh,v 1.1 2006-10-31 11:35:09 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:  G4BertiniAndFritiofStoppingPhysics
+// ClassName: QGSP_BERT_95XS
 //
-// Author:     Alberto Ribon
+// Author: 18-Oct-2012 A. Ribon
 //
-// Date:       27 July 2012
+// Description: Modified version of the physics list QGSP_BERT 
+//              to provide the same cross sections as QGSP_BERT
+//              in version G4 9.5 (but the components: stopping,
+//              lepto-nuclear, and ion physics are not the same)
 //
-// Modified:  
-// 20120921  M. Kelsey -- Move MuonMinusCapture.hh here; replace G4MMCAtRest
-//		with new G4MuonMinusCapture.
-//
-// Class Description:
-//
-// This class provides the nuclear capture at rest of negatively charged
-// particles, using: Bertini for pi-, K-, and Sigma-; 
-//                   Fritiof/Precompound for anti-proton and anti-Sigma+;
-//                   another (CHIPS-independent) model for mu-.
-// No capture at rest is used for the other hadrons: Xi-, Omega-
-// (this means that these hadrons can only decay).
+// Modified:
 //
 //----------------------------------------------------------------------------
+//
+#ifndef TQGSP_BERT_95XS_h
+#define TQGSP_BERT_95XS_h 1
 
-#ifndef G4BertiniAndFritiofStoppingPhysics_h
-#define G4BertiniAndFritiofStoppingPhysics_h 1
+#include <CLHEP/Units/SystemOfUnits.h>
 
 #include "globals.hh"
-#include "G4VPhysicsConstructor.hh"
+#include "G4VModularPhysicsList.hh"
+#include "CompileTimeConstraints.hh"
 
-
-class G4HadronicAbsorptionBertini;
-class G4HadronicAbsorptionFritiof;
-class G4MuonMinusCapture;
-
-
-class G4BertiniAndFritiofStoppingPhysics : public G4VPhysicsConstructor {
-
-public: 
-
-  G4BertiniAndFritiofStoppingPhysics( G4int ver = 1 );
-
-  G4BertiniAndFritiofStoppingPhysics( const G4String& name,
-		                      G4int ver = 1,
-		                      G4bool UseMuonMinusCapture=true );
-
-  virtual ~G4BertiniAndFritiofStoppingPhysics();
-
-public: 
-
-  // This method will be invoked in the Construct() method. 
-  // each particle type will be instantiated
-  virtual void ConstructParticle();
- 
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type 
-  virtual void ConstructProcess();
+template<class T>
+class TQGSP_BERT_95XS: public T
+{
+public:
+  TQGSP_BERT_95XS(G4int ver = 1);
+  virtual ~TQGSP_BERT_95XS();
+  
+public:
+  // SetCuts() 
+  virtual void SetCuts();
 
 private:
-
-  G4MuonMinusCapture* muProcess;
-  G4HadronicAbsorptionBertini* hBertiniProcess;
-  G4HadronicAbsorptionFritiof* hFritiofProcess;
-  
-  G4int  verbose;
-  G4bool wasActivated;
-  G4bool useMuonMinusCapture;
+  enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };
 };
 
+#include "QGSP_BERT_95XS.icc"
+typedef TQGSP_BERT_95XS<G4VModularPhysicsList> QGSP_BERT_95XS;
 
 #endif

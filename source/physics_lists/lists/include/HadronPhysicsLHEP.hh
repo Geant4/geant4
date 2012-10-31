@@ -34,6 +34,7 @@
 //
 // Modified:
 // 21.11.2005 G.Folger: don't  keep processes as data members, but new these
+// 16.10.2012 A.Ribon: renamed stopping builder
 //
 //----------------------------------------------------------------------------
 //
@@ -44,7 +45,7 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4StoppingHadronBuilder.hh"
+#include "G4LHEPStoppingHadronBuilder.hh"
 #include "G4MiscLHEPBuilder.hh"
 
 #include "G4LHEPPiKBuilder.hh"
@@ -79,7 +80,7 @@ class HadronPhysicsLHEP : public G4VPhysicsConstructor
     G4LHEPProtonBuilder * theLHEPPro;
     
     G4MiscLHEPBuilder * theMiscLHEP;
-    G4StoppingHadronBuilder * theStoppingHadron;
+    G4LHEPStoppingHadronBuilder * theStoppingHadron;
 };
 
 // 2002 by J.P. Wellisch

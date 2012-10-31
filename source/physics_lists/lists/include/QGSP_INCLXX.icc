@@ -34,6 +34,7 @@
 //   Created as a copy of QGSP_INCL_ABLA.icc
 //
 // Modified:
+// 16.10.2012 A.Ribon: Use new default stopping
 // 27.03.2012 D.Mancusi: Extended INCL++ to incident heavy ions up to 16O
 // 27.11.2011 P.Kaitaniemi: Created physics list for INCL++ model
 //
@@ -56,7 +57,7 @@
 #include "G4EmStandardPhysics.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4IonINCLXXPhysics.hh"
-#include "G4QStoppingPhysics.hh"
+#include "G4StoppingPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 
@@ -94,7 +95,7 @@ template<class T> TQGSP_INCLXX<T>::TQGSP_INCLXX(G4int ver):  T()
   this->RegisterPhysics( new HadronPhysicsQGSP_INCLXX(ver));
 
   // Stopping Physics
-  this->RegisterPhysics( new G4QStoppingPhysics(ver) );
+  this->RegisterPhysics( new G4StoppingPhysics(ver) );
 
   // Ion Physics
   this->RegisterPhysics( new G4IonINCLXXPhysics(ver));

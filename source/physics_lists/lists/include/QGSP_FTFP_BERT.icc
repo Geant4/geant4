@@ -28,7 +28,7 @@
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   QGSP_BERT
+// ClassName:   QGSP_FTFP_BERT
 //
 // Author: 2009  J. Apostolakis/V.Ivantchenko
 //
@@ -36,7 +36,8 @@
 // 27.11.2009 G.Folger: Mark as experimental
 // 04.06.2010 G.Folger: Use new ctor for builders
 // 04.06.2010 G.Folger: Remove experimental status
-// 16.08.2010 H.Kurashige: Remove inclusion of G4ParticleWithCuts 
+// 16.08.2010 H.Kurashige: Remove inclusion of G4ParticleWithCuts
+// 16.10.2012 A.Ribon: Renamed the physics classes used
 //
 //----------------------------------------------------------------------------
 //
@@ -56,8 +57,8 @@
 #include "G4DecayPhysics.hh"
 #include "G4EmStandardPhysics.hh"
 #include "G4EmExtraPhysics.hh"
-#include "G4IonFTFPBinaryCascadePhysics.hh"
-#include "G4QStoppingPhysics.hh"
+#include "G4IonPhysics.hh"
+#include "G4StoppingPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 
@@ -90,10 +91,10 @@ template<class T> TQGSP_FTFP_BERT<T>::TQGSP_FTFP_BERT(G4int ver):  T()
   this->RegisterPhysics( new HadronPhysicsQGSP_FTFP_BERT(ver));
 
   // Stopping Physics
-  this->RegisterPhysics( new G4QStoppingPhysics(ver) );
+  this->RegisterPhysics( new G4StoppingPhysics(ver) );
 
   // Ion Physics
-  this->RegisterPhysics( new G4IonFTFPBinaryCascadePhysics(ver));
+  this->RegisterPhysics( new G4IonPhysics(ver));
   
   // Neutron tracking cut
   this->RegisterPhysics( new G4NeutronTrackingCut(ver));

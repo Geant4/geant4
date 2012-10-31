@@ -138,12 +138,14 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         HadronPhysicsQGSC_CHIPS.hh
         HadronPhysicsQGSP_BERT_CHIPS.hh
         HadronPhysicsQGSP_BERT.hh
+        HadronPhysicsQGSP_BERT_95.hh
         HadronPhysicsQGSP_BERT_HP.hh
         HadronPhysicsQGSP_BERT_NOLEP.hh
         HadronPhysicsQGSP_BERT_TRV.hh
         HadronPhysicsQGSP_BIC.hh
         HadronPhysicsQGSP_BIC_HP.hh
         HadronPhysicsQGSP_FTFP_BERT.hh
+        HadronPhysicsQGSP_FTFP_BERT_95.hh
         HadronPhysicsQGSP.hh
 	HadronPhysicsQGSP_INCLXX.hh
         HadronPhysicsShielding.hh
@@ -169,9 +171,13 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         QGSP_BERT_EMX.hh
         QGSP_BERT_EMX.icc
         QGSP_BERT.hh
+        QGSP_BERT.icc
+        QGSP_BERT_95.hh
+        QGSP_BERT_95.icc
+        QGSP_BERT_95XS.hh
+        QGSP_BERT_95XS.icc
         QGSP_BERT_HP.hh
         QGSP_BERT_HP.icc
-        QGSP_BERT.icc
         QGSP_BERT_NOLEP.hh
         QGSP_BERT_NOLEP.icc
         QGSP_BERT_TRV.hh
@@ -184,6 +190,10 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         QGSP_BIC.icc
         QGSP_FTFP_BERT.hh
         QGSP_FTFP_BERT.icc
+        QGSP_FTFP_BERT_95.hh
+        QGSP_FTFP_BERT_95.icc
+        QGSP_FTFP_BERT_95XS.hh
+        QGSP_FTFP_BERT_95XS.icc
         QGSP.hh
         QGSP.icc
 	QGSP_INCLXX.hh
@@ -193,7 +203,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         Shielding.hh
         Shielding.icc
         SpecialCuts.hh
-	  G4PhysListUtil.hh
+	G4PhysListUtil.hh
     SOURCES
         G4HadronInelasticQBBC.cc
         G4PhysListFactory.cc
@@ -209,6 +219,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         HadronPhysicsQGSC_BERT.cc
         HadronPhysicsQGSC_CHIPS.cc
         HadronPhysicsQGSP_BERT.cc
+        HadronPhysicsQGSP_BERT_95.cc
         HadronPhysicsQGSP_BERT_CHIPS.cc
         HadronPhysicsQGSP_BERT_HP.cc
         HadronPhysicsQGSP_BERT_NOLEP.cc
@@ -217,6 +228,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         HadronPhysicsQGSP_BIC_HP.cc
         HadronPhysicsQGSP.cc
         HadronPhysicsQGSP_FTFP_BERT.cc
+        HadronPhysicsQGSP_FTFP_BERT_95.cc
         HadronPhysicsQGSP_INCLXX.cc
         HadronPhysicsShielding.cc
         MaxTimeCuts.cc

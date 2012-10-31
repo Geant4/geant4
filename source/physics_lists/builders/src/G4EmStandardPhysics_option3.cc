@@ -204,7 +204,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
     if (particleName == "gamma") {
 
       G4ComptonScattering* cs   = new G4ComptonScattering;
-      cs->SetModel(new G4KleinNishinaModel());
+      cs->SetEmModel(new G4KleinNishinaModel());
 
       ph->RegisterProcess(new G4PhotoElectricEffect(), particle);
       ph->RegisterProcess(cs, particle);

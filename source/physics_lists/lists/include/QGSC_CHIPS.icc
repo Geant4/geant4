@@ -35,6 +35,7 @@
 // Modified:
 // 27.11.2009 G.Folger: Mark as obsolete
 // 16.08.2010 H.Kurashige: Remove inclusion of G4ParticleWithCuts 
+// 16.10.2012 A.Ribon: Renamed the physics classes used
 //
 //-------------------------------------------------------------------------------
 //  Short description: In tis file the aim is to get rid of LHEP, use the
@@ -61,8 +62,8 @@
 
 #include "G4DecayPhysics.hh"
 #include "G4EmStandardPhysics.hh"
-#include "G4EmExtraPhysics.hh"
-#include "G4IonPhysics.hh"
+#include "G4EmQExtraPhysics.hh"
+#include "G4IonLHEPPhysics.hh"
 #include "G4QCaptureAtRestPhysics.hh"
 #include "G4HadronQElasticPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
@@ -71,6 +72,7 @@
 #include "HadronPhysicsQGSC_CHIPS.hh"
 
 #include "G4WarnPLStatus.hh"
+
 
 template<class T> TQGSC_CHIPS<T>::TQGSC_CHIPS(G4int ver):  T()
 {
@@ -82,13 +84,13 @@ template<class T> TQGSC_CHIPS<T>::TQGSC_CHIPS(G4int ver):  T()
   this->SetVerboseLevel(ver);
 
   G4WarnPLStatus obs;
-  obs.Unsupported("QGSC_CHIPS", "CHIPS");
+  obs.Unsupported("QGSC_CHIPS", "FTFP_BERT");
 
   // EM Physics
   this->RegisterPhysics( new G4EmStandardPhysics(ver) );
 
   // Synchroton Radiation & GN Physics
-  this->RegisterPhysics( new G4EmExtraPhysics(ver) );
+  this->RegisterPhysics( new G4EmQExtraPhysics(ver) );
 
   // Decays
   this->RegisterPhysics( new G4DecayPhysics(ver) );
@@ -103,7 +105,7 @@ template<class T> TQGSC_CHIPS<T>::TQGSC_CHIPS(G4int ver):  T()
   this->RegisterPhysics( new G4QCaptureAtRestPhysics(ver) );
 
   // Ion Physics
-  this->RegisterPhysics( new G4IonPhysics("ion") );
+  this->RegisterPhysics( new G4IonLHEPPhysics(ver) );
   
   // Neutron tracking cut
   this->RegisterPhysics( new G4NeutronTrackingCut("Neutron tracking cut", ver) );
