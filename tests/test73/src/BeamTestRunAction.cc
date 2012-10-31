@@ -30,6 +30,8 @@
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 #include <assert.h>
 #ifdef G4ANALYSIS_USEROOT
