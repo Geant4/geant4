@@ -1,5 +1,5 @@
 //------------------------------------------------------------------------
-// Last update: 09-Aug-2012
+// Last update: 11-Oct-2012
 // 
 // Author: Alberto Ribon
 //
@@ -19,10 +19,18 @@
 //
 //------------------------------------------------------------------------
 
-#include "G4RunManager.hh"
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
+#include <ctime>
+#include <CLHEP/Random/Ranlux64Engine.h>
+
 #include "Tst64DetectorConstruction.hh"
 #include "Tst64PhysicsList.hh"
 #include "Tst64PrimaryGeneratorAction.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4RunManager.hh"
 #include "G4DecayPhysics.hh"
 #include "G4ParticleTable.hh"
 #include "G4Step.hh"
@@ -38,12 +46,6 @@
 #include "G4Navigator.hh"
 #include "G4HadronicAbsorptionBertini.hh"
 #include "G4HadronicAbsorptionFritiof.hh"
-#include "CLHEP/Random/Ranlux64Engine.h" 
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <sstream>
-
 
 int main( int argc, char** argv ) {
 
@@ -66,7 +68,7 @@ int main( int argc, char** argv ) {
 
   CLHEP::Ranlux64Engine defaultEngine( 1234567, 4 ); 
   CLHEP::HepRandom::setTheEngine( &defaultEngine ); 
-  G4int seed = time( NULL ); 
+  G4int seed = std::time( NULL ); 
   CLHEP::HepRandom::setTheSeed( seed ); 
   G4cout << " Initial seed = " << seed << G4endl; 
   //CLHEP::HepRandom::getTheEngine()->restoreStatus( "start.rndm" );

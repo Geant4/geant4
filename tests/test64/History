@@ -13,6 +13,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11 Oct 2012 Gabriele Cosmo               test64-V09-05-06
+- Explicit inclusion of units and constants headers.
+
+11 Oct 2012 Alberto Ribon                test64-V09-05-05
+- Fixed compilation warning in Windows (<ctime>, std::time).
+
 08 Oct 2012 Alberto Ribon                test64-V09-05-04
 - Fixed warning on Windows.
 

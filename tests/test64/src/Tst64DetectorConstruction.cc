@@ -28,6 +28,7 @@
 
 #include "Tst64DetectorConstruction.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4VSolid.hh"
 #include "G4Box.hh"
 #include "G4Material.hh"
