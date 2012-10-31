@@ -159,7 +159,7 @@ void G4UIcommandTree::RemoveCommand(G4UIcommand *aCommand)
 // L. Garnier 01.28.08 This function has not a good name. In fact, it try
 // to match a command name, not a path. It should be rename as FindCommandName
 
-G4UIcommand * G4UIcommandTree::FindPath(const char* commandPath)
+G4UIcommand * G4UIcommandTree::FindPath(const char* commandPath) const
 {
   G4String remainingPath = commandPath;
   if( remainingPath.index( pathName ) == std::string::npos )
@@ -197,7 +197,7 @@ G4UIcommand * G4UIcommandTree::FindPath(const char* commandPath)
  * @commandPath : command or path to match
  * @return the commandTree found or NULL if not
  */
-G4UIcommandTree * G4UIcommandTree::FindCommandTree(const char* commandPath)
+G4UIcommandTree* G4UIcommandTree::FindCommandTree(const char* commandPath)
 {
   G4String remainingPath = commandPath;
   if( remainingPath.index( pathName ) == std::string::npos )
@@ -225,7 +225,7 @@ G4UIcommandTree * G4UIcommandTree::FindCommandTree(const char* commandPath)
   return NULL;
 }
 
-G4String G4UIcommandTree::CompleteCommandPath(const G4String aCommandPath)
+G4String G4UIcommandTree::CompleteCommandPath(const G4String& aCommandPath)
 {
   G4String pName = aCommandPath;
   G4String remainingPath = aCommandPath;
@@ -326,7 +326,7 @@ G4String G4UIcommandTree::GetFirstMatchedString(const G4String& str1,
   return strMatched;
 }
 
-void G4UIcommandTree::ListCurrent()
+void G4UIcommandTree::ListCurrent() const
 {
   G4cout << "Command directory path : " << pathName << G4endl;
   if( guidance != NULL ) guidance->List();
@@ -346,7 +346,7 @@ void G4UIcommandTree::ListCurrent()
   }
 }
 
-void G4UIcommandTree::ListCurrentWithNum()
+void G4UIcommandTree::ListCurrentWithNum() const
 {
   G4cout << "Command directory path : " << pathName << G4endl;
   if( guidance != NULL ) guidance->List();
@@ -369,7 +369,7 @@ void G4UIcommandTree::ListCurrentWithNum()
   }
 }
 
-void G4UIcommandTree::List()
+void G4UIcommandTree::List() const
 {
   ListCurrent();
   G4int n_commandEntry = command.size();

@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22 October, 2012 K. Murakami (intercoms-V09-05-06)
+ - GenericMessenger, add settting range and available states.
+
+19 October, 2012 K. Murakami (intercoms-V09-05-05)
+ - ReceiveG4cout/cerr() argument, change G4String to const G4String&
+   (G4UIsesson, G4UIbatch)
+ - Code reviewed in terms of "function const" and G4String argument.
+   (G4UImanager, G4UIcommandTree)
+
 17 October, 2012 K. Murakami (intercoms-V09-05-04)
  - Added macro path feature with /control/macroPath command (G4UImanager)
  - Added a shortcut way for defining UImacro commands (G4UImessenger)

@@ -54,6 +54,7 @@ public:
   double d_u;
   G4complex c;
   G4String s;
+  G4String s2;
   G4ThreeVector v3;
   G4ThreeVector v3_u;
   bool m0_called;
@@ -85,15 +86,19 @@ m2_called(false), m3_called(false), m3_arg1(0), messenger(this, "/mytest/") {
   messenger.DeclareProperty("double", d, "double property");
   messenger.DeclareProperty("complex", c, "complex property");
   messenger.DeclareProperty("string", s, "string property");
+  messenger.DeclareProperty("string2", s2, "string property with other options")
+           .SetParameterName("String", true)
+           .SetCandidates("string1 string2 string3")
+           .SetDefaultValue("string2");
   messenger.DeclareProperty("3vector", v3, "G4ThreeVector property");
   
   messenger.DeclareProperty("doubleunit", d_u)
            .SetGuidance("double energy property")
            .SetGuidance("additional guidance")
-           .SetUnit("MeV")
+           .SetDefaultUnit("MeV")
            .SetStates(G4State_PreInit, G4State_Idle);
   messenger.DeclareProperty("3vectorunit", v3_u, "3 vector length property")
-           .SetUnit("mm");
+           .SetUnitCategory("Length");
   
   messenger.DeclareMethod("method0", &testGenericMessenger::method0, "Method with 0 arguments");
   messenger.DeclareMethod("method1", &testGenericMessenger::method1, "Method with 1 arguments");
@@ -187,6 +192,13 @@ int main()
   assert(tst.s == "mystring");
   UImanager->ApplyCommand("/mytest/string \"another string\"");
   assert(tst.s == "another string");
+  
+  //---std::string with other options---------------------------------
+  assert(tst.s2 == G4String());
+  UImanager->ApplyCommand("/mytest/string2");
+  assert(tst.s2 == "string2");
+  UImanager->ApplyCommand("/mytest/string2 string3");
+  assert(tst.s2 == "string3");
 
   //---G4ThreeVector--------------------------------------------------
   assert(tst.v3 == G4ThreeVector());

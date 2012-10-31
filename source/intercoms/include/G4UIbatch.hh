@@ -72,7 +72,7 @@ public:
   G4UIsession* GetPreviousSession() const;
 
   virtual G4UIsession* SessionStart();
-  virtual void PauseSessionStart(G4String Prompt);
+  virtual void PauseSessionStart(const G4String& Prompt);
 
 };
 

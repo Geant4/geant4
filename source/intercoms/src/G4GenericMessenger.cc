@@ -46,6 +46,16 @@ public:
 
 
 G4GenericMessenger::G4GenericMessenger(void* obj, const G4String& dir, const G4String& doc): directory(dir), object(obj) {
+  // Check if parent commnand is already existing.
+  // In fact there is no way to check this. UImanager->GetTree()->FindPath() will always rerurn NULL is a dicrectory is given
+  size_t pos = dir.find_last_of('/', dir.size()-2);
+  while(pos != 0 && pos != std::string::npos) {
+    G4UIdirectory* d = new G4UIdirectory(dir.substr(0,pos+1).c_str());
+    G4String guidance = "Commands for ";
+    guidance += dir.substr(1,pos-1);
+    d->SetGuidance(guidance);
+    pos = dir.find_last_of('/', pos-1);
+  }
   dircmd = new G4UIdirectory(dir);
   dircmd->SetGuidance(doc);
 }
@@ -96,6 +106,14 @@ G4String G4GenericMessenger::GetCurrentValue(G4UIcommand* command) {
 }
 
 void G4GenericMessenger::SetNewValue(G4UIcommand* command, G4String newValue) {
+  // Check if there are units on this commands
+  if (typeid(*command) == typeid(G4UIcmdWithADoubleAndUnit)) {
+    newValue = G4UIcommand::ConvertToString(G4UIcommand::ConvertToDimensionedDouble(newValue));
+  }
+  else if (typeid(*command) == typeid(G4UIcmdWith3VectorAndUnit)) {
+    newValue = G4UIcommand::ConvertToString(G4UIcommand::ConvertToDimensioned3Vector(newValue));
+  }
+  
   if ( properties.find(command->GetCommandName()) != properties.end()) {
     Property& p = properties[command->GetCommandName()];
     p.variable.FromString(newValue);
@@ -119,7 +137,7 @@ void G4GenericMessenger::SetGuidance(const G4String& s) {
 }
 
 
-G4GenericMessenger::Command& G4GenericMessenger::Command::SetUnit(const G4String& unit) {
+G4GenericMessenger::Command& G4GenericMessenger::Command::SetUnit(const G4String& unit, UnitSpec spec) {
   // Change the type of command (unfortunatelly this is done a posteriory)
   // We need to delete the old command before creating the new one and therefore we need to recover the information
   // before the deletetion
@@ -128,16 +146,20 @@ G4GenericMessenger::Command& G4GenericMessenger::Command::SetUnit(const G4String
   G4String range = command->GetRange();
   std::vector<G4String> guidance;
   for (G4int i = 0; i < command->GetGuidanceEntries(); i++) guidance.push_back(command->GetGuidanceLine(i));
+  // Before deleting the command we need to add a fake one to avoid deleting the directory entry and with its guidance
+  G4UIcommand tmp((cmdpath+"_tmp").c_str(), messenger);
   delete command;
 
   if (*type == typeid(float) || *type == typeid(double) ) {
     G4UIcmdWithADoubleAndUnit* cmd_t = new G4UIcmdWithADoubleAndUnit(cmdpath, messenger);
-    cmd_t->SetDefaultUnit(unit);
+    if(spec == UnitDefault) cmd_t->SetDefaultUnit(unit);
+    else if(spec == UnitCategory) cmd_t->SetUnitCategory(unit);
     command = cmd_t;
   }
   else if (*type == typeid(G4ThreeVector)) {
     G4UIcmdWith3VectorAndUnit* cmd_t = new G4UIcmdWith3VectorAndUnit(cmdpath, messenger);
-    cmd_t->SetDefaultUnit(unit);
+    if(spec == UnitDefault) cmd_t->SetDefaultUnit(unit);
+    else if(spec == UnitCategory) cmd_t->SetUnitCategory(unit);
     command = cmd_t;
   }
   else {
@@ -148,5 +170,26 @@ G4GenericMessenger::Command& G4GenericMessenger::Command::SetUnit(const G4String
   command->SetRange(range);
   return *this;
 }
+
+G4GenericMessenger::Command& G4GenericMessenger::Command::SetParameterName(const G4String& name,G4bool omittable, G4bool currentAsDefault) {
+  G4UIparameter* theParam = command->GetParameter(0);
+  theParam->SetParameterName(name);
+  theParam->SetOmittable(omittable);
+  theParam->SetCurrentAsDefault(currentAsDefault);
+  return *this;
+}
+
+G4GenericMessenger::Command& G4GenericMessenger::Command::SetCandidates(const G4String& candList) {
+  G4UIparameter * theParam = command->GetParameter(0);
+  theParam->SetParameterCandidates(candList);
+  return *this;
+}
+
+G4GenericMessenger::Command& G4GenericMessenger::Command::SetDefaultValue(const G4String& defVal) {
+  G4UIparameter * theParam = command->GetParameter(0);
+  theParam->SetDefaultValue(defVal);
+  return *this;
+}
+
 
 

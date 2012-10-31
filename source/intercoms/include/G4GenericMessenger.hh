@@ -57,6 +57,7 @@ public:
   
 public:
   struct Command {
+    enum UnitSpec {UnitCategory, UnitDefault};
     Command(G4UIcommand* cmd, const std::type_info& ti) : command(cmd), type(&ti) {}
     Command() : command(0), type(0) {}
     //    Command& operator =(const Command& rhs) { command = rhs.command; type = rhs.type; }
@@ -67,7 +68,13 @@ public:
     Command& SetStates(G4ApplicationState s0, G4ApplicationState s1, G4ApplicationState s2, G4ApplicationState s3, G4ApplicationState s4) {command->AvailableForStates(s0,s1,s2,s3,s4); return *this;}
     Command& SetRange(const G4String& range) {command->SetRange(range.c_str()); return *this;}
     Command& SetGuidance(const G4String& s) { command->SetGuidance(s); return *this; }
-    Command& SetUnit(const G4String&);
+    Command& SetUnit(const G4String&, UnitSpec = UnitDefault);
+    Command& SetUnitCategory(const G4String& u) {return SetUnit(u, UnitCategory);}
+    Command& SetDefaultUnit(const G4String& u) {return SetUnit(u, UnitDefault);}
+    Command& SetParameterName(const G4String&, G4bool, G4bool =false);
+    Command& SetDefaultValue(const G4String&);
+    Command& SetCandidates(const G4String&);
+    
     G4UIcommand* command;
     const std::type_info* type;
   };

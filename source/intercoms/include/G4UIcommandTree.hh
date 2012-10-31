@@ -54,15 +54,15 @@ class G4UIcommandTree
   public:
       void AddNewCommand(G4UIcommand * newCommand);
       void RemoveCommand(G4UIcommand * aCommand);
-      G4UIcommand * FindPath(const char* commandPath);
-      G4UIcommandTree * FindCommandTree(const char* commandPath);
-      G4String CompleteCommandPath(const G4String commandPath);
+      G4UIcommand* FindPath(const char* commandPath) const;
+      G4UIcommandTree* FindCommandTree(const char* commandPath);
+      G4String CompleteCommandPath(const G4String& commandPath);
       // Complete most available caracters in common into command path in the command line 
       // given
 
-      void List();
-      void ListCurrent();
-      void ListCurrentWithNum();
+      void List() const;
+      void ListCurrent() const;
+      void ListCurrentWithNum() const;
       void CreateHTML();
 
   private:
