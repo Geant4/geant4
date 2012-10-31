@@ -152,10 +152,10 @@ void RunAction::FillPerStep(G4double dEstep, G4int Lbin, G4int Rbin)
 
 inline void RunAction::AddStep(G4double q)
 {
-  if(0.0 == q) { fNeutralStep += 1.0; }
-  else         { fChargedStep += 1.0; }  
+  if (q == 0.0) { fNeutralStep += 1.0; }
+  else          { fChargedStep += 1.0; }  
 }
-
+ 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

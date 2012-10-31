@@ -14,10 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+19-10-12 mma (testem2-V09-05-05)
+- PhysListEmStandard: use G4UrbanMsc96 
 
 12-10-12 V.Ivant (testem2-V09-05-04)
 - Added statistics on number of charged and neutral steps
-- Migration to the updated analysis tool and inplicit units
+- Migration to the updated analysis tool and implicit units
      
 10-10-12 mma (testem2-V09-05-03)
 - add Em physics option4
