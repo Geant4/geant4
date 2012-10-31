@@ -15,8 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11 October 2012 - G. Cosmo, test74-V09-05-02
+              Explicit inclusion of units and constants headers.
+
 21 May 2012 - M. Raine, S. Incerti, tag test74-V09-05-01
-              Updated SteppingAction.cc
+              Updated SteppingAction.cc.
 
 04 April 2012 - M. Raine, S. Incerti, tag test74-V09-05-00
               First version.

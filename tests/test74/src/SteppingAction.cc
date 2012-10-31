@@ -34,6 +34,8 @@
 #include "DetectorConstruction.hh"
 #include "PrimaryGeneratorAction.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4SteppingManager.hh"
 #include "G4VTouchable.hh"
 #include "G4VPhysicalVolume.hh"
