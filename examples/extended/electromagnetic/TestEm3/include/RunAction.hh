@@ -69,6 +69,9 @@ public:
                                             {fEnergyFlow[plane]  += Eflow;};
   void SumLateralEleak(G4int cell, G4double Eflow)
                                             {fLateralEleak[cell] += Eflow;};
+
+  void AddChargedStep() { fChargedStep += 1.0; }
+  void AddNeutralStep() { fNeutralStep += 1.0; }
     
   void PrintDedxTables();
 
@@ -98,6 +101,9 @@ private:
   G4double fEdeptrue [MaxAbsor];
   G4double fRmstrue  [MaxAbsor];
   G4double fLimittrue[MaxAbsor];
+
+  G4double fChargedStep;
+  G4double fNeutralStep;
 
   G4int  fN_gamma;
   G4int  fN_elec;

@@ -14,6 +14,15 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12-10-12 V.Ivant (testem3-V09-05-09)
+- Do not save random seed per event
+
+12-10-12 V.Ivant (testem3-V09-05-08)
+- Added statistics on number of charged and neutral steps
+
+12-10-12 V.Ivant (testem3-V09-05-07)
+- Migration to the updated analysis tool and inplicit units
      
 10-10-12 mma (testem3-V09-05-06)
 - PhysicsList: add Em option4

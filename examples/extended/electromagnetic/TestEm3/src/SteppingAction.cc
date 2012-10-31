@@ -82,7 +82,10 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   
   // collect step length of charged particles
   G4double stepl = 0.;
-  if (particle->GetPDGCharge() != 0.) stepl = aStep->GetStepLength();
+  if (particle->GetPDGCharge() != 0.) {
+    stepl = aStep->GetStepLength();
+    fRunAct->AddChargedStep();
+  } else { fRunAct->AddNeutralStep(); }
   
   //  G4cout << "Nabs= " << absorNum << "   edep(keV)= " << edep << G4endl;
   
@@ -90,9 +93,10 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   fEventAct->SumEnergy(absorNum,edep,stepl);
   
   //longitudinal profile of edep per absorber
-  if (edep>0.) G4AnalysisManager::Instance()->FillH1(MaxAbsor+absorNum, 
-                                                    G4double(layerNum+1), edep);
-  
+  if (edep>0.) {
+    G4AnalysisManager::Instance()->FillH1(MaxAbsor+absorNum, 
+					  G4double(layerNum+1), edep);
+  }
   //energy flow
   //
   // unique identificator of layer+absorber

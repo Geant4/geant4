@@ -65,6 +65,8 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim)
   fHistoManager = new HistoManager();
   fApplyLimit = false;
 
+  fChargedStep = fNeutralStep = 0.0;
+
   for (G4int k=0; k<MaxAbsor; k++) { fEdeptrue[k] = fRmstrue[k] = 1.;
                                     fLimittrue[k] = DBL_MAX;
   }
@@ -85,7 +87,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
   // save Rndm status
   //
-  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+  //G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   CLHEP::HepRandom::showEngineStatus();
 
   //initialize cumulative quantities
@@ -94,6 +96,8 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
     fSumEAbs[k] = fSum2EAbs[k]  = fSumLAbs[k] = fSum2LAbs[k] = 0.;
     fEnergyDeposit[k].clear();  
   }
+
+  fChargedStep = fNeutralStep = 0.0;
 
   fN_gamma = 0;
   fN_elec  = 0;
@@ -136,6 +140,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4double  norm = G4double(nEvt);
   if(norm > 0) norm = 1./norm;
   G4double qnorm = std::sqrt(norm);
+
+  fChargedStep *= norm;
+  fNeutralStep *= norm;
 
   //compute and print statistic
   //
@@ -213,9 +220,12 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
          << fPrimary->GetParticleGun()->
     GetParticleDefinition()->GetParticleName()
          << "  E = " << G4BestUnit(beamEnergy,"Energy") << G4endl;
-  G4cout << " Mean number of gamma  " << (G4double)fN_gamma*norm << G4endl;
-  G4cout << " Mean number of e-     " << (G4double)fN_elec*norm << G4endl;
-  G4cout << " Mean number of e+     " << (G4double)fN_pos*norm << G4endl;
+  G4cout << " Mean number of gamma          " << (G4double)fN_gamma*norm << G4endl;
+  G4cout << " Mean number of e-             " << (G4double)fN_elec*norm << G4endl;
+  G4cout << " Mean number of e+             " << (G4double)fN_pos*norm << G4endl;
+  G4cout << std::setprecision(6)
+	 << " Mean number of charged steps  " << fChargedStep << G4endl;
+  G4cout << " Mean number of neutral steps  " << fNeutralStep << G4endl;
   G4cout << "------------------------------------------------------------\n";
   
   //Energy flow
@@ -238,7 +248,8 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     EdepTot [iAbsor] += (fEnergyFlow[Id] - fEnergyFlow[Id+1] - fLateralEleak[Id]);
   }
   
-  G4cout << "\n Energy deposition from Energy flow balance : \n"
+  G4cout << std::setprecision(3)
+	 << "\n Energy deposition from Energy flow balance : \n"
          << std::setw(10) << "  material \t Total Edep \n \n";
   G4cout.precision(6);
   
