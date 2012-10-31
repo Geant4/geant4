@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm12/include/RunAction.hh
+/// \brief Definition of the RunAction class
+//
 // $Id: RunAction.hh,v 1.4 2007-04-27 10:38:11 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -60,7 +63,7 @@ class RunAction : public G4UserRunAction
     void AddStepSize    (G4int nb, G4double s)
                                      { fNbOfSteps += nb; fNbOfSteps2 += nb*nb;
                                        fStepSize  += s ; fStepSize2  += s*s;  };
-				       			       	           
+                                                                                         
     
   private:
     DetectorConstruction*   fDetector;

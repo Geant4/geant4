@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm12/src/DetectorConstruction.cc
+/// \brief Implementation of the DetectorConstruction class
+//
 // $Id: DetectorConstruction.cc,v 1.2 2006-06-29 16:43:00 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -46,6 +49,8 @@
 #include "G4SolidStore.hh"
 
 #include "G4UnitsTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -107,49 +112,49 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   G4PhysicalVolumeStore::GetInstance()->Clean();
   G4LogicalVolumeStore::GetInstance()->Clean();
   G4SolidStore::GetInstance()->Clean();
-		   
+                   
   // Absorber
   //
   G4Sphere* 
-  sAbsor = new G4Sphere("Absorber",			//name
-    		 0., fAbsorRadius, 0., twopi, 0., pi);	//size
+  sAbsor = new G4Sphere("Absorber",                        //name
+                     0., fAbsorRadius, 0., twopi, 0., pi);        //size
 
   G4LogicalVolume*
-  lAbsor = new G4LogicalVolume(sAbsor,			//solid
-      			       fAbsorMaterial,		//material
-      			      "Absorber");		//name
-				   
-  fAbsor = new G4PVPlacement(0,				//no rotation
-                             G4ThreeVector(),		//at (0,0,0)
-                             lAbsor,			//logical volume
-                            "Absorber",			//name
-                             0,				//mother  volume
-                             false,			//no boolean operation
-                             0);			//copy number
+  lAbsor = new G4LogicalVolume(sAbsor,                        //solid
+                                     fAbsorMaterial,                //material
+                                    "Absorber");                //name
+                                   
+  fAbsor = new G4PVPlacement(0,                                //no rotation
+                             G4ThreeVector(),                //at (0,0,0)
+                             lAbsor,                        //logical volume
+                            "Absorber",                        //name
+                             0,                                //mother  volume
+                             false,                        //no boolean operation
+                             0);                        //copy number
 
   // Layers
   //
   fLayerThickness = fAbsorRadius/fNbOfLayers;
                         
-  for (G4int i=1; i<=fNbOfLayers; i++) {			   
+  for (G4int i=1; i<=fNbOfLayers; i++) {                           
     G4Sphere*
     sLayer = new G4Sphere("Layer", (i-1)*fLayerThickness, i*fLayerThickness,
                           0., twopi, 0., pi);
-		 
-    G4LogicalVolume*		   			                      
-    lLayer = new G4LogicalVolume(sLayer,		//shape
-                                 fAbsorMaterial,		//material
-                                 "Layer");		//name
-				 
-	     new G4PVPlacement(0,			//no rotation
-                               G4ThreeVector(),		//at (0,0,0)
-                               lLayer,			//logical volume
-                               "Layer",			//name
-                               lAbsor,			//mother  volume
-                               false,			//no boolean operation
-                               i);			//copy number
-			                           
-   }			   		   
+                 
+    G4LogicalVolume*                                                                 
+    lLayer = new G4LogicalVolume(sLayer,                //shape
+                                 fAbsorMaterial,                //material
+                                 "Layer");                //name
+                                 
+             new G4PVPlacement(0,                        //no rotation
+                               G4ThreeVector(),                //at (0,0,0)
+                               lLayer,                        //logical volume
+                               "Layer",                        //name
+                               lAbsor,                        //mother  volume
+                               false,                        //no boolean operation
+                               i);                        //copy number
+                                                   
+   }                                              
 
   PrintParameters();
     
@@ -167,7 +172,7 @@ void DetectorConstruction::PrintParameters()
   G4cout << "---> The Absorber is a sphere of " 
          << G4BestUnit(fAbsorRadius,"Length") << " radius of "
          << fAbsorMaterial->GetName() << " divided in " << fNbOfLayers 
-	 << " slices of " << G4BestUnit(fLayerThickness,"Length") << G4endl;
+         << " slices of " << G4BestUnit(fLayerThickness,"Length") << G4endl;
   G4cout << "\n---------------------------------------------------------\n";
 }
 
@@ -205,9 +210,9 @@ void DetectorConstruction::SetMagField(G4double fieldValue)
   G4FieldManager* fieldMgr 
    = G4TransportationManager::GetTransportationManager()->GetFieldManager();
     
-  if (fMagField) delete fMagField;	//delete the existing magn field
+  if (fMagField) delete fMagField;        //delete the existing magn field
   
-  if (fieldValue!=0.)			// create a new one if non nul
+  if (fieldValue!=0.)                        // create a new one if non nul
     {
       fMagField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));        
       fieldMgr->SetDetectorField(fMagField);

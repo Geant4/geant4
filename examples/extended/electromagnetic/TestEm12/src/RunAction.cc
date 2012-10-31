@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm12/src/RunAction.cc
+/// \brief Implementation of the RunAction class
+//
 // $Id: RunAction.cc,v 1.8 2007-08-19 20:57:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
@@ -42,6 +45,7 @@
 #include "G4EmCalculator.hh"
 
 #include "Randomize.hh"
+#include "G4SystemOfUnits.hh"
 #include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -92,7 +96,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   fCsdaRange = DBL_MAX;
   if (particle->GetPDGCharge() != 0.)
     fCsdaRange = emCalculator.GetCSDARange(energy,particle,material);
-     		    
+                         
   //histograms
   //
   fHistoManager->book();
@@ -121,7 +125,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
    
   G4ParticleDefinition* particle = fKinematic->GetParticleGun()
                                           ->GetParticleDefinition();
-  G4String partName = particle->GetParticleName();    		         
+  G4String partName = particle->GetParticleName();                             
   G4double energy = fKinematic->GetParticleGun()->GetParticleEnergy();
   
   G4cout << "\n ======================== run summary ======================\n";
@@ -130,10 +134,10 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   
   G4cout << "\n The run consists of " << NbofEvents << " "<< partName << " of "
          << G4BestUnit(energy,"Energy") << " through " 
-	 << G4BestUnit(fDetector->GetAbsorRadius(),"Length") << " of "
-	 << material->GetName() << " (density: " 
-	 << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
-	 
+         << G4BestUnit(fDetector->GetAbsorRadius(),"Length") << " of "
+         << material->GetName() << " (density: " 
+         << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
+         
   G4cout << "\n ============================================================\n";
   
   //compute total energy deposit
@@ -147,7 +151,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     << "\n Total Energy deposited        = " << G4BestUnit(fEdeposit,"Energy")
     << " +- "                               << G4BestUnit( rms,"Energy")
     << G4endl;
-     	 
+              
   //compute track length of primary track
   //
   fTrackLen /= NbofEvents; fTrackLen2 /= NbofEvents;
@@ -168,7 +172,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout 
     << "\n Range from EmCalculator       = " << G4BestUnit(fCsdaRange,"Length")
     << " (from full dE/dx)" << G4endl;
-   	 	 
+                     
   //compute projected range of primary track
   //
   fProjRange /= NbofEvents; fProjRange2 /= NbofEvents;

@@ -14,7 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+12-10-12 V.Ivant (testem12-V09-05-07)
+- Migration to the updated analysis tool
+- Added Opt4 Physics List and decreased limit on cuts
+          
 30-04-12 mma (testem12-V09-05-06)
 - StepMaxMessenger : printing correction
      

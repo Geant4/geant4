@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm12/src/SteppingAction.cc
+/// \brief Implementation of the SteppingAction class
+//
 // $Id: SteppingAction.cc,v 1.4 2007-04-27 10:38:11 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -62,7 +65,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
  fEventAction->AddEdep(edep);     
  
  //longitudinal profile of deposited energy
- //	
+ //        
  G4ThreeVector prePoint  = aStep->GetPreStepPoint() ->GetPosition();
  G4ThreeVector postPoint = aStep->GetPostStepPoint()->GetPosition();
  G4ThreeVector point = prePoint + G4UniformRand()*(postPoint - prePoint);

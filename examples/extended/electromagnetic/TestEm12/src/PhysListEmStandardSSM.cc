@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm12/src/PhysListEmStandardSSM.cc
+/// \brief Implementation of the PhysListEmStandardSSM class
+//
 // $Id: PhysListEmStandardSSM.cc,v 1.2 2011-01-05 19:07:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -55,6 +58,8 @@
 #include "G4ionIonisation.hh"
 
 #include "G4EmProcessOptions.hh"
+
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -92,12 +97,12 @@ void PhysListEmStandardSSM::ConstructProcess()
 
       G4CoulombScattering* cs = new G4CoulombScattering();
       G4eSingleCoulombScatteringModel* model = 
-	new G4eSingleCoulombScatteringModel();
+        new G4eSingleCoulombScatteringModel();
       //model->SetLowEnergyThreshold(10*eV);
       model->SetPolarAngleLimit(0.0);
       cs->AddEmModel(0, model);
       pmanager->AddDiscreteProcess(cs);            
-	    
+            
     } else if (particleName == "e+") {
       //positron
 
@@ -107,7 +112,7 @@ void PhysListEmStandardSSM::ConstructProcess()
 
       G4CoulombScattering* cs = new G4CoulombScattering();
       G4eSingleCoulombScatteringModel* model = 
-	new G4eSingleCoulombScatteringModel();
+        new G4eSingleCoulombScatteringModel();
       model->SetPolarAngleLimit(0.0);
       cs->AddEmModel(0, model);
       pmanager->AddDiscreteProcess(cs);            
@@ -140,8 +145,8 @@ void PhysListEmStandardSSM::ConstructProcess()
       pmanager->AddDiscreteProcess(cs);
      
     } else if ((!particle->IsShortLived()) &&
-	       (particle->GetPDGCharge() != 0.0) && 
-	       (particle->GetParticleName() != "chargedgeantino")) {
+               (particle->GetPDGCharge() != 0.0) && 
+               (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
       pmanager->AddProcess(new G4hIonisation,        -1, 1, 1);
       pmanager->AddDiscreteProcess(new G4CoulombScattering);            

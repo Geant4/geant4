@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm12/src/EventAction.cc
+/// \brief Implementation of the EventAction class
+//
 // $Id: EventAction.cc,v 1.4 2010-06-07 05:40:46 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
