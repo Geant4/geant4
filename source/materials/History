@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10-10-12 V.Ivanchenko (materials-V09-05-32)
+- G4ElementData - updated and simplified 
+
 30-08-12 Pere Mato (materials-V09-05-31)
 - Added test/CMakeLists.txt
 
