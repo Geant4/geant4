@@ -83,7 +83,7 @@ G4QAntiBaryonPlusNuclearCrossSection::~G4QAntiBaryonPlusNuclearCrossSection()
 G4double G4QAntiBaryonPlusNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom,
                                                        G4int tgZ, G4int tgN, G4int PDG)
 {
-  static G4double tolerance=0.001;     // Tolerance (0.1%) to consider as "the same mom"
+  //A.R.23-Oct-2012 Shadowed variable  static G4double tolerance=0.001; // Tolerance (0.1%) to consider as "the same mom"
   static G4int j;                      // A#0f Z/N-records already tested in AMDB
   static std::vector <G4int>    colN;  // Vector of N for calculated nuclei (isotops)
   static std::vector <G4int>    colZ;  // Vector of Z for calculated nuclei (isotops)
