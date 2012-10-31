@@ -789,7 +789,7 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
               << G4endl;
       G4double estDistToSolid= motherSolid->DistanceToIn(localPoint); 
       message << "          Estimated isotropic distance to solid (distToIn)= " 
-              << estDistToSolid;
+              << estDistToSolid << G4endl;
       if( estDistToSolid > 100.0 * kCarTolerance )
       {
         motherSolid->DumpInfo();

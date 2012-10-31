@@ -13,9 +13,149 @@ and keep track of all category-tags.
 It DOES NOT substitute the  CVS log-message one should put at every
 committal in the CVS repository !
 
+ Names for lines of tags:
+   Fix-line     =  fixes for 9.5 patches  (currently patch 02)
+   Develop-line =  improvements for 9.6
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Oct 16th, 2012 - J.Apostolakis  (geomnav-V09-05-19)   Fix-line
+------------------------------
+- G4Navigator and G4MultiNavigator 
+   Took out unintentional commit of additional change 
+   that added extra argument to LocateGlobalPointWithinVolume
+
+Oct 16th, 2012 - J.Apostolakis  (geomnav-V09-05-18)   Fix-line
+------------------------------
+- G4PropagatorInField & G4VIntersectionLocator
+   Changed first two arguments of IntersectChord to const 3-vec references.
+    ( Performance fix - thanks to Makoto Asai. )
+
+- G4VIntersectionLocator.cc
+    Made const the first argument of GetLastSurface normal 
+      (Performance fix).
+    Fixed return value of validNormal of GetSurfaceNormal. 
+
+- G4Navigator, G4MultiNavigator and G4ErrorPropagationNavigator
+    Revised interface of ComputeSafety, making 'true' default value of
+      the 3rd argument.
+
+- G4Navigator 
+    Changed GetSavedState and RestoreSavedState methods to protected.
+
+- G4ErrorPropagationNavigator
+    Cosmetic change to improve readability of initialisation of a double.
+
+- G4ReplicaNavigation.cc
+    Small revision to printout - to improve end-of-line. 
+   
+Oct 15th, 2012 - J.Apostolakis  (geomnav-V09-05-17)   Fix-line
+------------------------------
+- G4Navigator
+    Fixed condition in GetGlobalExitNormal.
+    Enabled calculation of normal for daughters of Replicas.
+
+Oct 15th, 2012 - J.Apostolakis  (geomnav-V09-05-16)   Fix-line
+------------------------------
+- G4Navigator::ComputeStep 
+    Do not define G4DEBUG_NAVIGATION in this and methods below.
+
+Oct 15th, 2012 - J.Apostolakis  (geomnav-V09-05-15)   Fix-line
+------------------------------
+- G4Navigator
+   Hidden exception for unsupported Exit Normal in case of Replicas 
+     only available in #ifdef G4DEBUG_NAVIGATION , and
+     made it JustWarning for now.
+   Revised codes for two exceptions which can occur only in case of run-time
+     errors. ( Was not-supported.)
+
+Tag geomnav-V09-05-14 is in the development-line -- Not included or relevant.
+---------------------
+
+Oct 11th, 2012 - J.Apostolakis  (geomnav-V09-05-13)   Fix-line
+------------------------------
+- Navigator::GetLocalExitNormal()
+    Hidden Exception warning for missing Exit Normal 
+     ( Note: it remains 'protected' under  #ifdef G4DEBUG_NAVIGATION)
+
+Tag geomnav-V09-05-12 is in the development-line -- Not relevant.
+---------------------
+
+Oct 11th, 2012 - J.Apostolakis  (geomnav-V09-05-11) 
+------------------------------
+- Navigator::ComputeStep: Fixed condition for transformation of 
+   local-normal: had flipped conditions, not corrected it.
+
+Oct  2nd, 2012 - J.Apostolakis  (geomnav-V09-05-10) 
+------------------------------
+- Navigator::GetGlobalExitNormal: Added checks for non-unit surface normals 
+  in cases of exiting (existing global) or entering (new local) normal.
+
+Sep 21st, 2012 - J.Apostolakis  (geomnav-V09-05-09) 
+------------------------------
+- Improved GetLocalExitNormal.  In case GrandMother is correct, 
+   it will now supply it.
+  Revised the code protected by flag G4_NAV_ALT_NORMAL (it is disactivated.)
+
+Sep 20th, 2012 - J.Apostolakis  (geomnav-V09-05-08) 
+------------------------------
+***Modification of INTERFACE***
+- Any client (G4 or user) that need a normal should convert to using 
+    GetGlobalExitNormal()  in place of GetLocalExitNormal()
+
+G4Navigator.cc
+- Suppressed extra transformations for updating fGrandMotherExitNormal
+    in ComputeStep.  This is the only existing way to keep an update 'local' 
+    Exit Normal  ( potential alternative way is not implemented. )
+    It also serves as an alternative way (not needed) for the 'global'
+    Exit Normal. 
+
+  CHANGE of BEHAVIOR: 
+    This changes the results of GetLocalExitNormal(G4bool* ) and
+      GetLocalExitNormalAndCheck(const G4ThreeVector&, G4bool*)
+    It now always returns 'valid'=false when Exiting.
+    A simple ERROR (not G4Exception) is generated if this case 
+      used.
+
+  Detailed description of change:
+    Previously it was unclear whether the (Grand Mother) normal 
+     was correct (due to potential extra changes of coordinates.)
+    In the case that the GrandMother was correct (unknown before), 
+      it is no longer available (when exiting.)
+
+    The suppressed updating of fGrandMotherExitNormal in ComputeStep
+  is not needed for the Exit Normal in Global Coordinates, 
+  as that is now calculated using the Grand-Mother to Global transform
+  in the case of exiting volume.
+
+  Note: the suppressed code is protected by "#ifdef G4_NAV_ALT_NORMAL" 
+    in ComputeStep() and GetLocalExitNormal()
+
+- Commented out extra debug printing in ComputeStep() - missed earlier.
+
+Sep 19th, 2012 - J.Apostolakis  (geomnav-V09-05-07) 
+------------------------------
+G4Navigator
+- Commented out debug printing in ComputeStep() and GetGlobalExitNormal()
+
+Sep 19th, 2012 - J.Apostolakis  (geomnav-V09-05-06) 
+------------------------------
+G4Navigator.cc
+- Reverted condition in GetGlobalExitNormal.  
+  NOTE: This version contains debug printing (next tag will remove them.)
+
+testG4Navigator1 extended to check GetGlobalExitNormal (few rotation for now.)
+
+Aug 15th, 2012 - J.Apostolakis
+------------------------------
+G4Navigator.cc
+- Corrected condition in GetGlobalExitNormal -- the value is precalculated
+  when Locate was just called, not when ComputeStep was last called.
+
+July 11th, 2012 - J.Apostolakis (geomnav-V09-05-05)
+-------------------------------
+- Added data member for improved Exit Normal for optical photons (and
+  potentially more uses, e.g. field )
 
 June 12th, 2012 - G.Cosmo (geomnav-V09-05-04)
 -------------------------

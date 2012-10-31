@@ -110,9 +110,9 @@ G4LinScale myParam;
 G4VPhysicalVolume* BuildGeometry()
 {
 
-    G4Box *myBigBox= new G4Box ("cuboid",25,25,20);
-    G4Box *myBox=new G4Box("cube",10,10,10);
-    G4Box *mySlab= new G4Box("slab",10,25,10);
+    G4Box *myBigBox= new G4Box("cuboid",25,25,20);
+    G4Box *mySlab=   new G4Box("slab",  10,25,10);
+    G4Box *myBox=    new G4Box("cube",  10,10,10);
 
     G4Box *myVariableBox=new G4Box("Variable Box",10,5,5);
 
@@ -126,10 +126,10 @@ G4VPhysicalVolume* BuildGeometry()
 					       0,false,0);
 				// Note: no mother pointer set
 
-    G4LogicalVolume *boxLog=new G4LogicalVolume(myBox,0,
-						"Crystal Box",0,0,0);
     G4LogicalVolume *slabLog=new G4LogicalVolume(mySlab,0,
 						 "Crystal Slab",0,0,0);
+    G4LogicalVolume *boxLog=new G4LogicalVolume(myBox,0,
+						"Crystal Box",0,0,0);
 //  G4PVPlacement *offMXYPhys=
                               new G4PVPlacement(0,G4ThreeVector(-15,15,-10),
 						"Target 1",boxLog,
@@ -139,18 +139,24 @@ G4VPhysicalVolume* BuildGeometry()
 						 "Target 2",boxLog,
 						 worldPhys,false,0);
 
-    G4PVPlacement *offYPhys=new G4PVPlacement(0,G4ThreeVector(15,0,-10),
+    //  Use Rotation to check exit normal -- Box is unchanged !
+    // G4RotationMatrix *rot1=new G4RotationMatrix();
+    // rot1->rotateY(pi);
+    G4PVPlacement *offYPhys=new G4PVPlacement(0,G4ThreeVector(15,0,-10),   // (rot1, 
 					      "Target 3",slabLog,
-					      worldPhys,false,0);
+					      worldPhys,false,3); // copy# = 3
 
+    //  Use Rotation to check exit normal -- Box is unchanged !
+    G4RotationMatrix *rot2=new G4RotationMatrix();
+    rot2->rotateZ(0.5*pi);
 //  G4PVPlacement *offYZPhys=
-                             new G4PVPlacement(0,G4ThreeVector(0,15,10),
+                             new G4PVPlacement(rot2,G4ThreeVector(0,15,10), 
 					       "Target 4",boxLog,
-					       worldPhys,false,0);
+					       worldPhys,false,4);
 //  G4PVPlacement *offMYZPhys=
                               new G4PVPlacement(0,G4ThreeVector(0,-15,10),
 						"Target 5",boxLog,
-						worldPhys,false,0);
+						worldPhys,false,5);
 
 
     G4LogicalVolume *variLog=new G4LogicalVolume(myVariableBox,0,
@@ -225,38 +231,77 @@ G4bool testG4Navigator2(G4VPhysicalVolume *pTopNode)
     G4double Step,physStep,safety;
     G4ThreeVector xHat(1,0,0),yHat(0,1,0),zHat(0,0,1);
     G4ThreeVector mxHat(-1,0,0),myHat(0,-1,0),mzHat(0,0,-1);
-    
+
+    G4ThreeVector position, direction;  // memory for use in checks, move
+    G4ThreeVector globalNormal; 
+    G4bool validNormal; 
+
     myNav.SetWorldVolume(pTopNode);
   
 //
 // Test location & Step computation
 //  
-    located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(0,0,-10));
+    located=myNav.LocateGlobalPointAndSetup( position= G4ThreeVector(0,0,-10));
     assert(located->GetName()=="World");
     physStep=kInfinity;
-    Step=myNav.ComputeStep(G4ThreeVector(0,0,-10),mxHat,physStep,safety);
+
+    Step=myNav.ComputeStep( position, direction=mxHat, physStep, safety);
+    // Intersect 'Target 3' at ( 25, 0, -10)
     assert(ApproxEqual(Step,25));
 //    assert(ApproxEqual(safety,5));
     assert(safety>=0);
 
-    located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(0,0,-10));
+    // G4cout << " Checking Exit Normal at " << position+Step*direction << G4endl;
+    globalNormal= myNav.GetGlobalExitNormal( position+Step*direction, &validNormal ); 
+    assert ( globalNormal == mxHat); 
+    assert ( validNormal );
+
+#if 0
+    located=myNav.LocateGlobalPointAndSetup( position= G4ThreeVector( 26, 0, -10) );
+    assert(located != 0); 
+    assert(located->GetName()=="Target 3");
+    Step=myNav.ComputeStep( position=G4ThreeVector( 26, 0,-10), direction=xHat, 2.0, safety);
+    // Exit 'Target 3' at ( 25, 0, -10)
+    assert(ApproxEqual(Step,1.0));
+
+    globalNormal= myNav.GetGlobalExitNormal( position+Step*direction, &validNormal ); 
+    // G4cout << " TestNav1> Exit Normal (global) = " << globalNormal << G4endl;
+
+    assert ( globalNormal == xHat); 
+    assert ( validNormal ); 
+#endif
+
+// 2nd locate / compute - step
+    located=myNav.LocateGlobalPointAndSetup( position=G4ThreeVector(0,0,-10) );
     assert(located->GetName()=="World");
     physStep=kInfinity;
-    Step=myNav.ComputeStep(G4ThreeVector(0,0,-10),xHat,physStep,safety);
+
+    Step=myNav.ComputeStep(position, direction=xHat,physStep,safety);
     assert(ApproxEqual(Step,5));
 //    assert(ApproxEqual(safety,5));
     assert(safety>=0);
     myNav.SetGeometricallyLimitedStep();
+
+    globalNormal= myNav.GetGlobalExitNormal( position+Step*direction, &validNormal ); 
+    // G4cout << " TestNav1> Exit Normal (global) = " << globalNormal << G4endl;
+    assert ( globalNormal == direction); 
+    assert ( validNormal ); 
+
     located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(5,0,-10),0,true);
     assert(located->GetName()=="Vari' Blocks");
 
     located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(0,0,-10));
     assert(located->GetName()=="World");
     physStep=kInfinity;
-    Step=myNav.ComputeStep(G4ThreeVector(0,0,-10),zHat,physStep,safety);
+    Step=myNav.ComputeStep(G4ThreeVector(0,0,-10),direction=zHat,physStep,safety);
     assert(ApproxEqual(Step,30));
 //    assert(ApproxEqual(safety,5));
     assert(safety>=0);
+
+    globalNormal= myNav.GetGlobalExitNormal( position+Step*direction, &validNormal ); 
+    // G4cout << " TestNav1> Exit Normal (global) = " << globalNormal << G4endl;
+    assert ( globalNormal == direction); 
+    assert ( validNormal ); 
 
     located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(0,0,-10));
     assert(located->GetName()=="World");
