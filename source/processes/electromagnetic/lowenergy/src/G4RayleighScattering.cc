@@ -68,8 +68,8 @@ void G4RayleighScattering::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
-    if(!Model()) { SetModel(new G4LivermoreRayleighModel); }
-    AddEmModel(1, Model());
+    if(!EmModel()) { SetEmModel(new G4LivermoreRayleighModel); }
+    AddEmModel(1, EmModel());
   } 
 }
 

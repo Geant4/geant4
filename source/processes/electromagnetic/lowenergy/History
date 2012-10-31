@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20.10.2012  V.Ivanchenko, tag emlowen-V09-05-44
+- G4RayleighScattering - substitute methods Model(), SetModel()
+    by EmModel(), SetEmModel()
+- G4LivermoreGammaConversionModel - removed variable shadowing
+
 17.10.2012  M. Raine, tag emlowen-V09-05-43
 	    Update of MuElec classes to widen the energy range of application.
 

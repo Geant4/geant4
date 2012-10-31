@@ -65,9 +65,15 @@ public:
 
 private:
 
-  const G4MaterialCutsCouple* fCurrentCouple;
+  void ReadData(size_t Z, const char* path = 0);
 
-  const G4double smallEnergy;
+  G4double ScreenFunction1(G4double screenVariable);
+  G4double ScreenFunction2(G4double screenVariable);
+
+  G4LivermoreGammaConversionModel & operator=(const  G4LivermoreGammaConversionModel &right);
+  G4LivermoreGammaConversionModel(const  G4LivermoreGammaConversionModel&);
+
+  G4double smallEnergy;
   G4bool isInitialised;
   G4int maxZ;
 
@@ -77,14 +83,6 @@ private:
   G4ParticleChangeForGamma* fParticleChange;
 
   std::vector<G4LPhysicsFreeVector*> data;
-
-  void ReadData(size_t Z, const char* path = 0);
-
-  G4double ScreenFunction1(G4double screenVariable);
-  G4double ScreenFunction2(G4double screenVariable);
-
-  G4LivermoreGammaConversionModel & operator=(const  G4LivermoreGammaConversionModel &right);
-  G4LivermoreGammaConversionModel(const  G4LivermoreGammaConversionModel&);
 
 };
 
