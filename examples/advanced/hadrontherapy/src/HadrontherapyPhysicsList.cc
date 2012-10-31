@@ -46,6 +46,7 @@
 //       export PHYSLIST=QGSP_BIC_EMY
 //       User must considered that, in this second case, radioactive processes are not activated 
  
+#include "G4SystemOfUnits.hh"
 #include "G4RunManager.hh"
 #include "G4Region.hh"
 #include "G4RegionStore.hh"

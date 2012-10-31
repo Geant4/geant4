@@ -32,11 +32,12 @@
 // Institute in the framework of the MC-INFN Group
 //
 
+#include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Box.hh"
 #include "G4Tubs.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
-#include "globals.hh"
 #include "G4RunManager.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"

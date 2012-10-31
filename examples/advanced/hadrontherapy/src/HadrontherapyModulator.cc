@@ -32,6 +32,10 @@
 // Institute in the framework of the MC-INFN Group
 //
 
+#include <fstream>
+
+#include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Material.hh"
 #include "G4Tubs.hh"
 #include "G4Box.hh"
@@ -39,7 +43,6 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4ThreeVector.hh"
 #include "G4PVPlacement.hh"
-#include "globals.hh"
 #include "G4Transform3D.hh"
 #include "G4RotationMatrix.hh"
 #include "G4VisAttributes.hh"
@@ -47,7 +50,6 @@
 #include "HadrontherapyModulator.hh"
 #include "G4Transform3D.hh"
 #include "G4ios.hh"
-#include <fstream>
 #include "G4RunManager.hh"
 #include "G4NistManager.hh"
 

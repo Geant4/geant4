@@ -34,12 +34,13 @@
 
 #include "HadrontherapyPrimaryGeneratorAction.hh"
 #include "HadrontherapyPrimaryGeneratorMessenger.hh"
+#include "HadrontherapyAnalysisManager.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "Randomize.hh"
-#include "HadrontherapyAnalysisManager.hh"
 
 HadrontherapyPrimaryGeneratorAction::HadrontherapyPrimaryGeneratorAction()
 {
