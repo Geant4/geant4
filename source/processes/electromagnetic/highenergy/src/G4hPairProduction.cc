@@ -64,6 +64,8 @@ G4hPairProduction::G4hPairProduction(const G4String& name)
     isInitialised(false)
 {
   SetProcessSubType(fPairProdByCharged);
+  SetSecondaryParticle(G4Positron::Positron());
+  SetIonisation(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -97,9 +99,6 @@ void G4hPairProduction::InitialiseEnergyLossProcess(
     isInitialised = true;
 
     theParticle = part;
-    SetSecondaryParticle(G4Positron::Positron());
-    SetIonisation(false);
-
     if (!EmModel()) { SetEmModel(new G4hPairProductionModel()); }
 
     G4VEmFluctuationModel* fm = 0;

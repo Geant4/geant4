@@ -68,6 +68,7 @@ G4mplIonisation::G4mplIonisation(G4double mCharge, const G4String& name)
   SetVerboseLevel(0);
   SetProcessSubType(fIonisation);
   SetStepFunction(0.2, 1*mm);
+  SetSecondaryParticle(G4Electron::Electron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -90,7 +91,6 @@ void G4mplIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* p,
   if(isInitialised) { return; }
 
   SetBaseParticle(0);
-  SetSecondaryParticle(G4Electron::Electron());
 
   // monopole model is responsible both for energy loss and fluctuations
   G4mplIonisationWithDeltaModel* ion =
