@@ -38,13 +38,15 @@
 #ifndef RemSimMoonHabitat_h
 #define RemSimMoonHabitat_h 1
 
-class RemSimVGeometryComponent;
 class G4VPhysicalVolume;
 class G4Box;
 class G4LogicalVolume;
 class G4Material;
 class RemSimMaterial;
 class G4VisAttributes;
+
+#include "RemSimVGeometryComponent.hh"
+
 class RemSimMoonHabitat: public RemSimVGeometryComponent
 {
 public:

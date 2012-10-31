@@ -28,12 +28,14 @@
 //
 // Code developed by: S.Guatelli, susanna@uow.edu.au
 //
-#include "RemSimVGeometryComponent.hh"
-#include "RemSimMaterial.hh"
-#include "G4Material.hh"
-#include "G4MaterialTable.hh"
 #include "RemSimShieldingDecorator.hh"
 #include "RemSimDecorator.hh"
+#include "RemSimVGeometryComponent.hh"
+#include "RemSimMaterial.hh"
+
+#include "G4SystemOfUnits.hh"
+#include "G4Material.hh"
+#include "G4MaterialTable.hh"
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"

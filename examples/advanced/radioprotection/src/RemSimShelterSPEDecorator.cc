@@ -28,20 +28,20 @@
 //
 // Code developed by: S.Guatelli, susanna@uow.edu.au
 //
-#include "RemSimVGeometryComponent.hh"
-#include "RemSimMaterial.hh"
-#include "G4Material.hh"
-#include "G4MaterialTable.hh"
 #include "RemSimShelterSPEDecorator.hh"
 #include "RemSimDecorator.hh"
+#include "RemSimVGeometryComponent.hh"
+#include "RemSimMaterial.hh"
+
+#include "G4SystemOfUnits.hh"
+#include "G4Material.hh"
+#include "G4MaterialTable.hh"
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4VisAttributes.hh"
-
 #include "G4RunManager.hh"
-
 
 RemSimShelterSPEDecorator::RemSimShelterSPEDecorator(RemSimVGeometryComponent* comp)
   : RemSimDecorator(comp)

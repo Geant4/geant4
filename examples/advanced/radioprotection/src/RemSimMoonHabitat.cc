@@ -35,10 +35,11 @@
 //
 // Author:Susanna Guatelli, guatelli@ge.infn.it 
 //
-#include "RemSimVGeometryComponent.hh"
-#include "RemSimMaterial.hh"
-#include "G4Material.hh"
 #include "RemSimMoonHabitat.hh"
+#include "RemSimMaterial.hh"
+
+#include "G4SystemOfUnits.hh"
+#include "G4Material.hh"
 #include "G4Box.hh"
 #include "G4Trd.hh"
 #include "G4LogicalVolume.hh"
@@ -49,6 +50,7 @@
 #include "RemSimDecorator.hh"
 #include "RemSimAstronautDecorator.hh"
 #include "G4SubtractionSolid.hh"
+
 RemSimMoonHabitat::RemSimMoonHabitat()
 {
   pMaterial = new RemSimMaterial(); 

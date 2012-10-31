@@ -36,14 +36,16 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
+#include "RemSimMaterial.hh"
+
+#include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4MaterialPropertiesTable.hh"
 #include "G4MaterialPropertyVector.hh"
-#include "globals.hh"
 #include "G4MaterialTable.hh"
 #include "G4RunManager.hh"
 #include "G4Element.hh"
 #include "G4ElementTable.hh"
-#include "RemSimMaterial.hh"
 
 RemSimMaterial::RemSimMaterial():
   matPb(0), matAir(0), matH2O(0), Al(0), nylon(0), mylar(0), 

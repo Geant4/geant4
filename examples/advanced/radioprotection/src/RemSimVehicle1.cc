@@ -30,6 +30,8 @@
 //
 #include "RemSimVGeometryComponent.hh"
 #include "RemSimMaterial.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4Material.hh"
 #include "RemSimVehicle1.hh"
 #include "G4Box.hh"
