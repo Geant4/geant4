@@ -38,6 +38,16 @@ struct G4CascadeNNChannelData {
   static data_t data;
 };
 
-typedef G4CascadeFunctions<G4CascadeNNChannelData,G4PionNucSampler> G4CascadeNNChannel;
+class G4CascadeNNChannel
+  : public G4CascadeFunctions<G4CascadeNNChannelData,G4PionNucSampler> {
+public:
+  G4CascadeNNChannel()
+    : G4CascadeFunctions<G4CascadeNNChannelData,G4PionNucSampler>() {;}
+  virtual ~G4CascadeNNChannel() {;}
+
+  // Will replace interpolation of 0-10 MeV bin on total and elastic
+  virtual G4double
+  findCrossSection(G4double ke, const G4double (&xsec)[30]) const;
+};
 
 #endif	/* G4_CASCADE_NN_CHANNEL_HH */

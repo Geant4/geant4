@@ -41,47 +41,47 @@ namespace {
 
   static const G4int nn3bfs[6][3] =
    {{neu,neu,pi0}, {pro,neu,pim}, {neu,lam,k0},
-    {neu,s0,k0},   {neu,sm,kpl},   {pro,sm,k0}};
+    {neu,s0,k0},   {neu,sm,kpl},  {pro,sm,k0}};
 
   static const G4int nn4bfs[18][4] =
-   {{neu,neu,pip,pim},{pro,neu,pim,pi0},{neu,neu,pi0,pi0},
-    {pro,pro,pim,pim},{neu,lam,k0,pi0}, {neu,lam,kpl,pim},
-    {pro,lam,k0,pim}, {pro,s0,k0,pim},  {neu,s0,k0,pi0},
+   {{neu,neu,pip,pim}, {pro,neu,pim,pi0},{neu,neu,pi0,pi0},
+    {pro,pro,pim,pim}, {neu,lam,k0,pi0}, {neu,lam,kpl,pim},
+    {pro,lam,k0,pim},  {pro,s0,k0,pim},  {neu,s0,k0,pi0},
     {neu,s0,kpl,pim},  {neu,sp,k0,pim},  {neu,sm,kpl,pi0},
     {pro,sm,kpl,pim},  {neu,sm,k0,pip},  {pro,sm,k0,pi0},
-    {neu,neu,kpl,kmi},  {neu,neu,k0,k0b}, {pro,neu,k0,kmi}};
+    {neu,neu,kpl,kmi}, {neu,neu,k0,k0b}, {pro,neu,k0,kmi}};
 
   static const G4int nn5bfs[32][5] =
-   {{neu,neu,pip,pim,pi0},{neu,neu,pi0,pi0,pi0},{pro,neu,pip,pim,pim},
-    {pro,neu,pim,pi0,pi0},{pro,pro,pim,pim,pi0},{neu,lam,k0,pip,pim},
-    {neu,lam,k0,pi0,pi0}, {neu,lam,kpl,pim,pi0}, {neu,s0,k0,pip,pim},
-    {neu,s0,k0,pi0,pi0},  {neu,s0,kpl,pim,pi0},  {neu,sm,kpl,pip,pim},
-    {neu,sm,kpl,pi0,pi0},  {neu,sm,k0,pip,pi0},  {neu,sp,k0,pim,pi0},
-    {neu,sp,kpl,pim,pim},  {pro,lam,k0,pim,pi0}, {pro,lam,kpl,pim,pim},
-    {pro,s0,k0,pim,pi0},  {pro,s0,kpl,pim,pim},  {pro,sm,kpl,pim,pi0},
-    {pro,sm,k0,pip,pim},  {pro,sm,k0,pi0,pi0},  {pro,sp,k0,pim,pim},
+   {{neu,neu,pip,pim,pi0}, {neu,neu,pi0,pi0,pi0}, {pro,neu,pip,pim,pim},
+    {pro,neu,pim,pi0,pi0}, {pro,pro,pim,pim,pi0}, {neu,lam,k0,pip,pim},
+    {neu,lam,k0,pi0,pi0},  {neu,lam,kpl,pim,pi0}, {neu,s0,k0,pip,pim},
+    {neu,s0,k0,pi0,pi0},   {neu,s0,kpl,pim,pi0},  {neu,sm,kpl,pip,pim},
+    {neu,sm,kpl,pi0,pi0},  {neu,sm,k0,pip,pi0},   {neu,sp,k0,pim,pi0},
+    {neu,sp,kpl,pim,pim},  {pro,lam,k0,pim,pi0},  {pro,lam,kpl,pim,pim},
+    {pro,s0,k0,pim,pi0},   {pro,s0,kpl,pim,pim},  {pro,sm,kpl,pim,pi0},
+    {pro,sm,k0,pip,pim},   {pro,sm,k0,pi0,pi0},   {pro,sp,k0,pim,pim},
     {neu,neu,pim,kpl,k0b}, {neu,neu,pip,k0,kmi},  {neu,neu,pi0,kpl,kmi},
-    {neu,neu,pi0,k0,k0b}, {pro,neu,pim,kpl,kmi},  {pro,neu,pim,k0,k0b},
+    {neu,neu,pi0,k0,k0b},  {pro,neu,pim,kpl,kmi}, {pro,neu,pim,k0,k0b},
     {pro,neu,pi0,k0,kmi},  {pro,pro,pim,k0,kmi}};
 
   static const G4int nn6bfs[7][6] =
-   {{neu,neu,pip,pip,pim,pim},{neu,neu,pip,pim,pi0,pi0},
-    {neu,neu,pi0,pi0,pi0,pi0},{pro,neu,pip,pim,pim,pi0},
-    {pro,neu,pim,pi0,pi0,pi0},{pro,pro,pip,pim,pim,pim},
+   {{neu,neu,pip,pip,pim,pim}, {neu,neu,pip,pim,pi0,pi0},
+    {neu,neu,pi0,pi0,pi0,pi0}, {pro,neu,pip,pim,pim,pi0},
+    {pro,neu,pim,pi0,pi0,pi0}, {pro,pro,pip,pim,pim,pim},
     {pro,pro,pim,pim,pi0,pi0}};
 
   static const G4int nn7bfs[8][7] =
-   {{neu,neu,pip,pip,pim,pim,pi0},{neu,neu,pip,pim,pi0,pi0,pi0},
-    {neu,neu,pi0,pi0,pi0,pi0,pi0},{pro,neu,pip,pip,pim,pim,pim},
-    {pro,neu,pip,pim,pim,pi0,pi0},{pro,neu,pim,pi0,pi0,pi0,pi0},
-    {pro,pro,pip,pim,pim,pim,pi0},{pro,pro,pim,pim,pi0,pi0,pi0}};
+   {{neu,neu,pip,pip,pim,pim,pi0}, {neu,neu,pip,pim,pi0,pi0,pi0},
+    {neu,neu,pi0,pi0,pi0,pi0,pi0}, {pro,neu,pip,pip,pim,pim,pim},
+    {pro,neu,pip,pim,pim,pi0,pi0}, {pro,neu,pim,pi0,pi0,pi0,pi0},
+    {pro,pro,pip,pim,pim,pim,pi0}, {pro,pro,pim,pim,pi0,pi0,pi0}};
 
   static const G4int nn8bfs[10][8] =
-   {{neu,neu,pip,pip,pip,pim,pim,pim},{neu,neu,pip,pip,pim,pim,pi0,pi0},
-    {neu,neu,pip,pim,pi0,pi0,pi0,pi0},{neu,neu,pi0,pi0,pi0,pi0,pi0,pi0},
-    {pro,neu,pip,pip,pim,pim,pim,pi0},{pro,neu,pip,pim,pim,pi0,pi0,pi0},
-    {pro,neu,pim,pi0,pi0,pi0,pi0,pi0},{pro,pro,pip,pip,pim,pim,pim,pim},
-    {pro,pro,pip,pim,pim,pim,pi0,pi0},{pro,pro,pim,pim,pi0,pi0,pi0,pi0}};
+   {{neu,neu,pip,pip,pip,pim,pim,pim}, {neu,neu,pip,pip,pim,pim,pi0,pi0},
+    {neu,neu,pip,pim,pi0,pi0,pi0,pi0}, {neu,neu,pi0,pi0,pi0,pi0,pi0,pi0},
+    {pro,neu,pip,pip,pim,pim,pim,pi0}, {pro,neu,pip,pim,pim,pi0,pi0,pi0},
+    {pro,neu,pim,pi0,pi0,pi0,pi0,pi0}, {pro,pro,pip,pip,pim,pim,pim,pim},
+    {pro,pro,pip,pim,pim,pim,pi0,pi0}, {pro,pro,pim,pim,pi0,pi0,pi0,pi0}};
 
   static const G4int nn9bfs[11][9] =
    {{neu,neu,pip,pip,pip,pim,pim,pim,pi0},{neu,neu,pip,pip,pim,pim,pi0,pi0,pi0},
@@ -95,21 +95,20 @@ namespace {
 namespace {
   // Total n n cross sections as a function of kinetic energy
   static const G4double nnTotXSec[30] = 
-  // For now set nn cross sections equal to pn up to 320 MeV and use SAID
-  // cross sections.  Above 320 MeV nn cross sections set equal to pp
-  {20357.0, 945.5, 732.7, 535.6, 397.0, 287.3, 208.2, 147.0, 103.8,  75.5,
-      58.8,  45.9,  39.1,  34.9,  27.0,  32.0,  44.0,  47.04, 44.86, 46.03,
-      44.09, 41.81, 41.17, 40.65, 40.15, 40.18, 39.26, 38.36, 38.39, 38.41}; 
+  // Stepanov cross sections below 400 MeV
+  {17613.0, 863.3, 674.6, 495.2, 376.0, 285.4, 205.8, 135.7,  93.7,  69.1,
+      55.2,  44.5,  38.8,  35.1,  33.0,  32.0,  44.0,  47.04, 44.86, 46.03,
+      44.09, 41.81, 41.17, 40.65, 40.15, 40.18, 39.26, 38.36, 38.39, 38.41};
 
   static const G4double nnCrossSections[93][30] = {
   //
   // multiplicity 2 (1 channel)
   //
   //  n n
-  {20357.0, 945.5, 732.7, 535.6, 397.0, 287.3, 208.2, 147.0, 103.8,  75.5,
-      58.8,  45.9,  39.1,  34.9,  26.3,  26.1,  25.0,  23.5,  21.0,  18.0,
-      16.0,  14.3,  12.5,  11.2,  10.3,   9.6,   9.0,   8.5,   8.0,   7.7},
-
+  // Stepanov cross sections below 400 MeV 
+   {17613.0, 863.3, 674.6, 495.2, 376.0, 285.4, 205.8, 135.7, 93.7, 69.1,
+       55.2,  44.5,  38.8,  35.1,  32.3,  26.1,  25.0,  23.5, 21.0, 18.0,
+       16.0,  14.3,  12.5,  11.2,  10.3,   9.6,   9.0,   8.5,  8.0,  7.7 },
   //
   // multiplicity 3 (6 channels)
   //
@@ -592,3 +591,17 @@ G4CascadeNNChannelData::data_t
 G4CascadeNNChannelData::data(nn2bfs, nn3bfs, nn4bfs, nn5bfs, nn6bfs, nn7bfs,
 			     nn8bfs, nn9bfs, nnCrossSections, nnTotXSec,
 			     neu*neu, "NeutronNeutron");
+
+// Overload base class interpolator to use function for 0-10 MeV total, elastic
+
+G4double 
+G4CascadeNNChannel::findCrossSection(G4double ke,
+                                     const G4double (&xsec)[30]) const {
+  if (ke < 0.01 && (xsec == nnTotXSec || xsec == nnCrossSections[0])) {
+    // Stepanov's function for ke < 10 MeV, up to zero-energy value
+    const G4double kemin = 4.0/nnTotXSec[0];
+    return (ke>0.001 ? (9.0692 - 0.0050574/ke)/ke + 6.9466 :
+	    ke>kemin ? 4.0/ke : nnTotXSec[0]);
+  }
+  return G4PionNucSampler::findCrossSection(ke, xsec);  // Call through to base
+}

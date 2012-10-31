@@ -15,6 +15,27 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+20 October 2012  Michael Kelsey (hadr-casc-V09-05-26)
+-----------------------------------------------------
+- G4CascadePPChannel.cc, G4CascadeNNChannel.cc, G4CascadeNPChannel.cc:  For
+  continuous low-energy functions, add cutoff in K.E. to match zero-energy
+  cross-section value, and avoid divide-by-zero divergence.
+
+19 October 2012  Dennis Wright
+------------------------------
+- for classes G4CascadePPChannel, G4CascadeNNChannel, G4CascadeNPChannel
+  use Stepanov's functions to fill in total and elastic cross section arrays
+  at all energy bins from 10 to 320 MeV inclusive.  Below 10 MeV use
+  Stepanov's continuous functions to generate cross section.
+
+15 October 2012  Dennis Wright (hadr-casc-V09-05-25)
+----------------------------------------------------
+- replace SAID cross sections with in-medium cross sections of 
+  Li & Machleidt for incident energies below 420 MeV.  Classes
+  changed: G4CascadePPChannel, G4CascadeNNChannel, G4CascadeNPChannel.
+- method findCrossSection removed from G4CascadePPChannel and G4CascadeNPChannel
+  since no Coulomb is included in L&M cross sections 
+
 9 October 2012 Michael Kelsey (hadr-casc-V09-05-24)
 ---------------------------------------------------
 - G4ExitonConfiguration: Add empty() function to test exciton state, reduce

@@ -42,63 +42,63 @@ namespace {
 
   static const G4int pp3bfs[6][3] =
   {{pro,pro,pi0}, {pro,neu,pip}, {pro,lam,kpl},
-    {pro,s0,kpl},   {pro,sp,k0},   {neu,sp,kpl}};
+   {pro,s0,kpl},  {pro,sp,k0},   {neu,sp,kpl}};
 
   static const G4int pp4bfs[18][4] =
-  {{pro,pro,pip,pim},{pro,neu,pip,pi0},{pro,pro,pi0,pi0},
-    {neu,neu,pip,pip},{pro,lam,kpl,pi0}, {pro,lam,k0,pip},
-    {neu,lam,kpl,pip}, {neu,s0,kpl,pip},  {pro,s0,kpl,pi0},
-    {pro,s0,k0,pip},  {pro,sm,kpl,pip},  {pro,sp,k0,pi0},
-    {neu,sp,k0,pip},  {pro,sp,kpl,pim},  {neu,sp,kpl,pi0},
-    {pro,pro,k0,k0b}, {pro,pro,kpl,kmi},  {pro,neu,kpl,k0b}};
+  {{pro,pro,pip,pim}, {pro,neu,pip,pi0}, {pro,pro,pi0,pi0},
+   {neu,neu,pip,pip}, {pro,lam,kpl,pi0}, {pro,lam,k0,pip},
+   {neu,lam,kpl,pip}, {neu,s0,kpl,pip},  {pro,s0,kpl,pi0},
+   {pro,s0,k0,pip},   {pro,sm,kpl,pip},  {pro,sp,k0,pi0},
+   {neu,sp,k0,pip},   {pro,sp,kpl,pim},  {neu,sp,kpl,pi0},
+   {pro,pro,k0,k0b},  {pro,pro,kpl,kmi}, {pro,neu,kpl,k0b}};
 
   static const G4int pp5bfs[32][5] =
-  {{pro,pro,pip,pim,pi0},{pro,pro,pi0,pi0,pi0},{pro,neu,pip,pip,pim},
-    {pro,neu,pip,pi0,pi0},{neu,neu,pip,pip,pi0},{pro,lam,kpl,pip,pim},
-    {pro,lam,kpl,pi0,pi0}, {pro,lam,k0,pip,pi0}, {pro,s0,kpl,pip,pim},
-    {pro,s0,kpl,pi0,pi0},  {pro,s0,k0,pip,pi0},  {pro,sp,k0,pip,pim},
-    {pro,sp,k0,pi0,pi0},  {pro,sp,kpl,pim,pi0},  {pro,sm,kpl,pip,pi0},
-    {pro,sm,k0,pip,pip},  {neu,lam,kpl,pip,pi0}, {neu,lam,k0,pip,pip},
-    {neu,s0,kpl,pip,pi0},  {neu,s0,k0,pip,pip},  {neu,sp,k0,pip,pi0},
-    {neu,sp,kpl,pip,pim},  {neu,sp,kpl,pi0,pi0},  {neu,sm,kpl,pip,pip},
-    {pro,pro,pip,k0,kmi},  {pro,pro,pim,kpl,k0b}, {pro,pro,pi0,k0,k0b},
-    {pro,pro,pi0,kpl,kmi},  {pro,neu,pip,k0,k0b}, {pro,neu,pip,kpl,kmi},
-    {pro,neu,pi0,kpl,k0b}, {neu,neu,pip,kpl,k0b}};
+  {{pro,pro,pip,pim,pi0}, {pro,pro,pi0,pi0,pi0}, {pro,neu,pip,pip,pim},
+   {pro,neu,pip,pi0,pi0}, {neu,neu,pip,pip,pi0}, {pro,lam,kpl,pip,pim},
+   {pro,lam,kpl,pi0,pi0}, {pro,lam,k0,pip,pi0},  {pro,s0,kpl,pip,pim},
+   {pro,s0,kpl,pi0,pi0},  {pro,s0,k0,pip,pi0},   {pro,sp,k0,pip,pim},
+   {pro,sp,k0,pi0,pi0},   {pro,sp,kpl,pim,pi0},  {pro,sm,kpl,pip,pi0},
+   {pro,sm,k0,pip,pip},   {neu,lam,kpl,pip,pi0}, {neu,lam,k0,pip,pip},
+   {neu,s0,kpl,pip,pi0},  {neu,s0,k0,pip,pip},   {neu,sp,k0,pip,pi0},
+   {neu,sp,kpl,pip,pim},  {neu,sp,kpl,pi0,pi0},  {neu,sm,kpl,pip,pip},
+   {pro,pro,pip,k0,kmi},  {pro,pro,pim,kpl,k0b}, {pro,pro,pi0,k0,k0b},
+   {pro,pro,pi0,kpl,kmi}, {pro,neu,pip,k0,k0b},  {pro,neu,pip,kpl,kmi},
+   {pro,neu,pi0,kpl,k0b}, {neu,neu,pip,kpl,k0b}};
 
   static const G4int pp6bfs[7][6] =
-  {{pro,pro,pip,pip,pim,pim},{pro,pro,pip,pim,pi0,pi0},
-    {pro,pro,pi0,pi0,pi0,pi0},{pro,neu,pip,pip,pim,pi0},
-    {pro,neu,pip,pi0,pi0,pi0},{neu,neu,pip,pip,pip,pim},
-    {neu,neu,pip,pip,pi0,pi0}};
+  {{pro,pro,pip,pip,pim,pim}, {pro,pro,pip,pim,pi0,pi0},
+   {pro,pro,pi0,pi0,pi0,pi0}, {pro,neu,pip,pip,pim,pi0},
+   {pro,neu,pip,pi0,pi0,pi0}, {neu,neu,pip,pip,pip,pim},
+   {neu,neu,pip,pip,pi0,pi0}};
 
   static const G4int pp7bfs[8][7] =
-  {{pro,pro,pip,pip,pim,pim,pi0},{pro,pro,pip,pim,pi0,pi0,pi0},
-    {pro,pro,pi0,pi0,pi0,pi0,pi0},{pro,neu,pip,pip,pip,pim,pim},
-    {pro,neu,pip,pip,pim,pi0,pi0},{pro,neu,pip,pi0,pi0,pi0,pi0},
-    {neu,neu,pip,pip,pip,pim,pi0},{neu,neu,pip,pip,pi0,pi0,pi0}};
+  {{pro,pro,pip,pip,pim,pim,pi0}, {pro,pro,pip,pim,pi0,pi0,pi0},
+   {pro,pro,pi0,pi0,pi0,pi0,pi0}, {pro,neu,pip,pip,pip,pim,pim},
+   {pro,neu,pip,pip,pim,pi0,pi0}, {pro,neu,pip,pi0,pi0,pi0,pi0},
+   {neu,neu,pip,pip,pip,pim,pi0}, {neu,neu,pip,pip,pi0,pi0,pi0}};
 
   static const G4int pp8bfs[10][8] =
-  {{pro,pro,pip,pip,pip,pim,pim,pim},{pro,pro,pip,pip,pim,pim,pi0,pi0},
-    {pro,pro,pip,pim,pi0,pi0,pi0,pi0},{pro,pro,pi0,pi0,pi0,pi0,pi0,pi0},
-    {pro,neu,pip,pip,pip,pim,pim,pi0},{pro,neu,pip,pip,pim,pi0,pi0,pi0},
-    {pro,neu,pip,pi0,pi0,pi0,pi0,pi0},{neu,neu,pip,pip,pip,pip,pim,pim},
-    {neu,neu,pip,pip,pip,pim,pi0,pi0},{neu,neu,pip,pip,pi0,pi0,pi0,pi0}};
+  {{pro,pro,pip,pip,pip,pim,pim,pim}, {pro,pro,pip,pip,pim,pim,pi0,pi0},
+   {pro,pro,pip,pim,pi0,pi0,pi0,pi0}, {pro,pro,pi0,pi0,pi0,pi0,pi0,pi0},
+   {pro,neu,pip,pip,pip,pim,pim,pi0}, {pro,neu,pip,pip,pim,pi0,pi0,pi0},
+   {pro,neu,pip,pi0,pi0,pi0,pi0,pi0}, {neu,neu,pip,pip,pip,pip,pim,pim},
+   {neu,neu,pip,pip,pip,pim,pi0,pi0}, {neu,neu,pip,pip,pi0,pi0,pi0,pi0}};
 
   static const G4int pp9bfs[11][9] =
-  {{pro,pro,pip,pip,pip,pim,pim,pim,pi0},{pro,pro,pip,pip,pim,pim,pi0,pi0,pi0},
-    {pro,pro,pip,pim,pi0,pi0,pi0,pi0,pi0},{pro,pro,pi0,pi0,pi0,pi0,pi0,pi0,pi0},
-    {pro,neu,pip,pip,pip,pip,pim,pim,pim},{pro,neu,pip,pip,pip,pim,pim,pi0,pi0},
-    {pro,neu,pip,pip,pim,pi0,pi0,pi0,pi0},{pro,neu,pip,pi0,pi0,pi0,pi0,pi0,pi0},
-    {neu,neu,pip,pip,pip,pip,pim,pim,pi0},{neu,neu,pip,pip,pip,pim,pi0,pi0,pi0},
-    {neu,neu,pip,pip,pi0,pi0,pi0,pi0,pi0}};
+  {{pro,pro,pip,pip,pip,pim,pim,pim,pi0}, {pro,pro,pip,pip,pim,pim,pi0,pi0,pi0},
+   {pro,pro,pip,pim,pi0,pi0,pi0,pi0,pi0}, {pro,pro,pi0,pi0,pi0,pi0,pi0,pi0,pi0},
+   {pro,neu,pip,pip,pip,pip,pim,pim,pim}, {pro,neu,pip,pip,pip,pim,pim,pi0,pi0},
+   {pro,neu,pip,pip,pim,pi0,pi0,pi0,pi0}, {pro,neu,pip,pi0,pi0,pi0,pi0,pi0,pi0},
+   {neu,neu,pip,pip,pip,pip,pim,pim,pi0}, {neu,neu,pip,pip,pip,pim,pi0,pi0,pi0},
+   {neu,neu,pip,pip,pi0,pi0,pi0,pi0,pi0}};
 }
 
 namespace {
   // Total p p cross sections as a function of kinetic energy
   static const G4double ppTotXSec[30] = 
-  // Use SAID cross sections up to 320 MeV
-  {17613.0, 349.6, 263.5, 183.8, 133.0,  96.0,  71.0,  52.6,  39.8,  31.7,
-      27.2,  24.6,  23.9,  24.4,  27.0,  32.0,  44.0,  47.04, 44.86, 46.03,
+  // Stepanov cross sections below 400 MeV
+  {17613.0, 863.3, 674.6, 495.2, 376.0, 285.4, 205.8, 135.7,  93.7,  69.1,
+      55.2,  44.5,  38.8,  35.1,  33.0,  32.0,  44.0,  47.04, 44.86, 46.03,
       44.09, 41.81, 41.17, 40.65, 40.15, 40.18, 39.26, 38.36, 38.39, 38.41};
 
   static const G4double ppCrossSections[93][30] = {
@@ -106,9 +106,10 @@ namespace {
   // multiplicity 2 (1 channel)
   //
   //  p p
-  {17613.0, 349.6, 263.5, 183.8, 133.0,  96.0,  71.0,  52.6,  39.8,  31.7,
-      27.2,  24.6,  23.9,  24.4,  26.3,  26.1,  25.0,  23.5,  21.0,  18.0,
-      16.0,  14.3,  12.5,  11.2,  10.3,   9.6,   9.0,   8.5,   8.0,   7.7},
+  // Stepanov cross sections below 400 MeV 
+   {17613.0, 863.3, 674.6, 495.2, 376.0, 285.4, 205.8, 135.7, 93.7, 69.1,
+       55.2,  44.5,  38.8,  35.1,  32.3,  26.1,  25.0,  23.5, 21.0, 18.0,
+       16.0,  14.3,  12.5,  11.2,  10.3,   9.6,   9.0,   8.5,  8.0,  7.7 },
   //
   // multiplicity 3 (6 channels)
   //
@@ -593,17 +594,16 @@ G4CascadePPChannelData::data(pp2bfs, pp3bfs, pp4bfs, pp5bfs, pp6bfs, pp7bfs,
 			     pro*pro, "ProtonProton");
 
 
-// Overload base class interpolator to use function for 0-20 MeV total, elastic
+// Overload base class interpolator to use function for 0-10 MeV total, elastic
 
 G4double 
-G4CascadePPChannel::findCrossSection(double ke,
-				     const G4double (&xsec)[30]) const {
-  if (ke < 0.020 && (xsec == ppTotXSec || xsec == ppCrossSections[0])) {
-    // SAID calculations use (3453 mb)/Tlab[MeV] up to 20 MeV
-    const G4double xsecScale = 3.453;	// mb-GeV
-    const G4double keMin = xsecScale / ppTotXSec[0];
-    return (ke>keMin) ? xsecScale/ke : ppTotXSec[0];
+G4CascadePPChannel::findCrossSection(G4double ke,
+                                     const G4double (&xsec)[30]) const {
+  if (ke < 0.01 && (xsec == ppTotXSec || xsec == ppCrossSections[0])) {
+    // Stepanov's function for ke < 10 MeV, up to zero-energy value
+    const G4double kemin = 4.0/ppTotXSec[0];
+    return (ke>0.001 ? (9.0692 - 0.0050574/ke)/ke + 6.9466 :
+	    ke>kemin ? 4.0/ke : ppTotXSec[0]);
   }
-   
   return G4PionNucSampler::findCrossSection(ke, xsec);	// Call through to base
 }

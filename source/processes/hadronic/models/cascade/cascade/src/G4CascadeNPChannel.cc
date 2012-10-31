@@ -42,54 +42,54 @@ namespace {
   {{pro,neu}};
 
   static const G4int np3bfs[9][3] =
-  {{pro,pro,pim},{pro,neu,pi0},{neu,neu,pip},{pro,lam,k0},
-   {pro,s0,k0},  {pro,sm,kpl},  {neu,lam,kpl}, {neu,s0,kpl},
+  {{pro,pro,pim}, {pro,neu,pi0}, {neu,neu,pip}, {pro,lam,k0},
+   {pro,s0,k0},   {pro,sm,kpl},  {neu,lam,kpl}, {neu,s0,kpl},
    {neu,sp,k0}};
 
   static const G4int np4bfs[22][4] =
-  {{pro,neu,pip,pim},{pro,pro,pim,pi0},{pro,neu,pi0,pi0},
-   {neu,neu,pip,pi0},{pro,lam,kpl,pim}, {pro,s0,kpl,pim},
-   {pro,lam,k0,pi0}, {pro,s0,k0,pi0},  {pro,sp,k0,pim},
-   {pro,sm,kpl,pi0},  {pro,sm,k0,pip},  {neu,lam,kpl,pi0},
-   {neu,lam,k0,pip}, {neu,sp,kpl,pim},  {neu,sp,k0,pi0},
-   {neu,s0,kpl,pi0},  {neu,s0,k0,pip},  {neu,sm,kpl,pip},
-   {pro,neu,kpl,kmi},  {pro,neu,k0,k0b}, {pro,pro,k0,kmi},
+  {{pro,neu,pip,pim}, {pro,pro,pim,pi0}, {pro,neu,pi0,pi0},
+   {neu,neu,pip,pi0}, {pro,lam,kpl,pim}, {pro,s0,kpl,pim},
+   {pro,lam,k0,pi0},  {pro,s0,k0,pi0},   {pro,sp,k0,pim},
+   {pro,sm,kpl,pi0},  {pro,sm,k0,pip},   {neu,lam,kpl,pi0},
+   {neu,lam,k0,pip},  {neu,sp,kpl,pim},  {neu,sp,k0,pi0},
+   {neu,s0,kpl,pi0},  {neu,s0,k0,pip},   {neu,sm,kpl,pip},
+   {pro,neu,kpl,kmi}, {pro,neu,k0,k0b},  {pro,pro,k0,kmi},
    {neu,neu,kpl,k0b}};
 
   static const G4int np5bfs[38][5] =
-  {{pro,neu,pip,pim,pi0},{pro,neu,pi0,pi0,pi0},{pro,pro,pip,pim,pim},
-   {pro,pro,pim,pi0,pi0},{neu,neu,pip,pip,pim},{neu,neu,pip,pi0,pi0},
-   {pro,lam,kpl,pim,pi0}, {pro,lam,k0,pip,pim}, {pro,lam,k0,pi0,pi0},
-   {pro,s0,k0,pip,pim},  {pro,s0,k0,pi0,pi0},  {pro,s0,kpl,pim,pi0},
-   {pro,sp,kpl,pim,pim},  {pro,sp,k0,pim,pi0},  {pro,sm,k0,pip,pi0},
+  {{pro,neu,pip,pim,pi0}, {pro,neu,pi0,pi0,pi0}, {pro,pro,pip,pim,pim},
+   {pro,pro,pim,pi0,pi0}, {neu,neu,pip,pip,pim}, {neu,neu,pip,pi0,pi0},
+   {pro,lam,kpl,pim,pi0}, {pro,lam,k0,pip,pim},  {pro,lam,k0,pi0,pi0},
+   {pro,s0,k0,pip,pim},   {pro,s0,k0,pi0,pi0},   {pro,s0,kpl,pim,pi0},
+   {pro,sp,kpl,pim,pim},  {pro,sp,k0,pim,pi0},   {pro,sm,k0,pip,pi0},
    {pro,sm,kpl,pip,pim},  {pro,sm,kpl,pi0,pi0},  {neu,lam,kpl,pip,pim},
-   {neu,lam,kpl,pi0,pi0}, {neu,lam,k0,pip,pi0}, {neu,s0,kpl,pip,pim},
-   {neu,s0,kpl,pi0,pi0},  {neu,s0,k0,pip,pi0},  {neu,sp,k0,pip,pim},
-   {neu,sp,k0,pi0,pi0},  {neu,sp,kpl,pim,pi0},  {neu,sm,kpl,pip,pi0},
-   {neu,sm,k0,pip,pip},  {pro,neu,kpl,kmi,pi0},  {pro,neu,k0,k0b,pi0},
+   {neu,lam,kpl,pi0,pi0}, {neu,lam,k0,pip,pi0},  {neu,s0,kpl,pip,pim},
+   {neu,s0,kpl,pi0,pi0},  {neu,s0,k0,pip,pi0},   {neu,sp,k0,pip,pim},
+   {neu,sp,k0,pi0,pi0},   {neu,sp,kpl,pim,pi0},  {neu,sm,kpl,pip,pi0},
+   {neu,sm,k0,pip,pip},   {pro,neu,kpl,kmi,pi0}, {pro,neu,k0,k0b,pi0},
    {pro,neu,k0,kmi,pip},  {pro,neu,kpl,k0b,pim}, {pro,pro,k0,k0b,pim},
-   {pro,pro,kpl,kmi,pim},  {pro,pro,k0,kmi,pi0},  {neu,neu,kpl,kmi,pip},
-   {neu,neu,k0,k0b,pip}, {neu,neu,kpl,k0b,pi0}};
+   {pro,pro,kpl,kmi,pim}, {pro,pro,k0,kmi,pi0},  {neu,neu,kpl,kmi,pip},
+   {neu,neu,k0,k0b,pip},  {neu,neu,kpl,k0b,pi0}};
 
   static const G4int np6bfs[7][6] =
-  {{pro,neu,pip,pip,pim,pim},{pro,neu,pip,pim,pi0,pi0},
-   {pro,neu,pi0,pi0,pi0,pi0},{pro,pro,pip,pim,pim,pi0},
-   {pro,pro,pim,pi0,pi0,pi0},{neu,neu,pip,pip,pim,pi0},
+  {{pro,neu,pip,pip,pim,pim}, {pro,neu,pip,pim,pi0,pi0},
+   {pro,neu,pi0,pi0,pi0,pi0}, {pro,pro,pip,pim,pim,pi0},
+   {pro,pro,pim,pi0,pi0,pi0}, {neu,neu,pip,pip,pim,pi0},
    {neu,neu,pip,pi0,pi0,pi0}};
 
   static const G4int np7bfs[9][7] =
-  {{pro,neu,pip,pip,pim,pim,pi0},{pro,neu,pip,pim,pi0,pi0,pi0},
-   {pro,neu,pi0,pi0,pi0,pi0,pi0},{pro,pro,pip,pip,pim,pim,pim},
-   {pro,pro,pip,pim,pim,pi0,pi0},{pro,pro,pim,pi0,pi0,pi0,pi0},
-   {neu,neu,pip,pip,pip,pim,pim},{neu,neu,pip,pip,pim,pi0,pi0},
+  {{pro,neu,pip,pip,pim,pim,pi0}, {pro,neu,pip,pim,pi0,pi0,pi0},
+   {pro,neu,pi0,pi0,pi0,pi0,pi0}, {pro,pro,pip,pip,pim,pim,pim},
+   {pro,pro,pip,pim,pim,pi0,pi0}, {pro,pro,pim,pi0,pi0,pi0,pi0},
+   {neu,neu,pip,pip,pip,pim,pim}, {neu,neu,pip,pip,pim,pi0,pi0},
    {neu,neu,pip,pi0,pi0,pi0,pi0}};
 
   static const G4int np8bfs[10][8] =
-  {{pro,neu,pip,pip,pip,pim,pim,pim},{pro,neu,pip,pip,pim,pim,pi0,pi0},
-   {pro,neu,pip,pim,pi0,pi0,pi0,pi0},{pro,neu,pi0,pi0,pi0,pi0,pi0,pi0},
-   {pro,pro,pip,pip,pim,pim,pim,pi0},{pro,pro,pip,pim,pim,pi0,pi0,pi0},
-   {pro,pro,pim,pi0,pi0,pi0,pi0,pi0},{neu,neu,pip,pip,pip,pim,pim,pi0},
-   {neu,neu,pip,pip,pim,pi0,pi0,pi0},{neu,neu,pip,pi0,pi0,pi0,pi0,pi0}};
+  {{pro,neu,pip,pip,pip,pim,pim,pim}, {pro,neu,pip,pip,pim,pim,pi0,pi0},
+   {pro,neu,pip,pim,pi0,pi0,pi0,pi0}, {pro,neu,pi0,pi0,pi0,pi0,pi0,pi0},
+   {pro,pro,pip,pip,pim,pim,pim,pi0}, {pro,pro,pip,pim,pim,pi0,pi0,pi0},
+   {pro,pro,pim,pi0,pi0,pi0,pi0,pi0}, {neu,neu,pip,pip,pip,pim,pim,pi0},
+   {neu,neu,pip,pip,pim,pi0,pi0,pi0}, {neu,neu,pip,pi0,pi0,pi0,pi0,pi0}};
 
   static const G4int np9bfs[12][9] =
   {{pro,neu,pip,pip,pip,pim,pim,pim,pi0},{pro,neu,pip,pip,pim,pim,pi0,pi0,pi0},
@@ -103,35 +103,36 @@ namespace {
 namespace {
   // Total n p cross section as a function of kinetic energy
   static const G4double npTotXSec[30] = 
-  // Use SAID cross sections up to 320 MeV
-  {20357.0, 945.5, 732.7, 535.6, 397.0, 287.3, 208.2, 147.0, 103.8,  75.5,
-      58.8,  45.9,  39.1,  34.9,  34.0,  35.0,  37.5,  39.02, 40.29, 40.72,
+  // Stepanov cross sections below 400 MeV 
+  {20360.0, 302.4, 235.9, 173.3, 132.0, 100.7,  74.9,  51.9,  38.8,  31.6,  
+      27.8,  25.2,  24.0,  23.3,  29.1,  35.0,  37.5,  39.02, 40.29, 40.72,
       42.36, 41.19, 42.04, 41.67, 40.96, 39.48, 39.79, 39.39, 39.36, 39.34};
-      
+
   static const G4double npCrossSections[108][30] = {
   //
   // multiplicity 2 (1 channel)
   //
   //  p n (p n)
-  {20357.0, 945.5, 732.7, 535.6, 397.0, 287.3, 208.2, 147.0, 103.8, 75.5,
-      58.8,  45.9,  39.1,  34.9,  31.0,  27.0,  23.0,  19.0,  17.0, 15.5,
-      14.0,  13.0,  12.0,  11.0,  10.0,   9.5,   9.0,   8.5,   8.0,  7.7},
+  // Stepanov cross sections below 400 MeV 
+  {20360.0, 302.4, 235.9, 173.3, 132.0, 100.7,  74.9,  51.9,  38.8,  31.6,       
+      27.8,  25.2,  24.0,  23.3,  27.0,  27.0,  23.0,  19.0,  17.0,  15.5,
+      14.0,  13.0,  12.0,  11.0,  10.0,   9.5,   9.0,   8.5,   8.0,   7.7},
   //
   // multiplicity 3 (9 channels)
   //
   //  p p pi- (n n pi+)
    { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.25, 0.9,  1.75, 2.3,  2.8,  2.8,
+     0.0,  0.0,  0.0,  0.0,  0.2,  0.9,  1.75, 2.3,  2.8,  2.8,
      2.2,  1.9,  1.6,  1.35, 1.1,  0.95, 0.8,  0.7,  0.6,  0.53 },
 
   //  p n pi0 (p n pi0)
    { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  1.8,  4.7,  8.3, 11.3, 12.0, 10.2,
+     0.0,  0.0,  0.0,  0.0,  1.2,  4.7,  8.3, 11.3, 12.0, 10.2,
      8.2,  6.0,  4.9,  3.6,  2.5,  2.0,  1.6,  1.2,  1.0,  0.08 },
 
   //  n n pi+ (p p pi-)
    { 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  0.0,  0.0,  0.95, 2.4,  4.2,  5.6,  6.1,  5.1,
+     0.0,  0.0,  0.0,  0.0,  0.7,  2.4,  4.2,  5.6,  6.1,  5.1,
      4.1,  3.0,  2.5,  1.8,  1.2,  1.0,  0.8,  0.6,  0.5,  0.41},
 
   //  p L K0 (n L K+)
@@ -675,20 +676,16 @@ G4CascadeNPChannelData::data(np2bfs, np3bfs, np4bfs, np5bfs, np6bfs, np7bfs,
 			     neu*pro, "NeutronProton");
 
 
-// Overload base class interpolator to use function for 0-20 MeV total, elastic
+// Overload base class interpolator to use function for 0-10 MeV total, elastic
 
 G4double 
-G4CascadeNPChannel::findCrossSection(double ke,
-				     const G4double (&xsec)[30]) const {
-  if (ke < 0.020 && (xsec == npTotXSec || xsec == npCrossSections[0])) {
-    // Function is a/(b*E + (1-c*E)^2) + d/(e*E + (1-f*E)^2)
-    const G4double parA=2730.,  parB=350.,  parC=55.3;
-    const G4double parD=17630., parE=6800., parF=344.;
-    G4double Cless1 = 1. - parC*ke;
-    G4double Fless1 = 1. - parF*ke;
-    return (parA/(parB*ke + Cless1*Cless1) +
-	    parD/(parE*ke + Fless1*Fless1) );
+G4CascadeNPChannel::findCrossSection(G4double ke,
+                                     const G4double (&xsec)[30]) const {
+  if (ke < 0.01 && (xsec == npTotXSec || xsec == npCrossSections[0])) {
+    // Stepanov's function for ke < 10 MeV, up to zero-energy value
+    const G4double kemin = 1.92/npTotXSec[0];
+    return (ke>0.001 ? (3.0885 - 0.0011748/ke)/ke + 5.3107 :
+	    ke>kemin ? 1.92/ke : npTotXSec[0]);
   }
-   
   return G4PionNucSampler::findCrossSection(ke, xsec);	// Call through to base
 }

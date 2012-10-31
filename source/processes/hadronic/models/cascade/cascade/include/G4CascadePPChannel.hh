@@ -48,9 +48,9 @@ public:
     : G4CascadeFunctions<G4CascadePPChannelData,G4PionNucSampler>() {;}
   virtual ~G4CascadePPChannel() {;}
 
-  // Will replace interpolation of 0-20 MeV bin on total and elastic
+  // Will replace interpolation of 0-10 MeV bin on total and elastic
   virtual G4double 
-  findCrossSection(double ke, const G4double (&xsec)[30]) const;
+  findCrossSection(G4double ke, const G4double (&xsec)[30]) const;
 };
 
 #endif	/* G4_CASCADE_PP_CHANNEL_HH */
