@@ -23,7 +23,6 @@ include(${Geant4_USE_FILE})
 #----------------------------------------------------------------------------
 # Find AIDA (required package)
 #
-set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 find_package(AIDA QUIET)
 if(NOT AIDA_FOUND)
   message(STATUS "G4 Examples: AIDA package not found. --> AnaEx03 example disabled")  

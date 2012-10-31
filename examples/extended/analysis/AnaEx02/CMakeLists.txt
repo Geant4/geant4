@@ -23,7 +23,6 @@ include(${Geant4_USE_FILE})
 #----------------------------------------------------------------------------
 # Find ROOT (required package)
 #
-set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 find_package(ROOT QUIET)
 if(NOT ROOT_FOUND)
   message(STATUS "G4 Examples: ROOT package not found. --> AnaEx02 example disabled")  

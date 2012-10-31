@@ -24,7 +24,6 @@ include(${Geant4_USE_FILE})
 #----------------------------------------------------------------------------
 # Find AIDA (optional package)
 #
-set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 find_package(AIDA)
 if(AIDA_FOUND)
   add_definitions(-DG4ANALYSIS_USE)   

@@ -68,10 +68,14 @@ void HistoManager::book()
   // The choice of analysis technology is done via selection of a namespace
   // in HistoManager.hh
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  analysisManager->SetVerboseLevel(1);
+  analysisManager->SetVerboseLevel(2);
   G4String extension = analysisManager->GetFileType();
   fileName[1] = fileName[0] + "." + extension;
       
+  // Create directories 
+  analysisManager->SetHistoDirectoryName("histo");
+  analysisManager->SetNtupleDirectoryName("ntuple");
+    
   // Open an output file
   //
   G4bool fileOpen = analysisManager->OpenFile(fileName[0]);
@@ -81,14 +85,10 @@ void HistoManager::book()
     return;
   }
   
-  // Create directories 
-  analysisManager->SetHistoDirectoryName("histo");
-  analysisManager->SetNtupleDirectoryName("ntuple");
-    
   // create selected histograms
   //
   analysisManager->SetFirstHistoId(1);
-  
+
   fHistId[1] = analysisManager->CreateH1("1","Edep in absorber (MeV)",
                                               100, 0., 800*MeV);
   fHistPt[1] = analysisManager->GetH1(fHistId[1]);
