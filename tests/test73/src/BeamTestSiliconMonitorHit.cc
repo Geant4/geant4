@@ -24,10 +24,12 @@
 // ********************************************************************
 //
 //
-#include "BeamTestSiliconMonitorHit.hh"
 #include <iostream>
 #include <iomanip>
 #include <fstream>
+
+#include "BeamTestSiliconMonitorHit.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 
 G4Allocator<BeamTestSiliconMonitorHit> BeamTestSiliconMonitorHitAllocator;

@@ -34,6 +34,7 @@
 #include "BeamTestSiliconMonitor.hh"
 #include "BeamTestCellParameterisation.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4Box.hh"
 #include "G4Colour.hh"
 #include "G4LogicalVolume.hh"

@@ -25,6 +25,7 @@
 //
 //
 #include "BeamTestEventAction.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4NistManager.hh"
 
 ////////////////////////////////////////////////////////////////////////

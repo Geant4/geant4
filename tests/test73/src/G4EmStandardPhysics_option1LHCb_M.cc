@@ -39,6 +39,7 @@
 //
 
 #include "G4EmStandardPhysics_option1LHCb_M.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 #include "G4LossTableManager.hh"

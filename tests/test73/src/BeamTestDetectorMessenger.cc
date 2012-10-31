@@ -30,13 +30,14 @@
 //  Created by Andrea Dotti on 3/7/12.
 //
 
+#include "globals.hh"
 #include "BeamTestDetectorMessenger.hh"
 #include "BeamTestDetectorConstruction.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithoutParameter.hh"
-#include "globals.hh"
 
 #include "BeamTestEventAction.hh"
 #include "G4RunManager.hh"

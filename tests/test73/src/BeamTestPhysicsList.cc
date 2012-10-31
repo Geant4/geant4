@@ -32,6 +32,7 @@
 #include "G4EmStandardPhysics_option1LHCb_M.hh" // LHCb below code plus additions by MR ionisation and step size 
 #include "MyEmPhysicsList.hh" // Private study
 #include "PhysListEmStandard.hh" // LHCb code
+#include "G4SystemOfUnits.hh"
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
