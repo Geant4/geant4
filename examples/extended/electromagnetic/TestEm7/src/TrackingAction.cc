@@ -56,6 +56,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
   if (track->GetTrackID() == 1) {
     G4double x = track->GetPosition().x() + 0.5*fDetector->GetAbsorSizeX();
     if(x > 0.0) fRunAction->AddProjRange(x);
+    G4AnalysisManager::Instance()->FillH1(3, x);
   }  
 }
 

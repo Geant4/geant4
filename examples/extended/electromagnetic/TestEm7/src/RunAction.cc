@@ -50,10 +50,10 @@
 
 RunAction::RunAction(DetectorConstruction* det, PhysicsList* phys,
                      PrimaryGeneratorAction* kin)
-:fDetector(det), fPhysics(phys), fKinematic(kin)
+ : fAnalysisManager(0), fDetector(det), fPhysics(phys), fKinematic(kin),
+   fTallyEdep(new G4double[MaxTally]), fProjRange(0.), fProjRange2(0.),
+   fEdeptot(0.), fEniel(0.), fNbPrimarySteps(0), fRange(0)
 { 
-  fTallyEdep = new G4double[MaxTally];
-  
   // Book predefined histograms
   BookHisto(); 
 }
@@ -72,7 +72,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   
   // save Rndm status
-  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+  ////G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   CLHEP::HepRandom::showEngineStatus();
      
   //initialize projected range, tallies, Ebeam, and book histograms
@@ -102,8 +102,8 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
 void RunAction::EndOfRunAction(const G4Run* aRun)
 {
-  G4int NbofEvents = aRun->GetNumberOfEvent();
-  if (NbofEvents == 0) return;
+  G4int nbofEvents = aRun->GetNumberOfEvent();
+  if (nbofEvents == 0) return;
 
   //run conditions
   //  
@@ -113,7 +113,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4String particle = fKinematic->GetParticleGun()->GetParticleDefinition()
                       ->GetParticleName();    
   G4double energy = fKinematic->GetParticleGun()->GetParticleEnergy();
-  G4cout << "\n The run consists of " << NbofEvents << " "<< particle << " of "
+  G4cout << "\n The run consists of " << nbofEvents << " "<< particle << " of "
          << G4BestUnit(energy,"Energy") << " through " 
          << G4BestUnit(fDetector->GetAbsorSizeX(),"Length") << " of "
          << material->GetName() << " (density: " 
@@ -128,7 +128,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4double rms = fProjRange2 - fProjRange*fProjRange;        
   if (rms>0.) rms = std::sqrt(rms); else rms = 0.;
 
-  G4double nstep = G4double(fNbPrimarySteps)/G4double(NbofEvents);
+  G4double nstep = G4double(fNbPrimarySteps)/G4double(nbofEvents);
 
   G4cout.precision(6);       
   G4cout << "\n Projected Range= "<< G4BestUnit(fProjRange,"Length")
@@ -138,10 +138,10 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
   //compute energy deposition and niel
   //
-  fEdeptot /= NbofEvents; 
+  fEdeptot /= nbofEvents; 
   G4cout << " Total energy deposit= "<< G4BestUnit(fEdeptot,"Energy")
          << G4endl;
-  fEniel /= NbofEvents; 
+  fEniel /= nbofEvents; 
   G4cout << " niel energy deposit = "<< G4BestUnit(fEniel,"Energy")
          << G4endl;
      
@@ -167,17 +167,15 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
   // normalize histograms
   //
-  if (fAnalysisManager->IsActive() ) {    
-    for (G4int j=1; j<3; j++) {  
-      G4double binWidth = fAnalysisManager->GetH1Width(j);
-      if(binWidth > 0.0) {
-	G4double fac = (mm/MeV)/(NbofEvents * binWidth);
-	fAnalysisManager->ScaleH1(j, fac);
-      }
-    }
-    fAnalysisManager->ScaleH1(3, 1./NbofEvents);
+  for (G4int j=1; j<3; j++) {  
+    G4double binWidth = fAnalysisManager->GetH1Width(j);
+    G4double fac = (mm/MeV)/(nbofEvents * binWidth);
+    fAnalysisManager->ScaleH1(j, fac);
+  }
+  fAnalysisManager->ScaleH1(3, 1./nbofEvents);
  
-    // save histograms
+  // save histograms
+  if (fAnalysisManager->IsActive() ) {        
     fAnalysisManager->Write();
     fAnalysisManager->CloseFile();
   }
@@ -212,14 +210,14 @@ void RunAction::BookHisto()
   // Default values (to be reset via /analysis/h1/set command)               
   G4int nbins = 100;
   G4double vmin = 0.;
-  G4double vmax = 0.;
+  G4double vmax = 100.;
 
   // Create all histograms as inactivated 
   // as we have not yet set nbins, vmin, vmax
   for (G4int k=0; k<kMaxHisto; k++) {
     G4int ih = fAnalysisManager->CreateH1(id[k], title[k], nbins, vmin, vmax);
     G4bool activ = false;
-    if (1 == k) activ = true;
+    if (k == 1) activ = true;
     fAnalysisManager->SetActivation(G4VAnalysisManager::kH1, ih, activ);
   }
 }

@@ -58,7 +58,8 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   if (edep <= 0.) return;
   
   G4double niel = step->GetNonIonizingEnergyDeposit();
-
+  fRunAction->FillEdep(edep, niel);
+  
   if (step->GetTrack()->GetTrackID() == 1) {
     fRunAction->AddPrimaryStep();
     /*
@@ -77,7 +78,9 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   G4double x1 = prePoint->GetPosition().x();
   G4double x2 = postPoint->GetPosition().x();  
   G4double x  = x1 + G4UniformRand()*(x2-x1) + 0.5*(fDetector->GetAbsorSizeX());
-  fRunAction->FillEdep(edep, niel, x);
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->FillH1(1, x, edep);
+  analysisManager->FillH1(2, x, edep);    
 
   //fill tallies
   //

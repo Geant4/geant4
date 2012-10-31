@@ -14,16 +14,20 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+18-10-12 mma (testem7-V09-05-08)
+- coding conventions: virtual and initialisation lists
+- back: fill histo in SteppingAction and TrackingAction
 
 12-10-12 V.Ivant (testem7-V09-05-07)
-- Migration to the updated analysis tool and inplicit units
+- Migration to the updated analysis tool and implicit units
 - RunAction - added functionality from HistoManager, which not
     needed anymore and deleted, added protection against division
     by zero
 - SteppinAction and RunAction - moved histogram filling into
     RunAction
 - PhysicsList - added Opt4 builder
-     
+    
 07-10-12 mma (testem7-V09-05-06)
 - HistoManager : use G4AnalysisManager
 

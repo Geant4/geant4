@@ -184,7 +184,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option3();    
-
+    
   } else if (name == "emstandard_opt4") {
 
     fEmName = name;
