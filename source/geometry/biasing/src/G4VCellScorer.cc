@@ -39,13 +39,19 @@
 
 G4VCellScorer::G4VCellScorer()
 {
-  G4cout << "--------------------------------------------------------" << G4endl
+  static G4bool warn=true;
+  if (warn)
+  {
+    G4cout
+         << "--------------------------------------------------------" << G4endl
          << "WARNING: Class  <G4VCellScorer>  is  now obsolete.  It |" << G4endl
          << "         will be removed starting from the next Geant4 |" << G4endl
          << "         major release.  Please, consider switching to |" << G4endl
          << "         general purpose scoring functionality.        |" << G4endl
          << "--------------------------------------------------------"
          << G4endl;
+    warn = false;
+  }
 }
 
 G4VCellScorer::~G4VCellScorer()
