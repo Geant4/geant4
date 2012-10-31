@@ -57,7 +57,7 @@
 #include "G4EmStandardPhysics.hh"
 #include "G4EmExtraPhysics.hh"
 #include "IonUrQMDPhysics.hh"
-#include "G4QStoppingPhysics.hh"
+#include "G4StoppingPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 
@@ -90,7 +90,7 @@ template<class T> TUrQMD<T>::TUrQMD(G4int ver):  T()
   this->RegisterPhysics(  new HadronPhysicsUrQMD(ver));
 
   // Stopping Physics
-  this->RegisterPhysics( new G4QStoppingPhysics(ver) );
+  this->RegisterPhysics( new G4StoppingPhysics(ver) );
 
   // Ion Physics
   this->RegisterPhysics( new IonUrQMDPhysics(ver));
