@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+October 11th, 2012 A. Dotti (exampleP01-V09-05-07)
+- Adding protection in case GCCXML is not found: disabling
+  example in CMake
 
 September 25th, 2012 I. Hrivnacova (exPersistency-V09-05-01)
 - Taking into account renaming the dictionary also in macros, code
