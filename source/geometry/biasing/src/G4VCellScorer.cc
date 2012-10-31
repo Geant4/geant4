@@ -35,9 +35,18 @@
 // ----------------------------------------------------------------------
 
 #include "G4VCellScorer.hh"
+#include "G4ios.hh"
 
 G4VCellScorer::G4VCellScorer()
-{}
+{
+  G4cout << "--------------------------------------------------------" << G4endl
+         << "WARNING: Class  <G4VCellScorer>  is  now obsolete.  It |" << G4endl
+         << "         will be removed starting from the next Geant4 |" << G4endl
+         << "         major release.  Please, consider switching to |" << G4endl
+         << "         general purpose scoring functionality.        |" << G4endl
+         << "--------------------------------------------------------"
+         << G4endl;
+}
 
 G4VCellScorer::~G4VCellScorer()
 {}
