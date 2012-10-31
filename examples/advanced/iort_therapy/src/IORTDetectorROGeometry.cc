@@ -40,6 +40,7 @@
 
 #include "IORTDetectorROGeometry.hh"
 #include "IORTDummySD.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"

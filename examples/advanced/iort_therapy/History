@@ -7,6 +7,8 @@ carlo.casarino@polooncologicocefalu.it
              History file of the IORT application
          ====================================================
 
+12.10.2012 - G.Cosmo;     Tag: iort_therapy-V09-05-03
+                Explicit inclusion of units and constants headers.
 13.06.2012 - G.Cosmo;     Tag: iort_therapy-V09-05-02
                 Use std::string::size_type for string length instead of int
                 in IORTMatrix::ion. Fixes compilation warning on gcc-4.7.

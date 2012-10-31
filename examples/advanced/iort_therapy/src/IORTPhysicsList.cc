@@ -63,6 +63,7 @@
 //    2. the QGSP_BIC_EMY Reference Physics Lists (define the PHYSLIST eviroment variable):
 //       export PHYSLIST=QGSP_BIC_EMY
  
+#include "G4SystemOfUnits.hh"
 #include "G4RunManager.hh" 
 #include "G4Region.hh"     
 #include "G4RegionStore.hh"   
