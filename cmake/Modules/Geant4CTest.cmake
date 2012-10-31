@@ -17,8 +17,6 @@ if(GEANT4_ENABLE_TESTING)
     set(GEANT4_DATA_DIR ${CMAKE_BINARY_DIR}/data CACHE PATH "Directory where the Geant4 data is located")
   elseif(NOT "$ENV{GEANT4_DATA_DIR}" STREQUAL "")
     set(GEANT4_DATA_DIR  "$ENV{GEANT4_DATA_DIR}" CACHE PATH "Directory where the Geant4 data is located" FORCE)
-  else()
-    set(GEANT4_DATA_DIR "" CACHE PATH "Directory where the Geant4 data is located" FORCE)
   endif()
   
   if(NOT GEANT4_DATA_DIR)

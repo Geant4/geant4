@@ -29,6 +29,8 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+25th October 2012 - Pere Mato (cmake-V09-05-55)
+- Templates/Geant4CTest.cmake: corrected mistake with GEANT4_DATA_DIR
 
 19th October 2012 - Ben Morgan (cmake-V09-05-54)
 - Templates/Geant4Config.cmake.in : Add g3tog4 component to detect
