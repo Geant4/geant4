@@ -190,7 +190,7 @@ void G4UnitDefinition::PrintDefinition()
 void G4UnitDefinition::BuildUnitsTable()
 {
  //Length
- new G4UnitDefinition(    "parsec","pc"      ,"Length",parsec); 
+ new G4UnitDefinition(    "parsec","parsec"  ,"Length",parsec); 
  new G4UnitDefinition( "kilometer","km"      ,"Length",kilometer);
  new G4UnitDefinition(     "meter","m"       ,"Length",meter);
  new G4UnitDefinition("centimeter","cm"      ,"Length",centimeter); 
