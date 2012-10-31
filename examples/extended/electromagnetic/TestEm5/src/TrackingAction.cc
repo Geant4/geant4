@@ -125,20 +125,18 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 
   if (id>0) {
     G4double theta  = std::acos(direction.x());
-    if(theta > 0.0) {
+    if (theta > 0.0) {
       G4double dteta  = analysisManager->GetH1Width(id);
       G4double unit   = analysisManager->GetH1Unit(id);    
-      if(dteta > 0.0) {
-        G4double weight = (unit*unit)/(twopi*std::sin(theta)*dteta);
-        /*
-          G4cout << "theta, dteta, unit, weight: " 
-          << theta << "  "   
-          << dteta << "  "   
-          << unit << "  "   
-          << weight << G4endl;   
-        */
-        analysisManager->FillH1(id,theta,weight);
-      }
+      G4double weight = (unit*unit)/(twopi*std::sin(theta)*dteta);
+      /*
+      G4cout << "theta, dteta, unit, weight: " 
+             << theta << "  "   
+             << dteta << "  "   
+             << unit << "  "   
+             << weight << G4endl;   
+      */
+      analysisManager->FillH1(id,theta,weight);
     }
   }
   
@@ -152,14 +150,12 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 
   if (id>0) {
     G4double theta  = std::acos(direction.x());
-    if(theta>0.0) {
+    if (theta > 0.0) {
       G4double dteta  = analysisManager->GetH1Width(id);
       G4double unit   = analysisManager->GetH1Unit(id);    
-      if(dteta > 0.0) {
-        G4double weight = (unit*unit)/(twopi*std::sin(theta)*dteta);
-        weight *= (aTrack->GetKineticEnergy()/MeV); 
-        analysisManager->FillH1(id,theta,weight);
-      }   
+      G4double weight = (unit*unit)/(twopi*std::sin(theta)*dteta);
+      weight *= (aTrack->GetKineticEnergy()/MeV); 
+      analysisManager->FillH1(id,theta,weight);
     } 
   }
   
@@ -171,8 +167,8 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   else if (reflect  && charged) id = 33;
   else if (reflect  && neutral) id = 43;
 
-  if(id>0) {
-    if(direction.x() != 0.0) {
+  if (id>0) {
+    if (direction.x() != 0.0) {
       G4double tet = std::atan(direction.y()/std::fabs(direction.x()));
       analysisManager->FillH1(id,tet);
       if (transmit && (flag == 2)) fRunAction->AddMscProjTheta(tet);

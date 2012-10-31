@@ -91,7 +91,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   } 
 
   // save Rndm status
-  //  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+  ////  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   CLHEP::HepRandom::showEngineStatus();
 }
 
@@ -281,25 +281,23 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   //
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   
-  if ( analysisManager->IsActive() ) {
-    G4int ih = 1;
-    G4double binWidth = analysisManager->GetH1Width(ih);
-    G4double unit     = analysisManager->GetH1Unit(ih);  
-    if(binWidth > 0.0) {
-      G4double fac = unit/(TotNbofEvents*binWidth);
-      analysisManager->ScaleH1(ih,fac);
-    }
-    ih = 10;
-    binWidth = analysisManager->GetH1Width(ih);
-    unit     = analysisManager->GetH1Unit(ih);  
-    if(binWidth > 0.0) {
-      G4double fac = unit/(TotNbofEvents*binWidth);
-      analysisManager->ScaleH1(ih,fac);
-    }
-    ih = 12;
-    analysisManager->ScaleH1(ih,1./TotNbofEvents);
+  G4int ih = 1;
+  G4double binWidth = analysisManager->GetH1Width(ih);
+  G4double unit     = analysisManager->GetH1Unit(ih);  
+  G4double fac = unit/(TotNbofEvents*binWidth);
+  analysisManager->ScaleH1(ih,fac);
+
+  ih = 10;
+  binWidth = analysisManager->GetH1Width(ih);
+  unit     = analysisManager->GetH1Unit(ih);  
+  fac = unit/(TotNbofEvents*binWidth);
+  analysisManager->ScaleH1(ih,fac);
+
+  ih = 12;
+  analysisManager->ScaleH1(ih,1./TotNbofEvents);
       
-    // save histograms
+  // save histograms
+  if ( analysisManager->IsActive() ) {    
     analysisManager->Write();
     analysisManager->CloseFile();
   }  

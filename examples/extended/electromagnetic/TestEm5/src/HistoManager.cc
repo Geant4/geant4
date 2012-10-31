@@ -61,8 +61,7 @@ void HistoManager::Book()
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   analysisManager->SetFileName(fFileName);
   analysisManager->SetVerboseLevel(1);
-  analysisManager->SetActivation(true);
-      // enable inactivation of histograms
+  analysisManager->SetActivation(true);    // enable inactivation of histograms
 
   // Define histograms start values
   const G4int kMaxHisto = 50;
@@ -110,7 +109,7 @@ void HistoManager::Book()
   // Default values (to be reset via /analysis/h1/set command)               
   G4int nbins = 100;
   G4double vmin = 0.;
-  G4double vmax = 0.;
+  G4double vmax = 100.;
 
   // Create all histograms as inactivated 
   // as we have not yet set nbins, vmin, vmax
