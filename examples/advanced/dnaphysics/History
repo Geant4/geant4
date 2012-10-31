@@ -5,6 +5,9 @@
                        Package History file
                        --------------------
 
+11 October 2012 - tag dnaphysics-V09-05-04 - G. Cosmo
+- Explicit inclusion of units and constants headers
+
 09 October 2012- tag dnaphysics-V09-05-03 - S. Incerti  
 - cleaned main
 

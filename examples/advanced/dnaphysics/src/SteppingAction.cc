@@ -35,6 +35,7 @@
 #include "PrimaryGeneratorAction.hh"
 #include "HistoManager.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4SteppingManager.hh"
 #include "G4VTouchable.hh"
 #include "G4VPhysicalVolume.hh"
