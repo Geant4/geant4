@@ -35,7 +35,7 @@
 #include "G4DecayPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "HadronPhysicsQGSP_BERT.hh"
-#include "G4QStoppingPhysics.hh"
+#include "G4StoppingPhysics.hh"
 #include "G4IonPhysics.hh"
 #include "G4SystemOfUnits.hh"    
 
@@ -63,7 +63,7 @@ RE04PhysicsList::RE04PhysicsList(G4String& parWorldName)
   this->RegisterPhysics( new HadronPhysicsQGSP_BERT(ver));
 
   // Stopping Physics
-  this->RegisterPhysics( new G4QStoppingPhysics(ver) );
+  this->RegisterPhysics( new G4StoppingPhysics(ver) );
 
   // Ion Physics
   this->RegisterPhysics( new G4IonPhysics(ver));

@@ -13,7 +13,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Oct. 8, 2012 A.Kimura (exRunAndEvent-V09-05-00)
+Oct. 24, 2012 A.Ribon (exampleRE04-V09-05-01)
+- Migrated to the new stopping physics.
+
+Oct. 8, 2012 A.Kimura (exampleRE04-V09-05-00)
 - revised all codes according to the coding guideline for extended examples
 
 Nov. 11, 2011 G.Folger (exampleRE04-V09-04-03)
