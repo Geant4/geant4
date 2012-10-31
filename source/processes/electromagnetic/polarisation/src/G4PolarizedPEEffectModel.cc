@@ -66,9 +66,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
-G4PolarizedPEEffectModel::G4PolarizedPEEffectModel(const G4ParticleDefinition* pd,
-					 const G4String& nam)
-  : G4PEEffectModel(pd,nam),crossSectionCalculator(0),verboseLevel(0)
+G4PolarizedPEEffectModel::G4PolarizedPEEffectModel(const G4ParticleDefinition*,
+						   const G4String& nam)
+  : G4PEEffectFluoModel(nam),crossSectionCalculator(0),verboseLevel(0)
 {
 }
 
@@ -84,7 +84,7 @@ G4PolarizedPEEffectModel::~G4PolarizedPEEffectModel()
 void G4PolarizedPEEffectModel::Initialise(const G4ParticleDefinition* pd,
 				     const G4DataVector& dv)
 {
-  G4PEEffectModel::Initialise(pd,dv);
+  G4PEEffectFluoModel::Initialise(pd,dv);
   if (!crossSectionCalculator)
     crossSectionCalculator = new G4PolarizedPEEffectCrossSection();
 }
@@ -98,7 +98,7 @@ void G4PolarizedPEEffectModel::SampleSecondaries(std::vector<G4DynamicParticle*>
 						 G4double maxEnergy)
 {
   //  std::vector<G4DynamicParticle*>* vdp = 
-  G4PEEffectModel::SampleSecondaries(vdp,couple, dp, tmin, maxEnergy);
+  G4PEEffectFluoModel::SampleSecondaries(vdp,couple, dp, tmin, maxEnergy);
 
   if(vdp && vdp->size()>0) {
     G4double gamEnergy0 = dp->GetKineticEnergy();

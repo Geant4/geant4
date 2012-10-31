@@ -56,19 +56,19 @@
 #ifndef G4PolarizedPEEffectModel_h
 #define G4PolarizedPEEffectModel_h 1
 
-#include "G4PEEffectModel.hh"
+#include "G4PEEffectFluoModel.hh"
 #include "G4StokesVector.hh"
 
 
 class G4PolarizedPEEffectCrossSection;
 
-class G4PolarizedPEEffectModel : public G4PEEffectModel
+class G4PolarizedPEEffectModel : public G4PEEffectFluoModel
 {
 
 public:
 
   G4PolarizedPEEffectModel(const G4ParticleDefinition* p = 0, 
-			const G4String& nam = "Polarized-PhotoElectric");
+			   const G4String& nam = "Polarized-PhotoElectric");
 
   void Initialise(const G4ParticleDefinition* pd, const G4DataVector& dv);
   virtual ~G4PolarizedPEEffectModel();
