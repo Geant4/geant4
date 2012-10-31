@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ 17-10-12 Ivana Hrivnacova (exhadr03-V09-05-10)
+- Adding missing explicit use of system of units 
  
  12-10-12 Andrea Dotti (exhadr03-V09-05-09)
 - Adding explicit use of system of units

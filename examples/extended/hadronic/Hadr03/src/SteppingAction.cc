@@ -40,7 +40,7 @@
 #include "G4ParticleTypes.hh"
 #include "G4RunManager.hh"
 #include "G4HadronicProcess.hh"
-			    
+			   
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(PrimaryGeneratorAction* prim, RunAction* RuAct)
