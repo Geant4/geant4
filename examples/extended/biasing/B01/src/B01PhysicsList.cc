@@ -50,6 +50,7 @@
 #include "G4ShortLivedConstructor.hh"
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
+#include "G4SystemOfUnits.hh"
 
 B01PhysicsList::B01PhysicsList():  G4VUserPhysicsList()
 {

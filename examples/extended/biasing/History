@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct 13, 2012 A. Dotti - exbiasing-V09-05-03
+- Adding explicit use of system of units
+
 Sep 24, 2012 I.Hrivnacova - exbiasing-V09-05-02
 - New tag for synchronizing with ctest
 
