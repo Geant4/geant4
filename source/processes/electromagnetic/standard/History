@@ -17,11 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14 October 12: V.Ivanchenko (emstand-V09-05-54) 
+- G4XrayRayleighModel - V. Grichine, update of xsc and angular distribution
+- G4eBremParametrizedModel - use G4DipBustGenerator for angular distribution
+- G4ModifiedTsai - removed old obsolete interface
+
 08 October 12: V.Ivanchenko (emstand-V09-05-53)
 - G4KleinNishinaModel - fixed computation of electron energy
 
 05 October 12: V.Ivanchenko (emstand-V09-05-52)
-- G4eBremParametrizedModel - migration to new angular generator interface
 - G4UrbanMscModel95 - added protection into GetTrueStepLength method (true
     legth cannot exceed physics path length 
 - G4UrbanMscModel96 - new version of the model

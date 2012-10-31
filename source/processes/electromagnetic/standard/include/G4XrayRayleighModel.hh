@@ -24,6 +24,8 @@
 // ********************************************************************
 //
 // author: Vladimir Grichine
+//
+// 14.10.12 V. Grichine, fFormFactor was added as the class member
 // 25.05.2011 first implementation
 //
 // X ray Rayleigh scattering model based on simplified form-factors 
@@ -71,6 +73,7 @@ private:
 
   G4double lowEnergyLimit;  
   G4double highEnergyLimit; 
+  G4double fFormFactor; 
 
   G4int verboseLevel;
   G4bool isInitialised;

@@ -101,8 +101,8 @@ G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(const G4ParticleDefinition*
   nist = G4NistManager::Instance();  
 
   SetLPMFlag(true);
-  SetAngularDistribution(new G4ModifiedTsai());
-  //  SetAngularDistribution(new G4DipBustGenerator());
+  //SetAngularDistribution(new G4ModifiedTsai());
+  SetAngularDistribution(new G4DipBustGenerator());
 
   particleMass = kinEnergy = totalEnergy = currentZ = z13 = z23 = lnZ = Fel 
     = Finel = fCoulomb = fMax = densityFactor = densityCorr = lpmEnergy 

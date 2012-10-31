@@ -76,19 +76,13 @@ public:
                                          G4int Z,
                                          const G4Material* mat = 0);
 
-  G4double PolarAngle(const G4double initial_energy,
-		      const G4double final_energy,
-		      const G4int Z);
-
   void PrintGeneratorInformation() const;
-
-protected:
 
 private:
 
   // hide assignment operator 
-     G4ModifiedTsai & operator=(const  G4ModifiedTsai &right);
-     G4ModifiedTsai(const  G4ModifiedTsai&);
+  G4ModifiedTsai & operator=(const  G4ModifiedTsai &right);
+  G4ModifiedTsai(const  G4ModifiedTsai&);
 
 };
 

@@ -101,36 +101,6 @@ G4ModifiedTsai::SampleDirection(const G4DynamicParticle* dp,
   return fLocalDirection;
 }
 
-G4double G4ModifiedTsai::PolarAngle(const G4double initial_energy,
-				    const G4double, // final_energy
-				    const G4int ) // Z
-{
-  // Sample gamma angle (Z - axis along the parent particle).
-  // Universal distribution suggested by L. Urban (Geant3 manual (1993) 
-  // Phys211) derived from Tsai distribution (Rev Mod Phys 49,421(1977))
-
-  G4double gamma = 1. + initial_energy/electron_mass_c2;   
-  G4double uMax  = gamma*pi;
-
-  const G4double a1     = 0.625;
-  const G4double a2     = 1.875;
-  const G4double border = 0.25;
-  G4double u, theta;
-
-  do
-  {
-    u = - std::log(G4UniformRand()*G4UniformRand());
-
-    if ( border > G4UniformRand() ) u /= a1; 
-    else                            u /= a2; 
-    
-  } while( u > uMax );
-
-  theta = u/gamma;
-
-  return theta;
-}
-
 void G4ModifiedTsai::PrintGeneratorInformation() const
 {
   G4cout << "\n" << G4endl;
