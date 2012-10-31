@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm6/src/RunAction.cc
+/// \brief Implementation of the RunAction class
+//
 // $Id: RunAction.cc,v 1.15 2010-11-09 21:30:47 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
@@ -113,12 +116,12 @@ void RunAction::EndOfRunAction(const G4Run*)
   G4double countTot = 0.;
   G4cout << "\n Number of process calls --->";
   for (size_t i=0; i< fProcCounter->size();i++) {
-	G4String procName = (*fProcCounter)[i]->GetName();
-	if (procName != "Transportation") {
-	  G4int count    = (*fProcCounter)[i]->GetCounter(); 
-	  G4cout << "\t" << procName << " : " << count;
-	  countTot += count;
-	}
+        G4String procName = (*fProcCounter)[i]->GetName();
+        if (procName != "Transportation") {
+          G4int count    = (*fProcCounter)[i]->GetCounter(); 
+          G4cout << "\t" << procName << " : " << count;
+          countTot += count;
+        }
   }
   G4cout << G4endl;
   

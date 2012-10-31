@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm6/include/PhysicsList.hh
+/// \brief Definition of the PhysicsList class
+//
 // $Id: PhysicsList.hh,v 1.8 2009-11-27 14:54:58 hbu Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -49,7 +52,7 @@ class PhysicsList: public G4VUserPhysicsList
    ~PhysicsList();
 
     // Construct particles
-    void ConstructParticle();
+    virtual void ConstructParticle();
     void ConstructBosons();
     void ConstructLeptons();
     void ConstructHadrons();
@@ -57,7 +60,7 @@ class PhysicsList: public G4VUserPhysicsList
     void SetCuts();
 
     // Construct processes and register them
-    void ConstructProcess();
+    virtual void ConstructProcess();
     void ConstructGeneral();
     void ConstructEM();
 

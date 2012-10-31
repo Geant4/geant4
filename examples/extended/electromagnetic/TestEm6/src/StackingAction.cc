@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm6/src/StackingAction.cc
+/// \brief Implementation of the StackingAction class
+//
 // $Id: StackingAction.cc,v 1.1 2009-11-27 14:54:58 hbu Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 

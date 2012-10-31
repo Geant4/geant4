@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm6/include/StackingAction.hh
+/// \brief Definition of the StackingAction class
+//
 // $Id: StackingAction.hh,v 1.1 2009-11-27 14:54:58 hbu Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
@@ -46,7 +49,7 @@ class StackingAction : public G4UserStackingAction
     StackingAction();
    ~StackingAction();
 
-    G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* );
+    virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* );
     
 };
 

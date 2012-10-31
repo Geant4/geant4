@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm6/src/DetectorConstruction.cc
+/// \brief Implementation of the DetectorConstruction class
+//
 // $Id: DetectorConstruction.cc,v 1.10 2006-06-29 16:57:00 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -45,6 +48,7 @@
 #include "G4SolidStore.hh"
 
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -96,22 +100,22 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   G4SolidStore::GetInstance()->Clean();
   
   G4Box*
-  sBox = new G4Box("Container",				//its name
-                   fBoxSize/2,fBoxSize/2,fBoxSize/2);	//its dimensions
-		   			                      
-  fL_Box = new G4LogicalVolume(sBox,			//its shape
-                             fMaterial,			//its material
-                             fMaterial->GetName());	//its name
-			     
-  fL_Box->SetUserLimits(fUserLimits);			     
+  sBox = new G4Box("Container",                                //its name
+                   fBoxSize/2,fBoxSize/2,fBoxSize/2);        //its dimensions
+                                                                 
+  fL_Box = new G4LogicalVolume(sBox,                        //its shape
+                             fMaterial,                        //its material
+                             fMaterial->GetName());        //its name
+                             
+  fL_Box->SetUserLimits(fUserLimits);                             
                                    
-  fP_Box = new G4PVPlacement(0,				//no rotation
-  			   G4ThreeVector(),		//at (0,0,0)
-                           fL_Box,			//its logical volume
-			   fMaterial->GetName(),	//its name
-                           0,	       		        //its mother  volume
-                           false,			//no boolean operation
-                           0);				//copy number
+  fP_Box = new G4PVPlacement(0,                                //no rotation
+                             G4ThreeVector(),                //at (0,0,0)
+                           fL_Box,                        //its logical volume
+                           fMaterial->GetName(),        //its name
+                           0,                                       //its mother  volume
+                           false,                        //no boolean operation
+                           0);                                //copy number
                            
   PrintParameters();
     
@@ -156,9 +160,9 @@ void DetectorConstruction::SetMagField(G4double fieldValue)
   G4FieldManager* fieldMgr 
    = G4TransportationManager::GetTransportationManager()->GetFieldManager();
     
-  if (fMagField) delete fMagField;	//delete the existing magn field
+  if (fMagField) delete fMagField;        //delete the existing magn field
   
-  if (fieldValue!=0.)			// create a new one if non nul
+  if (fieldValue!=0.)                        // create a new one if non nul
     {
       fMagField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));        
       fieldMgr->SetDetectorField(fMagField);

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm6/TestEm6.cc
+/// \brief Main program of the electromagnetic/TestEm6 example
+//
 // $Id: TestEm6.cc,v 1.17 2010-05-21 08:56:45 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
