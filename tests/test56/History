@@ -15,8 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+11-10-12  G.Cosmo (test56-V09-05-01)
+- Explicit inclusion of units and constants headers.
+
 11-05-12  G.Folger     (test56-V09-05-00)
-- Fix compiltion warnings on unused variables
+- Fix compiltion warnings on unused variables.
 
 21-03-11  V.Ivanchenko (test56-V09-04-00)
-- First version
+- First version.
