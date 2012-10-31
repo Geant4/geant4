@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+19-10-12 mma (testem7-V09-05-09)
+- PhysListEmStandard: use G4UrbanMsc96
+      
 18-10-12 mma (testem7-V09-05-08)
 - coding conventions: virtual and initialisation lists
 - back: fill histo in SteppingAction and TrackingAction
