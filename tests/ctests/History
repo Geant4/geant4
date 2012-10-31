@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ctests-V09-05-26 24th October 2012 Pere Mato
+- Moved GNUMakeTestfile.cmake from the CDash scripts to this package
+  to ensure consistency of test definitions with G4 released versions.
+
 ctests-V09-05-25 19th October 2012 Ivana Hrivnacova
 - Fix in example-ext-medical-dicom: added ENVIRONMENT
 
