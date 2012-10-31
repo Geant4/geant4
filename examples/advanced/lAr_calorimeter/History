@@ -8,6 +8,10 @@ $Id: History,v 1.21 2010-11-16 17:54:39 allison Exp $
 
                       Category History file
                       ---------------------
+11.10.2012   Andrea Dotti (lAr_calorimeter-V09-05-00)
+	     Use of PhyListFactory instead of explicit instantiaion of 
+	     physics lists.
+	     Adding CMakeList.txt file
 
 17.01.2011   G.A.P.Cirrone (lAr_calorimeter-V09-04-00)
 	     Fixed compilation errors and physics models updated
