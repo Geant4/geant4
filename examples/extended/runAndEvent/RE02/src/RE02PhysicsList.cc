@@ -37,6 +37,7 @@
 #include "RE02PhysicsList.hh"
 
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"
