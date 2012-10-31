@@ -40,6 +40,8 @@
 #include "XrayFluoDetectorConstruction.hh"
 #include "XrayFluoDetectorMessenger.hh"
 #include "XrayFluoSD.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Material.hh"
 #include "G4ThreeVector.hh"
 #include "G4Box.hh"

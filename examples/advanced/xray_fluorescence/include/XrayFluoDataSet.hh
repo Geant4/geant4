@@ -40,6 +40,8 @@
 #ifndef FluoDataSet_hh
 #define FluoDataSet_hh 1
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
 #include "G4DataVector.hh"
 #include "G4VEMDataSet.hh"
@@ -54,12 +56,12 @@ public:
 		  G4DataVector* points, 
 	      G4DataVector* values,
 	      const G4VDataSetAlgorithm* interpolation,
-	      G4double unitE = MeV, G4double unitData = barn);
+	      G4double unitE = CLHEP::MeV, G4double unitData = CLHEP::barn);
   
   XrayFluoDataSet(G4int Z,
 		  const G4String& dataFile,
 	      const G4VDataSetAlgorithm* interpolation,
-	      G4double unitE = MeV, G4double unitData = barn);
+	      G4double unitE = CLHEP::MeV, G4double unitData = CLHEP::barn);
 
   ~XrayFluoDataSet();
  
@@ -121,6 +123,4 @@ private:
 
 };
 
-
- 
 #endif

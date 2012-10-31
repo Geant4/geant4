@@ -39,25 +39,23 @@
 #ifndef XrayFluoPlaneDetectorConstruction_hh
 #define XrayFluoPlaneDetectorConstruction_hh 1
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
+#include "globals.hh"
+#include "G4RotationMatrix.hh"
+#include "G4VUserDetectorConstruction.hh"
+
 #include "XrayFluoSiLiDetectorType.hh"
 #include "XrayFluoHPGeDetectorType.hh"
 #include "XrayFluoSD.hh"
-#include "G4VUserDetectorConstruction.hh"
-#include "globals.hh"
-#include "G4RotationMatrix.hh"
-
 
 class G4Box;
-//class G4Tubs;
 class G4Sphere;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
 class XrayFluoPlaneDetectorMessenger;
 class XrayFluoNistMaterials;
-
-//class XrayFluoSD;
-//class XrayFluoVDetectorType;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -284,25 +282,19 @@ inline void XrayFluoPlaneDetectorConstruction::ComputeApparateParameters()
   
   DeviceThickness = PixelThickness+OhmicNegThickness+OhmicPosThickness;
 
-  G4cout << "DeviceThickness(cm): "<< DeviceThickness/cm << G4endl;
+  G4cout << "DeviceThickness(cm): "<< DeviceThickness/CLHEP::cm << G4endl;
 
   DeviceSizeY =(NbOfPixelRows * std::max(ContactSizeXY,PixelSizeXY));
   DeviceSizeX =(NbOfPixelColumns * std::max(ContactSizeXY,PixelSizeXY));
 
   screenSizeXY = 2 * DeviceThickness + std::max(DeviceSizeY,DeviceSizeX);
 
-  G4cout << "DeviceSizeX(cm): "<< DeviceSizeX/cm <<G4endl;
-  G4cout << "DeviceSizeY(cm): "<< DeviceSizeY/cm << G4endl;
+  G4cout << "DeviceSizeX(cm): "<< DeviceSizeX/CLHEP::cm <<G4endl;
+  G4cout << "DeviceSizeY(cm): "<< DeviceSizeY/CLHEP::cm << G4endl;
 
-  WorldSizeZ = (2 * (DistDe  + DeviceThickness + screenThickness)) + 5*m; 
-  WorldSizeXY = (2 * (planeSizeXY))+ 5*m;
+  WorldSizeZ = (2 * (DistDe  + DeviceThickness + screenThickness)) + 5*CLHEP::m; 
+  WorldSizeXY = (2 * (planeSizeXY))+ 5*CLHEP::m;
   
 }
 
 #endif
-
-
-
-
-
-

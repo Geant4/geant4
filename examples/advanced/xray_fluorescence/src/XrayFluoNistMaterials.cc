@@ -36,6 +36,8 @@
 // -------------------------------------------------------------------
 
 #include "XrayFluoNistMaterials.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 XrayFluoNistMaterials::XrayFluoNistMaterials()
 { CreateMaterials();}

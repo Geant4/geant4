@@ -35,16 +35,17 @@
 //
 // -------------------------------------------------------------------
 
+#include <fstream>
+#include <sstream>
+
 #include "XrayFluoSiLiDetectorType.hh"
 #include "XrayFluoDataSet.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 #include "G4DataVector.hh"
 #include "G4LogLogInterpolation.hh"
 #include "G4ios.hh"
-#include <fstream>
-#include <sstream>
-#include "G4UnitsTable.hh"
 #include "Randomize.hh"
-
 
 XrayFluoSiLiDetectorType::XrayFluoSiLiDetectorType():
   detectorMaterial("SiLi"),efficiencySet(0)

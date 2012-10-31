@@ -37,6 +37,9 @@
 #include "XrayFluoPlaneDetectorConstruction.hh"
 #include "XrayFluoPlaneDetectorMessenger.hh"
 #include "XrayFluoSD.hh"
+#include "XrayFluoNistMaterials.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Material.hh"
 #include "G4ThreeVector.hh"
 #include "G4Box.hh"
@@ -51,8 +54,6 @@
 #include "G4ios.hh"
 #include "G4PVReplica.hh"
 #include "G4UserLimits.hh"
-#include "XrayFluoNistMaterials.hh"
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

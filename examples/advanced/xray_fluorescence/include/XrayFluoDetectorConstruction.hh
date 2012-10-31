@@ -41,14 +41,16 @@
 #ifndef XrayFluoDetectorConstruction_hh
 #define XrayFluoDetectorConstruction_hh 1
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
+#include "globals.hh"
+#include "G4RotationMatrix.hh"
+#include "G4VUserDetectorConstruction.hh"
+#include "G4Navigator.hh"
+
 #include "XrayFluoSiLiDetectorType.hh"
 #include "XrayFluoHPGeDetectorType.hh"
 #include "XrayFluoSD.hh"
-#include "G4VUserDetectorConstruction.hh"
-#include "globals.hh"
-#include "G4RotationMatrix.hh"
-#include "G4Navigator.hh"
-
 #include "XrayFluoGeometry.hh"
 
 class G4Box;
@@ -324,32 +326,26 @@ inline void XrayFluoDetectorConstruction::ComputeApparateParameters()
   
   if (phaseSpaceFlag) {    
 
-    WorldSizeZ = 10 *m; 
-    WorldSizeXY = 10 *m;
+    WorldSizeZ = 10 *CLHEP::m; 
+    WorldSizeXY = 10 *CLHEP::m;
 
   }
   else {
     
     DeviceThickness = PixelThickness+OhmicNegThickness+OhmicPosThickness+windowThickness;//change!
     
-    G4cout << "DeviceThickness(cm): "<< DeviceThickness/cm << G4endl;
+    G4cout << "DeviceThickness(cm): "<< DeviceThickness/CLHEP::cm << G4endl;
     
     DeviceSizeY =(NbOfPixelRows * std::max(ContactSizeXY,PixelSizeXY));
     DeviceSizeX =(NbOfPixelColumns * std::max(ContactSizeXY,PixelSizeXY));
     
-    G4cout << "DeviceSizeX(cm): "<< DeviceSizeX/cm <<G4endl;
-    G4cout << "DeviceSizeY(cm): "<< DeviceSizeY/cm << G4endl;
+    G4cout << "DeviceSizeX(cm): "<< DeviceSizeX/CLHEP::cm <<G4endl;
+    G4cout << "DeviceSizeY(cm): "<< DeviceSizeY/CLHEP::cm << G4endl;
     
-    WorldSizeZ = (2 * (DistDe  +1.4142 *(std::max(std::max(DeviceThickness,DeviceSizeY), DeviceSizeX))))+5*m; 
-    WorldSizeXY = 2 * (DistDe +1.4142 *Dia1SizeXY)+5*m;
+    WorldSizeZ = (2 * (DistDe +1.4142 *(std::max(std::max(DeviceThickness,DeviceSizeY), DeviceSizeX))))+5*CLHEP::m; 
+    WorldSizeXY = 2 * (DistDe +1.4142 *Dia1SizeXY)+5*CLHEP::m;
     
   }
 }
 
 #endif
-
-
-
-
-
-

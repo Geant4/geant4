@@ -36,9 +36,10 @@
 // -------------------------------------------------------------------
 
 #include "XrayFluoNormalization.hh"
+#include "XrayFluoDataSet.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4VDataSetAlgorithm.hh"
 #include "G4LogLogInterpolation.hh"
-#include "XrayFluoDataSet.hh"
 
 XrayFluoNormalization::XrayFluoNormalization()
 
