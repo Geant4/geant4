@@ -104,6 +104,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4phys_builders
     HEADERS
+        G4PhysicsConstructorFactory.hh
         CompileTimeConstraints.hh
         G4AntiBarionBuilder.hh
         G4BertiniAndFritiofStoppingPhysics.hh

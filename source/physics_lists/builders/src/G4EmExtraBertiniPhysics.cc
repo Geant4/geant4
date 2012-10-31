@@ -53,6 +53,12 @@
 #include "G4ProcessManager.hh"
 #include "G4BuilderType.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4EmExtraBertiniPhysics);
+
+
 G4EmExtraBertiniPhysics::G4EmExtraBertiniPhysics(G4int ver): 
   G4VPhysicsConstructor("G4GammaLeptoNuclearPhys"), wasBuilt(false), gnActivated(false), 
   munActivated(false), synActivated(false), synchOn(false), gammNucOn(true), muNucOn(false), 

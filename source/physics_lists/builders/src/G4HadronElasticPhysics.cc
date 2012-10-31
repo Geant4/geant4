@@ -76,6 +76,12 @@
 #include "G4ComponentAntiNuclNuclearXS.hh"  
 #include "G4CrossSectionElastic.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronElasticPhysics);
+//
+
 G4HadronElasticPhysics::G4HadronElasticPhysics(G4int ver)
   : G4VPhysicsConstructor("hElasticWEL_CHIPS"), verbose(ver), 
     wasActivated(false)

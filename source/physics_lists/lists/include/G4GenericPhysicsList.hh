@@ -23,81 +23,55 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronTrackingCut.cc,v 1.6 2010-06-04 15:28:35 gunter Exp $
+// $Id: G4GenericPhysicsList.hh,v 1.1 2007-10-19 15:35:08 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4NeutronTrackingCut
+// ClassName:   
 //
-// Author: Nov 2006 G.Folger
+// Author: Witek Pokorski
 //
+// Modified:
 //
 //----------------------------------------------------------------------------
 //
+#ifndef TG4GenericPhysicsList_h
+#define TG4GenericPhysicsList_h 1
 
-#include "G4NeutronTrackingCut.hh"
+#include "G4VModularPhysicsList.hh"
+#include "globals.hh"
+#include "CompileTimeConstraints.hh"
 
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ProcessManager.hh"
+#include "G4PhysicsConstructorRegistry.hh"
 
-#include "G4Neutron.hh"
-#include "G4NeutronKiller.hh"
+#include "G4GenericMessenger.hh"
 
-// factory
-#include "G4PhysicsConstructorFactory.hh"
-//
-G4_DECLARE_PHYSCONSTR_FACTORY(G4NeutronTrackingCut);
-//
-
-G4NeutronTrackingCut::G4NeutronTrackingCut(G4int ver)
-  :  G4VPhysicsConstructor("neutronTrackingCut")
-   , verbose(ver), wasActivated(false)
+template<class T>
+class TG4GenericPhysicsList: public T
 {
-  timeLimit          = 10.*microsecond;
-  kineticEnergyLimit = 0.0;
-  pNeutronKiller     = 0;
-}
+public:
+  TG4GenericPhysicsList(G4int ver = 1);
+  TG4GenericPhysicsList(std::vector<G4String>* physConstr, G4int ver = 1);
+  virtual ~TG4GenericPhysicsList();
+  
+public:
+  // SetCuts() 
+  virtual void SetCuts();
 
-G4NeutronTrackingCut::G4NeutronTrackingCut(const G4String& name, G4int ver)
-  :  G4VPhysicsConstructor(name), verbose(ver), wasActivated(false)
-{
-  timeLimit          = 10.*microsecond;
-  kineticEnergyLimit = 0.0;
-  pNeutronKiller     = 0;
-}
+private:
+  enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };
 
-G4NeutronTrackingCut::~G4NeutronTrackingCut()
-{
-  delete pNeutronKiller;
-}
+  void RegisterPhysicsConstructor(G4String& physconstr) {this->RegisterPhysics(G4PhysicsConstructorRegistry::Instance()->GetPhysicsConstructor(physconstr));}
 
-void G4NeutronTrackingCut::ConstructParticle()
-{
-  G4Neutron::NeutronDefinition();
-}
+  G4GenericMessenger messenger;
+  void DeclareProperties();
 
-void G4NeutronTrackingCut::ConstructProcess()
-{
-  if(wasActivated) return;
-  wasActivated = true;
+};
+#include "G4GenericPhysicsList.icc"
+typedef TG4GenericPhysicsList<G4VModularPhysicsList> G4GenericPhysicsList;
 
-  // Add Process
+#endif
 
-  pNeutronKiller = new G4NeutronKiller();
-  G4ParticleDefinition * particle = G4Neutron::Neutron();
-  G4ProcessManager * pmanager = particle->GetProcessManager();
-
-  if(verbose > 0) {
-    G4cout << "### Adding tracking cuts for " << particle->GetParticleName() 
-	   << "  TimeCut(ns)= " << timeLimit/ns 
-	   << "  KinEnergyCut(MeV)= " <<  kineticEnergyLimit/MeV
-	   <<  G4endl;
-  }
-  pmanager -> AddDiscreteProcess(pNeutronKiller);
-  pNeutronKiller->SetKinEnergyLimit(kineticEnergyLimit);
-  pNeutronKiller->SetTimeLimit(timeLimit);
-}
 
 

@@ -15,6 +15,17 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12-10-2012, W.Pokorski			(phys-lists-V09-05-53)
+- fixing the static builds and a bug introduced in the previous tag
+
+12-10-2012, W.Pokorski			(phys-lists-V09-05-52)
+- moving the templated factory class to builders directory to fix the
+dependencies problem
+
+11-10-2012, W.Pokorski			(phys-lists-V09-05-51)
+- adding the factory machinery, adding the registry, implementing the
+generic physics list, modifying FTFP_BERT to use the registry
+
 04-10-2012, M. Kelsey			(phys-lists-V09-05-50)
 - After discussion with J.Yarba and K.Genser, undo migration of
   G4MuonMinusCapture from V09-05-46: leave new version in

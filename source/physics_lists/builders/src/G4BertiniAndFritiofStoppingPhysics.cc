@@ -52,6 +52,11 @@
 #include "G4MuonMinus.hh"
 #include "G4PionMinus.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4BertiniAndFritiofStoppingPhysics);
+//
 
 G4BertiniAndFritiofStoppingPhysics::
 G4BertiniAndFritiofStoppingPhysics( G4int ver ) :  

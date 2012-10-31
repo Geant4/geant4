@@ -53,6 +53,10 @@
 #include "G4IonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4DecayPhysics);
 
 G4DecayPhysics::G4DecayPhysics(G4int ver)
   :  G4VPhysicsConstructor("Decay"), verbose(ver), wasActivated(false)
