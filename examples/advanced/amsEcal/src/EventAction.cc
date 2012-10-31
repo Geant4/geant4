@@ -36,6 +36,7 @@
 #include "EventActionMessenger.hh"
 #include "HistoManager.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4Event.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
