@@ -419,7 +419,7 @@ void G4StackManager::TransferOneStackedTrack(G4ClassificationOfNewTrack origin, 
   }
   else
   {
-    G4TrackStack* targetStack;
+    G4TrackStack* targetStack = 0;
     switch(destination)
     {
       case fUrgent:

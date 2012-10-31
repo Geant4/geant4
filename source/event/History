@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 11th, 2012, P.Mato (event-V09-05-11)
+- Fixed warning of a possible use of uninitialized variable
+
 October 10th, 2012, P.Mato (event-V09-05-10)
 - Fixed problem with new implementation of G4StackManager::TransferOneStackedTrack
 
