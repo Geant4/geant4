@@ -37,6 +37,7 @@
 #include "EventAction.hh"
 #include "HistoManager.hh"
 
+#include "G4PhysicalConstants.hh"
 #include "G4Track.hh"
 #include "G4Positron.hh"
 

@@ -32,6 +32,12 @@
 #include "DetectorConstruction.hh"
 #include "DetectorMessenger.hh"
 
+#include <iomanip>
+
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
+#include "G4UImanager.hh"
 #include "G4NistManager.hh"
 #include "G4Material.hh"
 #include "G4Box.hh"
@@ -44,10 +50,6 @@
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
-
-#include "G4UImanager.hh"
-#include "G4UnitsTable.hh"
-#include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

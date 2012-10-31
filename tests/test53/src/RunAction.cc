@@ -36,6 +36,7 @@
 #include "HistoManager.hh"
 #include "EmAcceptance.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
