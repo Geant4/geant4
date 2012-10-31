@@ -29,7 +29,7 @@
 // Based on the following publications
 //	    - Geant4 physics processes for microdosimetry simulation:
 //	    very low energy electromagnetic models for electrons in Si,
-//	    to be published in TNS
+//	    NIM B, vol. 288, pp. 66 - 73, 2012.
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -49,16 +49,16 @@ G4MuElecElasticModel::G4MuElecElasticModel(const G4ParticleDefinition*,
                                              const G4String& nam)
 :G4VEmModel(nam),isInitialised(false)
 {
-  nistSi = G4NistManager::Instance()->FindOrBuildMaterial("G4_SI");
+  nistSi = G4NistManager::Instance()->FindOrBuildMaterial("G4_Si");
 
   killBelowEnergy = 16.7 * eV; // Minimum e- energy for energy loss by excitation
   lowEnergyLimit = 0 * eV; 
   lowEnergyLimitOfModel = 5 * eV; // The model lower energy is 5 eV
-  highEnergyLimit = 50 * keV;
+  highEnergyLimit = 100. * MeV;
   SetLowEnergyLimit(lowEnergyLimit);
   SetHighEnergyLimit(highEnergyLimit);
 
-  verboseLevel= 2;
+  verboseLevel= 0;
   // Verbosity scale:
   // 0 = nothing 
   // 1 = warning for energy non-conservation 

@@ -29,7 +29,8 @@
 // Based on the following publications
 //	    - Geant4 physics processes for microdosimetry simulation:
 //	    very low energy electromagnetic models for electrons in Si,
-//	    to be published in TNS
+//	    NIM B, vol. 288, pp. 66 - 73, 2012.
+//
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
@@ -69,7 +70,7 @@ void G4MuElecElastic::InitialiseProcess(const G4ParticleDefinition*)
     SetBuildTableFlag(false);
     if(!Model()) SetModel(new G4MuElecElasticModel);
     Model()->SetLowEnergyLimit(5*eV);
-    Model()->SetHighEnergyLimit(50*keV);
+    Model()->SetHighEnergyLimit(100*MeV);
     AddEmModel(1, Model());
   } 
 }

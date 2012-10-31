@@ -30,13 +30,13 @@
 //
 //          - Inelastic cross-sections of low energy electrons in silicon
 //	    for the simulation of heavy ion tracks with theGeant4-DNA toolkit,
-//	    NSS Conf. Record 2010, p80-85
+//	    NSS Conf. Record 2010, pp. 80-85.
 //	    - Geant4 physics processes for microdosimetry simulation:
 //	    very low energy electromagnetic models for electrons in Si,
-//	    to be published in TNS
+//	    NIM B, vol. 288, pp. 66 - 73, 2012.
 //	    - Geant4 physics processes for microdosimetry simulation:
 //	    very low energy electromagnetic models for protons and
-//	    heavy ions in Si, to be published in NIMB
+//	    heavy ions in Si, NIM B, vol. 287, pp. 124 - 129, 2012.
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
@@ -63,7 +63,7 @@ G4MuElecInelasticModel::G4MuElecInelasticModel(const G4ParticleDefinition*,
 {
   nistSi = G4NistManager::Instance()->FindOrBuildMaterial("G4_Si");
 
-  verboseLevel= 3;
+  verboseLevel= 0;
   // Verbosity scale:
   // 0 = nothing 
   // 1 = warning for energy non-conservation 
@@ -131,7 +131,7 @@ void G4MuElecInelasticModel::Initialise(const G4ParticleDefinition* particle,
     tableFile[electron] = fileElectron;
 
     lowEnergyLimit[electron] = 16.7 * eV; 
-    highEnergyLimit[electron] = 50.0 * keV;
+    highEnergyLimit[electron] = 100.0 * MeV;
 
     // Cross section
     
@@ -178,7 +178,7 @@ void G4MuElecInelasticModel::Initialise(const G4ParticleDefinition* particle,
     tableFile[proton] = fileProton;
 
     lowEnergyLimit[proton] = 50. * keV;
-    highEnergyLimit[proton] = 50. * MeV;
+    highEnergyLimit[proton] = 1. * GeV;
 
     // Cross section
     

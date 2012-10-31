@@ -29,7 +29,7 @@
 // Based on the following publications
 //	    - Geant4 physics processes for microdosimetry simulation:
 //	    very low energy electromagnetic models for electrons in Si,
-//	    to be published in TNS
+//	    NIM B, vol. 288, pp. 66 - 73, 2012.
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
