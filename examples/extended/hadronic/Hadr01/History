@@ -14,6 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17-10-12  A. Ribon (exhadr01-V09-05-06)
+- Retagged after that the previous tag was rejected.
+
+16-10-12  A. Ribon (exhadr01-V09-05-05)
+- Renamed default stopping and ion physics classes.
+
 13-10-12  A. Dotti (exhadr01-V09-05-04)
 - Adding explicit use of system of units
 

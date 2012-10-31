@@ -39,6 +39,7 @@
 // Modified:
 // 04.06.2006 Adoptation of Hadr01 (V.Ivanchenko)
 // 26.04.2007 Physics according to 8.3 Physics List (V.Ivanchenko)
+// 16.10.2012 Renamed used classes (A.Ribon)
 //
 ////////////////////////////////////////////////////////////////////////
 // 
@@ -62,9 +63,10 @@
 #include "G4NeutronTrackingCut.hh"
 #include "G4NeutronCrossSectionXS.hh"
 #include "G4QStoppingPhysics.hh"
+#include "G4StoppingPhysics.hh"
 #include "G4LHEPStoppingPhysics.hh"
 #include "G4IonBinaryCascadePhysics.hh"
-#include "G4IonFTFPBinaryCascadePhysics.hh"
+#include "G4IonLHEPPhysics.hh"
 #include "G4IonPhysics.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4EmProcessOptions.hh"
@@ -82,8 +84,6 @@
 #include "HadronPhysicsQGSP_BIC_HP.hh"
 #include "HadronPhysicsQGSP_FTFP_BERT.hh"
 #include "HadronPhysicsQGS_BIC.hh"
-
-#include "G4IonPhysics.hh"
 
 #include "G4LossTableManager.hh"
 
@@ -289,7 +289,7 @@ void PhysicsList::SetBuilderList0(G4bool flagHP)
   } else {
     fHadronPhys.push_back( new G4HadronElasticPhysics(verboseLevel) );
   }
-  fHadronPhys.push_back( new G4QStoppingPhysics(verboseLevel));
+  fHadronPhys.push_back( new G4StoppingPhysics(verboseLevel));
   fHadronPhys.push_back( new G4IonBinaryCascadePhysics(verboseLevel));
   fHadronPhys.push_back( new G4NeutronTrackingCut(verboseLevel));
 }
@@ -304,8 +304,8 @@ void PhysicsList::SetBuilderList1(G4bool flagHP)
   } else {
     fHadronPhys.push_back( new G4HadronElasticPhysics(verboseLevel) );
   }
-  fHadronPhys.push_back( new G4QStoppingPhysics(verboseLevel));
-  fHadronPhys.push_back( new G4IonPhysics(verboseLevel));
+  fHadronPhys.push_back( new G4StoppingPhysics(verboseLevel));
+  fHadronPhys.push_back( new G4IonLHEPPhysics(verboseLevel));
   fHadronPhys.push_back( new G4NeutronTrackingCut(verboseLevel));
 }
 
@@ -315,8 +315,8 @@ void PhysicsList::SetBuilderList2(G4bool addStopping)
 {
   fHadronPhys.push_back( new G4EmExtraPhysics(verboseLevel));
   fHadronPhys.push_back( new G4HadronElasticPhysicsLHEP(verboseLevel));
-  if(addStopping) { fHadronPhys.push_back( new G4QStoppingPhysics(verboseLevel)); }
-  fHadronPhys.push_back( new G4IonPhysics(verboseLevel));
+  if(addStopping) { fHadronPhys.push_back( new G4StoppingPhysics(verboseLevel)); }
+  fHadronPhys.push_back( new G4IonLHEPPhysics(verboseLevel));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -325,8 +325,8 @@ void PhysicsList::SetBuilderList3()
 {
   fHadronPhys.push_back( new G4EmExtraPhysics(verboseLevel));
   RegisterPhysics( new G4HadronElasticPhysicsXS(verboseLevel) );
-  fHadronPhys.push_back( new G4QStoppingPhysics(verboseLevel));
-  fHadronPhys.push_back( new G4IonFTFPBinaryCascadePhysics(verboseLevel));
+  fHadronPhys.push_back( new G4StoppingPhysics(verboseLevel));
+  fHadronPhys.push_back( new G4IonPhysics(verboseLevel));
   fHadronPhys.push_back( new G4NeutronTrackingCut(verboseLevel));
 }
 
@@ -336,8 +336,8 @@ void PhysicsList::SetBuilderList4()
 {
   fHadronPhys.push_back( new G4EmExtraPhysics(verboseLevel));
   fHadronPhys.push_back( new G4HadronQElasticPhysics(verboseLevel));
-  fHadronPhys.push_back( new G4QStoppingPhysics(verboseLevel));
-  fHadronPhys.push_back( new G4IonPhysics(verboseLevel));
+  fHadronPhys.push_back( new G4QStoppingPhysics(verboseLevel));  //16-Oct-2012 A.R. Leave CHIPS stopping
+  fHadronPhys.push_back( new G4IonLHEPPhysics(verboseLevel));
   fHadronPhys.push_back( new G4NeutronTrackingCut(verboseLevel));
 }
 
