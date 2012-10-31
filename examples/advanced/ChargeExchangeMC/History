@@ -7,6 +7,8 @@ cirrone@lns.infn.it
              History file of the ChargeExchangeMC application
          ====================================================
 
+18.10.2012, L.Pandola & A.Radkov, Tag: ChargeExchangeMC-V09-05-02
+	    - Add the CMakeLists.txt file (first version, to be checked)
 
 17.10.2012, L.Pandola & A.Radkov, Tag: ChargeExchangeMC-V09-05-01
             - Fix to compile the code against Geant4 9.6
