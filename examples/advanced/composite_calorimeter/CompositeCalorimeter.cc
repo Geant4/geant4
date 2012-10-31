@@ -33,9 +33,7 @@
 #include "CCalRunAction.hh"
 
 #include "CCalPrimaryGeneratorAction.hh"
-#include "LHEP.hh"
-#include "QGSP.hh"
-#include "QGSP_BIC_EMY.hh"
+#include "G4PhysListFactory.hh"
 
 #include "G4RunManager.hh"
 
@@ -58,12 +56,8 @@ int main(int argc,char** argv) {
   G4RunManager * runManager = new G4RunManager;
   runManager->SetUserInitialization(new CCalDetectorConstruction);
 
-  //***LOOKHERE*** CHOOSE THE PHYSICS LIST.
-  // runManager->SetUserInitialization(new LHEP);          // LHEP     
-  // runManager->SetUserInitialization(new QGSP);          // QGSP 
-  // runManager->SetUserInitialization(new QGSC);          // QGSC
-  runManager->SetUserInitialization(new QGSP_BIC_EMY);  // QGSP_BIC_EMY 
-  //***endLOOKHERE***
+  G4PhysListFactory factory;
+  runManager->SetUserInitialization(factory.ReferencePhysList());
 
   ////////////////////////////
   //  User action classes.  //

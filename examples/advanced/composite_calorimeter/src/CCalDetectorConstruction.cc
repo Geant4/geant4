@@ -46,8 +46,9 @@
 #include "CCalSensitiveConfiguration.hh"
 #include "CCalEcalOrganization.hh"
 #include "CCalHcalOrganization.hh"
-#include "G4SDManager.hh"
 
+#include "G4SystemOfUnits.hh"
+#include "G4SDManager.hh"
 #include "G4FieldManager.hh"
 #include "G4ChordFinder.hh"
 #include "G4Mag_UsualEqRhs.hh"
@@ -155,22 +156,22 @@ G4VPhysicalVolume* CCalDetectorConstruction::Construct() {
   G4VPhysicalVolume* volume = testBeamHCal96->PhysicalVolume(0);
 
   //Addsenistive detector types 
-  G4bool result;
+  //G4bool result;
   G4int sensitive;
   sensitive = CCalSensitiveConfiguration::getInstance()->
     getSensitiveFlag("HadronCalorimeter");
-  if (sensitive>0) result = CCalSensAssign::getInstance()->
+  if (sensitive>0) /*result =*/ CCalSensAssign::getInstance()->
 		     addCaloSD("HadronCalorimeter", new CCalHcalOrganization);
   sensitive = CCalSensitiveConfiguration::getInstance()->
     getSensitiveFlag("CrystalMatrixModule");
-  if (sensitive>0) result = CCalSensAssign::getInstance()->
+  if (sensitive>0) /*result =*/ CCalSensAssign::getInstance()->
 		     addCaloSD("CrystalMatrix", new CCalEcalOrganization);
 
   //Assign the sensitive detectors
-  result = CCalSensAssign::getInstance()->assign();
+  /*result =*/ CCalSensAssign::getInstance()->assign();
 
   //Create the stacking manager required by Calorimeter
-  result = CCalSensAssign::getInstance()->stackingAction();
+  /*result =*/ CCalSensAssign::getInstance()->stackingAction();
   
   return volume;
 

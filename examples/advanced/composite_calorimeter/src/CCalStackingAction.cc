@@ -30,6 +30,7 @@
 #include "CCalStackingAction.hh"
 #include "G4StackManager.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4SDManager.hh"
 #include "CCaloSD.hh"
 #include "CCalSDList.hh"

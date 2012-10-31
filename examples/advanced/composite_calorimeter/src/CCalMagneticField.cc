@@ -27,10 +27,12 @@
 // File: CCalMagneticField.cc
 // Description: User Field class implementation.
 ///////////////////////////////////////////////////////////////////////////////
+#include <fstream>
+
 #include "CCalMagneticField.hh"
 #include "CCalutils.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4FieldManager.hh"
-#include <fstream>
 
 //#define ddebug
 //#define debug

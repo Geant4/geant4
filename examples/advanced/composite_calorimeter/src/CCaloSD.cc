@@ -29,6 +29,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "CCaloSD.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4VProcess.hh"
 #include "G4SDManager.hh"
 #include "G4VTouchable.hh"

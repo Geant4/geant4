@@ -28,15 +28,18 @@
 // Description: CCalPrimaryGeneratorAction Sets up particle beam
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <CLHEP/Random/RandFlat.h>
+
 #include "CCalPrimaryGeneratorAction.hh"
 #include "CCalPrimaryGeneratorMessenger.hh"
 #include "G4HEPEvtInterface.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
-#include "CLHEP/Random/RandFlat.h"
 #include "G4HEPEvtInterface.hh"
 #include "G4RunManager.hh"
 
