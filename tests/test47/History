@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 11, 2012 - Gabriele Cosmo (test47-V09-05-01)
+- Explicit inclusion of units and constants headers.
+
 September 30, 2010 - Alberto Ribon (test47-V09-05-00)
 - Migrated to the new cross sections and new INCL++.
 

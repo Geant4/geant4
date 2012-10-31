@@ -25,6 +25,8 @@
 //
 #include "globals.hh"
 #include "G4ios.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "HistoITEPTest47.hh"
 #include "G4VParticleChange.hh"

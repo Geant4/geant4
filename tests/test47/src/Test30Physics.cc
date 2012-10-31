@@ -39,6 +39,7 @@
 
 #include "Test30Physics.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 #include "Test30VSecondaryGenerator.hh"
 #include "G4PhysicsTable.hh"

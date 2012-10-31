@@ -25,6 +25,7 @@
 //
 #include "MaterialTest47.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 #include "G4Material.hh"
 
