@@ -253,11 +253,11 @@ foreach(_i 00 01 02 03)
                   BUILD Hadr${_i} ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 endforeach()
 GEANT4_ADD_TEST(example-ext-medical-dicom 
-                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/medical/DICOM/dicom
+                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/medical/DICOM/DICOM
                         ${CMAKE_SOURCE_DIR}/examples/extended/medical/DICOM/run.mac
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/medical/DICOM
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/medical/DICOM
-                BUILD dicom PROJECT DICOM )
+                BUILD DICOM )
 GEANT4_ADD_TEST(example-ext-medical-electronScattering 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/extended/medical/electronScattering/electronScattering
                         ${CMAKE_SOURCE_DIR}/examples/extended/medical/electronScattering/electronScattering.in
