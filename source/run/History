@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct. 15th, 2012, M.Asai (run-V09-05-09)
+- Offering more granular public methods of G4RunManager, which enable
+external framework with its own event loop to execute each individual 
+event without copying context of base class methods of G4RunManager.
+
 Oct. 1st, 2012, G.Cosmo (run-V09-05-08, run-V09-05-07)
 - Move constructors and destructor for G4VPhysicsConstructor to source.
 

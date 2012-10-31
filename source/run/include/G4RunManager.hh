@@ -154,7 +154,7 @@ class G4RunManager
     // current event loop will be processed. This method is available only for
     // EventProc state.
 
-  protected: // with description
+  public: // with description
 
     virtual void InitializeGeometry();
     virtual void InitializePhysics();
@@ -180,6 +180,12 @@ class G4RunManager
     //  RunTermination() method terminates a run processing. For example, a G4Run class
     // object is deleted in this class. If the user uses ODBMS and wants to store the
     // G4Run class object, he/she must override this method.
+
+    virtual void InitializeEventLoop(G4int n_event,const char* macroFile=0,G4int n_select=-1);
+    virtual void ProcessOneEvent(G4int i_event);
+    virtual void TerminateOneEvent();
+    virtual void TerminateEventLoop();
+    //  Granular virtual methods invoked from DoEventLoop() method.
 
     ///////////////////////////////////////////////////////////virtual void BuildPhysicsTables();
     //  This method is invoked from RunInitialization() to create physics tables.
@@ -256,6 +262,9 @@ class G4RunManager
 
     G4int nParallelWorlds;
 
+    G4String msgText;
+    G4int n_select_msg;
+    G4int numberOfEventProcessed;
 
   public:
     virtual void rndmSaveThisRun();
@@ -457,9 +466,12 @@ class G4RunManager
     { runIDCounter = i; }
     //  Set the run number counter. Initially, the counter is initialized to zero and
     // incremented by one for every BeamOn().
+
+  public:
     inline G4int GetNumberOfParallelWorld() const
     { return nParallelWorlds; }
-  public:
+    inline void SetNumberOfEventsToBeProcessed(G4int val)
+    { numberOfEventToBeProcessed = val; }
     inline void SetDCtable(G4DCtable* DCtbl)
     { DCtable = DCtbl; }
 

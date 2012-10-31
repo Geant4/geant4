@@ -73,7 +73,8 @@ G4RunManager::G4RunManager()
  currentRun(0),currentEvent(0),n_perviousEventsToBeStored(0),
  numberOfEventToBeProcessed(0),storeRandomNumberStatus(false),
  storeRandomNumberStatusToG4Event(0),
- currentWorld(0),nParallelWorlds(0)
+ currentWorld(0),nParallelWorlds(0),msgText(" "),n_select_msg(-1),
+ numberOfEventProcessed(0)
 {
   if(fRunManager)
   {
@@ -223,48 +224,68 @@ void G4RunManager::RunInitialization()
   }
 
   runAborted = false;
-
+  numberOfEventProcessed = 0;
   if(verboseLevel>0) G4cout << "Start Run processing." << G4endl;
 }
 
 void G4RunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_select)
 {
-  if(verboseLevel>0) 
-  { timer->Start(); }
-
-  G4String msg;
-  if(macroFile!=0)
-  { 
-    if(n_select<0) n_select = n_event;
-    msg = "/control/execute ";
-    msg += macroFile;
-  }
-  else
-  { n_select = -1; }
+  InitializeEventLoop(n_event,macroFile,n_select);
 
 // Event loop
-  G4int i_event;
-  for( i_event=0; i_event<n_event; i_event++ )
+  for(G4int i_event=0; i_event<n_event; i_event++ )
   {
-    currentEvent = GenerateEvent(i_event);
-    eventManager->ProcessOneEvent(currentEvent);
-    AnalyzeEvent(currentEvent);
-    UpdateScoring();
-    if(i_event<n_select) G4UImanager::GetUIpointer()->ApplyCommand(msg);
-    StackPreviousEvent(currentEvent);
-    currentEvent = 0;
+    ProcessOneEvent(i_event);
+    TerminateOneEvent();
     if(runAborted) break;
   }
 
+  TerminateEventLoop();
+}
+
+void G4RunManager::InitializeEventLoop(G4int n_event,const char* macroFile,G4int n_select)
+{
+  if(verboseLevel>0) 
+  { timer->Start(); }
+
+  n_select_msg = n_select;
+  if(macroFile!=0)
+  { 
+    if(n_select_msg<0) n_select_msg = n_event;
+    msgText = "/control/execute ";
+    msgText += macroFile;
+  }
+  else
+  { n_select_msg = -1; }
+}
+
+void G4RunManager::ProcessOneEvent(G4int i_event)
+{
+  currentEvent = GenerateEvent(i_event);
+  eventManager->ProcessOneEvent(currentEvent);
+  AnalyzeEvent(currentEvent);
+  UpdateScoring();
+  if(i_event<n_select_msg) G4UImanager::GetUIpointer()->ApplyCommand(msgText);
+}
+
+void G4RunManager::TerminateOneEvent()
+{
+  StackPreviousEvent(currentEvent);
+  currentEvent = 0;
+  numberOfEventProcessed++;
+}
+
+void G4RunManager::TerminateEventLoop()
+{
   if(verboseLevel>0)
   {
     timer->Stop();
     G4cout << "Run terminated." << G4endl;
     G4cout << "Run Summary" << G4endl;
     if(runAborted)
-    { G4cout << "  Run Aborted after " << i_event + 1 << " events processed." << G4endl; }
+    { G4cout << "  Run Aborted after " << numberOfEventProcessed << " events processed." << G4endl; }
     else
-    { G4cout << "  Number of events processed : " << n_event << G4endl; }
+    { G4cout << "  Number of events processed : " << numberOfEventProcessed << G4endl; }
     G4cout << "  "  << *timer << G4endl;
   }
 }
