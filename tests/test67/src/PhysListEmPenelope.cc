@@ -27,6 +27,7 @@
 // GEANT4 tag $Name:  $
 
 #include "PhysListEmPenelope.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4UAtomicDeexcitation.hh"
 #include "G4VAtomDeexcitation.hh"
 #include "G4ParticleDefinition.hh"

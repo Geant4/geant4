@@ -29,9 +29,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include <iomanip>
+
 #include "DetectorConstruction.hh"
 
-
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4NistManager.hh"
 #include "G4Material.hh"
 #include "G4Box.hh"
@@ -49,7 +52,6 @@
 
 #include "G4UImanager.hh"
 #include "G4UnitsTable.hh"
-#include <iomanip>
 
 #include "G4SDManager.hh"
 #include "SensitiveDetector.hh"
