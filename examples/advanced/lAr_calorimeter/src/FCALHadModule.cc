@@ -35,13 +35,16 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <fstream>
+
 #include "FCALHadModule.hh"
 
 #include "FCALMaterialConsultant.hh"
 #include "FCALHadModuleSD.hh"
 #include "G4SDManager.hh"
 
-
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Box.hh"
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
@@ -53,7 +56,6 @@
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 
-#include <fstream>
 #include "G4ios.hh"
 
 

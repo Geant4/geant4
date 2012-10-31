@@ -31,9 +31,13 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+#include <iostream>
+
 #include "FCALSteppingAction.hh"
 #include "G4SteppingManager.hh"
 
+#include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Track.hh"
 #include "G4DynamicParticle.hh"
 #include "G4Material.hh"
@@ -48,8 +52,6 @@
 #include "G4ThreeVector.hh"
 
 #include "G4ios.hh"
-#include <iostream>
-#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

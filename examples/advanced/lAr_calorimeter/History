@@ -8,6 +8,10 @@ $Id: History,v 1.21 2010-11-16 17:54:39 allison Exp $
 
                       Category History file
                       ---------------------
+
+12.10.2012 - G.Cosmo (lAr_calorimeter-V09-05-01)
+             Explicit inclusion of units and constants headers.
+
 11.10.2012   Andrea Dotti (lAr_calorimeter-V09-05-00)
 	     Use of PhyListFactory instead of explicit instantiaion of 
 	     physics lists.
