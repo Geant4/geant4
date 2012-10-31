@@ -55,11 +55,11 @@ class RE03DetectorConstruction : public G4VUserDetectorConstruction
     void SetupGeometry();
 
   private:
-    G4Material* air;
-    G4Material* water;
-    G4VPhysicalVolume* worldPhys;
-    G4VPhysicalVolume* phantomPhys;
-    G4bool constructed;
+    G4Material* fAir;
+    G4Material* fWater;
+    G4VPhysicalVolume* fWorldPhys;
+    G4VPhysicalVolume* fPhantomPhys;
+    G4bool fConstructed;
 };
 
 #endif

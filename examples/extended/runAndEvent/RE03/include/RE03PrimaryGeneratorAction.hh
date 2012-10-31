@@ -50,10 +50,9 @@ class RE03PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     virtual void GeneratePrimaries(G4Event*);
 
   private:
-    G4ParticleGun*                particleGun;
+    G4ParticleGun*                fParticleGun;
 
 };
-
 
 #endif
 

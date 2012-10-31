@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 15, 2012 I.Hrivnacova (exampleRE03-V09-05-01)
+- Replaced tabulators with space characters
+
+Oct 14, 2012 T.Aso 
+- revised all codes according to the coding guideline for extended examples
  
 May. 25, 2012 G.Cosmo (exampleRE03-V09-05-00)
 - Corrected signature of RE03UserScoreWriter::DumpQuantityToFile() to adopt

@@ -23,8 +23,8 @@ into the water box.
 
 1.2 Physics
 
- The physics list is mostly identical to exampleN03. It does not
-have hadronics.
+ The physics list is taken from referenced physics-list QGS_BIC
+in Geant4.
 
 2. Macro files
 

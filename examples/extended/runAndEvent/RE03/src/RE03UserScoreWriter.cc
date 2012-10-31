@@ -38,16 +38,19 @@
 #include <map>
 #include <fstream>
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE03UserScoreWriter::RE03UserScoreWriter()
-  : G4VScoreWriter() {
-  ;
-}
+  : G4VScoreWriter() 
+{;}
 
-RE03UserScoreWriter::~RE03UserScoreWriter() {
-  ;
-}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+RE03UserScoreWriter::~RE03UserScoreWriter() 
+{;}
 
-void RE03UserScoreWriter::DumpQuantityToFile(const G4String & psName, const G4String & fileName, const G4String & option) {
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void RE03UserScoreWriter::DumpQuantityToFile(const G4String & psName, 
+                                             const G4String & fileName, 
+                                             const G4String & option) {
 
   //
   if(verboseLevel > 0) {
@@ -76,11 +79,10 @@ void RE03UserScoreWriter::DumpQuantityToFile(const G4String & psName, const G4St
 
   
   // retrieve the map
-  MeshScoreMap fSMap = fScoringMesh->GetScoreMap();
-  
+  MeshScoreMap scMap = fScoringMesh->GetScoreMap();
 
-  MeshScoreMap::const_iterator msMapItr = fSMap.find(psName);
-  if(msMapItr == fSMap.end()) {
+  MeshScoreMap::const_iterator msMapItr = scMap.find(psName);
+  if(msMapItr == scMap.end()) {
     G4cerr << "ERROR : DumpToFile : Unknown quantity, \""
            << psName << "\"." << G4endl;
     return;

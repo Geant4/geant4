@@ -27,9 +27,7 @@
 /// \brief Main program of the runAndEvent/RE03 example
 //
 //
-// $Id: RE03.cc,v 1.5 2010-11-08 20:14:41 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
+// $Id: $
 // 
 
 #include "G4RunManager.hh"
@@ -37,7 +35,7 @@
 #include "G4ScoringManager.hh"
 
 #include "RE03DetectorConstruction.hh"
-#include "RE03PhysicsList.hh"
+#include "QGS_BIC.hh"
 #include "RE03PrimaryGeneratorAction.hh"
 
 #ifdef G4VIS_USE
@@ -73,7 +71,7 @@ int main(int argc,char** argv)
  G4VUserDetectorConstruction* detector = new RE03DetectorConstruction;
  runManager->SetUserInitialization(detector);
  //
- G4VUserPhysicsList* physics = new RE03PhysicsList;
+ G4VUserPhysicsList* physics = new QGS_BIC;
  runManager->SetUserInitialization(physics);
     
  // Set user action classes
