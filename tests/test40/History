@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11-10-2012 G.Cosmo         (test40-V09-05-00)
+- Explicit inclusion of units and constants headers.
+
 30-09-2011 G.Folger        (test40-V09-04-02)
 - Fix gcc46 compilation warning in /DetectorConstruction.cc
 

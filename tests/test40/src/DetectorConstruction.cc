@@ -33,6 +33,9 @@
 #include "DetectorConstruction.hh"
 #include "DetectorMessenger.hh"
 
+#include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
+
 #include "G4Tubs.hh"
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
@@ -44,8 +47,6 @@
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
-
-#include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
