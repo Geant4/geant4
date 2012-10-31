@@ -91,6 +91,7 @@ G4eIonisation::G4eIonisation(const G4String& name)
 {
   //  SetStepFunction(0.2, 1*mm);
   SetProcessSubType(fIonisation);
+  SetSecondaryParticle(theElectron);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -124,7 +125,6 @@ void G4eIonisation::InitialiseEnergyLossProcess(
 {
   if(!isInitialised) {
     if(part != theElectron) { isElectron = false; }
-    SetSecondaryParticle(theElectron);
     if (!EmModel()) { SetEmModel(new G4MollerBhabhaModel()); }
     EmModel()->SetLowEnergyLimit (MinKinEnergy());
     EmModel()->SetHighEnergyLimit(MaxKinEnergy());

@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 October 12: V.Ivanchenko (emstand-V09-05-57)
+- G4eBremsstrahlung, G4eIonisation,  G4hIonisation, G4ionIonisation -
+    secondary particle type defined in constructors and not in Initialise() 
+    method, this is needed for correct initialisation at G4_PreInit
+
 20 October 12: V.Ivanchenko (emstand-V09-05-56)
 - G4CoulombScattering, G4NuclearStopping, G4eMultipleScattering,
   G4hMultipleScattering, G4ComptonScattering - substitute methods 

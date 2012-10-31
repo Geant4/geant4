@@ -90,6 +90,7 @@ G4ionIonisation::G4ionIonisation(const G4String& name)
   SetLinearLossLimit(0.02);
   SetStepFunction(0.1, 0.01*mm);
   SetProcessSubType(fIonisation);
+  SetSecondaryParticle(G4Electron::Electron());
   corr = G4LossTableManager::Instance()->EmCorrections();
   eth = 2*MeV;
 }
@@ -137,7 +138,6 @@ void G4ionIonisation::InitialiseEnergyLossProcess(
     else                { theBaseParticle = bpart; }
 
     SetBaseParticle(theBaseParticle);
-    SetSecondaryParticle(G4Electron::Electron());
 
     if (!EmModel(1)) { SetEmModel(new G4BraggIonModel(), 1); }
     EmModel(1)->SetLowEnergyLimit(MinKinEnergy());

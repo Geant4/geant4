@@ -113,6 +113,7 @@ G4hIonisation::G4hIonisation(const G4String& name)
 {
   SetStepFunction(0.2, 0.1*mm);
   SetProcessSubType(fIonisation);
+  SetSecondaryParticle(G4Electron::Electron());
   mass = 0.0;
   ratio = 0.0;
   eth = 2*MeV;
@@ -178,7 +179,6 @@ void G4hIonisation::InitialiseEnergyLossProcess(
       theBaseParticle = bpart;
     }
     SetBaseParticle(theBaseParticle);
-    SetSecondaryParticle(G4Electron::Electron());
 
     mass  = part->GetPDGMass();
     ratio = electron_mass_c2/mass;
