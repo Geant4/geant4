@@ -116,13 +116,6 @@ void HistoManager::bookHisto()
   fHisto->Add1D("20","E1/E9 Ratio",fBinsED,0.0,1,1.0);
   fHisto->Add1D("21","E1/E25 Ratio",fBinsED,0.0,1.0,1.0);
   fHisto->Add1D("22","E9/E25 Ratio",fBinsED,0.0,1.0,1.0);
-
-  // initialise acceptance - by default is not applied
-  for(G4int i=0; i<fNmax; i++) {
-    fEdeptrue[i] = 1.0;
-    fRmstrue[i]  = 1.0;
-    fLimittrue[i]= 10.;
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -153,15 +146,21 @@ void HistoManager::BeginOfRun()
   fComp.resize(93,0.0);
   fConv.resize(93,0.0);
 
-  if(fHisto->IsActive()) { 
-    for(G4int i=0; i<fNHisto; ++i) {fHisto->Activate(i, true); }
+  // initialise acceptance - by default is not applied
+  for(G4int i=0; i<fNmax; i++) {
+    fEdeptrue[i] = 1.0;
+    fRmstrue[i]  = 1.0;
+    fLimittrue[i]= 10.;
   }
 
-  fHisto->Book();
+  if(fHisto->IsActive()) { 
+    for(G4int i=0; i<fNHisto; ++i) {fHisto->Activate(i, true); }
+    fHisto->Book();
 
-  if(fVerbose > 0) {
-    G4cout << "HistoManager: Histograms are booked and run has been started"
-           << G4endl;
+    if(fVerbose > 0) {
+      G4cout << "HistoManager: Histograms are booked and run has been started"
+	     << G4endl;
+    }
   }
 }
 
@@ -218,7 +217,7 @@ void HistoManager::EndOfRun(G4int runID)
     G4double r = s*std::sqrt(xx);
     G4cout << std::setprecision(4) << "Edep " << nam[j] << " =                   " << e
            << " +- " << r;
-    if(e > 0.0) G4cout << "  res=  " << f*s/e << " %   " << fStat[j];
+    if(e > 0.1) G4cout << "  res=  " << f*s/e << " %   " << fStat[j];
     G4cout << G4endl;
   }
   if(fLimittrue[0] < 10. || fLimittrue[1] < 10. || fLimittrue[2] < 10.) {
@@ -253,14 +252,15 @@ void HistoManager::EndOfRun(G4int runID)
   G4cout<<G4endl;
 
   // normalise histograms
-  for(G4int i=0; i<fNHisto; i++) {
-    fHisto->ScaleH1(i,x);
+  if(fHisto->IsActive()) { 
+    for(G4int i=0; i<fNHisto; i++) {
+      fHisto->ScaleH1(i,x);
+    }
+    fHisto->Save();
   }
-
-  fHisto->Save();
   if(0 < runID) { return; }
 
-  // Acceptance
+  // Acceptance only for the first run
   EmAcceptance acc;
   G4bool isStarted = false;
   for (j=0; j<fNmax; j++) {
