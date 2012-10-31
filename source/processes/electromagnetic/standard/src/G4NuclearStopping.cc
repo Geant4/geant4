@@ -45,6 +45,8 @@
 
 #include "G4NuclearStopping.hh"
 #include "G4ICRU49NuclearStoppingModel.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4PhysicalConstants.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -80,12 +82,12 @@ void G4NuclearStopping::InitialiseProcess(const G4ParticleDefinition*)
   if(!isInitialized) {
     isInitialized = true;
 
-    if(!Model()) {
+    if(!EmModel(1)) {
       modelICRU49 = new G4ICRU49NuclearStoppingModel();
-      SetModel(modelICRU49);
+      SetEmModel(modelICRU49);
     }
-    AddEmModel(1, Model());
-    Model()->SetParticleChange(&nParticleChange);
+    AddEmModel(1, EmModel());
+    EmModel()->SetParticleChange(&nParticleChange);
   }
 }
 
@@ -107,7 +109,10 @@ G4VParticleChange* G4NuclearStopping::AlongStepDoIt(const G4Track& track,
   nParticleChange.InitializeForAlongStep(track);
   G4double T2 = step.GetPostStepPoint()->GetKineticEnergy();
 
-  if(T2 > 0.0 && T2 < MaxKinEnergy()) {
+  const G4ParticleDefinition* part = track.GetParticleDefinition();
+  G4double Z = std::fabs(part->GetPDGCharge()/eplus);
+
+  if(T2 > 0.0 && T2*proton_mass_c2 < Z*Z*MeV*part->GetPDGMass()) {
 
     G4double length = step.GetStepLength(); 
     if(length > 0.0) {
@@ -115,7 +120,6 @@ G4VParticleChange* G4NuclearStopping::AlongStepDoIt(const G4Track& track,
       // primary
       G4double T1= step.GetPreStepPoint()->GetKineticEnergy();
       G4double T = 0.5*(T1 + T2);
-      const G4ParticleDefinition* part = track.GetDefinition();
       const G4MaterialCutsCouple* couple = track.GetMaterialCutsCouple(); 
       G4VEmModel* mod = SelectModel(T, couple->GetIndex());
 

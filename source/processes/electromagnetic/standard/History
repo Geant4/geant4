@@ -17,6 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20 October 12: V.Ivanchenko (emstand-V09-05-56)
+- G4CoulombScattering, G4NuclearStopping, G4eMultipleScattering,
+  G4hMultipleScattering, G4ComptonScattering - substitute methods 
+    Model(), SetModel() by EmModel(), SetEmModel()
+- G4NuclearStopping - added check on ion energy at the process level 
+    to speedup computations
+- G4CoulombScattering - close possibility to change polar angle limit 
+    after first initialisation
+- added warning to obsolete methods and classes
+
 18 October 12: V.Ivanchenko (emstand-V09-05-55)
 -  G4BetheBlochModel, G4BraggIonModel, G4BraggModel - define flag isIon 
      for all nucleus except deuteron, triton and special DNA ions

@@ -86,6 +86,11 @@ G4bool G4CoulombScattering::IsApplicable(const G4ParticleDefinition& p)
 
 void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
 {
+  // second initialisation not allowed for the time being
+  // this means that polar angle limit change will not be appled 
+  // after first initialisation
+  if(isInitialised) { return; }
+
   G4double a = G4LossTableManager::Instance()->FactorForAngleLimit()
     *CLHEP::hbarc/CLHEP::fermi;
   q2Max = 0.5*a*a;
@@ -104,7 +109,7 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
 	 << " theta= " << theta
 	 << G4endl;
   */
-
+  /*
   // second initialisation
   if(isInitialised) {
     G4VEmModel* mod = EmModel(1);
@@ -114,29 +119,30 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
 
     // first initialisation
   } else {
-    isInitialised = true;
-    G4double mass = p->GetPDGMass();
-    G4String name = p->GetParticleName();
-    //G4cout << name << "  type: " << p->GetParticleType() 
-    //<< " mass= " << mass << G4endl;
-    if (mass > GeV || p->GetParticleType() == "nucleus") {
-      SetBuildTableFlag(false);
-      if(name != "GenericIon") { SetVerboseLevel(0); }
-    } else {
-      if(name != "e-" && name != "e+" &&
-         name != "mu+" && name != "mu-" && name != "pi+" && 
-	 name != "kaon+" && name != "proton" ) { SetVerboseLevel(0); }
-    }
+  */
 
-    G4double emin = MinKinEnergy();
-    G4double emax = MaxKinEnergy();
-    if(!EmModel(1)) { SetModel(new G4eCoulombScatteringModel(), 1); }
-    G4VEmModel* model = EmModel(1);
-    model->SetPolarAngleLimit(theta);
-    model->SetLowEnergyLimit(emin);
-    model->SetHighEnergyLimit(emax);
-    AddEmModel(1, model);
+  isInitialised = true;
+  G4double mass = p->GetPDGMass();
+  G4String name = p->GetParticleName();
+  //G4cout << name << "  type: " << p->GetParticleType() 
+  //<< " mass= " << mass << G4endl;
+  if (mass > GeV || p->GetParticleType() == "nucleus") {
+    SetBuildTableFlag(false);
+    if(name != "GenericIon") { SetVerboseLevel(0); }
+  } else {
+    if(name != "e-" && name != "e+" &&
+       name != "mu+" && name != "mu-" && name != "pi+" && 
+       name != "kaon+" && name != "proton" ) { SetVerboseLevel(0); }
   }
+
+  if(!EmModel(1)) { SetEmModel(new G4eCoulombScatteringModel(), 1); }
+  G4VEmModel* model = EmModel(1);
+  G4double emin = std::max(MinKinEnergy(),model->LowEnergyLimit());
+  G4double emax = std::min(MaxKinEnergy(),model->HighEnergyLimit());
+  model->SetPolarAngleLimit(theta);
+  model->SetLowEnergyLimit(emin);
+  model->SetHighEnergyLimit(emax);
+  AddEmModel(1, model);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

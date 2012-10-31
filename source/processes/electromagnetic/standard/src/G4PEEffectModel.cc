@@ -68,6 +68,9 @@ G4PEEffectModel::G4PEEffectModel(const G4ParticleDefinition*,
 				 const G4String& nam)
   : G4VEmModel(nam)
 {
+  G4cout << "### G4PEEffectModel is obsolete "
+	 << "and will be removed for the next release." << G4endl;
+
   theGamma    = G4Gamma::Gamma();
   theElectron = G4Electron::Electron();
   fminimalEnergy = 1.0*eV;

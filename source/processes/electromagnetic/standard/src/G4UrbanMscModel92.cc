@@ -177,6 +177,8 @@ G4UrbanMscModel92::G4UrbanMscModel92(const G4String& nam)
   currentMaterialIndex = -1;
   fParticleChange = 0;
   couple = 0;
+  G4cout << "### G4UrbanMscModel92 is obsolete and will be removed for "
+	 << "the next Geant4 version" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
