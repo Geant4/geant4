@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24-10-12 A.Ribon (testem9-V09-05-05)
+- Migrated to the new stopping and ion physics
+
 21-10-12 V.Ivant (testem9-V09-05-04)
 - Added extra test of biasing
 

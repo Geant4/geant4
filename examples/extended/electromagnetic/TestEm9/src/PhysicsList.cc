@@ -37,6 +37,7 @@
 //
 // Modified:
 // 17.11.06 Use components from physics_lists subdirectory (V.Ivanchenko)
+// 24.10.12 Migrated to new stopping and ion physics (A.Ribon)
 //
 //----------------------------------------------------------------------------
 //
@@ -58,9 +59,9 @@
 #include "G4DecayPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4HadronInelasticQBBC.hh"
-#include "G4IonBinaryCascadePhysics.hh"
+#include "G4IonPhysics.hh"
 #include "G4EmExtraPhysics.hh"
-#include "G4QStoppingPhysics.hh"
+#include "G4StoppingPhysics.hh"
 
 #include "G4RegionStore.hh"
 #include "G4Region.hh"
@@ -218,7 +219,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
   } else if (name == "binary" && !fBicIsRegisted) {
     fHadronPhys.push_back(new G4HadronInelasticQBBC());
-    fHadronPhys.push_back(new G4IonBinaryCascadePhysics());
+    fHadronPhys.push_back(new G4IonPhysics());
     fBicIsRegisted = true;
     if (verboseLevel > 0) 
       G4cout << "PhysicsList::Add hadron inelastic physics from <QBBC>" << G4endl;
@@ -230,7 +231,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
       G4cout << "PhysicsList::Add gamma- and electro-nuclear physics" << G4endl;
 
   } else if (name == "stopping" && !fStopIsRegisted) {
-    fHadronPhys.push_back(new G4QStoppingPhysics());
+    fHadronPhys.push_back(new G4StoppingPhysics());
     fStopIsRegisted = true;
     if (verboseLevel > 0) 
       G4cout << "PhysicsList::Add stopping physics" << G4endl;
