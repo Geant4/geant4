@@ -12,14 +12,17 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11 October 2012, Gabriele Cosmo (test69-V09-05-02)
+- Explicit inclusion of units and constants headers.
+
 14 September 2012, Davide Mancusi (test69-V09-05-01)
-- Move all macro files in a dedicated directory
+- Move all macro files in a dedicated directory.
 
 14 September 2012, Davide Mancusi (test69-V09-05-00)
-- Split big test69 into many small tests, so that it can be run in parallel
-- Updated README
+- Split big test69 into many small tests, so that it can be run in parallel.
+- Updated README.
 
 26 October 2011, Pekka Kaitaniemi (test69-V09-04-00)
-- Created a new test for INCL++ cascade model
-- Requires INCL++ tag hadr-inclxx-V09-04-03 or later
+- Created a new test for INCL++ cascade model.
+- Requires INCL++ tag hadr-inclxx-V09-04-03 or later.
 
