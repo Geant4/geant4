@@ -72,7 +72,6 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
   // save Rndm status
   //
-  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   CLHEP::HepRandom::showEngineStatus();
 
   //initialize cumulative quantities
