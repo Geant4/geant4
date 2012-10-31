@@ -15,8 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11-Oct-12  G.Cosmo (test45-V09-05-00)
+- Explicit inclusion of units and constants headers.
+
 17-Nov-11 V.Ivant (test45-V09-04-01)
-- removed obsolete G4Exception
+- Removed obsolete G4Exception.
 
 08-April-11 A.Ivant (test45-V09-04-00)
 - 0-80 MeV for pn_dn_050+ 110d in HistoManager.

@@ -38,6 +38,7 @@
 //
 
 #include "PrimaryGeneratorAction.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ParticleGun.hh"
 #include "HistoManager.hh"
 

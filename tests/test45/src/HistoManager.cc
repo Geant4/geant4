@@ -42,6 +42,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "HistoManager.hh"
+#include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 #include "G4Neutron.hh"
 #include "G4Proton.hh"
@@ -49,7 +52,6 @@
 #include "G4Positron.hh"
 #include "Histo.hh"
 #include "G4Track.hh"
-#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -71,11 +73,11 @@ HistoManager* HistoManager::GetPointer()
 HistoManager::HistoManager()
 {
   verbose   =  0;
-  nHisto    = 12;
+  nHisto    = 12; 
   length    = 10.*mm;
   histo     = new Histo();
   neutron   = G4Neutron::Neutron();
-  dangle    = 5.*degree; 
+  dangle    = 2.5*degree; 
   angle[0]  = 0.0*degree;
   angle[1]  = 15.0*degree;
   angle[2]  = 30.0*degree;
@@ -83,12 +85,14 @@ HistoManager::HistoManager()
   angle[4]  = 60.0*degree;
   angle[5]  = 90.0*degree;
   //pn-cu, pn-fe
+  /*
   angle[0]  = 0.0*degree;
   angle[1]  = 30.0*degree;
   angle[2]  = 45.0*degree;
   angle[3]  = 60.0*degree;
   angle[4]  = 90.0*degree;
   angle[5]  = 110.0*degree;
+  */
 
   // pn_al, pn_c, ta, w: 050MeV
   emin1     = -.05*MeV;
@@ -101,6 +105,7 @@ HistoManager::HistoManager()
   nbins2    =  45;
   
   // pn_cu, pn_fe 35-70 MeV + dn_be,li,other
+  /*
   emin1     = 0*MeV;
   emax1     = 80*MeV;
   emin2     = 0*MeV;
@@ -109,6 +114,7 @@ HistoManager::HistoManager()
   de2       =  1.0*MeV;
   nbins1    =  80;
   nbins2    =  80;
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -122,6 +128,32 @@ HistoManager::~HistoManager()
 
 void HistoManager::bookHisto()
 {
+  for(G4int i=0; i<6; i++) {
+    G4String s;
+    G4String I;
+    std::ostringstream ss;
+    std::ostringstream II;
+    ss << angle[i];
+    II << (i+1);
+    s = ss.str();
+    I = II.str();
+    angle[i]=angle[i]*degree;
+    G4String S = " neutron yield at " + s + " degree in the target ";
+    histo->add1D(I,S,nbins1,emin1,emax1,1.0);
+  }
+  for(G4int i=0; i<6; i++) {
+    G4String s;
+    G4String I;
+    std::ostringstream ss;
+    std::ostringstream II;
+    ss << angle[i];
+    II << (i+7);
+    s = ss.str();
+    I = II.str();
+    angle[i]=angle[i]*degree;
+    G4String S = " neutron yield at " + s + " degree in the target ";
+    histo->add1D(I,S,nbins2,emin2,emax2,1.0);
+  }
   // pn_al
   /*
   histo->add1D("1"," low-energy neutron yield at 0 degree in the target",
@@ -149,7 +181,7 @@ void HistoManager::bookHisto()
 	       nbins2,emin2,emax2,1.0);
   histo->add1D("12"," neutron yield at 90 degree in the target",
 	       nbins2,emin2,emax2,1.0);
-  */
+ 
   //pn_cu, pn_fe
   histo->add1D("1"," low-energy neutron yield at 0 degree in the target",
 	       nbins1,emin1,emax1,1.0);
@@ -176,6 +208,7 @@ void HistoManager::bookHisto()
 	       nbins2,emin2,emax2,1.0);
   histo->add1D("12"," neutron yield at 110 degree in the target",
 	       nbins2,emin2,emax2,1.0);
+  */
   
 }
 
