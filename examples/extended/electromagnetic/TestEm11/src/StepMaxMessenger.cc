@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm11/src/StepMaxMessenger.cc
+/// \brief Implementation of the StepMaxMessenger class
+//
 // $Id: StepMaxMessenger.cc,v 1.3 2006-06-29 16:40:53 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm11/include/DetectorConstruction.hh
+/// \brief Definition of the DetectorConstruction class
+//
 // $Id: DetectorConstruction.hh,v 1.13 2006-06-29 16:51:06 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -42,7 +45,7 @@ class G4Material;
 class G4UniformMagField;
 class DetectorMessenger;
 
-     const G4int MaxAbsor = 10;			// 0 + 9  
+     const G4int MaxAbsor = 10;                        // 0 + 9  
      
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

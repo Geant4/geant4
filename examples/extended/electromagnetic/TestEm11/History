@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12-10-12 V.Ivant (testem11-V09-05-05)
+- Migration to the updated analysis tool
+- Added Opt4 Physics List and decreased limit on cuts
      
 25-05-12 mma (testem11-V09-05-04)
 - new results in sandia/EGSnrc : e- 50 MeV, 150 MeV in Water

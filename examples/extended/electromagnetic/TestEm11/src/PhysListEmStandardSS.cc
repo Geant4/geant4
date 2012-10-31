@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm11/src/PhysListEmStandardSS.cc
+/// \brief Implementation of the PhysListEmStandardSS class
+//
 // $Id: PhysListEmStandardSS.cc,v 1.11 2011-01-05 19:08:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -53,6 +56,8 @@
 #include "G4ionIonisation.hh"
 
 #include "G4EmProcessOptions.hh"
+
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -88,7 +93,7 @@ void PhysListEmStandardSS::ConstructProcess()
       pmanager->AddProcess(new G4eIonisation,        -1, 1, 1);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1, 2, 2);
       pmanager->AddDiscreteProcess(new G4CoulombScattering);            
-	    
+            
     } else if (particleName == "e+") {
       //positron
       pmanager->AddProcess(new G4eIonisation,        -1, 1, 1);
@@ -119,8 +124,8 @@ void PhysListEmStandardSS::ConstructProcess()
       pmanager->AddDiscreteProcess(cs);
      
     } else if ((!particle->IsShortLived()) &&
-	       (particle->GetPDGCharge() != 0.0) && 
-	       (particle->GetParticleName() != "chargedgeantino")) {
+               (particle->GetPDGCharge() != 0.0) && 
+               (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
       G4CoulombScattering* cs = new G4CoulombScattering();
       pmanager->AddProcess(new G4hIonisation,        -1, 1, 1);
@@ -138,20 +143,20 @@ void PhysListEmStandardSS::ConstructProcess()
   
   //physics tables
   //
-  emOptions.SetMinEnergy(100*eV);	//default    
-  emOptions.SetMaxEnergy(100*TeV);	//default  
-  emOptions.SetDEDXBinning(12*20);	//default=12*7  
-  emOptions.SetLambdaBinning(12*20);	//default=12*7
-  //  emOptions.SetSplineFlag(true);	//default
+  emOptions.SetMinEnergy(100*eV);        //default    
+  emOptions.SetMaxEnergy(100*TeV);        //default  
+  emOptions.SetDEDXBinning(12*20);        //default=12*7  
+  emOptions.SetLambdaBinning(12*20);        //default=12*7
+  //  emOptions.SetSplineFlag(true);        //default
       
   //energy loss
   //
-  //emOptions.SetStepFunction(0.2, 100*um);	//default=(0.2, 1*mm)      
-  //emOptions.SetLinearLossLimit(1.e-2);		//default
+  //emOptions.SetStepFunction(0.2, 100*um);        //default=(0.2, 1*mm)      
+  //emOptions.SetLinearLossLimit(1.e-2);                //default
    
   //ionization
   //
-  emOptions.SetSubCutoff(false);	//default  
+  emOptions.SetSubCutoff(false);        //default  
 
   // scattering
   emOptions.SetPolarAngleLimit(0.0);

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm11/include/RunAction.hh
+/// \brief Definition of the RunAction class
+//
 // $Id: RunAction.hh,v 1.3 2007-08-19 20:52:53 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -61,7 +64,7 @@ class RunAction : public G4UserRunAction
                                      { fNbOfSteps += nb; fNbOfSteps2 += nb*nb;
                                        fStepSize  += s ; fStepSize2  += s*s;  };
     void AddTrackStatus (G4int i)    { fStatus[i]++ ;};
-    			           
+                                       
     G4double GetCsdaRange (G4int i) {return fCsdaRange[i];};
     G4double GetXfrontNorm(G4int i) {return fXfrontNorm[i];};    
            

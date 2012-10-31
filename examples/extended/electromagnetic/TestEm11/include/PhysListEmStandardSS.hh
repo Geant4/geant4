@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm11/include/PhysListEmStandardSS.hh
+/// \brief Definition of the PhysListEmStandardSS class
+//
 // $Id: PhysListEmStandardSS.hh,v 1.1 2010-05-25 21:03:44 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

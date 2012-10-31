@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm11/src/DetectorConstruction.cc
+/// \brief Implementation of the DetectorConstruction class
+//
 // $Id: DetectorConstruction.cc,v 1.23 2009-03-04 18:49:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -47,6 +50,8 @@
 
 #include "G4UImanager.hh"
 #include "G4UnitsTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,7 +61,7 @@ DetectorConstruction::DetectorConstruction()
 {
   // default parameter values of the absorbers
   fNbOfAbsor = 1;
-  fAbsorThickness[0] = 0*mm;	//dummy, for initialization   
+  fAbsorThickness[0] = 0*mm;        //dummy, for initialization   
   fAbsorThickness[1] = 1*mm;  
   fAbsorSizeYZ       = 1.*mm;
   for (G4int iAbs=0; iAbs<MaxAbsor; iAbs++) {
@@ -125,7 +130,7 @@ void DetectorConstruction::DefineMaterials()
   G4Material* Galactic =   
   new G4Material("Galactic", 1., 1.008*g/mole, density,
                              kStateGas,temperature,pressure);
-			     
+                             
   fDefaultMaterial = Galactic;
   
   //  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
@@ -159,23 +164,23 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   // World
   //
   G4Box* solidWorld =
-    new G4Box("World",						//name
-               fAbsorSizeX/2,fAbsorSizeYZ/2,fAbsorSizeYZ/2);	//size
+    new G4Box("World",                                                //name
+               fAbsorSizeX/2,fAbsorSizeYZ/2,fAbsorSizeYZ/2);        //size
 
   G4LogicalVolume* logicWorld =
-    new G4LogicalVolume(solidWorld,		//solid
-                        fDefaultMaterial,	//material
-                        "World");		//name
+    new G4LogicalVolume(solidWorld,                //solid
+                        fDefaultMaterial,        //material
+                        "World");                //name
 
   fPhysiWorld = 
-    new G4PVPlacement(0,			//no rotation
-  		      G4ThreeVector(),		//at (0,0,0)
-                      logicWorld,		//logical volume
-                      "World",			//name
-                       0,			//mother volume
-                       false,			//no boolean operation
-                       0);               	//copy number
-				 
+    new G4PVPlacement(0,                        //no rotation
+                        G4ThreeVector(),                //at (0,0,0)
+                      logicWorld,                //logical volume
+                      "World",                        //name
+                       0,                        //mother volume
+                       false,                        //no boolean operation
+                       0);                       //copy number
+                                 
   //
   // Absorbers
   //
@@ -189,39 +194,39 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
       new G4Box(matname,fAbsorThickness[k]/2,fAbsorSizeYZ/2,fAbsorSizeYZ/2);
 
     G4LogicalVolume* logicAbsor =
-      new G4LogicalVolume(solidAbsor,    	// solid
-			  material, 		// material
-			  matname);     	// name
-				     
+      new G4LogicalVolume(solidAbsor,            // solid
+                          material,                 // material
+                          matname);             // name
+                                     
     fXfront[k] = fXfront[k-1] + fAbsorThickness[k-1];    
     G4double xcenter = fXfront[k]+0.5*fAbsorThickness[k];
     G4ThreeVector position = G4ThreeVector(xcenter,0.,0.);
   
-      new G4PVPlacement(0,		   	//no rotation
-      		        position,   		//position
-                        logicAbsor,     	//logical volume	
-                        matname,	   	//name
-                        logicWorld,        	//mother
-                        false,             	//no boulean operat
-                        k);               	//copy number
+      new G4PVPlacement(0,                           //no rotation
+                              position,                   //position
+                        logicAbsor,             //logical volume        
+                        matname,                   //name
+                        logicWorld,                //mother
+                        false,                     //no boulean operat
+                        k);                       //copy number
     
     // divisions, if any
     //
     G4double LayerThickness = fAbsorThickness[k]/fNbOfDivisions[k];
     G4Box* solidLayer =   
       new G4Box(matname,LayerThickness/2,fAbsorSizeYZ/2,fAbsorSizeYZ/2);
-		       
+                       
     G4LogicalVolume* logicLayer =
-      new G4LogicalVolume(solidLayer,	//solid
-                          material,	//material
-                          matname); 	//name
-				       
-      new G4PVReplica(matname,			//name
-      		      logicLayer,		//logical volume
-      		      logicAbsor,		//mother
-                      kXAxis,			//axis of replication
-                      fNbOfDivisions[k],		//number of replica
-                      LayerThickness);		//witdth of replica    
+      new G4LogicalVolume(solidLayer,        //solid
+                          material,        //material
+                          matname);         //name
+                                       
+      new G4PVReplica(matname,                        //name
+                            logicLayer,                //logical volume
+                            logicAbsor,                //mother
+                      kXAxis,                        //axis of replication
+                      fNbOfDivisions[k],                //number of replica
+                      LayerThickness);                //witdth of replica    
   }
 
 
@@ -242,7 +247,7 @@ void DetectorConstruction::PrintParameters()
      {
       G4cout << "\n \t" << std::setw(12) << fAbsorMaterial[i]->GetName() <<": "
               << std::setw(6) << G4BestUnit(fAbsorThickness[i],"Length")
-	      << "  divided in " << fNbOfDivisions[i] << " slices";
+              << "  divided in " << fNbOfDivisions[i] << " slices";
      }
   G4cout << "\n-------------------------------------------------------------\n"
          << G4endl;
@@ -257,7 +262,7 @@ void DetectorConstruction::SetNbOfAbsor(G4int ival)
   if (ival < 1 || ival > (MaxAbsor-1))
     { G4cout << "\n ---> warning from SetfNbOfAbsor: "
              << ival << " must be at least 1 and and most " << MaxAbsor-1
-	     << ". Command refused" << G4endl;
+             << ". Command refused" << G4endl;
       return;
     }
   fNbOfAbsor = ival;
@@ -345,9 +350,9 @@ void DetectorConstruction::SetMagField(G4double fieldValue)
   G4FieldManager* fieldMgr
    = G4TransportationManager::GetTransportationManager()->GetFieldManager();
 
-  if(fMagField) delete fMagField;		//delete the existing magn field
+  if(fMagField) delete fMagField;                //delete the existing magn field
 
-  if(fieldValue!=0.)			// create a new one if non nul
+  if(fieldValue!=0.)                        // create a new one if non nul
   { fMagField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));
     fieldMgr->SetDetectorField(fMagField);
     fieldMgr->CreateChordFinder(fMagField);

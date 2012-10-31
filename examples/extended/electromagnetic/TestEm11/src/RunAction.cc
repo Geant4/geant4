@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm11/src/RunAction.cc
+/// \brief Implementation of the RunAction class
+//
 // $Id: RunAction.cc,v 1.7 2007-08-19 20:52:53 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
@@ -41,6 +44,7 @@
 #include "G4EmCalculator.hh"
 
 #include "Randomize.hh"
+#include "G4SystemOfUnits.hh"
 #include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -105,7 +109,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   G4ParticleDefinition* particle = fKinematic->GetParticleGun()
                                           ->GetParticleDefinition();
   if (particle->GetPDGCharge() != 0.) {
-    G4double width = fHistoManager->GetBinWidth(ih);   					    
+    G4double width = fHistoManager->GetBinWidth(ih);                                               
     G4EmCalculator emCalculator;
     G4double energy = fKinematic->GetParticleGun()->GetParticleEnergy();
     G4int NbOfAbsor = fDetector->GetNbOfAbsor();
@@ -117,7 +121,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
       if (i>1) {
         G4double thickness = fDetector->GetAbsorThickness(i-1);
         fXfrontNorm[i] = fXfrontNorm[i-1] + thickness/fCsdaRange[i-1];
-      }			      
+      }                              
     }        
   }     
   fPhysics->GetStepMaxProcess()->SetMaxStep2(stepMax);           
@@ -138,7 +142,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   //     
   G4ParticleDefinition* particle = fKinematic->GetParticleGun()
                                           ->GetParticleDefinition();
-  G4String partName = particle->GetParticleName();    		         
+  G4String partName = particle->GetParticleName();                             
   G4double energy = fKinematic->GetParticleGun()->GetParticleEnergy();
   
   G4int NbOfAbsor = fDetector->GetNbOfAbsor();
@@ -156,9 +160,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
      G4double thickness = fDetector->GetAbsorThickness(i);
      G4double density = material->GetDensity();    
      G4cout << std::setw(20) << G4BestUnit(thickness,"Length") << " of "
-	    << material->GetName() << " (density: " 
-	    << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
-  }	 
+            << material->GetName() << " (density: " 
+            << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
+  }         
   G4cout << "\n ============================================================\n";
   
   //compute total energy deposit
@@ -172,7 +176,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     << "\n Total Energy deposited        = " << G4BestUnit(fEdeposit,"Energy")
     << " +- "                                << G4BestUnit( rms,"Energy")
     << G4endl;
-     	 
+              
   //compute track length of primary track
   //
   fTrackLen /= NbofEvents; fTrackLen2 /= NbofEvents;
@@ -191,7 +195,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
      << "\n Range from EmCalculator = " << G4BestUnit(fCsdaRange[1],"Length")
      << " (from full dE/dx)" << G4endl;
   }
-   	 	 
+                     
   //compute projected range of primary track
   //
   fProjRange /= NbofEvents; fProjRange2 /= NbofEvents;

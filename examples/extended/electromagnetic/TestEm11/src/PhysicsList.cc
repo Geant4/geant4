@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm11/src/PhysicsList.cc
+/// \brief Implementation of the PhysicsList class
+//
 // $Id: PhysicsList.cc,v 1.8 2010-05-20 13:02:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -39,11 +42,13 @@
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
+#include "G4EmStandardPhysics_option4.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
 
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -242,6 +247,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option3();
     
+  } else if (name == "emstandard_opt4") {
+
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option4();
+    
   } else if (name == "standardSS") {
 
     fEmName = name;
@@ -309,7 +320,7 @@ void PhysicsList::AddStepMax()
 
       if (fStepMaxProcess->IsApplicable(*particle))
         {
-	  pmanager ->AddDiscreteProcess(fStepMaxProcess);
+          pmanager ->AddDiscreteProcess(fStepMaxProcess);
         }
   }
 }

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm11/src/PrimaryGeneratorMessenger.cc
+/// \brief Implementation of the PrimaryGeneratorMessenger class
+//
 // $Id: PrimaryGeneratorMessenger.cc,v 1.2 2006-06-29 16:40:43 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //

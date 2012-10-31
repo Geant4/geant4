@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm11/src/HistoManager.cc
+/// \brief Implementation of the HistoManager class
+//
 //
 // $Id: HistoManager.cc,v 1.1 2010-09-16 16:26:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
@@ -145,15 +148,15 @@ void HistoManager::SetHisto(G4int ih,
   
   const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8" };
   const G4String title[] = 
-                { "dummy",					//0
-		  "Edep (MeV/mm) along absorber",		//1
-                  "total Energy deposited in absorber", 	//2
-                  "true track length of the primary particle",	//3
-		  "true step size of the primary particle",	//4
-		  "projected range of the primary particle",	//5
-                  "true track length of charged secondaries",	//6
-		  "true step size of charged secondaries",	//7
-		  "Edep (MeV.cm2/g) along x/r0"			//8		  
+                { "dummy",                                        //0
+                  "Edep (MeV/mm) along absorber",                //1
+                  "total Energy deposited in absorber",         //2
+                  "true track length of the primary particle",        //3
+                  "true step size of the primary particle",        //4
+                  "projected range of the primary particle",        //5
+                  "true track length of charged secondaries",        //6
+                  "true step size of charged secondaries",        //7
+                  "Edep (MeV.cm2/g) along x/r0"                        //8                  
                  };
 
   G4String titl = title[ih];
@@ -230,9 +233,9 @@ void HistoManager::saveAscii()
      
       for (G4int iBin=0; iBin<fNbins[ih]; iBin++) {
          File << "  " << iBin << "\t" 
-	      << fHistPt[ih]->axis().bin_center(iBin) << "\t"
-	      << fHistPt[ih]->bin_height(iBin) 
-	      << G4endl;
+              << fHistPt[ih]->axis().bin_center(iBin) << "\t"
+              << fHistPt[ih]->bin_height(iBin) 
+              << G4endl;
       } 
     }
  } 
