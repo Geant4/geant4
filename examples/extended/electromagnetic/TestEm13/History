@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12-10-12 V.Ivant (testem13-V09-05-02)
+- Migration to the updated analysis tool and inplicit units
      
 08-10-12 mma (testem13-V09-05-01)
 - G4 coding conventions: virtual
