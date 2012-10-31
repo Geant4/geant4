@@ -7,7 +7,7 @@
                             ------
 
 Description:    reproducibility tests of FTFP_BERT.
-                It does 10 checks of reproducibility for each
+                It does 100 checks of reproducibility for each
                 of the following 5 cases of single hadrons
                 impinging on a simplified calorimeter:
                   1.  20 GeV  kaon0L  on  Fe-Sci

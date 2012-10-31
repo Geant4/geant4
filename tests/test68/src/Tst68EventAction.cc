@@ -1,12 +1,13 @@
+#include <sstream>
+
 #include "Tst68EventAction.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4Timer.hh"
 #include "G4Event.hh"
 #include "G4ios.hh"
 #include "G4EventManager.hh"
 #include "Tst68SteppingAction.hh"
 #include "G4RunManager.hh"
-#include "G4Timer.hh"
-#include <sstream>
-
 
 Tst68EventAction::Tst68EventAction() : 
   theSteppingAction( 0 ), numberOfEvents( 0 ), sumTotalDepositedEnergy( 0.0 ) {
@@ -68,7 +69,7 @@ void Tst68EventAction::EndOfEventAction( const G4Event* evt ) {
 
   union double_ull_t { double d; unsigned long long u;} x; 
   x.d = r;
-  G4cout << std::hex << "   random=" << x.u << G4cout << std::dec << G4endl;
+  G4cout << std::hex << "   random=" << x.u << std::dec << G4endl;
 
   numberOfEvents++;
 }

@@ -9,6 +9,7 @@
 #include "Tst68StackingAction.hh" 
 #include "CLHEP/Random/Ranlux64Engine.h" 
 #include "CLHEP/Random/MTwistEngine.h" 
+#include <ctime>
 
 
 int main(int argc,char** argv) { 
@@ -16,7 +17,7 @@ int main(int argc,char** argv) {
   CLHEP::Ranlux64Engine defaultEngine( 1234567, 4 ); 
  
   CLHEP::HepRandom::setTheEngine( &defaultEngine ); 
-  G4int seed = time( NULL ); 
+  G4int seed = std::time( NULL ); 
   CLHEP::HepRandom::setTheSeed( seed ); 
   G4cout << G4endl 
          << " ===================================================== " << G4endl 

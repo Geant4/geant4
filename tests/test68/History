@@ -13,12 +13,33 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11 Oct 2012 Gabriele Cosmo               test68-V09-05-08
+- Explicit inclusion of units and constants headers.
+
+11 Oct 2012 Alberto Ribon                test68-V09-05-07
+- Fixed compilation warning in Windows (<ctime>, std::time).
+
+10 Oct 2012 Alberto Ribon                test68-V09-05-06
+- Use $<CONFIGURATION> (instead of hardwired "RelWithDebInfo")
+  to get the subdirectory where the executable is placed in Windows.
+
+10 Oct 2012 Alberto Ribon                test68-V09-05-05
+- Fix bad output format: it could fix the non-reproducibility
+  seen in both Mac and Windows.
+
+10 Oct 2012 Alberto Ribon                test68-V09-05-04
+- Try to fix the problem on Windows by specifying explicitly the
+  path and name of the executable invoked by the Python script.
+
+05 Oct 2012 Alberto Ribon                test68-V09-05-03
+- Moved from "Experimental" group to "Nightly" and "Continuous".
+  Increased the number of events from 10 to 100.
+
 08 Aug 2012 Alberto Ribon                test68-V09-05-02
 - Fixed small mistake.
 
 08 Aug 2012 Alberto Ribon                test68-V09-05-01
 - Can be built with CMake and ready for CTest.
-
 
 08 Aug 2012 Alberto Ribon                test68-V09-05-00
 - Created new test for the reproducibility of FTFP_BERT.

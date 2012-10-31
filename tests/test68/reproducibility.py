@@ -1,11 +1,14 @@
 #!/usr/bin/python
 
 #-------------------------------------------------------------------------
-# Last update: 08-Aug-2012
+# Last update: 10-Oct-2012
 #
-# This python script, which has no input parameters, tests the
-# reproducibility of the sequence of random numbers for the FTFP_BERT
-# physics list, using a Geant4 application.
+# This python script, which has at most one input parameter
+# (the configuration in which Geant4 has been built: this is needed only
+#  in Windows, because the executable is placed in a subdirectory whose
+#  name is the configuration), tests the reproducibility of the sequence
+# of random numbers for the FTFP_BERT physics list, using a Geant4
+# application.
 # The application consists of shooting a particle on a simple
 # sampling calorimeter, for a few specified combinations of:
 #   beam particle, beam energy, calorimeter type
@@ -50,6 +53,7 @@ import os
 import sys
 import string
 import subprocess
+import platform
 
 print '  ========== START reproducibility.py ========== '
 
@@ -114,7 +118,7 @@ BfieldValue = "4 tesla"
 # the number of single event checks, and
 # the gap between successive extra single event checks.
 NumEvents = "1"
-NumSingleEventChecks = 10;
+NumSingleEventChecks = 100;
 GapBetweenExtraSingleEventChecks = 0;
 
 if ( NumEvents < 0 ) :
@@ -126,6 +130,22 @@ if ( NumSingleEventChecks < 0 ) :
 if ( GapBetweenExtraSingleEventChecks < 0 ) :
     print ' Warning: GapBetweenExtraSingleEventChecks = ', GapBetweenExtraSingleEventChecks, '  < 0 : set it to 0 !'
     GapBetweenExtraSingleEventChecks = 0
+
+# 10-Oct-2012 : In Windows the Geant4 configuration is used as subdirectory
+#               name where to put the executable
+configuration = ""
+if ( len( sys.argv ) > 1 ) :
+  configuration = sys.argv[1]
+  print ' configuration=', configuration
+
+# For Windows platform, set the proper path and add ".exe" to the
+# executable name.
+executable_path = "."
+executable_name = "test68"
+if ( platform.system() == 'Windows' ) :
+  executable_path = configuration
+  executable_name += ".exe"
+  print ' executable_path=', executable_path, ' ; executable_name=', executable_name
 
 for iCase in listCases :
 
@@ -190,13 +210,16 @@ for iCase in listCases :
             g4file.close()
 
     # --- Run the tests and get the last "random=" numbers from the log files
+    
     if ( NumSingleEventChecks > 0 ) :
         vecRuns = []
         for i in range( NumSingleEventChecks+1 ) :
             nameMacro = "reproducibility_" + str( i ) + ".g4" + suffix
             nameOut = "out_" + str( i ) + ".log" + suffix
             outfile = open( nameOut, "w" )
-            p = subprocess.Popen( [ os.path.join( ".", "test68" ), nameMacro ], stdout=outfile, stderr=subprocess.STDOUT )
+            ###p = subprocess.Popen( [ os.path.join( ".", "test68" ), nameMacro ], stdout=outfile, stderr=subprocess.STDOUT )
+            p = subprocess.Popen( [ os.path.join( executable_path, executable_name ), nameMacro ], 
+                                  stdout=outfile, stderr=subprocess.STDOUT )
             p.wait()
             outfile.close()
 

@@ -14,14 +14,14 @@ GEANT4_EXECUTABLE( test68 test68.cc src/*.cc )
 
 #---Test definition-----------------------------------------
 GEANT4_ADD_TEST( test68-build BUILD test68 
-                              LABELS Experimental ) 
+                              LABELS Nightly Continuous ) 
 
 #message( ${CMAKE_CURRENT_SOURCE_DIR} " " ${CMAKE_CURRENT_BINARY_DIR} )
 
 configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/start.rndm ${CMAKE_CURRENT_BINARY_DIR}/start.rndm COPYONLY )
 
 GEANT4_ADD_TEST( test68-reproducibility 
-		 COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/reproducibility.py 
+		 COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/reproducibility.py $<CONFIGURATION> 
 		 DEPENDS test68-build
-		 LABELS Experimental
+		 LABELS Nightly Continuous
 		 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT} )
