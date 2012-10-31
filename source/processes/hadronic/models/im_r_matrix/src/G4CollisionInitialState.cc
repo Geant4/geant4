@@ -31,6 +31,7 @@
 // -----------------------------------------------------------------------------
 
 #include "G4CollisionInitialState.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4BCAction.hh"
 // Class G4CollisionInitialState
 

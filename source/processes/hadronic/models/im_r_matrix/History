@@ -15,9 +15,12 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
 
 
+12-Oct-2012 Gabriele Cosmo               hadr-im_r-V09-05-08
+- Explicitly inclusion of headers for system of units and physical
+  constants... fixed cases introduced again in last tags...
+
 05-Oct-2012 Gunter Folger 		 hadr-im_r-V09-05-07
 -  add Print() to G4CollisionInitialState
-
 
 28-Sep-2012 Alberto Ribon                hadr-im_r-V09-05-06
 - Fixed reproducibility violation in G4CollisionComposite.cc.
@@ -25,7 +28,6 @@ code and to keep track of all tags.
 20-Sep-2012 Gabriele Cosmo               hadr-im_r-V09-05-05
 - Explicitly use inclusion of headers for system of units and physical
   constants, in plan to remove implicit inclusion from globals.hh.
-
 
 12-Jun-2012 Gunter Folger		 hadr-im_r-V09-05-04
 -  fixes to avoid shadowing of variables
@@ -37,7 +39,6 @@ code and to keep track of all tags.
 
 29-May-2012 Gunter Folger		 hadr-im_r-V09-05-02
 -  Ignore: incomplete tag
-
 
 18-May-2012 Gunter Folger		 hadr-im_r-V09-05-01
 -  Fix coverity warnings, part 1: includes done, src started.
