@@ -29,6 +29,18 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19th October 2012 - Ben Morgan (cmake-V09-05-54)
+- Templates/Geant4Config.cmake.in : Add g3tog4 component to detect
+  and configure G3toG4 library if required.
+- Modules/Geant4OptionalComponents.cmake : Improve documentation of
+  GEANT4_USE_G3TOG4 option.
+- Modules/Geant4CTest.cmake : Remove un-needed message() of dataset
+  configuration.
+
+18th October 2012 - Gunter Folger     (cmake-V09-05-53)
+- Modules/Geant4InstallData.cmake: Use G4EMLOW.6.31
+
 16th October 2012 Ben Morgan (cmake-V09-05-52)
 - Modules/Geant4InstallData.cmake : Update version and MD5 of
   G4NEUTRONXS for 1.2 release, add new G4SAIDDATA dataset,

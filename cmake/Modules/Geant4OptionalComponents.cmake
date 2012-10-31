@@ -13,8 +13,7 @@
 #  ZLIB   - Control use of internal G4zlib, or locate external ZLIB
 #           (NOTIMPLEMENTEDYET - always uses internal zlib)
 #  GDML   - Requires external XercesC
-#  G3TOG4 - UNIX only, requires fortran compiler
-
+#  G3TOG4 - UNIX only
 
 #-----------------------------------------------------------------------
 # Find required CLHEP package
@@ -49,7 +48,6 @@ endif()
 
 GEANT4_ADD_FEATURE(GEANT4_USE_SYSTEM_CLHEP "Use system CLHEP library")
 
-
 #-----------------------------------------------------------------------
 # Find required EXPAT package
 # We always use the internal G4expat on WIN32.
@@ -82,7 +80,6 @@ endif()
 
 GEANT4_ADD_FEATURE(GEANT4_USE_SYSTEM_EXPAT "Use system EXPAT library")
 
-
 #-----------------------------------------------------------------------
 # Find required ZLIB package
 # For now, we always use the internal Geant4 zlib...
@@ -94,8 +91,6 @@ if(GEANT4_USE_SYSTEM_ZLIB)
 endif(GEANT4_USE_SYSTEM_ZLIB)
 
 GEANT4_ADD_FEATURE(GEANT4_USE_SYSTEM_ZLIB "Use system zlib library")
-
-
 
 #-----------------------------------------------------------------------
 # Optional Support for GDML - requires Xerces-C package
@@ -115,7 +110,6 @@ endif(GEANT4_USE_GDML)
 
 GEANT4_ADD_FEATURE(GEANT4_USE_GDML "Build Geant4 with GDML support")
 
-
 #-----------------------------------------------------------------------
 # Optional support for G3TOG4 convertion interface.
 # We do not build the rztog4 application.
@@ -127,20 +121,7 @@ GEANT4_ADD_FEATURE(GEANT4_USE_GDML "Build Geant4 with GDML support")
 # -- OLDER NOTES --
 #
 if(UNIX)
-  option(GEANT4_USE_G3TOG4 "Build the rztog4 application for converting Geant3 geometries to Geant4" OFF)
-  #if(GEANT4_USE_G3TOG4)
-  #enable_language(Fortran)
-  #find_package(CERNLIB REQUIRED)
-  #endif(GEANT4_USE_G3TOG4)
-
-  GEANT4_ADD_FEATURE(GEANT4_USE_G3TOG4 "Build the rztog4 application")
+  option(GEANT4_USE_G3TOG4 "Build Geant3 ASCII call list reader library" OFF)
+  GEANT4_ADD_FEATURE(GEANT4_USE_G3TOG4 "Build Geant3 ASCII call list reader library")
 endif()
-
-
-
-
-
-
-
-
 
