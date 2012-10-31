@@ -36,6 +36,7 @@
 // -------------------------------------------------------------------
 
 #include "G4ITTrackHolder.hh"
+#include "G4Track.hh"
 
 G4ITTrackHolder* G4ITTrackHolder::fInstance(0);
 
@@ -53,7 +54,12 @@ G4ITTrackHolder* G4ITTrackHolder::Instance()
     return fInstance;
 }
 
-void G4ITTrackHolder::PushTrack(G4Track*)
+void G4ITTrackHolder::PushTrack(G4Track* track)
 {
-    ;
+    delete track;
+}
+
+double G4ITTrackHolder::GetTimeStep() const
+{
+    return 0;
 }

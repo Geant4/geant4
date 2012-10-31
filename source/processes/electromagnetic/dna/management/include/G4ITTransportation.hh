@@ -26,14 +26,15 @@
 // $Id$
 //
 /// \brief This class is a slightly modified version of G4Transportation
+///        initially written by John Apostolakis and colleagues (1997)
 ///        But it should use the exact same algorithm
+//
+// Original Author : John Apostolakis
+//
+// Contact : Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
 // WARNING : This class is released as a prototype.
 // It might strongly evolve or even disapear in the next releases.
-//
-// History:
-// -----------
-// 10 Oct 2011 M.Karamitros created
 //
 // -------------------------------------------------------------------
 

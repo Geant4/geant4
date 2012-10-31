@@ -36,6 +36,9 @@
 //
 // -------------------------------------------------------------------
 
+/// \brief { The transportation method implemented is the one from
+///         Ermak-McCammon : J. Chem. Phys. 69, 1352 (1978)}
+
 #include <CLHEP/Random/Stat.h>
 
 #include "G4DNABrownianTransportation.hh"

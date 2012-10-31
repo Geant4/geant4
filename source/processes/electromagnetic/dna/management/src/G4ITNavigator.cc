@@ -23,13 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Id: From G4ITNavigator.cc,v 1.46 2010-11-15 14:03:27 gcosmo Exp
 // $Id$
 // 
 // class G4ITNavigator Implementation
 //
 // Original author: Paul Kent, July 95/96
 //
+// G4ITNavigator is a duplicate version of G4Navigator starting from Geant4.9.5
+// initially written by Paul Kent and colleagues.
+// The only difference resides in the way the information is saved and managed
+//
+// History:
+// - Created.                                  Paul Kent,     Jul 95/96
+// - Zero step protections                     J.A. / G.C.,   Nov  2004
+// - Added check mode                          G. Cosmo,      Mar  2004
+// - Made Navigator Abstract                   G. Cosmo,      Nov  2003
+// - G4ITNavigator created                     M.K.,          Nov  2012
 // --------------------------------------------------------------------
 
 #include <iomanip>
@@ -895,6 +904,8 @@ G4double G4ITNavigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
     // edge/corner problem by itself
     //
     G4bool exitingReplica = fExitedMother;
+//  G4bool calculatedExitNormal= false;
+    
     Step = freplicaNav.ComputeStep(pGlobalpoint,
                                    pDirection,
                                    fLastLocatedPointLocal,
@@ -903,6 +914,7 @@ G4double G4ITNavigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
                                    pNewSafety,
                                    fHistory,
                                    fValidExitNormal,
+                                   //calculatedExitNormal,
                                    fExitNormal,
                                    exitingReplica,
                                    fEntering,

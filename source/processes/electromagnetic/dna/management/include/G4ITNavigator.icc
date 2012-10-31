@@ -23,12 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// Id: From G4Navigator.icc,v 1.18 2010-12-15 13:46:39 gcosmo Exp
 // $Id$
 //
 // 
 // class G4ITNavigator Inline implementation
+//
+// G4ITNavigator is a duplicate version of G4Navigator started from Geant4.9.5
+// initially written by Paul Kent and colleagues.
+// The only difference resides in the way the information is saved and managed
 //
 // ********************************************************************
 

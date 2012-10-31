@@ -56,6 +56,7 @@ protected :
 public:
     static G4ITTrackHolder* Instance();
     virtual void PushTrack(G4Track*);
+    virtual double GetTimeStep() const ;
 };
 
 #endif // G4ITTRACKHOLDER_HH

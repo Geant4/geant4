@@ -23,26 +23,33 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// Id: From G4Navigator.hh,v 1.34 2010-12-15 13:46:39 gcosmo Exp
 // $Id$
 //
+// Original author: Paul Kent, July 95/96
 //
-// class G4ITNavigator
+/// \brief { Class description:
+///
+/// G4ITNavigator is a duplicate version of G4Navigator started from Geant4.9.5
+/// initially written by Paul Kent and colleagues.
+/// The only difference resides in the way the information is saved and managed
+///
+/// A class for use by the tracking management, able to obtain/calculate
+/// dynamic tracking time information such as the distance to the next volume,
+/// or to find the physical volume containing a given point in the world
+/// reference system. The navigator maintains a transformation history and
+/// other information to optimise the tracking time performance.}
 //
-// Class description:
+// Contact : Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
-// A class for use by the tracking management, able to obtain/calculate
-// dynamic tracking time information such as the distance to the next volume,
-// or to find the physical volume containing a given point in the world
-// reference system. The navigator maintains a transformation history and
-// other information to optimise the tracking time performance.
-
+// WARNING : This class is released as a prototype.
+// It might strongly evolve or even disapear in the next releases.
+//
 // History:
 // - Created.                                  Paul Kent,     Jul 95/96
 // - Zero step protections                     J.A. / G.C.,   Nov  2004
 // - Added check mode                          G. Cosmo,      Mar  2004
 // - Made Navigator Abstract                   G. Cosmo,      Nov  2003
+// - G4ITNavigator created                     M.K.,          Nov  2012
 // *********************************************************************
 
 #ifndef G4ITNAVIGATOR_HH

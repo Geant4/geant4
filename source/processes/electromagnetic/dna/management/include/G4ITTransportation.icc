@@ -26,9 +26,12 @@
 // $Id$
 //
 /// \brief This class is a slightly modified version of G4Transportation
+///        initially written by J. Apostolakis and colleagues
 ///        But it should use the exact same algorithm
 //
-// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
+// Original Author : John Apostolakis
+//
+// Contact : Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
 // WARNING : This class is released as a prototype.
 // It might strongly evolve or even disapear in the next releases.

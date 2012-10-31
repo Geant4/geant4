@@ -25,6 +25,10 @@
 //
 // $Id$
 //
+/// \brief {Duplicated version of G4TransportationManager.
+///         This class just contains the pointer to the navigator object of the
+///         simulation.}
+//
 // History:
 // -----------
 //

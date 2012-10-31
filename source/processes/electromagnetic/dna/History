@@ -13,6 +13,23 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
+23-10-2012  M.K                 tag emdna-V09-05-30
+            Add exception in G4DNASecondOrderReaction
+            Add carriage return in G4DNASmoluchowskiReaction cc and hh
+
+18-10-2012  M.K                 tag emdna-V09-05-29
+            Previous tag did not include history changes
+
+18-10-2012  M.K                 tag emdna-V09-05-28
+            Remove warning
+
+17-10-2012  M.K                 tag emdna-V09-05-27
+            Correct a typo from previous tag
+
+17-10-2012  M.K                 tag emdna-V09-05-26
+            Correct information in headers
+            Rename G4DNADiffustionControlledModel to G4DNASmoluchowskiReactionModel
+            G4ITNavigator updated to new interface of ReplicaNavigation::ComputeStep.
 
 01-10-2012  SI, P.Pater         tag emdna-V09-05-25
             Force kinetic energy to zero for real killings in models.

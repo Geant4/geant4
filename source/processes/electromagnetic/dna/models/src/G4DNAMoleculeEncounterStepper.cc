@@ -87,7 +87,7 @@ void G4DNAMoleculeEncounterStepper::Prepare()
 G4double G4DNAMoleculeEncounterStepper::CalculateStep(const G4Track& trackA, const G4double& userMinTimeStep)
 {
     // DEBUG
-    //    G4cout << "G4MoleculeEncounterStepper::CalculateStep, time :" << G4ITStepManager::Instance()->GetGlobalTime()  << G4endl;
+    //    G4cout << "G4MoleculeEncounterStepper::CalculateStep, time :" << G4ITTrackHolder::Instance()->GetGlobalTime()  << G4endl;
 
     G4Molecule* moleculeA = GetMolecule(trackA);
 

@@ -72,7 +72,7 @@ class G4TrackListNode;
   * G4IT is a interface which allows the inheriting object :
   * - to be included in ITManager for the search of nearest
   * neighbour
-  * - to be tracked using G4ITStepManager
+  * - to be tracked using a synchroneous track stepper
   * The inheriting class must implement the operator < , ==
   * and != in order to enable the sorting out.
   * also the concrete header of MyIT ("MyIt.hh") should contain : ITDef(MyIT)

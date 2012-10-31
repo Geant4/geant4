@@ -32,6 +32,7 @@
 #include "G4MolecularConfiguration.hh"
 #include "G4DNADamages.hh"
 #include "G4UnitsTable.hh"
+#include "G4ITTrackHolder.hh"
 
 void G4DNASecondOrderReaction::Create()
 {
@@ -92,7 +93,6 @@ G4DNASecondOrderReaction::SecondOrderReactionState::SecondOrderReactionState() :
 
 void G4DNASecondOrderReaction::BuildPhysicsTable(const G4ParticleDefinition&)
 {
-//    fpMoleculeDensity = G4DNAMolecularMaterial::Instance()->GetDensityTableFor(fpMaterial);
     fpMoleculeDensity = G4DNAMolecularMaterial::Instance()->GetNumMolPerVolTableFor(fpMaterial);
     fMolarMassOfMaterial = fpMaterial->GetMassOfMolecule()*CLHEP::Avogadro*1e3;
     fIsInitialized = true;
@@ -110,7 +110,14 @@ void
 G4DNASecondOrderReaction::SetReaction(const G4MolecularConfiguration* molConf,
                                       const G4Material* mat, double reactionRate)
 {
-    if(fIsInitialized) {;}//G4Exception(...)
+    if(fIsInitialized)
+    {
+        G4ExceptionDescription exceptionDescription ;
+        exceptionDescription << "G4DNASecondOrderReaction was already initialised. ";
+        exceptionDescription << "You cannot set a reaction after initialisation.";
+        G4Exception("G4DNASecondOrderReaction::SetReaction","G4DNASecondOrderReaction001",
+                    FatalErrorInArgument,exceptionDescription);
+    }
     fpMolecularConfiguration = molConf;
     fpMaterial = mat;
     fReactionRate = reactionRate;
@@ -217,8 +224,6 @@ G4double G4DNASecondOrderReaction::PostStepGetPhysicalInteractionLength(const G4
     // multiple by -1 to indicate to the tracking system that we are returning a time
 }
 
-#include "G4ITStepManager.hh"
-
 G4VParticleChange* G4DNASecondOrderReaction::PostStepDoIt(const G4Track& track,const G4Step& /*step*/)
 {
     G4Molecule* molecule = GetMolecule(track);
@@ -226,11 +231,11 @@ G4VParticleChange* G4DNASecondOrderReaction::PostStepDoIt(const G4Track& track,c
     if(verboseLevel > 1)
     {
         G4cout << "___________" << G4endl;
-        G4cout << ">>> °°°° Beginning of G4DNASecondOrderReaction verbose" << G4endl;
+        G4cout << ">>> Beginning of G4DNASecondOrderReaction verbose" << G4endl;
         G4cout << ">>> Returned value : " << G4BestUnit(fReturnedValue,"Time") << G4endl;
-        G4cout << ">>> Time Step : " << G4BestUnit(G4ITStepManager::Instance()->GetTimeStep(),"Time") << G4endl;
+        G4cout << ">>> Time Step : " << G4BestUnit(G4ITTrackHolder::Instance()->GetTimeStep(),"Time") << G4endl;
         G4cout << ">>> Reaction : " << molecule->GetName() << " + " << fpMaterial->GetName() << G4endl;
-        G4cout << ">>> End of G4DNASecondOrderReaction verbose °°°° <<<" << G4endl;
+        G4cout << ">>> End of G4DNASecondOrderReaction verbose <<<" << G4endl;
     }
 #endif
     fReturnedValue  = DBL_MAX;
@@ -239,3 +244,4 @@ G4VParticleChange* G4DNASecondOrderReaction::PostStepDoIt(const G4Track& track,c
     G4DNADamages::Instance()->AddIndirectDamage(fpMaterial->GetName(),molecule,track.GetPosition(),track.GetGlobalTime());
     return &fParticleChange;
 }
+

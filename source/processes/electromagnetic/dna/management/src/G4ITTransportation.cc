@@ -25,12 +25,33 @@
 //
 // $Id$
 //
-// This class is slightly modified version of G4Transportation
-// But it should use the exact same algorithm
+/// \brief This class is a slightly modified version of G4Transportation
+///        initially written by John Apostolakis and colleagues
+///        But it should use the exact same algorithm
 //
-// History:
+// Contact : Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
+//
+// History :
 // -----------
-// 10 Oct 2011 M.Karamitros created
+// =======================================================================
+// Modified:
+//   28 Oct  2011, P.Gumpl./J.Ap: Detect gravity field, use magnetic moment
+//   20 Nov  2008, J.Apostolakis: Push safety to helper - after ComputeSafety
+//    9 Nov  2007, J.Apostolakis: Flag for short steps, push safety to helper
+//   19 Jan  2006, P.MoraDeFreitas: Fix for suspended tracks (StartTracking)
+//   11 Aug  2004, M.Asai: Add G4VSensitiveDetector* for updating stepPoint.
+//   21 June 2003, J.Apostolakis: Calling field manager with
+//                     track, to enable it to configure its accuracy
+//   13 May  2003, J.Apostolakis: Zero field areas now taken into
+//                     account correclty in all cases (thanks to W Pokorski).
+//   29 June 2001, J.Apostolakis, D.Cote-Ahern, P.Gumplinger:
+//                     correction for spin tracking
+//   20 Febr 2001, J.Apostolakis:  update for new FieldTrack
+//   22 Sept 2000, V.Grichine:     update of Kinetic Energy
+//  ---------------------------------------------------
+//   10 Oct  2011, M.Karamitros:   G4ITTransportation created
+// Created:  19 March 1997, J. Apostolakis
+// =======================================================================
 //
 // -------------------------------------------------------------------
 

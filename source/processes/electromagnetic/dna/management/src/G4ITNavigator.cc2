@@ -31,6 +31,10 @@
 //
 // Original author: Paul Kent, July 95/96
 //
+// G4ITNavigator is a duplicate version of G4Navigator starting from Geant4.9.5
+// initially written by Paul Kent and colleagues.
+// The only difference resides in the way the information is saved and managed
+//
 // --------------------------------------------------------------------
 
 #include "G4ITNavigator.hh"
