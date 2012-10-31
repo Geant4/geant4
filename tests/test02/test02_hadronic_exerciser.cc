@@ -30,6 +30,7 @@
 
 #include "globals.hh"
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 #include <vector>
 
 static void OutputCases
