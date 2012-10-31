@@ -219,6 +219,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         }
 
         if (OldMomentum * theGlobalNormal > 0.0) {
+#ifdef G4DEBUG_OPTICAL_PROC
            G4ExceptionDescription ed;
            ed << " G4OpBoundaryProcess/PostStepDoIt(): "
               << " theGlobalNormal points in a wrong direction. "
@@ -231,8 +232,12 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
            ed << "     Global Normal (Exiting New Vol) = " << theGlobalNormal << G4endl;
            ed << G4endl;
            G4Exception("G4OpBoundaryProcess::PostStepDoIt", "OpBoun02",
-                      EventMustBeAborted,ed,
+                       EventMustBeAborted,  // Or JustWarning to see if it happens repeatedbly on one ray
+                       ed,
                       "Invalid Surface Normal - Geometry must return valid surface normal pointing in the right direction");
+#else
+           theGlobalNormal = -theGlobalNormal;
+#endif
         }
 
 	G4MaterialPropertiesTable* aMaterialPropertiesTable;
