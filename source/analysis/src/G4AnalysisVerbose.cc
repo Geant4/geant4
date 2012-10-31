@@ -40,8 +40,9 @@ G4AnalysisVerbose::G4AnalysisVerbose(const G4String& type, G4int verboseLevel)
    fFailureText()
 {
    if ( verboseLevel == 1 ) fDoneText = "- done";
-   if ( verboseLevel == 2 ) fToBeDoneText = "done ";
-   if ( verboseLevel == 3 ) fToBeDoneText = "going to ";
+   if ( verboseLevel == 2 ) fDoneText = "- done";
+   if ( verboseLevel == 3 ) fToBeDoneText = "done ";
+   if ( verboseLevel == 4 ) fToBeDoneText = "going to ";
    fFailureText = "has failed";
 }
 

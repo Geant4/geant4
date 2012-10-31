@@ -17,6 +17,11 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 10, 2012 I.Hrivnacova (analysis-V09-05-13)
+- Adding commands for handling h2d histograms.
+- Adding functions for accessing h1d, h2d by name
+- Splitting verbose level 1 in 2 levels and shifting the upper levels
+
 September 28, 2012 I.Hrivnacova (analysis-V09-05-12)
 - Fixed loops in G4Root/XmlAnalysisManager::WriteOnAscii;
   (causing compilation warning for shadowing)

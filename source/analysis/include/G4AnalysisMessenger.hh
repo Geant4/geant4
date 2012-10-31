@@ -58,6 +58,12 @@ class G4AnalysisMessenger : public G4UImessenger
     void SetH1TitleCmd();
     void SetH1XAxisCmd();
     void SetH1YAxisCmd();
+    void CreateH2Cmd();
+    void SetH2Cmd();
+    void SetH2TitleCmd();
+    void SetH2XAxisCmd();
+    void SetH2YAxisCmd();
+    void SetH2ZAxisCmd();
  
     G4VAnalysisManager*  fManager; ///< Associated class
     
@@ -73,6 +79,14 @@ class G4AnalysisMessenger : public G4UImessenger
     G4UIcommand*           fSetH1TitleCmd;   
     G4UIcommand*           fSetH1XAxisCmd;   
     G4UIcommand*           fSetH1YAxisCmd;   
+    G4UIdirectory*         fH2Dir;   
+    G4UIcommand*           fCreateH2Cmd;
+    G4UIcommand*           fSetH2Cmd;
+    G4UIcmdWithAnInteger*  fSetH2AsciiCmd;   
+    G4UIcommand*           fSetH2TitleCmd;   
+    G4UIcommand*           fSetH2XAxisCmd;   
+    G4UIcommand*           fSetH2YAxisCmd;   
+    G4UIcommand*           fSetH2ZAxisCmd;   
 };
   
 #endif

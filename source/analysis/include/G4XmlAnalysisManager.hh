@@ -107,8 +107,9 @@ class G4XmlAnalysisManager : public G4VAnalysisManager
                                      G4bool onlyIfActive = true) const;
     virtual tools::waxml::ntuple* GetNtuple() const;
 
-    //tools::histo::h1d*  GetH1D(const G4String& name, G4bool warn = true) const;
-        // later
+    // Access methods via names
+    virtual G4int  GetH1Id(const G4String& name, G4bool warn = true) const;
+    virtual G4int  GetH2Id(const G4String& name, G4bool warn = true) const;
         
     // Access to H1 parameters
     virtual G4int    GetH1Nbins(G4int id) const;
@@ -176,6 +177,8 @@ class G4XmlAnalysisManager : public G4VAnalysisManager
 
     std::vector<tools::histo::h1d*>         fH1Vector;            
     std::vector<tools::histo::h2d*>         fH2Vector;            
+    std::map<G4String, G4int>  fH1NameIdMap;            
+    std::map<G4String, G4int>  fH2NameIdMap;            
     
     tools::waxml::ntuple*   fNtuple; 
     tools::ntuple_booking*  fNtupleBooking; 

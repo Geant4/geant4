@@ -109,9 +109,10 @@ class G4RootAnalysisManager : public G4VAnalysisManager
     
     virtual tools::wroot::ntuple* GetNtuple() const;
 
-    // Do we want also access via names?
-    //tools::histo::h1d*  GetH1D(const G4String& name, G4bool warn = true) const;
-        // later
+    // Access methods via names
+    virtual G4int  GetH1Id(const G4String& name, G4bool warn = true) const;
+    virtual G4int  GetH2Id(const G4String& name, G4bool warn = true) const;
+
     // Access to H1 parameters
     virtual G4int    GetH1Nbins(G4int id) const;
     virtual G4double GetH1Xmin(G4int id) const;
@@ -180,6 +181,8 @@ class G4RootAnalysisManager : public G4VAnalysisManager
 
     std::vector<tools::histo::h1d*>  fH1Vector;            
     std::vector<tools::histo::h2d*>  fH2Vector;            
+    std::map<G4String, G4int>  fH1NameIdMap;            
+    std::map<G4String, G4int>  fH2NameIdMap;            
     
     tools::wroot::ntuple*   fNtuple; 
     tools::ntuple_booking*  fNtupleBooking; 

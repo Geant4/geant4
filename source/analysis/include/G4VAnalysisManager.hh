@@ -250,9 +250,11 @@ class G4VAnalysisManager
     G4AnalysisVerbose  fVerboseL1;
     G4AnalysisVerbose  fVerboseL2;
     G4AnalysisVerbose  fVerboseL3;
+    G4AnalysisVerbose  fVerboseL4;
     G4AnalysisVerbose* fpVerboseL1;
     G4AnalysisVerbose* fpVerboseL2;
     G4AnalysisVerbose* fpVerboseL3;
+    G4AnalysisVerbose* fpVerboseL4;
  
   private:
     G4AnalysisMessenger* fMessenger;    

@@ -50,9 +50,11 @@ G4VAnalysisManager::G4VAnalysisManager(const G4String& type)
     fVerboseL1(type,1),
     fVerboseL2(type,2),
     fVerboseL3(type,3),
+    fVerboseL4(type,4),
     fpVerboseL1(0),
     fpVerboseL2(0),
     fpVerboseL3(0),
+    fpVerboseL4(0),
     fMessenger(0),
     fNofActiveObjects(0),
     fNofAsciiObjects(0),
@@ -120,7 +122,7 @@ G4bool G4VAnalysisManager::WriteAscii()
     G4ExceptionDescription description;
     description 
       << "Cannot open file. File name is not defined.";
-    G4Exception("G4VAnalysisManager::OpenFile()",
+    G4Exception("G4VAnalysisManager::WriteAscii()",
                 "Analysis_W009", JustWarning, description);
     return false;
   }
@@ -232,21 +234,31 @@ void G4VAnalysisManager::SetVerboseLevel(G4int verboseLevel)
     fpVerboseL1 = 0;
     fpVerboseL2 = 0;
     fpVerboseL3 = 0;
+    fpVerboseL4 = 0;
   }
   else if ( verboseLevel == 1 ) {  
     fpVerboseL1 = &fVerboseL1;
     fpVerboseL2 = 0;
     fpVerboseL3 = 0;
+    fpVerboseL4 = 0;
   }
   else if ( verboseLevel == 2 ) {  
     fpVerboseL1 = &fVerboseL1;
     fpVerboseL2 = &fVerboseL2;
     fpVerboseL3 = 0;
+    fpVerboseL4 = 0;
+  }
+  else if ( verboseLevel == 3 ) {  
+    fpVerboseL1 = &fVerboseL1;
+    fpVerboseL2 = &fVerboseL2;
+    fpVerboseL3 = &fVerboseL3;
+    fpVerboseL4 = 0;
   }
   else {
     fpVerboseL1 = &fVerboseL1;
     fpVerboseL2 = &fVerboseL2;
     fpVerboseL3 = &fVerboseL3;
+    fpVerboseL4 = &fVerboseL4;
   }
 }  
 
