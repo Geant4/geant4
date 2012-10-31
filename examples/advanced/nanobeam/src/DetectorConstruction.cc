@@ -28,6 +28,8 @@
 // -------------------------------------------------------------------
 
 #include "DetectorConstruction.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4NistManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

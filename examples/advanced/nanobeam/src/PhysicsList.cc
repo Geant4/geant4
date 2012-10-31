@@ -28,6 +28,7 @@
 // -------------------------------------------------------------------
 
 #include "PhysicsList.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
