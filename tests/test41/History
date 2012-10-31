@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11-10-12  G.Cosmo      (test41-V09-05-02)
+- Explicit inclusion of units and constants headers.
+
 28-08-12  V.Ivanchenko (test41-V09-05-01)
 - PhysListEmStandardIG - set polar angle limit back to 0.2
 
