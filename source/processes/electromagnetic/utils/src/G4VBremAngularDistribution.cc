@@ -59,7 +59,10 @@
 
 G4VBremAngularDistribution::G4VBremAngularDistribution(const G4String& name) 
   : G4VEmAngularDistribution(name)
-{}
+{
+  G4cout << "### G4VBremAngularDistribution interface class is obsolete "
+	 << "and will be removed for the next release." << G4endl;
+}
 
 //    
 

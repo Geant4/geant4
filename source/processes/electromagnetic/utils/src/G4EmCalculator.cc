@@ -82,6 +82,7 @@
 #include "G4EmCorrections.hh"
 #include "G4GenericIon.hh"
 #include "G4ProcessVector.hh"
+#include "G4Gamma.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -730,6 +731,22 @@ G4double G4EmCalculator::ComputeCrossSectionPerAtom(G4double kinEnergy,
   return ComputeCrossSectionPerAtom(kinEnergy,FindParticle(particle),
 				    processName,
                                     elm->GetZ(),elm->GetN(),cut);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double 
+G4EmCalculator::ComputeGammaAttenuationLength(G4double kinEnergy, 
+					      const G4Material* mat)
+{
+  G4double res = 0.0;
+  const G4ParticleDefinition* gamma = G4Gamma::Gamma();
+  res += ComputeCrossSectionPerVolume(kinEnergy, gamma, "conv", mat, 0.0);
+  res += ComputeCrossSectionPerVolume(kinEnergy, gamma, "compt", mat, 0.0);
+  res += ComputeCrossSectionPerVolume(kinEnergy, gamma, "phot", mat, 0.0);
+  res += ComputeCrossSectionPerVolume(kinEnergy, gamma, "Rayl", mat, 0.0);
+  if(res > 0.0) { res = 1.0/res; }
+  return res;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

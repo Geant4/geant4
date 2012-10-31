@@ -85,7 +85,11 @@ G4VEnergyLoss::G4VEnergyLoss(const G4String& aName , G4ProcessType aType)
      nmaxCont1(4),
      nmaxCont2(16)
 {
-  if(!ELossMessenger) { ELossMessenger = new G4EnergyLossMessenger(); }
+  if(!ELossMessenger) { 
+    G4cout << "### G4VEnergyLoss class is obsolete "
+	   << "and will be removed for the next release." << G4endl;
+    ELossMessenger = new G4EnergyLossMessenger(); 
+  }
 
   imat = 0;
   f1Fluct = f2Fluct = e1Fluct = e2Fluct = rateFluct = ipotFluct = e1LogFluct 

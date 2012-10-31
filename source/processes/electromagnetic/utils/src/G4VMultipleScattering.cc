@@ -91,7 +91,6 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name,
   firstParticle(0),
   currParticle(0),
   stepLimit(fUseSafety),
-  geomMin(1.e-6*CLHEP::mm),
   skin(1.0),
   facrange(0.04),
   facgeom(2.5),
@@ -100,6 +99,8 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name,
 {
   SetVerboseLevel(1);
   SetProcessSubType(fMultipleScattering);
+
+  geomMin = 1.e-6*CLHEP::mm;
 
   // default limit on polar angle
   polarAngleLimit = 0.0;
@@ -114,6 +115,8 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name,
   modelManager = new G4EmModelManager();
   emManager = G4LossTableManager::Instance();
   emManager->Register(this);
+
+  warn = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -142,6 +145,12 @@ void G4VMultipleScattering::AddEmModel(G4int order, G4VEmModel* p,
 
 void G4VMultipleScattering::SetModel(G4VMscModel* p, G4int index)
 {
+  ++warn;
+  if(warn < 10) { 
+    G4cout << "### G4VMultipleScattering::SetModel is obsolete method "
+	   << "and will be removed for the next release." << G4endl;
+    G4cout << "    Please, use SetEmModel" << G4endl;
+  } 
   G4int n = mscModels.size();
   if(index >= n) { for(G4int i=n; i<=index; ++i) {mscModels.push_back(0);} }
   mscModels[index] = p;
@@ -151,6 +160,12 @@ void G4VMultipleScattering::SetModel(G4VMscModel* p, G4int index)
 
 G4VMscModel* G4VMultipleScattering::Model(G4int index)
 {
+  ++warn;
+  if(warn < 10) { 
+    G4cout << "### G4VMultipleScattering::Model is obsolete method "
+	   << "and will be removed for the next release." << G4endl;
+    G4cout << "    Please, use EmModel" << G4endl;
+  } 
   G4VMscModel* p = 0;
   if(index >= 0 && index <  G4int(mscModels.size())) { p = mscModels[index]; }
   return p;
@@ -358,13 +373,14 @@ G4double G4VMultipleScattering::AlongStepGetPhysicalInteractionLength(
   }
 
   // step limit
-  if(gPathLength > 0.0 && currentModel->IsActive(ekin)) {
+  if(currentModel->IsActive(ekin) && gPathLength > geomMin) {
     tPathLength = currentModel->ComputeTruePathLengthLimit(track, gPathLength);
     if (tPathLength < physStepLimit) { 
       *selection = CandidateForSelection; 
     }
   }
-  /*    
+  /*
+  if(currParticle->GetPDGMass() > GeV)    
   G4cout << "MSC::AlongStepGPIL: Ekin= " << ekin 
 	 << " gPathLength= " << gPathLength
 	 << " tPathLength= " << tPathLength
@@ -380,6 +396,7 @@ G4VMultipleScattering::PostStepGetPhysicalInteractionLength(
               const G4Track&, G4double, G4ForceCondition* condition)
 {
   *condition = Forced;
+  //*condition = NotForced;
   return DBL_MAX;
 }
 
@@ -388,46 +405,38 @@ G4VMultipleScattering::PostStepGetPhysicalInteractionLength(
 G4VParticleChange* 
 G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
 {
-  G4ThreeVector dir2 = step.GetPostStepPoint()->GetMomentumDirection();
+  fParticleChange.ProposeMomentumDirection(step.GetPostStepPoint()->GetMomentumDirection());
   fNewPosition = step.GetPostStepPoint()->GetPosition();
-  fParticleChange.ProposeMomentumDirection(dir2);
   fParticleChange.ProposePosition(fNewPosition);
   fPositionChanged = false;
 
   G4double ekin = track.GetKineticEnergy();
   G4double geomLength = step.GetStepLength();
 
-  if(currentModel->IsActive(ekin) && geomLength > 0.0) {
+  // very small step - no msc
+  if(!currentModel->IsActive(ekin)) {
+    tPathLength = geomLength;
 
+    // sample msc
+  } else {
     G4double range = 
       currentModel->GetRange(currParticle,ekin,track.GetMaterialCutsCouple());
 
     G4double trueLength = currentModel->ComputeTrueStepLength(geomLength);
 
-    // normal case
-    if(trueLength < tPathLength) {
-      tPathLength = trueLength; 
-
+    /*
       // protection against wrong t->g->t conversion
-      /*
-    } else if(trueLength > tPathLength) { 
+      if(trueLength > tPathLength) { 
       G4cout << "G4VMultipleScattering::AlongStepDoIt: GeomLength= " 
 	     << geomLength 
 	     << " trueLenght= " << trueLength 
 	     << " tPathLength= " << tPathLength
 	     << " dr= " << range - trueLength << G4endl;
       */
-    }
-    /*
-      G4cout << "MSC::AlongStepDoIt: GeomLength= " << geomLength 
-      << " trueLenght= " << trueLength 
-      << " dr= " << range - trueLength << G4endl;
-    */
-   
-    fParticleChange.ProposeTrueStepLength(tPathLength);
+    if(trueLength < tPathLength) { tPathLength = trueLength; }
 
-    // do not sample displacement at the last step
-    if(tPathLength < range) {
+    // do not sample scattering at the last or at a small step
+    if(tPathLength < range && tPathLength > geomMin) {
 
       G4double safety = step.GetPreStepPoint()->GetSafety();
       if(geomLength > safety) {
@@ -436,36 +445,29 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
       G4ThreeVector displacement = 
 	currentModel->SampleScattering(track.GetDynamicParticle(),safety);
 
-      G4double r = displacement.mag();
+      G4double r2 = displacement.mag2();
 
-      //G4cout << "R= " << r << " safety= " << safety << G4endl;
+      //G4cout << "R= " << sqrt(r2) << " safety= " << safety << G4endl;
 
       // make correction for displacement
-      if(r > 0.0) {
+      if(r2 > 0.0) {
 
 	fPositionChanged = true;
 	// displaced point is definitely within the volume
-	if(r < safety) {
+	if(r2 < safety*safety) {
 
 	  // compute new endpoint of the Step
 	  fNewPosition += displacement;
 
 	} else {
-
 	  // add a factor which ensure numerical stability
-	  G4double fact = 0.99*safety/r; 
-	  fNewPosition += displacement*fact;
+	  fNewPosition += displacement*(0.99*safety/sqrt(r2));
 	}
-
-	//safetyHelper->ReLocateWithinVolume(fNewPosition);
-	//fParticleChange.ProposePosition(fNewPosition);
       }
     }
-
-    // no scattering case
-  } else {
-    fParticleChange.ProposeTrueStepLength(geomLength);
   }
+  fParticleChange.ProposeTrueStepLength(tPathLength);
+  //fParticleChange.ProposePosition(fNewPosition);
   return &fParticleChange;
 }
 
@@ -474,7 +476,7 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
 G4VParticleChange* 
 G4VMultipleScattering::PostStepDoIt(const G4Track& track, const G4Step&)
 {
-  fParticleChange.Initialize(track);
+  fParticleChange.Initialize(track);  
   if(fPositionChanged) { 
     safetyHelper->ReLocateWithinVolume(fNewPosition);
     fParticleChange.ProposePosition(fNewPosition); 

@@ -1090,8 +1090,9 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   // Long step
   if(eloss > preStepKinEnergy*linLossLimit) {
 
-    G4double x = GetScaledRangeForScaledEnergy(preStepScaledEnergy) 
-      - length/reduceFactor;
+    //G4double x = GetScaledRangeForScaledEnergy(preStepScaledEnergy) 
+    //  - length/reduceFactor;
+    G4double x = (fRange - length)/reduceFactor;
     eloss = preStepKinEnergy - ScaledKinEnergyForLoss(x)/massRatio;
    
     /*

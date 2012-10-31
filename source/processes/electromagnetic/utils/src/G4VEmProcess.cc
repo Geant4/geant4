@@ -135,6 +135,7 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   biasFlag     = false; 
   weightFlag   = false;
   (G4LossTableManager::Instance())->Register(this);
+  warn = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -190,6 +191,12 @@ void G4VEmProcess::AddEmModel(G4int order, G4VEmModel* p,
 
 void G4VEmProcess::SetModel(G4VEmModel* p, G4int index)
 {
+  ++warn;
+  if(warn < 10) { 
+    G4cout << "### G4VEmProcess::SetModel is obsolete method and will be "
+	   << "removed for the next release." << G4endl;
+    G4cout << "    Please, use SetEmModel" << G4endl;
+  } 
   G4int n = emModels.size();
   if(index >= n) { for(G4int i=n; i<=index; ++i) {emModels.push_back(0);} }
   emModels[index] = p;
@@ -199,6 +206,11 @@ void G4VEmProcess::SetModel(G4VEmModel* p, G4int index)
 
 G4VEmModel* G4VEmProcess::Model(G4int index)
 {
+  if(warn < 10) { 
+    G4cout << "### G4VEmProcess::Model is obsolete method and will be "
+	   << "removed for the next release." << G4endl;
+    G4cout << "    Please, use EmModel" << G4endl;
+  } 
   G4VEmModel* p = 0;
   if(index >= 0 && index <  G4int(emModels.size())) { p = emModels[index]; }
   return p;

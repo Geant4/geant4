@@ -396,6 +396,8 @@ private:
   G4double                     fFactor;
   G4bool                       biasFlag;
   G4bool                       weightFlag;
+
+  G4int                        warn;
 };
 
 // ======== Run time inline methods ================

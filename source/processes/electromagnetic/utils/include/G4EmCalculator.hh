@@ -199,6 +199,9 @@ public:
                        const G4String& processName, const G4Element*,
 		       G4double cut = 0.0);
 
+  G4double ComputeGammaAttenuationLength(G4double kinEnergy, 
+					 const G4Material*);
+
   G4double ComputeShellIonisationCrossSectionPerAtom(
                    const G4String& part, G4int Z, 
 		   G4AtomicShellEnumerator shell,

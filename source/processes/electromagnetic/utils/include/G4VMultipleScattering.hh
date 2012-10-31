@@ -253,6 +253,7 @@ private:
 
   G4EmModelManager*           modelManager;
   G4LossTableManager*         emManager;
+  G4double                    geomMin;
 
   // ======== Parameters of the class fixed at initialisation =======
 
@@ -266,7 +267,6 @@ private:
 
   G4MscStepLimitType          stepLimit;
 
-  G4double                    geomMin;
   G4double                    skin;
   G4double                    facrange;
   G4double                    facgeom;
@@ -295,6 +295,7 @@ private:
   G4ThreeVector               fNewPosition;
   G4bool                      fPositionChanged;
 
+  G4int                       warn;
 };
 
 // ======== Run time inline methods ================

@@ -17,8 +17,22 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20 October 12: V.Ivant (emutils-V09-05-47)
+- G4VMultipleScatteringModel - fixed typo in previous tag;
+    compute true path length even is msc model is inactive 
+
+20 October 12: V.Ivant (emutils-V09-05-46)
+- G4VMultipleScatteringModel - critical fix for stopping particles 
+    (ATLAS report on small steps of low-energy ions)
+
+19 October 12: V.Ivant (emutils-V09-05-45)
+- G4VEnergyLossProcess, G4VMultipleScattering - attempt to optimise
+    run time methods called at each step
+- G4EmCalculator - added ComputeGammaAttenuationLength method
+- added warning to obsolete methods and classes
+
 18 October 12: V.Ivant (emutils-V09-05-44)
-- G4VEnergyLossProcess - define flag isIon fo all nucleus except
+- G4VEnergyLossProcess - define flag isIon for all nucleus except
     deuteron, triton and special DNA ions
 - G4VEmProcess, G4EmModelManager - minor reduce of number of operations
     at each step
