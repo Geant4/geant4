@@ -33,6 +33,8 @@
 
 #include "ROOTAnalysis.hh"
 #include "G4Version.hh"
+#include "G4SystemOfUnits.hh"
+
 
 ROOTAnalysis* ROOTAnalysis::instance = 0;
 
