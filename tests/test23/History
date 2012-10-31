@@ -38,6 +38,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+12 October 2012  Andrea Dotti  (test23-V09-05-06)
+----------------------------------------------------
+- Explicit inclusion of units and constants headers.
 
 9 October 2012  Gabriele Cosmo (test23-V09-05-05)
 ----------------------------------------------------
