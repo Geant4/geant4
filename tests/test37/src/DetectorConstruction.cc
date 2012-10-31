@@ -26,6 +26,7 @@
 #include "DetectorConstruction.hh"
 #include "DetectorMessenger.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4RunManager.hh" 
 
 #include "G4NistManager.hh"
