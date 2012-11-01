@@ -30,7 +30,6 @@ if(GEANT4_ENABLE_TESTING)
                  "G4LEDATA;G4EMLOW"
                  "G4LEVELGAMMADATA;PhotonEvaporation"
                  "G4RADIOACTIVEDATA;RadioactiveDecay"
-                 "G4ABLADATA;G4ABLA"
                  "G4NEUTRONXSDATA;G4NEUTRONXS"
                  "G4PIIDATA;G4PII"
                  "G4REALSURFACEDATA;RealSurface"

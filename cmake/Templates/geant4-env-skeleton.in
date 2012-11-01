@@ -28,7 +28,6 @@
 # Resource file paths
 # Data Library Paths are only set if they were installed by CMake
 #
-@GEANT4_ENV_G4ABLADATA@
 @GEANT4_ENV_G4LEDATA@
 @GEANT4_ENV_G4LEVELGAMMADATA@
 @GEANT4_ENV_G4NEUTRONHPDATA@

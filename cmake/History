@@ -29,6 +29,32 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+31st October 2012 - Ben Morgan        (cmake-V09-05-60)
+- Modules/Geant4InstallData.cmake: Remove obsolete ABLA dataset.
+- Modules/Geant4ToolchainBackwardCompatibility.cmake: Remove
+  setting of ABLA environment export variables to overcome error
+  reported by Gunter Folger and Hisaya Kurashige.
+- Modules/Geant4CTest.cmake: Remove obsolete ABLA dataset.
+- Template/geant4-env-skeleton.in: Remove ABLA export variables
+- Template/geant4make-skeleton.in: Remove ABLA export variables
+
+
+31th October 2012 -  Gunter Folger    (cmake-V09-05-59)
+-  bring settings for ABLA back in , used elsewhere, and caused 
+    configure to badly fail.
+    
+30th October 2012 -  Gunter Folger    (cmake-V09-05-58)
+- Modules/Geant4InstallData.cmake: Revert to use G4EMLOW.6.32
+    and delete settings for ABLA, not needed per Davide M.
+
+30th October 2012 - John Apostolakis  (cmake-V09-05-57)
+- Modules/Geant4InstallData.cmake: Revert to use G4EMLOW.6.31
+    to overcome problems in Continuous build of G4 in Cdash
+
+30th October 2012 - Gunter Folger     (cmake-V09-05-56)
+- Modules/Geant4InstallData.cmake: Use G4EMLOW.6.32
+
 25th October 2012 - Pere Mato (cmake-V09-05-55)
 - Templates/Geant4CTest.cmake: corrected mistake with GEANT4_DATA_DIR
 
