@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+28-10-12 mma (rdecay01-V09-05-13)
+- update README and .README
+     
 07-10-12 mma (rdecay01-V09-05-12)
 - use G4AnalysisManager
 

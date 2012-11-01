@@ -106,18 +106,18 @@ $Id: README,v 1.2 2010-09-17 11:21:45 maire Exp $
       7 : momentum balance
       8 : total time of life of decay chain          
                             
-   The histograms are managed by the HistoManager class and its Messenger. 
+   The histograms are managed by G4AnalysisManager and its Messenger. 
    The histos can be individually activated with the command :
-   /rdecay1/histo/setHisto id nbBins  valMin valMax unit 
+   /analysis/h1/set id nbBins  valMin valMax unit 
    where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
    
    One can control the name of the histograms file with the command:
-   /rdecay1/histo/setFileName  name  (default rdecay1)
+   /analysis/setFileName  name  (default rdecay1)
    
    It is possible to choose the format of the histogram file : root (default),
-   hbook, xml, csv, by using namespace in HistoManager.hh
+   xml, csv, by using namespace in HistoManager.hh
    
    It is also possible to print selected histograms on an ascii file:
-   /rdecay1/histo/printHisto id
+   /analysis/h1/setAscii id
    All selected histos will be written on a file name.ascii (default rdecay1)
 
