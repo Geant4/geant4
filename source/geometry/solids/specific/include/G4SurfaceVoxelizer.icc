@@ -122,17 +122,17 @@ G4int G4SurfaceVoxelizer::GetMaxVoxels(G4ThreeVector &ratioOfReduction)
 }
 
 inline
-G4long G4SurfaceVoxelizer::GetCountOfVoxels() const
+long long G4SurfaceVoxelizer::GetCountOfVoxels() const
 {
   return fCountOfVoxels;
 }
 
 inline
-G4long G4SurfaceVoxelizer::CountVoxels(std::vector<G4double> boundaries[]) const
+long long G4SurfaceVoxelizer::CountVoxels(std::vector<G4double> boundaries[]) const
 {
-  G4long sx = boundaries[0].size() - 1;
-  G4long sy = boundaries[1].size() - 1;
-  G4long sz = boundaries[2].size() - 1;
+  long long sx = boundaries[0].size() - 1;
+  long long sy = boundaries[1].size() - 1;
+  long long sz = boundaries[2].size() - 1;
 
   return  sx * sy *sz;
 }

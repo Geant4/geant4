@@ -150,9 +150,9 @@ class G4SurfaceVoxelizer
 
     G4int AllocatedMemory();
 
-    inline G4long GetCountOfVoxels() const;
+    inline long long GetCountOfVoxels() const;
 
-    inline G4long CountVoxels(std::vector<G4double> boundaries[]) const;
+    inline long long CountVoxels(std::vector<G4double> boundaries[]) const;
 
     inline G4int GetCandidates(std::vector<G4int> &curVoxel,
                          const std::vector<G4int> *&candidates,
