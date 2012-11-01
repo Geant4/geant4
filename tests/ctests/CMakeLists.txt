@@ -215,10 +215,15 @@ GEANT4_ADD_TEST(example-ext-exoticphysics-monopole
                 BUILD monopole ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT} )
 GEANT4_ADD_TEST(example-ext-exoticphysics-phonons
                 COMMAND ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/phononExample/XGeBox
-                        ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phononExample/vis.mac
+                        ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phononExample/run.in
+                POSTCMD ${CMAKE_COMMAND} -E compare_files timing.ssv ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phononExample/timing.out
+                POSTCMD ${CMAKE_COMMAND} -E compare_files caustic.ssv ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phononExample/caustic.out
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phononExample
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/phononExample
-                BUILD XGeBox ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT} )
+                BUILD XGeBox PROJECT phononExample
+                ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
+                            CRYSTALMAPS=${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phononExample/CrystalMaps
+		)
 foreach(_i 01 02 03 04 05 06)
   GEANT4_ADD_TEST(example-ext-field-field${_i} 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/field/field${_i}/field${_i} 
@@ -474,11 +479,11 @@ GEANT4_ADD_TEST(example-adv-air_shower
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/air_shower
                 BUILD Ultra ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-adv-hadrontherapy 
-                COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/hadrontherapy/Hadrontherapy
+                COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/hadrontherapy/hadrontherapy
                         ${CMAKE_SOURCE_DIR}/examples/advanced/hadrontherapy/batch.mac
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/hadrontherapy
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/hadrontherapy
-                BUILD Hadrontherapy ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+                BUILD hadrontherapy ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-adv-human_phantom 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/human_phantom/phantom batch.mac
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/human_phantom

@@ -17,6 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ctests-V09-05-32 31th October 2012 Francesco Romano
+- Correct case for hadrontherapy example to follow changes in the example 
+   CMakeLists.txt file
+
+ctests-V09-05-31 30th October 2012 Michael Kelsey
+- Improve phononExample following discussion with Ivana: Envvar CRYSTALMAPS
+  points to input directory used by executable; new input file runs without
+  graphics; output files are compared with references from source directory.
+  Requires phononExample-V09-05-02 or later.
+
 ctests-V09-05-30 30th October 2012 Gunter Folger
 - Add project names for several advanced examples:
    human_phantom,purging_magnet, radioprotection, xray_fluorescence,
