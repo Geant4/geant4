@@ -54,7 +54,6 @@
 #include "G4ChipsKaonMinusInelasticXS.hh"
 #include "G4ChipsKaonPlusInelasticXS.hh"
 #include "G4ChipsKaonZeroInelasticXS.hh"
-#include "G4BGGNucleonInelasticXS.hh"
 #include "G4CrossSectionDataSetRegistry.hh"
 
 // factory
@@ -180,15 +179,11 @@ void HadronPhysicsFTFP_BERT::ConstructProcess()
   ChipsKaonPlus = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonPlusInelasticXS::Default_Name());
   ChipsKaonZero = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name());
   //
-    BGGProton = new G4BGGNucleonInelasticXS(G4Proton::Proton());
-    BGGNeutron = new G4BGGNucleonInelasticXS(G4Neutron::Neutron());
     
   FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(ChipsKaonMinus);
   FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(ChipsKaonPlus);
   FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(ChipsKaonZero );
   FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(ChipsKaonZero );
-    FindInelasticProcess(G4Proton::Proton())->AddDataSet(BGGProton);
-    FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(BGGNeutron);
     
     
   theHyperon->Build();

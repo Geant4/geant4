@@ -50,16 +50,19 @@
 
 #include "G4HadronInelasticProcess.hh"
 #include "G4BinaryLightIonReaction.hh"
-#include "G4TripathiCrossSection.hh"
-#include "G4TripathiLightCrossSection.hh"
-#include "G4IonsShenCrossSection.hh"
-#include "G4IonProtonCrossSection.hh"
+//#include "G4TripathiCrossSection.hh"
+//#include "G4TripathiLightCrossSection.hh"
+//#include "G4IonsShenCrossSection.hh"
+//#include "G4IonProtonCrossSection.hh"
+#include "G4GGNuclNuclCrossSection.hh"
 
 #include "G4PreCompoundModel.hh"
 #include "G4ExcitationHandler.hh"
 #include "G4FTFBuilder.hh"
 #include "G4HadronicInteraction.hh"
 #include "G4BuilderType.hh"
+
+#include "G4CrossSectionDataSetRegistry.hh"
 
 using namespace std;
 
@@ -69,7 +72,8 @@ G4IonPhysics::G4IonPhysics(G4int ver)
   : G4VPhysicsConstructor("ionInelasticFTFP_BIC"),verbose(ver),
     wasActivated(false)
 {
-  fTripathi = fTripathiLight = fShen = fIonH = 0;
+//  fTripathi = fTripathiLight = fShen = fIonH = 0;
+    fGGNuclNucl=0;
   theIonBC = 0;
   theFTFP = 0;
   theBuilder = 0;
@@ -116,11 +120,12 @@ void G4IonPhysics::ConstructProcess()
   theFTFP->SetMinEnergy(2*GeV);
   theFTFP->SetMaxEnergy(emax);
 
-  fShen = new G4IonsShenCrossSection();
+  //fShen = new G4IonsShenCrossSection();
   //fTripathi = new G4TripathiCrossSection();
   //fTripathiLight = new G4TripathiLightCrossSection();
-  fIonH = new G4IonProtonCrossSection();
-
+  //fIonH = new G4IonProtonCrossSection();
+    fGGNuclNucl = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4GGNuclNuclCrossSection::Default_Name());
+    
   AddProcess("dInelastic", G4Deuteron::Deuteron(),false);
   AddProcess("tInelastic",G4Triton::Triton(),false);
   AddProcess("He3Inelastic",G4He3::He3(),true);
@@ -137,15 +142,20 @@ void G4IonPhysics::ConstructProcess()
 
 void G4IonPhysics::AddProcess(const G4String& name, 
 					       G4ParticleDefinition* part, 
-					       G4bool isIon)
+					       G4bool )//isIon)
 {
   G4HadronInelasticProcess* hadi = new G4HadronInelasticProcess(name, part);
   G4ProcessManager* pManager = part->GetProcessManager();
   pManager->AddDiscreteProcess(hadi);
+/*
   hadi->AddDataSet(fShen);
   //hadi->AddDataSet(fTripathi);
   //hadi->AddDataSet(fTripathiLight);
   if(isIon) { hadi->AddDataSet(fIonH); }
+ */
+    
+  hadi->AddDataSet(fGGNuclNucl);
+    
   hadi->RegisterMe(theIonBC);
   hadi->RegisterMe(theFTFP);
 }

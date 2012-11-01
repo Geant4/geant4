@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26-10-2012, W.Pokorski			(phys-lists-V09-05-65)
+- second try with the new ion XS
+
+25-10-2012, W.Pokorski			(phys-lists-V09-05-64)
+- moving FTFP_BERT to use the agreed set of cross-sections
+
 24-10-2012, W.Pokorski			(phys-lists-V09-05-63)
 - moving FTFP_BERT to use BGGNucleonInelastic
 
