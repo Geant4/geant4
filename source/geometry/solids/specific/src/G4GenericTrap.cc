@@ -50,6 +50,8 @@
 #include "G4TessellatedSolid.hh"
 #include "G4TriangularFacet.hh"
 #include "G4QuadrangularFacet.hh"
+#include "G4VoxelLimits.hh"
+#include "G4AffineTransform.hh"
 #include "Randomize.hh"
 
 #include "G4VGraphicsScene.hh"

@@ -32,6 +32,8 @@
 //
 //  Test file for class G4TwistedTubs
 //
+// 08.10.12 V. Grichine, bug report no. 899 was added 
+//
 //             Ensure asserts are compiled in
 
 #include <assert.h>
@@ -43,10 +45,31 @@
 #include "ApproxEqual.hh"
 
 #include "G4ThreeVector.hh"
+#include "G4ParticleMomentum.hh"
 #include "G4TwistedTubs.hh"
 #include "G4RotationMatrix.hh"
 #include "G4AffineTransform.hh"
 #include "G4VoxelLimits.hh"
+
+///////////////////////////////////////////////////////////////////
+//
+// Dave's auxiliary function
+
+const G4String OutputInside(const EInside a)
+{
+	switch(a) 
+        {
+		case kInside:  return "Inside"; 
+		case kOutside: return "Outside";
+		case kSurface: return "Surface";
+	}
+	return "????";
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+
 
 G4bool testG4TwistedTubs()
 {
@@ -78,13 +101,91 @@ G4bool testG4TwistedTubs()
       dist = t1.DistanceToIn(Spoint,dir/dir.mag()) ;
       G4cout << "Spoint " << Spoint << " " <<  dist << G4endl ;
     }
-
-
     return true;
 }
 
 int main()
 {
+  G4double dist;
+  G4bool *pgoodNorm,goodNorm,calcNorm=true;
+  G4ThreeVector *pNorm,norm;
+
+
+  // b899 distance to out id infinity
+
+  G4double innerRadiusOfTheTube = 407.195*mm;
+  G4double outerRadiusOfTheTube = 422.92898418921311*mm;
+  G4double hightOfTheTube = 1090*mm;
+  //  G4double startAngleOfTheTube = 0.*deg;
+  G4double spanningAngleOfTheTube = 2.25*deg;
+  G4double twistedAngleOfTheTube = 0.23561944901923448*rad;
+
+  G4TwistedTubs* tracker_tube = new G4TwistedTubs("tracker_tube",
+                                                  twistedAngleOfTheTube,
+                                                  innerRadiusOfTheTube,
+                                                  outerRadiusOfTheTube-2.*micrometer,
+                                                  hightOfTheTube,
+                                                  spanningAngleOfTheTube-0.01*deg);
+
+
+  G4ThreeVector PrimaryPosition;
+  G4double x = -14.37245571118363*mm;
+  G4double y  = -421.5761625068428*mm;
+  PrimaryPosition[2] = -859.6092789812545*mm;
+
+
+  spanningAngleOfTheTube = 122.*2.25*deg;
+
+  G4double cosTheta = std::cos(spanningAngleOfTheTube);
+  G4double sinTheta = std::sin(spanningAngleOfTheTube);
+
+  // PrimaryPosition[0] = -14.37245571118363*mm;
+  // PrimaryPosition[1] = -421.5761625068428*mm;
+  PrimaryPosition[0] = x*cosTheta + y*sinTheta;
+  PrimaryPosition[1] = -x*sinTheta + y*cosTheta;
+
+  // G4ParticleMomentum aMomentum;
+  G4ThreeVector aMomentum;
+
+  // aMomentum[0] = 0.05348375305152415*MeV;
+  // aMomentum[1] = -0.005546019422201249*MeV;
+  aMomentum[2] = 0.04481714826766207*MeV;
+
+
+  x = 0.05348375305152415*MeV;
+  y = -0.005546019422201249*MeV;
+
+  aMomentum[0] = x*cosTheta + y*sinTheta;
+  aMomentum[1] = -x*sinTheta + y*cosTheta;
+
+  aMomentum /= aMomentum.mag();
+
+  // PrimaryPosition is on surface and going inside
+
+  EInside a1 = tracker_tube->Inside(PrimaryPosition);	
+  G4cout << "bug899, starting point is " << OutputInside(a1) << G4endl;
+  G4ThreeVector normal;
+ 
+  normal = tracker_tube->SurfaceNormal(PrimaryPosition);
+
+  G4double scalar;
+
+  scalar = aMomentum.x()*normal.x() + aMomentum.y()*normal.y() + aMomentum.z()*normal.z();
+
+  G4cout<<"dirction*normal = "<<scalar<<G4endl; 
+
+  dist = tracker_tube->DistanceToIn(PrimaryPosition,aMomentum);
+
+  G4cout<<"distance to in = "<<dist<<G4endl; 
+
+
+  dist = tracker_tube->DistanceToOut(PrimaryPosition,aMomentum,calcNorm,pgoodNorm,pNorm);
+
+  G4cout<<"distance to out = "<<dist<<G4endl; 
+
+
+
+
 #ifdef NDEBUG
     G4Exception("FAIL: *** Assertions must be compiled in! ***");
 #endif

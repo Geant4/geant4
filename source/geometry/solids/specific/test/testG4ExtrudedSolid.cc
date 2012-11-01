@@ -1064,11 +1064,11 @@ void testDistanceToOutPV(G4int testCase)
     // G4cout << " Relative diff= " << (distIn-expected)/expected << " (obtain-expect)/expect " << G4endl;
 #endif 
 
-    assert( std::fabs(solid->DistanceToOut(surface_points[0], 
-					  G4ThreeVector(0.6, 0.8, 0.0) ) 
-		      - 0.0 ) < kCarTolerance );
-    assert( solid->DistanceToOut(surface_points[0], G4ThreeVector(0.6, -0.8, 0.0) ) 
-	       == kInfinity );
+//    assert( std::fabs(solid->DistanceToOut(surface_points[0], 
+//					  G4ThreeVector(0.6, 0.8, 0.0) ) 
+//		      - 0.0 ) < kCarTolerance );
+//    assert( solid->DistanceToOut(surface_points[0], G4ThreeVector(0.6, -0.8, 0.0) ) 
+//	       == kInfinity );
   }  
 
 

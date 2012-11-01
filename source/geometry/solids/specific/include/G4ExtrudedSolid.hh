@@ -69,6 +69,8 @@
 
 #include "G4TessellatedSolid.hh"
 
+class G4VFacet;
+
 class G4ExtrudedSolid : public G4TessellatedSolid
 {
 

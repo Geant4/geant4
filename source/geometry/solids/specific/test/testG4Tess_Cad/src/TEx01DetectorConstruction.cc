@@ -75,13 +75,13 @@ G4VPhysicalVolume* TEx01DetectorConstruction::Construct()
 //
 //--------- Material definition ---------
 
-  G4double a, z;
+  G4double av, z;
   G4double density;
   G4int nel;
 
   //Air
-  G4Element* N = new G4Element("Nitrogen", "N", z=7., a= 14.01*g/mole);
-  G4Element* O = new G4Element("Oxygen"  , "O", z=8., a= 16.00*g/mole);
+  G4Element* N = new G4Element("Nitrogen", "N", z=7., av= 14.01*g/mole);
+  G4Element* O = new G4Element("Oxygen"  , "O", z=8., av= 16.00*g/mole);
    
   G4Material* Air = new G4Material("Air", density= 1.29*mg/cm3, nel=2);
   Air->AddElement(N, 70*perCent);
@@ -89,7 +89,7 @@ G4VPhysicalVolume* TEx01DetectorConstruction::Construct()
 
   //Lead
   G4Material* Pb = 
-  new G4Material("Lead", z=82., a= 207.19*g/mole, density= 11.35*g/cm3);
+  new G4Material("Lead", z=82., av= 207.19*g/mole, density= 11.35*g/cm3);
     
   // Print all the materials defined.
   //
@@ -245,11 +245,11 @@ G4VPhysicalVolume* TEx01DetectorConstruction::Construct()
 	is2 >> level;
 	//	G4cout << logicName << " " << physiName << " " << level << G4endl;
 	//
-	std::vector<G4TessellatedSolid*>::iterator itr=solidStore.begin();
-	while ((*itr)->GetName() != lsName && itr != solidStore.end()) 
-	  itr++ ;
-	if (itr != solidStore.end()) {
-	  solidTarget = (*itr);
+	std::vector<G4TessellatedSolid*>::iterator iter=solidStore.begin();
+	while ((*iter)->GetName() != lsName && iter != solidStore.end()) 
+	  iter++ ;
+	if (iter != solidStore.end()) {
+	  solidTarget = (*iter);
 	} else {
 	  G4cerr << " the .geom and .tree files don't match!" << G4endl;
 	} 
@@ -279,12 +279,12 @@ G4VPhysicalVolume* TEx01DetectorConstruction::Construct()
   
   logicWorld  ->SetVisAttributes(BoxVisAtt);  
   G4int i = 1;
-  G4double r, g, b;
+  G4double r, gr, b;
   for (itr = solidStore.begin(); itr != solidStore.end(); itr++) {
     r = (256-i)/256;
-    g= 1.- r;
+    gr= 1.- r;
     b = 1- r*r;
-    FacetVisAtt= new G4VisAttributes(G4Colour(r, g, b));
+    FacetVisAtt= new G4VisAttributes(G4Colour(r, gr, b));
     // works only on logic volume
     //    (*itr) ->SetVisAttributes(FacetVisAtt);
   }  
