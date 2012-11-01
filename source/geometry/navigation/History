@@ -13,73 +13,158 @@ and keep track of all category-tags.
 It DOES NOT substitute the  CVS log-message one should put at every
 committal in the CVS repository !
 
- Names for lines of tags:
-   Fix-line     =  fixes for 9.5 patches  (currently patch 02)
-   Develop-line =  improvements for 9.6
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-Oct 16th, 2012 - J.Apostolakis  (geomnav-V09-05-19)   Fix-line
+Nov  1st, 2012 - J.Apostolakis  (geomnav-V09-05-32)
 ------------------------------
-- G4Navigator and G4MultiNavigator 
-   Took out unintentional commit of additional change 
-   that added extra argument to LocateGlobalPointWithinVolume
+ G4Navigator
+  * Changed to use *new* safety (best safety), as a trial.
+  - Added information for problem of 'not calculated' normal in
+     GetGlobalExitNormal
+  - Revised operator << to print all state (adapted from PrintState),
+     not just history
+  - Hidden unused code in GetLocalExitNormalAndCheck.
 
-Oct 16th, 2012 - J.Apostolakis  (geomnav-V09-05-18)   Fix-line
+Oct 31st, 2012 - J.Apostolakis  (geomnav-V09-05-31)
 ------------------------------
-- G4PropagatorInField & G4VIntersectionLocator
-   Changed first two arguments of IntersectChord to const 3-vec references.
-    ( Performance fix - thanks to Makoto Asai. )
+- G4VoxelSafety: Improved reporting of potential issues, e.g. (nodeNo==0)
 
-- G4VIntersectionLocator.cc
-    Made const the first argument of GetLastSurface normal 
-      (Performance fix).
-    Fixed return value of validNormal of GetSurfaceNormal. 
+- G4VoxelNavigation: Added a simple check whether point in ComputeSafety 
+   call is inside current volume.
+
+Oct 30th, 2012 - J.Apostolakis  (geomnav-V09-05-30)
+------------------------------
+- VoxelSafety
+   * Use distance to reduce search length.
+
+Oct 30th, 2012 - J.Apostolakis  (geomnav-V09-05-29)
+------------------------------
+- VoxelSafety
+   * Find distance to voxel boundary at current level. 
+     Decide next node using distance.
+
+Oct 30th, 2012 - J.Apostolakis  (geomnav-V09-05-28)
+------------------------------
+- VoxelSafety
+   * Fixed logic to find next voxel up and down.
+
+Oct 29th, 2012 - J.Apostolakis  (geomnav-V09-05-27)
+------------------------------
+- ReplicaNavigation 
+   * Get additional information in case of 'Out-of-Volume' exception.  
+   * Hide debug printout with (fVerbose>2)
+
+- SafetyHelper
+   * Introduced check of length for Relocation method
+      LocateGlobalPointWithinVolume
+     to check move against safety.  Works if Verbose Level > 0.
+
+- VoxelSafety
+   * Eliminated debug printouts - hidden in 'if fVerbose > 2'
+   * Reset fCheckMode in constructor. 
+
+
+Oct 29th, 2012 - J.Apostolakis  (geomnav-V09-05-26)
+------------------------------
+- ReplicaNavigation: Fix for compilation issues
+     (shadowing variable, unused variable.)
+
+Oct 26th, 2012 - J.Apostolakis  (geomnav-V09-05-25)
+------------------------------
+- Fix for ReplicaNavigation: set 'calculatedExitNormal' flag correctly.
+
+Oct 26th, 2012 - J.Apostolakis  (geomnav-V09-05-24)
+------------------------------
+- Revised G4Navigator to use G4VoxelSafety and to check its results
+   against those of G4NormalNavigation::ComputeSafety 
+
+    NOTE: *SLOW* - Calculates safety 3 times for voxel volumes
+        for checking only, not for production
+
+- G4VoxelSafety: 
+    * Improved to use equivalent nodes.  ( Still checks all voxels. )
+    * Changed arguments and members 
+       to make G4SmartVoxelHeader into const G4SmartVoxelHeader
+
+    
+- G4ReplicaNavigator: Small cleanup, mostly cosmetic.
+
+Oct 23rd, 2012 - J.Apostolakis  (geomnav-V09-05-23)
+------------------------------
+- G4ReplicaNavigator
+   Fixed compiler warning on for perMillion
+
+Oct 23rd, 2012 - J.Apostolakis  (geomnav-V09-05-22)
+------------------------------
+Incorporated fixes made for geomnav-V09-18 (in Fix-line)
+
+- G4Navigator::GetGlobalExitNormal
+   Corrected use of cached global normal value - 
+     use it only when ComputeStep was last called.
 
 - G4Navigator, G4MultiNavigator and G4ErrorPropagationNavigator
-    Revised interface of ComputeSafety, making 'true' default value of
-      the 3rd argument.
+   Changed default of 3rd argument of ComputeSafety to true
 
 - G4Navigator 
-    Changed GetSavedState and RestoreSavedState methods to protected.
+    Changed GetSavedState and RestoreSavedState methods to protected (from public).
+    Extended the state saved by these methods.
 
 - G4ErrorPropagationNavigator
     Cosmetic change to improve readability of initialisation of a double.
 
+Oct 15th, 2012 - J.Apostolakis  (geomnav-V09-05-21)
+------------------------------
+- G4PropagatorInField & G4VIntersectionLocator
+    Changed first two arguments of IntersectChord to const 3-vec references.
+- G4VIntersectionLocator.cc
+    Fixed return value of validNormal of GetSurfaceNormal. 
+    Made const the first argument of GetLastSurface normal.
+- G4ErrorPropagationNavigator
+    Revised interface of ComputeSafety, making 'true' default value of 
+      the 3rd argument.
+    Cosmetic change to improve readability of initialisation of a double.
 - G4ReplicaNavigation.cc
     Small revision to printout - to improve end-of-line. 
-   
-Oct 15th, 2012 - J.Apostolakis  (geomnav-V09-05-17)   Fix-line
+
+Oct 15th, 2012 - J.Apostolakis  (geomnav-V09-05-20)
 ------------------------------
 - G4Navigator
-    Fixed condition in GetGlobalExitNormal.
-    Enabled calculation of normal for daughters of Replicas.
+   Enabled the code that finds the entering normal for the case of replicas!
+     When entering a volume, the same code can find the entering normal in the
+     case of replicas, as in the case of other types of volumes (normal,
+     parameterised. )
+   Improved error message, changing it into an Exception. (#5)
 
-Oct 15th, 2012 - J.Apostolakis  (geomnav-V09-05-16)   Fix-line
+- G4ReplicaNavigation
+   Transform exitNormal to Grand-mother reference frame  (was current=mother)
+   Fix starting depth for 'while': had made it top-2, not top-1=2nd level.
+
+Oct 15th, 2012 - J.Apostolakis  (geomnav-V09-05-15)   Fix-line --> Ignored
 ------------------------------
-- G4Navigator::ComputeStep 
-    Do not define G4DEBUG_NAVIGATION in this and methods below.
+- G4Navigator: Hidden exception with #ifdef for unsupported Exit Normal in Replicas 
 
-Oct 15th, 2012 - J.Apostolakis  (geomnav-V09-05-15)   Fix-line
+Oct 13th, 2012 - J.Apostolakis  (geomnav-V09-05-14)   Develop-line
 ------------------------------
-- G4Navigator
-   Hidden exception for unsupported Exit Normal in case of Replicas 
-     only available in #ifdef G4DEBUG_NAVIGATION , and
-     made it JustWarning for now.
-   Revised codes for two exceptions which can occur only in case of run-time
-     errors. ( Was not-supported.)
+- ReplicaNavigation:
+   Extended it to calculate ExitNormal. First version.
+     Now calculates it at each 'depth', and also for daughter.
+       Was: calculated it only for exiting mother, i.e. current
 
-Tag geomnav-V09-05-14 is in the development-line -- Not included or relevant.
----------------------
+- Navigator: GetExitNormal (Local)
+   Set fCalculatedExitNormal in case of 'Valid' (convex) normal.
+   Re-activate printing for missing exit Normal in case of Replica.
+     ( define G4DEBUG_NAVIGATION 1 )
 
-Oct 11th, 2012 - J.Apostolakis  (geomnav-V09-05-13)   Fix-line
+Oct 11th, 2012 - J.Apostolakis  (geomnav-V09-05-13)   Fix-line  --> Ignored
+
+Oct 11th, 2012 - J.Apostolakis  (geomnav-V09-05-12)   Develop-line
 ------------------------------
 - Navigator::GetLocalExitNormal()
     Hidden Exception warning for missing Exit Normal 
      ( Note: it remains 'protected' under  #ifdef G4DEBUG_NAVIGATION)
 
-Tag geomnav-V09-05-12 is in the development-line -- Not relevant.
----------------------
+* G4SafetyHelper::ReLocateWithinVolume: Added check of relocation.
 
 Oct 11th, 2012 - J.Apostolakis  (geomnav-V09-05-11) 
 ------------------------------

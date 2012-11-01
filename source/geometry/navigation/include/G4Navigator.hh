@@ -150,8 +150,6 @@ class G4Navigator
     // the caller is certain that the new global point (position) is inside the
     // same volume as the previous position.  Usually this can be guaranteed
     // only if the point is within safety.
-    //   A second use (with preserveState = true) can do this without
-    // resetting the state variables (fExiting, .. )
 
   inline void LocateGlobalPointAndUpdateTouchableHandle(
                 const G4ThreeVector&       position,
@@ -187,7 +185,7 @@ class G4Navigator
     // Calculate the isotropic distance to the nearest boundary from the
     // specified point in the global coordinate system. 
     // The globalpoint utilised must be within the current volume.
-    //  The value returned is usually an underestimate.
+    // The value returned is usually an underestimate.  
     // The proposed maximum length is used to avoid volume safety
     //  calculations.  The geometry must be closed.
     // To ensure minimum side effects from the call, keepState

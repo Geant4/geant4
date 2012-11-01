@@ -150,8 +150,8 @@ G4VIntersectionLocator::IntersectChord( const G4ThreeVector&  StartPointA,
     LinearStepLength = GetNavigatorFor()->ComputeStep( StartPointA,
                                  ChordAB_Dir, ChordAB_Length, NewSafety );
     intersects = (LinearStepLength <= ChordAB_Length); 
-    // G4Navigator contracts to return k_infinity if len==asked
-    // and it did not find a surface boundary at that length
+       // G4Navigator contracts to return k_infinity if len==asked
+       // and it did not find a surface boundary at that length
     
     // G4cout << "G4VIntersectionLocator:  intersect= " << intersects
     //       << " step= " << LinearStepLength << " Chord length= " << ChordAB_Length;

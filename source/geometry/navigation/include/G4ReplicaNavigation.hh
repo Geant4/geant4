@@ -57,6 +57,28 @@
 
 class G4VSolid;
 
+struct G4ExitNormal {
+   //  Bucket to hold value of Normal (3-vector), 
+   //    bools for calculated and leave-behind or 'validConvex',
+   //    and exiting side.
+   
+   //    Identity of 'Side' of Replicaa
+   enum  ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kPX,kMX,kPY,kMY,kPZ,kMZ,kMother};
+   // Used by DistanceToOut methods
+
+   //  For communicating between methods
+   G4ThreeVector exitNormal;
+   G4bool        calculated;   // Normal
+   G4bool        validConvex;  // Solid locally convex
+   ESide         exitSide;
+public:
+   G4ExitNormal(G4ThreeVector norm= G4ThreeVector(0.,0.,0.),
+                G4bool        calc=false,
+                G4bool        valid= false,
+                ESide         side= kNull )
+   { exitNormal= norm; calculated= calc; validConvex=valid; exitSide=side;}
+};
+
 class G4ReplicaNavigation
 {
    friend class G4ReplicaNavigationTester;
@@ -82,6 +104,7 @@ class G4ReplicaNavigation
                               G4double &newSafety,
                               G4NavigationHistory &history,
                               G4bool &validExitNormal,
+                              G4bool &calculatedExitNormal,
                               G4ThreeVector &exitNormal,
                               G4bool &exiting,
                               G4bool &entering,
@@ -114,7 +137,8 @@ class G4ReplicaNavigation
   G4double DistanceToOut( const G4VPhysicalVolume *pVol,
                           const G4int replicaNo,
                           const G4ThreeVector &localPoint,
-                          const G4ThreeVector &localDirection ) const;
+                          const G4ThreeVector &localDirection,
+                          G4ExitNormal& candidateNormal ) const;
 
   inline G4int GetVerboseLevel() const;
   inline void  SetVerboseLevel(G4int level);
@@ -134,20 +158,30 @@ class G4ReplicaNavigation
 
   G4double DistanceToOutPhi( const G4ThreeVector &localPoint,
                              const G4ThreeVector &localDirection,
-                             const G4double width ) const;
+                             const G4double width,
+                             G4ExitNormal& foundNormal ) const;
 
   G4double DistanceToOutRad( const G4ThreeVector &localPoint,
                              const G4ThreeVector &localDirection,
                              const G4double width,
                              const G4double offset,
-                             const G4int replicaNo ) const;
+                             const G4int replicaNo,
+                             G4ExitNormal& foundNormal ) const;
   inline void SetPhiTransformation( const G4double ang,
                                           G4VPhysicalVolume *pVol=0 ) const;
  private:
-
+   // Invariants - unaltered during navigation
+   // **********
+   //  Configuration parameters
     G4bool fCheck; 
     G4int  fVerbose;
+   //  Local copy of constants
     G4double kCarTolerance, kRadTolerance, kAngTolerance;
+
+   // State - altered during navigation
+   // *****
+   // None: methods are const.
+
 };
 
 #include "G4ReplicaNavigation.icc"

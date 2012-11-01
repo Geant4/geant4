@@ -106,7 +106,7 @@ class G4MultiNavigator : public G4Navigator
     // 
     // Important Note: In order to call this the geometry MUST be closed.
 
-  void LocateGlobalPointWithinVolume(const G4ThreeVector& position);
+   void LocateGlobalPointWithinVolume(const G4ThreeVector& position); 
     // Relocate in all geometries for point that has not changed volume
     // (ie is within safety  in all geometries or is distance less that 
     // along the direction of a computed step.

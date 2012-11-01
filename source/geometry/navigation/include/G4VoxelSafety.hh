@@ -81,10 +81,11 @@ class G4VoxelSafety
       //  Make extra checks
 
   protected:
-    G4double  SafetyForVoxelHeader( G4SmartVoxelHeader* pHead,
-                              const G4ThreeVector& localPoint ); 
+    G4double  SafetyForVoxelHeader( const G4SmartVoxelHeader* pHead,
+                                    const G4ThreeVector& localPoint,
+                                    G4double  distUpperDepth = 0.0 );
 
-    G4double  SafetyForVoxelNode(   G4SmartVoxelNode *curVoxelNode, 
+    G4double  SafetyForVoxelNode(   const G4SmartVoxelNode *curVoxelNode,
                               const G4ThreeVector& localPoint ); 
 
     G4SmartVoxelNode* VoxelLocateLight( G4SmartVoxelHeader* pHead,
@@ -117,7 +118,7 @@ class G4VoxelSafety
     std::vector<G4int> fVoxelNodeNoStack;    
       // Node no point is inside at each level 
 
-    std::vector<G4SmartVoxelHeader*> fVoxelHeaderStack;
+    std::vector<const G4SmartVoxelHeader*> fVoxelHeaderStack;
       // Voxel headers at each level
 
     G4SmartVoxelNode* fVoxelNode;
