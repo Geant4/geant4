@@ -755,9 +755,10 @@ G4UrbanMscModel90::SampleScattering(const G4DynamicParticle* dynParticle,
        << " E(MeV)= " << kineticEnergy/MeV
        << " Step(mm)= " << tPathLength/mm
        << " in " << CurrentCouple()->GetMaterial()->GetName()
-       << " scattering angle is set to zero" << G4endl;
+       << " CosTheta= " << cth 
+       << " is too big - the angle is set to zero" << G4endl;
     G4Exception("G4UrbanMscModel90::SampleScattering","em0004",JustWarning,
-                ed,"Please, send bug report in the case of this message");
+                ed,"");
     return fDisplacement;
   }
 

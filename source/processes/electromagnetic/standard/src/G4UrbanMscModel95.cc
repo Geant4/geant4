@@ -159,14 +159,14 @@ void G4UrbanMscModel95::Initialise(const G4ParticleDefinition* p,
 
   // set values of some data members
   SetParticle(p);
-
+  /*
   if(p->GetPDGMass() > MeV) {
     G4cout << "### WARNING: G4UrbanMscModel95 model is used for " 
 	   << p->GetParticleName() << " !!! " << G4endl;
     G4cout << "###          This model should be used only for e+-" 
 	   << G4endl;
   }
-
+  */
   fParticleChange = GetParticleChangeForMSC(p);
 
   //samplez = true;

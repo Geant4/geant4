@@ -35,16 +35,18 @@
 //
 // Author:        Andreas Schaelicke & Vladimir Ivantchenko
 //
-// Creation date: 25.09.2011
+// Creation date: 04.10.2011
 //
 // Modifications:
 //
 //
 // Class Description:
 //
-// Implementation of the bremssrahlung model using
-// S.M. Seltzer and M.J. Berger Atomic data and Nuclear Data 
-// Tables 35 (1986) 345
+// Implementation of the bremssrahlung energy spectrum using
+// 1. S.M. Seltzer and M.J. Berger Nucl. Instr. Meth. B12 (1985) 95
+// 2. S.M. Seltzer and M.J. Berger Atomic data and Nuclear Data 
+//    Tables 35 (1986) 345
+// Cross section computation in the base class G4eBremsstrahlungRelModel
 
 // -------------------------------------------------------------------
 //
@@ -75,6 +77,8 @@ public:
 				 G4double cutEnergy,
 				 G4double maxEnergy);
 
+  inline void SetBicubicInterpolationFlag(G4bool);
+
 protected:
 
   virtual G4double ComputeDXSectionPerAtom(G4double gammaEnergy);
@@ -90,9 +94,14 @@ private:
   static G4Physics2DVector* dataSB[101];
   static G4double ylimit[101];
   static G4double expnumlim;
-  G4int nwarn;
-
+  G4int  nwarn;
+  G4bool useBicubicInterpolation;
 };
+
+inline void G4SeltzerBergerModel::SetBicubicInterpolationFlag(G4bool val)
+{
+  useBicubicInterpolation = val;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

@@ -33,21 +33,13 @@
 //
 // File name:     G4SeltzerBergerModel
 //
-// Author:        Andreas Schaelicke 
+// Author:        Vladimir Ivanchenko use inheritance from Andreas Schaelicke
+//                base class implementing ultra relativistic bremsstrahlung
+//                model 
 //
-// Creation date: 12.08.2008
+// Creation date: 04.10.2011
 //
 // Modifications:
-//
-// 13.11.08    add SetLPMflag and SetLPMconstant methods
-// 13.11.08    change default LPMconstant value
-// 13.10.10    add angular distributon interface (VI)
-//
-// Main References:
-//  Y.-S.Tsai, Rev. Mod. Phys. 46 (1974) 815; Rev. Mod. Phys. 49 (1977) 421. 
-//  S.Klein,  Rev. Mod. Phys. 71 (1999) 1501.
-//  T.Stanev et.al., Phys. Rev. D25 (1982) 1291.
-//  M.L.Ter-Mikaelian, High-energy Electromagnetic Processes in Condensed Media, Wiley, 1972.
 //
 // -------------------------------------------------------------------
 //
@@ -86,7 +78,7 @@ G4double G4SeltzerBergerModel::expnumlim = -12.;
 
 G4SeltzerBergerModel::G4SeltzerBergerModel(const G4ParticleDefinition* p,
 					   const G4String& nam)
-  : G4eBremsstrahlungRelModel(p,nam)
+  : G4eBremsstrahlungRelModel(p,nam),useBicubicInterpolation(false)
 {
   SetLowEnergyLimit(0.0);
   SetLPMFlag(false);
@@ -165,6 +157,7 @@ void G4SeltzerBergerModel::ReadData(size_t Z, const char* path)
   G4Physics2DVector* v = new G4Physics2DVector();
   const G4double emaxlog = 4*log(10.);
   if(v->Retrieve(fin)) { 
+    if(useBicubicInterpolation) { v->SetBicubicInterpolation(true); }
     dataSB[Z] = v; 
     ylimit[Z] = v->Value(0.97, emaxlog);
   } else {

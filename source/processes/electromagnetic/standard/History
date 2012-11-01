@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26 October 12: V.Ivanchenko (emstand-V09-05-60)
+- G4UrbanMscModel90 - improved warning for large angle scattering
+- G4SeltzerBergerModel - added  SetBicubicInterpolationFlag method
+    activating more accurate parameterisation of 2D data for
+    energy spectrum; improved comments
+
+25 October 12: V.Ivanchenko (emstand-V09-05-59)
+- G4UrbanMscModel95 - comment out unwanted warning at initialisation
+
 25 October 12: V.Ivanchenko (emstand-V09-05-58)
 -  G4hMultipleScattering - use G4UrbanMscModel95 as a default
 
