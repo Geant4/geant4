@@ -57,16 +57,16 @@
 #include "G4DecayKineticTracks.hh"
 #include "G4HadronicInteractionRegistry.hh"
 
-G4GeneratorPrecompoundInterface::G4GeneratorPrecompoundInterface(G4VPreCompoundModel* p)
+G4GeneratorPrecompoundInterface::G4GeneratorPrecompoundInterface(G4VPreCompoundModel* preModel)
 : CaptureThreshold(10*MeV)
 {
     proton = G4Proton::Proton();
     neutron = G4Neutron::Neutron();
-    if(p) { SetDeExcitation(p); }
+    if(preModel) { SetDeExcitation(preModel); }
     else  { 
-      G4HadronicInteraction* p =  
+      G4HadronicInteraction* hadi =  
 	G4HadronicInteractionRegistry::Instance()->FindModel("PRECO");
-      G4VPreCompoundModel* pre = static_cast<G4VPreCompoundModel*>(p);
+      G4VPreCompoundModel* pre = static_cast<G4VPreCompoundModel*>(hadi);
       if(!pre) { pre = new G4PreCompoundModel(); }
       SetDeExcitation(pre); 
     }

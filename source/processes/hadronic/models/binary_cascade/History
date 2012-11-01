@@ -13,6 +13,21 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+26 Oct 2012 Gunter Folger        had-binary-V09-05-13
+- send a warning message to G4cout, not G4cerr.
+
+26 Oct 2012 Gunter Folger        had-binary-V09-05-12
+- more places corrected to explicitely convert in G4BinaryCascade 
+   and G4BinaryLightIonReaction; unused variable removed.
+
+25 Oct 2012 Vladimir Ivanchenko  had-binary-V09-05-11
+- G4BinaryCascade - use G4lrint to increment lateZ 
+- G4BinaryLightIonReaction - comment out unused variable
+
+25 Oct 2012 Vladimir Ivanchenko  had-binary-V09-05-10
+-  G4GeneratorPrecompoundInterface - fixed variable shadowing introduced
+     in tag 07
+
 24 Oct 2012 Gunter Folger        had-binary-V09-05-09
 -  Attempt to fix warning in G4BinaryLightIonCascade when target is very light:
    - split very long ApplyYourSelf() into smaller bits.

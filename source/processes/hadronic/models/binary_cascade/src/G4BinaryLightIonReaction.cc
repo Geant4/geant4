@@ -91,7 +91,7 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
 	if(getenv("BLICDEBUG") ) G4cerr << " ######### Binary Light Ion Reaction number starts ######### "<<eventcounter<<G4endl;
 	G4ping debug("debug_G4BinaryLightIonReaction");
 	pA=aTrack.GetDefinition()->GetBaryonNumber();
-	pZ=G4lrint(aTrack.GetDefinition()->GetPDGCharge());
+	pZ=G4lrint(aTrack.GetDefinition()->GetPDGCharge()/eplus);
 	tA=targetNucleus.GetA_asInt();
 	tZ=targetNucleus.GetZ_asInt();
 
@@ -131,7 +131,7 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
             G4cerr << "G4BinaryLightIonReaction no final state for: " << G4endl;
             G4cerr << " Primary " << aTrack.GetDefinition()
                << ", (A,Z)=(" << aTrack.GetDefinition()->GetBaryonNumber()
-               << "," << aTrack.GetDefinition()->GetPDGCharge() << ") "
+               << "," << aTrack.GetDefinition()->GetPDGCharge()/eplus << ") "
                << ", kinetic energy " << aTrack.GetKineticEnergy()
                << G4endl;
             G4cerr << " Target nucleus (A,Z)=("
@@ -225,20 +225,20 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
 		      }
 		      delete spectators;
 
-		      G4cerr << "G4BinaryLightIonReaction.cc: mom check: " <<  momentum
+		      G4cout << "G4BinaryLightIonReaction.cc: mom check: " <<  momentum
 		            << " 3.mag "<< momentum.vect().mag() << G4endl
 		            << " .. pInitialState/pFinalState/spectators " << pInitialState <<" "
 		            << pFinalState << " " << pspectators << G4endl
 		            << " .. A,Z " << spectatorA <<" "<< spectatorZ << G4endl;
-		      G4cerr << "G4BinaryLightIonReaction invalid final state for: " << G4endl;
-		      G4cerr << " Primary " << aTrack.GetDefinition()
+		      G4cout << "G4BinaryLightIonReaction invalid final state for: " << G4endl;
+		      G4cout << " Primary " << aTrack.GetDefinition()
   	    		      << ", (A,Z)=(" << aTrack.GetDefinition()->GetBaryonNumber()
-  	    		      << "," << aTrack.GetDefinition()->GetPDGCharge() << ") "
+  	    		      << "," << aTrack.GetDefinition()->GetPDGCharge()/eplus << ") "
   	    		      << ", kinetic energy " << aTrack.GetKineticEnergy()
   	    		      << G4endl;
-		      G4cerr << " Target nucleus (A,Z)=(" <<  targetNucleus.GetA_asInt()
+		      G4cout << " Target nucleus (A,Z)=(" <<  targetNucleus.GetA_asInt()
             		      << "," << targetNucleus.GetZ_asInt() << ")" << G4endl;
-		      G4cerr << " if frequent, please submit above information as bug report"
+		      G4cout << " if frequent, please submit above information as bug report"
 		            << G4endl << G4endl;
 
 		      theResult.Clear();
@@ -448,7 +448,7 @@ G4ReactionProductVector * G4BinaryLightIonReaction::FuseNucleiAndPrompound(const
 G4ReactionProductVector * G4BinaryLightIonReaction::Interact(G4LorentzVector & mom, const G4LorentzRotation & toBreit)
 {
       G4ReactionProductVector * result = 0;
-      G4double projectileMass(0) ,targetMass(0);
+      G4double projectileMass(0);
       G4LorentzVector it;
 
       G4int tryCount(0);
@@ -464,10 +464,6 @@ G4ReactionProductVector * G4BinaryLightIonReaction::Interact(G4LorentzVector & m
 
          target3dNucleus = new G4Fancy3DNucleus;
          target3dNucleus->Init(tA, tZ);
-         targetMass=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(tZ,tA);
-         //m_nucl = ( swapped ) ? projectileMass : targetMass;
-         //   G4cout << " mass table, nucleus, delta : " << m2 <<" "<< target3dNucleus->GetMass()
-         //               <<" "<<m2-target3dNucleus->GetMass() << G4endl;
          G4double impactMax = target3dNucleus->GetOuterRadius()+projectile3dNucleus->GetOuterRadius();
          //        G4cout << "out radius - nucleus - projectile " << target3dNucleus->GetOuterRadius()/fermi << " - " << projectile3dNucleus->GetOuterRadius()/fermi << G4endl;
          G4double aX=(2.*G4UniformRand()-1.)*impactMax;
@@ -536,7 +532,7 @@ G4double G4BinaryLightIonReaction::GetProjectileExcitation()
          if(!aNuc->AreYouHit())
          {
             spectatorA++;
-            spectatorZ+=G4lrint(aNuc->GetDefinition()->GetPDGCharge());
+            spectatorZ+=G4lrint(aNuc->GetDefinition()->GetPDGCharge()/eplus);
          }
          else
          {
@@ -570,7 +566,7 @@ G4LorentzVector G4BinaryLightIonReaction::SortResult(G4ReactionProductVector * r
          pspectators += G4LorentzVector( (*result)[i]->GetMomentum(), (*result)[i]->GetTotalEnergy() );
          spectators->push_back((*result)[i]);
          //   spectA++;
-         //   spectZ+= G4lrint((*result)[i]->GetDefinition()->GetPDGCharge());
+         //   spectZ+= G4lrint((*result)[i]->GetDefinition()->GetPDGCharge()/eplus);
       }
 
       //       G4cout << (*result)[i]<< " "

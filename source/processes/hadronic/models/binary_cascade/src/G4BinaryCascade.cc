@@ -816,7 +816,7 @@ G4bool  G4BinaryCascade::BuildLateParticleCollisions(G4KineticTrackVector * seco
          FindLateParticleCollision(*iter);
          lateParticles4Momentum += (*iter)->GetTrackingMomentum();
          lateA += (*iter)->GetDefinition()->GetBaryonNumber();
-         lateZ += (*iter)->GetDefinition()->GetPDGCharge();
+         lateZ += G4lrint((*iter)->GetDefinition()->GetPDGCharge()/eplus);
          //PrintKTVector(*iter, "late particle ");
       } else
       {
@@ -824,7 +824,7 @@ G4bool  G4BinaryCascade::BuildLateParticleCollisions(G4KineticTrackVector * seco
          //PrintKTVector(*iter, "incoming particle ");
          theProjectile4Momentum += (*iter)->GetTrackingMomentum();
          projectileA += (*iter)->GetDefinition()->GetBaryonNumber();
-         projectileZ += (*iter)->GetDefinition()->GetPDGCharge();
+         projectileZ += G4lrint((*iter)->GetDefinition()->GetPDGCharge()/eplus);
 #ifdef debug_BIC_Propagate
          G4cout << " Adding initial secondary " << *iter
                << " time" << (*iter)->GetFormationTime()
@@ -839,7 +839,7 @@ G4bool  G4BinaryCascade::BuildLateParticleCollisions(G4KineticTrackVector * seco
       G4LorentzVector mom=primary->Get4Momentum();
       theProjectile4Momentum += mom;
       projectileA = primary->GetDefinition()->GetBaryonNumber();
-      projectileZ = primary->GetDefinition()->GetPDGCharge();
+      projectileZ = G4lrint(primary->GetDefinition()->GetPDGCharge()/eplus);
       // now check if "excitation" energy left by TheoHE model
       G4double excitation= theProjectile4Momentum.e() + initial_nuclear_mass - lateParticles4Momentum.e() - massInNucleus;
 #ifdef debug_BIC_GetExcitationEnergy
@@ -965,7 +965,7 @@ G4ReactionProductVector *  G4BinaryCascade::DecayVoidNucleus()
       G4double eCMS=finalP.mag();
       if ( eCMS < sumMass )                    // @@GF --- Cheat!!
       {
-         eCMS=sumMass + (2*MeV*masses.size());
+         eCMS=sumMass + 2*MeV*masses.size();
          finalP.setE(std::sqrt(finalP.vect().mag2() + sqr(eCMS)));
       }
 
@@ -1193,7 +1193,7 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
     if (primary->GetState() == G4KineticTrack::inside)
     {
         initialBaryon = primary->GetDefinition()->GetBaryonNumber();
-        initialCharge = G4lrint(primary->GetDefinition()->GetPDGCharge());
+        initialCharge = G4lrint(primary->GetDefinition()->GetPDGCharge()/eplus);
     }
 
     // for primary resonances, subtract neutron ( = proton) field ( ie. add std::abs(field))
@@ -1229,7 +1229,7 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
 #endif
         initialBaryon=initialCharge=0;
         lateA -= primary->GetDefinition()->GetBaryonNumber();
-        lateZ -= G4lrint(primary->GetDefinition()->GetPDGCharge());
+        lateZ -= G4lrint(primary->GetDefinition()->GetPDGCharge()/eplus);
     }
 
     initialBaryon += collision->GetTargetBaryonNumber();
@@ -1276,7 +1276,7 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
             (*i)->SetState(primary->GetState());  // decay may be anywhere!
             if ( (*i)->GetState() == G4KineticTrack::inside ){
                 finalBaryon+=(*i)->GetDefinition()->GetBaryonNumber();
-                finalCharge+=G4lrint((*i)->GetDefinition()->GetPDGCharge());
+                finalCharge+=G4lrint((*i)->GetDefinition()->GetPDGCharge()/eplus);
             } else {
                G4double tin=0., tout=0.;
                if (((G4RKPropagation*)thePropagator)->GetSphereIntersectionTimes((*i),tin,tout) &&
@@ -1299,7 +1299,7 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
                 {
                     (*i)->SetState(G4KineticTrack::inside);
                     finalBaryon+=(*i)->GetDefinition()->GetBaryonNumber();
-                    finalCharge+=G4lrint((*i)->GetDefinition()->GetPDGCharge());
+                    finalCharge+=G4lrint((*i)->GetDefinition()->GetPDGCharge()/eplus);
                 }
                 else
                 {
@@ -2192,7 +2192,7 @@ G4KineticTrackVector* G4BinaryCascade::CorrectBarionsOnBoundary(
         for ( iter =in->begin(); iter != in->end(); ++iter)
         {
             ++secondaries_in;
-            secondaryCharge_in += G4lrint((*iter)->GetDefinition()->GetPDGCharge());
+            secondaryCharge_in += G4lrint((*iter)->GetDefinition()->GetPDGCharge()/eplus);
             if ((*iter)->GetDefinition()->GetBaryonNumber()!=0 )
             {
                 secondaryBarions_in += (*iter)->GetDefinition()->GetBaryonNumber();
@@ -2247,7 +2247,7 @@ G4KineticTrackVector* G4BinaryCascade::CorrectBarionsOnBoundary(
                 (*iter)->UpdateTrackingMomentum((*iter)->GetTrackingMomentum().e() + barrier);
                 if ( ! kt_fail ) kt_fail=new G4KineticTrackVector;
                 kt_fail->push_back(*iter);
-                currentZ -= G4lrint((*iter)->GetDefinition()->GetPDGCharge());
+                currentZ -= G4lrint((*iter)->GetDefinition()->GetPDGCharge()/eplus);
                 currentA -= (*iter)->GetDefinition()->GetBaryonNumber();
 
             }
@@ -2274,7 +2274,7 @@ G4KineticTrackVector* G4BinaryCascade::CorrectBarionsOnBoundary(
         for ( iter =out->begin(); iter != out->end(); ++iter)
         {
             ++secondaries_out;
-            secondaryCharge_out += G4lrint((*iter)->GetDefinition()->GetPDGCharge());
+            secondaryCharge_out += G4lrint((*iter)->GetDefinition()->GetPDGCharge()/eplus);
             if ((*iter)->GetDefinition()->GetBaryonNumber() !=0 )
             {
                 secondaryBarions_out += (*iter)->GetDefinition()->GetBaryonNumber();
@@ -2345,7 +2345,7 @@ G4KineticTrackVector* G4BinaryCascade::CorrectBarionsOnBoundary(
                     (*iter)->UpdateTrackingMomentum((*iter)->GetTrackingMomentum().e() - barrier);
                     if ( kt_fail == 0 ) kt_fail=new G4KineticTrackVector;
                     kt_fail->push_back(*iter);
-                    currentZ += G4lrint((*iter)->GetDefinition()->GetPDGCharge());
+                    currentZ += G4lrint((*iter)->GetDefinition()->GetPDGCharge()/eplus);
                     currentA += (*iter)->GetDefinition()->GetBaryonNumber();
                 }
 #ifdef debug_BIC_CorrectBarionsOnBoundary
@@ -2396,7 +2396,7 @@ G4Fragment * G4BinaryCascade::FindFragments()
     G4KineticTrackVector::iterator i;
     for(i = theTargetList.begin(); i != theTargetList.end(); ++i)
     {
-        if((*i)->GetDefinition()->GetPDGCharge() == eplus)
+        if(G4lrint((*i)->GetDefinition()->GetPDGCharge()/eplus) == 1 )
         {
             zTarget++;
         }
@@ -2407,7 +2407,7 @@ G4Fragment * G4BinaryCascade::FindFragments()
     for(i = theCapturedList.begin(); i != theCapturedList.end(); ++i)
     {
         CapturedMomentum += (*i)->Get4Momentum();
-        if((*i)->GetDefinition()->GetPDGCharge() == eplus)
+        if(G4lrint((*i)->GetDefinition()->GetPDGCharge()/eplus) == 1 )
         {
             zCaptured++;
         }
@@ -2847,7 +2847,6 @@ G4ReactionProductVector * G4BinaryCascade::FillVoidNucleusProducts(G4ReactionPro
         products->push_back(aNew);
     }
 
-
     G4double SumMassNucleons(0.);
     for(iter = theTargetList.begin(); iter != theTargetList.end(); ++iter)
     {
@@ -2971,19 +2970,19 @@ G4bool G4BinaryCascade::CheckChargeAndBaryonNumber(G4String where)
    G4int secsA(0), secsZ(0);
    for ( i=theCapturedList.begin(); i!=theCapturedList.end(); ++i) {
       CapturedA += (*i)->GetDefinition()->GetBaryonNumber();
-      CapturedZ += (*i)->GetDefinition()->GetPDGCharge();
+      CapturedZ += G4lrint((*i)->GetDefinition()->GetPDGCharge()/eplus);
    }
 
    for ( i=theSecondaryList.begin(); i!=theSecondaryList.end(); ++i) {
       if ( (*i)->GetState() != G4KineticTrack::inside ) {
          secsA += (*i)->GetDefinition()->GetBaryonNumber();
-         secsZ += (*i)->GetDefinition()->GetPDGCharge();
+         secsZ += G4lrint((*i)->GetDefinition()->GetPDGCharge()/eplus);
       }
    }
 
    for ( i=theFinalState.begin(); i!=theFinalState.end(); ++i) {
       fStateA += (*i)->GetDefinition()->GetBaryonNumber();
-      fStateZ += (*i)->GetDefinition()->GetPDGCharge();
+      fStateZ += G4lrint((*i)->GetDefinition()->GetPDGCharge()/eplus);
    }
 
    G4int deltaA= iStateA -  secsA - fStateA -currentA - lateA;
