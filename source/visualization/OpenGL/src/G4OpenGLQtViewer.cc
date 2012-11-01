@@ -266,9 +266,11 @@ G4OpenGLQtViewer::~G4OpenGLQtViewer (
   // Delete all the existing buttons in the layout
   QLayoutItem *wItem;
   if (fSceneTreeWidget != NULL) {
-    while ((wItem = fSceneTreeWidget->layout()->takeAt(0)) != 0) {
-      delete wItem->widget();
-      delete wItem;
+    if (fSceneTreeWidget->layout() != NULL) {
+      while ((wItem = fSceneTreeWidget->layout()->takeAt(0)) != 0) {
+	delete wItem->widget();
+	delete wItem;
+      }
     }
     fUISceneTreeComponentsTBWidget->removeTab(fUISceneTreeComponentsTBWidget->indexOf(fSceneTreeWidget));
   }
@@ -918,11 +920,16 @@ void G4OpenGLQtViewer::actionChangeBackgroundColor() {
   //   // (Note added by JA 13/9/2005) Background now handled in view
   //   // parameters.  A kernel visit is triggered on change of background.
 
+#if QT_VERSION < 0x040500
+  bool a;
+  const QColor color = QColor(QColorDialog::getRgba (QColor(Qt::black).rgba(),&a,fGLWindow));
+#else
   const QColor color =
     QColorDialog::getColor(Qt::black,
                            fGLWindow,
                            " Get background color and transparency",
                            QColorDialog::ShowAlphaChannel);
+#endif
   if (color.isValid()) {
     G4Colour colour(((G4double)color.red())/255,
                     ((G4double)color.green())/255,
@@ -937,11 +944,16 @@ void G4OpenGLQtViewer::actionChangeBackgroundColor() {
 
 void G4OpenGLQtViewer::actionChangeTextColor() {
 
+#if QT_VERSION < 0x040500
+  bool a;
+  const QColor color = QColor(QColorDialog::getRgba (QColor(Qt::yellow).rgba(),&a,fGLWindow));
+#else
   const QColor& color =
     QColorDialog::getColor(Qt::yellow,
                            fGLWindow,
                            " Get text color and transparency",
                            QColorDialog::ShowAlphaChannel);
+#endif
   if (color.isValid()) {
     G4Colour colour(((G4double)color.red())/255,
                     ((G4double)color.green())/255,
@@ -957,11 +969,16 @@ void G4OpenGLQtViewer::actionChangeTextColor() {
 
 void G4OpenGLQtViewer::actionChangeDefaultColor() {
 
+#if QT_VERSION < 0x040500
+  bool a;
+  const QColor color = QColor(QColorDialog::getRgba (QColor(Qt::white).rgba(),&a,fGLWindow));
+#else
   const QColor& color =
     QColorDialog::getColor(Qt::white,
                            fGLWindow,
                            " Get default color and transparency",
                            QColorDialog::ShowAlphaChannel);
+#endif
   if (color.isValid()) {
     G4Colour colour(((G4double)color.red())/255,
                     ((G4double)color.green())/255,
@@ -2464,10 +2481,10 @@ QTreeWidgetItem* G4OpenGLQtViewer::createTreeWidgetItem(
   newItem->setCheckState(0,state);
   updatePositivePoIndexSceneTreeWidgetQuickMap(POIndex,newItem);
 
-  changeQColorForTreeWidgetItem(newItem,QColor(color.GetRed()*255,
-                                               color.GetGreen()*255,
-                                               color.GetBlue()*255,
-                                               color.GetAlpha()*255));
+  changeQColorForTreeWidgetItem(newItem,QColor((int)(color.GetRed()*255),
+                                               (int)(color.GetGreen()*255),
+                                               (int)(color.GetBlue()*255),
+                                               (int)(color.GetAlpha()*255)));
 
   // If invisible
   if ((state == Qt::Unchecked) && (POIndex == -1)) {
@@ -2618,10 +2635,10 @@ bool G4OpenGLQtViewer::parseAndInsertInSceneTree(
           // Set a tootip
           parentItemList.at(i)->setToolTip (0,"");
           
-          changeQColorForTreeWidgetItem(parentItemList.at(i),QColor(color.GetRed()*255,
-                                                                    color.GetGreen()*255,
-                                                                    color.GetBlue()*255,
-                                                                    color.GetAlpha()*255));
+          changeQColorForTreeWidgetItem(parentItemList.at(i),QColor((int)(color.GetRed()*255),
+                                                                    (int)(color.GetGreen()*255),
+                                                                    (int)(color.GetBlue()*255),
+                                                                    (int)(color.GetAlpha()*255)));
           
           // set check only if there is something to display
           if (color.GetAlpha() > 0) {
@@ -2988,12 +3005,36 @@ void G4OpenGLQtViewer::sceneTreeComponentItemChanged(QTreeWidgetItem* item, int)
 
   if (fCheckSceneTreeComponentSignalLock == false) {
     fCheckSceneTreeComponentSignalLock = true;
+    G4bool checked = false;
     if (item->checkState(0) == Qt::Checked) {
-      setCheckComponent(item,true);
-    } else {
-      setCheckComponent(item,false);
+      checked = true;
     }
+    setCheckComponent(item,checked);
     updateQWidget();
+
+    // change vis attributes to set new visibility
+    G4int iPO = item->data(0,Qt::UserRole).toInt();
+    if (iPO >= 0 && fTreeItemModels.find(iPO) != fTreeItemModels.end()) {
+      const PVPath& fullPath = fTreeItemModels[iPO];
+      // If a physical volume
+      if (fullPath.size()) {
+
+        // Instantiate a working copy of a G4VisAttributes object...
+        G4VisAttributes workingVisAtts;
+        // and set the visibility.
+        workingVisAtts.SetVisibility(checked);
+
+        // Add a vis atts modifier to the view parameters...
+        fVP.AddVisAttributesModifier
+        (G4ModelingParameters::VisAttributesModifier
+         (workingVisAtts,
+          G4ModelingParameters::VASVisibility,
+          fullPath));
+        // G4ModelingParameters::VASVisibility tells G4PhysicalVolumeModel that
+        // it is the visibility that should be picked out and merged with the
+        // touchable's normal vis attributes.
+      }
+    }
 
     fCheckSceneTreeComponentSignalLock = false;
   }
@@ -3062,10 +3103,15 @@ void G4OpenGLQtViewer::changeColorAndTransparency(QTreeWidgetItem* item,int) {
   }
   const QColor& old = QColor(item->data(2,Qt::UserRole).value<QColor>());
 
+#if QT_VERSION < 0x040500
+  bool a;
+  const QColor& color = QColor(QColorDialog::getRgba (old.rgba(),&a,fSceneTreeComponentTreeWidget));
+#else
   const QColor& color = QColorDialog::getColor(old,
                                         fSceneTreeComponentTreeWidget,
                                         " Get color and transparency",
                                         QColorDialog::ShowAlphaChannel);
+#endif
   
   if (color.isValid()) {
 
@@ -3222,10 +3268,10 @@ void G4OpenGLQtViewer::changeDepthOnSceneTreeItem(
         // Good thing to do is to check and suppress doubles in changeDepthInSceneTree
         // and then check if last (transparents volumes) has to change alpha
 
-        changeQColorForTreeWidgetItem(item,QColor(color.GetRed()*255,
-                                                  color.GetGreen()*255,
-                                                  color.GetBlue()*255,
-                                                  transparencyLevel*255));
+        changeQColorForTreeWidgetItem(item,QColor((int)(color.GetRed()*255),
+                                                  (int)(color.GetGreen()*255),
+                                                  (int)(color.GetBlue()*255),
+                                                  (int)(transparencyLevel*255)));
       }
     }
   }

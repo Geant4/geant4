@@ -52,7 +52,7 @@ inline void G4VGraphicsSystem::SetName (const G4String& name) {
   fName = name;
 }
 
-inline void G4VGraphicsSystem::SetNickName (const G4String& nickname) {
+inline void G4VGraphicsSystem::SetNickname (const G4String& nickname) {
   fNickname = nickname;
 }
 

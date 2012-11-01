@@ -24,22 +24,24 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQt.hh,v 1.2 2009-02-04 16:48:40 lgarnier Exp $
+// $Id:$
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-// OpenGLImmediateQt graphics system factory.
+// John Allison  27th October 2012
+// Base class for OpenGLImmediate/StoredQt graphics system factories.
 
-#ifndef G4OPENGLIMMEDIATEQT_HH
-#define G4OPENGLIMMEDIATEQT_HH
+#ifndef G4OPENGLQT_HH
+#define G4OPENGLQT_HH
 
-#include "G4OpenGLQt.hh"
+#include "G4VGraphicsSystem.hh"
 
-class G4OpenGLImmediateQt: public G4OpenGLQt {
+class G4OpenGLQt: public G4VGraphicsSystem {
 public:
-  G4OpenGLImmediateQt ();
-  G4VSceneHandler* CreateSceneHandler (const G4String& name = "");
-  G4VViewer*  CreateViewer  (G4VSceneHandler&, const G4String& name = "");
+  G4OpenGLQt (const G4String& name,
+              const G4String& nickname,
+              const G4String& description,
+              Functionality f);
+  G4bool IsUISessionCompatible () const;
 };
 
 #endif

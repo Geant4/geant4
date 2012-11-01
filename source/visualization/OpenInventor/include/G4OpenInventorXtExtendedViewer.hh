@@ -24,15 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.hh,v 1.15 2009-09-18 12:48:43 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Jeff Kallenbach 01 Aug 1996
 // OpenInventor viewer - opens window, hard copy, etc.
-// Frederick Jones and TJR  October 2012
-// Extended viewer based on G4OpenInventorXtViewer.hh
-// Uses G4OpenInventorXtExaminerViewer.
 
 #ifndef G4OPENINVENTORXTEXTENDEDVIEWER_HH
 #define G4OPENINVENTORXTEXTENDEDVIEWER_HH
@@ -40,22 +35,53 @@
 #ifdef G4VIS_BUILD_OI_DRIVER
 
 // Inheritance :
-#include "G4OpenInventorXtViewer.hh"
+#include "G4OpenInventorViewer.hh"
 
 #include <X11/Intrinsic.h>
 #include <Inventor/nodes/SoEventCallback.h>
 
 class G4OpenInventorXtExaminerViewer;
 
-class G4OpenInventorXtExtendedViewer: public G4OpenInventorXtViewer {
+class G4OpenInventorXtExtendedViewer: public G4OpenInventorViewer {
+public: //G4VViewer
+  virtual void FinishView();
+  virtual void SetView();
+protected:
+  virtual void ViewerRender();
+  virtual SoCamera* GetCamera();
 public:
   G4OpenInventorXtExtendedViewer(G4OpenInventorSceneHandler& scene,
 		         const G4String& name = "");
   void Initialise();
+
   virtual ~G4OpenInventorXtExtendedViewer();
-protected:
+private:
+  Widget AddMenu(Widget,const G4String&,const G4String&);
+  void AddButton(Widget,const G4String&,XtCallbackProc);
+private:
+  static void PostScriptCbk(Widget,XtPointer,XtPointer);
+  static void PixmapPostScriptCbk(Widget,XtPointer,XtPointer);
+  static void WriteInventorCbk(Widget,XtPointer,XtPointer);
+  static void LoadInventorCbk(Widget,XtPointer,XtPointer);
+  static void EscapeCbk(Widget,XtPointer,XtPointer);
   static void EscapeFromKeyboardCbk(void * o);
+  static void SceneGraphStatisticsCbk(Widget,XtPointer,XtPointer);
+  static void EraseDetectorCbk(Widget,XtPointer,XtPointer);
+  static void EraseEventCbk(Widget,XtPointer,XtPointer);
+  static void SetSolidCbk(Widget,XtPointer,XtPointer);
+  static void SetWireFrameCbk(Widget,XtPointer,XtPointer);
+  static void SetReducedWireFrameCbk(Widget,XtPointer,XtPointer);
+  static void SetFullWireFrameCbk(Widget,XtPointer,XtPointer);
+  static void UpdateSceneCbk(Widget,XtPointer,XtPointer);
+  static void HelpCbk(Widget,XtPointer,XtPointer);
+  static void HelpCancelCbk(Widget,XtPointer,XtPointer);
+  static void SetPreviewCbk(Widget,XtPointer,XtPointer);
+  static void SetPreviewAndFullCbk(Widget,XtPointer,XtPointer);
+private:
+  Widget fShell;
   G4OpenInventorXtExaminerViewer* fViewer;
+  Widget fHelpForm;
+  Widget fHelpText;
 };
 
 #endif

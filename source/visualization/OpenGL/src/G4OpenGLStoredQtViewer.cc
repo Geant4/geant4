@@ -93,6 +93,72 @@ void G4OpenGLStoredQtViewer::initializeGL () {
 #endif
 }
 
+G4bool G4OpenGLStoredQtViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
+{
+  // Identical to G4OpenGLStoredViewer::CompareForKernelVisit except
+  // for checking of VisAttributesModifiers, because
+  // G4OpenGLStoredQtViewer keeps track of its own touchable
+  // modifiers (fTreeItemModels, etc.).
+  if (
+      (lastVP.GetDrawingStyle ()    != fVP.GetDrawingStyle ())    ||
+      (lastVP.IsAuxEdgeVisible ()   != fVP.IsAuxEdgeVisible ())   ||
+      (lastVP.GetRepStyle ()        != fVP.GetRepStyle ())        ||
+      (lastVP.IsCulling ()          != fVP.IsCulling ())          ||
+      (lastVP.IsCullingInvisible () != fVP.IsCullingInvisible ()) ||
+      (lastVP.IsDensityCulling ()   != fVP.IsDensityCulling ())   ||
+      (lastVP.IsCullingCovered ()   != fVP.IsCullingCovered ())   ||
+      (lastVP.IsSection ()          != fVP.IsSection ())          ||
+      // Section (DCUT) implemented locally.  But still need to visit
+      // kernel if status changes so that back plane culling can be
+      // switched.
+      (lastVP.IsCutaway ()          != fVP.IsCutaway ())          ||
+      // Cutaways implemented locally.  But still need to visit kernel
+      // if status changes so that back plane culling can be switched.
+      (lastVP.IsExplode ()          != fVP.IsExplode ())          ||
+      (lastVP.GetNoOfSides ()       != fVP.GetNoOfSides ())       ||
+      (lastVP.GetDefaultVisAttributes()->GetColour() !=
+       fVP.GetDefaultVisAttributes()->GetColour())                ||
+      (lastVP.GetDefaultTextVisAttributes()->GetColour() !=
+       fVP.GetDefaultTextVisAttributes()->GetColour())            ||
+      (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())||
+      (lastVP.IsPicking ()          != fVP.IsPicking ())
+//      ||
+//      (lastVP.GetVisAttributesModifiers().size() !=
+//       fVP.GetVisAttributesModifiers().size())
+      )
+    return true;
+
+  if (lastVP.IsDensityCulling () &&
+      (lastVP.GetVisibleDensity () != fVP.GetVisibleDensity ()))
+    return true;
+
+  /**************************************************************
+   Section (DCUT) implemented locally.  No need to visit kernel if
+   section plane itself changes.
+   if (lastVP.IsSection () &&
+   (lastVP.GetSectionPlane () != fVP.GetSectionPlane ()))
+   return true;
+   ***************************************************************/
+
+  /**************************************************************
+   Cutaways implemented locally.  No need to visit kernel if cutaway
+   planes themselves change.
+   if (lastVP.IsCutaway ()) {
+   if (lastVP.GetCutawayPlanes ().size () !=
+   fVP.GetCutawayPlanes ().size ()) return true;
+   for (size_t i = 0; i < lastVP.GetCutawayPlanes().size(); ++i)
+   if (lastVP.GetCutawayPlanes()[i] != fVP.GetCutawayPlanes()[i])
+   return true;
+   }
+   ***************************************************************/
+
+  if (lastVP.IsExplode () &&
+      (lastVP.GetExplodeFactor () != fVP.GetExplodeFactor ()))
+    return true;
+
+  return false;
+}
+
 G4bool G4OpenGLStoredQtViewer::POSelected(size_t POListIndex)
 {
   return isTouchableVisible(POListIndex);

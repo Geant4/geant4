@@ -162,13 +162,25 @@ public: // With description
   void SetCutawaySolid         (G4VSolid* pCutawaySolid);
   void SetEvent                (const G4Event* pEvent);
   void SetVisAttributesModifiers(const std::vector<VisAttributesModifier>);
-  
+
+  static G4bool PVNameCopyNoPathNotEqual
+  (const PVNameCopyNoPath&,
+   const PVNameCopyNoPath&);
+
+  static G4bool VAMSNotEqual
+  (const std::vector<VisAttributesModifier>&,
+   const std::vector<VisAttributesModifier>&);
+
   friend std::ostream& operator <<
   (std::ostream& os, const G4ModelingParameters&);
   
   friend std::ostream& operator <<
   (std::ostream& os, const PVNameCopyNoPath&);
-  
+
+  friend std::ostream& operator <<
+  (std::ostream& os,
+   const std::vector<VisAttributesModifier>&);
+
 private:
 
   // Data members...
@@ -194,6 +206,10 @@ std::ostream& operator <<
 
 std::ostream& operator <<
 (std::ostream& os, const G4ModelingParameters::PVNameCopyNoPath&);
+
+std::ostream& operator <<
+(std::ostream& os,
+ const std::vector<G4ModelingParameters::VisAttributesModifier>&);
 
 #include "G4ModelingParameters.icc"
 

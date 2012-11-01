@@ -26,6 +26,23 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+24th October 2012  John Allison  (visman-V09-05-43)
+- G4VGraphicsSystem:
+  o Added virtual function IsUISessionCompatible.
+  o Changed spelling of SetNickname for consistency.
+- G4VisCommandsSceneHandler.cc: /vis/sceneHandler/create:
+  o If UI session is incompatible, look for a "fallback" graphics system.
+- G4VisExecutive.icc:
+  o Added "fallback" graphics systems for Qt.
+
+24th October 2012  John Allison  (visman-V09-05-42)
+- G4ViewParameters.cc:
+  o Added fVisAttributesModifiers to operator<< and operator!=.
+- G4VisCommands.cc: /vis/list:
+  o Added printing of possible attributes for trajectories and touchables.
+- G4VisCommandsViewer.cc: /vis/viewer/copyViewFrom:
+  o Added reference to /vis/viewer/set/all for copying scene modifications.
+
 18th October 2012  John Allison  (visman-V09-05-41)
 - G4VisExecutive.icc:
   o Reverted to G4OpenInventorXt as the default OI for X Windows.

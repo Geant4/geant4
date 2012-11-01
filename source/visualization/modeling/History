@@ -20,6 +20,16 @@ committal in the CVS repository !
 History file for visualization/modeling
 ---------------------------------------
 
+24th October 2012  John Allison  (modeling-V09-05-22)
+- G4ModelingParameters:
+  o Added fVisAttributesModifiers to operator<< and operator!=.
+  o Added static functions VAMSNotEqual and PVNameCopyNoPathNotEqual to
+    facilitate the above.
+- G4PhysicalVolumeModel:
+  o Allowed default constructor.  fpTopPV defaults to 0, checked with
+    G4Exception(…FatalException…) in DescribeYourselfTo.  This allows
+    one to instantiate a dummy so that one can print AttDefs, for example.
+
 11th October 2012  John Allison  (modeling-V09-05-21)
 - G4PhysicalVolumeModel and G4ModelingParameters:
   o Tidying. 

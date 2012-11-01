@@ -210,21 +210,23 @@ if(GEANT4_USE_QT)
     list(APPEND G4VIS_MODULE_OPENGL_HEADERS
         G4OpenGLImmediateQt.hh
         G4OpenGLImmediateQtViewer.hh
+        G4OpenGLQt.hh
         G4OpenGLQtExportDialog.hh
         G4OpenGLQtMovieDialog.hh
         G4OpenGLQtViewer.hh
         G4OpenGLStoredQt.hh
-	G4OpenGLStoredQtSceneHandler.hh
+        G4OpenGLStoredQtSceneHandler.hh
         G4OpenGLStoredQtViewer.hh)
 
     list(APPEND G4VIS_MODULE_OPENGL_SOURCES
         G4OpenGLImmediateQt.cc
         G4OpenGLImmediateQtViewer.cc
+        G4OpenGLQt.cc
         G4OpenGLQtExportDialog.cc
         G4OpenGLQtMovieDialog.cc
         G4OpenGLQtViewer.cc
         G4OpenGLStoredQt.cc
-	G4OpenGLStoredQtSceneHandler.cc
+        G4OpenGLStoredQtSceneHandler.cc
         G4OpenGLStoredQtViewer.cc)
 
 

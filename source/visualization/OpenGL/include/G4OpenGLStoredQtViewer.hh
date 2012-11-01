@@ -64,6 +64,9 @@ public:
 
 protected:
 
+  // Special version for Qt - avoid comparing VisAttributesModifiers.
+  G4bool CompareForKernelVisit(G4ViewParameters&);
+
   // Two virtual functions to return sub-class selection.
   G4bool POSelected(size_t POListIndex);
   G4bool TOSelected(size_t TOListIndex);

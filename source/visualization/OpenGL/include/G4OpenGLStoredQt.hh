@@ -33,9 +33,9 @@
 #ifndef G4OPENGLSTOREDQT_HH
 #define G4OPENGLSTOREDQT_HH
 
-#include "G4VGraphicsSystem.hh"
+#include "G4OpenGLQt.hh"
 
-class G4OpenGLStoredQt: public G4VGraphicsSystem {
+class G4OpenGLStoredQt: public G4OpenGLQt {
 public:
   G4OpenGLStoredQt ();
   G4VSceneHandler* CreateSceneHandler (const G4String& name = "");

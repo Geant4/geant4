@@ -51,7 +51,7 @@ public:
   
 protected:
   void KernelVisitDecision ();
-  G4bool CompareForKernelVisit(G4ViewParameters&);
+  virtual G4bool CompareForKernelVisit(G4ViewParameters&);
   void DrawDisplayLists ();
   virtual void DisplayTimePOColourModification
   (G4Colour&, size_t /*currentPOListIndex*/) {}

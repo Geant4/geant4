@@ -513,7 +513,10 @@ G4VisCommandViewerCopyViewFrom::G4VisCommandViewerCopyViewFrom () {
   G4bool omitable;
   fpCommand = new G4UIcmdWithAString ("/vis/viewer/copyViewFrom", this);
   fpCommand -> SetGuidance
-    ("Copy the camera-specific parameters from the specified viewer.");
+  ("Copy the camera-specific parameters from the specified viewer.");
+  fpCommand -> SetGuidance
+  ("Note: To copy scene modifications - style, etc. - please use"
+   "\n\"/vis/viewer/set/all\"");
   fpCommand -> SetParameterName ("from-viewer-name", omitable = false);
 }
 

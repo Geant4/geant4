@@ -39,6 +39,14 @@
 #include "G4RunManager.hh"
 #include "G4Run.hh"
 #include "G4UIsession.hh"
+#include "G4Trajectory.hh"
+#include "G4TrajectoryPoint.hh"
+#include "G4RichTrajectory.hh"
+#include "G4RichTrajectoryPoint.hh"
+#include "G4SmoothTrajectory.hh"
+#include "G4SmoothTrajectoryPoint.hh"
+#include "G4PhysicalVolumeModel.hh"
+#include "G4AttDef.hh"
 
 ////////////// /vis/abortReviewKeptEvents /////////////////////////////
 
@@ -154,6 +162,26 @@ void G4VisCommandList::SetNewValue (G4UIcommand*, G4String newValue)
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   UImanager->ApplyCommand("/vis/scene/list ! c");
   UImanager->ApplyCommand("/vis/viewer/list ! c");
+
+  G4cout <<
+  "\nAttributes available for modeling and filtering with"
+  "\n  \"/vis/modeling/trajectories/create/drawByAttribute\" and"
+  "\n  \"/vis/filtering/trajectories/create/attributeFilter\" commands"
+  "\nand by picking:"
+  << G4endl;
+  G4cout << G4TrajectoriesModel().GetAttDefs();
+  G4cout << G4RichTrajectory().GetAttDefs()
+  << G4RichTrajectoryPoint().GetAttDefs();
+  G4cout << G4SmoothTrajectory().GetAttDefs()
+  << G4SmoothTrajectoryPoint().GetAttDefs();
+  G4cout << G4Trajectory().GetAttDefs()
+  << G4TrajectoryPoint().GetAttDefs();
+
+  G4cout <<
+  "\nAttributes available for touchables by picking:"
+  << G4endl;
+  G4cout << G4PhysicalVolumeModel().GetAttDefs();
+
   if (verbosity < G4VisManager::parameters)
     G4cout <<
   "\nTo get more information, \"/vis/list all all\" or use individual commands"

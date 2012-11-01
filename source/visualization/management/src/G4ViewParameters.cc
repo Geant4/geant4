@@ -808,6 +808,15 @@ std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
   default: os << "unrecognised"; break;
   }
 
+  os << "\n  Vis attributes modifiers: ";
+  const std::vector<G4ModelingParameters::VisAttributesModifier>& vams =
+    v.fVisAttributesModifiers;
+  if (vams.empty()) {
+    os << "None";
+  } else {
+    os << vams;
+  }
+
   return os;
 }
 
@@ -874,6 +883,10 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
   if (IsExplode() &&
       ((fExplodeFactor != v.fExplodeFactor) ||
        (fExplodeCentre != v.fExplodeCentre))) return true;
+
+  if (G4ModelingParameters::VAMSNotEqual
+      (fVisAttributesModifiers, v.fVisAttributesModifiers))
+    return true;
 
   return false;
 }

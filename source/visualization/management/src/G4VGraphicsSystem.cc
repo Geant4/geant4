@@ -61,6 +61,11 @@ G4VGraphicsSystem::G4VGraphicsSystem (const G4String& name,
   fDescription (description),
   fFunctionality (f) {}
 
+G4bool G4VGraphicsSystem::IsUISessionCompatible () const
+{
+  return true;
+}
+
 std::ostream& operator << (std::ostream& os, const G4VGraphicsSystem& gs) {
   G4VisManager* pVMan = G4VisManager::GetInstance ();
   const G4SceneHandlerList& scenes = pVMan -> GetAvailableSceneHandlers ();

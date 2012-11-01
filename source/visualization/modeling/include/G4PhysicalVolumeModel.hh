@@ -133,7 +133,7 @@ public: // With description
   // Nested class for handling nested parameterisations.
 
   G4PhysicalVolumeModel
-  (G4VPhysicalVolume*,
+  (G4VPhysicalVolume* = 0,
    G4int requestedDepth = UNLIMITED,
    const G4Transform3D& modelTransformation = G4Transform3D(),
    const G4ModelingParameters* = 0,

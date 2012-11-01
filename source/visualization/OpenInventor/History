@@ -20,6 +20,11 @@ committal in the CVS repository !
 History file for visualization/OpenInventor
 -------------------------------------------
 
+18th October 2012  Frederick Jones
+- G4OpenInventorXtExtendedViewer:
+  o Removed inheritance from G4OpenInventorXtViewer.
+  o Now inherits from G4OpenInventorViewer.
+
 17th October 2012  John Allison  (openinventor-V09-05-12)
 - G4OpenInventorXtExaminerViewer.cc:
   o Disabled initial auto setting to first viewpoint (FWJ).

@@ -64,8 +64,6 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
  G4bool useFullExtent):
   G4VModel        (modelTransformation, pMP),
   fpTopPV         (pVPV),
-  fTopPVName      (pVPV -> GetName ()),
-  fTopPVCopyNo    (pVPV -> GetCopyNo ()),
   fRequestedDepth (requestedDepth),
   fUseFullExtent  (useFullExtent),
   fCurrentDepth   (0),
@@ -77,13 +75,18 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
   fpClippingSolid (0),
   fClippingMode   (subtraction)
 {
-  fType = "G4PhysicalVolumeModel";
-  std::ostringstream o;
-  o << fpTopPV -> GetCopyNo ();
-  fGlobalTag = fpTopPV -> GetName () + "." + o.str();
-  fGlobalDescription = "G4PhysicalVolumeModel " + fGlobalTag;
+  if (fpTopPV) {
+    
+    fType = "G4PhysicalVolumeModel";
+    fTopPVName = fpTopPV -> GetName ();
+    fTopPVCopyNo = fpTopPV -> GetCopyNo ();
+    std::ostringstream o;
+    o << fpTopPV -> GetCopyNo ();
+    fGlobalTag = fpTopPV -> GetName () + "." + o.str();
+    fGlobalDescription = "G4PhysicalVolumeModel " + fGlobalTag;
 
-  CalculateExtent ();
+    CalculateExtent ();
+  }
 }
 
 G4PhysicalVolumeModel::~G4PhysicalVolumeModel ()
@@ -133,6 +136,10 @@ void G4PhysicalVolumeModel::CalculateExtent ()
 void G4PhysicalVolumeModel::DescribeYourselfTo
 (G4VGraphicsScene& sceneHandler)
 {
+  if (!fpTopPV) G4Exception
+    ("G4PhysicalVolumeModel::DescribeYourselfTo",
+     "modeling0012", FatalException, "No model.");
+
   if (!fpMP) G4Exception
     ("G4PhysicalVolumeModel::DescribeYourselfTo",
      "modeling0003", FatalException, "No modeling parameters.");

@@ -17,6 +17,47 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27th October 2012  John Allison (opengl-V09-05-48, needs visman-V09-05-43)
+- Finally solved problem of batch v. non-Qt session!!!
+  o Introduced G4OpenGLQt, a base class for G4OpenGLImmediate/StoredQt
+    graphics system factories.
+  o Implemented G4OpenGLQt::IsUISessionCompatible().  This finds the original
+    session, if any.  If the session is a G4UIbatch (which can happen if
+    invoked from a command in a macro file), it uses GetPreviousSession
+    (recursively if necessary - the command may call another macro or command)
+    until the original session, if any, is found.  If there is no original
+    session we assume the application is in batch mode, and allow a Qt window.
+    It's OK to have a Qt window in batch - one can open a viewer, create a
+    scene, set view parameters and /vis/ogl/printEPS.  If there *is* an
+    original session, but it is *not* an G4UIQt, we flag it as incompatible.
+    A "fallback" graphics system is found, if any, in /vis/sceneHandler/create.
+
+26th October 2012  John Allison
+- G4OpenGLImmediate/StoredQt.cc:
+  o Use GetG4UIWindow() to tell if G4UIQt has been instantiated.
+    Solves problem of batch v. non-Qt session.
+
+23rd October 2012  John Allison
+- G4OpenGLStoredViewer.hh:
+  o Made CompareForKernelVisit virtual.
+- G4OpenGLStoredQtViewer:
+  o Introduced G4OpenGLStoredQtViewer::CompareForKernelVisit, which
+    is identical to G4OpenGLStoredViewer::CompareForKernelVisit
+    except for checking of VisAttributesModifiers, because
+    G4OpenGLStoredQtViewer keeps track of its own touchable
+    modifiers (fTreeItemModels, etc.).
+- G4OpenGLQtViewer.cc:
+  o Introduced code to capture changes to visibility (selection) in
+    VisAttributesModifiers.  This adds to the code to capture colour
+    and transparency introduced in opengl-V09-05-47.
+
+18th October 2012  Laurent Garnier
+- G4OpenGLQtViewer :
+ o Fix a Qt < 4.5 issue for ColorDialog
+ o Fix a Qt < 4.4 issue for GridLayout::itemAtPosition
+ o Fix a crash at exit on Linux SLC5 (he is right!)
+ o Fix a compilation warning on SLC5
+
 13th October 2012  John Allison
 - G4OpenGLSceneHandler.cc, G4OpenGLImmediateSceneHandler.cc,
   G4OpenGLStoredSceneHandler.cc, G4OpenGLStoredViewer.cc:

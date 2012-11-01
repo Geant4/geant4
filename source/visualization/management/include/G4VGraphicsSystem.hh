@@ -79,8 +79,9 @@ public: // With description
   const G4String& GetNickname      () const;
   const G4String& GetDescription   () const;
   Functionality   GetFunctionality () const;
+  virtual G4bool IsUISessionCompatible () const;
   void SetName          (const G4String&);
-  void SetNickName      (const G4String&);
+  void SetNickname      (const G4String&);
   void SetDescription   (const G4String&);
   void SetFunctionality (Functionality);
 

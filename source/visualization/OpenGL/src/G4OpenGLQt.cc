@@ -24,22 +24,57 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQt.hh,v 1.2 2009-02-04 16:48:40 lgarnier Exp $
+// $Id:$
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-// OpenGLImmediateQt graphics system factory.
+// John Allison  27th October 2012
+// Base class for OpenGLImmediate/StoredQt graphics system factories.
 
-#ifndef G4OPENGLIMMEDIATEQT_HH
-#define G4OPENGLIMMEDIATEQT_HH
+#ifdef G4VIS_BUILD_OPENGLQT_DRIVER
 
 #include "G4OpenGLQt.hh"
 
-class G4OpenGLImmediateQt: public G4OpenGLQt {
-public:
-  G4OpenGLImmediateQt ();
-  G4VSceneHandler* CreateSceneHandler (const G4String& name = "");
-  G4VViewer*  CreateViewer  (G4VSceneHandler&, const G4String& name = "");
-};
+#include "G4UIQt.hh"
+#include "G4UImanager.hh"
+#include "G4UIbatch.hh"
+
+G4OpenGLQt::G4OpenGLQt (const G4String& name,
+                        const G4String& nickname,
+                        const G4String& description,
+                        Functionality f):
+G4VGraphicsSystem (name,
+                   nickname,
+                   description,
+                   f)
+{}
+
+G4bool G4OpenGLQt::IsUISessionCompatible () const
+{
+  G4bool isCompatible = false;
+  G4UImanager* ui = G4UImanager::GetUIpointer();
+  G4UIsession* session = ui->GetSession();
+  // In case it's a G4UIbatch, find original session by recursive search until
+  // the session is no longer a G4UIbatch, in which case it will be the
+  // original session, if any.
+  while (G4UIbatch* batch = dynamic_cast<G4UIbatch*>(session)) {
+    session = batch->GetPreviousSession();
+  }
+  if (!session) {
+    // The user has not instantiated a session - must be batch.
+    // It's OK to have a Qt window in batch - you can open a viewer, create a
+    // scene, set view parameters and /vis/ogl/printEPS.
+    isCompatible = true;
+  } else {
+    // The user has instantiated a session...
+    if (dynamic_cast<G4UIQt*>(session)) {
+      // ...and it's a G4UIQt session, which is OK.
+      isCompatible = true;
+    } else {
+      // Not OK - go and find the fallback graphics system.
+      isCompatible = false;
+    }
+  }
+  return isCompatible;
+}
 
 #endif

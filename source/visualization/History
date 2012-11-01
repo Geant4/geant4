@@ -24,11 +24,33 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+27th October 2012  John Allison  (vis-V09-05-45)
+- visman-V09-05-43:
+  o Implemented the concept of a "fallback" graphics system.  Used only
+    Qt at present.  A Qt viewer will only work with a Qt session so if
+    for a user instantiates a non-Qt session we wish to avoid instantiating
+    a Qt viewer - instantiate, Xm, for example, instead.  (It's OK to
+    instantiate a Qt viewer in batch - no window is opened, but one can create
+    a scene, change view parameters and "/vis/ogl/printEPS" to get an
+    eps file in batch.)
+- opengl-V09-05-48:
+  o Solves problem of batch v. non-Qt session.
+  o Records changes to colour and visibility of touchables in
+    VisAttributesModifiers, so that they may be transmitted to other
+    viewers.
+  o Qt fixes.
+  o Bug fix: Hidden markers can now be handled on-the-fly, i.e., without
+    having to rebuild the display lists.
+
+24th October 2012  John Allison
+- modeling-V09-05-22 and visman-V09-05-42:
+  o Improvements for printing of parameters and att defs.
+
 18th October 2012  John Allison  (vis-V09-05-44)
 - visman-V09-05-41:
   o Reverted to G4OpenInventorXt as the default OI for X Windows.
   o Get G4OpenInventorXtExtended with "/vis/open OIXE".
-- openinventor-V09-05-12:
+- openinventor-V09-05-12 (Frederick Jones):
   o Bug fixes.
   o Disabled initial auto setting to first viewpoint of the new
     G4OpenInventorXtExaminerViewer.
@@ -40,7 +62,7 @@ History file for visualization category
 - openinventor-V09-05-11:
   o Encapsulated Fred's code in a new driver, G4OpenInventorXtExtended
   (OIXE).
-- openinventor-V09-05-10:
+- openinventor-V09-05-10 (Frederick Jones):
   o G4OpenInventorXtExaminerViewer
     . New class implements functional extensions to the 
       Xt-based viewer.  A plug-in replacement for
