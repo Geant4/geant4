@@ -94,8 +94,6 @@ class G4UIQt : public QObject, public G4VBasicShell, public G4VInteractiveSessio
 public: // With description
   G4UIQt(int,char**);
   // (argv, argc) or (0, NULL) had to be given.
-  static G4bool IsInstantiated() {return fIsInstantiated;}
-  // True if instantiated.
   G4UIsession* SessionStart();
   // To enter interactive X loop ; waiting/executing command,...
   void AddMenu(const char*,const char*);
@@ -162,7 +160,6 @@ public:
   //   G4String GetCommand(Widget);
 
 private:
-  static G4bool fIsInstantiated;
   void SecondaryLoop(G4String); // a VIRER
   void CreateHelpWidget();
   void InitHelpTreeAndVisParametersWidget();

@@ -24,7 +24,6 @@ OGLLIBS  =
 
 CPPFLAGS += -I$(G4BASE)/global/management/include
 CPPFLAGS += -I$(G4BASE)/interfaces/common/include
-CPPFLAGS += -I$(G4BASE)/interfaces/GAG/include
 CPPFLAGS += -I$(G4BASE)/intercoms/include
 
 include $(G4INSTALL)/config/moc.gmk

@@ -17,8 +17,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-1st November, 2012 Gabriele Cosmo (interfaces-V09-05-30a)
-- Fixed GNUmakefile and source.cmake in basic module for missing G4UIGAG.hh.
+30th October, 2012 John Allison (interfaces-V09-05-31 needs vis-V09-05-45)
+- G4UIQt: Removed IsInstantiated.  No longer needed.
 
 23th October, 2012 Koichi Murakami (interfaces-V09-05-30)
 - UIExecutive, fixed Windows error, add SelectSessionByBestGuess().

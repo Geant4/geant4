@@ -23,7 +23,6 @@ include_directories(${CLHEP_INCLUDE_DIRS})
 include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/interfaces/common/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/interfaces/GAG/include)
 
 #
 # Module has optional sources
