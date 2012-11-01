@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ctests-V09-05-33 1st November 2012 Gunter Folger
+- Add project names for several advanced examples:
+   gammaray_telescope, phononExample, and air_shower 
+
 ctests-V09-05-32 31th October 2012 Francesco Romano
 - Correct case for hadrontherapy example to follow changes in the example 
    CMakeLists.txt file

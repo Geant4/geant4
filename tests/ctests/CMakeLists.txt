@@ -220,7 +220,7 @@ GEANT4_ADD_TEST(example-ext-exoticphysics-phonons
                 POSTCMD ${CMAKE_COMMAND} -E compare_files caustic.ssv ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phononExample/caustic.out
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phononExample
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/phononExample
-                BUILD XGeBox PROJECT phononExample
+                BUILD XGeBox PROJECT dmc
                 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
                             CRYSTALMAPS=${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phononExample/CrystalMaps
 		)
@@ -456,7 +456,8 @@ GEANT4_ADD_TEST(example-adv-gammaray_telescope
                 POSTCMD ${CMAKE_COMMAND} -E compare_files gammaraytel.err ${CMAKE_SOURCE_DIR}/examples/advanced/gammaray_telescope/gammaraytel.err
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/gammaray_telescope
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/gammaray_telescope
-                BUILD GammaRayTel  ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+                BUILD GammaRayTel  PROJECT gammaray_telescope
+		ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-adv-microdosimetry 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/microdosimetry/microdosimetry 
                         ${CMAKE_SOURCE_DIR}/examples/advanced/microdosimetry/microdosimetry.mac
@@ -477,7 +478,8 @@ GEANT4_ADD_TEST(example-adv-air_shower
                         ${CMAKE_SOURCE_DIR}/examples/advanced/air_shower/UltraMacro.mac
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/air_shower
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/air_shower
-                BUILD Ultra ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+                BUILD Ultra PROJECT air_shower
+		ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-adv-hadrontherapy 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/hadrontherapy/hadrontherapy
                         ${CMAKE_SOURCE_DIR}/examples/advanced/hadrontherapy/batch.mac
