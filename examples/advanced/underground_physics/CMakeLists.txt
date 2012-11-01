@@ -1,8 +1,7 @@
- #----------------------------------------------------------------------------
+#----------------------------------------------------------------------------
 # Setup the project
 cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
-set(name DMX)
-project(${name})
+project(underground_physics)
 
 #----------------------------------------------------------------------------
 # Find Geant4 package, activating all available UI and Vis drivers by default
@@ -20,6 +19,18 @@ endif()
 # Setup Geant4 include directories and compile definitions
 #
 include(${Geant4_USE_FILE})
+
+#----------------------------------------------------------------------------
+# Find AIDA (optional package)
+#
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
+find_package(AIDA)
+if(AIDA_FOUND)
+  message(STATUS "G4 Examples: AIDA found. --> underground_physics example with AIDA enabled.") 
+  add_definitions(-DG4ANALYSIS_USE)  
+else()
+  message(STATUS "G4 Example: AIDA not found --> underground_physics example with AIDA disabled.")
+endif()
 
 #Check here for DMXENV_GPS_USE
 #Use GPS if the environment variable is set, and the user has *not* supplied the CMake 
@@ -40,16 +51,44 @@ endif()
 
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
-# NB: headers are included so they will show up in IDEs
 #
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${Geant4_INCLUDE_DIR})
-# Setup include directory for this project
-file(GLOB sources ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cc)
+include_directories(${PROJECT_SOURCE_DIR}/include 
+                    ${Geant4_INCLUDE_DIR}
+                    ${AIDA_INCLUDE_DIR})
+file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
+file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
-add_executable(${name} EXCLUDE_FROM_ALL ${name}.cc ${sources})
-target_link_libraries(${name} ${Geant4_LIBRARIES})
+add_executable(DMX DMX.cc ${sources} ${headers})
+target_link_libraries(DMX ${Geant4_LIBRARIES} ${AIDA_LIBRARIES} )
 
+#----------------------------------------------------------------------------
+# Copy all scripts to the build directory, i.e. the directory in which we
+# build underground_physics. This is so that we can run the executable directly because it
+# relies on these scripts being in the current working directory.
+#
+set(underground_physics_SCRIPTS
+    alpha_1000.mac alpha_low.mac alpha.mac ambe_spectrum.mac gamma_1000.mac gamma_2000.mac gamma_low.mac gamma.mac initInter.mac neutron.mac stt.mac stt.out stt_pmt_ref.out stt_ref.out wired.mac
+  )
+
+foreach(_script ${underground_physics_SCRIPTS})
+  configure_file(
+    ${PROJECT_SOURCE_DIR}/${_script}
+    ${PROJECT_BINARY_DIR}/${_script}
+    COPYONLY
+    )
+endforeach()
+
+#----------------------------------------------------------------------------
+# Add program to the project targets
+# (this avoids the need of typing the program name after make)
+#
+add_custom_target(underground_physics DEPENDS DMX)
+
+#----------------------------------------------------------------------------
+# Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
+#
+install(TARGETS DMX DESTINATION bin)
 
