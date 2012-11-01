@@ -85,8 +85,6 @@
 static G4bool exitSession = true;
 static G4bool exitPause = true;
 
-G4bool G4UIQt::fIsInstantiated = false;
-
 /**   Build a Qt window with a menubar, output area and promt area<br> 
 <pre>
    +-----------------------+
@@ -141,8 +139,6 @@ G4UIQt::G4UIQt (
     G4cout        << "G4UIQt : Unable to init Qt. Aborted" << G4endl;
   }
   
-  fIsInstantiated = true;
-
   G4UImanager* UI = G4UImanager::GetUIpointer();
   if(UI!=NULL) UI->SetSession(this);
   if(UI!=NULL) UI->SetG4UIWindow(this);
