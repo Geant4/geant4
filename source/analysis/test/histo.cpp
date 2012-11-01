@@ -1,6 +1,10 @@
 // Copyright (C) 2010, Guy Barrand. All rights reserved.
 // See the file tools.license for terms.
 
+#ifdef TOOLS_MEM
+#include <tools/mem>
+#endif //TOOLS_MEM
+
 #include <tools/histo/h1d>
 #include <tools/histo/h2d>
 #include <tools/histo/p1d>
@@ -11,6 +15,10 @@
 #include <iostream>
 
 int main(int argc,char** argv) {
+#ifdef TOOLS_MEM
+  tools::mem::set_check_by_class(true);{
+#endif //TOOLS_MEM
+
   bool print = true;
   if(argc==2) {
     std::string s = argv[1];
@@ -18,6 +26,10 @@ int main(int argc,char** argv) {
   }
 
   unsigned int entries = 1000000;
+
+  ////////////////////////////////////////
+  /// h1d ////////////////////////////////
+  ////////////////////////////////////////
  {
    tools::random::gauss rg(1,2);
    tools::histo::h1d h("Gauss",100,-5,5);
@@ -44,6 +56,9 @@ int main(int argc,char** argv) {
    if(print) h.hprint(std::cout);
  }
 
+  ////////////////////////////////////////
+  /// p1d ////////////////////////////////
+  ////////////////////////////////////////
  {
    tools::random::gauss rg(1,2);
    tools::random::bw rbw(0,1);
@@ -54,6 +69,9 @@ int main(int argc,char** argv) {
    if(print) h.hprint(std::cout);
  }
 
+  ////////////////////////////////////////
+  /// h2d ////////////////////////////////
+  ////////////////////////////////////////
  {
    tools::random::gauss rg(1,2);
    tools::random::bw rbw(0,1);
@@ -74,7 +92,7 @@ int main(int argc,char** argv) {
    */
 
   {
-    tools::histo::h1d* projection = tools::histo::projection_x(h,"SliceX");
+    tools::histo::h1d* projection = tools::histo::projection_x(h,"ProjX");
     if(!projection) return -1;
     projection->set_title("Gauss_BW_projectionX");
     if(print) projection->hprint(std::cout);
@@ -82,7 +100,7 @@ int main(int argc,char** argv) {
   }
    
   {
-    tools::histo::h1d* projection = tools::histo::projection_y(h,"SliceY");
+    tools::histo::h1d* projection = tools::histo::projection_y(h,"ProjY");
     if(!projection) return -1;
     projection->set_title("Gauss_BW_projectionY");
     if(print) projection->hprint(std::cout);
@@ -150,6 +168,77 @@ int main(int argc,char** argv) {
   }
 
  }
+
+  ////////////////////////////////////////
+  /// h3d ////////////////////////////////
+  ////////////////////////////////////////
+ {
+   tools::random::gauss rg(1,2);
+   tools::random::bw rbw(0,1);
+   tools::random::flat rflat;
+   tools::histo::h3d h("Gauss_BW_flat",100,-10,10,100,-2,2,100,-2,2);
+   for(unsigned int count=0;count<entries;count++) {
+     h.fill(rg.shoot(),rbw.shoot(),rflat.shoot());
+   }
+   if(print) h.hprint(std::cout);
+
+   if(print){
+     std::cout << "x mean " << h.mean_x()
+               << " rms " << h.rms_x() << std::endl;
+     std::cout << "y mean " << h.mean_y()
+               << " rms " << h.rms_y() << std::endl;
+     std::cout << "z mean " << h.mean_z()
+               << " rms " << h.rms_z() << std::endl;
+   }
+
+  {
+    tools::histo::h2d* projection = tools::histo::projection_xy(h,"ProjXY");
+    if(!projection) return -1;
+    projection->set_title("Gauss_BW_flat_projectionXY");
+    if(print) projection->hprint(std::cout);
+    
+   {tools::histo::h1d* _projection =
+      tools::histo::projection_x(*projection,"ProjX");
+    if(!_projection) return -1;
+    _projection->set_title("Gauss_BW_flat_projectionX");
+    if(print) _projection->hprint(std::cout);
+    delete _projection;}
+
+   {tools::histo::h1d* _projection =
+      tools::histo::projection_y(*projection,"ProjY");
+    if(!_projection) return -1;
+    _projection->set_title("Gauss_BW_flat_projectionY");
+    if(print) _projection->hprint(std::cout);
+    delete _projection;}
+
+    delete projection;
+  }
+   
+  {
+    tools::histo::h2d* projection = tools::histo::projection_yz(h,"ProjYZ");
+    if(!projection) return -1;
+    projection->set_title("Gauss_BW_flat_projectionYZ");
+    if(print) projection->hprint(std::cout);
+    
+   {tools::histo::h1d* _projection =
+      tools::histo::projection_y(*projection,"ProjZ");
+    if(!_projection) return -1;
+    _projection->set_title("Gauss_BW_flat_projectionZ");
+    if(print) _projection->hprint(std::cout);
+    delete _projection;}
+
+    delete projection;
+  }
+   
+ }
+
+  //////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////
+
+#ifdef TOOLS_MEM
+  }tools::mem::balance(std::cout);
+#endif //TOOLS_MEM
 
   return 0;
 }

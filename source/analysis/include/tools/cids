@@ -7,7 +7,6 @@
 #include "cid"
 
 #include <string>
-#include <ctime>
 #include "typedefs" //byte
 
 namespace tools {
@@ -24,8 +23,16 @@ inline cid _cid(bool)           {return 9;}
 
 // not compiler types :
 inline cid _cid(uint64)             {return 10;}
-inline cid _cid(time_t)             {return 11;}
+inline cid _cid(int64)              {return 11;}
 inline cid _cid(const std::string&) {return 12;}
+inline cid _cid(fits_bit)           {return 13;}
+inline cid _cid(csv_time)           {return 14;}
+
+//NOTE : avoid time_t which is defined in general as a long
+//       and is then ambiguous relative to int/int64.
+
+//NOTE : if adding some, it must not exceed 20. Else, you have to change
+//       the below for std::vector.
 
 }
 

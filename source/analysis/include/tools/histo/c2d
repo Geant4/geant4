@@ -15,6 +15,11 @@ namespace histo {
 
 class c2d : public base_cloud {
 public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::histo::c2d");
+    return s_v;
+  }
+public:
   bool set_title(const std::string&);
   unsigned int dimension() const {return 2;}
   bool reset();
@@ -50,6 +55,12 @@ public:
   }
   bool set_conversion_parameters(unsigned int,double,double,  
                                  unsigned int,double,double);
+
+  bool set_histogram(h2d* a_histo){ //we take ownership of a_histo.
+    reset();
+    m_histo = a_histo;
+    return true;
+  }
 public:
   c2d();
   c2d(const std::string&,int=-1);

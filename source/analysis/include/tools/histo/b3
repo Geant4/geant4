@@ -361,6 +361,16 @@ public:
     }
     return sw;
   }
+
+public:
+  //NOTE : print is a Python keyword.
+  void hprint(std::ostream& a_out) {
+    // A la HPRINT.
+    a_out << parent::dimension() << parent::title() << std::endl;
+    a_out 
+      << " * ENTRIES = " << parent::all_entries() << std::endl;
+  
+  }
 public:
   b3(const std::string& a_title,
                 bn_t aXnumber,TC aXmin,TC aXmax,

@@ -17,6 +17,10 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 26, 2012 I.Hrivnacova (analysis-V09-05-15)
+- Updated to g4tools 1.4.3 (by G. Barrand) - see History_tools;
+  includes bug correction for histo/h3::fill
+
 October 14, 2012 I.Hrivnacova (analysis-V09-05-14)
 - Adding function  G4VAnalysisManager::SetActivation(..) 
   for setting activation to all histograms of one type

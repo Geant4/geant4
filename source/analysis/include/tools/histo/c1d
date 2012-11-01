@@ -15,6 +15,11 @@ namespace histo {
 
 class c1d : public base_cloud {
 public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::histo::c1d");
+    return s_v;
+  }
+public:
   bool set_title(const std::string& a_title){
     m_title = a_title;
     if(m_histo) m_histo->set_title(a_title);
@@ -58,6 +63,12 @@ public:
       m_Sx2w *= a_scale;
       return true;
     }
+  }
+
+  bool set_histogram(h1d* a_histo){ //we take ownership of a_histo.
+    reset();
+    m_histo = a_histo;
+    return true;
   }
 
 public:

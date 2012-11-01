@@ -65,7 +65,7 @@ else
       G4_cppflags="-Wno-non-virtual-dtor -Wwrite-strings -Wpointer-arith -Woverloaded-virtual"
     else
       G4_cppflags="-W -Wall -ansi -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual"
-#      G4_cppflags="${G4_cppflags} -Wshadow"
+      G4_cppflags="${G4_cppflags} -Wshadow"
     fi
   fi
 

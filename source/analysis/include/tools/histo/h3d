@@ -41,6 +41,13 @@ public:
     return *this;
   }
 
+#ifdef __CINT__
+  bool fill(double aX,double aY,double aZ,double aW = 1) {
+    return parent::fill(aX,aY,aZ,aW);    
+  }
+  void hprint(std::ostream& a_out) {parent::hprint(a_out);}
+#endif
+
 private:static void check_instantiation() {h3d dummy("",10,0,1,10,0,1,10,0,1);}
 };
 

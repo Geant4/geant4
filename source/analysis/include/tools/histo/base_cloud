@@ -7,23 +7,43 @@
 #include <string>
 #include <vector>
 
+#ifdef TOOLS_MEM
+#include "../mem"
+#endif
+
 namespace tools {
 namespace histo {
 
 class base_cloud {
+  static const std::string& s_class() {
+    static const std::string s_v("tools::histo::base_cloud");
+    return s_v;
+  }
 protected:
   base_cloud(int aLimit)
   :m_limit(aLimit)
   ,m_Sw(0)
-  {}
-  virtual ~base_cloud(){}
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~base_cloud(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
 public:
   base_cloud(const base_cloud& a_from)
   :m_title(a_from.m_title)
   ,m_limit(a_from.m_limit)
   ,m_Sw(a_from.m_Sw)
   ,m_ws(a_from.m_ws)
-  {}
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
 
   base_cloud& operator=(const base_cloud& a_from){
     m_title = a_from.m_title;

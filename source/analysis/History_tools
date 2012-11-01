@@ -1,3 +1,17 @@
+ 1.4.3 :
+ - histo/b3,h3d : have a print() method. (Few things in it for the moment...)
+ - histo/sliced : for h3 : projection_[xy,yz,xz] methods.
+ - test/cpp/histo.cpp : example of a h3d with some projections.   
+
+ 1.4.2 :
+ - histo/h3::fill : bug correction : line 69 [3] -> [2].
+ - test/cpp/use_cpp : g++ : have the -shadow option.
+ - histo/c[1,2,3]d : set_histogram(), s_class() : methods needed when
+   creating back objects when reading an AIDA xml file.
+   (In fact not used today since reading files is not used in G4).
+ - modifs in typedefs, cids, tos, vmanip : the same, coming from modifs
+   in inlib related to the reading of files.
+
  1.4.1 : 21 Aug 2012 : G.Barrand :
  - wroot/file, free_seg : handle (and save) "free segments".
    It permits to open the file correctly when opening back

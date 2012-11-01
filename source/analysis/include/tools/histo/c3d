@@ -15,6 +15,11 @@ namespace histo {
 
 class c3d : public base_cloud {
 public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::histo::c3d");
+    return s_v;
+  }
+public:
   bool set_title(const std::string&);
   unsigned int dimension() const {return 3;}
   bool reset();
@@ -60,6 +65,12 @@ public:
   bool set_conversion_parameters(unsigned int,double,double,
                                  unsigned int,double,double,
                                  unsigned int,double,double);
+
+  bool set_histogram(h3d* a_histo){ //we take ownership of a_histo.
+    reset();
+    m_histo = a_histo;
+    return true;
+  }
 public:
   c3d();
   c3d(const std::string&,int=-1);
