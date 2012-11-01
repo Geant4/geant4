@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 1, 2012 G.Cosmo (global-V09-05-13)
+- Added missing header in sources.cmake script for management module.
+
 October 24, 2012 G.Cosmo (global-V09-05-12)
 - Use 'const G4String&' as arguments in G4coutdestination instead of
   plain string copy to reduce memory churn (K.Murakami).

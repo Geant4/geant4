@@ -26,13 +26,14 @@ include_directories(${CLHEP_INCLUDE_DIRS})
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4globman
     HEADERS
+        globals.hh
+        templates.hh
+        tls.hh
         G4strstreambuf.hh
         G4Allocator.hh
         G4strstreambuf.icc
         G4AllocatorPool.hh
-        globals.hh
         G4ApplicationState.hh
-        templates.hh
         G4DataVector.hh
         G4DataVector.icc
         G4ErrorPropagatorData.hh
