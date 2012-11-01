@@ -88,15 +88,6 @@ int main(int argc ,char ** argv)
 {
   // Set the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine());
-
-  //imported from eliot_geant4.9.3p01// to create a different seed
-  G4int seconds = time(NULL);
-  G4int a,seed;
-  G4int resto = seconds % 1000;
-  a = CLHEP::RandFlat::shoot(10000,99999);
-  seed = resto*a;
-  CLHEP::HepRandom::setTheSeed(seed);
-  //imported from eliot_geant4.9.3p01
         
    G4RunManager* runManager = new G4RunManager;
   // Geometry controller is responsible for instantiating the

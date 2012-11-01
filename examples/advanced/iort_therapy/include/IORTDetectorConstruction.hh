@@ -173,8 +173,6 @@ inline bool IsInside(G4double detectorX,
   void SetinnerRadiusDiscoIORT(G4double innerr);
   void SetheightDiscoIORT(G4double height);
   void SetDiscoXPositionIORT(G4double xpos);
-  void SetDiscoYPositionIORT(G4double ypos);
-  void SetDiscoZPositionIORT(G4double zpos);
 
   G4bool  SetDiscoMaterialIORT1(G4String material);
   void SetOuterRadiusDiscoIORT1(G4double outerr);
@@ -182,7 +180,7 @@ inline bool IsInside(G4double detectorX,
   void SetheightDiscoIORT1(G4double height);
   void SetDiscoXPositionIORT1(G4double xpos);
 
-  void SetAngleDiscoIORT0(G4double phi0);
+
 
 private:
 
@@ -225,13 +223,6 @@ private:
   G4Region* aRegion;
 
   
-  
-  //Disco0 IORT
-  G4Tubs* solidDiscoIORT0;
-  G4LogicalVolume* logicDiscoIORT0;
-  G4VPhysicalVolume* physiDiscoIORT0;
-  G4double AngleDiscoIORT0; 
-
   // Disco1 IORT
   G4VisAttributes* white;
   G4VisAttributes* gray;
@@ -240,8 +231,6 @@ private:
   G4double OuterRadiusDiscoIORT;
   G4double heightDiscoIORT;
   G4double DiscoXPositionIORT;
-  G4double DiscoYPositionIORT;
-  G4double DiscoZPositionIORT;
   G4Tubs* solidDiscoIORT; 
   G4LogicalVolume* logicDiscoIORT;
   G4VPhysicalVolume* physiDiscoIORT;

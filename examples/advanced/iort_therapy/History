@@ -7,8 +7,6 @@ carlo.casarino@polooncologicocefalu.it
              History file of the IORT application
          ====================================================
 
-26.10.2012 - F.Romano;  Tag: iort_therapy-V09-05-06
-               Updated some files: general review of the example
 26.10.2012 - L.Pandola;  Tag: iort_therapy-V09-05-05
                Replace CMakeLists.txt to deal with UI/VIS
 24.10.2012 - A.Ribon;     Tag: iort_therapy-V09-05-04

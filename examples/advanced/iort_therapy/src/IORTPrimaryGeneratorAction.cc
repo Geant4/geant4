@@ -194,14 +194,9 @@ void IORTPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   
 while (true)  {
 
-  //Mx =  CLHEP::RandFlat::shoot(0.9,1);
-  //My =  CLHEP::RandFlat::shoot(-0.1,0.1);
-  //Mz =  CLHEP::RandFlat::shoot(-0.1,0.1);
-
-  Mx =  CLHEP::RandFlat::shoot(0.7,1);
-  My =  CLHEP::RandFlat::shoot(-0.3,0.3); // ranges good for 0<Theta<20
-  Mz =  CLHEP::RandFlat::shoot(-0.3,0.3);
-
+  Mx =  CLHEP::RandFlat::shoot(0.9,1);
+  My =  CLHEP::RandFlat::shoot(-0.1,0.1);
+  Mz =  CLHEP::RandFlat::shoot(-0.1,0.1);
   condizione = std::sqrt(Mx*Mx + My*My + Mz*Mz);
 
  
