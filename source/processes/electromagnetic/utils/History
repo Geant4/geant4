@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26 October 12: V.Ivant (emutils-V09-05-50)
+- G4VMultipleScatteringModel - return version 48
+- G4VEmProcess - changed initialisation for ions
+
+25 October 12: V.Ivant (emutils-V09-05-49)
+- G4VMultipleScatteringModel - moved relocation ALongStep and do not 
+	call msc PostStep
+
 21 October 12: V.Ivant (emutils-V09-05-48)
 - G4EmBiasingManager - cleanup the code; do not modify ParticleChange
     when apply RussianRoulette (monor CPU saving); moved

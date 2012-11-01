@@ -202,20 +202,21 @@ G4VMultipleScattering::GetModelByIndex(G4int idx, G4bool ver) const
 void 
 G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part)
 {
-  if (!firstParticle) {
-    if(part.GetParticleType() == "nucleus" && 
-       part.GetParticleSubType() == "generic") {
-      firstParticle = G4GenericIon::GenericIon();
-      isIon = true;
-    } else {
-      firstParticle = &part;
-      if(part.GetParticleType() == "nucleus" || 
-	 part.GetPDGMass() > GeV) {isIon = true;} 
-    } 
-    // limitations for ions
-    if(isIon) {
+  if(!firstParticle) { firstParticle = &part; }
+  if(part.GetParticleType() == "nucleus" && 
+     part.GetParticleSubType() == "generic") {
+
+    G4String pname = part.GetParticleName();
+    if(pname != "deuteron" && pname != "triton" &&
+       pname != "He3" && pname != "alpha" &&
+       pname != "alpha+"   && pname != "helium" &&
+       pname != "hydrogen") {
+
       SetStepLimitType(fMinimal);
       SetLateralDisplasmentFlag(false);
+      SetRangeFactor(0.2);
+      firstParticle = G4GenericIon::GenericIon();
+      isIon = true; 
     }
   }
 
@@ -227,6 +228,7 @@ G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part)
            << GetProcessName()
            << " and particle " << part.GetParticleName()
            << " local particle " << firstParticle->GetParticleName()
+	   << " isIon= " << isIon 
            << G4endl;
   }
 
@@ -359,13 +361,13 @@ G4double G4VMultipleScattering::AlongStepGetPhysicalInteractionLength(
   // get Step limit proposed by the process
   *selection = NotCandidateForSelection;
   physStepLimit = gPathLength = tPathLength = currentMinimalStep;
-  
+
   G4double ekin = track.GetKineticEnergy();
   // isIon flag is used only to select a model
   if(isIon) { 
     ekin *= proton_mass_c2/track.GetParticleDefinition()->GetPDGMass(); 
   }
-
+  
   // select new model
   if(1 < numberOfModels) {
     currentModel = static_cast<G4VMscModel*>(
@@ -414,7 +416,7 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
   G4double geomLength = step.GetStepLength();
 
   // very small step - no msc
-  if(!currentModel->IsActive(ekin)) {
+  if(!currentModel->IsActive(ekin) || tPathLength <= geomMin) {
     tPathLength = geomLength;
 
     // sample msc
@@ -463,6 +465,7 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
 	  // add a factor which ensure numerical stability
 	  fNewPosition += displacement*(0.99*safety/sqrt(r2));
 	}
+	//safetyHelper->ReLocateWithinVolume(fNewPosition);
       }
     }
   }

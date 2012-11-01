@@ -83,6 +83,7 @@
 #include "G4Positron.hh"
 #include "G4PhysicsTableHelper.hh"
 #include "G4EmBiasingManager.hh"
+#include "G4GenericIon.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -254,6 +255,20 @@ G4VEmModel* G4VEmProcess::GetModelByIndex(G4int idx, G4bool ver)
 void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 {
   if(!particle) { SetParticle(&part); }
+
+  if(part.GetParticleType() == "nucleus" && 
+     part.GetParticleSubType() == "generic") {
+
+    G4String pname = part.GetParticleName();
+    if(pname != "deuteron" && pname != "triton" &&
+       pname != "alpha" && pname != "He3" &&
+       pname != "alpha+"   && pname != "helium" &&
+       pname != "hydrogen") {
+
+      particle = G4GenericIon::GenericIon();
+    }
+  }
+
   if(1 < verboseLevel) {
     G4cout << "G4VEmProcess::PreparePhysicsTable() for "
            << GetProcessName()
