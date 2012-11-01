@@ -4,7 +4,7 @@
 # GNUmakefile 
 # -----------
 
-name := Microbeam
+name := microbeam
 
 G4TARGET := $(name)
 G4EXLIB := true
