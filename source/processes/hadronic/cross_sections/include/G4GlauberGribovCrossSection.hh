@@ -58,6 +58,8 @@ public:
 
   G4GlauberGribovCrossSection ();
   virtual ~G4GlauberGribovCrossSection ();
+
+    static const char* Default_Name() {return "Glauber-Gribov";}
    
   virtual
   G4bool IsIsoApplicable(const G4DynamicParticle* aDP, G4int Z, G4int A, 

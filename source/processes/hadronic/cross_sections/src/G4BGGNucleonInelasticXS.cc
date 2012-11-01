@@ -56,6 +56,8 @@
 #include "G4Element.hh"
 #include "G4Isotope.hh"
 
+#include "G4CrossSectionDataSetRegistry.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4BGGNucleonInelasticXS::G4BGGNucleonInelasticXS(const G4ParticleDefinition* p)
@@ -86,8 +88,6 @@ G4BGGNucleonInelasticXS::G4BGGNucleonInelasticXS(const G4ParticleDefinition* p)
 
 G4BGGNucleonInelasticXS::~G4BGGNucleonInelasticXS()
 {
-  delete fGlauber;
-  delete fNucleon;
   delete fHadron;
   delete fSAID;
 }
@@ -207,9 +207,10 @@ void G4BGGNucleonInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
   if(isInitialized) { return; }
   isInitialized = true;
 
-  fNucleon = new G4NucleonNuclearCrossSection();
-  fGlauber = new G4GlauberGribovCrossSection();
-  fHadron  = new G4HadronNucleonXsc();
+    fNucleon = (G4NucleonNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NucleonNuclearCrossSection::Default_Name());
+    fGlauber = (G4GlauberGribovCrossSection*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4GlauberGribovCrossSection::Default_Name());
+
+    fHadron  = new G4HadronNucleonXsc();
   //fGHEISHA = new G4HadronInelasticDataSet();
   fSAID    = new G4ComponentSAIDTotalXS();
 

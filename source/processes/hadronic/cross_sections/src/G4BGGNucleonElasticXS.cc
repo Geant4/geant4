@@ -52,6 +52,8 @@
 #include "G4Neutron.hh"
 #include "G4NistManager.hh"
 
+#include "G4CrossSectionDataSetRegistry.hh"
+
 G4BGGNucleonElasticXS::G4BGGNucleonElasticXS(const G4ParticleDefinition* p)
  : G4VCrossSectionDataSet("Barashenkov-Glauber") 
 {
@@ -77,8 +79,6 @@ G4BGGNucleonElasticXS::G4BGGNucleonElasticXS(const G4ParticleDefinition* p)
 
 G4BGGNucleonElasticXS::~G4BGGNucleonElasticXS()
 {
-  delete fGlauber;
-  delete fNucleon;
   delete fHadron;
   delete fSAID;
 }
@@ -194,8 +194,9 @@ void G4BGGNucleonElasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
   if(isInitialized) { return; }
   isInitialized = true;
 
-  fNucleon = new G4NucleonNuclearCrossSection();
-  fGlauber = new G4GlauberGribovCrossSection();
+  fNucleon = (G4NucleonNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NucleonNuclearCrossSection::Default_Name());
+  fGlauber = (G4GlauberGribovCrossSection*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4GlauberGribovCrossSection::Default_Name());
+    
   fHadron  = new G4HadronNucleonXsc();
   fSAID    = new G4ComponentSAIDTotalXS();
   fNucleon->BuildPhysicsTable(*particle);

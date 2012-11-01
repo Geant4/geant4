@@ -65,6 +65,10 @@ G4_REFERENCE_XS_FACTORY(G4ChipsPionMinusInelasticXS);
 G4_REFERENCE_XS_FACTORY(G4ChipsPionMinusElasticXS);
 G4_REFERENCE_XS_FACTORY(G4ChipsAntiBaryonInelasticXS);
 G4_REFERENCE_XS_FACTORY(G4ChipsAntiBaryonElasticXS);
+G4_REFERENCE_XS_FACTORY(G4NucleonNuclearCrossSection);
+G4_REFERENCE_XS_FACTORY(G4GlauberGribovCrossSection);
+G4_REFERENCE_XS_FACTORY(G4GGNuclNuclCrossSection);
+
 
 G4CrossSectionDataSetRegistry* G4CrossSectionDataSetRegistry::theInstance = 0;
 

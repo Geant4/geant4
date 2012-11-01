@@ -40,6 +40,11 @@
 #include "G4ParticleDefinition.hh"
 #include "G4HadronNucleonXsc.hh"
 
+// factory
+#include "G4CrossSectionFactory.hh"
+//
+G4_DECLARE_XS_FACTORY(G4GlauberGribovCrossSection);
+
 ///////////////////////////////////////////////////////////////////////////////
 
 const G4double G4GlauberGribovCrossSection::fNeutronBarCorrectionTot[93] = {
@@ -223,7 +228,7 @@ const G4double G4GlauberGribovCrossSection::fPionMinusBarCorrectionIn[93] = {
 //
 
 G4GlauberGribovCrossSection::G4GlauberGribovCrossSection() 
- : G4VCrossSectionDataSet("Glauber-Gribov"),
+ : G4VCrossSectionDataSet(Default_Name()),
    fUpperLimit(100000*GeV), fLowerLimit(10.*MeV),// fLowerLimit(3*GeV),
    fRadiusConst(1.08*fermi),  // 1.1, 1.3 ?
    fTotalXsc(0.0), fElasticXsc(0.0), fInelasticXsc(0.0), fProductionXsc(0.0),

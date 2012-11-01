@@ -53,6 +53,9 @@ public:
 
   G4GGNuclNuclCrossSection ();
   virtual ~G4GGNuclNuclCrossSection ();
+    
+  static const char* Default_Name() {return "Glauber-Gribov nucleus nucleus";}
+
    
   virtual
   G4bool IsElementApplicable(const G4DynamicParticle*, 

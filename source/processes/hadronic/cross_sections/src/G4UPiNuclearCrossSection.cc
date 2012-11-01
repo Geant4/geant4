@@ -55,14 +55,26 @@ G4UPiNuclearCrossSection::G4UPiNuclearCrossSection()
 
 G4UPiNuclearCrossSection::~G4UPiNuclearCrossSection()
 {
-  piPlusElastic   ->clearAndDestroy();
-  piPlusInelastic ->clearAndDestroy();
-  piMinusElastic  ->clearAndDestroy();
-  piMinusInelastic->clearAndDestroy();
-  delete piPlusElastic;
-  delete piPlusInelastic;
-  delete piMinusElastic;
-  delete piMinusInelastic;
+  if(piPlusElastic) {
+    piPlusElastic->clearAndDestroy();
+    delete piPlusElastic;
+    piPlusElastic = 0;
+  }
+  if(piPlusInelastic) {
+    piPlusInelastic->clearAndDestroy();
+    delete piPlusInelastic;
+    piPlusInelastic = 0;
+  }
+  if(piMinusElastic) {
+    piMinusElastic->clearAndDestroy();
+    delete piMinusElastic;
+    piMinusElastic = 0;
+  }
+  if(piMinusInelastic) {
+    piMinusInelastic->clearAndDestroy();
+    delete piMinusInelastic;
+    piMinusInelastic = 0;
+  }
 }
 
 G4bool 

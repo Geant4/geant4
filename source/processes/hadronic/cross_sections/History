@@ -14,6 +14,35 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+26 October 2012 W.Pokorski   (hadr-cross-V09-05-38)
+---------------------------------------------------
+- setting min kin energy in G4GGNuclNuclCrossSection to 0
+
+25 October 2012 W.Pokorski   (hadr-cross-V09-05-37)
+---------------------------------------------------
+- (V. Grischine) removing Z > 1 condition from G4GGNuclNuclCrossSection
+
+- (V. Ivanchenko) G4UPiNuclearCrossSection - cosmetic modification - more clean destructor 
+    implementation 
+
+23 October 2012 W.Pokorski   (hadr-cross-V09-05-36)
+---------------------------------------------------
+- fixing the static builds (adding references to factories)
+
+23 October 2012 W.Pokorski   (hadr-cross-V09-05-35)
+---------------------------------------------------
+- fixing another bug (double deletion) from previous tag...
+
+23 October 2012 W.Pokorski   (hadr-cross-V09-05-34)
+---------------------------------------------------
+- fixing bug (double deletion) from previous tag
+
+G4NucleonNuclearCrossSection and G4GGNuclNuclCrossSection
+23 October 2012 W.Pokorski   (hadr-cross-V09-05-33)
+---------------------------------------------------
+- adding factory mechanism for G4GlauberGribovCrossSection, 
+G4NucleonNuclearCrossSection and G4GGNuclNuclCrossSection
+
 18 October 2012 V.Ivanchenko (hadr-cross-V09-05-32)
 ---------------------------------------------------
 - G4NeutronCaptureXS - fixed compillation problem

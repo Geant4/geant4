@@ -24,6 +24,7 @@
 // ********************************************************************
 //
 // 24.11.08 V. Grichine - first implementation
+// 25.10.12 W.Pokorski - following Vladimir's advice, I removed Z>1 condition
 //
 
 #include "G4GGNuclNuclCrossSection.hh"
@@ -36,9 +37,14 @@
 #include "G4HadTmpUtil.hh"
 #include "G4HadronNucleonXsc.hh"
 
+// factory
+#include "G4CrossSectionFactory.hh"
+//
+G4_DECLARE_XS_FACTORY(G4GGNuclNuclCrossSection);
+
 
 G4GGNuclNuclCrossSection::G4GGNuclNuclCrossSection() 
- : G4VCrossSectionDataSet("Glauber-Gribov nucleus nucleus"),
+ : G4VCrossSectionDataSet(Default_Name()),
    fUpperLimit(100000*GeV), fLowerLimit(0.1*MeV),
    fRadiusConst(1.08*fermi),  // 1.1, 1.3 ?
    fTotalXsc(0.0), fElasticXsc(0.0), fInelasticXsc(0.0), fProductionXsc(0.0),
@@ -63,13 +69,13 @@ G4GGNuclNuclCrossSection::CrossSectionDescription(std::ostream& outFile) const
 }
 
 G4bool 
-G4GGNuclNuclCrossSection::IsElementApplicable(const G4DynamicParticle* aDP, 
-					      G4int Z, const G4Material*)
+G4GGNuclNuclCrossSection::IsElementApplicable(const G4DynamicParticle*, 
+					      G4int, const G4Material*)
 {
-  G4bool applicable = false;
-  G4double kineticEnergy = aDP->GetKineticEnergy();
+  G4bool applicable = true;
+//  G4double kineticEnergy = aDP->GetKineticEnergy();
 
-  if (kineticEnergy >= fLowerLimit && Z > 1) applicable = true;
+//  if (kineticEnergy >= fLowerLimit) applicable = true;
   return applicable;
 }
 
