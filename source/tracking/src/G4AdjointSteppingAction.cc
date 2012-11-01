@@ -116,5 +116,17 @@ void G4AdjointSteppingAction::UserSteppingAction(const G4Step* aStep)
 		return;
 	}  
   }
+  //Check for reaching out of world
+  if (aStep->GetPostStepPoint()->GetStepStatus() == fWorldBoundary) {
+	  did_adj_part_reach_ext_source=true;
+	  last_momentum =aTrack->GetMomentum();
+	  last_ekin=aTrack->GetKineticEnergy();
+	  last_weight = aTrack->GetWeight();
+	  last_part_def = aTrack->GetDefinition();
+	  last_pos = crossing_pos;
+  		return;
+
+  }
+  
 }
 

@@ -18,6 +18,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26 October 2012 Laurent Desorgher (tracking-V09-05-04)
+- G4AdointSteppingAction.cc. Add test for adjoint particle reaching "out_of_the_world".
+ 
 3rd July 2012  John Allison (tracking-V09-05-03)
 - G4Rich/SmoothTrajectory(Point).hh:
   o Fixes for Coverity warnings.
