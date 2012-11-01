@@ -128,10 +128,10 @@ protected:
   G4double     fPan_sens;        // Translation sensibility
 
 private :
-  G4int                             fPrintSizeX;
-  G4int                             fPrintSizeY;
-  G4String                          fPrintFilename;
-  int                               fPrintFilenameIndex;
+  static G4int                             fPrintSizeX;
+  static G4int                             fPrintSizeY;
+  static G4String                          fPrintFilename;
+  static int                               fPrintFilenameIndex;
   unsigned int fWinSize_x, fWinSize_y;
   G4float                           fPointSize;
   G4bool fSizeHasChanged;

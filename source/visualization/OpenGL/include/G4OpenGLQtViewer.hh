@@ -328,6 +328,8 @@ private Q_SLOTS :
   void processLookForFinished();
   void processEncodeStdout();
   void sceneTreeComponentItemChanged(QTreeWidgetItem* item, int id);
+
+  // action trigger by a click on a component scene tree
   void sceneTreeComponentSelected();
   void changeDepthInSceneTree(int);
   void changeSearchSelection();

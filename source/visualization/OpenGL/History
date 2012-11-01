@@ -17,6 +17,25 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30th October 2012  Laurent Garnier (tagged: opengl-V09-05-49)
+
+30th October 2012  John Allison
+- G4OpenGLQtViewer::toggleTransparency: Swapped true<->false.
+
+29th October 2012  John Allison
+- G4OpenGLViewer: The following data members have been made static with the
+  following initial values, modifiable by: "/vis/ogl/set/printSize", 
+  "/vis/ogl/set/printFilename" and used by "/vis/ogl/printEPS", and thus 
+  are used by all OGL viewers.  fPrintFilenameIndex is initialised to zero
+  and counts on for *all* viewers.
+     G4int G4OpenGLViewer::fPrintSizeX = -1;
+     G4int G4OpenGLViewer::fPrintSizeY = -1;
+     G4String G4OpenGLViewer::fPrintFilename = "G4OpenGL";
+     int G4OpenGLViewer::fPrintFilenameIndex = 0;
+
+29th October 2012  Laurent Garnier
+- G4OpenGLQtViewer : Comment out a method and fix a printing caracter non desired 
+
 27th October 2012  John Allison (opengl-V09-05-48, needs visman-V09-05-43)
 - Finally solved problem of batch v. non-Qt session!!!
   o Introduced G4OpenGLQt, a base class for G4OpenGLImmediate/StoredQt

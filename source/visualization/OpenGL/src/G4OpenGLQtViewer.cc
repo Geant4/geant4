@@ -707,9 +707,9 @@ void G4OpenGLQtViewer::toggleProjection(bool check) {
 void G4OpenGLQtViewer::toggleTransparency(bool check) {
   
   if (check) {
-    transparency_enabled = false;
-  } else {
     transparency_enabled = true;
+  } else {
+    transparency_enabled = false;
   }
   SetNeedKernelVisit (true);
   updateToolbarAndMouseContextMenu();
@@ -3042,6 +3042,7 @@ void G4OpenGLQtViewer::sceneTreeComponentItemChanged(QTreeWidgetItem* item, int)
 
 
 void G4OpenGLQtViewer::sceneTreeComponentSelected() {
+  /*
   if (fSceneTreeComponentTreeWidget) {
     if (! fSceneTreeComponentTreeWidget->selectedItems().isEmpty ()) {
       QTreeWidgetItem* item = fSceneTreeComponentTreeWidget->selectedItems ().first();
@@ -3049,13 +3050,12 @@ void G4OpenGLQtViewer::sceneTreeComponentSelected() {
 
         const PVPath& fullPath = fTreeItemModels[item->data(0,Qt::UserRole).toInt()];
         if (fullPath.size() > 0) {
-          const G4VisAttributes* visAttr2 = GetApplicableVisAttributes(fullPath.at(fullPath.size()-1).GetPhysicalVolume()->GetLogicalVolume()->GetVisAttributes());
-          
-          G4cout << visAttr2;
-        }
+	  const G4VisAttributes* visAttr2 = GetApplicableVisAttributes(fullPath.at(fullPath.size()-1).GetPhysicalVolume()->GetLogicalVolume()->GetVisAttributes());
+	}
       }
     }
   }
+  */
 }
 
 

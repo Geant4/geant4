@@ -56,6 +56,11 @@
 
 #include <sstream>
 
+G4int G4OpenGLViewer::fPrintSizeX = -1;
+G4int G4OpenGLViewer::fPrintSizeY = -1;
+G4String G4OpenGLViewer::fPrintFilename = "G4OpenGL";
+int G4OpenGLViewer::fPrintFilenameIndex = 0;
+
 G4OpenGLViewer::G4OpenGLViewer (G4OpenGLSceneHandler& scene):
 G4VViewer (scene, -1),
 fPrintColour (true),
@@ -85,10 +90,6 @@ fDisplayLightFrontGreen(1.),
 fDisplayLightFrontBlue(0.),
 fRot_sens(1.),
 fPan_sens(0.01),
-fPrintSizeX(-1),
-fPrintSizeY(-1),
-fPrintFilename ("G4OpenGL"),
-fPrintFilenameIndex(0),
 fWinSize_x(0),
 fWinSize_y(0),
 fPointSize (0),
