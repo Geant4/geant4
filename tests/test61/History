@@ -11,11 +11,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-30-Oct-2012,  Gunter Folger (test61-V09-02)
-- Use default Precompound, and therefore default setting 
-   for de-exciation.
-    
-11-Oct-2012, G.Cosmo (test61-V09-05-01)
+
+30-Oct-2012, Gunter Folger (test61-V09-05-02)
+- Use default Precompound, and therefore default setting for de-excitation.
+
+11-Oct-2012, Gabriele Cosmo (test61-V09-05-01)
 - Explicit inclusion of units and constants headers.
 
 27-Jul-2012, Vladimir Ivanchenko (test61-V09-05-00)
