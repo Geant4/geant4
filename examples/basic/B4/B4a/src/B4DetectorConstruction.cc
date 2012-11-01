@@ -29,7 +29,6 @@
 /// \brief Implementation of the B4DetectorConstruction class
 
 #include "B4DetectorConstruction.hh"
-#include "B4DetectorMessenger.hh"
 
 #include "G4Material.hh"
 #include "G4NistManager.hh"
@@ -50,6 +49,7 @@
 
 #include "G4FieldManager.hh"
 #include "G4TransportationManager.hh"
+#include "G4GenericMessenger.hh"
 
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
@@ -66,7 +66,16 @@ B4DetectorConstruction::B4DetectorConstruction()
    fGapPV(0),
    fCheckOverlaps(true)
 {
-  fMessenger = new B4DetectorMessenger(this);
+  // Define /B4/det commands using generic messenger class
+  fMessenger 
+    = new G4GenericMessenger(this, "/B4/det/", "Detector construction control");
+
+  // Define /B4/det/setMagField command
+  G4GenericMessenger::Command& setMagFieldCmd
+    = fMessenger->DeclareMethod("setMagField", 
+                                &B4DetectorConstruction::SetMagField, 
+                                "Define magnetic field value (in X direction");
+  setMagFieldCmd.SetUnitCategory("Magnetic flux density");                                
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -74,6 +83,7 @@ B4DetectorConstruction::B4DetectorConstruction()
 B4DetectorConstruction::~B4DetectorConstruction()
 { 
   delete fMagField;
+  delete fMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

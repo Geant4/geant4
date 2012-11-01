@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26/10/12 I. Hrivnacova (exampleB4-V09-05-01)
+- Replaced messenger classes with use of G4GenericMessenger
+
 18/09/12 I. Hrivnacova (exbasic-V09-05-00)
 - Updated code using analysis:
   - Now only a selected analysis manager is included 

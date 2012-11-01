@@ -22,8 +22,8 @@
  	- the number of layers, and
  	- the transverse size of the calorimeter (the entrance face is a square). 
  	
-   In addition a transverse uniform magnetic field can be applied (see
-   B4DetectorMessenger class) and set via the interactive command.
+   In addition a transverse uniform magnetic field can be applied and set 
+   via the interactive command defined using the G4GenericMessenger class.
    For example:
  
 \verbatim
@@ -76,8 +76,7 @@
    
    The user can choose the frequency of printing from B4aEventAction (or event 
    action classes in other options) via the interactive command defined in
-   B4aEventActionMessenger (or messengers classes in other options), for 
-   example:
+   using the G4GenericMessenger class, for example:
     
 \verbatim
 /B4/event/setPrintModulo 100
