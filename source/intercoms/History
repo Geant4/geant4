@@ -16,6 +16,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+26 October, 2012 P. Mato (intercoms-V09-05-07)
+ - G4AnyMethod.hh avoided compilation warning.
 
 22 October, 2012 K. Murakami (intercoms-V09-05-06)
  - GenericMessenger, add settting range and available states.

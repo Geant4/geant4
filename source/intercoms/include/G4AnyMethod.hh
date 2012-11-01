@@ -168,8 +168,8 @@ private:
     }
     virtual void operator()(void* obj, const std::string& s0) {
       nakedA0 a0;
-      std::stringstream s(s0);
-      s >> a0;
+      std::stringstream strs(s0);
+      strs >> a0;
       ((T*)obj->*fRef)(a0);
     }
     virtual Placeholder* Clone() const {
@@ -193,8 +193,8 @@ private:
     virtual void operator()(void* obj, const std::string& s0) {
       nakedA0 a0;
       nakedA1 a1;
-      std::stringstream s(s0);
-      s >> a0 >> a1;
+      std::stringstream strs(s0);
+      strs >> a0 >> a1;
       ((T*)obj->*fRef)(a0, a1);
     }
     virtual Placeholder* Clone() const {
