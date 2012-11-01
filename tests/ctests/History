@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ctests-V09-05-30 30th October 2012 Gunter Folger
+- Add project names for several advanced examples:
+   human_phantom,purging_magnet, radioprotection, xray_fluorescence,
+   medical_linac
+
+ctests-V09-05-29 29th October 2012 Gunter Folger
+- Correct case for several examples to follow changes in example 
+   CMakeLists.txt files
+   
 ctests-V09-05-28 26th October 2012 Michael Kelsey
 - Add phononExample extended example using vis.mac as input.  The latter
   should be changed to a non-graphical version when available.

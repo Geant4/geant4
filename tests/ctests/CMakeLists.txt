@@ -427,11 +427,11 @@ GEANT4_ADD_TEST(example-adv-amsEcal
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/amsEcal
                 BUILD amsEcal ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-adv-dnaphysics 
-                COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/dnaphysics/DNAPhysics 
+                COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/dnaphysics/dnaphysics 
                         ${CMAKE_SOURCE_DIR}/examples/advanced/dnaphysics/dna.mac
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/dnaphysics
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/dnaphysics
-                BUILD DNAPhysics ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+                BUILD dnaphysics ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-adv-eRosita 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/eRosita/eRosita 
                         ${CMAKE_SOURCE_DIR}/examples/advanced/eRosita/eRosita.in
@@ -439,11 +439,11 @@ GEANT4_ADD_TEST(example-adv-eRosita
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/eRosita
                 BUILD eRosita ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-adv-gammaknife
-                COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/gammaknife/GammaKnife 
+                COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/gammaknife/gammaknife 
                         ${CMAKE_SOURCE_DIR}/examples/advanced/gammaknife/simulation.mac
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/gammaknife
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/gammaknife
-                BUILD GammaRayTel  ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+                BUILD gammaknife  ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-adv-gammaray_telescope 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/gammaray_telescope/GammaRayTel 
                         ${CMAKE_SOURCE_DIR}/examples/advanced/gammaray_telescope/gammaraytel.in
@@ -453,18 +453,18 @@ GEANT4_ADD_TEST(example-adv-gammaray_telescope
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/gammaray_telescope
                 BUILD GammaRayTel  ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-adv-microdosimetry 
-                COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/microdosimetry/Microdosimetry 
+                COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/microdosimetry/microdosimetry 
                         ${CMAKE_SOURCE_DIR}/examples/advanced/microdosimetry/microdosimetry.mac
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/microdosimetry
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/microdosimetry
-                BUILD Microdosimetry ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+                BUILD microdosimetry ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 if(GEANT4_USE_SYSTEM_CLHEP)
   GEANT4_ADD_TEST(example-adv-nanobeam 
-                  COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/nanobeam/Nanobeam 
+                  COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/nanobeam/nanobeam 
                           ${CMAKE_SOURCE_DIR}/examples/advanced/nanobeam/default.mac
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/nanobeam
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/nanobeam
-                  BUILD Nanobeam  ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+                  BUILD nanobeam  ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 endif()
 
 GEANT4_ADD_TEST(example-adv-air_shower 
@@ -484,25 +484,25 @@ GEANT4_ADD_TEST(example-adv-human_phantom
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/human_phantom
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/human_phantom
                 WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/examples/advanced/human_phantom
-                BUILD phantom ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+                BUILD phantom PROJECT human_phantom ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-adv-purging_magnet
                 COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/purging_magnet/PurgMag MacroTesting.mac
                 WORKING_DIRECTORY  ${CMAKE_SOURCE_DIR}/examples/advanced/purging_magnet
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/purging_magnet
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/purging_magnet
-                BUILD PurgMag ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+                BUILD PurgMag PROJECT purging_magnet ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-adv-radioprotection
                 COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/radioprotection/remsim vehicle1.mac
                 WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/examples/advanced/radioprotection
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/radioprotection
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/radioprotection
-                BUILD remsim ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+                BUILD remsim PROJECT radioprotection ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-adv-xray_fluorescence
                 COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/xray_fluorescence/XrayFluo livermore.mac 1
                 WORKING_DIRECTORY  ${CMAKE_SOURCE_DIR}/examples/advanced/xray_fluorescence
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/xray_fluorescence
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/xray_fluorescence
-                BUILD XrayFluo ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT} XRAYDATA=. )
+                BUILD XrayFluo PROJECT xray_fluorescence ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT} XRAYDATA=. )
 GEANT4_ADD_TEST(example-adv-iort_therapy-build
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/iort_therapy
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/iort_therapy
@@ -510,7 +510,7 @@ GEANT4_ADD_TEST(example-adv-iort_therapy-build
 GEANT4_ADD_TEST(example-adv-medical_linac-build
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/medical_linac
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/medical_linac
-                BUILD ml2)
+                BUILD ml2 PROJECT medical_linac)
 
 #-------------------------------------------------------------------------------------------------
 #---Simplified Calorimeter-----------------------------------------------------------------------------
