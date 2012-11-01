@@ -212,7 +212,6 @@ HadronPhysicsQGSP_FTFP_BERT_95::~HadronPhysicsQGSP_FTFP_BERT_95()
    delete xsBarashenkovGGPion;
    delete xsAxenWellischGGProton;
    delete xsLaidlawWellischGGNeutron;
-   delete xsChipsHyperons;
    delete xsGaloyanUzhinskyAntibaryon;
 }
 
@@ -274,7 +273,7 @@ void HadronPhysicsQGSP_FTFP_BERT_95::ConstructProcess()
 
   // --- Hyperons ---
   // Use Chips inelastic hyperon cross sections
-  xsChipsHyperons = new G4ChipsHyperonInelasticXS();
+  xsChipsHyperons = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsHyperonInelasticXS::Default_Name());
   G4PhysListUtil::FindInelasticProcess(G4Lambda::Lambda())->AddDataSet(xsChipsHyperons);
   G4PhysListUtil::FindInelasticProcess(G4AntiLambda::AntiLambda())->AddDataSet(xsChipsHyperons);
   G4PhysListUtil::FindInelasticProcess(G4SigmaMinus::SigmaMinus())->AddDataSet(xsChipsHyperons);

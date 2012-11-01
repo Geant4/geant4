@@ -44,6 +44,11 @@
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 
+#include "G4ChipsHyperonInelasticXS.hh"
+#include "G4CrossSectionDataSetRegistry.hh"
+
+#include "G4ComponentAntiNuclNuclearXS.hh"
+
 G4MiscLHEPBuilder::G4MiscLHEPBuilder(): 
   theAntiProtonInelastic(0), theLEAntiProtonModel(0), 
   theHEAntiProtonModel(0),
@@ -75,6 +80,9 @@ void G4MiscLHEPBuilder::Build()
   G4ProcessManager * aProcMan = 0;
   wasActivated = true;
   
+    theAntiNucleonData =
+    new G4CrossSectionInelastic(new G4ComponentAntiNuclNuclearXS());
+    
   // anti-Proton
   theAntiProtonInelastic = new G4AntiProtonInelasticProcess();
   aProcMan = G4AntiProton::AntiProton()->GetProcessManager();
@@ -84,6 +92,7 @@ void G4MiscLHEPBuilder::Build()
   theAntiProtonInelastic->RegisterMe(theLEAntiProtonModel);
   theAntiProtonInelastic->RegisterMe(theHEAntiProtonModel);
   aProcMan->AddDiscreteProcess(theAntiProtonInelastic);
+    theAntiProtonInelastic->AddDataSet(theAntiNucleonData);
 
   // AntiNeutron
   theAntiNeutronInelastic = new G4AntiNeutronInelasticProcess();
@@ -94,7 +103,10 @@ void G4MiscLHEPBuilder::Build()
   theAntiNeutronInelastic->RegisterMe(theLEAntiNeutronModel);
   theAntiNeutronInelastic->RegisterMe(theHEAntiNeutronModel);
   aProcMan->AddDiscreteProcess(theAntiNeutronInelastic);
+  theAntiNeutronInelastic->AddDataSet(theAntiNucleonData);
 
+  theCHIPSInelastic = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsHyperonInelasticXS::Default_Name());
+    
   // Lambda
   theLambdaInelastic = new G4LambdaInelasticProcess();
   aProcMan = G4Lambda::Lambda()->GetProcessManager();
@@ -104,7 +116,8 @@ void G4MiscLHEPBuilder::Build()
   theLambdaInelastic->RegisterMe(theLELambdaModel);
   theLambdaInelastic->RegisterMe(theHELambdaModel);
   aProcMan->AddDiscreteProcess(theLambdaInelastic);
-  
+  theLambdaInelastic->AddDataSet(theCHIPSInelastic);
+    
   // AntiLambda
   theAntiLambdaInelastic = new G4AntiLambdaInelasticProcess();
   aProcMan = G4AntiLambda::AntiLambda()->GetProcessManager();
@@ -114,6 +127,7 @@ void G4MiscLHEPBuilder::Build()
   theAntiLambdaInelastic->RegisterMe(theLEAntiLambdaModel);
   theAntiLambdaInelastic->RegisterMe(theHEAntiLambdaModel);
   aProcMan->AddDiscreteProcess(theAntiLambdaInelastic);
+  theAntiLambdaInelastic->AddDataSet(theCHIPSInelastic);
     
   // SigmaMinus
   theSigmaMinusInelastic = new G4SigmaMinusInelasticProcess();
@@ -124,7 +138,8 @@ void G4MiscLHEPBuilder::Build()
   theSigmaMinusInelastic->RegisterMe(theLESigmaMinusModel);
   theSigmaMinusInelastic->RegisterMe(theHESigmaMinusModel);
   aProcMan->AddDiscreteProcess(theSigmaMinusInelastic);
-
+  theSigmaMinusInelastic->AddDataSet(theCHIPSInelastic);
+    
   // anti-SigmaMinus
   theAntiSigmaMinusInelastic = new G4AntiSigmaMinusInelasticProcess();
   aProcMan = G4AntiSigmaMinus::AntiSigmaMinus()->GetProcessManager();
@@ -134,6 +149,7 @@ void G4MiscLHEPBuilder::Build()
   theAntiSigmaMinusInelastic->RegisterMe(theLEAntiSigmaMinusModel);
   theAntiSigmaMinusInelastic->RegisterMe(theHEAntiSigmaMinusModel);
   aProcMan->AddDiscreteProcess(theAntiSigmaMinusInelastic);
+  theAntiSigmaMinusInelastic->AddDataSet(theCHIPSInelastic);
 
   // SigmaPlus
   theSigmaPlusInelastic = new G4SigmaPlusInelasticProcess();
@@ -144,7 +160,8 @@ void G4MiscLHEPBuilder::Build()
   theSigmaPlusInelastic->RegisterMe(theLESigmaPlusModel);
   theSigmaPlusInelastic->RegisterMe(theHESigmaPlusModel);
   aProcMan->AddDiscreteProcess(theSigmaPlusInelastic);
-
+  theSigmaPlusInelastic->AddDataSet(theCHIPSInelastic);
+    
   // anti-SigmaPlus
   theAntiSigmaPlusInelastic = new G4AntiSigmaPlusInelasticProcess();
   aProcMan = G4AntiSigmaPlus::AntiSigmaPlus()->GetProcessManager();
@@ -154,6 +171,7 @@ void G4MiscLHEPBuilder::Build()
   theAntiSigmaPlusInelastic->RegisterMe(theLEAntiSigmaPlusModel);
   theAntiSigmaPlusInelastic->RegisterMe(theHEAntiSigmaPlusModel);
   aProcMan->AddDiscreteProcess(theAntiSigmaPlusInelastic);
+  theAntiSigmaPlusInelastic->AddDataSet(theCHIPSInelastic);
 
   // XiMinus
   theXiMinusInelastic = new G4XiMinusInelasticProcess();
@@ -164,6 +182,7 @@ void G4MiscLHEPBuilder::Build()
   theXiMinusInelastic->RegisterMe(theLEXiMinusModel);
   theXiMinusInelastic->RegisterMe(theHEXiMinusModel);
   aProcMan->AddDiscreteProcess(theXiMinusInelastic);
+  theXiMinusInelastic->AddDataSet(theCHIPSInelastic);
 
   // anti-XiMinus
   theAntiXiMinusInelastic = new G4AntiXiMinusInelasticProcess();
@@ -174,6 +193,7 @@ void G4MiscLHEPBuilder::Build()
   theAntiXiMinusInelastic->RegisterMe(theLEAntiXiMinusModel);
   theAntiXiMinusInelastic->RegisterMe(theHEAntiXiMinusModel);
   aProcMan->AddDiscreteProcess(theAntiXiMinusInelastic);
+  theAntiXiMinusInelastic->AddDataSet(theCHIPSInelastic);
 
   // XiZero
   theXiZeroInelastic = new G4XiZeroInelasticProcess();
@@ -184,7 +204,8 @@ void G4MiscLHEPBuilder::Build()
   theXiZeroInelastic->RegisterMe(theLEXiZeroModel);
   theXiZeroInelastic->RegisterMe(theHEXiZeroModel);
   aProcMan->AddDiscreteProcess(theXiZeroInelastic);
-
+  theXiZeroInelastic->AddDataSet(theCHIPSInelastic);
+    
   // anti-XiZero
   theAntiXiZeroInelastic = new G4AntiXiZeroInelasticProcess();
   aProcMan = G4AntiXiZero::AntiXiZero()->GetProcessManager();
@@ -194,6 +215,7 @@ void G4MiscLHEPBuilder::Build()
   theAntiXiZeroInelastic->RegisterMe(theLEAntiXiZeroModel);
   theAntiXiZeroInelastic->RegisterMe(theHEAntiXiZeroModel);
   aProcMan->AddDiscreteProcess(theAntiXiZeroInelastic);
+  theAntiXiZeroInelastic->AddDataSet(theCHIPSInelastic);
 
   // OmegaMinus
   theOmegaMinusInelastic = new G4OmegaMinusInelasticProcess();
@@ -204,6 +226,7 @@ void G4MiscLHEPBuilder::Build()
   theOmegaMinusInelastic->RegisterMe(theLEOmegaMinusModel);
   theOmegaMinusInelastic->RegisterMe(theHEOmegaMinusModel);
   aProcMan->AddDiscreteProcess(theOmegaMinusInelastic);
+  theOmegaMinusInelastic->AddDataSet(theCHIPSInelastic);
 
   // anti-OmegaMinus
   theAntiOmegaMinusInelastic = new G4AntiOmegaMinusInelasticProcess();
@@ -214,6 +237,7 @@ void G4MiscLHEPBuilder::Build()
   theAntiOmegaMinusInelastic->RegisterMe(theLEAntiOmegaMinusModel);
   theAntiOmegaMinusInelastic->RegisterMe(theHEAntiOmegaMinusModel);
   aProcMan->AddDiscreteProcess(theAntiOmegaMinusInelastic);
+  theAntiOmegaMinusInelastic->AddDataSet(theCHIPSInelastic);
 }
 
 // 2002 by J.P. Wellisch

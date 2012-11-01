@@ -46,11 +46,16 @@
 #include "G4ProcessManager.hh"
 #include "G4PiNuclearCrossSection.hh"
 #include "G4CrossSectionPairGG.hh"
+#include "G4ChipsKaonMinusInelasticXS.hh"
+#include "G4ChipsKaonPlusInelasticXS.hh"
+#include "G4ChipsKaonZeroInelasticXS.hh"
+#include "G4CrossSectionDataSetRegistry.hh"
 
 G4QGSPPiKBuilder::
 G4QGSPPiKBuilder(G4bool quasiElastic, G4bool projectileDiffraction) 
 {
   thePiData = new G4CrossSectionPairGG(new G4PiNuclearCrossSection(), 91*GeV);
+    
   theMin = 12*GeV;
   theModel = new G4TheoFSGenerator("QGSP");
 
@@ -120,7 +125,8 @@ Build(G4KaonPlusInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(100*TeV);
-  aP->RegisterMe(theModel);
+    aP->RegisterMe(theModel);
+    aP->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonPlusInelasticXS::Default_Name()));
 }
 
 void G4QGSPPiKBuilder::
@@ -129,6 +135,7 @@ Build(G4KaonMinusInelasticProcess * aP)
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(100*TeV);
   aP->RegisterMe(theModel);
+  aP->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonMinusInelasticXS::Default_Name()));
 }
 
 void G4QGSPPiKBuilder::
@@ -137,6 +144,7 @@ Build(G4KaonZeroLInelasticProcess * aP)
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(100*TeV);
   aP->RegisterMe(theModel);
+  aP->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name()));
 }
 
 void G4QGSPPiKBuilder::

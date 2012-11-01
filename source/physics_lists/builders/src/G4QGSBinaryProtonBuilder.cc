@@ -43,7 +43,8 @@
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProtonInelasticCrossSection.hh"
-#include "G4CrossSectionPairGG.hh"
+#include "G4BGGNucleonInelasticXS.hh"
+
 
 G4QGSBinaryProtonBuilder::
 G4QGSBinaryProtonBuilder(G4bool quasiElastic) 
@@ -72,9 +73,7 @@ G4QGSBinaryProtonBuilder(G4bool quasiElastic)
 void G4QGSBinaryProtonBuilder::
 Build(G4ProtonInelasticProcess * aP)
  {
-// G4cout << "adding inelastic Proton in QGSBinary" << G4endl;
-   aP->AddDataSet(new G4CrossSectionPairGG(
-   		new G4ProtonInelasticCrossSection(), 91*GeV));  
+     aP->AddDataSet(new G4BGGNucleonInelasticXS(G4Proton::Proton()));
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(100*TeV);
    aP->RegisterMe(theModel);

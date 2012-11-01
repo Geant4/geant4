@@ -61,11 +61,17 @@
 #include "G4NeutronInelasticCrossSection.hh"
 #include "G4PiNuclearCrossSection.hh"
 #include "G4ComponentAntiNuclNuclearXS.hh"
+#include "G4CrossSectionPairGG.hh"
+#include "G4PiNuclearCrossSection.hh"
 
 #include "G4QGSBuilder.hh"
 #include "G4FTFBuilder.hh"
 
-#include "G4QHadronInelasticDataSet.hh"
+#include "G4ChipsKaonMinusInelasticXS.hh"
+#include "G4ChipsKaonPlusInelasticXS.hh"
+#include "G4ChipsKaonZeroInelasticXS.hh"
+#include "G4ChipsHyperonInelasticXS.hh"
+#include "G4CrossSectionDataSetRegistry.hh"
 
 #include "G4CascadeInterface.hh"
 #include "G4BinaryCascade.hh"
@@ -148,9 +154,6 @@ void G4HadronInelasticQBBC::ConstructProcess()
   G4CrossSectionInelastic* anucxs = 
     new G4CrossSectionInelastic(theAntiNuclXS);
 
-  // use CHIPS cross sections also for Kaons
-  G4QHadronInelasticDataSet* theCHIPSInelastic = new G4QHadronInelasticDataSet();
-
   // loop over particles
   theParticleIterator->reset();
   while( (*theParticleIterator)() ) {
@@ -187,21 +190,32 @@ void G4HadronInelasticQBBC::ConstructProcess()
 
     } else if(pname == "pi-" || pname == "pi+") {
       G4HadronicProcess* hp = FindInelasticProcess(particle);
-      hp->AddDataSet(new G4BGGPionInelasticXS(particle));
+//      hp->AddDataSet(new G4BGGPionInelasticXS(particle));
+      hp->AddDataSet(new G4CrossSectionPairGG(new G4PiNuclearCrossSection(), 91*GeV));
       //hp->RegisterMe(theQGSP);
       hp->RegisterMe(theFTFP);
       hp->RegisterMe(theBERT1);
 
-    } else if(pname == "kaon-"     || 
-	      pname == "kaon+"     || 
-	      pname == "kaon0S"    || 
-	      pname == "kaon0L") {
+    } else if(pname == "kaon-" ) {
       G4HadronicProcess* hp = FindInelasticProcess(particle);
       hp->RegisterMe(theFTFP1);
       hp->RegisterMe(theBERT1);
-      hp->AddDataSet(theCHIPSInelastic);
+      hp->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonMinusInelasticXS::Default_Name()));
 
-    } else if(pname == "lambda"    || 
+    } else if(pname == "kaon+" ) {
+        G4HadronicProcess* hp = FindInelasticProcess(particle);
+        hp->RegisterMe(theFTFP1);
+        hp->RegisterMe(theBERT1);
+        hp->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonPlusInelasticXS::Default_Name()));
+
+    } else if(pname == "kaon0S"    ||
+              pname == "kaon0L") {
+        G4HadronicProcess* hp = FindInelasticProcess(particle);
+        hp->RegisterMe(theFTFP1);
+        hp->RegisterMe(theBERT1);
+        hp->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name()));
+        
+    } else if(pname == "lambda"    ||
               pname == "omega-"    ||
 	      pname == "sigma-"    || 
 	      pname == "sigma+"    || 
@@ -211,6 +225,7 @@ void G4HadronInelasticQBBC::ConstructProcess()
       G4HadronicProcess* hp = FindInelasticProcess(particle);
       hp->RegisterMe(theFTFP1);
       hp->RegisterMe(theBERT1);
+      hp->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsHyperonInelasticXS::Default_Name()));
 
     } else if(pname == "anti_alpha"   ||
 	      pname == "anti_deuteron"||

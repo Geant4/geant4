@@ -41,6 +41,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
+#include "G4CrossSectionDataSetRegistry.hh"
   
   
 G4HyperonFTFPBuilder::G4HyperonFTFPBuilder(): 
@@ -90,8 +91,7 @@ G4HyperonFTFPBuilder::G4HyperonFTFPBuilder():
   AntiHyperonFTFP->SetHighEnergyGenerator(theStringModel);
 
 // use CHIPS cross sections
-//  theCHIPSInelastic = new G4QHadronInelasticDataSet();
-  theCHIPSInelastic = new G4ChipsHyperonInelasticXS();
+  theCHIPSInelastic = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsHyperonInelasticXS::Default_Name());
 }
 
 

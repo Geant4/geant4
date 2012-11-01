@@ -89,6 +89,9 @@
 #include "G4HEOmegaMinusInelastic.hh"
 #include "G4HEAntiOmegaMinusInelastic.hh"
 
+#include "G4CrossSectionInelastic.hh"
+#include "G4ChipsHyperonInelasticXS.hh"
+
 class G4MiscLHEPBuilder 
 {
   public: 
@@ -100,6 +103,9 @@ class G4MiscLHEPBuilder
 
   private:
  
+    G4CrossSectionInelastic* theAntiNucleonData;
+    G4VCrossSectionDataSet* theCHIPSInelastic;
+    
     // anti-proton
     G4AntiProtonInelasticProcess* theAntiProtonInelastic;
     G4LEAntiProtonInelastic* theLEAntiProtonModel;

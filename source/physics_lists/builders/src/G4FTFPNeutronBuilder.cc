@@ -107,7 +107,7 @@ Build(G4NeutronInelasticProcess * aP)
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
   aP->RegisterMe(theModel);
-    aP->AddDataSet(new G4BGGNucleonInelasticXS(G4Proton::Proton()));
+    aP->AddDataSet(new G4BGGNucleonInelasticXS(G4Neutron::Neutron()));
     
 }
 

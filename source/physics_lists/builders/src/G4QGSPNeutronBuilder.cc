@@ -45,7 +45,7 @@
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 #include "G4NeutronInelasticCrossSection.hh"
-#include "G4CrossSectionPairGG.hh"
+#include "G4BGGNucleonInelasticXS.hh"
 
 G4QGSPNeutronBuilder::
 G4QGSPNeutronBuilder(G4bool quasiElastic, G4bool projectileDiffraction) 
@@ -111,8 +111,7 @@ Build(G4NeutronInelasticProcess * aP)
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(100*TeV);
   aP->RegisterMe(theModel);
-  aP->AddDataSet(new G4CrossSectionPairGG(
-  		new G4NeutronInelasticCrossSection(), 91*GeV));  
+   aP->AddDataSet(new G4BGGNucleonInelasticXS(G4Neutron::Neutron()));
 }
 
 // 2002 by J.P. Wellisch
