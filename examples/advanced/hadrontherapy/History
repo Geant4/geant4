@@ -8,6 +8,30 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
              History file of the Hadrontherapy application
          ====================================================
 
+29.10.2012 F.Romano;       Tag: hadrontherapy-V09-05-09
+           - Added explicit inclusion of units and constants headers where missing
+	   - Executable renamed to the same name of the directory to avoid possible
+	     problems with Mac/WIN (thanks to Ivana for the suggestion)
+
+26.10.2012 F.Romano;       Tag: hadrontherapy-V09-05-08
+           - Fixed region volume problem
+
+25.10.2012 F.Romano;       Tag: hadrontherapy-V09-05-07
+           - Included GPS in batch.mac and minor changes
+
+24.10.2012 F.Romano;       Tag: hadrontherapy-V09-05-06
+           - Added explicit inclusion of units and constants headers in new file
+
+24.10.2012 A.Ribon;       Tag: hadrontherapy-V09-05-05
+           - Migrated to the new stopping physics.
+
+23.10.2012 F.Romano;       Tag: hadrontherapy-V09-05-04
+           - Remove IAEA detetctor and related files
+	   - Added Carbon beam line
+	   - Fixed system of units issues
+	   - Added GPS
+	   - Modified CMakeList.txt
+
 11.10.2012 G.Cosmo;       Tag: hadrontherapy-V09-05-03
            - Explicit inclusion of units and constants headers.
 

@@ -7,7 +7,7 @@
 #######################
 #
 /control/verbose 1
-/tracking/verbose 0
+/tracking/verbose 2
 /run/verbose 1
 /event/verbose 0
 
@@ -47,13 +47,36 @@
 # Set the primary particle type,
 # energy and position along the X direction
 #
-/gun/particle proton
-/beam/energy/meanEnergy 62 MeV
-/beam/energy/sigmaEnergy 400 keV
-/beam/position/Xposition -2700 mm
 
 
+#---------------------------gps-----------------
+/gps/pos/shape Circle
+/gps/pos/centre -310. 0. 0. cm
+/gps/pos/radius 0. mm
+/gps/pos/sigma_r 2. mm
+/gps/particle proton
+/gps/pos/type Beam
 
+
+# the incident surface is in the y-z plane
+
+/gps/pos/rot1 0 1 0
+/gps/pos/rot2 0 0 1
+
+# the beam is travelling along the x-axis without any angular dispersion (angular despersion set to 0.0)
+#
+
+/gps/ang/rot1 0 0 1
+/gps/ang/rot2 0 1 0 
+/gps/ang/type beam1d 
+/gps/ang/sigma_r 0. deg
+
+
+# the beam energy is in gaussian profile
+#
+/gps/ene/type Gauss
+/gps/ene/mono 62 MeV
+/gps/ene/sigma 0.3 MeV
 
 # Copy & Paste in a new macro the previous and ONE of the following groups of commands
 # in order to change the Phantom & Detector geometry!
@@ -131,9 +154,16 @@
 # Cut & paste the following commands in order to create, starting from the default sizes, 
 # a full voxellized (200 by 200 by 200) detector
 
-/changeDetector/voxelSize 0 200 200 um
-/changeDetector/displacement 0 0 0
-/changePhantom/size 4 4 4 cm
+
+/changePhantom/size 40 40 40 cm
+changePhantom/position 20 0 0 cm
+
+
+/changeDetector/size 4 4 4 cm
+/changeDetector/voxelSize .1 40 40 mm
+/changeDetector/displacement 0 18 18 cm
 /changePhantom/update
+
+/run/beamOn 300
 ##########################################################################################
 

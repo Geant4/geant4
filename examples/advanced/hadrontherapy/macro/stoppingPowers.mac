@@ -55,12 +55,19 @@
 # Ions #
 ########
 # First you need to define the ion
-/gun/particle ion
-/gun/ion 6 12 6
+
+
+
+#---------------------------gps-----------------
+
+/gps/particle ion
+/gps/ion 6 12 6
 
 # This is non necessary if the ion is already into Geant4 database:
 # /particle/list
 
 
 /parameter/getstopping G4_WATER 1 150 200 C12[0.0] stopCarbon_Water_1MeV_150MeV.out
+
+
 

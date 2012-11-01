@@ -37,6 +37,7 @@
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithADouble.hh"
+#include "G4SystemOfUnits.hh"
 
 HadrontherapyPrimaryGeneratorMessenger::HadrontherapyPrimaryGeneratorMessenger(
                                              HadrontherapyPrimaryGeneratorAction* HadrontherapyGun)
@@ -57,7 +58,7 @@ HadrontherapyPrimaryGeneratorMessenger::HadrontherapyPrimaryGeneratorMessenger(
 
  MomentumDir = new G4UIdirectory("/beam/momentum/");  
  MomentumDir -> SetGuidance ("set momentum of particle ");  
-
+/*
  sigmaMomentumYCmd = new G4UIcmdWithADouble("/beam/momentum/sigmaY",this);
  sigmaMomentumYCmd -> SetGuidance("set sigma momentum y");
  sigmaMomentumYCmd -> SetParameterName("momentum",false);
@@ -116,25 +117,26 @@ HadrontherapyPrimaryGeneratorMessenger::HadrontherapyPrimaryGeneratorMessenger(
  sigmaZCmd -> SetDefaultUnit("mm");
  sigmaZCmd -> SetUnitCandidates("mm cm m");
  sigmaZCmd -> AvailableForStates(G4State_PreInit,G4State_Idle);   
+*/
 }
 
 HadrontherapyPrimaryGeneratorMessenger::~HadrontherapyPrimaryGeneratorMessenger()
 {
   delete beamParametersDir;
   delete EnergyDir;
-  delete meanKineticEnergyCmd;  
-  delete sigmaEnergyCmd;
+ // delete meanKineticEnergyCmd;  
+ // delete sigmaEnergyCmd;
   delete particlePositionDir;
   delete MomentumDir;
-  delete XpositionCmd; 
+/*  delete XpositionCmd; 
   delete YpositionCmd; 
   delete ZpositionCmd; 
   delete sigmaYCmd; 
   delete sigmaZCmd; 
   delete sigmaMomentumYCmd; 
-  delete sigmaMomentumZCmd; 
+  delete sigmaMomentumZCmd; */
 }  
-
+/*
 void HadrontherapyPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)                
 {
   if ( command == meanKineticEnergyCmd )                                                                        
@@ -170,4 +172,4 @@ void HadrontherapyPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,G4
   if ( command == sigmaMomentumZCmd )                                                                        
     { HadrontherapyAction -> SetsigmaMomentumZ(sigmaMomentumZCmd
 					       -> GetNewDoubleValue(newValue));}
-}                 
+}                 */

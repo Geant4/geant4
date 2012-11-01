@@ -38,6 +38,7 @@
 #include "globals.hh"
 #include "G4UImessenger.hh"
 
+
 class PassiveProtonBeamLine;
 class G4UIdirectory;
 class G4UIcmdWithADoubleAndUnit;

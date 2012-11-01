@@ -30,7 +30,7 @@
 // the *COMPLETE* version of this program, together with its documentation;
 // Hadrontherapy (both basic and full version) are supported by the Italian INFN
 // Institute in the framework of the MC-INFN Group
-//
+// 
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -76,7 +76,7 @@
 #include "HadrontherapyGeometryMessenger.hh"
 #include "HadrontherapyInteractionParameters.hh"
 #include "G4ScoringManager.hh"
-#include "IAEAScoreWriter.hh"
+
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -104,7 +104,7 @@ int main(int argc ,char ** argv)
 	
   G4ScoringManager *scoringManager = G4ScoringManager::GetScoringManager();
   scoringManager->SetVerboseLevel(1);
-  scoringManager->SetScoreWriter(new IAEAScoreWriter());
+  
 	
   // Initialize the default Hadrontherapy geometry
   geometryController->SetGeometry("default");
@@ -115,7 +115,7 @@ int main(int argc ,char ** argv)
   // Initialize the physics 
   G4PhysListFactory factory;
   G4VModularPhysicsList* phys = 0;
-  G4String physName = "";
+  G4String physName = " ";
 
   // Physics List name defined via environment variable
   char* path = getenv("PHYSLIST");
@@ -185,7 +185,6 @@ int main(int argc ,char ** argv)
 	}
       
 #endif
-      if (ui->IsGUI())
       ui->SessionStart();
       delete ui;
 #endif 

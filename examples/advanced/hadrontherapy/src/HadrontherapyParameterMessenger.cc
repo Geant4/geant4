@@ -34,6 +34,7 @@
 
 #include "HadrontherapyParameterMessenger.hh"
 #include "HadrontherapyInteractionParameters.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"

@@ -140,7 +140,7 @@ void HadrontherapyDetectorConstruction::ConstructPhantom()
     red = new G4VisAttributes(G4Colour(255/255., 0/255. ,0/255.));
     red -> SetVisibility(true);
     red -> SetForceSolid(true);
-    //red -> SetForceWireframe(true);
+    red -> SetForceWireframe(true);
     phantomLogicalVolume -> SetVisAttributes(red);
 }
 

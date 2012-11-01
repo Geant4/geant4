@@ -35,6 +35,7 @@
 #include "HadrontherapyAnalysisManager.hh"
 #include "HadrontherapyMatrix.hh"
 #include "HadrontherapyAnalysisFileMessenger.hh"
+#include "G4SystemOfUnits.hh"
 #include <time.h>
 
 HadrontherapyAnalysisManager* HadrontherapyAnalysisManager::instance = 0;

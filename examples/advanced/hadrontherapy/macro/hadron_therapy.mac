@@ -34,12 +34,36 @@
 # Set the primary particle type,
 # energy and position along the X direction
 #
-/gun/particle proton
 
-/beam/energy/meanEnergy 63 MeV
-/beam/energy/sigmaEnergy 400 keV
-/beam/position/Xposition -2600 mm
 
+#---------------------------gps-----------------
+/gps/pos/shape Circle
+/gps/pos/centre -310. 0. 0. cm
+/gps/pos/radius 0. mm
+/gps/pos/sigma_r 2. mm
+/gps/particle proton
+/gps/pos/type Beam
+
+
+# the incident surface is in the y-z plane
+
+/gps/pos/rot1 0 1 0
+/gps/pos/rot2 0 0 1
+
+# the beam is travelling along the x-axis without any angular dispersion (angular despersion set to 0.0)
+#
+
+/gps/ang/rot1 0 0 1
+/gps/ang/rot2 0 1 0 
+/gps/ang/type beam1d 
+/gps/ang/sigma_r 0. deg
+
+
+# the beam energy is in gaussian profile
+#
+/gps/ene/type Gauss
+/gps/ene/mono 62 MeV
+/gps/ene/sigma 0.3 MeV
 
 #/beamLine/RangeShifter/RSMat G4_PLEXIGLASS
 #/beamLine/RangeShifter/thickness 13 mm
@@ -51,14 +75,41 @@
 #
 
 # Set cuts ONLY inside detector
-/Physics/setDetectorCuts 0.01 mm
+/Physics/setDetectorCuts 0.001 mm
 
 # Set cuts outside detector 
-/Physics/setCuts 1 m
+/Physics/setCuts 1 mm
 
-/Step/waterPhantomStepMax 0.01 mm 
+/Step/waterPhantomStepMax 0.005 mm 
 
 #########################
+############################################################################################################################## 
+# 							 DETECTOR DESCRIPTION
+###################################################
+# USE THE FOLLOWING FOUR LINES FOR DEFINITION OF PHANTOM
+###################################################
+#
+#/changePhantom/position 20. 0. 0. cm
+#/changePhantom/update
+
+/changePhantom/size 40 40 40  cm
+/changePhantom/position 20 0 0 cm
+
+###################################################
+# USE THE FOLLOWING FOR A VOXELLIZED DETECTOR
+###################################################
+#
+
+
+/changeDetector/size 4 4 4 cm
+/changeDetector/voxelSize .1 40 40 mm
+
+# Put the detector in the lower left corner of the phantom
+#
+/changeDetector/displacement 0 18 18 cm
+/changePhantom/update
+
+
 # Visualisation 
 #
 /vis/scene/create
@@ -86,16 +137,15 @@
 #/changePhantom/material G4_Pb
 
 # Only if secondaries dose/fluence are needed
-#/analysis/secondaries true 
+#/analysis/secondaries true
 
 /run/beamOn 100
-
 #########################
 # Move the generated .root & .out
 # files into the
 # "SimulationOutputs" folder
 # if this folder has been created
 
-/control/shell mv DoseDistribution.root SimulationOutputs/proton/BraggPeak/protonBraggPeak.root		
-/control/shell mv Dose.out SimulationOutputs/proton/BraggPeak/Dose.out		
+/control/shell mv DoseDistribution.root experimentalData/proton/BraggPeak/protonBraggPeak.root		
+/control/shell mv Dose.out experimentalData/proton/BraggPeak/Dose.out		
 

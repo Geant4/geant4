@@ -38,6 +38,7 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4UIdirectory.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "HadrontherapyMatrix.hh"
 

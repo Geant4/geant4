@@ -66,7 +66,7 @@ HadrontherapyMatrix* HadrontherapyMatrix::GetInstance(G4int voxelX, G4int voxelY
 }
 HadrontherapyMatrix::HadrontherapyMatrix(G4int voxelX, G4int voxelY, G4int voxelZ, G4double mass):
     stdFile("Dose.out"),
-    doseUnit(MeV/g)
+    doseUnit(gray)
 {  
 	// Number of the voxels of the phantom
 	// For Y = Z = 1 the phantom is divided in slices (and not in voxels)
@@ -295,7 +295,7 @@ void HadrontherapyMatrix::StoreDoseFluenceAscii(G4String file)
 	ofs << std::setprecision(6) << std::left <<
 	    "i\tj\tk\t"; 
 	// Total dose 
-	ofs << std::setw(width) << "Dose(MeV/g)";
+	ofs << std::setw(width) << "Dose(Gy)";
 	if (secondary)
 	{
 	    for (size_t l=0; l < ionStore.size(); l++)
@@ -335,7 +335,7 @@ void HadrontherapyMatrix::StoreDoseFluenceAscii(G4String file)
 			ofs << G4endl;
 			ofs << i << '\t' << j << '\t' << k << '\t';
 			// Total dose 
-			ofs << std::setw(width) << matrix[n]/massOfVoxel/doseUnit; 
+			ofs << std::setw(width) << (matrix[n]/massOfVoxel)/doseUnit; 
 			if (secondary)
 			{
 			    for (size_t l=0; l < ionStore.size(); l++)

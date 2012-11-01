@@ -33,6 +33,7 @@
 //
 
 #include "HadrontherapyDetectorSD.hh"
+#include "G4SystemOfUnits.hh"
 #include "HadrontherapyAnalysisManager.hh"
 #include "HadrontherapyDetectorHit.hh"
 #include "G4Step.hh"

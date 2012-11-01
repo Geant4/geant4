@@ -45,6 +45,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
 #include "G4UserEventAction.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "HadrontherapyAnalysisManager.hh"
 

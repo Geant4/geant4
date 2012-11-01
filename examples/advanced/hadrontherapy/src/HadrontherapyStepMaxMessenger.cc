@@ -35,6 +35,7 @@
 #include "HadrontherapyStepMaxMessenger.hh"
 #include "HadrontherapyStepMax.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4SystemOfUnits.hh"
 
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyStepMaxMessenger::HadrontherapyStepMaxMessenger(HadrontherapyStepMax* stepM)
