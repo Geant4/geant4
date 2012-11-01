@@ -174,8 +174,8 @@ G4double G4VEmAdjointModel::DiffCrossSectionPerVolumePrimToSecond(
 	G4double E1=kinEnergyProd;
 	G4double E2=kinEnergyProd*1.0001;
  	G4double dE=(E2-E1);
- 	G4double sigma1=theDirectEMModel->CrossSectionPerVolume(aMaterial,theDirectPrimaryPartDef,kinEnergyProj,E1,E2);
-        G4double sigma2=theDirectEMModel->CrossSectionPerVolume(aMaterial,theDirectPrimaryPartDef,kinEnergyProj,E2,1.e50);
+ 	G4double sigma1=theDirectEMModel->CrossSectionPerVolume(aMaterial,theDirectPrimaryPartDef,kinEnergyProj,E1,1.e20);
+    G4double sigma2=theDirectEMModel->CrossSectionPerVolume(aMaterial,theDirectPrimaryPartDef,kinEnergyProj,E2,1.e20);
  	dSigmadEprod=(sigma1-sigma2)/dE;
  }
  return dSigmadEprod;	

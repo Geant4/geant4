@@ -66,6 +66,7 @@ class G4AdjointBremsstrahlungModel: public G4VEmAdjointModel
 {
 public:
 
+  G4AdjointBremsstrahlungModel(G4VEmModel* aModel);
   G4AdjointBremsstrahlungModel();
   ~G4AdjointBremsstrahlungModel();
   virtual void SampleSecondaries(const G4Track& aTrack,
@@ -101,33 +102,14 @@ public:
 
 
 private:
-   G4eBremsstrahlungModel* theDirectStdBremModel;
-   G4EmModelManager* theEmModelManagerForFwdModels;
-   G4bool isDirectModelInitialised ;
-  //G4PenelopeBremsstrahlungModel* theDirectPenelopeBremModel;
-
+  G4VEmModel* theDirectStdBremModel;
+  G4EmModelManager* theEmModelManagerForFwdModels;
+  G4bool isDirectModelInitialised ;
 
   G4double highKinEnergy;
-  G4double lowKinEnergy;
- 
-  
+  G4double lowKinEnergy, lastCZ;
   std::vector<G4DataVector*> partialSumSigma;
-  
- 
-  
   std::vector<float> SigmaPerAtom; 
-
-  
-  G4double MigdalConstant;
-  G4double lastCZ;
-  
-
- /* 
-  G4bool UsePenelopeModel;
-  G4EmModelManager* theEmModelManagerForFwdModels;
-  G4bool isPenelopeModelInitialised ;
- */ 
-  
   
 };
 

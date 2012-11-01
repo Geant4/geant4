@@ -81,9 +81,19 @@ G4VParticleChange* G4AdjointAlongStepWeightCorrection::AlongStepDoIt(const G4Tra
   									preStepKinEnergy,Tkin, currentCouple,length);
 	
   
- 
-  G4double new_weight=weight_correction*track.GetWeight();
   
+
+  //Caution!!!
+  // It is important  to select the weight of the post_step_point
+  // as the current weight and not the weight of the track, as t
+  // the  weight of the track is changed after having applied all
+  // the along_step_do_it.
+
+  // G4double new_weight=weight_correction*track.GetWeight(); //old
+  G4double new_weight=weight_correction*step.GetPostStepPoint()->GetWeight();
+
+
+
   //if (weight_correction >2.) new_weight=1.e-300;
   
   

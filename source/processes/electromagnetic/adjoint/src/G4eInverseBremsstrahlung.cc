@@ -32,7 +32,8 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-G4eInverseBremsstrahlung::G4eInverseBremsstrahlung(G4bool whichScatCase,G4String process_name,G4AdjointBremsstrahlungModel* aBremAdjointModel):
+G4eInverseBremsstrahlung::G4eInverseBremsstrahlung(G4bool whichScatCase,G4String process_name,
+                    G4VEmAdjointModel* aBremAdjointModel):
 				G4VAdjointReverseReaction(process_name,whichScatCase)
 {theAdjointEMModel = aBremAdjointModel;
  theAdjointEMModel->SetSecondPartOfSameType(false);
