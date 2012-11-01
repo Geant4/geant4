@@ -1,0 +1,59 @@
+#----------------------------------------------------------------------------
+# DEFAULT MACRO FOR THE  
+# GAMMAKNIFE EXAMPLE
+#
+#
+# THIS MACRO SIMPLY PERMIT TO  RUN A SIMULATION 
+# WITH THE VISUALISATION  
+#
+# --------------------------------------------------------------------------------  
+
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 1
+/event/verbose 0
+ 
+
+/control/execute GPS.in                     # Defaults for the GeneralParticleSource
+
+/score/create/boxMesh boxMesh_1
+/score/mesh/boxSize 22.5 22.5 22.5 mm
+/score/mesh/nBin 45 45 45
+/score/quantity/energyDeposit eDep
+/score/close
+/score/list
+
+/run/initialize
+
+
+
+# SET OF THE VISUALISATION CHARACTERISTICS
+/vis/scene/create
+/vis/open OGL
+/vis/viewer/flush
+
+/vis/viewer/set/viewpointThetaPhi 80 10 deg
+/vis/viewer/zoom 0.7
+/vis/viewer/pan -20 0 cm
+/vis/scene/add/trajectories
+/tracking/storeTrajectory 1
+/vis/scene/endOfEventAction accumulate -1
+#/vis/viewer/update
+#/vis/viewer/set/lightsMove camera
+/vis/viewer/flush
+
+
+# /run/setCutForRegion PatientLog 100000 m
+/run/setCut 1000000000 mm
+
+/calorimeter/helmetSize 14
+
+#/gammaknife/loadAngles MachineAngle.in
+#/gammaknife/beamOn 10
+
+/run/beamOn 100
+
+/score/dumpQuantityToFile boxMesh_1 eDep eDep_scorer.out
+ 
+
+

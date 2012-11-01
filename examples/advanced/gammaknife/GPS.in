@@ -1,0 +1,32 @@
+# We have two energies and for these we set up two mono-energetic sources.
+# Unluckily we have to set all the parameters for each source separately.
+#
+# /gps/verbose 2
+/gps/source/intensity 1
+/gps/ene/type Mono
+/gps/ene/mono 1.33 MeV
+/gps/particle gamma
+/gps/pos/type Volume
+/gps/pos/shape Cylinder
+/gps/pos/centre 0.0 0.0 -40.1 cm
+/gps/pos/radius 0.5 mm
+/gps/pos/halfz 10.0 mm
+/gps/ang/type iso
+/gps/ang/mintheta 177 deg
+/gps/ang/maxtheta 180 deg
+
+/gps/source/add 1
+# /gps/verbose 2
+/gps/ene/type Mono
+/gps/ene/mono 1.17 MeV
+/gps/particle gamma
+/gps/pos/type Volume
+/gps/pos/shape Cylinder
+/gps/pos/centre 0.0 0.0 -40.1 cm
+/gps/pos/radius 0.5 mm
+/gps/pos/halfz 10.0 mm
+/gps/ang/type iso
+/gps/ang/mintheta 177 deg
+/gps/ang/maxtheta 180 deg
+
+# /gps/source/list        # Writes the list of source (not that useful)
