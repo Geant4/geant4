@@ -67,6 +67,7 @@
 #include "GammaKnifeController.hh"
 #include "G4PhysListFactory.hh"
 
+#include <ctime>
 
 int main(int argc ,char ** argv)
 {

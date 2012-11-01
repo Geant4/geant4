@@ -7,6 +7,9 @@ francesco.romano@lns.infn.it
              History file of the GammaKnife application
          ====================================================
 
+31.10.2012 G.Folger;       Tag: gammaknife-V09-05-03
+           - gammaknife.cc: add include for <ctime>, needed for Windows 
+
 31.10.2012 F.Romano;       Tag: gammaknife-V09-05-02
            - added batch.mac without VIS
 	   - fixed warnings 
