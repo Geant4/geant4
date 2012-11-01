@@ -13,7 +13,7 @@
 /run/initialize
 #
 /gun/particle neutron
-/gun/energy 0.1 keV
+/gun/energy 100 eV
 #
 /process/inactivate hadElastic
 /process/inactivate hInelastic

@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+ 28-10-12 mma (exhadr03-V09-05-11)
+- update README and .README
 
  17-10-12 Ivana Hrivnacova (exhadr03-V09-05-10)
 - Adding missing explicit use of system of units 

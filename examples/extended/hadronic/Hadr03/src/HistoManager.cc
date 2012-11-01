@@ -62,8 +62,8 @@ void HistoManager::Book()
   
   // Define histograms start values
   const G4int kMaxHisto = 13;
-  const G4String name[] = {"0","1","2","3","4","5","6","7","8","9",
-                           "10","11","12"};
+  const G4String id[] = {"0","1","2","3","4","5","6","7","8","9",
+                         "10","11","12"};
   const G4String title[] = 
                 { "dummy",                                          //0
                   "kinetic energy of scattered primary particle",   //1
@@ -83,13 +83,13 @@ void HistoManager::Book()
   // Default values (to be reset via /analysis/h1/set command)               
   G4int nbins = 100;
   G4double vmin = 0.;
-  G4double vmax = 0.;
+  G4double vmax = 100.;
 
   // Create all histograms as inactivated 
   // as we have not yet set nbins, vmin, vmax
   for (G4int k=0; k<kMaxHisto; k++) {
-    G4int id = analysisManager->CreateH1(name[k], title[k], nbins, vmin, vmax);
-    analysisManager->SetActivation(G4VAnalysisManager::kH1, id, false);
+    G4int ih = analysisManager->CreateH1(id[k], title[k], nbins, vmin, vmax);
+    analysisManager->SetActivation(G4VAnalysisManager::kH1, ih, false);
   }
 }
 
