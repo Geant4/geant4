@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.5
+// INCL++ revision: v5.1.6
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -44,6 +44,9 @@
 #include <sstream>
 
 namespace G4INCL {
+
+  /// \brief Static instance of the NaturalIsotopicAbundances class
+  const NaturalIsotopicDistributions *ParticleTable::theNaturalIsotopicDistributions = NULL;
 
   /// \brief Static pointer to the mass function for nuclei
   ParticleTable::NuclearMassFn ParticleTable::getTableMass;
@@ -527,40 +530,62 @@ namespace G4INCL {
 
   G4double ParticleTable::getNuclearRadius(const G4int A, const G4int Z) {
 // assert(A>0 && Z>=0 && Z<=A);
+    if(A >= 19 || (A < 6 && A >= 2)) {
+      // For large (Woods-Saxon or Modified Harmonic Oscillator) or small
+      // (Gaussian) nuclei, the radius parameter is just the nuclear radius
+      return getRadiusParameter(A,Z);
+    } else if(A < clusterTableASize && Z < clusterTableZSize && A >= 6) {
+      const G4double thisRMS = positionRMS[Z][A];
+      if(thisRMS>0.0)
+        return thisRMS;
+      else {
+        ERROR("ParticleTable::getRadiusParameter : Radius for nucleus A = " << A << " Z = " << Z << " is ==0.0" << std::endl);
+        return 0.0;
+      }
+    } else if(A < 19) {
+      const G4double theRadiusParameter = getRadiusParameter(A, Z);
+      const G4double theDiffusenessParameter = getSurfaceDiffuseness(A, Z);
+      // The formula yields the nuclear RMS radius based on the parameters of
+      // the nuclear-density function
+      return 1.581*theDiffusenessParameter*
+        (2.+5.*theRadiusParameter)/(2.+3.*theRadiusParameter);
+    } else {
+      ERROR("ParticleTable::getNuclearRadius: No radius for nucleus A = " << A << " Z = " << Z << std::endl);
+      return 0.0;
+    }
+  }
+
+  G4double ParticleTable::getRadiusParameter(const G4int A, const G4int Z) {
+// assert(A>0 && Z>=0 && Z<=A);
     if(A >= 28) {
+      // phenomenological radius fit
       return (2.745e-4 * A + 1.063) * std::pow(A, 1.0/3.0);
-    } else if(A < 28 && A >= 19) {
-      return mediumRadius[A-1];
-    } else if(A < 19 && A >= 6) {
-      return mediumRadius[A-1];
-      //      return 1.581*mediumDiffuseness[A-1]*(2.+5.*mediumRadius[A-1])/(2.+3.*mediumRadius[A-1]);
     } else if(A < 6 && A >= 2) {
       if(Z<clusterTableZSize) {
         const G4double thisRMS = positionRMS[Z][A];
         if(thisRMS>0.0)
           return thisRMS;
         else {
-          ERROR("ParticleTable::getNuclearRadius : Radius for nucleus A = " << A << " Z = " << Z << " is ==0.0" << std::endl);
+          ERROR("ParticleTable::getRadiusParameter : Radius for nucleus A = " << A << " Z = " << Z << " is ==0.0" << std::endl);
           return 0.0;
         }
       } else {
-        ERROR("ParticleTable::getNuclearRadius : No radius for nucleus A = " << A << " Z = " << Z << std::endl);
+        ERROR("ParticleTable::getRadiusParameter : No radius for nucleus A = " << A << " Z = " << Z << std::endl);
         return 0.0;
       }
+    } else if(A < 28 && A >= 6) {
+      return mediumRadius[A-1];
+      //      return 1.581*mediumDiffuseness[A-1]*(2.+5.*mediumRadius[A-1])/(2.+3.*mediumRadius[A-1]);
     } else {
-      ERROR("ParticleTable::getNuclearRadius : No radius for nucleus A = " << A << " Z = " << Z << std::endl);
+      ERROR("ParticleTable::getRadiusParameter: No radius for nucleus A = " << A << " Z = " << Z << std::endl);
       return 0.0;
     }
   }
 
   G4double ParticleTable::getMaximumNuclearRadius(const G4int A, const G4int Z) {
     const G4double XFOISA = 8.0;
-    const G4double radius = getNuclearRadius(A,Z);
-    const G4double diffuseness = getSurfaceDiffuseness(A,Z);
-    if(A >= 28) {
-      return radius + XFOISA * diffuseness;
-    } else if(A < 28 && A >= 19) {
-      return radius + XFOISA * diffuseness;
+    if(A >= 19) {
+      return getNuclearRadius(A,Z) + XFOISA * getSurfaceDiffuseness(A,Z);
     } else if(A < 19 && A >= 6) {
       return 5.5 + 0.3 * (G4double(A) - 6.0)/12.0;
     } else if(A >= 2) {
@@ -571,7 +596,11 @@ namespace G4INCL {
     }
   }
 
+#ifdef INCLXX_IN_GEANT4_MODE
+  G4double ParticleTable::getSurfaceDiffuseness(const G4int A, const G4int /*Z*/ ) {
+#else
   G4double ParticleTable::getSurfaceDiffuseness(const G4int A, const G4int Z) {
+#endif // INCLXX_IN_GEANT4_MODE
 
     if(A >= 28) {
       return 1.63e-4 * A + 0.510;
@@ -580,9 +609,10 @@ namespace G4INCL {
     } else if(A < 19 && A >= 6) {
       return mediumDiffuseness[A-1];
     } else if(A < 6 && A >= 2) {
-      return ParticleTable::getNuclearRadius(A, Z);
+      ERROR("ParticleTable::getSurfaceDiffuseness: was called for A = " << A << " Z = " << Z << std::endl);
+      return 0.0;
     } else {
-      ERROR("ParticleTable::getSurfaceDiffuseness : No diffuseness for nucleus A = " << A << " Z = " << Z << std::endl);
+      ERROR("ParticleTable::getSurfaceDiffuseness: No diffuseness for nucleus A = " << A << " Z = " << Z << std::endl);
       return 0.0;
     }
   }

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.5
+// INCL++ revision: v5.1.6
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -55,6 +55,7 @@
 #include "G4SystemOfUnits.hh"
 #endif
 #include "G4INCLGlobals.hh"
+#include "G4INCLNaturalIsotopicDistributions.hh"
 
 namespace G4INCL {
   class ParticleTable {
@@ -153,6 +154,13 @@ namespace G4INCL {
     static NuclearMassFn getTableMass;
     static ParticleMassFn getTableParticleMass;
 
+    static G4double getTableSpeciesMass(const ParticleSpecies &p) {
+      if(p.theType == Composite)
+        return (*getTableMass)(p.theA, p.theZ);
+      else
+        return (*getTableParticleMass)(p.theType);
+    }
+
     // Typedefs and pointers for transparent handling of separation energies
     typedef G4double (*SeparationEnergyFn)(const ParticleType, const G4int, const G4int);
     static SeparationEnergyFn getSeparationEnergy;
@@ -210,6 +218,7 @@ namespace G4INCL {
     }
 
     static G4double getNuclearRadius(const G4int A, const G4int Z);
+    static G4double getRadiusParameter(const G4int A, const G4int Z);
     static G4double getMaximumNuclearRadius(const G4int A, const G4int Z);
     static G4double getSurfaceDiffuseness(const G4int A, const G4int Z);
 
@@ -327,6 +336,14 @@ namespace G4INCL {
      */
     static const G4double eSquared;
 
+    static IsotopicDistribution const &getNaturalIsotopicDistribution(const G4int Z) {
+      return getNaturalIsotopicDistributions()->getIsotopicDistribution(Z);
+    }
+
+    static G4int drawRandomNaturalIsotope(const G4int Z) {
+      return getNaturalIsotopicDistributions()->drawRandomIsotope(Z);
+    }
+
   protected:
     ParticleTable() {};
     ~ParticleTable() {};
@@ -368,6 +385,16 @@ namespace G4INCL {
 
     /// \brief Transform an integer digit (represented by a char) to a IUPAC char
     static char intToIUPAC(char n) { return elementIUPACDigits.at(n); }
+
+    /// \brief Array of natural isotopic distributions
+    static const NaturalIsotopicDistributions *theNaturalIsotopicDistributions;
+
+    /// \brief Get the singleton instance of the natural isotopic distributions
+    static const NaturalIsotopicDistributions *getNaturalIsotopicDistributions() {
+      if(!theNaturalIsotopicDistributions)
+        theNaturalIsotopicDistributions = new NaturalIsotopicDistributions;
+      return theNaturalIsotopicDistributions;
+    }
 
   };
 }

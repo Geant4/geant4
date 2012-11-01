@@ -51,6 +51,8 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
         G4INCLIChannel.hh
         G4INCLIAvatar.hh
         G4INCLConfig.hh
+        G4INCLNaturalIsotopicDistributions.hh
+        G4INCLHashing.hh
         G4INCLLogger.hh
         G4INCLGlobalInfo.hh
         G4INCLGlobals.hh
@@ -89,6 +91,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
         G4INCLInverseInterpolationTable.cc
         G4INCLRandom.cc
         G4INCLFinalState.cc
+        G4INCLNaturalIsotopicDistributions.cc
         G4INCLLogger.cc
         G4INCLParticleSpecies.cc
 

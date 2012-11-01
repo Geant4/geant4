@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.5
+// INCL++ revision: v5.1.6
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -49,6 +49,7 @@
 #include "G4INCLThreeVector.hh"
 #include "G4INCLParticleTable.hh"
 #include "G4INCLParticleType.hh"
+#include "G4INCLParticleSpecies.hh"
 #include "G4INCLLogger.hh"
 #include <list>
 #include <sstream>
@@ -153,6 +154,11 @@ namespace G4INCL {
      */
     G4INCL::ParticleType getType() const {
       return theType;
+    };
+
+    /// \brief Get the particle species
+    virtual G4INCL::ParticleSpecies getSpecies() const {
+      return ParticleSpecies(theType);
     };
 
     void setType(ParticleType t) {

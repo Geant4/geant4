@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.5
+// INCL++ revision: v5.1.6
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -49,6 +49,7 @@
 #include "G4INCLGlobalInfo.hh"
 #include "G4INCLLogger.hh"
 #include "G4INCLConfig.hh"
+#include "G4INCLRootFinder.hh"
 
 namespace G4INCL {
   class INCL {
@@ -98,6 +99,160 @@ namespace G4INCL {
 
       /// \brief Remnant size below which cascade stops
       G4int minRemnantSize;
+
+      /// \brief Class to adjust remnant recoil
+      class RecoilFunctor : public RootFunctor {
+        public:
+          /** \brief Prepare for calling the () operator and scaleParticleEnergies
+           *
+           * The constructor sets the private class members.
+           */
+          RecoilFunctor(Nucleus * const n, const EventInfo &ei) :
+            RootFunctor(0., 1E6),
+            nucleus(n),
+            outgoingParticles(n->getStore()->getOutgoingParticles()),
+            theEventInfo(ei) {
+              for(ParticleIter p=outgoingParticles.begin(); p!=outgoingParticles.end(); ++p) {
+                particleMomenta.push_back((*p)->getMomentum());
+                particleKineticEnergies.push_back((*p)->getKineticEnergy());
+              }
+            }
+          virtual ~RecoilFunctor() {}
+
+          /** \brief Compute the energy-conservation violation.
+           *
+           * \param x scale factor for the particle energies
+           * \return the energy-conservation violation
+           */
+          G4double operator()(const G4double x) const {
+            scaleParticleEnergies(x);
+            return nucleus->getConservationBalance(theEventInfo,true).energy;
+          }
+
+          /// \brief Clean up after root finding
+          void cleanUp(const G4bool success) const {
+            if(!success)
+              scaleParticleEnergies(1.);
+          }
+
+        private:
+          /// \brief Pointer to the nucleus
+          Nucleus *nucleus;
+          /// \brief List of final-state particles.
+          ParticleList const &outgoingParticles;
+          // \brief Reference to the EventInfo object
+          EventInfo const &theEventInfo;
+          /// \brief Initial momenta of the outgoing particles
+          std::list<ThreeVector> particleMomenta;
+          /// \brief Initial kinetic energies of the outgoing particles
+          std::list<G4double> particleKineticEnergies;
+
+          /** \brief Scale the kinetic energies of the outgoing particles.
+           *
+           * \param rescale scale factor
+           */
+          void scaleParticleEnergies(const G4double rescale) const {
+            // Rescale the energies (and the momenta) of the outgoing particles.
+            ThreeVector pBalance = nucleus->getIncomingMomentum();
+            std::list<ThreeVector>::const_iterator iP = particleMomenta.begin();
+            std::list<G4double>::const_iterator iE = particleKineticEnergies.begin();
+            for( ParticleIter i = outgoingParticles.begin(); i != outgoingParticles.end(); ++i, ++iP, ++iE)
+            {
+              const G4double mass = (*i)->getMass();
+              const G4double newKineticEnergy = (*iE) * rescale;
+
+              (*i)->setMomentum(*iP);
+              (*i)->setEnergy(mass + newKineticEnergy);
+              (*i)->adjustMomentumFromEnergy();
+
+              pBalance -= (*i)->getMomentum();
+            }
+
+            nucleus->setMomentum(pBalance);
+            const G4double remnantMass = ParticleTable::getTableMass(nucleus->getA(),nucleus->getZ()) + nucleus->getExcitationEnergy();
+            const G4double pRem2 = pBalance.mag2();
+            const G4double recoilEnergy = pRem2/
+              (std::sqrt(pRem2+remnantMass*remnantMass) + remnantMass);
+            nucleus->setEnergy(remnantMass + recoilEnergy);
+          }
+      };
+
+      /// \brief Class to adjust remnant recoil in the reaction CM system
+      class RecoilCMFunctor : public RootFunctor {
+        public:
+          /** \brief Prepare for calling the () operator and scaleParticleEnergies
+           *
+           * The constructor sets the private class members.
+           */
+          RecoilCMFunctor(Nucleus * const n, const EventInfo &ei) :
+            RootFunctor(0., 1E6),
+            nucleus(n),
+            theIncomingMomentum(nucleus->getIncomingMomentum()),
+            outgoingParticles(n->getStore()->getOutgoingParticles()),
+            theEventInfo(ei) {
+              thePTBoostVector = nucleus->getIncomingMomentum()/nucleus->getInitialEnergy();
+              for(ParticleIter p=outgoingParticles.begin(); p!=outgoingParticles.end(); ++p) {
+                (*p)->boost(thePTBoostVector);
+                particleCMMomenta.push_back((*p)->getMomentum());
+              }
+            }
+          virtual ~RecoilCMFunctor() {}
+
+          /** \brief Compute the energy-conservation violation.
+           *
+           * \param x scale factor for the particle energies
+           * \return the energy-conservation violation
+           */
+          G4double operator()(const G4double x) const {
+            scaleParticleCMMomenta(x);
+            return nucleus->getConservationBalance(theEventInfo,true).energy;
+          }
+
+          /// \brief Clean up after root finding
+          void cleanUp(const G4bool success) const {
+            if(!success)
+              scaleParticleCMMomenta(1.);
+          }
+
+        private:
+          /// \brief Pointer to the nucleus
+          Nucleus *nucleus;
+          /// \brief Projectile-target CM boost vector
+          ThreeVector thePTBoostVector;
+          /// \brief Incoming momentum
+          ThreeVector theIncomingMomentum;
+          /// \brief List of final-state particles.
+          ParticleList const &outgoingParticles;
+          // \brief Reference to the EventInfo object
+          EventInfo const &theEventInfo;
+          /// \brief Initial CM momenta of the outgoing particles
+          std::list<ThreeVector> particleCMMomenta;
+
+          /** \brief Scale the kinetic energies of the outgoing particles.
+           *
+           * \param rescale scale factor
+           */
+          void scaleParticleCMMomenta(const G4double rescale) const {
+            // Rescale the CM momenta of the outgoing particles.
+            ThreeVector remnantMomentum = theIncomingMomentum;
+            std::list<ThreeVector>::const_iterator iP = particleCMMomenta.begin();
+            for( ParticleIter i = outgoingParticles.begin(); i != outgoingParticles.end(); ++i, ++iP)
+            {
+              (*i)->setMomentum(*iP * rescale);
+              (*i)->adjustEnergyFromMomentum();
+              (*i)->boost(-thePTBoostVector);
+
+              remnantMomentum -= (*i)->getMomentum();
+            }
+
+            nucleus->setMomentum(remnantMomentum);
+            const G4double remnantMass = ParticleTable::getTableMass(nucleus->getA(),nucleus->getZ()) + nucleus->getExcitationEnergy();
+            const G4double pRem2 = remnantMomentum.mag2();
+            const G4double recoilEnergy = pRem2/
+              (std::sqrt(pRem2+remnantMass*remnantMass) + remnantMass);
+            nucleus->setEnergy(remnantMass + recoilEnergy);
+          }
+      };
 
       /** \brief Rescale the energies of the outgoing particles.
        *
@@ -167,7 +322,7 @@ namespace G4INCL {
        *
        * Used in forced CN events.
        */
-      void initMaxInteractionDistance(Cluster const * const c);
+      void initMaxInteractionDistance(ParticleSpecies const &p, const G4double kineticEnergy);
 
       /** \brief Initialize the universe radius.
        *

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.5
+// INCL++ revision: v5.1.6
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -337,7 +337,6 @@ namespace G4INCL {
       }
 
       // -t/--target: target species
-      // \todo{natural targets}
       if(variablesMap.count("target")) {
         targetSpecies = ParticleSpecies(targetString);
         if(targetSpecies.theType!=Composite) {
@@ -348,6 +347,8 @@ namespace G4INCL {
           std::cerr << suggestHelpMsg;
           std::exit(EXIT_FAILURE);
         }
+        if(targetSpecies.theA==0)
+          naturalTarget = true;
       }
 
       // --pauli
@@ -682,8 +683,11 @@ namespace G4INCL {
     else
       message << "Projectile: composite, A=" << projectileSpecies.theA << ", Z=" << projectileSpecies.theZ << std::endl;
     message << "  energy = " << projectileKineticEnergy << std::endl;
-    message << "Target: A = " << targetSpecies.theA << " Z = " << targetSpecies.theZ << std::endl;
-    message << "Number of shots = " << nShots << std::endl;
+    if(targetSpecies.theA>0)
+      message << "Target: A = " << targetSpecies.theA << " Z = " << targetSpecies.theZ << std::endl;
+    else
+      message << "Target: natural isotopic composition, Z = " << targetSpecies.theZ << std::endl;
+    message << "Number of requested shots = " << nShots << std::endl;
     return message.str();
   }
 
@@ -713,7 +717,12 @@ namespace G4INCL {
 #endif
       << std::endl << "# Projectile and target definitions" << std::endl
       << "target = " << targetString << "\t# * target nuclide. Can be specified as Fe56, 56Fe, Fe-56, 56-Fe, Fe_56, 56_Fe or Fe. If the mass number is omitted, natural target composition is assumed." << std::endl
-      << "         " << "# the target nuclide was parsed as Z=" << targetSpecies.theZ << ", A=" << targetSpecies.theA << std::endl
+      << "         " << "# the target nuclide was parsed as Z=" << targetSpecies.theZ;
+    if(targetSpecies.theA>0)
+      ss << ", A=" << targetSpecies.theA;
+    else
+      ss << ", natural target";
+    ss << std::endl
       << "projectile = " << projectileString << "\t# * projectile name (proton, neutron, pi+, pi0, pi-, d, t, a, He-4...)" << std::endl
       << "         " << "# the projectile nuclide was parsed as Z=" << projectileSpecies.theZ << ", A=" << projectileSpecies.theA << std::endl
       << "energy = " << projectileKineticEnergy << "\t# * total kinetic energy of the projectile, in MeV" << std::endl

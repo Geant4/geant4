@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.5
+// INCL++ revision: v5.1.6
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -48,6 +48,7 @@
 #include <algorithm>
 #include <cctype>
 #include <sstream>
+#include <algorithm>
 
 namespace G4INCL {
 
@@ -113,6 +114,12 @@ namespace G4INCL {
     theZ(ParticleTable::getChargeNumber(theType))
   {}
 
+  ParticleSpecies::ParticleSpecies(const G4int A, const G4int Z) :
+    theType(Composite),
+    theA(A),
+    theZ(Z)
+  {}
+
   void ParticleSpecies::parseNuclide(std::string const &pS) {
     theType = Composite;
 
@@ -121,16 +128,14 @@ namespace G4INCL {
     std::string allowed("0123456789abcdefghijklmnopqrstuvwxyz");
     allowed += separators;
 
-    // There must be at least two characters
+    // There must be at least one character
     if(pS.find_first_not_of(allowed)!=std::string::npos) {
       // Malformed input string
       // Setting unknown particle species
       (*this) = ParticleSpecies(UnknownParticle);
       return;
     }
-
-    // There must be at least two characters
-    if(pS.size()<2) {
+    if(pS.size()<1) {
       // Malformed input string
       // Setting unknown particle species
       (*this) = ParticleSpecies(UnknownParticle);
@@ -150,9 +155,9 @@ namespace G4INCL {
     G4int (*predicate)(G4int);
     G4bool startsWithAlpha = std::isalpha(pS.at(0));
     if(startsWithAlpha) {
-      predicate=std::isalpha;
-    } else if(std::isdigit(pS.at(0))) {
       predicate=std::isdigit;
+    } else if(std::isdigit(pS.at(0))) {
+      predicate=std::isalpha;
     } else {
       // Non-alphanumeric character in string
       // Setting unknown particle species
@@ -160,22 +165,25 @@ namespace G4INCL {
       return;
     }
 
+    G4bool hasIsotope = true;
     size_t endFirstSection, beginSecondSection;
     if(firstSeparator==std::string::npos) {
       // No separator, Fe56 or 56Fe style
       // Identify the end of the first section
 
       // Find the first character that is not of the same type as the first one
-      for(beginSecondSection=1; beginSecondSection<pS.size(); ++beginSecondSection) {
-        if(!predicate(pS.at(beginSecondSection)))
-          break;
-      }
+      beginSecondSection = std::find_if(pS.begin()+1, pS.end(), predicate) - pS.begin();
 
       if(beginSecondSection>=pS.size()) {
-        // Only one type of characters (numeric or alphabetic) in the string
-        // Setting unknown particle species
-        (*this) = ParticleSpecies(UnknownParticle);
-        return;
+        if(startsWithAlpha) {
+          // Only alphabetic characters are present -- must be an element name
+          hasIsotope = false;
+        } else {
+          // Only numeric characters in the string
+          // Setting unknown particle species
+          (*this) = ParticleSpecies(UnknownParticle);
+          return;
+        }
       }
 
       endFirstSection = beginSecondSection;
@@ -206,16 +214,19 @@ namespace G4INCL {
       return;
     }
 
-    parsingStream >> theA;
-    if(parsingStream.fail()) {
-      // Couldn't parse the mass section
-      // Setting unknown particle species
-      (*this) = ParticleSpecies(UnknownParticle);
-      return;
-    }
+    if(hasIsotope) {
+      parsingStream >> theA;
+      if(parsingStream.fail()) {
+        // Couldn't parse the mass section
+        // Setting unknown particle species
+        (*this) = ParticleSpecies(UnknownParticle);
+        return;
+      }
+    } else
+      theA = 0;
 
     // Check that Z<=A
-    if(theZ>theA) {
+    if(theZ>theA && hasIsotope) {
       // Setting unknown particle species
       (*this) = ParticleSpecies(UnknownParticle);
       return;

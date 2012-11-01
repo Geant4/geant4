@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.5
+// INCL++ revision: v5.1.6
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -72,17 +72,22 @@ namespace G4INCL {
     const G4int nuclideID = 1000*Z + A; // MCNP-style nuclide IDs
     const std::map<G4int,InverseInterpolationTable*>::const_iterator mapEntry = rpCorrelationTableCache.find(nuclideID);
     if(mapEntry == rpCorrelationTableCache.end()) {
-      const G4double radius = ParticleTable::getNuclearRadius(A, Z);
-      const G4double diffuseness = ParticleTable::getSurfaceDiffuseness(A, Z);
-      const G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(A, Z);
 
       IFunction1D *rpCorrelationFunction;
       if(A > 19) {
+        const G4double radius = ParticleTable::getRadiusParameter(A, Z);
+        const G4double diffuseness = ParticleTable::getSurfaceDiffuseness(A, Z);
+        const G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(A, Z);
         rpCorrelationFunction = new NuclearDensityFunctions::WoodsSaxonRP(radius, maximumRadius, diffuseness);
       } else if(A <= 19 && A > 6) {
+        const G4double radius = ParticleTable::getRadiusParameter(A, Z);
+        const G4double diffuseness = ParticleTable::getSurfaceDiffuseness(A, Z);
+        const G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(A, Z);
         rpCorrelationFunction = new NuclearDensityFunctions::ModifiedHarmonicOscillatorRP(radius, maximumRadius, diffuseness);
       } else if(A <= 6 && A > 1) { // Gaussian distribution for light nuclei
-        rpCorrelationFunction = new NuclearDensityFunctions::GaussianRP(maximumRadius, Math::oneOverSqrtThree * diffuseness);
+        const G4double radius = ParticleTable::getRadiusParameter(A, Z);
+        const G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(A, Z);
+        rpCorrelationFunction = new NuclearDensityFunctions::GaussianRP(maximumRadius, Math::oneOverSqrtThree * radius);
       } else {
         ERROR("No r-p correlation function for target A = "
             << A << " Z = " << Z << std::endl);
@@ -122,17 +127,22 @@ namespace G4INCL {
     const G4int nuclideID = 1000*Z + A; // MCNP-style nuclide IDs
     const std::map<G4int,InverseInterpolationTable*>::const_iterator mapEntry = rCDFTableCache.find(nuclideID);
     if(mapEntry == rCDFTableCache.end()) {
-      G4double radius = ParticleTable::getNuclearRadius(A, Z);
-      G4double diffuseness = ParticleTable::getSurfaceDiffuseness(A, Z);
-      G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(A, Z);
 
       IFunction1D *rDensityFunction;
       if(A > 19) {
+        G4double radius = ParticleTable::getRadiusParameter(A, Z);
+        G4double diffuseness = ParticleTable::getSurfaceDiffuseness(A, Z);
+        G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(A, Z);
         rDensityFunction = new NuclearDensityFunctions::WoodsSaxon(radius, maximumRadius, diffuseness);
       } else if(A <= 19 && A > 6) {
+        G4double radius = ParticleTable::getRadiusParameter(A, Z);
+        G4double diffuseness = ParticleTable::getSurfaceDiffuseness(A, Z);
+        G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(A, Z);
         rDensityFunction = new NuclearDensityFunctions::ModifiedHarmonicOscillator(radius, maximumRadius, diffuseness);
       } else if(A <= 6 && A > 2) { // Gaussian distribution for light nuclei
-        rDensityFunction = new NuclearDensityFunctions::Gaussian(maximumRadius, Math::oneOverSqrtThree * diffuseness);
+        G4double radius = ParticleTable::getRadiusParameter(A, Z);
+        G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(A, Z);
+        rDensityFunction = new NuclearDensityFunctions::Gaussian(maximumRadius, Math::oneOverSqrtThree * radius);
       } else if(A == 2 && Z == 1) { // density from the Paris potential for deuterons
         rDensityFunction = new NuclearDensityFunctions::ParisR();
       } else {

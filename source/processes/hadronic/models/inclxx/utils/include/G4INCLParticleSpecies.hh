@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.5
+// INCL++ revision: v5.1.6
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -61,6 +61,7 @@ namespace G4INCL {
     {}
       ParticleSpecies(std::string const &pS);
       ParticleSpecies(ParticleType const t);
+      ParticleSpecies(const G4int A, const G4int Z);
 
       ParticleType theType;
       G4int theA, theZ;

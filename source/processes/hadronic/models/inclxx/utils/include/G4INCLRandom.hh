@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.5
+// INCL++ revision: v5.1.6
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -104,6 +104,16 @@ namespace G4INCL {
     static G4double shoot0() {
       G4double r;
       while( (r=shoot()) <= 0. )
+        ;
+      return r;
+    }
+
+    /**
+     * Return a random number in the [0,1[ interval
+     */
+    static G4double shoot1() {
+      G4double r;
+      while( (r=shoot()) >= 1. )
         ;
       return r;
     }

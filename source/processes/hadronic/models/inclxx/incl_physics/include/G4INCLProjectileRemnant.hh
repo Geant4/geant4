@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.5
+// INCL++ revision: v5.1.6
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -47,11 +47,16 @@
 #define G4INCLPROJECTILEREMNANT_HH_
 
 #include "G4INCLCluster.hh"
+#include "G4INCLRandom.hh"
 #include <vector>
 #include <map>
 #include <numeric>
+#include <functional>
 
 namespace G4INCL {
+
+  /// \brief Helper function for ProjectileRemnant::shuffleStoredComponents
+  G4int shuffleComponentsHelper(G4int range);
 
   class ProjectileRemnant : public Cluster {
     // typedefs for the calculation of the projectile excitation energy
@@ -206,7 +211,7 @@ namespace G4INCL {
     ParticleList shuffleStoredComponents() {
       ParticleList pL = getStoredComponents();
       std::vector<Particle *> theVector(pL.begin(),pL.end());
-      std::random_shuffle(theVector.begin(), theVector.end());
+      std::random_shuffle(theVector.begin(), theVector.end(), shuffleComponentsHelper);
       return ParticleList(theVector.begin(),theVector.end());
     }
 

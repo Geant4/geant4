@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.5
+// INCL++ revision: v5.1.6
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -61,7 +61,7 @@ namespace G4INCL {
   }
 
   G4double PauliStandard::getBlockingProbability(Particle const * const particle, Nucleus const * const nucleus) const {
-    const G4double r0 = nucleus->getDensity()->getCentralRadius();
+    const G4double r0 = nucleus->getDensity()->getNuclearRadius();
     const G4double pFermi = nucleus->getPotential()->getFermiMomentum(particle);
 
     const G4double pbl = cellSize * std::sqrt(pFermi/r0);

@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.5
+// INCL++ revision: v5.1.6
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -91,22 +91,26 @@ namespace G4INCL {
 
       /** \brief Return the maximum impact parameter for Coulomb-distorted
        *         trajectories. **/
-      G4double maxImpactParameter(Particle const * const p, Nucleus const *
-          const n) const;
-
-      /** \brief Return the maximum impact parameter for Coulomb-distorted
-       *         trajectories. **/
-      G4double maxImpactParameter(Cluster const * const c, Nucleus const *
+      G4double maxImpactParameter(ParticleSpecies const &p, const G4double kinE, Nucleus const *
           const n) const;
 
     private:
+      /// \brief Return the maximum impact parameter for Coulomb-distorted trajectories.
+      G4double maxImpactParameterParticle(ParticleSpecies const &p, const G4double kinE, Nucleus const *
+          const n) const;
+
       /// \brief Return the minimum distance of approach in a head-on collision (b=0).
-      G4double minimumDistance(Particle const * const p, Nucleus const * const n) const {
-        const G4double particleMass = p->getTableMass();
+      G4double minimumDistance(ParticleSpecies const &p, const G4double kineticEnergy, Nucleus const * const n) const {
+        const G4double particleMass = ParticleTable::getTableSpeciesMass(p);
         const G4double nucleusMass = n->getTableMass();
         const G4double reducedMass = particleMass*nucleusMass/(particleMass+nucleusMass);
-        return ParticleTable::eSquared * p->getZ() * n->getZ() * particleMass
-          / (p->getKineticEnergy() * reducedMass);
+        return ParticleTable::eSquared * p.theZ * n->getZ() * particleMass
+          / (kineticEnergy * reducedMass);
+      }
+
+      /// \brief Return the minimum distance of approach in a head-on collision (b=0).
+      G4double minimumDistance(Particle const * const p, Nucleus const * const n) const {
+        return minimumDistance(p->getSpecies(), p->getKineticEnergy(), n);
       }
 
       /** \brief Perform Coulomb deviation

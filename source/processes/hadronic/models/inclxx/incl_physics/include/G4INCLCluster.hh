@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.5
+// INCL++ revision: v5.1.6
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -122,6 +122,10 @@ namespace G4INCL {
       // constant time
       std::swap(particles, rhs.particles);
       std::swap(theParticleSampler, rhs.theParticleSampler);
+    }
+
+    ParticleSpecies getSpecies() const {
+      return ParticleSpecies(theA, theZ);
     }
 
     void deleteParticles() {

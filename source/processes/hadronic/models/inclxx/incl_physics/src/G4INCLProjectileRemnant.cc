@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.5
+// INCL++ revision: v5.1.6
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -48,6 +48,10 @@
 #include <numeric>
 
 namespace G4INCL {
+
+  G4int shuffleComponentsHelper(G4int range) {
+    return (G4int)(Random::shoot1()*range);
+  }
 
   void ProjectileRemnant::reset() {
     deleteParticles();

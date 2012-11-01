@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.5
+// INCL++ revision: v5.1.6
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -122,19 +122,25 @@ namespace G4INCL {
     }
   }
 
-  G4double CoulombNonRelativistic::maxImpactParameter(Particle const * const p,
+  G4double CoulombNonRelativistic::maxImpactParameter(ParticleSpecies const &p, const G4double kinE,
       Nucleus const * const n) const {
-    const G4double theMinimumDistance = minimumDistance(p, n);
-    const G4double rMax = n->getCoulombRadius(p);
-    const G4double theMaxImpactParameterSquared = rMax*(rMax-theMinimumDistance);
-    return (theMaxImpactParameterSquared>0. ?
-        std::sqrt(theMaxImpactParameterSquared) : 0.);
+    G4double theMaxImpactParameter = maxImpactParameterParticle(p, kinE, n);
+    if(theMaxImpactParameter <= 0.)
+      return 0.;
+    if(p.theType == Composite)
+      theMaxImpactParameter +=  2.*ParticleTable::getNuclearRadius(p.theA, p.theZ);
+    return theMaxImpactParameter;
   }
 
-  G4double CoulombNonRelativistic::maxImpactParameter(Cluster const * const c, Nucleus const *
-      const n) const {
-    Particle const * const clusterAsParticle = c;
-    return maxImpactParameter(clusterAsParticle,n) + 2.*ParticleTable::getNuclearRadius(c->getA(),c->getZ());
+  G4double CoulombNonRelativistic::maxImpactParameterParticle(ParticleSpecies const &p, const G4double kinE,
+      Nucleus const * const n) const {
+    const G4double theMinimumDistance = minimumDistance(p, kinE, n);
+    const G4double rMax = n->getCoulombRadius(p);
+    const G4double theMaxImpactParameterSquared = rMax*(rMax-theMinimumDistance);
+    if(theMaxImpactParameterSquared<=0.)
+      return 0.;
+    G4double theMaxImpactParameter = std::sqrt(theMaxImpactParameterSquared);
+    return theMaxImpactParameter;
   }
 
   G4bool CoulombNonRelativistic::coulombDeviation(Particle * const p, Nucleus const * const n) const {
@@ -150,10 +156,12 @@ namespace G4INCL {
 
     G4double newImpactParameter, alpha; // Parameters that must be determined by the deviation
 
-    // Note that in the following we call the
-    // maxImpactParameter(Particle*,Nucleus*) method (i.e. not the
-    // (Cluster*,Nucleus*) one)
-    if(impactParameter>maxImpactParameter(p,n)) {
+    ParticleSpecies aSpecies = p->getSpecies();
+    G4double kineticEnergy = p->getKineticEnergy();
+    // Note that in the following call to maxImpactParameter we are not
+    // interested in the size of the cluster. This is why we call
+    // maxImpactParameterParticle.
+    if(impactParameter>maxImpactParameterParticle(aSpecies, kineticEnergy, n)) {
       // This should happen only for composite particles, whose trajectory can
       // geometrically miss the nucleus but still trigger a cascade because of
       // the finite extension of the projectile.
@@ -165,7 +173,7 @@ namespace G4INCL {
       // The particle trajectory intersects the Coulomb sphere
 
       // Compute the entrance angle
-      const G4double radius = n->getCoulombRadius(p);
+      const G4double radius = n->getCoulombRadius(p->getSpecies());
       G4double argument = -(1. + 2.*impactParameter*impactParameter/(radius*theMinimumDistance))
         / eccentricity;
       const G4double thetaIn = Math::twoPi - std::acos(argument) - deltaTheta2;

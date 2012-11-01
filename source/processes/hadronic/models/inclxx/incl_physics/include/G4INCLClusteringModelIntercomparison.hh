@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.5
+// INCL++ revision: v5.1.6
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,12 +39,20 @@
 #ifndef G4INCLClusteringModelIntercomparison_hh
 #define G4INCLClusteringModelIntercomparison_hh 1
 
+#ifdef INCLXX_IN_GEANT4_MODE
+#define INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON_Set 1
+#endif // INCLXX_IN_GEANT4_MODE
+
 #include "G4INCLIClusteringModel.hh"
 #include "G4INCLParticle.hh"
 #include "G4INCLParticleTable.hh"
 #include "G4INCLCluster.hh"
 #include "G4INCLNucleus.hh"
 #include "G4INCLKinematicsUtils.hh"
+#include "G4INCLHashing.hh"
+
+#include <set>
+#include <algorithm>
 
 namespace G4INCL {
 
@@ -63,7 +71,8 @@ namespace G4INCL {
       nConsideredMax(0),
       nConsidered(0),
       consideredPartners(NULL),
-      isInRunningConfiguration(NULL)
+      isInRunningConfiguration(NULL),
+      maxMassConfigurationSkipping(ParticleTable::maxClusterMass)
     {
       // Set up the maximum charge and neutron number for clusters
       clusterZMaxAll = 0;
@@ -85,6 +94,11 @@ namespace G4INCL {
       std::fill(runningPotentials,
                 runningPotentials + ParticleTable::maxClusterMass,
                 0.0);
+
+      std::fill(runningConfiguration,
+                runningConfiguration + ParticleTable::maxClusterMass,
+                -1);
+
     }
 
     virtual ~ClusteringModelIntercomparison() {
@@ -101,10 +115,17 @@ namespace G4INCL {
 
     Nucleus *theNucleus;
 
-    G4double runningEnergies[ParticleTable::maxClusterMass];
-    ThreeVector runningMomenta[ParticleTable::maxClusterMass];
-    ThreeVector runningPositions[ParticleTable::maxClusterMass];
-    G4double runningPotentials[ParticleTable::maxClusterMass];
+    G4double runningEnergies[ParticleTable::maxClusterMass+1];
+    ThreeVector runningMomenta[ParticleTable::maxClusterMass+1];
+    ThreeVector runningPositions[ParticleTable::maxClusterMass+1];
+    G4double runningPotentials[ParticleTable::maxClusterMass+1];
+#if defined(INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON_HashMask)
+    Hashing::NucleonItem runningConfiguration[ParticleTable::maxClusterMass];
+#elif defined(INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON_Set)
+    G4int runningConfiguration[ParticleTable::maxClusterMass];
+#else
+#error Unrecognized INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON. Allowed values are: Set, HashMask.
+#endif
 
     G4int selectedA, selectedZ;
     G4double sqtot;
@@ -146,11 +167,99 @@ namespace G4INCL {
 
     /** \brief Best cluster configuration
      *
-     * A dynamical array of Particle* is allocated on this variable and filled
-     * with pointers to the nucleons which make up the best cluster
-     * configuration that has been found so far.
+     * This array contains pointers to the nucleons which make up the best
+     * cluster configuration that has been found so far.
      */
     Particle *candidateConfiguration[ParticleTable::maxClusterMass];
+
+#if defined(INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON_HashMask)
+    typedef std::set<Hashing::HashType> HashContainer;
+    typedef HashContainer::iterator HashIterator;
+
+    /// \brief Array of containers for configurations that have already been checked
+    HashContainer checkedConfigurations[ParticleTable::maxClusterMass-2];
+#elif defined(INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON_Set)
+    /** \brief Class for storing and comparing sorted nucleon configurations
+     *
+     * This class is actually just a wrapper around an array of Particle*
+     * pointers. It provides a lexicographical comparison operator
+     * (SortedNucleonConfiguration::operator<) for inclusion in std::set
+     * containers.
+     */
+    class SortedNucleonConfiguration {
+      public:
+        // Use Particle* as nucleon identifiers
+        typedef G4int NucleonItem;
+
+        /// \brief Constructor
+        SortedNucleonConfiguration() : theSize(0), nucleons(NULL) {}
+
+        /// \brief Copy constructor
+        SortedNucleonConfiguration(const SortedNucleonConfiguration &rhs) :
+          theSize(rhs.theSize),
+          nucleons(new NucleonItem[theSize])
+      {
+        std::copy(rhs.nucleons, rhs.nucleons+theSize, nucleons);
+      }
+
+        /// \brief Destructor
+        ~SortedNucleonConfiguration() {
+          delete [] nucleons;
+        }
+
+        /// \brief Helper method for the assignment operator
+        void swap(SortedNucleonConfiguration &rhs) {
+          std::swap(theSize, rhs.theSize);
+          std::swap(nucleons, rhs.nucleons);
+        }
+
+        /// \brief Assignment operator
+        SortedNucleonConfiguration &operator=(const SortedNucleonConfiguration &rhs) {
+          SortedNucleonConfiguration tempConfig(rhs);
+          swap(tempConfig);
+          return *this;
+        }
+
+        /** \brief Order operator for SortedNucleonConfiguration
+         *
+         * The comparison is done lexicographically (i.e. from the first
+         * element to the last).
+         */
+        G4bool operator<(const SortedNucleonConfiguration &rhs) const {
+// assert(theSize==rhs.theSize);
+          return std::lexicographical_compare(nucleons, nucleons+theSize, rhs.nucleons, rhs.nucleons+theSize);
+        }
+
+        /// \brief Fill configuration with array of NucleonItem
+        void fill(NucleonItem *config, size_t n) {
+          theSize = n;
+          nucleons = new NucleonItem[theSize];
+          std::copy(config, config+theSize, nucleons);
+          std::sort(nucleons, nucleons+theSize);
+        }
+
+      private:
+        /// \brief Size of the array
+        size_t theSize;
+
+        /// \brief The real array
+        NucleonItem *nucleons;
+    };
+
+    typedef std::set<SortedNucleonConfiguration> SortedNucleonConfigurationContainer;
+    typedef SortedNucleonConfigurationContainer::iterator SortedNucleonConfigurationIterator;
+
+    /// \brief Array of containers for configurations that have already been checked
+    SortedNucleonConfigurationContainer checkedConfigurations[ParticleTable::maxClusterMass-2];
+#else
+#error Unrecognized INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON. Allowed values are: Set, HashMask.
+#endif
+
+    /** \brief Maximum mass for configuration storage
+     *
+     * Skipping configurations becomes inefficient above this mass.
+     */
+    G4int maxMassConfigurationSkipping;
   };
 
 }

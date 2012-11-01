@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.5
+// INCL++ revision: v5.1.6
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -335,24 +335,24 @@ namespace G4INCL {
       }
     }
 
-    /** \brief Get the Coulomb radius for a given Particle
+    /** \brief Get the Coulomb radius for a given particle
      *
      * That's the radius of the sphere that the Coulomb trajectory of the
      * incoming particle should intersect. The intersection point is used to
      * determine the effective impact parameter of the trajectory and the new
      * entrance angle.
      *
-     * If the Particle is not a Cluster, the Coulomb radius reduces to the
+     * If the particle is not a Cluster, the Coulomb radius reduces to the
      * surface radius. We use a parametrisation for d, t, He3 and alphas. For
      * heavier clusters we fall back to the surface radius.
      *
-     * \param particle pointer to a particle
+     * \param p the particle species
      * \return Coulomb radius
      */
-    G4double getCoulombRadius(Particle const * const particle) const {
-      if(particle->isCluster()) {
-        const G4int zp = particle->getZ();
-        const G4int ap = particle->getA();
+    G4double getCoulombRadius(ParticleSpecies const &p) const {
+      if(p.theType == Composite) {
+        const G4int zp = p.theZ;
+        const G4int ap = p.theA;
         G4double barr, radius = 0.;
         if(zp==1 && ap==2) { // d
           barr = 0.2565*Math::pow23((G4double)theA)-0.78;

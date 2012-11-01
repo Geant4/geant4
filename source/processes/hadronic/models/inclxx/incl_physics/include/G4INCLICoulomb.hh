@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.5
+// INCL++ revision: v5.1.6
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -99,11 +99,7 @@ namespace G4INCL {
 
       /** \brief Return the maximum impact parameter for Coulomb-distorted
        *         trajectories. **/
-      virtual G4double maxImpactParameter(Particle const * const p, Nucleus const * const n) const = 0;
-
-      /** \brief Return the maximum impact parameter for Coulomb-distorted
-       *         trajectories. **/
-      virtual G4double maxImpactParameter(Cluster const * const c, Nucleus const * const n) const = 0;
+      virtual G4double maxImpactParameter(ParticleSpecies const &p, const G4double kinE, Nucleus const * const n) const = 0;
 
   };
 }

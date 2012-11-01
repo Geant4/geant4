@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.5
+// INCL++ revision: v5.1.6
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -39,6 +39,7 @@
 #include "G4INCLNuclearDensity.hh"
 #include "G4INCLParticleTable.hh"
 #include "G4INCLGlobals.hh"
+#include <algorithm>
 
 namespace G4INCL {
 
@@ -46,6 +47,7 @@ namespace G4INCL {
     theA(A),
     theZ(Z),
     theMaximumRadius((*rpCorrelationTable)(1.)),
+    theNuclearRadius(ParticleTable::getNuclearRadius(theA,theZ)),
     rFromP(rpCorrelationTable),
     // The interpolation table for local-energy look-ups is simply obtained by
     // inverting the r-p correlation table.
@@ -55,7 +57,6 @@ namespace G4INCL {
         << std::endl
         << tFromR->print()
         << std::endl);
-    initCentralRadius();
     initializeTransmissionRadii();
   }
 
@@ -69,14 +70,15 @@ namespace G4INCL {
     theA(rhs.theA),
     theZ(rhs.theZ),
     theMaximumRadius(rhs.theMaximumRadius),
-    theCentralRadius(rhs.theCentralRadius),
-    transmissionRadius(rhs.transmissionRadius),
+    theNuclearRadius(rhs.theNuclearRadius),
     // rFromP is owned by NuclearDensityFactory, so shallow copy is sufficient
     rFromP(rhs.rFromP)
   {
     // deep copy for tFromR
     delete tFromR;
     tFromR = new InverseInterpolationTable(*(rhs.tFromR));
+
+    std::copy(rhs.transmissionRadius, rhs.transmissionRadius+UnknownParticle, transmissionRadius);
   }
 
   NuclearDensity &NuclearDensity::operator=(const NuclearDensity &rhs) {
@@ -89,26 +91,24 @@ namespace G4INCL {
     std::swap(theA, rhs.theA);
     std::swap(theZ, rhs.theZ);
     std::swap(theMaximumRadius, rhs.theMaximumRadius);
-    std::swap(theCentralRadius, rhs.theCentralRadius);
-    std::swap(transmissionRadius, rhs.transmissionRadius);
+    std::swap(theNuclearRadius, rhs.theNuclearRadius);
+    std::swap_ranges(transmissionRadius, transmissionRadius+UnknownParticle, rhs.transmissionRadius);
     std::swap(rFromP, rhs.rFromP);
     std::swap(tFromR, rhs.tFromR);
  }
 
   void NuclearDensity::initializeTransmissionRadii() {
-    const G4double r0 = 1.12;
-    const G4double theNucleonTransmissionRadius = r0*Math::pow13((G4double)theA) + 0.88;
+    const G4double theProtonRadius = 0.88; // fm
+    const G4double theProtonTransmissionRadius = theNuclearRadius + theProtonRadius;
 
-    transmissionRadius[Proton] = theNucleonTransmissionRadius;
-    transmissionRadius[Neutron] = theNucleonTransmissionRadius;
-    transmissionRadius[PiPlus] = theCentralRadius;
-    transmissionRadius[PiZero] = theCentralRadius;
-    transmissionRadius[PiMinus] = theCentralRadius;
-    transmissionRadius[DeltaPlusPlus] = theNucleonTransmissionRadius;
-    transmissionRadius[DeltaPlus] = theNucleonTransmissionRadius;
-    transmissionRadius[DeltaZero] = theNucleonTransmissionRadius;
-    transmissionRadius[DeltaMinus] = theNucleonTransmissionRadius;
-    transmissionRadius[Composite] = theCentralRadius;
+    transmissionRadius[Proton] = theProtonTransmissionRadius;
+    transmissionRadius[PiPlus] = theNuclearRadius;
+    transmissionRadius[PiMinus] = theNuclearRadius;
+    transmissionRadius[DeltaPlusPlus] = theProtonTransmissionRadius;
+    transmissionRadius[DeltaPlus] = theProtonTransmissionRadius;
+    transmissionRadius[DeltaMinus] = theProtonTransmissionRadius;
+    transmissionRadius[Composite] = theNuclearRadius;
+    // transmission radii for neutral particles intentionally left uninitialised
   }
 
   G4double NuclearDensity::getMaxRFromP(G4double p) const {

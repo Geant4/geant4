@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.5
+// INCL++ revision: v5.1.6
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -118,7 +118,7 @@ namespace G4INCL {
       // If Coulomb is activated, do not process events with impact
       // parameter larger than the maximum impact parameter, taking into
       // account Coulomb distortion.
-      if(impactParameter>CoulombDistortion::maxImpactParameter(p,theNucleus)) {
+      if(impactParameter>CoulombDistortion::maxImpactParameter(p->getSpecies(), kineticEnergy, theNucleus)) {
         DEBUG("impactParameter>CoulombDistortion::maxImpactParameter" << std::endl);
         delete p;
         return -1.;

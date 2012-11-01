@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.5
+// INCL++ revision: v5.1.6
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -70,7 +70,6 @@
 #include "G4INCLClusteringModelNone.hh"
 
 #include "G4INCLIntersection.hh"
-#include "G4INCLRootFinder.hh"
 
 #include "G4INCLCrossSections.hh"
 
@@ -184,10 +183,7 @@ namespace G4INCL {
   }
 
   G4bool INCL::prepareReaction(const ParticleSpecies &projectileSpecies, const G4double kineticEnergy, const G4int A, const G4int Z) {
-    if(A > 1 && A < 300 && Z > 0 && Z < 200) {
-      theA = A;
-      theZ = Z;
-    } else {
+    if(A < 0 || A > 300 || Z < 1 || Z > 200) {
       ERROR("Unsupported target: A = " << A << " Z = " << Z << std::endl);
       ERROR("Target configuration rejected." << std::endl);
       return false;
@@ -196,37 +192,17 @@ namespace G4INCL {
     // Initialise the maximum universe radius
     initUniverseRadius(projectileSpecies, kineticEnergy, A, Z);
 
-    // Set the maximum impact parameter
-    // \todo{for natural target abundances, make this the largest impact
-    // parameter for all the isotopes.}
-    delete nucleus;
-    nucleus = new Nucleus(A, Z, theConfig, maxUniverseRadius);
-    G4double projectileMass;
-    if(projectileSpecies.theType==Composite)
-      projectileMass = ParticleTable::getTableMass(projectileSpecies.theA, projectileSpecies.theZ);
+    // Initialise the nucleus
+    theZ = Z;
+    if(theConfig->isNaturalTarget())
+      theA = ParticleTable::drawRandomNaturalIsotope(Z);
     else
-      projectileMass = ParticleTable::getTableParticleMass(projectileSpecies.theType);
-    G4double energy = kineticEnergy + projectileMass;
-    G4double momentumZ = std::sqrt(energy*energy - projectileMass*projectileMass);
-    G4INCL::ThreeVector momentum(0.0, 0.0, momentumZ);
-    if(projectileSpecies.theType==Composite) {
-      G4INCL::Cluster *projectile = new G4INCL::Cluster(projectileSpecies.theZ,projectileSpecies.theA);
-      projectile->setMass(projectileMass);
-      projectile->setEnergy(energy);
-      projectile->setMomentum(momentum);
-      maxImpactParameter = CoulombDistortion::maxImpactParameter(projectile, nucleus);
-      initMaxInteractionDistance(projectile); // for forced CN events
-      delete projectile;
-    } else {
-      G4INCL::ThreeVector position(0.0, 0.0, 0.0); // Irrelevant at this point...
-      G4INCL::Particle *projectile = new G4INCL::Particle(projectileSpecies.theType, energy,
-          momentum, position);
-      maxImpactParameter = CoulombDistortion::maxImpactParameter(projectile, nucleus);
-      delete projectile;
-    }
+      theA = A;
+    initializeTarget(theA, theZ);
 
-    delete nucleus;
-    nucleus = NULL;
+    // Set the maximum impact parameter
+    maxImpactParameter = CoulombDistortion::maxImpactParameter(projectileSpecies, kineticEnergy, nucleus);
+    initMaxInteractionDistance(projectileSpecies, kineticEnergy); // for forced CN events
 
     // Set the geometric cross section
     theGlobalInfo.geometricCrossSection =
@@ -259,11 +235,6 @@ namespace G4INCL {
       const G4int targetZ
       ) {
     // Set the target and the projectile
-    if(theConfig->isNaturalTarget()) {
-      // \todo{support for natural targets}
-      FATAL("Fatal: natural targets are not supported yet." << std::endl);
-      std::exit(EXIT_FAILURE);
-    }
     targetInitSuccess = prepareReaction(projectileSpecies, kineticEnergy, targetA, targetZ);
 
     if(!targetInitSuccess) {
@@ -281,8 +252,6 @@ namespace G4INCL {
   }
 
   G4bool INCL::preCascade(ParticleSpecies const projectileSpecies, const G4double kineticEnergy) {
-    initializeTarget(theA, theZ);
-
     // Reset theEventInfo
     theEventInfo.reset();
 
@@ -500,24 +469,34 @@ namespace G4INCL {
     ThreeVector theCNMomentum = nucleus->getIncomingMomentum();
     ThreeVector theCNSpin = nucleus->getIncomingAngularMomentum();
     const G4double theTargetMass = ParticleTable::getTableMass(theEventInfo.At, theEventInfo.Zt);
-    G4double theCNEnergy = theTargetMass;
     G4int theCNA=theEventInfo.At, theCNZ=theEventInfo.Zt;
     Cluster * const theProjectileRemnant = nucleus->getProjectileRemnant();
+    G4double theCNEnergy = theTargetMass + theProjectileRemnant->getEnergy();
 
     // Loop over the potential participants
     ParticleList initialProjectileComponents = theProjectileRemnant->getParticles();
+    std::vector<Particle *> shuffledComponents(initialProjectileComponents.begin(), initialProjectileComponents.end());
+    // Shuffle the list of potential participants
+    std::random_shuffle(shuffledComponents.begin(), shuffledComponents.end(), shuffleComponentsHelper);
+
     G4bool success = true;
     G4bool atLeastOneNucleonEntering = false;
-    for(ParticleIter p=initialProjectileComponents.begin(); p!=initialProjectileComponents.end(); ++p) {
-      // Skip those nucleons that will not enter the interaction distance
+    for(std::vector<Particle*>::const_iterator p=shuffledComponents.begin(); p!=shuffledComponents.end(); ++p) {
+      // Skip geometrical spectators
+      Intersection intersectionUniverse(IntersectionFactory::getEarlierTrajectoryIntersection(
+            (*p)->getPosition(),
+            (*p)->getPropagationVelocity(),
+            maxUniverseRadius));
+      if(!intersectionUniverse.exists)
+        continue;
+
+      // At least one nucleon must enter the interaction distance
       Intersection intersectionInteraction(IntersectionFactory::getEarlierTrajectoryIntersection(
             (*p)->getPosition(),
             (*p)->getPropagationVelocity(),
             maxInteractionDistance));
-      if(!intersectionInteraction.exists)
-        continue;
-
-      atLeastOneNucleonEntering = true;
+      if(intersectionInteraction.exists)
+        atLeastOneNucleonEntering = true;
 
       // Build an entry avatar for this nucleon
       ParticleEntryAvatar theAvatar(0.0, nucleus, *p);
@@ -602,158 +581,6 @@ namespace G4INCL {
   }
 
   void INCL::rescaleOutgoingForRecoil() {
-    class RecoilFunctor : public RootFunctor {
-      public:
-        /** \brief Prepare for calling the () operator and scaleParticleEnergies
-         *
-         * The constructor sets the private class members.
-         */
-        RecoilFunctor(Nucleus * const n, const EventInfo &ei) :
-          RootFunctor(0., 1E6),
-          nucleus(n),
-          outgoingParticles(n->getStore()->getOutgoingParticles()),
-          theEventInfo(ei) {
-            for(ParticleIter p=outgoingParticles.begin(); p!=outgoingParticles.end(); ++p) {
-              particleMomenta.push_back((*p)->getMomentum());
-              particleKineticEnergies.push_back((*p)->getKineticEnergy());
-            }
-          }
-        virtual ~RecoilFunctor() {}
-
-        /** \brief Compute the energy-conservation violation.
-         *
-         * \param x scale factor for the particle energies
-         * \return the energy-conservation violation
-         */
-        G4double operator()(const G4double x) const {
-          scaleParticleEnergies(x);
-          return nucleus->getConservationBalance(theEventInfo,true).energy;
-        }
-
-        /// \brief Clean up after root finding
-        void cleanUp(const G4bool success) const {
-          if(!success)
-            scaleParticleEnergies(1.);
-        }
-
-      private:
-        /// \brief Pointer to the nucleus
-        Nucleus *nucleus;
-        /// \brief List of final-state particles.
-        ParticleList const &outgoingParticles;
-        // \brief Reference to the EventInfo object
-        EventInfo const &theEventInfo;
-        /// \brief Initial momenta of the outgoing particles
-        std::list<ThreeVector> particleMomenta;
-        /// \brief Initial kinetic energies of the outgoing particles
-        std::list<G4double> particleKineticEnergies;
-
-        /** \brief Scale the kinetic energies of the outgoing particles.
-         *
-         * \param alpha scale factor
-         */
-        void scaleParticleEnergies(const G4double rescale) const {
-          // Rescale the energies (and the momenta) of the outgoing particles.
-          ThreeVector pBalance = nucleus->getIncomingMomentum();
-          std::list<ThreeVector>::const_iterator iP = particleMomenta.begin();
-          std::list<G4double>::const_iterator iE = particleKineticEnergies.begin();
-          for( ParticleIter i = outgoingParticles.begin(); i != outgoingParticles.end(); ++i, ++iP, ++iE)
-          {
-            const G4double mass = (*i)->getMass();
-            const G4double newKineticEnergy = (*iE) * rescale;
-
-            (*i)->setMomentum(*iP);
-            (*i)->setEnergy(mass + newKineticEnergy);
-            (*i)->adjustMomentumFromEnergy();
-
-            pBalance -= (*i)->getMomentum();
-          }
-
-          nucleus->setMomentum(pBalance);
-          const G4double remnantMass = ParticleTable::getTableMass(nucleus->getA(),nucleus->getZ()) + nucleus->getExcitationEnergy();
-          const G4double pRem2 = pBalance.mag2();
-          const G4double recoilEnergy = pRem2/
-            (std::sqrt(pRem2+remnantMass*remnantMass) + remnantMass);
-          nucleus->setEnergy(remnantMass + recoilEnergy);
-        }
-    };
-
-    class RecoilCMFunctor : public RootFunctor {
-      public:
-        /** \brief Prepare for calling the () operator and scaleParticleEnergies
-         *
-         * The constructor sets the private class members.
-         */
-        RecoilCMFunctor(Nucleus * const n, const EventInfo &ei) :
-          RootFunctor(0., 1E6),
-          nucleus(n),
-          theIncomingMomentum(nucleus->getIncomingMomentum()),
-          outgoingParticles(n->getStore()->getOutgoingParticles()),
-          theEventInfo(ei) {
-            thePTBoostVector = nucleus->getIncomingMomentum()/nucleus->getInitialEnergy();
-            for(ParticleIter p=outgoingParticles.begin(); p!=outgoingParticles.end(); ++p) {
-              (*p)->boost(thePTBoostVector);
-              particleCMMomenta.push_back((*p)->getMomentum());
-            }
-          }
-        virtual ~RecoilCMFunctor() {}
-
-        /** \brief Compute the energy-conservation violation.
-         *
-         * \param x scale factor for the particle energies
-         * \return the energy-conservation violation
-         */
-        G4double operator()(const G4double x) const {
-          scaleParticleCMMomenta(x);
-          return nucleus->getConservationBalance(theEventInfo,true).energy;
-        }
-
-        /// \brief Clean up after root finding
-        void cleanUp(const G4bool success) const {
-          if(!success)
-            scaleParticleCMMomenta(1.);
-        }
-
-      private:
-        /// \brief Pointer to the nucleus
-        Nucleus *nucleus;
-        /// \brief Projectile-target CM boost vector
-        ThreeVector thePTBoostVector;
-        /// \brief Incoming momentum
-        ThreeVector theIncomingMomentum;
-        /// \brief List of final-state particles.
-        ParticleList const &outgoingParticles;
-        // \brief Reference to the EventInfo object
-        EventInfo const &theEventInfo;
-        /// \brief Initial CM momenta of the outgoing particles
-        std::list<ThreeVector> particleCMMomenta;
-
-        /** \brief Scale the kinetic energies of the outgoing particles.
-         *
-         * \param alpha scale factor
-         */
-        void scaleParticleCMMomenta(const G4double rescale) const {
-          // Rescale the CM momenta of the outgoing particles.
-          ThreeVector remnantMomentum = theIncomingMomentum;
-          std::list<ThreeVector>::const_iterator iP = particleCMMomenta.begin();
-          for( ParticleIter i = outgoingParticles.begin(); i != outgoingParticles.end(); ++i, ++iP)
-          {
-            (*i)->setMomentum(*iP * rescale);
-            (*i)->adjustEnergyFromMomentum();
-            (*i)->boost(-thePTBoostVector);
-
-            remnantMomentum -= (*i)->getMomentum();
-          }
-
-          nucleus->setMomentum(remnantMomentum);
-          const G4double remnantMass = ParticleTable::getTableMass(nucleus->getA(),nucleus->getZ()) + nucleus->getExcitationEnergy();
-          const G4double pRem2 = remnantMomentum.mag2();
-          const G4double recoilEnergy = pRem2/
-            (std::sqrt(pRem2+remnantMass*remnantMass) + remnantMass);
-          nucleus->setEnergy(remnantMass + recoilEnergy);
-        }
-    };
-
     RecoilCMFunctor theRecoilFunctor(nucleus, theEventInfo);
 
     // Apply the root-finding algorithm
@@ -905,27 +732,54 @@ namespace G4INCL {
     return nUnmergedSpectators;
   }
 
-  void INCL::initMaxInteractionDistance(Cluster const * const projectile) {
-    const G4double projectileKineticEnergyPerNucleon = projectile->getKineticEnergy()/projectile->getA();
-    const G4double r0 = nucleus->getDensity()->getCentralRadius();
+  void INCL::initMaxInteractionDistance(ParticleSpecies const &projectileSpecies, const G4double kineticEnergy) {
+    if(projectileSpecies.theType != Composite) {
+      maxInteractionDistance = 0.;
+      return;
+    }
+
+    const G4double projectileKineticEnergyPerNucleon = kineticEnergy/projectileSpecies.theA;
+    const G4double r0 = NuclearDensityFactory::createDensity(theA, theZ)->getNuclearRadius();
 
     maxInteractionDistance = r0 + CrossSections::interactionDistanceNN(projectileKineticEnergyPerNucleon);
   }
 
   void INCL::initUniverseRadius(ParticleSpecies const &p, const G4double kineticEnergy, const G4int A, const G4int Z) {
-    NuclearDensity *theDensity = NuclearDensityFactory::createDensity(A,Z);
-    if(!theDensity) {
-      FATAL("NULL density in initUniverseRadius. "
-          << "Projectile type=" << p.theType
-          << ", A=" << p.theA
-          << ", Z=" << p.theZ
-          << ", kinE=" << kineticEnergy
-          << ", target A=" << A
-          << ", Z=" << Z
-          << std::endl << std::flush);
-      std::abort();
+    G4double rMax = 0.0;
+    if(A==0) {
+      IsotopicDistribution const &anIsotopicDistribution =
+        ParticleTable::getNaturalIsotopicDistribution(Z);
+      IsotopeVector theIsotopes = anIsotopicDistribution.getIsotopes();
+      for(IsotopeIter i=theIsotopes.begin(); i!=theIsotopes.end(); ++i) {
+        NuclearDensity *theDensity = NuclearDensityFactory::createDensity(i->theA,Z);
+        if(!theDensity) {
+          FATAL("NULL density in initUniverseRadius. "
+                << "Projectile type=" << p.theType
+                << ", A=" << p.theA
+                << ", Z=" << p.theZ
+                << ", kinE=" << kineticEnergy
+                << ", target A=" << A
+                << ", Z=" << Z
+                << std::endl);
+          std::abort();
+        }
+        rMax = std::max(theDensity->getMaximumRadius(), rMax);
+      }
+    } else {
+      NuclearDensity *theDensity = NuclearDensityFactory::createDensity(A,Z);
+      if(!theDensity) {
+        FATAL("NULL density in initUniverseRadius. "
+              << "Projectile type=" << p.theType
+              << ", A=" << p.theA
+              << ", Z=" << p.theZ
+              << ", kinE=" << kineticEnergy
+              << ", target A=" << A
+              << ", Z=" << Z
+              << std::endl);
+        std::abort();
+      }
+      rMax = theDensity->getMaximumRadius();
     }
-    const G4double rMax = theDensity->getMaximumRadius();
     if(p.theType==Composite) {
       maxUniverseRadius = rMax;
     } else if(p.theType==Proton || p.theType==Neutron) {

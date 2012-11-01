@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.5
+// INCL++ revision: v5.1.6
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -82,11 +82,13 @@ namespace G4INCL {
      * \return the radius
      */
     G4double getTransmissionRadius(Particle const * const p) const {
-      if(p->getType()==Composite) {
-        return transmissionRadius.find(p->getType())->second +
+      const ParticleType t = p->getType();
+// assert(t!=Neutron && t!=PiZero && t!=DeltaZero); // no neutral particles here
+      if(t==Composite) {
+        return transmissionRadius[t] +
           ParticleTable::getNuclearRadius(p->getA(), p->getZ());
       } else
-        return transmissionRadius.find(p->getType())->second;
+        return transmissionRadius[t];
     };
 
     /** \brief The radius used for calculating the transmission coefficient.
@@ -104,30 +106,20 @@ namespace G4INCL {
     /// \brief Get the charge number.
     G4int getZ() const { return theZ; }
 
-    G4double getCentralRadius() { return theCentralRadius; }
+    G4double getNuclearRadius() { return theNuclearRadius; }
 
   private:
 
     /** \brief Initialize the transmission radius. */
     void initializeTransmissionRadii();
 
-    void initCentralRadius() {
-      const G4double theRadiusParameter = ParticleTable::getNuclearRadius(theA, theZ);
-      if(theA>=6 && theA<19) {
-        const G4double theDiffusenessParameter = ParticleTable::getSurfaceDiffuseness(theA, theZ);
-        theCentralRadius = 1.581*theDiffusenessParameter*
-          (2.+5.*theRadiusParameter)/(2.+3.*theRadiusParameter);
-      } else
-        theCentralRadius = theRadiusParameter;
-    }
-
     G4int theA, theZ;
     G4double theMaximumRadius;
     /// \brief Represents INCL4.5's R0 variable
-    G4double theCentralRadius;
+    G4double theNuclearRadius;
 
     /* \brief map of transmission radii per particle type */
-    std::map<ParticleType,G4double> transmissionRadius;
+    G4double transmissionRadius[UnknownParticle];
 
     InverseInterpolationTable *rFromP;
     InverseInterpolationTable *tFromR;

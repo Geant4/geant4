@@ -16,6 +16,13 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+27 October 2012 - Davide Mancusi (hadr-inclxx-V09-05-28)
+-----------------------------------------------------------
+- INCL++ v5.1.6
+  o Major speed improvement in cluster coalescence -- gained about a factor of
+    2 in 1-GeV p+208Pb
+  o Fix some bugs in reactions induced by composite particles
+
 9 October 2012 - Davide Mancusi (hadr-inclxx-V09-05-27)
 -----------------------------------------------------------
 - INCL++ v5.1.5

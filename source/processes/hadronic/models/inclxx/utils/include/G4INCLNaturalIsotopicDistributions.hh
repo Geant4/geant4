@@ -36,52 +36,70 @@
 
 #include "globals.hh"
 
-#include "G4INCLTransmissionChannel.hh"
+/** \file G4INCLNaturalIsotopicDistributions.hh
+ * \brief Classes that stores isotopic abundances
+ *
+ * \date 21st October 2012
+ * \author Davide Mancusi
+ */
+
+#ifndef G4INCLISOTOPICDISTRIBUTION_HH_
+#define G4INCLISOTOPICDISTRIBUTION_HH_
+
+#include <vector>
+#include <map>
 
 namespace G4INCL {
 
-  TransmissionChannel::TransmissionChannel(Nucleus *nucleus, Particle *particle)
-    : theNucleus(nucleus), theParticle(particle)
-  {}
+  /// \brief Holds an isotope and an abundance
+  struct Isotope {
+    Isotope(const G4int A, const G4double abundance);
+    G4int theA;
+    G4double theAbundance;
+  };
 
-  TransmissionChannel::~TransmissionChannel() {}
+  typedef std::vector<Isotope> IsotopeVector;
+  typedef IsotopeVector::iterator IsotopeIter;
 
-  G4double TransmissionChannel::particleLeaves() {
+  /// \brief Class that stores isotopic abundances for a given element
+  class IsotopicDistribution {
+    public:
 
-    // \todo{this is the place to add refraction}
+      /// \brief Constructor
+      IsotopicDistribution(IsotopeVector const &aVector);
 
-    // The particle energy outside the nucleus. Subtract the nuclear
-    // potential from the kinetic energy when leaving the nucleus
-    G4double kineticEnergyOutside = theParticle->getEnergy()
-      - theParticle->getPotentialEnergy()
-      - theParticle->getMass();
+      /// \brief Draw a random isotope based on the abundance vector
+      G4int drawRandomIsotope() const;
 
-    // Correction for real masses
-    const G4int AParent = theNucleus->getA();
-    const G4int ZParent = theNucleus->getZ();
-    const G4double theQValueCorrection = theParticle->getEmissionQValueCorrection(AParent,ZParent);
-    kineticEnergyOutside += theQValueCorrection;
-    theParticle->setTableMass();
+      /// \brief Get the isotope vector
+      IsotopeVector const &getIsotopes() const;
 
-    // Scaling factor for the particle momentum
-    theParticle->setEnergy(kineticEnergyOutside + theParticle->getMass());
-    theParticle->adjustMomentumFromEnergy();
-    theParticle->setPotentialEnergy(0.);
+    private:
+      IsotopeVector theIsotopes;
+  };
 
-    return theQValueCorrection;
-  }
+  /// \brief Class that stores isotopic abundances for a given element
+  class NaturalIsotopicDistributions {
+    public:
 
-  FinalState* TransmissionChannel::getFinalState() {
-    FinalState *fs = new FinalState;
-    G4double initialEnergy = 0.0;
-    initialEnergy = theParticle->getEnergy() - theParticle->getPotentialEnergy();
+      /// \brief Constructor
+      NaturalIsotopicDistributions();
 
-    // Correction for real masses
-    initialEnergy += theParticle->getTableMass() - theParticle->getMass();
+      /** \brief Draw a random isotope
+       *
+       * \param Z the element number
+       */
+      G4int drawRandomIsotope(G4int const Z) const;
 
-    const G4double theQValueCorrection = particleLeaves();
-    fs->setTotalEnergyBeforeInteraction(initialEnergy + theQValueCorrection);
-    fs->addOutgoingParticle(theParticle); // We write the particle down as outgoing
-    return fs;
-  }
+      /** \brief Get an isotopic distribution
+       *
+       * \param Z the element number
+       */
+      IsotopicDistribution const &getIsotopicDistribution(G4int const Z) const;
+
+    private:
+      std::map<G4int, IsotopicDistribution> theDistributions;
+  };
+
 }
+#endif // G4INCLISOTOPICDISTRIBUTION_HH_
