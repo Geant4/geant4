@@ -5,6 +5,12 @@
                        Package History file
                        --------------------
 
+26 October 2012 - tag dnaphysics-V09-05-06 - L. Pandola
+- Changed CMakeLists.txt to deal with VIS 
+
+26 October 2012 - tag dnaphysics-V09-05-05 - S. Incerti
+- Renamed executable.
+
 11 October 2012 - tag dnaphysics-V09-05-04 - G. Cosmo
 - Explicit inclusion of units and constants headers
 

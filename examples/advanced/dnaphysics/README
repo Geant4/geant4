@@ -40,7 +40,7 @@ The code can be compiled with gmake.
 
 In interactive mode, run:
 
-> $G4WORDIR/bin/$G4SYSTEM/DNAPhysics
+> $G4WORDIR/bin/$G4SYSTEM/dnahysics
 
 The macro dna.mac is executed by default. It shows how to shoot different 
 particle types.
