@@ -532,14 +532,15 @@ void G4TessellatedSolid::CreateVertexList()
 
 #ifdef G4SPECSDEBUG
   G4double previousValue = 0;
-  for (res=vertexListSorted.begin(); res!=vertexListSorted.end(); ++res)
+  for (set<G4VertexInfo,G4VertexComparator>::iterator res=
+       vertexListSorted.begin(); res!=vertexListSorted.end(); ++res)
   {
     G4int id = (*res).id;
     G4ThreeVector vec = fVertexList[id];
-    G4double value = abs(vec.mag());
-    if (previousValue > value) 
+    G4double mvalue = abs(vec.mag());
+    if (previousValue > mvalue) 
       G4cout << "Error!" << "\n";
-    previousValue = value;
+    previousValue = mvalue;
   }
 #endif
 }
@@ -1352,14 +1353,6 @@ G4TessellatedSolid::DistanceToInCore(const G4ThreeVector &aPoint,
       currentPoint += direction * (shift + shiftBonus);
     }
     while (fVoxels.UpdateCurrentVoxel(currentPoint, direction, curVoxel));
-
-#ifdef G4SPECSDEBUG
-    if (fabs(minDistance - distanceToInNoVoxels) > kCarTolerance)
-    {
-      EInside location = Inside(aPoint);
-      minDistance = distanceToInNoVoxels; // you can place a breakpoint here
-    }
-#endif
   }
   else
   {
@@ -1596,12 +1589,6 @@ EInside G4TessellatedSolid::Inside (const G4ThreeVector &aPoint) const
   {
     location = InsideNoVoxels(aPoint);
   }
-#ifdef G4SPECSDEBUG
-  if (location != insideNoVoxels)
-  {
-    location = insideNoVoxels; // you can place a breakpoint here
-  }
-#endif
   return location;
 }
 

@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+01-Nov-2012  G.Cosmo (geom-specific-V09-05-15)
+- Fixed compilation of debug code under G4SPECSDEBUG.
+
 01-Nov-2012  M.Gayer (geom-specific-V09-05-14)
 - Corrected signature for voxels count methods in G4SurfaceVoxelizer.
 
