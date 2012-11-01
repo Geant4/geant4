@@ -213,6 +213,12 @@ GEANT4_ADD_TEST(example-ext-exoticphysics-monopole
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/monopole
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/monopole
                 BUILD monopole ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT} )
+GEANT4_ADD_TEST(example-ext-exoticphysics-phonons
+                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/phononExample/XGeBox
+                        ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phononExample/vis.mac
+                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phononExample
+                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/phononExample
+                BUILD XGeBox ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT} )
 foreach(_i 01 02 03 04 05 06)
   GEANT4_ADD_TEST(example-ext-field-field${_i} 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/field/field${_i}/field${_i} 
@@ -432,6 +438,12 @@ GEANT4_ADD_TEST(example-adv-eRosita
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/eRosita
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/eRosita
                 BUILD eRosita ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+GEANT4_ADD_TEST(example-adv-gammaknife
+                COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/gammaknife/GammaKnife 
+                        ${CMAKE_SOURCE_DIR}/examples/advanced/gammaknife/simulation.mac
+                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/gammaknife
+                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/gammaknife
+                BUILD GammaRayTel  ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-adv-gammaray_telescope 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/gammaray_telescope/GammaRayTel 
                         ${CMAKE_SOURCE_DIR}/examples/advanced/gammaray_telescope/gammaraytel.in

@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ctests-V09-05-28 26th October 2012 Michael Kelsey
+- Add phononExample extended example using vis.mac as input.  The latter
+  should be changed to a non-graphical version when available.
+
+ctests-V09-05-27 26th October 2012 Gunter Folger
+- Add gammaknife advanced example using simulation.mac as input.
+
 ctests-V09-05-26 24th October 2012 Pere Mato
 - Moved GNUMakeTestfile.cmake from the CDash scripts to this package
   to ensure consistency of test definitions with G4 released versions.

@@ -196,6 +196,10 @@ GEANT4_ADD_TEST(example-ext-exoticphysics-monopole
                 COMMAND ${BINDIR}/monopole ${SRCDIR}/extended/exoticphysics/monopole/monopole.in
                 BUILD ${SRCDIR}/extended/exoticphysics/monopole)
 
+GEANT4_ADD_TEST(example-ext-exoticphysics-phonons
+                COMMAND ${BINDIR}/XGeBox ${SRCDIR}/extended/exoticphysics/phononExample/vis.mac
+                BUILD ${SRCDIR}/extended/exoticphysics/phononExample)
+
 foreach(_i 01 02 03 04 05)
   GEANT4_ADD_TEST(example-ext-field-field${_i} 
                   COMMAND ${BINDIR}/field${_i} ${SRCDIR}/extended/field/field${_i}/field${_i}.in
