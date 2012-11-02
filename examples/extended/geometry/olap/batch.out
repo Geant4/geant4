@@ -11,7 +11,10 @@
                             WWW : http://cern.ch/geant4
 *************************************************************
 
-<<< Geant4 Physics List simulation engine: QGSP_BIC 3.4
+OlapGrid(): 
+   gsize: 3 3 3
+New world: WorldLV
+OlapDetConstr::DeleteNewWorld(): no daughter in NewWorld!
 
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
@@ -23,7 +26,14 @@ Current available graphics systems are:
   DAWNFILE (DAWNFILE)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
+  OpenGLImmediateQt (OGLI, OGLIQt)
+  OpenGLImmediateX (OGLIX)
+  OpenGLImmediateXm (OGLIXm, OGLI_FALLBACK, OGLIQt_FALLBACK)
+  OpenGLStoredQt (OGL, OGLS, OGLSQt)
+  OpenGLStoredX (OGLSX)
+  OpenGLStoredXm (OGLSXm, OGL_FALLBACK, OGLS_FALLBACK, OGLSQt_FALLBACK)
   RayTracer (RayTracer)
+  RayTracerX (RayTracerX)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
@@ -53,4 +63,5 @@ Some /vis commands (optionally) take a string to specify colour.
 Available colours:
   black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
 
-Available UI session types: [ Qt, Xm, GAG, tcsh, csh ]
+/olap/trigger will trigger 867 events.
+Event=0 : WorldLV

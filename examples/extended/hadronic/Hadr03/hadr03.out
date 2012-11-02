@@ -11,103 +11,26 @@
                             WWW : http://cern.ch/geant4
 *************************************************************
 
-Vacuum H 1e-25 2.73 1.87245e-14
- fMaterial:Vacuum with formula: H added! 
-     Nb of fMaterial = 1
-     Nb of fIsotope =  0
-     Nb of fElement =  1
-Air N0.78-O0.22 0.00129 273.15 6.32421e+08
- fMaterial:Air with formula: N0.78-O0.22 added! 
-     Nb of fMaterial = 2
-     Nb of fIsotope =  0
-     Nb of fElement =  3
-Aluminium Al 2.7 273.15 6.32421e+08
- fMaterial:Aluminium with formula: Al added! 
-     Nb of fMaterial = 3
-     Nb of fIsotope =  0
-     Nb of fElement =  4
-Silicon Si 2.329 273.15 6.32421e+08
- fMaterial:Silicon with formula: Si added! 
-     Nb of fMaterial = 4
-     Nb of fIsotope =  0
-     Nb of fElement =  5
-Lead Pb 11.3 273.15 6.32421e+08
- fMaterial:Lead with formula: Pb added! 
-     Nb of fMaterial = 5
-     Nb of fIsotope =  0
-     Nb of fElement =  6
-Germanium Ge 5.323 273.15 6.32421e+08
- fMaterial:Germanium with formula: Ge added! 
-     Nb of fMaterial = 6
-     Nb of fIsotope =  0
-     Nb of fElement =  7
-CsI Cs-I 4.51 273.15 6.32421e+08
- fMaterial:CsI with formula: Cs-I added! 
-     Nb of fMaterial = 7
-     Nb of fIsotope =  0
-     Nb of fElement =  9
-Visualization Manager instantiating with verbosity "warnings (3)"...
-Visualization Manager initialising...
-Registering graphics systems...
+/run/verbose 2
+#
+/testhadr/det/setMat Molybdenum98
+#
+/run/initialize
+userDetector->Construct() start.
 
-You have successfully registered the following graphics systems.
-Current available graphics systems are:
-  ASCIITree (ATree)
-  DAWNFILE (DAWNFILE)
-  G4HepRep (HepRepXML)
-  G4HepRepFile (HepRepFile)
-  OpenGLImmediateQt (OGLI, OGLIQt)
-  OpenGLImmediateX (OGLIX)
-  OpenGLImmediateXm (OGLIXm, OGLI_FALLBACK, OGLIQt_FALLBACK)
-  OpenGLStoredQt (OGL, OGLS, OGLSQt)
-  OpenGLStoredX (OGLSX)
-  OpenGLStoredXm (OGLSXm, OGL_FALLBACK, OGLS_FALLBACK, OGLSQt_FALLBACK)
-  RayTracer (RayTracer)
-  RayTracerX (RayTracerX)
-  VRML1FILE (VRML1FILE)
-  VRML2FILE (VRML2FILE)
-  gMocrenFile (gMocrenFile)
+ The Box is 10 m      of Molybdenum98
+ 
+ Material: Molybdenum98    density: 10.280 g/cm3   RadL:   9.731 mm      Nucl.Int.Length:  15.682 cm      Imean: 424.000 eV 
+   --->  Element: Molybdenum98 (Mo98)   Z = 42.0   N =  98.0   A =  97.91 g/mole
+         --->  Isotope:  Mo98   Z = 42   N =  98   A =  97.91 g/mole   abundance: 100.00 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
-Registering model factories...
-
-You have successfully registered the following model factories.
-Registered model factories:
-  generic
-  drawByCharge
-  drawByParticleID
-  drawByOriginVolume
-  drawByAttribute
-
-Registered filter factories:
-  chargeFilter
-  particleFilter
-  originVolumeFilter
-  attributeFilter
-
-You have successfully registered the following user vis actions.
-Run Duration User Vis Actions: none
-End of Event User Vis Actions: none
-End of Run User Vis Actions: none
-
-Some /vis commands (optionally) take a string to specify colour.
-Available colours:
-  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
-
-
-----> The target has been changed to 3 cm of Lead
-WARNING: model G4LEDeuteronInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4LETritonInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4LEAlphaInelastic is being deprecated and will
-disappear in Geant4 version 10.0
+Molybdenum98 is registered to the default region.
+physicsList->Construct() start.
+physicsList->Construct() start.
 WARNING: model G4LENeutronInelastic is being deprecated and will
 disappear in Geant4 version 10.0
 /build/electric_commander/build/release/slc5-gcc43/data/G4NDL4.1
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /build/electric_commander/build/release/slc5-gcc43/data/G4NDL4.1/Capture/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /build/electric_commander/build/release/slc5-gcc43/data/G4NDL4.1/Elastic/CrossSection/8_17_Oxygen
-NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /build/electric_commander/build/release/slc5-gcc43/data/G4NDL4.1/Inelastic/CrossSection/8_17_Oxygen
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /build/electric_commander/build/release/slc5-gcc43/data/G4NDL4.1/Capture/CrossSection/8_17_Oxygen
 WARNING: model G4LEProtonInelastic is being deprecated and will
 disappear in Geant4 version 10.0
 WARNING: model G4LEPionPlusInelastic is being deprecated and will
@@ -186,25 +109,33 @@ WARNING: model G4LEAntiOmegaMinusInelastic is being deprecated and will
 disappear in Geant4 version 10.0
 WARNING: model G4HEAntiOmegaMinusInelastic is being deprecated and will
 disappear in Geant4 version 10.0
-### exrdmPhysicsList::ConstructProcess is done
-world cuts are set
-Target cuts are set
-Detector cuts are set
+physicsList->CheckParticleList() start.
+physicsList->setCut() start.
+#
+/process/list
+     Transportation,         hadElastic,   NeutronInelastic,           nCapture
+           nFission,    ProtonInelastic,  PionPlusInelastic, PionMinusInelastic
+  KaonPlusInelastic, KaonMinusInelastic, KaonZeroLInelastic, KaonZeroSInelastic
+AntiProtonInelastic,AntiNeutronInelastic,    LambdaInelastic,AntiLambdaInelastic
+SigmaMinusInelastic,AntiSigmaMinusInelastic, SigmaPlusInelastic,AntiSigmaPlusInelastic
+   XiMinusInelastic,AntiXiMinusInelastic,    XiZeroInelastic,AntiXiZeroInelastic
+OmegaMinusInelastic,AntiOmegaMinusInelastic,         dInelastic,         tInelastic
+       He3Inelastic,     alphaInelastic,       ionInelastic,    PhotonInelastic
 
-### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
-          DefaultRegionForTheWorld
-
-### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
-          DefaultRegionForTheWorld
+#
+/gun/particle proton
+/gun/energy 10 MeV
+#
+/run/beamOn 10000
 ============================================================================================
              HADRONIC PROCESSES SUMMARY (verbose level 1)
 
                                   Hadronic Processes for <GenericIon>
                                   -----------------------------------
-        ionInelastic  Models:     Binary Light Ion Cascade: Emin(GeV)=    0  Emax(GeV)= 20
+        ionInelastic  Models:     Binary Light Ion Cascade: Emin(GeV)=    0  Emax(GeV)= 4
+                                                      FTFP: Emin(GeV)=    2  Emax(GeV)= 100000
 
-        ionInelastic  Crs sctns:          AxenWellischIonH: Emin(GeV)=    0  Emax(GeV)= 100000
-                                                  IonsShen: Emin(GeV)=    0  Emax(GeV)= 100000
+        ionInelastic  Crs sctns: Glauber-Gribov nucleus nucleus: Emin(GeV)=    0  Emax(GeV)= 100000
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 
@@ -235,28 +166,10 @@ AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Ema
  AntiProtonInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
-          hFritiofCaptureAtRest
-
-                                  Hadronic Processes for <e+>
-                                  -----------------------------------
-     PositronNuclear  Models:      G4ElectroVDNuclearModel: Emin(GeV)=    0  Emax(GeV)= 1e+06
-
-     PositronNuclear  Crs sctns:          ElectroNuclearXS: Emin(GeV)=    0  Emax(GeV)= 100000
-                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
-
-                                  Hadronic Processes for <e->
-                                  -----------------------------------
-      ElectroNuclear  Models:      G4ElectroVDNuclearModel: Emin(GeV)=    0  Emax(GeV)= 1e+06
-
-      ElectroNuclear  Crs sctns:          ElectroNuclearXS: Emin(GeV)=    0  Emax(GeV)= 100000
-                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
-
 
                                   Hadronic Processes for <gamma>
                                   -----------------------------------
-     PhotonInelastic  Models:               BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 3.5
-                                           TheoFSGenerator: Emin(GeV)=    3  Emax(GeV)= 100000
+     PhotonInelastic  Models:               BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 10
 
      PhotonInelastic  Crs sctns:            PhotoNuclearXS: Emin(GeV)=    0  Emax(GeV)= 100000
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
@@ -269,7 +182,8 @@ AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Ema
           hadElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
    KaonPlusInelastic  Models:                         QGSP: Emin(GeV)=   12  Emax(GeV)= 100000
-                                     G4LEKaonPlusInelastic: Emin(GeV)=    0  Emax(GeV)= 25
+                                     G4LEKaonPlusInelastic: Emin(GeV)=  9.5  Emax(GeV)= 25
+                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 9.9
 
    KaonPlusInelastic  Crs sctns:  ChipsKaonPlusInelasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
@@ -282,12 +196,12 @@ AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Ema
           hadElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
   KaonMinusInelastic  Models:                         QGSP: Emin(GeV)=   12  Emax(GeV)= 100000
-                                    G4LEKaonMinusInelastic: Emin(GeV)=    0  Emax(GeV)= 25
+                                    G4LEKaonMinusInelastic: Emin(GeV)=  9.5  Emax(GeV)= 25
+                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 9.9
 
   KaonMinusInelastic  Crs sctns: ChipsKaonMinusInelasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
-          hBertiniCaptureAtRest
 
                                   Hadronic Processes for <lambda>
                                   -----------------------------------
@@ -302,9 +216,6 @@ AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Ema
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 
-                     Hadronic Processes for <mu->
-          muMinusCaptureAtRest
-
                                   Hadronic Processes for <neutron>
                                   -----------------------------------
           hadElastic  Models:                hElasticCHIPS: Emin(GeV)=    0  Emax(GeV)= 100000
@@ -314,7 +225,7 @@ AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Ema
 
     NeutronInelastic  Models:                         QGSP: Emin(GeV)=   12  Emax(GeV)= 100000
                                       G4LENeutronInelastic: Emin(GeV)=  9.5  Emax(GeV)= 25
-                                            Binary Cascade: Emin(GeV)= 0.0199  Emax(GeV)= 9.9
+                                            BertiniCascade: Emin(GeV)= 0.0199  Emax(GeV)= 9.9
                                         NeutronHPInelastic: Emin(GeV)=    0  Emax(GeV)= 0.02
 
     NeutronInelastic  Crs sctns:      NeutronHPInelasticXS: Emin(GeV)=    0  Emax(GeV)= 0.02
@@ -343,7 +254,8 @@ AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Ema
                                             GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
    PionPlusInelastic  Models:                         QGSP: Emin(GeV)=   12  Emax(GeV)= 100000
-                                     G4LEPionPlusInelastic: Emin(GeV)=    0  Emax(GeV)= 25
+                                     G4LEPionPlusInelastic: Emin(GeV)=  9.5  Emax(GeV)= 25
+                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 9.9
 
    PionPlusInelastic  Crs sctns:      G4CrossSectionPairGG: Emin(GeV)=    0  Emax(GeV)= 100000
                          G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
@@ -360,14 +272,14 @@ AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Ema
                                             GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
   PionMinusInelastic  Models:                         QGSP: Emin(GeV)=   12  Emax(GeV)= 100000
-                                    G4LEPionMinusInelastic: Emin(GeV)=    0  Emax(GeV)= 25
+                                    G4LEPionMinusInelastic: Emin(GeV)=  9.5  Emax(GeV)= 25
+                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 9.9
 
   PionMinusInelastic  Crs sctns:      G4CrossSectionPairGG: Emin(GeV)=    0  Emax(GeV)= 100000
                          G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
                            below 91 GeV, Glauber-Gribov above 
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
-          hBertiniCaptureAtRest
 
                                   Hadronic Processes for <proton>
                                   -----------------------------------
@@ -378,58 +290,106 @@ AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Ema
 
      ProtonInelastic  Models:                         QGSP: Emin(GeV)=   12  Emax(GeV)= 100000
                                        G4LEProtonInelastic: Emin(GeV)=  9.5  Emax(GeV)= 25
-                                            Binary Cascade: Emin(GeV)=    0  Emax(GeV)= 9.9
+                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 9.9
 
      ProtonInelastic  Crs sctns:       Barashenkov-Glauber: Emin(GeV)=    0  Emax(GeV)= 100000
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 ============================================================================================
 
+Region <DefaultRegionForTheWorld> --  -- appears in <Molybdenum98> world volume
+ This region is in the mass world.
+ Root logical volume(s) : Molybdenum98 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Molybdenum98 
+ Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 0 fm    
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 0 fm    
+
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
+ Material : Molybdenum98
+ Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 0 fm    
+ Energy thresholds :  gamma  42.9443 keV    e-  1.44302 MeV    e+  1.36749 MeV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma  10 cm        e-  10 cm        e+  10 cm     proton 10 cm    
- Energy thresholds :  gamma  2.10237 MeV    e-  430.674 MeV    e+  408.132 MeV proton 10 MeV
- Region(s) which use this couple : 
-    Target
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Germanium
- Range cuts        :  gamma  50 cm        e-  50 cm        e+  50 cm     proton 50 cm    
- Energy thresholds :  gamma  10 GeV    e-  1.83883 GeV    e+  1.74258 GeV proton 50 MeV
- Region(s) which use this couple : 
-    Detector
-
 ====================================================================
 
-Root file: proton.root
-ROOT Histo H10 Energy deposit (MeV) in the traget booked 
-ROOT Histo H11 Energy deposit (MeV) in the detector booked 
-ROOT Histo H12 Total energy spectrum (MeV) of the traget and detector booked 
-ROOT Histo H13 Coincidence spectrum (MeV) between the traget and detector booked 
-ROOT Histo H14 Anti-coincidence spectrum (MeV) in the traget booked 
-ROOT Histo H15 Anti-coincidence spectrum (MeV) in the detector booked 
-ROOT Histo H16 Decay emission spectrum (MeV) booked 
-Creating Ntuple T1 in ROOT file: Emitted Particles
-ROOT Ntuple tT1 Emitted Particles PID:Energy:Time:Weight booked 
-Creating Ntuple T2 in ROOT file: RadioIsotopes
-ROOT Ntuple tT2 RadioIsotopes PID:Time:Weight booked 
-Creating Ntuple T3 in ROOT file: Energy Depositions
-ROOT Ntuple tT3 Energy Depositions Energy:Time:Weight booked 
-Creating Ntuple RDecayProducts in ROOT file: All Products of RDecay
-ROOT Ntuple tRDecayProducts All Products of RDecay PID:Z:A:Energy:Time:Weight booked 
-exrdmAnalysisManager: Histograms are booked and the run has been started
-### Run : 0
-ROOT: files writing...
-ROOT: files closing...
-exrdmAnalysisManager: Histograms have been saved!
-Graphics systems deleted.
-Visualization Manager deleting...
+Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   0 kByte
+    Total CPU time elapsed for geometry optimisation: 0 seconds
+### Run 0 start.
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 9876, 54321
+----------------------------------------
+Start Run processing.
+
+---> Begin of Event: 0
+Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=0.62s Real=0.62s Sys=0.01s
+
+ The run consists of 10000 proton of 10 MeV through 10 m      of Molybdenum98 (density: 10.28 g/cm3 )
+
+ Process calls frequency --->	hadElastic= 7753	ProtonInelastic= 2247
+
+ MeanFreePath:	4.8109 cm     +- 4.8064 cm    	massic: 49.456 g/cm2 
+ CrossSection:	0.20786 cm^-1 		massic: 2.022 mm2/g 
+
+ Verification : crossSections from G4HadronicProcessStore:
+    hadElastic= 1.5534 mm2/g 
+    ProtonInelastic= 448.03 um2/mg
+    total = 2.0014 mm2/g 
+
+   List of nuclear reactions: 
+
+             proton + Mo98 --> 2 neutron + Tc97[0.0]:      58   Q = -9.8053 MeV
+   proton + Mo98 --> N gamma + 2 neutron + Tc97[0.0]:      11   Q = -9.7858 MeV
+     proton + Mo98 --> N gamma + neutron + Tc98[0.0]:    2141   Q = -2.5097 MeV
+      proton + Mo98 --> N gamma + proton + Mo98[0.0]:      33   Q = -40.455 keV
+                         proton + Mo98 --> Tc99[0.0]:       1   Q = -9.8976 MeV
+               proton + Mo98 --> neutron + Tc98[0.0]:       3   Q = -3.0793 MeV
+                         proton + Mo98 --> proton + :     462   Q = -485.13 eV 
+                proton + Mo98 --> proton + Mo98[0.0]:    7291   Q = 1.9754e-06 eV 
+
+                                     Number of gamma: N = 1 --> 6
+
+   List of generated particles: 
+
+      Mo98[0.0]:    7324  Emean =  34.162 keV	( 1 keV --> 404.37 keV)
+      Tc97[0.0]:      69  Emean =  100.82 keV	( 76.949 keV --> 124.92 keV)
+      Tc98[0.0]:    2144  Emean =  114.89 keV	( 9.3637 keV --> 324.72 keV)
+      Tc99[0.0]:       1  Emean =  102.39 keV	( 102.39 keV --> 102.39 keV)
+          gamma:    7344  Emean =  1.7213 MeV	( 34.057 keV --> 7.1101 MeV)
+        neutron:    2282  Emean =  1.4264 MeV	( 437.76 eV  --> 7.1075 MeV)
+         proton:      33  Emean =  7.4702 MeV	( 4.8922 MeV --> 8.9384 MeV)
+
+   Momentum balance: Pmean =  408.94 keV	( 5.2599e-07 eV  --> 13.497 MeV) 
+
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 1671750052, 194941303
+----------------------------------------
+G4 kernel has come to Quit state.
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserRunAction deleted.
+UserPrimaryGenerator deleted.
+EventManager deleted.
+UImanager deleted.
+Units table cleared.
+StateManager deleted.
+RunManagerKernel is deleted.
+RunManager is deleted.
