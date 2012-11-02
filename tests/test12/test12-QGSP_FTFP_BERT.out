@@ -11,15 +11,20 @@
                             WWW : http://cern.ch/geant4
 *************************************************************
 
-<<< Geant4 Physics List simulation engine: FTFP_BERT 1.3
+<<< Geant4 Physics List simulation engine: QGSP_FTFP_BERT 3.6
 
-Test12 using physics list FTFP_BERT (default)
+Test12 using physics list QGSP_FTFP_BERT
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 # /run/verbose 2
 /run/setCut 1 m
 /run/initialize
  Material Pbnot found, using Pb
+ New QGSP_FTFP_BERT physics list, replaces LEP with FTF/P for p/n/pi (/K?)  Thresholds: 
+    1) between BERT  and FTF/P over the interval 6 to 8 GeV. 
+    2) between FTF/P and QGS/P over the interval 12 to 25 GeV. 
+  -- quasiElastic was asked to be 1
+     Changed to 1 for QGS  and to 0 (must be false) for FTF
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 /gun/direction 1 0 0
 #
@@ -417,10 +422,12 @@ AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Ema
 
           hadElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
-   KaonPlusInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
-                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 5
+   KaonPlusInelastic  Models:                         QGSP: Emin(GeV)=   12  Emax(GeV)= 100000
+                                                      FTFP: Emin(GeV)=    6  Emax(GeV)= 25
+                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 8
 
-   KaonPlusInelastic  Crs sctns:  ChipsKaonPlusInelasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
+   KaonPlusInelastic  Crs sctns:          CHIPSInelasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
+                                  ChipsKaonPlusInelasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 
@@ -430,10 +437,12 @@ AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Ema
 
           hadElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
-  KaonMinusInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
-                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 5
+  KaonMinusInelastic  Models:                         QGSP: Emin(GeV)=   12  Emax(GeV)= 100000
+                                                      FTFP: Emin(GeV)=    6  Emax(GeV)= 25
+                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 8
 
-  KaonMinusInelastic  Crs sctns: ChipsKaonMinusInelasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
+  KaonMinusInelastic  Crs sctns:          CHIPSInelasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
+                                 ChipsKaonMinusInelasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
           hBertiniCaptureAtRest
@@ -461,10 +470,12 @@ AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Ema
           hadElastic  Crs sctns:     ChipsNeutronElasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
                                             GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
-    NeutronInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
-                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 5
+    NeutronInelastic  Models:                         QGSP: Emin(GeV)=   12  Emax(GeV)= 100000
+                                                      FTFP: Emin(GeV)=    6  Emax(GeV)= 25
+                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 8
 
     NeutronInelastic  Crs sctns:       Barashenkov-Glauber: Emin(GeV)=    0  Emax(GeV)= 100000
+                                       Barashenkov-Glauber: Emin(GeV)=    0  Emax(GeV)= 100000
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
             nCapture  Models:                   G4LCapture: Emin(GeV)=    0  Emax(GeV)= 20000
@@ -484,10 +495,14 @@ AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Ema
           hadElastic  Crs sctns:       Barashenkov-Glauber: Emin(GeV)=    0  Emax(GeV)= 100000
                                             GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
-   PionPlusInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
-                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 5
+   PionPlusInelastic  Models:                         QGSP: Emin(GeV)=   12  Emax(GeV)= 100000
+                                                      FTFP: Emin(GeV)=    6  Emax(GeV)= 25
+                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 8
 
    PionPlusInelastic  Crs sctns:      G4CrossSectionPairGG: Emin(GeV)=    0  Emax(GeV)= 100000
+                         G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
+                           below 91 GeV, Glauber-Gribov above 
+                                      G4CrossSectionPairGG: Emin(GeV)=    0  Emax(GeV)= 100000
                          G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
                            below 91 GeV, Glauber-Gribov above 
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
@@ -501,10 +516,14 @@ AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Ema
           hadElastic  Crs sctns:       Barashenkov-Glauber: Emin(GeV)=    0  Emax(GeV)= 100000
                                             GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
-  PionMinusInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
-                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 5
+  PionMinusInelastic  Models:                         QGSP: Emin(GeV)=   12  Emax(GeV)= 100000
+                                                      FTFP: Emin(GeV)=    6  Emax(GeV)= 25
+                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 8
 
   PionMinusInelastic  Crs sctns:      G4CrossSectionPairGG: Emin(GeV)=    0  Emax(GeV)= 100000
+                         G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
+                           below 91 GeV, Glauber-Gribov above 
+                                      G4CrossSectionPairGG: Emin(GeV)=    0  Emax(GeV)= 100000
                          G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
                            below 91 GeV, Glauber-Gribov above 
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
@@ -518,18 +537,16 @@ AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Ema
           hadElastic  Crs sctns:      ChipsProtonElasticXS: Emin(GeV)=    0  Emax(GeV)= 100000
                                             GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
-     ProtonInelastic  Models:                         FTFP: Emin(GeV)=    4  Emax(GeV)= 100000
-                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 5
+     ProtonInelastic  Models:                         QGSP: Emin(GeV)=   12  Emax(GeV)= 100000
+                                                      FTFP: Emin(GeV)=    6  Emax(GeV)= 25
+                                            BertiniCascade: Emin(GeV)=    0  Emax(GeV)= 8
 
      ProtonInelastic  Crs sctns:       Barashenkov-Glauber: Emin(GeV)=    0  Emax(GeV)= 100000
+                                       Barashenkov-Glauber: Emin(GeV)=    0  Emax(GeV)= 100000
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
 ============================================================================================
-G4Fragment::CalculateExcitationEnergy(): WARNING 
-Fragment: A = 170, Z =  65, U = -4.194e+00 MeV  IsStable= 1
-          P = (8.806e+02,-2.062e+02,-1.152e+03) MeV   E = 1.583e+05 MeV
-
-   time(s) spent user  time: 23.28s, wall time: 23.55s
+   time(s) spent user  time: 11.16s, wall time: 11.26s
 #
 # neutron at 100 GeV in Pb
 #
@@ -539,7 +556,7 @@ Fragment: A = 170, Z =  65, U = -4.194e+00 MeV  IsStable= 1
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
-   time(s) spent user  time: 20.33s, wall time: 20.61s
+   time(s) spent user  time: 9.2s, wall time: 9.22s
 #
 # pi+ at 100 GeV in Pb
 #
@@ -549,7 +566,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
-   time(s) spent user  time: 17.95s, wall time: 18.01s
+   time(s) spent user  time: 7.9s, wall time: 7.92s
 #
 # pi- at 100 GeV in Pb
 #
@@ -559,7 +576,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
-   time(s) spent user  time: 17.01s, wall time: 17.32s
+   time(s) spent user  time: 8.77s, wall time: 8.78s
 #
 # kaon+ at 100 GeV in Pb
 #
@@ -569,7 +586,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
-   time(s) spent user  time: 17.75s, wall time: 18.06s
+   time(s) spent user  time: 8.22s, wall time: 8.23s
 #
 # kaon- at 100 GeV in Pb
 #
@@ -579,7 +596,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
-   time(s) spent user  time: 18.25s, wall time: 18.29s
+   time(s) spent user  time: 7.12s, wall time: 7.13s
 #
 # kaon0S at 100 GeV in Pb
 #
@@ -589,7 +606,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
-   time(s) spent user  time: 18.57s, wall time: 18.79s
+   time(s) spent user  time: 7.85s, wall time: 7.86s
 #
 # kaon0L at 100 GeV in Pb
 #
@@ -599,7 +616,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
-   time(s) spent user  time: 17.69s, wall time: 17.68s
+   time(s) spent user  time: 7.12s, wall time: 7.12s
 #
 # proton at 100 GeV in Al
 #
@@ -924,7 +941,7 @@ hPairProd:   for  pi+    SubType= 4
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
-   time(s) spent user  time: 2.28s, wall time: 2.33s
+   time(s) spent user  time: 1.88s, wall time: 1.89s
 #
 # neutron at 100 GeV in Al
 #
@@ -933,7 +950,7 @@ hPairProd:   for  pi+    SubType= 4
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
-   time(s) spent user  time: 1.76s, wall time: 1.77s
+   time(s) spent user  time: 1.14s, wall time: 1.13s
 #
 # pi+ at 100 GeV in Al
 #
@@ -942,7 +959,11 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
-   time(s) spent user  time: 1.46s, wall time: 1.46s
+G4Fragment::CalculateExcitationEnergy(): WARNING 
+Fragment: A =  26, Z =  12, U = -7.800e-01 MeV  IsStable= 1
+          P = (-1.278e+02,-4.323e+01,-1.501e+02) MeV   E = 2.420e+04 MeV
+
+   time(s) spent user  time: 0.83s, wall time: 0.83s
 #
 # pi- at 100 GeV in Al
 #
@@ -951,7 +972,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
-   time(s) spent user  time: 1.37s, wall time: 1.37s
+   time(s) spent user  time: 1.02s, wall time: 1.03s
 #
 # kaon+ at 100 GeV in Al
 #
@@ -960,7 +981,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
-   time(s) spent user  time: 1.39s, wall time: 1.4s
+   time(s) spent user  time: 0.86s, wall time: 0.86s
 #
 # kaon- at 100 GeV in Al
 #
@@ -969,7 +990,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
-   time(s) spent user  time: 1.38s, wall time: 1.38s
+   time(s) spent user  time: 0.83s, wall time: 0.83s
 #
 # kaon0S at 100 GeV in Al
 #
@@ -978,7 +999,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
-   time(s) spent user  time: 1.44s, wall time: 1.43s
+   time(s) spent user  time: 0.85s, wall time: 0.85s
 #
 # kaon0L at 100 GeV in Al
 #
@@ -987,7 +1008,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
-   time(s) spent user  time: 1.3s, wall time: 1.31s
+   time(s) spent user  time: 0.81s, wall time: 0.82s
 #
 # proton at 100 GeV in Air
 #
@@ -1312,7 +1333,7 @@ hPairProd:   for  pi+    SubType= 4
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
-   time(s) spent user  time: 0s, wall time: 0s
+   time(s) spent user  time: 0s, wall time: 0.01s
 #
 # neutron at 100 GeV in Air
 #
@@ -1348,7 +1369,7 @@ SimpleBox is now made of Air
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
 /run/beamOn 100
-   time(s) spent user  time: 0.01s, wall time: 0s
+   time(s) spent user  time: 0s, wall time: 0s
 #
 # kaon- at 100 GeV in Air
 #
@@ -1357,7 +1378,7 @@ SimpleBox is now made of Air
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
 /run/beamOn 100
-   time(s) spent user  time: 0s, wall time: 0s
+   time(s) spent user  time: 0.01s, wall time: 0s
 #
 # kaon0S at 100 GeV in Air
 #
@@ -1366,7 +1387,7 @@ SimpleBox is now made of Air
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
 /run/beamOn 100
-   time(s) spent user  time: 0s, wall time: 0s
+   time(s) spent user  time: 0s, wall time: 0.01s
 #
 # kaon0L at 100 GeV in Air
 #
@@ -1385,7 +1406,7 @@ SimpleBox is now made of Air
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 5
-   time(s) spent user  time: 0.2s, wall time: 0.2s
+   time(s) spent user  time: 0.17s, wall time: 0.17s
 #
 # anti_neutron at 10 GeV in Pb
 #
@@ -1395,7 +1416,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 5
-   time(s) spent user  time: 0.34s, wall time: 0.34s
+   time(s) spent user  time: 0.22s, wall time: 0.22s
 #
 # anti_deuteron at 10 GeV in Pb
 #
@@ -1405,7 +1426,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 5
-   time(s) spent user  time: 0.02s, wall time: 0.02s
+   time(s) spent user  time: 0.04s, wall time: 0.04s
 #
 # anti_triton at 10 GeV in Pb
 #
@@ -1415,7 +1436,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 5
-   time(s) spent user  time: 0.01s, wall time: 0.01s
+   time(s) spent user  time: 0s, wall time: 0s
 #
 # anti_He3 at 10 GeV in Pb
 #
@@ -1425,7 +1446,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 5
-   time(s) spent user  time: 0s, wall time: 0s
+   time(s) spent user  time: 0.03s, wall time: 0.03s
 #
 # anti_alpha at 10 GeV in Pb
 #
@@ -1444,7 +1465,7 @@ SimpleBox is now made of Pb
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 5
-   time(s) spent user  time: 0.01s, wall time: 0.01s
+   time(s) spent user  time: 0.01s, wall time: 0.02s
 #
 # anti_neutron at 10 GeV in Al
 #
@@ -1453,7 +1474,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 5
-   time(s) spent user  time: 0s, wall time: 0.01s
+   time(s) spent user  time: 0.03s, wall time: 0.02s
 #
 # anti_deuteron at 10 GeV in Al
 #
@@ -1462,7 +1483,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 5
-   time(s) spent user  time: 0.02s, wall time: 0.02s
+   time(s) spent user  time: 0.01s, wall time: 0.02s
 #
 # anti_triton at 10 GeV in Al
 #
@@ -1543,4 +1564,4 @@ SimpleBox is now made of Air
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
 /run/beamOn 5
-   time(s) spent user  time: 0s, wall time: 0s
+   time(s) spent user  time: 0.01s, wall time: 0.01s

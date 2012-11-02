@@ -2,9 +2,10 @@
         ############################################
         !!! WARNING - FPE detection is activated !!!
         ############################################
++++ G4StackManager uses G4SmartTrackStack. +++
 
 *************************************************************
- Geant4 version Name: geant4-09-04-beta-cand-02    (25-June-2010)
+ Geant4 version Name: geant4-09-05-ref-10    (2-November-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -21,29 +22,36 @@
 /testem/phys/addPhysics standardISS
 PhysicsList::AddPhysicsList: <standardISS>
 #
-/testem/phys/setCuts 1 cm
-#
 /run/initialize
 userDetector->Construct() start.
 
- Material: Galactic     density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 114561548.020 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
-   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204727512.315 parsec  Nucl.Int.Length: 114561548.020 parsec  Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
+   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
- Material:    G4_Si     density:  2.330 g/cm3   RadL:   9.366 cm   Nucl.Int.Length:  45.753 cm   Imean: 173.000 eV 
+
+ Material:    G4_Si    density:  2.330 g/cm3   RadL:   9.366 cm      Nucl.Int.Length:  45.753 cm      Imean: 173.000 eV 
    --->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole
-   --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
-   --->  Isotope:  Si29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
-   --->  Isotope:  Si30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+         --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
+         --->  Isotope:  Si29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
+         --->  Isotope:  Si30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
- The  WORLD   is made of 150 um  of Galactic. The transverse size (YZ) of the world is 1.2 cm 
- The ABSORBER is made of 100 um  of G4_Si. The transverse size (YZ) is 1 cm 
- X position of the middle of the absorber 0 fm 
+
+ The  WORLD   is made of 150 um     of Galactic. The transverse size (YZ) of the world is 1.2 cm    
+ The ABSORBER is made of 100 um     of G4_Si. The transverse size (YZ) is 1 cm    
+ X position of the middle of the absorber 0 fm    
 World is registered to the default region.
 physicsList->Construct() start.
 physicsList->Construct() start.
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
-PhysicsList::SetCuts:CutLength : 1 mm 
+#
+/run/setCut 1 cm
+#
+/run/setCutForAGivenParticle proton 1 nm
 #
 /testem/stack/killSecondaries
 /testem/gun/setDefault
@@ -53,220 +61,250 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /run/beamOn 100
 
 phot:   for  gamma    SubType= 12
+      LambdaPrime table from 200 keV to 10 TeV in 54 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :   Emin=        0 eV       Emax=         10 TeV
+       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila
 
 compt:   for  gamma    SubType= 13
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
+      LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       Klein-Nishina :   Emin=        0 eV       Emax=         10 TeV
+       Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
 conv:   for  gamma    SubType= 14
-      Lambda tables from 1.022 MeV to 10 TeV in 77 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :   Emin=        0 eV       Emax=         10 TeV
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :   Emin=        0 eV       Emax=         10 TeV
+        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
 
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
 CoulombScat:   for  e-    SubType= 1
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      0 < Theta(degree) < 180, Eth(MeV)= 10000; pLimit(GeV^1)= 0.139531
+      Lambda table from 100 eV  to 10 TeV in 77 bins, spline: 1
+      0 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
+eSingleCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :   Emin=        0 eV       Emax=         10 TeV
+        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
 
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
-            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
 annihil:   for  e+    SubType= 5
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            eplus2gg :   Emin=        0 eV       Emax=         10 TeV
+            eplus2gg :  Emin=        0 eV    Emax=       10 TeV
 
 CoulombScat:   for  e+    SubType= 1
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      0 < Theta(degree) < 180, Eth(MeV)= 10000; pLimit(GeV^1)= 0.139531
+      Lambda table from 100 eV  to 10 TeV in 77 bins, spline: 1
+      0 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
+eSingleCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :   Emin=        0 eV       Emax=          2 MeV
-          BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
+               Bragg :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
 
 CoulombScat:   for  proton    SubType= 1
-      0 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      0 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :   Emin=        0 eV       Emax=        100 keV
-IonCoulombScattering :   Emin=      100 keV      Emax=         10 TeV
+  eCoulombScattering :  Emin=        0 eV    Emax=      100 keV
+IonCoulombScattering :  Emin=      100 keV   Emax=       10 TeV
 
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            BraggIon :   Emin=        0 eV       Emax=          2 MeV
-          BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
+            BraggIon :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
 
 CoulombScat:   for  GenericIon    SubType= 1
-      0 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      0 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :   Emin=        0 eV       Emax=        100 keV
-IonCoulombScattering :   Emin=      100 keV      Emax=         10 TeV
+  eCoulombScattering :  Emin=        0 eV    Emax=      100 keV
+IonCoulombScattering :  Emin=      100 keV   Emax=       10 TeV
+
+ionIoni:   for  alpha    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV
+          BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
+
+msc:   for anti_proton    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :   Emin=        0 eV       Emax=          2 MeV
-          BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
 
 msc:   for kaon+    SubType= 10
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :   Emin=        0 eV       Emax=         10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :   Emin=        0 eV       Emax=    1.05231 MeV
-          BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
+               Bragg :  Emin=        0 eV    Emax=  1.05231 MeV
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
+
+msc:   for kaon-    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :   Emin=        0 eV       Emax=    1.05231 MeV
-          BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :   Emin=        0 eV       Emax=        200 keV
-          BetheBloch :   Emin=      200 keV      Emax=          1 GeV
-        MuBetheBloch :   Emin=        1 GeV      Emax=         10 TeV
+               Bragg :  Emin=        0 eV    Emax=      200 keV
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
 
 muBrems:   for  mu+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :   Emin=        0 eV       Emax=         10 TeV
+              MuBrem :  Emin=        0 eV    Emax=       10 TeV
 
 muPairProd:   for  mu+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :   Emin=        0 eV       Emax=         10 TeV
+          muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 CoulombScat:   for  mu+    SubType= 1
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      0 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      Lambda table from 100 eV  to 10 TeV in 77 bins, spline: 1
+      0 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
 muIoni:   for  mu-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :   Emin=        0 eV       Emax=        200 keV
-          BetheBloch :   Emin=      200 keV      Emax=          1 GeV
-        MuBetheBloch :   Emin=        1 GeV      Emax=         10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=      200 keV
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
 
 muBrems:   for  mu-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :   Emin=        0 eV       Emax=         10 TeV
+              MuBrem :  Emin=        0 eV    Emax=       10 TeV
 
 muPairProd:   for  mu-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :   Emin=        0 eV       Emax=         10 TeV
+          muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 CoulombScat:   for  mu-    SubType= 1
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      0 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      Lambda table from 100 eV  to 10 TeV in 77 bins, spline: 1
+      0 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for pi+    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :   Emin=        0 eV       Emax=    297.505 keV
-          BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
+               Bragg :  Emin=        0 eV    Emax=  297.505 keV
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
 
 msc:   for pi-    SubType= 10
-      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc90 :   Emin=        0 eV       Emax=         10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :   Emin=        0 eV       Emax=    297.505 keV
-          BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
 
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
+ This region is in the mass world.
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Galactic G4_Si 
- Production cuts :   gamma 1 cm      e- 1 cm      e+ 1 cm  proton 0 fm 
+ Production cuts :   gamma 1 cm         e- 1 cm         e+ 1 cm     proton 1 nm    
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 1 cm         e- 1 cm         e+ 1 cm     proton 1 nm    
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Galactic
- Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 0 fm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0 eV 
+ Range cuts        :  gamma  1 cm        e-  1 cm        e+  1 cm     proton 1 nm    
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0.1 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Si
- Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 0 fm 
- Energy thresholds :  gamma  20.6438 keV    e-  4.00759 MeV    e+  3.79783 MeV proton 0 eV 
+ Range cuts        :  gamma  1 cm        e-  1 cm        e+  1 cm     proton 1 nm    
+ Energy thresholds :  gamma  20.6438 keV    e-  4.00759 MeV    e+  3.79783 MeV proton 0.1 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -289,11 +327,11 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.59s Real=1.6s Sys=0s
+  User=1.28s Real=1.3s Sys=0s
 
  ======================== run summary ======================
 
- The run was 100 proton of 20 MeV, through 100 um  of G4_Si
+ The run was 100 proton of 20 MeV, through 100 um     of G4_Si
  (density: 2.33 g/cm3 )
 
  Threshold Energy for displacement 
@@ -302,43 +340,43 @@ Run Summary
  ============= Primary particle statistics ==============
 
  Total track length in absorber:
- 99.97 um  +- 3.969 nm 
+ 100 um     +- 8.095 nm    
 
  Mean Number of Steps :
- 2906 +/- 4.857
+ 3477 +/- 8.592
 
  Mean Free Path :
- 34.4 nm  +/- 5.75e+04 fm 
+ 28.76 nm     +/- 7.109e+04 fm    
 
  Mean Cross Section :
- 5.819e+06 barn   +/- 9727 barn  
+ 6.96e+06 barn   +/- 1.721e+04 barn  
 
  Mean scattering angle :
- 12.5 mrad +/- 0.647 mrad
+ 1.2 deg  +/- 2.075 mrad
 
  Total energy deposit in absorber:
- 471.7 keV +/- 3.502 keV
------> dE/dx total= 47.18 MeV/cm	(20.25 MeV*cm2/g)
+ 11.38 MeV +/- 49.84 keV
+-----> dE/dx total= 1138 MeV/cm	(488.3 MeV*cm2/g)
 
  Nuclear energy deposit in absorber:
- 124.3 eV  +/- 6.797 eV 
------> dE/dx  nucl = 0.01243 MeV/cm	(0.005335 MeV*cm2/g)
+ 10.74 MeV +/- 48.71 keV
+-----> dE/dx  nucl = 1074 MeV/cm	(460.8 MeV*cm2/g)
 
  NIEL in absorber (Th>21 eV):
- 30.95 eV  +/- 5.157 eV 
------> NIEL = 0.003096 MeV/cm	(0.001329 MeV*cm2/g)
+ 0.0001992 eV  +/- 0 eV 
+-----> NIEL = 1.992e-08 MeV/cm	(8.551e-09 MeV*cm2/g)
 
 ----------------------------------------------------------------
 
- Total Number of primary knock-on atoms: PKA = 55
- Mean Kinetic Energy of PKA = 66.42 eV  +/- 9.649 eV 
- Total Frenkel-pairs Concentration: FP = 5898 #/cm3
+ Total Number of primary knock-on atoms: PKA = 27163
+ Mean Kinetic Energy of PKA = 39.52 keV +/- 0 eV 
+ Total Frenkel-pairs Concentration: FP = 0.03795 #/cm3
 
 ----------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 451917554, 906021814
+ Current couple of seeds = 771886846, 1344814257
 ----------------------------------------
 
  ===========================================================
@@ -347,25 +385,32 @@ Run Summary
 /gun/energy 80 MeV
 /run/beamOn 100
 
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
+ This region is in the mass world.
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Galactic G4_Si 
- Production cuts :   gamma 1 cm      e- 1 cm      e+ 1 cm  proton 0 fm 
+ Production cuts :   gamma 1 cm         e- 1 cm         e+ 1 cm     proton 1 nm    
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 1 cm         e- 1 cm         e+ 1 cm     proton 1 nm    
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Galactic
- Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 0 fm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0 eV 
+ Range cuts        :  gamma  1 cm        e-  1 cm        e+  1 cm     proton 1 nm    
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0.1 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Si
- Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 0 fm 
- Energy thresholds :  gamma  20.64 keV    e-  4.008 MeV    e+  3.798 MeV proton 0 eV 
+ Range cuts        :  gamma  1 cm        e-  1 cm        e+  1 cm     proton 1 nm    
+ Energy thresholds :  gamma  20.64 keV    e-  4.008 MeV    e+  3.798 MeV proton 0.1 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -375,7 +420,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 451917554, 906021814
+ Current couple of seeds = 771886846, 1344814257
 ----------------------------------------
 Start Run processing.
 
@@ -383,11 +428,11 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.33s Real=2.34s Sys=0s
+  User=5.07s Real=5.13s Sys=0.01s
 
  ======================== run summary ======================
 
- The run was 100 alpha of 80 MeV, through 100 um  of G4_Si
+ The run was 100 alpha of 80 MeV, through 100 um     of G4_Si
  (density: 2.33 g/cm3 )
 
  Threshold Energy for displacement 
@@ -396,43 +441,43 @@ Run Summary
  ============= Primary particle statistics ==============
 
  Total track length in absorber:
- 99.95 um  +- 4.423 nm 
+ 99.29 um     +- 184.1 nm    
 
  Mean Number of Steps :
- 3126 +/- 5.828
+ 1.19e+04 +/- 1616
 
  Mean Free Path :
- 31.97 nm  +/- 5.963e+04 fm 
+ 8.342 nm     +/- 1.133 nm    
 
  Mean Cross Section :
- 6.26e+06 barn   +/- 1.167e+04 barn  
+ 2.4e+07 barn   +/- 3.258e+06 barn  
 
  Mean scattering angle :
- 5.742 mrad +/- 0.289 mrad
+ 21.91 deg  +/- 3.804 deg 
 
  Total energy deposit in absorber:
- 1.865 MeV +/- 4.854 keV
------> dE/dx total= 186.6 MeV/cm	(80.1 MeV*cm2/g)
+ 78.59 MeV +/- 129.6 keV
+-----> dE/dx total= 7915 MeV/cm	(3397 MeV*cm2/g)
 
  Nuclear energy deposit in absorber:
- 506.7 eV  +/- 29.35 eV 
------> dE/dx  nucl = 0.05069 MeV/cm	(0.02176 MeV*cm2/g)
+ 71.29 MeV +/- 51.1 keV
+-----> dE/dx  nucl = 7180 MeV/cm	(3082 MeV*cm2/g)
 
  NIEL in absorber (Th>21 eV):
- 175.7 eV  +/- 16.5 eV 
------> NIEL = 0.01758 MeV/cm	(0.007545 MeV*cm2/g)
+ 0.0004627 eV  +/- 0 eV 
+-----> NIEL = 4.66e-08 MeV/cm	(2e-08 MeV*cm2/g)
 
 ----------------------------------------------------------------
 
- Total Number of primary knock-on atoms: PKA = 214
- Mean Kinetic Energy of PKA = 99.23 eV  +/- 12.39 eV 
- Total Frenkel-pairs Concentration: FP = 3.349e+04 #/cm3
+ Total Number of primary knock-on atoms: PKA = 224170
+ Mean Kinetic Energy of PKA = 31.8 keV +/- 0 eV 
+ Total Frenkel-pairs Concentration: FP = 0.08875 #/cm3
 
 ----------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1684757445, 757096476
+ Current couple of seeds = 2045185342, 343322745
 ----------------------------------------
 
  ===========================================================
@@ -442,25 +487,32 @@ Run Summary
 /gun/energy 560 MeV
 /run/beamOn 100
 
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
+ This region is in the mass world.
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Galactic G4_Si 
- Production cuts :   gamma 1 cm      e- 1 cm      e+ 1 cm  proton 0 fm 
+ Production cuts :   gamma 1 cm         e- 1 cm         e+ 1 cm     proton 1 nm    
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 1 cm         e- 1 cm         e+ 1 cm     proton 1 nm    
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Galactic
- Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 0 fm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0 eV 
+ Range cuts        :  gamma  1 cm        e-  1 cm        e+  1 cm     proton 1 nm    
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0.1 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Si
- Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 0 fm 
- Energy thresholds :  gamma  20.64 keV    e-  4.008 MeV    e+  3.798 MeV proton 0 eV 
+ Range cuts        :  gamma  1 cm        e-  1 cm        e+  1 cm     proton 1 nm    
+ Energy thresholds :  gamma  20.64 keV    e-  4.008 MeV    e+  3.798 MeV proton 0.1 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -470,7 +522,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1684757445, 757096476
+ Current couple of seeds = 2045185342, 343322745
 ----------------------------------------
 Start Run processing.
 
@@ -478,11 +530,11 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.06s Real=2.06s Sys=0.01s
+  User=88.92s Real=88.93s Sys=0.02s
 
  ======================== run summary ======================
 
- The run was 100 Si28[0.0] of 560 MeV, through 100 um  of G4_Si
+ The run was 100 Si28[0.0] of 560 MeV, through 100 um     of G4_Si
  (density: 2.33 g/cm3 )
 
  Threshold Energy for displacement 
@@ -491,43 +543,43 @@ Run Summary
  ============= Primary particle statistics ==============
 
  Total track length in absorber:
- 99.97 um  +- 3.275 nm 
+ 52.22 um     +- 369.2 nm    
 
  Mean Number of Steps :
- 2705 +/- 5.096
+ 1.891e+05 +/- 5053
 
  Mean Free Path :
- 36.96 nm  +/- 6.962e+04 fm 
+ 2.762 Ang    +/- 7636 fm    
 
  Mean Cross Section :
- 5.416e+06 barn   +/- 1.02e+04 barn  
+ 7.247e+08 barn   +/- 2.004e+07 barn  
 
  Mean scattering angle :
- 6.941 mrad +/- 0.5551 mrad
+ 1.446 rad  +/- 3.885 deg 
 
  Total energy deposit in absorber:
- 90.5 MeV +/- 90.62 keV
------> dE/dx total= 9053 MeV/cm	(3885 MeV*cm2/g)
+ 560 MeV +/- 1.706 eV 
+-----> dE/dx total= 1.072e+05 MeV/cm	(4.603e+04 MeV*cm2/g)
 
  Nuclear energy deposit in absorber:
- 40.03 keV +/- 7.605 keV
------> dE/dx  nucl = 4.004 MeV/cm	(1.719 MeV*cm2/g)
+ 453.5 MeV +/- 632.4 keV
+-----> dE/dx  nucl = 8.684e+04 MeV/cm	(3.727e+04 MeV*cm2/g)
 
  NIEL in absorber (Th>21 eV):
- 20.18 keV +/- 1.221 keV
------> NIEL = 2.019 MeV/cm	(0.8663 MeV*cm2/g)
+ 0.000334 eV  +/- 0 eV 
+-----> NIEL = 6.397e-08 MeV/cm	(2.745e-08 MeV*cm2/g)
 
 ----------------------------------------------------------------
 
- Total Number of primary knock-on atoms: PKA = 11535
- Mean Kinetic Energy of PKA = 299.4 eV  +/- 67.06 eV 
- Total Frenkel-pairs Concentration: FP = 3.845e+06 #/cm3
+ Total Number of primary knock-on atoms: PKA = 4472255
+ Mean Kinetic Energy of PKA = 10.14 keV +/- 0 eV 
+ Total Frenkel-pairs Concentration: FP = 0.1218 #/cm3
 
 ----------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1708416657, 1557091822
+ Current couple of seeds = 1865948408, 562473943
 ----------------------------------------
 
  ===========================================================
@@ -537,25 +589,32 @@ Run Summary
 /gun/energy 1120 MeV
 /run/beamOn 100
 
-Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
+ This region is in the mass world.
  Root logical volume(s) : World 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Galactic G4_Si 
- Production cuts :   gamma 1 cm      e- 1 cm      e+ 1 cm  proton 0 fm 
+ Production cuts :   gamma 1 cm         e- 1 cm         e+ 1 cm     proton 1 nm    
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 1 cm         e- 1 cm         e+ 1 cm     proton 1 nm    
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Galactic
- Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 0 fm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0 eV 
+ Range cuts        :  gamma  1 cm        e-  1 cm        e+  1 cm     proton 1 nm    
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0.1 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Si
- Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 0 fm 
- Energy thresholds :  gamma  20.64 keV    e-  4.008 MeV    e+  3.798 MeV proton 0 eV 
+ Range cuts        :  gamma  1 cm        e-  1 cm        e+  1 cm     proton 1 nm    
+ Energy thresholds :  gamma  20.64 keV    e-  4.008 MeV    e+  3.798 MeV proton 0.1 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -565,7 +624,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1708416657, 1557091822
+ Current couple of seeds = 1865948408, 562473943
 ----------------------------------------
 Start Run processing.
 
@@ -573,11 +632,11 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.75s Real=1.76s Sys=0s
+  User=76.54s Real=76.6s Sys=0.01s
 
  ======================== run summary ======================
 
- The run was 100 Fe56[0.0] of 1.12 GeV, through 100 um  of G4_Si
+ The run was 100 Fe56[0.0] of 1.12 GeV, through 100 um     of G4_Si
  (density: 2.33 g/cm3 )
 
  Threshold Energy for displacement 
@@ -586,54 +645,156 @@ Run Summary
  ============= Primary particle statistics ==============
 
  Total track length in absorber:
- 99.96 um  +- 3.908 nm 
+ 59.86 um     +- 396.6 nm    
 
  Mean Number of Steps :
- 2345 +/- 4.29
+ 1.674e+05 +/- 7548
 
  Mean Free Path :
- 42.63 nm  +/- 7.799e+04 fm 
+ 3.575 Ang    +/- 1.629e+04 fm    
 
  Mean Cross Section :
- 4.696e+06 barn   +/- 8591 barn  
+ 5.599e+08 barn   +/- 2.551e+07 barn  
 
  Mean scattering angle :
- 6.06 mrad +/- 0.3799 mrad
+ 1.281 rad  +/- 3.604 deg 
 
  Total energy deposit in absorber:
- 276.4 MeV +/- 325.9 keV
------> dE/dx total= 2.765e+04 MeV/cm	(1.187e+04 MeV*cm2/g)
+ 1.12 GeV +/- 4.316 eV 
+-----> dE/dx total= 1.871e+05 MeV/cm	(8.03e+04 MeV*cm2/g)
 
  Nuclear energy deposit in absorber:
- 120.2 keV +/- 17.75 keV
------> dE/dx  nucl = 12.03 MeV/cm	(5.163 MeV*cm2/g)
+ 839.8 MeV +/- 1.733 MeV
+-----> dE/dx  nucl = 1.403e+05 MeV/cm	(6.021e+04 MeV*cm2/g)
 
  NIEL in absorber (Th>21 eV):
- 63.87 keV +/- 0 eV 
------> NIEL = 6.39 MeV/cm	(2.742 MeV*cm2/g)
+ 0.0003587 eV  +/- 0 eV 
+-----> NIEL = 5.993e-08 MeV/cm	(2.572e-08 MeV*cm2/g)
 
 ----------------------------------------------------------------
 
- Total Number of primary knock-on atoms: PKA = 36217
- Mean Kinetic Energy of PKA = 306.6 eV  +/- 47.2 eV 
- Total Frenkel-pairs Concentration: FP = 1.217e+07 #/cm3
+ Total Number of primary knock-on atoms: PKA = 3960828
+ Mean Kinetic Energy of PKA = 21.2 keV +/- 0 eV 
+ Total Frenkel-pairs Concentration: FP = 0.1141 #/cm3
 
 ----------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1218501901, 1653420723
+ Current couple of seeds = 129361733, 1985274912
 ----------------------------------------
 
  ===========================================================
+############## Iron
+/gun/particle e-
+/gun/energy 500 MeV
+/run/beamOn 100
+
+Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
+ This region is in the mass world.
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Galactic G4_Si 
+ Production cuts :   gamma 1 cm         e- 1 cm         e+ 1 cm     proton 1 nm    
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 1 cm         e- 1 cm         e+ 1 cm     proton 1 nm    
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Galactic
+ Range cuts        :  gamma  1 cm        e-  1 cm        e+  1 cm     proton 1 nm    
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0.1 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_Si
+ Range cuts        :  gamma  1 cm        e-  1 cm        e+  1 cm     proton 1 nm    
+ Energy thresholds :  gamma  20.64 keV    e-  4.008 MeV    e+  3.798 MeV proton 0.1 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+### Run 4 start.
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 129361733, 1985274912
+----------------------------------------
+Start Run processing.
+
+---> Begin of Event: 0
+Run terminated.
+Run Summary
+  Number of events processed : 100
+  User=3.31s Real=3.32s Sys=0s
+
+ ======================== run summary ======================
+
+ The run was 100 e- of 500 MeV, through 100 um     of G4_Si
+ (density: 2.33 g/cm3 )
+
+ Threshold Energy for displacement 
+ 21 eV
+
+ ============= Primary particle statistics ==============
+
+ Total track length in absorber:
+ 99.47 um     +- 55.78 nm    
+
+ Mean Number of Steps :
+ 208 +/- 1.506
+
+ Mean Free Path :
+ 478.2 nm     +/- 3.472 nm    
+
+ Mean Cross Section :
+ 4.186e+05 barn   +/- 3039 barn  
+
+ Mean scattering angle :
+ 0.005237 mrad +/- 0.004139 mrad
+
+ Total energy deposit in absorber:
+ 1.236 MeV +/- 1.195 MeV
+-----> dE/dx total= 124.2 MeV/cm	(53.31 MeV*cm2/g)
+
+ Nuclear energy deposit in absorber:
+ 1.201 MeV +/- 1.195 MeV
+-----> dE/dx  nucl = 120.8 MeV/cm	(51.83 MeV*cm2/g)
+
+ NIEL in absorber (Th>21 eV):
+ 8.138e-10 eV  +/- 0 eV 
+-----> NIEL = 8.181e-14 MeV/cm	(3.511e-14 MeV*cm2/g)
+
+----------------------------------------------------------------
+
+ Total Number of primary knock-on atoms: PKA = 18716
+ Mean Kinetic Energy of PKA = 0.02224 eV  +/- 0 eV 
+ Total Frenkel-pairs Concentration: FP = 1.558e-07 #/cm3
+
+----------------------------------------------------------------
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 861046554, 1377937296
+----------------------------------------
+
+ ===========================================================
+#
+G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
-G4 kernel has come to Quit state.
 EventManager deleted.
 UImanager deleted.
 Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
-RunManager is deleting.
+RunManager is deleted.
