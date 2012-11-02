@@ -1,0 +1,250 @@
+
+                 Geant4 9.5 - patch-02 Release Notes
+                 -----------------------------------
+
+                                                              22 October 2012
+
+List of fixes included in this public patch since the public release 9.5.p01:
+
+  o Environments
+    ------------
+    + G4Py:
+      o Updated scripts for use of internal CLHEP module.
+      o Added necessary updates for 9.5.p01. Addressing problem report #1317.
+      o Fixed logics in configuration script for specifying Python include
+        path. Addressing problem report #1316.
+      o Fixes in pyG4VisManager: added static statement for GetVerbosity() and
+        fixed GetConcreteInstance() returning an insufficient class pointer.
+        Addressing problem report #1318.
+
+  o Digits_Hits:
+    -----------
+    + G4VScoringMesh: avoid updating size and segment in command-line scoring
+      and print warning when SetSize() or SetNumberOfSegments is called more
+      then once.
+
+  o Error Propagation:
+    -----------------
+    + Fixes in G4ErrorTrackLengthTarget and G4VErrorLimitProcess to solve
+      memory leak. Addressing problem report #1284.
+    + Fixed variable name (partType -> partName) in G4ErrorFreeTrajState
+      and delete code not needed in G4ErrorPhysicsList.
+    + Explicitly use inclusion of headers for system of units and physical
+      constants and fixed spurious cases of hidden variables.
+
+  o Event:
+    -----
+    + Correction for orthogonalization of rotation matrix in
+      G4SPSPosDistribution::GenerateRotationMatrices() method.
+      Addressing problem report #1299.
+
+  o Geometry:
+    --------
+    + biasing:
+    + divisions:
+    + management:
+      o Fixed trivial cases of variable shadowing.
+    + navigation:
+      o G4Navigator: added method GetGlobalExitNormal() to be used in place
+        of GetLocalExitNormal() by optical processes, to address problem
+        report #1300. Compute normals also for replicas.
+        Moved internal methods GetSavedState() and RestoreSavedState() to
+        protected.
+      o G4PropagatorInField, G4VIntersectionLocator: corrected two arguments
+        of IntersectChord() to be const references instead of copy (fix for
+        CPU performance).
+      o G4Navigator, G4MultiNavigator and G4ErrorPropagationNavigator:
+        use 'true' as default value for state keeping.
+      o Fixed trivial cases of variable shadowing.
+    + solids/Boolean:
+      o G4SubtractionSolid: refined protection for potential cases of
+        infinite loop in DistanceToIn(p,v); return computed distance instead
+        of zero and provide more descriptive information when issuing warning.
+    + solids/BREPS:
+      o Fixed trivial cases of variable shadowing.
+    + solids/CSG:
+      o G4Para::SurfaceNormal(): fixed calculation of sin(alpha) from
+        cosine and tangent.
+      o G4Torus: revised values of delta, to account for precision loss
+        in calculating radius 'pt'. Reordered a few computation for better
+        FP accuracy.
+    + volumes:
+      o Corrected GNUMakefile for spurious inclusion path.
+
+  o Global:
+    ------
+    + G4PhysicsVector: added GetMaxEnergy() inlined method; indicate inline
+      methods in header file by explicitly adding inline keyword; added inline
+      method Value() and private method ComputeValue() in order to have inline
+      access to the value for the case of multiple calls with the the same
+      energy value.
+    + Correction to G4PhysicsOrderedFreeVector to fix ordering of elements.
+    + G4UnitsTable: added call to BuildUnitsTable() from static accessor to
+      guarantee proper initialization of units in static calls.
+      Modified warnings in cout to be compliant with G4Exception syntax.
+    + Implemented workaround to aid for templated symbols of
+      G4ReferenceCountedHandle to be properly imported/exported
+      for DLL build on Windows systems based on CMake.
+      Addressing problem report #1329.
+    + Fixed trivial cases of variable shadowing.
+    + Updated date and version for 9.5.p02.
+
+  o Intercoms:
+    ---------
+    + Fixed trivial cases of variable shadowing.
+
+  o Interfaces:
+    ----------
+    + Fix in G4UIWin32 to make it work on Win64; replaced [Get|Set]WindowLong()
+      with [Get|Set]WindowLongPtr() and GWL_USERDATA by GWLP_USERDATA.
+
+  o Particles:
+    ---------
+    + Fixed bug in decay table for k_star-.
+    + Modified G4eDecayProduct to use std::vector instead of fixed size array,
+      removing limitation of number of daughters.
+
+  o Persistency:
+    -----------
+    + ASCII:
+      o Fixed case of conversion from size_t to G4int in G4tgrUtils in
+        function AreWordsEquivalent(), detected on win64 system.
+    + GDML:
+      o Proper handling of constant material properties.
+      o Fixed trivial cases of variable shadowing.
+
+  o Electromagnetic Processes:
+    -------------------------
+    + Standard:
+      o G4eplusAnnihilation: fixed weight propagation for annihilation at rest.
+      o G4IonFluctuations: use simplified algorithm for very small steps to
+        avoid infinite loop in tracking of very low energy (~10 eV) ions.
+        Addressing problem report #1345.
+      o G4UrbanMscModel90: added protection against very low step limit to
+        avoid infinite loop in tracking of very low energy (~10 eV) ions.
+        Addressing problem report #1345.
+      o G4UrbanMscModel92: use more loose protection against large angle
+        scattering (1000 -> 10000).
+      o Added missing reference to G4UrbanMscModel92 files in CMake script.
+    + Utils:
+      o Fixed weight propagation from primary to secondaries in G4VEmProcess.
+
+  o Hadronic Processes:
+    ------------------
+    + cross_sections:
+      o G4HadronCrossSections: use cache of previous cross-section and G4Pow
+        to save some CPU time.
+    + management:
+      o G4HadronicProcess: avoid cross-section computation in PostStepDoIt
+        for neutral hadrons (minor improvement in CPU time).
+    + models/binary_cascade:
+      o Fixed case of use of Lorentz vector explicit contructor in
+        G4BinaryCascade.
+    + models/CHIPS:
+      o Fix to linear table update for quasi-elastic cross-sections, also
+        responsible for event non-reproducibility.
+      o Fixed bug in ElectroNuclearReaction. Addressing problem report #1354.
+      o Fixed cases of use of Lorentz vector explicit contructor in
+        G4QFragmentation and G4Quasmon.
+    + models/de_excitation:
+      o G4DiscreteGammaTransition: fixed algorithm of selection of discrete
+        transition; restore transition to the ground state in gamma+C12
+        reaction. Addressing problem report #1338.
+    + models/lend:
+      o Fixed GNUmakefile for use of internal expat library, if explicitely
+        chosen.
+      o Fixed trivial cases of variable shadowing.
+    + models/neutron_hp:
+      o Fixed case of use of Lorentz vector explicit contructor in
+        G4NeutronHPCaptureFS.
+    + models/parton_string/hadronization:
+      o Removed unnecessary assertions in G4ExcitedStringDecay and removed
+        debug printouts.
+      o Made copy ctor, =, == , and != operators private without
+        implementation in G4LundStringFragmentation and G4QGSMFragmentation, 
+        fixing coverity warnings.
+    + models/qmd:
+      o Fixed compilation warning on win64 in G4QMDMeanField.
+    + models/quasi_elastic
+      o Bug fix in G4QuasiElRatios affecting the initialisation of table.
+        Bug fix fixing wrong initialization of linear table and influencing
+        event reproducibility.
+    + processes:
+      o G4WHadronElasticProcess: fixed time and weight of recoil nuclear.
+      o Fixed trivial cases of variable shadowing.
+    + stopping:
+      o G4PiMinusAbsorptionBertini: if Bertini fails to interact projectile,
+        return untouched projectile track as G4ParticleChange, so process
+        manager can decay it.
+
+  o Generic Processes:
+    -----------------
+    + Biasing:
+      o Fixed trivial cases of variable shadowing.
+    + Cuts:
+      o Fixed compilation warning in G4VRangeToEnergyConverter
+        if G4_NO_VERBOSE set.
+      o Fixed trivial cases of variable shadowing.
+    + Optical:
+      o Adopt call to GlobalExitNormal() from G4Navigator in G4OpBoundaryProcess
+        for proper extrapolation of normals on boundaries.
+        Addressing problem report #1300.
+      o Fixed Coverity defects and cases of variable shadowing.
+    + Transportation:
+      o G4Transportation: corrected issues with initilisation of data members
+        reported by Coverity.
+      o Explicitly use inclusion of headers for system of units and physical
+        constants and fixed cases of variable shadowing.
+
+  o Track:
+    -----
+    + Fixed bug in copy constructor of G4VUUserTrackInformation.
+      Addressing problem report #1346.
+
+  o Visualization:
+    -------------
+    + OpenGL: fix in G4OpenGLWin32Viewer to make it work on Win64; replaced
+      [Get|Set]WindowLong() with [Get|Set]WindowLongPtr() and GWL_USERDATA by
+      GWLP_USERDATA.
+
+  o Examples:
+    --------
+    + Updated reference outputs.
+    + advanced/composite_calorimeter:
+      o Fixed crashes due to high global times converted to integers values.
+        Addressing problem report #1337.
+    + advanced/human_phantom:
+      o Make destructor virtual in G4BasePhantomBuilder.
+    + extended/electromagnetic/TestEm7
+      o Fixed compilation problems on Mac for c2_functions.
+      o Fixed case of division by zero at initialisation in
+        G4ScreenedNuclearRecoil
+    + extended/field/field04
+      o Renamed global allocator for F04Trajectory to not clash with one
+        defined in the kernel. Fixes compilation problem on Windows.
+    + extended/persistency/gdml/G01:
+      o Added missing unit in opticalsurfaces.gdml.
+    + extended/persistency/P01:
+      o Fixes in GNUMakefile and CMake scripts.
+      o Removed unnecessary G4Exception from the code.
+      o Added root macro to read the hits.
+      o Removed debug printout; small fix in the iterator type.
+    + examples/novice/N07:
+      o Added protection within G4VERBOSE in ExN07SteppingVerbose.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 9.5 or 9.5.p01.
+  o  Technical notes distributed for release 9.5 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 9.5.p02 are available
+through our "Download" Web page:
+   http://cern.ch/geant4/support/download.shtml
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/userdocuments.shtml
+for further information about using Geant4.

@@ -21,6 +21,7 @@ Major development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(x)  Fixes included in release 9.5.p02
 
 Summarised, the list of changes is the following:
 
@@ -35,18 +36,18 @@ cmake                                            cmake-V09-05-14
   Addressing problem report #1306.
 - Updated to reference new data set G4EMLOW-6.26.
 
-digits_hits                                      digits_hits-V09-05-01
+digits_hits                                      digits_hits-V09-05-01       (x)
 -----------
 - G4VScoringMesh: avoid updating size and segment in command-line scoring
   and print warning when SetSize() or SetNumberOfSegments is called more then
   once.
 
-event                                            event-V09-05-04
+event                                            event-V09-05-04             (x)
 -----
 - Correction for orthogonalization of rotation matrix in G4SPSPosDistribution
   GenerateRotationMatrices() method. Addressing problem report #1299.
 
-geometry/management                              geommng-V09-05-00
+geometry/management                              geommng-V09-05-00           (x)
 -------------------
 - Extended one comment to G4VSolid header.
 
@@ -81,8 +82,9 @@ global                                           global-V09-05-02
 
 interfaces                                       interfaces-V09-05-02
 ----------
-- G4UIWin32: modified to make it work on Win64; replaced [Get|Set]WindowLong()
-  with [Get|Set]WindowLongPtr() and GWL_USERDATA by GWLP_USERDATA.
+- G4UIWin32: modified to make it work on Win64; replaced                     (x)
+  [Get|Set]WindowLong() with [Get|Set]WindowLongPtr() and
+  GWL_USERDATA by GWLP_USERDATA.
 - G4UIQt: changed name of viewer components.
 
 materials                                        materials-V09-05-17
@@ -93,13 +95,13 @@ materials                                        materials-V09-05-17
   Added 'fMassOfMolecule' definition into G4Material constructor with base
   material and only computed when relevant.
 
-particles                                        particles-V09-05-01
+particles                                        particles-V09-05-01         (x)
 ---------
 - Fixed bug in decay table for k_star-.
 - Modified G4eDecayProduct to use std::vector instead of fixed size array,
   removing limitation of number of daughters.
 
-persistency/ascii                                ascii-V09-05-00
+persistency/ascii                                ascii-V09-05-00             (x)
 -----------------
 - Fixed case of conversion from size_t to G4int in G4tgrUtils in
   function AreWordsEquivalent(), detected on win64 system.
@@ -156,7 +158,7 @@ processes/electromagnetic/utils                  emutils-V09-05-09
   used to violate the reproducibility. Now using a map for cashing, with
   the key given by the PDG encoding of the ion, which is unique for each
   isotope.
-- G4VEmProcess: use ProposeWeight() instead of ProposeParentWeight()
+- G4VEmProcess: use ProposeWeight() instead of ProposeParentWeight()         (x)
   to fix weights of secondary particle for gamma processes.
 - G4VEmModel: added virtual method Value(), by default computing cross-section.
 - G4VMultipleScattering: removed transport cross-section table; simplified
@@ -193,7 +195,7 @@ processes/hadronic
     with the CHIPS_HP physics-list.
   o Fix to hadron elastic and inelastic interfaces to make properly use of
     the base class G4VCrossSectionDataSet.
-  o Fix to linear table update for quasi-elastic cross-sections responsible
+  o Fix to linear table update for quasi-elastic cross-sections responsible  (x)
     for event non-reproducibility.
 - models/coherent_elastic (hadr-cohe-V09-05-04)
   o G4ElasticHadrNucleusHE: fixed reproducibility violation due to cashing
@@ -218,21 +220,21 @@ processes/hadronic
 - models/neutron_hp (hadr-hpn-V09-05-02)
   o Added G4NeutronHPBGGNucleonInelasticXS class to be used in Shielding
     physics-list.
-- models/parton_string/hadronization (had-hadronization-V09-05-00)
+- models/parton_string/hadronization (had-hadronization-V09-05-00)           (x)
   o Changes in debugging information in G4ExcitedStringDecay.
 - models/parton_string/management (had-partonstring-mgt-V09-05-00)
   o Changes in debugging information.
 - models/pre_equilibrium (hadr-pre-V09-05-01)
   o Added Description() method in G4PreCompoundModel printing the actual
     description from the Physics Reference Manual.
-- models/qmd (hadr-qmd-V09-05-00)
+- models/qmd (hadr-qmd-V09-05-00)                                            (x)
   o Fixed compilation warning on win64 in G4QMDMeanField.
-- models/quasi_elastic (hadr-qelastic-V09-05-01)
+- models/quasi_elastic (hadr-qelastic-V09-05-01)                             (x)
   o Bug fix in G4QuasiElRatios affecting the initialisation of table.
     Bug fix fixing wrong initialization of linear table and influencing
     event reproducibility.
 - processes (hadr-proc-V09-05-02)
-  o G4WHadronElasticProcess: time and weight for recoil are copied from the
+  o G4WHadronElasticProcess: time and weight for recoil are copied from the  (x)
     primary particle directly to avoid inconsistency of parameters definition.
 - stopping (hadr-stopping-V09-05-03)
   o G4FTFCaptureAtRest: included annihilation of anti_sigma+.
@@ -255,7 +257,7 @@ visualization                                    vis-V09-05-17
 - OpenGL:
   o X and Xm drivers: implemented text layout and offset.
   o Introduced QT tree ("Scene" panel in G4UIQt session).
-  o Fix to G4OpenGLWin32Viewer to make it work on Win64.
+  o Fix to G4OpenGLWin32Viewer to make it work on Win64.                     (x)
   o G4OpenGLXm classes: change G4Exception ID.
 - OpenInventor:
   o Fix to G4OpenInventorWinViewer to make it work on Win64.
@@ -287,8 +289,8 @@ examples                                         examples-V09-05-04
 - extended/electromagnetic/TestEm6 (testem6-V09-05-01)
   o Apply new coding conventions.
 - extended/electromagnetic/TestEm7 (testem7-V09-05-04)
-  o c2_functions: fixed compilation problems on gcc-4.7.
-  o G4ScreenedNuclearRecoil: fixed division by zero at initialisation.
+  o c2_functions: fixed compilation problems on gcc-4.7.                     (x)
+  o G4ScreenedNuclearRecoil: fixed division by zero at initialisation.       (x)
   o Added extra test case for low-energy ions.
   o Apply new coding conventions.
 - extended/electromagnetic/TestEm8 (testem8-V09-05-07)
@@ -319,9 +321,9 @@ examples                                         examples-V09-05-04
 - extended/medical/fanoCavity (fano-V09-05-05)
 - extended/medical/fanoCavity2 (fano2-V09-05-04)
   o Apply new coding conventions.
-- extended/persistency/gdml/G01 (G01-V09-05-00)
+- extended/persistency/gdml/G01 (G01-V09-05-00)                              (x)
   o Added missing unit in opticalsurfaces.gdml.
-- extended/persistency/P01 (exampleP01-V09-05-03)
+- extended/persistency/P01 (exampleP01-V09-05-03)                            (x)
   o Fixes in GNUMakefile and CMake scripts.
   o Removed unnecessary G4Exception from the code.
   o Added root macro to read the hits.

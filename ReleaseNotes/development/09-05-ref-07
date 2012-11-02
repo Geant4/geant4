@@ -16,6 +16,7 @@ Major development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(x)  Fixes included in release 9.5.p02
 
 Summarised, the list of changes is the following:
 
@@ -54,7 +55,7 @@ analysis                                         analysis-V09-05-02
 - Fixes in memory management: delete file before opening a new one (all);
   delete ntuple before closing a file (csv, xml).
 
-error_propagation                                error_propagation-V09-05-03
+error_propagation                                error_propagation-V09-05-03 (x)
 -----------------
 - Explicitly use inclusion of headers for system of units and physical
   constants.
@@ -102,7 +103,7 @@ persistency                                      persistency-V09-05-02
 -----------
 - Explicitly use inclusion of headers for system of units and physical
   constants.
-- gdml (gdml-V09-05-04)
+- gdml (gdml-V09-05-04)                                                      (x)
   o Added proper handling of constant material properties.
 
 physics_lists                                    phys-lists-V09-05-43
@@ -255,7 +256,7 @@ processes/hadronic
     if material, element, primary particle and kinetic energy are the
     same; G4Nucleus is updated using new method SetIsotope().
     Take into account that all elements should have isotopes.
-  o G4HadronCrossSections: use cache of previous cross-section and G4Pow
+  o G4HadronicCrossSections: use cache of previous cross-section and G4Pow.  (x)
   o Removed unnecessary statics in CHIPS cross-sections and fixed case of
     double-deletion.
   o Fixed Coverity defects in G4CrossSectionPairGG for use of invalid iterator.
@@ -287,7 +288,7 @@ processes/hadronic
     minor bugs.
   o Removed relic class G4INCLBook.
   o Fixed minor bug concerning transmission of delta resonances.
-- models/lend (hadr-lend-V09-05-02)
+- models/lend (hadr-lend-V09-05-02)                                          (x)
   o Fixed GNUmakefile for use of internal expat library, if explicitely chosen.
 - models/parton_string/diffraction (hadr-string-diff-V09-05-12)
   o Tuning of FTF parameters: Wdelta 0.25 -> 0.05, Dcor 0.4 -> 0.3,
@@ -336,7 +337,7 @@ processes/management                             procman-V09-05-02
 
 processes/optical                                op-V09-05-05
 -----------------
-- Explicitly use inclusion of headers for system of units and physical
+- Explicitly use inclusion of headers for system of units and physical       (x)
   constants.
 
 processes/parameterisation                       param-V09-05-00
@@ -349,7 +350,7 @@ processes/scoring                                procscore-V09-05-02
 - Explicitly use inclusion of headers for system of units and physical
   constants.
 
-processes/transportation                         transport-V09-05-02
+processes/transportation                         transport-V09-05-02         (x)
 ------------------------
 - G4Transportation: corrected issues with initilisation of data members
   reported by Coverity.
@@ -408,7 +409,7 @@ examples                                         examples-V09-05-07
 - extended/electromagnetic/TestEm1 (testem1-V09-05-07)
   o Added radioactive-decay to physics-list and associated input macro.
 - extended/electromagnetic/TestEm7 (testem7-V09-05-05)
-  o Cleared not used arguments in c2_functions code.
+  o Cleared not used arguments in c2_functions code.                         (x)
 - extended/electromagnetic/TestEm10 (testem10-V09-05-01)
   o Em10RunAction: fixed case of write outside boundaries of C-array.
     Cleanup initialisation.

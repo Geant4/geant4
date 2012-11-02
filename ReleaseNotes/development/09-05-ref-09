@@ -17,6 +17,7 @@ Major development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(x)  Fixes included in release 9.5.p02
 
 Summarised, the list of changes is the following:
 
@@ -37,7 +38,7 @@ analysis                                         analysis-V09-05-12
 - Fixed loops in G4Root/XmlAnalysisManager::WriteOnAscii(), causing
   compilation warning for shadowing.
 
-error_propagation                                error_propagation-V09-05-05
+error_propagation                                error_propagation-V09-05-05 (x)
 -----------------
 - Changes in G4ErrorFreeTrajState (partType -> partName) and delete code
   not needed in G4ErrorPhysicsList.
@@ -95,11 +96,11 @@ processes/electromagnetic/standard               emstand-V09-05-51
   G4UrbanMscModel92, G4UrbanMscModel93, G4UrbanMscModel95,
   G4WentzelVIModel, G4GoudsmitSaundersonMscModel: sampling of scattering
   moved from PostStep to AlongStep.
-- G4UrbanMscModel90, G4UrbanMscModel92, G4UrbanMscModel93,
+- G4UrbanMscModel90, G4UrbanMscModel92, G4UrbanMscModel93,                   (x)
   G4UrbanMscModel95, G4GoudsmitSaundersonMscModel: added protection to step
   limit. Addressing problem report #1345.
   Fixed computations of effective electron energy at a step.
-- Added simplified fluctuations for very small steps in G4IonFluctuations.
+- Added simplified fluctuations for very small steps in G4IonFluctuations.   (x)
   Addressing problem report #1345.
 - G4CoulombScattering: fixed initilisation for the case when polar angle
   limit is below pi.
@@ -152,8 +153,8 @@ processes/hadronic
     electro-nuclear. Copes with case that both primary survives and secondaries
     are created. Fixed problem of flushing stdout/stderr for energy checking
     printout. Removed GetTargetDefinition(); instead added GetTargetIsotope();
-    check cross-section in PostStepDoIt only for charged particles (for
-    performance reasons).
+  o G4HadronicProcess: check cross-section in PostStepDoIt only for charged  (x)
+    particles (for performance reasons).
 - models/abrasion (had-abrasion-V09-05-03)
   o Fixed Coverity defects in G4WilsonAbrasionModel.
 - models/cascade (hadr-casc-V09-05-21)
@@ -175,7 +176,7 @@ processes/hadronic
 - models/chiral_inv_phase_space (hadr-chips-V09-05-04)
   o System of units and physical constants headers explicit inclusion.
   o Fixed warning in G4QPDGCode (hadr-chips-body-V09-05-08).
-  o Fixed bug in ElectroNuclearReaction (hadr-chips-inter-V09-05-06).
+  o Fixed bug in ElectroNuclearReaction (hadr-chips-inter-V09-05-06).        (x)
     Addressing problem report #1354.
 - models/coherent_elastic (hadr-cohe-V09-05-11)
   o Initialisation of subtype field for G4ChargeExchangeProcess.
