@@ -45,7 +45,7 @@
 
 #include "G4VoxelSafety.hh"
 
-#define G4DEBUG_NAVIGATION 1
+// #define G4DEBUG_NAVIGATION 1
 
 // ********************************************************************
 // Constructor
@@ -523,7 +523,7 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
   fLastLocatedPointLocal = localPoint;
 
 #ifdef G4VERBOSE
-  if( fVerbose == 4 )
+  if( fVerbose >= 4 )
   {
     G4int oldcoutPrec = G4cout.precision(8);
     G4String curPhysVol_Name("None");
@@ -531,10 +531,10 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
     G4cout << "    Return value = new volume = " << curPhysVol_Name << G4endl;
     G4cout << "    ----- Upon exiting:" << G4endl;
     PrintState();
-#ifdef G4DEBUG_NAVIGATION
-    G4cout << "Upon exiting LocateGlobalPointAndSetup():" << G4endl;
-    G4cout << "    History = " << G4endl << fHistory << G4endl << G4endl;
-#endif
+    if( fVerbose == 5 ){
+      G4cout << "Upon exiting LocateGlobalPointAndSetup():" << G4endl;
+      G4cout << "    History = " << G4endl << fHistory << G4endl << G4endl;
+    }
     G4cout.precision(oldcoutPrec);
   }
 #endif
@@ -743,7 +743,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
              << "  Globalpoint = " << std::setw(25) << pGlobalpoint << G4endl
              << "  Direction   = " << std::setw(25) << pDirection << G4endl;
        if( fVerbose >= 4 ){
-          G4cout << "  ---- Upon entering :" << G4endl;
+          G4cout << "  ---- Upon entering : State" << G4endl;
           PrintState();
        }
     }
@@ -1485,10 +1485,15 @@ G4Navigator::GetMotherToDaughterTransform( G4VPhysicalVolume *pEnteringPhysVol, 
 // ********************************************************************
 //
 G4ThreeVector G4Navigator::
-GetLocalExitNormalAndCheck(const G4ThreeVector& ExpectedBoundaryPointGlobal,
+GetLocalExitNormalAndCheck( 
+#ifdef G4DEBUG_NAVIGATION
+                           const G4ThreeVector& ExpectedBoundaryPointGlobal,
+#else
+                           const G4ThreeVector&,
+#endif
                                  G4bool*        pValid)
 {
-#ifdef G4DEBUG
+#ifdef G4DEBUG_NAVIGATION
   // Check Current point against expected 'local' value
   //
   if ( fLastTriedStepComputation ) 
@@ -1687,19 +1692,18 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
         case kNormal:
           if ( pVoxelHeader )
           {
-            G4double safetyOldVoxel;
-            safetyOldVoxel=fvoxelNav.ComputeSafety(localPoint,fHistory,pMaxLength);
 #ifdef G4NEW_SAFETY
             static G4VoxelSafety sfVoxelSafety;
             G4double safetyTwo=
                sfVoxelSafety.ComputeSafety(localPoint, *motherPhysical, pMaxLength);
                //*************************
+#ifdef G4DEBUG_NAVIGATION
             G4double safetyNormal=
                fnormalNav.ComputeSafety(localPoint, fHistory, pMaxLength);
               //***********************
              
-            // G4cout << " New Voxel Safety= " << safetyTwo << "  Value from Normal= "
-            //        << safetyNormal << G4endl;
+            // G4cout << " New Voxel Safety= "   << safetyTwo 
+            //        << "  Value from Normal= " << safetyNormal << G4endl;
             G4double diffSafety= (safetyTwo - safetyNormal);
             if( std::fabs(diffSafety) > CLHEP::perMillion * std::fabs(safetyNormal) ){
               G4ExceptionDescription exd;
@@ -1713,13 +1717,9 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
                   << "  Copy# = " << motherPhysical->GetCopyNo() << G4endl;
               exd << "          : Global coordinates = " << pGlobalpoint << G4endl;
               G4Exception("G4Navigator::ComputeSafety", "GeomNav0003", JustWarning, exd);
-
-// #define G4DEBUG 1
-#ifdef G4DEBUG
-               // Call it again for debugging purposes only
-              safetyTwo= sfVoxelSafety.ComputeSafety(localPoint, *motherPhysical, pMaxLength);
-#endif
             }
+            G4double safetyOldVoxel;
+            safetyOldVoxel=fvoxelNav.ComputeSafety(localPoint,fHistory,pMaxLength);
 
             G4double diffBetterToApprox= safetyTwo - safetyOldVoxel;
             if( diffBetterToApprox < 0.0 ) {
@@ -1734,11 +1734,14 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
                   << "  Copy# = " << motherPhysical->GetCopyNo() << G4endl;
               exd << "          : Global coordinates = " << pGlobalpoint << G4endl;
               G4Exception("G4Navigator::ComputeSafety", "GeomNav0003", JustWarning, exd);
-
             }
+#endif
+
             // newSafety= safetyOldVoxel;
-            newSafety= safetyTwo;   // Faster (to be) and best available
+            newSafety= safetyTwo;   // Faster and best available
 #else
+            G4double safetyOldVoxel;
+            safetyOldVoxel=fvoxelNav.ComputeSafety(localPoint,fHistory,pMaxLength);
             newSafety= safetyOldVoxel;
 #endif
           }
