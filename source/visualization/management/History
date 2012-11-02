@@ -26,6 +26,15 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+30th October 2012  John Allison  (visman-V09-05-45)
+- G4VisManager.cc:
+  o Improved PrintAvailableGraphicsSystems.  Collected systems of same
+    name on one line with a list of nicknames.
+
+29th October 2012  John Allison  (visman-V09-05-44)
+- G4VisCommandsSceneAdd.cc: /vis/scene/add/date:
+  o Added user-specified date-time as last argument(s) on command line.
+
 24th October 2012  John Allison  (visman-V09-05-43)
 - G4VGraphicsSystem:
   o Added virtual function IsUISessionCompatible.

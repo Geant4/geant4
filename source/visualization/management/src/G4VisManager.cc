@@ -73,6 +73,9 @@
 #include "G4EventManager.hh"
 #include "G4Run.hh"
 #include "G4Event.hh"
+#include <map>
+#include <set>
+#include <vector>
 #include <sstream>
 
 G4VisManager* G4VisManager::fpInstance = 0;
@@ -1363,16 +1366,36 @@ void G4VisManager::SetCurrentViewer (G4VViewer* pViewer) {
   }
 }
 
+namespace {
+  struct NicknameComparison {
+    bool operator() (const G4String& lhs, const G4String& rhs) const
+    {return lhs.length()<rhs.length();}
+  };
+}
+
 void G4VisManager::PrintAvailableGraphicsSystems () const {
   G4int nSystems = fAvailableGraphicsSystems.size ();
   G4cout << "Current available graphics systems are:";
   if (nSystems) {
-    for (int i = 0; i < nSystems; i++) {
-      const G4VGraphicsSystem* pSystem = fAvailableGraphicsSystems [i];
-      G4cout << "\n  " << pSystem -> GetName ();
-      if (pSystem -> GetNickname () != "") {
-	G4cout << " (" << pSystem -> GetNickname () << ")";
+    // Make a map of graphics systems names (there may be repeated systems)
+    // and for each name a set of nicknames.  The nicknames are ordered
+    // by length - see struct NicknameComparison above.
+    std::map<G4String,std::set<G4String,NicknameComparison> > systemMap;
+    for (G4int i = 0; i < nSystems; i++) {
+      const G4VGraphicsSystem* pSystem = fAvailableGraphicsSystems[i];
+      systemMap[pSystem->GetName()].insert(pSystem->GetNickname());
+    }
+    // Print the map.
+    std::map<G4String,std::set<G4String,NicknameComparison> >::const_iterator i;
+    for (i = systemMap.begin(); i != systemMap.end(); ++i) {
+      G4cout << "\n  " << i->first << " (";
+      const std::set<G4String,NicknameComparison>& nicknames = i->second;
+      std::set<G4String,NicknameComparison>::const_iterator j;
+      for (j = nicknames.begin(); j != nicknames.end(); ++j) {
+        if (j != nicknames.begin()) G4cout << ", ";
+        G4cout << *j;
       }
+      G4cout << ')';
     }
   }
   else {

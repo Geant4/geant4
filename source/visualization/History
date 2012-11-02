@@ -24,6 +24,35 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+1st November 2012  John Allison  (vis-V09-05-46)
+- opengl-V09-05-50:
+  o Fixed compiler warnings (FJ).
+  o Fixed bug in printEPS for batch (LG).
+
+31st October 2012  John Allison
+- openinventor-V09-05-14:  FWJ
+  o Fixed shadowed variables (compiler warnings).
+  o Corrected unrecoverable zoom-out when switching
+    to Perspective camera.
+  o Fixed incomplete mouse-over position readout.
+  o Added License and Disclaimer JA,
+
+30th October 2012  John Allison
+- visman-V09-05-45: Improved PrintAvailableGraphicsSystems.
+- opengl-V09-05-49:
+  o printSize, etc. (set by /vis/ogl/printSize, etc.) made static, i.e.,
+    applies to all OGL viewers.
+  o Corrected effect of toggle transparency pop-up action.
+
+29th October 2012  John Allison
+- visman-V09-05-44: G4VisCommandsSceneAdd.cc: /vis/scene/add/date:
+  o Added user-specified date-time as last argument(s) on command line.
+
+28th October 2012  Laurent Garnier
+- visexternal-V09-04-04 and visexternal-V09-04-05:
+  o 26th October 2012  Laurent Garnier, recorded 28th October JA.
+  o Remove create date in eps files (very useful to be able to compare them)
+
 27th October 2012  John Allison  (vis-V09-05-45)
 - visman-V09-05-43:
   o Implemented the concept of a "fallback" graphics system.  Used only

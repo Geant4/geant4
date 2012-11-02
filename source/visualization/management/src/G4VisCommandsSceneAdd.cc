@@ -379,6 +379,13 @@ G4VisCommandSceneAddDate::G4VisCommandSceneAddDate () {
   parameter -> SetGuidance ("Layout, i.e., adjustment: left|centre|right.");
   parameter -> SetDefaultValue ("left");  // Would prefer right.
   fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("date", 's', omitable = true);
+  parameter -> SetGuidance
+  ("The date you want to appear on the view of the scene (this includes the"
+   "\nrest of the line, including spaces).  The default, \'-\', writes the"
+   "\ndate and time of the moment of drawing.");
+  parameter -> SetDefaultValue ("-");
+  fpCommand -> SetParameter (parameter);
 }
 
 G4VisCommandSceneAddDate::~G4VisCommandSceneAddDate () {
@@ -404,15 +411,20 @@ void G4VisCommandSceneAddDate::SetNewValue (G4UIcommand*, G4String newValue)
 
   G4int size;
   G4double x, y;
-  G4String layoutString;
+  G4String layoutString, dateString;
   std::istringstream is(newValue);
-  is >> size >> x >> y >> layoutString;
+  is >> size >> x >> y >> layoutString >> dateString;
+  // Read rest of line, if any.
+  const size_t NREMAINDER = 100;
+  char remainder[NREMAINDER];
+  is.getline(remainder, NREMAINDER);
+  dateString += remainder;
   G4Text::Layout layout = G4Text::right;
   if (layoutString(0) == 'l') layout = G4Text::left;
   else if (layoutString(0) == 'c') layout = G4Text::centre;
   else if (layoutString(0) == 'r') layout = G4Text::right;
 
-  Date* date = new Date(fpVisManager, size, x, y, layout);
+  Date* date = new Date(fpVisManager, size, x, y, layout, dateString);
   G4VModel* model =
     new G4CallbackModel<G4VisCommandSceneAddDate::Date>(date);
   model->SetType("Date");
@@ -434,7 +446,12 @@ void G4VisCommandSceneAddDate::SetNewValue (G4UIcommand*, G4String newValue)
 void G4VisCommandSceneAddDate::Date::operator()
   (G4VGraphicsScene& sceneHandler, const G4Transform3D&)
 {
-  G4String time = fTimer.GetClockTime();
+  G4String time;
+  if (fDate == "-") {
+    time = fTimer.GetClockTime();
+  } else {
+    time = fDate;
+  }
   // Check for \n, starting from back, and erase.
   std::string::size_type i = time.rfind('\n');
   if (i != std::string::npos) time.erase(i);

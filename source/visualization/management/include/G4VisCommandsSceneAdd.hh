@@ -101,15 +101,17 @@ private:
   struct Date {
     Date
     (G4VisManager* vm, G4int size,
-     G4double x, G4double y, G4Text::Layout layout):
+     G4double x, G4double y, G4Text::Layout layout,
+     const G4String& date):
       fpVisManager(vm), fSize(size),
-      fX(x), fY(y), fLayout(layout) {}
+      fX(x), fY(y), fLayout(layout), fDate(date) {}
     void operator()(G4VGraphicsScene&, const G4Transform3D&);
     G4VisManager* fpVisManager;
     G4Timer fTimer;
     G4int fSize;
     G4double fX, fY;
     G4Text::Layout fLayout;
+    G4String fDate;
   };
   G4UIcommand* fpCommand;
 };

@@ -20,6 +20,21 @@ committal in the CVS repository !
 History file for visualization/OpenInventor
 -------------------------------------------
 
+31st October 2012  John Allison  (openinventor-V09-05-14)
+- History:
+  o Corrected date!!!
+
+31st October 2012  John Allison  (openinventor-V09-05-13)
+- G4OpenInventorXtExaminerViewer.cc/hh:
+  o Added License and Disclaimer.
+
+30th October 2012  Frederick Jones
+- G4OpenInventorXtExaminerViewer:
+  o Fixed shadowed variables (compiler warnings)
+  o Corrected unrecoverable zoom-out when switching
+    to Perspective camera.
+  o Fixed incomplete mouse-over position readout.
+
 18th October 2012  Frederick Jones
 - G4OpenInventorXtExtendedViewer:
   o Removed inheritance from G4OpenInventorXtViewer.

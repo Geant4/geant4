@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+1st November 2012  John Allison (tagged: opengl-V09-05-50)
+
+31st October 2012  Fred Jones
+- Fix compiler warnings.
+
+31st October 2012  Laurent Garnier
+- G4OpenGLStored/ImmediateQtViewer: Fix a bug in batch mode for printEPS, size was not correct
+
 30th October 2012  Laurent Garnier (tagged: opengl-V09-05-49)
 
 30th October 2012  John Allison

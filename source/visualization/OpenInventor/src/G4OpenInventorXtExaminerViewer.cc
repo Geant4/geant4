@@ -1,3 +1,32 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// Open Inventor Xt Extended Viewer - 30 Oct 2012
+// Rastislav Ondrasek, Pierre-Luc Gagnon, Frederick Jones TRIUMF
+
 #include <stdio.h>
 #include <string.h>
 #include <string>
@@ -745,14 +774,19 @@ void G4OpenInventorXtExaminerViewer::afterRealizeHook()
    SoXtExaminerViewer::afterRealizeHook();
 
    // Default height is used when selecting and viewing scene elements
+   // FWJ Added defaultHeight for Ortho camera
    SoCamera *cam = getCamera();
    if (cam) {
       if (cam->isOfType(SoPerspectiveCamera::getClassTypeId())) {
          defaultHeightAngle =
             ((SoPerspectiveCamera *) cam)->heightAngle.getValue();
          toggleCameraType();
+         defaultHeight =
+            ((SoOrthographicCamera *) cam)->height.getValue();
          toggleCameraType();
       } else {
+         defaultHeight =
+            ((SoOrthographicCamera *) cam)->height.getValue();
          toggleCameraType();
          cam = getCamera();
          if (cam->isOfType(SoPerspectiveCamera::getClassTypeId()))
@@ -952,7 +986,9 @@ void G4OpenInventorXtExaminerViewer::moveCamera(float dist, bool lookdown)
 
       cam->position = camPosNew;
       cam->pointAt(p2, camUpVec);
-      cam->focalDistance = (p2 - camPosNew).length();
+      // FWJ Disabled: zooms out the Persp camera much too far
+      // and can't recover by zooming in!
+      //      cam->focalDistance = (p2 - camPosNew).length();
 
       p2.getValue(x,y,z);
       camPosNew.getValue(x,y,z);
@@ -1124,7 +1160,7 @@ void G4OpenInventorXtExaminerViewer::mouseoverCB(void *aThis, SoEventCallback *e
 
       if(node->getTypeId() == Geant4_SoPolyhedron::getClassTypeId()) {
 
-         sLogName = "Logical Volume: ";
+         sLogName = "Logical Volume:  ";
          sLogName += ((Geant4_SoPolyhedron *)node)->getName().getString();
 
          SoGetBoundingBoxAction bAction(viewportRegion);
@@ -1132,7 +1168,7 @@ void G4OpenInventorXtExaminerViewer::mouseoverCB(void *aThis, SoEventCallback *e
          SbBox3f bBox = bAction.getBoundingBox();
          SbVec3f center = bBox.getCenter();
          center.getValue(x,y,z);
-         ssZPos << "Z Pos: " << z;
+         ssZPos << "Pos:  " << x << "  " << y << "  " << z;
 
          G4AttHolder* attHolder = dynamic_cast<G4AttHolder*>(node);
          if(attHolder && attHolder->GetAttDefs().size()) {
@@ -1152,14 +1188,14 @@ void G4OpenInventorXtExaminerViewer::mouseoverCB(void *aThis, SoEventCallback *e
 
                   if(valueName == "Solid") {
                      if(ssSolids.str() == "")
-                        ssSolids << "Solid Name: " << value;
+                        ssSolids << "Solid Name:  " << value;
                      else
                         ssSolids << ", " << value;
                   }
 
                   if(valueName == "Material") {
                      if(ssMaterials.str() == "")
-                        ssMaterials << "Material Name: " << value;
+                        ssMaterials << "Material Name:  " << value;
                      else
                         ssMaterials << ", " << value;
                   }
@@ -2070,11 +2106,11 @@ void G4OpenInventorXtExaminerViewer::getSceneElements()
       bAction.apply(path);
       SbBox3f bBox = bAction.getBoundingBox();
 
-      SbVec3f center = bBox.getCenter();
-      center.getValue(x,y,z);
+      SbVec3f centr = bBox.getCenter();
+      centr.getValue(x,y,z);
 
       path->ref();
-      sceneElement el = { field, path, center, 0.0 };
+      sceneElement el = { field, path, centr, 0.0 };
       this->sceneElements.push_back(el);
    }
 }
@@ -2622,7 +2658,7 @@ void G4OpenInventorXtExaminerViewer::lookAtSceneElementCB(Widget,
          SbVec3f elementCoord = bBox.getCenter();
 
          This->refParticleIdx = 0;
-         SbVec3f p1, p2, p;
+         SbVec3f p;
 
          float absLengthNow, absLengthMin;
          int maxIdx = This->refParticleTrajectory.size() - 2;
@@ -2654,8 +2690,10 @@ void G4OpenInventorXtExaminerViewer::lookAtSceneElementCB(Widget,
             pN = This->refParticleTrajectory[This->refParticleTrajectory.size() - 1];
             This->distance = (pN - p1).length() / 10;
 
+            // FWJ Restore the default height instead of hard-wired value
             if (cam->isOfType(SoOrthographicCamera::getClassTypeId()))
-               ((SoOrthographicCamera *) cam)->height.setValue(10000.0f);
+               ((SoOrthographicCamera *) cam)->height.setValue(This->defaultHeight);
+            // ((SoOrthographicCamera *) cam)->height.setValue(10000.0f);
             else if (cam->isOfType(SoPerspectiveCamera::getClassTypeId()))
                ((SoPerspectiveCamera *) cam)->heightAngle.setValue(
                                                                    This->defaultHeightAngle);
@@ -4446,7 +4484,7 @@ void G4OpenInventorXtExaminerViewer::setStartingPtForAnimation()
       stopAnimating();
 
    SbRotation rot;
-   SbVec3f p1, p2, p2_tmp, camUpVec, camDir, camDir_tmp, leftRightAxis;
+   SbVec3f p1, p2, p2_tmp, camUpV, camD, camD_tmp, leftRightAxis;
    float x1, y1, z1, x2, y2, z2;
 
    if (currentState == ANIMATION) {
@@ -4467,24 +4505,24 @@ void G4OpenInventorXtExaminerViewer::setStartingPtForAnimation()
    p1.getValue(x1, y1, z1);
    p2.getValue(x2, y2, z2);
 
-   camDir = p2 - p1;
-   camDir.normalize();
+   camD = p2 - p1;
+   camD.normalize();
 
    p2_tmp.setValue(x2, y1, z2);
-   camDir_tmp = p2_tmp - p1;
-   camDir_tmp.normalize();
+   camD_tmp = p2_tmp - p1;
+   camD_tmp.normalize();
 
-   camUpVec.setValue(0, 1, 0);
-   rot.setValue(camDir_tmp, camDir);
-   rot.multVec(camUpVec, camUpVec);
+   camUpV.setValue(0, 1, 0);
+   rot.setValue(camD_tmp, camD);
+   rot.multVec(camUpV, camUpV);
 
-   leftRightAxis = camDir.cross(camUpVec);
+   leftRightAxis = camD.cross(camUpV);
 
    myCam->position = p1;
-   myCam->pointAt(p2, camUpVec);
+   myCam->pointAt(p2, camUpV);
 
    // Update camera position
-   p1 = p1 + (up_down * camUpVec) + (left_right * leftRightAxis);
+   p1 = p1 + (up_down * camUpV) + (left_right * leftRightAxis);
    myCam->position = p1;
 }
 
@@ -4539,9 +4577,10 @@ void G4OpenInventorXtExaminerViewer::gotoRefPathStartCB(Widget,
    This->animSpeedSwitch->whichChild.setValue(SO_SWITCH_NONE);
    This->scheduleRedraw();
 
+   // FWJ Disabled: this is set in moveCamera()
    // Zoom in
-   SoCamera *cam = This->getCamera();
-   cam->focalDistance = 0.1f;
+   //   SoCamera *cam = This->getCamera();
+   //   cam->focalDistance = 0.1f;
 
    This->prevParticleDir = SbVec3f(0,0,0);
 
@@ -4600,7 +4639,7 @@ void G4OpenInventorXtExaminerViewer::animateRefParticleCB(Widget,
    ///////////////////////////////////////////////////////////////
 
    SoCamera *cam = This->getCamera();
-   SbVec3f camDirOld, camDirNew, camDirNew_tmp, camUpVec, P0, P1, P1_tmp;
+   //   SbVec3f camDirOld, camDirNew, camDirNew_tmp, camUpVec, P0, P1, P1_tmp;
 
    if (This->currentState == ANIMATION || This->currentState == REVERSED_ANIMATION
        || This->currentState == ROTATING)
@@ -4677,9 +4716,9 @@ void G4OpenInventorXtExaminerViewer::sceneChangeCB(void *userData, SoSensor *)
 }
 
 
-HookEventProcState::HookEventProcState(G4OpenInventorXtExaminerViewer *viewer)
+HookEventProcState::HookEventProcState(G4OpenInventorXtExaminerViewer* vwr)
 {
-   this->viewer = viewer;
+   this->viewer = vwr;
 }
 
 

@@ -52,6 +52,8 @@ G4OpenGLStoredQtViewer::G4OpenGLStoredQtViewer
   fHasToRepaint = false;
   fIsRepainting = false;
 
+  resize(fVP.GetWindowSizeHintX(),fVP.GetWindowSizeHintY());
+
   if (fViewId < 0) return;  // In case error in base class instantiation.
 }
 

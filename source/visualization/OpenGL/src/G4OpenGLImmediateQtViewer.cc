@@ -51,6 +51,8 @@ G4OpenGLImmediateQtViewer::G4OpenGLImmediateQtViewer
   fHasToRepaint = false;
   fIsRepainting = false;
 
+  resize(fVP.GetWindowSizeHintX(),fVP.GetWindowSizeHintY());
+
   if (fViewId < 0) return;  // In case error in base class instantiation.
 }
 

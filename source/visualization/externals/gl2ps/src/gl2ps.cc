@@ -2681,13 +2681,13 @@ static void gl2psPrintPostScriptHeader(void)
   gl2psPrintf("%%%%Title: %s\n"
               "%%%%Creator: GL2PS %d.%d.%d%s, %s\n"
               "%%%%For: %s\n"
-              "%%%%CreationDate: %s"
+              "%%%%CreationDate:\n"
               "%%%%LanguageLevel: 3\n"
               "%%%%DocumentData: Clean7Bit\n"
               "%%%%Pages: 1\n",
               gl2ps->title, GL2PS_MAJOR_VERSION, GL2PS_MINOR_VERSION, 
               GL2PS_PATCH_VERSION, GL2PS_EXTRA_VERSION, GL2PS_COPYRIGHT,
-              gl2ps->producer, ctime(&now));
+              gl2ps->producer);
 
   if(gl2ps->format == GL2PS_PS){
     gl2psPrintf("%%%%Orientation: %s\n"
@@ -3248,10 +3248,10 @@ static void gl2psPrintTeXHeader(void)
           "%% Title: %s\n"
           "%% Creator: GL2PS %d.%d.%d%s, %s\n"
           "%% For: %s\n"
-          "%% CreationDate: %s",
+          "%% CreationDate:\n",
           gl2ps->title, GL2PS_MAJOR_VERSION, GL2PS_MINOR_VERSION,
           GL2PS_PATCH_VERSION, GL2PS_EXTRA_VERSION, GL2PS_COPYRIGHT,
-          gl2ps->producer, ctime(&now));
+          gl2ps->producer);
 
   fprintf(gl2ps->stream, 
           "\\setlength{\\unitlength}{1pt}\n"
@@ -3966,15 +3966,9 @@ static int gl2psPrintPDFInfo(void)
   }
   
   offs += fprintf(gl2ps->stream, 
-                  "/CreationDate (D:%d%02d%02d%02d%02d%02d)\n"
+                  "/CreationDate\n"
                   ">>\n"
-                  "endobj\n",
-                  newtime->tm_year+1900, 
-                  newtime->tm_mon+1, 
-                  newtime->tm_mday,
-                  newtime->tm_hour,
-                  newtime->tm_min,
-                  newtime->tm_sec);
+                  "endobj\n");
   return offs;
 }
 
@@ -4916,9 +4910,9 @@ static void gl2psPrintSVGHeader(void)
   gl2psPrintf("<desc>\n");
   gl2psPrintf("Creator: GL2PS %d.%d.%d%s, %s\n"
               "For: %s\n"
-              "CreationDate: %s",
+              "CreationDate:\n",
               GL2PS_MAJOR_VERSION, GL2PS_MINOR_VERSION, GL2PS_PATCH_VERSION,
-              GL2PS_EXTRA_VERSION, GL2PS_COPYRIGHT, gl2ps->producer, ctime(&now));
+              GL2PS_EXTRA_VERSION, GL2PS_COPYRIGHT, gl2ps->producer);
   gl2psPrintf("</desc>\n");
   gl2psPrintf("<defs>\n");
   gl2psPrintf("</defs>\n");
@@ -5281,10 +5275,10 @@ static void gl2psPrintPGFHeader(void)
           "%% Title: %s\n"
           "%% Creator: GL2PS %d.%d.%d%s, %s\n"
           "%% For: %s\n"
-          "%% CreationDate: %s",
+          "%% CreationDate:\n",
           gl2ps->title, GL2PS_MAJOR_VERSION, GL2PS_MINOR_VERSION,
           GL2PS_PATCH_VERSION, GL2PS_EXTRA_VERSION, GL2PS_COPYRIGHT,
-          gl2ps->producer, ctime(&now));
+          gl2ps->producer);
 
   fprintf(gl2ps->stream, "\\begin{pgfpicture}\n");
   if(gl2ps->options & GL2PS_DRAW_BACKGROUND){

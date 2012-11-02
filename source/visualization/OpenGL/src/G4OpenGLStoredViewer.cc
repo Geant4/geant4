@@ -293,7 +293,7 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 		G4OpenGLTransform3D oglt (to.fTransform);
 		glMultMatrixd (oglt.GetGLMatrix ());
 	      }
-	      const G4Colour& c = to.fColour;
+	      const G4Colour& cc = to.fColour;
 	      if (fFadeFactor > 0. && to.fEndTime < fEndTime) {
 		// Brightness scaling factor
 		G4double bsf = 1. - fFadeFactor *
@@ -301,21 +301,21 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 		const G4Colour& bg = fVP.GetBackgroundColour();
                 if (transparency_enabled) {
                   glColor4d
-		  (bsf * c.GetRed() + (1. - bsf) * bg.GetRed(),
-		   bsf * c.GetGreen() + (1. - bsf) * bg.GetGreen(),
-		   bsf * c.GetBlue() + (1. - bsf) * bg.GetBlue(),
-                   bsf * c.GetAlpha() + (1. - bsf) * bg.GetAlpha());
+		  (bsf * cc.GetRed() + (1. - bsf) * bg.GetRed(),
+		   bsf * cc.GetGreen() + (1. - bsf) * bg.GetGreen(),
+		   bsf * cc.GetBlue() + (1. - bsf) * bg.GetBlue(),
+                   bsf * cc.GetAlpha() + (1. - bsf) * bg.GetAlpha());
                 } else {
                   glColor3d
-		  (bsf * c.GetRed() + (1. - bsf) * bg.GetRed(),
-		   bsf * c.GetGreen() + (1. - bsf) * bg.GetGreen(),
-		   bsf * c.GetBlue() + (1. - bsf) * bg.GetBlue());
+		  (bsf * cc.GetRed() + (1. - bsf) * bg.GetRed(),
+		   bsf * cc.GetGreen() + (1. - bsf) * bg.GetGreen(),
+		   bsf * cc.GetBlue() + (1. - bsf) * bg.GetBlue());
                 }
 	      } else {
                 if (transparency_enabled) {
-                  glColor4d(c.GetRed(),c.GetGreen(),c.GetBlue(),c.GetAlpha());
+                  glColor4d(cc.GetRed(),cc.GetGreen(),cc.GetBlue(),cc.GetAlpha());
                 } else {
-                  glColor3d(c.GetRed(),c.GetGreen(),c.GetBlue());
+                  glColor3d(cc.GetRed(),cc.GetGreen(),cc.GetBlue());
                 }
 	      }
 	      glCallList (to.fDisplayListId);
