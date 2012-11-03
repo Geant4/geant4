@@ -66,7 +66,7 @@ test45 ## Validation of thick target data for low-energy proton and ion beams
        ## stopped in different targets (not for stt).
 test46 ## Validation of CMS-type combined calorimeter (not for stt).
 test47 ## CMS combined calorimeter (not for stt).
-test48 ## Stopping processes validation (not for stt) 
+test48 ## Stopping processes validation
 test49 ## Test for CHIPS inelastic nuclear interactions.
 test50 ## Statistical test suite for e.m. processes:
        ## 1) CSDA range and Stopping Power test for e-,p;
