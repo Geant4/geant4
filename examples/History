@@ -17,6 +17,35 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+2nd November 2012  Gabriele Cosmo (examples-V09-05-10)
+- Updated reference outputs according to reference tag geant4-09-05-ref-10.
+- Includes tags: examples-advanced-cmk-V09-05-00, air_shower-V09-05-05,
+                 amsEcal-V09-05-01, ccal-V09-05-03, ChargeExchangeMC-V09-05-03,
+                 brachy-V09-05-01, dnaphysics-V09-05-06, eRosita-V09-05-00,
+                 gammaknife-V09-05-03, gammaraytel-V09-05-00,
+                 hadrontherapy-V09-05-09, human_phantom-V09-05-03,
+                 iort_therapy-V09-05-05, lAr_calorimeter-V09-05-01,
+                 medical_linac-V09-05-07, microbeam-V09-05-05,
+                 microdosimetry-V09-05-05, nanobeam-V09-05-03, purmag-V09-05-02,
+                 radioprotection-V09-05-02, DMX-V09-05-03, XrayFluo-V09-05-04,
+                 xraytel-V09-05-01, exampleB4-V09-05-01, exbiasing-V09-05-03,
+                 examples-extended-V09-05-00, analysisExample-V09-05-05
+                 testem0-V09-05-09, testem1-V09-05-12, testem2-V09-05-05,
+                 testem3-V09-05-11, testem4-V09-05-07, testem5-V09-05-10,
+                 testem6-V09-05-03, testem7-V09-05-09, testem8-V09-05-09,
+                 testem9-V09-05-05, testem10-V09-05-03, testem11-V09-05-07,
+                 testem12-V09-05-09, testem13-V09-05-02, testem14-V09-05-05,
+                 testem15-V09-05-05, testem16-V09-05-03, testem17-V09-05-05,
+                 testem18-V09-05-04, fieldex01-V09-05-00, fieldex02-V09-05-00,
+                 fieldex03-V09-05-00, g3tog4Tests-V09-05-04, exhadr01-V09-05-06,
+                 exHadronic-V09-05-02, exhadr02-V09-05-05, exhadr03-V09-05-11,
+                 exMedical-V09-05-01, DICOM-V09-05-09, exPersistency-V09-05-06,
+                 gtherapy-V09-05-05, exampleP01-V09-05-07, exampleP02-V09-05-00,
+                 rdecay01-V09-05-13, rdecay02-V09-05-03, exampleRE01-V09-05-01,
+                 exRunAndEvent-V09-05-01, exampleRE02-V09-05-02,
+                 exampleRE03-V09-05-01, exampleRE04-V09-05-01,
+                 exNovice-V09-05-01.
+
 2nd October 2012  Gabriele Cosmo (examples-V09-05-09)
 - Updated reference outputs according to reference tag geant4-09-05-ref-09.
 - Includes tags: microdosimetry-V09-05-02, exbasic-V09-05-00,
