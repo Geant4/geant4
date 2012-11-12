@@ -38,6 +38,8 @@
 #include "G4OpenGLStoredSceneHandler.hh"
 #include "G4ios.hh"
 
+#include <qapplication.h>
+
 G4OpenGLStoredQtViewer::G4OpenGLStoredQtViewer
 (G4OpenGLStoredSceneHandler& sceneHandler,
  const G4String&  name):
@@ -89,6 +91,12 @@ void G4OpenGLStoredQtViewer::initializeGL () {
   } else {
     fHasToRepaint =true;
   }
+
+   // Set the component visible
+   setVisible(true) ;
+
+   // and update it immediatly before wait for SessionStart() (batch mode)
+  QCoreApplication::sendPostedEvents () ;
 
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredQtViewer::InitialiseGL  END\n");

@@ -272,7 +272,9 @@ G4OpenGLQtViewer::~G4OpenGLQtViewer (
 	delete wItem;
       }
     }
-    fUISceneTreeComponentsTBWidget->removeTab(fUISceneTreeComponentsTBWidget->indexOf(fSceneTreeWidget));
+    if (fUISceneTreeComponentsTBWidget != NULL) {
+      fUISceneTreeComponentsTBWidget->removeTab(fUISceneTreeComponentsTBWidget->indexOf(fSceneTreeWidget));
+    }
   }
   G4cout <<removeTempFolder().toStdString().c_str() <<G4endl;
 }
@@ -2246,14 +2248,13 @@ QWidget *G4OpenGLQtViewer::getParentWidget()
 
 void G4OpenGLQtViewer::initSceneTreeComponent(){
 
-  if (fUISceneTreeComponentsTBWidget == NULL) {
-    return;
-  }
-
   fSceneTreeWidget = new QWidget();
   fSceneTreeWidget->setLayout (new QVBoxLayout());
-  fUISceneTreeComponentsTBWidget->addTab(fSceneTreeWidget,QString(GetName().data()));
-  
+
+  if (fUISceneTreeComponentsTBWidget != NULL) {
+    fUISceneTreeComponentsTBWidget->addTab(fSceneTreeWidget,QString(GetName().data()));
+  }
+
   QLayout* layoutSceneTreeComponentsTBWidget = fSceneTreeWidget->layout();
 
 

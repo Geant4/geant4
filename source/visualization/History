@@ -24,6 +24,20 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+5nd November 2012  Joseph Perl  (vis-V09-05-48)
+Rolling openinventor back to: openinventor-V09-05-14
+
+2nd November 2012  Joseph Perl  (vis-V09-05-47)
+-openinventor-V09-05-15:
+  o Fixed Coin3D dependency issue (FJ).
+-visman-V09-05-46:
+  o Tidied G4ViewParameters.hh (JA).
+- opengl-V09-05-51:
+  o Fixed bug in display-list-re-use algorithm.
+  o Fixed a possible problem in batch mode for Qt scene tree component.
+- opengl-V09-05-52:
+  o Fix bug #1368, Qt batch mode display a window and printEPS (JA and LG).
+
 1st November 2012  John Allison  (vis-V09-05-46)
 - opengl-V09-05-50:
   o Fixed compiler warnings (FJ).

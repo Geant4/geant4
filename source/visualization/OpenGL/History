@@ -17,6 +17,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+2nd November 2012  John Allison (opengl-V09-05-52)
+- G4OpenGLImmediateQtViewer,G4OpenGLStoredQtViewer :
+  o Fix bug #1368, now Qt batch mode display a window and printEPS is working again
+
+2nd November 2012  John Allison (opengl-V09-05-51)
+- G4OpenGLStoredSceneHandler.cc:
+  o Fixed bug in display-list-re-use algorithm.  (If touchables have
+    been modified it is too risky to re-use display lists.)
+
+2nd November 2012  Laurent Garnier
+- G4OpenGLQtViewer : Fix a possible problem in batch mode for scene tree component
+
 1st November 2012  John Allison (tagged: opengl-V09-05-50)
 
 31st October 2012  Fred Jones

@@ -176,16 +176,18 @@ public: // With description
   // it contains more information.  (The size information in
   // GetXGeometryString and GetWindowSizeHint is guaranteed to be
   // identical.)
-  bool IsWindowSizeHintX () const;
-  bool IsWindowSizeHintY () const;
-  bool IsWindowLocationHintX () const;
-  bool IsWindowLocationHintY () const;
-
+        bool             IsWindowSizeHintX       () const;
+        bool             IsWindowSizeHintY       () const;
+        bool             IsWindowLocationHintX   () const;
+        bool             IsWindowLocationHintY   () const;
         G4bool           IsAutoRefresh           () const;
-  const G4Colour&        GetBackgroundColour     () const;
+  const G4Colour&  GetBackgroundColour           () const;
         G4bool           IsPicking               () const;
-
-  // Here Follow functions to evaluate the above algorithms as a
+        RotationStyle    GetRotationStyle        () const;
+  const std::vector<G4ModelingParameters::VisAttributesModifier>&
+                         GetVisAttributesModifiers () const;
+  
+  // Here Follow functions to evaluate useful quantities as a
   // function of the radius of the Bounding Sphere of the object being
   // viewed.  Call them in the order given - for efficiency, later
   // functions depend on the results of earlier ones (Store the
@@ -196,10 +198,7 @@ public: // With description
   G4double GetFarDistance     (G4double cameraDistance,
 			       G4double nearDistance, G4double radius) const;
   G4double GetFrontHalfHeight (G4double nearDistance, G4double radius) const;
-  RotationStyle GetRotationStyle() const;
-  const std::vector<G4ModelingParameters::VisAttributesModifier>&
-  GetVisAttributesModifiers() const;
-  
+
   // Set, Add, Multiply, Increment, Unset and Clear functions.
   void SetDrawingStyle         (G4ViewParameters::DrawingStyle style);
   void SetAuxEdgeVisible       (G4bool);

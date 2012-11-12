@@ -38,6 +38,8 @@
 
 #include "G4ios.hh"
 
+#include <qapplication.h>
+
 G4OpenGLImmediateQtViewer::G4OpenGLImmediateQtViewer
 (G4OpenGLImmediateSceneHandler& sceneHandler,
  const G4String&  name):
@@ -85,6 +87,11 @@ void G4OpenGLImmediateQtViewer::initializeGL () {
     fHasToRepaint =true;
   }
 
+  // Set the component visible
+  setVisible(true) ;
+  
+  // and update it immediatly before wait for SessionStart() (batch mode)
+  QCoreApplication::sendPostedEvents () ;
 }
 
 
