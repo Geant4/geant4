@@ -271,6 +271,7 @@ private:
   G4double                    facrange;
   G4double                    facgeom;
   G4double                    polarAngleLimit;
+  G4double                    lowestKinEnergy;
 
   G4bool                      latDisplasment;
   G4bool                      isIon;
@@ -294,6 +295,7 @@ private:
 
   G4ThreeVector               fNewPosition;
   G4bool                      fPositionChanged;
+  G4bool                      isActive;
 
   G4int                       warn;
 };

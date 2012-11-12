@@ -84,9 +84,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4VMultipleScattering::G4VMultipleScattering(const G4String& name, 
-					     G4ProcessType type):
-  G4VContinuousDiscreteProcess(name, type),
+G4VMultipleScattering::G4VMultipleScattering(const G4String& name, G4ProcessType):
+  G4VContinuousDiscreteProcess("msc", fElectromagnetic),
   numberOfModels(0),
   firstParticle(0),
   currParticle(0),
@@ -99,8 +98,10 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name,
 {
   SetVerboseLevel(1);
   SetProcessSubType(fMultipleScattering);
+  if("ionmsc" == name) { firstParticle = G4GenericIon::GenericIon(); }
 
   geomMin = 1.e-6*CLHEP::mm;
+  lowestKinEnergy = 1*eV;
 
   // default limit on polar angle
   polarAngleLimit = 0.0;
@@ -111,6 +112,7 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name,
   pParticleChange = &fParticleChange;
   safetyHelper = 0;
   fPositionChanged = false;
+  isActive = false;
 
   modelManager = new G4EmModelManager();
   emManager = G4LossTableManager::Instance();
@@ -203,21 +205,12 @@ void
 G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part)
 {
   if(!firstParticle) { firstParticle = &part; }
-  if(part.GetParticleType() == "nucleus" && 
-     part.GetParticleSubType() == "generic") {
-
-    G4String pname = part.GetParticleName();
-    if(pname != "deuteron" && pname != "triton" &&
-       pname != "He3" && pname != "alpha" &&
-       pname != "alpha+"   && pname != "helium" &&
-       pname != "hydrogen") {
-
-      SetStepLimitType(fMinimal);
-      SetLateralDisplasmentFlag(false);
-      SetRangeFactor(0.2);
-      firstParticle = G4GenericIon::GenericIon();
-      isIon = true; 
-    }
+  if(part.GetParticleType() == "nucleus") {
+    SetStepLimitType(fMinimal);
+    SetLateralDisplasmentFlag(false);
+    SetRangeFactor(0.2);
+    if(&part == G4GenericIon::GenericIon()) { firstParticle = &part; }
+    isIon = true; 
   }
 
   emManager->PreparePhysicsTable(&part, this);
@@ -375,18 +368,21 @@ G4double G4VMultipleScattering::AlongStepGetPhysicalInteractionLength(
   }
 
   // step limit
-  if(currentModel->IsActive(ekin) && gPathLength > geomMin) {
+  if(currentModel->IsActive(ekin) && gPathLength >= geomMin 
+     && ekin >= lowestKinEnergy) {
+    isActive = true;
     tPathLength = currentModel->ComputeTruePathLengthLimit(track, gPathLength);
     if (tPathLength < physStepLimit) { 
       *selection = CandidateForSelection; 
     }
-  }
-  /*
+  } else { isActive = false; }
+  /*  
   if(currParticle->GetPDGMass() > GeV)    
-  G4cout << "MSC::AlongStepGPIL: Ekin= " << ekin 
+  G4cout << "MSC::AlongStepGPIL: Ekin= " << ekin
 	 << " gPathLength= " << gPathLength
 	 << " tPathLength= " << tPathLength
-	 << " currentMinimalStep= " << currentMinimalStep<< G4endl;
+	 << " currentMinimalStep= " << currentMinimalStep
+	 << " isActive " << isActive << G4endl;
   */
   return gPathLength;
 }
@@ -412,59 +408,71 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
   fParticleChange.ProposePosition(fNewPosition);
   fPositionChanged = false;
 
-  G4double ekin = track.GetKineticEnergy();
   G4double geomLength = step.GetStepLength();
 
   // very small step - no msc
-  if(!currentModel->IsActive(ekin) || tPathLength <= geomMin) {
+  if(!isActive) {
     tPathLength = geomLength;
 
     // sample msc
   } else {
     G4double range = 
-      currentModel->GetRange(currParticle,ekin,track.GetMaterialCutsCouple());
+      currentModel->GetRange(currParticle,track.GetKineticEnergy(),
+			     track.GetMaterialCutsCouple());
 
     G4double trueLength = currentModel->ComputeTrueStepLength(geomLength);
 
+    
+    // protection against wrong t->g->t conversion
+    //    if(trueLength > tPathLength) 
     /*
-      // protection against wrong t->g->t conversion
-      if(trueLength > tPathLength) { 
-      G4cout << "G4VMultipleScattering::AlongStepDoIt: GeomLength= " 
-	     << geomLength 
-	     << " trueLenght= " << trueLength 
-	     << " tPathLength= " << tPathLength
-	     << " dr= " << range - trueLength << G4endl;
-      */
-    if(trueLength < tPathLength) { tPathLength = trueLength; }
+    if(currParticle->GetPDGMass() > GeV)    
+    G4cout << "G4VMsc::AlongStepDoIt: GeomLength= " 
+	   << geomLength 
+	   << " trueLenght= " << trueLength 
+	   << " tPathLength= " << tPathLength
+	   << " dr= " << range - trueLength 
+	   << " ekin= " << track.GetKineticEnergy() << G4endl;
+    */
+    if (trueLength <= physStepLimit) {
+      tPathLength = trueLength; 
+    } else {
+      tPathLength = physStepLimit - 0.5*geomMin; 
+    }
 
     // do not sample scattering at the last or at a small step
-    if(tPathLength < range && tPathLength > geomMin) {
+    if(tPathLength + geomMin < range && tPathLength > geomMin) {
 
-      G4double safety = step.GetPreStepPoint()->GetSafety();
-      if(geomLength > safety) {
-	safety = currentModel->ComputeSafety(fNewPosition, 0.0); 
-      }
+      G4double preSafety = step.GetPreStepPoint()->GetSafety();
+      G4double postSafety= preSafety - geomLength; 
+      G4bool safetyRecomputed = false;
+      if( postSafety < geomMin ) {
+	safetyRecomputed = true;
+	postSafety = currentModel->ComputeSafety(fNewPosition,0.0); 
+      } 
       G4ThreeVector displacement = 
-	currentModel->SampleScattering(track.GetDynamicParticle(),safety);
+	currentModel->SampleScattering(track.GetDynamicParticle(),postSafety);
 
       G4double r2 = displacement.mag2();
 
-      //G4cout << "R= " << sqrt(r2) << " safety= " << safety << G4endl;
+      //G4cout << "R= " << sqrt(r2) << " postSafety= " << postSafety << G4endl;
 
       // make correction for displacement
       if(r2 > 0.0) {
 
 	fPositionChanged = true;
+        G4double fac = 1.0;
+
 	// displaced point is definitely within the volume
-	if(r2 < safety*safety) {
-
-	  // compute new endpoint of the Step
-	  fNewPosition += displacement;
-
-	} else {
+	if(r2 > postSafety*postSafety) {
+          if(!safetyRecomputed) {
+	    postSafety = currentModel->ComputeSafety(fNewPosition, 0.0);
+	  } 
 	  // add a factor which ensure numerical stability
-	  fNewPosition += displacement*(0.99*safety/sqrt(r2));
+	  if(r2 > postSafety*postSafety) { fac = 0.99*postSafety/sqrt(r2); }
 	}
+	// compute new endpoint of the Step
+	fNewPosition += fac*displacement;
 	//safetyHelper->ReLocateWithinVolume(fNewPosition);
       }
     }

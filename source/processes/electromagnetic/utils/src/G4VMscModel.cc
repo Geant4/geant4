@@ -101,10 +101,17 @@ G4VMscModel::GetParticleChangeForMSC(const G4ParticleDefinition* p)
     change = new G4ParticleChangeForMSC();
   }
   if(p) {
-    G4String partname = p->GetParticleName();
-    if(p->GetPDGMass() < GeV || ForceBuildTableFlag()
-       || partname == "deuteron" || partname == "triton" 
-       || partname == "He3" || partname == "alpha") {
+
+    // table is never built for GenericIon 
+    if(p->GetParticleName() == "GenericIon") {
+      if(xSectionTable) {
+	xSectionTable->clearAndDestroy();
+	delete xSectionTable;
+	xSectionTable = 0;
+      }
+
+      // table is always built for low mass particles 
+    } else if(p->GetPDGMass() < 4.5*GeV || ForceBuildTableFlag()) {
       G4double emin = std::max(LowEnergyLimit(), LowEnergyActivationLimit());
       G4double emax = std::min(HighEnergyLimit(), HighEnergyActivationLimit());
       emin = std::max(emin, man->MinKinEnergy());

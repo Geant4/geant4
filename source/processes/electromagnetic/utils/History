@@ -17,12 +17,36 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09 November 12: V.Ivant (emutils-V09-05-56)
+08 November 12: V.Ivant (emutils-V09-05-55)
+- G4VEnergyLossProcess - fixed non-reproducibility for ions
+
+08 November 12: V.Ivant (emutils-V09-05-54)
+- G4VMultipleScattering - improved logic of computation of PostStep
+    safety and true step length, added more accurate protection 
+    against case when true length exceed physics step limit
+
+06 November 12: V.Ivant (emutils-V09-05-53)
+- G4VMultipleScattering - fixed non-reproducibility for ions, added
+    protection - do not sample scattering if range exceed true step
+    length less than minGeom parameter (1e-6 mm)
+
+03 November 12: V.Ivant (emutils-V09-05-52)
+- G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering - fixed
+    printout at initialisation 
+
+02 November 12: V.Ivant (emutils-V09-05-51)
+- G4VMultipleScattering - ion multiple scattering is defined 
+    in the class constructor
+- G4VMscModel - build table for all particles except case when
+    multiple scattering process is shared with G4GenericIon  
+
 26 October 12: V.Ivant (emutils-V09-05-50)
-- G4VMultipleScatteringModel - return version 48
+- G4VMultipleScattering - return version 48
 - G4VEmProcess - changed initialisation for ions
 
 25 October 12: V.Ivant (emutils-V09-05-49)
-- G4VMultipleScatteringModel - moved relocation ALongStep and do not 
+- G4VMultipleScattering - moved relocation AlongStep and do not 
 	call msc PostStep
 
 21 October 12: V.Ivant (emutils-V09-05-48)
@@ -33,11 +57,11 @@ committal in the CVS repository !
     corresponding modifiction needed for biasing interface
 
 20 October 12: V.Ivant (emutils-V09-05-47)
-- G4VMultipleScatteringModel - fixed typo in previous tag;
+- G4VMultipleScattering - fixed typo in previous tag;
     compute true path length even is msc model is inactive 
 
 20 October 12: V.Ivant (emutils-V09-05-46)
-- G4VMultipleScatteringModel - critical fix for stopping particles 
+- G4VMultipleScattering - critical fix for stopping particles 
     (ATLAS report on small steps of low-energy ions)
 
 19 October 12: V.Ivant (emutils-V09-05-45)

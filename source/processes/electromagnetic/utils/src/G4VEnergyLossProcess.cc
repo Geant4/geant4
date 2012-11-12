@@ -584,7 +584,10 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 			   num == "kaon+" || num == "kaon-" || 
 			   num == "alpha" || num == "anti_proton" || 
 			   num == "GenericIon")))
-    { PrintInfoDefinition(); }
+    { 
+      particle = &part;
+      PrintInfoDefinition(); 
+    }
 
   // Added tracking cut to avoid tracking artifacts
   // identify deexcitation flag
@@ -877,7 +880,7 @@ void G4VEnergyLossProcess::StartTracking(G4Track* track)
 
   // reset ion
   if(isIon) {
-    chargeSqRatio = 1.0;
+    chargeSqRatio = 0.5;
 
     G4double newmass = track->GetDefinition()->GetPDGMass();
     if(baseParticle) {
@@ -915,6 +918,7 @@ G4double G4VEnergyLossProcess::AlongStepGetPhysicalInteractionLength(
     }
     if(x > finR) { x = y + finR*(1.0 - dRoverRange)*(2.0 - finR/fRange); }
     /*
+    if(particle->GetPDGMass() > 0.9*GeV)
     G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy
 	  <<" range= "<<fRange << " idx= " << basedCoupleIndex
     	  << " y= " << y << " finR= " << finR
@@ -964,6 +968,7 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
       reduceFactor = 1.0/(fFactor*massRatio);
     }
   }
+  //  if(particle->GetPDGMass() > 0.9*GeV)
   //G4cout << "q2= " << chargeSqRatio << " massRatio= " << massRatio << G4endl; 
   // initialisation for sampling of the interaction length 
   //if(previousStepSize <= 0.0) { theNumberOfInteractionLengthLeft = -1.0; }
@@ -1014,6 +1019,7 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
 
 #ifdef G4VERBOSE
     if (verboseLevel>2){
+    //  if(particle->GetPDGMass() > 0.9*GeV){
       G4cout << "G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength ";
       G4cout << "[ " << GetProcessName() << "]" << G4endl; 
       G4cout << " for " << track.GetDefinition()->GetParticleName() 

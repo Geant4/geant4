@@ -360,7 +360,10 @@ void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 			   num == "kaon+" || num == "kaon-" || 
 			   num == "alpha" || num == "anti_proton" || 
 			   num == "GenericIon")))
-    { PrintInfoDefinition(); }
+    { 
+      particle = &part;
+      PrintInfoDefinition(); 
+    }
 
   if(1 < verboseLevel) {
     G4cout << "G4VEmProcess::BuildPhysicsTable() done for "
