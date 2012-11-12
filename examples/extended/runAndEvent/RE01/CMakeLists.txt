@@ -40,7 +40,7 @@ target_link_libraries(RE01 ${Geant4_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(RE01_SCRIPTS
-    sample.in vis.mac
+    sample.in vis.mac pythia_event.data
   )
 
 foreach(_script ${RE01_SCRIPTS})
