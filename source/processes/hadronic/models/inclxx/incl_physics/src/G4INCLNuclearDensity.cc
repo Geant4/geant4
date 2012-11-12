@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.6
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -72,12 +72,10 @@ namespace G4INCL {
     theMaximumRadius(rhs.theMaximumRadius),
     theNuclearRadius(rhs.theNuclearRadius),
     // rFromP is owned by NuclearDensityFactory, so shallow copy is sufficient
-    rFromP(rhs.rFromP)
-  {
+    rFromP(rhs.rFromP),
     // deep copy for tFromR
-    delete tFromR;
-    tFromR = new InverseInterpolationTable(*(rhs.tFromR));
-
+    tFromR(new InverseInterpolationTable(*(rhs.tFromR)))
+  {
     std::copy(rhs.transmissionRadius, rhs.transmissionRadius+UnknownParticle, transmissionRadius);
   }
 

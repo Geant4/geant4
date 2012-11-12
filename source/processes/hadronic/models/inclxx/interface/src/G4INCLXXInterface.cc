@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.6
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -48,6 +48,7 @@
 
 G4INCLXXInterface::G4INCLXXInterface(const G4String& nam) :
   G4VIntraNuclearTransportModel(nam),
+  theINCLModel(NULL),
   theInterfaceStore(G4INCLXXInterfaceStore::GetInstance()),
   complainedAboutBackupModel(false)
 {
@@ -90,17 +91,6 @@ G4bool G4INCLXXInterface::AccurateProjectile(const G4HadProjectile &aTrack, cons
     return true;
   }
 
-  // If the projectile is heavier than theMaxProjMassINCL, run the collision as
-  // light on heavy.
-  // Note that here we are sure that either the projectile of the target is
-  // smaller than theMaxProjMass; otherwise theBackupModel would have been
-  // called.
-  const G4int theMaxProjMassINCL = theInterfaceStore->GetMaxProjMassINCL();
-  if(pA > theMaxProjMassINCL)
-    return true;
-  else
-    return false;
-
   // If either nucleus is a LCP (A<=4), run the collision as light on heavy
   const G4int tA = theNucleus.GetA_asInt();
   if(tA<=4 || pA<=4) {
@@ -110,8 +100,19 @@ G4bool G4INCLXXInterface::AccurateProjectile(const G4HadProjectile &aTrack, cons
       return true;
   }
 
-  // In all other cases, use the global setting
-  return theInterfaceStore->GetAccurateProjectile();
+  // If one of the nuclei is heavier than theMaxProjMassINCL, run the collision
+  // as light on heavy.
+  // Note that here we are sure that either the projectile or the target is
+  // smaller than theMaxProjMass; otherwise theBackupModel would have been
+  // called.
+  const G4int theMaxProjMassINCL = theInterfaceStore->GetMaxProjMassINCL();
+  if(pA > theMaxProjMassINCL)
+    return true;
+  else if(tA > theMaxProjMassINCL)
+    return false;
+  else
+    // In all other cases, use the global setting
+    return theInterfaceStore->GetAccurateProjectile();
 }
 
 G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& theNucleus)

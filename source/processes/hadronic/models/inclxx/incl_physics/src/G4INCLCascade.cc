@@ -30,7 +30,7 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.6
+// INCL++ revision: v5.1.8
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -573,6 +573,12 @@ namespace G4INCL {
       nucleus->setExcitationEnergy(theCNExcitationEnergy);
       nucleus->setMass(theCNMass+theCNExcitationEnergy);
       nucleus->setSpin(theCNSpin); // neglects any orbital angular momentum of the CN
+
+      // Take care of any remaining deltas
+      theEventInfo.forcedDeltasOutside = nucleus->decayOutgoingDeltas();
+
+      // Cluster decay
+      theEventInfo.clusterDecay = nucleus->decayOutgoingClusters() | nucleus->decayMe();
 
       // Fill the EventInfo structure
       nucleus->fillEventInfo(&theEventInfo);
