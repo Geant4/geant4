@@ -141,8 +141,7 @@ The macro file microbeam.mac is read by default.
 
 ---->5. PHYSICS
 
-Livermore, Binary and Binary_ion physics lists are used by default,
-see microbeam.mac
+Livermore physics list is used by default, see microbeam.mac
 
 ---->6. SIMULATION OUTPUT AND RESULT ANALYZIS                                    
 
