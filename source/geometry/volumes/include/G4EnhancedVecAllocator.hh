@@ -99,7 +99,11 @@ class G4EnhancedVecAllocator : public std::allocator<_Tp>
     // override allocate / deallocate
     //
     void deallocate(_Tp* _Ptr, size_t _Count);
+#ifdef __IBMCPP__
+    _Tp* allocate(size_t _Count, void * const hint = 0);  // IBM AIX
+#else
     _Tp* allocate(size_t _Count);
+#endif
 };
 
 // ------------------------------------------------------------
@@ -141,8 +145,13 @@ void G4EnhancedVecAllocator<_Tp>::deallocate(_Tp* _Ptr, size_t _Count)
 // allocate
 // ************************************************************
 //
+#ifdef __IBMCPP__
+template<typename _Tp>
+_Tp* G4EnhancedVecAllocator<_Tp>::allocate(size_t _Count, void * const hint)
+#else
 template<typename _Tp>
 _Tp* G4EnhancedVecAllocator<_Tp>::allocate(size_t _Count)
+#endif
 {
   size_t totalsize = _Count * sizeof(_Tp);
 

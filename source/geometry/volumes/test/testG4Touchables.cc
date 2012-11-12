@@ -108,20 +108,15 @@ G4VPhysicalVolume* BuildGeometry()
   G4Box *posBoxSlice=new G4Box("PosBoxSlice",10,10,2);
   G4Box *paramBox=new G4Box("ParamBox",1,1,1);
 
-  G4LogicalVolume *worldLog=new G4LogicalVolume(worldBox,0,
-						"WorldLog",0,0,0);
-  G4LogicalVolume *posLog=new G4LogicalVolume(posBox,0,
-					      "PosLog",0,0,0);
-  G4LogicalVolume *pos2Log=new G4LogicalVolume(posBox,0,
-					      "Pos2Log",0,0,0);
-  G4LogicalVolume *pos3Log=new G4LogicalVolume(posBox,0,
-					      "Pos3Log",0,0,0);
-  G4LogicalVolume *pos4Log=new G4LogicalVolume(posBox,0,
-					      "Pos4Log",0,0,0);
-  G4LogicalVolume *posSliceLog=new G4LogicalVolume(posBoxSlice,0,
-						   "PosSliceLog",0,0,0);
-  G4LogicalVolume *paramLog=new G4LogicalVolume(paramBox,0,
-						"ParamLog",0,0,0);
+  G4LogicalVolume *worldLog=new G4LogicalVolume(worldBox,0, "WorldLog" );
+  // FieldMgr=0, SensitiveVolume=0, UserLimits=0, optimise=true);
+  G4LogicalVolume *posLog=new G4LogicalVolume  (posBox, 0, "PosLog" );
+  G4LogicalVolume *pos2Log=new G4LogicalVolume( posBox, 0, "Pos2Log");
+  G4LogicalVolume *pos3Log=new G4LogicalVolume( posBox, 0, "Pos3Log");
+  G4LogicalVolume *pos4Log=new G4LogicalVolume( posBox, 0, "Pos4Log",0,0,0);
+
+  G4LogicalVolume *posSliceLog=new G4LogicalVolume(posBoxSlice,0,"PosSliceLog");
+  G4LogicalVolume *paramLog=new G4LogicalVolume(paramBox,0,"ParamLog");
 
   G4PVPlacement *worldPhys=new G4PVPlacement(0,G4ThreeVector(0,0,0),
 					    "WorldPhys",worldLog,0,false,0);
