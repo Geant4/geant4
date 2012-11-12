@@ -9,6 +9,9 @@ $Id: History,v 1.13 2010-11-18 13:10:47 allison Exp $
                       Category History file
                       ---------------------
 
+06.11.2012 - Luciano Pandola (purmag-V09-05-03)
+- Fix syntax in CMakeLists.txt
+
 26.10.2012 - Luciano Pandola (purmag-V09-05-02)
 - Replace CMakeLists.txt to deal with UI/VIS
 

@@ -23,11 +23,21 @@ include(${Geant4_USE_FILE})
 #----------------------------------------------------------------------------
 # Find AIDA (optional package)
 #
-find_package(AIDA)
-if(AIDA_FOUND QUIET)
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
+find_package(AIDA QUIET)
+if(AIDA_FOUND)
   message(STATUS "G4 Examples: AIDA found. --> purging_magnet example with AIDA enabled.") 
-  # Uncomment this line if suitable (some customization may be needed)
   add_definitions(-DG4ANALYSIS_USE)   
+else()
+  message(STATUS "G4 Example: AIDA not found --> purging_magnet example with AIDA disabled.")
+endif()
+
+#----------------------------------------------------------------------------
+# Add option to debug
+#
+option(DEBUG_INTERPOLATING_FIELD "Debug setting" OFF)
+if(DEBUG_INTERPOLATING_FIELD)
+  add_definitions(-DDEBUG_INTERPOLATING_FIELD)
 endif()
 
 #----------------------------------------------------------------------------
