@@ -38,6 +38,7 @@
 #define G4_EZ_WORLD_H
 
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 
 // ====================================================================
 //

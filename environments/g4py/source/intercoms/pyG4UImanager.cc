@@ -45,12 +45,12 @@ using namespace boost::python;
 namespace pyG4UImanager {
 
 // ApplyCommand
-G4int(G4UImanager::*f1_ApplyCommand)(const char*)= &G4UImanager::ApplyCommand;
-G4int(G4UImanager::*f2_ApplyCommand)(G4String)= &G4UImanager::ApplyCommand;
+G4int(G4UImanager::*f1_ApplyCommand)(const char*) = &G4UImanager::ApplyCommand;
+G4int(G4UImanager::*f2_ApplyCommand)(const G4String&) = 
+  &G4UImanager::ApplyCommand;
 
 // CreateHTML
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_CreateHTML, CreateHTML, 0, 1);
-
 
 
 //////////////////////////////////////////////
@@ -130,6 +130,9 @@ void export_G4UImanager()
    .def("ApplyCommand",     f1_ApplyCommand)
    .def("ApplyCommand",     f2_ApplyCommand)
    .def("CreateHTML",       &G4UImanager::CreateHTML, f_CreateHTML())
+   .def("SetMacroSearchPath", &G4UImanager::SetMacroSearchPath)
+   .def("GetMacroSearchPath", &G4UImanager::GetMacroSearchPath,
+        return_value_policy<return_by_value>())
    // ---
    .def("SetPauseAtBeginOfEvent", &G4UImanager::SetPauseAtBeginOfEvent)
    .def("GetPauseAtBeginOfEvent", &G4UImanager::GetPauseAtBeginOfEvent)

@@ -33,6 +33,7 @@
 #include "QPhysicsList.hh"
 #include "Particles.hh"
 #include "PhysicsListEMstd.hh"
+#include "G4SystemOfUnits.hh"
 
 // ====================================================================
 //

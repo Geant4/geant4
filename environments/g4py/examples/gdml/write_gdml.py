@@ -36,6 +36,6 @@ navigator= gTransportationManager.GetNavigatorForTracking()
 world_volume= navigator.GetWorldVolume()
 
 gdml_parser = G4GDMLParser()
-gdml_parser.Write("qgeom.gdml", world_volume)
+gdml_parser.Write("qgeom_out.gdml", world_volume)
 
 

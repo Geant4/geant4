@@ -48,7 +48,6 @@ namespace pyG4GDMLParser {
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_GetWorldVolume, 
                                        GetWorldVolume, 0, 1);
 
-#if G4VERSION_NUMBER >= 940
 void (G4GDMLParser::*f1_Write)
   (const G4String&, const G4VPhysicalVolume*, G4bool, 
    const G4String&) = &G4GDMLParser::Write;
@@ -58,14 +57,9 @@ void (G4GDMLParser::*f2_Write)
    const G4String&) = &G4GDMLParser::Write;
 
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(g_Write, Write, 2, 4);
-#endif
-
-
-#if G4VERSION_NUMBER >= 920
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_Read, Read, 1, 2);
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_ReadModule, ReadModule, 1, 2);
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_Write, Write, 1, 4);
-#endif
 
 }
 
@@ -79,24 +73,12 @@ void export_G4GDMLParser()
   class_<G4GDMLParser, boost::noncopyable>
     ("G4GDMLParser", "GDML parser")
     // ---
-#if G4VERSION_NUMBER < 920
-    .def("Read",             &G4GDMLParser::Read)
-#else
     .def("Read",             &G4GDMLParser::Read,       f_Read())
     .def("ReadModule",       &G4GDMLParser::ReadModule, f_ReadModule())
     .def("ParseST",          &G4GDMLParser::ParseST,
          return_value_policy<reference_existing_object>())
-#endif
-
-#if G4VERSION_NUMBER >= 920
-#if G4VERSION_NUMBER >= 940
     .def("Write",            f1_Write, f_Write())
     .def("Write",            f2_Write, g_Write())
-#else
-    .def("Write",            &G4GDMLParser::Write,      f_Write())
-#endif
-#endif
-
     .def("GetWorldVolume",   &G4GDMLParser::GetWorldVolume,
          f_GetWorldVolume()
          [return_value_policy<reference_existing_object>()])
