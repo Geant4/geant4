@@ -17,9 +17,6 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-10 November 12: V.Ivanchenko (emstand-V09-05-64)
-- G4WentzelOKandVIxSection - revert to 9.5 version
-
 09 November 12: V.Ivanchenko (emstand-V09-05-63)
 - G4WentzelVIModel - fixed minor problem in single scattering mode
 
