@@ -10,7 +10,7 @@
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
+// * work  make  any representation or  warranty, express or implied, * 
 // * regarding  this  software system or assume any liability for its *
 // * use.  Please see the license in the file  LICENSE  and URL above *
 // * for the full disclaimer and the limitation of liability.         *
@@ -24,22 +24,22 @@
 // ********************************************************************
 // 
 // ----------------------------------------------------------------------------
-//                 GEANT4 - GammaKnife example
+//                 GEANT4 - GAMMAKNIFE example
 // ----------------------------------------------------------------------------
-// Code developed by:
-//
-// F.Romano* (a,b), M.G.Sabini (c), G. Cuttone (a)
-//
+// AUTHORS:
+// G. Cuttone (a), J. Pipek (b) F.Romano* (a,c), M.G.Sabini (d)
+// 
 // PAST AUTHORS:
-// G.A.P. Cirrone (a), G.Russo (d,e), M.Russo (a)
+// G.A.P. Cirrone (a), G.Russo (e), M.Russo (a)
 //
 // (a) Laboratori Nazionali del Sud - INFN, Catania, Italy
-// (b) Centro Studi e Ricerche e Museo Sorico della Fisica E.Fermi, Roma, Italy
-// (c) Dipartimento di Immagini, Ospedale Cannizzaro, Catania, Italy
-// (d) Fondazione Istituto San Raffaele G.Giglio, Cefalù (Palermo), Italy
-// (e) IBFM-CNR , Segrate (Milano), Italy
+// (b) Faculty of Nuclear Sciences and Physical Engineering, Czech Technical University, Czech Republic
+// (c) Centro Studi e Ricerche e Museo Storico della Fisica E.Fermi, Roma, Italy
+// (d) Dipartimento di Immagini, Ospedale Cannizzaro, Catania, Italy
+// (e) Fondazione Istituto San Raffaele G.Giglio, Cefalù (Palermo), Italy
 //
-// * francesco.romano@lns.infn.it
+//
+// *Corresponding author, email to francesco.romano@lns.infn.it
 // ----------------------------------------------------------------------------
 
 #include "G4RunManager.hh"
@@ -87,13 +87,13 @@ int main(int argc ,char ** argv)
   // Initialize the physics 
   G4PhysListFactory factory;
   G4VModularPhysicsList* phys = 0;
-  G4String physName = " ";
+  G4String physName = "";
 
   // Physics List name defined via environment variable
   char* path = getenv("PHYSLIST");
   if (path) { physName = G4String(path); }
 
- if(factory.IsReferencePhysList(physName)) 
+  if(physName != "" && factory.IsReferencePhysList(physName))
     {
       phys = factory.GetReferencePhysList(physName);
     } 

@@ -352,7 +352,7 @@ void GammaKnifeDetectorConstruction::ConstructBeamLine()
   G4double Rmin2Coll_fixed = 4.25*mm;
   G4double Rmax2Coll_fixed = 15.*mm;
   G4double hightColl_fixed = 4.625*cm;
-  //stessi angoli di spanning di prima 
+ 
 
   G4ThreeVector positionColl_fixed = G4ThreeVector(0,0,-27.325*cm);
 
@@ -385,7 +385,7 @@ void GammaKnifeDetectorConstruction::ConstructBeamLine()
   G4double Rmin2Coll_fixed_Fe = 15.*mm;
   G4double Rmax2Coll_fixed_Fe = 40.*mm;
   G4double hightColl_fixed_Fe = 4.625*cm;
-  //stessi angoli di spanning di prima 
+ 
 
   G4ThreeVector positionColl_fixed_Fe = G4ThreeVector(0,0,-27.325*cm);
 
@@ -415,7 +415,7 @@ void GammaKnifeDetectorConstruction::ConstructBeamLine()
   G4double Rmax1Coll_helmet = 15.*mm;
   G4double Rmax2Coll_helmet = 15.*mm;
   G4double hightColl_helmet = 3.0*cm;
-  //stessi angoli di spanning di prima 
+ 
 
   G4ThreeVector positionColl_helmet = G4ThreeVector(0,0,-19.5*cm);
 

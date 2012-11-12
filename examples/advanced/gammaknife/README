@@ -15,7 +15,7 @@
  (a) Laboratori Nazionali del Sud - INFN, Catania, Italy
  (b) Faculty of Nuclear Sciences and Physical Engineering, Czech Technical University, Czech Republic
  (c) Centro Studi e Ricerche e Museo Storico della Fisica E.Fermi, Roma, Italy
- (d) Dipartimento di Immagini, Ospedale Cannizzaro, Catania, Italy
+ (d) UOS Fisica Sanitaria, Ospedale Cannizzaro, Catania, Italy
  (e) Fondazione Istituto San Raffaele G.Giglio, Cefalù (Palermo), Italy
 
 
@@ -26,9 +26,9 @@
 
 ----> INTRODUCTION.                                                    
                                                                        
-The GAMMAKNIFE example is a Geant4 application specifically developed to simulate an advanced device for Stereotactic Radiosurgery. In particular, the example reproduces a Leksell GammaKnife unit model C, currently active at the Cannizzaro Hospital in Catania. Gammaknife Stereotactic Radiosurgery allows in a single session accurate external irradiations with high dose and sharp dose gradient to minimize radiation doses given to adjacent critical brain structures. The unit consists of a cast iron body containing 201 Co60 sources in a hemispherical arrangement. Beams of gamma radiation, coming from different directions focus through a collimation system at the isocentre, where the target volume is positioned.
+The GAMMAKNIFE example is a Geant4 application specifically developed to simulate an advanced device for Stereotactic Radiosurgery. In particular, the example reproduces a Leksell Gamma-Knife unit model C, currently active at the Cannizzaro Hospital in Catania. Gamma-Knife Stereotactic Radiosurgery allows in a single session accurate external irradiations with high dose and sharp dose gradient to minimize radiation doses given to adjacent critical brain structures. The unit consists of a cast iron body containing 201 Co60 sources in a hemispherical arrangement. Beams of gamma radiation, coming from different directions focus through a collimation system at the isocentre, where the target volume is positioned.
 
-This example allows to simulate the main components a a Gamma Knife unit: the source, collimation system and also a spherical phantom used for routinely measurements. All the four available final collimators are reproduced and its dimension can be changed run-time by a macro command. The energy deposited distribution is computed at the end of the simulation in a voxellized geometry, using scoring mesh. GAMMAKNIFE example exploits original solutions for the sources device simulation, providing a very simple configuration of the geometry and primary events: a single source is, indeed, simulated (instead of 201) and the scoring mesh (placed in a spherical water phantom) is rotated at 201 angles correspondent to the real angular displacement of the sources in the device. This is possible thanks to the symmetry of the source positions respect to the isocentre.
+This example allows to simulate the main components of a Gamma-Knife unit: the source, collimation system and also a spherical phantom used for routinely measurements. All the four available final collimators are reproduced and its dimension can be changed run-time by a macro command. The energy deposited distribution is computed at the end of the simulation in a voxellized geometry, using scoring mesh. GAMMAKNIFE example exploits original solutions for the sources device simulation, providing a very simple configuration of the geometry and primary events: a single source is, indeed, simulated (instead of 201) and the scoring mesh (placed in a spherical water phantom) is rotated at 201 angles correspondent to the real angular displacement of the sources in the device. This is possible thanks to the symmetry of the source positions respect to the isocentre.
 
 The GAMMAKNIFE example contains the following subfolders and files:
 - /src: where source .cc files are stored
@@ -56,7 +56,7 @@ In interactive mode:
 > $G4WORKDIR/bin/Linux-g++/gammaknife
 The defaultMacro.mac is executed in this case.
 
-For a realistic simulation of the Gamma Knife device, including the irradiation of all the sources, the macro simulation.mac has to be used, defining the number of particles shooted per each angle (that is, for each "source"). The following commands have to be used to this aim:
+For a realistic simulation of the Gamma-Knife device, including the irradiation of all the sources, the macro simulation.mac has to be used, defining the number of particles shooted per each angle (that is, for each "source"). The following commands have to be used to this aim:
  /gammaknife/loadAngles MachineAngle.in	      --> rotation agles file is called
  /gammaknife/beamOn <number-of-events>	      --> <number-of-events> are shooted for each angle
 
@@ -72,7 +72,7 @@ GPS (General Particle Source) class is used to generate the primary events.The G
 
 ----> GEOMETRICAL SET-UP.
  
-The Gamma Knife unit consists of a cast-iron body containing the 60Co sources and the collimation system. Sources are displaced along five parallel rings at the same distance from the isocentre. Depending on the specific ring, sources are located with a different spacing, respectively with an angle of 7.6◦, 8◦, 9◦, 9◦ and 10◦. These angles represent the rotation angles of the scoring mesh (contained in the MachineAngle.in file). Gamma radiation (1.17 and 1.33 MeV), emitted by Co60 sources arranged in a hemispherical shape, focuses on the isocentre, located 401 mm far from the source. The radiation beam is collimated by means of fixed and mobile collimation systems in order to obtain four possible beam diameters at the isocentre: 4, 8, 14 and 18 mm.
+The Gamma-Knife unit consists of a cast-iron body containing the 60Co sources and the collimation system. Sources are displaced along five parallel rings at the same distance from the isocentre. Depending on the specific ring, sources are located with a different spacing, respectively with an angle of 7.6◦, 8◦, 9◦, 9◦ and 10◦. These angles represent the rotation angles of the scoring mesh (contained in the MachineAngle.in file). Gamma radiation (1.17 and 1.33 MeV), emitted by Co60 sources arranged in a hemispherical shape, focuses on the isocentre, located 401 mm far from the source. The radiation beam is collimated by means of fixed and mobile collimation systems in order to obtain four possible beam diameters at the isocentre: 4, 8, 14 and 18 mm.
 
 The elements simulated are:
 
@@ -88,7 +88,7 @@ To change the diameter of the final truncated collimator (mobile helmet) the fol
  /calorimeter/helmetSize <diameter in mm>
 Notice that, as in the real device, only four final diameters are allowed: 4, 8, 14 and 18 mm. These are not the physical apertures of the diameter but represent the final diameter of the beam at the isocentre. In the GammaKnifeDetectorConstruction::UpdateHelmet() method more details can be found in this concern.
 
-Important note: the GAMMAKNIFE application is meant as an example of simulation of a device for Stereotactic Radiosurgery. Thus, all the main geometrical features of the Gamma Knife device are accurately simulated but the geometrical displecement of the some elements is not exactly correspondent to the real one, because covered by a patent. In case you need detailed geometrical information, please contact the Elekta Company.
+Important note: the GAMMAKNIFE application is meant as an example of simulation of a device for Stereotactic Radiosurgery. Thus, all the main geometrical features of the Gamma-Knife device are accurately simulated but the geometrical displecement of the some elements is not exactly correspondent to the real one, because covered by a patent. In case you need detailed geometrical information, please contact the Elekta Company.
 
 
 ----> PHYSICS
