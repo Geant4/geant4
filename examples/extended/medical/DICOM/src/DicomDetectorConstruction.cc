@@ -347,7 +347,6 @@ void DicomDetectorConstruction::ReadPhantomDataFile(const G4String& fname)
   char* part = getenv( "DICOM_CHANGE_MATERIAL_DENSITY" );
   G4double densityDiff = -1.;
   if( part ) densityDiff = G4UIcommand::ConvertToDouble(part);
-  std::map<G4int,G4double>  fDensityDiffs; // to be able to use a different densityDiff for each material
   if( densityDiff != -1. ) {
     for( unsigned int ii = 0; ii < fOriginalMaterials.size(); ii++ ){
       fDensityDiffs[ii] = densityDiff; //currently all materials with same difference
@@ -388,7 +387,7 @@ void DicomDetectorConstruction::ReadPhantomDataFile(const G4String& fname)
     fin >> density;
 
     //-- Get material from list of original materials
-    int mateID = fMateIDs[voxelCopyNo];
+    mateID = fMateIDs[voxelCopyNo];
     G4Material* mateOrig  = fOriginalMaterials[mateID];
 
     //-- Get density bin: middle point of the bin in which the current density is included 

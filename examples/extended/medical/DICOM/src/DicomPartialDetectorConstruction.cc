@@ -84,17 +84,17 @@ G4VPhysicalVolume* DicomPartialDetectorConstruction::Construct()
   G4double worldYDimension = 1.*m;
   G4double worldZDimension = 1.*m;
 
-  G4Box* fWorld_solid = new G4Box( "WorldSolid",
+  G4Box* world_box = new G4Box( "WorldSolid",
                           worldXDimension,
                           worldYDimension,
                           worldZDimension );
 
-  fWorld_logic = new G4LogicalVolume( fWorld_solid, 
+  fWorld_logic = new G4LogicalVolume( world_box, 
                                     fAir, 
                                     "WorldLogical", 
                                     0, 0, 0 );
 
-  G4VPhysicalVolume* fWorld_phys = new G4PVPlacement( 0,
+  G4VPhysicalVolume* world_phys = new G4PVPlacement( 0,
                                   G4ThreeVector(0,0,0),
                                   "World",
                                   fWorld_logic,
@@ -107,7 +107,7 @@ G4VPhysicalVolume* DicomPartialDetectorConstruction::Construct()
   ConstructPhantomContainer();
   ConstructPhantom();
 
-  return fWorld_phys;
+  return world_phys;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -125,15 +125,15 @@ void DicomPartialDetectorConstruction::ReadPhantomData()
   G4int compression;
   finDF >> compression; // not used here
 
-  G4int fNoFiles;
-  finDF >> fNoFiles;  // only 1 file supported for the moment
-  if( fNoFiles != 1 ) {
+  G4int numFiles;
+  finDF >> numFiles;  // only 1 file supported for the moment
+  if( numFiles != 1 ) {
     G4Exception("DicomPartialDetectorConstruction::ReadPhantomData",
                 "",
                 FatalErrorInArgument,
                 "More than 1 DICOM file is not supported");
   }
-  for(G4int i = 0; i < fNoFiles; i++ ) {    
+  for(G4int i = 0; i < numFiles; i++ ) {    
     finDF >> fname;
     //--- Read one data file
     fname += ".g4pdcm";
@@ -383,10 +383,10 @@ void DicomPartialDetectorConstruction::ConstructPhantomContainer()
   G4String contname= "PhantomContainer";
 
   //----- Define the volume that contains all the voxels
-  G4Tubs* fContainer_solid = new G4Tubs(contname,0., 200., 100., 0., 360*deg);
+  G4Tubs* container_tube = new G4Tubs(contname,0., 200., 100., 0., 360*deg);
 
   fContainer_logic = 
-    new G4LogicalVolume( fContainer_solid, 
+    new G4LogicalVolume( container_tube, 
                          fAir,  
                          contname, 
                          0, 0, 0 );

@@ -9,6 +9,10 @@ $Id: History,v 1.31 2010-12-23 11:34:22 chauvie Exp $
 
                       ---------------------
 
+07.11.2012 - Gabriele Cosmo (DICOM-V09-05-10)
+           Fixed compilation warnings for shadowing of variables and unused
+           return flag from system calls.
+
 18.10.2012 - Ivana Hrivnacova (DICOM-V09-05-09)
 	   Updated CMakeLists.txt: added copying data files to the build
            area as they are needed to run the tests. 
