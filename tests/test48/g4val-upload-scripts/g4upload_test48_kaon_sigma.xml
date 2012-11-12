@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : insert_g4test.xml
+    Created on : October 31, 2011, 05:19 PM
+    Author     : adotti
+    Description: xml description to upload geant 4 test into database
+-->
+<testslist>
+    
+    <tests>
+        <testdes>test48</testdes>
+        <g4version>geant4-9.6-b01</g4version>
+        <observable>Final State Topology; Total Energy of Secondary pi0</observable>
+        <reaction>K- on H</reaction>
+        <score>
+            <type>expert</type>
+            <value>passed</value>  
+        </score>
+        <imageblob>kmin-H-models.gif</imageblob>
+        <taglist>
+            <tag>
+                <name>Model</name>
+                <value>CHIPS, LEP, Bertini</value>
+            </tag>
+            <tag>
+                <name>Particle</name>
+                <value>K-</value>
+            </tag>       
+            <tag>
+                <name>Target</name>
+                <value>H</value>
+            </tag>
+
+        </taglist>    
+    </tests>
+
+    <tests>
+        <testdes>test48</testdes>
+        <g4version>geant4-9.6-b01</g4version>
+        <observable>Production Rate of Secondary Particles</observable>
+        <reaction>Sigma- on H</reaction>
+        <score>
+            <type>expert</type>
+            <value>passed</value>  
+        </score>
+        <imageblob>sigmamin-H-models.gif</imageblob>
+
+        <taglist>
+
+            <tag>
+                <name>Model</name>
+                <value>CHIPS, Bertini</value>
+            </tag>               
+            <tag>
+                <name>Particle</name>
+                <value>Sigma-</value>
+            </tag>       
+            <tag>
+                <name>Target</name>
+                <value>H</value>
+            </tag>
+
+        </taglist>    
+    </tests>
+    
+
+
+</testslist>

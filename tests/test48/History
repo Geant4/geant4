@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 8, 2012 Krzysztof Genser & Julia Yarba (test48-V09-05-07)
+- accepted (almost all) CMakeLists.txt file modifications by Pere Mato
+  to allow for simultaneous use of it within Geant4 and standalone build
 
 October 22, 2012 Krzysztof Genser (test48-V09-05-06)
 - disabled the test in cmake file if ROOT package is not found
@@ -32,7 +35,8 @@ October 18, 2012 Krzysztof Genser (test48-V09-05-02)
 - retagging to repropose the tag due to a cdash script problem?
 
 October 17, 2012 Krzysztof Genser (test48-V09-05-01)
-- renamed mu2e used physics constructor G4MuonMinusCapture to G4MuonMinusCapturePhysics plus other changes
+- renamed mu2e used physics constructor G4MuonMinusCapture to
+G4MuonMinusCapturePhysics plus other changes
 - other changes by Julia Yarba
 
 

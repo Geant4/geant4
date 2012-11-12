@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : insert_g4test.xml
+    Created on : October 31, 2011, 05:19 PM
+    Author     : adotti
+    Description: xml description to upload geant 4 test into database
+-->
+<testslist>
+
+    
+    <tests>
+        <testdes>test48</testdes>
+        <g4version>geant4-9.6-b01</g4version>
+        <observable>kinetic energy of secondary neutrons</observable>
+        <reaction>pi- on C</reaction>
+        <score>
+            <type>expert</type>
+            <value>passed</value>  
+        </score>
+        <imageblob>pim-C-models.gif</imageblob>
+        <taglist>
+            <tag>
+                <name>Model</name>
+                <value>CHIPS, LEP, BertiniPrecompound</value>
+            </tag>               
+            <tag>
+                <name>Particle</name>
+                <value>pi-</value>
+            </tag>       
+            <tag>
+                <name>Target</name>
+                <value>C</value>
+            </tag>
+
+        </taglist>    
+    </tests>
+
+    <tests>
+        <testdes>test48</testdes>
+        <g4version>geant4-9.6-b01</g4version>
+        <observable>kinetic energy of secondary neutrons</observable>
+        <reaction>pi- on C</reaction>
+        <score>
+            <type>expert</type>
+            <value>passed</value>  
+        </score>
+        <imageblob>pim-C-Bert-regre.gif</imageblob>
+        <taglist>
+            <tag>
+                <name>Model</name>
+                <value>BertiniPreCo: 4.9.6-b01,4.9.5-ref02,4.9.5.p01,4.9.4-ref10</value>
+            </tag>  
+	    <tag>
+	       <name>Comment</name>
+	       <value>4.9.5-ref02 includes tag hadr-casc-V09-05-05</value>
+	    </tag>             
+            <tag>
+                <name>Particle</name>
+                <value>pi-</value>
+            </tag>       
+            <tag>
+                <name>Target</name>
+                <value>C</value>
+            </tag>
+
+        </taglist>    
+    </tests>
+    
+    <tests>
+        <testdes>test48</testdes>
+        <g4version>geant4-9.5-ref02</g4version>
+        <observable>kinetic energy of secondary neutrons</observable>
+        <reaction>pi- on N</reaction>
+        <score>
+            <type>expert</type>
+            <value>passed</value>  
+        </score>
+        <imageblob>pim-N-models.gif</imageblob>
+        <taglist>
+            <tag>
+                <name>Model</name>
+                <value>CHIPS, LEP, BertiniPrecompound</value>
+            </tag>               
+            <tag>
+                <name>Particle</name>
+                <value>pi-</value>
+            </tag>       
+            <tag>
+                <name>Target</name>
+                <value>N</value>
+            </tag>
+
+        </taglist>    
+    </tests>
+    
+    <tests>
+        <testdes>test48</testdes>
+        <g4version>geant4-9.5-ref02</g4version>
+        <observable>kinetic energy of secondary neutrons</observable>
+        <reaction>pi- on N</reaction>
+        <score>
+            <type>expert</type>
+            <value>passed</value>  
+        </score>
+        <imageblob>pim-N-BertPC-regre.gif</imageblob>
+        <taglist>
+            <tag>
+                <name>Model</name>
+                <value>BertiniPreCo: 4.9.5-ref02,4.9.5.ref01,4.9.4-ref10</value>
+            </tag>  
+	    <tag>
+	       <name>Comment</name>
+	       <value>4.9.5-ref02 includes tag hadr-casc-V09-05-05</value>
+	    </tag>             
+            <tag>
+                <name>Particle</name>
+                <value>pi-</value>
+            </tag>       
+            <tag>
+                <name>Target</name>
+                <value>N</value>
+            </tag>
+
+        </taglist>    
+    </tests>
+        
+    <tests>
+        <testdes>test48</testdes>
+        <g4version>geant4-9.5-ref02</g4version>
+        <observable>kinetic energy of secondary neutrons</observable>
+        <reaction>pi- on O</reaction>
+        <score>
+            <type>expert</type>
+            <value>passed</value>  
+        </score>
+        <imageblob>pim-O-models.gif</imageblob>
+        <taglist>
+            <tag>
+                <name>Model</name>
+                <value>CHIPS, LEP, BertiniPrecompound</value>
+            </tag>               
+            <tag>
+                <name>Particle</name>
+                <value>pi-</value>
+            </tag>       
+            <tag>
+                <name>Target</name>
+                <value>O</value>
+            </tag>
+
+        </taglist>    
+    </tests>
+    
+    <tests>
+        <testdes>test48</testdes>
+        <g4version>geant4-9.5-ref02</g4version>
+        <observable>kinetic energy of secondary neutrons</observable>
+        <reaction>pi- on O</reaction>
+        <score>
+            <type>expert</type>
+            <value>passed</value>  
+        </score>
+        <imageblob>pim-O-BertPC-regre.gif</imageblob>
+        <taglist>
+            <tag>
+                <name>Model</name>
+                <value>BertiniPreCo: 4.9.5-ref02,4.9.5.ref01,4.9.4-ref10</value>
+            </tag>  
+	    <tag>
+	       <name>Comment</name>
+	       <value>4.9.5-ref02 includes tag hadr-casc-V09-05-05</value>
+	    </tag>             
+            <tag>
+                <name>Particle</name>
+                <value>pi-</value>
+            </tag>       
+            <tag>
+                <name>Target</name>
+                <value>O</value>
+            </tag>
+
+        </taglist>    
+    </tests>
+    
+    
+    <tests>
+        <testdes>test48</testdes>
+        <g4version>geant4-9.5-ref02</g4version>
+        <observable>kinetic energy of secondary neutrons</observable>
+        <reaction>pi- on Al</reaction>
+        <score>
+            <type>expert</type>
+            <value>passed</value>  
+        </score>
+        <imageblob>pim-Al-models.gif</imageblob>
+        <taglist>
+            <tag>
+                <name>Model</name>
+                <value>CHIPS, LEP, BertiniPrecompound</value>
+            </tag>               
+            <tag>
+                <name>Particle</name>
+                <value>pi-</value>
+            </tag>       
+            <tag>
+                <name>Target</name>
+                <value>Al</value>
+            </tag>
+
+        </taglist>    
+    </tests>
+
+    <tests>
+        <testdes>test48</testdes>
+        <g4version>geant4-9.5-ref02</g4version>
+        <observable>kinetic energy of secondary neutrons</observable>
+        <reaction>pi- on Al</reaction>
+        <score>
+            <type>expert</type>
+            <value>passed</value>  
+        </score>
+        <imageblob>pim-Al-BertPC-regre.gif</imageblob>
+        <taglist>
+            <tag>
+                <name>Model</name>
+                <value>BertiniPreCo: 4.9.5-ref02,4.9.5.ref01,4.9.4-ref10</value>
+            </tag>  
+	    <tag>
+	       <name>Comment</name>
+	       <value>4.9.5-ref02 includes tag hadr-casc-V09-05-05</value>
+	    </tag>             
+            <tag>
+                <name>Particle</name>
+                <value>pi-</value>
+            </tag>       
+            <tag>
+                <name>Target</name>
+                <value>Al</value>
+            </tag>
+
+        </taglist>    
+    </tests>
+        
+    <tests>
+        <testdes>test48</testdes>
+        <g4version>geant4-9.5-ref02</g4version>
+        <observable>kinetic energy of secondary neutrons</observable>
+        <reaction>pi- on Cu</reaction>
+        <score>
+            <type>expert</type>
+            <value>passed</value>  
+        </score>
+        <imageblob>pim-Cu-models.gif</imageblob>
+        <taglist>
+            <tag>
+                <name>Model</name>
+                <value>CHIPS, LEP, BertiniPrecompound</value>
+            </tag>               
+            <tag>
+                <name>Particle</name>
+                <value>pi-</value>
+            </tag>       
+            <tag>
+                <name>Target</name>
+                <value>Cu</value>
+            </tag>
+
+        </taglist>    
+    </tests>
+    
+    <tests>
+        <testdes>test48</testdes>
+        <g4version>geant4-9.5-ref02</g4version>
+        <observable>kinetic energy of secondary neutrons</observable>
+        <reaction>pi- on Cu</reaction>
+        <score>
+            <type>expert</type>
+            <value>passed</value>  
+        </score>
+        <imageblob>pim-Cu-BertPC-regre.gif</imageblob>
+        <taglist>
+            <tag>
+                <name>Model</name>
+                <value>BertiniPreCo: 4.9.5-ref02,4.9.5.ref01,4.9.4-ref10</value>
+            </tag>  
+	    <tag>
+	       <name>Comment</name>
+	       <value>4.9.5-ref02 includes tag hadr-casc-V09-05-05</value>
+	    </tag>             
+            <tag>
+                <name>Particle</name>
+                <value>pi-</value>
+            </tag>       
+            <tag>
+                <name>Target</name>
+                <value>Cu</value>
+            </tag>
+
+        </taglist>    
+    </tests>
+    
+    <tests>
+        <testdes>test48</testdes>
+        <g4version>geant4-9.5-ref02</g4version>
+        <observable>kinetic energy of secondary neutrons</observable>
+        <reaction>pi- on Ta</reaction>
+        <score>
+            <type>expert</type>
+            <value>passed</value>  
+        </score>
+        <imageblob>pim-Ta-models.gif</imageblob>
+        <taglist>
+            <tag>
+                <name>Model</name>
+                <value>CHIPS, LEP, BertiniPrecompound</value>
+            </tag>               
+            <tag>
+                <name>Particle</name>
+                <value>pi-</value>
+            </tag>       
+            <tag>
+                <name>Target</name>
+                <value>Ta</value>
+            </tag>
+
+        </taglist>    
+    </tests>
+    
+    <tests>
+        <testdes>test48</testdes>
+        <g4version>geant4-9.5-ref02</g4version>
+        <observable>kinetic energy of secondary neutrons</observable>
+        <reaction>pi- on Ta</reaction>
+        <score>
+            <type>expert</type>
+            <value>passed</value>  
+        </score>
+        <imageblob>pim-Ta-BertPC-regre.gif</imageblob>
+        <taglist>
+            <tag>
+                <name>Model</name>
+                <value>BertiniPreCo: 4.9.5-ref02,4.9.5.ref01,4.9.4-ref10</value>
+            </tag>  
+	    <tag>
+	       <name>Comment</name>
+	       <value>4.9.5-ref02 includes tag hadr-casc-V09-05-05</value>
+	    </tag>             
+            <tag>
+                <name>Particle</name>
+                <value>pi-</value>
+            </tag>       
+            <tag>
+                <name>Target</name>
+                <value>Ta</value>
+            </tag>
+
+        </taglist>    
+    </tests>
+    
+    <tests>
+        <testdes>test48</testdes>
+        <g4version>geant4-9.5-ref02</g4version>
+        <observable>kinetic energy of secondary neutrons</observable>
+        <reaction>pi- on Pb</reaction>
+        <score>
+            <type>expert</type>
+            <value>passed</value>  
+        </score>
+        <imageblob>pim-Pb-models.gif</imageblob>
+        <taglist>
+            <tag>
+                <name>Model</name>
+                <value>CHIPS, LEP, BertiniPrecompound</value>
+            </tag>               
+            <tag>
+                <name>Particle</name>
+                <value>pi-</value>
+            </tag>       
+            <tag>
+                <name>Target</name>
+                <value>Pb</value>
+            </tag>
+
+        </taglist>    
+    </tests>
+
+    <tests>
+        <testdes>test48</testdes>
+        <g4version>geant4-9.5-ref02</g4version>
+        <observable>kinetic energy of secondary neutrons</observable>
+        <reaction>pi- on Pb</reaction>
+        <score>
+            <type>expert</type>
+            <value>passed</value>  
+        </score>
+        <imageblob>pim-Pb-BertPC-regre.gif</imageblob>
+        <taglist>
+            <tag>
+                <name>Model</name>
+                <value>BertiniPreCo: 4.9.5-ref02,4.9.5.ref01,4.9.4-ref10</value>
+            </tag>  
+	    <tag>
+	       <name>Comment</name>
+	       <value>4.9.5-ref02 includes tag hadr-casc-V09-05-05</value>
+	    </tag>             
+            <tag>
+                <name>Particle</name>
+                <value>pi-</value>
+            </tag>       
+            <tag>
+                <name>Target</name>
+                <value>Pb</value>
+            </tag>
+
+        </taglist>    
+    </tests>
+    
+    <tests>
+        <testdes>test48</testdes>
+        <g4version>geant4-9.5-ref02</g4version>
+        <observable>Final State Topology; Total Energy of Secondary pi0</observable>
+        <reaction>K- on H</reaction>
+        <score>
+            <type>expert</type>
+            <value>passed</value>  
+        </score>
+        <imageblob>kmin-H-models.gif</imageblob>
+        <taglist>
+	    <tag>
+            <tag>
+                <name>Model</name>
+                <value>CHIPS, LEP, Bertini</value>
+            </tag>               
+	       <name>Comment</name>
+	       <value>4.9.5-ref02 includes tag hadr-casc-V09-05-05</value>
+	    </tag>             
+            <tag>
+                <name>Particle</name>
+                <value>K-</value>
+            </tag>       
+            <tag>
+                <name>Target</name>
+                <value>H</value>
+            </tag>
+
+        </taglist>    
+    </tests>
+
+    <tests>
+        <testdes>test48</testdes>
+        <g4version>geant4-9.5-ref02</g4version>
+        <observable>Production Rate of Secondary Particles</observable>
+        <reaction>Sigma- on H</reaction>
+        <score>
+            <type>expert</type>
+            <value>passed</value>  
+        </score>
+        <imageblob>sigmamin-H-models-logY.gif</imageblob>
+
+        <taglist>
+
+            <tag>
+                <name>Model</name>
+                <value>CHIPS, BertiniPrecompound</value>
+            </tag>               
+	    <tag>
+	       <name>Comment</name>
+	       <value>4.9.5-ref02 includes tag hadr-casc-V09-05-05</value>
+	    </tag>             
+            <tag>
+                <name>Particle</name>
+                <value>Sigma-</value>
+            </tag>       
+            <tag>
+                <name>Target</name>
+                <value>H</value>
+            </tag>
+
+        </taglist>    
+    </tests>
+    
+
+
+</testslist>
