@@ -80,7 +80,11 @@ class G4ReactionProduct
     inline void* operator new(size_t) {
       return (void *)aRPAllocator.MallocSingle();
     }
-
+#ifdef __IBMCPP__
+    inline void* operator new(size_t, void *p) {
+      return p;
+    }
+#endif
     inline void operator delete(void* aReactionProduct) {
       aRPAllocator.FreeSingle((G4ReactionProduct*)aReactionProduct);
     }
