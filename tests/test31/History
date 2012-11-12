@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12-11-12  V.Ivant (test31-V09-05-04)
+- test31Histo, test31SD - fixed variable shadowing
+
 24-10-12  A.Ribon (test31-V09-05-03)
 - Migrate to the new stopping and ion physics.
 

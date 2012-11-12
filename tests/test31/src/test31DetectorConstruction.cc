@@ -48,6 +48,8 @@
 #include "globals.hh"
 #include "G4ios.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4PhysicalConstants.hh"
+
 #include "G4Material.hh"
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
@@ -135,6 +137,15 @@ void test31DetectorConstruction::DefineMaterials()
   ma->AddElement(man->FindOrBuildElement("H"), natoms=18);
   ma->AddElement(man->FindOrBuildElement("O"), natoms=5);
   if(ma) man->SetVerbose(1);
+
+  G4double temperature = CLHEP::STP_Temperature*0.5;
+  G4double pressure = CLHEP::STP_Pressure*0.5;
+  man->ConstructNewGasMaterial("Xe1","G4_Xe",temperature,pressure);
+  temperature = CLHEP::STP_Temperature*0.1;
+  pressure = CLHEP::STP_Pressure;
+  man->ConstructNewGasMaterial("Xe2","G4_Xe",temperature,pressure);
+
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

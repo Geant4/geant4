@@ -88,12 +88,15 @@ void test31SD::Initialize(G4HCofThisEvent*)
 
 G4bool test31SD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
+  //G4cout << "SD: =====" << G4endl;
   G4double edep = aStep->GetTotalEnergyDeposit();
 
   theHisto->AddStep();
   theHisto->AddTrackLength(aStep->GetStepLength());
 
   G4int j = aStep->GetPreStepPoint()->GetPhysicalVolume()->GetCopyNo();
+
+  //G4cout << "SD: edep= " << edep << "  j= " << j << G4endl;
    
   if(j < 0 || j >= numAbs) {
       G4cout << "Warning!!! test31SD: cannot add " << edep/MeV
@@ -121,11 +124,14 @@ G4bool test31SD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   G4bool stop = false;
   G4bool primary = false;
   G4bool outAbs = false;
-  if(track->GetNextVolume()->GetName() == "World"
-     && (zend <= delta || zend >= zmax)  ) outAbs = true;
 
-  if(tkin == 0.0) stop = true;
-  if(0 == aStep->GetTrack()->GetParentID()) primary = true;
+  //G4cout << "Next vol " << track->GetNextVolume() << G4endl;
+
+  if(track->GetNextVolume() != track->GetVolume()
+     && (zend <= delta || zend >= zmax)  ) { outAbs = true; }
+
+  if(tkin == 0.0) { stop = true; }
+  if(0 == aStep->GetTrack()->GetParentID()) { primary = true; }
 
   // new particle
   if(trIDnow != trIDold || evno != evnOld) {
@@ -136,6 +142,8 @@ G4bool test31SD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   }
 
   // Primary particle stop 
+  //G4cout << "primary= " << primary << " stop= " << stop 
+  //<< " outAbs= " << outAbs << G4endl;
    
   if(primary && (stop || outAbs)) {
 
@@ -173,6 +181,7 @@ G4bool test31SD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
     }
     part_is_out = false;
   }
+  //G4cout << " ================ " << G4endl;
   return true;
 }
 
@@ -188,10 +197,10 @@ void test31SD::EndOfEvent(G4HCofThisEvent*)
 
   // The histogramm on the energy deposition profile
   if(numAbs > 0) {
-    G4double s = theHisto->GetAbsorberThickness();
-    G4double z = -0.5 * s;
+    G4double sss = theHisto->GetAbsorberThickness();
+    G4double z = -0.5 * sss;
     for(i=0; i<numAbs; i++) {
-      z += s; 
+      z += sss; 
       etot += energy[i];
       //      G4cout << "i= " << i << " e= " << energy[i] << G4endl;
       theHisto->AddEnergy(energy[i], z);

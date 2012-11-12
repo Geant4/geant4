@@ -459,8 +459,8 @@ void test31Histo::TableControl()
     mat = mman->FindOrBuildMaterial(mat_name);
     fact = 0.001*gram/(MeV*cm2*mat->GetDensity());
 
-    const G4ParticleDefinition* part = cal.FindParticle(namep[ii]);
-    if(!part) break;
+    const G4ParticleDefinition* part1 = cal.FindParticle(namep[ii]);
+    if(!part1) break;
       
     if(ii == 1) proc_name = mu_name;
     else if(ii == 2) proc_name = h_name;
@@ -468,7 +468,7 @@ void test31Histo::TableControl()
 
     G4double AA = 1.0;
     if(ii >= 5) {
-      G4int ZZ = part->GetAtomicNumber();
+      G4int ZZ = part1->GetAtomicNumber();
       AA = mman->GetAtomicMassAmu(ZZ);
     }
 
@@ -486,9 +486,9 @@ void test31Histo::TableControl()
       G4double e = e0[ij];
       G4double e1 = e;
       if(ii >= 5) e1 *= AA;
-      G4double dedx0 = cal.ComputeTotalDEDX(e1,part,mat,e1);
-      G4double dedx  = cal.ComputeElectronicDEDX(e1,part,mat,e1);
-      G4double dedx1 = cal.GetDEDX(e1,part,mat);
+      G4double dedx0 = cal.ComputeTotalDEDX(e1,part1,mat,e1);
+      G4double dedx  = cal.ComputeElectronicDEDX(e1,part1,mat,e1);
+      G4double dedx1 = cal.GetDEDX(e1,part1,mat);
       G4double dedx2 = wst.GetElectronicDEDX(6, e1);
       G4cout << std::setw(3) << ij << "." 
              << std::setw(10) << e/MeV 
@@ -504,7 +504,7 @@ void test31Histo::TableControl()
     G4cout << "######## Ranges ########" << G4endl;
     for(G4int ik=0; ik<1000; ik++) {
       G4double e = std::pow(10.,ee0);
-      G4double r = cal.GetRange(e,part,mat);
+      G4double r = cal.GetRange(e,part1,mat);
       G4cout << "E(MeV)= " << e << "  R(mm)= " << r << G4endl;
       ee0 += 0.003;
     }
@@ -517,8 +517,8 @@ void test31Histo::TableControl()
       G4cout << "             Ionisation Corrections" << G4endl;
       G4cout << "================================================================" << G4endl;
 
-      const G4int nm = 7;
-      G4String nmat[nm] = {"G4_H", "G4_C", "G4_Al", "G4_Cu", "G4_Ag", "G4_Au", "G4_Pb"};
+      const G4int nmm = 7;
+      G4String nmat[nmm] = {"G4_H", "G4_C", "G4_Al", "G4_Cu", "G4_Ag", "G4_Au", "G4_Pb"};
       const G4int kkk = 25;
       G4double ek[kkk] = {0.3, 1.0, 1.25, 1.5, 1.75, 2.0, 2.5, 3.0, 3.5,  
 		          4.0, 4.5, 5.0, 6.5, 8.0,  12.5, 20.0, 30., 100., 
@@ -526,21 +526,21 @@ void test31Histo::TableControl()
 
       G4double mass = part->GetPDGMass();
   
-      G4double L, L0, L1, L2,  KS, LS, S, del, mk, dedx, fac, fact, fs(0), nuc;
+      G4double L, L0, L1, L2,  KS, LS, S, del, mk, dedx, fac, fs(0), nuc;
       //G4double Spin, S0, dc;
   
-      for(G4int i=0; i<nm; i++) {
+      for(G4int i=0; i<nmm; i++) {
 	//dc = 0.0;
 	mat = mman->FindOrBuildMaterial(nmat[i]);
-	fact = gram/(MeV*cm2*mat->GetDensity());
-	fac = 2.0*twopi_mc2_rcl2*(mat->GetElectronDensity())*fact;
+	G4double fact1 = gram/(MeV*cm2*mat->GetDensity());
+	fac = 2.0*twopi_mc2_rcl2*(mat->GetElectronDensity())*fact1;
 	G4cout << "   New Material  " << mat->GetName() << G4endl;
 	for(G4int j=0; j<kkk; j++) {
 	  G4double e = ek[j]*MeV;
 	  G4double tau = e/mass;
 	  G4double gamma = 1.0 + tau;
 	  G4double beta2 = tau*(tau + 2.0)/(gamma*gamma);
-	  //        G4double dedx0 = cal.ComputeDEDX(e,part,"hIoni",mat)*fact;
+	  //        G4double dedx0 = cal.ComputeDEDX(e,part,"hIoni",mat)*fact1;
     
 	  L0   = emc->Bethe(part,mat,e);
 	  //Spin = 
@@ -554,7 +554,7 @@ void test31Histo::TableControl()
 	  L2   = emc->BlochCorrection(part,mat,e);
 	  del  = -0.5*emc->DensityCorrection(part,mat,e);
 	  mk   = 0.5*emc->MottCorrection(part,mat,e);
-	  nuc  = fact*emc->NuclearDEDX(part,mat,e,false);
+	  nuc  = fact1*emc->NuclearDEDX(part,mat,e,false);
 	  L = L0 + L1 + L2 +fs + del -S;
 	  dedx = L*fac/beta2;
 	  // if(0 == j) dc = (dedx0 - dedx)*MeV*MeV;
@@ -594,7 +594,7 @@ void test31Histo::TableControl()
     G4DataVector        empty;
     bragg.Initialise(proton, empty);
     bethe.Initialise(proton, empty);
-    const G4Element* elm;
+    const G4Element* elm1;
     const G4Material* ma;
    
     G4double e     = 2.0*MeV;
@@ -603,22 +603,17 @@ void test31Histo::TableControl()
     G4double bg2   = tau * (tau+2.0);
     G4double beta2 = bg2/(gam*gam);
     G4double eta   = beta2/(fine_structure_const*fine_structure_const);
-    G4double fact  = 0.5 * beta2*eta*eta / twopi_mc2_rcl2;
+    G4double fact2 = 0.5 * beta2*eta*eta / twopi_mc2_rcl2;
     G4double dedx0, dedx1;
 
     for(G4int z=1; z<93; z++) {
-      elm = mman->FindOrBuildElement(z, false);
-      G4String nam = "G4_"+elm->GetSymbol();
+      elm1 = mman->FindOrBuildElement(z, false);
+      G4String nam = "G4_"+elm1->GetSymbol();
       ma = mman->FindOrBuildMaterial(nam, false);
       //      G4cout << "Elm " << elm << "  mat " << ma << "   " << nam << G4endl;
-    }
-    for(G4int z=1; z<93; z++) {
-      elm = mman->FindOrBuildElement(z, false);
-      G4String nam = "G4_"+elm->GetSymbol();
-      ma = mman->FindOrBuildMaterial(nam, false);
       dedx0 = bragg.ComputeDEDXPerVolume(ma,proton,e,GeV);
       dedx1 = bethe.ComputeDEDXPerVolume(ma,proton,e,GeV);
-      G4cout << " " << (dedx1 - dedx0)*fact/(ma->GetElectronDensity()) << ",";
+      G4cout << " " << (dedx1 - dedx0)*fact2/(ma->GetElectronDensity()) << ",";
       if(z/10*10 == z) G4cout << G4endl;
     }
     G4cout << G4endl;
@@ -631,8 +626,8 @@ void test31Histo::TableControl()
     G4double fdedx0, fdedx1, s0, s1;
     G4cout << G4endl;
     for(G4int z=1; z<93; z++) {
-      elm = mman->FindOrBuildElement(z, false);
-      G4String nam = "G4_"+elm->GetSymbol();
+      elm1 = mman->FindOrBuildElement(z, false);
+      G4String nam = "G4_"+elm1->GetSymbol();
       ma = mman->FindOrBuildMaterial(nam, false);
       fdedx0 = bragg.ComputeDEDXPerVolume(ma,proton,e,GeV)*ffact/ma->GetElectronDensity();
       fdedx1 = bethe.ComputeDEDXPerVolume(ma,proton,e,GeV)*ffact/ma->GetElectronDensity();
@@ -652,7 +647,7 @@ void test31Histo::TableControl()
     G4cout << "             Stopping Powers" << G4endl;
     G4cout << "=================================================================" << G4endl;
 
-    G4String nm[7] = {"G4_Be", "G4_Al", "G4_Si", "G4_Ge", "G4_Fe", "G4_Ag", "G4_Au"};
+    G4String nmk[7] = {"G4_Be", "G4_Al", "G4_Si", "G4_Ge", "G4_Fe", "G4_Ag", "G4_Au"};
     const G4String partc[2] = {"proton", "alpha"};
     const G4String proc[2] = {"hIoni", "ionIoni"};
     
@@ -661,15 +656,15 @@ void test31Histo::TableControl()
 
     for(G4int ii=0; ii<2; ii++) {
     
-      const G4ParticleDefinition* part = cal.FindParticle(partc[ii]);
+      const G4ParticleDefinition* part2 = cal.FindParticle(partc[ii]);
 
       for(G4int i=0; i<7; i++) {
-	mat = mman->FindOrBuildMaterial(nm[i]);
+	mat = mman->FindOrBuildMaterial(nmk[i]);
         G4cout << "  Particle  " << partc[ii] << " in  Material  " 
 	       << mat->GetName() << G4endl;
-	G4double fact = gram/(MeV*cm2*mat->GetDensity());
+	G4double fact3 = gram/(MeV*cm2*mat->GetDensity());
         std::ifstream* fin = new std::ifstream();
-        std::string fname = "stopping/" + partc[ii] + "_" + nm[i];
+        std::string fname = "stopping/" + partc[ii] + "_" + nmk[i];
         std::string fnamef= fname + ".txt";
         fin->open(fnamef.c_str());
         if( !fin->is_open()) {
@@ -683,8 +678,8 @@ void test31Histo::TableControl()
           i2++;
           (*fin) >> e >> se >> sn >> st;
           e *= MeV;
-          mce = fact*(cal.ComputeDEDX(e,part,proc[ii],mat));
-          mcn = fact*emc->NuclearDEDX(part,mat,e,false);
+          mce = fact3*(cal.ComputeDEDX(e,part2,proc[ii],mat));
+          mcn = fact3*emc->NuclearDEDX(part2,mat,e,false);
           mct = mce + mcn;
           G4double diff = 100.*(mct/st - 1.0);
 	  /*
@@ -729,7 +724,7 @@ void test31Histo::MuonTest()
     G4cout << "             Stopping Powers" << G4endl;
     G4cout << "====================================================================" << G4endl;
 
-    G4String nm[4] = {"G4_WATER", "G4_Al", "G4_Fe", "G4_He"};
+    G4String nmk[4] = {"G4_WATER", "G4_Al", "G4_Fe", "G4_He"};
 
     G4double energy1[25] = {0.0001,  0.0002,  0.0003, 0.0005, 0.0007,
                             0.001,  0.002,  0.003, 0.005, 0.007, 
@@ -812,14 +807,14 @@ void test31Histo::MuonTest()
     G4cout << G4endl;  
 
     for(i=0; i<4; i++) {
-      const G4Material* mat = mman->FindOrBuildMaterial(nm[i]);
-      G4double fact = gram/(MeV*cm2*mat->GetDensity());
+      const G4Material* mat = mman->FindOrBuildMaterial(nmk[i]);
+      G4double fact4 = gram/(MeV*cm2*mat->GetDensity());
       G4cout << "###  Material ### " << mat->GetName() << " Data" << G4endl;  
       for(j=0; j<43; j++) {
         dedx[i][j]   -= dedxn[i][j];
-        dedxn[i][j]  = fact*(cal.ComputeDEDX(energy[j],part,"muIoni",mat));
-        dedxn[i][j] += fact*(cal.ComputeDEDX(energy[j],part,"muBrems",mat));
-        dedxn[i][j] += fact*(cal.ComputeDEDX(energy[j],part,"muPairProd",mat));
+        dedxn[i][j]  = fact4*(cal.ComputeDEDX(energy[j],part,"muIoni",mat));
+        dedxn[i][j] += fact4*(cal.ComputeDEDX(energy[j],part,"muBrems",mat));
+        dedxn[i][j] += fact4*(cal.ComputeDEDX(energy[j],part,"muPairProd",mat));
 	G4cout << dedx[i][j] << " ";
       }
       G4cout << G4endl;  
@@ -831,7 +826,7 @@ void test31Histo::MuonTest()
       G4cout << G4endl;  
       G4cout << "### Geant4 low energy" << G4endl;  
       for(j=0; j<25; j++) {
-        G4cout << fact*(cal.ComputeDEDX(energy1[j],part,"muIoni",mat)) << " ";
+        G4cout << fact4*(cal.ComputeDEDX(energy1[j],part,"muIoni",mat)) << " ";
       }
       G4cout << G4endl;  
     }
@@ -856,7 +851,7 @@ void test31Histo::ElectronTest()
     G4cout << "             Stopping Powers" << G4endl;
     G4cout << "====================================================================" << G4endl;
 
-    G4String nm[3] = {"G4_WATER", "G4_Si", "G4_W"};
+    G4String nmk[3] = {"G4_WATER", "G4_Si", "G4_W"};
     const G4int nmax = 30;
     
     G4double e = MeV;    
@@ -872,7 +867,7 @@ void test31Histo::ElectronTest()
     }
     G4cout << G4endl;  
     for(i=0; i<3; i++) {
-      const G4Material* mat = mman->FindOrBuildMaterial(nm[i]);
+      const G4Material* mat = mman->FindOrBuildMaterial(nmk[i]);
       //      G4double fact = gram/(barn*cm3*mat->GetDensity());
       G4double fact = 1.0;
       G4cout << "###  Material ### " << mat->GetName() << "   Cross Sections: " <<G4endl;  
