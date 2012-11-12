@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06 November 2012: V.Ivant (emmuons-V09-05-06)
+- G4MuBremsstrahlungModel, G4MuPairProductionModel - reduce number of
+    computations of log of the same argument, no change in results
+
 25 October 2012: V.Ivant (emmuons-V09-05-05)
 - G4MuMultipleScattering - use G4UrbanMscModel95 as a default
 

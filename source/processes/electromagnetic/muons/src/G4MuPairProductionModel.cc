@@ -497,16 +497,18 @@ G4MuPairProductionModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
   //	 << " minPair= " << minPairEnergy << " maxpair= " << maxPairEnergy 
   //       << " ymin= " << ymin << " dy= " << dy << G4endl;
 
+  G4double logmaxmin = log(maxPairEnergy/minPairEnergy);
+
   // select bins
   G4int iymin = 0;
   G4int iymax = nbiny-1;
   if( minEnergy > minPairEnergy)
   {
-    G4double xc = log(minEnergy/minPairEnergy)/log(maxPairEnergy/minPairEnergy);
+    G4double xc = log(minEnergy/minPairEnergy)/logmaxmin;
     iymin = (G4int)((log(xc) - ymin)/dy);
     if(iymin >= nbiny) iymin = nbiny-1;
     else if(iymin < 0) iymin = 0;
-    xc = log(maxEnergy/minPairEnergy)/log(maxPairEnergy/minPairEnergy);
+    xc = log(maxEnergy/minPairEnergy)/logmaxmin;
     iymax = (G4int)((log(xc) - ymin)/dy) + 1;
     if(iymax >= nbiny) iymax = nbiny-1;
     else if(iymax < 0) iymax = 0;
@@ -537,8 +539,7 @@ G4MuPairProductionModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
   //        << iymax << " Z= " << currentZ << G4endl;
   G4double y = ya[iy-1] + dy*(p - p1)/(p2 - p1);
 
-  G4double PairEnergy = minPairEnergy*exp(exp(y)
-                       *log(maxPairEnergy/minPairEnergy));
+  G4double PairEnergy = minPairEnergy*exp( exp(y)*logmaxmin );
 		       
   if(PairEnergy < minEnergy) { PairEnergy = minEnergy; }
   if(PairEnergy > maxEnergy) { PairEnergy = maxEnergy; }

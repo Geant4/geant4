@@ -151,6 +151,8 @@ private:
   G4double lowestKinEnergy;
   G4double minThreshold;
 
+  G4double fDN[93];
+
   std::vector<G4DataVector*> partialSumSigma;
 };
 
