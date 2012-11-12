@@ -74,7 +74,7 @@ public:
   
   void AddFactory(G4String, G4VBaseXSFactory*);
 
-  G4VCrossSectionDataSet* GetCrossSectionDataSet(const G4String& name);
+  G4VCrossSectionDataSet* GetCrossSectionDataSet(const G4String& name, G4bool warning=true);
     
 private:
 

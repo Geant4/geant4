@@ -257,18 +257,10 @@ G4CrossSectionDataStore::SampleZandA(const G4DynamicParticle* part,
     iso = (*isoVector)[0];
 
     // more than 1 isotope
-    if(1 < nIso) {
-      G4double* abundVector = anElement->GetRelativeAbundanceVector();
-      G4double sum = 0.0;
-      G4double q = G4UniformRand();
-      for (G4int j = 0; j<nIso; ++j) {
-	sum += abundVector[j];
-	if(q <= sum) {
-	  iso = (*isoVector)[j];
-	  break;
-	}
-      }
+    if(1 < nIso) { 
+      iso = dataSetList[i]->SelectIsotope(anElement, part->GetKineticEnergy());
     }
+
   } else {
 
     //----------------------------------------------------------------

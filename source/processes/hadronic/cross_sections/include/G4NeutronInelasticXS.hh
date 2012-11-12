@@ -82,6 +82,8 @@ public:
                               const G4Isotope* iso,
                               const G4Element* elm,
                               const G4Material* mat);
+
+  virtual G4Isotope* SelectIsotope(const G4Element*, G4double kinEnergy);
   */
 
   virtual

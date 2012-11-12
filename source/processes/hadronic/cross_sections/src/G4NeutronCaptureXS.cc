@@ -49,6 +49,7 @@
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsVector.hh"
 #include "G4DynamicParticle.hh"
+#include "Randomize.hh"
 
 using namespace std;
 
@@ -87,6 +88,7 @@ G4NeutronCaptureXS::G4NeutronCaptureXS()
   //data.resize(maxZ+1, 0);
   data.SetName("NeutronCapture");
   work.resize(13,0);
+  temp.resize(13,0.0);
   isInitialized = false;
 }
 
@@ -187,6 +189,51 @@ G4NeutronCaptureXS::GetIsoCrossSection(const G4DynamicParticle* aParticle,
     G4cout  << "ekin= " << ekin << ",  xs= " << xs << G4endl;
   }
   return xs;
+}
+
+G4Isotope* G4NeutronCaptureXS::SelectIsotope(const G4Element* anElement,
+					     G4double kinEnergy)
+{
+  G4int nIso = anElement->GetNumberOfIsotopes();
+  G4IsotopeVector* isoVector = anElement->GetIsotopeVector();
+  G4Isotope* iso = (*isoVector)[0];
+
+  // more than 1 isotope
+  if(1 < nIso) {
+    G4int Z = G4lrint(anElement->GetZ());
+    if(Z > maxZ) { Z = maxZ; }
+    G4double* abundVector = anElement->GetRelativeAbundanceVector();
+    G4double q = G4UniformRand();
+    G4double sum = 0.0;
+
+    // is there isotope wise cross section?
+    if(0 == amin[Z]) {
+      for (G4int j = 0; j<nIso; ++j) {
+	sum += abundVector[j];
+	if(q <= sum) {
+	  iso = (*isoVector)[j];
+	  break;
+	}
+      }
+    } else {
+      size_t nmax = data.GetNumberOfComponents(Z);
+      if(temp.size() < nmax) { temp.resize(nmax,0.0); }
+      for (size_t i=0; i<nmax; ++i) {
+	G4int A = (*isoVector)[i]->GetN();
+	G4PhysicsVector* v = data.GetComponentDataByID(Z, A);
+        if(v) { sum += abundVector[i]*v->Value(kinEnergy); }
+        temp[i] = sum;
+      }
+      sum *= q;
+      for (size_t j = 0; j<nmax; ++j) {
+        if(temp[j] >= sum) {
+          iso = (*isoVector)[j];
+          break;
+	}
+      }
+    }
+  }
+  return iso;
 }
 
 void 

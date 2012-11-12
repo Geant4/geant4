@@ -14,6 +14,31 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+07 November 2012 W.Pokorski   (hadr-cross-V09-05-42)
+---------------------------------------------------
+- making exception in G4CrossSectionDataSetRegistry::GetCrossSectionDataSet optional
+(returning null pointer)
+
+05 November 2012 V.Ivanchenko   (hadr-cross-V09-05-41)
+-----------------------------------------------------
+- G4BGGNucleonElasticXS, G4BGGPionElasticXS, G4UPiNuclearCrossSection
+    fixed Coverity complains - implemented initialisation of class 
+    members in constructors
+
+02 November 2012 W.Pokorski   (hadr-cross-V09-05-40)
+---------------------------------------------------
+- making two methods in CHIPS XS public for the use of quasi-elastic
+
+01 November 2012 V.Ivanchenko   (hadr-cross-V09-05-39)
+---------------------------------------------------
+- G4VCrossSectionDataSet - added virtual method SelectIsotope which is used
+    for element wise cross section allowing for the dataset to use isotope
+    wise cross section when isotope is selected; by default the old
+    method is used based on isotope abundancy, so no change of results
+    is expected
+- G4NeutronCaptureXS - implement isotope selection based on isotope cross
+    section
+
 26 October 2012 W.Pokorski   (hadr-cross-V09-05-38)
 ---------------------------------------------------
 - setting min kin energy in G4GGNuclNuclCrossSection to 0

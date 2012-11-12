@@ -128,6 +128,11 @@ public: //with description
   //=====================================================================
 
   // Implement this method if needed
+  // This method is called for element-wise cross section
+  // Default implementation assumes equal cross sections for all isotopes 
+  virtual G4Isotope* SelectIsotope(const G4Element*, G4double kinEnergy);
+
+  // Implement this method if needed
   virtual
   void BuildPhysicsTable(const G4ParticleDefinition&);
 

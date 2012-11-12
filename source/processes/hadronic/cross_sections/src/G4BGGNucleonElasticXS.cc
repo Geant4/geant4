@@ -69,6 +69,7 @@ G4BGGNucleonElasticXS::G4BGGNucleonElasticXS(const G4ParticleDefinition* p)
   fNucleon = 0;
   fGlauber = 0;
   fHadron  = 0;
+  fSAID    = 0;
   particle = p;
   theProton= G4Proton::Proton();
   isProton = false;

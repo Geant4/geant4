@@ -135,7 +135,7 @@ void G4CrossSectionDataSetRegistry::AddFactory(G4String name, G4VBaseXSFactory* 
   factories[name] = factory;
 }
 
-G4VCrossSectionDataSet* G4CrossSectionDataSetRegistry::GetCrossSectionDataSet(const G4String& name)
+G4VCrossSectionDataSet* G4CrossSectionDataSetRegistry::GetCrossSectionDataSet(const G4String& name, G4bool warning)
 {
   size_t n = xSections.size(); 
  
@@ -155,9 +155,12 @@ G4VCrossSectionDataSet* G4CrossSectionDataSetRegistry::GetCrossSectionDataSet(co
     }
   else
     {
-      G4ExceptionDescription ED;
-      ED << "invalid cross section data set name ["<< name << "]" << G4endl;
-      G4Exception("G4CrossSectionDataSetRegistry::GetCrossSectionDataSet", "CrossSection001", FatalException, ED);
+        if(warning)
+        {
+         G4ExceptionDescription ED;
+         ED << "Factory for ["<< name << "] cross section data set not found." << G4endl;
+         G4Exception("G4CrossSectionDataSetRegistry::GetCrossSectionDataSet", "CrossSection001", FatalException, ED);
+        }
       return 0;
     }
 }

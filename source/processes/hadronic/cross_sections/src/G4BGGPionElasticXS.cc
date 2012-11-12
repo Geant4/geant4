@@ -72,6 +72,7 @@ G4BGGPionElasticXS::G4BGGPionElasticXS(const G4ParticleDefinition*)
   fPion = 0;
   fGlauber = 0;
   fHadron  = 0;
+  fSAID    = 0;
   particle = 0;
   theProton= G4Proton::Proton();
   isPiplus = false;

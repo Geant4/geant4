@@ -83,6 +83,8 @@ public: // With Description
                               const G4Element* elm,
                               const G4Material* mat);
 
+  virtual G4Isotope* SelectIsotope(const G4Element*, G4double kinEnergy);
+
   virtual
   void BuildPhysicsTable(const G4ParticleDefinition&);
 
@@ -103,6 +105,7 @@ private:
 
   G4ElementData data;
   std::vector<G4PhysicsVector*> work;
+  std::vector<G4double> temp;
 
   static const G4int amin[93];
   static const G4int amax[93];
