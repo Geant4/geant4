@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+6 November 2012 - G.Cosmo (ascii-V09-05-04)
+- Minor fix for porting on AIX to G4tgrVolumeMgr.
+
 5 July 2012 - G.Cosmo (ascii-V09-05-03)
 - Explicitly use inclusion of headers for system of units and physical
   constants, in plan to remove implicit inclusion from globals.hh.

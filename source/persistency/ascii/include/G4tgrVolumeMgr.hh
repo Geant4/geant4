@@ -54,7 +54,7 @@
 
 typedef std::map< G4String, G4tgrSolid* > G4mapssol;
 typedef std::map< G4String, G4tgrVolume* > G4mapsvol;
-typedef std::multimap< const G4String, const G4tgrPlace* > G4mmapspl;
+typedef std::multimap< G4String, const G4tgrPlace* > G4mmapspl;
 
 //----------------------------------------------------------------------------  
 class G4tgrVolumeMgr 
