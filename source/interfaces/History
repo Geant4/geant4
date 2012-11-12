@@ -17,6 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+6 November 2012 Koichi Murakami (interfaces-V09-05-35)
+- G4UIExecutive, remove Win32 session from best guess.
+
+2 November 2012 Koichi Murakami (interfaces-V09-05-34)
+- G4UIExecutive, G4UItcsh, add null check for getenv return.
+
+2nd November 2012  Laurent Garnier (interfaces-V09-05-33)
+- G4UIQt : Remove icons for all applications. It will be now provided in a 
+           icons.mac file
+
 1st November, 2012 Gabriele Cosmo (interfaces-V09-05-32)
 - Fixed GNUmakefile and source.cmake in basic module for missing G4UIGAG.hh.
 

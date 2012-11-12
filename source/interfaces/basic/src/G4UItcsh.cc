@@ -75,7 +75,10 @@ G4UItcsh::G4UItcsh(const G4String& prompt, G4int maxhist)
   tcgetattr(0, &tios);
 
   // read a shell history file
-  G4String homedir= getenv("HOME");
+  const char* path = getenv("HOME");
+  if( path == NULL ) return;
+
+  G4String homedir= path;
   G4String fname= homedir + historyFileName;
 
   std::ifstream histfile;
@@ -98,7 +101,10 @@ G4UItcsh::~G4UItcsh()
 /////////////////////
 {
   // store a shell history
-  G4String homedir= getenv("HOME");
+  const char* path = getenv("HOME");
+  if( path == NULL ) return;
+
+  G4String homedir= path;
   G4String fname= homedir + historyFileName;
 
   std::ofstream histfile;

@@ -157,33 +157,6 @@ G4UIQt::G4UIQt (
   }
   fMainWindow = new QMainWindow();
 
-
-  // open/save
-  AddIcon("Open macro file","open","/control/execute");
-  AddIcon("Save viewer state","save","/vis/viewer/save");
-
-  // Cursors style : Should be for all viewers
-  
-  AddIcon("Move","move","");
-  AddIcon("Pick","pick","");
-  AddIcon("Zoom out","zoom_out","");
-  AddIcon("Zoom in","zoom_in","");
-  AddIcon("Rotate","rotate","");
-
-  // Surface Style : Should be change when changing current viewer
-  AddIcon("Hidden line removal","hidden_line_removal","");
-  AddIcon("Hidden line removal","hidden_line_and_surface_removal","");
-  AddIcon("Hidden line removal","solid","");
-  AddIcon("Hidden line removal","wireframe","");
-
-  // Perspective/Ortho
-  AddIcon("Perspective","perspective","");
-  AddIcon("Orthographic","ortho","");
-
-  // Try : changebackground
-  //  AddIcon("change background","/Users/garnier/Desktop/Captures/a.jpg","/vis/viewer/set/background");
-
-
  
 #ifdef G4DEBUG_INTERFACES_BASIC
   printf("G4UIQt::Initialise after main window creation +++++++++++\n");
@@ -877,7 +850,7 @@ void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCom
     // try to open a file
     pix = QPixmap(aFileName);
     if (pix.isNull()) {
-      G4cout << "Warning: file '"<< aIconFile <<"' is incorrect or does not exist, this command will not be build"<< G4endl;
+      G4cout << "Warning: file '"<< aFileName <<"' is incorrect or does not exist, this command will not be build"<< G4endl;
       return;
     }
     userToolBar = true; 

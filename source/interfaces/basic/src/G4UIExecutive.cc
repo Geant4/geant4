@@ -223,8 +223,15 @@ void G4UIExecutive::SelectSessionByEnv()
 // --------------------------------------------------------------------------
 void G4UIExecutive::SelectSessionByFile(const G4String& appname)
 {
-  G4String homedir= getenv("HOME");
+  const char* path = getenv("HOME");
+  if( path == NULL ) return;
+  G4String homedir = path;
+
+#ifndef WIN32
   G4String fname= homedir + "/.g4session";
+#else
+  G4String fname= homedir + "\\.g4session";
+#endif
     
   std::ifstream fsession;
   enum { BUFSIZE= 1024 }; char linebuf[BUFSIZE];
@@ -277,7 +284,6 @@ void G4UIExecutive::SelectSessionByBestGuess()
   if ( qt_build ) selected = kQt;
   else if ( tcsh_build ) selected = kTcsh;
   else if ( xm_build ) selected = kXm;
-  else if ( win32_build ) selected = kWin32;
 }
 
 // --------------------------------------------------------------------------
