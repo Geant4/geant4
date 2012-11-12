@@ -6,10 +6,10 @@ gStyle->SetTitleSize(0.04, "y");
 gStyle->SetMarkerSize(1.2);
 
 TLegend* legc = new TLegend(0.25, 0.65, 0.5, 0.88);
-TString bhed[6] = {"pi- g4 9.4p04","pi- g4 9.5p01","pi- g4 9.6beta","p g4 9.4p04","p g4 9.5p01","p g4 9.6beta"};
+TString bhed[6] = {"pi- g4 9.4p04","pi- g4 9.6beta QBBC","pi- g4 9.6beta QGSP_FTFP_BERT_EMV","p g4 9.4p04","p g4 9.6beta QBBC","p g4 9.6beta QGSP_FTFP_BERT_EML"};
 
 gPad->SetLogx();
-TH1F* hh = gPad->DrawFrame(0.9,0.5,310,0.9,"Response of combined calorimeter QGSP_FTFP_BERT_EML");
+TH1F* hh = gPad->DrawFrame(0.9,0.5,310,0.9,"Response of combined calorimeter");
 hh->GetXaxis()->SetTitle("E_{0} (GeV)");
 hh->GetYaxis()->SetTitle("E_{rec}/E_{0}");
 gPad->SetGrid();
@@ -37,7 +37,7 @@ Double_t e5[nd] = {.644,.616,.613,.623,.630,.635,.649,.664,.673,.675,.687,.738,.
 
 TGraphErrors* gr[6];
 
-for(int i=0; i<2; i++) {
+for(int i=0; i<3; i++) {
   if(i == 0) {
     gr[i] = new TGraphErrors(nd-2,ener,e0,err0,err0);
     gr[i+3] = new TGraphErrors(nd-2,ener,e3,err0,err0);
@@ -64,6 +64,6 @@ for(int i=0; i<2; i++) {
 
 legc->Draw();
 
-c1.Print("Erec1.gif");
+c1.Print("Erec.gif");
 
 }

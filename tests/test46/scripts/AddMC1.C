@@ -11,7 +11,7 @@ if(iplot==5) hhh = (TH1F*)fff->Get("h11");
 
 hhh->SetLineColor(col[idir]);
 //hhh->SetLineWidth(2);
-leg[0]->AddEntry(hhh, dir[idir], "l");
+leg[0]->AddEntry(hhh, dir1[idir], "l");
 //hhh->Draw("C HIST SAME");
 hhh->Draw("HIST SAME 9");
 cout << "AddMC1 done" << endl;

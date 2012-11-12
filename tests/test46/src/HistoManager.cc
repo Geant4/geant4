@@ -326,9 +326,9 @@ void HistoManager::EndOfEvent()
   abshcal += Eabshcal;
 
   // Sum of ECAl + HCAL *0
-  G4double edep = e25*factorEcal + Ehcal*factorHcal0; 
-  edepSum += edep;
-  edepSum2 += edep*edep;
+  G4double edep0 = e25*factorEcal + Ehcal*factorHcal0; 
+  edepSum += edep0;
+  edepSum2 += edep0*edep0;
 
   // Sum of ECAl + HCAL 
   G4double edep1 = e25*factorEcal + Ehcal*factorHcal; 
@@ -349,7 +349,7 @@ void HistoManager::EndOfEvent()
   histo->Fill(7,Ehcal,1.0);
   histo->Fill(8,Eehcal,1.0);
   histo->Fill(9,Eabshcal+Ehcal,1.0);
-  histo->Fill(10,edep,1.0);
+  histo->Fill(10,edep0,1.0);
   histo->Fill(11,edep1,1.0);
   histo->Fill(12,etot,1.0);
 }
@@ -367,7 +367,6 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
     primaryKineticEnergy = e;
     primaryDef = pd;
   } else {
-    const G4ParticleDefinition* pd = track->GetDefinition();
 
     if(pd == G4Gamma::Gamma())            { histo->Fill(16,e,1.0); }
     else if(pd == G4Electron::Electron()) { histo->Fill(17,e,1.0); }
@@ -378,36 +377,36 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HistoManager::AddEcalHit(const G4ParticleDefinition* part, 
-			      G4int copyNo, G4double edep, G4double time)
+			      G4int copyNo, G4double de, G4double time)
 {
   n_step++;
-  E[copyNo] += edep;
-  //  G4cout << "### edep= " << edep << "   #copyNo =" << copyNo << G4endl;
-  if(part->GetPDGMass() < MeV) { Eecal += edep; }
+  E[copyNo] += de;
+  //  G4cout << "### edep= " << de << "   #copyNo =" << copyNo << G4endl;
+  if(part->GetPDGMass() < MeV) { Eecal += de; }
   //  G4cout << "### Eecal= " << Eecal << G4endl;
-  histo->Fill(13,std::log10(edep/MeV),1.0); 
-  histo->Fill(14,time,edep); 
+  histo->Fill(13,std::log10(de/MeV),1.0); 
+  histo->Fill(14,time,de); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
 void HistoManager::AddHcalHit(const G4ParticleDefinition* part, 
-			      G4int, G4double edep, G4double time)
+			      G4int, G4double de, G4double time)
 {
   n_step++;
-  Ehcal += edep;
-  if(part->GetPDGMass() < MeV) { Eehcal += edep; }
-  histo->Fill(15,time,edep); 
+  Ehcal += de;
+  if(part->GetPDGMass() < MeV) { Eehcal += de; }
+  histo->Fill(15,time,de); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void HistoManager::AddHcalAbsorberHit(const G4ParticleDefinition*, G4double edep)
+void HistoManager::AddHcalAbsorberHit(const G4ParticleDefinition*, G4double de)
 {
   n_step++;
-  Eabshcal += edep;
-  //  G4cout << "### edepAbs= " << edep << G4endl;
+  Eabshcal += de;
+  //  G4cout << "### edepAbs= " << de << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

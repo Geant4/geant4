@@ -33,12 +33,13 @@ leg[1]->SetHeader("FTFP_BERT_EMV");
 for(iplot=0; iplot<2; iplot++) {
 
   c1.cd(iplot + 1);
-  for(idir = 13; idir<17; idir++) {
+  //  for(idir = 13; idir<17; idir++) {
+  for(idir = 13; idir<15; idir++) {
     gROOT->ProcessLine(".x $G4INSTALL/tests/test46/scripts/AddMC.C");
   }
   cout << "PlotSingle " << iplot << " done " << endl;
 }
 leg[1]->Draw("SAME");
-c1.Print("A_e-30d.gif");
+c1.Print("A_e-30gev.gif");
 
 }

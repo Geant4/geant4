@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05-11-12  V.Ivanchenko (test46-V09-05-04)
+- Fixed variable shadowing
+
 20-05-12  V.Ivant (test46-V09-05-03)
 - Added extra PhysicsLists and code cleanup
 

@@ -114,13 +114,12 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void 
-StackingAction::ActivateSecondaryBiasing(const G4String& pname, 
+StackingAction::ActivateSecondaryBiasing(const G4String& partname, 
 					 G4double f, G4double e)
 {
   G4ParticleDefinition* part = 
-    G4ParticleTable::GetParticleTable()->FindParticle(pname);
+    G4ParticleTable::GetParticleTable()->FindParticle(partname);
   if(part) {
-
     biasedParticle.push_back(part);
     rrProbability.push_back(f);
     biasedEnergy.push_back(e);

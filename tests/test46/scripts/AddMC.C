@@ -15,10 +15,8 @@ if(iplot+iplot0==7) hhh = (TH1F*)fff->Get("h5");
 hhh->SetLineColor(col[idir]);
 //hhh->SetLineWidth(2);
 leg[iplot]->AddEntry(hhh, dir1[idir], "l");
-//leg[iplot]->AddEntry(hhh, dir[idir], "l");
 //hhh->Draw("C HIST SAME");
 hhh->Draw("HIST SAME");
-//c1->Update();
 //delete fff;
  cout << "AddMC done iplot= " << iplot << " iplot0= " << iplot0 << endl;
 }

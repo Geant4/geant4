@@ -368,8 +368,8 @@ void DetectorConstruction::ConstructPreShower()
 
     z0 += dz;
     G4String matname = mat[i];
-    G4Material* m = manager->FindOrBuildMaterial(matname);
-    logic = new G4LogicalVolume(solid,m,matname);
+    G4Material* mate = manager->FindOrBuildMaterial(matname);
+    logic = new G4LogicalVolume(solid,mate,matname);
     new G4PVPlacement(0,G4ThreeVector(0.,0.,z0),matname,logic,physiWorld,false,0);
   }
 }
