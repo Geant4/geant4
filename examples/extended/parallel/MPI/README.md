@@ -1,16 +1,9 @@
-/// @file "parallel/MPI/.README"
-/// @brief Examples MPI README
-
-/*! \page MPI Category : parallel/MPI
-
-- - -
 Geant4 MPI Interface
 ====================
 
 Author:
 Koichi Murakami (KEK) / Koichi.Murakami@kek.jp
 
-- - -
 
 About the interface
 ===================
@@ -170,6 +163,7 @@ for running examples:
 - *G4LEVELGAMMADATA* : directory path for photon evalopation
 - *G4SAIDXSDATA* : directory path for nucleon cross section data
 
+
 For using ROOT libraries
 
 - *ROOTSYS* : root path of the ROOT package
@@ -203,5 +197,4 @@ An example of dosimetry in a water phantom.
 - Learn how to paralleized your applications.
 - Create a ROOT file containing histograms/trees in each node.
 
-*/
 

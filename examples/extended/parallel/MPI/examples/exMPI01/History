@@ -1,0 +1,23 @@
+$Id: History,v 1.3 2010-06-06 05:07:23 perl Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                          exMPI01 History
+                          ---------------
+
+27 October 2012 K. Murakami
+ - migrated to CMake build
+ - updated documentations
+
+4 June 2010 J.Perl
+ - Updated vis usage.
+
+18 May 2010 K.Murakami
+ - use G4UIcsh instead of G4UItcsh because OpenMPI is now default.
+ - use G4eMultipleScattering instead of obsolete G4MultipleScattering.
+
+16 Nov. 2007 K.Murakami
+ - commited to G4 CVS.
