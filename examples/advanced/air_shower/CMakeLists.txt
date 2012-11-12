@@ -23,11 +23,37 @@ include(${Geant4_USE_FILE})
 #----------------------------------------------------------------------------
 # Find AIDA (optional package)
 #
-find_package(AIDA)
-if(AIDA_FOUND QUIET)
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
+find_package(AIDA QUIET)
+if(AIDA_FOUND)
   message(STATUS "G4 Examples: AIDA found. --> air_shower example with AIDA enabled.") 
   # Uncomment this line if suitable (some customization may be needed)
-  add_definitions(-DG4ANALYSIS_USE)   
+  add_definitions(-DG4ANALYSIS_USE)  
+else()
+  message(STATUS "G4 Example: AIDA not found --> air_shower example with AIDA disabled.")
+endif()
+
+#----------------------------------------------------------------------------
+# Add options 
+#
+option(ULTRA_MIRROR_USE "Use of mirrors" OFF)
+if(ULTRA_MIRROR_USE)
+  add_definitions(-DULTRA_MIRROR_USE)
+endif()
+
+option(ULTRA_VERBOSE "Set verbosity" OFF)
+if(ULTRA_VERBOSE)
+  add_definitions(-DULTRA_VERBOSE)
+endif()
+
+option(ULTRA_GROUND_USE "Use ground" OFF)
+if(ULTRA_GROUND_USE)
+  add_definitions(-DULTRA_GROUND_USE)
+endif()
+
+option(ULTRA_REFLECTION_USE "Use of reflection" OFF)
+if(ULTRA_REFLECTION_USE)
+  add_definitions(-DULTRA_REFLECTION_USE)
 endif()
 
 #----------------------------------------------------------------------------

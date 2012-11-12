@@ -7,6 +7,9 @@
                            History file
                            ------------
 
+06.11.2012 - L. Pandola (air_shower-V09-05-06)
+             Fix syntax in CMakeLists.txt
+
 26.10.2012 - L. Pandola (air_shower-V09-05-05)
 	     Replace CMakeLists.txt to deal with UI/VIS
 
