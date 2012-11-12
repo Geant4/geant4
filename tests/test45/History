@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05-Nov-12 V.Ivant (test45-V09-05-01)
+- Fixed variable shadowing and migrate to internal histograms
+
 11-Oct-12  G.Cosmo (test45-V09-05-00)
 - Explicit inclusion of units and constants headers.
 

@@ -129,84 +129,84 @@ HistoManager::~HistoManager()
 void HistoManager::bookHisto()
 {
   for(G4int i=0; i<6; i++) {
-    G4String s;
+    G4String sss;
     G4String I;
     std::ostringstream ss;
     std::ostringstream II;
     ss << angle[i];
     II << (i+1);
-    s = ss.str();
+    sss = ss.str();
     I = II.str();
     angle[i]=angle[i]*degree;
-    G4String S = " neutron yield at " + s + " degree in the target ";
-    histo->add1D(I,S,nbins1,emin1,emax1,1.0);
+    G4String S = " neutron yield at " + sss + " degree in the target ";
+    histo->Add1D(I,S,nbins1,emin1,emax1,1.0);
   }
   for(G4int i=0; i<6; i++) {
-    G4String s;
+    G4String sss;
     G4String I;
     std::ostringstream ss;
     std::ostringstream II;
     ss << angle[i];
     II << (i+7);
-    s = ss.str();
+    sss = ss.str();
     I = II.str();
     angle[i]=angle[i]*degree;
-    G4String S = " neutron yield at " + s + " degree in the target ";
-    histo->add1D(I,S,nbins2,emin2,emax2,1.0);
+    G4String S = " neutron yield at " + sss + " degree in the target ";
+    histo->Add1D(I,S,nbins2,emin2,emax2,1.0);
   }
   // pn_al
   /*
-  histo->add1D("1"," low-energy neutron yield at 0 degree in the target",
+  histo->Add1D("1"," low-energy neutron yield at 0 degree in the target",
 	       nbins1,emin1,emax1,1.0);
-  histo->add1D("2"," low-energy neutron yield at 15 degree in the target",
+  histo->Add1D("2"," low-energy neutron yield at 15 degree in the target",
 	       nbins1,emin1,emax1,1.0);
-  histo->add1D("3"," low-energy neutron yield at 30 degree in the target",
+  histo->Add1D("3"," low-energy neutron yield at 30 degree in the target",
 	       nbins1,emin1,emax1,1.0);
-  histo->add1D("4"," low-energy neutron yield at 45 degree in the target",
+  histo->Add1D("4"," low-energy neutron yield at 45 degree in the target",
 	       nbins1,emin1,emax1,1.0);
-  histo->add1D("5"," low-energy neutron yield at 60 degree in the target",
+  histo->Add1D("5"," low-energy neutron yield at 60 degree in the target",
 	       nbins1,emin1,emax1,1.0);
-  histo->add1D("6"," low-energy neutron yield at 90 degree in the target",
+  histo->Add1D("6"," low-energy neutron yield at 90 degree in the target",
 	       nbins1,emin1,emax1,1.0);
 
-  histo->add1D("7"," neutron yield at 0 degree in the target",
+  histo->Add1D("7"," neutron yield at 0 degree in the target",
 	       nbins2,emin2,emax2,1.0);
-  histo->add1D("8"," neutron yield at 15 degree in the target",
+  histo->Add1D("8"," neutron yield at 15 degree in the target",
 	       nbins2,emin2,emax2,1.0);
-  histo->add1D("9"," neutron yield at 30 degree in the target",
+  histo->Add1D("9"," neutron yield at 30 degree in the target",
 	       nbins2,emin2,emax2,1.0);
-  histo->add1D("10"," neutron yield at 45 degree in the target",
+  histo->Add1D("10"," neutron yield at 45 degree in the target",
 	       nbins2,emin2,emax2,1.0);
-  histo->add1D("11"," neutron yield at 60 degree in the target",
+  histo->Add1D("11"," neutron yield at 60 degree in the target",
 	       nbins2,emin2,emax2,1.0);
-  histo->add1D("12"," neutron yield at 90 degree in the target",
+  histo->Add1D("12"," neutron yield at 90 degree in the target",
 	       nbins2,emin2,emax2,1.0);
  
   //pn_cu, pn_fe
-  histo->add1D("1"," low-energy neutron yield at 0 degree in the target",
+  histo->Add1D("1"," low-energy neutron yield at 0 degree in the target",
 	       nbins1,emin1,emax1,1.0);
-  histo->add1D("2"," low-energy neutron yield at 30 degree in the target",
+  histo->Add1D("2"," low-energy neutron yield at 30 degree in the target",
 	       nbins1,emin1,emax1,1.0);
-  histo->add1D("3"," low-energy neutron yield at 45 degree in the target",
+  histo->Add1D("3"," low-energy neutron yield at 45 degree in the target",
 	       nbins1,emin1,emax1,1.0);
-  histo->add1D("4"," low-energy neutron yield at 60 degree in the target",
+  histo->Add1D("4"," low-energy neutron yield at 60 degree in the target",
 	       nbins1,emin1,emax1,1.0);
-  histo->add1D("5"," low-energy neutron yield at 90 degree in the target",
+  histo->Add1D("5"," low-energy neutron yield at 90 degree in the target",
 	       nbins1,emin1,emax1,1.0);
-  histo->add1D("6"," low-energy neutron yield at 110 degree in the target",
+  histo->Add1D("6"," low-energy neutron yield at 110 degree in the target",
 	       nbins1,emin1,emax1,1.0);
 
-  histo->add1D("7"," neutron yield at 0 degree in the target",
+  histo->Add1D("7"," neutron yield at 0 degree in the target",
 	       nbins2,emin2,emax2,1.0);
-  histo->add1D("8"," neutron yield at 30 degree in the target",
+  histo->Add1D("8"," neutron yield at 30 degree in the target",
 	       nbins2,emin2,emax2,1.0);
-  histo->add1D("9"," neutron yield at 45 degree in the target",
+  histo->Add1D("9"," neutron yield at 45 degree in the target",
 	       nbins2,emin2,emax2,1.0);
-  histo->add1D("10"," neutron yield at 60 degree in the target",
+  histo->Add1D("10"," neutron yield at 60 degree in the target",
 	       nbins2,emin2,emax2,1.0);
-  histo->add1D("11"," neutron yield at 90 degree in the target",
+  histo->Add1D("11"," neutron yield at 90 degree in the target",
 	       nbins2,emin2,emax2,1.0);
-  histo->add1D("12"," neutron yield at 110 degree in the target",
+  histo->Add1D("12"," neutron yield at 110 degree in the target",
 	       nbins2,emin2,emax2,1.0);
   */
   
@@ -218,9 +218,9 @@ void HistoManager::BeginOfRun()
 {
   n_evt       = 0;
 
-  histo->setVerbose(verbose);
+  histo->SetVerbose(verbose);
   bookHisto();
-  histo->book();
+  histo->Book();
 
   if(verbose > 0) 
     G4cout << "HistoManager: Histograms are booked and run has been started"
@@ -259,11 +259,11 @@ void HistoManager::EndOfRun()
     G4double a2 = angle[i] + dangle;
     if(a1 < 0.0) a1 = 0.0; 
     G4double fact = fac/(std::cos(a1) - std::cos(a2));
-    histo->scale(i,fact/de1);
-    histo->scale(i+6,fact/de2);
+    histo->ScaleH1(i,fact/de1);
+    histo->ScaleH1(i+6,fact/de2);
   }
 
-  histo->save();
+  histo->Save();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -294,8 +294,8 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
     G4ThreeVector dir = track->GetMomentumDirection();
     G4int idx = IndexTheta(dir.theta());
     if(idx >= 0) {
-      if(e <= emax1) histo->fill(idx, e, 1.0);
-      if(e >= emin2) histo->fill(idx+6, e, 1.0);
+      if(e <= emax1) histo->Fill(idx, e, 1.0);
+      if(e >= emin2) histo->Fill(idx+6, e, 1.0);
     }
     
   }
@@ -313,8 +313,8 @@ void HistoManager::AddLeakingParticle(const G4Track* track)
     G4ThreeVector dir = track->GetMomentumDirection();
     G4int idx = IndexTheta(dir.theta());
     if(idx >= 0) {
-      if(e <= emax1) histo->fill(idx, e, 1.0);
-      if(e >= emin2) histo->fill(idx+6, e, 1.0);
+      if(e <= emax1) histo->Fill(idx, e, 1.0);
+      if(e >= emin2) histo->Fill(idx+6, e, 1.0);
     }
     */
   }
@@ -325,14 +325,14 @@ void HistoManager::AddLeakingParticle(const G4Track* track)
 void HistoManager::SetVerbose(G4int val)        
 {
   verbose = val; 
-  histo->setVerbose(val);
+  histo->SetVerbose(val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void HistoManager::Fill(G4int id, G4double x, G4double w)
 {
-  histo->fill(id, x, w);
+  histo->Fill(id, x, w);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
