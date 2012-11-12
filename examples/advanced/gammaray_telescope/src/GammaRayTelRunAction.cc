@@ -105,10 +105,12 @@ void GammaRayTelRunAction::EndOfRunAction(const G4Run* aRun)
   G4cout << "End of Run " << G4endl;
   G4cout << "File " << name << G4endl;
 
+/*	
   // Run ended, update the visualization
   if (G4VVisManager::GetConcreteInstance()) {
      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
   }
+*/
 
   // Close the file with the hits information
 #ifdef G4STORE_DATA

@@ -85,8 +85,8 @@ GammaRayTelDetectorConstruction::GammaRayTelDetectorConstruction()
    solidCALDetectorY(0),logicCALDetectorY(0),physiCALDetectorY(0),
    solidPlane(0),logicPlane(0),physiPlane(0),
    solidConverter(0),logicConverter(0),physiConverter(0),
-   trackerSD(0),calorimeterSD(0),anticoincidenceSD(0),
-   aTKRRegion(0), aCALRegion(0)
+   trackerSD(0),calorimeterSD(0),anticoincidenceSD(0)
+   // aTKRRegion(0), aCALRegion(0)
 {
   // default parameter values of the payload
   
@@ -683,19 +683,20 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
   
   // Cuts by Regions 
 
-
-  G4String regName[] = {"Calorimeter","Tracker"};
-  if (aCALRegion) delete aCALRegion;
-
-  aCALRegion = new G4Region(regName[0]);
-  logicCAL->SetRegion(aCALRegion);
-  aCALRegion->AddRootLogicalVolume(logicCAL);
-
-  if (aTKRRegion) delete aTKRRegion;
-
-  aTKRRegion = new G4Region(regName[1]);
-  logicTKR->SetRegion(aTKRRegion);
-  aTKRRegion->AddRootLogicalVolume(logicTKR);
+  /*
+    G4String regName[] = {"Calorimeter","Tracker"};
+    if (aCALRegion) delete aCALRegion;
+    
+    aCALRegion = new G4Region(regName[0]);
+    logicCAL->SetRegion(aCALRegion);
+    aCALRegion->AddRootLogicalVolume(logicCAL);
+    
+    if (aTKRRegion) delete aTKRRegion;
+    
+    aTKRRegion = new G4Region(regName[1]);
+    logicTKR->SetRegion(aTKRRegion);
+    aTKRRegion->AddRootLogicalVolume(logicTKR);
+  */
 
   //Sensitive Detector Manager
   

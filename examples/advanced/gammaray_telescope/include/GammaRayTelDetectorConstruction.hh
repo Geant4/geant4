@@ -268,8 +268,8 @@ private:
   GammaRayTelCalorimeterSD* calorimeterSD;  //pointer to the sensitive detector
   GammaRayTelAnticoincidenceSD* anticoincidenceSD;  //pointer to the sensitive detector
 
-  G4Region* aTKRRegion; // TKR cut region
-  G4Region* aCALRegion; // CAL cut region
+  //G4Region* aTKRRegion; // TKR cut region
+  //G4Region* aCALRegion; // CAL cut region
 
 private:
     
