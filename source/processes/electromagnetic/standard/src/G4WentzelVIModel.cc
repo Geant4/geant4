@@ -369,6 +369,7 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
       singleScatteringMode = true;
       tPathLength = zPathLength; 
       lambdaeff = DBL_MAX;
+      cosThetaMin = 1.0;
     } else if(xtsec > 0.0) {
 
       lambdaeff = 1./cross; 
@@ -425,7 +426,8 @@ G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
   const G4double thinlimit = 0.1; 
   G4int nMscSteps = 1;
   // large scattering angle case - two step approach
-  if(tPathLength*invlambda > thinlimit && safety > tlimitminfix) { 
+  if(!singleScatteringMode && tPathLength*invlambda > thinlimit 
+     && safety > tlimitminfix) { 
     x0 *= 0.5; 
     nMscSteps = 2; 
   } 
@@ -433,6 +435,10 @@ G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
   // step limit due to single scattering
   G4double x1 = 2*tPathLength;
   if(0.0 < xtsec) { x1 = -log(G4UniformRand())/xtsec; }
+
+  // no scattering case
+  if(singleScatteringMode && x1 > tPathLength)  
+    { return fDisplacement; }
 
   const G4ElementVector* theElementVector = 
     currentMaterial->GetElementVector();
@@ -448,6 +454,7 @@ G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
   // end point of the step 
   G4ThreeVector dir(0.0,0.0,1.0);
   fDisplacement.set(0.0,0.0,-zPathLength);
+
   G4double mscfac = zPathLength/tPathLength;
 
   // start a loop 
@@ -462,7 +469,7 @@ G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
   do {
 
     // single scattering case
-    if(x1 < x2) { 
+    if(singleScatteringMode || x1 <= x2) { 
       step = x1;
       singleScat = true;
     } else {
@@ -491,9 +498,9 @@ G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
       dir = temp;
 
       // new proposed step length
-      x1  = -log(G4UniformRand())/xtsec; 
       x2 -= step; 
-      if(x2 <= 0.0) { --nMscSteps; }
+      x1  = -log(G4UniformRand())/xtsec; 
+      if(singleScatteringMode && x1 > x2) { break; }
 
     // multiple scattering
     } else { 
@@ -502,44 +509,42 @@ G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
       x2  = x0;
 
       // for multiple scattering x0 should be used as a step size
-      if(!singleScatteringMode) {
-        G4double z0 = x0*invlambda;
+      G4double z0 = x0*invlambda;
 
-	// sample z in interval 0 - 1
-	do {
-	  G4double zzz = 0.0;
-	  if(z0 > 0.1) { zzz = exp(-1.0/z0); }
-	  z = -z0*log(1.0 - (1.0 - zzz)*G4UniformRand());
-	} while(z > 1.0);
-	cost = 1.0 - 2.0*z/*factCM*/;
-	if(cost > 1.0)       { cost = 1.0; }
-	else if(cost < -1.0) { cost =-1.0; }
-	sint = sqrt((1.0 - cost)*(1.0 + cost));
-	phi  = twopi*G4UniformRand();
-	G4double vx1 = sint*cos(phi);
-	G4double vy1 = sint*sin(phi);
+      // sample z in interval 0 - 1
+      do {
+	G4double zzz = 0.0;
+	if(z0 > 0.1) { zzz = exp(-1.0/z0); }
+	z = -z0*log(1.0 - (1.0 - zzz)*G4UniformRand());
+      } while(z > 1.0);
+      cost = 1.0 - 2.0*z/*factCM*/;
+      if(cost > 1.0)       { cost = 1.0; }
+      else if(cost < -1.0) { cost =-1.0; }
+      sint = sqrt((1.0 - cost)*(1.0 + cost));
+      phi  = twopi*G4UniformRand();
+      G4double vx1 = sint*cos(phi);
+      G4double vy1 = sint*sin(phi);
 
-	// change direction
-	temp.set(vx1,vy1,cost);
-	temp.rotateUz(dir);
-	dir = temp;
+      // change direction
+      temp.set(vx1,vy1,cost);
+      temp.rotateUz(dir);
+      dir = temp;
 
-	// lateral displacement  
-	if (latDisplasment && x0 > tlimitminfix) {
-	  G4double rms = invsqrt12*sqrt(2*z0);
-          G4double r   = x0*mscfac;
-	  G4double dx  = r*(0.5*vx1 + rms*G4RandGauss::shoot(0.0,1.0));
-	  G4double dy  = r*(0.5*vy1 + rms*G4RandGauss::shoot(0.0,1.0));
-	  G4double dz;
-	  G4double d   = r*r - dx*dx - dy*dy;
-	  if(d >= 0.0)  { dz = sqrt(d) - r; }
-	  else          { dx = dy = dz = 0.0; }
+      // lateral displacement  
+      if (latDisplasment && safety > tlimitminfix) {
+	G4double rms = invsqrt12*sqrt(2*z0);
+	G4double r   = x0*mscfac;
+	G4double dx  = r*(0.5*vx1 + rms*G4RandGauss::shoot(0.0,1.0));
+	G4double dy  = r*(0.5*vy1 + rms*G4RandGauss::shoot(0.0,1.0));
+	G4double dz;
+	G4double d   = r*r - dx*dx - dy*dy;
+	if(d >= 0.0)  { dz = sqrt(d) - r; }
+	else          { dx = dy = dz = 0.0; }
 
-	  // change position
-	  temp.set(dx,dy,dz);
-	  temp.rotateUz(dir); 
-	  fDisplacement += temp;
-	}
+	// change position
+	temp.set(dx,dy,dz);
+	temp.rotateUz(dir); 
+	fDisplacement += temp;
       }
     }
   } while (0 < nMscSteps);

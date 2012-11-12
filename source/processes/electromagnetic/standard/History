@@ -17,6 +17,26 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10 November 12: V.Ivanchenko (emstand-V09-05-64)
+- G4WentzelOKandVIxSection - revert to 9.5 version
+
+09 November 12: V.Ivanchenko (emstand-V09-05-63)
+- G4WentzelVIModel - fixed minor problem in single scattering mode
+
+08 November 12: V.Ivanchenko (emstand-V09-05-62)
+- G4UrbanMscModel90, G4UrbanMscModel93, G4UrbanMscModel95 - do not sample 
+    scattering if energy is below 1 eV
+- G4WentzelVIModel - added "no scattering" check inside SampleScattering
+    method
+- G4WentzelOKandVIxSection - return back screening parameter parameterisation
+    of Geant4 9.5 (better fit MuScat data)
+
+03 November 12: V.Ivanchenko (emstand-V09-05-61)
+- G4XrayRayleighModel - fixed minor Coverity warning
+
+26 October 12: V. Grichine - bug fixed in G4XrayRayleighModel for calculating 
+of the atomic form factor in the SampleSecondaries method.
+
 26 October 12: V.Ivanchenko (emstand-V09-05-60)
 - G4UrbanMscModel90 - improved warning for large angle scattering
 - G4SeltzerBergerModel - added  SetBicubicInterpolationFlag method

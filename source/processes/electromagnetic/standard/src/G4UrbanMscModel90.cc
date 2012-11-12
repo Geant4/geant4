@@ -740,7 +740,7 @@ G4UrbanMscModel90::SampleScattering(const G4DynamicParticle* dynParticle,
   } else {
     kineticEnergy -= tPathLength*GetDEDX(particle,currentKinEnergy,couple);
   }
-  if((kineticEnergy <= 0.0) || (tPathLength <= tlimitminfix) ||
+  if((kineticEnergy <= eV) || (tPathLength <= tlimitminfix) ||
      (tPathLength/tausmall < lambda0) ) { return fDisplacement; }
 
   G4double cth  = SampleCosineTheta(tPathLength,kineticEnergy);

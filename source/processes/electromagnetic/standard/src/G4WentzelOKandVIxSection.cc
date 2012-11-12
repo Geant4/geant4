@@ -89,8 +89,9 @@ G4WentzelOKandVIxSection::G4WentzelOKandVIxSection() :
     ScreenRSquare[0] = alpha2*a0*a0;
     for(G4int j=1; j<100; ++j) {
       G4double x = a0*fG4pow->Z13(j);
-      //ScreenRSquare[j] = 0.5*(1 + exp(-j*j*0.001))*alpha2*x*x;
-      ScreenRSquare[j] = 0.5*alpha2*x*x;
+      ScreenRSquare[j] = 0.5*(1 + exp(-j*j*0.001))*alpha2*x*x;
+      //ScreenRSquare[j] = (0.5 + 0.5/G4double(j))*alpha2*x*x;
+      //ScreenRSquare[j] = 0.5*alpha2*x*x;
       x = fNistManager->GetA27(j);
       FormFactor[j] = constn*x*x;
     } 
@@ -160,21 +161,17 @@ G4WentzelOKandVIxSection::SetupTarget(G4int Z, G4double cut)
     //gam0pcmp = (etot + targetMass)*targetMass/invmass2;
     //pcmp2    = tmass2/invmass2;
 
-    kinFactor = coeff*targetZ*chargeSquare*invbeta2/mom2;
+    kinFactor = coeff*Z*chargeSquare*invbeta2/mom2;
 
     screenZ = ScreenRSquare[targetZ]/mom2;
     if(Z > 1) {
-      screenZ *= std::min(Z*1.13,1.13 +3.76*Z*Z*invbeta2*alpha2*chargeSquare);
-      /*
       if(mass > MeV) {
 	screenZ *= std::min(Z*1.13,1.13 +3.76*Z*Z*invbeta2*alpha2*chargeSquare);
       } else {
 	G4double tau = tkin/mass;
-	//	screenZ *= std::min(Z*invbeta2,
-	screenZ *= std::min(Z*1.13,
-        (1.13 +3.76*Z*Z*invbeta2*alpha2*std::sqrt(tau/(tau + fG4pow->Z23(Z)))));
+	screenZ *= std::min(Z*1.13,(1.13 +3.76*Z*Z
+	  *invbeta2*alpha2*std::sqrt(tau/(tau + fG4pow->Z23(targetZ)))));
       }
-      */
     }
     if(targetZ == 1 && cosTetMaxNuc2 < 0.0 && particle == theProton) {
       cosTetMaxNuc2 = 0.0;

@@ -52,7 +52,8 @@ G4XrayRayleighModel::G4XrayRayleighModel(const G4ParticleDefinition*,
 {
   fParticleChange = 0;
   lowEnergyLimit  = 250*eV; 
-  highEnergyLimit = 1.*MeV;
+  highEnergyLimit = 10.*MeV;
+  fFormFactor     = 0.0;
   
   //  SetLowEnergyLimit(lowEnergyLimit);
   SetHighEnergyLimit(highEnergyLimit);
@@ -152,7 +153,7 @@ G4double G4XrayRayleighModel::ComputeCrossSectionPerAtom(
 ///////////////////////////////////////////////////////////////////////////////////
 
 void G4XrayRayleighModel::SampleSecondaries(std::vector<G4DynamicParticle*>* /*fvect*/,
-					    const G4MaterialCutsCouple*, // couple,
+					    const G4MaterialCutsCouple* couple,
 					      const G4DynamicParticle* aDynamicGamma,
 					      G4double,
 					      G4double)
@@ -186,7 +187,29 @@ void G4XrayRayleighModel::SampleSecondaries(std::vector<G4DynamicParticle*>* /*f
   cofA = -signc*std::pow(delta, power);
   cosDipole = cofA - 1./cofA;
 
-  G4double fo = fFormFactor*pi;
+  // select atom
+  const G4Element* elm = SelectRandomAtom(couple, aDynamicGamma->GetParticleDefinition(), photonEnergy0);
+  G4double Z = elm->GetZ();
+
+  G4double k   = photonEnergy0/hbarc;
+           k  *= Bohr_radius;
+  G4double p0  =  0.680654;  
+  G4double p1  = -0.0224188;
+  G4double lnZ = std::log(Z);    
+
+  G4double lna = p0 + p1*lnZ; 
+
+  G4double  alpha = std::exp(lna);
+
+  G4double fo   = std::pow(k, alpha); 
+
+  p0 = 3.68455;
+  p1 = -0.464806;
+  lna = p0 + p1*lnZ; 
+
+  fo *= 0.01*pi*std::exp(lna);
+
+  
   G4double beta = fo/(1 + fo);
 
   cosTheta = (cosDipole + beta)/(1. + cosDipole*beta);
