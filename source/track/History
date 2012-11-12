@@ -17,6 +17,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- November 8, 2012 I.Hrivnacova (track-V09-05-20)
+- Fixed G4Track: added initialisation of useGivenVelocity where missing
+
 - Sep. 23, 2012 H.Kurashige (track-V09-05-19)
 - Add UseGivenVelocity methods to skip CalculateVelocity
 

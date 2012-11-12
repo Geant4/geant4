@@ -109,7 +109,8 @@ G4Track::G4Track()
     fpUserInformation(0),
     prev_mat(0),  groupvel(0),
     prev_velocity(0.0), prev_momentum(0.0),
-    is_OpticalPhoton(false)
+    is_OpticalPhoton(false),
+    useGivenVelocity(false)
 {
 }
 //////////////////
@@ -130,7 +131,8 @@ G4Track::G4Track(const G4Track& right)
     fpUserInformation(0),
     prev_mat(0),  groupvel(0),
     prev_velocity(0.0), prev_momentum(0.0),
-    is_OpticalPhoton(false)
+    is_OpticalPhoton(false),
+    useGivenVelocity(false)
 {
   *this = right;
 }
@@ -192,7 +194,8 @@ G4Track & G4Track::operator=(const G4Track &right)
    prev_velocity = right.prev_velocity;
    prev_momentum = right.prev_momentum;
 
-   is_OpticalPhoton = right.is_OpticalPhoton; 
+   is_OpticalPhoton = right.is_OpticalPhoton;
+   useGivenVelocity = right.useGivenVelocity; 
   }
   return *this;
 }
