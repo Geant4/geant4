@@ -126,13 +126,13 @@ GEANT4_ADD_TEST(example-bas-b2b COMMAND ${BINDIR}/exampleB2b ${SRCDIR}/basic/B2/
                                 BUILD ${SRCDIR}/basic/B2/B2b)
 GEANT4_ADD_TEST(example-bas-b3  COMMAND ${BINDIR}/exampleB3 ${SRCDIR}/basic/B3/exampleB3.in
                                 BUILD ${SRCDIR}/basic/B3)
-GEANT4_ADD_TEST(example-bas-b4a COMMAND ${BINDIR}/exampleB4a ${SRCDIR}/basic/B4/B4a/exampleB4.in
+GEANT4_ADD_TEST(example-bas-b4a COMMAND ${BINDIR}/exampleB4a -m ${SRCDIR}/basic/B4/B4a/exampleB4.in
                                 BUILD ${SRCDIR}/basic/B4/B4a)
-GEANT4_ADD_TEST(example-bas-b4b COMMAND ${BINDIR}/exampleB4b ${SRCDIR}/basic/B4/B4b/exampleB4.in
+GEANT4_ADD_TEST(example-bas-b4b COMMAND ${BINDIR}/exampleB4b -m ${SRCDIR}/basic/B4/B4b/exampleB4.in
                                 BUILD ${SRCDIR}/basic/B4/B4b)
-GEANT4_ADD_TEST(example-bas-b4c COMMAND ${BINDIR}/exampleB4c ${SRCDIR}/basic/B4/B4c/exampleB4.in
+GEANT4_ADD_TEST(example-bas-b4c COMMAND ${BINDIR}/exampleB4c -m ${SRCDIR}/basic/B4/B4c/exampleB4.in
                                 BUILD ${SRCDIR}/basic/B4/B4c)
-GEANT4_ADD_TEST(example-bas-b4d COMMAND ${BINDIR}/exampleB4d ${SRCDIR}/basic/B4/B4d/exampleB4.in
+GEANT4_ADD_TEST(example-bas-b4d COMMAND ${BINDIR}/exampleB4d -m ${SRCDIR}/basic/B4/B4d/exampleB4.in
                                 BUILD ${SRCDIR}/basic/B4/B4d)
 
 GEANT4_ADD_TEST(example-nov-n01 COMMAND ${BINDIR}/exampleN01 ${SRCDIR}/novice/N01/exampleN01.in
@@ -197,10 +197,9 @@ GEANT4_ADD_TEST(example-ext-exoticphysics-monopole
                 BUILD ${SRCDIR}/extended/exoticphysics/monopole)
 
 GEANT4_ADD_TEST(example-ext-exoticphysics-phonons
-                COMMAND ${BINDIR}/XGeBox ${SRCDIR}/extended/exoticphysics/phononExample/run.in
-                BUILD ${SRCDIR}/extended/exoticphysics/phononExample
-	        ENVIRONMENT CRYSTALMAPS={SRCDIR}/extended/exoticphysics/phononExample/CrystalMaps
-)
+                COMMAND ${BINDIR}/XGeBox ${SRCDIR}/extended/exoticphysics/phonon/run.in
+                BUILD ${SRCDIR}/extended/exoticphysics/phonon
+                ENVIRONMENT CRYSTALMAPS=${SRCDIR}/extended/exoticphysics/phonon/CrystalMaps)
 
 foreach(_i 01 02 03 04 05)
   GEANT4_ADD_TEST(example-ext-field-field${_i} 

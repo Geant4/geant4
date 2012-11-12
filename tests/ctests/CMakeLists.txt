@@ -50,25 +50,25 @@ GEANT4_ADD_TEST(example-bas-b3
                 BUILD exampleB3 PROJECT B3 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-bas-b4a 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/basic/B4/B4a/exampleB4a
-                        ${CMAKE_SOURCE_DIR}/examples/basic/B4/B4a/exampleB4.in
+                        -m ${CMAKE_SOURCE_DIR}/examples/basic/B4/B4a/exampleB4.in
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/basic/B4/B4a
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/basic/B4/B4a
                 BUILD exampleB4a PROJECT B4a ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-bas-b4b 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/basic/B4/B4b/exampleB4b
-                        ${CMAKE_SOURCE_DIR}/examples/basic/B4/B4b/exampleB4.in
+                        -m ${CMAKE_SOURCE_DIR}/examples/basic/B4/B4b/exampleB4.in
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/basic/B4/B4b
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/basic/B4/B4b
                 BUILD exampleB4b PROJECT B4b ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-bas-b4c 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/basic/B4/B4c/exampleB4c
-                        ${CMAKE_SOURCE_DIR}/examples/basic/B4/B4c/exampleB4.in
+                        -m ${CMAKE_SOURCE_DIR}/examples/basic/B4/B4c/exampleB4.in
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/basic/B4/B4c
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/basic/B4/B4c
                 BUILD exampleB4c PROJECT B4c ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-bas-b4d 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/basic/B4/B4d/exampleB4d
-                        ${CMAKE_SOURCE_DIR}/examples/basic/B4/B4d/exampleB4.in
+                        -m ${CMAKE_SOURCE_DIR}/examples/basic/B4/B4d/exampleB4.in
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/basic/B4/B4d
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/basic/B4/B4d
                 BUILD exampleB4d PROJECT B4d ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
@@ -214,15 +214,15 @@ GEANT4_ADD_TEST(example-ext-exoticphysics-monopole
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/monopole
                 BUILD monopole ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT} )
 GEANT4_ADD_TEST(example-ext-exoticphysics-phonons
-                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/phononExample/XGeBox
-                        ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phononExample/run.in
-                POSTCMD ${CMAKE_COMMAND} -E compare_files timing.ssv ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phononExample/timing.out
-                POSTCMD ${CMAKE_COMMAND} -E compare_files caustic.ssv ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phononExample/caustic.out
-                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phononExample
-                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/phononExample
+                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/phonon/XGeBox
+                        ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon/run.in
+                POSTCMD ${CMAKE_COMMAND} -E compare_files timing.ssv ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon/timing.out
+                POSTCMD ${CMAKE_COMMAND} -E compare_files caustic.ssv ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon/caustic.out
+                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon
+                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/phonon
                 BUILD XGeBox PROJECT dmc
                 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
-                            CRYSTALMAPS=${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phononExample/CrystalMaps
+                            CRYSTALMAPS=${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon/CrystalMaps
 		)
 foreach(_i 01 02 03 04 05 06)
   GEANT4_ADD_TEST(example-ext-field-field${_i} 
@@ -452,8 +452,8 @@ GEANT4_ADD_TEST(example-adv-gammaknife
 GEANT4_ADD_TEST(example-adv-gammaray_telescope 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/gammaray_telescope/GammaRayTel 
                         ${CMAKE_SOURCE_DIR}/examples/advanced/gammaray_telescope/gammaraytel.in
-                ERROR gammaraytel.err
-                POSTCMD ${CMAKE_COMMAND} -E compare_files gammaraytel.err ${CMAKE_SOURCE_DIR}/examples/advanced/gammaray_telescope/gammaraytel.err
+#                ERROR gammaraytel.err
+#                POSTCMD ${CMAKE_COMMAND} -E compare_files gammaraytel.err ${CMAKE_SOURCE_DIR}/examples/advanced/gammaray_telescope/gammaraytel.err
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/gammaray_telescope
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/gammaray_telescope
                 BUILD GammaRayTel  PROJECT gammaray_telescope

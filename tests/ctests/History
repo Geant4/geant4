@@ -16,6 +16,24 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+ctests-V09-05-38 8th November 2012 Pere Mato
+- Fixed typo in the definition of test example-ext-exoticphysics-phonons
+
+ctests-V09-05-37 6th November 2012 Gunter Folger
+- Updated GNUMakeTestfile for example-bas-b4a,b,c,d for changes in B4 example;
+  now handling program arguments in a new way
+
+ctests-V09-05-36 2nd November 2012 Luciano Pandola
+- removed the comparison of the cerr output of gammaray_telescope
+  against the expected error message gammaraytel.err
+
+ctests-V09-05-35 1st November 2012 Ivana Hrivnacova
+- Updated example-bas-b4a,b,c,d for changes in B4 example;
+  now handling program arguments in a new way
+
+ctests-V09-05-34 1st November 2012 Michael Kelsey
+- Rename directory "phononExample" to "phonon" per request from Gabriele
+  Cosmo.  Requires phononExample-V09-05-04 or later.
 
 ctests-V09-05-33 1st November 2012 Gunter Folger
 - Add project names for several advanced examples:
