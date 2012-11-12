@@ -213,9 +213,9 @@ int main(int , char **)
   tree->commit();
   tree->close();
 
-  delete af;
-  delete tf;
   delete tree;
+  delete tf;
+  delete af;
 
   pgs.ClearSampling();
 

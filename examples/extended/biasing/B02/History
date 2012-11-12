@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+8 November 2012 Ivana Hrivnacova - B02-V09-05-00
+- Adding explicit use of system of units (missing in B02PhysicsList)
+- Fixed the order of deleting AIDA factories
+- Removed FindAIDA.cmake (now provided in Geant4 modules)
+
 30 November 2010 Ivana Hrivnacova - B02-V09-03-00
 - Migrated to use particle-based multiple-scattering.
 
