@@ -54,6 +54,12 @@
 #include "G4BGGPionElasticXS.hh"
 #include "G4NeutronElasticXS.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronElasticPhysicsXS);
+
+
 G4HadronElasticPhysicsXS::G4HadronElasticPhysicsXS(G4int ver)
   : G4VPhysicsConstructor("hElasticWEL_CHIPS_XS"), verbose(ver), 
     wasActivated(false)

@@ -94,7 +94,7 @@
 #include "G4GoudsmitSaundersonMscModel.hh"
 #include "G4WentzelVIModel.hh"
 #include "G4CoulombScattering.hh"
-
+#include "G4eCoulombScatteringModel.hh"
 //
 
 #include "G4LossTableManager.hh"
@@ -124,6 +124,11 @@
 //
 #include "G4PhysicsListHelper.hh"
 #include "G4BuilderType.hh"
+
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4EmPenelopePhysics);
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -204,7 +209,10 @@ void G4EmPenelopePhysics::ConstructProcess()
   kmsc->AddEmModel(0, new G4WentzelVIModel());
   G4MuMultipleScattering* pmsc = new G4MuMultipleScattering();
   pmsc->AddEmModel(0, new G4WentzelVIModel());
-  G4hMultipleScattering* hmsc = new G4hMultipleScattering();
+  G4hMultipleScattering* hmsc = new G4hMultipleScattering("ionmsc");
+
+  // high energy limit for e+- scattering models
+  G4double highEnergyLimit = 100*MeV;
 
   // nuclear stopping
   G4NuclearStopping* ionnuc = new G4NuclearStopping();
@@ -233,7 +241,7 @@ void G4EmPenelopePhysics::ConstructProcess()
       G4PenelopePhotoElectricModel* thePEPenelopeModel = new 
 	G4PenelopePhotoElectricModel();   
       thePEPenelopeModel->SetHighEnergyLimit(PenelopeHighEnergyLimit);
-      thePhotoElectricEffect->AddEmModel(0,thePEPenelopeModel);
+      thePhotoElectricEffect->SetEmModel(thePEPenelopeModel, 1);
       ph->RegisterProcess(thePhotoElectricEffect, particle);
 
       //Compton scattering
@@ -241,14 +249,14 @@ void G4EmPenelopePhysics::ConstructProcess()
       G4PenelopeComptonModel* theComptonPenelopeModel = 
 	new G4PenelopeComptonModel();
       theComptonPenelopeModel->SetHighEnergyLimit(PenelopeHighEnergyLimit);
-      theComptonScattering->AddEmModel(0,theComptonPenelopeModel);
+      theComptonScattering->SetEmModel(theComptonPenelopeModel, 1);
       ph->RegisterProcess(theComptonScattering, particle);
 
       //Gamma conversion
       G4GammaConversion* theGammaConversion = new G4GammaConversion();
       G4PenelopeGammaConversionModel* theGCPenelopeModel = 
 	new G4PenelopeGammaConversionModel();
-      theGammaConversion->AddEmModel(0,theGCPenelopeModel);
+      theGammaConversion->SetEmModel(theGCPenelopeModel,1);
       ph->RegisterProcess(theGammaConversion, particle);
 
       //Rayleigh scattering
@@ -256,15 +264,29 @@ void G4EmPenelopePhysics::ConstructProcess()
       G4PenelopeRayleighModel* theRayleighPenelopeModel = 
 	new G4PenelopeRayleighModel();
       //theRayleighPenelopeModel->SetHighEnergyLimit(PenelopeHighEnergyLimit);
-      theRayleigh->AddEmModel(0,theRayleighPenelopeModel);
+      theRayleigh->SetEmModel(theRayleighPenelopeModel, 1);
       ph->RegisterProcess(theRayleigh, particle);
 
     } else if (particleName == "e-") {
 
-      G4eMultipleScattering* msc = new G4eMultipleScattering();
-      //msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
+      // multiple scattering
+      G4eMultipleScattering* msc = new G4eMultipleScattering;
       msc->SetStepLimitType(fUseDistanceToBoundary);
+      G4UrbanMscModel95* msc1 = new G4UrbanMscModel95();
+      G4WentzelVIModel* msc2 = new G4WentzelVIModel();
+      msc1->SetHighEnergyLimit(highEnergyLimit);
+      msc2->SetLowEnergyLimit(highEnergyLimit);
+      msc->AddEmModel(0, msc1);
+      msc->AddEmModel(0, msc2);
+
+      G4eCoulombScatteringModel* ssm = new G4eCoulombScatteringModel(); 
+      G4CoulombScattering* ss = new G4CoulombScattering();
+      ss->SetEmModel(ssm, 1); 
+      ss->SetMinKinEnergy(highEnergyLimit);
+      ssm->SetLowEnergyLimit(highEnergyLimit);
+      ssm->SetActivationLowEnergyLimit(highEnergyLimit);
       ph->RegisterProcess(msc, particle);
+      ph->RegisterProcess(ss, particle);
       
       //Ionisation
       G4eIonisation* eIoni = new G4eIonisation();
@@ -285,11 +307,25 @@ void G4EmPenelopePhysics::ConstructProcess()
 
     } else if (particleName == "e+") {
     
-      G4eMultipleScattering* msc = new G4eMultipleScattering();
-      //msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
+      // multiple scattering
+      G4eMultipleScattering* msc = new G4eMultipleScattering;
       msc->SetStepLimitType(fUseDistanceToBoundary);
-      ph->RegisterProcess(msc, particle);
+      G4UrbanMscModel95* msc1 = new G4UrbanMscModel95();
+      G4WentzelVIModel* msc2 = new G4WentzelVIModel();
+      msc1->SetHighEnergyLimit(highEnergyLimit);
+      msc2->SetLowEnergyLimit(highEnergyLimit);
+      msc->AddEmModel(0, msc1);
+      msc->AddEmModel(0, msc2);
 
+      G4eCoulombScatteringModel* ssm = new G4eCoulombScatteringModel(); 
+      G4CoulombScattering* ss = new G4CoulombScattering();
+      ss->SetEmModel(ssm, 1); 
+      ss->SetMinKinEnergy(highEnergyLimit);
+      ssm->SetLowEnergyLimit(highEnergyLimit);
+      ssm->SetActivationLowEnergyLimit(highEnergyLimit);
+      ph->RegisterProcess(msc, particle);
+      ph->RegisterProcess(ss, particle);
+      
       //Ionisation
       G4eIonisation* eIoni = new G4eIonisation();
       G4PenelopeIonisationModel* theIoniPenelope = 
@@ -334,10 +370,11 @@ void G4EmPenelopePhysics::ConstructProcess()
 
       // Identical to G4EmStandardPhysics_option3
       
+      G4hMultipleScattering* msc = new G4hMultipleScattering();
       G4ionIonisation* ionIoni = new G4ionIonisation();
       ionIoni->SetStepFunction(0.1, 10*um);
 
-      ph->RegisterProcess(hmsc, particle);
+      ph->RegisterProcess(msc, particle);
       ph->RegisterProcess(ionIoni, particle);
       ph->RegisterProcess(ionnuc, particle);
 
@@ -422,7 +459,7 @@ void G4EmPenelopePhysics::ConstructProcess()
       
       ph->RegisterProcess(hmsc, particle);
       ph->RegisterProcess(new G4hIonisation(), particle);
-
+      ph->RegisterProcess(pnuc, particle);
     }
   }
     

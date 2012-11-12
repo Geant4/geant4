@@ -33,6 +33,7 @@
 // Author: 2011 P. Kaitaniemi
 //
 // Modified:
+// 31.10.2012 A.Ribon: Use G4MiscBuilder
 // 23.03.2012 D. Mancusi: Extended INCL++ to incident heavy ions up to 16O
 // 27.11.2011 P.Kaitaniemi: Created physics list for INCL++ using QGSP_INCL_ABLA as a template
 //
@@ -52,6 +53,11 @@
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(HadronPhysicsQGSP_INCLXX);
+
 HadronPhysicsQGSP_INCLXX::HadronPhysicsQGSP_INCLXX(G4int)
     :  G4VPhysicsConstructor("hInelastic QGSP_INCLXX")
     , theNeutrons(0)
@@ -69,7 +75,7 @@ HadronPhysicsQGSP_INCLXX::HadronPhysicsQGSP_INCLXX(G4int)
     , theQGSPPro(0)
     , theBertiniPro(0)
     , theInclAblaPro(0)
-    , theMiscLHEP(0)
+    , theMisc(0)
     , QuasiElastic(true)
     , ProjectileDiffraction(false)
 {
@@ -92,7 +98,7 @@ HadronPhysicsQGSP_INCLXX::HadronPhysicsQGSP_INCLXX(const G4String& name, G4bool 
     , theQGSPPro(0)
     , theBertiniPro(0)
     , theInclAblaPro(0)
-    , theMiscLHEP(0)
+    , theMisc(0)
     , QuasiElastic(quasiElastic)
     , ProjectileDiffraction(false)
 {
@@ -142,12 +148,12 @@ void HadronPhysicsQGSP_INCLXX::CreateModels()
   theInclAblaPiK->SetMinEnergy(0.0*GeV);
   theInclAblaPiK->SetMaxEnergy(3.0*GeV);
   
-  theMiscLHEP=new G4MiscLHEPBuilder;
+  theMisc=new G4MiscBuilder;
 }
 
 HadronPhysicsQGSP_INCLXX::~HadronPhysicsQGSP_INCLXX()
 {
-   delete theMiscLHEP;
+   delete theMisc;
    delete theQGSPNeutron;
    delete theLEPNeutron;
    delete theBertiniNeutron;
@@ -183,6 +189,6 @@ void HadronPhysicsQGSP_INCLXX::ConstructProcess()
   theNeutrons->Build();
   thePro->Build();
   thePiK->Build();
-  theMiscLHEP->Build();
+  theMisc->Build();
 }
 

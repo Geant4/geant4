@@ -34,6 +34,7 @@
 //       created from HadronPhysicsQGSP_BERT
 // Modified:
 // 15.10.2005 G.Folger: first version
+// 31.10.2012 A.Ribon: Use G4MiscBuilder
 //
 //----------------------------------------------------------------------------
 //
@@ -51,6 +52,11 @@
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(HadronPhysicsQGSP_BERT_NOLEP);
+
 HadronPhysicsQGSP_BERT_NOLEP::HadronPhysicsQGSP_BERT_NOLEP(G4int)
     :  G4VPhysicsConstructor("hInelastic QGSP_BERT_NOLEP")
     , theNeutrons(0)
@@ -63,7 +69,7 @@ HadronPhysicsQGSP_BERT_NOLEP::HadronPhysicsQGSP_BERT_NOLEP(G4int)
     , thePro(0)
     , theQGSPPro(0)
     , theBertiniPro(0)
-    , theMiscLHEP(0)
+    , theMisc(0)
     , QuasiElastic(true)
     , ProjectileDiffraction(false)
 {
@@ -81,7 +87,7 @@ HadronPhysicsQGSP_BERT_NOLEP::HadronPhysicsQGSP_BERT_NOLEP(const G4String& name,
     , thePro(0)
     , theQGSPPro(0)
     , theBertiniPro(0)
-    , theMiscLHEP(0)
+    , theMisc(0)
     , QuasiElastic(quasiElastic)
     , ProjectileDiffraction(false)
 {
@@ -115,12 +121,12 @@ void HadronPhysicsQGSP_BERT_NOLEP::CreateModels()
   thePiK->RegisterMe(theBertiniPiK=new G4BertiniPiKBuilder);
   theBertiniPiK->SetMaxEnergy(9.9*GeV);
   
-  theMiscLHEP=new G4MiscLHEPBuilder;
+  theMisc=new G4MiscBuilder;
 }
 
 HadronPhysicsQGSP_BERT_NOLEP::~HadronPhysicsQGSP_BERT_NOLEP()
 {
-   delete theMiscLHEP;
+   delete theMisc;
    delete theQGSPNeutron;
    delete theLEPNeutron;
    delete theBertiniNeutron;
@@ -151,6 +157,6 @@ void HadronPhysicsQGSP_BERT_NOLEP::ConstructProcess()
   theNeutrons->Build();
   thePro->Build();
   thePiK->Build();
-  theMiscLHEP->Build();
+  theMisc->Build();
 }
 

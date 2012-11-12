@@ -106,6 +106,11 @@
 #include "G4PhysicsListHelper.hh"
 #include "G4BuilderType.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4EmStandardPhysics_option1);
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4EmStandardPhysics_option1::G4EmStandardPhysics_option1(G4int ver)
@@ -185,7 +190,7 @@ void G4EmStandardPhysics_option1::ConstructProcess()
   kmsc->AddEmModel(0, new G4WentzelVIModel());
   G4MuMultipleScattering* pmsc = new G4MuMultipleScattering();
   pmsc->AddEmModel(0, new G4WentzelVIModel());
-  G4hMultipleScattering* hmsc = new G4hMultipleScattering();
+  G4hMultipleScattering* hmsc = new G4hMultipleScattering("ionmsc");
 
   // high energy limit for e+- scattering models and bremsstrahlung
   G4double highEnergyLimit = 100*MeV;
@@ -270,7 +275,8 @@ void G4EmStandardPhysics_option1::ConstructProcess()
     } else if (particleName == "alpha" || 
 	       particleName == "He3" ) {
 
-      ph->RegisterProcess(hmsc, particle);
+      //ph->RegisterProcess(hmsc, particle);
+      ph->RegisterProcess(new G4hMultipleScattering(), particle);
       ph->RegisterProcess(new G4ionIonisation(), particle);
 
     } else if (particleName == "GenericIon") {

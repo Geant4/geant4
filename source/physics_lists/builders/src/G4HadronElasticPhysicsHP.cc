@@ -49,6 +49,11 @@
 #include "G4NeutronHPElastic.hh"
 #include "G4NeutronHPElasticData.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronElasticPhysicsHP);
+
 G4HadronElasticPhysicsHP::G4HadronElasticPhysicsHP(G4int ver)
   : G4VPhysicsConstructor("hElasticWEL_CHIPS_HP"), verbose(ver), 
     wasActivated(false)

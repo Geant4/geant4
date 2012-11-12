@@ -82,6 +82,11 @@
 #include "G4CrossSectionElastic.hh"
 #include "G4DiffuseElastic.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronDElasticPhysics);
+
 G4HadronDElasticPhysics::G4HadronDElasticPhysics(G4int ver)
   : G4VPhysicsConstructor("hElasticDIFFUSE"), verbose(ver), 
     wasActivated(false)

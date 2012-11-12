@@ -44,6 +44,11 @@
 #include "G4ios.hh"
 #include <iomanip>   
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(HadronPhysicsLHEP_EMV);
+
 HadronPhysicsLHEP_EMV::HadronPhysicsLHEP_EMV(G4int) 
     :  G4VPhysicsConstructor("hInelastic LHEP_EMV")
     , theNeutrons(0)

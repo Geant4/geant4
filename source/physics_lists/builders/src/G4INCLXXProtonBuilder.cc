@@ -28,6 +28,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
+#include "G4BGGNucleonInelasticXS.hh"
 
 G4INCLXXProtonBuilder::
 G4INCLXXProtonBuilder() 
@@ -54,7 +55,7 @@ Build(G4ProtonInelasticProcess * aP)
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
   aP->RegisterMe(theModel);
-  aP->AddDataSet(&theXSec);  
+  aP->AddDataSet(new G4BGGNucleonInelasticXS(G4Proton::Proton()));
 }
 
 // 2011 by P. Kaitaniemi

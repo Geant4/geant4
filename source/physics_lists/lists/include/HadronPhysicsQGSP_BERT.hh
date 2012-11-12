@@ -37,6 +37,7 @@
 // 08.06.2006 V.Ivanchenko: remove stopping
 // 25.04.2007 G.Folger: Add quasielastic option, use this by default
 // 10.12.2007 G.Folger: Add projectilediffrative option for proton/neutron, off by default
+// 31.10.2012 A.Ribon: Use G4MiscBuilder
 //
 //----------------------------------------------------------------------------
 //
@@ -47,7 +48,7 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4MiscLHEPBuilder.hh"
+#include "G4MiscBuilder.hh"
 
 #include "G4PiKBuilder.hh"
 #include "G4LEPPiKBuilder.hh"
@@ -95,7 +96,7 @@ class HadronPhysicsQGSP_BERT : public G4VPhysicsConstructor
     G4QGSPProtonBuilder * theQGSPPro; 
     G4BertiniProtonBuilder * theBertiniPro;
     
-    G4MiscLHEPBuilder * theMiscLHEP;
+    G4MiscBuilder * theMisc;
     
     G4bool QuasiElastic;
     G4bool ProjectileDiffraction;

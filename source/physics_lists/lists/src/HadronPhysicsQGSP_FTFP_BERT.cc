@@ -50,9 +50,12 @@
 #include "G4ShortLivedConstructor.hh"
 #include "G4IonConstructor.hh"
 
-#include "G4QHadronInelasticDataSet.hh"
-
 #include "G4PhysListUtil.hh"
+
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(HadronPhysicsQGSP_FTFP_BERT);
 
 HadronPhysicsQGSP_FTFP_BERT::HadronPhysicsQGSP_FTFP_BERT(G4int)
     :  G4VPhysicsConstructor("hInelastic QGSP_FTFP_BERT")
@@ -74,7 +77,6 @@ HadronPhysicsQGSP_FTFP_BERT::HadronPhysicsQGSP_FTFP_BERT(G4int)
     , theFTFPAntiBaryon(0)
     , QuasiElastic(true)
     , ProjectileDiffraction(false)
-    , theCHIPSInelastic(0)
 {
 }
 
@@ -99,7 +101,6 @@ HadronPhysicsQGSP_FTFP_BERT::HadronPhysicsQGSP_FTFP_BERT(const G4String&,
     , theFTFPAntiBaryon(0)
     , QuasiElastic(quasiElastic)
     , ProjectileDiffraction(false)
-    , theCHIPSInelastic(0)
 {
 }
 
@@ -186,8 +187,6 @@ HadronPhysicsQGSP_FTFP_BERT::~HadronPhysicsQGSP_FTFP_BERT()
    delete theHyperon;
    delete theAntiBaryon;
    delete theFTFPAntiBaryon;
-
-   delete theCHIPSInelastic;
 }
 
 void HadronPhysicsQGSP_FTFP_BERT::ConstructParticle()
@@ -212,14 +211,6 @@ void HadronPhysicsQGSP_FTFP_BERT::ConstructProcess()
   theNeutrons->Build();
   thePro->Build();
   thePiK->Build();
-  // use CHIPS cross sections also for Kaons
-  theCHIPSInelastic = new G4QHadronInelasticDataSet();
-  
-  G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(theCHIPSInelastic);
-  G4PhysListUtil::FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(theCHIPSInelastic);
-  G4PhysListUtil::FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(theCHIPSInelastic);
-  G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(theCHIPSInelastic);
-
   theHyperon->Build(); 
   theAntiBaryon->Build(); 
 }

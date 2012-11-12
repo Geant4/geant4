@@ -47,6 +47,11 @@
 #include "G4StepLimiter.hh"
 #include "G4UserSpecialCuts.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4StepLimiterBuilder);
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4StepLimiterBuilder::G4StepLimiterBuilder(const G4String& name)

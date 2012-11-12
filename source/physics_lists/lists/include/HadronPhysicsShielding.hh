@@ -76,7 +76,6 @@ class HadronPhysicsShielding : public G4VPhysicsConstructor
 
   private:
     void CreateModels();
-    G4HadronicProcess* FindInelasticProcess(const G4ParticleDefinition*);
     
     G4NeutronBuilder * theNeutrons;
     //G4NeutronHPBuilder * theHPNeutron;

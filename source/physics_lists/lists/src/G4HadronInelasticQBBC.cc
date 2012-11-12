@@ -83,6 +83,11 @@
 #include "G4Evaporation.hh"
 #include "G4HadronicInteractionRegistry.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronInelasticQBBC);
+
 G4HadronInelasticQBBC::G4HadronInelasticQBBC(G4int ver) 
   : G4VHadronPhysics("hInelastic"),verbose(ver),wasActivated(false)
 {

@@ -61,6 +61,10 @@
 
 #include "G4PhysListUtil.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(HadronPhysicsQGSP_FTFP_BERT_95);
 
 HadronPhysicsQGSP_FTFP_BERT_95::HadronPhysicsQGSP_FTFP_BERT_95(G4int)
     :  G4VPhysicsConstructor("hInelastic QGSP_FTFP_BERT_95")

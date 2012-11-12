@@ -41,6 +41,13 @@
 #include "G4LossTableManager.hh"
 #include "G4EmSaturation.hh"
 
+
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4OpticalPhysics);
+
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4OpticalPhysics::G4OpticalPhysics(G4int verbose, const G4String& name)

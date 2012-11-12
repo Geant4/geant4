@@ -42,7 +42,7 @@
 #include "G4NeutronCrossSectionXS.hh"
 #include "G4DataQuestionaire.hh"
 
-//#include "G4NeutronInelasticXS.hh"
+#include "G4NeutronInelasticXS.hh"
 #include "G4NeutronCaptureXS.hh"
 
 #include "G4ParticleDefinition.hh"
@@ -52,6 +52,12 @@
 #include "G4HadronicProcessType.hh"
 
 #include "G4Neutron.hh"
+
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4NeutronCrossSectionXS);
+
 
 G4NeutronCrossSectionXS::G4NeutronCrossSectionXS(G4int ver) :
   G4VPhysicsConstructor("NeutronXS"), verbose(ver) 
@@ -70,7 +76,7 @@ void G4NeutronCrossSectionXS::ConstructParticle()
 void G4NeutronCrossSectionXS::ConstructProcess() 
 {
 
-//  G4NeutronInelasticXS* xinel = new G4NeutronInelasticXS();
+  G4NeutronInelasticXS* xinel = new G4NeutronInelasticXS();
   G4NeutronCaptureXS* xcap = new G4NeutronCaptureXS();
 
   const G4ParticleDefinition* neutron = G4Neutron::Neutron();
@@ -84,8 +90,8 @@ void G4NeutronCrossSectionXS::ConstructProcess()
   G4HadronicProcess* had = 0;
   for(G4int i=0; i<n; i++) {
     if(fHadronInelastic == ((*pv)[i])->GetProcessSubType()) {
-//      had = static_cast<G4HadronicProcess*>((*pv)[i]);
-//      had->AddDataSet(xinel);
+      had = static_cast<G4HadronicProcess*>((*pv)[i]);
+      had->AddDataSet(xinel);
     } else if(fCapture == ((*pv)[i])->GetProcessSubType()) {
       had = static_cast<G4HadronicProcess*>((*pv)[i]);
       had->AddDataSet(xcap);

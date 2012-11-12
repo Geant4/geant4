@@ -117,6 +117,11 @@
 #include "G4PhysicsListHelper.hh"
 #include "G4BuilderType.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4EmLowEPPhysics);
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4EmLowEPPhysics::G4EmLowEPPhysics(G4int ver)

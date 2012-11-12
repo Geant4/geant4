@@ -33,6 +33,12 @@
 #include "globals.hh"
 #include "G4PhysicsListHelper.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4RadioactiveDecayPhysics);
+
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4RadioactiveDecayPhysics::G4RadioactiveDecayPhysics(G4int)

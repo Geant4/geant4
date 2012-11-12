@@ -33,6 +33,7 @@
 // Author: 2011 P. Kaitaniemi
 //
 // Modified:
+// 31.10.2012 A.Ribon: Use G4MiscBuilder
 // 27.11.2011 P.Kaitaniemi: Created using QGSP_INCL_ABLA as a template
 //
 //----------------------------------------------------------------------------
@@ -44,7 +45,7 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4MiscLHEPBuilder.hh"
+#include "G4MiscBuilder.hh"
 
 #include "G4PiKBuilder.hh"
 #include "G4LEPPiKBuilder.hh"
@@ -105,7 +106,7 @@ class HadronPhysicsQGSP_INCLXX : public G4VPhysicsConstructor
     G4BertiniProtonBuilder * theBertiniPro;
     G4INCLXXProtonBuilder * theInclAblaPro;
     
-    G4MiscLHEPBuilder * theMiscLHEP;
+    G4MiscBuilder * theMisc;
     
     G4bool QuasiElastic;
     G4bool ProjectileDiffraction;

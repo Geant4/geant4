@@ -54,6 +54,14 @@
 
 #include "G4QHadronInelasticDataSet.hh"
 
+#include "G4HadronInelasticDataSet.hh"
+#include "G4CrossSectionDataSetRegistry.hh"
+#include "G4CrossSectionPairGG.hh"
+#include "G4ProtonInelasticCrossSection.hh"
+#include "G4NeutronInelasticCrossSection.hh"
+#include "G4PhysListUtil.hh"
+
+
 HadronPhysicsQGSP_BERT_CHIPS::HadronPhysicsQGSP_BERT_CHIPS(G4int)
     :  G4VPhysicsConstructor("hInelastic QGSP_BERT_CHIPS")
     , theNeutrons(0)
@@ -72,6 +80,8 @@ HadronPhysicsQGSP_BERT_CHIPS::HadronPhysicsQGSP_BERT_CHIPS(G4int)
     , theMiscCHIPS(0)
     , QuasiElastic(true)
     , ProjectileDiffraction(false)
+    , xsAxenWellischGGProton(0)
+    , xsLaidlawWellischGGNeutron(0)
 {
 }
 
@@ -93,6 +103,8 @@ HadronPhysicsQGSP_BERT_CHIPS::HadronPhysicsQGSP_BERT_CHIPS(const G4String& name,
     , theMiscCHIPS(0)
     , QuasiElastic(quasiElastic)
     , ProjectileDiffraction(false)
+    , xsAxenWellischGGProton(0)
+    , xsLaidlawWellischGGNeutron(0)
 {
 }
 
@@ -147,6 +159,9 @@ HadronPhysicsQGSP_BERT_CHIPS::~HadronPhysicsQGSP_BERT_CHIPS()
    delete theBertiniPion;
    delete thePion;
    delete theKaon;
+
+   delete xsAxenWellischGGProton;
+   delete xsLaidlawWellischGGNeutron;
 }
 
 void HadronPhysicsQGSP_BERT_CHIPS::ConstructParticle()
@@ -169,6 +184,19 @@ void HadronPhysicsQGSP_BERT_CHIPS::ConstructProcess()
   thePro->Build();
   thePion->Build();
   theKaon->Build();   // has CHIPS cross sections for Kaons
-
   theMiscCHIPS->Build();
+
+  // Inelastic cross sections
+
+  // --- Protons ---
+  // Use Axen-Wellisch inelastic proton cross section up to 91 GeV,
+  // and Glauber-Gribov above
+  xsAxenWellischGGProton = new G4CrossSectionPairGG(new G4ProtonInelasticCrossSection(), 91*GeV); 
+  G4PhysListUtil::FindInelasticProcess(G4Proton::Proton())->AddDataSet(xsAxenWellischGGProton);
+
+  // --- Neutrons ---
+  // Use Laidlaw-Wellisch inelastic neutron cross section up to 91 GeV,
+  // and Glauber-Gribov above
+  xsLaidlawWellischGGNeutron = new G4CrossSectionPairGG(new G4NeutronInelasticCrossSection(), 91*GeV);
+  G4PhysListUtil::FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(xsLaidlawWellischGGNeutron);
 }

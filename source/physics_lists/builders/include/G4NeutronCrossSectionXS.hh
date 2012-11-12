@@ -47,7 +47,7 @@ class G4NeutronCrossSectionXS : public G4VPhysicsConstructor {
 
 public:
 
-  G4NeutronCrossSectionXS(G4int ver);
+  G4NeutronCrossSectionXS(G4int ver = 0);
   virtual ~G4NeutronCrossSectionXS();
 
   virtual void ConstructParticle();

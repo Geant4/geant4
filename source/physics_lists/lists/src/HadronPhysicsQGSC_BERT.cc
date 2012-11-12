@@ -51,6 +51,11 @@
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(HadronPhysicsQGSC_BERT);
+
 HadronPhysicsQGSC_BERT::HadronPhysicsQGSC_BERT(G4int)
     :  G4VPhysicsConstructor("hInelastic QGSC_BERT")
     , theNeutrons(0)

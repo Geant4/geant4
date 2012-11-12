@@ -37,6 +37,7 @@
 // 08.06.2006 V.Ivanchenko: remove stopping
 // 20.06.2006 G.Folger: Bertini applies to Kaons, i.e. use SetMinEnergy instead of SetMinPionEnergy
 // 25.04.2007 G.Folger: Add code for quasielastic
+// 31.10.2012 A.Ribon: Use G4MiscBuilder
 //
 //----------------------------------------------------------------------------
 //
@@ -54,6 +55,11 @@
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(HadronPhysicsQGSP_BERT_HP);
+
 HadronPhysicsQGSP_BERT_HP::HadronPhysicsQGSP_BERT_HP(G4int)
     :  G4VPhysicsConstructor("hInelastic QGSP_BERT_HP")
     , theNeutrons(0)
@@ -69,7 +75,7 @@ HadronPhysicsQGSP_BERT_HP::HadronPhysicsQGSP_BERT_HP(G4int)
     , theLEPPro(0)      //A.R. 26-Jul-2012 Coverity fix
     , theQGSPPro(0)
     , theBertiniPro(0)
-    , theMiscLHEP(0)
+    , theMisc(0)
     , QuasiElastic(true)
 {}
 
@@ -88,7 +94,7 @@ HadronPhysicsQGSP_BERT_HP::HadronPhysicsQGSP_BERT_HP(const G4String& name, G4boo
     , theLEPPro(0)      //A.R. 26-Jul-2012 Coverity fix
     , theQGSPPro(0)
     , theBertiniPro(0)
-    , theMiscLHEP(0)
+    , theMisc(0)
     , QuasiElastic(quasiElastic)
 {}
 
@@ -125,12 +131,12 @@ void HadronPhysicsQGSP_BERT_HP::CreateModels()
   thePiK->RegisterMe(theBertiniPiK=new G4BertiniPiKBuilder);
   theBertiniPiK->SetMaxEnergy(9.9*GeV);
   
-  theMiscLHEP=new G4MiscLHEPBuilder;
+  theMisc=new G4MiscBuilder;
 }
 
 HadronPhysicsQGSP_BERT_HP::~HadronPhysicsQGSP_BERT_HP() 
 {
-   delete theMiscLHEP;
+   delete theMisc;
    delete theQGSPNeutron;
    delete theLEPNeutron;
    delete theBertiniNeutron;
@@ -164,6 +170,6 @@ void HadronPhysicsQGSP_BERT_HP::ConstructProcess()
   theNeutrons->Build();
   thePro->Build();
   thePiK->Build();
-  theMiscLHEP->Build();
+  theMisc->Build();
 }
 

@@ -94,6 +94,11 @@
 #include "G4PhysicsListHelper.hh"
 #include "G4BuilderType.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4EmDNAPhysicsChemistry);
+
 using namespace std;
 
 G4EmDNAPhysicsChemistry::G4EmDNAPhysicsChemistry(G4int ver)

@@ -36,6 +36,7 @@
 // 23.11.2005 G.Folger: migration to non static particles
 // 08.06.2006 V.Ivanchenko: remove stopping
 // 19.06.2008 G.Folger: change default for QE to NOT use Chips QE
+// 01.11.2012 W.Pokorski & A.Ribon: use new cross sections
 //
 //----------------------------------------------------------------------------
 //
@@ -59,7 +60,6 @@
 #include "G4NeutronBuilder.hh"
 #include "G4BertiniNeutronBuilder.hh"
 #include "G4FTFPNeutronBuilder.hh"
-#include "G4LEPNeutronBuilder.hh"
 
 #include "G4HyperonFTFPBuilder.hh"
 #include "G4AntiBarionBuilder.hh"
@@ -81,7 +81,6 @@ class HadronPhysicsFTFP_BERT_TRV : public G4VPhysicsConstructor
     G4NeutronBuilder * theNeutrons;
     G4BertiniNeutronBuilder * theBertiniNeutron;
     G4FTFPNeutronBuilder * theFTFPNeutron;
-    G4LEPNeutronBuilder * theLEPNeutron;        //needed for capture&fission
  
     G4PiKBuilder * thePiK;
     G4BertiniPiKBuilder * theBertiniPiK;
@@ -101,7 +100,8 @@ class HadronPhysicsFTFP_BERT_TRV : public G4VPhysicsConstructor
     G4VCrossSectionDataSet * ChipsKaonMinus;
     G4VCrossSectionDataSet * ChipsKaonPlus;
     G4VCrossSectionDataSet * ChipsKaonZero;
+    G4VCrossSectionDataSet * xsNeutronInelasticXS;
+    G4VCrossSectionDataSet * xsNeutronCaptureXS;
 };
 
 #endif
-

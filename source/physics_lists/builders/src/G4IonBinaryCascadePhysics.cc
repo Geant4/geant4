@@ -61,6 +61,12 @@
 #include "G4IonConstructor.hh"
 #include "G4BuilderType.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4IonBinaryCascadePhysics);
+
+
 G4IonBinaryCascadePhysics::G4IonBinaryCascadePhysics(G4int ver)
   :  G4VPhysicsConstructor("IonBinaryCascade"), verbose(ver), wasActivated(false)
 {

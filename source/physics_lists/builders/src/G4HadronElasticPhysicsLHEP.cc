@@ -53,6 +53,12 @@
 #include "G4IonConstructor.hh"
 #include "G4Neutron.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronElasticPhysicsLHEP);
+
+
 G4HadronElasticPhysicsLHEP::G4HadronElasticPhysicsLHEP(G4int ver)
   : G4VPhysicsConstructor("hElasticLHEP"), verbose(ver), 
     wasActivated(false)

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: GenericPhysicsList.icc,v 1.7 2010-08-16 07:14:44 kurasige Exp $
+// $Id: G4GenericPhysicsList.icc,v 1.7 2010-08-16 07:14:44 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -51,48 +51,48 @@
 
 
 
-template<class T> TGenericPhysicsList<T>::TGenericPhysicsList(G4int ver):  T(), messenger(this, "/PhysicsList/")
+template<class T> TG4GenericPhysicsList<T>::TG4GenericPhysicsList(G4int ver):  T(), messenger(this, "/PhysicsList/")
 {
   DeclareProperties();
 
   G4DataQuestionaire it(photon);
-  G4cout << "<<< Geant4 Physics List simulation engine: GenericPhysicsList"<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: G4GenericPhysicsList"<<G4endl;
   G4cout <<G4endl;
-  this->defaultCutValue = 0.7*mm;  
+    this->defaultCutValue = 0.7*CLHEP::mm;
   this->SetVerboseLevel(ver);
 }
 
-template<class T> TGenericPhysicsList<T>::TGenericPhysicsList(std::vector<G4String>* physConstr, G4int ver):  T(), messenger(this, "/PhysicsList/")
+template<class T> TG4GenericPhysicsList<T>::TG4GenericPhysicsList(std::vector<G4String>* physConstr, G4int ver):  T(), messenger(this, "/PhysicsList/")
 {
   DeclareProperties();
 
   G4DataQuestionaire it(photon);
-  G4cout << "<<< Geant4 Physics List simulation engine: GenericPhysicsList"<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: G4GenericPhysicsList"<<G4endl;
   G4cout <<G4endl;
-  this->defaultCutValue = 0.7*mm;  
+    this->defaultCutValue = 0.7*CLHEP::mm;
   this->SetVerboseLevel(ver);
 
   for(std::vector<G4String>::iterator i=physConstr->begin(); i!=physConstr->end(); i++) RegisterPhysicsConstructor(*i);
 }
 
-template<class T> TGenericPhysicsList<T>::~TGenericPhysicsList()
+template<class T> TG4GenericPhysicsList<T>::~TG4GenericPhysicsList()
 {
 }
 
-template<class T> void TGenericPhysicsList<T>::SetCuts()
+template<class T> void TG4GenericPhysicsList<T>::SetCuts()
 {
   if (this->verboseLevel >1){
-    G4cout << "GenericPhysicsList::SetCuts:";
+    G4cout << "G4GenericPhysicsList::SetCuts:";
   }  
 
   this->SetCutsWithDefault();   
  
 }
 
-template<class T> void TGenericPhysicsList<T>::DeclareProperties()
+template<class T> void TG4GenericPhysicsList<T>::DeclareProperties()
 {
   messenger.DeclareProperty("defaultCutValue", this->defaultCutValue, "Default Cut Value");
-  messenger.DeclareMethod("SetVerboseLevel", &TGenericPhysicsList::SetVerboseLevel, "Verbose Level");
+  messenger.DeclareMethod("SetVerboseLevel", &TG4GenericPhysicsList::SetVerboseLevel, "Verbose Level");
   
-  messenger.DeclareMethod("RegisterPhysics", &TGenericPhysicsList::RegisterPhysicsConstructor, "Register Physics Constructor");
+  messenger.DeclareMethod("RegisterPhysics", &TG4GenericPhysicsList::RegisterPhysicsConstructor, "Register Physics Constructor");
 }

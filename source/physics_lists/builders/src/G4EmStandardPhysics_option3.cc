@@ -107,6 +107,11 @@
 #include "G4PhysicsListHelper.hh"
 #include "G4BuilderType.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4EmStandardPhysics_option3);
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4EmStandardPhysics_option3::G4EmStandardPhysics_option3(G4int ver)
@@ -186,7 +191,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
   // kmsc->AddEmModel(0, new G4WentzelVIModel());
   //G4hMultipleScattering* pmsc = new G4hMultipleScattering();
   //pmsc->AddEmModel(0, new G4WentzelVIModel());
-  G4hMultipleScattering* hmsc = new G4hMultipleScattering();
+  G4hMultipleScattering* hmsc = new G4hMultipleScattering("ionmsc");
 
   // nuclear stopping
   G4NuclearStopping* ionnuc = new G4NuclearStopping();
@@ -203,7 +208,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
 
     if (particleName == "gamma") {
 
-      G4ComptonScattering* cs   = new G4ComptonScattering;
+      G4ComptonScattering* cs = new G4ComptonScattering;
       cs->SetEmModel(new G4KleinNishinaModel());
 
       ph->RegisterProcess(new G4PhotoElectricEffect(), particle);

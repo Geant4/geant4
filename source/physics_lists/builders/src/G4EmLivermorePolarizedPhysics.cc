@@ -87,6 +87,7 @@
 #include "G4WentzelVIModel.hh"
 #include "G4GoudsmitSaundersonMscModel.hh"
 #include "G4CoulombScattering.hh"
+#include "G4eCoulombScatteringModel.hh"
 
 // interfaces
 #include "G4LossTableManager.hh"
@@ -114,6 +115,12 @@
 //
 #include "G4PhysicsListHelper.hh"
 #include "G4BuilderType.hh"
+
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4EmLivermorePolarizedPhysics);
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -194,7 +201,10 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
   kmsc->AddEmModel(0, new G4WentzelVIModel());
   G4MuMultipleScattering* pmsc = new G4MuMultipleScattering();
   pmsc->AddEmModel(0, new G4WentzelVIModel());
-  G4hMultipleScattering* hmsc = new G4hMultipleScattering();
+  G4hMultipleScattering* hmsc = new G4hMultipleScattering("ionmsc");
+
+  // high energy limit for e+- scattering models
+  G4double highEnergyLimit = 100*MeV;
 
   // nuclear stopping
   G4NuclearStopping* ionnuc = new G4NuclearStopping();
@@ -244,10 +254,24 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
 
     } else if (particleName == "e-") {
 
-      G4eMultipleScattering* msc = new G4eMultipleScattering();
-      //msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
+      // multiple scattering
+      G4eMultipleScattering* msc = new G4eMultipleScattering;
       msc->SetStepLimitType(fUseDistanceToBoundary);
+      G4UrbanMscModel95* msc1 = new G4UrbanMscModel95();
+      G4WentzelVIModel* msc2 = new G4WentzelVIModel();
+      msc1->SetHighEnergyLimit(highEnergyLimit);
+      msc2->SetLowEnergyLimit(highEnergyLimit);
+      msc->AddEmModel(0, msc1);
+      msc->AddEmModel(0, msc2);
+
+      G4eCoulombScatteringModel* ssm = new G4eCoulombScatteringModel(); 
+      G4CoulombScattering* ss = new G4CoulombScattering();
+      ss->SetEmModel(ssm, 1); 
+      ss->SetMinKinEnergy(highEnergyLimit);
+      ssm->SetLowEnergyLimit(highEnergyLimit);
+      ssm->SetActivationLowEnergyLimit(highEnergyLimit);
       ph->RegisterProcess(msc, particle);
+      ph->RegisterProcess(ss, particle);
       
       // Ionisation
       G4eIonisation* eIoni = new G4eIonisation();
@@ -258,19 +282,30 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
       eIoni->SetStepFunction(0.2, 100*um); //     
       ph->RegisterProcess(eIoni, particle);
       
-      // Bremsstrahlung
+      // Bremsstrahlung from standard
       G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
-      G4LivermoreBremsstrahlungModel* theBremLivermore = new
-        G4LivermoreBremsstrahlungModel();
-      theBremLivermore->SetHighEnergyLimit(25*MeV);
-      eBrem->AddEmModel(0, theBremLivermore);
       ph->RegisterProcess(eBrem, particle);
 
     } else if (particleName == "e+") {
 
-      G4eMultipleScattering* msc = new G4eMultipleScattering();
-      //msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
+      // multiple scattering
+      G4eMultipleScattering* msc = new G4eMultipleScattering;
       msc->SetStepLimitType(fUseDistanceToBoundary);
+      G4UrbanMscModel95* msc1 = new G4UrbanMscModel95();
+      G4WentzelVIModel* msc2 = new G4WentzelVIModel();
+      msc1->SetHighEnergyLimit(highEnergyLimit);
+      msc2->SetLowEnergyLimit(highEnergyLimit);
+      msc->AddEmModel(0, msc1);
+      msc->AddEmModel(0, msc2);
+
+      G4eCoulombScatteringModel* ssm = new G4eCoulombScatteringModel(); 
+      G4CoulombScattering* ss = new G4CoulombScattering();
+      ss->SetEmModel(ssm, 1); 
+      ss->SetMinKinEnergy(highEnergyLimit);
+      ssm->SetLowEnergyLimit(highEnergyLimit);
+      ssm->SetActivationLowEnergyLimit(highEnergyLimit);
+
+      // Ionisation
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetStepFunction(0.2, 100*um);      
 
@@ -278,6 +313,7 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
       ph->RegisterProcess(eIoni, particle);
       ph->RegisterProcess(new G4eBremsstrahlung(), particle);
       ph->RegisterProcess(new G4eplusAnnihilation(), particle);
+      ph->RegisterProcess(ss, particle);
 
     } else if (particleName == "mu+" ||
                particleName == "mu-"    ) {
@@ -388,7 +424,7 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
       
       ph->RegisterProcess(hmsc, particle);
       ph->RegisterProcess(new G4hIonisation(), particle);
-
+      ph->RegisterProcess(pnuc, particle);
     }
   }
     

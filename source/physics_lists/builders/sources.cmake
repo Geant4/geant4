@@ -182,6 +182,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4LHEPProtonBuilder.hh
         G4LHEPStoppingHadronBuilder.hh
         G4LHEPStoppingPhysics.hh
+        G4MiscBuilder.hh
         G4MiscCHIPSBuilder.hh
         G4MiscLHEPBuilder.hh
         G4MiscQGSCBuilder.hh
@@ -320,6 +321,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4LHEPProtonBuilder.cc
         G4LHEPStoppingHadronBuilder.cc
         G4LHEPStoppingPhysics.cc
+        G4MiscBuilder.cc
         G4MiscCHIPSBuilder.cc
         G4MiscLHEPBuilder.cc
         G4MiscQGSCBuilder.cc

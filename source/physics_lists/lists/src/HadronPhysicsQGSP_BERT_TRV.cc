@@ -35,6 +35,7 @@
 //
 // Modified:
 //    27 Nov 2009 G.Folger : change transition energies to reduce use of LEP
+//    31 Oct 2012 A.Ribon : use G4MiscBuilder
 //
 //----------------------------------------------------------------------------
 //
@@ -52,6 +53,11 @@
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(HadronPhysicsQGSP_BERT_TRV);
+
 HadronPhysicsQGSP_BERT_TRV::HadronPhysicsQGSP_BERT_TRV(G4int)
     :  G4VPhysicsConstructor("hInelastic QGSP_BERT_TRV")
     , theNeutrons(0)
@@ -66,7 +72,7 @@ HadronPhysicsQGSP_BERT_TRV::HadronPhysicsQGSP_BERT_TRV(G4int)
     , theLEPPro(0)
     , theQGSPPro(0)
     , theBertiniPro(0)
-    , theMiscLHEP(0)
+    , theMisc(0)
     , QuasiElastic(true)
 {}
 
@@ -84,7 +90,7 @@ HadronPhysicsQGSP_BERT_TRV::HadronPhysicsQGSP_BERT_TRV(const G4String& name, G4b
     , theLEPPro(0)
     , theQGSPPro(0)
     , theBertiniPro(0)
-    , theMiscLHEP(0)
+    , theMisc(0)
     , QuasiElastic(quasiElastic)
 {}
 
@@ -121,12 +127,12 @@ void HadronPhysicsQGSP_BERT_TRV::CreateModels()
   thePiK->RegisterMe(theBertiniPiK=new G4BertiniPiKBuilder);
   theBertiniPiK->SetMaxEnergy(9.9*GeV);
   
-  theMiscLHEP=new G4MiscLHEPBuilder;
+  theMisc=new G4MiscBuilder;
 }
 
 HadronPhysicsQGSP_BERT_TRV::~HadronPhysicsQGSP_BERT_TRV()
 {
-   delete theMiscLHEP;
+   delete theMisc;
    delete theQGSPNeutron;
    delete theLEPNeutron;
    delete theBertiniNeutron;
@@ -159,6 +165,6 @@ void HadronPhysicsQGSP_BERT_TRV::ConstructProcess()
   theNeutrons->Build();
   thePro->Build();
   thePiK->Build();
-  theMiscLHEP->Build();
+  theMisc->Build();
 }
 

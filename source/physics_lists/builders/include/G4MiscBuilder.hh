@@ -27,18 +27,19 @@
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4MiscLHEPBuilder
+// ClassName:    G4MiscBuilder
 //
-// Author: 2002 J.P. Wellisch
+// Author:       31-Oct-2012 A. Ribon
+//
+// Description:  Modified version of G4MiscLHEPBuidler
+//               with the new (better) hadronic cross sections
 //
 // Modified:
-// 16.11.2005 G.Folger: don't  keep processes as data members, but new these
-// 13.06.2006 G.Folger: (re)move elastic scatterring 
 //
 //----------------------------------------------------------------------------
 //
-#ifndef G4MiscLHEPBuilder_h
-#define G4MiscLHEPBuilder_h 1
+#ifndef G4MiscBuilder_h
+#define G4MiscBuilder_h 1
 
 #include "globals.hh"
 
@@ -89,17 +90,23 @@
 #include "G4HEOmegaMinusInelastic.hh"
 #include "G4HEAntiOmegaMinusInelastic.hh"
 
-class G4MiscLHEPBuilder 
+#include "G4CrossSectionInelastic.hh"
+
+
+class G4MiscBuilder 
 {
   public: 
-    G4MiscLHEPBuilder();
-    virtual ~G4MiscLHEPBuilder();
+    G4MiscBuilder();
+    virtual ~G4MiscBuilder();
 
   public: 
     void Build();
 
   private:
  
+    G4CrossSectionInelastic* theAntiNucleonData;
+    G4VCrossSectionDataSet* theChipsInelastic;
+    
     // anti-proton
     G4AntiProtonInelasticProcess* theAntiProtonInelastic;
     G4LEAntiProtonInelastic* theLEAntiProtonModel;
@@ -172,6 +179,5 @@ class G4MiscLHEPBuilder
 
     G4bool wasActivated;
 };
-// 2002 by J.P. Wellisch
 
 #endif

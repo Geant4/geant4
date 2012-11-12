@@ -36,6 +36,7 @@
 // 23.11.2005 G.Folger: migration to non static particles
 // 08.06.2006 V.Ivanchenko: remove stopping
 // 25.04.2007 G.Folger: Add code for quasielastic
+// 31.10.2012 A.Ribon: Use G4MiscBuilder
 //
 //----------------------------------------------------------------------------
 //
@@ -53,6 +54,11 @@
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(HadronPhysicsQGSP_BIC);
+
 HadronPhysicsQGSP_BIC::HadronPhysicsQGSP_BIC(G4int)
     :  G4VPhysicsConstructor("hInelastic QGSP_BIC")
     , theNeutrons(0)
@@ -66,7 +72,7 @@ HadronPhysicsQGSP_BIC::HadronPhysicsQGSP_BIC(G4int)
     , theLEPPro(0)
     , theQGSPPro(0)
     , theBinaryPro(0)
-    , theMiscLHEP(0)
+    , theMisc(0)
     , QuasiElastic(true)
 {}
 
@@ -83,7 +89,7 @@ HadronPhysicsQGSP_BIC::HadronPhysicsQGSP_BIC(const G4String& name, G4bool quasiE
     , theLEPPro(0)
     , theQGSPPro(0)
     , theBinaryPro(0)
-    , theMiscLHEP(0)
+    , theMisc(0)
     , QuasiElastic(quasiElastic)
 {}
 
@@ -113,12 +119,12 @@ void HadronPhysicsQGSP_BIC::CreateModels()
   thePiK->RegisterMe(theLEPPiK=new G4LEPPiKBuilder);
   theLEPPiK->SetMaxEnergy(25*GeV);
 
-  theMiscLHEP=new G4MiscLHEPBuilder;
+  theMisc=new G4MiscBuilder;
 }
 
 HadronPhysicsQGSP_BIC::~HadronPhysicsQGSP_BIC() 
 {
-   delete theMiscLHEP;
+   delete theMisc;
    delete theQGSPNeutron;
    delete theLEPNeutron;
    delete theBinaryNeutron;
@@ -150,6 +156,6 @@ void HadronPhysicsQGSP_BIC::ConstructProcess()
   theNeutrons->Build();
   thePro->Build();
   thePiK->Build();
-  theMiscLHEP->Build();
+  theMisc->Build();
 }
 

@@ -58,6 +58,11 @@
 #include "G4AntiNeutronAnnihilationAtRest.hh"
 #include "G4HadronicDeprecate.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4LHEPStoppingPhysics);
+
 
 G4LHEPStoppingPhysics::G4LHEPStoppingPhysics(G4int ver)
   : G4VPhysicsConstructor("LHEP Stopping")

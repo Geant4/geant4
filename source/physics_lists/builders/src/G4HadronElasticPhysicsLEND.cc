@@ -51,6 +51,12 @@
 #include "G4LENDElastic.hh"
 #include "G4LENDElasticCrossSection.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronElasticPhysicsLEND);
+
+
 G4HadronElasticPhysicsLEND::G4HadronElasticPhysicsLEND(G4int ver,G4String eva)
   : G4VPhysicsConstructor("hElasticWEL_CHIPS_LEND"), verbose(ver), 
     wasActivated(false),

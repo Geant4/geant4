@@ -44,12 +44,15 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
-#include "G4QHadronInelasticDataSet.hh"
+
+#include "G4ChipsKaonMinusInelasticXS.hh"
+#include "G4ChipsKaonPlusInelasticXS.hh"
+#include "G4ChipsKaonZeroInelasticXS.hh"
+#include "G4CrossSectionDataSetRegistry.hh"
 
 G4FTFBinaryKaonBuilder::
 G4FTFBinaryKaonBuilder(G4bool quasiElastic)
-{
-  theKaonData = new  G4QHadronInelasticDataSet();
+{    
   theMin = 4*GeV;
   theModel = new G4TheoFSGenerator("FTFB");
 
@@ -80,7 +83,6 @@ G4FTFBinaryKaonBuilder:: ~G4FTFBinaryKaonBuilder()
   delete theStringDecay;
   delete theStringModel;
   delete theModel;
-  delete theKaonData;
   if ( theQuasiElastic ) delete theQuasiElastic;
 }
 
@@ -91,7 +93,7 @@ void G4FTFBinaryKaonBuilder::
 Build(G4KaonPlusInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
-  aP->AddDataSet(theKaonData);
+  aP->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonPlusInelasticXS::Default_Name()));
   aP->RegisterMe(theModel);
 }
 
@@ -99,7 +101,7 @@ void G4FTFBinaryKaonBuilder::
 Build(G4KaonMinusInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
-  aP->AddDataSet(theKaonData);
+  aP->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonMinusInelasticXS::Default_Name()));
   aP->RegisterMe(theModel);
 }
 
@@ -107,7 +109,7 @@ void G4FTFBinaryKaonBuilder::
 Build(G4KaonZeroLInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
-  aP->AddDataSet(theKaonData);
+  aP->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name()));
   aP->RegisterMe(theModel);
 }
 
@@ -115,6 +117,7 @@ void G4FTFBinaryKaonBuilder::
 Build(G4KaonZeroSInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
-  aP->AddDataSet(theKaonData);
+    
+  aP->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name()));
   aP->RegisterMe(theModel);
 }

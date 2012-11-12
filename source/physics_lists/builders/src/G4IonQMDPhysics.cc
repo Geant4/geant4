@@ -64,6 +64,11 @@
 #include "G4IonConstructor.hh"
 #include "G4BuilderType.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4IonQMDPhysics);
+
 G4IonQMDPhysics::G4IonQMDPhysics(G4int ver)
   :  G4VPhysicsConstructor("IonQMD"), verbose(ver), wasActivated(false)
 {

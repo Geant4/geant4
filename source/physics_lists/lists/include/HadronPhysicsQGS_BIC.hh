@@ -44,7 +44,7 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4MiscLHEPBuilder.hh"
+#include "G4MiscBuilder.hh"
 
 #include "G4PiKBuilder.hh"
 #include "G4BinaryPiKBuilder.hh"
@@ -89,7 +89,7 @@ class HadronPhysicsQGS_BIC : public G4VPhysicsConstructor
     G4QGSBinaryProtonBuilder * theQGSBinaryPro; 
     G4BinaryProtonBuilder * theBinaryPro;
     
-    G4MiscLHEPBuilder * theMiscLHEP;
+    G4MiscBuilder * theMisc;
     
     G4bool QuasiElastic;
 };

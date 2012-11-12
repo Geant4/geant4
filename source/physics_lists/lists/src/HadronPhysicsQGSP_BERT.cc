@@ -38,6 +38,7 @@
 // 20.06.2006 G.Folger: Bertini applies to Kaons, i.e. use SetMinEnergy instead of SetMinPionEnergy
 // 25.04.2007 G.Folger: Add code for quasielastic
 // 10.12.2007 G.Folger: Add projectilediffrative option for proton/neutron, off by default
+// 31.10.2012 A.Ribon: Use G4MiscBuilder
 //
 //----------------------------------------------------------------------------
 //
@@ -55,6 +56,12 @@
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(HadronPhysicsQGSP_BERT);
+
+
 HadronPhysicsQGSP_BERT::HadronPhysicsQGSP_BERT(G4int)
     :  G4VPhysicsConstructor("hInelastic QGSP_BERT")
     , theNeutrons(0)
@@ -69,7 +76,7 @@ HadronPhysicsQGSP_BERT::HadronPhysicsQGSP_BERT(G4int)
     , theLEPPro(0)
     , theQGSPPro(0) 
     , theBertiniPro(0)
-    , theMiscLHEP(0)
+    , theMisc(0)
     , QuasiElastic(true)
     , ProjectileDiffraction(false)
 {
@@ -89,7 +96,7 @@ HadronPhysicsQGSP_BERT::HadronPhysicsQGSP_BERT(const G4String& name, G4bool quas
     , theLEPPro(0)
     , theQGSPPro(0) 
     , theBertiniPro(0)
-    , theMiscLHEP(0)
+    , theMisc(0)
     , QuasiElastic(quasiElastic)
     , ProjectileDiffraction(false)
 {
@@ -125,12 +132,12 @@ void HadronPhysicsQGSP_BERT::CreateModels()
   thePiK->RegisterMe(theBertiniPiK=new G4BertiniPiKBuilder);
   theBertiniPiK->SetMaxEnergy(9.9*GeV);
   
-  theMiscLHEP=new G4MiscLHEPBuilder;
+  theMisc=new G4MiscBuilder;
 }
 
 HadronPhysicsQGSP_BERT::~HadronPhysicsQGSP_BERT()
 {
-   delete theMiscLHEP;
+   delete theMisc;
    delete theQGSPNeutron;
    delete theLEPNeutron;
    delete theNeutrons;
@@ -164,6 +171,6 @@ void HadronPhysicsQGSP_BERT::ConstructProcess()
   theNeutrons->Build();
   thePro->Build();
   thePiK->Build();
-  theMiscLHEP->Build();
+  theMisc->Build();
 }
 

@@ -111,20 +111,14 @@ void G4PhysicsConstructorRegistry::AddFactory(G4String name, G4VBasePhysConstrFa
 
 G4VPhysicsConstructor* G4PhysicsConstructorRegistry::GetPhysicsConstructor(const G4String& name)
 {
-  size_t n = physConstr.size(); 
- 
-  for (size_t i=0; i<n; ++i) 
-    {
-      if(physConstr[i]) 
-	{
-	  G4VPhysicsConstructor* p = physConstr[i];
-	  if (p->GetPhysicsName() == name) return p;
-	}
-    }
   // check if factory exists...
   //
   if (factories.find(name)!=factories.end())
     {
+        // we could store the list of called factories in some vector and
+        // before returning we can could first check if this physics constructor was already instantiated
+        // if yes, we can throw an exception saying that this physics can been already registered
+        
       return factories[name]->Instantiate();
     }
   else

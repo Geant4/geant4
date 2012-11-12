@@ -50,6 +50,11 @@
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(HadronPhysicsLHEP);
+
 HadronPhysicsLHEP::HadronPhysicsLHEP(G4int)
     :  G4VPhysicsConstructor("hInelastic LHEP") 
     , theNeutrons(0)

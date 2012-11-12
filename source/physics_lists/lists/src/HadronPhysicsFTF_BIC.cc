@@ -50,6 +50,11 @@
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(HadronPhysicsFTF_BIC);
+
 HadronPhysicsFTF_BIC::HadronPhysicsFTF_BIC(G4int)
     :  G4VPhysicsConstructor("hInelastic FTF_BIC")
     , theNeutrons(0)

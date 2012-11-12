@@ -54,6 +54,10 @@
 #include "G4BuilderType.hh"
 #include "G4HadronicDeprecate.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4EmQExtraPhysics);
 
 G4EmQExtraPhysics::G4EmQExtraPhysics(G4int ver): 
   G4VPhysicsConstructor("G4GammaLeptoNuclearPhys"), wasBuilt(false), gnActivated(false), 

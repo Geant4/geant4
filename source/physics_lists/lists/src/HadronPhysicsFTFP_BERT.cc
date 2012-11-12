@@ -56,6 +56,8 @@
 #include "G4ChipsKaonZeroInelasticXS.hh"
 #include "G4CrossSectionDataSetRegistry.hh"
 
+#include "G4PhysListUtil.hh"
+
 // factory
 #include "G4PhysicsConstructorFactory.hh"
 //
@@ -180,31 +182,12 @@ void HadronPhysicsFTFP_BERT::ConstructProcess()
   ChipsKaonZero = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name());
   //
     
-  FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(ChipsKaonMinus);
-  FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(ChipsKaonPlus);
-  FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(ChipsKaonZero );
-  FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(ChipsKaonZero );
-    
+  G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(ChipsKaonMinus);
+  G4PhysListUtil::FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(ChipsKaonPlus);
+  G4PhysListUtil::FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(ChipsKaonZero );
+  G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(ChipsKaonZero );
     
   theHyperon->Build();
   theAntiBaryon->Build();
-}
-G4HadronicProcess* 
-HadronPhysicsFTFP_BERT::FindInelasticProcess(const G4ParticleDefinition* p)
-{
-  G4HadronicProcess* had = 0;
-  if(p) {
-     G4ProcessVector*  pvec = p->GetProcessManager()->GetProcessList();
-     size_t n = pvec->size();
-     if(0 < n) {
-       for(size_t i=0; i<n; ++i) {
-	 if(fHadronInelastic == ((*pvec)[i])->GetProcessSubType()) {
-	   had = static_cast<G4HadronicProcess*>((*pvec)[i]);
-	   break;
-	 }
-       }
-     }
-  }
-  return had;
 }
 

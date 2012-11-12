@@ -49,6 +49,12 @@
 #include "G4BaryonConstructor.hh"
 #include "G4Neutron.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4ChargeExchangePhysics);
+
+
 G4ChargeExchangePhysics::G4ChargeExchangePhysics(G4int ver, G4bool glauber)
   : G4VPhysicsConstructor("chargeExchange"), verbose(ver), glFlag(glauber),
     wasActivated(false)

@@ -62,6 +62,11 @@
 #include "G4CrossSectionDataSetRegistry.hh"
 #include "G4PhysListUtil.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(HadronPhysicsShielding);
+
 HadronPhysicsShielding::HadronPhysicsShielding( G4int )
     :  G4VPhysicsConstructor("hInelastic Shielding")
     , theNeutrons(0)
@@ -194,44 +199,23 @@ void HadronPhysicsShielding::ConstructProcess()
 //  FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(BGGxsNeutron);
 //
 
-    FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(new  G4BGGNucleonInelasticXS(G4Neutron::Neutron()));
-    NeutronHPJENDLHEInelastic=new G4NeutronHPJENDLHEInelasticData;
-    FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(NeutronHPJENDLHEInelastic);
-    FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(new G4NeutronHPInelasticData);
-
+  G4PhysListUtil::FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(new  G4BGGNucleonInelasticXS(G4Neutron::Neutron()));
+  NeutronHPJENDLHEInelastic=new G4NeutronHPJENDLHEInelasticData;
+  G4PhysListUtil::FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(NeutronHPJENDLHEInelastic);
+  G4PhysListUtil::FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(new G4NeutronHPInelasticData);
     
 //  BGGxsProton=new G4BGGNucleonInelasticXS(G4Proton::Proton());
-//  FindInelasticProcess(G4Proton::Proton())->AddDataSet(BGGxsProton);
+//  G4PhysListUtil::FindInelasticProcess(G4Proton::Proton())->AddDataSet(BGGxsProton);
 
   thePiK->Build();
   // use CHIPS cross sections also for Kaons
   
   G4CrossSectionDataSetRegistry* registry = G4CrossSectionDataSetRegistry::Instance();
     
-  FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(registry->GetCrossSectionDataSet(G4ChipsKaonMinusInelasticXS::Default_Name()));
-  FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(registry->GetCrossSectionDataSet(G4ChipsKaonPlusInelasticXS::Default_Name()));
-  FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(registry->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name()));
-  FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(registry->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name()));
+  G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(registry->GetCrossSectionDataSet(G4ChipsKaonMinusInelasticXS::Default_Name()));
+  G4PhysListUtil::FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(registry->GetCrossSectionDataSet(G4ChipsKaonPlusInelasticXS::Default_Name()));
+  G4PhysListUtil::FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(registry->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name()));
+  G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(registry->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name()));
 
   theMiscCHIPS->Build();
 }
-
-G4HadronicProcess* 
-HadronPhysicsShielding::FindInelasticProcess(const G4ParticleDefinition* p)
-{
-  G4HadronicProcess* had = 0;
-  if(p) {
-     G4ProcessVector*  pvec = p->GetProcessManager()->GetProcessList();
-     size_t n = pvec->size();
-     if(0 < n) {
-       for(size_t i=0; i<n; ++i) {
-	 if(fHadronInelastic == ((*pvec)[i])->GetProcessSubType()) {
-	   had = static_cast<G4HadronicProcess*>((*pvec)[i]);
-	   break;
-	 }
-       }
-     }
-  }
-  return had;
-}
-

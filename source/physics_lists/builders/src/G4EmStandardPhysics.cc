@@ -185,9 +185,9 @@ void G4EmStandardPhysics::ConstructProcess()
   kmsc->AddEmModel(0, new G4WentzelVIModel());
   G4MuMultipleScattering* pmsc = new G4MuMultipleScattering();
   pmsc->AddEmModel(0, new G4WentzelVIModel());
-  G4hMultipleScattering* hmsc = new G4hMultipleScattering();
+  G4hMultipleScattering* hmsc = new G4hMultipleScattering("ionmsc");
 
-  // high energy limit for e+- scattering models and bremsstrahlung
+  // high energy limit for e+- scattering models
   G4double highEnergyLimit = 100*MeV;
 
   // Add standard EM Processes
@@ -262,8 +262,8 @@ void G4EmStandardPhysics::ConstructProcess()
     } else if (particleName == "alpha" ||
                particleName == "He3") {
 
-      ph->RegisterProcess(hmsc, particle);
-      //ph->RegisterProcess(new G4hMultipleScattering(), particle);
+      //ph->RegisterProcess(hmsc, particle);
+      ph->RegisterProcess(new G4hMultipleScattering(), particle);
       ph->RegisterProcess(new G4ionIonisation(), particle);
 
     } else if (particleName == "GenericIon") {

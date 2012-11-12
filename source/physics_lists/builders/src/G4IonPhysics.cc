@@ -66,6 +66,12 @@
 
 using namespace std;
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4IonPhysics);
+
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4IonPhysics::G4IonPhysics(G4int ver)

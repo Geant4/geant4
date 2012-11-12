@@ -115,6 +115,11 @@
 #include "G4PhysicsListHelper.hh"
 #include "G4BuilderType.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4EmStandardPhysics_option2);
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4EmStandardPhysics_option2::G4EmStandardPhysics_option2(G4int ver)
@@ -188,17 +193,13 @@ void G4EmStandardPhysics_option2::ConstructProcess()
   // muon & hadron multiple scattering
   G4MuMultipleScattering* mumsc = new G4MuMultipleScattering();
   mumsc->AddEmModel(0, new G4WentzelVIModel());
-
-  G4hMultipleScattering* hmsc = new G4hMultipleScattering();
-
   G4hMultipleScattering* pmsc = new G4hMultipleScattering();
   pmsc->AddEmModel(0, new G4WentzelVIModel());
-
   G4hMultipleScattering* pimsc = new G4hMultipleScattering();
   pimsc->AddEmModel(0, new G4WentzelVIModel());
-
   G4hMultipleScattering* kmsc = new G4hMultipleScattering();
   kmsc->AddEmModel(0, new G4WentzelVIModel());
+  G4hMultipleScattering* hmsc = new G4hMultipleScattering("ionmsc");
 
   // high energy limit for e+- scattering models and bremsstrahlung
   G4double highEnergyLimit = 100*MeV;
@@ -293,7 +294,8 @@ void G4EmStandardPhysics_option2::ConstructProcess()
     } else if (particleName == "alpha" ||
                particleName == "He3") {
 
-      ph->RegisterProcess(hmsc, particle);
+      //ph->RegisterProcess(hmsc, particle);
+      ph->RegisterProcess(new G4hMultipleScattering(), particle);
       ph->RegisterProcess(new G4ionIonisation(), particle);
 
     } else if (particleName == "GenericIon") {

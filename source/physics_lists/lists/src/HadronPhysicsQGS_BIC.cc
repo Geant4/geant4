@@ -51,6 +51,11 @@
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(HadronPhysicsQGS_BIC);
+
 HadronPhysicsQGS_BIC::HadronPhysicsQGS_BIC(G4int)
     :  G4VPhysicsConstructor("hInelastic QGS_BIC")
     , theNeutrons(0)
@@ -65,7 +70,7 @@ HadronPhysicsQGS_BIC::HadronPhysicsQGS_BIC(G4int)
     , theLEPPro(0)
     , theQGSBinaryPro(0)
     , theBinaryPro(0)
-    , theMiscLHEP(0)
+    , theMisc(0)
     , QuasiElastic(true)
 {}
 
@@ -83,7 +88,7 @@ HadronPhysicsQGS_BIC::HadronPhysicsQGS_BIC(const G4String& name, G4bool quasiEla
     , theLEPPro(0)
     , theQGSBinaryPro(0)
     , theBinaryPro(0)
-    , theMiscLHEP(0)
+    , theMisc(0)
 , QuasiElastic(quasiElastic)
 {}
 
@@ -115,12 +120,12 @@ void HadronPhysicsQGS_BIC::CreateModels()
   theLEPPiK->SetMinPionEnergy(1.2*GeV);
   theLEPPiK->SetMaxEnergy(25*GeV);
 
-  theMiscLHEP=new G4MiscLHEPBuilder;
+  theMisc=new G4MiscBuilder;
 }
 
 HadronPhysicsQGS_BIC::~HadronPhysicsQGS_BIC() 
 {
-   delete theMiscLHEP;
+   delete theMisc;
    delete theQGSBinaryNeutron;
    delete theLEPNeutron;
    delete theBinaryNeutron;
@@ -153,6 +158,6 @@ void HadronPhysicsQGS_BIC::ConstructProcess()
   theNeutrons->Build();
   thePro->Build();
   thePiK->Build();
-  theMiscLHEP->Build();
+  theMisc->Build();
 }
 

@@ -81,7 +81,7 @@ class HadronPhysicsQGSP_FTFP_BERT : public G4VPhysicsConstructor
 
   private:
     void CreateModels();
-    G4HadronicProcess* FindInelasticProcess(const G4ParticleDefinition*);
+
     G4NeutronBuilder * theNeutrons;
     G4FTFPNeutronBuilder * theFTFPNeutron;
     G4QGSPNeutronBuilder * theQGSPNeutron;
@@ -105,7 +105,6 @@ class HadronPhysicsQGSP_FTFP_BERT : public G4VPhysicsConstructor
     
     G4bool QuasiElastic;
     G4bool ProjectileDiffraction;
-    G4VCrossSectionDataSet * theCHIPSInelastic;
 };
 
 #endif
