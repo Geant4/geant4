@@ -77,7 +77,7 @@ G4PenelopeGammaConversionModel::G4PenelopeGammaConversionModel(const G4ParticleD
 
 G4PenelopeGammaConversionModel::~G4PenelopeGammaConversionModel()
 {
-  std::map <const G4int,G4PhysicsFreeVector*>::iterator i;
+  std::map <G4int,G4PhysicsFreeVector*>::iterator i;
   if (logAtomicCrossSection)
     {
       for (i=logAtomicCrossSection->begin();i != logAtomicCrossSection->end();i++)
@@ -103,7 +103,7 @@ void G4PenelopeGammaConversionModel::Initialise(const G4ParticleDefinition*,
 
   // logAtomicCrossSection is created only once, since it is  never cleared
   if (!logAtomicCrossSection)
-    logAtomicCrossSection =  new std::map<const G4int,G4PhysicsFreeVector*>;
+    logAtomicCrossSection =  new std::map<G4int,G4PhysicsFreeVector*>;
 
   //delete old material data...
   if (fEffectiveCharge)

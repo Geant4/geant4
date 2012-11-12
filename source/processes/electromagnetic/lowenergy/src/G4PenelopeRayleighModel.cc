@@ -90,7 +90,7 @@ G4PenelopeRayleighModel::G4PenelopeRayleighModel(const G4ParticleDefinition*,
 
 G4PenelopeRayleighModel::~G4PenelopeRayleighModel()
 {
-  std::map <const G4int,G4PhysicsFreeVector*>::iterator i;
+  std::map <G4int,G4PhysicsFreeVector*>::iterator i;
   if (logAtomicCrossSection)
     {
       for (i=logAtomicCrossSection->begin();i != logAtomicCrossSection->end();i++)
@@ -157,9 +157,9 @@ void G4PenelopeRayleighModel::Initialise(const G4ParticleDefinition* ,
   // logAtomicCrossSection and atomicFormFactor are created only once,
   // since they are never cleared
   if (!logAtomicCrossSection)
-    logAtomicCrossSection = new std::map<const G4int,G4PhysicsFreeVector*>;
+    logAtomicCrossSection = new std::map<G4int,G4PhysicsFreeVector*>;
   if (!atomicFormFactor)
-    atomicFormFactor = new std::map<const G4int,G4PhysicsFreeVector*>;
+    atomicFormFactor = new std::map<G4int,G4PhysicsFreeVector*>;
 
   if (!logFormFactorTable)
     logFormFactorTable = new std::map<const G4Material*,G4PhysicsFreeVector*>;

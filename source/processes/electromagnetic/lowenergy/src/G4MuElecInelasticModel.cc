@@ -631,9 +631,7 @@ double G4MuElecInelasticModel::DifferentialCrossSection(G4ParticleDefinition * p
       // k should be in eV and energy transfer eV also
 
       std::vector<double>::iterator t2 = std::upper_bound(eTdummyVec.begin(),eTdummyVec.end(), k);
-
       std::vector<double>::iterator t1 = t2-1;
-
       // SI : the following condition avoids situations where energyTransfer >last vector element
       if (energyTransfer <= eVecm[(*t1)].back() && energyTransfer <= eVecm[(*t2)].back() )
       {
@@ -663,9 +661,10 @@ double G4MuElecInelasticModel::DifferentialCrossSection(G4ParticleDefinition * p
       // k should be in eV and energy transfer eV also
       std::vector<double>::iterator t2 = std::upper_bound(pTdummyVec.begin(),pTdummyVec.end(), k);
       std::vector<double>::iterator t1 = t2-1;
-      
+      if (energyTransfer <= pVecm[(*t1)].back() && energyTransfer <= pVecm[(*t2)].back() )
+      {
         std::vector<double>::iterator e12 = std::upper_bound(pVecm[(*t1)].begin(),pVecm[(*t1)].end(), energyTransfer);
-        std::vector<double>::iterator e11 = e12-1;
+		std::vector<double>::iterator e11 = e12-1;
 
         std::vector<double>::iterator e22 = std::upper_bound(pVecm[(*t2)].begin(),pVecm[(*t2)].end(), energyTransfer);
         std::vector<double>::iterator e21 = e22-1;
@@ -681,7 +680,7 @@ double G4MuElecInelasticModel::DifferentialCrossSection(G4ParticleDefinition * p
         xs12 = pDiffCrossSectionData[LevelIndex][valueT1][valueE12];
         xs21 = pDiffCrossSectionData[LevelIndex][valueT2][valueE21];
         xs22 = pDiffCrossSectionData[LevelIndex][valueT2][valueE22];
-
+	  }
    }
 
    G4double xsProduct = xs11 * xs12 * xs21 * xs22;

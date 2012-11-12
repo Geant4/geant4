@@ -33,6 +33,7 @@
 // 15 Mar 2010   L. Pandola, removed methods to set explicitely fluorescence cuts.
 //               Main cuts from G4ProductionCutsTable are always used
 // 30 May 2011   A Mantero & V Ivanchenko Migration to model design for deexcitation
+// 22 Oct 2012   A & V Ivanchenko Migration data structure to G4PhysicsVector
 //
 
 
@@ -40,12 +41,12 @@
 #define G4LivermorePhotoElectricModel_h 1
 
 #include "G4VEmModel.hh"
+#include "G4ElementData.hh"
+#include <vector>
 
 class G4ParticleChangeForGamma;
-class G4VCrossSectionHandler;
 class G4VAtomDeexcitation;
-class G4VPhotoElectricAngularDistribution;
-class G4AtomicTransitionManager;
+class G4LPhysicsFreeVector;
 
 class G4LivermorePhotoElectricModel : public G4VEmModel
 {
@@ -72,30 +73,45 @@ public:
 				 G4double tmin,
 				 G4double maxEnergy);
 
+  inline void SetLimitNumberOfShells(G4int);
+
+
 protected:
 
   G4ParticleChangeForGamma* fParticleChange;
 
 private:
 
+  void ReadData(G4int Z, const char* path = 0);
+
   G4LivermorePhotoElectricModel & operator=(const  G4LivermorePhotoElectricModel &right);
   G4LivermorePhotoElectricModel(const  G4LivermorePhotoElectricModel&);
 
-  G4ParticleDefinition*     theGamma;
-  G4ParticleDefinition*     theElectron;
+  G4ParticleDefinition*   theGamma;
+  G4ParticleDefinition*   theElectron;
 
-  G4double lowEnergyLimit;  
-  G4double highEnergyLimit; 
-
-  G4int verboseLevel;
+  G4int                   verboseLevel;
+  G4int                   maxZ;
+  G4int                   nShellLimit;
   G4bool                  fDeexcitationActive;
+  G4bool                  isInitialised;
 
-  G4VCrossSectionHandler* crossSectionHandler;
-  G4VCrossSectionHandler* shellCrossSectionHandler;
+  G4LPhysicsFreeVector*   fCrossSection[99];
+  G4LPhysicsFreeVector*   fCrossSectionLE[99];
+  std::vector<G4double>   fParam[99];
+  G4int                   fNShells[99];
+  G4int                   fNShellsUsed[99];
+  G4ElementData           fShellCrossSection;
 
   G4VAtomDeexcitation*    fAtomDeexcitation;
 
 };
+
+inline 
+void G4LivermorePhotoElectricModel::SetLimitNumberOfShells(G4int n)
+{
+  nShellLimit = n;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

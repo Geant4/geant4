@@ -101,7 +101,7 @@ private:
   //points and 32 points in x. The 33-th column gives the total XS vs. E.
   //It is implemented as a one-dimensional array of dimension
   //57*33=1881 elements. data[e][x] --> theElementData[e*(nBinsX+1)+x]
-  std::map<const G4int,G4DataVector*> *theElementData;
+  std::map<G4int,G4DataVector*> *theElementData;
 
   //Tables for energy sampling
   void InitializeEnergySampling(const G4Material*,G4double cut);

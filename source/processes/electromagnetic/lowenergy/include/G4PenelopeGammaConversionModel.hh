@@ -99,7 +99,7 @@ private:
   //Use a quicker sampling algorithm if E < smallEnergy
   G4double fSmallEnergy; 
 
-  std::map<const G4int,G4PhysicsFreeVector*> *logAtomicCrossSection;
+  std::map<G4int,G4PhysicsFreeVector*> *logAtomicCrossSection;
   void ReadDataFile(const G4int Z);
 
   void InitializeScreeningRadii();

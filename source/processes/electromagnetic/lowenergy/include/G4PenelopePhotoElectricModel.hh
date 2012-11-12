@@ -115,7 +115,7 @@ private:
   //with log(E) vs. log(XS)
   //Element [0] of the table is the total XS, element [iS] is the 
   //partial cross section for shell iS-1
-  std::map<const G4int,G4PhysicsTable*> *logAtomicShellXS;
+  std::map<G4int,G4PhysicsTable*> *logAtomicShellXS;
 
   size_t SelectRandomShell(G4int Z,G4double energy);
   G4String WriteTargetShell(size_t shellID);

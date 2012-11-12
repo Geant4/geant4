@@ -64,7 +64,7 @@ G4PenelopeBremsstrahlungFS::G4PenelopeBremsstrahlungFS() :
   for (size_t i=0;i<nBinsE;i++)
     theEGrid[i] = 0.;
 
-  theElementData = new std::map<const G4int,G4DataVector*>;
+  theElementData = new std::map<G4int,G4DataVector*>;
   theTempVec = new G4PhysicsFreeVector(nBinsX);
 }
 
@@ -78,7 +78,7 @@ G4PenelopeBremsstrahlungFS::~G4PenelopeBremsstrahlungFS()
     delete theTempVec;
 
   //Clear manually theElementData
-  std::map<const G4int,G4DataVector*>::iterator i;
+  std::map<G4int,G4DataVector*>::iterator i;
   if (theElementData)
     {
       for (i=theElementData->begin(); i != theElementData->end(); i++)        

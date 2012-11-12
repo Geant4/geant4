@@ -101,8 +101,8 @@ private:
   G4bool isInitialised;
 
   //Internal tables and manager methods
-  std::map<const G4int,G4PhysicsFreeVector*> *logAtomicCrossSection;
-  std::map<const G4int,G4PhysicsFreeVector*> *atomicFormFactor;
+  std::map<G4int,G4PhysicsFreeVector*> *logAtomicCrossSection;
+  std::map<G4int,G4PhysicsFreeVector*> *atomicFormFactor;
 
 
   G4DataVector logQSquareGrid; //log(Q^2) grid for interpolation

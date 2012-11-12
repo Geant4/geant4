@@ -86,7 +86,7 @@ G4PenelopePhotoElectricModel::G4PenelopePhotoElectricModel(const G4ParticleDefin
 
 G4PenelopePhotoElectricModel::~G4PenelopePhotoElectricModel()
 {  
-  std::map <const G4int,G4PhysicsTable*>::iterator i;
+  std::map <G4int,G4PhysicsTable*>::iterator i;
   if (logAtomicShellXS)
     {
       for (i=logAtomicShellXS->begin();i != logAtomicShellXS->end();i++)
@@ -109,7 +109,7 @@ void G4PenelopePhotoElectricModel::Initialise(const G4ParticleDefinition* partic
 
   // logAtomicShellXS is created only once, since it is  never cleared
   if (!logAtomicShellXS)
-    logAtomicShellXS = new std::map<const G4int,G4PhysicsTable*>;
+    logAtomicShellXS = new std::map<G4int,G4PhysicsTable*>;
 
   InitialiseElementSelectors(particle,cuts);
 
