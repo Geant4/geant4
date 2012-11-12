@@ -58,7 +58,7 @@ protected:
     G4MoleculeCounter();
     virtual ~G4MoleculeCounter(){;}
     static G4MoleculeCounter* fpInstance;
-    typedef std::map<const G4Molecule, NbMoleculeAgainstTime> CounterMapType;
+    typedef std::map<G4Molecule, NbMoleculeAgainstTime> CounterMapType;
 
     CounterMapType fCounterMap;
 

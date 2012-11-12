@@ -84,6 +84,7 @@ G4DNARuddIonisationExtendedModel::G4DNARuddIonisationExtendedModel(const G4Parti
 
     //Mark this model as "applicable" for atomic deexcitation
     SetDeexcitationFlag(true);
+    fAtomDeexcitation = 0;
     fParticleChangeForGamma = 0;
 }
 
@@ -811,6 +812,7 @@ G4double G4DNARuddIonisationExtendedModel::RejectionFunction(G4ParticleDefinitio
     rejection_term = (1./rejection_term)*CorrectionFactor(particleDefinition,k,ionizationLevelIndex) * Gj[j];
     //* (S/Bj_energy) ; Not needed anymore
 
+    G4bool isHelium = false;
 
     if (    particleDefinition == G4Proton::ProtonDefinition()
             || particleDefinition == instance->GetIon("hydrogen")
@@ -819,7 +821,7 @@ G4double G4DNARuddIonisationExtendedModel::RejectionFunction(G4ParticleDefinitio
         return(rejection_term);
     }
 
-    if(particleDefinition->GetAtomicMass() > 4) // anything above Helium
+    else if(particleDefinition->GetAtomicMass() > 4) // anything above Helium
     {
         G4double Z = particleDefinition->GetAtomicNumber();
         G4double x = 100.*std::sqrt(beta2)/std::pow(Z,(2./3.));
@@ -827,8 +829,9 @@ G4double G4DNARuddIonisationExtendedModel::RejectionFunction(G4ParticleDefinitio
         rejection_term*=Zeffion*Zeffion;
     }
 
-    if (particleDefinition == instance->GetIon("alpha++") )
+    else if (particleDefinition == instance->GetIon("alpha++") )
     {
+        isHelium = true;
         slaterEffectiveCharge[0]=0.;
         slaterEffectiveCharge[1]=0.;
         slaterEffectiveCharge[2]=0.;
@@ -837,8 +840,9 @@ G4double G4DNARuddIonisationExtendedModel::RejectionFunction(G4ParticleDefinitio
         sCoefficient[2]=0.;
     }
 
-    if (particleDefinition == instance->GetIon("alpha+") )
+    else if (particleDefinition == instance->GetIon("alpha+") )
     {
+        isHelium = true;
         slaterEffectiveCharge[0]=2.0;
         // The following values are provided by M. Dingfelder (priv. comm)
         slaterEffectiveCharge[1]=2.0;
@@ -849,8 +853,9 @@ G4double G4DNARuddIonisationExtendedModel::RejectionFunction(G4ParticleDefinitio
         sCoefficient[2]=0.15;
     }
 
-    if (particleDefinition == instance->GetIon("helium") )
+    else if (particleDefinition == instance->GetIon("helium") )
     {
+        isHelium = true;
         slaterEffectiveCharge[0]=1.7;
         slaterEffectiveCharge[1]=1.15;
         slaterEffectiveCharge[2]=1.15;
@@ -859,10 +864,11 @@ G4double G4DNARuddIonisationExtendedModel::RejectionFunction(G4ParticleDefinitio
         sCoefficient[2]=0.25;
     }
 
-    if (    particleDefinition == instance->GetIon("helium")
-            || particleDefinition == instance->GetIon("alpha+")
-            || particleDefinition == instance->GetIon("alpha++")
-            )
+//    if (    particleDefinition == instance->GetIon("helium")
+//            || particleDefinition == instance->GetIon("alpha+")
+//            || particleDefinition == instance->GetIon("alpha++")
+//            )
+    if (isHelium)
     {
 
         G4double zEff = particleDefinition->GetPDGCharge() / eplus + particleDefinition->GetLeptonNumber();

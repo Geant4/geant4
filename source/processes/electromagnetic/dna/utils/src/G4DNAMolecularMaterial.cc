@@ -320,7 +320,6 @@ const std::vector<double>* G4DNAMolecularMaterial::GetDensityTableFor(const G4Ma
             exceptionDescription << "The geant4 application is at the wrong state. State must be: G4State_Idle."<< G4endl;
             G4Exception("G4DNAMolecularMaterial::GetDensityTableFor",
                         "G4DNAMolecularMaterial_WRONG_STATE_APPLICATION",FatalException,exceptionDescription);
-            abort();
         }
     }
 
@@ -388,7 +387,6 @@ const std::vector<double>* G4DNAMolecularMaterial::GetNumMolPerVolTableFor(const
             exceptionDescription << "The geant4 application is at the wrong state. State must be : G4State_Idle."<< G4endl;
             G4Exception("G4DNAMolecularMaterial::GetNumMolPerVolTableFor",
                         "G4DNAMolecularMaterial_WRONG_STATE_APPLICATION",FatalException,exceptionDescription);
-            abort();
         }
     }
 

@@ -56,7 +56,7 @@ G4MolecularConfiguration::G4MolecularConfigurationManager*
 G4MolecularConfiguration::G4MolecularConfigurationManager::~G4MolecularConfigurationManager()
 {
     G4MolecularConfigurationManager::MolecularConfigurationTable::iterator it1;
-    std::map<const G4ElectronOccupancy, G4MolecularConfiguration*, comparator>::iterator it2;
+    std::map<G4ElectronOccupancy, G4MolecularConfiguration*, comparator>::iterator it2;
 
     for(it1 = fTable.begin() ; it1 != fTable.end() ; it1++)
     {
@@ -113,7 +113,7 @@ G4MolecularConfiguration::G4MolecularConfiguration(const G4MoleculeDefinition* m
 {
     fMoleculeDefinition = moleculeDef ;
     fgManager->fTable[fMoleculeDefinition][elecOcc] = this;
-    std::map<const G4ElectronOccupancy, G4MolecularConfiguration*, comparator>::iterator it ;
+    std::map<G4ElectronOccupancy, G4MolecularConfiguration*, comparator>::iterator it ;
     it = fgManager->fTable[moleculeDef].find(elecOcc);
     fElectronOccupancy = &(it->first);
 

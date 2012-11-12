@@ -45,6 +45,18 @@ G4DNAMolecularStepByStepModel::~G4DNAMolecularStepByStepModel()
     if(fReactionModel) delete fReactionModel;
 }
 
+G4DNAMolecularStepByStepModel& G4DNAMolecularStepByStepModel::operator=(const G4DNAMolecularStepByStepModel& right)
+{
+    G4ExceptionDescription exceptionDescription
+            ("Use copy constructor rather than assignement operator.");
+    G4Exception("G4DNAMolecularStepByStepModel::operator=(const G4DNAMolecularStepByStepModel&)","G4DNAMolecularStepByStepModel001",
+                FatalErrorInArgument,exceptionDescription);
+
+    if (&right==this) return *this;
+    return *this; // avoid warnings
+}
+
+
 G4DNAMolecularStepByStepModel::G4DNAMolecularStepByStepModel(const G4DNAMolecularStepByStepModel& right):
     G4VITModel(right),
     fMolecularReactionTable(reference_cast<const G4DNAMolecularReactionTable*>(fpReactionTable))

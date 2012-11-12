@@ -109,7 +109,7 @@ void G4DNADamages::AddIndirectDamage(const G4String& baseName,
     }
 
     G4DNAIndirectHit* indirectHit  = 0;
-    std::map<const G4Molecule, const G4Molecule*>::iterator it = fMolMap.find(*molecule);
+    std::map<G4Molecule, const G4Molecule*>::iterator it = fMolMap.find(*molecule);
 
     if(it == fMolMap.end())
     {

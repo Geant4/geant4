@@ -64,8 +64,8 @@ void G4DNAElectronSolvatation::InitialiseProcess(const G4ParticleDefinition*)
         isInitialised = true;
         SetBuildTableFlag(false);
 
-        if(!Model()) SetModel(new G4DNASancheSolvatationModel);
-        AddEmModel(1, Model());
+        if(!EmModel()) SetEmModel(new G4DNASancheSolvatationModel);
+        AddEmModel(1, EmModel());
     }
 }
 

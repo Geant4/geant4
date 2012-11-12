@@ -297,7 +297,6 @@ G4TrackListNode* G4TrackList::Unflag(G4Track* __track)
         exceptionDescription << " was not connected to any trackList ";
         G4Exception("G4TrackList::Unflag","G4TrackList003",
                     FatalErrorInArgument,exceptionDescription);
-        exit(-1); // coverity
         return 0;
     }
     CheckFlag(__trackListNode);

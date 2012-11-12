@@ -107,7 +107,7 @@ vector<G4ThreeVector> G4DNAMolecularDecayDisplacer::GetProductsDisplacement(cons
     G4int nbProducts = theDecayChannel -> GetNbProducts();
     vector<G4ThreeVector> theProductDisplacementVector (nbProducts);
 
-    typedef map<const G4MoleculeDefinition* const,G4double> RMSmap ;
+    typedef map<const G4MoleculeDefinition*,G4double> RMSmap ;
     RMSmap theRMSmap;
 
     G4int decayType = theDecayChannel -> GetDisplacementType();
@@ -391,4 +391,3 @@ G4ThreeVector G4DNAMolecularDecayDisplacer::radialDistributionOfElectron() const
 
     return RandDirection;
 }
-

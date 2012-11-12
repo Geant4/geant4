@@ -199,11 +199,19 @@ G4ITStepProcessor::~G4ITStepProcessor()
 G4ITStepProcessor::G4ITStepProcessor(const G4ITStepProcessor& rhs)
 {
     verboseLevel = rhs.verboseLevel ;
+    fStoreTrajectory = rhs.fStoreTrajectory ;
+
     //    fpUserSteppingAction = 0 ;
     fpTrackingManager = 0;
     fpNavigator = 0;
     fInitialized = false;
+
+    kCarTolerance = rhs.kCarTolerance;
+    fInitialized = false;
+    fPreviousTimeStep = DBL_MAX;
+
     CleanProcessor();
+    ResetSecondaries();
 }
 //______________________________________________________________________________
 

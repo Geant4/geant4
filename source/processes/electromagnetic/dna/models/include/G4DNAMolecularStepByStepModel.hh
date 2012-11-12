@@ -65,15 +65,6 @@ public:
 
     G4DNAMolecularStepByStepModel(const G4DNAMolecularStepByStepModel&);
 
-    /** Assignment operator
-         *  \param other Object to assign from
-         *  \return A reference to this
-         */
-    G4DNAMolecularStepByStepModel& operator=(const G4DNAMolecularStepByStepModel& /*other*/)
-    {
-        return *this;
-    }
-
     G4IT_ADD_CLONE(G4VITModel, G4DNAMolecularStepByStepModel)
 
     virtual void PrintInfo();
@@ -85,6 +76,13 @@ public:
 protected:
     const G4DNAMolecularReactionTable*& fMolecularReactionTable;
     G4VDNAReactionModel* fReactionModel;
+
+private :
+    /** Assignment operator
+         *  \param other Object to assign from
+         *  \return A reference to this
+         */
+    G4DNAMolecularStepByStepModel& operator=(const G4DNAMolecularStepByStepModel& /*other*/);
 };
 
 inline void G4DNAMolecularStepByStepModel::SetReactionModel(G4VDNAReactionModel* reactionModel)

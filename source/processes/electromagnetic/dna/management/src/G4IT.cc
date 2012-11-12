@@ -60,7 +60,9 @@ G4IT* GetIT(const G4Track& track)
 ///
 G4IT::G4IT() : G4VUserTrackInformation("G4IT"),
     fpTrack (0),
-    fpPreviousIT(0), fpNextIT(0), fpTrackingInformation(new G4TrackingInformation())
+    fpPreviousIT(0), fpNextIT(0),
+    fTrackingInformation()
+//    fpTrackingInformation(new G4TrackingInformation())
 {
     fpITBox=0;
     fpKDNode = 0 ;
@@ -72,7 +74,9 @@ G4IT::G4IT() : G4VUserTrackInformation("G4IT"),
 // Use only by inheriting classes
 G4IT::G4IT(const G4IT& /*right*/) : G4VUserTrackInformation("G4IT"),
     fpTrack (0),
-    fpPreviousIT(0), fpNextIT(0), fpTrackingInformation(new G4TrackingInformation())
+    fpPreviousIT(0), fpNextIT(0),
+    fTrackingInformation()
+//    fpTrackingInformation(new G4TrackingInformation())
 {
     fpITBox=0;
     fpKDNode = 0 ;
@@ -88,25 +92,26 @@ G4IT& G4IT::operator=(const G4IT& right)
     exceptionDescription << "The assignment operator of G4IT should not be used, this feature is not supported."
                          << "If really needed, please contact the developers.";
     G4Exception("G4IT::operator=(const G4IT& right)","G4IT001",FatalException,exceptionDescription);
-    exit(-1);
 
-    if(this != &right)
-    {
-        fpTrack = 0;
-        fpITBox = 0;
-        fpPreviousIT = 0;
-        fpNextIT = 0;
-        fpKDNode = 0 ;
-        fParentID_A = 0;
-        fParentID_B = 0;
-        fpTrackingInformation = 0;
-        fpTrackNode = 0;
-    }
+    if(this == &right) return *this;
+
+    fpTrack = 0;
+    fpITBox = 0;
+    fpPreviousIT = 0;
+    fpNextIT = 0;
+    fpKDNode = 0 ;
+    fParentID_A = 0;
+    fParentID_B = 0;
+//    fpTrackingInformation = 0;
+    fpTrackNode = 0;
+
     return *this;
 }
 
 G4IT::G4IT(G4Track * aTrack) : G4VUserTrackInformation("G4IT"),
-    fpPreviousIT(0), fpNextIT(0), fpTrackingInformation(new G4TrackingInformation())
+    fpPreviousIT(0), fpNextIT(0),
+    fTrackingInformation()
+//    fpTrackingInformation(new G4TrackingInformation())
 {
     fpITBox = 0;
     fpTrack = aTrack;
@@ -135,11 +140,11 @@ G4IT::~G4IT()
 {
     TakeOutBox();
 
-    if(fpTrackingInformation)
-    {
-        delete fpTrackingInformation;
-        fpTrackingInformation = 0;
-    }
+//    if(fpTrackingInformation)
+//    {
+//        delete fpTrackingInformation;
+//        fpTrackingInformation = 0;
+//    }
 
     // Note :
     // G4ITTrackingManager will delete fTrackNode.
@@ -153,7 +158,7 @@ void G4IT::RecordCurrentPositionNTime()
 {
     if(fpTrack)
     {
-        fpTrackingInformation->RecordCurrentPositionNTime(fpTrack);
+        fTrackingInformation.RecordCurrentPositionNTime(fpTrack);
     }
 }
 

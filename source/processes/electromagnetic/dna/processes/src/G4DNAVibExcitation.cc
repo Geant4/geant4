@@ -65,11 +65,11 @@ void G4DNAVibExcitation::InitialiseProcess(const G4ParticleDefinition* p)
 
     if(name == "e-")
     { 
-      if(!Model()) SetModel(new G4DNASancheExcitationModel);
-      Model()->SetLowEnergyLimit(2*eV);
-      Model()->SetHighEnergyLimit(100*eV);
+      if(!EmModel()) SetEmModel(new G4DNASancheExcitationModel);
+      EmModel()->SetLowEnergyLimit(2*eV);
+      EmModel()->SetHighEnergyLimit(100*eV);
 
-      AddEmModel(1, Model());
+      AddEmModel(1, EmModel());
     }
   } 
 }
@@ -80,6 +80,6 @@ void G4DNAVibExcitation::PrintInfo()
 {
      G4cout
       << " Total cross sections computed from " 
-      << Model()->GetName() 
+      << EmModel()->GetName() 
       << G4endl;
 }

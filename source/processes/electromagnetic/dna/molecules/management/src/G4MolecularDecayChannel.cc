@@ -91,28 +91,28 @@ G4MolecularDecayChannel::G4MolecularDecayChannel(const G4MolecularDecayChannel& 
 G4MolecularDecayChannel& G4MolecularDecayChannel::operator=
 (const G4MolecularDecayChannel& right)
 {
-    if(this != &right)
-    {
-        // string
-        fName = right.fName;
-        //displacement type
-        fDisplacementType = right.fDisplacementType;
-        // pointer
-        if(right.fProductsVector)
-        {
-            fProductsVector = new vector<G4MoleculeHandle>(*(right.fProductsVector));
-        }
-        else fProductsVector = 0;
+    if (&right==this) return *this;
 
-        // double
-        fReleasedEnergy = right.fReleasedEnergy;
-        fDecayTime      = right.fDecayTime;
-        fProbability    = right.fProbability;
-        // vector
-        fRMSMotherMoleculeDisplacement = right.fRMSMotherMoleculeDisplacement;
-        fRMSProductsDisplacementVector = right.fRMSProductsDisplacementVector;
+    // string
+    fName = right.fName;
+    //displacement type
+    fDisplacementType = right.fDisplacementType;
+    // pointer
+    if(right.fProductsVector)
+    {
+        fProductsVector = new vector<G4MoleculeHandle>(*(right.fProductsVector));
     }
+    else fProductsVector = 0;
+
+    // double
+    fReleasedEnergy = right.fReleasedEnergy;
+    fDecayTime      = right.fDecayTime;
+    fProbability    = right.fProbability;
+    // vector
+    fRMSMotherMoleculeDisplacement = right.fRMSMotherMoleculeDisplacement;
+    fRMSProductsDisplacementVector = right.fRMSProductsDisplacementVector;
     return *this;
+
 }
 
 void G4MolecularDecayChannel::AddProduct(const G4Molecule* molecule, G4double displacement)

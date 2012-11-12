@@ -77,6 +77,7 @@ G4DNARuddIonisationModel::G4DNARuddIonisationModel(const G4ParticleDefinition*,
 
     //Mark this model as "applicable" for atomic deexcitation
     SetDeexcitationFlag(true);
+    fAtomDeexcitation = 0;
     fParticleChangeForGamma = 0;
 }
 
@@ -591,7 +592,7 @@ G4double G4DNARuddIonisationModel::RandomizeEjectedElectronEnergy(G4ParticleDefi
         maximumKineticEnergyTransfer= 4.* (electron_mass_c2 / proton_mass_c2) * k;
     }
 
-    if (particleDefinition == instance->GetIon("helium")
+    else if (particleDefinition == instance->GetIon("helium")
             || particleDefinition == instance->GetIon("alpha+")
             || particleDefinition == instance->GetIon("alpha++"))
     {
@@ -640,7 +641,7 @@ void G4DNARuddIonisationModel::RandomizeEjectedElectronDirection(G4ParticleDefin
         maxSecKinetic = 4.* (electron_mass_c2 / proton_mass_c2) * k;
     }
 
-    if (particleDefinition == instance->GetIon("helium")
+    else if (particleDefinition == instance->GetIon("helium")
             || particleDefinition == instance->GetIon("alpha+")
             || particleDefinition == instance->GetIon("alpha++"))
     {
@@ -747,16 +748,21 @@ G4double G4DNARuddIonisationModel::DifferentialCrossSection(G4ParticleDefinition
 
     G4double tau = 0.;
 
+    G4bool isProtonOrHydrogen = false;
+    G4bool isHelium = false;
+
     if (particleDefinition == G4Proton::ProtonDefinition()
             || particleDefinition == instance->GetIon("hydrogen"))
     {
+        isProtonOrHydrogen = true;
         tau = (electron_mass_c2/proton_mass_c2) * k ;
     }
 
-    if ( particleDefinition == instance->GetIon("helium")
+    else if ( particleDefinition == instance->GetIon("helium")
          || particleDefinition == instance->GetIon("alpha+")
          || particleDefinition == instance->GetIon("alpha++"))
     {
+        isHelium = true;
         tau = (0.511/3728.) * k ;
     }
 
@@ -787,14 +793,15 @@ G4double G4DNARuddIonisationModel::DifferentialCrossSection(G4ParticleDefinition
             * ( (F1+w*F2) / ( std::pow((1.+w),3) * ( 1.+std::exp(alphaConst*(w-wc)/v))) );
 
     if ( (particleDefinition == instance->GetIon("hydrogen")) && (ionizationLevelIndex==4))
-
+    {
         //    sigma = Gj[j] * (S/Bj[ionizationLevelIndex])
         sigma = Gj[j] * (S/waterStructure.IonisationEnergy(ionizationLevelIndex))
                 * ( (F1+w*F2) / ( std::pow((1.+w),3) * ( 1.+std::exp(alphaConst*(w-wc)/v))) );
-
-    if (    particleDefinition == G4Proton::ProtonDefinition()
-            || particleDefinition == instance->GetIon("hydrogen")
-            )
+    }
+//    if (    particleDefinition == G4Proton::ProtonDefinition()
+//            || particleDefinition == instance->GetIon("hydrogen")
+//            )
+    if(isProtonOrHydrogen)
     {
         return(sigma);
     }
@@ -809,7 +816,7 @@ G4double G4DNARuddIonisationModel::DifferentialCrossSection(G4ParticleDefinition
         sCoefficient[2]=0.;
     }
 
-    if (particleDefinition == instance->GetIon("alpha+") )
+    else if (particleDefinition == instance->GetIon("alpha+") )
     {
         slaterEffectiveCharge[0]=2.0;
         // The following values are provided by M. Dingfelder (priv. comm)
@@ -821,7 +828,7 @@ G4double G4DNARuddIonisationModel::DifferentialCrossSection(G4ParticleDefinition
         sCoefficient[2]=0.15;
     }
 
-    if (particleDefinition == instance->GetIon("helium") )
+    else if (particleDefinition == instance->GetIon("helium") )
     {
         slaterEffectiveCharge[0]=1.7;
         slaterEffectiveCharge[1]=1.15;
@@ -831,10 +838,11 @@ G4double G4DNARuddIonisationModel::DifferentialCrossSection(G4ParticleDefinition
         sCoefficient[2]=0.25;
     }
 
-    if (    particleDefinition == instance->GetIon("helium")
-            || particleDefinition == instance->GetIon("alpha+")
-            || particleDefinition == instance->GetIon("alpha++")
-            )
+//    if (    particleDefinition == instance->GetIon("helium")
+//            || particleDefinition == instance->GetIon("alpha+")
+//            || particleDefinition == instance->GetIon("alpha++")
+//            )
+    if(isHelium)
     {
         sigma = Gj[j] * (S/Bj[ionizationLevelIndex]) * ( (F1+w*F2) / ( std::pow((1.+w),3) * ( 1.+std::exp(alphaConst*(w-wc)/v))) );
 

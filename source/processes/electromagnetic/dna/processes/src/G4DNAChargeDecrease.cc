@@ -74,20 +74,20 @@ void G4DNAChargeDecrease::InitialiseProcess(const G4ParticleDefinition* p)
 
     if( name == "proton" )
     {
-      if(!Model()) SetModel(new G4DNADingfelderChargeDecreaseModel);
-      Model()->SetLowEnergyLimit(100*eV);
-      Model()->SetHighEnergyLimit(100*MeV);
+      if(!EmModel()) SetEmModel(new G4DNADingfelderChargeDecreaseModel);
+      EmModel()->SetLowEnergyLimit(100*eV);
+      EmModel()->SetHighEnergyLimit(100*MeV);
 
-      AddEmModel(1, Model());   
+      AddEmModel(1, EmModel());   
     }
     
     if( name == "alpha" || name == "alpha+" )
     {
-      if(!Model()) SetModel(new G4DNADingfelderChargeDecreaseModel);
-      Model()->SetLowEnergyLimit(1*keV);
-      Model()->SetHighEnergyLimit(400*MeV);
+      if(!EmModel()) SetEmModel(new G4DNADingfelderChargeDecreaseModel);
+      EmModel()->SetLowEnergyLimit(1*keV);
+      EmModel()->SetHighEnergyLimit(400*MeV);
 
-      AddEmModel(1, Model());   
+      AddEmModel(1, EmModel());   
     }
     
   } 
@@ -98,7 +98,7 @@ void G4DNAChargeDecrease::InitialiseProcess(const G4ParticleDefinition* p)
 void G4DNAChargeDecrease::PrintInfo()
 {
   G4cout
-    << " Total cross sections computed from " << Model()->GetName() << " model"
+    << " Total cross sections computed from " << EmModel()->GetName() << " model"
     << G4endl;
 }         
 

@@ -60,10 +60,10 @@ void G4DNAElastic::InitialiseProcess(const G4ParticleDefinition*)
   {
     isInitialised = true;
     SetBuildTableFlag(false);
-    if(!Model()) SetModel(new G4DNAScreenedRutherfordElasticModel);
-    Model()->SetLowEnergyLimit(0*eV);
-    Model()->SetHighEnergyLimit(1.*MeV);
-    AddEmModel(1, Model());
+    if(!EmModel()) SetEmModel(new G4DNAScreenedRutherfordElasticModel);
+    EmModel()->SetLowEnergyLimit(0*eV);
+    EmModel()->SetHighEnergyLimit(1.*MeV);
+    AddEmModel(1, EmModel());
   } 
 }
 
@@ -72,7 +72,7 @@ void G4DNAElastic::InitialiseProcess(const G4ParticleDefinition*)
 void G4DNAElastic::PrintInfo()
 {
   G4cout
-    << " Total cross sections computed from " << Model()->GetName() << " model"
+    << " Total cross sections computed from " << EmModel()->GetName() << " model"
     << G4endl;
 }         
 

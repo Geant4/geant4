@@ -51,27 +51,19 @@ class G4ITTrackingInteractivity;
 class G4ITTrackingManager
 {
 protected:
-    int fVerboseLevel;
-
     G4ITTrackingInteractivity* fpTrackingInteractivity;
 
 public:
     G4ITTrackingManager();
     virtual ~G4ITTrackingManager();
 
-    void Initialize();
+    //void Initialize();
 
     virtual void StartTracking(G4Track*);
     virtual void AppendStep(G4Track* track, G4Step* step);
     virtual void EndTracking(G4Track*);
-    inline void SetVerbose(int);
 
     void SetInteractivity(G4ITTrackingInteractivity*);
 };
-
-inline void G4ITTrackingManager::SetVerbose(int flag)
-{
-    fVerboseLevel = flag;
-}
 
 #endif // G4ITTRACKINGMANAGER_HH

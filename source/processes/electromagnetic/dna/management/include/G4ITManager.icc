@@ -242,7 +242,6 @@ G4KDTreeResultHandle G4ITMANAGER::FindNearest(const T* point0, const T* key)
             ("Bad request : no node found in the IT you are searching closest neighbourg for");
             G4Exception("G4ITManager::FindNearest","ITManager002",
                         FatalErrorInArgument,exceptionDescription);
-            exit(-1); // coverity
             return 0; // coverity
         }
 

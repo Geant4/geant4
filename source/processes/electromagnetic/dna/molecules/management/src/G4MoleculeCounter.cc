@@ -231,7 +231,6 @@ void G4MoleculeCounter::RemoveAMoleculeAtTime(const G4Molecule& molecule, G4doub
             {
                 G4cout<<"!! ***** Is going back!!!!"<<G4endl;
                 G4cout<<"!! PREVIOUS TIME = "<< G4BestUnit(it-> first,"Time") <<G4endl;
-                G4cout<<"!! PREVIOUS TIME = "<< it-> first << std::setprecision(5) <<G4endl;
             }
             it--;
         }

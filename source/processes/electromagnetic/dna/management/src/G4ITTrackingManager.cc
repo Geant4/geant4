@@ -45,10 +45,10 @@ G4ITTrackingManager::G4ITTrackingManager()
     fpTrackingInteractivity = 0;
 }
 //___________________________________________________
-void G4ITTrackingManager::Initialize()
-{
+//void G4ITTrackingManager::Initialize()
+//{
 //    if(fpTrackingInteractivity) fpTrackingInteractivity->Initialize();
-}
+//}
 //___________________________________________________
 G4ITTrackingManager::~G4ITTrackingManager()
 {

@@ -175,7 +175,7 @@ protected :
         G4MolecularConfigurationManager(){;}
         ~G4MolecularConfigurationManager();
 
-        typedef std::map<const G4MoleculeDefinition*, std::map<const G4ElectronOccupancy, G4MolecularConfiguration*, comparator> > MolecularConfigurationTable;
+        typedef std::map<const G4MoleculeDefinition*, std::map<G4ElectronOccupancy, G4MolecularConfiguration*, comparator> > MolecularConfigurationTable;
         MolecularConfigurationTable fTable;
     };
 

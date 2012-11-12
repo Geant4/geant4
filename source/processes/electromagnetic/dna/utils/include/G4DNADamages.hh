@@ -97,7 +97,7 @@ protected :
     G4bool fJustCountDamage;
     G4int fNIndirectDamages;
     std::vector<G4DNAIndirectHit*> fIndirectHits;
-    std::map<const G4Molecule, const G4Molecule*> fMolMap;
+    std::map<G4Molecule, const G4Molecule*> fMolMap;
 };
 
 inline const std::vector<G4DNAIndirectHit*>* G4DNADamages::GetIndirectHits()

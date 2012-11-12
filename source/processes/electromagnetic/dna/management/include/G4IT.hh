@@ -72,7 +72,7 @@ class G4TrackListNode;
   * G4IT is a interface which allows the inheriting object :
   * - to be included in ITManager for the search of nearest
   * neighbour
-  * - to be tracked using a synchroneous track stepper
+  * - to be tracked using G4ITStepManager
   * The inheriting class must implement the operator < , ==
   * and != in order to enable the sorting out.
   * also the concrete header of MyIT ("MyIt.hh") should contain : ITDef(MyIT)
@@ -131,7 +131,7 @@ public :
     inline G4double                GetPreStepGlobalTime() const;
     inline G4KDNode*               GetNode() const;
 
-    inline G4TrackingInformation* GetTrackingInfo(){return fpTrackingInformation;}
+    inline G4TrackingInformation* GetTrackingInfo(){return &fTrackingInformation;}
 
     inline G4TrackListNode* GetTrackListNode(){return fpTrackNode;}
     inline void SetTrackListNode(G4TrackListNode* node){ fpTrackNode = node;}
@@ -152,7 +152,7 @@ private :
     int fParentID_A;
     int fParentID_B;
 
-    G4TrackingInformation* fpTrackingInformation ;
+    G4TrackingInformation fTrackingInformation ;
     G4TrackListNode* fpTrackNode;
 };
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -228,17 +228,17 @@ inline void G4IT::GetParentID(int& p_a,int&p_b)
 
 inline G4double G4IT::GetPreStepGlobalTime() const
 {
-    return fpTrackingInformation->GetPreStepGlobalTime();
+    return fTrackingInformation.GetPreStepGlobalTime();
 }
 
 inline G4double G4IT::GetPreStepLocalTime() const
 {
-    return fpTrackingInformation->GetPreStepLocalTime();
+    return fTrackingInformation.GetPreStepLocalTime();
 }
 
 inline const G4ThreeVector& G4IT::GetPreStepPosition() const
 {
-    return fpTrackingInformation->GetPreStepPosition();
+    return fTrackingInformation.GetPreStepPosition();
 }
 
 inline const G4IT* G4IT::GetPrevious() const

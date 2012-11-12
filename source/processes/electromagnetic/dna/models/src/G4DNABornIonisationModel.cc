@@ -62,6 +62,7 @@ G4DNABornIonisationModel::G4DNABornIonisationModel(const G4ParticleDefinition*,
 
     //Mark this model as "applicable" for atomic deexcitation
     SetDeexcitationFlag(true);
+    fAtomDeexcitation = 0;
     fParticleChangeForGamma = 0;
     fpMolWaterDensity = 0;
 }
@@ -514,7 +515,7 @@ G4double G4DNABornIonisationModel::RandomizeEjectedElectronEnergy(G4ParticleDefi
 
     }
 
-    if (particleDefinition == G4Proton::ProtonDefinition())
+    else if (particleDefinition == G4Proton::ProtonDefinition())
     {
         G4double maximumKineticEnergyTransfer = 4.* (electron_mass_c2 / proton_mass_c2) * k;
 
@@ -564,7 +565,7 @@ void G4DNABornIonisationModel::RandomizeEjectedElectronDirection(G4ParticleDefin
         }
     }
 
-    if (particleDefinition == G4Proton::ProtonDefinition())
+    else if (particleDefinition == G4Proton::ProtonDefinition())
     {
         G4double maxSecKinetic = 4.* (electron_mass_c2 / proton_mass_c2) * k;
         phi = twopi * G4UniformRand();

@@ -56,30 +56,30 @@ G4VITModel::~G4VITModel()
     // Let the concrete class delete the reactionTable
 }
 
-G4VITModel::G4VITModel(const G4VITModel& other)
+G4VITModel::G4VITModel(const G4VITModel& right)
 {
     //copy ctor
-    fName               = other.fName;
-    fType1              = other.fType1;
-    fType2              = other.fType2;
-    fpReactionTable      = 0;
-    fpTimeStepper     = other.fpTimeStepper->Clone();
-    fpReactionProcess = other.fpReactionProcess->Clone();
+    fName               = right.fName;
+    fType1              = right.fType1;
+    fType2              = right.fType2;
+    fpReactionTable     = 0;
+    fpTimeStepper     = right.fpTimeStepper->Clone();
+    fpReactionProcess = right.fpReactionProcess->Clone();
 }
 
 // should not be used
-G4VITModel& G4VITModel::operator=(const G4VITModel& rhs)
+G4VITModel& G4VITModel::operator=(const G4VITModel& right)
 {
-    if (this == &rhs) return *this; // handle self assignment
+    if (this == &right) return *this; // handle self assignment
 
-    fName               = rhs.fName;
-    fType1              = rhs.fType1;
-    fType2              = rhs.fType2;
+    fName               = right.fName;
+    fType1              = right.fType1;
+    fType2              = right.fType2;
     fpReactionTable      = 0;
     if(fpTimeStepper) delete fpTimeStepper;
-    fpTimeStepper        = rhs.fpTimeStepper->Clone();
+    fpTimeStepper        = right.fpTimeStepper->Clone();
     if(fpReactionProcess) delete fpReactionProcess;
-    fpReactionProcess    = rhs.fpReactionProcess->Clone();
+    fpReactionProcess    = right.fpReactionProcess->Clone();
 
     //assignment operator
     return *this;

@@ -129,25 +129,3 @@ inline G4VParticleChange* G4DNAMolecularDecay::AtRestDoIt(
 
 
 #endif /* G4MOLECULARDECAYPROCESS_HH */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

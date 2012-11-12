@@ -65,10 +65,10 @@ void G4DNAAttachment::InitialiseProcess(const G4ParticleDefinition* p)
 
     if(name == "e-")
     {
-      if(!Model()) SetModel(new G4DNAMeltonAttachmentModel);
-      Model()->SetLowEnergyLimit(4.*eV);
-      Model()->SetHighEnergyLimit(13.*eV);
-      AddEmModel(1, Model());   
+      if(!EmModel()) SetEmModel(new G4DNAMeltonAttachmentModel);
+      EmModel()->SetLowEnergyLimit(4.*eV);
+      EmModel()->SetHighEnergyLimit(13.*eV);
+      AddEmModel(1, EmModel());   
     }
   } 
 }
@@ -79,7 +79,7 @@ void G4DNAAttachment::PrintInfo()
 {
      G4cout
       << " Total cross sections computed from " 
-      << Model()->GetName() 
+      << EmModel()->GetName() 
       << G4endl;
 }         
 

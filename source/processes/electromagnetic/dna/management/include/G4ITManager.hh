@@ -153,11 +153,10 @@ class G4ITManager : public G4VITManager
     static G4ITManager<T> *      fInstance;
     G4ITManager<T>();
 
-    typedef std::map<const T,G4ITBox* > BoxMap;
+    typedef std::map<T,G4ITBox* > BoxMap;
     BoxMap fBox;
 
-    typedef std::map<const T, G4KDTree* > TreeMap ;
-
+    typedef std::map<T, G4KDTree* > TreeMap;
     TreeMap fTree;
     TreeMap fPrevious_tree;
 
@@ -205,7 +204,6 @@ public :
             G4ExceptionDescription exceptionDescription ("You are requested a bad IT");
             G4Exception("G4ITManager::GetBox","ITManager001",
                         FatalErrorInArgument,exceptionDescription);
-            exit(-1); // coverity
             return 0; // coverity
         }
 
