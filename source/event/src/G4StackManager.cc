@@ -43,7 +43,7 @@ G4StackManager::G4StackManager()
   theMessenger = new G4StackingMessenger(this);
 #ifdef G4_USESMARTSTACK
   urgentStack = new G4SmartTrackStack;
-  G4cout<<"+++ G4StackManager uses G4SmartTrackStack. +++"<<G4endl;
+ // G4cout<<"+++ G4StackManager uses G4SmartTrackStack. +++"<<G4endl;
 #else
   urgentStack = new G4TrackStack(5000);
 //  G4cout<<"+++ G4StackManager uses ordinary G4TrackStack. +++"<<G4endl;
@@ -233,6 +233,8 @@ void G4StackManager::ReClassify()
 G4int G4StackManager::PrepareNewEvent()
 {
   if(userStackingAction) userStackingAction->PrepareNewEvent();
+  
+  urgentStack->clear(); // Set the urgentStack in a defined state. Not doing it would affect reproducibility.
   
   G4int n_passedFromPrevious = 0;
   
@@ -450,6 +452,76 @@ void G4StackManager::TransferOneStackedTrack(G4ClassificationOfNewTrack origin, 
   return;
 }
 
+void G4StackManager::clear()
+{
+  ClearUrgentStack();
+  ClearWaitingStack();
+  for(int i=1;i<=numberOfAdditionalWaitingStacks;i++) {ClearWaitingStack(i);}
+}
+
+void G4StackManager::ClearUrgentStack()
+{
+  urgentStack->clear();
+}
+
+void G4StackManager::ClearWaitingStack(int i)
+{
+  if(i==0) {
+    waitingStack->clear();
+  } else {
+    if(i<=numberOfAdditionalWaitingStacks) additionalWaitingStacks[i-1]->clear();
+  }
+}
+
+void G4StackManager::ClearPostponeStack()
+{
+  postponeStack->clear();
+}
+
+G4int G4StackManager::GetNTotalTrack() const
+{
+  int n = urgentStack->GetNTrack() + waitingStack->GetNTrack() + postponeStack->GetNTrack();
+  for(int i=1;i<=numberOfAdditionalWaitingStacks;i++) {n += additionalWaitingStacks[i-1]->GetNTrack();}
+  return n;
+}
+
+G4int G4StackManager::GetNUrgentTrack() const
+{
+  return urgentStack->GetNTrack();
+}
+
+G4int G4StackManager::GetNWaitingTrack(int i) const
+{
+  if(i==0) { return waitingStack->GetNTrack(); }
+  else {
+    if(i<=numberOfAdditionalWaitingStacks) { return additionalWaitingStacks[i-1]->GetNTrack();}
+  }
+  return 0;
+}
+
+G4int G4StackManager::GetNPostponedTrack() const
+{
+  return postponeStack->GetNTrack();
+}
+
+void G4StackManager::SetVerboseLevel( G4int const value )
+{
+  verboseLevel = value;
+}
+
+void G4StackManager::SetUserStackingAction(G4UserStackingAction* value)
+{
+	userStackingAction = value;
+  if(userStackingAction) userStackingAction->SetStackManager(this);
+}
+
+G4ClassificationOfNewTrack G4StackManager::DefaultClassification(G4Track *aTrack)
+{
+  G4ClassificationOfNewTrack classification = fUrgent;
+  if( aTrack->GetTrackStatus() == fPostponeToNextEvent )
+  { classification = fPostpone; }
+  return classification;
+}
 
 
 

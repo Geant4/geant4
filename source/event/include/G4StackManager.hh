@@ -122,57 +122,19 @@ class G4StackManager
       G4int numberOfAdditionalWaitingStacks;
 
   public:
-      inline void clear()
-      { 
-        ClearUrgentStack();
-        ClearWaitingStack();
-        for(int i=1;i<=numberOfAdditionalWaitingStacks;i++) {ClearWaitingStack(i);}
-      }
-      inline void ClearUrgentStack()
-      { urgentStack->clear(); }
-      inline void ClearWaitingStack(int i=0)
-      {
-        if(i==0) {
-          waitingStack->clear(); 
-        } else {
-          if(i<=numberOfAdditionalWaitingStacks) additionalWaitingStacks[i-1]->clear();
-        }
-      }
-      inline void ClearPostponeStack()
-      { postponeStack->clear(); }
-      inline G4int GetNTotalTrack() const
-      { int n = urgentStack->GetNTrack() + waitingStack->GetNTrack() + postponeStack->GetNTrack();
-        for(int i=1;i<=numberOfAdditionalWaitingStacks;i++) {n += additionalWaitingStacks[i-1]->GetNTrack();}
-        return n;
-      }
-      inline G4int GetNUrgentTrack() const
-      { return urgentStack->GetNTrack(); }
-      inline G4int GetNWaitingTrack(int i=0) const
-      { if(i==0) { return waitingStack->GetNTrack(); }
-        else {
-         if(i<=numberOfAdditionalWaitingStacks) { return additionalWaitingStacks[i-1]->GetNTrack();}
-        }
-        return 0;
-      }
-      inline G4int GetNPostponedTrack() const
-      { return postponeStack->GetNTrack(); }
-      inline void SetVerboseLevel( G4int const value )
-      { verboseLevel = value; }
-      inline void SetUserStackingAction(G4UserStackingAction* value)
-      { 
-	userStackingAction = value;
-        if(userStackingAction) userStackingAction->SetStackManager(this);
-      }
-
+      void clear();
+      void ClearUrgentStack();
+      void ClearWaitingStack(int i=0);
+      void ClearPostponeStack();
+      G4int GetNTotalTrack() const;
+      G4int GetNUrgentTrack() const;
+      G4int GetNWaitingTrack(int i=0) const;
+      G4int GetNPostponedTrack() const;
+      void SetVerboseLevel( G4int const value );
+      void SetUserStackingAction(G4UserStackingAction* value);
+  
   private:
-      inline G4ClassificationOfNewTrack 
-      DefaultClassification(G4Track *aTrack)
-      { 
-        G4ClassificationOfNewTrack classification = fUrgent;
-        if( aTrack->GetTrackStatus() == fPostponeToNextEvent )
-        { classification = fPostpone; }
-        return classification;
-      }
+     G4ClassificationOfNewTrack DefaultClassification(G4Track *aTrack);
 };
 
 #endif

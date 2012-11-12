@@ -44,16 +44,13 @@ void G4SmartTrackStack::dumpStatistics()
 }
 
 G4SmartTrackStack::G4SmartTrackStack()
-	:fTurn(0), nTurn(5)
+	:fTurn(0), nTurn(5), maxNTracks(0), nTracks(0)
 {
-	stacks[0] = new G4TrackStack(5000);
-	stacks[1] = new G4TrackStack(5000);
-	stacks[2] = new G4TrackStack(5000); // electrons
-	stacks[3] = new G4TrackStack(5000);
-	stacks[4] = new G4TrackStack(5000);
-
-	maxNTracks = 0;
-  nTracks = 0;
+	for(int i=0;i<nTurn;i++)
+	{
+	  stacks[i] = new G4TrackStack(5000);
+	  energies[i] = 0.;
+	}
 }
 
 G4SmartTrackStack::~G4SmartTrackStack()
@@ -145,7 +142,10 @@ void G4SmartTrackStack::PushToStack( const G4StackedTrack& aStackedTrack )
 
 void G4SmartTrackStack::clear()
 {
-	for (int i = 0; i < nTurn; i++)
-		stacks[i]->clear();
+  for (int i = 0; i < nTurn; i++) {
+    stacks[i]->clear();
+    energies[i] = 0.0;
+    fTurn = 0;
+  }
   nTracks = 0;
 }

@@ -17,6 +17,23 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 9th, 2012, P. Mato (event-V09-05-16)
+- G4StackManager, G4SmartTrackStack: set stack at well defined state at new event
+  This fixes problem with reproducibility
+
+November 8th, 2012, M.Asai (event-V09-05-15)
+- Fixed uninitialized valiables in G4SmartTrackStack.
+
+November 5th, 2012, P. Mato (event-V09-05-14)
+- G4StackManager: moved a bunch of inlined methods from header to the implementation file
+  because the pointer "urgentStack" was visible from client code with a different type.
+  This fixes the crashes observed (only visible on Windows VC10) in the following tests:
+    example-ext-radioactivedecay-rdecay01, example-nov-n04
+
+November 2nd, 2012, M.Asai (event-V09-05-13)
+- Removed inline keyword from G4EventManager::AbortEvent() to prevent incorrect 
+  inlining for VC++ if SmartStack is used.
+
 October 15th, 2012, M.Asai (event-V09-05-12)
 - Added warning messages to G4CennScorer and G4CellScorerStore classes which will 
 be dropped fromversion 10.0.

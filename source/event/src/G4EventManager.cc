@@ -387,4 +387,10 @@ G4VUserEventInformation* G4EventManager::GetUserInformation()
 void G4EventManager::KeepTheCurrentEvent()
 { if(currentEvent) currentEvent->KeepTheEvent(); }
 
+void G4EventManager::AbortCurrentEvent()
+{
+  abortRequested = true;
+  trackContainer->clear();
+  if(tracking) trackManager->EventAborted();
+}
 
