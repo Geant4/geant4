@@ -14,6 +14,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08-11-12 I. Hrivnacova (exampleN03Con-V09-05-07)   
+- Removed executing gui.mac, as the macro is not provided
+  in the example 
+
+06-11-12 L. Garnier (exampleN03Con-V09-05-06)   
+- Fix gui.mac in example and not in visTutor
+
 03-09-12 I. Hrivnacova (exampleN03Con-V09-05-05)   
 - New tag to be synchronized with the update in tests/ctest;
   no changes in the example itself   
