@@ -132,6 +132,7 @@ G4QuadrangularFacet::G4QuadrangularFacet (const G4ThreeVector &vt0,
     G4cerr << "Side lengths = P2->P3" << length3 << endl;    
     G4cerr << "Side lengths = P3->P0" << length4 << endl;    
     G4cerr << endl;
+    fRadius = 0.0;
   }
 }
 
@@ -148,11 +149,12 @@ G4QuadrangularFacet::G4QuadrangularFacet (const G4QuadrangularFacet &rhs)
 {
   fFacet1 = rhs.fFacet1;
   fFacet2 = rhs.fFacet2;
+  fRadius = 0.0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-const G4QuadrangularFacet &
+G4QuadrangularFacet &
 G4QuadrangularFacet::operator=(const G4QuadrangularFacet &rhs)
 {
   if (this == &rhs)
@@ -160,6 +162,7 @@ G4QuadrangularFacet::operator=(const G4QuadrangularFacet &rhs)
 
   fFacet1 = rhs.fFacet1;
   fFacet2 = rhs.fFacet2;
+  fRadius = 0.0;
 
   return *this;
 }

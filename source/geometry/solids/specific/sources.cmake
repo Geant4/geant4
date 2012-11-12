@@ -66,6 +66,7 @@ GEANT4_DEFINE_MODULE(NAME G4specsolids
         G4ReduciblePolygon.hh
         G4SolidExtentList.hh
         G4SurfaceVoxelizer.hh
+        G4SurfaceVoxelizer.icc
         G4TessellatedGeometryAlgorithms.hh
         G4TessellatedSolid.hh
         G4Tet.hh

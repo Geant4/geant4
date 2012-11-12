@@ -17,6 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12-Nov-2012  M.Gayer (geom-specific-V09-05-18)
+- Fixed out-of-bound array access in BuildReduceVoxels2().
+
+06-Nov-2012  G.Cosmo (geom-specific-V09-05-17)
+- Correction in sources.cmake script for missing .icc file.
+
+06-Nov-2012  G.Cosmo (geom-specific-V09-05-16)
+- Fixed Coverity defects in new code (M.Gayer).
+- Minor fixes for porting on AIX.
+
 01-Nov-2012  G.Cosmo (geom-specific-V09-05-15)
 - Fixed compilation of debug code under G4SPECSDEBUG.
 

@@ -59,8 +59,10 @@ G4int G4SurfaceVoxelizer::fDefaultVoxelsCount = -1;
 
 //______________________________________________________________________________
 G4SurfaceVoxelizer::G4SurfaceVoxelizer()
-  : fCountOfVoxels(0), fBoundingBox("TessBBox", 1, 1, 1)
+  : fBoundingBox("TessBBox", 1, 1, 1)
 {
+  fCountOfVoxels = fNPerSlice = fTotalCandidates = 0;
+  
   fTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
   SetMaxVoxels(fDefaultVoxelsCount); 
@@ -76,7 +78,11 @@ G4SurfaceVoxelizer::~G4SurfaceVoxelizer()
 //______________________________________________________________________________
 void G4SurfaceVoxelizer::BuildEmpty()
 {
-  vector<G4int> xyz(3), max(3), candidates;
+  // by reserving the size of candidates, we would avoid reallocation of 
+  // the vector which could cause fragmentation
+  //
+  vector<G4int> xyz(3), max(3), candidates(fTotalCandidates);
+  const vector<G4int> empty(0);
 
   for (G4int i = 0; i <= 2; i++) max[i] = fBoundaries[i].size();
   unsigned int size = max[0] * max[1] * max[2];
@@ -95,7 +101,14 @@ void G4SurfaceVoxelizer::BuildEmpty()
         if (GetCandidatesVoxelArray(xyz, candidates)) 
         {
           fEmpty.SetBitNumber(index, false);
-          fCandidates[index] = candidates;
+
+          // rather than assigning directly with:
+          // "fCandidates[index] = candidates;", in an effort to ensure that 
+          // capacity would be just exact, we rather use following 3 lines
+          //
+          vector<G4int> &c = (fCandidates[index] = empty);
+          c.reserve(candidates.size());
+          c.assign(candidates.begin(), candidates.end());
         }
       }
     }
@@ -537,7 +550,7 @@ void G4SurfaceVoxelizer::BuildReduceVoxels2(std::vector<G4double> boundaries[],
     vector<G4double> reducedBoundary(destination);
 
     G4int sum = 0, cur = 0;
-    for (G4int i = 0; i <= max; i++)
+    for (G4int i = 0; i < max; i++)
     {
       sum += candidatesCount[i];
       if (sum > average * (cur + 1) || i == 0)
@@ -997,7 +1010,7 @@ void G4SurfaceVoxelizer::SetMaxVoxels(const G4ThreeVector &ratioOfReduction)
 //______________________________________________________________________________
 G4int G4SurfaceVoxelizer::SetDefaultVoxelsCount(G4int count)
 {
-  G4int res =   fDefaultVoxelsCount;
+  G4int res = fDefaultVoxelsCount;
   fDefaultVoxelsCount = count;
   return res;
 }
@@ -1028,3 +1041,4 @@ G4int G4SurfaceVoxelizer::AllocatedMemory()
 
   return size;
 }
+

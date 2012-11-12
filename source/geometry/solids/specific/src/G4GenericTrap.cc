@@ -66,11 +66,11 @@ const G4double G4GenericTrap::fgkTolerance = 1E-3;
 
 // --------------------------------------------------------------------
 
-G4GenericTrap::G4GenericTrap( const G4String& name, G4double hz,
+G4GenericTrap::G4GenericTrap( const G4String& name, G4double halfZ,
                               const std::vector<G4TwoVector>&  vertices )
   : G4VSolid(name),
     fpPolyhedron(0),
-    fDz(hz),
+    fDz(halfZ),
     fVertices(),
     fIsTwisted(false),
     fTessellatedSolid(0),
@@ -99,7 +99,7 @@ G4GenericTrap::G4GenericTrap( const G4String& name, G4double hz,
   
   // Check dZ
   // 
-  if (hz < kCarTolerance)
+  if (halfZ < kCarTolerance)
   {
      G4Exception("G4GenericTrap::G4GenericTrap()", "GeomSolids0002",
                 FatalErrorInArgument, "dZ is too small or negative");

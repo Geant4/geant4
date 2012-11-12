@@ -150,7 +150,7 @@ G4TessellatedSolid::G4TessellatedSolid (const G4TessellatedSolid &ts)
 //
 // Assignment operator.
 //
-const G4TessellatedSolid&
+G4TessellatedSolid&
 G4TessellatedSolid::operator= (const G4TessellatedSolid &ts)
 {
   if (&ts == this) return *this;
@@ -596,7 +596,7 @@ G4bool G4TessellatedSolid::GetSolidClosed () const
 // on the right.  Note that copies of the facets are generated, rather than
 // using the original facet set of the solid on the right.
 //
-const G4TessellatedSolid &
+G4TessellatedSolid &
 G4TessellatedSolid::operator+=(const G4TessellatedSolid &right)
 {
   G4int size = right.GetNumberOfFacets();
@@ -958,7 +958,7 @@ G4bool G4TessellatedSolid::Normal (const G4ThreeVector &p,
                                          G4ThreeVector &aNormal) const
 {
   G4double minDist;
-  G4VFacet *facet;
+  G4VFacet *facet = 0;
 
   if (fVoxels.GetCountOfVoxels() > 1)
   {
@@ -1003,7 +1003,7 @@ G4bool G4TessellatedSolid::Normal (const G4ThreeVector &p,
 
   if (minDist != kInfinity)
   {
-    aNormal = facet->GetSurfaceNormal();
+    if (facet)  { aNormal = facet->GetSurfaceNormal(); }
     return minDist <= kCarToleranceHalf;
   }
   else

@@ -141,8 +141,8 @@ class G4TessellatedSolid : public G4VSolid
       // persistifiable objects.
 
     G4TessellatedSolid (const G4TessellatedSolid &ts);
-    const G4TessellatedSolid &operator= (const G4TessellatedSolid &right);
-    const G4TessellatedSolid &operator+= (const G4TessellatedSolid &right);
+    G4TessellatedSolid &operator= (const G4TessellatedSolid &right);
+    G4TessellatedSolid &operator+= (const G4TessellatedSolid &right);
 
     G4bool AddFacet (G4VFacet *aFacet);
     inline G4VFacet *GetFacet (G4int i) const;

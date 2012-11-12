@@ -77,7 +77,7 @@ class G4QuadrangularFacet : public G4VFacet
     G4QuadrangularFacet (const G4QuadrangularFacet &right);
    ~G4QuadrangularFacet ();
 
-    const G4QuadrangularFacet &operator=(const G4QuadrangularFacet &right);    
+    G4QuadrangularFacet &operator=(const G4QuadrangularFacet &right);    
 
     G4VFacet *GetClone ();
 

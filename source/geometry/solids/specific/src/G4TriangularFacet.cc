@@ -121,6 +121,7 @@ G4TriangularFacet::G4TriangularFacet (const G4ThreeVector &vt0,
     fSurfaceNormal.set(0,0,0);
     fA = fB = fC = 0.0;
     fDet = 0.0;
+    fArea = fRadius = 0.0;
   }
   else
   { 
@@ -163,6 +164,7 @@ G4TriangularFacet::G4TriangularFacet ()
   fE1 = zero;
   fE2 = zero;
   fDet = 0.0;
+  fArea = fRadius = 0.0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -196,7 +198,7 @@ G4TriangularFacet::G4TriangularFacet (const G4TriangularFacet &rhs)
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-const G4TriangularFacet &
+G4TriangularFacet &
 G4TriangularFacet::operator=(const G4TriangularFacet &rhs)
 {
   SetVertices(0);

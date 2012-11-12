@@ -74,7 +74,7 @@ class G4TriangularFacet : public G4VFacet
                        const G4ThreeVector &vt2, G4FacetVertexType);
     G4TriangularFacet (const G4TriangularFacet &right);
 
-    const G4TriangularFacet &operator=(const G4TriangularFacet &right);    
+    G4TriangularFacet &operator=(const G4TriangularFacet &right);    
 
     G4VFacet *GetClone ();
     G4TriangularFacet *GetFlippedFacet ();

@@ -41,12 +41,12 @@
 // 
 // Parameters in the constructor:
 // - name               - solid name
-// - hz                 - the solid half length in Z
+// - halfZ              - the solid half length in Z
 // - vertices           - the (x,y) coordinates of vertices:
 //                        o first four points: vertices[i], i<4 
-//                          are the vertices sitting on the -hz plane;
+//                          are the vertices sitting on the -halfZ plane;
 //                        o last four points: vertices[i], i>=4
-//                          are the vertices sitting on the +hz plane.
+//                          are the vertices sitting on the +halfZ plane.
 //
 //   The order of defining the vertices of the solid is the following:
 //      - point 0 is connected with points 1,3,4
@@ -81,7 +81,7 @@ class G4GenericTrap : public G4VSolid
 {
   public:  // with description
 
-     G4GenericTrap( const G4String& name, G4double hz,
+     G4GenericTrap( const G4String& name, G4double halfZ,
                     const std::vector<G4TwoVector>& vertices );
        // Constructor
 

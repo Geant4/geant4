@@ -138,30 +138,6 @@ long long G4SurfaceVoxelizer::CountVoxels(std::vector<G4double> boundaries[]) co
 }
 
 inline
-G4int G4SurfaceVoxelizer::GetCandidates(std::vector<G4int> &curVoxel,
-                                  const std::vector<G4int> *&candidates,
-                                        std::vector<G4int> &space) const
-{
-  G4int voxelsIndex, csize=0;
-  G4int emptys = fEmpty.GetNbits();
-  if (!emptys || (((voxelsIndex = GetVoxelsIndex(curVoxel)) >= 0)
-              && !fEmpty[voxelsIndex]))
-  {      
-    if (emptys)
-    {
-      candidates = &(*fCandidates.find(voxelsIndex)).second;
-    }
-    else
-    {
-      GetCandidatesVoxelArray(curVoxel, space, 0);
-      candidates = &space;
-    }
-    csize = candidates->size();
-  }
-  return csize;
-}
-
-inline
 const std::vector<G4int>&
 G4SurfaceVoxelizer::GetCandidates(std::vector<G4int> &curVoxel) const
 {
@@ -169,7 +145,7 @@ G4SurfaceVoxelizer::GetCandidates(std::vector<G4int> &curVoxel) const
 
   if (voxelsIndex >= 0 && !fEmpty[voxelsIndex])
   {      
-    return (*fCandidates.find(voxelsIndex)).second;
+    return fCandidates[voxelsIndex];
   }
   return fNoCandidates;
 }

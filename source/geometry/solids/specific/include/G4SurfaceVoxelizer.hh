@@ -52,7 +52,6 @@
 #include "G4VSolid.hh"
 
 #include "G4Transform3D.hh"
-#include "G4SurfaceVoxelizer.hh"
 #include "G4SolidStore.hh"
 #include "Randomize.hh"
 #include "G4PhysicalConstants.hh"
@@ -80,7 +79,7 @@ class G4SurfaceVoxelizer
 
   public:
 
-    template <typename T>
+    template <typename T> 
     static inline G4int BinarySearch(const std::vector<T> &vec, T value);
 
     void Voxelize(std::vector<G4VFacet *> &facets);
@@ -155,7 +154,7 @@ class G4SurfaceVoxelizer
     inline long long CountVoxels(std::vector<G4double> boundaries[]) const;
 
     inline G4int GetCandidates(std::vector<G4int> &curVoxel,
-                         const std::vector<G4int> *&candidates,
+                               std::vector<G4int> *&candidates,
                                std::vector<G4int> &space) const;
     inline const std::vector<G4int> &
                  GetCandidates(std::vector<G4int> &curVoxel) const;
@@ -170,6 +169,7 @@ class G4SurfaceVoxelizer
                                       const G4ThreeVector &f);
 
     static G4int SetDefaultVoxelsCount(G4int count);
+
     static G4int GetDefaultVoxelsCount();
 
   private:
@@ -228,7 +228,7 @@ class G4SurfaceVoxelizer
 
     std::vector<G4VoxelBox> fVoxelBoxes;
     std::vector<std::vector<G4int> > fVoxelBoxesCandidates;
-    std::map<G4int, std::vector<G4int> > fCandidates;
+    mutable std::map<G4int, std::vector<G4int> > fCandidates;
 
     const std::vector<G4int> fNoCandidates;
 
@@ -249,7 +249,9 @@ class G4SurfaceVoxelizer
     G4SurfBits fBitmasks[3];
 
     G4ThreeVector fBoundingBoxCenter;
+
     G4Box fBoundingBox;
+
     G4ThreeVector fBoundingBoxSize;
 
     G4ThreeVector fReductionRatio;
