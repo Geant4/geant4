@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+08-11-12 V.Ivant (testem5-V09-05-11)
+- Fixed README and pixe.mac
      
 19-10-12 mma (testem5-V09-05-10)
 - PhysListEmStandard: use G4UrbanMsc96 

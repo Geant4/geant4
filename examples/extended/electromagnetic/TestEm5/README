@@ -44,8 +44,8 @@ $Id: README,v 1.26 2009-09-18 14:03:24 maire Exp $
  - "emstandard_opt0" recommended standard EM physics for LHC
  - "emstandard_opt1" best CPU performance standard physics for LHC
  - "emstandard_opt2"     
- - "emstandard_opt3" best current advanced EM options. 
-                     analog to "local" above  
+ - "emstandard_opt3" best standard EM options - analog to "local" above
+ - "emstandard_opt4" best current advanced EM options standard + lowenergy   
  - "emlivermore"  low-energy EM physics using Livermore data
  - "empenelope"   low-energy EM physics implementing Penelope models
            
