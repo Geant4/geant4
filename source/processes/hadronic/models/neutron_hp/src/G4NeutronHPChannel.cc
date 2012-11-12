@@ -37,6 +37,9 @@
 #include "G4NeutronHPFinalState.hh"
 #include "G4HadTmpUtil.hh"
 
+#include "G4NeutronHPManager.hh"
+#include "G4NeutronHPReactionWhiteBoard.hh"
+
   G4double G4NeutronHPChannel::GetXsec(G4double energy)
   {
     return std::max(0., theChannelData->GetXsec(energy));
@@ -208,7 +211,15 @@
   ApplyYourself(const G4HadProjectile & theTrack, G4int anIsotope)
   {
 //    G4cout << "G4NeutronHPChannel::ApplyYourself+"<<niso<<G4endl;
-    if(anIsotope != -1) return theFinalStates[anIsotope]->ApplyYourself(theTrack);
+    if ( anIsotope != -1 ) 
+    {
+       //Inelastic Case
+       //G4cout << "G4NeutronHPChannel Inelastic Case" 
+       //<< " Z= " << this->GetZ(it) << " A = " << this->GetN(it) << G4endl;
+       G4NeutronHPManager::GetInstance()->GetReactionWhiteBoard()->SetTargA( (G4int)this->GetN(anIsotope) ); 
+       G4NeutronHPManager::GetInstance()->GetReactionWhiteBoard()->SetTargZ( (G4int)this->GetZ(anIsotope) ); 
+       return theFinalStates[anIsotope]->ApplyYourself(theTrack);
+    }
     G4double sum=0;
     G4int it=0;
     G4double * xsec = new G4double[niso];
@@ -262,6 +273,10 @@
       theFinalState = theFinalStates[it]->ApplyYourself(theTrack);
     }
 //    G4cout <<"THE IMPORTANT RETURN"<<G4endl;
+      //G4cout << "TK G4NeutronHPChannel Elastic, Capture and Fission Cases " 
+      //<< " Z= " << this->GetZ(it) << " A = " << this->GetN(it) << G4endl;
+    G4NeutronHPManager::GetInstance()->GetReactionWhiteBoard()->SetTargA( (G4int)this->GetN(it) ); 
+    G4NeutronHPManager::GetInstance()->GetReactionWhiteBoard()->SetTargZ( (G4int)this->GetZ(it) ); 
     return theFinalState;
   }
 

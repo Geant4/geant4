@@ -33,17 +33,18 @@
   G4NeutronHPData::G4NeutronHPData()
   {
      numEle = G4Element::GetNumberOfElements();
-     theData = new G4NeutronHPElementData[numEle];
+     for ( G4int i = 0 ; i < numEle ; i++ ) theData.push_back ( new G4NeutronHPElementData );
 //     G4cout << "G4NeutronHPData::G4NeutronHPData(): numEle="<<numEle<<G4endl;
      for (G4int i=0; i<numEle; i++)
      {
-       theData[i].Init((*(G4Element::GetElementTable()))[i]);
+       (*theData[i]).Init((*(G4Element::GetElementTable()))[i]);
      }
   }
   
   G4NeutronHPData::~G4NeutronHPData()
   {
-  delete [] theData;
+     for ( std::vector<G4NeutronHPElementData*>::iterator it = theData.begin() ; it != theData.end() ; it++ ) delete *it;
+     theData.clear();
   }
   
   G4NeutronHPData * G4NeutronHPData::Instance()
@@ -70,3 +71,13 @@
     }
     return theResult;
   }
+
+void G4NeutronHPData::addPhysicsVector()
+{
+   for ( G4int i = numEle; i < (G4int)G4Element::GetNumberOfElements() ; i++ )
+   {
+      theData.push_back ( new G4NeutronHPElementData );
+      (*theData[i]).Init((*(G4Element::GetElementTable()))[i]);
+   }
+   numEle = G4Element::GetNumberOfElements();
+}

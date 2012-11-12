@@ -100,9 +100,11 @@ class G4NeutronHPInelastic : public G4HadronicInteraction
   private:
   
   G4double * xSec;
-  G4NeutronHPChannelList * theInelastic; // one List per element
+  //G4NeutronHPChannelList * theInelastic; // one List per element
+      std::vector<G4NeutronHPChannelList*> theInelastic; // one List per element
   G4String dirName;
   G4int numEle;
+      void addChannelForNewElement();
   
   private:
   

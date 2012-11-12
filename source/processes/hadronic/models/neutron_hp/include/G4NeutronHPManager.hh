@@ -23,59 +23,40 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4NeutronHPFission.hh,v 1.10 2006-06-29 20:47:47 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
- // Hadronic Process: High Precision low E neutron tracking
- // original by H.P. Wellisch, TRIUMF, 14-Feb-97
- // Builds and has the Cross-section data for one material.
-  
-#ifndef G4NeutronHPFission_h
-#define G4NeutronHPFission_h 1
+#ifndef G4NeutronHPManager_h
+#define G4NeutronHPManager_h 1
 
 // Class Description
-// Final state production model for a high precision (based on evaluated data
-// libraries) description of neutron induced fission below 20 MeV; 
-// Note that this model (by intent of avoiding the possibility of heating studies) does
-// not provide the nuclear fragments.
-//
-// To be used in your physics list in case you need this physics.
-// In this case you want to register an object of this class with 
-// the corresponding process.
+// Manager of NeutronHP 
 // Class Description - End
 
+// 121031 First implementation done by T. Koi (SLAC/PPA)
+//
 #include "globals.hh"
-#include "G4NeutronHPChannel.hh"
-#include "G4HadronicInteraction.hh"
 
-#include "G4NeutronHPFissionFS.hh"
+#include "G4NeutronHPReactionWhiteBoard.hh"
 
-class G4NeutronHPFission : public G4HadronicInteraction
+class G4NeutronHPManager 
 {
-  public: 
-  
-  G4NeutronHPFission();
+   public:
+      static G4NeutronHPManager* GetInstance() {
+         if ( instance == NULL) instance = new G4NeutronHPManager();
+         return instance;
+      };
 
-  ~G4NeutronHPFission();
-  
-  G4HadFinalState * ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus);
+   private: 
+      G4NeutronHPManager();
+      G4NeutronHPManager( const G4NeutronHPManager& ){};
+      ~G4NeutronHPManager();
+      static G4NeutronHPManager* instance;
 
-  virtual const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
+   public:
+      G4NeutronHPReactionWhiteBoard* GetReactionWhiteBoard();
+      void OpenReactionWhiteBoard();
+      void CloseReactionWhiteBoard(){delete RWB; RWB=NULL;};
 
-  private:
-  
-  G4NeutronHPFissionFS theFS;
-  
-  private:
-  
-  G4double * xSec;
-  //G4NeutronHPChannel * theFission;
-      std::vector<G4NeutronHPChannel*> theFission;
-  G4String dirName;
-  G4int numEle;
-  // static G4String theNames[3];
-      void addChannelForNewElement();
+   private:
+      G4NeutronHPReactionWhiteBoard* RWB;
 };
 
 #endif

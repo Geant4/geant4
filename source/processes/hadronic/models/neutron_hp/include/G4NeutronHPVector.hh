@@ -397,6 +397,8 @@ class G4NeutronHPVector
 	G4double integ=theInt.GetBinIntegral(aScheme,x0,x1,y0,y1);
 #if defined WIN32-VC
 	if(!_finite(integ)){integ=0;}
+#elif defined __IBMCPP__
+	if(isinf(integ)||isnan(integ)){integ=0;}
 #else
 	if(std::isinf(integ)||std::isnan(integ)){integ=0;}
 #endif

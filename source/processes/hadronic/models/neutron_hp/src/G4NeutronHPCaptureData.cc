@@ -120,7 +120,11 @@ void G4NeutronHPCaptureData::BuildPhysicsTable(const G4ParticleDefinition& aP)
   size_t numberOfElements = G4Element::GetNumberOfElements();
   // G4cout << "CALLED G4NeutronHPCaptureData::BuildPhysicsTable "<<numberOfElements<<G4endl;
    // TKDB
-   if ( theCrossSections == 0 ) theCrossSections = new G4PhysicsTable( numberOfElements );
+   //if ( theCrossSections == 0 ) theCrossSections = new G4PhysicsTable( numberOfElements );
+   if ( theCrossSections == NULL ) 
+      theCrossSections = new G4PhysicsTable( numberOfElements );
+   else
+      theCrossSections->clearAndDestroy();
 
   // make a PhysicsVector for each element
 

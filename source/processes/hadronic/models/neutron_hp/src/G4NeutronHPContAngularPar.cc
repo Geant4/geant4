@@ -136,12 +136,19 @@
          //Cheating for small remaining_energy 
          //TEMPORAL SOLUTION
          if ( nDiscreteEnergies == nEnergies )
+         {
             remaining_energy = std::max ( remaining_energy , theAngular[nDiscreteEnergies-1].GetLabel() ); //Minimum Line
+         }
          else
          {
-            G4double cont_min = theAngular[nDiscreteEnergies].GetLabel();   
-            if ( theAngular[nDiscreteEnergies].GetLabel() == 0.0 ) cont_min = theAngular[nDiscreteEnergies+1].GetLabel();   
-            
+            //G4double cont_min = theAngular[nDiscreteEnergies].GetLabel();   
+            //if ( theAngular[nDiscreteEnergies].GetLabel() == 0.0 ) cont_min = theAngular[nDiscreteEnergies+1].GetLabel();   
+            G4double cont_min=0.0; 
+            for ( G4int j = nDiscreteEnergies ; j < nEnergies ; j++ )
+            {
+               cont_min = theAngular[j].GetLabel();   
+               if ( theAngular[j].GetValue(0) != 0.0 ) break;  
+            }
             remaining_energy = std::max ( remaining_energy , std::min ( theAngular[nDiscreteEnergies-1].GetLabel() , cont_min ) );   //Minimum Line or grid 
          }
 //
@@ -161,17 +168,53 @@
          for ( G4int j = nDiscreteEnergies ; j < nEnergies ; j++ ) 
          {
             G4double delta = 0.0;
+            G4double e_low = 0.0;
+            G4double e_high = 0.0;
             if ( theAngular[j].GetLabel() <= remaining_energy ) delta = theAngular[j].GetValue(0);
 
             //To calculate Prob. e_low and e_high should be in eV 
-            G4double e_low = theAngular[j-1].GetLabel()/eV;
-            if ( j == nDiscreteEnergies ) e_low = 0.0/eV;
-            G4double e_high = theAngular[j].GetLabel()/eV;
+            //There are two case
+            //1:theAngular[nDiscreteEnergies].GetLabel() != 0.0
+            //   delta should be used between j-1 and j 
+            //   At j = nDiscreteEnergies (the first) e_low should be set explicitly  
+            if ( theAngular[j].GetLabel() != 0 )
+            {
+               if ( j == nDiscreteEnergies ) {
+                  e_low = 0.0/eV;
+               } else {
+                  e_low = theAngular[j-1].GetLabel()/eV;
+               }
+               e_high = theAngular[j].GetLabel()/eV;
+            }
+            //2:theAngular[nDiscreteEnergies].GetLabel() == 0.0
+            //   delta should be used between j and j+1 
+            if ( theAngular[j].GetLabel() == 0.0 ) {
+               e_low = theAngular[j].GetLabel()/eV;
+               if ( j != nEnergies-1 ) {
+                  e_high = theAngular[j+1].GetLabel()/eV;
+               } else {
+                  e_high = theAngular[j].GetLabel()/eV;
+                  if ( theAngular[j].GetValue(0) != 0.0 ) {
+                     throw G4HadronicException(__FILE__, __LINE__, "G4NeutronHPContAngularPar: Unexpected non zero value of theAngular[nEnergies-1].GetValue(0)");    
+                  }
+               }
+            }
 
             running[j+1] = running[j] + ( ( e_high - e_low ) * delta );
          }
          G4double tot_prob_CON = running[ nEnergies ] - running[ nDiscreteEnergies ];
 
+/*
+         For FPE debugging 
+         if (tot_prob_DIS + tot_prob_CON == 0 ) { 
+            G4cout << "TKDB tot_prob_DIS + tot_prob_CON " << tot_prob_DIS + tot_prob_CON << G4endl;
+            G4cout << "massCode " << massCode << G4endl;
+            G4cout << "nDiscreteEnergies " << nDiscreteEnergies << " nEnergies " << nEnergies << G4endl;
+            for ( int j = nDiscreteEnergies ; j < nEnergies ; j++ ) {
+               G4cout << j << " " << theAngular[j].GetLabel() << " " << theAngular[j].GetValue(0) << G4endl;
+            }
+          }
+*/
          // Normalize random 
          random *= (tot_prob_DIS + tot_prob_CON);
 //2nd Judge Discrete or not             This shoudl be relatively close to 1  For safty 
@@ -549,13 +592,24 @@
         aMan.Init(angularRep-10, nAngularParameters-1);
 //        theBuff1.SetInterpolationManager(aMan); // Store interpolates f(costh)
 //        theBuff2.SetInterpolationManager(aMan); // Store interpolates f(costh)
-        for(i=0; i<nAngularParameters; i++) // i=1 ist wichtig!
+//      Bug Report #1366 from L. Russell 
+        //for(i=0; i<nAngularParameters; i++) // i=1 ist wichtig!
+        //{
+        //  theBuff1.SetX(i, theAngular[it-1].GetValue(i));
+        //  theBuff1.SetY(i, theAngular[it-1].GetValue(i+1));
+        //  theBuff2.SetX(i, theAngular[it].GetValue(i));
+        //  theBuff2.SetY(i, theAngular[it].GetValue(i+1));
+        //  i++;
+        //}
         {
-          theBuff1.SetX(i, theAngular[it-1].GetValue(i));
-          theBuff1.SetY(i, theAngular[it-1].GetValue(i+1));
-          theBuff2.SetX(i, theAngular[it].GetValue(i));
-          theBuff2.SetY(i, theAngular[it].GetValue(i+1));
-          i++;
+        G4int j;
+        for(i=0,j=1; i<nAngularParameters; i++,j+=2) 
+        {
+          theBuff1.SetX(i, theAngular[it-1].GetValue(j));
+          theBuff1.SetY(i, theAngular[it-1].GetValue(j+1));
+          theBuff2.SetX(i, theAngular[it].GetValue(j));
+          theBuff2.SetY(i, theAngular[it].GetValue(j+1));
+        }
         }
         G4NeutronHPVector theStore;
         theStore.SetInterpolationManager(aMan); // Store interpolates f(costh)        

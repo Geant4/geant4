@@ -14,6 +14,77 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+7 November 2012 Tatsumi Koi (hadr-hpn-V09-05-25)
+Fix compiler warning of potential usage of uninitialized variable
+	src/G4NeutronHPContAngularPar.cc
+
+
+6 November 2012 Tatsumi Koi (hadr-hpn-V09-05-24)
+Fix compilation warnings for shadowed variables
+	src/G4NeutronHPCapture.cc
+Bug fix in returing unchaged final states
+        src/G4NeutronHPChannelList.cc
+Fix potential floating point error 
+	src/G4NeutronHPContAngularPar.cc
+
+
+6 November 2012 Gabriele Cosmo (hadr-hpn-V09-05-23)
+Fix for porting on AIX in G4NeutronHPVector header.
+
+
+2 November 2012 Tatsumi Koi (hadr-hpn-V09-05-22)
+Fix Bugzilla report #1366
+	src/G4NeutronHPContAngularPar.cc
+
+
+2 November 2012 Tatsumi Koi (hadr-hpn-V09-05-21)
+Enhance functionality of ReactionWhiteBoard
+	include/G4NeutronHPReactionWhiteBoard.hh
+	src/G4NeutronHPReasctionWhiteBoard.cc
+- Modified sources.cmake for 09-05-21(18)
+	sources.cmake
+
+
+2 November 2012 Tatsumi Koi (hadr-hpn-V09-05-20)
+Enable to handle final states of dynamically generated G4Elements 
+	include/G4NeutronHPCapture.hh
+	include/G4NeutronHPElastic.hh
+	include/G4NeutronHPFission.hh
+	include/G4NeutronHPInelastic.hh
+	src/G4NeutronHPCapture.cc
+	src/G4NeutronHPElastic.cc
+	src/G4NeutronHPFission.cc
+	src/G4NeutronHPInelastic.cc
+
+
+1 November 2012 Tatsumi Koi (hadr-hpn-V09-05-19)
+Enable to handle cross sections of dynamically generated G4Elements 
+	include/G4NeutronHPData.hh
+	src/G4NeutronHPData.cc
+	include/G4NeutronHPCaptureData.hh
+	include/G4NeutronHPElasticData.hh
+	include/G4NeutronHPFissionData.hh
+	include/G4NeutronHPInelastic.hh
+	src/G4NeutronHPCaptureData.cc
+	src/G4NeutronHPElasticData.cc
+	src/G4NeutronHPFissionData.cc
+	src/G4NeutronHPInelasticData.cc
+
+
+31 October 2012 Tatsumi Koi (hadr-hpn-V09-05-18)
+Add NeutronHPManager and NeutronHPReactionWhiteBoard
+	include/G4NeutronHPManager.hh
+	include/G4NeutronHPReactionWhiteBoard.hh
+	src/G4NeutronHPManager.cc
+	src/G4NeutronHPReasctionWhiteBoard.cc
+Set A and Z of the reaction into "targetNucleus" from HadronicProcess
+	src/G4NeutronHPChannel.cc
+	src/G4NeutronHPCapture.cc
+	src/G4NeutronHPFission.cc
+	src/G4NeutronHPInelastic.cc
+	src/G4NeutronHPElastic.cc
+
+
 26 September 2012 Gabriele Cosmo (hadr-hpn-V09-05-17)
 - Explicitly use inclusion of headers for system of units and physical
   constants, in plan to remove implicit inclusion from globals.hh.

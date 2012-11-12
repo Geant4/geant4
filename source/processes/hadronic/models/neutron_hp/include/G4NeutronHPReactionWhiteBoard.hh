@@ -23,59 +23,46 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4NeutronHPFission.hh,v 1.10 2006-06-29 20:47:47 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
- // Hadronic Process: High Precision low E neutron tracking
- // original by H.P. Wellisch, TRIUMF, 14-Feb-97
- // Builds and has the Cross-section data for one material.
-  
-#ifndef G4NeutronHPFission_h
-#define G4NeutronHPFission_h 1
+#ifndef G4NeutronHPReactionWhiteBoard_h
+#define G4NeutronHPReactionWhiteBoard_h 1
 
 // Class Description
-// Final state production model for a high precision (based on evaluated data
-// libraries) description of neutron induced fission below 20 MeV; 
-// Note that this model (by intent of avoiding the possibility of heating studies) does
-// not provide the nuclear fragments.
-//
-// To be used in your physics list in case you need this physics.
-// In this case you want to register an object of this class with 
-// the corresponding process.
+// Keep Information of Current Interaction
 // Class Description - End
 
+// 121031 First implementation done by T. Koi (SLAC/PPA)
+//
 #include "globals.hh"
-#include "G4NeutronHPChannel.hh"
-#include "G4HadronicInteraction.hh"
+#include <map>
 
-#include "G4NeutronHPFissionFS.hh"
-
-class G4NeutronHPFission : public G4HadronicInteraction
+class G4NeutronHPReactionWhiteBoard 
 {
-  public: 
-  
-  G4NeutronHPFission();
+   public:
+      G4NeutronHPReactionWhiteBoard();
+      ~G4NeutronHPReactionWhiteBoard();
 
-  ~G4NeutronHPFission();
-  
-  G4HadFinalState * ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus);
+   public:
+      void Dump();
 
-  virtual const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
+      void SetTargZ( G4int Z ){ targZ=Z; };
+      void SetTargA( G4int A ){ targA=A; };
+      void SetTargM( G4int M ){ targM=M; };
+      G4int GetTargZ(){ return targZ; };
+      G4int GetTargA(){ return targA; };
+      G4int GetTargM(){ return targM; };
+       
+      bool AddRecord( std::pair<G4String,G4String> );
+      G4String GetValue( G4String );
+      // "0" or "0.0" will retrun for invalid key by following two methods
+      G4int GetValueInInt( G4String );
+      G4double GetValueInDouble( G4String );
 
-  private:
-  
-  G4NeutronHPFissionFS theFS;
-  
-  private:
-  
-  G4double * xSec;
-  //G4NeutronHPChannel * theFission;
-      std::vector<G4NeutronHPChannel*> theFission;
-  G4String dirName;
-  G4int numEle;
-  // static G4String theNames[3];
-      void addChannelForNewElement();
+   private:
+      G4int targZ;
+      G4int targA;
+      G4int targM;
+      std::map< G4String,G4String > mapStringPair;
+      //,,,
 };
 
 #endif

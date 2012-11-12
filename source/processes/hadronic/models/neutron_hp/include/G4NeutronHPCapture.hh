@@ -61,12 +61,14 @@ class G4NeutronHPCapture : public G4HadronicInteraction
   private:
   
   G4double * xSec;
-  G4NeutronHPChannel * theCapture;
+  //G4NeutronHPChannel * theCapture;
+      std::vector<G4NeutronHPChannel*> theCapture;
   G4String dirName;
   G4int numEle;
   G4int it;
   
   G4HadFinalState theResult;
+      void addChannelForNewElement();
 };
 
 #endif

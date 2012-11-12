@@ -120,8 +120,12 @@ void G4NeutronHPInelasticData::BuildPhysicsTable(const G4ParticleDefinition& aP)
   size_t numberOfElements = G4Element::GetNumberOfElements();
 //  theCrossSections = new G4PhysicsTable( numberOfElements );
 // TKDB
-   if ( theCrossSections == 0 )
-   { theCrossSections = new G4PhysicsTable( numberOfElements ); }
+   //if ( theCrossSections == 0 )
+   //{ theCrossSections = new G4PhysicsTable( numberOfElements ); }
+   if ( theCrossSections == NULL ) 
+      theCrossSections = new G4PhysicsTable( numberOfElements );
+   else
+      theCrossSections->clearAndDestroy();
 
   // make a PhysicsVector for each element
 

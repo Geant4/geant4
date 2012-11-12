@@ -58,17 +58,21 @@ class G4NeutronHPElastic : public G4HadronicInteraction
 
   virtual const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
 
-  G4int GetNiso() {return theElastic[0].GetNiso();}
+  //G4int GetNiso() {return theElastic[0].GetNiso();}
+  G4int GetNiso() {return (*theElastic[0]).GetNiso();}
 
   void DoNotSuspend() {overrideSuspension = true;}
 
   private:
   
   G4double * xSec;
-  G4NeutronHPChannel * theElastic;
+  //G4NeutronHPChannel * theElastic;
+  std::vector<G4NeutronHPChannel*> theElastic;
   G4String dirName;
   G4int numEle;
   G4bool overrideSuspension;
+
+      void addChannelForNewElement();
 };
 
 #endif
