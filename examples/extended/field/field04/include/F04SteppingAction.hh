@@ -34,6 +34,8 @@
 
 class F04SteppingActionMessenger;
 
+class G4LogicalVolume;
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class F04SteppingAction : public G4UserSteppingAction
@@ -48,7 +50,8 @@ class F04SteppingAction : public G4UserSteppingAction
   private:
 
     F04SteppingActionMessenger*    fSteppingMessenger;
-
+    G4LogicalVolume* fTargetVolume;
+    G4LogicalVolume* fTestPlaneVolume;
 };
 
 #endif

@@ -34,12 +34,17 @@
 #include "F04SteppingActionMessenger.hh"
 
 #include "G4ParticleTypes.hh"
+#include "G4LogicalVolumeStore.hh"
 
 #include "F04UserTrackInformation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F04SteppingAction::F04SteppingAction()
+ : G4UserSteppingAction(),
+   fSteppingMessenger(0),
+   fTargetVolume(0),
+   fTestPlaneVolume(0)
 {
   fSteppingMessenger = new F04SteppingActionMessenger(this);
 }
@@ -56,12 +61,20 @@ F04SteppingAction::~F04SteppingAction()
 void F04SteppingAction::UserSteppingAction(const G4Step* theStep)
 {
   G4Track* theTrack = theStep->GetTrack();
-
+  
+  // Get pointers to test volumes (only once)
+  if ( ! fTargetVolume ) {
+    fTargetVolume
+      = G4LogicalVolumeStore::GetInstance()->GetVolume("Target");
+    fTestPlaneVolume
+     = G4LogicalVolumeStore::GetInstance()->GetVolume("TestPlane");
+  }   
+ 
   if (theTrack->GetParentID()==0) {
     //This is a primary track
-    G4String theVolumeName = theStep->GetPreStepPoint()->
-                                  GetPhysicalVolume()->GetName();
-    if (theVolumeName != "Target") {
+    G4LogicalVolume* theVolume 
+      = theStep->GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume();
+    if (theVolume != fTargetVolume) {
        theTrack->SetTrackStatus(fStopAndKill);
        return;
     }
@@ -72,18 +85,18 @@ void F04SteppingAction::UserSteppingAction(const G4Step* theStep)
   // check if it is entering the test volume
   G4StepPoint* thePrePoint = theStep->GetPreStepPoint();
   G4VPhysicalVolume* thePrePV = thePrePoint->GetPhysicalVolume();
-  G4String thePrePVname = thePrePV->GetName();
+  G4LogicalVolume* thePreLV = thePrePV->GetLogicalVolume();
 
-  G4String thePostPVname = " ";
+  G4LogicalVolume* thePostLV = 0;
   G4StepPoint* thePostPoint = theStep->GetPostStepPoint();
 
   if (thePostPoint) {
      G4VPhysicalVolume* thePostPV = thePostPoint->GetPhysicalVolume();
-     if (thePostPV) thePostPVname = thePostPV->GetName();
+     if (thePostPV) thePostLV = thePostPV->GetLogicalVolume();
   }
 
-  if (thePrePVname  != "TestPlane" &&
-      thePostPVname == "TestPlane") {
+  if (thePostLV == fTestPlaneVolume &&
+      thePreLV  != fTestPlaneVolume) {
 
 //     G4double x = theTrack->GetPosition().x();
 //     G4double y = theTrack->GetPosition().y();
@@ -105,7 +118,7 @@ void F04SteppingAction::UserSteppingAction(const G4Step* theStep)
                       (F04UserTrackInformation*)theTrack->GetUserInformation();
 
   if (trackInformation->GetTrackStatusFlag() != reverse) {
-     if (thePrePVname  != "Target" ) {
+     if (thePreLV  != fTargetVolume ) {
         if ( theTrack->      GetMomentumDirection().z()>0.0 &&
              theTrack->GetVertexMomentumDirection().z()<0.0     )
         {

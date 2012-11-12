@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 6th, 2012 Peter Gumplinger - fieldex04-V09-05-02
+- reverse the order of checking thePostLV and thePreLV in the if-statement
+
 Jun 20th, 2012 Peter Gumplinger    - fieldex04-V09-05-01
 - remove SetModel from F04OpticalPhysics.cc co-work with op-V09-05-04
 
