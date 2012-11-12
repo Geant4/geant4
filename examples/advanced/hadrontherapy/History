@@ -8,6 +8,10 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
              History file of the Hadrontherapy application
          ====================================================
 
+08.11.2012 F.Romano;       Tag: hadrontherapy-V09-05-10
+           - hadrontherapy.cc: fixed problem for referencePhysList if condition
+	   - README revised
+	   
 29.10.2012 F.Romano;       Tag: hadrontherapy-V09-05-09
            - Added explicit inclusion of units and constants headers where missing
 	   - Executable renamed to the same name of the directory to avoid possible
