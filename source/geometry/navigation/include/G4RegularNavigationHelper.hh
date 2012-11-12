@@ -48,14 +48,18 @@
 class G4RegularNavigationHelper
 {
   public:
-
-    G4RegularNavigationHelper();
+    static G4RegularNavigationHelper * Instance();
    ~G4RegularNavigationHelper();
   
-    static void ClearStepLengths();
-    static void AddStepLength( G4int copyNo, G4double slen );
+    void ClearStepLengths();
+    void AddStepLength( G4int copyNo, G4double slen );
+    const std::vector< std::pair<G4int,G4double> > & GetStepLengths();
 
-    static std::vector< std::pair<G4int,G4double> > theStepLengths;
+    std::vector< std::pair<G4int,G4double> > theStepLengths;
+
+  private:
+    G4RegularNavigationHelper();
+    static G4RegularNavigationHelper * theInstance;
 };
 
 #endif

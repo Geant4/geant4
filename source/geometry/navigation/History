@@ -16,6 +16,71 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Nov  6th, 2012 - J.Apostolakis  (geomnav-V09-05-42)
+------------------------------
+ G4Navigator::ComputeSafety
+  - Made the 'old' safety default (the one provided by G4VoxelNavigation). 
+
+ G4VoxelSafety
+   ComputeSafety
+   - Provide the mother safety in the call to SafetyForVoxelHeader 
+      as initial value of 'minimum safety'.p
+     This is optimisation, to reduce number of voxels searched.
+
+   SafetyForVoxelHeader
+   - If point is outside boundaries of voxel 'Min' or 'Max' coordinates,
+       then corresponding 'distance' will be negative.  
+     Must never consider this direction to move: Reset that distance to
+       DBL_MAX.
+
+   Cosmetic changes in SafetyForVoxelHeader
+   - Added explanation: why must 'pointNodeNo' be normalised 
+   - Revised asserts, corrected comments and removed old ones.
+   - added 'depth' to some diagnostic printouts
+
+Nov 9th, 2012 - G.Cosmo  (geomnav-V09-05-41)
+-----------------------
+- G4RegularNavigationHelper: add newline at the end of file to avoid
+  compilation warnings on clang.
+
+Nov 9th, 2012 - G.Folger  (geomnav-V09-05-40)
+------------------------  (Coworks with procscore-V09-05-05, which requires it)
+- G4RegularNavigationHelper: transform it to real singleton from static
+  utility class, created upon first use; make vector of Steplengths a data
+  member.
+- Adapted G4RegularNavigation to use G4RegularNavigationHelper singleton calls.
+
+Nov  6th, 2012 - J.Apostolakis  (geomnav-V09-05-39)
+------------------------------
+ Fix for compiler warning from gcc 4.7 
+
+Nov  6th, 2012 - J.Apostolakis  (geomnav-V09-05-38)
+------------------------------
+- G4VoxelSafety::SafetyForVoxelNode:
+ Fix: Correct the calculation of pointNodeNo to ensure it corresponds
+   to a physical node ( range: 0 to Max-1 ).
+
+ Reason: It is possible for the Min and Max of a voxel NOT to contain the
+ current location along an axis.  ( At lower levels only, not top level. )
+
+ Did not delete the code that reports a problem in the case -- left 
+   under G4DEBUB_NAVIGATION for later investigations.
+
+ Interface change: added const pointer to Physical volume (for printing.)
+
+Nov  5th, 2012 - J.Apostolakis  (geomnav-V09-05-37)
+------------------------------
+- G4VoxelSafety::SafetyForVoxelHeader:
+   * Optimisation: Use minSafety and maxLength to prune search tree. 
+       Pass along minSafety to lower levels (had missed it).
+   * Also keep safety at this level and below (NOT above) as 'ourSafety'
+       Return 'ourSafety', not updated value of minSafety.
+   * Arguments: use *squared* distance-to-upper-depth, and add previous 
+       *minimum* safety.
+     Revised calculation of square distance-to-upper-depth, adding square of 
+       current level distance. 
+     (Previous: Used maximum of previous and current level, to avoid square root)
+   * Printing only under the flag 'G4DEBUG_NAVIGATION', not G5VERBOSE
 
 Nov  1st, 2012 - J.Apostolakis  (geomnav-V09-05-36)
 ------------------------------

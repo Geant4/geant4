@@ -1617,8 +1617,8 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
   return globalNormal;
 }
 
-#define  G4NEW_SAFETY  1
-
+// To make the new Voxel Safety the default, uncomment the next line
+// #define  G4NEW_SAFETY  1
 
 // ********************************************************************
 // ComputeSafety

@@ -83,7 +83,11 @@ class G4VoxelSafety
   protected:
     G4double  SafetyForVoxelHeader( const G4SmartVoxelHeader* pHead,
                                     const G4ThreeVector& localPoint,
-                                    G4double  distUpperDepth = 0.0 );
+                                    G4double maxLength,
+                                    const G4VPhysicalVolume&  currentPhysical, // Debug
+                                    G4double  distUpperDepth = 0.0,
+                                    G4double  previousMinSafety= DBL_MAX
+                                   );
 
     G4double  SafetyForVoxelNode(   const G4SmartVoxelNode *curVoxelNode,
                               const G4ThreeVector& localPoint ); 
