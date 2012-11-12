@@ -23,8 +23,8 @@ include(${Geant4_USE_FILE})
 #----------------------------------------------------------------------------
 # Find AIDA (optional package)
 #
-find_package(AIDA)
-if(AIDA_FOUND QUIET)
+find_package(AIDA QUIET)
+if(AIDA_FOUND)
   message(STATUS "G4 Examples: AIDA found. --> amsEcal example with AIDA enabled.") 
   # Uncomment this line if suitable (some customization may be needed)
   add_definitions(-DG4ANALYSIS_USE)   
