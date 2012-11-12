@@ -39,10 +39,6 @@
 // reactions in the inelastic reactions.
 // ----------------------------------------------------------------------
 
-//#define debug
-//#define pdebug
-//#define ppdebug
-//#define nandebug
 
 #include "G4QuasiElRatios.hh"
 #include "G4PhysicalConstants.hh"
@@ -54,6 +50,8 @@
 #include "G4He3.hh"
 #include "G4Alpha.hh"
 #include "G4ThreeVector.hh"
+#include "G4CrossSectionDataSetRegistry.hh"
+
 
 // initialisation of statics
 std::vector<G4double*> G4QuasiElRatios::vT; // Vector of pointers to LinTable in C++ heap
@@ -62,6 +60,10 @@ std::vector<std::pair<G4double,G4double>*> G4QuasiElRatios::vX; // ETPointers to
 
 G4QuasiElRatios::G4QuasiElRatios()
 {
+    
+    PCSmanager=(G4ChipsProtonElasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsProtonElasticXS::Default_Name());
+    
+    NCSmanager=(G4ChipsNeutronElasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsNeutronElasticXS::Default_Name());
 }
 
 G4QuasiElRatios::~G4QuasiElRatios()
@@ -836,8 +838,6 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiElRatios::Scatter(G4int NPDG,
         return std::make_pair(G4LorentzVector(0.,0.,0.,0.),p4M); // Do Nothing Action
     }
     G4double P=std::sqrt(E2-mP2);                   // Momentum in pseudo laboratory system
-    G4VCrossSection* PCSmanager=G4ProtonElasticCrossSection::GetPointer();
-    G4VCrossSection* NCSmanager=G4NeutronElasticCrossSection::GetPointer();
     // @@ Temporary NN t-dependence for all hadrons
     if(pPDG>3400 || pPDG<-3400) G4cout<<"-Warning-G4QE::Scatter: pPDG="<<pPDG<<G4endl;
     G4int PDG=2212;                                                // *TMP* instead of pPDG
@@ -850,8 +850,8 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiElRatios::Scatter(G4int NPDG,
         else if(PDG==2112) PDG=2212;
     }
     G4double xSec=0.;                        // Prototype of Recalculated Cross Section *TMP*
-    if(PDG==2212) xSec=PCSmanager->GetCrossSection(false, P, Z, N, PDG); // P CrossSect *TMP*
-    else          xSec=NCSmanager->GetCrossSection(false, P, Z, N, PDG); // N CrossSect *TMP*
+    if(PDG==2212) xSec=PCSmanager->GetChipsCrossSection(P, Z, N, PDG); // P CrossSect *TMP*
+    else          xSec=NCSmanager->GetChipsCrossSection(P, Z, N, PDG); // N CrossSect *TMP*
     // @@ check a possibility to separate p, n, or alpha (!)
     if(xSec <= 0.)                                    // The cross-section iz 0 -> Do Nothing
     {
@@ -955,8 +955,6 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiElRatios::ChExer(G4int NPDG,
         return std::make_pair(G4LorentzVector(0.,0.,0.,0.),p4M); // Do Nothing Action
     }
     G4double P=std::sqrt(E2-mS2);                   // Momentum in pseudo laboratory system
-    G4VCrossSection* PCSmanager=G4ProtonElasticCrossSection::GetPointer();
-    G4VCrossSection* NCSmanager=G4NeutronElasticCrossSection::GetPointer();
     // @@ Temporary NN t-dependence for all hadrons
     G4int PDG=2212;                                                // *TMP* instead of pPDG
     if(pPDG==2112||pPDG==-211||pPDG==-321) PDG=2112;               // *TMP* instead of pPDG
@@ -968,8 +966,8 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiElRatios::ChExer(G4int NPDG,
         else if(PDG==2112) PDG=2212;
     }
     G4double xSec=0.;                        // Prototype of Recalculated Cross Section *TMP*
-    if(PDG==2212) xSec=PCSmanager->GetCrossSection(false, P, Z, N, PDG); // P CrossSect *TMP*
-    else          xSec=NCSmanager->GetCrossSection(false, P, Z, N, PDG); // N CrossSect *TMP*
+    if(PDG==2212) xSec=PCSmanager->GetChipsCrossSection(P, Z, N, PDG); // P CrossSect *TMP*
+    else          xSec=NCSmanager->GetChipsCrossSection(P, Z, N, PDG); // N CrossSect *TMP*
     // @@ check a possibility to separate p, n, or alpha (!)
     if(xSec <= 0.) // The cross-section iz 0 -> Do Nothing
     {
