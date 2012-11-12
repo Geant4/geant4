@@ -51,6 +51,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
 #include "G4UserEventAction.hh"  // NOT INCLUDED IN geant4.9.3p01_version
+#include "G4SystemOfUnits.hh"
 
 #include "IORTAnalysisManager.hh"
 

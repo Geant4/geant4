@@ -23,11 +23,14 @@ include(${Geant4_USE_FILE})
 #----------------------------------------------------------------------------
 # Find ROOT (optional package)
 #
-find_package(ROOT)
-if(ROOT_FOUND QUIET)
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
+find_package(ROOT QUIET)
+if(ROOT_FOUND)
   message(STATUS "G4 Examples: ROOT found. --> iort_therapy example with ROOT enabled.") 
   # Uncomment this line if suitable (some customization may be needed)
   add_definitions(-DG4ANALYSIS_USE_ROOT)   
+else()
+  message(STATUS "G4 Examples: ROOT not found. --> iort_therapy example with ROOT disabled.") 
 endif()
 
 #----------------------------------------------------------------------------

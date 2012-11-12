@@ -46,6 +46,8 @@
 #include "G4TouchableHistory.hh"
 #include "G4SDManager.hh"
 #include "IORTMatrix.hh"
+#include "G4SystemOfUnits.hh"
+
 
 /////////////////////////////////////////////////////////////////////////////
 IORTDetectorSD::IORTDetectorSD(G4String name):
