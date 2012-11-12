@@ -58,6 +58,19 @@ G4BREPSolid::G4BREPSolid(const G4String& name)
    fStatistics(1000000), fCubVolEpsilon(0.001), fAreaAccuracy(-1.),
    fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
 {
+  static G4bool warn=true;
+  if (warn)
+  {
+    G4cout
+         << "--------------------------------------------------------" << G4endl
+         << "WARNING: BREPS classes are being dismissed.  They will |" << G4endl
+         << "         be removed starting  from next  Geant4  major |" << G4endl
+         << "         release.  Please, consider switching to adopt |" << G4endl
+         << "         correspondent CSG or specific primitives.     |" << G4endl
+         << "--------------------------------------------------------"
+         << G4endl;
+    warn = false;
+  }
 }
 
 G4BREPSolid::G4BREPSolid( const G4String&   name        , 
@@ -71,6 +84,19 @@ G4BREPSolid::G4BREPSolid( const G4String&   name        ,
    fStatistics(1000000), fCubVolEpsilon(0.001), fAreaAccuracy(-1.),
    fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
 {
+  static G4bool warn=true;
+  if (warn)
+  {
+    G4cout
+         << "--------------------------------------------------------" << G4endl
+         << "WARNING: BREPS classes are being dismissed.  They will |" << G4endl
+         << "         be removed starting  from next  Geant4  major |" << G4endl
+         << "         release.  Please, consider switching to adopt |" << G4endl
+         << "         correspondent CSG or specific primitives.     |" << G4endl
+         << "--------------------------------------------------------"
+         << G4endl;
+    warn = false;
+  }
   Initialize();
 }
 
