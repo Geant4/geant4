@@ -18,6 +18,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 6, 2012, L.Pandola tag human_phantom-V09-05-04
+- Fix syntax in the CMakeLists.txt
+
 October 25, 2012, L.Pandola tag human_phantom-V09-05-03
 - Replace CMakeLists.txt to deal with UI/VIS and GDML 
 

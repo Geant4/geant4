@@ -23,11 +23,14 @@ include(${Geant4_USE_FILE})
 #----------------------------------------------------------------------------
 # Find gdml (optional package)
 #
-find_package(gdml)
-if(GDML_FOUND QUIET)
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
+find_package(gdml QUIET)
+if(GDML_FOUND)
   message(STATUS "G4 Examples: gdml found. --> human_phantom example with gdml enabled.") 
   # Uncomment this line if suitable (some customization may be needed)
   add_definitions(-DG4LIB_USE_GDML)   
+else()
+  message(STATUS "G4 Examples: gdml not found. --> human_phantom example with gdml disabled.")
 endif()
 
 #----------------------------------------------------------------------------
