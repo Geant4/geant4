@@ -51,9 +51,9 @@ public: // with description
   
   G4int SplitEnergyInVolumes(const G4Step* aStep );    // Calculates the energy spliting, and dumps it into theEnergies. Returns number of steps
 
-  inline void GetLastVoxelID( G4int& voxelID);
-  inline void GetFirstVoxelID( G4int& voxelID);
-  inline void GetVoxelID( G4int stepNo, G4int& voxelID );
+  void GetLastVoxelID( G4int& voxelID);
+  void GetFirstVoxelID( G4int& voxelID);
+  void GetVoxelID( G4int stepNo, G4int& voxelID );
   inline void GetVoxelIDAndLength( G4int stepNo, G4int& voxelID, G4double& stepLength ); 
   inline void GetLengthAndEnergyDeposited( G4int stepNo, G4int& voxelID, G4double& stepLength, G4double &energyLoss);
   inline void GetLengthAndInitialEnergy( G4double &preStepEnergy, G4int stepNo, G4int& voxelID, G4double& stepLength, G4double &initialEnergy);
@@ -63,7 +63,7 @@ public: // with description
   inline G4Material* GetVoxelMaterial( G4int stepNo );
 
 private:
-  inline void GetStepLength( G4int stepNo, G4double& stepLength );
+  void GetStepLength( G4int stepNo, G4double& stepLength );
 
   void GetPhantomParam(G4bool mustExist);
   G4bool IsPhantomVolume( G4VPhysicalVolume* pv );

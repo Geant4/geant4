@@ -37,6 +37,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4ParticleChange.hh"
 #include "G4TransportationManager.hh"
+#include "G4RegularNavigationHelper.hh"
 #include "G4ParticleChange.hh"
 #include "G4StepPoint.hh"
 
@@ -141,7 +142,7 @@ G4VParticleChange* G4ScoreSplittingProcess::PostStepDoIt(
 
   pParticleChange->Initialize(track); 
   if(  ( ! pCurrentVolume->IsRegularStructure() ) || ( !ptrSD ) 
-    || G4RegularNavigationHelper::theStepLengths.size() <= 1) {
+    || G4RegularNavigationHelper::Instance()->GetStepLengths().size() <= 1) {
      // Set the flag to make sure that Stepping Manager does the scoring
      pParticleChange->ProposeSteppingControl( NormalCondition );     
   } else { 
