@@ -30,11 +30,18 @@
 /// \brief Test program for the G4BlineTracer class
 
 #include "G4BlineTracer.hh"
+#include "G4RunManager.hh"
+#include "FTFP_BERT.hh"
 
-// test program which only instantiates the G4BlineTracer class
+// Test program which only instantiates the G4BlineTracer class.
 
 int main()
 {
+  // Construct the default run manager
+  // and set a physics list (otherwise a run action cannot be instatiated)
+  G4RunManager * runManager = new G4RunManager;
+  runManager->SetUserInitialization(new FTFP_BERT);
+
   // Instantiate the G4BlineTracer class
   G4BlineTracer* theBlineTool = new G4BlineTracer();
   
