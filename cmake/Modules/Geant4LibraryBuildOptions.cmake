@@ -5,10 +5,11 @@
 # further configuration. This module performs this task whicj includes:
 #
 #  1) Extra build modes for developers
-#  2) Additional compile definitions to assist visualization or optimize
+#  2) Additional compiler definitions to assist visualization or optimize
 #     performance.
-#  3) Whether to build shared and/or static libraries
-#  4) Whether to build libraries in global or granular format.
+#  3) Additional compiler flags which may be added optionally.
+#  4) Whether to build shared and/or static libraries.
+#  5) Whether to build libraries in global or granular format.
 #
 #
 
@@ -23,9 +24,8 @@ if(NOT WIN32)
   include(Geant4BuildModes)
 endif(NOT WIN32)
 
-
-#----------------------------------------------------------------------------
-# Optional define flags which are applicable globally
+#-----------------------------------------------------------------------
+# Optional compiler definitions which are applicable globally
 #
 # - G4_STORE_TRAJECTORY
 # ON by default, switching off can improve performance. Needs to be on
@@ -41,11 +41,10 @@ if(GEANT4_BUILD_STORE_TRAJECTORY)
   add_definitions(-DG4_STORE_TRAJECTORY)
 endif()
 
-
 # - G4VERBOSE
-# ON by default, switching off can improve performance, but at the cost of
-# fewer informational or warning messages. Mark as advanced because most users
-# should not need to worry about it.
+# ON by default, switching off can improve performance, but at the cost 
+# of fewer informational or warning messages. Mark as advanced because 
+# most users should not need to worry about it.
 option(GEANT4_BUILD_VERBOSE_CODE 
   "Enable verbose output from Geant4 code. Switch off for better performance at the cost of fewer informational messages or warnings"
   ON)
@@ -55,7 +54,23 @@ if(GEANT4_BUILD_VERBOSE_CODE)
   add_definitions(-DG4VERBOSE)
 endif()
 
+#-----------------------------------------------------------------------
+# Optional compiler flags
+#
+# - GEANT4_BUILD_CXXSTD
+# Choose C++ Standard to build against, if supported.
+# Mark as advanced because most users will not need it.
+if(CXXSTD_IS_AVAILABLE)
+  enum_option(GEANT4_BUILD_CXXSTD 
+    DOC "C++ Standard to compile against"
+    VALUES ${CXXSTD_IS_AVAILABLE}
+    CASE_INSENSITIVE
+    )
+  mark_as_advanced(GEANT4_BUILD_CXXSTD)
+  geant4_add_feature(GEANT4_BUILD_CXXSTD "Compiling against C++ Standard '${GEANT4_BUILD_CXXSTD}'")
 
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${${GEANT4_BUILD_CXXSTD}_FLAGS}")
+endif()
 
 #-----------------------------------------------------------------------
 # Setup Library Format Option.
@@ -68,10 +83,6 @@ endif()
 # Global libraries are built by default, but we provide an option to 
 # switch to granular format. Granular format is only intended for 
 # developers, so we mark this option as advanced and warn the user.
-# REMOVED IN 9.5 RELEASE
-#option(GEANT4_BUILD_GRANULAR_LIBS "Build Geant4 with granular libraries" OFF)
-#mark_as_advanced(GEANT4_BUILD_GRANULAR_LIBS)
-#GEANT4_ADD_FEATURE(GEANT4_BUILD_GRANULAR_LIBS "Build granular Geant4 libraries")
 
 # Still warn, because the variable can still be set from the command line!
 if(GEANT4_BUILD_GRANULAR_LIBS)

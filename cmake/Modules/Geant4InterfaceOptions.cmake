@@ -46,14 +46,18 @@ if(GEANT4_USE_INVENTOR)
   find_package(Inventor REQUIRED)
   find_package(OpenGL REQUIRED)
 
-  # On UNIX, we also require Xm and X11...
+  # On UNIX, we also require Xm and X11 (inc. Xpm)...
   if(UNIX)
     if(NOT INVENTOR_SOXT_LIBRARY OR NOT INVENTOR_SOXT_INCLUDE_DIR)
-      message(FATAL_ERROR "could not find SoXt library and/or headers")
+      message(FATAL_ERROR "Could not find SoXt library and/or headers")
     endif()
     set(INVENTOR_INCLUDE_DIR "${INVENTOR_INCLUDE_DIR}" "${INVENTOR_SOXT_INCLUDE_DIR}")
     find_package(Motif REQUIRED)
     find_package(X11 REQUIRED)
+
+    if(NOT X11_Xpm_FOUND)
+      message(FATAL_ERROR "Could not find X11 Xpm headers and/or library (Required by GEANT4_USE_INVENTOR)")
+    endif()
   endif()
 
   GEANT4_ADD_FEATURE(

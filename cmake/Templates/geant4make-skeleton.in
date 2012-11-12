@@ -127,16 +127,8 @@
 
 #-----------------------------------------------------------------------
 # Resource file paths
-# N.B. Data Library Paths are only set if they were installed by CMake
 #
-@GEANT4_TC_G4LEDATA@
-@GEANT4_TC_G4LEVELGAMMADATA@
-@GEANT4_TC_G4NEUTRONHPDATA@
-@GEANT4_TC_G4NEUTRONXSDATA@
-@GEANT4_TC_G4PIIDATA@
-@GEANT4_TC_G4RADIOACTIVEDATA@
-@GEANT4_TC_G4REALSURFACEDATA@
-@GEANT4_TC_G4SAIDXSDATA@
+@GEANT4_TC_DATASETS@
 
 #-----------------------------------------------------------------------
 # Optional components.

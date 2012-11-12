@@ -29,6 +29,81 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+12th November 2012 - Ben Morgan       (cmake-V09-05-67)
+- Modules/Geant4MakeRules_cxx.cmake : Add -Qunused-arguments flag
+  to compiler flags when running Clang. This is to finally suppress
+  warnings when building tests, which CTest cannot filter out.
+
+
+9th November 2012 - Ben Morgan        (cmake-V09-05-66)
+- Resubmission of cmake-V09-05-64+cmake-V09-05-65. Former was
+  rejected after clang warnings, which are now ignored by the
+  CTest system. Latter passed Continuous builds without issue and
+  only affects Windows systems.
+
+
+8th November 2012 - Ben Morgan        (cmake-V09-05-65)
+- Modules/Geant4MakeRules_cxx.cmake : Remove MD flags from core flags.
+  Add MD flag to Release style build modes (RELEASE, MINSIZEREL and
+  RELWITHDEBINFO). Add MDd flag to Debug style build modes (DEBUG,
+  TESTRELEASE, MAINTAINER).
+  This follows discussions originated from HyperNews:
+  http://hypernews.slac.stanford.edu:5090/HyperNews/geant4/get/installconfig/1436/1.html
+
+
+7th November 2012 - Ben Morgan        (cmake-V09-05-64)
+- [BUGFIX #1351]
+- Geant4MacroUtilities.cmake : Implement new functions set_ifnot
+  and enum_option
+- Geant4MakeRules_cxx.cmake : Implement C++ Standard detection and
+  flag configuration for GNU, Clang and Intel compilers.
+- Geant4LibraryBuildOptions.cmake : Add user option to select C++
+  Standard to build against, it the compiler supports this. The
+  default is always c++98/'ansi' (C++98 plus the '03 addenda).
+
+
+5th November 2012 - Ben Morgan        (cmake-V09-05-63)
+- Modules/Geant4InterfaceOptions.cmake: Remove requirement to co-work
+  with internal tag openinventor-V09-05-16.
+
+
+5th November 2012 - Ben Morgan        (cmake-V09-05-62)
+- Modules/Geant4InterfaceOptions.cmake: Check that X11 Xpm library
+  has been found when Inventor driver is activated, and FATAL_ERROR
+  is it is not located.
+
+
+2nd November 2012 - Ben Morgan        (cmake-V09-05-61)
+- [BUGFIX #1285]
+- Modules/Geant4InstallData.cmake: Implement new
+  API for managing data to allow reuse of existing datasets and
+  not install data at build time if required.
+- Modules/Geant4DatasetDefinitions.cmake: Migrate dataset definitions
+  to separate file to ease update and patch cycle.
+- Modules/Geant4ToolchainBackwardCompatibility.cmake: Migrate export
+  of dataset environment variables/paths to use new dataset API. Avoids
+  hardcoding of dataset names, allowing for easy expansion/contraction
+  in the future.
+- Modules/Geant4CTest.cmake: Migrate setting of GEANT4_TEST_ENVIRONMENT
+  to use new dataset API for export of environment variable names and
+  values.
+- Templates/geant4make-skeleton.in: Migrate expansion variables for
+  datasets to single 'code block' variable.
+- Templates/geant4-env-skeleton.in: Migrate expansion variables for
+  datasets to single 'code block' variable.
+- [PERFORMANCE]: Tidy up module inclusions to provide minor, but
+  noticeable, speed up in CMake configuration time.
+- Modules/Geant4MacroDefineModule.cmake: Use 'header guard' variable to
+  prevent module being loaded multiple times.
+- Modules/Geant4MacroLibraryTargets.cmake: Use 'header guard' variable to
+  prevent module being loaded multiple times.
+- Modules/Geant4MacroUtilities.cmake: Include Geant4MacroDefineModule
+  and Geant4MacroLibraryTargets so these are included at top level and
+  hence are not re-parsed by CMake if they are included in lower scopes.
+- [CLEANUP]
+- Templates/geant4-env.csh.in: Remove obsolete file.
+- Templates/geant4-env.sh.in: Remove obsolete file.
+
 
 31st October 2012 - Ben Morgan        (cmake-V09-05-60)
 - Modules/Geant4InstallData.cmake: Remove obsolete ABLA dataset.
