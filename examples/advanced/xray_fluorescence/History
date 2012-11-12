@@ -19,6 +19,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06-11-2012 L. Pandola Tag: XrayFluo-V09-05-05
+- Fix syntax in CMakeLists.txt
+
 26-10-2012 L. Pandola Tag: XrayFluo-V09-05-04
 - Replace CMakeLists.txt to deal with UI/VIS
 
