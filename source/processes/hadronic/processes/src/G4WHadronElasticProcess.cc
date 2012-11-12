@@ -56,6 +56,7 @@
 #include "G4HadronElasticDataSet.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4HadronicException.hh"
+#include "G4HadronicDeprecate.hh"
 
 G4WHadronElasticProcess::G4WHadronElasticProcess(const G4String& pName)
   : G4HadronicProcess(pName, fHadronElastic) {
@@ -63,6 +64,7 @@ G4WHadronElasticProcess::G4WHadronElasticProcess(const G4String& pName)
   theNeutron  = G4Neutron::Neutron();
   lowestEnergy = 1.*keV;
   lowestEnergyNeutron = 1.e-6*eV;
+  G4HadronicDeprecate("G4WHadronElasticProcess");
 }
 
 G4WHadronElasticProcess::~G4WHadronElasticProcess()

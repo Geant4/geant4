@@ -16,6 +16,16 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+06 November 2012 Vladimir Ivantchenko (hadr-proc-V09-05-12)
+-------------------------------------------------------
+- Fixed History
+- G4WHadronElasticProcess - marked as obsolete
+
+02 November 2012 Vladimir Ivantchenko (hadr-proc-V09-05-11)
+-------------------------------------------------------
+- G4HadronElasticProcess - added warning for obsolete method,
+    use cut for recoil as energy threshold to produce recoil ion
+
 20 September 2012 Gabriele Cosmo (hadr-proc-V09-05-10)
 -------------------------------------------------------
 - Explicitly use inclusion of headers for system of units and physical
@@ -63,7 +73,7 @@ Requires co-working base tag hadr-man-V09-05-16
 --------------------------------------------------------
 - G4WHadronElasticProcess - time and weight for recoil are
     copied from the primary particle directly to avoid 
-    inconsistency of parameters definition 
+    inconsistency of parameters definition - fixed bug #1305
 
 22 February 2012 Vladimir Ivantchenko (hadr-proc-V09-05-01)
 --------------------------------------------------------

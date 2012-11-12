@@ -44,14 +44,13 @@
 #include "G4HadronElasticDataSet.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4HadronicException.hh"
+#include "G4HadronicDeprecate.hh"
 
 G4HadronElasticProcess::G4HadronElasticProcess(const G4String& pName)
-  : G4HadronicProcess(pName, fHadronElastic) 
+  : G4HadronicProcess(pName, fHadronElastic), isInitialised(false)
 {
   AddDataSet(new G4HadronElasticDataSet);
-  theNeutron  = G4Neutron::Neutron();
   lowestEnergy = 1.*keV;
-  lowestEnergyNeutron = 1.e-6*eV;
 }
 
 G4HadronElasticProcess::~G4HadronElasticProcess()
@@ -100,9 +99,7 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
 
   // NOTE:  Very low energy scatters were causing numerical (FPE) errors
   //        in earlier releases; these limits have not been changed since.
-  if (part == theNeutron) {
-    if (kineticEnergy <= lowestEnergyNeutron) return theTotalResult;
-  } else if (kineticEnergy <= lowestEnergy)   return theTotalResult;
+  if (kineticEnergy <= lowestEnergy)   return theTotalResult;
 
   G4Material* material = track.GetMaterial();
   G4Nucleus* targNucleus = GetTargetNucleusPointer();
@@ -200,8 +197,7 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
 
   // NOTE:  Very low energy scatters were causing numerical (FPE) errors
   //        in earlier releases; these limits have not been changed since.
-  if((part == theNeutron && efinal <= lowestEnergyNeutron) || 
-     (part != theNeutron && efinal <= lowestEnergy)) {
+  if(efinal <= lowestEnergy) {
     edep += efinal;
     efinal = 0.0;
   }
@@ -229,7 +225,7 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
   if(result->GetNumberOfSecondaries() > 0) {
     G4DynamicParticle* p = result->GetSecondary(0)->GetParticle();
 
-    if(p->GetKineticEnergy() > lowestEnergy) {
+    if(p->GetKineticEnergy() > tcut) {
       theTotalResult->SetNumberOfSecondaries(1);
       G4ThreeVector pdir = p->GetMomentumDirection();
       // G4cout << "recoil " << pdir << G4endl;
@@ -257,3 +253,26 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
 
   return theTotalResult;
 }
+
+void 
+G4HadronElasticProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
+{
+  if(!isInitialised) {
+    isInitialised = true;
+    if(G4Neutron::Neutron() == &part) { lowestEnergy = 1.e-6*eV; }
+  }
+  G4HadronicProcess::PreparePhysicsTable(part);
+}
+
+void G4HadronElasticProcess::SetLowestEnergy(G4double val)
+{
+  lowestEnergy = val;
+}
+
+void 
+G4HadronElasticProcess::SetLowestEnergyNeutron(G4double val)
+{
+  lowestEnergy = val;
+  G4HadronicDeprecate("G4HadronElasticProcess::SetLowestEnergyNeutron()");
+}
+

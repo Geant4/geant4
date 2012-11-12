@@ -58,9 +58,14 @@ public:
   virtual G4VParticleChange* PostStepDoIt(const G4Track& aTrack, 
 					  const G4Step& aStep);
 
-  inline void SetLowestEnergy(G4double);
+  // initialise thresholds
+  virtual void PreparePhysicsTable(const G4ParticleDefinition&);
 
-  inline void SetLowestEnergyNeutron(G4double);
+  // set internal limit
+  virtual void SetLowestEnergy(G4double);
+
+  // obsolete method - will be removed
+  virtual void SetLowestEnergyNeutron(G4double);
 
   virtual void Description() const;
 
@@ -70,23 +75,8 @@ private:
   G4HadronElasticProcess& operator=(const G4HadronElasticProcess &right);
   G4HadronElasticProcess(const G4HadronElasticProcess& );
 
-  const G4ParticleDefinition* theNeutron;
-
-  G4double        lowestEnergy;
-  G4double        lowestEnergyNeutron;
+  G4double lowestEnergy;
+  G4bool   isInitialised;
 };
-
-inline void 
-G4HadronElasticProcess::SetLowestEnergy(G4double val)
-{
-  lowestEnergy = val;
-}
-
-inline void 
-G4HadronElasticProcess::SetLowestEnergyNeutron(G4double val)
-{
-  lowestEnergyNeutron = val;
-}
-
 
 #endif
