@@ -15,6 +15,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+6 November 2012 Gabriele Cosmo (hadr-lend-V09-05-04)
+----------------------------------------------
+Fix for porting on AIX in statusMessageReporting source code.
+
 26 September 2012 Gabriele Cosmo (hadr-lend-V09-05-03)
 ----------------------------------------------
 Explicitly use inclusion of headers for system of units and physical

@@ -140,11 +140,12 @@ char *smr_vallocateFormatMessage( const char *fmt, va_list *args ) {
     while( 1 ) {
         if( ( message = (char *) realloc( message, size ) ) == NULL ) return( NULL );
         //TK110426
-#ifndef WIN32
-        __va_copy( args_, *args );
-#endif
-#ifdef WIN32
+#if defined WIN32
         args_ = *args;
+#elif defined __IBMCPP__
+        va_copy( args_, *args );
+#else
+        __va_copy( args_, *args );
 #endif
         n = vsnprintf( message, size, fmt, args_ );
         va_end( args_ );
