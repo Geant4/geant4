@@ -78,6 +78,10 @@ public:
   G4float G1, G2, G3, G4;
   G4int model, coef, profile, grid;
 
+  G4LogicalVolume* GetLogicalWorld() {return logicWorld;};
+  G4LogicalVolume* GetLogicalVol() {return logicVol;};
+  G4LogicalVolume* GetLogicalGrid() {return logicControlVol_GridShadow;};
+
 private:
    
   void DefineMaterials();
