@@ -15,23 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-29/11/11 B.Morgan (exbasic-V09-04-05)
-- Fixed CMakeLists.txt to setup UI and VIS as needed, and copy all macros
-  to build directory so executable is runnable directly.
-
-23/11/11 I. Hrivnacova (exbasic-V09-04-04)     
-- Fixed the example name in the top comment line in init.mac and
-  init_vis.mac  
-
-21/11/11 I. Hrivnacova (exbasic-V09-04-03)     
+21/11/11 I. Hrivnacova 
 - Improved vis.mac
 - Removed alternative detector construction class  
 
-18/11/11 I. Hrivnacova (exbasic-V09-04-02)
-- Fixes in macros and README files
-     
-14/11/11 I. Hrivnacova (exbasic-V09-04-00)
-- The first tagged version of the new B3 example.
+14/11/11 I. Hrivnacova
+- The first tagged version of the new B3 example
+  (tagged in basic).
 
 11-11-11 (mma)     
 - EventAction: printModulo 10000

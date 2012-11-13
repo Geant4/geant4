@@ -44,7 +44,9 @@ target_link_libraries(exampleB4b ${Geant4_LIBRARIES})
 set(EXAMPLEB4B_SCRIPTS
   exampleB4b.out
   exampleB4.in
+  icons.mac
   gui.mac
+  run.png
   init.mac
   init_vis.mac
   run1.mac
