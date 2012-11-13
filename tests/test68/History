@@ -13,6 +13,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13 Nov 2012 Alberto Ribon                test68-V09-05-09
+- Fixed the massive non-reproducibility in Windows due to use of
+  a Unix command (mv) in the script reproducibility.py .
+
 11 Oct 2012 Gabriele Cosmo               test68-V09-05-08
 - Explicit inclusion of units and constants headers.
 

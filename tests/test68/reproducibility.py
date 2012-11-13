@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #-------------------------------------------------------------------------
-# Last update: 10-Oct-2012
+# Last update: 13-Nov-2012
 #
 # This python script, which has at most one input parameter
 # (the configuration in which Geant4 has been built: this is needed only
@@ -140,12 +140,17 @@ if ( len( sys.argv ) > 1 ) :
 
 # For Windows platform, set the proper path and add ".exe" to the
 # executable name.
+# 13-Nov-2012: the Unix command "mv" must be replaced by "rename" in Windows.
+
+
 executable_path = "."
 executable_name = "test68"
+rename_command = "mv"
 if ( platform.system() == 'Windows' ) :
   executable_path = configuration
   executable_name += ".exe"
-  print ' executable_path=', executable_path, ' ; executable_name=', executable_name
+  rename_command = "rename"
+  print ' executable_path=', executable_path, ' ; executable_name=', executable_name, ' ; rename_command=', rename_command
 
 for iCase in listCases :
 
@@ -201,10 +206,10 @@ for iCase in listCases :
             g4file.write( "/mydet/update \n" )
             if ( i == 0 ) :
                 g4file.write( "/run/beamOn " + NumEvents + " \n" )
-                g4file.write( "/control/shell mv currentEvent.rndm event_0.rndm" + suffix + " \n" )
+                g4file.write( "/control/shell %s currentEvent.rndm event_0.rndm%s \n" %( rename_command, suffix ) )
                 for j in range( NumSingleEventChecks-1 ) :
                     g4file.write( "/run/beamOn " + str( GapBetweenExtraSingleEventChecks+1 ) + " \n" )
-                    g4file.write( "/control/shell mv currentEvent.rndm event_" + str( j+1 ) + ".rndm" + suffix + " \n" )
+                    g4file.write( "/control/shell %s currentEvent.rndm event_%d.rndm%s \n" %( rename_command, j+1, suffix ) )
             else :
                 g4file.write( "/run/beamOn 1 \n" )
             g4file.close()
