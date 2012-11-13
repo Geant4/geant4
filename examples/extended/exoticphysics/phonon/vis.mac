@@ -1,0 +1,32 @@
+#
+# create empty scene
+#
+/vis/scene/create
+#
+# Create a scene handler for a specific graphics system
+# (Edit the next line(s) to choose another graphic system)
+#
+/vis/open OGL
+#
+# draw scene
+#
+/vis/viewer/reset
+/vis/viewer/set/viewpointThetaPhi 180. 90. deg
+/vis/viewer/zoom 1.4
+#
+# for drawing the tracks
+# (if too many tracks cause core dump => storeTrajectory 0)
+/tracking/storeTrajectory 1
+/vis/scene/endOfEventAction accumulate
+/vis/scene/add/trajectories
+/vis/scene/add/hits
+
+
+/vis/modeling/trajectories/create/drawByParticleID
+
+
+/vis/modeling/trajectories/drawByParticleID-0/set XTPhononSlow Red 
+/vis/modeling/trajectories/drawByParticleID-0/set XTPhononFast Green
+/vis/modeling/trajectories/drawByParticleID-0/set XLPhonon Blue
+
+/run/beamOn 1

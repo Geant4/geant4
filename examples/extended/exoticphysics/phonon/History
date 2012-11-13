@@ -1,0 +1,43 @@
+$Id: $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Phonon Example History file
+                    -----------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+1 November 2012: D. Brandt (phononExample-V09-05-04)
+- Renamed directory from phononExample to phonon, per Gabriele Cosmo.
+
+1 November 2012: D. Brandt (phononExample-V09-05-03)
+- XPhononReflectionProcess.cc: Fix uninitialized variable.
+
+30 October 2012: D. Brandt (phononExample-V09-05-02)
+- XAlminumElectrodeSensitivity constructor now checks for existence
+  of output files. If files exist, output is appended, if not they
+  are created
+- Path for crystal map files is now taken from CRYSTALMAPS
+  environment variable
+- Added inline comments
+
+29 October 2012: I. Hrivnacova (phononExample-V09-05-01)
+- Added explicit include of units and physical constants
+- Replaced own defined PI with pi from physical constants
+- Adding Copyright where missing
+- Allocate XLogicalLattice on heap to avoid a stack overflow 
+- Added file descriptions (for Doxygen documentation)
+- Added .README file
+- Replaced tabulations with space characters
+
+26 October 2012: M.Asai (phononExample-V09-05-00)
+- Introducing a new example.
+

@@ -6,12 +6,16 @@
 /*! \page Examples_exoticphysics Category "exoticphysics"
 
  Examples in this directory demonstrate exotic physics applications. 
- Currently, only one example is provided:
+ Currently, two examples are provided:
 
 \link Examplemonopole monopole \endlink
 
 This example is devoted to the energy deposited by classical magnetic
 monopole.
+
+\link Examplephonon phonon \endlink
+
+This example simulates phonons in sub-Kelvin temperature Germanium crystal.
 
 */
 
