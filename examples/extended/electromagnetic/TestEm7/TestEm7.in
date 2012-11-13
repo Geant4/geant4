@@ -24,6 +24,7 @@
 /testem/phys/addPhysics   emstandard_opt3
 #
 /run/initialize
+/analysis/setActivation false
 #
 /gun/particle proton
 /gun/energy 160 MeV

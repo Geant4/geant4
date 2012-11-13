@@ -236,8 +236,8 @@ public:
         /// It returns the integral of the function over the domain requested
     /// with error tolerances as specified.  It is just a front-end to partial_integrals()
     /// 
-    /// \param xmin lower bound of the domain for integration
-        /// \param xmax upper bound of the domain for integration
+    /// \param amin lower bound of the domain for integration
+        /// \param amax upper bound of the domain for integration
     /// \param partials if non-NULL, a vector in which to receive the partial integrals.
         /// It will automatically be sized appropriately, if provided, to contain \a n - 1 elements where \a n is the length of \a xgrid  
     /// \param abs_tol the absolute error bound for each segment
@@ -249,7 +249,7 @@ public:
     /// with no error checking.
     /// \param extrapolate if true, use simple Richardson extrapolation on the final 2 steps to reduce the error.
     /// \return sum of partial integrals, which is the definite integral from the first value in \a xgrid to the last.
-        float_type integral(float_type xmin, float_type xmax, std::vector<float_type> *partials = 0,
+        float_type integral(float_type amin, float_type amax, std::vector<float_type> *partials = 0,
              float_type abs_tol=1e-12, float_type rel_tol=1e-12, int derivs=2, bool adapt=true, bool extrapolate=true) 
                 const throw(c2_exception);
 
@@ -280,8 +280,8 @@ public:
         ///
         /// \note the \a sampling_grid of the returned function matches the \a sampling_grid of its parent.
         /// \see \ref sample_function_for_plotting "Adaptive Sampling Examples"
-    /// \param xmin lower bound of the domain for sampling
-        /// \param xmax upper bound of the domain for sampling
+    /// \param amin lower bound of the domain for sampling
+        /// \param amax upper bound of the domain for sampling
     /// \param abs_tol the absolute error bound for each segment
     /// \param rel_tol the fractional error bound for each segment. 
         /// \param derivs if 0 or 1, return a useless function, but fill in the \a xvals and \a yvals vectors (if non-null).
@@ -290,7 +290,7 @@ public:
         /// \param [in,out] xvals vector of abscissas at which the function was actually sampled (if non-null)
         /// \param [in,out] yvals vector of function values corresponding to \a xvals (if non-null)
         /// \return a new, sampled representation, if \a derivs is 2.  A null pointer if \a derivs is 0 or 1.
-        c2_piecewise_function_p<float_type> *adaptively_sample(float_type xmin, float_type xmax,
+        c2_piecewise_function_p<float_type> *adaptively_sample(float_type amin, float_type amax,
                  float_type abs_tol=1e-12, float_type rel_tol=1e-12,
                  int derivs=2, std::vector<float_type> *xvals=0, std::vector<float_type> *yvals=0) const throw(c2_exception);
         
@@ -299,7 +299,7 @@ public:
         /// \brief return the upper bound of the domain for this function as set by set_domain()
         inline float_type xmax() const { return fXMax; }
         /// \brief set the domain for this function.
-        void set_domain(float_type xmin, float_type xmax) { fXMin=xmin; fXMax=xmax; }
+        void set_domain(float_type amin, float_type amax) { fXMin=amin; fXMax=amax; }
                 
         /// \brief this is a counter owned by the function but which can be used to monitor efficiency of algorithms.
         ///
@@ -334,11 +334,11 @@ public:
         
     /// \brief return the grid of 'interesting' points along this function which lie in the region requested
         ///
-    /// if a sampling grid is defined, work from there, otherwise return vector of (xmin, xmax)
-        /// \param xmin the lower bound for which the function is to be sampled
-        /// \param xmax the upper bound for which the function is to be sampled
+    /// if a sampling grid is defined, work from there, otherwise return vector of (amin, amax)
+        /// \param amin the lower bound for which the function is to be sampled
+        /// \param amax the upper bound for which the function is to be sampled
         /// \param [in,out] grid filled vector containing the samplng grid.
-        virtual void get_sampling_grid(float_type xmin, float_type xmax, std::vector<float_type> &grid) const ;
+        virtual void get_sampling_grid(float_type amin, float_type amax, std::vector<float_type> &grid) const ;
         
         /// \brief clean up endpoints on a grid of points
         /// \param[in,out] result the sampling grid with excessively closely space endpoints removed.
@@ -350,25 +350,25 @@ public:
         void refine_sampling_grid(std::vector<float_type> &grid, size_t refinement) const;                
         
         /// \brief create a new c2_function from this one which is normalized on the interval 
-    /// \param xmin lower bound of the domain for integration
-        /// \param xmax upper bound of the domain for integration
+    /// \param amin lower bound of the domain for integration
+        /// \param amax upper bound of the domain for integration
         /// \param norm the desired integral for the function over the region
         /// \return a new c2_function with the desired \a norm.
-        c2_function<float_type> &normalized_function(float_type xmin, float_type xmax, float_type norm=1.0) const throw(c2_exception);
+        c2_function<float_type> &normalized_function(float_type amin, float_type amax, float_type norm=1.0) const throw(c2_exception);
         /// \brief create a new c2_function from this one which is square-normalized on the interval 
-    /// \param xmin lower bound of the domain for integration
-        /// \param xmax upper bound of the domain for integration
+    /// \param amin lower bound of the domain for integration
+        /// \param amax upper bound of the domain for integration
         /// \param norm the desired integral for the function over the region
         /// \return a new c2_function with the desired \a norm.
-        c2_function<float_type> &square_normalized_function(float_type xmin, float_type xmax, float_type norm=1.0) const throw(c2_exception);
+        c2_function<float_type> &square_normalized_function(float_type amin, float_type amax, float_type norm=1.0) const throw(c2_exception);
         /// \brief create a new c2_function from this one which is square-normalized with the provided \a weight on the interval 
-    /// \param xmin lower bound of the domain for integration
-        /// \param xmax upper bound of the domain for integration
+    /// \param amin lower bound of the domain for integration
+        /// \param amax upper bound of the domain for integration
         /// \param weight a c2_function providing the weight
         /// \param norm the desired integral for the function over the region
         /// \return a new c2_function with the desired \a norm.
         c2_function<float_type> &square_normalized_function(
-                float_type xmin, float_type xmax, const c2_function<float_type> &weight, float_type norm=1.0)
+                float_type amin, float_type amax, const c2_function<float_type> &weight, float_type norm=1.0)
                 const throw(c2_exception);
 
         /// \brief factory function to create a c2_sum_p from a regular algebraic expression.
@@ -808,11 +808,11 @@ public:
         /// \brief clear our function
         void unset_function() { func.unset_function(); }
         
-        virtual void get_sampling_grid(float_type xmin, float_type xmax, std::vector<float_type> &grid) const 
+        virtual void get_sampling_grid(float_type amin, float_type amax, std::vector<float_type> &grid) const 
         {        
                 if(!func.valid()) throw c2_exception("c2_plugin_function_p called uninitialized");
-                if(this->sampling_grid) c2_function<float_type>::get_sampling_grid(xmin, xmax, grid);
-                else  func->get_sampling_grid(xmin, xmax, grid);
+                if(this->sampling_grid) c2_function<float_type>::get_sampling_grid(amin, amax, grid);
+                else  func->get_sampling_grid(amin, amax, grid);
         }
 protected:
         c2_ptr<float_type> func;
@@ -1421,8 +1421,8 @@ public:
     /// \brief do the dirty work of constructing the spline from a function.
     /// \param func a function without any requirement of valid derivatives to sample into an interpolating function.
         /// Very probably a c2_classic_function.
-    /// \param xmin the lower bound of the region to sample
-    /// \param xmax the upper bound of the region to sample
+    /// \param amin the lower bound of the region to sample
+    /// \param amax the upper bound of the region to sample
         /// \param abs_tol the maximum absolute error permitted when linearly interpolating the points.
         /// the real error will be much smaller, since this uses cubic splines at the end.
         /// \param rel_tol the maximum relative error permitted when linearly interpolating the points.
@@ -1436,7 +1436,7 @@ public:
         /// \a abs_tol, and 0 in \a rel_tol since the absolute error on the log of a function is the relative error
         /// on the function itself. 
         interpolating_function_p<float_type> &  sample_function(const c2_function<float_type> &func, 
-                          float_type xmin, float_type xmax, float_type abs_tol, float_type rel_tol,
+                          float_type amin, float_type amax, float_type abs_tol, float_type rel_tol,
                           bool lowerSlopeNatural, float_type lowerSlope, 
                           bool upperSlopeNatural, float_type upperSlope
                           ) throw(c2_exception);
@@ -1671,10 +1671,10 @@ public:
         { float_type q=std::sin(x); if(yprime) *yprime=std::cos(x); if(yprime2) *yprime2=-q; return q; }        
     
     /// \brief return a grid dynamically, suitable for use with trig functions with period 2*pi
-    /// \param xmin the lower bound for the grid
-    /// \param xmax upper bound for the grid
+    /// \param amin the lower bound for the grid
+    /// \param amax upper bound for the grid
     /// \param [in, out] grid the sampling grid.
-        virtual void get_sampling_grid(float_type xmin, float_type xmax,  std::vector<float_type> &grid) const; 
+        virtual void get_sampling_grid(float_type amin, float_type amax,  std::vector<float_type> &grid) const; 
 };
 
 /// \brief compute cos(x) with its derivatives.

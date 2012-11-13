@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02-11-12 V.Ivant (testem7-V09-05-10)
+- c2_functions - fixed variable shadowing
      
 19-10-12 mma (testem7-V09-05-09)
 - PhysListEmStandard: use G4UrbanMsc96
@@ -35,7 +38,7 @@ track of all tags.
 - HistoManager : use G4AnalysisManager
 
 11-07-12 V.Ivant (testem7-V09-05-05)
-- c2_functions - rmoved not used arguments
+- c2_functions - removed not used arguments
 
 12-04-12 V.Ivant (testem7-V09-05-04)
 - c2_functions (M.Mendenhall) fixed compillation problems at gcc 4.7

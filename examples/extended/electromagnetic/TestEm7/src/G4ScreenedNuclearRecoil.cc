@@ -847,17 +847,17 @@ std::vector<G4String> G4NativeScreenedCoulombCrossSection::GetScreeningKeys() co
 
 static inline G4double cm_energy(G4double a1, G4double a2, G4double t0) {
         // "relativistically correct energy in CM frame"
-        G4double m1=a1*amu_c2, m2=a2*amu_c2;
-        G4double mc2=(m1+m2);
-        G4double f=2.0*m2*t0/(mc2*mc2);
+        G4double m1=a1*amu_c2, mass2=a2*amu_c2;
+        G4double mc2=(m1+mass2);
+        G4double f=2.0*mass2*t0/(mc2*mc2);
         // old way: return (f < 1e-6) ?  0.5*mc2*f : mc2*(std::sqrt(1.0+f)-1.0);
         // formally equivalent to previous, but numerically stable for all f without conditional
         // uses identity (sqrt(1+x) - 1)(sqrt(1+x) + 1) = x
         return mc2*f/(std::sqrt(1.0+f)+1.0); 
 }
 
-static inline G4double  thetac(G4double m1, G4double m2, G4double eratio) {
-        G4double s2th2=eratio*( (m1+m2)*(m1+m2)/(4.0*m1*m2) );
+static inline G4double  thetac(G4double m1, G4double mass2, G4double eratio) {
+        G4double s2th2=eratio*( (m1+mass2)*(m1+mass2)/(4.0*m1*mass2) );
         G4double sth2=std::sqrt(s2th2);
         return 2.0*std::asin(sth2);
 }
@@ -876,9 +876,9 @@ void G4NativeScreenedCoulombCrossSection::LoadData(G4String screeningKey, G4int 
         
         G4int nMaterials = G4Material::GetNumberOfMaterials();
         
-        for (G4int m=0; m<nMaterials; m++)
+        for (G4int im=0; im<nMaterials; im++)
     {
-                const G4Material* material= (*materialTable)[m];
+                const G4Material* material= (*materialTable)[im];
                 const G4ElementVector* elementVector = material->GetElementVector();
                 const G4int nMatElements = material->GetNumberOfElements();
                 
