@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13-Nov-2012  M.Gayer (geom-specific-V09-05-19)
+- More fixes for out-of-bound array accesses in G4SurfaceVoxelizer.
+
 12-Nov-2012  M.Gayer (geom-specific-V09-05-18)
 - Fixed out-of-bound array access in BuildReduceVoxels2().
 

@@ -515,9 +515,13 @@ void G4SurfaceVoxelizer::BuildReduceVoxels(std::vector<G4double> boundaries[],
       for (G4int j = 0; j < max; ++j)
       {
         if (j != skip)
+        {
           reducedBoundary[cur++] = boundary[j];
-        else 
-          skip = mergings[++i] + 1;
+        }
+        else
+        {
+          if (++i < (G4int)mergings.size())  { skip = mergings[i] + 1; }
+        }
       }
       boundaries[k] = reducedBoundary;
     }
@@ -936,7 +940,7 @@ G4SurfaceVoxelizer::DistanceToNext(const G4ThreeVector &point,
     G4int cur = curVoxel[i];
     if(direction[i] >= 1e-10)
     {
-      if (boundary[++cur] - point[i] < fTolerance) // make sure shift would
+        if (boundary[cur] - point[i] < fTolerance) // make sure shift would
         if (++cur >= (G4int) boundary.size())      // be non-zero
           continue;
     }
@@ -975,7 +979,7 @@ G4SurfaceVoxelizer::UpdateCurrentVoxel(const G4ThreeVector &point,
     if (direction[i] > 0) 
     {
       if (point[i] >= boundary[++index]) 
-        if (++curVoxel[i] >= (G4int) boundary.size())
+        if (++curVoxel[i] >= (G4int) boundary.size() - 1)
           return false;
     }
     else
