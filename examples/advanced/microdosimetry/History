@@ -9,6 +9,10 @@ $Id: History,v 1.24 2010-11-18 11:48:21 allison Exp $
                        Package History file
                        --------------------
 
+3 Nov 2012 - S.Incerti - microdosimetry-V09-05-06
+- Removed shadowing in SteppingAction
+- Updated physics list for usage of SetEmModel() method
+
 26 Oct 2012 - L.Pandola - microdosimetry-V09-05-05
 - Changed CMakeLists.txt to deal with VIS/UI
 

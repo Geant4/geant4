@@ -184,27 +184,27 @@ void PhysicsList::ConstructEM()
 
       // DNA elastic is not active in the world 
       G4DNAElastic* theDNAElasticProcess = new G4DNAElastic("e-_G4DNAElastic");
-      theDNAElasticProcess->SetModel(new G4DummyModel(),1);
+      theDNAElasticProcess->SetEmModel(new G4DummyModel(),1);
       pmanager->AddDiscreteProcess(theDNAElasticProcess);
 
       // DNA excitation is not active in the world 
       G4DNAExcitation* dnaex = new G4DNAExcitation("e-_G4DNAExcitation");
-      dnaex->SetModel(new G4DummyModel(),1);
+      dnaex->SetEmModel(new G4DummyModel(),1);
       pmanager->AddDiscreteProcess(dnaex);
 
       // DNA ionisation is not active in the world 
       G4DNAIonisation* dnaioni = new G4DNAIonisation("e-_G4DNAIonisation");
-      dnaioni->SetModel(new G4DummyModel(),1); 
+      dnaioni->SetEmModel(new G4DummyModel(),1); 
       pmanager->AddDiscreteProcess(dnaioni);
 
       // DNA attachment is not active in the world 
       G4DNAAttachment* dnaatt = new G4DNAAttachment("e-_G4DNAAttachment");
-      dnaatt->SetModel(new G4DummyModel(),1); 
+      dnaatt->SetEmModel(new G4DummyModel(),1); 
       pmanager->AddDiscreteProcess(dnaatt);
 
       // DNA vib. excitation is not active in the world 
       G4DNAVibExcitation* dnavib = new G4DNAVibExcitation("e-_G4DNAVibExcitation");
-      dnavib->SetModel(new G4DummyModel(),1); 
+      dnavib->SetEmModel(new G4DummyModel(),1); 
       pmanager->AddDiscreteProcess(dnavib);
 
       // THE FOLLOWING PROCESS WILL KILL ALL ELECTRONS BELOW A SELECTED ENERY THRESHOLD
@@ -226,14 +226,14 @@ void PhysicsList::ConstructEM()
 
       // DNA excitation is not active in the world 
       G4DNAExcitation* dnaex = new G4DNAExcitation("proton_G4DNAExcitation");
-      dnaex->SetModel(new G4DummyModel(),1);
-      dnaex->SetModel(new G4DummyModel(),2);
+      dnaex->SetEmModel(new G4DummyModel(),1);
+      dnaex->SetEmModel(new G4DummyModel(),2);
       pmanager->AddDiscreteProcess(dnaex);
 
       // DNA ionisation is not active in the world 
       G4DNAIonisation* dnaioni = new G4DNAIonisation("proton_G4DNAIonisation");
-      dnaioni->SetModel(new G4DummyModel(),1); 
-      dnaioni->SetModel(new G4DummyModel(),2); 
+      dnaioni->SetEmModel(new G4DummyModel(),1); 
+      dnaioni->SetEmModel(new G4DummyModel(),2); 
       pmanager->AddDiscreteProcess(dnaioni);
 
       // DNA charge decrease is ACTIVE in the world since no corresponding STANDARD process exist
@@ -271,12 +271,12 @@ void PhysicsList::ConstructEM()
 
       // DNA excitation is not active in the world 
       G4DNAExcitation* dnaex = new G4DNAExcitation("alpha_G4DNAExcitation");
-      dnaex->SetModel(new G4DummyModel(),1);
+      dnaex->SetEmModel(new G4DummyModel(),1);
       pmanager->AddDiscreteProcess(dnaex);
 
       // DNA ionisation is not active in the world 
       G4DNAIonisation* dnaioni = new G4DNAIonisation("alpha_G4DNAIonisation");
-      dnaioni->SetModel(new G4DummyModel(),1); 
+      dnaioni->SetEmModel(new G4DummyModel(),1); 
       pmanager->AddDiscreteProcess(dnaioni);
 
       // DNA charge decrease is ACTIVE in the world since no corresponding STANDARD process exist
