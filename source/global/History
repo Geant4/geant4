@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 5, 2012 M.Maire (global-V09-05-14)
+- Reverted change to G4UnitsTable for parsec unit definition, introduced
+  in tag "global-V09-05-10". Back to use 'pc' to avoid formatting printout
+  issues.
+
 November 1, 2012 G.Cosmo (global-V09-05-13)
 - Added missing header in sources.cmake script for management module.
 
