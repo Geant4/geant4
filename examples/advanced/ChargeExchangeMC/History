@@ -7,6 +7,9 @@ cirrone@lns.infn.it
              History file of the ChargeExchangeMC application
          ====================================================
 
+02.11.2012 - L.Garnier Tag: ChargeExchangeMC-V09-05-04
+            - Add icons.mac
+
 25.10.2012, L.Pandola & A.Radkov, Tag: ChargeExchangeMC-V09-05-03
             - Fix the CMakeLists.txt file to make Qt optional
 

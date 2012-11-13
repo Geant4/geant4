@@ -15,3 +15,6 @@
 /gui/addButton viewer "Highlight inner crystals" "/cexmc/vis/hlIC"
 /gui/addButton viewer "Unhighlight inner crystals" "/cexmc/vis/hlIC false"
 /gui/addButton viewer "Update scene" "/vis/scene/notifyHandlers"
+
+#Add an icon toolbar
+/control/execute mac/icons.mac
