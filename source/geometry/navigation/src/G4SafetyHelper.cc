@@ -111,7 +111,7 @@ G4SafetyHelper::CheckNextStep(const G4ThreeVector &position,
   return linstep;
 }
 
-G4double G4SafetyHelper::ComputeSafety( const G4ThreeVector& position ) 
+G4double G4SafetyHelper::ComputeSafety( const G4ThreeVector& position, G4double maxLength )
 {
   G4double newSafety;
 
@@ -128,7 +128,7 @@ G4double G4SafetyHelper::ComputeSafety( const G4ThreeVector& position )
     if( !fUseParallelGeometries )
     {
       // Safety for mass geometry
-      fLastSafety = fpMassNavigator->ComputeSafety(position,true); 
+      fLastSafety = fpMassNavigator->ComputeSafety(position, maxLength, true);
     }
     else
     {

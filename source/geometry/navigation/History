@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Nov  6th, 2012 - J.Apostolakis  (geomnav-V09-05-43)
+------------------------------
+ G4SafetyHelper
+  - Fixed ComputeSafety, to adapt it to use ComputeSafety with extra
+     argument, double maxRadius.  It was passing a boolean for this 
+     argument. ( That was correct until the additional argument was added.)
+
 Nov  6th, 2012 - J.Apostolakis  (geomnav-V09-05-42)
 ------------------------------
  G4Navigator::ComputeSafety
