@@ -5,6 +5,9 @@
                        Package History file
                        --------------------
 
+3 November 2012 - tag dnaphysics-V09-05-07 - S. Incerti
+- Removed shadowing in SteppingAction 
+
 26 October 2012 - tag dnaphysics-V09-05-06 - L. Pandola
 - Changed CMakeLists.txt to deal with VIS 
 
