@@ -108,7 +108,7 @@ void PhysListEmStandardISS::ConstructProcess()
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1, 3);
 
       G4CoulombScattering* cs = new G4CoulombScattering();
-      cs->AddEmModel(0, new G4eSingleCoulombScatteringModel());
+      cs->SetEmModel(new G4eSingleCoulombScatteringModel());
       pmanager->AddDiscreteProcess(cs); 
             
     } else if (particleName == "mu+" || 

@@ -14,6 +14,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12-11-12  V.Ivanchenko (test58-V09-05-01)
+- RunAction - fixed variable shadowing
+- TrackingAction added protetion for acos(x) if (x = 1 + a*1e-16)
+- PhysListEmStandardISS use SetEMModel
+
 11-10-12  G.Cosmo (test58-V09-05-00)
 - Explicit inclusion of units and constants headers.
 

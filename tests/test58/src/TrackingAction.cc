@@ -53,18 +53,17 @@ void TrackingAction::PreUserTrackingAction(const G4Track*)
 
 void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 {
+  //scattering angle of  primary particle
+  if (aTrack->GetParentID() == 0 ){
 
+    G4double theta = 0.0;
+    G4double    vx = (aTrack->GetMomentumDirection()).x(); 
 
-  	//scattering angle of  primary particle
-  	if (aTrack->GetParentID() == 0 ){
-
-  	G4ThreeVector direction = aTrack->GetMomentumDirection();    
-    	G4double theta  = std::acos(direction.x());
- 	eventaction->AddTheta(theta); 
-  
-	}
-
-
+    if(vx <= -1.0)    { theta = -CLHEP::pi; }
+    else if(vx < 1.0) { theta = std::acos(vx); }
+    else { G4cout << "TrackingAction: vx - 1 = " << vx - 1 << G4endl; }
+    eventaction->AddTheta(theta);   
+  }
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

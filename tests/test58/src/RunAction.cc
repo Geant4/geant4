@@ -115,7 +115,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4double rmssum_T = 0.0;
   if(N_rec > 0) {
     sum_T/=N_rec;     sum_T2/=N_rec;
-    G4double rmssum_T =sum_T2- sum_T*sum_T;
+    rmssum_T =sum_T2- sum_T*sum_T;
     if(rmssum_T>0.) rmssum_T=std::sqrt(rmssum_T/N_rec);
   }
 
