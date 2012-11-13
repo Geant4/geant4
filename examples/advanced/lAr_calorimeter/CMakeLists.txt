@@ -54,6 +54,7 @@ set(EXAMPLELARCALORIMETER_SCRIPTS
   run1.mac
   run2.mac
   vis.mac
+  icons.mac
   )
 
 foreach(_script ${EXAMPLELARCALORIMETER_SCRIPTS})
