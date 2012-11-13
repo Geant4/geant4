@@ -15,6 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13 November 2012: P Mato (phononExample-V09-05-06)
+- Added property svn:eol-style native to caustic.out and timing.out files
+
+12 November 2012: P Mato (phononExample-V09-05-05)
+- Removed open mode fstream::in for output files. This will make
+  the associated test not to fail on Windows(VC9).
+
 1 November 2012: D. Brandt (phononExample-V09-05-04)
 - Renamed directory from phononExample to phonon, per Gabriele Cosmo.
 

@@ -53,8 +53,8 @@ XAlminumElectrodeSensitivity::XAlminumElectrodeSensitivity(G4String name)
   G4String HCname;
   collectionName.insert(HCname="XAlminumElectrodeHit");
   HCID = -1;
-  fWriter.open("caustic.ssv",fstream::in | fstream::out | fstream::ate);
-  fWriter2.open("timing.ssv", fstream::in | fstream::out | fstream::ate);
+  fWriter.open("caustic.ssv", fstream::out | fstream::ate);
+  fWriter2.open("timing.ssv", fstream::out | fstream::ate);
 
   if(!fWriter.is_open()){
     G4cout<<"\nXAlminumElectrodeSensitivity::Constructor:";
