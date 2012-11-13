@@ -8,6 +8,12 @@ $Id: History,v 1.37 2010-11-18 19:46:38 allison Exp $
 
                       Example History file
                       ---------------------
+02.11.2012 - L.Garnier Tag (ccal-V09-05-05)
+- Fix CMakeFile.txt, gui.mac and icons.mac. Now ok for cmake
+
+02.11.2012 - L.Garnier Tag (ccal-V09-05-04)
+- Add icons.mac
+
 12.10.2012 - A. Dotti (ccal-V09-05-03)
 - Adding use of AIDA in CMake
 - Removing unused variable (compilation warning)

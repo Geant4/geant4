@@ -54,6 +54,7 @@ set(EXAMPLECOMPOSITECALORIMETER_SCRIPTS
   gui.mac
   test.g4mac
   vis.mac
+  icons.mac
   )
 
 foreach(_script ${EXAMPLECOMPOSITECALORIMETER_SCRIPTS})
