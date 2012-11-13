@@ -36,7 +36,7 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "QGSP_BIC_EMY.hh"
+#include "QBBC.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -66,7 +66,7 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(new B1DetectorConstruction());
 
   // Physics list
-  G4VModularPhysicsList* physicsList = new QGSP_BIC_EMY;
+  G4VModularPhysicsList* physicsList = new QBBC;
   physicsList->SetVerboseLevel(1);
   runManager->SetUserInitialization(physicsList);
     

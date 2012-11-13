@@ -30,7 +30,7 @@ $Id$
  2- PHYSICS LIST
  
    The particle's type and the physic processes which will be available
-   in this example are set in the QGSP_BIC_EMY physics list. This physics
+   in this example are set in the QBBC physics list. This physics
    list requires data files for low energy electromagnetic processes which
    path is defined via the G4LEDATA environment variable.
  

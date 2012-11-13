@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13/11/12 I. Hrivnacova  (exampleB1-V09-05-03)
+- Use QBBC physics list instead of QGSP_BIC_EMY, which becomes
+  obsolete
+
 02/11/12 J. Allison  (exampleB1-V09-05-01 and 02)
 - README: Improved.
 
