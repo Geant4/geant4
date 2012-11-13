@@ -129,9 +129,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   // Check volume
   //
   G4Tubs* solidC = new G4Tubs("Check",0.,checkR,checkZ,0.,twopi);
-  fLogicCheck = new G4LogicalVolume( solidC,fWorldMaterial,"World");
+  fLogicCheck = new G4LogicalVolume( solidC,fWorldMaterial,"Check");
   //  G4VPhysicalVolume* physC = 
-  new G4PVPlacement(0,G4ThreeVector(),fLogicCheck,"World",fLogicWorld,false,0);
+  new G4PVPlacement(0,G4ThreeVector(),fLogicCheck,"Check",fLogicWorld,false,0);
   fLogicCheck->SetSensitiveDetector(fCheckSD);
 
   //

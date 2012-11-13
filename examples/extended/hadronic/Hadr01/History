@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13-11-12  V.Ivanchenko (exhadr01-V09-05-07)
+- updated README
+- DetectorConstruction - fixed bug in volume name
+
 17-10-12  A. Ribon (exhadr01-V09-05-06)
 - Retagged after that the previous tag was rejected.
 

@@ -4,8 +4,7 @@
 /testhadr/TargetMat        G4_Al 
 /testhadr/TargetRadius     1  cm
 /testhadr/TargetLength     10 cm
-#/testhadr/NumberDivZ       100
-/testhadr/DrawTracks       all
+#/testhadr/NumberDivZ       10
 #/testhadr/CutsAll          1 mm
 #/testhadr/Physics          QBBC
 #
@@ -38,7 +37,7 @@
 /vis/viewer/set/viewpointThetaPhi 90. 0.
 #
 # Specify zoom value:
-#/vis/viewer/zoom 2.
+/vis/viewer/zoom 1.5
 #
 # Specify style (surface or wireframe):
 #/vis/viewer/set/style wireframe
