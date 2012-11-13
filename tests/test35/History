@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+test35-V09-05-02  05 November 2012 V.Ivanchenko
+- Fixed variable shadowing
+
 test35-V09-05-01  9 October 2012 G.Cosmo
 - Explicit inclusion of units and constants headers.
 

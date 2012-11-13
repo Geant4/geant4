@@ -78,18 +78,14 @@ Test30VSecondaryGenerator::~Test30VSecondaryGenerator()
 
 G4HadFinalState* Test30VSecondaryGenerator::Secondaries(const G4Track& track)
 {
+  G4HadFinalState *result1 = 0;
   G4HadProjectile thePro(track);
   if (hInteraction) {
 
-    G4HadFinalState *result = hInteraction->ApplyYourself(thePro, targetNucleus);
-    result->SetTrafoToLab(thePro.GetTrafoToLab());
-    return result;
-//   return hInteraction->ApplyYourself(track, targetNucleus);
-
- } else {
-    return 0;
- }
-
+    result1 = hInteraction->ApplyYourself(thePro, targetNucleus);
+    result1->SetTrafoToLab(thePro.GetTrafoToLab());
+  }
+  return result1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

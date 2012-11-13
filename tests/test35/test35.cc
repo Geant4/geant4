@@ -340,8 +340,8 @@ int main(int argc, char** argv)
 		 << G4endl; 
 	  continue;
 	}
-	G4String s(c);
-	if(s=="1") { break; }
+	G4String ss(c);
+	if(ss=="1") { break; }
  	
       } else if(line == "#rad") {
 	xssolang = false;
@@ -551,7 +551,7 @@ int main(int argc, char** argv)
     double errp[50][20];
 
     double mom0 = 0.0;
-    int j, k;
+    G4int j, k;
     for(k=0; k<nmompi; k++) {
       double dp = mompi[k] - mom0;
       double ang0 = 0.0;
@@ -583,7 +583,7 @@ int main(int argc, char** argv)
     G4ParticleDefinition* pd;
     G4ThreeVector  mom;
     G4LorentzVector labv, fm;
-    G4double e, p, m, px, py, pt, theta, x;
+    G4double e, p, mass1, px, py, pt, theta, x;
     G4VParticleChange* aChange = 0;
 
     for (G4int iter=0; iter<nevt; ++iter) {
@@ -614,7 +614,7 @@ int main(int argc, char** argv)
       G4int n_pr = 0;
       G4int n_pi = 0;
       
-      for(G4int j=0; j<n; ++j) {
+      for(j=0; j<n; ++j) {
 
         sec = aChange->GetSecondary(j)->GetDynamicParticle();
         pd  = sec->GetDefinition();
@@ -632,10 +632,10 @@ int main(int argc, char** argv)
         theta = mom.theta();
         G4double cost  = cos(theta);
 
-        m = pd->GetPDGMass();
-	p = sqrt(e*(e + 2.0*m));
+        mass1 = pd->GetPDGMass();
+	p = sqrt(e*(e + 2.0*mass1));
 	mom *= p;
-	fm = G4LorentzVector(mom, e + m);
+	fm = G4LorentzVector(mom, e + mass1);
 	labv -= fm;
         px = mom.x();
         py = mom.y();
@@ -738,8 +738,8 @@ int main(int argc, char** argv)
       }
     }
     std::ofstream* fout = new std::ofstream();
-    std::string fname = hFile+"_pi+.dpdo";
-    fout->open(fname.c_str(), std::ios::out|std::ios::trunc);
+    std::string fname0 = hFile+"_pi+.dpdo";
+    fout->open(fname0.c_str(), std::ios::out|std::ios::trunc);
     ofstream* fout1 = new ofstream();
     string fname1 = hFile+"_pi-.dpdo";
     fout1->open(fname1.c_str(), std::ios::out|std::ios::trunc);
@@ -913,7 +913,7 @@ int main(int argc, char** argv)
     mom0 = 0.0;
     if(mom0 == 0.0) {
       for(k=0; k<nmompi; ++k) {
-	G4double mom1 = mompi[k];
+        mom1 = mompi[k];
 	G4cout << "## Next momentum bin " 
 	       << mom0 << "  -  " << mom1 << "  MeV/c" 
 	       << G4endl;
