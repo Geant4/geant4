@@ -279,8 +279,8 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     theStringModel->SetFragmentationModel(theQGStringDecay);
     theModel->SetTransport(theCascade);
     theModel->SetHighEnergyGenerator(theStringModel);
-    G4QuasiElasticChannel* theQuasiElastic = new G4QuasiElasticChannel;
-    theModel->SetQuasiElasticChannel(theQuasiElastic);
+    G4QuasiElasticChannel* quasiElastic = new G4QuasiElasticChannel;
+    theModel->SetQuasiElasticChannel(quasiElastic);
     theModel->SetMinEnergy(0.5*GeV);
     theModel->SetMaxEnergy(100*TeV);
     sg = new Test30VSecondaryGenerator(theModel, mat);
@@ -305,8 +305,8 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     theStringModel->SetFragmentationModel(theQGStringDecay);
     theModel->SetTransport(theCascade);
     theModel->SetHighEnergyGenerator(theStringModel);
-    G4QuasiElasticChannel* theQuasiElastic = new G4QuasiElasticChannel;
-    theModel->SetQuasiElasticChannel(theQuasiElastic);
+    G4QuasiElasticChannel* quasiElastic = new G4QuasiElasticChannel;
+    theModel->SetQuasiElasticChannel(quasiElastic);
     theModel->SetMinEnergy(0.5*GeV);
     theModel->SetMaxEnergy(100*TeV);
     sg = new Test30VSecondaryGenerator(theModel, mat);

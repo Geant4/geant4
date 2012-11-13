@@ -436,8 +436,8 @@ int main(int argc, char** argv)
 	  G4cout << "Use #run command to overcome this limitation " << G4endl;
 	  continue;
 	}
-	G4String s(c);
-	if(s=="1") { break; }
+	G4String ss(c);
+	if(ss=="1") { break; }
       } else if(line == "#run") { 
 	break; 
       } else if(line == "#verbose") {
@@ -1098,7 +1098,7 @@ int main(int argc, char** argv)
 	// for exclusive reaction 2 particles in final state
         if(!inclusive && nbar != 2) { break; }
 
-        G4double m = pd->GetPDGMass();
+        G4double mass1 = pd->GetPDGMass();
 	p = mom.mag();
         labv -= fm;
 
@@ -1112,7 +1112,7 @@ int main(int argc, char** argv)
         py = mom.y();
         pz = mom.z();
         pt = std::sqrt(px*px +py*py);
-        e  = fm.e() - m;
+        e  = fm.e() - mass1;
 
         theta = mom.theta();
         G4double cost  = std::cos(theta);
@@ -1160,8 +1160,8 @@ int main(int argc, char** argv)
 		 << pd->GetParticleName() << "  Ekin(MeV)= "
                  << e/MeV
 		 << "  p(MeV)= " << mom/MeV
-		 << "  m(MeV)= " << m/MeV
-		 << "  Etot(MeV)= " << (e+m)/MeV
+		 << "  m(MeV)= " << mass1/MeV
+		 << "  Etot(MeV)= " << (e+mass1)/MeV
 		 << "  pt(MeV)= " << pt/MeV
                  << "  std::sin(tet)= " << pt/p
                  << "  phi(deg)= " << mom.phi()/degree
@@ -1264,17 +1264,17 @@ int main(int argc, char** argv)
 	G4ParticleChange* bChange = dynamic_cast<G4ParticleChange*>(aChange);
         G4double ekin = bChange->GetEnergy();
         G4ThreeVector dir = *(bChange->GetMomentumDirection());
-        G4double mom = std::sqrt(ekin*(ekin + 2*m));
+        G4double mom1 = std::sqrt(ekin*(ekin + 2*mass));
 
         theta = dir.theta();
         G4double cost  = std::cos(theta);
         G4double thetad = theta/degree;
-        G4LorentzVector fm(dir.x()*mom,dir.y()*mom,dir.z()*mom,ekin + mass);
+        G4LorentzVector fm1(dir.x()*mom1,dir.y()*mom1,dir.z()*mom1,ekin + mass);
 
-        labv -= fm;
+        labv -= fm1;
 
-        fm.boost(-bst);
-        G4double tetcm  = fm.theta();
+        fm1.boost(-bst);
+        G4double tetcm  = fm1.theta();
         G4double tetcmd = tetcm/degree;
         G4double costcm = std::cos(tetcm);
        
@@ -1291,7 +1291,7 @@ int main(int argc, char** argv)
                  << "primary  "
 		 << namePart << "  Ekin(MeV)= "
                  << ekin/MeV
-		 << "  p(MeV)= " << mom/MeV
+		 << "  p(MeV)= " << mom1/MeV
 		 << "  m(MeV)= " << mass/MeV
 		 << "  Etot(MeV)= " << (ekin+mass)/MeV
                  << "  std::sin(tet)= " << std::sin(theta)

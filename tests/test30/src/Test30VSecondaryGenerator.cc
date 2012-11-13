@@ -117,14 +117,14 @@ G4double Test30VSecondaryGenerator::GetMass()
 
 G4HadFinalState* Test30VSecondaryGenerator::Secondaries(const G4Track& track)
 {
-  G4HadFinalState *result = 0;
+  G4HadFinalState *result1 = 0;
   G4HadProjectile thePro(track);
   if (hInteraction) {
 
-    result = hInteraction->ApplyYourself(thePro, targetNucleus);
-    result->SetTrafoToLab(thePro.GetTrafoToLab());
+    result1 = hInteraction->ApplyYourself(thePro, targetNucleus);
+    result1->SetTrafoToLab(thePro.GetTrafoToLab());
   }
-  return result;
+  return result1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
