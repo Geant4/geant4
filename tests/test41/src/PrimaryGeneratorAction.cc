@@ -59,8 +59,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   if(!isInitialised) SetDefaultKinematic();
   G4double p = ptot + (2.0*G4UniformRand() - 1.0)*sigma;
-  G4double m = particleGun->GetParticleDefinition()->GetPDGMass();
-  particleGun->SetParticleEnergy(std::sqrt(p*p + m*m) - m);
+  G4double mass = particleGun->GetParticleDefinition()->GetPDGMass();
+  particleGun->SetParticleEnergy(std::sqrt(p*p + mass*mass) - mass);
   particleGun->GeneratePrimaryVertex(anEvent);
 }
 

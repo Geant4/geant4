@@ -98,9 +98,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 void DetectorConstruction::SetWorldMaterial(const G4String& mat)
 {
   // search the material by its name
-  G4Material* m = G4NistManager::Instance()->FindOrBuildMaterial(mat);
-  if(m) {
-    matWorld = m;
+  G4Material* mate = G4NistManager::Instance()->FindOrBuildMaterial(mat);
+  if(mate) {
+    matWorld = mate;
     if(physWorld) G4RunManager::GetRunManager()->GeometryHasBeenModified();
   }
 }
@@ -108,9 +108,9 @@ void DetectorConstruction::SetWorldMaterial(const G4String& mat)
 void DetectorConstruction::SetAbsorberMaterial(const G4String& mat)
 {
   // search the material by its name
-  G4Material* m = G4NistManager::Instance()->FindOrBuildMaterial(mat);
-  if(m) {
-    matAbsorber = m;
+  G4Material* mate = G4NistManager::Instance()->FindOrBuildMaterial(mat);
+  if(mate) {
+    matAbsorber = mate;
     run->SetMaterialName(mat);
     if(physWorld) G4RunManager::GetRunManager()->GeometryHasBeenModified();
   }
