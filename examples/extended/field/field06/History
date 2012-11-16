@@ -15,6 +15,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 15th, 2012 Ivana Hrivnacova - fieldex06-V09-05-02
+------------------------------------
+- Synchronized .README with changes in README
+
+November 14th, 2012 Ivana Hrivnacova - fieldex06-V09-05-01
+------------------------------------
+- In vis.mac: replaced OGLIX with OGL
+
 November 6th, 2012 Peter Gumplinger - fieldex06-V09-05-00
 ------------------------------------
 - own Tag and History.

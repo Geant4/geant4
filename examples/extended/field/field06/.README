@@ -40,10 +40,10 @@ Classes Used
 
     G4VModularPhysicsList::ConstructProcess();
 \endverbatim
+    F06ExtraPhysics defines G4StepLimiter and G4UserSpecialCuts
+
     F06ExtraPhysics::AddBetaDecay() to "neutron" as an example of how to set a decay-table with
     decay-channel(s) to a G4ParticleDefinition.
-
-    F06ExtraPhysics defines G4StepLimiter and G4UserSpecialCuts
 
 \section field06_s5 User Action Classes
 
