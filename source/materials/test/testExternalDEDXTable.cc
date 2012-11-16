@@ -43,6 +43,7 @@
 #include "globals.hh"
 #include "G4ExtDEDXTable.hh"
 #include "G4LPhysicsFreeVector.hh"
+#include "G4SystemOfUnits.hh"
 
 
 void Test(const G4String& fileName) {

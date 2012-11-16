@@ -38,6 +38,7 @@
 #include "G4Element.hh"
 #include "G4Material.hh"
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 #include <map>
 #include <iomanip>
 
@@ -119,7 +120,7 @@ G4String matName = material->GetName();
 G4double mass = material->GetMassOfMolecule();
 
  G4cout << "\n---> " << matName << ": mass of molecule "
-        << mass << " = " << mass/g << " g = " << mass/amu << " amu" 
+  << mass << " = " << mass/g << " g = " << mass/CLHEP::amu << " amu"
         << G4endl;
 
 //

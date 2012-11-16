@@ -44,6 +44,7 @@
 
 #include "G4AtomicShells.hh"
 #include "G4Element.hh"
+#include "G4SystemOfUnits.hh"
 
 
 int main()

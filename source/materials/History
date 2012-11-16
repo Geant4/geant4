@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14-11-12 P. Mato (materials-V09-05-33)
+- Added include G4SystemOfUnits.hh in unit tests 
+
 10-10-12 V.Ivanchenko (materials-V09-05-32)
 - G4ElementData - updated and simplified 
 
