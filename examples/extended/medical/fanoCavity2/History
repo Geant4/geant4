@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14-11-12 I. Hrivnacova (fano2-V09-05-08)
+- Fixed order of instatiating G4VisExecutive and G4UIExecutive
+  (required when Qt driver is activated).
+
 13-10-12 A. Dotti (fano2-V09-05-07)
 - Removing double include of system of units
 

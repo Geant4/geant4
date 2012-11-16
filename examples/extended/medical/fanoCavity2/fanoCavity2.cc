@@ -92,6 +92,11 @@ int main(int argc,char** argv) {
   //get the pointer to the User Interface manager 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();  
 
+#ifdef G4VIS_USE
+      G4VisManager* visManager = new G4VisExecutive;
+      visManager->Initialize();
+#endif
+
   if (argc!=1)   // batch mode  
     {
      G4String command = "/control/execute ";
@@ -102,17 +107,16 @@ int main(int argc,char** argv) {
   else           // interactive mode :define visualization and UI terminal
     { 
 #ifdef G4UI_USE
+     G4UIExecutive* ui = new G4UIExecutive(argc, argv);
 #ifdef G4VIS_USE
-      G4VisManager* visManager = new G4VisExecutive;
-      visManager->Initialize();
-      UImanager->ApplyCommand("/control/execute vis.mac");     
+     UImanager->ApplyCommand("/control/execute vis.mac");     
 #endif
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-      ui->SessionStart();
-      delete ui;
-#ifdef G4VIS_USE
-      delete visManager;
+     ui->SessionStart();
+     delete ui;
 #endif     
+
+#ifdef G4VIS_USE
+     delete visManager;
 #endif     
     }
 
