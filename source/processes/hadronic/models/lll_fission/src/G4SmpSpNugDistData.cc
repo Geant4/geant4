@@ -108,10 +108,10 @@ G4int G4fissionEvent::G4SmpSpNugDistData(G4int isotope) {
 //  Cf-252 using the G4double Poisson model from Brunson;
     r=fisslibrng();
 
-    sum=0.;
-    for(i=0; i<nSPfissg; i++) {
-       sum=sum+Cf252spdist[i];
-       if (r <= sum || Cf252spdist[i+1] == 0.) return i;
+    sum = 0.;
+    for (i = 0; i < nSPfissg-1; i++) {
+      sum = sum + Cf252spdist[i];
+      if (r <= sum || Cf252spdist[i+1] == 0.) return i;
     }
   } else if (isotope == 92238) {
 /*

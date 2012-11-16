@@ -64,14 +64,13 @@
 #include "G4SystemOfUnits.hh"
 
 G4FissionLibrary::G4FissionLibrary()
-  : G4NeutronHPFinalState()
+  : G4NeutronHPFinalState(), theIsotope(0), targetMass(0.0)
 {
   hasXsec = false;
 }
 
 G4FissionLibrary::~G4FissionLibrary()
-{
-}
+{}
 
 G4NeutronHPFinalState * G4FissionLibrary::New()
 {

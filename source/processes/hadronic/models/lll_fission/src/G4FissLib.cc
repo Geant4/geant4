@@ -63,9 +63,10 @@
 #include "G4SystemOfUnits.hh"
 
 G4FissLib::G4FissLib()
+ :xSec(0)
 {
-  SetMinEnergy( 0.0 );
-  SetMaxEnergy( 20.*MeV );
+  SetMinEnergy(0.0);
+  SetMaxEnergy(20.*MeV);
   if(!getenv("G4NEUTRONHPDATA")) {
      G4cout << "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files." << G4endl;
      throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
