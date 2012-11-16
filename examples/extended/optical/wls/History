@@ -16,6 +16,9 @@ track of all tags.
  
      ----------------------------------------------------------
 
+Nov 14th, 2012 Ivana Hrivnacova (WLS-V09-05-02)
+- In vis.mac: OGLIX replaced with OGL
+
 Sep 17th, 2012 Peter Gumplinger (WLS-V09-05-01)
     remove G4TRACKING_ALLOC_EXPORT, G4DLLEXPORT and G4DLLIMPORT from
     WLSTrajectory and WLSTrajectoryPoint.

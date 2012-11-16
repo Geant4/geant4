@@ -389,7 +389,6 @@ scintillator volume.
 
 - Enables/disables the main LXe scintillator volume. By default this is part of
 the geometry.
-\endverbatim
 
 \section LXe_s8 Macro files
 

@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15 November 2012  Ivana Hrivnacova (exOptical-V09-05-01)
+- Minor fixes in .README files
+
 18 September 2012 Ivana Hrivnacova (exOptical-V09-05-00)
 - Updated CMakeLists.txt files
   adding visualization, copying macros, install target and comment lines

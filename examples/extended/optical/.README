@@ -15,7 +15,7 @@ Multi-purpose detector setup implementing:
 -# large wall of small PMTs opposite a Cerenkov slab to show the cone
 -# plastic scintillator with wave-length-shifting fiber readout.
 
-\link ExampleWLS WLS \endlink
+\link Examplewls wls \endlink
 
 This application simulates the propagation of photons inside a Wave Length
 Shifting (WLS) fiber.

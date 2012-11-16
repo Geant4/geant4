@@ -15,7 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-18 September 2012 Ivana Hrivnacova (exOptical-V09-05-00)
+14 November 2012 Ivana Hrivnacova (LXe-V09-05-01)
+- In vis.mac: OGLIX replaced with OGL
+
+18 September 2012 Ivana Hrivnacova
 - RecorderBase renamed to LXeRecorderBase (by P. Gumplinger)
   See also ../History for general changes
 
