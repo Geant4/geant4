@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/phononExample/src/XAlminumElectrodeSensitivity.cc
+/// \file exoticphysics/phonon/src/XAlminumElectrodeSensitivity.cc
 /// \brief Implementation of the XAlminumElectrodeSensitivity class
 //
 // $Id$

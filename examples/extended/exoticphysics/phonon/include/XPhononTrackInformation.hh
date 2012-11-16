@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/phononExample/include/XPhononTrackInformation.hh
+/// \file exoticphysics/phonon/include/XPhononTrackInformation.hh
 /// \brief Definition of the XPhononTrackInformation class
 //
 // $Id$

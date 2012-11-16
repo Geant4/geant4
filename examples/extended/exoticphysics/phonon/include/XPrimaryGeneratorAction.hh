@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/phononExample/include/XPrimaryGeneratorAction.hh
+/// \file exoticphysics/phonon/include/XPrimaryGeneratorAction.hh
 /// \brief Definition of the XPrimaryGeneratorAction class
 //
 // $Id$

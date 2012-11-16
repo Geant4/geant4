@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/phononExample/src/XTPhononSlow.cc
+/// \file exoticphysics/phonon/src/XTPhononSlow.cc
 /// \brief Implementation of the XTPhononSlow class
 //
 // $Id$

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/phononExample/src/XPhononStackingAction.cc
+/// \file exoticphysics/phonon/src/XPhononStackingAction.cc
 /// \brief Implementation of the XPhononStackingAction class
 //
 // $Id$

@@ -45,7 +45,7 @@ User Stacking Action class XPhononStackingAction.
 4. EXECUTION & OUTPUT
 
 The executable must be run from within the source directory of the example
-to ensure that it can find the path for crystal data files and macros.
+to ensure that it can find the path for crystal data files.
 Alternatively the search path for the crystal maps can be set in the
 setting the CRYSTALMAPS environment variable. If this variable does not
 exist, it defaults to ./CrystalMaps.

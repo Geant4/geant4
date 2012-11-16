@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/phononExample/include/XPhysicsList.hh
+/// \file exoticphysics/phonon/include/XPhysicsList.hh
 /// \brief Definition of the XPhysicsList class
 //
 // $Id$

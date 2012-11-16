@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/phononExample/XGeBox.cc
-/// \brief Main program of the exoticphysics/phononExample example
+/// \file exoticphysics/phonon/XGeBox.cc
+/// \brief Main program of the exoticphysics/phonon example
 //
 // $Id$
 //

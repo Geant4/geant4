@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/phononExample/src/XLatticeManager3.cc
+/// \file exoticphysics/phonon/src/XLatticeManager3.cc
 /// \brief Implementation of the XLatticeManager3 class
 //
 // $Id$

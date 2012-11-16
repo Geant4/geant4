@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/phononExample/include/XPhononDownconversionProcess.hh
+/// \file exoticphysics/phonon/include/XPhononDownconversionProcess.hh
 /// \brief Definition of the XPhononDownconversionProcess class
 //
 // $Id$

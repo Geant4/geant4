@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/phononExample/src/XPhononScatteringProcess.cc
+/// \file exoticphysics/phonon/src/XPhononScatteringProcess.cc
 /// \brief Implementation of the XPhononScatteringProcess class
 //
 // $Id$

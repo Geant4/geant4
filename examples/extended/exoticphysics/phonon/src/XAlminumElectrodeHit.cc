@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/phononExample/src/XAlminumElectrodeHit.cc
+/// \file exoticphysics/phonon/src/XAlminumElectrodeHit.cc
 /// \brief Implementation of the XAlminumElectrodeHit class
 //
 // $Id$

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/phononExample/src/XLogicalLattice.cc
+/// \file exoticphysics/phonon/src/XLogicalLattice.cc
 /// \brief Implementation of the XLogicalLattice class
 //
 // $Id$
