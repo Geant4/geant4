@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13-11-12 I. Hrivnacova (AnaEx03-V09-05-05)   
+- Fixed order of instatiating G4VisExecutive and G4UIExecutive
+  (required when Qt driver is activated).
+
 03-09-12 I. Hrivnacova (AnaEx03-V09-05-04)   
 - New tag to be synchronized with the update in tests/ctest;
   no changes in the example itself   
