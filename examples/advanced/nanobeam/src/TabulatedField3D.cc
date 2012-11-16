@@ -413,7 +413,7 @@ if (model==3)
   G4double x_local,y_local,z_local;
   x_local= 0; y_local=0; z_local=0;
 
-  G4double vars = 0;               // For Enges formula
+  //G4double vars = 0;               // For Enges formula
   G4double G1, G2, G3;	        // For Enges formula
   //G4double K0, K1, K2, K3;	// For Enges formula
   //G4double P0, P1, P2, P3, cte;	// For Enges formula
@@ -475,8 +475,8 @@ if (model==3)
 	 if ( ((z_local>=-z2[i]) & (z_local<-z1[i])) ||  ((z_local>z1[i]) & (z_local<=z2[i])) ) // Inside the fringefield
 	 {
 
-	  vars = ( z_local - z1[i]) / a0[i];     // se (8) 
-  	  if (z_local<-z1[i])  vars = ( - z_local - z1[i]) / a0[i];  // se (9)  p1397 Incerti et.al.
+     //vars = ( z_local - z1[i]) / a0[i];     // se (8)
+     //if (z_local<-z1[i])  vars = ( - z_local - z1[i]) / a0[i];  // se (9)  p1397 Incerti et.al.
 
 
 	  P0 = c0[i]+c1[i]*s+c2[i]*s*s;
