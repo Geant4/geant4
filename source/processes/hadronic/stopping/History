@@ -14,6 +14,17 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+14 November 2012 V. Ivantchenko (hadr-stopping-V09-05-31)
+--------------------------------------------------------------------
+- G4MuMinusCapturePrecompound - fixed extra run time memory leak
+
+14 November 2012 V. Ivantchenko & A. Ribon (hadr-stopping-V09-05-30)
+--------------------------------------------------------------------
+- G4HadronicAbsorptionFritiof, G4MuMinusCapturePrecompound,
+  G4MuMinusBoundDecay, G4EmCaptureCascade: fixed memory leak;
+    reuse G4PreCompoundModel instead from the store of creation of 
+    a new one
+
 17 October 2012 Michael Kelsey  (hadr-stopping-V09-05-29)
 ---------------------------------------------------------
 - G4HadronicAbsorptionBertini:  Use Bertini's IsApplicable() function to

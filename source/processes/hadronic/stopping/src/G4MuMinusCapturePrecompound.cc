@@ -58,6 +58,7 @@
 #include "G4NucleiProperties.hh"
 #include "G4VPreCompoundModel.hh"
 #include "G4PreCompoundModel.hh"
+#include "G4HadronicInteractionRegistry.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -70,13 +71,21 @@ G4MuMinusCapturePrecompound::G4MuMinusCapturePrecompound(
   fNeutron = G4Neutron::Neutron();
   fThreshold = 10*MeV;
   fPreCompound = ptr;
-  if(!ptr) { fPreCompound = new G4PreCompoundModel(); }
+  if(!ptr) { 
+    G4HadronicInteraction* p =
+      G4HadronicInteractionRegistry::Instance()->FindModel("PRECO");
+    ptr = static_cast<G4VPreCompoundModel*>(p); 
+    fPreCompound = ptr;
+    if(!ptr) { fPreCompound = new G4PreCompoundModel(); }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4MuMinusCapturePrecompound::~G4MuMinusCapturePrecompound()
-{}
+{
+  result.Clear();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -227,7 +236,9 @@ G4MuMinusCapturePrecompound::ApplyYourself(const G4HadProjectile& projectile,
       fTime = time0 + rp->GetTOF();
       G4ThreeVector direction = rp->GetMomentum().unit();
       AddNewParticle(rp->GetDefinition(), direction, rp->GetKineticEnergy());
+      delete rp;
     }
+    delete rpv;
   } 
   if(verboseLevel > 1)
     G4cout << "G4MuMinusCapturePrecompound::ApplyYourself:  Nsec= " 

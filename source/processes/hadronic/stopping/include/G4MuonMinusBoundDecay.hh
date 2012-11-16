@@ -100,9 +100,9 @@ private:
 inline void 
 G4MuonMinusBoundDecay::AddNewParticle(G4DynamicParticle* dp, G4double time)
 {
-  G4HadSecondary* hs = new G4HadSecondary(dp);
-  hs->SetTime(time);
-  result.AddSecondary(*hs);
+  G4HadSecondary hs(dp);
+  hs.SetTime(time);
+  result.AddSecondary(hs);
 }
 
 #endif

@@ -45,7 +45,6 @@
 
 #include "G4SystemOfUnits.hh"
 #include "G4HadronicAbsorptionFritiof.hh"
-#include "G4ExcitationHandler.hh"
 #include "G4PreCompoundModel.hh"
 #include "G4GeneratorPrecompoundInterface.hh"
 #include "G4FTFModel.hh"
@@ -54,7 +53,7 @@
 #include "G4TheoFSGenerator.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
-
+#include "G4HadronicInteractionRegistry.hh"
 
 // Constructor
 G4HadronicAbsorptionFritiof::
@@ -64,12 +63,16 @@ G4HadronicAbsorptionFritiof( G4ParticleDefinition* pdef )
   
   G4TheoFSGenerator * theModel = new G4TheoFSGenerator( "FTFP" );
   G4FTFModel * theStringModel = new G4FTFModel;
-  G4LundStringFragmentation * theLund = new G4LundStringFragmentation;
-  G4ExcitedStringDecay * theStringDecay = new G4ExcitedStringDecay( theLund );
+  theLund = new G4LundStringFragmentation;
+  theStringDecay = new G4ExcitedStringDecay( theLund );
   theStringModel->SetFragmentationModel( theStringDecay );
 
   // Not a cascade - goes straight to Preco
-  G4PreCompoundModel * thePreEquilib = new G4PreCompoundModel;
+  G4HadronicInteraction* p =
+    G4HadronicInteractionRegistry::Instance()->FindModel("PRECO");
+  G4VPreCompoundModel * thePreEquilib = static_cast<G4VPreCompoundModel*>(p); 
+  if(! thePreEquilib) { thePreEquilib = new G4PreCompoundModel; }
+
   G4GeneratorPrecompoundInterface * theCascade = 
     new G4GeneratorPrecompoundInterface( thePreEquilib ); 
 
@@ -82,6 +85,12 @@ G4HadronicAbsorptionFritiof( G4ParticleDefinition* pdef )
   theModel->SetMaxEnergy( theMax );
 
   RegisterMe( theModel );
+}
+
+
+G4HadronicAbsorptionFritiof::~G4HadronicAbsorptionFritiof() {
+  delete theLund;
+  delete theStringDecay;
 }
 
 

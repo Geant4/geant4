@@ -49,13 +49,15 @@
 #include "G4HadronStoppingProcess.hh"
 
 class G4ParticleDefinition;
+class G4LundStringFragmentation;
+class G4ExcitedStringDecay;
 
 
 class G4HadronicAbsorptionFritiof : public G4HadronStoppingProcess { 
 
 public:
-  G4HadronicAbsorptionFritiof( G4ParticleDefinition* pdef=0 );
-  virtual ~G4HadronicAbsorptionFritiof() {}
+  G4HadronicAbsorptionFritiof( G4ParticleDefinition* pdef=0 ); 
+  virtual ~G4HadronicAbsorptionFritiof();
   
   G4bool IsApplicable( const G4ParticleDefinition& );
 
@@ -67,6 +69,9 @@ private:
   G4HadronicAbsorptionFritiof( const G4HadronicAbsorptionFritiof& );
   
   G4ParticleDefinition* pdefApplicable;
+
+  G4LundStringFragmentation * theLund;
+  G4ExcitedStringDecay * theStringDecay;
 
 };
 

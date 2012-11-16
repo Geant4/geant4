@@ -105,9 +105,9 @@ G4EmCaptureCascade::AddNewParticle(G4ParticleDefinition* aParticle,
   G4DynamicParticle* dp = new G4DynamicParticle(aParticle,
                                                 G4RandomDirection(),
                                                 kinEnergy);
-  G4HadSecondary* hs = new G4HadSecondary(dp);
-  hs->SetTime(fTime);
-  result.AddSecondary(*hs);
+  G4HadSecondary hs(dp);
+  hs.SetTime(fTime);
+  result.AddSecondary(hs);
 }
 
 #endif
