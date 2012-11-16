@@ -858,10 +858,6 @@ int test_one_solid ( Esolid useCase,  int num_points, int directions_per_point )
   distOut = c5.DistanceToOut(pCheck,vCheck,calcNorm,pgoodNorm,pNorm); 
 
 
-#ifdef NDEBUG
-    G4Exception("FAIL: *** Assertions must be compiled in! ***");
-#endif
-
     std::ofstream foutDistIn("DistIn.dat", std::ios::out ) ;
     foutDistIn.setf( std::ios::scientific, std::ios::floatfield );
 

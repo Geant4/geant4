@@ -31,6 +31,7 @@
 // testG4Box
 //             Ensure asserts are compiled in
 
+#undef NDEBUG
 #include <assert.h>
 #include <cmath>
 
@@ -128,10 +129,10 @@ G4bool testG4Box()
     G4ThreeVector edgeYmZ(   0.0,  30.0, -40.0); 
     G4ThreeVector edgemYZ(   0.0, -30.0,  40.0); 
 
-    G4double invSqrt2 = 1.0 / std::sqrt( 2.0); 
-    G4double invSqrt3 = 1.0 / std::sqrt( 3.0); 
-
-    normal= b1.SurfaceNormal( edgeXY ); 
+    G4double invSqrt2 = 1.0 / std::sqrt( 2.0);
+    G4double invSqrt3 = 1.0 / std::sqrt( 3.0);
+  
+    normal= b1.SurfaceNormal( edgeXY );
     assert(ApproxEqual( normal, G4ThreeVector( invSqrt2, invSqrt2, 0.0) )); 
     // G4cout << " Normal at " << edgeXY << " is " << normal 
     //    << " Expected is " << G4ThreeVector( invSqrt2, invSqrt2, 0.0) << G4endl;     
@@ -402,7 +403,7 @@ G4bool testG4Box()
 int main()
 {
 #ifdef NDEBUG
-    G4Exception("FAIL: *** Assertions must be compiled in! ***");
+    G4Exception("testG4Box", "Assertions must be compiled in!", FatalException, "");
 #endif
     assert(testG4Box());
     return 0;

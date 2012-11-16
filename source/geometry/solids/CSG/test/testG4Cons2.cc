@@ -30,6 +30,7 @@
 // Simple test of G4Cons
 // Basic checks on each function + awkward cases for tracking / geom algorithms
 
+#undef NDEBUG
 #include <assert.h>
 #include <cmath>
 #include "G4ios.hh"

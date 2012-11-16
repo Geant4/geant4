@@ -41,6 +41,7 @@
 //  - Old 'main' is now a test function,  new main loops over each solid type
 
 #include "G4ios.hh"
+#undef NDEBUG
 #include <assert.h>
 #include <cmath>
 #include "globals.hh"

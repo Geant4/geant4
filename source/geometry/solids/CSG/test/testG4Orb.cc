@@ -39,6 +39,7 @@
 // 20.10.96 V.Grichine Final modifications to commit
 
 #include "G4ios.hh"
+#undef NDEBUG
 #include <assert.h>
 #include <cmath>
 #include "globals.hh"

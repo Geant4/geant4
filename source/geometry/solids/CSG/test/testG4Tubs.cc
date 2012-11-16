@@ -39,6 +39,7 @@
 // ~95-96 P. Kent R&D
 // 21.5.99 V. Grichine tests of phi-intersections (t3 and t4)
 
+#undef NDEBUG
 #include <assert.h>
 #include <cmath>
 

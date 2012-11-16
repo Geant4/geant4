@@ -30,6 +30,7 @@
 // Test of G4Para
 // Includes all/most of the tests Done for a box
 
+#undef NDEBUG
 #include <assert.h>
 #include <cmath>
 #include "G4ios.hh"

@@ -36,6 +36,7 @@
 // 30.10.96     V.Grichine First version for first G4Torus implementation
 
 #include "G4ios.hh"
+#undef NDEBUG
 #include <assert.h>
 #include <cmath>
 

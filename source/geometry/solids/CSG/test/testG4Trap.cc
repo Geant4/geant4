@@ -31,6 +31,7 @@
 // testG4Trap
 //             Ensure asserts are compiled in
 
+#undef NDEBUG
 #include <assert.h>
 #include <cmath>
 #include "G4ios.hh"

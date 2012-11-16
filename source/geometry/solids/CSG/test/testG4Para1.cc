@@ -31,6 +31,7 @@
 // testG4Para
 //             Ensure asserts are compiled in
 
+#undef NDEBUG
 #include <assert.h>
 #include <cmath>
 #include "G4ios.hh"

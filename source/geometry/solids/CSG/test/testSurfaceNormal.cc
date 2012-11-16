@@ -38,6 +38,7 @@
 //
 
 #include "G4ios.hh"
+#undef NDEBUG
 #include <assert.h>
 #include <cmath>
 #include "globals.hh"
