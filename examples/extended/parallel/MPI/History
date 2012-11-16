@@ -9,6 +9,9 @@
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15 November 2012, K. Murakami (MPI-V09-05-02)
+ - typos in documents are fixed.
+
 8 November 2012, K. Murakami (MPI-V09-05-01)
  - explicit inclusion of G4SystemOfUnits.hh and G4PhysicalConstants.hh
  - updated documentations

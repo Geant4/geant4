@@ -14,10 +14,10 @@ Koichi Murakami (KEK) / Koichi.Murakami@kek.jp
 
 About the interface
 ===================
-G4MPI is a native interface with MPI libraries. The directory contains
+G4MPI is a native interface with MPI libraries. The directory contains 
 a Geant4 UI library and a couple of parallelized examples.
-Using this interface, users applications can be parllelized with
-different MPI compliant libraries, such as OpenMPI, LAM/MPI, MPICH2, and so on.
+Using this interface, users applications can be parallelized with
+different MPI compliant libraries, such as OpenMPI, LAM/MPI, MPICH2 and so on.
 
 System Requirements:
 --------------------
@@ -25,9 +25,9 @@ System Requirements:
 ### MPI Library
 
 The MPI interface can work with MPI-compliant libraries, 
-such as Open MPI, LAM/MPI, Intel MPI, etc.
+such as Open MPI, LAM/MPI, Intel MPI etc.
 
-For example, the information about Open MPI can be obtaied from
+For example, the information about Open MPI can be obtained from
 http://www.open-mpi.org/
 
 ### CMake
@@ -74,36 +74,38 @@ How to make parallel applications
 
 An example of a main program:
 
-    #include "G4MPImanager.hh"
-    #include "G4MPIsession.hh"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cc}
+#include "G4MPImanager.hh"
+#include "G4MPIsession.hh"
 
-    int main(int argc,char** argv)
-    {
-       At first, G4MPImanager/G4MPIsession should be created.
-      G4MPImanager* g4MPI= new G4MPImanager(argc,argv);
+int main(int argc,char** argv)
+{
+  //// At first, G4MPImanager/G4MPIsession should be created.
+  G4MPImanager* g4MPI= new G4MPImanager(argc,argv);
       
-      MPI session (G4MPIsession) instead of G4UIterminal
-      G4MPIsession* session= g4MPI-> GetMPIsession();
+  //// MPI session (G4MPIsession) instead of G4UIterminal
+  G4MPIsession* session= g4MPI-> GetMPIsession();
       
-      user application setting
-      G4RunManager* runManager= new G4RunManager();
+  //// user application setting
+  G4RunManager* runManager= new G4RunManager();
 
-      ....
+  ....
 
-      After user application setting, just start a MPI session.
-      MPIsession treats both interactive and batch modes.
-      session-> SessionStart();
+  //// After user application setting, just start a MPI session.
+  MPIsession treats both interactive and batch modes.
+  session-> SessionStart();
 
-      Finally, terminate the program
-      delete g4MPI;
-      delete runManager;
-    }
+  //// Finally, terminate the program
+  delete g4MPI;
+  delete runManager;
+}    
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 ### Notes about session shell
 
 LAM/MPI users can use "G4tcsh" as an interactive session shell.
-For other users (Open MPI/MPICH2), plese use G4csh (default).
+For other users (Open MPI/MPICH2), plesae use G4csh (default).
 
 In case of OpenMPI, *LD_LIBRARY_PATH* for OpenMPI runtime libraries
 should be set at run time. Alternatively, you can add this path
@@ -111,7 +113,7 @@ to the dynamic linker configuration using `ldconfig`.
 (needs sys-admin authorization)
 
 
-MPI runtime rnvironment
+MPI runtime Environment
 -----------------------
 1. Make hosts/cluster configuration of your MPI environment.
 2. Launch MPI runtime environment, typically executing
@@ -130,24 +132,24 @@ MPI G4UI commands
 -----------------
 G4UI commands handling the G4MPI interface are placed in /mpi/.
 
-
-    Command directory path : /mpi/
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Command directory path : /mpi/
     
-    Guidance :
-    MPI control commands
+Guidance :
+MPI control commands
     
-     Sub-directories :
-     Commands :
-       verbose *        Set verbose level.
-       status *         Show mpi status.
-       execute *        Execute a macro file. (=/control/execute)
-       beamOn *         Start a parallel run w/ thread.
-       .beamOn *        Start a parallel run w/o thread.
-       masterWeight *   Set weight for master node.
-       showSeeds *      Show seeds of MPI nodes.
-       setMasterSeed *  Set a master seed for the seed generator.
-       setSeed *        Set a seed for a specified node.
-
+ Sub-directories :
+ Commands :
+   verbose *        Set verbose level.
+   status *         Show mpi status.
+   execute *        Execute a macro file. (=/control/execute)
+   beamOn *         Start a parallel run w/ thread.
+   .beamOn *        Start a parallel run w/o thread.
+   masterWeight *   Set weight for master node.
+   showSeeds *      Show seeds of MPI nodes.
+   setMasterSeed *  Set a master seed for the seed generator.
+   setSeed *        Set a seed for a specified node.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ### Notes:
 While "/run/beamOn" and "/mpi/beamOn" commands invoke beam-on in background,
@@ -155,7 +157,7 @@ so you can input UI commands even while event processing.
 
 The original "/control/execute" and "/run/beamOn" are overwritten
 with "/mpi/execute" and "/mpi/beamOn" commands respectively,
-customized for the MPI interface.
+that are customized for the MPI interface.
 
 - - -
 
@@ -166,9 +168,10 @@ There are a couple of examples for Geant4 MPI applications.
 In some cases, you need to set some additional environment variables
 for running examples:
 
-- *G4LEDATA* : directory path for low energy EM data.
-- *G4LEVELGAMMADATA* : directory path for photon evalopation
+- *G4LEDATA* : directory path for low energy EM data
+- *G4LEVELGAMMADATA* : directory path for photon evapolation
 - *G4SAIDXSDATA* : directory path for nucleon cross section data
+
 
 For using ROOT libraries
 
@@ -200,8 +203,7 @@ An example of dosimetry in a water phantom.
 
 **Features:**
 - Score dose distribution in a water phantom.
-- Learn how to paralleized your applications.
+- Learn how to parallelized your applications.
 - Create a ROOT file containing histograms/trees in each node.
 
 */
-
