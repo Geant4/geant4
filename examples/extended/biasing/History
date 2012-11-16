@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 15, 2012 I.Hrivnacova - exbiasing-V09-05-04
+- Minor fixes in .README
+
 Oct 13, 2012 A. Dotti - exbiasing-V09-05-03
 - Adding explicit use of system of units
 

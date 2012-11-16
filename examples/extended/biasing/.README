@@ -64,7 +64,7 @@ importance of the current volumes.
 Short description of importance sampling and scoring:
 http://cern.ch/geant4/working_groups/geometry/biasing/Sampling.html
 
-\link ExampleB01 Example B01 \endlink
+\subsection biasing_sub_15 Example B01 
 
 The example uses importance sampling or the weight window technique 
 according to an input parameter. It uses scoring in both cases. 
@@ -83,7 +83,7 @@ with argument: 0, the importance sampling is applied with argument: 1,
 the weight window technique is applied.
 
 
-\link ExampleB02 Example B02 \endlink
+\subsection biasing_sub_16 Example B02 
 
 This example uses a parallel geometry to define G4GeometryCell objects
 for scoring and importance sampling. In addition it customizes
