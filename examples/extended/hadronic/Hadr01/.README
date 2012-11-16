@@ -144,69 +144,24 @@ gmake visclean
 gmake
 \endverbatim
 
-The vis.mac file can be used an example of visualization. The following command can 
-be used:
-
-\verbatim
-/testhadr/DrawTracks  charged
-/testhadr/DrawTracks  charged+n
-/testhadr/DrawTracks  neutral
-/testhadr/DrawTracks  all
-\endverbatim
-
 
 \section Hadr01_s5 HISTOGRAMS
 
-To use histograms any of implementations of AIDA interfaces should
-be available (see http://aida.freehep.org).
+There are built in histograms. The 1st one (idx=0, id="1") scores energy
+deposition along the target. Histograms "22", "23", "24", "25" scores
+energy deposition per particle type.
+ 
+All other histograms are provided in decimal logarithmic scale (log10(E/MeV),
+where E is secondary particle energy at production
 
-A package including AIDA and extended interfaces also using Python
-is PI, available from: http://cern.ch/pi .
-
-Once installed PI or PI-Lite in a specified local area $PI_DIR, it is
-required to add the installation path to $PATH, i.e. for example,
-for release 1.2.1 of PI:
-
-\verbatim
-setenv PATH ${PATH}:$PI_DIR/1.3.12/app/releases/PI/PI_1_3_12/slc3_gcc323/bin
-\endverbatim
-
-CERN users can use the PATH to the LCG area on AFS.
-
-Before compilation of the example it is optimal to clean up old 
-files:
+It is possible to change scale and output file name using UI commands:
 
 \verbatim
-gmake histclean
-setenv G4ANALYSIS_USE 1
-gmake
+/testhadr/histo/fileName name
+/testhadr/histo/setHisto idx nbins vmin vmax unit
 \endverbatim
 
-Before running the example the command should be issued:
-
-\verbatim
-eval `aida-config --runtime csh`
-\endverbatim
-
-It is possible to choose the format of the output file with 
-histograms using UI command:
-
-\verbatim
-/testhadr/HistoName   name
-/testhadr/HistoType   type
-/testhadr/HistoOption "uncompress"
-\endverbatim
-
-The following types are available: hbook, root, aida. They will be 
-stored in the file "name.hbook", "name.root", or "name.aida". 
-If the environment variable HISTODIR is defined, files are stored in this 
-subdirectory.
-
-To show the content of a histogram ID=i the commands may be applied:
-
-\verbatim
-/testhadr/HistoPrint  i
-\endverbatim
+Only ROOT histograms are available.
 
 All histograms are normalized to the number of events.
   

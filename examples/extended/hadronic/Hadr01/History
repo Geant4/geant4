@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15-11-12  I. Hrivnacova (exhadr01-V09-05-08)
+- Synchronized .README with changes in README
+
 13-11-12  V.Ivanchenko (exhadr01-V09-05-07)
 - updated README
 - DetectorConstruction - fixed bug in volume name
