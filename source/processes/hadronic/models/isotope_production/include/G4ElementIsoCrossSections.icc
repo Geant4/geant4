@@ -23,13 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#include "G4ElementIsoCrossSections.hh"
 
 template <class IsoIsoCrossSectionType>
 G4ElementIsoCrossSections<IsoIsoCrossSectionType>::
 G4ElementIsoCrossSections()
 {
   nIsotopes = 0;
+  crossSectionBuffer = 0.0;
   theData = NULL;
   G4cout << "WARNING: G4ElementIsoCrossSections is deprecated and will be removed with Geant4 version 10"
          << G4endl;
