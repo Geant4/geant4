@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 14th, 2012 P. Mato - field-V09-05-07
+-----------------------
+- G4QuadrupoleMagField: allow displaced origin and rotation (Björn Riese)
+- Added G4SystemOfUnits.hh in unit tests
+
 August 30th, 2012 P. Mato - field-V09-05-06
 -----------------------
 - Adapted CMakeLists.txt files to new unit tests

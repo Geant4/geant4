@@ -48,7 +48,7 @@ ExN01RunAction::~ExN01RunAction()
                                                                                                      
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
                                                                                                      
-void ExN01RunAction::BeginOfRunAction(const G4Run* aRun)
+void ExN01RunAction::BeginOfRunAction(const G4Run*)
 {
  
                                                                                                      

@@ -35,6 +35,7 @@
 
 #include "G4ProcessManager.hh"
 #include "G4ParticleTypes.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

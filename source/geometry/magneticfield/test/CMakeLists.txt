@@ -1,4 +1,4 @@
-GEANT4_ADD_UNIT_TESTS(test*.cc field07 NTST TestCylinderATLAS
+GEANT4_ADD_UNIT_TESTS(test*.cc field07 
                       INCLUDE_DIRS geometry/management/include
                                    geometry/volumes/include
                                    geometry/navigation/include

@@ -55,6 +55,7 @@
 #include "G4Colour.hh"
 
 #include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  

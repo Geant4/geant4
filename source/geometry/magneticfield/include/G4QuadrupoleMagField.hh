@@ -41,26 +41,34 @@
 // Here X,Y,Z are the coordinates of a space point of interest.
 
 // History:
-// 3.2.97 - V.Grichine, created.
+//  3.2.97 - V.Grichine, created.
+// 11.5.12 - B. Riese allow displaced origin and rotation (Björn Riese)
 // -------------------------------------------------------------------
 
 #ifndef G4QUADRUPOLEMAGFIELD_HH
 #define G4QUADRUPOLEMAGFIELD_HH
 
 #include "G4MagneticField.hh"
+#include "G4ThreeVector.hh"
+#include "G4RotationMatrix.hh"
 
 class G4QuadrupoleMagField : public G4MagneticField
 {
   public: // with description
 
-    G4QuadrupoleMagField(G4double pGradient);
+    G4QuadrupoleMagField(G4double          pGradient);
+    G4QuadrupoleMagField(G4double          pGradient, 
+                         G4ThreeVector     pOrigin, 
+                         G4RotationMatrix* pMatrix);
    ~G4QuadrupoleMagField();
 
     void GetFieldValue(const G4double yTrack[],
                              G4double B[]     ) const;
   private:
 
-    G4double fGradient;
+    G4double          fGradient;
+    G4ThreeVector     fOrigin;
+    G4RotationMatrix* fpMatrix;
 };
-
 #endif
+
