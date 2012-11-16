@@ -1319,10 +1319,10 @@ G4QHadronVector* G4QFreeScattering::InElF(G4int NPDG, G4LorentzVector N4M,
           <<", while it is defined only for p,n,hyperons(not Omega),pi,K/antiK"<<G4endl;
     G4Exception("G4QFreeScattering::InElF:","22",FatalException,"CHIPS_crash");
   }
+  if     (mC-mP-mM-mT <-0.000001) return 0;
   G4QHadronVector* TripQH = new G4QHadronVector; // Proto of the Result
   G4LorentzVector m4M(0.,0.,0.,mM);
-  if     (mC-mP-mM-mT <-0.000001) return 0;
-  else if(mC-mP-mM-mT < 0.000001) // Equal share
+  if(mC-mP-mM-mT < 0.000001) // Equal share
   {
     p4M=(mP/mC)*c4M;
     m4M=(mM/mC)*c4M;
