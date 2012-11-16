@@ -259,8 +259,6 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
                   "GeomNav0002", FatalException, message); 
     }
 #endif
-    assert( (0 <= fNoGeometriesLimiting)
-           && (fNoGeometriesLimiting <= fNoActiveNavigators) );
   }
 #ifdef G4DEBUG_PATHFINDER      
   else

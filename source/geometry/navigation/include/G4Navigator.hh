@@ -291,19 +291,22 @@ class G4Navigator
   inline void EnableBestSafety( G4bool value= false );
     // Enable best-possible evaluation of isotropic safety
 
- protected:
-  void SetSavedState();
-  // ( fValidExitNormal, fExitNormal, fExiting, fEntering,
-  //   fBlockedPhysicalVolume, fBlockedReplicaNo, fLastStepWasZero);
-  // Extended to include:
-  // ( fLastLocatedPointLocal, fLocatedOutsideWorld;
-  //   fEnteredDaughter, fExitedMother
-  //   fPreviousSftOrigin, sPreviousSafety)  Safety Sphere
-  void RestoreSavedState();
-  // Copy aspects of the state, to enable a non-state changing
-  //  call to ComputeStep
-  
  protected:  // with description
+
+  void SetSavedState();
+    // ( fValidExitNormal, fExitNormal, fExiting, fEntering,
+    //   fBlockedPhysicalVolume, fBlockedReplicaNo, fLastStepWasZero);
+    // Extended to include:
+    // ( fLastLocatedPointLocal, fLocatedOutsideWorld;
+    //   fEnteredDaughter, fExitedMother
+    //   fPreviousSftOrigin, sPreviousSafety)  Safety Sphere.
+
+  void RestoreSavedState();
+    // Copy aspects of the state, to enable a non-state changing
+    // call to ComputeStep().
+  
+  virtual void ResetState();
+    // Utility method to reset the navigator state machine.
 
   inline G4ThreeVector ComputeLocalPoint(const G4ThreeVector& rGlobPoint) const;
     // Return position vector in local coordinate system, given a position
@@ -313,9 +316,6 @@ class G4Navigator
     // Return the local direction of the specified vector in the reference
     // system of the volume that was found by LocalGlobalPointAndSetup.
     // The Local Coordinates of point in world coordinate system.
-
-  virtual void ResetState();
-    // Utility method to reset the navigator state machine.
 
   inline EVolume VolumeType(const G4VPhysicalVolume *pVol) const;
     // Characterise `type' of volume - normal/replicated/parameterised.

@@ -598,7 +598,6 @@ void G4GeomTestVolume::TestOneLine( const G4ThreeVector &p,
             result =
               overshoots.insert( std::pair<const G4long,G4GeomTestOvershootList>
                                (iDaug,G4GeomTestOvershootList(target,iDaug)) );
-          assert(result.second);
           overshoot = result.first;
         }
 
@@ -631,7 +630,6 @@ void G4GeomTestVolume::TestOneLine( const G4ThreeVector &p,
             result =
             overlaps.insert( std::pair<const G4long,G4GeomTestOverlapList>
                            (key,G4GeomTestOverlapList(target,iDaug,kDaug)) );
-          assert(result.second);
           overlap = result.first;
         }
 

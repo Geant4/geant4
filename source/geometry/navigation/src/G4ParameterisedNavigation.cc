@@ -178,8 +178,6 @@ G4double G4ParameterisedNavigation::
   {
     if (localDirection.dot(exitNormal)>=kMinExitingNormalCosine)
     {
-      assert( (0 <= blockedReplicaNo)&&(blockedReplicaNo<nReplicas) );
-
       // Block exited daughter replica; Must be on boundary => zero safety
       //
       fBList.BlockVolume(blockedReplicaNo);

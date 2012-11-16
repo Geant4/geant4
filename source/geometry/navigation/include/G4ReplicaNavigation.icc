@@ -89,12 +89,6 @@ G4ReplicaNavigation::VoxelLocate( const G4SmartVoxelHeader* pHead,
     // voxel & it is blocked => should have exited mother
     // (or similar)       P.Kent
     // assert(targetNodeNo>=0&&targetNodeNo<targetHeaderNoSlices);
-    //
-    // The assert above fails for simulation of high energy electrons 
-    // It is not clear what is the cause for this failure.
-    // The code below attempts to rectify this problem until a
-    // complete resolution is possible.    
-    //           J.Apostolakis, June 12, 1998
 
     if( (targetNodeNo<0) || (targetNodeNo>=targetHeaderNoSlices) )
     {

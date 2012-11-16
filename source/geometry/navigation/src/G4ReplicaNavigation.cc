@@ -42,8 +42,6 @@
 #include "G4VSolid.hh"
 #include "G4GeometryTolerance.hh"
 
-#include <assert.h>
-
 // ********************************************************************
 // Constructor
 // ********************************************************************
@@ -85,7 +83,6 @@ G4ReplicaNavigation::Inside(const G4VPhysicalVolume *pVol,
   G4double coord, rad2, rmin, tolRMax2, rmax, tolRMin2;
 
   pVol->GetReplicationData(axis, nReplicas, width, offset, consuming);
-  assert(consuming);
 
   switch (axis)
   {
@@ -192,7 +189,6 @@ G4ReplicaNavigation::DistanceToOut(const G4VPhysicalVolume *pVol,
   G4double coord, rho, rmin, rmax;
 
   pVol->GetReplicationData(axis, nReplicas, width, offset, consuming);
-  assert(consuming);
   switch(axis)
   {
     case kXAxis:
@@ -269,7 +265,6 @@ G4ReplicaNavigation::DistanceToOut(const G4VPhysicalVolume *pVol,
    { G4ExitNormal::kMX, G4ExitNormal::kMY, G4ExitNormal::kMZ };
 
   pVol->GetReplicationData(axis, nReplicas, width, offset, consuming);
-  assert(consuming);
   switch(axis)
   {
     case kXAxis:
@@ -488,8 +483,6 @@ G4ReplicaNavigation::DistanceToOutPhi(const G4ThreeVector &localPoint,
   {
     candidateNormal = G4ThreeVector(0., -1.0, 0.); // Split -S and +S 'phi'
   }
-  assert( std::fabs( candidateNormal.mag2() - 1.0 ) < CLHEP::perMillion ); 
-
   foundNormal.calculated= (sidePhi != G4ExitNormal::kNull );
   foundNormal.exitNormal= candidateNormal;
    
@@ -659,7 +652,6 @@ G4ReplicaNavigation::ComputeTransformation(const G4int replicaNo,
   G4bool consuming;
 
   pVol->GetReplicationData(axis, nReplicas, width, offset, consuming);
-  assert(consuming);
 
   switch (axis)
   {
@@ -715,7 +707,6 @@ G4ReplicaNavigation::ComputeTransformation(const G4int replicaNo,
   G4bool consuming;
 
   pVol->GetReplicationData(axis, nReplicas, width, offset, consuming);
-  assert(consuming);
 
   switch (axis)
   {
@@ -910,8 +901,6 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
   }
   if( motherDeterminedStep)
   {
-     assert(calculatedExitNormal);
-
      G4ThreeVector globalExitNormalTop=
         globalToLocalTop.Inverse().TransformAxis(exitVectorMother);
      
