@@ -42,8 +42,8 @@
  - "emstandard_opt0" recommended standard EM physics for LHC
  - "emstandard_opt1" best CPU performance standard physics for LHC
  - "emstandard_opt2"     
- - "emstandard_opt3" best current advanced EM options. 
-                     analog to "local" above  
+ - "emstandard_opt3" best standard EM options - analog to "local" above
+ - "emstandard_opt4" best current advanced EM options standard + lowenergy   
  - "emlivermore"  low-energy EM physics using Livermore data
  - "empenelope"   low-energy EM physics implementing Penelope models
            
@@ -82,7 +82,7 @@
 \section TestEm5_s5 TRACKING
  
  During the tracking, one can keep or not the secondaries : see StackingAction
- class and its messenger (StackingMessenger).
+ class and its Messenger (StackingMessenger).
  One can also limit 'by hand' the step lenght of the particle. As an example,
  this limitation is implemented as a 'full' process : see StepMax class and its
  Messenger. The 'StepMax process' is registered in the Physics List. 
@@ -99,11 +99,11 @@
  
 \section TestEm5_s7 List of the built-in histograms
         
- The test contains more than 20 built-in 1D histograms, which are managed by the
- HistoManager class and its Messenger. The histos can be individually activated
+ The test contains more than 20 built-in 1D histograms, which are managed by
+ G4AnalysisManager class and its Messenger. The histos can be individually activated
  with the command :
 \verbatim
-/testem/histo/setHisto id nbBins  valMin valMax unit 
+/analysis/h1/set id nbBins  valMin valMax unit 
 \endverbatim
  where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
  (see the macros xxxx.mac).
@@ -138,7 +138,7 @@
  
  One can control the name of the histograms file with the command:
 \verbatim
-/testem/histo/setFileName  name  (default testem5)
+/analysis/setFileName  name  (default testem5)
 \endverbatim
     
  It is possible to choose the format of the histogram file : root (default),
@@ -146,7 +146,7 @@
      
  It is also possible to print selected histograms on an ascii file:
 \verbatim
-/testem/histo/printHisto id
+/analysis/h1/setAscii id
 \endverbatim
  All selected histos will be written on a file name.ascii  (default testem5) 
     
