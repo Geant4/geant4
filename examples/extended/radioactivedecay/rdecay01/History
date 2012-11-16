@@ -14,7 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+14-11-12 I. Hrivnacova (rdecay01-V09-05-14)
+- Fixed order of instantiating G4VisExecutive and G4UIExecutive
+  (required when Qt driver is activated).
+    
 28-10-12 mma (rdecay01-V09-05-13)
 - update README and .README
      
