@@ -50,6 +50,7 @@
 //   Ivana Hrivnacova, IPN Orsay
 // 
 
+#undef NDEBUG
 #include <assert.h>
 #include <cmath>
 #include <vector>

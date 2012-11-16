@@ -50,6 +50,7 @@
 //
 // Adapted for G4GenericTrap by  Tatiana Nikitina 
 
+#undef NDEBUG
 #include <assert.h>
 #include <cmath>
 #include <vector>

@@ -34,6 +34,7 @@
 //
 //             Ensure asserts are compiled in
 
+#undef NDEBUG
 #include <assert.h>
 #include <cmath>
 

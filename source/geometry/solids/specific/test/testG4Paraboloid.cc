@@ -24,6 +24,7 @@
 // ********************************************************************
 //
 //
+#undef NDEBUG
 #include <assert.h>
 
 #include "G4GeometryTolerance.hh"

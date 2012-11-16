@@ -36,6 +36,7 @@
 // Author: Dionysios Anninos
 //
 // --------------------------------------------------------------
+#undef NDEBUG
 #include <assert.h>
 #include <cmath>
 

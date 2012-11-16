@@ -31,6 +31,7 @@
 // Cvs version: $ Id $
 // Cvs tag :  $ Name $
 
+#undef NDEBUG
 #include "G4Timer.hh"
 #include <cmath>
 #include <fstream>
@@ -75,7 +76,7 @@ int main(int, char **)
   Z_Values[6] = 30;
   Z_Values[7] = 40;
 
-  double Phi_Values[1];
+  double Phi_Values[2];
   Phi_Values[0]=-10*deg;
    Phi_Values[1]=10.*deg;
   // Phi_Values[1]=2*pi;

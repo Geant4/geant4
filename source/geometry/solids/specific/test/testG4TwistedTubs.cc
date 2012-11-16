@@ -36,6 +36,7 @@
 //
 //             Ensure asserts are compiled in
 
+#undef NDEBUG
 #include <assert.h>
 #include <cmath>
 
@@ -107,8 +108,8 @@ G4bool testG4TwistedTubs()
 int main()
 {
   G4double dist;
-  G4bool *pgoodNorm,goodNorm,calcNorm=true;
-  G4ThreeVector *pNorm,norm;
+  G4bool *pgoodNorm=NULL,calcNorm=true;
+  G4ThreeVector *pNorm=NULL,norm;
 
 
   // b899 distance to out id infinity
