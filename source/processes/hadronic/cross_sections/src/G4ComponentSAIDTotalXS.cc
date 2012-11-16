@@ -242,7 +242,11 @@ void G4ComponentSAIDTotalXS::ReadData(G4int index,
   if (!(filein)) {
     G4cout << ost.str() << " is not opened by G4ComponentSAIDTotalXS" 
 	   << G4endl;
-    throw G4HadronicException(__FILE__, __LINE__,"NO data sets opened");
+    G4String sss(ost.str());
+    throw G4HadronicException(__FILE__, __LINE__,
+			      "Data file " + sss + 
+			      " is not opened," +
+			      "chech that G4SAIDXSDATA correctly set");
 
   } else {
     if(GetVerboseLevel() > 1) {
