@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file eventgenerator/exgps/exGPS.cc
+/// \file eventgenerator/exgps/exgps.cc
 /// \brief Main program of the eventgenerator/exgps example
 //
 #include "G4RunManager.hh"
