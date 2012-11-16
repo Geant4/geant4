@@ -12,6 +12,10 @@ summarize all major modifications introduced in the code and keep
 track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
+
+13-11-12 I. Hrivnacova (particleGunExample-V09-05-04)
+- Fixed order of instatiating G4VisExecutive and G4UIExecutive
+  (required when Qt driver is activated).
      
 26-03-12 mma (particleGunExample-V09-05-03)
 - all classes : apply G4 coding conventions
