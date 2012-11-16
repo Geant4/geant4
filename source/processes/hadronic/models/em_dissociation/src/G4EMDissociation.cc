@@ -112,6 +112,27 @@ G4EMDissociation::G4EMDissociation():G4HadronicInteraction("EMDissociation") {
   verboseLevel = 0;
 }
 
+/*
+G4EMDissociation::G4EMDissociation(const G4EMDissociation& emd)
+ : G4HadronicInteraction(emd)
+{
+  if (emd.theExcitationHandler != 0) {
+    theExcitationHandler = new G4ExcitationHandler;
+    *theExcitationHandler = *emd.theExcitationHandler;
+  }
+
+  handlerDefinedInternally = emd.handlerDefinedInternally;
+
+  if (emd.dissociationCrossSection != 0) {
+    dissociationCrossSection = new G4EMDissociationCrossSection;
+    *dissociationCrossSection = *emd.dissociationCrossSection;
+  }
+
+  if (emd.thePhotonSpectrum !- 0) {
+    thePhotonSpectrum = new G4EMDissociationSpectrum;
+    *thePhotonSpectrum = *emd.thePhotonSpectrum;
+}
+*/
 
 G4EMDissociation::G4EMDissociation (G4ExcitationHandler *aExcitationHandler)
 {

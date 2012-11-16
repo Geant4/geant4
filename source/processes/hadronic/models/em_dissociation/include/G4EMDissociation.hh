@@ -79,7 +79,8 @@
 class G4EMDissociation : public G4HadronicInteraction
 {
   public:
-    G4EMDissociation ();
+    G4EMDissociation();
+    G4EMDissociation(const G4EMDissociation& emd);
     G4EMDissociation (G4ExcitationHandler *);
     ~G4EMDissociation ();
     
