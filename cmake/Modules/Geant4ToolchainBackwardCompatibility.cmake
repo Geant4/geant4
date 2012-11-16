@@ -622,7 +622,7 @@ foreach(_ds ${GEANT4_EXPORTED_DATASETS})
     ${CMAKE_INSTALL_FULL_BINDIR}
     ${${_ds}_PATH}
     )
-  set(${_ds}_PATH "\"`cd \$geant_envbindir/${G4ENV_BINDIR_TO_DATADIR} > /dev/null \; pwd`\"")
+  set(${_ds}_PATH "\"`cd \$geant4_envbindir/${G4ENV_BINDIR_TO_DATADIR} > /dev/null \; pwd`\"")
 endforeach()
 
 

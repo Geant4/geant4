@@ -29,6 +29,45 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+15th November 2012 - Ben Morgan        (cmake-V09-05-71)
+[BUGFIX #1387]
+- Modules/Geant4ToolchainBackwardCompatibility.cmake : Correct shell
+  variable name in export of commands to scripts.
+
+
+14th November 2012 - Ben Morgan        (cmake-V09-05-70)
+- Modules/Geant4BuildProjectConfig.cmake : Add CMakeMacroParseArguments
+  to list of modules installed as it is needed to support FindROOT
+  on CMake < 2.8.
+
+
+14th November 2012 -  Gunter Folger    (cmake-V09-05-69)
+-  switch to G4NDL 4.2 
+   (excluding changes made past tag cmake-V09-05-68)
+
+13th November 2012 - Ben Morgan
+[BUGFIX #1290, #1328]
+- Templates/geant4-config.in : Add support for G3ToG4 library. Add
+  CLHEP library to link line using output from clhep-config.
+  Replace explicit -I@VAR@ flags with pure @VAR@ variables for
+  each include path that may be filtered out if it is in the 
+  compiler's default search path.
+- Modules/Geant4ConfigureConfigScript.cmake : Set export variable
+  for existence of G3ToG4. Implement function to return list of
+  default search paths for GNU, Clang and Intel compilers.
+  Create list before configuring geant4-config, and filter out
+  any header paths that we need to export but that appear in this list 
+  before creating export variables.
+
+13th November 2012 - Ben Morgan       (cmake-V09-05-68)
+- Modules/Geant4BuildProjectConfig.cmake : Copy FindXXX modules required
+  by examples from source to build tree, and install them into a
+  Modules subdirectory of GEANT4_CMAKE_DIR.
+- Templates/UseGeant4.cmake : Append path for FindXXX modules required
+  by examples to CMAKE_MODULE_PATH. This is transparent across both
+  the build and install trees.
+
+
 12th November 2012 - Ben Morgan       (cmake-V09-05-67)
 - Modules/Geant4MakeRules_cxx.cmake : Add -Qunused-arguments flag
   to compiler flags when running Clang. This is to finally suppress
