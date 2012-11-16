@@ -15,6 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14-11-12 I. Hrivnacova (gtherapy-V09-05-06)
+- Fixed order of instatiating G4VisExecutive and G4UIExecutive
+  (required when Qt driver is activated).
+- Added compilations options G4VIS_USE, G4UI_USE in main  
+
 24-10-12 A. Ribon (gtherapy-V09-05-05)
 - Migrated to the new stopping physics.
 

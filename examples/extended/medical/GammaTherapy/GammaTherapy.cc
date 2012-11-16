@@ -45,8 +45,13 @@
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 
+#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
+#endif
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
@@ -80,15 +85,21 @@ int main(int argc,char** argv) {
   // get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
+#ifdef G4VIS_USE
+  G4VisManager* visManager = new G4VisExecutive("Quiet");
+  visManager->Initialize();
+#endif
+
   if (argc==1)   // Define UI terminal for interactive mode
     {
-      G4VisManager* visManager = new G4VisExecutive("Quiet");
-      visManager->Initialize();
+#ifdef G4UI_USE
       G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-      ui->SessionStart();
+#ifdef G4VIS_USE
       UImanager->ApplyCommand("/control/execute vis.mac");     
+#endif
+      ui->SessionStart();
       delete ui;
-      delete visManager;
+#endif
     }
   else if (argc>1) // Batch mode with 1 or more files
     {
@@ -96,6 +107,10 @@ int main(int argc,char** argv) {
       G4String fileName = argv[1];
       UImanager->ApplyCommand(command+fileName);
     }
+
+#ifdef G4VIS_USE
+  delete visManager;
+#endif
 
   // job termination
   delete runManager;
