@@ -14,6 +14,16 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+14 November 2012 Vladimir Ivantchenko  (hadr-man-V09-05-24)
+-------------------------------------------------------
+- G4HadronicProcess.cc - added full printout about hadronic exception 
+    inside G4Exception printout, fixed bug#1377
+
+14 November 2012 Vladimir Ivantchenko  (hadr-man-V09-05-23)
+-------------------------------------------------------
+- G4HadronicProcess.cc - added catch of G4HadronicException
+    inside BuildPhysicsTable method
+
 11 October 2012 Krzysztof Genser   (hadr-man-V09-05-22)
 -------------------------------------------------------
 - G4HadronicProcessType.hh added fLeptonAtRest

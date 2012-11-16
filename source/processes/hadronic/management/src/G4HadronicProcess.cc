@@ -71,6 +71,8 @@
 
 #include <typeinfo>
 #include <sstream>
+#include <iostream>
+
 #include <stdlib.h>
 
 // File-scope variable to capture environment variable at startup
@@ -145,6 +147,7 @@ void G4HadronicProcess::RegisterMe( G4HadronicInteraction *a )
   catch(G4HadronicException & aE)
   {
     G4ExceptionDescription ed;
+    aE.Report(ed);
     ed << "Unrecoverable error in " << GetProcessName()
        << " to register " << a->GetModelName() << G4endl;
     G4Exception("G4HadronicProcess::RegisterMe", "had001", FatalException,
@@ -163,7 +166,18 @@ void G4HadronicProcess::PreparePhysicsTable(const G4ParticleDefinition& p)
 
 void G4HadronicProcess::BuildPhysicsTable(const G4ParticleDefinition& p)
 {
-  theCrossSectionDataStore->BuildPhysicsTable(p);
+  try
+  {
+    theCrossSectionDataStore->BuildPhysicsTable(p);
+  }
+  catch(G4HadronicException aR)
+  {
+    G4ExceptionDescription ed;
+    aR.Report(ed);
+    ed << " hadronic initialisation fails" << G4endl;
+    G4Exception("G4HadronicProcess::BuildPhysicsTable", "had000", 
+		FatalException,ed);
+  }
   G4HadronicProcessStore::Instance()->PrintInfo(&p);
 }
 
@@ -179,6 +193,7 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
   catch(G4HadronicException aR)
   {
     G4ExceptionDescription ed;
+    aR.Report(ed);
     DumpState(aTrack,"GetMeanFreePath",ed);
     ed << " Cross section is not available" << G4endl;
     G4Exception("G4HadronicProcess::GetMeanFreePath", "had002", FatalException,
@@ -213,6 +228,7 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
   catch(G4HadronicException & aR)
   {
     G4ExceptionDescription ed;
+    aR.Report(ed);
     DumpState(aTrack,"SampleZandA",ed);
     ed << " PostStepDoIt failed on element selection" << G4endl;
     G4Exception("G4HadronicProcess::PostStepDoIt", "had003", FatalException,
@@ -261,6 +277,7 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
   catch(G4HadronicException & aE)
   {
     G4ExceptionDescription ed;
+    aE.Report(ed);
     ed << "Target element "<<anElement->GetName()<<"  Z= "
        << targetNucleus.GetZ_asInt() << "  A= "
        << targetNucleus.GetA_asInt() << G4endl;
@@ -290,6 +307,7 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
     catch(G4HadronicException aR)
     {
       G4ExceptionDescription ed;
+      aR.Report(ed);
       ed << "Call for " << theInteraction->GetModelName() << G4endl;
       ed << "Target element "<<anElement->GetName()<<"  Z= "
 	 << targetNucleus.GetZ_asInt()
