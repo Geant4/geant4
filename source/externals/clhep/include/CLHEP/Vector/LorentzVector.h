@@ -84,7 +84,7 @@ public:
   inline HepLorentzVector(double x, double y, double z);
   // Constructor giving the components x, y, z with t-component set to 0.0.
 
-  inline HepLorentzVector(double t);
+  explicit HepLorentzVector(double t);
   // Constructor giving the t-component with x, y and z set to 0.0.
 
   inline HepLorentzVector();

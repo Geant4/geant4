@@ -29,18 +29,18 @@ static inline double safe_acos (double x) {
 }
 
 HepRotationZ::HepRotationZ(double ddelta) : 
-		d(proper(ddelta)), s(std::sin(ddelta)), c(std::cos(ddelta))
+		its_d(proper(ddelta)), its_s(std::sin(ddelta)), its_c(std::cos(ddelta))
 {}
 
 HepRotationZ & HepRotationZ::set ( double ddelta ) {
-  d = proper(ddelta);
-  s = std::sin(d);
-  c = std::cos(d);
+  its_d = proper(ddelta);
+  its_s = std::sin(its_d);
+  its_c = std::cos(its_d);
   return *this;
 }
 
 double  HepRotationZ::phi() const {
-  return  - d/2.0;
+  return  - its_d/2.0;
 }  // HepRotationZ::phi()
 
 double  HepRotationZ::theta() const {
@@ -48,7 +48,7 @@ double  HepRotationZ::theta() const {
 }  // HepRotationZ::theta()
 
 double  HepRotationZ::psi() const {
-  return  - d/2.0;
+  return  - its_d/2.0;
 }  // HepRotationZ::psi()
 
 HepEulerAngles HepRotationZ::eulerAngles() const {
@@ -121,7 +121,7 @@ void HepRotationZ::decompose
 }
 
 double HepRotationZ::distance2( const HepRotationZ & r  ) const {
-  double answer = 2.0 * ( 1.0 - ( s * r.s + c * r.c ) ) ;
+  double answer = 2.0 * ( 1.0 - ( its_s * r.its_s + its_c * r.its_c ) ) ;
   return (answer >= 0) ? answer : 0;
 }
 
@@ -174,12 +174,12 @@ bool HepRotationZ::isNear( const HepLorentzRotation & lt,
 }
 
 double HepRotationZ::norm2() const {
-  return 2.0 - 2.0 * c;
+  return 2.0 - 2.0 * its_c;
 }
 
 std::ostream & HepRotationZ::print( std::ostream & os ) const {
-  os << "\nRotation about Z (" << d <<
-                ") [cos d = " << c << " sin d = " << s << "]\n";
+  os << "\nRotation about Z (" << its_d <<
+                ") [cos d = " << its_c << " sin d = " << its_s << "]\n";
   return os;
 }
 

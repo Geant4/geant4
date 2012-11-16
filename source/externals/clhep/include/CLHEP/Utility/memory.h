@@ -30,6 +30,17 @@
 //
 // ======================================================================
 
+// don't generate unnecessary warnings
+#if defined __GNUC__ 
+  #if __GNUC__ > 3 && __GNUC_MINOR__ > 6
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wdelete-non-virtual-dtor"
+  #endif
+#endif 
+#ifdef __clang__
+  #pragma clang diagnostic push
+  #pragma clang diagnostic ignored "-Wdelete-non-virtual-dtor"
+#endif
 
 #include "CLHEP/Utility/defs.h"
 #include "CLHEP/Utility/noncopyable.h"

@@ -340,7 +340,7 @@ inline HepRotation operator * (const HepRotationZ & rz, const HepRotation & r){
   HepRep3x3 mmm = r.rep3x3();
   double c = rz.xx();
   double ss = rz.yx();
-  return HepRotation (  c*mmm.xx_-s*mmm.yx_, c*mmm.xy_-s*mmm.yy_, c*mmm.xz_-s*mmm.yz_,
+  return HepRotation (  c*mmm.xx_-ss*mmm.yx_, c*mmm.xy_-ss*mmm.yy_, c*mmm.xz_-ss*mmm.yz_,
                         ss*mmm.xx_+c*mmm.yx_, ss*mmm.xy_+c*mmm.yy_, ss*mmm.xz_+c*mmm.yz_,
                               mmm.zx_,           mmm.zy_,          mmm.zz_       );
 }
