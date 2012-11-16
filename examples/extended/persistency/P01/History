@@ -14,11 +14,14 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Nvember 14th, 2012 P. Mato (exampleP01-V09-05-08)
+- Fixed compilation warning
+
 October 11th, 2012 A. Dotti (exampleP01-V09-05-07)
 - Adding protection in case GCCXML is not found: disabling
   example in CMake
 
-September 25th, 2012 I. Hrivnacova (exPersistency-V09-05-01)
+September 25th, 2012 I. Hrivnacova
 - Taking into account renaming the dictionary also in macros, code
   and GNUmake build 
 - Fixes in GNUmakefile (was failing when building with internal

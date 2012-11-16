@@ -16,6 +16,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 15th, 2012 I. Hrivnacova (exPersistency-V09-05-07)
+- Fixes in files descriptions (for Doxygen)
+
 October 22th, 2012 I. Hrivnacova (exPersistency-V09-05-06)
 - Fixed handling GDML option in CMake build:
   The "gdml" component is added to find_package call in G0*/CMakeLists.txt

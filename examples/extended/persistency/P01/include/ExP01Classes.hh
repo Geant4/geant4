@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/P01/include/Classes.hh
-/// \brief Definition of the Classes class
+/// \file persistency/P01/include/ExP01Classes.hh
+/// \brief Declaration of the classes for generating dictionaries
 //
 #include "ExP01TrackerHit.hh"
 

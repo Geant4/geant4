@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 /// \file persistency/P02/include/ExP02Classes.hh
-/// \brief Definition of the ExP02Classes class
+/// \brief Declaration of the classes for generating dictionaries
 //
 #include "ExP02GeoTree.hh"
 //

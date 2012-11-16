@@ -54,12 +54,12 @@ int main(int argc,char** argv)
  
   TIter next(fo.GetListOfKeys());
   TKey *key;
-  double tot_en;
+  //double tot_en;
   while ((key=(TKey*)next()))
   {
     fo.GetObject(key->GetName(), hits);
  
-    tot_en = 0;
+    //tot_en = 0;
     G4cout << "Collection: " << key->GetName() << G4endl;
     G4cout << "Number of hits: " << hits->size() << G4endl;
     for (size_t i=0;i!=hits->size();i++)
