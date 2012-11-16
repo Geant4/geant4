@@ -3547,33 +3547,37 @@ void G4OpenGLQtViewer::updateToolbarAndMouseContextMenu(){
   // Surface style
   if (d_style == G4ViewParameters::wireframe) {
     if (fUiQt) fUiQt->SetIconWireframeSelected();
-    fDrawingWireframe->setChecked(true);
-    fDrawingLineRemoval->setChecked(false);
-    fDrawingSurfaceRemoval->setChecked(false);
-    fDrawingLineSurfaceRemoval->setChecked(false);
-    
+    if (fContextMenu) {
+      fDrawingWireframe->setChecked(true);
+      fDrawingLineRemoval->setChecked(false);
+      fDrawingSurfaceRemoval->setChecked(false);
+      fDrawingLineSurfaceRemoval->setChecked(false);
+    }    
   } else if (d_style == G4ViewParameters::hlr) {
     if (fUiQt) fUiQt->SetIconHLRSelected();
-    fDrawingLineRemoval->setChecked(true);
-    fDrawingWireframe->setChecked(false);
-    fDrawingSurfaceRemoval->setChecked(false);
-    fDrawingLineSurfaceRemoval->setChecked(false);
-    
+    if (fContextMenu) {
+      fDrawingLineRemoval->setChecked(true);
+      fDrawingWireframe->setChecked(false);
+      fDrawingSurfaceRemoval->setChecked(false);
+      fDrawingLineSurfaceRemoval->setChecked(false);
+    }    
   } else if (d_style == G4ViewParameters::hsr) {
     if (fUiQt) fUiQt->SetIconSolidSelected();
-    fDrawingSurfaceRemoval->setChecked(true);
-    fDrawingWireframe->setChecked(false);
-    fDrawingLineRemoval->setChecked(false);
-    fDrawingLineSurfaceRemoval->setChecked(false);
-    
+    if (fContextMenu) {
+      fDrawingSurfaceRemoval->setChecked(true);
+      fDrawingWireframe->setChecked(false);
+      fDrawingLineRemoval->setChecked(false);
+      fDrawingLineSurfaceRemoval->setChecked(false);
+    }
   } else if (d_style == G4ViewParameters::hlhsr) {
     if (fUiQt) fUiQt->SetIconHLHSRSelected();
-    fDrawingLineSurfaceRemoval->setChecked(true);
-    fDrawingWireframe->setChecked(false);
-    fDrawingLineRemoval->setChecked(false);
-    fDrawingSurfaceRemoval->setChecked(false);
-    fDrawingLineSurfaceRemoval->setChecked(false);
-
+    if (fContextMenu) {
+      fDrawingLineSurfaceRemoval->setChecked(true);
+      fDrawingWireframe->setChecked(false);
+      fDrawingLineRemoval->setChecked(false);
+      fDrawingSurfaceRemoval->setChecked(false);
+      fDrawingLineSurfaceRemoval->setChecked(false);
+    }
   }
   
   
@@ -3581,46 +3585,45 @@ void G4OpenGLQtViewer::updateToolbarAndMouseContextMenu(){
   G4double d_proj = fVP.GetFieldHalfAngle () ;
   if (d_proj == 0.) { // ortho
     if (fUiQt) fUiQt->SetIconOrthoSelected();
-    fProjectionOrtho->setChecked(true);
-    fProjectionPerspective->setChecked(false);
-    
+    if (fContextMenu) {
+      fProjectionOrtho->setChecked(true);
+      fProjectionPerspective->setChecked(false);
+    }    
   } else {
     if (fUiQt) fUiQt->SetIconPerspectiveSelected();
-    fProjectionPerspective->setChecked(true);
-    fProjectionOrtho->setChecked(false);
+      if (fContextMenu) {
+        fProjectionPerspective->setChecked(true);
+        fProjectionOrtho->setChecked(false);
+      }
   }
   
   
   // mouse style : They are controlled by UI !
-  if (fUiQt) {
+  if (fUiQt && fContextMenu) {
     if (fUiQt->IsIconPickSelected()) {
       fMousePickAction->setChecked(true);
       fMouseZoomOutAction->setChecked(false);
       fMouseZoomInAction->setChecked(false);
       fMouseRotateAction->setChecked(false);
       fMouseMoveAction->setChecked(false);
-      
     } else if (fUiQt->IsIconZoomOutSelected()) {
       fMouseZoomOutAction->setChecked(true);
       fMousePickAction->setChecked(false);
       fMouseZoomInAction->setChecked(false);
       fMouseRotateAction->setChecked(false);
       fMouseMoveAction->setChecked(false);
-      
     } else if (fUiQt->IsIconZoomInSelected()) {
       fMouseZoomInAction->setChecked(true);
       fMousePickAction->setChecked(false);
       fMouseZoomOutAction->setChecked(false);
       fMouseRotateAction->setChecked(false);
       fMouseMoveAction->setChecked(false);
-      
     } else if (fUiQt->IsIconRotateSelected()) {
       fMouseRotateAction->setChecked(true);
       fMousePickAction->setChecked(false);
       fMouseZoomOutAction->setChecked(false);
       fMouseZoomInAction->setChecked(false);
       fMouseMoveAction->setChecked(false);
-      
     } else if (fUiQt->IsIconMoveSelected()) {
       fMouseMoveAction->setChecked(true);
       fMousePickAction->setChecked(false);

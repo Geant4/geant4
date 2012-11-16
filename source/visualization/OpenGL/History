@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13th November 2012  Laurent Garnier (opengl-V09-05-53)
+- G4OpenGLQtViewer
+  o Fix bug #1385 on Linux at launch. Mouse context try to change before it is initialize.
+    No problem for Mac OS X 
+
 2nd November 2012  John Allison (opengl-V09-05-52)
 - G4OpenGLImmediateQtViewer,G4OpenGLStoredQtViewer :
   o Fix bug #1368, now Qt batch mode display a window and printEPS is working again
