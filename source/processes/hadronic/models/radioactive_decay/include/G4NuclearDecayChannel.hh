@@ -140,12 +140,12 @@ protected:
   G4int                  daughterA;
   G4int                  daughterZ;
   G4ParticleDefinition  *daughterNucleus;
-  G4DynamicParticle     *dynamicDaughter;
+  G4DynamicParticle* dynamicDaughter;
   G4double               Qtransition;
   G4double               halflifethreshold;
   G4bool                 applyICM;
   G4bool                 applyARM;
-  CLHEP::RandGeneral*    RandomEnergy;    
+  CLHEP::RandGeneral* RandomEnergy;    
 };
 #endif
 

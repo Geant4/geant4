@@ -62,7 +62,7 @@
 #include "globals.hh"
 #include "G4VRestDiscreteProcess.hh"
 #include "G4ParticleChangeForRadDecay.hh"
-#include "G4RadioactiveDecaymessenger.hh"  
+// #include "G4RadioactiveDecaymessenger.hh"  
 
 #include "G4NucleusLimits.hh"
 #include "G4RadioactiveDecayRate.hh"

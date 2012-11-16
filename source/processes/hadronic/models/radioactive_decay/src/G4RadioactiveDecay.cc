@@ -1375,9 +1375,6 @@ void G4RadioactiveDecay::SetSourceTimeProfile(G4String filename)
                 FatalException, ed);
   }
 
-  // if (!infile) G4Exception(__FILE__, G4inttostring(__LINE__), FatalException,
-  //                          "Unable to open source data file");
-
   G4double bin, flux;
   NSourceBin = -1;
   while (infile >> bin >> flux ) {
@@ -1386,8 +1383,6 @@ void G4RadioactiveDecay::SetSourceTimeProfile(G4String filename)
       G4Exception("G4RadioactiveDecay::SetSourceTimeProfile()", "HAD_RDM_002",
                   FatalException, "Input source time file too big (>100 rows)");
 
-    //  G4Exception(__FILE__, G4inttostring(__LINE__), FatalException,
-    //              "input source data file too big (>100 rows)" );
     } else {
       SBin[NSourceBin] = bin * s;
       SProfile[NSourceBin] = flux;
@@ -1415,8 +1410,6 @@ void G4RadioactiveDecay::SetDecayBias(G4String filename)
   std::ifstream infile(filename, std::ios::in);
   if (!infile) G4Exception("G4RadioactiveDecay::SetDecayBias()", "HAD_RDM_003",
                            FatalException, "Unable to open bias data file" );
-//  if (!infile) G4Exception(__FILE__, G4inttostring(__LINE__), FatalException,
-//                             "Unable to open bias data file" );
 
   G4double bin, flux;
   G4int dWindows = 0;
@@ -1430,8 +1423,6 @@ void G4RadioactiveDecay::SetDecayBias(G4String filename)
     if (NDecayBin > 99) {
       G4Exception("G4RadioactiveDecay::SetDecayBias()", "HAD_RDM_004",
                   FatalException, "Input bias file too big (>100 rows)" );
-//      G4Exception(__FILE__, G4inttostring(__LINE__), FatalException,
-//                  "input bias data file too big (>100 rows)" );
     } else {
       DBin[NDecayBin] = bin * s;
       DProfile[NDecayBin] = flux;

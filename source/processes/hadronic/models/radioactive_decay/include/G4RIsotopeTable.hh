@@ -70,16 +70,16 @@ class G4RIsotopeTable : public G4VIsotopeTable
 public:
   //
   typedef std::vector<G4IsotopeProperty*> G4IsotopeList;
-  typedef std::vector<G4String>           G4IsotopeNameList;
+  typedef std::vector<G4String> G4IsotopeNameList;
 
 public:
   // constructor
-  //
-  G4RIsotopeTable ();
+  G4RIsotopeTable();
 
 protected:
-  // hide copy construictor as protected
-  G4RIsotopeTable(const  G4RIsotopeTable &right);
+  // Hide copy constructor and assignment operator as protected
+  G4RIsotopeTable(const G4RIsotopeTable& right);
+  G4RIsotopeTable& operator = (const G4RIsotopeTable& right);
 
 public:
   // destructor

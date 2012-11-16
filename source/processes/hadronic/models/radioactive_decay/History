@@ -14,6 +14,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
 
+13 November 2012  Dennis Wright  radioactive_decay-V09-05-12
+------------------------------------------------------------
+- G4NuclearDecayChannel: fix Coverity bugs 15098, 15099, 37711 uninitialized
+  variables, and bug 14520, dereference of possible null pointer
+- G4RIsotopeTable: add assignment operator as per Coverity bug 37113
+- G4RadioactiveDecay.hh - remove extra include of G4RadioactiveDecaymessenger.hh
+
 04 October 2012  Gabriele Cosmo  radioactive_decay-V09-05-11
 ------------------------------------------------------------
 - G4RIsotopeTable.cc: added inclusion of units header...
@@ -89,9 +96,10 @@ track of all tags.
        
 01 May 2012  Laurent Desorgher  radioactive_decay-V09-05-01
 ---------------------------------------------------------
-- G4RIsotopeTable : Add the reading of user data  files  in order to take into account the life time
-  given in these files. (Bug reported by M. Maire)
-  G4RadioactiveDecay: Put the activation development of Fan Lei from trunk in the tagged release. 
+- G4RIsotopeTable : Add the reading of user data  files  in order to take
+   into account the life time given in these files. (Bug reported by M. Maire)
+- G4RadioactiveDecay: Put the activation development of Fan Lei from trunk in
+   the tagged release. 
 
 17 March 2012  Dennis Wright  radioactive_decay-V09-05-00
 ---------------------------------------------------------
@@ -127,14 +135,16 @@ track of all tags.
 18 October 2011 Laurent Desorgher(radioactive_decay-V09-04-10)
 ---------------------------------
 --G4RadioactiveDecay:
-		-Add possibility for the user to load its own decay file.
-		-Set halflifethreshold negative by default to allow the tracking of all
-	   								excited nuclei resulting from a radioactive decay
+   -Add possibility for the user to load its own decay file.
+   -Set halflifethreshold negative by default to allow the tracking of all
+     excited nuclei resulting from a radioactive decay
 --G4RadioactiveDecayChannel:
-		-Correction to allow the atomic relaxation of de-excited nuclei produce also during beta and alpha decay.
-		 Problem ersaed and solution proposed by Ko Abe 
+   -Correction to allow the atomic relaxation of de-excited nuclei produce
+     also during beta and alpha decay.  Problem ersaed and solution proposed
+     by Ko Abe 
 --G4RadioactiveDecayMessenger:
-		-Add macro commands  /grdm/setRadioactiveDecayFile and  /grdm/setPhotoEvaporationFile
+   -Add macro commands  /grdm/setRadioactiveDecayFile and
+                        /grdm/setPhotoEvaporationFile
 
 26 September 2011  Dennis Wright  (radioactive_decay-V09-04-09)
 ---------------------------------------------------------------
