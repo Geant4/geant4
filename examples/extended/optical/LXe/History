@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16 November 2012 Gunter Folger    (LXe-V09-05-02)
+- reduce size of LXe.out, and remove tracking/verbose 1, responsible for the 
+   size of the output
+
 14 November 2012 Ivana Hrivnacova (LXe-V09-05-01)
 - In vis.mac: OGLIX replaced with OGL
 
