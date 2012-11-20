@@ -78,10 +78,6 @@ They are:
 
 7- main()
 
- - compile and link to generate an executable
-         % cd wls
-         % make
-                 
  - execute wls in 'batch' mode from macro files
  - you can enter an optional integer seed for batch mode 
          % wls wls.in (optional: enter an integer seed here)

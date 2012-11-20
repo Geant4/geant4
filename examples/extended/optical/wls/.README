@@ -77,14 +77,8 @@ They are:
 
 \section Examplewls_s7 main ()
 
- - compile and link to generate an executable
-\verbatim
-% cd wls
-% make
-\endverbatim
-                 
- - execute wls in 'batch' mode from macro files
- - you can enter an optional integer seed for batch mode 
+ - Execute wls in 'batch' mode from macro files; \n
+   you can enter an optional integer seed for batch mode 
 \verbatim
 % wls wls.in (optional: enter an integer seed here)
 \endverbatim
