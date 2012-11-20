@@ -382,7 +382,8 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandGeometrySetVisibility);
   
   directory = new G4UIdirectory ("/vis/set/");
-  directory -> SetGuidance("Set quantities for use in appropriate commands.");
+  directory -> SetGuidance
+    ("Set quantities for use in future commands where appropriate.");
   fDirectoryList.push_back (directory);
   RegisterMessenger(new G4VisCommandSetColour);
   RegisterMessenger(new G4VisCommandSetLineWidth);
@@ -435,6 +436,7 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandSceneHandlerSelect);
   
   directory = new G4UIdirectory ("/vis/touchable/");
+  directory -> SetGuidance ("Operations on touchables.");
   directory = new G4UIdirectory ("/vis/touchable/set/");
   directory -> SetGuidance ("Set vis attributes of current touchable.");
   fDirectoryList.push_back (directory);

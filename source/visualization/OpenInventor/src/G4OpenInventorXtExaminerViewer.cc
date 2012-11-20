@@ -370,6 +370,7 @@ void G4OpenInventorXtExaminerViewer::constructor(const SbBool build)
    SoInput * input = new SoInput;
    input->setBuffer(buf, bufsize);
    SbBool ok = SoDB::read(input, this->superimposition);
+   (void)ok;   // FWJ added to avoid compiler warning
    assert(ok);
    delete input;
    delete[] buf;
@@ -1037,7 +1038,9 @@ void G4OpenInventorXtExaminerViewer::pickingCB(void *aThis,
    // back through the nodes in the group until we find the Coordinate3 node
             int nodeIndex = grpNode->findChild(trajectory);
             SoNode * tmpNode;
-            SoCoordinate3 * coords;
+            // FWJ needs initialization
+            SoCoordinate3 * coords = 0;
+            //            SoCoordinate3 * coords;
             // We allow only 100 iterations, in case the node isn't found
             // (should take only a few iterations)
             for(int i = 0; i < 100; ++i) {

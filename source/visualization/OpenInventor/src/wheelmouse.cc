@@ -54,7 +54,7 @@ extern "C" {
 /*                                                                 */ 
 /*******************************************************************/ 
 
-static void mouseScroll(Widget w, XtPointer client_data, XEvent *event)
+static void mouseScroll(Widget, XtPointer client_data, XEvent *event)
 {
    Widget sb = (Widget)client_data;
    int value_return			  = 0;

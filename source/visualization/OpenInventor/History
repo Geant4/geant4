@@ -20,6 +20,27 @@ committal in the CVS repository !
 History file for visualization/OpenInventor
 -------------------------------------------
 
+17th November 2012  John Allison (openinventor-V09-05-17)
+- G4OpenInventorXtExaminerViewer:
+  o Reverted to openinventor-V09-05-14 (except small fix for compiler
+    warning about uninitialised quantity).
+- wheelmouse.cc:
+  o Fixed compiler warning about un-used parameter.
+- Note: The fix in sources.cmake (openinventor-V09-05-16) is kept for
+  possible future development.
+
+5th November 2012  John Allison (openinventor-V09-05-16)
+- sources.cmake: Added ${X11_Xpm_LIB} for createPixmapFromXpm on Mac.
+
+02nd November 2012  Frederick Jones (openinventor-V09-05-15)
+- G4OpenInventorXtExaminerViewer:
+  o Removed dependency on SoXtCursor.h
+    This is a Coin3d extension which is incompatible with
+    SGI Open Inventor and with old versions of Coin3d.
+  o Removed dependency on SoXtInternal.h
+    Moved code for createPixmapFromXpm() into the class.
+  o Fixed compiler warnings for unused/uninitialized variables.
+
 31st October 2012  John Allison  (openinventor-V09-05-14)
 - History:
   o Corrected date!!!

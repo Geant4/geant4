@@ -26,6 +26,10 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+17th November 2012  John Allison  (visman-V09-05-47)
+- G4VisManager.cc:
+  o Improved guidance on /vis/set/ and /vis/touchable/ command directories.
+
 2nd November 2012  John Allison  (visman-V09-05-46)
 - G4ViewParameters.hh: Tidied.
 

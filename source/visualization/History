@@ -24,7 +24,22 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
-5nd November 2012  Joseph Perl  (vis-V09-05-48)
+17th November 2012  John Allison  (vis-V09-05-49)
+- visman-V09-05-47:
+  o Improved guidance on command directories.
+- openinventor-V09-05-17:
+  o Reverted to openinventor-V09-05-14.
+  o Fixed compiler warnings.
+
+13th November 2012  Laurent Garnier
+- opengl-V09-05-53:
+  o Fix bug #1385 on Linux at launch.
+
+5th November 2012  John Allison
+- openinventor-V09-05-16:
+  o Fixed libXpm linking problem.
+
+5th November 2012  Joseph Perl  (vis-V09-05-48)
 Rolling openinventor back to: openinventor-V09-05-14
 
 2nd November 2012  Joseph Perl  (vis-V09-05-47)
