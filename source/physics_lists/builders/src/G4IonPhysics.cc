@@ -89,6 +89,21 @@ G4IonPhysics::G4IonPhysics(G4int ver)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4IonPhysics::G4IonPhysics(const G4String& nname)
+  : G4VPhysicsConstructor(nname),verbose(1),
+    wasActivated(false)
+{
+//  fTripathi = fTripathiLight = fShen = fIonH = 0;
+    fGGNuclNucl=0;
+  theIonBC = 0;
+  theFTFP = 0;
+  theBuilder = 0;
+  SetPhysicsType(bIons);
+  if(verbose > 1) { G4cout << "### G4IonPhysics" << G4endl; }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4IonPhysics::~G4IonPhysics()
 {
   delete theBuilder;

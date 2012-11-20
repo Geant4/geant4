@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20-11-2012, V.Ivanchenko		(phys-lists-V09-05-78)
+- G4IonPhysics - added old constructor to provide backward
+    compatibility with 9.5 (CMS request) 
+
 06-11-2012, V.Ivanchenko		(phys-lists-V09-05-77)
 - G4EmStandardPhysics_option4 - fixed typo - 2 ionisation for e+-
 

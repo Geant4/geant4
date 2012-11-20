@@ -54,6 +54,7 @@ class G4IonPhysics : public G4VPhysicsConstructor
 public:
 
   G4IonPhysics(G4int ver = 0);
+  G4IonPhysics(const G4String& nname);
   virtual ~G4IonPhysics();
 
   // This method will be invoked in the Construct() method.
