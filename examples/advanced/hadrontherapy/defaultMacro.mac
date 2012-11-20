@@ -30,7 +30,7 @@
 #
 
 /vis/scene/create
-/vis/open OGLI
+/vis/open OGL
 /vis/viewer/flush
 /vis/viewer/set/viewpointThetaPhi 30 140 deg
 /vis/viewer/zoom 1
@@ -128,7 +128,7 @@
 # Default material is water liquid
 #/changePhantom/material G4_PLEXIGLASS
 
-/run/beamOn 1000
+/run/beamOn 100
 
 # Create the SimulationOutputs/proton/BraggPeak directory before to use the following command
 /control/shell mv DoseDistribution.root esperimentalData/proton/BraggPeak/protonBraggPeak.root

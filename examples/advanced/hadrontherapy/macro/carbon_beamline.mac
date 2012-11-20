@@ -39,11 +39,7 @@
 # Visualisation 
 #
 /vis/scene/create
-#/vis/open OGLIQt # only if QT library are installed
-#/vis/open OGLSX 600x600-0+0
-/vis/open OGLI
-#/vis/open HepRepFile
-#/vis/open DAWNFILE
+/vis/open OGL
 #/vis/viewer/set/background white
 /vis/viewer/set/style solid
 /vis/viewer/flush

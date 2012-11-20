@@ -8,6 +8,10 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
              History file of the Hadrontherapy application
          ====================================================
 
+
+16.11.2012 F.Romano;       Tag: hadrontherapy-V09-05-11
+           - in macro files included generic command for visualization vis/open OGL where needed
+
 08.11.2012 F.Romano;       Tag: hadrontherapy-V09-05-10
            - hadrontherapy.cc: fixed problem for referencePhysList if condition
 	   - README revised
