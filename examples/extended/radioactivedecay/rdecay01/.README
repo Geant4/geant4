@@ -47,8 +47,8 @@ allows to limit to single decay (default) or full decay chain.
 
  Users can redefine RadioactiveDecay and PhotonEvaporation data, via commands:
 \verbatim
- /grdm/setRadioactiveDecayFile
- /grdm/setPhotoEvaporationFile 
+/grdm/setRadioactiveDecayFile
+/grdm/setPhotoEvaporationFile 
 \endverbatim
  Examples of such files are given in subdirectory UserData. \n
  Formats are described in readme \n
@@ -71,18 +71,12 @@ allows to limit to single decay (default) or full decay chain.
  
 \section rdecay01_s7 How to start ?
  
-  - compile and link to generate an executable
-\verbatim
-% cd rdecay01
-% gmake
-\endverbatim
- 		
-  - execute rdecay01 in 'batch' mode from macro files
+  - Execute rdecay01 in 'batch' mode from macro files
 \verbatim
 % rdecay01   singleDecay.mac
 \endverbatim
  		
-  - execute rdecay01 in 'interactive mode' with visualization
+  - Execute rdecay01 in 'interactive mode' with visualization
 \verbatim
 % rdecay01
 ....
@@ -94,7 +88,7 @@ Idle> /run/beamOn 1
 Idle> exit
 \endverbatim
 	
-\section rdecay01_s7 Histograms
+\section rdecay01_s8 Histograms
  
   rdecay01 produces several 1D histograms which are saved as
   rdecay01.root by default.

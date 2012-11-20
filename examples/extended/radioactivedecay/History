@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 25, 2012  I. Hrivnacova - exRadioactivedecay-V09-05-01
+- Updated documentation:
+  - Fixed .README files for artefacts from Markdown support
+  - Removed/updated obsolete instructions (how to compile & link)
+
 September 25, 2012  I. Hrivnacova - exRadioactivedecay-V09-05-00
 - Updated CMakeLists.txt files:
   adding visualization, optional external packages (rdecay02 ), copying macros, 
