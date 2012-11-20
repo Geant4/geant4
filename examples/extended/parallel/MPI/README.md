@@ -146,7 +146,9 @@ MPI control commands
 
 ### Notes:
 While "/run/beamOn" and "/mpi/beamOn" commands invoke beam-on in background,
-so you can input UI commands even while event processing.
+so you can input UI commands even while event processing. Note that drawing
+tracks in OpenGL with these commands causes a crash. Please use /mpi/.beamOn
+command instead.
 
 The original "/control/execute" and "/run/beamOn" are overwritten
 with "/mpi/execute" and "/mpi/beamOn" commands respectively,
