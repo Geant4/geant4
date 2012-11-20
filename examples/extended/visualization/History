@@ -15,6 +15,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17th November 2012  Ivana Hrivnacova (exVisualization-V09-05-01)
+- Improved .README
      
 25th September 2012  Ivana Hrivnacova (exVisualization-V09-05-00)
 - Added/updated CMakeLists.txt files:

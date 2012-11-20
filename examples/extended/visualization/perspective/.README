@@ -7,13 +7,14 @@ examples/extended/visualization/perspective
 
 This example is another example of using the Geant Visualization
 System as a "stand-alone" graphics library and viewer.  See
-examples/extended/visualization/standalone for a simpler
-introductory explanation.
+\ref Examplestandalone for a simpler introductory explanation.
 
 The particular feature of this example is the addition of "perspective
 lines".  The direction of these lines is controlled by
 
-  /perspectiveDemo/optionString x
+\verbatim      
+/perspectiveDemo/optionString x
+\endverbatim      
 
 See vis.mac.
 

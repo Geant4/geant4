@@ -21,7 +21,10 @@ draws a simple logo.
 
 3) To visualise, use the usual Geant4 vis commands to create a view
    and scene, then add the vis action to the scene with
-   /vis/scene/add/userAction - see vis.mac.
+\verbatim
+/vis/scene/add/userAction 
+\endverbatim
+   see vis.mac.
 
 Note: The system needs an "extent" in order to point the virtual
 camera and adjust its field of view, etc.  This defines the "standard
