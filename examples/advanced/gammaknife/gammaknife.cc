@@ -46,9 +46,6 @@
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
 #include "G4UItcsh.hh"
-#ifdef G4UI_USE_XM
-#include "G4UIXm.hh"
-#endif
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
 #endif
