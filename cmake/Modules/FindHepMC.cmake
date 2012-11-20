@@ -8,7 +8,7 @@
 #  HEPMC_LIBRARIES
 #  HEPMC_FIO_LIBRARIES
 
-find_path(HEPMC_INCLUDE_DIR HepMC/GenEvent.
+find_path(HEPMC_INCLUDE_DIR HepMC/GenEvent.h
           HINTS $ENV{HEPMC_ROOT_DIR}/include ${HEPMC_ROOT_DIR}/include
           $ENV{HEPMC_DIR}/include ${HEPMC_DIR}/include)
 

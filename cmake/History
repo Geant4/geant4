@@ -29,6 +29,9 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+20th November 2012 - Ivana Hrivnacova  (cmake-V09-05-73)
+- Fixed FindHepMC.cmake (GenEvent.h file extension was missing)
+ 
 16th November 2012 - Ben Morgan        (cmake-V09-05-72)
 - Modules/Geant4ToolchainBackwardCompatibility.cmake : Improve
   description of workaround for sourcing Cshell scripts
