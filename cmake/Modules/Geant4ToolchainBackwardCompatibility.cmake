@@ -136,10 +136,11 @@ else
     unset g4sls_sourced_dir
     echo \"ERROR: ${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION} could NOT self-locate Geant4 installation\"
     echo \"because it was sourced (i.e. embedded) in another script.\"
-    echo \"This issue is specific to (t)csh\"
-    echo \"You need to use:\"
+    echo \"This is due to limitations of (t)csh but can be worked around by providing\"
+    echo \"the directory where ${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION} is located\"
+    echo \"to it, either via cd-ing to the directory before sourcing:\"
     echo \"  cd where_script_is ; source ${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION}\"
-    echo \"or:\"
+    echo \"or by supplying the directory as an argument to the script:\"
     echo \"  source where_script_is/${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION} where_script_is\"
     echo \" \"
   endif
