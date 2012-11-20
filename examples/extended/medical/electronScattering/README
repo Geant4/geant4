@@ -114,15 +114,11 @@ $Id: README,v 1.1 2009-09-19 16:09:43 maire Exp $
 	
  8- HOW TO START ?
  
- - compile and link to generate an executable
- 	% cd electronScattering
- 	% gmake
- 		
- - execute eBenchmarkV1 in 'batch' mode from macro files e.g.
- 	% $(G4INSTALL)/bin/$(G4SYSTEM)/eBenchmarkV1   myMacro.mac
+ - execute electronScattering in 'batch' mode from macro files e.g.
+ 	% electronScattering   myMacro.mac
 		
- - execute eBenchmarkV1 in 'interactive' mode with visualization e.g.
- 	% $(G4INSTALL)/bin/$(G4SYSTEM)/eBenchmarkV1
+ - execute electronScattering in 'interactive' mode with visualization e.g.
+ 	% electronScattering
 	Then type your commands, for instance :
 	Idle> control/execute vis.mac
 	Idle> run/beamOn 5

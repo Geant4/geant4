@@ -103,11 +103,6 @@ This present example, electronScattering2, was the Geant4 code used for this pub
  	
  7- HOW TO START
  
- - compile and link to generate an executable
- 	% cd electronScattering2
- 	% make or gmake depending on your platform
-
- 		
  - execute electornScattering2 in 'batch' mode from macro files:
  	% electronScattering2 <macro_file> <starting_seed> <output_file>
 

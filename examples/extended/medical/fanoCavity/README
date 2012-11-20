@@ -161,10 +161,6 @@ $Id: README,v 1.16 2009-10-25 19:06:26 maire Exp $
  	
  6- HOW TO START ?
  
- 	- compile and link to generate an executable
- 		% cd geant4/examples/extended/medical/fanoCavity
- 		% gmake
- 		
  	- execute fanoCavity in 'batch' mode from macro files
  		% fanoCavity   run01.mac
  		

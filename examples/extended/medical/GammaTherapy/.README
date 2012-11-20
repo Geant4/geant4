@@ -5,10 +5,9 @@
 
 /*! \page ExampleGammaTherapy Example GammaTherapy
 
-                   I.Gudovska, V.Ivanchenko, S.Larsson \n
-            Karolinska Institute & Hospital, Stockholm, Sweden \n
-                       CERN, Geneva, Switzerland
-
+\author I.Gudovska, V.Ivanchenko, S.Larsson \n
+Karolinska Institute & Hospital, Stockholm, Sweden \n
+CERN, Geneva, Switzerland
 
 Electron beam of 50 MeV converted on target. All charged particles removed
 from the beam after the target. Gamma beam irradiate a water phantom.

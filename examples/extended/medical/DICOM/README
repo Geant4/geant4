@@ -39,10 +39,10 @@ In the application the phantom is placed on a table.
  - To run the environment variabmore le G4LEDATA needs to be set, pointing to the low energy data base, and the G4LEVELGAMMADATA pointing to the PhotonEvaporation data base
 
  - batch mode:
-   - $G4INSTALL/bin/Linux-g++/DICOM run.mac 
+   - DICOM run.mac 
 
  - interactive mode:
-   - $G4INSTALL/bin/Linux-g++/DICOM
+   - DICOM
    the file vis.mac is read in order to visualise the phantom with OpenGL, DAWN or VRML
 
 --->4) Metadata:

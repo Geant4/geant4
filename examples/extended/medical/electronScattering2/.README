@@ -103,42 +103,35 @@ This present example, electronScattering2, was the Geant4 code used for this pub
  	
 \section electronScattering2_s7 HOW TO START
  
- - compile and link to generate an executable
-\verbatim
-% cd electronScattering2
-% make or gmake depending on your platform
-\endverbatim
-
- 		
- - execute electornScattering2 in 'batch' mode from macro files:
+ - Execute electornScattering2 in 'batch' mode from macro files:
 \verbatim
 % electronScattering2 <macro_file> <starting_seed> <output_file>
 \endverbatim
+
    for example, to run the Al1_13MeV case with physics option 2 and a starting random seed of 1:
 \verbatim
 % electronScattering2 macros/Opt2/Al1_13MeV.mac 1  output/Opt2/Al1_13MeV_1
 \endverbatim
 
- - if macro_file is not specfied, the job starts and then just waits for interactive commands
+ - If macro_file is not specfied, the job starts and then just waits for interactive commands
  
- - if starting_seed is not specified, it defaults to 1.
+ - If starting_seed is not specified, it defaults to 1.
    Precision benchmark studies often involve running multiple long batch jobs and then combining the results.
    If you plan to combine more than one job with the same primary foil and energy, be sure to use different
    random seeds for each of the jobs.
 
- - if output_file is not specified, it defaults to output.csv in the current directory
+ - If output_file is not specified, it defaults to output.csv in the current directory
 
- - to simplify batch submission of large numbers of jobs, a shell script is given called run.csh.
+ - To simplify batch submission of large numbers of jobs, a shell script is given called run.csh.
    The above submission could be done, for example, by:
 \verbatim
 run.csh Opt2/Al1_13MeV 1
 \endverbatim
 
- - to run a basic visualization job, producing output to a HepRep file, use vis.mac, as in:
+ - To run a basic visualization job, producing output to a HepRep file, use vis.mac, as in:
 \verbatim
 % electronScattering2 macros/vis.mac
 \endverbatim
-
 
 \section electronScattering2_s8 OUTPUT
 	

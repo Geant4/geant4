@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17-11-12 I. Hrivnacova (exMedical-V09-05-02)
+- Updated documentation:
+  - Fixed .README files for artefacts from Markdown support
+  - Removed obsolete instructions (how to compile & link)
+
 13-10-12 A. Dotti (exMedical-V09-05-01)
 - Retagging: previous tag does not appear in tag database
 

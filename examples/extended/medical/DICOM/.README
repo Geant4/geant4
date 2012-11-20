@@ -7,16 +7,16 @@
 
 
 The DICOM application has been originally developed by the Geant4 users: \n
-Louis Archambault,+Luc Beaulieu, ++Vincent Hubert-Tremblay.
+Louis Archambault,(1)Luc Beaulieu, (2)Vincent Hubert-Tremblay.
 
-+ Centre Hospitalier Universitaire de Quebec (CHUQ),   \n
+- (1) Centre Hospitalier Universitaire de Quebec (CHUQ),   \n
 Hotel-Dieu de Quebec, departement de Radio-oncologie  \n
 11 cote du palais. Quebec, QC, Canada, G1R 2J6        \n
 tel (418) 525-4444 #6720                              \n
 fax (418) 691 5268                                    \n
 web : thomson.phy.ulaval.ca/phys_med                  \n
 
-++ Universite Laval, Quebec (QC) Canada
+- (2) Universite Laval, Quebec (QC) Canada
 
 And it has been deeply reviewed by Pedro Arce in December 2007. \n
 Very small changes by Stephane Chauvie in January 2008. \n
@@ -42,12 +42,12 @@ In the application the phantom is placed on a table.
 
  - batch mode:
 \verbatim
-$G4INSTALL/bin/Linux-g++/DICOM run.mac 
+DICOM run.mac 
 \endverbatim
 
  - interactive mode:
 \verbatim
-$G4INSTALL/bin/Linux-g++/DICOM
+DICOM
 \endverbatim
    the file vis.mac is read in order to visualise the phantom with OpenGL, DAWN or VRML
 
