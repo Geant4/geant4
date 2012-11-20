@@ -29,7 +29,7 @@ $Id$
  The method of placement can be selected interactively via the command
  (see DetectorMessenger and debug.mac):
 \verbatim 
- /placement/setMethod method
+/placement/setMethod method
 \endverbatim
       
 \section Transforms_s2 Physics list
@@ -54,26 +54,22 @@ $Id$
   
 \section Transforms_s6 How to start ?
 
-  - compile and link to generate an executable
-\verbatim  
- 	% cd transforms
- 	% gmake
-\endverbatim 		
-  - execute transforms in 'interactive mode' with visualization
+  - Execute transforms in 'interactive mode' with visualization
 \verbatim    
- 	% transforms
- 	....
- 	Idle>   ---> type your commands. For instance:
-	Idle> /control/execute debug.mac 
-	....
-	Idle> /placement/setMethod WithInverseMatrix 	
-	Idle> /run/beamOn 1
-	....				
- 	Idle> exit
+% transforms
+....
+Idle>   ---> type your commands. For instance:
+Idle> /control/execute debug.mac 
+....
+Idle> /placement/setMethod WithInverseMatrix 	
+Idle> /run/beamOn 1
+....				
+Idle> exit
 \endverbatim 	 		
-  - execute transforms in 'batch' mode from macro files
+
+  - Execute transforms in 'batch' mode from macro files
 \verbatim     
- 	% transforms   debug.mac	
+% transforms   debug.mac	
 \endverbatim
  
 */

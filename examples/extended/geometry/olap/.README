@@ -61,7 +61,7 @@ A very tiny geometry (RandomDetector.hh,.cc) is provided within the example.
 It is instantiated in the file olapex.cc.
 
 
-\subsection OLAP_s3.1 Configuring the user-geometry
+\subsection OLAP_s31 Configuring the user-geometry
 
 The geometry debugging tools can be used for any Geant4 geometry. The
 geometry which one wants to debug must be available as subclass of
@@ -111,7 +111,7 @@ runManager->SetUserAction(olapSteppingAction);
 \endverbatim
 
 
-\subsection OLAP_s3.2 Navigating the geometry from command line
+\subsection OLAP_s32 Navigating the geometry from command line
 
 Unix like navigation of the logical volume hierarchy is provided by
 the /olap/cd command. The root of the logical volume tree can be accessed
@@ -129,7 +129,7 @@ navigational command and the DVs beeing the direct daughters of the MV.
 current NewWorld and MV is located.
 
 
-\subsection OLAP_s3.3 Detecting Overlaps
+\subsection OLAP_s33 Detecting Overlaps
 
 First determine the density of the grid of geantinos using
 \verbatim

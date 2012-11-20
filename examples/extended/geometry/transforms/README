@@ -58,10 +58,6 @@ $Id: README,v 1.2 2010-09-17 11:21:45 maire Exp $
   
  6- How to start ?
     -------------- 
-  - compile and link to generate an executable
- 	% cd transforms
- 	% gmake
- 		
   - execute transforms in 'interactive mode' with visualization
  	% transforms
  	....
