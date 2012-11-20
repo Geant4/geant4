@@ -50,7 +50,7 @@
 # Visualisation 
 #
 /vis/scene/create
-/vis/open OGLI
+/vis/open OGL
 /vis/viewer/flush
 #/vis/viewer/set/style solid 
 /vis/viewer/set/auxiliaryEdge true
