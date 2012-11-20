@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17-November 2012, Ivana Hrivnacova  (exgflash-V09-05-01)
+- Fixed .README file for artefacts from Markdown support
+
 15-November 2012, Ivana Hrivnacova  (exgflash-V09-05-00)
 - Minor fix in .README
 
