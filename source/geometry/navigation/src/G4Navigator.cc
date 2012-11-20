@@ -880,7 +880,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
         }
         break;
       case kReplica:
-        G4Exception("G4Navigator::ComputeStep()", "GeomNav0003",
+        G4Exception("G4Navigator::ComputeStep()", "GeomNav0001",
                     FatalException, "Not applicable for replicated volumes.");
         break;
     }
@@ -1072,7 +1072,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
         desc << "  Location    = " << finalLocalPoint << G4endl;
         desc << "  Volume name = " << motherPhysical->GetName()
              << "  copy/replica No = " << motherPhysical->GetCopyNo() << G4endl;
-        G4Exception("G4Navigator::ComputeStep", "Geom0003",
+        G4Exception("G4Navigator::ComputeStep()", "GeomNav0003",
                     JustWarning, desc, "Normal not available for exiting.");
 #endif
       }
@@ -1361,11 +1361,11 @@ G4ThreeVector G4Navigator::GetLocalExitNormal( G4bool* valid )
       *valid = true;
       fCalculatedExitNormal= true;  // Should be true already
     }
-    else  // ie  ( fBlockedPhysicalVolume == 0 )
+    else  // i.e.  ( fBlockedPhysicalVolume == 0 )
     {
       *valid = false;
       G4Exception("G4Navigator::GetLocalExitNormal()",
-                  "GeomNav003", JustWarning, 
+                  "GeomNav0003", JustWarning, 
                   "Incorrect call to GetLocalSurfaceNormal." );
     }
   }
@@ -1382,7 +1382,7 @@ G4ThreeVector G4Navigator::GetLocalExitNormal( G4bool* valid )
         desc << " Parameters of solid: " << *daughterSolid
              << " Point for surface = " << fLastLocatedPointLocal << std::endl;
         G4Exception("G4Navigator::GetLocalExitNormal()",
-                    "GeomNav003", FatalException, desc,
+                    "GeomNav0003", FatalException, desc,
                     "Surface Normal returned by Solid is not a Unit Vector." );
       }
       fCalculatedExitNormal= true;
@@ -1403,7 +1403,7 @@ G4ThreeVector G4Navigator::GetLocalExitNormal( G4bool* valid )
         G4ExceptionDescription message; 
         message << "Function called when *NOT* at a Boundary." << G4endl;
         G4Exception("G4Navigator::GetLocalExitNormal()",
-                    "GeomNav003", JustWarning, message); 
+                    "GeomNav0003", JustWarning, message); 
       }
     }
   }
@@ -1529,8 +1529,9 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
       edN << *this << G4endl;
       this->SetVerboseLevel( oldVerbose );
        
-      G4Exception("G4Navigator::GetGlobalExitNormal", "Geom0003", JustWarning,
-                  edN, " LocalExitNormalAndCheck() did not calculate Normal.");
+      G4Exception("G4Navigator::GetGlobalExitNormal()",
+                  "GeomNav0003", JustWarning, edN,
+                  "LocalExitNormalAndCheck() did not calculate Normal.");
      }
 #endif
      
@@ -1548,8 +1549,9 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
            << globalNormal.mag() << G4endl;
        edN << "  Calculated It      = " << fCalculatedExitNormal << G4endl;
 
-       G4Exception("G4Navigator::GetGlobalExitNormal()","Geom0003",JustWarning,
-                   edN, "Value obtained from new local *solid* is incorrect.");
+       G4Exception("G4Navigator::GetGlobalExitNormal()",
+                   "GeomNav0003",JustWarning, edN,
+                   "Value obtained from new local *solid* is incorrect.");
        localNormal = localNormal.unit(); // Should we correct it ??
      }
      G4AffineTransform localToGlobal = GetLocalToGlobalTransform();
@@ -1577,7 +1579,7 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
       edDfn << "  Normal stored (Global)     = " << fExitNormalGlobalFrame
             << G4endl;
       edDfn << "  Global Computed from Local = " << globalNormal << G4endl;
-      G4Exception("G4Navigator::GetGlobalExitNormal", "GeomNav003",
+      G4Exception("G4Navigator::GetGlobalExitNormal()", "GeomNav0003",
                   JustWarning, edDfn);
     }
   }
@@ -1683,7 +1685,7 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
                   << "  Copy# = " << motherPhysical->GetCopyNo() << G4endl;
               exd << "          : Global coordinates = " << pGlobalpoint
                   << G4endl;
-              G4Exception("G4Navigator::ComputeSafety",
+              G4Exception("G4Navigator::ComputeSafety()",
                           "GeomNav0003", JustWarning, exd);
             }
             G4double safetyOldVoxel;
@@ -1703,7 +1705,7 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
                   << "  Copy# = " << motherPhysical->GetCopyNo() << G4endl;
               exd << "          : Global coordinates = " << pGlobalpoint
                   << G4endl;
-              G4Exception("G4Navigator::ComputeSafety",
+              G4Exception("G4Navigator::ComputeSafety()",
                           "GeomNav0003", JustWarning, exd);
             }
 #endif
@@ -1733,7 +1735,7 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
           }
           break;
         case kReplica:
-          G4Exception("G4Navigator::ComputeSafety()", "NotApplicable",
+          G4Exception("G4Navigator::ComputeSafety()", "GeomNav0001",
                       FatalException, "Not applicable for replicated volumes.");
           break;
       }

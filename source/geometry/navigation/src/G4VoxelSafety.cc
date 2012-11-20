@@ -234,8 +234,6 @@ G4VoxelSafety::SafetyForVoxelHeader( const G4SmartVoxelHeader* pHeader,
   G4int    targetHeaderNoSlices;
   G4int    targetNodeNo;
 
-  static const char *pMethodName= "G4VoxelSafety::SafetyForVoxelHeader";
-
   G4double minSafety= previousMinSafety;
   G4double ourSafety= DBL_MAX;
   unsigned int checkedNum= 0;
@@ -278,7 +276,8 @@ G4VoxelSafety::SafetyForVoxelHeader( const G4SmartVoxelHeader* pHeader,
      G4VSolid* pSolid= pLogical->GetSolid();
      ed << "  Solid type = " << pSolid->GetEntityType() << G4endl;
      ed << *pSolid << G4endl;
-     G4Exception(pMethodName, "GeomNav1003", JustWarning, ed,
+     G4Exception("G4VoxelSafety::SafetyForVoxelHeader()", "GeomNav1003",
+                 JustWarning, ed,
                  "Point is outside range of Voxel in current coordinate");
   }
 #endif
@@ -359,8 +358,9 @@ G4VoxelSafety::SafetyForVoxelHeader( const G4SmartVoxelHeader* pHeader,
        ed << " Problem for node number= " << targetNodeNo
           << "    Number of slides = " << targetHeaderNoSlices
           << G4endl;
-       G4Exception( pMethodName,  "GeomNav0003", FatalException,
-                    ed, "Problem sampleProxy is Zero. Failure in loop.");
+       G4Exception( "G4VoxelSafety::SafetyForVoxelHeader()", "GeomNav0003",
+                    FatalException, ed,
+                    "Problem sampleProxy is Zero. Failure in loop.");
      }
      else if ( sampleProxy->IsNode() )
      {
