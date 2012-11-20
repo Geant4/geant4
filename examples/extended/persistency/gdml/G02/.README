@@ -32,7 +32,7 @@
  
  - Compile and link to generate the executable (in your CMAKE build directory):
 \verbatim
-% make geotest
+% make
 \endverbatim
  
  - Execute the application:

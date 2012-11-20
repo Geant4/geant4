@@ -25,14 +25,14 @@ the geometry is read from geo.root file.
 	Building and running the example
 	--------------------------------
 
-        This examples requires the ROOT toolkit to be installed in the
+        This example requires the ROOT toolkit to be installed in the
 system as well as GCCXML package which is used by the Reflex tool. The
 provided CMake file checks for the existance of those packages. 
 Once the CMake configuration has been succesfully done, the executable
 for this example should be build using make (in your CMake build
 directory):
 
-	make exampleP02
+	make
 
 	Remark on dictionary generation
 	-------------------------------

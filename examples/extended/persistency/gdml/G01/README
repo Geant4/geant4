@@ -37,7 +37,7 @@ HOW TO BUILD THE EXAMPLE ?
   the path where the XercesC XML parser package is installed in your system.
 
 - Compile and link to generate the executable (in your CMAKE build directory):
- 	      % make load_gdml
+ 	      % make
 
 - Execute the application.
   o For reading and visualize interactively a GDML file:

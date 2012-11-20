@@ -41,13 +41,7 @@ g4geom_assembly.txt :
      	
 \section P03_s2 HOW TO START ?
  
-    - compile and link to generate an executable
-\verbatim
-% cd P03
-% make
-\endverbatim
- 		
-    - execute textGeom in 'batch' mode from macro file 
+Execute textGeom in 'batch' mode from macro file 
 \verbatim
 % textGeom run.mac
 \endverbatim

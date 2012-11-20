@@ -16,6 +16,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 17th, 2012 I. Hrivnacova (exPersistency-V09-05-08)
+- Fixed .README files for artefacts from Markdown support
+- Removed/updated obsolete instructions (how to compile & link)
+
 November 15th, 2012 I. Hrivnacova (exPersistency-V09-05-07)
 - Fixes in files descriptions (for Doxygen)
 

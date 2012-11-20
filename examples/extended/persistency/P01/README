@@ -29,12 +29,11 @@ file as argument).
 	This examples requires the ROOT toolkit to be installed in the
 system as well as GCCXML package which is used by the Reflex tool. The
 provided CMake file checks for the existance of those packages. 
-Once the CMake configuration has been succesfully done, the two executable
-for this example should be build using make (in your CMake build
-directory): 
+Once the CMake configuration has been succesfully done, the two executables
+for this example (exampleP01, readHits) should be build using make (in your 
+CMake build directory): 
 
-	    make exampleP01
-	    make readHits
+	    make 
 
 When the example is run (using the provided run.mac macro file) ten
 events are generated and the produced hits will be stored in 

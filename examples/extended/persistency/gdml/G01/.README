@@ -37,20 +37,22 @@ Several simple GDML files are provided:
 
 - Compile and link to generate the executable (in your CMAKE build directory):
 \verbatim
-make load_gdml
+make 
 \endverbatim
 
 
 - Execute the application.
-	- For reading and visualize interactively a GDML file:
+  - For reading and visualize interactively a GDML file:
 \verbatim
 load_gdml [GDML-file-in].gdml
 \endverbatim
-	- For reading, writing and visualize interactively a GDML file:
+
+  - For reading, writing and visualize interactively a GDML file:
 \verbatim
 load_gdml [GDML-file-in].gdml [GDML-file-out].gdml
 \endverbatim
-	- For reading, writing a GDML file and running in batch a macro:
+
+  - For reading, writing a GDML file and running in batch a macro:
 \verbatim
 load_gdml [GDML-file-in].gdml [GDML-file-out].gdml [macro].in
 \endverbatim

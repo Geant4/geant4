@@ -34,7 +34,7 @@
  
  - Compile and link to generate the executable  (in your CMAKE build directory)::
 \verbatim
-% make gdml_ext
+% make
 \endverbatim
  
  - Execute the application for reading and visualizing the setup:

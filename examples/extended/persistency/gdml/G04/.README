@@ -29,7 +29,7 @@ A simple GDML files is provided:
 
 - Compile and link to generate the executable (in your CMAKE build directory):
 \verbatim
-% make gdml_det
+% make
 \endverbatim
 
 - Execute the application for parsing interactively the GDML file:
