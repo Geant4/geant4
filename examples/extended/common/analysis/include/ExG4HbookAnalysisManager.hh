@@ -159,8 +159,11 @@ class ExG4HbookAnalysisManager : public G4VAnalysisManager
     virtual tools::hbook::h2*  GetH2(G4int id, G4bool warn = true,
                                       G4bool onlyIfActive = true) const;
     virtual tools::hbook::wntuple* GetNtuple() const;
-    //tools::hbook::h1*  GetH1(const G4String& name, G4bool warn = true) const;
     
+    // Access methods via names
+    virtual G4int  GetH1Id(const G4String& name, G4bool warn = true) const;
+    virtual G4int  GetH2Id(const G4String& name, G4bool warn = true) const;
+
     // Access to H1 parameters
     virtual G4int    GetH1Nbins(G4int id) const;
     virtual G4double GetH1Xmin(G4int id) const;
@@ -263,6 +266,8 @@ class ExG4HbookAnalysisManager : public G4VAnalysisManager
     std::vector<tools::hbook::h2*>  fH2Vector;            
     std::vector<h1_booking*>  fH1BookingVector;            
     std::vector<h2_booking*>  fH2BookingVector;            
+    std::map<G4String, G4int>  fH1NameIdMap;            
+    std::map<G4String, G4int>  fH2NameIdMap;            
 
     tools::hbook::wntuple*  fNtuple; 
     tools::ntuple_booking*  fNtupleBooking; 

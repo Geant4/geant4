@@ -16,6 +16,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19/11/2012 I. Hrivnacova (excommon-analysis-V09-05-04)
+- Updated to analysis-V09-05-15
+- Adding functions for accessing h1, h2 by name
+- Splitting verbose level 1 in 2 levels and shifting the upper levels
+- Fixed GetH1[2]Width: return the correct value also when histogram is
+  inactive.
+
 28/08/2012 I. Hrivnacova (excommon-analysis-V09-05-03)
 - Updated to analysis-V09-05-10
 - Adding a possibility to fill h1, h2 with values with automatically 

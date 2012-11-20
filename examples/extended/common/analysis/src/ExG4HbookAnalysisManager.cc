@@ -66,6 +66,8 @@ ExG4HbookAnalysisManager::ExG4HbookAnalysisManager()
    fH2Vector(),
    fH1BookingVector(),
    fH2BookingVector(),
+   fH1NameIdMap(),  
+   fH2NameIdMap(),  
    fNtuple(0),
    fNtupleBooking(0),
    fNtupleIColumnMap(),
@@ -182,8 +184,8 @@ void ExG4HbookAnalysisManager::CreateH1FromBooking()
     ++index;
 
 #ifdef G4VERBOSE
-    if ( fpVerboseL3 ) 
-      fpVerboseL3->Message("create from booking", "h1", info->fName);
+    if ( fpVerboseL4 ) 
+      fpVerboseL4->Message("create from booking", "h1", info->fName);
 #endif
 
     // Create h1
@@ -193,10 +195,10 @@ void ExG4HbookAnalysisManager::CreateH1FromBooking()
     fH1Vector.push_back(h1);
 
 #ifdef G4VERBOSE
-    if ( fpVerboseL2 ) { 
+    if ( fpVerboseL3 ) { 
       G4ExceptionDescription description;
       description << " name : " << info->fName << " hbook index : " << hbookIndex; 
-      fpVerboseL2->Message("create from booking", "h1", description);
+      fpVerboseL3->Message("create from booking", "h1", description);
     }  
 #endif
   } 
@@ -235,8 +237,8 @@ void ExG4HbookAnalysisManager::CreateH2FromBooking()
     ++index;
 
 #ifdef G4VERBOSE
-    if ( fpVerboseL2 ) 
-      fpVerboseL2->Message("create from booking", "h2", info->fName);
+    if ( fpVerboseL3 ) 
+      fpVerboseL3->Message("create from booking", "h2", info->fName);
 #endif
 
     // Create h2
@@ -247,10 +249,10 @@ void ExG4HbookAnalysisManager::CreateH2FromBooking()
     fH2Vector.push_back(h2);
 
 #ifdef G4VERBOSE
-    if ( fpVerboseL2 ) { 
+    if ( fpVerboseL3 ) { 
       G4ExceptionDescription description;
       description << " name : " << info->fName << " hbook index : " << hbookIndex; 
-      fpVerboseL2->Message("create from booking", "h2", description);
+      fpVerboseL3->Message("create from booking", "h2", description);
     }  
 #endif
   } 
@@ -269,8 +271,8 @@ void ExG4HbookAnalysisManager::CreateNtupleFromBooking()
   if ( fNtuple || (! fNtupleBooking) ) return;       
 
 #ifdef G4VERBOSE
-  if ( fpVerboseL3 ) 
-    fpVerboseL3->Message("create from booking", "ntuple", fNtupleBooking->m_name);
+  if ( fpVerboseL4 ) 
+    fpVerboseL4->Message("create from booking", "ntuple", fNtupleBooking->m_name);
 #endif
 
   // Create an "ntuple" directory both in memory and in the file
@@ -315,8 +317,8 @@ void ExG4HbookAnalysisManager::CreateNtupleFromBooking()
   FinishNtuple();
 
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("create from booking", "ntuple", fNtupleBooking->m_name);
+  if ( fpVerboseL3 ) 
+    fpVerboseL3->Message("create from booking", "ntuple", fNtupleBooking->m_name);
 #endif
 }   
 
@@ -447,17 +449,17 @@ G4bool ExG4HbookAnalysisManager::WriteOnAscii(std::ofstream& output)
     tools::hbook::h1* h1 = fH1Vector[i];
 
 #ifdef G4VERBOSE
-    if ( fpVerboseL2 ) 
-      fpVerboseL2->Message("write on ascii", "h1", info->fName);
+    if ( fpVerboseL3 ) 
+      fpVerboseL3->Message("write on ascii", "h1", info->fName);
 #endif
   
     output << "\n  1D histogram " << id << ": " << h1->title() 
            << "\n \n \t     X \t\t     Y" << G4endl;
     
-    for (G4int i=0; i< G4int(h1->axis().bins()); ++i) {
-       output << "  " << i << "\t" 
-              << h1->axis().bin_center(i) << "\t"
-              << h1->bin_height(i) << G4endl;
+    for (G4int j=0; j< G4int(h1->axis().bins()); ++j) {
+       output << "  " << j << "\t" 
+              << h1->axis().bin_center(j) << "\t"
+              << h1->bin_height(j) << G4endl;
     } 
   }
   
@@ -549,8 +551,8 @@ G4bool ExG4HbookAnalysisManager::OpenFile(const G4String& fileName)
   }  
   
 #ifdef G4VERBOSE
-  if ( fpVerboseL3 ) 
-    fpVerboseL3->Message("open", "analysis file", name);
+  if ( fpVerboseL4 ) 
+    fpVerboseL4->Message("open", "analysis file", name);
 #endif
   
   // delete a previous file if it exists
@@ -611,8 +613,8 @@ G4bool ExG4HbookAnalysisManager::OpenFile(const G4String& fileName)
 G4bool ExG4HbookAnalysisManager::Write() 
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL3 ) 
-    fpVerboseL3->Message("write", "file", GetFullFileName());
+  if ( fpVerboseL4 ) 
+    fpVerboseL4->Message("write", "file", GetFullFileName());
 #endif
 
   // ntuple 
@@ -640,8 +642,8 @@ G4bool ExG4HbookAnalysisManager::Write()
 G4bool ExG4HbookAnalysisManager::CloseFile()
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL3 ) 
-    fpVerboseL3->Message("close", "file", GetFullFileName());
+  if ( fpVerboseL4 ) 
+    fpVerboseL4->Message("close", "file", GetFullFileName());
 #endif
 
   // reset data
@@ -665,8 +667,8 @@ G4int ExG4HbookAnalysisManager::CreateH1(const G4String& name, const G4String& t
                                const G4String& unitName, const G4String& fcnName)
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL3 ) 
-    fpVerboseL3->Message("create", "H1", name);
+  if ( fpVerboseL4 ) 
+    fpVerboseL4->Message("create", "H1", name);
 #endif
 
   // Create h1 booking & information
@@ -712,13 +714,14 @@ G4int ExG4HbookAnalysisManager::CreateH1(const G4String& name, const G4String& t
   fLockFirstHistoId = true;
 
 #ifdef G4VERBOSE
-    if ( fpVerboseL1 ) { 
+    if ( fpVerboseL2 ) { 
       G4ExceptionDescription description;
       description << " name : " << name << " hbook index : " << hbookIndex; 
-      fpVerboseL1->Message("create", "H1", description);
+      fpVerboseL2->Message("create", "H1", description);
     }  
 #endif
 
+  fH1NameIdMap[name] = index + fFirstHistoId;
   return index + fFirstHistoId;
 }                                         
 
@@ -730,8 +733,8 @@ G4int ExG4HbookAnalysisManager::CreateH2(const G4String& name, const G4String& t
                                const G4String& xfcnName, const G4String& yfcnName)
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL3 ) 
-    fpVerboseL3->Message("create", "H2", name);
+  if ( fpVerboseL4 ) 
+    fpVerboseL4->Message("create", "H2", name);
 #endif
 
   // Create h2 booking & information
@@ -784,13 +787,14 @@ G4int ExG4HbookAnalysisManager::CreateH2(const G4String& name, const G4String& t
   fLockFirstHistoId = true;
 
 #ifdef G4VERBOSE
-    if ( fpVerboseL1 ) {
+    if ( fpVerboseL2 ) {
       G4ExceptionDescription description;
       description << " name : " << name << " hbook index : " << hbookIndex; 
-      fpVerboseL1->Message("create", "H2", description);
+      fpVerboseL2->Message("create", "H2", description);
     }  
 #endif
 
+  fH2NameIdMap[name] = index + fFirstHistoId;
   return index + fFirstHistoId;
 }                                         
 
@@ -811,8 +815,8 @@ G4bool ExG4HbookAnalysisManager::SetH1(G4int id,
 
   G4HnInformation* info = GetH1Information(id);
 #ifdef G4VERBOSE
-  if ( fpVerboseL3 ) 
-    fpVerboseL3->Message("configure", "H1", info->fName);
+  if ( fpVerboseL4 ) 
+    fpVerboseL4->Message("configure", "H1", info->fName);
 #endif
 
   // Keep new parameters in booking & information
@@ -863,8 +867,8 @@ G4bool ExG4HbookAnalysisManager::SetH2(G4int id,
 
   G4HnInformation* info = GetH2Information(id);
 #ifdef G4VERBOSE
-  if ( fpVerboseL3 ) 
-    fpVerboseL3->Message("configure", "H2", info->fName);
+  if ( fpVerboseL4 ) 
+    fpVerboseL4->Message("configure", "H2", info->fName);
 #endif
 
   // Keep new parameters in booking & information
@@ -928,8 +932,8 @@ void ExG4HbookAnalysisManager::CreateNtuple(const G4String& name,
                                             const G4String& title)
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL3 ) 
-    fpVerboseL3->Message("create", "ntuple", name);
+  if ( fpVerboseL4 ) 
+    fpVerboseL4->Message("create", "ntuple", name);
 #endif
 
   if ( fNtupleBooking ) {
@@ -953,8 +957,8 @@ void ExG4HbookAnalysisManager::CreateNtuple(const G4String& name,
   }    
 
 #ifdef G4VERBOSE
-  if ( fpVerboseL3 ) 
-    fpVerboseL3->Message("create", "ntuple", name);
+  if ( fpVerboseL4 ) 
+    fpVerboseL4->Message("create", "ntuple", name);
 #endif
 
   // Define ntuple ID in HBOOK
@@ -974,10 +978,10 @@ void ExG4HbookAnalysisManager::CreateNtuple(const G4String& name,
   }  
 
 #ifdef G4VERBOSE
-  if ( fpVerboseL1 ) {
+  if ( fpVerboseL2 ) {
     G4ExceptionDescription description;
     description << " name : " << name << " hbook index : " << fNtupleHbookId; 
-    fpVerboseL1->Message("create", "ntuple", description);
+    fpVerboseL2->Message("create", "ntuple", description);
   }  
 #endif
 }                                         
@@ -986,8 +990,8 @@ void ExG4HbookAnalysisManager::CreateNtuple(const G4String& name,
 G4int ExG4HbookAnalysisManager::CreateNtupleIColumn(const G4String& name)
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL3 ) 
-    fpVerboseL3->Message("create", "ntuple I column", name);
+  if ( fpVerboseL4 ) 
+    fpVerboseL4->Message("create", "ntuple I column", name);
 #endif
 
   if ( ! fNtupleBooking ) {
@@ -1013,8 +1017,8 @@ G4int ExG4HbookAnalysisManager::CreateNtupleIColumn(const G4String& name)
   fLockFirstNtupleColumnId = true;
 
 #ifdef G4VERBOSE
-  if ( fpVerboseL1 ) 
-    fpVerboseL1->Message("create", "ntuple I column", name);
+  if ( fpVerboseL2 ) 
+    fpVerboseL2->Message("create", "ntuple I column", name);
 #endif
 
   return index + fFirstNtupleColumnId;       
@@ -1024,8 +1028,8 @@ G4int ExG4HbookAnalysisManager::CreateNtupleIColumn(const G4String& name)
 G4int ExG4HbookAnalysisManager::CreateNtupleFColumn(const G4String& name)
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL3 ) 
-    fpVerboseL3->Message("create", "ntuple F column", name);
+  if ( fpVerboseL4 ) 
+    fpVerboseL4->Message("create", "ntuple F column", name);
 #endif
 
   if ( ! fNtupleBooking )  {
@@ -1051,8 +1055,8 @@ G4int ExG4HbookAnalysisManager::CreateNtupleFColumn(const G4String& name)
   fLockFirstNtupleColumnId = true;
 
 #ifdef G4VERBOSE
-  if ( fpVerboseL1 ) 
-    fpVerboseL1->Message("create", "ntuple F column", name);
+  if ( fpVerboseL2 ) 
+    fpVerboseL2->Message("create", "ntuple F column", name);
 #endif
 
   return index + fFirstNtupleColumnId;       
@@ -1063,8 +1067,8 @@ G4int ExG4HbookAnalysisManager::CreateNtupleFColumn(const G4String& name)
 G4int ExG4HbookAnalysisManager::CreateNtupleDColumn(const G4String& name) 
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL3 ) 
-    fpVerboseL3->Message("create", "ntuple D column", name);
+  if ( fpVerboseL4 ) 
+    fpVerboseL4->Message("create", "ntuple D column", name);
 #endif
 
   if ( ! fNtupleBooking ) {
@@ -1090,8 +1094,8 @@ G4int ExG4HbookAnalysisManager::CreateNtupleDColumn(const G4String& name)
   fLockFirstNtupleColumnId = true;
 
 #ifdef G4VERBOSE
-  if ( fpVerboseL1 ) 
-    fpVerboseL1->Message("create", "ntuple D column", name);
+  if ( fpVerboseL2 ) 
+    fpVerboseL2->Message("create", "ntuple D column", name);
 #endif
 
   return index + fFirstNtupleColumnId;       
@@ -1103,8 +1107,8 @@ void ExG4HbookAnalysisManager::FinishNtuple()
   if ( ! fNtuple ) return;
 
 #ifdef G4VERBOSE
-  if ( fpVerboseL3 ) 
-    fpVerboseL3->Message("finish", "ntuple", fNtupleBooking->m_name);
+  if ( fpVerboseL4 ) 
+    fpVerboseL4->Message("finish", "ntuple", fNtupleBooking->m_name);
 #endif
 
   // Return to //PAWC/LUN1 :
@@ -1112,8 +1116,8 @@ void ExG4HbookAnalysisManager::FinishNtuple()
 
   //fNtuple->add_row_beg();
 #ifdef G4VERBOSE
-  if ( fpVerboseL1 ) 
-    fpVerboseL1->Message("finish", "ntuple", fNtupleBooking->m_name);
+  if ( fpVerboseL2 ) 
+    fpVerboseL2->Message("finish", "ntuple", fNtupleBooking->m_name);
 #endif
 }
   
@@ -1131,10 +1135,10 @@ G4bool ExG4HbookAnalysisManager::FillH1(G4int id, G4double value, G4double weigh
   G4HnInformation* info = GetInformation(kH1, id);
   h1->fill(info->fXFcn(value/info->fXUnit), weight);
 #ifdef G4VERBOSE
-  if ( fpVerboseL3 ) {
+  if ( fpVerboseL4 ) {
     G4ExceptionDescription description;
     description << " id " << id << " value " << value;
-    fpVerboseL3->Message("fill", "H1", description);
+    fpVerboseL4->Message("fill", "H1", description);
   }  
 #endif
   return true;
@@ -1154,11 +1158,11 @@ G4bool ExG4HbookAnalysisManager::FillH2(G4int id,
   h2->fill(info->fXFcn(xvalue/info->fXUnit), 
            info->fYFcn(yvalue/info->fYUnit), weight);
 #ifdef G4VERBOSE
-  if ( fpVerboseL3 ) {
+  if ( fpVerboseL4 ) {
     G4ExceptionDescription description;
     description << " id " << id 
                 << " xvalue " << xvalue << " yvalue " << yvalue;
-    fpVerboseL3->Message("fill", "H2", description);
+    fpVerboseL4->Message("fill", "H2", description);
   }  
 #endif
   return true;
@@ -1178,10 +1182,10 @@ G4bool ExG4HbookAnalysisManager::FillNtupleIColumn(G4int id, G4int value)
   
   column->fill(value);
  #ifdef G4VERBOSE
-  if ( fpVerboseL3 ) {
+  if ( fpVerboseL4 ) {
     G4ExceptionDescription description;
     description << " id " << id << " value " << value;
-    fpVerboseL3->Message("fill", "ntuple I column", description);
+    fpVerboseL4->Message("fill", "ntuple I column", description);
   }  
 #endif
  return true;       
@@ -1200,10 +1204,10 @@ G4bool ExG4HbookAnalysisManager::FillNtupleFColumn(G4int id, G4float value)
   
   column->fill(value);
 #ifdef G4VERBOSE
-  if ( fpVerboseL3 ) {
+  if ( fpVerboseL4 ) {
     G4ExceptionDescription description;
     description << " id " << id << " value " << value;
-    fpVerboseL3->Message("fill", "ntuple F column", description);
+    fpVerboseL4->Message("fill", "ntuple F column", description);
   }  
 #endif
   return true;       
@@ -1222,10 +1226,10 @@ G4bool ExG4HbookAnalysisManager::FillNtupleDColumn(G4int id, G4double value)
   
   column->fill(value);
 #ifdef G4VERBOSE
-  if ( fpVerboseL3 ) {
+  if ( fpVerboseL4 ) {
     G4ExceptionDescription description;
     description << " id " << id << " value " << value;
-    fpVerboseL3->Message("fill", "ntuple D column", description);
+    fpVerboseL4->Message("fill", "ntuple D column", description);
   }  
 #endif
   return true;       
@@ -1235,8 +1239,8 @@ G4bool ExG4HbookAnalysisManager::FillNtupleDColumn(G4int id, G4double value)
 G4bool ExG4HbookAnalysisManager::AddNtupleRow()
 { 
 #ifdef G4VERBOSE
-  if ( fpVerboseL3 )
-    fpVerboseL3->Message("add", "ntuple row", "");
+  if ( fpVerboseL4 )
+    fpVerboseL4->Message("add", "ntuple row", "");
 #endif
 
   //G4cout << "Hbook: Going to add Ntuple row ..." << G4endl;
@@ -1251,8 +1255,8 @@ G4bool ExG4HbookAnalysisManager::AddNtupleRow()
   //fNtuple->add_row_fast();
   fNtuple->add_row();
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 )
-    fpVerboseL2->Message("add", "ntuple row", "");
+  if ( fpVerboseL3 )
+    fpVerboseL3->Message("add", "ntuple row", "");
 #endif
   return true;
 }
@@ -1268,9 +1272,41 @@ tools::hbook::h1*  ExG4HbookAnalysisManager::GetH1(G4int id, G4bool warn,
 tools::hbook::h2*  ExG4HbookAnalysisManager::GetH2(G4int id, G4bool warn,
                                                    G4bool onlyIfActive) const 
 {
-  return GetH2InFunction(id, "GetH1", warn, onlyIfActive);
+  return GetH2InFunction(id, "GetH2", warn, onlyIfActive);
 }
 
+//_____________________________________________________________________________
+G4int  ExG4HbookAnalysisManager::GetH1Id(const G4String& name, G4bool warn) const
+{
+  std::map<G4String, G4int>::const_iterator it = fH1NameIdMap.find(name);
+  if ( it ==  fH1NameIdMap.end() ) {  
+    if ( warn) {
+      G4String inFunction = "ExG4HbookAnalysisManager::GetH1Id";
+      G4ExceptionDescription description;
+      description << "      " << "histogram " << name << " does not exist.";
+      G4Exception(inFunction, "Analysis_W007", JustWarning, description);
+    }
+    return -1;         
+  }
+  return it->second;
+}  
+                                      
+//_____________________________________________________________________________
+G4int  ExG4HbookAnalysisManager::GetH2Id(const G4String& name, G4bool warn) const
+{
+  std::map<G4String, G4int>::const_iterator it = fH2NameIdMap.find(name);
+  if ( it ==  fH2NameIdMap.end() ) {  
+    if ( warn) {
+      G4String inFunction = "ExG4HbookAnalysisManager::GetH2Id";
+      G4ExceptionDescription description;
+      description << "      " << "histogram " << name << " does not exist.";
+      G4Exception(inFunction, "Analysis_W007", JustWarning, description);
+    }
+    return -1;         
+  }
+  return it->second;
+}  
+                                      
 //_____________________________________________________________________________
 tools::hbook::wntuple* ExG4HbookAnalysisManager::GetNtuple() const
 {
@@ -1311,7 +1347,7 @@ G4double ExG4HbookAnalysisManager::GetH1Xmax(G4int id) const
 //_____________________________________________________________________________
 G4double ExG4HbookAnalysisManager::GetH1Width(G4int id) const
 {
-  tools::hbook::h1* h1 = GetH1InFunction(id, "GetH1XWidth");
+  tools::hbook::h1* h1 = GetH1InFunction(id, "GetH1XWidth", true, false);
   if ( ! h1 ) return 0;
   
   G4int nbins = h1->axis().bins();
@@ -1362,7 +1398,7 @@ G4double ExG4HbookAnalysisManager::GetH2Xmax(G4int id) const
 //_____________________________________________________________________________
 G4double ExG4HbookAnalysisManager::GetH2XWidth(G4int id) const
 {
-  tools::hbook::h2* h2 = GetH2InFunction(id, "GetH2XWidth");
+  tools::hbook::h2* h2 = GetH2InFunction(id, "GetH2XWidth", true, false);
   if ( ! h2 ) return 0;
   
   G4int nbins = h2->axis_x().bins();
@@ -1413,7 +1449,7 @@ G4double ExG4HbookAnalysisManager::GetH2Ymax(G4int id) const
 //_____________________________________________________________________________
 G4double ExG4HbookAnalysisManager::GetH2YWidth(G4int id) const
 {
-  tools::hbook::h2* h2 = GetH2InFunction(id, "GetH2YWidth");
+  tools::hbook::h2* h2 = GetH2InFunction(id, "GetH2YWidth", true, false);
   if ( ! h2 ) return 0;
   
   G4int nbins = h2->axis_y().bins();
