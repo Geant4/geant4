@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-14-Nov-2012  P. Mato (geom-specific-V09-05-20)
+14-Nov-2012  P. Mato (geom-specific-V09-05-21)
 - Added #undef NDEBUG in unit tests to ensure that assert always works
 
 13-Nov-2012  M.Gayer (geom-specific-V09-05-19)
