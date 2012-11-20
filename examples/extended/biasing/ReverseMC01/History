@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16-November, 2012 I.Hrivnacova  (ReverseMC01-V09-05-05)
+- Fixed .README file for artefacts from Markdown support
+
 04-September, 2012 I.Hrivnacova  (ReverseMC01-V09-05-04)
 - Renamed macros to have an extension .mac (was .g4mac)
 - Updated CMakeLists.txt:

@@ -210,37 +210,37 @@ learn how to adapt its G4 analysis code for an adjoint simulation.
 
 The outputs of an adjoint simulation are:
 
-	- The total energy deposited and particle current entering the sensitive cylinder normalized 
-	 automatically to a user defined primary spectrum(exponential or power law) .These results are stored in the files:
-	 	- Adj_Edep_vs_EkinPrim.txt                            
-		- Adj_ElectronCurrent.txt
-		- Adj_GammaCurrent.txt
-		- Adj_ProtonCurrent.txt
-		- ConvergenceOfAdjointSimulationResults.txt: 
-				The total normalized edep and its relative error registered every 5000 adjoint events
-		
-		
-	- The answer matrix of the energy deposited and particles current on the sensitive cylinder in function of primary energy of e-, gamma and
-	protons. These results are stored in the files Adj********_Answer.txt
+ - The total energy deposited and particle current entering the sensitive cylinder normalized 
+  automatically to a user defined primary spectrum(exponential or power law) .These results are stored in the files:
+   - Adj_Edep_vs_EkinPrim.txt                            
+   - Adj_ElectronCurrent.txt
+   - Adj_GammaCurrent.txt
+   - Adj_ProtonCurrent.txt
+   - ConvergenceOfAdjointSimulationResults.txt: 
+                         The total normalized edep and its relative error registered every 5000 adjoint events
+         
+         
+ - The answer matrix of the energy deposited and particles current on the sensitive cylinder in function of primary energy of e-, gamma and
+ protons. These results are stored in the files Adj********_Answer.txt
 		   	
 		 
 	
 The outputs of a forward simulation are:	 
-	- The mean energy deposited and particle current entering the sensitive cylinder per event.
-	 These results are stored in the files:
-	 	- Fwd_Edep_vs_EkinPrim.txt                            
-		- Fwd_ElectronCurrent.txt
-		- Fwd_GammaCurrent.txt
-		- Fwd_ProtonCurrent.txt
-		
+  - The mean energy deposited and particle current entering the sensitive cylinder per event.
+   These results are stored in the files:
+   - Fwd_Edep_vs_EkinPrim.txt                            
+   - Fwd_ElectronCurrent.txt
+   - Fwd_GammaCurrent.txt
+   - Fwd_ProtonCurrent.txt
+          
  
 
 \subsection ReverseMC01_sub_s3_4 Run macrofiles
 
 The following example run macro files are distributed with the code:
-	- run_adjoint_simulation_electron.mac and  run_adjoint_simulation_proton.mac for adjoint simulations 
-	
-	- run_forward_simulation_electron.mac  and run_forward_simulation_proton.mac for forward simulations
+  - run_adjoint_simulation_electron.mac and  run_adjoint_simulation_proton.mac for adjoint simulations 
+
+  - run_forward_simulation_electron.mac  and run_forward_simulation_proton.mac for forward simulations
 	
 
 \subsection ReverseMC01_sub_s3_5 Comparison of adjoint and forward simulation results
@@ -252,16 +252,16 @@ to the fluence considered in the adjoint  simulation.
 For the macro files that are provided  with the examples it consists into multiplying  the forward results by pi*100.
 This normalization factor is explained by the following:
 	
-	- For the forward simulation the results are given  per number of events. It corresponds  
-	to a normalization to a  fluence of 1 particle emanating from the external source. 
-	
-	- In run_fwd_simulation.mac the source is set on a sphere of 10 cm radius (see /gps commands in
-	 macrofile).Therefore the omnidirectional  fluence for the fwd simulation  is 1./(pi*R^2) with R=10cm. 
-	
-	- The adjoint results  are normalized to a fluence of 1/cm2.
-	    (See command /RMC01/analysis/SetExponentialSpectrumForAdjointSim in macrofile)
-	
-	- In conclusion to compare the adjoint and forward results, the forward results should
+  - For the forward simulation the results are given  per number of events. It corresponds  
+    to a normalization to a  fluence of 1 particle emanating from the external source. 
+
+  - In run_fwd_simulation.mac the source is set on a sphere of 10 cm radius (see /gps commands in
+    macrofile).Therefore the omnidirectional  fluence for the fwd simulation  is 1./(pi*R^2) with R=10cm. 
+
+  - The adjoint results  are normalized to a fluence of 1/cm2.
+    (See command /RMC01/analysis/SetExponentialSpectrumForAdjointSim in macrofile)
+
+  - In conclusion to compare the adjoint and forward results, the forward results should
 			by multiplied by pi*R^2/cm2= pi*100.
 
 
@@ -299,27 +299,27 @@ The commands to control the adjoint source are:
 The external surface is set as the external boundary of a the physical volume with name phys_vol_name
 		 	
 - /adjoint/SetAdjSourceEmin  Emin energy_unit \n
-Set the minimum  energy of the external source
+ Set the minimum  energy of the external source
 		
 - /adjoint/SetAdjSourceEmax  Emax energy_unit \n
-Set the maximum  energy of the external source
+ Set the maximum  energy of the external source
 			
 - /adjoint/ConsiderAsPrimary  particle_name \n
-The type  of particle specified by  "particle_name" will be added in the list of primary adjoint particles. 
-	The list of candidates depends on the reverse physics processes considered in the simulation. At the most the 
-	potential candidates are (e-, gamma, proton , ion). For this example only e-, gamma, proton
- 	can be chosen. As the proton ionization is not considered by default, the default list of particles is
-	[e-,gamma]. To have also the proton as candidate the proton ionization should 
-	be switch on (/adjoint_physics/UseProtonIonisation true).
+ The type  of particle specified by  "particle_name" will be added in the list of primary adjoint particles. 
+ The list of candidates depends on the reverse physics processes considered in the simulation. At the most the 
+ potential candidates are (e-, gamma, proton , ion). For this example only e-, gamma, proton
+ can be chosen. As the proton ionization is not considered by default, the default list of particles is
+ [e-,gamma]. To have also the proton as candidate the proton ionization should 
+ be switch on (/adjoint_physics/UseProtonIonisation true).
 
 - /adjoint/NeglectAsPrimary  particle_name \n
 
-	The type  of particle specified by  "particle_name" will be removed from the list of primary adjoint particles. 
-	The list of candidates depends on the reverse physics processes considered in the simulation. At the most the 
-	potential candidates are (e-, gamma, proton , ion). For this example only e-, gamma, proton
- 	can be chosen. As the proton ionization is not considered by default, the default list of particles is
-	[e-,gamma].To have also the proton as candidate the proton ionization should 
-	be switch on (/adjoint_physics/UseProtonIonisation true). 
+ The type  of particle specified by  "particle_name" will be removed from the list of primary adjoint particles. 
+ The list of candidates depends on the reverse physics processes considered in the simulation. At the most the 
+ potential candidates are (e-, gamma, proton , ion). For this example only e-, gamma, proton
+ can be chosen. As the proton ionization is not considered by default, the default list of particles is
+ [e-,gamma].To have also the proton as candidate the proton ionization should 
+ be switch on (/adjoint_physics/UseProtonIonisation true). 
 		
 
 The commands to control the external source are:
@@ -329,7 +329,7 @@ The external source is set on a sphere with radius R and centered on position (X
 				 
 - /adjoint/DefineSphericalExtSourceCenteredOnAVolume phys_vol_name R unit_length\n
 The external source is set on a sphere with radius R and with its center position located at the center of the 
-	the physical volume specified by the name phys_vol_name.
+the physical volume specified by the name phys_vol_name.
 
 - /adjoint/DefineExtSourceOnExtSurfaceOfAVolume phys_vol_name \n
 The external surface is set as the external boundary of a the physical volume with name phys_vol_name
@@ -344,14 +344,14 @@ Set the maximum  energy of the external source. An adjoint track will be stop wh
 These commands allow to control the electromagnetic processes that will be considered in the simulation.
 
 The processes that can be used are:
-	- Reverse and forward e- continuous and discrete  Ionization. Always switch on
-	- Reverse and forward e- Bremsstrahlung. Switch on by default
-	- Reverse and forward Compton scattering. Switch on by default
-	- Reverse and forward photo electric effect. Switch on by default
-	- Reverse and forward photo electric effect. Switch on by default
-	- Reverse and forward multiple scattering. Switch on by default
-	- Reverse and forward proton continuous and discrete  Ionization. Switch off by default	
-	- Forward e-e+ pair production. Switch off by default. 
+- Reverse and forward e- continuous and discrete  Ionization. Always switch on
+- Reverse and forward e- Bremsstrahlung. Switch on by default
+- Reverse and forward Compton scattering. Switch on by default
+- Reverse and forward photo electric effect. Switch on by default
+- Reverse and forward photo electric effect. Switch on by default
+- Reverse and forward multiple scattering. Switch on by default
+- Reverse and forward proton continuous and discrete  Ionization. Switch off by default	
+- Forward e-e+ pair production. Switch off by default. 
 	 
 
 The commands that can be used to switch on of these processes are:
