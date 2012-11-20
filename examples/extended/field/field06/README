@@ -58,15 +58,11 @@
 
  6- HOW TO START ?
 
-        - compile and link to generate an executable
-                % cd $G4INSTALL/example/extended/field/field06
-                % gmake
-
         - execute field06 in 'batch' mode from macro files e.g.
-                % $(G4INSTALL)/bin/$(G4SYSTEM)/field06 field06.in > field06.out &
+                % field06 field06.in > field06.out &
 
         - execute field06 in 'interactive' mode with visualization e.g.
-                % $(G4INSTALL)/bin/$(G4SYSTEM)/field60
+                % field60
                 ....
                 Idle> type your commands, for example:
                 Idle> run/beamOn 1

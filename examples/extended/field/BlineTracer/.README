@@ -32,20 +32,20 @@ G4BlineEquation, motion along the field) instead of a Lorentz equation.
 
 During the execution of this method :
  	
-	- The user defined  equations of motion associated to the different
-	 global  and local fields are replaced by instances of G4BlineEquation 
-	 associated to the same fields.
-	 The G4BlineEquation class defines the differential equation of a 
-	 magnetic field line. 
+ - The user defined  equations of motion associated to the different
+  global  and local fields are replaced by instances of G4BlineEquation 
+  associated to the same fields.
+  The G4BlineEquation class defines the differential equation of a 
+  magnetic field line. 
 
-	- User defined ChordFinders are replaced by new ChordFinders 
-	 associated to the G4BlineEquation object.
+ - User defined ChordFinders are replaced by new ChordFinders 
+  associated to the G4BlineEquation object.
 
-	- The user primary generator action, run action, event action and
-	 stepping action are replaced by instances of the classes
-	 G4BlinePrimaryGeneratorAction, G4BlineTracer, G4BlineEventAction
-	 and G4BlineSteppingAction respectively. Other actions are set to
-	 a NULL pointer.
+ - The user primary generator action, run action, event action and
+  stepping action are replaced by instances of the classes
+  G4BlinePrimaryGeneratorAction, G4BlineTracer, G4BlineEventAction
+  and G4BlineSteppingAction respectively. Other actions are set to
+  a NULL pointer.
 
 After the execution of the method, the original user defined actions, equation
 of motions and chord-finders are restored.	 
@@ -121,65 +121,65 @@ Marker size parameter ('setPointSize')
 \verbatim
 /vis/blineTracer/computeBline  nb_of_lines  
 \endverbatim
-		- Parameters: integer nb_of_lines      
-		- Description: Compute nb_of_lines different magnetic field lines
+    - Parameters: integer nb_of_lines      
+    - Description: Compute nb_of_lines different magnetic field lines
 	
 \verbatim
 /vis/blineTracer/setMaxStepLength max_step_length 
 \endverbatim
-		- Parameters: double max_step_length 
-		- Description: Set the maximum tracking step length for computing 
-		             magnetic field lines
+    - Parameters: double max_step_length 
+    - Description: Set the maximum tracking step length for computing 
+		   magnetic field lines
 			     
 \verbatim
 /vis/blineTracer/setColour  red green blue
 \endverbatim
-		- Parameters: double red, green, blue
-		- Description: Define  the colour for visualisation of the 
-			    next computed magnetic field lines. The color is
-			    defined by a  RGB code (red,green,blue)  with all
-			    parameters smaller than 1.
+    - Parameters: double red, green, blue
+    - Description: Define  the colour for visualisation of the 
+		   next computed magnetic field lines. The color is
+		   defined by a  RGB code (red,green,blue)  with all
+		   parameters smaller than 1.
 			    
 \verbatim
  /vis/blineTracer/stockLines aBool
 \endverbatim
-		- Parameters: boolean aBool
-		- Description: If true the next computed field lines are stored
-			      as Polylines for further visualisation
+    - Parameters: boolean aBool
+    - Description: If true the next computed field lines are stored
+		   as Polylines for further visualisation
 
 \verbatim
 /vis/blineTracer/stockLines aBool
 \endverbatim
-		- Parameters: boolean aBool
-		- Description: If true the next computed field lines are stored
-			      as Polymarkers for further visualisation
+    - Parameters: boolean aBool
+    - Description: If true the next computed field lines are stored
+	           as Polymarkers for further visualisation
 
 \verbatim
 /vis/blineTracer/setPointSize point_size
 \endverbatim
-		- Parameters: double point_size
-		- Description: set the size of the visualisation  markers
-			     that will be associated with the next computed
-			     magnetic field lines
+    - Parameters: double point_size
+    - Description: set the size of the visualisation  markers
+		   that will be associated with the next computed
+		   magnetic field lines
    
 \verbatim
 /vis/blineTracer/resetMaterialToBeDrawn
 \endverbatim
-		- Parameters: none
-		- Description: The vector of Polyline and Polymarker representing 
-			     magnetic field lines to be visualised are removed
-			     from memory
+    - Parameters: none
+    - Description: The vector of Polyline and Polymarker representing 
+		   magnetic field lines to be visualised are removed
+		   from memory
 	
 \verbatim
 /tracking/storeTrajectory 1
 \endverbatim
-	       - If the storeTrajectory parameter is not set no field lines are
-	       stored.		     
+    - If the storeTrajectory parameter is not set no field lines are
+      stored.		     
 			     
 \section ExampleBlineTracer_s3 Current limitations & known problems
 
-	The tool is working properly only for detectors parts where magnetic
-        field are defined. It is planned in the future to stop the tracking of
-	field lines in regions where no fields are existing.
+ The tool is working properly only for detectors parts where magnetic
+ field are defined. It is planned in the future to stop the tracking of
+ field lines in regions where no fields are existing.
 
 */

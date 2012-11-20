@@ -66,15 +66,11 @@ $Id: README,v 1.5 2010-06-06 04:56:36 perl Exp $
 
  5- HOW TO START ?
  
- 	- compile and link to generate an executable
- 		% cd $G4INSTALL/example/extended/field/field03
- 		% gmake
- 		
  	- execute field03 in 'batch' mode from macro files e.g.
- 		% $(G4INSTALL)/bin/$(G4SYSTEM)/field03 field03.in
+ 		% field03 field03.in
 		
  	- execute field03 in 'interactive' mode with visualization e.g.
- 		% $(G4INSTALL)/bin/$(G4SYSTEM)/field03
+ 		% field03
 		....
 		Idle> /control/execute vis.mac
 		....
