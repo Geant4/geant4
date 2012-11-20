@@ -52,6 +52,7 @@
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
+#include "G4EmStandardPhysics_option4.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
 #include "G4HadronElasticPhysics.hh"
@@ -156,7 +157,17 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   if (verboseLevel>0) {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
-  if (name == "emstandard_opt2") {
+  if (name == "emstandard_opt0") {
+
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics();
+
+  } else if (name == "emstandard_opt1") {
+
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics_option1();
+
+  } else if (name == "emstandard_opt2") {
 
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option2();
@@ -166,15 +177,10 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmStandardPhysics_option3();
 
-  } else if (name == "emstandard_opt1") {
+  } else if (name == "emstandard_opt4") {
 
     delete fEmPhysicsList;
-    fEmPhysicsList = new G4EmStandardPhysics_option1();
-
-  } else if (name == "emstandard_opt0") {
-
-    delete fEmPhysicsList;
-    fEmPhysicsList = new G4EmStandardPhysics();
+    fEmPhysicsList = new G4EmStandardPhysics_option4();
 
   } else if (name == "FTFP_BERT_EMV") {
 
@@ -210,7 +216,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
   } else if (name == "QBBC") {
 
-    AddPhysicsList("emstandard_opt2");
+    AddPhysicsList("emstandard_opt0");
     SetBuilderList3();
     fHadronPhys.push_back( new G4HadronInelasticQBBC());
 
@@ -324,7 +330,7 @@ void PhysicsList::SetBuilderList2(G4bool addStopping)
 void PhysicsList::SetBuilderList3()
 {
   fHadronPhys.push_back( new G4EmExtraPhysics(verboseLevel));
-  RegisterPhysics( new G4HadronElasticPhysicsXS(verboseLevel) );
+  fHadronPhys.push_back( new G4HadronElasticPhysicsXS(verboseLevel) );
   fHadronPhys.push_back( new G4StoppingPhysics(verboseLevel));
   fHadronPhys.push_back( new G4IonPhysics(verboseLevel));
   fHadronPhys.push_back( new G4NeutronTrackingCut(verboseLevel));

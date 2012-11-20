@@ -88,7 +88,7 @@ which are distributed with Geant4 in /geant4/physics_lists subdirectory.
 The reference Physics List name may be defined in the 3d argument of the 
 run command: 
 
-$G4BIN/Linux++/Hadr01 my.macro QGSP_BERT   
+Hadr01 my.macro QGSP_BERT   
 
 If 3d argument is not set then the PHYSLIST environment variable is checked. 
 If both are not defined then reference Phsyics Lists is not instantiated, 

@@ -15,6 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17-11-12 I. Hrivnacova (exHadronic-V09-05-03)
+- Updated documentation:
+  - Fixed .README files for artefacts from Markdown support
+  - Removed obsolete instructions (how to compile & link)
+
 13-10-12 A. Dotti (exHadronic-V09-05-02)
 - Adding explicit use of system of units
 

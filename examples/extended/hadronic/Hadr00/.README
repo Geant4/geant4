@@ -5,9 +5,8 @@
 
 /*! \page ExampleHadr00 Example Hadr00
 
-                             \author V.Ivanchenko \n
-                       CERN, Geneva, Switzerland
-
+\author V.Ivanchenko \n
+CERN, Geneva, Switzerland
 
 This example demonstrates a usage of G4PhysListFactory to build 
 Physics List and G4HadronicProcessStore to access cross sections.
@@ -47,7 +46,7 @@ Physics List is defined by its name given in the 3d argument of the of the
 run command. 
 
 \verbatim
-$G4BIN/Linux++/hadr01 my.macro QGSP_BERT 
+Hadr00 my.macro QGSP_BERT 
 \endverbatim
 
 If 3d argument is not set then by the PHYSLIST environment variable. 

@@ -5,11 +5,10 @@
 
 /*! \page ExampleHadr01 Example Hadr01
 
-            \author A.Bagulya, I.Gudowska, V.Ivanchenko, N.Starkov \n
-                       CERN, Geneva, Switzerland \n
-            Karolinska Institute & Hospital, Stockholm, Sweden \n
-               Lebedev Physical Institute, Moscow, Russia
-
+\author A.Bagulya, I.Gudowska, V.Ivanchenko, N.Starkov \n
+CERN, Geneva, Switzerland \n
+Karolinska Institute & Hospital, Stockholm, Sweden \n
+Lebedev Physical Institute, Moscow, Russia
 
 This example application is based on the application IION developed for
 simulation of proton or ion beam interaction with a water target. Different 
@@ -103,7 +102,7 @@ The reference Physics List name may be defined in the 3d argument of the
 run command: 
 
 \verbatim
-$G4BIN/Linux++/Hadr01 my.macro QGSP_BERT 
+Hadr01 my.macro QGSP_BERT 
 \endverbatim
 
 If 3d argument is not set then the PHYSLIST environment variable is checked. 

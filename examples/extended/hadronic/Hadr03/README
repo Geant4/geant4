@@ -116,10 +116,6 @@ $Id: README,v 1.9 2010-04-02 13:22:02 maire Exp $
 	
  7- HOW TO START ?
  
-   Compile and link to generate an executable
-   	% cd geant4/examples/extended/hadronic/Hadr03
-   	% gmake
- 		
    Execute Hadr03 in 'batch' mode from macro files :
  	% Hadr03   inelastic.mac
  		

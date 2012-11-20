@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17-11-12  V.Ivanchenko (exhadr01-V09-05-09)
+- PhysicsList - bug fixed (absence of elestic scattering)
+    hadronic HyperNews report #734
+
 15-11-12  I. Hrivnacova (exhadr01-V09-05-08)
 - Synchronized .README with changes in README
 

@@ -5,14 +5,13 @@
 
 /*! \page ExampleHadr02 Example Hadr02
 
-		     Example and DMJET: 
-                     \author V.Ivanchenko, A.Ivanchenko,  \n
-		     UrQMD: Kh Abdel-Waged et al, A. Dotti \n
-                       CERN, Geneva, Switzerland \n
-        	     Geant4 Associate International \n
-		University of Bordeaux, CENBG/IN2P3/CNRS \n
-                     (ESA contract 22712/09/NL/AT)
-
+Example and DMJET: 
+\author V.Ivanchenko, A.Ivanchenko,  \n
+UrQMD: Kh Abdel-Waged et al, A. Dotti \n
+CERN, Geneva, Switzerland \n
+Geant4 Associate International \n
+University of Bordeaux, CENBG/IN2P3/CNRS \n
+(ESA contract 22712/09/NL/AT)
 
 This example application is providing simulation of ion beam interaction with different 
 targets. Hadronic aspects of beam target interaction are demonstrated in the example 
@@ -48,7 +47,7 @@ G4_USE_DPMJET   - flag of DPMJET activation
 To run the example with DPMJET:
 
 \verbatim
-$G4WORKDIR/bin/Linux-g++/Hadr02 dpmjet.in QGSP_BIC
+Hadr02 dpmjet.in QGSP_BIC
 \endverbatim
 
 The last parameter is optional. It is the name of Geant4 reference Physics List on
@@ -79,7 +78,7 @@ use UrQMD).
 To run the example with UrQMD only for ion-ion physics:
 
 \verbatim
-$G4WORKDIR/bin/Linux-g++/Hadr02 urqmd.in QGSP_BIC
+Hadr02 urqmd.in QGSP_BIC
 \endverbatim
 
 The last parameter is optional. It is the name of Geant4 reference Physics List on
@@ -90,15 +89,15 @@ environment variable
 setenv PHYSLIST QGSP_BIC
 \endverbatim
 
-To run the examplw with the full UrQMD physics:
+To run the example with the full UrQMD physics:
 
 \verbatim
-$G4WORKDIR/bin/Linux-g++/Hadr02 default.in UrQMD
+Hadr02 default.in UrQMD
 \endverbatim
 or:
 \verbatim
 setenv PHYSLIST UrQMD
-$G4WORKDIR/bin/Linux-g++/Hadr02 default.in
+Hadr02 default.in
 \endverbatim
 
 UrQMD physics list can be used in any application, releavant headers and source files (*UrQDM*)

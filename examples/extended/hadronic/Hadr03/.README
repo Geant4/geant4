@@ -75,17 +75,17 @@
    where unit is the desired unit for the histo (MeV or keV, etc..)
    (see the macros xxxx.mac).
    
-          - 1	: "kinetic energy of scattered primary particle"
-	  - 2	: "kinetic energy of recoil nuclei"
-	  - 3	: "kinetic energy of gamma"
-	  - 4	: "kinetic energy of neutrons"
-	  - 5	: "kinetic energy of protons"
-	  - 6	: "kinetic energy of deuterons"
-	  - 7	: "kinetic energy of alphas"
-	  - 8	: "kinetic energy of all others ions"
-	  - 9	: "kinetic energy of all others mesons"
-	  - 10	: "kinetic energy of all others baryons"
-	  - 11	: "Q = Ekin out - Ekin in"		
+   - 1   : "kinetic energy of scattered primary particle"
+   - 2   : "kinetic energy of recoil nuclei"
+   - 3   : "kinetic energy of gamma"
+   - 4   : "kinetic energy of neutrons"
+   - 5   : "kinetic energy of protons"
+   - 6   : "kinetic energy of deuterons"
+   - 7   : "kinetic energy of alphas"
+   - 8   : "kinetic energy of all others ions"
+   - 9   : "kinetic energy of all others mesons"
+   - 10  : "kinetic energy of all others baryons"
+   - 11  : "Q = Ekin out - Ekin in"              
       
    The histograms are managed by the HistoManager class and its Messenger. 
    The histos can be individually activated with the command :
@@ -122,12 +122,6 @@
 	
 \section Hadr03_s7 HOW TO START ?
  
-   Compile and link to generate an executable
-\verbatim
-% cd geant4/examples/extended/hadronic/Hadr03
-% gmake
-\endverbatim
- 		
    Execute Hadr03 in 'batch' mode from macro files :
 \verbatim
 % Hadr03   inelastic.mac
@@ -135,6 +129,11 @@
  		
    Execute Hadr03 in 'interactive mode' with visualization :
 \verbatim
+% Hadr03
+Idle> control/execute vis.mac
+....
+Idle> type your commands
+....
 Idle> exit
 \endverbatim
  

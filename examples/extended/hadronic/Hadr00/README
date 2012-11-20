@@ -40,7 +40,7 @@ the beam can be defined via standard UI commands
 Physics List is defined by its name given in the 3d argument of the of the 
 run command. 
 
-$G4BIN/Linux++/hadr01 my.macro QGSP_BERT   
+Hadr00 my.macro QGSP_BERT   
 
 If 3d argument is not set then by the PHYSLIST environment variable. 
 By default FTFP_BERT Physics List will be instantiated.
