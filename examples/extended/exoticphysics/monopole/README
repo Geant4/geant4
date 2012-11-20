@@ -80,10 +80,6 @@ monopole.
 
  5- HOW TO START ?
 
-     - compile and link to generate an executable
-	% cd monopole
- 	% gmake
-
      - execute Test  in 'batch' mode from macro files
  	% monopole  monopole.in
 
