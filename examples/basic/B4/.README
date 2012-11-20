@@ -52,9 +52,13 @@
 \section B4_s2 PHYSICS LIST
  
    The particle's type and the physic processes which will be available
-   in this example are set in the FTFP_BERT physics list. This physics
-   list requires data files for low energy electromagnetic processes which
-   path is defined via the G4LEDATA envirnoment variable.
+   in this example are set in the FTFP_BERT physics list. This physics list 
+   requires data files for electromagnetic and hadronic processes.
+   See more on installation of the datasets in
+   <a href="http://geant4.web.cern.ch/geant4/UserDocumentation/UsersGuides/InstallationGuide/html/ch03s03.html">
+   Geant4 Installation Guide, Chapter 3.3: Note On Geant4 Datasets </a>.
+   The following datasets: G4LEDATA, G4LEVELGAMMADATA and G4SAIDXSDATA are 
+   mandatory for this example.
  
    In addition the build-in interactive command:
 \verbatim
@@ -234,13 +238,13 @@ The following paragraphs are common to all basic examples
  
 \section B4_C HOW TO RUN
 
-    This example handles the program arguments in a new way.
-    It can be run with the following optional arguments:
+   This example handles the program arguments in a new way.
+   It can be run with the following optional arguments:
 \verbatim
 % exampleB4a [-m macro ] [-u UIsession]
 \endverbatim 
  
-    - Execute exampleB4a in the 'interactive mode' with visualization
+   - Execute exampleB4a in the 'interactive mode' with visualization
 \verbatim
 % exampleB4a
 and type in the commands from run1.mac line by line:  
@@ -249,22 +253,22 @@ Idle> /run/beamOn 1
 Idle> ...
 Idle> exit
 \endverbatim                
-      or
+     or
 \verbatim
 Idle> /control/execute run1.mac
 ....
 Idle> exit
 \endverbatim                
 
-    - Execute exampleB4a in the 'batch' mode from macro files 
-      (without visualization)
+   - Execute exampleB4a in the 'batch' mode from macro files 
+     (without visualization)
 \verbatim
 % exampleB4a -m run2.mac
 % exampleB4a -m exampleB4.in > exampleB4.out
 \endverbatim                
 
-    - Execute exampleB4a in the 'interactive mode' with a selected UI session,
-      e.g. tcsh
+   - Execute exampleB4a in the 'interactive mode' with a selected UI session,
+     e.g. tcsh
 \verbatim
 % exampleB4a -u tcsh 
 \endverbatim                

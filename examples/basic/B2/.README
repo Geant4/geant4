@@ -9,25 +9,25 @@ This example simulates a simplified fixed target experiment.
 
 \section B2_s1 GEOMETRY DEFINITION
  
-     The setup consists of a target followed by six chambers of increasing
-     transverse size. These chambers are located in a region called the Tracker
-     region. Their shape are boxes, constructed as simple boxes 
-     (in B2aDetectorConstruction) and as parametrised volumes 
-     (in B2bDetectorConstruction), see also B2bChamberParameterisation class.
+   The setup consists of a target followed by six chambers of increasing
+   transverse size. These chambers are located in a region called the Tracker
+   region. Their shape are boxes, constructed as simple boxes 
+   (in B2aDetectorConstruction) and as parametrised volumes 
+   (in B2bDetectorConstruction), see also B2bChamberParameterisation class.
 
-     The default geometry is constructed in the detector construction class.
-     One can change the materials of the target and the chambers
-     interactively via the commands defined in B2aDetectorMessenger
-     (or B2bDetectorMessenger). For example:
+   The default geometry is constructed in the detector construction class.
+   One can change the materials of the target and the chambers
+   interactively via the commands defined in B2aDetectorMessenger
+   (or B2bDetectorMessenger). For example:
 
 \verbatim
 /B2/det/setTargetMaterial G4_WATER
 /B2/det/setChamberMaterial G4_Ar
 \endverbatim
  
-     In addition, a transverse uniform magnetic field can be applied (see
-     B2MagneticField and B2aDetectorMessenger, B2bDetectorMessenger classes) 
-     and set interactively. For example:
+   In addition, a transverse uniform magnetic field can be applied (see
+   B2MagneticField and B2aDetectorMessenger, B2bDetectorMessenger classes) 
+   and set interactively. For example:
 
 \verbatim
 /B2/det/setField 0.2 tesla
@@ -35,44 +35,48 @@ This example simulates a simplified fixed target experiment.
  
 \section B2_s2 PHYSICS LIST
 
-     The particle's type and the physic processes which will be available
-     in this example are set in the FTFP_BERT physics list. This physics
-     list requires data files for low energy electromagnetic processes which
-     path is defined via the G4LEDATA envirnoment variable.
+   The particle's type and the physic processes which will be available
+   in this example are set in the FTFP_BERT physics list. This physics list 
+   requires data files for electromagnetic and hadronic processes.
+   See more on installation of the datasets in
+   <a href="http://geant4.web.cern.ch/geant4/UserDocumentation/UsersGuides/InstallationGuide/html/ch03s03.html">
+   Geant4 Installation Guide, Chapter 3.3: Note On Geant4 Datasets </a>.
+   The following datasets: G4LEDATA, G4LEVELGAMMADATA and G4SAIDXSDATA are 
+   mandatory for this example.
  
-     In addition, the build-in interactive command:
+   In addition, the build-in interactive command:
 \verbatim
 /process/(in)activate processName
 \endverbatim
-     allows the user to activate/inactivate the processes one by one.
+   allows the user to activate/inactivate the processes one by one.
 
 \section B2_s3 PRIMARY GENERATOR
 
-     The primary kinematic consists of a single particle which hits the
-     target perpendicular to the entrance face. The type of the particle
-     and its energy are set in the B2PrimaryGeneratorAction class, and can
-     be changed via the G4 build-in commands of the G4ParticleGun class.
+   The primary kinematic consists of a single particle which hits the
+   target perpendicular to the entrance face. The type of the particle
+   and its energy are set in the B2PrimaryGeneratorAction class, and can
+   be changed via the G4 build-in commands of the G4ParticleGun class.
   
 \section B2_s4 RUNS and EVENTS
  
-     A run is a set of events.
+   A run is a set of events.
  
-     The user has control:
-        - at Begin and End of each run (class B2RunAction)
-        - at Begin and End of each event (class B2EventAction)
-        - at Begin and End of each track (class TrackingAction, not used here)
-	- at End of each step (class SteppingAction, not used here)
+   The user has control:
+      - at Begin and End of each run (class B2RunAction)
+      - at Begin and End of each event (class B2EventAction)
+      - at Begin and End of each track (class TrackingAction, not used here)
+      - at End of each step (class SteppingAction, not used here)
 
 \section B2_s5 USER LIMITS
  
-    This example also illustrates how to introduce tracking constraints
-    like maximum step length, minimum kinetic energy etc. via the G4UserLimits
-    class and associated G4StepLimiter and G4UserSpecialCuts processes.    
-    See B2aDetectorConstruction (or B2bDetectorConstruction).
+   This example also illustrates how to introduce tracking constraints
+   like maximum step length, minimum kinetic energy etc. via the G4UserLimits
+   class and associated G4StepLimiter and G4UserSpecialCuts processes.    
+   See B2aDetectorConstruction (or B2bDetectorConstruction).
 
-    The maximum step limit in the tracker region can be set by the interactive
-    command (see B2aDetectorMessenger, B2bDetectorMessenger classes). 
-    For example:
+   The maximum step limit in the tracker region can be set by the interactive
+   command (see B2aDetectorMessenger, B2bDetectorMessenger classes). 
+   For example:
 
 \verbatim
 /B2/det/stepMax 1.0 mm
@@ -80,27 +84,27 @@ This example simulates a simplified fixed target experiment.
 
 \section B2_s6 DETECTOR RESPONSE
  
-     A HIT is a step per step record of all the information needed to
-     simulate and analyse the detector response.
+   A HIT is a step per step record of all the information needed to
+   simulate and analyse the detector response.
  
-     In this example the Tracker chambers are considered to be the detector.
-     Therefore, the chambers are declared 'sensitive detectors' (SD) in
-     the B2aDetectorConstruction (or B2bDetectorConstruction) class.
-     They are associated with an instance of the B2TrackerSD class.
+   In this example the Tracker chambers are considered to be the detector.
+   Therefore, the chambers are declared 'sensitive detectors' (SD) in
+   the B2aDetectorConstruction (or B2bDetectorConstruction) class.
+   They are associated with an instance of the B2TrackerSD class.
  
-     Then, a Hit is defined as a set of 4 informations per step, inside
-     the chambers, namely:
-        - the track identifier (an integer),
-	- the chamber number,
- 	- the total energy deposit in this step, and
- 	- the position of the energy deposit.
+   Then, a Hit is defined as a set of 4 informations per step, inside
+   the chambers, namely:
+     - the track identifier (an integer),
+     - the chamber number,
+     - the total energy deposit in this step, and
+     - the position of the energy deposit.
 
-     A given hit is an instance of the class B2TrackerHit which is created
-     during the tracking of a particle, step by step, in the method
-     B2TrackerSD::ProcessHits(). This hit is inserted in a HitsCollection. 
+   A given hit is an instance of the class B2TrackerHit which is created
+   during the tracking of a particle, step by step, in the method
+   B2TrackerSD::ProcessHits(). This hit is inserted in a HitsCollection. 
 
-     The HitsCollection is printed at the end of each event (via the method
-     B2TrackerSD::EndOfEvent()), under the control of the command:
+   The HitsCollection is printed at the end of each event (via the method
+   B2TrackerSD::EndOfEvent()), under the control of the command:
 \verbatim
 /hits/verbose 2
 \endverbatim
@@ -168,13 +172,7 @@ This example simulates a simplified fixed target experiment.
  
 \section B2_C HOW TO RUN
  
-    - compile and link to generate an executable
-\verbatim
-% cd B2/B2a
-% make
-\endverbatim                
- 
-    - Execute exampleB2a in the 'interactive mode' with visualization
+   - Execute exampleB2a in the 'interactive mode' with visualization
 \verbatim
 % exampleB2a
 and type in the commands from run1.mac line by line:  
@@ -190,8 +188,8 @@ Idle> /control/execute run1.mac
 Idle> exit
 \endverbatim                
 
-    - Execute exampleB2a in the 'batch' mode from macro files 
-      (without visualization)
+   - Execute exampleB2a in the 'batch' mode from macro files 
+   (without visualization)
 \verbatim
 % exampleB2a run2.mac
 % exampleB2a exampleB2.in > exampleB2.out

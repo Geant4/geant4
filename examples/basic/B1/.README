@@ -29,9 +29,13 @@
 \section B1_s2 PHYSICS LIST
 
    The particle's type and the physic processes which will be available
-   in this example are set in the QBBC physics list. This physics
-   list requires data files for low energy electromagnetic processes which
-   path is defined via the G4LEDATA environment variable.    
+   in this example are set in the QBBC physics list. This physics list 
+   requires data files for electromagnetic and hadronic processes.
+   See more on installation of the datasets in
+   <a href="http://geant4.web.cern.ch/geant4/UserDocumentation/UsersGuides/InstallationGuide/html/ch03s03.html">
+   Geant4 Installation Guide, Chapter 3.3: Note On Geant4 Datasets </a>.
+   The following datasets: G4LEDATA, G4LEVELGAMMADATA, G4NEUTRONXSDATA and 
+   G4SAIDXSDATA are mandatory for this example.
  
    In addition the build-in interactive command:
 \verbatim
@@ -122,7 +126,7 @@ The following paragraphs are common to all basic examples
    
 \section B1_C HOW TO RUN
 
-    - Execute exampleB1 in the 'interactive mode' with visualization
+   - Execute exampleB1 in the 'interactive mode' with visualization
 \verbatim
 % exampleB1
 and type in the commands from run1.mac line by line:
@@ -139,8 +143,8 @@ Idle> /control/execute run1.mac
 Idle> exit
 \endverbatim                
 
-    - Execute exampleB1 in the 'batch' mode from macro files 
-      (without visualization)
+   - Execute exampleB1 in the 'batch' mode from macro files 
+   (without visualization)
 \verbatim
 % exampleB1 run2.mac
 % exampleB1 exampleB1.in > exampleB1.out

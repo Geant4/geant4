@@ -13,7 +13,7 @@ development.
    - Simple geometry with a few solids 
    - Geometry with simple placements (G4PVPlacement)
    - Scoring total dose in a selected volume user action classes
-   - Geant4 physics list (QGSP_BIC_EMY)
+   - Geant4 physics list (QBBC)
    
 - \ref ExampleB2
    - Simplified tracker geometry with global constant magnetic field

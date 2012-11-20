@@ -17,6 +17,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17/11/12 I. Hrivnacova (exbasic-V09-05-03)
+- Updated documentation:
+  - Fixed .README files for artefacts from Markdown support
+  - Removed obsolete instructions (how to compile & link)
+  - Updated info about used physics lists and needed data files 
+
 02/11/12 I. Hrivnacova (exbasic-V09-05-02)
 - Fixed CMake build for added macros in B2, B4
 

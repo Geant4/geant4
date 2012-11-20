@@ -43,6 +43,10 @@ $Id$
      the G4LEDATA envirnoment variable
    - radioactive decay hadronic processes which path is defined via 
      the G4RADIOACTIVEDATA envirnoment variable.
+   
+   See more on installation of the datasets in Geant4 Installation Guide,
+   Chapter 3.3: Note On Geant4 Datasets:
+   http://geant4.web.cern.ch/geant4/UserDocumentation/UsersGuides/InstallationGuide/html/ch03s03.html
  	 
  3- PRIMARY GENERATOR
   

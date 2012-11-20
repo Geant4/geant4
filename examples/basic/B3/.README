@@ -41,6 +41,10 @@
    - radioactive decay hadronic processes which path is defined via 
      the G4RADIOACTIVEDATA envirnoment variable.
  	 
+   See more on installation of the datasets in
+   <a href="http://geant4.web.cern.ch/geant4/UserDocumentation/UsersGuides/InstallationGuide/html/ch03s03.html">
+   Geant4 Installation Guide, Chapter 3.3: Note On Geant4 Datasets </a>.
+
 \section B3_s3 PRIMARY GENERATOR
 
    The default particle beam is an ion (F18), at rest, randomly distributed 
@@ -135,13 +139,7 @@ The following paragraphs are common to all basic examples
 
 \section B3_C HOW TO RUN
  
-    - compile and link to generate an executable
-\verbatim
-% cd B3
-% make
-\endverbatim                
- 
-    - Execute exampleB3 in the 'interactive mode' with visualization
+   - Execute exampleB3 in the 'interactive mode' with visualization
 \verbatim
 % exampleB3
 and type in the commands from run1.mac line by line:  
@@ -158,8 +156,8 @@ Idle> /control/execute run1.mac
 Idle> exit
 \endverbatim                
 
-    - Execute exampleB3 in the 'batch' mode from macro files 
-      (without visualization)
+   - Execute exampleB3 in the 'batch' mode from macro files 
+   (without visualization)
 \verbatim
 % exampleB3 run2.mac
 % exampleB3 exampleB3.in > exampleB3.out
