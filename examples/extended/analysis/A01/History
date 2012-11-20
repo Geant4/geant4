@@ -11,6 +11,9 @@ $Id: History,v 1.50 2010-06-06 04:21:04 perl Exp $
 
 ---------------------------------------------------------------------------  
 
+16 November 2012 Ivana Hrivnacova (exampleA01-V09-05-03)
+- Fixed .README file for artefacts from Markdown support
+
 31 August 2012 Ivana Hrivnacova (exampleA01-V09-05-02)
 - Minor fixes in CMakeList.txt
 
