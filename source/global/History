@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 16, 2012 V.Ivantchenko (global-V09-05-15)
+- G4Physics2DVector: fixed comments, more correct references.
+- Updated date for release 9.6.
+
 November 5, 2012 M.Maire (global-V09-05-14)
 - Reverted change to G4UnitsTable for parsec unit definition, introduced
   in tag "global-V09-05-10". Back to use 'pc' to avoid formatting printout

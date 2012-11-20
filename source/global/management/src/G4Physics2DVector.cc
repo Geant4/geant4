@@ -206,8 +206,8 @@ void G4Physics2DVector::ComputeValue(G4double xx, G4double yy)
 void G4Physics2DVector::BicubicInterpolation(size_t idx, size_t idy)
 {
     // Bicubic interpolation according to 
-    // 1. H.M. Antia, "Numerical methods for scientists and engineers",
-    //    Birkhauser, 2001. 
+    // 1. H.M. Antia, "Numerical Methods for Scientists and Engineers",
+    //    MGH, 1991. 
     // 2. W.H. Press et al., "Numerical recipes. The Art of Scientific 
     //    Computing", Cambridge University Press, 2007. 
     G4double x1 = xVector[idx];
