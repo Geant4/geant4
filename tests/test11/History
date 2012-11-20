@@ -14,6 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+18 Nov 2012   Pere Mato                (test11-V09-05-05)
+- To avoid intermittent build problems on Windows added an
+  artificial dependency between targets to serialize building them.
+
+31 October 2012  Tatsumi Koi 		(test11-V09-05-04)
+- Add "showEngineStatus" at the end of job
+
 12 Oct 2012  Andrea Dotti              (test11-V09-05-03)
 - Explicit inclusion of units and constants headers.
 

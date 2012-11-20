@@ -73,6 +73,7 @@ int main(int argc,char** argv) {
     UImanager->ApplyCommand(command+fileName);
   }
 
+  CLHEP::HepRandom::showEngineStatus();
   delete runManager;
   return 0;
 }
