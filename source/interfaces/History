@@ -17,10 +17,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+
+15th November 2012 Laurent Garnier (interfaces-V09-05-36)
+- G4UIQt:
+ o Fix bug #1391 : Menus were append before the "File" menu
+ o FIx bug #1389 : add button with command with arguments was not working
+
+14th November 2012 Laurent Garnier
+- G4UIQt: Put name of the app in the title bar
+
 6 November 2012 Koichi Murakami (interfaces-V09-05-35)
 - G4UIExecutive, remove Win32 session from best guess.
 
-2 November 2012 Koichi Murakami (interfaces-V09-05-34)
+2nd November 2012 Koichi Murakami (interfaces-V09-05-34)
 - G4UIExecutive, G4UItcsh, add null check for getenv return.
 
 2nd November 2012  Laurent Garnier (interfaces-V09-05-33)

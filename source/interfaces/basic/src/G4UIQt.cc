@@ -265,13 +265,6 @@ G4UIQt::G4UIQt (
 
   fMainWindow->setCentralWidget(fMainSplitterWidget);
 
-
-  // Add a quit subMenu
-  QMenu *fileMenu = fMainWindow->menuBar()->addMenu("File");
-  fileMenu->addAction("Quit", this, SLOT(ExitSession()));
-
-
-  AddInteractor ("file",(G4Interactor)fileMenu);
 #ifdef G4DEBUG_INTERFACES_BASIC
   printf("G4UIQt::G4UIQt :: 6\n");
 #endif
@@ -282,7 +275,7 @@ G4UIQt::G4UIQt (
 
   if(UI!=NULL) UI->SetCoutDestination(this);  // TO KEEP
 
-  fMainWindow->setWindowTitle( tr("G4UI Session") ); 
+  fMainWindow->setWindowTitle(QFileInfo( QCoreApplication::applicationFilePath() ).fileName()); 
   fMainWindow->resize(300,600); 
   fMainWindow->move(QPoint(50,50));
 
@@ -788,7 +781,7 @@ void G4UIQt::AddMenu (
   if (aLabel == NULL) return;
 
   QMenu *fileMenu = new QMenu(aLabel);
-  fMainWindow->menuBar()->insertMenu(fMainWindow->menuBar()->actions().last(),fileMenu); 
+  fMainWindow->menuBar()->addMenu(fileMenu); 
 
   AddInteractor (aName,(G4Interactor)fileMenu);
 }
@@ -821,6 +814,12 @@ void G4UIQt::AddButton (
   if(UI==NULL) return;
   G4UIcommandTree * treeTop = UI->GetTree();
 
+  G4String cmd = aCommand;
+  G4int cmdEndPos = cmd.find_first_of(" \t");
+  if(cmdEndPos!=G4int(std::string::npos)) {
+    cmd.erase(cmdEndPos);
+  }
+  
   if(treeTop->FindPath(aCommand) == NULL) {
     G4cout << "Warning: command '"<< aCommand <<"' does not exist, please define it before using it."<< G4endl;
   }
