@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+18 November 2012  Pere Mato (test15-V09-05-04)
+----------------------------------------------------
+- To avoid intermittent build problems on Windows added an
+  artificial dependency between targets to serialize building them.
+
 12 Oct 2012, Andrea Dotti   (test15-V09-05-03)
 ----------------------------------------------
 - Explicit inclusion of units and constants headers.
