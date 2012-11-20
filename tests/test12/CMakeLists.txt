@@ -5,10 +5,10 @@ include(${Geant4_USE_FILE})
 
 GEANT4_EXECUTABLE(test12 test12.cc src/*.cc)
 GEANT4_EXECUTABLE(test12_hadronic_exerciser test12_hadronic_exerciser.cc)
-add_custom_target(test12-all DEPENDS test12 test12_hadronic_exerciser)
+add_dependencies(test12 test12_hadronic_exerciser) # Artificial to force serialization (problem on windows)
 
 #---Test definitions----------------------------------------------------------------------------------
-GEANT4_ADD_TEST(test12-build BUILD test12-all)
+GEANT4_ADD_TEST(test12-build BUILD test12)
 GEANT4_ADD_TEST(test12_hadronic_exerciser COMMAND test12_hadronic_exerciser
                                           OUTPUT  test12.in
                                           DEPENDS test12-build)
