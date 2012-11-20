@@ -1,0 +1,14 @@
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Parallel Examples History file
+                      -------------------------------
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+16 November 2012, I. Hrivnacova (exparallel-V09-05-00)
+- Added CMakeLists.txt file in the top directory
