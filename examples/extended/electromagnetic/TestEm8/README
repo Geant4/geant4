@@ -70,10 +70,6 @@ $Id: README,v 1.5 2010-09-08 11:22:01 vnivanch Exp $
 
  5- HOW TO START ?
  
- 	- compile and link to generate an executable
- 		% cd TestEm8
- 		% gmake
- 		
  	- execute TestEm8 in 'batch' mode from macro files e.g.
  		% $(G4INSTALL)/bin/$(G4SYSTEM)/TestEm8  TestEm8.in
 		

@@ -98,15 +98,11 @@ $Id: README,v 1.6 2008-05-07 11:47:09 maire Exp $
 
  5- HOW TO START ?
  
- 	- compile and link to generate an executable
- 		% cd TestEm10
- 		% gmake
- 		
  	- execute TestEm10 in 'batch' mode from macro files e.g.
- 		% $(G4INSTALL)/bin/$(G4SYSTEM)/TestEm10   run11.mac
+ 		% TestEm10   run11.mac
 		
  	- execute TestEm10 in 'interactive' mode with visualization e.g.
- 		% $(G4INSTALL)/bin/$(G4SYSTEM)/TestEm10
+ 		% TestEm10
 		....
 		Idle> type your commands
 		....

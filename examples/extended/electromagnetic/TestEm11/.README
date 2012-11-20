@@ -85,18 +85,12 @@
  	
 \section TestEm11_s5 HOW TO START ?
  
- - compile and link to generate an executable
-\verbatim
-% cd geant4/examples/extended/electromagnetic/TestEm1
-% gmake
-\endverbatim
- 		
- - execute TestEm11 in 'batch' mode from macro files
+ - Execute TestEm11 in 'batch' mode from macro files
 \verbatim
 % TestEm11   run01.mac
 \endverbatim
  		
- - execute TestEm11 in 'interactive mode' with visualization
+ - Execute TestEm11 in 'interactive mode' with visualization
 \verbatim
 % TestEm11
 ....

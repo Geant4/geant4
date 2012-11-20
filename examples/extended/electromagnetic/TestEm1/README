@@ -88,10 +88,6 @@ $Id: README,v 1.28 2010-06-06 04:25:24 perl Exp $
  	
  6 - HOW TO START ?
  
-  - compile and link to generate an executable
-	% cd geant4/examples/extended/electromagnetic/TestEm1
-	% gmake
- 		
   - execute TestEm1 in 'batch' mode from macro files
 	% TestEm1   runs.mac
  		

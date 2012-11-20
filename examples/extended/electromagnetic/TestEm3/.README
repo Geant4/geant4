@@ -57,27 +57,27 @@
 	    
 \section TestEm3_s2 PHYSICS LISTS
  
-    Physics lists can be local (eg. in this example) or from G4 kernel
-    physics_lists subdirectory.
-     
-    Local physics lists:	 
-    - "local"	standard EM physics with current 'best' options setting.
-                these options are explicited in PhysListEmStandard
-    
-    From geant4/source/physics_lists/builders:	 
-    - "emstandard_opt0" recommended standard EM physics for LHC
-    - "emstandard_opt1" best CPU performance standard physics for LHC
-    - "emstandard_opt2"     
-    - "emstandard_opt3" best current advanced EM options. 
-                        analog to "local" above  
-    - "emlivermore"  low-energy EM physics using Livermore data
-    - "empenelope"   low-energy EM physics implementing Penelope models
-        
-    Physics lists and options can be (re)set with UI commands
-    
-    Please, notice that options set through G4EmProcessOPtions are global, eg
-    for all particle types. In G4 builders, it is shown how to set options per
-    particle type.
+  Physics lists can be local (eg. in this example) or from G4 kernel
+  physics_lists subdirectory.
+   
+  Local physics lists:         
+  - "local"   standard EM physics with current 'best' options setting.
+              these options are explicited in PhysListEmStandard
+  
+  From geant4/source/physics_lists/builders:   
+  - "emstandard_opt0" recommended standard EM physics for LHC
+  - "emstandard_opt1" best CPU performance standard physics for LHC
+  - "emstandard_opt2"     
+  - "emstandard_opt3" best current advanced EM options. 
+                      analog to "local" above  
+  - "emlivermore"  low-energy EM physics using Livermore data
+  - "empenelope"   low-energy EM physics implementing Penelope models
+      
+  Physics lists and options can be (re)set with UI commands
+  
+  Please, notice that options set through G4EmProcessOPtions are global, eg
+  for all particle types. In G4 builders, it is shown how to set options per
+  particle type.
         	    
 \section TestEm3_s3 AN EVENT : THE PRIMARY GENERATOR
  
@@ -132,18 +132,12 @@
  	
 \section TestEm3_s6 HOW TO START ?
  
-  - compile and link to generate an executable
-\verbatim
- % cd TestEm3
- % gmake
-\endverbatim
- 		
-  - execute TestEm3 in 'batch' mode from macro files
+  - Execute TestEm3 in 'batch' mode from macro files
 \verbatim
 % TestEm3   run01.mac
 \endverbatim
  		
-  - execute TestEm3 in 'interactive mode' with visualization
+  - Execute TestEm3 in 'interactive mode' with visualization
 \verbatim
 % TestEm3
 ....

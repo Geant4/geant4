@@ -99,10 +99,6 @@ $Id: README,v 1.6 2008-09-26 19:47:51 maire Exp $
 	
  7- HOW TO START ?
  
-	compile and link to generate an executable
- 		% cd geant4/examples/extended/electromagnetic/TestEm15
- 		% gmake
- 		
 	execute TestEm15 in 'batch' mode from macro files :
  		% TestEm15   compt.mac
  		

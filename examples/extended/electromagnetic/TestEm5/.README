@@ -108,31 +108,31 @@
  where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
  (see the macros xxxx.mac).
  
-      - 1 :  "energy deposit in absorber"
-      - 2 :  "energy of charged secondaries at creation"
-      - 3 :  "energy of neutral secondaries at creation"
-      - 4 :  "energy of charged at creation (log10(Ekin))"
-      - 5 :  "energy of neutral at creation (log10(Ekin))"
-      - 6 :  "x_vertex of charged secondaries (all)"
-      - 7 :  "x_vertex of charged secondaries (not absorbed)"
-      - 10 :  "(transmit, charged) : kinetic energy at exit of world"
-      - 11 :  "(transmit, charged) : ener fluence: dE(MeV)/dOmega"	
-      - 12 :  "(transmit, charged) : space angle dN/dOmega"
-      - 13 :  "(transmit, charged) : projected angle at exit of world"
-      - 14 :  "(transmit, charged) : projected position at exit of world"
-      - 15 :  "(transmit, charged) : radius at exit of world"	
-      - 20 :  "(transmit, neutral) : kinetic energy at exit of world"
-      - 21 :  "(transmit, neutral) : ener fluence: dE(MeV)/dOmega"	
-      - 22 :  "(transmit, neutral) : space angle dN/dOmega"
-      - 23 :  "(transmit, neutral) : projected angle at exit of world"
-      - 30 :  "(reflect , charged) : kinetic energy at exit of world"
-      - 31 :  "(reflect , charged) : ener fluence: dE(MeV)/dOmega"	
-      - 32 :  "(reflect , charged) : space angle dN/dOmega"
-      - 33 :  "(reflect , charged) : projected angle at exit of world"
-      - 40 :  "(reflect , neutral) : kinetic energy at exit of world"
-      - 41 :  "(reflect , neutral) : ener fluence: dE(MeV)/dOmega"	
-      - 42 :  "(reflect , neutral) : space angle dN/dOmega"
-      - 43 :  "(reflect , neutral) : projected angle at exit of world"
+ - 1 :  "energy deposit in absorber"
+ - 2 :  "energy of charged secondaries at creation"
+ - 3 :  "energy of neutral secondaries at creation"
+ - 4 :  "energy of charged at creation (log10(Ekin))"
+ - 5 :  "energy of neutral at creation (log10(Ekin))"
+ - 6 :  "x_vertex of charged secondaries (all)"
+ - 7 :  "x_vertex of charged secondaries (not absorbed)"
+ - 10 :  "(transmit, charged) : kinetic energy at exit of world"
+ - 11 :  "(transmit, charged) : ener fluence: dE(MeV)/dOmega"      
+ - 12 :  "(transmit, charged) : space angle dN/dOmega"
+ - 13 :  "(transmit, charged) : projected angle at exit of world"
+ - 14 :  "(transmit, charged) : projected position at exit of world"
+ - 15 :  "(transmit, charged) : radius at exit of world"   
+ - 20 :  "(transmit, neutral) : kinetic energy at exit of world"
+ - 21 :  "(transmit, neutral) : ener fluence: dE(MeV)/dOmega"      
+ - 22 :  "(transmit, neutral) : space angle dN/dOmega"
+ - 23 :  "(transmit, neutral) : projected angle at exit of world"
+ - 30 :  "(reflect , charged) : kinetic energy at exit of world"
+ - 31 :  "(reflect , charged) : ener fluence: dE(MeV)/dOmega"      
+ - 32 :  "(reflect , charged) : space angle dN/dOmega"
+ - 33 :  "(reflect , charged) : projected angle at exit of world"
+ - 40 :  "(reflect , neutral) : kinetic energy at exit of world"
+ - 41 :  "(reflect , neutral) : ener fluence: dE(MeV)/dOmega"      
+ - 42 :  "(reflect , neutral) : space angle dN/dOmega"
+ - 43 :  "(reflect , neutral) : projected angle at exit of world"
 
  The histograms can be viewed using ROOT or PAW.
  
@@ -181,18 +181,12 @@
 	
 \section TestEm5_s9 HOW TO START ?
  
- - compile and link to generate an executable
-\verbatim
-% cd TestEm5
-% gmake
-\endverbatim
- 		
- - execute TestEm5 in 'batch' mode from macro files e.g.
+ - Execute TestEm5 in 'batch' mode from macro files e.g.
 \verbatim
 % $(G4INSTALL)/bin/$(G4SYSTEM)/TestEm5   myMacro.mac
 \endverbatim
 		
- - execute TestEm5 in 'interactive' mode with visualization e.g.
+ - Execute TestEm5 in 'interactive' mode with visualization e.g.
 \verbatim
 % $(G4INSTALL)/bin/$(G4SYSTEM)/TestEm5
 \endverbatim

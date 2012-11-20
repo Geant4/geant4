@@ -11,12 +11,6 @@
 	
   The program can be used in batch or interactively.	
  
-  - compile and link to generate an executable
-\verbatim
-% cd geant4/examples/extended/electromagnetic/TestEm0
-% gmake
-\endverbatim
- 		
   - execute TestEm0 in 'batch' mode from macro files :
 \verbatim
 % TestEm0   TestEm0.in

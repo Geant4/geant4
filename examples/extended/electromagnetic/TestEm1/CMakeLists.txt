@@ -40,7 +40,7 @@ target_link_libraries(TestEm1 ${Geant4_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(TestEm1_SCRIPTS
-    annihil.mac brems.mac erange.mac gammaconversion.mac geantino.mac ionis.mac photoelec.mac photon.mac radioactive.mac range.mac runs.mac TestEm1.in TestEm1.out vis.mac
+    annihil.mac brems.mac erange.mac gammaconversion.mac geantino.mac photoelec.mac photon.mac radioactive.mac range.mac runs.mac TestEm1.in TestEm1.out vis.mac
   )
 
 foreach(_script ${TestEm1_SCRIPTS})

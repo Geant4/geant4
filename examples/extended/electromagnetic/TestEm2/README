@@ -97,14 +97,10 @@ $Id: README,v 1.28 2010-02-22 15:41:29 maire Exp $
 
  6- HOW TO START ?
 
-     - compile and link to generate an executable
- 		% cd TestEm2
- 		% gmake
-
-     - execute TestEm2 in 'batch' mode from macro files
+     - Execute TestEm2 in 'batch' mode from macro files
  		% TestEm2   run01.mac
 
-     - execute TestEm2 in 'interactive mode' with visualization
+     - Execute TestEm2 in 'interactive mode' with visualization
  		% TestEm2
  		....
  		Idle> type your commands

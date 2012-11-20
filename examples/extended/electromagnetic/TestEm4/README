@@ -44,10 +44,6 @@ $Id: README,v 1.21 2008-09-12 18:46:14 maire Exp $
  	
  6- HOW TO START ?
  
- 	- compile and link to generate an executable
- 		% cd examples/extended/electromagnetic/TestEm4
- 		% gmake
- 		
  	- execute TestEm4 in 'batch' mode from macro files
  		% TestEm4   TestEm4.in
  		

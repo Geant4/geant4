@@ -128,14 +128,10 @@ $Id: README,v 1.33 2009-09-17 20:06:26 maire Exp $
  	
  6- HOW TO START ?
  
-  - compile and link to generate an executable
- 	% cd TestEm3
- 	% gmake
- 		
-  - execute TestEm3 in 'batch' mode from macro files
+  - Execute TestEm3 in 'batch' mode from macro files
  	% TestEm3   run01.mac
  		
-  - execute TestEm3 in 'interactive mode' with visualization
+  - Execute TestEm3 in 'interactive mode' with visualization
  	% TestEm3
  	....
  	Idle> type your commands. For instance:
