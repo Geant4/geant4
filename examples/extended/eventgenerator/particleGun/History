@@ -13,6 +13,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
 
+17-11-12 I. Hrivnacova (particleGunExample-V09-05-05)
+- Updated documentation:
+  - Fixed .README files for artefacts from Markdown support
+  - Removed obsolete instructions (how to compile & link)
+
 13-11-12 I. Hrivnacova (particleGunExample-V09-05-04)
 - Fixed order of instatiating G4VisExecutive and G4UIExecutive
   (required when Qt driver is activated).

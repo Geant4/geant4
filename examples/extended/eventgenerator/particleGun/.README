@@ -95,18 +95,13 @@ PhysicsList.cc defines only geantino and transportation process.
  in case of interactive running mode.
  
 \section ParticleGun_s5 How to start ?
-  - compile and link to generate an executable
-\verbatim 
-% cd gun
-% gmake
-\endverbatim 
  		
-  - execute particleGun in 'batch' mode from macro files
+  - Execute particleGun in 'batch' mode from macro files
 \verbatim 
 % ParticleGun   run1.mac
 \endverbatim 
  		
-  - execute particleGun2 in 'interactive mode' with visualization
+  - Execute particleGun2 in 'interactive mode' with visualization
 \verbatim 
 % particleGun
 ....

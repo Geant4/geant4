@@ -101,10 +101,6 @@ http://proj-clhep.web.cern.ch/proj-clhep/manual/UserGuide/VectorDefs/node49.html
  5- How to start ?
     --------------
  
-  - compile and link to generate an executable
- 	% cd gun
- 	% gmake
- 		
   - execute particleGun in 'batch' mode from macro files
  	% ParticleGun   run1.mac
  		
