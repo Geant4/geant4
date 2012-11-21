@@ -44,6 +44,12 @@ set(GEANT4_FALSEPOSITIVE_SOURCES
   #   They are covered in sources.cmake though!
   G4VRML1SceneHandlerFunc.icc
   G4VRML2SceneHandlerFunc.icc
+  # - Documentation of processes/hadronic/models/cascade/cascade
+  # lists some sources in in comments. These do not correspond to
+  # real sources so we can safely filter them
+  # TODO : Improve regex to identify comments!!!!
+  T1xxChannel.cc
+  XXChannel.cc
   )
 
 
@@ -143,6 +149,8 @@ endforeach()
 #
 if(GEANT4_BUILD_ISINCONSISTENT)
   message(FATAL_ERROR "Inconsistent Geant4 build detected!")
+else()
+  message(STATUS "Geant4 build appears consistent")
 endif()
 
 

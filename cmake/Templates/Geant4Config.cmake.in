@@ -84,82 +84,92 @@
 # DEBUG : print out the variables passed via find_package arguments
 #
 if(Geant4_CONFIG_DEBUG)
-    message(STATUS "G4CFG_DEBUG : Geant4_VERSION         = ${Geant4_VERSION}")
-    message(STATUS "G4CFG_DEBUG : Geant4_FIND_VERSION    = ${Geant4_FIND_VERSION}")
-    message(STATUS "G4CFG_DEBUG : Geant4_FIND_REQUIRED   = ${Geant4_FIND_REQUIRED}")
-    message(STATUS "G4CFG_DEBUG : Geant4_FIND_COMPONENTS = ${Geant4_FIND_COMPONENTS}")
+  message(STATUS "G4CFG_DEBUG : Geant4_VERSION         = ${Geant4_VERSION}")
+  message(STATUS "G4CFG_DEBUG : Geant4_FIND_VERSION    = ${Geant4_FIND_VERSION}")
+  message(STATUS "G4CFG_DEBUG : Geant4_FIND_REQUIRED   = ${Geant4_FIND_REQUIRED}")
+  message(STATUS "G4CFG_DEBUG : Geant4_FIND_COMPONENTS = ${Geant4_FIND_COMPONENTS}")
 
-   foreach(_cpt ${Geant4_FIND_COMPONENTS})
-       message(STATUS "G4CFG_DEBUG : Geant4_FIND_REQUIRED_${_cpt} = ${Geant4_FIND_REQUIRED_${_cpt}}")
-    endforeach()
+  foreach(_cpt ${Geant4_FIND_COMPONENTS})
+    message(STATUS "G4CFG_DEBUG : Geant4_FIND_REQUIRED_${_cpt} = ${Geant4_FIND_REQUIRED_${_cpt}}")
+  endforeach()
 
-    message(STATUS "G4CFG_DEBUG : Geant4_LIBDEPS_LOADED = ${Geant4_LIBDEPS_LOADED}")
+  message(STATUS "G4CFG_DEBUG : Geant4_LIBDEPS_LOADED = ${Geant4_LIBDEPS_LOADED}")
 endif()
 
-#----------------------------------------------------------------------------
-# Locate ourselves, since all other config files should have been installed
-# alongside us...
+#-----------------------------------------------------------------------
+# Locate ourselves, since all other config files should have been 
+# installed alongside us...
 #
 get_filename_component(_thisdir "${CMAKE_CURRENT_LIST_FILE}" PATH)
 
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Provide *recommended* compiler flags used by this build of Geant4
 # Don't mess with the actual CMAKE_CXX_FLAGS!!!
 # It's up to the user what to do with these
 @GEANT4_COMPILER_FLAG_HINTS@
 
-#----------------------------------------------------------------------------
-# Set the base compile definitions required to use Geant4
+#-----------------------------------------------------------------------
+# Set the base compile definitions required to use Geant4 if the variable
+# does not exist (we do this to ensure multiple calls to find_package
+# don't overwrite previous invocations)
 # Components may append to this
 # We set VIS/UI_USE directly here, because for now they are, unfortunately,
 # always needed for the Examples. 
 # However, they ARE NOT required to use Geant4 itself.
 #
-set(Geant4_DEFINITIONS @GEANT4_CORE_DEFINITIONS@)
+if(NOT Geant4_DEFINITIONS)
+  set(Geant4_DEFINITIONS @GEANT4_CORE_DEFINITIONS@)
+endif()
 
+# We set VIS/UI_USE directly here, because for now they are, unfortunately,
+# always needed for the Examples. 
+# However, they ARE NOT required to use Geant4 itself.
+#
 if(NOT G4UI_NONE)
-    list(APPEND Geant4_DEFINITIONS -DG4UI_USE)
+  list(APPEND Geant4_DEFINITIONS -DG4UI_USE)
 endif()
 
 if(NOT G4VIS_NONE)
-    list(APPEND Geant4_DEFINITIONS -DG4VIS_USE)
+  list(APPEND Geant4_DEFINITIONS -DG4VIS_USE)
 endif()
 
-#----------------------------------------------------------------------------
-# Configure the path to the Geant4 headers, using a relative path if possible.
-# This is only known at CMake time, so we expand a CMake supplied variable.
+#-----------------------------------------------------------------------
+# Configure the path to the Geant4 headers, using a relative path if 
+# possible. This is only known at CMake time, so we expand a CMake 
+# supplied variable.
 #
 @GEANT4_INCLUDE_DIR_SETUP@
 
 @GEANT4_MODULE_PATH_SETUP@
 
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Configure the path(s) to third party headers.
 # This is not a perfect solution to recording dependencies on external
 # libraries, but it does ensure that users of THIS Geant4 will pick up
 # those it was built against.
-# Library dependencies are generally handled through the Geant4LibraryDepends
-# file listed below (apart from one exception!)
+# Library dependencies are generally handled through the 
+# Geant4LibraryDepends file listed below (apart from one exception!)
 #
 set(Geant4_THIRD_PARTY_INCLUDE_DIRS @GEANT4_THIRD_PARTY_INCLUDES@)
 
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Construct overall include path for using Geant4
 #
 set(Geant4_INCLUDE_DIRS
     ${Geant4_INCLUDE_DIR}
     ${Geant4_THIRD_PARTY_INCLUDE_DIRS})
 
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # If we have used imported targets for any third party packages, reimport
 # them here, BEFORE we try and import the Geant4 targets which are
-# linked againt them.
+# linked against them.
 # Generally, we try and use a standard find_package, but try and force it
 # to find the actual package we were built against.
-# THIS IS NOT PERFECT!!
+# THIS IS NOT PERFECT, AS IT CANNOT GUARANTEE A BINARY COMPATIBLE
+# PACKAGE IS FOUND.
 @GEANT4_THIRD_PARTY_IMPORT_SETUP@
 
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Include the file listing all the imported targets.
 # (Not needed if used in the same Geant4 project, or if we have run before) 
 # This is always installed in the same location as us...
@@ -171,11 +181,11 @@ if(NOT CMAKE_PROJECT_NAME STREQUAL Geant4)
   endif()
 endif()
 
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Setup components.
 # THIS SECTION IS VERY ROUGH AND VERY MUCH CUT AND PASTE.
 # TODO: INVESTIGATE TIDY UP WITH LESS PROCESSING.
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Many components are simply present as parts of libraries or always built
 # but require additional compile definitions.
 #
@@ -338,10 +348,11 @@ if(Geant4_vis_openinventor_FOUND)
 endif()
 
 
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Now perform final configuration of libraries...
-# We provide FOUND variables for shared and static but for now we don't allow
-# users to choose - we prefer shared if available, and fallback to static
+# We provide FOUND variables for shared and static but for now we don't 
+# allow users to choose - we prefer shared if available, and fallback to 
+# static otherwise
 #
 set(Geant4_shared_FOUND @BUILD_SHARED_LIBS@)
 set(Geant4_static_FOUND @BUILD_STATIC_LIBS@)
@@ -423,18 +434,27 @@ endforeach()
 # - Now set them to Geant4_LIBRARIES
 set(Geant4_LIBRARIES ${_geant4_internal_libraries})
 
-#----------------------------------------------------------------------------
+
+#-----------------------------------------------------------------------
+# Remove any duplicates from the Geant4_{DEFINITIONS,INCLUDE_DIRS,LIBRARIES}
+# variables so that multiple passes append things correctly 
+#
+list(REMOVE_DUPLICATES Geant4_DEFINITIONS)
+list(REMOVE_DUPLICATES Geant4_INCLUDE_DIRS)
+list(REMOVE_DUPLICATES Geant4_LIBRARIES)
+
+#-----------------------------------------------------------------------
 # Point the user to the UseGeant4.cmake file which they may wish to include
 # to help them with setting up Geant4
 #
 set(Geant4_USE_FILE ${_thisdir}/UseGeant4.cmake)
 
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Finally, handle any remaining components.
-# We should have dealt with all available components above, except for ui_all
-# and vis_all, and removed them from the list of FIND_COMPONENTS so any left 
-# we either didn't find or don't know about. Emit a warning if REQUIRED isn't 
-# set, or FATAL_ERROR otherwise
+# We should have dealt with all available components above, except for 
+# ui_all and vis_all, and removed them from the list of FIND_COMPONENTS 
+# so any left  we either didn't find or don't know about. Emit a warning 
+# if REQUIRED isn't set, or FATAL_ERROR otherwise
 #
 list(REMOVE_DUPLICATES Geant4_FIND_COMPONENTS)
 list(REMOVE_ITEM Geant4_FIND_COMPONENTS ui_all vis_all)

@@ -29,6 +29,24 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21st November 2012 - Ben Morgan        (cmake-V09-05-75)
+- Templates/geant4_validate_sources.cmake.in : Add "T1xxChannel.cc"
+  and "XXChannel.cc" names to false positives. These names appear
+  in processes/hadronic/models/cascade/cascade/sources.cmake as
+  comments, but the current regex picks them up. This is a temporary
+  fix as longer term solution is to update regex to not match
+  comments!
+
+21st November 2012 - Ben Morgan        (cmake-V09-05-74)
+- Templates/Geant4Config.cmake.in : Fix setting of Geant4 DEFINITIONS
+  INCLUDE_DIRS and LIBRARIES so that multiple calls to find_package
+  do not overwrite previosu settings. Multiple calls now copy,
+  insert or append to these variables as needed. Duplicates
+  are removed from the final list.
+- Templates/UseGeant4.cmake : Tidy up documentation and mark
+  macros as deprecated.
+
 20th November 2012 - Ivana Hrivnacova  (cmake-V09-05-73)
 - Fixed FindHepMC.cmake (GenEvent.h file extension was missing)
  
