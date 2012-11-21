@@ -75,7 +75,7 @@
  	 
 \section TestEm7_s3 AN EVENT : THE PRIMARY GENERATOR
  
- \The primary kinematic consists of a single particle which hits the
+  The primary kinematic consists of a single particle which hits the
   block perpendicular to the input face. The type of the particle
   and its energy are set in the PrimaryGeneratorAction class, and can
   changed via the G4 build-in commands of G4ParticleGun class (see

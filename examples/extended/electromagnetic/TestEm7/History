@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20-11-12 I.Hrivnacova (testem7-V09-05-11)
+- Fixed typo in .README
+
 02-11-12 V.Ivant (testem7-V09-05-10)
 - c2_functions - fixed variable shadowing
      
