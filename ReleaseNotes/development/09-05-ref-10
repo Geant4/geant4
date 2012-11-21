@@ -42,15 +42,6 @@ cmake                                            cmake-V09-05-60
 -----
 - Removed find of Inventor debug libraries and added find for of SoXt headers.
   Addresses problem report #1320. 
-- Added FindPythia6 module for Pythia-6. Added support also HEPMC_DIR
-  environment variable. Added FindAIDA module.
-- Use the argument TIM=<timeout> to set a shorter timeout than CTest.
-- Removed extraneous quotes around resolved include paths (courtesy of
-  F.Kislat). Addressing problem report #1357.
-- Added g3tog4 component to detect and configure G3toG4 library if required.
-- Removed optimization flags from 'TestRelease' build mode flags on all
-  platforms. Addressing problem report #1263.
-  Removed obsolete 'TestReleaseDebug' build mode.
 - Updated G4EMLOW dataset to version 6.32.
   Updated G4NEUTRONXS dateset to version 1.2
   Updated G4SAIDDATA dataset to version 1.1.
@@ -83,7 +74,7 @@ event                                            event-V09-05-12
 - G4SmartTrackStack: optimized tuning for the parameters (4-5% persistent
   reduction in total execution time in complex setups). Courtesy of
   S.Kamperis (GSOC).
-  Fix to not use particle defitions pointers and use PDG code instead.
+  Fix to not use particle definition pointers and use PDG code instead.
   Enabled by default the use of G4SmartTrackStack (-DG4_USESMARTSTACK)
 - Added deprecation warning messages to G4CellScorer and G4CellScorerStore
   classes which will be dropped starting from next major release.
@@ -117,7 +108,7 @@ geometry/navigation                              geomnav-V09-05-36
   Revised end condition to use distance of previous depths.
 - G4VoxelNavigation: added simple check whether point in ComputeSafety()
   call is inside current volume.
-- G4ErrorPropagationNavigator: osmetic change to improve readability 
+- G4ErrorPropagationNavigator: cosmetic change to improve readability 
   of initialisation of a double.
 
 geometry/solids/CSG                              geom-csg-V09-05-08
@@ -163,10 +154,10 @@ intercoms                                        intercoms-V09-05-07
 - G4GenericMessenger: added settting range and available states. Added
   some protection when getting the value of a command which is a method
 
-interfaces                                       interfaces-V09-05-18
+interfaces                                       interfaces-V09-05-32
 ----------
 - Code reviewed to use const G4String& argument.
-- G4UItcsh: changd command completion, now dynamically optimize path.
+- G4UItcsh: changed command completion, now dynamically optimize path.
 - Changed GetCommandLine() in G4UIshell to GetCommandLineString() to avoid
   conflicts on Windows.
 - G4InteractorMessenger: allow "addIcon" command to have ommitables parameters.
@@ -175,7 +166,7 @@ interfaces                                       interfaces-V09-05-18
 - G4UIExecutive: introduced string-driven-selection of UI session.
   Introduced run-time session selection scheme and moved inline code to source.
   Re-ordered printing of available sessions.
-  Fixed case-insensitivity in .g4session, with some modfications.
+  Fixed case-insensitivity in .g4session, with some modifications.
 - G4UIQt: added "save" command to "save" icon through /vis/viewer/save.
   Fixed issue for ColorDialog in Qt < 4.5.
   Addressing problem report #1365.
@@ -200,7 +191,6 @@ physics_lists                                    phys-lists-V09-05-68
   G4GenericPhysicsList.
 - Moved FTFP_BERT, QGSP_BERT, QBBC and Shielding lists to use new agreed
   set of cross-sections. Changed to use BGGNucleonInelastic in FTFP_BERT.
-- Added nuclear capture at rest of anti-nuclei with Fritiof/Precompound.
 - Replaced G4IonBinaryCascadePhysics with G4IonPhysics in some lists.
 - Changed default physics for stopping, lepto-nuclear, and ion.
   Only LHEP- and CHIPS-based physics lists keep using exactly the same physics
@@ -367,7 +357,7 @@ processes/hadronic                               hadr-V09-05-00
 - models/im_r_matrix (hadr-im_r-V09-05-08)
   o Added Print() method to G4CollisionInitialState.
 - models/inclxx (hadr-inclxx-V09-05-28)
-  o Updated to v5.1.8: major speed improvement in cluster coalescence;
+  o Updated to v5.1.6: major speed improvement in cluster coalescence;
     gained about a factor of 2 in 1-GeV p+208Pb. Fixed some bugs in reactions
     induced by composite particles.
   o Only one model instance for all processes.
@@ -384,7 +374,7 @@ processes/hadronic                               hadr-V09-05-00
     Modified BuildPhysicsTable() method: added Spline, added initialisation
     of atomic de-excitation (needed for the case when radioactive decay is
     used standalone).
-- stopping (hadr-stopping-V09-05-25)
+- stopping (hadr-stopping-V09-05-29)
   o G4HadronicAbsorptionBertini: use Bertini's IsApplicable() function to
     decide whether incident projectile is suitable for absorption or not.
   o Added nuclear capture at rest of anti-nuclei with FTFP in
@@ -512,7 +502,7 @@ examples                                         examples-V09-05-10
   o Added CMakeList.txt file.
 - advanced/microbeam (microbeam-V09-05-05)
   o Changed CMakeLists.txt to deal with VIS/UI and AIDA
-- advanced/microdosimetry (microdosimetry-V09-05-02)
+- advanced/microdosimetry (microdosimetry-V09-05-05)
 - advanced/nanobeam (nanobeam-V09-05-03)
   o Changed CMakeLists.txt to deal with VIS/UI and AIDA.
   o Renamed executable.

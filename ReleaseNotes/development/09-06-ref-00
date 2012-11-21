@@ -1,0 +1,469 @@
+
+                       geant4-09-06-ref-00
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o Implemented C++ Standard detection and flag configuration for
+   GNU, Clang and Intel compilers in CMake scripts.
+ o Brought G4Py environment up-to-date.
+ o Updated internal CLHEP module to CLHEP-2.1.3.1.
+ o Instrumented EM and hadronic builders to register factories.
+ o Improved logic of computation of post-step safety and true step-length
+   in G4VMultipleScattering; added more accurate protection against case
+   when true length exceeds physics step limit.
+ o New data set for low-energy processes G4NDL-4.2.
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+cmake                                            cmake-V09-05-75
+-----
+- Implemented C++ Standard detection and flag configuration for GNU, Clang
+  and Intel compilers; added user option to select C++ Standard to build
+  against, if the compiler supports this.
+  The default is always c++98/'ansi' (C++98 plus the '03 addenda).
+  Addressing problem report #1351.
+- New API for managing data to allow reuse of existing datasets and
+  not install data at build time if required.
+  Addressing problem report #1285.
+- Correct shell variable name in export of commands to scripts.
+  Addressing problem report #1387
+- Added support for G3ToG4 library. Added CLHEP library to link line using
+  output from clhep-config. Addressing problem reports #1290 and #1328.
+- Check that X11 Xpm library has been found when Inventor driver is activated,
+  and issue FATAL_ERROR if it is not located.
+- On Windows setup, add MD flag to Release style build modes (RELEASE,
+  MINSIZEREL and RELWITHDEBINFO); add MDd flag to Debug style build modes
+  (DEBUG, TESTRELEASE, MAINTAINER).
+- Tidy up module inclusions to provide minor, but noticeable, speed up
+  in CMake configuration time.
+- Use 'header guard' variable to prevent module being loaded multiple times.
+- Improved description of workaround for sourcing Cshell scripts
+  non-interactively.
+- Fix setting of Geant4 DEFINITIONS, INCLUDE_DIRS and LIBRARIES so that
+  multiple calls to find_package do not overwrite previous settings.
+- Updated to new G4NDL-4.2 data set.
+- Removed obsolete files geant4-env.[c]sh.in.
+
+environments                                     envs-V09-05-03
+------------
+- g4py:
+  o Updated configure script for CMake build.
+  o Updated Geant4 interface according to latest changes to kernel.
+  o Explicitly including units and constants headers.
+  o Updated documentations in Markdown format.
+  o Minor updates for examples.
+
+event                                            event-V09-05-16
+-----
+- G4StackManager, G4SmartTrackStack: fixed problem of event reproducibility
+  by setting stack at well defined state at every new event.
+  Fixed uninitialized variables in G4SmartTrackStack.
+- G4StackManager: moved some inlined methods from header to the implementation
+  file to fix issue with Windows DLLs. Also, removed inline keyword from
+  G4EventManager::AbortEvent() to prevent incorrect inlining for VC++ if
+  G4SmartTrackStack is used.
+
+externals                                       externals-V09-05-04
+---------
+- Updated internal CLHEP module to CLHEP-2.1.3.1:
+  o Made the HepLorentzVector(double t) constructor explicit.
+  o Fixed typo in operator*() for HepRotation.
+  o Clean up remaining naming overlap between Units and internal variables.
+
+geometry/magneticfield                           field-V09-05-07
+----------------------
+- G4QuadrupoleMagField: allow displaced origin and rotation.
+
+geometry/navigation                              geomnav-V09-05-45
+-------------------
+- G4Navigator::ComputeSafety(): restored original safety computation
+  provided by G4VoxelNavigation as default.
+- G4SafetyHelper: fixed ComputeSafety(), to adapt it to use extra argument.
+  Included optimisation, to reduce number of voxels searched.
+  Fix in SafetyForVoxelNode() to correct calculation of 'pointNodeNo'
+  to ensure it corresponds to a physical node ( range: 0 to Max-1 ).
+- G4RegularNavigationHelper: transform it to real singleton from static
+  utility class, created upon first use; make vector of 'Steplengths' a data
+  member. Adapted G4RegularNavigation to use G4RegularNavigationHelper
+  singleton calls. Fixes run-time errors on Windows DLLs.
+- Code cleanup. Corrected G4Exceptions tags and text.
+
+geometry/solids/BREPS                            breps-V09-05-02
+---------------------
+- Added deprecation warning for BREPs module, planned for removal from next
+  major release.
+
+geometry/solids/CSG                              geom-csg-V09-05-09
+-------------------
+- Updated unit tests.
+
+geometry/solids/specific                         geom-specific-V09-05-21
+------------------------
+- Fixed cases of out-of-bound array access in G4SurfaceVoxelizer.
+- Correction in sources.cmake script for missing .icc file.
+
+geometry/volumes                                 geomvol-V09-05-02
+----------------
+- Fix in G4EnhancedVecAllocator for porting on AIX.
+
+source/global                                    global-V09-05-15
+-------------
+- G4Physics2DVector: fixed comments, more correct references.
+- Reverted change to G4UnitsTable for parsec unit definition.
+- Updated date for release 9.6.
+
+interfaces                                       interfaces-V09-05-36
+----------
+- G4UIQt: removed icons for all applications. It will be now provided in a
+  icons.mac file. Put name of the app in the title bar.
+  Corrected "File" menu; addressing problem report #1391.
+  Fixed 'add' button; addressing problem report #1389.
+- G4UIExecutive: removed Win32 session from best guess.
+- G4UIExecutive, G4UItcsh: add null check for getenv return.
+
+materials                                        materials-V09-05-33
+---------
+- Fixes to unit tests.
+
+persistency/ascii                                ascii-V09-05-04
+-----------------
+- Minor fix for porting on AIX to G4tgrVolumeMgr.
+
+physics_lists                                    phys-lists-V09-05-79
+-------------
+- In all EM builders use WentzelVI multiple scattering model for e+- above
+  100 MeV; build transport mean free path for He3 and He4, do not build for
+  all other ions and heavy hadrons.
+- Added proper treatment of light anti-ions in G4HadronQElasticPhysics.
+- Added missing fission model in FTFP_BERT_TRV.
+  Consistent treatment of _EMV, _EMX, and _EMY physics lists.
+- Instrumenting EM and hadronic constructors to register factories.
+- G4IonPhysics added old constructor for backward compatibility with
+  9.5 release.
+
+processes/electromagnetic/dna                    emdna-V09-05-35
+-----------------------------
+- Switched to use of SetEmModel() and EmModel() in all dna/processes classes.
+- Fixed uninitialised variable in Ionisation Models (Born, Rudd, RuddExtended)
+  and some optimisation.
+- Fixed Coverity defects and some code cleanup.
+- Minor fixes for porting on AIX; mainly on use of const signature
+  for objects in maps...
+
+processes/electromagnetic/lowenergy              emlowen-V09-05-48
+-----------------------------------
+- G4LivermorePhotoElectricModel: migration to G4PhysicsVector data structure.
+- Fix in G4MuElecInelasticModel for usage of iterators at boundary of vectors.
+- Minor fixes for porting on AIX; mainly on use of const signature for
+  objects in maps.
+
+processes/electromagnetic/muons                  emmuons-V09-05-06
+-------------------------------
+- G4MuBremsstrahlungModel, G4MuPairProductionModel: reduce number of
+  computations of log() of the same argument, no change in results.
+
+processes/electromagnetic/standard               emstand-V09-05-65
+----------------------------------
+- G4UrbanMscModel90, G4UrbanMscModel93, G4UrbanMscModel95: do not sample
+  scattering if energy is below 1 eV.
+- G4WentzelVIModel: added "no scattering" check inside SampleScattering().
+  Fixed minor problem in single scattering mode.
+- G4WentzelOKandVIxSection: revert to 9.5 version, as giving better fit
+  with MuScat data. Make special case only for Hydrogen.
+- Fix in G4XrayRayleighModel for calculatiion of the atomic form factor
+  in SampleSecondaries() method. Fixed minor Coverity defect.
+
+processes/electromagnetic/utils                  emutils-V09-05-56
+-------------------------------
+- G4VMultipleScattering: improved logic of computation of PostStep
+  safety and true step length, added more accurate protection against case
+  when true length exceeds physics step limit.
+  Fixed case of event non-reproducibility for ions; added protection, do not
+  sample scattering if range exceed true step length is less than 'minGeom'
+  parameter (1e-6 mm). Define ion multiple scattering in constructor.
+- G4VMscModel: build table for all particles except case when
+  multiple-scattering process is shared with G4GenericIon.
+- G4VEnergyLossProcess: fixed case of event non-reproducibility for ions.
+- G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering: fixed
+  printout at initialisation.
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V09-05-43)
+  o G4VCrossSectionDataSet: added virtual method SelectIsotope() which is used
+    for element wise cross-sections, allowing for the data-set to use isotope
+    wise cross-sections when isotope is selected; by default the old
+    method is used based on isotope abundancy; no change of results expected.
+  o G4NeutronCaptureXS: implemented isotope selection based on isotope cross-
+    section.
+  o Make exception in G4CrossSectionDataSetRegistry::GetCrossSectionDataSet()
+    optional.
+  o Make two methods in CHIPS cross-sections public for the use in
+    quasi-elastic module.
+  o Fixed Coverity defects in G4BGGNucleonElasticXS, G4BGGPionElasticXS
+    and G4UPiNuclearCrossSection for initialisation of class members in
+    constructors.
+  o G4ComponentSAIDTotalXS: more extended exception printout.
+- management (hadr-man-V09-05-22)
+  o G4HadronicProcess: added catch of G4HadronicException inside
+    BuildPhysicsTable() method.
+    Added full printout about hadronic exception inside G4Exception body;
+    addressing problem report #1377.
+- models/chiral_inv_phase_space/body (hadr-chips-body-V09-05-11)
+  o Fixed memory leak in G4QFreeScattering.
+- models/em_dissociation (hadr-emd-V09-05-03)
+  o G4EMDissociation: added protoype for copy constructor.
+- models/inclxx (hadr-inclxx-V09-05-30)
+  o Updated to v5.1.8: fixed bug in forced compound nucleus (emission of
+    di-protons or di-neutrons).
+    Fixed a bug affecting the choice of the accurate-projectile mode.
+    Minor Coverity fixes.
+- models/lend (hadr-lend-V09-05-04)
+  o Fix for porting on AIX in statusMessageReporting source code.
+- models/lepto_nuclear (hadr-lepnuc-V09-05-02)
+  o Fix to GNUmakefile.
+- models/lll_fission (hadr-lllfis-V09-05-02)
+  o Fixed Coverity defects for uninitialised variables.
+- models/neutron_hp (hadr-hpn-V09-05-25)
+  o Added G4NeutronHPManager and G4NeutronHPReactionWhiteBoard classes.
+  o Set A and Z of the reaction into "targetNucleus" from HadronicProcess.
+  o Enable to handle cross sections of dynamically generated G4Elements.
+    Enable to handle final states of dynamically generated G4Elements
+  o Fix in G4NeutronHPContAngularPar::Sample() when dealing with outgoing
+    angles. Addresses problem report #1366.
+    Fixed potential floating point error.
+  o Fix in returning unchanged final states in G4NeutronHPChannelList.
+  o Fix for porting on AIX in G4NeutronHPVector header.
+  o Requiring new data set G4NDL-4.2.
+- models/quasi_elastic (hadr-qelastic-V09-05-06)
+  o Moved classes to use common cross-sections.
+- models/radioactive_decay (radioactive_decay-V09-05-12)
+  o Fixed Coverity defects for uninitialised variables and potential
+    dereferencing of null pointers.
+- processes (hadr-proc-V09-05-12)
+  o G4HadronElasticProcess: use cut for recoil as energy threshold to
+    produce recoil ion. Added deprecation warning for obsolete method.
+  o Marked as obsolete G4WHadronElasticProcess class.
+- stopping (hadr-stopping-V09-05-31)
+  o G4HadronicAbsorptionFritiof, G4MuMinusCapturePrecompound,
+    G4MuMinusBoundDecay, G4EmCaptureCascade: fixed memory leak;
+    reuse G4PreCompoundModel instead from the store of creation of
+    a new one.
+- util (hadr-util-V09-05-13)
+  o Fixed Coverity defect for uninitialised data in copy-ctor,
+  o Fix for porting on AIX in G4ReactionProduct header.
+
+processes/scoring                                procscore-V09-05-05
+-----------------
+- Adapt to modifications in G4RegularNavigationHelper; this is now a
+  real singleton and no longer an utility static class; now accessed
+  through G4RegularNavigationHelper::Instance() call; StepLengths is
+  accessed by GetStepLengths().
+- Avoid to inline functions accessing G4RegularNavigationHelper.
+- Addressing run-time errors on Windows when using DLLs.
+
+track                                            track-V09-05-20
+-----
+- Fix in G4Track, added missing initialisation of 'useGivenVelocity' data.
+
+visualization                                    vis-V09-05-49
+-------------
+- management:
+  o Tidied G4ViewParameters code.
+  o Improved guidance on command directories.
+- Opengl:
+  o Fix for Qt batch mode and printEPS. Addressing problem report #1368.
+  o Fixed problem on Linux at startup. Addressing problem report #1385.
+  o Fixed bug in display-list-re-use algorithm.
+- OpenInventor:
+  o Fixed libXpm linking problem. Fixed compilation warnings.
+
+data sets
+---------
+- G4NDL.4.2:
+  o Fixed problems in following isotopes: 44Ru105, 60Nd146, 63Eu152 and 92U238.
+  o Separated thermal data from main data set distribution.
+
+examples                                         examples-V09-06-00
+--------
+- Updated reference outputs, README and documentation.
+- advanced/air_shower (air_shower-V09-05-06)
+- advanced/amsEcal (amsEcal-V09-05-02)
+  o Fixed syntax in CMakeLists.txt.
+- advanced/ChargeExchangeMC (ChargeExchangeMC-V09-05-04)
+  o Added icons.mac.
+- advanced/composite_calorimeter (ccal-V09-05-03)
+  o Added icons.mac. Fix in CMake scripts and gui.mac.
+- advanced/dnaphysics (dnaphysics-V09-05-07)
+  o Fixed variable shadowing in SteppingAction.
+- advanced/gammaknife (gammaknife-V09-05-06)
+  o MachineAngle.in: modified angles for final configuration.
+  o Fixed problem for referencePhysList if condition.
+- advanced/gammaray_telescope (gammaraytel-V09-05-05)
+  o Changed logic of UI/GUI instantiation in the main(), to avoid problems
+    when running in batch mode.
+  o Fixed warnings due to two G4Regions without their own cut.
+    Change physics list from QGSP_BIC to FTFP_BERT, to fix deprecation
+    warnings for LEP models.
+  o Fixes to CMakeLists.txt file for AIDA dependency and G4STORE_DATA option.
+- advanced/hadrontherapy (hadrontherapy-V09-05-11)
+  o Fixed problem for referencePhysList if condition.
+  o Included generic command for visualization vis/open OGL in input
+    macro files where needed.
+- advanced/human_phantom (human_phantom-V09-05-04)
+  o Fixed syntax in CMakeLists.txt.
+- advanced/iort_therapy (iort_therapy-V09-05-11)
+  o Included generic command for visualization vis/open OGL in input
+    macro files where needed.
+  o Code revision and various minor fixes.
+  o Fixed syntax in CMakeLists.txt.
+- advanced/lAr_calorimeter (lAr_calorimeter-V09-05-03)
+  o Added icons.mac. Fix in CMake scripts and gui.mac.
+- advanced/microbeam (microbeam-V09-05-07)
+  o Fixed variable shadowing in MicrobeamEMField.
+  o Simplified physics list.
+  o Fixed syntax in CMakeLists.txt.
+- advanced/microdosimetry (microdosimetry-V09-05-06)
+  o Fixed variable shadowing in SteppingAction.
+  o Updated physics list for usage of SetEmModel() method.
+- advanced/nanobeam (nanobeam-V09-05-06)
+  o Switched to touchables.
+  o Fixed variable shadowing in SteppingAction and TabulatedField3D.
+  o Fixed syntax in CMakeLists.txt.
+- advanced/purging_magnet (purmag-V09-05-03)
+- advanced/xray_fluorescence (XrayFluo-V09-05-05)
+  o Fixed syntax in CMakeLists.txt.
+- basic (exbasic-V09-05-03)
+- basic/B1 (exampleB1-V09-05-03)
+  o Use QBBC physics list instead of QGSP_BIC_EMY, which becomes obsolete.
+  o vis.mac: improved view and added text, scale, logo etc. to scene.
+- extended/analysis/A01 (exampleA01-V09-05-03)
+  o Fixed .README file for artefacts from Markdown support.
+- extended/analysis/AnaEx03 (AnaEx03-V09-05-05)
+  o Fixed order of instantiating G4VisExecutive and G4UIExecutive.
+- extended/analysis/N03Con (exampleN03Con-V09-05-07)
+  o Removed executing gui.mac, as the macro is not provided in the example.
+- extended/biasing (exbiasing-V09-05-04)
+- extended/biasing/B02 (B02-V09-05-00)
+  o Fixed the order of deleting AIDA factories.
+  o Removed FindAIDA.cmake (now provided in Geant4 modules).
+  o Explicit inclusion of units and constants headers.
+- extended/biasing/ReverseMC01 (ReverseMC01-V09-05-05)
+  o Fixed .README file for artefacts from Markdown support.
+- extended/common/analysis (excommon-analysis-V09-05-04)
+  o Updated to latest features of analysis module.
+  o Added functions for accessing h1, h2 by name.
+  o Splitting verbose level 1 in 2 levels and shifting the upper levels.
+  o Fixed GetH1[2]Width: return the correct value also when histogram is
+    inactive.
+- extended/electromagnetic (electromagnetic-V09-05-00)
+- extended/electromagnetic/TestEm5 (testem5-V09-05-12)
+  o Fixes in README and pixe.mac.
+- extended/electromagnetic/TestEm7 (testem7-V09-05-11)
+  o c2_functions: fixed variable shadowing.
+- extended/electromagnetic/TestEm9 (testem9-V09-05-07)
+  o Added extra test of pixe in TestEm9.in. Updated README.
+- extended/eventgenerator (exEventgenerator-V09-05-02)
+- extended/eventgenerator/exgps (exgps-V09-05-04)
+  o Fix in main file description for Doxygen.
+- extended/eventgenerator/particleGun (particleGunExample-V09-05-05)
+  o Fixed order of instatiating G4VisExecutive and G4UIExecutive.
+- extended/exoticphysics (exExoticphysics-V09-05-02)
+- extended/exoticphysics/phonon (phononExample-V09-05-08)
+  o Removed open mode fstream::in for output files.
+  o Added copying macros in build area in CMake build.
+- extended/field (fieldex-V09-05-03)
+- extended/field/field01 (fieldex01-V09-05-00)
+  o Fixed F01DetectorMessenger file description.
+- extended/field/field04 (fieldex04-V09-05-02)
+  o Reverse order of checking thePostLV and thePreLV, to fix run-time
+    crash on Windows.
+  o In vis.mac: replaced OGLIX with OGL.
+- extended/field/field05 (fieldex05-V09-05-00)
+  o In vis.mac: replaced OGLIX with OGL.
+- extended/field/field06 (fieldex06-V09-05-02)
+  o New example exercising capability of tracking massive particles
+    in a gravity field.
+- extended/geometry (exGeometry-V09-05-01)
+  o Removed obsolete instructions and update docs.
+- extended/hadronic (exHadronic-V09-05-03)
+- extended/hadronic/Hadr00 (exhadr00-V09-05-07)
+  o Updated README and docs.
+- extended/hadronic/Hadr01 (exhadr01-V09-05-09)
+  o PhysicsList: fixed bug for absence of elastic scattering.
+  o DetectorConstruction: fixed bug in volume name.
+- extended/medical (exMedical-V09-05-02)
+  o Updated README and docs.
+- extended/medical/DICOM (DICOM-V09-05-10)
+  o Fixed compilation warnings for shadowing of variables and unused
+    return flag from system calls.
+- extended/medical/fanoCavity2 (fano2-V09-05-08)
+  o Fixed order of instatiating G4VisExecutive and G4UIExecutive.
+- extended/medical/GammaTherapy (gtherapy-V09-05-06)
+  o Fixed order of instatiating G4VisExecutive and G4UIExecutive.
+  o Added compilations options G4VIS_USE, G4UI_USE in main.
+- extended/optical (exOptical-V09-05-01)
+- extended/optical/LXe (LXe-V09-05-02)
+  o In vis.mac: OGLIX replaced with OGL.
+  o Reduced size of LXe.out by removing '/tracking/verbose 1' in input macro.
+- extended/optical/wls (WLS-V09-05-03)
+  o In vis.mac: OGLIX replaced with OGL.
+- extended/parallel (exparallel-V09-05-00)
+- extended/parallel/MPI (MPI-V09-05-06)
+  o Migrated to CMake build with change of directory structure.
+  o Migrated to new G4Exception signature.
+  o Fixed infinite-loop of slaves when a macro does not exists.
+  o Added support for execution of maro with /control/macroPath.
+  o Added best guess of selection of a UI shell.
+  o Explicit inclusion of units and constants headers.
+  o Added Doxygen-style docs.
+- extended/parameterisations/gflash (exgflash-V09-05-01)
+  o Fixed .README file for artefacts from Markdown support.
+- extended/persistency (exPersistency-V09-05-08)
+  o Removed/updated obsolete documentation and instructions.
+- extended/radioactivedecay (exRadioactivedecay-V09-05-01)
+- extended/radioactivedecay/rdecay01 (rdecay01-V09-05-14)
+  o Fixed order of instantiating G4VisExecutive and G4UIExecutive.
+- extended/radioactivedecay/rdecay02 (rdecay02-V09-05-04)
+  o Minor fix in CMake build.
+- extended/runAndEvent/RE01 (exampleRE01-V09-05-02)
+  o Added copying pythia_event.data in the build area.
+- extended/runAndEvent/RE02 (exampleRE02-V09-05-03)
+  o Fixed .README files for artefacts from Markdown support.
+- extended/visualization (exVisualization-V09-05-01)
+  o Improved .README and documentation.
+- novice/N03 (exampleN03-V09-05-02)
+  o Added icons.mac. Fix in CMake script and gui.mac.
+
+tests                                            tests-V09-06-00
+-----
+- Updated reference outputs and tools.
+- tests/test11 (test11-V09-05-05)
+  o Added "showEngineStatus" at the end of job.
+  o Fix to CMake setup to serialize build on Windows.
+- tests/test12 (test12-V09-05-07)
+- tests/test13 (test13-V09-05-03)	
+- tests/test15 (test15-V09-05-04)
+- tests/test16 (test16-V09-05-03)
+- tests/test23 (test23-V09-05-07)
+  o Fix to CMake setup to serialize build on Windows.
+- tests/test30 (test30-V09-05-17)
+- tests/test31 (test31-V09-05-04)
+- tests/test35 (test35-V09-05-02)
+- tests/test41 (test41-V09-05-03)
+- tests/test45 (test45-V09-05-01)
+- tests/test46 (test46-V09-05-04)
+  o Fixed variable shadowing.
+- tests/test48 (test48-V09-05-07)
+  o Fixes to CMake script to allow for simultaneous build/run.
+- tests/test58 (test58-V09-05-01)
+  o Added protection in TrackingAction.
+  o Use SetEMModel() in PhysListEmStandardISS.
+  o Fixed variable shadowing.
+- tests/test68 (test68-V09-05-09)
+  o Fixed the massive non-reproducibility in Windows due to use of
+    a Unix command (mv) in the script reproducibility.py.

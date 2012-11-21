@@ -33,7 +33,7 @@ config                                           config-V09-05-09
 ------
 - Removed path to INCL package "processes/hadronic/models/incl".
 
-environments                                     envs-V09-05-02
+environments                                     envs-V09-05-02              (x)
 ------------
 - G4Py:
   o Updated scripts for use of internal CLHEP module.
@@ -74,7 +74,7 @@ g3tog4                                           g3tog4-V09-05-02
 
 global                                           global-V09-05-08
 ------
-- Implemented workaround to aid for templated symbols of
+- Implemented workaround to aid for templated symbols of                     (x)
   G4ReferenceCountedHandle to be properly imported/exported
   for DLL build on Windows systems based on CMake.
   Addressing problem report #1329.
@@ -388,7 +388,7 @@ visualization                                    vis-V09-05-33
 examples                                         examples-V09-05-07
 --------
 - Updated reference outputs.
-- advanced/composite_calorimeter (ccal-V09-05-00)
+- advanced/composite_calorimeter (ccal-V09-05-00)                            (x)
   o Fixed crashes due to high global times converted to integers values.
     Addressing problem report #1337.
 - advanced/hadrontherapy (hadrontherapy-V09-05-02)
