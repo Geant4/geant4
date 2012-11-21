@@ -9,6 +9,9 @@
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20 November 2012, I. Hrivnacova (MPI-V09-05-06)
+- Fixed .README files
+
 20 November 2012, I. Hrivnacova (MPI-V09-05-05)
 - Fixed CmakeLists.txt in the top directory
 

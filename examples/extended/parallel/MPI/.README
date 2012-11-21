@@ -1,7 +1,7 @@
 /// @file "parallel/MPI/.README"
 /// @brief Examples MPI README
 
-/*! \page MPI Category : parallel/MPI
+/*! \page Examples_MPI Category : parallel/MPI
 
 - - -
 Geant4 MPI Interface
