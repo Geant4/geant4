@@ -14,7 +14,7 @@ decayer.
 \section pythia_s1 Requirements for external software packages
 
 \subsection pythia_sub_s11 PYTHIA
-  - Tested version 6.4.26
+  - Tested version 6.4.28
   - URL: http://www.thep.lu.se/~torbjorn/Pythia.html
 
 \section pythia_s2 Example decayer6

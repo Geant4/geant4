@@ -9,7 +9,7 @@ decayer.
 Requirements for external software packages
 -------------------------------------------
 PYTHIA
-  Tested version 6.4.18
+  Tested version 6.4.28
   URL: http://www.thep.lu.se/~torbjorn/Pythia.html
   
 Example decayer6

@@ -48,28 +48,11 @@ At the third stage, all particles in the RoI (Region of Interest) along
 the isolated muons are tracked. All these examinations are applied in
 ExN04StackingAction.
 
-5 Installation:
+5. Installation
  
- 1. Download and install HepMC from:
-    http://lcgapp.cern.ch/project/simu/HepMC/
-    (Last tested version : 2.06.08)
- 
- 2. Download the PYTHIA6 source file from the PYTHIA6 download site:
-    http://www.hepforge.org/downloads/pythia6
-    
- 3. Define the environment variables:
-    PYTHIA6           the path to pythia-vesrinX.f source code
-    PYTHIA6_VERSION   the pythia version 
-    
-    e.g. If you download pythia-6.4.26.f.gz and unzip it in $HOME,
-         then you have to set:
-    export PYTHIA6=$HOME
-    export PYTHIA6_VERSION="6.4.26"
-    
- 4. cd $G4INSTALL/example/extended/eventgenerator/HepMC/HepMCEx01
-    make
+ See HepMC/README how to build this example.
 
- Execution:
+6. Execution
  
  % hepmcEx01 hepmc_pygen.in
    

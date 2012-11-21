@@ -16,9 +16,9 @@ used to test whether given particle is to be stored or not. The
 decision criteria for storing particle are configurable via the
 MCTruthConfig class. 
 
-\section Example1MCTruth_s1 HOW TO BUILD THE EXAMPLE ?
+\section ExampleMCTruth_s1 HOW TO BUILD THE EXAMPLE ?
 
-- if you do not have it yet, install HepMC event record (tested with version 2.06.03)
+- if you do not have it yet, install HepMC event record (tested with version 2.06.08)
 
 - set HEPMC_ROOT_DIR variable to point to the directory where HepMC is installed; 
   if the HepMC is installed in your system directory (/usr/local) you do not need to set anything
@@ -30,7 +30,7 @@ MCTruthConfig class.
 % your_binary_directory/mctruthex
 \endverbatim
 
-\section Example1MCTruth_s2 DESCRIPTION OF THE MCTRUTH HANDLING MECHANISM
+\section ExampleMCTruth_s2 DESCRIPTION OF THE MCTRUTH HANDLING MECHANISM
  
 The main element of the MC truth handling machinery is the
 MCTruthManager class. This class is responsible for all the

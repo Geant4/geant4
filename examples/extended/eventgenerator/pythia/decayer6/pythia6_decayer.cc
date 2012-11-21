@@ -40,6 +40,7 @@
 #include "G4UImanager.hh"
 #include "G4ThreeVector.hh"
 #include "QGSP_BERT.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "Randomize.hh"
 

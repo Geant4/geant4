@@ -19,7 +19,7 @@ MCTruthConfig class.
 
 HOW TO BUILD THE EXAMPLE ?
 
-- if you do not have it yet, install HepMC event record (tested with version 2.06.03)
+- if you do not have it yet, install HepMC event record (tested with version 2.06.08)
 
 - set HEPMC_ROOT_DIR variable to point to the directory where HepMC is installed; 
   if the HepMC is installed in your system directory (/usr/local) you do not need to set anything

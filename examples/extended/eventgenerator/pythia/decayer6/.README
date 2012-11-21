@@ -54,24 +54,35 @@
 - 1. Download the PYTHIA6 source file from the PYTHIA6 download site:\n
    http://www.hepforge.org/downloads/pythia6
    
-- 2. Define the environment variables:
+- 2A. With CMake: Build pythia6 library
+ 
+  For a convenience a CMake file for building Pythia6 library from 
+  the source is provided in
+  examples/extended/eventgenerator/CMakeLists.txt.pythia6.
+  Build the pythia6 library following the instructions in this file
+  and then define the environment variables:
 \verbatim
-PYTHIA6           the path to pythia-vesrinX.f source code
+PYTHIA6          the path where pythia6 library is installed
+PYTHIA6_VERSION  the pythia version 
+\endverbatim
+
+- 2B. With GNUmake: Define the environment variables: \n
+\verbatim
+PYTHIA6           the path to pythia-versionX.f source code
 PYTHIA6_VERSION   the pythia version 
 \endverbatim
-     e.g. If you download pythia-6.4.23.f.gz and unzip it in $HOME,
-        then you have to set:
-\verbatim
-export PYTHIA6=$HOME
-export PYTHIA6_VERSION="6.4.23"
-\endverbatim
+    
+  e.g. If you download pythia-6.4.26.f.gz and unzip it in $HOME,
+       then you have to set:
+  export PYTHIA6=$HOME
+  export PYTHIA6_VERSION="6.4.26"
+  
+  pythia6 will be then compiled together with example code.
    
-- 3. Compilation:
-\verbatim
-% cd $G4INSTALL/example/extended/eventgenerator/pythia/decayer6
-% make setup
-% make
-\endverbatim                
+- 3. Compilation:\n
+  Then the example is compiled in a standard way, see \ref README_HowToRun. \n
+  Note that with GNUmake build, an additional step 'gmake setup' is 
+  needed before 'gmake'. 
   
 - 4. Execution:
 \verbatim

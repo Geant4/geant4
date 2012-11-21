@@ -12,13 +12,13 @@ It also include an example for demonstrating MC truth handling with HepMC.
 \section HepMC_s1 Requirements for external software packages
 
 \subsection HepMC_sub_s11 HepMC
-  - tested version : 2.06.03
+  - Tested version : 2.06.08
   - http://lcgapp.cern.ch/project/simu/HepMC/
 
   Note: examples were tested only on Linux with gcc.
 
 \subsection HepMC_sub_s12 PYTHIA
-  - Tested version 6.205 (CERNLIB 2005)
+  - Tested version 6.4.26
   - URL: http://www.thep.lu.se/~torbjorn/Pythia.html
 
 
@@ -63,19 +63,56 @@ It also include an example for demonstrating MC truth handling with HepMC.
     process PYTHIA events(H->4mu) generated at every event.
 
   - hepmc_ascii.in \n
-    read pregenerated events from HepMC Ascii file (data/example_MyPhyia.dat).
+    read pregenerated events from HepMC Ascii file (data/example_MyPythia.dat).
 
-\subsection  HepMC_sub_s25  How to compile
+\subsection  HepMC_sub_s25  Installation
 
-  To build HepMCEx01 and HepMCEx02 examples, the directory path where the
-  HepMC package is installed must be provided through the variable HEPMC_DIR.
-  PYTHIA 6.205 must be installed through CERNLIB 2005 and the bin path
-  correctly added in PATH.
+- 1. Download and install HepMC from: \n
+   http://lcgapp.cern.ch/project/simu/HepMC/ \n
+   and define the environment variable:
+\verbatim
+HEPMC_DIR         the path to HepMC installation.
+\endverbatim
+ 
+- 2. Download the PYTHIA6 source file from the PYTHIA6 download site:\n
+   http://www.hepforge.org/downloads/pythia6
+   
+- 2A. With CMake: Build pythia6 library
+ 
+  For a convenience a CMake file for building Pythia6 library from 
+  the source is provided in
+  examples/extended/eventgenerator/CMakeLists.txt.pythia6.
+  Build the pythia6 library following the instructions in this file
+  and then define the environment variables:
+\verbatim
+PYTHIA6          the path where pythia6 library is installed
+PYTHIA6_VERSION  the pythia version 
+\endverbatim
 
-\subsection  HepMC_sub_s26  Notes
+- 2B. With GNUmake: Define the environment variables: \n
+\verbatim
+PYTHIA6           the path to pythia-versionX.f source code
+PYTHIA6_VERSION   the pythia version 
+\endverbatim
+    
+  e.g. If you download pythia-6.4.26.f.gz and unzip it in $HOME,
+       then you have to set:
+  export PYTHIA6=$HOME
+  export PYTHIA6_VERSION="6.4.26"
+  
+  pythia6 will be then compiled together with example code.
+   
+- 3. Compilation:\n
+  Then the examples are compiled in a standard way, see \ref README_HowToRun.
 
-  We attached a sample HepMC Ascii data file, "data/example_MyPhyia.dat",
-  which contains 10 PYTHIA events created by "data/example_MyPythia.cxx(cc)".
+\subsection  HepMC_sub_s26  Examples
+
+  See more details in \ref ExampleHepMCEx01 and \ref ExampleHepMCEx02. 
+
+\subsection  HepMC_sub_s27  Notes
+
+  We attached a sample HepMC Ascii data file, "data/example_MyPythia.dat",
+  which contains 10 PYTHIA events created by "data/example_MyPythia.cxx".
 
 \section HepMC_s3 Example MCTruth
 

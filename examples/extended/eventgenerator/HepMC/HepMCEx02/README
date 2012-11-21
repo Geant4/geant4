@@ -39,3 +39,11 @@ in every event.
 
   All particles except muons are killed in the calorimeter section.
 
+5. Installation
+ 
+ See HepMC/README how to build this example.
+
+6. Execution
+ 
+ % hepmcEx02 hepmc_pygen.in
+   
