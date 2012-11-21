@@ -122,7 +122,8 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         FTFP_BERT.icc
         FTFP_BERT_TRV.hh
         FTFP_BERT_TRV.icc
-	G4GenericPhysicsList.hh
+        G4GenericPhysicsList.hh
+        G4GenericPhysicsList.icc
         G4HadronInelasticQBBC.hh
         G4PhysListFactory.hh
         G4VHadronPhysics.hh
