@@ -15,6 +15,16 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+ 21-11-12 mma (exhadr03-V09-05-14)
+- PhysicsList: use QBBC instead of QGSP_BERT_HP
+     
+ 20-11-12 mma (exhadr03-V09-05-13)
+- SteppingAction - return back to exhadr03-V09-05-11
+
+ 20-11-12 V.Ivanchenko (exhadr03-V09-05-12)
+- RunAction - added protection against division by zero
+- SteppingAction - fixed typo
+     
  28-10-12 mma (exhadr03-V09-05-11)
 - update README and .README
 

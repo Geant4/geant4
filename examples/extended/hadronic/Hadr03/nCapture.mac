@@ -6,20 +6,22 @@
 /control/verbose 2
 /run/verbose 2
 #
-/testhadr/det/setMat Boron10
+/testhadr/det/setMat Molybdenum100
+###/testhadr/det/setMat Boron11
 ###/testhadr/det/setMat G4_B 
-/testhadr/det/setSize 1000 m
+/testhadr/det/setSize 100 km
 #
 /run/initialize
 #
 /gun/particle neutron
-/gun/energy 100 eV
+/gun/energy 1 eV
 #
 /process/inactivate hadElastic
 /process/inactivate hInelastic
 /process/inactivate NeutronInelastic
+/process/inactivate nFission
 #
-/analysis/setFileName nCaptureHP
+/analysis/setFileName ncapture/Mo100
 /analysis/h1/set 2  100  0. 70 keV	#recoil ion
 /analysis/h1/set 3  100  0. 15 MeV	#gamma
 /analysis/h1/set 11 100  0. 70 MeV	#Q

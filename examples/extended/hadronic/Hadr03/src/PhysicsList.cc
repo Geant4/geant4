@@ -66,8 +66,8 @@ PhysicsList::PhysicsList()
   RegisterPhysics( new G4HadronElasticPhysics(verb) );
 
   // Hadron Physics
-  RegisterPhysics( new HadronPhysicsQGSP_BERT_HP(verb));
-  ////RegisterPhysics( new G4HadronInelasticQBBC(verb));  
+  ////RegisterPhysics( new HadronPhysicsQGSP_BERT_HP(verb));
+  RegisterPhysics( new G4HadronInelasticQBBC(verb));  
 
   // Ion Physics
   RegisterPhysics( new G4IonPhysics(verb));

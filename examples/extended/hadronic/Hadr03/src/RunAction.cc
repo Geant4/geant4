@@ -174,9 +174,11 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4double MeanFreePath = fSumTrack /fTotalCount;     
   G4double MeanTrack2   = fSumTrack2/fTotalCount;     
   G4double rms = std::sqrt(std::fabs(MeanTrack2 - MeanFreePath*MeanFreePath));
-  G4double CrossSection = 1./MeanFreePath;     
+  G4double CrossSection = 0.0;
+  if(MeanFreePath > 0.0) { CrossSection = 1./MeanFreePath; }
   G4double massicMFP = MeanFreePath*density;
-  G4double massicCS  = 1./massicMFP;
+  G4double massicCS  = 0.0;
+  if(massicMFP > 0.0) { massicCS = 1./massicMFP; }
    
   G4cout << "\n\n MeanFreePath:\t"   << G4BestUnit(MeanFreePath,"Length")
          << " +- "                   << G4BestUnit( rms,"Length")
