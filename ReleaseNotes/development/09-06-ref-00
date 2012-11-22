@@ -294,7 +294,8 @@ examples                                         examples-V09-06-00
 - advanced/air_shower (air_shower-V09-05-06)
 - advanced/amsEcal (amsEcal-V09-05-02)
   o Fixed syntax in CMakeLists.txt.
-- advanced/ChargeExchangeMC (ChargeExchangeMC-V09-05-04)
+- advanced/ChargeExchangeMC (ChargeExchangeMC-V09-05-05)
+  o Add "File" menu in gui.mac. Addressing problem report #1395.
   o Added icons.mac.
 - advanced/composite_calorimeter (ccal-V09-05-03)
   o Added icons.mac. Fix in CMake scripts and gui.mac.
@@ -337,7 +338,7 @@ examples                                         examples-V09-06-00
 - advanced/purging_magnet (purmag-V09-05-03)
 - advanced/xray_fluorescence (XrayFluo-V09-05-05)
   o Fixed syntax in CMakeLists.txt.
-- basic (exbasic-V09-05-03)
+- basic (exbasic-V09-05-04)
 - basic/B1 (exampleB1-V09-05-03)
   o Use QBBC physics list instead of QGSP_BIC_EMY, which becomes obsolete.
   o vis.mac: improved view and added text, scale, logo etc. to scene.
@@ -370,6 +371,10 @@ examples                                         examples-V09-06-00
 - extended/eventgenerator (exEventgenerator-V09-05-02)
 - extended/eventgenerator/exgps (exgps-V09-05-04)
   o Fix in main file description for Doxygen.
+- extended/eventgenerator/HepMC (exHepMC-V09-05-01)
+  o Modified AsciiReader to use IO_GenEvent instead of IO_AsciiParticles.
+  o Changed physics list to FTFP_BERT.
+  o Added CMake setup. Updated data files and outputs.
 - extended/eventgenerator/particleGun (particleGunExample-V09-05-05)
   o Fixed order of instatiating G4VisExecutive and G4UIExecutive.
 - extended/exoticphysics (exExoticphysics-V09-05-02)
@@ -396,6 +401,8 @@ examples                                         examples-V09-06-00
 - extended/hadronic/Hadr01 (exhadr01-V09-05-09)
   o PhysicsList: fixed bug for absence of elastic scattering.
   o DetectorConstruction: fixed bug in volume name.
+- extended/hadronic/Hadr03 (exhadr03-V09-05-14)
+  o PhysicsList: use QBBC instead of QGSP_BERT_HP.
 - extended/medical (exMedical-V09-05-02)
   o Updated README and docs.
 - extended/medical/DICOM (DICOM-V09-05-10)
