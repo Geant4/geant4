@@ -17,6 +17,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22/11/12 I. Hrivnacova (exbasic-V09-05-04)
+- Updated gui.mac macros (in B2 and B4):
+  Added File menu, as it was removed from Qt driver
+
 17/11/12 I. Hrivnacova (exbasic-V09-05-03)
 - Updated documentation:
   - Fixed .README files for artefacts from Markdown support
