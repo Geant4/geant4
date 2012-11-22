@@ -29,7 +29,7 @@ a readout geometry to find the phi-z cell.
 
 \section ExampleHepMCEx01_s3 Full set of "ordinary" physics processes
 
-QGSP_BERT physics list defines almost all of leptons and hadrons which
+FTFP_BERT physics list defines almost all of leptons and hadrons which
 Geant4 has dedicated classes for. Also almost all physics processes 
 Geant4 has are defined.
 

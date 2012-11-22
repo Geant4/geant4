@@ -12,7 +12,7 @@ It also include an example for demonstrating MC truth handling with HepMC.
 \section HepMC_s1 Requirements for external software packages
 
 \subsection HepMC_sub_s11 HepMC
-  - Tested version : 2.06.08
+  - Tested version : 2.06.09
   - http://lcgapp.cern.ch/project/simu/HepMC/
 
   Note: examples were tested only on Linux with gcc.

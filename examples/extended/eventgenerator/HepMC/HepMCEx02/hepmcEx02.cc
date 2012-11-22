@@ -39,7 +39,7 @@
 #include "G4UImanager.hh"
 
 #include "H02DetectorConstruction.hh"
-#include "QGSP_BERT.hh"
+#include "FTFP_BERT.hh"
 #include "H02PrimaryGeneratorAction.hh"
 #include "H02EventAction.hh"
 #include "H02SteppingAction.hh"
@@ -61,7 +61,7 @@ int main(int argc, char** argv)
   G4VUserDetectorConstruction* detector = new H02DetectorConstruction;
   runManager-> SetUserInitialization(detector);
   //
-  G4VUserPhysicsList* physics = new QGSP_BERT;
+  G4VUserPhysicsList* physics = new FTFP_BERT;
   runManager-> SetUserInitialization(physics);
 
   runManager-> Initialize();

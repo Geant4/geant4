@@ -39,7 +39,7 @@
 #include "G4UImanager.hh"
 
 #include "ExN04DetectorConstruction.hh"
-#include "QGSP_BERT.hh"
+#include "FTFP_BERT.hh"
 #include "ExN04PrimaryGeneratorAction.hh"
 #include "ExN04RunAction.hh"
 #include "ExN04EventAction.hh"
@@ -72,7 +72,7 @@ int main(int argc,char** argv)
   G4VUserDetectorConstruction* detector = new ExN04DetectorConstruction;
   runManager->SetUserInitialization(detector);
   //
-  G4VUserPhysicsList* physics = new QGSP_BERT;
+  G4VUserPhysicsList* physics = new FTFP_BERT;
   runManager->SetUserInitialization(physics);
   
   runManager->Initialize();

@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 21th, 2012 K. Murakami (exHepMC-V09-05-01)
+- changed that AsciiReader uses IO_GenEvent instead of IO_AsciiParticles
+- migration to CMake. CMakeLists.txt, added link to -lgfortran/-lg2c
+- data files and outputs are updateds
+- physics list is changed to FTFP_BERT
+
 December 10th 2010 K.Murakami
 - change physics list from GGSP to QGSP_BERT
 - update outputs

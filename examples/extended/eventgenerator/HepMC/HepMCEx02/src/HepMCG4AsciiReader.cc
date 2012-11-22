@@ -43,7 +43,7 @@ HepMCG4AsciiReader::HepMCG4AsciiReader()
   :  filename("xxx.dat"), verbose(0)
 ////////////////////////////////////////
 {
-  asciiInput= new HepMC::IO_AsciiParticles(filename.c_str(), std::ios::in);
+  asciiInput= new HepMC::IO_GenEvent(filename.c_str(), std::ios::in);
 
   messenger= new HepMCG4AsciiReaderMessenger(this);
 }
@@ -62,8 +62,7 @@ void HepMCG4AsciiReader::Initialize()
 {
   delete asciiInput;
 
-  asciiInput= new HepMC::IO_AsciiParticles(filename.c_str(), std::ios::in);
-  asciiInput-> print();
+  asciiInput= new HepMC::IO_GenEvent(filename.c_str(), std::ios::in);
 }
 
 /////////////////////////////////////////////////////////
@@ -77,4 +76,3 @@ HepMC::GenEvent* HepMCG4AsciiReader::GenerateHepMCEvent()
     
   return evt;
 }
-

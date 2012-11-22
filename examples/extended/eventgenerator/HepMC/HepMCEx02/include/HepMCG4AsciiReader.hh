@@ -36,14 +36,14 @@
 #define HEPMC_G4_ASCII_READER_H
 
 #include "HepMCG4Interface.hh"
-#include "HepMC/IO_AsciiParticles.h"
+#include "HepMC/IO_GenEvent.h"
 
 class HepMCG4AsciiReaderMessenger;
 
 class HepMCG4AsciiReader : public HepMCG4Interface {
 protected:
   G4String filename;
-  HepMC::IO_AsciiParticles* asciiInput;
+  HepMC::IO_GenEvent* asciiInput;
 
   G4int verbose;
   HepMCG4AsciiReaderMessenger* messenger;

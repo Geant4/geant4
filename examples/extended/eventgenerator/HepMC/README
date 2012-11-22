@@ -9,7 +9,7 @@ It also include an example for demonstrating MC truth handling with HepMC.
 Requirements for external software packages
 -------------------------------------------
 HepMC:
-  Tested version : 2.06.03
+  Tested version : 2.06.09
   http://lcgapp.cern.ch/project/simu/HepMC/
 
   Note: examples were tested only on Linux with gcc.
@@ -68,7 +68,7 @@ class HepMCG4PythiaInterface / HepMCG4AsciiReaderMessenger
   --------------
   1. Download and install HepMC from:
     http://lcgapp.cern.ch/project/simu/HepMC/
-    (Last tested version : 2.06.08)
+    (Last tested version : 2.06.09)
     
     and define the environment variable:
     HEPMC_DIR         the path to HepMC installation.
