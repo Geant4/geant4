@@ -295,7 +295,7 @@ examples                                         examples-V09-06-00
 - advanced/amsEcal (amsEcal-V09-05-02)
   o Fixed syntax in CMakeLists.txt.
 - advanced/ChargeExchangeMC (ChargeExchangeMC-V09-05-05)
-  o Add "File" menu in gui.mac. Addressing problem report #1395.
+  o Added "File" menu in gui.mac. Addressing problem report #1395.
   o Added icons.mac.
 - advanced/composite_calorimeter (ccal-V09-05-03)
   o Added icons.mac. Fix in CMake scripts and gui.mac.

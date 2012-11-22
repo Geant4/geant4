@@ -1611,8 +1611,7 @@ please refer to the corresponding History files provided in most packages):
     Reviewed implementation to be able to call widget dialog box for
     parameters outside view/scene tab stack component.
     A menu/icon with a command without parameter will open a parameter dialog
-    box. Added warning when creating new menu if command not found.
-    Introduced static IsInstantiated() method for use by visualization system.<BR>
+    box. Added warning when creating new menu if command not found.<BR>
     Moved icon creation in a generic method AddIcon().
     Icons are provided in a icons.mac file.
     Put name of the app in the title bar.
@@ -2029,8 +2028,8 @@ please refer to the corresponding History files provided in most packages):
     <LI>G4OpenInventorXtExaminerViewer: new class implements functional
         extensions to the Xt-based viewer. A plug-in replacement for
         SoXtExaminerViewer (the standard viewer provided with Coin3d).</LI>
-    <LI>G4OpenInventorXtViewer: instantiates G4OpenInventorXtExaminerViewer
-        instead of SoXtExaminerViewer. Added some additional menu items.</LI>
+    <LI>G4OpenInventorXtExtendedViewer: instantiates G4OpenInventorXtExaminerViewer.
+        Obtained with '/vis/open OIXE'. Added some additional menu items.</LI>
     <LI>Added test of VisAttributesModifiers to list checked for kernel visit.</LI>
     <LI>NOTE: currently supporting only Coin3D implementation of Inventor.</LI>
     <LI>Removed #ifdef G4VIS... protection from header files.</LI>
@@ -2138,6 +2137,8 @@ please refer to the corresponding History files provided in most packages):
         </UL></LI>
     <LI>ChargeExchangeMC
         <UL>
+        <LI>Added "File" menu in gui.mac. Addressing problem report
+            <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1395">#1395</A>.</LI>
         <LI>Added icons.mac. Fixed compilation errors.</LI>
         </UL></LI>
     <LI>composite_calorimeter
