@@ -546,10 +546,9 @@ please refer to the corresponding History files provided in most packages):
         very low energy electromagnetic models for protons and heavy ions
         in Si", accepted in NIMB.</LI>
     <LI>Added new Compton model G4MUComptonModel.</LI>
+    <LI>G4LivermorePhotoElectricModel and G4LivermoreGammaConversionModel: 
+        migration to G4PhysicsVector and G4ElementData data structures.</LI>
     <LI>Removed obsolete Penelope v2001 models and related helper classes.</LI>
-    <LI>New draft class G4Livermore2012GammaConversionModel.</LI>
-    <LI>G4LivermorePhotoElectricModel: migration to G4PhysicsVector data
-        structure.</LI>
     <LI>Make a consistent use of G4Element::GetA() and GetAtomicMassAmu()
         in Penelope models.</LI>
     <LI>Removed dependency on obsolete G4AtomicDeexcitation in
@@ -577,18 +576,15 @@ please refer to the corresponding History files provided in most packages):
         cross-sections.</LI>
     <LI>Corrected G4PenelopeBremsstrahlungFS to avoid anomaly in the gamma-ray
         spectrum close to the cut.</LI>
-    <LI>G4RayleighScattering: use high energy table above 100 keV.
-        Introduced new class G4RayleighAngularGenerator and new version for
-        G4LivermoreGammaConversionModel (temporarly keeping the old version as
-        G4Livermore2012GammaConversionModel).
-        Substituted methods Model(), SetModel() with EmModel(), SetEmModel()</LI>
+    <LI>G4RayleighScattering: build physics table above 100 keV,
+        Substituted calls to methods Model(), SetModel() with 
+	EmModel(), SetEmModel()</LI>
     <LI>Migration to the common SampleDirection() interface in
-        G4VEmAngularDistribution for Livermore and Penelope models..</LI>
+        G4VEmAngularDistribution for Livermore and Penelope models.</LI>
+    <LI>Introduced new class G4RayleighAngularGenerator.</LI> 
     <LI>G4Generator2BS: fixed sampling according to the original paper.</LI>
     <LI>G4PhotoElectricAngularGeneratorPolarized: added protection against
         possible infinite loop.</LI>
-    <LI>Added renamed Compton low energy model by JB et al.
-        Renamed Monash U. Compton model.</LI>
     <LI>Added protection against cos(theta) < -1 to avoid numerical problems
         in G4PhotoElectricAngularGeneratorPolarized, G4Generator2BN,
         G4Generator2BS, G4RayleighAngularGenerator.
@@ -598,13 +594,12 @@ please refer to the corresponding History files provided in most packages):
         vectors.</LI>
     <LI>Minor fixes for porting on AIX; mainly on use of const signature for
         objects in maps.</LI>
-    <LI>Removed temporary class G4Livermore2012GammaConversionModel.</LI>
-    <LI>Requires new data set version 6.32 of G4LEDATA.</LI>
     </UL></LI>
 <LI><B>Muons</B>
     <UL>
     <LI>G4MuMultipleScattering: use G4UrbanMscModel95 as a default.
-        Substituted methods Model(), SetModel() with EmModel(), SetEmModel().</LI>
+        Substituted calls to methods Model(), SetModel() with 
+        EmModel(), SetEmModel().</LI>
     <LI>G4MuBremsstrahlung, G4MuIonisation,  G4MuPairProduction: secondary
         particle type defined in constructors and not in Initialise() method,
         this is needed for correct initialisation at G4_PreInit.</LI>
@@ -614,222 +609,193 @@ please refer to the corresponding History files provided in most packages):
 <LI><B>Polarisation</B>
     <UL>
     <LI>G4PolarizedPhotoElectricEffect, G4PolarizedPEEffectModel: substituted
-        methods Model(), SetModel() with EmModel(), SetEmModel().</LI>
+        calls to methods Model(), SetModel() with EmModel(), SetEmModel().</LI>
     </UL></LI>
 <LI><B>Standard</B>
     <UL>
     <LI>Single and multiple scattering:
         <UL>
-        <LI>G4CoulombScattering: added method MinPrimaryEnergy() allowing to define
-            low edge of physics table when Coulomb scattering is combined with
-            multiple or single scattering.
-            Modified initialisation, to allow addition of custom model with
-            specialised parameters.</LI>
-        <LI>Fixed event non-reproducibility in multiple-scattering models for
-            the case where more than one model is defined for different energy
-            intervals.</LI>
-        <LI>G4UrbanMscModel95: improved fix for cases of abnormal tail using 
-            results of single scattering model for tuning.  Protection against
-            very large angles is retained.
-            Commented out unwanted warning at initialisation.
-            Added protection into GetTrueStepLength method (true legth cannot
-            exceed physics path length.</LI>
-        <LI>G4UrbanMscModel96: new version of the Urban model.</LI>
-        <LI>G4CoulombScatteringModel, G4UrbanMscModel90, G4UrbanMscModel92,
-            G4UrbanMscModel93, G4UrbanMscModel95, G4WentzelVIModel and
-            G4GoudsmitSaundersonMscModel: moved cross-section table from process
-            to model; removed method GetLambda().</LI>
-        <LI>G4UrbanMscModel90, G4UrbanMscModel93, G4UrbanMscModel95: do not
-            sample scattering if energy is below 1 eV.</LI>
-        <LI>G4WentzelVIModel: added "no scattering" check inside
-            SampleScattering(). Fixed sampling for single scattering mode.</LI>
-        <LI>G4hMultipleScattering: use G4UrbanMscModel95 as a default.</LI>
-        <LI>G4eMultipleScattering, G4hMultipleScattering: minor optimisation
-            at initialisation.</LI>
-        <LI>G4GoudsmitSaundersonMscModel: fixed FPE bug; fixed inconsistency -
-            lateral displacement is not anymore sampled for plural scattering.</LI>
-        <LI>G4GoudsmitSaundersonMscModel: improved method of definition of
-            screening parameter. Fixed use of screening function in
-            G4eBremsstrahlungRelModel.</LI>
-        <LI>G4ScreeningMottCrossSection, G4eSingleCoulombScatteringModel: updated
-            version of electron scattering code based on analytical approximation 
-            of the Mott cross-section by means of Hose coefficients. Added new 
-            class G4MottCoefficients.</LI>
-        <LI>Fixed non-reproducibility in multiple-scattering models for the
-            case when more than several models are defined for different
-            energy interval.</LI>
-        <LI>Implemented StartTracking() method in multiple-scattering models.</LI>
-        <LI>G4CoulombScattering: improved list of options/flags in constructor
-            to reduce size of cross-section tables. Close possibility to change
-            polar angle limit after first initialisation.
-            Fixed initilisation for the case when polar angle limit is below pi.</LI>
-        <LI>G4ComptonScattering: build two cross-section tables, below and
-            above 1 MeV using different technique for interpolation.
-            G4PhotoElectricEffect: build cross-section table above 200 keV.</LI>
-        <LI>G4CoulombScatteringModel, G4eCoulombScatteringModel,
-            G4UrbanMscModel90, G4UrbanMscModel92, G4UrbanMscModel93,
-            G4UrbanMscModel95, G4WentzelVIModel, G4GoudsmitSaundersonMscModel:
-            sampling of scattering moved from PostStep to AlongStep.</LI>
         <LI>G4CoulombScattering, G4NuclearStopping, G4eMultipleScattering,
             G4hMultipleScattering, G4ComptonScattering: substituted methods
             Model(), SetModel() with EmModel(), SetEmModel().</LI>
+        <LI>G4CoulombScattering: added method MinPrimaryEnergy() 
+            allowing to define
+            low edge of physics table when Coulomb scattering is combined with
+            multiple or single scattering;
+            modified initialisation allowing easier addition 
+	    of a custom model; improved list of options/flags in constructor
+            to reduce size of cross-section tables; do not allow
+            anymore to change polar angle limit after first initialisation;
+            fixed initilisation for the case when polar angle limit 
+            is below pi.</LI>
+        <LI>For all multiple scattering models:
+            sampling of scattering moved from PostStep to AlongStep;
+            implemented StartTracking() method allowing to gurantee
+            reproducibility of simulation moved cross-section table from 
+            process to model; fixed event non-reproducibility for
+            the case where more than one model is configured for
+            a particle for different energies; removed method GetLambda();
+            added protection to stop sample scattering if energy is below 
+            1 eV.</LI>
+        <LI>G4hMultipleScattering: use G4UrbanMscModel95 as a default.</LI>
+        <LI>.</LI>
+        <LI>G4UrbanMscModel95: improved fix for cases of abnormal tail using 
+            results of single scattering model for tuning (protection against
+            very large angles is retained);
+            added protection into GetTrueStepLength method (true legth cannot
+            exceed physics path length.</LI>
+        <LI>G4UrbanMscModel96: new version of the Urban model.</LI>
+        <LI>G4WentzelVIModel: added "no scattering" check inside
+            SampleScattering(). </LI>
+        <LI>G4WentzelOKandVIxSection: revert to 9.5 version, 
+            as giving better fit
+            with MuScat data; make special case only for Hydrogen.</LI>
+        <LI>G4GoudsmitSaundersonMscModel: fixed FPE bug; fixed inconsistency -
+            lateral displacement is not anymore sampled for plural scattering;
+            improved method of definition of screening parameter.</LI>
+        <LI>G4ScreeningMottCrossSection, G4eSingleCoulombScatteringModel: 
+            updated version of electron scattering code based on analytical 
+            approximation of the Mott cross-section by means of Hose 
+            coefficients. Added new 
+            class G4MottCoefficients.</LI>
         </UL></LI>
     <LI>Bremsstrahlung models:
         <UL>
-        <LI>G4SeltzerBergerModel: fixed minor problem of sampling for positrons;
+        <LI>G4SeltzerBergerModel: fixed minor problem of sampling for 
+            positrons;
             made internal data structure static to be used by both e+ and e-
             models providing some memory reduction; use simplified computation
-            of majorant valid for data with more detailed grid.
-            Optimisation of sampling for e+.
-            Added SetBicubicInterpolationFlag() method, activating more
-            accurate parameterisation of 2D data for energy spectrum.
-            For the cut on gamma energy below 5%, added extra factor 1.2 to
+            of majorant valid for data with more detailed grid;
+            added SetBicubicInterpolationFlag() method, activating more
+            accurate parameterisation of 2D data for energy spectrum;
+            for the cut on gamma energy below 5% below primary electron
+            energy use extra factor 1.2 to
             max value of the cross-section when sampling gamma energy (reduced
             number of cases when differencial cross-section exceeds estimated
             maximum of the cross-section).</LI>
-        <LI>G4UniversalFluctuation, G4IonFluctuations: improved sampling
-            for "thick" absorber.</LI>
-        <LI>G4DipBustGenerator: fixed model description.</LI>
-        <LI>G4eBremsstrahlungRelModel: switched full screening off.</LI>
-        <LI>G4ModifiedTsai: improved sampling of Bremsstarhlung in backward
-            hemisphere. Removed old obsolete interface.</LI>
-        <LI>G4eBremsstrahlung, G4eIonisation,  G4hIonisation, G4ionIonisation:
-            secondary particle type defined in constructors and not in
-            Initialise() method, this is needed for correct initialisation
-            at G4_PreInit.</LI>
-        <LI>G4eBremParametrizedModel: use G4DipBustGenerator for angular
+        <LI>G4eBremsstrahlungRelModel: fixed use of screening function;
+            switched full screening off; use G4DipBustGenerator for angular
             distribution.</LI>
-        <LI>Migrated to use SampleDirection() interface from G4VEmAngularDistribution
-            for G4DipBustGenerator, G4ModifiedTsai, G4SeltzerBergerModel,
-            G4eBremParametrizedModel, G4eBremsstrahlungModel, G4PEEffectFluoModel,
-            G4PEEffectModel and G4eBremsstrahlungRelModel.</LI>
         </UL></LI>
-    <LI>G4GammaConversion: use relativistic model above 100 GeV; more accurate
-        cross-sections plus LPM effect at very high energy.
-        Changed low energy limit of the high energy model from 100 to 80 GeV.</LI>
-    <LI>G4SauterGavrilaAngularDistribution extracted from G4PEEffectModel,
-        changed limit gamma factor from 5 to 30 (no angular sampling above
-        ~15 MeV instead of 2.5 MeV).</LI>
-    <LI>G4DipBustGenerator, G4SauterGavrilaAngularDistribution: added
-        protection to angular sampling theta < pi, and optimise computation
-        for ultra-relativistic particles.</LI>
-    <LI>G4NuclearStopping: added check of upper energy limit;
-        G4ICRU49NuclearStoppingModel: reduced upper limit for protons from
-        100 MeV to 1 MeV (for CPU performance speedup).
-        Added check on ion energy at the process level to speedup computations.</LI>
-    <LI>G4GammaConversion, G4KleinNishinaModel, G4KleinNishinaCompton,
-        G4PEEffectFluoModel: minor cleanup of initialisation.</LI>
+    <LI>Angular generators:
+        <UL>
+        <LI>Migrated all angular generators to G4VEmAngularDistribution
+            interface and use SampleDirection() method in models which
+            are using this interface (bremsstrahlung and photoelectric).</LI>
+        <LI>G4SauterGavrilaAngularDistribution extracted from G4PEEffectModel,
+            changed limit gamma factor from 5 to 30 (no angular sampling above
+            ~15 MeV instead of 2.5 MeV).</LI>
+        <LI>G4DipBustGenerator, G4SauterGavrilaAngularDistribution: added
+            protection to angular sampling theta < pi, and optimise computation
+            for ultra-relativistic particles.</LI>
+        <LI>G4DipBustGenerator: fixed model description.</LI>
+        <LI>G4ModifiedTsai: improved sampling of bremsstarhlung in backward
+            hemisphere.</LI>
+    </UL></LI>
+    <LI>G4UniversalFluctuation, G4IonFluctuations: improved sampling
+            for "thick" absorber.</LI>
+    <LI>G4GammaConversion: use relativistic model above 80 GeV in
+        order to have more accurate
+        cross-sections plus LPM effect at very high energy.</LI>
+    <LI>G4ComptonScattering: build two cross-section tables, below and
+        above 1 MeV using different technique for interpolation.</LI>
+    <LI>G4PhotoElectricEffect: build cross-section table above 200 keV.</LI>
     <LI>G4KleinNishinaModel: added simplified PDF function and fixed infinite
         loop. Fixed computation of electron energy.</LI>
     <LI>G4BetheBlochModel, G4BraggIonModel, G4BraggModel: defined flag 'isIon'
         for all nucleus except deuteron, triton and special DNA ions.</LI>
-    <LI>G4XrayRayleighModel: update of cross-sections and angular distribution.</LI>
-    <LI>G4WentzelOKandVIxSection: revert to 9.5 version, as giving better fit
-        with MuScat data. Make special case only for Hydrogen.</LI>
-    <LI>Fix in G4XrayRayleighModel for calculatiion of the atomic form factor
-        in SampleSecondaries() method. Fixed minor Coverity defect.</LI>
+    <LI>G4eBremsstrahlung, G4eIonisation,  G4hIonisation, G4ionIonisation:
+        secondary particle type defined in constructors and not in
+        Initialise() method, this is needed for correct initialisation
+            at G4_PreInit.</LI>
+    <LI>G4NuclearStopping: added check of upper energy limit and ion energy 
+        to speedup computations.</LI>
+    <LI>G4ICRU49NuclearStoppingModel: reduced upper limit for protons from
+        100 MeV to 1 MeV (for CPU performance)</LI>
+    <LI>G4XrayRayleighModel: update of cross-sections and angular 
+        distribution.</LI>
     <LI>Added deprecation warning to obsolete methods and classes.</LI>
     </UL></LI>
 <LI><B>Utils</B>
     <UL>
-    <LI>G4VAtomDeexcitation: corrected activation of de-excitation for the
-        case when specific de-excitation regions are not defined.
-        Use safe method to extract integer Z.</LI>
-    <LI>G4VEmAngularDistribution added  methods SampleCosinePolarAngle(),
-        SampleDirection() and Initialise().</LI>
     <LI>G4LossTableManager: added a check and protection against double
         registration of the same process; this allows the use of the same
-        EM energy-loss process for different particle types.</LI>
-    <LI>G4EmCalculator: modified method to access a process to take into 
-        account that the same process may be used by different particle types; 
-        added new methods ActiveForParticle(), FindEnLossProcess(), 
-        FindDiscreteProcess() and FindMscProcess(). Fix in FindRegion().
-        Improved model selection for multiple-scattering processes.
-        Added ComputeGammaAttenuationLength() method.</LI>
-    <LI>G4EmCorrections: fixed event reproducibility violation due to cashing
-        of 'IonHighOrderCorrections' with a vector depending on the ion charge.</LI>
-    <LI>G4VEmModel: added virtual method Value(), by default computing
-        cross-section. Added inline methods HighEnergyActivationLimit(),
-        LowEnergyActivationLimit(), ForceBuildTableFlag(), ForceBuildTable().</LI>
-    <LI>G4VEmProcess: added extra option allowing to build two different
-        tables for low-energy and high-energy using different interpolation
-        method. Removed over initialisation in StartTracking().
-        Changed initialisation for ions.
-        Fixed minor memory leak at destruction.
-        Applied fix partially addressing problem report
-        <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1314">#1314</A>;
-        force if step==1.</LI>
-    <LI>G4VEmProcess, G4VEnergyLossProcess, G4EmProcessOption:
-        updated according to modified biasing interface.</LI>
+        EM energy-loss process for different particle types;
+        added methods MinKinEnergy() and MaxKinEnergy()</LI>
+    <LI>G4LossTableBuilder: added method BuildTableForModel() to enable the
+        building of the physics-table for a model.</LI>
+    <LI>G4EmModelManager: extended printout if cross-section table is built
+        for the model; improved printout of model energy limits.</LI>
+    <LI>G4VEmProcess, G4VEnergyLossProcess, G4VMultipleScattering:
+        optimisation of time methods called at each step;
+        updated tracking parameters and
+        flags in PostStepGetPhysicalInteractionLength(),
+        print process/model information for the
+        same list of particles.</LI>
+    <LI>G4VEnergyLossProcess, G4VMultipleScattering, G4VEmModel: added
+        implementation of StartTracking() method; moved initialisation 
+        of a new track inside this method; defined flag 'isIon' for all 
+        nucleus except deuteron, triton and
+        special DNA ions (fixing event non-reproducibility for ions).</LI>
+    <LI>G4VMultipleScatteringProcess, G4VMscModel: sampling scattering is
+        moved from PostStep to AlongStep.</LI>
     <LI>G4VMultipleScattering: removed transport cross-section table (it
         is assigned to msc models); simplified 
         AlongStepGetPhysicalInteractionLength() method; added
-        protection against zero kinetic energy into PostStepDoIt().
-        Optimised initialisation and reduced number of checks at run time.
-        Allow to change position and direction AlongStep.
-        Improved logic of computation of PostStep
-        safety and true step length, added more accurate protection against case
-        when true length exceeds physics step limit.
+        protection against zero kinetic energy into PostStepDoIt();
+        optimised initialisation and reduced number of checks at run time;
+        added more accurate protection against case
+        when true length exceeds physics step limit;
         Fixed case of event non-reproducibility for ions; added protection,
         do not sample scattering if range exceed true step length is less than
-        'minGeom' parameter (1e-6 mm). Define ion multiple scattering in
-        constructor. Improved printout at initialisation.</LI>
-    <LI>G4VMscModel: critical fix for stopping particles, based
-        on ATLAS report on small steps of low-energy ions.
-        Compute true path length even if multiple-scattering model is inactive.<BR>
-        Build table for all particles except case when
-        multiple-scattering process is shared with G4GenericIon.<BR>
-        Added building of transport cross-section table and new 
-        method GetTransportCrossSection() to be used at run-time. Added method
-        GetTransportMeanFreePath().
-        Updated GetRange() and GetEnergy() methods to allow using the same
-        model class for many particles.
-        Optimisation of inline methods. Allow build of transport cross-section
-        table for d, t, He3, He4.
-        Moved method Value() to G4VEmModel. Added GetDEDX() method.</LI>
-    <LI>G4VMultipleScatteringProcess: change final position PostStep to cope
-        with parallel transportation. Added call to ReLocate PostStep.
-        Check that true step length proposed by multiple-scattering model
-        does not exceed physical true length.</LI>
-    <LI>G4VMultipleScatteringProcess, G4VMscModel: sampling scattering is
-        moved from PostStep to AlongStep.</LI>
-    <LI>G4LossTableBuilder: added method BuildTableForModel() to enable the
-        building of the physics-table for a model.</LI>
-    <LI>G4LossTableManager: added methods MinKinEnergy() and MaxKinEnergy().
-    <LI>G4EmModelManager: extended printout if cross-section table is built
-        for the model. Improved printout of model energy limits.</LI>
-    <LI>G4VEnergyLossProcess: fix for forced biasing, now forcing if step==1
+        'minGeom' parameter (1e-6 mm); define ion multiple scattering in
+        constructor; improved printout at initialisation.</LI>
+    <LI>G4VEmProcess: added extra option allowing to build two different
+        tables for low-energy and high-energy using different interpolation
+        method; added StartTracking() method;
+        changed initialisation for ions;
+        Applied fix partially addressing problem report;
+        <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1314">#1314</A>;
+        force if step==1.</LI>
+    <LI>G4VEnergyLossProcess:  
+        fix for forced biasing, now forcing if step==1
         (addressing problem report
         <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1314">#1314</A>).</LI>
-    <LI>G4VEnergyLossProcess, G4VEmProcess: updated tracking parameters and
-        flags in PostStepGetPhysicalInteractionLength().</LI>
-    <LI>G4VEnergyLossProcess, G4VMultipleScattering, G4VEmModel: added
-        implementation of StartTracking() method. Changed initialisation in
-        G4VMscModel of the new track using this method.</LI>
-    <LI>G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering: use the
-        same list of particles for printout at initialisation in the case of
-        verboseLevel=1.</LI>
-    <LI>G4VEnergyLossProcess, G4VMultipleScattering, G4EmModelManager:
-        optimisation to run time methods called at each step.
-        Fixed printout at initialisation.</LI>
-    <LI>G4VEnergyLossProcess: fixed case of non-reproducibility due to missing
-        initialisation in StartTracking() method for ions.
-        Take into account modifications for G4VAtomDeexcitation
-        in order to keep energy balance.
-        Defined flag 'isIon' for all nucleus except deuteron, triton and
-        special DNA ions. Fixed case of event non-reproducibility for ions.</LI>
+    <LI>G4VEmModel: added virtual method Value(), by default computing
+        cross-section; added inline methods HighEnergyActivationLimit(),
+        LowEnergyActivationLimit(), ForceBuildTableFlag(), 
+        ForceBuildTable().</LI>
+    <LI>G4VMscModel: critical fix for stopping particles, based
+        on ATLAS report on small steps of low-energy ions;
+        Compute true path length even if multiple-scattering 
+        model is inactive;
+        build table for all particles except case when
+        multiple-scattering process is shared with G4GenericIon;
+        added building of transport cross-section table and new 
+        method GetTransportCrossSection() to be used at run-time; added method
+        GetTransportMeanFreePath(); added GetDEDX() method.</LI>
+    <LI>G4VEmAngularDistribution added  methods 
+        SampleDirection() and Initialise().</LI>
+    <LI>G4EmCalculator: modified method to access a process to take into 
+        account that the same process may be used by different particle types; 
+        added new methods ActiveForParticle(), FindEnLossProcess(), 
+        FindDiscreteProcess() and FindMscProcess(); fixed method FindRegion();
+        improved model selection for multiple-scattering processes;
+        added ComputeGammaAttenuationLength() method.</LI>
+    <LI>G4EmCorrections: fixed event reproducibility violation due to cashing
+        of 'IonHighOrderCorrections' with a vector depending 
+        on the ion charge.</LI>
     <LI>G4EnergyLossMessenger: allow to apply biasing UI commands only in
         Idle state.</LI>
-    <LI>G4VEmAngularDistribution: added temporary dummy implementation of
-        virtual sampling methods; will be removed when all generators will
-        migrate to the new signature.</LI>
     <LI>G4VAtomDeexcitation: fixed logic of activation of de-excitation per
-        region and for all geometries. Updated initialisation for the case
+        region and for all geometries; updated initialisation for the case
         when de-excitation is not used. Added computation of sum of energies
         of de-excitation gamma and electron produced AlongStep; use logical OR
-        instead of AND for de-exitation flags. Fixed de-excitation AlongStep
-        by substitution which limited de-ecitation from ion ionisation.</LI>
-    <LI>G4EmModelManager: improved printout on models.</LI>
+        instead of AND for de-exitation flags; fixed de-excitation AlongStep
+        by substitution which limited de-ecitation from ion ionisation;
+        corrected activation of de-excitation for the
+        case when specific de-excitation regions are not defined;
+        use G4lring method to extract integer Z.</LI>
     <LI>G4EmBiasingmanager: added check on number of secondaries PostStep,
         if not 1 then disable both splitting and Russian roulette. This does 
         not affect ordinary delta-electron and Bremssrahlung secondary biasing.
@@ -1081,8 +1047,7 @@ please refer to the corresponding History files provided in most packages):
         energy are the same; cross-section for element is not recomputed
         if material, element, primary particle and kinetic energy are the
         same; G4Nucleus is updated using new method SetIsotope().
-        Take into account that all elements should have isotopes.
-        Fixed bug in cache mechanism for element cross-section.</LI>
+        Take into account that all elements should have isotopes.</LI>
     <LI>G4VCrossSectionDataSet: added virtual method SelectIsotope() which is
         used for element wise cross-sections, allowing for the data-set to use
         isotope wise cross-sections when isotope is selected; by default the
@@ -1092,7 +1057,8 @@ please refer to the corresponding History files provided in most packages):
         Added new method GetCoulombBarrier().</LI>
     <LI>G4GGNuclNuclCrossSection, G4GlauberGribovCrossSection: updated to get
         total and inelastic cross-sections from G4HadronNucleonXsc.</LI>
-    <LI>G4BGGNucleonInelastic, G4BGGNucleonElastic: use SAID data for scattering
+    <LI>G4BGGNucleonInelastic, G4BGGNucleonElastic: use SAID data for 
+        scattering
         off hydrogen below 1.3 GeV for neutrons and below 2 GeV for protons.
         G4BGGPionInelastic, G4BGGPionElastic: use SAID data for scattering
         off hydrogen below 2.6 GeV.</LI>
@@ -1378,7 +1344,7 @@ please refer to the corresponding History files provided in most packages):
         G4ExcitationHandler; added access methods to de-excitation components.</LI>
     <LI>G4VEvaporationFactory, G4Evaporation, G4EvaporationGEMFactory,
         G4EvaporationFactory, G4EvaporationDefaultGEMFactory: correct deletion
-        of decay channels after run. Simplified constructors.</LI>
+        of decay channels after run and simplified constructors.</LI>
     <LI>G4Evaporation: cleanup logic of initialisation and setup options;
         always define photon evaporation channel as first; removed obsolete
         constructor.</LI>
