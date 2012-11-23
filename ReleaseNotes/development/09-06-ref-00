@@ -101,9 +101,11 @@ geometry/solids/CSG                              geom-csg-V09-05-09
 -------------------
 - Updated unit tests.
 
-geometry/solids/specific                         geom-specific-V09-05-21
+geometry/solids/specific                         geom-specific-V09-05-22
 ------------------------
 - Fixed cases of out-of-bound array access in G4SurfaceVoxelizer.
+- Added 'const' qualifiers to signature in G4VoxelComparator::operator()
+  for porting on AIX-xlC compiler.
 - Correction in sources.cmake script for missing .icc file.
 
 geometry/volumes                                 geomvol-V09-05-02
