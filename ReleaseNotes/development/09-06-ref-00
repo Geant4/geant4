@@ -13,6 +13,7 @@ Major development/fixes included since the last development tag are:
    in G4VMultipleScattering; added more accurate protection against case
    when true length exceeds physics step limit.
  o New data set for low-energy processes G4NDL-4.2.
+ o New data set for for nuclear de-excitation data PhotonEvaporation-2.3.
  o New data set for radio-active decay processes G4RadioactiveDecay-3.6.
 
 ---------- Reference-tag 'Release Notes' -----------
@@ -46,7 +47,8 @@ cmake                                            cmake-V09-05-76
   non-interactively.
 - Fix setting of Geant4 DEFINITIONS, INCLUDE_DIRS and LIBRARIES so that
   multiple calls to find_package do not overwrite previous settings.
-- Updated to new G4NDL-4.2 and G4RadioactiveDecay-3.6 data sets.
+- Updated to new G4NDL-4.2, G4RadioactiveDecay-3.6 and
+  PhotonEvaporation-2.3 data sets.
 - Removed obsolete files geant4-env.[c]sh.in.
 
 environments                                     envs-V09-05-03
@@ -294,6 +296,9 @@ data sets
 - G4RadioactiveDecay.3.6:
   o Added new files containing the forbidden Beta decay information for all
     nuclei known to have such decays in the ENSDF database.
+- PhotonEvaporation.2.3:
+  o Corrected internal conversion coefficients for Cs133, Pa234, and TH231,
+    according to ENSDF. Updated files z90.a231, z91.a234 and z55.a133.
 
 examples                                         examples-V09-06-00
 --------

@@ -414,8 +414,8 @@ please refer to the corresponding History files provided in most packages):
           when validating source files.</LI>
       <LI>Added FindHepMC, FindPythia6 and FindAIDA modules.</LI>
       <LI>Updated version of data sets: G4EMLOW.6.32, G4NDL.4.2,
-          G4NEUTRONXS.1.2, RadioactiveDecay.3.6, and G4SAIDDATA.1.1.
-          Removed obsolete ABLA dataset.
+          G4NEUTRONXS.1.2, RadioactiveDecay.3.6, PhotonEvaporation.2.3 and
+          G4SAIDDATA.1.1. Removed obsolete ABLA dataset.
           Updated the required version of CLHEP to 2.1.3.1.</LI>
       <LI>Removed obsolete files geant4-env.[c]sh.in.</LI>
       <LI>Updated references to data libraries version for 9.6.</LI>
@@ -2090,11 +2090,6 @@ please refer to the corresponding History files provided in most packages):
 <A NAME="data-notes">
 <H3><I>Data sets</I></H3></A>
 <UL>
-<LI>New data set G4NEUTRONXS-1.2 for evaluated neutron cross section data
-    on natural composition of elements:
-    <UL>
-    <LI>Evaluated cross section data derived from G4NDL-4.1.</LI>
-    </UL></LI>
 <LI>New low-energy data set, G4EMLOW.6.32:
     <UL>
     <LI>Updated high granularity electron elastic cross-section data.</LI>
@@ -2130,6 +2125,11 @@ please refer to the corresponding History files provided in most packages):
         and 92U238.</LI>
     <LI>Separated thermal data from main data set distribution.</LI>
     </UL></LI>
+<LI>New data set G4NEUTRONXS-1.2 for evaluated neutron cross section data
+    on natural composition of elements:
+    <UL>
+    <LI>Evaluated cross section data derived from new G4NDL set.</LI>
+    </UL></LI>
 <LI>New data set for radioactive-decay processes, G4RadioactiveDecay.3.6:
     <UL>
     <LI>Added new files containing the forbidden Beta decay information for all
@@ -2141,6 +2141,11 @@ please refer to the corresponding History files provided in most packages):
 <LI>New data set for evaluated SAID data-base, G4SAIDDATA1.1:
     <UL>
     <LI>Fixed length of vectors.</LI>
+    </UL></LI>
+<LI>New data set PhotonEvaporation.2.3 for nuclear de-excitation data:
+    <UL>
+    <LI>Corrected internal conversion coefficients for Cs133, Pa234, and TH231,
+        according to ENSDF. Updated files z90.a231, z91.a234 and z55.a133.</LI>
     </UL></LI>
 </UL></LI>
 
