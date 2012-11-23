@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23-11-2012, A.Ribon                     (phys-lists-V09-05-81)
+- Included FTFP_BERT_HP in G4PhysListFactory
+
+23-11-2012, A.Ribon                     (phys-lists-V09-05-80)
+- Created the new physics list FTFP_BERT_HP
+
 21-11-2012, B.Morgan        (phys-lists-V09-05-79)
 - lists/sources.cmake - added G4GenericPhysicsList.icc file to
     header list, fixing issue reported by validate_sources target.

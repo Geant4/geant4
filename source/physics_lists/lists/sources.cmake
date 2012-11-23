@@ -120,6 +120,8 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         FTFP_BERT_EMX.icc
         FTFP_BERT.hh
         FTFP_BERT.icc
+        FTFP_BERT_HP.hh
+        FTFP_BERT_HP.icc
         FTFP_BERT_TRV.hh
         FTFP_BERT_TRV.icc
         G4GenericPhysicsList.hh
@@ -131,6 +133,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         HadronPhysicsCHIPS_HP.hh
         HadronPhysicsFTF_BIC.hh
         HadronPhysicsFTFP_BERT.hh
+        HadronPhysicsFTFP_BERT_HP.hh
         HadronPhysicsFTFP_BERT_TRV.hh
         HadronPhysicsLHEP_EMV.hh
         HadronPhysicsLHEP.hh
@@ -213,6 +216,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         HadronPhysicsCHIPS_HP.cc
         HadronPhysicsFTF_BIC.cc
         HadronPhysicsFTFP_BERT.cc
+        HadronPhysicsFTFP_BERT_HP.cc
         HadronPhysicsFTFP_BERT_TRV.cc
         HadronPhysicsLHEP.cc
         HadronPhysicsLHEP_EMV.cc

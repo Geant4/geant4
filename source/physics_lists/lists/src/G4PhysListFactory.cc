@@ -41,6 +41,7 @@
 #include "CHIPS.hh"
 #include "FTFP_BERT.hh"
 #include "FTFP_BERT_TRV.hh"
+#include "FTFP_BERT_HP.hh"
 //#include "FTFP_BERT_DE.hh"
 #include "FTF_BIC.hh"
 #include "LBE.hh"
@@ -72,7 +73,7 @@ G4PhysListFactory::G4PhysListFactory()
   nlists_hadr = 19;
   G4String ss[19] = {
     "CHIPS",
-    "FTFP_BERT","FTFP_BERT_TRV","FTF_BIC",
+    "FTFP_BERT","FTFP_BERT_TRV","FTFP_BERT_HP","FTF_BIC", 
     "LBE","LHEP","QBBC",
     "QGSC_BERT","QGSP","QGSP_BERT","QGSP_BERT_CHIPS","QGSP_BERT_HP",
     "QGSP_BIC","QGSP_BIC_HP",
@@ -146,6 +147,7 @@ G4PhysListFactory::GetReferencePhysList(const G4String& name)
   if(had_name == "CHIPS")               {p = new CHIPS(verbose);}
   else if(had_name == "FTFP_BERT")      {p = new FTFP_BERT(verbose);}
   else if(had_name == "FTFP_BERT_TRV")  {p = new FTFP_BERT_TRV(verbose);}
+  else if(had_name == "FTFP_BERT_HP")   {p = new FTFP_BERT_HP(verbose);}
   //  else if(had_name == "FTFP_BERT_DE")   {p = new FTFP_BERT_DE(verbose);}
   else if(had_name == "FTF_BIC")        {p = new FTF_BIC(verbose);}
   else if(had_name == "LBE")            {p = new LBE();}
