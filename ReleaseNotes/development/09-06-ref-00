@@ -136,12 +136,13 @@ persistency/ascii                                ascii-V09-05-04
 -----------------
 - Minor fix for porting on AIX to G4tgrVolumeMgr.
 
-physics_lists                                    phys-lists-V09-05-79
+physics_lists                                    phys-lists-V09-05-81
 -------------
 - In all EM builders use WentzelVI multiple scattering model for e+- above
   100 MeV; build transport mean free path for He3 and He4, do not build for
   all other ions and heavy hadrons.
 - Added proper treatment of light anti-ions in G4HadronQElasticPhysics.
+- Added new physics list FTFP_BERT_HP.
 - Added missing fission model in FTFP_BERT_TRV.
   Consistent treatment of _EMV, _EMX, and _EMY physics lists.
 - Instrumenting EM and hadronic constructors to register factories.
@@ -407,8 +408,9 @@ examples                                         examples-V09-06-00
 - extended/hadronic/Hadr01 (exhadr01-V09-05-09)
   o PhysicsList: fixed bug for absence of elastic scattering.
   o DetectorConstruction: fixed bug in volume name.
-- extended/hadronic/Hadr03 (exhadr03-V09-05-14)
+- extended/hadronic/Hadr03 (exhadr03-V09-05-15)
   o PhysicsList: use QBBC instead of QGSP_BERT_HP.
+  o SteppingAction: added protection for neutronHP.
 - extended/medical (exMedical-V09-05-02)
   o Updated README and docs.
 - extended/medical/DICOM (DICOM-V09-05-10)
@@ -438,6 +440,8 @@ examples                                         examples-V09-06-00
   o Fixed .README file for artefacts from Markdown support.
 - extended/persistency (exPersistency-V09-05-08)
   o Removed/updated obsolete documentation and instructions.
+- extended/polarisation (exPolarisation-V09-05-02)
+  o Fixed README files.
 - extended/radioactivedecay (exRadioactivedecay-V09-05-01)
 - extended/radioactivedecay/rdecay01 (rdecay01-V09-05-14)
   o Fixed order of instantiating G4VisExecutive and G4UIExecutive.
