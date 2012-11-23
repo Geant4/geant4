@@ -83,140 +83,16 @@ void DetectorConstruction::DefineMaterials()
 {
  // define a Material from isotopes
  //
- G4int ncomponents;
- G4double abundance, massfraction;
-
- // Boron10
- // 
- G4Isotope* B10 = new G4Isotope("B10", 5, 10);
- //
- G4Element* b10  = new G4Element("Boron10","B10",ncomponents=1);
- b10->AddIsotope(B10, abundance= 100.*perCent);
- //
- G4Material* boron10 
-         = new G4Material("Boron10", 2.46*g/cm3, ncomponents=1);
- boron10->AddElement(b10, massfraction=100.*perCent);
-
- // Boron11
- // 
- G4Isotope* B11 = new G4Isotope("B11", 5, 11);
- //
- G4Element* b11  = new G4Element("Boron11","B11",ncomponents=1);
- b11->AddIsotope(B11, abundance= 100.*perCent);
- //
- G4Material* boron11 
-         = new G4Material("Boron11", 2.46*g/cm3, ncomponents=1);
- boron11->AddElement(b11, massfraction=100.*perCent);
- 
- // Carbon12
- // 
- ////G4Isotope* C12 = new G4Isotope("C12", 6, 12);
- //
- ////G4Element* c12  = new G4Element("Carbon12","C12",ncomponents=1);
- ////c12->AddIsotope(C12, abundance= 100.*perCent);
- //
- ////G4Material* carbon12 
- ////        = new G4Material("Carbon12", 2.27*g/cm3, ncomponents=1);
- ////carbon12->AddElement(c12, massfraction=100.*perCent);
-  
- // Oxygen16
- // 
- G4Isotope* O16 = new G4Isotope("O16", 8, 16);
- //
- G4Element* o16  = new G4Element("Oxygen16","O16",ncomponents=1);
- o16->AddIsotope(O16, abundance= 100.*perCent);
- //
- G4Material* oxygen16
-         = new G4Material("Oxygen16", 1.429*g/cm3, ncomponents=1);
- oxygen16->AddElement(o16, massfraction=100.*perCent);
- 
- // Calcium40
- // 
- G4Isotope* Ca40 = new G4Isotope("Ca40", 20, 40);
- //
- G4Element* ca40  = new G4Element("Calcium40","Ca40",ncomponents=1);
- ca40->AddIsotope(Ca40, abundance= 100.*perCent);
- //
- G4Material* calcium40
-         = new G4Material("Calcium40", 1.55*g/cm3, ncomponents=1);
- calcium40->AddElement(ca40, massfraction=100.*perCent);
- 
- // Calcium48
- // 
- G4Isotope* Ca48 = new G4Isotope("Ca48", 20, 48);
- //
- G4Element* ca48  = new G4Element("Calcium48","Ca48",ncomponents=1);
- ca48->AddIsotope(Ca48, abundance= 100.*perCent);
- //
- G4Material* calcium48
-         = new G4Material("Calcium48", 1.55*g/cm3, ncomponents=1);
- calcium48->AddElement(ca48, massfraction=100.*perCent);
-   
- // Zirconium90
- // 
- G4Isotope* Zr90 = new G4Isotope("Zr90", 40, 90);
- //
- G4Element* zr90  = new G4Element("Zirconium90","Zr90",ncomponents=1);
- zr90->AddIsotope(Zr90, abundance= 100.*perCent);
- //
- G4Material* zirconium90 
-         = new G4Material("Zirconium90", 6.51*g/cm3, ncomponents=1);
- zirconium90->AddElement(zr90, massfraction=100.*perCent); 
-  
- // Molybdenum98
- // 
- G4Isotope* Mo98 = new G4Isotope("Mo98", 42, 98);
- //
- G4Element* mo98  = new G4Element("Molybdenum98","Mo98",ncomponents=1);
- mo98->AddIsotope(Mo98, abundance= 100.*perCent);
- //
- G4Material* molybden98 
-         = new G4Material("Molybdenum98", 10.28*g/cm3, ncomponents=1);
- molybden98->AddElement(mo98, massfraction=100.*perCent);
- 
- // Molybdenum100
- //  
- G4Isotope* Mo100 = new G4Isotope("Mo100", 42, 100);
- //
- G4Element* mo100  = new G4Element("Molybdenum100","Mo100",ncomponents=1);
- mo100->AddIsotope(Mo100, abundance= 100.*perCent);
- //
- G4Material* molybden100 
-         = new G4Material("Molybdenum100", 10.28*g/cm3, ncomponents=1);
- molybden100->AddElement(mo100, massfraction=100.*perCent);
- 
- // Lead208
- //  
- G4Isotope* Pb208 = new G4Isotope("Pb208", 82, 208);
- //
- G4Element* pb208  = new G4Element("Lead208","Pb208",ncomponents=1);
- pb208->AddIsotope(Pb208, abundance= 100.*perCent);
- //
- G4Material* lead208 
-         = new G4Material("Lead208", 11.34*g/cm3, ncomponents=1);
- lead208->AddElement(pb208, massfraction=100.*perCent); 
- 
- // Uranium 235
- //  
- G4Isotope* U235 = new G4Isotope("U235", 92, 235);
- //
- G4Element* u235  = new G4Element("Uranium235","U235",ncomponents=1);
- u235->AddIsotope(U235, abundance= 100.*perCent);
- //
- G4Material* uranium235 
-         = new G4Material("Uranium235", 19.05*g/cm3, ncomponents=1);
- uranium235->AddElement(u235, massfraction=100.*perCent);
-    
- // Uranium 238
- //  
- G4Isotope* U238 = new G4Isotope("U238", 92, 238);
- //
- G4Element* u238  = new G4Element("Uranium238","U238",ncomponents=1);
- u238->AddIsotope(U238, abundance= 100.*perCent);
- //
- G4Material* uranium238 
-         = new G4Material("Uranium238", 19.05*g/cm3, ncomponents=1);
- uranium238->AddElement(u238, massfraction=100.*perCent);
+ MaterialWithSingleIsotope("Boron10",      "B10",    2.46*g/cm3, 5,  10);
+ MaterialWithSingleIsotope("Boron11",      "B11",    2.46*g/cm3, 5,  11);
+ MaterialWithSingleIsotope("Oxygen16",     "O16",    1.43*g/cm3, 8,  16);
+ MaterialWithSingleIsotope("Cacium40",     "Ca40",   1.55*g/cm3, 20, 40);
+ MaterialWithSingleIsotope("Zirconium90",  "Zr90",   6.51*g/cm3, 40, 90);    
+ MaterialWithSingleIsotope("Molybdenum98", "Mo98",  10.28*g/cm3, 42, 98);
+ MaterialWithSingleIsotope("Molybdenum100","Mo100", 10.28*g/cm3, 42, 100); 
+ MaterialWithSingleIsotope("Lead208",      "Pb208", 11.34*g/cm3, 82, 208); 
+ MaterialWithSingleIsotope("Uranium235",   "U235",  19.05*g/cm3, 92, 235);  
+ MaterialWithSingleIsotope("Uranium238",   "U238",  19.05*g/cm3, 92, 238);     
     
  // or use G4-NIST materials data base
  //
@@ -224,6 +100,27 @@ void DetectorConstruction::DefineMaterials()
  man->FindOrBuildMaterial("G4_B");
 
  ///G4cout << *(G4Material::GetMaterialTable()) << G4endl;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4Material* DetectorConstruction::MaterialWithSingleIsotope( G4String name,
+                           G4String symbol, G4double density, G4int Z, G4int A)
+{
+ // define a material from an isotope
+ //
+ G4int ncomponents;
+ G4double abundance, massfraction;
+
+ G4Isotope* isotope = new G4Isotope(symbol, Z, A);
+ 
+ G4Element* element  = new G4Element(name, symbol, ncomponents=1);
+ element->AddIsotope(isotope, abundance= 100.*perCent);
+ 
+ G4Material* material = new G4Material(name, density, ncomponents=1);
+ material->AddElement(element, massfraction=100.*perCent);
+
+ return material;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

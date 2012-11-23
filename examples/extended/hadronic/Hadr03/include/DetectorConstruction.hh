@@ -58,13 +58,16 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
   public:
   
-     virtual G4VPhysicalVolume* Construct();
-     
-     void SetSize     (G4double);              
-     void SetMaterial (G4String);            
-     void SetMagField (G4double);
+    virtual G4VPhysicalVolume* Construct();
 
-     void UpdateGeometry();
+    G4Material* 
+    MaterialWithSingleIsotope(G4String, G4String, G4double, G4int, G4int);
+         
+    void SetSize     (G4double);              
+    void SetMaterial (G4String);            
+    void SetMagField (G4double);
+
+    void UpdateGeometry();
      
   public:
   

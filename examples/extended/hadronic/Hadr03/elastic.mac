@@ -19,7 +19,7 @@
 /gun/energy 10 MeV
 #
 /process/list
-/process/inactivate ProtonInelastic
+/process/inactivate protonInelastic
 /process/inactivate hInelastic
 #
 /analysis/setFileName elastic

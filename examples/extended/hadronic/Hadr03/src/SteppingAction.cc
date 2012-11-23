@@ -62,8 +62,9 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   const G4VProcess* process   = endPoint->GetProcessDefinedStep();
   fRunAction->CountProcesses(process);
   
-  // check that an real interaction occured (eg. not a transportation)     
-  G4bool transmit = (endPoint->GetStepStatus() <= fGeomBoundary);  
+  // check that an real interaction occured (eg. not a transportation)
+  G4StepStatus stepStatus = endPoint->GetStepStatus();
+  G4bool transmit = (stepStatus==fGeomBoundary || stepStatus==fWorldBoundary);
   if (transmit) return;
                       
   //real processes : sum track length
@@ -82,8 +83,10 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   G4ParticleDefinition* particle = aStep->GetTrack()->GetDefinition();
   G4String partName = particle->GetParticleName();
   G4String nuclearChannel = partName;
-  G4HadronicProcess* hproc = (G4HadronicProcess*) process;  
-  G4String targetName = hproc->GetTargetIsotope()->GetName();
+  G4HadronicProcess* hproc = (G4HadronicProcess*) process;
+  const G4Isotope* target = hproc->GetTargetIsotope();
+  G4String targetName = "XXXX";  
+  if (target) targetName = target->GetName();
   nuclearChannel += " + " + targetName + " --> ";
     
   //scattered primary particle (if any)
