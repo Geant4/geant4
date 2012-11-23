@@ -182,7 +182,7 @@ class G4SurfaceVoxelizer
 
       G4VoxelComparator(std::vector<G4VoxelInfo> &voxels) : fVoxels(voxels) {}
 
-      G4bool operator()(G4int l, G4int r)
+      G4bool operator()(const G4int& l, const G4int& r) const
       {
         G4VoxelInfo &lv = fVoxels[l], &rv = fVoxels[r];
         G4int left = lv.count +  fVoxels[lv.next].count;
