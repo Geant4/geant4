@@ -127,19 +127,27 @@ recompilation) and a recompilation of user applications is required.
 </UL>
 
 <P> </P>
-<B>Standard Electromagnetic physics</B>
+<B>Electromagnetic and optical physics</B>
 <P> </P>
 <UL>
-<LI><FONT COLOR="RED"><U><B>###### FILL INFORMATION HERE !!! ######</B></U></FONT></LI>
-<LI>Standard EM physics lists now require the G4EMLOW data files (version 6.32)
-    and SAID data files (version 1.1).</LI> 
+<LI>EM physics (both standard and low-energy) now require 
+the G4EMLOW data files (version 6.32).</LI> 
+<LI>New combined EM physics constructor G4EmStandardPhysics_option4
+which include the best combination of standadr and 
+low-energy models now available; it
+is proposed for accurate EM simulation.</LI> 
+<LI>Obsolete methods <TT>Get/SetModel()</TT> have been removed from 
+    optical processes,
+    requiring an update (i.e. removal of such calls) for those custom physics 
+    lists and physics configurations in which optical boundary process is
+    defined.</LI>
 </UL>
 
 <P> </P>
-<B>Low Energy Electromagnetic physics</B>
+<B>Hadronic physics</B>
 <P> </P>
 <UL>
-<LI><FONT COLOR="RED"><U><B>###### FILL INFORMATION HERE !!! ######</B></U></FONT></LI>
+<LI>Hadronic physics now require new G4SAIDXSDATA data files (version 1.1).</LI> 
 </UL>
 
 <P> </P>
@@ -178,16 +186,17 @@ Please see the corresponding details in
 
 <B>Materials</B>
 <UL>
-<LI><FONT COLOR="RED"><U><B>###### FILL INFORMATION HERE !!! ######</B></U></FONT></LI>
+<LI>For all elements vector of G4Isotopes is created, by default natural
+abundaces of isotopes from NIST DB are used.</LI>
 </UL>
 
 <B>Standard Electromagnetic physics & optical</B>
 <UL>
-<LI><FONT COLOR="RED"><U><B>###### FILL INFORMATION HERE !!! ######</B></U></FONT></LI>
-<LI>Obsolete methods <TT>Get/SetModel()</TT> have been removed from optical processes,
-    requiring an update (i.e. removal of such calls) for those custom physics 
-    lists and physics configurations in which optical boundary process is
-    defined.</LI>
+<LI>Multiple scattering sampling is performed AlongStep before
+sampling of energy loss</LI>
+<LI>WentzelVI multiple scattering model is used by default 
+in all EM physics constructors; for electrons and positrons 
+WentzelVI model is used above 100 MeV</LI>
 </UL>
 
 <B>Hadronic physics</B>
@@ -210,6 +219,13 @@ Please see the corresponding details in
 <LI>New hadron stopping models, G4PiMinusAbsorptionBertini,
     G4KaonMinusAbsorptionBertini and G4SigmaMinusAbsorptionBertini are added.</LI>
 <LI>New total cross section sets based on SAID data-base are added.</LI>
+<LI>A new option is added to the nuclear de-excitation module allowing
+to ignore Doppler broading for long lived meta-stable isotopes
+and provide instead decay at rest; this new feature
+is activated by environment variable 
+<it>G4AddTimeLimitToPhotonEvaporation</it>; if this environment variable
+is set than momentum balance of the de-excitation is broken but
+energy balance is kept.</LI>
 </UL>
 
 <P> </P>
@@ -229,6 +245,9 @@ Please see the corresponding details in
     of FTF and Precompound models for anti-proton and anti-Sigma+.</LI>
 <LI>Introduced the WentzelVI model for multiple scattering of e+ and e-
     above 100 MeV in all physics lists for HEP applications.</LI>
+<LI>Relativistic gamma conversion model in used in all physics
+    constructors above 80 GeV.</LI>
+<LI>New EM physics constructor G4EmStandardPhysics_option4 is provided.</LI>
 <LI>CHIPS elastic and inelastic cross-sections for protons, neutrons, pions,
     kaons, hyperons and anti-baryons have been extracted and moved to the
     default module. They can now be selected individually for use in physics
@@ -2109,8 +2128,10 @@ please refer to the corresponding History files provided in most packages):
         and 92U238.</LI>
     <LI>Separated thermal data from main data set distribution.</LI>
     </UL></LI>
-<LI>New data set for radioactive-decay processes, G4RadioactiveDecay.3.5:
+<LI>New data set for radioactive-decay processes, G4RadioactiveDecay.3.6:
     <UL>
+    <LI>Added new files containing the forbidden Beta decay information for all
+        nuclei known to have such decays in the ENSDF database.</LI>
     <LI>Updated format of files exceeding 100 characters length.
         Addressing problem report
         <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1336">#1336</A>.</LI>

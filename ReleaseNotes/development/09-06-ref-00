@@ -13,6 +13,7 @@ Major development/fixes included since the last development tag are:
    in G4VMultipleScattering; added more accurate protection against case
    when true length exceeds physics step limit.
  o New data set for low-energy processes G4NDL-4.2.
+ o New data set for radio-active decay processes G4RadioactiveDecay-3.6.
 
 ---------- Reference-tag 'Release Notes' -----------
 
@@ -289,6 +290,9 @@ data sets
 - G4NDL.4.2:
   o Fixed problems in following isotopes: 44Ru105, 60Nd146, 63Eu152 and 92U238.
   o Separated thermal data from main data set distribution.
+- G4RadioactiveDecay.3.6:
+  o Added new files containing the forbidden Beta decay information for all
+    nuclei known to have such decays in the ENSDF database.
 
 examples                                         examples-V09-06-00
 --------
