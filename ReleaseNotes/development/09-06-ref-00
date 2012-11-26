@@ -21,7 +21,7 @@ Major development/fixes included since the last development tag are:
 
 Summarised, the list of changes is the following:
 
-cmake                                            cmake-V09-05-76
+cmake                                            cmake-V09-05-77
 -----
 - Implemented C++ Standard detection and flag configuration for GNU, Clang
   and Intel compilers; added user option to select C++ Standard to build
@@ -406,7 +406,7 @@ examples                                         examples-V09-06-00
 - extended/field/field06 (fieldex06-V09-05-02)
   o New example exercising capability of tracking massive particles
     in a gravity field.
-- extended/geometry (exGeometry-V09-05-01)
+- extended/geometry (exGeometry-V09-05-02)
   o Removed obsolete instructions and update docs.
 - extended/hadronic (exHadronic-V09-05-03)
 - extended/hadronic/Hadr00 (exhadr00-V09-05-07)
