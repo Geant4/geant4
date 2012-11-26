@@ -16,6 +16,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26/11/2012 I. Hrivnacova (exGeometry-V09-05-02)
+- Fixed .README files (the transforms example page name) 
+
 17/11/2012 I. Hrivnacova (exGeometry-V09-05-01)
   - Removed obsolete instructions (how to compile & link)
   - Fixed .README file in olap

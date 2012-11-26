@@ -14,7 +14,7 @@ See notes included in the package for details on how to use it, known
 limitations and defined commands.
 
 
-\link ExampleTransforms Transforms \endlink
+\link Exampletransforms Transforms \endlink
 
 This extended example demonstrates various ways of definition of 
 3D transformations for placing volumes. 
