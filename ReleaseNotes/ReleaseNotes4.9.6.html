@@ -49,9 +49,8 @@ User Documentation</A> for further information about using Geant4.
 <LI><A HREF="#5.">Expected effects on physics and performance</A></LI>
 <LI><A HREF="#6.">Known Run-Time Problems and Limitations</A></LI>
 <LI><A HREF="#7.">Compilation Warnings</A></LI>
-<LI><A HREF="#8.">Known Run-Time Warnings</A></LI>
-<LI><A HREF="#9.">Geant4 Software License</A></LI>
-<LI><A HREF="#10.">Detailed list of changes and fixes</A></LI>
+<LI><A HREF="#8.">Geant4 Software License</A></LI>
+<LI><A HREF="#9.">Detailed list of changes and fixes</A></LI>
 </OL>
 
 <P> </P>
@@ -102,6 +101,8 @@ Platforms configured but neither tested nor supported:
 This release of Geant4 has been verified with
 <A TARGET="ext" HREF="http://cern.ch/clhep/">CLHEP</A>, release <B>2.1.3.1</B>.
 Use of a different CLHEP version may cause incorrect simulation results.
+NOTE: an internal module of the relevant CLHEP classes is provided and can be
+used as alternative to an external CLHEP library installation.
 
 
 <P> </P>
@@ -239,7 +240,31 @@ Please see the corresponding details in
 <P> </P>
 <B>Interfaces and Visualization</B>
 <UL>
-<LI><FONT COLOR="RED"><U><B>###### FILL INFORMATION HERE !!! ######</B></U></FONT></LI>
+<LI>/vis/set/colour, lineWidth, textColour, textLayout - new commands to set
+    view details.</LI>
+<LI>/vis/scene/add/arrow, arrow2D, line, line2D, logo2D, text2D, date,
+    frame - new commands to add content to views.</LI>
+<LI>/vis/scene/activateModel - new command to control trajectory and hit
+    modeling.</LI>
+<LI>/vis/viewer/save, copyViewFrom - new commands to save view parameters
+    and copy them from one view to another.</LI>
+<LI>Improved OpenGL rendering speed through major re-design of scene and
+    transient processing. Use new command /vis/ogl/set/eventsDrawInterval
+    to get even more speed when accumulating multiple events.</LI>
+<LI>/vis/scene/add/userAction now supports multiple user vis actions.
+     Where previously one could only have a single user vis action, one can
+     now register any number of such actions. Each action gets a specific name,
+     and each can be assigned to any selected scene.</LI>
+<LI>Added Event ID to trajectory attributes so that in scenes that contain
+    more than one event, one can tell which trajectory came from which event.</LI>
+<LI>Improved Qt interface and viewer.</LI>
+<LI>Improved handling of text.</LI>
+<LI>Added new OpenInventor option: /vis/open OIXE (in addition to the previous
+    option, /vis/open OIX). Provides many new capabilities such as ability to
+    set viewpoints and to fly along a trajectory path.
+    This is an excellent viewer selection for accelerator studies or other
+    situations in which it can otherwise be difficult to set appropriate
+    views.</LI>
 </UL>
 
 <P> </P>
@@ -313,35 +338,7 @@ We do not believe that any of these lead to incorrect run-time behaviour.
 
 <!-- ============================================== -->
 
-<H2>8. Known Run-Time Warnings</H2>
-
-The following message may be written to standard output at the end of a program:
-<PRE>
-    G4Transportation: Statistics for looping particles 
-       Sum of energy of loopers killed: 
-       Max energy of loopers killed: 
-</PRE>
-It provides the total energy (in <TT>MeV</TT>) of tracks  killed due to
-excessive number of steps ('looping') during the simulation, and the maximum
-energy of such a track. Such behaviour can be due to low-momentum particles 
-which loop in magnetic fields (a physical effect, which can consume a lot of 
-CPU time for little  ) 
-or being abandoned due to being stuck at geometrical boundaries.
-<P></P>
-In case either of these reported energies is significant, we recommend
-increasing the verbosity of <TT>G4Transportation</TT> to obtain information for
-each track killed. A user can change the threshold energy above which particles
-are killed more reluctantly (only after significant additional effort) using
-the method <TT>SetThresholdImportantEnergy()</TT> of <TT>G4Transportation</TT>.
-The default value is <TT>100 MeV</TT>.
-
-<P> </P>
-<A NAME="9."></A>
-<HR>
-
-<!-- ============================================== -->
-
-<H2>9. Geant4 Software License</H2>
+<H2>8. Geant4 Software License</H2>
 
 A Software License applies to the Geant4 code.
 Users must accept this license in order to use it. The details and the list of
@@ -350,12 +347,12 @@ copyright holders is available at
 and also in the text file <TT>LICENSE</TT> distributed with the source code.
 
 <P> </P>
-<A NAME="10."></A>
+<A NAME="9."></A>
 <HR>
 
 <!-- ============================================== -->
 
-<H2>10. Detailed list of changes and fixes</H2>
+<H2>9. Detailed list of changes and fixes</H2>
 
 These are the main new features/fixes included in this release since the
 last patched public release (for more detailed lists of fixes/additions,
@@ -589,7 +586,7 @@ please refer to the corresponding History files provided in most packages):
         spectrum close to the cut.</LI>
     <LI>G4RayleighScattering: build physics table above 100 keV,
         Substituted calls to methods Model(), SetModel() with 
-	EmModel(), SetEmModel()</LI>
+        EmModel(), SetEmModel()</LI>
     <LI>Migration to the common SampleDirection() interface in
         G4VEmAngularDistribution for Livermore and Penelope models.</LI>
     <LI>Introduced new class G4RayleighAngularGenerator.</LI> 
@@ -634,7 +631,7 @@ please refer to the corresponding History files provided in most packages):
             low edge of physics table when Coulomb scattering is combined with
             multiple or single scattering;
             modified initialisation allowing easier addition 
-	    of a custom model; improved list of options/flags in constructor
+            of a custom model; improved list of options/flags in constructor
             to reduce size of cross-section tables; do not allow
             anymore to change polar angle limit after first initialisation;
             fixed initilisation for the case when polar angle limit 
@@ -1243,7 +1240,7 @@ please refer to the corresponding History files provided in most packages):
     <UL>
     <LI>Developed and improved ability of Bertini cascade to handle
         photo-nuclear and elector-nuclear interactions and the interactions
-	of stopping particles.</LI>
+        of stopping particles.</LI>
     <LI>G4CascadeInterface: check for no-interaction in retryInelasticProton(),
         both in return value and in debugging report.
         Added new function for dumping configuration.</LI>
@@ -1878,176 +1875,135 @@ please refer to the corresponding History files provided in most packages):
 <A NAME="vis-notes">
 <H3><I>Visualization</I></H3></A>
 <UL>
-<LI>Migrated drivers to use G4VScenehandler::fObjectTransformation.</LI>
-<LI>Migrated to G4Scene::Model.</LI>
-<LI>Fixed Ubuntu warnings about ignoring return value of system call.</LI>
-<LI>Code health check removed several instances of code duplication,
-    unnecessary screen refeshing, incorrect buffer switching (necessitating
-    extra refreshing), variable shadowing, etc.</LI>
-<LI>Explicitly use inclusion of headers for system of units and physical
-    constants.</LI>
-<LI>Fixed cases of variable shadowing and Coverity defects.</LI>
-<LI><B>Management</B>
+<LI><B>General:</B>
     <UL>
-    <LI>Implemented the concept of a "fallback" graphics system. Used only
-        Qt at present. A Qt viewer will only work with a Qt session so if
-        for a user instantiates a non-Qt session we wish to avoid instantiating
-        a Qt viewer - instantiate, Xm, for example, instead.
-        It's OK to instantiate a Qt viewer in batch - no window is opened,
-        but one can create a scene, change view parameters and
-        '/vis/ogl/printEPS' to get an eps file in batch.</LI>
-    <LI>Extended G4VisManager to allow registering any number of named vis
-        actions and associate them with particular types of action. They are
-        added to the scene with the command '/vis/scene/add/userAction [<name>]'
-        (default all).<BR>
-        Implemented 'Begin/EndDraw'(2D).
+    <LI>Added commands (see help system or user guide for details):
+        <UL>
+        <LI>/vis/scene/activateModel</LI>
+        <LI>/vis/viewer/copyViewFrom</LI>
+        <LI>/vis/set/colour</LI>
+        <LI>/vis/set/lineWidth</LI>
+        <LI>/vis/set/textColour</LI>
+        <LI>/vis/set/textLayout</LI>
+        <LI>/vis/scene/add/arrow</LI>
+        <LI>/vis/scene/add/arrow2D</LI>
+        <LI>/vis/scene/add/line</LI>
+        <LI>/vis/scene/add/line2D</LI>
+        <LI>/vis/scene/add/logo2D</LI>
+        <LI>/vis/scene/add/text2D</LI>
+        <LI>/vis/scene/add/date</LI>
+        <LI>/vis/scene/add/frame</LI>
+        <LI>/vis/viewer/save</LI>
+        </UL></LI>
+    <LI>Improved commands:
+        <UL>
+        <LI>/vis/scene/add/axes - default size is now computed automatically,
+            limit width to length/50.</LI>
+        <LI>/vis/scene/add/logo - default size is now computed automatically.</LI>
+        <LI>/vis/scene/add/scale - default size is now computed automatically.</LI>
+        </UL></LI>
+    <LI>Extended G4VisManager to support multiple user vis actions.
+        Where previously one could only have a single user vis action, one can
+        now register any number of such actions. Each action gets a specific
+        name, and each can be assigned to any selected scenes.
+        See the help system or user guide for details:
+        /vis/scene/add/userAction.</LI>
+    <LI>Added Event ID to trajectory attributes so that in scenes that contain
+        more than one event, one can tell which trajectory came from which
+        event.</LI>
+    <LI>Removed creation date from eps files (so that one can more easily use
+        diff to tell that two files have the same graphics).</LI>
+    <LI>Implemented 'BeginDraw/EndDraw' and 'BeginDraw2D/EndDraw2D'.
         This forces all thus-bracketed Draw messages to have the same
         transformation. If an attempt to change the transformation is detected,
         a fatal exception is raised.</LI>
-    <LI>G4VisManager::EndOfEvent(): removed unwarranted DrawView().
-        It was causing two copies of the geometry to be drawn.</LI>
-    <LI>Added UI commands '/vis/scene/activateModel', '/vis/viewer/copyViewFrom',
-        '/vis/set/colour', '/vis/set/lineWidth', '/vis/scene/add/line'(2D)
-        and 'arrow'(2D).</LI>
-    <LI>Added command '/vis/set/textColour', allowing the user to change the
-        above current quantities for use by subsequent commands.</LI>
-    <LI>Added command '/vis/set/textLayout'.</LI>
-    <LI>Added command '/vis/scene/add/logo2D' and 'text2D'.</LI>
-    <LI>Added '/vis/scene/add/date' and '/vis/scene/add/frame'.</LI>
-    <LI>Added '/vis/viewer/save' command.
-        Completed '/vis/touchable/set/' commands.
-        Added the copying of VisAttributesModifiers to modeling parameters.</LI>
-    <LI>Improved '/vis/scene/add/axes' command, logo and scale: size computed
-        automatically by default. Added protection (limited width of axes to
-        length/50).</LI>
-    <LI>Introduced concept of "current quantities" for use in vis commands.</LI>
-    <LI>G4VSceneHandler: Added Get/SetObjectTransformation.</LI>
+    <LI>Migrated drivers to use G4VScenehandler::fObjectTransformation.</LI>
     <LI>Added G4VViewer::RefreshView().</LI>
     <LI>Added an extra refresh for auto-refresh viewers at end of run.</LI>
-    <LI>Removed multi-requested parameter guidance.
-        Collapsed guidance to one long string with '\n' for new lines.</LI>
-    <LI>G4VisCommandsSceneAdd: in command /vis/scene/add/date, added
-        user-specified date-time as last argument(s) on command line.</LI>
-    <LI>Improved PrintAvailableGraphicsSystems().</LI>
-    <LI>Added eventID to G4Atts for trajectories.</LI>
-    <LI>Get G4OpenInventorXtExtended with '/vis/open OIXE'.</LI>
+    <LI>G4VisManager::EndOfEvent(): removed unwarranted DrawView()
+        that was causing duplicate copy of the geometry to be drawn.</LI>
     <LI>Marker size bug fix.</LI>
-    <LI>Fixes for Qt Stored text.</LI>
-    <LI>Improved guidance on command directories.</LI>
-    </UL></LI>
-<LI><B>Modeling</B>
-    <UL>
-    <LI>Validating geometry in all worlds.</LI>
-    <LI>Introduced G4ArrowModel. Re-implemented G4AxesModel to use it.</LI>
-    <LI>Added Get/SetType for all models (sub-classes of G4VModel).</LI>
-    <LI>G4PhysicalVolumeModel: draw only one replica if top volume.
-        Added SetBaseFullPVPath(). The base full path is the full path of the
+    <LI>Fixed Ubuntu warnings about ignoring return value of system call.</LI>
+    <LI>Removed several instances of code duplication,
+        unnecessary screen refeshing, incorrect buffer switching
+        (necessitating extra refreshing), variable shadowing, etc.</LI>
+    <LI>Removed #ifdef G4VIS... from header files.</LI>
+    <LI>Protected against use of 2D primitives in viewers that can not handle
+        these.</LI>
+    <LI>Improved handling of parallel worlds (some worlds had been missing from redraws).</LI>
+    <LI>Added SetBaseFullPVPath(). The base full path is the full path of the
         top physical volume (actually the full path of the mother of the top
         physical volume), so that even if a user issues
         '/vis/drawVolume sub-detector', the full path includes the base full
         path, i.e., the full path up to the world volume.</LI>
-    <LI>G4TrajectoriesModel: added GetAttDefs() and CreateCurrentAttValues()
-        for event ID.</LI>
-    <LI>Bug fix for G4LogicalVolumeModel.</LI>
-    <LI>G4ModelingParameters: added VisAttributesModifiers, enums and a nested
+     <LI>G4ModelingParameters: added VisAttributesModifiers, enums and a nested
         class for communicating a modification to the vis attributes for a
         specific touchable defined by PVNameCopyNoPath, to be used by new
         commands set, '/vis/touchable/set/...'.</LI>
-    <LI>Use Begin/EndDraw to improve drawing speed. Assumes all trajectories
-        are drawn with the same transformation.</LI>
     <LI>Brought stray print statement under control of verbosity.
         Addressing problem report
         <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1310">#1310</A>.</LI>
-    <LI>Improvements for printing of parameters and att defs.</LI>
-    </UL></LI>
-<LI><B>Externals</B>
-    <UL>
-    <LI>Removed create date in eps files (very useful to be able to
-        compare them).</LI>
     </UL></LI>
 <LI><B>FukuiRendeder (DAWN)</B>
     <UL>
-    <LI>Implemented 2D text. Added print-once warnings for other 2D.</LI>
-    </UL></LI>
-<LI><B>gMocren</B>, <B>HepRep</B>
-    <UL>
-    <LI>Intercepted 2D primitives; printing warning.</LI>
+    <LI>Implemented 2D text.</LI>
     </UL></LI>
 <LI><B>OpenGL</B>
     <UL>
-    <LI>Improved rendering speed.</LI>
-    <LI>Major re-design of scene and transient processing.</LI>
-    <LI>Major revisions in Qt interface: added search widget in scene tree;
-        double-click now allow to change color/transparency; fixed a problem
-        on scene tree with non touchable volumes.<BR>
-        G4OpenGLQtViewer: updated scene tree viewer algorithm for speedup
-        and transparency fix.
-        Fixed text layout in Qt. Improvements in Qt viewer.
-        Introduced QT tree ("Scene" panel in G4UIQt session).</LI>
-    <LI>Improvements in X viewers: now 3D text is hidden, when appropiate,
-        by volumes drawn in surface mode. Implemented text layout and offset.</LI>
+    <LI>Improved rendering speed through major re-design of scene and transient
+        processing.</LI>
+    <LI>Added command /vis/ogl/set/eventsDrawInterval to specify how frequently
+        image should update when accumulating multiple events. Defaults to 1,
+        meaning to refresh after every event.</LI>
+    <LI>Improved Qt interface and viewer:
+        <UL>
+        <LI>Introduced Qt tree ("Scene" panel in G4UIQt session).</LI>
+        <LI>Added search widget in scene tree.</LI>
+        <LI>Added depth-of-geometry slider.</LI>
+        <LI>Double-click to change color/transparency.</LI>
+        <LI>Record changes to colour and visibility of touchables so that they
+            may be transmitted to other viewers.</LI>
+        <LI>Attempting to instantiate a Qt viewer when there is no Qt UI
+            session used to cause a crash since the viewer requires the Qt UI
+            session. We now protect against this, creating an alternate OpenGL
+            viewer when a Qt viewer would not be appropriate.</LI>
+        <LI>Allow instantiation of a Qt viewer in batch - no window is opened,
+            but one can create a scene, change view parameters and
+            '/vis/ogl/printEPS' to get an eps file in batch.</LI>
+        </UL></LI>
+    <LI>Improved handling of text in all X viewers:
+        <UL>
+        <LI>Volumes drawn in surface mode now hide 3D text when appropiate.</LI>
+        <LI>Implemented text layout and offset.</LI>
+        <LI>Fixed cases where text was missing.</LI>
+        </UL></LI>
     <LI>Corrected treatment of colour for transient objects.</LI>
-    <LI>Implemented proper treatment of transparency in OpenGL stored mode
-        in the case trajectories pass through or behind transparent persistent
-        objects (detector components). Required proper ordering of display list
-        execution.</LI>
-    <LI>Multiple fixes and improvements to Qt and Qt Stored text.</LI>
-    <LI>Introduced depth of geometry slider.</LI>
-    <LI>G4OpenGLStoredSceneHandler: removed Set/Clear/Draw from EndModeling.</LI>
-        Significant rationalisation in G4OpenGLSceneHandler.
-        Moved colour from display list to PO so that a sub-class may modify
-        through the new virtual function below.</LI>
-    <LI>G4OpenGLStoredViewer: added virtual void
-        DisplayTimePOColourModification()
-        so that a sub-class may modify the colur/transparency.</LI>
-    <LI>Fixed drawing of non-display-list text.</LI>
-    <LI>Fixed drawing of trajectories when no memory from display lists.</LI>
-    <LI>Fixed cases of extra drawing, causing loss of trajectories.</LI>
-    <LI>Added UI command /vis/ogl/set/eventsDrawInterval.</LI>
-    <LI>Removed #ifdef G4VIS... protection from header files.</LI>
-    <LI>Material (for surface rendering) follows glColor at all times.</LI>
-    <LI>Changed glColor3d to glColor4d throughout.</LI>
-    <LI>Corrected effect of toggle transparency pop-up action.</LI>
-    <LI>Recording changes to colour and visibility of touchables in
-        VisAttributesModifiers, so that they may be transmitted to other
-        viewers.</LI>
-    <LI>Bug fix: hidden markers can now be handled on-the-fly, i.e., without
-        having to rebuild the display lists.</LI>
-    <LI>Fixed bug in printEPS() for batch.</LI>
-    <LI>Fix for Qt batch mode and printEPS. Addressing problem report
+    <LI>Corrected treatment of transparency in OpenGL stored mode
+        for trajectories that pass through or behind transparent persistent
+        objects (detector components).</LI>
+    <LI>Fixed bug such that hidden markers can now be handled on-the-fly,
+        i.e., without having to rebuild the display lists.</LI>
+    <LI>Fixed Qt batch mode printEPS. Addressing problem report
         <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1368">#1368</A>.</LI>
     <LI>Fixed problem on Linux at startup. Addressing problem report
         <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1385">#1385</A>.</LI>
-    <LI>Fixed bug in display-list-re-use algorithm.</LI>
-    <LI>Improved display list re-use.</LI>
     </UL></LI>
 <LI><B>OpenInventor</B>
     <UL>
-    <LI>G4OpenInventorXtExaminerViewer: new class implements functional
-        extensions to the Xt-based viewer. A plug-in replacement for
-        SoXtExaminerViewer (the standard viewer provided with Coin3d).</LI>
-    <LI>G4OpenInventorXtExtendedViewer: instantiates G4OpenInventorXtExaminerViewer.
-        Obtained with '/vis/open OIXE'. Added some additional menu items.</LI>
-    <LI>Added test of VisAttributesModifiers to list checked for kernel visit.</LI>
-    <LI>NOTE: currently supporting only Coin3D implementation of Inventor.</LI>
-    <LI>Removed #ifdef G4VIS... protection from header files.</LI>
-    <LI>Intercepted 2D primitives; printing warning.</LI>
-    <LI>Fixed libXpm linking problem. Fixed compilation warnings.</LI>
-    <LI>Pick up default vis attributes if primitive has none.</LI>
-    </UL></LI>
-<LI><B>Tree</B>
-    <UL>
-    <LI><TT>G4VTreeSceneHandler</TT>: removed empty implementations of
-        <TT>Begin/EndPrimitives()</TT>, which allows objects to pick up
-        the default.</LI>
-    </UL></LI>
-<LI><B>VRML</B>
-    <UL>
-    <LI>Intercepted 2D primitives; printing warning.</LI>
-    </UL></LI>
-<LI><B>XXX</B>
-    <UL>
-    <LI>Added test of VisAttributesModifiers to list checked for kernel visit.</LI>
+    <LI>New option: /vis/open OIXE (in addition to the previous option,
+        /vis/open OIX):
+        <UL>
+        <LI>OIXE opens a G4OpenInventorXtExaminerViewer, an optional
+            replacement for the standard SoXtExaminerViewer.</LI>
+        <LI>Provides many new capabilities such as ability
+            to set viewpoints and to fly along a trajectory path.</LI>
+        <LI>This is an excellent viewer selection for accelerator studies or
+            other situations in which it can otherwise be difficult to set
+            appropriate views.</LI>
+        <LI>See help system or user guide for details.</LI>
+        <LI>Currently requires the Coin3D implementation of Inventor.</LI>
+        </UL></LI>
+    <LI>Fixed libXpm linking problem.</LI>
     </UL></LI>
 </UL>
 
