@@ -1,0 +1,80 @@
+$Id$
+
+///\file "extended/.README"
+///\brief Examples How To Run README page
+
+/*! \page README_HowToRun How to build and run an example
+
+All novice, basic and most of extended examples have a similar structure.
+The main () function is included in \em exampleXYZ.cc in the example top directory
+and the example source code is structered in \em include and \em src subdirectories.
+When the example is built, the executable takes the same name as the file with
+main () function without \em .cc extension, \em exampleXYZ.
+
+Then several macros are provided to run the example with various start-up
+conditions. These macros have usually \em .mac extension. Besides these macros,
+there is often a macro \em exampleXYZ.in (note its different extension)
+which is used in Geant4 testing and which output, \em exampleXYZ.out, can be also included
+in the distribution.
+
+You can find all details about building the examples in the <a href= "http://geant4.web.cern.ch/geant4/UserDocumentation/UsersGuides/InstallationGuide/html/index.html"> Geant4 Installation Guide </a>, in the section <a href="http://geant4.web.cern.ch/geant4/UserDocumentation/UsersGuides/InstallationGuide/html/ch03s02.html">  3.2. Building Applications with Geant4 </a>.
+Here we recall only the basics. 
+
+\section HowToRun_s1 Compile and link to generate an executable
+
+\subsection HowToRun_subs11 With CMake
+\verbatim
+% cd path_to_exampleXYZ     # go to directory which contains your example
+% mkdir exampleXYZ_build
+% cd exampleXYZ_build
+% cmake -DGeant4_DIR=path_to_Geant4_installation/lib[64]/Geant4-9.6.0/ ../exampleXYZ
+% make -j N exampleXYZ      # "N" is the number of processes 
+% make install              # this step is optional              
+\endverbatim
+
+\subsection  HowToRun_subs12 With GNUmake 
+
+To use GNUmake build system when Geant4 was installed with CMake, you have to source first
+the setup script in order to define needed environment variables:
+\verbatim
+source path_to_Geant4_installation/share/Geant4-9.6.0/geant4make/geant4make.[c]sh 
+\endverbatim
+
+Then to build example
+\verbatim
+% cd path_to_exampleXYZ/exampleXYZ
+% gmake
+\endverbatim
+
+An additional step is needed when building an example using shared classes
+(usually from ../shared directory) or classes from 
+\link Examples_common common \endlink:
+\verbatim
+% cd path_to_exampleXYZ/exampleXYZ
+% gmake setup
+% gmake
+\endverbatim
+
+When building the example in this way make sure that the path to the example executable and its shared library is added in the paths defined on your system (eg. PATH and LD_LIBRARY_PATH on Linux). 
+
+\section HowToRun_s2 Execute exampleXYZ in 'batch' mode from macro files
+ 		
+\verbatim
+... go to the directory where the example was built/installed
+% exampleXYZ  xyz.mac
+\endverbatim
+ 		
+\section HowToRun_s3 Execute exampleXYZ in 'interactive mode' with visualization
+\verbatim
+... go to the directory where the example was built/installed
+% exampleXYZ
+....
+Idle> type your commands
+....
+Idle> exit
+\endverbatim
+
+See also the explicit instructions for building TestEm1 example at 
+\ref README_HowToRunTestEm1 page.
+
+*/
