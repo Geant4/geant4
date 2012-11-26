@@ -13,24 +13,29 @@ $Id$
  1- GEOMETRY DEFINITION
  
      The setup consists of a target followed by six chambers of increasing
-     transverse size. These chambers are located in a region called the Tracker
-     region. Their shape are boxes, constructed as simple boxes 
+     transverse size at defined instances from the target. These chambers are 
+     located in a region called the Tracker region. 
+     Their shape are cylinders, constructed as simple cylinders
      (in B2aDetectorConstruction) and as parametrised volumes 
      (in B2bDetectorConstruction), see also B2bChamberParameterisation class.
 
-     The default geometry is constructed in the detector construction class.
+     In addition, a global, uniform, and transverse magnetic field can be 
+     applied (see B2MagneticField and B2aDetectorMessenger, 
+     B2bDetectorMessenger classes) and set via interactive commands. 
+     For example:
+
+     /B2/det/setField 0.2 tesla
+ 
+     An instance of the B2TrackerSD class is created and associated with each 
+     logical chamber volume (in B2a) and with the one G4LogicalVolume associated 
+     with G4PVParameterised (in B2b). 
+
      One can change the materials of the target and the chambers
      interactively via the commands defined in B2aDetectorMessenger
      (or B2bDetectorMessenger). For example:
 
      /B2/det/setTargetMaterial G4_WATER
      /B2/det/setChamberMaterial G4_Ar
- 
-     In addition, a transverse uniform magnetic field can be applied (see
-     B2MagneticField and B2aDetectorMessenger, B2bDetectorMessenger classes) 
-     and set interactively. For example:
-
-     /B2/det/setField 0.2 tesla
  
  2- PHYSICS LIST
 
@@ -49,10 +54,11 @@ $Id$
 
  3- PRIMARY GENERATOR
 
-     The primary kinematic consists of a single particle which hits the
-     target perpendicular to the entrance face. The type of the particle
-     and its energy are set in the B2PrimaryGeneratorAction class, and can
-     be changed via the G4 build-in commands of the G4ParticleGun class.
+     The primary generator action class employs the G4ParticleGun. 
+     The primary kinematics consists of a single particle which hits the target 
+     perpendicular to the entrance face. The type of the particle 
+     and its energy can be changed via the G4 built-in commands of 
+     the G4ParticleGun class. 
   
  4- RUNS and EVENTS
  
@@ -63,6 +69,17 @@ $Id$
         - at Begin and End of each event (class B2EventAction)
         - at Begin and End of each track (class TrackingAction, not used here)
 	- at End of each step (class SteppingAction, not used here)
+        
+     The event number is written to the log file every requested number 
+     of events in B2EventAction::BeginOfEventAction() and 
+     B2EventAction::EndOfEventAction(). 
+     Moreover, for the first 100 events and every 100 events thereafter 
+     information about the number of stored trajectories in the event 
+     is printed as well as the number of hits stored in the G4VHitsCollection. 
+     
+     The run number is printed at B2RunAction::BeginOfRunAction(), where the 
+     G4RunManager is also informed how to SetRandomNumberStore for storing 
+     initial random number seeds per run or per event.         
 
  5- USER LIMITS
  

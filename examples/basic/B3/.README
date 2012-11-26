@@ -70,9 +70,9 @@
    	
 \section B3_s5 STACKING ACTION
 
-   Beta decay of Fluor generates a neutrino. One wishes do not track this
-   neutrino. Therefore one kills it immediately, before created particles
-   will put in a stack.
+   Beta decay of Fluor generates a neutrino. One wishes not to track this
+   neutrino; therefore one kills it immediately, before created particles
+   are put in a stack.
    The function B3StackingAction::ClassifyNewTrack() is invoked by G4 kernel
    each time a new particle is created.
        		

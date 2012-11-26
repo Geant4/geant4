@@ -67,11 +67,11 @@
    allows to activate/inactivate the processes one by one.
  	 
 \section B4_s3 PRIMARY GENERATOR
- 
+
    The primary beam consists of a single particle which hits the
    calorimeter perpendicular to the input face. The type of the particle
    and its energy are set in the B4PrimaryGeneratorAction class, and can
-   be changed via the G4 build-in commands of the G4ParticleGun class (see
+   be changed via the G4 built-in commands of the G4ParticleGun class (see
    the macros provided with this example).
  	
 \section B4_s4 RUNS and EVENTS
@@ -79,7 +79,7 @@
    A run is a set of events. 
    
    The user can choose the frequency of printing from B4aEventAction (or event 
-   action classes in other options) via the interactive command defined in
+   action classes in other options) via the interactive command defined
    using the G4GenericMessenger class, for example:
     
 \verbatim
@@ -96,53 +96,53 @@
    
 \subsection s5a Variant a: User Actions
    
-     These 4 quantities are data members of the B4aEventAction class.  
-     They are collected step by step in 
-     B4aSteppingAction::UserSteppingAction(), and passed to the event action
-     via two methods: B4aEventAction::AddAbs() and B4aEventAction::AddGap().
+   These 4 quantities are data members of the B4aEventAction class.  
+   They are collected step by step in 
+   B4aSteppingAction::UserSteppingAction(), and passed to the event action
+   via two methods: B4aEventAction::AddAbs() and B4aEventAction::AddGap().
    
-     In B4aEventAction::EndOfEventAction(), these quantities are printed and 
-     filled in H1D histograms and ntuple to accumulate statistic and compute 
-     dispersion.
+   In B4aEventAction::EndOfEventAction(), these quantities are printed and 
+   filled in H1D histograms and ntuple to accumulate statistic and compute 
+   dispersion.
      
 \subsection s5b Variant b: User data object 
    
-     In order to avoid dependencies between action classes, a user object
-     B4bRunData is defined with data members needed to the accounted
-     information. 
-     In order to reduce the number of data members a 2-dimensions array
-     is introduced for each quantity.
-     Then the quantities are collected step by step in user action classes:
-     B4bSteppingAction::UserSteppingAction() and 
-     B4bEventAction::EndOfEventAction() in a similar way as in variant a. 
+   In order to avoid dependencies between action classes, a user object
+   B4bRunData is defined with data members needed to the accounted
+   information. 
+   In order to reduce the number of data members a 2-dimensions array
+   is introduced for each quantity.
+   Then the quantities are collected step by step in user action classes:
+   B4bSteppingAction::UserSteppingAction() and 
+   B4bEventAction::EndOfEventAction() in a similar way as in variant a. 
      
 \subsection s5c  Variant c: Hits and Sensitive detectors
    
-     In this option, the physics quantities are accounted using the hits
-     and sensitive detectors framework defined in the Geant4 kernel.  
-     The physics quantities are stored in B4cCalorHit via two B4cCalorimeterSD
-     objects, one associated with the Absorber volume and another one with Gap
-     in B4cDetectorConstruction.
-     
-     In contrary to the B2 example (Tracker) where a new hit is created
-     with each track passing the sensitive volume (in the calorimeter), only one
-     hit is created for each calorimeter layer and one more hit to account for
-     the total quantities in all layers. In addition to the variants a and b,
-     the quantities per each layer are also available in addition to the total 
-     quantities.
+   In this option, the physics quantities are accounted using the hits
+   and sensitive detectors framework defined in the Geant4 kernel.  
+   The physics quantities are stored in B4cCalorHit via two B4cCalorimeterSD
+   objects, one associated with the Absorber volume and another one with Gap
+   in B4cDetectorConstruction.
+   
+   In contrary to the B2 example (Tracker) where a new hit is created
+   with each track passing the sensitive volume (in the calorimeter), only one
+   hit is created for each calorimeter layer and one more hit to account for
+   the total quantities in all layers. In addition to the variants a and b,
+   the quantities per each layer are also available in addition to the total 
+   quantities.
      
 \subsection s5d  Variant d: Scorer
     
-     In this option, the Geant4 scorers which are defined on the top of hits
-     and sensitive detectors Geant4 framework are used.  
-     In practice this means that the user does not need to define hits and sensitive
-     detector classes but rather uses the classes already defined
-     in Geant4. In this example, the G4MultiFunctionalDetector with
-     G4PSEnergyDeposit and G4PSTrackLength primitive scores are used (see
-     B4dDetectorConstruction class).
-    
-     Also with this approach, the quantities per each layer are available 
-     in addition to the total quantities.
+   In this option, the Geant4 scorers which are defined on the top of hits
+   and sensitive detectors Geant4 framework are used.  
+   In practice this means that the user does not need to define hits and sensitive
+   detector classes but rather uses the classes already defined
+   in Geant4. In this example, the G4MultiFunctionalDetector with
+   G4PSEnergyDeposit and G4PSTrackLength primitive scores are used (see
+   B4dDetectorConstruction class).
+   
+   Also with this approach, the quantities per each layer are available 
+   in addition to the total quantities.
               				
 \section B4_s6 HISTOGRAMS
  
@@ -156,11 +156,11 @@
    - Track length in gap
    The same values are also saved in an ntuple.
 
-   The accumulated statistic and computed dispersion is printed at the end of 
-   run, in B4RunAction::EndOfRunAction().
-
    The histograms and ntuple are saved in the output file in a format
    according to a technology selected in B4Analysis.hh.
+
+   The accumulated statistic and computed dispersion is printed at the end of 
+   run, in B4RunAction::EndOfRunAction().
  
 \section B4_s7 VISUALIZATION TUTORIAL
 

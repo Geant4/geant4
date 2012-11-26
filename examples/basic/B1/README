@@ -25,7 +25,7 @@ $Id$
    The materials are created with the help of the G4NistManager class,
    which allows to build a material from the NIST database using their
    names. All available materials can be found in the Geant4 User's Guide
-   for Application Developers, Appendix 9: Geant4 Materials Database.
+   for Application Developers, Appendix 10: Geant4 Materials Database.
 		
  2- PHYSICS LIST
  
@@ -45,8 +45,8 @@ $Id$
  3- PRIMARY GENERATOR
   
    The primary generator is defined in the B1PrimaryGeneratorAction class.
-   The default kinematic is a 6 MeV gamma, randomly distributed in front
-   of the envelope across 80% of the (X,Y) envelope size. 
+   The default kinematics is a 6 MeV gamma, randomly distributed in front
+   of the envelope across 80% of the transvers (X,Y) envelope size. 
    This default setting can be changed via the Geant4 built-in commands 
    of the G4ParticleGun class.
      
@@ -56,11 +56,13 @@ $Id$
    in the user action classes. Alternative ways of scoring via
    Geant4 classes can be found in the other examples.
    
-   Here, the energy deposit in a selected volume is accumulated step by step
-   in B1SteppingAction and the event energy deposit deposit is done event by 
-   event in B1EventAction. The dose is then computed in 
-   B1RunAction::EndOfRunAction() and and its value is printed on the screen. 
-
+   It is in B1SteppingAction that the energy deposition is collected 
+   for a selected volume step by step and the statistical event by event 
+   accumulation of energy deposition is done within B1EventAction. 
+   Information about the primary particle is printed in the
+   B1RunAction::EndOfRunAction() along with the computation of the dose. 
+   An example of creating and computing new units (e.g., dose) is also shown 
+   in the class constructor. 
 
  The following paragraphs are common to all basic examples
 
@@ -91,6 +93,14 @@ $Id$
    The DAWNFILE, HepRepFile drivers are always available
    (since they require no external libraries), but the OGL driver requires
    that the Geant4 libraries have been built with the OpenGL option.
+
+   From Release 9.6 the vis.mac macro in example B1 has additional commands
+   that demonstrate additional functionality of the vis system, such as
+   displaying text, axes, scales, date, logo and shows how to change
+   viewpoint and style.  Consider copying these to other examples or
+   your application.  To see even more commands use help or
+   ls or browse the available UI commands in the Application
+   Developers Guide, Section 7.1.
 
    For more information on visualization, including information on how to
    install and run DAWN, OpenGL and HepRApp, see the visualization tutorials,
