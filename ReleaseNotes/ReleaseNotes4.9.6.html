@@ -131,15 +131,14 @@ recompilation) and a recompilation of user applications is required.
 <P> </P>
 <UL>
 <LI>EM physics (both standard and low-energy) now require 
-the G4EMLOW data files (version 6.32).</LI> 
+    the G4EMLOW data files (version 6.32 is needed).</LI> 
 <LI>New combined EM physics constructor G4EmStandardPhysics_option4
-which include the best combination of standadr and 
-low-energy models now available; it
-is proposed for accurate EM simulation.</LI> 
+    which includes the best combination of standard and low-energy models
+    now available; it is proposed for accurate EM simulation.</LI> 
 <LI>Obsolete methods <TT>Get/SetModel()</TT> have been removed from 
-    optical processes,
-    requiring an update (i.e. removal of such calls) for those custom physics 
-    lists and physics configurations in which optical boundary process is
+    optical processes, requiring an update (i.e. removal of such calls) for
+    those custom physics lists and physics configurations in which optical
+    boundary process is
     defined.</LI>
 </UL>
 
@@ -147,7 +146,7 @@ is proposed for accurate EM simulation.</LI>
 <B>Hadronic physics</B>
 <P> </P>
 <UL>
-<LI>Hadronic physics now require new G4SAIDXSDATA data files (version 1.1).</LI> 
+<LI>Hadronic physics now require new G4SAIDDATA data files.</LI> 
 </UL>
 
 <P> </P>
@@ -164,8 +163,8 @@ This release introduces new data set versions.
 Please see the corresponding details in
 <A href="#data-notes">Section 10</A> of this document.
 <UL>
-<LI>New data set versions: <TT>G4EMLOW.6.32, G4NDL.4.2, G4NEUTRONXS.1.2,
-    RadioactiveDecay.3.5, G4SAIDDATA.1.1</TT>.</LI>
+<LI>New data set versions: <TT>G4EMLOW6.32, G4NDL4.2, G4NEUTRONXS1.2,
+    RadioactiveDecay3.6, G4SAIDDATA1.1</TT>.</LI>
 </UL>
 
 <P> </P>
@@ -186,17 +185,27 @@ Please see the corresponding details in
 
 <B>Materials</B>
 <UL>
-<LI>For all elements vector of G4Isotopes is created, by default natural
-abundaces of isotopes from NIST DB are used.</LI>
+<LI>For all elements, a vector of G4Isotopes is always created using abundances
+    from NIST (in previous Geant4 versions, the vector of isotopes was created
+    only for NIST materials), so it is no longer needed to define natural
+    composition of isotopes in the user code.</LI>
 </UL>
 
-<B>Standard Electromagnetic physics & optical</B>
+<B>Electromagnetic physics</B>
 <UL>
-<LI>Multiple scattering sampling is performed AlongStep before
-sampling of energy loss</LI>
-<LI>WentzelVI multiple scattering model is used by default 
-in all EM physics constructors; for electrons and positrons 
-WentzelVI model is used above 100 MeV</LI>
+<LI>Multiple scattering sampling is performed AlongStep before sampling of
+    energy loss (previously multiple scattering was sampled PostStep). The
+    performance of simulation is nearly the same, simulation become a bit
+    faster.</LI>
+<LI>WentzelVI multiple scattering model is used by default in all EM physics
+    lists. For electrons and positrons WentzelVI model is used above 100 MeV.
+    This was done to provide more accurate simulation both small and large
+    anglesof high energy charged particles.</LI>
+<LI>New processes (G4MuElecElastic, G4MuElecInelastic) for microdosimetry
+    in Silicon for electrons, protons and ions and corresponding models
+    (G4MuElecElasticModel, G4MuElecInelasticModel).</LI>
+<LI>New Compton scattering model (G4LowEPComptonModel) along with specific
+    Physics constructor (G4EmLowEPPhysics).</LI>
 </UL>
 
 <B>Hadronic physics</B>
@@ -220,12 +229,11 @@ WentzelVI model is used above 100 MeV</LI>
     G4KaonMinusAbsorptionBertini and G4SigmaMinusAbsorptionBertini are added.</LI>
 <LI>New total cross section sets based on SAID data-base are added.</LI>
 <LI>A new option is added to the nuclear de-excitation module allowing
-to ignore Doppler broading for long lived meta-stable isotopes
-and provide instead decay at rest; this new feature
-is activated by environment variable 
-<it>G4AddTimeLimitToPhotonEvaporation</it>; if this environment variable
-is set than momentum balance of the de-excitation is broken but
-energy balance is kept.</LI>
+    to ignore Doppler broadening for long lived meta-stable isotopes and
+    provide instead decay at rest; this new feature is activated by the
+    environment variable <IT>G4AddTimeLimitToPhotonEvaporation</IT>; if
+    this environment variable is set than momentum balance of the
+    de-excitation is broken but energy balance is kept.</LI>
 </UL>
 
 <P> </P>
@@ -262,14 +270,17 @@ energy balance is kept.</LI>
 
 <H2>5. Expected effects on physics and computing performance</H2>
 
-<B>Standard Electromagnetic physics and cuts</B>
+<B>Electromagnetic physics</B>
 <UL>
-<LI><FONT COLOR="RED"><U><B>###### FILL INFORMATION HERE !!! ######</B></U></FONT></LI> 
+<LI>Compared with Geant4 9.5.02 a minor speedup of simulation of EM showers
+    (2-3%) in calorimeters is expected, also about factor 2 speedup of EM
+    initialisation.</LI> 
 </UL>
 
 <B>Hadronic physics</B>
 <UL>
-<LI><FONT COLOR="RED"><U><B>###### FILL INFORMATION HERE !!! ######</B></U></FONT></LI>
+<LI>Similar CPU speed for simulation of hadronic showers as in
+    Geant4 9.5.p02.</LI>
 </UL>
 
 <P> </P>
@@ -537,14 +548,14 @@ please refer to the corresponding History files provided in most packages):
 <LI><B>Low Energy</B>
     <UL>
     <LI>New processes and models for microdosimetry in Si for electrons,
-        protons and ions. Details can be found in: "Inelastic cross-sections of
-        low energy electrons in silicon for the simulation of heavy ion tracks
-        with the Geant4-DNA toolkit", NSS Conf. Record 2010, p80-85;
+        protons and ions. Details can be found in: "Inelastic cross-sections
+        of low energy electrons in silicon for the simulation of heavy ion
+        tracks with the Geant4-DNA toolkit", NSS Conf. Record 2010, p80-85;
         "Geant4 physics processes for microdosimetry simulation: very low
-        energy electromagnetic models for electrons in Si", submitted
-        to TNS; "Geant4 physics processes for microdosimetry simulation:
-        very low energy electromagnetic models for protons and heavy ions
-        in Si", accepted in NIMB.</LI>
+        energy electromagnetic models for electrons in Si", NIM B, vol. 288,
+        pp. 66 - 73, 2012; "Geant4 physics processes for microdosimetry
+        simulation: very low energy electromagnetic models for protons and
+        heavy ions in Si", NIM B, vol. 287, pp. 124 - 129, 2012.</LI>
     <LI>Added new Compton model G4MUComptonModel.</LI>
     <LI>G4LivermorePhotoElectricModel and G4LivermoreGammaConversionModel: 
         migration to G4PhysicsVector and G4ElementData data structures.</LI>
@@ -2074,6 +2085,7 @@ please refer to the corresponding History files provided in most packages):
         Geant4 Penelope dataset.</LI>
     <LI>Updated icru73 ion stopping data with PASS code computations (main
         difference for Iron ions - Bragg peak is lower by about 10%).</LI>
+    <LI>Added optimized data files for Livermore gamma processes.</LI>
     <LI>Added optimized muelec files.</LI>
     </UL></LI>
 <LI>New neutron data set with thermal cross sections, G4NDL.4.2:
