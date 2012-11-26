@@ -11,7 +11,7 @@ include(${Geant4_USE_FILE})
 #
 find_package(HepMC QUIET)
 if(NOT HEPMC_FOUND)
-  message(STATUS "G4 Examples: HepMC package not found. --> HepMCEx02 example disabled")  
+  message(STATUS "G4 Examples: HepMC package not found. --> example_MyPythia disabled")  
   return()
 endif()
 
@@ -20,7 +20,7 @@ endif()
 #
 find_package(Pythia6 QUIET)
 if(PYTHIA6_FOUND)
-  message(STATUS "G4 Examples: Pythia6 found. --> HepMCEx02 example with Pythia6 enabled.") 
+  message(STATUS "G4 Examples: Pythia6 found. --> example_MyPythia with Pythia6 enabled.") 
   add_definitions(-DG4LIB_USE_PYTHIA) 
 else()
   set(PYTHIA6_LIBRARIES "")  

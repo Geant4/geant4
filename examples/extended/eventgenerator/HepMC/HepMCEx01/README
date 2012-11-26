@@ -54,5 +54,5 @@ ExN04StackingAction.
 
 6. Execution
  
- % hepmcEx01 hepmc_pygen.in
+ % HepMCEx01 hepmc_pygen.in
    

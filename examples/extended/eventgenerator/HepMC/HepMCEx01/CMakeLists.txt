@@ -52,13 +52,13 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
-add_executable(hepmcEx01 hepmcEx01.cc ${sources} ${headers})
-target_link_libraries(hepmcEx01 ${Geant4_LIBRARIES}
+add_executable(HepMCEx01 HepMCEx01.cc ${sources} ${headers})
+target_link_libraries(HepMCEx01 ${Geant4_LIBRARIES}
                       ${HEPMC_LIBRARIES} ${HEPMC_FIO_LIBRARIES}
                       ${PYTHIA6_LIBRARIES} gfortran)
 
 # if pythia is compiled with g77, link with -lg2c instead.
-#target_link_libraries(hepmcEx01 ${Geant4_LIBRARIES}
+#target_link_libraries(HepMCEx01 ${Geant4_LIBRARIES}
 #                      ${HEPMC_LIBRARIES} ${HEPMC_FIO_LIBRARIES}
 #                      ${PYTHIA6_LIBRARIES} g2c)
 
@@ -69,6 +69,7 @@ target_link_libraries(hepmcEx01 ${Geant4_LIBRARIES}
 #
 set(HepMCEx01_SCRIPTS
     hepmc_ascii.in hepmc_ascii.out hepmc_pygen.in hepmc_pygen.out pyh4mu.mac pyset.mac vis.mac
+    data/example_MyPythia.dat
   )
 
 foreach(_script ${HepMCEx01_SCRIPTS})
@@ -80,13 +81,7 @@ foreach(_script ${HepMCEx01_SCRIPTS})
 endforeach()
 
 #----------------------------------------------------------------------------
-# Add program to the project targets
-# (this avoids the need of typing the program name after make)
-#
-add_custom_target(HepMCEx01 DEPENDS hepmcEx01)
-
-#----------------------------------------------------------------------------
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
-install(TARGETS hepmcEx01 DESTINATION bin)
+install(TARGETS HepMCEx01 DESTINATION bin)
 

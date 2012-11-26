@@ -51,7 +51,7 @@ ExN04StackingAction.
   
 \section ExampleHepMCEx01_s6 Execution
 \verbatim
-% hepmcEx01 hepmc_pygen.in
+% HepMCEx01 hepmc_pygen.in
 \endverbatim                
 
 */

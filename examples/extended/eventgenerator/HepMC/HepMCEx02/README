@@ -45,5 +45,5 @@ in every event.
 
 6. Execution
  
- % hepmcEx02 hepmc_pygen.in
+ % HepMCEx02 hepmc_pygen.in
    

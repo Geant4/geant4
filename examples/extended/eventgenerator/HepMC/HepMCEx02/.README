@@ -42,7 +42,7 @@ in every event.
   
 \section ExampleHepMCEx02_s6 Execution
 \verbatim
-% hepmcEx02 hepmc_pygen.in
+% HepMCEx02 hepmc_pygen.in
 \endverbatim                
 
 */
