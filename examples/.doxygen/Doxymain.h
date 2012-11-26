@@ -35,7 +35,14 @@ See more on each examples category pages:
 - \ref README_basic
 - \ref README_extended
 - <a href="http://geant4advancedexampleswg.wikispaces.com/ExamplesDocumentation">
-  Geant4 Advanced Examples </a>
+  Advanced Examples </a>
+
+And more on what is common for all examples:
+- \ref README_HowToRun 
+- \ref README_HowToNavigate
+
+
+
 */
 
 

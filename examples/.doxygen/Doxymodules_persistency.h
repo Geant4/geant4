@@ -16,29 +16,56 @@
  */
 
 /** @defgroup extended_persistency_gdml_G01 G01
- *  Persistency gdml example G01 has its
- *  <a href="../html_G01/html/index.html">standalone documentation </a>
+ *  Persistency gdml example G01 
  *  @ingroup extended_persistency_gdml
  *  @{
  */
+
+  class G01DetectorConstruction {};
+  class G01PhysicsList {};
+  class G01PrimaryGeneratorAction {};
 
 /** @} */
 
 /** @defgroup extended_persistency_gdml_G02 G02
- *  Persistency gdml example G02 has its
- *  <a href="../html_G02/html/index.html">standalone documentation </a>
+ *  Persistency gdml example G02 
  *  @ingroup extended_persistency_gdml
  *  @{
  */
+
+  class G02ChamberParameterisation {};
+  class G02DetectorConstruction {};
+  class G02DetectorMessenger {};
+  class G02PrimaryGeneratorAction {};
+  class G02RunAction {};
 
 /** @} */
 
 /** @defgroup extended_persistency_gdml_G03 G03
- *  Persistency gdml example G03 has its
- *  <a href="../html_G03/html/index.html">standalone documentation </a>
+ *  Persistency gdml example G03
  *  @ingroup extended_persistency_gdml
  *  @{
  */
+
+  class G03ColorReader {};
+  class G03ColorWriter {};
+  class G03DetectorConstruction {};
+  class G03DetectorMessenger {};
+  class G03PrimaryGeneratorAction {};
+  class G03RunAction {};
+
+/** @} */
+
+/** @defgroup extended_persistency_gdml_G04 G04
+ *  Persistency gdml example G04
+ *  @ingroup extended_persistency_gdml
+ *  @{
+ */
+
+  class G04DetectorConstruction {};
+  class G04PhysicsList {};
+  class G04PrimaryGeneratorAction {};
+  class G04SensitiveDetector {};
 
 /** @} */
 

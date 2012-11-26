@@ -20,12 +20,14 @@
   class DicomEventAction {};
   class DicomHandler {};
   class DicomIntersectVolume {};
+  class DicomNestedParamDetectorConstruction {};
   class DicomNestedPhantomParameterisation {};
   class DicomPartialDetectorConstruction {};
   class DicomPhantomParameterisationColour {};
   class DicomPhantomZSliceHeader {};
   class DicomPhysicsList {};
   class DicomPrimaryGeneratorAction {};
+  class DicomRegularDetectorConstruction {};
   class DicomRunAction {};
   class DicomRun {};
   class NestedParamDicomDetectorConstruction {};

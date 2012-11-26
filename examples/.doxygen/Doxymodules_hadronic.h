@@ -37,4 +37,13 @@
 
 /** @} */
 
+/** @defgroup extended_hadronic_Hadr03 Hadr03
+ *  The shared hadronic classes have their
+ *  <a href="../html_Hadr03/html/index.html">standalone documentation </a>
+ *  @ingroup extended_hadronic
+ *  @{
+ */
+
+/** @} */
+
 /** @} */

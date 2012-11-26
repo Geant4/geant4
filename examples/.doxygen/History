@@ -18,6 +18,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26/11/12 I.Hrivnacova (doxygen-V09-05-02)
+- Updated Doxyfile for removing .README.HowToRunTestEm1
+
+26/11/12 I.Hrivnacova (doxygen-V09-05-01)
+- Completed extended examples
+
 27/06/12 I.Hrivnacova (doxygen-V09-05-00)
 - First tag on Doxygen configuration files which now included
   extended examples in the generated documentation.

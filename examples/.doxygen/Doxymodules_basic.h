@@ -97,10 +97,8 @@
  */
 
   class B4aEventAction{};
-  class B4aEventActionMessenger{};
   class B4aSteppingAction{};
   class B4DetectorConstruction{};
-  class B4DetectorMessenger{};
   class B4PrimaryGeneratorAction{};
   class B4RunAction{};
 
@@ -114,11 +112,9 @@
  */
 
   class B4bEventAction{};
-  class B4bEventActionMessenger{};
   class B4bRunData{};
   class B4bSteppingAction{};
   class B4DetectorConstruction{};
-  class B4DetectorMessenger{};
   class B4PrimaryGeneratorAction{};
   class B4RunAction{};
 
@@ -131,11 +127,9 @@
  */
 
   class B4cDetectorConstruction{};
-  class B4cDetectorMessenger{};
   class B4cCalorHit{};
   class B4cCalorimeterSD{};
   class B4cEventAction{};
-  class B4cEventActionMessenger{};
   class B4PrimaryGeneratorAction{};
   class B4RunAction{};
 
@@ -149,9 +143,7 @@
  */
 
   class B4dDetectorConstruction{};
-  class B4dDetectorMessenger{};
   class B4dEventAction{};
-  class B4dEventActionMessenger{};
   class B4PrimaryGeneratorAction{};
   class B4RunAction{};
 

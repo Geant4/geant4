@@ -19,4 +19,29 @@
 
 /** @} */
 
+/** @defgroup extended_exoticphysics_phonon phonon
+ *  Exotic physics example phonon
+ *  @ingroup extended_exoticphysics
+ *  @{
+ */
+
+  class XAlminumElectrodeHit {};
+  class XAlminumElectrodeSensitivity {};
+  class XDetectorConstruction {};
+  class XLatticeManager3 {};
+  class XLogicalLattice {};
+  class XLPhonon {};
+  class XPhononDownconversionProcess {};
+  class XPhononReflectionProcess {};
+  class XPhononScatteringProcess {};
+  class XPhononStackingAction {};
+  class XPhononTrackInformation {};
+  class XPhysicalLattice {};
+  class XPhysicsList {};
+  class XPrimaryGeneratorAction {};
+  class XTPhononFast {};
+  class XTPhononSlow {};
+
+/** @} */
+
 /** @} */
