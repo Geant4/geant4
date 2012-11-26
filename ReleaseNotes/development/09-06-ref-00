@@ -350,7 +350,7 @@ examples                                         examples-V09-06-00
 - advanced/purging_magnet (purmag-V09-05-03)
 - advanced/xray_fluorescence (XrayFluo-V09-05-05)
   o Fixed syntax in CMakeLists.txt.
-- basic (exbasic-V09-05-04)
+- basic (exbasic-V09-05-05)
 - basic/B1 (exampleB1-V09-05-03)
   o Use QBBC physics list instead of QGSP_BIC_EMY, which becomes obsolete.
   o vis.mac: improved view and added text, scale, logo etc. to scene.
@@ -383,8 +383,9 @@ examples                                         examples-V09-06-00
 - extended/eventgenerator (exEventgenerator-V09-05-02)
 - extended/eventgenerator/exgps (exgps-V09-05-04)
   o Fix in main file description for Doxygen.
-- extended/eventgenerator/HepMC (exHepMC-V09-05-01)
+- extended/eventgenerator/HepMC (exHepMC-V09-05-02)
   o Modified AsciiReader to use IO_GenEvent instead of IO_AsciiParticles.
+  o Renamed main files to match directory name.
   o Changed physics list to FTFP_BERT.
   o Added CMake setup. Updated data files and outputs.
 - extended/eventgenerator/particleGun (particleGunExample-V09-05-05)
