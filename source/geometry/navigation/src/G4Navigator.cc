@@ -1544,7 +1544,7 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
            << "  Using Local Normal - from call to GetLocalExitNormalAndCheck. "
            << G4endl
            << "  Local  Exit Normal = " << localNormal  << " || = "
-           << sqrt(localMag2) << G4endl
+           << std::sqrt(localMag2) << G4endl
            << "  Global Exit Normal = " << globalNormal << " || = "
            << globalNormal.mag() << G4endl;
        edN << "  Calculated It      = " << fCalculatedExitNormal << G4endl;

@@ -92,10 +92,10 @@ G4ModifiedTsai::SampleDirection(const G4DynamicParticle* dp,
   } while(u > uMax);
 
   G4double cost = 1.0 - 2*u*u/(uMax*uMax);
-  G4double sint = sqrt((1 - cost)*(1 + cost));
+  G4double sint = std::sqrt((1 - cost)*(1 + cost));
   G4double phi  = CLHEP::twopi*G4UniformRand(); 
 
-  fLocalDirection.set(sint*cos(phi), sint*sin(phi), cost);
+  fLocalDirection.set(sint*std::cos(phi), sint*std::sin(phi), cost);
   fLocalDirection.rotateUz(dp->GetMomentumDirection());
 
   return fLocalDirection;

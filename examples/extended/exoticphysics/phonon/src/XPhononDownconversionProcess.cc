@@ -172,7 +172,7 @@ inline double XPhononDownconversionProcess::GetTTDecayProb(double d, double x){
 inline double XPhononDownconversionProcess::MakeLDeviation(double d, double x){
   //change in L'-phonon propagation direction after decay
 
-  return acos((1+(x*x)-((d*d)*(1-x)*(1-x)))/(2*x));
+  return std::acos((1+(x*x)-((d*d)*(1-x)*(1-x)))/(2*x));
   //return 0;
 }
 
@@ -182,7 +182,7 @@ inline double XPhononDownconversionProcess::MakeLDeviation(double d, double x){
 inline double XPhononDownconversionProcess::MakeTDeviation(double d, double x){
   //change in T-phonon propagation direction after decay (L->L+T process)
   
-  return acos((1-x*x+d*d*(1-x)*(1-x))/(2*d*(1-x)));
+  return std::acos((1-x*x+d*d*(1-x)*(1-x))/(2*d*(1-x)));
   //return 0;
 }
 
@@ -192,7 +192,7 @@ inline double XPhononDownconversionProcess::MakeTDeviation(double d, double x){
 inline double XPhononDownconversionProcess::MakeTTDeviation(double d, double x){
   //change in T-phonon propagation direction after decay (L->T+T process)
 
-  return acos((1-d*d*(1-x)*(1-x)+d*d*x*x)/(2*d*x));
+  return std::acos((1-d*d*(1-x)*(1-x)+d*d*x*x)/(2*d*x));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -113,7 +113,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
    Histo->FillNtupleDColumn(3, y);
    Histo->FillNtupleDColumn(4, z);
    Histo->FillNtupleDColumn(5, step->GetTotalEnergyDeposit()/eV);
-   Histo->FillNtupleDColumn(6, sqrt((x-xp)*(x-xp)+(y-yp)*(y-yp)+(z-zp)*(z-zp))/nm);
+   Histo->FillNtupleDColumn(6, std::sqrt((x-xp)*(x-xp)+(y-yp)*(y-yp)+(z-zp)*(z-zp))/nm);
    Histo->FillNtupleDColumn(7, (step->GetPreStepPoint()->GetKineticEnergy() - step->GetPostStepPoint()->GetKineticEnergy())/eV );
    
    Histo->AddNtupleRow();

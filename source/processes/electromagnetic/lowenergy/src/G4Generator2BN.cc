@@ -251,10 +251,10 @@ G4ThreeVector& G4Generator2BN::SampleDirection(const G4DynamicParticle* dp,
 
   } while(u*dmax > ds || t > CLHEP::pi);
 
-  G4double sint = sin(t);
+  G4double sint = std::sin(t);
   G4double phi  = twopi*G4UniformRand(); 
 
-  fLocalDirection.set(sint*cos(phi), sint*sin(phi),cos(t));
+  fLocalDirection.set(sint*std::cos(phi), sint*std::sin(phi),std::cos(t));
   fLocalDirection.rotateUz(dp->GetMomentumDirection());
 
   return fLocalDirection;

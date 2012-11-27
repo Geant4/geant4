@@ -87,7 +87,7 @@ G4SauterGavrilaAngularDistribution::SampleDirection(
     G4double sinteta = std::sqrt(sint2);
     G4double phi  = CLHEP::twopi*G4UniformRand(); 
 
-    fLocalDirection.set(sinteta*cos(phi), sinteta*sin(phi), costeta);
+    fLocalDirection.set(sinteta*std::cos(phi), sinteta*std::sin(phi), costeta);
     fLocalDirection.rotateUz(dp->GetMomentumDirection());
   }
   return fLocalDirection;

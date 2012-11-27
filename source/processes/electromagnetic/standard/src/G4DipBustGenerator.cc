@@ -91,10 +91,10 @@ G4DipBustGenerator::SampleDirection(const G4DynamicParticle* dp,
 
   cosTheta = (cosTheta + beta)/(1 + cosTheta*beta);
 
-  G4double sinTheta = sqrt((1 - cosTheta)*(1 + cosTheta));
+  G4double sinTheta = std::sqrt((1 - cosTheta)*(1 + cosTheta));
   G4double phi  = twopi*G4UniformRand(); 
 
-  fLocalDirection.set(sinTheta*cos(phi), sinTheta*sin(phi),cosTheta);
+  fLocalDirection.set(sinTheta*std::cos(phi), sinTheta*std::sin(phi),cosTheta);
   fLocalDirection.rotateUz(dp->GetMomentumDirection());
 
   return fLocalDirection;

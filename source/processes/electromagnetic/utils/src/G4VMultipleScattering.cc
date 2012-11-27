@@ -469,7 +469,7 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
 	    postSafety = currentModel->ComputeSafety(fNewPosition, 0.0);
 	  } 
 	  // add a factor which ensure numerical stability
-	  if(r2 > postSafety*postSafety) { fac = 0.99*postSafety/sqrt(r2); }
+	  if(r2 > postSafety*postSafety) { fac = 0.99*postSafety/std::sqrt(r2); }
 	}
 	// compute new endpoint of the Step
 	fNewPosition += fac*displacement;

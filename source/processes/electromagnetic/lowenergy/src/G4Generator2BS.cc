@@ -92,7 +92,7 @@ G4ThreeVector& G4Generator2BS::SampleDirection(const G4DynamicParticle* dp,
   ratio2 = 1 + ratio*ratio;
 
   G4double gamma = energy/electron_mass_c2;
-  G4double beta  = sqrt((gamma - 1)*(gamma + 1))/gamma;
+  G4double beta  = std::sqrt((gamma - 1)*(gamma + 1))/gamma;
 
   //G4double Zeff = std::sqrt(static_cast<G4double>(Z) * (static_cast<G4double>(Z) + 1.0));
   //z = (0.00008116224*(std::pow(Zeff,0.3333333)));
@@ -129,10 +129,10 @@ G4ThreeVector& G4Generator2BS::SampleDirection(const G4DynamicParticle* dp,
 
   
   G4double cost = 1 - 2*y/ymax;
-  G4double sint = sqrt((1 - cost)*(1 + cost));
+  G4double sint = std::sqrt((1 - cost)*(1 + cost));
   G4double phi  = twopi*G4UniformRand(); 
 
-  fLocalDirection.set(sint*cos(phi), sint*sin(phi),cost);
+  fLocalDirection.set(sint*std::cos(phi), sint*std::sin(phi),cost);
   fLocalDirection.rotateUz(dp->GetMomentumDirection());
 
   return fLocalDirection;

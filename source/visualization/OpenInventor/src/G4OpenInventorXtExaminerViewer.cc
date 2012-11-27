@@ -1768,7 +1768,7 @@ SbBool G4OpenInventorXtExaminerViewer::processSoEvent(const SoEvent * const ev) 
 
 // Called by hitting PageUp during animation.
 void G4OpenInventorXtExaminerViewer::incSpeed() {
-	if (ceil(animateBtwPtsPeriod * 100) >= 4) {
+	if (std::ceil(animateBtwPtsPeriod * 100) >= 4) {
 		if (speedStep > 0.08)
 			speedStep -= 0.02;
 		else
@@ -1788,7 +1788,7 @@ void G4OpenInventorXtExaminerViewer::incSpeed() {
 void G4OpenInventorXtExaminerViewer::decSpeed() {
 	animateBtwPtsPeriod += speedStep;
 	if (animateBtwPtsPeriod < MIN_SPEED) {
-		if (floor(animateBtwPtsPeriod * 100) == 12) { // Errors in double representation
+		if (std::floor(animateBtwPtsPeriod * 100) == 12) { // Errors in double representation
 			speedStep = 0.08;
 		} else if (animateBtwPtsPeriod > 0.12)
 			speedStep += 0.02;
@@ -2215,7 +2215,7 @@ void G4OpenInventorXtExaminerViewer::distanceToTrajectory(const SbVec3f &q,
       }
    }
 
-   dist = sqrt(sqrDist);
+   dist = std::sqrt(sqrDist);
 }
 
 
@@ -4251,7 +4251,7 @@ void G4OpenInventorXtExaminerViewer::sortBookmarksCB(Widget,
       XtFree(vpName);
    }
 
-   sort(charList.begin(), charList.end());
+   std::sort(charList.begin(), charList.end());
 
    newStrList = (XmString *) XtMalloc(size * sizeof(XmString));
    for (int i = 0; i < size; i++) {
