@@ -60,6 +60,7 @@ class G4SmartTrackStack
       void PushToStack(const G4StackedTrack& aStackedTrack);
       G4StackedTrack PopFromStack();
       void clear();
+      void clearAndDestroy();
       void TransferTo(G4TrackStack* aStack);
       G4double getEnergyOfStack(G4TrackStack* aTrackStack);
       void dumpStatistics();

@@ -234,7 +234,7 @@ G4int G4StackManager::PrepareNewEvent()
 {
   if(userStackingAction) userStackingAction->PrepareNewEvent();
   
-  urgentStack->clear(); // Set the urgentStack in a defined state. Not doing it would affect reproducibility.
+  urgentStack->clearAndDestroy(); // Set the urgentStack in a defined state. Not doing it would affect reproducibility.
   
   G4int n_passedFromPrevious = 0;
   
@@ -347,9 +347,9 @@ void G4StackManager::TransferStackedTracks(G4ClassificationOfNewTrack origin, G4
   if(destination==fKill)
   {
     if(originStack)
-    { originStack->clear(); }
+    { originStack->clearAndDestroy(); }
     else
-    { urgentStack->clear(); }
+    { urgentStack->clearAndDestroy(); }
   }
   else
   {
@@ -461,21 +461,21 @@ void G4StackManager::clear()
 
 void G4StackManager::ClearUrgentStack()
 {
-  urgentStack->clear();
+  urgentStack->clearAndDestroy();
 }
 
 void G4StackManager::ClearWaitingStack(int i)
 {
   if(i==0) {
-    waitingStack->clear();
+    waitingStack->clearAndDestroy();
   } else {
-    if(i<=numberOfAdditionalWaitingStacks) additionalWaitingStacks[i-1]->clear();
+    if(i<=numberOfAdditionalWaitingStacks) additionalWaitingStacks[i-1]->clearAndDestroy();
   }
 }
 
 void G4StackManager::ClearPostponeStack()
 {
-  postponeStack->clear();
+  postponeStack->clearAndDestroy();
 }
 
 G4int G4StackManager::GetNTotalTrack() const

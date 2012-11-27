@@ -149,3 +149,13 @@ void G4SmartTrackStack::clear()
   }
   nTracks = 0;
 }
+
+void G4SmartTrackStack::clearAndDestroy()
+{
+  for (int i = 0; i < nTurn; i++) {
+    stacks[i]->clearAndDestroy();
+    energies[i] = 0.0;
+    fTurn = 0;
+  }
+  nTracks = 0;
+}

@@ -65,6 +65,7 @@ public:
 	void TransferTo(G4TrackStack* aStack);
 	void TransferTo(G4SmartTrackStack* aStack);
   
+        void clearAndDestroy();
 private:
 	G4int safetyValve1;
   G4int safetyValve2;

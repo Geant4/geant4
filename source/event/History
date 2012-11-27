@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 27th, 2012, Hisaya Kurashige (event-V09-05-17)
+- Add clearAndDestory() method to G4TrackStack and G4SmartTrackStack 
+  and use this method in G4StackManager::clear()
+  This fixes problem with memory leak
+
 November 9th, 2012, P. Mato (event-V09-05-16)
 - G4StackManager, G4SmartTrackStack: set stack at well defined state at new event
   This fixes problem with reproducibility

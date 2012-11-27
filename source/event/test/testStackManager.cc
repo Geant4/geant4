@@ -39,7 +39,7 @@ int main()
   //--- create a Stackmanager----------------------------------------
   G4StackManager stackmanager;
   G4VTrajectory* traj = new G4Trajectory();
-  G4Track* track  = new G4Track();
+  G4Track* track  = new G4Track(new G4DynamicParticle(), 0.0, G4ThreeVector());
 
   G4VTrajectory* rtraj;
   G4Track* rtrack;

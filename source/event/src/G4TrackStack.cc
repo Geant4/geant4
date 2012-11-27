@@ -35,10 +35,16 @@
 
 G4TrackStack::~G4TrackStack()
 {
+  clearAndDestroy();
+}
+
+void G4TrackStack::clearAndDestroy()
+{
   for( iterator i = begin(); i != end(); i++ ) {
     delete (*i).GetTrack();
     delete (*i).GetTrajectory();
   }
+  clear();
 }
 
 void G4TrackStack::TransferTo(G4TrackStack* aStack) {
