@@ -143,7 +143,7 @@ have_g3tog4="@G4_BUILTWITH_G3TOG4@"
 feature_list="${feature_list} g3tog4[${have_g3tog4}]"
 
 if test "x${have_g3tog4}" = "xyes" ; then
-  libs="-lG3ToG4 ${libs}"
+  libs="-lG3toG4 ${libs}"
 fi
 
 # - Qt
