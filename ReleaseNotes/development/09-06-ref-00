@@ -21,7 +21,7 @@ Major development/fixes included since the last development tag are:
 
 Summarised, the list of changes is the following:
 
-cmake                                            cmake-V09-05-77
+cmake                                            cmake-V09-05-78
 -----
 - Implemented C++ Standard detection and flag configuration for GNU, Clang
   and Intel compilers; added user option to select C++ Standard to build
@@ -45,11 +45,17 @@ cmake                                            cmake-V09-05-77
 - Use 'header guard' variable to prevent module being loaded multiple times.
 - Improved description of workaround for sourcing Cshell scripts
   non-interactively.
+- Added "-Wno-variadic-macros -Wshadow" compilation options g++ and clang.
 - Fix setting of Geant4 DEFINITIONS, INCLUDE_DIRS and LIBRARIES so that
   multiple calls to find_package do not overwrite previous settings.
+- Extended description in Geant4CPackBase.cmake script.
 - Updated to new G4NDL-4.2, G4RadioactiveDecay-3.6 and
   PhotonEvaporation-2.3 data sets.
 - Removed obsolete files geant4-env.[c]sh.in.
+
+config                                           config-V09-05-14
+------
+- Added "-Wno-variadic-macros -Wshadow" compilation options to Mac setups,
 
 environments                                     envs-V09-05-03
 ------------
