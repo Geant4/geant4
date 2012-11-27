@@ -30,11 +30,15 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27th November 2012 -  Gabriele Cosmo   (cmake-V09-05-78)
+- Added "-Wno-variadic-macros -Wshadow" compilation options g++ and clang.
+- Extended description in Geant4CPackBase.cmake script.
+
 26th November 2012 -  Gunter Folger    (cmake-V09-05-77)
- - switch to PhotonEvaporation 2.3
+- Switch to PhotonEvaporation 2.3
 
 23rd November 2012 -  Gunter Folger    (cmake-V09-05-76)
- - switch to G4RadioactiveDecay 3.6
+- Switch to G4RadioactiveDecay 3.6
 
 21st November 2012 - Ben Morgan        (cmake-V09-05-75)
 - Templates/geant4_validate_sources.cmake.in : Add "T1xxChannel.cc"
