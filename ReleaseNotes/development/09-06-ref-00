@@ -21,7 +21,7 @@ Major development/fixes included since the last development tag are:
 
 Summarised, the list of changes is the following:
 
-cmake                                            cmake-V09-05-78
+cmake                                            cmake-V09-05-79
 -----
 - Implemented C++ Standard detection and flag configuration for GNU, Clang
   and Intel compilers; added user option to select C++ Standard to build
