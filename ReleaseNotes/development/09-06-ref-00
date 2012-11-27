@@ -55,7 +55,7 @@ cmake                                            cmake-V09-05-78
 
 config                                           config-V09-05-14
 ------
-- Added "-Wno-variadic-macros -Wshadow" compilation options to Mac setups,
+- Added "-Wno-variadic-macros -Wshadow" compilation options to Mac setups.
 
 environments                                     envs-V09-05-03
 ------------
@@ -66,7 +66,7 @@ environments                                     envs-V09-05-03
   o Updated documentations in Markdown format.
   o Minor updates for examples.
 
-event                                            event-V09-05-16
+event                                            event-V09-05-17
 -----
 - G4StackManager, G4SmartTrackStack: fixed problem of event reproducibility
   by setting stack at well defined state at every new event.
@@ -75,8 +75,11 @@ event                                            event-V09-05-16
   file to fix issue with Windows DLLs. Also, removed inline keyword from
   G4EventManager::AbortEvent() to prevent incorrect inlining for VC++ if
   G4SmartTrackStack is used.
+- Fixed memory leak from G4TrackStack to delete tracks when method clear()
+  from G4StackManager is called. Added clearAndDestory() method to
+  G4TrackStack and G4SmartTrackStack.
 
-externals                                       externals-V09-05-04
+externals                                        externals-V09-05-04
 ---------
 - Updated internal CLHEP module to CLHEP-2.1.3.1:
   o Made the HepLorentzVector(double t) constructor explicit.
