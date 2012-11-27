@@ -31,7 +31,7 @@
 #include "XLogicalLattice.hh"
 #include "G4PhysicalConstants.hh"
 #include "Randomize.hh"
-#include <math.h>
+#include <cmath>
 
 XLogicalLattice::XLogicalLattice(){
   fVresTheta=0;

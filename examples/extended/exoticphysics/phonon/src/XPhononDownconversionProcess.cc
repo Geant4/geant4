@@ -39,7 +39,7 @@
 #include "XTPhononFast.hh"
 #include "XTPhononSlow.hh"
 #include "XLPhonon.hh"
-#include <math.h>
+#include <cmath>
 
 #include "XPhononTrackInformation.hh"
 
