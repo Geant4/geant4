@@ -1,3 +1,6 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
 // *                                                                  *
 // * The  Geant4 software  is  copyright of the Copyright Holders  of *
 // * the Geant4 Collaboration.  It is provided  under  the terms  and *
@@ -19,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-////
+//
 // Open Inventor Xt Extended Viewer - 30 Oct 2012
 // Rastislav Ondrasek, Pierre-Luc Gagnon, Frederick Jones TRIUMF
 
