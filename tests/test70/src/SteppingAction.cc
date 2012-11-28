@@ -56,22 +56,22 @@ SteppingAction::~SteppingAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void SteppingAction::UserSteppingAction(const G4Step* s)
+void SteppingAction::UserSteppingAction(const G4Step* stp)
 {
-    if (s->GetTrack()->GetDynamicParticle()->GetDefinition() == G4Electron::Definition())
+    if (stp->GetTrack()->GetDynamicParticle()->GetDefinition() == G4Electron::Definition())
     {
-        Edeposit += s -> GetTotalEnergyDeposit();
+        Edeposit += stp -> GetTotalEnergyDeposit();
 
-        if( s -> GetTrack() -> GetTrackID() == 1)
+        if( stp -> GetTrack() -> GetTrackID() == 1)
         {
-            if(Primary->GetIncidentEnergy() - s->GetPostStepPoint()->GetKineticEnergy() > 2.*keV )
+            if(Primary->GetIncidentEnergy() - stp->GetPostStepPoint()->GetKineticEnergy() > 2.*keV )
             {
-                G4cout<<"!!!" <<  s -> GetTrack() -> GetDynamicParticle() -> GetDefinition() -> GetParticleName()
+                G4cout<<"!!!" <<  stp -> GetTrack() -> GetDynamicParticle() -> GetDefinition() -> GetParticleName()
                      <<" finished tracking track 1 "<<G4endl;
                 G4cout<<"!!! Penetration : "
-                     << G4BestUnit((s->GetTrack() ->GetPosition() - s->GetTrack()->GetVertexPosition()).mag(),"Length")
+                     << G4BestUnit((stp->GetTrack() ->GetPosition() - stp->GetTrack()->GetVertexPosition()).mag(),"Length")
                      <<G4endl;
-                s-> GetTrack() -> SetTrackStatus(fStopAndKill);
+                stp-> GetTrack() -> SetTrackStatus(fStopAndKill);
             }
         }
     }
