@@ -103,7 +103,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
    
       G4double b     = waterRadius*waterRadius;
       G4double r     = std::sqrt(b*G4UniformRand());
-      G4double phi   = twopi * G4UniformRand();
+               phi   = twopi * G4UniformRand();
 
       G4double x = r*std::cos(phi);
       G4double y = r*std::sin(phi);
