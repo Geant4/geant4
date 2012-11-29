@@ -1,8 +1,11 @@
-$Id: History,v 1.14 2010-05-27 15:05:08 allison Exp $
+$Id:$
 -----------------------------------------------------------------------------
 
 History file for visualization/test subdirectory
 ------------------------------------------------
+
+28th Nov 2012  Gabriele Cosmo (test201-V09-05-01)
+- Fixed cases of variable shadowing.
 
 9th Oct 2012  Gabriele Cosmo (test201-V09-05-00)
 - Explicit inclusion of units and constants headers.

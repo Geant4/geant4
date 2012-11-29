@@ -139,10 +139,10 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   {
     G4RotationMatrix rm;
     rm.rotateZ(i*rotAngle);
-    char s[64];
-    sprintf(s,"calo_phys_%d",i);
+    char sname[64];
+    sprintf(sname,"calo_phys_%d",i);
     new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(0.*cm,i*calPos,0.*cm)),
-                      s,calorimeter_log,experimantalHall_phys,
+                      sname,calorimeter_log,experimantalHall_phys,
                       false,i);
   }
 
