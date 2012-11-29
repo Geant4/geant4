@@ -49,8 +49,6 @@
 #include "G4ReactionProductVector.hh"
 #include "G4ReactionProduct.hh"
 #include "globals.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
 
 // INCL++
 #include "G4INCLCascade.hh"

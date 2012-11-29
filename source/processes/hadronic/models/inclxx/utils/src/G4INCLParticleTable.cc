@@ -37,6 +37,8 @@
 #include "globals.hh"
 
 #include "G4INCLParticleTable.hh"
+#include "G4SystemOfUnits.hh"
+
 #include <algorithm>
 // #include <cassert>
 #include <cmath>

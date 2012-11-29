@@ -52,7 +52,6 @@
 #include "G4IonTable.hh"
 #include "G4ParticleTable.hh"
 #include "globals.hh"
-#include "G4SystemOfUnits.hh"
 #endif
 #include "G4INCLGlobals.hh"
 #include "G4INCLNaturalIsotopicDistributions.hh"

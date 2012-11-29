@@ -16,6 +16,10 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+29 November 2012 - Gabriele Cosmo (hadr-inclxx-V09-05-31)
+-----------------------------------------------------------
+- Remove inclusion of G4SystemOfUnits from headers!
+
 6 November 2012 - Davide Mancusi (hadr-inclxx-V09-05-30)
 -----------------------------------------------------------
 - INCL++ v5.1.8

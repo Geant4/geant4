@@ -38,6 +38,8 @@
 
 #include <cmath>
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4INCLXXInterface.hh"
 #include "G4GenericIon.hh"
 #include "G4INCLCascade.hh"
