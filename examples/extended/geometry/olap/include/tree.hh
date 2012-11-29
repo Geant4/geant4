@@ -61,21 +61,21 @@ class TreeNode
   
 public:
 
-  TreeNode(TreeNode * parent, Data data)
-    : parent_(parent), firstChild_(0),
-      lastChild_(0), nextSibling_(0), data_(data)
+  TreeNode(TreeNode * prt, Data dta)
+    : parent_(prt), firstChild_(0),
+      lastChild_(0), nextSibling_(0), data_(dta)
     { 
-      if (parent)
+      if (prt)
       {
-        if(!parent->firstChild_)
+        if(!prt->firstChild_)
         {
-          parent->firstChild_=this;
-          parent->lastChild_=this;
+          prt->firstChild_=this;
+          prt->lastChild_=this;
         }  
         else
         {
-          parent->lastChild_->nextSibling_ = this;
-          parent->lastChild_=this;
+          prt->lastChild_->nextSibling_ = this;
+          prt->lastChild_=this;
         }   
       }        
     }
