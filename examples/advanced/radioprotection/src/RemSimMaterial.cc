@@ -131,7 +131,7 @@ void RemSimMaterial::DefineMaterials()
  
   // Air material
   G4double airDensity = 1.290*mg/cm3;
-  G4Material* matAir = new G4Material("Air",airDensity,2);
+  matAir = new G4Material("Air",airDensity,2);
   matAir -> AddElement(elN,0.7);
   matAir -> AddElement(elO,0.3);
 

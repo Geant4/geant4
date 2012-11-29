@@ -168,9 +168,9 @@ void RemSimPrimaryGeneratorAction::ReadProbability(G4String fileName)
 	{
           if (k%nColumns != 0)
 	    {	
-	      G4double energy = a *MeV;
-	      energies -> push_back(energy);
-	      //   G4cout << "energy: " << energy << G4endl;
+	      G4double ene = a *MeV;
+	      energies -> push_back(ene);
+	      //   G4cout << "energy: " << ene << G4endl;
               k++;
 	    }
 	  else if (k%nColumns == 0)
