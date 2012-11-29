@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 28, 2012  G.Cosmo                 geommng-V09-05-04
+- Get rid of explicit inclusion of costants header from meshdefs.hh.
+
 August 15, 2012  V.Ivantchenko             geommng-V09-05-03
 - Add base materials in G4Region::ScanVolumeTree() to the list of region
   materials, when applicable.
