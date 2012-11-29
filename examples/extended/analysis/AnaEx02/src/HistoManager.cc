@@ -32,13 +32,13 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include <TH1D.h>
+#include <TFile.h>
+#include <TTree.h>
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "HistoManager.hh"
 #include "G4UnitsTable.hh"
-#include "G4SystemOfUnits.hh"
-
-#include "TH1D.h"
-#include "TFile.h"
-#include "TTree.h"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -76,13 +76,13 @@ void HistoManager::book()
    return;
  }
    
- histo[1] = new TH1D("1", "Edep in absorber", 100, 0., 800*MeV);
+ histo[1] = new TH1D("1", "Edep in absorber", 100, 0., 800*CLHEP::MeV);
  if (!histo[1]) G4cout << "\n can't create histo 1" << G4endl;
- histo[2] = new TH1D("2", "Edep in gap", 100, 0., 100*MeV);
+ histo[2] = new TH1D("2", "Edep in gap", 100, 0., 100*CLHEP::MeV);
  if (!histo[2]) G4cout << "\n can't create histo 2" << G4endl;
- histo[3] = new TH1D("3", "trackL in absorber", 100, 0., 1*m);
+ histo[3] = new TH1D("3", "trackL in absorber", 100, 0., 1*CLHEP::m);
  if (!histo[3]) G4cout << "\n can't create histo 3" << G4endl;
- histo[4] = new TH1D("4", "trackL in gap", 100, 0., 50*cm);
+ histo[4] = new TH1D("4", "trackL in gap", 100, 0., 50*CLHEP::cm);
  if (!histo[4]) G4cout << "\n can't create histo 4" << G4endl;  
 
  // create 1 ntuple in subdirectory "tuples"
