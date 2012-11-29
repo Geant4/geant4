@@ -133,9 +133,6 @@ recompilation) and a recompilation of user applications is required.
 <UL>
 <LI>EM physics (both standard and low-energy) now require 
     the G4EMLOW data files (version 6.32 is needed).</LI> 
-<LI>New combined EM physics constructor G4EmStandardPhysics_option4
-    which includes the best combination of standard and low-energy models
-    now available; it is proposed for accurate EM simulation.</LI> 
 <LI>Obsolete methods <TT>Get/SetModel()</TT> have been removed from 
     optical processes, requiring an update (i.e. removal of such calls) for
     those custom physics lists and physics configurations in which optical
@@ -154,7 +151,11 @@ recompilation) and a recompilation of user applications is required.
 <B>Physics Lists</B>
 <P> </P>
 <UL>
-<LI><FONT COLOR="RED"><U><B>###### FILL INFORMATION HERE !!! ######</B></U></FONT></LI>
+<LI>Physics lists which depend on the CHIPS package or on the parameterized
+  (Gheisha-like) models (LEP/HEP) are deprecated and will be removed in
+  Geant4 10.</LI>
+<LI>New combined EM physics constructor G4EmStandardPhysics_option4
+  which  combines the most accurate models now available for each process. Models from both standard and low-energy options are used.</LI>
 </UL>
 
 <P> </P>
@@ -176,6 +177,16 @@ Please see the corresponding details in
 
 <H2>4. New Developments and Capabilities </H2>
 
+<B>General</B>
+<UL>
+<LI>Full reproducibility (i.e. possibility to restart from any event by
+    specifying the random generator status at the beginning of the event)
+    is now guaranteed in all physics models, with only two exceptions: 
+    CHIPS stopping and neutron HP. This means that reproducibility is
+    valid for most of the physics lists, e.g. FTFP_BERT, QGSP_BERT,
+    QGSP_FTFP_BERT, etc.</LI>
+</UL>
+
 <B>Geometry</B>
 <UL>
 <LI>A new optimized implementation of G4TessellatedSolid now provides
@@ -194,16 +205,16 @@ Please see the corresponding details in
 
 <B>Electromagnetic physics</B>
 <UL>
-<LI>Multiple scattering sampling is performed AlongStep before sampling of
-    energy loss (previously multiple scattering was sampled PostStep). The
-    performance of simulation is nearly the same, simulation become a bit
-    faster.</LI>
 <LI>WentzelVI multiple scattering model is used by default in all EM physics
     lists. For electrons and positrons WentzelVI model is used above 100 MeV.
     This was done to provide more accurate simulation both small and large
-    anglesof high energy charged particles.</LI>
-<LI>New processes (G4MuElecElastic, G4MuElecInelastic) for microdosimetry
-    in Silicon for electrons, protons and ions and corresponding models
+    angles of high energy charged particles.</LI>
+<LI>Multiple scattering sampling is performed AlongStep before sampling of
+  energy loss (previously multiple scattering was sampled PostStep). The
+  performance of simulation is nearly the same, simulation become a bit
+  faster.</LI>
+<LI>New processes for microdosimetry
+    in Silicon for electrons, protons and ions (G4MuElecElastic, G4MuElecInelastic) and corresponding models
     (G4MuElecElasticModel, G4MuElecInelasticModel).</LI>
 <LI>New Compton scattering model (G4LowEPComptonModel) along with specific
     Physics constructor (G4EmLowEPPhysics).</LI>
@@ -211,9 +222,6 @@ Please see the corresponding details in
 
 <B>Hadronic physics</B>
 <UL>
-<LI><FONT COLOR="RED"><U><B>###### FILL INFORMATION HERE !!! ######</B></U></FONT></LI>
-<LI>Using Shen and Ion/proton cross-sections for ions, instead of Tripathi
-    cross-sections. Improved cross-section for light ions including deuteron.</LI>
 <LI>Hadronic processes now trigger re-sampling of the interaction if
     energy/momentum non-conservation limits are exceeded. A warning message
     is printed if this occurs.</LI>
@@ -226,68 +234,95 @@ Please see the corresponding details in
 <LI>A new electro-nuclear interaction model, G4ElectroVDNuclearModel, has
     been added. It is based on the CHIPS total cross sections, Bertini cascade
     and FTFP.</LI>
-<LI>New hadron stopping models, G4PiMinusAbsorptionBertini,
-    G4KaonMinusAbsorptionBertini and G4SigmaMinusAbsorptionBertini are added.</LI>
+<LI>New hadron stopping models G4PiMinusAbsorptionBertini,
+    G4KaonMinusAbsorptionBertini, G4SigmaMinusAbsorptionBertini,
+    G4AntiProtonAbsorptionFritiof, and G4AntiSigmaPlusAbsorptionFritiof
+    are added. </LI>
 <LI>New total cross section sets based on SAID data-base are added.</LI>
-<LI>A new option is added to the nuclear de-excitation module allowing
+<LI>A new option in the nuclear de-excitation module allows
     to ignore Doppler broadening for long lived meta-stable isotopes and
-    provide instead decay at rest; this new feature is activated by the
-    environment variable <IT>G4AddTimeLimitToPhotonEvaporation</IT>; if
-    this environment variable is set than momentum balance of the
-    de-excitation is broken but energy balance is kept.</LI>
+    provide instead decay at rest. This new feature is activated by the
+    environment variable 
+  <IT>G4AddTimeLimitToPhotonEvaporation</IT>
+  . If
+    this environment variable is set the momentum balance of the
+    de-excitation is broken and energy balance is respected.</LI>
 </UL>
 
-<P> </P>
-<B>Interfaces and Visualization</B>
-<UL>
-<LI>/vis/set/colour, lineWidth, textColour, textLayout - new commands to set
-    view details.</LI>
-<LI>/vis/scene/add/arrow, arrow2D, line, line2D, logo2D, text2D, date,
-    frame - new commands to add content to views.</LI>
-<LI>/vis/scene/activateModel - new command to control trajectory and hit
-    modeling.</LI>
-<LI>/vis/viewer/save, copyViewFrom - new commands to save view parameters
-    and copy them from one view to another.</LI>
-<LI>Improved OpenGL rendering speed through major re-design of scene and
-    transient processing. Use new command /vis/ogl/set/eventsDrawInterval
-    to get even more speed when accumulating multiple events.</LI>
-<LI>/vis/scene/add/userAction now supports multiple user vis actions.
-     Where previously one could only have a single user vis action, one can
-     now register any number of such actions. Each action gets a specific name,
-     and each can be assigned to any selected scene.</LI>
-<LI>Added Event ID to trajectory attributes so that in scenes that contain
-    more than one event, one can tell which trajectory came from which event.</LI>
-<LI>Improved Qt interface and viewer.</LI>
-<LI>Improved handling of text.</LI>
-<LI>Added new OpenInventor option: /vis/open OIXE (in addition to the previous
-    option, /vis/open OIX). Provides many new capabilities such as ability to
-    set viewpoints and to fly along a trajectory path.
-    This is an excellent viewer selection for accelerator studies or other
-    situations in which it can otherwise be difficult to set appropriate
-    views.</LI>
-</UL>
-
-<P> </P>
 <B>Physics Lists</B>
 <UL>
-<LI><FONT COLOR="RED"><U><B>###### FILL INFORMATION HERE !!! ######</B></U></FONT></LI>
-<LI>New model of gamma nuclear interactions using the Bertini cascade
-    introduced in FTFP_BERT physics list.</LI>
-<LI>Introduced Bertini model for pi-, K-, and Sigma- for nuclear capture at
-    rest in FTFP_BERT and FTFP_BERT_TRV physics lists. Also use combination
-    of FTF and Precompound models for anti-proton and anti-Sigma+.</LI>
-<LI>Introduced the WentzelVI model for multiple scattering of e+ and e-
-    above 100 MeV in all physics lists for HEP applications.</LI>
+<LI>The model of multiple scattering for electrons and positrons is changed
+    in all physics lists for HEP applications. Introduced the WentzelVI
+    model for multiple scattering of e+ and e- above 100 MeV. Below 100 MeV
+    the Urban95 model is used in the main physics lists (whereas Urban93
+    is used in EMV or EMX).</LI>
 <LI>Relativistic gamma conversion model in used in all physics
-    constructors above 80 GeV.</LI>
-<LI>New EM physics constructor G4EmStandardPhysics_option4 is provided.</LI>
+  constructors above 80 GeV.</LI>
+<LI>New EM physics constructor G4EmStandardPhysics_option4  selects the  most accurate models for each EM process. It  combines models from  standard and low-energy sub-packages.</LI>
+<LI>New model for lepton-nuclear interactions using Bertini and
+  Fritiof/Precompound has been introduced in most physics list.
+  Only LHEP- and CHIPS-based physics lists  still use the
+  (deprecated) CHIPS model for handling lepton-nuclear interactions.</LI>
+<LI>Introduced Bertini model for
+    nuclear capture at rest of pi-, K-, Sigma-, Xi- and Omega-  in most physics lists. 
+    Also use Fritiof/Precompound model for anti-proton, anti-Sigma+
+    and light anti-nucleus capture at rest in the same physics lists.
+    Only LHEP- and CHIPS-based physics lists are still using the
+    (deprecated) CHIPS model for handling nuclear capture at rest.</LI>
 <LI>CHIPS elastic and inelastic cross-sections for protons, neutrons, pions,
     kaons, hyperons and anti-baryons have been extracted and moved to the
     default module. They can now be selected individually for use in physics
     lists.</LI>
+<LI>Barashenkov-Glauber-Gribov nucleon-nucleus inelastic cross sections
+    are now used in most physics lists instead of Axen-Wellisch 
+    proton-nucleus and Laidlaw-Wellisch neutron-nucleus inelastic
+    cross sections.</LI>
+<LI>Glauber-Gribov nucleus-nucleus inelastic cross sections are now used
+    in most physics lists instead of Shen (which in turn replaced Tripathi)
+    cross sections.</LI>
+<LI>The new physics list FTFP_BERT_HP has been created: it is similar to
+    FTFP_BERT, but using HP for low-energy neutrons.</LI>
+<LI>Four new physics lists have been created: QGSP_BERT_95,
+    QGSP_FTFP_BERT_95, QGSP_BERT_95XS and QGSP_FTFP_BERT_95XS.
+    The "95" variants have the same physics models and cross sections
+    as QGSP_BERT and QGSP_FTFP_BERT, respectively, in Geant4 version 9.5.
+    The "95XS" variants have the same cross sections as QGSP_BERT and
+    QGSP_FTFP_BERT, respectively, in Geant4 version 9.5, whereas the
+    physics models are the same as in Geant4 version 9.6.
+    These physics lists, which have been created for "backward compatibility"
+    with the production physics lists used by the experiments, are
+    deprecated and will be removed in Geant4 10.
+    FTFP_BERT remains the recommended physics list for high-energy
+    applications.</LI>
 </UL>
-
-<P> </P>
+<p><B>Visualization</B> and <B>Interfaces</B> </p>
+<UL>
+  <LI>/vis/set/colour, lineWidth, textColour, textLayout - new commands to set
+    view details.</LI>
+  <LI>/vis/scene/add/arrow, arrow2D, line, line2D, logo2D, text2D, date,
+    frame - new commands to add content to views.</LI>
+  <LI>/vis/scene/activateModel - new command to control trajectory and hit
+    modeling.</LI>
+  <LI>/vis/viewer/save, copyViewFrom - new commands to save view parameters
+    and copy them from one view to another.</LI>
+  <LI>Improved OpenGL rendering speed through major re-design of scene and
+    transient processing. Use new command /vis/ogl/set/eventsDrawInterval
+    to get even more speed when accumulating multiple events.</LI>
+  <LI>/vis/scene/add/userAction now supports multiple user vis actions.
+    Where previously one could only have a single user vis action, one can
+    now register any number of such actions. Each action gets a specific name,
+    and each can be assigned to any selected scene.</LI>
+  <LI>Added Event ID to trajectory attributes so that in scenes that contain
+    more than one event, one can tell which trajectory came from which event.</LI>
+  <LI>Improved Qt interface and viewer.</LI>
+  <LI>Improved handling of text.</LI>
+  <LI>Added new OpenInventor option: /vis/open OIXE (in addition to the previous
+    option, /vis/open OIX). Provides many new capabilities such as ability to
+    set viewpoints and to fly along a trajectory path.
+    This is an excellent viewer selection for accelerator studies or other
+    situations in which it can otherwise be difficult to set appropriate
+    views. </LI>
+</UL>
 <A NAME="5."></A>
 <HR>
 
@@ -304,6 +339,9 @@ Please see the corresponding details in
 
 <B>Hadronic physics</B>
 <UL>
+<LI>The main change on hadronic showers in Geant4 9.6 is their lateral
+    profile: showers are wider in Iron and Copper, and narrower in
+    heavier absorbers, like Tungsten and Lead.
 <LI>Similar CPU speed for simulation of hadronic showers as in
     Geant4 9.5.p02.</LI>
 </UL>
@@ -760,10 +798,9 @@ please refer to the corresponding History files provided in most packages):
         constructor; improved printout at initialisation.</LI>
     <LI>G4VEmProcess: added extra option allowing to build two different
         tables for low-energy and high-energy using different interpolation
-        method; added StartTracking() method;
-        changed initialisation for ions;
-        Applied fix partially addressing problem report;
-        <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1314">#1314</A>;
+        method; this was necessary in order to allow the combination of different models for multiple scattering. Added StartTracking() method to promote full reproducibility; it calls corresponding method in each model. Changed initialisation for ions.
+        Applied fix to help address problem report
+        <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1314">#1314</A>,
         force if step==1.</LI>
     <LI>G4VEnergyLossProcess:  
         fix for forced biasing, now forcing if step==1
@@ -774,12 +811,12 @@ please refer to the corresponding History files provided in most packages):
         LowEnergyActivationLimit(), ForceBuildTableFlag(), 
         ForceBuildTable().</LI>
     <LI>G4VMscModel: critical fix for stopping particles, based
-        on ATLAS report on small steps of low-energy ions;
-        Compute true path length even if multiple-scattering 
-        model is inactive;
-        build table for all particles except case when
-        multiple-scattering process is shared with G4GenericIon;
-        added building of transport cross-section table and new 
+        on ATLAS report on extremely small steps of low-energy ions.
+        Computes true path length even if multiple-scattering 
+        model is inactive.
+        Builds table for all particles except  when
+        the same instance of the multiple-scattering process is shared by many different nuclei - the case when it is registered for G4GenericIon.
+        Added building of transport cross-section table and new 
         method GetTransportCrossSection() to be used at run-time; added method
         GetTransportMeanFreePath(); added GetDEDX() method.</LI>
     <LI>G4VEmAngularDistribution added  methods 
@@ -793,39 +830,35 @@ please refer to the corresponding History files provided in most packages):
     <LI>G4EmCorrections: fixed event reproducibility violation due to cashing
         of 'IonHighOrderCorrections' with a vector depending 
         on the ion charge.</LI>
-    <LI>G4EnergyLossMessenger: allow to apply biasing UI commands only in
-        Idle state.</LI>
     <LI>G4VAtomDeexcitation: fixed logic of activation of de-excitation per
-        region and for all geometries; updated initialisation for the case
-        when de-excitation is not used. Added computation of sum of energies
-        of de-excitation gamma and electron produced AlongStep; use logical OR
-        instead of AND for de-exitation flags; fixed de-excitation AlongStep
-        by substitution which limited de-ecitation from ion ionisation;
-        corrected activation of de-excitation for the
-        case when specific de-excitation regions are not defined;
-        use G4lring method to extract integer Z.</LI>
-    <LI>G4EmBiasingmanager: added check on number of secondaries PostStep,
-        if not 1 then disable both splitting and Russian roulette. This does 
-        not affect ordinary delta-electron and Bremssrahlung secondary biasing.
-        Dynamic weight approach (weight is function of secondary energy) is
-        applied for Russian roulette if biasing limit energy is set below 
-        1 GeV, alternatively costant factor is used.
-        Fixed bug in Bremsstrahlung splitting.
-        Do not using dynamic weight for Russian roulette.
-        Cleanup the code; do not modify ParticleChange when apply
-        Russian-Roulette (minor CPU save); moved RussianRoulette()
-        method to inline; added range cut option.</LI>
-    <LI>G4EmBiasingManager, G4VEmProcess, G4VEnergyLossProcess,
-        G4EmProcessOptions, G4EnergyLossMessenger: change Bremsstrahlung
-        splitting to EGS-style with unique secondaries. Only Bremsstrahlung
-        split particles with weight > 1/N (N=brem splitting factor), and only
-        Russian Roulette with weight < 1. Energy limit no longer used.
-        Set weight consistently for forced interaction and cross-section
-        biasing in G4VEmProcess and G4VEnergyLossProcess.</LI>
-    <LI>G4ElectronIonPair: use inverse FanoFactor to simplify formula.
-        Cleanup implementation of sampling of number of ions.</LI>
-    <LI>Added deprecation warning to obsolete methods and classes.</LI>
-    </UL></LI>
+      region and for all geometries; updated initialization for the case
+      when de-excitation is not used. Added computation of sum of energies
+      of de-excitation gamma and electron produced AlongStep; use logical OR
+      instead of AND for de-excitation flags; fixed de-excitation AlongStep
+      by substitution which limited de-ecitation from ion ionisation;
+      corrected activation of de-excitation for the
+      case when specific de-excitation regions are not defined;
+      use G4lring method to extract integer Z.</LI>
+    <li>G4ElectronIonPair: use inverse FanoFactor to simplify formula.
+      Cleanup implementation of sampling of number of ions.</li>
+    <li>Added deprecation warning to obsolete methods and classes.</li>
+    <li> Biasing
+    <UL>
+      <LI> Fixed Bremsstrahlung
+      splitting to sample  gamma  secondaries. </LI>
+      <LI>Set weight consistently for forced interaction and cross-section
+      biasing in G4VEmProcess and G4VEnergyLossProcess.</LI>
+      <LI>G4EmBiasingManager: added check on number of  PostStep secondaries;
+        if multiple secondaries disables both splitting and Russian roulette. This does 
+        not affect  delta-electron and Bremsstrahlung secondary biasing.
+        Cleanup the code; do not modify ParticleChange when applying
+        Russian-Roulette (minor CPU save). Moved RussianRoulette()
+      method to inline; added range cut option.</LI>
+      <LI>G4EnergyLossMessenger: allow to apply biasing UI commands only in
+      Idle state.</LI>
+  </UL>
+</LI>
+</UL>
 <LI><B>Xrays</B>
     <UL>
     <LI>Updated <TT>G4VXTRenergyLoss</TT> and regular XTR radiators/models
@@ -874,13 +907,13 @@ please refer to the corresponding History files provided in most packages):
 <LI>Updated CLHEP module to version 2.1.3.1:
     <UL>
     <LI>Random: use a template to get rid of the warnings in Ranlux64Engine.</LI>
-    <LI>Vector, Geometry, Random: changed names of internal variables so
-        to avoid shadow variable.</LI>
+    <LI>Vector, Geometry, Random: changed names of internal variables 
+        to avoid shadowing of variable.</LI>
     <LI>Evaluator: fixed a problem with unary +/- and exponentials in
         Evaluator class.</LI>
-    <LI>Vector, Evaluator, Random, Geometry: use explicit <TT>std::</TT> with
+    <LI>Vector, Evaluator, Random, Geometry: use explicit <TT>std::</TT> for
         math functions.</LI>
-    <LI>Made HepLorentzVector(double) contructor explicit.</LI>
+    <LI>Made explicit the HepLorentzVector(double) contructor.</LI>
     </UL></LI>
 </UL>
 
@@ -915,9 +948,9 @@ please refer to the corresponding History files provided in most packages):
         which may own touchables in pre- and post-step points belonging to
         different worlds.</LI>
     <LI>Adapt to modifications in G4RegularNavigationHelper which is now a
-        real singleton accessed through call to Instance(); 'StepLengths' are
-        accessed by GetStepLengths(). Avoid to inline functions accessing
-        G4RegularNavigationHelper. Addressing run-time errors on Windows when
+        canonical singleton accessed through call to Instance(). Step lengths are
+        accessed by GetStepLengths(). Avoiding  inline functions to access
+        G4RegularNavigationHelper. Addressed run-time errors on Windows when
         using DLLs.</LI>
     </UL></LI>
 </UL>
@@ -925,9 +958,9 @@ please refer to the corresponding History files provided in most packages):
 <A NAME="geo-notes">
 <H3><I>Geometry</I></H3></A>
 <UL>
-<LI>Fixed cases of variable shadowing.</LI>
-<LI>Explicitly use inclusion of headers for system of units and physical
+<LI>Explicitly  include  headers for system of units and physical
     constants.</LI>
+<LI>Fixed cases of variable shadowing.</LI>
 <LI><B>Biasing</B>
     <UL>
     <LI>Added deprecation warning messages to G4VCellScorer and
@@ -947,17 +980,16 @@ please refer to the corresponding History files provided in most packages):
     <UL>
     <LI>Extended G4ReplicaNavigation to calculate ExitNormal. Now calculates
         it at each 'depth', and eventually also for daughters.
-        Get additional information in case of 'Out-of-Volume' exception.</LI>
+        Gives additional information in case of 'Out-of-Volume' exception.</LI>
     <LI>G4SafetyHelper: introduced check of length for relocation method
         LocateGlobalPointWithinVolume() to check move against safety.</LI>
-    <LI>G4VoxelSafety: improved to use equivalent nodes.
-        Revised end condition to use distance of previous depths.</LI>
-    <LI>G4VoxelNavigation: added simple check whether point in ComputeSafety()
-        call is inside current volume.</LI>
-    <LI>G4RegularNavigationHelper: transform it to real singleton from static
-        utility class, created upon first use; make vector of 'Steplengths' a
-        data member. Adapted G4RegularNavigation to use
-        G4RegularNavigationHelper singleton calls. Fixes run-time errors on
+    <LI>G4VoxelSafety: introduced first optimisations in this method,  using distance to voxels to trim search tree. The search uses the distance to voxels and the current and previous depths. Includes use of equivalent nodes. It is currently not used in production - it is a first release at the 'beta' level. </LI>
+    <LI>G4VoxelNavigation: added simple check  in ComputeSafety()
+        call whether point is inside current volume.</LI>
+    <LI>G4RegularNavigationHelper: transform it to  singleton created upon first use, instead of static
+        utility class. Make vector of Step Lengths a
+        data member. Adapted G4RegularNavigation to the 
+         singleton. Fixes run-time errors on
         Windows DLLs.</LI>
     <LI>G4ErrorPropagationNavigator: cosmetic change to improve readability 
         of initialisation of a double.</LI>
@@ -1708,14 +1740,13 @@ please refer to the corresponding History files provided in most packages):
         the HP data-driven treatment for low-energy neutrons.</LI>
     <LI>Instrumented EM and hadronic constructors to register factories.</LI>
     </UL></LI>
-<LI>Physics lists qualification changes (obsolete/partially
-    disabled/experimental/supported):
+<LI>Physics lists qualification changes (supported/experimental/unsupported):
     <UL>
-    <LI>Marked unsupported: <FONT COLOR="RED"><U><B>###### FILL INFORMATION HERE !!! ######</B></U></FONT></LI>
-    <LI>Marked obsolete: <FONT COLOR="RED"><U><B>###### FILL INFORMATION HERE !!! ######</B></U></FONT></LI>
-    <LI>Marked supported: <FONT COLOR="RED"><U><B>###### FILL INFORMATION HERE !!! ######</B></U></FONT></LI>
-    <LI>Marked experimental: QGSP_BERT_95, QGSP_BERT_95XS,
-        QGSP_FTFP_BERT_95, QGSP_FTFP_BERT_95XS.</LI>
+    <LI>Marked supported: FTFP_BERT_HP.</LI>
+    <LI>Marked experimental: QGSP_INCLXX.</LI>
+    <LI>Marked unsupported: LHEP, LHEP_EMV, CHIPS, CHIPS_HP, QGSC_BERT, 
+        QGSC_CHIPS, QGSP_BERT_CHIPS, QGSP_BERT_NOLEP, QGSP_BERT_TRV, QGSP_QEL, 
+        QGSP_BERT_95, QGSP_BERT_95XS, QGSP_FTFP_BERT_95, QGSP_FTFP_BERT_95XS.</LI>
     </UL></LI>
     <LI>EM physics builders and options:
     <UL>
@@ -1771,28 +1802,27 @@ please refer to the corresponding History files provided in most packages):
     </UL></LI>
 <LI>Hadronic builders:
     <UL>
-    <LI>New builders using Bertini gamma- and electron-nuclear.
-        Migrated FTFP_BERT and FTFP_BERT_TRV to use the new builders.
-        Moved FTFP_BERT and FTFP_BERT_TRV to use the new cross-sections
-        extracted from CHIPS.</LI>
+    <LI>New builders using Bertini and Fritiof for lepton-nuclear.
+        Migrated most of the physics lists to use these new builders
+        and the new cross-sections extracted from CHIPS.</LI>
     <LI>Using new functionality of cross-sections registry to allow
         sharing of cross section data-sets.
-        Migrated the Elastic and DElastic builders, and the FTFP_BERT and 
-        FTFP_BERT_TRV physics lists to use factory mechanism for CHIPS
-        cross-sections.</LI>
+        Migrated the Elastic and DElastic builders, and most of the
+        physics lists to use factory mechanism for the new cross-sections
+        extracted from CHIPS.</LI>
     <LI>Updates the INCLXX builders for compatibility with the latest INCL++
         developments. Updated QGSP_INCLXX physics list to treat light-ion-induced
         collisions with INCL++.</LI>
     <LI>Reduced number of objects deleted in hadronic builders to avoid cases
         of double deletion.</LI>
-    <LI>G4IonBinaryCascadePhysics, G4IonFTFPBinaryCascadePhysics: migrated to
-        use Shen and Ion/proton cross-sections.
-        Commented out Tripathi cross-sections.</LI>
+    <LI>Renamed G4IonFTFPBinaryCascadePhysics as G4IonPhysics 
+        (while the original G4IonPhysics has been renamed as
+        G4IonLHEPPhysics).
+        Migrated G4IonPhysics and G4IonBinaryCascadePhysics to use
+        Glauber-Gribov nucleus-nucleus inelastic cross sections.</LI>
     <LI>G4VHadronPhysics: include name of the hadron in the name of the process.</LI>
     <LI>Added proper treatment of light anti-ions in G4HadronQElasticPhysics.</LI>
     <LI>Removed obsolete class G4HadronInelasticQLHEP.</LI>
-    <LI>In G4QandFTFStoppingPhysics the annihilation at rest of anti_sigma+
-        are now handled by FTF. Use general G4HadronicAbsorptionBertini.</LI>
     <LI>Improve creation of cascade to avoid one instantiation of Precompound in
         FTFP{Proton,Neutron,PiK,AntiBarion} builders.</LI>
     <LI>Substituted use of G4WHadronElasticPhysics by G4HadronElasticPhysics in
@@ -1803,28 +1833,25 @@ please refer to the corresponding History files provided in most packages):
     </UL></LI>
 <LI>Updates to lists:
     <UL>
-    <LI>Use Bertini model for pi-, K-, and Sigma- for nuclear capture at rest
-        in FTFP_BERT and FTFP_BERT_TRV physics lists. In addition use FTF/Preco 
-        for anti-proton and anti-Sigma+; removed CHIPS for Xi- and Omega-.</LI>
-    <LI>Moved FTFP_BERT, QGSP_BERT, QBBC and Shielding lists to use new agreed
-        set of cross-sections. Changed to use BGGNucleonInelastic in FTFP_BERT.</LI>
-    <LI>Added 4 new experimental physics lists: QGSP_BERT_95, QGSP_BERT_95XS,
-        QGSP_FTFP_BERT_95, QGSP_FTFP_BERT_95XS.</LI>
+    <LI>Use Bertini model for pi-, K-, Sigma-, Xi- and Omega- for nuclear
+        capture at rest in most physics lists. In addition use FTF/Preco 
+        for anti-proton, anti-Sigma+ and light anti-nucleus capture at rest
+        in the same physics lists.</LI>
+    <LI>Added four new physics lists: QGSP_BERT_95, QGSP_BERT_95XS,
+        QGSP_FTFP_BERT_95 and QGSP_FTFP_BERT_95XS.</LI>
     <LI>Added nuclear capture at rest of anti-nuclei with Fritiof/Precompound.</LI>
     <LI>Fix to use correct classes for Bertini gamma/electro-nuclear.</LI>
     <LI>HadronPhysicsShielding: fixed problem in neutron cross-section for
         inelastic reaction below 20MeV.</LI>
     <LI>Replaced G4QandFTFStoppingPhysics with the new class
-        G4BertiniAndFritiofStoppingPhysics in FTFP_BERT and FTFP_BERT_TRV
-        lists.</LI>
+        G4BertiniAndFritiofStoppingPhysics.</LI>
     <LI>Replaced G4IonBinaryCascadePhysics with G4IonPhysics in some lists.</LI>
     <LI>Changed default physics for stopping, lepto-nuclear, and ion.
         Only LHEP- and CHIPS-based physics lists keep using exactly the same
         physics as before, whereas all other physics lists migrate to the new
         default. Deprecated the physics lists that will be removed in next
         major release.</LI>
-    <LI>Added missing fission model in FTFP_BERT_TRV.
-        Consistent treatment of _EMV, _EMX, and _EMY physics lists.</LI>
+    <LI>Consistent treatment of _EMV, _EMX, and _EMY physics lists.</LI>
     </UL></LI>
 <LI>Added new factory class G4PhysListFactory implementing new automatic
     registration mechanism; added registry singleton class
@@ -2152,6 +2179,7 @@ please refer to the corresponding History files provided in most packages):
     <LI>medical_linac
         <UL>
         <LI>Fixed compilation warnings and cleanup of unused files.</LI>
+        <LI>Cleared unnecessary calls to 'this'.</LI>
         <LI>Added batch.mac to run without graphics.</LI>
         <LI>Fixed compilation warnings on gcc-4.7 and clang.</LI>
         </UL></LI>
