@@ -697,18 +697,18 @@ void Em10RunAction::CountEvent()
 
 /////////////////////////////////////////////////////////////////////////
 
-void Em10RunAction::AddnStepsCharged(G4double ns)
+void Em10RunAction::AddnStepsCharged(G4double nstp)
 {
-  nStepSumCharged += ns;
-  nStepSum2Charged += ns*ns;
+  nStepSumCharged += nstp;
+  nStepSum2Charged += nstp*nstp;
 }
 
 ////////////////////////////////////////////////////////////////////////
 
-void Em10RunAction::AddnStepsNeutral(G4double ns)
+void Em10RunAction::AddnStepsNeutral(G4double nstp)
 {
-  nStepSumNeutral += ns;
-  nStepSum2Neutral += ns*ns;
+  nStepSumNeutral += nstp;
+  nStepSum2Neutral += nstp*nstp;
 }
 
 ////////////////////////////////////////////////////////////////////////////
