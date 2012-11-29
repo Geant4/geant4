@@ -348,7 +348,7 @@ examples                                         examples-V09-06-00
 - advanced/human_phantom (human_phantom-V09-05-05)
   o Fixed cases of variable shadowing.
   o Fixed syntax in CMakeLists.txt.
-- advanced/iort_therapy (iort_therapy-V09-05-13)
+- advanced/iort_therapy (iort_therapy-V09-05-14)
   o Included generic command for visualization vis/open OGL in input
     macro files where needed.
   o Code revision, fixed variables shadowing and other minor fixes.

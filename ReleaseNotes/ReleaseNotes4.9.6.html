@@ -100,7 +100,7 @@ Platforms configured but neither tested nor supported:
 
 This release of Geant4 has been verified with
 <A TARGET="ext" HREF="http://cern.ch/clhep/">CLHEP</A>, release <B>2.1.3.1</B>.
-Use of a different CLHEP version may cause incorrect simulation results.
+Use of a different CLHEP version may cause incorrect simulation results.<BR>
 NOTE: an internal module of the relevant CLHEP classes is provided and can be
 used as alternative to an external CLHEP library installation.
 
@@ -119,13 +119,6 @@ Geant4 features) in order to upgrade from release 9.5 to release 9.6.
 Note that for all users a full re-installation of libraries (or a full
 recompilation) and a recompilation of user applications is required.
 
-
-<P> </P>
-<B>Configuration</B>
-<P> </P>
-<UL>
-<LI><FONT COLOR="RED"><FONT COLOR="RED"><U><B>###### FILL INFORMATION HERE !!! ######</B></U></FONT></FONT></LI> 
-</UL>
 
 <P> </P>
 <B>Electromagnetic and optical physics</B>
@@ -152,10 +145,8 @@ recompilation) and a recompilation of user applications is required.
 <P> </P>
 <UL>
 <LI>Physics lists which depend on the CHIPS package or on the parameterized
-  (Gheisha-like) models (LEP/HEP) are deprecated and will be removed in
-  Geant4 10.</LI>
-<LI>New combined EM physics constructor G4EmStandardPhysics_option4
-  which  combines the most accurate models now available for each process. Models from both standard and low-energy options are used.</LI>
+    (Gheisha-like) models (LEP/HEP) are deprecated and will be removed in
+    Geant4 10.</LI>
 </UL>
 
 <P> </P>
@@ -179,45 +170,45 @@ Please see the corresponding details in
 
 <B>General</B>
 <UL>
-<LI>Full reproducibility (i.e. possibility to restart from any event by
-    specifying the random generator status at the beginning of the event)
-    is now guaranteed in all physics models, with only two exceptions: 
-    CHIPS stopping and neutron HP. This means that reproducibility is
-    valid for most of the physics lists, e.g. FTFP_BERT, QGSP_BERT,
-    QGSP_FTFP_BERT, etc.</LI>
+<LI>Full event reproducibility is  provided in simulations with most physics lists; this  allows  to restart a simulation from an intermediate event and obtain exactly the same results, if the user specifies or restores the status of the pseudo random generator  at the beginning of the event.
+    This strict event reproducibility is achieved in all physics models, with  two exceptions: 
+    CHIPS stopping and neutron HP. This means that event reproducibility is
+    valid for the  majority of the physics lists, including FTFP_BERT, QGSP_BERT and 
+    QGSP_FTFP_BERT.</LI>
 </UL>
 
 <B>Geometry</B>
 <UL>
-<LI>A new optimized implementation of G4TessellatedSolid now provides
-    substantial CPU performance boost and better scaling for memory
-    footprint and CPU speed with increased complexity (number of facets)
+<LI>A new optimized implementation of G4TessellatedSolid  provides
+    substantial CPU performance boost and reduced memory
+    footprint. Scaling of CPU time with increased complexity (number of facets)
     of the shapes being defined or imported.</LI>
 </UL>
 
 <B>Materials</B>
 <UL>
 <LI>For all elements, a vector of G4Isotopes is always created using abundances
-    from NIST (in previous Geant4 versions, the vector of isotopes was created
-    only for NIST materials), so it is no longer needed to define natural
+    from NIST. (In previous Geant4 versions, the vector of isotopes was created
+    only for NIST materials.) As a result it is no longer needed to define natural
     composition of isotopes in the user code.</LI>
 </UL>
 
 <B>Electromagnetic physics</B>
 <UL>
 <LI>WentzelVI multiple scattering model is used by default in all EM physics
-    lists. For electrons and positrons WentzelVI model is used above 100 MeV.
+    lists. For electrons and positrons the WentzelVI model is used only above 100 MeV.
     This was done to provide more accurate simulation both small and large
     angles of high energy charged particles.</LI>
-<LI>Multiple scattering sampling is performed AlongStep before sampling of
-  energy loss (previously multiple scattering was sampled PostStep). The
-  performance of simulation is nearly the same, simulation become a bit
-  faster.</LI>
+<LI>Sampling of multiple scattering  is performed AlongStep, before the sampling of
+  energy loss (previously multiple scattering was sampled PostStep, after the energy loss). The
+  physics performance is unchanged.</LI>
 <LI>New processes for microdosimetry
     in Silicon for electrons, protons and ions (G4MuElecElastic, G4MuElecInelastic) and corresponding models
     (G4MuElecElasticModel, G4MuElecInelasticModel).</LI>
 <LI>New Compton scattering model (G4LowEPComptonModel) along with specific
-    Physics constructor (G4EmLowEPPhysics).</LI>
+    Physics builder (G4EmLowEPPhysics).</LI>
+<LI>New builder
+  selects the most accurate models now available for each process; this  is G4EmStandardPhysics_option4. Models from both standard and low-energy options are used.</LI>
 </UL>
 
 <B>Hadronic physics</B>
@@ -225,20 +216,11 @@ Please see the corresponding details in
 <LI>Hadronic processes now trigger re-sampling of the interaction if
     energy/momentum non-conservation limits are exceeded. A warning message
     is printed if this occurs.</LI>
-<LI>HTML files describing hadronic processes, models and cross-sections can
-    now be printed by invoking the ProcessDescription(), ModelDescription()
-    and CrossSectionDescription() methods, respectively.
-    These will be used for full physics list documentation.</LI>
-<LI>The INCL cascade model (INCL++) was updated and can now handle
-    heavy-ion collisions.</LI>
-<LI>A new electro-nuclear interaction model, G4ElectroVDNuclearModel, has
-    been added. It is based on the CHIPS total cross sections, Bertini cascade
-    and FTFP.</LI>
 <LI>New hadron stopping models G4PiMinusAbsorptionBertini,
     G4KaonMinusAbsorptionBertini, G4SigmaMinusAbsorptionBertini,
     G4AntiProtonAbsorptionFritiof, and G4AntiSigmaPlusAbsorptionFritiof
     are added. </LI>
-<LI>New total cross section sets based on SAID data-base are added.</LI>
+<LI>New total cross section sets based on SAID data-base are added. (They are used for proton, neutron and pion cross-sections on hydrogen in majority of physics lists.)</LI>
 <LI>A new option in the nuclear de-excitation module allows
     to ignore Doppler broadening for long lived meta-stable isotopes and
     provide instead decay at rest. This new feature is activated by the
@@ -247,6 +229,13 @@ Please see the corresponding details in
   . If
     this environment variable is set the momentum balance of the
     de-excitation is broken and energy balance is respected.</LI>
+<LI>A new electro-nuclear interaction model, G4ElectroVDNuclearModel, was created. It is based on the CHIPS total cross sections, with final state modeling using the Bertini cascade
+  and FTFP.</LI>
+<LI>The INCL cascade model (INCL++) was updated and can now handle
+  heavy-ion collisions.</LI>
+<LI>HTML files describing hadronic processes, models and cross-sections can
+     be printed by invoking the ProcessDescription(), ModelDescription()
+  and CrossSectionDescription() methods, respectively.</LI>
 </UL>
 
 <B>Physics Lists</B>
@@ -332,7 +321,7 @@ Please see the corresponding details in
 
 <B>Electromagnetic physics</B>
 <UL>
-<LI>Compared with Geant4 9.5.02 a minor speedup of simulation of EM showers
+<LI>Compared with Geant4 9.5.p02 a minor speedup of simulation of EM showers
     (2-3%) in calorimeters is expected, also about factor 2 speedup of EM
     initialisation.</LI> 
 </UL>
@@ -764,6 +753,7 @@ please refer to the corresponding History files provided in most packages):
     </UL></LI>
 <LI><B>Utils</B>
     <UL>
+    <LI>Fixed issues with event-reordering  reproducibility related to EM models. Added StartTracking() method in G4VEmProcess which calls corresponding methods in each registered model. </LI>
     <LI>G4LossTableManager: added a check and protection against double
         registration of the same process; this allows the use of the same
         EM energy-loss process for different particle types;
@@ -772,44 +762,42 @@ please refer to the corresponding History files provided in most packages):
         building of the physics-table for a model.</LI>
     <LI>G4EmModelManager: extended printout if cross-section table is built
         for the model; improved printout of model energy limits.</LI>
-    <LI>G4VEmProcess, G4VEnergyLossProcess, G4VMultipleScattering:
-        optimisation of time methods called at each step;
-        updated tracking parameters and
-        flags in PostStepGetPhysicalInteractionLength(),
-        print process/model information for the
-        same list of particles.</LI>
-    <LI>G4VEnergyLossProcess, G4VMultipleScattering, G4VEmModel: added
-        implementation of StartTracking() method; moved initialisation 
-        of a new track inside this method; defined flag 'isIon' for all 
-        nucleus except deuteron, triton and
-        special DNA ions (fixing event non-reproducibility for ions).</LI>
-    <LI>G4VMultipleScatteringProcess, G4VMscModel: sampling scattering is
-        moved from PostStep to AlongStep.</LI>
-    <LI>G4VMultipleScattering: removed transport cross-section table (it
-        is assigned to msc models); simplified 
-        AlongStepGetPhysicalInteractionLength() method; added
-        protection against zero kinetic energy into PostStepDoIt();
-        optimised initialisation and reduced number of checks at run time;
-        added more accurate protection against case
-        when true length exceeds physics step limit;
-        Fixed case of event non-reproducibility for ions; added protection,
-        do not sample scattering if range exceed true step length is less than
-        'minGeom' parameter (1e-6 mm); define ion multiple scattering in
-        constructor; improved printout at initialisation.</LI>
+    <LI>Process and model abstract classes:
+      <ul>
+        <li>G4VEmProcess, G4VEnergyLossProcess, G4VMultipleScattering:
+          optimisation of time methods called at each step;
+          updated tracking parameters and
+          flags in PostStepGetPhysicalInteractionLength(),
+          print process/model information for the
+          same list of particles.</li>
+        <li>G4VEnergyLossProcess, G4VMultipleScattering, G4VEmModel: added
+          implementation of StartTracking() method; moved initialisation 
+          of a new track inside this method; defined flag 'isIon' for all 
+          nucleus except deuteron, triton and
+          special DNA ions (fixing event non-reproducibility for ions).</li>
+        <li>G4VMultipleScatteringProcess, G4VMscModel: sampling scattering is
+          moved from PostStep to AlongStep.</li>
+        <li></li>
+      </ul>
+    </LI>
+    <li>G4VMultipleScattering: removed transport cross-section table (it
+          is assigned to msc models); simplified 
+          AlongStepGetPhysicalInteractionLength() method; added
+          protection against zero kinetic energy into PostStepDoIt();
+          optimised initialisation and reduced number of checks at run time;
+          added more accurate protection against case
+          when true length exceeds physics step limit;
+          Fixed case of event non-reproducibility for ions; added protection,
+          do not sample scattering if range exceed true step length is less than
+          'minGeom' parameter (1e-6 mm); define ion multiple scattering in
+          constructor; improved printout at initialisation.</li>
     <LI>G4VEmProcess: added extra option allowing to build two different
         tables for low-energy and high-energy using different interpolation
-        method; this was necessary in order to allow the combination of different models for multiple scattering. Added StartTracking() method to promote full reproducibility; it calls corresponding method in each model. Changed initialisation for ions.
-        Applied fix to help address problem report
-        <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1314">#1314</A>,
-        force if step==1.</LI>
-    <LI>G4VEnergyLossProcess:  
-        fix for forced biasing, now forcing if step==1
-        (addressing problem report
-        <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1314">#1314</A>).</LI>
+        method; this was needed in order to  combined  different models for multiple scattering. Changed initialisation for ions.        </LI>
     <LI>G4VEmModel: added virtual method Value(), by default computing
         cross-section; added inline methods HighEnergyActivationLimit(),
         LowEnergyActivationLimit(), ForceBuildTableFlag(), 
-        ForceBuildTable().</LI>
+      ForceBuildTable().</LI>
     <LI>G4VMscModel: critical fix for stopping particles, based
         on ATLAS report on extremely small steps of low-energy ions.
         Computes true path length even if multiple-scattering 
@@ -846,8 +834,11 @@ please refer to the corresponding History files provided in most packages):
     <UL>
       <LI> Fixed Bremsstrahlung
       splitting to sample  gamma  secondaries. </LI>
+      <LI>G4VEnergyLossProcess:  
+        fix for forced biasing, now forcing if step==1
+        (addressing problem report <a href="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1314">#1314</a>). Also required  change in G4VEmProcess.</LI>
       <LI>Set weight consistently for forced interaction and cross-section
-      biasing in G4VEmProcess and G4VEnergyLossProcess.</LI>
+        biasing in G4VEmProcess and G4VEnergyLossProcess.</LI>
       <LI>G4EmBiasingManager: added check on number of  PostStep secondaries;
         if multiple secondaries disables both splitting and Russian roulette. This does 
         not affect  delta-electron and Bremsstrahlung secondary biasing.
@@ -868,7 +859,7 @@ please refer to the corresponding History files provided in most packages):
         provide more realistic angular distribution for secondary SR gammas
         according to simplified dipole busted approach.</LI>
     <LI>Removed warning in G4Cerenkov constructor.</LI>
-    </UL></LI>
+</UL></LI>
 </UL>
 
 <A NAME="errprop-notes">
@@ -1018,11 +1009,10 @@ please refer to the corresponding History files provided in most packages):
 <LI><B>Solids (Specific)</B>
     <UL>
     <LI>New rewrite of G4TessellatedSolid resulting in reduced memory footprint
-        by 50%, and factor of tens or more speedup for number of facets of the
-        order of thousands; now adopting to ad-hoc voxelization of the surface
+        by 50% and large speedup;  for number of facets in the thousands the speedup factor observed is tens or more. Adopted to ad-hoc voxelization of the surface
         for fast retrivial of intersected facets.
         Measured a factor of thousands speedup when number of facets is of the
-        order of hundreds thousand. New classes introduced, G4SurfBits and
+        order of order of a hundred thousand. New classes introduced, G4SurfBits and
         G4SurfaceVoxelizer.</LI>
     <LI>Modified <TT>GetPointOnSurface()</TT> to throw <TT>sqrt(r)</TT>
         uniformly for disk surfaces, in <TT>G4Paraboloid, G4Polycone</TT>
