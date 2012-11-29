@@ -461,15 +461,15 @@ int main(int argc, char** argv) {
 
           histo.FillEvtMuonMinusBeam(secondaries);
 
-          for (G4int i=0; i<nssecnd; ++i) {
-            const G4Track*           ssTrack = (*secondaries)[i];
+          for (G4int k=0; k<nssecnd; ++k) {
+            const G4Track*           ssTrack = (*secondaries)[k];
             G4TrackStatus ssts =  	ssTrack->GetTrackStatus();
             const G4DynamicParticle* ssdp = ssTrack->GetDynamicParticle();
             const G4ParticleDefinition* ssdpd = ssdp->GetDefinition();
             G4String ssName = ssdpd->GetParticleName();
 
             if (verbose>=1) {
-              G4cout << "Secondary: " << i 
+              G4cout << "Secondary: " << k
                      << " is " << ssName
                      << ", " << ssdp->GetPDGcode()
                      << ", status: " << ssts
@@ -479,10 +479,9 @@ int main(int argc, char** argv) {
                      << ssdp->GetTotalMomentum()/GeV << " GeV"
                      << G4endl;
             }
-            delete (*secondaries)[i];
+            delete (*secondaries)[k];
           }
           secondaries->clear();
-
         }
       }
 

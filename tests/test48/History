@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 28, 2012 Gabriele Cosmo (test48-V09-05-08)
+- fixed cases of variable shadowing
+
 November 8, 2012 Krzysztof Genser & Julia Yarba (test48-V09-05-07)
 - accepted (almost all) CMakeLists.txt file modifications by Pere Mato
   to allow for simultaneous use of it within Geant4 and standalone build
