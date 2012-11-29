@@ -200,9 +200,9 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
   for (i=1; i<=18; i++)
   {
     name = GetCellName(i);
-    G4double pos_x = 0*cm;
-    G4double pos_y = 0*cm;
-    G4double pos_z = startz + (i-1) * (2*hightShield);
+    pos_x = 0*cm;
+    pos_y = 0*cm;
+    pos_z = startz + (i-1) * (2*hightShield);
     G4VPhysicalVolume *pvol = 
       new G4PVPlacement(0, 
                         G4ThreeVector(pos_x, pos_y, pos_z),
