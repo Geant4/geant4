@@ -17,6 +17,37 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30th November 2012  Gabriele Cosmo (examples-V09-06-00)
+- Updated reference outputs according to reference tag geant4-09-06-ref-00.
+- Updated documentation.
+- Includes tags: air_shower-V09-05-07, amsEcal-V09-05-03, ccal-V09-05-05,
+                 ChargeExchangeMC-V09-05-05, dnaphysics-V09-05-07,
+                 gammaknife-V09-05-06, gammaraytel-V09-05-05,
+                 hadrontherapy-V09-05-13, human_phantom-V09-05-05,
+                 iort_therapy-V09-05-14, lAr_calorimeter-V09-05-03,
+                 medical_linac-V09-05-10, microbeam-V09-05-07,
+                 microdosimetry-V09-05-06, nanobeam-V09-05-06, purmag-V09-05-03,
+                 radioprotection-V09-05-03, XrayFluo-V09-05-06,
+                 exbasic-V09-05-05, exampleA01-V09-05-03, AnaEx02-V09-05-04,
+                 AnaEx03-V09-05-05, exampleN03Con-V09-05-07, B01-V09-05-01,
+                 exbiasing-V09-05-04, ReverseMC01-V09-05-06,
+                 excommon-analysis-V09-05-04, electromagnetic-V09-05-00,
+                 testem5-V09-05-12, testem7-V09-05-11, testem9-V09-05-08,
+                 testem10-V09-05-04, testem17-V09-05-06,
+                 exEventgenerator-V09-05-02, exgps-V09-05-04,
+                 exHepMC-V09-05-02, exExoticphysics-V09-05-02,
+                 phononExample-V09-05-09, fieldex-V09-05-03,
+                 fieldex02-V09-05-01, fieldex04-V09-05-04,
+                 exGeometry-V09-05-02, olapex-V09-05-01, exHadronic-V09-05-03,
+                 exhadr03-V09-05-15, exMedical-V09-05-02, DICOM-V09-05-10,
+                 fano-V09-05-09, exOptical-V09-05-01, LXe-V09-05-02,
+                 WLS-V09-05-04, exparallel-V09-05-00, MPI-V09-05-06,
+                 exgflash-V09-05-01, exPersistency-V09-05-08,
+                 exPolarisation-V09-05-02, exRadioactivedecay-V09-05-01,
+                 rdecay02-V09-05-05, exampleRE01-V09-05-02,
+                 exampleRE02-V09-05-03, exVisualization-V09-05-01,
+                 exampleN03-V09-05-02.
+
 2nd November 2012  Gabriele Cosmo (examples-V09-05-10)
 - Updated reference outputs according to reference tag geant4-09-05-ref-10.
 - Includes tags: examples-advanced-cmk-V09-05-00, air_shower-V09-05-05,
