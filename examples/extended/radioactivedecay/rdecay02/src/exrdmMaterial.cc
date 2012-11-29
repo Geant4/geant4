@@ -101,7 +101,7 @@ void exrdmMaterial::AddMaterial (G4String name, G4String formula,
   
   char *tokenPtr1 = NULL;
   char *sname     = NULL;
-  G4String s, s1("0123456789");
+  G4String s0, s1("0123456789");
   G4String element, isotopename;
   G4int ncomponents, natoms;
   G4double fatoms = 0.;
@@ -144,13 +144,13 @@ void exrdmMaterial::AddMaterial (G4String name, G4String formula,
   while (tokenPtr1 != NULL) {
     isotope = 0;
     //      G4cout << tokenPtr1 << G4endl;
-    s       = G4String(tokenPtr1);
-    ls      = s.length();
-    ll      = s.find("(");
-    lr      = s.find(")");
+    s0      = G4String(tokenPtr1);
+    ls      = s0.length();
+    ll      = s0.find("(");
+    lr      = s0.find(")");
     if (ll == lr) {
-      id = s.find_first_of(s1);
-      element = s.substr(0,id);
+      id = s0.find_first_of(s1);
+      element = s0.substr(0,id);
       
       if (element.length() == 1) element.insert(0," ");
       for (i = 0; i<110; i++) {
@@ -181,14 +181,14 @@ void exrdmMaterial::AddMaterial (G4String name, G4String formula,
       if (id == std::string::npos) {
         natoms = 1;
       } else {
-        natoms = atoi((s.substr(id,ls-id)).c_str());
+        natoms = atoi((s0.substr(id,ls-id)).c_str());
       }
-      if (natoms < 1) fatoms = atof((s.substr(id,ls-id)).c_str());
+      if (natoms < 1) fatoms = atof((s0.substr(id,ls-id)).c_str());
       //        G4cout << "   Elements = " << element << G4endl;
       //G4cout << "   Nb of atoms = " << natoms << G4endl;
     } else {
-      element = s.substr(0,ll);
-      isotope = atoi((s.substr(ll+1,lr-ll)).c_str());
+      element = s0.substr(0,ll);
+      isotope = atoi((s0.substr(ll+1,lr-ll)).c_str());
       if (element.length() == 1) element.insert(0," ");
       for (i = 0; i<110; i++) {
         if (element == fELU[i]) break;
@@ -214,13 +214,13 @@ void exrdmMaterial::AddMaterial (G4String name, G4String formula,
 
       Z           = i+1;
       element     = fELU[i];
-      isotopename = element+s.substr(ll+1,lr-ll-1);
+      isotopename = element+s0.substr(ll+1,lr-ll-1);
       if (lr == std::string::npos ) {
         natoms = 1;
       } else {
-        natoms = atoi((s.substr(lr+1,ls-lr)).c_str());
+        natoms = atoi((s0.substr(lr+1,ls-lr)).c_str());
       }  
-      if (natoms < 1)  fatoms = atof((s.substr(id,ls-id)).c_str());
+      if (natoms < 1)  fatoms = atof((s0.substr(id,ls-id)).c_str());
       if (fatoms == 0.) natoms = 1;
       //
       //        G4cout << "   Elements = " << element << G4endl;
@@ -264,7 +264,7 @@ void exrdmMaterial::AddMaterial (G4String name, G4String formula,
       }
     }
     tokenPtr1 = strtok( NULL, "-");
-    //      s.empty();
+    //      s0.empty();
     //element.erase();
     //
   }

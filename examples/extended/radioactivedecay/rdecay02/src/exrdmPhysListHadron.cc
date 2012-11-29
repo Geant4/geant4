@@ -139,7 +139,7 @@ void exrdmPhysListHadron::ConstructProcess()
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4String particleName = particle->GetParticleName();
     if (particleName != "neutron") {  
-      G4ProcessManager* pManager = particle->GetProcessManager();
+      pManager = particle->GetProcessManager();
       if (particle->GetPDGMass() > 110.*MeV && fTheElasticProcess.IsApplicable(*particle)
           && !particle->IsShortLived()) { 
         pManager->AddDiscreteProcess(&fTheElasticProcess);

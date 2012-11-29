@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28/11/2012  Gabriele Cosmo (rdecay02-V09-05-05)
+- Fixed cases of variable shadowing.
+
 14/11/2012  Ivana Hrivnacova (rdecay02-V09-05-04)
 - Minor fix in CMake build
 
