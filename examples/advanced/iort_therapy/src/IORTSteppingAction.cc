@@ -207,7 +207,7 @@ void IORTSteppingAction::UserSteppingAction(const G4Step* aStep)
 
 		// If a generic ion is originated in the detector, its baryonic number, PDG charge, 
 		// total number of electrons in the orbitals are stored in a ntuple 
-		analysis -> genericIonInformation(a, z, electronOccupancy, secondaryParticleKineticEnergy/MeV);
+		analysis -> genericIonInformation(a, z, electronOccupancy, secondaryParticleKineticEnergy/CLHEP::MeV);
 	    }
 #endif
 	}
