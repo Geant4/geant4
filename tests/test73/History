@@ -11,6 +11,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29 Nov 2012, Gabriele Cosmo (test73-V09-05-18)
+Fixed variable shadowing cases from ROOT.
+
 12 Oct 2012, Andrea Dotti (test73-V09-05-17)
 Explicit inclusion of units and constants headers.
 

@@ -25,9 +25,10 @@
 //
 //
 // 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "BeamTestPrimaryGeneratorAction.hh"
 
-#include "G4SystemOfUnits.hh"
 #include "G4Event.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleGun.hh"
@@ -87,7 +88,7 @@ void BeamTestPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
         //Get momentum direction
         G4ThreeVector momdir = particleGun->GetParticleMomentumDirection();
         //Position of primary depends on P
-        G4double dx = 6.*mm;
+        G4double dx = 6.*CLHEP::mm;
         G4double dz = dx/std::tan(momdir.theta());
         //G4cout << "pT " << pT << "  and tan(theta_xz) = " << tan(xzAngle(A)) << G4endl;
         G4ThreeVector Position(-dx,0.,-dz);

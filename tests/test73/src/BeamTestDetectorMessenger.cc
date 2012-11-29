@@ -30,10 +30,11 @@
 //  Created by Andrea Dotti on 3/7/12.
 //
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
 #include "BeamTestDetectorMessenger.hh"
 #include "BeamTestDetectorConstruction.hh"
-#include "G4SystemOfUnits.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAnInteger.hh"
@@ -53,14 +54,14 @@ BeamTestDetectorMessenger::BeamTestDetectorMessenger( BeamTestDetectorConstructi
     theDetectorDir->SetGuidance("Commands to control detector setup");
     
     theChamberWidthCmd->SetGuidance("Set chamber width (in um)");
-    theChamberWidthCmd->SetDefaultValue(1*um);
+    theChamberWidthCmd->SetDefaultValue(1*CLHEP::um);
     theChamberWidthCmd->SetDefaultUnit("um");
     theChamberWidthCmd->SetParameterName("CW", false);
     theChamberWidthCmd->SetUnitCategory("Length");
     theChamberWidthCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
     theChamberSpacingCmd->SetGuidance("Set chambers spacing (in um)");
-    theChamberSpacingCmd->SetDefaultValue(1*um);
+    theChamberSpacingCmd->SetDefaultValue(1*CLHEP::um);
     theChamberSpacingCmd->SetDefaultUnit("um");
     theChamberSpacingCmd->SetParameterName("CS", false);
     theChamberSpacingCmd->SetUnitCategory("Length");

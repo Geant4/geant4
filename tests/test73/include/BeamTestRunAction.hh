@@ -82,7 +82,7 @@ class BeamTestRunAction : public G4UserRunAction
 		void FillEvents(G4double, G4double, G4double, G4double);
         void SetpT( G4double pt ) { pT = pt; }
         void SetEnergyDeposit(G4double val );
-        void AddSuffix( G4String s ) { fNameSuffix << s; }
+        void AddSuffix( G4String str ) { fNameSuffix << str; }
         void Initialize();
         void MergeFiles( G4String pattern );
         void SetMergedFilename( G4String fn ) { mergedFileName = fn; }
@@ -114,4 +114,3 @@ class BeamTestRunAction : public G4UserRunAction
 };
 
 #endif
-
