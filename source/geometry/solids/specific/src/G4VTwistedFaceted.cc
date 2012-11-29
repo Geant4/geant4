@@ -41,6 +41,7 @@
 
 #include "G4VTwistedFaceted.hh"
 
+#include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"

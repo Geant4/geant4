@@ -49,16 +49,8 @@
 #include "G4SurfBits.hh"
 #include "G4Box.hh"
 #include "G4VFacet.hh"
-#include "G4VSolid.hh"
 
-#include "G4Transform3D.hh"
-#include "G4SolidStore.hh"
 #include "Randomize.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4GeometryTolerance.hh"
-#include "G4CSGSolid.hh"
-#include "G4Types.hh"
-#include "geomdefs.hh"
 
 struct G4VoxelBox
 {

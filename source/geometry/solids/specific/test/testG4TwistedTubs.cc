@@ -46,7 +46,6 @@
 #include "ApproxEqual.hh"
 
 #include "G4ThreeVector.hh"
-#include "G4ParticleMomentum.hh"
 #include "G4TwistedTubs.hh"
 #include "G4RotationMatrix.hh"
 #include "G4AffineTransform.hh"
