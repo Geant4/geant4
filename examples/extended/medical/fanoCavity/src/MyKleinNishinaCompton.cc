@@ -71,10 +71,9 @@ G4double MyKleinNishinaCompton::CrossSectionPerVolume(
                                              G4double GammaEnergy,
                                              G4double, G4double)
 {
-  G4double CrossSection = 
-  G4VEmModel::CrossSectionPerVolume(mat,part,GammaEnergy);
+  G4double xsection = G4VEmModel::CrossSectionPerVolume(mat,part,GammaEnergy);
 
-  return CrossSection*fCrossSectionFactor;
+  return xsection*fCrossSectionFactor;
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -101,18 +100,18 @@ void MyKleinNishinaCompton::SampleSecondaries(
 
   G4double epsilon, epsilonsq, onecost, sint2, greject ;
 
-  G4double epsilon0   = 1./(1. + 2.*E0_m);
-  G4double epsilon0sq = epsilon0*epsilon0;
-  G4double alpha1     = - log(epsilon0);
-  G4double alpha2     = 0.5*(1.- epsilon0sq);
+  G4double eps0   = 1./(1. + 2.*E0_m);
+  G4double eps0sq = eps0*eps0;
+  G4double alpha1     = - log(eps0);
+  G4double alpha2     = 0.5*(1.- eps0sq);
 
   do {
     if ( alpha1/(alpha1+alpha2) > G4UniformRand() ) {
-      epsilon   = exp(-alpha1*G4UniformRand());   // epsilon0**r
+      epsilon   = exp(-alpha1*G4UniformRand());   // eps0**r
       epsilonsq = epsilon*epsilon; 
 
     } else {
-      epsilonsq = epsilon0sq + (1.- epsilon0sq)*G4UniformRand();
+      epsilonsq = eps0sq + (1.- eps0sq)*G4UniformRand();
       epsilon   = sqrt(epsilonsq);
     };
 

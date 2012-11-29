@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+28-11-12 G. Cosmo (fano-V09-05-09)
+- Fixed cases of variable shadowing.
+
 13-10-12 A. Dotti (fano-V09-05-08)
 - Removing double include of system of units
 
