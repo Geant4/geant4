@@ -1037,7 +1037,7 @@ please refer to the corresponding History files provided in most packages):
 <LI>Added header for thread local storage defines.</LI>
 <LI>G4Physics2DVector: added bicubic interpolation option.
     No effect on results if option is not active.</LI>
-<LI>Added GetClockTime() function to G4Timer to print the actual clock time.</LI>
+<LI>Added GetClockTime() function to G4Timer to print the  clock time.</LI>
 <LI>Use explicit inclusion of headers for system of units and physical
     constants. Fixed cases of variable shadowing.</LI>
 <LI>Update date of release for 9.6.</LI>
@@ -1046,7 +1046,7 @@ please refer to the corresponding History files provided in most packages):
 <A NAME="greps-notes">
 <H3><I>Graphical Representations</I></H3></A>
 <UL>
-<LI>G4VVisManager: Added Begin/EndDraw(2D), optional methods for
+<LI>G4VVisManager: Added Begin/End Draw(2D), optional methods for
     bracketing Draw() methods to improve drawing speed.</LI>
 <LI>G4Colour: in operator<<(), added colour name if in colour map.
       Added colour brown.</LI>
@@ -1081,7 +1081,7 @@ please refer to the corresponding History files provided in most packages):
     <LI>G4VCrossSectionDataSet: added virtual method SelectIsotope() which is
         used for element wise cross-sections, allowing for the data-set to use
         isotope wise cross-sections when isotope is selected; by default the
-        old method is used based on isotope abundancy; no change of results
+        old method is used based on isotope abundance; no change of results
         expected.</LI>
     <LI>G4HadronNucleonXsc: updated p,n,pi-,pi+ cross-sections on p,n.
         Added new method GetCoulombBarrier().</LI>
@@ -1096,8 +1096,8 @@ please refer to the corresponding History files provided in most packages):
         elements p, d, t, He3, He4, Li7 and Be9.
         Fixed condition and setting minimum kinetic energy in to 0.</LI>
     <LI>New classes G4ComponentGGNuclNuclXsc based on G4GGNuclNuclCrossSection
-        (Glauber-Gribov for ion-ion xsc) and G4ComponentBarNucleonNucleusXsc
-        based on G4NucleonNuclearCrossSection (Barashenkov xsc); implemented
+        (Glauber-Gribov for ion-ion cross section) and G4ComponentBarNucleonNucleusXsc
+        based on G4NucleonNuclearCrossSection (Barashenkov cross section); implemented
         component interface.</LI>
     <LI>Added elastic and inelastic cross-sections extracted from CHIPS.
         Make GetExchangeT() method public to be used in coherent_elastic.</LI>
@@ -1121,29 +1121,46 @@ please refer to the corresponding History files provided in most packages):
     </UL></LI>
 <LI><B>Management</B>
     <UL>
-    <LI>Added method for energy non-conservation check; in case of
-        non-conservation, re-sample the interaction. Limits are set in
-        G4HadronicInteraction, and may be overridden per model; LEP and HEP
-        override defaults, as these do not include the recoil nucleus in the 
-        final state. E/p conservation fails only if both absolute and relative 
-        fail. Added check for momentum conservation, reusing limits for energy.
-        Added check for charge and baryon number conservation if limit is
-        less than DBL_MAX.</LI>
-    <LI>G4HadronicProcess: move some data members to protected to be used in 
-        derived classes; removed unused code. Changed logic of definition of 
-        time for secondary particles inside method FillResults().
-        Moved to use method ResetNumberOfInteractionLengthLeft() and
-        GetTotalNumberOfInteractionLengthTraversed() from G4VProcess.
-        Check cross-section in PostStepDoIt() only for charged particles to
-        improve CPU performance.
-        Improved quick check and full check for case of electro-nuclear.
-        Copes with case that both primary survives and secondaries are created.
-        Fixed problem of flushing stdout/stderr for energy checking printout.
-        Removed GetTargetDefinition(); instead added GetTargetIsotope();</LI>
-        Added catch of G4HadronicException inside BuildPhysicsTable() method.
-        Added full printout about hadronic exception inside G4Exception body;
-        addressing problem report
-        <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1377">#1377</A>.</LI>
+    <LI>Added method to address energy non-conservation; if check finds violation of energy conservation, re-sample the interaction. 
+      <ul>
+        <li>Limits are set in
+          G4HadronicInteraction, and may be overridden per model; LEP and HEP
+          override defaults, as these do not include the recoil nucleus in the 
+          final state.
+          </li>
+        <li>Failure of E/p conservation is signalled only if both checks, absolute and relative, 
+          fail. Thus violations which  either a) are just small(er) in absolute value than the value threshold or b) are just a smaller fraction than the threshold fraction (but not both) will not fail.</li>
+        <li>Added check for momentum conservation, reusing limits for energy.</li>
+        <li>Added check for charge and baryon number conservation; active only if limit is
+          less than DBL_MAX.</li>
+        </ul>
+    </LI>
+    <LI>G4HadronicProcess
+      <ul>
+        <li>Moved some data members to protected to be used in 
+          derived classes; removed unused code. </li>
+        <li>Changed logic of definition of 
+          time for secondary particles inside method FillResults().
+          </li>
+        <li>Moved to use method ResetNumberOfInteractionLengthLeft() and
+          GetTotalNumberOfInteractionLengthTraversed() from G4VProcess.
+          </li>
+        <li>Dropped the check cross-section in PostStepDoIt()  in the case of neutral particles, in order to
+          improve CPU performance.
+          Now check only for charged particles.</li>
+        <li>Improved quick check and full check for case of electro-nuclear.
+          Copes with case that both primary survives and secondaries are created.
+          </li>
+        <li>Fixed problem of flushing stdout/stderr for energy checking printout.
+          </li>
+        <li>Removed GetTargetDefinition(); instead added GetTargetIsotope().</li>
+        <li>Added catch of G4HadronicException inside BuildPhysicsTable() method.
+          </li>
+        <li>Added full printout about hadronic exception inside G4Exception body;
+          addressing problem report <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1377">#1377</A>.
+          </li>
+        </ul>
+    </LI>
     <LI>G4HadronicProcessStore: added functions GetCrossSectionPerAtom(),
         GetTargetDefinition() and GetCrossSectionPerVolume().
         Added e+ and mu+ to level-1 reporting.</LI>
@@ -1169,7 +1186,7 @@ please refer to the corresponding History files provided in most packages):
         <LI>Added G4VIntraNuclearTransportModel::Description() method, printing 
             a descriptive message before throwing a G4Exception.</LI>
         <LI>Modified G4VHighEnergyGenerator: added ModelDescripion() to interface;
-            made copy-costructor, =,  ==, and  != operators private, not
+            made private the copy-costructor and the =,  ==, and  != operators, which are not
             implemented.</LI>
         <LI>G4VIntraNuclearTransportModel: added PropagateModelDescription()
             method.</LI>
