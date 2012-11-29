@@ -616,14 +616,14 @@ void Tst01DetectorConstruction::ConstructDetectors()
   // compose assembly 
   G4ThreeVector pos0(0.,0., 0.);
   tplate->AddPlacedVolume(plateV, pos0, 0);
-  for (G4int i=0; i<ntooth; i++) {
+  for (G4int i1=0; i1<ntooth; i1++) {
     xt = xplate+xtooth;
-    yt = -yplate + (4*i+1)*ytooth;
+    yt = -yplate + (4*i1+1)*ytooth;
     G4ThreeVector pos1(xt, yt, 0);
     tplate->AddPlacedVolume(toothV, pos1, 0);
 
     xt = -xplate-xtooth;
-    yt = -yplate + (4*i+3)*ytooth;
+    yt = -yplate + (4*i1+3)*ytooth;
     G4ThreeVector pos2(xt, yt, 0);
     tplate->AddPlacedVolume(toothV, pos2, 0);
   }  
@@ -731,7 +731,7 @@ void Tst01DetectorConstruction::ConstructDetectors()
 
   std::vector<G4VPhysicalVolume*>::iterator viter = assembly->GetVolumesIterator();
   G4cout << "Imprinted volumes: ";
-  for (size_t i=0; i<assembly->TotalImprintedVolumes(); i++)
+  for (size_t i5=0; i5<assembly->TotalImprintedVolumes(); i5++)
   {
      G4cout << (*viter)->GetName() << " - "; viter++;
   }
