@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28 November 2012 - G. Cosmo, test74-V09-05-03
+              Fixed parameter shadowing in SteppingAction.
+
 11 October 2012 - G. Cosmo, test74-V09-05-02
               Explicit inclusion of units and constants headers.
 

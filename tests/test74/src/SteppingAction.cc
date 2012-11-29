@@ -53,16 +53,16 @@ SteppingAction::~SteppingAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void SteppingAction::UserSteppingAction(const G4Step* s)
+void SteppingAction::UserSteppingAction(const G4Step* stp)
 {
-  G4StepPoint* endPoint = s->GetPostStepPoint();
+  G4StepPoint* endPoint = stp->GetPostStepPoint();
   G4String procName = endPoint->GetProcessDefinedStep()->GetProcessName();
   Run->CountProcesses(procName);
 
-  G4double edep = s->GetTotalEnergyDeposit();
+  G4double edep = stp->GetTotalEnergyDeposit();
   Run->SumeTransf(edep);
 
-  G4Track* track = s->GetTrack();
+  G4Track* track = stp->GetTrack();
   G4double kinEnergy = track->GetKineticEnergy();
 
   G4ParticleDefinition* particle = track->GetDefinition();
@@ -74,7 +74,5 @@ void SteppingAction::UserSteppingAction(const G4Step* s)
   {
     track->SetTrackStatus(fStopAndKill);
     Run->SumeTransf(kinEnergy);
-    return ;
   }
-  
 }    
