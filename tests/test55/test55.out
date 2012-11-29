@@ -2,10 +2,9 @@
         ############################################
         !!! WARNING - FPE detection is activated !!!
         ############################################
-+++ G4StackManager uses G4SmartTrackStack. +++
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-10    (2-November-2012)
+ Geant4 version Name: geant4-09-06-ref-00    (30-November-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -20,7 +19,7 @@
 
 ***** Table : Nb of materials = 5 *****
 
- Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm      Nucl.Int.Length:  75.520 cm      Imean:  75.000 eV 
+ Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm   Nucl.Int.Length:  75.520 cm   Imean:  75.000 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -33,7 +32,7 @@
           ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
 
 
- Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m       Nucl.Int.Length: 662.904 m       Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
          --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
@@ -46,7 +45,7 @@
           ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
 
 
- Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km      Nucl.Int.Length:  85.515 km      Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
+ Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km   Nucl.Int.Length:  85.515 km   Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
          --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
@@ -59,14 +58,14 @@
           ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
 
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 parsec  Nucl.Int.Length: 114334693.470 parsec  Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 114334693.470 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm      Nucl.Int.Length:  38.877 cm      Imean: 166.000 eV 
+ Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.877 cm   Imean: 166.000 eV 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
          --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
@@ -75,10 +74,10 @@
 
 
 ---------------------------------------------------------
----> The Absorber is 20 cm     of G4_Al
+---> The Absorber is 20 cm  of G4_Al
 
 ---------------------------------------------------------
-PhysicsList::SetCuts:CutLength : 1 mm    
+PhysicsList::SetCuts:CutLength : 1 mm 
 /testem/gun/rndm 3 mm
 /testem/event/printModulo 1000
 /testem/stepMax 0.001 mm
@@ -88,7 +87,7 @@ PhysicsList::SetCuts:CutLength : 1 mm
 
 ***** Table : Nb of materials = 5 *****
 
- Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm      Nucl.Int.Length:  75.520 cm      Imean:  75.000 eV 
+ Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm   Nucl.Int.Length:  75.520 cm   Imean:  75.000 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -101,7 +100,7 @@ PhysicsList::SetCuts:CutLength : 1 mm
           ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
 
 
- Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m       Nucl.Int.Length: 662.904 m       Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
          --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
@@ -114,7 +113,7 @@ PhysicsList::SetCuts:CutLength : 1 mm
           ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
 
 
- Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km      Nucl.Int.Length:  85.515 km      Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
+ Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km   Nucl.Int.Length:  85.515 km   Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
          --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
@@ -127,14 +126,14 @@ PhysicsList::SetCuts:CutLength : 1 mm
           ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
 
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 parsec  Nucl.Int.Length: 114334693.470 parsec  Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 114334693.470 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm      Nucl.Int.Length:  38.877 cm      Imean: 166.000 eV 
+ Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.877 cm   Imean: 166.000 eV 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
          --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
@@ -143,7 +142,7 @@ PhysicsList::SetCuts:CutLength : 1 mm
 
 
 ---------------------------------------------------------
----> The Absorber is 20 cm     of G4_Al
+---> The Absorber is 20 cm  of G4_Al
 
 ---------------------------------------------------------
 /testem/run/testRange 300.1 15.005 um
@@ -155,15 +154,13 @@ PhysicsList::SetCuts:CutLength : 1 mm
 phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 154 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
- LivermorePhElectric :  Emin=        0 eV    Emax=        1 GeV   AngularGenSauterGavrila  FluoActive
-       PhotoElectric :  Emin=        1 GeV   Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
+ LivermorePhElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
 
 compt:   for  gamma    SubType= 13
-      Lambda table from 100 eV  to 1 MeV in 80 bins, spline: 1
+      Lambda table from 10 eV  to 1 MeV in 100 bins, spline: 1
       LambdaPrime table from 1 MeV to 10 TeV in 140 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-    LivermoreCompton :  Emin=        0 eV    Emax=        1 GeV  FluoActive
-       Klein-Nishina :  Emin=        1 GeV   Emax=       10 TeV
+    LivermoreCompton :  Emin=        0 eV    Emax=       10 TeV  FluoActive
 
 conv:   for  gamma    SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
@@ -172,7 +169,7 @@ conv:   for  gamma    SubType= 14
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
 
 Rayl:   for  gamma    SubType= 11
-      Lambda table from 100 eV  to 100 keV in 60 bins, spline: 0
+      Lambda table from 10 eV  to 100 keV in 80 bins, spline: 0
       LambdaPrime table from 100 keV to 10 TeV in 160 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    LivermoreRayleigh :  Emin=        0 eV    Emax=       10 TeV   CullenGenerator
@@ -180,22 +177,29 @@ Rayl:   for  gamma    SubType= 11
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=      100 MeV  Table with 120 bins Emin=    100 eV    Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=       10 TeV  Table with 100 bins Emin=    100 MeV   Emax=     10 TeV
+
+CoulombScat:   for  e-    SubType= 1
+      Lambda table from 10 eV  to 10 TeV in 100 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=      100 MeV   Emax=       10 TeV
 
 ### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
           DefaultRegionForTheWorld
 
 eIoni:   for  e-    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        LowEnergyIoni :  Emin=        0 eV    Emax=      100 keV
         MollerBhabha :  Emin=      100 keV   Emax=       10 TeV
 
 eBrem:   for  e-    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            LowEnBrem :  Emin=        0 eV    Emax=        1 GeV   AngularGen2BS
@@ -204,18 +208,19 @@ eBrem:   for  e-    SubType= 3
 msc:   for e+    SubType= 10
       RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=      100 MeV  Table with 120 bins Emin=    100 eV    Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=       10 TeV  Table with 100 bins Emin=    100 MeV   Emax=     10 TeV
 
 eIoni:   for  e+    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
 
 eBrem:   for  e+    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
@@ -225,43 +230,49 @@ annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :  Emin=        0 eV    Emax=       10 TeV
 
+CoulombScat:   for  e+    SubType= 1
+      Lambda table from 10 eV  to 10 TeV in 100 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=      100 MeV   Emax=       10 TeV
+
 msc:   for proton    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  proton    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=        2 MeV
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
 
-hBrems:   for  anti_proton    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+hBrems:   for  proton    SubType= 3
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem :  Emin=        0 eV    Emax=       10 TeV
 
-hPairProd:   for  anti_proton    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+hPairProd:   for  proton    SubType= 4
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-nuclearStopping:   for  anti_proton    SubType= 8
+nuclearStopping:   for  proton    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :  Emin=        0 eV    Emax=        1 MeV
 
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
 
 ionIoni:   for  GenericIon    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       finalRange(mm)= 0.001, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -272,44 +283,44 @@ nuclearStopping:   for  GenericIon    SubType= 8
    ICRU49NucStopping :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for alpha    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 ionIoni:   for  alpha    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV
           BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
 
-nuclearStopping:   for  GenericIon    SubType= 8
+nuclearStopping:   for  alpha    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for anti_proton    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=        2 MeV
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
 
 hBrems:   for  anti_proton    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem :  Emin=        0 eV    Emax=       10 TeV
 
 hPairProd:   for  anti_proton    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -320,61 +331,61 @@ nuclearStopping:   for  anti_proton    SubType= 8
 msc:   for kaon+    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  kaon+    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=  1.05231 MeV
           BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
 
 hBrems:   for  kaon+    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem :  Emin=        0 eV    Emax=       10 TeV
 
 hPairProd:   for  kaon+    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for kaon-    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  kaon-    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
           BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
 
-hBrems:   for  kaon+    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+hBrems:   for  kaon-    SubType= 3
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem :  Emin=        0 eV    Emax=       10 TeV
 
-hPairProd:   for  kaon+    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+hPairProd:   for  kaon-    SubType= 4
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-muMsc:   for mu+    SubType= 10
+msc:   for mu+    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 muIoni:   for  mu+    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=      200 keV
@@ -382,51 +393,51 @@ muIoni:   for  mu+    SubType= 2
         MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
 
 muBrems:   for  mu+    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
               MuBrem :  Emin=        0 eV    Emax=       10 TeV
 
 muPairProd:   for  mu+    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 CoulombScat:   for  mu+    SubType= 1
-      Lambda table from 100 eV  to 10 TeV in 108 bins, spline: 1
+      Lambda table from 10 eV  to 10 TeV in 108 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
-muMsc:   for mu-    SubType= 10
+msc:   for mu-    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 muIoni:   for  mu-    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=      200 keV
           BetheBloch :  Emin=      200 keV   Emax=        1 GeV
         MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
 
-muBrems:   for  mu+    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+muBrems:   for  mu-    SubType= 3
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
               MuBrem :  Emin=        0 eV    Emax=       10 TeV
 
-muPairProd:   for  mu+    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+muPairProd:   for  mu-    SubType= 4
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 CoulombScat:   for  mu-    SubType= 1
-      Lambda table from 100 eV  to 10 TeV in 108 bins, spline: 1
+      Lambda table from 10 eV  to 10 TeV in 108 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
@@ -434,50 +445,50 @@ CoulombScat:   for  mu-    SubType= 1
 msc:   for pi+    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  pi+    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
 
 hBrems:   for  pi+    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem :  Emin=        0 eV    Emax=       10 TeV
 
 hPairProd:   for  pi+    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for pi-    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  pi-    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
 
-hBrems:   for  pi+    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+hBrems:   for  pi-    SubType= 3
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                hBrem :  Emin=        0 eV    Emax=       10 TeV
 
-hPairProd:   for  pi+    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+hPairProd:   for  pi-    SubType= 4
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -485,14 +496,14 @@ hPairProd:   for  pi+    SubType= 4
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Galactic
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Al
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -511,24 +522,24 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.03s Real=2.03s Sys=0s
+  User=2.28s Real=2.28s Sys=0s
 
- The run consists of 1000 C12[0.0] of 144 MeV through 20 cm     of G4_Al (density: 2.699 g/cm3 )
+ The run consists of 1000 C12[0.0] of 144 MeV through 20 cm  of G4_Al (density: 2.699 g/cm3 )
 
- Projected Range= 303.32 um       rms= 1.43328 um    
- Mean number of primary steps = 304.671
+ Projected Range= 303.224 um    rms= 1.42815 um 
+ Mean number of primary steps = 304.682
  Total energy deposit= 144 MeV
- NIEL energy deposit = 98.3031 keV
+ NIEL energy deposit = 98.2235 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 32736319, 1726970131
+ Current couple of seeds = 834306404, 1971865678
 ----------------------------------------
 /control/verbose 0
 
 ***** Table : Nb of materials = 6 *****
 
- Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm      Nucl.Int.Length:  75.520 cm      Imean:  75.000 eV 
+ Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm   Nucl.Int.Length:  75.520 cm   Imean:  75.000 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -541,7 +552,7 @@ Run Summary
           ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
 
 
- Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m       Nucl.Int.Length: 662.904 m       Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
          --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
@@ -554,7 +565,7 @@ Run Summary
           ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
 
 
- Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km      Nucl.Int.Length:  85.515 km      Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
+ Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km   Nucl.Int.Length:  85.515 km   Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
          --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
@@ -567,20 +578,20 @@ Run Summary
           ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
 
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 parsec  Nucl.Int.Length: 114334693.470 parsec  Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 114334693.470 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm      Nucl.Int.Length:  38.877 cm      Imean: 166.000 eV 
+ Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.877 cm   Imean: 166.000 eV 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
          --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:    G4_Be    density:  1.848 g/cm3   RadL:  35.276 cm      Nucl.Int.Length:  39.449 cm      Imean:  63.700 eV 
+ Material:    G4_Be    density:  1.848 g/cm3   RadL:  35.276 cm   Nucl.Int.Length:  39.449 cm   Imean:  63.700 eV 
    --->  Element: Be (Be)   Z =  4.0   N =   9.0   A =   9.01 g/mole
          --->  Isotope:   Be9   Z =  4   N =   9   A =   9.01 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
@@ -589,33 +600,33 @@ Run Summary
 
 
 ---------------------------------------------------------
----> The Absorber is 20 cm     of G4_Be
+---> The Absorber is 20 cm  of G4_Be
 
 ---------------------------------------------------------
 ### Run 1 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 32736319, 1726970131
+ Current couple of seeds = 834306404, 1971865678
 ----------------------------------------
 
 ---> Begin of Event: 0
 
- The run consists of 1000 C12[0.0] of 144 MeV through 20 cm     of G4_Be (density: 1.848 g/cm3 )
+ The run consists of 1000 C12[0.0] of 144 MeV through 20 cm  of G4_Be (density: 1.848 g/cm3 )
 
- Projected Range= 381.487 um       rms= 1.91658 um    
- Mean number of primary steps = 382.78
+ Projected Range= 381.569 um    rms= 1.96374 um 
+ Mean number of primary steps = 382.882
  Total energy deposit= 144 MeV
- NIEL energy deposit = 77.7184 keV
+ NIEL energy deposit = 77.8843 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1927351919, 1139544464
+ Current couple of seeds = 1914294843, 1156252501
 ----------------------------------------
 
 ***** Table : Nb of materials = 7 *****
 
- Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm      Nucl.Int.Length:  75.520 cm      Imean:  75.000 eV 
+ Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm   Nucl.Int.Length:  75.520 cm   Imean:  75.000 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -628,7 +639,7 @@ Run Summary
           ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
 
 
- Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m       Nucl.Int.Length: 662.904 m       Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
          --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
@@ -641,7 +652,7 @@ Run Summary
           ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
 
 
- Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km      Nucl.Int.Length:  85.515 km      Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
+ Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km   Nucl.Int.Length:  85.515 km   Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
          --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
@@ -654,26 +665,26 @@ Run Summary
           ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
 
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 parsec  Nucl.Int.Length: 114334693.470 parsec  Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 114334693.470 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm      Nucl.Int.Length:  38.877 cm      Imean: 166.000 eV 
+ Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.877 cm   Imean: 166.000 eV 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
          --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:    G4_Be    density:  1.848 g/cm3   RadL:  35.276 cm      Nucl.Int.Length:  39.449 cm      Imean:  63.700 eV 
+ Material:    G4_Be    density:  1.848 g/cm3   RadL:  35.276 cm   Nucl.Int.Length:  39.449 cm   Imean:  63.700 eV 
    --->  Element: Be (Be)   Z =  4.0   N =   9.0   A =   9.01 g/mole
          --->  Isotope:   Be9   Z =  4   N =   9   A =   9.01 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:     G4_C    density:  2.000 g/cm3   RadL:  21.349 cm      Nucl.Int.Length:  40.101 cm      Imean:  81.000 eV 
+ Material:     G4_C    density:  2.000 g/cm3   RadL:  21.349 cm   Nucl.Int.Length:  40.101 cm   Imean:  81.000 eV 
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
          --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
@@ -683,33 +694,33 @@ Run Summary
 
 
 ---------------------------------------------------------
----> The Absorber is 20 cm     of G4_C
+---> The Absorber is 20 cm  of G4_C
 
 ---------------------------------------------------------
 ### Run 2 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1927351919, 1139544464
+ Current couple of seeds = 1914294843, 1156252501
 ----------------------------------------
 
 ---> Begin of Event: 0
 
- The run consists of 1000 C12[0.0] of 144 MeV through 20 cm     of G4_C (density: 2 g/cm3 )
+ The run consists of 1000 C12[0.0] of 144 MeV through 20 cm  of G4_C (density: 2 g/cm3 )
 
- Projected Range= 346.189 um       rms= 1.70615 um    
- Mean number of primary steps = 347.486
+ Projected Range= 346.089 um    rms= 1.73443 um 
+ Mean number of primary steps = 347.422
  Total energy deposit= 144 MeV
- NIEL energy deposit = 92.0439 keV
+ NIEL energy deposit = 92.138 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1489494540, 958122246
+ Current couple of seeds = 609763916, 239326002
 ----------------------------------------
 
 ***** Table : Nb of materials = 8 *****
 
- Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm      Nucl.Int.Length:  75.520 cm      Imean:  75.000 eV 
+ Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm   Nucl.Int.Length:  75.520 cm   Imean:  75.000 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -722,7 +733,7 @@ Run Summary
           ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
 
 
- Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m       Nucl.Int.Length: 662.904 m       Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
          --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
@@ -735,7 +746,7 @@ Run Summary
           ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
 
 
- Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km      Nucl.Int.Length:  85.515 km      Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
+ Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km   Nucl.Int.Length:  85.515 km   Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
          --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
@@ -748,33 +759,33 @@ Run Summary
           ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
 
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 parsec  Nucl.Int.Length: 114334693.470 parsec  Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 114334693.470 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm      Nucl.Int.Length:  38.877 cm      Imean: 166.000 eV 
+ Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.877 cm   Imean: 166.000 eV 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
          --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:    G4_Be    density:  1.848 g/cm3   RadL:  35.276 cm      Nucl.Int.Length:  39.449 cm      Imean:  63.700 eV 
+ Material:    G4_Be    density:  1.848 g/cm3   RadL:  35.276 cm   Nucl.Int.Length:  39.449 cm   Imean:  63.700 eV 
    --->  Element: Be (Be)   Z =  4.0   N =   9.0   A =   9.01 g/mole
          --->  Isotope:   Be9   Z =  4   N =   9   A =   9.01 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:     G4_C    density:  2.000 g/cm3   RadL:  21.349 cm      Nucl.Int.Length:  40.101 cm      Imean:  81.000 eV 
+ Material:     G4_C    density:  2.000 g/cm3   RadL:  21.349 cm   Nucl.Int.Length:  40.101 cm   Imean:  81.000 eV 
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
          --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: G4_KAPTON    density:  1.420 g/cm3   RadL:  28.575 cm      Nucl.Int.Length:  55.867 cm      Imean:  79.600 eV 
+ Material: G4_KAPTON    density:  1.420 g/cm3   RadL:  28.575 cm   Nucl.Int.Length:  55.867 cm   Imean:  79.600 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -800,33 +811,33 @@ Run Summary
 
 
 ---------------------------------------------------------
----> The Absorber is 70.14 um     of G4_KAPTON
+---> The Absorber is 70.14 um  of G4_KAPTON
 
 ---------------------------------------------------------
 ### Run 3 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1489494540, 958122246
+ Current couple of seeds = 609763916, 239326002
 ----------------------------------------
 
 ---> Begin of Event: 0
 
- The run consists of 1000 Li7[0.0] of 29.818 MeV through 70.14 um     of G4_KAPTON (density: 1.42 g/cm3 )
+ The run consists of 1000 Li7[0.0] of 29.818 MeV through 70.14 um  of G4_KAPTON (density: 1.42 g/cm3 )
 
- Projected Range= 70.14 um       rms= 0 fm    
+ Projected Range= 70.14 um    rms= 0 fm 
  Mean number of primary steps = 73
- Total energy deposit= 8.26286 MeV
- NIEL energy deposit = 4.57962 keV
+ Total energy deposit= 8.26995 MeV
+ NIEL energy deposit = 4.58037 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1292658958, 1861706759
+ Current couple of seeds = 933594081, 1584276745
 ----------------------------------------
 
 ***** Table : Nb of materials = 9 *****
 
- Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm      Nucl.Int.Length:  75.520 cm      Imean:  75.000 eV 
+ Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm   Nucl.Int.Length:  75.520 cm   Imean:  75.000 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -839,7 +850,7 @@ Run Summary
           ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
 
 
- Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m       Nucl.Int.Length: 662.904 m       Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
          --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
@@ -852,7 +863,7 @@ Run Summary
           ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
 
 
- Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km      Nucl.Int.Length:  85.515 km      Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
+ Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km   Nucl.Int.Length:  85.515 km   Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
          --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
@@ -865,33 +876,33 @@ Run Summary
           ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
 
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 parsec  Nucl.Int.Length: 114334693.470 parsec  Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 114334693.470 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm      Nucl.Int.Length:  38.877 cm      Imean: 166.000 eV 
+ Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.877 cm   Imean: 166.000 eV 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
          --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:    G4_Be    density:  1.848 g/cm3   RadL:  35.276 cm      Nucl.Int.Length:  39.449 cm      Imean:  63.700 eV 
+ Material:    G4_Be    density:  1.848 g/cm3   RadL:  35.276 cm   Nucl.Int.Length:  39.449 cm   Imean:  63.700 eV 
    --->  Element: Be (Be)   Z =  4.0   N =   9.0   A =   9.01 g/mole
          --->  Isotope:   Be9   Z =  4   N =   9   A =   9.01 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:     G4_C    density:  2.000 g/cm3   RadL:  21.349 cm      Nucl.Int.Length:  40.101 cm      Imean:  81.000 eV 
+ Material:     G4_C    density:  2.000 g/cm3   RadL:  21.349 cm   Nucl.Int.Length:  40.101 cm   Imean:  81.000 eV 
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
          --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: G4_KAPTON    density:  1.420 g/cm3   RadL:  28.575 cm      Nucl.Int.Length:  55.867 cm      Imean:  79.600 eV 
+ Material: G4_KAPTON    density:  1.420 g/cm3   RadL:  28.575 cm   Nucl.Int.Length:  55.867 cm   Imean:  79.600 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -914,7 +925,7 @@ Run Summary
           ElmMassFraction:  20.92 %  ElmAbundance  12.82 % 
 
 
- Material: G4_POLYCARBONATE    density:  1.200 g/cm3   RadL:  34.587 cm      Nucl.Int.Length:  63.437 cm      Imean:  73.100 eV 
+ Material: G4_POLYCARBONATE    density:  1.200 g/cm3   RadL:  34.587 cm   Nucl.Int.Length:  63.437 cm   Imean:  73.100 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -935,33 +946,33 @@ Run Summary
 
 
 ---------------------------------------------------------
----> The Absorber is 29.333 um     of G4_POLYCARBONATE
+---> The Absorber is 29.333 um  of G4_POLYCARBONATE
 
 ---------------------------------------------------------
 ### Run 4 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1292658958, 1861706759
+ Current couple of seeds = 933594081, 1584276745
 ----------------------------------------
 
 ---> Begin of Event: 0
 
- The run consists of 1000 Li7[0.0] of 29.818 MeV through 29.333 um     of G4_POLYCARBONATE (density: 1.2 g/cm3 )
+ The run consists of 1000 Li7[0.0] of 29.818 MeV through 29.333 um  of G4_POLYCARBONATE (density: 1.2 g/cm3 )
 
- Projected Range= 29.333 um       rms= 0 fm    
+ Projected Range= 29.333 um    rms= 0 fm 
  Mean number of primary steps = 32
- Total energy deposit= 2.8292 MeV
- NIEL energy deposit = 1.61526 keV
+ Total energy deposit= 2.82985 MeV
+ NIEL energy deposit = 1.6152 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1910594264, 1955204516
+ Current couple of seeds = 39846077, 366833286
 ----------------------------------------
 
 ***** Table : Nb of materials = 10 *****
 
- Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm      Nucl.Int.Length:  75.520 cm      Imean:  75.000 eV 
+ Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm   Nucl.Int.Length:  75.520 cm   Imean:  75.000 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -974,7 +985,7 @@ Run Summary
           ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
 
 
- Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m       Nucl.Int.Length: 662.904 m       Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
          --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
@@ -987,7 +998,7 @@ Run Summary
           ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
 
 
- Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km      Nucl.Int.Length:  85.515 km      Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
+ Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km   Nucl.Int.Length:  85.515 km   Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
          --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
@@ -1000,33 +1011,33 @@ Run Summary
           ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
 
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 parsec  Nucl.Int.Length: 114334693.470 parsec  Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 114334693.470 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm      Nucl.Int.Length:  38.877 cm      Imean: 166.000 eV 
+ Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.877 cm   Imean: 166.000 eV 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
          --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:    G4_Be    density:  1.848 g/cm3   RadL:  35.276 cm      Nucl.Int.Length:  39.449 cm      Imean:  63.700 eV 
+ Material:    G4_Be    density:  1.848 g/cm3   RadL:  35.276 cm   Nucl.Int.Length:  39.449 cm   Imean:  63.700 eV 
    --->  Element: Be (Be)   Z =  4.0   N =   9.0   A =   9.01 g/mole
          --->  Isotope:   Be9   Z =  4   N =   9   A =   9.01 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:     G4_C    density:  2.000 g/cm3   RadL:  21.349 cm      Nucl.Int.Length:  40.101 cm      Imean:  81.000 eV 
+ Material:     G4_C    density:  2.000 g/cm3   RadL:  21.349 cm   Nucl.Int.Length:  40.101 cm   Imean:  81.000 eV 
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
          --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: G4_KAPTON    density:  1.420 g/cm3   RadL:  28.575 cm      Nucl.Int.Length:  55.867 cm      Imean:  79.600 eV 
+ Material: G4_KAPTON    density:  1.420 g/cm3   RadL:  28.575 cm   Nucl.Int.Length:  55.867 cm   Imean:  79.600 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -1049,7 +1060,7 @@ Run Summary
           ElmMassFraction:  20.92 %  ElmAbundance  12.82 % 
 
 
- Material: G4_POLYCARBONATE    density:  1.200 g/cm3   RadL:  34.587 cm      Nucl.Int.Length:  63.437 cm      Imean:  73.100 eV 
+ Material: G4_POLYCARBONATE    density:  1.200 g/cm3   RadL:  34.587 cm   Nucl.Int.Length:  63.437 cm   Imean:  73.100 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -1067,7 +1078,7 @@ Run Summary
           ElmMassFraction:  18.88 %  ElmAbundance   9.09 % 
 
 
- Material: G4_MYLAR    density:  1.400 g/cm3   RadL:  28.536 cm      Nucl.Int.Length:  55.985 cm      Imean:  78.700 eV 
+ Material: G4_MYLAR    density:  1.400 g/cm3   RadL:  28.536 cm   Nucl.Int.Length:  55.985 cm   Imean:  78.700 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -1088,33 +1099,33 @@ Run Summary
 
 
 ---------------------------------------------------------
----> The Absorber is 23.143 um     of G4_MYLAR
+---> The Absorber is 23.143 um  of G4_MYLAR
 
 ---------------------------------------------------------
 ### Run 5 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1910594264, 1955204516
+ Current couple of seeds = 39846077, 366833286
 ----------------------------------------
 
 ---> Begin of Event: 0
 
- The run consists of 1000 Li7[0.0] of 29.818 MeV through 23.143 um     of G4_MYLAR (density: 1.4 g/cm3 )
+ The run consists of 1000 Li7[0.0] of 29.818 MeV through 23.143 um  of G4_MYLAR (density: 1.4 g/cm3 )
 
- Projected Range= 23.143 um       rms= 0 fm    
+ Projected Range= 23.143 um    rms= 0 fm 
  Mean number of primary steps = 26
- Total energy deposit= 2.53155 MeV
- NIEL energy deposit = 1.41771 keV
+ Total energy deposit= 2.5333 MeV
+ NIEL energy deposit = 1.41784 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2140345174, 1746332580
+ Current couple of seeds = 2061134880, 1994770855
 ----------------------------------------
 
 ***** Table : Nb of materials = 10 *****
 
- Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm      Nucl.Int.Length:  75.520 cm      Imean:  75.000 eV 
+ Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm   Nucl.Int.Length:  75.520 cm   Imean:  75.000 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -1127,7 +1138,7 @@ Run Summary
           ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
 
 
- Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m       Nucl.Int.Length: 662.904 m       Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
          --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
@@ -1140,7 +1151,7 @@ Run Summary
           ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
 
 
- Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km      Nucl.Int.Length:  85.515 km      Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
+ Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km   Nucl.Int.Length:  85.515 km   Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
          --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
@@ -1153,33 +1164,33 @@ Run Summary
           ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
 
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 parsec  Nucl.Int.Length: 114334693.470 parsec  Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 114334693.470 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm      Nucl.Int.Length:  38.877 cm      Imean: 166.000 eV 
+ Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.877 cm   Imean: 166.000 eV 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
          --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:    G4_Be    density:  1.848 g/cm3   RadL:  35.276 cm      Nucl.Int.Length:  39.449 cm      Imean:  63.700 eV 
+ Material:    G4_Be    density:  1.848 g/cm3   RadL:  35.276 cm   Nucl.Int.Length:  39.449 cm   Imean:  63.700 eV 
    --->  Element: Be (Be)   Z =  4.0   N =   9.0   A =   9.01 g/mole
          --->  Isotope:   Be9   Z =  4   N =   9   A =   9.01 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:     G4_C    density:  2.000 g/cm3   RadL:  21.349 cm      Nucl.Int.Length:  40.101 cm      Imean:  81.000 eV 
+ Material:     G4_C    density:  2.000 g/cm3   RadL:  21.349 cm   Nucl.Int.Length:  40.101 cm   Imean:  81.000 eV 
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
          --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: G4_KAPTON    density:  1.420 g/cm3   RadL:  28.575 cm      Nucl.Int.Length:  55.867 cm      Imean:  79.600 eV 
+ Material: G4_KAPTON    density:  1.420 g/cm3   RadL:  28.575 cm   Nucl.Int.Length:  55.867 cm   Imean:  79.600 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -1202,7 +1213,7 @@ Run Summary
           ElmMassFraction:  20.92 %  ElmAbundance  12.82 % 
 
 
- Material: G4_POLYCARBONATE    density:  1.200 g/cm3   RadL:  34.587 cm      Nucl.Int.Length:  63.437 cm      Imean:  73.100 eV 
+ Material: G4_POLYCARBONATE    density:  1.200 g/cm3   RadL:  34.587 cm   Nucl.Int.Length:  63.437 cm   Imean:  73.100 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -1220,7 +1231,7 @@ Run Summary
           ElmMassFraction:  18.88 %  ElmAbundance   9.09 % 
 
 
- Material: G4_MYLAR    density:  1.400 g/cm3   RadL:  28.536 cm      Nucl.Int.Length:  55.985 cm      Imean:  78.700 eV 
+ Material: G4_MYLAR    density:  1.400 g/cm3   RadL:  28.536 cm   Nucl.Int.Length:  55.985 cm   Imean:  78.700 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -1241,33 +1252,33 @@ Run Summary
 
 
 ---------------------------------------------------------
----> The Absorber is 70.14 um     of G4_KAPTON
+---> The Absorber is 70.14 um  of G4_KAPTON
 
 ---------------------------------------------------------
 ### Run 6 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2140345174, 1746332580
+ Current couple of seeds = 2061134880, 1994770855
 ----------------------------------------
 
 ---> Begin of Event: 0
 
- The run consists of 1000 C12[0.0] of 79.08 MeV through 70.14 um     of G4_KAPTON (density: 1.42 g/cm3 )
+ The run consists of 1000 C12[0.0] of 79.08 MeV through 70.14 um  of G4_KAPTON (density: 1.42 g/cm3 )
 
- Projected Range= 70.14 um       rms= 0 fm    
+ Projected Range= 70.14 um    rms= 0 fm 
  Mean number of primary steps = 73
- Total energy deposit= 23.7099 MeV
- NIEL energy deposit = 11.7215 keV
+ Total energy deposit= 23.706 MeV
+ NIEL energy deposit = 11.7205 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1150570165, 975324673
+ Current couple of seeds = 1673924449, 1378796557
 ----------------------------------------
 
 ***** Table : Nb of materials = 10 *****
 
- Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm      Nucl.Int.Length:  75.520 cm      Imean:  75.000 eV 
+ Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm   Nucl.Int.Length:  75.520 cm   Imean:  75.000 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -1280,7 +1291,7 @@ Run Summary
           ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
 
 
- Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m       Nucl.Int.Length: 662.904 m       Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
          --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
@@ -1293,7 +1304,7 @@ Run Summary
           ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
 
 
- Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km      Nucl.Int.Length:  85.515 km      Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
+ Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km   Nucl.Int.Length:  85.515 km   Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
          --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
@@ -1306,33 +1317,33 @@ Run Summary
           ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
 
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 parsec  Nucl.Int.Length: 114334693.470 parsec  Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 114334693.470 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm      Nucl.Int.Length:  38.877 cm      Imean: 166.000 eV 
+ Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.877 cm   Imean: 166.000 eV 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
          --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:    G4_Be    density:  1.848 g/cm3   RadL:  35.276 cm      Nucl.Int.Length:  39.449 cm      Imean:  63.700 eV 
+ Material:    G4_Be    density:  1.848 g/cm3   RadL:  35.276 cm   Nucl.Int.Length:  39.449 cm   Imean:  63.700 eV 
    --->  Element: Be (Be)   Z =  4.0   N =   9.0   A =   9.01 g/mole
          --->  Isotope:   Be9   Z =  4   N =   9   A =   9.01 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:     G4_C    density:  2.000 g/cm3   RadL:  21.349 cm      Nucl.Int.Length:  40.101 cm      Imean:  81.000 eV 
+ Material:     G4_C    density:  2.000 g/cm3   RadL:  21.349 cm   Nucl.Int.Length:  40.101 cm   Imean:  81.000 eV 
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
          --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: G4_KAPTON    density:  1.420 g/cm3   RadL:  28.575 cm      Nucl.Int.Length:  55.867 cm      Imean:  79.600 eV 
+ Material: G4_KAPTON    density:  1.420 g/cm3   RadL:  28.575 cm   Nucl.Int.Length:  55.867 cm   Imean:  79.600 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -1355,7 +1366,7 @@ Run Summary
           ElmMassFraction:  20.92 %  ElmAbundance  12.82 % 
 
 
- Material: G4_POLYCARBONATE    density:  1.200 g/cm3   RadL:  34.587 cm      Nucl.Int.Length:  63.437 cm      Imean:  73.100 eV 
+ Material: G4_POLYCARBONATE    density:  1.200 g/cm3   RadL:  34.587 cm   Nucl.Int.Length:  63.437 cm   Imean:  73.100 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -1373,7 +1384,7 @@ Run Summary
           ElmMassFraction:  18.88 %  ElmAbundance   9.09 % 
 
 
- Material: G4_MYLAR    density:  1.400 g/cm3   RadL:  28.536 cm      Nucl.Int.Length:  55.985 cm      Imean:  78.700 eV 
+ Material: G4_MYLAR    density:  1.400 g/cm3   RadL:  28.536 cm   Nucl.Int.Length:  55.985 cm   Imean:  78.700 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -1394,33 +1405,33 @@ Run Summary
 
 
 ---------------------------------------------------------
----> The Absorber is 29.333 um     of G4_POLYCARBONATE
+---> The Absorber is 29.333 um  of G4_POLYCARBONATE
 
 ---------------------------------------------------------
 ### Run 7 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1150570165, 975324673
+ Current couple of seeds = 1673924449, 1378796557
 ----------------------------------------
 
 ---> Begin of Event: 0
 
- The run consists of 1000 C12[0.0] of 79.08 MeV through 29.333 um     of G4_POLYCARBONATE (density: 1.2 g/cm3 )
+ The run consists of 1000 C12[0.0] of 79.08 MeV through 29.333 um  of G4_POLYCARBONATE (density: 1.2 g/cm3 )
 
- Projected Range= 29.333 um       rms= 0 fm    
+ Projected Range= 29.333 um    rms= 0 fm 
  Mean number of primary steps = 32
- Total energy deposit= 8.03445 MeV
- NIEL energy deposit = 4.06434 keV
+ Total energy deposit= 8.03838 MeV
+ NIEL energy deposit = 4.06413 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 254816080, 2017640433
+ Current couple of seeds = 641518991, 399252832
 ----------------------------------------
 
 ***** Table : Nb of materials = 10 *****
 
- Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm      Nucl.Int.Length:  75.520 cm      Imean:  75.000 eV 
+ Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm   Nucl.Int.Length:  75.520 cm   Imean:  75.000 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -1433,7 +1444,7 @@ Run Summary
           ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
 
 
- Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m       Nucl.Int.Length: 662.904 m       Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
          --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
@@ -1446,7 +1457,7 @@ Run Summary
           ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
 
 
- Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km      Nucl.Int.Length:  85.515 km      Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
+ Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km   Nucl.Int.Length:  85.515 km   Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
          --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
@@ -1459,33 +1470,33 @@ Run Summary
           ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
 
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 parsec  Nucl.Int.Length: 114334693.470 parsec  Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 114334693.470 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm      Nucl.Int.Length:  38.877 cm      Imean: 166.000 eV 
+ Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.877 cm   Imean: 166.000 eV 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
          --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:    G4_Be    density:  1.848 g/cm3   RadL:  35.276 cm      Nucl.Int.Length:  39.449 cm      Imean:  63.700 eV 
+ Material:    G4_Be    density:  1.848 g/cm3   RadL:  35.276 cm   Nucl.Int.Length:  39.449 cm   Imean:  63.700 eV 
    --->  Element: Be (Be)   Z =  4.0   N =   9.0   A =   9.01 g/mole
          --->  Isotope:   Be9   Z =  4   N =   9   A =   9.01 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:     G4_C    density:  2.000 g/cm3   RadL:  21.349 cm      Nucl.Int.Length:  40.101 cm      Imean:  81.000 eV 
+ Material:     G4_C    density:  2.000 g/cm3   RadL:  21.349 cm   Nucl.Int.Length:  40.101 cm   Imean:  81.000 eV 
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
          --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: G4_KAPTON    density:  1.420 g/cm3   RadL:  28.575 cm      Nucl.Int.Length:  55.867 cm      Imean:  79.600 eV 
+ Material: G4_KAPTON    density:  1.420 g/cm3   RadL:  28.575 cm   Nucl.Int.Length:  55.867 cm   Imean:  79.600 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -1508,7 +1519,7 @@ Run Summary
           ElmMassFraction:  20.92 %  ElmAbundance  12.82 % 
 
 
- Material: G4_POLYCARBONATE    density:  1.200 g/cm3   RadL:  34.587 cm      Nucl.Int.Length:  63.437 cm      Imean:  73.100 eV 
+ Material: G4_POLYCARBONATE    density:  1.200 g/cm3   RadL:  34.587 cm   Nucl.Int.Length:  63.437 cm   Imean:  73.100 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -1526,7 +1537,7 @@ Run Summary
           ElmMassFraction:  18.88 %  ElmAbundance   9.09 % 
 
 
- Material: G4_MYLAR    density:  1.400 g/cm3   RadL:  28.536 cm      Nucl.Int.Length:  55.985 cm      Imean:  78.700 eV 
+ Material: G4_MYLAR    density:  1.400 g/cm3   RadL:  28.536 cm   Nucl.Int.Length:  55.985 cm   Imean:  78.700 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -1547,33 +1558,33 @@ Run Summary
 
 
 ---------------------------------------------------------
----> The Absorber is 23.143 um     of G4_MYLAR
+---> The Absorber is 23.143 um  of G4_MYLAR
 
 ---------------------------------------------------------
 ### Run 8 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 254816080, 2017640433
+ Current couple of seeds = 641518991, 399252832
 ----------------------------------------
 
 ---> Begin of Event: 0
 
- The run consists of 1000 C12[0.0] of 59.04 MeV through 23.143 um     of G4_MYLAR (density: 1.4 g/cm3 )
+ The run consists of 1000 C12[0.0] of 59.04 MeV through 23.143 um  of G4_MYLAR (density: 1.4 g/cm3 )
 
- Projected Range= 23.143 um       rms= 0 fm    
+ Projected Range= 23.143 um    rms= 0 fm 
  Mean number of primary steps = 26
- Total energy deposit= 9.21605 MeV
- NIEL energy deposit = 4.80579 keV
+ Total energy deposit= 9.22364 MeV
+ NIEL energy deposit = 4.80642 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1596891598, 1209112067
+ Current couple of seeds = 1454753081, 988801613
 ----------------------------------------
 
 ***** Table : Nb of materials = 10 *****
 
- Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm      Nucl.Int.Length:  75.520 cm      Imean:  75.000 eV 
+ Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm   Nucl.Int.Length:  75.520 cm   Imean:  75.000 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -1586,7 +1597,7 @@ Run Summary
           ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
 
 
- Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m       Nucl.Int.Length: 662.904 m       Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
          --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
@@ -1599,7 +1610,7 @@ Run Summary
           ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
 
 
- Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km      Nucl.Int.Length:  85.515 km      Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
+ Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km   Nucl.Int.Length:  85.515 km   Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
          --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
@@ -1612,33 +1623,33 @@ Run Summary
           ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
 
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 parsec  Nucl.Int.Length: 114334693.470 parsec  Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 114334693.470 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm      Nucl.Int.Length:  38.877 cm      Imean: 166.000 eV 
+ Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.877 cm   Imean: 166.000 eV 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
          --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:    G4_Be    density:  1.848 g/cm3   RadL:  35.276 cm      Nucl.Int.Length:  39.449 cm      Imean:  63.700 eV 
+ Material:    G4_Be    density:  1.848 g/cm3   RadL:  35.276 cm   Nucl.Int.Length:  39.449 cm   Imean:  63.700 eV 
    --->  Element: Be (Be)   Z =  4.0   N =   9.0   A =   9.01 g/mole
          --->  Isotope:   Be9   Z =  4   N =   9   A =   9.01 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:     G4_C    density:  2.000 g/cm3   RadL:  21.349 cm      Nucl.Int.Length:  40.101 cm      Imean:  81.000 eV 
+ Material:     G4_C    density:  2.000 g/cm3   RadL:  21.349 cm   Nucl.Int.Length:  40.101 cm   Imean:  81.000 eV 
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
          --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: G4_KAPTON    density:  1.420 g/cm3   RadL:  28.575 cm      Nucl.Int.Length:  55.867 cm      Imean:  79.600 eV 
+ Material: G4_KAPTON    density:  1.420 g/cm3   RadL:  28.575 cm   Nucl.Int.Length:  55.867 cm   Imean:  79.600 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -1661,7 +1672,7 @@ Run Summary
           ElmMassFraction:  20.92 %  ElmAbundance  12.82 % 
 
 
- Material: G4_POLYCARBONATE    density:  1.200 g/cm3   RadL:  34.587 cm      Nucl.Int.Length:  63.437 cm      Imean:  73.100 eV 
+ Material: G4_POLYCARBONATE    density:  1.200 g/cm3   RadL:  34.587 cm   Nucl.Int.Length:  63.437 cm   Imean:  73.100 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -1679,7 +1690,7 @@ Run Summary
           ElmMassFraction:  18.88 %  ElmAbundance   9.09 % 
 
 
- Material: G4_MYLAR    density:  1.400 g/cm3   RadL:  28.536 cm      Nucl.Int.Length:  55.985 cm      Imean:  78.700 eV 
+ Material: G4_MYLAR    density:  1.400 g/cm3   RadL:  28.536 cm   Nucl.Int.Length:  55.985 cm   Imean:  78.700 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -1700,33 +1711,33 @@ Run Summary
 
 
 ---------------------------------------------------------
----> The Absorber is 46.7 um     of G4_KAPTON
+---> The Absorber is 46.7 um  of G4_KAPTON
 
 ---------------------------------------------------------
 ### Run 9 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1596891598, 1209112067
+ Current couple of seeds = 1454753081, 988801613
 ----------------------------------------
 
 ---> Begin of Event: 0
 
- The run consists of 1000 O16[0.0] of 78.215 MeV through 46.7 um     of G4_KAPTON (density: 1.42 g/cm3 )
+ The run consists of 1000 O16[0.0] of 78.215 MeV through 46.7 um  of G4_KAPTON (density: 1.42 g/cm3 )
 
- Projected Range= 46.7 um       rms= 0 fm    
+ Projected Range= 46.7 um    rms= 0 fm 
  Mean number of primary steps = 49
- Total energy deposit= 36.4207 MeV
- NIEL energy deposit = 19.4875 keV
+ Total energy deposit= 36.4383 MeV
+ NIEL energy deposit = 19.4899 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1758608580, 755712165
+ Current couple of seeds = 825209504, 287254607
 ----------------------------------------
 
 ***** Table : Nb of materials = 10 *****
 
- Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm      Nucl.Int.Length:  75.520 cm      Imean:  75.000 eV 
+ Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm   Nucl.Int.Length:  75.520 cm   Imean:  75.000 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -1739,7 +1750,7 @@ Run Summary
           ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
 
 
- Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m       Nucl.Int.Length: 662.904 m       Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
          --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
@@ -1752,7 +1763,7 @@ Run Summary
           ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
 
 
- Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km      Nucl.Int.Length:  85.515 km      Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
+ Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km   Nucl.Int.Length:  85.515 km   Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
          --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
@@ -1765,33 +1776,33 @@ Run Summary
           ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
 
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 parsec  Nucl.Int.Length: 114334693.470 parsec  Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 114334693.470 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm      Nucl.Int.Length:  38.877 cm      Imean: 166.000 eV 
+ Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.877 cm   Imean: 166.000 eV 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
          --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:    G4_Be    density:  1.848 g/cm3   RadL:  35.276 cm      Nucl.Int.Length:  39.449 cm      Imean:  63.700 eV 
+ Material:    G4_Be    density:  1.848 g/cm3   RadL:  35.276 cm   Nucl.Int.Length:  39.449 cm   Imean:  63.700 eV 
    --->  Element: Be (Be)   Z =  4.0   N =   9.0   A =   9.01 g/mole
          --->  Isotope:   Be9   Z =  4   N =   9   A =   9.01 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:     G4_C    density:  2.000 g/cm3   RadL:  21.349 cm      Nucl.Int.Length:  40.101 cm      Imean:  81.000 eV 
+ Material:     G4_C    density:  2.000 g/cm3   RadL:  21.349 cm   Nucl.Int.Length:  40.101 cm   Imean:  81.000 eV 
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
          --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: G4_KAPTON    density:  1.420 g/cm3   RadL:  28.575 cm      Nucl.Int.Length:  55.867 cm      Imean:  79.600 eV 
+ Material: G4_KAPTON    density:  1.420 g/cm3   RadL:  28.575 cm   Nucl.Int.Length:  55.867 cm   Imean:  79.600 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -1814,7 +1825,7 @@ Run Summary
           ElmMassFraction:  20.92 %  ElmAbundance  12.82 % 
 
 
- Material: G4_POLYCARBONATE    density:  1.200 g/cm3   RadL:  34.587 cm      Nucl.Int.Length:  63.437 cm      Imean:  73.100 eV 
+ Material: G4_POLYCARBONATE    density:  1.200 g/cm3   RadL:  34.587 cm   Nucl.Int.Length:  63.437 cm   Imean:  73.100 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -1832,7 +1843,7 @@ Run Summary
           ElmMassFraction:  18.88 %  ElmAbundance   9.09 % 
 
 
- Material: G4_MYLAR    density:  1.400 g/cm3   RadL:  28.536 cm      Nucl.Int.Length:  55.985 cm      Imean:  78.700 eV 
+ Material: G4_MYLAR    density:  1.400 g/cm3   RadL:  28.536 cm   Nucl.Int.Length:  55.985 cm   Imean:  78.700 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -1853,33 +1864,33 @@ Run Summary
 
 
 ---------------------------------------------------------
----> The Absorber is 29.333 um     of G4_POLYCARBONATE
+---> The Absorber is 29.333 um  of G4_POLYCARBONATE
 
 ---------------------------------------------------------
 ### Run 10 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1758608580, 755712165
+ Current couple of seeds = 825209504, 287254607
 ----------------------------------------
 
 ---> Begin of Event: 0
 
- The run consists of 1000 O16[0.0] of 78.215 MeV through 29.333 um     of G4_POLYCARBONATE (density: 1.2 g/cm3 )
+ The run consists of 1000 O16[0.0] of 78.215 MeV through 29.333 um  of G4_POLYCARBONATE (density: 1.2 g/cm3 )
 
- Projected Range= 29.333 um       rms= 0 fm    
+ Projected Range= 29.333 um    rms= 0 fm 
  Mean number of primary steps = 32
- Total energy deposit= 18.4426 MeV
- NIEL energy deposit = 9.8572 keV
+ Total energy deposit= 18.4381 MeV
+ NIEL energy deposit = 9.85618 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 902952765, 159090658
+ Current couple of seeds = 394602484, 1422575621
 ----------------------------------------
 
 ***** Table : Nb of materials = 10 *****
 
- Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm      Nucl.Int.Length:  75.520 cm      Imean:  75.000 eV 
+ Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm   Nucl.Int.Length:  75.520 cm   Imean:  75.000 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -1892,7 +1903,7 @@ Run Summary
           ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
 
 
- Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m       Nucl.Int.Length: 662.904 m       Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
          --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
@@ -1905,7 +1916,7 @@ Run Summary
           ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
 
 
- Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km      Nucl.Int.Length:  85.515 km      Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
+ Material: TechVacuum    density:  0.010 kg/m3   RadL:  36.786 km   Nucl.Int.Length:  85.515 km   Imean:  85.703 eV   temperature: 273.15 K  pressure:   0.02 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
          --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
@@ -1918,33 +1929,33 @@ Run Summary
           ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
 
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 parsec  Nucl.Int.Length: 114334693.470 parsec  Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 114334693.470 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm      Nucl.Int.Length:  38.877 cm      Imean: 166.000 eV 
+ Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.877 cm   Imean: 166.000 eV 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
          --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:    G4_Be    density:  1.848 g/cm3   RadL:  35.276 cm      Nucl.Int.Length:  39.449 cm      Imean:  63.700 eV 
+ Material:    G4_Be    density:  1.848 g/cm3   RadL:  35.276 cm   Nucl.Int.Length:  39.449 cm   Imean:  63.700 eV 
    --->  Element: Be (Be)   Z =  4.0   N =   9.0   A =   9.01 g/mole
          --->  Isotope:   Be9   Z =  4   N =   9   A =   9.01 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:     G4_C    density:  2.000 g/cm3   RadL:  21.349 cm      Nucl.Int.Length:  40.101 cm      Imean:  81.000 eV 
+ Material:     G4_C    density:  2.000 g/cm3   RadL:  21.349 cm   Nucl.Int.Length:  40.101 cm   Imean:  81.000 eV 
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
          --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: G4_KAPTON    density:  1.420 g/cm3   RadL:  28.575 cm      Nucl.Int.Length:  55.867 cm      Imean:  79.600 eV 
+ Material: G4_KAPTON    density:  1.420 g/cm3   RadL:  28.575 cm   Nucl.Int.Length:  55.867 cm   Imean:  79.600 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -1967,7 +1978,7 @@ Run Summary
           ElmMassFraction:  20.92 %  ElmAbundance  12.82 % 
 
 
- Material: G4_POLYCARBONATE    density:  1.200 g/cm3   RadL:  34.587 cm      Nucl.Int.Length:  63.437 cm      Imean:  73.100 eV 
+ Material: G4_POLYCARBONATE    density:  1.200 g/cm3   RadL:  34.587 cm   Nucl.Int.Length:  63.437 cm   Imean:  73.100 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -1985,7 +1996,7 @@ Run Summary
           ElmMassFraction:  18.88 %  ElmAbundance   9.09 % 
 
 
- Material: G4_MYLAR    density:  1.400 g/cm3   RadL:  28.536 cm      Nucl.Int.Length:  55.985 cm      Imean:  78.700 eV 
+ Material: G4_MYLAR    density:  1.400 g/cm3   RadL:  28.536 cm   Nucl.Int.Length:  55.985 cm   Imean:  78.700 eV 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -2006,28 +2017,28 @@ Run Summary
 
 
 ---------------------------------------------------------
----> The Absorber is 23.143 um     of G4_MYLAR
+---> The Absorber is 23.143 um  of G4_MYLAR
 
 ---------------------------------------------------------
 ### Run 11 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 902952765, 159090658
+ Current couple of seeds = 394602484, 1422575621
 ----------------------------------------
 
 ---> Begin of Event: 0
 
- The run consists of 1000 O16[0.0] of 78.215 MeV through 23.143 um     of G4_MYLAR (density: 1.4 g/cm3 )
+ The run consists of 1000 O16[0.0] of 78.215 MeV through 23.143 um  of G4_MYLAR (density: 1.4 g/cm3 )
 
- Projected Range= 23.143 um       rms= 0 fm    
+ Projected Range= 23.143 um    rms= 0 fm 
  Mean number of primary steps = 26
- Total energy deposit= 16.4353 MeV
- NIEL energy deposit = 8.61085 keV
+ Total energy deposit= 16.4458 MeV
+ NIEL energy deposit = 8.61077 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1039070981, 859299398
+ Current couple of seeds = 715237303, 668791118
 ----------------------------------------
 
 ===============================================================================
@@ -2040,9 +2051,9 @@ Run Summary
   Particle       Material      Energy    Ref.Value  Err.   Sim.Value  Diff. P/F
                                 (MeV)                (%)                (%)    
 -------------------------------------------------------------------------------
-  C12[0.0]          G4_Al       144.0  300.1 um      5.0303.32 um      -1.1   P
-  C12[0.0]          G4_Be       144.0  381.5 um      5.0381.487 um       0.0   P
-  C12[0.0]           G4_C       144.0  327.7 um      5.0346.189 um      -5.6   F
+  C12[0.0]          G4_Al       144.0     300.1 um   5.0  303.224 um   -1.0   P
+  C12[0.0]          G4_Be       144.0     381.5 um   5.0  381.569 um   -0.0   P
+  C12[0.0]           G4_C       144.0     327.7 um   5.0  346.089 um   -5.6   F
 -------------------------------------------------------------------------------
   TOTAL = 3, FAILED = 1, PASSED = 2
 ===============================================================================
@@ -2058,15 +2069,15 @@ Run Summary
   Particle       Material      Energy    Ref.Value  Err.   Sim.Value  Diff. P/F
                                 (MeV)                (%)                (%)    
 -------------------------------------------------------------------------------
-  Li7[0.0]      G4_KAPTON        29.8      8.44 MeV  5.0  8.26286 MeV   2.1   P
-  Li7[0.0]  G4_POLYCAR...        29.8      2.93 MeV  5.0   2.8292 MeV   3.4   P
-  Li7[0.0]       G4_MYLAR        29.8      2.61 MeV  5.0  2.53155 MeV   3.0   P
-  C12[0.0]      G4_KAPTON        79.1     23.17 MeV  5.0  23.7099 MeV  -2.3   P
-  C12[0.0]  G4_POLYCAR...        79.1      7.34 MeV  5.0  8.03445 MeV  -9.5   F
-  C12[0.0]       G4_MYLAR        59.0      9.39 MeV  5.0  9.21605 MeV   1.9   P
-  O16[0.0]      G4_KAPTON        78.2     35.47 MeV  5.0  36.4207 MeV  -2.7   P
-  O16[0.0]  G4_POLYCAR...        78.2     18.18 MeV  5.0  18.4426 MeV  -1.4   P
-  O16[0.0]       G4_MYLAR        78.2     16.32 MeV  5.0  16.4353 MeV  -0.7   P
+  Li7[0.0]      G4_KAPTON        29.8      8.44 MeV  5.0  8.26995 MeV   2.0   P
+  Li7[0.0]  G4_POLYCAR...        29.8      2.93 MeV  5.0  2.82985 MeV   3.4   P
+  Li7[0.0]       G4_MYLAR        29.8      2.61 MeV  5.0   2.5333 MeV   2.9   P
+  C12[0.0]      G4_KAPTON        79.1     23.17 MeV  5.0   23.706 MeV  -2.3   P
+  C12[0.0]  G4_POLYCAR...        79.1      7.34 MeV  5.0  8.03838 MeV  -9.5   F
+  C12[0.0]       G4_MYLAR        59.0      9.39 MeV  5.0  9.22364 MeV   1.8   P
+  O16[0.0]      G4_KAPTON        78.2     35.47 MeV  5.0  36.4383 MeV  -2.7   P
+  O16[0.0]  G4_POLYCAR...        78.2     18.18 MeV  5.0  18.4381 MeV  -1.4   P
+  O16[0.0]       G4_MYLAR        78.2     16.32 MeV  5.0  16.4458 MeV  -0.8   P
 -------------------------------------------------------------------------------
   TOTAL = 9, FAILED = 1, PASSED = 8
 ===============================================================================

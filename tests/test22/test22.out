@@ -2,10 +2,9 @@
         ############################################
         !!! WARNING - FPE detection is activated !!!
         ############################################
-+++ G4StackManager uses G4SmartTrackStack. +++
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-10    (2-November-2012)
+ Geant4 version Name: geant4-09-06-ref-00    (30-November-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -228,7 +227,7 @@ hIoni:   for  GenericIon    SubType= 2
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
 
 hIoni:   for  alpha    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -238,7 +237,7 @@ hIoni:   for  alpha    SubType= 2
           BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
 
 msc:   for alpha    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
@@ -302,7 +301,7 @@ muPairProd:   for  mu+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-muMsc:   for mu+    SubType= 10
+msc:   for mu+    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
@@ -328,7 +327,7 @@ muPairProd:   for  mu-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-muMsc:   for mu-    SubType= 10
+msc:   for mu-    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
@@ -503,19 +502,19 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Lead 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -541,7 +540,7 @@ Event number 9
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.67s Real=0.67s Sys=0s
+  User=0.63s Real=0.63s Sys=0s
 /gun/energy 1.0 GeV
 /run/beamOn 10
 
@@ -550,19 +549,19 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Lead 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -583,7 +582,7 @@ Event number 19
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.52s Real=0.52s Sys=0s
+  User=0.47s Real=0.48s Sys=0s
 /gun/energy 0.75 GeV
 /run/beamOn 10
 
@@ -592,19 +591,19 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Lead 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -622,10 +621,15 @@ Event number 26
 Event number 27
 Event number 28
 Event number 29
+WARNING: G4DistributionGenerator is deprecated and will be removed in GEANT4 version 10.0.
+WARNING: G4PiMinusStopAbsorption is deprecated and will be removed in GEANT4 version 10.0.
+WARNING: G4StopDeexcitationAlgorithm is deprecated and will be removed in GEANT4 version 10.0.
+WARNING: G4StopTheoDeexcitation is deprecated and will be removed in GEANT4 version 10.0.
+WARNING: G4StopDeexcitation is deprecated and will be removed in GEANT4 version 10.0.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.42s Real=0.42s Sys=0s
+  User=0.35s Real=0.35s Sys=0s
 /gun/energy 0.150 GeV
 /run/beamOn 10
 
@@ -634,19 +638,19 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Lead 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -667,7 +671,7 @@ Event number 39
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.09s Real=0.09s Sys=0s
+  User=0.1s Real=0.09s Sys=0s
 /gun/energy 0.050 GeV
 /run/beamOn 10
 
@@ -676,19 +680,19 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Lead 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -709,7 +713,7 @@ Event number 49
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.02s Real=0.02s Sys=0s
+  User=0.02s Real=0.03s Sys=0s
 /gun/energy 0.015 GeV
 /run/beamOn 10
 
@@ -718,19 +722,19 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Lead 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -751,7 +755,7 @@ Event number 59
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.01s Real=0.01s Sys=0s
+  User=0.02s Real=0.01s Sys=0s
 /gun/energy 0.0015 GeV
 /run/beamOn 10
 
@@ -760,19 +764,19 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Lead 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -808,19 +812,19 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Lead 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -830,11 +834,6 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 Start Run processing.
 Event number 70
 Event number 71
-WARNING: G4DistributionGenerator is deprecated and will be removed in GEANT4 version 10.0.
-WARNING: G4PiMinusStopAbsorption is deprecated and will be removed in GEANT4 version 10.0.
-WARNING: G4StopDeexcitationAlgorithm is deprecated and will be removed in GEANT4 version 10.0.
-WARNING: G4StopTheoDeexcitation is deprecated and will be removed in GEANT4 version 10.0.
-WARNING: G4StopDeexcitation is deprecated and will be removed in GEANT4 version 10.0.
 Event number 72
 Event number 73
 Event number 74
@@ -846,7 +845,7 @@ Event number 79
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.39s Real=1.39s Sys=0s
+  User=1.51s Real=1.51s Sys=0s
 /gun/energy 3 GeV
 /run/beamOn 10
 
@@ -855,19 +854,19 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Lead 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -888,7 +887,7 @@ Event number 89
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.84s Real=0.83s Sys=0s
+  User=0.84s Real=0.85s Sys=0.01s
 /gun/energy 2.5 GeV
 /run/beamOn 10
 
@@ -897,19 +896,19 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Lead 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -930,7 +929,7 @@ Event number 99
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.77s Real=0.77s Sys=0s
+  User=0.68s Real=0.7s Sys=0s
 /gun/energy 1.0 GeV
 /run/beamOn 10
 
@@ -939,19 +938,19 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Lead 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -972,7 +971,7 @@ Event number 109
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.37s Real=0.37s Sys=0s
+  User=0.44s Real=0.44s Sys=0s
 /gun/energy 0.75 GeV
 /run/beamOn 10
 
@@ -981,19 +980,19 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Lead 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -1014,7 +1013,7 @@ Event number 119
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.36s Real=0.37s Sys=0s
+  User=0.35s Real=0.35s Sys=0s
 /gun/energy 0.150 GeV
 /run/beamOn 10
 
@@ -1023,19 +1022,19 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Lead 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -1056,7 +1055,7 @@ Event number 129
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.13s Real=0.12s Sys=0s
+  User=0.13s Real=0.13s Sys=0s
 /gun/energy 0.050 GeV
 /run/beamOn 10
 
@@ -1065,19 +1064,19 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Lead 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -1098,7 +1097,7 @@ Event number 139
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.05s Real=0.05s Sys=0s
+  User=0.04s Real=0.05s Sys=0s
 /gun/energy 0.015 GeV
 /run/beamOn 10
 
@@ -1107,19 +1106,19 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Lead 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -1140,7 +1139,7 @@ Event number 149
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.01s Real=0.02s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 /gun/energy 0.0015 GeV
 /run/beamOn 10
 
@@ -1149,19 +1148,19 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Lead 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -1197,19 +1196,19 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Lead 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -1230,7 +1229,7 @@ Event number 169
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=2.53s Real=2.53s Sys=0s
+  User=2.45s Real=2.45s Sys=0s
 /gun/energy 3 GeV
 /run/beamOn 10
 
@@ -1239,19 +1238,19 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Lead 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -1272,7 +1271,7 @@ Event number 179
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.53s Real=1.55s Sys=0s
+  User=1.41s Real=1.41s Sys=0s
 /gun/energy 2.5 GeV
 /run/beamOn 10
 
@@ -1281,19 +1280,19 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Lead 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -1314,7 +1313,7 @@ Event number 189
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.24s Real=1.24s Sys=0s
+  User=1.19s Real=1.2s Sys=0s
 /gun/energy 1.0 GeV
 /run/beamOn 10
 
@@ -1323,19 +1322,19 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Lead 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -1356,7 +1355,7 @@ Event number 199
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.47s Real=0.46s Sys=0s
+  User=0.52s Real=0.52s Sys=0s
 /gun/energy 0.75 GeV
 /run/beamOn 10
 
@@ -1365,19 +1364,19 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Lead 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -1398,7 +1397,7 @@ Event number 209
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.38s Real=0.39s Sys=0s
+  User=0.43s Real=0.43s Sys=0s
 /gun/energy 0.150 GeV
 /run/beamOn 10
 
@@ -1407,19 +1406,19 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Lead 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -1440,7 +1439,7 @@ Event number 219
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.05s Real=0.05s Sys=0s
+  User=0.06s Real=0.05s Sys=0s
 /gun/energy 0.050 GeV
 /run/beamOn 10
 
@@ -1449,19 +1448,19 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Lead 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -1491,19 +1490,19 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Lead 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -1533,19 +1532,19 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Lead 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -1566,7 +1565,7 @@ Event number 249
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0s Sys=0s
 #
 # gamma in Al
 #
@@ -1665,7 +1664,7 @@ hIoni:   for  GenericIon    SubType= 2
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
 
 hIoni:   for  alpha    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -1676,7 +1675,7 @@ hIoni:   for  alpha    SubType= 2
           BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
 
 msc:   for alpha    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
@@ -1740,7 +1739,7 @@ muPairProd:   for  mu+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-muMsc:   for mu+    SubType= 10
+msc:   for mu+    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
@@ -1766,7 +1765,7 @@ muPairProd:   for  mu-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-muMsc:   for mu-    SubType= 10
+msc:   for mu-    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
@@ -1802,24 +1801,24 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Aluminium 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -1840,7 +1839,7 @@ Event number 259
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.29s Real=0.29s Sys=0s
+  User=0.39s Real=0.39s Sys=0s
 /gun/energy 1.0 GeV
 /run/beamOn 10
 
@@ -1849,24 +1848,24 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Aluminium 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -1887,7 +1886,7 @@ Event number 269
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.29s Real=0.29s Sys=0s
+  User=0.22s Real=0.22s Sys=0s
 /gun/energy 0.75 GeV
 /run/beamOn 10
 
@@ -1896,24 +1895,24 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Aluminium 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -1934,7 +1933,7 @@ Event number 279
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.14s Real=0.14s Sys=0s
+  User=0.21s Real=0.21s Sys=0s
 /gun/energy 0.150 GeV
 /run/beamOn 10
 
@@ -1943,24 +1942,24 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Aluminium 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -1981,7 +1980,7 @@ Event number 289
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.05s Real=0.05s Sys=0s
+  User=0.04s Real=0.04s Sys=0s
 /gun/energy 0.050 GeV
 /run/beamOn 10
 
@@ -1990,24 +1989,24 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Aluminium 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -2037,24 +2036,24 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Aluminium 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -2075,7 +2074,7 @@ Event number 309
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.02s Real=0.02s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /gun/energy 0.0015 GeV
 /run/beamOn 10
 
@@ -2084,24 +2083,24 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Aluminium 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -2137,24 +2136,24 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Aluminium 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -2175,7 +2174,7 @@ Event number 329
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.77s Real=0.78s Sys=0s
+  User=0.82s Real=0.82s Sys=0s
 /gun/energy 3 GeV
 /run/beamOn 10
 
@@ -2184,24 +2183,24 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Aluminium 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -2222,7 +2221,7 @@ Event number 339
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.62s Real=0.61s Sys=0s
+  User=0.51s Real=0.51s Sys=0s
 /gun/energy 2.5 GeV
 /run/beamOn 10
 
@@ -2231,24 +2230,24 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Aluminium 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -2269,7 +2268,7 @@ Event number 349
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.46s Real=0.46s Sys=0s
+  User=0.43s Real=0.43s Sys=0s
 /gun/energy 1.0 GeV
 /run/beamOn 10
 
@@ -2278,24 +2277,24 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Aluminium 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -2316,7 +2315,7 @@ Event number 359
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.24s Real=0.24s Sys=0s
+  User=0.25s Real=0.25s Sys=0s
 /gun/energy 0.75 GeV
 /run/beamOn 10
 
@@ -2325,24 +2324,24 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Aluminium 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -2363,7 +2362,7 @@ Event number 369
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.18s Real=0.18s Sys=0s
+  User=0.21s Real=0.21s Sys=0s
 /gun/energy 0.150 GeV
 /run/beamOn 10
 
@@ -2372,24 +2371,24 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Aluminium 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -2419,24 +2418,24 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Aluminium 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -2457,7 +2456,7 @@ Event number 389
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.03s Real=0.03s Sys=0s
+  User=0.03s Real=0.02s Sys=0s
 /gun/energy 0.015 GeV
 /run/beamOn 10
 
@@ -2466,24 +2465,24 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Aluminium 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -2504,7 +2503,7 @@ Event number 399
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 /gun/energy 0.0015 GeV
 /run/beamOn 10
 
@@ -2513,24 +2512,24 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Aluminium 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -2566,24 +2565,24 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Aluminium 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -2604,7 +2603,7 @@ Event number 419
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.25s Real=1.26s Sys=0s
+  User=1.24s Real=1.23s Sys=0s
 /gun/energy 3 GeV
 /run/beamOn 10
 
@@ -2613,24 +2612,24 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Aluminium 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -2651,7 +2650,7 @@ Event number 429
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.75s Real=0.74s Sys=0s
+  User=0.76s Real=0.76s Sys=0s
 /gun/energy 2.5 GeV
 /run/beamOn 10
 
@@ -2660,24 +2659,24 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Aluminium 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -2698,7 +2697,7 @@ Event number 439
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.63s Real=0.64s Sys=0s
+  User=0.54s Real=0.54s Sys=0s
 /gun/energy 1.0 GeV
 /run/beamOn 10
 
@@ -2707,24 +2706,24 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Aluminium 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -2745,7 +2744,7 @@ Event number 449
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.31s Real=0.31s Sys=0s
+  User=0.27s Real=0.27s Sys=0s
 /gun/energy 0.75 GeV
 /run/beamOn 10
 
@@ -2754,24 +2753,24 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Aluminium 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -2792,7 +2791,7 @@ Event number 459
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.24s Real=0.24s Sys=0s
+  User=0.22s Real=0.22s Sys=0s
 /gun/energy 0.150 GeV
 /run/beamOn 10
 
@@ -2801,24 +2800,24 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Aluminium 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -2839,7 +2838,7 @@ Event number 469
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.04s Real=0.04s Sys=0s
+  User=0.03s Real=0.03s Sys=0s
 /gun/energy 0.050 GeV
 /run/beamOn 10
 
@@ -2848,24 +2847,24 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Aluminium 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -2886,7 +2885,7 @@ Event number 479
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.01s Real=0.01s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 /gun/energy 0.015 GeV
 /run/beamOn 10
 
@@ -2895,24 +2894,24 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Aluminium 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -2933,7 +2932,7 @@ Event number 489
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0s Sys=0s
 /gun/energy 0.0015 GeV
 /run/beamOn 10
 
@@ -2942,24 +2941,24 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Aluminium 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -3079,7 +3078,7 @@ hIoni:   for  GenericIon    SubType= 2
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
 
 hIoni:   for  alpha    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -3090,7 +3089,7 @@ hIoni:   for  alpha    SubType= 2
           BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
 
 msc:   for alpha    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
@@ -3154,7 +3153,7 @@ muPairProd:   for  mu+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-muMsc:   for mu+    SubType= 10
+msc:   for mu+    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
@@ -3180,7 +3179,7 @@ muPairProd:   for  mu-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-muMsc:   for mu-    SubType= 10
+msc:   for mu-    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
@@ -3216,29 +3215,29 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -3268,29 +3267,29 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -3320,29 +3319,29 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -3372,29 +3371,29 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -3424,29 +3423,29 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -3476,29 +3475,29 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -3528,29 +3527,29 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -3586,29 +3585,29 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -3629,7 +3628,7 @@ Event number 579
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.63s Real=1.63s Sys=0s
+  User=1.77s Real=1.77s Sys=0s
 /gun/energy 3 GeV
 /run/beamOn 10
 
@@ -3638,29 +3637,29 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -3681,7 +3680,7 @@ Event number 589
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.81s Real=1.82s Sys=0s
+  User=1.15s Real=1.15s Sys=0s
 /gun/energy 2.5 GeV
 /run/beamOn 10
 
@@ -3690,29 +3689,29 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -3733,7 +3732,7 @@ Event number 599
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.32s Real=1.33s Sys=0s
+  User=2.29s Real=2.29s Sys=0s
 /gun/energy 1.0 GeV
 /run/beamOn 10
 
@@ -3742,29 +3741,29 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -3785,7 +3784,7 @@ Event number 609
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.8s Real=0.8s Sys=0s
+  User=0.66s Real=0.66s Sys=0s
 /gun/energy 0.75 GeV
 /run/beamOn 10
 
@@ -3794,29 +3793,29 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -3846,29 +3845,29 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -3889,7 +3888,7 @@ Event number 629
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.22s Real=0.22s Sys=0s
+  User=0.21s Real=0.21s Sys=0s
 /gun/energy 0.050 GeV
 /run/beamOn 10
 
@@ -3898,29 +3897,29 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -3941,7 +3940,7 @@ Event number 639
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.09s Real=0.09s Sys=0s
+  User=0.08s Real=0.08s Sys=0s
 /gun/energy 0.015 GeV
 /run/beamOn 10
 
@@ -3950,29 +3949,29 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -4002,29 +4001,29 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -4060,29 +4059,29 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -4112,29 +4111,29 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -4164,29 +4163,29 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -4207,7 +4206,7 @@ Event number 689
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0s Sys=0s
 /gun/energy 1.0 GeV
 /run/beamOn 10
 
@@ -4216,29 +4215,29 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -4268,29 +4267,29 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -4311,7 +4310,7 @@ Event number 709
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.01s Real=0s Sys=0s
+  User=0.01s Real=0s Sys=0.01s
 /gun/energy 0.150 GeV
 /run/beamOn 10
 
@@ -4320,29 +4319,29 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -4372,29 +4371,29 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -4424,29 +4423,29 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -4467,7 +4466,7 @@ Event number 739
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0s Sys=0s
 /gun/energy 0.0015 GeV
 /run/beamOn 10
 
@@ -4476,29 +4475,29 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Air 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
  Root logical volume(s) : 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : 
- Production cuts :   gamma 1 mm         e- 1 mm         e+ 1 mm     proton 1 mm    
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  101.843 keV    e-  1.36749 MeV    e+  1.27862 MeV proton 100 keV
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  1 mm        e-  1 mm        e+  1 mm     proton 1 mm    
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld

@@ -3,7 +3,200 @@
 ========================================================
 ### New verbose level 0
 Number of events according to macro 100
-Generator <lhep> is not included in the  list SetModels.csh, so is ignored!
-Generator <bertini> is not included in the  list SetModels.csh, so is ignored!
-###### End of test #####
+###### Start new run # 0     #####
+Material is selected: G4_C
+Test30Physics entry
+Process is created gen= lhep
+WARNING: model G4LEProtonInelastic is being deprecated and will
+disappear in Geant4 version 10.0
+New generator and material= G4_C
+Nucleus with N= 12  Z= 6
+Mass from targetNucleus(MeV)= 11174.9
+Mass from IonTable(MeV)=      11174.9
+Secondary generator <lhep> is initialized
+The particle:  proton
+Ekin = 2.205031e+00 GeV
+### factor  = 9.403219e-02    cross(b)= 2.591799e-01
+### 0-th event start 
+  User=0.01s Real=0.01s Sys=0s
+#################################################################
+###### Cross section per bin for pi+
 
+## Next momentum bin 0  -  100  MeV/c
+
+  0  0  259.18  0  129.59  0  0  0  129.59  0## Next momentum bin 100  -  150  MeV/c
+
+  296.206  777.54  0  259.18  518.36  518.36  0  0  259.18  0## Next momentum bin 150  -  200  MeV/c
+
+  296.206  259.18  0  259.18  0  0  259.18  0  0  0## Next momentum bin 200  -  250  MeV/c
+
+  296.206  0  259.18  518.36  1036.72  259.18  0  0  0  0## Next momentum bin 250  -  300  MeV/c
+
+  0  0  1036.72  518.36  0  0  0  0  0  0## Next momentum bin 300  -  350  MeV/c
+
+  0  259.18  518.36  0  0  0  0  0  0  0## Next momentum bin 350  -  400  MeV/c
+
+  0  518.36  259.18  259.18  259.18  0  0  259.18  0  0## Next momentum bin 400  -  450  MeV/c
+
+  0  259.18  0  259.18  0  0  259.18  0  0  0## Next momentum bin 450  -  500  MeV/c
+
+  148.103  0  0  0  0  0  0  0  0  0## Next momentum bin 500  -  600  MeV/c
+
+  0  259.18  129.59  0  0  129.59  0  0  0  0## Next momentum bin 600  -  700  MeV/c
+
+  222.154  259.18  259.18  129.59  0  0  0  0  0  0## Next momentum bin 700  -  800  MeV/c
+
+  0  129.59  129.59  129.59  0  0  0  0  0  0
+
+## ds/do(mb/strad) for pi+ with momentum cut: 100  -  800  MeV/c
+  74.0514  168.467  155.508  129.59  90.713  51.836  25.918  12.959  12.959  0
+## ds/dp(mb/GeV) for pi+ with theta cut 0.35  -  2.15 radian
+  494.081  2162.35  708.494  2122.08  1275.67  534.986  1330.1  708.494  0  394.101  460.348  291.244
+## cross_tot(bn)= 0.606086
+
+#################################################################
+## ds/do(mb/strad) for pi0 with momentum cut: 100  -  800  MeV/c
+  37.0257  129.59  38.877  116.631  51.836  51.836  12.959  0  0  12.959
+
+## ds/dp(mb/GeV) for pi0 with theta cut 0.35  -  2.15 radian
+  154.282  244.281  1705.91  835.706  1131.15  1250.24  694.276  449.995  338.208  70.7151  192.855  0
+## cross_tot(bn)= 0.374274
+
+#################################################################
+## ds/do(mb/strad) for protons with momentum cut: 100  -  800  MeV/c
+  177.723  233.262  311.016  233.262  414.688  323.975  285.098  323.975  285.098  220.303
+
+## ds/dp(mb/GeV) for pi0 with theta cut 0.35  -  2.15 radian
+  6897.21  10835.7  11404.2  7819.41  5444.32  4401.34  4223.1  2843.05  1932.07  1315.68  1294.23  633.914
+## cross_tot(bn)= 3.45927
+
+#################################################################
+## ds/do(mb/strad) for pi- with momentum cut: 100  -  800  MeV/c
+  37.0257  90.713  51.836  38.877  25.918  12.959  12.959  25.918  0  12.959
+
+## ds/dp(mb/GeV) for pi- with theta cut 0.35  -  2.15 radian
+  323.458  322.783  288.528  606.178  582.489  1112.34  141.43  0  141.43  239.411  169.104  314.996
+## cross_tot(bn)= 0.264456
+
+## Next momentum bin 0  -  100  MeV/c
+  0  0  0  0  0  0  129.59  129.59  0  0
+## Next momentum bin 100  -  150  MeV/c
+  0  0  0  0  0  0  259.18  0  0  0
+## Next momentum bin 150  -  200  MeV/c
+  0  0  0  0  0  0  0  0  0  259.18
+## Next momentum bin 200  -  250  MeV/c
+  0  0  0  0  259.18  0  0  259.18  0  0
+## Next momentum bin 250  -  300  MeV/c
+  296.206  259.18  259.18  259.18  0  0  0  0  0  0
+## Next momentum bin 300  -  350  MeV/c
+  148.103  518.36  259.18  0  0  259.18  0  259.18  0  0
+## Next momentum bin 350  -  400  MeV/c
+  0  259.18  0  0  0  0  0  0  0  0
+## Next momentum bin 400  -  450  MeV/c
+  0  0  0  0  0  0  0  0  0  0
+## Next momentum bin 450  -  500  MeV/c
+  0  259.18  0  0  0  0  0  0  0  0
+## Next momentum bin 500  -  600  MeV/c
+  0  0  129.59  0  129.59  0  0  0  0  0
+## Next momentum bin 600  -  700  MeV/c
+  74.0514  129.59  129.59  0  0  0  0  0  0  0
+## Next momentum bin 700  -  800  MeV/c
+  74.0514  129.59  0  259.18  0  0  0  0  0  0
+###### Start new run # 1     #####
+Material is selected: G4_C
+Test30Physics entry
+Process is created gen= bertini
+New generator and material= G4_C
+Nucleus with N= 12  Z= 6
+Mass from targetNucleus(MeV)= 11174.9
+Mass from IonTable(MeV)=      11174.9
+Secondary generator <bertini> is initialized
+The particle:  proton
+Ekin = 2.20503 GeV
+### factor  = 0.0940322    cross(b)= 0.25918
+### 0-th event start 
+  User=0.03s Real=0.03s Sys=0s
+#################################################################
+###### Cross section per bin for pi+
+
+## Next momentum bin 0  -  100  MeV/c
+
+  0  0  0  0  0  0  0  0  0  0## Next momentum bin 100  -  150  MeV/c
+
+  0  0  259.18  0  259.18  259.18  0  0  259.18  0## Next momentum bin 150  -  200  MeV/c
+
+  0  0  0  259.18  0  0  0  259.18  0  259.18## Next momentum bin 200  -  250  MeV/c
+
+  148.103  259.18  0  0  0  259.18  518.36  0  0  0## Next momentum bin 250  -  300  MeV/c
+
+  0  0  0  0  0  0  0  259.18  259.18  0## Next momentum bin 300  -  350  MeV/c
+
+  0  518.36  0  0  0  0  259.18  0  259.18  0## Next momentum bin 350  -  400  MeV/c
+
+  148.103  259.18  0  0  259.18  518.36  0  0  259.18  0## Next momentum bin 400  -  450  MeV/c
+
+  0  0  0  259.18  0  259.18  0  0  0  0## Next momentum bin 450  -  500  MeV/c
+
+  296.206  259.18  0  0  0  0  0  0  0  0## Next momentum bin 500  -  600  MeV/c
+
+  74.0514  129.59  129.59  259.18  0  0  0  0  0  0## Next momentum bin 600  -  700  MeV/c
+
+  74.0514  129.59  0  259.18  0  0  0  0  0  0## Next momentum bin 700  -  800  MeV/c
+
+  222.154  129.59  0  0  0  0  129.59  0  0  0
+
+## ds/do(mb/strad) for pi+ with momentum cut: 100  -  800  MeV/c
+  66.6463  103.672  25.918  77.754  25.918  64.795  51.836  25.918  51.836  12.959
+## ds/dp(mb/GeV) for pi+ with theta cut 0.35  -  2.15 radian
+  0  1099.95  856.942  1095.56  636.694  918.204  1353.17  552.845  141.43  413.385  314.996  232.107
+## cross_tot(bn)= 0.428788
+
+#################################################################
+## ds/do(mb/strad) for pi0 with momentum cut: 100  -  800  MeV/c
+  37.0257  25.918  25.918  51.836  103.672  25.918  64.795  12.959  38.877  12.959
+
+## ds/dp(mb/GeV) for pi0 with theta cut 0.35  -  2.15 radian
+  330.496  1125.26  1398.7  917.389  590.61  564.09  488.561  453.991  604.828  562.194  141.022  70.7151
+## cross_tot(bn)= 0.417614
+
+#################################################################
+## ds/do(mb/strad) for protons with momentum cut: 100  -  800  MeV/c
+  88.8617  246.221  272.139  168.467  272.139  103.672  142.549  103.672  90.713  64.795
+
+## ds/dp(mb/GeV) for pi0 with theta cut 0.35  -  2.15 radian
+  3411.99  5885.71  3354.41  3411.97  2232.39  2441.61  1366.51  2696.67  1574.38  1267.43  655.582  675.601
+## cross_tot(bn)= 1.74924
+
+#################################################################
+## ds/do(mb/strad) for pi- with momentum cut: 100  -  800  MeV/c
+  0  25.918  12.959  51.836  12.959  12.959  0  12.959  0  0
+
+## ds/dp(mb/GeV) for pi- with theta cut 0.35  -  2.15 radian
+  456.825  590.61  0  324.133  488.561  0  582.489  0  0  192.855  0  0
+## cross_tot(bn)= 0.164258
+
+## Next momentum bin 0  -  100  MeV/c
+  0  0  0  0  0  0  0  0  259.18  129.59
+## Next momentum bin 100  -  150  MeV/c
+  0  0  0  0  259.18  259.18  0  0  0  0
+## Next momentum bin 150  -  200  MeV/c
+  0  0  0  0  0  0  0  0  0  0
+## Next momentum bin 200  -  250  MeV/c
+  0  0  0  0  0  0  0  259.18  0  0
+## Next momentum bin 250  -  300  MeV/c
+  0  0  0  518.36  0  0  0  0  0  0
+## Next momentum bin 300  -  350  MeV/c
+  0  0  0  0  0  0  0  0  0  0
+## Next momentum bin 350  -  400  MeV/c
+  0  259.18  259.18  259.18  0  0  0  0  0  0
+## Next momentum bin 400  -  450  MeV/c
+  0  0  0  0  0  0  0  0  0  0
+## Next momentum bin 450  -  500  MeV/c
+  0  0  0  0  0  0  0  0  0  0
+## Next momentum bin 500  -  600  MeV/c
+  0  129.59  0  129.59  0  0  0  0  0  0
+## Next momentum bin 600  -  700  MeV/c
+  0  0  0  0  0  0  0  0  0  0
+## Next momentum bin 700  -  800  MeV/c
+  0  0  0  0  0  0  0  0  0  0
+###### End of test #####
