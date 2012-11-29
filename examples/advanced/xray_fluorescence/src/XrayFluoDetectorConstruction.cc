@@ -665,7 +665,7 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
   G4VisAttributes * yellow= new G4VisAttributes( G4Colour(255/255. ,255/255. ,51/255. ));
   G4VisAttributes * red= new G4VisAttributes( G4Colour(255/255. , 0/255. , 0/255. ));
   G4VisAttributes * blue= new G4VisAttributes( G4Colour(0/255. , 0/255. ,  255/255. ));
-  G4VisAttributes * gray= new G4VisAttributes( G4Colour(128/255. , 128/255. ,  128/255. ));
+  G4VisAttributes * grayc= new G4VisAttributes( G4Colour(128/255. , 128/255. ,  128/255. ));
   G4VisAttributes * lightGray= new G4VisAttributes( G4Colour(178/255. , 178/255. ,  178/255. ));
   G4VisAttributes * green= new G4VisAttributes( G4Colour(0/255. , 255/255. ,  0/255. ));
 
@@ -676,8 +676,8 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
   blue->SetVisibility(true);
   green->SetVisibility(true);
   green->SetForceSolid(true);
-  gray->SetVisibility(true);
-  gray->SetForceSolid(true);
+  grayc->SetVisibility(true);
+  grayc->SetForceSolid(true);
   lightGray->SetVisibility(true);
   lightGray->SetForceSolid(true);
   simpleBoxVisAtt->SetVisibility(true);
@@ -700,7 +700,7 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
 
 
 
-  if (sampleGranularity)  logicGrain->SetVisAttributes(gray);
+  if (sampleGranularity)  logicGrain->SetVisAttributes(grayc);
 
   //always return the physical World
     

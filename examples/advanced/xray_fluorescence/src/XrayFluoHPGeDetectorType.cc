@@ -269,7 +269,7 @@ void XrayFluoHPGeDetectorType::LoadResponseData(G4String fileName)
 	}
   G4double a = 0;
   G4int k = 1;
-  G4int s = 0;
+  G4int q = 0;
   
   G4int Z = 1;
   G4DataVector* energies = new G4DataVector;
@@ -281,7 +281,7 @@ void XrayFluoHPGeDetectorType::LoadResponseData(G4String fileName)
       G4int nColumns = 2;
       if (a == -1)
 	{
-	  if (s == 0)
+	  if (q == 0)
 	    {
 	      // End of a  data set
 	      energyMap[Z] = energies;
@@ -291,10 +291,10 @@ void XrayFluoHPGeDetectorType::LoadResponseData(G4String fileName)
 	      data = new G4DataVector;
 	      Z++;	    
 	    }      
-	  s++;
-	  if (s == nColumns)
+	  q++;
+	  if (q == nColumns)
 	    {
-	      s = 0;
+	      q = 0;
 	    }
 	}
       else if (a == -2)
