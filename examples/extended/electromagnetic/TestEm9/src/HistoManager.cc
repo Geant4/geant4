@@ -210,25 +210,27 @@ void HistoManager::EndOfRun(G4int runID)
   G4cout << std::setprecision(4) << "Average number of steps      " << xs << G4endl;
   
   for(j=0; j<3; j++) {
-    G4double e = fEdeptr[j];
-    G4double s = fErmstr[j];
+    G4double ex = fEdeptr[j];
+    G4double sx = fErmstr[j];
     G4double xx= G4double(fStat[j]);
     if(xx > 0.0) xx = 1.0/xx;
-    G4double r = s*std::sqrt(xx);
-    G4cout << std::setprecision(4) << "Edep " << nam[j] << " =                   " << e
+    G4double r = sx*std::sqrt(xx);
+    G4cout << std::setprecision(4) << "Edep " << nam[j]
+           << " =                   " << ex
            << " +- " << r;
-    if(e > 0.1) G4cout << "  res=  " << f*s/e << " %   " << fStat[j];
+    if(ex > 0.1) G4cout << "  res=  " << f*sx/ex << " %   " << fStat[j];
     G4cout << G4endl;
   }
   if(fLimittrue[0] < 10. || fLimittrue[1] < 10. || fLimittrue[2] < 10.) {
     G4cout<<"===========  Mean values without trancating ====================="<<G4endl;
     for(j=0; j<fNmax; j++) {
-      G4double e = fEdep[j];
-      G4double s = fErms[j];
-      G4double r = s*std::sqrt(x);
-      G4cout << std::setprecision(4) << "Edep " << nam[j] << " =                   " << e
-             << " +- " << r;
-      if(e > 0.0) G4cout << "  res=  " << f*s/e << " %";
+      G4double ex = fEdep[j];
+      G4double sx = fErms[j];
+      G4double rx = sx*std::sqrt(x);
+      G4cout << std::setprecision(4) << "Edep " << nam[j]
+             << " =                   " << ex
+             << " +- " << rx;
+      if(ex > 0.0) G4cout << "  res=  " << f*sx/ex << " %";
       G4cout << G4endl;
     }
   }

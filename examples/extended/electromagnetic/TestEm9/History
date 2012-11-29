@@ -1,4 +1,4 @@
-$Id: History,v 1.65 2011-01-06 15:56:39 vnivanch Exp $
+$Id:$
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28-11-12 G. Cosmo (testem9-V09-05-08)
+- Fixed cases of variable shadowing.
 
 15-11-12 I. Hrivnacova (testem9-V09-05-07)
 - Synchronized .README with changes in README
