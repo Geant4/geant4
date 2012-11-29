@@ -108,22 +108,22 @@ public:
   void SetStepper();
 
   /// Set the minimum step length
-  void SetMinStep(G4double s) { fMinStep = s; }
+  void SetMinStep(G4double stp) { fMinStep = stp; }
 
   /// Set the delta chord length
-  void SetDeltaChord(G4double s) { fDeltaChord = s; }
+  void SetDeltaChord(G4double dcr) { fDeltaChord = dcr; }
 
   /// Set the delta one step length
-  void SetDeltaOneStep(G4double s) { fDeltaOneStep = s; }
+  void SetDeltaOneStep(G4double stp) { fDeltaOneStep = stp; }
 
   /// Set the delta intersection length
-  void SetDeltaIntersection(G4double s) { fDeltaIntersection = s; }
+  void SetDeltaIntersection(G4double its) { fDeltaIntersection = its; }
 
   /// Set the minimum eps length
-  void SetEpsMin(G4double s) { fEpsMin = s; }
+  void SetEpsMin(G4double eps) { fEpsMin = eps; }
 
   /// Set the maximum eps length
-  void SetEpsMax(G4double s) { fEpsMax = s; }
+  void SetEpsMax(G4double eps) { fEpsMax = eps; }
 
   /// Return the list of Element Fields
   FieldList* GetFields() { return fFields; }

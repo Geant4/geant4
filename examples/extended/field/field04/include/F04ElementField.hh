@@ -67,9 +67,9 @@ class F04ElementField
     virtual ~F04ElementField() { if (fNavigator) delete fNavigator; }
 
     /// SetMaxStep(G4double) sets the max. step size
-    void SetMaxStep(G4double s)
+    void SetMaxStep(G4double stp)
     {
-      fMaxStep = s;
+      fMaxStep = stp;
       fUserLimits->SetMaxAllowedStep(fMaxStep);
       fVolume->SetUserLimits(fUserLimits);
     }
