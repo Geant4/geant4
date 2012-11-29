@@ -56,14 +56,14 @@ public:
 	void add(G4ThreeVector pos, G4double depEnergy, G4double density);
 	void add(const G4Step* aStep);
 
-	inline std::vector <Svoxel> getVoxels(){return this->voxels;}
+	inline std::vector <Svoxel> getVoxels(){return voxels;}
 
 	G4int getMinNumberOfEvents();
 	G4int getMaxNumberOfEvents();
 
 	G4bool loadData();
 
-	inline void setRecycling(int recycling){this->nRecycling=recycling;};
+	inline void setRecycling(int recycling){nRecycling=recycling;}
 	void saveResults(void);
         void resetNEventsInVoxels();
 private:

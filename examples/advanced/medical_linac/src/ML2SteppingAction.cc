@@ -49,15 +49,15 @@
 
 #include "G4VReadOutGeometry.hh"
 
-CML2SteppingAction::CML2SteppingAction(CML2Convergence *convergence)
+CML2SteppingAction::CML2SteppingAction(CML2Convergence *conv)
 {
-	this->convergence=convergence;
+	convergence=conv;
 }
 
 CML2SteppingAction::~CML2SteppingAction(void)
 {}
 void CML2SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
-	this->convergence->add(aStep);
+	convergence->add(aStep);
 }
 

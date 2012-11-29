@@ -52,20 +52,20 @@
 
 CML2PhantomConstructionMessenger::CML2PhantomConstructionMessenger(CML2PhantomConstruction *phantomConstructor) : pPhantomConstructor (phantomConstructor)
 {
-	this->PhantomName=new G4UIcmdWithAString("/phantom/PhantomName",this);
-	this->PhantomName->SetDefaultValue("fullWater");
-	this->PhantomName->SetGuidance("phantom name to select among those implemented  fullWater, boxInBox, Dicom1");
-	this->pPhantomConstructor->setPhantomName("fullWater");
+	PhantomName=new G4UIcmdWithAString("/phantom/PhantomName",this);
+	PhantomName->SetDefaultValue("fullWater");
+	PhantomName->SetGuidance("phantom name to select among those implemented  fullWater, boxInBox, Dicom1");
+	pPhantomConstructor->setPhantomName("fullWater");
 
-	this->PhantomFileName =new G4UIcmdWithAString("/phantom/PhantomFileName",this);
-	this->PhantomFileName ->SetDefaultValue("");
-	this->PhantomFileName->SetGuidance("full path and macro file name containing specific setup data for the phantom chosen");
-	this->pPhantomConstructor->setPhantomFileName ("");
+	PhantomFileName =new G4UIcmdWithAString("/phantom/PhantomFileName",this);
+	PhantomFileName ->SetDefaultValue("");
+	PhantomFileName->SetGuidance("full path and macro file name containing specific setup data for the phantom chosen");
+	pPhantomConstructor->setPhantomFileName ("");
 
-	this->phantomCentre=new G4UIcmdWith3VectorAndUnit("/phantom/centre", this);
-	this->phantomCentre->SetDefaultUnit("mm");
-	this->phantomCentre->SetGuidance("phantom centre coordinates in the world [mm]");
-	this->phantomCentre->SetDefaultValue(G4ThreeVector(0.,0.,0.));
+	phantomCentre=new G4UIcmdWith3VectorAndUnit("/phantom/centre", this);
+	phantomCentre->SetDefaultUnit("mm");
+	phantomCentre->SetGuidance("phantom centre coordinates in the world [mm]");
+	phantomCentre->SetDefaultValue(G4ThreeVector(0.,0.,0.));
 }
 
 CML2PhantomConstructionMessenger::~CML2PhantomConstructionMessenger(void)
@@ -75,17 +75,17 @@ CML2PhantomConstructionMessenger::~CML2PhantomConstructionMessenger(void)
 }
 void CML2PhantomConstructionMessenger::SetNewValue(G4UIcommand* cmd, G4String newValue)
 {
-	if (cmd==this->PhantomName)
-	{this->pPhantomConstructor->setPhantomName(newValue);}
+	if (cmd==PhantomName)
+	{pPhantomConstructor->setPhantomName(newValue);}
 
-	if (cmd==this->PhantomFileName )
-	{this->pPhantomConstructor->setPhantomFileName (newValue);}
+	if (cmd==PhantomFileName )
+	{pPhantomConstructor->setPhantomFileName (newValue);}
 
-	if (cmd==this->phantomCentre )
+	if (cmd==phantomCentre )
 	{
-		if (this->bOnlyVisio)
+		if (bOnlyVisio)
 		{
-			this->pPhantomConstructor->applyNewCentre(this->phantomCentre->GetNew3VectorRawValue(newValue));
+			pPhantomConstructor->applyNewCentre(phantomCentre->GetNew3VectorRawValue(newValue));
 // what follows seems to be necessary to have a good refresh
 			G4UImanager* UI = G4UImanager::GetUIpointer();
 			G4String command;
@@ -96,7 +96,7 @@ void CML2PhantomConstructionMessenger::SetNewValue(G4UIcommand* cmd, G4String ne
 		}
 		else
 		{
-			this->pPhantomConstructor->addNewCentre(this->phantomCentre->GetNew3VectorRawValue(newValue));
+			pPhantomConstructor->addNewCentre(phantomCentre->GetNew3VectorRawValue(newValue));
 		}
 	}
 }

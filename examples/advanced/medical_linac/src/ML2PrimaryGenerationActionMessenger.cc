@@ -49,36 +49,36 @@
 
 CML2PrimaryGenerationActionMessenger::CML2PrimaryGenerationActionMessenger(CML2PrimaryGenerationAction *PML2PrimaryGenerationAction) : pML2PrimaryGenerationAction(PML2PrimaryGenerationAction)
 {
-	this->nRecycling=new G4UIcmdWithAnInteger("/primaryParticleData/nIdenticalParticles",this);
-	this->nRecycling->SetDefaultValue(1);
-	this->nRecycling->SetGuidance("number of identical particles generated in the primary generator");
+	nRecycling=new G4UIcmdWithAnInteger("/primaryParticleData/nIdenticalParticles",this);
+	nRecycling->SetDefaultValue(1);
+	nRecycling->SetGuidance("number of identical particles generated in the primary generator");
 
-	this->calculatedPhaseSpaceFileIN=new G4UIcmdWithAString("/primaryParticleData/calculatedPhaseSpaceFileIN",this);
-	this->calculatedPhaseSpaceFileIN->SetDefaultValue("");
-	this->calculatedPhaseSpaceFileIN->SetGuidance("full path and file name of the phase space file to be used as particle generator");
+	calculatedPhaseSpaceFileIN=new G4UIcmdWithAString("/primaryParticleData/calculatedPhaseSpaceFileIN",this);
+	calculatedPhaseSpaceFileIN->SetDefaultValue("");
+	calculatedPhaseSpaceFileIN->SetGuidance("full path and file name of the phase space file to be used as particle generator");
 
-	this->sourceTypeName=new G4UIcmdWithAString("/primaryParticleData/sourceTypeName",this);
-	this->sourceTypeName->SetDefaultValue("");
-	this->sourceTypeName->SetGuidance("type of particle generator source  (randomTarget, phaseSpace)");
+	sourceTypeName=new G4UIcmdWithAString("/primaryParticleData/sourceTypeName",this);
+	sourceTypeName->SetDefaultValue("");
+	sourceTypeName->SetGuidance("type of particle generator source  (randomTarget, phaseSpace)");
 
-	this->nMaxParticlesInRamPhaseSpace=new G4UIcmdWithAnInteger("/primaryParticleData/nMaxParticlesInRamPhaseSpace",this);
-	this->nMaxParticlesInRamPhaseSpace->SetDefaultValue(10000);
-	this->nMaxParticlesInRamPhaseSpace->SetGuidance("maximum particle number loaded from the phase space file each time");
+	nMaxParticlesInRamPhaseSpace=new G4UIcmdWithAnInteger("/primaryParticleData/nMaxParticlesInRamPhaseSpace",this);
+	nMaxParticlesInRamPhaseSpace->SetDefaultValue(10000);
+	nMaxParticlesInRamPhaseSpace->SetGuidance("maximum particle number loaded from the phase space file each time");
 
-	this->GunMeanEnegy=new G4UIcmdWithADoubleAndUnit("/primaryParticleData/GunMeanEnegy", this);
-	this->GunMeanEnegy->SetDefaultUnit("MeV");
-	this->GunMeanEnegy->SetDefaultValue(6.);
-	this->GunMeanEnegy->SetGuidance("mean energy of the primary particles");
+	GunMeanEnegy=new G4UIcmdWithADoubleAndUnit("/primaryParticleData/GunMeanEnegy", this);
+	GunMeanEnegy->SetDefaultUnit("MeV");
+	GunMeanEnegy->SetDefaultValue(6.);
+	GunMeanEnegy->SetGuidance("mean energy of the primary particles");
 
-	this->GunStdEnegy=new G4UIcmdWithADoubleAndUnit("/primaryParticleData/GunStdEnegy", this);
-	this->GunStdEnegy->SetDefaultUnit("MeV");
-	this->GunStdEnegy->SetDefaultValue(0.127);
-	this->GunStdEnegy->SetGuidance("std energy of the primary particles");
+	GunStdEnegy=new G4UIcmdWithADoubleAndUnit("/primaryParticleData/GunStdEnegy", this);
+	GunStdEnegy->SetDefaultUnit("MeV");
+	GunStdEnegy->SetDefaultValue(0.127);
+	GunStdEnegy->SetGuidance("std energy of the primary particles");
 
-	this->GunRadious=new G4UIcmdWithADoubleAndUnit("/primaryParticleData/GunRadious", this);
-	this->GunRadious->SetDefaultUnit("mm");
-	this->GunRadious->SetDefaultValue(10.);
-	this->GunRadious->SetGuidance("radious primary particles beam");
+	GunRadious=new G4UIcmdWithADoubleAndUnit("/primaryParticleData/GunRadious", this);
+	GunRadious->SetDefaultUnit("mm");
+	GunRadious->SetDefaultValue(10.);
+	GunRadious->SetGuidance("radious primary particles beam");
 }
 
 CML2PrimaryGenerationActionMessenger::~CML2PrimaryGenerationActionMessenger(void)
@@ -93,39 +93,39 @@ CML2PrimaryGenerationActionMessenger::~CML2PrimaryGenerationActionMessenger(void
 }
 void CML2PrimaryGenerationActionMessenger::SetNewValue(G4UIcommand* cmd, G4String newValue)
 {
-	if (cmd==this->GunMeanEnegy)
+	if (cmd==GunMeanEnegy)
 	{
-		this->GunMeanEnegy->GetNewUnitValue(newValue);
-		this->pML2PrimaryGenerationAction->setGunMeanEnergy(this->GunMeanEnegy->GetNewDoubleValue(newValue));
+		GunMeanEnegy->GetNewUnitValue(newValue);
+		pML2PrimaryGenerationAction->setGunMeanEnergy(GunMeanEnegy->GetNewDoubleValue(newValue));
 	}
 
-	if (cmd==this->GunStdEnegy)
+	if (cmd==GunStdEnegy)
 	{
-		this->GunStdEnegy->GetNewUnitValue(newValue);
-		this->pML2PrimaryGenerationAction->setGunStdEnergy(this->GunStdEnegy->GetNewDoubleValue(newValue));
+		GunStdEnegy->GetNewUnitValue(newValue);
+		pML2PrimaryGenerationAction->setGunStdEnergy(GunStdEnegy->GetNewDoubleValue(newValue));
 	}
 
-	if (cmd==this->GunRadious)
+	if (cmd==GunRadious)
 	{
-		this->GunRadious->GetNewUnitValue(newValue);
-		this->pML2PrimaryGenerationAction->setGunRadious(this->GunRadious->GetNewDoubleValue(newValue));
-	}
-
-
-	if (cmd==this->nMaxParticlesInRamPhaseSpace)
-	{
-		this->pML2PrimaryGenerationAction->setNMaxParticlesInRamPhaseSpace(this->nMaxParticlesInRamPhaseSpace->GetNewIntValue(newValue));
+		GunRadious->GetNewUnitValue(newValue);
+		pML2PrimaryGenerationAction->setGunRadious(GunRadious->GetNewDoubleValue(newValue));
 	}
 
 
-	if (cmd==this->nRecycling)
-	{this->pML2PrimaryGenerationAction->setNRecycling(this->nRecycling->GetNewIntValue(newValue));}
+	if (cmd==nMaxParticlesInRamPhaseSpace)
+	{
+		pML2PrimaryGenerationAction->setNMaxParticlesInRamPhaseSpace(nMaxParticlesInRamPhaseSpace->GetNewIntValue(newValue));
+	}
 
-	if (cmd==this->calculatedPhaseSpaceFileIN)
-	{this->pML2PrimaryGenerationAction->setCalculatedPhaseSpaceFileIN(newValue);}
 
-	if (cmd==this->sourceTypeName)
-	{this->pML2PrimaryGenerationAction->setSourceTypeName(newValue);}
+	if (cmd==nRecycling)
+	{pML2PrimaryGenerationAction->setNRecycling(nRecycling->GetNewIntValue(newValue));}
+
+	if (cmd==calculatedPhaseSpaceFileIN)
+	{pML2PrimaryGenerationAction->setCalculatedPhaseSpaceFileIN(newValue);}
+
+	if (cmd==sourceTypeName)
+	{pML2PrimaryGenerationAction->setSourceTypeName(newValue);}
 
 
 }

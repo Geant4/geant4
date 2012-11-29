@@ -72,29 +72,29 @@ public:
 	void design(G4double accTargetZPosition);
 	void GeneratePrimaries(G4Event *anEvent);
 	void inizialize(SPrimaryParticle *primaryParticleData);
-	inline void setNRecycling(G4int val){this->nRecycling=val;};
-	inline void setNLoopsPhSpParticles(G4int val){this->nLoopsPhSpParticles=val;};
-	inline void setNMaxParticlesInRamPhaseSpace(G4int val){this->nMaxParticlesInRamPhaseSpace=val;std::cout<<"Current nMaxParticlesInRamPhaseSpace: " << this->nMaxParticlesInRamPhaseSpace<< G4endl;};
+	inline void setNRecycling(G4int val){nRecycling=val;}
+	inline void setNLoopsPhSpParticles(G4int val){nLoopsPhSpParticles=val;}
+	inline void setNMaxParticlesInRamPhaseSpace(G4int val){nMaxParticlesInRamPhaseSpace=val;std::cout<<"Current nMaxParticlesInRamPhaseSpace: " << nMaxParticlesInRamPhaseSpace<< G4endl;}
 
-	inline void setGunMeanEnergy(G4double val){this->GunMeanEnegy=val;};
-	inline void setGunStdEnergy(G4double val){this->GunStdEnegy=val;};
-	inline void setGunRadious(G4double val){this->GunRadious=val;};
-	inline void setCalculatedPhaseSpaceFileIN(G4String val){this->calculatedPhaseSpaceFileIN=val;};
+	inline void setGunMeanEnergy(G4double val){GunMeanEnegy=val;}
+	inline void setGunStdEnergy(G4double val){GunStdEnegy=val;}
+	inline void setGunRadious(G4double val){GunRadious=val;}
+	inline void setCalculatedPhaseSpaceFileIN(G4String val){calculatedPhaseSpaceFileIN=val;}
 	inline void setSourceTypeName(G4String val)
 	{
-		this->sourceTypeName=val;
-		if (this->sourceTypeName=="randomTarget")
+		sourceTypeName=val;
+		if (sourceTypeName=="randomTarget")
 		{
-			this->idParticleSource=id_randomTarget;
+			idParticleSource=id_randomTarget;
 		}
-		else if (this->sourceTypeName=="phaseSpace")
+		else if (sourceTypeName=="phaseSpace")
 		{
-			this->idParticleSource=id_phaseSpace;
+			idParticleSource=id_phaseSpace;
 		}
-	};
-	inline void setRotation(G4RotationMatrix *val){this->rm=val;};
-	inline G4int getNrecycling(){return this->nRecycling;};
-	inline G4int getSourceTypeName(){return this->idParticleSource;};
+	}
+	inline void setRotation(G4RotationMatrix *val){rm=val;};
+	inline G4int getNrecycling(){return nRecycling;};
+	inline G4int getSourceTypeName(){return idParticleSource;};
 
 private:
 	void setGunRandom();

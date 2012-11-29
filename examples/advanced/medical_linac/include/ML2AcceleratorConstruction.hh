@@ -65,25 +65,25 @@ public:
 	~CML2AcceleratorConstruction(void);
 	static CML2AcceleratorConstruction* GetInstance(void);
 	bool Construct(G4VPhysicalVolume *PVWorld, G4bool bOnlyVisio);
-	inline G4VPhysicalVolume *getPhysicalVolume(void){return this->PVAccWorld;};
+	inline G4VPhysicalVolume *getPhysicalVolume(void){return PVAccWorld;}
 	void resetAccelerator();
 
-	inline void setAcceleratorName(G4String val){this->AcceleratorName=val;};
-	inline void setAcceleratorMacFileName(G4String val){this->AcceleratorMacFileName=val;};
+	inline void setAcceleratorName(G4String val){AcceleratorName=val;}
+	inline void setAcceleratorMacFileName(G4String val){AcceleratorMacFileName=val;}
 
 	G4String getCurrentRotationString();
 
-	inline G4String getNextAcceleratorXRotationName(){return this->nextAcceleratorXRotationName;};
-	inline void setIsoCentre(G4double val){this->isoCentre=val;};
-	inline void setRotation90Y(G4bool val){this->bRotate90Y=val;};
+	inline G4String getNextAcceleratorXRotationName(){return nextAcceleratorXRotationName;}
+	inline void setIsoCentre(G4double val){isoCentre=val;}
+	inline void setRotation90Y(G4bool val){bRotate90Y=val;}
 
-	inline void addAcceleratorRotationsX(G4double val){this->rotationsX.push_back(val);};
+	inline void addAcceleratorRotationsX(G4double val){rotationsX.push_back(val);}
 
-	inline G4double getAcceleratorIsoCentre(){return this->isoCentre;};
-	inline G4String getAcceleratorName(){return this->AcceleratorName;};
-	inline G4String getAcceleratorMacFileName(){return this->AcceleratorMacFileName;};
-	inline G4double getZ_Value_PhaseSpaceBeforeJaws(){return this->Z_Value_PhaseSpaceBeforeJaws;};
-	inline G4bool getRotation90Y(){return this->bRotate90Y;};
+	inline G4double getAcceleratorIsoCentre(){return isoCentre;}
+	inline G4String getAcceleratorName(){return AcceleratorName;}
+	inline G4String getAcceleratorMacFileName(){return AcceleratorMacFileName;}
+	inline G4double getZ_Value_PhaseSpaceBeforeJaws(){return Z_Value_PhaseSpaceBeforeJaws;}
+	inline G4bool getRotation90Y(){return bRotate90Y;}
 	void writeInfo();
 
 	G4RotationMatrix * rotateAccelerator();

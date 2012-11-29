@@ -59,10 +59,10 @@ public:
 	CML2SDWithParticle(G4int idType, G4int max_N_particles_in_PhSp_File, G4int seed, G4int nMaxParticlesInRamPhaseSpace, G4String name, G4String PhaseSpaceOutFile, G4bool bSavePhaseSpace, G4bool bStopAtVolatilePhaseSpace, SPrimaryParticle *primaryParticleData, G4double  accTargetZPosition);
 	~CML2SDWithParticle(void);
 	G4bool ProcessHits(G4Step *aStep, G4TouchableHistory *ROHist);
-	G4int getTotalNumberOfParticles(){return this->nTotalParticles;};
-	inline CML2SDWithParticle* getCML2SensitiveDetectorParticle(){return this;};
-	inline Sparticle getParticle(int i){return this->particles[i];};
-	inline void setActive(G4bool bActive){this->bActive=bActive;};
+	G4int getTotalNumberOfParticles(){return nTotalParticles;}
+	inline CML2SDWithParticle* getCML2SensitiveDetectorParticle(){return this;}
+	inline Sparticle getParticle(int i){return particles[i];}
+	inline void setActive(G4bool act){bActive=act;}
 	void save();
 private:
 	void saveDataParticles(G4int nParticle);

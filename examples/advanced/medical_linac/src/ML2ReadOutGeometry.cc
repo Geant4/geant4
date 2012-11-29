@@ -51,46 +51,48 @@
 #include "ML2DummySD.hh"
 #include "G4PVReplica.hh"
 
-CML2ReadOutGeometry::CML2ReadOutGeometry():ROPhyVol(0)
+CML2ReadOutGeometry::CML2ReadOutGeometry() : ROPhyVol(0)
 {
     // Build the world volume
     G4Material *Vacuum=G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
-    G4ThreeVector halfSizeWorld, centre;
-    centre.set(0.*mm, 0.*mm, 0.*mm);
+    G4ThreeVector halfSizeWorld, ctr;
+    ctr.set(0.*mm, 0.*mm, 0.*mm);
     halfSizeWorld.set(3000.*mm, 3000*mm, 3000*mm);
     G4Box *ROphmWorldB = new G4Box("ROphmWorldG", halfSizeWorld.getX(), halfSizeWorld.getY(), halfSizeWorld.getZ());
     G4LogicalVolume *ROphmWorldLV = new G4LogicalVolume(ROphmWorldB, Vacuum, "ROphmWorldL", 0, 0, 0);
-    this->ROPhyVol= new G4PVPlacement(0, centre, "ROphmWorldPV", ROphmWorldLV, 0, false, 0);
+    ROPhyVol= new G4PVPlacement(0, ctr, "ROphmWorldPV", ROphmWorldLV, 0, false, 0);
 }
 
 CML2ReadOutGeometry::~CML2ReadOutGeometry(void)
 {
-    delete this->ROPhyVol;
+    delete ROPhyVol;
 }
-void CML2ReadOutGeometry::setBuildData(G4ThreeVector centre, G4ThreeVector halfSize, G4int NumberOfVoxelsAlongX, G4int NumberOfVoxelsAlongY, G4int NumberOfVoxelsAlongZ)
+
+void CML2ReadOutGeometry::setBuildData(G4ThreeVector ctr, G4ThreeVector hSiz, G4int NVX, G4int NVY, G4int NVZ)
 {
-    this->centre=centre;
-    this->halfSize=halfSize;
-    this->NumberOfVoxelsAlongX=NumberOfVoxelsAlongX;
-    this->NumberOfVoxelsAlongY=NumberOfVoxelsAlongY;
-    this->NumberOfVoxelsAlongZ=NumberOfVoxelsAlongZ;
+    centre=ctr;
+    halfSize=hSiz;
+    NumberOfVoxelsAlongX=NVX;
+    NumberOfVoxelsAlongY=NVY;
+    NumberOfVoxelsAlongZ=NVZ;
 }
+
 G4VPhysicalVolume* CML2ReadOutGeometry::Build()
 {
     // Build RO Zone
     G4Material *Vacuum=G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
-    G4Box *ROBox = new G4Box("ROBox", this->halfSize.getX(), this->halfSize.getY(), this->halfSize.getZ());
+    G4Box *ROBox = new G4Box("ROBox", halfSize.getX(), halfSize.getY(), halfSize.getZ());
     G4LogicalVolume *ROLV = new G4LogicalVolume(ROBox, Vacuum, "ROLV", 0, 0, 0);
     G4VPhysicalVolume *ROPV;
-    ROPV = new G4PVPlacement(0, this->centre, "ROPV", ROLV, this->ROPhyVol, false, 0);
+    ROPV = new G4PVPlacement(0, centre, "ROPV", ROLV, ROPhyVol, false, 0);
 
     // ROGeomtry: Voxel division
 
     G4double halfXVoxelDimensionX, halfXVoxelDimensionY, halfXVoxelDimensionZ;
 
-    halfXVoxelDimensionX=this->halfSize.getX()/this->NumberOfVoxelsAlongX;
-    halfXVoxelDimensionY=this->halfSize.getY()/this->NumberOfVoxelsAlongY;
-    halfXVoxelDimensionZ=this->halfSize.getZ()/this->NumberOfVoxelsAlongZ;
+    halfXVoxelDimensionX=halfSize.getX()/NumberOfVoxelsAlongX;
+    halfXVoxelDimensionY=halfSize.getY()/NumberOfVoxelsAlongY;
+    halfXVoxelDimensionZ=halfSize.getZ()/NumberOfVoxelsAlongZ;
 
     G4double voxelXThicknessX = 2*halfXVoxelDimensionX;
     G4double voxelXThicknessY = 2*halfXVoxelDimensionY;
@@ -100,8 +102,8 @@ G4VPhysicalVolume* CML2ReadOutGeometry::Build()
     // X division first... slice along X axis
     G4Box *ROPhantomXDivision = new G4Box("ROPhantomXDivision",
                                           halfXVoxelDimensionX,
-                                          this->halfSize.getY(),
-                                          this->halfSize.getZ());
+                                          halfSize.getY(),
+                                          halfSize.getZ());
 
     G4LogicalVolume *ROPhantomXDivisionLog = new G4LogicalVolume(ROPhantomXDivision,
                                                                  Vacuum,
@@ -114,12 +116,12 @@ G4VPhysicalVolume* CML2ReadOutGeometry::Build()
                                              kXAxis,
                                              NumberOfVoxelsAlongX,
                                              voxelXThicknessX,
-                                             -this->halfSize.getX());
+                                             -halfSize.getX());
     // ...then Z division
 
     G4Box *ROPhantomZDivision = new G4Box("ROPhantomZDivision",
                                           halfXVoxelDimensionX,
-                                          this->halfSize.getY(),
+                                          halfSize.getY(),
                                           halfXVoxelDimensionZ);
 
     G4LogicalVolume *ROPhantomZDivisionLog = new G4LogicalVolume(ROPhantomZDivision,
@@ -131,9 +133,9 @@ G4VPhysicalVolume* CML2ReadOutGeometry::Build()
                                              ROPhantomZDivisionLog,
                                              ROPhantomXDivisionPhys,
                                              kZAxis,
-                                             this->NumberOfVoxelsAlongZ,
+                                             NumberOfVoxelsAlongZ,
                                              voxelXThicknessZ,
-                                             -this->halfSize.getZ());
+                                             -halfSize.getZ());
     // ...then Y  division
 
     G4Box *ROPhantomYDivision = new G4Box("ROPhantomYDivision",
@@ -149,9 +151,9 @@ G4VPhysicalVolume* CML2ReadOutGeometry::Build()
                                              ROPhantomYDivisionLog,
                                              ROPhantomZDivisionPhys,
                                              kYAxis,
-                                             this->NumberOfVoxelsAlongY,
+                                             NumberOfVoxelsAlongY,
                                              voxelXThicknessY,
-                                             -this->halfSize.getY());
+                                             -halfSize.getY());
 
     // Sensitive detector doesn't matter which logical volume is used
     G4VSensitiveDetector *sensDet=new CML2DummySD("Dummy ROG phantom");

@@ -65,7 +65,7 @@ public:
 	CML2PhantomConstructionMessenger(CML2PhantomConstruction *phantomConstructor);
 	~CML2PhantomConstructionMessenger(void);
 	void SetNewValue(G4UIcommand* cmd, G4String newValue);
-	inline void SetReferenceWorld(G4bool bOnlyVisio) {this->bOnlyVisio=bOnlyVisio;};
+	inline void SetReferenceWorld(G4bool bOV) {bOnlyVisio=bOV;}
 private:
 
 	CML2PhantomConstruction *pPhantomConstructor;
