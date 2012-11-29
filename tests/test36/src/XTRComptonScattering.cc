@@ -321,19 +321,19 @@ G4VParticleChange* XTRComptonScattering::PostStepDoIt(const G4Track& aTrack,
 
    G4double epsilon, epsilonsq, onecost, sint2, greject ;
 
-   G4double epsilon0 = 1./(1. + 2*E0_m) , epsilon0sq = epsilon0*epsilon0;
-   G4double alpha1   = - log(epsilon0)  , alpha2 = 0.5*(1.- epsilon0sq);
+   G4double eps0 = 1./(1. + 2*E0_m) , eps0sq = eps0*eps0;
+   G4double alpha1   = - log(eps0)  , alpha2 = 0.5*(1.- eps0sq);
 
    do 
    {
      if ( alpha1/(alpha1+alpha2) > G4UniformRand() )
      { 
-       epsilon   = exp(-alpha1*G4UniformRand());   // epsilon0**r
+       epsilon   = exp(-alpha1*G4UniformRand());   // eps0**r
        epsilonsq = epsilon*epsilon; 
      }
      else 
      {
-       epsilonsq = epsilon0sq + (1.- epsilon0sq)*G4UniformRand();
+       epsilonsq = eps0sq + (1.- eps0sq)*G4UniformRand();
        epsilon   = sqrt(epsilonsq);
      }
      onecost = (1.- epsilon)/(epsilon*E0_m);

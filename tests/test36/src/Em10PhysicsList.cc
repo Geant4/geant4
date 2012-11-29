@@ -428,10 +428,10 @@ void Em10PhysicsList::ConstructEM()
 
       pmanager->AddDiscreteProcess(processXTR);
 
-      G4SynchrotronRadiation* sr = new G4SynchrotronRadiation();
+      G4SynchrotronRadiation* srad = new G4SynchrotronRadiation();
       // sr->SetVerboseLevel(1);
 
-      pmanager->AddDiscreteProcess( sr );
+      pmanager->AddDiscreteProcess( srad );
       
       pmanager->AddDiscreteProcess( new G4StepLimiterPerRegion() );
 
