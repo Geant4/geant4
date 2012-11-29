@@ -122,12 +122,12 @@ void WLSPrimaryGeneratorAction::BuildEmissionSpectrum()
                 G4double prevCII = currentCII;
                 G4double prevIN  = currentIN;
 
-                for (size_t i = 1;
-                     i < theWLSVector->GetVectorLength();
-                     i++)
+                for (size_t j = 1;
+                     j < theWLSVector->GetVectorLength();
+                     j++)
                 {
-                  currentPM = theWLSVector->Energy(i);
-                  currentIN = (*theWLSVector)[i];
+                  currentPM = theWLSVector->Energy(j);
+                  currentIN = (*theWLSVector)[j];
                   currentCII = 0.5 * (prevIN + currentIN);
                   currentCII = prevCII + (currentPM - prevPM) * currentCII;
                   aPhysicsOrderedFreeVector->
