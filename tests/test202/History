@@ -1,8 +1,28 @@
-$Id: History,v 1.9 2010-11-30 17:22:40 gunter Exp $
+$Id:$
 -----------------------------------------------------------------------------
 
 History file for test/test202 subdirectory
 ------------------------------------------------
+
+29th November 2012  Gabriele Cosmo (test202-V09-05-08)
+- Exclude changes introduced in tags -05 and -06 which fail in testing!
+
+28th November 2012  Gabriele Cosmo (test202-V09-05-07)
+- Fixed cases of variable shadowing.
+
+6th November 2012  Laurent Garnier (test202-V09-05-05 test202-V09-05-06)
+- test202
+  o Remove 198 and make only 2 tests by driver (IX,SI,IXm,SXm,IQt,SQt)
+  o Update reference folders regarding to the new tests
+  o Fix a bug in Test scripts: Test don't have to be run in parallele
+
+30th October 2012  Laurent Garnier (test202-V09-05-01 / test202-V09-05-02
+                                    test202-V09-05-03 test202-V09-05-04)
+- First proposition tag for test202 tests
+- Fix CMakeList
+
+27th October 2012  Laurent Garnier
+- Add tests for test202 on X, Xm, Qt
 
 9th October 2012  Gabriele Cosmo  (test202-V09-05-00)
 - Explicit inclusion of units and constants headers.

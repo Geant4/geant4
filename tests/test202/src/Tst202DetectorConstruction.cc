@@ -255,14 +255,14 @@ G4VPhysicalVolume* Tst202DetectorConstruction::Construct()
     // This is a test of the BooleanProcessor for the case of a
     // "hollow" subtraction, i.e., making a hollow box using
     // G4SubtractionSolid.
-    G4String name = "BoxInBox";
+    G4String sname = "BoxInBox";
     G4double halfOuter = 50.*cm;
     G4double thickness = 10.*cm;
     G4double halfInner = halfOuter - thickness;
-    G4VSolid* outer = new G4Box(name+"Outer", halfOuter, halfOuter, halfOuter);
-    G4VSolid* inner = new G4Box(name+"Inner", halfInner, halfInner, halfInner);
-    G4VSolid* hollow = new G4SubtractionSolid(name, outer, inner, G4Transform3D());
-    G4LogicalVolume* log = new G4LogicalVolume(hollow, Al, name);
+    G4VSolid* outer = new G4Box(sname+"Outer", halfOuter, halfOuter, halfOuter);
+    G4VSolid* inner = new G4Box(sname+"Inner", halfInner, halfInner, halfInner);
+    G4VSolid* hollow = new G4SubtractionSolid(sname, outer, inner, G4Transform3D());
+    G4LogicalVolume* log = new G4LogicalVolume(hollow, Al, sname);
     new G4PVPlacement(G4Translate3D(0., 600.*cm, 0.),
 		      log, name, experimentalHall_log, false, 0);
   }
