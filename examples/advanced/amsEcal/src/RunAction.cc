@@ -352,9 +352,9 @@ void RunAction::CreateFilePixels()
   G4int n1pxl   = detector->GetN1Pixels();
   G4int n2pxl   = detector->GetN2Pixels();
   G4int n1shift = detector->GetN1Shift();    
-  G4int nbEvents    = G4RunManager::GetRunManager()->GetCurrentRun()
+  G4int noEvents    = G4RunManager::GetRunManager()->GetCurrentRun()
                      ->GetNumberOfEventToBeProcessed();
-  File << nbEvents << " " << n1pxl << " " <<  n2pxl << " " << n1shift
+  File << noEvents << " " << n1pxl << " " <<  n2pxl << " " << n1shift
          << G4endl;
 }
 

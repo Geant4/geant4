@@ -15,11 +15,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28-11-12 G.Cosmo (amsEcal-V09-05-03)
+- Fixed cases of variable shadowing.
+
 06-11-12 L.Pandola (amsEcal-V09-05-02)
-- Fix syntax in the CMakeLists.txt 
+- Fixed syntax in the CMakeLists.txt.
 
 26-10-12 L.Pandola (amsEcal-V09-05-01)
-- Replace CMakeLists.txt to deal with UI/VIS
+- Replace CMakeLists.txt to deal with UI/VIS.
 
 11-10-12 G.Cosmo (amsEcal-V09-05-00)
 - Explicit inclusion of units and constants headers.
