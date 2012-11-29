@@ -234,9 +234,9 @@ void XPhysicalLattice::SetLatticeOrientation(G4double t_rot, G4double p_rot){
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
-void XPhysicalLattice::SetMillerOrientation(int l, int m, int n){
+void XPhysicalLattice::SetMillerOrientation(int l, int k, int n){
   fTheta=pi/2-std::atan2(n+0.000001,l+0.000001)*rad;
-  fPhi=pi/2-std::atan2(l+0.000001,m+0.000001)*rad;
+  fPhi=pi/2-std::atan2(l+0.000001,k+0.000001)*rad;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
