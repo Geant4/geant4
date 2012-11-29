@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAAttachment.cc,v 1.1 2010/09/08 13:46:45 sincerti Exp $
+// $Id$
 // GEANT4 tag $Name:  $
 
 #include "G4DNAAttachment.hh"

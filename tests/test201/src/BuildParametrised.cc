@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: BuildParametrised.cc,v 1.6 2006-06-29 21:47:33 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Based on test code from Hans-Peter Wellisch

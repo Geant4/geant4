@@ -27,8 +27,7 @@
 /// \brief Definition of the B01RunAction class
 //
 //
-// $Id: B01RunAction.hh,v 1.2 2007-06-21 15:03:35 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // 
 
 #ifndef B01RunAction_h

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenIO.cc,v 1.6 2010-11-10 23:53:23 akimura Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // File I/O manager class for writing or reading calcuated dose

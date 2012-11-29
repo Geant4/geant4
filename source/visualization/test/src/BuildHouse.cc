@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: BuildHouse.cc,v 1.3 2006-06-29 21:34:16 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

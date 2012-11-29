@@ -27,8 +27,7 @@
 /// \brief Implementation of the G02DetectorMessenger class
 //
 //
-// $Id: G02DetectorMessenger.cc,v 1.3 2008-12-18 12:57:06 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Class G02DetectorMessenger implementation
 //

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.hh,v 1.30 2009-11-04 11:01:59 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //      ---------------- G4QPDGCode ----------------
 //             by Mikhail Kossov, Sept 1999.

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventAction.cc,v 1.3 2010/06/07 05:40:46 perl Exp $
+// $Id$
 // GEANT4 tag $Name: geant4-09-03-ref-08 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

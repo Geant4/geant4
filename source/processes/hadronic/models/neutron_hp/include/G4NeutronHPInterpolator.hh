@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPInterpolator.hh,v 1.20 2008-08-12 00:42:31 tkoi Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 080809 Change interpolation scheme of "histogram", now using LinearLinear
 //        For multidimensional interpolations By T. Koi

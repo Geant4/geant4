@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventGenerator.cc,v 1.4 2006-06-29 20:55:37 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // G4EventGenerator
 

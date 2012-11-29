@@ -27,8 +27,7 @@
 /// \brief Main program of the visualization/perspective example
 //
 //
-// $Id: perspective.cc,v 1.3 2010-11-09 09:49:57 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 #include "globals.hh"
 #include "G4VisExecutive.hh"

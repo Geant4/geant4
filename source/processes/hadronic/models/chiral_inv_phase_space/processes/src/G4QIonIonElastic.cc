@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QIonIonElastic.cc,v 1.3 2010-06-10 10:16:10 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //      ---------------- G4QIonIonElastic class -----------------
 //                 by Mikhail Kossov, December 2006.

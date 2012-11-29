@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsTouchableSet.hh,v 1.4 2010-06-15 16:33:55 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 // /vis/touchable/set commands - John Allison  8th October 2012
 

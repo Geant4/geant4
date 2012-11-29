@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.cc,v 1.36 2010-10-25 07:58:15 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

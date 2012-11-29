@@ -26,7 +26,7 @@
 /// \file persistency/P03/include/ExTGRCRegionCutsMgr.hh
 /// \brief Definition of the ExTGRCRegionCutsMgr class
 //
-// $Id: ExTGRCRegionCutsMgr.hh,v 1.3 2010-11-05 08:52:34 gcosmo Exp $
+// $Id$
 
 #ifndef ExTGRCRegionCutsMgr_h
 #define ExTGRCRegionCutsMgr_h

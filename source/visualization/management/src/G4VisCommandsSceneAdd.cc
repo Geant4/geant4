@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.85 2010-12-11 16:50:10 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // /vis/scene/add commands - John Allison  9th August 1998
 
 #include "G4VisCommandsSceneAdd.hh"

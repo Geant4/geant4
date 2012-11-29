@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst14PositronPenelope.hh,v 1.1 2008-12-15 10:23:20 pandola Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Luciano Pandola (pandola@lngs.infn.it)
 //

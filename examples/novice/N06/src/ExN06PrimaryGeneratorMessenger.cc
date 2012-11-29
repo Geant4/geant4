@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN06PrimaryGeneratorMessenger.cc,v 1.3 2006-06-29 17:54:29 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

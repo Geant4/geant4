@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HCofThisEvent.cc,v 1.4 2006-06-29 18:06:42 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "G4HCofThisEvent.hh"

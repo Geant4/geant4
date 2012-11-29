@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommandTree.hh,v 1.17 2009-05-07 09:33:51 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4UIcommandTree_h

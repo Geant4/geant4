@@ -25,8 +25,7 @@
 //
 
 //
-// $Id: test201.cc,v 1.18 2010-05-20 18:10:48 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DefaultLinearColorMap.hh,v 1.1 2007-11-04 04:06:08 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4DefaultLinearColorMap_h

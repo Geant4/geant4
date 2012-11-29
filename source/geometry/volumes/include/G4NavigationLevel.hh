@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationLevel.hh,v 1.18 2009-08-04 08:27:20 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // class G4NavigationLevel
 //

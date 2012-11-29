@@ -26,8 +26,7 @@
 /// \file hadronic/Hadr02/src/HistoManager.cc
 /// \brief Implementation of the HistoManager class
 //
-// $Id: HistoManager.cc,v 1.17 2010-01-13 15:53:44 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //

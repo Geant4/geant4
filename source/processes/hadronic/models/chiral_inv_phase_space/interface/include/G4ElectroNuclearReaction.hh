@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElectroNuclearReaction.hh,v 1.28 2010-11-10 16:20:11 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Class description:
 // G4ElectroNuclearReaction = eA interface to use CHIPS in the G4Hadronic frame

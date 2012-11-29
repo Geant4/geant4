@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SimpleLocator.hh,v 1.2 2008-10-29 14:31:55 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // Class G4SimpleLocator 

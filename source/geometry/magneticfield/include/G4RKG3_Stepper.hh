@@ -25,8 +25,7 @@
 //
 //
 //
-// $Id: G4RKG3_Stepper.hh,v 1.14 2010-07-23 14:13:09 tnikitin Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 //

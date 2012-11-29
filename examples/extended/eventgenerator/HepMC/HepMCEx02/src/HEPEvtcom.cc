@@ -26,7 +26,7 @@
 /// \file eventgenerator/HepMC/HepMCEx02/src/HEPEvtcom.cc
 /// \brief Implementation of the HEPEvtcom class
 //
-//$Id: HEPEvtcom.cc,v 1.3 2006-06-29 17:12:07 gunter Exp $
+//$Id$
 // ======================================================================
 //      PARAMETER (NMXHEP=4000) 
 //      COMMON/HEPEVT/NEVHEP,NHEP,ISTHEP(NMXHEP),IDHEP(NMXHEP), 

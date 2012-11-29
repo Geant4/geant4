@@ -26,7 +26,7 @@
 /// \file analysis/A01/include/A01PrimaryGeneratorMessenger.hh
 /// \brief Definition of the A01PrimaryGeneratorMessenger class
 //
-// $Id: A01PrimaryGeneratorMessenger.hh,v 1.4 2006-06-29 16:31:37 gunter Exp $
+// $Id$
 // --------------------------------------------------------------
 //
 #ifndef A01PrimaryGeneratorMessenger_h

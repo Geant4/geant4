@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.hh,v 1.23 2010-06-12 04:07:45 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 

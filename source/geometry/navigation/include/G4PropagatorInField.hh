@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 // 
-// $Id: G4PropagatorInField.hh,v 1.19 2009-11-13 17:34:26 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // Class G4PropagatorInField 

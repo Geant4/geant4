@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4SmartVoxels.cc,v 1.5 2006-06-29 18:58:52 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 // testG4SmartVoxels

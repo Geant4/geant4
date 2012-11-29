@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeChannel.hh,v 1.7 2010-06-25 09:41:52 gunter Exp $
-// GEANT4 tag: $Name: not supported by cvs2svn $
+// $Id$
 //
 // 20100514  M. Kelsey -- All functionality removed except quantum-number
 //		validation functions.

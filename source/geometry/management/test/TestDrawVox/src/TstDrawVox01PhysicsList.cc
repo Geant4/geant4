@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TstDrawVox01PhysicsList.cc,v 1.6 2006-06-29 18:35:21 gunter Exp $
+// $Id$
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //

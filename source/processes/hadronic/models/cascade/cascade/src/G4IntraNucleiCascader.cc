@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IntraNucleiCascader.cc,v 1.69 2010-12-15 07:41:09 gunter Exp $
-// Geant4 tag: $Name: not supported by cvs2svn $
+// $Id$
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100307  M. Kelsey -- Bug fix: momentum_out[0] should be momentum_out.e()

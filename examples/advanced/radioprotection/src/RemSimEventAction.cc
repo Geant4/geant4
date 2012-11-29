@@ -30,8 +30,7 @@
 //    **********************************
 //
 //
-// $Id: RemSimEventAction.cc,v 1.11 2010-06-07 05:19:47 perl Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author : Susanna Guatelli, guatelli@ge.infn.it
 // 

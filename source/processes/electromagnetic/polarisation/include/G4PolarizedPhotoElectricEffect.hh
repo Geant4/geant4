@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedPhotoElectricEffect.hh,v 1.1 2007-11-01 17:29:09 schaelic Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 //------------------ G4PolarizedPhotoElectricEffect physics process ------------------

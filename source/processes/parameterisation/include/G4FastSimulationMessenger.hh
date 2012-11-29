@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationMessenger.hh,v 1.7 2007-05-11 13:50:20 mverderi Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 //	GEANT 4 class header file 

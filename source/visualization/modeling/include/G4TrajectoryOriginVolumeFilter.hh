@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryOriginVolumeFilter.hh,v 1.3 2006-08-25 19:44:14 tinslay Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Filter trajectories according to volume name. Only registered 
 // volumes will pass the filter.

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeT33piNChannel.cc,v 1.4 2010-12-15 07:40:49 gunter Exp $
-// GEANT4 tag: $Name: not supported by cvs2svn $
+// $Id$
 //
 // 20100612  M. Kelsey -- BUG FIX:  Swapped eight-body channel final-states
 // 20100804  M. Kelsey -- Add name string to ctor

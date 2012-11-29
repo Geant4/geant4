@@ -26,7 +26,7 @@
 /// \file analysis/A01/src/A01EventActionMessenger.cc
 /// \brief Implementation of the A01EventActionMessenger class
 //
-// $Id: A01EventActionMessenger.cc,v 1.6 2006-06-29 16:32:39 gunter Exp $
+// $Id$
 // --------------------------------------------------------------
 //
 

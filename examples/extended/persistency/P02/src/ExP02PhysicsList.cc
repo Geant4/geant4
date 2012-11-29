@@ -27,8 +27,7 @@
 /// \brief Implementation of the ExP02PhysicsList class
 //
 //
-// $Id: ExP02PhysicsList.cc,v 1.3 2010-11-30 11:39:49 ivana Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

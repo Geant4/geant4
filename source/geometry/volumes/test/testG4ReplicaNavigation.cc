@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4ReplicaNavigation.cc,v 1.11 2006-06-29 18:58:48 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Test private location & distance computation functions of

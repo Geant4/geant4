@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QCHIPSWorld.cc,v 1.34 2010-06-23 13:56:30 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //      ---------------- G4QCHIPSWorld ----------------
 //             by Mikhail Kossov, Sept 1999.

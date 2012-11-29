@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagneticField.hh,v 1.14 2006-06-29 18:23:14 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4MagneticField

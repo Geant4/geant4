@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadePiZeroPChannel.hh,v 1.3 2010-06-25 09:42:40 gunter Exp $
-// GEANT4 tag: $Name: not supported by cvs2svn $
+// $Id$
 
 #ifndef G4_CASCADE_PIZEROP_CHANNEL_HH
 #define G4_CASCADE_PIZEROP_CHANNEL_HH

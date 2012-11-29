@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Run.hh,v 1.16 2007-03-07 03:00:14 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4Run_h

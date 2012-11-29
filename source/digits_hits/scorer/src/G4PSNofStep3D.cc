@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSNofStep3D.cc,v 1.4 2010-07-22 07:23:45 taso Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // G4PSNofStep3D
 #include "G4PSNofStep3D.hh"

@@ -26,7 +26,7 @@
 /// \file analysis/A01/include/A01HadCalorimeterHit.hh
 /// \brief Definition of the A01HadCalorimeterHit class
 //
-// $Id: A01HadCalorimeterHit.hh,v 1.5 2006-06-29 16:31:12 gunter Exp $
+// $Id$
 // --------------------------------------------------------------
 //
 #ifndef A01HadCalorimeterHit_h

@@ -27,8 +27,7 @@
 /// \brief Implementation of the F01DetectorConstruction class
 //
 //
-// $Id: F01DetectorConstruction.cc,v 1.16 2009-11-05 01:07:41 gum Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.hh,v 1.21 2008-10-29 14:17:42 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Class G4ChordFinder

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXFile.cc,v 1.2 2006-06-29 21:27:24 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  7th March 2006

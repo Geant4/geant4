@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExDivTesterTrd.cc,v 1.3 2006-06-29 18:20:28 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // class ExDivTesterTrd Implementation file
 //

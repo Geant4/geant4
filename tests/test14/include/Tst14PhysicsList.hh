@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Tst14PhysicsList.hh,v 1.15 2010-08-29 19:50:17 sincerti Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Original author unknown (contact: Maria.Grazia.Pia@cern.ch)
 //

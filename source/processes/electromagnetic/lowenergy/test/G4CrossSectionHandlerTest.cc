@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionHandlerTest.cc,v 1.4 2006-06-29 19:43:53 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998

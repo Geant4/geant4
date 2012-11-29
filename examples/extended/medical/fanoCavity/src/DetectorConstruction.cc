@@ -26,8 +26,7 @@
 /// \file medical/fanoCavity/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc,v 1.3 2007-10-08 12:05:02 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

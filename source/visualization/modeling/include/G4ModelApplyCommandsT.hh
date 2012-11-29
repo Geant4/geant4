@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ModelApplyCommandsT.hh,v 1.6 2009-02-25 14:17:11 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Abstract model messenges. Derived classes should implement
 // the "Apply" method

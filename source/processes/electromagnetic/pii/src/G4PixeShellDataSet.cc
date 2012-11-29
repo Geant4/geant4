@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PixeShellDataSet.cc,v 1.3 2010-11-22 11:29:38 pia Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //

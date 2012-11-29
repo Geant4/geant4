@@ -27,8 +27,7 @@
 /// \brief Definition of the G03PrimaryGeneratorAction class
 //
 //
-// $Id: G03PrimaryGeneratorAction.hh,v 1.1 2008-11-20 15:41:54 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Class G03PrimaryGeneratorAction
 //

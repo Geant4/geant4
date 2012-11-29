@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VKineticNucleon.cc,v 1.3 2006-06-29 20:46:07 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #include "G4VKineticNucleon.hh"
 

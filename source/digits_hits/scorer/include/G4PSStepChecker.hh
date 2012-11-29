@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSStepChecker.hh,v 1.2 2010-07-22 07:23:45 taso Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4PSStepChecker_h

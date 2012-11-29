@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPFissionData.hh,v 1.10 2008-04-16 23:39:56 tkoi Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 080417 Add IsZAApplicable method (return false) by T. Koi
 //

@@ -27,8 +27,7 @@
 /// \brief Definition of the RE03DetectorConstruction class
 //
 //
-// $Id: RE03DetectorConstruction.hh,v 1.1 2007-11-13 19:55:43 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

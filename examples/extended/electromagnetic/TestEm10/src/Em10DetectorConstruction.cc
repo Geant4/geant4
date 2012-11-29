@@ -27,8 +27,7 @@
 /// \brief Implementation of the Em10DetectorConstruction class
 //
 //
-// $Id: Em10DetectorConstruction.cc,v 1.32 2007-07-27 17:52:04 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

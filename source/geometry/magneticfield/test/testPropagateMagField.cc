@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testPropagateMagField.cc,v 1.33 2009-11-05 13:18:05 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //  
 //

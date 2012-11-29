@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrack.hh,v 1.21 2006-11-13 18:24:35 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4FieldTrack

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSEnergyDeposit.cc,v 1.3 2010-07-22 07:23:45 taso Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // G4PSEnergyDeposit
 #include "G4PSEnergyDeposit.hh"

@@ -27,8 +27,7 @@
 /// \brief Implementation of the F01RunAction class
 //
 //
-// $Id: F01RunAction.cc,v 1.10 2006-06-29 17:16:49 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

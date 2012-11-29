@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: F03VisManager.cc,v 1.2 2006-06-29 18:30:35 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison 24th January 1998.

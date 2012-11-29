@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst61RunAction.cc,v 1.1 2008-10-28 23:11:23 tkoi Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "Tst61RunAction.hh"

@@ -26,8 +26,7 @@
 /// \file runAndEvent/RE01/include/RE01CalorimeterParametrisation.hh
 /// \brief Definition of the RE01CalorimeterParametrisation class
 //
-// $Id: RE01CalorimeterParametrisation.hh,v 1.2 2006-06-29 17:42:31 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef RE01CalorimeterParametrisation_H

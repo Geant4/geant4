@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4THitsMap.hh,v 1.9 2007-08-30 05:13:03 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4THitsMap_h
 #define G4THitsMap_h 1

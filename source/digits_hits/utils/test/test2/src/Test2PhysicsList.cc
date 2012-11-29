@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Test2PhysicsList.cc,v 1.2 2010-09-01 08:03:10 akimura Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "Test2PhysicsList.hh"

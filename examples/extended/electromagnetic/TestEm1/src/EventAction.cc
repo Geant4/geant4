@@ -27,8 +27,7 @@
 /// \brief Implementation of the EventAction class
 //
 //
-// $Id: EventAction.cc,v 1.9 2010-06-07 05:40:45 perl Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

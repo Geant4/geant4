@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileCTtoDensityMap.hh,v 1.1 2009-10-12 10:04:35 akimura Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // Created:  Oct. 12, 2009  Akinori Kimura  

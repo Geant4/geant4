@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartTrackStack.cc,v 1.5 2010-11-24 22:56:57 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "G4SmartTrackStack.hh"

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhantomParameterisation.hh,v 1.6 2010-11-09 15:43:15 arce Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4PhantomParameterisation

@@ -27,8 +27,7 @@
 /// \brief Definition of the OlapEventAction class
 //
 //
-// $Id: OlapEventAction.hh,v 1.6 2010-11-16 14:34:30 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // --------------------------------------------------------------

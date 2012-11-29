@@ -29,7 +29,7 @@
 //    *                                *
 //    **********************************
 //
-// $Id: RemSimAstronautDecorator.cc,v 1.7 2006-06-29 16:23:33 gunter Exp $
+// $Id$
 //
 // Author:Susanna Guatelli, guatelli@ge.infn.it 
 

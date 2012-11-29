@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3G4Interface.hh,v 1.10 2006-06-29 18:11:54 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //   Interfaces for G3 equivalent routines
 //

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularNavigationHelper.hh,v 1.1 2009-01-27 09:31:29 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file

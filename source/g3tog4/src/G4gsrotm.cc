@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsrotm.cc,v 1.12 2006-06-29 18:14:55 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #include "G3toG4.hh"
 #include "G3RotTable.hh"

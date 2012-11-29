@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LinInterpolation.hh,v 1.4 2009-09-25 07:41:34 sincerti Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //

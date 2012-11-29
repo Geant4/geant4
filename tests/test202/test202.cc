@@ -25,8 +25,7 @@
 //
 
 //
-// $Id: test202.cc,v 1.4 2010-07-11 09:05:38 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 // Usage: test202 [macro-file]

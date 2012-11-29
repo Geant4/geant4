@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbRotationMatrix.cc,v 1.10 2010-10-13 15:20:01 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4tgbRotationMatrix

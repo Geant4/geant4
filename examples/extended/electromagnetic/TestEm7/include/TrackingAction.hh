@@ -26,8 +26,7 @@
 /// \file electromagnetic/TestEm7/include/TrackingAction.hh
 /// \brief Definition of the TrackingAction class
 //
-// $Id: TrackingAction.hh,v 1.3 2010-09-17 18:45:43 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

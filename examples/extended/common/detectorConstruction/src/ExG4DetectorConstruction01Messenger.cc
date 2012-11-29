@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExG4DetectorConstruction01Messenger.cc,v 1.2 2006-06-29 16:46:49 gunter Exp $
+// $Id$
 //
 /// \file ExG4DetectorConstruction01Messenger.cc
 /// \brief Implementation of the ExG4DetectorConstruction01Messenger class

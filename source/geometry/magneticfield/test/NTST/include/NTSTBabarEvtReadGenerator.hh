@@ -25,7 +25,7 @@
 //
 //--------------------------------------------------------------------------
 // File and Version Information:
-// 	$Id: NTSTBabarEvtReadGenerator.hh,v 1.4 2006-06-29 18:25:21 gunter Exp $
+// 	$Id$
 //
 // Description:
 //	Class NTSTBabarEvtReadGenerator

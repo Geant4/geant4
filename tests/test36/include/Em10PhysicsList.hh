@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10PhysicsList.hh,v 1.4 2007-06-21 15:06:01 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef Em10PhysicsList_h

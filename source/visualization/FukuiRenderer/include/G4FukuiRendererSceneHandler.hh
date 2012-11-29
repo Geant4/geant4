@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FukuiRendererSceneHandler.hh,v 1.17 2010-05-30 10:18:32 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Satoshi TANAKA, Fri Jun 28 11:19:19 JST 1996

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPartonStringModel.cc,v 1.8 2010-12-07 10:42:40 vuzhinsk Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //// ------------------------------------------------------------
 //      GEANT 4 class implementation file

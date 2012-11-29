@@ -29,7 +29,7 @@
 // ====================================================================
 //
 //   HepMCG4GenericPythiaMessenger.hh
-//   $Id: HepMCG4PythiaMessenger.hh,v 1.3 2006-06-29 17:05:26 gunter Exp $
+//   $Id$
 //
 // ====================================================================
 #ifndef HEPMC_G4_PYTHIA_MESSENGER_H

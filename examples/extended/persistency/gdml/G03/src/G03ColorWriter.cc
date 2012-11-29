@@ -26,8 +26,7 @@
 /// \file persistency/gdml/G03/src/G03ColorWriter.cc
 /// \brief Implementation of the G03ColorWriter class
 //
-// $Id: G03ColorWriter.cc,v 1.2 2009-04-24 15:54:21 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // --------------------------------------------------------------------
 

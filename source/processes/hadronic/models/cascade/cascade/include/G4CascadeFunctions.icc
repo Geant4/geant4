@@ -25,8 +25,7 @@
 //
 #ifndef G4_CASCADE_FUNCTIONS_ICC
 #define G4_CASCADE_FUNCTIONS_ICC
-// $Id: G4CascadeFunctions.icc,v 1.6 2010-12-15 07:39:40 gunter Exp $
-// GEANT4 tag: $Name: not supported by cvs2svn $
+// $Id$
 //
 // 20100512  M. Kelsey -- Pass std::vector<> buffer as argument to
 //		getOutgoingPartTypes().

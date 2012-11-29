@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst202DetectorConstruction.hh,v 1.1 2007-02-08 15:45:28 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef Tst202DetectorConstruction_h

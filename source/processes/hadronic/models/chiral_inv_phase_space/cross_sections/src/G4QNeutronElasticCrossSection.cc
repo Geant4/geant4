@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNeutronElasticCrossSection.cc,v 1.5 2010-09-03 15:19:04 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // G4 Physics class: G4QNeutronElasticCrossSection for nA elastic cross sections

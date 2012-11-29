@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Integrator.icc,v 1.13 2006-06-29 18:59:47 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Implementation of G4Integrator methods. 
 //

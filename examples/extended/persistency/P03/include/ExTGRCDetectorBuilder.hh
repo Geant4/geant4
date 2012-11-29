@@ -26,7 +26,7 @@
 /// \file persistency/P03/include/ExTGRCDetectorBuilder.hh
 /// \brief Definition of the ExTGRCDetectorBuilder class
 //
-// $Id: ExTGRCDetectorBuilder.hh,v 1.5 2010-11-05 08:52:34 gcosmo Exp $
+// $Id$
 
 #ifndef ExTGRCDetectorBuilder_h
 #define ExTGRCDetectorBuilder_h

@@ -26,8 +26,7 @@
 /// \file electromagnetic/TestEm7/include/G4LindhardPartition.hh
 /// \brief Definition of the G4LindhardPartition class
 //
-// $Id: G4LindhardPartition.hh,v 1.4 2009-11-26 08:19:57 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 /*

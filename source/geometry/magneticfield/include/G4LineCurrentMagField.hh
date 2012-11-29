@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LineCurrentMagField.hh,v 1.4 2006-06-29 18:22:46 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4LineCurrentMagField

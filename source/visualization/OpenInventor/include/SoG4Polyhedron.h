@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: SoG4Polyhedron.h,v 1.3 2007-09-17 16:08:00 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // John Allison  26th October 2006
 // Extended Geant4_SoPolyhedron to include G4Atts.

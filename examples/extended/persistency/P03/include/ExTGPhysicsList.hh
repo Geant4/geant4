@@ -26,7 +26,7 @@
 /// \file persistency/P03/include/ExTGPhysicsList.hh
 /// \brief Definition of the ExTGPhysicsList class
 //
-// $Id: ExTGPhysicsList.hh,v 1.2 2010-11-05 08:52:34 gcosmo Exp $
+// $Id$
 
 #ifndef ExTGPhysicsList_h
 #define ExTGPhysicsList_h 1

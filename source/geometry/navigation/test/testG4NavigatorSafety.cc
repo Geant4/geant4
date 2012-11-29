@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4NavigatorSafety.cc,v 1.6 2010-11-09 10:48:27 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 //   Create a tubular "calorimeter". Generate random points along x, y & z

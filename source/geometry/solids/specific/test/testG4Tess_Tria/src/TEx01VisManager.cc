@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: TEx01VisManager.cc,v 1.3 2007-05-18 10:40:29 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // John Allison 24th January 1998.

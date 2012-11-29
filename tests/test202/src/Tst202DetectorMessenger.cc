@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst202DetectorMessenger.cc,v 1.2 2007-11-11 11:36:04 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "Tst202DetectorMessenger.hh"

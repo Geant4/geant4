@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPolycone.hh,v 1.9 2010-07-02 10:46:27 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // 
 // classes G4ParameterisationPolyconeRho,
 //         G4ParameterisationPolyconePhi,

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VFlavoredParallelWorld.hh,v 1.5 2006-11-03 17:44:40 mverderi Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Abstract interface for GEANT4 Flavored Parallel World.

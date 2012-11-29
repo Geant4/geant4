@@ -29,7 +29,7 @@
 // ====================================================================
 //
 //   ExN04PrimaryGeneratorAction.cc
-//   $Id: ExN04PrimaryGeneratorAction.cc,v 1.5 2006-07-05 11:06:36 gcosmo Exp $
+//   $Id$
 //
 // ====================================================================
 #include "ExN04PrimaryGeneratorAction.hh"

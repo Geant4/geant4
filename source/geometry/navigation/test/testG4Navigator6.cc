@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Navigator6.cc,v 1.5 2006-06-29 18:37:28 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 //

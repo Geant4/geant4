@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scale.hh,v 1.7 2006-06-29 19:05:56 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  21st July 2001.

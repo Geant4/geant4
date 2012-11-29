@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VQCrossSection.cc,v 1.1 2009-11-16 18:15:43 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // CHIPS virtual class: G4VQCrossSection for the collision cross sections

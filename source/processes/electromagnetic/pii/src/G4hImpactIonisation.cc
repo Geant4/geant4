@@ -28,8 +28,7 @@
 // ------------------------------------------------------------
 // G4RDHadronIonisation
 //
-// $Id: G4hImpactIonisation.cc,v 1.4 2010-11-25 19:49:43 pia Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Maria Grazia Pia (MariaGrazia.Pia@ge.infn.it)
 //

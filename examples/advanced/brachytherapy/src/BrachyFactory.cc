@@ -34,8 +34,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyFactory.cc,v 1.7 2006-06-29 15:48:23 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Factory of brachytherapic sources
 //

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: BuildCalorimeter.hh,v 1.6 2006-06-29 18:15:26 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef BUILDCALORIMETER_HH
 #define BUILDCALORIMETER_HH

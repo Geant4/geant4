@@ -27,8 +27,7 @@
 /// \brief Implementation of the G04SensitiveDetector class
 //
 //
-// $Id: G04SensitiveDetector.cc,v 1.2 2010-10-21 13:13:55 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "G04SensitiveDetector.hh"

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PiMinusStopMaterial.hh,v 1.11 2007-07-05 18:19:14 dennis Exp $
+// $Id$
 //
 //      File name:     G4PiMinusStopMaterial.hh 
 //

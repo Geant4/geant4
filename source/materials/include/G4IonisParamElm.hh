@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamElm.hh,v 1.10 2008-06-03 14:30:10 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 // class description

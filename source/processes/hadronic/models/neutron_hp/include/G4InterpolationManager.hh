@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4InterpolationManager.hh,v 1.13 2007-06-06 12:45:13 ahoward Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4InterpolationManager_h
 #define G4InterpolationManager_h 1

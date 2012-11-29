@@ -25,8 +25,7 @@
 //
 #ifndef G4CASCADE_SAMPLER_ICC
 #define G4CASCADE_SAMPLER_ICC
-// $Id: G4CascadeSampler.icc,v 1.6 2010-12-15 07:39:46 gunter Exp $
-// GEANT4 tag: $Name: not supported by cvs2svn $
+// $Id$
 //
 // 20100506 M. Kelsey -- Move functionity of G4CascadeChannel here,
 //		use as base class to G4CascadeFunctions<T>.

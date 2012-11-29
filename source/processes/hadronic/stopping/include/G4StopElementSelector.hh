@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4StopElementSelector.hh,v 1.10 2007-07-05 18:19:14 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author:        V.Ivanchenko (Vladimir.Ivantchenko@cern.ch)
 // 

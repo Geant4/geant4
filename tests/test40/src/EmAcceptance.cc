@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: EmAcceptance.cc,v 1.3 2006-06-29 22:03:32 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 

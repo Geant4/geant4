@@ -26,7 +26,7 @@
 /// \file medical/DICOM/include/DicomPhysicsList.hh
 /// \brief Definition of the DicomPhysicsList class
 //
-// $Id: DicomPhysicsList.hh,v 1.7 2009-10-26 11:21:01 chauvie Exp $
+// $Id$
 
 #ifndef DicomPhysicsList_h
 #define DicomPhysicsList_h 1

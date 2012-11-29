@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst11DetectorConstruction.hh,v 1.8 2008-09-04 22:31:30 tkoi Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 080901 Add defineTKMaterials() 
 //

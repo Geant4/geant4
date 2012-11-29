@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointAlongStepWeightCorrection.cc,v 1.6 2010-09-03 14:33:21 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #include "G4AdjointAlongStepWeightCorrection.hh"
 #include "G4Step.hh"

@@ -27,8 +27,7 @@
 /// \brief Implementation of the B02Run class
 //
 //
-// $Id: B02Run.cc,v 1.2 2007-06-21 15:03:45 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 //=====================================================================

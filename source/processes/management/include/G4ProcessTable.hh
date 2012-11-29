@@ -25,8 +25,7 @@
 //
 
 //
-// $Id: G4ProcessTable.hh,v 1.10 2006-06-29 21:07:32 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ------------------------------------------------------------

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QSynchRad.cc,v 1.1 2009-11-17 10:36:55 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Created by Mikhail Kosov 6-Nov-2009
 //

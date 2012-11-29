@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hRDEnergyLoss.cc,v 1.3 2010-11-25 19:49:43 pia Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -----------------------------------------------------------
 //      GEANT 4 class implementation file

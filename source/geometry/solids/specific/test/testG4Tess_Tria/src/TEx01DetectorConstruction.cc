@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: TEx01DetectorConstruction.cc,v 1.5 2007-05-18 10:40:29 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

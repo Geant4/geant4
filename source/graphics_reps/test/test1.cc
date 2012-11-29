@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test1.cc,v 1.5 2006-06-29 19:07:37 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  19th July 1996

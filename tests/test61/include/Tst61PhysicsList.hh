@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst61PhysicsList.hh,v 1.1 2008-10-28 23:11:23 tkoi Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef Tst61PhysicsList_h
 #define Tst61PhysicsList_h 1

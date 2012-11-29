@@ -27,8 +27,7 @@
 /// \brief Definition of the Em10PrimaryGeneratorAction class
 //
 //
-// $Id: Em10PrimaryGeneratorAction.hh,v 1.3 2006-06-29 16:38:01 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

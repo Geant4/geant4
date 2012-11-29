@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIdNdxTest.cc,v 1.8 2008-04-14 14:53:39 grichine Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 //

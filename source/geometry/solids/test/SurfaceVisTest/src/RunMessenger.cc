@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunMessenger.cc,v 1.1 2008-05-15 14:01:08 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

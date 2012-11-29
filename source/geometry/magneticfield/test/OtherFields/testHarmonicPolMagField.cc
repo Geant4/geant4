@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testHarmonicPolMagField.cc,v 1.7 2006-06-29 18:26:43 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //  
 //

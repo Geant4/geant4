@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWithADoubleAndUnit.cc,v 1.10 2010-08-03 07:10:47 kmura Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 

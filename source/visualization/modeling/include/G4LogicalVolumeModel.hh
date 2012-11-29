@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolumeModel.hh,v 1.9 2006-11-01 10:28:42 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  26th July 1999.

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBS.hh,v 1.11 2010-12-07 09:36:59 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // 
 // Olivier Crumeyrolle  12 September 1996
 

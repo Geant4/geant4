@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPassageTrackLength.cc,v 1.2 2010-07-22 07:23:45 taso Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // G4PSPassageTrackLength
 #include "G4PSPassageTrackLength.hh"

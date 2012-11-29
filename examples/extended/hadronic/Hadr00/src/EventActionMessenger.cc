@@ -26,8 +26,7 @@
 /// \file hadronic/Hadr00/src/EventActionMessenger.cc
 /// \brief Implementation of the EventActionMessenger class
 //
-// $Id: EventActionMessenger.cc,v 1.1 2008-07-07 16:37:26 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////
 //

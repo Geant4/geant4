@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: BuildCalorimeter.cc,v 1.5 2006-06-29 21:34:10 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

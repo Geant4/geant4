@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TheoFSGenerator.hh,v 1.6 2007-11-13 16:01:36 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 // Class Description

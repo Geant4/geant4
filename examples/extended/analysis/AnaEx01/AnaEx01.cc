@@ -27,8 +27,7 @@
 /// \brief Main program of the analysis/AnaEx01 example
 //
 //
-// $Id: AnaEx01.cc,v 1.15 2010-11-08 10:38:44 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

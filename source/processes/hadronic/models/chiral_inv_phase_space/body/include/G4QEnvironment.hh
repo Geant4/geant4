@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QEnvironment.hh,v 1.38 2010-11-22 07:07:27 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //      ---------------- G4QEnvironment ----------------
 //             by Mikhail Kossov, August 2000.

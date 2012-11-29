@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: globals.hh,v 1.27 2006-06-29 19:03:51 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // Global Constants and typedefs

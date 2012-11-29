@@ -26,8 +26,7 @@
 /// \file biasing/B02/include/B02ScoreTable.hh
 /// \brief Definition of the B02ScoreTable class
 //
-// $Id: B02ScoreTable.hh,v 1.1 2007-06-13 13:31:41 ahoward Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------------------------------------------------------
 // Class B02ScoreTable

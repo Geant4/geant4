@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNASancheExcitationModel.hh,v 1.3 2010/11/11 23:43:35 sincerti Exp $
+// $Id$
 // GEANT4 tag $Name:  $
 //
 

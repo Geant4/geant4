@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.hh,v 1.21 2009-11-27 16:34:37 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // class G4Region
 //

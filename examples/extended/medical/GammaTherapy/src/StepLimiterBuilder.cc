@@ -27,8 +27,7 @@
 /// \brief Implementation of the StepLimiterBuilder class
 //
 //
-// $Id: StepLimiterBuilder.cc,v 1.3 2008-08-05 10:38:35 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //

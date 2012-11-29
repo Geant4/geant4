@@ -27,8 +27,7 @@
 /// \brief Definition of the G4THitsCollection class
 //
 //
-// $Id: G4THitsCollection.hh,v 1.3 2006-06-29 17:35:35 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4THitsCollection_h

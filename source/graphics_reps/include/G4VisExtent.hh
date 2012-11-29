@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExtent.hh,v 1.10 2006-06-29 19:06:24 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // A.Walkden 28/11/95

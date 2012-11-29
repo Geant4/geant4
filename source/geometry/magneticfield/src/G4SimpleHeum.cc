@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SimpleHeum.cc,v 1.10 2009-03-25 15:29:02 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //  Simple Heum:
 //        x_1 = x_0 + h *

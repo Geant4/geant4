@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoreWriter.hh,v 1.2 2007-11-06 09:41:34 akimura Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4VScoreWriter_h

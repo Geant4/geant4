@@ -26,8 +26,7 @@
 /// \file electromagnetic/TestEm5/src/StepMaxMessenger.cc
 /// \brief Implementation of the StepMaxMessenger class
 //
-// $Id: StepMaxMessenger.cc,v 1.3 2006-06-29 16:56:23 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

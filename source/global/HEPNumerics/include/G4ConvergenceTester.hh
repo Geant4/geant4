@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConvergenceTester.hh,v 1.1 2010-10-12 07:24:27 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Class description:
 //

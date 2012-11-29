@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst18PhysicsList.cc,v 1.11 2010-06-01 13:23:55 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testshapes.cc,v 1.4 2006-06-29 21:33:32 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  Jan 1996

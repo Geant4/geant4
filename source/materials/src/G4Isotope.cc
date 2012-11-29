@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Isotope.cc,v 1.23 2010-10-25 09:20:40 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

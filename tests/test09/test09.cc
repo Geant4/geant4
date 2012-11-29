@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test09.cc,v 1.6 2006-06-29 21:37:40 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "Tst09DetectorConstruction.hh"

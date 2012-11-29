@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VPreCompoundTransitions.hh,v 1.6 2010-08-20 07:42:19 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // J. M. Quesada (May 08). New virtual classes have been added Prob1,2,3 
 // JMQ (06 September 2008) Also external choices have been added for:

@@ -27,8 +27,7 @@
 /// \brief Main program of the analysis/N03Con example
 //
 //
-// $Id: exampleN03Con.cc,v 1.5 2010-11-12 19:16:31 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -30,8 +30,7 @@
 //    *                                       *
 //    *****************************************
 //
-// $Id: BrachyDetectorMessenger.hh,v 1.7 2006-06-29 15:47:22 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 #ifndef BrachyDetectorMessenger_h

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGlobalFastSimulationManager.hh,v 1.5 2006-06-29 19:08:31 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Abstract interface for GEANT4 Global Fast Simulation Manager.

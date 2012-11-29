@@ -27,8 +27,7 @@
 /// \brief Implementation of the G3toG4DetectorConstruction class
 //
 //
-// $Id: G3toG4DetectorConstruction.cc,v 1.5 2006-06-29 17:20:15 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //--------------------------------------------------------------------------
 // G3toG4DetectorConstruction. Most the work is Done in

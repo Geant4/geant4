@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: XTRComptonScattering.hh,v 1.4 2007-06-21 15:06:48 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //------------------ XTRComptonScattering physics process -----------------------
 //                   by Michel Maire, April 1996

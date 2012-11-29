@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VNeutronHPEDis.hh,v 1.10 2006-06-29 20:50:05 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4VNeutronHPEDis_h
 #define G4VNeutronHPEDis_h 1

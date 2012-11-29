@@ -26,8 +26,7 @@
 /// \file biasing/ReverseMC01/include/RMC01AdjointEventAction.hh
 /// \brief Definition of the RMC01AdjointEventAction class
 //
-// $Id: RMC01AdjointEventAction.hh,v 1.1 2009-11-19 22:41:18 ldesorgh Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //////////////////////////////////////////////////////////////
 //  Class Name:        RMC01AdjointEventAction

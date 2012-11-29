@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3PartTable.hh,v 1.10 2006-06-29 18:12:05 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------
 // Class description:

@@ -26,8 +26,7 @@
 /// \file hadronic/Hadr01/src/CheckVolumeSD.cc
 /// \brief Implementation of the CheckVolumeSD class
 //
-// $Id: CheckVolumeSD.cc,v 1.3 2006-06-29 17:24:02 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////
 //

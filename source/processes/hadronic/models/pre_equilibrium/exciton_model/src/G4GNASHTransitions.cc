@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GNASHTransitions.cc,v 1.6 2010-08-20 07:42:19 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 20.08.2010 V.Ivanchenko move constructor and destructor to the source 
 

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: F03StepCut.cc,v 1.2 2006-06-29 18:30:27 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "F03StepCut.hh"

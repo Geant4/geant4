@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst1DetectorConstruction.cc,v 1.2 2010-09-30 20:53:08 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

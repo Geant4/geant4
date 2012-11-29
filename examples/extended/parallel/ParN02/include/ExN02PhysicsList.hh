@@ -27,8 +27,7 @@
 /// \brief Definition of the ExN02PhysicsList class
 //
 //
-// $Id: ExN02PhysicsList.hh,v 1.12 2008-09-22 16:41:20 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 
-// $Id: testG4Orb.cc,v 1.7 2009-01-29 16:54:51 grichine Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // G4Orb Test File
 //

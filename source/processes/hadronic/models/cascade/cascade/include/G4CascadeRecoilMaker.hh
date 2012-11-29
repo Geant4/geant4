@@ -25,8 +25,7 @@
 //
 #ifndef G4CASCADE_RECOIL_MAKER_HH
 #define G4CASCADE_RECOIL_MAKER_HH
-// $Id: G4CascadeRecoilMaker.hh,v 1.7 2010-12-15 07:39:44 gunter Exp $
-// Geant4 tag: $Name: not supported by cvs2svn $
+// $Id$
 //
 // Collects generated cascade data (using Collider::collide() interface)
 // and computes the nuclear recoil kinematics needed to balance the event.

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LorentzConvertor.hh,v 1.18 2010-12-15 07:39:58 gunter Exp $
-// Geant4 tag: $Name: not supported by cvs2svn $
+// $Id$
 //
 // 20100108  Michael Kelsey -- Use G4LorentzVector internally
 // 20100120  M. Kelsey -- BUG FIX:  scm_momentum should be G4ThreeVector

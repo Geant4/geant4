@@ -27,8 +27,7 @@
 /// \brief Implementation of the RE02DetectorConstruction class
 //
 //
-// $Id: RE02DetectorConstruction.cc,v 1.5 2010-12-07 15:17:13 stesting Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
  
 #include "RE02DetectorConstruction.hh"

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 
-// $Id: testG4Sphere.cc,v 1.30 2010-03-24 09:50:03 grichine Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // G4Sphere Test File
 //

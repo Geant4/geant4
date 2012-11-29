@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Sc01EventAction.cc,v 1.3 2006-06-29 18:54:00 gunter Exp $
+// $Id$
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //

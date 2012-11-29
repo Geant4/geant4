@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LEPionPlusInelastic.hh,v 1.12 2007-02-24 05:23:52 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Low Energy PionPlus Inelastic Process
 // J.L. Chuma, TRIUMF, 19-Nov-1996

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExVDivTester.cc,v 1.7 2009-05-16 09:15:33 arce Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // class ExVDivTester Implementation file
 //

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversionTest.cc,v 1.4 2006-06-29 19:48:44 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //

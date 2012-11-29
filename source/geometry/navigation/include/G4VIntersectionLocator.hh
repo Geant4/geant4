@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VIntersectionLocator.hh,v 1.6 2009-11-30 11:39:15 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // Class G4VIntersectionLocator 

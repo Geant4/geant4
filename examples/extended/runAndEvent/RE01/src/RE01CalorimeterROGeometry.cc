@@ -26,8 +26,7 @@
 /// \file runAndEvent/RE01/src/RE01CalorimeterROGeometry.cc
 /// \brief Implementation of the RE01CalorimeterROGeometry class
 //
-// $Id: RE01CalorimeterROGeometry.cc,v 1.2 2006-06-29 17:43:39 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "RE01CalorimeterROGeometry.hh"

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILEViewer.cc,v 1.21 2010-11-11 01:13:42 akimura Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Satoshi TANAKA
 // DAWNFILE view - opens window, hard copy, etc.

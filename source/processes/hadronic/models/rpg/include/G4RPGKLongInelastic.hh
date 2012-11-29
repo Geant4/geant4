@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RPGKLongInelastic.hh,v 1.1 2007-07-18 20:51:37 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: D. H. Wright
 // Date:   18 June 2007

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UItokenNum.hh,v 1.9 2010-05-18 07:46:29 kmura Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // G4UItokenNum.hh
 

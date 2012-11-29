@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4MultiNavigator1.cc,v 1.1 2006-11-11 01:35:38 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 //   Locate & Step within simple boxlike geometry, both

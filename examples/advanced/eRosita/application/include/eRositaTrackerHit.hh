@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: eRositaTrackerHit.hh,v 1.3 2010-11-23 23:34:32 pia Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef eRositaTrackerHit_h

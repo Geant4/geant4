@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSEnergyDeposit3D.cc,v 1.6 2010-09-16 14:58:34 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // G4PSEnergyDeposit3D
 #include "G4PSEnergyDeposit3D.hh"

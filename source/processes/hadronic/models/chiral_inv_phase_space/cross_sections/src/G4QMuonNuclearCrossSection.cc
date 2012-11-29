@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QMuonNuclearCrossSection.cc,v 1.2 2010-06-02 09:08:25 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // G4 Physics class: G4QMuonNuclearCrossSection for gamma+A cross sections

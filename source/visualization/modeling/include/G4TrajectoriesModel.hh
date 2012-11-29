@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoriesModel.hh,v 1.11 2010-05-11 11:21:52 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  26th August 1998.

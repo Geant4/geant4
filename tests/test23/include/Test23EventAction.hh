@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Test23EventAction.hh,v 1.2 2006-06-29 21:49:31 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //      ---------------- Test23EventAction header ----------------
 //                 by Mikhail Kossov, December 2003.

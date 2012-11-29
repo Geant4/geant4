@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst16PhysicsList.cc,v 1.10 2010-03-18 05:09:33 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VHighEnergyGenerator.hh,v 1.4 2006-06-29 20:45:41 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4VHighEnergyGenerator_h
 #define G4VHighEnergyGenerator_h 1

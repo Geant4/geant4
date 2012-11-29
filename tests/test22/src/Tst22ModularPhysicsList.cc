@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst22ModularPhysicsList.cc,v 1.6 2010-06-25 09:46:21 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

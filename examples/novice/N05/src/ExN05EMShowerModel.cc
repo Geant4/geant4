@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05EMShowerModel.cc,v 1.15 2006-11-14 09:21:44 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #include "ExN05EMShowerModel.hh"
 #include "ExN05EnergySpot.hh"

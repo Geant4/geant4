@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst09PhysicsList.cc,v 1.9 2010-03-21 14:54:50 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

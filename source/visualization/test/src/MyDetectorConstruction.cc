@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyDetectorConstruction.cc,v 1.39 2006-11-14 16:03:55 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 #include "MyDetectorConstruction.hh"

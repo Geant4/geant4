@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10CalorimeterSD.hh,v 1.4 2007-06-21 15:05:49 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

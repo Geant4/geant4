@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst16DetectorMessenger.hh,v 1.5 2007-08-23 12:11:00 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef Tst16DetectorMessenger_h

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QANuMuNuclearCrossSection.hh,v 1.1 2009-11-16 18:15:42 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // GEANT4 physics class: G4QANuMuNuclearCrossSection -- header file for (anu_mu,mu+)A XS

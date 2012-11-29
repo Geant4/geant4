@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.hh,v 1.22 2008-02-29 12:23:14 akimura Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // (HISTORY)
 //  03-Sep-2007  T.Aso Command definitions are introduced.

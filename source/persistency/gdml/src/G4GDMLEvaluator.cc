@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLEvaluator.cc,v 1.26 2010-11-04 11:33:49 gcosmo Exp $
+// $Id$
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLEvaluator Implementation

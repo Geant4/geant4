@@ -27,8 +27,7 @@
 /// \brief Implementation of the RE01RegionInformation class
 //
 //
-// $Id: RE01RegionInformation.cc,v 1.2 2006-06-29 17:44:15 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "RE01RegionInformation.hh"

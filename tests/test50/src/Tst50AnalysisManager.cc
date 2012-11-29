@@ -29,8 +29,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: Tst50AnalysisManager.cc,v 1.30 2010-11-10 00:21:03 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
 // History:

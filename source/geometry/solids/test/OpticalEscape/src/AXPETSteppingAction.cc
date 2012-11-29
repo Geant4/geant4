@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: AXPETSteppingAction.cc,v 1.1 2008-09-03 13:34:03 gcosmo Exp $
+// $Id$
 // ------------------------------------------------------------
 // Geant4 class implementation file
 //

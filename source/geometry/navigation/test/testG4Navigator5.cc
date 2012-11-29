@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Navigator5.cc,v 1.6 2006-06-29 18:37:26 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Locate & Step within replicated geometry (without full voxels)

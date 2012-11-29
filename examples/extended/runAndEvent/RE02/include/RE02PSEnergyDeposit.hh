@@ -27,8 +27,7 @@
 /// \brief Definition of the RE02PSEnergyDeposit class
 //
 //
-// $Id: RE02PSEnergyDeposit.hh,v 1.2 2006-12-13 15:42:50 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef RE02PSEnergyDeposit_h

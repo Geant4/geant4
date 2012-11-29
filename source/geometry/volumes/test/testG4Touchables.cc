@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Touchables.cc,v 1.10 2006-06-29 18:58:56 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Test file for G4TouchableHistory/G4GRSVolume/G4GRSSolid

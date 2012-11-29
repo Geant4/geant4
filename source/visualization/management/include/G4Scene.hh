@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scene.hh,v 1.19 2009-11-04 12:49:16 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Scene  John Allison  19th July 1996.

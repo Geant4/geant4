@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsdetd.cc,v 1.8 2006-06-29 18:13:47 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 #include "G3toG4.hh"
 #include "G3DetTable.hh"

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPolycone.cc,v 1.17 2009-05-18 19:30:29 ivana Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // class G4ParameterisationPolycone Implementation file
 //

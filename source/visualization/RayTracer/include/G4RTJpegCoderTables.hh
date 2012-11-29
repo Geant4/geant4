@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTJpegCoderTables.hh,v 1.6 2006-06-29 21:23:17 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 // class description:

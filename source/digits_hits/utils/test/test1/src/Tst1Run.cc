@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst1Run.cc,v 1.1 2007-07-13 05:55:34 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "Tst1Run.hh"

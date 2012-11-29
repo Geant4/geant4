@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QKaonMinusElasticCrossSection.cc,v 1.2 2010-06-14 15:55:18 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // G4 Physics class: G4QKaonMinusElasticCrossSection for pA elastic cross sections

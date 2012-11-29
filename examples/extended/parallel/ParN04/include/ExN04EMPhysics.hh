@@ -27,8 +27,7 @@
 /// \brief Definition of the ExN04EMPhysics class
 //
 //
-// $Id: ExN04EMPhysics.hh,v 1.2 2006-06-29 17:36:01 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // ------------------------------------------------------------

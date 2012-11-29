@@ -26,8 +26,7 @@
 /// \file medical/GammaTherapy/src/StepLimiterMessenger.cc
 /// \brief Implementation of the StepLimiterMessenger class
 //
-// $Id: StepLimiterMessenger.cc,v 1.2 2006-06-29 21:58:01 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

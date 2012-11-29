@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearLevelStore.hh,v 1.4 2010-11-17 16:50:53 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 04-10-2010  M. Kelsey -- Replace G4String keys with integers (ZZZAAA),
 //		            move string operation to GenerateFilename()

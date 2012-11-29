@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ParametrisedBox.hh,v 1.5 2010-05-20 18:10:09 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Original class written by Hans-Peter Wellisch.

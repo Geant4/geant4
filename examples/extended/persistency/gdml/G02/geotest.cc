@@ -27,8 +27,7 @@
 /// \brief Main program of the persistency/gdml/G02 example
 //
 //
-// $Id: geotest.cc,v 1.5 2010-11-30 10:53:38 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // --------------------------------------------------------------

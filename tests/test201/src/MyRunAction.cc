@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyRunAction.cc,v 1.7 2006-06-29 21:47:51 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "MyRunAction.hh"

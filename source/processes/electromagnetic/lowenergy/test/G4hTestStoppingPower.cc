@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hTestStoppingPower.cc,v 1.18 2006-06-29 19:44:46 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // 
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998

@@ -27,8 +27,7 @@
 /// \brief Implementation of the PhysicsList class
 //
 // 
-// $Id: PhysicsList.cc,v 1.8 2010-04-05 18:02:39 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSNofSecondary.cc,v 1.5 2010-07-23 04:35:38 taso Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // G4PSNofSecondary
 #include "G4PSNofSecondary.hh"

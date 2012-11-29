@@ -26,8 +26,7 @@
 /// \file runAndEvent/RE01/include/RE01TrackerSD.hh
 /// \brief Definition of the RE01TrackerSD class
 //
-// $Id: RE01TrackerSD.hh,v 1.2 2006-06-29 17:43:26 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef RE01TrackerSD_h

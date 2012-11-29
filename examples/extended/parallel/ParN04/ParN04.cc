@@ -27,8 +27,7 @@
 /// \brief Main program of the parallel/ParN04 example
 //
 //
-// $Id: ParN04.cc,v 1.8 2010-11-07 11:34:05 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // --------------------------------------------------------------

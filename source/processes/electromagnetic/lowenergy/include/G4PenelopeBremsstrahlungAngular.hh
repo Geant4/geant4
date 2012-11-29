@@ -25,8 +25,7 @@
 //
 // 
 // -------------------------------------------------------------------
-// $Id: G4PenelopeBremsstrahlungAngular.hh,v 1.1 2010-12-20 14:11:13 pandola Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: L.Pandola
 //

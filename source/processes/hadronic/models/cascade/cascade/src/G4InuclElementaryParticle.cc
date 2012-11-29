@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclElementaryParticle.cc,v 1.10 2010/09/23 05:33:56 mkelsey Exp $
+// $Id$
 // Geant4 tag: $Name:  $
 //
 // 20100428  M. Kelsey -- Use G4InuclParticleNames enums instead of numbers,

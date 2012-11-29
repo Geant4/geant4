@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ForwardXrayTR.cc,v 1.16 2010-11-01 10:22:18 grichine Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // G4ForwardXrayTR class -- implementation file
 //

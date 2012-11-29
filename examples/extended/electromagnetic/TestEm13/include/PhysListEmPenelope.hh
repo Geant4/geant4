@@ -26,8 +26,7 @@
 /// \file electromagnetic/TestEm13/include/PhysListEmPenelope.hh
 /// \brief Definition of the PhysListEmPenelope class
 //
-// $Id: PhysListEmPenelope.hh,v 1.4 2009-11-19 17:30:25 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

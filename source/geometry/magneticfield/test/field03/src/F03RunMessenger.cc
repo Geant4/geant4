@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: F03RunMessenger.cc,v 1.3 2006-06-29 18:30:25 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

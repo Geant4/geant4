@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 
-// $Id: testG4Sphere2.cc,v 1.6 2007-05-18 10:24:32 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // G4Sphere Test File
 //

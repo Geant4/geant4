@@ -26,7 +26,7 @@
 /// \file analysis/A01/src/A01EMPhysics.cc
 /// \brief Implementation of the A01EMPhysics class
 //
-// $Id: A01EMPhysics.cc,v 1.9 2009-11-21 01:00:19 perl Exp $
+// $Id$
 // --------------------------------------------------------------
 //
 //

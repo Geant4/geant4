@@ -25,8 +25,7 @@
 //
 #include "G4QPartonPair.hh"
 //
-// $Id: G4QPartonPair.cc,v 1.2 2009-02-23 09:49:24 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIXaw.cc,v 1.6 2006-06-29 19:09:47 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // G.Barrand
 

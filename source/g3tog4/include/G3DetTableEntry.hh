@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3DetTableEntry.hh,v 1.6 2006-06-29 18:11:23 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // G3DetTableEntry class
 

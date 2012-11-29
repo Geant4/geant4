@@ -27,8 +27,7 @@
 /// \brief Main program of the g3tog4/clGeometry example
 //
 //
-// $Id: clGeometry.cc,v 1.9 2010-11-04 21:47:43 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: SCDetectorConstruction.hh,v 1.6 2006-12-13 15:43:46 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

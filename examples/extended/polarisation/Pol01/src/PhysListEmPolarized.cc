@@ -27,8 +27,7 @@
 /// \brief Implementation of the PhysListEmPolarized class
 //
 //
-// $Id: PhysListEmPolarized.cc,v 1.3 2009-11-21 16:27:40 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 

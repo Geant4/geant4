@@ -26,8 +26,7 @@
 /// \file medical/GammaTherapy/include/PhysicsList.hh
 /// \brief Definition of the PhysicsList class
 //
-// $Id: PhysicsList.hh,v 1.6 2006-11-16 14:42:20 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Modified:
 //

@@ -26,7 +26,7 @@
 /// \file analysis/A01/include/A01EMPhysics.hh
 /// \brief Definition of the A01EMPhysics class
 //
-// $Id: A01EMPhysics.hh,v 1.7 2009-11-21 01:00:19 perl Exp $
+// $Id$
 // --------------------------------------------------------------
 //
 // 09-Oct-2003 Chhange gamma, electron, positorn process T. Koi

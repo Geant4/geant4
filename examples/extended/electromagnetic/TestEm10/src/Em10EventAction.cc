@@ -27,8 +27,7 @@
 /// \brief Implementation of the Em10EventAction class
 //
 //
-// $Id: Em10EventAction.cc,v 1.7 2010-06-06 04:33:02 perl Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

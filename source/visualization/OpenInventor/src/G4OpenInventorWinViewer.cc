@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWinViewer.cc,v 1.27 2010-11-10 17:53:22 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 /*
  * jck : 05 Feb 1997 : Initial Implementation

@@ -27,8 +27,7 @@
 /// \brief Definition of the G02RunAction class
 //
 //
-// $Id: G02RunAction.hh,v 1.2 2008-12-18 12:57:00 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Class G02RunAction
 //

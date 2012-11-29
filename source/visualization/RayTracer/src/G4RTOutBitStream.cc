@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTOutBitStream.cc,v 1.6 2008-04-04 13:52:48 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 //

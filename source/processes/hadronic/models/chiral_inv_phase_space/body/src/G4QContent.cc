@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QContent.cc,v 1.50 2010-11-22 07:08:01 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //      ---------------- G4QContent ----------------
 //             by Mikhail Kossov, Sept 1999.

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronElasticDataSet.cc,v 1.9 2011-01-09 02:37:48 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // G4 Physics class: HadronElasticDataSet for cross sections

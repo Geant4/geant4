@@ -27,8 +27,7 @@
 /// \brief Definition of the ProcessesCount class
 //
 //
-// $Id: ProcessesCount.hh,v 1.1 2007-01-19 17:20:26 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

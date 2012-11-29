@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyPhysicsList.hh,v 1.9 2006-11-15 10:02:17 guatelli Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Code review: MGP, 5 November 2006 (still to be completed)
 //

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VNuclearDensity.hh,v 1.4 2006-06-29 20:45:49 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4VNuclearDensity_h
 #define G4VNuclearDensity_h 1

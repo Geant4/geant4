@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3DetTableEntry.cc,v 1.5 2006-06-29 18:12:51 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #include "globals.hh"
 #include "G3DetTableEntry.hh"

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: T07PrimaryGeneratorAction.hh,v 1.4 2006-06-29 21:37:04 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

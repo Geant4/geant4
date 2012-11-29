@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFAnnihilation.hh,v 1.1 2010/12/07 10:42:40 vuzhinsk Exp $
+// $Id$
 
 #ifndef G4FTFAnnihilation_h
 #define G4FTFAnnihilation_h 1

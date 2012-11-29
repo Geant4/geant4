@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectricField.hh,v 1.2 2006-06-29 18:21:59 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4ElectricField

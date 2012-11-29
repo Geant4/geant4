@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Chips.hh,v 1.19 2006-06-29 20:05:53 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //      ---------------- G4Chips ----------------
 //          by Mikhail Kossov, September 1999.

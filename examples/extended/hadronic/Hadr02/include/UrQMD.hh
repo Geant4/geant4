@@ -26,8 +26,7 @@
 /// \file hadronic/Hadr02/include/UrQMD.hh
 /// \brief Definition of the UrQMD class
 //
-// $Id: UrQMD.hh,v 1.1 2007-10-19 15:35:08 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //

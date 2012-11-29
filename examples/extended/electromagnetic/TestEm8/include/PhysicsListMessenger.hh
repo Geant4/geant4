@@ -27,8 +27,7 @@
 /// \brief Definition of the PhysicsListMessenger class
 //
 //
-// $Id: PhysicsListMessenger.hh,v 1.3 2010-09-08 09:12:10 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //

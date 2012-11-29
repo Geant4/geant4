@@ -27,8 +27,7 @@
 /// \brief Implementation of the G01PrimaryGeneratorAction class
 //
 //
-// $Id: G01PrimaryGeneratorAction.cc,v 1.2 2008-11-10 15:39:34 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 

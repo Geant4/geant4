@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclCollider.hh,v 1.22 2010-12-15 07:39:56 gunter Exp $
-// Geant4 tag: $Name: not supported by cvs2svn $
+// $Id$
 //
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 // 20100517  M. Kelsey -- Inherit from common base class, make other colliders

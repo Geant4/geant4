@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLWtViewer.hh,v 1.25 2010-10-08 10:07:31 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // G4OpenGLWtViewer : Class to provide WindowsNT specific

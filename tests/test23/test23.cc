@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test23.cc,v 1.7 2006-06-29 21:49:27 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //  Test of the G4QCaptureAtRest CHIPS process in GEANT4
 

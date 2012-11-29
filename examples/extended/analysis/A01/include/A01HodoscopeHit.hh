@@ -26,7 +26,7 @@
 /// \file analysis/A01/include/A01HodoscopeHit.hh
 /// \brief Definition of the A01HodoscopeHit class
 //
-// $Id: A01HodoscopeHit.hh,v 1.5 2006-06-29 16:31:19 gunter Exp $
+// $Id$
 // --------------------------------------------------------------
 //
 #ifndef A01HodoscopeHit_h

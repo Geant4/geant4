@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: AXPETDetectorConstruction.cc,v 1.2 2010-11-16 13:35:53 tnikitin Exp $
+// $Id$
 // ------------------------------------------------------------
 // Geant4 class implementation file
 //

@@ -27,8 +27,7 @@
 /// \brief Implementation of the Em10SteppingAction class
 //
 //
-// $Id: Em10SteppingAction.cc,v 1.6 2006-06-29 16:39:06 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

@@ -26,7 +26,7 @@
 /// \file analysis/A01/src/A01EventAction.cc
 /// \brief Implementation of the A01EventAction class
 //
-// $Id: A01EventAction.cc,v 1.10 2007-05-17 09:55:14 duns Exp $
+// $Id$
 // --------------------------------------------------------------
 //
 

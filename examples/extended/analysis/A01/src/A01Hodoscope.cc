@@ -26,7 +26,7 @@
 /// \file analysis/A01/src/A01Hodoscope.cc
 /// \brief Implementation of the A01Hodoscope class
 //
-// $Id: A01Hodoscope.cc,v 1.7 2006-06-29 16:32:50 gunter Exp $
+// $Id$
 // --------------------------------------------------------------
 //
 #include "A01Hodoscope.hh"

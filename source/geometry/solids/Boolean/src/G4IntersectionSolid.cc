@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectionSolid.cc,v 1.34 2010-10-20 07:31:39 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Implementation of methods for the class G4IntersectionSolid
 //

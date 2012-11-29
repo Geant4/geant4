@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingVerbose.hh,v 1.4 2006-06-29 22:05:14 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
 //

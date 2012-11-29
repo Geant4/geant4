@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BoldyshevTripletModel.cc,v 1.2 2010/11/12 16:48:13 flongo Exp $
+// $Id$
 // GEANT4 tag $Name:  $
 //
 //

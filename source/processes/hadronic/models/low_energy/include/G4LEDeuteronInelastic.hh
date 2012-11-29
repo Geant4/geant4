@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LEDeuteronInelastic.hh,v 1.10 2007-02-24 06:45:04 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Low Energy Deuteron Inelastic Process
 // J.L. Chuma, TRIUMF, 25-Feb-1997

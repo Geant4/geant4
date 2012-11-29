@@ -26,7 +26,7 @@
 /// \file analysis/A01/src/A01PrimaryGeneratorAction.cc
 /// \brief Implementation of the A01PrimaryGeneratorAction class
 //
-// $Id: A01PrimaryGeneratorAction.cc,v 1.5 2006-06-29 16:33:05 gunter Exp $
+// $Id$
 // --------------------------------------------------------------
 //
 

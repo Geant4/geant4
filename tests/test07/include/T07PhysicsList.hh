@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: T07PhysicsList.hh,v 1.7 2010-03-31 06:51:53 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

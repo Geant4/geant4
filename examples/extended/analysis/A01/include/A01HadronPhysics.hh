@@ -26,7 +26,7 @@
 /// \file analysis/A01/include/A01HadronPhysics.hh
 /// \brief Definition of the A01HadronPhysics class
 //
-// $Id: A01HadronPhysics.hh,v 1.7 2009-11-21 01:00:19 perl Exp $
+// $Id$
 // --------------------------------------------------------------
 //
 //  10-Oct-2003 Full Hadron Processes with Parameterization Model  T. Koi

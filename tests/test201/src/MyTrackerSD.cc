@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyTrackerSD.cc,v 1.6 2010-05-27 15:00:18 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "G4VPhysicalVolume.hh"

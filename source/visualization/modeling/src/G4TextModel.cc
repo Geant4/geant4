@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TextModel.cc,v 1.7 2006-06-29 21:33:00 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  3rd April 2001

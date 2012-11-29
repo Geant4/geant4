@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: XTRPhotoElectricEffect.cc,v 1.4 2007-06-21 15:07:34 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

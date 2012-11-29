@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InteractionCase.cc,v 1.2 2010-06-25 09:44:32 gunter Exp $
-// GEANT4 tag: $Name: not supported by cvs2svn $
+// $Id$
 //
 // 20100518  M. Kelsey -- Move code from Colliders' "bulletTargetSetter()"
 //		to setBulletTarget().

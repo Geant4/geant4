@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultiLevelLocator.hh,v 1.3 2010-07-13 15:59:42 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // Class G4MultiLevelLocator 

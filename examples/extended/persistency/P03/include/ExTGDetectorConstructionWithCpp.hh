@@ -26,7 +26,7 @@
 /// \file persistency/P03/include/ExTGDetectorConstructionWithCpp.hh
 /// \brief Definition of the ExTGDetectorConstructionWithCpp class
 //
-// $Id: ExTGDetectorConstructionWithCpp.hh,v 1.3 2010-11-05 08:52:34 gcosmo Exp $
+// $Id$
 
 #ifndef ExTGDetectorConstructionWithCpp_HH
 #define ExTGDetectorConstructionWithCpp_HH

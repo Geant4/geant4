@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.hh,v 1.22 2010-05-19 14:50:30 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4UImanager_h

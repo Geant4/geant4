@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSEnergyDeposit3D.hh,v 1.4 2010-07-22 07:23:45 taso Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4PSEnergyDeposit3D_h

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronicInteraction.hh,v 1.14 2010-04-03 00:40:45 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Interaction  abstract base class
 // This class is the base class for the model classes.

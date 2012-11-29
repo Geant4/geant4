@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.cc,v 1.38 2010-10-19 15:42:10 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // Implementation for G4Trd class

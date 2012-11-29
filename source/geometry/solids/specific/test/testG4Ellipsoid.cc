@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Ellipsoid.cc,v 1.5 2007-02-09 12:05:51 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // testG4Ellipsoid
 //

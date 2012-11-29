@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test90Ne10CO2pai.cc,v 1.9 2010-11-23 15:31:10 grichine Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 //

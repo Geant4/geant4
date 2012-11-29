@@ -27,8 +27,7 @@
 /// \brief Definition of the Em10EventActionMessenger class
 //
 //
-// $Id: Em10EventActionMessenger.hh,v 1.3 2006-06-29 16:37:53 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

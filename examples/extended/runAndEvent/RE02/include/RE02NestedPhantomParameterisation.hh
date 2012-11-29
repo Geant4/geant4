@@ -27,8 +27,7 @@
 /// \brief Definition of the RE02NestedPhantomParameterisation class
 //
 //
-// $Id: RE02NestedPhantomParameterisation.hh,v 1.4 2010-11-09 19:46:30 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef RE02NESTEDPARAMETERISATION_HH
 #define RE02NESTEDPARAMETERISATION_HH

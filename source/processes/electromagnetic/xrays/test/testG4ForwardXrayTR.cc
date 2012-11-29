@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4ForwardXrayTR.cc,v 1.7 2006-06-29 19:56:33 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 

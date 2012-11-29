@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VHitsCollection.hh,v 1.2 2006-06-29 18:06:40 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4VHitsCollection_h

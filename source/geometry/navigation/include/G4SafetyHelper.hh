@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SafetyHelper.hh,v 1.7 2007-05-02 15:32:13 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4SafetyHelper

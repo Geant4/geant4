@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntegratorTest.cc,v 1.10 2006-08-21 12:24:32 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Test program for G4Integrator class. The function std::exp(-x)*std::cos(x) is
 // integrated between zero and two pi. The exact result is 0.499066278634

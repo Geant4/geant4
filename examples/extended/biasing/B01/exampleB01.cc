@@ -27,8 +27,7 @@
 /// \brief Main program of the biasing/B01 example
 //
 //
-// $Id: exampleB01.cc,v 1.27 2007-06-22 13:22:09 ahoward Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // --------------------------------------------------------------

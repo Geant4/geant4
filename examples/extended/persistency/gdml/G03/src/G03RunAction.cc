@@ -27,8 +27,7 @@
 /// \brief Implementation of the G03RunAction class
 //
 //
-// $Id: G03RunAction.cc,v 1.1 2008-11-20 15:41:54 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Class G03RunAction implementation
 //

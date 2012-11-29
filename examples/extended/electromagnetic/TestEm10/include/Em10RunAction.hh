@@ -27,8 +27,7 @@
 /// \brief Definition of the Em10RunAction class
 //
 //
-// $Id: Em10RunAction.hh,v 1.5 2006-06-29 16:38:06 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

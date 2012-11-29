@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LineCurrentMagField.hh,v 1.3 2006-06-29 18:26:50 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 // Class describing line current magnetic field.

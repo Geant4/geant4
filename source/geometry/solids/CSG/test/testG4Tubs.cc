@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Tubs.cc,v 1.22 2008-11-05 13:56:30 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 // testG4Tubs

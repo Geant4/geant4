@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotoNuclearProcess.hh,v 1.9 2009-03-31 19:16:38 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Class Description
 // Process for photon nuclear inelastic scattering; 

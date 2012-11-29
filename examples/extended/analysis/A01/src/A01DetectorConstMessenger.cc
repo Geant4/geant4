@@ -26,7 +26,7 @@
 /// \file analysis/A01/src/A01DetectorConstMessenger.cc
 /// \brief Implementation of the A01DetectorConstMessenger class
 //
-// $Id: A01DetectorConstMessenger.cc,v 1.4 2006-06-29 16:32:01 gunter Exp $
+// $Id$
 // --------------------------------------------------------------
 //
 #include "A01DetectorConstMessenger.hh"

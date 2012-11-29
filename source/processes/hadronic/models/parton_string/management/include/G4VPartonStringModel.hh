@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPartonStringModel.hh,v 1.3 2006-06-29 20:55:27 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4VPartonStringModel_h
 #define G4VPartonStringModel_h 1

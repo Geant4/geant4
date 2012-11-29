@@ -27,8 +27,7 @@
 /// \brief Definition of the PhysListEmPenelope class
 //
 //
-// $Id: PhysListEmPenelope.hh,v 1.4 2011-01-06 18:34:38 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 #ifndef PhysListEmPenelope_h
 #define PhysListEmPenelope_h 1

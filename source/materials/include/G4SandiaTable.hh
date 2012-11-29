@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SandiaTable.hh,v 1.23 2010-11-22 08:21:04 grichine Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 // class description
 //

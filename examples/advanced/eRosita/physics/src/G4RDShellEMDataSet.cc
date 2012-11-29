@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RDShellEMDataSet.cc,v 1.16 2008/03/10 15:07:41 pia Exp $
+// $Id$
 // GEANT4 tag $Name:  $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)

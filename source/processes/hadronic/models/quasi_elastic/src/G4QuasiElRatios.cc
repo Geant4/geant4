@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiElRatios.cc,v 1.4 2010-09-03 15:19:04 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // G4 Physics class: G4QuasiElRatios for N+A elastic cross sections

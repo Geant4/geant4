@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RDVCrossSectionHandler.hh,v 1.14 2006/06/29 19:37:01 gunter Exp $
+// $Id$
 // GEANT4 tag $Name: geant4-09-01-ref-00 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)

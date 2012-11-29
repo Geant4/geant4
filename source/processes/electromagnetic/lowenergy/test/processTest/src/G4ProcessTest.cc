@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTest.cc,v 1.12 2006-06-29 19:48:50 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3Division.cc,v 1.17 2006-06-29 18:12:53 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // by I.Hrivnacova, V.Berejnoi 13.10.99
 

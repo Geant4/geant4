@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronElasticProcess.hh,v 1.2 2009-09-22 17:35:07 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
 // 

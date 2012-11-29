@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VGammaTransition.cc,v 1.1 2010-10-30 16:16:05 vnivanch Exp $
+// $Id$
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 

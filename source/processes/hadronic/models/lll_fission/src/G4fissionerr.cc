@@ -53,7 +53,7 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4fissionerr.cc,v 1.3 2008-07-09 21:04:57 dennis Exp $
+// $Id$
 //
 
 #include <iostream>

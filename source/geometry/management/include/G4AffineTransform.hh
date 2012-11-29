@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AffineTransform.hh,v 1.6 2006-06-29 18:30:37 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4AffineTransform

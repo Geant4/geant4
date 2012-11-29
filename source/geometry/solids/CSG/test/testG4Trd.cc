@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Trd.cc,v 1.10 2006-06-29 18:46:29 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
  
 // testG4Trd

@@ -27,8 +27,7 @@
 /// \brief Implementation of the F03FieldSetup class
 //
 //
-// $Id: F03FieldSetup.cc,v 1.5 2007-04-28 01:31:12 gum Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //  
 //   Field Setup class implementation.

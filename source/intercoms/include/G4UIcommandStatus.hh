@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommandStatus.hh,v 1.5 2006-06-29 19:08:08 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4UIcommandStatus_h

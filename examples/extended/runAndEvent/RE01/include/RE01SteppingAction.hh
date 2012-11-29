@@ -26,8 +26,7 @@
 /// \file runAndEvent/RE01/include/RE01SteppingAction.hh
 /// \brief Definition of the RE01SteppingAction class
 //
-// $Id: RE01SteppingAction.hh,v 1.2 2006-06-29 17:43:17 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef RE01SteppingAction_H

@@ -26,8 +26,7 @@
 /// \file medical/fanoCavity/src/MyKleinNishinaCompton.cc
 /// \brief Implementation of the MyKleinNishinaCompton class
 //
-// $Id: MyKleinNishinaCompton.cc,v 1.6 2009-10-25 19:06:26 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

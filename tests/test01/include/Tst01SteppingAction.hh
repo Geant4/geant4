@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst01SteppingAction.hh,v 1.8 2006-06-29 21:34:58 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

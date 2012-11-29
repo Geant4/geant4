@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Visible.hh,v 1.13 2006-11-07 11:53:16 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  30th October 1996

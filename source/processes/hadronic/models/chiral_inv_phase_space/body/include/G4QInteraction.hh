@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QInteraction.hh,v 1.7 2009-08-28 14:49:10 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4QInteraction_h

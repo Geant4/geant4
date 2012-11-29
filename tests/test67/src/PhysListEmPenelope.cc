@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmPenelope.cc,v 1.1 2010/03/19 09:55:53 pandola Exp $
+// $Id$
 // GEANT4 tag $Name:  $
 
 #include "PhysListEmPenelope.hh"

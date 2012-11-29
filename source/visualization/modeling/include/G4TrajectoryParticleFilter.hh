@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryParticleFilter.hh,v 1.3 2006-08-25 19:44:14 tinslay Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Filter trajectories according to particle type. Only registered 
 // particle types will pass the filter.

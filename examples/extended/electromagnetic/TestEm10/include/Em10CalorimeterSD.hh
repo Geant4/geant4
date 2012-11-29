@@ -27,8 +27,7 @@
 /// \brief Definition of the Em10CalorimeterSD class
 //
 //
-// $Id: Em10CalorimeterSD.hh,v 1.3 2006-06-29 16:37:43 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

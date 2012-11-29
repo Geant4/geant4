@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEPEvtInterface.hh,v 1.8 2006-06-29 18:08:36 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4HEPEvtInterface_h

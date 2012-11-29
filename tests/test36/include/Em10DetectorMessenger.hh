@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorMessenger.hh,v 1.4 2007-06-21 15:05:53 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

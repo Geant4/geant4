@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImessenger.cc,v 1.7 2006-06-29 19:09:06 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "G4UImessenger.hh"

@@ -26,8 +26,7 @@
 /// \file electromagnetic/TestEm7/src/PhysListEmStandardNR.cc
 /// \brief Implementation of the PhysListEmStandardNR class
 //
-// $Id: PhysListEmStandardNR.cc,v 1.5 2010-10-13 12:21:56 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 

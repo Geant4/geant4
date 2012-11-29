@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDigi.cc,v 1.2 2006-06-29 18:06:26 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 // G4VDigi

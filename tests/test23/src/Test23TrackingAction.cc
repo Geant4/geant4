@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Test23TrackingAction.cc,v 1.2 2006-06-29 21:50:03 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //      ---------------- Test23TrackingAction class ----------------
 //                 by Mikhail Kossov, December 2003.

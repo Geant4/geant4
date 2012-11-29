@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: eRositaEventAction.hh,v 1.2 2010-11-25 21:35:44 pia Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
  
 #ifndef eRositaEventAction_h

@@ -27,8 +27,7 @@
 /// \brief Implementation of the G02ChamberParameterisation class
 //
 //
-// $Id: G02ChamberParameterisation.cc,v 1.2 2008-12-18 12:57:02 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Class G02ChamberParameterisation implementation
 //

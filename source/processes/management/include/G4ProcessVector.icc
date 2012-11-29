@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessVector.icc,v 1.5 2006-06-29 21:07:42 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 inline G4bool G4ProcessVector::operator==(const G4ProcessVector &right) const
 {

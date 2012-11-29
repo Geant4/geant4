@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AdjointElectron.hh,v 1.1 2008-11-06 13:17:36 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file

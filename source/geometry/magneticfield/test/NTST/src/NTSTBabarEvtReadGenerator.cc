@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: NTSTBabarEvtReadGenerator.cc,v 1.4 2006-06-29 18:26:03 gunter Exp $
+// $Id$
 //
 // -- Bogus -- BaBar Object-Oriented Geant-based Unified Simulation
 //

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeSigmaZeroPChannel.hh,v 1.7 2010-06-25 09:42:56 gunter Exp $
-// GEANT4 tag: $Name: not supported by cvs2svn $
+// $Id$
 //
 // 20100507  M. Kelsey -- Remove redundant total-bins template argument
 // 20100510  M. Kelsey -- Add initial "31" template arg.  Add G4CascSampler

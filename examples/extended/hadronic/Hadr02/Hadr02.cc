@@ -26,8 +26,7 @@
 /// \file hadronic/Hadr02/Hadr02.cc
 /// \brief Main program of the hadronic/Hadr02 example
 //
-// $Id: Hadr02.cc,v 1.4 2010-05-27 18:09:56 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------
 //      GEANT4 Hadr02

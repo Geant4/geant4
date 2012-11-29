@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: eRositaSteppingVerbose.hh,v 1.1 2010-11-23 16:17:03 pia Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //   This class manages the verbose outputs in G4SteppingManager. 
 //   It inherits from G4SteppingVerbose.

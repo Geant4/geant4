@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testSurfaceAreaCube.cc,v 1.1 2006-10-20 14:38:52 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // --------------------------------------------------------------------
 // Adapted by Hans Dierckx to test surface Area

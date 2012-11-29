@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AtomicShells.hh,v 1.8 2010-04-30 13:09:22 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 // class description
 //

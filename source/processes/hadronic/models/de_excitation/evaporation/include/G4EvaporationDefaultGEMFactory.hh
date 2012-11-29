@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationDefaultGEMFactory.hh,v 1.1 2009-07-27 10:20:13 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by J. M. Quesada (July 2009) on base of V. Lara code

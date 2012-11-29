@@ -32,8 +32,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyFactoryI.cc,v 1.6 2006-06-29 15:48:26 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #include "BrachyFactoryI.hh"
 #include "BrachyPrimaryGeneratorActionI.hh"

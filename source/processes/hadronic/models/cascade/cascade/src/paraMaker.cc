@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: paraMaker.cc,v 1.19 2010-09-14 17:51:36 mkelsey Exp $
-// Geant4 tag: $Name: not supported by cvs2svn $
+// $Id$
 //
 // 20100412  M. Kelsey -- Modify paraMaker[Truncated] to take buffer as argument
 // 20100517  M. Kelsey -- BUG FIX:  Must check for array boundary "if (Z>=70)"

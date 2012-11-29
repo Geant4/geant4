@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QIsotope.cc,v 1.16 2010-05-28 15:03:46 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //      ---------------- G4QIsotope class ----------------
 //             by Mikhail Kossov, December 2003.

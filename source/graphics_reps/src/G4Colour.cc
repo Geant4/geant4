@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Colour.cc,v 1.11 2007-01-05 14:06:28 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison 20th October 1996

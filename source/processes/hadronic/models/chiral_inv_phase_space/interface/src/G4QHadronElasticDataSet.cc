@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QHadronElasticDataSet.cc,v 1.3 2010-05-26 12:19:06 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // GEANT4 physics class: G4QHadronElasticDataSet -- header file
 // Created by M. Kosov (Mikhail.Kossov@cern.ch) 21.01.10

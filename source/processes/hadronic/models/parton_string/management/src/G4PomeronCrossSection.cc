@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PomeronCrossSection.cc,v 1.6 2006-11-07 12:51:39 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "G4PomeronCrossSection.hh"

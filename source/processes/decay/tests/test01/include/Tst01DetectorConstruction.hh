@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst01DetectorConstruction.hh,v 1.3 2006-06-29 19:31:44 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef Tst01DetectorConstruction_h

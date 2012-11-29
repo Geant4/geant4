@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: AXPETPhysicsList.cc,v 1.2 2010-11-16 13:38:09 tnikitin Exp $
+// $Id$
 // ------------------------------------------------------------
 // Geant4 class implementation file
 //

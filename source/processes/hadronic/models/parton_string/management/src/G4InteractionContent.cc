@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4InteractionContent.cc,v 1.4 2006-06-29 20:55:39 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file

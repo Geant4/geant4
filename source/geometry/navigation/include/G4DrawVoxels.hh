@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DrawVoxels.hh,v 1.3 2006-06-29 18:35:36 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // class G4DrawVoxels

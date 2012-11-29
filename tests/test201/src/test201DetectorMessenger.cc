@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test201DetectorMessenger.cc,v 1.9 2010-05-11 12:23:52 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Detector Construction Messenger for visualization testing.

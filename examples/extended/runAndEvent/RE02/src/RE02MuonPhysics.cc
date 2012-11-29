@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE02/src/RE02MuonPhysics.cc
 /// \brief Implementation of the RE02MuonPhysics class
 //
-// $Id: RE02MuonPhysics.cc,v 1.3 2010-04-07 01:29:00 asaim Exp $
+// $Id$
 // --------------------------------------------------------------
 //
 // 09-Oct-2003 mu+- tau+- processes are changed by T. Koi 

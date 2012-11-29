@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclParticleNames.hh,v 1.3 2010/06/25 09:43:30 gunter Exp $
+// $Id$
 // Geant4 tag: $Name:  $
 //
 // Defines enums to map G4InuclElementaryParticle type codes to human

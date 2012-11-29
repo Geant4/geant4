@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc,v 1.49 2010-10-19 15:42:10 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // class G4Trap
 //

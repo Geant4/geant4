@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testDataInterpolation.cc,v 1.6 2006-06-29 19:00:31 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #include "G4ios.hh"
 #include "globals.hh"

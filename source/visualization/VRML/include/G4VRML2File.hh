@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2File.hh,v 1.11 2006-06-29 21:25:37 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // G4VRML2File.hh
 // Satoshi Tanaka & Yasuhide Sawada

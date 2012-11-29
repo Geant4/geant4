@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyEventAction.hh,v 1.6 2006-11-01 11:16:23 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef MyEventAction_h

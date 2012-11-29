@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbVolumeMgr.cc,v 1.10 2010-12-15 11:29:54 arce Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4tgbVolumeMgr

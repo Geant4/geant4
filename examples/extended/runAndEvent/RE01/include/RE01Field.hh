@@ -26,8 +26,7 @@
 /// \file runAndEvent/RE01/include/RE01Field.hh
 /// \brief Definition of the RE01Field class
 //
-// $Id: RE01Field.hh,v 1.2 2006-06-29 17:42:48 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef RE01Field_H

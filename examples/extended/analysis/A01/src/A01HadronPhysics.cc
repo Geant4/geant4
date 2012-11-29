@@ -26,7 +26,7 @@
 /// \file analysis/A01/src/A01HadronPhysics.cc
 /// \brief Implementation of the A01HadronPhysics class
 //
-// $Id: A01HadronPhysics.cc,v 1.9 2009-11-21 01:00:19 perl Exp $
+// $Id$
 // --------------------------------------------------------------
 //
 // 09-Oct-2003 Hadron Physics List with Parameterization Model by T. Koi

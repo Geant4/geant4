@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyExRunAction.cc,v 1.1 2006-11-28 15:19:42 tnikitin Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -27,8 +27,7 @@
 /// \brief Implementation of the F03PhysicsList class
 //
 //
-// $Id: F03PhysicsList.cc,v 1.14 2010-08-16 08:24:39 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // 
 
 #include "G4Timer.hh"

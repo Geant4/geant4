@@ -27,8 +27,7 @@
 /// \brief Definition of the PhysListEmStandard class
 //
 //
-// $Id: PhysListEmStandard.hh,v 1.3 2006-06-29 16:57:44 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

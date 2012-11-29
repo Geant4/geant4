@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Circle.hh,v 1.9 2006-06-29 19:05:20 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  17/11/96.

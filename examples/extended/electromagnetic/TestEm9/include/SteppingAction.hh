@@ -26,8 +26,7 @@
 /// \file electromagnetic/TestEm9/include/SteppingAction.hh
 /// \brief Definition of the SteppingAction class
 //
-// $Id: SteppingAction.hh,v 1.3 2006-06-29 17:02:44 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 /////////////////////////////////////////////////////////////////////////

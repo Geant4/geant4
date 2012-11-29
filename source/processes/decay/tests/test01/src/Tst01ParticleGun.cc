@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst01ParticleGun.cc,v 1.6 2008-10-24 15:24:16 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 // G4ParticleGun

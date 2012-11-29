@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPNeutronYield.hh,v 1.10 2006-06-29 20:49:05 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4NeutronHPNeutronYield_h
 #define G4NeutronHPNeutronYield_h 1

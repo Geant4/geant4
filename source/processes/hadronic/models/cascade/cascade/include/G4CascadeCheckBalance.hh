@@ -25,8 +25,7 @@
 //
 #ifndef G4CASCADE_CHECK_BALANCE_HH
 #define G4CASCADE_CHECK_BALANCE_HH
-// $Id: G4CascadeCheckBalance.hh,v 1.12 2010-12-15 07:39:30 gunter Exp $
-// Geant4 tag: $Name: not supported by cvs2svn $
+// $Id$
 //
 // Verify and report four-momentum conservation for collision output; uses
 // same interface as collision generators.

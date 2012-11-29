@@ -26,8 +26,7 @@
 /// \file medical/DICOM/include/DicomRunAction.hh
 /// \brief Definition of the DicomRunAction class
 //
-// $Id: DicomRunAction.hh,v 1.1 2008-11-27 21:55:27 arce Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // 
 
 #ifndef DicomRunAction_h

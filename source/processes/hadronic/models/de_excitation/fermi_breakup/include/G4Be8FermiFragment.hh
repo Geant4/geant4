@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Be8FermiFragment.hh,v 1.3 2006-06-29 20:10:57 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)

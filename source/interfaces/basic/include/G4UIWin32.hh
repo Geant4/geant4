@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIWin32.hh,v 1.14 2006-06-29 19:09:29 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4UIWin32_h
 #define G4UIWin32_h 

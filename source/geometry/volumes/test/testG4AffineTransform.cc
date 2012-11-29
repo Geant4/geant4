@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4AffineTransform.cc,v 1.9 2006-06-29 18:58:27 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include <assert.h>

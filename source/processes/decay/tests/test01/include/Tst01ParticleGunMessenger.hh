@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst01ParticleGunMessenger.hh,v 1.3 2006-06-29 19:31:50 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

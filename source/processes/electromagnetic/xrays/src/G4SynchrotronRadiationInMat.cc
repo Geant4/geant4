@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiationInMat.cc,v 1.5 2010-10-14 18:38:21 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file

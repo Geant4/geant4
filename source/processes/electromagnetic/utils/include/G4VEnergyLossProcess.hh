@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.93 2010-10-14 16:27:35 vnivanch Exp $
+// $Id$
 // GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------

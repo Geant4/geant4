@@ -26,8 +26,7 @@
 /// \file exoticphysics/monopole/src/G4MonopolePhysics.cc
 /// \brief Implementation of the G4MonopolePhysics class
 //
-// $Id: G4MonopolePhysics.cc,v 1.6 2010-11-29 15:14:17 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //

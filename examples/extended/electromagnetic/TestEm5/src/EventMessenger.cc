@@ -26,8 +26,7 @@
 /// \file electromagnetic/TestEm5/src/EventMessenger.cc
 /// \brief Implementation of the EventMessenger class
 //
-// $Id: EventMessenger.cc,v 1.5 2006-06-29 16:55:36 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

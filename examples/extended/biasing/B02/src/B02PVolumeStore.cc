@@ -27,7 +27,7 @@
 /// \brief Implementation of the B02PVolumeStore class
 //
 //
-// $Id: B02PVolumeStore.cc,v 1.5 2006-06-29 16:34:50 gunter Exp $
+// $Id$
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------

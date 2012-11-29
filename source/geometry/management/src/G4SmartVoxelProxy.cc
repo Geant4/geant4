@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelProxy.cc,v 1.3 2006-06-29 18:33:48 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Class G4SmartVoxelProxy
 //

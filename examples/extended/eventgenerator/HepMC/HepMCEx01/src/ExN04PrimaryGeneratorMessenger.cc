@@ -29,7 +29,7 @@
 // ====================================================================
 //
 //   ExN04PrimaryGeneratorMessenger.cc
-//   $Id: ExN04PrimaryGeneratorMessenger.cc,v 1.3 2006-06-29 17:06:10 gunter Exp $
+//   $Id$
 //
 // ====================================================================
 #include "G4UIcommand.hh"

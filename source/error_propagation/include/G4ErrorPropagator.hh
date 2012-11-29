@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ErrorPropagator.hh,v 1.3 2007-05-29 14:41:35 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // Class Description:

@@ -26,8 +26,7 @@
 /// \file runAndEvent/RE01/include/RE01CalorimeterHit.hh
 /// \brief Definition of the RE01CalorimeterHit class
 //
-// $Id: RE01CalorimeterHit.hh,v 1.3 2006-06-29 17:42:29 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef RE01CalorimeterHit_h

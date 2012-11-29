@@ -29,7 +29,7 @@
 // ====================================================================
 //
 //   ExN04PrimaryGeneratorAction.hh
-//   $Id: ExN04PrimaryGeneratorAction.hh,v 1.6 2006-06-29 17:04:49 gunter Exp $
+//   $Id$
 //
 // ====================================================================
 #ifndef EXN04_PRIMARY_GENERATOR_ACTION_H

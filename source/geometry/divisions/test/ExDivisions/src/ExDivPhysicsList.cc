@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExDivPhysicsList.cc,v 1.3 2010-06-16 08:51:13 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

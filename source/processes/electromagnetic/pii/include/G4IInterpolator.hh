@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IInterpolator.hh,v 1.3 2010-12-15 07:39:16 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //

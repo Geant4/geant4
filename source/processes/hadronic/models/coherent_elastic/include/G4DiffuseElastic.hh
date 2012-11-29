@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffuseElastic.hh,v 1.17 2009-09-22 16:21:46 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: V. Grichine (Vladimir,Grichine@cern.ch)
 //

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadePPChannel.hh,v 1.3 2010-06-25 09:42:28 gunter Exp $
-// GEANT4 tag: $Name: not supported by cvs2svn $
+// $Id$
 //
 // 20120907  M. Kelsey -- Subclass and overload findCrossSection() function.
 

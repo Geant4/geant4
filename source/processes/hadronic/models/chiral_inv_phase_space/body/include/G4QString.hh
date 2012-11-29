@@ -25,8 +25,7 @@
 //
 //
 //
-// $Id: G4QString.hh,v 1.11 2009-08-24 14:41:49 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 #ifndef G4QString_h
 #define G4QString_h 1

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMarker.hh,v 1.13 2009-02-24 10:58:04 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // G4VMarker - base class for markers - circles, squares, etc.

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst1PrimaryGeneratorAction.cc,v 1.2 2007-07-13 06:15:37 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "Tst1PrimaryGeneratorAction.hh"

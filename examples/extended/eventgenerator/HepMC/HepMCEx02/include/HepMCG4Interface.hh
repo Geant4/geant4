@@ -29,7 +29,7 @@
 // ====================================================================
 //
 //   HepMCG4Interface.hh
-//   $Id: HepMCG4Interface.hh,v 1.4 2006-06-29 17:10:12 gunter Exp $
+//   $Id$
 //
 //   A base class for primary generation via HepMC object.
 //   This class is derived from G4VPrimaryGenerator.

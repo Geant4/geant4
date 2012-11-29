@@ -26,8 +26,7 @@
 /// \file medical/fanoCavity2/include/PhysListEmStandard_option0.hh
 /// \brief Definition of the PhysListEmStandard_option0 class
 //
-// $Id: PhysListEmStandard_option0.hh,v 1.1 2009-10-31 18:05:56 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Vector3D.hh,v 1.5 2006-06-29 18:59:18 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4VECTOR3D_HH
 #define G4VECTOR3D_HH

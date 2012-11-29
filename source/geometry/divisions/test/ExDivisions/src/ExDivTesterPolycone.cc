@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExDivTesterPolycone.cc,v 1.3 2006-06-29 18:20:18 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // class ExDivTesterPolycone Implementation file
 //

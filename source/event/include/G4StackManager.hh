@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackManager.hh,v 1.13 2009-08-15 15:45:50 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //  Last Modification : 04/Oct/11 P. Mato - making use of G4TrackStack with value semantics
 ///

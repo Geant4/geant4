@@ -27,8 +27,7 @@
 /// \brief Main program of the visualization/standalone example
 //
 //
-// $Id: standalone.cc,v 1.3 2010-11-09 10:02:45 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 #include "globals.hh"
 #include "G4VisExecutive.hh"

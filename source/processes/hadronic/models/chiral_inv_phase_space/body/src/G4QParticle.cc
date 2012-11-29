@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParticle.cc,v 1.36 2010-06-25 14:03:44 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //      ---------------- G4QParticle ----------------
 //             by Mikhail Kossov, Sept 1999.

@@ -26,7 +26,7 @@
 /// \file analysis/A01/include/A01MuonPhysics.hh
 /// \brief Definition of the A01MuonPhysics class
 //
-// $Id: A01MuonPhysics.hh,v 1.8 2009-12-02 22:45:09 perl Exp $
+// $Id$
 // --------------------------------------------------------------
 //
 // 09-Oct-2003 mu+- tau+- processes are changed by T. Koi

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyCalorimeterSD.hh,v 1.5 2006-06-29 21:47:00 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef MyCalorimeterSD_h

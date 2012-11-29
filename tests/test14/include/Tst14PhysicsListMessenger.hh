@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst14PhysicsListMessenger.hh,v 1.13 2010-08-29 19:50:17 sincerti Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)

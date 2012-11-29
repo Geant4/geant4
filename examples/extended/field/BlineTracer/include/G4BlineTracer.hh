@@ -27,8 +27,7 @@
 /// \brief Definition of the G4BlineTracer class
 //
 //
-// $Id: G4BlineTracer.hh,v 1.2 2006-06-29 17:15:03 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // --------------------------------------------------------------------

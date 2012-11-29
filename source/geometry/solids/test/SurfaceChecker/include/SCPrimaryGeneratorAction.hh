@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: SCPrimaryGeneratorAction.hh,v 1.3 2006-06-29 18:54:31 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

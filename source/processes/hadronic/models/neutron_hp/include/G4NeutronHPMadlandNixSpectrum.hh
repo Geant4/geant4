@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPMadlandNixSpectrum.hh,v 1.12 2006-06-29 20:48:33 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4NeutronHPMadlandNixSpectrum_h
 #define G4NeutronHPMadlandNixSpectrum_h 1

@@ -27,8 +27,7 @@
 /// \brief Implementation of the RE03PrimaryGeneratorAction class
 //
 //
-// $Id: RE03PrimaryGeneratorAction.cc,v 1.1 2007-11-13 19:55:43 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "RE03PrimaryGeneratorAction.hh"

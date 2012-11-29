@@ -32,8 +32,7 @@
 //    *                                  *
 //    ************************************
 //
-// $Id: PurgMagAnalysisManager.hh,v 1.4 2009-04-08 10:23:31 cirrone Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifdef G4ANALYSIS_USE

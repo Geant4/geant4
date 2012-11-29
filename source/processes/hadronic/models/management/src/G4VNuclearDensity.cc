@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VNuclearDensity.cc,v 1.4 2010-11-03 17:24:34 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "G4VNuclearDensity.hh"

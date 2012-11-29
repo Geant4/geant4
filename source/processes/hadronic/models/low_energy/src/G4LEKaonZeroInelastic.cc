@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEKaonZeroInelastic.cc,v 1.9 2006-06-29 20:45:03 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
  // Hadronic Process: Low Energy KaonZeroShort Inelastic Process
  // J.L. Chuma, TRIUMF, 11-Feb-1997

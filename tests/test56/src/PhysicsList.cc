@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.8 2010/11/22 18:32:59 vnivanch Exp $
+// $Id$
 // GEANT4 tag $Name: testem18-V09-03-05 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

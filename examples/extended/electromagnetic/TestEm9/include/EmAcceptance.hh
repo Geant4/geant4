@@ -26,8 +26,7 @@
 /// \file electromagnetic/TestEm9/include/EmAcceptance.hh
 /// \brief Definition of the EmAcceptance class
 //
-// $Id: EmAcceptance.hh,v 1.2 2006-06-29 17:01:00 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 

@@ -27,8 +27,7 @@
 /// \brief Definition of the G03ColorReader class
 //
 //
-// $Id: G03ColorReader.hh,v 1.3 2009-04-24 15:54:21 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G03ColorReader

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst25DetectorMessenger.cc,v 1.4 2006-06-29 21:52:43 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "Tst25DetectorMessenger.hh"

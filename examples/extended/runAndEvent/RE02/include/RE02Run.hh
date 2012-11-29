@@ -27,8 +27,7 @@
 /// \brief Definition of the RE02Run class
 //
 //
-// $Id: RE02Run.hh,v 1.3 2006-11-18 01:37:23 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // 
 
 #ifndef RE02Run_h

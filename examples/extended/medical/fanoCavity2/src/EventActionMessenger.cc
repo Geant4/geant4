@@ -26,8 +26,7 @@
 /// \file medical/fanoCavity2/src/EventActionMessenger.cc
 /// \brief Implementation of the EventActionMessenger class
 //
-// $Id: EventActionMessenger.cc,v 1.1 2007-10-15 16:20:23 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

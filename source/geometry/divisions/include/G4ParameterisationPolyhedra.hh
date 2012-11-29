@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPolyhedra.hh,v 1.10 2010-07-02 10:46:27 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // 
 // classes G4ParameterisationPolyhedraRho,
 //         G4ParameterisationPolyhedraPhi,

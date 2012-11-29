@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RDDopplerProfile.hh,v 1.2 2008/03/17 13:45:25 pia Exp $
+// $Id$
 // GEANT4 tag $Name:  $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)

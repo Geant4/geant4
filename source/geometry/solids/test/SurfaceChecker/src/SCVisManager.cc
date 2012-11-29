@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: SCVisManager.cc,v 1.3 2007-05-18 11:04:23 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // John Allison 24th January 1998.

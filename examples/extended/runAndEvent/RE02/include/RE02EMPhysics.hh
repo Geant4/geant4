@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE02/include/RE02EMPhysics.hh
 /// \brief Definition of the RE02EMPhysics class
 //
-// $Id: RE02EMPhysics.hh,v 1.3 2010-04-07 01:29:00 asaim Exp $
+// $Id$
 // --------------------------------------------------------------
 //
 // 09-Oct-2003 Chhange gamma, electron, positorn process T. Koi

@@ -27,8 +27,7 @@
 /// \brief Definition of the F01PhysicsList class
 //
 //
-// $Id: F01PhysicsList.hh,v 1.6 2010-04-08 14:09:44 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef F01PhysicsList_h

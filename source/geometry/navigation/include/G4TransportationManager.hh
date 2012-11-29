@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.hh,v 1.12 2007-04-20 15:28:37 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // class G4TransportationManager
 //

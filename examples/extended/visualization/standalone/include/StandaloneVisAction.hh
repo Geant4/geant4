@@ -27,8 +27,7 @@
 /// \brief Definition of the StandaloneVisAction class
 //
 //
-// $Id: StandaloneVisAction.hh,v 1.2 2006-06-29 17:45:55 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 #ifndef STANDALONEVISACTION_HH
 #define STANDALONEVISACTION_HH

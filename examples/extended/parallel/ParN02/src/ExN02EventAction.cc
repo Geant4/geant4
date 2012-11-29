@@ -27,8 +27,7 @@
 /// \brief Implementation of the ExN02EventAction class
 //
 //
-// $Id: ExN02EventAction.cc,v 1.11 2006-06-29 17:48:05 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

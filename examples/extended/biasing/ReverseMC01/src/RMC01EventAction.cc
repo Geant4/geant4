@@ -26,8 +26,7 @@
 /// \file biasing/ReverseMC01/src/RMC01EventAction.cc
 /// \brief Implementation of the RMC01EventAction class
 //
-// $Id: RMC01EventAction.cc,v 1.2 2010-06-06 04:22:20 perl Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //////////////////////////////////////////////////////////////
 //      Class Name:        RMC01EventAction

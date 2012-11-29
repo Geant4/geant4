@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst69DetectorConstruction.cc,v 1.1 2008-11-10 11:06:21 kaitanie Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "Tst69DetectorConstruction.hh"

@@ -27,8 +27,7 @@
 /// \brief Implementation of the B02ScoringDetectorConstruction class
 //
 //
-// $Id: B02ScoringDetectorConstruction.cc,v 1.7 2006-06-29 16:34:57 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "globals.hh"

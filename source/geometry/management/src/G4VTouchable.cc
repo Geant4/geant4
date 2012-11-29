@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTouchable.cc,v 1.1 2009-11-06 10:36:00 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // class G4VTouchable implementation

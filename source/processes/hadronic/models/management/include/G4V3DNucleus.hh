@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4V3DNucleus.hh,v 1.8 2010-09-08 16:39:22 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 20110805  M. Kelsey -- Change nucleon vector to use objects, not pointers
 

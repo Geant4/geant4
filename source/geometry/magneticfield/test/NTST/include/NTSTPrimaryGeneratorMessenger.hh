@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: NTSTPrimaryGeneratorMessenger.hh,v 1.3 2006-06-29 18:25:51 gunter Exp $
+// $Id$
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

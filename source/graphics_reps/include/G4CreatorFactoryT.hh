@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CreatorFactoryT.hh,v 1.2 2006-12-13 15:44:03 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Generic identifier-creator based factory. Based on 
 // factory presented in "Modern C++ Design, Andrei Alexandrescu"

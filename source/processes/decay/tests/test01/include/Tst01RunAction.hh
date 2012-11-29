@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst01RunAction.hh,v 1.3 2006-06-29 19:31:56 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef Tst01RunAction_h

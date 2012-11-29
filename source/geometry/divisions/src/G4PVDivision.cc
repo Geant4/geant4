@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVDivision.cc,v 1.24 2010-09-06 09:28:24 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // class G4PVDivision Implementation file
 //

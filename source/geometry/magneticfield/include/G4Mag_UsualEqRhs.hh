@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mag_UsualEqRhs.hh,v 1.7 2006-06-29 18:23:12 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4Mag_UsualEqRhs

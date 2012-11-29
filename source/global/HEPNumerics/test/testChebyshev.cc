@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testChebyshev.cc,v 1.6 2006-06-29 19:00:28 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Test program for G4ChebyshevApproximation class. The function std::exp(-x)*std::cos(x) is
 // integrated between zero and two pi. The true result is 0.499066278634

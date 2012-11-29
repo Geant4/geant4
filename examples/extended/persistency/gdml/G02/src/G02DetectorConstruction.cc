@@ -27,8 +27,7 @@
 /// \brief Implementation of the G02DetectorConstruction class
 //
 //
-// $Id: G02DetectorConstruction.cc,v 1.8 2009-04-24 15:47:13 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Class G02DetectorConstruction implementation
 //

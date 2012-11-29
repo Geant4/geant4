@@ -26,8 +26,7 @@
 /// \file runAndEvent/RE01/src/RE01EventAction.cc
 /// \brief Implementation of the RE01EventAction class
 //
-// $Id: RE01EventAction.cc,v 1.2 2006-06-29 17:43:55 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "RE01EventAction.hh"

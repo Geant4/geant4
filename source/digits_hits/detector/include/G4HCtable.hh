@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HCtable.hh,v 1.3 2006-06-29 18:05:15 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4HCtable_H

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversion.hh,v 1.23 2009-02-20 12:06:37 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 //------------------ G4GammaConversion physics process------------------------

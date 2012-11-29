@@ -26,8 +26,7 @@
 /// \file exoticphysics/monopole/include/EventAction.hh
 /// \brief Definition of the EventAction class
 //
-// $Id: EventAction.hh,v 1.1 2007-08-16 10:32:04 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

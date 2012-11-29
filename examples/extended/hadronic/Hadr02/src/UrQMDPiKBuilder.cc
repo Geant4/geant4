@@ -26,8 +26,7 @@
 /// \file hadronic/Hadr02/src/UrQMDPiKBuilder.cc
 /// \brief Implementation of the UrQMDPiKBuilder class
 //
-// $Id: UrQMDPiKBuilder.cc,v 1.7 2010-11-18 14:52:22 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //

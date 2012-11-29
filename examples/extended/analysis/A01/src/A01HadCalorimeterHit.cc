@@ -26,7 +26,7 @@
 /// \file analysis/A01/src/A01HadCalorimeterHit.cc
 /// \brief Implementation of the A01HadCalorimeterHit class
 //
-// $Id: A01HadCalorimeterHit.cc,v 1.11 2006-11-14 07:11:19 perl Exp $
+// $Id$
 // --------------------------------------------------------------
 //
 

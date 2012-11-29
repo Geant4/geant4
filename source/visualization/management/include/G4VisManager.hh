@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.76 2010-11-13 10:54:55 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

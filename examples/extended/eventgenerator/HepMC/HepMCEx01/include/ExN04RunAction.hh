@@ -27,8 +27,7 @@
 /// \brief Definition of the ExN04RunAction class
 //
 //
-// $Id: ExN04RunAction.hh,v 1.3 2006-07-05 11:06:36 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

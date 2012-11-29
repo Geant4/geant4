@@ -26,7 +26,7 @@
 /// \file analysis/A01/src/A01PrimaryGeneratorMessenger.cc
 /// \brief Implementation of the A01PrimaryGeneratorMessenger class
 //
-// $Id: A01PrimaryGeneratorMessenger.cc,v 1.4 2006-06-29 16:33:07 gunter Exp $
+// $Id$
 // --------------------------------------------------------------
 //
 #include "A01PrimaryGeneratorMessenger.hh"

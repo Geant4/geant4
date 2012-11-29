@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGraphicsScene.hh,v 1.13 2010-05-30 11:15:36 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // John Allison  19th July 1996
 //
 // Class Description:

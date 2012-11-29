@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HEPionMinusInelastic.cc,v 1.17 2010-11-29 05:44:44 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 11-OCT-2007 F.W. Jones: fixed incorrect Imax (should be Imin) in
 //             sampling of charge exchange.

@@ -26,8 +26,7 @@
 /// \file medical/GammaTherapy/include/StepLimiter.hh
 /// \brief Definition of the StepLimiter class
 //
-// $Id: StepLimiter.hh,v 1.3 2008-08-05 10:38:35 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

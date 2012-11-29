@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: NTSTRotationMatrix.hh,v 1.3 2006-06-29 18:25:54 gunter Exp $
+// $Id$
 //
 #ifndef _NTSTROTATION_
 #define _NTSTROTATION_

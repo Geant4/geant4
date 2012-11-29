@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTransitionRadiation.cc,v 1.6 2010-06-16 15:34:15 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // G4VTransitionRadiation class -- implementation file
 

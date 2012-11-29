@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremParametrizedModel.cc,v 1.18 2010/11/04 17:30:32 vnivanch Exp $
+// $Id$
 // GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------

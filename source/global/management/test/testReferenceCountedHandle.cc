@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testReferenceCountedHandle.cc,v 1.10 2006-06-29 19:05:08 gunter Exp $
+// $Id$
 // 
 //
 // The program testing features and behaviour of the

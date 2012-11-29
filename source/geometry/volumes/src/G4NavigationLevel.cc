@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationLevel.cc,v 1.5 2009-08-03 16:13:19 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 30.09.97 J.Apostolakis Initial version. 
 //                    

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LorentzConvertor.cc,v 1.30 2010-12-15 07:41:13 gunter Exp $
-// Geant4 tag: $Name: not supported by cvs2svn $
+// $Id$
 //
 // 20100108  Michael Kelsey -- Use G4LorentzVector internally
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly

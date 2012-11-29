@@ -26,8 +26,7 @@
 /// \file hadronic/Hadr02/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc,v 1.3 2006-06-29 17:23:52 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // -------------------------------------------------------------
 //      GEANT4

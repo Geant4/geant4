@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryCellImportance.hh,v 1.4 2006-06-29 18:15:54 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------------------------------------------------------
 // Class G4GeometryCellImportance

@@ -26,7 +26,7 @@
 /// \file analysis/A01/include/A01IonPhysics.hh
 /// \brief Definition of the A01IonPhysics class
 //
-// $Id: A01IonPhysics.hh,v 1.8 2009-11-21 01:00:19 perl Exp $
+// $Id$
 // --------------------------------------------------------------
 // 05-Jan-2004 Add G4ionIonisation T. Koi
 //

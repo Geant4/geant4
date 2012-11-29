@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProjectileDiffractiveChannel.cc,v 1.2 2007-11-15 16:07:42 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 // Author : Gunter Folger Nov 2007

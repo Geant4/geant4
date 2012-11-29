@@ -26,7 +26,7 @@
 /// \file medical/DICOM/include/DicomRun.hh
 /// \brief Definition of the DicomRun class
 //
-// $Id: DicomRun.hh,v 1.1 2008-11-27 21:55:27 arce Exp $
+// $Id$
 
 #ifndef DicomRun_h
 #define DicomRun_h 1

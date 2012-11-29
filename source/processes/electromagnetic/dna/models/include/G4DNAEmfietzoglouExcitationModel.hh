@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAEmfietzoglouExcitationModel.hh,v 1.3 2010-03-26 19:52:44 sincerti Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4DNAEmfietzoglouExcitationModel_h

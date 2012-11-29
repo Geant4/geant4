@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelNode.cc,v 1.6 2006-06-29 18:33:45 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Class G4SmartVoxelNode
 //

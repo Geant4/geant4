@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LowEnergyCompton.cc,v 1.45 2008/04/24 14:13:25 pia Exp $
+// $Id$
 // GEANT4 tag $Name:  $
 //
 // Author: A. Forti

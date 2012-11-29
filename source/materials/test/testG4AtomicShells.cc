@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4AtomicShells.cc,v 1.7 2009-09-18 07:47:07 grichine Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // Test for access to atomic subshell data table, which is the field of

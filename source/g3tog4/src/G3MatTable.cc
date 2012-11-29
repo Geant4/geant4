@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3MatTable.cc,v 1.16 2006-06-29 18:12:57 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // by I.Hrivnacova, 27 Sep 99
 

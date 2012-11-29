@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyCalorimeterHit.cc,v 1.8 2010-05-27 15:00:18 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "MyCalorimeterHit.hh"

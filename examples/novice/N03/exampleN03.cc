@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN03.cc,v 1.39 2010-12-01 05:56:17 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

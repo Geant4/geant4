@@ -26,8 +26,7 @@
 /// \file runAndEvent/RE01/include/RE01UnknownDecayPhysics.hh
 /// \brief Definition of the RE01UnknownDecayPhysics class
 //
-// $Id: RE01UnknownDecayPhysics.hh,v 1.2 2006-06-29 17:42:37 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 #ifndef RE01UnknownDecayPhysics_h

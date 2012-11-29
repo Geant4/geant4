@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLWtViewer.cc,v 1.55 2010-10-08 10:07:31 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // G4OpenGLWtViewer : Class to provide Wt specific

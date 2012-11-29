@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.hh,v 1.17 2006-12-11 21:14:45 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  5th April 2001

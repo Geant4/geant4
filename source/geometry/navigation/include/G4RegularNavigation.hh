@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularNavigation.hh,v 1.4 2010-09-03 16:29:43 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4RegularNavigation

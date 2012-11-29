@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RandomDirectionTest.cc,v 1.1 2008-03-19 16:53:55 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // Test for random direction unit vector algorithm

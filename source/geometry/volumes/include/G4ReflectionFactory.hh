@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectionFactory.hh,v 1.5 2010-04-13 07:19:01 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // class G4ReflectionFactory

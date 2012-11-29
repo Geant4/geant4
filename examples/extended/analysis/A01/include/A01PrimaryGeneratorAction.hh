@@ -26,7 +26,7 @@
 /// \file analysis/A01/include/A01PrimaryGeneratorAction.hh
 /// \brief Definition of the A01PrimaryGeneratorAction class
 //
-// $Id: A01PrimaryGeneratorAction.hh,v 1.4 2006-06-29 16:31:35 gunter Exp $
+// $Id$
 // --------------------------------------------------------------
 //
 

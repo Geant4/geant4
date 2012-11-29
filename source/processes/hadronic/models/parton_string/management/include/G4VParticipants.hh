@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticipants.hh,v 1.7 2010-09-08 16:58:04 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4VParticipants_h

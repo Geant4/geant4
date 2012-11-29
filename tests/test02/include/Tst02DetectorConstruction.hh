@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst02DetectorConstruction.hh,v 1.9 2007-08-24 12:56:35 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef Tst02DetectorConstruction_h

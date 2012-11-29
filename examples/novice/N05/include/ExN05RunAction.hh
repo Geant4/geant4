@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05RunAction.hh,v 1.9 2006-06-29 17:52:51 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef ExN05RunAction_h

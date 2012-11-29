@@ -27,8 +27,7 @@
 /// \brief Definition of the G03DetectorConstruction class
 //
 //
-// $Id: G03DetectorConstruction.hh,v 1.2 2009-04-15 13:26:26 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Class G03DetectorConstruction
 //

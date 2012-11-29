@@ -27,8 +27,7 @@
 /// \brief Definition of the Em10EventAction class
 //
 //
-// $Id: Em10EventAction.hh,v 1.3 2006-06-29 16:37:51 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

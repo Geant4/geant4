@@ -27,8 +27,7 @@
 /// \brief Implementation of the EventActionMessenger class
 //
 //
-// $Id: EventActionMessenger.cc,v 1.3 2006-06-29 16:54:15 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

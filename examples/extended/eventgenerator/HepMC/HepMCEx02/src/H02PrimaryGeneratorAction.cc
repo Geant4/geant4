@@ -29,7 +29,7 @@
 // ====================================================================
 //
 //   H02PrimaryGeneratorAction.cc
-//   $Id: H02PrimaryGeneratorAction.cc,v 1.4 2006-07-05 12:04:13 gcosmo Exp $
+//   $Id$
 //
 // ====================================================================
 #include "H02PrimaryGeneratorAction.hh"

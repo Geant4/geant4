@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test02.cc,v 1.6 2008-07-18 09:31:51 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "Tst02DetectorConstruction.hh"

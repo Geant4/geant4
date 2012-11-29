@@ -27,8 +27,7 @@
 /// \brief Implementation of the PhysListEmPenelope class
 //
 //
-// $Id: PhysListEmPenelope.cc,v 1.7 2010-04-02 15:46:31 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 

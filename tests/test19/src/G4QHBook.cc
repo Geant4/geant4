@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QHBook.cc,v 1.5 2007-10-18 10:44:47 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //      ---------------- G4QHBook ----------------
 //      made for process level tests by Mikhail Kossov - Feb 2005

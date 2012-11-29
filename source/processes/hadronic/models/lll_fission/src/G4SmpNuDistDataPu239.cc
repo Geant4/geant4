@@ -53,7 +53,7 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4SmpNuDistDataPu239.cc,v 1.3 2007-06-01 18:30:38 dennis Exp $
+// $Id$
 //
 
 #include <cmath>

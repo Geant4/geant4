@@ -26,7 +26,7 @@
 /// \file analysis/A01/src/A01PhysicsList.cc
 /// \brief Implementation of the A01PhysicsList class
 //
-// $Id: A01PhysicsList.cc,v 1.8 2006-06-29 16:33:03 gunter Exp $
+// $Id$
 // --------------------------------------------------------------
 //
 // 28-Jan-04 Add QGSP_BERT and QGSP_BIC for hadronic lists. T. Koi

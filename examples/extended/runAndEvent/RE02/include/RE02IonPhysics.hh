@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE02/include/RE02IonPhysics.hh
 /// \brief Definition of the RE02IonPhysics class
 //
-// $Id: RE02IonPhysics.hh,v 1.3 2010-04-07 01:29:00 asaim Exp $
+// $Id$
 // --------------------------------------------------------------
 // 05-Jan-2004 Add G4ionIonisation T. Koi
 //

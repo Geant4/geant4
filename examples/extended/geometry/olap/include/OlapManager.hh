@@ -27,8 +27,7 @@
 /// \brief Definition of the OlapManager class
 //
 //
-// $Id: OlapManager.hh,v 1.5 2010-10-27 10:25:26 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // --------------------------------------------------------------

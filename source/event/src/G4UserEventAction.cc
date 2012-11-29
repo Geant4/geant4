@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserEventAction.cc,v 1.7 2006-06-29 18:10:31 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "G4UserEventAction.hh"

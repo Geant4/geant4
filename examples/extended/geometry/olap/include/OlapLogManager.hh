@@ -27,8 +27,7 @@
 /// \brief Definition of the OlapLogManager class
 //
 //
-// $Id: OlapLogManager.hh,v 1.2 2006-06-29 17:22:06 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // --------------------------------------------------------------

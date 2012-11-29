@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4ParameterisedMaterial.cc,v 1.9 2006-06-29 18:58:40 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 //   Test the Navigation in geometry with parameterised volumes (which 

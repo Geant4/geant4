@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hTestLossTableProduction.cc,v 1.7 2006-06-29 19:44:44 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // 
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998

@@ -26,8 +26,7 @@
 /// \file exoticphysics/monopole/include/G4MonopoleTransportation.icc
 /// \brief Implementation of the G4MonopoleTransportation class inline functions
 //
-// $Id: G4MonopoleTransportation.icc,v 1.1 2010-06-04 19:03:36 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

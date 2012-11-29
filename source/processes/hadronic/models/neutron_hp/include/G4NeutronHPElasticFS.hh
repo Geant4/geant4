@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPElasticFS.hh,v 1.12 2007-06-06 12:45:13 ahoward Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 25-08-06 New Final State type (refFlag==3 , Legendre (Low Energy) + Probability (High Energy) )
 //          is added by T. KOI

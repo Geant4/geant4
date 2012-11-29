@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testExitNormalNav.cc,v 1.7 2006-06-29 18:58:25 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //   Testing the product of Exit Normal of the Navigator for
 //     simple hierarchial geometry.  

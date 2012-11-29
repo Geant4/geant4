@@ -27,8 +27,7 @@
 /// \brief Implementation of the B02ImportanceDetectorConstruction class
 //
 //
-// $Id: B02ImportanceDetectorConstruction.cc,v 1.11 2007-06-22 13:38:55 ahoward Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "globals.hh"

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.cc,v 1.35 2010-12-07 09:36:59 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 //

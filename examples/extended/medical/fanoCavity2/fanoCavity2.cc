@@ -26,8 +26,7 @@
 /// \file medical/fanoCavity2/fanoCavity2.cc
 /// \brief Main program of the medical/fanoCavity2 example
 //
-// $Id: fanoCavity2.cc,v 1.3 2010-11-02 15:56:47 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 

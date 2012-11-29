@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LEProtonInelastic.hh,v 1.12 2007-02-26 18:31:19 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Low Energy Proton Inelastic Process
 // original by H.P. Wellisch

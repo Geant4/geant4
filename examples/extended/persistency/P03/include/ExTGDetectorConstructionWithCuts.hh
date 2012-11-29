@@ -26,7 +26,7 @@
 /// \file persistency/P03/include/ExTGDetectorConstructionWithCuts.hh
 /// \brief Definition of the ExTGDetectorConstructionWithCuts class
 //
-// $Id: ExTGDetectorConstructionWithCuts.hh,v 1.3 2010-11-05 08:52:34 gcosmo Exp $
+// $Id$
 
 #ifndef ExTGDetectorConstructionWithCuts_HH
 #define ExTGDetectorConstructionWithCuts_HH

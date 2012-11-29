@@ -65,8 +65,7 @@
 // 16 August 1999, F Lei, DERA UK
 // Adapted from a verson by Bill Lockman, SLAC, to whom all credits go:
 //
-// $Id: Tst18EventActionMessenger.hh,v 1.7 2006-06-29 21:44:22 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

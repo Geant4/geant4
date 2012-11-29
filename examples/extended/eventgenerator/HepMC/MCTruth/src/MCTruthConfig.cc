@@ -27,8 +27,7 @@
 /// \brief Implementation of the MCTruthConfig class
 //
 //
-// $Id: MCTruthConfig.cc,v 1.1 2006-11-22 14:51:29 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // --------------------------------------------------------------

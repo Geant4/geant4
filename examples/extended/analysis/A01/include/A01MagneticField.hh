@@ -26,7 +26,7 @@
 /// \file analysis/A01/include/A01MagneticField.hh
 /// \brief Definition of the A01MagneticField class
 //
-// $Id: A01MagneticField.hh,v 1.5 2009-11-21 00:22:55 perl Exp $
+// $Id$
 // --------------------------------------------------------------
 //
 

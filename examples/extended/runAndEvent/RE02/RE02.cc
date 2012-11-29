@@ -27,8 +27,7 @@
 /// \brief Main program of the runAndEvent/RE02 example
 //
 //
-// $Id: RE02.cc,v 1.5 2010-11-08 18:48:54 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

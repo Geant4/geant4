@@ -26,8 +26,7 @@
 /// \file persistency/gdml/G03/src/G03ColorReader.cc
 /// \brief Implementation of the G03ColorReader class
 //
-// $Id: G03ColorReader.cc,v 1.4 2009-04-24 15:54:21 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // --------------------------------------------------------------------
 

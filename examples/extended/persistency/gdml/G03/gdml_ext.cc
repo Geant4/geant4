@@ -27,8 +27,7 @@
 /// \brief Main program of the persistency/gdml/G03 example
 //
 //
-// $Id: gdml_ext.cc,v 1.7 2010-11-07 13:31:07 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // --------------------------------------------------------------

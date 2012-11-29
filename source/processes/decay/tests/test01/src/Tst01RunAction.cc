@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst01RunAction.cc,v 1.4 2008-10-24 15:24:16 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "Tst01RunAction.hh"

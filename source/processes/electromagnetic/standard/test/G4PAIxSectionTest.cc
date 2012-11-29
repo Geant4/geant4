@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIxSectionTest.cc,v 1.16 2009-12-30 12:57:41 grichine Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 //

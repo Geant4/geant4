@@ -27,8 +27,7 @@
 /// \brief Definition of the RE02PSCellFlux class
 //
 //
-// $Id: RE02PSCellFlux.hh,v 1.2 2006-12-13 15:42:47 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef RE02PSCellFlux_h

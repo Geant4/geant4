@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttDef.cc,v 1.2 2006-11-01 10:15:05 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 #include "G4AttDef.hh"
 

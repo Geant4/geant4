@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10RunMessenger.cc,v 1.4 2007-06-21 15:07:16 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

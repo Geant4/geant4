@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Cons2.cc,v 1.21 2009-11-12 10:40:45 tnikitin Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Simple test of G4Cons
 // Basic checks on each function + awkward cases for tracking / geom algorithms

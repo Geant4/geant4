@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPrimitiveScorer.cc,v 1.5 2010-07-23 04:34:59 taso Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // G4VPrimitiveScorer
 #include "G4VPrimitiveScorer.hh"

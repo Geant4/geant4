@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: BuildBoxWorld.hh,v 1.7 2006-06-29 18:15:24 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef BUILDBOXWORLD_HH
 #define BUILDBOXWORLD_HH

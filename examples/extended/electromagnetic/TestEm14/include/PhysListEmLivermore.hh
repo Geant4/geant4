@@ -26,8 +26,7 @@
 /// \file electromagnetic/TestEm14/include/PhysListEmLivermore.hh
 /// \brief Definition of the PhysListEmLivermore class
 //
-// $Id: PhysListEmLivermore.hh,v 1.4 2009-11-19 10:36:37 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

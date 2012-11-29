@@ -26,7 +26,7 @@
 /// \file analysis/A01/include/A01GeneralPhysics.hh
 /// \brief Definition of the A01GeneralPhysics class
 //
-// $Id: A01GeneralPhysics.hh,v 1.5 2006-06-29 16:31:08 gunter Exp $
+// $Id$
 // --------------------------------------------------------------
 //
 

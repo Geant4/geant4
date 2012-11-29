@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Test2PSConstruction.hh,v 1.1 2010-11-03 08:48:57 taso Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

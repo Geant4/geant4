@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SmartFilter.hh,v 1.3 2006-08-25 19:39:39 tinslay Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Filter with additional funcionality such as active and inverted states, 
 // and filtering statistics

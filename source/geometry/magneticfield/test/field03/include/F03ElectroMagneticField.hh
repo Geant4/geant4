@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: F03ElectroMagneticField.hh,v 1.2 2006-06-29 18:29:16 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 //    A class for control of the Magnetic Field of the detector.

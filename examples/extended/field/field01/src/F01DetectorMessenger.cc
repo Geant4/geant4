@@ -27,8 +27,7 @@
 /// \brief Implementation of the F01DetectorMessenger class
 //
 //
-// $Id: F01DetectorMessenger.cc,v 1.5 2006-06-29 17:16:27 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

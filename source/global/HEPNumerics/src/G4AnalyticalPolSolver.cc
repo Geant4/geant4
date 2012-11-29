@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AnalyticalPolSolver.cc,v 1.7 2007-11-13 17:35:06 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include  "globals.hh"

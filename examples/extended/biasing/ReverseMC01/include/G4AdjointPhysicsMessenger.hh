@@ -26,8 +26,7 @@
 /// \file biasing/ReverseMC01/include/G4AdjointPhysicsMessenger.hh
 /// \brief Definition of the G4AdjointPhysicsMessenger class
 //
-// $Id: G4AdjointPhysicsMessenger.hh,v 1.1 2009-11-19 22:41:18 ldesorgh Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //////////////////////////////////////////////////////////////
 //  Class Name:        G4AdjointPhysicsMessenger

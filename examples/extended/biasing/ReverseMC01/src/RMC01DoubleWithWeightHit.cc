@@ -26,8 +26,7 @@
 /// \file biasing/ReverseMC01/src/RMC01DoubleWithWeightHit.cc
 /// \brief Implementation of the RMC01DoubleWithWeightHit class
 //
-// $Id: RMC01DoubleWithWeightHit.cc,v 1.1 2009-11-19 22:41:18 ldesorgh Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //////////////////////////////////////////////////////////////
 //      Class Name:        RMC01DoubleWithWeightHit

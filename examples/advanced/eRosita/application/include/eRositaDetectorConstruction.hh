@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: eRositaDetectorConstruction.hh,v 1.3 2010-12-15 07:36:48 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

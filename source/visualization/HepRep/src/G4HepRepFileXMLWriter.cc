@@ -25,7 +25,7 @@
 //
 //--------------------------------------------------------------------------
 // File and Version Information:
-// 	$Id: G4HepRepFileXMLWriter.cc,v 1.3 2006-06-29 21:17:28 gunter Exp $
+// 	$Id$
 //
 // Description:
 //	Create a HepRep XML File (HepRep version 1).

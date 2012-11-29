@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMinusCaptureCascade.cc,v 1.16 2008-05-05 09:09:06 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //   G4MuonMinusCaptureAtRest physics process
 //                   

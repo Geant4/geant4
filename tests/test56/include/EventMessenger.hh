@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventMessenger.hh,v 1.1 2007/02/13 17:57:20 maire Exp $
+// $Id$
 // GEANT4 tag $Name: geant4-09-02-ref-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

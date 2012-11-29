@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: T07DetectorMessenger.hh,v 1.4 2006-06-29 21:36:54 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

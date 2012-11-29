@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LorentzRotation.hh,v 1.5 2006-06-29 18:59:04 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4LorentzRotation_hh
 #define G4LorentzRotation_hh

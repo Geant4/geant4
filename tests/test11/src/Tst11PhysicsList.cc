@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst11PhysicsList.cc,v 1.11 2009-11-18 23:48:10 tkoi Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 080901 Add dump neutron Cross Section
 //        Add Thermal Scattering by T. Koi

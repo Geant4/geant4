@@ -25,8 +25,7 @@
 //
 //
 // 12/06/2002 G4UIGainServer H. MInamimoto and H. Yoshida created
-// $Id: G4UIGainServer.cc,v 1.12 2008-07-18 06:39:43 kmura Exp $
-// $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef WIN32
 

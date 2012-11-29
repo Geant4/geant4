@@ -26,7 +26,7 @@
 /// \file analysis/A01/include/A01CellParameterisation.hh
 /// \brief Definition of the A01CellParameterisation class
 //
-// $Id: A01CellParameterisation.hh,v 1.4 2006-06-29 16:30:29 gunter Exp $
+// $Id$
 // --------------------------------------------------------------
 //
 

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPFinalState.hh,v 1.15 2008-08-05 22:43:26 tkoi Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 080721 Create adjust_final_state method by T. Koi  
 // 080801 Introduce theNDLDataA,Z which has A and Z of NDL data by T. Koi

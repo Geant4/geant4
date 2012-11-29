@@ -27,8 +27,7 @@
 /// \brief Definition of the F01EventAction class
 //
 //
-// $Id: F01EventAction.hh,v 1.5 2006-06-29 17:15:39 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

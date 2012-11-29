@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommands.hh,v 1.8 2009-03-09 12:42:00 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 // /vis/ top level commands - John Allison  5th February 2001
 

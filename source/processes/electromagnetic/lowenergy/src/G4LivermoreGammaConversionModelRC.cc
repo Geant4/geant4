@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreGammaConversionModelRC.cc,v 1.1 2010-11-10 17:12:22 flongo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Francesco Longo & Gerardo Depaola
 //         on base of G4LivermoreGammaConversionModel

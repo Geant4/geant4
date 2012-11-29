@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst1PhysicsList.cc,v 1.1 2010-09-15 21:16:41 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "Tst1PhysicsList.hh"

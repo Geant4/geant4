@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimRunAction.hh,v 1.10 2006-06-29 16:23:15 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
 //

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Test23EventActionMessenger.cc,v 1.2 2006-06-29 21:50:01 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //      ---------------- Test23EventActionMessenger class ----------------
 //                 by Mikhail Kossov, December 2003.

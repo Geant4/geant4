@@ -26,7 +26,7 @@
 /// \file analysis/A01/src/A01EmCalorimeter.cc
 /// \brief Implementation of the A01EmCalorimeter class
 //
-// $Id: A01EmCalorimeter.cc,v 1.6 2006-06-29 16:32:33 gunter Exp $
+// $Id$
 // --------------------------------------------------------------
 //
 #include "A01EmCalorimeter.hh"

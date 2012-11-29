@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Cons1.cc,v 1.8 2007-04-23 13:58:39 grichine Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 // testG4Cons

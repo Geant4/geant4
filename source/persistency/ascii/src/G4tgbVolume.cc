@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbVolume.cc,v 1.23 2010-11-05 08:58:36 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4tgbVolume

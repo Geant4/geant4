@@ -26,8 +26,7 @@
 /// \file medical/electronScattering/src/PhysListEmStandardGS.cc
 /// \brief Implementation of the PhysListEmStandardGS class
 //
-// $Id: PhysListEmStandardGS.cc,v 1.1 2011-01-05 18:48:54 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 

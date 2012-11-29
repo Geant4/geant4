@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExactHelixStepper.hh,v 1.7 2010-07-21 13:45:37 tnikitin Exp $ 
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$ 
 //
 //
 // class G4ExactHelixStepper

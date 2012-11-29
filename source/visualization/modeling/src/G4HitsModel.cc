@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HitsModel.cc,v 1.18 2006-11-14 14:42:08 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  26th August 1998.

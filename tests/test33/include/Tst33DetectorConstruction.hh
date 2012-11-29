@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33DetectorConstruction.hh,v 1.4 2007-06-22 12:47:16 ahoward Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------------------------------------------------------
 // Class Tst33DetectorConstruction

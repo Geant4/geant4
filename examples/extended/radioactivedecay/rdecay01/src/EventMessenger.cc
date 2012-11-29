@@ -26,8 +26,7 @@
 /// \file radioactivedecay/rdecay01/src/EventMessenger.cc
 /// \brief Implementation of the EventMessenger class
 //
-// $Id: EventMessenger.cc,v 1.2 2010-09-17 11:21:45 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

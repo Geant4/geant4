@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33VisRunAction.cc,v 1.5 2008-04-21 09:00:03 ahoward Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

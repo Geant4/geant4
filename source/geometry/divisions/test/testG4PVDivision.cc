@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4PVDivision.cc,v 1.5 2009-05-14 14:19:32 ivana Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // test for G4PVDivision classes
 //

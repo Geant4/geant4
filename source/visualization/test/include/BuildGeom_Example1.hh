@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: BuildGeom_Example1.hh,v 1.4 2006-06-29 21:33:36 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

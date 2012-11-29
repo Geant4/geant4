@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CylindricalSurface.hh,v 1.10 2006-06-29 18:39:12 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------------------------------------------------------
 // Class G4CylindricalSurface

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QChipolino.cc,v 1.36 2009-08-10 16:36:53 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //      ---------------- G4QChipolino ----------------
 //             by Mikhail Kossov, Sept 1999.

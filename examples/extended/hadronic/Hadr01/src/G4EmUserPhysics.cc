@@ -26,8 +26,7 @@
 /// \file hadronic/Hadr01/src/G4EmUserPhysics.cc
 /// \brief Implementation of the G4EmUserPhysics class
 //
-// $Id: G4EmUserPhysics.cc,v 1.22 2010-12-19 18:11:05 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //

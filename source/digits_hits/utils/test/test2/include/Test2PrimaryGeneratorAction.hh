@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Test2PrimaryGeneratorAction.hh,v 1.1 2010-07-23 06:15:41 akimura Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef Test2PrimaryGeneratorAction_h

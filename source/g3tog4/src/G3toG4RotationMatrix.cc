@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3toG4RotationMatrix.cc,v 1.4 2006-06-29 18:13:31 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 #include "G3toG4RotationMatrix.hh"
 

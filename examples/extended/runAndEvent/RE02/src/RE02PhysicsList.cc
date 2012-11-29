@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE02/src/RE02PhysicsList.cc
 /// \brief Implementation of the RE02PhysicsList class
 //
-// $Id: RE02PhysicsList.cc,v 1.2 2006-06-29 17:45:29 gunter Exp $
+// $Id$
 // --------------------------------------------------------------
 //
 // 28-Jan-04 Add QGSP_BERT and QGSP_BIC for hadronic lists. T. Koi

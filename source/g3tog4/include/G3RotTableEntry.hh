@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3RotTableEntry.hh,v 1.6 2006-06-29 18:12:13 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------
 // Class description:

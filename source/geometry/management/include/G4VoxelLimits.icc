@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelLimits.icc,v 1.4 2006-06-29 18:33:15 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // G4VoxelLimits Inline implementation

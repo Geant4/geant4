@@ -27,8 +27,7 @@
 /// \brief Implementation of the F01CalorimeterSD class
 //
 //
-// $Id: F01CalorimeterSD.cc,v 1.6 2006-06-29 17:16:23 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

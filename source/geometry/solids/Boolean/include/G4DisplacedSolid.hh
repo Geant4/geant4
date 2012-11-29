@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DisplacedSolid.hh,v 1.21 2010-10-20 07:31:39 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4DisplacedSolid

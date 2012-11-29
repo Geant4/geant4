@@ -27,8 +27,7 @@
 /// \brief Main program of the electromagnetic/TestEm1 example
 //
 //
-// $Id: TestEm1.cc,v 1.16 2010-04-06 11:11:24 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 

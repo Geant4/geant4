@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ParametrisedBox.cc,v 1.6 2006-06-29 21:34:36 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Test of parametrisation.  Based on Hans-Peter Wellisch's test.

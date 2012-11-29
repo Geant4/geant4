@@ -26,7 +26,7 @@
 /// \file analysis/A01/include/A01DriftChamberHit.hh
 /// \brief Definition of the A01DriftChamberHit class
 //
-// $Id: A01DriftChamberHit.hh,v 1.5 2006-06-29 16:30:55 gunter Exp $
+// $Id$
 // --------------------------------------------------------------
 //
 #ifndef A01DriftChamberHit_h

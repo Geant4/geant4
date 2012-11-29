@@ -35,7 +35,7 @@
 // 14.10.96 John Apostolakis,   design and implementation
 // 17.03.97 John Apostolakis,   renaming new set functions being added
 //
-// $Id: G4PropagatorInField.cc,v 1.52 2010-07-13 15:59:42 gcosmo Exp $
+// $Id$
 // GEANT4 tag $ Name:  $
 // ---------------------------------------------------------------------------
 

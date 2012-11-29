@@ -26,7 +26,7 @@
 /// \file analysis/A01/src/A01DriftChamberHit.cc
 /// \brief Implementation of the A01DriftChamberHit class
 //
-// $Id: A01DriftChamberHit.cc,v 1.11 2006-11-14 07:11:18 perl Exp $
+// $Id$
 // --------------------------------------------------------------
 //
 #include "A01DriftChamberHit.hh"

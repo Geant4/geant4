@@ -27,8 +27,7 @@
 /// \brief Definition of the RE01Trajectory class
 //
 //
-// $Id: RE01Trajectory.hh,v 1.6 2010-11-15 22:29:57 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef RE01Trajectory_h

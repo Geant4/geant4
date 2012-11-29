@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DELPHIMagField.hh,v 1.2 2006-06-29 18:26:45 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 // Class describing the DELPHI magnetic field. This axial symmetry

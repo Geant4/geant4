@@ -27,8 +27,7 @@
 /// \brief Implementation of the G04PhysicsList class
 //
 //
-// $Id: G04PhysicsList.cc,v 1.1 2010-10-11 08:40:51 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 

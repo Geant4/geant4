@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CurveRayIntersection.hh,v 1.6 2007-05-11 13:49:31 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------------------------------------------------------
 // Class G4CurveRayIntersection

@@ -26,8 +26,7 @@
 /// \file electromagnetic/TestEm8/src/HistoManager.cc
 /// \brief Implementation of the HistoManager class
 //
-// $Id: HistoManager.cc,v 1.4 2010-11-19 10:15:33 grichine Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //

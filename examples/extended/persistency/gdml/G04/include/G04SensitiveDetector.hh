@@ -27,8 +27,7 @@
 /// \brief Definition of the G04SensitiveDetector class
 //
 //
-// $Id: G04SensitiveDetector.hh,v 1.1 2010-10-11 08:40:51 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G04SensitiveDetector_h

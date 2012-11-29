@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.hh,v 1.6 2010-10-19 15:20:18 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4ReflectedSolid

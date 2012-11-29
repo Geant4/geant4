@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisManager.cc,v 1.6 2010-05-29 21:35:16 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Abstract interface for GEANT4 Visualization Manager.

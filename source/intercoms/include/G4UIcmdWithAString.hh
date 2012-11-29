@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWithAString.hh,v 1.5 2006-06-29 19:07:59 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 

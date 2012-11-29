@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpWLS.cc,v 1.13 2008-10-24 19:50:50 gum Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 ////////////////////////////////////////////////////////////////////////
 // Optical Photon WaveLength Shifting (WLS) Class Implementation

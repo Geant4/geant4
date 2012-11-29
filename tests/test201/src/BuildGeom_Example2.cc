@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: BuildGeom_Example2.cc,v 1.6 2006-06-29 21:47:31 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // Makoto Asai - based on Long Baseline Neutrino Observatory experiment.

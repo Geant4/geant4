@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polymarker.cc,v 1.12 2010-12-07 09:36:59 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  November 1996

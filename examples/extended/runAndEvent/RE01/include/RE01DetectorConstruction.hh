@@ -26,8 +26,7 @@
 /// \file runAndEvent/RE01/include/RE01DetectorConstruction.hh
 /// \brief Definition of the RE01DetectorConstruction class
 //
-// $Id: RE01DetectorConstruction.hh,v 1.2 2006-06-29 17:42:39 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef RE01DetectorConstruction_h

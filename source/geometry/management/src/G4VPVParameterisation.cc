@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPVParameterisation.cc,v 1.8 2007-07-16 08:40:13 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Default implementations for Parameterisations that do not
 // parameterise solid and/or material.

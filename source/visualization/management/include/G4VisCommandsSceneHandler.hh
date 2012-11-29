@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneHandler.hh,v 1.8 2006-06-29 21:28:44 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 // /vis/sceneHandler commands - John Allison  10th October 1998
 

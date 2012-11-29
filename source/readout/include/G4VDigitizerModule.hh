@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDigitizerModule.hh,v 1.8 2006-06-29 21:12:58 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4VDigitizerModule_H

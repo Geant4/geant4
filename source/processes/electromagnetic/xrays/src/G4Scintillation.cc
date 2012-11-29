@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc,v 1.38 2010-12-15 07:39:26 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 ////////////////////////////////////////////////////////////////////////
 // Scintillation Light Class Implementation

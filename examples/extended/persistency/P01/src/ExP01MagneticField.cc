@@ -27,8 +27,7 @@
 /// \brief Implementation of the ExP01MagneticField class
 //
 //
-// $Id: ExP01MagneticField.cc,v 1.2 2006-06-29 17:39:26 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //  
 //   User Field class implementation.
 //

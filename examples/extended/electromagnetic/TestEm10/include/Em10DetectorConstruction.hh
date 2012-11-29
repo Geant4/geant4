@@ -27,8 +27,7 @@
 /// \brief Definition of the Em10DetectorConstruction class
 //
 //
-// $Id: Em10DetectorConstruction.hh,v 1.19 2006-06-29 16:37:46 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

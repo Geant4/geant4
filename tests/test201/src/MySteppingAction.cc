@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: MySteppingAction.cc,v 1.9 2006-06-29 21:47:53 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // 16/Apr/1997  J. Allison:  For visualization/test/test19.

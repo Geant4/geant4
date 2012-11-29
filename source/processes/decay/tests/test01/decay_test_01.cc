@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: decay_test_01.cc,v 1.4 2007-05-07 10:12:29 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "Tst01DetectorConstruction.hh"

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHP3NAInelasticFS.hh,v 1.9 2006-06-29 20:46:35 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G4NeutronHP3NAInelasticFS_h
 #define G4NeutronHP3NAInelasticFS_h 1

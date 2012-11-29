@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4NavigationHistory.cc,v 1.9 2007-02-13 17:24:59 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // testG4NavigationHistory

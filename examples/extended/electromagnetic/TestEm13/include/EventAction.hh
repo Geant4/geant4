@@ -26,8 +26,7 @@
 /// \file electromagnetic/TestEm13/include/EventAction.hh
 /// \brief Definition of the EventAction class
 //
-// $Id: EventAction.hh,v 1.2 2006-06-29 16:43:58 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

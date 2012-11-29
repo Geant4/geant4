@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: SCDetectorConstruction.cc,v 1.9 2007-07-18 14:38:48 tnikitin Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

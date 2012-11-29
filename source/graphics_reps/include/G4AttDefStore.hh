@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttDefStore.hh,v 1.11 2007-04-03 13:58:07 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 #ifndef G4ATTDEFSTORE_HH
 #define G4ATTDEFSTORE_HH

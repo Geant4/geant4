@@ -27,8 +27,7 @@
 /// \brief Implementation of the StandaloneVisAction class
 //
 //
-// $Id: StandaloneVisAction.cc,v 1.2 2006-06-29 17:45:58 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 #include "StandaloneVisAction.hh"
 

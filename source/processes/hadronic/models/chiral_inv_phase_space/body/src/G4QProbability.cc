@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QProbability.cc,v 1.3 2009-09-04 16:13:19 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file

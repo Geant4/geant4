@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33PhysicsList.cc,v 1.8 2010-03-24 21:12:43 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include <iomanip>                

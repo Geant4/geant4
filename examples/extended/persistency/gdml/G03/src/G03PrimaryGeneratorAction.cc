@@ -27,8 +27,7 @@
 /// \brief Implementation of the G03PrimaryGeneratorAction class
 //
 //
-// $Id: G03PrimaryGeneratorAction.cc,v 1.2 2008-12-18 12:57:16 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Class G03PrimaryGeneratorAction implementation
 //

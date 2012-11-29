@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst61PhysicsList.cc,v 1.2 2009-11-19 01:32:06 tkoi Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 091118 Change multiple scattering processes to particle dedicated by T. Koi
 //

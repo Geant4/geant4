@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Shoot.hh,v 1.9 2006-06-29 18:15:29 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef SHOOT_HH
 #define SHOOT_HH

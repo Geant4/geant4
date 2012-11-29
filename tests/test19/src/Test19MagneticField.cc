@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Test19MagneticField.cc,v 1.1 2009-11-17 17:03:15 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //  
 
 #include "Test19MagneticField.hh"

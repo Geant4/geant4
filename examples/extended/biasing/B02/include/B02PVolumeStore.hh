@@ -27,7 +27,7 @@
 /// \brief Definition of the B02PVolumeStore class
 //
 //
-// $Id: B02PVolumeStore.hh,v 1.3 2006-06-29 16:34:33 gunter Exp $
+// $Id$
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------

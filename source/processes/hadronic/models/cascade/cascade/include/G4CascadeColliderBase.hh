@@ -25,8 +25,7 @@
 //
 #ifndef G4CASCADE_COLLIDER_BASE_HH
 #define G4CASCADE_COLLIDER_BASE_HH
-// $Id: G4CascadeColliderBase.hh,v 1.4 2010-12-15 07:39:32 gunter Exp $
-// Geant4 tag: $Name: not supported by cvs2svn $
+// $Id$
 //
 // 20100714  M. Kelsey -- Move functionality from G4VCascadeCollider, and
 //		provide conservation-checking here, with wrapper function

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleDiv.cc,v 1.4 2009-05-18 13:49:53 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "ExDivDetectorConstruction.hh"

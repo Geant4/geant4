@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrMessenger.cc,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4tgrMessenger

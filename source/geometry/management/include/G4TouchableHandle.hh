@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TouchableHandle.hh,v 1.6 2006-06-29 18:32:25 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // 
 // Class G4TouchableHandle
 //

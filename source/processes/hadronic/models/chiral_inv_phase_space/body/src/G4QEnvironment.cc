@@ -27,8 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789
 //
 //
-// $Id: G4QEnvironment.cc,v 1.172 2010-11-22 07:07:43 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //      ---------------- G4QEnvironment ----------------
 //             by Mikhail Kossov, August 2000.

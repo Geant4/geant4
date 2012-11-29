@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4InteractionContent.hh,v 1.5 2009-07-17 12:36:41 vuzhinsk Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4InteractionContent_h

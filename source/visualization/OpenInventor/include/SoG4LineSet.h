@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SoG4LineSet.h,v 1.2 2006-12-13 15:49:51 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // John Allison  26th October 2006
 // Extended SoLineSet to include G4Atts.

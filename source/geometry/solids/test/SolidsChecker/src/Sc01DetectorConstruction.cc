@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Sc01DetectorConstruction.cc,v 1.13 2006-12-13 15:43:42 gunter Exp $
+// $Id$
 // 
 //  GEANT 4 class header file 
 //

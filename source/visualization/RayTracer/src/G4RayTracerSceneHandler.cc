@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerSceneHandler.cc,v 1.10 2006-11-14 14:46:37 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 #include "G4RayTracerSceneHandler.hh"
 #include "G4VisManager.hh"

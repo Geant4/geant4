@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: meshdefs.hh,v 1.7 2006-06-29 18:33:17 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // Tube/Cone Meshing constants for extent calculations

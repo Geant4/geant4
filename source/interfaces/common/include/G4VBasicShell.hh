@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VBasicShell.hh,v 1.7 2006-06-29 19:10:03 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4VBasicShell_H

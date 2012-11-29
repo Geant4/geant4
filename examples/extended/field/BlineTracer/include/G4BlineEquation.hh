@@ -27,8 +27,7 @@
 /// \brief Definition of the G4BlineEquation class
 //
 //
-// $Id: G4BlineEquation.hh,v 1.2 2006-06-29 17:14:53 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // --------------------------------------------------------------------

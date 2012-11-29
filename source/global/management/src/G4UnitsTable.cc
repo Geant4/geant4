@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnitsTable.cc,v 1.38 2010-08-09 15:21:14 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //

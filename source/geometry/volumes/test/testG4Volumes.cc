@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Volumes.cc,v 1.10 2006-06-29 18:58:59 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // testG4Volumes Placement and replica/parameterised volumes setup tests

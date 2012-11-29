@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldManagerStore.hh,v 1.3 2008-01-17 09:39:08 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // class G4FieldManagerStore
 //

@@ -27,8 +27,7 @@
 /// \brief Implementation of the Em10RunMessenger class
 //
 //
-// $Id: Em10RunMessenger.cc,v 1.5 2006-06-29 16:39:01 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

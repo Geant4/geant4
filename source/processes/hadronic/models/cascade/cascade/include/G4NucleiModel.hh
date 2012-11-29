@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NucleiModel.hh,v 1.34 2010/10/20 23:51:07 mkelsey Exp $
+// $Id$
 // GEANT4 tag: $Name:  $
 //
 // 20100319  M. Kelsey -- Remove "using" directory and unnecessary #includes,

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCoulombBarrier.hh,v 1.5 2009-03-04 11:05:02 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999)

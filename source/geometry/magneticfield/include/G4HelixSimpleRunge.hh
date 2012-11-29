@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HelixSimpleRunge.hh,v 1.7 2006-06-29 18:22:41 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4HelixSimpleRunge

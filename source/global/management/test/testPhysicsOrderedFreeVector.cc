@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testPhysicsOrderedFreeVector.cc,v 1.6 2006-06-29 19:05:05 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #include "globals.hh"
 #include "G4PhysicsOrderedFreeVector.hh"

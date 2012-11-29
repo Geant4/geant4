@@ -26,8 +26,7 @@
 /// \file runAndEvent/RE01/src/RE01PrimaryGeneratorMessenger.cc
 /// \brief Implementation of the RE01PrimaryGeneratorMessenger class
 //
-// $Id: RE01PrimaryGeneratorMessenger.cc,v 1.2 2006-06-29 17:44:12 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "RE01PrimaryGeneratorMessenger.hh"

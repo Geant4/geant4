@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QLowEnergy.cc,v 1.5 2010/06/14 16:11:27 mkossov Exp $
+// $Id$
 // GEANT4 tag $Name: geant4-09-04 $
 //
 //      ---------------- G4QLowEnergy class -----------------

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QDiffractionRatio.cc,v 1.1 2009-11-16 18:15:43 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // G4 Physics class: G4QDiffractionRatio for N+A Diffraction Interactions

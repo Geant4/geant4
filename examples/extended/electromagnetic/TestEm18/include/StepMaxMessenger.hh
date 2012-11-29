@@ -26,8 +26,7 @@
 /// \file electromagnetic/TestEm18/include/StepMaxMessenger.hh
 /// \brief Definition of the StepMaxMessenger class
 //
-// $Id: StepMaxMessenger.hh,v 1.1 2007-02-13 17:57:20 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

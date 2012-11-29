@@ -27,8 +27,7 @@
 /// \brief Definition of the PrimaryGeneratorAction1 class
 //
 //
-// $Id: PrimaryGeneratorAction1.hh,v 1.2 2010-07-16 07:37:48 maire Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VViewer.cc,v 1.26 2009-11-17 14:37:06 lgarnier Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // John Allison  27th March 1996

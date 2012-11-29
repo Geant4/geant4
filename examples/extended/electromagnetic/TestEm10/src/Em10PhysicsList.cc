@@ -27,8 +27,7 @@
 /// \brief Implementation of the Em10PhysicsList class
 //
 //
-// $Id: Em10PhysicsList.cc,v 1.25 2009-11-21 16:12:01 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #include "Em10PhysicsList.hh"

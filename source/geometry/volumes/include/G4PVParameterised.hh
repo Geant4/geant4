@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVParameterised.hh,v 1.8 2007-04-11 07:56:38 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // class G4PVParameterised

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4PathFinder.cc,v 1.8 2007-02-13 16:15:34 japost Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $ 
+// $Id$
 //
 // 
 // Moving with PathFinder in simple boxlike geometry, 

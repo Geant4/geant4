@@ -27,8 +27,7 @@
 /// \brief Definition of the Em10StepCut class
 //
 //
-// $Id: Em10StepCut.hh,v 1.5 2006-06-29 16:38:12 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

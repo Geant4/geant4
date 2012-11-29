@@ -27,8 +27,7 @@
 /// \brief Definition of the Em10PhysicsListMessenger class
 //
 //
-// $Id: Em10PhysicsListMessenger.hh,v 1.7 2006-06-29 16:37:59 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

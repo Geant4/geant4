@@ -25,8 +25,7 @@
 //
 #ifndef G4V_CASCADE_COLLIDER_HH
 #define G4V_CASCADE_COLLIDER_HH
-// $Id: G4VCascadeCollider.hh,v 1.5 2010-12-15 07:40:04 gunter Exp $
-// Geant4 tag: $Name: not supported by cvs2svn $
+// $Id$
 //
 // 20100615  M. Kelsey -- Split constructor to have verbose separately
 // 20100711  M. Kelsey -- Allow name to be changed after ctor, by self

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMillerGreenExcitationModel.cc,v 1.11 2010/10/08 08:53:17 sincerti Exp $
+// $Id$
 // GEANT4 tag $Name:  $
 //
 

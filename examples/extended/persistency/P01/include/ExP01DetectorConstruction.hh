@@ -27,8 +27,7 @@
 /// \brief Definition of the ExP01DetectorConstruction class
 //
 //
-// $Id: ExP01DetectorConstruction.hh,v 1.2 2006-06-29 17:38:46 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

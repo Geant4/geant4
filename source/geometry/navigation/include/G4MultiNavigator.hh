@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultiNavigator.hh,v 1.5 2008-10-24 14:00:03 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // class G4MultiNavigator

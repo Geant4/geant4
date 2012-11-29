@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst05PhysicsList.hh,v 1.8 2006-06-29 21:36:06 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Para1.cc,v 1.8 2006-06-29 18:46:01 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
  
 // testG4Para

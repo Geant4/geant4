@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Test19MagneticField.hh,v 1.1 2009-11-17 17:03:15 mkossov Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Created by M. Kosov 11-Nov-2009 (following N02 Example)
 //

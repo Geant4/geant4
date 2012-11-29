@@ -26,8 +26,7 @@
 /// \file hadronic/Hadr00/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //
-// $Id: RunAction.hh,v 1.1 2008-07-07 16:37:26 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef RunAction_h

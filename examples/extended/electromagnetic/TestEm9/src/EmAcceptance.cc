@@ -27,8 +27,7 @@
 /// \brief Implementation of the Emeptance class
 //
 //
-// $Id: EmAcceptance.cc,v 1.4 2006-06-29 17:03:03 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 

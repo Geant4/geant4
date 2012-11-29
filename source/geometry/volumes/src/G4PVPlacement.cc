@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVPlacement.cc,v 1.17 2010-07-05 13:29:12 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // class G4PVPlacement Implementation

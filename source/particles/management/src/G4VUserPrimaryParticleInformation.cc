@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPrimaryParticleInformation.cc,v 1.2 2006-06-29 19:26:22 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #include "G4VUserPrimaryParticleInformation.hh"
 G4VUserPrimaryParticleInformation::G4VUserPrimaryParticleInformation() {;}

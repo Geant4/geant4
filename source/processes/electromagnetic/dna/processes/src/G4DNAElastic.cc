@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAElastic.cc,v 1.4 2010-09-08 14:07:16 sincerti Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 #include "G4DNAElastic.hh"
 #include "G4SystemOfUnits.hh"

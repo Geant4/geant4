@@ -27,8 +27,7 @@
 /// \brief Definition of the G3toG4DetectorConstruction class
 //
 //
-// $Id: G3toG4DetectorConstruction.hh,v 1.4 2006-06-29 17:20:03 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 #ifndef G3toG4DetectorConstruction_h
 #define G3toG4DetectorConstruction_h 1

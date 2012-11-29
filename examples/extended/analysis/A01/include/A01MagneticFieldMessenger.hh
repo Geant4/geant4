@@ -26,7 +26,7 @@
 /// \file analysis/A01/include/A01MagneticFieldMessenger.hh
 /// \brief Definition of the A01MagneticFieldMessenger class
 //
-// $Id: A01MagneticFieldMessenger.hh,v 1.4 2006-06-29 16:31:29 gunter Exp $
+// $Id$
 // --------------------------------------------------------------
 //
 #ifndef A01MagneticFieldMessenger_h

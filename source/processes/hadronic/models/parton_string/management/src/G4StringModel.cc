@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StringModel.cc,v 1.4 2006-06-29 20:55:45 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // G4StringModel
 #include "G4StringModel.hh"

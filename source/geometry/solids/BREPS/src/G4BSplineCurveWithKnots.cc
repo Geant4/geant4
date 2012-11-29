@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BSplineCurveWithKnots.cc,v 1.5 2006-06-29 18:41:38 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

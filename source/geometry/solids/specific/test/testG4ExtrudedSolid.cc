@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4ExtrudedSolid.cc,v 1.4 2008-02-27 12:33:20 ivana Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // testG4ExtrudedSolid
 //
