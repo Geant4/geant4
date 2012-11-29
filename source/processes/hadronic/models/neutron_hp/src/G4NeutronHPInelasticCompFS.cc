@@ -758,9 +758,11 @@ void G4NeutronHPInelasticCompFS::two_body_reaction ( G4DynamicParticle* proj, G4
    G4double gamma = AA/(A+1-AA)*beta;
    G4double E3 = AA/std::pow((1+A),2)*(beta*beta+1+2*beta*mu)*E1;
    G4double omega3 = (1+beta*mu)/std::sqrt(beta*beta+1+2*beta*mu);
+   if ( omega3 > 1.0 ) omega3 = 1.0;
 
    G4double E4 = (A+1-AA)/std::pow((1+A),2)*(gamma*gamma+1-2*gamma*mu)*E1;
    G4double omega4 = (1-gamma*mu)/std::sqrt(gamma*gamma+1-2*gamma*mu);
+   if ( omega4 > 1.0 ) omega4 = 1.0;
 
    hadron->SetKineticEnergy ( E3 );
    
