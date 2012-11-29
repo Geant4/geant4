@@ -238,8 +238,6 @@ void F02ElectricFieldSetup::SetFieldValue(G4ThreeVector fieldVector)
     if (fEMfield) delete fEMfield;
     fEMfield = 0;
     fEquation->SetFieldObj(fEMfield);   // As a double check ...
-
-    G4MagneticField* fEMfield = 0;
     fieldMgr->SetDetectorField(fEMfield);
   }
 }
