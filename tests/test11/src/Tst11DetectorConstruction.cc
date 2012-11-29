@@ -378,15 +378,16 @@ void Tst11DetectorConstruction::defineTKMaterials()
 
 }
 
-void Tst11DetectorConstruction::SetMaterial( G4String materialChoice )
+void Tst11DetectorConstruction::SetMaterial( G4String mat )
 {
   // search the material by its name
-  selectedMaterial = G4Material::GetMaterial( materialChoice );
+  selectedMaterial = G4Material::GetMaterial( mat );
 }
 
 
 
-void Tst11DetectorConstruction::createIsotopeMaterial( G4int iZ , G4int iA , G4String name , G4double temp , G4int m )
+void Tst11DetectorConstruction::createIsotopeMaterial( G4int iZ , G4int iA ,
+                                     G4String name , G4double temp , G4int ism )
 {
 
    G4NistManager* nistMan = G4NistManager::Instance();
@@ -395,7 +396,7 @@ void Tst11DetectorConstruction::createIsotopeMaterial( G4int iZ , G4int iA , G4S
    G4Element* theElement;
    if ( iA != 0 )
    {
-      anIsotope = new G4Isotope ( name , iZ , iA , nistMan->GetAtomicMass(iZ,iA)/931.494028 *g/mole,m);
+      anIsotope = new G4Isotope ( name , iZ , iA , nistMan->GetAtomicMass(iZ,iA)/931.494028 *g/mole,ism);
       theElement = new G4Element ( name , name , 1 );
       theElement -> AddIsotope ( anIsotope , 1 );
    }
