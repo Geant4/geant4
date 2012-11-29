@@ -115,7 +115,7 @@ void  G4HumanPhantomMessenger::AddBodyPart(G4String newBodyPartSensitivity)
 
   strcpy(str, newBodyPartSensitivity.c_str()); 
   
-  std::string bodypart = strtok(str," ");
+  std::string bpart = strtok(str," ");
 
   std::string sensitivity = strtok(NULL," ");
 
@@ -125,9 +125,9 @@ void  G4HumanPhantomMessenger::AddBodyPart(G4String newBodyPartSensitivity)
     bps=false;
   }
 
-  G4cout << " >>> Body Part = " << bodypart << "\n"
+  G4cout << " >>> Body Part = " << bpart << "\n"
 	 << " >>> Sensitivity = " << sensitivity << G4endl;
 
-  myUserPhantom->SetBodyPartSensitivity(bodypart,bps);
+  myUserPhantom->SetBodyPartSensitivity(bpart,bps);
 }
 

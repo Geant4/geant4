@@ -121,11 +121,11 @@ void G4HumanPhantomRunAction::EndOfRunAction(const G4Run* aRun)
 }
 
 
-void G4HumanPhantomRunAction::Fill(G4String bodypartName, 
+void G4HumanPhantomRunAction::Fill(G4String bName, 
 				      G4double energyDeposit)
 
 {
- energyTotal[bodypartName] += energyDeposit;
+ energyTotal[bName] += energyDeposit;
 }
 
 void G4HumanPhantomRunAction::totalRunEnergyDeposit() 
