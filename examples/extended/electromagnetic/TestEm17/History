@@ -15,12 +15,15 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28-11-12 G. Cosmo (testem17-V09-05-06)
+- Fixed cases of variable shadowing.
+
 12-10-12 V.Ivant (testem17-V09-05-05)
 - Migration to the updated analysis tool and inplicit units
 
 19-08-12 V.Ivanchenko (testem17-V09-05-04)
 - MuNuclearBuilder - use G4MuonNuclearProcess instead of 
-    G4MuNuclearInteraction (as in all reference Physics Lists)
+  G4MuNuclearInteraction (as in all reference Physics Lists)
      
 16-04-12 mma (testem17-V09-05-03)
 - all classes : apply G4 coding conventions

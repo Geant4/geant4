@@ -117,11 +117,11 @@ double MuCrossSections::CRB_Mephi(double z,double a,double tkin,double ep)
     double e,v,delta,rab0,z_13,dn,b,b1,dn_star,rab1,fn,epmax1,fe,rab2;
 //    
     double ame=0.51099907e-3; // GeV
-    double amu=0.105658389;        // GeV
+    double lamu=0.105658389;        // GeV
     double re=2.81794092e-13; // cm
     double avno=6.022137e23;
     double alpha=1./137.036;
-    double rmass=amu/ame; // "207"
+    double rmass=lamu/ame; // "207"
     double coeff=16./3.*alpha*avno*(re/rmass)*(re/rmass); // cm^2
     double sqrte=1.64872127; // sqrt(2.71828...)
     double btf=183.;
@@ -134,9 +134,9 @@ double MuCrossSections::CRB_Mephi(double z,double a,double tkin,double ep)
           crb_g4=0.;
           return crb_g4;
         }
-        e=tkin+amu;
+        e=tkin+lamu;
         v=ep/e;
-        delta=amu*amu*v/(2.*(e-ep)); // qmin
+        delta=lamu*lamu*v/(2.*(e-ep)); // qmin
         rab0=delta*sqrte;
         z_13=pow(z,-0.3333333); //
 //***                nuclear size and excitation, screening parameters
@@ -155,17 +155,17 @@ double MuCrossSections::CRB_Mephi(double z,double a,double tkin,double ep)
         }
 //***                nucleus contribution logarithm
         rab1=b*z_13;
-        fn=log(rab1/(dn_star*(ame+rab0*rab1))*(amu+delta*(dn_star*sqrte-2.)));
+        fn=log(rab1/(dn_star*(ame+rab0*rab1))*(lamu+delta*(dn_star*sqrte-2.)));
         if(fn < 0.) fn=0.;
 //***                electron contribution logarithm
-        epmax1=e/(1.+amu*rmass/(2.*e));
+        epmax1=e/(1.+lamu*rmass/(2.*e));
         if(ep >= epmax1)
         {
           fe=0.;
           goto label10;
         }
         rab2=b1*z_13*z_13;
-        fe=log(rab2*amu/((1.+delta*rmass/(ame*sqrte))*(ame+rab0*rab2)));
+        fe=log(rab2*lamu/((1.+delta*rmass/(ame*sqrte))*(ame+rab0*rab2)));
         if(fe < 0.) fe=0.;
 //***
 label10:
@@ -191,16 +191,16 @@ double MuCrossSections::CRK_Mephi(double z,double a,double tkin,double ep)
     double e,epmax,v,sigma0,a1,a3;
 //
     double ame=0.51099907e-3; // GeV
-    double amu=0.105658389; // GeV
+    double lamu=0.105658389; // GeV
     double re=2.81794092e-13; // cm
     double avno=6.022137e23;
     double alpha=1./137.036;
-    double pi=3.141592654;
-    double bmu=amu*amu/(2.*ame);
-    double coeff0=avno*2.*pi*ame*re*re;
-    double coeff1=alpha/(2.*pi);
+    double lpi=3.141592654;
+    double bmu=lamu*lamu/(2.*ame);
+    double coeff0=avno*2.*lpi*ame*re*re;
+    double coeff1=alpha/(2.*lpi);
 //***
-        e=tkin+amu;
+        e=tkin+lamu;
         epmax=e/(1.+bmu/e);
         if(ep >= epmax)
         {
@@ -210,7 +210,7 @@ double MuCrossSections::CRK_Mephi(double z,double a,double tkin,double ep)
         v=ep/e;
         sigma0=coeff0*(z/a)*(1.-ep/epmax+0.5*v*v)/(ep*ep);
         a1=log(1.+2.*ep/ame);
-        a3=log(4.*e*(e-ep)/(amu*amu));
+        a3=log(4.*e*(e-ep)/(lamu*lamu));
         crk_g4=sigma0*(1.+coeff1*a1*(a3-a1));
         return crk_g4;
 }
@@ -232,18 +232,18 @@ double MuCrossSections::CRN_Mephi(double /* z */,double a,double tkin,double ep)
     double crn_g4;
     double e,aeff,sigph,v,v1,v2,amu2,up,down;
 //***
-    double amu=0.105658389; // GeV
+    double lamu=0.105658389; // GeV
     double avno=6.022137e23;
     double amp=0.9382723; // GeV
-    double pi=3.14159265;
+    double lpi=3.14159265;
     double alpha=1./137.036;
 //***
     double epmin_phn=0.20; // GeV
     double alam2=0.400000; // GeV**2
     double alam =0.632456; // sqrt(alam2)
-    double coeffn=alpha/pi*avno*1e-30; // cm^2/microbarn
+    double coeffn=alpha/lpi*avno*1e-30; // cm^2/microbarn
 //***
-        e=tkin+amu;
+        e=tkin+lamu;
         crn_g4=0.;
         if(ep >= e-0.5*amp) return crn_g4;
         if(ep <= epmin_phn) return crn_g4;
@@ -252,7 +252,7 @@ double MuCrossSections::CRN_Mephi(double /* z */,double a,double tkin,double ep)
         v=ep/e;
         v1=1.-v;
         v2=v*v;
-        amu2=amu*amu;
+        amu2=lamu*lamu;
         up=e*e*v1/amu2*(1.+amu2*v2/(alam2*v1));
         down=1.+ep/alam*(1.+alam/(2.*amp)+ep/alam);
         crn_g4=coeffn*aeff/a*sigph/ep*(-v1+(v1+0.5*v2*(1.+2.*amu2/alam2))*log(up/down));
@@ -286,17 +286,17 @@ double MuCrossSections::CRP_Mephi(double z,double a,double tkin,double ep)
     double ale,cre,be,fe,ymu,ymd,ym1,alm_crm,a10,bm,fm;
 //
     double ame=0.51099907e-3; // GeV
-    double amu=0.105658389; // GeV
+    double lamu=0.105658389; // GeV
     double re=2.81794092e-13; // cm
     double avno=6.022137e23;
-    double pi=3.14159265;
+    double lpi=3.14159265;
     double alpha=1./137.036;
-    double rmass=amu/ame; // "207"
-    double coeff=4./(3.*pi)*(alpha*re)*(alpha*re)*avno; // cm^2
+    double rmass=lamu/ame; // "207"
+    double coeff=4./(3.*lpi)*(alpha*re)*(alpha*re)*avno; // cm^2
     double sqrte=1.64872127; // sqrt(2.71828...)
-    double c3=3.*sqrte*amu/4.; // for limits
+    double c3=3.*sqrte*lamu/4.; // for limits
     double c7=4.*ame; // -"-
-    double c8=6.*amu*amu; // -"-
+    double c8=6.*lamu*lamu; // -"-
 
     double xgi[8]={.0199,.1017,.2372,.4083,.5917,.7628,.8983,.9801}; // Gauss, 8
     double wgi[8]={.0506,.1112,.1569,.1813,.1813,.1569,.1112,.0506}; // Gauss, 8
@@ -307,7 +307,7 @@ double MuCrossSections::CRP_Mephi(double z,double a,double tkin,double ep)
     g1h=4.4e-5;
     g2h=4.8e-5;
 
-        e=tkin+amu;
+        e=tkin+lamu;
         z13=pow(z,0.3333333);
         e1=e-ep;
         crp_g4=0.;
@@ -328,10 +328,10 @@ double MuCrossSections::CRP_Mephi(double z,double a,double tkin,double ep)
           g1=g1tf;
           g2=g2tf;
         }
-        zeta1=0.073*log(e/(amu+g1*z13*z13*e))-0.26;
+        zeta1=0.073*log(e/(lamu+g1*z13*z13*e))-0.26;
         if(zeta1 > 0.)
         {
-          zeta2=0.058*log(e/(amu+g2*z13*e))-0.14;
+          zeta2=0.058*log(e/(lamu+g2*z13*e))-0.14;
           zeta=zeta1/zeta2;
         }
         else
