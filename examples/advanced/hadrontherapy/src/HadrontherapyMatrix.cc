@@ -198,10 +198,10 @@ G4bool HadrontherapyMatrix::Fill(G4int trackID,
 		// Initialize data
     if (newIon.dose && newIon.fluence)
     {
-		for(G4int m=0; m<numberOfVoxelAlongX*numberOfVoxelAlongY*numberOfVoxelAlongZ; m++)
+		for(G4int q=0; q<numberOfVoxelAlongX*numberOfVoxelAlongY*numberOfVoxelAlongZ; q++)
 		{
-			newIon.dose[m] = 0.;
-			newIon.fluence[m] = 0;
+			newIon.dose[q] = 0.;
+			newIon.fluence[q] = 0;
 		}
 		if (energyDeposit > 0.) newIon.dose[Index(i, j, k)] += energyDeposit;
 		if (fluence) newIon.fluence[Index(i, j, k)]++;

@@ -77,13 +77,13 @@ HadrontherapyInteractionParameters::~HadrontherapyInteractionParameters()
     delete nistEle; 
 }
 
-G4double HadrontherapyInteractionParameters::GetStopping (G4double energy, 
+G4double HadrontherapyInteractionParameters::GetStopping (G4double ene, 
 	                                                  const G4ParticleDefinition* pDef, 
 						          const G4Material* pMat,
-							  G4double density)
+							  G4double dens)
 {
-    if (density) return ComputeTotalDEDX(energy, pDef, pMat)/density;
-    return ComputeTotalDEDX(energy, pDef, pMat);
+    if (dens) return ComputeTotalDEDX(ene, pDef, pMat)/dens;
+    return ComputeTotalDEDX(ene, pDef, pMat);
 }
 bool HadrontherapyInteractionParameters::GetStoppingTable(const G4String& vararg)
 {
@@ -186,9 +186,9 @@ void HadrontherapyInteractionParameters::PlotStopping(const G4String& filetype)
 #endif
 
 // Search for user material choice inside G4NistManager database
-G4Material* HadrontherapyInteractionParameters::GetNistMaterial(G4String material)
+G4Material* HadrontherapyInteractionParameters::GetNistMaterial(G4String mat)
 {
-    Pmaterial = G4NistManager::Instance()->FindOrBuildMaterial(material);
+    Pmaterial = G4NistManager::Instance()->FindOrBuildMaterial(mat);
     if (Pmaterial) density = Pmaterial -> GetDensity(); 
     return Pmaterial;
 }

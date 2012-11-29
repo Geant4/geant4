@@ -100,7 +100,7 @@ inline bool IsInside(G4double detectorX,
 		     G4double phantomX,
 		     G4double phantomY,
 		     G4double phantomZ,
-		     G4ThreeVector detectorToPhantomPosition)
+		     G4ThreeVector pos)
 {
 // Dimensions check... X Y and Z
 // Firstly check what dimension we are modifying
@@ -110,7 +110,7 @@ inline bool IsInside(G4double detectorX,
 		    G4cout << "Error: Detector X dimension must be smaller or equal to the corrispondent of the phantom" << G4endl;
 		    return false;
 		 }
-	    if ( (phantomX - detectorX) < detectorToPhantomPosition.getX()) 
+	    if ( (phantomX - detectorX) < pos.getX()) 
 	         {
 		    G4cout << "Error: X dimension doesn't fit with detector to phantom relative position" << G4endl;
 		    return false;
@@ -123,7 +123,7 @@ inline bool IsInside(G4double detectorX,
 		    G4cout << "Error: Detector Y dimension must be smaller or equal to the corrispondent of the phantom" << G4endl;
 		    return false;
 		 }
-	    if ( (phantomY - detectorY) < detectorToPhantomPosition.getY()) 
+	    if ( (phantomY - detectorY) < pos.getY()) 
 	     {
 		   G4cout << "Error: Y dimension doesn't fit with detector to phantom relative position" << G4endl;
 		   return false;
@@ -136,7 +136,7 @@ inline bool IsInside(G4double detectorX,
 		    G4cout << "Error: Detector Z dimension must be smaller or equal to the corrispondent of the phantom" << G4endl;
 		    return false;
 		 }
-	    if ( (phantomZ - detectorZ) < detectorToPhantomPosition.getZ()) 
+	    if ( (phantomZ - detectorZ) < pos.getZ()) 
 	     {
 		   G4cout << "Error: Z dimension doesn't fit with detector to phantom relative position" << G4endl;
 		   return false;
