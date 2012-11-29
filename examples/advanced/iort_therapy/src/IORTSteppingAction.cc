@@ -38,6 +38,8 @@
 //   *Corresponding author, email to carlo.casarino@polooncologicocefalu.it
 //////////////////////////////////////////////////////////////////////////////////////////////
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4SteppingManager.hh"
 #include "G4TrackVector.hh"
 #include "IORTSteppingAction.hh"
@@ -51,7 +53,6 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
 #include "G4UserEventAction.hh"  // NOT INCLUDED IN geant4.9.3p01_version
-#include "G4SystemOfUnits.hh"
 
 #include "IORTAnalysisManager.hh"
 
@@ -95,18 +96,18 @@ void IORTSteppingAction::UserSteppingAction(const G4Step* aStep)
 	if(particleType == "nucleus") {
 	    G4int A = def->GetBaryonNumber();
 	    G4double Z = def->GetPDGCharge();
-	    G4double posX = aStep->GetTrack()->GetPosition().x() / cm;
-	    G4double posY = aStep->GetTrack()->GetPosition().y() / cm;
-	    G4double posZ = aStep->GetTrack()->GetPosition().z() / cm;
-	    G4double energy = secondaryParticleKineticEnergy / A / MeV;
+	    G4double posX = aStep->GetTrack()->GetPosition().x() / CLHEP::cm;
+	    G4double posY = aStep->GetTrack()->GetPosition().y() / CLHEP::cm;
+	    G4double posZ = aStep->GetTrack()->GetPosition().z() / CLHEP::cm;
+	    G4double energy = secondaryParticleKineticEnergy / A / CLHEP::MeV;
 
 	    IORTAnalysisManager* analysisMgr =  IORTAnalysisManager::GetInstance();   
 	    analysisMgr->FillFragmentTuple(A, Z, energy, posX, posY, posZ);
 	} else if(particleName == "proton") {   // proton (hydrogen-1) is a special case
-	    G4double posX = aStep->GetTrack()->GetPosition().x() / cm ;
-	    G4double posY = aStep->GetTrack()->GetPosition().y() / cm ;
-	    G4double posZ = aStep->GetTrack()->GetPosition().z() / cm ;
-	    G4double energy = secondaryParticleKineticEnergy * MeV;    // Hydrogen-1: A = 1, Z = 1
+	    G4double posX = aStep->GetTrack()->GetPosition().x() / CLHEP::cm ;
+	    G4double posY = aStep->GetTrack()->GetPosition().y() / CLHEP::cm ;
+	    G4double posZ = aStep->GetTrack()->GetPosition().z() / CLHEP::cm ;
+	    G4double energy = secondaryParticleKineticEnergy * CLHEP::MeV;    // Hydrogen-1: A = 1, Z = 1
 	    IORTAnalysisManager::GetInstance()->FillFragmentTuple(1, 1.0, energy, posX, posY, posZ);
 	}
 
@@ -116,19 +117,19 @@ void IORTSteppingAction::UserSteppingAction(const G4Step* aStep)
 	IORTAnalysisManager* analysis =  IORTAnalysisManager::GetInstance();   
 	//There is a bunch of stuff recorded with the energy 0, something should perhaps be done about this.
 	if(secondaryParticleName == "proton") {
-	    analysis->hydrogenEnergy(secondaryParticleKineticEnergy / MeV);
+	    analysis->hydrogenEnergy(secondaryParticleKineticEnergy / CLHEP::MeV);
 	}
 	if(secondaryParticleName == "deuteron") {
-	    analysis->hydrogenEnergy((secondaryParticleKineticEnergy/2) / MeV);
+	    analysis->hydrogenEnergy((secondaryParticleKineticEnergy/2) / CLHEP::MeV);
 	}
 	if(secondaryParticleName == "triton") {
-	    analysis->hydrogenEnergy((secondaryParticleKineticEnergy/3) / MeV);
+	    analysis->hydrogenEnergy((secondaryParticleKineticEnergy/3) / CLHEP::MeV);
 	}
 	if(secondaryParticleName == "alpha") {
-	    analysis->heliumEnergy((secondaryParticleKineticEnergy/4) / MeV);
+	    analysis->heliumEnergy((secondaryParticleKineticEnergy/4) / CLHEP::MeV);
 	}
 	if(secondaryParticleName == "He3"){
-	    analysis->heliumEnergy((secondaryParticleKineticEnergy/3) / MeV);		
+	    analysis->heliumEnergy((secondaryParticleKineticEnergy/3) / CLHEP::MeV);		
 	}
 #endif
 
@@ -184,19 +185,19 @@ void IORTSteppingAction::UserSteppingAction(const G4Step* aStep)
 	    IORTAnalysisManager* analysis =  IORTAnalysisManager::GetInstance();   
 
 	    if (secondaryParticleName == "e-")
-		analysis -> electronEnergyDistribution(secondaryParticleKineticEnergy/MeV);
+		analysis -> electronEnergyDistribution(secondaryParticleKineticEnergy/CLHEP::MeV);
 
 	    if (secondaryParticleName == "gamma")
-		analysis -> gammaEnergyDistribution(secondaryParticleKineticEnergy/MeV);
+		analysis -> gammaEnergyDistribution(secondaryParticleKineticEnergy/CLHEP::MeV);
 
 	    if (secondaryParticleName == "deuteron")
-		analysis -> deuteronEnergyDistribution(secondaryParticleKineticEnergy/MeV);
+		analysis -> deuteronEnergyDistribution(secondaryParticleKineticEnergy/CLHEP::MeV);
 
 	    if (secondaryParticleName == "triton")
-		analysis -> tritonEnergyDistribution(secondaryParticleKineticEnergy/MeV);
+		analysis -> tritonEnergyDistribution(secondaryParticleKineticEnergy/CLHEP::MeV);
 
 	    if (secondaryParticleName == "alpha")
-		analysis -> alphaEnergyDistribution(secondaryParticleKineticEnergy/MeV);
+		analysis -> alphaEnergyDistribution(secondaryParticleKineticEnergy/CLHEP::MeV);
 
 	    G4double z = (*fSecondary)[lp1]-> GetDynamicParticle() -> GetDefinition() -> GetPDGCharge();
 	    if (z > 0.)
@@ -212,8 +213,3 @@ void IORTSteppingAction::UserSteppingAction(const G4Step* aStep)
 	}
     }
 }
-
-
-
-
-

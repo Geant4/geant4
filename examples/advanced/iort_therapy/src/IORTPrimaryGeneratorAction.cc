@@ -38,11 +38,12 @@
 //   *Corresponding author, email to carlo.casarino@polooncologicocefalu.it
 //////////////////////////////////////////////////////////////////////////////////////////////
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "IORTPrimaryGeneratorAction.hh"
 #include "IORTPrimaryGeneratorMessenger.hh"
 
 #include "globals.hh"
-#include "G4SystemOfUnits.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
@@ -82,10 +83,10 @@ void IORTPrimaryGeneratorAction::SetDefaultPrimaryParticle()
   // Define the energy of primary particles:
   // gaussian distribution with mean energy = 10.0 *MeV   
   // and sigma = 400.0 *keV
-  G4double defaultMeanKineticEnergy = 10.0 *MeV;   
+  G4double defaultMeanKineticEnergy = 10.0 *CLHEP::MeV;   
   meanKineticEnergy = defaultMeanKineticEnergy;
 
-  G4double defaultsigmaEnergy = 100.0 *keV;   
+  G4double defaultsigmaEnergy = 100.0 *CLHEP::keV;   
   sigmaEnergy = defaultsigmaEnergy;
   
 #ifdef G4ANALYSIS_USE_ROOT    
@@ -97,19 +98,19 @@ void IORTPrimaryGeneratorAction::SetDefaultPrimaryParticle()
   // the y, z coordinates have a gaussian distribution
   
   
-  G4double defaultX0 = -862.817 *mm;                 
+  G4double defaultX0 = -862.817 *CLHEP::mm;                 
   X0 = defaultX0;
 
-  G4double defaultY0 = 0.0 *mm;  
+  G4double defaultY0 = 0.0 *CLHEP::mm;  
   Y0 = defaultY0;
 
-  G4double defaultZ0 = 0.0 *mm;  
+  G4double defaultZ0 = 0.0 *CLHEP::mm;  
   Z0 = defaultZ0;
 
-  G4double defaultsigmaY = 1. *mm;  
+  G4double defaultsigmaY = 1. *CLHEP::mm;  
   sigmaY = defaultsigmaY;
 
-  G4double defaultsigmaZ = 1. *mm;  
+  G4double defaultsigmaZ = 1. *CLHEP::mm;  
   sigmaZ = defaultsigmaZ;
 
   // Define the parameters of the momentum of primary particles: 
@@ -123,7 +124,7 @@ void IORTPrimaryGeneratorAction::SetDefaultPrimaryParticle()
   sigmaMomentumZ = defaultsigmaMomentumZ;
 */
 
-  G4double defaultTheta = 6.0 *deg;  
+  G4double defaultTheta = 6.0 *CLHEP::deg;  
   Theta = defaultTheta;
 
 }

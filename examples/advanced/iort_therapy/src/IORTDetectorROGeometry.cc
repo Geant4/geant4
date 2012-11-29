@@ -50,8 +50,7 @@
 #include "G4Material.hh"
 
 /////////////////////////////////////////////////////////////////////////////
-IORTDetectorROGeometry::IORTDetectorROGeometry(G4String aString,
-								 G4ThreeVector detectorToWorldPosition,
+IORTDetectorROGeometry::IORTDetectorROGeometry(G4String aString, G4ThreeVector pos,
 								 G4double detectorDimX,
 								 G4double detectorDimY,
 								 G4double detectorDimZ,
@@ -60,7 +59,7 @@ IORTDetectorROGeometry::IORTDetectorROGeometry(G4String aString,
 								 G4int numberOfVoxelsZ):
    
     G4VReadOutGeometry(aString),
-    detectorToWorldPosition(detectorToWorldPosition),
+    detectorToWorldPosition(pos),
     detectorSizeX(detectorDimX),
     detectorSizeY(detectorDimY),
     detectorSizeZ(detectorDimZ),
