@@ -541,7 +541,7 @@ G4Material   *LensMaterial        = G4Material::GetMaterial(name = "Acrylic") ;
 G4ThreeVector LensPosition        = UVscopePosition+G4ThreeVector(0.0*mm,0.0*mm,UVscopeHeight/2.0-UVscopeBaffle) ;
 
 
-UltraFresnelLens *FresnelLens = new UltraFresnelLens(LensDiameter,LensNumOfGrooves,LensMaterial,World_phys,LensPosition) ;
+FresnelLens = new UltraFresnelLens(LensDiameter,LensNumOfGrooves,LensMaterial,World_phys,LensPosition) ;
 
 
 ///////////////////////////////////
