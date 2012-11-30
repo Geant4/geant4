@@ -355,7 +355,7 @@ examples                                         examples-V09-06-00
   o Fixed syntax in CMakeLists.txt.
 - advanced/lAr_calorimeter (lAr_calorimeter-V09-05-03)
   o Added icons.mac. Fix in CMake scripts and gui.mac.
-- advanced/medical_linac (medical_linac-V09-05-10)
+- advanced/medical_linac (medical_linac-V09-05-11)
   o Fixed cases of variable shadowing.
   o Cleared unnecessary calls to this->.
 - advanced/microbeam (microbeam-V09-05-07)
