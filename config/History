@@ -16,6 +16,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27th November 2012 Gabriele Cosmo (config-V09-05-14)
+- Added -Wno-variadic-macros -Wshadow compilation options to
+  Darwin-g++.gmk and Darwin-clang.gmk.
+
+19th October 2012 Gabriele Cosmo (config-V09-05-13)
+- Added -Wshadow compilation option to Linux-g++.gmk.
+
 4th October 2012 Gabriele Cosmo (config-V09-05-12, config-V09-05-11)
 - binmake.gmk: replaced "photolepton_hadron" module with "lepto_nuclear".
 - Cowork with tag "hadr-V09-05-00".
