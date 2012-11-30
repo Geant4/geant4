@@ -224,7 +224,6 @@ void CML2PrimaryGenerationAction::fillParticlesContainer()
 	int i;
 	G4double x,y,z;
 	G4int d;
-	G4String s;
 
 	static bool checkFileRewind=false;
 	static bool bRewindTheFile=false;
