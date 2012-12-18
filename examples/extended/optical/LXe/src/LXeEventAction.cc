@@ -97,7 +97,7 @@ void LXeEventAction::EndOfEventAction(const G4Event* anEvent){
         trj->SetForceDrawTrajectory(fForcedrawphotons);
         trj->SetForceNoDrawTrajectory(fForcenophotons);
       }
-      trj->DrawTrajectory(50);
+      trj->DrawTrajectory();
     }
   }
  
