@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Dec 10th 2012 Alberto Ribon  (test19-V09-06-00)
+-  Removed the CHIPS test: the slot is now available.
+
 Oct 9th 2012 Gabriele Cosmo  (test19-V09-05-02)
 - Explicit inclusion of units and constants headers.
 
