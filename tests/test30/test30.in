@@ -42,4 +42,7 @@ bertini
 #generator
 chips
 #run
+#generator
+incl
+#run
 #exit
