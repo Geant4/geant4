@@ -101,12 +101,6 @@ GEANT4_ADD_TEST(example-nov-n04
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/novice/N04
                 BUILD exampleN04 PROJECT N04
                 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
-GEANT4_ADD_TEST(example-nov-n05 
-                COMMAND ${CMAKE_BINARY_DIR}/examples/novice/N05/exampleN05 
-                        ${CMAKE_SOURCE_DIR}/examples/novice/N05/exampleN05.in
-                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/novice/N05
-                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/novice/N05
-                BUILD exampleN05 PROJECT N05 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-nov-n06 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/novice/N06/exampleN06 
                         ${CMAKE_SOURCE_DIR}/examples/novice/N06/exampleN06.in
@@ -312,6 +306,12 @@ GEANT4_ADD_TEST(example-ext-parameterisations-gflash
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/parameterisations/gflash
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/parameterisations/gflash
                 BUILD ExGflash PROJECT gflash ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+GEANT4_ADD_TEST(example-ext-parameterisations-par01 
+                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/parameterisations/Par01/examplePar01 
+                        ${CMAKE_SOURCE_DIR}/examples/extended/parameterisations/Par01/examplePar01.in
+                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/parameterisations/Par01
+                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/parameterisations/Par01
+                BUILD examplePar01 PROJECT Par01 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 if(GEANT4_USE_GDML)
   GEANT4_ADD_TEST(example-ext-persistency-gdml-g01 
                   PRECMD  ${CMAKE_COMMAND} -E remove -f g01.gdml

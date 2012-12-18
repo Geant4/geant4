@@ -1,4 +1,4 @@
-$Id: History,v 1.122 2010-10-29 13:21:59 gcosmo Exp $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ctests-V09-06-01 14th December 2012 Ivana Hrivnacova
+- Fixed SOURCE_DIR and BINARY_DIR in added test
+  (example-ext-parameterisations-par01)
+
+ctests-V09-06-00 13th December 2012 Ivana Hrivnacova
+- Updated test for moving novice/N05 in extended/parameterisations/Par01
+
 ctests-V09-05-38 8th November 2012 Pere Mato
 - Fixed typo in the definition of test example-ext-exoticphysics-phonons
 

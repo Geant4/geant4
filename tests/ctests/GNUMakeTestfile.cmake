@@ -143,8 +143,6 @@ GEANT4_ADD_TEST(example-nov-n03 COMMAND ${BINDIR}/exampleN03 ${SRCDIR}/novice/N0
                                 BUILD ${SRCDIR}/novice/N03)
 GEANT4_ADD_TEST(example-nov-n04 COMMAND ${BINDIR}/exampleN04 ${SRCDIR}/novice/N04/exampleN04.in
                                 BUILD ${SRCDIR}/novice/N04)
-GEANT4_ADD_TEST(example-nov-n05 COMMAND ${BINDIR}/exampleN05 ${SRCDIR}/novice/N05/exampleN05.in
-                                BUILD ${SRCDIR}/novice/N05)
 GEANT4_ADD_TEST(example-nov-n06 COMMAND ${BINDIR}/exampleN06 ${SRCDIR}/novice/N06/exampleN06.in
                                 BUILD ${SRCDIR}/novice/N06)
 GEANT4_ADD_TEST(example-nov-n07 COMMAND ${BINDIR}/exampleN07 ${SRCDIR}/novice/N07/exampleN07.in
@@ -257,6 +255,8 @@ GEANT4_ADD_TEST(example-ext-optical-wls
 GEANT4_ADD_TEST(example-ext-parameterisations-gflash 
                 COMMAND ${BINDIR}/ExGflash ${SRCDIR}/extended/parameterisations/gflash/test.mac
                 BUILD ${SRCDIR}/extended/parameterisations/gflash)
+GEANT4_ADD_TEST(example-ext-parameterisations-par01 COMMAND ${BINDIR}/examplePar01 ${SRCDIR}/extended/parameterisations/Par01/examplePar01.in
+                BUILD ${SRCDIR}/extended/parameterisations/Par01)
 #if(GEANT4_USE_GDML)
 #  GEANT4_ADD_TEST(example-ext-persistency-gdml-g01 
 #                  PRECMD  ${CMAKE_COMMAND} -E remove -f g01.gdml
