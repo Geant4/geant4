@@ -1,2 +1,0 @@
-p_Tkin_400_GeV_Ta181_data_prc80.root
-p_Pmom_400929_MeV_Ta181_qgsp_g493p5.root
