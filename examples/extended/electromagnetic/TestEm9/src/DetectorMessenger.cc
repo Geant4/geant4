@@ -27,7 +27,8 @@
 /// \brief Implementation of the DetectorMessenger class
 //
 //
-// $Id$
+// $Id: DetectorMessenger.cc,v 1.3 2006-06-29 17:03:01 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 /////////////////////////////////////////////////////////////////////////
