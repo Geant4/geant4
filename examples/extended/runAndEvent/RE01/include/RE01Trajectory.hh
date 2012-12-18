@@ -58,7 +58,7 @@ public:
   virtual ~RE01Trajectory();
 
   virtual void ShowTrajectory(std::ostream& os=G4cout) const;
-  virtual void DrawTrajectory(G4int i_mode =0) const;
+  virtual void DrawTrajectory() const;
   virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
   virtual std::vector<G4AttValue>* CreateAttValues() const;
   virtual void AppendStep(const G4Step* aStep);

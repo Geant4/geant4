@@ -123,7 +123,7 @@ void RE01Trajectory::ShowTrajectory(std::ostream& os) const
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
-void RE01Trajectory::DrawTrajectory(G4int /*i_mode*/) const
+void RE01Trajectory::DrawTrajectory() const
 {
 
    G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();

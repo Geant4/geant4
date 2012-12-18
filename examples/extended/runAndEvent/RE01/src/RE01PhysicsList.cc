@@ -35,7 +35,7 @@
 #include "G4EmStandardPhysics.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4IonPhysics.hh"
-#include "G4QStoppingPhysics.hh"
+#include "G4StoppingPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 
@@ -71,7 +71,7 @@ RE01PhysicsList::RE01PhysicsList():  G4VModularPhysicsList()
   RegisterPhysics( new HadronPhysicsQGSP_BERT(ver));
 
   // Stopping Physics
-  RegisterPhysics( new G4QStoppingPhysics(ver) );
+  RegisterPhysics( new G4StoppingPhysics(ver) );
 
   // Ion Physics
   RegisterPhysics( new G4IonPhysics(ver));
