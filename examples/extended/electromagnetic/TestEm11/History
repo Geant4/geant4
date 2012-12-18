@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11-12-12 V.Ivant (testem11-V09-06-00)
+- PhysListEmStandard: use SetEmModel method
      
 20-10-12 mma (testem11-V09-05-07)
 - PhysListEmStandard: use G4UrbanMsc96 

@@ -26,7 +26,8 @@
 /// \file electromagnetic/TestEm11/include/StepMax.hh
 /// \brief Definition of the StepMax class
 //
-// $Id$
+// $Id: StepMax.hh,v 1.3 2006-06-29 16:39:57 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
