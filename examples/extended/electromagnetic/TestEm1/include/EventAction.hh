@@ -27,7 +27,8 @@
 /// \brief Definition of the EventAction class
 //
 //
-// $Id$
+// $Id: EventAction.hh,v 1.3 2006-06-29 16:36:10 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 

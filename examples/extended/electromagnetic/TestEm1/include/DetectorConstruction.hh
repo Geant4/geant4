@@ -27,7 +27,8 @@
 /// \brief Definition of the DetectorConstruction class
 //
 //
-// $Id$
+// $Id: DetectorConstruction.hh,v 1.2 2006-06-29 16:36:04 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 

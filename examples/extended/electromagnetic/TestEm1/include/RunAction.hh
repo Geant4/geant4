@@ -26,7 +26,8 @@
 /// \file electromagnetic/TestEm1/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //
-// $Id$
+// $Id: RunAction.hh,v 1.9 2010-04-06 11:11:24 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -26,7 +26,8 @@
 /// \file electromagnetic/TestEm1/include/PhysListEmStandardSS.hh
 /// \brief Definition of the PhysListEmStandardSS class
 //
-// $Id$
+// $Id: PhysListEmStandardSS.hh,v 1.1 2006-08-10 08:45:14 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
