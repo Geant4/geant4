@@ -55,9 +55,6 @@ class G4VSampler;
 //class G4GeometrySampler;
 class G4VIStore;
 class G4VWeightWindowStore;
-class G4CellStoreScorer;
-class G4CellScorer;
-class G4CellScorerStore;
 class G4UserRunAction;
 class Tst33VEventAction;
 class G4ProcessPlacer;
@@ -109,9 +106,6 @@ private:
   Tst33DetectorConstruction *fDetectorConstruction;
   G4VSampler *fSampler;
   //  G4GeometrySampler *fSampler;
-  G4CellStoreScorer *fScorer;
-  G4CellScorerStore *fScorerStore;
-  const G4CellScorer *fCell_19_Scorer;
   G4VIStore *fIStore;
   G4VWeightWindowStore *fWWStore;
   Tst33VEventAction *fEventAction;
@@ -128,6 +122,8 @@ private:
   G4bool parallel_geometry;
 
   G4bool forceCoupled;
+
+  G4bool f_created_scorer;
 
 };
 

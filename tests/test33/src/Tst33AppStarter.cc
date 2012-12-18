@@ -45,8 +45,6 @@
 #include "Tst33SlobedConcreteShield.hh"
 #include "Tst33ConcreteShield.hh"
 #include "Tst33ParallelGeometry.hh"
-#include "G4CellScorerStore.hh"
-//#include "G4CellStoreScorer.hh"
 #include "Tst33IStoreBuilder.hh"
 #include "Tst33WeightWindowStoreBuilder.hh"
 #include "Tst33ScorerBuilder.hh"
@@ -55,9 +53,6 @@
 #include "Tst33VisEventAction.hh"
 #include "Tst33TimedEventAction.hh"
 #include "G4VIStore.hh"
-#include "G4CellScorer.hh"
-//#include "G4ScoreTable.hh"
-#include "Tst33ScoreTable.hh"
 #include "Tst33TimedApplication.hh"
 #include "Tst33VisApplication.hh"
 #include "G4ProcessPlacer.hh"
@@ -66,13 +61,6 @@
 #include "G4WeightWindowAlgorithm.hh"
 #include "G4VWeightWindowStore.hh"
 
-// customized scorer and store
-#include "Tst33CellScorer.hh"
-#include "Tst33CellScorerStore.hh"
-
-// a score table
-//#include "G4ScoreTable.hh"
-#include "Tst33ScoreTable.hh"
 
 
 
@@ -85,9 +73,6 @@ Tst33AppStarter::Tst33AppStarter()
   fApp(0),
   fDetectorConstruction((new Tst33DetectorConstruction)),
   fSampler(0),
-  fScorer(0),
-  fScorerStore(0),  
-  fCell_19_Scorer(0),
   fIStore(0),
   fWWStore(0),
   fConfigured(false),
@@ -97,7 +82,9 @@ Tst33AppStarter::Tst33AppStarter()
   fWeightChangeProcess(0),
   fWWAlg(0),
   parallel_geometry(false),
-  forceCoupled(false)
+  forceCoupled(false),
+  f_created_scorer(false)
+
 {
   if (!fDetectorConstruction) {
     NewFailed("Tst33AppStarter", "Tst33DetectorConstruction");
@@ -208,30 +195,25 @@ G4bool Tst33AppStarter::IsGeo_n_App(){
 }
 
 G4bool Tst33AppStarter::CheckCreateScorer() {
-  G4bool createscorer = true;
+  static G4bool createscorer = true;
   if (!IsGeo_n_App()) {
     G4cout << "Tst33AppStarter::CheckCreateScorer: !IsGeo_n_App()!" << G4endl;
     createscorer = false;
   }
-  if (fScorer) {
-    G4cout << "Tst33AppStarter::CheckCreateScorer: scorer already exists!" << G4endl;
-    createscorer = false;
-  }
-  if (fScorerStore) {
-    G4cout << "Tst33AppStarter::CheckCreateScorer: scorer already exists!" << G4endl;
-    createscorer = false;
-  }
+
+  if(f_created_scorer) createscorer = false;
+  
   return createscorer;
 }
 
 void Tst33AppStarter::CreateScorer() {
   // create a customized cell scorer store
-  Tst33CellScorerStore tst33store;
+  //  Tst33CellScorerStore tst33store;
 
   if (CheckCreateScorer()) { 
     Tst33ScorerBuilder sb;
-    fScorerStore = sb.CreateScorer(fSampleGeometry,
- 				   &fCell_19_Scorer);
+    sb.CreateScorer(fSampleGeometry);
+    f_created_scorer = true;
 //     fScorer = new G4CellStoreScorer(*fScorerStore);
 //     if (!fScorer) {
 //       NewFailed("CreateScorer","G4CellStoreScorer");
@@ -244,8 +226,6 @@ void Tst33AppStarter::CreateScorer() {
 void Tst33AppStarter::DeleteScorers() {
   //  delete fScorer;
   //  fScorer = 0;
-  fScorerStore->DeleteAllScorers();
-  fCell_19_Scorer = 0;
 }
 
 G4bool Tst33AppStarter::CheckCreateIStore() {
@@ -427,9 +407,6 @@ void Tst33AppStarter::ClearSampling() {
   }
   else {
     fSampler->ClearSampling();
-    if (fScorer) {
-       DeleteScorers();
-    }
     if (fIStore) {
       delete fIStore;
       fIStore = 0;
@@ -492,12 +469,6 @@ void Tst33AppStarter::Run(G4int nevents) {
 
 void Tst33AppStarter::PostRun() {
   if (fConfigured) {
-    if (fScorerStore) {
-      //      G4ScoreTable sp(fIStore);
-      //      B02ScoreTable sp(&aIstore);
-      //xtest      Tst33ScoreTable sp(fIStore);
-      //xtest      sp.Print(fScorerStore->GetMapGeometryCellCellScorer(), &G4cout);
-    }
   }
   else {
     G4cout << "Tst33AppStarter::PostRun: not configured!" << G4endl;

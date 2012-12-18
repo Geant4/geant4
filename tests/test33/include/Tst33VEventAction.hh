@@ -45,14 +45,14 @@
 #include "globals.hh"
 
 
-class G4CellScorer;
+//Alex 17/12/12 class G4CellScorer;
 
 class Tst33VEventAction : public G4UserEventAction
 {
 public:
   Tst33VEventAction();
   virtual ~Tst33VEventAction();
-  virtual void SpecialCellScorer(const G4CellScorer *scorer) = 0;
+  //Alex 17/12/12  virtual void SpecialCellScorer(const G4CellScorer *scorer) = 0;
   virtual void Clear() = 0;
 };
 

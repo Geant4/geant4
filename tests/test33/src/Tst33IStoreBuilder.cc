@@ -35,7 +35,7 @@
 // ----------------------------------------------------------------------
 
 #include "Tst33IStoreBuilder.hh"
-#include "Tst33CellScorerStore.hh"
+//#include "Tst33CellScorerStore.hh"
 #include "G4IStore.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4GeometryCell.hh"
@@ -52,7 +52,7 @@ G4VIStore *Tst33IStoreBuilder::CreateIStore(Tst33VGeometry *samplegeo) {
   // create an importance store and fill it with the importance
   // per cell values
 
-  Tst33CellScorerStore tst33store;
+  //  Tst33CellScorerStore tst33store;
 
   const G4VPhysicalVolume &pworld = samplegeo->GetWorldVolumeAddress();
   G4IStore *istore=0;
@@ -65,7 +65,7 @@ G4VIStore *Tst33IStoreBuilder::CreateIStore(Tst33VGeometry *samplegeo) {
   G4GeometryCell gWorldCell(pworld, 0);
   istore->AddImportanceGeometryCell(1, gWorldCell);
 
-  tst33store.AddG4CellScorer(gWorldCell);
+  //  tst33store.AddG4CellScorer(gWorldCell);
   
   G4int i=1;
   for (i=1; i <= 19; ++i) {
@@ -82,7 +82,7 @@ G4VIStore *Tst33IStoreBuilder::CreateIStore(Tst33VGeometry *samplegeo) {
 //       istore->AddImportanceGeometryCell(imp, gCellPlus);
       istore->AddImportanceGeometryCell(imp, gCellMinus.GetPhysicalVolume(), i); //ASO - change overloading of AddImportanceGeometryCell?
       istore->AddImportanceGeometryCell(imp, gCellPlus.GetPhysicalVolume(), i); //ASO
-      tst33store.AddG4CellScorer(gCell);
+      //      tst33store.AddG4CellScorer(gCell);
     }
     //    istore->AddImportanceGeometryCell(imp, gCell);
     istore->AddImportanceGeometryCell(imp, gCell.GetPhysicalVolume(), i);

@@ -41,12 +41,11 @@
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
 
-#include "G4CellScorer.hh"
 #include "G4RunManager.hh"
 
 Tst33TimedEventAction::Tst33TimedEventAction(G4int time)
   :
-  fCScorer(0),
+  //Alex  fCScorer(0),
   fProcessTime(0.),
   fMaxRunTime(time),
   fOld_lwe(0)
@@ -60,13 +59,15 @@ Tst33TimedEventAction::~Tst33TimedEventAction()
 }
 
 void Tst33TimedEventAction::Clear() {
-  fCScorer = 0;
+  //Alex  fCScorer = 0;
 }
-void Tst33TimedEventAction::SpecialCellScorer(const G4CellScorer *scorer){
-  fCScorer = scorer;
-  fSig.Init();
-  fOld_lwe = 0;
-}
+
+// Temporary remove until figured out test, Alex Howard 17/12/12:
+// void Tst33TimedEventAction::SpecialCellScorer(const G4CellScorer *scorer){
+//   fCScorer = scorer;
+//   fSig.Init();
+//   fOld_lwe = 0;
+// }
 
 
 void Tst33TimedEventAction::BeginOfEventAction(const G4Event*)
@@ -80,16 +81,17 @@ void Tst33TimedEventAction::EndOfEventAction(const G4Event*)
   fTimer.Stop();
 
   fProcessTime += fTimer.GetUserElapsed()*100;
-  if (fCScorer) {
-    G4CellScoreValues v=fCScorer->GetCellScoreValues();
-    G4double lwe(v.fSumSLWE);
-    G4double lwediff(lwe - fOld_lwe); // energy weighted step length 
-                                      // in the last event
-    fOld_lwe = lwe;
+  // Alex 17/12/12: Temporarily remove until can figure it out:
+//   if (fCScorer) {
+//     G4CellScoreValues v=fCScorer->GetCellScoreValues();
+//     G4double lwe(v.fSumSLWE);
+//     G4double lwediff(lwe - fOld_lwe); // energy weighted step length 
+//                                       // in the last event
+//     fOld_lwe = lwe;
 
-    fSig.Xin(lwediff);
+//     fSig.Xin(lwediff);
 
-  }
+//   }
   if (fProcessTime >= fMaxRunTime) {
     G4RunManager::GetRunManager()->AbortRun();
     G4cout << "Tst33TimedEventAction::EndOfEventAction: aborted after"

@@ -71,9 +71,10 @@ void Tst33VisEventAction::Clear() {
 }
 
 
-void Tst33VisEventAction::SpecialCellScorer(const G4CellScorer *){
-  G4cout << "Tst33VisEventAction::SpecialCellScorer: no action taken!" << G4endl;
-}
+//Alex 17/12/12 Temporary commit until I can figure it out:
+// void Tst33VisEventAction::SpecialCellScorer(const G4CellScorer *){
+//   G4cout << "Tst33VisEventAction::SpecialCellScorer: no action taken!" << G4endl;
+// }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

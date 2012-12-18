@@ -49,7 +49,7 @@
 #include "Tst33VEventAction.hh"
 #include "Tst33Sigma.hh"
 
-class G4CellScorer;
+//Alex class G4CellScorer;
 
 class Tst33TimedEventAction : public Tst33VEventAction
 {
@@ -60,7 +60,7 @@ public:
 public:
   virtual void BeginOfEventAction(const G4Event*);
   virtual void EndOfEventAction(const G4Event*);
-  virtual void SpecialCellScorer(const G4CellScorer *scorer);
+  //Alex  virtual void SpecialCellScorer(const G4CellScorer *scorer);
   virtual void Clear();
 
 private:
@@ -70,7 +70,7 @@ private:
 
 private:
   G4Timer fTimer;
-  const G4CellScorer *fCScorer;
+  //Alex  const G4CellScorer *fCScorer;
   G4double fProcessTime;
   std::ofstream fOut;
   G4double fMaxRunTime;

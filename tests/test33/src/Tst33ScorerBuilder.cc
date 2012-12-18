@@ -35,8 +35,6 @@
 // ----------------------------------------------------------------------
 
 #include "Tst33ScorerBuilder.hh"
-#include "G4CellScorerStore.hh"
-#include "G4CellScorer.hh"
 #include "Tst33VGeometry.hh"
 
 //ASO
@@ -57,9 +55,8 @@ Tst33ScorerBuilder::~Tst33ScorerBuilder()
 {}
 
 
-G4CellScorerStore *Tst33ScorerBuilder::
-CreateScorer(Tst33VGeometry *samplegeo, 
-	     const G4CellScorer **specialCellScorer){
+void Tst33ScorerBuilder::
+CreateScorer(Tst33VGeometry *samplegeo){
 
 
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
@@ -83,24 +80,12 @@ CreateScorer(Tst33VGeometry *samplegeo,
 
   G4GeometryCell gWorldCell(samplegeo->GetWorldVolumeAddress(), -1);
   
-  G4CellScorerStore *cs_store = new G4CellScorerStore();
-  if (!cs_store) {
-    G4Exception("Tst33ScorerBuilder::CreateScorer()",
-        "TST33-08", FatalException, " new failed to create G4CellScorerStore!");
-  }
-  cs_store->AddCellScorer(gWorldCell);
-  
   
   G4int i = 1;
   for (i=1; i <= 19; i++) {
     G4GeometryCell gCell(samplegeo->GetGeometryCell(i, ""));
     //xtest    gCell.GetPhysicalVolume().GetLogicalVolume()->SetSensitiveDetector(MFDet2);
 
-    const G4CellScorer *s = cs_store->AddCellScorer(gCell);
-
-    if (i==18) {
-      *specialCellScorer = s; // ????
-    }
     if (i!=19) {
       G4GeometryCell gCellMinus(samplegeo->GetGeometryCell(i, "I1-"));
       gCellMinus.GetPhysicalVolume().GetLogicalVolume()->SetSensitiveDetector(MFDetMinus);
@@ -222,5 +207,4 @@ CreateScorer(Tst33VGeometry *samplegeo,
 
 
 
-  return cs_store;
 }

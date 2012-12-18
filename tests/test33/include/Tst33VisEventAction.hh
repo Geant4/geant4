@@ -54,7 +54,7 @@ public:
 
   virtual void   BeginOfEventAction(const G4Event*);
   virtual void   EndOfEventAction(const G4Event*);
-  virtual void SpecialCellScorer(const G4CellScorer *scorer);
+  //Alex 17/12/12  virtual void SpecialCellScorer(const G4CellScorer *scorer);
   virtual void Clear();
   void DrawTrajectory(G4Trajectory &trj) const;
   
