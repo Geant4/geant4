@@ -48,7 +48,6 @@
 #include "G4NeutronInelasticProcess.hh"
 #include "G4VKaonBuilder.hh"
 
-#include "G4QHadronInelasticDataSet.hh"
 #include "G4CascadeInterface.hh"   
 
 class G4BertiniKaonBuilder : public G4VKaonBuilder
@@ -68,7 +67,10 @@ class G4BertiniKaonBuilder : public G4VKaonBuilder
     void SetMaxEnergy(G4double aM) {theMax = aM;}
 
   private:
-    G4QHadronInelasticDataSet * theKaonData;
+    G4VCrossSectionDataSet * ChipsKaonMinus;
+    G4VCrossSectionDataSet * ChipsKaonPlus;
+    G4VCrossSectionDataSet * ChipsKaonZero;
+
     G4CascadeInterface * theModel;    
     G4double theMin;
     G4double theMax;

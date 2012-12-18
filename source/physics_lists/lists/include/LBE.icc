@@ -64,6 +64,8 @@
 #include "G4DataQuestionaire.hh"
 #include "G4WarnPLStatus.hh"
 
+// Builder for all stopping processes
+#include "G4StoppingPhysics.hh"
 
 // Constructor /////////////////////////////////////////////////////////////
 template<class T> TLBE<T>::TLBE() : G4VUserPhysicsList() 
@@ -79,6 +81,8 @@ template<class T> TLBE<T>::TLBE() : G4VUserPhysicsList()
   cutForProton        = this->defaultCutValue;
   cutForAlpha         = 1.0*CLHEP::nanometer;
   cutForGenericIon    = 1.0*CLHEP::nanometer;
+
+  stoppingPhysics = new G4StoppingPhysics;
 
   VerboseLevel = 1;
   OpVerbLevel = 0;
@@ -107,7 +111,7 @@ template<class T> TLBE<T>::~TLBE()
   ConstructMyBaryons();
   ConstructMyIons();
   ConstructMyShortLiveds();
-
+  stoppingPhysics->ConstructParticle();	// Anything not included above
 }
 
 
@@ -123,7 +127,6 @@ template<class T> TLBE<T>::~TLBE()
 
   //OpticalPhotons
   G4OpticalPhoton::OpticalPhotonDefinition();
-
 }
 
 
@@ -189,17 +192,11 @@ template<class T> TLBE<T>::~TLBE()
 // Construct Processes //////////////////////////////////////////////////////
  template<class T> void TLBE<T>::ConstructProcess() 
 {
-
   AddTransportation();
-
   ConstructEM();
-
   ConstructOp();
-
   ConstructHad();
-
   ConstructGeneral();
-
 }
 
 
@@ -575,13 +572,6 @@ template<class T> TLBE<T>::~TLBE()
 #include "G4NeutronHPInelasticData.hh"
 #include "G4LCapture.hh"
 
-// Stopping processes
-#include "G4PiMinusAbsorptionAtRest.hh"
-#include "G4KaonMinusAbsorptionAtRest.hh"
-#include "G4AntiProtonAnnihilationAtRest.hh"
-#include "G4AntiNeutronAnnihilationAtRest.hh"
-
-
 // ConstructHad()
 // Makes discrete physics processes for the hadrons, at present limited
 // to those particles with GHEISHA interactions (INTRC > 0).
@@ -627,7 +617,6 @@ template<class T> TLBE<T>::~TLBE()
 	  theInelasticProcess->RegisterMe(theHEInelasticModel);
 	  pmanager->AddDiscreteProcess(theInelasticProcess);
 	  G4String prcNam;
-	  pmanager->AddRestProcess(new G4PiMinusAbsorptionAtRest, ordDefault);
 	}
       
       else if (particleName == "kaon+") 
@@ -684,7 +673,6 @@ template<class T> TLBE<T>::~TLBE()
 	    new G4HEKaonMinusInelastic;
 	  theInelasticProcess->RegisterMe(theHEInelasticModel);
 	  pmanager->AddDiscreteProcess(theInelasticProcess);
-	  pmanager->AddRestProcess(new G4KaonMinusAbsorptionAtRest, ordDefault);
 	}
 
       else if (particleName == "proton") 
@@ -798,8 +786,10 @@ template<class T> TLBE<T>::~TLBE()
 	  theInelasticProcess->RegisterMe(theLEInelasticModel);
 	  pmanager->AddDiscreteProcess(theInelasticProcess);
 	}
+    }	// while ((*(this->theParticleIterator))()) 
 
-    }
+  // Add stopping processes with builder
+  stoppingPhysics->ConstructProcess();
 }
 
 

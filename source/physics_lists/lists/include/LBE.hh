@@ -53,6 +53,8 @@
 #include "CompileTimeConstraints.hh"
 #include "G4VModularPhysicsList.hh"
 
+class G4StoppingPhysics;	// This builder encapsulate stopping processes
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 template<class T>
@@ -105,6 +107,8 @@ private:
   G4double cutForProton;
   G4double cutForAlpha;
   G4double cutForGenericIon;
+
+  G4StoppingPhysics* stoppingPhysics;
 
   // these methods Construct particles 
   void ConstructMyBosons();

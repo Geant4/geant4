@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4HadronInelasticQBBC.cc,v 1.29 2010-11-19 19:50:15 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -52,9 +53,6 @@
 #include "G4NeutronInelasticXS.hh"
 #include "G4NeutronCaptureXS.hh"
 
-#include "G4QInelastic.hh"
-#include "G4HadronicProcessStore.hh"
-
 #include "G4CrossSectionInelastic.hh"
 #include "G4ProtonInelasticCrossSection.hh"
 #include "G4NeutronInelasticCrossSection.hh"
@@ -74,7 +72,6 @@
 
 #include "G4CascadeInterface.hh"
 #include "G4BinaryCascade.hh"
-#include "G4LCapture.hh"
 #include "G4NeutronRadCapture.hh"
 
 #include "G4PreCompoundModel.hh"
@@ -148,10 +145,6 @@ void G4HadronInelasticQBBC::ConstructProcess()
   //G4cout << "G4HadronInelasticQBBC::ConstructProcess new Binary"<< G4endl;
   G4BinaryCascade* bic = new G4BinaryCascade(thePreCompound);
   G4HadronicInteraction* theBIC = NewModel(bic,0.0,1.5*GeV);
-
-  G4QInelastic* theCHIPS = new G4QInelastic();
-  G4HadronicProcessStore* store = G4HadronicProcessStore::Instance();
-  store->RegisterExtraProcess(theCHIPS);
 
   // cross sections
   theAntiNuclXS = new G4ComponentAntiNuclNuclearXS();
@@ -249,8 +242,6 @@ void G4HadronInelasticQBBC::ConstructProcess()
       hp->RegisterMe(theFTFP2);
       hp->AddDataSet(anucxs);
 
-      //pmanager->AddDiscreteProcess(theCHIPS);
-      //store->RegisterParticleForExtraProcess(theCHIPS,particle);
     } 
   }
 }

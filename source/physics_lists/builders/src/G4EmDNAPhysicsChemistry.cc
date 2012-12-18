@@ -478,10 +478,10 @@ void G4EmDNAPhysicsChemistry::ConstructProcess()
             G4DNAElastic* theDNAElasticProcess = new G4DNAElastic("e-_G4DNAElastic");
             G4DNAChampionElasticModel * championElasticModel = new G4DNAChampionElasticModel();
             championElasticModel->SetKillBelowThreshold(0.*eV);
-            theDNAElasticProcess->SetModel(championElasticModel);
+            theDNAElasticProcess->SetEmModel(championElasticModel);
 
             // or alternative model
-            //theDNAElasticProcess->SetModel(new G4DNAScreenedRutherfordElasticModel());
+            //theDNAElasticProcess->SetEmModel(new G4DNAScreenedRutherfordElasticModel());
 
             ph->RegisterProcess(theDNAElasticProcess, particle);
 
@@ -494,7 +494,7 @@ void G4EmDNAPhysicsChemistry::ConstructProcess()
             // *** Vibrational excitation ***
             G4DNAVibExcitation* vibExcitation = new G4DNAVibExcitation("e-_G4DNAVibExcitation");
             G4DNASancheExcitationModel* sancheExcitationMod = new G4DNASancheExcitationModel;
-            vibExcitation -> SetModel(sancheExcitationMod);
+            vibExcitation -> SetEmModel(sancheExcitationMod);
             sancheExcitationMod->ExtendLowEnergyLimit(0.025*eV);
             ph->RegisterProcess(vibExcitation, particle);
 

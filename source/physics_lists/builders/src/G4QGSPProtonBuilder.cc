@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4QGSPProtonBuilder.cc,v 1.8 2010-11-18 14:52:22 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -47,7 +48,7 @@
 #include "G4BGGNucleonInelasticXS.hh"
 
 G4QGSPProtonBuilder::
-G4QGSPProtonBuilder(G4bool quasiElastic, G4bool projectileDiffraction) 
+G4QGSPProtonBuilder(G4bool quasiElastic) 
  {
    theMin = 12*GeV;
    theModel = new G4TheoFSGenerator("QGSP");
@@ -68,12 +69,6 @@ G4QGSPProtonBuilder(G4bool quasiElastic, G4bool projectileDiffraction)
       theModel->SetQuasiElasticChannel(theQuasiElastic);
    } else 
    {  theQuasiElastic=0;}  
-   if ( projectileDiffraction )
-   {
-      theProjectileDiffraction=new G4ProjectileDiffractiveChannel;
-      theModel->SetProjectileDiffraction(theProjectileDiffraction);
-   } else 
-   {  theProjectileDiffraction=0;}
  }
 
 void G4QGSPProtonBuilder::
@@ -95,7 +90,6 @@ G4QGSPProtonBuilder::~G4QGSPProtonBuilder()
    delete thePreEquilib;
    delete theCascade;
    if ( theQuasiElastic ) delete theQuasiElastic;
-   if ( theProjectileDiffraction ) delete theProjectileDiffraction;
    delete theStringDecay;
    delete theStringModel;
    delete theModel;

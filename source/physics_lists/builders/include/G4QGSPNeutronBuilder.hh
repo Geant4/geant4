@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4QGSPNeutronBuilder.hh,v 1.5 2010-06-15 11:03:35 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -56,13 +57,11 @@
 #include "G4QGSMFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
 #include "G4QuasiElasticChannel.hh"
-#include "G4ProjectileDiffractiveChannel.hh"
 
 class G4QGSPNeutronBuilder : public G4VNeutronBuilder
 {
   public: 
-    G4QGSPNeutronBuilder(G4bool quasiElastic=false,
-                         G4bool projectileDiffraction=false);
+    G4QGSPNeutronBuilder(G4bool quasiElastic=false);
     virtual ~G4QGSPNeutronBuilder();
 
   public: 
@@ -80,7 +79,6 @@ class G4QGSPNeutronBuilder : public G4VNeutronBuilder
     G4QGSModel< G4QGSParticipants > * theStringModel;
     G4ExcitedStringDecay * theStringDecay;
     G4QuasiElasticChannel * theQuasiElastic;
-    G4ProjectileDiffractiveChannel * theProjectileDiffraction;
 
     G4QGSMFragmentation * theQGSM;
     G4ExcitationHandler * theHandler;

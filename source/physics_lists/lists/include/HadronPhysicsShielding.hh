@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: HadronPhysicsShielding.hh,v 1.1 2010-06-08 16:05:48 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -42,7 +43,6 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4MiscCHIPSBuilder.hh"
 
 #include "G4PiKBuilder.hh"
 #include "G4BertiniPiKBuilder.hh"
@@ -58,6 +58,11 @@
 #include "G4FTFPNeutronBuilder.hh"
 #include "G4LEPNeutronBuilder.hh"
 #include "G4NeutronHPBuilder.hh"
+
+#include "G4HyperonFTFPBuilder.hh"
+#include "G4AntiBarionBuilder.hh"
+#include "G4FTFPAntiBarionBuilder.hh"
+
 
 class HadronPhysicsShielding : public G4VPhysicsConstructor
 {
@@ -90,9 +95,12 @@ class HadronPhysicsShielding : public G4VPhysicsConstructor
     G4ProtonBuilder * thePro;
     G4BertiniProtonBuilder * theBertiniPro;
     G4FTFPProtonBuilder * theFTFPPro;    
+
+    G4HyperonFTFPBuilder * theHyperon;
     
-    G4MiscCHIPSBuilder * theMiscCHIPS;
-    
+    G4AntiBarionBuilder * theAntiBaryon;
+    G4FTFPAntiBarionBuilder * theFTFPAntiBaryon;
+
     G4bool QuasiElastic;
     G4VCrossSectionDataSet * theCHIPSInelastic;
     G4VCrossSectionDataSet * BGGxsNeutron;

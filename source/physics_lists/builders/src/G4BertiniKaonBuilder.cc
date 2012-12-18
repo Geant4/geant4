@@ -43,10 +43,19 @@
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 
+#include "G4ChipsKaonMinusInelasticXS.hh"
+#include "G4ChipsKaonPlusInelasticXS.hh"
+#include "G4ChipsKaonZeroInelasticXS.hh"
+#include "G4CrossSectionDataSetRegistry.hh"
+
+
 G4BertiniKaonBuilder::
 G4BertiniKaonBuilder() 
  {
-   theKaonData = new G4QHadronInelasticDataSet;
+   ChipsKaonMinus = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonMinusInelasticXS::Default_Name());
+   ChipsKaonPlus = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonPlusInelasticXS::Default_Name());
+   ChipsKaonZero = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name());
+
    theMin = 0*GeV;
    theMax = 9.9*GeV;
    theModel = new G4CascadeInterface;
@@ -56,7 +65,9 @@ G4BertiniKaonBuilder()
 
 G4BertiniKaonBuilder::~G4BertiniKaonBuilder() 
 {
-	delete theKaonData;
+   delete ChipsKaonMinus;
+   delete ChipsKaonPlus;
+   delete ChipsKaonZero;
 }
 
 void G4BertiniKaonBuilder::
@@ -65,6 +76,7 @@ Build(G4KaonPlusInelasticProcess * aP)
    aP->RegisterMe(theModel);
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(theMax);
+   aP->AddDataSet(ChipsKaonPlus);
  }
 
 void G4BertiniKaonBuilder::
@@ -73,6 +85,7 @@ Build(G4KaonMinusInelasticProcess * aP)
    aP->RegisterMe(theModel);
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(theMax);
+   aP->AddDataSet(ChipsKaonMinus);
  }
 
 void G4BertiniKaonBuilder::
@@ -81,6 +94,7 @@ Build(G4KaonZeroLInelasticProcess * aP)
    aP->RegisterMe(theModel);
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(theMax);
+   aP->AddDataSet(ChipsKaonZero);
  }
 
 void G4BertiniKaonBuilder::
@@ -89,6 +103,7 @@ Build(G4KaonZeroSInelasticProcess * aP)
    aP->RegisterMe(theModel);
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(theMax);
+   aP->AddDataSet(ChipsKaonZero);
  }
 
 void G4BertiniKaonBuilder::

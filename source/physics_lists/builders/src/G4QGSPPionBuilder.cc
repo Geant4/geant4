@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4QGSPPionBuilder.cc,v 1.1 2010-11-19 16:21:40 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -48,7 +49,7 @@
 #include "G4CrossSectionPairGG.hh"
 
 G4QGSPPionBuilder::
-G4QGSPPionBuilder(G4bool quasiElastic, G4bool projectileDiffraction) 
+G4QGSPPionBuilder(G4bool quasiElastic) 
 {
   thePiData = new G4CrossSectionPairGG(new G4PiNuclearCrossSection(), 91*GeV);
   theMin = 12*GeV;
@@ -70,12 +71,6 @@ G4QGSPPionBuilder(G4bool quasiElastic, G4bool projectileDiffraction)
      theModel->SetQuasiElasticChannel(theQuasiElastic);
   } else 
   {  theQuasiElastic=0;}
-  if ( projectileDiffraction )
-  {
-     theProjectileDiffraction=new G4ProjectileDiffractiveChannel;
-     theModel->SetProjectileDiffraction(theProjectileDiffraction);
-  } else 
-  {  theProjectileDiffraction=0;}
    
   theModel->SetTransport(theCascade);
 }
@@ -86,7 +81,6 @@ G4QGSPPionBuilder::
   delete theCascade;
   delete thePreEquilib;
   if ( theQuasiElastic ) delete theQuasiElastic;
-  if ( theProjectileDiffraction ) delete theProjectileDiffraction;
   delete theStringDecay;
   delete theStringModel;
   delete theModel;

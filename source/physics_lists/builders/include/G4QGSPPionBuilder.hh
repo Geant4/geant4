@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4QGSPPionBuilder.hh,v 1.1 2010-11-19 16:21:40 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -55,14 +56,12 @@
 #include "G4QGSMFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
 #include "G4QuasiElasticChannel.hh"
-#include "G4ProjectileDiffractiveChannel.hh"
 #include "G4VCrossSectionDataSet.hh"
 
 class G4QGSPPionBuilder : public G4VPionBuilder
 {
   public: 
-    G4QGSPPionBuilder(G4bool quasiElastic=false,
-                     G4bool projectileDiffraction=false);
+    G4QGSPPionBuilder(G4bool quasiElastic=false);
     virtual ~G4QGSPPionBuilder();
 
   public: 
@@ -80,7 +79,6 @@ class G4QGSPPionBuilder : public G4VPionBuilder
     G4QGSModel< G4QGSParticipants > * theStringModel;
     G4ExcitedStringDecay * theStringDecay;
     G4QuasiElasticChannel * theQuasiElastic;
-    G4ProjectileDiffractiveChannel * theProjectileDiffraction;
     G4QGSMFragmentation * theQGSM;
     G4ExcitationHandler * theHandler;
     G4double theMin;

@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4EmDNAPhysics.cc,v 1.8 2010-11-25 07:44:55 sincerti Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4EmDNAPhysics.hh"
 

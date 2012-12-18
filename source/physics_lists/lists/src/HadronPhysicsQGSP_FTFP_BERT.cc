@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: HadronPhysicsQGSP_FTFP_BERT.cc,v 1.4 2010-06-19 11:12:46 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -75,7 +76,6 @@ HadronPhysicsQGSP_FTFP_BERT::HadronPhysicsQGSP_FTFP_BERT(G4int)
     , theAntiBaryon(0)
     , theFTFPAntiBaryon(0)
     , QuasiElastic(true)
-    , ProjectileDiffraction(false)
 {
 }
 
@@ -99,7 +99,6 @@ HadronPhysicsQGSP_FTFP_BERT::HadronPhysicsQGSP_FTFP_BERT(const G4String&,
     , theAntiBaryon(0)
     , theFTFPAntiBaryon(0)
     , QuasiElastic(quasiElastic)
-    , ProjectileDiffraction(false)
 {
 }
 
@@ -126,7 +125,7 @@ void HadronPhysicsQGSP_FTFP_BERT::CreateModels()
 	 << " and to " << quasiElasFTF << " (must be false) for FTF" << G4endl;
 
   theNeutrons=new G4NeutronBuilder;
-  theNeutrons->RegisterMe(theQGSPNeutron=new G4QGSPNeutronBuilder(quasiElasQGS, ProjectileDiffraction));
+  theNeutrons->RegisterMe(theQGSPNeutron=new G4QGSPNeutronBuilder(quasiElasQGS));
   theQGSPNeutron->SetMinEnergy(minQGSP);   
   theNeutrons->RegisterMe(theFTFPNeutron=new G4FTFPNeutronBuilder(quasiElasFTF));
   theFTFPNeutron->SetMinEnergy(minFTFP);   // was (9.5*GeV);
@@ -142,7 +141,7 @@ void HadronPhysicsQGSP_FTFP_BERT::CreateModels()
   theBertiniNeutron->SetMaxEnergy(maxBERT);         // was (9.9*GeV);
 
   thePro=new G4ProtonBuilder;
-  thePro->RegisterMe(theQGSPPro=new G4QGSPProtonBuilder(quasiElasQGS, ProjectileDiffraction));
+  thePro->RegisterMe(theQGSPPro=new G4QGSPProtonBuilder(quasiElasQGS));
   theQGSPPro->SetMinEnergy(minQGSP);   
   thePro->RegisterMe(theFTFPPro=new G4FTFPProtonBuilder(quasiElasFTF));
   theFTFPPro->SetMinEnergy(minFTFP);   // was (9.5*GeV);

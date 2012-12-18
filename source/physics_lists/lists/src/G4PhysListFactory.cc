@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PhysListFactory.cc,v 1.16 2010-11-19 19:50:15 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -37,18 +38,14 @@
 //
 
 #include "G4PhysListFactory.hh"
-#include "CHIPS.hh"
 #include "FTFP_BERT.hh"
 #include "FTFP_BERT_TRV.hh"
 #include "FTFP_BERT_HP.hh"
 //#include "FTFP_BERT_DE.hh"
 #include "FTF_BIC.hh"
 #include "LBE.hh"
-#include "LHEP.hh"
 #include "QBBC.hh"
-#include "QGSC_BERT.hh"
 #include "QGSP_BERT.hh"
-#include "QGSP_BERT_CHIPS.hh"
 #include "QGSP_BERT_HP.hh"
 #include "QGSP_BIC.hh"
 #include "QGSP_BIC_HP.hh"
@@ -71,10 +68,9 @@ G4PhysListFactory::G4PhysListFactory()
 {
   nlists_hadr = 19;
   G4String ss[19] = {
-    "CHIPS",
     "FTFP_BERT","FTFP_BERT_TRV","FTFP_BERT_HP","FTF_BIC", 
-    "LBE","LHEP","QBBC",
-    "QGSC_BERT","QGSP","QGSP_BERT","QGSP_BERT_CHIPS","QGSP_BERT_HP",
+    "LBE","QBBC",
+    "QGSP_BERT","QGSP_BERT_HP",
     "QGSP_BIC","QGSP_BIC_HP",
     "QGSP_FTFP_BERT","QGS_BIC","QGSP_INCLXX",
     "Shielding"};
@@ -143,18 +139,14 @@ G4PhysListFactory::GetReferencePhysList(const G4String& name)
 	   << em_name << ">  EMoption= " << em_opt << G4endl;
   }
   G4VModularPhysicsList* p = 0;
-  if(had_name == "CHIPS")               {p = new CHIPS(verbose);}
-  else if(had_name == "FTFP_BERT")      {p = new FTFP_BERT(verbose);}
+  if(had_name == "FTFP_BERT")           {p = new FTFP_BERT(verbose);}
   else if(had_name == "FTFP_BERT_TRV")  {p = new FTFP_BERT_TRV(verbose);}
   else if(had_name == "FTFP_BERT_HP")   {p = new FTFP_BERT_HP(verbose);}
   //  else if(had_name == "FTFP_BERT_DE")   {p = new FTFP_BERT_DE(verbose);}
   else if(had_name == "FTF_BIC")        {p = new FTF_BIC(verbose);}
   else if(had_name == "LBE")            {p = new LBE();}
-  else if(had_name == "LHEP")           {p = new LHEP(verbose);}
   else if(had_name == "QBBC")           {p = new QBBC(verbose);}
-  else if(had_name == "QGSC_BERT")      {p = new QGSC_BERT(verbose);}
   else if(had_name == "QGSP_BERT")      {p = new QGSP_BERT(verbose);}
-  else if(had_name == "QGSP_BERT_CHIPS"){p = new QGSP_BERT_CHIPS(verbose);}
   else if(had_name == "QGSP_BERT_HP")   {p = new QGSP_BERT_HP(verbose);}
   else if(had_name == "QGSP_BIC")       {p = new QGSP_BIC(verbose);}
   else if(had_name == "QGSP_BIC_HP")    {p = new QGSP_BIC_HP(verbose);}

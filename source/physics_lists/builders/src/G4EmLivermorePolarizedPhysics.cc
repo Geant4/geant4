@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4EmLivermorePolarizedPhysics.cc,v 1.12 2010-11-10 17:33:02 flongo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4EmLivermorePolarizedPhysics.hh"
 #include "G4ParticleDefinition.hh"

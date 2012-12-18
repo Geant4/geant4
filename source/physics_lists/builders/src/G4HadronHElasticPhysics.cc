@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4HadronHElasticPhysics.cc,v 1.10 2010-07-29 10:52:14 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -57,14 +58,15 @@
 
 #include "G4HadronElasticProcess.hh"
 #include "G4HadronElastic.hh"
-#include "G4CHIPSElastic.hh"
+#include "G4ChipsElasticModel.hh"
 #include "G4ElasticHadrNucleusHE.hh"
 #include "G4AntiNuclElastic.hh"
 
 #include "G4BGGNucleonElasticXS.hh"
 #include "G4BGGPionElasticXS.hh"
 #include "G4NeutronElasticXS.hh"
-#include "G4CHIPSElasticXS.hh"
+#include "G4ChipsProtonElasticXS.hh"
+#include "G4ChipsNeutronElasticXS.hh"
 
 #include "G4ComponentAntiNuclNuclearXS.hh"  
 #include "G4CrossSectionElastic.hh"
@@ -137,8 +139,8 @@ void G4HadronHElasticPhysics::ConstructProcess()
   lhep1->SetMaxEnergy(elimitPi);
   lhep2->SetMaxEnergy(elimitAntiNuc);
 
-  G4CHIPSElastic* chipsp = new G4CHIPSElastic();
-  G4HadronElastic* neutronModel = new G4CHIPSElastic();
+  G4ChipsElasticModel* chipsp = new G4ChipsElasticModel();
+  G4ChipsElasticModel* neutronModel = new G4ChipsElasticModel();
 
   G4ElasticHadrNucleusHE* he = new G4ElasticHadrNucleusHE(); 
   he->SetMinEnergy(elimitPi);
@@ -178,7 +180,7 @@ void G4HadronHElasticPhysics::ConstructProcess()
 
       G4HadronElasticProcess* hel = new G4HadronElasticProcess();
       //hel->AddDataSet(new G4BGGNucleonElasticXS(particle));
-      hel->AddDataSet(new G4CHIPSElasticXS());
+      hel->AddDataSet(new G4ChipsProtonElasticXS());
       hel->RegisterMe(chipsp);
       pmanager->AddDiscreteProcess(hel);
       if(verbose > 1) {
@@ -189,9 +191,8 @@ void G4HadronHElasticPhysics::ConstructProcess()
     } else if(pname == "neutron") {   
 
       G4HadronElasticProcess* hel = new G4HadronElasticProcess();
-      //hel->AddDataSet(new G4NeutronElasticXS());
-      //hel->AddDataSet(new G4BGGNucleonElasticXS(particle));
-      hel->AddDataSet(new G4CHIPSElasticXS());
+      hel->AddDataSet(new G4NeutronElasticXS());
+      //hel->AddDataSet(new G4ChipsNeutronElasticXS());
       hel->RegisterMe(neutronModel);
       pmanager->AddDiscreteProcess(hel);
       if(verbose > 1) {
@@ -203,8 +204,7 @@ void G4HadronHElasticPhysics::ConstructProcess()
     } else if (pname == "pi+" || pname == "pi-") { 
 
       G4HadronElasticProcess* hel = new G4HadronElasticProcess();
-      hel->AddDataSet(new G4CHIPSElasticXS());
-      //hel->AddDataSet(new G4BGGPionElasticXS(particle));
+      hel->AddDataSet(new G4BGGPionElasticXS(particle));
       hel->RegisterMe(lhep1);
       hel->RegisterMe(he);
       pmanager->AddDiscreteProcess(hel);
@@ -221,7 +221,7 @@ void G4HadronHElasticPhysics::ConstructProcess()
       
       G4HadronElasticProcess* hel = new G4HadronElasticProcess();
       hel->RegisterMe(lhep0);
-      hel->AddDataSet(new G4CHIPSElasticXS());
+      //hel->AddDataSet(new G4CHIPSElasticXS());
       pmanager->AddDiscreteProcess(hel);
       if(verbose > 1) {
 	G4cout << "### HadronElasticPhysics: " << hel->GetProcessName()

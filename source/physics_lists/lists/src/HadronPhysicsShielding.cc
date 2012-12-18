@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: HadronPhysicsShielding.cc,v 1.1 2010-06-08 16:06:18 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -79,7 +80,9 @@ HadronPhysicsShielding::HadronPhysicsShielding( G4int )
     , thePro(0)
     , theBertiniPro(0)
     , theFTFPPro(0)
-    , theMiscCHIPS(0)
+    , theHyperon(0)
+    , theAntiBaryon(0)
+    , theFTFPAntiBaryon(0)
     , QuasiElastic(false)
     , theCHIPSInelastic(0)
     , BGGxsNeutron(0)
@@ -102,7 +105,9 @@ HadronPhysicsShielding::HadronPhysicsShielding(const G4String& name, G4bool quas
     , thePro(0)
     , theBertiniPro(0)
     , theFTFPPro(0)
-    , theMiscCHIPS(0)
+    , theHyperon(0)
+    , theAntiBaryon(0)
+    , theFTFPAntiBaryon(0)
     , QuasiElastic(quasiElastic)
     , theCHIPSInelastic(0)
     , BGGxsNeutron(0)
@@ -146,8 +151,11 @@ void HadronPhysicsShielding::CreateModels()
   thePiK->RegisterMe(theFTFPPiK);
   thePiK->RegisterMe(theBertiniPiK=new G4BertiniPiKBuilder);
   theBertiniPiK->SetMaxEnergy(5*GeV);
-  
-  theMiscCHIPS=new G4MiscCHIPSBuilder;
+
+  theHyperon=new G4HyperonFTFPBuilder;
+    
+  theAntiBaryon=new G4AntiBarionBuilder;
+  theAntiBaryon->RegisterMe(theFTFPAntiBaryon=new G4FTFPAntiBarionBuilder(QuasiElastic));
 }
 
 HadronPhysicsShielding::~HadronPhysicsShielding()
@@ -166,7 +174,10 @@ HadronPhysicsShielding::~HadronPhysicsShielding()
   delete theBertiniPro;
   delete theFTFPPro;    
     
-  delete theMiscCHIPS;
+  delete theHyperon;
+  delete theAntiBaryon;
+  delete theFTFPAntiBaryon;
+
   delete theCHIPSInelastic;
   delete BGGxsNeutron;
   delete NeutronHPJENDLHEInelastic;
@@ -216,5 +227,6 @@ void HadronPhysicsShielding::ConstructProcess()
   G4PhysListUtil::FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(registry->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name()));
   G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(registry->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name()));
 
-  theMiscCHIPS->Build();
+  theHyperon->Build();
+  theAntiBaryon->Build();
 }

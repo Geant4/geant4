@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: HadronPhysicsQGSP_BERT.cc,v 1.5 2010-06-15 11:03:50 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -77,7 +78,6 @@ HadronPhysicsQGSP_BERT::HadronPhysicsQGSP_BERT(G4int)
     , theBertiniPro(0)
     , theMisc(0)
     , QuasiElastic(true)
-    , ProjectileDiffraction(false)
 {
 }
 
@@ -97,14 +97,13 @@ HadronPhysicsQGSP_BERT::HadronPhysicsQGSP_BERT(const G4String& name, G4bool quas
     , theBertiniPro(0)
     , theMisc(0)
     , QuasiElastic(quasiElastic)
-    , ProjectileDiffraction(false)
 {
 }
 
 void HadronPhysicsQGSP_BERT::CreateModels()
 {
   theNeutrons=new G4NeutronBuilder;
-  theNeutrons->RegisterMe(theQGSPNeutron=new G4QGSPNeutronBuilder(QuasiElastic, ProjectileDiffraction));
+  theNeutrons->RegisterMe(theQGSPNeutron=new G4QGSPNeutronBuilder(QuasiElastic));
   theNeutrons->RegisterMe(theLEPNeutron=new G4LEPNeutronBuilder);
   theLEPNeutron->SetMinInelasticEnergy(9.5*GeV);
   theLEPNeutron->SetMaxInelasticEnergy(25*GeV);  
@@ -114,7 +113,7 @@ void HadronPhysicsQGSP_BERT::CreateModels()
   theBertiniNeutron->SetMaxEnergy(9.9*GeV);
 
   thePro=new G4ProtonBuilder;
-  thePro->RegisterMe(theQGSPPro=new G4QGSPProtonBuilder(QuasiElastic, ProjectileDiffraction));
+  thePro->RegisterMe(theQGSPPro=new G4QGSPProtonBuilder(QuasiElastic));
   thePro->RegisterMe(theLEPPro=new G4LEPProtonBuilder);
   theLEPPro->SetMinEnergy(9.5*GeV);
   theLEPPro->SetMaxEnergy(25*GeV);

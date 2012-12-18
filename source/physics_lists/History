@@ -15,6 +15,25 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13-12-2012, A.Ribon    		        (phys-lists-V09-06-03)
+- Removed projectile diffraction (which uses CHIPS).
+- Removed all obsolete physics lists and associated builders
+  and physics constructors.
+
+12-12-2012, M.Kelsey                    (phys-lists-V09-06-02)
+- Remove LHEPStopping* builders, remove G4StoppingHadronBuilder in LHEP
+  physics list, and replace obsolete stopping processes with builder in LBE.
+  Prerequisite for removing obsolete stopping processes.
+
+11-12-2012, V.Ivanchenko		(phys-lists-V09-06-01)
+- G4HadronInelasticQBBC - removed CHIPS headers
+- G4HadronElasticPhysics, G4HadronHElasticPhysics - substitute
+    obsolete CHIPS classes 
+
+07-12-2012, V.Ivanchenko		(phys-lists-V09-06-00)
+- G4EmDNAPhysicsChemistry - substituted obsolete interface 
+    SetModel() by SetEmModel()
+
 23-11-2012, A.Ribon                     (phys-lists-V09-05-81)
 - Included FTFP_BERT_HP in G4PhysListFactory
 

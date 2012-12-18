@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4HadronElasticPhysics.cc,v 1.16 2010-09-24 12:54:13 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -59,7 +60,7 @@
 
 #include "G4HadronElasticProcess.hh"
 #include "G4HadronElastic.hh"
-#include "G4CHIPSElastic.hh"
+#include "G4ChipsElasticModel.hh"
 #include "G4ElasticHadrNucleusHE.hh"
 #include "G4AntiNuclElastic.hh"
 
@@ -147,8 +148,8 @@ void G4HadronElasticPhysics::ConstructProcess()
   lhep1->SetMaxEnergy(elimitPi);
   lhep2->SetMaxEnergy(elimitAntiNuc);
 
-  G4CHIPSElastic* chipsp = new G4CHIPSElastic();
-  neutronModel = new G4CHIPSElastic();
+  G4ChipsElasticModel* chipsp = new G4ChipsElasticModel();
+  neutronModel = new G4ChipsElasticModel();
 
   G4ElasticHadrNucleusHE* he = new G4ElasticHadrNucleusHE(); 
   he->SetMinEnergy(elimitPi);

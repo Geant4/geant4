@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4QGSPProtonBuilder.hh,v 1.7 2010-11-17 17:12:28 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -57,13 +58,11 @@
 #include "G4QGSMFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
 #include "G4QuasiElasticChannel.hh"
-#include "G4ProjectileDiffractiveChannel.hh"
 
 class G4QGSPProtonBuilder : public G4VProtonBuilder
 {
   public: 
-    G4QGSPProtonBuilder(G4bool quasiElastic=false,
-                        G4bool projectileDiffraction=false);
+    G4QGSPProtonBuilder(G4bool quasiElastic=false);
     virtual ~G4QGSPProtonBuilder();
 
   public: 
@@ -80,7 +79,6 @@ class G4QGSPProtonBuilder : public G4VProtonBuilder
     G4QGSModel< G4QGSParticipants > * theStringModel;
     G4ExcitedStringDecay * theStringDecay;
     G4QuasiElasticChannel * theQuasiElastic;
-    G4ProjectileDiffractiveChannel * theProjectileDiffraction;
     G4QGSMFragmentation * theQGSM;
     G4ExcitationHandler * theHandler;
     G4double theMin;

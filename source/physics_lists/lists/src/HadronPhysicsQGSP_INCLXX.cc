@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: HadronPhysicsQGSP_INCLXX.cc,v 1.2 2010-06-03 10:42:44 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -76,7 +77,6 @@ HadronPhysicsQGSP_INCLXX::HadronPhysicsQGSP_INCLXX(G4int)
     , theInclAblaPro(0)
     , theMisc(0)
     , QuasiElastic(true)
-    , ProjectileDiffraction(false)
 {
 }
 
@@ -99,14 +99,13 @@ HadronPhysicsQGSP_INCLXX::HadronPhysicsQGSP_INCLXX(const G4String& name, G4bool 
     , theInclAblaPro(0)
     , theMisc(0)
     , QuasiElastic(quasiElastic)
-    , ProjectileDiffraction(false)
 {
 }
 
 void HadronPhysicsQGSP_INCLXX::CreateModels()
 {
   theNeutrons=new G4NeutronBuilder;
-  theNeutrons->RegisterMe(theQGSPNeutron=new G4QGSPNeutronBuilder(QuasiElastic, ProjectileDiffraction));
+  theNeutrons->RegisterMe(theQGSPNeutron=new G4QGSPNeutronBuilder(QuasiElastic));
   theNeutrons->RegisterMe(theLEPNeutron=new G4LEPNeutronBuilder);
   theLEPNeutron->SetMinInelasticEnergy(9.5*GeV);
   theLEPNeutron->SetMaxInelasticEnergy(25*GeV);  
@@ -120,7 +119,7 @@ void HadronPhysicsQGSP_INCLXX::CreateModels()
   theInclAblaNeutron->SetMaxEnergy(3.0*GeV);
 
   thePro=new G4ProtonBuilder;
-  thePro->RegisterMe(theQGSPPro=new G4QGSPProtonBuilder(QuasiElastic, ProjectileDiffraction));
+  thePro->RegisterMe(theQGSPPro=new G4QGSPProtonBuilder(QuasiElastic));
   thePro->RegisterMe(theLEPPro=new G4LEPProtonBuilder);
   theLEPPro->SetMinEnergy(9.5*GeV);
   theLEPPro->SetMaxEnergy(25*GeV);
