@@ -50,7 +50,6 @@
 #include "G4HadronElasticPhysics.hh"
 #include "G4HadronDElasticPhysics.hh"
 #include "G4HadronHElasticPhysics.hh"
-#include "G4HadronQElasticPhysics.hh"
 #include "G4HadronInelasticQBBC.hh"
 #include "G4IonBinaryCascadePhysics.hh"
 
@@ -228,10 +227,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
   } else if (name == "HElastic" && !fHelIsRegisted) {
     fHadronPhys.push_back( new G4HadronHElasticPhysics());
-    fHelIsRegisted = true;
-
-  } else if (name == "QElastic" && !fHelIsRegisted) {
-    fHadronPhys.push_back( new G4HadronQElasticPhysics());
     fHelIsRegisted = true;
 
   } else if (name == "binary" && !fBicIsRegisted) {

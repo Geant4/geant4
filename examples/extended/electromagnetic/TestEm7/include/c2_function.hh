@@ -1701,8 +1701,8 @@ public:
         
         virtual float_type value_with_derivatives(float_type x, float_type *yprime, float_type *yprime2) const throw(c2_exception)
         {
-                float_type c=std::cos(x), s=std::sin(x);
-                float_type t=s/c;
+                float_type c=std::cos(x), ss=std::sin(x);
+                float_type t=ss/c;
                 float_type yp=1/(c*c);
                 if(yprime) *yprime=yp; if(yprime2) *yprime2=2*t*yp; 
                 return t; 
