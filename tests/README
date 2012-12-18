@@ -1,4 +1,4 @@
-$Id: README,v 1.33 2010-11-29 10:36:04 gcosmo Exp $
+$Id: README 66261 2012-12-14 10:06:09Z ribon $
 -------------------------------------------------------------------
 
      =========================================================
@@ -22,7 +22,7 @@ exhaustive and complete.
  
 test01 ## Geometry - CSG solids and navigator:
        ## including Boolean, assemblies, reflection and calorimeter benchmark.
-test02 ## LHEP Physics Lists
+test02 ## FTFP_BERT_HP Physics Lists
        ## test02.in (em test) is obsolete; hadron test is the main
 test05 ## Geometry - Tessellated solids and General Particle Source.
        ## (Action? Eventually add CAD input setup.)
@@ -35,39 +35,40 @@ test11 ## Neutron transport.
 test12 ## FTF String Model + precompound.
 test13 ## QGSM, Dual Parton Model + precompound.
 test14 ## LowEnergy em (photons and electrons).
-test15 ## Isotope Production
+test15 ## available; up to 9.5 used for Isotope Production
 test16 ## n and p Cross-Sections
 test17 ## LowEnergy e.m. (protons, antiprotons and ions). 
 test18 ## Radioactive decay.
-test19 ## discrete process verification test for Physics On Flight
+test19 ## Free slot
 test20 ## Pi0 production test 
-test22 ## Gamma and electro-nuclear physics.
-test23 ## Muon capture for CHIPS, stopping.
+test22 ## Free slot
+test23 ## Free slot
 test24 ## Binary cascade hadronic model.
 test25 ## Classical cascade hadronic model.
 test27 ## Binary cascade for light ions (G4BinaryLightIonReaction).
 test28 ## Hadronic abrasion/ablation and em-dissociation.
-test29 ## Electroweak interface (G4QCaptureAtRest).
+test29 ## Free slot
 test30 ## Hadronic generators test versus thin target data E<3 GeV (not for stt).
 test31 ## Test of stopping powers and energy loss for EM physics (not for stt) .
-test32 ## Free slot.
+test32 ## Test of hadronic cross sections
 test33 ## Importance biasing and scoring.
 test34 ## Shower parameterisation with 'gflash'.
 test35 ## Hadronic Generator test versus HARP data 3 GeV < E < 13 GeV (not for stt).
 test36 ## EM XTR processes
 test37 ## Sandia data, electron beam in semi-infinite media (not for stt).
-test38 ## Cross-section scaling test of gamma and electron nuclear reactions
-       ## using CHIPS decay for final state production.
-test39 ## CHIPS elastic & lA scattering at process level
+test38 ## Free slot
+test39 ## Free slot
 test40 ## Benchmark test for e.m. shower development from single primary
 test41 ## MUSCAT experiment for multiple-scattering validation (not for stt).
+test42 ## test CMS calorimeter with Cherenkov radiation (CR) detection (not for stt).
+test43 ## Hadronic generators test/validation for high energy (not for stt).
 test44 ## Bragg peak distribution validation (not for stt).
 test45 ## Validation of thick target data for low-energy proton and ion beams
        ## stopped in different targets (not for stt).
 test46 ## Validation of CMS-type combined calorimeter (not for stt).
 test47 ## CMS combined calorimeter (not for stt).
 test48 ## Stopping processes validation
-test49 ## Test for CHIPS inelastic nuclear interactions.
+test49 ## Free slot
 test50 ## Statistical test suite for e.m. processes:
        ## 1) CSDA range and Stopping Power test for e-,p;
        ## 2) gamma attenuation coefficient;
