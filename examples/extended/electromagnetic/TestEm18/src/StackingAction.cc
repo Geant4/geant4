@@ -26,7 +26,8 @@
 /// \file electromagnetic/TestEm18/src/StackingAction.cc
 /// \brief Implementation of the StackingAction class
 //
-// $Id$
+// $Id: StackingAction.cc,v 1.3 2011-01-06 18:34:38 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -26,7 +26,8 @@
 /// \file electromagnetic/TestEm18/src/DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
 //
-// $Id$
+// $Id: DetectorMessenger.cc,v 1.1 2007-02-13 17:57:20 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

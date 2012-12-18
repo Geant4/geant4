@@ -26,7 +26,8 @@
 /// \file electromagnetic/TestEm18/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// $Id$
+// $Id: DetectorConstruction.hh,v 1.2 2010-11-19 12:17:50 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

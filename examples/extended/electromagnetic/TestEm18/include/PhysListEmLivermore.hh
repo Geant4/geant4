@@ -27,7 +27,8 @@
 /// \brief Definition of the PhysListEmLivermore class
 //
 //
-// $Id$
+// $Id: PhysListEmLivermore.hh,v 1.4 2011-01-06 18:34:38 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef PhysListEmLivermore_h
 #define PhysListEmLivermore_h 1

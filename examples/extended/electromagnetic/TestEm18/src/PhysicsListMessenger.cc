@@ -26,7 +26,8 @@
 /// \file electromagnetic/TestEm18/src/PhysicsListMessenger.cc
 /// \brief Implementation of the PhysicsListMessenger class
 //
-// $Id$
+// $Id: PhysicsListMessenger.cc,v 1.6 2011-01-06 18:34:38 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

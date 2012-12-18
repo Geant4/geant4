@@ -26,7 +26,8 @@
 /// \file electromagnetic/TestEm18/include/SteppingVerbose.hh
 /// \brief Definition of the SteppingVerbose class
 //
-// $Id$
+// $Id: SteppingVerbose.hh,v 1.1 2007-02-13 17:57:20 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   This class manages the verbose outputs in G4SteppingManager. 
 //   It inherits from G4SteppingVerbose.

@@ -26,7 +26,8 @@
 /// \file electromagnetic/TestEm18/src/PhysListEmStandard.cc
 /// \brief Implementation of the PhysListEmStandard class
 //
-// $Id$
+// $Id: PhysListEmStandard.cc,v 1.24 2009-11-15 22:10:03 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -92,7 +93,7 @@ void PhysListEmStandard::ConstructProcess()
       ////ph->RegisterProcess(new G4RayleighScattering, particle);      
       ph->RegisterProcess(new G4PhotoElectricEffect, particle);      
       G4ComptonScattering* cs   = new G4ComptonScattering;
-      cs->SetModel(new G4KleinNishinaModel());
+      cs->SetEmModel(new G4KleinNishinaModel());
       ph->RegisterProcess(cs, particle);
       ph->RegisterProcess(new G4GammaConversion, particle);
      
