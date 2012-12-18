@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4AdjointPhotoElectricModel.hh,v 1.5 2010-11-11 11:51:56 ldesorgh Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Module:		G4AdjointPhotoElectricModel
@@ -58,7 +59,7 @@
 
 #include "globals.hh"
 #include "G4VEmAdjointModel.hh"
-#include "G4PEEffectModel.hh"
+#include "G4PEEffectFluoModel.hh"
 class G4AdjointPhotoElectricModel: public G4VEmAdjointModel
 
 {
@@ -83,7 +84,7 @@ public:
   
   
   
-  inline void SetTheDirectPEEffectModel(G4PEEffectModel* aModel){theDirectPEEffectModel = aModel; 
+  inline void SetTheDirectPEEffectModel(G4PEEffectFluoModel* aModel){theDirectPEEffectModel = aModel; 
   						       DefineDirectEMModel(aModel);} 				      
   
   virtual void CorrectPostStepWeight(G4ParticleChange* fParticleChange, 
@@ -105,7 +106,7 @@ private:
   G4double  shell_prob[40][40];
  
   
-  G4PEEffectModel* theDirectPEEffectModel;
+  G4PEEffectFluoModel* theDirectPEEffectModel;
   size_t index_element;
   G4double current_eEnergy;
   

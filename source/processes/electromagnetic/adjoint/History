@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12 Dec 2012: V.Ivanchenko (emadjoint-V09-06-00)
+- G4AdjointPhotoElectricModel use G4PEEffectFluoModel instead of obsolete
+    G4PEEffectModel
+
 30 Oct 2012: L. Desorgher (emadjoint-V09-05-04)
 -Inclusion of headers for system of units and physical constants in G4AdjointBremsstrahlungModel
 

@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4eInverseBremsstrahlung.hh,v 1.4 2009-11-20 10:31:20 ldesorgh Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Module:		G4eInverseBremstrahlung.hh
