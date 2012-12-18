@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4RayShooter.cc,v 1.2 2006-06-29 18:10:00 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4RayShooter.hh"

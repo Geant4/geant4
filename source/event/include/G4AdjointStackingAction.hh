@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4AdjointStackingAction.hh,v 1.2 2009-11-18 17:57:59 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointStackingAction

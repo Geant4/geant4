@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4StackedTrack.hh,v 1.12 2010-10-27 07:21:13 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //  Last Modification : 02/Feb/96 M.Asai

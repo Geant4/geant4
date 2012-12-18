@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+December 4th, 2012, M.Asai (event-V09-06-01)
+- Delete undeleted UI command in the destructor of G4StackMessenger. Addressing to bug report #1380.
+
+December 3rd, 2012, M.Asai (event-V09-06-00)
+- Remove obsolete classes G4CellScorer and G4CellScorerStore.
+
 November 27th, 2012, Hisaya Kurashige (event-V09-05-17)
 - Add clearAndDestory() method to G4TrackStack and G4SmartTrackStack 
   and use this method in G4StackManager::clear()

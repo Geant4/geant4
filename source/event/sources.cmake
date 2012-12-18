@@ -54,8 +54,6 @@ GEANT4_DEFINE_MODULE(NAME G4event
         G4AdjointPosOnPhysVolGenerator.hh
         G4AdjointPrimaryGenerator.hh
         G4AdjointStackingAction.hh
-        G4CellScorer.hh
-        G4CellScorerStore.hh
         G4ClassificationOfNewTrack.hh
         G4EvManMessenger.hh
         G4Event.hh
@@ -91,8 +89,6 @@ GEANT4_DEFINE_MODULE(NAME G4event
         G4AdjointPosOnPhysVolGenerator.cc
         G4AdjointPrimaryGenerator.cc
         G4AdjointStackingAction.cc
-        G4CellScorer.cc
-        G4CellScorerStore.cc
         G4EvManMessenger.cc
         G4Event.cc
         G4EventManager.cc

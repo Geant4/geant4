@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4TrajectoryContainer.hh,v 1.17 2010-10-27 07:21:13 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // G4TrajectoryContainer

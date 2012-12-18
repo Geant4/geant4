@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4StackChecker.hh,v 1.2 2006-06-29 18:09:05 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef G4StackChecker_h

@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4StackingMessenger.cc,v 1.6 2009-09-16 23:10:46 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
 
@@ -69,6 +70,7 @@ G4StackingMessenger::~G4StackingMessenger()
 {
   delete statusCmd;
   delete clearCmd;
+  delete verboseCmd;
   delete stackDir;
 }
 

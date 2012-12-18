@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PrimaryTransformer.hh,v 1.12 2006-06-29 18:08:46 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef G4PromaryTransformer_h 

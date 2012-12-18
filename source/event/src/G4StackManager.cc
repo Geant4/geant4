@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4StackManager.cc,v 1.15 2010-12-15 22:15:07 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //  Last Modification : 09/Dec/96 M.Asai

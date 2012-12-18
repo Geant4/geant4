@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ParticleGun.hh,v 1.11 2007-11-07 17:13:19 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef G4ParticleGun_h
