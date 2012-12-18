@@ -26,7 +26,8 @@
 /// \file medical/electronScattering/src/EventMessenger.cc
 /// \brief Implementation of the EventMessenger class
 //
-// $Id$
+// $Id: EventMessenger.cc,v 1.1 2009-09-19 16:09:44 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
