@@ -24,11 +24,13 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id$
+// $Id: PrimaryGeneratorAction.hh,v 1.3 2010-10-06 12:16:59 sincerti Exp $
 // -------------------------------------------------------------------
 
 #ifndef PrimaryGeneratorAction_h
 #define PrimaryGeneratorAction_h 1
+
+#include <CLHEP/Matrix/Matrix.h>
 
 #include "globals.hh"
 #include "Randomize.hh"
@@ -40,8 +42,6 @@
 
 #include "DetectorConstruction.hh"
 #include "PrimaryGeneratorMessenger.hh"
-
-#include "CLHEP/Matrix/Matrix.h"
 
 class PrimaryGeneratorMessenger;
 
@@ -74,9 +74,7 @@ private:
   G4bool shoot;
   
    // Matrix
-  CLHEP::HepMatrix beamMatrix;
-
-	
+  CLHEP::HepMatrix beamMatrix;	
 };
 
 #endif
