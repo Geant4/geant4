@@ -27,7 +27,8 @@
 /// \brief Implementation of the TrackingAction class
 //
 //
-// $Id$
+// $Id: TrackingAction.cc,v 1.18 2008-08-28 15:28:04 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

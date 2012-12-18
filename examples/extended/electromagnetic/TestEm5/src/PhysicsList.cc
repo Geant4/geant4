@@ -26,7 +26,8 @@
 /// \file electromagnetic/TestEm5/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id$
+// $Id: PhysicsList.cc,v 1.42 2010-11-19 16:29:35 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

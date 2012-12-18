@@ -26,7 +26,8 @@
 /// \file electromagnetic/TestEm5/include/EventMessenger.hh
 /// \brief Definition of the EventMessenger class
 //
-// $Id$
+// $Id: EventMessenger.hh,v 1.5 2006-06-29 16:54:38 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
