@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4eeTo3PiModel.cc,v 1.3 2009-11-11 17:13:47 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -77,10 +78,7 @@ G4eeTo3PiModel::G4eeTo3PiModel(G4eeCrossSections* cr):
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4eeTo3PiModel::~G4eeTo3PiModel()
-{
-  G4cout << "### G4eeTo3PiModel::~G4eeTo3PiModel: gmax= "
-	 << gmax << " gcash= " << gcash << G4endl;
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

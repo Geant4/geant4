@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10 December 2012: V.Ivant (emhighenergy-V09-06-00)
+- G4eeTo3PiModel - removed printout from destructor (fixed bug #1404)
+
 21 July 2012: V.Ivant (emhighenergy-V09-05-03)
 - G4hBremsstrahlung, G4mplIonisation,  G4hPairProduction -
     secondary particle type defined in constructors and not in Initialise() 
