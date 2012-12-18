@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: Tst10EventAction.cc,v 1.9 2006-06-29 21:38:32 gunter Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -78,7 +78,7 @@ void Tst10EventAction::EndOfEventAction(const G4Event* evt)
   {
     for(G4int i=0; i<n_trajectories; i++)
     {
-      (*(evt->GetTrajectoryContainer()))[i]->DrawTrajectory(50);
+      (*(evt->GetTrajectoryContainer()))[i]->DrawTrajectory();
     }
   }		 
 }

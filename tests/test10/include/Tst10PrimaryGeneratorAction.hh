@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: Tst10PrimaryGeneratorAction.hh,v 1.4 2006-06-29 21:38:22 gunter Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: Tst10DetectorConstruction.hh,v 1.6 2006-06-29 21:38:12 gunter Exp $
 // ------------------------------------------------------------
 //  GEANT 4 class header file 
 //

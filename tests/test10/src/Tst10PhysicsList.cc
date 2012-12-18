@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: Tst10PhysicsList.cc,v 1.8 2006-06-29 21:38:36 gunter Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //

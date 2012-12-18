@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: Tst10EventActionMessenger.cc,v 1.3 2006-06-29 21:38:34 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
