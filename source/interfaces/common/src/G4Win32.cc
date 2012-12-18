@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Win32.cc,v 1.10 2008-11-14 16:21:42 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G.Barrand
 

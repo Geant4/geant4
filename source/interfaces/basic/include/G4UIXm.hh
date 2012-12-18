@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4UIXm.hh,v 1.14 2008-11-14 16:21:42 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4UIXm_h
 #define G4UIXm_h 

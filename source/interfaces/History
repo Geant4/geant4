@@ -18,6 +18,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 
+7th December 2012  John Allison (interfaces-V09-06-00)
+- Removed G4UIXaw.
+
 15th November 2012 Laurent Garnier (interfaces-V09-05-36)
 - G4UIQt:
  o Fix bug #1391 : Menus were append before the "File" menu

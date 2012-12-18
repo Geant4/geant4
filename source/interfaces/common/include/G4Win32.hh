@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Win32.hh,v 1.9 2008-11-14 16:21:42 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  To unify Windows message treatment between 
 // G4/interfaces Windows sessions and G4/visualizations Windows drivers.

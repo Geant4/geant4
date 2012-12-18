@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4UIQt.cc,v 1.53 2010-11-02 15:38:51 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
 

@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VUIshell.cc,v 1.10 2007-06-14 05:44:58 kmura Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4UImanager.hh"

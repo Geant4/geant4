@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4UIterminal.hh,v 1.10 2007-05-22 01:51:05 kmura Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ====================================================================
 //   G4UIterminal.cc

@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4UIWin32.cc,v 1.13 2006-06-29 19:09:45 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G.Barrand
 
