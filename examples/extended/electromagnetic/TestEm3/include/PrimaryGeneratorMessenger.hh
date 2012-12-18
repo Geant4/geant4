@@ -26,7 +26,8 @@
 /// \file electromagnetic/TestEm3/include/PrimaryGeneratorMessenger.hh
 /// \brief Definition of the PrimaryGeneratorMessenger class
 //
-// $Id$
+// $Id: PrimaryGeneratorMessenger.hh,v 1.3 2006-06-29 16:52:05 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

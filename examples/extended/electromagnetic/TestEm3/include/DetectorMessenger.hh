@@ -26,7 +26,8 @@
 /// \file electromagnetic/TestEm3/include/DetectorMessenger.hh
 /// \brief Definition of the DetectorMessenger class
 //
-// $Id$
+// $Id: DetectorMessenger.hh,v 1.8 2006-06-29 16:51:08 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

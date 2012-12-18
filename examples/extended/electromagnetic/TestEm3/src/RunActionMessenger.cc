@@ -26,7 +26,8 @@
 /// \file electromagnetic/TestEm3/src/RunActionMessenger.cc
 /// \brief Implementation of the RunActionMessenger class
 //
-// $Id$
+// $Id: RunActionMessenger.cc,v 1.13 2007-04-25 10:07:27 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
