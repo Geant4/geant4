@@ -34,7 +34,7 @@
 #include "G4UnitsTable.hh"
 
 #include "G4HadronElasticPhysics.hh"
-#include "HadronPhysicsQGSP_BERT_HP.hh"
+#include "HadronPhysicsFTFP_BERT_HP.hh"
 #include "G4HadronInelasticQBBC.hh"
 #include "G4IonPhysics.hh"
 #include "GammaPhysics.hh"
@@ -66,7 +66,7 @@ PhysicsList::PhysicsList()
   RegisterPhysics( new G4HadronElasticPhysics(verb) );
 
   // Hadron Physics
-  ////RegisterPhysics( new HadronPhysicsQGSP_BERT_HP(verb));
+  ////RegisterPhysics( new HadronPhysicsFTFP_BERT_HP(verb));
   RegisterPhysics( new G4HadronInelasticQBBC(verb));  
 
   // Ion Physics

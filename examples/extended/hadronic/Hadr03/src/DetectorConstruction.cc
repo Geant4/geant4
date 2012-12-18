@@ -28,7 +28,8 @@
 //
 
 //
-// $Id$
+// $Id: DetectorConstruction.cc,v 1.8 2007-11-12 15:48:58 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
@@ -82,13 +83,16 @@ void DetectorConstruction::DefineMaterials()
 {
  // define a Material from isotopes
  //
+ MaterialWithSingleIsotope("Helium4",      "He4",    1.25*g/cm3, 2,  4); 
  MaterialWithSingleIsotope("Boron10",      "B10",    2.46*g/cm3, 5,  10);
  MaterialWithSingleIsotope("Boron11",      "B11",    2.46*g/cm3, 5,  11);
  MaterialWithSingleIsotope("Oxygen16",     "O16",    1.43*g/cm3, 8,  16);
  MaterialWithSingleIsotope("Cacium40",     "Ca40",   1.55*g/cm3, 20, 40);
  MaterialWithSingleIsotope("Zirconium90",  "Zr90",   6.51*g/cm3, 40, 90);    
  MaterialWithSingleIsotope("Molybdenum98", "Mo98",  10.28*g/cm3, 42, 98);
- MaterialWithSingleIsotope("Molybdenum100","Mo100", 10.28*g/cm3, 42, 100); 
+ MaterialWithSingleIsotope("Molybdenum100","Mo100", 10.28*g/cm3, 42, 100);
+ MaterialWithSingleIsotope("Iodine126",    "I126",   4.94*g/cm3, 53, 126);
+ MaterialWithSingleIsotope("Iodine127",    "I127",   4.94*g/cm3, 53, 127);  
  MaterialWithSingleIsotope("Lead208",      "Pb208", 11.34*g/cm3, 82, 208); 
  MaterialWithSingleIsotope("Uranium235",   "U235",  19.05*g/cm3, 92, 235);  
  MaterialWithSingleIsotope("Uranium238",   "U238",  19.05*g/cm3, 92, 238);     

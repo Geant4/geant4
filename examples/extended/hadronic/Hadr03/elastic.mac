@@ -20,7 +20,7 @@
 #
 /process/list
 /process/inactivate protonInelastic
-/process/inactivate hInelastic
+/process/inactivate ProtonInelastic
 #
 /analysis/setFileName elastic
 /analysis/h1/set 1  100  9. 11 MeV	# scaterred proton

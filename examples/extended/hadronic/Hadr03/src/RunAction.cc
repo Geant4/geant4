@@ -26,7 +26,8 @@
 /// \file hadronic/Hadr03/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id$
+// $Id: RunAction.cc,v 1.5 2010-04-05 18:02:39 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -185,7 +186,15 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
          << "\n CrossSection:\t"     << CrossSection*cm << " cm^-1 "
          << "\t\tmassic: "         << G4BestUnit(massicCS, "Surface/Mass")
          << G4endl;
-         
+	 
+  //cross section per atom (only for single material)
+  //
+  if (material->GetNumberOfElements() == 1) {
+    G4double nbAtoms = material->GetTotNbOfAtomsPerVolume();
+    G4double crossSection = CrossSection/nbAtoms;
+    G4cout << " crossSection per atom:\t"
+           << G4BestUnit(crossSection,"Surface") << G4endl;     
+  }         
   //check cross section from G4HadronicProcessStore
   //
   G4cout << "\n Verification : "
@@ -205,7 +214,22 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   }             
   G4cout << "\n    total = " 
          << G4BestUnit(sumc, "Surface/Mass") << G4endl;
-         
+	 
+ // per atom
+  if (material->GetNumberOfElements() == 1) {
+    const G4Element* element = material->GetElement(0);
+    sumc = 0.0;
+    for (it = fProcCounter.begin(); it != fProcCounter.end(); it++) {
+      const G4VProcess* process = it->first;
+      G4double xs =
+      store->GetCrossSectionPerAtom(particle,energy,process,element);
+      sumc += xs;
+      G4String procName = process->GetProcessName();    
+      G4cout << "\n    " << procName << "= " << G4BestUnit(xs, "Surface");
+    }             
+    G4cout << "\n    total = " << G4BestUnit(sumc, "Surface") << G4endl;  
+  }
+              
  //nuclear channel count
  //
  G4cout << "\n   List of nuclear reactions: \n" << G4endl;

@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+ 04-12-12 mma (exhadr03-V09-06-00)
+- PhysicsList: QGSP_BERT_HP replaced by FTFP_BERT_HP
+- RunAction: compute crossSection per atom
+     
  23-11-12 mma (exhadr03-V09-05-15)
 - SteppingAction : add more protection for neutronHP
      

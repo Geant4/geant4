@@ -4,7 +4,7 @@
   // Draw histos filled by Geant4 simulation 
   //   
   ////TFile f = TFile("elastic.root");
-  TFile f = TFile("nCaptureHP.root");    
+  TFile f = TFile("HP.root");    
   TCanvas* c1 = new TCanvas("c1", "  ");
   c1->SetLogy(1);
   c1->cd();
