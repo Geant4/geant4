@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07-12-12  V.Ivant (test44-V09-06-00)
+- PhysicsList - removed CHIPS and LHEP builders
+
 24-10-12  A.Ribon (test44-V09-05-02)
 - Migrated to new stopping physics.
 
