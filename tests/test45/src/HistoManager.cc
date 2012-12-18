@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: HistoManager.cc,v 1.2 2008-06-11 13:44:04 antoni Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -154,7 +155,7 @@ void HistoManager::bookHisto()
     histo->Add1D(I,S,nbins2,emin2,emax2,1.0);
   }
   // pn_al
-  /*
+ 
   histo->Add1D("1"," low-energy neutron yield at 0 degree in the target",
 	       nbins1,emin1,emax1,1.0);
   histo->Add1D("2"," low-energy neutron yield at 15 degree in the target",
@@ -181,6 +182,7 @@ void HistoManager::bookHisto()
   histo->Add1D("12"," neutron yield at 90 degree in the target",
 	       nbins2,emin2,emax2,1.0);
  
+  /*
   //pn_cu, pn_fe
   histo->Add1D("1"," low-energy neutron yield at 0 degree in the target",
 	       nbins1,emin1,emax1,1.0);

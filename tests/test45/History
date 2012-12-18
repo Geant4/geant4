@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+02-Dec-12 J.Allison (test45-V09-06-00)
+- Migration to DrawTrajectory() (i_mode argument is no longer available):
+  o EventAction.cc: Removed argument from DrawTrajectory().
+
 05-Nov-12 V.Ivant (test45-V09-05-01)
 - Fixed variable shadowing and migrate to internal histograms
 
