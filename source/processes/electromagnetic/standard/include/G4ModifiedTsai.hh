@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ModifiedTsai.hh,v 1.1 2010-10-14 15:17:48 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -58,7 +59,6 @@
 
 #include "G4ios.hh"
 #include "globals.hh"
-#include "G4VBremAngularDistribution.hh"
 #include "G4VEmAngularDistribution.hh"
 
 class G4ModifiedTsai : public G4VEmAngularDistribution

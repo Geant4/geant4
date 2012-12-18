@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: BremLPMTest.cc,v 1.2 2008-08-22 08:16:17 schaelic Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
 //   Test Routine for eBremsstrahlung-Models

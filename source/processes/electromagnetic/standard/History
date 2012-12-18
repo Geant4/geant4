@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07 December 12: V.Ivanchenko (emstand-V09-06-00)
+- G4ModifiedTsai, G4PairProductionRelModel, G4WentzelOKandVIxSection,
+  G4WentzelVIRelXSection - removed obsolete methods and headers
+
 12 November 12: V.Ivanchenko (emstand-V09-05-65)
 - G4WentzelOKandVIxSection - make special case for Hydrogen
 

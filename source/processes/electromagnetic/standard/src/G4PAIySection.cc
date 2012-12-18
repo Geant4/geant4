@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4PAIySection.cc,v 1.8 2010-11-23 15:31:10 grichine Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // G4PAIySection.cc -- class implementation file

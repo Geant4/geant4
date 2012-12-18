@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PAIxSection.hh,v 1.15 2008-05-30 16:04:40 grichine Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // G4PAIxSection.hh -- header file

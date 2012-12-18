@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4InitXscPAItest.cc,v 1.6 2006-06-29 19:54:11 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //
