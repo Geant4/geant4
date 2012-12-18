@@ -26,7 +26,8 @@
 /// \file hadronic/Hadr01/src/TargetSD.cc
 /// \brief Implementation of the TargetSD class
 //
-// $Id$
+// $Id: TargetSD.cc,v 1.4 2006-06-29 17:24:34 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
 //

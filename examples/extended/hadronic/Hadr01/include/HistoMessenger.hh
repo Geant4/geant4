@@ -26,7 +26,8 @@
 /// \file hadronic/Hadr01/include/HistoMessenger.hh
 /// \brief Definition of the HistoMessenger class
 //
-// $Id$
+// $Id: HistoMessenger.hh,v 1.1 2010-09-08 11:23:53 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 

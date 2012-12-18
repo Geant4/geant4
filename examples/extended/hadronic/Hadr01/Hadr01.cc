@@ -27,7 +27,8 @@
 /// \brief Main program of the hadronic/Hadr01 example
 //
 //
-// $Id$
+// $Id: Hadr01.cc,v 1.12 2010-05-26 11:53:40 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------
 //      GEANT4 Hadr01

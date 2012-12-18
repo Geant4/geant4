@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12-12-12  V.Ivanchenko (exhadr01-V09-06-01)
+- PhysicsList - removed unused LHEP builder header
+
+07-12-12  V.Ivanchenko (exhadr01-V09-06-00)
+- PhysicsList - removed CHIPS and LHEP builders
+
 17-11-12  V.Ivanchenko (exhadr01-V09-05-09)
 - PhysicsList - bug fixed (absence of elestic scattering)
     hadronic HyperNews report #734
