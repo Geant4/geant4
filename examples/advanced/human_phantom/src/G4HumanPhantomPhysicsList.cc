@@ -35,7 +35,8 @@
 //    *                                *
 //    **********************************
 //
-// $Id$
+// $Id: G4HumanPhantomPhysicsList.cc,v 1.13 2010-11-16 15:28:49 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4HumanPhantomPhysicsList.hh"
 
@@ -127,19 +128,19 @@ void G4HumanPhantomPhysicsList::ConstructEM()
       
       // Photon     
       G4RayleighScattering* theRayleigh = new G4RayleighScattering();
-      theRayleigh->SetModel(new G4LivermoreRayleighModel());  //not strictly necessary
+      theRayleigh->SetEmModel(new G4LivermoreRayleighModel());  //not strictly necessary
       pmanager->AddDiscreteProcess(theRayleigh);
 
       G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
-      thePhotoElectricEffect->SetModel(new G4LivermorePhotoElectricModel());
+      thePhotoElectricEffect->SetEmModel(new G4LivermorePhotoElectricModel());
       pmanager->AddDiscreteProcess(thePhotoElectricEffect);
 	
       G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
-      theComptonScattering->SetModel(new G4LivermoreComptonModel());
+      theComptonScattering->SetEmModel(new G4LivermoreComptonModel());
       pmanager->AddDiscreteProcess(theComptonScattering);
 	
       G4GammaConversion* theGammaConversion = new G4GammaConversion();
-      theGammaConversion->SetModel(new G4LivermoreGammaConversionModel());
+      theGammaConversion->SetEmModel(new G4LivermoreGammaConversionModel());
       pmanager->AddDiscreteProcess(theGammaConversion);
       
     } else if (particleName == "e-") {

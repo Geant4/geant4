@@ -18,6 +18,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+December 12, 2012, V.Ivanchenko tag human_phantom-V09-06-00
+- G4HumanPhantomPhysicsList: substitute SetModel by SetEmModel
+
 November 28, 2012, G.Cosmo tag human_phantom-V09-05-05
 - Fixed cases of variable shadowing.
 
