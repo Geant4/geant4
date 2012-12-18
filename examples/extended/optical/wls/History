@@ -16,6 +16,11 @@ track of all tags.
  
      ----------------------------------------------------------
 
+Dec 02, 2012 J.Allison (WLS-V09-06-00)
+  Migration to DrawTrajectory() (i_mode argument is no longer available):
+  o WLSTrajectory.cc: Removed DrawTrajectory(G4int i_mode).
+  o WLSEventAction.cc: Removed argument from DrawTrajectory().
+
 Nov 28th, 2012 Gabriele Cosmo (WLS-V09-05-04)
 - Fixed cases of variable shadowing.
 

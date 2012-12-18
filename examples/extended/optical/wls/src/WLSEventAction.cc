@@ -101,16 +101,16 @@ void WLSEventAction::EndOfEventAction(const G4Event* evt)
         if (drawFlag == "all") {
            G4cout << "Now calling DrawTrajectory" << G4endl;
            G4cout << "Particle Name: " << trj->GetParticleName() << G4endl;
-           trj->DrawTrajectory(50);
+           trj->DrawTrajectory();
         }
         else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-                               trj->DrawTrajectory(50);
+                               trj->DrawTrajectory();
         else if (trj->GetParticleName()=="opticalphoton")
         {
           G4cout << "We should be drawing an opticalphoton" << G4endl;
           trj->SetForceDrawTrajectory(forcedrawphotons);
           trj->SetForceNoDrawTrajectory(forcenophotons);
-          trj->DrawTrajectory(50);
+          trj->DrawTrajectory();
         }
       }
   }

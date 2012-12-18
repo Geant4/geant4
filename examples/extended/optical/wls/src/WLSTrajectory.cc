@@ -128,13 +128,11 @@ void WLSTrajectory::ShowTrajectory(std::ostream& os) const
 
 void WLSTrajectory::DrawTrajectory() const
 {
-  // Invoke the default implementation in G4VTrajectory...
-  G4VTrajectory::DrawTrajectory();
-  // ... or override with your own code here.
-}
+    // i_mode is no longer available as an argument of G4VTrajectory.
+    // In this exampple it was always called with an argument of 50.
+    const G4int i_mode = 50;
+    // Consider using commands /vis/modeling/trajectories.
 
-void WLSTrajectory::DrawTrajectory(G4int i_mode) const
-{
     // Invoke the default implementation in G4VTrajectory...
     // G4VTrajectory::DrawTrajectory(i_mode);
     // ... or override with your own code here.
