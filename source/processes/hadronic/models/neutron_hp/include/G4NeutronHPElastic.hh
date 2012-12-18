@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
  // Hadronic Process: High Precision low E neutron tracking
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97

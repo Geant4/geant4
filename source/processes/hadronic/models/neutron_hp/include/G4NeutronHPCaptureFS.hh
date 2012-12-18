@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4NeutronHPCaptureFS_h
 #define G4NeutronHPCaptureFS_h 1

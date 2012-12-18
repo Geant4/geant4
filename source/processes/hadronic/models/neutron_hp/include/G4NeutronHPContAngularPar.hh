@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 // 080718 Add ClearHistories method and related class member
 //

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4NeutronHPNBodyPhaseSpace_h
 #define G4NeutronHPNBodyPhaseSpace_h 1

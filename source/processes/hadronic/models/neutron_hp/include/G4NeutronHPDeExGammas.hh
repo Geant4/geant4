@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4NeutronHPDeExGammas_h
 #define G4NeutronHPDeExGammas_h 1

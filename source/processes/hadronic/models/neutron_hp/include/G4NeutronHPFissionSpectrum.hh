@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4NeutronHPFissionSpectrum_h
 #define G4NeutronHPFissionSpectrum_h 1

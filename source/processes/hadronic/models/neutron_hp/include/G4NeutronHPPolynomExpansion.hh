@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4NeutronHPPolynomExpansion_h
 #define G4NeutronHPPolynomExpansion_h 1

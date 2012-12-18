@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 // 080721 Create adjust_final_state method by T. Koi  
 // 080801 Introduce theNDLDataA,Z which has A and Z of NDL data by T. Koi

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4NeutronHPDiscreteTwoBody_h
 #define G4NeutronHPDiscreteTwoBody_h 1

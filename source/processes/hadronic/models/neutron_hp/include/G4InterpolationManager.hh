@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4InterpolationManager_h
 #define G4InterpolationManager_h 1

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4NeutronHPAngularP_h
 #define G4NeutronHPAngularP_h 1

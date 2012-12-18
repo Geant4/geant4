@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4NeutronHPIsotropic_h
 #define G4NeutronHPIsotropic_h 1

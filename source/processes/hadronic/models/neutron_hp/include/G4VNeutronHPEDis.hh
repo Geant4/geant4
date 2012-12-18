@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4VNeutronHPEDis_h
 #define G4VNeutronHPEDis_h 1

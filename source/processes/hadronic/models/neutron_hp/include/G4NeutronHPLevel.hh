@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4NeutronHPLevel_h
 #define G4NeutronHPLevel_h 1

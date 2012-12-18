@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4NeutronHPEnAngCorrelation_h
 #define G4NeutronHPEnAngCorrelation_h 1

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97

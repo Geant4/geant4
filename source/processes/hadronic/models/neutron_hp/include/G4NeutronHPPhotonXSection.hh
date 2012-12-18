@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4NeutronHPPhotonXSection_h
 #define G4NeutronHPPhotonXSection_h 1

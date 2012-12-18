@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4NeutronHPMadlandNixSpectrum_h
 #define G4NeutronHPMadlandNixSpectrum_h 1

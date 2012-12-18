@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4NeutronHPArbitaryTab_h
 #define G4NeutronHPArbitaryTab_h 1

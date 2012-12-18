@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4NeutronHPLabAngularEnergy_h
 #define G4NeutronHPLabAngularEnergy_h 1

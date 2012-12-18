@@ -162,18 +162,6 @@ GEANT4_DEFINE_MODULE(NAME G4had_neu_hp
         G4NeutronHPThermalScatteringData.hh
         G4NeutronHPThermalScatteringNames.hh
         G4NeutronHPWattSpectrum.hh
-        G4NeutronHPorLCapture.hh
-        G4NeutronHPorLCaptureData.hh
-        G4NeutronHPorLCaptureModel.hh
-        G4NeutronHPorLEInelastic.hh
-        G4NeutronHPorLEInelasticData.hh
-        G4NeutronHPorLEInelasticModel.hh
-        G4NeutronHPorLElastic.hh
-        G4NeutronHPorLElasticData.hh
-        G4NeutronHPorLElasticModel.hh
-        G4NeutronHPorLFission.hh
-        G4NeutronHPorLFissionData.hh
-        G4NeutronHPorLFissionModel.hh
         G4VNeutronHPEnergyAngular.hh
 	G4NeutronHPBGGNucleonInelasticXS.hh
         G4NeutronHPManager.hh
@@ -281,18 +269,6 @@ GEANT4_DEFINE_MODULE(NAME G4had_neu_hp
         G4NeutronHPThermalScatteringData.cc
         G4NeutronHPThermalScatteringNames.cc
         G4NeutronHPWattSpectrum.cc
-        G4NeutronHPorLCapture.cc
-        G4NeutronHPorLCaptureData.cc
-        G4NeutronHPorLCaptureModel.cc
-        G4NeutronHPorLEInelastic.cc
-        G4NeutronHPorLEInelasticData.cc
-        G4NeutronHPorLEInelasticModel.cc
-        G4NeutronHPorLElastic.cc
-        G4NeutronHPorLElasticData.cc
-        G4NeutronHPorLElasticModel.cc
-        G4NeutronHPorLFission.cc
-        G4NeutronHPorLFissionData.cc
-        G4NeutronHPorLFissionModel.cc
 	G4NeutronHPBGGNucleonInelasticXS.cc
         G4NeutronHPManager.cc
         G4NeutronHPReasctionWhiteBoard.cc

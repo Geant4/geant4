@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4NeutronHPLegendreTable_h
 #define G4NeutronHPLegendreTable_h 1

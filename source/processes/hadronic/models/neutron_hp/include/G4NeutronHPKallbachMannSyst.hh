@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4NeutronHPKallbachMannSyst_h
 #define G4NeutronHPKallbachMannSyst_h 1

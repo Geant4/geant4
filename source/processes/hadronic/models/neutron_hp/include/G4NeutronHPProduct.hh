@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4NeutronHPProduct_h
 #define G4NeutronHPProduct_h 1

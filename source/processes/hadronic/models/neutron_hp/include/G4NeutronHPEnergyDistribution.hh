@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4NeutronHPEnergyDistribution_h
 #define G4NeutronHPEnergyDistribution_h 1

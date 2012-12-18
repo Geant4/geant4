@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4InterpolationIterator_h
 #define G4InterpolationIterator_h 1

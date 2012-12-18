@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 #ifndef G4NeutronHPNeutronYield_h
 #define G4NeutronHPNeutronYield_h 1
