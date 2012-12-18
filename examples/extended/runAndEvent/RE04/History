@@ -13,6 +13,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Dec 02, 2012 J.Allison (exampleRE04-V09-06-00)
+  Migration to DrawTrajectory() (i_mode argument is no longer available):
+  o RE04Trajectory.cc: Removed DrawTrajectory(G4int i_mode).
+
 Oct. 24, 2012 A.Ribon (exampleRE04-V09-05-01)
 - Migrated to the new stopping physics.
 

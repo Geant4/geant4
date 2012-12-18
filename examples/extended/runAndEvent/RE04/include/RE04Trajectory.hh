@@ -60,7 +60,7 @@ typedef std::vector<G4VTrajectoryPoint*>  TrajectoryPointContainer;
 /// - void ShowTrajectory(std::ostream& os=G4cout) const
 ///     invokes the default implementation
 ///
-/// - void DrawTrajectory(G4int i_mode = 0) const
+/// - void DrawTrajectory() const
 ///     invokes the default implementation
 ///
 /// - void AppendStep(const G4Step* aStep)
@@ -128,7 +128,7 @@ public:
 // Other member functions
    virtual void ShowTrajectory(std::ostream& os=G4cout) const;
    //virtual void DrawTrajectory() const;
-   virtual void DrawTrajectory(G4int i_mode = 0) const;
+   virtual void DrawTrajectory() const;
    virtual void AppendStep(const G4Step* aStep);
    virtual int GetPointEntries() const { return fPositionRecord->size(); }
    virtual G4VTrajectoryPoint* GetPoint(G4int i) const 

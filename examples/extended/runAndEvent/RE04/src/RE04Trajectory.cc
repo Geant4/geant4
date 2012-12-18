@@ -110,21 +110,11 @@ void RE04Trajectory::ShowTrajectory(std::ostream& os) const
   // ... or override with your own code here.
 }
 
-/***
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE04Trajectory::DrawTrajectory() const
 {
   // Invoke the default implementation in G4VTrajectory...
   G4VTrajectory::DrawTrajectory();
-  // ... or override with your own code here.
-}
-***/
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void RE04Trajectory::DrawTrajectory(G4int i_mode) const
-{
-  // Invoke the default implementation in G4VTrajectory...
-  G4VTrajectory::DrawTrajectory(i_mode);
   // ... or override with your own code here.
 }
 
