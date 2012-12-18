@@ -27,7 +27,8 @@
 /// \brief Main program of the electromagnetic/TestEm0 example
 //
 //
-// $Id$
+// $Id: DirectAccess.cc,v 1.2 2006-06-29 16:35:25 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
 //
@@ -35,7 +36,7 @@
 //
 #include "G4Material.hh"
 
-#include "G4PEEffectModel.hh"
+#include "G4PEEffectFluoModel.hh"
 #include "G4KleinNishinaCompton.hh"
 #include "G4BetheHeitlerModel.hh"
 
@@ -80,7 +81,7 @@ int main() {
   //
   G4ParticleDefinition* gamma = G4Gamma::Gamma();
   
-  G4VEmModel* phot = new G4PEEffectModel();
+  G4VEmModel* phot = new G4PEEffectFluoModel();
   G4VEmModel* comp = new G4KleinNishinaCompton();
   G4VEmModel* conv = new G4BetheHeitlerModel(); 
   
