@@ -7,14 +7,13 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: CMakeLists.txt,v 1.2 2010-11-23 13:35:03 gcosmo Exp $
+# $Id$
 #
 #------------------------------------------------------------------------------
 
 add_subdirectory(abrasion)
 add_subdirectory(binary_cascade)
 add_subdirectory(cascade)
-add_subdirectory(chiral_inv_phase_space)
 add_subdirectory(coherent_elastic)
 add_subdirectory(de_excitation)
 add_subdirectory(em_dissociation)
@@ -27,6 +26,7 @@ add_subdirectory(lll_fission)
 add_subdirectory(low_energy)
 add_subdirectory(management)
 add_subdirectory(neutron_hp)
+#add_subdirectory(particle_hp)
 add_subdirectory(parton_string)
 add_subdirectory(lepto_nuclear)
 add_subdirectory(pre_equilibrium)
