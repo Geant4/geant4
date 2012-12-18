@@ -64,7 +64,6 @@ class G4Circle;
 class G4Square;
 class G4Polymarker;
 class G4Polyhedron;
-class G4NURBS;
 
 class G4VGraphicsScene {
 
@@ -146,7 +145,6 @@ public: // With description
   virtual void AddPrimitive (const G4Square&)     = 0;
   virtual void AddPrimitive (const G4Polymarker&) = 0;
   virtual void AddPrimitive (const G4Polyhedron&) = 0;
-  virtual void AddPrimitive (const G4NURBS&)      = 0;
 
 };
 

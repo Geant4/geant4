@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.144 2010-12-27 12:18:16 allison Exp $
+cvs log $Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14th December 2012  John Allison (greps-V09-06-01)
+- $Id$ expansion.
+
+3rd December 2012  John Allison (greps-V09-06-00)
+- Removed NURBS and i_mode.
+
 1st October 2012  John Allison (greps-V09-05-14)
 - G4DimensionedType: Another attempt to keep compilers happy:
-  o Created G4DimensionedType.cc.
+  o Created G4DimensionedTypeUtils.cc.
   o Moved "Helper class" HasName and utility function GetUnitValue from
     G4DimensionedType.hh to G4DimensionedTypeUtils.cc inside a new
     namespace, G4DimensionedTypeUtils.

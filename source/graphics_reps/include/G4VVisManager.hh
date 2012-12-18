@@ -82,7 +82,6 @@ class G4Scale;
 class G4Square;
 class G4Polymarker;
 class G4Polyhedron;
-class G4NURBS;
 class G4VSolid;
 class G4VHit;
 class G4VDigi;
@@ -112,9 +111,6 @@ public: // With description
   virtual void Draw (const G4Circle&,
     const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
 
-  virtual void Draw (const G4NURBS&,
-    const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
-
   virtual void Draw (const G4Polyhedron&,
     const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
 
@@ -140,9 +136,6 @@ public: // With description
   virtual void Draw2D (const G4Circle&,
     const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
 
-  virtual void Draw2D (const G4NURBS&,
-    const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
-
   virtual void Draw2D (const G4Polyhedron&,
     const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
 
@@ -165,15 +158,11 @@ public: // With description
   // associated with the object itself - thus you can, for example,
   // change the colour of a physical volume.
 
+  virtual void Draw (const G4VTrajectory&) = 0;
+
   virtual void Draw (const G4VHit&) = 0;
 
   virtual void Draw (const G4VDigi&) = 0;
-
-  virtual void Draw (const G4VTrajectory&, G4int i_mode = 0) = 0;
-  // i_mode is a parameter that can be used to control the drawing of
-  // the trajectory.  See, e.g., G4TrajectoryDrawByCharge::Draw in the
-  // modeling sub-category.  Its use is deprecated; use trajectory
-  // model commands instead.
 
   virtual void Draw (const G4LogicalVolume&, const G4VisAttributes&,
     const G4Transform3D& objectTransformation = G4Transform3D()) = 0;
@@ -213,7 +202,6 @@ public: // With description
   // any, and redraw all views.
 
   virtual void DispatchToModel(const G4VTrajectory&) = 0;
-  virtual void DispatchToModel(const G4VTrajectory&, G4int i_mode) = 0;
   // Draw the trajectory.
 
   virtual G4bool FilterTrajectory(const G4VTrajectory&) = 0;
