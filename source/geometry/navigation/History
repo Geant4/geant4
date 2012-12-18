@@ -1,4 +1,4 @@
-$Id: History,v 1.152 2010-12-15 13:47:10 gcosmo Exp $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 10th, 2012 - G.Cosmo  (geomnav-V09-06-00)
+------------------------
+- Cleared left-over debug check in G4VoxelNavigation.
+  Addressing problem report #1406.
 
 Nov 20th, 2012 - G.Cosmo  (geomnav-V09-05-45)
 ------------------------

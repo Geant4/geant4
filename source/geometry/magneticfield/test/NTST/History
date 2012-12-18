@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2005-11-09 14:50:48 gcosmo Exp $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+December 5th, 2012  John Allison
+- Migrated to DrawTrajectory (i_mode argument no longer available).
 
 June 13th, 2012  Gabriele Cosmo
 - Explicit inclusion of units and constants headers.

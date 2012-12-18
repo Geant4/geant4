@@ -61,10 +61,6 @@
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
 #include "G4VisExtent.hh"
-#include "G4NURBS.hh"
-#include "G4NURBStube.hh"
-#include "G4NURBScylinder.hh"
-#include "G4NURBStubesector.hh"
 
 using namespace CLHEP;
 
@@ -1569,17 +1565,6 @@ G4Polyhedron* G4Hype::GetPolyhedron () const
       fpPolyhedron = CreatePolyhedron();
     }
   return fpPolyhedron;
-}
-
-
-//
-// CreateNURBS
-//
-G4NURBS* G4Hype::CreateNURBS() const 
-{
-  // Tube for now!!!
-  //
-  return new G4NURBStube(endInnerRadius, endOuterRadius, halfLenZ);
 }
 
 

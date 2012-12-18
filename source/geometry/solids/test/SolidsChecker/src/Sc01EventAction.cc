@@ -91,14 +91,14 @@ void Sc01EventAction::EndOfEventAction(const G4Event* evt)
       G4VTrajectory* trj = ((*(evt->GetTrajectoryContainer()))[i]);
 
       // if ( fDrawFlag == "all" )        
-      trj->DrawTrajectory(50); 
-                                  //     pVisManager->Draw(*trj,1000);
+      trj->DrawTrajectory(); 
+                                  //     pVisManager->Draw(*trj);
       /*
       else if ( (fDrawFlag == "charged")&&
-                (trj->GetCharge() != 0.) )  pVisManager->Draw(*trj,1000);
+                (trj->GetCharge() != 0.) )  pVisManager->Draw(*trj);
 
       else if ((fDrawFlag == "neutral")&&
-               (trj->GetCharge() == 0.))    pVisManager->Draw(*trj,1000);
+               (trj->GetCharge() == 0.))    pVisManager->Draw(*trj);
       */
     }
   }		 

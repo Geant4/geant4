@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.7 2007-03-04 14:23:25 grichine Exp $
+# $Id$
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -17,26 +17,6 @@ include $(G4INSTALL)/config/architecture.gmk
 
 # Override some variables for binmake.gmk.
 #
-INCFLAGS := -I$(G4BASE)/geometry/management/include \
-            -I$(G4BASE)/geometry/solids/Boolean/include \
-            -I$(G4BASE)/geometry/solids/CSG/include \
-            -I$(G4BASE)/geometry/solids/specific/include \
-            -I$(G4BASE)/global/management/include \
-            -I$(G4BASE)/global/HEPNumerics/include \
-            -I$(G4BASE)/global/HEPRandom/include \
-            -I$(G4BASE)/global/HEPGeometry/include \
-            -I$(G4BASE)/graphics_reps/include
-
-LDLIBS   := -lG4geomBoolean -lG4csg -lG4specsolids -lG4geometrymng \
-            -lG4graphics_reps \
-            -lG4intercoms \
-            -lG4hepnumerics \
-            -lG4globman
-
-GLOB_LDLIBS   := -lG4geometry \
-            -lG4graphics_reps \
-            -lG4global
-
 include $(G4INSTALL)/config/binmake.gmk
 
 .PHONY: clean_all

@@ -53,8 +53,6 @@
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
-#include "G4NURBS.hh"
-#include "G4NURBSbox.hh"
 #include "G4VisExtent.hh"
 
 //#define G4SPECSDEBUG 1    
@@ -1065,13 +1063,6 @@ G4VisExtent G4EllipticalCone::GetExtent() const
   return G4VisExtent (-maxDim, maxDim,
                       -maxDim, maxDim,
                       -maxDim, maxDim);
-}
-
-G4NURBS* G4EllipticalCone::CreateNURBS () const
-{
-  // Box for now!!!
-  //
-  return new G4NURBSbox(xSemiAxis, ySemiAxis,zheight);
 }
 
 G4Polyhedron* G4EllipticalCone::CreatePolyhedron () const

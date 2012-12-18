@@ -1,4 +1,4 @@
-$Id: History,v 1.24 2007-05-18 11:09:54 gcosmo Exp $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+December, 14th, 2012,   G.Cosmo         -  geomsolids-V09-06-00
+- Includes tags: geom-bool-V09-06-01, geom-csg-V09-06-01,
+                 geom-specific-V09-06-01, geom-solids-tests-V09-06-00.
+- Archived BREPS module.
+- Restored SVN id headers.
 
 June, 12th, 2012,   G.Cosmo             -  geomsolids-V09-05-00
 - Includes tags: geom-bool-V09-05-02, geom-csg-V09-05-04, breps-V09-05-01,

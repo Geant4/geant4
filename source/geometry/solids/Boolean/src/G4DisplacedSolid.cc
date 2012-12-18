@@ -45,8 +45,6 @@
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
-#include "G4NURBS.hh"
-// #include "G4NURBSbox.hh"
 
 ////////////////////////////////////////////////////////////////
 //
@@ -450,18 +448,6 @@ G4DisplacedSolid::CreatePolyhedron () const
   polyhedron
     ->Transform(G4Transform3D(GetObjectRotation(),GetObjectTranslation()));
   return polyhedron;
-}
-
-//////////////////////////////////////////////////////////////////////////
-//
-//
-
-G4NURBS*      
-G4DisplacedSolid::CreateNURBS () const 
-{
-  // Take into account local transformation - see CreatePolyhedron.
-  // return fPtrSolid->CreateNURBS() ;
-  return 0;
 }
 
 //////////////////////////////////////////////////////////////////////////

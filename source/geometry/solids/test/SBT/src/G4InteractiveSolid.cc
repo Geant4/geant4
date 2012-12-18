@@ -40,6 +40,8 @@
 #include "G4UIcmdPargInteger.hh" 
 #include "G4UIcmdPargListDouble.hh"
 
+#include "G4UIcmdWithAnInteger.hh" 
+
 #include "G4Box.hh"
 #include "G4Cons.hh"
 #include "G4Orb.hh"
@@ -470,11 +472,18 @@ G4InteractiveSolid::G4InteractiveSolid( const G4String &prefix )
 	dircTestCmd->SetGuidance( "Declare a DircTest solid" );
 
 	//
-	// Declare BooleanSolid1
+	// Declare SimpleBooleanSolid
 	//
-	G4String BooleanSolid1Path = prefix+"BooleanSolid";
-	BooleanSolid1Cmd = new G4UIcmdWithPargs( BooleanSolid1Path, this, 0, 0 );
-	BooleanSolid1Cmd->SetGuidance( "Declare a Boolean solid #1" );
+	G4String SimpleBooleanSolidPath = prefix+"SimpleBooleanSolid";
+	SimpleBooleanSolidCmd = new G4UIcmdWithAnInteger( SimpleBooleanSolidPath, this); 
+	boxCmd->SetGuidance( "Declare a simple Boolean solid - with a type" );
+	SimpleBooleanSolidCmd->SetParameterName("Type of Boolean", false, true); // 1) Cannot omit, 2) current is default
+	SimpleBooleanSolidCmd->SetDefaultValue(1);   // Used only if omitable and default is false (ie not now.)
+        //     "Type of Boolean (0: int, 1: sub, 2: union): ", 1 );
+	// SimpleBooleanType = new G4UIcmdPargInteger( "Type of Boolean (0: int, 1: sub, 2: union): ", 1 );
+
+	// BooleanSolid1Cmd = new G4UIcmdWithPargs( BooleanSolid1Path, this, 0, 0 );
+	// BooleanSolid1Cmd->SetGuidance( "Declare a Boolean solid #1" );
 }
 
 
@@ -1472,7 +1481,7 @@ void G4InteractiveSolid::MakeMeDircTest()
 //
 // BooleanSolid1Test
 //
-void G4InteractiveSolid::MakeMeBooleanSolid1(G4String)
+void G4InteractiveSolid::MakeMeASimpleBooleanSolid(G4String values)
 {
   /*
     G4IntersectionSolid.hh  G4SubtractionSolid.hh  G4UnionSolid.hh
@@ -1480,12 +1489,47 @@ void G4InteractiveSolid::MakeMeBooleanSolid1(G4String)
     So: Boolean type operation and 2 CSG Objects with parameters for each (..)
     plus a transformation to apply to the second solid
    */
-	delete solid;
-	BooleanOp OperationType;
+        delete solid;
 
-	//OperationType = INTERSECTION;
+	BooleanOp OperationType;
+	// OperationType = INTERSECTION;
 	OperationType = SUBTRACTION;
-		
+
+	// if ( SimpleBooleanSolidCmd->GetArguments( values )) {
+        G4int intValue= SimpleBooleanSolidCmd->GetNewIntValue(values); 
+
+	// if (     intValue <= std::max( SUBTRACTION, std::max( UNION, INTERSECTION ) ) 
+        //  &&  intValue >= std::min( SUBTRACTION, std::min( UNION, INTERSECTION ) ) )
+
+        if( (intValue == SUBTRACTION) || (intValue == INTERSECTION) || (intValue == UNION) )
+        {
+           BooleanOp booleanOpType;
+
+           booleanOpType = (BooleanOp) intValue; 
+
+           //  if( intValue  == SUBTRACTION ) { booleanOpType = SUBTRACTION; }
+           // else if ( intValue == INTERSECTION ) { booleanOpType = INTERSECTION; }
+           // else if ( intValue == INTERSECTION ) { booleanOpType = UNION; }
+
+           if( ( booleanOpType == SUBTRACTION ) || ( booleanOpType == INTERSECTION ) || ( booleanOpType == UNION ) )
+           {
+              OperationType= booleanOpType;
+           }else{
+              G4cerr << " ERROR> Error in converting value for boolean operation type.  The value " 
+                     << booleanOpType << " is not valid. " << G4endl;
+           }
+        }
+        else
+        {
+           G4cerr << " ERROR> Requested value for boolean operation type is out of range. " << G4endl;
+           G4cerr << "  Value requested = " << intValue << G4endl;
+           G4cerr << "  Allowed values are: " << G4endl;
+           G4cerr << "    Intersection: " << INTERSECTION << G4endl
+                  << "    Subtraction:  " << SUBTRACTION << G4endl
+                  << "    Union:        " << UNION <<  G4endl;
+           G4cerr << "  Using default value: " << OperationType << G4endl;
+        }
+
 	/*
 	G4Tubs *outside = new G4Tubs( "OuterFrame",	// name (arbitrary) 
 				      1.0*m, 		// inner radius
@@ -1651,8 +1695,15 @@ void G4InteractiveSolid::SetNewValue( G4UIcommand *command, G4String newValues )
 		MakeMeDircTest();
 	else if (command == twistedTubsCmd) 
 		MakeMeATwistedTubs( newValues );
-	else if (command == BooleanSolid1Cmd) 
-		MakeMeBooleanSolid1(newValues);
+	else if (command == SimpleBooleanSolidCmd) 
+		MakeMeASimpleBooleanSolid(newValues);
+	// else if (command == TestBooleanSolidCmd) a
+	//	MakeMeTestBooleanSolid(newValues);
+	// else if (command == BooleanSolid1Cmd) 
+	//	StoreConstituentSolid(newValues);
+
+	//else if (command == BooleanSolid1Cmd) 
+	//	MakeMeGeneralBooleanSolid(newValues);
 
 	/* Here to add new boolean solids */
 

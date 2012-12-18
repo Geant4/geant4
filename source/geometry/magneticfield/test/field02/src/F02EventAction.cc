@@ -162,11 +162,11 @@ void F02EventAction::EndOfEventAction(const G4Event* evt)
 
       if (drawFlag == "all") 
       {
-        trj->DrawTrajectory(50);
+        trj->DrawTrajectory();
       }
       else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
       {
-        trj->DrawTrajectory(50); 
+        trj->DrawTrajectory();
       }
     }
   }  

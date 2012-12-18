@@ -56,8 +56,6 @@
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
-#include "G4NURBS.hh"
-#include "G4NURBSbox.hh"
 
 using namespace CLHEP;
  
@@ -2381,10 +2379,4 @@ void G4Cons::DescribeYourselfTo (G4VGraphicsScene& scene) const
 G4Polyhedron* G4Cons::CreatePolyhedron () const
 {
   return new G4PolyhedronCons(fRmin1,fRmax1,fRmin2,fRmax2,fDz,fSPhi,fDPhi);
-}
-
-G4NURBS* G4Cons::CreateNURBS () const
-{
-  G4double RMax = (fRmax2 >= fRmax1) ? fRmax2 : fRmax1 ;
-  return new G4NURBSbox (RMax, RMax, fDz);       // Box for now!!!
 }

@@ -152,7 +152,6 @@ class G4Sphere : public G4CSGSolid
     G4VisExtent   GetExtent          () const;    
     void          DescribeYourselfTo(G4VGraphicsScene& scene) const;
     G4Polyhedron* CreatePolyhedron() const;
-    G4NURBS*      CreateNURBS() const;
   
   public:  // without description
    

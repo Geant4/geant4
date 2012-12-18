@@ -107,7 +107,6 @@ class G4Tet : public G4VSolid
     void          DescribeYourselfTo (G4VGraphicsScene& scene) const;
     G4VisExtent   GetExtent          () const;
     G4Polyhedron* CreatePolyhedron   () const;
-    G4NURBS*      CreateNURBS        () const;
     G4Polyhedron* GetPolyhedron      () const;
 
   public:   // without description
@@ -122,7 +121,7 @@ class G4Tet : public G4VSolid
       // Copy constructor and assignment operator.
 
     const char* CVSHeaderVers()
-      { return "$Id: G4Tet.hh,v 1.11 2010-10-20 08:54:18 gcosmo Exp $"; }
+      { return "$Id$"; }
     const char* CVSFileVers()
       { return CVSVers; }
     void PrintWarnings(G4bool flag)

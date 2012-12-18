@@ -1,7 +1,7 @@
-
 GEANT4_ADD_UNIT_TESTS(INCLUDE_DIRS geometry/management/include
+                                   geometry/volumes/include
+                                   geometry/navigation/include
                                    geometry/solids/CSG/include
-                                   geometry/solids/BREPS/include
                                    geometry/solids/Boolean/include
                                    geometry/solids/specific/include
                                    global/management/include
@@ -11,6 +11,3 @@ GEANT4_ADD_UNIT_TESTS(INCLUDE_DIRS geometry/management/include
                                    graphics_reps/include
                                    ${CLHEP_INCLUDE_DIRS}
                       LIBRARIES G4geometry)
-  
-
-

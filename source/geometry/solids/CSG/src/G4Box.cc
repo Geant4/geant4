@@ -50,8 +50,6 @@
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
-#include "G4NURBS.hh"
-#include "G4NURBSbox.hh"
 #include "G4VisExtent.hh"
 
 ////////////////////////////////////////////////////////////////////////
@@ -1052,9 +1050,4 @@ G4VisExtent G4Box::GetExtent() const
 G4Polyhedron* G4Box::CreatePolyhedron () const 
 {
   return new G4PolyhedronBox (fDx, fDy, fDz);
-}
-
-G4NURBS* G4Box::CreateNURBS () const 
-{
-  return new G4NURBSbox (fDx, fDy, fDz);
 }

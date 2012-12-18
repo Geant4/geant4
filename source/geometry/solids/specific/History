@@ -1,4 +1,4 @@
-$Id: History,v 1.186 2010-11-26 13:36:35 gcosmo Exp $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14-Dec-2012  G.Cosmo (geom-specific-V09-06-01)
+- Restored SVN id headers.
+
+02-Dec-2012  J.Allison (geom-specific-V09-06-00)
+- Removed NURBS.
 
 29-Nov-2012  G.Cosmo (geom-specific-V09-05-24)
 - Remove inclusion of G4PhysicalConstants.hh from G4SurfaceVoxelizer.hh.

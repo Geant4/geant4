@@ -149,7 +149,7 @@ void NTSTEventAction::EndOfEventAction(const G4Event* evt)
   G4int n_trajectories = 0;
   if(trajectoryContainer)
     { n_trajectories = trajectoryContainer->entries(); }
-  G4cout << "    " << n_trajectories 
+  G4cout << "    " << n_trajectories
 	 << " trajectories stored in this event." << G4endl;
 
 
@@ -158,9 +158,9 @@ void NTSTEventAction::EndOfEventAction(const G4Event* evt)
   if(pVVisManager) {
     for(G4int i=0; i<n_trajectories; i++) {
       G4VTrajectory* trj = (*(evt->GetTrajectoryContainer()))[i];
-      //           if (drawFlag == "all") trj->DrawTrajectory(50);
+      //           if (drawFlag == "all") trj->DrawTrajectory();
       //           else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-      trj->DrawTrajectory(50); 
+      trj->DrawTrajectory(); 
     }
   }
 }

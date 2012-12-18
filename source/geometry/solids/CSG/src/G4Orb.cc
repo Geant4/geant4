@@ -53,8 +53,6 @@
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
-#include "G4NURBS.hh"
-#include "G4NURBSbox.hh"
 
 using namespace CLHEP;
 
@@ -721,9 +719,4 @@ void G4Orb::DescribeYourselfTo ( G4VGraphicsScene& scene ) const
 G4Polyhedron* G4Orb::CreatePolyhedron () const
 {
   return new G4PolyhedronSphere (0., fRmax, 0., 2*pi, 0., pi);
-}
-
-G4NURBS* G4Orb::CreateNURBS () const
-{
-  return new G4NURBSbox (fRmax, fRmax, fRmax);       // Box for now!!!
 }

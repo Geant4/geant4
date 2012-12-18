@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id:$
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // class G4CutTubs
@@ -51,10 +50,6 @@
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
-#include "G4NURBS.hh"
-#include "G4NURBStube.hh"
-#include "G4NURBScylinder.hh"
-#include "G4NURBStubesector.hh"
 
 using namespace CLHEP;
 

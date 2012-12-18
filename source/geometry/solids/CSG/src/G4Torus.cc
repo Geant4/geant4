@@ -69,10 +69,6 @@
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
-#include "G4NURBS.hh"
-#include "G4NURBStube.hh"
-#include "G4NURBScylinder.hh"
-#include "G4NURBStubesector.hh"
 
 using namespace CLHEP;
 
@@ -1788,34 +1784,4 @@ void G4Torus::DescribeYourselfTo ( G4VGraphicsScene& scene ) const
 G4Polyhedron* G4Torus::CreatePolyhedron () const 
 {
   return new G4PolyhedronTorus (fRmin, fRmax, fRtor, fSPhi, fDPhi);
-}
-
-G4NURBS* G4Torus::CreateNURBS () const 
-{
-  G4NURBS* pNURBS;
-  if (fRmin != 0) 
-  {
-    if (fDPhi >= twopi) 
-    {
-      pNURBS = new G4NURBStube(fRmin, fRmax, fRtor);
-    }
-    else 
-    {
-      pNURBS = new G4NURBStubesector(fRmin, fRmax, fRtor, fSPhi, fSPhi + fDPhi);
-    }
-  }
-  else 
-  {
-    if (fDPhi >= twopi) 
-    {
-      pNURBS = new G4NURBScylinder (fRmax, fRtor);
-    }
-    else 
-    {
-      const G4double epsilon = 1.e-4; // Cylinder sector not yet available!
-      pNURBS = new G4NURBStubesector (epsilon, fRmax, fRtor,
-                                      fSPhi, fSPhi + fDPhi);
-    }
-  }
-  return pNURBS;
 }

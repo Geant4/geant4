@@ -1156,15 +1156,6 @@ G4Polyhedron* G4Polyhedra::CreatePolyhedron() const
 }
 
 //
-// CreateNURBS
-//
-G4NURBS *G4Polyhedra::CreateNURBS() const
-{
-  return 0;
-}
-
-
-//
 // G4PolyhedraHistorical stuff
 //
 G4PolyhedraHistorical::G4PolyhedraHistorical()

@@ -7,11 +7,10 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: CMakeLists.txt,v 1.1 2010-09-29 18:42:42 bmorgan Exp $
+# $Id$
 #
 #------------------------------------------------------------------------------
 
-add_subdirectory(BREPS)
 add_subdirectory(Boolean)
 add_subdirectory(CSG)
 add_subdirectory(specific)

@@ -639,11 +639,6 @@ G4Polyhedron* G4VSolid::CreatePolyhedron () const
   return 0;
 }
 
-G4NURBS* G4VSolid::CreateNURBS () const
-{
-  return 0;
-}
-
 G4Polyhedron* G4VSolid::GetPolyhedron () const
 {
   return 0;

@@ -3,7 +3,7 @@
 # A simple script to run all the tests in this directory and check
 # their results against the expected (previous) results
 #
-# $Id: test.sh,v 1.9 2006/11/14 15:11:28 japost Exp $
+# $Id$
 # $Name: geant4-09-02-ref-05 $
 #
 

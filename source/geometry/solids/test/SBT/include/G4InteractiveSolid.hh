@@ -52,6 +52,7 @@ class G4UIdirectory;
 class G4UIcommand;
 class G4UIcmdWithPargs;
 class G4UIcmdParg;
+class G4UIcmdWithAnInteger;
 
 class G4InteractiveSolid : public G4UImessenger, public G4SolidQuery {
 public:
@@ -68,6 +69,10 @@ protected:
   G4String ConvertArgsToString( G4UIcmdParg **array, const G4int nItem );
 	
   G4VSolid	*solid;
+
+   // Constituent Solids for Boolean
+  G4VSolid	*fSolidA;
+  G4VSolid	*fSolidB;
 	
   G4UIdirectory	*volumeDirectory;
 	
@@ -190,19 +195,29 @@ protected:
   G4UIcmdWithPargs	*dircTestCmd;
   void MakeMeDircTest();
 
-
-  
   typedef enum BooleanOp {
     INTERSECTION,
     SUBTRACTION,
     UNION
   } BooleanOp;
 
-  G4UIcmdWithPargs	*BooleanSolid1Cmd;
-  void MakeMeBooleanSolid1(G4String values);
+  // G4UIcmdWithPargs	*TestBooleanSolidCmd;  
+  // void MakeMeTestBooleanSolid(G4String values);
+
+/* 
+  G4UIcmdWithAnInteger  *StoreConstituentSolidCmd;
+  void StoreConstituentSolid(G4String values);
+*/
+
+  // G4UIcmdParg		*SimpleBooleanArgs[1];
+  // G4UIcmdPargInteger    *SimpleBooleanType;
+  G4UIcmdWithAnInteger  *SimpleBooleanSolidCmd;
+  void MakeMeASimpleBooleanSolid(G4String values);
+
+  // G4UIcmdWithPargs      *GeneralBooleanSolidCmd;
+  // void MakeMeGeneralBooleanSolid(G4String values);
 
   /* Here add new commands and functions to create solids */
-
 };
 
 

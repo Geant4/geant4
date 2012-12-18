@@ -1186,15 +1186,6 @@ G4Polyhedron* G4Polycone::CreatePolyhedron() const
 
 
 //
-// CreateNURBS
-//
-G4NURBS *G4Polycone::CreateNURBS() const
-{
-  return 0;
-}
-
-
-//
 // G4PolyconeHistorical stuff
 //
 

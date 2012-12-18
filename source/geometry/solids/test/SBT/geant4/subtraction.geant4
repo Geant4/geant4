@@ -1,0 +1,33 @@
+#
+# GEANT4 SBT Script to test G4Tubs
+# DCW 19/3/99 First try
+#
+# Increment the number below to **really** waste CPU time
+#
+/test/maxPoints 1000
+#
+# --- tubs.a1.log
+# Here is a tube with no inner radius and no phi segmentation
+#
+/solid/BooleanSolid
+/test/errorFileName  log/boolean-subtraction.a1.log
+/test/run
+/test/gridSizes 0.02 0.02 0.02 m
+/test/errorFileName  log/boolean-subtraction.a2.log
+/test/run
+#
+# --- subtraction.b1.log
+#  DircTest = Tubs - Box
+#
+/test/gridSizes 0 0 0 m
+/solid/DircTest
+/test/errorFileName  log/boolean-dircTest.a1.log
+/test/run
+/test/gridSizes 0.02 0.02 0.02 m
+/test/errorFileName  log/boolean-dircTest.a2.log
+/test/run
+#
+
+#
+#
+exit

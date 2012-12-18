@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2008-03-27 16:47:21 gcosmo Exp $
+$Id$
 ----------------------------------------------------------------
 
            History file for geometry/solids/test/SBT
@@ -11,6 +11,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 28, 2012 - J.Apostolakis
+----------------------------
+- G4InteractiveSolid: changed 'BooleanSolid' command to 'SimpleBooleanSolid'
+  to prepare for addition of a general boolean.
 
 Apr 6, 2012 - M.Kelsey
 ----------------------

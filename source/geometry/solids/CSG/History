@@ -1,4 +1,4 @@
-$Id: History,v 1.135 2010-11-23 14:46:11 gcosmo Exp $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+December 14, 2012  G.Cosmo               geom-csg-V09-06-01
+- Restored SVN id headers.
+
+Dec 02, 2012  J.Allison                  geom-csg-V09-06-00
+- Removed NURBS.
 
 Nov 14, 2012   P. Mato                   geom-csg-V09-05-09
 - Added #undef NDEBUG in unit tests to ensure that assert always works

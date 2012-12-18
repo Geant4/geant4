@@ -122,7 +122,6 @@ class G4Paraboloid : public G4VSolid
     void DescribeYourselfTo(G4VGraphicsScene& scene) const;
     G4Polyhedron* CreatePolyhedron() const;
     G4Polyhedron* GetPolyhedron () const;
-    G4NURBS*      CreateNURBS() const;
 
   public:  // without description
 

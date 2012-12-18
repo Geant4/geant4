@@ -48,8 +48,6 @@
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
-#include "G4NURBS.hh"
-#include "G4NURBSbox.hh"
 
 using namespace CLHEP;
 
@@ -1471,10 +1469,4 @@ void G4Trd::DescribeYourselfTo ( G4VGraphicsScene& scene ) const
 G4Polyhedron* G4Trd::CreatePolyhedron () const
 {
   return new G4PolyhedronTrd2 (fDx1, fDx2, fDy1, fDy2, fDz);
-}
-
-G4NURBS* G4Trd::CreateNURBS () const
-{
-  //  return new G4NURBSbox (fDx, fDy, fDz);
-  return 0;
 }

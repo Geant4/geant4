@@ -1,4 +1,4 @@
-$Id: README.SBT,v 1.1 2008-02-22 11:20:39 ivana Exp $
+$Id$
 
 The SBT log outputs can be debugged with Fred in this
 way:

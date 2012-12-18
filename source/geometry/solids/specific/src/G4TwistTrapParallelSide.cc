@@ -25,7 +25,6 @@
 //
 //
 // $Id: G4TwistTrapParallelSide.cc,v 
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------------

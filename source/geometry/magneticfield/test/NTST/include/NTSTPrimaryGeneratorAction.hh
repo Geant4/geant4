@@ -26,7 +26,6 @@
 // $Id: NTSTPrimaryGeneratorAction instantiates each of the allowed
 // generators and invokes the one specified by the messenger
 
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 

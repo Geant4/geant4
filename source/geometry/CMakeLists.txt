@@ -8,7 +8,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: CMakeLists.txt,v 1.2 2011-01-05 13:01:52 bmorgan Exp $
+# $Id$
 #
 #------------------------------------------------------------------------------
 
@@ -32,7 +32,6 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
             magneticfield/sources.cmake
             management/sources.cmake
             navigation/sources.cmake
-            solids/BREPS/sources.cmake
             solids/Boolean/sources.cmake
             solids/CSG/sources.cmake
             solids/specific/sources.cmake

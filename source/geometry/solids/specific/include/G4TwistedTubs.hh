@@ -129,7 +129,6 @@ class G4TwistedTubs : public G4VSolid
 
   void            DescribeYourselfTo (G4VGraphicsScene &scene) const;
   G4Polyhedron   *CreatePolyhedron   () const;
-  G4NURBS        *CreateNURBS        () const;
   G4Polyhedron   *GetPolyhedron      () const;
 
   std::ostream &StreamInfo(std::ostream& os) const;

@@ -56,7 +56,7 @@
 
 #include "G4Tet.hh"
 
-const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.16 2010-10-20 08:54:18 gcosmo Exp $";
+const char G4Tet::CVSVers[]="$Id$";
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -67,8 +67,6 @@ const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.16 2010-10-20 08:54:18 gcosmo Exp
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
-#include "G4NURBS.hh"
-#include "G4NURBSbox.hh"
 #include "G4VisExtent.hh"
 
 #include "G4ThreeVector.hh"
@@ -802,15 +800,6 @@ G4Polyhedron* G4Tet::CreatePolyhedron () const
   ph->createPolyhedron(4,4,xyz,faces);
 
   return ph;
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// CreateNURBS
-
-G4NURBS* G4Tet::CreateNURBS () const 
-{
-  return new G4NURBSbox (fDx, fDy, fDz);
 }
 
 ////////////////////////////////////////////////////////////////////////

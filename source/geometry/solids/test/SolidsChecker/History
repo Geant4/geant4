@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2005-03-18 16:24:05 link Exp $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 05, 2012  John Allison
+- Migrated to DrawTrajectory (i_mode argument no longer available).
 
 Mar 18, 2005  Oliver Link
 - Added G4TwistedTrd and general G4TwistedTrap as test cases

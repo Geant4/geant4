@@ -56,8 +56,6 @@
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
 #include "G4PolyhedronArbitrary.hh"
-#include "G4NURBS.hh"
-#include "G4NURBSbox.hh"
 #include "G4VisExtent.hh"
 
 const G4int    G4GenericTrap::fgkNofVertices = 8;
@@ -2213,27 +2211,5 @@ G4Polyhedron* G4GenericTrap::CreatePolyhedron() const
 
   return (G4Polyhedron*) polyhedron;
 }
-
-// --------------------------------------------------------------------
-
-G4NURBS*  G4GenericTrap::CreateNURBS() const
-{
-#ifdef G4TESS_TEST
-  if ( fTessellatedSolid )
-  { 
-    return fTessellatedSolid->CreateNURBS();
-  }
-#endif
-
-  // Computes bounding vectors for the shape
-  //
-  G4double Dx,Dy;
-  G4ThreeVector minVec = GetMinimumBBox();
-  G4ThreeVector maxVec = GetMaximumBBox();
-  Dx = 0.5*(maxVec.x()- minVec.y());
-  Dy = 0.5*(maxVec.y()- minVec.y());
-
-  return new G4NURBSbox (Dx, Dy, fDz);
-}    
 
 // --------------------------------------------------------------------

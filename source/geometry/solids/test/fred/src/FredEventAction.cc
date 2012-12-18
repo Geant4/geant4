@@ -124,7 +124,7 @@ void FredEventAction::DrawNormal()
 	
 	while(numTraj--) {
 	 	G4VTrajectory *trajectory = (*trajectoryContainer)[numTraj];
-	  	trajectory->DrawTrajectory( 0 );
+	  	trajectory->DrawTrajectory();
 	}
 	
 	// Draw hits

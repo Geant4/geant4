@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# $Id: sbt.sh,v 1.2 2008-01-25 17:09:50 ivana Exp $
+# $Id$
 # 
 # This script must be run from the top level directory where is SBT installed;
 # it calls the SBT program with the selected geant4 macro in SBT/geant4 directory.

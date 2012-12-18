@@ -1,4 +1,4 @@
-$Id:$
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+December 4th, 2012,   J.Allison       -  geom-solids-tests-V09-06-00
+- Fixed migration to DrawTrajectory() method with no arguments.
+- Restored SVN id headers.
 
 April 17th, 2012,   G.Cosmo           -  geom-solids-tests-V09-05-01
 - Minor fixes for compilation warnings and logs update.

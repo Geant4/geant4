@@ -54,8 +54,6 @@
 
 #include "G4Polyhedron.hh"   
 #include "G4VGraphicsScene.hh"
-#include "G4NURBS.hh"
-#include "G4NURBSbox.hh"
 #include "G4VisExtent.hh"
 
 //
