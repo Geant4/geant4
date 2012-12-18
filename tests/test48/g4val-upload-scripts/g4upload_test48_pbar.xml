@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : insert_g4test.xml
+    Created on : October 31, 2011, 05:19 PM
+    Author     : adotti
+    Description: xml description to upload geant 4 test into database
+-->
+<testslist>
+    
+    <tests>
+        <testdes>test48</testdes>
+        <g4version>geant4-9.6-b01</g4version>
+        <observable>Charged Pion Momentun; Number of Secondary Pions</observable>
+        <reaction>pbar on H</reaction>
+        <score>
+            <type>expert</type>
+            <value>passed</value>  
+        </score>
+        <imageblob>pbar-H-models.gif</imageblob>
+        <taglist>
+            <tag>
+                <name>Model</name>
+                <value>CHIPS, FTF</value>
+            </tag>
+            <tag>
+                <name>Particle</name>
+                <value>pbar</value>
+            </tag>       
+            <tag>
+                <name>Target</name>
+                <value>H</value>
+            </tag>
+
+        </taglist>    
+    </tests>    
+
+</testslist>

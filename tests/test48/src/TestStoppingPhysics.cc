@@ -88,9 +88,6 @@
 #include "G4KaonMinusAbsorption.hh"
 #include "G4KaonMinusAbsorptionAtRest.hh"
 
-// chips code
-#include "G4QCaptureAtRest.hh"
-
 // Bertini cascade
 // for pi-
 #include "G4PiMinusAbsorptionBertini.hh"
@@ -377,10 +374,6 @@ G4VProcess* TestStoppingPhysics::GetProcess(const G4String& gen_name,
         theProcess = new G4AntiProtonAbsorptionFritiof();
      }
   }
-  else if(gen_name == "CHIPS") 
-  {
-    theProcess = new G4QCaptureAtRest();
-  } 
   else 
   {
     G4cout << gen_name

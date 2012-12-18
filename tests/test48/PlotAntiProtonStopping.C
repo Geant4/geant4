@@ -23,12 +23,17 @@
 
 // provision for near-future use of FTF for baryons
 //
+/*
 const int NModelsBaryons=3;
 std::string ModelsBaryons[3] = { "stopping", "CHIPS", "FTF" };
-
-
 int         ColorModel[4]    = { 2, 1, 6, 3 };
 int         SymbModel[4]     = { 29, 20, 21, 8 };
+*/
+
+const int NModelsBaryons=2;
+std::string ModelsBaryons[2] = { "CHIPS", "FTF" };
+int         ColorModel[3]    = { 1, 6, 3 };
+int         SymbModel[3]     = { 20, 21, 8 };
 
 
 // pbar beam business
@@ -197,28 +202,40 @@ void plotAntiProton( std::string target="H" )
    TH1F* hi_mom[NModelsBaryons];
    TH1F* hi_mult[NModelsBaryons];
    
-   TCanvas *myc = new TCanvas("myc","",1000,600);
+   TCanvas *myc = new TCanvas("myc","pbar annihilation on H",1100,500);
 
 // This part is for plotting model-vs data only.
 // It needs to be commented out if both model-vs-data abd regression are wanted (see below).
 // However, leave the TCanvas instanciation here !
 
+/*
    myc->Divide(2,1);
    myc->cd(1); gPad->SetLeftMargin(0.15);
    //gPad->SetLogx(1); gPad->SetLogy(1);
-   myc->cd(2);gPad->SetLeftMargin(0.15); 
+   myc->cd(2);gPad->SetLeftMargin(0.15); gPad->SetLogy();
    //gPad->SetLogx(1); gPad->SetLogy(1);
-   
+*/   
    // This part is for plotting both model-vs-data & regression, all in one canvas. 
-   // Make sure the TCanvas is instanciated !
+   // Make sure the TCanvas is instantiated !
    //
+
 /*
-   TPad* pad1 = new TPad("pad1","",0.01, 0.01,0.49,0.99);
+   TPad* pad1 = new TPad("pad1","pbar annihilation on H",0.01, 0.01,0.99,0.99);
    pad1->Draw();
    pad1->Divide(1,2);
    pad1->cd(1); gPad->SetLeftMargin(0.15);
    pad1->cd(2); gPad->SetLeftMargin(0.15);
-*/      
+*/
+   TText* txt = new TText( 0.35, 0.93, "pbar annihilation on H" );
+   txt->SetTextSize(0.05);
+   txt->Draw();
+   
+   TPad* pad1 = new TPad("pad1","",0.01, 0.01,0.49,0.92);
+   pad1->Draw();
+   TPad* pad2 = new TPad("pad2","",0.51, 0.01,0.99,0.92);
+   pad2->Draw();
+   pad2->SetLogy();
+      
    double ymin_mom = 100000., ymin_mult = 100000. ; // something big... don't know if I can use FLT_MAX
    double ymax_mom = -1., ymax_mult = -1. ;
    for ( int m=0; m<NModelsBaryons; m++ )
@@ -228,7 +245,9 @@ void plotAntiProton( std::string target="H" )
       TFile* f = new TFile( histofile.c_str() );
       // f->ls();
       hi_mom[m] = (TH1F*)f->Get("ChargedPionMomentum");
+      hi_mom[m]->SetTitle("");
       hi_mult[m] = (TH1F*)f->Get("NPions");
+      hi_mult[m]->SetTitle("");
       hi_mom[m]->SetLineColor(ColorModel[m]);
       hi_mult[m]->SetLineColor(ColorModel[m]);
       hi_mom[m]->SetLineWidth(2);
@@ -251,12 +270,12 @@ void plotAntiProton( std::string target="H" )
 	if ( yy > ymax_mult ) ymax_mult = yy;
 	if ( yy < ymin_mult && yy > 0. ) ymin_mult = yy;
       }      
-      myc->cd(1);
-//      pad1->cd(1);
+//       myc->cd(1);
+      pad1->cd();
       if ( m == 0 ) hi_mom[m]->Draw();
       else hi_mom[m]->Draw("same");
-      myc->cd(2);
-//      pad1->cd(2);
+//      myc->cd(2);
+      pad2->cd();
       if ( m == 0 ) hi_mult[m]->Draw();
       else hi_mult[m]->Draw("same");      
    }
@@ -270,7 +289,8 @@ void plotAntiProton( std::string target="H" )
       hi_mom[m]->GetYaxis()->SetRangeUser(ymin_mom,ymax_mom*1.4);
       hi_mom[m]->SetStats(0);
       leg1->AddEntry( hi_mom[m], ModelsBaryons[m].c_str(), "L" );
-      hi_mult[m]->GetYaxis()->SetRangeUser(ymin_mult,ymax_mult*1.1);
+      // hi_mult[m]->GetYaxis()->SetRangeUser(ymin_mult,ymax_mult*1.1);
+      hi_mult[m]->GetYaxis()->SetRangeUser(ymin_mult,1.);
       hi_mult[m]->SetStats(0);
       leg2->AddEntry( hi_mult[m], ModelsBaryons[m].c_str(), "L" );
    }
@@ -285,15 +305,15 @@ void plotAntiProton( std::string target="H" )
    gr2->SetMarkerColor(4);  gr2->SetMarkerStyle(22);
    gr2->SetMarkerSize(1.6);
    
-   myc->cd(1);
-//   pad1->cd(1);
+//    myc->cd(1);
+   pad1->cd();
    gr1->Draw("p"); 
    leg1->AddEntry(gr1, "exp.data", "p");
    leg1->Draw();
    leg1->SetFillColor(kWhite);
      
-   myc->cd(2);
-//   pad1->cd(2);
+//   myc->cd(2);
+   pad2->cd();
    gr2->Draw("p");
    leg2->AddEntry(gr2, "exp.data", "p");
    leg2->Draw();
