@@ -8,7 +8,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: CMakeLists.txt,v 1.3 2010-11-23 13:29:25 gcosmo Exp $
+# $Id$
 #
 #------------------------------------------------------------------------------
 
@@ -58,11 +58,6 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
             hadronic/models/cascade/cascade/sources.cmake
             hadronic/models/cascade/evaporation/sources.cmake
             hadronic/models/cascade/utils/sources.cmake
-            hadronic/models/chiral_inv_phase_space/body/sources.cmake
-            hadronic/models/chiral_inv_phase_space/cross_sections/sources.cmake
-            hadronic/models/chiral_inv_phase_space/fragmentation/sources.cmake
-            hadronic/models/chiral_inv_phase_space/interface/sources.cmake
-            hadronic/models/chiral_inv_phase_space/processes/sources.cmake
             hadronic/models/coherent_elastic/sources.cmake
             hadronic/models/de_excitation/ablation/sources.cmake
             hadronic/models/de_excitation/evaporation/sources.cmake
