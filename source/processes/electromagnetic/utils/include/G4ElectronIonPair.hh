@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ElectronIonPair.hh,v 1.5 2010-10-25 17:23:01 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 #ifndef G4ElectronIonPair_h

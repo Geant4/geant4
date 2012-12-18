@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4LossTableManager.hh,v 1.61 2010-09-03 10:09:45 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // -------------------------------------------------------------------
@@ -80,7 +81,6 @@
 #include <vector>
 #include "globals.hh"
 #include "G4VEnergyLossProcess.hh"
-#include "G4EnergyLossTables.hh"
 
 class G4PhysicsTable;
 class G4MaterialCutsCouple;

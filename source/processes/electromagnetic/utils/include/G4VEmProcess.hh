@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4VEmProcess.hh,v 1.61 2010-08-17 17:36:59 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -221,12 +222,6 @@ public:
   // Add model for region, smaller value of order defines which
   // model will be selected for a given energy interval  
   void AddEmModel(G4int, G4VEmModel*, const G4Region* region = 0);
-
-  // Assign a model to a process - obsolete will be removed
-  void SetModel(G4VEmModel*, G4int index = 1);
-  
-  // return the assigned model - obsolete will be removed
-  G4VEmModel* Model(G4int index = 1);
 
   // return the assigned model
   G4VEmModel* EmModel(G4int index = 1);

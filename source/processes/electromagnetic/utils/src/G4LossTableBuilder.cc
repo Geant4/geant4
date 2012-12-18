@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4LossTableBuilder.cc,v 1.32 2009-08-11 17:24:53 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //

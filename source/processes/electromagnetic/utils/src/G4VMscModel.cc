@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4VMscModel.cc,v 1.18 2010-09-07 16:05:33 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //

@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4VAtomDeexcitation.hh,v 1.9 2011-01-03 19:34:03 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //

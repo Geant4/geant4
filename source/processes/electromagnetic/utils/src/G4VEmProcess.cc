@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4VEmProcess.cc,v 1.88 2010-08-17 17:36:59 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -185,35 +186,6 @@ void G4VEmProcess::AddEmModel(G4int order, G4VEmModel* p,
   G4VEmFluctuationModel* fm = 0;
   modelManager->AddEmModel(order, p, fm, region);
   if(p) { p->SetParticleChange(pParticleChange); }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4VEmProcess::SetModel(G4VEmModel* p, G4int index)
-{
-  ++warn;
-  if(warn < 10) { 
-    G4cout << "### G4VEmProcess::SetModel is obsolete method and will be "
-	   << "removed for the next release." << G4endl;
-    G4cout << "    Please, use SetEmModel" << G4endl;
-  } 
-  G4int n = emModels.size();
-  if(index >= n) { for(G4int i=n; i<=index; ++i) {emModels.push_back(0);} }
-  emModels[index] = p;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4VEmModel* G4VEmProcess::Model(G4int index)
-{
-  if(warn < 10) { 
-    G4cout << "### G4VEmProcess::Model is obsolete method and will be "
-	   << "removed for the next release." << G4endl;
-    G4cout << "    Please, use EmModel" << G4endl;
-  } 
-  G4VEmModel* p = 0;
-  if(index >= 0 && index <  G4int(emModels.size())) { p = emModels[index]; }
-  return p;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

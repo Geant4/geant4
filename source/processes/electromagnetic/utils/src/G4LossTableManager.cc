@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4LossTableManager.cc,v 1.105 2010-11-04 12:55:09 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -1149,8 +1150,6 @@ G4double G4LossTableManager::GetDEDX(const G4ParticleDefinition *aParticle,
   if(aParticle != currentParticle) { GetEnergyLossProcess(aParticle); }
   G4double x = 0.0;
   if(currentLoss) { x = currentLoss->GetDEDX(kineticEnergy, couple); }
-  else            { x = G4EnergyLossTables::GetDEDX(currentParticle,
-						    kineticEnergy,couple,false); }
   return x;
 }
 
@@ -1186,10 +1185,8 @@ G4LossTableManager::GetRangeFromRestricteDEDX(const G4ParticleDefinition *aParti
 					      const G4MaterialCutsCouple *couple)
 {
   if(aParticle != currentParticle) { GetEnergyLossProcess(aParticle); }
-  G4double x;
+  G4double x = DBL_MAX;
   if(currentLoss) { x = currentLoss->GetRangeForLoss(kineticEnergy, couple); }
-  else { x = G4EnergyLossTables::GetRange(currentParticle,kineticEnergy,
-					  couple,false); }
   return x;
 }
 
@@ -1200,10 +1197,8 @@ G4double G4LossTableManager::GetRange(const G4ParticleDefinition *aParticle,
 				      const G4MaterialCutsCouple *couple)
 {
   if(aParticle != currentParticle) { GetEnergyLossProcess(aParticle); }
-  G4double x;
+  G4double x = DBL_MAX;
   if(currentLoss) { x = currentLoss->GetRange(kineticEnergy, couple); }
-  else { x = G4EnergyLossTables::GetRange(currentParticle,kineticEnergy,
-					  couple,false); }
   return x;
 }
 
@@ -1214,10 +1209,8 @@ G4double G4LossTableManager::GetEnergy(const G4ParticleDefinition *aParticle,
 				       const G4MaterialCutsCouple *couple)
 {
   if(aParticle != currentParticle) { GetEnergyLossProcess(aParticle); }
-  G4double x;
+  G4double x = 0;
   if(currentLoss) { x = currentLoss->GetKineticEnergy(range, couple); }
-  else { x = G4EnergyLossTables::GetPreciseEnergyFromRange(currentParticle,range,
-							   couple,false); }
   return x;
 }
 

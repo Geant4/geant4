@@ -64,12 +64,10 @@ GEANT4_DEFINE_MODULE(NAME G4emutils
         G4LossTableManager.hh
         G4MscStepLimitType.hh
         G4VAtomDeexcitation.hh
-        G4VBremAngularDistribution.hh
         G4VEmAngularDistribution.hh
         G4VEmFluctuationModel.hh
         G4VEmModel.hh
         G4VEmProcess.hh
-        G4VEnergyLoss.hh
         G4VEnergyLossProcess.hh
         G4VMscModel.hh
         G4VMultipleScattering.hh
@@ -92,12 +90,10 @@ GEANT4_DEFINE_MODULE(NAME G4emutils
         G4LossTableBuilder.cc
         G4LossTableManager.cc
         G4VAtomDeexcitation.cc
-        G4VBremAngularDistribution.cc
         G4VEmAngularDistribution.cc
         G4VEmFluctuationModel.cc
         G4VEmModel.cc
         G4VEmProcess.cc
-        G4VEnergyLoss.cc
         G4VEnergyLossProcess.cc
         G4VMscModel.cc
         G4VMultipleScattering.cc

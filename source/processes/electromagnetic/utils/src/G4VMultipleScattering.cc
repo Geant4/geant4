@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4VMultipleScattering.cc,v 1.86 2010-10-26 11:30:46 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -140,36 +141,6 @@ void G4VMultipleScattering::AddEmModel(G4int order, G4VEmModel* p,
   G4VEmFluctuationModel* fm = 0;
   modelManager->AddEmModel(order, p, fm, region);
   if(p) { p->SetParticleChange(pParticleChange); }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4VMultipleScattering::SetModel(G4VMscModel* p, G4int index)
-{
-  ++warn;
-  if(warn < 10) { 
-    G4cout << "### G4VMultipleScattering::SetModel is obsolete method "
-	   << "and will be removed for the next release." << G4endl;
-    G4cout << "    Please, use SetEmModel" << G4endl;
-  } 
-  G4int n = mscModels.size();
-  if(index >= n) { for(G4int i=n; i<=index; ++i) {mscModels.push_back(0);} }
-  mscModels[index] = p;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4VMscModel* G4VMultipleScattering::Model(G4int index)
-{
-  ++warn;
-  if(warn < 10) { 
-    G4cout << "### G4VMultipleScattering::Model is obsolete method "
-	   << "and will be removed for the next release." << G4endl;
-    G4cout << "    Please, use EmModel" << G4endl;
-  } 
-  G4VMscModel* p = 0;
-  if(index >= 0 && index <  G4int(mscModels.size())) { p = mscModels[index]; }
-  return p;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

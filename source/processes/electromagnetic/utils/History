@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12 December 12: V.Ivant (emutils-V09-06-01)
+- G4LossTableManager - removed calls to obsolete methods
+
+07 December 12: V.Ivant (emutils-V09-06-00)
+- Removed obsolete classes G4VEnergyLoss, G4VBremAngularDistribution
+- G4VEmProcess, G4VMultipleScattering - removed obsolete methods
+    SetModel(), Model()
+
 09 November 12: V.Ivant (emutils-V09-05-56)
 08 November 12: V.Ivant (emutils-V09-05-55)
 - G4VEnergyLossProcess - fixed non-reproducibility for ions

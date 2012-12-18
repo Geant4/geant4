@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4VMultipleScattering.hh,v 1.63 2010-03-10 18:29:51 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
@@ -183,12 +184,6 @@ public:
   // Add model for region, smaller value of order defines which
   // model will be selected for a given energy interval  
   void AddEmModel(G4int order, G4VEmModel*, const G4Region* region = 0);
-
-  // Assign a model to a process - obsolete method will be removed
-  void SetModel(G4VMscModel*, G4int index = 1);
-  
-  // return the assigned model - obsolete method will be removed
-  G4VMscModel* Model(G4int index = 1);
 
   // Assign a model to a process
   void SetEmModel(G4VMscModel*, G4int index = 1);
