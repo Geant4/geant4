@@ -17,7 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Sep 24th, 2012 I.Hrivnacova (exParameterisations-V09-05-00)
+Dec 13th, 2012 I. Hrivnacova (exParameterisations-V09-06-00)
+--------------------
+- Added Par01 example (moved from novice/N05)
+
+Sep 24th, 2012 I. Hrivnacova (exParameterisations-V09-05-00)
 --------------------
 - Updated CMakeLists.txt:
   adding visualization, copying macros, install target and comment lines 

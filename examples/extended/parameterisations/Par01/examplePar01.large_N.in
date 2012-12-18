@@ -1,0 +1,59 @@
+#  examplePar01_large_N.in
+#
+/gun/particle e-
+/gun/energy 1 GeV
+/gun/position 0 0 0
+#
+#/tracking/verbose 1
+#
+/gun/direction 0 .6 1.
+/run/beamOn 250
+#
+/gun/direction 0 .3 1.
+/run/beamOn 250
+#
+/gun/direction 0 -.3 1.
+/run/beamOn 250
+#
+/gun/direction 0 -.6 1.
+/run/beamOn 250 
+#
+/gun/particle pi-
+/gun/energy 1 GeV
+/gun/position 0 0 0
+#
+#
+#
+/gun/direction 0 .6 1.
+/run/beamOn 250
+#
+/gun/direction 0 .3 1.
+/run/beamOn 250
+#
+/gun/direction 0 -.3 1.
+/run/beamOn 250
+#
+/gun/direction 0 -.6 1.
+/run/beamOn 250
+#
+#
+# switch off Fast Simulation
+#
+/gun/particle e-
+#
+/process/inactivate G4FastSimulationManagerProcess
+#
+/gun/direction 0 .6 1.
+/run/beamOn 250
+#
+
+
+exit
+
+
+
+
+
+
+
+
