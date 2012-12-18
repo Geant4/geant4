@@ -1,4 +1,4 @@
-$Id: README,v 1.2 2003-04-11 10:49:35 gcosmo Exp $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -30,6 +30,7 @@ N05 - Implements a setup for fast-parameterisation.
       Provides a simple shower parameterisation for e+/e-/gamma in a
       EM calorimeter, and a pi+/pi- parameterisation using ghost volumes.
       Implements parameterised detector response.
+      Moved in extended/parameterisations/Par01.
 N06 - Simulation of optical photons generation and transport.
       Defines optical surfaces and exercises optical physics processes
       (Cerenkov, Scintillation, Absorption, Rayleigh, ...). Uses stacking
