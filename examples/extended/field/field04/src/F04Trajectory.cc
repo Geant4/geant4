@@ -119,15 +119,6 @@ void F04Trajectory::DrawTrajectory() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void F04Trajectory::DrawTrajectory(G4int i_mode) const
-{
-    // Invoke the default implementation in G4VTrajectory...
-    G4VTrajectory::DrawTrajectory(i_mode);
-    // ... or override with your own code here.
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void F04Trajectory::AppendStep(const G4Step* aStep)
 {
     fpPointsContainer->push_back(new F04TrajectoryPoint(aStep));

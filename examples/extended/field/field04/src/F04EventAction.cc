@@ -84,9 +84,9 @@ void F04EventAction::EndOfEventAction(const G4Event* evt)
    for(G4int i=0; i<n_trajectories; i++)
       { G4Trajectory* trj = 
                       (G4Trajectory *)((*(evt->GetTrajectoryContainer()))[i]);
-        if (fDrawFlag == "all") trj->DrawTrajectory(50);
+        if (fDrawFlag == "all") trj->DrawTrajectory();
         else if ((fDrawFlag == "charged")&&(trj->GetCharge() != 0.))
-                               trj->DrawTrajectory(50);
+                               trj->DrawTrajectory();
       }
   }
 

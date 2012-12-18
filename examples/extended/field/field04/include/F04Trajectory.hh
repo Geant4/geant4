@@ -79,7 +79,6 @@ class F04Trajectory : public G4VTrajectory
 
      virtual void ShowTrajectory(std::ostream& os=G4cout) const;
      virtual void DrawTrajectory() const;
-     virtual void DrawTrajectory(G4int i_mode=0) const;
      virtual void AppendStep(const G4Step* aStep);
      virtual void MergeTrajectory(G4VTrajectory* secondTrajectory);
 
