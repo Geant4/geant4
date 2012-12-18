@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VLowEnergyTestableDiscreteProcess.hh,v 1.3 2006-06-29 19:37:17 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef G4VLowEnergyTestableDiscreteProcess_hh

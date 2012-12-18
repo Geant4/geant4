@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4LivermorePhotoElectricModel.cc,v 1.13 2010-12-27 17:45:12 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // Author: Sebastien Incerti
@@ -307,7 +308,7 @@ G4LivermorePhotoElectricModel::SampleSecondaries(
   const G4AtomicShell* shell = 0;
 
   // no de-excitation from the last shell
-  if(fDeexcitationActive && shellIdx + 1 == nn) {
+  if(fDeexcitationActive && shellIdx + 1 < nn) {
     G4AtomicShellEnumerator as = G4AtomicShellEnumerator(shellIdx);
     shell = fAtomDeexcitation->GetAtomicShell(Z, as);
   }

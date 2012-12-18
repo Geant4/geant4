@@ -42,7 +42,8 @@
 // ------------------
 // Test of second implementation of the Empiric Model for shell cross sections in proton ionisation
 // --------------------------------------------------------------------
-// $Id$
+// $Id: PIXEtest.cc,v 1.6 2010-11-22 18:32:00 mantero Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "globals.hh"
 #include "G4ios.hh"

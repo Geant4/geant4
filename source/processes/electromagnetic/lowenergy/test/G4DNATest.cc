@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4DNATest.cc,v 1.14 2006-06-29 19:43:57 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "globals.hh"
 #include "G4ios.hh"

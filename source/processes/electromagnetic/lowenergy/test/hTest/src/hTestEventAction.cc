@@ -114,9 +114,9 @@ void hTestEventAction::EndOfEventAction(const G4Event* evt)
 
     for(G4int i=0; i<n_trajectories; i++) {
       G4Trajectory* t = (G4Trajectory*)((*(evt->GetTrajectoryContainer()))[i]);
-      if (drawFlag == "all") t->DrawTrajectory(50);
+      if (drawFlag == "all") t->DrawTrajectory();
       else if ((drawFlag == "charged")&&(t->GetCharge() != 0.))
-                             t->DrawTrajectory(50); 
+                             t->DrawTrajectory(); 
     }
   }  
 

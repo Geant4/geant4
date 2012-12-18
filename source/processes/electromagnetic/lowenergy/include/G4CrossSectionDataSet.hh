@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4CrossSectionDataSet.hh,v 1.7 2009-09-25 07:41:34 sincerti Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Riccardo Capra <capra@ge.infn.it>
 //

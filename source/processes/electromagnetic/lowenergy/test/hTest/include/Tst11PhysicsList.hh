@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: Tst11PhysicsList.hh,v 1.5 2006-06-29 19:46:53 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef Tst11PhysicsList_h
 #define Tst11PhysicsList_h 1

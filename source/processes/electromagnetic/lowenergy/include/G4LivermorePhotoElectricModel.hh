@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4LivermorePhotoElectricModel.hh,v 1.4 2010-03-15 09:02:29 pandola Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Sebastien Incerti
 //         30 October 2008

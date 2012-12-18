@@ -25,7 +25,8 @@
 //
 //
 
-// $Id$
+// $Id: G4CrossSectionDataSet.cc,v 1.11 2009-11-12 10:05:30 sincerti Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Riccardo Capra <capra@ge.infn.it>
 // Code review by MGP October 2007: removed inheritance from concrete class

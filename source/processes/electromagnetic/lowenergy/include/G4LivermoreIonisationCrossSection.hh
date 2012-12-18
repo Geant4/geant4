@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4LivermoreIonisationCrossSection.hh,v 1.3 2009-10-23 09:28:37 pandola Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // Author: Vladimir Ivanchenko

@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4LivermoreBremsstrahlungModel.cc,v 1.9 2010-12-03 16:03:35 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
 //         on base of G4LowEnergyBremsstrahlung developed by A.Forti and V.Ivanchenko

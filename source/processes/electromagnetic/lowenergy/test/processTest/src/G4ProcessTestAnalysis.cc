@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ProcessTestAnalysis.cc,v 1.11 2006-06-29 19:48:52 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:  A. Pfeiffer (Andreas.Pfeiffer@cern.ch) 
 //         (copy of his UserAnalyser class)

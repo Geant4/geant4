@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4LivermorePolarizedGammaConversionModel.hh,v 1.1 2009-10-30 14:52:05 flongo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Authors: G.Depaola & F.Longo
 //

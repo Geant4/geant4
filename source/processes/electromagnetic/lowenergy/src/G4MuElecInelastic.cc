@@ -81,29 +81,29 @@ void G4MuElecInelastic::InitialiseProcess(const G4ParticleDefinition* p)
 
     if(name == "e-")
     {
-      if(!Model()) SetModel(new G4MuElecInelasticModel);
-      Model()->SetLowEnergyLimit(16.7*eV);
-      Model()->SetHighEnergyLimit(100*MeV);
+      if(!EmModel()) SetEmModel(new G4MuElecInelasticModel);
+      EmModel()->SetLowEnergyLimit(16.7*eV);
+      EmModel()->SetHighEnergyLimit(100*MeV);
 
-      AddEmModel(1, Model());   
+      AddEmModel(1, EmModel());   
     }
 
     else if(name == "proton")
     {
-      if(!Model()) SetModel(new G4MuElecInelasticModel);
-      Model()->SetLowEnergyLimit(50.*keV);
-      Model()->SetHighEnergyLimit(1*GeV);
+      if(!EmModel()) SetEmModel(new G4MuElecInelasticModel);
+      EmModel()->SetLowEnergyLimit(50.*keV);
+      EmModel()->SetHighEnergyLimit(1*GeV);
 
-      AddEmModel(1, Model());   
+      AddEmModel(1, EmModel());   
     }
 
     else
     {
-      if(!Model()) SetModel(new G4MuElecInelasticModel);
-      Model()->SetLowEnergyLimit(50.*keV);
-      Model()->SetHighEnergyLimit(100.*GeV);
+      if(!EmModel()) SetEmModel(new G4MuElecInelasticModel);
+      EmModel()->SetLowEnergyLimit(50.*keV);
+      EmModel()->SetHighEnergyLimit(100.*GeV);
 
-      AddEmModel(1, Model());   
+      AddEmModel(1, EmModel());   
     }
   } 
 }
@@ -112,13 +112,17 @@ void G4MuElecInelastic::InitialiseProcess(const G4ParticleDefinition* p)
 
 void G4MuElecInelastic::PrintInfo()
 {
-  if (Model(2))
+  // V.I. printout of models is perfored by model manager
+  //      if this extra printout is needed it should be 
+  //      protected by verbosity level
+  /*
+  if (EmModel(2))
   {
     G4cout
       << " Total cross sections computed from " 
-      << Model(1)->GetName() 
+      << EmModel(1)->GetName() 
       << " and "
-      << Model(2)->GetName() 
+      << EmModel(2)->GetName() 
       << " models"
       << G4endl;
   } 
@@ -126,9 +130,10 @@ void G4MuElecInelastic::PrintInfo()
   {
     G4cout
       << " Total cross sections computed from " 
-      << Model()->GetName() 
+      << EmModel()->GetName() 
       << G4endl;
   }
+  */
 }         
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4LivermoreComptonModifiedModel.hh,v 1.3 2009-04-17 10:29:20 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Sebastien Incerti
 //         30 October 2008

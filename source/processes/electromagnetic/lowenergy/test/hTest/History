@@ -11,6 +11,10 @@ introduced in the code and keep track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+05.12.2012 - John Allison
+             Migrated to DrawTrajectory (i_mode argument no longer available).
+
 25.05.2000 - Stephane Chauvie 
              Moved TestEm6 here from source/examples/extended/electromagnetic
 

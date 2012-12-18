@@ -17,6 +17,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07.12.2012  V.Ivanchenko, tag emlowen-V09-06-02
+- G4MuElecInelastic, G4MuElecElastic - substituted calls to obsolete 
+    method
+
+05.12.2012  L. Pandola, tag emlowen-V09-06-01
+	    Slightly change the fix on G4LivermorePhotoElectricModel 
+  	    introduced in the previous tag; bug fix #1402
+
+04.12.2012  A. Mantero, tag emlowen-V09-06-00
+- G4LivermorePhotoElectricModel: fixed a bug in line 310
+- G4UAtomDeexcitation: Added some debug options
+
 12.11.2012  V.Ivanchenko, tag emlowen-V09-05-48
 - G4MuElecInelasticModel Gunter Folger fixed usage of iterators at 
     boundary of vectors
