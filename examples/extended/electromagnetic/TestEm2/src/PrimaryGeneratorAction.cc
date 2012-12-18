@@ -26,7 +26,8 @@
 /// \file electromagnetic/TestEm2/src/PrimaryGeneratorAction.cc
 /// \brief Implementation of the PrimaryGeneratorAction class
 //
-// $Id$
+// $Id: PrimaryGeneratorAction.cc,v 1.6 2006-06-29 16:50:44 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

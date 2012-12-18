@@ -26,7 +26,8 @@
 /// \file electromagnetic/TestEm2/src/TrackingAction.cc
 /// \brief Implementation of the TrackingAction class
 //
-// $Id$
+// $Id: TrackingAction.cc,v 1.3 2006-06-29 16:51:01 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

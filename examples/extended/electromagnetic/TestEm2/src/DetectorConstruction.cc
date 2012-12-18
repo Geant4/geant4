@@ -27,7 +27,8 @@
 /// \brief Implementation of the DetectorConstruction class
 //
 // 
-// $Id$
+// $Id: DetectorConstruction.cc,v 1.14 2009-09-16 18:07:30 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
