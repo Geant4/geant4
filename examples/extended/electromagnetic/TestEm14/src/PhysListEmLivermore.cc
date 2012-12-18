@@ -27,7 +27,8 @@
 /// \brief Implementation of the PhysListEmLivermore class
 //
 //
-// $Id$
+// $Id: PhysListEmLivermore.cc,v 1.5 2010-04-02 13:22:02 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -73,6 +74,10 @@
 
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
+
+#include "G4EmProcessOptions.hh"
+#include "G4LossTableManager.hh"
+#include "G4UAtomicDeexcitation.hh"
 
 #include "G4SystemOfUnits.hh"
 
@@ -174,6 +179,14 @@ void PhysListEmLivermore::ConstructProcess()
       pmanager->AddProcess(new G4hIonisation,       -1,-1, 1);
     }
   }
+  
+  // Deexcitation
+  //
+  G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
+  de->SetFluo(true);
+  de->SetAuger(false);  
+  de->SetPIXE(false);  
+  G4LossTableManager::Instance()->SetAtomDeexcitation(de);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
