@@ -38,6 +38,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10 December 2012  Alberto Ribon (test23-V09-06-00)
+----------------------------------------------------
+- Removed the CHIPS test: the slot is now available.
+
 15 November 2012  Pere Mato (test23-V09-05-07)
 ----------------------------------------------------
 - To avoid intermittent build problems on Windows added an
