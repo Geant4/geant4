@@ -62,7 +62,6 @@
 #include "B01PhysicsList.hh"
 #include "B01PrimaryGeneratorAction.hh"
 #include "B01RunAction.hh"
-#include "B01ScoreTable.hh"
 
 // Files specific for biasing and scoring
 #include "G4GeometrySampler.hh"
@@ -134,7 +133,6 @@ int main(int argc, char **argv)
 
   // print a table of the scores
   //
-  B01ScoreTable sp(aIstore); //ASO
 
   // open geometry for clean biasing stores clean-up
   //

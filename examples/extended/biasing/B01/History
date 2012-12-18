@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2010-03-24 21:04:23 gcosmo Exp $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 17th, 2012 A.Howard - B01-V09-06-00
+- Removed reference to obsolete G4CellScorer classes
 
 Nov 28th, 2012 G.Cosmo - B01-V09-05-01
 - Fixed cases of variable shadowing.
