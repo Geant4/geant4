@@ -100,7 +100,7 @@ void EventAction::EndOfEventAction(const G4Event* event) {
         G4Trajectory* trajectory = 
            (G4Trajectory*) ((*(event->GetTrajectoryContainer()))[i]);
  
-        if(trajectory) trajectory -> DrawTrajectory(50);
+        if(trajectory) trajectory -> DrawTrajectory();
     }
   }
 
