@@ -59,6 +59,8 @@
 #include "G4Isotope.hh"
 #include "G4Element.hh"
 #include "G4StableIsotopes.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4HadronicException.hh"
 

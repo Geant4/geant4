@@ -52,8 +52,9 @@
 //
 #ifdef G4_USE_DPMJET
 
-
 #include "G4Type1GlauberParameterisation.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 using namespace std;
 
@@ -139,29 +140,29 @@ G4double G4Type1GlauberParameterisation::GetFitParameters
 // values;
 //
   G4int deltan = pt2 - pt1;
-  G4int m      = 1;
+  G4int M      = 1;
   G4double a1[2];
   G4double sd;
   G4int ifail;
-  dlsqpm_ (&deltan,&lnbsite[pt1],&lnib[pt1],&m,&a1[0],&sd,&ifail);
+  dlsqpm_ (&deltan,&lnbsite[pt1],&lnib[pt1],&M,&a1[0],&sd,&ifail);
   
   G4double c1 = a1[0];
-  G4double m1 = a1[1];
+  G4double M1 = a1[1];
 
-//  G4double m2 = (lnib[3] - lnib[2]) / (lnbsite[3] - lnbsite[2]);
-//  G4double c2 = lnib[2] - m2*lnbsite[2];
+//  G4double M2 = (lnib[3] - lnib[2]) / (lnbsite[3] - lnbsite[2]);
+//  G4double c2 = lnib[2] - M2*lnbsite[2];
   deltan = 3;
-  dlsqpm_ (&deltan,&lnbsite[1],&lnib[1],&m,&a1[0],&sd,&ifail);
+  dlsqpm_ (&deltan,&lnbsite[1],&lnib[1],&M,&a1[0],&sd,&ifail);
   
   G4double c2 = a1[0];
-  G4double m2 = a1[1];
+  G4double M2 = a1[1];
   
   p[0] = std::exp(c2);
-  p[1] = m2;
+  p[1] = M2;
   p[2] = std::exp(c1);
-  p[3] = m1;
-  if (std::abs(m2-m1) > 1.0E-10) {
-    p[4] = exp(-(c2-c1)/(m2-m1));
+  p[3] = M1;
+  if (std::abs(M2-M1) > 1.0E-10) {
+    p[4] = exp(-(c2-c1)/(M2-M1));
   }
   else {
     p[4] = limit2 / 2.0;
@@ -169,7 +170,7 @@ G4double G4Type1GlauberParameterisation::GetFitParameters
 //
 //
 // This next bit solves for gamma to determine the inflection at high-b values.
-// The algorthm used is EXTREEEEEMELY crude .... but practical and robust.
+// The algorthM used is EXTREEEEEMELY crude .... but practical and robust.
 // It's a linear search.
 //
   G4double delta = 1.0E+99;
@@ -200,10 +201,10 @@ G4double G4Type1GlauberParameterisation::GetFitParameters
     phi[i] = -std::log(1.0 - bsite[i]);
   }
   deltan = pt4-pt3;
-  m      = 3;
+  M      = 3;
   G4double a2[4];
   
-  dlsqpm_ (&deltan,&phi[pt3],&ib[pt3],&m,&a2[0],&sd,&ifail);
+  dlsqpm_ (&deltan,&phi[pt3],&ib[pt3],&M,&a2[0],&sd,&ifail);
   
   p[6] = a2[0];
   p[7] = a2[1];

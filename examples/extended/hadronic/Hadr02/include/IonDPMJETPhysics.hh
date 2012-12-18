@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/include/IonDPMJETPhysics.hh
 /// \brief Definition of the IonDPMJETPhysics class
 //
-// $Id$
+// $Id: IonDPMJETPhysics.hh,v 1.0 2010/08/26 10:51:25 antoni Exp $
 // GRAS tag $Name: gras-02-05-02 $
 //
 //---------------------------------------------------------------------------
@@ -55,6 +55,8 @@
 
 #include "G4VHadronPhysics.hh"
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
+
 
 class G4BinaryLightIonReaction;
 class G4DPMJET2_5Model;

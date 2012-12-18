@@ -26,7 +26,8 @@
 /// \file hadronic/Hadr02/src/UrQMDPiKBuilder.cc
 /// \brief Implementation of the UrQMDPiKBuilder class
 //
-// $Id$
+// $Id: UrQMDPiKBuilder.cc,v 1.7 2010-11-18 14:52:22 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -43,6 +44,8 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

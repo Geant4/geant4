@@ -26,7 +26,8 @@
 /// \file hadronic/Hadr02/include/EventAction.hh
 /// \brief Definition of the EventAction class
 //
-// $Id$
+// $Id: EventAction.hh,v 1.3 2006-06-29 17:23:34 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -46,6 +47,7 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 #include <vector>
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

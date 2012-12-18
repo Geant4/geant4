@@ -26,7 +26,8 @@
 /// \file hadronic/Hadr02/src/Histo.cc
 /// \brief Implementation of the Histo class
 //
-// $Id$
+// $Id: Histo.cc,v 1.2 2010-09-28 19:08:27 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -44,6 +45,9 @@
 #include "Histo.hh"
 #include "HistoMessenger.hh"
 #include "G4RootAnalysisManager.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

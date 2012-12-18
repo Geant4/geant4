@@ -26,7 +26,8 @@
 /// \file hadronic/Hadr02/include/DetectorMessenger.hh
 /// \brief Definition of the DetectorMessenger class
 //
-// $Id$
+// $Id: DetectorMessenger.hh,v 1.7 2007-05-16 11:43:30 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -44,6 +45,7 @@
 
 #include "globals.hh"
 #include "G4UImessenger.hh"
+#include "G4SystemOfUnits.hh"
 
 class DetectorConstruction;
 class G4UIdirectory;

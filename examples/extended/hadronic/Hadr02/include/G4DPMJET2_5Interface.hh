@@ -38,6 +38,9 @@
 //
 #ifndef G4DPMJET2_5Interface_hh
 #define G4DPMJET2_5Interface_hh 1
+
+#include "G4SystemOfUnits.hh"
+
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // MODULE:              G4DPMJET2_5Interface.hh

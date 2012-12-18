@@ -63,6 +63,7 @@
 #include "G4FullGlaubAADataSet.hh"
 #include "G4GlaubAADataSet.hh"
 #include "G4Type1GlauberParameterisation.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4DPMJET2_5Interface.hh"
 

@@ -47,6 +47,8 @@
 
 #include "G4VHadronPhysics.hh"
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
+
 
 class G4HadronicInteraction;
 class G4VCrossSectionDataSet;

@@ -26,7 +26,8 @@
 /// \file hadronic/Hadr02/include/EventActionMessenger.hh
 /// \brief Definition of the EventActionMessenger class
 //
-// $Id$
+// $Id: EventActionMessenger.hh,v 1.3 2006-06-29 17:23:36 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -45,6 +46,7 @@
 
 #include "globals.hh"
 #include "G4UImessenger.hh"
+#include "G4SystemOfUnits.hh"
 
 class EventAction;
 class G4UIcmdWithAString;

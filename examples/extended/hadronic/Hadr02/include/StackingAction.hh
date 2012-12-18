@@ -26,7 +26,8 @@
 /// \file hadronic/Hadr02/include/StackingAction.hh
 /// \brief Definition of the StackingAction class
 //
-// $Id$
+// $Id: StackingAction.hh,v 1.3 2006-06-29 17:23:56 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -44,6 +45,8 @@
 
 #include "G4UserStackingAction.hh"
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
+
 
 class HistoManager;
 class StackingMessenger;

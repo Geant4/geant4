@@ -56,6 +56,8 @@
 #include "G4VGlauberDataSet.hh"
 
 #include "G4DPMJET2_5Interface.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include <iomanip>
 #include <iostream>

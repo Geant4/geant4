@@ -59,6 +59,8 @@
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ///////////////////////////////////////////////////////////////////////////////
 //
+#include "G4SystemOfUnits.hh"
+
 #include "G4ParticleDefinition.hh"
 #include "G4Isotope.hh"
 #include "globals.hh"

@@ -54,6 +54,8 @@
 
 
 #include "G4GlaubAADataSet.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4DPMJET2_5Interface.hh"
 

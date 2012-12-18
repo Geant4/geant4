@@ -26,7 +26,8 @@
 /// \file hadronic/Hadr02/include/HadronPhysicsUrQMD.hh
 /// \brief Definition of the HadronPhysicsUrQMD class
 //
-// $Id$
+// $Id: HadronPhysicsUrQMD.hh,v 1.5 2010-06-03 10:42:44 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -45,6 +46,7 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4PiKBuilder.hh"
 #include "UrQMDPiKBuilder.hh"
@@ -92,7 +94,6 @@ class HadronPhysicsUrQMD : public G4VPhysicsConstructor
     G4AntiBarionBuilder * fAntiBaryon;
     UrQMDAntiBarionBuilder * fUrQMDAntiBaryon;
 
-    G4VCrossSectionDataSet * fCHIPSInelastic;
 };
 
 #endif

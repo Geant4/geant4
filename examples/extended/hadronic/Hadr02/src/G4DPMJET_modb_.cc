@@ -55,6 +55,9 @@
 
 #include "globals.hh"
 #include "G4GlaubAADataSetHandler.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 
 extern "C" void g4dpmjet_modb_ (G4double &v, G4double &b)
 {

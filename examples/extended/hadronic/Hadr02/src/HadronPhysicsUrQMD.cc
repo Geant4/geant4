@@ -26,7 +26,8 @@
 /// \file hadronic/Hadr02/src/HadronPhysicsUrQMD.cc
 /// \brief Implementation of the HadronPhysicsUrQMD class
 //
-// $Id$
+// $Id: HadronPhysicsUrQMD.cc,v 1.4 2010-06-15 11:03:50 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -47,12 +48,18 @@
 #include <iomanip>   
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4MesonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
-#include "G4QHadronInelasticDataSet.hh"
+#include "G4ChipsKaonMinusInelasticXS.hh"
+#include "G4ChipsKaonPlusInelasticXS.hh"
+#include "G4ChipsKaonZeroInelasticXS.hh"
+#include "G4CrossSectionDataSetRegistry.hh"
+
 #include "G4ProcessManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,9 +75,7 @@ HadronPhysicsUrQMD::HadronPhysicsUrQMD(G4int)
   fPro = 0;
   fUrQMDPro = 0;    
   fHyperon = 0;
-  fAntiBaryon = 0;
-  fUrQMDAntiBaryon = 0;
-  fCHIPSInelastic = 0;
+  fAntiBaryon = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -118,8 +123,6 @@ HadronPhysicsUrQMD::~HadronPhysicsUrQMD()
   delete fHyperon;
   delete fAntiBaryon;
   delete fUrQMDAntiBaryon;
-  
-  delete fCHIPSInelastic;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -144,13 +147,17 @@ void HadronPhysicsUrQMD::ConstructProcess()
   fNeutrons->Build();
   fPro->Build();
   fPiK->Build();
-  // use CHIPS cross sections also for Kaons
-  fCHIPSInelastic = new G4QHadronInelasticDataSet();
-  
-  FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(fCHIPSInelastic);
-  FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(fCHIPSInelastic);
-  FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(fCHIPSInelastic);
-  FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(fCHIPSInelastic);
+    
+    // use CHIPS cross sections also for Kaons
+    ChipsKaonMinus = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonMinusInelasticXS::Default_Name());
+    ChipsKaonPlus = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonPlusInelasticXS::Default_Name());
+    ChipsKaonZero = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name());
+    //
+    
+    G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(ChipsKaonMinus);
+    G4PhysListUtil::FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(ChipsKaonPlus);
+    G4PhysListUtil::FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(ChipsKaonZero );
+    G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(ChipsKaonZero );
 
   fHyperon->Build();
   fAntiBaryon->Build();

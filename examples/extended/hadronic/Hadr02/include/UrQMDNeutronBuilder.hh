@@ -26,7 +26,8 @@
 /// \file hadronic/Hadr02/include/UrQMDNeutronBuilder.hh
 /// \brief Definition of the UrQMDNeutronBuilder class
 //
-// $Id$
+// $Id: UrQMDNeutronBuilder.hh,v 1.2 2009-03-31 18:38:33 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -42,6 +43,7 @@
 #define UrQMDNeutronBuilder_h 1
 
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4HadronElasticProcess.hh"
 #include "G4HadronFissionProcess.hh"

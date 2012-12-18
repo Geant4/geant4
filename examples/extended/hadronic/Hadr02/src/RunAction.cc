@@ -26,7 +26,8 @@
 /// \file hadronic/Hadr02/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id$
+// $Id: RunAction.cc,v 1.3 2006-06-29 17:23:52 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------
 //      GEANT4
@@ -43,6 +44,9 @@
 #include "G4VVisManager.hh"
 #include "G4NistManager.hh"
 #include "G4Element.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

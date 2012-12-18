@@ -26,7 +26,8 @@
 /// \file hadronic/Hadr02/include/HistoManager.hh
 /// \brief Definition of the HistoManager class
 //
-// $Id$
+// $Id: HistoManager.hh,v 1.9 2009-08-28 09:21:34 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -51,6 +52,8 @@
 
 #include "globals.hh"
 #include "G4Material.hh"
+#include "G4SystemOfUnits.hh"
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

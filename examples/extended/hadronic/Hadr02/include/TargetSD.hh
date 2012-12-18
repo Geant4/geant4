@@ -26,7 +26,8 @@
 /// \file hadronic/Hadr02/include/TargetSD.hh
 /// \brief Definition of the TargetSD class
 //
-// $Id$
+// $Id: TargetSD.hh,v 1.4 2006-06-29 17:24:00 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -45,6 +46,8 @@
 
 #include "G4VSensitiveDetector.hh"
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

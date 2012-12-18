@@ -26,7 +26,8 @@
 /// \file hadronic/Hadr02/include/UrQMD.hh
 /// \brief Definition of the UrQMD class
 //
-// $Id$
+// $Id: UrQMD.hh,v 1.1 2007-10-19 15:35:08 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -45,6 +46,7 @@
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
 #include "CompileTimeConstraints.hh"
+#include "G4SystemOfUnits.hh"
 
 template<class T>
 class TUrQMD: public T

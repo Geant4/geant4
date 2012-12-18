@@ -26,7 +26,8 @@
 /// \file hadronic/Hadr02/include/UrQMDPiKBuilder.hh
 /// \brief Definition of the UrQMDPiKBuilder class
 //
-// $Id$
+// $Id: UrQMDPiKBuilder.hh,v 1.6 2010-11-18 14:52:22 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -42,6 +43,7 @@
 #define UrQMDPiKBuilder_h 1
 
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 
 #include "G4HadronElasticProcess.hh"
 #include "G4HadronFissionProcess.hh"

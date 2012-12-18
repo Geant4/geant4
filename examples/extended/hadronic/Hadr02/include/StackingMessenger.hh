@@ -26,7 +26,8 @@
 /// \file hadronic/Hadr02/include/StackingMessenger.hh
 /// \brief Definition of the StackingMessenger class
 //
-// $Id$
+// $Id: StackingMessenger.hh,v 1.3 2006-06-29 17:23:58 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 /////////////////////////////////////////////////////////////////////////
@@ -46,6 +47,8 @@
 
 #include "G4UImessenger.hh"
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
+
 
 class StackingAction;
 class G4UIcmdWithABool;

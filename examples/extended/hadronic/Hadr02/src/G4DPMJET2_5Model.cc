@@ -79,6 +79,8 @@
 #include "G4LorentzVector.hh"
 #include "G4HadTmpUtil.hh"
 #include "globals.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 #include <fstream>
 
@@ -764,16 +766,16 @@ G4HadFinalState *G4DPMJET2_5Model::ApplyYourself (
 // and load into the particle change if you can identify the particles.
 //  
   G4int n              = hkkevt_.nhkk;
-  G4int m              = 0;
+  G4int M1             = 0;
   G4Fragment *fragment = 0;
   if (verboseLevel >= 2) DumpVerboseInformation1 (n);
 //
 //
 // Now go through each of the secondaries and add to theParticleChange.
 //
-  for (G4int i=0; i<n; i++)
+  for (G4int ii=0; ii<n; ii++)
   {
-    if (hkkevt_.isthkk[i]==1 || hkkevt_.isthkk[i]==-1)
+    if (hkkevt_.isthkk[ii]==1 || hkkevt_.isthkk[ii]==-1)
     {
 //
 // Particle is a final state secondary and not a nucleus.
@@ -813,7 +815,7 @@ G4HadFinalState *G4DPMJET2_5Model::ApplyYourself (
       G4int nucA = extevt_.idres[i];
       G4int nucZ = extevt_.idxres[i];
       if (nucA>0 && nucZ>0) {
-        m++;
+        M1++;
         fragment           = 0;
         G4double px        = hkkevt_.phkk[i][0] * GeV;
         G4double py        = hkkevt_.phkk[i][1] * GeV;
@@ -827,7 +829,7 @@ G4HadFinalState *G4DPMJET2_5Model::ApplyYourself (
         G4LorentzVector lv = G4LorentzVector(px,py,pz,et+1.0*eV);
         fragment           = new G4Fragment(nucA, nucZ, lv);
         if (verboseLevel >= 2)
-          DumpVerboseInformation3 (m, nucA, nucZ, lv.vect(), et, et-ionMass, pP);
+          DumpVerboseInformation3 (M1, nucA, nucZ, lv.vect(), et, et-ionMass, pP);
 //
 //
 // Now we can decay the nuclear fragment if present.  The secondaries are

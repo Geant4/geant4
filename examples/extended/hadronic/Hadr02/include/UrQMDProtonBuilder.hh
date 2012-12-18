@@ -26,7 +26,8 @@
 /// \file hadronic/Hadr02/include/UrQMDProtonBuilder.hh
 /// \brief Definition of the UrQMDProtonBuilder class
 //
-// $Id$
+// $Id: UrQMDProtonBuilder.hh,v 1.2 2009-03-31 18:38:33 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
@@ -43,6 +44,7 @@
 #include "G4VProtonBuilder.hh"
 
 #include "G4UrQMD1_3Model.hh"
+#include "G4SystemOfUnits.hh"
 
 class UrQMDProtonBuilder : public G4VProtonBuilder
 {

@@ -66,6 +66,8 @@
 
 #include "G4VCrossSectionDataSet.hh"
 #include "G4DPMJET2_5CrossSectionParamSet.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4PhysicalConstants.hh"
 
 #include <map>
 
@@ -75,40 +77,42 @@ typedef std::map< G4int, G4DPMJET2_5CrossSectionParamSet *, std::less< G4int > >
 //
 class G4DPMJET2_5CrossSection : public G4VCrossSectionDataSet
 {
-  public:
-    G4DPMJET2_5CrossSection();
-    ~G4DPMJET2_5CrossSection();
-    virtual G4bool IsApplicable(const G4DynamicParticle* theProjectile,
-      const G4Element* theTarget);
+public:
 
-    virtual G4bool IsZAApplicable(const G4DynamicParticle* theProjectile,
-      G4double ZZ, G4double AA);
+  G4DPMJET2_5CrossSection();
 
-    virtual G4double GetCrossSection(const G4DynamicParticle* theProjectile,
-      const G4Element* theTarget, G4double theTemperature);
+  virtual ~G4DPMJET2_5CrossSection();
 
-    virtual 
-    G4double GetIsoZACrossSection(const G4DynamicParticle* theProjectile,
-                                  G4double ZZ, G4double AA, 
-                                  G4double theTemperature);
+  virtual G4bool IsIsoApplicable(const G4DynamicParticle* theProjectile,
+				 G4int ZZ, G4int AA,
+				 const G4Element* elm = 0,
+				 const G4Material* mat = 0);
 
-    virtual void BuildPhysicsTable(const G4ParticleDefinition&);
+  virtual 
+  G4double GetIsoCrossSection(const G4DynamicParticle* theProjectile,
+			      G4int ZZ, G4int AA,
+			      const G4Isotope*,
+			      const G4Element* elm = 0,
+			      const G4Material* mat = 0);
+ 
+  virtual void BuildPhysicsTable(const G4ParticleDefinition&);
 
-    virtual void DumpPhysicsTable(const G4ParticleDefinition&);
+  virtual void DumpPhysicsTable(const G4ParticleDefinition&);
     
-  private:
-    void Initialise ();
+private:
 
-    G4int APmin;
-    G4int APmax;
-    G4int ATmin;
-    G4int ATmax;
+  void Initialise ();
 
-    G4DPMJET2_5CrossSectionIndex theCrossSectionIndex;
+  G4int APmin;
+  G4int APmax;
+  G4int ATmin;
+  G4int ATmax;
+
+  G4DPMJET2_5CrossSectionIndex theCrossSectionIndex;
     
-    const G4double upperLimit;
-    const G4double lowerLimit;
-    const G4int    maxA;
+  const G4double upperLimit;
+  const G4double lowerLimit;
+  const G4int    maxA;
 };
 ///////////////////////////////////////////////////////////////////////////////
 //

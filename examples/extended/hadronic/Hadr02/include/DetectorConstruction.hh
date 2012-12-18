@@ -26,7 +26,8 @@
 /// \file hadronic/Hadr02/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// $Id$
+// $Id: DetectorConstruction.hh,v 1.4 2006-06-29 17:23:28 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -46,6 +47,7 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
 #include "G4Material.hh"
+#include "G4SystemOfUnits.hh"
 
 class CheckVolumeSD;
 class TargetSD;

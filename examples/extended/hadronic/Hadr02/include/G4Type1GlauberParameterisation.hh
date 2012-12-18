@@ -62,6 +62,8 @@
 
 #include "globals.hh"
 #include <fstream>
+#include "G4SystemOfUnits.hh"
+
 ////////////////////////////////////////////////////////////////////////////////
 //
 class G4Type1GlauberParameterisation

@@ -51,6 +51,7 @@
 
 #include "G4VCrossSectionDataSet.hh"
 #include "G4VComponentCrossSection.hh"
+#include "G4SystemOfUnits.hh"
 
 class UrQMDAntiBarionBuilder : public G4VAntiBarionBuilder
 {
