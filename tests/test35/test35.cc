@@ -100,7 +100,6 @@
 #include "G4Timer.hh"
 #include "G4NistManager.hh"
 
-#include "G4QInelastic.hh"
 #include "G4ForceCondition.hh"
 #include "G4TouchableHistory.hh"
 
@@ -307,7 +306,8 @@ int main(int argc, char** argv)
       } else if(line == "#generator") {
 	nameGen = "";
         (*fin) >> nameGen;
-	if (nameGen == "") {
+	if (nameGen == "" || nameGen == "chips"
+	    || nameGen == "qgsc" || nameGen == "ftfc") {
 	  G4cout << "Generator name is empty! " << G4endl; 
 	  continue;
 	}
@@ -323,11 +323,6 @@ int main(int argc, char** argv)
 	  nameGen = "lhep";  
 	  hFile = "lhep"; 
           break;
-	}
-	// CHIPS name
-        else if(nameGen == "CHIPS")   { 
-	  nameGen = "chips"; 
-	  hFile = "chips"; 
 	}
 	// Elastic always active
 	else if(nameGen == "elastic") { break; }
@@ -401,14 +396,14 @@ int main(int argc, char** argv)
 
     // ------- Select model
     G4VProcess* proc = phys->GetProcess(nameGen, namePart, material);
-    G4QInelastic* chips = 0;
-    if(nameGen == "chips") { chips = new G4QInelastic(); }
 
     if(!proc) { 
-      cout << "For particle: " << part->GetParticleName()
+      if("" != nameGen) {
+	cout << "For particle: " << part->GetParticleName()
 	     << " generator " << nameGen << " is unavailable"
 	     << endl;
-      break;
+      }
+      continue;
     }
 
     // ------- Define target A
@@ -470,9 +465,7 @@ int main(int argc, char** argv)
     G4VCrossSectionDataSet* cs = 0;
     G4double cross_sec = 0.0;
 
-    if(chips) {
-      chips->SetParameters();
-    } else if(nameGen == "lepar") {
+    if(nameGen == "lepar") {
       cs = new G4HadronInelasticDataSet();
     } else if(part == proton) {
       if(xsbgg)      { cs = new G4BGGNucleonInelasticXS(part); }
@@ -519,15 +512,8 @@ int main(int argc, char** argv)
     step->SetPostStepPoint(bPoint);
     step->SetStepLength(theStep);
 
-    if(chips) {
-      G4ForceCondition condition = NotForced;
-      cross_sec = 1.0/(material->GetTotNbOfAtomsPerVolume()*
-		       chips->GetMeanFreePath(*gTrack, DBL_MAX, 
-					      &condition));
-    } else {
-      cs->BuildPhysicsTable(*part);
-      cross_sec = cs->GetCrossSection(&dParticle, elm);
-    }
+    cs->BuildPhysicsTable(*part);
+    cross_sec = cs->GetCrossSection(&dParticle, elm);
 
     G4double factor = 
       cross_sec*MeV*1000.0*(G4double)nbinse/(energy*barn*(G4double)nevt);
@@ -604,8 +590,7 @@ int main(int argc, char** argv)
       labv = G4LorentzVector(0., 0., sqrt(e0*(e0 + 2.0*mass)), 
 			     e0 + mass + amass);
 
-      if(chips) { aChange = chips->PostStepDoIt(*gTrack,*step); }
-      else      { aChange = proc->PostStepDoIt(*gTrack,*step); }
+      aChange = proc->PostStepDoIt(*gTrack,*step); 
 
       G4int n = aChange->GetNumberOfSecondaries();
 

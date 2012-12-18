@@ -14,6 +14,16 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+test35-V09-06-02  14 December 2012 A.Ribon
+- Removed unused include of the obsolete CHIPS header file
+  G4StringChipsInterface.hh .
+
+test35-V09-06-01  13 December 2012 V.Ivanchenko
+- Removed obsolete class depending on CHIPS
+
+test35-V09-06-00  10 December 2012 V.Ivanchenko
+- Removed dependences on CHIPS
+
 test35-V09-05-02  05 November 2012 V.Ivanchenko
 - Fixed variable shadowing
 
