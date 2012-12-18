@@ -78,13 +78,7 @@
 #include "G4GeometrySampler.hh"
 #include "G4IStore.hh"
 
-// customized scorer and store
-#include "B02CellScorer.hh"
-#include "B02CellScorerStore.hh"
 
-// a score table
-//#include "G4ScoreTable.hh"
-#include "B02ScoreTable.hh"
 
 // AIDA stuff
 
@@ -143,9 +137,6 @@ int main(int , char **)
   // set world volume importance to 1
   aIstore.AddImportanceGeometryCell(1, gWorldVolumeCell);
 
-  // create a customized cell scorer store
-  B02CellScorerStore b02store;
-
   // set importance values and create scorers 
   G4int cell(1);
   for (cell=1; cell<=18; cell++) {
@@ -154,10 +145,6 @@ int main(int , char **)
     G4double imp = std::pow(2.0,cell-1);
     //x    aIstore.AddImportanceGeometryCell(imp, gCell);
     aIstore.AddImportanceGeometryCell(imp, gCell.GetPhysicalVolume(), cell);
-    // adding the standard G4CellScorer for 17 concrete cells
-    if (cell<18) {
-      b02store.AddG4CellScorer(gCell);
-    }
   }
 
   // create a histogram for a special scorer for the last cell 
@@ -167,15 +154,12 @@ int main(int , char **)
   AIDA::IHistogramFactory *hf = af->createHistogramFactory( *tree );
   AIDA::IHistogram1D *h = 
     hf->createHistogram1D("10","w*sl vs. e", 30, 0., 20*MeV);
-  // create a special scorer for the last cell 
-  B02CellScorer b02scorer(h);
   
 
 
 
   // creating the geometry cell and add both to the store
   G4GeometryCell gCell = pdet->GetGeometryCell(18);
-  b02store.AddB02CellScorer(&b02scorer, gCell);
 
 
   // create importance geometry cell pair for the "rest"cell
@@ -189,8 +173,6 @@ int main(int , char **)
   // create the importance and scoring sampler for biasing and scoring 
   // in the parallel world
 
-  //  G4CellStoreScorer scorer(b02store); 
-
   G4GeometrySampler pgs(ghostWorld,"neutron");
 
   pgs.SetParallel(true);
@@ -203,10 +185,6 @@ int main(int , char **)
   pgs.Configure();
 
   runManager->BeamOn(numberOfEvents);
-
-  // print a table of the scores
-  B02ScoreTable sp(&aIstore);
-
 
  
   tree->commit();
