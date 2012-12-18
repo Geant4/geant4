@@ -30,7 +30,7 @@
 #include "Tst02DetectorConstruction.hh"
 #include "Tst02RunAction.hh"
 #include "Tst02PrimaryGeneratorAction.hh"
-#include "LHEP.hh"
+#include "FTFP_BERT.hh"
 #include "Tst02SteppingAction.hh"
 
 #include "G4UImanager.hh"
@@ -50,7 +50,7 @@ int main(int argc,char** argv) {
 
   // UserInitialization classes
   runManager->SetUserInitialization(new Tst02DetectorConstruction);
-  runManager->SetUserInitialization(new LHEP);
+  runManager->SetUserInitialization(new FTFP_BERT);
 
   // UserAction classes
   runManager->SetUserAction(new Tst02RunAction);
