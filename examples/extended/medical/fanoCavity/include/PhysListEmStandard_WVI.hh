@@ -26,7 +26,8 @@
 /// \file medical/fanoCavity/include/PhysListEmStandard_WVI.hh
 /// \brief Definition of the PhysListEmStandard_WVI class
 //
-// $Id$
+// $Id: PhysListEmStandard_WVI.hh,v 1.1 2010-01-19 17:28:20 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

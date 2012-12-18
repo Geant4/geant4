@@ -26,7 +26,8 @@
 /// \file medical/fanoCavity/src/PhysListEmStandard_option3.cc
 /// \brief Implementation of the PhysListEmStandard_option3 class
 //
-// $Id$
+// $Id: PhysListEmStandard_option3.cc,v 1.2 2009-11-16 17:51:44 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -89,7 +90,7 @@ void PhysListEmStandard_option3::ConstructProcess()
       G4ComptonScattering* compton = new G4ComptonScattering();
       MyKleinNishinaCompton* comptonModel = new MyKleinNishinaCompton(fDetector);
       comptonModel->SetCSFactor(1000.);      
-      compton->SetModel(comptonModel );
+      compton->SetEmModel(comptonModel );
             
       pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
       pmanager->AddDiscreteProcess(compton);

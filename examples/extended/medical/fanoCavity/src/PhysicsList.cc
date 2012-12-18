@@ -26,7 +26,8 @@
 /// \file medical/fanoCavity/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id$
+// $Id: PhysicsList.cc,v 1.19 2010-01-19 17:28:20 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

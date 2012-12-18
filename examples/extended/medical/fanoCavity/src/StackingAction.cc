@@ -26,7 +26,8 @@
 /// \file medical/fanoCavity/src/StackingAction.cc
 /// \brief Implementation of the StackingAction class
 //
-// $Id$
+// $Id: StackingAction.cc,v 1.2 2007-03-02 11:08:41 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

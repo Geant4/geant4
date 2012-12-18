@@ -26,7 +26,8 @@
 /// \file medical/fanoCavity/include/MyMollerBhabhaModel.hh
 /// \brief Definition of the MyMollerBhabhaModel class
 //
-// $Id$
+// $Id: MyMollerBhabhaModel.hh,v 1.1 2007-01-19 17:20:26 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -26,7 +26,8 @@
 /// \file medical/fanoCavity/src/StackingMessenger.cc
 /// \brief Implementation of the StackingMessenger class
 //
-// $Id$
+// $Id: StackingMessenger.cc,v 1.1 2007-01-23 13:34:19 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

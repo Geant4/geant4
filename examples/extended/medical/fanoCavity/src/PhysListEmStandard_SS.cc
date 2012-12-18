@@ -26,7 +26,8 @@
 /// \file medical/fanoCavity/src/PhysListEmStandard_SS.cc
 /// \brief Implementation of the PhysListEmStandard_SS class
 //
-// $Id$
+// $Id: PhysListEmStandard_SS.cc,v 1.2 2011-01-04 19:15:59 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -87,7 +88,7 @@ void PhysListEmStandard_SS::ConstructProcess()
       G4ComptonScattering* compton = new G4ComptonScattering();
       MyKleinNishinaCompton* comptonModel = new MyKleinNishinaCompton(fDetector);
       comptonModel->SetCSFactor(1000.);      
-      compton->SetModel(comptonModel );
+      compton->SetEmModel(comptonModel );
             
       pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
       pmanager->AddDiscreteProcess(compton);

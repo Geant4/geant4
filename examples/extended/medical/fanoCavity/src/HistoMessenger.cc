@@ -27,7 +27,8 @@
 /// \brief Implementation of the HistoMessenger class
 //
 //
-// $Id$
+// $Id: HistoMessenger.cc,v 1.2 2010-09-17 11:21:46 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
