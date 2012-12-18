@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.27 2010-11-23 13:35:03 gcosmo Exp $
+# $Id$
 # --------------------------------------------------------------
 # GNUmakefile for hadronic models library. G.Folger 10-Dec-97
 # --------------------------------------------------------------
@@ -10,11 +10,6 @@ SUBDIRS += binary_cascade
 SUBDIRS += cascade/evaporation
 SUBDIRS += cascade/utils
 SUBDIRS += cascade/cascade
-SUBDIRS += chiral_inv_phase_space/body
-SUBDIRS += chiral_inv_phase_space/cross_sections
-SUBDIRS += chiral_inv_phase_space/fragmentation
-SUBDIRS += chiral_inv_phase_space/interface
-SUBDIRS += chiral_inv_phase_space/processes
 SUBDIRS += coherent_elastic
 SUBDIRS += de_excitation/evaporation
 SUBDIRS += de_excitation/fermi_breakup
@@ -38,6 +33,7 @@ SUBDIRS += lll_fission
 SUBDIRS += low_energy
 SUBDIRS += management
 SUBDIRS += neutron_hp
+#SUBDIRS += particle_hp
 SUBDIRS += lepto_nuclear
 SUBDIRS += parton_string/diffraction
 SUBDIRS += parton_string/hadronization
@@ -62,6 +58,7 @@ SUBLIBS +=  G4hadronic_RPG
 SUBLIBS +=  G4hadronic_qmd
 SUBLIBS +=  G4had_mod_man
 SUBLIBS +=  G4had_neu_hp
+SUBLIBS +=  G4had_part_hp
 SUBLIBS +=  G4had_lend
 SUBLIBS +=  G4had_lll_fis
 SUBLIBS +=  G4hadronic_radioactivedecay
@@ -73,11 +70,6 @@ SUBLIBS +=  G4hadronic_hetcpp_utils
 SUBLIBS +=  G4hadronic_inclxx_utils
 SUBLIBS +=  G4hadronic_inclxx_physics
 SUBLIBS +=  G4hadronic_inclxx_interface
-SUBLIBS +=  G4hadronic_body_ci
-SUBLIBS +=  G4hadronic_crosec_ci
-SUBLIBS +=  G4hadronic_fragm_ci
-SUBLIBS +=  G4hadronic_interface_ci
-SUBLIBS +=  G4hadronic_proc_ci
 SUBLIBS +=  G4hadronic_deex_evaporation
 SUBLIBS +=  G4hadronic_deex_fermi_breakup
 SUBLIBS +=  G4hadronic_deex_fission
