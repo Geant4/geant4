@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4NuclNuclDiffuseElastic.cc,v 1.5 2010-11-09 09:04:29 grichine Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // Physics model class G4NuclNuclDiffuseElastic 

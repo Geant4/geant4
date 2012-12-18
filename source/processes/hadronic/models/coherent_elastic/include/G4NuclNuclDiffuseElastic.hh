@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4NuclNuclDiffuseElastic.hh,v 1.21 2010-11-09 09:04:29 grichine Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // G4 Model: optical elastic scattering with 4-momentum balance 

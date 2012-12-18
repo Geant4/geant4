@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4HadronElastic.cc,v 1.6 2010-11-19 18:50:03 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Header : G4HadronElastic
 //

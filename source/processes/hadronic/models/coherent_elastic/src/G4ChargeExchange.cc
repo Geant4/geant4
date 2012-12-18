@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ChargeExchange.cc,v 1.18 2010-11-19 18:50:03 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // G4 Model: Charge and strangness exchange based on G4LightMedia model

@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.82 2010-11-18 22:49:57 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //  The generator of high energy hadron-nucleus elastic scattering

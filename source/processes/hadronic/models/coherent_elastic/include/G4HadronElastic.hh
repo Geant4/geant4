@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4HadronElastic.hh,v 1.4 2009-09-23 14:37:44 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Header : G4HadronElastic
 //
