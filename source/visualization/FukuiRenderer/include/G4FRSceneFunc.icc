@@ -92,25 +92,6 @@ void G4FRSCENEHANDLER::AddPrimitive (const G4Polyline& polyline)
 } // G4FRSCENEHANDLER::AddPrimitive (polyline)
 
 
-//----- Add nurbes
-void G4FRSCENEHANDLER::AddPrimitive (const G4NURBS&)
-{
-		//----- 
-#if defined DEBUG_FR_SCENE
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
-	G4cout << "***** AddPrimitive( G4NURBS )\n";
-#endif
-
-		//----- Initialize DAWN IF NECESSARY
-	FRBeginModeling();
-	
-	///////////////////////////////////////////////
-	// DAWN does not support NUBS visualizaition //
-	///////////////////////////////////////////////
-}
-
-
-
 //----- Add text
 void G4FRSCENEHANDLER::AddPrimitive ( const G4Text& text )
 {

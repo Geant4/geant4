@@ -55,14 +55,6 @@ G4TrajectoryDrawByCharge::G4TrajectoryDrawByCharge(const G4String& name,
 G4TrajectoryDrawByCharge::~G4TrajectoryDrawByCharge() {}
 
 void
-G4TrajectoryDrawByCharge::Draw(const G4VTrajectory& object,
-			       const G4int&,
-			       const G4bool& visible) const
-{
-  Draw(object, visible);
-}
-
-void
 G4TrajectoryDrawByCharge::Draw(const G4VTrajectory& traj, const G4bool& visible) const
 {
   G4Colour colour;

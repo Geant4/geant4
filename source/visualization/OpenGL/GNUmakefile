@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.13 2010-05-20 07:09:33 lgarnier Exp $
+# $Id$
 
 name := G4OpenGL
 

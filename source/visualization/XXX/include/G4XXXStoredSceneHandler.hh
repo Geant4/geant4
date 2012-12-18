@@ -89,7 +89,6 @@ public:
   void AddPrimitive(const G4Circle&);
   void AddPrimitive(const G4Square&);
   void AddPrimitive(const G4Polyhedron&);
-  void AddPrimitive(const G4NURBS&);
   // Further optional AddPrimitive methods.  Explicitly invoke base
   // class methods if not otherwise defined to avoid warnings about
   // hiding of base class methods.

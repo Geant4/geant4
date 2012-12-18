@@ -47,15 +47,6 @@ namespace G4TrajectoryDrawerUtils {
   void GetPoints(const G4VTrajectory& traj, G4Polyline& trajectoryLine,
 		 G4Polymarker& auxiliaryPoints, G4Polymarker& stepPoints);
 
-  /***
-  // Draw trajectory line and points
-  void DrawLineAndPoints(const G4VTrajectory& traj, const G4int& i_mode, 
-			 const G4Colour& cfg, const G4bool& visible);
-  ***/
-
-  // Draw trajectory line and points using G4VisTrajContext object information
-  void DrawLineAndPoints(const G4VTrajectory& traj, const G4VisTrajContext&, const G4int& i_mode);
-
   // Draw trajectory line and points using G4VisTrajContext object information
   void DrawLineAndPoints(const G4VTrajectory& traj, const G4VisTrajContext&);
 

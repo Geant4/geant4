@@ -34,14 +34,6 @@
 
 #ifdef G4VIS_BUILD_OPENGL_DRIVER
 
-// Included here - problems with HP compiler if not before other includes?
-#include "G4NURBS.hh"
-
-// Here follows a special for Mesa, the OpenGL emulator.  Does not affect
-// other OpenGL's, as far as I'm aware.   John Allison 18/9/96.
-#define CENTERLINE_CLPP  /* CenterLine C++ workaround: */
-// Also seems to be required for HP's CC and AIX xlC, at least.
-
 #include "G4OpenGLSceneHandler.hh"
 #include "G4OpenGLViewer.hh"
 #include "G4OpenGLTransform3D.hh"
@@ -656,103 +648,6 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   glDisable (GL_STENCIL_TEST);  // Revert to default for next primitive.
   glDepthMask (GL_TRUE);        // Revert to default for next primitive.
   glDisable (GL_LIGHTING);      // Revert to default for next primitive.
-}
-
-//Method for handling G4NURBS objects for drawing solids.
-//Knots and Ctrl Pnts MUST be arrays of GLfloats.
-void G4OpenGLSceneHandler::AddPrimitive (const G4NURBS& nurb) {
-
-  GLUnurbsObj *gl_nurb;
-  gl_nurb = gluNewNurbsRenderer ();
-
-  GLfloat *u_knot_array, *u_knot_array_ptr;
-  u_knot_array = u_knot_array_ptr = new GLfloat [nurb.GetnbrKnots(G4NURBS::U)];
-  G4NURBS::KnotsIterator u_iterator (nurb, G4NURBS::U);
-  while (u_iterator.pick (u_knot_array_ptr++)){}
-
-  GLfloat *v_knot_array, *v_knot_array_ptr;
-  v_knot_array = v_knot_array_ptr = new GLfloat [nurb.GetnbrKnots(G4NURBS::V)];
-  G4NURBS::KnotsIterator v_iterator (nurb, G4NURBS::V);
-  while (v_iterator.pick (v_knot_array_ptr++)){}
-
-  GLfloat *ctrl_pnt_array, *ctrl_pnt_array_ptr;
-  ctrl_pnt_array = ctrl_pnt_array_ptr =
-    new GLfloat [nurb.GettotalnbrCtrlPts () * G4NURBS::NofC];
-  G4NURBS::CtrlPtsCoordsIterator c_p_iterator (nurb);
-  while (c_p_iterator.pick (ctrl_pnt_array_ptr++)){}
-
-  // Get vis attributes - pick up defaults if none.
-  const G4VisAttributes* pVA =
-    fpViewer -> GetApplicableVisAttributes (nurb.GetVisAttributes ());
-
-  // Get view parameters that the user can force through the vis
-  // attributes, thereby over-riding the current view parameter.
-  G4ViewParameters::DrawingStyle drawing_style = GetDrawingStyle (pVA);
-  //G4bool isAuxEdgeVisible = GetAuxEdgeVisible (pVA);
-  
-  //Get colour, etc..
-  const G4Colour& c = pVA -> GetColour ();
-
-  switch (drawing_style) {
-
-  case (G4ViewParameters::hlhsr):
-    //    G4cout << "Hidden line removal not implememented in G4OpenGL.\n"
-    // << "Using hidden surface removal." << G4endl;
-  case (G4ViewParameters::hsr):
-    {
-      if (!fProcessing2D) glEnable (GL_LIGHTING);
-      glEnable (GL_DEPTH_TEST);
-      glEnable (GL_AUTO_NORMAL);
-      glEnable (GL_NORMALIZE);
-      gluNurbsProperty (gl_nurb, GLU_DISPLAY_MODE, GLU_FILL);
-      gluNurbsProperty (gl_nurb, GLU_SAMPLING_TOLERANCE, 50.0);
-      GLfloat materialColour [4];
-      materialColour [0] = c.GetRed ();
-      materialColour [1] = c.GetGreen ();
-      materialColour [2] = c.GetBlue ();
-      materialColour [3] = 1.0;  // = c.GetAlpha () for transparency -
-				 // but see complication in
-				 // AddPrimitive(const G4Polyhedron&).
-      glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, materialColour);
-      break;
-    }
-  case (G4ViewParameters::hlr):
-    //    G4cout << "Hidden line removal not implememented in G4OpenGL.\n"
-    // << "Using wireframe." << G4endl;
-  case (G4ViewParameters::wireframe):
-  default:
-    glDisable (GL_LIGHTING);
-//    glDisable (GL_DEPTH_TEST);
-    glEnable (GL_DEPTH_TEST);
-    glDisable (GL_AUTO_NORMAL);
-    glDisable (GL_NORMALIZE);
-    gluNurbsProperty (gl_nurb, GLU_DISPLAY_MODE, GLU_OUTLINE_POLYGON);
-    gluNurbsProperty (gl_nurb, GLU_SAMPLING_TOLERANCE, 50.0);
-    glColor4d(c.GetRed(), c.GetGreen(), c.GetBlue(),c.GetAlpha());
-    break;
-  }	
-
-  gluBeginSurface (gl_nurb);
-  G4int u_stride = 4;
-  G4int v_stride = nurb.GetnbrCtrlPts(G4NURBS::U) * 4;
-
-  gluNurbsSurface (gl_nurb, 
-		   nurb.GetnbrKnots (G4NURBS::U), (GLfloat*)u_knot_array, 
-		   nurb.GetnbrKnots (G4NURBS::V), (GLfloat*)v_knot_array,
-		   u_stride,
-		   v_stride,  
-		   ctrl_pnt_array,
-		   nurb.GetUorder (),
-		   nurb.GetVorder (), 
-		   GL_MAP2_VERTEX_4);
-  
-  gluEndSurface (gl_nurb);
-
-  delete [] u_knot_array;  // These should be allocated with smart allocators
-  delete [] v_knot_array;  // to avoid memory explosion.
-  delete [] ctrl_pnt_array;
-
-  gluDeleteNurbsRenderer (gl_nurb);
 }
 
 void G4OpenGLSceneHandler::AddCompound(const G4VTrajectory& traj) {

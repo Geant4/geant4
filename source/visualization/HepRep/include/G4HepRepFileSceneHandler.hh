@@ -98,7 +98,6 @@ public:
   void AddPrimitive(const G4Circle&);
   void AddPrimitive(const G4Square&);
   void AddPrimitive(const G4Polyhedron&);
-  void AddPrimitive(const G4NURBS&);
 
   ////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////

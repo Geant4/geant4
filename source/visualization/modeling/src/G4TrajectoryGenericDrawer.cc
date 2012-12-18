@@ -40,21 +40,6 @@ G4TrajectoryGenericDrawer::G4TrajectoryGenericDrawer(const G4String& name, G4Vis
 G4TrajectoryGenericDrawer::~G4TrajectoryGenericDrawer() {}
 
 void
-G4TrajectoryGenericDrawer::Draw(const G4VTrajectory& traj, const G4int& i_mode, const G4bool& visible) const
-{
-  G4VisTrajContext myContext(GetContext());
-  myContext.SetVisible(visible);
-
-  if (GetVerbose()) {
-    G4cout<<"G4TrajectoryGenericDrawer named "<<Name();
-    G4cout<<", drawing trajectory with configuration: "<<G4endl;
-    myContext.Print(G4cout);
-  }
-  
-  G4TrajectoryDrawerUtils::DrawLineAndPoints(traj, myContext, i_mode);
-}
-
-void
 G4TrajectoryGenericDrawer::Draw(const G4VTrajectory& traj, const G4bool& visible) const
 {
   G4VisTrajContext myContext(GetContext());

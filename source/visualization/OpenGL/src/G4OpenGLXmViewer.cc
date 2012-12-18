@@ -264,7 +264,6 @@ void G4OpenGLXmViewer::CreateMainWindow () {
 
 
   //*********Create style pulldown menu on menubar*********
-  rep_str = XmStringCreateLocalized ((char*)"Representation");
   draw_str = XmStringCreateLocalized ((char*)"Drawing");
   bgnd_str = XmStringCreateLocalized ((char*)"Background color");
 
@@ -273,7 +272,6 @@ void G4OpenGLXmViewer::CreateMainWindow () {
      (char*)"style",
      0,
      NULL,
-     XmVaCASCADEBUTTON, rep_str, 'R',
      XmVaCASCADEBUTTON, draw_str, 'D',
      XmVaCASCADEBUTTON, bgnd_str, 'B',
      XtNvisual, vi -> visual, 
@@ -283,58 +281,10 @@ void G4OpenGLXmViewer::CreateMainWindow () {
      XtNbackground, bgnd,
      NULL);
   
-  XmStringFree (rep_str);
   XmStringFree (draw_str);
   XmStringFree (bgnd_str);
 
   //  G4cout << "Created Style pulldown menu" << G4endl;
-
-  //Add Representation pullright menu to style cascade...
-  polyhedron_str = XmStringCreateLocalized ((char*)"Polyhedron");
-  nurbs_str = XmStringCreateLocalized ((char*)"NURBS");
-
-  rep_style_pullright = XmVaCreateSimplePulldownMenu 
-    (style_cascade,
-     (char*)"rep_style",
-     0,
-     rep_style_callback,
-     XmVaRADIOBUTTON, polyhedron_str, 'P', NULL, NULL,
-     XmVaRADIOBUTTON, nurbs_str, 'N', NULL, NULL,
-     XmNradioBehavior, True, 
-     XmNradioAlwaysOne, True, 
-     XmNuserData, this, 
-     XtNvisual, vi -> visual, 
-     XtNdepth, vi -> depth, 
-     XtNcolormap, cmap, 
-     XtNborderColor, borcol,
-     XtNbackground, bgnd,
-     NULL);
-  
-  Widget special_widget;
-
-  G4ViewParameters::RepStyle style;
-  style = fVP.GetRepStyle();
-  
-  if (style == G4ViewParameters::polyhedron) {
-    special_widget = XtNameToWidget(rep_style_pullright, "button_0");
-    if(special_widget) {
-      XtVaSetValues (special_widget, XmNset, True, NULL);
-    }
-  } else if (style == G4ViewParameters::nurbs) {
-    special_widget = XtNameToWidget(rep_style_pullright, "button_1");
-    if(special_widget) {
-      XtVaSetValues (special_widget, XmNset, True, NULL);
-    }
-  } else {
-    G4Exception
-      ("G4OpenGLXmViewer::CreateMainWindow",
-       "opengl2014", FatalException,
-       "Invalid Representation style");
-  }
-  XmStringFree (polyhedron_str);
-  XmStringFree (nurbs_str);
-  
-  //  G4cout << "Created Representation pulldown menu" << G4endl;
 
   //Add Drawing pullright menu to style cascade...
   wireframe_str = XmStringCreateLocalized ((char*)"Wireframe");
@@ -361,6 +311,8 @@ void G4OpenGLXmViewer::CreateMainWindow () {
      XtNbackground, bgnd,
      NULL);
   
+  Widget special_widget;
+
   G4ViewParameters::DrawingStyle d_style;
   d_style = fVP.GetDrawingStyle();
   

@@ -96,7 +96,6 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         void AddPrimitive (const G4Circle&);
         void AddPrimitive (const G4Square&);
         void AddPrimitive (const G4Polyhedron&);
-        void AddPrimitive (const G4NURBS&);
 
         void AddPrimitive (const G4Polymarker&);
         void AddPrimitive (const G4Scale& scale);

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.9 2010-12-23 14:18:05 lgarnier Exp $
+# $Id$
 
 # lib name
 name := G4VRML

@@ -284,19 +284,6 @@ void G4VRML2SCENEHANDLER::AddPrimitive(const G4Polyhedron& polyhedron)
 
 } 
 
-
-void G4VRML2SCENEHANDLER::AddPrimitive(const G4NURBS&)
-{
-#if defined DEBUG_SCENE_FUNC
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
-	G4cout << "***** AddPrimitive nurbs" << "\n" ;
-#endif 
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
-	G4cout << "G4VRML2File::AddPrimitive(G4NURBS&): not implemented. " << "\n" ;
-
-	VRMLBeginModeling () ;
-}
-
 void G4VRML2SCENEHANDLER::AddPrimitive( const G4Text& ) 
 {
 #if defined DEBUG_SCENE_FUNC

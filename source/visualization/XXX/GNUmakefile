@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.8 2009-10-21 15:28:53 allison Exp $
+# $Id$
 
 name := G4visXXX
 

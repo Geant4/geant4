@@ -192,7 +192,6 @@ public: // With description
   virtual void AddPrimitive (const G4Polymarker&);
   // Default implementation in this class but can be over-ridden.
   virtual void AddPrimitive (const G4Polyhedron&) = 0;  
-  virtual void AddPrimitive (const G4NURBS&)      = 0;       
 
   //////////////////////////////////////////////////////////////
   // Access functions.

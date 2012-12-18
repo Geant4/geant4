@@ -160,7 +160,6 @@ G4bool G4OpenInventorViewer::CompareForKernelVisit(G4ViewParameters& vp) {
   if (
       (vp.GetDrawingStyle ()    != fVP.GetDrawingStyle ())    ||
       (vp.IsAuxEdgeVisible ()   != fVP.IsAuxEdgeVisible ())   ||
-      (vp.GetRepStyle ()        != fVP.GetRepStyle ())        ||
       (vp.IsCulling ()          != fVP.IsCulling ())          ||
       (vp.IsCullingInvisible () != fVP.IsCullingInvisible ()) ||
       (vp.IsDensityCulling ()   != fVP.IsDensityCulling ())   ||

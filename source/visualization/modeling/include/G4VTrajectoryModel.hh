@@ -52,8 +52,6 @@ public:
   virtual ~G4VTrajectoryModel();
   
   // Draw method
-  virtual void Draw(const G4VTrajectory& trajectory, const G4int& i_mode = 0,
-		    const G4bool& visible = true) const = 0;
   virtual void Draw(const G4VTrajectory& trajectory, 
 		    const G4bool& visible = true) const = 0;
   

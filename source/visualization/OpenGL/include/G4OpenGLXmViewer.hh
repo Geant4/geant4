@@ -73,8 +73,7 @@ protected:
                                     actions_cascade,
                                     misc_cascade,
                                     spec_cascade,
-                                    rep_style_pullright, 
-                                    drawing_style_pullright, 
+                                    drawing_style_pullright,
                                     background_color_pullright, 
                                     transparency_pullright, 
                                     antialias_pullright, 
@@ -87,10 +86,8 @@ protected:
                                     actions_str,
                                     misc_str,
                                     spec_str,
-                                    rep_str,
                                     draw_str,
                                     polyhedron_str,
-                                    nurbs_str,
                                     wireframe_str,
                                     hlr_str,
                                     hsr_str,
@@ -250,11 +247,7 @@ public:
 				      XtPointer clientData, 
 				      XtPointer callData);
   
-  static void rep_style_callback (Widget w, 
-				  XtPointer clientData, 
-				  XtPointer callData);
-  
-  static void background_color_callback (Widget w, 
+  static void background_color_callback (Widget w,
 					 XtPointer clientData, 
 					 XtPointer callData);
   

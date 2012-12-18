@@ -239,9 +239,6 @@ public: // With description
   void Draw (const G4Circle&,
     const G4Transform3D& objectTransformation = G4Transform3D());
 
-  void Draw (const G4NURBS&,
-    const G4Transform3D& objectTransformation = G4Transform3D());
-
   void Draw (const G4Polyhedron&,
     const G4Transform3D& objectTransformation = G4Transform3D());
 
@@ -261,9 +258,6 @@ public: // With description
     const G4Transform3D& objectTransformation = G4Transform3D());
 
   void Draw2D (const G4Circle&,
-    const G4Transform3D& objectTransformation = G4Transform3D());
-
-  void Draw2D (const G4NURBS&,
     const G4Transform3D& objectTransformation = G4Transform3D());
 
   void Draw2D (const G4Polyhedron&,
@@ -289,14 +283,11 @@ public: // With description
   // itself - thus you can, for example, change the colour of a
   // physical volume.
 
+  void Draw (const G4VTrajectory&);
+
   void Draw (const G4VHit&);
 
   void Draw (const G4VDigi&);
-
-  void Draw (const G4VTrajectory&, G4int i_mode);
-  // i_mode is a parameter that can be used to control the drawing of
-  // the trajectory.  See, e.g., G4VTrajectory::DrawTrajectory.
-  // i_mode defaults to 0 by inheritance from G4VVisManager.
 
   void Draw (const G4LogicalVolume&, const G4VisAttributes&,
     const G4Transform3D& objectTransformation = G4Transform3D());
@@ -336,7 +327,6 @@ public: // With description
   // any, and redraw all views.
 
   void DispatchToModel(const G4VTrajectory&);
-  void DispatchToModel(const G4VTrajectory&, G4int i_mode);
   // Draw the trajectory.
 
   G4bool FilterTrajectory(const G4VTrajectory&);

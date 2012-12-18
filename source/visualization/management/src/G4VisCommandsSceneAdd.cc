@@ -2344,8 +2344,6 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
   propagatorInField->SetTrajectoryFilter(0); // Switch off smooth trajectories.
   static G4IdentityTrajectoryFilter auxiliaryPointsFilter;
   G4String defaultTrajectoryType;
-  G4bool i_mode_found = false;
-  G4int i_mode = 0;
   if (smooth && rich) {
     UImanager->ApplyCommand("/tracking/storeTrajectory 3");
     propagatorInField->SetTrajectoryFilter(&auxiliaryPointsFilter);
@@ -2358,29 +2356,12 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
     UImanager->ApplyCommand("/tracking/storeTrajectory 3");
     defaultTrajectoryType = "G4RichTrajectory";
   } else {
-    if (!newValue.empty()) {
-      std::istringstream iss(newValue);
-      iss >> i_mode;
-      if (iss) {
-	i_mode_found = true;
-	if (verbosity >= G4VisManager::warnings) {
-	  G4cout <<
-  "WARNING: Integer parameter " << i_mode << " found."
-  "\n  DEPRECATED - its use in this command will be removed at a future major"
-  "\n  release.  Use \"/vis/modeling/trajectories\" commands."
-		 << G4endl;
-	}
-      } else {
-	if (verbosity >= G4VisManager::errors) {
-	  G4cout << "ERROR: Unrecognised parameter \"" << newValue << "\""
-	    "\n  No action taken."
-		 << G4endl;
-	}
-	return;
-      }
+    if (verbosity >= G4VisManager::errors) {
+      G4cout << "ERROR: Unrecognised parameter \"" << newValue << "\""
+      "\n  No action taken."
+      << G4endl;
     }
-    UImanager->ApplyCommand("/tracking/storeTrajectory 1");
-    defaultTrajectoryType = "G4Trajectory";
+    return;
   }
   UImanager->SetVerboseLevel(keepVerbose);
 
@@ -2403,12 +2384,7 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
     }
   }
 
-  G4TrajectoriesModel* model = 0;
-  if (i_mode_found) {
-    model = new G4TrajectoriesModel(i_mode);
-  } else {
-    model = new G4TrajectoriesModel();
-  }
+  G4TrajectoriesModel* model = new G4TrajectoriesModel();
   const G4String& currentSceneName = pScene -> GetName ();
   pScene -> AddEndOfEventModel (model, warn);
 

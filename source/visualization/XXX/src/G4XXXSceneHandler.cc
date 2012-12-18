@@ -237,13 +237,3 @@ void G4XXXSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
   // for an example of how to get facets out of a G4Polyhedron,
   // including how to cope with triangles if that's a problem.
 }
-
-void G4XXXSceneHandler::AddPrimitive(const G4NURBS&) {
-#ifdef G4XXXDEBUG
-  G4cout <<
-    "G4XXXSceneHandler::AddPrimitive(const G4NURBS& nurbs) called."
-	 << G4endl;
-  PrintThings();
-#endif
-  //?? Don't bother implementing this.  NURBS are not functional.
-}

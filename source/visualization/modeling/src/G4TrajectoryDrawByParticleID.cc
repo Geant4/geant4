@@ -48,14 +48,6 @@ G4TrajectoryDrawByParticleID::G4TrajectoryDrawByParticleID(const G4String& name,
 G4TrajectoryDrawByParticleID::~G4TrajectoryDrawByParticleID() {}
 
 void
-G4TrajectoryDrawByParticleID::Draw(const G4VTrajectory& object,
-				   const G4int&,
-				   const G4bool& visible) const
-{
-  Draw(object, visible);
-}
-
-void
 G4TrajectoryDrawByParticleID::Draw(const G4VTrajectory& traj, const G4bool& visible) const
 {
   G4Colour colour(fDefault);

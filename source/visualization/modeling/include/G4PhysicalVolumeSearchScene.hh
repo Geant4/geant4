@@ -96,7 +96,6 @@ public:
   virtual void AddPrimitive (const G4Square&)     {}
   virtual void AddPrimitive (const G4Polymarker&) {}
   virtual void AddPrimitive (const G4Polyhedron&) {}
-  virtual void AddPrimitive (const G4NURBS&)      {}
 
 private:
   void FindVolume (const G4VSolid&);

@@ -1,4 +1,4 @@
-$Id: History,v 1.163 2010-12-27 12:41:19 allison Exp $
+$Id$
 
 -------------------------------------------------------------------
 
@@ -25,6 +25,9 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+2nd December 2012  John Allison  (visman-V09-06-00)
+- Removed NURBS and references to i_mode.
 
 17th November 2012  John Allison  (visman-V09-05-47)
 - G4VisManager.cc:

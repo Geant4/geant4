@@ -1,4 +1,4 @@
-.$Id: History,v 1.136 2010-11-07 22:29:30 perl Exp $
+.$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 --------------------------------------------------
+
+2nd December 2012  John Allison  (vis-HepRep-V09-06-00)
+- Remove NURBS.
 
 8th August 2012  John Allison  (vis-HepRep-V09-05-05 and 06)
 - G4HepRepSceneHandler.cc: Intercepted 2D primitives.

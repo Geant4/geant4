@@ -33,14 +33,6 @@
 
 #ifdef G4VIS_BUILD_OPENGL_DRIVER
 
-// Included here - problems with HP compiler if not before other includes?
-#include "G4NURBS.hh"
-
-// Here follows a special for Mesa, the OpenGL emulator.  Does not affect
-// other OpenGL's, as far as I'm aware.   John Allison 18/9/96.
-#define CENTERLINE_CLPP  /* CenterLine C++ workaround: */
-// Also seems to be required for HP's CC and AIX xlC, at least.
-
 #include "G4OpenGLImmediateSceneHandler.hh"
 
 #include "G4OpenGLViewer.hh"
@@ -212,16 +204,6 @@ void G4OpenGLImmediateSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron
   G4bool furtherprocessing = AddPrimitivePreamble(polyhedron);
   if (furtherprocessing) {
     G4OpenGLSceneHandler::AddPrimitive(polyhedron);
-  }
-}
-
-void G4OpenGLImmediateSceneHandler::AddPrimitive (const G4NURBS& nurbs)
-{
-  // Note: colour is still handled in
-  // G4OpenGLSceneHandler::AddPrimitive(const G4NURBS&).
-  G4bool furtherprocessing = AddPrimitivePreamble(nurbs);
-  if (furtherprocessing) {
-    G4OpenGLSceneHandler::AddPrimitive(nurbs);
   }
 }
 

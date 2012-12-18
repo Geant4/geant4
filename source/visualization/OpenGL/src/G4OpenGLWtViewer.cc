@@ -246,22 +246,9 @@ void G4OpenGLWtViewer::createPopupMenu()    {
 
   WMenu *mRepresentation = mStyle->addMenu("&Representation");
   WMenu *mProjection = mStyle->addMenu("&Projection");
-  WAction *polyhedron = mRepresentation->addAction("Polyhedron");
-  WAction *nurbs = mRepresentation->addAction("NURBS");
 
   WAction *ortho = mProjection->addAction("Orthographic");
   WAction *perspective = mProjection->addAction("Persepective");
-
-  // INIT mRepresentation
-  G4ViewParameters::RepStyle style;
-  style = fVP.GetRepStyle();
-  if (style == G4ViewParameters::polyhedron) {
-    createRadioAction(polyhedron,nurbs,SLOT(toggleRepresentation(bool)),1);
-  } else if (style == G4ViewParameters::nurbs) {
-    createRadioAction(polyhedron,nurbs,SLOT(toggleRepresentation(bool)),2);
-  } else {
-    mRepresentation->clear();
-  }
 
   // INIT mProjection
   if (fVP.GetFieldHalfAngle() == 0) {
@@ -643,29 +630,6 @@ void G4OpenGLWtViewer::toggleDrawingAction(int aAction) {
   updateWWidget();
 }
 
-
-/**
-   SLOT Activate by a click on the representation menu
-   Warning : When G4OpenGLStoredWtViewer::DrawView() method call,
-   KernelVisitDecision () will be call and will set the fNeedKernelVisit
-   to 1. See G4XXXStoredViewer::CompareForKernelVisit for explanations.
-   It will cause a redraw of the view
-   @param check : 1 polyhedron, 0 nurbs
-   @see G4OpenGLStoredWtViewer::DrawView
-   @see G4XXXStoredViewer::CompareForKernelVisit
-*/
-void G4OpenGLWtViewer::toggleRepresentation(bool check) {
-
-  G4ViewParameters::RepStyle style;
-  if (check == 1) {
-    style = G4ViewParameters::polyhedron;
-  } else {
-    style = G4ViewParameters::nurbs;
-  }
-  fVP.SetRepStyle (style);
-
-  updateWWidget();
-}
 
 /**
    SLOT Activate by a click on the projection menu

@@ -50,8 +50,6 @@ public: // With description
   virtual ~G4TrajectoryDrawByParticleID();
 
   // Draw method
-  virtual void Draw(const G4VTrajectory& trajectory, const G4int& i_mode = 0,
-		    const G4bool& visible = true) const;
   virtual void Draw(const G4VTrajectory& trajectory, 
 		    const G4bool& visible = true) const;
   

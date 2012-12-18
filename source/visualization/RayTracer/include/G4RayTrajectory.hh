@@ -75,7 +75,6 @@ class G4RayTrajectory : public G4VTrajectory
    virtual void AppendStep(const G4Step*);
    virtual void ShowTrajectory(std::ostream&) const;
    virtual void DrawTrajectory() const {;}
-   virtual void DrawTrajectory(G4int) const {;}
    virtual int GetPointEntries() const {return positionRecord->size();}
    virtual G4VTrajectoryPoint* GetPoint(G4int i) const 
    { return (*positionRecord)[i]; }

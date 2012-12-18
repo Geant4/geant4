@@ -59,7 +59,6 @@ public:
   void AddPrimitive (const G4Square&);
   void AddPrimitive (const G4Scale& scale);
   void AddPrimitive (const G4Polyhedron&);
-  void AddPrimitive (const G4NURBS&);
 
 protected:
 

@@ -62,7 +62,6 @@ public:
   void AddPrimitive (const G4Circle&);
   void AddPrimitive (const G4Square&);
   void AddPrimitive (const G4Polyhedron& p);
-  void AddPrimitive (const G4NURBS& nurb);
   void AddPrimitive (const G4Polymarker&);
   ////////////////////////////////////////////////////////////////
   // Explicitly invoke base class methods to avoid warnings about

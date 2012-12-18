@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.14 2011-01-03 14:53:34 lgarnier Exp $
+# $Id$
 
 name := G4RayTracer
 

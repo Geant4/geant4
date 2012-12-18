@@ -25,7 +25,6 @@
 //
 //
 // $Id: G4VisCommands.cc,v 1.24 2009-03-09 12:42:00 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/set - John Allison  21st March 2012
 // Set quantities for use in appropriate future commands.

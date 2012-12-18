@@ -1,4 +1,4 @@
-$Id: History,v 1.67 2011-01-03 14:53:34 lgarnier Exp $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for Ray Tracer category
 ---------------------------------------
+
+2nd December 2012  John Allison  (raytracer-V09-06-00)
+- Removed NURBS and references to i_mode.
 
 5th July 2012  Gabriele Cosmo  (raytracer-V09-05-05)
 - Explicitly use inclusion of headers for system of units and physical

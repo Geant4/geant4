@@ -58,7 +58,6 @@
 #include "G4Circle.hh"
 #include "G4Square.hh"
 #include "G4Text.hh"
-#include "G4NURBS.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4VisAttributes.hh"
 #include "G4VSolid.hh"
@@ -1004,29 +1003,6 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Square& square) {
     setMarker(instance, square);
 
     factory->createHepRepPoint(instance, center.x(), center.y(), center.z());
-}
-
-void G4HepRepSceneHandler::AddPrimitive (const G4NURBS&) {
-#ifdef PDEBUG
-    cout << "G4HepRepSceneHandler::AddPrimitive(G4NURBS&) " << endl;
-#endif
-    if (dontWrite()) return;
-
-    /*** You may need this
-    if (fProcessing2D) {
-      static G4bool warned = false;
-      if (!warned) {
-	warned = true;
-	G4Exception
-	  ("G4HepRepSceneHandler::AddPrimitive (const G4NURBS&)",
-	   "vis-HepRep1007", JustWarning,
-	   "2D NURBS not implemented.  Ignored.");
-      }
-      return;
-    }
-    ***/
-
-    cout << "G4HepRepSceneHandler::AddPrimitive G4NURBS : not yet implemented. " << endl;
 }
 
 void G4HepRepSceneHandler::AddPrimitive (const G4Scale& scale) { 

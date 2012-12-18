@@ -1,4 +1,4 @@
-$Id: History,v 1.196 2011-01-07 09:47:23 allison Exp $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+2nd December 2012  John Allison  (opengl-V09-06-00)
+- Remove NURBS.
 
 13th November 2012  Laurent Garnier (opengl-V09-05-53)
 - G4OpenGLQtViewer

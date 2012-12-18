@@ -25,7 +25,6 @@
 //
 //
 // $Id: G4VisCommandsDefault.hh,v 1.3 2006-06-29 21:28:34 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/default commands - John Allison  30th October 2011
 

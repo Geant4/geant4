@@ -25,7 +25,6 @@
 //
 //
 // $Id:$
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // John Allison  27th October 2012
 // Base class for OpenGLImmediate/StoredQt graphics system factories.

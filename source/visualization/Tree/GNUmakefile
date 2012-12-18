@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.7 2011-01-03 14:55:59 lgarnier Exp $
+# $Id$
 
 name := G4Tree
 

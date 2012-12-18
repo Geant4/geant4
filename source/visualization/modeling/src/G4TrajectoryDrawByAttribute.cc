@@ -59,14 +59,6 @@ G4TrajectoryDrawByAttribute::~G4TrajectoryDrawByAttribute()
 }
 
 void
-G4TrajectoryDrawByAttribute::Draw(const G4VTrajectory& object,
-				  const G4int&,
-				  const G4bool& visible) const
-{
-  Draw(object, visible);
-}
-
-void
 G4TrajectoryDrawByAttribute::Draw(const G4VTrajectory& object, 
 				  const G4bool& visible) const
 {

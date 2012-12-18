@@ -367,15 +367,6 @@ void G4XXXStoredSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
   // including how to cope with triangles if that's a problem.
 }
 
-void G4XXXStoredSceneHandler::AddPrimitive(const G4NURBS&) {
-#ifdef G4XXXStoredDEBUG
-  G4cout <<
-    "G4XXXStoredSceneHandler::AddPrimitive(const G4NURBS& nurbs) called."
-	 << G4endl;
-#endif
-  //?? Don't bother implementing this.  NURBS are not functional.
-}
-
 void G4XXXStoredSceneHandler::ClearStore ()
 {
   fStore.clear();

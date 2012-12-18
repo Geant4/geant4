@@ -54,16 +54,11 @@ class G4TrajectoriesModel: public G4VModel {
 public: // With description
 
   G4TrajectoriesModel ();
-  G4TrajectoriesModel (G4int drawingMode);
 
   virtual ~G4TrajectoriesModel ();
 
   virtual void DescribeYourselfTo (G4VGraphicsScene&);
   // The main task of a model is to describe itself to the graphics scene.
-
-  G4bool IsDrawingModeSet() const;
-  G4int GetDrawingMode() const;
-  void SetDrawingMode(G4int drawingMode);
 
   const G4VTrajectory* GetCurrentTrajectory() const
   {return fpCurrentTrajectory;}
@@ -73,8 +68,6 @@ public: // With description
   
 private:
 
-  G4bool fDrawingModeSet;
-  G4int fDrawingMode;
   const G4VTrajectory* fpCurrentTrajectory;
   G4int fEventID;
 

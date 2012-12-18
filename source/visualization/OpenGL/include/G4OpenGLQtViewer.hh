@@ -315,7 +315,6 @@ private Q_SLOTS :
   void showShortcuts();
   void toggleMouseAction(int);
   void toggleSurfaceAction(int);
-  void toggleRepresentation(bool);
   void toggleProjection(bool);
   void toggleTransparency(bool);
   void toggleAntialiasing(bool);

@@ -56,7 +56,6 @@
 #include "G4RotationMatrix.hh"
 #include "G4Polyline.hh"
 #include "G4Polyhedron.hh"
-#include "G4NURBS.hh"
 #include "G4NullModel.hh"
 #include "G4ModelingParameters.hh"
 #include "G4TransportationManager.hh"
@@ -753,12 +752,6 @@ void G4VisManager::Draw (const G4Circle& circle,
   DrawT (circle, objectTransform);
 }
 
-void G4VisManager::Draw (const G4NURBS& nurbs,
-			 const G4Transform3D& objectTransform)
-{
-  DrawT (nurbs, objectTransform);
-}
-
 void G4VisManager::Draw (const G4Polyhedron& polyhedron,
 			 const G4Transform3D& objectTransform)
 {
@@ -799,12 +792,6 @@ void G4VisManager::Draw2D (const G4Circle& circle,
 			   const G4Transform3D& objectTransform)
 {
   DrawT2D (circle, objectTransform);
-}
-
-void G4VisManager::Draw2D (const G4NURBS& nurbs,
-			   const G4Transform3D& objectTransform)
-{
-  DrawT2D (nurbs, objectTransform);
 }
 
 void G4VisManager::Draw2D (const G4Polyhedron& polyhedron,
@@ -859,17 +846,14 @@ void G4VisManager::Draw (const G4VDigi& digi) {
   }
 }
 
-void G4VisManager::Draw (const G4VTrajectory& traj,
-			 G4int i_mode) {
+void G4VisManager::Draw (const G4VTrajectory& traj) {
   if (fIsDrawGroup) {
     fpSceneHandler -> SetModel (&dummyTrajectoriesModel);
-    dummyTrajectoriesModel.SetDrawingMode(i_mode);
     fpSceneHandler -> AddCompound (traj);
   } else {
     if (IsValidView ()) {
       ClearTransientStoreIfMarked();
       fpSceneHandler -> SetModel (&dummyTrajectoriesModel);
-      dummyTrajectoriesModel.SetDrawingMode(i_mode);
       fpSceneHandler -> AddCompound (traj);
     }
   }
@@ -1152,42 +1136,11 @@ void G4VisManager::DispatchToModel(const G4VTrajectory& trajectory)
 
   assert (0 != trajectoryModel); // Should exist
 
-  trajectoryModel->Draw(trajectory, visible);
-}
-
-void G4VisManager::DispatchToModel(const G4VTrajectory& trajectory, G4int i_mode)
-{
-  G4bool visible(true);
-
-  // See if trajectory passes filter
-  G4bool passed = FilterTrajectory(trajectory);
-
-  if (!passed) {
-    // Draw invisible trajectory if trajectory failed filter and
-    // are filtering in soft mode
-    if (fpTrajFilterMgr->GetMode() == FilterMode::Soft) visible = false;
-    else {return;}
-  }
-
-  // Go on to draw trajectory
-  assert (0 != fpTrajDrawModelMgr);
-
-  const G4VTrajectoryModel* trajectoryModel = CurrentTrajDrawModel();
-
-  assert (0 != trajectoryModel); // Should exist
-
   if (IsValidView()) {
     G4TrajectoriesModel* trajectoriesModel =
       dynamic_cast<G4TrajectoriesModel*>(fpSceneHandler->GetModel());
     if (trajectoriesModel) {
-      if (trajectoriesModel->IsDrawingModeSet()) {
-	trajectoryModel->Draw(trajectory, i_mode, visible);
-      } else {
-	trajectoryModel->Draw(trajectory, visible);
-      }
-    } else {
-      // Just draw at user's request
-      trajectoryModel->Draw(trajectory, i_mode, visible);
+      trajectoryModel->Draw(trajectory, visible);
     }
   }
 }

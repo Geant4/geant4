@@ -317,26 +317,12 @@ void G4OpenGLQtViewer::createPopupMenu()    {
   // === Style Menu ===
   QMenu *mStyle = fContextMenu->addMenu("&Style");
 
-  QMenu *mRepresentation = mStyle->addMenu("&Representation");
   QMenu *mProjection = mStyle->addMenu("&Projection");
-  QAction *polyhedron = mRepresentation->addAction("Polyhedron");
-  QAction *nurbs = mRepresentation->addAction("NURBS");
 
   fProjectionOrtho = mProjection->addAction("Orthographic", signalMapperSurface, SLOT(map()));
   fProjectionPerspective = mProjection->addAction("Persepective", signalMapperSurface, SLOT(map()));
 
-  // INIT mRepresentation
-  G4ViewParameters::RepStyle style;
-  style = fVP.GetRepStyle();
-  if (style == G4ViewParameters::polyhedron) {
-    createRadioAction(polyhedron,nurbs,SLOT(toggleRepresentation(bool)),1);
-  } else if (style == G4ViewParameters::nurbs) {
-    createRadioAction(polyhedron,nurbs,SLOT(toggleRepresentation(bool)),2);
-  } else {
-    mRepresentation->clear();
-  }
-
-  // INIT mProjection
+ // INIT mProjection
   if (fVP.GetFieldHalfAngle() == 0) {
     createRadioAction(fProjectionOrtho, fProjectionPerspective,SLOT(toggleProjection(bool)),1);
   } else {
@@ -654,30 +640,6 @@ void G4OpenGLQtViewer::toggleSurfaceAction(int aAction) {
   updateQWidget();
 }
 
-
-/**
-   SLOT Activate by a click on the representation menu
-   Warning : When G4OpenGLStoredQtViewer::DrawView() method call,
-   KernelVisitDecision () will be call and will set the fNeedKernelVisit
-   to 1. See G4XXXStoredViewer::CompareForKernelVisit for explanations.
-   It will cause a redraw of the view
-   @param check : 1 polyhedron, 0 nurbs
-   @see G4OpenGLStoredQtViewer::DrawView
-   @see G4XXXStoredViewer::CompareForKernelVisit
-*/
-void G4OpenGLQtViewer::toggleRepresentation(bool check) {
-
-  G4ViewParameters::RepStyle style;
-  if (check == 1) {
-    style = G4ViewParameters::polyhedron;
-  } else {
-    style = G4ViewParameters::nurbs;
-  }
-  fVP.SetRepStyle (style);
-
-  updateToolbarAndMouseContextMenu();
-  updateQWidget();
-}
 
 /**
    SLOT Activate by a click on the projection menu

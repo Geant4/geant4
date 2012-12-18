@@ -64,7 +64,6 @@ public:
   void AddPrimitivesSquare (const std::vector <G4VMarker>&);
   void AddPrimitive (const G4Scale&);
   void AddPrimitive (const G4Polyhedron&);
-  void AddPrimitive (const G4NURBS&);
 
   void PreAddSolid (const G4Transform3D& objectTransformation,
 		    const G4VisAttributes&);

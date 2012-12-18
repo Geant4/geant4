@@ -25,7 +25,6 @@
 //
 //
 // $Id: G4OpenInventorXt.cc,v 1.5 2010-05-26 14:30:46 allison Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Jeff Kallenbach 01 Aug 1996

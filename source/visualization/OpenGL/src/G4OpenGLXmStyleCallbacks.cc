@@ -82,42 +82,6 @@ void G4OpenGLXmViewer::drawing_style_callback (Widget w,
   pView->DrawView ();
 }
 
-void G4OpenGLXmViewer::rep_style_callback (Widget w, 
-					 XtPointer clientData, 
-					 XtPointer) 
-{
-  G4long choice = (G4long)clientData;
-  G4OpenGLXmViewer* pView;
-  XtVaGetValues (XtParent(w),
-		 XmNuserData, &pView,
-		 NULL);
-  G4ViewParameters::RepStyle style;
-
-  switch (choice) {
-    
-  case 0:
-    style = G4ViewParameters::polyhedron;
-    break;
-
-  case 1:
-    style = G4ViewParameters::nurbs;
-    break;
-
-  default:
-    style = G4ViewParameters::polyhedron;
-    G4Exception
-      ("G4OpenGLXmViewer::rep_style_callback",
-       "opengl2007", FatalException,
-       "Unrecognised case in rep_style_callback.");
-  }
-
-  pView->fVP.SetRepStyle (style);
-
-  pView->SetView ();
-  pView->ClearView ();
-  pView->DrawView ();
-}
-
 void G4OpenGLXmViewer::background_color_callback (Widget w, 
 						XtPointer clientData, 
 						XtPointer) 

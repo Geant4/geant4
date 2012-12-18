@@ -42,14 +42,6 @@ G4TrajectoryDrawByOriginVolume::G4TrajectoryDrawByOriginVolume(const G4String& n
 G4TrajectoryDrawByOriginVolume::~G4TrajectoryDrawByOriginVolume() {}
 
 void
-G4TrajectoryDrawByOriginVolume::Draw(const G4VTrajectory& object,
-				     const G4int&,
-				     const G4bool& visible) const
-{
-  Draw(object, visible);
-}
-
-void
 G4TrajectoryDrawByOriginVolume::Draw(const G4VTrajectory& traj, const G4bool& visible) const
 {
   G4Colour colour(fDefault);

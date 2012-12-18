@@ -64,7 +64,6 @@ public:
   void AddPrimitive (const G4Text&);
   void AddPrimitive (const G4Scale&);
   void AddPrimitive (const G4Polyhedron&);
-  void AddPrimitive (const G4NURBS&);
   void ClearStore ();
   void ClearTransientStore ();
 

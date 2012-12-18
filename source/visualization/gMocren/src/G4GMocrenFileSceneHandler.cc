@@ -613,20 +613,6 @@ void G4GMocrenFileSceneHandler::AddPrimitive (const G4Polyline& polyline)
 } // G4GMocrenFileSceneHandler::AddPrimitive (polyline)
 
 
-//----- Add nurbes
-void G4GMocrenFileSceneHandler::AddPrimitive (const G4NURBS&)
-{
-  //----- 
-  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
-    G4cout << "***** AddPrimitive( G4NURBS )" << G4endl;
-
-  //----- Initialize if necessary
-  GFBeginModeling();
-
-}
-
-
-
 //----- Add text
 void G4GMocrenFileSceneHandler::AddPrimitive ( const G4Text& text )
 {
@@ -1569,7 +1555,7 @@ void G4GMocrenFileSceneHandler::AddCompound(const G4VTrajectory & traj) {
 	("G4VSceneHandler::AddCompound(const G4VTrajectory&)",
 	 "gMocren0013", FatalException, "Not a G4TrajectoriesModel.");
     } else {
-      traj.DrawTrajectory(pTrModel->GetDrawingMode());
+      traj.DrawTrajectory();
 
       const G4VTrajectory * trj = pTrModel->GetCurrentTrajectory();
       G4cout << "------ track" << G4endl;
