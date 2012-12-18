@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id$
+// $Id: EventAction.cc,v 1.1 2009-05-04 10:05:35 sincerti Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -69,7 +69,7 @@ void EventAction::EndOfEventAction(const G4Event* evt)
       for (G4int i=0; i<n_trajectories; i++) 
       { 
 	  G4Trajectory* trj = (G4Trajectory*)((*(evt->GetTrajectoryContainer()))[i]);
-          trj->DrawTrajectory(50);
+          trj->DrawTrajectory();
       } 
  }
 }

@@ -15,6 +15,15 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07 Dec 2012   V.Ivanchenko tag test60-V09-06-01
+            - PhysicsList - substituted obsolete SetModel method
+              by SetEmModel
+
+02 Dec 2012   J.Allison   tag test60-V09-06-00
+            - Migration to DrawTrajectory() (i_mode argument is no longer
+              available):
+              o EventAction.cc: Removed argument from DrawTrajectory().
+
 11 Oct 2012   G.Cosmo     tag test60-V09-05-00
             - Explicit inclusion of units and constants headers.
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id$
+// $Id: PhysicsList.cc,v 1.3 2010-09-09 10:16:15 sincerti Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -142,8 +142,8 @@ void PhysicsList::ConstructEM()
     if (particleName == "e-") {
 
       G4DNAElastic* theDNAElasticProcess = new G4DNAElastic();
-      //theDNAElasticProcess->SetModel(new G4DNAChampionElasticModel());
-      theDNAElasticProcess->SetModel(new G4DNAScreenedRutherfordElasticModel());
+      //theDNAElasticProcess->SetEmModel(new G4DNAChampionElasticModel());
+      theDNAElasticProcess->SetEmModel(new G4DNAScreenedRutherfordElasticModel());
       pmanager->AddDiscreteProcess(theDNAElasticProcess);
 
       pmanager->AddDiscreteProcess(new G4DNAExcitation());
