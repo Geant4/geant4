@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.400 2010-12-22 16:28:40 lgarnier Exp $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14th December 2012 Gabriele Cosmo  (config-V09-06-01)
+- Removed includes for BREPS module.
+
+13th December 2012 Gunter Folger  (config-V09-06-00)
+- Removed includes for CHIPS module.
 
 27th November 2012 Gabriele Cosmo (config-V09-05-14)
 - Added -Wno-variadic-macros -Wshadow compilation options to
