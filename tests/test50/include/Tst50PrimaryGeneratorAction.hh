@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: Tst50PrimaryGeneratorAction.hh,v 1.9 2006-06-29 22:04:56 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
 //

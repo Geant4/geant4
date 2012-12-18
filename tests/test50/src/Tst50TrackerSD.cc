@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: Tst50TrackerSD.cc,v 1.7 2006-06-29 22:06:28 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)

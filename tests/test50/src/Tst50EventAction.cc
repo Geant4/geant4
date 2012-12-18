@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: Tst50EventAction.cc,v 1.20 2006-06-29 22:05:44 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
@@ -99,7 +100,7 @@ void Tst50EventAction::EndOfEventAction(const G4Event* evt)
         { 
          G4Trajectory* trj = (G4Trajectory*)
 	 ((*(evt->GetTrajectoryContainer()))[i]);
-	 trj -> DrawTrajectory(50);
+	 trj -> DrawTrajectory();
         }
     }
 }

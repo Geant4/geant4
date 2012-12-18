@@ -24,11 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: Tst50RunAction.hh,v 1.19 2006-06-29 22:05:08 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //
 //
-// $Id$
+// $Id: Tst50RunAction.hh,v 1.19 2006-06-29 22:05:08 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
 //

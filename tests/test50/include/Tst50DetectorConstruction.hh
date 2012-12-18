@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: Tst50DetectorConstruction.hh,v 1.18 2010-06-25 09:46:47 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // author: Susanna Guatelli (guatelli@ge.infn.it) 

@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: Tst50SteppingVerbose.cc,v 1.10 2006-06-29 22:06:24 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //
