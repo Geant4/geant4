@@ -41,7 +41,6 @@
 #include "G4HadronElasticPhysics.hh"
 #include "G4HadronDElasticPhysics.hh"
 #include "G4HadronHElasticPhysics.hh"
-#include "G4HadronQElasticPhysics.hh"
 #include "G4HadronInelasticQBBC.hh"
 #include "G4IonBinaryCascadePhysics.hh"
 #include "G4Decay.hh"
@@ -142,11 +141,6 @@ void RemSimPhysicsList::AddPhysicsList(const G4String& name)
   } else if (name == "HElastic" && !helIsRegistered) {
     G4cout << "THE FOLLOWING HADRONIC ELASTIC PHYSICS LIST HAS BEEN ACTIVATED: G4HadronHElasticPhysics()" << G4endl;
     hadronPhys.push_back( new G4HadronHElasticPhysics());
-    helIsRegistered = true;
-
-  } else if (name == "QElastic" && !helIsRegistered) {
-    G4cout << "THE FOLLOWING HADRONIC ELASTIC PHYSICS LIST HAS BEEN ACTIVATED: G4HadronQElasticPhysics()" << G4endl;
-    hadronPhys.push_back( new G4HadronQElasticPhysics());
     helIsRegistered = true;
 
   } else if (name == "binary" && !bicIsRegistered) {
