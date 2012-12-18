@@ -41,7 +41,7 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "QGSP_BIC_EMY.hh"
+#include "FTFP_BERT.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -63,7 +63,7 @@ int main(int argc,char** argv) {
 
   // UserInitialization classes (mandatory)
   runManager->SetUserInitialization(new B1DetectorConstruction);
-  runManager->SetUserInitialization(new QGSP_BIC_EMY);
+  runManager->SetUserInitialization(new FTFP_BERT);
   
 #ifdef G4VIS_USE
   // Visualization, if you choose to have it!
