@@ -27,7 +27,8 @@
 /// \brief Implementation of the PhysListEmStandard class
 //
 //
-// $Id$
+// $Id: PhysListEmStandard.cc,v 1.4 2010-04-02 15:46:31 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -87,7 +88,7 @@ void PhysListEmStandard::ConstructProcess()
       ////pmanager->AddDiscreteProcess(new G4RayleighScattering);               
       pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
       G4ComptonScattering* cs   = new G4ComptonScattering;
-      cs->SetModel(new G4KleinNishinaModel());
+      cs->SetEmModel(new G4KleinNishinaModel());
       pmanager->AddDiscreteProcess(cs);
       pmanager->AddDiscreteProcess(new G4GammaConversion);
             

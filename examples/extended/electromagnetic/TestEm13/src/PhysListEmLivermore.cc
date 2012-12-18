@@ -27,7 +27,8 @@
 /// \brief Implementation of the PhysListEmLivermore class
 //
 //
-// $Id$
+// $Id: PhysListEmLivermore.cc,v 1.6 2010-04-02 15:46:31 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 

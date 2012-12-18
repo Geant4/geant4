@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11-12-12 V.Ivant (testem13-V09-06-00)
+- PhysListEmStandard: use SetEmModel method
+
 12-10-12 V.Ivant (testem13-V09-05-02)
 - Migration to the updated analysis tool and inplicit units
      
