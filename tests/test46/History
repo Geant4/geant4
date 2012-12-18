@@ -15,6 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10-12-12  V.Ivanchenko (test46-V09-06-01)
+- Removed dependences on CHIPS
+
+02-12-12  J.Allison (test46-V09-06-00)
+- Migration to DrawTrajectory() (i_mode argument is no longer available):
+  o EventAction.cc: Removed argument from DrawTrajectory().
+
 05-11-12  V.Ivanchenko (test46-V09-05-04)
 - Fixed variable shadowing
 

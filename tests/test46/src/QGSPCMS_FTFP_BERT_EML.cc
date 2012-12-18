@@ -31,7 +31,7 @@
 #include "G4DecayPhysics.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4IonPhysics.hh"
-#include "G4QStoppingPhysics.hh"
+#include "G4StoppingPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 
@@ -68,7 +68,7 @@ QGSPCMS_FTFP_BERT_EML::QGSPCMS_FTFP_BERT_EML()
   RegisterPhysics( new HadronPhysicsQGSP_FTFP_BERT(ver)); 
   
   // Stopping Physics
-  RegisterPhysics( new G4QStoppingPhysics(ver));
+  RegisterPhysics( new G4StoppingPhysics(ver));
 
   // Ion Physics
   RegisterPhysics( new G4IonPhysics(ver));
