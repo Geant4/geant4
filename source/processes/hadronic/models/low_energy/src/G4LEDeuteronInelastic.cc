@@ -108,7 +108,6 @@ G4LEDeuteronInelastic::ApplyYourself(const G4HadProjectile& aTrack,
       theParticleChange.SetStatusChange(isAlive);
       theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
       theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
-      if (isotopeProduction) DoIsotopeCounting(originalIncident, targetNucleus);
       return &theParticleChange;      
     }
 
@@ -121,7 +120,6 @@ G4LEDeuteronInelastic::ApplyYourself(const G4HadProjectile& aTrack,
     delete vec[i];
   }
 
-  if (isotopeProduction) DoIsotopeCounting(originalIncident, targetNucleus); 
   return &theParticleChange;
 }
  

@@ -73,7 +73,6 @@ G4LENeutronInelastic::ApplyYourself(const G4HadProjectile& aTrack,
   targetParticle = *originalTarget;
   if (originalIncident->GetKineticEnergy()/GeV < 0.01 + 2.*G4UniformRand()/9.) {
     SlowNeutron(originalIncident, modifiedOriginal, targetParticle, targetNucleus);
-    if (isotopeProduction) DoIsotopeCounting(originalIncident, targetNucleus);
     delete originalTarget;
     return &theParticleChange;
   }
@@ -108,7 +107,6 @@ G4LENeutronInelastic::ApplyYourself(const G4HadProjectile& aTrack,
   const G4double cutOff = 0.1;
   if (modifiedOriginal.GetKineticEnergy()/MeV <= cutOff) {
     SlowNeutron(originalIncident, modifiedOriginal, targetParticle, targetNucleus);
-    if (isotopeProduction) DoIsotopeCounting(originalIncident, targetNucleus);
     delete originalTarget;
     return &theParticleChange;
   }
@@ -133,7 +131,6 @@ G4LENeutronInelastic::ApplyYourself(const G4HadProjectile& aTrack,
     
   SetUpChange(vec, vecLen, currentParticle, targetParticle, incidentHasChanged);
    
-  if (isotopeProduction) DoIsotopeCounting(originalIncident, targetNucleus); 
   delete originalTarget;
   return &theParticleChange;
 }

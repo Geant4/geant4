@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4LEAntiNeutronInelastic.hh,v 1.11 2007-02-24 06:13:02 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Low Energy AntiNeutron Inelastic Process
 // J.L. Chuma, TRIUMF, 19-Feb-1997

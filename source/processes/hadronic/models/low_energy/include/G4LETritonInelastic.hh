@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4LETritonInelastic.hh,v 1.10 2007-02-26 18:34:35 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Low Energy Triton Inelastic Process
 // J.L. Chuma, TRIUMF, 25-Feb-1997

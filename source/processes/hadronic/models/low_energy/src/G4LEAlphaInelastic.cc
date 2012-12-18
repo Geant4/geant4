@@ -64,7 +64,6 @@ G4LEAlphaInelastic::ApplyYourself(const G4HadProjectile& aTrack,
                                   G4Nucleus& targetNucleus)
 {
   theParticleChange.Clear();
-  const G4HadProjectile* originalIncident = &aTrack;
 
   G4double A = targetNucleus.GetA_asInt();
   G4double Z = targetNucleus.GetZ_asInt();
@@ -125,6 +124,5 @@ G4LEAlphaInelastic::ApplyYourself(const G4HadProjectile& aTrack,
     delete vec[i];
   }
 
-  if (isotopeProduction) DoIsotopeCounting(originalIncident, targetNucleus); 
   return &theParticleChange;
 }

@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4LEOmegaMinusInelastic.cc,v 1.12 2006-06-29 20:45:09 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: OmegaMinus Inelastic Process
 // J.L. Chuma, TRIUMF, 20-Feb-1997
@@ -126,7 +127,7 @@ G4LEOmegaMinusInelastic::ApplyYourself(const G4HadProjectile& aTrack,
     
   SetUpChange(vec, vecLen, currentParticle, targetParticle, incidentHasChanged);
 
-  if (isotopeProduction) DoIsotopeCounting(originalIncident, targetNucleus);
+//  if (isotopeProduction) DoIsotopeCounting(originalIncident, targetNucleus);
 
   delete originalTarget;
   return &theParticleChange;

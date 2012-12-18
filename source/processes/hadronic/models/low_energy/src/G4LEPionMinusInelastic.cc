@@ -138,8 +138,6 @@ G4LEPionMinusInelastic::ApplyYourself(const G4HadProjectile& aTrack,
     
   SetUpChange(vec, vecLen, currentParticle, targetParticle, incidentHasChanged);
 
-  if (isotopeProduction) DoIsotopeCounting(originalIncident, targetNucleus);
-
   delete originalTarget;
   return &theParticleChange;
 }

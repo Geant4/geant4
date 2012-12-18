@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4LEAntiSigmaMinusInelastic.cc,v 1.11 2006-06-29 20:44:49 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: AntiSigmaMinus Inelastic Process
 // J.L. Chuma, TRIUMF, 19-Feb-1997
@@ -127,8 +128,6 @@ G4LEAntiSigmaMinusInelastic::ApplyYourself(const G4HadProjectile& aTrack,
                    quasiElastic);
     
   SetUpChange(vec, vecLen, currentParticle, targetParticle, incidentHasChanged);
-
-  if (isotopeProduction) DoIsotopeCounting(originalIncident, targetNucleus);
 
   delete originalTarget;
   return &theParticleChange;

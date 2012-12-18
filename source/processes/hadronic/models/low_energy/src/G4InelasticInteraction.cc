@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4InelasticInteraction.cc,v 1.12 2009-01-24 11:56:27 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Inelastic Interaction 
 // original by H.P. Wellisch
@@ -46,14 +47,9 @@
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4HadReentrentException.hh"
-#include "G4IsoResult.hh"
-#include "G4IsoParticleChange.hh"
-
-G4IsoParticleChange* G4InelasticInteraction::theIsoResult = 0;
-G4IsoParticleChange* G4InelasticInteraction::theOldIsoResult = 0;
 
 G4InelasticInteraction::G4InelasticInteraction(const G4String& name) 
- : G4HadronicInteraction(name), isotopeProduction(false), cache(0.0)
+ : G4HadronicInteraction(name), cache(0.0)
 {}
   
 G4InelasticInteraction::~G4InelasticInteraction()
@@ -440,7 +436,7 @@ void G4InelasticInteraction::SetUpChange(
   }
 }
 
-
+/*
 G4IsoParticleChange* G4InelasticInteraction::GetIsotopeProductionInfo() 
 { 
   G4IsoParticleChange* anIsoResult = theIsoResult;
@@ -448,8 +444,9 @@ G4IsoParticleChange* G4InelasticInteraction::GetIsotopeProductionInfo()
   theIsoResult = 0;
   return anIsoResult;
 }
+*/
 
-
+/*
 void
 G4InelasticInteraction::DoIsotopeCounting(const G4HadProjectile* theProjectile,
                                           const G4Nucleus& aNucleus)
@@ -471,7 +468,6 @@ G4InelasticInteraction::DoIsotopeCounting(const G4HadProjectile* theProjectile,
     anIsoResult = ExtractResidualNucleus(aNucleus);
   }
 
-/*
   G4cout << " contents of anIsoResult (from ExtractResidualNucleus) " << G4endl;
   G4cout << " original projectile: "
          << theProjectile->GetDefinition()->GetParticleName() << G4endl;
@@ -480,7 +476,7 @@ G4InelasticInteraction::DoIsotopeCounting(const G4HadProjectile* theProjectile,
          << anIsoResult->GetMotherNucleus().GetZ_asInt() << G4endl;
   G4cout << " extracted nucleus = " << anIsoResult->GetIsotope() << G4endl;
   G4cout << " end contents of anIsoResult " << G4endl;
-*/
+
   // Add all info explicitly and add typename from model called.
   theIsoResult->SetIsotope(anIsoResult->GetIsotope());
   theIsoResult->SetProductionTime(theProjectile->GetGlobalTime() );
@@ -501,8 +497,9 @@ G4InelasticInteraction::DoIsotopeCounting(const G4HadProjectile* theProjectile,
   //    theIsoResult = 0;
   //  }
 }
+*/
 
-
+/*
 G4IsoResult*
 G4InelasticInteraction::ExtractResidualNucleus(const G4Nucleus& aNucleus)
 {
@@ -541,6 +538,7 @@ G4InelasticInteraction::ExtractResidualNucleus(const G4Nucleus& aNucleus)
 
   return theResult;
 }
+*/
 
 const std::pair<G4double, G4double> G4InelasticInteraction::GetFatalEnergyCheckLevels() const
 {

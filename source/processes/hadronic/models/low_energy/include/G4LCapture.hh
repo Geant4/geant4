@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4LCapture.hh,v 1.11 2006-06-29 20:43:26 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // G4 Low energy model: neutron capture -- header file

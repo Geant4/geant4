@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4InelasticInteraction.hh,v 1.7 2009-08-30 16:12:13 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Inelastic Interaction 
 // This class is an abstract base class, since the pure virtual
@@ -52,10 +53,6 @@
 #include "G4ParticleTypes.hh" 
 #include "Randomize.hh"
 #include "G4ReactionDynamics.hh"
-#include "G4VIsotopeProduction.hh"
-
-class G4IsoResult;
-class G4IsoParticleChange;
 
 
 class G4InelasticInteraction : public G4HadronicInteraction
@@ -65,19 +62,12 @@ class G4InelasticInteraction : public G4HadronicInteraction
     G4InelasticInteraction(const G4String& name = "LEInelastic");
     virtual ~G4InelasticInteraction();
 
-    void RegisterIsotopeProductionModel(G4VIsotopeProduction* aModel)
-      {theProductionModels.push_back(aModel);}
-
-    void TurnOnIsotopeProduction() {isotopeProduction = true;}
-
-    static G4IsoParticleChange* GetIsotopeProductionInfo(); 
-
     virtual const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
 
   protected:
     
     G4double Pmltpc(G4int np, G4int nm, G4int nz, G4int n,
-                    G4double b, G4double c );
+                    G4double b, G4double c);
     
     G4bool MarkLeadingStrangeParticle(const G4ReactionProduct &currentParticle,
                                       const G4ReactionProduct &targetParticle,
@@ -110,12 +100,6 @@ class G4InelasticInteraction : public G4HadronicInteraction
                      G4ReactionProduct& targetParticle,
                      G4bool& incidentHasChanged);
 
-    void DoIsotopeCounting(const G4HadProjectile* theProjectile,
-                           const G4Nucleus& aNucleus);
-
-    G4IsoResult* ExtractResidualNucleus(const G4Nucleus& aNucleus);
-    G4bool isotopeProduction;
-
     G4ReactionDynamics theReactionDynamics;
 
   private:
@@ -123,9 +107,6 @@ class G4InelasticInteraction : public G4HadronicInteraction
     G4double cache;
     G4ThreeVector what;
 
-    std::vector<G4VIsotopeProduction*> theProductionModels;
-    static G4IsoParticleChange* theIsoResult;
-    static G4IsoParticleChange* theOldIsoResult;
 };
  
 #endif

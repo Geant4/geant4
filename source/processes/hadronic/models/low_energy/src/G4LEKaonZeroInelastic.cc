@@ -23,13 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4LEKaonZeroInelastic.cc,v 1.9 2006-06-29 20:45:03 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// $Id$
-//
- // Hadronic Process: Low Energy KaonZeroShort Inelastic Process
- // J.L. Chuma, TRIUMF, 11-Feb-1997
- // Last modified: 27-Mar-1997
- // Modified by J.L.Chuma 30-Apr-97: added originalTarget for CalculateMomenta
+// Hadronic Process: Low Energy KaonZeroShort Inelastic Process
+// J.L. Chuma, TRIUMF, 11-Feb-1997
+// Last modified: 27-Mar-1997
+// Modified by J.L.Chuma 30-Apr-97: added originalTarget for CalculateMomenta
  
 #include "G4LEKaonZeroInelastic.hh"
 #include "G4PhysicalConstants.hh"
@@ -118,8 +118,6 @@ G4LEKaonZeroInelastic::ApplyYourself(const G4HadProjectile& aTrack,
                       incidentHasChanged, targetHasChanged, quasiElastic);
     
   SetUpChange(vec, vecLen, currentParticle, targetParticle, incidentHasChanged);
-
-  if (isotopeProduction) DoIsotopeCounting(originalIncident, targetNucleus);
 
   delete originalTarget;
   return &theParticleChange;

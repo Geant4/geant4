@@ -118,7 +118,6 @@ G4LETritonInelastic::ApplyYourself(const G4HadProjectile& aTrack,
     theParticleChange.SetStatusChange(isAlive);
     theParticleChange.SetEnergyChange(aTrack.GetKineticEnergy());
     theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
-    if (isotopeProduction) DoIsotopeCounting(originalIncident, targetNucleus);
     return &theParticleChange;
   }
 
@@ -130,8 +129,6 @@ G4LETritonInelastic::ApplyYourself(const G4HadProjectile& aTrack,
     theParticleChange.AddSecondary( pd );
     delete vec[i];
   }
-
-  if (isotopeProduction) DoIsotopeCounting(originalIncident, targetNucleus);
 
   if (triton_debug) G4cout << "leaving LETritonInelastic" << G4endl;
   return &theParticleChange;

@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4LEAntiKaonZeroInelastic.cc,v 1.10 2006-06-29 20:44:39 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Low Energy KaonZeroLong Inelastic Process
 // J.L. Chuma, TRIUMF, 11-Feb-1997
@@ -128,7 +129,7 @@ G4LEAntiKaonZeroInelastic::ApplyYourself(const G4HadProjectile& aTrack,
   }
   SetUpChange(vec, vecLen, currentParticle, targetParticle, incidentHasChanged);
 
-  if (isotopeProduction) DoIsotopeCounting(originalIncident, targetNucleus);    
+//  if (isotopeProduction) DoIsotopeCounting(originalIncident, targetNucleus);    
   delete originalTarget;
   return &theParticleChange;
 }

@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4LEKaonZeroSInelastic.hh,v 1.12 2007-02-26 18:25:37 dennis Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4 Gheisha High Energy model class -- header file
 // H. Fesefeldt, RWTH Aachen 23-October-1996
