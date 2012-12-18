@@ -1,4 +1,4 @@
-/* $Id: liblist.c,v 1.22 2010-11-02 09:20:42 gcosmo Exp $ */
+/* $Id$ */
 
 /*
 Given a "libname.map" file on standard input and a list or directory

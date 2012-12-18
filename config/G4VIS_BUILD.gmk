@@ -1,4 +1,4 @@
-# $Id: G4VIS_BUILD.gmk,v 1.22 2009-11-05 10:06:54 allison Exp $
+# $Id$
 # -------------------------------------------------------------
 # Visualization-specific CPPFLAGS for BUILD phase.
 #   John Allison, 24th January 1998.

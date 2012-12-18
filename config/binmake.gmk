@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.149 2010-11-23 13:21:37 gcosmo Exp $
+# $Id$
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -93,11 +93,6 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/hadronic/models/cascade/cascade/include \
               -I$(G4BASE)/processes/hadronic/models/cascade/evaporation/include \
               -I$(G4BASE)/processes/hadronic/models/cascade/utils/include \
-              -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/body/include \
-              -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/cross_sections/include \
-              -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/fragmentation/include \
-              -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/interface/include \
-              -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/processes/include \
               -I$(G4BASE)/processes/hadronic/models/coherent_elastic/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/ablation/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/evaporation/include \
@@ -139,7 +134,6 @@ ifndef INCFLAGS
               -I$(G4BASE)/geometry/management/include \
               -I$(G4BASE)/geometry/solids/CSG/include \
               -I$(G4BASE)/geometry/solids/specific/include \
-              -I$(G4BASE)/geometry/solids/BREPS/include \
               -I$(G4BASE)/geometry/solids/Boolean/include \
               -I$(G4BASE)/geometry/divisions/include \
               -I$(G4BASE)/geometry/volumes/include \
