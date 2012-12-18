@@ -43,6 +43,8 @@
 
 #include "DMXAnalysisManager.hh"
 
+#include "G4SystemOfUnits.hh"
+
 DMXAnalysisManager* DMXAnalysisManager::instance = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
