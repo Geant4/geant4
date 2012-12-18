@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07 December 2012 - V.Ivanchenko (error-propagation-V09-06-00)
+- G4ErrorPhysicsList - remove unnecessary header
+
 21 November 2012 - P.Arce (error-propagation-V09-05-06)
 - Changes to G4ErrorRunManagerHelper to correct check for G4ErrorPhysicsList" 
 

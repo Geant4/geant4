@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ErrorPhysicsList.cc,v 1.3 2009-05-14 13:54:34 arce Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -157,8 +158,6 @@ void G4ErrorPhysicsList::ConstructProcess()
 #include "G4MuPairProduction.hh"
 
 #include "G4PhysicsTable.hh"
-
-#include "G4VEnergyLoss.hh"
 
 #include "G4MuIonisation.hh"
 

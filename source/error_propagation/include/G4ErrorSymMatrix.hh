@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ErrorSymMatrix.hh,v 1.2 2007-06-01 12:43:28 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class Description:
 //
