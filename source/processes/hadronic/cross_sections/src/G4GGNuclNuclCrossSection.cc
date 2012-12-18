@@ -57,7 +57,9 @@ G4GGNuclNuclCrossSection::G4GGNuclNuclCrossSection()
 
 
 G4GGNuclNuclCrossSection::~G4GGNuclNuclCrossSection()
-{}
+{
+  delete hnXsc;
+}
 
 void
 G4GGNuclNuclCrossSection::CrossSectionDescription(std::ostream& outFile) const

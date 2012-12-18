@@ -51,7 +51,9 @@ G4ComponentGGNuclNuclXsc::G4ComponentGGNuclNuclXsc()
 
 
 G4ComponentGGNuclNuclXsc::~G4ComponentGGNuclNuclXsc()
-{}
+{
+  delete hnXsc;
+}
 
 ////////////////////////////////////////////////////////////////////
 

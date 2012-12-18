@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ChipsProtonElasticXS.cc,v 1.4 2010-06-25 09:45:53 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // G4 Physics class: G4ChipsProtonElasticXS for pA elastic cross sections

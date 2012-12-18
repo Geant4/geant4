@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ChipsPionPlusElasticXS.cc,v 1.3 2010-02-16 07:53:05 mkossov Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // G4 Physics class: G4ChipsPionPlusElasticXS for pA elastic cross sections

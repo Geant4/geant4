@@ -44,10 +44,12 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 
-
 G4ComponentAntiNuclNuclearXS::G4ComponentAntiNuclNuclearXS() 
-: G4VComponentCrossSection("AntiAGlauber"), fUpperLimit( 10000 * GeV ),
-  fLowerLimit( 10 * MeV )
+: G4VComponentCrossSection("AntiAGlauber"), fUpperLimit(10000*GeV),
+  fLowerLimit(10*MeV), fRadiusEff(0.0), fRadiusNN2(0.0),
+  fTotalXsc(0.0), fElasticXsc(0.0), fInelasticXsc(0.0),
+  fAntiHadronNucleonTotXsc(0.0), fAntiHadronNucleonElXsc(0.0),
+  Elab(0.0), S(0.0), SqrtS(0) 
 {
   theAProton       = G4AntiProton::AntiProton();
   theANeutron      = G4AntiNeutron::AntiNeutron();
