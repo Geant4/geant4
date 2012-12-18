@@ -1,4 +1,4 @@
-// $Id$
+// $Id: History,v 1.1 2009-11-19 22:21:21 gum Exp $
 // ------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+December 2nd, 2012 John Allison - fieldex06-V09-06-00
+------------------------------------
+- Migration to DrawTrajectory() (i_mode argument is no longer available):
+  o F06EventAction.cc: Removed argument from DrawTrajectory().
 
 November 15th, 2012 Ivana Hrivnacova - fieldex06-V09-05-02
 ------------------------------------

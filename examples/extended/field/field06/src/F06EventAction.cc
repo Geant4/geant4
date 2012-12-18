@@ -75,7 +75,7 @@ void F06EventAction::EndOfEventAction(const G4Event* evt)
    for(G4int i=0; i<n_trajectories; i++) 
       { G4Trajectory* trj = (G4Trajectory *)((*(evt->GetTrajectoryContainer()))[i]);
         if(trj->GetParticleDefinition()->GetParticleName() != "neutron") continue;
-        if (drawFlag == "all") trj->DrawTrajectory(50);
+        if (drawFlag == "all") trj->DrawTrajectory();
       }
   }  
 
