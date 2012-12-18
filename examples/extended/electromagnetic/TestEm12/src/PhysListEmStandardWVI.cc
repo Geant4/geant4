@@ -26,7 +26,8 @@
 /// \file electromagnetic/TestEm12/src/PhysListEmStandardWVI.cc
 /// \brief Implementation of the PhysListEmStandardWVI class
 //
-// $Id$
+// $Id: PhysListEmStandardWVI.cc,v 1.1 2010-11-19 15:59:01 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
