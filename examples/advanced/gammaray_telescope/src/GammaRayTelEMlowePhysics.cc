@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: GammaRayTelEMlowePhysics.cc,v 1.1 2009-11-18 15:59:05 flongo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
@@ -81,13 +82,13 @@ void GammaRayTelEMlowePhysics::ConstructProcess()
   pManager = G4Gamma::Gamma()->GetProcessManager();
 
   G4RayleighScattering* theRayleigh = new G4RayleighScattering();
-  theRayleigh->SetModel(new G4LivermoreRayleighModel()); 
+  theRayleigh->SetEmModel(new G4LivermoreRayleighModel()); 
   G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
-  thePhotoElectricEffect->SetModel(new G4LivermorePhotoElectricModel());
+  thePhotoElectricEffect->SetEmModel(new G4LivermorePhotoElectricModel());
   G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
-  theComptonScattering->SetModel(new G4LivermoreComptonModel());
+  theComptonScattering->SetEmModel(new G4LivermoreComptonModel());
   G4GammaConversion* theGammaConversion = new G4GammaConversion();
-  theGammaConversion->SetModel(new G4LivermoreGammaConversionModel());
+  theGammaConversion->SetEmModel(new G4LivermoreGammaConversionModel());
 
   pManager->AddDiscreteProcess(theRayleigh);
   pManager->AddDiscreteProcess(thePhotoElectricEffect);

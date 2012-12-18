@@ -25,7 +25,8 @@
 //
 #ifdef G4ANALYSIS_USE
 //
-// $Id$
+// $Id: GammaRayTelAnalysis.cc,v 1.22 2010-11-10 00:15:42 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
