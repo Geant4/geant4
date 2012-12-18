@@ -18,6 +18,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+3rd December 2012  John Allison (tracking-V09-06-00)
+- Removed DrawTrajectory(G4int i_mode).
+
 26 October 2012 Laurent Desorgher (tracking-V09-05-04)
 - G4AdointSteppingAction.cc. Add test for adjoint particle reaching "out_of_the_world".
  

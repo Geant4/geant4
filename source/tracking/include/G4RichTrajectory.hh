@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4RichTrajectory.hh,v 1.8 2010-10-27 07:57:21 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
 //
@@ -83,6 +84,8 @@ public:
   {return (this==&right);} 
   
   // Other (virtual) member functions
+  void ShowTrajectory(std::ostream& os=G4cout) const;
+  void DrawTrajectory() const;
   void AppendStep(const G4Step* aStep);
   void MergeTrajectory(G4VTrajectory* secondTrajectory);
   int GetPointEntries() const { return fpRichPointsContainer->size(); }

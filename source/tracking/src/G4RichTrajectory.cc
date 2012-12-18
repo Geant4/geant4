@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4RichTrajectory.cc,v 1.9 2010-02-22 21:26:56 allison Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------
 //
@@ -152,6 +153,20 @@ void G4RichTrajectory::MergeTrajectory(G4VTrajectory* secondTrajectory)
   }
   delete (*seco->fpRichPointsContainer)[0];
   seco->fpRichPointsContainer->clear();
+}
+
+void G4RichTrajectory::ShowTrajectory(std::ostream& os) const
+{
+  // Invoke the default implementation in G4VTrajectory...
+  G4VTrajectory::ShowTrajectory(os);
+  // ... or override with your own code here.
+}
+
+void G4RichTrajectory::DrawTrajectory() const
+{
+  // Invoke the default implementation in G4VTrajectory...
+  G4VTrajectory::DrawTrajectory();
+  // ... or override with your own code here.
 }
 
 const std::map<G4String,G4AttDef>* G4RichTrajectory::GetAttDefs() const
