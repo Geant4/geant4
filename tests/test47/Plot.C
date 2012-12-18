@@ -20,24 +20,84 @@
 #include "TStyle.h"
 #include "TGraph.h"
 
-const int modelsITEP=9, modelsBNL=9, modelsD=9;
+const int modelsITEP=6, modelsBNL=6, modelsD=7;
 
-std::string ModelsITEP[9]  = {"lepar", "ftfb",    "bertini", "binary", "qgsc",      "qgsp",      "qgsb",   "ftfp",      "CHIPS"};
-std::string ModelsITEPh[9] = {"lepar", "ftfb",    "bertini", "binary", "qgsc",      "qgsp",      "qgsb",   "ftfp",      "CHIPS"};
-std::string ModelNamesI[9] = {"LEP",   "FTF-Bin", "Bertini", "Binary", "QGS-Chips", "QGS-Preco", "QGS-Bin","FTF-Preco", "CHIPS"};
+//std::string ModelsITEP[2]  = {"bertini", "bertP"};
+//std::string ModelsITEPh[2] = {"bertini", "bertP"};
+//std::string ModelNamesI[2] = {"Bertini (Cascade)", "Bertini (Precompound)"};
+//std::string ModelsITEP[2]  = {"ftfp", "ftfpU"};
+//std::string ModelsITEPh[2] = {"ftfp", "ftfpU"};
+//std::string ModelNamesI[2] = {"FTFP (80 MeV)", "FTFP (10 MeV)"};
+std::string ModelsITEP[6]  = {"lepar", "bertini", "binary",  "qgsp",      "ftfp",      "CHIPS"};
+std::string ModelsITEPh[6] = {"lepar", "bertini", "binary",  "qgsp",      "ftfp",      "CHIPS"};
+std::string ModelNamesI[6] = {"LEP",   "Bertini", "Binary",  "QGS-Preco", "FTF-Preco", "CHIPS"};
+//std::string ModelsITEP[9]  = {"lepar", "ftfb",    "bertini", "binary", "qgsc",      "qgsp",      "qgsb",   "ftfp",      "CHIPS"};
+//std::string ModelsITEPh[9] = {"lepar", "ftfb",    "bertini", "binary", "qgsc",      "qgsp",      "qgsb",   "ftfp",      "CHIPS"};
+//std::string ModelNamesI[9] = {"LEP",   "FTF-Bin", "Bertini", "Binary", "QGS-Chips", "QGS-Preco", "QGS-Bin","FTF-Preco", "CHIPS"};
 
-std::string ModelNameD = "bertini";
-std::string ModelDirectory[9] = {"9.3.cand05", "9.3.ref03", "V09-03-23", "9.3.p01", "V09-03-28", "9.3.ref05", "9.3.ref06", "V09-03-45", "V09-03-66"};
-std::string ModelNamesD[9] = {"(9.3.cand05)", "(9.3.ref03)", "(V09-03-23)", "(9.3.p01)", "(V09-03-28)", "(9.3.ref05)", "(9.3.ref06)", "(V09-03-45)", "(V09-03-66)"};
+//std::string ModelsITEP[9]  = {"bertiniO", "bertiniW", "bertiniU", "bertiniV", "bertiniM", "bertiniL", "bertiniJ", "bertiniI", "bertiniH"};
+//std::string ModelsITEPh[9] = {"bertini",  "bertini",  "bertini",  "bertini",  "bertini",  "bertini",  "bertini",  "bertini",  "bertini"};
+//std::string ModelNamesI[9] = {"(9.3.b01)", "(9.3.p01)", "(9.3.ref03)", "(V09-03-23)", "(V09-03-28)", "(9.3.ref05)", "(9.3.ref06)", "(V09-03-45)", "(V09-03-66)"};
 
-std::string ModelsBNL[9]   = {"lepar", "ftfb",    "bertini", "binary", "qgsc",      "qgsp",      "qgsb",   "ftfp", "CHIPS"};
-std::string ModelsBNLh[9]  = {"lepar", "ftfb",    "bertini", "binary", "qgsc",      "qgsp",      "qgsb",   "ftfp", "CHIPS"};
-std::string ModelNamesB[9] = {"LEP",   "FTF-Bin", "Bertini", "Binary", "QGS-Chips", "QGS-Preco", "QGS-Bin","FTF-Preco","CHIPS"};
+//std::string ModelNameD = "bertini";
+//std::string ModelDirectory[7] = {"9.3.p01", "9.3.ref05", "9.3.ref06", "9.4.ref00", "9.5.ref00", "9.5.ref09", "9.5.ref10"};
+//std::string ModelNamesD[7] = {"(9.3.p01)", "(9.3.ref05)", "(9.3.ref06)", "(9.4.ref00)", "(9.5.ref00)", "(9.5.ref09)", "(9.5.ref10)"};
+//std::string ModelDirectory[9] = {"9.3.cand05", "9.3.ref03", "V09-03-23", "9.3.p01", "V09-03-28", "9.3.ref05", "9.3.ref06", "V09-03-45", "V09-03-66"};
+//std::string ModelNamesD[9] = {"(9.3.cand05)", "(9.3.ref03)", "(V09-03-23)", "(9.3.p01)", "(V09-03-28)", "(9.3.ref05)", "(9.3.ref06)", "(V09-03-45)", "(V09-03-66)"};
 
+std::string ModelNameD = "ftfp";
+std::string ModelDirectory[7] = {"9.3.p01", "9.3.ref06", "9.3.ref09", "9.4.ref00", "9.5.ref00", "9.5.ref09", "9.5.ref10"};
+std::string ModelNamesD[7] = {"(9.3.p01)", "(9.3.ref06)", "(9.3.ref09)", "(9.4.ref00)", "(9.5.ref00)", "(9.5.ref09)", "(9.5.ref10)"};
+
+//std::string ModelNameD = "CHIPS";
+//std::string ModelDirectory[7] = {"9.3.cand05", "9.3.p01", "9.3.ref05", "9.4.ref00", "9.5.ref00", "9.5.ref09", "9.5.ref10"};
+//std::string ModelNamesD[7] = {"(9.3.cand05)", "(9.3.p01)", "(9.3.ref05)", "(9.4.ref00)", "(9.5.ref00)", "(9.5.ref09)", "(9.5.ref10)"};
+//std::string ModelDirectory[10] = {"9.3.cand02", "9.3.cand05", "V09-03-02", "9.3.ref01", "9.3.ref02", "9.3.ref03", "9.3.p01", "9.3.ref05", "9.4.b01", "9.3.ref06"};
+//std::string ModelNamesD[10] = {"(9.3.cand02)", "(9.3.cand05)", "(V09-03-02)", "(9.3.ref01)", "(9.3.ref02)", "(9.3.ref03)", "(9.3.p01)", "(9.3.ref05)", "(9.4.b01)", "(9.3.ref06)"};
+
+//std::string ModelDirectory[15] = {"9.3.cand02", "9.3.cand05", "9.3.ref01", "9.3.ref02", "9.3.ref03", "V09-03-23", "9.3.p01", "V09-03-28", "9.3.ref05", "9.4.b01", "9.3.ref06", "V09-03-45", "V09-03-66", "9.3.ref08", "9.3.ref09"};
+//std::string ModelNamesD[15] = {"(9.3.cand02)", "(9.3.cand05)", "(9.3.ref01)", "(9.3.ref02)", "(9.3.ref03)", "(V09-03-23)", "(9.3.p01)", "(V09-03-28)", "(9.3.ref05)", "(9.4.b01)", "(9.3.ref06)", "(V09-03-45)", "(V09-03-66)", "(9.3.ref08)", "(9.3.ref09)"};
+
+//std::string ModelsITEP[19]  = {"bertiniO", "bertiniN", "bertiniX", "bertiniY", "bertiniZ", "bertiniP", "bertiniQ", "bertiniR", "bertiniS", "bertiniT", "bertiniU", "bertiniV", "bertiniW", "bertiniM", "bertiniL", "bertiniK", "bertiniJ", "bertiniI", "bertiniH"};
+//std::string ModelsITEPh[19] = {"bertini",  "bertini",  "bertini",  "bertini",  "bertini",  "bertini",  "bertini",  "bertini",  "bertini",  "bertini",  "bertini",  "bertini",  "bertini",  "bertini", "bertini",  "bertini", "bertini",  "bertini", "bertini"};
+//std::string ModelNamesI[19] = {"(9.3.b01)", "(V09-02-05)", "(V09-02-08)", "(Form.Time)", "(Trailing)", "(V09-02-10)", "(9.3.cand02)", "(9.3.cand05)", "(9.3.ref01)", "(9.3.ref02)", "(9.3.ref03)", "(V09-03-23)", "(9.3.p01)", "(V09-03-28)", "(9.3.ref05)", "(9.4.b01)", "(9.3.ref06)", "(V09-03-45)", "(V09-03-66)"};
+
+//std::string ModelsITEP[6]  = {"CHIPScand02", "CHIPScand05", "CHIPSref00", "CHIPSref05", "CHIPSref06", "CHIPS94b01"};
+//std::string ModelsITEPh[6] = {"CHIPS",  "CHIPS",  "CHIPS",  "CHIPS",  "CHIPS",  "CHIPS"};
+//std::string ModelNamesI[6] = {"(9.3.cand02)", "(9.3.cand05)", "(V09-03-02)", "(9.3.ref05)", "(9.3.ref06)", "(9.4.b01)"};
+
+//std::string ModelsBNL[2]   = {"bertini", "bertP"};
+//std::string ModelsBNLh[2]  = {"bertini", "bertP"};
+//std::string ModelNamesB[2] = {"Bertini (Cascade)", "Bertini (Precompound)"};
+//std::string ModelsBNL[2]  = {"ftfp", "ftfpU"};
+//std::string ModelsBNLh[2] = {"ftfp", "ftfpU"};
+//std::string ModelNamesB[2] = {"FTFP (80 MeV)", "FTFP (10 MeV)"};
+std::string ModelsBNL[6]   = {"lepar", "bertini", "binary", "qgsp",      "ftfp", "CHIPS"};
+std::string ModelsBNLh[6]  = {"lepar", "bertini", "binary", "qgsp",      "ftfp", "CHIPS"};
+std::string ModelNamesB[6] = {"LEP",   "Bertini", "Binary", "QGS-Preco", "FTF-Preco","CHIPS"};
+
+//std::string ModelsBNL[9]   = {"lepar", "ftfb",    "bertini", "binary", "qgsc",      "qgsp",      "qgsb",   "ftfp", "CHIPS"};
+//std::string ModelsBNLh[9]  = {"lepar", "ftfb",    "bertini", "binary", "qgsc",      "qgsp",      "qgsb",   "ftfp", "CHIPS"};
+//std::string ModelNamesB[9] = {"LEP",   "FTF-Bin", "Bertini", "Binary", "QGS-Chips", "QGS-Preco", "QGS-Bin","FTF-Preco","CHIPS"};
+
+//std::string ModelsBNL[9]  = {"bertiniO", "bertiniW", "bertiniU", "bertiniV", "bertiniM", "bertiniL", "bertiniJ", "bertiniI", "bertiniH"};
+//std::string ModelsBNLh[9] = {"bertini",  "bertini",  "bertini",  "bertini",  "bertini",  "bertini",  "bertini", "bertini"};
+//std::string ModelNamesB[9] = {"(9.3.b01)", "(9.3.p01)", "(9.3.ref03)", "(V09-03-23)", "(V09-03-28)", "(9.3.ref05)", "(9.3.ref06)", "(V09-03-45)", "(V09-03-66)"};
+
+//std::string ModelsBNL[19]  = {"bertiniO", "bertiniN", "bertiniX", "bertiniY", "bertiniZ", "bertiniP", "bertiniQ", "bertiniR", "bertiniS", "bertiniT", "bertiniU", "bertiniV", "bertiniW", "bertiniM", "bertiniL", "bertiniK", "bertiniJ", "bertiniI", "bertiniH"};
+//std::string ModelsBNLh[19] = {"bertini",  "bertini",  "bertini",  "bertini",  "bertini",  "bertini",  "bertini",  "bertini",  "bertini",  "bertini",  "bertini",  "bertini",  "bertini",  "bertini", "bertini",  "bertini", "bertini",  "bertini", "bertini"};
+//std::string ModelNamesB[19] = {"(9.3.b01)", "(V09-02-05)", "(V09-02-08)", "(Form.Time)", "(Trailing)", "(V09-02-10)", "(9.3.cand02)", "(9.3.cand05)", "(9.3.ref01)", "(9.3.ref02)", "(9.3.ref03)", "(V09-03-23)", "(9.3.p01)", "(V09-03-28)", "(9.3.ref05)", "(9.4.b01)", "(9.3.ref06)", "(V09-03-45)", "(V09-03-66)"};
+
+//std::string ModelsBNL[6]  = {"CHIPScand02", "CHIPScand05", "CHIPSref00", "CHIPSref05", "CHIPSref06", "CHIPS94b01"};
+//std::string ModelsBNLh[6] = {"CHIPS",  "CHIPS",  "CHIPS",  "CHIPS",  "CHIPS",  "CHIPS"};
+//std::string ModelNamesB[6] = {"(9.3.cand02)", "(9.3.cand05)", "(V09-03-02)", "(9.3.ref05)", "(9.3.ref06)", "(9.4.b01)"};
 
 int         colModel[9]    = {8, 2, 6, 3, 7, 9, 1, 4, 12};
 int         symbModel[9]   = {24, 29, 25, 27, 26, 23, 21, 20, 22};
-int         stylModel[9]   = {3, 1, 2, 4, 5, 6, 1, 7, 8};
+int         stylModel[9]   = {3, 2, 1, 4, 5, 6, 1, 7, 8};
+//int         colModel[9]    = {4, 2, 3, 6, 7, 9, 1, 8, 12};
+//int         symbModel[9]   = {24, 29, 25, 27, 26, 23, 21, 20, 22};
+//int         stylModel[9]   = {4, 3, 2, 1,  5, 6, 1, 7, 8};
 double      keproton[4]    = {0.09, 0.15, 0.19, 0.23};
 double      keneutron[4]   = {0.07, 0.11, 0.15, 0.17};
 bool        debug=false;
@@ -223,6 +283,49 @@ void plotKEx(char ene[6], char angle[6], int first=0, int logy=0, int save=0,
   }
 }
 
+
+void plotKEx2(char ene[6], char angle[6], int first=0, int logy=0, int save=0, 
+	      double ymin=-1., double ymax=-1.,char particle[8]="proton", 
+	      char beam[8]="proton", bool ratio='false', bool error=true, 
+	      int leg1=1, int leg2=1, char dir[20]=".", char dird[40]=".", 
+	      char mark=' ') {
+
+  setStyle();
+  TCanvas *myc = new TCanvas("myc","",800,300); myc->Divide(2,1);
+
+  int leg=leg1; if (leg2 < leg) leg=leg2;
+  char markf[4]=" ";
+  myc->cd(1); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
+  if (mark == 'y') sprintf(markf, "(a)");
+  if (ratio)
+    plotKERatio("C", ene,angle,first,logy,ymin,ymax,particle,beam,error,leg1,dir,dird,markf);
+  else
+    plotKE("C", ene,angle,first,logy,ymin,ymax,particle,beam, leg1, dir,dird,markf);
+  myc->cd(2); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
+  if (mark == 'y') sprintf(markf, "(b)");
+  if (ratio)
+    plotKERatio("U",ene,angle,first,logy,ymin,ymax,particle,beam,error,leg2,dir,dird,markf);
+  else
+    plotKE("U",ene,angle,first,logy,ymin,ymax,particle,beam,leg2,dir,dird,markf);
+
+  char anglx[6], fname[160];
+  int nx = 0;
+  for (int i=0; i<6; i++) {
+    if (angle[i] != ' ') { anglx[nx] = angle[i]; nx++;}
+  }
+  if (save != 0) {
+    std::string tag=".gif";
+    if (ratio) {
+      if (save > 0) tag = "R.eps";
+      else          tag = "R.gif";
+    } else {
+      if (save > 0) tag = ".eps";
+    }
+    sprintf (fname, "%sCUto%sat%sGeV%sdeg%s", beam, particle, ene, anglx, tag.c_str());
+    myc->SaveAs(fname);
+  }
+}
+
 void plotKEn(char ene[6], int first=0, int logy=0, int save=0, double ymin=-1.,
 	     double ymax=-1., char beam[8]="proton", bool ratio=false, 
 	     bool error=true, int leg1=1, int leg2=1,char dir[20]=".", 
@@ -303,6 +406,44 @@ void plotKEp(char element[2], char ene[6], int first=0, int logy=0, int save=0,
     plotKE(element,"1.40","119.0",first,logy,ymin,ymax,"proton",beam,leg,dir,dird,markf);
   myc->cd(4); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
   if (mark == 'y') sprintf(markf, "(d)");
+  if (ratio)
+    plotKERatio(element,ene,   "119.0",first,logy,ymin,ymax,"proton",beam,error,leg,dir,dird,markf);
+  else
+    plotKE(element,ene,   "119.0",first,logy,ymin,ymax,"proton",beam,leg,dir,dird,markf);
+
+  char fname[160];
+  if (save != 0) {
+    std::string tag=".gif";
+    if (ratio) {
+      if (save > 0) tag = "R.eps";
+      else          tag = "R.gif";
+    } else {
+      if (save > 0) tag = ".eps";
+    }
+    sprintf (fname, "%stoproton_1%s", beam, element, tag.c_str());
+    myc->SaveAs(fname);
+  }
+
+}
+
+void plotKEp2(char element[2], char ene[6], int first=0, int logy=0, int save=0,
+	      double ymin=-1., double ymax=-1., char beam[8]="proton", 
+	      bool ratio=false, bool error=true, int leg1=1, int leg2=1, 
+	      char dir[20]=".", char dird[40]=".", char mark=' ') {
+
+  setStyle();  
+  TCanvas *myc = new TCanvas("myc","",800,300); myc->Divide(2,1);
+
+  int leg=leg1; if (leg2 < leg) leg=leg2;
+  char markf[4]=" ";
+  myc->cd(1); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
+  if (mark == 'y') sprintf(markf, "(a)");
+  if (ratio)
+    plotKERatio(element,"1.40"," 59.1",first,logy,ymin,ymax,"proton",beam,error,leg1,dir,dird,markf);
+  else
+    plotKE(element,"1.40"," 59.1",first,logy,ymin,ymax,"proton",beam,leg1,dir,dird,markf);
+  myc->cd(2); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
+  if (mark == 'y') sprintf(markf, "(b)");
   if (ratio)
     plotKERatio(element,ene,   "119.0",first,logy,ymin,ymax,"proton",beam,error,leg,dir,dird,markf);
   else
@@ -1144,7 +1285,43 @@ void plotBE(char element[2], char angle[6], double ke, int logy=0, int scan=1,
     leg1->Draw();
   }
 }
- 
+
+void plotMT2(char ene[6], int first=0, int logy=0, int save=0, double ymin=-1,
+	     double ymax=-1., char particle[8]="piplus", char beam[8]="proton",
+	     bool ratio=false, bool error=true, int leg1=1, int leg2=1, 
+	     char dir[20]=".", char dird[40]=".", char mark=' ') {
+
+  setStyle();
+  TCanvas *myc = new TCanvas("myc","",800,300); myc->Divide(2,1);
+
+  char markf[4]=" ";
+  myc->cd(1); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
+  if (mark == 'y') sprintf(markf, "(a)");
+  if (ratio)
+    plotMTRatio("Be",ene,"1.10", first,logy,ymin,ymax,particle,beam,error,leg1,dir,dird,markf);
+  else
+    plotMT("Be",ene,"1.10", first,logy,ymin,ymax,particle,beam,leg1,dir,dird,markf);
+  myc->cd(2); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
+  if (mark == 'y') sprintf(markf, "(b)");
+  if (ratio)
+    plotMTRatio("Au",ene,"2.30", first,logy,ymin,ymax,particle,beam,error,leg2,dir,dird,markf);
+  else
+    plotMT("Au",ene,"2.30", first,logy,ymin,ymax,particle,beam,leg2,dir,dird,markf);
+
+  char fname[160];
+  if (save != 0) {
+    std::string tag=".gif";
+    if (ratio) {
+      if (save > 0) tag = "R.eps";
+      else          tag = "R.gif";
+    } else {
+      if (save > 0) tag = ".eps";
+    }
+    sprintf (fname, "%sBeAuto%sat%sGeV%s", beam, particle, ene, tag.c_str());
+    myc->SaveAs(fname);
+  }
+}
+
 void plotMT4(char ene[6], int first=0, int logy=0, int save=0, double ymin=-1,
 	     double ymax=-1., char particle[8]="piplus", char beam[8]="proton",
 	     bool ratio=false, bool error=true, int leg1=1, int leg2=1, 
@@ -1363,6 +1540,8 @@ void plotMT(char element[2], char ene[6], char rapid[6], int firstMode=0,
     if (hi[i] != 0) {
       if (debug) std::cout << "Model " << i << " " << hi[i] << " " << ymi0 << " " << ymx0 << "\n";
       hi[i]->GetYaxis()->SetRangeUser(ymi0,ymx0);
+    } else {
+      if (debug) std::cout << "Model " << i << " absent " << hi[i] << " first " << first << std::endl;
     }
   }
 

@@ -27,13 +27,13 @@
 #include "globals.hh"
 #include "G4ios.hh"
 
-#include "G4SystemOfUnits.hh"
 #include "G4Material.hh"
 #include "G4ElementVector.hh"
 #include "MaterialTest47.hh"
 #include "Test30Physics.hh"
 #include "HistoBNLTest47.hh"
 #include "HistoITEPTest47.hh"
+#include "HistoMIPSTest47.hh"
 #include "G4VContinuousDiscreteProcess.hh"
 #include "G4ProcessManager.hh"
 #include "G4VParticleChange.hh"
@@ -83,6 +83,7 @@
 #include "G4DecayPhysics.hh"
 #include "G4Timer.hh"
 #include "Randomize.hh"
+#include "CLHEP/Units/PhysicalConstants.h"
 
 #include <fstream>
 #include <string>
@@ -103,17 +104,29 @@ int main(int argc, char** argv) {
   G4String  nameMat  = "Be";
   G4String  nameGen  = "Binary";
   G4double  energy   = 0;
-  G4double  m_p      = 1.40*GeV;
+  G4double  m_p      = 1.40*CLHEP::GeV;
   G4int     nevt     = 1000;
-  G4double theStep   = 0.01*micrometer;
+  G4double theStep   = 0.01*CLHEP::micrometer;
   G4Material* material = 0;
-  G4bool isBNL = false;
-  //G4bool gtran = false;
-  //G4bool gemis = false;
-  G4int  verbose  = 0; 
-  G4bool xsbgg    = true;
-  //G4bool nevap    = true;
-  G4long myseed   = 135799753;
+  G4bool isBNL       = false;
+  G4bool isMIPS      = false;
+  //G4bool gtran     = false;
+  //G4bool gemis     = false;
+  G4int  verbose     = 0; 
+  G4bool xsbgg       = true;
+  //G4bool nevap     = true;
+  G4long myseed      = 135799753;
+  G4double dpByp     = 0.;
+  G4double anglX     = 0.;
+  G4double danglX    = 0.;
+  G4double anglY     = 0.;
+  G4double danglY    = 0.;
+  G4double targetL   = 0.;
+  G4double beamX     = 0.;
+  G4double beamDX    = 0.;
+  G4double beamY     = 0.;
+  G4double beamDY    = 0.;
+  G4double targetR   = 0.;
 
   // Choose the Random engine
   //
@@ -158,12 +171,13 @@ int main(int argc, char** argv) {
 
   MaterialTest47*  mate = new MaterialTest47();
   Test30Physics*   phys = new Test30Physics();
-  HistoITEPTest47  histoITEP(namePart, nameMat, m_p/GeV, nameGen);
-  HistoBNLTest47   histoBNL(namePart, nameMat, m_p/GeV, nameGen);
+  HistoITEPTest47  histoITEP(namePart, nameMat, m_p/CLHEP::GeV, nameGen);
+  HistoBNLTest47   histoBNL(namePart, nameMat, m_p/CLHEP::GeV, nameGen);
+  HistoMIPSTest47  histoMIPS(namePart, nameMat, m_p/CLHEP::GeV, nameGen);
 
   // Geometry
 
-  G4Box* sFrame = new G4Box ("Box", 100.0*cm, 100.0*cm, 100.0*cm);
+  G4Box* sFrame = new G4Box ("Box", 100.0*CLHEP::cm, 100.0*CLHEP::cm, 100.0*CLHEP::cm);
   G4LogicalVolume* lFrame = new G4LogicalVolume(sFrame,material,"Box",0,0,0);
   G4PVPlacement* pFrame = new G4PVPlacement(0,G4ThreeVector(),"Box",
                                             lFrame,0,false,0);
@@ -191,6 +205,13 @@ int main(int argc, char** argv) {
   G4cout << "#randomSeed" << G4endl;
   G4cout << "#jobID" << G4endl;
   G4cout << "#clusterID" << G4endl;
+  G4cout << "#isITEP" << G4endl;
+  G4cout << "#isBNL" << G4endl;
+  G4cout << "#isMIPS" << G4endl;
+  G4cout << "#dpByp" << G4endl;
+  G4cout << "#angleX(mrad)" << G4endl;
+  G4cout << "#angleY(mrad)" << G4endl;
+  G4cout << "#targetSize(mm)" << G4endl;
 
   G4String line, line1;
   G4bool end = true;
@@ -202,37 +223,49 @@ int main(int argc, char** argv) {
         (*fin) >> namePart;
 	histoITEP.setParticle(namePart);
 	histoBNL.setParticle(namePart);
+	histoMIPS.setParticle(namePart);
       } else if(line == "#momentum(MeV/c)") {
         (*fin) >> m_p;
-        m_p *= MeV;
-	histoITEP.setMomentum(m_p/GeV);
-	histoBNL.setMomentum(m_p/GeV);
+        m_p *= CLHEP::MeV;
+	histoITEP.setMomentum(m_p/CLHEP::GeV);
+	histoBNL.setMomentum(m_p/CLHEP::GeV);
+	histoMIPS.setMomentum(m_p/CLHEP::GeV);
       } else if(line == "#events") {
         (*fin) >> nevt;
       } else if(line == "#isBNL") {
-        isBNL = true;
+        isBNL  = true;
+	isMIPS = false;
       } else if(line == "#isITEP") {
-        isBNL = false;
+        isBNL  = false;
+	isMIPS = false;
+      } else if(line == "#isMIPS") {
+        isBNL  = false;
+	isMIPS = true;
       } else if(line == "#step(mm)") {
         (*fin) >> theStep;
-        theStep *= mm;
+        theStep *= CLHEP::mm;
       } else if(line == "#material") {
         (*fin) >> nameMat;
 	histoITEP.setTarget(nameMat);
 	histoBNL.setTarget(nameMat);
+	histoMIPS.setTarget(nameMat);
       } else if(line == "#generator") {
         (*fin) >> nameGen;
 	histoITEP.setGenerator(nameGen);
 	histoBNL.setGenerator(nameGen);
+	histoMIPS.setGenerator(nameGen);
       } else if(line == "#xs_ghad") {
 	xsbgg = false;
       } else if(line == "#run") {
         break;
       } else if(line == "#verbose") {
         (*fin) >> verbose;
+	histoITEP.setDebug(verbose>2);
+	histoBNL.setDebug(verbose>2);
+	histoMIPS.setDebug(verbose>2);
       } else if(line == "#position(mm)") {
         (*fin) >> nx >> ny >> nz;
-        aPosition = G4ThreeVector(nx*mm, ny*mm, nz*mm);
+        aPosition = G4ThreeVector(nx*CLHEP::mm, ny*CLHEP::mm, nz*CLHEP::mm);
       } else if(line == "#direction") {
         (*fin) >> nx >> ny >> nz;
         if(nx*nx + ny*ny + nz*nz > 0.0) {
@@ -241,7 +274,7 @@ int main(int argc, char** argv) {
 	}
       } else if(line == "#time(ns)") {
         (*fin) >> aTime;
-        aTime *= ns;
+        aTime *= CLHEP::ns;
       } else if(line == "#exit") {
         end = false;
         break;
@@ -259,10 +292,20 @@ int main(int argc, char** argv) {
         (*fin) >> jobid ;
         histoITEP.setJobID(jobid);
         histoBNL.setJobID(jobid);
+        histoMIPS.setJobID(jobid);
       } else if ( line == "#clusterID") {
         (*fin) >> clusterid ;
         histoITEP.setClusterID(clusterid);
         histoBNL.setClusterID(clusterid);
+        histoMIPS.setClusterID(clusterid);
+      } else if ( line == "#dpByp") {
+        (*fin) >> dpByp;
+      } else if ( line == "#angleX") {
+        (*fin) >> anglX >> danglX;
+      } else if ( line == "#angleY") {
+        (*fin) >> anglY >> danglY;
+      } else if ( line == "#targetSize") {
+        (*fin) >> targetL >> targetR >> beamX >> beamDX >> beamY >> beamDY;
       }
     } while(end);
 
@@ -283,6 +326,7 @@ int main(int argc, char** argv) {
     G4QInelastic* chips = 0;
     if(nameGen == "CHIPS") { chips = new G4QInelastic(); }
     G4double amass = phys->GetNucleusMass();
+    G4double pmass = (G4Proton::Proton())->GetPDGMass();
 
     if (!proc) { 
       G4cout << "For particle: " << part->GetParticleName()
@@ -290,7 +334,7 @@ int main(int argc, char** argv) {
 	     << G4endl;
       exit(1);
     } else {
-      G4cout << "Nucleus mass " << amass << G4endl;
+      G4cout << "Nucleus mass " << amass << " proton mass " << pmass << G4endl;
     }
     const G4Element* elm = material->GetElement(0); 
 
@@ -300,17 +344,24 @@ int main(int argc, char** argv) {
     G4cout << "The particle:  " << part->GetParticleName() << G4endl;
     G4cout << "The material:  " << material->GetName() 
 	   << "  Z= " << Z << "  A= " << A << G4endl;
-    G4cout << "The step:      " << theStep/mm << " mm" << G4endl;
-    G4cout << "The position:  " << aPosition/mm << " mm" << G4endl;
+    G4cout << "The step:      " << theStep/CLHEP::mm << " mm" << G4endl;
+    G4cout << "The position:  " << aPosition/CLHEP::mm << " mm" << G4endl;
     G4cout << "The direction: " << aDirection << G4endl;
-    G4cout << "The time:      " << aTime/ns << " ns" << G4endl;
+    G4cout << "The time:      " << aTime/CLHEP::ns << " ns" << G4endl;
+    if (isMIPS) {
+      G4cout << "Delta(p)/p  " << dpByp << " Angle (X) " << anglX << " +- "
+	     << danglX << " mrad; (Y) " << anglY << " +- " << danglY 
+	     << " mrad; Beam size (X) " << beamX << " +- " << beamDX << " (Y) "
+	     << beamY << " +- " << beamDY << " Target (Radius) "  << targetR
+	     << "  (Length) " << targetL << " mm " << G4endl;
+    }
 
     G4double mass = part->GetPDGMass();
     energy = sqrt(m_p*m_p + mass*mass);
     G4double eTot  = energy+amass;
 
-    G4cout << "energy = " << energy/GeV << " GeV" << G4endl;
-    G4cout << "Target Mass = " << amass/GeV << " GeV and Initial total energy = " << eTot/GeV << " GeV" << G4endl;
+    G4cout << "energy = " << energy/CLHEP::GeV << " GeV" << G4endl;
+    G4cout << "Target Mass = " << amass/CLHEP::GeV << " GeV and Initial total energy = " << eTot/CLHEP::GeV << " GeV" << G4endl;
 
     // Create a DynamicParticle
     G4DynamicParticle dParticle(part,aDirection,energy);
@@ -350,7 +401,7 @@ int main(int argc, char** argv) {
     aPoint = new G4StepPoint();
     aPoint->SetPosition(aPosition);
     aPoint->SetMaterial(material);
-    G4double safety = 10000.*cm;
+    G4double safety = 10000.*CLHEP::cm;
     aPoint->SetSafety(safety);
     step->SetPreStepPoint(aPoint);
 
@@ -371,10 +422,9 @@ int main(int argc, char** argv) {
       cross_sec = cs->GetCrossSection(&dParticle, elm);
     } else {
       cross_sec = (G4HadronCrossSections::Instance())->
-        // GetInelasticCrossSection(&dParticle, elm);
         GetInelasticCrossSection(&dParticle, Z, A );
     }
-    cross_sec /= millibarn;
+    cross_sec /= CLHEP::millibarn;
     G4cout << "    cross(b)= " << cross_sec << " mb" << G4endl;
 
     if(!G4StateManager::GetStateManager()->SetNewState(G4State_Idle))
@@ -383,23 +433,56 @@ int main(int argc, char** argv) {
     G4Timer* timer = new G4Timer();
     timer->Start();
     G4ThreeVector   mom;
-    G4LorentzVector labv;
+    G4LorentzVector labv, labp;
     G4VParticleChange* aChange = 0;
     G4int nsec2 = 0;
+    G4ThreeVector newPosition(aPosition);
 
     for (G4int iter=0; iter<nevt; iter++) {
 
       if(verbose>=1) 
         G4cout << "### " << iter << "-th event start " << G4endl;
 
+      if (isMIPS) {
+	G4double angleX = G4RandGauss::shoot(anglX,danglX)*CLHEP::mrad;
+	G4double angleY = G4RandGauss::shoot(anglY,danglY)*CLHEP::mrad;
+	G4double zv     = targetL*(G4UniformRand() - 0.5)*CLHEP::mm;
+	G4double xv     = targetR*CLHEP::mm;
+	G4double yv     = targetR*CLHEP::mm;
+	if (targetR > 0) {
+	  while (std::sqrt(xv*xv+yv*yv) > targetR) {
+	    xv          = G4RandGauss::shoot(beamX,beamDX)*CLHEP::mm;
+	    yv          = G4RandGauss::shoot(beamY,beamDY)*CLHEP::mm;
+	  }
+	}
+	G4double pmom   = m_p*G4RandGauss::shoot(1.0,dpByp);
+	newPosition = aPosition + G4ThreeVector(xv,yv,zv);
+	aDirection  = G4ThreeVector(-std::cos(angleX)*std::sin(angleY),
+				    std::sin(angleX),
+				    std::cos(angleX)*std::cos(angleY));
+	bPosition   = newPosition+aDirection*theStep;
+	energy = sqrt(pmom*pmom + mass*mass);
+	mom    = pmom*aDirection;
+	aPoint->SetPosition(newPosition);
+	bPoint->SetPosition(bPosition);
+	step->SetPreStepPoint(aPoint);
+	step->SetPostStepPoint(bPoint);
+	dParticle.SetMomentumDirection(aDirection.x(),aDirection.y(),aDirection.z());
+	gTrack->SetPosition(newPosition);
+	if (verbose>1) G4cout << "New Position " << newPosition 
+			      << ", direction " << aDirection
+			      << " and p " << mom << " " << pmom << G4endl;
+      }
       G4double e0 = energy-mass;
 
       dParticle.SetKineticEnergy(e0);
 
       gTrack->SetStep(step);
       gTrack->SetKineticEnergy(e0);
-      labv = G4LorentzVector(0., 0., sqrt(e0*(e0 + 2.0*mass))/GeV,
-                             (e0 + mass + amass)/GeV);
+      labv = G4LorentzVector(mom.x()/CLHEP::GeV, mom.y()/CLHEP::GeV, 
+			     mom.z()/CLHEP::GeV, (e0+mass+amass)/CLHEP::GeV);
+      labp = G4LorentzVector(mom.x()/CLHEP::GeV, mom.y()/CLHEP::GeV,
+			     mom.z()/CLHEP::GeV, (e0+mass+pmass)/CLHEP::GeV);
       if(chips) { aChange = chips->PostStepDoIt(*gTrack,*step); }
       else      { aChange = proc->PostStepDoIt(*gTrack,*step); }
 
@@ -414,8 +497,9 @@ int main(int argc, char** argv) {
       if(verbose>=1 and iter == 1000*(iter/1000)) 
         G4cout << "##### " << iter << "-th event  #####" << G4endl;
 
-      if (isBNL) histoBNL.fill(aChange, labv);
-      else       histoITEP.fill(aChange, labv);
+      if     (isMIPS) histoMIPS.fill(aChange, labv, newPosition, labp);
+      else if (isBNL) histoBNL.fill (aChange, labv, newPosition, labp);
+      else            histoITEP.fill(aChange, labv, newPosition, labp);
 
       for (G4int i=0; i<n; i++) {
         delete aChange->GetSecondary(i);
@@ -428,8 +512,9 @@ int main(int argc, char** argv) {
     delete timer;
 
     // Committing the transaction with the tree
-    if (isBNL) histoBNL.write(cross_sec, nevt);
-    else       histoITEP.write(cross_sec, nevt);
+    if      (isMIPS) histoMIPS.write(cross_sec, nevt);
+    else if (isBNL)  histoBNL.write(cross_sec, nevt);
+    else             histoITEP.write(cross_sec, nevt);
   }
 
   delete mate;

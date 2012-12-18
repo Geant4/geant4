@@ -46,6 +46,7 @@ HistoTest47::HistoTest47(std::string namePart, std::string nameMat,
   setTarget(nameMat);
   setMomentum(momentum);
   setGenerator(nameGen);
+  setDebug(false);
 
   mapParticle[G4Proton::Proton()]         = 0;
   mapParticle[G4Neutron::Neutron()]       = 1;

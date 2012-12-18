@@ -39,11 +39,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "HsQGSPInterface.hh"
-#include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 #include "G4QuasiElasticChannel.hh"
+#include "CLHEP/Units/PhysicalConstants.h"
 
 HsQGSPInterface::HsQGSPInterface() 
 {
@@ -57,8 +57,8 @@ HsQGSPInterface::HsQGSPInterface()
   theModel->SetQuasiElasticChannel(theQuasiElastic);
   theStringDecay = new G4ExcitedStringDecay(&theFragmentation);
   theStringModel.SetFragmentationModel(theStringDecay);
-  theModel->SetMinEnergy(GeV);
-  theModel->SetMaxEnergy(100*TeV);
+  theModel->SetMinEnergy(CLHEP::GeV);
+  theModel->SetMaxEnergy(100*CLHEP::TeV);
 }
 
 HsQGSPInterface::~HsQGSPInterface() 

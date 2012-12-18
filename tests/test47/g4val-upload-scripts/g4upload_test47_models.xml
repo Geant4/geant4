@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : insert_g4test.xml
+    Created on : October 31, 2011, 05:19 PM
+    Author     : adotti
+    Description: xml description to upload geant4 test into database
+-->
+<testslist>
+
+    
+    <tests>
+        <testdes>test47</testdes>
+        <g4version>geant4-9.6-b01</g4version>
+        <observable>kinetic energy of secondary proton or neutron</observable>
+        <reaction>p on C</reaction>
+        <score>
+            <type>expert</type>
+            <value>passed</value>  
+        </score>
+        <imageblob>p-C-1.4GeV-models.gif</imageblob>
+        <taglist>
+            <tag>
+                <name>Particle</name>
+                <value>proton</value>
+            </tag>       
+            <tag>
+                <name>Target</name>
+                <value>Carbon</value>
+            </tag>
+            <tag>
+                <name>Energy</name>
+                <value>1.4 GeV/c</value>
+            </tag>
+            <tag>
+                <name>Model</name>
+                <value>Bertini, Binary, QGSC, CHIPS</value>
+            </tag>               
+
+        </taglist>    
+    </tests>
+
+    <tests>
+        <testdes>test47</testdes>
+        <g4version>geant4-9.6-b01</g4version>
+        <observable>kinetic energy of secondary proton or neutron</observable>
+        <reaction>p on C</reaction>
+        <score>
+            <type>expert</type>
+            <value>passed</value>  
+        </score>
+        <imageblob>p-C-7.5GeV-models.gif</imageblob>
+        <taglist>
+            <tag>
+                <name>Particle</name>
+                <value>proton</value>
+            </tag>       
+            <tag>
+                <name>Target</name>
+                <value>Carbon</value>
+            </tag>
+            <tag>
+                <name>Energy</name>
+                <value>7.5 GeV/c</value>
+            </tag>
+            <tag>
+                <name>Model</name>
+                <value>Bertini, Binary, QGSC, CHIPS, FTFP</value>
+            </tag>               
+
+        </taglist>    
+    </tests>
+
+
+    <tests>
+        <testdes>test47</testdes>
+        <g4version>geant4-9.6-b01</g4version>
+        <observable>kinetic energy of secondary proton or neutron</observable>
+        <reaction>pi- on C</reaction>
+        <score>
+            <type>expert</type>
+            <value>passed</value>  
+        </score>
+        <imageblob>pim-C-1.4GeV-models.gif</imageblob>
+        <taglist>
+            <tag>
+                <name>Particle</name>
+                <value>pi-</value>
+            </tag>       
+            <tag>
+                <name>Target</name>
+                <value>Carbon</value>
+            </tag>
+            <tag>
+                <name>Energy</name>
+                <value>1.4 GeV/c</value>
+            </tag>
+            <tag>
+                <name>Model</name>
+                <value>Bertini, Binary, QGSC, CHIPS</value>
+            </tag>               
+
+        </taglist>    
+    </tests>
+
+    <tests>
+        <testdes>test47</testdes>
+        <g4version>geant4-9.6-b01</g4version>
+        <observable>kinetic energy of secondary proton or neutron</observable>
+        <reaction>pi- on C</reaction>
+        <score>
+            <type>expert</type>
+            <value>passed</value>  
+        </score>
+        <imageblob>pim-C-5GeV-models.gif</imageblob>
+        <taglist>
+            <tag>
+                <name>Particle</name>
+                <value>pi-</value>
+            </tag>       
+            <tag>
+                <name>Target</name>
+                <value>Carbon</value>
+            </tag>
+            <tag>
+                <name>Energy</name>
+                <value>5.0 GeV/c</value>
+            </tag>
+            <tag>
+                <name>Model</name>
+                <value>Bertini, Binary, QGSC, CHIPS, FTFP</value>
+            </tag>               
+
+        </taglist>    
+    </tests>
+
+
+    <tests>
+        <testdes>test47</testdes>
+        <g4version>geant4-9.6-b01</g4version>
+        <observable>kinetic energy of secondary proton or neutron</observable>
+        <reaction>pi+ on C</reaction>
+        <score>
+            <type>expert</type>
+            <value>passed</value>  
+        </score>
+        <imageblob>pip-C-1.4GeV-models.gif</imageblob>
+        <taglist>
+            <tag>
+                <name>Particle</name>
+                <value>pi+</value>
+            </tag>       
+            <tag>
+                <name>Target</name>
+                <value>Carbon</value>
+            </tag>
+            <tag>
+                <name>Energy</name>
+                <value>1.4 GeV/c</value>
+            </tag>
+            <tag>
+                <name>Model</name>
+                <value>Bertini, Binary, QGSC, CHIPS</value>
+            </tag>               
+
+        </taglist>    
+    </tests>
+
+    <tests>
+        <testdes>test47</testdes>
+        <g4version>geant4-9.6-b01</g4version>
+        <observable>kinetic energy of secondary proton or neutron</observable>
+        <reaction>pi+ on C</reaction>
+        <score>
+            <type>expert</type>
+            <value>passed</value>  
+        </score>
+        <imageblob>pip-C-5GeV-models.gif</imageblob>
+        <taglist>
+            <tag>
+                <name>Particle</name>
+                <value>pi+</value>
+            </tag>       
+            <tag>
+                <name>Target</name>
+                <value>Carbon</value>
+            </tag>
+            <tag>
+                <name>Energy</name>
+                <value>5.0 GeV/c</value>
+            </tag>
+            <tag>
+                <name>Model</name>
+                <value>Bertini, Binary, QGSC, CHIPS, FTFP</value>
+            </tag>               
+
+        </taglist>    
+    </tests>
+
+    <tests>
+        <testdes>test47</testdes>
+        <g4version>geant4-9.6-b01</g4version>
+        <observable>kinetic energy of secondary proton or neutron</observable>
+        <reaction>p on U</reaction>
+        <score>
+            <type>expert</type>
+            <value>passed</value>  
+        </score>
+        <imageblob>p-U-1.4GeV-models.gif</imageblob>
+        <taglist>
+            <tag>
+                <name>Particle</name>
+                <value>proton</value>
+            </tag>       
+            <tag>
+                <name>Target</name>
+                <value>Uranium</value>
+            </tag>
+            <tag>
+                <name>Energy</name>
+                <value>1.4 GeV/c</value>
+            </tag>
+            <tag>
+                <name>Model</name>
+                <value>Bertini, Binary, QGSC, CHIPS</value>
+            </tag>               
+
+        </taglist>    
+    </tests>
+
+    <tests>
+        <testdes>test47</testdes>
+        <g4version>geant4-9.6-b01</g4version>
+        <observable>kinetic energy of secondary proton or neutron</observable>
+        <reaction>p on U</reaction>
+        <score>
+            <type>expert</type>
+            <value>passed</value>  
+        </score>
+        <imageblob>p-U-7.5GeV-models.gif</imageblob>
+        <taglist>
+            <tag>
+                <name>Particle</name>
+                <value>proton</value>
+            </tag>       
+            <tag>
+                <name>Target</name>
+                <value>Uranium</value>
+            </tag>
+            <tag>
+                <name>Energy</name>
+                <value>7.5 GeV/c</value>
+            </tag>
+            <tag>
+                <name>Model</name>
+                <value>Bertini, Binary, QGSC, CHIPS, FTFP</value>
+            </tag>               
+
+        </taglist>    
+    </tests>
+
+
+    <tests>
+        <testdes>test47</testdes>
+        <g4version>geant4-9.6-b01</g4version>
+        <observable>kinetic energy of secondary proton or neutron</observable>
+        <reaction>pi- on U</reaction>
+        <score>
+            <type>expert</type>
+            <value>passed</value>  
+        </score>
+        <imageblob>pim-U-1.4GeV-models.gif</imageblob>
+        <taglist>
+            <tag>
+                <name>Particle</name>
+                <value>pi-</value>
+            </tag>       
+            <tag>
+                <name>Target</name>
+                <value>Uranium</value>
+            </tag>
+            <tag>
+                <name>Energy</name>
+                <value>1.4 GeV/c</value>
+            </tag>
+            <tag>
+                <name>Model</name>
+                <value>Bertini, Binary, QGSC, CHIPS</value>
+            </tag>               
+
+        </taglist>    
+    </tests>
+
+    <tests>
+        <testdes>test47</testdes>
+        <g4version>geant4-9.6-b01</g4version>
+        <observable>kinetic energy of secondary proton or neutron</observable>
+        <reaction>pi- on U</reaction>
+        <score>
+            <type>expert</type>
+            <value>passed</value>  
+        </score>
+        <imageblob>pim-U-5GeV-models.gif</imageblob>
+        <taglist>
+            <tag>
+                <name>Particle</name>
+                <value>pi-</value>
+            </tag>       
+            <tag>
+                <name>Target</name>
+                <value>Uranium</value>
+            </tag>
+            <tag>
+                <name>Energy</name>
+                <value>5.0 GeV/c</value>
+            </tag>
+            <tag>
+                <name>Model</name>
+                <value>Bertini, Binary, QGSC, CHIPS, FTFP</value>
+            </tag>               
+
+        </taglist>    
+    </tests>
+
+
+    <tests>
+        <testdes>test47</testdes>
+        <g4version>geant4-9.6-b01</g4version>
+        <observable>kinetic energy of secondary proton or neutron</observable>
+        <reaction>pi+ on U</reaction>
+        <score>
+            <type>expert</type>
+            <value>passed</value>  
+        </score>
+        <imageblob>pip-U-1.4GeV-models.gif</imageblob>
+        <taglist>
+            <tag>
+                <name>Particle</name>
+                <value>pi+</value>
+            </tag>       
+            <tag>
+                <name>Target</name>
+                <value>Uranium</value>
+            </tag>
+            <tag>
+                <name>Energy</name>
+                <value>1.4 GeV/c</value>
+            </tag>
+            <tag>
+                <name>Model</name>
+                <value>Bertini, Binary, QGSC, CHIPS</value>
+            </tag>               
+
+        </taglist>    
+    </tests>
+
+    <tests>
+        <testdes>test47</testdes>
+        <g4version>geant4-9.6-b01</g4version>
+        <observable>kinetic energy of secondary proton or neutron</observable>
+        <reaction>pi+ on U</reaction>
+        <score>
+            <type>expert</type>
+            <value>passed</value>  
+        </score>
+        <imageblob>pip-U-5GeV-models.gif</imageblob>
+        <taglist>
+            <tag>
+                <name>Particle</name>
+                <value>pi+</value>
+            </tag>       
+            <tag>
+                <name>Target</name>
+                <value>Uranium</value>
+            </tag>
+            <tag>
+                <name>Energy</name>
+                <value>5.0 GeV/c</value>
+            </tag>
+            <tag>
+                <name>Model</name>
+                <value>Bertini, Binary, QGSC, CHIPS, FTFP</value>
+            </tag>               
+
+        </taglist>    
+    </tests>
+
+
+</testslist>

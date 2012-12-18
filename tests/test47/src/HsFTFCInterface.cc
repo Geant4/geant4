@@ -39,12 +39,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "HsFTFCInterface.hh"
-#include "G4SystemOfUnits.hh"
 #include "G4LundStringFragmentation.hh"
 #include "G4FTFModel.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
+#include "CLHEP/Units/PhysicalConstants.h"
 
 HsFTFCInterface::HsFTFCInterface() 
 {
@@ -55,8 +55,8 @@ HsFTFCInterface::HsFTFCInterface()
   theModel->SetHighEnergyGenerator(theStringModel);
   theStringDecay = new G4ExcitedStringDecay(new G4LundStringFragmentation());
   theStringModel->SetFragmentationModel(theStringDecay);
-  theModel->SetMinEnergy(GeV);
-  theModel->SetMaxEnergy(100*TeV);
+  theModel->SetMinEnergy(CLHEP::GeV);
+  theModel->SetMaxEnergy(100*CLHEP::TeV);
 }
 
 HsFTFCInterface::~HsFTFCInterface() 

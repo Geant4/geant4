@@ -36,7 +36,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "Test30VSecondaryGenerator.hh"
-#include "G4SystemOfUnits.hh"
 #include "G4Track.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
@@ -44,6 +43,7 @@
 #include "G4HadronicInteraction.hh"
 #include "G4ElementVector.hh"
 #include "G4Material.hh"
+#include "CLHEP/Units/PhysicalConstants.h"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -64,9 +64,9 @@ Test30VSecondaryGenerator::Test30VSecondaryGenerator(G4HadronicInteraction* hadi
   G4cout << "Nucleus with N= " << N << "  Z= " << Z << G4endl;
   targetNucleus.SetParameters((G4double)N, (G4double)Z);
   mass = targetNucleus.AtomicMass((G4double)N, (G4double)Z);
-  G4cout << "Mass from targetNucleus(MeV)= " << mass/MeV << G4endl;
+  G4cout << "Mass from targetNucleus(MeV)= " << mass/CLHEP::MeV << G4endl;
   mass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(Z, N);
-  G4cout << "Mass from IonTable(MeV)=      " << mass/MeV << G4endl;
+  G4cout << "Mass from IonTable(MeV)=      " << mass/CLHEP::MeV << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -28,6 +28,7 @@
 
 #include "G4ParticleDefinition.hh"
 #include "G4LorentzVector.hh"
+#include "G4ThreeVector.hh"
 
 #include <string>
 #include <map>
@@ -47,15 +48,17 @@ public:
   void setTarget(std::string nameMat)    {target = nameMat; unInitialized =true;}
   void setMomentum(double momentum)      {energy = momentum; unInitialized =true;}
   void setGenerator(std::string nameGen) {generator = nameGen; unInitialized =true;}
-  void setJobID( int id ) { jobID = id ; return ; }
-  void setClusterID( int id ) { clusterID = id ; return ; }
-  virtual void fill(G4VParticleChange*, G4LorentzVector)=0;
+  void setJobID( int id )     { jobID = id; }
+  void setClusterID( int id ) { clusterID = id; }
+  void setDebug(bool deb)     { debug = deb; }
+  virtual void fill(G4VParticleChange*, G4LorentzVector&, G4ThreeVector&,
+		    G4LorentzVector&)=0;
   virtual void write(G4double cross_sec, G4int nevt)=0;
 
 protected:
 
   G4int particleType(G4ParticleDefinition*);
-  bool                                   unInitialized;
+  bool                                   unInitialized, debug;
   std::string                            particle, target, generator;
   double                                 energy;
   int                                    jobID;

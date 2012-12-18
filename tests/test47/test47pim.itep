@@ -1,8 +1,6 @@
 #verbose
 0
 #rad
-#events
-1000000
 //--------Proton_processes
 #particle
 pi-
@@ -16,100 +14,114 @@ pi-
 C
 #momentum(MeV/c)
 5000.0
-// ---
+#events
+1000000
 #generator
 lepar
 #run
-// ---
 #generator
 bertini
 #run
-// ---
 #generator
 binary
 #run
-// ---
 #generator
-qgsc
+qgsp
 #run
-// ---
 #generator
 ftfp
+#run
+#events
+500000
+#generator
+CHIPS
 #run
 //--------
 #material
 Cu
 #momentum(MeV/c)
 5000.0
-// ---
+#events
+1000000
 #generator
 lepar
 #run
-// ---
 #generator
 bertini
 #run
-// ---
 #generator
 binary
 #run
-// ---
 #generator
-qgsc
+qgsp
 #run
-// ---
 #generator
 ftfp
+#run
+#events
+500000
+#generator
+CHIPS
 #run
 //--------
 #material
 Pb
 #momentum(MeV/c)
 5000.0
-// ---
+#events
+1000000
 #generator
 lepar
 #run
-// ---
 #generator
 bertini
 #run
-// ---
 #generator
 binary
 #run
-// ---
 #generator
-qgsc
+qgsp
 #run
-// ---
+#events
+500000
+#run
 #generator
 ftfp
+#run
+#events
+250000
+#generator
+CHIPS
 #run
 //--------
 #material
 U
 #momentum(MeV/c)
 5000.0
-// ---
+#events
+1000000
 #generator
 lepar
 #run
-// ---
 #generator
 bertini
 #run
-// ---
 #generator
 binary
 #run
-// ---
 #generator
-qgsc
+qgsp
 #run
-// ---
+#events
+500000
+#run
 #generator
 ftfp
 #run
-// ---
+#events
+250000
+#generator
+CHIPS
+#run
+//--------
 #exit

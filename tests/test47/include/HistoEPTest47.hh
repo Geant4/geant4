@@ -40,12 +40,16 @@ public:
 
   void initialize(std::string namePart, std::string nameMat, G4double momentum,
 		  std::string nameGen);
-  void fill(G4VParticleChange*, G4LorentzVector);
+  void setDebug(bool deb) { debug = deb; }
+  void fill(G4VParticleChange*, G4LorentzVector&, G4ThreeVector&);
   void write() ;
 
 private:
 
-  TH1F                  *hiPx, *hiPy, *hiPz, *hiE, *hiKE;
+  G4double              pin;
+  G4bool                debug;
+  TH1F                  *hiPx, *hiPy, *hiPz, *hiE, *hiKE, *hiX, *hiY;
+  TH1F                  *hiDpByp, *hiR, *hiZ, *hiAngX, *hiAngY;
  
 };
 

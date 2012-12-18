@@ -25,12 +25,11 @@
 //
 #include "globals.hh"
 #include "G4ios.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
 
 #include "HistoBNLTest47.hh"
 #include "G4VParticleChange.hh"
 #include "G4UnitsTable.hh"
+#include "CLHEP/Units/PhysicalConstants.h"
 
 HistoBNLTest47::HistoBNLTest47(std::string namePart, std::string nameMat, 
 			       G4double momentum, std::string nameGen) :
@@ -63,7 +62,8 @@ HistoBNLTest47::HistoBNLTest47(std::string namePart, std::string nameMat,
 
 HistoBNLTest47::~HistoBNLTest47() {}
 
-void HistoBNLTest47::fill(G4VParticleChange* aChange, G4LorentzVector pinit) {
+void HistoBNLTest47::fill(G4VParticleChange* aChange, G4LorentzVector& pinit,
+			  G4ThreeVector& aPosition, G4LorentzVector&) {
 
   if (unInitialized) initialize();
 
@@ -77,9 +77,9 @@ void HistoBNLTest47::fill(G4VParticleChange* aChange, G4LorentzVector pinit) {
     pd  = sec->GetDefinition();
     mom = sec->GetMomentumDirection();
     G4int    type  = particleType(pd);
-    G4double ke    = (sec->GetKineticEnergy())/GeV;
+    G4double ke    = (sec->GetKineticEnergy())/CLHEP::GeV;
     if (ke < 0.0) ke = 0.0;
-    G4double m     = (pd->GetPDGMass())/GeV;
+    G4double m     = (pd->GetPDGMass())/CLHEP::GeV;
     G4double p     = std::sqrt(ke*(ke + 2.0*m));
     G4double ee    = ke + m;
     mom           *= p;
@@ -126,7 +126,7 @@ void HistoBNLTest47::fill(G4VParticleChange* aChange, G4LorentzVector pinit) {
     }
   }
 
-  epTest.fill(aChange,pinit);
+  epTest.fill(aChange,pinit,aPosition);
 }
 
 void HistoBNLTest47::write(G4double cross_sec, G4int nevt) {
@@ -144,10 +144,10 @@ void HistoBNLTest47::write(G4double cross_sec, G4int nevt) {
     sprintf (title, "Events/%6.3f GeV", xbin);
     hiMT11[ii]->GetYaxis()->SetTitle(title);
     xbin  = hiMT12[ii]->GetBinWidth(1);
-    scale = cross_sec/(((double)(std::max(nevt,1)))*xbin*2.*pi*dy);
+    scale = cross_sec/(((double)(std::max(nevt,1)))*xbin*2.*CLHEP::pi*dy);
     sprintf (title, "Reduced Transverse Mass of p (GeV)");
     hiMT12[ii]->GetXaxis()->SetTitle(title);
-    sprintf (title, "Events (scaled by #frac{1}{p})/%6.3f GeV", xbin);
+    sprintf (title, "Events (scaled by #frac{1}{m_{T}})/%6.3f GeV", xbin);
     hiMT12[ii]->GetYaxis()->SetTitle(title);
     sprintf (name, "MTproton0%s%4.2f", tag1Name,  yv);
     hiMT10.push_back((TH1F*)hiMT12[ii]->Clone());
@@ -161,10 +161,10 @@ void HistoBNLTest47::write(G4double cross_sec, G4int nevt) {
     sprintf (title, "Events/%6.3f GeV", xbin);
     hiMT21[ii]->GetYaxis()->SetTitle(title);
     xbin  = hiMT22[ii]->GetBinWidth(1);
-    scale = cross_sec/(((double)(std::max(nevt,1)))*xbin*2.*pi*dy);
+    scale = cross_sec/(((double)(std::max(nevt,1)))*xbin*2.*CLHEP::pi*dy);
     sprintf (title, "Reduced Transverse Mass of n (GeV)");
     hiMT22[ii]->GetXaxis()->SetTitle(title);
-    sprintf (title, "Events (scaled by #frac{1}{p})/%6.3f GeV", xbin);
+    sprintf (title, "Events (scaled by #frac{1}{m_{T}})/%6.3f GeV", xbin);
     hiMT22[ii]->GetYaxis()->SetTitle(title);
     sprintf (name, "MTneutron0%s%4.2f", tag1Name,  yv);
     hiMT20.push_back((TH1F*)hiMT22[ii]->Clone());
@@ -178,10 +178,10 @@ void HistoBNLTest47::write(G4double cross_sec, G4int nevt) {
     sprintf (title, "Events/%6.3f GeV", xbin);
     hiMT31[ii]->GetYaxis()->SetTitle(title);
     xbin  = hiMT32[ii]->GetBinWidth(1);
-    scale = cross_sec/(((double)(std::max(nevt,1)))*xbin*2.*pi*dy);
+    scale = cross_sec/(((double)(std::max(nevt,1)))*xbin*2.*CLHEP::pi*dy);
     sprintf (title, "Reduced Transverse Mass of #pi+ (GeV)");
     hiMT32[ii]->GetXaxis()->SetTitle(title);
-    sprintf (title, "Events (scaled by #frac{1}{p})/%6.3f GeV", xbin);
+    sprintf (title, "Events (scaled by #frac{1}{m_{T}})/%6.3f GeV", xbin);
     hiMT32[ii]->GetYaxis()->SetTitle(title);
     sprintf (name, "MTpiplus0%s%4.2f", tag1Name,  yv);
     hiMT30.push_back((TH1F*)hiMT32[ii]->Clone());
@@ -195,10 +195,10 @@ void HistoBNLTest47::write(G4double cross_sec, G4int nevt) {
     sprintf (title, "Events/%6.3f GeV", xbin);
     hiMT41[ii]->GetYaxis()->SetTitle(title);
     xbin  = hiMT42[ii]->GetBinWidth(1);
-    scale = cross_sec/(((double)(std::max(nevt,1)))*xbin*2.*pi*dy);
+    scale = cross_sec/(((double)(std::max(nevt,1)))*xbin*2.*CLHEP::pi*dy);
     sprintf (title, "Reduced Transverse Mass of #pi- (GeV)");
     hiMT42[ii]->GetXaxis()->SetTitle(title);
-    sprintf (title, "Events (scaled by #frac{1}{p})/%6.3f GeV", xbin);
+    sprintf (title, "Events (scaled by #frac{1}{m_{T}})/%6.3f GeV", xbin);
     hiMT42[ii]->GetYaxis()->SetTitle(title);
     sprintf (name, "MTpiminus0%s%4.2f", tag1Name,  yv);
     hiMT40.push_back((TH1F*)hiMT42[ii]->Clone());
@@ -212,10 +212,10 @@ void HistoBNLTest47::write(G4double cross_sec, G4int nevt) {
     sprintf (title, "Events/%6.3f GeV", xbin);
     hiMT51[ii]->GetYaxis()->SetTitle(title);
     xbin  = hiMT52[ii]->GetBinWidth(1);
-    scale = cross_sec/(((double)(std::max(nevt,1)))*xbin*2.*pi*dy);
+    scale = cross_sec/(((double)(std::max(nevt,1)))*xbin*2.*CLHEP::pi*dy);
     sprintf (title, "Reduced Transverse Mass of K+ (GeV)");
     hiMT52[ii]->GetXaxis()->SetTitle(title);
-    sprintf (title, "Events (scaled by #frac{1}{p})/%6.3f GeV", xbin);
+    sprintf (title, "Events (scaled by #frac{1}{m_{T}})/%6.3f GeV", xbin);
     hiMT52[ii]->GetYaxis()->SetTitle(title);
     sprintf (name, "MTkplus0%s%4.2f", tag1Name,  yv);
     hiMT50.push_back((TH1F*)hiMT52[ii]->Clone());
@@ -229,10 +229,10 @@ void HistoBNLTest47::write(G4double cross_sec, G4int nevt) {
     sprintf (title, "Events/%6.3f GeV", xbin);
     hiMT61[ii]->GetYaxis()->SetTitle(title);
     xbin  = hiMT62[ii]->GetBinWidth(1);
-    scale = cross_sec/(((double)(std::max(nevt,1)))*xbin*2.*pi*dy);
+    scale = cross_sec/(((double)(std::max(nevt,1)))*xbin*2.*CLHEP::pi*dy);
     sprintf (title, "Reduced Transverse Mass of K- (GeV)");
     hiMT62[ii]->GetXaxis()->SetTitle(title);
-    sprintf (title, "Events (scaled by #frac{1}{p})/%6.3f GeV", xbin);
+    sprintf (title, "Events (scaled by #frac{1}{m_{T}})/%6.3f GeV", xbin);
     hiMT62[ii]->GetYaxis()->SetTitle(title);
     sprintf (name, "MTkminus0%s%4.2f", tag1Name,  yv);
     hiMT60.push_back((TH1F*)hiMT62[ii]->Clone());

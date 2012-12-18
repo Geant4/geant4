@@ -85,7 +85,7 @@ private:
   G4Material* material;
   G4Nucleus targetNucleus;
   G4double mass;
-  G4HadFinalState* result;
+  //  G4HadFinalState* result;
 
 };
 

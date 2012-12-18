@@ -39,7 +39,6 @@
 
 #include "Test30Physics.hh"
 
-#include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 #include "Test30VSecondaryGenerator.hh"
 #include "G4PhysicsTable.hh"
@@ -64,20 +63,21 @@
 #include "G4LEPionMinusInelastic.hh"
 #include "G4LEProtonInelastic.hh"
 #include "G4LENeutronInelastic.hh"
+#include "G4HEPionPlusInelastic.hh"
+#include "G4HEPionMinusInelastic.hh"
+#include "G4HEProtonInelastic.hh"
+#include "G4HENeutronInelastic.hh"
 #include "G4RPGPiPlusInelastic.hh"
 #include "G4RPGPiMinusInelastic.hh"
 #include "G4RPGProtonInelastic.hh"
 #include "G4RPGNeutronInelastic.hh"
 
-#include "G4QStringChipsParticleLevelInterface.hh"
-#include "G4StringChipsInterface.hh"
 #include "G4PreCompoundModel.hh"
 #include "G4ExcitationHandler.hh"
 #include "G4BinaryCascade.hh"
 #include "G4BinaryLightIonReaction.hh"
 #include "G4CascadeInterface.hh"
 #include "HsQGSPInterface.hh"
-#include "HsQGSCInterface.hh"
 #include "HsQGSBInterface.hh"
 #include "G4INCLXXInterface.hh"
 
@@ -89,6 +89,8 @@
 #include "G4ExcitedStringDecay.hh"
 #include "G4LundStringFragmentation.hh"
 #include "G4QuasiElasticChannel.hh"
+
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -158,6 +160,18 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 
+  } else if(gen_name == "hepar") {
+    if(part_name == "proton")   
+      sg = new Test30VSecondaryGenerator(new G4HEProtonInelastic(),mat);
+    else if(part_name == "pi+") 
+      sg = new Test30VSecondaryGenerator(new G4HEPionPlusInelastic(),mat);
+    else if(part_name == "pi-") 
+      sg = new Test30VSecondaryGenerator(new G4HEPionMinusInelastic(),mat);
+    else if(part_name == "neutron") 
+      sg = new Test30VSecondaryGenerator(new G4HENeutronInelastic(),mat);
+    theProcess->SetSecondaryGenerator(sg);
+    man->AddDiscreteProcess(theProcess);
+
   } else if(gen_name == "rpg") {
     if(part_name == "proton")   
       sg = new Test30VSecondaryGenerator(new G4RPGProtonInelastic(),mat);
@@ -167,12 +181,6 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
       sg = new Test30VSecondaryGenerator(new G4RPGPiMinusInelastic(),mat);
     else if(part_name == "neutron") 
       sg = new Test30VSecondaryGenerator(new G4RPGNeutronInelastic(),mat);
-    theProcess->SetSecondaryGenerator(sg);
-    man->AddDiscreteProcess(theProcess);
-
-  } else if(gen_name == "CHIPS") {
-
-    sg = new Test30VSecondaryGenerator(new G4QStringChipsParticleLevelInterface(),mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 
@@ -236,13 +244,6 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 
-  } else if(gen_name == "qgsc") {
-    HsQGSCInterface* qgsc = new HsQGSCInterface();
-    qgsc->SetMinEnergy(GeV);
-    sg = new Test30VSecondaryGenerator(qgsc, mat);
-    theProcess->SetSecondaryGenerator(sg);
-    man->AddDiscreteProcess(theProcess);
-
   } else if(gen_name == "LElastic") {
     G4LElastic* els = new G4LElastic();
     sg = new Test30VSecondaryGenerator(els, mat);
@@ -262,9 +263,8 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
 
     G4TheoFSGenerator* theModel = new G4TheoFSGenerator;
     G4FTFModel* theStringModel = new G4FTFModel();
-    G4GeneratorPrecompoundInterface* theCascade =
-      new G4GeneratorPrecompoundInterface();
-    // theCascade->SetDeExcitation(thePreCompound); // can NOT do this here because thePreCo == 0 !!!
+    G4GeneratorPrecompoundInterface* theCascade = 
+      new G4GeneratorPrecompoundInterface;
     theCascade->SetCaptureThreshold(10*MeV);   // Uzhi 25.09.10
     G4ExcitedStringDecay* theStringDecay = 
       new G4ExcitedStringDecay(new G4LundStringFragmentation());
@@ -278,12 +278,15 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 
-  } else if(gen_name == "ftfc") {
+
+  } else if(gen_name == "ftfpU") {
 
     G4TheoFSGenerator* theModel = new G4TheoFSGenerator;
     G4FTFModel* theStringModel = new G4FTFModel();
-    G4QStringChipsParticleLevelInterface* theCascade = 
-      new G4QStringChipsParticleLevelInterface;
+    G4GeneratorPrecompoundInterface* theCascade =
+      new G4GeneratorPrecompoundInterface();
+    // theCascade->SetDeExcitation(thePreCompound); // can NOT do this here because thePreCo == 0 !!!
+    theCascade->SetCaptureThreshold(10*MeV);   // Uzhi 25.09.10
     G4ExcitedStringDecay* theStringDecay = 
       new G4ExcitedStringDecay(new G4LundStringFragmentation());
     theStringModel->SetFragmentationModel(theStringDecay);

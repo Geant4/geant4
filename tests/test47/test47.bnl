@@ -1,8 +1,6 @@
 #verbose
 0
 #rad
-#events
-10000
 //--------Proton_processes
 #particle
 proton
@@ -17,71 +15,71 @@ proton
 #material
 Cu
 // ---
+#events
+1000000
 #generator
 lepar
 #run
-// ---
 #generator
 bertini
 #run
-// ---
 #generator
 qgsp
 #run
-// ---
+#events
+250000
 #generator
 ftfp
 #run
-// ---
 #generator
-qgsc
+CHIPS
 #run
-#exit
 //--------
+#events
+1000000
 #material
 Au
-// ---
 #generator
 lepar
 #run
-// ---
 #generator
 bertini
 #run
-// ---
 #generator
 qgsp
 #run
-// ---
-#generator
-qgsc
-#run
-// ---
+#events
+250000
 #generator
 ftfp
+#run
+#events
+100000
+#generator
+CHIPS
 #run
 //--------
 #material
 Be
 // ---
+#events
+1000000
 #generator
 lepar
 #run
-// ---
 #generator
 bertini
 #run
-// ---
 #generator
 qgsp
 #run
-// ---
-#generator
-qgsc
-#run
-// ---
+#events
+500000
 #generator
 ftfp
+#run
+#generator
+CHIPS
 #run
 // ---
 #exit

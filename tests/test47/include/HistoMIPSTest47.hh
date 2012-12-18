@@ -23,51 +23,41 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//----------------------------------------------------------------------------
-//
-//  Package   : Simulation 
-//
-// Description: Algorithm of G4 HARP for Hadron Production in the target
-//
-// Author:      V.Ivanchenko 05.03.04
-//
-// Modifications: 
-//
-//----------------------------------------------------------------------------
-//
+#ifndef HistoMIPSTest47_H
+#define HistoMIPSTest47_H
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+#include "HistoTest47.hh"
+#include "HistoEPTest47.hh"
 
-#include "HsQGSCInterface.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTable.hh"
-#include "G4ProcessManager.hh"
-#include "G4QuasiElasticChannel.hh"
+#include "TFile.h"
+#include "TH1F.h"
+#include <string>
 
-HsQGSCInterface::HsQGSCInterface() 
-{
-  theModel = new G4TheoFSGenerator;
-  theCascade = new G4QStringChipsParticleLevelInterface;
-  theModel->SetTransport(theCascade);
-  theModel->SetHighEnergyGenerator(&theStringModel);
-  theStringDecay = new G4ExcitedStringDecay(&theFragmentation);
-  theStringModel.SetFragmentationModel(theStringDecay);
-  G4QuasiElasticChannel* theQuasiElastic = new G4QuasiElasticChannel;
-  theModel->SetQuasiElasticChannel(theQuasiElastic);
-  theModel->SetMinEnergy(GeV);
-  theModel->SetMaxEnergy(100*TeV);
-}
+class HistoMIPSTest47 : public HistoTest47 {
 
-HsQGSCInterface::~HsQGSCInterface() 
-{
-  delete theStringDecay;
-}
+public:
 
-G4HadFinalState* HsQGSCInterface::ApplyYourself(const G4HadProjectile& aTrack, 
-                                                        G4Nucleus& theNucleus)
-{
-  return theModel->ApplyYourself(aTrack, theNucleus);
-}
+  HistoMIPSTest47(std::string namePart, std::string nameMat, G4double momentum,
+		  std::string nameGen);
+  virtual ~HistoMIPSTest47();
 
+  virtual void fill(G4VParticleChange*, G4LorentzVector&, G4ThreeVector&,
+		    G4LorentzVector&);
+  virtual void write(G4double cross_sec, G4int nevt) ;
 
+private:
+
+  void initialize();
+  void book();
+
+  std::string           fileName;
+  char                  tag1Name[60], tag2Name[24], tag3Name[40];
+  HistoEPTest47         epTest;
+  G4double              xminCalorimeter, xmaxCalorimeter, yminCalorimeter, eMin;
+  G4double              ymaxCalorimeter, rmaxCalorimeter, zCalorimeter, sterad;
+  std::vector<TH1F*>    hiPL1, hiPL2, hiPL3, hiXF1, hiXF2, hiXF3;
+  std::vector<TH1F*>    hiXW1, hiXW2, hiXW3;
+  
+};
+
+#endif

@@ -43,7 +43,8 @@ public:
 		  std::string nameGen);
   virtual ~HistoITEPTest47();
 
-  virtual void fill(G4VParticleChange*, G4LorentzVector);
+  virtual void fill(G4VParticleChange*, G4LorentzVector&, G4ThreeVector&,
+		    G4LorentzVector&);
   virtual void write(G4double cross_sec, G4int nevt);
 
 private:
