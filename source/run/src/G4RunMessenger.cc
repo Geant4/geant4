@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4RunMessenger.cc,v 1.31 2007-11-16 22:37:43 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4RunMessenger.hh"
@@ -147,10 +148,6 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   physCmd->SetGuidance(" first initialization (or BeamOn).");
   physCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  cutCmd = new G4UIcmdWithoutParameter("/run/cutoffModified",this);
-  cutCmd->SetGuidance("/run/cutoffModified becomes obsolete.");
-  cutCmd->SetGuidance("It is safe to remove invoking this command.");
-
   constScoreCmd = new G4UIcmdWithoutParameter("/run/constructScoringWorlds",this);
   constScoreCmd->SetGuidance("Constrct scoring parallel world(s) if defined.");
   constScoreCmd->SetGuidance("This command is not mandatory, but automatically called when a run starts.");
@@ -213,35 +210,6 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   randEvtCmd->SetDefaultValue(0);
   randEvtCmd->SetRange("flag>=0 && flag<3");
   randEvtCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  //old commands for the rndm engine status handling
-  //
-  randDirOld = new G4UIcmdWithAString("/run/randomNumberStatusDirectory",this);
-  randDirOld->SetGuidance("Define the directory name of the rndm status files.");
-  randDirOld->SetGuidance("Directory must be creates before storing the files.");
-  randDirOld->SetGuidance("OBSOLETE --- Please use commands in /random/ directory");
-  randDirOld->SetParameterName("fileName",true);
-  randDirOld->SetDefaultValue("./");
-  randDirOld->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed);
-  
-  storeRandOld = new G4UIcmdWithAnInteger("/run/storeRandomNumberStatus",this);
-  storeRandOld->SetGuidance("The randomNumberStatus will be saved at :");
-  storeRandOld->SetGuidance("begining of run (currentRun.rndm) and "
-                            "begining of event (currentEvent.rndm) ");  
-  storeRandOld->SetGuidance("OBSOLETE --- Please use commands in /random/ directory");
-  storeRandOld->SetParameterName("flag",true);
-  storeRandOld->SetDefaultValue(1);
-          
-  restoreRandOld = new G4UIcmdWithAString("/run/restoreRandomNumberStatus",this);
-  restoreRandOld->SetGuidance("Reset the status of the rndm engine from a file.");
-  restoreRandOld->SetGuidance("See CLHEP manual for detail.");
-  restoreRandOld->SetGuidance("The engine status must be stored beforehand.");
-  restoreRandOld->SetGuidance("Directory of the status file should be set by"
-                              " /random/setDirectoryName.");
-  restoreRandOld->SetGuidance("OBSOLETE --- Please use commands in /random/ directory");
-  restoreRandOld->SetParameterName("fileName",true);
-  restoreRandOld->SetDefaultValue("currentRun.rndm");
-  restoreRandOld->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed);  
 }
 
 G4RunMessenger::~G4RunMessenger()
@@ -259,9 +227,7 @@ G4RunMessenger::~G4RunMessenger()
   delete initCmd;
   delete geomCmd;
   delete physCmd;
-  delete cutCmd;
   delete randEvtCmd;
-  delete randDirOld; delete storeRandOld; delete restoreRandOld; 
   delete constScoreCmd;
   delete runDirectory;
   
@@ -317,8 +283,6 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   { runManager->GeometryHasBeenModified(); }
   else if( command==physCmd )
   { runManager->PhysicsHasBeenModified(); }
-  else if( command==cutCmd )
-  { runManager->CutOffHasBeenModified(); }
  
   else if( command==seedCmd )
   {
@@ -348,25 +312,6 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   { runManager->RestoreRandomNumberStatus(newValue); }
   else if( command==randEvtCmd )
   { runManager->StoreRandomNumberStatusToG4Event(randEvtCmd->GetNewIntValue(newValue)); }
-  
-  else if( command==randDirOld )
-  {G4cout << "warning: deprecated command. Use /random/setDirectoryName"
-          << G4endl; 
-  // runManager->SetRandomNumberStoreDir(newValue);
-  }
-  else if( command==storeRandOld )
-  {G4cout << "warning: deprecated command. Use /random/setSavingFlag"
-          << G4endl;
-   // G4int frequency = storeRandOld->GetNewIntValue(newValue);
-   // G4bool flag = false;
-   // if(frequency != 0) flag = true;	     
-   // runManager->SetRandomNumberStore(flag);
-  }    
-  else if( command==restoreRandOld )
-  {G4cout << "warning: deprecated command. Use /random/resetEngineFrom"
-           << G4endl;  
-   // runManager->RestoreRandomNumberStatus(newValue);
-  }  
   else if( command==constScoreCmd )
   { runManager->ConstructScoringWorlds(); }
 

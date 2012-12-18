@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4MatScanMessenger.cc,v 1.5 2006-12-01 02:00:55 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //

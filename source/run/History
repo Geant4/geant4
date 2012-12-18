@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Dec. 3rd, 2012, M.Asai (run-V09-06-01)
+- Removing obsolete UI commands for random number handling.
+
+Dec. 3rd, 2012, M.Asai (run-V09-06-00)
+- Removing obsolete UI commands.
+
 Oct. 15th, 2012, M.Asai (run-V09-05-09)
 - Offering more granular public methods of G4RunManager, which enable
 external framework with its own event loop to execute each individual 

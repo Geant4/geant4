@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4RunManagerKernel.hh,v 1.11 2010-11-18 13:46:06 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 

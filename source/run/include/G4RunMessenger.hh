@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4RunMessenger.hh,v 1.18 2007-11-13 15:48:44 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //	GEANT 4 class header file 
@@ -93,7 +94,6 @@ class G4RunMessenger: public G4UImessenger
     G4UIcmdWithoutParameter *   initCmd;
     G4UIcmdWithoutParameter *   geomCmd;
     G4UIcmdWithoutParameter *   physCmd;
-    G4UIcmdWithoutParameter *   cutCmd;
     G4UIcmdWithAnInteger *      randEvtCmd;
 
     G4UIdirectory *             randomDirectory;
@@ -104,10 +104,6 @@ class G4RunMessenger: public G4UImessenger
     G4UIcmdWithoutParameter *   saveThisEventCmd;
     G4UIcmdWithAString *        restoreRandCmd;
     
-    G4UIcmdWithAString *        randDirOld;
-    G4UIcmdWithAnInteger *      storeRandOld;
-    G4UIcmdWithAString *        restoreRandOld;  
-
     G4UIcmdWithoutParameter *   constScoreCmd;
 
     G4MaterialScanner *         materialScanner;

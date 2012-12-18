@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4MSSteppingAction.cc,v 1.2 2006-06-29 21:13:42 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //
