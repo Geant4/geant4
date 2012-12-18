@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2010-03-18 05:10:21 dennis Exp $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,8 +15,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13 Dec 2012  Michael Kelsey (test16-V09-06-00)
+----------------------------------------------
+- Replace LHEP-style pi/K stopping processes with Bertini-based.  This also
+  eliminates the "TRIUMPH_STOP_KMINUS" and "TRIUMPH_STOP_PIMINUS"
+  preprocessor macros.
+
 18 November 2012  Pere Mato (test16-V09-05-03)
-----------------------------------------------------
+----------------------------------------------
 - To avoid intermittent build problems on Windows added an
   artificial dependency between targets to serialize building them.
 

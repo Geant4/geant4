@@ -340,16 +340,8 @@ void Tst16PhysicsList::ConstructEM()
 
 // Stopping processes
 
-#ifdef TRIUMF_STOP_PIMINUS
-#include "G4PionMinusAbsorptionAtRest.hh"
-#else
-#include "G4PiMinusAbsorptionAtRest.hh"
-#endif
-#ifdef TRIUMF_STOP_KMINUS
-#include "G4KaonMinusAbsorption.hh"
-#else
-#include "G4KaonMinusAbsorptionAtRest.hh"
-#endif
+#include "G4PiMinusAbsorptionBertini.hh"
+#include "G4KaonMinusAbsorptionBertini.hh"
 
 //
 // ConstructHad()
@@ -397,14 +389,7 @@ void Tst16PhysicsList::ConstructHad()
                                 new G4HEPionMinusInelastic;
          theInelasticProcess->RegisterMe(theHEInelasticModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
-#ifdef TRIUMF_STOP_PIMINUS
-         pmanager->AddRestProcess(new G4PionMinusAbsorptionAtRest, ordDefault);
-#else
-         G4String prcNam;
-         pmanager->AddRestProcess(
-           new G4PiMinusAbsorptionAtRest(
-                prcNam="PiMinusAbsorptionAtRest"), ordDefault);
-#endif
+         pmanager->AddRestProcess(new G4PiMinusAbsorptionBertini, ordDefault);
       }
       else if (particleName == "kaon+") {
          pmanager->AddDiscreteProcess(theElasticProcess);
@@ -453,11 +438,7 @@ void Tst16PhysicsList::ConstructHad()
                                  new G4HEKaonMinusInelastic;
          theInelasticProcess->RegisterMe(theHEInelasticModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
-#ifdef TRIUMF_STOP_KMINUS
-         pmanager->AddRestProcess(new G4KaonMinusAbsorption, ordDefault);
-#else
-         pmanager->AddRestProcess(new G4KaonMinusAbsorptionAtRest, ordDefault);
-#endif
+         pmanager->AddRestProcess(new G4KaonMinusAbsorptionBertini, ordDefault);
       }
       else if (particleName == "proton") {
          pmanager->AddDiscreteProcess(theElasticProcess);
