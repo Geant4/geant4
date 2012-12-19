@@ -1,4 +1,4 @@
-$Id: History,v 1.50 2010-06-06 04:21:04 perl Exp $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -10,6 +10,9 @@ $Id: History,v 1.50 2010-06-06 04:21:04 perl Exp $
      ----------------------------------------------------------
 
 ---------------------------------------------------------------------------  
+
+18 December 2012 Michael Kelsey (exampleA01-V09-06-00)
+- Replace G4AntiProtonAnnihiliationAtRest with G4AntiProtonAbsorptionFritiof.
 
 16 November 2012 Ivana Hrivnacova (exampleA01-V09-05-03)
 - Fixed .README file for artefacts from Markdown support

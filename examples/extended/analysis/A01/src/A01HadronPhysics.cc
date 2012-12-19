@@ -285,8 +285,8 @@ void A01HadronPhysics::ConstructProcess()
    theAntiProtonInelasticProcess->RegisterMe(theAntiProtonHEPModel);
    pManager->AddDiscreteProcess(theAntiProtonInelasticProcess);
 
-   G4AntiProtonAnnihilationAtRest* theAntiProtonAnnihilation
-                            =  new G4AntiProtonAnnihilationAtRest();
+   G4AntiProtonAbsorptionFritiof* theAntiProtonAnnihilation
+                            =  new G4AntiProtonAbsorptionFritiof();
    pManager->AddRestProcess(theAntiProtonAnnihilation);
 
    G4VProcess* theapMultipleScattering = new G4hMultipleScattering();

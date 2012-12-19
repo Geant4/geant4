@@ -130,7 +130,7 @@
 #include "G4HEAntiOmegaMinusInelastic.hh"
 
 // Stopping processes
-#include "G4AntiProtonAnnihilationAtRest.hh"
+#include "G4AntiProtonAbsorptionFritiof.hh"
 #include "G4AntiNeutronAnnihilationAtRest.hh"
 
 class A01HadronPhysics : public G4VPhysicsConstructor
