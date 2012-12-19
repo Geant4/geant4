@@ -25,7 +25,7 @@
 //
 #ifdef G4ANALYSIS_USE
 //
-// $Id: GammaRayTelAnalysis.cc 66241 2012-12-13 18:34:42Z gunter $
+// $Id$
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland

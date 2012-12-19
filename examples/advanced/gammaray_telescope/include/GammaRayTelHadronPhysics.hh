@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: GammaRayTelHadronPhysics.hh 66477 2012-12-18 17:45:30Z mkelsey $
+// $Id$
 //
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
