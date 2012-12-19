@@ -9,6 +9,8 @@ $Id$
                       Category History file
                       ---------------------
 
+18.12.2012 - M.Kelsey (DMX-V09-06-01)
+	   - Migrate hadron-stopping processes
 
 31.10.2012 - A.Howard (DMX-V09-06-00)
 	   - Fixed missing G4SystemOfUnits.hh header

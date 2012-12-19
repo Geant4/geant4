@@ -558,9 +558,9 @@ void DMXPhysicsList::ConstructOp()
 #include "G4LCapture.hh"
 
 // Stopping processes
-#include "G4PiMinusAbsorptionAtRest.hh"
-#include "G4KaonMinusAbsorptionAtRest.hh"
-#include "G4AntiProtonAnnihilationAtRest.hh"
+#include "G4PiMinusAbsorptionBertini.hh"
+#include "G4KaonMinusAbsorptionBertini.hh"
+#include "G4AntiProtonAbsorptionFritiof.hh"
 #include "G4AntiNeutronAnnihilationAtRest.hh"
 
 
@@ -609,7 +609,7 @@ void DMXPhysicsList::ConstructHad()
 	  theInelasticProcess->RegisterMe(theHEInelasticModel);
 	  pmanager->AddDiscreteProcess(theInelasticProcess);
 	  G4String prcNam;
-	  pmanager->AddRestProcess(new G4PiMinusAbsorptionAtRest, ordDefault);
+	  pmanager->AddRestProcess(new G4PiMinusAbsorptionBertini, ordDefault);
 	}
       
       else if (particleName == "kaon+") 
@@ -666,7 +666,7 @@ void DMXPhysicsList::ConstructHad()
 	    new G4HEKaonMinusInelastic;
 	  theInelasticProcess->RegisterMe(theHEInelasticModel);
 	  pmanager->AddDiscreteProcess(theInelasticProcess);
-	  pmanager->AddRestProcess(new G4KaonMinusAbsorptionAtRest, ordDefault);
+	  pmanager->AddRestProcess(new G4KaonMinusAbsorptionBertini, ordDefault);
 	}
 
       else if (particleName == "proton") 
@@ -693,6 +693,7 @@ void DMXPhysicsList::ConstructHad()
 	    new G4HEAntiProtonInelastic;
 	  theInelasticProcess->RegisterMe(theHEInelasticModel);
 	  pmanager->AddDiscreteProcess(theInelasticProcess);
+	  pmanager->AddRestProcess(new G4AntiProtonAbsorptionFritiof, ordDefault);
 	}
 
       else if (particleName == "neutron") {
@@ -746,6 +747,7 @@ void DMXPhysicsList::ConstructHad()
 	    new G4HEAntiNeutronInelastic;
 	  theInelasticProcess->RegisterMe(theHEInelasticModel);
 	  pmanager->AddDiscreteProcess(theInelasticProcess);
+	  pmanager->AddRestProcess(new G4AntiNeutronAnnihilationAtRest, ordDefault);
 	}
 
       else if (particleName == "deuteron") 
