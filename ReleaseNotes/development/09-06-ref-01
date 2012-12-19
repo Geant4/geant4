@@ -1,0 +1,265 @@
+
+                       geant4-09-06-ref-01
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o Tidied up code. Removed most deprecated classes and code for major release.
+
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+cmake                                            cmake-V09-06-00
+-----
+- Tidy up layout in scripts and removed obsolete files and documentation.
+
+config                                           config-V09-06-01
+------
+- Removed references to BREPS and CHIPS modules in binmake-gmk.
+
+analysis                                         analysis-V09-06-00
+--------
+- Added 'svn:keywords' property to files.
+
+error_propagation                                error-propagation-V09-06-00
+-----------------
+- G4ErrorPhysicsList: remove inclusion of unnecessary header.
+
+event                                            event-V09-06-01
+-----
+- Delete undeleted UI command in destructor of G4StackMessenger.
+  Addressing problem report #1380.
+- Removed obsolete classes G4CellScorer and G4CellScorerStore.
+
+externals                                        externals-V09-05-04
+---------
+- Updated internal CLHEP module to CLHEP-2.1.3.1:
+  o Made the HepLorentzVector(double t) constructor explicit.
+  o Fixed typo in operator*() for HepRotation.
+  o Clean up remaining naming overlap between Units and internal variables.
+
+geometry                                         geometry-V09-06-00
+--------
+- Cleared left-over debug check in G4VoxelNavigation.
+  Addressing problem report #1406.
+- Removed deprecated BREPs module.
+- Removed obsolete classes G4VCellScorer and G4VCellScorerStore.
+- Removed references to NURBS from all solids.
+- Added 'svn:keywords' property to files.
+
+graphics_reps                                    greps-V09-06-01
+-------------
+- Removed obsolete code for NURBS and 'i_mode' parameter for DrawTrajectory().
+- Added 'svn:keywords' property to files.
+
+interfaces                                       interfaces-V09-06-00
+----------
+- Removed deprecated G4UIXaw driver class.
+
+persistency/ascii                                ascii-V09-06-00
+-----------------
+- Removed handling of deprecated BREPS solids.
+
+physics_lists                                    phys-lists-V09-06-03
+-------------
+- Cleanup of obsolete physics lists and associated builders
+  and physics constructors.
+- Removed CHIPS-based lists and configurations.
+- Remove LHEPStopping* builders and G4StoppingHadronBuilder in LHEP
+  physics list. Replaced obsolete stopping processes with builder in LBE.
+- G4HadronElasticPhysics, G4HadronHElasticPhysics: substituted obsolete
+  CHIPS classes.
+- G4EmDNAPhysicsChemistry: substituted obsolete interface SetModel()
+  by SetEmModel().
+
+processes/electromagnetic/adjoint                emadjoint-V09-06-00
+---------------------------------
+- G4AdjointPhotoElectricModel: use G4PEEffectFluoModel instead of obsolete
+  G4PEEffectModel.
+
+processes/electromagnetic/highenergy             emhighenergy-V09-06-00
+------------------------------------
+- G4eeTo3PiModel: removed printout from destructor.
+  Addressing problem report #1404.
+
+processes/electromagnetic/lowenergy              emlowen-V09-06-02
+-----------------------------------
+- G4LivermorePhotoElectricModel: fix addressing problem report #1402.
+- G4UAtomDeexcitation: added some debug options.
+- G4MuElecInelastic, G4MuElecElastic: substituted calls to obsolete method.
+
+processes/electromagnetic/standard               emstand-V09-06-00
+----------------------------------
+- G4ModifiedTsai, G4PairProductionRelModel, G4WentzelOKandVIxSection,
+  G4WentzelVIRelXSection: removed obsolete methods and headers.
+
+processes/electromagnetic/utils                  emutils-V09-06-01
+-------------------------------
+- Removed obsolete classes G4VEnergyLoss, G4VBremAngularDistribution.
+- G4VEmProcess, G4VMultipleScattering: removed obsolete methods SetModel()
+  and Model(). Removed calls to obsolete methods in G4LossTableManager.
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V09-06-00)
+  o Fixed several Coverity defects for initialisation of class members
+    and minor potential memory leaks.
+- models/chiral_inv_phase_space (hadr-chips-V09-06-00)
+  o Removed deprecated CHIPS classes.
+- models/coherent_elastic (hadr-cohe-V09-06-01)
+  o Fixed conditional statement depending on uninitialised variable.
+  o Removed deperecated CHIPS elastic classes.
+- models/low_energy (hadr-lep-V09-06-00)
+  o Removed isotope production from all models.
+- models/neutron_hp (hadr-hpn-V09-06-02)
+  o Deleted deprecated HP or low-energy parameterization models and data sets.
+- models/theo_high_energy (had-theo-HE-V09-06-00)
+  o Removed deprecated G4ProjectileDiffractiveChannel class.
+- processes (hadr-proc-V09-06-00)
+  o G4HadronElasticProcess: added full printout from hadronic exception
+    inside G4Exception text. Addressing problem #1377 for inelastic process.
+  o Removed deprecated class G4WHadronElasticProcess.
+- stopping (hadr-stopping-V09-06-01)
+  o Removed deprecated stopping classes.
+
+run                                              run-V09-06-01
+---
+- Removing obsolete UI commands, including obsolete UI commands for
+  random number handling.
+
+tracking                                         tracking-V09-06-00
+--------
+- Removed 'i_mode' parameter from DrawTrajectory().
+
+visualization                                    vis-V09-06-01
+-------------
+- Removed NURBS code and references to i_mode.
+- Added 'svn:keywords' property to files.
+
+examples                                         examples-V09-06-01
+--------
+- Updated reference outputs.
+- advanced/gammaray_telescope (gammaraytel-V09-06-01)
+  o GammaRayTelEMlowePhysics: substituted calls to SetModel() by SetEmModel()
+    and migrated stopping processes.
+- advanced/human_phantom (human_phantom-V09-06-00)
+  o G4HumanPhantomPhysicsList: substituted calls to SetModel() by SetEmModel().
+- advanced/iort_therapy (iort_therapy-V09-06-00)
+  o Removed G4HadronQElasticPhysics, and replaced G4QStoppingPhysics.
+- advanced/medical_linac (medical_linac-V09-06-00)
+  o Removed obsolete G4HadronQElasticPhysics.
+- advanced/nanobeam (nanobeam-V09-06-00)
+  o Corrected order and format of inclusion of CLHEP headers.
+- advanced/radioprotection (radioprotection-V09-06-00)
+  o Removed use of obsolete G4HadronQElasticPhysics.
+- advanced/underground_physics (DMX-V09-06-01)
+  o Fixed case of missing inclusion of units header when analysis activated.
+  o Make Auger, fluorescence and PIXE on by default.
+    Addressing problem report #1386.
+  o Migrated hadron-stopping processes.
+- extended/analysis/A01 (exampleA01-V09-06-00)
+  o Replaced G4AntiProtonAnnihiliationAtRest with G4AntiProtonAbsorptionFritiof.
+- extended/biasing/B01 (B01-V09-06-00)
+- extended/biasing/B02 (B02-V09-06-01)
+  o Removed references to obsolete G4CellScorer classes.
+- extended/electromagnetic/TestEm0 (testem0-V09-06-01)
+  o DirectAccess: use G4PEEffectFluoModel instead of obsolete G4PEEffectModel.
+  o PhysListEmStandard: substituted obsolete function call.
+- extended/electromagnetic/TestEm1 (testem1-V09-06-00)
+- extended/electromagnetic/TestEm2 (testem2-V09-06-00)
+- extended/electromagnetic/TestEm3 (testem3-V09-06-00)
+- extended/electromagnetic/TestEm5 (testem5-V09-06-00)
+  o PhysListEmStandard: use SetEmModel() method.
+- extended/electromagnetic/TestEm7 (testem7-V09-06-02)
+  o PhysListEmStandardSS, PhysListEmStandardNR: updated according to
+    Option4 physics list models and parameters.
+  o Removed obsolete class G4HadronQElasticPhysics.
+  o c2_function: fixed variable shadowing.
+- extended/electromagnetic/TestEm9 (testem9-V09-06-00)
+- extended/electromagnetic/TestEm11 (testem11-V09-06-00)
+- extended/electromagnetic/TestEm12 (testem12-V09-06-00)
+- extended/electromagnetic/TestEm13 (testem13-V09-06-00)
+  o PhysListEmStandard: use SetEmModel() method.
+- extended/electromagnetic/TestEm14 (testem14-V09-06-01)
+  o PhysListEmLivermore, PhysListEmPenelope: added activation of fluorescence.
+  o PhysListEmStandard: use SetEmModel() method.
+- extended/electromagnetic/TestEm18 (testem18-V09-06-00)
+  o PhysListEmStandard: use SetEmModel() method.
+- extended/field/field04 (fieldex04-V09-06-00)
+- extended/field/field06 (fieldex06-V09-06-00)
+  o Migration to DrawTrajectory() ('i_mode' argument no longer available).
+- extended/hadronic/Hadr01 (exhadr01-V09-06-01)
+  o PhysicsList: removed CHIPS and LHEP builders.
+- extended/hadronic/Hadr02 (exhadr02-V09-06-01)
+  o Migrated to cross-sections extracted from CHIPS.
+- extended/hadronic/Hadr03 (exhadr03-V09-06-00)
+  o PhysicsList: QGSP_BERT_HP replaced by FTFP_BERT_HP
+  o RunAction: compute crossSection per atom.
+- extended/medical/electronScattering (electronScattering-V09-06-00)
+- extended/medical/fanoCavity (fano-V09-06-00)
+  o Use SetEmModel() method in physics builders.
+- extended/optical/LXe (LXe-V09-06-00)
+- extended/optical/wls (WLS-V09-06-00)
+  o Migration to DrawTrajectory() ('i_mode' argument no longer available).
+- extended/parameterisations (exParameterisations-V09-06-00)
+  o Added Par01 example, extracted as copy of novice/N05.
+- extended/runAndEvent/RE01 (exampleRE01-V09-06-01)
+  o Replaced obsolete class G4QStoppingPhysics with G4StoppingPhysics.
+  o Migration to DrawTrajectory() ('i_mode' argument no longer available).
+- extended/runAndEvent/RE02 (exampleRE02-V09-06-00)
+  o Replaced G4AntiProtonAnnihiliationAtRest with G4AntiProtonAbsorptionFritiof.
+- extended/runAndEvent/RE04 (exampleRE04-V09-06-00)
+  o Migration to DrawTrajectory() ('i_mode' argument no longer available).
+- extended/visualization/userVisAction (exam-ext-vis-UVA-V09-06-00)
+  o Replaced physics list QGSP_BIC_EMY with FTFP_BERT.
+- novice (exNovice-V09-06-01)
+  o Moved N05 example in extented/parameterisations/Par01.
+  o Added 'svn:keywords' property to files.
+
+
+tests                                            tests-V09-06-01
+-----
+- Updated reference outputs and tools.
+- Archived tests 15, 19, 22, 23, 29, 39, 49.
+- tests/test02 (test02-V09-06-01)
+  o Replaced obsolete LHEP physics list with FTFP_BERT.
+- tests/test10 (test10-V09-06-00)
+  o Migration to DrawTrajectory() ('i_mode' argument no longer available).
+- tests/test16 (test16-V09-06-00)
+- tests/test18 (test18-V09-06-00)
+  o Replace LHEP-style pi/K stopping processes with Bertini-based.
+- tests/test30 (test30-V09-06-02)
+  o Removed dependences on CHIPS.
+- tests/test33 (test33-V09-06-00)
+  o Removed obsolete G4CellScorer class references.
+- tests/test35 (test35-V09-06-02)
+  o Removed dependences on CHIPS.
+- tests/test44 (test44-V09-06-00)
+  o PhysicsList: removed CHIPS and LHEP builders.
+- tests/test45 (test45-V09-06-00)
+  o Migration to DrawTrajectory() ('i_mode' argument no longer available).
+- tests/test46 (test46-V09-06-02)
+  o Removed dependencies on CHIPS and updated diagrams.
+  o Migration to DrawTrajectory() ('i_mode' argument no longer available).
+  o Removed scripts, now moved to verification module.
+- tests/test47 (test47-V09-06-00)
+  o Removed CHIPS and FTFC configurations.
+- tests/test48 (test48-V09-06-04)
+  o muminus: added experimental data on NNeut vs EKin (from R.M.Sundelin).
+  o PlotMuMinus: added scripts to overlay Sundelin's data on simulated plots.
+  o g4val-upload-scripts: added xml for pbar upload.
+  o Removed CHIPS stopping and old Geisha-style capture/annihilation code.
+- tests/test50 (test50-V09-06-00)
+- tests/test52 (test52-V09-06-00)
+- tests/test53 (test53-V09-06-00)
+- tests/test54 (test54-V09-06-00)
+- tests/test55 (test55-V09-06-00)
+  o Migration to DrawTrajectory() ('i_mode' argument no longer available).
+- tests/test60 (test60-V09-06-01)
+  o PhysicsList: replaced call to obsolete SetModel() method by SetEmModel().
+  o Migration to DrawTrajectory() ('i_mode' argument no longer available).
+- tests/test74 (test74-V09-06-00)
+  o Migration to DrawTrajectory() ('i_mode' argument no longer available).
