@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: GammaRayTelHadronPhysics.hh,v 1.5 2010-11-11 17:25:01 stesting Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: GammaRayTelHadronPhysics.hh 66477 2012-12-18 17:45:30Z mkelsey $
 //
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
@@ -131,19 +130,10 @@
 #include "G4HEAntiOmegaMinusInelastic.hh"
 
 // Stopping processes
-#include "G4AntiProtonAnnihilationAtRest.hh"
+#include "G4AntiProtonAbsorptionFritiof.hh"
 #include "G4AntiNeutronAnnihilationAtRest.hh"
-
-#ifdef TRIUMF_STOP_PIMINUS
-#include "G4PionMinusAbsorptionAtRest.hh"
-#else
-#include "G4PiMinusAbsorptionAtRest.hh"
-#endif
-#ifdef TRIUMF_STOP_KMINUS
-#include "G4KaonMinusAbsorption.hh"
-#else
-#include "G4KaonMinusAbsorptionAtRest.hh"
-#endif
+#include "G4PiMinusAbsorptionBertini.hh"
+#include "G4KaonMinusAbsorptionBertini.hh"
 
 // quark gluon string model with chips afterburner.
 #include "G4TheoFSGenerator.hh"
@@ -188,11 +178,7 @@ class GammaRayTelHadronPhysics : public G4VPhysicsConstructor
    G4LEPionMinusInelastic* theLEPionMinusModel;
    G4hMultipleScattering thePionMinusMult;
    G4hIonisation thePionMinusIonisation;
-#ifdef TRIUMF_STOP_PIMINUS
-   G4PionMinusAbsorptionAtRest thePionMinusAbsorption;
-#else
-   G4PiMinusAbsorptionAtRest thePionMinusAbsorption;
-#endif
+   G4PiMinusAbsorptionBertini thePionMinusAbsorption;
 
    // pi+ and pi-
    
@@ -217,11 +203,7 @@ class GammaRayTelHadronPhysics : public G4VPhysicsConstructor
    G4HEKaonMinusInelastic* theHEKaonMinusModel;
    G4hMultipleScattering theKaonMinusMult;
    G4hIonisation theKaonMinusIonisation;
-#ifdef TRIUMF_STOP_KMINUS
-   G4KaonMinusAbsorption theKaonMinusAbsorption;
-#else
-   G4PiMinusAbsorptionAtRest theKaonMinusAbsorption;
-#endif
+   G4KaonMinusAbsorptionBertini theKaonMinusAbsorption;
 
    // K0L
    G4KaonZeroLInelasticProcess theKaonZeroLInelastic;
@@ -246,7 +228,7 @@ class GammaRayTelHadronPhysics : public G4VPhysicsConstructor
    G4HEAntiProtonInelastic* theHEAntiProtonModel;
    G4hMultipleScattering theAntiProtonMult;
    G4hIonisation theAntiProtonIonisation;
-   G4AntiProtonAnnihilationAtRest  theAntiProtonAnnihilation;
+   G4AntiProtonAbsorptionFritiof  theAntiProtonAnnihilation;
     
    // neutron
    G4NeutronInelasticProcess  theNeutronInelastic;

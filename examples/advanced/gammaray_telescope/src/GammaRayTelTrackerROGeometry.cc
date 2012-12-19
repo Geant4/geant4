@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelTrackerROGeometry.cc,v 1.6 2006-06-29 15:57:10 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: GammaRayTelTrackerROGeometry.cc 66241 2012-12-13 18:34:42Z gunter $
 //
 // 
 // ------------------------------------------------------------

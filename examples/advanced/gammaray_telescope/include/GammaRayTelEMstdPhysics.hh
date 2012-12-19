@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelEMstdPhysics.hh,v 1.1 2009-11-18 15:57:21 flongo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: GammaRayTelEMstdPhysics.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 // 
 // ------------------------------------------------------------

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelTrackerSD.hh,v 1.5 2006-06-29 15:56:04 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: GammaRayTelTrackerSD.hh 66241 2012-12-13 18:34:42Z gunter $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland

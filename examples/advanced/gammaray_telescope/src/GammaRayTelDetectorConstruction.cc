@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelDetectorConstruction.cc,v 1.15 2006-06-29 15:56:22 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: GammaRayTelDetectorConstruction.cc 66241 2012-12-13 18:34:42Z gunter $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland

@@ -25,8 +25,7 @@
 //
 #ifdef G4ANALYSIS_USE
 //
-// $Id: GammaRayTelAnalysis.hh,v 1.18 2006-06-29 15:54:51 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: GammaRayTelAnalysis.hh 66241 2012-12-13 18:34:42Z gunter $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland

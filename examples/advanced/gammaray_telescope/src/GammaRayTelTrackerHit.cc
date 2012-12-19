@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelTrackerHit.cc,v 1.5 2010-11-11 17:25:01 stesting Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: GammaRayTelTrackerHit.cc 66241 2012-12-13 18:34:42Z gunter $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland

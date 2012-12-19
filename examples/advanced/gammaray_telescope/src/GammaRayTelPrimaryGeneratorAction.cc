@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelPrimaryGeneratorAction.cc,v 1.11 2007-11-09 16:33:34 flongo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: GammaRayTelPrimaryGeneratorAction.cc 66241 2012-12-13 18:34:42Z gunter $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
