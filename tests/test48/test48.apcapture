@@ -19,10 +19,4 @@ H
 #generator
 FTF
 #run
-#generator
-CHIPS
-#run
-#generator
-stopping
-#run
 #exit

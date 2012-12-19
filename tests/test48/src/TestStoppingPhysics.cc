@@ -72,21 +72,21 @@
 
 #include "G4PreCompoundModel.hh"
 
-#include "G4AntiProtonAnnihilationAtRest.hh"
-#include "G4AntiNeutronAnnihilationAtRest.hh"
+// #include "G4AntiProtonAnnihilationAtRest.hh"
+// #include "G4AntiNeutronAnnihilationAtRest.hh"
 
 //
 // there're 2 alternative implementations of the pi- absorbtion at rest
 // the former was widely used in a variety of physics lists until replaced
 // by the chips-bound code, while the later has not been used/test at all
 //
-#include "G4PionMinusAbsorptionAtRest.hh"
-#include "G4PiMinusAbsorptionAtRest.hh"
+// #include "G4PionMinusAbsorptionAtRest.hh"
+// #include "G4PiMinusAbsorptionAtRest.hh"
 //
 // another "duplicate"
 //
-#include "G4KaonMinusAbsorption.hh"
-#include "G4KaonMinusAbsorptionAtRest.hh"
+// #include "G4KaonMinusAbsorption.hh"
+// #include "G4KaonMinusAbsorptionAtRest.hh"
 
 // Bertini cascade
 // for pi-
@@ -259,12 +259,14 @@ G4VProcess* TestStoppingPhysics::GetProcess(const G4String& gen_name,
 
   // Choose generator
   //
-  if(gen_name == "stopping" || gen_name == "stopping-alt" || gen_name == "captureUpdate"
+  if(gen_name == "stopping" || gen_name == "captureUpdate"
 #if defined (USE_MUCAPTURE)
      || gen_name == "newmustopping" 
 #endif
      ) 
   {
+
+/*
     if(part_name == "anti_proton")   
     {
       theProcess = new G4AntiProtonAnnihilationAtRest();
@@ -297,7 +299,9 @@ G4VProcess* TestStoppingPhysics::GetProcess(const G4String& gen_name,
 	  theProcess = new G4KaonMinusAbsorptionAtRest();
        }
     }
-    else if ( part_name == "mu-")
+
+    else */ 
+    if ( part_name == "mu-")
     {
 
       if (gen_name == "stopping" )

@@ -101,14 +101,20 @@ else()
     add_definitions(-DUSE_MUCAPTURE)
   endif (USE_MUCAPTURE)
     
-  #------------------------------------------------------------------------------
-  # - collates all the sources and headers in and below the current directory
-  #------------------------------------------------------------------------------
-  GEANT4_COLLATE_APPLICATION_SOURCES(TEST48_SOURCES) ## this will not work for mu2e mucapture style include
+  #----------------------------------------------------------------------------
+  # Locate sources and headers for this project
+  # NB: headers are included so they will show up in IDEs
+  #
+  file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
+  file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
+  
+  #----------------------------------------------------------------------------
+  # Add the executable, and link it to the Geant4 libraries
+  #
+  add_executable(test48 test48.cc ${sources} ${headers})
   
   include_directories(${PROJECT_SOURCE_DIR}/include ${INCLUDE_DIRECTORIES} ${EXTRA_INCLUDE_DIRECTORIES} ${ROOT_INCLUDE_DIR})
 
-  add_executable(test48 ${TEST48_SOURCES})
   target_link_libraries(test48 ${EXTRA_LIBRARIES} ${Geant4_LIBRARIES} ${ROOT_LIBRARIES} ${XercesC_LIBRARIES})
   
   #message("CMAKE_INCLUDE_PATH: ${CMAKE_INCLUDE_PATH}")

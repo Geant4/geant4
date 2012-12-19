@@ -15,6 +15,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+December 18, 2012 Krzysztof Genser (test48-V09-06-04)
+- correcting CMakeLists.txt after deprecation of
+  GEANT4_COLLATE_APPLICATION_SOURCES
+
+December 18, 2012 Julia Yarba (test48-V09-06-03)
+- Removed old Geisha-style capture/annihilation code ("stopping" model)
+  (shell scripts updated but ROOT macrons still need to be cleaned up !)  
+
 December 11, 2012 Alberto Ribon (test48-V09-06-02)
 - Removed CHIPS stopping. 
   (Clean-up of shell scripts and ROOT macros need to be done!)

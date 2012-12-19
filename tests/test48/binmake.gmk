@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.149 2010-11-23 13:21:37 gcosmo Exp $
+# $Id$
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.

@@ -19,10 +19,4 @@ C
 #generator
 BertiniPreCo
 #run
-#generator
-CHIPS
-#run
-#generator
-stopping
-#run
 #exit

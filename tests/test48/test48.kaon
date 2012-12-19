@@ -19,14 +19,4 @@ H
 #generator
 Bertini
 #run
-#generator
-CHIPS
-#run
-#generator
-stopping
-#run
-#exit
-#generator
-stopping-alt
-#run
 #exit
