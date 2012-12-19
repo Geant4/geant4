@@ -60,9 +60,7 @@ if(GEANT4_USE_INVENTOR)
     endif()
   endif()
 
-  GEANT4_ADD_FEATURE(
-    GEANT4_USE_INVENTOR "Build OpenInventor Driver"
-    )
+  GEANT4_ADD_FEATURE(GEANT4_USE_INVENTOR "Build OpenInventor Driver")
 endif()
 
 
@@ -98,7 +96,7 @@ endif()
 #-----------------------------------------------------------------------
 if(UNIX)
   # - Support for Client/Server DAWN driver
-  # mark as advanced because user should know what they're doing to use this
+  # mark as advanced because user should know what they're doing here
   option(GEANT4_USE_NETWORKDAWN "Build Dawn driver with Client/Server support" OFF)
   #
   # Possible headers checks for needed network parts?

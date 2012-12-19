@@ -22,7 +22,7 @@
 # with compiler specifics and linker flags
 if(NOT WIN32)
   include(Geant4BuildModes)
-endif(NOT WIN32)
+endif()
 
 #-----------------------------------------------------------------------
 # Optional compiler definitions which are applicable globally
@@ -156,13 +156,13 @@ endif()
 # if it can be protected so that the genwindef target wouldn't be defined
 # more than once... Put it here for now...
 if(WIN32)
-    add_definitions(-DG4LIB_BUILD_DLL)
-    # Assume the sources are co-located 
-    get_filename_component(_genwindef_src_dir ${CMAKE_CURRENT_LIST_FILE} PATH)
-    add_executable(genwindef EXCLUDE_FROM_ALL 
-        ${_genwindef_src_dir}/genwindef/genwindef.cpp 
-        ${_genwindef_src_dir}/genwindef/LibSymbolInfo.h
-        ${_genwindef_src_dir}/genwindef/LibSymbolInfo.cpp)
+  add_definitions(-DG4LIB_BUILD_DLL)
+  # Assume the sources are co-located 
+  get_filename_component(_genwindef_src_dir ${CMAKE_CURRENT_LIST_FILE} PATH)
+  add_executable(genwindef EXCLUDE_FROM_ALL 
+    ${_genwindef_src_dir}/genwindef/genwindef.cpp 
+    ${_genwindef_src_dir}/genwindef/LibSymbolInfo.h
+    ${_genwindef_src_dir}/genwindef/LibSymbolInfo.cpp)
 endif()
 
 

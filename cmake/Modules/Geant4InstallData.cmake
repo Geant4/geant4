@@ -7,6 +7,7 @@
 #                          available pre-existing installed and optionally
 #                          downloaded and installed from the net.
 #
+
 #-----------------------------------------------------------------------
 # Install examples if requested
 #
@@ -18,7 +19,8 @@ if(GEANT4_INSTALL_EXAMPLES)
     DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/Geant4-${Geant4_VERSION}
     COMPONENT Examples
     PATTERN "CVS" EXCLUDE
-    PATTERN ".svn" EXCLUDE)
+    PATTERN ".svn" EXCLUDE
+    )
 endif()
 
 GEANT4_ADD_FEATURE(GEANT4_INSTALL_EXAMPLES "Will install source code for Geant4 examples")

@@ -69,8 +69,6 @@ function(get_system_include_dirs _dirs)
   endif()
 endfunction()
 
-
-
 #-----------------------------------------------------------------------
 # Only create script if we have a global library build...
 #
@@ -176,8 +174,8 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
 
   # Configure the script
   # - BUILD TREE
-  # Ouch, the include path will be LONG, but at least we always have absolute
-  # paths...
+  # Ouch, the include path will be LONG, but at least we always have 
+  # absolute paths...
   set(GEANT4_CONFIG_SELF_LOCATION "# BUILD TREE IS NON-RELOCATABLE")
   set(GEANT4_CONFIG_INSTALL_PREFIX "${PROJECT_BINARY_DIR}")
   set(GEANT4_CONFIG_INSTALL_EXECPREFIX \"\")
@@ -197,21 +195,25 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
   # Not sure if version check is o.k., but I'll be shocked if we ever see
   # a CMake 2.7 in the wild...
   if(${CMAKE_VERSION} VERSION_GREATER 2.7)
-    configure_file(${CMAKE_SOURCE_DIR}/cmake/Templates/geant4-config.in
+    configure_file(
+      ${CMAKE_SOURCE_DIR}/cmake/Templates/geant4-config.in
       ${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/geant4-config
-      @ONLY)
+      @ONLY
+      )
 
     file(COPY 
       ${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/geant4-config
       DESTINATION ${PROJECT_BINARY_DIR}
       FILE_PERMISSIONS
-      OWNER_READ OWNER_WRITE OWNER_EXECUTE
-      GROUP_READ GROUP_EXECUTE
-      WORLD_READ WORLD_EXECUTE)
+        OWNER_READ OWNER_WRITE OWNER_EXECUTE
+        GROUP_READ GROUP_EXECUTE
+        WORLD_READ WORLD_EXECUTE
+      )
   else()
     # Changing permissions is awkward, so just configure and document
     # that you have to do 'sh geant4-config' in this case.
-    configure_file(${CMAKE_SOURCE_DIR}/cmake/Templates/geant4-config.in
+    configure_file(
+      ${CMAKE_SOURCE_DIR}/cmake/Templates/geant4-config.in
       ${PROJECT_BINARY_DIR}/geant4-config
       @ONLY
       )
@@ -240,7 +242,8 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
   endif() 
 
   # Configure the install tree script
-  configure_file(${CMAKE_SOURCE_DIR}/cmake/Templates/geant4-config.in
+  configure_file(
+    ${CMAKE_SOURCE_DIR}/cmake/Templates/geant4-config.in
     ${PROJECT_BINARY_DIR}/InstallTreeFiles/geant4-config
     @ONLY
     )

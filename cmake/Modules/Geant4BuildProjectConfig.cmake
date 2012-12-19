@@ -16,7 +16,6 @@ foreach(_mode DEBUG MINSIZEREL RELEASE RELWITHDEBINFO)
 set(Geant4_CXX_FLAGS_${_mode} \"${CMAKE_CXX_FLAGS_${_mode}}\")")
 endforeach()
 
-
 # Core compile definitions...
 set(GEANT4_CORE_DEFINITIONS )
 
@@ -28,7 +27,6 @@ set(GEANT4_THIRD_PARTY_IMPORT_SETUP )
 
 # Externals libraries that may be present
 set(GEANT4_EXTERNALS_TARGETS )
-
 
 # - Stuff from Geant4LibraryBuildOptions.cmake
 if(GEANT4_BUILD_STORE_TRAJECTORY)
@@ -44,7 +42,6 @@ endif()
 if(WIN32)
   list(APPEND GEANT4_CORE_DEFINITIONS -DG4LIB_BUILD_DLL)
 endif()
-
 
 # - Stuff from Geant4OptionalComponents.cmake
 # - CLHEP
@@ -91,8 +88,8 @@ if(GEANT4_USE_QT)
 # Qt reimport on WIN32
 set(QT_QMAKE_EXECUTABLE ${QT_QMAKE_EXECUTABLE})
 set(QT_USE_IMPORTED_TARGETS ON)
-find_package(Qt4 REQUIRED)"
-        )
+find_package(Qt4 REQUIRED)
+    ")
   endif()
 endif()
 
@@ -107,8 +104,9 @@ set(GEANT4_CMAKE_DIR "${PROJECT_BINARY_DIR}")
 # GEANT4_BUILDTREE_INCLUDE_DIRS property and use this to create the 
 # header setup
 #
-get_property(__geant4_buildtree_include_dirs GLOBAL PROPERTY
-    GEANT4_BUILDTREE_INCLUDE_DIRS)
+get_property(__geant4_buildtree_include_dirs GLOBAL PROPERTY 
+  GEANT4_BUILDTREE_INCLUDE_DIRS
+  )
 
 set(GEANT4_INCLUDE_DIR_SETUP "
 # Geant4 configured for use from the build tree - absolute paths are used.
@@ -125,41 +123,51 @@ set(CMAKE_MODULE_PATH \${CMAKE_MODULE_PATH} ${CMAKE_MODULE_PATH})
 #
 get_property(__geant4_exported_targets GLOBAL PROPERTY GEANT4_EXPORTED_TARGETS)
 
-export(TARGETS ${__geant4_exported_targets} FILE
-    ${PROJECT_BINARY_DIR}/Geant4LibraryDepends.cmake)
-
+export(TARGETS ${__geant4_exported_targets} 
+  FILE ${PROJECT_BINARY_DIR}/Geant4LibraryDepends.cmake
+  )
 
 # Configure the build tree config file...
-configure_file(${PROJECT_SOURCE_DIR}/cmake/Templates/Geant4Config.cmake.in
-    ${PROJECT_BINARY_DIR}/Geant4Config.cmake
-    @ONLY)
+configure_file(
+  ${PROJECT_SOURCE_DIR}/cmake/Templates/Geant4Config.cmake.in
+  ${PROJECT_BINARY_DIR}/Geant4Config.cmake
+  @ONLY
+  )
 
 # Configure the build tree versioning file
-configure_file(${PROJECT_SOURCE_DIR}/cmake/Templates/Geant4ConfigVersion.cmake.in
-    ${PROJECT_BINARY_DIR}/Geant4ConfigVersion.cmake
-    @ONLY)
+configure_file(
+  ${PROJECT_SOURCE_DIR}/cmake/Templates/Geant4ConfigVersion.cmake.in
+  ${PROJECT_BINARY_DIR}/Geant4ConfigVersion.cmake
+  @ONLY
+  )
 
 # Copy the custom modules into the build tree
-configure_file(${PROJECT_SOURCE_DIR}/cmake/Modules/CMakeMacroParseArguments.cmake
+configure_file(
+  ${PROJECT_SOURCE_DIR}/cmake/Modules/CMakeMacroParseArguments.cmake
   ${PROJECT_BINARY_DIR}/Modules/CMakeMacroParseArguments.cmake
   COPYONLY
   )
 
 foreach(_mod AIDA HepMC Pythia6 ROOT StatTest)
-  configure_file(${PROJECT_SOURCE_DIR}/cmake/Modules/Find${_mod}.cmake
+  configure_file(
+    ${PROJECT_SOURCE_DIR}/cmake/Modules/Find${_mod}.cmake
     ${PROJECT_BINARY_DIR}/Modules/Find${_mod}.cmake
     COPYONLY
     )
 endforeach()
 
 # Copy the Main and Internal Use file into the build tree
-configure_file(${PROJECT_SOURCE_DIR}/cmake/Templates/UseGeant4.cmake
-    ${PROJECT_BINARY_DIR}/UseGeant4.cmake
-    COPYONLY)
-configure_file(${PROJECT_SOURCE_DIR}/cmake/Templates/UseGeant4_internal.cmake
-    ${PROJECT_BINARY_DIR}/UseGeant4_internal.cmake
-    COPYONLY)
+configure_file(
+  ${PROJECT_SOURCE_DIR}/cmake/Templates/UseGeant4.cmake
+  ${PROJECT_BINARY_DIR}/UseGeant4.cmake
+  COPYONLY
+  )
 
+configure_file(
+  ${PROJECT_SOURCE_DIR}/cmake/Templates/UseGeant4_internal.cmake
+  ${PROJECT_BINARY_DIR}/UseGeant4_internal.cmake
+  COPYONLY
+  )
 
 #-----------------------------------------------------------------------
 # - Generate Install Tree Configuration Files
@@ -170,22 +178,22 @@ set(GEANT4_CMAKE_DIR ${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME}-${${PROJECT_NAME}_V
 # Header path for install tree is dependent on whether we have a relocatable
 # install.
 if(CMAKE_INSTALL_IS_NONRELOCATABLE)
-    # Use ABSOLUTE paths...
-    set(GEANT4_INCLUDE_DIR_SETUP "
+  # Use ABSOLUTE paths...
+  set(GEANT4_INCLUDE_DIR_SETUP "
 # Geant4 configured for the install tree with absolute paths, so use these
 set(Geant4_INCLUDE_DIR \"${CMAKE_INSTALL_FULL_INCLUDEDIR}/Geant4\")
-")
+  ")
 else()
-    # Use RELATIVE paths... Where we measure relative to GEANT4_CMAKE_DIR
-    file(RELATIVE_PATH GEANT4_RELATIVE_HEADER_PATH
-        ${CMAKE_INSTALL_PREFIX}/${GEANT4_CMAKE_DIR}
-        ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
+  # Use RELATIVE paths... Where we measure relative to GEANT4_CMAKE_DIR
+  file(RELATIVE_PATH GEANT4_RELATIVE_HEADER_PATH
+    ${CMAKE_INSTALL_PREFIX}/${GEANT4_CMAKE_DIR}
+    ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
     )
 
-    set(GEANT4_INCLUDE_DIR_SETUP "
+  set(GEANT4_INCLUDE_DIR_SETUP "
 # Geant4 configured for the install with relative paths, so use these
 get_filename_component(Geant4_INCLUDE_DIR \"\${_thisdir}/${GEANT4_RELATIVE_HEADER_PATH}\" ABSOLUTE)
-")
+  ")
 endif()
 
 set(GEANT4_MODULE_PATH_SETUP)
@@ -193,22 +201,23 @@ set(GEANT4_MODULE_PATH_SETUP)
 # Install exported targets file for the install tree - we just install
 # the named export
 install(EXPORT Geant4LibraryDepends 
-    DESTINATION ${GEANT4_CMAKE_DIR}
-    COMPONENT Development
-)
-
+  DESTINATION ${GEANT4_CMAKE_DIR}
+  COMPONENT Development
+  )
 
 # Configure the install tree config file...
-configure_file(${PROJECT_SOURCE_DIR}/cmake/Templates/Geant4Config.cmake.in
-    ${PROJECT_BINARY_DIR}/InstallTreeFiles/Geant4Config.cmake
-    @ONLY
-)
+configure_file(
+  ${PROJECT_SOURCE_DIR}/cmake/Templates/Geant4Config.cmake.in
+  ${PROJECT_BINARY_DIR}/InstallTreeFiles/Geant4Config.cmake
+  @ONLY
+  )
 
 # Configure the install tree config versioning file...
-configure_file(${PROJECT_SOURCE_DIR}/cmake/Templates/Geant4ConfigVersion.cmake.in
-    ${PROJECT_BINARY_DIR}/InstallTreeFiles/Geant4ConfigVersion.cmake
-    @ONLY
-)
+configure_file(
+  ${PROJECT_SOURCE_DIR}/cmake/Templates/Geant4ConfigVersion.cmake.in
+  ${PROJECT_BINARY_DIR}/InstallTreeFiles/Geant4ConfigVersion.cmake
+  @ONLY
+  )
 
 # Install the config, config versioning and use files
 install(FILES

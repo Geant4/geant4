@@ -5,7 +5,7 @@
 #
 #
 #-----------------------------------------------------------------------
-# C++ Standard Setup
+# C++ ISO Standard Setup
 #-----------------------------------------------------------------------
 # If the compiler supports setting a particular C++ Standard to use
 # when compiling, configure the following global variables that can

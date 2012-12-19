@@ -12,19 +12,19 @@
 #  DATADIR          - read-only architecture-independent data (DATAROOTDIR)
 #  MANDIR           - man documentation (DATAROOTDIR/man)
 #  DOCDIR           - documentation root (DATAROOTDIR/doc/PROJECT_NAME)
-# Each CMAKE_INSTALL_<dir> value may be passed to the DESTINATION options of
-# install() commands for the corresponding file type.  If the includer does
-# not define a value the above-shown default will be used and the value will
-# appear in the cache for editing by the user.
-# If any of these values are absolute paths, the install of Geant4 is regarded 
-# as non-relocatable, and the variable:
+# Each CMAKE_INSTALL_<dir> value may be passed to the DESTINATION options 
+# of install() commands for the corresponding file type. If the includer 
+# does not define a value the above-shown default will be used and the 
+# value will appear in the cache for editing by the user.
+# If any of these values are absolute paths, the install of Geant4 is 
+# regarded as non-relocatable, and the variable:
 #  CMAKE_INSTALL_IS_NONRELOCATABLE
 # will be set.
 # Each CMAKE_INSTALL_FULL_<dir> value contains an absolute path constructed
 # from the corresponding destination by prepending (if necessary) the value
 # of CMAKE_INSTALL_PREFIX.
 
-#=============================================================================
+#-----------------------------------------------------------------------
 # Copyright 2011 Nikita Krupen'ko <krnekit@gmail.com>
 # Copyright 2011 Kitware, Inc.
 #
@@ -60,7 +60,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # 
-# ------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # 
 # The above copyright and license notice applies to distributions of
 # CMake in source and binary form.  Some source files contain additional
@@ -69,7 +69,7 @@
 # compatible licenses provide their own copyright notices documented in
 # corresponding subdirectories.
 # 
-# ------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # 
 # CMake was initially developed by Kitware with the following sponsorship:
 # 
@@ -85,14 +85,13 @@
 # 
 #  * Kitware, Inc.
 # 
-#=============================================================================
+#-----------------------------------------------------------------------
 
 # Installation directories
 #
 if(NOT DEFINED CMAKE_INSTALL_BINDIR)
   set(CMAKE_INSTALL_BINDIR "bin" CACHE PATH "user executables (bin)")
 endif()
-
 
 if(NOT DEFINED CMAKE_INSTALL_LIBDIR)
   set(_LIBDIR_DEFAULT "lib")
@@ -123,16 +122,16 @@ if(NOT DEFINED CMAKE_INSTALL_INCLUDEDIR)
   set(CMAKE_INSTALL_INCLUDEDIR "include" CACHE PATH "C header files (include)")
 endif()
 
-
 if(NOT DEFINED CMAKE_INSTALL_DATAROOTDIR)
   set(CMAKE_INSTALL_DATAROOTDIR "share" CACHE PATH "read-only architecture-independent data root (share)")
 endif()
 
-#-----------------------------------------------------------------------------
-# Values whose defaults are relative to DATAROOTDIR.  Store empty values in
-# the cache and store the defaults in local variables if the cache values are
-# not set explicitly.  This auto-updates the defaults as DATAROOTDIR changes.
-
+#-----------------------------------------------------------------------
+# Values whose defaults are relative to DATAROOTDIR.  
+# Store empty values in the cache and store the defaults in local 
+# variables if the cache values are not set explicitly. This auto-updates 
+# the defaults as DATAROOTDIR changes.
+#
 if(NOT CMAKE_INSTALL_DATADIR)
   set(CMAKE_INSTALL_DATADIR "" CACHE PATH "read-only architecture-independent data (DATAROOTDIR)")
   set(CMAKE_INSTALL_DATADIR "${CMAKE_INSTALL_DATAROOTDIR}")
@@ -147,8 +146,6 @@ if(NOT CMAKE_INSTALL_DOCDIR)
   set(CMAKE_INSTALL_DOCDIR "" CACHE PATH "documentation root (DATAROOTDIR/doc/PROJECT_NAME)")
   set(CMAKE_INSTALL_DOCDIR "${CMAKE_INSTALL_DATAROOTDIR}/doc/${PROJECT_NAME}")
 endif()
-
-#-----------------------------------------------------------------------------
 
 mark_as_advanced(
   CMAKE_INSTALL_BINDIR

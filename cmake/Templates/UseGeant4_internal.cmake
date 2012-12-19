@@ -5,20 +5,17 @@
 #
 # IT SHOULD NOT BE INSTALLED!
 
-#----------------------------------------------------------------------------
-# Special internal functions for building tests.
-#
-# - We need some internal helper modules, these should be available in
-# the buildtree
 include(CMakeMacroParseArguments)
 
-#----------------------------------------------------------------------------
-# function GEANT4_LINK_LIBRARY( <name> source1 source2 ...
-#                               [TYPE STATIC|SHARED] 
-#                               LIBRARIES library1 library2 ... )
+#-----------------------------------------------------------------------
+# Special internal functions for building tests.
+#-----------------------------------------------------------------------
+# function geant4_link_library(<name> source1 source2 ...
+#                              [TYPE STATIC|SHARED] 
+#                              LIBRARIES library1 library2 ...)
 #
-function(GEANT4_LINK_LIBRARY library)
-  CMAKE_PARSE_ARGUMENTS(ARG "TYPE;LIBRARIES" "" ${ARGN})
+function(geant4_link_library library)
+  cmake_parse_arguments(ARG "TYPE;LIBRARIES" "" ${ARGN})
   set(sources)
 
   # - Fill sources
@@ -63,25 +60,23 @@ function(GEANT4_LINK_LIBRARY library)
     add_library( ${library} ${ARG_TYPE} ${sources})
     target_link_libraries(${library} ${ARG_LIBRARIES} ${Geant4_LIBRARIES})
   endif()
-
 endfunction()
 
-
-#----------------------------------------------------------------------------
-# function GEANT4_EXECUTABLE( <name> source1 source2 ...
-#                             LIBRARIES library1 library2 ... )
+#-----------------------------------------------------------------------
+# function geant4_executable(<name> source1 source2 ...
+#                            LIBRARIES library1 library2 ... )
 #
-function(GEANT4_EXECUTABLE executable)
-  CMAKE_PARSE_ARGUMENTS(ARG "" "" "LIBRARIES" ${ARGN})
+function(geant4_executable executable)
+  cmake_parse_arguments(ARG "" "" "LIBRARIES" ${ARGN})
 
   set(sources)
 
-  foreach( fp ${ARG_UNPARSED_ARGUMENTS})
+  foreach(fp ${ARG_UNPARSED_ARGUMENTS})
     file(GLOB files ${fp})
     if(files)
-      set( sources ${sources} ${files})
+      set(sources ${sources} ${files})
     else()
-      set( sources ${sources} ${fp})
+      set(sources ${sources} ${fp})
     endif()
   endforeach()
 
@@ -92,10 +87,9 @@ function(GEANT4_EXECUTABLE executable)
   set_target_properties(${executable} PROPERTIES OUTPUT_NAME ${executable})
 endfunction()
 
-
-#----------------------------------------------------------------------------
-# function GEANT4_ADD_TEST( <name> COMMAND cmd [arg1... ] 
-#                           [PRECMD cmd [arg1...]] [POSTCMD cmd [arg1...]]
+#-----------------------------------------------------------------------
+# function geant4_add_test(<name> COMMAND cmd [arg1... ] 
+#                          [PRECMD cmd [arg1...]] [POSTCMD cmd [arg1...]]
 #                           [OUTPUT outfile] [ERROR errfile]
 #                           [WORKING_DIRECTORY directory]
 #                           [ENVIRONMENT var1=val1 var2=val2 ...
@@ -107,14 +101,17 @@ endfunction()
 #                           [PASSREGEX exp] [FAILREGEX epx]
 #                           [LABELS label1 label2 ...])
 #
-function(GEANT4_ADD_TEST test)
+function(geant4_add_test test)
   if(NOT CMAKE_PROJECT_NAME STREQUAL Geant4)
     message(WARNING "function GEANT4_ADD_TEST is only for internal Geant4 usage")
     return()
   endif()
 
-  CMAKE_PARSE_ARGUMENTS(ARG "DEBUG" "TIMEOUT;BUILD;OUTPUT;ERROR;SOURCE_DIR;BINARY_DIR;PROJECT;PASSREGEX;FAILREGEX;WORKING_DIRECTORY" 
-    "COMMAND;PRECMD;POSTCMD;ENVIRONMENT;DEPENDS;LABELS" ${ARGN})
+  cmake_parse_arguments(ARG 
+    "DEBUG" 
+    "TIMEOUT;BUILD;OUTPUT;ERROR;SOURCE_DIR;BINARY_DIR;PROJECT;PASSREGEX;FAILREGEX;WORKING_DIRECTORY" 
+    "COMMAND;PRECMD;POSTCMD;ENVIRONMENT;DEPENDS;LABELS" 
+    ${ARGN})
 
   if(NOT CMAKE_GENERATOR MATCHES Makefiles)
     set(_cfg $<CONFIGURATION>/)
@@ -190,7 +187,6 @@ function(GEANT4_ADD_TEST test)
   endif()
   set(_command ${_command} -P ${_driver})
 
-
   #- Now we can actually add the test
   if(ARG_BUILD)
     if(NOT ARG_SOURCE_DIR)
@@ -246,6 +242,5 @@ function(GEANT4_ADD_TEST test)
   else()
     set_property(TEST ${test} PROPERTY LABELS Nightly)  
   endif()
-
 endfunction()
 

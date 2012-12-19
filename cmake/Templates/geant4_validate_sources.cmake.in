@@ -22,7 +22,6 @@
 # file "geant4_validate_sources.cmake" SHOULD NOT BE EDITED
 #
 
-
 #-----------------------------------------------------------------------
 # List all sources that we know cause false positives, e.g. obsolete,
 # but still on disk
@@ -52,13 +51,11 @@ set(GEANT4_FALSEPOSITIVE_SOURCES
   XXChannel.cc
   )
 
-
 #-----------------------------------------------------------------------
 # First locate our current source tree
 #
 set(GEANT4_SOURCE_TREE "@PROJECT_SOURCE_DIR@/source")
 message(STATUS "Scanning source tree ${GEANT4_SOURCE_TREE}")
-
 
 #-----------------------------------------------------------------------
 # Now find all of the sources.cmake files...
@@ -152,6 +149,4 @@ if(GEANT4_BUILD_ISINCONSISTENT)
 else()
   message(STATUS "Geant4 build appears consistent")
 endif()
-
-
 

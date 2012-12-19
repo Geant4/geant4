@@ -1,6 +1,7 @@
 # - Geant4 CMake Configuration File for External Projects
 # This file is configured by Geant4 for use by an external project
-# As this file is configured by Geant4's CMake system it SHOULD NOT BE EDITED
+# This file is configured by Geant4's CMake system and SHOULD NOT BE EDITED
+#
 # It defines the following variables
 #  Geant4_INCLUDE_DIRS - include directories for Geant4
 #  Geant4_DEFINITIONS  - compile definitions needed to use Geant4
@@ -8,8 +9,8 @@
 #  Geant4_CXX_FLAGS    - Recommended CXX flags for the compiler used to
 #                        build the Geant4 libraries.
 #  Geant4_CXX_FLAGS_<CONFIG> - Recommended CXX flags for build mode CONFIG.
-#  Geant4_USE_FILE     - path to a CMake module which may be included to help
-#                        setup CMake variables 
+#  Geant4_USE_FILE     - path to a CMake module which may be included to 
+#                        help setup CMake variables 
 #
 # You may supply a version number through find_package which will be checked
 # against the version of this build. Standard CMake logic is used so that
@@ -18,12 +19,12 @@
 #
 #  VERSION_OF_THIS_BUILD >= VERSION_REQUESTED
 #
-# By default only the core (or kernel) of Geant4 is activated by this module.
-# You can specify additional components of Geant4 through the COMPONENTS
-# argument to find_package. By default, all core libraries of Geant4 are
-# appended to the Geant4_LIBRARIES variable. Specifiying additional components
-# will enable a check on the existence of these components, with the following
-# per component variables being set:
+# By default only the core (or kernel) of Geant4 is activated by this 
+# module. You can specify additional components of Geant4 through the 
+# COMPONENTS argument to find_package. By default, all core libraries of 
+# Geant4 are appended to the Geant4_LIBRARIES variable. Specifiying 
+# additional components will enable a check on the existence of these 
+# components, with the following per component variables being set:
 #
 #  Geant4_${COMPONENT}_FOUND    TRUE is the Geant4 library "component" was
 #                               found
@@ -31,18 +32,18 @@
 #  Geant4_${COMPONENT}_LIBRARY  Contains the library for the specified
 #                               "component" IF the component is a library.
 #
-# In Geant4, components can be optional subcomponents of an always available
-# library. In that case there will be no Geant4_{COMPONENT}_LIBRARY variable.
-# These non-library components are generally activated by compile definitions, 
-# and in these cases the appropriate definition will be added to the
-# Geant4_DEFINITIONS component
+# In Geant4, components can be optional subcomponents of an always 
+# available library. In that case there will be no 
+# Geant4_{COMPONENT}_LIBRARY variable. These non-library components are 
+# generally activated by compile definitions, and in these cases the 
+# appropriate definition will be added to the Geant4_DEFINITIONS component.
 #
-# If you specify components and use the REQUIRED option to find_package, then
-# the module will issue a FATAL_ERROR if this build of Geant does not have 
-# the requested component(s).
+# If you specify components and use the REQUIRED option to find_package, 
+# then the module will issue a FATAL_ERROR if this build of Geant4 does 
+# not have the requested component(s).
 #
-# The list of components available generally corresponds to the optional extras
-# that Geant4 can be built with and are:
+# The list of components available generally corresponds to the optional 
+# extras that Geant4 can be built with and are:
 #
 #  gdml              (GDML support)
 #  g3tog4            (Geant3 geometry call list reader library)
@@ -70,17 +71,17 @@
 # argument is set. This is because these options do not depend on specific
 # components being available.
 #
-# ===========================================================================
+#-----------------------------------------------------------------------
 # Variables used by this module which can change the default behaviour of
 # this module. They need to be set prior to the call to find_package
 #
-#  Geant4_CONFIG_DEBUG    If set, enable extra messaging output which can be
-#                         helpful in debugging and identifying problems with
-#                         the configuration.
+#  Geant4_CONFIG_DEBUG    If set, enable extra messaging output which can 
+#                         be helpful in debugging and identifying problems 
+#                         with the configuration.
 #
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # DEBUG : print out the variables passed via find_package arguments
 #
 if(Geant4_CONFIG_DEBUG)
@@ -244,7 +245,7 @@ if(Geant4_vis_vrml_network_FOUND)
   list(REMOVE_ITEM Geant4_FIND_COMPONENTS vis_vrml_network)
 endif()
 
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Components which requires slightly more complex setup
 #
 # - Visualization : RayTracerX
@@ -433,7 +434,6 @@ endforeach()
 
 # - Now set them to Geant4_LIBRARIES
 set(Geant4_LIBRARIES ${_geant4_internal_libraries})
-
 
 #-----------------------------------------------------------------------
 # Remove any duplicates from the Geant4_{DEFINITIONS,INCLUDE_DIRS,LIBRARIES}

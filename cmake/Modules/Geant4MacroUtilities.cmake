@@ -10,7 +10,7 @@
 #                      TYPE   <valuetype>
 #                      DOC    <docstring>
 #                      [DEFAULT <elem>]
-#                      [CASE_INSENSITIVE]
+#                      [CASE_INSENSITIVE])
 #          Declare a cache variable <option> that can only take values
 #          listed in VALUES. TYPE may be FILEPATH, PATH or STRING.
 #          <docstring> should describe that option, and will appear in
@@ -25,13 +25,13 @@
 #
 # General Geant4
 # --------------
-# macro geant4_add_feature(<NAME> <DOCSTRING>)
-#       Add a Geant4 feature, whose activation is specified by the
-#       existence of the variable <NAME>, to the list of enabled/disabled
-#       features, plus a docstring describing the feature
+# function geant4_add_feature(<NAME> <DOCSTRING>)
+#          Add a Geant4 feature, whose activation is specified by the
+#          existence of the variable <NAME>, to the list of enabled/disabled
+#          features, plus a docstring describing the feature
 #
-# macro geant4_print_enabled_features()
-#       Print enabled Geant4 features plus their docstrings.
+# function geant4_print_enabled_features()
+#          Print enabled Geant4 features plus their docstrings.
 #
 # Datasets
 # --------
@@ -47,6 +47,12 @@
 #                                INCLUDE_DIRS dir1 dir2 ...
 #                                LIBRARIES library1 library2 ...)
 #
+
+# - Include guard
+if(__geant4macroutilities_isloaded)
+  return()
+endif()
+set(__geant4macroutilities_isloaded YES)
 
 include(Geant4MacroDefineModule)
 include(Geant4MacroLibraryTargets)
@@ -69,7 +75,7 @@ endmacro()
 #                      TYPE   <valuetype>
 #                      DOC    <docstring>
 #                      [DEFAULT <elem>]
-#                      [CASE_INSENSITIVE]
+#                      [CASE_INSENSITIVE])
 #          Declare a cache variable <option> that can only take values
 #          listed in VALUES. TYPE may be FILEPATH, PATH or STRING.
 #          <docstring> should describe that option, and will appear in
@@ -129,26 +135,26 @@ endfunction()
 #-----------------------------------------------------------------------
 # GENERAL GEANT4
 #-----------------------------------------------------------------------
-# macro geant4_add_feature(<NAME> <DOCSTRING>)
-#       Add a Geant4 feature, whose activation is specified by the
-#       existence of the variable <NAME>, to the list of enabled/disabled
-#       features, plus a docstring describing the feature
+# function geant4_add_feature(<NAME> <DOCSTRING>)
+#          Add a Geant4 feature, whose activation is specified by the
+#          existence of the variable <NAME>, to the list of enabled/disabled
+#          features, plus a docstring describing the feature
 #
-macro(GEANT4_ADD_FEATURE _var _description)
+function(GEANT4_ADD_FEATURE _var _description)
   if(${_var})
     set_property(GLOBAL APPEND PROPERTY GEANT4_ENABLED_FEATURES ${_var})
-  else(${_var})
+  else()
     set_property(GLOBAL APPEND PROPERTY GEANT4_DISABLED_FEATURES ${_var})
-  endif(${_var})
+  endif()
 
   set_property(GLOBAL PROPERTY ${_var}_DESCRIPTION "${_description}")
-endmacro()
+endfunction()
 
 #-----------------------------------------------------------------------
-# macro geant4_print_enabled_features()
-#       Print enabled Geant4 features plus their docstrings.
+# function geant4_print_enabled_features()
+#          Print enabled Geant4 features plus their docstrings.
 #
-macro(GEANT4_PRINT_ENABLED_FEATURES)
+function(geant4_print_enabled_features)
   set(_currentFeatureText "The following Geant4 features are enabled:")
   get_property(_enabledFeatures GLOBAL PROPERTY GEANT4_ENABLED_FEATURES)
 
@@ -164,7 +170,7 @@ macro(GEANT4_PRINT_ENABLED_FEATURES)
   endforeach(_feature)
 
   message(STATUS "${_currentFeatureText}\n")
-endmacro()
+endfunction()
 
 #-----------------------------------------------------------------------
 # GEANT4 DATASETS
@@ -173,7 +179,7 @@ endmacro()
 #          Locate latest version of dataset <name> in <dir>, setting value
 #          of output variable to the full path to the dataset
 #
-function(GEANT4_LATEST_VERSION dir name var)
+function(geant4_latest_version dir name var)
   file(GLOB files RELATIVE ${dir} ${dir}/${name}*)
   set(newer)
   foreach(file ${files})
@@ -193,8 +199,8 @@ endfunction()
 #                                INCLUDE_DIRS dir1 dir2 ...
 #                                LIBRARIES library1 library2 ...)
 #
-function(GEANT4_ADD_UNIT_TESTS)
-  CMAKE_PARSE_ARGUMENTS(ARG "" "" "INCLUDE_DIRS;LIBRARIES" ${ARGN})
+function(geant4_add_unit_tests)
+  cmake_parse_arguments(ARG "" "" "INCLUDE_DIRS;LIBRARIES" ${ARGN})
 
   foreach(incdir ${ARG_INCLUDE_DIRS})
     if(IS_ABSOLUTE ${incdir})

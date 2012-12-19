@@ -46,7 +46,7 @@ else()
   endif()
 endif()
 
-GEANT4_ADD_FEATURE(GEANT4_USE_SYSTEM_CLHEP "Use system CLHEP library")
+GEANT4_ADD_FEATURE(GEANT4_USE_SYSTEM_CLHEP "Using system CLHEP library")
 
 #-----------------------------------------------------------------------
 # Find required EXPAT package
@@ -78,7 +78,7 @@ else()
   endif()
 endif()
 
-GEANT4_ADD_FEATURE(GEANT4_USE_SYSTEM_EXPAT "Use system EXPAT library")
+GEANT4_ADD_FEATURE(GEANT4_USE_SYSTEM_EXPAT "Using system EXPAT library")
 
 #-----------------------------------------------------------------------
 # Find required ZLIB package
@@ -90,7 +90,7 @@ if(GEANT4_USE_SYSTEM_ZLIB)
   find_package(ZLIB REQUIRED)
 endif(GEANT4_USE_SYSTEM_ZLIB)
 
-GEANT4_ADD_FEATURE(GEANT4_USE_SYSTEM_ZLIB "Use system zlib library")
+GEANT4_ADD_FEATURE(GEANT4_USE_SYSTEM_ZLIB "Using system zlib library")
 
 #-----------------------------------------------------------------------
 # Optional Support for GDML - requires Xerces-C package
@@ -108,7 +108,7 @@ if(GEANT4_USE_GDML)
   find_package(XercesC REQUIRED)
 endif(GEANT4_USE_GDML)
 
-GEANT4_ADD_FEATURE(GEANT4_USE_GDML "Build Geant4 with GDML support")
+GEANT4_ADD_FEATURE(GEANT4_USE_GDML "Building Geant4 with GDML support")
 
 #-----------------------------------------------------------------------
 # Optional support for G3TOG4 convertion interface.
@@ -122,6 +122,6 @@ GEANT4_ADD_FEATURE(GEANT4_USE_GDML "Build Geant4 with GDML support")
 #
 if(UNIX)
   option(GEANT4_USE_G3TOG4 "Build Geant3 ASCII call list reader library" OFF)
-  GEANT4_ADD_FEATURE(GEANT4_USE_G3TOG4 "Build Geant3 ASCII call list reader library")
+  GEANT4_ADD_FEATURE(GEANT4_USE_G3TOG4 "Building Geant3 ASCII call list reader library")
 endif()
 

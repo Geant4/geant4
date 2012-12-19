@@ -44,7 +44,6 @@ fi
 # Used below should we be setup to be relocatable.
 scriptloc=`dirname $script`
 
-
 #-----------------------------------------------------------------------
 # Expansion and calculation of all needed variables
 #
@@ -52,7 +51,6 @@ prefix=@GEANT4_CONFIG_INSTALL_PREFIX@
 exec_prefix=@GEANT4_CONFIG_EXECPREFIX@
 libdir=@GEANT4_CONFIG_LIBDIR@
 includedirs="@GEANT4_CONFIG_INCLUDE_DIRS@"
-
 
 name="geant4"
 description="Geant4 toolkit for the simulation of the passage of particles through matter"
@@ -72,7 +70,6 @@ vis_libs="-lG4Tree \
 -lG4VRML \
 -lG4vis_management \
 -lG4modeling"
-
 
 #-----------------------------------------------------------------------
 # Core setup...

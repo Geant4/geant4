@@ -6,9 +6,10 @@
 # To pass variables to cpack from cmake, they must be configured
 # in this file.  
 
+# - NSIS Specifics
 if(CPACK_GENERATOR MATCHES "NSIS")
-  # There is a bug in NSI that does not handle full unix paths properly. Make
-  # sure there is at least one set of two (2) backlasshes.
+  # There is a bug in NSI that does not handle full unix paths properly. 
+  # Make sure there is at least one set of two (2) backlasshes.
   set(CPACK_PACKAGE_ICON "@CMAKE_SOURCE_DIR@\\cmake\\Templates\\g4_small.bmp")
   set(CPACK_NSIS_MUI_ICON "@CMAKE_SOURCE_DIR@\\cmake\\Templates\\G4.ico")
   set(CPACK_NSIS_MUI_UNIICON "@CMAKE_SOURCE_DIR@\\cmake\\Templates\\G4.ico")
@@ -19,8 +20,9 @@ if(CPACK_GENERATOR MATCHES "NSIS")
   set(CPACK_NSIS_MODIFY_PATH ON)
 endif()
 
-
+# - PackageMaker Specifics
 if("${CPACK_GENERATOR}" STREQUAL "PackageMaker")
   set(CPACK_PACKAGING_INSTALL_PREFIX "/${CPACK_PACKAGE_INSTALL_DIRECTORY}")
   set(CPACK_PACKAGE_DEFAULT_LOCATION "/Applications")
 endif()
+

@@ -29,6 +29,35 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+18th December 2012 -  Ben Morgan       (cmake-V09-06-00)
+- Templates/UseGeant4_internal.cmake : Tidy layout
+- Templates/UseGeant4.cmake : Tidy layout and remove obsolete 
+  geant4_collate_application_sources macro.
+- Templates/Geant4ConfigVersion.cmake.in : Tidy layout
+- Templates/Geant4Config.cmake.in : Tidy layout
+- Modules/ResolveCompilerPaths.cmake : Tidy layout and convert macros to
+  consistent use of lowercase naming.
+- Modules/MacroEnsureVersion.cmake : Tidy layout and convert macros to
+  consistent use of lowercase naming.
+- Modules/Geant4ValidateSources.cmake : Tidy up layout/commenting
+- Modules/Geant4TestDriver.cmake : Tidy up layout/commenting
+- Modules/Geant4OptionalComponents.cmake : Tidy up layout.
+- Modules/Geant4MakeRules_fortran.cmake : Remove obsolete file.
+- Modules/Geant4MacroDefineModule.cmake : Tidy up layout and add basic
+  documentation placeholders for main macros.
+- Modules/Geant4LibraryBuildOptions.cmake : Tidy up layout
+- Modules/Geant4InstallDirs.cmake : Tidy up layout
+- Modules/Geant4ConfigureConfigScript.cmake : Tidy up layout
+- Modules/Geant4CTest.cmake : Tidy up layout
+- Modules/Geant4CPackBase.cmake : Tidy up layout
+- Modules/Geant4BuildProjectConfig.cmake : Tidy up layout
+- Modules/Geant4BuildModes.cmake : Tidy up commenting and layout.
+- Modules/Geant4MacroUtilities.cmake : Functionize macros where possible,
+  add include guard and standardize on lower case for function and internal
+  variable names.
+- INSTALL.g4cmake : Remove this now obsolete file
+
+
 27th November 2012 -  Ben Morgan       (cmake-V09-05-79)
 - Templates/geant4-config.in : Correct listing of G3toG4 library,
   replacing "-lG3ToG4" with "-lG3toG4"
