@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.hh,v 1.5 2009-04-06 12:44:16 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 /////////////////////////////////////////////////////////////////////////
@@ -78,6 +77,11 @@ public:
 
   void SetWorldMaterial(const G4String&);
 
+  //PreShower
+  void SetPSMaterial(const G4String&);
+  void SetPSLength(G4double val);
+  void SetPSGap(G4double val);
+
   //ECAL
   void SetEcalMaterial(const G4String&);
   void SetEcalLength(G4double val);
@@ -87,13 +91,13 @@ public:
   //HCAL
   void SetHcalWidth(G4double);          
 
-  void SetBuildPreShower(G4bool);
+  void SetBuildAllMatTest(G4bool);
 
 private:
 
   void ConstructECAL();
   void ConstructHCAL();
-  void ConstructPreShower();
+  void ConstructAllMatTest();
 
   DetectorConstruction & operator=(const DetectorConstruction &right);
   DetectorConstruction(const DetectorConstruction&);
@@ -108,6 +112,13 @@ private:
   G4Material* worldMaterial;
   G4double worldZ;
   G4double worldXY;
+
+  //PreShower
+  G4Material*      psMaterial;
+  G4LogicalVolume* logicPS;
+  G4double         psLength;   
+  G4double         psgap;   
+  G4double         psPosZ;
 
   //ECAL
   G4LogicalVolume* logicECal;
@@ -136,8 +147,8 @@ private:
   G4double hcalThickness;
 
   //PreShower
-  G4double posCenterPreShowerZ;
-  G4bool buildPreShower;
+  G4double posCenterAllMatTestZ;
+  G4bool buildAllMatTest;
 };
 
 #endif

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.5 2010-04-13 10:07:39 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -150,7 +149,6 @@ private:
 
   G4double factorEcal;
   G4double factorHcal;
-  G4double factorHcal0;
  
   G4int verbose;
 

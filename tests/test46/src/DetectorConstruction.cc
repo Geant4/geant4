@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.14 2010-12-21 19:43:08 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 /////////////////////////////////////////////////////////////////////////
@@ -87,7 +86,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction():
-  logicWorld(0),physiWorld(0),logicECal(0),logicCrystal(0)
+  logicWorld(0),physiWorld(0),logicPS(0),logicECal(0),logicCrystal(0)
 {
   // create commands for interactive definition of the calorimeter
   detectorMessenger = new DetectorMessenger(this);
@@ -112,6 +111,12 @@ DetectorConstruction::DetectorConstruction():
   ecalMaterial  = manager->FindOrBuildMaterial("G4_PbWO4");
   ecalMaterial->GetIonisation()->SetBirksConstant(.008415*mm/MeV);
   scinMaterial = manager->FindOrBuildMaterial("G4_POLYSTYRENE");
+  psMaterial = worldMaterial;
+
+  // Geometry parameters of PreShower
+  psLength = 10*cm;
+  psgap = 10*cm;
+  
 
   // Geometry parameters of ECAl
   crystalLength = 230.0*mm;
@@ -140,7 +145,7 @@ DetectorConstruction::DetectorConstruction():
   cutsHCAL = new G4ProductionCuts();
   cutsHCAL->SetProductionCut(1.0*mm);
 
-  buildPreShower = false;
+  buildAllMatTest = false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -167,13 +172,13 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     hcalThickness += (2*gap + absorThickness[i] + scinThickness[i]);
   }
 
-  G4double coeff = 1.2;
-  if(buildPreShower) coeff = 2.2;
-  worldZ = coeff*(hcalThickness + crystalLength);
-  posCenterHcalZ = crystalLength*.5; 
-  posCenterEcalZ = -hcalThickness*.5;
-  posCenterPreShowerZ = posCenterEcalZ - crystalLength;
-  
+  G4double delta = 20*cm;
+  worldZ = hcalThickness + crystalLength + psLength + psgap + delta;
+  posCenterAllMatTestZ = 4*cm - 0.5*worldZ;
+  psPosZ = 10*cm + 0.5*(psLength - worldZ);
+  posCenterEcalZ = psPosZ + psgap + 0.5*(psLength + crystalLength);
+  posCenterHcalZ = posCenterEcalZ + 0.5*(crystalLength + hcalThickness); 
+
   // Cleanup old geometry
   if(regionHCAL) {
     delete regionHCAL;
@@ -188,11 +193,15 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   // World
   G4Box* solidW = new G4Box("World",worldXY*.5,worldXY*.5,worldZ*.5);
   logicWorld = new G4LogicalVolume(solidW,worldMaterial,"World");
-  physiWorld = new G4PVPlacement(0,G4ThreeVector(),"World",logicWorld,0,false,0);
+  physiWorld = new G4PVPlacement(0,G4ThreeVector(0,0,0),"World",logicWorld,0,false,0);
+
+  G4Box* solidPS = new G4Box("solidPS",worldXY*.5,worldXY*.5,psLength*.5);
+  logicPS = new G4LogicalVolume(solidPS,psMaterial,"logicPS");
+  new G4PVPlacement(0,G4ThreeVector(0,0,psPosZ),"logicPS",logicPS,physiWorld,false,0);
   
   ConstructECAL();
   ConstructHCAL();
-  if(buildPreShower) ConstructPreShower();
+  if(buildAllMatTest) { ConstructAllMatTest(); }
 
   HistoManager* man = HistoManager::GetPointer();
   man->SetWorldLength(worldZ);
@@ -352,16 +361,16 @@ void DetectorConstruction::ConstructHCAL()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::ConstructPreShower()
+void DetectorConstruction::ConstructAllMatTest()
 {
   G4NistManager* manager = G4NistManager::Instance();
   const std::vector<G4String>& mat = manager->GetNistMaterialNames();
   G4int nmat  = mat.size();
-  G4cout << "### DetectorConstruction::ConstructPreShower() added " 
+  G4cout << "### DetectorConstruction::ConstructAllMatTest() added " 
 	 << nmat << " materials " << G4endl;
-  G4double dz = crystalLength/G4double(nmat);
-  G4double z0 = posCenterPreShowerZ - crystalLength*0.5 - dz*0.5;
-  G4Box* solid = new G4Box("PreShower",ecalWidth*0.5,ecalWidth*0.5,dz*0.5);
+  G4double dz = cm/G4double(nmat);
+  G4double z0 = posCenterAllMatTestZ - dz*0.5;
+  G4Box* solid = new G4Box("AllMatTest",ecalWidth*0.5,ecalWidth*0.5,dz*0.5);
   G4LogicalVolume* logic;
 
   for(G4int i=0; i<nmat; i++) {
@@ -374,6 +383,39 @@ void DetectorConstruction::ConstructPreShower()
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void DetectorConstruction::SetPSMaterial(const G4String& mat)
+{
+  // search the material by its name
+  G4Material* pttoMaterial =
+    G4NistManager::Instance()->FindOrBuildMaterial(mat, false);
+  if (pttoMaterial && pttoMaterial != psMaterial) {
+    psMaterial = pttoMaterial;
+    if(logicPS)   { logicPS->SetMaterial(psMaterial); }
+    G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void DetectorConstruction::SetPSLength (G4double val)
+{
+  if(val > 0.0) {
+    psLength = val;
+    G4RunManager::GetRunManager()->GeometryHasBeenModified();
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void DetectorConstruction::SetPSGap (G4double val)
+{
+  if(val > 0.0) {
+    psgap = val;
+    G4RunManager::GetRunManager()->GeometryHasBeenModified();
+  }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -384,12 +426,11 @@ void DetectorConstruction::SetEcalMaterial(const G4String& mat)
     G4NistManager::Instance()->FindOrBuildMaterial(mat, false);
   if (pttoMaterial && pttoMaterial != ecalMaterial) {
     ecalMaterial = pttoMaterial;
-    if(logicCrystal) logicCrystal->SetMaterial(ecalMaterial);
-    if(logicECal)    logicECal->SetMaterial(ecalMaterial);
+    if(logicCrystal) { logicCrystal->SetMaterial(ecalMaterial); }
+    if(logicECal)    { logicECal->SetMaterial(ecalMaterial); }
     G4RunManager::GetRunManager()->PhysicsHasBeenModified();
   }
 }
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -473,16 +514,17 @@ void DetectorConstruction::SetWorldMaterial(const G4String& mat)
 
   if (material && material != worldMaterial) {
     worldMaterial = material;
-    if(logicWorld) logicWorld->SetMaterial(worldMaterial);
+    if(logicWorld) { logicWorld->SetMaterial(worldMaterial); }
     G4RunManager::GetRunManager()->PhysicsHasBeenModified();
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void DetectorConstruction::SetBuildPreShower(G4bool val)
+void DetectorConstruction::SetBuildAllMatTest(G4bool val)
 {
-  buildPreShower = val;
+  buildAllMatTest = val;
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
   G4RunManager::GetRunManager()->PhysicsHasBeenModified();
 }
 

@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.cc,v 1.4 2009-04-06 12:44:16 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -68,11 +67,30 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   mat1Cmd->SetParameterName("wMaterial",false);
   mat1Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  mat2Cmd = new G4UIcmdWithAString("/testCalorim/preShowerMaterial",this);
+  mat2Cmd->SetGuidance("Select Material for PreShower");
+  mat2Cmd->SetParameterName("psMaterial",false);
+  mat2Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
   bCmd = new G4UIcmdWithADoubleAndUnit("/testCalorim/beamSizeXY",this);
   bCmd->SetGuidance("Set width of the beam");
   bCmd->SetParameterName("beamW",false);
   bCmd->SetUnitCategory("Length"); 
   bCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  lpCmd = new G4UIcmdWithADoubleAndUnit("/testCalorim/preShowerLength",this);
+  lpCmd->SetGuidance("Set PreShower Length");
+  lpCmd->SetParameterName("lengthp",false);
+  lpCmd->SetUnitCategory("Length");
+  lpCmd->SetRange("length>0");
+  lpCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  gpCmd = new G4UIcmdWithADoubleAndUnit("/testCalorim/preShowerGap",this);
+  gpCmd->SetGuidance("Set Gap between PreSHower and ECAL");
+  gpCmd->SetParameterName("lengthp1",false);
+  gpCmd->SetUnitCategory("Length");
+  gpCmd->SetRange("length1>0");
+  gpCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   rCmd = new G4UIcmdWithADoubleAndUnit("/testCalorim/crystalWidth",this);
   rCmd->SetGuidance("Set width of the Ecal");
@@ -140,8 +158,8 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   facCmd2->SetParameterName("fac2",false);
   facCmd2->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  mCmd = new G4UIcmdWithoutParameter("/testCalorim/addPreShower",this);
-  mCmd->SetGuidance("Build PreShower ");
+  mCmd = new G4UIcmdWithoutParameter("/testCalorim/allMatTest",this);
+  mCmd->SetGuidance("Build all NIST materials test ");
   mCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
@@ -151,10 +169,13 @@ DetectorMessenger::~DetectorMessenger()
 {
   delete matCmd;
   delete mat1Cmd;
+  delete mat2Cmd;
   delete bCmd;
   delete rCmd;
   delete rCmd1;
   delete lCmd;
+  delete lpCmd;
+  delete gpCmd;
   delete facCmd1;
   delete facCmd2;
   delete eCmd;
@@ -175,6 +196,8 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     Detector->SetEcalMaterial(newValue);
   else if( command == mat1Cmd )
     Detector->SetWorldMaterial(newValue);
+  else if( command == mat2Cmd )
+    Detector->SetPSMaterial(newValue);
   else if( command == bCmd ) 
     HistoManager::GetPointer()->SetBeamSizeXY(bCmd->GetNewDoubleValue(newValue));
   else if( command == rCmd ) 
@@ -183,6 +206,10 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     Detector->SetHcalWidth(rCmd1->GetNewDoubleValue(newValue));
   else if( command == lCmd ) 
     Detector->SetEcalLength(lCmd->GetNewDoubleValue(newValue));
+  else if( command == lpCmd ) 
+    Detector->SetPSLength(lpCmd->GetNewDoubleValue(newValue));
+  else if( command == gpCmd ) 
+    Detector->SetPSGap(gpCmd->GetNewDoubleValue(newValue));
   else if( command == facCmd1 ) 
     HistoManager::GetPointer()->SetFactor1(facCmd1->GetNewDoubleValue(newValue));
   else if( command == facCmd2 ) 
@@ -200,7 +227,7 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
   else if( command == updateCmd )
     Detector->UpdateGeometry();
   else if( command == mCmd )
-    Detector->SetBuildPreShower(true);
+    Detector->SetBuildAllMatTest(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

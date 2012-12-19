@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.13 2010-04-13 10:07:39 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //---------------------------------------------------------------------------
 //
@@ -80,9 +79,8 @@ HistoManager::HistoManager()
   nBins   = 100;
   histo   = new Histo();
   nmax    = 3;
-  factorEcal = 1.05;
-  factorHcal = 105.0;
-  factorHcal0= 105.0;
+  factorEcal = 1.03;
+  factorHcal = 100.0;
   worldZ = 100.*mm;
   sizeXY = 0.0;
 }
@@ -99,26 +97,26 @@ HistoManager::~HistoManager()
 void HistoManager::bookHisto()
 { 
   nHisto = 20;
-  histo->Add1D("0","e0, Evis in central crystal (GeV)",nBins,0.,maxEnergy,GeV);
-  histo->Add1D("1","e9, Evis in 3x3 (GeV)",nBins,0.,maxEnergy,GeV);
-  histo->Add1D("2","e25, Evis in 5x5 (GeV)",nBins,0.,maxEnergy,GeV);
-  histo->Add1D("3","E0/E3x3;",nBins,0.55,1.05,1);
-  histo->Add1D("4","E0/E5x5",nBins,0.55,1.05,1);
-  histo->Add1D("5","E3x3/E5x5",nBins,0.55,1.05,1);
-  histo->Add1D("6","Energy (GeV) Eecal",nBins,0.,maxEnergy,GeV);
-  histo->Add1D("7","Energy (GeV) Ehcal",nBins,0.,maxEnergy*0.01,GeV);
-  histo->Add1D("8","Energy (GeV) Eehcal",nBins,0.,maxEnergy*0.01,GeV);
-  histo->Add1D("9","Energy (GeV) Eabshcal",nBins,0.,maxEnergy*0.5,GeV);
-  histo->Add1D("10","Energy computed (GeV)",nBins,0.,maxEnergy,GeV);
-  histo->Add1D("11","Energy computed (GeV)",nBins,0.,maxEnergy,GeV);
-  histo->Add1D("12","Energy deposition total (GeV)",nBins,0.,maxEnergy,GeV);
-  histo->Add1D("13","ECAL hits log10(edep/MeV)",100,-6.,4.,1.0);
-  histo->Add1D("14","Time (ns) ECAL",100,-1.,99.,ns);
-  histo->Add1D("15","Time (ns) HCAL",100,-1.,99.,ns);
-  histo->Add1D("16","Gamma energy at creation log10(E/MeV)",180,-3.,6.,1.0);
-  histo->Add1D("17","Electron energy at creation log10(E/MeV)",180,-3.,6.,1.0);
-  histo->Add1D("18","Proton energy at creation log10(E/MeV)",180,-4.,5.,1.0);
-  histo->Add1D("19","Neutron energy at creation log10(E/MeV)",180,-4.,5.,1.0);
+  histo->Add1D("0","e0, Evis in central crystal (GeV)",nBins,0.,1.,1.);
+  histo->Add1D("1","e9, Evis in 3x3 (GeV)",nBins,0.,1.,1.);
+  histo->Add1D("2","e25, Evis in 5x5 (GeV)",nBins,0.,1.,1.);
+  histo->Add1D("3","E0/E3x3;",nBins,0.55,1.05,1.0);
+  histo->Add1D("4","E0/E5x5",nBins,0.55,1.05,1.0);
+  histo->Add1D("5","E3x3/E5x5",nBins,0.55,1.05,1.0);
+  histo->Add1D("6","Normalized energy ECAL",nBins,0.5,1.2,1.0);
+  histo->Add1D("7","Energy (GeV) Ehcal",nBins,0.,maxEnergy*0.02,GeV);
+  histo->Add1D("8","Energy (GeV) Eehcal",nBins,0.,maxEnergy*0.02,GeV);
+  histo->Add1D("9","Energy (GeV) Eabshcal",nBins,0.,maxEnergy,GeV);
+  histo->Add1D("10","Energy computed (GeV)",nBins,0.,2*maxEnergy,GeV);
+  histo->Add1D("11","Normalized reconstructed energy",nBins,0.8,1.2,1.0);
+  histo->Add1D("12","Normalized reconstructed energy",nBins,0.,2.,1.0);
+  histo->Add1D("13","ECAL hits log10(edep/MeV)",60,-4.,2.,1.0);
+  histo->Add1D("14","Time (ns) ECAL",50,0,50,ns);
+  histo->Add1D("15","Time (ns) HCAL",50,0,50,ns);
+  histo->Add1D("16","Gamma energy at creation log10(E/MeV)",60,-3.,3.,1.0);
+  histo->Add1D("17","Electron energy at creation log10(E/MeV)",50,-2.,3.,1.0);
+  histo->Add1D("18","Proton energy at creation log10(E/MeV)",40,-1.,3.,1.0);
+  histo->Add1D("19","Neutron energy at creation log10(E/MeV)",60,-3.,3.,1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -325,13 +323,10 @@ void HistoManager::EndOfEvent()
   ehcal += Eehcal;
   abshcal += Eabshcal;
 
-  // Sum of ECAl + HCAL *0
-  G4double edep0 = e25*factorEcal + Ehcal*factorHcal0; 
+  // Sum of ECAl + HCAL 
+  G4double edep0 = e25*factorEcal + Ehcal*factorHcal; 
   edepSum += edep0;
   edepSum2 += edep0*edep0;
-
-  // Sum of ECAl + HCAL 
-  G4double edep1 = e25*factorEcal + Ehcal*factorHcal; 
 
   // Total sum 
   G4double etot = e25 + Ehcal + Eabshcal; 
@@ -339,19 +334,19 @@ void HistoManager::EndOfEvent()
   etotSum2 += etot*etot;
 
   // Fill histo
-  histo->Fill(0,e0,1.0);
-  histo->Fill(1,e9,1.0);
-  histo->Fill(2,e25,1.0);
+  histo->Fill(0,e0/primaryKineticEnergy,1.0);
+  histo->Fill(1,e9/primaryKineticEnergy,1.0);
+  histo->Fill(2,e25/primaryKineticEnergy,1.0);
   histo->Fill(3,e19,1.0);
   histo->Fill(4,e125,1.0);
   histo->Fill(5,e925,1.0);
-  histo->Fill(6,Eecal,1.0);
+  histo->Fill(6,Eecal/primaryKineticEnergy,1.0);
   histo->Fill(7,Ehcal,1.0);
   histo->Fill(8,Eehcal,1.0);
   histo->Fill(9,Eabshcal+Ehcal,1.0);
   histo->Fill(10,edep0,1.0);
-  histo->Fill(11,edep1,1.0);
-  histo->Fill(12,etot,1.0);
+  histo->Fill(11,edep0/primaryKineticEnergy,1.0);
+  histo->Fill(12,edep0/primaryKineticEnergy,1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -367,7 +362,7 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
     primaryKineticEnergy = e;
     primaryDef = pd;
   } else {
-
+    e = log10(e/MeV);
     if(pd == G4Gamma::Gamma())            { histo->Fill(16,e,1.0); }
     else if(pd == G4Electron::Electron()) { histo->Fill(17,e,1.0); }
     else if(pd == G4Proton::Proton())     { histo->Fill(18,e,1.0); }
