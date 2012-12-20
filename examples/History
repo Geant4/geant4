@@ -1,4 +1,4 @@
-$Id: History,v 1.163 2010-10-29 13:21:45 gcosmo Exp $
+$Id: History 66555 2012-12-20 08:56:08Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,23 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20th December 2012  Gabriele Cosmo (examples-V09-06-01)
+- Updated reference outputs according to reference tag geant4-09-06-ref-01.
+- Includes tags: gammaraytel-V09-06-01, human_phantom-V09-06-00,
+                 iort_therapy-V09-06-00, medical_linac-V09-06-00,
+                 nanobeam-V09-06-00, radioprotection-V09-06-00, DMX-V09-06-01,
+                 exampleA01-V09-06-00, B01-V09-06-00, B02-V09-06-01,
+                 testem0-V09-06-01, testem1-V09-06-00, testem2-V09-06-00,
+                 testem3-V09-06-00, testem5-V09-06-00, testem7-V09-06-02,
+                 testem9-V09-06-00, testem11-V09-06-00, testem12-V09-06-00,
+                 testem13-V09-06-00, testem14-V09-06-01, testem18-V09-06-00,
+                 fieldex04-V09-06-00, fieldex06-V09-06-00, exhadr01-V09-06-01,
+                 exhadr02-V09-06-01, exhadr03-V09-06-00, fano-V09-06-00,
+                 electronScattering-V09-06-00, LXe-V09-06-00, WLS-V09-06-00,
+                 exParameterisations-V09-06-00, exampleRE01-V09-06-01,
+                 exampleRE02-V09-06-00, exampleRE04-V09-06-00,
+                 exam-ext-vis-UVA-V09-06-00, exNovice-V09-06-01.
 
 30th November 2012  Gabriele Cosmo (examples-V09-06-00)
 - Updated reference outputs according to reference tag geant4-09-06-ref-00.
