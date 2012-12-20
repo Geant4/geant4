@@ -220,33 +220,33 @@ tests                        Gunter.Folger@cern.ch           Gunter Folger
       test01                 Gabriele.Cosmo@cern.ch          Gabriele Cosmo
       test02                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test02.hadron          dwright@slac.stanford.edu       Dennis Wright
-      test03                 (not currently used - see tests/GNUmakefile)
-      test04                 (not currently used - see tests/GNUmakefile)
+      test03                 (not currently used)
+      test04                 (not currently used)
       test05                 Gabriele.Cosmo@cern.ch          Gabriele Cosmo
-      test06                 (not currently used - see tests/GNUmakefile)
+      test06                 (not currently used)
       test07                 Gunter.Folger@cern.ch           Gunter Folger
-      test08                 (not currently used - see tests/GNUmakefile)
+      test08                 (not currently used)
       test09                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test10                 gum@triumf.ca                   Peter Gumplinger
       test11                 tkoi@slac.stanford.edu          Tatsumi Koi
       test12                 Gunter.Folger@cern.ch           Gunter Folger
       test13                 Gunter.Folger@cern.ch           Gunter Folger
       test14                 incerti@cenbg.in2p3.fr          Sebastien Incerti
-      test15                 dwright@slac.stanford.edu       Dennis Wright
+      test15                 (not currently used)
       test16                 dwright@slac.stanford.edu       Dennis Wright
       test17                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test18                 flei@space.qinetiq.com          Fan Lei
-      test19                 (not currently used - see tests/GNUmakefile) 
-      test20                 (not currently used - see tests/GNUmakefile)
-      test21                 (not currently used - see tests/GNUmakefile)
-      test22                 (not currently used - see tests/GNUmakefile)
-      test23                 (not currently used - see tests/GNUmakefile)
+      test19                 (not currently used)
+      test20                 (not currently used)
+      test21                 (not currently used)
+      test22                 (not currently used)
+      test23                 (not currently used)
       test24                 Gunter.Folger@cern.ch           Gunter Folger
       test25                 Gunter.Folger@cern.ch           Gunter Folger
-      test26                 (not currently used - see tests/GNUmakefile)
+      test26                 (not currently used)
       test27                 Gunter.Folger@cern.ch           Gunter Folger
       test28                 flei@space.qinetiq.com          Fan Lei
-      test29                 (not currently used - see tests/GNUmakefile)
+      test29                 (not currently used)
       test30                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test31                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test32                 asai@slac.stanford.edu          Makoto Asai
@@ -255,8 +255,8 @@ tests                        Gunter.Folger@cern.ch           Gunter Folger
       test35                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test36                 Vladimir.Grichine@cern.ch       Vladimir Grichine
       test37                 Omrane.Ben.Mbarek.Kadri@cern.ch Omrane Kadri                    
-      test38                 (not currently used - see tests/GNUmakefile)
-      test39                 (not currently used - see tests/GNUmakefile)
+      test38                 (not currently used)
+      test39                 (not currently used)
       test40                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test41                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test44                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
@@ -264,7 +264,7 @@ tests                        Gunter.Folger@cern.ch           Gunter Folger
       test46                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test47                 Sunanda.Banerjee@cern.ch        Sunanda Banerjee
       test48                 genser@fnal.gov                 Krzysztof Genser
-      test49                 (not currently used - see tests/GNUmakefile)
+      test49                 (not currently used)
       test50                 incerti@cenbg.in2p3.fr          Sebastien Incerti
       test52                 Anton.Lechner@cern.ch	         Anton Lechner
       test53                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
