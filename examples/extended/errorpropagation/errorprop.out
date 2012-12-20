@@ -10,7 +10,7 @@
                             WWW : http://cern.ch/geant4
 *************************************************************
 
- creating G4RunManagerKernel 0x1753ccb0
+ creating G4RunManagerKernel 0x13746070
 
 The materials defined are : 
 
@@ -71,14 +71,14 @@ List of instantiated particles ============================================
 e+ e- gamma mu+ mu- pi+ pi- proton 
 physicsList->Construct() start.
  G4Transportation constructor> set fShortStepOptimisation to false
-0x1760dfe0G4ErrorPhysicsList:: particle process manager e+ = 0x1760f500
-0x1760ddd0G4ErrorPhysicsList:: particle process manager e- = 0x17610b20
-0x1760dad0G4ErrorPhysicsList:: particle process manager gamma = 0x17610d30
-0x1760e1f0G4ErrorPhysicsList:: particle process manager mu+ = 0x17610f80
-0x1760e640G4ErrorPhysicsList:: particle process manager mu- = 0x176111d0
-0x1760eab0G4ErrorPhysicsList:: particle process manager pi+ = 0x17611420
-0x1760eed0G4ErrorPhysicsList:: particle process manager pi- = 0x17611670
-0x1760f2f0G4ErrorPhysicsList:: particle process manager proton = 0x176118c0
+0x13816f80G4ErrorPhysicsList:: particle process manager e+ = 0x138184a0
+0x13816d70G4ErrorPhysicsList:: particle process manager e- = 0x13819ac0
+0x13816a70G4ErrorPhysicsList:: particle process manager gamma = 0x13819cd0
+0x13817190G4ErrorPhysicsList:: particle process manager mu+ = 0x13819f20
+0x138175e0G4ErrorPhysicsList:: particle process manager mu- = 0x1381a170
+0x13817a50G4ErrorPhysicsList:: particle process manager pi+ = 0x1381a3c0
+0x13817e70G4ErrorPhysicsList:: particle process manager pi- = 0x1381a610
+0x13818290G4ErrorPhysicsList:: particle process manager proton = 0x1381a860
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 

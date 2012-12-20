@@ -888,7 +888,7 @@ EV: 99
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.65s Real=0.65s Sys=0.01s
+  User=0.66s Real=1.02s Sys=0.01s
  ###### EndOfRunAction  
 =============================================================
  Number of event processed : 100

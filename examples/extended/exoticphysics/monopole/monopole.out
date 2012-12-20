@@ -19,7 +19,7 @@ G4PhysListFactory::GetReferencePhysList <FTFP_BERT>  EMoption= 0
 
 /monopole/setup 
 Monopole is created: m(GeV)= 100 Qel= 0 Qmag= 68.518
-/control/execute /build/cdash/G4/release/09-06-cand-00_branch/examples/extended/exoticphysics/monopole/monopole.in
+/control/execute /ec/build/nightly/g4tags-dev/examples/extended/exoticphysics/monopole/monopole.in
 /control/verbose 1
 /run/verbose 0
 /testex/run/verbose 1

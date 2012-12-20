@@ -14,7 +14,6 @@
 Checking overlaps for volume Envelope ... OK! 
 Checking overlaps for volume Shape1 ... OK! 
 Checking overlaps for volume Shape2 ... OK! 
-WARNING: G4QInelastic is deprecated and will be removed in GEANT4 version 10.0.
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
