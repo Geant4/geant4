@@ -1,4 +1,4 @@
-$Id: History,v 1.122 2010-10-29 13:21:59 gcosmo Exp $
+$Id: History 66557 2012-12-20 09:02:36Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+tests-V09-06-01 20th December 2012  Gabriele Cosmo
+- Updated reference outputs according to reference tag geant4-09-06-ref-01.
+- Deleted tests: test15, test19, test22, test23, test29, test38, test39, test49.
+- Includes tags: test02-V09-06-01, test10-V09-06-00, test16-V09-06-00,
+                 test18-V09-06-00, test30-V09-06-02, test33-V09-06-00,
+                 test35-V09-06-02, test44-V09-06-00, test45-V09-06-00,
+                 test46-V09-06-02, test47-V09-06-00, test48-V09-06-04,
+                 test50-V09-06-00, test52-V09-06-00, test53-V09-06-00,
+                 test54-V09-06-00, test55-V09-06-00, test60-V09-06-01,
+                 test74-V09-06-00, ctests-V09-06-01.
 
 tests-V09-06-00 30th November 2012  Gabriele Cosmo
 - Updated reference outputs according to reference tag geant4-09-06-ref-00.
