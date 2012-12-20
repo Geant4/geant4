@@ -67,27 +67,27 @@ SUBDIRS += test11
 SUBDIRS += test12
 SUBDIRS += test13
 SUBDIRS += test14
-SUBDIRS += test15
+# SUBDIRS += test15 ## Retired
 SUBDIRS += test16
 SUBDIRS += test17
 SUBDIRS += test18
-SUBDIRS += test19
+# SUBDIRS += test19 ## Free slot
 # SUBDIRS += test20 ## Not used
 # SUBDIRS += test21 ## Not used
-SUBDIRS += test22
-SUBDIRS += test23 ## Old test on 'cuts per material', now obsolete 
+# SUBDIRS += test22 ## Free slot
+# SUBDIRS += test23 ## Free slot
 SUBDIRS += test24
 SUBDIRS += test25
 # SUBDIRS += test26 ## Duplicated in em tests.
 SUBDIRS += test27
 SUBDIRS += test28
-SUBDIRS += test29
+# SUBDIRS += test29 ## Free slot
 # SUBDIRS += test30 ## Not in testing yet!
 # SUBDIRS += test31 ## Not in testing yet!
 # SUBDIRS += test32 ## Free slot
 SUBDIRS += test33
 SUBDIRS += test34
-SUBDIRS += test39
+# SUBDIRS += test39 ## Free slot
 SUBDIRS += test40
 SUBDIRS += test61
 SUBDIRS += test69
@@ -99,7 +99,7 @@ SUBDIRS_AIDA += test50
 HADEXERDIRS = test02 test11 test12 test13 test15 test16 test21 
 
 HADRONICSDIRS = test02 test11 test12 test13 test15 test16 
-HADRONICSDIRS += test21 test22 test23 test24 test25 test27 test28 test61 test69
+HADRONICSDIRS += test21 test24 test25 test27 test28 test61 test69
 
 #temp ADV_EXAMPLES += 01 02  03 04 05 06 07
 
@@ -250,7 +250,7 @@ endif
 
 clean:
 	@for nn in $(EXAMPLES); do \
-	  (cd test1$$nndir && $(MAKE) clean); \
+	  (cd test1$$nn && $(MAKE) clean); \
 	done;:
 	@for dir in $(SUBDIRS); do (cd $$dir && $(MAKE) clean); done;:
 
