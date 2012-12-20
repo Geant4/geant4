@@ -475,6 +475,66 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
+  User=0.01s Real=0s Sys=0s
+
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Copper 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.01s Real=0.02s Sys=0s
+
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Copper 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
   User=0s Real=0s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
@@ -505,67 +565,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
-
-Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
- This region is in the mass world.
- Root logical volume(s) : SLog 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Copper 
- Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
-
-Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
- Root logical volume(s) : 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : 
- Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0s Real=0s Sys=0s
-
-Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
- This region is in the mass world.
- Root logical volume(s) : SLog 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Copper 
- Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
-
-Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
- Root logical volume(s) : 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : 
- Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0.03s Real=0.02s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -686,7 +686,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -1064,7 +1064,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.02s Real=0.02s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -1169,7 +1169,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.04s Real=0.04s Sys=0s
+  User=0.05s Real=0.04s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -1204,7 +1204,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.17s Real=0.2s Sys=0.01s
+  User=0.16s Real=0.17s Sys=0s
 SimpleBox is now made of U
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
@@ -1240,7 +1240,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.02s Real=0.01s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -1275,7 +1275,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.02s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -1310,7 +1310,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.06s Real=0.05s Sys=0s
+  User=0.06s Real=0.06s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -1345,7 +1345,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
+  User=0.01s Real=0s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -1380,7 +1380,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.09s Real=0.08s Sys=0s
+  User=0.08s Real=0.09s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -1415,7 +1415,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.19s Real=0.2s Sys=0s
+  User=0.19s Real=0.19s Sys=0s
 SimpleBox is now made of Si
 
 conv:   for  gamma    SubType= 14
@@ -1793,7 +1793,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -1873,7 +1873,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.03s Real=0.03s Sys=0s
+  User=0.02s Real=0.03s Sys=0s
 SimpleBox is now made of Si
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
@@ -1954,7 +1954,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -1994,7 +1994,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.

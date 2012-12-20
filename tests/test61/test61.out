@@ -466,7 +466,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=23.66s Real=23.93s Sys=0.01s
+  User=26.68s Real=28.9s Sys=0.02s
 #
 # C(12,6)++ at 1 GeV/nucleon on H
 #
@@ -993,7 +993,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=4.14s Real=4.16s Sys=0.01s
+  User=4.21s Real=4.32s Sys=0.01s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -1264,7 +1264,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=2.39s Real=2.41s Sys=0s
+  User=2.41s Real=2.43s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1319,7 +1319,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=5.07s Real=5.08s Sys=0s
+  User=5.64s Real=6.16s Sys=0.05s
 #
 # C(12,6)++ at 200 MeV/nucleon on H
 #
@@ -1427,7 +1427,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0.78s Real=0.79s Sys=0s
+  User=0.8s Real=0.85s Sys=0s
 #
 #  .....end C(12,6)++............
 #
@@ -1706,7 +1706,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=17.12s Real=17.13s Sys=0s
+  User=20.49s Real=22.01s Sys=0.08s
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

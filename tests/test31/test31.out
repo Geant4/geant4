@@ -1001,7 +1001,7 @@ test31EventAction: Event # 100 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.72s Real=0.73s Sys=0s
+  User=0.7s Real=0.7s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
@@ -1114,7 +1114,7 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.84s Real=0.84s Sys=0s
+  User=0.8s Real=0.8s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
@@ -1227,7 +1227,7 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.78s Real=0.78s Sys=0s
+  User=0.74s Real=0.74s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
@@ -1340,7 +1340,7 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.63s Real=0.63s Sys=0s
+  User=0.59s Real=0.6s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
@@ -1453,7 +1453,7 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.77s Real=0.78s Sys=0s
+  User=0.74s Real=0.75s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
@@ -1566,7 +1566,7 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.88s Real=0.88s Sys=0s
+  User=0.76s Real=0.86s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
@@ -1679,7 +1679,7 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.63s Real=0.63s Sys=0s
+  User=0.6s Real=0.59s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
@@ -1739,5 +1739,5 @@ Average number of pi+pi-       0
 
 =========   End of tets31Histo  ============================
 #
-  User=6.44s Real=6.47s Sys=0.01s
+  User=6.11s Real=6.24s Sys=0.01s
 G4 kernel has come to Quit state.

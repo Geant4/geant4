@@ -520,7 +520,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.29s Real=2.29s Sys=0s
+  User=2.17s Real=2.18s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -566,7 +566,7 @@ EvtNo= 298  length= 0.00820941  xend= -0.000244414
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.84s Real=2.85s Sys=0s
+  User=2.71s Real=2.74s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 997 for anti_proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -1310,7 +1310,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.07s Real=3.07s Sys=0s
+  User=2.92s Real=3.18s Sys=0.01s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -1353,7 +1353,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.06s Real=3.06s Sys=0s
+  User=2.89s Real=3.42s Sys=0.01s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c

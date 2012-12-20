@@ -326,7 +326,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.25s Real=1.25s Sys=0.01s
+  User=1.18s Real=1.2s Sys=0.01s
 
  ======================== run summary ======================
 
@@ -427,7 +427,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.89s Real=2.91s Sys=0s
+  User=2.8s Real=3.1s Sys=0.01s
 
  ======================== run summary ======================
 
@@ -529,7 +529,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=51.05s Real=51.07s Sys=0.03s
+  User=49.91s Real=53.72s Sys=0.02s
 
  ======================== run summary ======================
 
@@ -631,7 +631,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=48.05s Real=48.06s Sys=0s
+  User=47.16s Real=50.72s Sys=0.01s
 
  ======================== run summary ======================
 
@@ -733,7 +733,7 @@ TrackingAction: vx - 1 = 8.882e-16
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=3.31s Real=3.32s Sys=0.01s
+  User=3.3s Real=3.61s Sys=0.01s
 
  ======================== run summary ======================
 

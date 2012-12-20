@@ -432,8 +432,8 @@ Index : 3     used in the geometry : Yes     recalculation needed : No
 Choosing random seed according to time(0) 
 
 --------- Ranecu engine status ---------
- Initial seed (index) = 68
- Current couple of seeds = 875715456, 1257110888
+ Initial seed (index) = 17
+ Current couple of seeds = 462236267, 1735807917
 ----------------------------------------
 Primary energy: 45 keV 
 
@@ -1647,4 +1647,4 @@ Primary energy: 2000 keV
 
 ---> Begin Of Event: 99000
 Execution terminated
-User=23.1s Real=23.47s Sys=0.03s
+User=22.83s Real=24.75s Sys=0.03s
