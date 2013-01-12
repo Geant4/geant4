@@ -476,7 +476,7 @@ G4HadFinalState* G4NeutronHPThermalScattering::ApplyYourself(const G4HadProjecti
 
          for ( G4int i=1 ; i < n1 ; i++ ) 
          {
-            if ( (*pvE_p_TL)[i]->first != (*pvE_p_TH)[i]->first ) abort();
+            if ( (*pvE_p_TL)[i]->first != (*pvE_p_TH)[i]->first ) G4HadronicException(__FILE__, __LINE__, "A problem is found in Thermal Scattering Data!");
             vE_T.push_back ( (*pvE_p_TL)[i]->first );
             vp_T.push_back ( get_linear_interpolated ( aTemp , std::pair< G4double , G4double > ( tempLH.first , (*pvE_p_TL)[i]->second ) , std::pair< G4double , G4double > ( tempLH.second , (*pvE_p_TL)[i]->second ) ) );  
          }
