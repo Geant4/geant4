@@ -13,6 +13,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+04-01-13 mma (exampleN03Con-V09-06-00)
+- RunAction: compute error on mean = rms/sqrt(n)
 
 08-11-12 I. Hrivnacova (exampleN03Con-V09-05-07)   
 - Removed executing gui.mac, as the macro is not provided

@@ -99,19 +99,19 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   //
   fSumEAbs /= NbOfEvents; fSum2EAbs /= NbOfEvents;
   G4double rmsEAbs = fSum2EAbs - fSumEAbs*fSumEAbs;
-  if (rmsEAbs >0.) rmsEAbs = std::sqrt(rmsEAbs); else rmsEAbs = 0.;
+  if (rmsEAbs >0.) rmsEAbs = std::sqrt(rmsEAbs/NbOfEvents); else rmsEAbs = 0.;
   
   fSumEGap /= NbOfEvents; fSum2EGap /= NbOfEvents;
   G4double rmsEGap = fSum2EGap - fSumEGap*fSumEGap;
-  if (rmsEGap >0.) rmsEGap = std::sqrt(rmsEGap); else rmsEGap = 0.;
+  if (rmsEGap >0.) rmsEGap = std::sqrt(rmsEGap/NbOfEvents); else rmsEGap = 0.;
   
   fSumLAbs /= NbOfEvents; fSum2LAbs /= NbOfEvents;
   G4double rmsLAbs = fSum2LAbs - fSumLAbs*fSumLAbs;
-  if (rmsLAbs >0.) rmsLAbs = std::sqrt(rmsLAbs); else rmsLAbs = 0.;
+  if (rmsLAbs >0.) rmsLAbs = std::sqrt(rmsLAbs/NbOfEvents); else rmsLAbs = 0.;
   
   fSumLGap /= NbOfEvents; fSum2LGap /= NbOfEvents;
   G4double rmsLGap = fSum2LGap - fSumLGap*fSumLGap;
-  if (rmsLGap >0.) rmsLGap = std::sqrt(rmsLGap); else rmsLGap = 0.;
+  if (rmsLGap >0.) rmsLGap = std::sqrt(rmsLGap/NbOfEvents); else rmsLGap = 0.;
   
   //print
   //
