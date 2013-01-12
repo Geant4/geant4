@@ -107,7 +107,6 @@ const char* G4ScreenedCoulombCrossSectionInfo::CVSFileVers() { return
 
 #include "G4EmProcessSubType.hh"
 
-#include "G4RangeTest.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4DynamicParticle.hh"
 #include "G4ProcessManager.hh"
