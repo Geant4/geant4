@@ -15,6 +15,16 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21-Dec-2012 M.Kelsey (test67-V09-06-01)
+	test67.cc: Move declaration of "returnCode" inside #ifdef block to
+	fix "unused variable" compiler warning.
+
+20-Dec-2012 L.Pandola (test67-V09-06-00)
+        Implemented a (dumb) cross-check of the results: the program complains if 
+        results are very different with respect of those of a reference file. 
+        No test is performed if the reference file is not found.
+        Add reference root files for 4 EM physics builders
+
 28-Nov-2012 G.Cosmo (test67-V09-05-05)
         Fixed variable shadowing in PrimaryGeneratorAction.
 

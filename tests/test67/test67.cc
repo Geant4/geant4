@@ -110,9 +110,13 @@ int main(int argc,char** argv) {
 
   //Close manually the ROOT file here, if it is the case
 #ifdef G4_USE_ROOT
+  G4int returnCode = ROOTAnalysis::getInstance()->CheckPhysicalResults();
+  if (!returnCode)
+    G4cout << "TEST PASSED" << G4endl;
   G4cout << "Going to close the ROOT file....";
   ROOTAnalysis::getInstance()->CloseFile();
   G4cout << "done" << G4endl;
+
 #endif
 
   // job termination

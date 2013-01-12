@@ -51,6 +51,7 @@ public:
   void BookNewHistogram(G4int runID,G4double primaryEnergy);
   void AddEventEnergy(G4int runID,G4double energy);
   void AddSecondary(G4String processName);
+  int CheckPhysicalResults();
   void CloseFile();
   void EndOfRun(G4int runID,G4double energy,G4int nEventsTotal,
 		G4int nEventsPeak,G4int nEventsFull);
@@ -62,8 +63,8 @@ public:
 private:
    //private constructor in order to create a singleton
   ROOTAnalysis();
-  static ROOTAnalysis* instance;
- 
+  static ROOTAnalysis* instance; 
+
   TFile* fFile;
   std::map<G4int,TH1D*> *fHistograms;
   TObjString *fVersionName;
