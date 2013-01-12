@@ -1,0 +1,34 @@
+#=======================================================
+# Macro file "water.mac" for the Water test by hTest.cc
+# 10.04.01 V.Ivanchenko
+#======================================================= 
+/control/verbose           2
+/run/verbose               2
+/tracking/verbose          0
+/event/verbose             0
+/hTest/verbose             0
+#
+/hTest/physics/cutGamma    1.0 mm
+/hTest/physics/cutElectron 0.2 mm
+/hTest/physics/MaxStep     1.0 mm
+/hTest/physics/verbose     0
+#/hTest/physics/EMList      LowEnergy
+/hTest/physics/EMList      Standard
+/hTest/physics/HadronList  LowEnergy
+#/hTest/physics/HadronList  none
+/hTest/AbsorberMaterial    Water
+/hTest/AbsorberThick       1.0 mm
+/hTest/AbsorberXY          20.0 cm
+/hTest/NumberOfAbsorbers   300
+/hTest/WorldMaterial       Vacuum
+/hTest/numberAbsToSave     0
+/hTest/HistoName           waterstn.paw 
+/hTest/NumberOfEvents      1000
+/hTest/nFirstEventToDebug -1
+/hTest/nLastEventToDebug  -1
+/hTest/gun/beamE           175 MeV
+/hTest/gun/sigmaE          0.9 MeV
+#
+/gun/particle              proton
+#/gun/particle              e-
+

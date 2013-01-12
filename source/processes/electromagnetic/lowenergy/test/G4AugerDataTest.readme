@@ -1,0 +1,13 @@
+This document briefly describe the unit test G4AugerDataTest.
+
+Geant4 and AIDA environments must be set.
+ 
+The test can be run in interctive or batch mode: batch mode ia automatically selected if Z-number is placed after the executable in the command line.
+
+In intercative mode Z of the element is asked to the user, then the index of the shell in wich the vacancy is placed, the index of the vacancy which the electron filling the vacancy comes from and finally the index of the shell which the auger electron comes from. all results are printed on stdout.
+
+In batch mode all data for all transitions of the selected element (z-number must follow commnd line) is extracted and store in two files. The first file has the format fluorescenceZ.xml, and contains a cloud containing all the energies of all transitions. th second file is in the format fluorescencetupleZ.hbk and contains a tuple with the following structure:
+
+Z, DataType, ShellStart, ShellStop, Shell Originating Auger Electrons, Energy, Probability, Energy Uncertainty, Type.
+
+All fields are int but Energy, Probabilty and uncertaintythat are double. Data Type and Type are set to 0 are are present only for comparison purposes.

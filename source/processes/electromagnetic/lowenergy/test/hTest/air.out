@@ -1,0 +1,238 @@
+**********************************************
+ Geant4 version 
+                                (06-Apr-2001)
+             Copyright : Geant4 Collaboration
+**********************************************
+Detector Construction is defined
+HsPhysicsList: <LowEnergy> EMPhysicsList is set
+HsPhysicsList: <none> HadronicPhysicsList is set
+Physics List is defined
+User actions will be initialized
+hTestPrimaryGeneratorMessenger: Construct 
+hTestPrimaryGeneratorAction is defined
+EventAction is defined
+TrackingAction is defined
+UI interface is started
+#================================================
+# Macro file for the Air test of "hTest.cc"
+#         10.04.01 V.Ivanchneko
+#================================================ 
+/run/verbose 2
+/step/verbose 0
+/tracking/verbose 0
+/stepping/verbose 0
+/event/verbose 0
+/hTest/verbose 0
+#
+/hTest/physics/cutGamma    1.0 cm
+/hTest/physics/cutElectron 1.0 mm
+/hTest/physics/MaxStep     1.0 mm
+hTestPhysicsList: MaxChargedStep = 1 mm
+#/hTest/physics/EMList      LowEnergy
+/hTest/physics/EMList      Standard
+HsPhysicsList: <Standard> EMPhysicsList is set
+/hTest/physics/HadronList  LowEnergy
+HsPhysicsList: <LowEnergy> HadronicPhysicsList is set
+/hTest/AbsorberMaterial    Air
+/hTest/WorldMaterial       Vacuum
+/hTest/HistoName           air.paw 
+/hTest/NumberOfEvents      1000
+#
+#/gun/particle e-
+#/gun/particle gamma
+#/gun/particle proton
+/gun/particle alpha
+#/gun/particle triton
+#/gun/particle IonC12
+/gun/energy 5.0 MeV
+#/gun/energy 0.001 MeV
+#/gun/energy 175.0 MeV
+#/gun/energy 360.0 MeV
+#/gun/energy 3240.0 MeV
+#
+#/run/beamOn 10
+
+Start initialisation
+userDetector->Construct() start.
+
+***** Table : Nb of materials = 18 *****
+
+ Material: Beryllium            density:  1.848 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  35.267 cm
+   --->  Element: Beryllium    Z =  4.0   N =   9.0   A =   9.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Aluminum            density:  2.700 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm
+   --->  Element: Aluminum    Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Carbon            density:  2.000 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  21.348 cm
+   --->  Element: Carbon    Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Silicon            density:  2.330 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   9.368 cm
+   --->  Element: Silicon    Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: liquidArgon            density:  1.390 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065 cm
+   --->  Element: liquidArgon    Z = 18.0   N =  40.0   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Iron            density:  7.870 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759 cm
+   --->  Element: Iron    Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Copper            density:  8.960 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.436 cm
+   --->  Element: Copper    Z = 29.0   N =  63.5   A =  63.55 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Gold            density: 19.320 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.344 mm
+   --->  Element: Gold    Z = 79.0   N = 197.0   A = 196.97 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Lead            density: 11.350 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612 mm
+   --->  Element: Lead    Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Water        H_2O   density:  1.000 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm
+   --->  Element: HydrogenH   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
+   --->  Element: OxygenO   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
+
+ Material: Methane        CH_4   density:  0.667 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 696.375 m
+   --->  Element: HydrogenH   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  25.19 %  Abundance  80.00 %
+   --->  Element: CarbonC   Z =  6.0   N =  12.0   A =  12.00 g/mole  fractionMass:  74.81 %  Abundance  20.00 %
+
+ Material: Graphite        Graphite   density:  2.265 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  18.834 cm
+   --->  Element: CarbonC   Z =  6.0   N =  12.0   A =  12.00 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: GaAs        GaAs   density:  5.318 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   2.293 cm
+   --->  Element: GalliumGa   Z = 31.0   N =  69.7   A =  69.72 g/mole  fractionMass:  48.20 %  Abundance  50.00 %
+   --->  Element: ArsenicumAs   Z = 33.0   N =  74.9   A =  74.92 g/mole  fractionMass:  51.80 %  Abundance  50.00 %
+
+ Material: Ethane        C_2H_6   density: 424.100 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.076 m
+   --->  Element: HydrogenH   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  20.16 %  Abundance  75.00 %
+   --->  Element: CarbonC   Z =  6.0   N =  12.0   A =  12.00 g/mole  fractionMass:  79.84 %  Abundance  25.00 %
+
+ Material: CsI        CsI   density:  4.530 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.852 cm
+   --->  Element: CesiumCs   Z = 55.0   N = 132.9   A = 132.91 g/mole  fractionMass:  51.15 %  Abundance  50.00 %
+   --->  Element: IodideI   Z = 53.0   N = 126.9   A = 126.90 g/mole  fractionMass:  48.85 %  Abundance  50.00 %
+
+ Material: Air            density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m
+   --->  Element: NitrogenN   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
+   --->  Element: OxygenO   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
+
+ Material: Mylar            density:  1.390 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  28.868 cm
+   --->  Element: CarbonC   Z =  6.0   N =  12.0   A =  12.00 g/mole  fractionMass:  55.00 %  Abundance  30.30 %
+   --->  Element: HydrogenH   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   8.33 %  Abundance  54.55 %
+   --->  Element: OxygenO   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  36.67 %  Abundance  15.15 %
+
+ Material: Vacuum            density:  0.000 mg/cm3  temperature:   2.73 K  pressure:   0.00 atm  RadLength: 204727576.737 pc
+   --->  Element: Vacuum    Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+
+The  WORLD   is made of  of Vacuum. The transverse size (XY) of the world is 1e+02 mm
+The ABSORBER is made of 300 items of 1 mm of Air. The transverse size (XY) is 1e+02 mm
+physicsList->Construct() start.
+Standard Electromagnetic PhysicsList is initilized
+MuonMinusCaptureAtRest is created 
+MuonMinusCaptureAtRest is created 
+LowEnergy Hadronic PhysicsList is initilized
+physicsList->setCut() start.
+hTestPhysicsList: Set cuts for all particles 
+
+phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
+        Sandia crossSection below 50 KeV
+       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+        Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 10 keV to 1e+02 GeV in 100 bins. 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1 MeV to 1e+02 GeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02 eV to 1e+02 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02 eV to 1e+02 TeV in 100 bins. 
+
+MuIoni:  knock-on electron cross sections .
+          Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+      PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
+
+MuBrems:  theoretical cross section 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
+
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02 eV to 1e+02 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+============= The cut Energy ==============================
+                      gamma            e-           
+Cut in range                  1 cm             1 mm
+Cut in energy
+ Beryllium                         3.84 keV           467 keV
+   Aluminum                         20.4 keV           597 keV
+   Carbon                         7.51 keV           522 keV
+   Silicon                         20.7 keV           546 keV
+   liquidArgon                         19.2 keV           345 keV
+   Iron                         60.6 keV          1.29 MeV
+   Copper                         70.1 keV          1.41 MeV
+   Gold                          377 keV          2.28 MeV
+   Lead                          284 keV          1.38 MeV
+   Water                         7.72 keV           353 keV
+   Methane                           10 eV           119 eV
+   Graphite                         7.92 keV           571 keV
+   GaAs                         63.9 keV           873 keV
+   Ethane                         3.87 keV           218 keV
+   CsI                          103 keV           690 keV
+   Air                           10 eV           276 eV
+   Mylar                         7.49 keV           431 keV
+   Vacuum                           10 eV            10 eV
+===================================================
+Start event loop for 1000 events
+hTestHisto: Histograms will be saved to the file <air.paw>
+Start closing geometry.
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=18s Real=18s Sys=0.14s
+hTestHisto: End of run actions are started
+========================================================
+Range(mm)= 36.17; Stragling(mm)= 0.3345 +- 0.0075
+========================================================
+Histograms and Ntuples are saved
+runManager will be deleted
+G4 kernel has come to Quit state.
+Deletion of G4 kernel class start.
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserPrimaryGenerator deleted.
+G4SDManager deleted.
+EventManager deleted.
+UImanager deleted.
+StateManager deleted.
+RunManager is deleting.
+runManager is deleted
