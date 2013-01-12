@@ -3,12 +3,12 @@
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
 
-name := RE03
+name := exampleRE06
 G4TARGET := $(name)
 G4EXLIB := true
 
 ifndef G4INSTALL
-  G4INSTALL = ../../../..
+  G4INSTALL = ../../..
 endif
 
 .PHONY: all

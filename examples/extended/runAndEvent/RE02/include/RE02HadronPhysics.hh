@@ -133,7 +133,7 @@
 #include "G4HEAntiOmegaMinusInelastic.hh"
 
 // Stopping processes
-#include "G4AntiProtonAbsorptionFritiof.hh"
+#include "G4AntiProtonAnnihilationAtRest.hh"
 #include "G4AntiNeutronAnnihilationAtRest.hh"
 
 //
@@ -183,7 +183,7 @@
 ///       G4HadronElasticProcess with G4LElastic,
 ///       G4AntiProtonInelasticProcess with G4LEAntiProtonInelastic and 
 ///       G4HEAntiProtonInelastic,
-///       G4AntiProtonAbsorptionFritiof, G4hMultipleScattering and G4hIonisation
+///       G4AntiProtonAnnihilationAtRest, G4hMultipleScattering and G4hIonisation
 ///     neutron :
 ///       G4HadronElasticProcess with G4LElastic,
 ///       G4NeutronInelasticProcess with G4BinaryCascade, G4LENeutronInelastic

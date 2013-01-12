@@ -1,0 +1,8 @@
+/mydet/generator particleGun
+/mydet/reqmuon 1
+/mydet/isomuon 1
+/run/beamOn 1
+/gun/particle mu-
+/gun/energy 10 TeV
+/run/beamOn 2
+exit
