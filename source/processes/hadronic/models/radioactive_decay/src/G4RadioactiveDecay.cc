@@ -1459,9 +1459,14 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
   // Initialize the G4ParticleChange object. Get the particle details and the
   // decay table.
 
+
+
   fParticleChangeForRadDecay.Initialize(theTrack);
   const G4DynamicParticle* theParticle = theTrack.GetDynamicParticle();
+
+
   G4ParticleDefinition *theParticleDef = theParticle->GetDefinition();
+
 
   // First check whether RDM applies to the current logical volume
   if (!isAllVolumesMode){
@@ -1565,10 +1570,18 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
 
       // Get parent particle information and boost the decay products to the
       // laboratory frame based on this information.
-      G4double ParentEnergy = theParticle->GetTotalEnergy();
+
+
+      //The Parent Energy used for the boost should be the total energy of
+      // the nucleus of the parent ion without the energy of the shell electrons
+      // (correction for bug 1359 by L. Desorgher)
+      G4double ParentEnergy =  theParticle->GetKineticEnergy()+theParticle->GetParticleDefinition()->GetPDGMass();
       G4ThreeVector ParentDirection(theParticle->GetMomentumDirection());
 
-      if (theTrack.GetTrackStatus() == fStopButAlive) {
+
+
+      if (theTrack.GetTrackStatus() == fStopButAlive) { //this condition seems to be always True, further investigation is needed (L.Desorgher)
+
         // The particle is decayed at rest.
         // since the time is still for rest particle in G4 we need to add the
         // additional time lapsed between the particle come to rest and the
@@ -1581,10 +1594,10 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
         finalGlobalTime += temptime;
         finalLocalTime += temptime;
         energyDeposit += theParticle->GetKineticEnergy();
-      } else {
-        // The particle is decayed in flight (PostStep case).
-        products->Boost( ParentEnergy, ParentDirection);
       }
+      products->Boost( ParentEnergy, ParentDirection);
+
+
 
       // Add products in theParticleChangeForRadDecay.
       G4int numberOfSecondaries = products->entries();
@@ -1599,6 +1612,7 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
         G4cout << G4endl;
         G4cout <<"G4Decay::DecayIt  : decay products in Lab. Frame" <<G4endl;
         products->DumpInfo();
+        products->IsChecked();
       }
 #endif
       for (index=0; index < numberOfSecondaries; index++) {
