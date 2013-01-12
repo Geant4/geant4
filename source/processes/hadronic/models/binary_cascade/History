@@ -12,7 +12,11 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
-8 Jan. 2012 V. Uzhinsky          had-binary-V09-06-01
+9 Jan. 2013 V. Uzhinsky          had-binary-V09-06-02
+-  Checking of G4GeneratorPrecompoundInterface::PropagateNuclNucl
+   for simulation of nucleus-nucleus interactions.
+
+8 Jan. 2013 V. Uzhinsky          had-binary-V09-06-01
 -  Checking a simplification of G4GeneratorPrecompoundInterface::Propagate
    for hadron-nucleus interactions only.
 

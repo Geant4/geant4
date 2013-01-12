@@ -69,11 +69,11 @@ public:
 
   virtual G4ReactionProductVector*
   Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus);
-/*
+
   virtual G4ReactionProductVector*                               // Uzhi Nov. 2012
   PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus,
                                                   G4V3DNucleus* theProjectileNucleus);
-*/
+
   inline void SetCaptureThreshold(G4double);
 
   virtual void PropagateModelDescription(std::ostream&) const;
