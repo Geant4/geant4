@@ -94,25 +94,6 @@ GEANT4_ADD_TEST(example-nov-n03
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/novice/N03
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/novice/N03
                 BUILD exampleN03 PROJECT N03 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
-GEANT4_ADD_TEST(example-nov-n04 
-                COMMAND ${CMAKE_BINARY_DIR}/examples/novice/N04/exampleN04 
-                        ${CMAKE_SOURCE_DIR}/examples/novice/N04/exampleN04.in
-                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/novice/N04
-                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/novice/N04
-                BUILD exampleN04 PROJECT N04
-                ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
-GEANT4_ADD_TEST(example-nov-n06 
-                COMMAND ${CMAKE_BINARY_DIR}/examples/novice/N06/exampleN06 
-                        ${CMAKE_SOURCE_DIR}/examples/novice/N06/exampleN06.in
-                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/novice/N06
-                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/novice/N06
-                BUILD exampleN06 PROJECT N06 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
-GEANT4_ADD_TEST(example-nov-n07 
-                COMMAND ${CMAKE_BINARY_DIR}/examples/novice/N07/exampleN07 
-                        ${CMAKE_SOURCE_DIR}/examples/novice/N07/exampleN07.in
-                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/novice/N07
-                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/novice/N07
-                BUILD exampleN07 PROJECT N07 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 #-------------------------------------------------------------------------------------------------
 #---Extended-----------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------------------
@@ -288,6 +269,12 @@ GEANT4_ADD_TEST(example-ext-medical-GammaTherapy
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/medical/GammaTherapy
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/medical/GammaTherapy
                 BUILD GammaTherapy ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+GEANT4_ADD_TEST(example-ext-optical-opnovice
+                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/optical/OpNovice/OpNovice 
+                        ${CMAKE_SOURCE_DIR}/examples/extended/optical/OpNovice/OpNovice.in
+                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/optical/OpNovice
+                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/optical/OpNovice
+                BUILD OpNovice ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-ext-optical-lxe 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/extended/optical/LXe/LXe
                         ${CMAKE_SOURCE_DIR}/examples/extended/optical/LXe/LXe.in
@@ -403,6 +390,18 @@ GEANT4_ADD_TEST(example-ext-runandevent-re04
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/runAndEvent/RE04
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/runAndEvent/RE04
                 BUILD RE04 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+GEANT4_ADD_TEST(example-ext-runandevent-re05
+                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/runAndEvent/RE05/exampleRE05
+                        ${CMAKE_SOURCE_DIR}/examples/extended/runAndEvent/RE05/exampleRE05.in
+                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/runAndEvent/RE05
+                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/runAndEvent/RE05
+                BUILD exampleRE05 PROJECT RE05 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+GEANT4_ADD_TEST(example-ext-runandevent-re06
+                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/runAndEvent/RE06/exampleRE06
+                        ${CMAKE_SOURCE_DIR}/examples/extended/runAndEvent/RE06/exampleRE06.in
+                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/runAndEvent/RE06
+                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/runAndEvent/RE06
+                BUILD exampleRE06 PROJECT RE06 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-ext-visualization-uservisaction-build
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/visualization/userVisAction
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/visualization/userVisAction

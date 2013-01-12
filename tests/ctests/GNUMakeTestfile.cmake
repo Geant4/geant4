@@ -141,12 +141,6 @@ GEANT4_ADD_TEST(example-nov-n02 COMMAND ${BINDIR}/exampleN02 ${SRCDIR}/novice/N0
                                 BUILD ${SRCDIR}/novice/N02)
 GEANT4_ADD_TEST(example-nov-n03 COMMAND ${BINDIR}/exampleN03 ${SRCDIR}/novice/N03/exampleN03.in
                                 BUILD ${SRCDIR}/novice/N03)
-GEANT4_ADD_TEST(example-nov-n04 COMMAND ${BINDIR}/exampleN04 ${SRCDIR}/novice/N04/exampleN04.in
-                                BUILD ${SRCDIR}/novice/N04)
-GEANT4_ADD_TEST(example-nov-n06 COMMAND ${BINDIR}/exampleN06 ${SRCDIR}/novice/N06/exampleN06.in
-                                BUILD ${SRCDIR}/novice/N06)
-GEANT4_ADD_TEST(example-nov-n07 COMMAND ${BINDIR}/exampleN07 ${SRCDIR}/novice/N07/exampleN07.in
-                                BUILD ${SRCDIR}/novice/N07)
                                 
 GEANT4_ADD_TEST(example-ext-analysis-a01 COMMAND ${BINDIR}/A01app ${SRCDIR}/extended/analysis/A01/test.in
                                 BUILD ${SRCDIR}/extended/analysis/A01)
@@ -246,6 +240,9 @@ GEANT4_ADD_TEST(example-ext-medical-fanoCavity2
 GEANT4_ADD_TEST(example-ext-medical-GammaTherapy 
                 COMMAND ${BINDIR}/GammaTherapy ${SRCDIR}/extended/medical/GammaTherapy/GammaTherapy.in
                 BUILD ${SRCDIR}/extended/medical/GammaTherapy)
+GEANT4_ADD_TEST(example-ext-optical-opnovice 
+                COMMAND ${BINDIR}/OpNovice ${SRCDIR}/extended/optical/OpNovice/OpNovice.in
+                BUILD ${SRCDIR}/extended/optical/OpNovice)
 GEANT4_ADD_TEST(example-ext-optical-lxe 
                 COMMAND ${BINDIR}/LXe ${SRCDIR}/extended/optical/LXe/LXe.in
                 BUILD ${SRCDIR}/extended/optical/LXe)
@@ -348,6 +345,12 @@ GEANT4_ADD_TEST(example-ext-parameterisations-par01 COMMAND ${BINDIR}/examplePar
 #                BUILD ${SRCDIR}/extended/runAndEvent/RE04
 #                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/runAndEvent/RE04
 #                BUILD RE04 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+GEANT4_ADD_TEST(example-ext-runandevent-re05
+                COMMAND ${BINDIR}/exampleRE05 ${SRCDIR}/extended/runAndEvent/RE05/exampleRE05.in
+                BUILD ${SRCDIR}/extended/runAndEvent/RE05)
+GEANT4_ADD_TEST(example-ext-runandevent-re06 
+                COMMAND ${BINDIR}/exampleRE06 ${SRCDIR}/extended/runAndEvent/RE06/exampleRE06.in
+                BUILD ${SRCDIR}/extended/runAndEvent/RE06)
 #GEANT4_ADD_TEST(example-ext-visualization-uservisaction-build
 #                BUILD ${SRCDIR}/extended/visualization/userVisAction
 #                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/visualization/userVisAction

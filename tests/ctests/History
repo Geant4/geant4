@@ -17,6 +17,24 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ctests-V09-06-06  9th January 2012 Gunter Folger
+- remove fake subtree tags/home/work/packages/geant4/geant4_... including a
+   duplicate CMakeLists.txt.
+
+ctests-V09-06-05 04th January 2013 Ivana Hrivnacova
+- Fixed previously added tests (path to executable): 
+  example-ext-optical-opnovice and example-ext-runandevent-re05,06
+
+ctests-V09-06-04 19th December 2012 Ivana Hrivnacova
+- Updated test for moving novice/N04,N07 in extended/runAndEvent/RE05,RE06
+
+ctests-V09-06-03 18th December 2012 Ivana Hrivnacova
+- Changed also test name (example-nov-n06 to example-ext-optical-opnovice)
+  and moved test just before example-ext-optical-lxe
+
+ctests-V09-06-02 17th December 2012 Peter Gumplinger
+- moved novice/N06 to /extended/optical/OpNovice
+
 ctests-V09-06-01 14th December 2012 Ivana Hrivnacova
 - Fixed SOURCE_DIR and BINARY_DIR in added test
   (example-ext-parameterisations-par01)
