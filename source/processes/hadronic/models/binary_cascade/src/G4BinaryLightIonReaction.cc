@@ -250,6 +250,8 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
 
 
 		   DeExciteSpectatorNucleus(spectators, cascaders, theStatisticalExEnergy, momentum);
+		} else {
+		   delete spectators;
 		}
 	}
 	// Rotate to lab

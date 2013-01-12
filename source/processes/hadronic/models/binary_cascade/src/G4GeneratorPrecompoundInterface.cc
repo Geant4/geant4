@@ -154,78 +154,79 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     }
     exciton3Momentum = captured3Momentum - wounded3Momentum;
 
-    if(anA>0 && aZ>0) {
+    if(anA == 0) return theTotalResult;
+
+    if(anA >= aZ) 
+    {
         G4double fMass =  G4NucleiProperties::GetNuclearMass(anA, aZ);
+
 #ifdef exactExcitationEnergy
-        // recalculate exEnergy from Energy balance....
+       // recalculate exEnergy from Energy balance....
         const G4HadProjectile * primary = GetPrimaryProjectile();
         G4double Einitial= primary->Get4Momentum().e()
-            		        + G4NucleiProperties::GetNuclearMass(theNucleus->GetMassNumber(),theNucleus->GetCharge());
-        G4double Efinal = fMass + secondary4Momemtum.e();
+            	+ G4NucleiProperties::GetNuclearMass(theNucleus->GetMassNumber(),
+                                                     theNucleus->GetCharge());
+// Uzhi        G4double Efinal = fMass + secondary4Momemtum.e();
+        G4double Efinal = std::sqrt(exciton3Momentum.mag2() + fMass*fMass)
+                        + secondary4Momemtum.e();
         if ( (Einitial - Efinal) > 0 ) {
             // G4cout << "G4GPI::Propagate() : positive exact excitation Energy "
-            //  << (Einitial - Efinal)/MeV << " MeV, exciton estimate " << exEnergy/MeV << " MeV" << G4endl;
-            exEnergy=Einitial - Efinal;
+            //        << (Einitial - Efinal)/MeV << " MeV, exciton estimate " 
+            //        << exEnergy/MeV << " MeV" << G4endl;
+
+//          exEnergy=Einitial - Efinal;
+            G4LorentzVector PrimMom=primary->Get4Momentum(); PrimMom.setE(Einitial);
+
+            exEnergy=(PrimMom - secondary4Momemtum).mag() - fMass;
         }
         else {
-            //  G4cout << "G4GeneratorPrecompoundInterface::Propagate() : negative exact excitation Energy "
-            //  << (Einitial - Efinal)/MeV << " MeV, setting  excitation to 0 MeV" << G4endl;
+            //  G4cout << "G4GeneratorPrecompoundInterface::Propagate() : " 
+            //         << "negative exact excitation Energy "
+            //         << (Einitial - Efinal)/MeV 
+            //         << " MeV, setting  excitation to 0 MeV" << G4endl;
             exEnergy=0.;
         }
 #endif
+
+        if(exEnergy < 0.) exEnergy=0.;   // Uzhi 11 Dec. 2012
+
         fMass += exEnergy;
-        G4ThreeVector balance=primary->Get4Momentum().vect() - secondary4Momemtum.vect() - exciton3Momentum;
-        #ifdef G4GPI_debug_excitation
-        G4cout << "momentum balance init/final  " << balance << " value " << balance.mag() << G4endl
-                << "primary / secondaries "<< primary->Get4Momentum() << " / "
-                << secondary4Momemtum << " captured/wounded: " << captured3Momentum << " / " <<  wounded3Momentum
-                << "  exciton " << exciton3Momentum << G4endl
-                << secondary4Momemtum.vect() + exciton3Momentum << G4endl;
-        #endif
-#ifdef exactExcitationEnergy
-        G4LorentzVector exciton4Momentum(exciton3Momentum, fMass);
-#else
+
+        G4ThreeVector balance=primary->Get4Momentum().vect() - 
+                              secondary4Momemtum.vect() - exciton3Momentum;
+
+#ifdef G4GPI_debug_excitation
+        G4cout << "momentum balance" << balance 
+               << " value " << balance.mag()                   <<G4endl
+               << "primary         "<< primary->Get4Momentum() <<G4endl
+               << "secondary       "<< secondary4Momemtum      <<G4endl
+               << "captured        "<< captured3Momentum       <<G4endl
+               << "wounded         "<< wounded3Momentum        <<G4endl
+               << "exciton         "<< exciton3Momentum        <<G4endl
+               << "second + exciton" 
+               << secondary4Momemtum.vect() + exciton3Momentum << G4endl;
+#endif
+//#ifdef exactExcitationEnergy
+//        G4LorentzVector exciton4Momentum(exciton3Momentum, fMass);
+//        G4LorentzVector exciton4Momentum(exciton3Momentum,
+//                std::sqrt(exciton3Momentum.mag2() + fMass*fMass));
+//#else
         G4LorentzVector exciton4Momentum(exciton3Momentum,
                 std::sqrt(exciton3Momentum.mag2() + fMass*fMass));
-#endif
-        if ( exEnergy > 0.0 ) {  // Need to de-excite the remnant nucleus only if excitation energy > 0.
-            G4Fragment anInitialState(anA, aZ, exciton4Momentum);
-            anInitialState.SetNumberOfParticles(numberOfEx-numberOfHoles);
-            anInitialState.SetNumberOfCharged(numberOfCh);
-            anInitialState.SetNumberOfHoles(numberOfHoles);
+//#endif
+//G4cout<<"exciton4Momentum "<<exciton4Momentum<<G4endl;
+        // Need to de-excite the remnant nucleus only if excitation energy > 0.
+        G4Fragment anInitialState(anA, aZ, exciton4Momentum);
+        anInitialState.SetNumberOfParticles(numberOfEx-numberOfHoles);
+        anInitialState.SetNumberOfCharged(numberOfCh);
+        anInitialState.SetNumberOfHoles(numberOfHoles);
 
-            G4ReactionProductVector * aPrecoResult = theDeExcitation->DeExcite(anInitialState);
-            // fill pre-compound part into the result, and return
-            theTotalResult->insert(theTotalResult->end(),aPrecoResult->begin(),aPrecoResult->end() );
-            delete aPrecoResult;
-
-        } else {  // No/negative excitation energy, we only need to create the remnant nucleus
-            //  energy is not conserved, ignore exciton momentum, i.e. remnant nucleus will be at rest
-            G4ParticleDefinition* theKindOfFragment = 0;
-            if (anA == 1 && aZ == 0) {
-                theKindOfFragment = G4Neutron::NeutronDefinition();
-            } else if (anA == 1 && aZ == 1) {
-                theKindOfFragment = G4Proton::ProtonDefinition();
-            } else if (anA == 2 && aZ == 1) {
-                theKindOfFragment = G4Deuteron::DeuteronDefinition();
-            } else if (anA == 3 && aZ == 1) {
-                theKindOfFragment = G4Triton::TritonDefinition();
-            } else if (anA == 3 && aZ == 2) {
-                theKindOfFragment = G4He3::He3Definition();
-            } else if (anA == 4 && aZ == 2) {
-                theKindOfFragment = G4Alpha::AlphaDefinition();;
-            } else {
-                theKindOfFragment =
-                        G4ParticleTable::GetParticleTable()->GetIonTable()->GetIon(aZ,anA,0.0);
-            }
-            if (theKindOfFragment != 0) {
-                G4ReactionProduct * theNew = new G4ReactionProduct(theKindOfFragment);
-                theNew->SetMomentum(G4ThreeVector(0.,0.,0.));
-                theNew->SetTotalEnergy(fMass);
-                //theNew->SetFormationTime(??0.??);
-                theTotalResult->push_back(theNew);
-            }
-        }
+        G4ReactionProductVector * aPrecoResult = 
+                                  theDeExcitation->DeExcite(anInitialState);
+        // fill pre-compound part into the result, and return
+        theTotalResult->insert(theTotalResult->end(),aPrecoResult->begin(),
+                                            aPrecoResult->end() );
+        delete aPrecoResult;
     }
 
     return theTotalResult;

@@ -2553,9 +2553,8 @@ G4ReactionProductVector * G4BinaryCascade::Propagate1H1(
 {
     G4ReactionProductVector * products = new G4ReactionProductVector;
     G4ParticleDefinition * aHTarg = G4Proton::ProtonDefinition();
-    G4double mass = aHTarg->GetPDGMass();
     if (nucleus->GetCharge() == 0) aHTarg = G4Neutron::NeutronDefinition();
-    mass = aHTarg->GetPDGMass();
+    G4double mass = aHTarg->GetPDGMass();
     G4KineticTrackVector * secs = 0;
     G4ThreeVector pos(0,0,0);
     G4LorentzVector mom(mass);
@@ -2584,9 +2583,11 @@ G4ReactionProductVector * G4BinaryCascade::Propagate1H1(
         }
     }
 
-    size_t current(0);
     ClearAndDestroy(&theFinalState);
-    for(current=0; secs && current<secs->size(); current++)
+    ClearAndDestroy(secondaries);
+    delete secondaries;
+
+    for(size_t current=0; secs && current<secs->size(); current++)
     {
         if((*secs)[current]->GetDefinition()->IsShortLived())
         {

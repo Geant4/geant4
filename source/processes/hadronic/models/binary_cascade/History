@@ -12,6 +12,20 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+8 Jan. 2012 V. Uzhinsky          had-binary-V09-06-01
+-  Checking a simplification of G4GeneratorPrecompoundInterface::Propagate
+   for hadron-nucleus interactions only.
+
+17 Dec. 2012 V. Uzhinsky         had-binary-V09-06-00
+-  Re-numeration of the previous tag.
+
+17 Dec. 2012 V. Uzhinsky         had-binary-V09-05-15
+-  An interface to Precompound model is implemented for nucleus-nucleus 
+   interactions at high (> 2GeV/N). It will be us17 Dec. 2012 V. Uzhinsky     
+    had-binary-V09-05-15
+
+15 Nov 2012 Gunter Folger        had-binary-V09-05-14
+- fix coverity warnings
 
 26 Oct 2012 Gunter Folger        had-binary-V09-05-13
 - send a warning message to G4cout, not G4cerr.
